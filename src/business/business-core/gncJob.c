@@ -35,10 +35,10 @@
 #include "messages.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
-#include "gnc-book.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 
+#include "qofbook.h"
 #include "qofclass.h"
 #include "qofinstance.h"
 #include "qofid.h"

@@ -43,4 +43,15 @@ void gncCustomerSetGUID (GncCustomer *customer, const GUID *guid);
  */
 GncCustomer * gncCloneCustomer (GncCustomer *from,  QofBook *book);
 
+/** The gncCustomerObtainTwin() will find the 'twin' of the
+ *  indicated customer in the indicated book.  If the twin doesn't
+ *  yet exist in the book, it will be created (by calling
+ *  gncCloneCustomer()) and placed into the book.
+ *
+ * We called this routine 'Obtain' instead of "Get" to distinguish
+ * it from the other Get routines, which work in fundamentally
+ * different ways.
+ */
+GncCustomer * gncCustomerObtainTwin (GncCustomer *from, QofBook *book);
+
 #endif /* GNC_CUSTOMERP_H_ */

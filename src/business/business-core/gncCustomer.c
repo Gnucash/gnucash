@@ -224,6 +224,20 @@ static void gncCustomerFree (GncCustomer *cust)
   g_free (cust);
 }
 
+GncCustomer *
+gncCustomerObtainTwin (GncCustomer *from, QofBook *book)
+{
+  GncCustomer *cust;
+  if (!from) return NULL;
+
+  cust = (GncCustomer *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
+  if (!cust)
+  {
+    cust = gncCloneCustomer (from, book);
+  }
+  return cust;
+}
+
 /* ============================================================== */
 /* Set Functions */
 

@@ -44,7 +44,7 @@ void gncJobSetGUID (GncJob *job, const GUID *guid);
 GncJob * gncCloneJob (GncJob *from, QofBook *book);
 
 /** The gncJobObtainTwin() will find the 'twin' of the
- *  indicated tax table in the indicated book.  If the twin doesn't
+ *  indicated job in the indicated book.  If the twin doesn't
  *  yet exist in the book, it will be created (by calling
  *  gncCloneJob()) and placed into the book.
  *

@@ -15,6 +15,10 @@ XXX TODO:
 -- TaxTable and BillTerm have common parent/child code.
    this could be abstracted into common code.
 
+=======
+-- finish onwer cclone
+-- vendor, invoice, entry, order
+
 
 #include "gncBusiness.h"
 
