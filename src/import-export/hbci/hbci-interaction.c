@@ -598,8 +598,8 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
 			       0.0);
   data->action_max = total;
   GNCInteractor_setRunning(data);
-  printf("progressStartCB: Action \"%s\" started, total %d.\n",
-	 text, total);
+  /* printf("progressStartCB: Action \"%s\" started, total %d.\n",
+     text, total); */
 
   /* Show the dialog */
   GNCInteractor_show(data);
@@ -623,8 +623,8 @@ static int progressAdvanceCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   }
 
   if (progress != AB_BANKING_PROGRESS_NONE) {
-    printf("progressLogCB: Progress set to %d out of %f.\n", 
-	   progress, data->action_max);
+    /* printf("progressLogCB: Progress set to %d out of %f.\n", 
+       progress, data->action_max); */
     if (progress <= data->action_max) 
       gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
 				   progress/data->action_max);
@@ -651,7 +651,7 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
 /*     printf("progressLogCB: Oops, wrong progress id %d -- ignored.\n", id); */
   }
 
-  printf("progressLogCB: Logging msg: %s\n", text);
+  /* printf("progressLogCB: Logging msg: %s\n", text); */
   GNCInteractor_add_log_text (data, text);
 
   g_free(text);

@@ -385,7 +385,7 @@ static void gnc_hbci_printresult(HBCI_Outbox *outbox, GNCInteractor *inter)
       }
     } 
     n=GWEN_DB_GetNextGroup(n);
-  } // while
+  } /* while */
 
   GWEN_DB_Group_free(rsp);
 }

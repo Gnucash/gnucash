@@ -222,8 +222,8 @@ update_accountlist (HBCIInitialInfo *info)
   else
     printf("update_accountlist: Oops, account list from AB_Banking is NULL.\n");
 
-  // printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash));
-  // printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash));
+  /* printf("update_accountlist: HBCI hash has %d entries.\n", g_hash_table_size(info->hbci_hash)); */
+  /* printf("update_accountlist: GNC hash has %d entries.\n", g_hash_table_size(info->gnc_hash)); */
   
   g_hash_table_thaw (info->hbci_hash);
   gtk_clist_thaw (GTK_CLIST (info->accountlist));
