@@ -669,6 +669,21 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
     if (api == NULL)
       return TRUE;
   }
+  // no libchipcard? Make that button greyed out
+  if 
+#if ((OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>13))
+      (HBCI_API_mediumType(info->api, "DDVCard") != MediumTypeCard)
+#else /* openhbci > 0.9.9.13 */
+      (! HBCI_Hbci_hasLibchipcard ()) 
+#endif /* openhbci <= 0.9.9.13 */
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (info->mediumddv),
+				FALSE);
+    } else {
+      gtk_widget_set_sensitive (GTK_WIDGET (info->mediumddv),
+				TRUE);
+    }
+
 
   /* Get HBCI bank and account list */
   {
@@ -1584,10 +1599,6 @@ void gnc_hbci_initial_druid (void)
 	 curdir);
       g_free (curdir);
     }
-    // no libchipcard? Make that button greyed out
-    if (! HBCI_Hbci_hasLibchipcard ()) 
-      gtk_widget_set_sensitive (GTK_WIDGET (info->mediumddv),
-				FALSE);
     gtk_signal_connect (GTK_OBJECT (page), "back", 
 			GTK_SIGNAL_FUNC (on_userid_back), info);
     gtk_signal_connect (GTK_OBJECT (page), "prepare", 
