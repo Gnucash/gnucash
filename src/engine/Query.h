@@ -29,6 +29,8 @@
 #ifndef __GNUCASH_QUERY_H__
 #define __GNUCASH_QUERY_H__
 
+#include <time.h>
+
 #include "Account.h"
 #include "Transaction.h"
 
@@ -59,13 +61,21 @@ void xaccQueryAddAccount (Query *, Account *acc);
 void  xaccQuerySetMaxSplits (Query *, int);
 
 /* The xaccQuerySetSortOrder() method sets the sort order that
- * should be used on the splits 
+ *    should be used on the splits.  The three arguments should 
+ *    be choosen from the enums above.  The first argument has the
+ *    sort priority, the next the next, etc.
  */
 void xaccQuerySetSortOrder (Query *, int, int, int); 
 
 /* The xaccQueryGetSplits() method returns a list of splits
- * matching the query and sorting criteria previously set up.
+ *    matching the query and sorting criteria previously set up.
  */
 Split ** xaccQueryGetSplits (Query *);
+
+/* The xaccQueryGetEaliestDateFound() routine will return the 
+ *    earliest date that appears in the list of returned splits.
+ */
+time_t xaccQueryGetEarliestDateFound (Query *);
+time_t xaccQueryGetLatestDateFound (Query *);
 
 #endif /* __GNUCASH_QUERY_H__ */

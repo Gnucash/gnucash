@@ -629,4 +629,22 @@ xaccQueryGetSplits (Query *q)
    return q->split_list;
 }
 
+/* ================================================== */
+
+time_t
+xaccQueryGetEarliestDateFound (Query *q)
+{
+   if (!q) return NULL;
+
+   return ((time_t) q->earliest_found.tv_sec);
+}
+
+time_t
+xaccQueryGetLatestDateFound (Query *q)
+{
+   if (!q) return NULL;
+
+   return ((time_t) q->latest_found.tv_sec);
+}
+
 /* ================ END OF FILE  ==================== */
