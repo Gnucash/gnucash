@@ -60,6 +60,7 @@ xaccInitializeAccountGroup (AccountGroup *grp, GNCBook *book)
   grp->accounts    = NULL;
 
   grp->book        = book;
+  grp->editlevel   = 0;
 }
 
 /********************************************************************\
@@ -145,6 +146,7 @@ xaccAccountGroupBeginEdit (AccountGroup *grp)
   GList *node;
 
   if (!grp) return;
+  grp->editlevel++;
 
   for (node = grp->accounts; node; node = node->next)
   {
@@ -172,6 +174,7 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
     xaccAccountGroupCommitEdit (account->children);
     xaccAccountCommitEdit (account);
   }
+  grp->editlevel--;
 }
 
 /********************************************************************\
@@ -363,7 +366,7 @@ xaccGroupGetNumSubAccounts (AccountGroup *grp)
 \********************************************************************/
 
 static void
-xaccPrependAccounts (AccountGroup *grp, GList **accounts_p)
+xaccAppendAccounts (AccountGroup *grp, GList **accounts_p)
 {
   GList *node;
 
@@ -373,22 +376,22 @@ xaccPrependAccounts (AccountGroup *grp, GList **accounts_p)
   {
     Account *account = node->data;
 
-    *accounts_p = g_list_prepend (*accounts_p, account);
+    *accounts_p = g_list_append (*accounts_p, account);
 
-    xaccPrependAccounts (account->children, accounts_p);
+    xaccApppendAccounts (account->children, accounts_p);
   }
 }
 
-GList *
+AccountList *
 xaccGroupGetSubAccounts (AccountGroup *grp)
 {
   GList *accounts = NULL;
 
   if (!grp) return NULL;
 
-  xaccPrependAccounts (grp, &accounts);
+  xaccAppendAccounts (grp, &accounts);
 
-  return g_list_reverse (accounts);
+  return accounts;
 }
 
 AccountList *
@@ -789,6 +792,7 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
 void
 xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
 {
+   int i;
    GList *node;
    if (!to || !from) return;
    if (!from->accounts || !to->book) return;
@@ -811,6 +815,15 @@ xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
          xaccGroupCopyGroup (to_acc->children, from_acc->children);
       }
       xaccAccountCommitEdit (to_acc);
+
+      /* make sure that we have a symmetric, uniform number of 
+       * begin-edits, so that subsequent GroupCommitEdit's 
+       * balance out. */
+      for (i=0; i<to->editlevel; i++)
+      {
+         xaccAccountBeginEdit (to_acc);
+         xaccAccountGroupBeginEdit (to_acc->children);
+      }
    }
 }
 
