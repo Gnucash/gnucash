@@ -76,10 +76,10 @@ gnc_item_list_append(GNCItemList *item_list, char *string)
 void
 gnc_item_list_select(GNCItemList *item_list, const char *string)
 {
-	GtkVisibility visibility;
 	gint row = 0;
 	gchar *text;
 
+	g_return_if_fail(item_list != NULL);
 	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
 
 	if (string == NULL) {
@@ -99,12 +99,28 @@ gnc_item_list_select(GNCItemList *item_list, const char *string)
 		gtk_clist_select_row(item_list->clist, row, 0);
                 gtk_clist_thaw(item_list->clist);
 
-		visibility = gtk_clist_row_is_visible(item_list->clist, row);
-		if (visibility == GTK_VISIBILITY_NONE)
-			gtk_clist_moveto(item_list->clist, row, 0, 0.5, 0.0);
+                gnc_item_list_show_selected(item_list);
 
 		return;
 	}
+}
+
+
+void
+gnc_item_list_show_selected(GNCItemList *item_list)
+{
+	GtkVisibility visibility;
+        gint row;
+
+	g_return_if_fail(item_list != NULL);
+	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
+
+        row = item_list->clist->focus_row;
+
+        visibility = gtk_clist_row_is_visible(item_list->clist, row);
+
+        if (visibility != GTK_VISIBILITY_FULL)
+                gtk_clist_moveto(item_list->clist, row, 0, 0.5, 0.0);
 }
 
 

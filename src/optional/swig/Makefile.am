@@ -73,7 +73,8 @@ install-data-local: libgncswig.la
 	elif [ -f ${perllibdir}/libgncswig.so.1.1 ]; then \
 		cd ${perllibdir} && ln -s libgncswig.so.1.1 gnucash.so; \
 	else \
-		echo "Can't find libgncswig shared library!"; \
+		echo "Can't find libgncswig shared library!" \
+		exit 1; \
 	fi
 
 uninstall-local:

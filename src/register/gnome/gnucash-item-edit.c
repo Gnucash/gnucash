@@ -1084,6 +1084,8 @@ item_edit_show_list (ItemEdit *item_edit)
                       GTK_ARROW_UP, GTK_SHADOW_OUT);
 
         gtk_widget_grab_focus(GTK_WIDGET(item_edit->item_list->clist));
+
+        gnc_item_list_show_selected(item_edit->item_list);
 }
 
 

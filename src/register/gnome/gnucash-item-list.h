@@ -51,6 +51,8 @@ void gnc_item_list_append(GNCItemList *item_list, char *string);
 
 void gnc_item_list_select(GNCItemList *item_list, const char *string);
 
+void gnc_item_list_show_selected(GNCItemList *item_list);
+
 void gnc_item_list_sort(GNCItemList *item_list);
 
 void gnc_item_list_autosize(GNCItemList *item_list);
