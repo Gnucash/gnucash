@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
-"POT-Creation-Date: 2001-04-15 04:04-0700\n"
+"POT-Creation-Date: 2001-04-15 16:11-0700\n"
 "PO-Revision-Date: 2000-07-05 15:17+0100\n"
 "Last-Translator: Alessandro Seveso <aleseveso@tiscalinet.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,7 +157,7 @@ msgid "Open"
 msgstr "Apri"
 
 # messages-i18n.c:327
-#: src/FileDialog.c:506 src/gnome/window-main.c:833
+#: src/FileDialog.c:506 src/gnome/window-main.c:854
 msgid "Save"
 msgstr "Salva"
 
@@ -2723,7 +2723,7 @@ msgstr "Trasferire Informazioni "
 
 # messages-i18n.c:237 src/gnome/glade-gnc-dialogs.c:361
 # src/gnome/glade-gnc-dialogs.c:521
-#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:534
+#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:555
 #: src/scm/guile-strings.c:66 src/scm/guile-strings.c:349
 #: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:17
 #: src/scm/report/guile-strings.c:38 src/scm/report/guile-strings.c:53
@@ -3580,17 +3580,17 @@ msgid "Close this Help window"
 msgstr "Chiudi la finestra del registro"
 
 # messages-i18n.c:98
-#: src/gnome/window-main.c:158
+#: src/gnome/window-main.c:159
 #, fuzzy
 msgid "<no file>"
 msgstr "Apri un file"
 
-#: src/gnome/window-main.c:587
+#: src/gnome/window-main.c:608
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr ""
 
 # messages-i18n.c:11
-#: src/gnome/window-main.c:623
+#: src/gnome/window-main.c:644
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -3599,169 +3599,169 @@ msgstr ""
 "GNU la via per gestire i vostri soldi!"
 
 # messages-i18n.c:192
-#: src/gnome/window-main.c:679
+#: src/gnome/window-main.c:700
 #, fuzzy
 msgid "New _File"
 msgstr "Nuovo File"
 
 # messages-i18n.c:93
-#: src/gnome/window-main.c:680
+#: src/gnome/window-main.c:701
 msgid "Create a new file"
 msgstr "Creare un nuovo file."
 
 # messages-i18n.c:185
-#: src/gnome/window-main.c:688
+#: src/gnome/window-main.c:709
 msgid "Import QIF..."
 msgstr "Importa QIF..."
 
 # messages-i18n.c:88
-#: src/gnome/window-main.c:689
+#: src/gnome/window-main.c:710
 msgid "Import a Quicken QIF file"
 msgstr "Importa un file QIF ."
 
-#: src/gnome/window-main.c:697
+#: src/gnome/window-main.c:718
 #, fuzzy
 msgid "New _Window"
 msgstr "finestra1"
 
 # messages-i18n.c:85
-#: src/gnome/window-main.c:698
+#: src/gnome/window-main.c:719
 #, fuzzy
 msgid "Open a new top-level GnuCash window"
 msgstr "Aprire la finestra d'aiuto di Gnucash."
 
 # messages-i18n.c:190
-#: src/gnome/window-main.c:704
+#: src/gnome/window-main.c:725
 #, fuzzy
 msgid "New _Account Tree"
 msgstr "Nuovo conto"
 
 # messages-i18n.c:96
-#: src/gnome/window-main.c:705
+#: src/gnome/window-main.c:726
 #, fuzzy
 msgid "Open a new account tree view"
 msgstr "Apri il conto."
 
 # messages-i18n.c:171
-#: src/gnome/window-main.c:712
+#: src/gnome/window-main.c:733
 #, fuzzy
 msgid "Close _Window"
 msgstr "Chiudi finestra"
 
 # messages-i18n.c:105
-#: src/gnome/window-main.c:713
+#: src/gnome/window-main.c:734
 #, fuzzy
 msgid "Close the current notebook page"
 msgstr "Registra l'operazione corrente"
 
 # messages-i18n.c:149
-#: src/gnome/window-main.c:725
+#: src/gnome/window-main.c:746
 msgid "_Preferences..."
 msgstr "_Preferenze..."
 
 # messages-i18n.c:99
-#: src/gnome/window-main.c:726
+#: src/gnome/window-main.c:747
 msgid "Open the global preferences dialog"
 msgstr "Apri la dialog delle preferenze globali."
 
 # messages-i18n.c:183
-#: src/gnome/window-main.c:738
+#: src/gnome/window-main.c:759
 #, fuzzy
 msgid "_General Ledger"
 msgstr "Registro Generale"
 
 # messages-i18n.c:85
-#: src/gnome/window-main.c:739
+#: src/gnome/window-main.c:760
 #, fuzzy
 msgid "Open a general ledger window"
 msgstr "Aprire la finestra d'aiuto di Gnucash."
 
 # messages-i18n.c:262
-#: src/gnome/window-main.c:746
+#: src/gnome/window-main.c:767
 #, fuzzy
 msgid "Commodity _Editor"
 msgstr "Commit"
 
-#: src/gnome/window-main.c:747
+#: src/gnome/window-main.c:768
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:754
+#: src/gnome/window-main.c:775
 msgid "_Price Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:755
+#: src/gnome/window-main.c:776
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:762
+#: src/gnome/window-main.c:783
 msgid "Financial _Calculator"
 msgstr ""
 
-#: src/gnome/window-main.c:763
+#: src/gnome/window-main.c:784
 msgid "Use the financial calculator"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
-#: src/gnome/window-main.c:769
+#: src/gnome/window-main.c:790
 #, fuzzy
 msgid "_Find Transactions"
 msgstr "Operazioni trouvate"
 
-#: src/gnome/window-main.c:770 src/gnome/window-register.c:902
+#: src/gnome/window-main.c:791 src/gnome/window-register.c:902
 #, fuzzy
 msgid "Find transactions with a search"
 msgstr "Trova delle operazioni con una ricerca."
 
 # src/gnome/glade-gnc-dialogs.c:638
-#: src/gnome/window-main.c:782
+#: src/gnome/window-main.c:803
 msgid "_Manual"
 msgstr "_Manuale"
 
 # messages-i18n.c:85
-#: src/gnome/window-main.c:783
+#: src/gnome/window-main.c:804
 msgid "Open the GnuCash Manual"
 msgstr "Apri il manuale di Gnucash."
 
-#: src/gnome/window-main.c:790
+#: src/gnome/window-main.c:811
 msgid "_Tips Of The Day"
 msgstr ""
 
 # po/guile_strings.txt:219
-#: src/gnome/window-main.c:791
+#: src/gnome/window-main.c:812
 #, fuzzy
 msgid "View the Tips of the Day"
 msgstr "Display della data?"
 
 # po/guile_strings.txt:264
-#: src/gnome/window-main.c:810
+#: src/gnome/window-main.c:831
 #, fuzzy
 msgid "_Tools"
 msgstr "Totali"
 
 # messages-i18n.c:332
-#: src/gnome/window-main.c:811
+#: src/gnome/window-main.c:832
 #, fuzzy
 msgid "_Settings"
 msgstr "Parametri"
 
-#: src/gnome/window-main.c:812
+#: src/gnome/window-main.c:833
 #, fuzzy
 msgid "_Windows"
 msgstr "finestra1"
 
 # messages-i18n.c:107
-#: src/gnome/window-main.c:834
+#: src/gnome/window-main.c:855
 msgid "Save the file to disk"
 msgstr "Salva il file su disco."
 
 # messages-i18n.c:283
-#: src/gnome/window-main.c:849
+#: src/gnome/window-main.c:870
 msgid "Exit"
 msgstr "Esci"
 
 # messages-i18n.c:83
-#: src/gnome/window-main.c:850
+#: src/gnome/window-main.c:871
 msgid "Exit GnuCash"
 msgstr "Esci da GnuCash."
 

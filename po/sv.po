@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
-"POT-Creation-Date: 2001-04-15 04:04-0700\n"
+"POT-Creation-Date: 2001-04-15 16:11-0700\n"
 "PO-Revision-Date: 2000-09-17 09:18+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -175,7 +175,7 @@ msgstr "Öppna"
 # messages-i18n.c:336
 # messages-i18n.c:373
 # messages-i18n.c:374
-#: src/FileDialog.c:506 src/gnome/window-main.c:833
+#: src/FileDialog.c:506 src/gnome/window-main.c:854
 msgid "Save"
 msgstr "Spara"
 
@@ -3432,7 +3432,7 @@ msgstr "Överför information"
 # src/gnome/glade-gnc-dialogs.c:529
 # messages-i18n.c:276 src/gnome/glade-gnc-dialogs.c:302
 # src/gnome/glade-gnc-dialogs.c:462
-#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:534
+#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:555
 #: src/scm/guile-strings.c:66 src/scm/guile-strings.c:349
 #: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:17
 #: src/scm/report/guile-strings.c:38 src/scm/report/guile-strings.c:53
@@ -4500,19 +4500,19 @@ msgstr "Stäng detta registerfönster"
 # messages-i18n.c:98
 # messages-i18n.c:107
 # messages-i18n.c:109
-#: src/gnome/window-main.c:158
+#: src/gnome/window-main.c:159
 #, fuzzy
 msgid "<no file>"
 msgstr "Öppna en fil"
 
-#: src/gnome/window-main.c:587
+#: src/gnome/window-main.c:608
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr ""
 
 # messages-i18n.c:11
 # messages-i18n.c:11
 # messages-i18n.c:11
-#: src/gnome/window-main.c:623
+#: src/gnome/window-main.c:644
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -4523,7 +4523,7 @@ msgstr ""
 # messages-i18n.c:201
 # messages-i18n.c:220
 # messages-i18n.c:222
-#: src/gnome/window-main.c:679
+#: src/gnome/window-main.c:700
 #, fuzzy
 msgid "New _File"
 msgstr "Ny fil"
@@ -4531,28 +4531,28 @@ msgstr "Ny fil"
 # messages-i18n.c:93
 # messages-i18n.c:102
 # messages-i18n.c:104
-#: src/gnome/window-main.c:680
+#: src/gnome/window-main.c:701
 msgid "Create a new file"
 msgstr "Skapa en ny fil"
 
 # messages-i18n.c:193
 # messages-i18n.c:212
 # messages-i18n.c:214
-#: src/gnome/window-main.c:688
+#: src/gnome/window-main.c:709
 msgid "Import QIF..."
 msgstr "Importera QIF..."
 
 # messages-i18n.c:88
 # messages-i18n.c:96
 # messages-i18n.c:98
-#: src/gnome/window-main.c:689
+#: src/gnome/window-main.c:710
 msgid "Import a Quicken QIF file"
 msgstr "Importera en Quicken QIF fil."
 
 # messages-i18n.c:179
 # messages-i18n.c:197
 # messages-i18n.c:199
-#: src/gnome/window-main.c:697
+#: src/gnome/window-main.c:718
 #, fuzzy
 msgid "New _Window"
 msgstr "Stäng fönster"
@@ -4560,7 +4560,7 @@ msgstr "Stäng fönster"
 # messages-i18n.c:85
 # messages-i18n.c:93
 # messages-i18n.c:95
-#: src/gnome/window-main.c:698
+#: src/gnome/window-main.c:719
 #, fuzzy
 msgid "Open a new top-level GnuCash window"
 msgstr "Öppna GnuCash hjälpfönster"
@@ -4568,7 +4568,7 @@ msgstr "Öppna GnuCash hjälpfönster"
 # messages-i18n.c:199
 # messages-i18n.c:218
 # messages-i18n.c:220
-#: src/gnome/window-main.c:704
+#: src/gnome/window-main.c:725
 #, fuzzy
 msgid "New _Account Tree"
 msgstr "Nytt konto"
@@ -4576,7 +4576,7 @@ msgstr "Nytt konto"
 # messages-i18n.c:96
 # messages-i18n.c:105
 # messages-i18n.c:107
-#: src/gnome/window-main.c:705
+#: src/gnome/window-main.c:726
 #, fuzzy
 msgid "Open a new account tree view"
 msgstr "Öppna ett konto"
@@ -4584,7 +4584,7 @@ msgstr "Öppna ett konto"
 # messages-i18n.c:74
 # messages-i18n.c:78
 # messages-i18n.c:80
-#: src/gnome/window-main.c:712
+#: src/gnome/window-main.c:733
 #, fuzzy
 msgid "Close _Window"
 msgstr "Stäng detta registerfönster"
@@ -4592,7 +4592,7 @@ msgstr "Stäng detta registerfönster"
 # messages-i18n.c:105
 # messages-i18n.c:116
 # messages-i18n.c:118
-#: src/gnome/window-main.c:713
+#: src/gnome/window-main.c:734
 #, fuzzy
 msgid "Close the current notebook page"
 msgstr "Spara den aktuella transaktionen"
@@ -4600,21 +4600,21 @@ msgstr "Spara den aktuella transaktionen"
 # messages-i18n.c:154
 # messages-i18n.c:171
 # messages-i18n.c:173
-#: src/gnome/window-main.c:725
+#: src/gnome/window-main.c:746
 msgid "_Preferences..."
 msgstr "_Inställningar..."
 
 # messages-i18n.c:99
 # messages-i18n.c:109
 # messages-i18n.c:111
-#: src/gnome/window-main.c:726
+#: src/gnome/window-main.c:747
 msgid "Open the global preferences dialog"
 msgstr "Öppna de globala inställningarnas dialogruta"
 
 # messages-i18n.c:191
 # messages-i18n.c:210
 # messages-i18n.c:212
-#: src/gnome/window-main.c:738
+#: src/gnome/window-main.c:759
 #, fuzzy
 msgid "_General Ledger"
 msgstr "Allmän liggare"
@@ -4622,71 +4622,71 @@ msgstr "Allmän liggare"
 # messages-i18n.c:85
 # messages-i18n.c:93
 # messages-i18n.c:95
-#: src/gnome/window-main.c:739
+#: src/gnome/window-main.c:760
 #, fuzzy
 msgid "Open a general ledger window"
 msgstr "Öppna GnuCash hjälpfönster"
 
-#: src/gnome/window-main.c:746
+#: src/gnome/window-main.c:767
 msgid "Commodity _Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:747
+#: src/gnome/window-main.c:768
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:754
+#: src/gnome/window-main.c:775
 msgid "_Price Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:755
+#: src/gnome/window-main.c:776
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:762
+#: src/gnome/window-main.c:783
 msgid "Financial _Calculator"
 msgstr ""
 
-#: src/gnome/window-main.c:763
+#: src/gnome/window-main.c:784
 msgid "Use the financial calculator"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 # src/gnome/glade-gnc-dialogs.c:1767
 # src/gnome/glade-gnc-dialogs.c:1707
-#: src/gnome/window-main.c:769
+#: src/gnome/window-main.c:790
 #, fuzzy
 msgid "_Find Transactions"
 msgstr "Sök transaktioner"
 
 # messages-i18n.c:92
 # messages-i18n.c:94
-#: src/gnome/window-main.c:770 src/gnome/window-register.c:902
+#: src/gnome/window-main.c:791 src/gnome/window-register.c:902
 #, fuzzy
 msgid "Find transactions with a search"
 msgstr "Hitta transaktioner med en sökning."
 
 # messages-i18n.c:163
 # messages-i18n.c:165
-#: src/gnome/window-main.c:782
+#: src/gnome/window-main.c:803
 msgid "_Manual"
 msgstr "_Manual"
 
 # messages-i18n.c:85
 # messages-i18n.c:98
 # messages-i18n.c:100
-#: src/gnome/window-main.c:783
+#: src/gnome/window-main.c:804
 msgid "Open the GnuCash Manual"
 msgstr "Öppna GnuCash manual"
 
-#: src/gnome/window-main.c:790
+#: src/gnome/window-main.c:811
 msgid "_Tips Of The Day"
 msgstr ""
 
 # po/guile_strings.txt:222
 # po/guile_strings.txt:223
 # po/guile_strings.txt:223
-#: src/gnome/window-main.c:791
+#: src/gnome/window-main.c:812
 #, fuzzy
 msgid "View the Tips of the Day"
 msgstr "Visa datum?"
@@ -4694,7 +4694,7 @@ msgstr "Visa datum?"
 # po/guile_strings.txt:265
 # po/guile_strings.txt:316
 # po/guile_strings.txt:316
-#: src/gnome/window-main.c:810
+#: src/gnome/window-main.c:831
 #, fuzzy
 msgid "_Tools"
 msgstr "Totalt"
@@ -4702,7 +4702,7 @@ msgstr "Totalt"
 # messages-i18n.c:342
 # messages-i18n.c:379
 # messages-i18n.c:380
-#: src/gnome/window-main.c:811
+#: src/gnome/window-main.c:832
 #, fuzzy
 msgid "_Settings"
 msgstr "Inställningar"
@@ -4710,7 +4710,7 @@ msgstr "Inställningar"
 # po/guile_strings.txt:31
 # po/guile_strings.txt:37
 # po/guile_strings.txt:37
-#: src/gnome/window-main.c:812
+#: src/gnome/window-main.c:833
 #, fuzzy
 msgid "_Windows"
 msgstr "Huvudfönster"
@@ -4718,21 +4718,21 @@ msgstr "Huvudfönster"
 # messages-i18n.c:107
 # messages-i18n.c:118
 # messages-i18n.c:120
-#: src/gnome/window-main.c:834
+#: src/gnome/window-main.c:855
 msgid "Save the file to disk"
 msgstr "Spara fil till disk"
 
 # messages-i18n.c:292
 # messages-i18n.c:324
 # messages-i18n.c:325
-#: src/gnome/window-main.c:849
+#: src/gnome/window-main.c:870
 msgid "Exit"
 msgstr "Avsluta"
 
 # messages-i18n.c:83
 # messages-i18n.c:90
 # messages-i18n.c:92
-#: src/gnome/window-main.c:850
+#: src/gnome/window-main.c:871
 msgid "Exit GnuCash"
 msgstr "Avsluta GnuCash"
 

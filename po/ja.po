@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
-"POT-Creation-Date: 2001-04-15 04:04-0700\n"
+"POT-Creation-Date: 2001-04-15 16:11-0700\n"
 "PO-Revision-Date: 2001-1-18 14:00+0900\n"
 "Last-Translator: Mitsuo Hamada <mhamada@redhat.com>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
@@ -148,7 +148,7 @@ msgstr "保存されていない変更があります。ファイルに保存しますか?"
 msgid "Open"
 msgstr "開く"
 
-#: src/FileDialog.c:506 src/gnome/window-main.c:833
+#: src/FileDialog.c:506 src/gnome/window-main.c:854
 msgid "Save"
 msgstr "保存"
 
@@ -2481,7 +2481,7 @@ msgstr "スタイルシートのテンプレート:"
 msgid "Tax Information"
 msgstr "税金情報"
 
-#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:534
+#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:555
 #: src/scm/guile-strings.c:66 src/scm/guile-strings.c:349
 #: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:17
 #: src/scm/report/guile-strings.c:38 src/scm/report/guile-strings.c:53
@@ -3225,15 +3225,15 @@ msgstr "閉じる"
 msgid "Close this Help window"
 msgstr "ヘルプウィンドウを閉じる"
 
-#: src/gnome/window-main.c:158
+#: src/gnome/window-main.c:159
 msgid "<no file>"
 msgstr ""
 
-#: src/gnome/window-main.c:587
+#: src/gnome/window-main.c:608
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr ""
 
-#: src/gnome/window-main.c:623
+#: src/gnome/window-main.c:644
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -3241,140 +3241,140 @@ msgstr ""
 "GnuCash 個人用財務管理\n"
 "GNU でお金を管理しよう!"
 
-#: src/gnome/window-main.c:679
+#: src/gnome/window-main.c:700
 #, fuzzy
 msgid "New _File"
 msgstr "新規ファイル"
 
-#: src/gnome/window-main.c:680
+#: src/gnome/window-main.c:701
 msgid "Create a new file"
 msgstr "新しいファイルを作成する"
 
-#: src/gnome/window-main.c:688
+#: src/gnome/window-main.c:709
 msgid "Import QIF..."
 msgstr "QIF のインポート..."
 
-#: src/gnome/window-main.c:689
+#: src/gnome/window-main.c:710
 msgid "Import a Quicken QIF file"
 msgstr "Quicken QIF ファイルを読み込む"
 
-#: src/gnome/window-main.c:697
+#: src/gnome/window-main.c:718
 #, fuzzy
 msgid "New _Window"
 msgstr "メインウィンドウ"
 
-#: src/gnome/window-main.c:698
+#: src/gnome/window-main.c:719
 #, fuzzy
 msgid "Open a new top-level GnuCash window"
 msgstr "GnuCashのヘルプウィンドウを開く"
 
-#: src/gnome/window-main.c:704
+#: src/gnome/window-main.c:725
 #, fuzzy
 msgid "New _Account Tree"
 msgstr "新規勘定科目"
 
-#: src/gnome/window-main.c:705
+#: src/gnome/window-main.c:726
 #, fuzzy
 msgid "Open a new account tree view"
 msgstr "勘定科目を開く"
 
-#: src/gnome/window-main.c:712
+#: src/gnome/window-main.c:733
 #, fuzzy
 msgid "Close _Window"
 msgstr "ヘルプウィンドウを閉じる"
 
-#: src/gnome/window-main.c:713
+#: src/gnome/window-main.c:734
 #, fuzzy
 msgid "Close the current notebook page"
 msgstr "このレポートを再読込"
 
-#: src/gnome/window-main.c:725
+#: src/gnome/window-main.c:746
 msgid "_Preferences..."
 msgstr "初期設定(_P)..."
 
-#: src/gnome/window-main.c:726
+#: src/gnome/window-main.c:747
 msgid "Open the global preferences dialog"
 msgstr "全体の初期設定ダイアログを開く"
 
-#: src/gnome/window-main.c:738
+#: src/gnome/window-main.c:759
 msgid "_General Ledger"
 msgstr "総勘定元帳(_G)"
 
-#: src/gnome/window-main.c:739
+#: src/gnome/window-main.c:760
 msgid "Open a general ledger window"
 msgstr "総勘定元帳を開く"
 
-#: src/gnome/window-main.c:746
+#: src/gnome/window-main.c:767
 msgid "Commodity _Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:747
+#: src/gnome/window-main.c:768
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:754
+#: src/gnome/window-main.c:775
 msgid "_Price Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:755
+#: src/gnome/window-main.c:776
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:762
+#: src/gnome/window-main.c:783
 msgid "Financial _Calculator"
 msgstr "財務計算機(_C)"
 
-#: src/gnome/window-main.c:763
+#: src/gnome/window-main.c:784
 msgid "Use the financial calculator"
 msgstr "財務計算機を使用する"
 
-#: src/gnome/window-main.c:769
+#: src/gnome/window-main.c:790
 msgid "_Find Transactions"
 msgstr "取引検索(_F)"
 
-#: src/gnome/window-main.c:770 src/gnome/window-register.c:902
+#: src/gnome/window-main.c:791 src/gnome/window-register.c:902
 msgid "Find transactions with a search"
 msgstr "検索により取引を見つける"
 
-#: src/gnome/window-main.c:782
+#: src/gnome/window-main.c:803
 msgid "_Manual"
 msgstr "マニュアル(_M)"
 
-#: src/gnome/window-main.c:783
+#: src/gnome/window-main.c:804
 msgid "Open the GnuCash Manual"
 msgstr "GnuCashマニュアルを開く"
 
-#: src/gnome/window-main.c:790
+#: src/gnome/window-main.c:811
 msgid "_Tips Of The Day"
 msgstr "今日のヒント(_T)"
 
-#: src/gnome/window-main.c:791
+#: src/gnome/window-main.c:812
 msgid "View the Tips of the Day"
 msgstr "「今日のヒント」を見る"
 
-#: src/gnome/window-main.c:810
+#: src/gnome/window-main.c:831
 msgid "_Tools"
 msgstr "ツール(_T)"
 
-#: src/gnome/window-main.c:811
+#: src/gnome/window-main.c:832
 #, fuzzy
 msgid "_Settings"
 msgstr "検索開始日"
 
-#: src/gnome/window-main.c:812
+#: src/gnome/window-main.c:833
 #, fuzzy
 msgid "_Windows"
 msgstr "メインウィンドウ"
 
-#: src/gnome/window-main.c:834
+#: src/gnome/window-main.c:855
 msgid "Save the file to disk"
 msgstr "ファイルをディスクに保存する"
 
-#: src/gnome/window-main.c:849
+#: src/gnome/window-main.c:870
 msgid "Exit"
 msgstr "終了"
 
-#: src/gnome/window-main.c:850
+#: src/gnome/window-main.c:871
 msgid "Exit GnuCash"
 msgstr "GnuCash を終了する"
 

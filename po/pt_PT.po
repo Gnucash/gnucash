@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 1.5.3\n"
-"POT-Creation-Date: 2001-04-15 04:04-0700\n"
+"POT-Creation-Date: 2001-04-15 16:11-0700\n"
 "PO-Revision-Date: 2001-03-13 23:45+GMT\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese Documentation Project (POLI) <info@poli.org>\n"
@@ -182,7 +182,7 @@ msgid "Open"
 msgstr "Abrir"
 
 # src/FileDialog.c:477 src/gnome/window-main.c:1020
-#: src/FileDialog.c:506 src/gnome/window-main.c:833
+#: src/FileDialog.c:506 src/gnome/window-main.c:854
 msgid "Save"
 msgstr "Gravar"
 
@@ -3075,7 +3075,7 @@ msgstr "Informação de Impostos"
 # src/gnome/glade-gnc-dialogs.c:5716 src/scm/report/guile-strings.c:6
 # src/scm/report/guile-strings.c:23 src/scm/report/guile-strings.c:67
 # src/scm/report/guile-strings.c:87
-#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:534
+#: src/gnome/glade-gnc-dialogs.c:5933 src/gnome/window-main.c:555
 #: src/scm/guile-strings.c:66 src/scm/guile-strings.c:349
 #: src/scm/report/guile-strings.c:16 src/scm/report/guile-strings.c:17
 #: src/scm/report/guile-strings.c:38 src/scm/report/guile-strings.c:53
@@ -3975,16 +3975,16 @@ msgstr "Fechar"
 msgid "Close this Help window"
 msgstr "Fechar esta janela de Ajuda"
 
-#: src/gnome/window-main.c:158
+#: src/gnome/window-main.c:159
 msgid "<no file>"
 msgstr ""
 
-#: src/gnome/window-main.c:587
+#: src/gnome/window-main.c:608
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr ""
 
 # src/gnome/window-main.c:511
-#: src/gnome/window-main.c:623
+#: src/gnome/window-main.c:644
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -3993,168 +3993,168 @@ msgstr ""
 "O modo GNU de gerir o seu dinheiro!"
 
 # src/gnome/window-main.c:1125
-#: src/gnome/window-main.c:679
+#: src/gnome/window-main.c:700
 #, fuzzy
 msgid "New _File"
 msgstr "Novo Ficheiro"
 
 # src/gnome/window-main.c:1126
-#: src/gnome/window-main.c:680
+#: src/gnome/window-main.c:701
 msgid "Create a new file"
 msgstr "Criar um ficheiro novo"
 
 # src/gnome/window-main.c:1138
-#: src/gnome/window-main.c:688
+#: src/gnome/window-main.c:709
 msgid "Import QIF..."
 msgstr "Importar QIF..."
 
 # src/gnome/window-main.c:1031 src/gnome/window-main.c:1139
-#: src/gnome/window-main.c:689
+#: src/gnome/window-main.c:710
 msgid "Import a Quicken QIF file"
 msgstr "Importar um ficheiro QIF do Quicken"
 
 # src/scm/guile-strings.c:88 src/scm/guile-strings.c:91
-#: src/gnome/window-main.c:697
+#: src/gnome/window-main.c:718
 #, fuzzy
 msgid "New _Window"
 msgstr "Janela Principal"
 
 # src/gnome/window-reconcile.c:1119 src/gnome/window-register.c:1508
-#: src/gnome/window-main.c:698
+#: src/gnome/window-main.c:719
 #, fuzzy
 msgid "Open a new top-level GnuCash window"
 msgstr "Abre a janela de ajuda do GnuCash"
 
 # src/gnome/dialog-account.c:1431 src/gnome/glade-gnc-dialogs.c:3415
-#: src/gnome/window-main.c:704
+#: src/gnome/window-main.c:725
 #, fuzzy
 msgid "New _Account Tree"
 msgstr "Nova Conta"
 
 # src/gnome/window-help.c:506
-#: src/gnome/window-main.c:705
+#: src/gnome/window-main.c:726
 #, fuzzy
 msgid "Open a new account tree view"
 msgstr "Abrir um novo documento"
 
 # src/gnome/window-help.c:535
-#: src/gnome/window-main.c:712
+#: src/gnome/window-main.c:733
 #, fuzzy
 msgid "Close _Window"
 msgstr "Fechar esta janela de Ajuda"
 
 # src/gnome/window-report.c:371
-#: src/gnome/window-main.c:713
+#: src/gnome/window-main.c:734
 #, fuzzy
 msgid "Close the current notebook page"
 msgstr "Reler o relatório actual"
 
 # src/gnome/window-main.c:1154
-#: src/gnome/window-main.c:725
+#: src/gnome/window-main.c:746
 msgid "_Preferences..."
 msgstr "_Preferências..."
 
 # src/gnome/window-main.c:1155
-#: src/gnome/window-main.c:726
+#: src/gnome/window-main.c:747
 msgid "Open the global preferences dialog"
 msgstr "Abre a janela global de preferêcnias"
 
 # src/gnome/window-main.c:1279
-#: src/gnome/window-main.c:738
+#: src/gnome/window-main.c:759
 msgid "_General Ledger"
 msgstr "Plano _de Contas"
 
 # src/gnome/window-main.c:1280
-#: src/gnome/window-main.c:739
+#: src/gnome/window-main.c:760
 msgid "Open a general ledger window"
 msgstr "Abrir uma janela de plano de contas"
 
-#: src/gnome/window-main.c:746
+#: src/gnome/window-main.c:767
 msgid "Commodity _Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:747
+#: src/gnome/window-main.c:768
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr ""
 
-#: src/gnome/window-main.c:754
+#: src/gnome/window-main.c:775
 msgid "_Price Editor"
 msgstr ""
 
-#: src/gnome/window-main.c:755
+#: src/gnome/window-main.c:776
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr ""
 
 # src/gnome/window-main.c:1287
-#: src/gnome/window-main.c:762
+#: src/gnome/window-main.c:783
 msgid "Financial _Calculator"
 msgstr "_Calculadora Financeira"
 
 # src/gnome/window-main.c:1288
-#: src/gnome/window-main.c:763
+#: src/gnome/window-main.c:784
 msgid "Use the financial calculator"
 msgstr "Utilizar a calculadora financeira"
 
 # src/gnome/window-main.c:1294
-#: src/gnome/window-main.c:769
+#: src/gnome/window-main.c:790
 msgid "_Find Transactions"
 msgstr "Proc_urar Transacção"
 
 # src/gnome/window-main.c:1084 src/gnome/window-main.c:1295
 # src/gnome/window-register.c:894
-#: src/gnome/window-main.c:770 src/gnome/window-register.c:902
+#: src/gnome/window-main.c:791 src/gnome/window-register.c:902
 msgid "Find transactions with a search"
 msgstr "Encontrar transacções com a procura"
 
 # src/gnome/window-main.c:1307
-#: src/gnome/window-main.c:782
+#: src/gnome/window-main.c:803
 msgid "_Manual"
 msgstr "_Manual"
 
 # src/gnome/window-main.c:1308
-#: src/gnome/window-main.c:783
+#: src/gnome/window-main.c:804
 msgid "Open the GnuCash Manual"
 msgstr "Abrir o Manual do GnuCash"
 
 # src/gnome/window-main.c:1315
-#: src/gnome/window-main.c:790
+#: src/gnome/window-main.c:811
 msgid "_Tips Of The Day"
 msgstr "_Dicas do Dia"
 
 # src/gnome/window-main.c:1316
-#: src/gnome/window-main.c:791
+#: src/gnome/window-main.c:812
 msgid "View the Tips of the Day"
 msgstr "Ver as Dicas do Dia"
 
 # src/gnome/window-main.c:1331
-#: src/gnome/window-main.c:810
+#: src/gnome/window-main.c:831
 msgid "_Tools"
 msgstr "_Ferramentas"
 
 # src/gnome/glade-gnc-dialogs.c:923
-#: src/gnome/window-main.c:811
+#: src/gnome/window-main.c:832
 #, fuzzy
 msgid "_Settings"
 msgstr "Início "
 
 # src/scm/guile-strings.c:88 src/scm/guile-strings.c:91
-#: src/gnome/window-main.c:812
+#: src/gnome/window-main.c:833
 #, fuzzy
 msgid "_Windows"
 msgstr "Janela Principal"
 
 # src/gnome/window-main.c:1021
-#: src/gnome/window-main.c:834
+#: src/gnome/window-main.c:855
 msgid "Save the file to disk"
 msgstr "Gravar o ficheiro para disco"
 
 # src/gnome/window-main.c:1094
-#: src/gnome/window-main.c:849
+#: src/gnome/window-main.c:870
 msgid "Exit"
 msgstr "Sair"
 
 # src/gnome/window-main.c:1095
-#: src/gnome/window-main.c:850
+#: src/gnome/window-main.c:871
 msgid "Exit GnuCash"
 msgstr "Sair do GnuCash"
 
