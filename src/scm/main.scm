@@ -48,15 +48,16 @@
 (export gnc:debug)
 (export build-path)
 (export gnc:use-module-here!)
-(export hash-fold)
 (export item-list->hash!)
-(export string-split)
 (export string-join)
 (export gnc:backtrace-if-exception)
 (export gnc:find-file)
 (export gnc:find-localized-file)
 (export gnc:main)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
+
+(re-export hash-fold)
+(re-export string-split)
 
 ;; from path.scm
 (export gnc:make-home-dir)
