@@ -45,7 +45,7 @@
 #include "Account.h"
 #include "Group.h"
 #include "RegWindow.h"
-#include "File.h"
+#include "file-utils.h"
 #include "FileBox.h"
 #include "FileDialog.h"
 #include "dialog-utils.h"

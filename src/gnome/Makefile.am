@@ -4,6 +4,7 @@ noinst_LIBRARIES = libgncgnome.a
 
 libgncgnome_a_SOURCES = \
   account-tree.c \
+  argv-list-converters.c \
   cursors.c \
   dialog-account.c \
   dialog-column-view.c \
@@ -31,6 +32,7 @@ libgncgnome_a_SOURCES = \
   druid-utils.c \
   extensions.c \
   file-history.c \
+  file-utils.c \
   gnc-amount-edit.c \
   gnc-commodity-edit.c \
   gnc-currency-edit.c \
@@ -71,6 +73,7 @@ mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
   account-tree.h \
+  argv-list-converters.h \
   dialog-account.h \
   dialog-column-view.h \
   dialog-commodity.h \
@@ -89,6 +92,7 @@ noinst_HEADERS = \
   druid-hierarchy.h \
   druid-utils.h \
   extensions.h \
+  file-utils.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \

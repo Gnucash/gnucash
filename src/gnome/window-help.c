@@ -63,7 +63,7 @@
 #endif
 #endif
 
-#include "File.h"
+#include "file-utils.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
