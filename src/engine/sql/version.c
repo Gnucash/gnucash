@@ -1,5 +1,5 @@
 /********************************************************************\
- * version.c -- handle backward compatibility issues                *
+ * version.c -- handle back-ward compatible database table upgrades *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -42,6 +42,7 @@ static short module = MOD_BACKEND;
 #define PGEND_CURRENT_MAJOR_VERSION 1
 
 /* ============================================================= */
+/* see if the version table exists, if not, create it */
 
 static gpointer
 version_table_cb (PGBackend *be, PGresult *result, int j, gpointer data)
@@ -78,6 +79,7 @@ pgendVersionTable (PGBackend *be)
 }
 
 /* ============================================================= */
+/* get the highest installed version number */
 
 typedef struct {
    int major;
@@ -107,6 +109,71 @@ pgendGetVersion (PGBackend *be)
    vers.major = 0;
    pgendGetResults (be, version_version_cb, &vers);
    return vers;
+}
+
+/* ============================================================= */
+/* move iguids to the tables */
+
+static gpointer
+get_iguid_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   int fin = atoi(DB_GET_VAL ("iguid", j));
+   return fin;
+}
+
+
+
+static void 
+put_iguid_in_tables (PGBackend *be)
+{
+   char *p, buff[200];
+   int iguid;
+	
+   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,1,0,'Start Put iGUID in Main Tables');";
+   SEND_QUERY (be,p, );
+
+   p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "UPDATE gncEntry SET iguid = 0;\n" 
+       
+       "UPDATE gncEntry SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncEntry.entryGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
+   SEND_QUERY (be,p, );
+   
+   p = "ALTER TABLE gncTransaction ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "UPDATE gncTransaction SET iguid = 0;\n" 
+       
+       "UPDATE gncTransaction SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncTransaction.transGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
+   SEND_QUERY (be,p, );
+	   
+   p = "ALTER TABLE gncAccount ADD COLUMN iguid INT4 DEFAULT 0;\n"
+       "UPDATE gncAccount SET iguid = 0;\n" 
+       
+       "UPDATE gncAccount SET iguid = gncGUIDCache.iguid "
+       " FROM gncGUIDCache, gncKVPValue "
+       " WHERE gncGUIDCache.guid = gncAccount.accountGUID "
+       " AND gncGUIDCache.iguid = gncKVPValue.iguid;\n";
+   SEND_QUERY (be,p, );
+
+   p = "SELECT iguid FROM gncGUIDCache ORDER BY iguid DESC LIMIT 1;";
+   SEND_QUERY (be,p, );
+   iguid = pgendGetResults (be, get_iguid_cb, 0);
+   iguid ++;
+
+   sprintf(buff, "CREATE SEQUENCE gnc_iguid_seq START %d;", iguid);
+   SEND_QUERY (be,buff, );
+	   
+   p = "DROP TABLE gncGUIDCache;";
+   SEND_QUERY (be,p, );
+   
+   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,1,1,'End Put iGUID in Main Tables');";
+   SEND_QUERY (be,p, );
 }
 
 /* ============================================================= */
@@ -140,6 +207,7 @@ pgendForwardVersion (PGBackend *be)
       /* version 1.1.0 add iguids to transaction and entry tables */
       if (1> vers.minor)
       {
+         put_iguid_in_tables(be);
       }
    }
 
