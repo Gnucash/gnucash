@@ -72,6 +72,8 @@ static void addObj (GncBillTerm *term);
 static void remObj (GncBillTerm *term);
 static void maybe_resort_list (GncBillTerm *term);
 
+static void gncBillTermRemoveChild (GncBillTerm *table, GncBillTerm *child);
+
 G_INLINE_FUNC void mark_term (GncBillTerm *term);
 G_INLINE_FUNC void
 mark_term (GncBillTerm *term)
@@ -121,6 +123,10 @@ static void gncBillTermFree (GncBillTerm *term)
 
   if (!term->do_free)
     PERR("free a billterm without do_free set!");
+
+  /* disconnect from parent */
+  if (term->parent)
+    gncBillTermRemoveChild(term->parent, term);
 
   /* disconnect from the children */
   for (list = term->children; list; list=list->next) {

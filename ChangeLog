@@ -1,3 +1,13 @@
+2003-07-09  Derek Atkins <derek@ihtfp.com>
+	
+	* src/business/business-core/gncBillTerm.c:
+	* src/business/business-core/gncTaxTable.c:
+	  Fix a crash where removing items in the wrong order could
+	  cause "Bad Things" to happen -- referencing an invalid
+	  object.  When being destroyed, an object should remove itself
+	  from it's parent's list of children, in addition to removing
+	  itself from it's children's pointer-to-parent.
+
 2003-07-09  Christian Stimming  <stimming@tuhh.de>
 
 	* README: Added remark about gnucash-docs.
