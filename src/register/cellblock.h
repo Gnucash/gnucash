@@ -18,10 +18,14 @@
  * be traversed to will be the one indicated.  Traversing
  * to the rright is usally performed with the tab key.
  * Special traversal order to the left, up or down are not
- * currently implemented.  To traverse out of the table entirely,
+ * currently implemented.  
+ *
+ * To traverse out of the table entirely,
  * the next_row&col should be set to negative values.  If
  * a traversal back into the table occurs, then the cell that 
- * will be entered will be the one with the negative values.
+ * will be entered will be the one with the negative values 
+ * minus one.  Thus to traverse out of the table, then back
+ * back to (m,n), set the next row-col to (-m-1,-n-1).
  *
  * MEMBERS:
  * The right_traverse array indicates which cell chould be

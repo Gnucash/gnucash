@@ -166,7 +166,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
    xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
    xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
-   xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -DATE_CELL_R, -DATE_CELL_C);
+   xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
 
 
    /* -------------------------------- */   

@@ -638,13 +638,12 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
        */
       if ((0 > next_row) || (0 > next_col)) {
          /* reverse the sign of next_row, col to be positive. */
-         cbs->next_row    = row - rel_row - next_row; 
-         cbs->next_column = col - rel_col - next_col;
+         cbs->next_row    = row - rel_row - next_row -1; 
+         cbs->next_column = col - rel_col - next_col -1;
          cbs->qparam      = NULLQUARK; 
          if (table->next_tab_group) {
             XmProcessTraversal (table->next_tab_group, 
                                 XmTRAVERSE_CURRENT); 
-
          }
       } else {
          cbs->next_row    = row - rel_row + next_row; 
