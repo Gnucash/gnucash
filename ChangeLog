@@ -1,3 +1,38 @@
+2001-04-05  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-transaction.c: guess what?
+
+	* src/test/test-xml-commodity.c: genericify all over.
+
+	* src/test/test-xml-account.c: genericify all over.
+
+	* src/test/gnc-test-stuff.c (test_load_file): use new generic
+	interface. 
+	(test_files_in_dir): same.
+
+	* src/engine/io-gncxml-v2.h (struct sixtp_global_data_v2_struct):
+	remove all the stuff made uneccesary by generification.
+
+	* src/engine/io-gncxml-v2.c (gnc_counter_end_handler): same as below.
+	(generic_callback): new func for generic callback.
+	(gnc_book_load_from_xml_file_v2): use new generic callback
+	mechanism. 
+
+	* src/engine/gnc-transaction-xml-v2.c
+	(gnc_transaction_end_handler): same as below.
+
+	* src/engine/gnc-pricedb-xml-v1.c (pricedb_v2_end_handler): same
+	as below.
+
+	* src/engine/gnc-commodity-xml-v2.c (gnc_commodity_end_handler):
+	same as below.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_end_handler):
+	genericify the callback mechanism.
+
+	* src/engine/io-gncxml-v2.c (gnc_book_load_from_xml_file_v2): move
+	xaccLogDisable call.
+
 2001-04-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/html-table.scm (gnc:html-table-remove-last-row!): Added
@@ -49,6 +84,12 @@
 	* src/scm/report/balance-sheet.scm: calculate retained profits
 	explicitly, display (liabilities + equity) to allow people
 	to check balances.
+
+2001-04-04  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_timespec): use
+	g_free rather than free (ben's find)
+	(dom_tree_to_gnc_numeric): same.
 
 2001-04-03  Dave Peticolas  <dave@krondo.com>
 

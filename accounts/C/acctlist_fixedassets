@@ -1,42 +1,38 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>House</name>
-        <guid>b7baffa7ae86e9e3471f65ecf7e898e0</guid>
-        <type>ASSET</type>
-        <description>House</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Other Asset</name>
-        <guid>939effb3e3dba6e80e22d8291916f4dd</guid>
-        <type>ASSET</type>
-        <description>Other Asset</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Vehicle</name>
-        <guid>400fa3023e51a54305046c00a2c3cfb9</guid>
-        <type>ASSET</type>
-        <description>Vehicle</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">3</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>House</act:name>
+  <act:id type="guid">b7baffa7ae86e9e3471f65ecf7e898e0</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>House</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Asset</act:name>
+  <act:id type="guid">939effb3e3dba6e80e22d8291916f4dd</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Other Asset</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vehicle</act:name>
+  <act:id type="guid">400fa3023e51a54305046c00a2c3cfb9</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Vehicle</act:description>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

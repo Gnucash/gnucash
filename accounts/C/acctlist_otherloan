@@ -1,45 +1,39 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Other Loan</name>
-        <guid>90f49685a7ff7a186b0571b5550cd586</guid>
-        <type>LIABILITY</type>
-        <description>Other Loan</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Interest</name>
-        <guid>db3ce3c909949a1da026cb2f8336f945</guid>
-        <type>EXPENSE</type>
-        <description>Interest</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Other Interest</name>
-        <guid>fa0d3202fbba65ac3ac92edbbeb7098c</guid>
-        <type>EXPENSE</type>
-        <description>Other Interest</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>db3ce3c909949a1da026cb2f8336f945</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">3</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Other Loan</act:name>
+  <act:id type="guid">90f49685a7ff7a186b0571b5550cd586</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Other Loan</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interest</act:name>
+  <act:id type="guid">db3ce3c909949a1da026cb2f8336f945</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Interest</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Interest</act:name>
+  <act:id type="guid">fa0d3202fbba65ac3ac92edbbeb7098c</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Other Interest</act:description>
+  <act:parent type="guid">db3ce3c909949a1da026cb2f8336f945</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,33 +1,29 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Expenses</name>
-        <guid>ee8238ee2c2ce590160761df09b99b72</guid>
-        <type>EXPENSE</type>
-        <description>Expenses</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Childcare</name>
-        <guid>8999739a6bfc46088a3ea5ec45e5f8a4</guid>
-        <type>EXPENSE</type>
-        <description>Childcare</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>ee8238ee2c2ce590160761df09b99b72</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">2</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Expenses</act:name>
+  <act:id type="guid">ee8238ee2c2ce590160761df09b99b72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Expenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Childcare</act:name>
+  <act:id type="guid">8999739a6bfc46088a3ea5ec45e5f8a4</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Childcare</act:description>
+  <act:parent type="guid">ee8238ee2c2ce590160761df09b99b72</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -100,14 +100,6 @@ on_accountChooseDruidPage_cancel       (GnomeDruid      *gnomedruid,
 
 
 void
-on_newAccountRunAgain_toggled          (GtkToggleButton *togglebutton,
-                                        gpointer         user_data)
-{
-    /* I'm not sure this is needed.  FIXME: remove */
-}
-
-
-void
 on_newAccountCancelDialog_OKButton_clicked
                                         (GtkButton       *button,
                                         gpointer         user_data)
@@ -174,5 +166,27 @@ on_newUserDruidFinishPage_prepare      (GnomeDruidPage  *gnomedruidpage,
     gnc_ui_show_nu_account_list();
 
     /* need to fill up the account list info here */
+}
+
+
+void
+on_newAccountTypesList_select_row      (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+    /* need to fill in useful data on a select row */
+}
+
+
+void
+on_newAccountTree_select_row           (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+    /* need to put info in the box and account name here */
 }
 

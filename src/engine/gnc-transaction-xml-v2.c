@@ -38,7 +38,7 @@
 
 #include "gnc-xml.h"
 
-#include "io-gncxml-v2.h"
+#include "io-gncxml-gen.h"
 
 #include "sixtp-dom-parsers.h"
 #include "Transaction.h"
@@ -452,7 +452,7 @@ gnc_transaction_end_handler(gpointer data_for_children,
     gboolean successful = FALSE;
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    sixtp_gdv2 *globaldata = (sixtp_gdv2*)global_data;
+    gxpf_data *gdata = (gxpf_data*)global_data;
 
     if(parent_data)
     {
@@ -478,7 +478,7 @@ gnc_transaction_end_handler(gpointer data_for_children,
 
     if(successful)
     {
-        globaldata->addTransactionFunc(globaldata, trn);
+        gdata->cb(tag, gdata->data, trn);
         successful = TRUE;
     }
     else

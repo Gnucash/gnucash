@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Currency Trading</name>
-        <guid>34613c96becb35522e7cdc327e9890e0</guid>
-        <type>CURRENCY</type>
-        <description>Currency Trading</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>DEM</id>
-        </currency>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">1</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Currency Trading</act:name>
+  <act:id type="guid">34613c96becb35522e7cdc327e9890e0</act:id>
+  <act:type>CURRENCY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>DEM</cmdty:id>
+  </act:currency>
+  <act:description>Currency Trading</act:description>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

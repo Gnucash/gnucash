@@ -13,7 +13,7 @@
 #include "sixtp-dom-generators.h"
 
 #include "gnc-xml.h"
-#include "io-gncxml-v2.h"
+#include "io-gncxml-gen.h"
 
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
@@ -223,7 +223,7 @@ gnc_account_end_handler(gpointer data_for_children,
     Account *acc;
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    sixtp_gdv2 *gdata = (sixtp_gdv2*)global_data;
+    gxpf_data *gdata = (gxpf_data*)global_data;
     
     successful = TRUE;
 
@@ -254,7 +254,7 @@ gnc_account_end_handler(gpointer data_for_children,
     }
     else
     {
-        gdata->addAccountFunc(global_data, acc);
+        gdata->cb(tag, gdata->data, acc);
     }
     
     xmlFreeNode(tree);

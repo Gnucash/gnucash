@@ -1,105 +1,83 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Salary (Spouse)</name>
-        <guid>af17b4af74637c09b67e817ec6f135d5</guid>
-        <type>INCOME</type>
-        <description>Salary (Spouse)</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Taxes (Spouse)</name>
-        <guid>5ee1e7d13ba219536e6ecd3ea899fb2d</guid>
-        <type>EXPENSE</type>
-        <description>Taxes (Spouse)</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Federal</name>
-        <guid>48a409acca0ef366e1630bb51884add9</guid>
-        <type>EXPENSE</type>
-        <description>Federal</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>5ee1e7d13ba219536e6ecd3ea899fb2d</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Medicare</name>
-        <guid>c3b6e1c886e4f5b6c0bd80984d61d0a5</guid>
-        <type>EXPENSE</type>
-        <description>Medicare</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>5ee1e7d13ba219536e6ecd3ea899fb2d</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Other Tax</name>
-        <guid>e476cd2ff2b912799032d440ba5d10ed</guid>
-        <type>EXPENSE</type>
-        <description>Other Tax</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>5ee1e7d13ba219536e6ecd3ea899fb2d</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Social Security</name>
-        <guid>b285b68902fc18445d4898680e918201</guid>
-        <type>EXPENSE</type>
-        <description>Social Security</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>5ee1e7d13ba219536e6ecd3ea899fb2d</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>State/Province</name>
-        <guid>e1c80b1cd5d013697b0c31290de68037</guid>
-        <type>EXPENSE</type>
-        <description>State/Province</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>5ee1e7d13ba219536e6ecd3ea899fb2d</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">7</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Salary (Spouse)</act:name>
+  <act:id type="guid">af17b4af74637c09b67e817ec6f135d5</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Salary (Spouse)</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taxes (Spouse)</act:name>
+  <act:id type="guid">5ee1e7d13ba219536e6ecd3ea899fb2d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Taxes (Spouse)</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Federal</act:name>
+  <act:id type="guid">48a409acca0ef366e1630bb51884add9</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Federal</act:description>
+  <act:parent type="guid">5ee1e7d13ba219536e6ecd3ea899fb2d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Medicare</act:name>
+  <act:id type="guid">c3b6e1c886e4f5b6c0bd80984d61d0a5</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Medicare</act:description>
+  <act:parent type="guid">5ee1e7d13ba219536e6ecd3ea899fb2d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Tax</act:name>
+  <act:id type="guid">e476cd2ff2b912799032d440ba5d10ed</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Other Tax</act:description>
+  <act:parent type="guid">5ee1e7d13ba219536e6ecd3ea899fb2d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Social Security</act:name>
+  <act:id type="guid">b285b68902fc18445d4898680e918201</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Social Security</act:description>
+  <act:parent type="guid">5ee1e7d13ba219536e6ecd3ea899fb2d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>State/Province</act:name>
+  <act:id type="guid">e1c80b1cd5d013697b0c31290de68037</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>State/Province</act:description>
+  <act:parent type="guid">5ee1e7d13ba219536e6ecd3ea899fb2d</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

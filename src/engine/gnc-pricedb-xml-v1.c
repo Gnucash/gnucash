@@ -35,7 +35,7 @@
 #include "sixtp-dom-generators.h"
 #include "sixtp-writers.h"
 #include "sixtp-xml-write-utils.h"
-#include "io-gncxml-v2.h"
+#include "io-gncxml-gen.h"
 
 #include "gnc-pricedb.h"
 
@@ -275,7 +275,7 @@ pricedb_v2_end_handler(
     gpointer *result, const gchar *tag)
 {
     GNCPriceDB *db = *result;
-    sixtp_gdv2* globaldata = (sixtp_gdv2*)global_data;
+    gxpf_data *gdata = (gxpf_data*)global_data;
 
     if(parent_data)
     {
@@ -287,7 +287,7 @@ pricedb_v2_end_handler(
         return TRUE;
     }
     
-    globaldata->addPriceDBFunc(globaldata, db);
+    gdata->cb(tag, gdata->data, db);
     *result = NULL;
 
     return TRUE;

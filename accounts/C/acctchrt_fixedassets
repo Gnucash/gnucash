@@ -1,78 +1,62 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Assets</name>
-        <guid>64b6276c060185131cecbd1ac6218440</guid>
-        <type>ASSET</type>
-        <description>Assets</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Fixed Assets</name>
-        <guid>9b171f77000bf68dd1ebbaf58336656d</guid>
-        <type>ASSET</type>
-        <description>Fixed Assets</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>64b6276c060185131cecbd1ac6218440</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>House</name>
-        <guid>9205ad6b6482903e5a696602d491c8f5</guid>
-        <type>ASSET</type>
-        <description>House</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9b171f77000bf68dd1ebbaf58336656d</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Other Asset</name>
-        <guid>ad3b239297277c9ef3840c0433cecb18</guid>
-        <type>ASSET</type>
-        <description>Other Asset</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9b171f77000bf68dd1ebbaf58336656d</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Vehicle</name>
-        <guid>5913089ffc36df6f0a5d96a5d7a444c0</guid>
-        <type>ASSET</type>
-        <description>Vehicle</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9b171f77000bf68dd1ebbaf58336656d</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">5</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Assets</act:name>
+  <act:id type="guid">64b6276c060185131cecbd1ac6218440</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Assets</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Fixed Assets</act:name>
+  <act:id type="guid">9b171f77000bf68dd1ebbaf58336656d</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Fixed Assets</act:description>
+  <act:parent type="guid">64b6276c060185131cecbd1ac6218440</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>House</act:name>
+  <act:id type="guid">9205ad6b6482903e5a696602d491c8f5</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>House</act:description>
+  <act:parent type="guid">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Other Asset</act:name>
+  <act:id type="guid">ad3b239297277c9ef3840c0433cecb18</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Other Asset</act:description>
+  <act:parent type="guid">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vehicle</act:name>
+  <act:id type="guid">5913089ffc36df6f0a5d96a5d7a444c0</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Vehicle</act:description>
+  <act:parent type="guid">9b171f77000bf68dd1ebbaf58336656d</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

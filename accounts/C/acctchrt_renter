@@ -1,63 +1,51 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Expenses</name>
-        <guid>9a2b4520f113372f4e576f5b6dc129c6</guid>
-        <type>EXPENSE</type>
-        <description>Expenses</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Insurance</name>
-        <guid>b79b231807a98cd562c46cf0454e9f25</guid>
-        <type>EXPENSE</type>
-        <description>Insurance</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9a2b4520f113372f4e576f5b6dc129c6</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Rental Insurance</name>
-        <guid>a4c93c964b8322d534e35b7054cbda4d</guid>
-        <type>EXPENSE</type>
-        <description>Rental Insurance</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>b79b231807a98cd562c46cf0454e9f25</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Rent</name>
-        <guid>c1638a9a48d4d0e1b17d99219a18f34b</guid>
-        <type>EXPENSE</type>
-        <description>Rent</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9a2b4520f113372f4e576f5b6dc129c6</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">4</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Expenses</act:name>
+  <act:id type="guid">9a2b4520f113372f4e576f5b6dc129c6</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Expenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Insurance</act:name>
+  <act:id type="guid">b79b231807a98cd562c46cf0454e9f25</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Insurance</act:description>
+  <act:parent type="guid">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rental Insurance</act:name>
+  <act:id type="guid">a4c93c964b8322d534e35b7054cbda4d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Rental Insurance</act:description>
+  <act:parent type="guid">b79b231807a98cd562c46cf0454e9f25</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Rent</act:name>
+  <act:id type="guid">c1638a9a48d4d0e1b17d99219a18f34b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Rent</act:description>
+  <act:parent type="guid">9a2b4520f113372f4e576f5b6dc129c6</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

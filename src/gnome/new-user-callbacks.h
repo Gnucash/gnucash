@@ -46,10 +46,6 @@ on_accountChooseDruidPage_cancel       (GnomeDruid      *gnomedruid,
                                         gpointer         user_data);
 
 void
-on_newAccountRunAgain_toggled          (GtkToggleButton *togglebutton,
-                                        gpointer         user_data);
-
-void
 on_newAccountCancelDialog_OKButton_clicked
                                         (GtkButton       *button,
                                          gpointer         user_data);
@@ -65,10 +61,24 @@ on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
 
-
-#endif /* _NEW_USER_CALLBACKS_H_ */    
-
 void
 on_newUserDruidFinishPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
                                         gpointer         user_data);
+
+void
+on_newAccountTypesList_select_row      (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+void
+on_newAccountTree_select_row           (GtkCList        *clist,
+                                        gint             row,
+                                        gint             column,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+
+#endif /* _NEW_USER_CALLBACKS_H_ */    

@@ -37,22 +37,8 @@ typedef struct _load_counter_struct load_counter;
 struct sixtp_global_data_v2_struct
 {
     GNCBook *book;
-    gpointer data;
-
-    int value;
-    char *tag;
-
     load_counter counter;
     void (*countCallback)(const char *type, load_counter counter);
-    
-    gboolean (*addAccountFunc)(struct sixtp_global_data_v2_struct *data,
-                               Account *act);
-    gboolean (*addCommodityFunc)(struct sixtp_global_data_v2_struct *data,
-                                 gnc_commodity *com);
-    gboolean (*addTransactionFunc)(struct sixtp_global_data_v2_struct *data,
-                                   Transaction *act);
-    gboolean (*addPriceDBFunc)(struct sixtp_global_data_v2_struct *data,
-                               GNCPriceDB *prc);
 };
 
 typedef struct sixtp_global_data_v2_struct sixtp_gdv2;

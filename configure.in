@@ -553,6 +553,7 @@ AC_OUTPUT(
           lib/Makefile
           macros/Makefile
 	  po/Makefile.in
+          po/Makefile
           rpm/Makefile
           src/Makefile
           src/calculation/Makefile 

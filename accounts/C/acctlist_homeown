@@ -1,72 +1,60 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Home Repair</name>
-        <guid>a2a85849ba534678e1970ec49515e6fa</guid>
-        <type>EXPENSE</type>
-        <description>Home Repair</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Insurance</name>
-        <guid>900dfe72555fdc3cbf6019c5a4603279</guid>
-        <type>EXPENSE</type>
-        <description>Insurance</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Home Insurance</name>
-        <guid>dc00b72b5d10aebe6b1665499a0cfddb</guid>
-        <type>EXPENSE</type>
-        <description>Home Insurance</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>900dfe72555fdc3cbf6019c5a4603279</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Taxes</name>
-        <guid>9c154b2a736879d3fe5ba128f7a62169</guid>
-        <type>EXPENSE</type>
-        <description>Taxes</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Property Tax</name>
-        <guid>40cbf9afed3e15e241e52f9e59a2cfd1</guid>
-        <type>EXPENSE</type>
-        <description>Property Tax</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9c154b2a736879d3fe5ba128f7a62169</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">5</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Home Repair</act:name>
+  <act:id type="guid">a2a85849ba534678e1970ec49515e6fa</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Home Repair</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Insurance</act:name>
+  <act:id type="guid">900dfe72555fdc3cbf6019c5a4603279</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Insurance</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Home Insurance</act:name>
+  <act:id type="guid">dc00b72b5d10aebe6b1665499a0cfddb</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Home Insurance</act:description>
+  <act:parent type="guid">900dfe72555fdc3cbf6019c5a4603279</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Taxes</act:name>
+  <act:id type="guid">9c154b2a736879d3fe5ba128f7a62169</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Taxes</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Property Tax</act:name>
+  <act:id type="guid">40cbf9afed3e15e241e52f9e59a2cfd1</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Property Tax</act:description>
+  <act:parent type="guid">9c154b2a736879d3fe5ba128f7a62169</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

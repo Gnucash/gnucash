@@ -455,7 +455,7 @@ dom_tree_to_gnc_numeric(xmlNodePtr node)
 
     if(string_to_gnc_numeric(content, ret) != NULL)
     {
-        free(content);
+        g_free(content);
         return ret;
     }
     else
@@ -518,10 +518,10 @@ dom_tree_to_timespec(xmlNodePtr node)
           }
           
           if(!string_to_timespec_secs(content, ret)) {
-            free(content);
-            return timespec_failure(ret);
+              g_free(content);
+              return timespec_failure(ret);
           }
-          free(content);
+          g_free(content);
           seen_s = TRUE;
         }
       }
@@ -539,10 +539,10 @@ dom_tree_to_timespec(xmlNodePtr node)
           }
           
           if(!string_to_timespec_nsecs(content, ret)) {
-            free(content);
-            return timespec_failure(ret);
+              g_free(content);
+              return timespec_failure(ret);
           }
-          free(content);
+          g_free(content);
           seen_ns = TRUE;
         }
       }

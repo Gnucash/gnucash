@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Childcare</name>
-        <guid>f37587dab73433d30ce6fa1a2c0ee53d</guid>
-        <type>EXPENSE</type>
-        <description>Childcare</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">1</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Childcare</act:name>
+  <act:id type="guid">f37587dab73433d30ce6fa1a2c0ee53d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Childcare</act:description>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

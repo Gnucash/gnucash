@@ -1,192 +1,148 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Assets</name>
-        <guid>52b5942b5beaec856eaca5a75ee71592</guid>
-        <type>ASSET</type>
-        <description>Assets</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Investments</name>
-        <guid>7ff59d92615cce4d8388d7e179ee3ff6</guid>
-        <type>ASSET</type>
-        <description>Investments</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>52b5942b5beaec856eaca5a75ee71592</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Brokerage Account</name>
-        <guid>f15ec9568727f08a5ebd8f3e66483876</guid>
-        <type>BANK</type>
-        <description>Brokerage Account</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>7ff59d92615cce4d8388d7e179ee3ff6</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Bond</name>
-        <guid>8196bf0015c25f501338f07a87c512d8</guid>
-        <type>STOCK</type>
-        <description>Bond</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>f15ec9568727f08a5ebd8f3e66483876</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Stock</name>
-        <guid>7d7db9bed07f21fc0b1f50674702aff0</guid>
-        <type>STOCK</type>
-        <description>Stock</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>f15ec9568727f08a5ebd8f3e66483876</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Market Index</name>
-        <guid>fe9db8a7eedf2990e9846f634a922143</guid>
-        <type>MUTUAL</type>
-        <description>Market Index</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>f15ec9568727f08a5ebd8f3e66483876</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Mutual Fund</name>
-        <guid>9da28c1aa7789e84bdc8484ba8f527b3</guid>
-        <type>MUTUAL</type>
-        <description>Mutual Fund</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>f15ec9568727f08a5ebd8f3e66483876</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Income</name>
-        <guid>9da3c880bd04b9db49eb7f5b06403bda</guid>
-        <type>INCOME</type>
-        <description>Income</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Dividend Income</name>
-        <guid>1af1f4894aeab96d840e66254d023b88</guid>
-        <type>INCOME</type>
-        <description>Dividend Income</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9da3c880bd04b9db49eb7f5b06403bda</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Interest Income</name>
-        <guid>7943bc59ffbb9a7be4afcd2996147119</guid>
-        <type>INCOME</type>
-        <description>Interest Income</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9da3c880bd04b9db49eb7f5b06403bda</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Bond Interest</name>
-        <guid>8ceb4752a11e2d342b9009b343fdba38</guid>
-        <type>INCOME</type>
-        <description>Bond Interest</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>7943bc59ffbb9a7be4afcd2996147119</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Expenses</name>
-        <guid>6de23244232785031501171abcc1d4aa</guid>
-        <type>EXPENSE</type>
-        <description>Expenses</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Commissions</name>
-        <guid>77fdffddc79c662c93c482cefa5a4744</guid>
-        <type>EXPENSE</type>
-        <description>Commissions</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>6de23244232785031501171abcc1d4aa</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">13</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Assets</act:name>
+  <act:id type="guid">52b5942b5beaec856eaca5a75ee71592</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Assets</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investments</act:name>
+  <act:id type="guid">7ff59d92615cce4d8388d7e179ee3ff6</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Investments</act:description>
+  <act:parent type="guid">52b5942b5beaec856eaca5a75ee71592</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Brokerage Account</act:name>
+  <act:id type="guid">f15ec9568727f08a5ebd8f3e66483876</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Brokerage Account</act:description>
+  <act:parent type="guid">7ff59d92615cce4d8388d7e179ee3ff6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bond</act:name>
+  <act:id type="guid">8196bf0015c25f501338f07a87c512d8</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Bond</act:description>
+  <act:parent type="guid">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Stock</act:name>
+  <act:id type="guid">7d7db9bed07f21fc0b1f50674702aff0</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Stock</act:description>
+  <act:parent type="guid">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Market Index</act:name>
+  <act:id type="guid">fe9db8a7eedf2990e9846f634a922143</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Market Index</act:description>
+  <act:parent type="guid">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Mutual Fund</act:name>
+  <act:id type="guid">9da28c1aa7789e84bdc8484ba8f527b3</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Mutual Fund</act:description>
+  <act:parent type="guid">f15ec9568727f08a5ebd8f3e66483876</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Income</act:name>
+  <act:id type="guid">9da3c880bd04b9db49eb7f5b06403bda</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Income</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dividend Income</act:name>
+  <act:id type="guid">1af1f4894aeab96d840e66254d023b88</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dividend Income</act:description>
+  <act:parent type="guid">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interest Income</act:name>
+  <act:id type="guid">7943bc59ffbb9a7be4afcd2996147119</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Interest Income</act:description>
+  <act:parent type="guid">9da3c880bd04b9db49eb7f5b06403bda</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bond Interest</act:name>
+  <act:id type="guid">8ceb4752a11e2d342b9009b343fdba38</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Bond Interest</act:description>
+  <act:parent type="guid">7943bc59ffbb9a7be4afcd2996147119</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Expenses</act:name>
+  <act:id type="guid">6de23244232785031501171abcc1d4aa</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Expenses</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Commissions</act:name>
+  <act:id type="guid">77fdffddc79c662c93c482cefa5a4744</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Commissions</act:description>
+  <act:parent type="guid">6de23244232785031501171abcc1d4aa</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -31,6 +31,8 @@
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
+  <default_width>640</default_width>
+  <default_height>480</default_height>
   <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
@@ -187,6 +189,11 @@
 	    <class>GtkCList</class>
 	    <name>newAccountTypesList</name>
 	    <can_focus>True</can_focus>
+	    <signal>
+	      <name>select_row</name>
+	      <handler>on_newAccountTypesList_select_row</handler>
+	      <last_modification_time>Tue, 03 Apr 2001 19:46:37 GMT</last_modification_time>
+	    </signal>
 	    <columns>3</columns>
 	    <column_widths>52,152,80</column_widths>
 	    <selection_mode>GTK_SELECTION_MULTIPLE</selection_mode>
@@ -313,7 +320,9 @@
 	<last_modification_time>Sun, 14 Jan 2001 18:14:22 GMT</last_modification_time>
       </signal>
       <title>Finish Account Setup</title>
-      <text>Please check the window for the new accounts that will be created.
+      <text>Please check the window for the new accounts that will be created.  
+Add any starting balances you would like to exist.
+This will come from a Starting Equity account.
 Press `Finish' if this is OK.</text>
       <background_color>25,25,112</background_color>
       <logo_background_color>255,255,255</logo_background_color>
@@ -333,40 +342,41 @@ Press `Finish' if this is OK.</text>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
+  <default_width>640</default_width>
+  <default_height>480</default_height>
   <allow_shrink>False</allow_shrink>
   <allow_grow>True</allow_grow>
   <auto_shrink>False</auto_shrink>
 
   <widget>
     <class>GtkVBox</class>
-    <name>vbox3</name>
+    <name>newAccountTopVBox</name>
     <homogeneous>False</homogeneous>
     <spacing>0</spacing>
 
     <widget>
       <class>GtkLabel</class>
       <name>newAccountLable</name>
-      <label>If you would like the new accounts to have a balance please enter it into the Balance column in the list below.</label>
-      <justify>GTK_JUSTIFY_RIGHT</justify>
+      <label>If you would like the accounts to have a starting balance click on the account line and enter the starting balance in the text entry box on the right.</label>
+      <justify>GTK_JUSTIFY_FILL</justify>
       <wrap>True</wrap>
-      <xalign>0.5</xalign>
-      <yalign>0.5</yalign>
-      <xpad>0</xpad>
-      <ypad>0</ypad>
+      <xalign>0.0800003</xalign>
+      <yalign>0.08</yalign>
+      <xpad>1</xpad>
+      <ypad>1</ypad>
       <child>
 	<padding>0</padding>
 	<expand>False</expand>
-	<fill>False</fill>
+	<fill>True</fill>
       </child>
     </widget>
 
     <widget>
-      <class>GtkScrolledWindow</class>
-      <name>scrolledwindow4</name>
-      <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
-      <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
-      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+      <class>GtkHPaned</class>
+      <name>newAccountHPaned</name>
+      <handle_size>10</handle_size>
+      <gutter_size>6</gutter_size>
+      <position>1</position>
       <child>
 	<padding>0</padding>
 	<expand>True</expand>
@@ -374,52 +384,131 @@ Press `Finish' if this is OK.</text>
       </child>
 
       <widget>
-	<class>GtkCTree</class>
-	<name>newAccountListCTree</name>
-	<can_focus>True</can_focus>
-	<columns>3</columns>
-	<column_widths>80,157,80</column_widths>
-	<selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	<show_titles>True</show_titles>
-	<shadow_type>GTK_SHADOW_IN</shadow_type>
+	<class>GtkScrolledWindow</class>
+	<name>newAccountTreeScrolledWindow</name>
+	<hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	<vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	<child>
+	  <shrink>False</shrink>
+	  <resize>False</resize>
+	</child>
+
+	<widget>
+	  <class>GtkCTree</class>
+	  <name>newAccountTree</name>
+	  <can_focus>True</can_focus>
+	  <signal>
+	    <name>select_row</name>
+	    <handler>on_newAccountTree_select_row</handler>
+	    <last_modification_time>Tue, 03 Apr 2001 19:46:19 GMT</last_modification_time>
+	  </signal>
+	  <columns>3</columns>
+	  <column_widths>86,233,80</column_widths>
+	  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	  <show_titles>True</show_titles>
+	  <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CTree:title</child_name>
+	    <name>newAccountTreeAccountLabel</name>
+	    <label>Account Name</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CTree:title</child_name>
+	    <name>newAccountTreeDestriptionLabel</name>
+	    <label>Description</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CTree:title</child_name>
+	    <name>newAccountTreeStartingBalanceLabel</name>
+	    <label>Starting Balance</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkVBox</class>
+	<name>vbox4</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <shrink>True</shrink>
+	  <resize>True</resize>
+	</child>
 
 	<widget>
 	  <class>GtkLabel</class>
-	  <child_name>CTree:title</child_name>
-	  <name>newAccountList_NameLable</name>
-	  <label>Name</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
+	  <name>newAccountAccountNameLabel</name>
+	  <label>Account: </label>
+	  <justify>GTK_JUSTIFY_RIGHT</justify>
+	  <wrap>True</wrap>
+	  <xalign>0.49</xalign>
 	  <yalign>0.5</yalign>
 	  <xpad>0</xpad>
 	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
 	</widget>
 
 	<widget>
 	  <class>GtkLabel</class>
-	  <child_name>CTree:title</child_name>
-	  <name>newAccountList_DescriptionLable</name>
-	  <label>Description</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <name>newAccountEnterStartingBalanceLabel</name>
+	  <label>Enter Starting Balance</label>
+	  <justify>GTK_JUSTIFY_RIGHT</justify>
 	  <wrap>False</wrap>
 	  <xalign>0.5</xalign>
 	  <yalign>0.5</yalign>
 	  <xpad>0</xpad>
 	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
 	</widget>
 
 	<widget>
-	  <class>GtkLabel</class>
-	  <child_name>CTree:title</child_name>
-	  <name>newAccountList_BalanceLable</name>
-	  <label>Balance</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
+	  <class>GtkEntry</class>
+	  <name>newAccountStartingBalanceEntry</name>
+	  <width>100</width>
+	  <can_focus>True</can_focus>
+	  <editable>True</editable>
+	  <text_visible>True</text_visible>
+	  <text_max_length>0</text_max_length>
+	  <text></text>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
 	</widget>
       </widget>
     </widget>
@@ -514,11 +603,6 @@ Press `Finish' if this is OK.</text>
 	<class>GtkCheckButton</class>
 	<name>newAccountCancelDialog_RunAgainToggle</name>
 	<can_focus>True</can_focus>
-	<signal>
-	  <name>toggled</name>
-	  <handler>on_newAccountRunAgain_toggled</handler>
-	  <last_modification_time>Wed, 10 Jan 2001 03:44:02 GMT</last_modification_time>
-	</signal>
 	<label>Run New User Account Setup again?</label>
 	<active>True</active>
 	<draw_indicator>True</draw_indicator>

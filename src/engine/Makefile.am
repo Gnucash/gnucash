@@ -41,9 +41,10 @@ libgncengine_la_SOURCES = \
   gnc-transaction-xml-v2.c \
   guid.c \
   io-gncbin-r.c \
+  io-gncxml-gen.c \
   io-gncxml-r.c \
-  io-gncxml-w.c \
   io-gncxml-v2.c \
+  io-gncxml-w.c \
   kvp_frame.c \
   md5.c \
   sixtp-dom-generators.c \
@@ -75,8 +76,8 @@ noinst_HEADERS = \
   TransactionP.h \
   date.h \
   gnc-associate-account.h \
-  gnc-book.h \
   gnc-book-p.h \
+  gnc-book.h \
   gnc-commodity.h \
   gnc-common.h \
   gnc-engine-util.h \
@@ -84,15 +85,16 @@ noinst_HEADERS = \
   gnc-event-p.h \
   gnc-event.h \
   gnc-numeric.h \
-  gnc-pricedb.h \
   gnc-pricedb-p.h \
+  gnc-pricedb.h \
   gnc-xml-helper.h \
   gnc-xml.h \
   guid.h \
   io-gncbin.h \
-  io-gncxml.h \
+  io-gncxml-gen.h \
   io-gncxml-p.h \
   io-gncxml-v2.h \
+  io-gncxml.h \
   kvp_frame.h \
   md5.h \
   sixtp-dom-generators.h \

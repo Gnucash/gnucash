@@ -8,6 +8,8 @@
 
 #include "sixtp-dom-parsers.h"
 #include "io-gncxml-v2.h"
+#include "io-gncxml-gen.h"
+
 #include "sixtp.h"
 #include "sixtp-parsers.h"
 #include "gnc-xml.h"
@@ -126,7 +128,8 @@ gnc_counter_end_handler(gpointer data_for_children,
     gint64 val;
     char *type;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-    sixtp_gdv2 *gdata = (sixtp_gdv2*)global_data;
+    gxpf_data *gdata = (gxpf_data*)global_data;
+    sixtp_gdv2 *sixdata = (sixtp_gdv2*)gdata->data;
     
     if(parent_data)
     {
@@ -152,15 +155,15 @@ gnc_counter_end_handler(gpointer data_for_children,
     
     if(safe_strcmp(type, "transaction") == 0)
     {
-        gdata->counter.transactions_total = val;
+        sixdata->counter.transactions_total = val;
     }
     else if(safe_strcmp(type, "account") == 0)
     {
-        gdata->counter.accounts_total = val;
+        sixdata->counter.accounts_total = val;
     }
     else if(safe_strcmp(type, "commodity") == 0)
     {
-        gdata->counter.commodities_total = val;
+        sixdata->counter.commodities_total = val;
     }
     else
     {
@@ -188,25 +191,56 @@ print_counter_data(load_counter data)
            data.commodities_total, data.commodities_loaded);
 }
 
+static const char *ACCOUNT_TAG = "gnc:account";
+static const char *PRICEDB_TAG = "gnc:pricedb";
+static const char *COMMODITY_TAG = "gnc:commodity";
+static const char *COUNT_DATA_TAG = "gnc:count-data";
+static const char *TRANSACTION_TAG = "gnc:transaction";
+
+static gboolean
+generic_callback(const char *tag, gpointer globaldata, gpointer data)
+{
+    sixtp_gdv2 *gd = (sixtp_gdv2*)globaldata;
+
+    if(safe_strcmp(tag, ACCOUNT_TAG) == 0)
+    {
+        add_account_local(gd, (Account*)data);
+    }
+    else if(safe_strcmp(tag, PRICEDB_TAG) == 0)
+    {
+        add_pricedb_local(gd, (GNCPriceDB*)data);
+    }
+    else if(safe_strcmp(tag, COMMODITY_TAG) == 0)
+    {
+        add_commodity_local(gd, (gnc_commodity*)data);
+    }
+    else if(safe_strcmp(tag, TRANSACTION_TAG) == 0)
+    {
+        add_transaction_local(gd, (Transaction*)data);
+    }
+    return TRUE;
+}
+
 gboolean
 gnc_book_load_from_xml_file_v2(
     GNCBook *book,
     void (*countcallback)(const char *type, load_counter count))
 {
-    sixtp_gdv2 gd;
+    sixtp_gdv2 *gd;
     sixtp *top_parser;
     sixtp *main_parser;
-    gpointer parse_result = NULL;
 
-    gd.book = book;
-    gd.counter.accounts_loaded = 0;
-    gd.counter.accounts_total = 0;
-    gd.counter.commodities_loaded = 0;
-    gd.counter.commodities_total = 0;
-    gd.counter.transactions_loaded = 0;
-    gd.counter.transactions_total = 0;
-    gd.counter.prices_loaded = 0;
-    gd.counter.prices_total = 0;
+    gd = g_new0(sixtp_gdv2, 1);
+    
+    gd->book = book;
+    gd->counter.accounts_loaded = 0;
+    gd->counter.accounts_total = 0;
+    gd->counter.commodities_loaded = 0;
+    gd->counter.commodities_total = 0;
+    gd->counter.transactions_loaded = 0;
+    gd->counter.transactions_total = 0;
+    gd->counter.prices_loaded = 0;
+    gd->counter.prices_total = 0;
 
     {
         AccountGroup *g = gnc_book_get_group(book);
@@ -214,42 +248,36 @@ gnc_book_load_from_xml_file_v2(
         gnc_book_set_group(book, xaccMallocAccountGroup());
     }
     
-    gd.addAccountFunc = add_account_local;
-    gd.addCommodityFunc = add_commodity_local;
-    gd.addTransactionFunc = add_transaction_local;
-    gd.addPriceDBFunc = add_pricedb_local;
-    gd.countCallback = countcallback;
+    gd->countCallback = countcallback;
     
     top_parser = sixtp_new();
     main_parser = sixtp_new();
-
-    /* stop logging while we load */
-    xaccLogDisable ();
 
     if(!sixtp_add_some_sub_parsers(
         top_parser, TRUE,
         "gnc-v2", main_parser,
         NULL, NULL))
     {
-        xaccLogEnable ();
         return FALSE;
     }
 
     if(!sixtp_add_some_sub_parsers(
            main_parser, TRUE,
-           "gnc:count-data", gnc_counter_sixtp_parser_create(),
-           "gnc:pricedb", gnc_pricedb_sixtp_parser_create(),
-           "gnc:commodity", gnc_commodity_sixtp_parser_create(),
-           "gnc:account", gnc_account_sixtp_parser_create(),
-           "gnc:transaction", gnc_transaction_sixtp_parser_create(),
+           COUNT_DATA_TAG, gnc_counter_sixtp_parser_create(),
+           PRICEDB_TAG, gnc_pricedb_sixtp_parser_create(),
+           COMMODITY_TAG, gnc_commodity_sixtp_parser_create(),
+           ACCOUNT_TAG, gnc_account_sixtp_parser_create(),
+           TRANSACTION_TAG, gnc_transaction_sixtp_parser_create(),
            NULL, NULL))
     {
-        xaccLogEnable ();
         return FALSE;
     }
 
-    if(!sixtp_parse_file(top_parser, gnc_book_get_file_path(book),
-                         NULL, &gd, &parse_result))
+    /* stop logging while we load */
+    xaccLogDisable ();
+
+    if(!gnc_xml_parse_file(top_parser, gnc_book_get_file_path(book),
+                           generic_callback, gd))
     {
         sixtp_destroy(top_parser);
         xaccLogEnable ();
@@ -311,7 +339,7 @@ write_counts(FILE* out, ...)
         {
             val = g_strdup_printf("%d", amount);
 
-            node = xmlNewNode(NULL, "gnc:count-data");
+            node = xmlNewNode(NULL, COUNT_DATA_TAG);
             xmlSetProp(node, "cd:type", type);
             xmlNodeAddContent(node, val);
 

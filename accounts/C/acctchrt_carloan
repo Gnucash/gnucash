@@ -1,90 +1,72 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Liabilities</name>
-        <guid>33a326fe16ae360f777a94b3f5bdfbdc</guid>
-        <type>LIABILITY</type>
-        <description>Liabilities</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Loans</name>
-        <guid>023e2343114b3d695feaeb96904e0da6</guid>
-        <type>LIABILITY</type>
-        <description>Loans</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>33a326fe16ae360f777a94b3f5bdfbdc</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Vehicle Loan</name>
-        <guid>3e5f44fd7bfaa9cae737a4113a749e36</guid>
-        <type>LIABILITY</type>
-        <description>Vehicle Loan</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>023e2343114b3d695feaeb96904e0da6</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Expense</name>
-        <guid>acacdcb998e45fb741766622e8542f0b</guid>
-        <type>EXPENSE</type>
-        <description>Expense</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Interest</name>
-        <guid>9e8495e80ebfb762089be917dff7ab72</guid>
-        <type>EXPENSE</type>
-        <description>Interest</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>acacdcb998e45fb741766622e8542f0b</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Vehicle Loan Interest</name>
-        <guid>e9bd8477e27361238d2f53c4fe7594ab</guid>
-        <type>EXPENSE</type>
-        <description>Vehicle Loan Interest</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>9e8495e80ebfb762089be917dff7ab72</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">6</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Liabilities</act:name>
+  <act:id type="guid">33a326fe16ae360f777a94b3f5bdfbdc</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Liabilities</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Loans</act:name>
+  <act:id type="guid">023e2343114b3d695feaeb96904e0da6</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Loans</act:description>
+  <act:parent type="guid">33a326fe16ae360f777a94b3f5bdfbdc</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vehicle Loan</act:name>
+  <act:id type="guid">3e5f44fd7bfaa9cae737a4113a749e36</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Vehicle Loan</act:description>
+  <act:parent type="guid">023e2343114b3d695feaeb96904e0da6</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Expense</act:name>
+  <act:id type="guid">acacdcb998e45fb741766622e8542f0b</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Expense</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interest</act:name>
+  <act:id type="guid">9e8495e80ebfb762089be917dff7ab72</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Interest</act:description>
+  <act:parent type="guid">acacdcb998e45fb741766622e8542f0b</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Vehicle Loan Interest</act:name>
+  <act:id type="guid">e9bd8477e27361238d2f53c4fe7594ab</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Vehicle Loan Interest</act:description>
+  <act:parent type="guid">9e8495e80ebfb762089be917dff7ab72</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -62,6 +62,7 @@ create_newUserDialog (void)
   gtk_object_set_data (GTK_OBJECT (newUserDialog), "newUserDialog", newUserDialog);
   gtk_widget_set_usize (newUserDialog, 540, 370);
   gtk_window_set_title (GTK_WINDOW (newUserDialog), _("New User Account setup"));
+  gtk_window_set_default_size (GTK_WINDOW (newUserDialog), 640, 480);
 
   accountChooseDruidPage = gnome_druid_new ();
   gtk_widget_set_name (accountChooseDruidPage, "accountChooseDruidPage");
@@ -260,7 +261,7 @@ create_newUserDialog (void)
   gnome_druid_page_finish_set_logo_bg_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_logo_bg_color);
   gnome_druid_page_finish_set_title_color (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), &newUserDruidFinishPage_title_color);
   gnome_druid_page_finish_set_title (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Finish Account Setup"));
-  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Please check the window for the new accounts that will be created.\nPress `Finish' if this is OK."));
+  gnome_druid_page_finish_set_text (GNOME_DRUID_PAGE_FINISH (newUserDruidFinishPage), _("Please check the window for the new accounts that will be created.  \nAdd any starting balances you would like to exist.\nThis will come from a Starting Equity account.\nPress `Finish' if this is OK."));
 
   gtk_signal_connect (GTK_OBJECT (accountChooseDruidPage), "cancel",
                       GTK_SIGNAL_FUNC (on_accountChooseDruidPage_cancel),
@@ -277,6 +278,9 @@ create_newUserDialog (void)
   gtk_signal_connect (GTK_OBJECT (chooseAccountTypesPage), "prepare",
                       GTK_SIGNAL_FUNC (on_chooseAccountTypesPage_prepare),
                       NULL);
+  gtk_signal_connect (GTK_OBJECT (newAccountTypesList), "select_row",
+                      GTK_SIGNAL_FUNC (on_newAccountTypesList_select_row),
+                      NULL);
   gtk_signal_connect (GTK_OBJECT (newUserDruidFinishPage), "finish",
                       GTK_SIGNAL_FUNC (on_newUserDruidFinishPage_finish),
                       NULL);
@@ -291,81 +295,139 @@ GtkWidget*
 create_newAccountList (void)
 {
   GtkWidget *newAccountList;
-  GtkWidget *vbox3;
+  GtkWidget *newAccountTopVBox;
   GtkWidget *newAccountLable;
-  GtkWidget *scrolledwindow4;
-  GtkWidget *newAccountListCTree;
-  GtkWidget *newAccountList_NameLable;
-  GtkWidget *newAccountList_DescriptionLable;
-  GtkWidget *newAccountList_BalanceLable;
+  GtkWidget *newAccountHPaned;
+  GtkWidget *newAccountTreeScrolledWindow;
+  GtkWidget *newAccountTree;
+  GtkWidget *newAccountTreeAccountLabel;
+  GtkWidget *newAccountTreeDestriptionLabel;
+  GtkWidget *newAccountTreeStartingBalanceLabel;
+  GtkWidget *vbox4;
+  GtkWidget *newAccountAccountNameLabel;
+  GtkWidget *newAccountEnterStartingBalanceLabel;
+  GtkWidget *newAccountStartingBalanceEntry;
 
   newAccountList = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (newAccountList, "newAccountList");
   gtk_object_set_data (GTK_OBJECT (newAccountList), "newAccountList", newAccountList);
   gtk_widget_set_usize (newAccountList, 200, 400);
   gtk_window_set_title (GTK_WINDOW (newAccountList), _("New Account List"));
+  gtk_window_set_default_size (GTK_WINDOW (newAccountList), 640, 480);
 
-  vbox3 = gtk_vbox_new (FALSE, 0);
-  gtk_widget_set_name (vbox3, "vbox3");
-  gtk_widget_ref (vbox3);
-  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "vbox3", vbox3,
+  newAccountTopVBox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (newAccountTopVBox, "newAccountTopVBox");
+  gtk_widget_ref (newAccountTopVBox);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountTopVBox", newAccountTopVBox,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox3);
-  gtk_container_add (GTK_CONTAINER (newAccountList), vbox3);
+  gtk_widget_show (newAccountTopVBox);
+  gtk_container_add (GTK_CONTAINER (newAccountList), newAccountTopVBox);
 
-  newAccountLable = gtk_label_new (_("If you would like the new accounts to have a balance please enter it into the Balance column in the list below."));
+  newAccountLable = gtk_label_new (_("If you would like the accounts to have a starting balance click on the account line and enter the starting balance in the text entry box on the right."));
   gtk_widget_set_name (newAccountLable, "newAccountLable");
   gtk_widget_ref (newAccountLable);
   gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountLable", newAccountLable,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (newAccountLable);
-  gtk_box_pack_start (GTK_BOX (vbox3), newAccountLable, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (newAccountLable), GTK_JUSTIFY_RIGHT);
+  gtk_box_pack_start (GTK_BOX (newAccountTopVBox), newAccountLable, FALSE, TRUE, 0);
+  gtk_label_set_justify (GTK_LABEL (newAccountLable), GTK_JUSTIFY_FILL);
   gtk_label_set_line_wrap (GTK_LABEL (newAccountLable), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (newAccountLable), 0.0800003, 0.08);
+  gtk_misc_set_padding (GTK_MISC (newAccountLable), 1, 1);
 
-  scrolledwindow4 = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_name (scrolledwindow4, "scrolledwindow4");
-  gtk_widget_ref (scrolledwindow4);
-  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "scrolledwindow4", scrolledwindow4,
+  newAccountHPaned = gtk_hpaned_new ();
+  gtk_widget_set_name (newAccountHPaned, "newAccountHPaned");
+  gtk_widget_ref (newAccountHPaned);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountHPaned", newAccountHPaned,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (scrolledwindow4);
-  gtk_box_pack_start (GTK_BOX (vbox3), scrolledwindow4, TRUE, TRUE, 0);
+  gtk_widget_show (newAccountHPaned);
+  gtk_box_pack_start (GTK_BOX (newAccountTopVBox), newAccountHPaned, TRUE, TRUE, 0);
+  gtk_paned_set_position (GTK_PANED (newAccountHPaned), 1);
 
-  newAccountListCTree = gtk_ctree_new (3, 0);
-  gtk_widget_set_name (newAccountListCTree, "newAccountListCTree");
-  gtk_widget_ref (newAccountListCTree);
-  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountListCTree", newAccountListCTree,
+  newAccountTreeScrolledWindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_name (newAccountTreeScrolledWindow, "newAccountTreeScrolledWindow");
+  gtk_widget_ref (newAccountTreeScrolledWindow);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountTreeScrolledWindow", newAccountTreeScrolledWindow,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (newAccountListCTree);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow4), newAccountListCTree);
-  gtk_clist_set_column_width (GTK_CLIST (newAccountListCTree), 0, 80);
-  gtk_clist_set_column_width (GTK_CLIST (newAccountListCTree), 1, 157);
-  gtk_clist_set_column_width (GTK_CLIST (newAccountListCTree), 2, 80);
-  gtk_clist_column_titles_show (GTK_CLIST (newAccountListCTree));
+  gtk_widget_show (newAccountTreeScrolledWindow);
+  gtk_paned_pack1 (GTK_PANED (newAccountHPaned), newAccountTreeScrolledWindow, FALSE, FALSE);
 
-  newAccountList_NameLable = gtk_label_new (_("Name"));
-  gtk_widget_set_name (newAccountList_NameLable, "newAccountList_NameLable");
-  gtk_widget_ref (newAccountList_NameLable);
-  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountList_NameLable", newAccountList_NameLable,
+  newAccountTree = gtk_ctree_new (3, 0);
+  gtk_widget_set_name (newAccountTree, "newAccountTree");
+  gtk_widget_ref (newAccountTree);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountTree", newAccountTree,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (newAccountList_NameLable);
-  gtk_clist_set_column_widget (GTK_CLIST (newAccountListCTree), 0, newAccountList_NameLable);
+  gtk_widget_show (newAccountTree);
+  gtk_container_add (GTK_CONTAINER (newAccountTreeScrolledWindow), newAccountTree);
+  gtk_clist_set_column_width (GTK_CLIST (newAccountTree), 0, 86);
+  gtk_clist_set_column_width (GTK_CLIST (newAccountTree), 1, 233);
+  gtk_clist_set_column_width (GTK_CLIST (newAccountTree), 2, 80);
+  gtk_clist_column_titles_show (GTK_CLIST (newAccountTree));
 
-  newAccountList_DescriptionLable = gtk_label_new (_("Description"));
-  gtk_widget_set_name (newAccountList_DescriptionLable, "newAccountList_DescriptionLable");
-  gtk_widget_ref (newAccountList_DescriptionLable);
-  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountList_DescriptionLable", newAccountList_DescriptionLable,
+  newAccountTreeAccountLabel = gtk_label_new (_("Account Name"));
+  gtk_widget_set_name (newAccountTreeAccountLabel, "newAccountTreeAccountLabel");
+  gtk_widget_ref (newAccountTreeAccountLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountTreeAccountLabel", newAccountTreeAccountLabel,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (newAccountList_DescriptionLable);
-  gtk_clist_set_column_widget (GTK_CLIST (newAccountListCTree), 1, newAccountList_DescriptionLable);
+  gtk_widget_show (newAccountTreeAccountLabel);
+  gtk_clist_set_column_widget (GTK_CLIST (newAccountTree), 0, newAccountTreeAccountLabel);
 
-  newAccountList_BalanceLable = gtk_label_new (_("Balance"));
-  gtk_widget_set_name (newAccountList_BalanceLable, "newAccountList_BalanceLable");
-  gtk_widget_ref (newAccountList_BalanceLable);
-  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountList_BalanceLable", newAccountList_BalanceLable,
+  newAccountTreeDestriptionLabel = gtk_label_new (_("Description"));
+  gtk_widget_set_name (newAccountTreeDestriptionLabel, "newAccountTreeDestriptionLabel");
+  gtk_widget_ref (newAccountTreeDestriptionLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountTreeDestriptionLabel", newAccountTreeDestriptionLabel,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (newAccountList_BalanceLable);
-  gtk_clist_set_column_widget (GTK_CLIST (newAccountListCTree), 2, newAccountList_BalanceLable);
+  gtk_widget_show (newAccountTreeDestriptionLabel);
+  gtk_clist_set_column_widget (GTK_CLIST (newAccountTree), 1, newAccountTreeDestriptionLabel);
+
+  newAccountTreeStartingBalanceLabel = gtk_label_new (_("Starting Balance"));
+  gtk_widget_set_name (newAccountTreeStartingBalanceLabel, "newAccountTreeStartingBalanceLabel");
+  gtk_widget_ref (newAccountTreeStartingBalanceLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountTreeStartingBalanceLabel", newAccountTreeStartingBalanceLabel,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (newAccountTreeStartingBalanceLabel);
+  gtk_clist_set_column_widget (GTK_CLIST (newAccountTree), 2, newAccountTreeStartingBalanceLabel);
+
+  vbox4 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_set_name (vbox4, "vbox4");
+  gtk_widget_ref (vbox4);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "vbox4", vbox4,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox4);
+  gtk_paned_pack2 (GTK_PANED (newAccountHPaned), vbox4, TRUE, TRUE);
+
+  newAccountAccountNameLabel = gtk_label_new (_("Account: "));
+  gtk_widget_set_name (newAccountAccountNameLabel, "newAccountAccountNameLabel");
+  gtk_widget_ref (newAccountAccountNameLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountAccountNameLabel", newAccountAccountNameLabel,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (newAccountAccountNameLabel);
+  gtk_box_pack_start (GTK_BOX (vbox4), newAccountAccountNameLabel, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (newAccountAccountNameLabel), GTK_JUSTIFY_RIGHT);
+  gtk_label_set_line_wrap (GTK_LABEL (newAccountAccountNameLabel), TRUE);
+  gtk_misc_set_alignment (GTK_MISC (newAccountAccountNameLabel), 0.49, 0.5);
+
+  newAccountEnterStartingBalanceLabel = gtk_label_new (_("Enter Starting Balance"));
+  gtk_widget_set_name (newAccountEnterStartingBalanceLabel, "newAccountEnterStartingBalanceLabel");
+  gtk_widget_ref (newAccountEnterStartingBalanceLabel);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountEnterStartingBalanceLabel", newAccountEnterStartingBalanceLabel,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (newAccountEnterStartingBalanceLabel);
+  gtk_box_pack_start (GTK_BOX (vbox4), newAccountEnterStartingBalanceLabel, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (newAccountEnterStartingBalanceLabel), GTK_JUSTIFY_RIGHT);
+
+  newAccountStartingBalanceEntry = gtk_entry_new ();
+  gtk_widget_set_name (newAccountStartingBalanceEntry, "newAccountStartingBalanceEntry");
+  gtk_widget_ref (newAccountStartingBalanceEntry);
+  gtk_object_set_data_full (GTK_OBJECT (newAccountList), "newAccountStartingBalanceEntry", newAccountStartingBalanceEntry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (newAccountStartingBalanceEntry);
+  gtk_box_pack_start (GTK_BOX (vbox4), newAccountStartingBalanceEntry, FALSE, FALSE, 0);
+  gtk_widget_set_usize (newAccountStartingBalanceEntry, 100, -2);
+
+  gtk_signal_connect (GTK_OBJECT (newAccountTree), "select_row",
+                      GTK_SIGNAL_FUNC (on_newAccountTree_select_row),
+                      NULL);
 
   return newAccountList;
 }
@@ -436,9 +498,6 @@ create_addAccountCancelDialog (void)
   gtk_widget_show (newAccountCancelDialog_OKButton);
   GTK_WIDGET_SET_FLAGS (newAccountCancelDialog_OKButton, GTK_CAN_DEFAULT);
 
-  gtk_signal_connect (GTK_OBJECT (newAccountCancelDialog_RunAgainToggle), "toggled",
-                      GTK_SIGNAL_FUNC (on_newAccountRunAgain_toggled),
-                      NULL);
   gtk_signal_connect (GTK_OBJECT (newAccountCancelDialog_OKButton), "clicked",
                       GTK_SIGNAL_FUNC (on_newAccountCancelDialog_OKButton_clicked),
                       NULL);

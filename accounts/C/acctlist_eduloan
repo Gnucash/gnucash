@@ -1,45 +1,39 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Education Loan</name>
-        <guid>d1065cfd075a21911c5bf039bc0e452e</guid>
-        <type>LIABILITY</type>
-        <description>Education Loan</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Interest</name>
-        <guid>b62a1a4aec662956bbd2edf340524768</guid>
-        <type>EXPENSE</type>
-        <description>Interest</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Education Loan Interest</name>
-        <guid>142ae0d9e7964c7ebb981ba7f2aa5a19</guid>
-        <type>EXPENSE</type>
-        <description>Education Loan Interest</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>b62a1a4aec662956bbd2edf340524768</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">3</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Education Loan</act:name>
+  <act:id type="guid">d1065cfd075a21911c5bf039bc0e452e</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Education Loan</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Interest</act:name>
+  <act:id type="guid">b62a1a4aec662956bbd2edf340524768</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Interest</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Education Loan Interest</act:name>
+  <act:id type="guid">142ae0d9e7964c7ebb981ba7f2aa5a19</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Education Loan Interest</act:description>
+  <act:parent type="guid">b62a1a4aec662956bbd2edf340524768</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

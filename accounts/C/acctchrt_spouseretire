@@ -1,114 +1,90 @@
 <?xml version="1.0"?>
-<gnc>
-  <version>1</version>
-  <ledger-data>
-    <account>
-      <restore>
-        <name>Assets</name>
-        <guid>96d9b17add59eb4c7edec7ed241af755</guid>
-        <type>ASSET</type>
-        <description>Assets</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Investments</name>
-        <guid>f46c9f777b1730c6b5f4a1faf9e31708</guid>
-        <type>ASSET</type>
-        <description>Investments</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>96d9b17add59eb4c7edec7ed241af755</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Spouse Retirement</name>
-        <guid>4426b41837adc284f96b291c31022844</guid>
-        <type>BANK</type>
-        <description>Spouse Retirement</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <slots>
-          <s>
-            <k>notes</k>
-            <string>IRA, 401(k), or other retirement</string>
-          </s>
-        </slots>
-        <parent>
-          <guid>f46c9f777b1730c6b5f4a1faf9e31708</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Bond</name>
-        <guid>c8e7c315502547e51bfdd5a70b5cdd2e</guid>
-        <type>STOCK</type>
-        <description>Bond</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>4426b41837adc284f96b291c31022844</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Stock</name>
-        <guid>b8838eb77b9603e035e1f7b440d468ae</guid>
-        <type>STOCK</type>
-        <description>Stock</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>4426b41837adc284f96b291c31022844</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Market Index</name>
-        <guid>0ec1a5b402ceea10d95445a2b31c41a1</guid>
-        <type>MUTUAL</type>
-        <description>Market Index</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>4426b41837adc284f96b291c31022844</guid>
-        </parent>
-      </restore>
-    </account>
-    <account>
-      <restore>
-        <name>Mutual Fund</name>
-        <guid>d9ed01f9b8f9845bc3f68f3e0afb021f</guid>
-        <type>MUTUAL</type>
-        <description>Mutual Fund</description>
-        <currency>
-          <space>ISO4217</space>
-          <id>USD</id>
-        </currency>
-        <parent>
-          <guid>4426b41837adc284f96b291c31022844</guid>
-        </parent>
-      </restore>
-    </account>
-  </ledger-data>
-</gnc>
+<gnc-v2>
+<gnc:count-data cd:type="account">7</gnc:count-data>
+<gnc:account version="2.0.0">
+  <act:name>Assets</act:name>
+  <act:id type="guid">96d9b17add59eb4c7edec7ed241af755</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Assets</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Investments</act:name>
+  <act:id type="guid">f46c9f777b1730c6b5f4a1faf9e31708</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Investments</act:description>
+  <act:parent type="guid">96d9b17add59eb4c7edec7ed241af755</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Spouse Retirement</act:name>
+  <act:id type="guid">4426b41837adc284f96b291c31022844</act:id>
+  <act:type>BANK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Spouse Retirement</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>notes</slot:key>
+      <slot:value type="string">IRA, 401(k), or other retirement</slot:value>
+    </slot>
+  </act:slots>
+  <act:parent type="guid">f46c9f777b1730c6b5f4a1faf9e31708</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bond</act:name>
+  <act:id type="guid">c8e7c315502547e51bfdd5a70b5cdd2e</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Bond</act:description>
+  <act:parent type="guid">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Stock</act:name>
+  <act:id type="guid">b8838eb77b9603e035e1f7b440d468ae</act:id>
+  <act:type>STOCK</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Stock</act:description>
+  <act:parent type="guid">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Market Index</act:name>
+  <act:id type="guid">0ec1a5b402ceea10d95445a2b31c41a1</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Market Index</act:description>
+  <act:parent type="guid">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Mutual Fund</act:name>
+  <act:id type="guid">d9ed01f9b8f9845bc3f68f3e0afb021f</act:id>
+  <act:type>MUTUAL</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Mutual Fund</act:description>
+  <act:parent type="guid">4426b41837adc284f96b291c31022844</act:parent>
+</gnc:account>
+</gnc-v2>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
