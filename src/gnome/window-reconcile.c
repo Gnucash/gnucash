@@ -32,6 +32,7 @@
 
 #include <gnome.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "AccWindow.h"
 #include "MainWindow.h"
@@ -323,13 +324,13 @@ startRecnWindow(GtkWidget *parent, Account *account,
   }
 
   /* Create the dialog box */
-  title = gnc_recn_make_window_name(account);
+  title = gnc_recn_make_window_name (account);
 
-  dialog = gnome_dialog_new(title,
-                            GNOME_STOCK_BUTTON_OK,
-                            GNOME_STOCK_BUTTON_CANCEL,
-                            NULL);
-  g_free(title);
+  dialog = gnome_dialog_new (title,
+                             GNOME_STOCK_BUTTON_OK,
+                             GNOME_STOCK_BUTTON_CANCEL,
+                             NULL);
+  g_free (title);
 
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
   gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
@@ -1273,6 +1274,28 @@ gnc_recn_create_tool_bar(RecnWindow *recnData)
   return toolbar;
 }
 
+static void
+gnc_get_reconcile_info (Account *account,
+                        gnc_numeric *new_ending,
+                        time_t *statement_date)
+{
+  if (xaccAccountGetReconcileLastDate (account, statement_date))
+  {
+    struct tm *tm;
+
+    tm = localtime (statement_date);
+
+    tm->tm_mon++;
+    tm->tm_isdst = -1;
+
+    *statement_date = mktime (tm);
+  }
+
+  xaccAccountGetReconcilePostponeDate (account, statement_date);
+
+  xaccAccountGetReconcilePostponeBalance (account, new_ending);
+}
+
 static gboolean
 find_by_account (gpointer find_data, gpointer user_data)
 {
@@ -1372,19 +1395,20 @@ recnWindow (GtkWidget *parent, Account *account)
     new_ending = xaccAccountGetBalance(account);
 
   /* The last time reconciliation was attempted during the current
-   * execution of gnucash, the date was stored.  Use that date if 
-   * possible.  This helps with balancing multiple accounts for
-   * which statements are issued at the same time, like multiple
-   * bank accounts on a single statement.
-   */
+   * execution of gnucash, the date was stored. Use that date if
+   * possible. This helps with balancing multiple accounts for which
+   * statements are issued at the same time, like multiple bank
+   * accounts on a single statement. */
   if (!last_statement_date)
-     statement_date = time(NULL);
+     statement_date = time (NULL);
   else
      statement_date = last_statement_date;
 
+  gnc_get_reconcile_info (account, &new_ending, &statement_date);
+
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */
-  if (!startRecnWindow(parent, account, &new_ending, &statement_date))
+  if (!startRecnWindow (parent, account, &new_ending, &statement_date))
   {
     gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
     g_free (recnData);
@@ -1749,6 +1773,9 @@ recnFinishCB (GtkWidget *w, gpointer data)
                                             TRUE);
 
   account = recn_get_account (recnData);
+
+  xaccAccountClearReconcilePostpone (account);
+  xaccAccountSetReconcileLastDate (account, date);
 
   if (auto_payment &&
       (xaccAccountGetType (account) == CREDIT) &&

@@ -277,6 +277,25 @@ void           xaccClearMark (Account *account, short val);
 void           xaccClearMarkDown (Account *account, short val);
 void           xaccClearMarkDownGr (AccountGroup *group, short val);
 
+/* The following functions get and set reconciliation information */
+gboolean       xaccAccountGetReconcileLastDate (Account *account,
+                                                time_t *last_date);
+void           xaccAccountSetReconcileLastDate (Account *account,
+                                                time_t last_date);
+
+gboolean       xaccAccountGetReconcilePostponeDate (Account *account,
+                                                    time_t *postpone_date);
+void           xaccAccountSetReconcilePostponeDate (Account *account,
+                                                    time_t postpone_date);
+
+gboolean       xaccAccountGetReconcilePostponeBalance (Account *account,
+                                                       gnc_numeric *balance);
+void           xaccAccountSetReconcilePostponeBalance (Account *account,
+                                                       gnc_numeric balance);
+
+void           xaccAccountClearReconcilePostpone (Account *account);
+
+
 /* The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
   are used to get and set a string that identifies the current source
   for investment pricing info.  Currently supported values include

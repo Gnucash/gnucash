@@ -146,6 +146,7 @@ gnc_reconcile_list_init(GNCReconcileList *list)
   list->current_split = NULL;
   list->no_toggle = FALSE;
   list->always_unselect = FALSE;
+  list->first_fill = TRUE;
   list->query = NULL;
 
   while (titles[list->num_columns] != NULL)
@@ -263,12 +264,11 @@ gnc_reconcile_list_set_row_style(GNCReconcileList *list, gint row,
 }
 
 static void
-gnc_reconcile_list_toggle(GNCReconcileList *list)
+gnc_reconcile_list_toggle (GNCReconcileList *list)
 {
   Split *split, *current;
   gboolean reconciled;
   const char *recn_str;
-  char recn;
   gint row;
 
   g_assert(IS_GNC_RECONCILE_LIST(list));
@@ -294,9 +294,8 @@ gnc_reconcile_list_toggle(GNCReconcileList *list)
     g_hash_table_remove(list->reconciled, split);
   }
 
-  recn = xaccSplitGetReconcile(split);
-  recn = reconciled ? YREC : recn;
-  recn_str = gnc_get_reconcile_str(recn);
+  recn_str = reconciled ? gnc_get_reconcile_str (YREC) : "";
+
   gtk_clist_set_text(GTK_CLIST(list), row, 4, recn_str);
 
   gnc_reconcile_list_set_row_style(list, row, reconciled);
@@ -533,7 +532,7 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_reconcile_list_commit(GNCReconcileList *list, time_t date)
+gnc_reconcile_list_commit (GNCReconcileList *list, time_t date)
 {
   GtkCList *clist = GTK_CLIST(list);
   Split *split;
@@ -547,13 +546,49 @@ gnc_reconcile_list_commit(GNCReconcileList *list, time_t date)
 
   for (i = 0; i < list->num_splits; i++)
   {
-    split = gtk_clist_get_row_data(clist, i);
+    char recn;
 
-    if (g_hash_table_lookup(list->reconciled, split) != NULL)
-    {
-      xaccSplitSetReconcile(split, YREC);
-      xaccSplitSetDateReconciledSecs(split, date);
-    }
+    split = gtk_clist_get_row_data (clist, i);
+
+    recn = g_hash_table_lookup (list->reconciled, split) ? YREC : NREC;
+
+    xaccSplitSetReconcile (split, recn);
+    if (recn == YREC)
+      xaccSplitSetDateReconciledSecs (split, date);
+  }
+}
+
+
+/********************************************************************\
+ * gnc_reconcile_list_commit                                        *
+ *   postpone the reconcile information in the list by setting      *
+ *   reconciled splits to cleared status                            *
+ *                                                                  *
+ * Args: list - list to commit                                      *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_reconcile_list_postpone (GNCReconcileList *list)
+{
+  GtkCList *clist = GTK_CLIST(list);
+  Split *split;
+  int i;
+
+  g_return_if_fail(list != NULL);
+  g_return_if_fail(IS_GNC_RECONCILE_LIST(list));
+
+  if (list->reconciled == NULL)
+    return;
+
+  for (i = 0; i < list->num_splits; i++)
+  {
+    char recn;
+
+    split = gtk_clist_get_row_data (clist, i);
+
+    recn = g_hash_table_lookup (list->reconciled, split) ? CREC : NREC;
+
+    xaccSplitSetReconcile (split, recn);
   }
 }
 
@@ -678,12 +713,11 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[2] = xaccTransGetDescription(trans);
     strings[3] = xaccPrintAmount(gnc_numeric_abs (amount), print_info);
 
+    if (list->first_fill && recn == CREC)
+      g_hash_table_insert (list->reconciled, split, split);
+
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
-    recn = reconciled ? YREC : recn;
-    if (recn == NREC)
-      strings[4] = "";
-    else
-      strings[4] = gnc_get_reconcile_str(recn);
+    strings[4] = reconciled ? gnc_get_reconcile_str (YREC) : "";
 
     row = gtk_clist_append(GTK_CLIST(list), (gchar **) strings);
     gtk_clist_set_row_data(GTK_CLIST(list), row, split);
@@ -692,4 +726,6 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
     list->num_splits++;
   }
+
+  list->first_fill = FALSE;
 }

@@ -61,6 +61,7 @@ struct _GNCReconcileList
 
   gboolean no_toggle;
   gboolean always_unselect;
+  gboolean first_fill;
 
   GHashTable *reconciled;
 
@@ -100,7 +101,9 @@ void gnc_reconcile_list_refresh (GNCReconcileList *list);
 
 gnc_numeric gnc_reconcile_list_reconciled_balance(GNCReconcileList *list);
 
-void gnc_reconcile_list_commit(GNCReconcileList *list, time_t date);
+void gnc_reconcile_list_commit (GNCReconcileList *list, time_t date);
+
+void gnc_reconcile_list_postpone (GNCReconcileList *list);
 
 void gnc_reconcile_list_unselect_all(GNCReconcileList *list);
 

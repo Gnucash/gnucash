@@ -65,7 +65,7 @@ kvp_frame   * kvp_frame_new(void);
 void          kvp_frame_delete(kvp_frame * frame);
 kvp_frame   * kvp_frame_copy(const kvp_frame * frame);
 void          kvp_frame_set_slot(kvp_frame * frame, 
-                               const char * key, const kvp_value * value);
+                                 const char * key, const kvp_value * value);
 kvp_value   * kvp_frame_get_slot(kvp_frame * frame, 
                                  const char * key);
 

@@ -1529,7 +1529,297 @@ xaccAccountTypesCompatible (int parent_type, int child_type)
 
 /********************************************************************\
 \********************************************************************/
+static kvp_frame *
+xaccAccountGetReconcileInfo (Account *account)
+{
+  kvp_value *value;
 
+  if (!account)
+    return NULL;
+
+  value = kvp_frame_get_slot (xaccAccountGetSlots (account), "reconcile-info");
+  if (!value)
+    return NULL;
+
+  return kvp_value_get_frame (value);
+}
+
+/********************************************************************\
+\********************************************************************/
+static void
+xaccAccountMakeReconcileInfo (Account *account)
+{
+  kvp_frame *slots;
+
+  if (!account)
+    return;
+
+  if (xaccAccountGetReconcileInfo (account))
+    return;
+
+  slots = xaccAccountGetSlots (account);
+  if (!slots)
+    return;
+
+  xaccAccountBeginEdit (account);
+  {
+    kvp_frame *frame;
+    kvp_value *value;
+
+    check_open (account);
+
+    frame = kvp_frame_new ();
+    value = kvp_value_new_frame (frame);
+
+    kvp_frame_set_slot (slots, "reconcile-info", value);
+
+    kvp_value_delete (value);
+    kvp_frame_delete (frame);
+
+    mark_account (account);
+  }
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
+gboolean
+xaccAccountGetReconcileLastDate (Account *account, time_t *last_date)
+{
+  kvp_frame *recn_info;
+  kvp_value *value;
+
+  if (!account)
+    return FALSE;
+
+  recn_info = xaccAccountGetReconcileInfo (account);
+  if (!recn_info)
+    return FALSE;
+
+  value = kvp_frame_get_slot (recn_info, "last-date");
+  if (!value)
+    return FALSE;
+
+  if (kvp_value_get_type (value) == KVP_TYPE_GINT64)
+  {
+    if (last_date)
+      *last_date = kvp_value_get_gint64 (value);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/********************************************************************\
+\********************************************************************/
+void
+xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
+{
+  kvp_frame *recn_info;
+
+  if (!account)
+    return;
+
+  recn_info = xaccAccountGetReconcileInfo (account);
+  if (!recn_info)
+  {
+    xaccAccountMakeReconcileInfo (account);
+    recn_info = xaccAccountGetReconcileInfo (account);
+    if (!recn_info)
+    {
+      PERR ("Couldn't make reconcile info");
+      return;
+    }
+  }
+
+  xaccAccountBeginEdit (account);
+  {
+    kvp_value *value;
+
+    check_open (account);
+
+    value = kvp_value_new_gint64 (last_date);
+
+    kvp_frame_set_slot (recn_info, "last-date", value);
+
+    kvp_value_delete (value);
+
+    mark_account (account);
+  }
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
+gboolean
+xaccAccountGetReconcilePostponeDate (Account *account,
+                                     time_t *postpone_date)
+{
+  kvp_frame *recn_info;
+  kvp_value *value;
+
+  if (!account)
+    return FALSE;
+
+  recn_info = xaccAccountGetReconcileInfo (account);
+  if (!recn_info)
+    return FALSE;
+
+  value = kvp_frame_get_slot (recn_info, "postpone-date");
+  if (!value)
+    return FALSE;
+
+  if (kvp_value_get_type (value) == KVP_TYPE_GINT64)
+  {
+    if (postpone_date)
+      *postpone_date = kvp_value_get_gint64 (value);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/********************************************************************\
+\********************************************************************/
+void
+xaccAccountSetReconcilePostponeDate (Account *account,
+                                     time_t postpone_date)
+{
+  kvp_frame *recn_info;
+
+  if (!account)
+    return;
+
+  recn_info = xaccAccountGetReconcileInfo (account);
+  if (!recn_info)
+  {
+    xaccAccountMakeReconcileInfo (account);
+    recn_info = xaccAccountGetReconcileInfo (account);
+    if (!recn_info)
+    {
+      PERR ("Couldn't make reconcile info");
+      return;
+    }
+  }
+
+  xaccAccountBeginEdit (account);
+  {
+    kvp_value *value;
+
+    check_open (account);
+
+    value = kvp_value_new_gint64 (postpone_date);
+
+    kvp_frame_set_slot (recn_info, "postpone-date", value);
+
+    kvp_value_delete (value);
+
+    mark_account (account);
+  }
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
+gboolean
+xaccAccountGetReconcilePostponeBalance (Account *account,
+                                        gnc_numeric *balance)
+{
+  kvp_frame *recn_info;
+  kvp_value *value;
+
+  if (!account)
+    return FALSE;
+
+  recn_info = xaccAccountGetReconcileInfo (account);
+  if (!recn_info)
+    return FALSE;
+
+  value = kvp_frame_get_slot (recn_info, "postpone-balance");
+  if (!value)
+    return FALSE;
+
+  if (kvp_value_get_type (value) == KVP_TYPE_GINT64)
+  {
+    if (balance)
+      *balance = kvp_value_get_numeric (value);
+
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/********************************************************************\
+\********************************************************************/
+void
+xaccAccountSetReconcilePostponeBalance (Account *account,
+                                        gnc_numeric balance)
+{
+  kvp_frame *recn_info;
+
+  if (!account)
+    return;
+
+  recn_info = xaccAccountGetReconcileInfo (account);
+  if (!recn_info)
+  {
+    xaccAccountMakeReconcileInfo (account);
+    recn_info = xaccAccountGetReconcileInfo (account);
+    if (!recn_info)
+    {
+      PERR ("Couldn't make reconcile info");
+      return;
+    }
+  }
+
+  xaccAccountBeginEdit (account);
+  {
+    kvp_value *value;
+
+    check_open (account);
+
+    value = kvp_value_new_numeric (balance);
+
+    kvp_frame_set_slot (recn_info, "postpone-balance", value);
+
+    kvp_value_delete (value);
+
+    mark_account (account);
+  }
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
+void
+xaccAccountClearReconcilePostpone (Account *account)
+{
+  kvp_frame *recn_info;
+
+  if (!account)
+    return;
+
+  recn_info = xaccAccountGetReconcileInfo (account);
+  if (!recn_info)
+    return;
+
+  xaccAccountBeginEdit (account);
+  {
+    check_open (account);
+
+    kvp_frame_set_slot (recn_info, "postpone-date", NULL);
+    kvp_frame_set_slot (recn_info, "postpone-balance", NULL);
+
+    mark_account (account);
+  }
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
 void
 xaccAccountSetPriceSrc(Account *acc, const char *src) {
 
