@@ -100,6 +100,7 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 {
   GNCReconcileList *list;
   gboolean include_children;
+  GList *accounts;
 
   g_return_val_if_fail(account, NULL);
   g_return_val_if_fail((type == RECLIST_DEBIT) ||
@@ -115,21 +116,22 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
   xaccQuerySetBook(list->query, gnc_get_current_book ());
 
   /* match the account */
-  xaccQueryAddSingleAccountMatch(list->query, account, QUERY_OR);
+  accounts = g_list_prepend (NULL, account);
 
   include_children = xaccAccountGetReconcileChildrenStatus(account);
-  if(include_children)
+  if (include_children)
   {
-    /* match child accounts */
     AccountGroup *account_group = xaccAccountGetChildren(account);
-    GList *children_list = xaccGroupGetSubAccounts(account_group);
-    GList *node;
+    GList *children = xaccGroupGetSubAccounts(account_group);
 
-    for (node = children_list; node; node = node->next)
-      xaccQueryAddSingleAccountMatch (list->query, node->data, QUERY_OR);
+    children = g_list_copy (children);
 
-    g_list_free (children_list);
+    accounts = g_list_concat (accounts, children);
   }
+
+  xaccQueryAddAccountMatch (list->query, accounts, ACCT_MATCH_ANY, QUERY_AND);
+
+  g_list_free (accounts);
 
   if (type == RECLIST_CREDIT)
     DxaccQueryAddValueMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
