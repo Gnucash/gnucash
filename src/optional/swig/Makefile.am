@@ -18,7 +18,8 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore \
   examples/scan-acct.pl \
-  perl5_swig_annotations.i
+  perl5_swig_annotations.i \
+  gnucash-swig-defines.c
 
 CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} -Dbool=char
 
@@ -97,8 +98,13 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
 
 CLEANFILES += gnucash.engine.i gnucash.engine_wrap.doc
 
-gnucash-engine-perl5_wrap.c: gnucash.engine.i
+gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
 	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
+CLEANFILES += gnucash-engine-perl5_wrap_int.c
+
+gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
+                             gnucash-engine-perl5_wrap_int.c
+	cat gnucash-swig-defines.c gnucash-engine-perl5_wrap_int.c > $@
 CLEANFILES += gnucash-engine-perl5_wrap.c
 
 CLEANFILES += gnucash.pm gnucash.so

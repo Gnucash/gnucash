@@ -130,7 +130,7 @@ libgncswig_la_LDFLAGS = -version-info 1:1:1
 noinst_HEADERS =    helperfuncs.h
 
 
-EXTRA_DIST =    .cvsignore   examples/scan-acct.pl   perl5_swig_annotations.i
+EXTRA_DIST =    .cvsignore   examples/scan-acct.pl   perl5_swig_annotations.i   gnucash-swig-defines.c
 
 
 CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} -Dbool=char
@@ -144,7 +144,7 @@ libgncswig_la_LIBADD =    @GLIB_LIBS@   ${top_srcdir}/src/engine/AccInfo.lo   ${
 SWIG_INPUT_HDRS :=    ${top_srcdir}/src/engine/AccInfo.h   ${top_srcdir}/src/engine/Account.h   ${top_srcdir}/src/engine/DateUtils.h   ${top_srcdir}/src/engine/FileIO.h   ${top_srcdir}/src/engine/GNCId.h   ${top_srcdir}/src/engine/Group.h   ${top_srcdir}/src/engine/LedgerUtils.h   ${top_srcdir}/src/engine/Query.h   ${top_srcdir}/src/engine/Queue.h   ${top_srcdir}/src/engine/Scrub.h   ${top_srcdir}/src/engine/Session.h   ${top_srcdir}/src/engine/TransLog.h   ${top_srcdir}/src/engine/Transaction.h   ${top_srcdir}/src/engine/date.h
 
 
-CLEANFILES =  gnucash.engine.i gnucash.engine_wrap.doc gnucash-engine-perl5_wrap.c gnucash.pm gnucash.so
+CLEANFILES =  gnucash.engine.i gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c gnucash-engine-perl5_wrap.c gnucash.pm gnucash.so
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../../config.h
 CONFIG_CLEAN_FILES = 
@@ -476,8 +476,12 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
           echo "%include `basename $$file`" >> $@; \
 	done
 
-gnucash-engine-perl5_wrap.c: gnucash.engine.i
+gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
 	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
+
+gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \
+                             gnucash-engine-perl5_wrap_int.c
+	cat gnucash-swig-defines.c gnucash-engine-perl5_wrap_int.c > $@
 
 # We have to do this because otherwise automake insists on putting
 # these files into the dist tarfile.  If there's a a better way,
