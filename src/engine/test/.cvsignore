@@ -7,8 +7,10 @@ test-commodities
 test-date
 test-freq-spec
 test-group-vs-book
+test-object
 test-period
 test-query
+test-querynew
 test-resolve-file-path
 test-scm-query
 test-split-vs-account
