@@ -39,7 +39,7 @@
       (optname-date (N_ "Date"))
       (optname-display-depth (N_ "Account Display Depth"))
 
-      (optname-show-foreign (N_ "Show Foreign Currencies"))
+      (optname-show-foreign (N_ "Show Foreign Currencies/Shares of Stock"))
       (optname-report-currency (N_ "Report's currency"))
 
       (pagename-accounts (N_ "Accounts"))
