@@ -30,10 +30,20 @@
 
 void refreshMainWindow( void );
 
-gncBoolean  verifyBox( const char *text );
+
+/* Only implemented in GNOME version right now. */
+int queryBox(const char *text,
+             int default_answer,
+             gncBoolean yes_allowed,
+             gncBoolean ok_allowed,
+             gncBoolean no_allowed,
+             gncBoolean cancel_allowed);
+
+/* deprecated... replaced by queryBox in GNOME version */
+gncBoolean  verifyBox(const char *text);
+
 void        errorBox( const char *message );
 void        setBusyCursor( gncUIWidget w );
 void        unsetBusyCursor( gncUIWidget w );
 
 #endif
-
