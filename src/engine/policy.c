@@ -55,11 +55,11 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
    gboolean want_positive;
    gnc_numeric baln;
 
-	if (!pcy || !lot || !lot->account || !lot->splits) return NULL;
+   if (!pcy || !lot || !lot->account || !lot->splits) return NULL;
 
    /* Recomputing the balance re-evaluates the lot closure */
    baln = gnc_lot_get_balance (lot);
-	if (gnc_lot_is_closed(lot)) return NULL;
+   if (gnc_lot_is_closed(lot)) return NULL;
 
    want_positive = gnc_numeric_negative_p (baln);
 
@@ -84,9 +84,12 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
       if (split->lot) goto donext;
 
       /* Allow equiv currencies */
-		is_match = gnc_commodity_equiv (common_currency, 
+      is_match = gnc_commodity_equiv (common_currency, 
                                       split->parent->common_currency);
-		if (FALSE == is_match) goto donext;
+      if (FALSE == is_match) goto donext;
+
+      /* Disallow zero-amount splits in general. */
+      if (gnc_numeric_zero_p(split->amount)) goto donext;
 
       is_positive = gnc_numeric_positive_p (split->amount);
       if ((want_positive && is_positive) ||
