@@ -1,5 +1,12 @@
 Version history:
 ------- -------
+ 1.5.6  - 23 April 2001
+         o reporting improvements
+         o many misc GUI improvements
+         o updated German and Portuguese translations
+         o fixes for Solaris
+         o bug fixes
+
  1.5.5  - 15 April 2001
          o more new & improved reports
          o use of gnome MDI for main window
