@@ -354,11 +354,6 @@ Quick API Overview:
    xaccSplitAssignToLot(): If a split is not already in a lot,
       then it places it into a lot, using a FIFO accounting policy.
 
-TODO:
--- need to recompute lot membership when source split 'amount' changes.
--- need to recompute gain value when source split value changes.
--- need to copy void status when source split date changes.
-
 Cap Gains Actual Implementation
 ===============================
 Cap Gains are noted by creating a separate transaction with two 
@@ -378,14 +373,27 @@ Things kept in sync:
 
 Things not kept in sync:
 -- kvp trees
--- description, memo,  other things?
+-- description, memo, action.
 
-The posted date is kept in sync using a lazy-evaluation scheme.
+The posted date is kept in sync using a data-constraint scheme.
 If xaccTransactionSetDatePosted() is called, the date change is
-accepted, and the split is marked date-dirty.  If the posted date
-is queried for (using GetDatePosted()), then the transaction is
-evaluated. If its a gains-transaction, then it's date is copied 
-from the source transaction that created the gains. 
+accepted, and the split is marked date-dirty.  When the transaction
+is commited (using xaccTransCommitEdit()), the date-dirty flag
+is evaluated, and, if needed, the date changes are propagated/rolled
+back on the appropriate gains splits.  Currently, one can only change
+the date on the gains-source transaction; the date on teh
+gains-recording split cannot be changed.
+
+TODO:
+-- need to recompute lot membership when source split 'amount' changes.
+   Done, need to test.
+-- need to recompute gain value when source split value changes.
+   Done, need to test.
+-- need to copy void status when source split date changes.
+-- when gains split is destroyed... ? the user did this intentionally,
+   and needs to scrub ... need to document that this is the users 
+   responsibility ... 
+
 
 Conversion
 ==========
@@ -463,6 +471,8 @@ Basic GUI:
 
    -- button or menu item, 'add notes to this lot'.
 
+todo:
+---- change lot viewer to use gnc-query-list
 
 
 Status

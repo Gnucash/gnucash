@@ -61,6 +61,24 @@ in an ad-hoc manner, with no governing framework.  This may change,
 as there is pressure to support more complex constraints that vary
 by region/country, by account type, by industry, etc.
 
+Why Not 'Lazy Evaluation'?
+--------------------------
+Lazy evaluation is supperfically like constraints, but differs in an
+important way.  With lazy evaluation, when something changes (e.g.
+the posted date) it is marked dirty. Later, when something else needs
+something (e.g. the posted date on a gains split), the dirty flag
+is examined, and, if dirty, the new/corrected value is computed and 
+returned.
+
+Simple/ad-hoc lazy evaluation works well when data dependencies are 
+simple, but it breaks down when there are too many/circular
+relationships.  It becomes all too easy to get trapped in inifite
+loops of corrections.   The goal of moving to a formal constraint
+system is to introduce specific, well-defined sync points where 
+constraint checking can be done, without incuring circular
+deopendencies.  At this time, the sync point is the xaccTransCommitEdit()
+subroutine.
+
 List of Constraints
 -------------------
 The following is a list of the constraints that are currently
