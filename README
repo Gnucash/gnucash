@@ -23,7 +23,7 @@ of the features of xacc are:
 To install:
 -----------
 
- First check the makefile to ensure that all the paths are ok.
+ First check the makefile to ensure that all the paths are OK.
  Also, make sure that the Xbae-Matrix widget and Motif or
  Lesstif are installed.  You can get Lesstif from 
  http://www.lesstif.org.  You can get The Xbae widget from
@@ -36,32 +36,33 @@ To install:
 
 sorry, no "make install" yet.
 
-Note version 0.9h may need help getting made I think I broke the makefile..
-
 
 Status:
 -------
-As of version 0.9h:
+As of version 0.9j:
+Bugs:
+-- tabbing between fields for mutual funds does not work correctly. 
+-- should add "number of shares" to transfer popup when transferring
+   from bank account to portfolio.
+
 ---------------
 Bare-bones Mutual Fund and Stock Portfolio handling
 is implemented. 
 Working Features:
--- transfers between bank account & fund work
+-- transfers between bank account & fund work correctly
 -- save to disk, restore from disk.
+-- Type of transaction (Buy, Cap Gain, Dividend Reinvest, etc.) now 
+   supported for portfolio/mutual fund accounts.  This field can be set 
+   and cleared, but is not currently used anywhere.  It will become 
+   useful when reports and graphs are generated.
 
-Bugs:
--- tabbing between fields for mutual funds does not work correctly. 
-
-Planned additions:
--- Indicate type of transaction (Buy, Cap Gain, Dividend Reinvest, etc.)
-
---------
+---------------
 An alpha version of import from Quicken files is also present,
 but it is very broken, and many/most quicken formats are not
-supported.  It is not currently enabled in the code ... adventrous
+supported.  It is not currently enabled in the code ... adventurous
 coders are encouraged to hack on this ...
 
-------------
+---------------
 An beta-level double-entry system has been created.
 "Double-entry" is a form of accounting where all transactions
 show up in two accounts (for example, a transfer from
@@ -86,11 +87,6 @@ from file.
 -------------
 The "reports" menu item is unimplemented and will result in a core dump.
 -------------
-
-Changes since 0.9g
------------------
- o assorted minor bug fixes
- o include ComboBox and modified Xbae in distribution
 
 That's all folks!
 
