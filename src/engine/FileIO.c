@@ -396,6 +396,20 @@ readAccount( int fd, AccountGroup *grp, int token )
       printf (" expected %d got %d transactions \n",numTrans,i);
       break;
       }
+#ifdef DELINT_BLANK_SPLITS_HACK
+      /* This is a dangerous hack, as it can destroy real data. */
+      {
+        int j=0;   
+        Split *s = trans->splits[0];
+        while (s) {
+          if (DEQ(0.0,s->damount) && DEQ (1.0,s->share_price)) {
+             xaccTransRemoveSplit (trans, s);
+             break;
+          }
+          j++; s=trans->splits[j];
+        }
+      }
+#endif /* DELINT_BLANK_SPLITS_HACK */
     }
   
   springAccount (acc->id);
