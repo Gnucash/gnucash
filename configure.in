@@ -1118,6 +1118,7 @@ AC_OUTPUT( m4/Makefile po/Makefile.in
           src/gnc-module/test/misc-mods/Makefile
           src/gnome/Makefile
 	  src/gnome/glade/Makefile
+	  src/gnome/schemas/Makefile
 	  src/gnome/ui/Makefile
           src/gnome-utils/Makefile
 	  src/gnome-utils/test/Makefile

@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-<requires lib="gnome"/>
 
 <widget class="GtkDialog" id="Prices Dialog">
   <property name="visible">True</property>
@@ -10,9 +9,13 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
+  <property name="default_width">400</property>
+  <property name="default_height">400</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">True</property>
+  <signal name="response" handler="gnc_prices_dialog_response" last_modification_time="Tue, 25 Nov 2003 06:49:39 GMT"/>
+  <signal name="destroy" handler="gnc_prices_dialog_window_destroy_cb" last_modification_time="Tue, 25 Nov 2003 07:56:53 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="vbox121">
@@ -57,10 +60,10 @@
 	    <widget class="GtkVBox" id="vbox122">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
-	      <property name="spacing">5</property>
+	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkScrolledWindow" id="scrolledwindow32">
+		<widget class="GtkScrolledWindow" id="price_list_window">
 		  <property name="border_width">3</property>
 		  <property name="visible">True</property>
 		  <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
@@ -69,14 +72,7 @@
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkTreeView" id="price_list">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="headers_visible">True</property>
-		      <property name="rules_hint">False</property>
-		      <property name="reorderable">False</property>
-		      <property name="enable_search">True</property>
-		    </widget>
+		    <placeholder/>
 		  </child>
 		</widget>
 		<packing>
@@ -88,6 +84,7 @@
 
 	      <child>
 		<widget class="GtkHButtonBox" id="hbuttonbox5">
+		  <property name="border_width">5</property>
 		  <property name="visible">True</property>
 		  <property name="layout_style">GTK_BUTTONBOX_SPREAD</property>
 		  <property name="spacing">20</property>
@@ -101,6 +98,7 @@
 		      <property name="label">gtk-add</property>
 		      <property name="use_stock">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <signal name="clicked" handler="gnc_prices_dialog_add_clicked" last_modification_time="Tue, 25 Nov 2003 06:46:11 GMT"/>
 		    </widget>
 		  </child>
 
@@ -113,6 +111,7 @@
 		      <property name="label">gtk-remove</property>
 		      <property name="use_stock">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <signal name="clicked" handler="gnc_prices_dialog_remove_clicked" last_modification_time="Tue, 25 Nov 2003 06:48:02 GMT"/>
 		    </widget>
 		  </child>
 
@@ -123,6 +122,7 @@
 		      <property name="can_default">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <signal name="clicked" handler="gnc_prices_dialog_remove_old_clicked" last_modification_time="Tue, 25 Nov 2003 06:48:20 GMT"/>
 
 		      <child>
 			<widget class="GtkAlignment" id="alignment6">
@@ -189,6 +189,7 @@
 		      <property name="can_default">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <signal name="clicked" handler="gnc_prices_dialog_edit_clicked" last_modification_time="Tue, 25 Nov 2003 06:48:50 GMT"/>
 
 		      <child>
 			<widget class="GtkAlignment" id="alignment5">
@@ -255,6 +256,7 @@
 		      <property name="can_default">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <signal name="clicked" handler="gnc_prices_dialog_get_quotes_clicked" last_modification_time="Tue, 25 Nov 2003 06:49:09 GMT"/>
 
 		      <child>
 			<widget class="GtkAlignment" id="alignment7">

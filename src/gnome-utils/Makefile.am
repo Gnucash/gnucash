@@ -63,7 +63,9 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-tree-model-price.c \
   gnc-tree-model-selection.c \
   gnc-tree-view-account.c \
+  gnc-tree-view-commodity.c \
   gnc-tree-view-common.c \
+  gnc-tree-view-price.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
   misc-gnome-utils.c \
@@ -108,7 +110,9 @@ gncinclude_HEADERS = \
   gnc-tree-model-price.h \
   gnc-tree-model-selection.h \
   gnc-tree-view-account.h \
+  gnc-tree-view-commodity.h \
   gnc-tree-view-common.h \
+  gnc-tree-view-price.h \
   gtkselect.h \
   misc-gnome-utils.h \
   print-session.h
