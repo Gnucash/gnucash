@@ -48,7 +48,7 @@
 #include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 
-typedef struct _PriceCell
+typedef struct
 {
   BasicCell cell;
 

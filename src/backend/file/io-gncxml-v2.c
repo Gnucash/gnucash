@@ -218,7 +218,7 @@ add_template_transaction_local( sixtp_gdv2 *data,
 {
     GList *n;
     Account *tmpAcct;
-    AccountGroup *acctGroup;
+    AccountGroup *acctGroup = NULL;
 
     /* expect a struct of: */
     /* . template accounts. */
@@ -238,18 +238,15 @@ add_template_transaction_local( sixtp_gdv2 *data,
             xaccGroupInsertAccount( acctGroup, (Account*)n->data );
         }
 
-        /*
-          This doesn't care about the "AccountCommitEdit-at-end"
-          paradigm of the normal accounts/transactions so much,
-          because there's only one template Account.
-        */
-        xaccAccountCommitEdit( (Account*)n->data );
     }
 
     for ( n = txd->transactions; n; n = n->next ) {
         /* insert transactions into accounts */
         add_transaction_local( data, (Transaction*)n->data );
     }
+
+    xaccAccountGroupCommitEdit (acctGroup);
+
     return TRUE;
 }
 

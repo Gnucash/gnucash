@@ -32,6 +32,7 @@
 #include <gnome.h>
 
 #include "quickfillcell.h"
+#include "quickfillcell-gnome.h"
 
 
 static gboolean
@@ -95,14 +96,16 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
         return TRUE;
 }
 
-
-void
-gnc_quickfill_cell_gui_init (QuickFillCell *cell)
+BasicCell *
+gnc_quickfill_cell_gnome_new (void)
 {
-        if (cell == NULL)
-                return;
+        BasicCell *cell;
 
-        cell->cell.direct_update = gnc_quickfill_cell_direct_update;
+        cell = gnc_quickfill_cell_new ();
+
+        cell->direct_update = gnc_quickfill_cell_direct_update;
+
+        return cell;
 }
 
 /*

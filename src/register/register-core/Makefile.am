@@ -1,3 +1,5 @@
+SUBDIRS = . test
+
 pkglib_LTLIBRARIES = libgncmod-register-core.la
 
 libgncmod_register_core_la_LDFLAGS = -module

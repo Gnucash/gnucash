@@ -431,6 +431,7 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
             /* This is the just-created template acct.  It can safely be
                removed, as we either will find or don't have a relevent
                template_acct. */
+            xaccAccountBeginEdit (sx->template_acct);
             xaccAccountDestroy( sx->template_acct );
             sx->template_acct = NULL;
     }
@@ -498,7 +499,7 @@ gboolean
 tt_act_handler( xmlNodePtr node, gpointer data )
 {
         gnc_template_xaction_data *txd = data;
-        Account                *acc;
+        Account *acc;
         gnc_commodity *com;
 
         acc = dom_tree_to_account( node );
@@ -506,6 +507,8 @@ tt_act_handler( xmlNodePtr node, gpointer data )
         if ( acc == NULL ) {
                 return FALSE;
         } else {
+                xaccAccountBeginEdit (acc);
+
                 /* Check for the lack of a commodity [signifying that the
                    pre-7/11/2001-CIT-change SX template Account was parsed [but
                    incorrectly]. */
@@ -524,6 +527,7 @@ tt_act_handler( xmlNodePtr node, gpointer data )
 
                 txd->accts = g_list_append( txd->accts, acc );
         }
+
         return TRUE;
 }
 

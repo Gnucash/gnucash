@@ -201,7 +201,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         gnc_header_widths_destroy (widths);
 }
 
-void        
+void
 gnc_table_refresh_gui (Table * table, gboolean do_scroll)
 {
         GnucashSheet *sheet;
@@ -221,10 +221,10 @@ gnc_table_refresh_gui (Table * table, gboolean do_scroll)
 }
 
 
-void        
-gnc_table_refresh_cursor_gui (Table * table,
-                              VirtualCellLocation vcell_loc,
-                              gboolean do_scroll)
+static void        
+gnc_table_refresh_cursor_gnome (Table * table,
+                                VirtualCellLocation vcell_loc,
+                                gboolean do_scroll)
 {
         GnucashSheet *sheet;
 
@@ -272,6 +272,16 @@ gnc_table_show_range (Table *table,
         sheet = GNUCASH_SHEET (table->ui_data);
 
         gnucash_sheet_show_range (sheet, start_loc, end_loc);
+}
+
+void
+gnc_table_gnome_init (void)
+{
+        TableGUIHandlers gui_handlers;
+
+        gui_handlers.cursor_refresh = gnc_table_refresh_cursor_gnome;
+
+        gnc_table_set_default_gui_handlers (&gui_handlers);
 }
 
 /*

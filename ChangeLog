@@ -1,3 +1,43 @@
+2001-09-14  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/register-gnome: add new headers
+
+	* src/register/register-gnome/gncmod-register-gnome.c: initialize
+	gnome-specific cells and table
+
+	* src/register/register-gnome/pricecell-gnome.c
+	(gnc_price_cell_gnome_new): new func.
+
+	* src/register/register-gnome/quickfillcell-gnome.c
+	(gnc_quickfill_cell_gnome_new): new func
+
+	* src/register/register-gnome/table-gnome.c: new code to
+	initialize table with gnome-specific callbacks
+
+	* src/register/register-core/Makefile.am: add test subdir
+
+	* src/register/register-core/pricecell.c: remove gui-specific stuff
+
+	* src/register/register-core/quickfillcell.c: remove gui-specific stuff
+
+	* src/register/register-core/table-allgui.c: implement gui cursor
+	refresh as a callback.
+
+	* src/gnome/window-register.c: fix menu names and help strings
+	
+	* src/backend/file/gnc-schedxaction-xml-v2.c
+	(gnc_schedXaction_end_handler): open account for editing
+	before destroying it.
+
+	* src/backend/file/gnc-schedxaction-xml-v2.c (tt_act_handler):
+	open account for editing and leave it open.
+
+	* src/backend/file/io-gncxml-v2.c
+	(add_template_transaction_local): commit the template account
+	group after all transactions have been added.
+
+	* configure.in: configure new test Makefile
+
 2001-09-13  Dave Peticolas  <dave@krondo.com>
 
 	* src/guile/gw-gnc-spec.scm: remove some unused wrappings

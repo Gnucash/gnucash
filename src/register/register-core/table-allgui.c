@@ -48,6 +48,8 @@
 
 /** Static Globals *****************************************************/
 
+static TableGUIHandlers default_gui_handlers;
+
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_REGISTER;
 
@@ -63,6 +65,15 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 
 /** Implementation *****************************************************/
 
+void
+gnc_table_set_default_gui_handlers (TableGUIHandlers *gui_handlers)
+{
+  if (!gui_handlers)
+    memset (&default_gui_handlers, 0, sizeof (default_gui_handlers));
+  else
+    default_gui_handlers = *gui_handlers;
+}
+
 Table * 
 gnc_table_new (TableLayout *layout, TableModel *model, TableControl *control)
 {
@@ -77,6 +88,8 @@ gnc_table_new (TableLayout *layout, TableModel *model, TableControl *control)
   table->layout = layout;
   table->model = model;
   table->control = control;
+
+  table->gui_handlers = default_gui_handlers;
 
   gnc_table_init (table);
 
@@ -1372,6 +1385,17 @@ gnc_table_find_close_valid_cell (Table *table, VirtualLocation *virt_loc,
     return FALSE;
 
   return gnc_table_find_valid_cell_horiz (table, virt_loc, exact_pointer);
+}
+
+void        
+gnc_table_refresh_cursor_gui (Table * table,
+                              VirtualCellLocation vcell_loc,
+                              gboolean do_scroll)
+{
+  g_return_if_fail (table != NULL);
+  g_return_if_fail (table->gui_handlers.cursor_refresh != NULL);
+
+  table->gui_handlers.cursor_refresh (table, vcell_loc, do_scroll);
 }
 
 gboolean

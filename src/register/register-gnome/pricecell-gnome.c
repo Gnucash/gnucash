@@ -31,9 +31,10 @@
 #include <gnome.h>
 #include <locale.h>
 
-#include "pricecell.h"
 #include "gnc-exp-parser.h"
 #include "gnc-ui-util.h"
+#include "pricecell.h"
+#include "pricecell-gnome.h"
 
 
 static gboolean
@@ -140,21 +141,14 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     return TRUE;
 }
 
-
-void gnc_price_cell_gui_init (PriceCell *cell);
-
-void
-gnc_price_cell_gui_init (PriceCell *cell)
+BasicCell *
+gnc_price_cell_gnome_new (void)
 {
-    if (cell == NULL)
-	return;
+  BasicCell *cell;
 
-    cell->cell.direct_update = gnc_price_cell_direct_update;
+  cell = gnc_price_cell_new ();
+
+  cell->direct_update = gnc_price_cell_direct_update;
+
+  return cell;
 }
-
-/*
-  Local Variables:
-  c-basic-offset: 4
-  tab-width: 8
-  End:
-*/

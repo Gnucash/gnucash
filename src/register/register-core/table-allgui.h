@@ -101,8 +101,7 @@
 
 
 /* The VirtualCell structure holds information about each virtual cell. */
-typedef struct _VirtualCell VirtualCell;
-struct _VirtualCell
+typedef struct
 {
   CellBlock *cellblock;  /* Array of physical cells */
   gpointer   vcell_data; /* Used by higher-level code */
@@ -110,9 +109,18 @@ struct _VirtualCell
   /* flags */
   unsigned int visible : 1;             /* visible in the GUI */
   unsigned int start_primary_color : 1; /* color usage flag */
-};
+} VirtualCell;
 
 typedef struct table Table;
+
+typedef void (*TableCursorRefreshCB) (Table *table,
+                                      VirtualCellLocation vcell_loc,
+                                      gboolean do_scroll);
+
+typedef struct
+{
+  TableCursorRefreshCB cursor_refresh;
+} TableGUIHandlers;
 
 typedef void (*TableRedrawHelpFunc) (Table *table);
 typedef void (*TableDestroyFunc) (Table *table);
@@ -135,11 +143,15 @@ struct table
   /* The virtual cell table */
   GTable *virt_cells;
 
+  TableGUIHandlers gui_handlers;
   TableRedrawHelpFunc ui_redraw_help;
   TableDestroyFunc ui_destroy;
   gpointer ui_data;
 };
 
+
+/* Set the default gui handlers used by new tables. */
+void gnc_table_set_default_gui_handlers (TableGUIHandlers *gui_handlers);
 
 /* Functions to create and destroy Tables.  */
 Table *     gnc_table_new (TableLayout *layout,
@@ -277,8 +289,7 @@ gboolean    gnc_table_find_close_valid_cell (Table *table,
                                              VirtualLocation *virt_loc,
                                              gboolean exact_cell);
 
-/* ==================================================== */
-/* UI-specific functions */
+/** UI-specific functions *******************************/
 
 /* Initialize the GUI from a table */
 void        gnc_table_init_gui (gncUIWidget widget, gpointer data);
@@ -297,6 +308,12 @@ void        gnc_table_show_range (Table *table,
                                   VirtualCellLocation start_loc,
                                   VirtualCellLocation end_loc);
 
+/* Refresh the cursor in the given location. If do_scroll is TRUE,
+ * scroll the register so the location is in view. */
+void        gnc_table_refresh_cursor_gui (Table * table,
+                                          VirtualCellLocation vcell_loc,
+                                          gboolean do_scroll);
+
 /* ==================================================== */
 
 void         gnc_table_wrap_verify_cursor_position (Table *table,
@@ -305,10 +322,6 @@ void         gnc_table_wrap_verify_cursor_position (Table *table,
 gboolean     gnc_table_virtual_loc_valid(Table *table,
                                          VirtualLocation virt_loc,
                                          gboolean exact_pointer);
-
-void         gnc_table_refresh_cursor_gui (Table * table,
-                                           VirtualCellLocation vcell_loc,
-                                           gboolean do_scroll);
 
 gboolean     gnc_table_move_tab (Table *table,
                                  VirtualLocation *virt_loc,

@@ -50,7 +50,7 @@
 #include "basiccell.h"
 #include "QuickFill.h"
 
-typedef struct _QuickFillCell
+typedef struct
 {
   BasicCell cell;
   QuickFill *qf;       /* quickfill-tree handled by this cell */
@@ -71,8 +71,5 @@ void             gnc_quickfill_cell_set_sort (QuickFillCell *cell,
 
 void             gnc_quickfill_cell_add_completion (QuickFillCell *cell,
                                                     const char *completion);
-
-/* GUI-dependent */
-void             gnc_quickfill_cell_gui_init (QuickFillCell *cell);
 
 #endif

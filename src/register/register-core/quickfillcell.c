@@ -272,8 +272,6 @@ gnc_quickfill_cell_init (QuickFillCell *cell)
   cell->cell.modify_verify = gnc_quickfill_cell_modify_verify;
   cell->cell.leave_cell    = gnc_quickfill_cell_leave;
   cell->cell.set_value     = gnc_quickfill_cell_set_value_internal;
-
-  gnc_quickfill_cell_gui_init (cell);
 }
 
 BasicCell *

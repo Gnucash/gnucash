@@ -49,9 +49,6 @@
 #include "pricecell.h"
 
 
-/* GUI-dependent */
-extern void gnc_price_cell_gui_init (PriceCell *cell);
-
 static void gnc_price_cell_init (PriceCell *cell);
 static void gnc_price_cell_set_value_internal (BasicCell *bcell,
                                                const char *value);
@@ -195,7 +192,7 @@ gnc_price_cell_new (void)
   return &cell->cell;
 }
 
-static void
+void
 gnc_price_cell_init (PriceCell *cell)
 {
   gnc_basic_cell_init (&(cell->cell));
@@ -213,8 +210,6 @@ gnc_price_cell_init (PriceCell *cell)
   cell->cell.leave_cell = gnc_price_cell_leave;
   cell->cell.set_value = gnc_price_cell_set_value_internal;
   cell->cell.get_help_value = PriceHelp;
-
-  gnc_price_cell_gui_init (cell);
 }
 
 static const char *

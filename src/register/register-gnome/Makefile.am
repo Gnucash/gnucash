@@ -16,8 +16,8 @@ libgncmod_register_gnome_la_SOURCES = \
   gnucash-scrolled-window.c \
   gnucash-sheet.c \
   gnucash-style.c \
-  quickfillcell-gnome.c \
   pricecell-gnome.c \
+  quickfillcell-gnome.c \
   table-gnome.c 
 
 noinst_HEADERS = \
@@ -30,7 +30,10 @@ noinst_HEADERS = \
   gnucash-item-list.h \
   gnucash-scrolled-window.h \
   gnucash-sheet.h \
-  gnucash-style.h
+  gnucash-style.h \
+  pricecell-gnome.h \
+  quickfillcell-gnome.h \
+  table-gnome.h
 
 EXTRA_DIST = \
   .cvsignore
