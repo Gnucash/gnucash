@@ -8,6 +8,12 @@
 	  output and using the QSF_XSD_TIME for the datestrings. KVP
 	  handling will be added in the next version.
 
+	* src/engine/Account.c:
+	  This patch fixes: (QofAccessFunc)xaccAccountSetNonStdSCU in
+	  src/engine/Account.c - that's a Set routine allocated as a
+	  QofAccessFunc - the patch changes it to the appropriate Get
+	  routine - the QofSetterFunc is OK.
+
 2005-01-26  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' QSF Backend.
