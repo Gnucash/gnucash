@@ -16,7 +16,6 @@ libgncmod_hbci_la_SOURCES = \
   gnc-hbci-gettrans.c \
   hbci-interaction.c \
   hbci-progressmon.c \
-  hbci-account-picker.c \
   druid-hbci-initial.c 
 
 noinst_HEADERS = \
@@ -33,7 +32,6 @@ noinst_HEADERS = \
   gnc-hbci-kvp.h \
   gnc-hbci-transfer.h \
   gnc-hbci-utils.h \
-  hbci-account-picker.h \
   hbci-interaction.h \
   hbci-interactionP.h
 

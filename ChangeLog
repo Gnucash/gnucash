@@ -1,5 +1,8 @@
 2002-11-22  Christian Stimming  <stimming@tuhh.de>
 
+	* src/gnome-utils/dialog-account-pick.[hc]: Move the account
+	picker dialog from hbci/ to gnome-utils.
+
 	* src/import-export/Transaction-matcher.c: Fix the case when
 	trans_online_id exists but is empty. Simplify heuristics for date
 	matching. Increase exact amount matching value.

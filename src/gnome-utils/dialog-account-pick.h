@@ -1,5 +1,5 @@
 /********************************************************************\
- * hbci-account-picker.h -- window for picking a GNUcash account  *
+ * dialog-account-pick.h -- window for picking a GNUcash account    *
  *                       (GnuCash)                                  *
  * Copyright (C) 2002 Christian <stimming@tuhh.de>
  *                                                                  *
@@ -21,15 +21,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef HBCI_ACCOUNT_PICKER_H
-#define HBCI_ACCOUNT_PICKER_H
+#ifndef DIALOG_ACCOUNT_PICK_H
+#define DIALOG_ACCOUNT_PICK_H
 
-#include "druid-hbci-initial.h"
 #include "Account.h"
 
-Account *hbci_account_picker_dialog(HBCIInitialInfo *info, 
-				    Account *initial_sel);
+Account *gnc_account_picker_dialog(Account *initial_sel);
 
-typedef struct _accountpickerdialog HBCIAccountPickerDialog;
+typedef struct _accountpickerdialog GNCAccountPickerDialog;
 
 #endif

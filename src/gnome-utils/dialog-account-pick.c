@@ -1,5 +1,5 @@
 /********************************************************************\
- * hbci-account-picker.c -- window for picking a Gnucash account    * 
+ * dialog-account-pick.c -- window for picking a Gnucash account    * 
  * Copyright (C) 2002 Christian <stimming@tuhh.de>                  *
  * Heavily copied from the QIF importer, which is                   *
  * Copyright (C) 2000-2001 Bill Gribble <grib@billgribble.com>      *
@@ -28,17 +28,18 @@
 #include <stdio.h>
 #include <guile/gh.h>
 
-#include "hbci-account-picker.h"
+#include "dialog-account-pick.h"
 #include "dialog-utils.h"
-#include "druid-hbci-initial.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "Group.h"
 
+/* Note: the name is '-pick' simply because a 'dialog-account-picker'
+   already exists in the src/import-export/qif-import subdirectory. */
+
 struct _accountpickerdialog {
   GtkWidget       * dialog;
   GtkWidget       * treeview;
-  HBCIInitialInfo * hbci_info;
   Account         * select;  
   GHashTable *hash;
 };
@@ -50,14 +51,14 @@ typedef struct
   GtkCTreeNode * parent;
   char *acctinfo[2];
   int *row;
-  HBCIAccountPickerDialog *wind;
+  GNCAccountPickerDialog *wind;
 } add_acc_data;
 
 static void
 acct_tree_add_accts(AccountGroup *accts, 
 		    GtkCTree * tree, GtkCTreeNode * parent,
                     char * base_name, int *row, 
-		    HBCIAccountPickerDialog *wind) 
+		    GNCAccountPickerDialog *wind) 
 {
   add_acc_data user_data;
   
@@ -104,7 +105,7 @@ static gpointer add_acc_cb (Account *current, gpointer user_data)
 }
 
 static void
-build_acct_tree(HBCIAccountPickerDialog * picker, HBCIInitialInfo * import) {
+build_acct_tree(GNCAccountPickerDialog * picker) {
   GtkCTreeNode * new_sel;
   int row = 0;
   AccountGroup *acct_tree;
@@ -135,56 +136,12 @@ build_acct_tree(HBCIAccountPickerDialog * picker, HBCIInitialInfo * import) {
   gtk_clist_thaw (GTK_CLIST(picker->treeview));
 }
 
-/* static void */
-/* new_child_string_cb(char * string, gpointer data) { */
-/*   if(string) { */
-/*     strncpy(data, string, 250); */
-/*   } */
-/*   else { */
-/*     *(char *)data = 0; */
-/*   } */
-/* } */
-
-/* static void */
-/* gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data) { */
-/*   HBCIAccountPickerDialog * wind = user_data; */
-/*   //SCM name_setter = gh_eval_str("qif-map-entry:set-gnc-name!"); */
-/*   char name[251] = ""; */
-/*   char sep[2] = " "; */
-/*   int  retval    = -1; */
-/*   char * fullname = NULL; */
-
-/*   GtkWidget * dlg = gnome_request_dialog(FALSE,  */
-/*                                          _("Enter a name for the account"),  */
-/*                                          "", 250, */
-/*                                          &new_child_string_cb, &name[0], */
-/*                                          NULL); */
-/*   retval = gnome_dialog_run_and_close(GNOME_DIALOG(dlg)); */
-/*   sep[0] = gnc_get_account_separator(); */
-
-/*    retval is 0 if the 'ok' button was clicked */ 
-/*   if(retval == 0) { */
-/*     if(wind->select) { */
-/*       fullname = g_strjoin(sep, xaccAccountGetName(wind->select), name, NULL); */
-/*     } */
-/*     else { */
-/*       fullname = g_strdup(name); */
-/*     } */
-/*     //wind->selected_name = g_strdup(fullname); */
-/*     //gh_call2(name_setter, wind->select, gh_str02scm(fullname)); */
-/*     //g_free(fullname); */
-/*   } */
-
-/*   build_acct_tree(wind, wind->hbci_info); */
-
-/* } */
-
 static void
 gnc_ui_qif_account_picker_select_cb(GtkCTree   * tree,
                                     GtkCTreeNode  * node,
                                     gint column,
                                     gpointer  user_data) {
-  HBCIAccountPickerDialog * wind = user_data;
+  GNCAccountPickerDialog * wind = user_data;
 
   wind->select = 
     g_hash_table_lookup (wind->hash, node);
@@ -196,7 +153,7 @@ gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
                                       GtkCTreeNode  * node,
                                       gint column,
                                       gpointer  user_data) {
-  HBCIAccountPickerDialog * wind = user_data;
+  GNCAccountPickerDialog * wind = user_data;
 
   wind->select = NULL;
 }
@@ -204,36 +161,35 @@ gnc_ui_qif_account_picker_unselect_cb(GtkCTree   * tree,
 
 
 /****************************************************************
- * hbci_account_picker_dialog
+ * gnc_account_picker_dialog
  * select an account from the ones that the engine knows about. 
  * it returns a pointer to the resulting account or 
  * NULL on cancel.  It's modal.
  ****************************************************************/
 
 Account *
-hbci_account_picker_dialog(HBCIInitialInfo *info, Account *initial_sel) {  
-  HBCIAccountPickerDialog * wind;
+gnc_account_picker_dialog(Account *initial_sel) {  
+  GNCAccountPickerDialog * wind;
   int retval = -1;
   Account *retaccount;
   //char * scmname;
   GladeXML *xml;
   GtkWidget *new_account_button;
   
-  wind = g_new0(HBCIAccountPickerDialog, 1);
+  wind = g_new0(GNCAccountPickerDialog, 1);
 
-  xml = gnc_glade_xml_new ("hbci.glade", "HBCI Setup Account Picker");
+  xml = gnc_glade_xml_new ("account.glade", "Account Picker");
 
   //glade_xml_signal_connect_data
   //  (xml, "gnc_ui_qif_account_picker_new_cb",
   //   GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb), wind);
 
   g_assert
-    (wind->dialog = glade_xml_get_widget (xml, "HBCI Setup Account Picker"));
+    (wind->dialog = glade_xml_get_widget (xml, "Account Picker"));
   g_assert
     (wind->treeview   = glade_xml_get_widget (xml, "account_tree"));
   g_assert
     (new_account_button = glade_xml_get_widget (xml, "new_account_button"));
-  wind->hbci_info   = info;
 
   wind->select  = initial_sel;
   wind->hash = g_hash_table_new(&g_direct_hash, &g_direct_equal);
@@ -251,7 +207,7 @@ hbci_account_picker_dialog(HBCIInitialInfo *info, Account *initial_sel) {
 
   /* this is to get the checkmarks set up right.. it will get called 
    * again after the window is mapped. */
-  build_acct_tree(wind, wind->hbci_info);
+  build_acct_tree(wind);
 
   retval = gnome_dialog_run_and_close(GNOME_DIALOG(wind->dialog));  
 

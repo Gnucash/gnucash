@@ -22,6 +22,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   cursors.c \
   argv-list-converters.c \
   dialog-account.c \
+  dialog-account-pick.c \
   dialog-commodity.c \
   dialog-options.c \
   dialog-utils.c \
@@ -51,6 +52,7 @@ libgncmod_gnome_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   dialog-account.h \
+  dialog-account-pick.h \
   dialog-commodity.h \
   dialog-options.h \
   dialog-utils.h \
