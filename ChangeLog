@@ -1,3 +1,15 @@
+2003-05-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/reconcile-list.[ch]: Port to the gnc-query-list.
+	  Remove all the extraneous code.
+	* src/gnome-utils/gnc-query-list.[ch]: Add code so the reconcile-list
+	  can successfully use the query-list.  Add a construct() method.
+	  Add an "unselect_all()" method.  Add the ability to print numerics
+	  as an ABS and invert the sort (defaults to off).  Add methods to
+	  determine if an item is in the list, and one to refresh the display
+	  of an item.
+	* src/gnome-utils/search-param.[ch]: fix the spelling of resizeable
+
 2003-05-12  David Hampton  <hampton@employees.org>
 
 	* src/quotes/finance-quote-check.in: 

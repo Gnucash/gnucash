@@ -108,15 +108,13 @@ gnc_query_list_get_type (void)
  *       query      - the query to use to find entries              *
  * Returns: the query list widget, or NULL if there was a problem.  *
 \********************************************************************/
-GtkWidget *
-gnc_query_list_new(GList *param_list, Query *query)
+void
+gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query)
 {
-  GNCQueryList *list;
-
-  g_return_val_if_fail(param_list, NULL);
-  g_return_val_if_fail(query, NULL);
-
-  list = GNC_QUERY_LIST(gtk_type_new(gnc_query_list_get_type()));
+  g_return_if_fail(list);
+  g_return_if_fail(param_list);
+  g_return_if_fail(query);
+  g_return_if_fail(IS_GNC_QUERY_LIST(list));
 
   /* more configuration */
   list->query = gncQueryCopy(query);
@@ -129,6 +127,20 @@ gnc_query_list_new(GList *param_list, Query *query)
 
   /* Initialize the CList */
   gnc_query_list_init_clist(list);
+}
+
+
+GtkWidget *
+gnc_query_list_new(GList *param_list, Query *query)
+{
+  GNCQueryList *list;
+
+  g_return_val_if_fail(param_list, NULL);
+  g_return_val_if_fail(query, NULL);
+
+  list = GNC_QUERY_LIST(gtk_type_new(gnc_query_list_get_type()));
+
+  gnc_query_list_construct(list, param_list, query);
 
   return GTK_WIDGET(list);
 }
@@ -202,6 +214,7 @@ gnc_query_list_init (GNCQueryList *list)
 {
   list->query = NULL;
   list->no_toggle = FALSE;
+  list->always_unselect = FALSE;
 
   list->num_columns = 0;
   list->column_params = NULL;
@@ -212,6 +225,9 @@ gnc_query_list_init (GNCQueryList *list)
 
   list->prev_allocation = -1;
   list->title_widths = NULL;
+
+  list->numeric_abs = FALSE;
+  list->numeric_inv_sort = FALSE;
 
   list->priv = g_new0(GNCQueryListPriv, 1);
   list->priv->component_id =
@@ -400,10 +416,8 @@ gnc_query_list_unselect_row (GtkCList *clist, gint row, gint column,
       /* User pressed the space key */
       parent_class->scroll_vertical(clist, GTK_SCROLL_STEP_FORWARD, 0.0);
     }
-    /* XXX
     if (!list->always_unselect)
       return;
-    */
   }
 
   parent_class->unselect_row (clist, row, column, event);
@@ -659,10 +673,15 @@ gnc_query_list_set_query_sort (GNCQueryList *list, gboolean new_column)
   node = g_list_nth(list->column_params, list->sort_column);
   param = node->data;
 
-  /* XXX: Maybe invert the sort order?
-  if ((list->list_type == RECLIST_CREDIT) && (key == BY_AMOUNT))
-    sort_order = !sort_order;
-  */
+  /* If we're asked to invert numerics, and if this is a numeric or
+   * debred column, then invert the sort order.
+   */
+  if (list->numeric_inv_sort) {
+    const char *type = gnc_search_param_get_param_type (param);
+    if (!safe_strcmp(type, QUERYCORE_NUMERIC) ||
+	!safe_strcmp(type, QUERYCORE_DEBCRED))
+      sort_order = !sort_order;
+  }
 
   /* Set the sort order for the engine, if the key changed */
   if (new_column)
@@ -783,6 +802,8 @@ gnc_query_list_fill(GNCQueryList *list)
       {
 	gnc_numeric (*nfcn)(gpointer) = (gnc_numeric(*)(gpointer))fcn;
 	gnc_numeric value = nfcn(res);
+	if (list->numeric_abs)
+	  value = gnc_numeric_abs (value);
 	strings[i++] = g_strdup(xaccPrintAmount(value,gnc_default_print_info(FALSE)));
       } else
 	strings[i++] = gncQueryCoreToString (type, res, fcn);
@@ -810,4 +831,61 @@ gnc_query_list_fill(GNCQueryList *list)
 
   /* Reverse the list again for the query code */
   g_list_reverse(entries);
+}
+
+/********************************************************************\
+ * gnc_query_list_unselect_all                                      *
+ *   unselect all items in the list                                 *
+ *                                                                  *
+ * Args: list - list to unselect all                                *
+ * Returns: nothing                                                 *
+\********************************************************************/
+void
+gnc_query_list_unselect_all(GNCQueryList *list)
+{
+  g_return_if_fail (list != NULL);
+  g_return_if_fail (IS_GNC_QUERY_LIST(list));
+
+  list->no_toggle = TRUE;
+  list->always_unselect = TRUE;
+
+  gtk_clist_unselect_all (GTK_CLIST(list));
+
+  list->always_unselect = FALSE;
+  list->no_toggle = FALSE;
+
+  list->current_entry = NULL;
+}
+
+
+gboolean gnc_query_list_item_in_list (GNCQueryList *list, gpointer item)
+{
+  g_return_val_if_fail(list, FALSE);
+  g_return_val_if_fail(item, FALSE);
+  g_return_val_if_fail(IS_GNC_QUERY_LIST(list), FALSE);
+
+  return (gtk_clist_find_row_from_data(GTK_CLIST(list), item) != -1);
+}
+
+void gnc_query_list_refresh_item (GNCQueryList *list, gpointer item)
+{
+  gint row;
+
+  g_return_if_fail(list);
+  g_return_if_fail(item);
+  g_return_if_fail(IS_GNC_QUERY_LIST(list));
+
+  row = gtk_clist_find_row_from_data(GTK_CLIST(list), item);
+  if (row != -1)
+    update_booleans (list, row);
+}
+
+void
+gnc_query_list_set_numerics (GNCQueryList *list, gboolean abs, gboolean inv_sort)
+{
+  g_return_if_fail(list);
+  g_return_if_fail(IS_GNC_QUERY_LIST(list));
+
+  list->numeric_abs = abs;
+  list->numeric_inv_sort = inv_sort;
 }

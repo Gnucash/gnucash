@@ -48,6 +48,7 @@ struct _GNCQueryList
   /* Query information */
   Query *query;
   gboolean no_toggle;
+  gboolean always_unselect;
   gint current_row;
   gint num_entries;
   gpointer current_entry;
@@ -56,6 +57,10 @@ struct _GNCQueryList
   gint num_columns;
   GList *column_params;
 
+  /* numeric information */
+  gboolean numeric_abs;
+  gboolean numeric_inv_sort;
+  
   /* Sorting info */
   gint sort_column;
   gboolean increasing;
@@ -89,7 +94,10 @@ GtkType gnc_query_list_get_type (void);
  * whatever they want.
  */
 GtkWidget * gnc_query_list_new (GList *param_list, Query *query);
+void gnc_query_list_construct (GNCQueryList *list, GList *param_list, Query *query);
 void gnc_query_list_reset_query (GNCQueryList *list, Query *query);
+
+void gnc_query_list_set_numerics (GNCQueryList *list, gboolean abs, gboolean inv_sort);
 
 gint gnc_query_list_get_needed_height(GNCQueryList *list, gint num_rows);
 
@@ -98,6 +106,12 @@ gint gnc_query_list_get_num_entries(GNCQueryList *list);
 gpointer gnc_query_list_get_current_entry(GNCQueryList *list);
 
 void gnc_query_list_refresh (GNCQueryList *list);
+
+void gnc_query_list_unselect_all(GNCQueryList *list);
+
+gboolean gnc_query_list_item_in_list (GNCQueryList *list, gpointer item);
+
+void gnc_query_list_refresh_item (GNCQueryList *list, gpointer item);
 
 #ifdef __cplusplus
 }

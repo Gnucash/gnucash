@@ -1,6 +1,7 @@
 /********************************************************************\
  * reconcile-list.h -- GNOME reconcile list functions               *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 2003 Derek Atkins <derek@ihtfp.com>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,9 +24,7 @@
 #ifndef GNC_RECONCILE_LIST_H
 #define GNC_RECONCILE_LIST_H
 
-#include <gtk/gtkclist.h>
-
-#include "Query.h"
+#include "gnc-query-list.h"
 #include "gnc-numeric.h"
 
 #ifdef __cplusplus
@@ -49,35 +48,15 @@ typedef enum
 
 struct _GNCReconcileList
 {
-  GtkCList clist;
-
-  GNCReconcileListType list_type;
-
-  gint num_splits;
-  gint num_columns;
-
-  gint current_row;
-  Split *current_split;
-
-  gboolean no_toggle;
-  gboolean always_unselect;
-  gboolean first_fill;
+  GNCQueryList qlist;
 
   GHashTable *reconciled;
-
   Account *account;
-  Query *query;
+  GList *column_list;
 
   GNCReconcileList *sibling;
-
-  /* Sorting info */
-  guint key;
-  gboolean increasing;
-  GtkWidget *title_arrow[5];
-
-  /* Column resizing */
-  gint prev_allocation;
-  gint title_width[5];
+  GNCReconcileListType list_type;
+  gboolean no_toggle;
 };
 
 struct _GNCReconcileListClass
