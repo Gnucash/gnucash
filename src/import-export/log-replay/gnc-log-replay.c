@@ -35,7 +35,6 @@
 #include <libguile.h>
 #include <gmodule.h>
 
-#include "libofx/libofx.h"
 #include "import-account-matcher.h"
 #include "import-commodity-matcher.h"
 #include "import-utilities.h"
@@ -103,7 +102,7 @@ typedef struct _split_record
   int date_reconciled_present;
 } split_record;
 /********************************************************************\
- * gnc_file_ofx_import
+ * gnc_file_log_replay_import
  * Entry point
 \********************************************************************/
 
@@ -171,82 +170,82 @@ static split_record interpret_split_record( char *record_line)
 	case 'R': record.log_action=LOG_ROLLBACK;
 	  break;
 	}
-      record.log_action_present=true;
+      record.log_action_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       string_to_guid(tok_ptr, &(record.trans_guid));
-      record.trans_guid_present=true;
+      record.trans_guid_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       string_to_guid(tok_ptr, &(record.split_guid));
-      record.split_guid_present=true;
+      record.split_guid_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       record.log_date = gnc_iso8601_to_timespec_local(tok_ptr);
-      record.log_date_present=true;
+      record.log_date_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       record.date_entered = gnc_iso8601_to_timespec_local(tok_ptr);
-      record.date_entered_present=true;
+      record.date_entered_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       record.date_posted = gnc_iso8601_to_timespec_local(tok_ptr);
-      record.date_posted_present=true;
+      record.date_posted_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       string_to_guid(tok_ptr, &(record.acc_guid));
-      record.acc_guid_present=true;
+      record.acc_guid_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       strncpy(record.acc_name,tok_ptr,STRING_FIELD_SIZE-1);
-      record.acc_name_present=true;
+      record.acc_name_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       strncpy(record.trans_num,tok_ptr,STRING_FIELD_SIZE-1);
-      record.trans_num_present=true;
+      record.trans_num_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       strncpy(record.trans_descr,tok_ptr,STRING_FIELD_SIZE-1);
-      record.trans_descr_present=true;
+      record.trans_descr_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       strncpy(record.split_memo,tok_ptr,STRING_FIELD_SIZE-1);
-      record.split_memo_present=true;
+      record.split_memo_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       strncpy(record.split_action,tok_ptr,STRING_FIELD_SIZE-1);
-      record.split_action_present=true;
+      record.split_action_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       record.split_reconcile = tok_ptr[0];
-      record.split_reconcile_present=true;
+      record.split_reconcile_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       string_to_gnc_numeric(tok_ptr, &(record.amount));
-      record.amount_present=true;
+      record.amount_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       string_to_gnc_numeric(tok_ptr, &(record.value));
-      record.value_present=true;
+      record.value_present=TRUE;
     }
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
     {  
       record.date_reconciled = gnc_iso8601_to_timespec_local(tok_ptr);
-      record.date_reconciled_present=true;
+      record.date_reconciled_present=TRUE;
     }
 
   if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
@@ -369,8 +368,8 @@ static void  process_trans_record(  FILE *log_file)
   char read_buf[256];
   char *read_retval;
   const char * record_end_str = "===== END";
-  int first_record=true;
-  int record_ended = false;
+  int first_record=TRUE;
+  int record_ended = FALSE;
   int split_num = 0;
   split_record record;
   Transaction * trans = NULL;
@@ -380,7 +379,7 @@ static void  process_trans_record(  FILE *log_file)
 
   DEBUG("process_trans_record(): Begin...\n");
 
-  while( record_ended == false)
+  while( record_ended == FALSE)
     {
       read_retval = fgets(read_buf,sizeof(read_buf),log_file);
       if(read_retval!=NULL && strncmp(record_end_str,read_buf,strlen(record_end_str))!=0)/* If we are not at the end of the record */
@@ -399,20 +398,20 @@ static void  process_trans_record(  FILE *log_file)
 		  break;
 		case LOG_DELETE: DEBUG("process_trans_record(): Playing back LOG_DELETE");
 		  if((trans=xaccTransLookup (&(record.trans_guid), book))!=NULL
-		     && first_record==true)
+		     && first_record==TRUE)
 		    {
 		      xaccTransBeginEdit(trans);
 		      xaccTransDestroy(trans);
 		    }
-		  else if(first_record==true)
+		  else if(first_record==TRUE)
 		    {
 		      PERR("The transaction to delete was not found!");
 		    }
 		  break;
 		case LOG_COMMIT: DEBUG("process_trans_record(): Playing back LOG_COMMIT");
-		  if(record.trans_guid_present == true 
+		  if(record.trans_guid_present == TRUE 
 		     && (trans=xaccTransLookupDirect (record.trans_guid, book)) != NULL
-		     && first_record == true)
+		     && first_record == TRUE)
 		    {
 		      DEBUG("process_trans_record(): Transaction to be edited was found");/*Destroy the current transaction, we will create a new one to replace it*/
 		      xaccTransBeginEdit(trans);
@@ -420,8 +419,8 @@ static void  process_trans_record(  FILE *log_file)
 		      xaccTransCommitEdit(trans);
 		    }
 
-		  if(record.trans_guid_present == true 
-		     && first_record==true)
+		  if(record.trans_guid_present == TRUE 
+		     && first_record==TRUE)
 		    {
 		      DEBUG("process_trans_record(): Creating the new transaction");
 		      trans = xaccMallocTransaction (book);
@@ -444,7 +443,7 @@ static void  process_trans_record(  FILE *log_file)
 			  xaccTransSetDescription(trans,record.trans_descr);
 			}
 		    }
-		  if(record.split_guid_present == true) /*Fill the split info*/
+		  if(record.split_guid_present == TRUE) /*Fill the split info*/
 		    {
 		      split=xaccMallocSplit(book);
 		      if(record.acc_guid_present)
@@ -480,7 +479,7 @@ static void  process_trans_record(  FILE *log_file)
 			  xaccSplitSetValue(split, record.value);
 			}
 		    }
-		  first_record=false;
+		  first_record=FALSE;
 		  break;
 		}
 	    }
@@ -491,7 +490,7 @@ static void  process_trans_record(  FILE *log_file)
 	}
       else /* The record ended */
 	{
-	  record_ended = true;
+	  record_ended = TRUE;
 	  DEBUG("process_trans_record(): Record ended\n");
 	  if(trans!=NULL)/*If we played with a transaction, commit it here*/
 	    {

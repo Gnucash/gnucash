@@ -1,7 +1,16 @@
-2003-05-26  Benoit Grégoire  <bock@step.polymtl.ca>
+2003-05-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-query-list.c: the query headers were restructured
+	  by linas so we need to add an extra #include to compile
+	* src/import-export/log-replay/gnc-log-replay.c: get it to compile.
+	  - Doesn't need libofx.h
+	  - use TRUE/FALSE, not true/false.
+
+2003-05-28  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/import-settings.c: Revert previous gettext macro addition.
-	* src/engine/TransLog.c,h: Change the log format to use GUID instead of C pointers and to use ISO8601 instead of proprietary format.
+	* src/engine/TransLog.c,h: Change the log format to use GUID instead of 
+	  C pointers and to use ISO8601 instead of proprietary format.
 	
 	* src/engine/gnc-numeric.h 
 	* src/import-export/import-match-map.c: Doxygen update
@@ -9,7 +18,10 @@
 	* configure.in
 	* src/scm/main.scm 
 	* src/import-export/Makefile.am 
-	* src/import-export/log-replay/*: New log replay module.  This ALMOST works, except I forgot you can't set the GUID of gnucash's objects, and thus completely screwed up on the playback logic.  I'll think of a solution when I am rested.
+	* src/import-export/log-replay/*: New log replay module.  This
+	  ALMOST works, except I forgot you can't set the GUID of
+	  gnucash's objects, and thus completely screwed up on the
+	  playback logic.  I'll think of a solution when I am rested.
 
 2003-05-28  Derek Atkins  <derek@ihtfp.com>
 
