@@ -238,7 +238,7 @@ gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
   widget_class =    (GtkWidgetClass*) klass;
   container_class = (GtkContainerClass*) klass;
 
-  parent_class = gtk_type_class(GTK_TYPE_CLIST);
+  parent_class = gtk_type_class(GTK_TYPE_GNC_QUERY_LIST);
 
   reconcile_list_signals[TOGGLE_RECONCILED] =
     gtk_signal_new("toggle_reconciled",
