@@ -457,7 +457,7 @@ regRefresh( RegWindow *regData )
     regRecalculateBalance (regData);
     
     /* and free memory!!! */
-    _free (data);
+    _free (newData); 
   }
 }
 
