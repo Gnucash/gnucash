@@ -223,6 +223,8 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   } else {
     printf("gnc_hbci_getbalance_finish: Warning: booked_grp == NULL. Assuming 0.\n");
     booked_value = 0.0;
+    booked_val = NULL;
+    booked_tt = 0;
   }
 
   if (noted_grp) {
@@ -237,6 +239,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   } else {
     printf("gnc_hbci_getbalance_finish: Warning: noted_grp == NULL. Assuming 0.\n");
     noted_value = 0.0;
+    noted_val = NULL;
   }
 
   if ((noted_value == 0.0) && (booked_value == 0.0))

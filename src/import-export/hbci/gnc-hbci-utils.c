@@ -819,6 +819,9 @@ choose_one_user (gncUIWidget parent, const list_HBCI_User *userlist)
 char *gnc_AB_VALUE_toReadableString(const AB_VALUE *v)
 {
   char tmp[100];
-  sprintf(tmp, "%.2f %s", AB_Value_GetValue(v), AB_Value_GetCurrency(v));
+  if (v)
+    sprintf(tmp, "%.2f %s", AB_Value_GetValue(v), AB_Value_GetCurrency(v));
+  else
+    sprintf(tmp, "%.2f", 0.0);
   return g_strdup(tmp);
 }
