@@ -150,13 +150,12 @@ xaccTransScrubImbalance (Transaction *trans)
   if (!trans)
     return;
 
+  xaccTransScrubSplitImbalance (trans);
+
   {
     GList *node;
     Account *account;
     Account *peer = NULL;
-
-    for (node = trans->splits; node; node = node->next)
-      xaccSplitScrubImbalance (node->data);
 
     imbalance = xaccTransGetImbalance (trans);
     if (gnc_numeric_zero_p (imbalance))
@@ -231,7 +230,20 @@ xaccTransScrubImbalance (Transaction *trans)
   }
 }
 
-void xaccSplitScrubImbalance (Split *split)
+void
+xaccTransScrubSplitImbalance (Transaction *trans)
+{
+  GList *node;
+
+  if (!trans)
+    return;
+
+  for (node = trans->splits; node; node = node->next)
+    xaccSplitScrubImbalance (node->data);
+}
+
+void
+xaccSplitScrubImbalance (Split *split)
 {
   Account *account;
   Transaction *trans;

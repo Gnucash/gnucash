@@ -63,6 +63,7 @@ void xaccGroupScrubOrphans (AccountGroup *grp);
  *    account.
  */
 void xaccSplitScrubImbalance (Split *split);
+void xaccTransScrubSplitImbalance (Transaction *trans);
 void xaccTransScrubImbalance (Transaction *trans);
 void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);

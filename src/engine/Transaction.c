@@ -36,6 +36,7 @@
 #include "BackendP.h"
 #include "GNCIdP.h"
 #include "Group.h"
+#include "Scrub.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -1330,6 +1331,8 @@ xaccTransCommitEdit (Transaction *trans)
      xaccSplitSetShareAmount(s, gnc_numeric_neg(split->damount));
      xaccSplitSetValue(s, gnc_numeric_neg(split->value));
    }
+
+   xaccTransScrubSplitImbalance (trans);
 
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
