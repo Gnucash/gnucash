@@ -4042,7 +4042,7 @@ create_Account_Dialog (void)
   gtk_box_pack_start (GTK_BOX (hbox67), currency_entry, TRUE, TRUE, 0);
   gtk_entry_set_editable (GTK_ENTRY (currency_entry), FALSE);
 
-  currency_button = gtk_button_new_with_label (_("Select ..."));
+  currency_button = gtk_button_new_with_label (_("Select..."));
   gtk_widget_ref (currency_button);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "currency_button", currency_button,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4064,7 +4064,7 @@ create_Account_Dialog (void)
   gtk_box_pack_start (GTK_BOX (hbox66), security_entry, TRUE, TRUE, 0);
   gtk_entry_set_editable (GTK_ENTRY (security_entry), FALSE);
 
-  security_button = gtk_button_new_with_label (_("Select ..."));
+  security_button = gtk_button_new_with_label (_("Select..."));
   gtk_widget_ref (security_button);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "security_button", security_button,
                             (GtkDestroyNotify) gtk_widget_unref);

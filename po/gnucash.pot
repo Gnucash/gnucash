@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-09-20 16:35-0700\n"
+"POT-Creation-Date: 2000-09-20 16:50-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3233,6 +3233,7 @@ msgid "To:"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:500 src/gnome/glade-gnc-dialogs.c:507
+#: src/gnome/glade-gnc-dialogs.c:4045 src/gnome/glade-gnc-dialogs.c:4067
 msgid "Select..."
 msgstr ""
 
@@ -3407,7 +3408,6 @@ msgid "/"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1459 src/gnome/glade-gnc-dialogs.c:1511
-#: src/gnome/glade-gnc-dialogs.c:4045 src/gnome/glade-gnc-dialogs.c:4067
 #: src/gnome/glade-gnc-dialogs.c:4469
 msgid "Select ..."
 msgstr ""

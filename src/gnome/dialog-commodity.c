@@ -35,6 +35,9 @@ struct _selectcommoditywindow {
   GtkWidget * namespace_entry;
   GtkWidget * commodity_combo;
   GtkWidget * commodity_entry;
+
+  gboolean is_modal;
+
   gnc_commodity_callback callback;
   void      * callback_data;
 };
@@ -47,6 +50,9 @@ struct _newcommoditywindow {
   GtkWidget * namespace_combo;
   GtkWidget * numeric_spinbutton;
   GtkWidget * fraction_spinbutton;
+
+  gboolean is_modal;
+
   gnc_commodity_callback callback;
   void      * callback_data;
 };
@@ -54,7 +60,6 @@ struct _newcommoditywindow {
 static void 
 select_modal_callback(const gnc_commodity * arg, void * data) {
   *((const gnc_commodity **)data) = arg;
-  gtk_main_quit();
 }
 
 /********************************************************************
@@ -64,16 +69,31 @@ select_modal_callback(const gnc_commodity * arg, void * data) {
 const gnc_commodity *
 gnc_ui_select_commodity_modal(const gnc_commodity * orig_sel) {  
   const gnc_commodity * retval = NULL;
-  
+
   SelectCommodityWindow * win = 
-    gnc_ui_select_commodity_create(orig_sel, &select_modal_callback, 
-                                   (void *) &retval);
+    gnc_ui_select_commodity_create(orig_sel, &select_modal_callback, &retval);
+
   gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
+  win->is_modal = TRUE;
+
   gtk_main();
-  
+
   return retval;
 }
 
+
+static gint
+select_commodity_close (GnomeDialog *dialog, gpointer data)
+{
+  SelectCommodityWindow *scw = data;
+
+  if (scw->is_modal)
+    gtk_main_quit();
+
+  g_free(scw);
+
+  return FALSE;
+}
 
 /********************************************************************
  * gnc_ui_select_commodity_create()
@@ -95,12 +115,17 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "commodity_combo");
   retval->commodity_entry = 
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "commodity_entry");
-  
+
+  retval->is_modal = FALSE;
+
   retval->callback = callback;
   retval->callback_data = callback_data;
 
+  gtk_signal_connect (GTK_OBJECT(retval->dialog), "close",
+                      GTK_SIGNAL_FUNC(select_commodity_close), retval);
+
   gtk_object_set_data(GTK_OBJECT(retval->dialog), "select_commodity_struct",
-                      (gpointer)retval);
+                      retval);
 
   /* build the menus of namespaces and commodities */
   namespace = gnc_ui_update_namespace_picker(retval->namespace_combo, 
@@ -108,6 +133,7 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
   gnc_ui_update_commodity_picker(retval->commodity_combo, namespace,
                           gnc_commodity_get_printname(orig_sel));
   gtk_widget_show_all(retval->dialog);
+  g_free(namespace);
 
   return retval;
 }
@@ -132,7 +158,7 @@ gnc_ui_update_commodity_picker(GtkWidget * combobox,
   GList      * iterator = NULL;
   GList      * commodity_items = NULL;
   const char * current;
-  
+
   for(iterator = commodities; iterator; iterator = iterator->next) {
     commodity_items = 
       g_list_append(commodity_items, 
@@ -145,7 +171,7 @@ gnc_ui_update_commodity_picker(GtkWidget * combobox,
   }
   gtk_combo_set_popdown_strings(GTK_COMBO(combobox), 
                                 commodity_items);
-  
+
   if(init_string) {
     current = init_string;
   }
@@ -169,7 +195,6 @@ void
 gnc_ui_select_commodity_destroy(SelectCommodityWindow * w) {
   if(w) {
     gnome_dialog_close(GNOME_DIALOG(w->dialog));
-    g_free(w);
   }
 }
 
@@ -183,7 +208,7 @@ gnc_ui_select_commodity_ok_cb(GtkButton * button,
   GtkWidget             * dialog = GTK_WIDGET(user_data);
   SelectCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
-  
+
   char          * namespace;  
   char          * fullname;
   gnc_commodity * retval = NULL;
@@ -195,7 +220,8 @@ gnc_ui_select_commodity_ok_cb(GtkButton * button,
                                          namespace,
                                          fullname);
   if(retval) {
-    (w->callback)(retval, w->callback_data);
+    if (w->callback)
+      (w->callback)(retval, w->callback_data);
     gnc_ui_select_commodity_destroy(w);
   }
   else {
@@ -222,8 +248,11 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
     gnc_ui_new_commodity_modal(namespace);
 
   if(new_commodity) {
-    gnc_ui_update_namespace_picker(w->namespace_combo, 
+    char *namespace;
+
+    namespace = gnc_ui_update_namespace_picker(w->namespace_combo, 
                             gnc_commodity_get_namespace(new_commodity));
+    g_free(namespace);
     gnc_ui_update_commodity_picker(w->commodity_combo,
                             gnc_commodity_get_namespace(new_commodity),
                             gnc_commodity_get_printname(new_commodity));
@@ -242,7 +271,9 @@ gnc_ui_select_commodity_cancel_cb(GtkButton * button,
   SelectCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
 
-  (w->callback)(NULL, w->callback_data);
+  if (w->callback)
+    (w->callback)(NULL, w->callback_data);
+
   gnc_ui_select_commodity_destroy(w);
 }
 
@@ -296,6 +327,18 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
 }
 
 
+static gint
+new_commodity_close (GnomeDialog *dialog, gpointer data)
+{
+  NewCommodityWindow *ncw = data;
+
+  if (ncw->is_modal)
+    gtk_main_quit();
+
+  g_free(ncw);
+
+  return FALSE;
+}
 
 /********************************************************************
  * gnc_ui_new_commodity_create()
@@ -306,8 +349,10 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
                             gnc_commodity_callback callback, 
                             void * callback_data) {
   NewCommodityWindow * retval = g_new0(NewCommodityWindow, 1);
+  char *namespace;
+
   retval->dialog = create_New_Commodity_Dialog();
-  
+
   retval->fullname_entry =
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "fullname_entry");
   retval->mnemonic_entry =
@@ -320,17 +365,24 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "numeric_spinbutton");
   retval->fraction_spinbutton =
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "fraction_spinbutton");
-  
+
+  retval->is_modal = FALSE;
+
   retval->callback = callback;
   retval->callback_data = callback_data;
 
   gtk_object_set_data(GTK_OBJECT(retval->dialog), "new_commodity_struct",
                       (gpointer)retval);
 
+  gtk_signal_connect (GTK_OBJECT(retval->dialog), "close",
+                      GTK_SIGNAL_FUNC(new_commodity_close), retval);
+
   gtk_widget_show_all(retval->dialog);
 
-  gnc_ui_update_namespace_picker(retval->namespace_combo, selected_namespace);
-  
+  namespace = gnc_ui_update_namespace_picker(retval->namespace_combo,
+                                             selected_namespace);
+  g_free(namespace);
+
   return retval;
 }
 
@@ -338,7 +390,6 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
 static void 
 new_modal_callback(const gnc_commodity * arg, void * data) {
   *((const gnc_commodity **)data) = arg;
-  gtk_main_quit();
 }
 
 /********************************************************************
@@ -348,13 +399,16 @@ new_modal_callback(const gnc_commodity * arg, void * data) {
 const gnc_commodity *
 gnc_ui_new_commodity_modal(const char * selected_namespace) {  
   gnc_commodity * retval = NULL;
-  
+
   NewCommodityWindow * win = 
     gnc_ui_new_commodity_create(selected_namespace, &new_modal_callback, 
-                                (void *) &retval);
-  gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
+                                &retval);
+
+  gtk_window_set_modal (GTK_WINDOW(win->dialog), TRUE);
+  win->is_modal = TRUE;
+
   gtk_main();
-  
+
   return retval;
 }
 
@@ -367,7 +421,6 @@ void
 gnc_ui_new_commodity_destroy(NewCommodityWindow * w) {
   if(w) {
     gnome_dialog_close(GNOME_DIALOG(w->dialog));
-    g_free(w);
   }
 }
 
@@ -379,7 +432,7 @@ gnc_ui_new_commodity_destroy(NewCommodityWindow * w) {
 void
 gnc_ui_new_commodity_ok_cb(GtkButton * button,
                            gpointer user_data) {
-  GtkWidget             * dialog = GTK_WIDGET(user_data);
+  GtkWidget          * dialog = GTK_WIDGET(user_data);
   NewCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "new_commodity_struct");
 
@@ -398,16 +451,16 @@ gnc_ui_new_commodity_ok_cb(GtkButton * button,
                           1,
                           gtk_spin_button_get_value_as_int
                           (GTK_SPIN_BUTTON(w->fraction_spinbutton)));
-    
+
     /* remember the commodity */
     gnc_commodity_table_insert(gnc_engine_commodities(), c);
-    
+
     /* if there's a callback (generally to fill in some fields with 
      * info about the commodity) call it */
     if(w->callback) {
       (w->callback)(c, w->callback_data);                              
     }
-    
+
     /* close the dialog */
     gnc_ui_new_commodity_destroy(w);
   }
@@ -429,7 +482,7 @@ gnc_ui_new_commodity_help_cb(GtkButton * button,
   GtkWidget             * dialog = GTK_WIDGET(user_data);
   SelectCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "new_commodity_struct");
-  
+
   /* FIXME */
 }
 
@@ -448,10 +501,6 @@ gnc_ui_new_commodity_cancel_cb(GtkButton * button,
   if (w->callback) {
     (w->callback)(NULL, w->callback_data);
   }
+
   gnc_ui_new_commodity_destroy(w);
 }
-
-
-
-
-

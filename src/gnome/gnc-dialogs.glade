@@ -6004,7 +6004,7 @@ Daily (365)
 		  <data>Account_Dialog</data>
 		  <last_modification_time>Thu, 10 Aug 2000 14:31:04 GMT</last_modification_time>
 		</signal>
-		<label>Select ...</label>
+		<label>Select...</label>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -6049,7 +6049,7 @@ Daily (365)
 		  <data>Account_Dialog</data>
 		  <last_modification_time>Thu, 10 Aug 2000 16:48:12 GMT</last_modification_time>
 		</signal>
-		<label>Select ...</label>
+		<label>Select...</label>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
