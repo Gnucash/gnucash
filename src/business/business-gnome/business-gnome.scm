@@ -222,3 +222,9 @@
 )
 
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-extensions)
+
+(define (gnc:invoice-make-printable invoice)
+  (display "I would be printing out an invoice right now...\n")
+  )
+
+(export gnc:invoice-make-printable)

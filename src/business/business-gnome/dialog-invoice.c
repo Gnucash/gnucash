@@ -7,6 +7,8 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <g-wrap-wct.h>
+#include <libguile.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -196,9 +198,18 @@ gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_invoice_window_print_invoice_cb (GtkWidget *widget, gpointer data)
 {
-  /* XXX: print this invoice (TBD) */
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice = iw_get_invoice (iw);
+  SCM func, inv;
 
-  fprintf (stderr, "I would print an invoice now... \n");
+  g_return_if_fail (invoice);
+
+  func = gh_eval_str ("gnc:invoice-make-printable");
+  inv = gw_wcp_assimilate_ptr (invoice, gh_eval_str("<gnc:GncInvoice*>"));
+
+  /* scm_protect_object(func); */
+  gh_call1 (func, inv);
+  /* scm_unprotect_object(func); */
 }
 
 static void
