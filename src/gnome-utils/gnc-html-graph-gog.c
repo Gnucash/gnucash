@@ -139,7 +139,6 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   GogRenderer *pixbufRend;
   GdkPixbuf *buf;
   gboolean updateStatus;
-  gint w, h;
   int datasize;
   double *data = NULL;
   char **labels = NULL, **colors = NULL;
@@ -175,7 +174,6 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     return FALSE;
   }
   g_object_set (G_OBJECT (plot),
-		//"horizontal",			TRUE,
 		"vary_style_by_element",	TRUE,
 		NULL);
   gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
@@ -200,15 +198,18 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     gog_object_set_pos (tmp, GOG_POSITION_N | GOG_POSITION_ALIGN_START);
     title = go_data_scalar_str_new (titleParam, FALSE);
     gog_dataset_set_dim (GOG_DATASET (tmp), 0, title, NULL);
-    /*
     gog_style_set_font (GOG_STYLED_OBJECT (tmp)->style,
                         pango_font_description_from_string ("Sans Bold 10"));
-    */
   }
 
   legend = gog_object_add_by_name( chart, "Legend", NULL );
+  gog_style_set_font( GOG_STYLED_OBJECT(legend)->style,
+                      pango_font_description_from_string( "Sans Regular 8" ) );
 
   // Note that this shouldn't be necessary as per discussion with Jody...
+  // ... but it is because we don't embed in a control which passes the
+  // update requests back to the graph widget, a-la the foo-canvas that
+  // gnumeric uses.  We probably _should_ do something like that, though.
   gog_object_update( GOG_OBJECT(graph) );
 
 #if 0
@@ -218,7 +219,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     gboolean output;
 
     mem = gsf_output_memory_new();
-    output = gog_graph_export_to_svg( graph, mem, 320., 240., 1. );
+    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
     printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
   }
 #endif // 0
@@ -226,10 +227,10 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   pixbufRend = g_object_new( GOG_RENDERER_PIXBUF_TYPE,
                              "model", graph,
                              NULL );
-  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), 320, 240, 1. );
+  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), eb->width, eb->height, 1. );
   buf = gog_renderer_pixbuf_get(GOG_RENDERER_PIXBUF(pixbufRend));
   widget = gtk_image_new_from_pixbuf( buf );
-  gtk_widget_set_size_request( widget, 320, 240 );
+  gtk_widget_set_size_request( widget, eb->width, eb->height );
   gtk_widget_show_all( widget );
   gtk_container_add( GTK_CONTAINER(eb), widget );
   // blindly copied from gnc-html-guppi.c
@@ -262,31 +263,34 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   GogRenderer *pixbufRend;
   GdkPixbuf *buf;
   gboolean updateStatus;
-  gint w, h;
   int datarows, datacols;
   double *data = NULL;
   char **col_labels = NULL, **row_labels = NULL, **col_colors = NULL;
-  char *x_axis_label, *y_axis_label;
-  gboolean rotate_row_labels, stacked;
+  //char *x_axis_label, *y_axis_label;
+  //gboolean rotate_row_labels, stacked;
 
   // First, parse data from the text-ized params.
   {
     char *datarowsStr, *datacolsStr, *dataStr, *colLabelsStr, *rowLabelsStr, *colColorsStr;
 
-    datarowsStr = g_hash_table_lookup(eb->params, "data_rows");
-    datacolsStr = g_hash_table_lookup(eb->params, "data_cols");
-    dataStr = g_hash_table_lookup(eb->params, "data" );
+    datarowsStr  = g_hash_table_lookup(eb->params, "data_rows");
+    datacolsStr  = g_hash_table_lookup(eb->params, "data_cols");
+    dataStr      = g_hash_table_lookup(eb->params, "data" );
     colLabelsStr = g_hash_table_lookup(eb->params, "col_labels");
     rowLabelsStr = g_hash_table_lookup(eb->params, "row_labels");
     colColorsStr = g_hash_table_lookup(eb->params, "col_colors");
+#if 0 // too strong at the moment.
     g_return_val_if_fail( datarowsStr != NULL
                           && datacolsStr != NULL
                           && dataStr != NULL
                           && colLabelsStr != NULL
                           && rowLabelsStr != NULL
                           && colColorsStr != NULL, FALSE );
+#endif // 0
     sscanf( datarowsStr, "%d", &datarows );
+    PINFO( "datarows=%d", datarows );
     sscanf( datacolsStr, "%d", &datacols );
+    PINFO( "datacols=%d", datacols );
     data = read_doubles( dataStr, datarows*datacols );
     row_labels = read_strings( rowLabelsStr, datarows );
     col_labels = read_strings( colLabelsStr, datacols );
@@ -295,8 +299,8 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 
   graph = g_object_new( GOG_GRAPH_TYPE, NULL );
   chart = gog_object_add_by_name( graph, "Chart", NULL );
-  // series => bars [cols]
-  // elements => segments [rows]
+  // series => bars [gnc:cols]
+  // elements => segments [gnc:rows]
   plot = gog_plot_new_by_name( "GogBarColPlot" );
   if ( !plot )
   {
@@ -305,21 +309,27 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     return FALSE;
   }
   g_object_set (G_OBJECT (plot),
-		"horizontal",			TRUE,
 		"vary_style_by_element",	TRUE,
+                "type",                         "normal",
 		NULL);
   gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
-  series = gog_plot_new_series( plot );
-  labelData = go_data_vector_str_new( row_labels, datarows );
-  gog_series_set_dim( series, 0, labelData, NULL );
-  go_data_emit_changed (GO_DATA (labelData));
 
+  labelData = go_data_vector_str_new(  (char const * const *)col_labels, datacols );
   {
     int i;
+    // foreach row:
+    //   series = row
+
     for ( i = 0; i < datacols; i++ )
     {
+      series = gog_plot_new_series( plot );
+
+      g_object_ref( labelData );
+      gog_series_set_dim( series, 0, labelData, NULL );
+      go_data_emit_changed (GO_DATA (labelData));
+
       sliceData = go_data_vector_val_new( data + (i*datarows), datarows );
-      gog_series_set_dim( series, i+1, sliceData, NULL );
+      gog_series_set_dim( series, 1, sliceData, NULL );
       go_data_emit_changed (GO_DATA (sliceData));
     }
   }
@@ -352,7 +362,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     gboolean output;
 
     mem = gsf_output_memory_new();
-    output = gog_graph_export_to_svg( graph, mem, 320., 240., 1. );
+    output = gog_graph_export_to_svg( graph, mem, eb->width, eb->height, 1. );
     printf( "svg: [%s]\n", (guchar*)gsf_output_memory_get_bytes( GSF_OUTPUT_MEMORY(mem) ) );
   }
 #endif // 0
@@ -360,15 +370,16 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   pixbufRend = g_object_new( GOG_RENDERER_PIXBUF_TYPE,
                              "model", graph,
                              NULL );
-  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), 320, 240, 1. );
+  gog_object_update( GOG_OBJECT(graph) );
+  updateStatus = gog_renderer_pixbuf_update( GOG_RENDERER_PIXBUF(pixbufRend), eb->width, eb->height, 1. );
   buf = gog_renderer_pixbuf_get(GOG_RENDERER_PIXBUF(pixbufRend));
   widget = gtk_image_new_from_pixbuf( buf );
-  gtk_widget_set_size_request( widget, 320, 240 );
+  gtk_widget_set_size_request( widget, eb->width, eb->height );
   gtk_widget_show_all( widget );
   gtk_container_add( GTK_CONTAINER(eb), widget );
   // blindly copied from gnc-html-guppi.c
   gtk_widget_set_usize(GTK_WIDGET(eb), eb->width, eb->height);
 
-  PINFO( "piechart rendering." );
+  PINFO( "barchart rendered." );
   return TRUE;
 }
