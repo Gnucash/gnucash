@@ -5,11 +5,12 @@
 ;; new reports for GnuCash.
 
 (define-module (gnucash report hello-world))
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash gnc-module))
 
 (debug-enable 'debug)
 (debug-enable 'backtrace)
 
-(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
 ;; This function will generate a set of options that GnuCash
@@ -324,7 +325,7 @@ See the guile (scheme) source code in %s \
 for details on writing your own reports, \
 or extending existing reports.")
           (gnc:html-markup-tt 
-           gnc:_share-dir-default_ "/gnucash/scm/report")))
+           (gnc:config-var-value-get gnc:*share-dir*) "/gnucash/scm/report")))
         (gnc:html-markup-p
          (gnc:html-markup/format
           (_ "For help on writing reports, or to contribute your brand \
