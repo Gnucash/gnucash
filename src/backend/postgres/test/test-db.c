@@ -60,10 +60,17 @@ save_xml_files (GNCSession *session_1, GNCSession *session_2)
 static char *
 db_file_url (const char *db_name, const char *mode)
 {
+  char *db_socket_dir;
+
   g_return_val_if_fail (db_name && mode, NULL);
 
-  return g_strdup_printf ("postgres://localhost:7777/%s?mode=%s",
-                          db_name, mode);
+  /* TEST_DB_SOCKET_DIR must be an absolute path */
+  db_socket_dir = getenv("TEST_DB_SOCKET_DIR");
+  if(! db_socket_dir) g_warning("Couldn't getenv TEST_DB_SOCKET_DIR");
+  g_return_val_if_fail (db_socket_dir, NULL);  
+
+  return g_strdup_printf ("postgres://%s:7777/%s?mode=%s",
+                          db_socket_dir, db_name, mode);
 }
 
 static gboolean
@@ -75,6 +82,8 @@ save_db_file (GNCSession *session, const char *db_name, const char *mode)
   g_return_val_if_fail (session && db_name && mode, FALSE);
 
   filename = db_file_url (db_name, mode);
+
+  printf("SAVING!!! %s\n", filename);
 
   gnc_session_begin (session, filename, FALSE, TRUE);
   io_err = gnc_session_get_error (session);
