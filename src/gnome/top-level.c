@@ -152,7 +152,7 @@ gnucash_ui_init(void)
      specific args... */
   if (!gnome_is_initialized)
   {
-    gnome_init("GnuCash", NULL, fake_argc, fake_argv);
+    gnome_init("GnuCash", NULL, get_global_argc(), get_global_argv());
     gnome_is_initialized = TRUE;
     
     /* initialization required for gtkhtml */

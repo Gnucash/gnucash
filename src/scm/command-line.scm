@@ -183,9 +183,12 @@
             
                 (if (not arg-def)
                     (begin
-                      (gnc:prefs-show-usage)
-                      (set! result #f)
-                      (set! quit? #t))
+                      ;;(gnc:prefs-show-usage)
+                      ;;(set! result #f)
+                      ;;(set! quit? #t))
+                      (display "Ignoring unused option ")(display arg-string)
+                      (newline)
+		      (set! rest (cdr rest)))
                     
                     (let* ((arg-type (car arg-def))
                            (arg-parse-result
