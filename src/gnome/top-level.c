@@ -49,6 +49,7 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-plugin-account-tree.h" /* FIXME Remove this line*/
 #include "gnc-plugin-register.h" /* FIXME Remove this line*/
+#include "gnc-plugin-page-register.h"
 #include "gnc-plugin-manager.h" /* FIXME Remove this line*/
 #include "gnc-icons.h" /* FIXME Remove this line*/
 #include "gnc-network.h"
@@ -141,6 +142,7 @@ static gboolean
 gnc_html_register_url_cb (const char *location, const char *label,
                           gboolean new_window, GNCURLResult *result)
 {
+  GncPluginPage *page = NULL;
   GNCSplitReg * gsr   = NULL;
   Split       * split = NULL;
   Account     * account;
@@ -158,8 +160,8 @@ gnc_html_register_url_cb (const char *location, const char *label,
     account = xaccGetAccountFromFullName (gnc_get_current_group (),
                                           location + 8, 
                                           gnc_get_account_separator ());
-    gsr = regWindowSimple (account);
-    gnc_split_reg_raise( gsr );
+    page = gnc_plugin_page_register_new (account, FALSE);
+    gnc_main_window_open_page (NULL, page);
   }
   /* href="gnc-register:guid=12345678901234567890123456789012" */
   else if (strncmp ("guid=", location, 5) == 0)
@@ -183,7 +185,8 @@ gnc_html_register_url_cb (const char *location, const char *label,
     else if (!safe_strcmp (id_type, GNC_ID_ACCOUNT))
     {
         account = xaccAccountLookup (&guid, gnc_get_current_book ());
-        gsr = regWindowSimple( account );
+	page = gnc_plugin_page_register_new (account, FALSE);
+	gnc_main_window_open_page (NULL, page);
     }
     else if (!safe_strcmp (id_type, GNC_ID_TRANS))
     {
@@ -204,7 +207,9 @@ gnc_html_register_url_cb (const char *location, const char *label,
           return FALSE;
         }
 
-        gsr = regWindowSimple( xaccSplitGetAccount(split) );
+        account = xaccSplitGetAccount(split);
+	page = gnc_plugin_page_register_new (account, FALSE);
+	gnc_main_window_open_page (NULL, page);
     }
     else if (!safe_strcmp (id_type, GNC_ID_SPLIT))
     {
@@ -216,7 +221,9 @@ gnc_html_register_url_cb (const char *location, const char *label,
           return FALSE;
         }
 
-        gsr = regWindowSimple( xaccSplitGetAccount(split) );
+        account = xaccSplitGetAccount(split);
+	page = gnc_plugin_page_register_new (account, FALSE);
+	gnc_main_window_open_page (NULL, page);
     }
     else
     {
@@ -225,9 +232,10 @@ gnc_html_register_url_cb (const char *location, const char *label,
         return FALSE;
     }
 
-    gnc_split_reg_raise(gsr);
-    if (split)
+    if (page && split) {
+      gsr = gnc_plugin_page_register_get_gsr(page);
       gnc_split_reg_jump_to_split( gsr, split );
+    }
   }
   else
   {

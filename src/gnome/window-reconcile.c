@@ -50,13 +50,15 @@
 #include "gnc-engine-util.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
+#include "gnc-main-window.h"
+#include "gnc-plugin-page.h"
+#include "gnc-plugin-page-register.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "guile-util.h"
 #include "messages.h"
 #include "reconcile-list.h"
 #include "window-reconcile.h"
-#include "window-register.h"
 #include "top-level.h"
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
@@ -813,17 +815,17 @@ static GNCSplitReg *
 gnc_reconcile_window_open_register(RecnWindow *recnData)
 {
   Account *account = recn_get_account (recnData);
+  GncPluginPage *page;
   GNCSplitReg *gsr;
+  gboolean include_children;
 
   if (!account)
     return(NULL);
 
-  if (xaccAccountGetReconcileChildrenStatus (account)) {
-    gsr = regWindowAccGroup (account);
-  } else {
-    gsr = regWindowSimple (account);
-  }
-  gnc_split_reg_raise( gsr );
+  include_children = xaccAccountGetReconcileChildrenStatus (account);
+  page = gnc_plugin_page_register_new (account, include_children);
+  gnc_main_window_open_page (NULL, page);
+  gsr = gnc_plugin_page_register_get_gsr(page);
   return gsr;
 }
 

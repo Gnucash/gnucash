@@ -1,0 +1,82 @@
+<ui>
+  <menubar>
+    <menu name="View">
+      <placeholder name="ViewPlaceholder">
+        <menu name="SelectTransactions"         action="SelectTransactionsAction">
+          <menu name="TransDateRange"           action="TransDateRangeAction">
+            <menuitem name="TransDateShowAll"   action="TransDateShowAllAction"/>
+            <menuitem name="TransDateSetRange"  action="TransDateSetRangeAction"/>
+          </menu>
+          <menu name="TransStatus"              action="TransStatusAction">
+            <menuitem name="StatusAll"          action="StatusAllAction"/>
+            <separator name="ViewSep42"/>
+            <menuitem name="StatusReconciled"   action="StatusReconciledAction"/>
+            <menuitem name="StatusCleared"      action="StatusClearedAction"/>
+            <menuitem name="StatusVoided"       action="StatusVoidedAction"/>
+            <menuitem name="StatusFrozen"       action="StatusFrozenAction"/>
+            <menuitem name="StatusUnreconciled" action="StatusUnreconciledAction"/>
+          </menu>
+        </menu>
+        <menu name="SortOrder"                  action="SortOrderAction">
+          <menuitem name="SortStandard"         action="SortStandardAction"/>
+          <separator name="ViewSep43"/>
+          <menuitem name="SortDate"             action="SortDateAction"/>
+          <menuitem name="SortDateEntry"        action="SortDateEntryAction"/>
+          <menuitem name="SortDateStatement"    action="SortDateStatementAction"/>
+          <menuitem name="SortNumber"           action="SortNumberAction"/>
+          <menuitem name="SortAmount"           action="SortAmountAction"/>
+          <menuitem name="SortMemo"             action="SortMemoAction"/>
+          <menuitem name="SortDescription"      action="SortDescriptionAction"/>
+          <menuitem name="SortAction"           action="SortActionAction"/>
+          <menuitem name="SortNotes"            action="SortNotesAction"/>
+        </menu>
+        <menu name="Style"                      action="StyleAction">
+          <menuitem name="StyleBasic"           action="StyleBasicAction"/>
+          <menuitem name="StyleAutoSplit"       action="StyleAutoSplitAction"/>
+          <menuitem name="StyleJournal"         action="StyleJournalAction"/>
+          <separator name="ViewSep44"/>
+          <menuitem name="StyleDoubleLine"      action="StyleDoubleLineAction"/>
+        </menu>
+      </placeholder>
+    </menu>
+
+    <menu name="Actions">
+      <placeholder name="ActionsPlaceholder">
+        <separator name="ActionsSep3"/>
+        <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
+        <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
+        <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
+        <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
+        <separator name="ActionsSep4"/>
+        <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
+        <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
+        <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
+      </placeholder>
+    </menu>
+  </menubar>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <toolitem name="ToolbarRecordTransaction"    action="RecordTransactionAction"/>
+      <toolitem name="ToolbarCancelTransaction"    action="CancelTransactionAction"/>
+      <toolitem name="ToolbarDeleteTransaction"    action="DeleteTransactionAction"/>
+      <separator name="ToolbarSep66"/>
+      <toolitem name="ToolbarDuplicateTransaction" action="DuplicateTransactionAction"/>
+      <separator name="ToolbarSep67"/>
+      <toolitem name="ToolbarBlankTransaction"     action="BlankTransactionAction"/>
+      <separator name="ToolbarSep68"/>
+      <toolitem name="ToolbarTransfer"             action="TransferAction"/>
+    </placeholder>
+  </toolbar>
+
+  <popup name="RegisterPopup"                action="FakeToplevel">>
+    <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
+    <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
+    <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
+    <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
+    <separator name="PopupSep1"/>
+    <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
+    <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
+    <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
+  </popup>
+</ui>

@@ -1,3 +1,53 @@
+2003-09-30  David Hampton  <hampton@employees.org>
+
+	* src/engine/Query.[ch]:
+	* src/engine/qofquery.[ch]:
+	* src/engine/qofquerycore.[ch]: Add code to extract the date terms
+	from a query.
+
+	* src/gnome/Makefile.am:
+	* src/gnome/gnc-embedded-window.[ch]: New support for an embedded
+	'window'.  This 'window' can only show a single plugin page.
+	Perfect for the embedded registers in the scheduled transaction
+	dialogs.
+
+	* src/gnome/gnc-plugin-page-register.[ch]:
+	* src/gnome/glade/register.glade:
+	* src/gnome/ui/gnc-main-window-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml: Flesh out the new
+	register gui code.
+
+	* src/gnome/dialog-print-check.[ch]:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/gnome/top-level.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/glade/sched-xact.glade:
+	* src/gnome/ui/Makefile.am:
+	* src/gnome/ui/gnc-plugin-page-sxregister-ui.xml:
+	* src/gnome/ui/gnc-sxed-to-create-window-ui.xml:
+	* src/gnome/ui/gnc-sxed-window-ui.xml: Use the new register gui
+	code.
+
+	* src/gnome/gnc-plugin-page.h:
+	* src/gnome/gnc-main-window.[ch]: Track all installed pages.
+	Don't try to installed a page that is already present.  Just
+	select the existing page and raise the appropriate window to the
+	top.
+
+	* src/gnome/gnc-plugin-page-account-tree.c: Intelligently
+	determine the parent window value.
+
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml: Move a menu
+	entry.
+
+	* src/gnome-utils/gnc-query-list.c: Fix missing functionality.
+
+	* src/register/register-gnome/gnucash-item-edit.c: Fix a crash.
+
+	* src/gnome/gnc-split-reg.[ch]:
+	* src/gnome/window-register.[ch]: Remove some no-longer-used code.
+
 2003-09-28  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-main-window.c:

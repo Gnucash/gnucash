@@ -6115,12 +6115,22 @@
       <property name="show_help">False</property>
 
       <child>
+	<widget class="GnomeDruidPageEdge" id="start_pg">
+	  <property name="visible">True</property>
+	  <property name="position">GNOME_EDGE_START</property>
+	  <property name="text" translatable="yes">This druid will walk you through any scheduled transactions that should be created.</property>
+	  <property name="background_color">#666666669998</property>
+	  <property name="logo_background_color">#666666669998</property>
+	</widget>
+      </child>
+
+      <child>
 	<widget class="GnomeDruidPageStandard" id="what_to_do">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">What to do, what to do?</property>
-	  <property name="title_foreground">#7d100839d8c8</property>
-	  <property name="background">#49880839e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="what_to_do_vbox">
@@ -6180,9 +6190,9 @@
 	<widget class="GnomeDruidPageStandard" id="reminders_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Transaction Reminders</property>
-	  <property name="title_foreground">#bda80839d8c8</property>
-	  <property name="background">#c6980839e9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox5">
@@ -6223,13 +6233,59 @@ Select any which you would like to create now, and click
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkTreeView" id="reminders_list">
+		    <widget class="GtkCTree" id="reminders_list">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="headers_visible">True</property>
-		      <property name="rules_hint">False</property>
-		      <property name="reorderable">False</property>
-		      <property name="enable_search">True</property>
+		      <property name="n_columns">3</property>
+		      <property name="column_widths">153,121,80</property>
+		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="show_titles">True</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+
+		      <child>
+			<widget class="GtkLabel" id="label847882">
+			  <property name="label" translatable="yes">Scheduled Transaction</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847883">
+			  <property name="label" translatable="yes">Frequency</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847884">
+			  <property name="label" translatable="yes">Days Away</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 		</widget>
@@ -6248,9 +6304,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="auto_create_notify_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Auto-Created Transactions Notification</property>
-	  <property name="title_foreground">#0a58083ad8c8</property>
-	  <property name="background">#0da0083ae9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="ac_vbox">
@@ -6275,9 +6331,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="to_create_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">To-Create Transaction Preparation</property>
-	  <property name="title_foreground">#1ec0083ad8c8</property>
-	  <property name="background">#39a0083ae9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox7">
@@ -6300,13 +6356,44 @@ Select any which you would like to create now, and click
 		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkTreeView" id="to_create_list">
+			<widget class="GtkCTree" id="to_create_list">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="headers_visible">True</property>
-			  <property name="rules_hint">False</property>
-			  <property name="reorderable">False</property>
-			  <property name="enable_search">True</property>
+			  <property name="n_columns">2</property>
+			  <property name="column_widths">177,80</property>
+			  <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+			  <property name="show_titles">True</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
+
+			  <child>
+			    <widget class="GtkLabel" id="label847893">
+			      <property name="label" translatable="yes">Name</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label847894">
+			      <property name="label" translatable="yes">State</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 		    </widget>
@@ -6590,7 +6677,15 @@ Select any which you would like to create now, and click
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		  <child>
-		    <placeholder/>
+		    <widget class="GtkVBox" id="to_create_txn_vbox">
+		      <property name="visible">True</property>
+		      <property name="homogeneous">False</property>
+		      <property name="spacing">0</property>
+
+		      <child>
+			<placeholder/>
+		      </child>
+		    </widget>
 		  </child>
 
 		  <child>
@@ -6627,9 +6722,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="created_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Created Transaction Review</property>
-	  <property name="title_foreground">#f7d8083ad8c8</property>
-	  <property name="background">#0a48083be9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="created_vbox">
@@ -6654,9 +6749,9 @@ Select any which you would like to create now, and click
 	<widget class="GnomeDruidPageStandard" id="obsolete_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Obsolete Scheduled Transactions</property>
-	  <property name="title_foreground">#0d80083bd8c8</property>
-	  <property name="background">#28c8083be9eb</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="title_foreground">#ffffffffffff</property>
+	  <property name="background">#666666669998</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox9">
@@ -6697,13 +6792,59 @@ Select those you wish to delete.</property>
 		  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		  <child>
-		    <widget class="GtkTreeView" id="sx_obsolete_clist">
+		    <widget class="GtkCList" id="sx_obsolete_clist">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="headers_visible">True</property>
-		      <property name="rules_hint">False</property>
-		      <property name="reorderable">False</property>
-		      <property name="enable_search">True</property>
+		      <property name="n_columns">3</property>
+		      <property name="column_widths">80,80,80</property>
+		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+		      <property name="show_titles">True</property>
+		      <property name="shadow_type">GTK_SHADOW_IN</property>
+
+		      <child>
+			<widget class="GtkLabel" id="label847872">
+			  <property name="label" translatable="yes">Frequency</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847873">
+			  <property name="label" translatable="yes">Name</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkLabel" id="label847874">
+			  <property name="label" translatable="yes">Ended On</property>
+			  <property name="use_underline">False</property>
+			  <property name="use_markup">False</property>
+			  <property name="justify">GTK_JUSTIFY_CENTER</property>
+			  <property name="wrap">False</property>
+			  <property name="selectable">False</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 		</widget>
@@ -6752,6 +6893,16 @@ Select those you wish to delete.</property>
 	  </child>
 	</widget>
       </child>
+
+      <child>
+	<widget class="GnomeDruidPageEdge" id="commit_page">
+	  <property name="visible">True</property>
+	  <property name="position">GNOME_EDGE_FINISH</property>
+	  <property name="text" translatable="yes">Press apply to create these transactions.</property>
+	  <property name="background_color">#666666669998</property>
+	  <property name="logo_background_color">#666666669998</property>
+	</widget>
+      </child>
     </widget>
   </child>
 </widget>
@@ -6787,7 +6938,7 @@ the created Scheduled Transactions directly.</property>
 	  <property name="title_color">#ffffffffffff</property>
 	  <property name="text_color">#000000000000</property>
 	  <property name="background_color">#666666669998</property>
-	  <property name="logo_background_color">#ffffffffffff</property>
+	  <property name="logo_background_color">#666666669998</property>
 	  <property name="textbox_color">#ffffffffffff</property>
 	</widget>
       </child>
@@ -6798,7 +6949,7 @@ the created Scheduled Transactions directly.</property>
 	  <property name="title" translatable="yes">Loan Information</property>
 	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669998</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox10">
@@ -7227,7 +7378,7 @@ the created Scheduled Transactions directly.</property>
 	  <property name="title" translatable="yes">Options</property>
 	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669998</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="opt_vbox">
@@ -7377,7 +7528,7 @@ the created Scheduled Transactions directly.</property>
 	  <property name="title" translatable="yes">Repayment</property>
 	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669998</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox12">
@@ -7647,7 +7798,7 @@ the created Scheduled Transactions directly.</property>
 	  <property name="title" translatable="yes">Repayment Type</property>
 	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669998</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox13">
@@ -8071,7 +8222,7 @@ the created Scheduled Transactions directly.</property>
 	  <property name="title" translatable="yes">Review</property>
 	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669998</property>
-	  <property name="logo_background">#1df0081d0001</property>
+	  <property name="logo_background">#666666669998</property>
 
 	  <child internal-child="vbox">
 	    <widget class="GtkVBox" id="druid-vbox14">

@@ -33,15 +33,20 @@
 #include "SX-book-p.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
+#include "egg-action-group.h"
+#include "eggtoolbar.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-dense-cal.h"
+#include "gnc-embedded-window.h"
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
+#include "gnc-plugin-page.h"
+#include "gnc-plugin-page-register.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "global-options.h"
@@ -150,7 +155,8 @@ struct _SchedXactionEditorDialog
 
         char *sxGUIDstr;
 
-        GtkWidget *toolbar;
+        GncEmbeddedWindow *embed_window;
+	GncPluginPage *plugin_page;
 };
 
 /** Prototypes **********************************************************/
@@ -209,6 +215,31 @@ static gboolean sxed_confirmed_cancel( SchedXactionEditorDialog *sxed );
 
 static gboolean editor_component_sx_equality( gpointer find_data,
                                               gpointer user_data );
+
+static void gnc_sxed_cmd_edit_cut (EggAction *action, SchedXactionEditorDialog *sxed);
+static void gnc_sxed_cmd_edit_copy (EggAction *action, SchedXactionEditorDialog *sxed);
+static void gnc_sxed_cmd_edit_paste (EggAction *action, SchedXactionEditorDialog *sxed);
+
+static EggActionEntry gnc_sxed_menu_entries [] =
+{
+	/* Toplevel */
+	{ "EditAction", N_("_Edit"), NULL, NULL, NULL, NULL },
+	{ "ViewAction", N_("_View"), NULL, NULL, NULL, NULL },
+	{ "ActionsAction", N_("_Actions"), NULL, NULL, NULL, NULL },
+
+	/* Edit menu */
+	{ "EditCutAction", N_("Cu_t"), GTK_STOCK_CUT, "<control>x",
+	  NULL,
+	  G_CALLBACK (gnc_sxed_cmd_edit_cut) },
+	{ "EditCopyAction", N_("_Copy"), GTK_STOCK_COPY, "<control>c",
+	  NULL,
+	  G_CALLBACK (gnc_sxed_cmd_edit_copy) },
+	{ "EditPasteAction", N_("_Paste"), GTK_STOCK_PASTE, "<control>v",
+	  NULL,
+	  G_CALLBACK (gnc_sxed_cmd_edit_paste) },
+
+};
+static guint gnc_sxed_menu_n_entries = G_N_ELEMENTS (gnc_sxed_menu_entries);
 
 /** Implementations *****************************************************/
 
@@ -1423,7 +1454,8 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         /* populate */
         schedXact_editor_populate( sxed );
 
-        gtk_widget_show_all(sxed->dialog);
+	/* Do not call show_all here. Screws up the gtkuimanager code */
+        gtk_widget_show(sxed->dialog);
 
 	/* Refresh the cal and the ledger */
 	gtk_widget_queue_resize( GTK_WIDGET( sxed->example_cal ) );
@@ -1467,6 +1499,7 @@ schedXact_editor_create_freq_sel( SchedXactionEditorDialog *sxed )
         gnc_dense_cal_set_num_months( sxed->example_cal, EX_CAL_NUM_MONTHS );
         gnc_dense_cal_set_months_per_col( sxed->example_cal, EX_CAL_MO_PER_COL );
         gtk_container_add( GTK_CONTAINER(f), GTK_WIDGET(sxed->example_cal) );
+	gtk_widget_show( GTK_WIDGET(sxed->example_cal) );
 }
 
 static
@@ -1475,37 +1508,39 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 {
         GtkFrame *tempxaction_frame;
         SplitRegister *splitreg;
-        GtkWidget *vbox;
-        int numLedgerLines = NUM_LEDGER_LINES_DEFAULT;
+        GtkWidget *main_vbox;
 
         tempxaction_frame =
                 GTK_FRAME( glade_xml_get_widget( sxed->gxml,
                                                  "tempxaction_frame" ) );
-        vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
 
+	/* Create the ledger */
         sxed->sxGUIDstr = g_strdup( guid_to_string( xaccSchedXactionGetGUID(sxed->sx) ) );
         sxed->ledger = gnc_ledger_display_template_gl( sxed->sxGUIDstr );
         splitreg = gnc_ledger_display_get_split_register( sxed->ledger );
 
-        numLedgerLines =
-                (int)gnc_lookup_number_option( SX_OPT_STR,
-                                               "Template Register Lines",
-                                               NUM_LEDGER_LINES_DEFAULT );
-        sxed->gsr = GNC_SPLIT_REG(
-                gnc_split_reg_new( sxed->ledger, GTK_WINDOW(sxed->dialog),
-                                   numLedgerLines,
-                                   (CREATE_TOOLBAR | CREATE_POPUP | CREATE_MENUS),
-                                   (CAP_JUMP | CAP_SCHEDULE) ) );
+	/* First the embedded window */
+        main_vbox = glade_xml_get_widget( sxed->gxml, "register_vbox" );
+	sxed->embed_window =
+	  gnc_embedded_window_new("SXWindowActions",
+				     gnc_sxed_menu_entries,
+				     gnc_sxed_menu_n_entries,
+				     "gnc-sxed-window-ui.xml",
+				     NULL, /* no accelerators */
+				     sxed);
+	gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(sxed->embed_window),
+			    FALSE, TRUE, 0);
 
-        gnc_split_reg_use_extended_popup( sxed->gsr );
-
-#if 0
-        gtk_box_pack_start( GTK_BOX(vbox),
-                            gnc_split_reg_get_toolbar( sxed->gsr ),
-                            FALSE, TRUE, 2 );
-#endif
-        gtk_box_pack_start( GTK_BOX(vbox), GTK_WIDGET(sxed->gsr),
-                            TRUE, TRUE, 2 );
+	/* Now create the register plugin page. */
+	sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
+	gnc_plugin_page_register_set_ui_description (sxed->plugin_page,
+						     "gnc-plugin-page-sxregister-ui.xml");
+	gnc_plugin_page_register_set_options (sxed->plugin_page,
+					      SX_OPT_STR,
+					      "Template Register Lines",
+					      NUM_LEDGER_LINES_DEFAULT,
+					      (CAP_JUMP | CAP_SCHEDULE) );
+	gnc_embedded_window_open_page (sxed->embed_window, sxed->plugin_page);
 
         /* configure... */
         /* don't use double-line */
@@ -1515,7 +1550,6 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 
         /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );
-
 }
 
 static
@@ -2331,3 +2365,21 @@ sxed_excal_update_adapt( GtkObject *o, gpointer ud )
 {
         gnc_sxed_update_cal( (SchedXactionEditorDialog*)ud );
 }
+
+/* Command callbacks */
+static void
+gnc_sxed_cmd_edit_cut (EggAction *action, SchedXactionEditorDialog *sxed)
+{
+}
+
+static void
+gnc_sxed_cmd_edit_copy (EggAction *action, SchedXactionEditorDialog *sxed)
+{
+}
+
+static void
+gnc_sxed_cmd_edit_paste (EggAction *action, SchedXactionEditorDialog *sxed)
+{
+}
+
+
