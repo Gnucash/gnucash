@@ -106,6 +106,8 @@ void qof_collection_foreach (QofCollection *,
 gpointer qof_collection_get_data (QofCollection *col);
 void qof_collection_set_data (QofCollection *col, gpointer user_data);
 
+/* Return value of 'dirty' flag on collection */
+gboolean qof_collection_is_dirty (QofCollection *col);
 
 
 #endif /* QOF_ID_H */

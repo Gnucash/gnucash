@@ -210,6 +210,22 @@ qof_collection_lookup_entity (QofCollection *col, const GUID * guid)
 
 /* =============================================================== */
 
+gboolean 
+qof_collection_is_dirty (QofCollection *col)
+{
+   if (!col) return FALSE;
+   return col->is_dirty;
+}
+
+void 
+qof_collection_mark_clean (QofCollection *col)
+{
+   if (!col) return;
+   col->is_dirty = FALSE;
+}
+
+/* =============================================================== */
+
 gpointer 
 qof_collection_get_data (QofCollection *col)
 {
