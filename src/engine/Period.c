@@ -254,6 +254,8 @@ trans_has_open_lot_tree (Transaction *trans)
    SplitList *split_list, *node;
 
    if (trans->marker) return FALSE;
+   trans->marker = 1;
+
    split_list = xaccTransGetSplitList (trans);
    for (node = split_list; node; node=node->next)
    {
@@ -263,7 +265,6 @@ trans_has_open_lot_tree (Transaction *trans)
       if (FALSE == gnc_lot_is_closed(lot)) return TRUE;
       if (lot_has_open_trans_tree (lot)) return TRUE;
    }
-   trans->marker = 1;
    return FALSE;
 }
 
@@ -273,6 +274,8 @@ lot_has_open_trans_tree (GNCLot *lot)
    SplitList *split_list, *snode;
 
    if (lot->marker) return FALSE;
+   lot->marker = 1;
+
    if (FALSE == gnc_lot_is_closed(lot)) return TRUE;
 
    split_list = gnc_lot_get_split_list (lot);
@@ -282,7 +285,6 @@ lot_has_open_trans_tree (GNCLot *lot)
       Transaction *trans = s->parent;
       if (trans_has_open_lot_tree (trans)) return TRUE;
    }
-   lot->marker = 1;
    return FALSE;
 }
 
