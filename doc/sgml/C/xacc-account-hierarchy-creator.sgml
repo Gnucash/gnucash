@@ -1,0 +1,86 @@
+<article id="xacc-account-hierarchy-creator">
+    <artheader>
+      <title>Account Hierarchy Creator</title>
+    </artheader>
+    
+    <para>When a user first starts up gnucash or asks for a "New File"
+    to be created from the "File" menu this druid is run to help the
+    user setup a list of accounts to use.  You can disable the druid
+    being shown when you choose to create a "New File" by setting the
+    FIXME option in the <link linkend="XACC-PREFERENCES">Preferences</link>
+    dialog.</para>
+
+    <sect1>
+      <title>First Explanatory Frame</title>
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame1.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>The first frame you see gives a short bit of explanation
+      for what the druid is mean to accomplish.</para>
+    </sect1>
+
+    <sect1>
+      <title>Currency Choosing</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame2.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>On this frame you pick the currency you'd like the
+      accounts to use.</para>
+    </sect1>
+
+    <sect1>
+      <title>Account Type Choosing</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame3.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>On this frame you choose what types of accounts you would
+      like to be setup.  Most people will want to choose the Common
+      accounts.  Other categories should be pretty self
+      explanantory.</para>
+
+      <para>In the bottom right corner of the frame you can see the
+      hierarchy of accounts that will be created because of this
+      category.  In the bottom left corner of the frame is a longer
+      description of the accounts that are a part of this type.</para>
+
+      <para>You can choose one, more than one, or all of the
+      categories.  The Select All button lets you choose all
+      categories easily.  Thea Clear All button lets you clear all the
+      selections.</para>
+    </sect1>
+
+    <sect1>
+      <title>Setting Starting Values</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame4.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>In this frame you get to see a final listing of all the
+      accounts that will be created all in one list.  You can also set
+      some starting balances on accounts here.</para>
+
+    </sect1>
+
+    <sect1>
+      <title>Final Frame</title>
+      
+    <para><inlinemediaobject><imageobject>
+          <imagedata fileref="image/new-user-frame5.png">
+        </imageobject></inlinemediaobject></para>
+
+      <para>If everything has been OK up to this point press the
+      Finish button and the accounts will be created in the new
+      account hierarchy.</para>
+    </sect1>
+    
+</article>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

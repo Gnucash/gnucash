@@ -1,6 +1,7 @@
 <!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
 <!entity xaccabout system "xacc-about.sgml">
 <!entity xaccaccountedit system "xacc-accountedit.sgml">
+<!entity xaccaccounthier system "xacc-account-hierarchy-creator.sgml">
 <!entity xaccacctypes system "xacc-acctypes.sgml">
 <!entity xaccnewacctwin system "xacc-newacctwin.sgml">
 <!entity xaccadjbalwin system "xacc-adjbalwin.sgml">
@@ -65,6 +66,7 @@
 &xaccabout;
 &xaccaccountedit;
 &xaccacctypes;
+&xaccaccounthier;
 &xaccassetbarcharts;
 &xaccassetpiecharts;
 &xaccnewacctwin;

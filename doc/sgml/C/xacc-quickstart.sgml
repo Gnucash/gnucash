@@ -97,11 +97,12 @@
 	</para>
 	
 	<para>
-	  If you want, GnuCash can help set up a default set
-	  of accounts for you, using the "New Account Setup"
-	  druid.  What's a druid?  Well, it's kind of like a
-	  wizard, but it's called a druid.  Why? Because it's
-	  not a wizard, it's a druid . . .
+	  If you want, GnuCash can help set up a default set of
+	  accounts for you, using the
+        <link linkend="xacc-account-hierarchy-creator">New Account Setup</link>
+	  druid.  What's a druid?  Well, it's kind of like a wizard,
+	  but it's called a druid.  Why? Because it's not a wizard,
+	  it's a druid . . .
 	  </para>
 	<para>
 	Anyway, the druid will take you through the process
