@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>TXF Export of tax data</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>The tax report allows you to export all tax related Income and Expenses
       to a <ULINK URL="http://www.turbotax.com/txf/index.html">TXF (Tax
       eXchange Format)</ULINK> file in addition to the html format that
@@ -70,7 +71,7 @@
     <LINK LINKEND="XACC-TXF-EXPORT-ANOMALIES">Known anomalies and
       limitations.</LINK>
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
