@@ -23,7 +23,7 @@ define(`split', `gncEntry, Split, Split, e,
        action,          , char *,   xaccSplitGetAction(ptr),
        reconciled,      , char,     xaccSplitGetReconcile(ptr),
        date_reconciled, , Timespec, xaccSplitRetDateReconciledTS(ptr),
-       amount,          , int64,    gnc_numeric_num(xaccSplitGetShareAmount(ptr)),
+       amount,          , int64,    gnc_numeric_num(xaccSplitGetAmount(ptr)),
        value,           , int64,    gnc_numeric_num(xaccSplitGetValue(ptr)),
        entryGUID,    KEY, GUID *,   xaccSplitGetGUID(ptr),
        ')
