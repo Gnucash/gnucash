@@ -426,9 +426,9 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     account = to;
 
   currency = xaccAccountGetCurrency(account);
-  
+
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
-  
+
   if((from != NULL) && (to != NULL))
   {
     if(!xaccAccountsHaveCommonCurrency(from, to))

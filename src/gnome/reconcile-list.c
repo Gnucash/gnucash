@@ -117,10 +117,10 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
 
   if (type == RECLIST_CREDIT)
     DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
-                            AMT_MATCH_ATLEAST, QUERY_AND);
+                             AMT_MATCH_ATLEAST, QUERY_AND);
   else
     DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
-                            AMT_MATCH_ATLEAST, QUERY_AND);
+                             AMT_MATCH_ATLEAST, QUERY_AND);
 
   return GTK_WIDGET(list);
 }
@@ -485,22 +485,24 @@ gnc_reconcile_list_refresh(GNCReconcileList *list)
  *   returns the reconciled balance of the list                     *
  *                                                                  *
  * Args: list - list to get reconciled balance of                   *
- * Returns: reconciled balance (double)                             *
+ * Returns: reconciled balance (gnc_numeric)                        *
 \********************************************************************/
-double
+gnc_numeric
 gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
 {
   GtkCList *clist = GTK_CLIST(list);
   Split *split;
-  double total = 0.0;
+  gnc_numeric total;
   int account_type;
   int i;
 
-  g_return_val_if_fail(list != NULL, 0.0);
-  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), 0.0);
+  total = gnc_numeric_zero ();
+
+  g_return_val_if_fail(list != NULL, total);
+  g_return_val_if_fail(IS_GNC_RECONCILE_LIST(list), total);
 
   if (list->reconciled == NULL)
-    return 0.0;
+    return total;
 
   account_type = xaccAccountGetType(list->account);
 
@@ -513,12 +515,12 @@ gnc_reconcile_list_reconciled_balance(GNCReconcileList *list)
 
     if ((account_type == STOCK) || (account_type == MUTUAL) ||
         (account_type == CURRENCY))
-      total += DxaccSplitGetShareAmount(split);
+      total = gnc_numeric_add_fixed (total, xaccSplitGetShareAmount(split));
     else
-      total += DxaccSplitGetValue(split);
+      total = gnc_numeric_add_fixed (total, xaccSplitGetValue(split));
   }
 
-  return ABS(total);
+  return gnc_numeric_abs (total);
 }
 
 
@@ -634,7 +636,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   Split **splits;
   Split *split;
 
-  double amount;
+  gnc_numeric amount;
   char recn;
   int row;
 
@@ -658,13 +660,13 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
       continue;
 
     if((account_type == STOCK) || (account_type == MUTUAL))
-      amount = DxaccSplitGetShareAmount(split);
+      amount = xaccSplitGetShareAmount(split);
     else
-      amount = DxaccSplitGetValue(split);
+      amount = xaccSplitGetValue(split);
 
-    if ((amount < 0) && (list->list_type == RECLIST_DEBIT))
+    if (gnc_numeric_negative_p (amount) && list->list_type == RECLIST_DEBIT)
       continue;
-    if ((amount >= 0) && (list->list_type == RECLIST_CREDIT))
+    if (!gnc_numeric_negative_p (amount) && list->list_type == RECLIST_CREDIT)
       continue;
 
     trans = xaccSplitGetParent(split);
@@ -674,11 +676,14 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = gnc_print_date(ts);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = DxaccPrintAmount(ABS(amount), print_info);
+    strings[3] = xaccPrintAmount(gnc_numeric_abs (amount), print_info);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
     recn = reconciled ? YREC : recn;
-    strings[4] = gnc_get_reconcile_str(recn);
+    if (recn == NREC)
+      strings[4] = "";
+    else
+      strings[4] = gnc_get_reconcile_str(recn);
 
     row = gtk_clist_append(GTK_CLIST(list), (gchar **) strings);
     gtk_clist_set_row_data(GTK_CLIST(list), row, split);

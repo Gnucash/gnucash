@@ -26,6 +26,7 @@
 #include <gtk/gtkclist.h>
 
 #include "Query.h"
+#include "gnc-numeric.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,7 +98,7 @@ Split * gnc_reconcile_list_get_current_split(GNCReconcileList *list);
 
 void gnc_reconcile_list_refresh (GNCReconcileList *list);
 
-double gnc_reconcile_list_reconciled_balance(GNCReconcileList *list);
+gnc_numeric gnc_reconcile_list_reconciled_balance(GNCReconcileList *list);
 
 void gnc_reconcile_list_commit(GNCReconcileList *list, time_t date);
 
