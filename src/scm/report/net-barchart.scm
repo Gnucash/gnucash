@@ -39,7 +39,7 @@
       (optname-show-profit (N_ "Show Net Profit"))
 
       (optname-sep-bars (N_ "Show Asset & Liability bars"))
-      (optname-net-bars (N_ "Show net worth bars"))
+      (optname-net-bars (N_ "Show Net Worth bars"))
 
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
