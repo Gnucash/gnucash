@@ -115,40 +115,6 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
    }
 }
 
-
-/* ==================================================== */
-/* hack alert -- will core dump if numrows has changed, etc. */
-/* hack alert -- assumes that first block is header. */
-
-static
-void
-xaccRefreshHeader (Table *table)
-{
-   int i,j;
-   CellBlock *arr;
-
-   if (!(table->entries)) return;
-
-   /* copy header data into entries cache */
-   arr = table->handlers[0][0];
-   if (arr) {
-      for (i=0; i<arr->numRows; i++) {
-         for (j=0; j<arr->numCols; j++) {
-            if (table->entries[i][j]) free (table->entries[i][j]);
-            if (arr->cells[i][j]) {
-               if ((arr->cells[i][j])->value) {
-                  table->entries[i][j] = strdup ((arr->cells[i][j])->value);
-               } else {
-                  table->entries[i][j] = strdup ("");
-               }
-            } else {
-               table->entries[i][j] = strdup ("");
-            }
-         }
-      }
-   }
-}
-
 /* ==================================================== */
 
 void

@@ -262,14 +262,13 @@ void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
       new_virt_col = table->locators[new_phys_row][new_phys_col]->virt_col;
    }
 
-   /* record the new virtual position ... */
-   table->current_cursor_virt_row = new_virt_row;
-   table->current_cursor_virt_col = new_virt_col;
-
    /* invalidate the cursor for now; we'll set it the the correct values below */
    table->current_cursor_phys_row = -1;
    table->current_cursor_phys_col = -1;
-   table->current_cursor->user_data = NULL;
+   table->current_cursor_virt_row = -1;
+   table->current_cursor_virt_col = -1;
+   curs = table->current_cursor;
+   if (curs) curs->user_data = NULL;
    table->current_cursor = NULL;
 
    /* check for out-of-bounds conditions (which may be deliberate) */
@@ -282,6 +281,10 @@ void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
    curs = table->handlers[new_virt_row][new_virt_col];
    table->current_cursor = curs;
 
+   /* record the new virtual position ... */
+   table->current_cursor_virt_row = new_virt_row;
+   table->current_cursor_virt_col = new_virt_col;
+
    /* compute some useful offsets ... */
    phys_row_origin = new_phys_row;
    phys_row_origin -= table->locators[new_phys_row][new_phys_col]->phys_row_offset;
@@ -289,8 +292,8 @@ void xaccMoveCursor (Table *table, int new_phys_row, int new_phys_col)
    phys_col_origin = new_phys_col;
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
 
-   table->current_cursor_phys_row = phys_col_origin;
-   table->current_cursor_phys_col = phys_row_origin;
+   table->current_cursor_phys_row = phys_row_origin;
+   table->current_cursor_phys_col = phys_col_origin;
 
    /* update the cell values to reflect the new position */
    for (i=0; i<curs->numRows; i++) {
@@ -333,30 +336,30 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
       new_virt_col = table->locators[new_phys_row][new_phys_col]->virt_col;
    }
 
-   /* record the new virtual position ... */
-   table->current_cursor_virt_row = new_virt_row;
-   table->current_cursor_virt_col = new_virt_col;
-
    curs = table->current_cursor;
 
    /* invalidate the cursor for now; we'll set it the the correct values below */
    table->current_cursor_phys_row = -1;
    table->current_cursor_phys_col = -1;
-   table->current_cursor->user_data = NULL;
+   table->current_cursor_virt_row = -1;
+   table->current_cursor_virt_col = -1;
+   if (curs) curs->user_data = NULL;
    table->current_cursor = NULL;
 
    /* check for out-of-bounds conditions (which may be deliberate) */
    if ((0 > new_virt_row) || (0 > new_virt_col)) {
       /* if the location is invalid, then we should take this 
        * as a command to unmap the cursor gui.  So do it .. */
-      for (i=0; i<curs->numRows; i++) {
-         for (j=0; j<curs->numCols; j++) {
-            BasicCell *cell;
-            cell = curs->cells[i][j];
-            if (cell) {
-               cell->changed = 0;
-               if (cell->move) {
-                  (cell->move) (cell, -1, -1);
+      if (curs) {
+         for (i=0; i<curs->numRows; i++) {
+            for (j=0; j<curs->numCols; j++) {
+               BasicCell *cell;
+               cell = curs->cells[i][j];
+               if (cell) {
+                  cell->changed = 0;
+                  if (cell->move) {
+                     (cell->move) (cell, -1, -1);
+                  }
                }
             }
          }
@@ -372,6 +375,10 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
    curs = table->handlers[new_virt_row][new_virt_col];
    table->current_cursor = curs;
 
+   /* record the new virtual position ... */
+   table->current_cursor_virt_row = new_virt_row;
+   table->current_cursor_virt_col = new_virt_col;
+
    /* compute some useful offsets ... */
    phys_row_origin = new_phys_row;
    phys_row_origin -= table->locators[new_phys_row][new_phys_col]->phys_row_offset;
@@ -379,8 +386,8 @@ void xaccMoveCursorGUI (Table *table, int new_phys_row, int new_phys_col)
    phys_col_origin = new_phys_col;
    phys_col_origin -= table->locators[new_phys_row][new_phys_col]->phys_col_offset;
 
-   table->current_cursor_phys_row = phys_col_origin;
-   table->current_cursor_phys_col = phys_row_origin;
+   table->current_cursor_phys_row = phys_row_origin;
+   table->current_cursor_phys_col = phys_col_origin;
 
    /* update the cell values to reflect the new position */
    for (i=0; i<curs->numRows; i++) {
@@ -440,6 +447,50 @@ void xaccCommitCursor (Table *table)
    }
 
    table->user_data[virt_row][virt_col] = curs->user_data;
+}
+
+/* ==================================================== */
+/* hack alert -- will core dump if numrows has changed, etc. */
+/* hack alert -- assumes that first block is header. */
+/* hack alert -- this routine is *just like* that above,
+ * except that its's committing the very first cursor.
+ * with cleverness we could probably eliminate this routine 
+ * entirely ... */
+
+void
+xaccRefreshHeader (Table *table)
+{
+   int i,j;
+   CellBlock *arr;
+
+   if (!(table->entries)) return;
+
+   /* copy header data into entries cache */
+   arr = table->handlers[0][0];
+printf ("have loop %d %d \n", arr->numRows, arr->numCols);
+   if (arr) {
+      for (i=0; i<arr->numRows; i++) {
+         for (j=0; j<arr->numCols; j++) {
+printf ("gonna %d %d \n", i,j);
+            if (table->entries[i][j]) free (table->entries[i][j]);
+printf ("OK\n");
+            if (arr->cells[i][j]) {
+printf ("OK\n");
+               if ((arr->cells[i][j])->value) {
+printf ("gonna %d %d %s \n", i,j, (arr->cells[i][j])->value);
+
+                  table->entries[i][j] = strdup ((arr->cells[i][j])->value);
+               } else {
+                  table->entries[i][j] = strdup ("");
+printf ("alt OK\n");
+               }
+            } else {
+               table->entries[i][j] = strdup ("");
+printf ("conkalt OK\n");
+            }
+         }
+      }
+   }
 }
 
 /* ==================================================== */

@@ -62,6 +62,14 @@ void        xaccMoveCursorGUI (Table *, int phys_row, int phys_col);
 /* copy text in the cursor cells to the table */
 void        xaccCommitCursor (Table *);
 
+/* hackl alert --
+ * for all practical purposes, RefreshHeader is identical
+ * tp CommitCursor(), except that it acts on cellblock 0,0.
+ * it should probably be made obsolete.
+ */
+void        xaccRefreshHeader (Table *);
+
+
 /* xaccVerifyCursorPosition checks the location of the cursor 
  * with respect to a physical row/column position, and if the 
  * resulting virtual position has changed, commits the changes in the
