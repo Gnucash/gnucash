@@ -1,3 +1,8 @@
+2001-07-30  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm: Fixed bug with sub-balances in
+	account tables with non-default account selection.
+
 2001-07-30  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/glade/sched-xact.glade: Added seperate reminders
