@@ -821,15 +821,15 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
     gtk_label_set_text (GTK_LABEL (GTK_BIN (new_item_button)->child), desc);
     g_free (desc);
   }
+  /* add the first criterion */
+  gnc_search_dialog_add_criterion (sw);
+
   /* show it all */
   gtk_widget_show_all (sw->dialog);
 
   /* Hide the 'new' button if there is no new_item_cb */
   if (!sw->new_item_cb)
     gtk_widget_hide_all (new_item_button);
-
-  /* add the first criterion */
-  gnc_search_dialog_add_criterion (sw);
 
   /* Connect XML signals */
 

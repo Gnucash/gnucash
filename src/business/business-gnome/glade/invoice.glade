@@ -420,6 +420,7 @@
 <widget>
   <class>GnomeApp</class>
   <name>Invoice Entry Window</name>
+  <visible>False</visible>
   <title>Invoice</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>

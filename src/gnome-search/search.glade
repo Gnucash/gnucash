@@ -19,6 +19,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>Search Dialog</name>
+  <visible>False</visible>
   <title>Search for...</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
