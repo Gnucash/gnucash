@@ -40,6 +40,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(444,root,root,755)
 %attr(555,-,-) /usr/bin/gnucash
 %attr(555,-,-) /usr/bin/gnc-prices
+%attr(555,-,-) /usr/bin/update-finance-quote
 %attr(555,-,-) /usr/share/gnucash/finance-quote-helper
 /usr/info/*
 /usr/lib/libgncengine.*

@@ -124,8 +124,7 @@
                    (gnc:html-markup-anchor
                     (sprintf #f "gnc-report:id=%a" (car report-info))
                     "Single Report"))))
-           
-           
+
            ;; add the report-table to the toplevel-cell
            (gnc:html-table-cell-append-objects!
             toplevel-cell report-table)
@@ -158,9 +157,8 @@
   
   ;; define the view now.
   (gnc:define-report 
-   'version 1.0
-   'name "Multicolumn View"
+   'version 1
+   'name (N_ "Multicolumn View")
    'renderer render-view
    'options-generator make-options
    'options-editor edit-options))
-

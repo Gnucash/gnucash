@@ -600,6 +600,15 @@ item_edit_focus_out (ItemEdit *item_edit)
 #endif
 }
 
+void
+item_edit_reset_offset (ItemEdit *item_edit)
+{
+        g_return_if_fail (item_edit != NULL);
+        g_return_if_fail (IS_ITEM_EDIT(item_edit));
+
+        item_edit->reset_pos = TRUE;
+}
+
 /*
  * Instance initialization
  */

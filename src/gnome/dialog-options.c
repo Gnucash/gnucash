@@ -219,6 +219,20 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
     else
       bad_value = TRUE;
   }
+  else if (safe_strcmp(type, "text") == 0)
+  {
+    if (gh_string_p(value))
+    {
+      char *string = gh_scm2newstr(value, NULL);
+      gint pos = 0;
+      gtk_editable_delete_text(GTK_EDITABLE(option->widget), 0, -1);
+      gtk_editable_insert_text(GTK_EDITABLE(option->widget),
+                               string, strlen (string), &pos);
+      free(string);
+    }
+    else
+      bad_value = TRUE;
+  }
   else if (safe_strcmp(type, "currency") == 0)
   {
     gnc_commodity *commodity;
@@ -502,6 +516,14 @@ gnc_option_get_ui_value(GNCOption *option)
     result = gh_bool2scm(active);
   }
   else if (safe_strcmp(type, "string") == 0)
+  {
+    char * string;
+
+    string = gtk_editable_get_chars(GTK_EDITABLE(option->widget), 0, -1);
+    result = gh_str02scm(string);
+    g_free(string);
+  }
+  else if (safe_strcmp(type, "text") == 0)
   {
     char * string;
 
@@ -1346,6 +1368,41 @@ gnc_option_set_ui_widget(GNCOption *option,
 
     gtk_box_pack_start(GTK_BOX(enclosing), label, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(enclosing), value, FALSE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(enclosing),
+		     gnc_option_create_default_button(option, tooltips),
+		     FALSE, FALSE, 0);
+    gtk_widget_show_all(enclosing);
+  }
+  else if (safe_strcmp(type, "text") == 0)
+  {
+    GtkWidget *frame;
+    GtkWidget *scroll;
+    gchar *colon_name;
+
+    frame = gtk_frame_new(name);
+
+    scroll = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
+                                   GTK_POLICY_NEVER, 
+                                   GTK_POLICY_AUTOMATIC);
+    gtk_container_border_width(GTK_CONTAINER(scroll), 2);
+
+    gtk_container_add(GTK_CONTAINER(frame), scroll);
+
+    enclosing = gtk_hbox_new(FALSE, 10);
+    value = gtk_text_new(NULL, NULL);
+    gtk_text_set_word_wrap(GTK_TEXT(value), TRUE);
+    gtk_text_set_editable(GTK_TEXT(value), TRUE);
+
+    gtk_container_add (GTK_CONTAINER (scroll), value);
+
+    option->widget = value;
+    gnc_option_set_ui_value(option, FALSE);
+
+    gtk_signal_connect(GTK_OBJECT(value), "changed",
+		       GTK_SIGNAL_FUNC(gnc_option_changed_cb), option);
+
+    gtk_box_pack_start(GTK_BOX(enclosing), frame, TRUE, TRUE, 0);
     gtk_box_pack_end(GTK_BOX(enclosing),
 		     gnc_option_create_default_button(option, tooltips),
 		     FALSE, FALSE, 0);

@@ -41,7 +41,7 @@
        (gnc:make-account-list-option
 	pagename-general optname-accounts
 	"c"
-	(_ "Select accounts to calculate income on")
+	(N_ "Select accounts to calculate income on")
 	(lambda ()
 	  (filter
 	   gnc:account-is-inc-exp?
@@ -57,17 +57,17 @@
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-inc-exp
-        "a" (_ "Show Income and Expenses?") #t))
+        "a" (N_ "Show Income and Expenses?") #t))
 
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-show-profit
-        "b" (_ "Show the net profit?") #f))
+        "b" (N_ "Show the net profit?") #f))
 
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-stacked
-        "ba" (_ "Show barchart as stacked?") #f))
+        "ba" (N_ "Show barchart as stacked?") #f))
 
       (gnc:options-add-plot-size! 
        options pagename-display 

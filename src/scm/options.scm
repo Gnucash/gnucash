@@ -190,6 +190,25 @@
              (else (list #f "string-option: not a string"))))
      #f #f #f #f)))
 
+(define (gnc:make-text-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-value)
+  (let* ((value default-value)
+         (value->string (lambda () (gnc:value->string value))))
+    (gnc:make-option
+     section name sort-tag 'text documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (cond ((string? x)(list #t x))
+             (else (list #f "text-option: not a string"))))
+     #f #f #f #f)))
+
 ;;; font options store fonts as strings a la the X Logical
 ;;; Font Description. You should always provide a default
 ;;; value, as currently there seems to be no way to go from

@@ -242,8 +242,8 @@ load_category_list (TaxInfoDialog *ti_dialog)
   {
     TXFInfo *txf_info = codes->data;
 
-    text[0] = txf_info->code;
-    text[1] = txf_info->form;
+    text[0] = txf_info->form;
+    text[1] = txf_info->description;
 
     gtk_clist_append (clist, text);
   }
@@ -308,6 +308,10 @@ account_to_gui (TaxInfoDialog *ti_dialog, Account *account)
     index = 0;
 
   gtk_clist_select_row (GTK_CLIST (ti_dialog->txf_category_clist), index, 0);
+  if (gtk_clist_row_is_visible (GTK_CLIST (ti_dialog->txf_category_clist),
+                                index) != GTK_VISIBILITY_FULL)
+    gtk_clist_moveto (GTK_CLIST (ti_dialog->txf_category_clist),
+                      index, 0, 0.5, 0.0);
 
   str = xaccAccountGetTaxUSPayerNameSource (account);
   if (safe_strcmp (str, "parent") == 0)

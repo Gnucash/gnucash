@@ -35,7 +35,7 @@
     (vector-ref columns-used 6))
   (define (debit-col columns-used)
     (vector-ref columns-used 7))
-  (define (debit-col columns-used)
+  (define (credit-col columns-used)
     (vector-ref columns-used 8))
   (define (balance-col columns-used)
     (vector-ref columns-used 9))
@@ -103,7 +103,7 @@
 	  (addto! heading-list (_ "Amount")))
       (if (debit-col column-vector)
 	  (addto! heading-list debit-string))
-      (if (debit-col column-vector)
+      (if (credit-col column-vector)
 	  (addto! heading-list credit-string))
       (if (balance-col column-vector)
 	  (addto! heading-list (_ "Balance")))
@@ -164,10 +164,9 @@
       (if (amount-single-col column-vector)
 	  (addto! row-contents
                   (if split-info?
-                      (gnc:html-split-anchor
-                       split
-                       (gnc:make-html-table-header-cell/markup "number-cell"
-                                                               split-value))
+                      (gnc:make-html-table-header-cell/markup
+                       "number-cell"
+                       (gnc:html-split-anchor split split-value))
                       " ")))
       (if (debit-col column-vector)
 	  (if (gnc:numeric-positive-p (gnc:gnc-monetary-amount split-value))
@@ -226,7 +225,7 @@
   (define (lookup-subtotal-pred sort-option)
     (vector-ref (cdr (assq sort-option comp-funcs-assoc-list)) 1))
 
-  (define (reg-options-generator)
+  (define (options-generator)
 
     (define gnc:*report-options* (gnc:new-options))
 
@@ -245,8 +244,23 @@
      (gnc:make-internal-option "__reg" "credit-string" (_ "Credit")))
 
     (gnc:register-reg-option
+     (gnc:make-simple-boolean-option
+      (N_ "Invoice") (N_ "Make an invoice")
+      "a" (N_ "Display this report as an invoice.") #f))
+
+    (gnc:register-reg-option
      (gnc:make-string-option
-      (N_ "Report Options") (N_ "Title")
+      (N_ "Invoice") (N_ "Client Name")
+      "b" (N_ "The name of the client to put on the invoice.") ""))
+
+    (gnc:register-reg-option
+     (gnc:make-text-option
+      (N_ "Invoice") (N_ "Client Address")
+      "c" (N_ "The address of the client to put on the invoice") ""))
+
+    (gnc:register-reg-option
+     (gnc:make-string-option
+      (N_ "General") (N_ "Title")
       "a" (N_ "The title of the report")
       (N_ "Register Report")))
 
@@ -286,7 +300,6 @@
       "i" (N_ "Display the amount?")  
       'double
       (list
-       (vector 'none (N_ "None") (N_ "No amount display"))
        (vector 'single (N_ "Single") (N_ "Single Column Display"))
        (vector 'double (N_ "Double") (N_ "Two Column Display")))))
 
@@ -326,7 +339,7 @@
       255
       #f))
 
-    (gnc:options-set-default-section gnc:*report-options* "Report Options")
+    (gnc:options-set-default-section gnc:*report-options* "General")
 
     gnc:*report-options*)
 
@@ -356,33 +369,47 @@
   (define (make-split-table splits options debit-string credit-string)
     (define (opt-val section name)
       (gnc:option-value (gnc:lookup-option options section name)))
+    (define (reg-report-journal?)
+      (opt-val "__reg" "journal"))
+    (define (reg-report-double?)
+      (opt-val "__reg" "double"))
+    (define (reg-report-invoice?)
+      (opt-val "Invoice" "Make an invoice"))
 
-    (define (add-subtotal-row table width subtotal-collector subtotal-style)
+    (define (add-subtotal-row table used-columns
+                              subtotal-collector subtotal-style)
       (let ((currency-totals (subtotal-collector
-                              'format gnc:make-gnc-monetary #f))
-            (blanks (make-list (- width 1) #f)))
+                              'format gnc:make-gnc-monetary #f)))
+        (define (make-blanks monetary)
+          (make-list
+           (- (if (amount-single-col used-columns)
+                  (amount-single-col used-columns)
+                  (if (gnc:numeric-negative-p
+                       (gnc:gnc-monetary-amount monetary))
+                      (credit-col used-columns)
+                      (debit-col used-columns)))
+              1)
+           #f))
 
-        (gnc:html-table-append-row!
-         table
-         (list
-          (gnc:make-html-table-cell/size
-           1 width (gnc:make-html-text (gnc:html-markup-hr)))))
+        (if (not (reg-report-invoice?))
+            (gnc:html-table-append-row!
+             table
+             (list
+              (gnc:make-html-table-cell/size
+               1 (num-columns-required used-columns)
+               (gnc:make-html-text (gnc:html-markup-hr))))))
 
         (for-each (lambda (currency)
                     (gnc:html-table-append-row! 
                      table 
-                     (append blanks
+                     (append (cons (gnc:make-html-table-header-cell/markup
+                                    "total-label-cell" (_ "Total"))
+                                   (make-blanks currency))
                              (list (gnc:make-html-table-header-cell/markup
-                                    "number-cell" currency))))
+                                    "total-number-cell" currency))))
                     (apply set-last-row-style! 
                            (cons table (cons "tr" subtotal-style))))
                   currency-totals)))
-
-    (define (reg-report-journal?)
-      (opt-val "__reg" "journal"))
-
-    (define (reg-report-double?)
-      (opt-val "__reg" "double"))
 
     (define (add-other-split-rows split table used-columns row-style)
       (define (other-rows-driver split parent table used-columns i)
@@ -408,7 +435,8 @@
                                     grand-total-style
                                     total-collector)
       (if (null? splits)
-          (add-subtotal-row table width total-collector grand-total-style)
+          (add-subtotal-row table used-columns
+                            total-collector grand-total-style)
 
 	  (let* ((current (car splits))
                  (current-row-style (if multi-rows? main-row-style
@@ -486,7 +514,11 @@
           (journal? (opt-val "__reg" "journal"))
           (debit-string (opt-val "__reg" "debit-string"))
           (credit-string (opt-val "__reg" "credit-string"))
-          (title (opt-val "Report Options" "Title")))
+          (invoice? (opt-val "Invoice" "Make an invoice"))
+          (title (opt-val "General" "Title")))
+
+      (if invoice?
+          (set! title (_ "Invoice")))
 
       (gnc:query-set-group query (gnc:get-current-group))
 
@@ -500,6 +532,13 @@
                                     (gnc:report-options report-obj)
                                     debit-string credit-string))
 
+      (if invoice?
+          (gnc:html-document-set-style!
+           document "table" 
+           'attribute (list "border" 1)
+           'attribute (list "cellspacing" 0)
+           'attribute (list "cellpadding" 0)))
+
       (gnc:html-document-set-title! document title)
       (gnc:html-document-add-object! document table)
 
@@ -508,20 +547,29 @@
   (gnc:define-report
    'version 1
    'name (N_ "Register")
-   'options-generator reg-options-generator
+   'options-generator options-generator
+   'renderer reg-renderer
+   'in-menu? #f)
+
+  (gnc:define-report
+   'version 1
+   'name (N_ "Invoice")
+   'options-generator options-generator
    'renderer reg-renderer
    'in-menu? #f))
 
-(define (gnc:apply-register-report func query journal? double?
+(define (gnc:apply-register-report func invoice? query journal? double?
                                    title debit-string credit-string)
   (let* ((options (gnc:make-report-options "Register"))
+         (invoice-op (gnc:lookup-option options "Invoice" "Make an invoice"))
          (query-op (gnc:lookup-option options "__reg" "query"))
          (journal-op (gnc:lookup-option options "__reg" "journal"))
          (double-op (gnc:lookup-option options "__reg" "double"))
-         (title-op (gnc:lookup-option options "Report Options" "Title"))
+         (title-op (gnc:lookup-option options "General" "Title"))
          (debit-op (gnc:lookup-option options "__reg" "debit-string"))
          (credit-op (gnc:lookup-option options "__reg" "credit-string")))
 
+    (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)
     (gnc:option-set-value journal-op journal?)
     (gnc:option-set-value double-op double?)
@@ -532,7 +580,13 @@
     (func (gnc:make-report "Register" options))))
 
 (define (gnc:show-register-report . rest)
-  (apply gnc:apply-register-report (cons gnc:report-window rest)))
+  (apply gnc:apply-register-report
+         (cons gnc:report-window (cons #f rest))))
 
 (define (gnc:print-register-report . rest)
-  (apply gnc:apply-register-report (cons gnc:print-report rest)))
+  (apply gnc:apply-register-report
+         (cons gnc:print-report (cons #f rest))))
+
+(define (gnc:show-invoice-report . rest)
+  (apply gnc:apply-register-report
+         (cons gnc:report-window (cons #t rest))))

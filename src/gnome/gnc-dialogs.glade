@@ -8708,11 +8708,11 @@ words.
 	    </child>
 
 	    <widget>
-	      <class>GtkHBox</class>
-	      <name>hbox85</name>
+	      <class>GtkVBox</class>
+	      <name>vbox113</name>
 	      <border_width>3</border_width>
 	      <homogeneous>False</homogeneous>
-	      <spacing>0</spacing>
+	      <spacing>2</spacing>
 
 	      <widget>
 		<class>GtkScrolledWindow</class>
@@ -8741,7 +8741,7 @@ words.
 		    <class>GtkLabel</class>
 		    <child_name>CList:title</child_name>
 		    <name>label847734</name>
-		    <label>Code</label>
+		    <label>Form</label>
 		    <justify>GTK_JUSTIFY_CENTER</justify>
 		    <wrap>False</wrap>
 		    <xalign>0.5</xalign>
@@ -8754,7 +8754,7 @@ words.
 		    <class>GtkLabel</class>
 		    <child_name>CList:title</child_name>
 		    <name>label847735</name>
-		    <label>Form</label>
+		    <label>Description</label>
 		    <justify>GTK_JUSTIFY_CENTER</justify>
 		    <wrap>False</wrap>
 		    <xalign>0.5</xalign>

@@ -548,16 +548,18 @@ gnc_ui_about_cb (GtkWidget *widget, gpointer data)
   GtkWidget *about;
   const gchar *message = _("The GnuCash personal finance manager.\n"
                            "The GNU way to manage your money!");
-  const gchar *copyright = "(C) 1998-2000 Linas Vepstas";
+  const gchar *copyright = "(C) 1998-2001 Linas Vepstas";
   const gchar *authors[] = {
     "Linas Vepstas <linas@linas.org>",
     NULL
   };
 
-  about = gnome_about_new("GnuCash", VERSION, copyright,
-                          authors, message, NULL);
+  about = gnome_about_new ("GnuCash", VERSION, copyright,
+                           authors, message, NULL);
+  gnome_dialog_set_parent (GNOME_DIALOG(about),
+                           GTK_WINDOW(gnc_get_ui_data ()));
 
-  gnome_dialog_run_and_close(GNOME_DIALOG(about));
+  gnome_dialog_run_and_close (GNOME_DIALOG(about));
 }
 
 static void

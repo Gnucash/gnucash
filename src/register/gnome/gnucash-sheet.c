@@ -661,6 +661,8 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         g_free (new_text_wc);
 
         if (retval) {
+                item_edit_reset_offset (ITEM_EDIT(sheet->item_editor));
+
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
 					  sheet->insert_signal);
 

@@ -215,7 +215,7 @@
       ssdoc))
   
   (gnc:define-html-style-sheet 
-   'version 1.0
+   'version 1
    'name "Fancy"
    'renderer fancy-renderer
    'options-generator fancy-options)

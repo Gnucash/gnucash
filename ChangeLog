@@ -1,4 +1,35 @@
+2001-03-31  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/options.scm: add a text option type
+
+	* src/gnome/dialog-options.c: add support for text options
+
+	* src/gnome/window-main.c (gnc_ui_about_cb): set parent
+
+	* src/scm/report/register.scm: more work
+
+	* src/scm/html-document.scm: fix bug
+
 2001-03-30  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/average-balance.scm: tweak default accounts
+
+	* src/scm/html-utilities.scm (gnc:html-build-acct-table):
+	put in a horizontal line before grand total.
+
+	* src/gnome/dialog-tax-info.c: use form & description, not
+	code & form, in clist. more work on display.
+
+	* src/scm/report/txf-export.scm: fix bug
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_modify_current_cell): reset item edit position
+
+	* src/register/gnome/gnucash-item-edit.c (item_edit_reset_offset):
+	new func
+
+	* src/gnome/gnc-currency-edit.c (add_item): don't use namespace
+	in string
 
 	* src/quotes/finance-quote-helper.in: check for non-standard
 	Perl modules

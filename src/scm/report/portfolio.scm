@@ -19,17 +19,17 @@
 
       (add-option
        (gnc:make-date-option
-	"General" "Date"
+	(N_ "General") (N_ "Date")
 	"a"
-	"Date to report on"
+	(N_ "Date to report on")
 	 (lambda () (cons 'absolute (cons (current-time) 0)))
         #f 'absolute #f ))
 
       (add-option
        (gnc:make-account-list-option
-	"General" "Accounts" 
+	(N_ "General") (N_ "Accounts")
 	"b"
-	"Stock Accounts to report on"
+	(N_ "Stock Accounts to report on")
 	(lambda () (filter gnc:account-is-stock?
                            (gnc:group-get-subaccounts
                             (gnc:get-current-group))))
@@ -38,9 +38,9 @@
 
       (add-option
        (gnc:make-currency-option
-	"General" "Report Currency"
+	(N_ "General" "Report Currency")
 	"c"
-	"Select the displayed currency"
+	(N_ "Select the displayed currency")
 	(gnc:option-value
 	 (gnc:lookup-global-option "International"
 				   "Default Currency"))))

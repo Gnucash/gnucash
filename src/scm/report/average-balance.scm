@@ -45,10 +45,10 @@
 		   ;; otherwise get some accounts -- here as an
 		   ;; example we get the asset and liability stuff
                    (gnc:filter-accountlist-type
-		    '(asset liability equity) 
+		    '(bank cash credit asset liability equity) 
 		    ;; or: '(bank cash checking savings stock
 		    ;; mutual-fund money-market)
-		    (gnc:group-get-account-list (gnc:get-current-group)))))))
+		    (gnc:group-get-subaccounts (gnc:get-current-group)))))))
         #f #t))
 
       (gnc:options-add-interval-choice! 
@@ -266,7 +266,7 @@
 				       report-currency 
 				       exchange-fn))))
 
-      (gnc:html-document-set-title! document (N_ "Average Balance"))
+      (gnc:html-document-set-title! document (_ "Average Balance"))
 
       (if (not (null? accounts))
           (let ((query (gnc:malloc-query))

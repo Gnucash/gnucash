@@ -72,7 +72,7 @@
        (gnc:make-account-list-option
 	pagename-accounts optname-accounts
 	"a"
-	(_ "Select accounts to calculate income on")
+	(N_ "Select accounts to calculate income on")
 	(lambda ()
 	  (gnc:filter-accountlist-type 
 	   (if is-income? '(income) '(expense))
@@ -86,19 +86,19 @@
       
       (gnc:options-add-account-levels! 
        options pagename-accounts optname-levels "c" 
-       (_ "Show accounts to this depth and not further") 
+       (N_ "Show accounts to this depth and not further") 
        2)
 
       ;; Display tab
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-fullname
-        "a" (_ "Show the full account name in legend?") #f))
+        "a" (N_ "Show the full account name in legend?") #f))
 
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-stacked
-        "b" (_ "Show barchart as stacked barchart?") #t))
+        "b" (N_ "Show barchart as stacked barchart?") #t))
 
       (add-option
        (gnc:make-number-range-option

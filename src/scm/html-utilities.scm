@@ -411,10 +411,16 @@
     
     ;; Show the total sum.
     (if show-total?
-	(add-subtotal-row! 
-	 1 total-name 
-	 (get-total-fn (filter show-acct? topl-accounts) my-get-balance)
-	 #t))
+        (begin
+          (gnc:html-table-append-row! 
+           table
+           (list
+            (gnc:make-html-table-cell/size
+             1 (* 2 tree-depth) (gnc:make-html-text (gnc:html-markup-hr)))))
+          (add-subtotal-row! 
+           1 total-name 
+           (get-total-fn (filter show-acct? topl-accounts) my-get-balance)
+           #t)))
     
     ;; set default alignment to right, and override for the name
     ;; columns

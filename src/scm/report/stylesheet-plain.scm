@@ -133,11 +133,13 @@
               (gnc:html-markup-p
                (gnc:html-markup-h3 title))))))
       
-      (gnc:html-document-append-objects! ssdoc (gnc:html-document-objects doc))
+      (gnc:html-document-append-objects! ssdoc
+                                         (gnc:html-document-objects doc))
+
       ssdoc))
-  
+
   (gnc:define-html-style-sheet 
-   'version 1.0
+   'version 1
    'name "Plain"
    'renderer plain-renderer
    'options-generator plain-options))

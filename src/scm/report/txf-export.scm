@@ -47,7 +47,6 @@
    (cons 'N258 #(none "F1040" "Sick pay or disability pay" 1 #f))
    (cons 'N483 #(none "F1040" "Social Security inc., spouse" 1 #f))
    (cons 'N266 #(none "F1040" "Social Security income, self" 1 #f))
-   (cons 'N260 #(none "F1040" "State and local tax refunds" 1 #t))
    (cons 'N269 #(none "F1040" "Taxable fringe benefits" 1 #f))
    (cons 'N672 #(none "F1099-G" "Qualified state tuition earnings" 1 #t))
    (cons 'N260 #(none "F1099-G" "State and local tax refunds" 1 #t))

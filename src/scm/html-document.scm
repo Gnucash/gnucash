@@ -144,7 +144,7 @@
           (push "</html>\n")
           (gnc:html-document-pop-style doc)
           (gnc:html-style-table-uncompile (gnc:html-document-style doc))
-          
+
           (apply string-append 
                  (gnc:html-document-tree-collapse retval))))))
 
@@ -249,7 +249,7 @@
              (set! tag #f)))
       (let* ((retval '())
              (push (lambda (l) (set! retval (cons l retval))))
-             (add-internal-tag (lambda (t) (push "<") (push tag) (push ">")))
+             (add-internal-tag (lambda (tag) (push "<") (push tag) (push ">")))
              (add-attribute
               (lambda (key value prior) (push " ") (push key) (push "=")
                       (push value) #t))

@@ -294,12 +294,12 @@
 
     (gnc:options-add-date-interval!
      gnc:*transaction-report-options*
-     (N_ "Report Options") (N_ "From") (N_ "To") "a")
+     (N_ "General") (N_ "From") (N_ "To") "a")
 
     ;; account to do report on
     (gnc:register-trep-option
      (gnc:make-account-list-option
-      (N_ "Report Options") (N_ "Account")
+      (N_ "General") (N_ "Account")
       "c" (N_ "Do transaction report on these accounts")
       (lambda ()
         (let ((current-accounts (gnc:get-current-accounts))
@@ -314,7 +314,7 @@
 
     (gnc:register-trep-option
      (gnc:make-multichoice-option
-      (N_ "Report Options") (N_ "Style")
+      (N_ "General") (N_ "Style")
       "d" (N_ "Report style")
       'single
       (list (vector 'multi-line
@@ -523,7 +523,7 @@
       #f))
 
     (gnc:options-set-default-section gnc:*transaction-report-options*
-                                     "Report Options")
+                                     "General")
 
    gnc:*transaction-report-options*)
 
@@ -572,7 +572,7 @@
                      table 
                      (append blanks
                              (list (gnc:make-html-table-header-cell/markup
-                                    "number-cell" currency))))
+                                    "total-number-cell" currency))))
                     (apply set-last-row-style! 
                            (cons table (cons "tr" subtotal-style))))
                   currency-totals)))
@@ -615,7 +615,7 @@
 
     (define (transaction-report-multi-rows-p options)
       (eq? (gnc:option-value
-            (gnc:lookup-option options (N_ "Report Options") (N_ "Style")))
+            (gnc:lookup-option options (N_ "General") (N_ "Style")))
 	   'multi-line))
 
     (define (add-other-split-rows split table used-columns row-style)
@@ -781,11 +781,11 @@
        (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
     (let ((document (gnc:make-html-document))
-	  (c_accounts (opt-val "Report Options" "Account"))
+	  (c_accounts (opt-val "General" "Account"))
 	  (begindate (gnc:date-option-absolute-time
-                      (opt-val "Report Options" "From")))
+                      (opt-val "General" "From")))
 	  (enddate (gnc:date-option-absolute-time
-                    (opt-val "Report Options" "To")))
+                    (opt-val "General" "To")))
 	  (primary-key (opt-val "Sorting" "Primary Key"))
 	  (primary-order (opt-val "Sorting" "Primary Sort Order"))
 	  (secondary-key (opt-val "Sorting" "Secondary Key"))

@@ -40,7 +40,7 @@
        (gnc:make-account-list-option
 	pagename-general optname-accounts
 	"b"
-	(_ "Select accounts to calculate income on")
+	(N_ "Select accounts to calculate income on")
 	(lambda ()
 	  (gnc:filter-accountlist-type 
 	   (if is-income? '(income) '(expense))
@@ -54,14 +54,14 @@
 
       (gnc:options-add-account-levels! 
        options pagename-general optname-levels "c" 
-       (_ "Show accounts to this depth and not further") 
+       (N_ "Show accounts to this depth and not further") 
        2)
 
       (add-option
        (gnc:make-currency-option
 	pagename-general optname-report-currency
 	"d"
-	(_ "Select the display value for the currency")
+	(N_ "Select the display value for the currency")
 	(gnc:option-value
 	 (gnc:lookup-global-option "International"
 				   "Default Currency"))))
@@ -69,12 +69,12 @@
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-fullname
-        "a" (_ "Show the full account name in legend?") #f))
+        "a" (N_ "Show the full account name in legend?") #f))
 
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-show-total
-        "b" (_ "Show the total balance in legend?") #t))
+        "b" (N_ "Show the total balance in legend?") #t))
 
       (add-option
        (gnc:make-number-range-option
@@ -82,8 +82,9 @@
         "c" (N_ "Maximum number of slices in pie") 7
         2 24 0 1))
 
-      (gnc:options-add-plot-size! options pagename-display 
-				  optname-plot-width optname-plot-height "d" 500 250)
+      (gnc:options-add-plot-size!
+       options pagename-display 
+       optname-plot-width optname-plot-height "d" 500 250)
 
       (gnc:options-set-default-section options pagename-general)      
 
@@ -219,7 +220,7 @@
 		     (options (gnc:make-report-options name))
 		     (account-op 
 		      (gnc:lookup-option options pagename-general
-					 optname-accounts)))
+                                         optname-accounts)))
 		;; now copy all the options
 		(define (set-option! pagename optname value)
 		  (gnc:option-set-value
