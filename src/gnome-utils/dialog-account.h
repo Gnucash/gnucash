@@ -42,9 +42,6 @@
  *  @author Copyright (C) 2000 Dave Peticolas
  */
 
-/** PROTOTYPES ******************************************************/
-typedef struct _AccountWindow  AccountWindow;
-
 /** @name Non-Modal */
 /** @{ */
 
@@ -52,14 +49,14 @@ typedef struct _AccountWindow  AccountWindow;
  *
  *  @param group This parameter is not used.
  */
-AccountWindow *gnc_ui_edit_account_window (Account *account);
+void gnc_ui_edit_account_window (Account *account);
 
 
 /** Disply a window for creating a new account
  *
  *  @param group This parameter is not used.
  */
-AccountWindow *gnc_ui_new_account_window (AccountGroup *group);
+void gnc_ui_new_account_window (AccountGroup *group);
 
 
 /** Disply a window for creating a new account.  This function will
@@ -71,8 +68,8 @@ AccountWindow *gnc_ui_new_account_window (AccountGroup *group);
  *
  *  @param parent The initially selected parent account.
  */
-AccountWindow *gnc_ui_new_account_window_with_default (AccountGroup *group,
-						       Account * parent);
+void gnc_ui_new_account_window_with_default (AccountGroup *group,
+					     Account * parent);
 
 
 /** Disply a window for creating a new account.  This function will
@@ -84,8 +81,8 @@ AccountWindow *gnc_ui_new_account_window_with_default (AccountGroup *group,
  *  which are allowed to be created.  The calling function is
  *  responsible for freeing this list.
  */
-AccountWindow *gnc_ui_new_account_with_types (AccountGroup *unused,
-					      GList *valid_types);
+void gnc_ui_new_account_with_types (AccountGroup *unused,
+				    GList *valid_types);
 /** @} */
 
 
@@ -142,8 +139,6 @@ Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
 
 /** @} */
 /** @} */
-
-void gnc_ui_edit_account_window_raise (AccountWindow * winData);
 
 /*
  * register a callback that get's called when the account has changed

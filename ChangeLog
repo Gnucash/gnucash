@@ -1,3 +1,10 @@
+2003-10-25  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-account.[ch]:
+	* src/gnome/gnc-plugin-page-account-tree.c: Fix problems with the
+	modal form of the edit account dialog.  Make AccountWindow an
+	internal data structure. No-one uses it anyway.
+
 2003-10-24  David Hampton  <hampton@employees.org>
 
 	* lots of files: Sync up at the gnome2-merge-4 tag.

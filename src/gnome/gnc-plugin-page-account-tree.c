@@ -154,7 +154,7 @@ static EggActionEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ActionsStockSplitAction", N_("Stock S_plit..."), NULL, NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split) },
-	{ "ActionsLotsAction", N_("_Lot Viewer..."), NULL, NULL,
+	{ "ActionsLotsAction", N_("View _Lots..."), NULL, NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots) },
 	{ "ScrubMenuAction", N_("Check & Repair"), NULL, NULL, NULL, NULL },
@@ -749,7 +749,6 @@ static void
 gnc_plugin_page_account_tree_cmd_edit_account (EggAction *action, GncPluginPageAccountTree *page)
 {
 	Account *account;
-	AccountWindow *account_window;
 
 	ENTER("action %p, page %p (merge_id %d, action_group %p)",
 	      action, page, page->priv->merge_id, page->priv->action_group);
@@ -757,8 +756,7 @@ gnc_plugin_page_account_tree_cmd_edit_account (EggAction *action, GncPluginPageA
 	account = gnc_plugin_page_account_tree_get_current_account (page);
 	g_return_if_fail (account != NULL);
 
-	account_window = gnc_ui_edit_account_window (account);
-	gnc_ui_edit_account_window_raise (account_window);
+	gnc_ui_edit_account_window (account);
 	LEAVE(" ");
 }
 
