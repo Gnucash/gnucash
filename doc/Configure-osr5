@@ -1,8 +1,0 @@
-#!/bin/sh
-#
-# configure script for SCO OpenServer release 5
-
-CC="gcc -melf -L/usr/local/lib -I/usr/local/include"
-INSTALL="/usr/local/bin/install -c"
-export CC INSTALL
-./configure

@@ -16,8 +16,6 @@ man_MANS = \
 EXTRA_DIST = \
   .cvsignore \
   ${doc_DATA} \
-  Configure-osr5 \
-  Configure-uw7 \
   RAW-NOTES \
   README.build-system \
   README.francais \
