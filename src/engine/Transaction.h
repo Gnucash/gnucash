@@ -356,6 +356,7 @@ double xaccSplitGetBalance (Split *);
 double xaccSplitGetClearedBalance (Split *);
 double xaccSplitGetReconciledBalance (Split *);
 double xaccSplitGetShareBalance (Split *);
+double xaccSplitGetCostBasis (Split *);
 double xaccSplitGetBaseValue (Split *s, char *base_currency);
 
 

@@ -101,6 +101,7 @@ xaccInitSplit( Split * split )
   split->share_balance             = 0.0;
   split->share_cleared_balance     = 0.0;
   split->share_reconciled_balance  = 0.0;
+  split->cost_basis                = 0.0;
 
   split->tickee = 0;
   }
@@ -302,6 +303,12 @@ double xaccSplitGetShareBalance (Split *s)
 {
    if (!s) return 0.0;
    return s->share_balance;
+}
+
+double xaccSplitGetCostBasis (Split *s) 
+{
+   if (!s) return 0.0;
+   return s->cost_basis;
 }
 
 /********************************************************************\

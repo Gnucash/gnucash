@@ -453,6 +453,7 @@ xaccAccountRecomputeBalance( Account * acc )
       split -> cleared_balance = dcleared_balance;
       split -> reconciled_balance = dreconciled_balance;
     }
+    split -> cost_basis = dbalance;
 
     last_split = split;
     i++;

@@ -116,6 +116,7 @@ struct _split
   double  share_cleared_balance;
   double  share_reconciled_balance;
 
+  double cost_basis;
   /* no tickee no washee */
   int tickee;
 };
