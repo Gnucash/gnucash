@@ -3,13 +3,13 @@ PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
 
+# Note that src/gnome-utils CANNOT depend on src/gnome!
 AM_CFLAGS = \
   -DPREFIX=\"${prefix}\" \
   -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
   -DDATADIR=\"${GNC_SHAREDIR}\" \
   -DLIBDIR=\"${GNC_LIBDIR}\" \
   -I${top_srcdir}/src/gnc-module \
-  -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/network-utils \
