@@ -52,7 +52,7 @@ static void
 gnc_lot_init (GNCLot *lot, GNCBook *book)
 {
    ENTER ("(lot=%p, book=%p)", lot, book);
-   lot->kvp_data = NULL;
+   lot->kvp_data = kvp_frame_new();;
    lot->account = NULL;
    lot->splits = NULL;
    lot->is_closed = -1;
