@@ -1033,31 +1033,35 @@ gnc_table_traverse_update(Table *table, int row, int col,
   gncBoolean exit_register = FALSE;
   CellBlock *arr = table->current_cursor;
   
-  ENTER("gnc_table_traverse_update(): proposed (%d %d %s) -> (%d %d %s)\n",
-        row, col, table->entries[row][col],
-        *dest_row, *dest_col, table->entries[*dest_row][*dest_col]);
+  ENTER("gnc_table_traverse_update(): proposed (%d, %d) -> (%d %d)\n",
+    row, col, *dest_row, *dest_col);
+
+  /* first, make sure our destination cell is valid.  If it is out of
+   * bounds report an error.  I don't think this ever happens. */
+  if ((*dest_row >= table->num_phys_rows) || (*dest_row < 0) ||
+      (*dest_col >= table->num_phys_cols) || (*dest_col < 0)) 
+  {
+    PERR("gnc_table_traverse_update: destination (%d, %d) out of bounds (%d, %d)\n",
+      *dest_row, *dest_col, table->num_phys_rows, table->num_phys_cols);
+    return TRUE;
+  }
+
+  /* next, check the current row and column.  If they are out of bounds
+   * we can recover by treating the traversal as a mouse point. This can
+   * occur whenever the Xbae widget is resized smaller. */
+  if ((row >= table->num_phys_rows) || (row < 0) ||
+      (col >= table->num_phys_cols) || (col < 0)) {
+
+    PINFO("gnc_table_traverse_update: source (%d, %d) out of bounds (%d, %d)\n",
+      row, col, table->num_phys_rows, table->num_phys_cols);
+    table->prev_phys_traverse_row = *dest_row;
+    table->prev_phys_traverse_col = *dest_col;
+    dir = GNC_TABLE_TRAVERSE_POINTER;
+  }
 
   /* process forward-moving traversals */
   switch(dir) {
     case GNC_TABLE_TRAVERSE_RIGHT:
-      /* Don't do a thing unless we verify that the row and column
-       * are in bounds. Ordinarily, they are always in bounds, except 
-       * in an unusual, arguably buggy situation: If the table has 
-       * been recently resized smaller, then the Xbae code might report
-       * a traverse out of a cell that was in the larger array, but not
-       * in the smaller array.  This is probably an Xbae bug. It 
-       * will core dump array access.
-       */
-      if ((row >= table->num_phys_rows) || 
-          (col >= table->num_phys_cols)) {
-        
-        assert (0);
-        table->prev_phys_traverse_row = *dest_row;
-        table->prev_phys_traverse_col = *dest_col;
-        LEAVE("gnc_table_traverse_update(): out of bounds\n");
-        return FALSE;
-      }
-      
       {
         /* cannot compute the cell location until we have checked that
          * row and colu have valid values.  compute the cell location
@@ -1086,16 +1090,16 @@ gnc_table_traverse_update(Table *table, int row, int col,
       /* FIXME: Right now we don't handle anything but forward
          traversals, but in the future, here's how it should go:
 
-         by default, we *accept* the proposed traversal.
+         By default, we *accept* the proposed traversal.
          
-         if its a left moving tab, you should move left.
-         if its an upwards moving tab you should move up, etc.
-         if its a mouse pointer, we should allow user to go to that cell.
-         all we are doing here is *not* overriding the proposed values.
+         If its a left moving tab, you should move left.
+         If its an upwards moving tab you should move up, etc.
+         If its a mouse pointer, we should allow user to go to that cell.
+         All we are doing here is *not* overriding the proposed values.
          
-         for right moving tab, we over-rode the proposed values to
-         make tabbing prettier. but some day we may want to make
-         moving up and down prettier too,.  */
+         For right moving tab, we over-rode the proposed values to
+         make tabbing prettier.  But some day we may want to make
+         moving up and down prettier too.  */
 
       break;
   }
