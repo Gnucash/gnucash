@@ -28,9 +28,32 @@
                            (remove-i18n-macros (cdr input))))))
         (else input)))
 
+(define (fill-out-topics input)
+  (define (first-non-blank-url input)
+    (cond ((null? input) "")
+          ((list? input)
+           (cond ((and (string? (car input)) (not (eq? "" (cadr input))))
+                  (cadr input))
+                 (else (let ((first (first-non-blank-url (car input))))
+                         (if (not (eq? "" first))
+                             first
+                             (first-non-blank-url (cdr input)))))))
+          (else "")))
+
+  (cond ((null? input) input)
+        ((list? input)
+         (cond ((and (string? (car input)) (eq? "" (cadr input)))
+                (cons (car input)
+                      (cons (first-non-blank-url (caddr input))
+                            (fill-out-topics (cddr input)))))
+               (else (cons (fill-out-topics (car input))
+                           (fill-out-topics (cdr input))))))
+        (else input)))
+
 (define (gnc:load-help-topics fname) 
   (with-input-from-file
       (gnc:find-in-directories fname
                                (gnc:config-var-value-get gnc:*load-path*))
-    (lambda () (remove-i18n-macros (read)))))
+    (lambda ()
+      (fill-out-topics (remove-i18n-macros (read))))))
 

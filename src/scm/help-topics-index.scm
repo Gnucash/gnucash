@@ -1,4 +1,4 @@
-(((N_ "GnuCash Manual") "" 
+(((N_ "GnuCash Manual") "gnc-help:index.html" 
   (((N_ "Overview") ""
     (((N_ "Introduction") "gnc-help:xacc-about.html" #f)
      ((N_ "Help") "gnc-help:xacc-userdocs.html" #f)))
