@@ -505,8 +505,8 @@ void gnc_file_log_replay (void)
   char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	notes	memo	action	reconciled	amount	value	date_reconciled";
   char * record_start_str = "===== START";
 
-  gnc_should_log(MOD_IMPORT, GNC_LOG_DEBUG);
-  DEBUG("gnc_file_log_replay(): Begin...\n");
+  gnc_set_log_level(MOD_IMPORT, GNC_LOG_DEBUG);
+  ENTER(" ");
 
   default_dir = gnc_lookup_string_option("__paths", "Log Files", NULL);
   if (default_dir == NULL)
