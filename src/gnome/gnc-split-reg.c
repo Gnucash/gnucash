@@ -94,6 +94,7 @@ static void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle sty
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
 static gnc_numeric gsr_account_present_balance( Account *account );
+static gnc_numeric gsr_account_projectedminimum_balance( Account *account );
 static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
 
 static void gsr_create_menus( GNCSplitReg *gsr );
@@ -689,6 +690,9 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->future_label,
                               (AmountGetterFn)xaccAccountGetBalance,
+                              leader, print_info, commodity, reverse, euro );
+    gsr_update_summary_label( gsr->projectedminimum_label,
+                              (AmountGetterFn)gsr_account_projectedminimum_balance,
                               leader, print_info, commodity, reverse, euro );
 
     if (gsr->shares_label != NULL)
@@ -1756,6 +1760,7 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
   gsr->balance_label    = NULL;
   gsr->reconciled_label = NULL;
   gsr->future_label     = NULL;
+  gsr->projectedminimum_label  = NULL;
   gsr->shares_label     = NULL;
   gsr->value_label      = NULL;
 
@@ -1792,6 +1797,7 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     gsr->future_label     = add_summary_label (summarybar, _("Future:"));
     gsr->cleared_label    = add_summary_label (summarybar, _("Cleared:"));
     gsr->reconciled_label = add_summary_label (summarybar, _("Reconciled:"));
+    gsr->projectedminimum_label  = add_summary_label (summarybar, _("Projected Minimum:"));
   }
   else
   {
@@ -2094,6 +2100,54 @@ gsr_account_present_balance (Account *account)
 
   return gnc_numeric_zero ();
 }
+
+/**
+ * A utility function which retreives the present balance from an Account.
+ * This should move somewhere more general?
+ **/
+static
+gnc_numeric
+gsr_account_projectedminimum_balance (Account *account)
+{
+  GList *list;
+  GList *node;
+  time_t today;
+  struct tm *tm;
+  gnc_numeric lowest = gnc_numeric_zero ();
+  int seen_a_transaction = 0;
+
+  if (!account)
+    return gnc_numeric_zero ();
+
+  today = time (NULL);
+  tm = localtime (&today);
+  tm->tm_hour = 23;
+  tm->tm_min = 59;
+  tm->tm_sec = 59;
+  tm->tm_isdst = -1;
+  today = mktime (tm);
+
+  list = xaccAccountGetSplitList (account);
+  for (node = g_list_last (list); node; node = node->prev)
+  {
+    Split *split = node->data;
+
+    if (!seen_a_transaction)
+    {
+      lowest = xaccSplitGetBalance (split);
+      seen_a_transaction = 1;
+    }
+
+    if ( gnc_numeric_compare(xaccSplitGetBalance (split), lowest) < 0 )
+      lowest = xaccSplitGetBalance (split);
+      
+    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
+      return lowest;
+  }
+
+  return lowest;
+}
+
 
 static
 gncUIWidget

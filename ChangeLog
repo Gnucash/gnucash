@@ -2,6 +2,9 @@
 
 	* po/np.po -- add the proper "Plural" header so it builds again.
 
+	* Nathan Neulinger's patch to gnc-split-reg.[ch] to implement
+	  a summary-bar "Projected minimum balance".  Somewhat fixes #102440.
+	
 2003-01-29  Matthew Vanecek <mevanecek@yahoo.com>
 	
 	* src/backend/postgres/Makefile.am: Changed the .sql.c target to

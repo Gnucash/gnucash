@@ -112,6 +112,7 @@ struct _GNCSplitReg {
   GtkWidget *cleared_label;
   GtkWidget *reconciled_label;
   GtkWidget *future_label;
+  GtkWidget *projectedminimum_label;
   GtkWidget *shares_label;
   GtkWidget *value_label;
 
