@@ -1529,7 +1529,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 				     NULL, /* no accelerators */
 				     sxed);
 	gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET(sxed->embed_window),
-			    FALSE, TRUE, 0);
+			    TRUE, TRUE, 0);
 
 	/* Now create the register plugin page. */
 	sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);

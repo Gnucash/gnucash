@@ -1,3 +1,20 @@
+2003-10-06  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-style.c: Fix color bleed
+	past end of the register.
+
+	* src/gnome/gnc-split-reg.c: Fix register sizing problems.  Minor
+	cleanup of widget packing.
+
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/gnc-embedded-window.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/glade/sched-xact.glade: Minor cleanup of widget
+	packing.
+
+	* src/scm/path.scm: Update config file names for new version
+	number.
+
 2003-09-30  David Hampton  <hampton@employees.org>
 
 	* src/engine/Query.[ch]:

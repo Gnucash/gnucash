@@ -570,7 +570,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 				0, priv->disallowCaps);
 	priv->gsr = (GNCSplitReg *)gsr;
 	gtk_widget_show (gsr);
-	gtk_container_add (GTK_CONTAINER (priv->widget), gsr);
+	gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
 
 	g_signal_connect (G_OBJECT (gsr), "button-press-event",
 			  G_CALLBACK (gnc_plugin_page_register_button_press_cb), page);

@@ -760,12 +760,6 @@
 	    </packing>
 	  </child>
 
-	  <child>
-	    <widget class="GtkVBox" id="vbox108">
-	      <property name="visible">True</property>
-	      <property name="homogeneous">False</property>
-	      <property name="spacing">0</property>
-
 	      <child>
 		<widget class="GtkFrame" id="tempxaction_frame">
 		  <property name="visible">True</property>
@@ -775,13 +769,10 @@
 
 		  <child>
 		    <widget class="GtkVBox" id="register_vbox">
+		      <property name="border_width">5</property>
 		      <property name="visible">True</property>
 		      <property name="homogeneous">False</property>
 		      <property name="spacing">0</property>
-
-		      <child>
-			<placeholder/>
-		      </child>
 
 		      <child>
 			<placeholder/>
@@ -814,25 +805,6 @@
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
-
-	      <child>
-		<widget class="GtkStatusbar" id="ledger_status">
-		  <property name="visible">True</property>
-		  <property name="has_resize_grip">True</property>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">False</property>
-		</packing>
-	      </child>
-	    </widget>
-	    <packing>
-	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
-	    </packing>
-	  </child>
 	</widget>
 	<packing>
 	  <property name="padding">0</property>

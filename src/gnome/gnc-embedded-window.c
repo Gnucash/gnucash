@@ -245,9 +245,10 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
 
   priv->menu_dock = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (priv->menu_dock);
-  gtk_box_pack_start (GTK_BOX (window), priv->menu_dock, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (window), priv->menu_dock, TRUE, TRUE, 0);
 
   priv->statusbar = gtk_statusbar_new ();
+  gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR(priv->statusbar), FALSE);
   gtk_widget_show (priv->statusbar);
   gtk_box_pack_end (GTK_BOX (window), priv->statusbar, FALSE, TRUE, 0);
 
