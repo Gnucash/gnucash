@@ -1251,7 +1251,7 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       N_("Tax Information"),
       N_("Setup tax information for all income and expense accounts"),
       gnc_tax_info_cb, NULL, NULL,
-      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_REMOVE,
+      GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     GNOMEUIINFO_END

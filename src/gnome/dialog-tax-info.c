@@ -44,7 +44,7 @@ typedef struct
   GtkWidget * account_tree;
 
   GtkWidget * tax_related_button;
-  GtkWidget * txf_category_combo;
+  GtkWidget * txf_category_clist;
   GtkWidget * txf_help_text;
   GtkWidget * current_account_button;
 } TaxInfoDialog;
