@@ -1,3 +1,8 @@
+2003-07-28  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-gnome/business-gnome.scm: remove
+	  some unused (old) code.
+
 2003-07-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/druid-hbci-initial.c: Add button for
