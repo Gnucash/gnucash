@@ -201,7 +201,7 @@ insertTransaction( Account *acc, Transaction *trans )
   int  i,j;
   Date *dj,*dt;
   int  inserted = False;
-  Transaction **oldTrans = acc->transaction;
+  Transaction **oldTrans;
 
   if (NULL == acc) {
     printf ("Internal Error: insertTransaction(): \n");
@@ -240,6 +240,7 @@ insertTransaction( Account *acc, Transaction *trans )
     data->saved = False;
   
   acc->numTrans++;
+  oldTrans = acc->transaction;
   acc->transaction = (Transaction **)_malloc((acc->numTrans)*
                                              sizeof(Transaction *));
   

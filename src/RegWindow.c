@@ -237,7 +237,7 @@ regRefresh( RegWindow *regData )
       /* XFER_CELL_C is same as NUM_CELL_C */
       xfer_acc = xaccGetOtherAccount (acc, trans);
       if (xfer_acc) {
-        sprintf( buf, "[%s]", xfer_acc->accountName );
+        sprintf( buf, "%s", xfer_acc->accountName );
         newData[row+1][NUM_CELL_C] = XtNewString(buf);
       } else {
         newData[row+1][NUM_CELL_C] = XtNewString("");
@@ -554,7 +554,7 @@ regSaveTransaction( RegWindow *regData, int position )
    * that has changed */
   char buf[BUFSIZE];
   int  row = (position * 2) + 1;
-  Account *acc;
+  Account *acc = regData->acc;
   Transaction *trans;
 
   /* If nothing has changed, we have nothing to do */
@@ -563,7 +563,6 @@ regSaveTransaction( RegWindow *regData, int position )
   /* Be sure to prompt the user to save to disk after changes are made! */
   acc->data->saved = False;
 
-  acc = regData->acc;
   trans = getTransaction( acc, position );
   
   if( trans == NULL )
@@ -597,21 +596,23 @@ regSaveTransaction( RegWindow *regData, int position )
     Account *xfer_acct = xaccGetOtherAccount (acc, trans);
     DEBUG("MOD_XFER");
 
-    /* remove the transaction from wherever it used to be */
-    REMOVE_TRANS (xfer_acct, trans);
-
-    /* recalculate the balance and redisplay the window for the old acct */
-    RECALC_BALANCE (xfer_acct);
-    REFRESH_REGISTER (xfer_acct);
-     
-    /* get the new account name */
-    name = XbaeMatrixGetCell(regData->reg,row+XFER_CELL_R, XFER_CELL_C);
-
-    /* get the new account from the name */
-    xfer_acct = xaccGetPeerAccountFromName (acc, name);
-
-    /* insert the transaction into the new account */
-    insertTransaction (xfer_acct, trans);
+    if (xfer_acct) {
+      /* remove the transaction from wherever it used to be */
+      REMOVE_TRANS (xfer_acct, trans);
+  
+      /* recalculate the balance and redisplay the window for the old acct */
+      RECALC_BALANCE (xfer_acct);
+      REFRESH_REGISTER (xfer_acct);
+       
+      /* get the new account name */
+      name = XbaeMatrixGetCell(regData->reg,row+XFER_CELL_R, XFER_CELL_C);
+  
+      /* get the new account from the name */
+      xfer_acct = xaccGetPeerAccountFromName (acc, name);
+  
+      /* insert the transaction into the new account */
+      insertTransaction (xfer_acct, trans);
+      }
     }
   
   if( regData->changed & MOD_DESC )
@@ -634,7 +635,9 @@ regSaveTransaction( RegWindow *regData, int position )
     trans->memo = XtNewString( tmp );
     }
   
-  if( regData->changed & MOD_ACTN )
+  /* ignore MOD_ACTN for non-stock accounts */
+  if( (regData->changed & MOD_ACTN) &&
+      ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
     {
     String  actn = NULL;
     DEBUG("MOD_ACTN");
@@ -686,7 +689,7 @@ regSaveTransaction( RegWindow *regData, int position )
       }
     }
 
-  /* ignore MOD_PRIC if for non-stock accounts */
+  /* ignore MOD_PRIC for non-stock accounts */
   if( (regData->changed & MOD_PRIC) &&
       ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
     {
@@ -762,6 +765,9 @@ regSaveTransaction( RegWindow *regData, int position )
     RECALC_BALANCE ((trans->credit));
     RECALC_BALANCE ((trans->debit));
   }
+
+  REFRESH_REGISTER ((trans->credit));
+  REFRESH_REGISTER ((trans->debit));
 
   /* reset the "changed" bitfield */
   regData->changed   = 0;
@@ -977,12 +983,12 @@ regWindow( Widget parent, Account *acc )
     /* set up column widths */
 
     acc -> colWidths[DATE_CELL_C] = 5;   /* the widths of columns */
-    acc -> colWidths[NUM_CELL_C]  = 4;   /* the widths of columns */
+    acc -> colWidths[NUM_CELL_C]  = 8;   /* the widths of columns */
     acc -> colWidths[DESC_CELL_C] = 35;  /* the widths of columns */
     acc -> colWidths[RECN_CELL_C] = 1;   /* the widths of columns */
-    acc -> colWidths[PAY_CELL_C]  = 8;   /* the widths of columns */
-    acc -> colWidths[DEP_CELL_C]  = 8;   /* the widths of columns */
-    acc -> colWidths[BALN_CELL_C] = 8;   /* $ balance */
+    acc -> colWidths[PAY_CELL_C]  = 12;  /* the widths of columns */
+    acc -> colWidths[DEP_CELL_C]  = 12;  /* the widths of columns */
+    acc -> colWidths[BALN_CELL_C] = 12;  /* $ balance */
 
     switch(acc->type)
       {
@@ -1388,7 +1394,7 @@ cancelCB( Widget mw, XtPointer cd, XtPointer cb )
  *        add an undo/cancel modifications feature                  *
  *                                                                  *
  * Args:   mw - the widget that called us                           *
- *         cd - regData - the data struct for this register          *
+ *         cd - regData - the data struct for this register         *
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
@@ -1889,11 +1895,11 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
   
   if( changed )
     {
-    sprintf( buf,"%2d/%2d\0\0", date.month, date.day );
+    sprintf( buf,"%2d/%2d", date.month, date.day );
     XbaeMatrixSetCell( mw, row, col, buf );
     XbaeMatrixRefreshCell( mw, row, col );
     
-    sprintf( buf,"%4d\0", date.year );
+    sprintf( buf,"%4d", date.year );
     XbaeMatrixSetCell( mw, row+1, col, buf );
     XbaeMatrixRefreshCell( mw, row+1, col );
     }
