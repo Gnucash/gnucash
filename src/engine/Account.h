@@ -47,7 +47,7 @@
 
 typedef enum 
 {
-  BAD_TYPE = -1,
+  BAD_TYPE = -1, /**< Not a type */
   NO_TYPE = -1,/**< Not a type */
   
   BANK = 0, /**< The bank account type denotes a savings or checking account
@@ -64,11 +64,15 @@ typedef enum
 	       * which show three columns: price, number of shares, and value. */
   MUTUAL= 6, /**< Mutual Fund accounts will typically be shown in registers
 	      * which show three columns: price, number of shares, and value. */
-  CURRENCY = 7, /**< The currency account type indicates that the account is a
-		 * currency trading account.  In many ways, a currency trading
-		 * account is like a stock trading account, where both values
-		 * and share quantities are set. 
-		 * @note:  DEPRECATED?*/
+  CURRENCY = 7, /**< The currency account type indicates that the
+		 * account is a currency trading account.  In many
+		 * ways, a currency trading account is like a stock
+		 * trading account. It is shown in the register with
+		 * three columns: price, number of shares, and
+		 * value. Note: Since version 1.7.0, this account is
+		 * no longer needed to exchange currencies between
+		 * accounts, so this type will probably become
+		 * deprecated sometime in the future.  */
   INCOME = 8, /**< Income accounts are used to denote income */
   
   EXPENSE = 9,/**< Expense accounts are used to denote expenses. */
@@ -83,38 +87,15 @@ typedef enum
 			    * just aren't ready for prime time */
   
   /* bank account types */
-  CHECKING = 13,
-  SAVINGS = 14,
-  MONEYMRKT = 15,
-  CREDITLINE = 16,     /**< line of credit */
+  CHECKING = 13, /**< bank account type -- don't use this for now, see NUM_ACCOUNT_TYPES  */
+  SAVINGS = 14, /**< bank account type -- don't use this for now, see NUM_ACCOUNT_TYPES  */
+  MONEYMRKT = 15, /**< bank account type -- don't use this for now, see NUM_ACCOUNT_TYPES  */
+  CREDITLINE = 16,     /**< line of credit -- don't use this for now, see NUM_ACCOUNT_TYPES  */
 } GNCAccountType;
 
 
-/** The xaccAccountGetTypeStr() routine returns a string suitable for 
- *  use in the GUI/Interface.  These strings should be translated
- *  to the local language. */
-const char * xaccAccountGetTypeStr (GNCAccountType type); 
-GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
 
-/** @name Account Conversion routines
- * Conversion routines for the account types to/from strings
- * that are used in persistant storage, communications.  These
- * strings should *not& be translated to the local language.
- * Typical converstion is INCOME -> "INCOME". */
-/** @{ */
-char *   xaccAccountTypeEnumAsString (GNCAccountType type); 
-gboolean xaccAccountStringToType (const char* str, GNCAccountType *type);
-GNCAccountType xaccAccountStringToEnum (const char* str);
-/** @} */
-
-/** Return TRUE if accounts of type parent_type can have accounts
- * of type child_type as children. */
-gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
-                                     GNCAccountType child_type);
-
-/* PROTOTYPES ******************************************************/
-
-/** @name Account Constructors/Destructors and Edit/Commit */
+/** @name Account Constructors, Edit/Commit, Comparison */
 /** @{ */
 
 /** Constructor */
@@ -146,18 +127,24 @@ void         xaccAccountCommitEdit (Account *account);
  *    (by calling xaccAccountBeginEdit()) before calling this routine.*/
 void         xaccAccountDestroy (Account *account);
 
+/** Compare two accounts for equality - this is a deep compare. */
+gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
+
+/** The xaccAccountOrder() subroutine defines a sorting order 
+ *    on accounts.  It takes pointers to two accounts, and
+ *    returns -1 if the first account is "less than" the second,
+ *    returns +1 if the first is "greater than" the second, and
+ *    0 if they are equal.  To determine the sort order, first
+ *    the account codes are compared, and if these are equal, then 
+ *    account types, and, if these are equal, the account names.
+ */
+int          xaccAccountOrder (Account **account_1, Account **account_2);
+
 /** @} */
 
-/** @name Account kvp_frame getters/setters */
-/** @{ */
-kvp_frame * xaccAccountGetSlots (Account *account);
-void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
-/** @} */
+/* ------------------ */
 
-/** @return The book where the account is stored */
-GNCBook * xaccAccountGetBook (Account *account);
-
-/** @name Account GUID subroutines */
+/** @name Account lookup and GUID routines */
 /** @{ */
 
 /** The xaccAccountGetGUID() subroutine will return the
@@ -175,64 +162,31 @@ Account    * xaccAccountLookup (const GUID *guid, GNCBook *book);
 /**    xaccAccountLookupDirect performs the same function as
  * xaccAccountLookup but takes a GUID struct directly. */
 Account    * xaccAccountLookupDirect (GUID guid, GNCBook *book);
+
+/** The xaccAccountLookupTwin() routine will find the "twin" of this
+ *    account 'acc' in the given other 'book' (if the twin exists).
+ *
+ *    When accounts are copied or cloned, both of the pair are marked
+ *    with the guid of thier copy, thus allowing the sibling-copy of
+ *    an account to be found.  Since the sibling may end up in a
+ *    different book, we need a way of finding it, given only that we
+ *    know the book, and that we know its twin.  
+ *
+ *    That's what this routine does.  Given some book 'book', and an
+ *    account 'acc', it will find the sibling account of 'acc' that is
+ *    in 'book', and return it.  If not found, it returns NULL.  This
+ *    routine uses the 'gemini' kvp values to do its work. */
+Account * xaccAccountLookupTwin (Account *acc,  GNCBook *book);
 /** @} */
 
-/** The xaccAccountLookupTwin() routine will find the
- *    "twin" of this account (if it exists) in another book.
- *    When accounts are copied or cloned,  both of the pair
- *    are marked with the guid of thier copy, thus allowing
- *    the sibling-copy of an account to be found.  Since the 
- *    sibling may end up in a different book, we need a way 
- *    of finding it, given only that we know the book, and 
- *    that we know its twin.  That's what this routine does.
- *    Given some book 'book', and an account 'acc', it will 
- *    find the sibling account of 'acc' that is in 'book',
- *    and return it.  If not found, it returns NULL.
- *    This routine uses the 'gemini' kvp values to do its work. */
-Account * xaccAccountLookupTwin (Account *acc,  GNCBook *book);
-
 /* ------------------ */
-
-/** Compare two accounts for equality - this is a deep compare. */
-gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
-
-/* ------------------ */
-/** The xaccAccountInsertLot() method will register the indicated lot 
- *    with this account.   Any splits later inserted into this lot must 
- *    belong to this account.  If the lot is already in another account,
- *    the lot, and all of the splits in it, will be moved from that
- *    account to this account. */
-void xaccAccountInsertLot (Account *, GNCLot *);
-void xaccAccountRemoveLot (Account *, GNCLot *);
-
-/** The xaccAccountInsertSplit() method will insert the indicated
- *    split into the indicated account.  If the split already 
- *    belongs to another account, it will be removed from that
- *    account first.*/
-void         xaccAccountInsertSplit (Account *account, Split *split);
-
-/** The xaccAccountFixSplitDateOrder() subroutine checks to see if 
- *    a split is in proper sorted date order with respect 
- *    to the other splits in this account. */
-void         xaccAccountFixSplitDateOrder (Account *account, Split *split);
-
-/** The xaccTransFixSplitDateOrder() checks to see if 
- *    all of the splits in this transaction are in
- *    proper date order. */
-void         xaccTransFixSplitDateOrder (Transaction *trans);
-
-/** The xaccAccountOrder() subroutine defines a sorting order 
- *    on accounts.  It takes pointers to two accounts, and
- *    returns -1 if the first account is "less than" the second,
- *    returns +1 if the first is "greater than" the second, and
- *    0 if they are equal.  To determine the sort order, first
- *    the account codes are compared, and if these are equal, then 
- *    account types, and, if these are equal, the account names.
- */
-int          xaccAccountOrder (Account **account_1, Account **account_2);
 
 /** @name Account general setters/getters */
 /** @{ */
+
+/** @return The book where the account is stored */
+GNCBook * xaccAccountGetBook (Account *account);
+
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
 /** Set the account's name */
@@ -258,6 +212,43 @@ const char *   xaccAccountGetDescription (Account *account);
 const char *   xaccAccountGetNotes (Account *account);
 /** Get the last num field of an Account */
 const char *   xaccAccountGetLastNum (Account *account);
+
+/** The xaccAccountGetFullName routine returns the fully qualified name
+ * of the account using the given separator char. The name must be
+ * g_free'd after use. The fully qualified name of an account is the
+ * concatenation of the names of the account and all its ancestor
+ * accounts starting with the topmost account and ending with the
+ * given account. Each name is separated by the given character.
+ *
+ * @note: WAKE UP!
+ * Unlike all other gets, the string returned by xaccAccountGetFullName() 
+ * must be freed by you the user !!!
+ * hack alert -- since it breaks the rule of string allocation, maybe this
+ * routine should not be in this library, but some utility library?
+ */
+char *         xaccAccountGetFullName (Account *account, const char separator);
+
+/** The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
+    are used to get and set a string that identifies the Finance::Quote
+    backend that should be used to retrieve online prices.  See
+    price-quotes.scm for more information.*/
+void         xaccAccountSetPriceSrc (Account *account, const char *src);
+/** The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
+    are used to get and set a string that identifies the Finance::Quote
+    backend that should be used to retrieve online prices.  See
+    price-quotes.scm for more information.*/
+const char * xaccAccountGetPriceSrc (Account *account);
+
+/** Returns a per-account flag: Prior to reconciling an account which
+    charges or pays interest, this flag tells whether to prompt the
+    user to enter a transaction for the interest charge or
+    payment. This per-account flag overrides the global preference. */
+gboolean xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value);
+/** Sets a per-account flag: Prior to reconciling an account which
+    charges or pays interest, this flag tells whether to prompt the
+    user to enter a transaction for the interest charge or
+    payment. This per-account flag overrides the global preference. */
+void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** @} */
 
 /* @name Account Commodity setters/getters
@@ -280,7 +271,22 @@ const char *   xaccAccountGetLastNum (Account *account);
 
 /** Set the account's commodity */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
-/** Get the account's commodity */
+/** Get the account's commodity 
+ *
+ * This is from the new commodity access routines.
+ *
+ * The account structure no longer stores two commodities ('currency'
+ * and 'security'). Instead it stores only one commodity. This single
+ * commodity is the one formerly known as 'security'.  Use
+ * xaccAccountSetCommodity() and xaccAccountGetCommodity() to set and
+ * fetch it. (This transition has been done between version 1.6.x and
+ * 1.7.0.)
+ *
+ * Basically, the engine eliminates the 'currency' field of the
+ * Account structure. Instead, the common currency is stored with the
+ * transaction.  The 'value' of a split is a translation of the
+ * Split's 'amount' (which is the amount of the Account's commodity
+ * involved) into the Transaction's balancing currency. */
 gnc_commodity * xaccAccountGetCommodity (Account *account);
 /** DOCUMENT ME! */
 int  xaccAccountGetCommoditySCU (Account *account);
@@ -296,6 +302,9 @@ void  xaccAccountSetNonStdSCU (Account *account, gboolean flag);
 gboolean  xaccAccountGetNonStdSCU (Account *account);
 /**@}*/
 
+
+/** @name Account Balance */
+/*@{*/
 /** Get the current balance of the account */
 gnc_numeric     xaccAccountGetBalance (Account *account);
 /** Get the current balance of the account, only including cleared transactions */
@@ -304,46 +313,23 @@ gnc_numeric     xaccAccountGetClearedBalance (Account *account);
 gnc_numeric     xaccAccountGetReconciledBalance (Account *account);
 /** Get the balance of the account as of the date specified */
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
+/*@}*/
 
 
-/** @name Account Deprecated currency/security access routines.
- * 
- * @deprecated The current API associates only one thing with an account:
- * the 'commodity'. Use xaccAccountGetCommodity() to fetch it.*/
-/** @{ */
-
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. 
- these two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency,
-                              GNCBook *book);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. 
- these two funcs take control of their gnc_commodity args. Don't free */
-void DxaccAccountSetSecurity (Account *account, gnc_commodity *security,
-                              GNCBook *book);
-/** @deprecated  Don't use doubles anymore, only use gnc_numerics.*/
-gnc_commodity * DxaccAccountGetCurrency (Account *account,
-                                         GNCBook *book);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-gnc_commodity * DxaccAccountGetSecurity (Account *account,
-                                         GNCBook *book);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-void DxaccAccountSetCurrencySCU (Account *account, int frac);
-/** @deprecated Don't use doubles anymore, only use gnc_numerics. */
-int  DxaccAccountGetCurrencySCU (Account *account);
-/**@}*/
-
-/** Delete any old data in the account's kvp data.
- * This includes the old currency and security fields. */
-void xaccAccountDeleteOldData (Account *account);
-
-/** @name Account Children and Parent getters/setters */
+/** @name Account Children and Parent */
 /** @{ */
 
 /** DOCUMENT ME! */
 AccountGroup * xaccAccountGetChildren (Account *account);
-/** DOCUMENT ME! */
+/** DOCUMENT ME! 
+ *
+ * FIXME: Is the ancestor account xaccAccountHasAncestor() the same as the parent account? 
+ */
 AccountGroup * xaccAccountGetParent (Account *account);
-/** DOCUMENT ME! */
+/** DOCUMENT ME! 
+ *
+ * FIXME: Is the ancestor account xaccAccountHasAncestor() the same as the parent account? 
+ */
 Account *      xaccAccountGetParentAccount (Account *account);
 /** DOCUMENT ME! */
 GList *        xaccAccountGetDescendants (Account *account);
@@ -352,7 +338,81 @@ GList *        xaccAccountGetDescendants (Account *account);
 void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
 /** DOCUMENT ME! */
 gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
+/** Returns true if the account has 'ancestor' as an ancestor.
+ * Returns false if either one is NULL. 
+ *
+ * FIXME: Is the ancestor account the same as the parent account? */
+gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 /** @} */
+
+/* ------------------ */
+
+/** @name Account kvp_frame getters/setters */
+/** @{ */
+kvp_frame * xaccAccountGetSlots (Account *account);
+void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
+
+/** Delete any old data in the account's kvp data.
+ * This includes the old currency and security fields. */
+void xaccAccountDeleteOldData (Account *account);
+/** @} */
+
+/* ------------------ */
+
+/** @name GNCAccountType conversion/checking
+ */
+/* @{ */
+/**
+ * Conversion routines for the account types to/from strings
+ * that are used in persistant storage, communications.  These
+ * strings should *not* be translated to the local language.
+ * Typical converstion is INCOME -> "INCOME". */
+char *   xaccAccountTypeEnumAsString (GNCAccountType type); 
+/**
+ * Conversion routines for the account types to/from strings
+ * that are used in persistant storage, communications.  These
+ * strings should *not* be translated to the local language.
+ * Typical converstion is INCOME -> "INCOME". */
+gboolean xaccAccountStringToType (const char* str, GNCAccountType *type);
+/**
+ * Conversion routines for the account types to/from strings
+ * that are used in persistant storage, communications.  These
+ * strings should *not* be translated to the local language.
+ * Typical converstion is INCOME -> "INCOME". */
+GNCAccountType xaccAccountStringToEnum (const char* str);
+
+/** The xaccAccountGetTypeStr() routine returns a string suitable for 
+ *  use in the GUI/Interface.  These strings should be translated
+ *  to the local language. */
+const char * xaccAccountGetTypeStr (GNCAccountType type); 
+/** The xaccAccountGetTypeStr() routine returns a string suitable for 
+ *  use in the GUI/Interface.  These strings should be translated
+ *  to the local language. */
+GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
+
+/** Return TRUE if accounts of type parent_type can have accounts
+ * of type child_type as children. */
+gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
+                                     GNCAccountType child_type);
+/* @} */
+
+/* ------------------ */
+
+/* Doxygen note: if these typedefs are inside the member group, the
+ * member group will show up at the top of the documentation, which is
+ * probably not wanted. */
+/** \warning Unimplemented, for xaccAccountForEachSplit() */
+typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
+/** Callback prototype for xaccAccountForEachTransaction() */
+typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
+
+/** @name Account split/transaction list management */
+/*@{*/
+/** The xaccAccountInsertSplit() method will insert the indicated
+ *    split into the indicated account.  If the split already 
+ *    belongs to another account, it will be removed from that
+ *    account first.*/
+void         xaccAccountInsertSplit (Account *account, Split *split);
 
 /** The xaccAccountGetSplitList() routine returns a pointer to a GList of
  *    the splits in the account.  
@@ -362,6 +422,82 @@ gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
  *    modify this list directly, and could leave you with a corrupted 
  *    pointer. */
 SplitList*      xaccAccountGetSplitList (Account *account);
+
+/** \warning  Unimplemented */
+gpointer xaccAccountForEachSplit(Account *account,
+                                 SplitCallback,
+                                 gpointer data);
+
+/** The xaccAccountForEachTransaction() routine will traverse all of
+   the transactions in the given 'account' and call the callback
+   function 'proc' on each transaction.  Processing will continue
+   if-and-only-if 'proc' does not return FALSE. The user data pointer
+   'data' will be passed on to the callback function 'proc'.
+
+   This function does not descend recursively to traverse transactions
+   in child accounts.
+
+   'proc' will be called exactly once for each transaction that is
+   pointed to by at least one split in the given account.
+
+   Note too, that if you call this function on two separate accounts
+   and those accounts share transactions, proc will be called once per
+   account for the shared transactions.
+   
+   The result of this function will not be FALSE if-and-only-if
+   every relevant transaction was traversed exactly once. 
+*/
+gboolean
+xaccAccountForEachTransaction(Account *account,
+                              TransactionCallback proc,
+                              void *data);
+
+/** The xaccAccountVisitUnvisitedTransactions() routine will
+   visit every transaction in the account that hasn't already been
+   visited exactly once.  visited_txns must be a hash table created
+   via guid_hash_table_new() and is the authority about which
+   transactions have already been visited.  Further, when this
+   procedure returns visited_txns will have been modified to reflect
+   all the newly visited transactions.
+
+   The result of this function will not be FALSE if-and-only-if 
+   every relevant transaction was traversed exactly once.  
+*/
+gboolean
+xaccAccountVisitUnvisitedTransactions(Account *account,
+                                      TransactionCallback,
+                                      void *data,
+                                      GHashTable *visited_txns);
+
+/** Returns a pointer to the transaction, not a copy. */
+Transaction *
+xaccAccountFindTransByDesc(Account *account, const char *description);
+/** Returns a pointer to the split, not a copy. */
+Split *
+xaccAccountFindSplitByDesc(Account *account, const char *description);
+
+/** The xaccAccountFixSplitDateOrder() subroutine checks to see if 
+ *    a split is in proper sorted date order with respect 
+ *    to the other splits in this account. */
+void         xaccAccountFixSplitDateOrder (Account *account, Split *split);
+
+/** The xaccTransFixSplitDateOrder() checks to see if 
+ *    all of the splits in this transaction are in
+ *    proper date order. */
+void         xaccTransFixSplitDateOrder (Transaction *trans);
+/*@}*/
+
+/* ------------------ */
+
+/** @name Account lots */
+/*@{*/
+/** The xaccAccountInsertLot() method will register the indicated lot 
+ *    with this account.   Any splits later inserted into this lot must 
+ *    belong to this account.  If the lot is already in another account,
+ *    the lot, and all of the splits in it, will be moved from that
+ *    account to this account. */
+void xaccAccountInsertLot (Account *, GNCLot *);
+void xaccAccountRemoveLot (Account *, GNCLot *);
 
  /** The xaccAccountGetLotList() routine returns a pointer to the GList of
  *    the lots in this account.  The same warnings as above apply. */
@@ -377,85 +513,10 @@ LotList * xaccAccountFindOpenLots (Account *acc,
 							  gpointer user_data),
 				   gpointer user_data, GCompareFunc sort_func);
 
-/** @name Account Tax related getters/setters */
-/** @{ */
+/*@}*/
 
-/** DOCUMENT ME! */
-gboolean        xaccAccountGetTaxRelated (Account *account);
-/** DOCUMENT ME! */
-void            xaccAccountSetTaxRelated (Account *account,
-                                          gboolean tax_related);
 
-/** DOCUMENT ME! */
-const char *    xaccAccountGetTaxUSCode (Account *account);
-/** DOCUMENT ME! */
-void            xaccAccountSetTaxUSCode (Account *account, const char *code);
-/** DOCUMENT ME! */
-const char *    xaccAccountGetTaxUSPayerNameSource (Account *account);
-/** DOCUMENT ME! */
-void            xaccAccountSetTaxUSPayerNameSource (Account *account,
-                                                    const char *source);
-/** @} */
-
-/** @name Account Placeholder getters/setters */
-/** @{ */
-
-/** DOCUMENT ME! */
-typedef enum 
-  {
-  PLACEHOLDER_NONE,
-  PLACEHOLDER_THIS,
-  PLACEHOLDER_CHILD,
-  } GNCPlaceholderType;
-
-/** DOCUMENT ME! */
-gboolean        xaccAccountGetPlaceholder (Account *account);
-/** DOCUMENT ME! */
-void            xaccAccountSetPlaceholder (Account *account,
-                                           gboolean option);
-/** DOCUMENT ME! */
-GNCPlaceholderType xaccAccountGetDescendantPlaceholder (Account *account);
-/** @} */
-
-/** The xaccAccountGetFullName routine returns the fully qualified name
- * of the account using the given separator char. The name must be
- * g_free'd after use. The fully qualified name of an account is the
- * concatenation of the names of the account and all its ancestor
- * accounts starting with the topmost account and ending with the
- * given account. Each name is separated by the given character.
- *
- * @note: WAKE UP!
- * Unlike all other gets, the string returned by xaccAccountGetFullName() 
- * must be freed by you the user !!!
- * hack alert -- since it breaks the rule of string allocation, maybe this
- * routine should not be in this library, but some utility library?
- */
-char *         xaccAccountGetFullName (Account *account, const char separator);
-
-/** Returns true if the account has 'ancestor' as an ancestor.
- * Returns false if either is NULL. */
-gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
-
-/** Set a mark on the account.  The meaning of this mark is
- * completely undefined. Its presented here as a utility for the
- * programmer, to use as desired.  Handy for performing customer traversals
- * over the account tree.  The mark is *not* stored in the database/file
- * format.  When accounts are newly created, the mark is set to zero.
- */
-void           xaccAccountSetMark (Account *account, short mark); 
-
-/** Get the mark set by xaccAccountSetMark */
-short          xaccAccountGetMark (Account *account);
-
-/** The xaccClearMark will find the topmost group, and clear the mark in
- * the entire group tree.  */
-void           xaccClearMark (Account *account, short val);
-
-/** The xaccClearMarkDown will clear the mark only in this and in
- * sub-accounts.*/
-void           xaccClearMarkDown (Account *account, short val);
-/** Will clear the mark for all the accounts of the AccountGroup .*/
-void           xaccClearMarkDownGr (AccountGroup *group, short val);
+/* ------------------ */
 
 /** @name Account Reconciliation information getters/setters */
 /** @{ */
@@ -491,25 +552,108 @@ void           xaccAccountSetReconcilePostponeBalance (Account *account,
 void           xaccAccountClearReconcilePostpone (Account *account);
 /** @} */
 
-/** @name Account AutoInterest getters/setters
- * @note FIXME: What is this? */
+
+/** DOCUMENT ME! */
+typedef enum 
+  {
+  PLACEHOLDER_NONE,
+  PLACEHOLDER_THIS,
+  PLACEHOLDER_CHILD,
+  } GNCPlaceholderType;
+
+/** @name Account Placeholder flag */
 /** @{ */
 /** DOCUMENT ME! */
-gboolean xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value);
+gboolean        xaccAccountGetPlaceholder (Account *account);
 /** DOCUMENT ME! */
-void     xaccAccountSetAutoInterestXfer (Account *account, gboolean option);
+void            xaccAccountSetPlaceholder (Account *account,
+                                           gboolean option);
+/** DOCUMENT ME! */
+GNCPlaceholderType xaccAccountGetDescendantPlaceholder (Account *account);
 /** @} */
 
-/** The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
-    are used to get and set a string that identifies the Finance::Quote
-    backend that should be used to retrieve online prices.  See
-    price-quotes.scm for more information.*/
-void         xaccAccountSetPriceSrc (Account *account, const char *src);
-/** The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
-    are used to get and set a string that identifies the Finance::Quote
-    backend that should be used to retrieve online prices.  See
-    price-quotes.scm for more information.*/
-const char * xaccAccountGetPriceSrc (Account *account);
+
+/** @name Account Tax related getters/setters */
+/** @{ */
+
+/** DOCUMENT ME! */
+gboolean        xaccAccountGetTaxRelated (Account *account);
+/** DOCUMENT ME! */
+void            xaccAccountSetTaxRelated (Account *account,
+                                          gboolean tax_related);
+
+/** DOCUMENT ME! */
+const char *    xaccAccountGetTaxUSCode (Account *account);
+/** DOCUMENT ME! */
+void            xaccAccountSetTaxUSCode (Account *account, const char *code);
+/** DOCUMENT ME! */
+const char *    xaccAccountGetTaxUSPayerNameSource (Account *account);
+/** DOCUMENT ME! */
+void            xaccAccountSetTaxUSPayerNameSource (Account *account,
+                                                    const char *source);
+/** @} */
+
+
+/** @name Account marking */
+/*@{*/
+/** Set a mark on the account.  The meaning of this mark is
+ * completely undefined. Its presented here as a utility for the
+ * programmer, to use as desired.  Handy for performing customer traversals
+ * over the account tree.  The mark is *not* stored in the database/file
+ * format.  When accounts are newly created, the mark is set to zero.
+ */
+void           xaccAccountSetMark (Account *account, short mark); 
+
+/** Get the mark set by xaccAccountSetMark */
+short          xaccAccountGetMark (Account *account);
+
+/** The xaccClearMark will find the topmost group, and clear the mark in
+ * the entire group tree.  */
+void           xaccClearMark (Account *account, short val);
+
+/** The xaccClearMarkDown will clear the mark only in this and in
+ * sub-accounts.*/
+void           xaccClearMarkDown (Account *account, short val);
+/** Will clear the mark for all the accounts of the AccountGroup .*/
+void           xaccClearMarkDownGr (AccountGroup *group, short val);
+/*@}*/
+
+
+/** @name Account deprecated routines. */
+/** @{ */
+
+/** @deprecated The current API associates only one thing with an
+ * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
+ * it.
+ *
+ * These two funcs take control of their gnc_commodity args. Don't free */
+void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency,
+                              GNCBook *book);
+/** @deprecated The current API associates only one thing with an
+ * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
+ * it.
+ *
+ * These two funcs take control of their gnc_commodity args. Don't free */
+void DxaccAccountSetSecurity (Account *account, gnc_commodity *security,
+                              GNCBook *book);
+/** @deprecated The current API associates only one thing with an
+ * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
+ * it. */
+gnc_commodity * DxaccAccountGetCurrency (Account *account,
+                                         GNCBook *book);
+/** @deprecated The current API associates only one thing with an
+ * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
+ * it. */
+gnc_commodity * DxaccAccountGetSecurity (Account *account,
+                                         GNCBook *book);
+/** @deprecated The current API associates only one thing with an
+ * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
+ * it. */
+void DxaccAccountSetCurrencySCU (Account *account, int frac);
+/** @deprecated The current API associates only one thing with an
+ * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
+ * it. */
+int  DxaccAccountGetCurrencySCU (Account *account);
 
 /**   xaccAccountGetQuoteTZ() and xaccAccountSetQuoteTZ() set the
       timezone to be used when interpreting the results from a given
@@ -523,60 +667,8 @@ const char * xaccAccountGetPriceSrc (Account *account);
 void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
 /** @deprecated */
 const char * xaccAccountGetQuoteTZ (Account *account);
+/**@}*/
 
-
-/** \warning Unimplemented */
-typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
-/** \warning  Unimplemented */
-gpointer xaccAccountForEachSplit(Account *account,
-                                 SplitCallback,
-                                 gpointer data);
-
-/** Callback prototype */
-typedef  gboolean (*TransactionCallback)(Transaction *t, void *data);
-/** The xaccAccountForEachTransaction() routine will
-   traverse all of the transactions in the given account.  Continue
-   processing IFF proc does not return FALSE. This function does not
-   descend recursively to traverse transactions in child accounts.
-
-   Proc will be called exactly once for each transaction that is
-   pointed to by at least one split in the given account.
-
-   Note too, that if you call this function on two separate accounts
-   and those accounts share transactions, proc will be called once per
-   account for the shared transactions.
-   
-   The result of this function will not be FALSE if-and-only-if
-   every relevant transaction was traversed exactly once.  
-*/
-gboolean
-xaccAccountForEachTransaction(Account *account,
-                              TransactionCallback,
-                              void *data);
-
-/** The xaccAccountVisitUnvisitedTransactions() routine will
-   visit every transaction in the account that hasn't already been
-   visited exactly once.  visited_txns must be a hash table created
-   via guid_hash_table_new() and is the authority about which
-   transactions have already been visited.  Further, when this
-   procedure returns visited_txns will have been modified to reflect
-   all the newly visited transactions.
-
-   The result of this function will not be FALSE if-and-only-if 
-   every relevant transaction was traversed exactly once.  
-*/
-gboolean
-xaccAccountVisitUnvisitedTransactions(Account *account,
-                                      TransactionCallback,
-                                      void *data,
-                                      GHashTable *visited_txns);
-
-/** Returns a pointer to the transaction, not a copy. */
-Transaction *
-xaccAccountFindTransByDesc(Account *account, const char *description);
-/** Returns a pointer to the split, not a copy. */
-Split *
-xaccAccountFindSplitByDesc(Account *account, const char *description);
 
 /** @name Account parameter names */
 /** @{ */
@@ -592,7 +684,7 @@ xaccAccountFindSplitByDesc(Account *account, const char *description);
 /** @} */
 
 /** This is the type-override when you want to match all accounts.  Used
- * in the gnome-search parameter list.  Be carefull when you use this. */
+ * in the gnome-search parameter list.  Be careful when you use this. */
 #define ACCOUNT_MATCH_ALL_TYPE	"account-match-all"
 
 #endif /* XACC_ACCOUNT_H */
