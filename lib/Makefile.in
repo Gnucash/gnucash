@@ -32,7 +32,7 @@ include @top_srcdir@/Makefile.init
 
 ######################################################################
 # See Makefile.common for information about these variables.
-CLEAN_SUBDIRS := ComboBox-1.33 Xbae-4.6.2-linas g-wrap
+CLEAN_SUBDIRS := ComboBox-1.33 Xbae-4.6.2-linas
 ######################################################################
 
 all:
@@ -47,28 +47,11 @@ all:
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-
-# Right now we only configure g-wrap once per make distclean, but we
-# try and re-build every make.
-g-wrap.configure:
-	(cd g-wrap && \
-	 ./configure --prefix=${ABSOLUTE_TOP_SRCDIR}/lib/g-wrap-install)
-	touch g-wrap.configure
-DIST_TRASH += g-wrap.configure
-
-g-wrap-install: g-wrap.configure
-	(cd g-wrap && ${MAKE})
-	(cd g-wrap && ${MAKE} install)
-TRASH += g-wrap-install
-
-.PHONY: g-wrap-install
-
-
-motif motif.static: g-wrap-install
+motif motif.static:
 	@cd ComboBox-1.33;    $(MAKE) default
 	@cd Xbae-4.6.2-linas; $(MAKE) default
 
-gnome gnome.static: g-wrap-install
+gnome gnome.static:
 
 qt qt.static: g-wrap-install
 

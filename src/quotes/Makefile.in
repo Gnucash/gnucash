@@ -1,5 +1,5 @@
-# Makefile -- makefile for gnucash/scm
-# Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              
+# Makefile -- makefile for src/quotes
+# Copyright (C) 2000 Rob Browning <rlb@cs.utexas.edu>              
 #                                                                  
 # This program is free software; you can redistribute it and/or    
 # modify it under the terms of the GNU General Public License as   
@@ -34,15 +34,15 @@ include @top_srcdir@/Makefile.common
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
-## the sed substitutions.  *sigh*
-bootstrap.scm: bootstrap.scm.in Makefile
+## the sed substitutions.
+gnc-prices: gnc-prices.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
-            -e 's:@-VERSION-@:${VERSION}:' \
-            -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:'
+            -e 's:@-PERL-@:${PERL}:g' \
+            -e 's:@-GNC_LIBDIR-@:${GNC_LIBDIR}:g'
+	chmod +x $@.tmp
 	mv $@.tmp $@
 
-default: bootstrap.scm
+default: gnc-prices
 
 .PHONY: default

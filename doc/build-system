@@ -1,6 +1,67 @@
 -*-text-*-
 
 ===========================================================================
+* Adding files to AC_OUTPUT in configure.in.
+
+Please do not add any non-makefiles to AC_OUTPUT unless you're
+*absolutely* sure that it's safe and necessary to do so.  If you're
+not sure, then please use the "generation with sed by hand approach"
+that we use for other non-makefiles like src/scm/bootstrap.scm.  See
+src/scm/bootstrap.scm.in and src/scm/Makefile.in for details.
+
+The reasoning behind this is that there are often variables that
+autoconf uses and replaces via the @@ mechanism that are recursively
+defined in terms of other variables.  For example, @datadir@ might
+expand into $prefix/share, which itself contains an unexpanded
+variable.  Unless the @datadir@ replacement is performed on a file
+that will eventually be processed by make, there's no guarantee that
+the variable will *ever* be fully expanded and then your code will
+break.
+
+To get around this, we handle all non-makefiles (with a few notable
+exceptions) manually with sed.  For example, we have
+src/scm/bootstrap.scm.in which is processed in src/scm/Makefile.in
+according to the following rule:
+
+  ## We borrow guile's convention and use @-...-@ as the substitution
+  ## brackets here, instead of the usual @...@.  This prevents autoconf
+  ## from substituting the values directly into the left-hand sides of
+  ## the sed substitutions.  *sigh*
+  bootstrap.scm: bootstrap.scm.in
+        rm -f $@.tmp
+        sed < $@.in > $@.tmp \
+            -e 's:@-VERSION-@:${VERSION}:g' \
+            -e 's:@-GNC_CONFIGDIR-@:${GNC_SHAREDIR}:g' \
+            -e 's:@-GNC_SHAREDIR-@:${GNC_CONFIGDIR}:g'
+        chmod +x $@.tmp
+        mv $@.tmp $@
+
+This approach guarantees that the variables referred to will be
+properly expanded at the right times.
+
+The only non-Makefiles files that must be handled directly by
+AC_OUTPUT are files that refer to variables that, when expanded, may
+have makefile-hostile characters like '#' in them like
+INCLUDE_LOCALE_H.  These may need to be replaced directly in the
+relevant file via AC_OUTPUT since going through a makefile would break
+the makefile when it interprets the '#' as the beginning of a comment.
+You'd have something like this:
+
+  FOO = "#include <locale.h>"
+
+If you end up in a situation where you need to refer to both these
+makefile-hostile variables and non-makefile hostile variables in the
+same file, please restructure things (breaking the file up if
+necessary) so that only the makefile hostile variables are in the
+files being handled by AC_OUTPUT directly.
+
+===========================================================================
+
+It is not safe to use $prefix in configure.in for anything other than
+an unexpanded reference.  If the user doesn't specify a --prefix, then
+it'll be set to NONE until the end of the configure process.
+
+===========================================================================
 
 Deleting .SUFFIX rules
 

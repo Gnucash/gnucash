@@ -35,13 +35,13 @@ INCLPATH := -I.. \
 	    -I@top_srcdir@/src/register/gnome 
 
 # All the other GNOME CFLAGS are handled in Makefile.common now
-CFLAGS   = @CFLAGS@ ${INCLPATH}
+CFLAGS   = @CFLAGS@ ${INCLPATH} ${GUILE_COMPILE_ARGS} ${G_WRAP_COMPILE_ARGS}
 LDFLAGS  = @LDFLAGS@
 
-GUILELIBS = @GUILELIBS@
-LIBS      = -L$(prefix)/lib @LIBS@ \
-            $(shell ${GNOME_CONFIG_BIN} --libs gnomeui print @GTK_XMHTML@) $(GUILELIBS) \
-            @top_srcdir@/lib/g-wrap-install/lib/libgwrapguile.a
+LIBS     = -L$(prefix)/lib @LIBS@ \
+            $(shell ${GNOME_CONFIG_BIN} --libs gnomeui print @GTK_XMHTML@) \
+            $(GUILE_LINK_ARGS) \
+            $(G_WRAP_LINK_ARGS)
 
 ifeq (${HAVE_PLOTUTILS},1)
   LIBS += @PLOTUTILS_LIBS@

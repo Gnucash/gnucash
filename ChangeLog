@@ -1,3 +1,19 @@
+2000-05-08  Rob Browning  <rlb@cs.utexas.edu>
+
+	* make-gnucash-patch.in: change gnucash.h to gnucash.c in ignores.
+	Delete src/messages_i18n.h from ignores.
+	Remove g-wrap files from ignores.
+
+	* src/guile/gnucash.c.in: new file (now auto-generated)
+	This and the following change fix a mutual dependency problem.
+
+	* src/guile/gnucash.h: new file (no longer auto-generated).
+
+	* src/Makefile.in (CLEAN_SUBDIRS): add quotes.
+	(all targets): build g-wrap before guile. 
+
+	* Makefile.init.in (VERSION): Added to fix problems with rpm spec, etc.
+
 2000-05-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/register/pricecell.c: allow the cell to be blanked directly.
@@ -74,6 +90,61 @@
 	currency code to make the currency symbol.
 	(gnc_lconv_set_char): check for the lconv default value using
 	CHAR_MAX, not 127.
+
+2000-05-02  Rob Browning  <rlb@cs.utexas.edu>
+
+	* Makefile.in: switch to sed to handle non-makefile generation.
+
+	* Makefile.init.in: kill PATH mangling.
+	Add DIFF GUILE and g-wrap command handling.
+	
+	* configure.in: Many changes related to the great g-wrap exodus
+        and the change to handle non-makefile with sed.
+	Kill recursive var expansion.
+	Kill prefix pre-expansion.
+        Remove fancy guile handling - presume newer guile (which is required).
+        Remove non-makefiles from AC_OUTPUT (except the locale stuff for now).
+
+	* doc/build-system: Document configure handling of non-makefiles.
+
+	* lib/Makefile.in: expunge g-wrap.
+
+	* make-gnucash-patch.in: use sed @--@ handling for expansions.
+	Be strict.
+	Add ignore for src/messages_i18n.h
+
+	* po/Makefile.in.in: handle extract-macros.perl.in vars with sed.
+
+	* po/extract-macros.perl.in: handle vars with sed.
+
+	* rpm/Makefile.in: new file.  Handle gnucash.spec.in with sed.
+
+	* rpm/gnucash.spec.in: use @--@ vars.
+
+	* src/Makefile.in: handle src/quotes in the build process.
+	Re-order src/guile to build before src/g-wrap.
+	
+	* src/g-wrap/Makefile.in: handle new version of g-wrap.
+
+	* src/gnome/Makefile.in: fix compile var handling for g-wrap, etc.
+
+	* src/guile/Makefile.in: fix compile var handling for g-wrap, etc.
+	Add sed handling for gnucash.h.in.
+
+	* src/guile/gnucash.h.in: handle g-wrap changes.
+	Handle removal of EXPANDED vars.
+	Switch to sed @--@ vars.
+
+	* src/qt/Makefile.in: fix compile var handling for g-wrap, etc.
+
+	* src/quotes/Makefile.in: new file.
+	Handle gnc-prices.in with sed.
+
+	* src/quotes/gnc-prices.in: Switch to sed @--@ vars.
+
+	* src/scm/Makefile.in: Handle bootstrap.scm.in with sed.
+
+	* src/scm/bootstrap.scm.in: Switch to sed @--@ vars.
 
 2000-05-02  Robert Graham Merkel  <rgmerk@mira.net>
 
@@ -356,9 +427,7 @@
 	* src/register/splitreg.c (configLayout): add the xto cell into
 	the transaction cursor.
 
- 2000-03-31  Rob Browning  <rlb@cs.utexas.edu>
-
- 	* src/scm/bootstrap.scm.in: use new GNC_EXPANDED_ vars.
+2000-03-31  Rob Browning  <rlb@cs.utexas.edu>
 
  	* src/scm/Makefile.in: set top_srcdir and include Makefile.init
 

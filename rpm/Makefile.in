@@ -1,4 +1,4 @@
-# Makefile -- makefile for gnucash/scm
+# Makefile -- makefile for ./rpm
 # Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              
 #                                                                  
 # This program is free software; you can redistribute it and/or    
@@ -35,14 +35,12 @@ include @top_srcdir@/Makefile.common
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
-bootstrap.scm: bootstrap.scm.in Makefile
+gnucash.spec: gnucash.spec.in Makefile
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
-            -e 's:@-VERSION-@:${VERSION}:' \
-            -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
-            -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:'
+            -e 's:@-VERSION-@:${VERSION}:'
 	mv $@.tmp $@
 
-default: bootstrap.scm
+default: gnucash.spec
 
 .PHONY: default

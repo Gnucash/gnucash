@@ -20,8 +20,6 @@
 
 @SET_MAKE@
 
-export PATH := @GUILE_BIN@:@ABSOLUTE_TOP_SRCDIR@/lib/g-wrap-install/bin/:${PATH}
-
 srcdir  = @srcdir@
 VPATH   = @srcdir@
 
@@ -41,6 +39,9 @@ sysconfdir=@sysconfdir@
 includedir=@includedir@
 mandir=@mandir@
 
+VERSION = @VERSION@
+PACKAGE = @PACKAGE@
+
 ABSOLUTE_TOP_SRCDIR=@ABSOLUTE_TOP_SRCDIR@
 
 CC           = @CC@
@@ -54,10 +55,19 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 SWIG         = @SWIG@
 PERL         = @PERL@
+GUILE        = @GUILE@
 
 CPU          = @target_cpu@
 
 OPT_STYLE_INSTALL=@OPT_STYLE_INSTALL@
+
+GUILE_LINK_ARGS = @GUILE_LINK_ARGS@
+GUILE_COMPILE_ARGS = @GUILE_COMPILE_ARGS@
+
+G_WRAP_LINK_ARGS = @G_WRAP_LINK_ARGS@
+G_WRAP_COMPILE_ARGS = @G_WRAP_COMPILE_ARGS@
+
+LOCALE_DIR = @LOCALE_DIR@
 
 # These are *only* to be used at *install* time.
 GNC_DOCDIR=@GNC_DOCDIR@

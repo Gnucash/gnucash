@@ -1,3 +1,4 @@
+# -*-makefile-*-
 # Makefile for program source directory in GNU NLS utilities package.
 # Copyright (C) 1995 Free Software Foundation, Inc.
 #
@@ -17,6 +18,8 @@
 
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
+
+PERL = @PERL@
 
 SHELL = /bin/sh
 @SET_MAKE@
@@ -91,7 +94,20 @@ $(PACKAGE).pot: pseudo-source.c $(POTFILES)
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
 	        && mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )
 
-pseudo-source.c: $(top_srcdir)/src/messages_i18n.h
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.  *sigh*
+extract-macros.perl: extract-macros.perl.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
+            -e 's:@-PERL-@:${PERL}:g' \
+            -e 's:@-CPP-@:${CPP}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
+pseudo-source.c: $(top_srcdir)/src/messages_i18n.h extract-macros.perl
 	perl -s extract-macros.perl $< > $@
 
 install: install-exec install-data

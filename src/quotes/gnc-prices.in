@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!@-PERL-@ -w
 #
 # FILE:
 # gnc-prices
@@ -13,7 +13,7 @@
 
 # hack alert -- this pathname should *NOT* be hard-coded, nor should the
 #               ones below it.
-use lib '@GNC_EXPANDED_LIBDIR@';
+use lib '@-GNC_LIBDIR-@';
 use Quote;
 use gnucash;
 

@@ -1,4 +1,4 @@
-#! /usr/bin/perl -s
+#!@-PERL-@ -w -s
 #
 # extract-macros.perl.in - Generate C file for input to xgettext
 # Copyright (C) 1999 Laurent Pélecq
@@ -23,8 +23,8 @@
 
 # Begin variables set by configure
 
-$package_name="@PACKAGE@";
-$cpp="@CPP@";
+$package_name="@-PACKAGE-@";
+$cpp="@-CPP-@";
 
 # End variables set by configure
 

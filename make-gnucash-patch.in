@@ -1,4 +1,4 @@
-#!@PERL@
+#!@-PERL-@ -w
 #
 # This perl script is used to make a patch for your GnuCash
 # development work. All patches should be submitted to the
@@ -10,6 +10,7 @@
 #
 # Author: Dave Peticolas <peticola@cs.ucdavis.edu>
 
+use strict;
 
 ###########################################################
 # This section must be configured for your own setup.     #
@@ -122,7 +123,7 @@ gnc-autogen.h
 src/g-wrap/gnc.c
 src/g-wrap/gnc.h
 src/g-wrap/gnc.html
-src/guile/gnucash.h
+src/guile/gnucash.c
 src/scm/bootstrap.scm
 src/swig/perl5/gnucash.engine_wrap.doc
 g-wrap.info
@@ -144,12 +145,6 @@ gnucash.pot
 po/pseudo-source.c
 stamp-cat-id
 po/extract-macros.perl
-include/messages_i18n.h
-lib/g-wrap/aclocal.m4
-lib/g-wrap/conf-h.in
-lib/g-wrap/stamp-h.in
-lib/g-wrap/*/Makefile.in
 src/guile/i18n.h
 make-gnucash-patch
-lib/g-wrap.configure
 rpm/gnucash.spec

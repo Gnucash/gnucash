@@ -51,7 +51,19 @@ motif-static: motif.static
 gnome-static: gnome.static
 qt-static: qt.static
 
-build-flavor: config.status
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+make-gnucash-patch: make-gnucash-patch.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PERL-@:${PERL}:g'
+	chmod +x $@.tmp
+	mv $@.tmp $@
+
+build-flavor: config.status make-gnucash-patch
+	@cd rpm     && ${MAKE} default
 	@cd lib     && ${MAKE} ${FLAVOR}
 	@cd src     && ${MAKE} ${FLAVOR}
 	ln -sf gnucash.${FLAVOR} gnucash.bin
@@ -115,7 +127,7 @@ config.status: configure
 		exit 1; \
 	fi
 
-CLEAN_SUBDIRS += lib src po
+CLEAN_SUBDIRS += lib src po rpm
 TRASH += TAGS *~ *.o *.bak
 
 DIST_TRASH += Makefile *~ *.o *.bak share/scm gnucash.bin

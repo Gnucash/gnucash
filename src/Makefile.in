@@ -37,7 +37,8 @@ CFLAGS = @CFLAGS@ @X_CFLAGS@ ${INCLPATH} ${CPPFLAGS}
 ######################################################################
 # See Makefile.common for information about these variables.
 COMMON_SRCS   := MultiLedger.c SplitLedger.c Destroy.c EuroUtils.c
-CLEAN_SUBDIRS := engine gnome motif register g-wrap guile reports swig qt scm
+CLEAN_SUBDIRS := engine gnome motif register g-wrap guile reports
+CLEAN_SUBDIRS += swig qt scm quotes
 MOTIF_SRCS := FileDialog.c Refresh.c
 GNOME_SRCS := FileDialog.c Refresh.c
 ######################################################################
@@ -51,33 +52,36 @@ include @top_srcdir@/Makefile.common
 default: $(OBJS)
 
 motif motif.static: ${MOTIF_OBJS}
+	@cd quotes          && $(MAKE) default
 	@cd scm             && $(MAKE) default
 	@cd engine          && $(MAKE) default
 	@cd register        && $(MAKE) motif
 	@cd reports         && $(MAKE) default
 	@cd g-wrap          && $(MAKE) motif
-	@cd swig            && $(MAKE) motif
 	@cd guile           && $(MAKE) default
+	@cd swig            && $(MAKE) motif
 	@cd motif           && $(MAKE) $@
 
 gnome gnome.static: ${GNOME_OBJS}
+	@cd quotes          && $(MAKE) default
 	@cd scm             && $(MAKE) default
 	@cd engine          && $(MAKE) default
 	@cd register        && $(MAKE) gnome
 	@cd reports         && $(MAKE) default
 	@cd g-wrap          && $(MAKE) gnome
-	@cd swig            && $(MAKE) gnome
 	@cd guile           && $(MAKE) default
+	@cd swig            && $(MAKE) gnome
 	@cd gnome           && $(MAKE) $@
 
 qt qt.static: $(QT_OBJS)
+	@cd quotes          && $(MAKE) default
 	@cd scm             && $(MAKE) default
 	@cd engine          && $(MAKE) default
 	@cd register        && $(MAKE) qt
 	@cd reports         && $(MAKE) default
 	@cd g-wrap          && $(MAKE) qt
-	@cd swig            && $(MAKE) qt
 	@cd guile           && $(MAKE) default 	
+	@cd swig            && $(MAKE) qt
 	@cd qt              && $(MAKE) $@
 
 .PHONY: default qt qt.static gnome gnome.static motif motif.static all
