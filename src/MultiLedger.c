@@ -406,8 +406,6 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
 void 
 xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 {
-   int typo;
-
    /* If we don't really need the redraw, don't do it. */
    if (!(regData->dirty)) return;
    regData->dirty = 0;  /* mark clean */
@@ -416,41 +414,23 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
     * assign a default source account for a "blank split"
     * that is attached to the bottom of the register.
     * The "blank split" is what the user edits to create 
-    * new splits and get them into the system.
-    */
+    * new splits and get them into the system. */
    xaccSRLoadRegister (regData->ledger, 
                        xaccQueryGetSplits (regData->query),
                        regData->leader);
 
-
   /* hack alert -- this computation of totals is incorrect 
    * for multi-account ledgers */
 
-  /* provide some convenience data for the ture GUI window.
-   * If the GUI wants to display yet other stuff, its on its own.
-   */
-  /* xaccAccountRecomputeBalance(regData->leader); */
+  /* provide some convenience data for the the GUI window.
+   * If the GUI wants to display yet other stuff, it's on its own. */
   regData->balance = xaccAccountGetBalance (regData->leader);
   regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
   regData->reconciledBalance = xaccAccountGetReconciledBalance (regData->leader);
 
-  /* for income and expense acounts, we have to reverse
-   * the meaning of balance, since, in a dual entry
-   * system, income will show up as a credit to a
-   * bank account, and a debit to the income account.
-   * Thus, positive and negative are interchanged */
-  typo = regData->type & REG_TYPE_MASK;
-  if ((INCOME_REGISTER == typo) ||
-      (EXPENSE_REGISTER == typo)) { 
-    regData->balance = - (regData->balance);
-    regData->clearedBalance = - (regData->clearedBalance);
-    regData->reconciledBalance = - (regData->reconciledBalance);
-  }
-
   /* OK, now tell this specific GUI window to redraw itself ... */
-  if (regData->redraw) {
-     (regData->redraw) (regData);
-   }
+  if (regData->redraw)
+    (regData->redraw) (regData);
 }
 
 /********************************************************************\

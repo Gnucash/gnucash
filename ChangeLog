@@ -1,3 +1,11 @@
+2000-03-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/MultiLedger.c (xaccLedgerDisplayRefresh): don't reverse the
+ 	balances ever -- let the GUI do it.
+
+	* src/motif/RegWindow.c (regRefresh): reverse the balances
+	for INCOME and expense.
+
 2000-03-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-register.c (regRefresh): print
