@@ -36,6 +36,9 @@
 #include "dialog-job.h"
 #include "business-utils.h"
 #include "dialog-payment.h"
+#include "dialog-tax-table.h"
+#include "dialog-billterms.h"
+#include "AccWindow.h"
 
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
@@ -47,6 +50,16 @@ typedef enum
   EDIT_INVOICE,
   VIEW_INVOICE
 } InvoiceDialogType;
+
+typedef enum
+{
+  BY_STANDARD = 0,
+  BY_DATE,
+  BY_DATE_ENTERED,
+  BY_DESC,
+  BY_QTY,
+  BY_PRICE
+} sort_type_t;
 
 struct _invoice_select_window {
   GNCBook *	book;
@@ -60,8 +73,6 @@ struct _invoice_window {
 
   GtkWidget *	dialog;
 
-  GtkWidget *	menubar_dock;
-  GtkWidget *	menubar;
   GtkWidget *	statusbar;
 
   /* Popup Menu */
@@ -77,6 +88,13 @@ struct _invoice_window {
   GtkWidget *	blank_button;
   GtkWidget *	print_button;
   GtkWidget *	post_button;
+
+  /* Menu Widgets */
+  GtkWidget *	menu_print;
+  GtkWidget *	menu_cut;
+  GtkWidget *	menu_paste;
+  GtkWidget *	menu_edit_invoice;
+  GtkWidget *	menu_actions;
 
   /* Data Widgets */
   GtkWidget *	id_entry;
@@ -100,6 +118,8 @@ struct _invoice_window {
   GnucashRegister *	reg;
   GncEntryLedger *	ledger;
 
+  sort_type_t	last_sort;
+
   InvoiceDialogType	dialog_type;
   GUID		invoice_guid;
   gint		component_id;
@@ -120,6 +140,27 @@ void gnc_invoice_window_duplicateCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_blankCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_printCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_postCB (GtkWidget *widget, gpointer data);
+
+void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_copy_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_paste_cb (GtkWidget *widget, gpointer data);
+
+void gnc_invoice_window_new_account_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_new_invoice_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_taxtable_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_billterm_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data);
+
+void gnc_invoice_window_sort_standard_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_sort_date_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_sort_date_entered_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_sort_description_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_sort_quantity_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_sort_price_cb (GtkWidget *widget, gpointer data);
+
+void gnc_invoice_window_toolbar_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_statusbar_cb (GtkWidget *widget, gpointer data);
 
 #define WIDTH_PREFIX "invoice_reg"
 static int last_width = 0;
@@ -501,6 +542,210 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   /* ... and redisplay here. */
   gnc_invoice_update_window (iw);
   gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
+}
+
+void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnucash_register_cut_clipboard (iw->reg);
+}
+
+void gnc_invoice_window_copy_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnucash_register_copy_clipboard (iw->reg);
+}
+
+void gnc_invoice_window_paste_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnucash_register_paste_clipboard (iw->reg);
+}
+
+void gnc_invoice_window_new_account_cb (GtkWidget *widget, gpointer data)
+{
+  gnc_ui_new_account_window (NULL);
+}
+
+void gnc_invoice_window_new_invoice_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  if (gncOwnerGetJob (&iw->job)) {
+    gnc_ui_invoice_new (&iw->job, iw->book);
+  } else {
+    gnc_ui_invoice_new (&iw->owner, iw->book);
+  }
+}
+
+void gnc_invoice_window_report_owner_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  int id;
+  SCM qtype;
+  SCM args;
+  SCM func;
+  SCM arg;
+
+  args = SCM_EOL;
+
+  func = gh_eval_str ("gnc:owner-report-create");
+  g_return_if_fail (gh_procedure_p (func));
+
+  qtype = gh_eval_str("<gnc:GncOwner*>");
+  g_return_if_fail (qtype != SCM_UNDEFINED);
+
+  arg = gw_wcp_assimilate_ptr (&iw->owner, qtype);
+  g_return_if_fail (arg != SCM_UNDEFINED);
+
+  args = gh_cons (SCM_BOOL_F, args);
+  args = gh_cons (arg, args);
+
+  /* Apply the function to the args */
+  arg = gh_apply (func, args);
+  g_return_if_fail (gh_exact_p (arg));
+  id = gh_scm2int (arg);
+
+  if (id >= 0)
+    reportWindow (id);
+}
+
+void gnc_invoice_window_taxtable_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_ui_tax_table_window_new (iw->book);
+}
+
+void gnc_invoice_window_billterm_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_ui_billterms_window_new (iw->book);
+}
+
+void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  if (gncOwnerGetJob (&iw->job))
+    gnc_ui_payment_new (&iw->job, iw->book);
+  else
+    gnc_ui_payment_new (&iw->owner, iw->book);
+}
+
+/* Sorting callbacks */
+
+static void
+gnc_invoice_window_sort (InvoiceWindow *iw, sort_type_t sort_code)
+{
+  QueryNew *query = gnc_entry_ledger_get_query (iw->ledger);
+  GSList *p1 = NULL, *p2 = NULL, *p3 = NULL, *standard;
+
+  if (iw->last_sort == sort_code)
+    return;
+
+  standard = g_slist_prepend (NULL, QUERY_DEFAULT_SORT);
+
+  switch (sort_code)
+  {
+    case BY_STANDARD:
+      p1 = standard;
+      break;
+    case BY_DATE:
+      p1 = g_slist_prepend (p1, ENTRY_DATE);
+      p2 = standard;
+      break;
+    case BY_DATE_ENTERED:
+      p1 = g_slist_prepend (p1, ENTRY_DATE_ENTERED);
+      p2 = standard;
+      break;
+    case BY_DESC:
+      p1 = g_slist_prepend (p1, ENTRY_DESC);
+      p2 = standard;
+      break;
+    case BY_QTY:
+      p1 = g_slist_prepend (p1, ENTRY_QTY);
+      p2 = standard;
+      break;
+    case BY_PRICE:
+      p1 = g_slist_prepend (p1, ENTRY_PRICE);
+      p2 = standard;
+      break;
+    default:
+      g_slist_free (standard);
+      g_return_if_fail (FALSE);
+  }
+
+  gncQuerySetSortOrder (query, p1, p2, p3);
+  iw->last_sort = sort_code;
+  gnc_entry_ledger_display_refresh (iw->ledger);
+}
+
+void
+gnc_invoice_window_sort_standard_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_invoice_window_sort (iw, BY_STANDARD);
+}
+
+void
+gnc_invoice_window_sort_date_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_invoice_window_sort (iw, BY_DATE);
+}
+
+void
+gnc_invoice_window_sort_date_entered_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_invoice_window_sort (iw, BY_DATE_ENTERED);
+}
+
+void
+gnc_invoice_window_sort_description_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_invoice_window_sort (iw, BY_DESC);
+}
+
+void
+gnc_invoice_window_sort_quantity_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_invoice_window_sort (iw, BY_QTY);
+}
+
+void
+gnc_invoice_window_sort_price_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  gnc_invoice_window_sort (iw, BY_PRICE);
+}
+
+/* Window configuration callbacks */
+
+void gnc_invoice_window_toolbar_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GtkCheckMenuItem *checkmenu = GTK_CHECK_MENU_ITEM(widget);
+
+  if (checkmenu->active) {
+    gtk_widget_show(iw->toolbar_dock);
+  } else {
+    gtk_widget_hide(iw->toolbar_dock);
+    gtk_widget_queue_resize(iw->toolbar_dock);
+  }
+}
+
+void gnc_invoice_window_statusbar_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GtkCheckMenuItem *checkmenu = GTK_CHECK_MENU_ITEM(widget);
+
+  if (checkmenu->active) {
+    gtk_widget_show(iw->statusbar);
+  } else {
+    gtk_widget_hide(iw->statusbar);
+    gtk_widget_queue_resize(iw->statusbar);
+  }
 }
 
 static GtkWidget *
@@ -959,6 +1204,7 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     }
   }
 
+  /* Set the toolbar widgets sensitivity */
   gtk_widget_set_sensitive (iw->edit_button, !is_posted);
   gtk_widget_set_sensitive (iw->enter_button, !is_posted);
   gtk_widget_set_sensitive (iw->cancel_button, !is_posted);
@@ -967,6 +1213,13 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   gtk_widget_set_sensitive (iw->blank_button, !is_posted);
   gtk_widget_set_sensitive (iw->print_button, is_posted);
   gtk_widget_set_sensitive (iw->post_button, !is_posted);
+
+  /* Set the menubar widgets sensitivity */
+  gtk_widget_set_sensitive (iw->menu_print, is_posted);
+  gtk_widget_set_sensitive (iw->menu_cut, !is_posted);
+  gtk_widget_set_sensitive (iw->menu_paste, !is_posted);
+  gtk_widget_set_sensitive (iw->menu_edit_invoice, !is_posted);
+  gtk_widget_set_sensitive (iw->menu_actions, !is_posted);
 
   if (is_posted) {
     //    GtkWidget *hide;
@@ -1098,9 +1351,12 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->print_button = glade_xml_get_widget (xml, "print_button");
   iw->post_button = glade_xml_get_widget (xml, "post_button");
 
-  /* grab the menubar widgets */
-  iw->menubar_dock = glade_xml_get_widget (xml, "menu_dock");
-  iw->menubar = glade_xml_get_widget (xml, "menubar1");
+  /* grab the menu widgets */
+  iw->menu_print = glade_xml_get_widget (xml, "menu_print");
+  iw->menu_cut = glade_xml_get_widget (xml, "menu_cut");
+  iw->menu_paste = glade_xml_get_widget (xml, "menu_paste");
+  iw->menu_edit_invoice = glade_xml_get_widget (xml, "menu_edit_invoice");
+  iw->menu_actions = glade_xml_get_widget (xml, "menu_actions");
 
   /* grab the statusbar */
   iw->statusbar = glade_xml_get_widget (xml, "status_bar");

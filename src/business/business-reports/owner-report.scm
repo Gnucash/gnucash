@@ -446,6 +446,39 @@
 
     document))
 
+(define (find-first-account type)
+  (define (find-first group num index)
+    (if (>= index num)
+	#f
+	(let* ((this-account (gnc:group-get-account group index))
+	       (account-type (gw:enum-<gnc:AccountType>-val->sym
+			      (gnc:account-get-type this-account) #f)))
+	  (if (eq? account-type type)
+	      this-account
+	      (find-first group num (+ index 1))))))
+
+  (let* ((current-group (gnc:get-current-group))
+	 (num-accounts (gnc:group-get-num-accounts
+			current-group)))
+    (if (> num-accounts 0)
+	(find-first current-group num-accounts 0)
+	#f)))
+
+(define (find-first-account-for-owner owner)
+  (let ((type (gw:enum-<gnc:GncOwnerType>-val->sym
+	       (gnc:owner-get-type (gnc:owner-get-end-owner owner)) #f)))
+    (case type
+      ((gnc-owner-customer)
+       (find-first-account 'receivable))
+
+      ((gnc-owner-vendor)
+       (find-first-account 'payable))
+
+      ((gnc-owner-job)
+       (find-first-account-for-owner (gnc:owner-get-end-owner owner)))
+
+      (else
+       #f))))
 
 (gnc:define-report
  'version 1
@@ -483,6 +516,37 @@
        (owner-report-create-internal "Vendor Report" owner query account)))
   ))
 
+(define (gnc:owner-report-create owner account)
+  (let* ((q (gnc:malloc-query))
+	 (guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
+
+    ; Figure out an account to use if nothing exists here.
+    (if (not account)
+	(set! account (find-first-account-for-owner owner)))
+
+    (gnc:query-add-guid-match
+     q 
+     (list gnc:split-trans gnc:invoice-from-txn gnc:invoice-owner
+	   gnc:owner-parentg)
+     guid 'query-or)
+    (gnc:query-add-guid-match
+     q
+     (list gnc:split-lot gnc:owner-from-lot gnc:owner-parentg)
+     guid 'query-or)
+    (gnc:query-add-guid-match
+     q
+     (list gnc:split-lot gnc:invoice-from-lot gnc:invoice-owner
+	   gnc:owner-parentg)
+     guid 'query-or)
+
+    (gnc:query-add-single-account-match q account 'query-and)
+    (gnc:query-set-book q (gnc:get-current-book))
+
+    (let ((res (owner-report-create owner q account)))
+      (gnc:free-query q)
+      res)))
+
+
 (define (gnc:owner-report-create-internal
 	 account split query journal? double? title
 	 debit-string credit-string)
@@ -490,7 +554,6 @@
   (let* ((trans (gnc:split-get-parent split))
 	 (invoice (gnc:invoice-get-invoice-from-txn trans))
 	 (temp-owner (gnc:owner-create))
-	 (q (gnc:malloc-query))
 	 (owner #f))
 
     (if invoice
@@ -511,33 +574,15 @@
 		  (check-splits (cdr splits)))))
 	  (check-splits split-list)))
 
-    (let ((guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
-      (gnc:query-add-guid-match
-       q 
-       (list gnc:split-trans gnc:invoice-from-txn gnc:invoice-owner
-	     gnc:owner-parentg)
-       guid 'query-or)
-      (gnc:query-add-guid-match
-       q
-       (list gnc:split-lot gnc:owner-from-lot gnc:owner-parentg)
-       guid 'query-or)
-      (gnc:query-add-guid-match
-       q
-       (list gnc:split-lot gnc:invoice-from-lot gnc:invoice-owner
-	     gnc:owner-parentg)
-       guid 'query-or)
-      )
-
-    (gnc:query-add-single-account-match q account 'query-and)
-    (gnc:query-set-book q (gnc:get-current-book))
-
-    (let ((res (owner-report-create owner q account)))
+    (let ((res (gnc:owner-report-create owner account)))
       (gnc:owner-destroy temp-owner)
-      (gnc:free-query q)
       res)))
+
 
 (gnc:register-report-hook 'receivable #t
 			  gnc:owner-report-create-internal)
 
 (gnc:register-report-hook 'payable #t
 			  gnc:owner-report-create-internal)
+
+(export gnc:owner-report-create)

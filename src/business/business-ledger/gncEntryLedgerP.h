@@ -10,7 +10,6 @@
 #include "guid.h"
 #include "gnc-book.h"
 #include "table-allgui.h"
-#include "QueryNew.h"
 #include "gncEntryLedger.h"
 
 struct GncEntryLedger_s {

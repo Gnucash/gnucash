@@ -646,3 +646,12 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
   gnc_resume_gui_refresh ();
   return;
 }
+
+QueryNew *
+gnc_entry_ledger_get_query (GncEntryLedger *ledger)
+{
+  if (!ledger)
+    return NULL;
+
+  return ledger->query;
+}

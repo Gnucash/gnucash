@@ -427,7 +427,7 @@
   <modal>False</modal>
   <allow_shrink>True</allow_shrink>
   <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
+  <auto_shrink>True</auto_shrink>
   <enable_layout_config>False</enable_layout_config>
 
   <widget>
@@ -459,13 +459,603 @@
       <widget>
 	<class>GtkMenuBar</class>
 	<name>menubar1</name>
-	<shadow_type>GTK_SHADOW_OUT</shadow_type>
+	<shadow_type>GTK_SHADOW_NONE</shadow_type>
 
 	<widget>
 	  <class>GtkMenuItem</class>
-	  <name>placeholder1</name>
-	  <label>PlaceHolder</label>
+	  <name>menu_file</name>
+	  <stock_item>GNOMEUIINFO_MENU_FILE_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_file_menu</name>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_new_invoice</name>
+	      <tooltip>Create a new invoice</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_new_invoice_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:41:11 GMT</last_modification_time>
+	      </signal>
+	      <label>_New Invoice</label>
+	      <right_justify>False</right_justify>
+	      <stock_icon>GNOME_STOCK_MENU_NEW</stock_icon>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_new_account</name>
+	      <tooltip>Create a new Account</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_new_account_cb</handler>
+		<last_modification_time>Tue, 02 Jul 2002 20:55:21 GMT</last_modification_time>
+	      </signal>
+	      <label>New Account</label>
+	      <right_justify>False</right_justify>
+	      <stock_icon>GNOME_STOCK_MENU_NEW</stock_icon>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator10</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_save</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_file_save_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_SAVE_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_saveas</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_file_save_as_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_SAVE_AS_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator12</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_print</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_printCB</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:07:26 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_PRINT_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator1</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_close</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_closeCB</handler>
+		<last_modification_time>Wed, 12 Jun 2002 01:59:32 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_CLOSE_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_exit</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_exit_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:55:04 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_EXIT_ITEM</stock_item>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_edit</name>
+	  <stock_item>GNOMEUIINFO_MENU_EDIT_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_edit_menu</name>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_cut</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_cut_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_CUT_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_copy</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_copy_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_COPY_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_paste</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_paste_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:35:28 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_PASTE_ITEM</stock_item>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator13</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_edit_invoice</name>
+	      <tooltip>Edit this Invoice</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_editCB</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:42:08 GMT</last_modification_time>
+	      </signal>
+	      <label>_Edit Invoice</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator11</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_view</name>
+	  <stock_item>GNOMEUIINFO_MENU_VIEW_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_view_menu</name>
+
+	    <widget>
+	      <class>GtkCheckMenuItem</class>
+	      <name>menu_toolbar</name>
+	      <tooltip>Display the toolbar</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_toolbar_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 05:55:04 GMT</last_modification_time>
+	      </signal>
+	      <label>_Toolbar</label>
+	      <active>True</active>
+	      <always_show_toggle>True</always_show_toggle>
+	    </widget>
+
+	    <widget>
+	      <class>GtkCheckMenuItem</class>
+	      <name>menu_status_bar</name>
+	      <tooltip>Display the Status Bar</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_statusbar_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:03:51 GMT</last_modification_time>
+	      </signal>
+	      <label>_Status Bar</label>
+	      <active>True</active>
+	      <always_show_toggle>True</always_show_toggle>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator4</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_sort_order</name>
+	      <label>Sort _Order</label>
+	      <right_justify>False</right_justify>
+
+	      <widget>
+		<class>GtkMenu</class>
+		<name>menu_sort_order_menu</name>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_standard</name>
+		  <tooltip>Keep normal invoice order</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_invoice_window_sort_standard_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Standard</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkMenuItem</class>
+		  <name>separator5</name>
+		  <right_justify>False</right_justify>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_date</name>
+		  <tooltip>Sort by date</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_invoice_window_sort_date_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Date</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_date_of_entry</name>
+		  <tooltip>Sort by the date of entry</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_invoice_window_sort_date_entered_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>Date of _Entry</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_quantity</name>
+		  <tooltip>Sort by quantity</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_invoice_window_sort_quantity_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Quantity</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_price_quantity</name>
+		  <tooltip>Sort by price</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_invoice_window_sort_price_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Price</label>
+		  <active>False</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+
+		<widget>
+		  <class>GtkRadioMenuItem</class>
+		  <name>menu_sort_description</name>
+		  <tooltip>Sort by description</tooltip>
+		  <signal>
+		    <name>activate</name>
+		    <handler>gnc_invoice_window_sort_description_cb</handler>
+		    <last_modification_time>Wed, 12 Jun 2002 02:13:24 GMT</last_modification_time>
+		  </signal>
+		  <label>_Description</label>
+		  <active>True</active>
+		  <always_show_toggle>True</always_show_toggle>
+		  <group>sort</group>
+		</widget>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_actions</name>
+	  <label>_Actions</label>
 	  <right_justify>False</right_justify>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_actions_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_enter</name>
+	      <tooltip>Record the current entry</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_recordCB</handler>
+		<last_modification_time>Wed, 12 Jun 2002 02:01:51 GMT</last_modification_time>
+	      </signal>
+	      <label>_Enter</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_cancel</name>
+	      <tooltip>Cancel the current entry</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_cancelCB</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:10:40 GMT</last_modification_time>
+	      </signal>
+	      <label>_Cancel</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_delete</name>
+	      <tooltip>Delete the current entry</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_deleteCB</handler>
+		<last_modification_time>Tue, 18 Jun 2002 07:59:59 GMT</last_modification_time>
+	      </signal>
+	      <label>_Delete</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator8</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_duplicate</name>
+	      <tooltip>Make a copy of the current entry</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_duplicateCB</handler>
+		<last_modification_time>Sun, 16 Jun 2002 00:14:37 GMT</last_modification_time>
+	      </signal>
+	      <label>Dup_licate</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_blank</name>
+	      <tooltip>Move to the blank entry at the bottom of the Invoice</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_blankCB</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:13:45 GMT</last_modification_time>
+	      </signal>
+	      <label>_Blank</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_reports</name>
+	  <label>_Reports</label>
+	  <right_justify>False</right_justify>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_reports_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_report_owner</name>
+	      <tooltip>Open a company report window for the owner of this Invoice</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_report_owner_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 17:31:17 GMT</last_modification_time>
+	      </signal>
+	      <label>_Company Report</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_tools</name>
+	  <label>_Tools</label>
+	  <right_justify>False</right_justify>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_tools_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_general_ledger</name>
+	      <tooltip>Open a general ledger window</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_gl_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_General Ledger</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_price_editor</name>
+	      <tooltip>View and edit the prices for stocks and mutual funds</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_prices_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_Price Editor</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_commodity_editor</name>
+	      <tooltip>View and edit the commodities for stocks and mutual funds</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_commodities_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_Commodity Editor</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_fincalc</name>
+	      <tooltip>Use the financial calculator</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_fincalc_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 06:22:56 GMT</last_modification_time>
+	      </signal>
+	      <label>_Financial Calculator</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_taxtable</name>
+	      <tooltip>View and edit the list of Tax Tables</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_taxtable_cb</handler>
+		<last_modification_time>Tue, 02 Jul 2002 20:55:22 GMT</last_modification_time>
+	      </signal>
+	      <label>_Tax Table Editor</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_billterm</name>
+	      <tooltip>View and edit the list of Billing Terms</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_billterm_cb</handler>
+		<last_modification_time>Tue, 02 Jul 2002 20:55:22 GMT</last_modification_time>
+	      </signal>
+	      <label>_Billing Terms Editor</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_payment</name>
+	      <tooltip>Enter a payment for the owner of this Invoice</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_invoice_window_payment_cb</handler>
+		<last_modification_time>Tue, 02 Jul 2002 20:55:22 GMT</last_modification_time>
+	      </signal>
+	      <label>Process Pa_yment</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
+	  <name>menu_help</name>
+	  <stock_item>GNOMEUIINFO_MENU_HELP_TREE</stock_item>
+
+	  <widget>
+	    <class>GtkMenu</class>
+	    <name>menu_help_menu</name>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_manual</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_help_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 01:57:06 GMT</last_modification_time>
+	      </signal>
+	      <label>_Gnucash Users Manual</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>menu_totd</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_totd_cb</handler>
+		<last_modification_time>Wed, 12 Jun 2002 01:57:06 GMT</last_modification_time>
+	      </signal>
+	      <label>_Tip Of The Day</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>separator9</name>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkPixmapMenuItem</class>
+	      <name>menu_about</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_main_window_about_cb</handler>
+		<last_modification_time>Sun, 16 Jun 2002 01:12:45 GMT</last_modification_time>
+	      </signal>
+	      <stock_item>GNOMEUIINFO_MENU_ABOUT_ITEM</stock_item>
+	    </widget>
+	  </widget>
 	</widget>
       </widget>
     </widget>
@@ -487,13 +1077,13 @@
 
       <widget>
 	<class>GtkToolbar</class>
-	<name>toolbar1</name>
+	<name>toolbar</name>
 	<border_width>2</border_width>
 	<orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
 	<type>GTK_TOOLBAR_BOTH</type>
-	<space_size>5</space_size>
+	<space_size>10</space_size>
 	<space_style>GTK_TOOLBAR_SPACE_LINE</space_style>
-	<relief>GTK_RELIEF_NORMAL</relief>
+	<relief>GTK_RELIEF_NONE</relief>
 	<tooltips>True</tooltips>
 
 	<widget>

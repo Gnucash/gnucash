@@ -13,6 +13,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/report/report-gnome \
   -I${top_srcdir}/src/business/business-core \
   -I${top_srcdir}/src/business/business-ledger \
+  -I${top_srcdir}/src/business/dialog-tax-table \
   ${GNOME_PRINT_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GLADE_CFLAGS} \

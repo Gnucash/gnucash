@@ -9,6 +9,15 @@
 	menu in glade.
 
 	* add a menubar to the Invoice Window in glade
+
+	* fill out the Invoice Window Menu, based upon the Register
+	Window.  Fill in the callbacks required to get the menu to work.
+
+	* Create a hook into the "owner-report" and link that into the
+	Invoice Window, so you can print the report from any Invoice.
+
+	* add a hook in the entry ledger to obtain the current Query (to
+	set the sort order).
 	
 2002-07-01  Derek Atkins  <derek@ihtfp.com>
 

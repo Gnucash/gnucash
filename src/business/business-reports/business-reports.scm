@@ -15,3 +15,5 @@
 (use-modules (gnucash report owner-report))
 
 (define gnc:invoice-report-create gnc:invoice-report-create-internal)
+
+(export gnc:owner-report-create)
