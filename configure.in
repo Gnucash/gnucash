@@ -591,6 +591,16 @@ AC_ARG_ENABLE( mt940,
   if test "x$enableval" != "xno" ; then
     MT940_DIR=mt940
   fi)
+if test x${MT940_DIR} = xmt940 ;
+then
+    AM_PATH_OPENHBCI(0.9.13.2)
+    HBCI_LIBS="${OPENHBCI_LIBS}"
+    HBCI_CFLAGS="${OPENHBCI_CFLAGS}"
+
+    AS_SCRUB_INCLUDE(HBCI_CFLAGS)
+    AC_SUBST(HBCI_LIBS)
+    AC_SUBST(HBCI_CFLAGS)
+fi
 AC_SUBST(MT940_DIR)
 
 ### --------------------------------------------------------------------------

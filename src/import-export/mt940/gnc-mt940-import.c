@@ -75,7 +75,7 @@ void gnc_file_mt940_import (void)
   FILE *mt940_file;
   GNCImportMainMatcher *gnc_mt940_importer_gui = NULL;
 
-  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
+  /* gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE); */
   DEBUG("gnc_file_mt940_import(): Begin...\n");
 
   default_dir = gnc_lookup_string_option("__paths", "Import MT940", NULL);

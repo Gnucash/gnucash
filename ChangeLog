@@ -1,3 +1,8 @@
+2003-09-18  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Add correct configure test for openhbci version
+	required by mt940 module.
+
 2003-09-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-kvp.c: Fix broken compile due to
