@@ -619,9 +619,14 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      /* C == Cleared / Reconciled */
      if ('C' == qifline [0]) {  
          /* Quicken uses C* and Cx, while MS Money uses CX.
-          * I don't know what * and x are supposed to differentiate 
+          * C* means cleared (but not yet reconciled)
+          * Cx or CX means reconciled
           */
-        xaccTransSetReconcile (trans, CREC);
+        if (('x' == qifline[1]) || ('X' == qifline[1])) { 
+           xaccTransSetReconcile (trans, YREC);
+        } else {
+           xaccTransSetReconcile (trans, CREC);
+        }
      } else 
 
      /* D == date */
