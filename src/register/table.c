@@ -74,7 +74,7 @@ ResizeStringArr (Table * table, int tile_rows, int tile_cols)
    int old_phys_rows, old_phys_cols;
    int i,j;
 
-   /* save old table size
+   /* save old table size */
    old_phys_rows = table->num_phys_rows;
    old_phys_cols = table->num_phys_cols;
 
@@ -198,7 +198,7 @@ ResizeUserData (Table * table, int tile_rows, int tile_cols)
    int old_rows, old_cols;
    int i,j;
 
-   /* save old table size
+   /* save old table size */
    old_rows = table->num_rows;
    old_cols = table->num_cols;
 
@@ -222,7 +222,7 @@ ResizeUserData (Table * table, int tile_rows, int tile_cols)
          /* if we are here, the new table has more
           * columns. Realloc the columns.  */
          for (i=0; i<tile_rows; i++) {
-            char **old_row;
+            void **old_row;
 
             old_row = table->user_data[i];
             table->user_data[i] = (void **) malloc (tile_cols * sizeof (void *));
@@ -243,7 +243,7 @@ ResizeUserData (Table * table, int tile_rows, int tile_cols)
       }
 
    } else {
-      char ***old_user_data;
+      void ***old_user_data;
 
       if (old_cols >= tile_cols) {
 
@@ -259,7 +259,7 @@ ResizeUserData (Table * table, int tile_rows, int tile_cols)
          /* if we are here, the new table has more
           * columns. Realloc the columns.  */
          for (i=0; i<old_rows; i++) {
-            char **old_row;
+            void **old_row;
 
             old_row = table->user_data[i];
             table->user_data[i] = (void **) malloc (tile_cols * sizeof (void *));
@@ -316,6 +316,7 @@ void
 xaccSetCursor (Table *table, CellBlock *curs)
 {
    table->cursor = curs;
+   xaccSetTableSize (table, 1, 1);
 }
 
 /* ==================================================== */
@@ -348,7 +349,7 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
       }
    }
 
-   cell->user_data = table->user_data[virt_row][virt_col];
+   table->cursor->user_data = table->user_data[virt_row][virt_col];
 }
 
 /* ==================================================== */
@@ -386,7 +387,7 @@ void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
       }
    }
 
-   cell->user_data = table->user_data[virt_row][virt_col];
+   table->cursor->user_data = table->user_data[virt_row][virt_col];
 }
 
 /* ==================================================== */
@@ -421,7 +422,7 @@ void xaccCommitCursor (Table *table)
       }
    }
 
-   table->user_data[virt_row][virt_col] = cell->user_data;
+   table->user_data[virt_row][virt_col] = table->cursor->user_data;
 }
 
 /* ==================================================== */
@@ -463,6 +464,8 @@ xaccRefreshHeader (Table *table)
 {
    int i,j;
    CellBlock *arr;
+
+   if (!(table->entries)) return;
 
    /* copy header data into entries cache */
    arr = table->header;
@@ -977,8 +980,8 @@ xaccRefreshTableGUI (Table * table)
 {
   XtVaSetValues (table->table_widget, XmNrows,    table->num_phys_rows,
                                       XmNcolumns, table->num_phys_cols,
+                                      XmNcells,   table->entries, 
                                       NULL);
-  XtVaSetValues (table->table_widget, XmNcells, table->entries, NULL);
 }
 
 /* ================== end of file ======================= */

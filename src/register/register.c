@@ -183,8 +183,7 @@ void xaccInitBasicRegister (BasicRegister *reg)
    xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
 
    /* -------------------------------- */   
-   table =  xaccMallocTable ();
-   xaccInitTable (table);
+   table = xaccMallocTable ();
    table -> header = header;
    xaccSetCursor (table, curs);
    reg->table = table;
