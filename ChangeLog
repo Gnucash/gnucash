@@ -1,3 +1,9 @@
+2004-18-21  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	  Add option to include zero-amount splits in computations.
+	  Fixes #143722.
+
 2004-18-19  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams's "QOF create: functionality added" patch:

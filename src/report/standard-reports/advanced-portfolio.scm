@@ -41,6 +41,7 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-shares-digits (N_ "Share decimal places"))
 (define optname-zero-shares (N_ "Include accounts with no shares"))
+(define optname-include-gains (N_ "Include gains and losses"))
 
 (define (options-generator)
   (let* ((options (gnc:new-options)) 
@@ -77,6 +78,13 @@
       gnc:pagename-general optname-shares-digits
       "e" (N_ "The number of decimal places to use for share numbers") 2
       0 6 0 1))
+
+    (gnc:register-option 
+     options 
+     (gnc:make-simple-boolean-option
+      gnc:pagename-general optname-include-gains "f" 
+      (N_ "Include splits with no shares for calculating money-in and money-out")
+      #f))
 
     ;; Account tab
     (add-option
@@ -127,7 +135,7 @@
     (string=? (gnc:split-get-guid s1) (gnc:split-get-guid s2)))
   
   (define (table-add-stock-rows table accounts to-date
-                                currency price-fn exchange-fn include-empty
+                                currency price-fn exchange-fn include-empty include-gains
                                 total-value total-moneyin total-moneyout
                                 total-gain)
 
@@ -178,7 +186,7 @@
                              ((same-split? s split) 
 			      ;; (gnc:debug "amount" (gnc:numeric-to-double (gnc:split-get-amount s)) )
                               (cond
-                                ((not (gnc:numeric-zero-p (gnc:split-get-amount s)))
+                              ((or include-gains (not (gnc:numeric-zero-p (gnc:split-get-amount s))))
                                  (unitscoll 'add commodity (gnc:split-get-amount s)) ;; Is the stock transaction?
                                  (if (< 0 (gnc:numeric-to-double
                                            (gnc:split-get-amount s)))
@@ -282,6 +290,8 @@
                                   gnc:optname-reportname))
         (include-empty (get-option gnc:pagename-accounts
                                   optname-zero-shares))
+        (include-gains (get-option gnc:pagename-general
+                                  optname-include-gains))
 
         (total-value    (gnc:make-commodity-collector))
         (total-moneyin  (gnc:make-commodity-collector))
@@ -330,7 +340,7 @@
           
           (table-add-stock-rows
            table accounts to-date currency price-fn exchange-fn
-           include-empty total-value total-moneyin total-moneyout total-gain)
+           include-empty include-gains total-value total-moneyin total-moneyout total-gain)
           
           (gnc:html-table-append-row/markup!
            table
