@@ -25,7 +25,10 @@
 include @top_srcdir@/Makefile.init
 
 INCLPATH = -I@srcdir@/../../include -I@srcdir@/../..  -I@prefix@/include
-CFLAGS   = @CFLAGS@ ${INCLPATH}
+
+# we want to add the -fpic flag to generate relocatable position independent code
+# for the engine so that in can be used in a shared module (e.g. a perl module) 
+CFLAGS   = @CFLAGS@ ${INCLPATH} -fpic
 
 ######################################################################
 # See Makefile.common for information about these variables.
