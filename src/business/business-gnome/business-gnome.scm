@@ -5,7 +5,6 @@
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/business-core" 0)
 (gnc:module-load "gnucash/gnome-search" 0)
-(gnc:module-load "gnucash/report/standard-reports" 0)
 
 (define (add-customer-extensions)
   (let ((last-cust (gnc:owner-create)))
@@ -220,7 +219,9 @@
 			(N_ "Reload invoice report")
 			(list "Extensions" "")
 			(lambda ()
-			  (load-from-path "gnucash/report/invoice.scm"))))
+			  (let ((m (current-module)))
+			    (load-from-path "gnucash/report/invoice.scm")
+			    (set-current-module m)))))
 
   (define init-data
     (gnc:make-menu-item (N_ "Initialize Test Data")
@@ -299,6 +300,3 @@
 )
 
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-extensions)
-
-(define gnc:invoice-make-printable gnc:invoice-report-create)
-(export gnc:invoice-make-printable)

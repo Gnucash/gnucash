@@ -1,5 +1,8 @@
 ;; -*-scheme-*-
-;; invoice.scm
+;; invoice.scm -- an Invoice Report, used to print a GncInvoice
+;;
+;; Created by:  Derek Atkins <warlord@MIT.EDU>
+;;
 
 (define-module (gnucash report invoice))
 
@@ -97,7 +100,7 @@
     (if (taxvalue-col column-vector)
 	(addto! heading-list (_ "Tax Amount")))
     (if (value-col column-vector)
-	(addto! heading-list (_ "Total Charge")))
+	(addto! heading-list (_ "Value")))
     (reverse heading-list)))
 
 (define (monetary-or-percent numeric currency entry-type)
@@ -249,7 +252,7 @@
 
   gnc:*report-options*)
 
-(define (make-entry-table entries options)
+(define (make-entry-table entries options add-order)
                           
   (define (add-subtotal-row leader table used-columns
                             subtotal-collector subtotal-style subtotal-label)
@@ -330,6 +333,9 @@
                            (gnc:gnc-monetary-commodity (cdr entry-values))
                            (gnc:gnc-monetary-amount (cdr entry-values)))
 
+	  (let ((order (gnc:entry-get-order current)))
+	    (if order (add-order order)))
+
           (do-rows-with-subtotals leader
                                   rest
                                   table
@@ -379,7 +385,7 @@
                          (line-helper rest)))))
   (line-helper (string->list string)))
 
-(define (make-client-table address)
+(define (make-client-table address orders)
   (let ((table (gnc:make-html-table)))
     (gnc:html-table-set-style!
      table "table"
@@ -390,6 +396,18 @@
      table
      (list
       (string-expand address #\newline "<br>")))
+    (gnc:html-table-append-row!
+     table
+     (list "<br>"))
+    (for-each
+     (lambda (order)
+       (let* ((reference (gnc:order-get-reference order)))
+	 (if (and reference (> (string-length reference) 0))
+	     (gnc:html-table-append-row!
+	      table
+	      (list
+	       (string-append (_ "REF") ":&nbsp;" reference))))))
+     orders)
     (set-last-row-style!
      table "td"
      'attribute (list "valign" "top"))
@@ -451,17 +469,21 @@
     (gnc:option-value
      (gnc:lookup-option (gnc:report-options report-obj) section name)))
 
-  (let ((document (gnc:make-html-document))
-        (table '())
-	(owner #f)
-	(entries '())
-        (invoice (opt-val "__reg" "invoice"))
-        (title #f))
+  (let* ((document (gnc:make-html-document))
+	 (table '())
+	 (orders '())
+	 (invoice (opt-val "__reg" "invoice"))
+	 (owner (gnc:invoice-get-owner invoice))
+	 (entries (gnc:invoice-get-entries invoice))
+	 (title (string-append (_ "Invoice #") (gnc:invoice-get-id invoice))))
 
-    (set! owner (gnc:invoice-get-owner invoice))
-    (set! entries (gnc:invoice-get-entries invoice))
-    (set! table (make-entry-table entries (gnc:report-options report-obj)))
-    (set! title (string-append (_ "Invoice #") (gnc:invoice-get-id invoice)))
+    (define (add-order o)
+      (if (not (member o orders))
+	  (addto! orders o)))
+
+    (set! table (make-entry-table entries
+				  (gnc:report-options report-obj)
+				  add-order))
 
     (gnc:html-document-set-title! document title)
 
@@ -491,7 +513,7 @@
 
     (gnc:html-document-add-object!
      document
-     (make-client-table (gnc:owner-get-address owner)))
+     (make-client-table (gnc:owner-get-address owner) orders))
 
     (make-break! document)
     (make-break! document)

@@ -207,7 +207,7 @@ gnc_invoice_window_print_invoice_cb (GtkWidget *widget, gpointer data)
 
   g_return_if_fail (invoice);
 
-  func = gh_eval_str ("gnc:invoice-make-printable");
+  func = gh_eval_str ("gnc:invoice-report-create");
   g_return_if_fail (gh_procedure_p (func));
 
   arg = gw_wcp_assimilate_ptr (invoice, gh_eval_str("<gnc:GncInvoice*>"));
@@ -368,7 +368,8 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice;
-
+  char const *msg = "";
+  
   if (!iw)
     return FALSE;
 
@@ -379,6 +380,23 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
   invoice = iw_get_invoice (iw);
   gncInvoiceSetOwner (invoice, &(iw->owner));
   gnc_entry_ledger_reset_query (iw->ledger);
+
+  if (iw->dialog_type == EDIT_INVOICE)
+    return FALSE;
+
+  switch (gncOwnerGetType (&(iw->owner))) {
+  case GNC_OWNER_CUSTOMER:
+    msg = gncCustomerGetTerms (gncOwnerGetCustomer (&(iw->owner)));
+    break;
+  case GNC_OWNER_VENDOR:
+    msg = gncVendorGetTerms (gncOwnerGetVendor (&(iw->owner)));
+    break;
+  default:
+    g_warning ("Unknown owner type: %d\n", gncOwnerGetType (&(iw->owner)));
+    break;
+  }
+
+  gtk_entry_set_text (GTK_ENTRY (iw->terms_entry), msg ? msg : "");
 
   return FALSE;
 }

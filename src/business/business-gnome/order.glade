@@ -421,7 +421,7 @@
 		<class>GtkEntry</class>
 		<name>ref_entry</name>
 		<can_focus>True</can_focus>
-		<editable>False</editable>
+		<editable>True</editable>
 		<text_visible>True</text_visible>
 		<text_max_length>0</text_max_length>
 		<text></text>

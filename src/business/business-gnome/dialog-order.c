@@ -104,6 +104,8 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
 		 (GTK_EDITABLE (ow->id_entry), 0, -1));
   gncOrderSetNotes (order, gtk_editable_get_chars
 		    (GTK_EDITABLE (ow->notes_text), 0, -1));
+  gncOrderSetReference (order, gtk_editable_get_chars
+			(GTK_EDITABLE (ow->ref_entry), 0, -1));
 
   tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ow->opened_date));
   timespecFromTime_t (&ts, tt);
@@ -316,6 +318,15 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
     return FALSE;
 
   gnc_owner_get_owner (ow->owner_choice, &(ow->owner));
+
+  /* Set the Order's owner now! */
+  order = ow_get_order (ow);
+  gncOrderSetOwner (order, &(ow->owner));
+
+  if (ow->dialog_type == EDIT_ORDER)
+    return FALSE;
+
+  /* Only set the reference during the New Job dialog */
   switch (gncOwnerGetType (&(ow->owner))) {
   case GNC_OWNER_JOB:
   {
@@ -328,9 +339,6 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
     break;    
   }
 
-  /* Set the Order's owner now! */
-  order = ow_get_order (ow);
-  gncOrderSetOwner (order, &(ow->owner));
   return FALSE;
 }
 
@@ -454,6 +462,9 @@ gnc_order_update_window (OrderWindow *ow)
     Timespec ts, ts_zero = {0,0};
     time_t tt;
     gint pos = 0;
+
+    gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
+			gncOrderGetReference (order));
 
     string = gncOrderGetNotes (order);
     gtk_editable_delete_text (GTK_EDITABLE (ow->notes_text), 0, -1);
@@ -645,7 +656,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   /* Now fill in a lot of the pieces and display properly */
   gnc_order_update_window (ow);
 
-  /* Set the Reference */
+  /* Maybe set the reference */
   gnc_order_owner_changed_cb (ow->owner_choice, ow);
 
   return ow;
@@ -717,7 +728,7 @@ gnc_order_window_new_order (GtkWidget *parent, GNCBook *bookp, GncOwner *owner)
   /* Now fill in a lot of the pieces and display properly */
   gnc_order_update_window (ow);
 
-  /* Set the Reference */
+  /* Maybe set the reference */
   gnc_order_owner_changed_cb (ow->owner_choice, ow);
 
   return ow;

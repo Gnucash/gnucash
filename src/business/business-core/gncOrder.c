@@ -29,6 +29,7 @@ struct _gncOrder {
   GUID		guid;
   char *	id;
   char *	notes;
+  char *	reference;
   char *	printname;
   GncOwner	owner;
   GList *	entries;
@@ -69,6 +70,7 @@ GncOrder *gncOrderCreate (GNCBook *book)
 
   order->id = CACHE_INSERT ("");
   order->notes = CACHE_INSERT ("");
+  order->reference = CACHE_INSERT ("");
 
   order->active = TRUE;
 
@@ -85,6 +87,7 @@ void gncOrderDestroy (GncOrder *order)
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
   CACHE_REMOVE (order->notes);
+  CACHE_REMOVE (order->reference);
   remObj (order);
 
   if (order->printname) g_free (order->printname);
@@ -137,6 +140,13 @@ void gncOrderSetNotes (GncOrder *order, const char *notes)
 {
   if (!order || !notes) return;
   SET_STR (order->notes, notes);
+  order->dirty = TRUE;
+}
+
+void gncOrderSetReference (GncOrder *order, const char *reference)
+{
+  if (!order || !reference) return;
+  SET_STR (order->reference, reference);
   order->dirty = TRUE;
 }
 
@@ -222,6 +232,12 @@ const char * gncOrderGetNotes (GncOrder *order)
 {
   if (!order) return NULL;
   return order->notes;
+}
+
+const char * gncOrderGetReference (GncOrder *order)
+{
+  if (!order) return NULL;
+  return order->reference;
 }
 
 gboolean gncOrderGetActive (GncOrder *order)

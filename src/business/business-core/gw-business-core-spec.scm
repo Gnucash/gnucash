@@ -585,6 +585,14 @@
 
   (gw:wrap-function
    ws
+   'gnc:order-get-reference
+   '(<gw:mchars> callee-owned const)
+   "gncOrderGetReference"
+   '((<gnc:GncOrder*> order))
+   "Return the Order's Reference")
+
+  (gw:wrap-function
+   ws
    'gnc:order-get-entries
    '(gw:glist-of <gnc:GncEntry*> callee-owned)
    "gncOrderGetEntries"
