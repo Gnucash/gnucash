@@ -1,5 +1,8 @@
 2005-04-03  David Hampton  <hampton@employees.org>
 
+	* configure.in: Remove reqirement for Berkeley DB.  The G2 branch
+	compiles and runs fine without it.
+
 	* src/gnome-utils/gnc-gnome-utils.c: Have gnucash read a private
 	RC file.  This makes it easy to apply styles to entire classes of
 	widgets in gnucsah without affecting any other application.

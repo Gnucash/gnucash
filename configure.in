@@ -813,29 +813,6 @@ LIBS="$LIBS -lm"
 
 
 ### --------------------------------------------------------------------------
-### Berkeley db
-
-DB_LIBS=
-   AC_CHECK_LIB(db-3, __db185_open, DB_LIBS="-ldb-3",
-    AC_CHECK_LIB(db-4.0, __db185_open, DB_LIBS="-ldb-4.0",
-     AC_CHECK_LIB(db-4.1, __db185_open, DB_LIBS="-ldb-4.1",
-      AC_CHECK_LIB(db-4.2, __db185_open, DB_LIBS="-ldb-4.2",
-        AC_MSG_ERROR([Your db library is missing db 1.85 compatibility mode])
-      )
-     )
-    )
-   )
-
-dnl look for db headers
-AC_CHECK_HEADERS(db_185.h db4/db_185.h)
-
-  if test "$ac_cv_header_db_h$ac_cv_header_db_185_h$ac_cv_header_db1_db_h$ac_cv_header_db4_db_185_h" = nononono; then
-  AC_MSG_ERROR([Berkeley db library required for GnuCash])
-fi
-
-AC_SUBST(DB_LIBS)
-
-### --------------------------------------------------------------------------
 ### popt
 
 AC_CHECK_LIB(popt, poptStrippedArgv,, [AC_MSG_ERROR([
