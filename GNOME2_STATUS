@@ -41,6 +41,11 @@ Register Core - MINIMALLY FUNCTIONAL
 	- The first time it is used, the account popup immediately
 	  selects the first account. After that it functions normally.
 
+	- There's a problem with the vertical sizing of the register.
+	It doesn't respect the verital size of the enclosing widget,
+	and when you grow the window the register appears to grow
+	vertically at double the rate the window is growing.
+
 	"There's a nasty bug in the register code related to gnucash's
 	use of an off-screen gtkentry to do text manipulation.  g2
 	doesn't allow this, and I ran out of patience trying to fix
@@ -79,8 +84,7 @@ Find - MINIMALLY FUNCTIONAL
 	- Use of the "Date" selection sometimes crashes gnucash (not
 	  when you select it, but then you change from "Date" to
 	  something else.
-	- Clicking find or help crashes gnucash. (Not a problem with
-	  find. A problem with the code it calls.)
+	- Clicking help prints lots of errors.
 
 
 View Toolbar/Summarybar/Statusbar - NEEDS WORK
@@ -99,8 +103,9 @@ Business functions - Somewhat Functional
 
 1) New icons desired:
 
-	-) Add account
-	-) 
+	a) Add account
+	b) Register
+	c) Report
 
 2) Support multiple windows and moving plugin pages between windows.
 Support a preference on whether new plugin pages appear in the same or
