@@ -1319,15 +1319,16 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
      */
     for (node = trans->splits; node; node = node->next)
     {
-      Split *s = node->data;
       const gnc_commodity *currency;
       const gnc_commodity *security;
+      Split *s = node->data;
+      Account *acct = xaccSplitGetAccount(s);
 
-      currency = xaccAccountGetCurrency (xaccSplitGetAccount(s));
-      security = xaccAccountGetSecurity (xaccSplitGetAccount(s));
-      if (!currency && security)
+      currency = xaccAccountGetCurrency (acct);
+      security = xaccAccountGetSecurity (acct);
+      if (!currency && security && (FALSE == gnc_commodity_equiv(curr, security)))
       {
-        xaccAccountSetCurrency (xaccSplitGetAccount(s), curr);
+        xaccAccountSetCurrency (acct, curr);
       }
     }
     kimono = xaccTransFindCommonCurrency (trans);
