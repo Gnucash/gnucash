@@ -4,6 +4,9 @@
 
 	* configure.in -- don't double-add -Wall.  Only add -Wall for GCC.
 	  let the user know what additional warnings are being added.
+
+	* fix bug #95844 -- fix qif-import/qif-parse.scm to match
+	  qif-io-core/qif-parse.scm w.r.t. parsing the numbers.
 	
 2002-10-19  Christian Stimming  <stimming@tuhh.de>
 

@@ -585,7 +585,7 @@
        (if (number? read-val)
            (gnc:double-to-gnc-numeric
             (+ 0.0 read-val) GNC-DENOM-AUTO
-            (logior (GNC-DENOM-SIGFIGS  
+            (logior (GNC-DENOM-SIGFIGS
                      (string-length (string-remove-char filtered-string #\.)))
                     GNC-RND-ROUND))
            (gnc:numeric-zero))))
