@@ -394,7 +394,10 @@ sql_sort_need_entry (Query *q)
    {							\
       sq->pq = stpcpy (sq->pq, "NOT (");		\
    }							\
-   sq->pq = stpcpy(sq->pq, fieldname " ~");		\
+   if (pd->str.use_regexp || !pd->str.case_sens)        \
+     sq->pq = stpcpy(sq->pq, fieldname " ~");		\
+   else                                                 \
+     sq->pq = stpcpy(sq->pq, fieldname " =");		\
    if (0 == pd->str.case_sens) {			\
       sq->pq = stpcpy(sq->pq, "*");			\
    }							\
@@ -446,9 +449,9 @@ sql_sort_need_entry (Query *q)
          break;							\
       case AMT_MATCH_EXACTLY:					\
          sq->pq = stpcpy(sq->pq, 				\
-            "abs(abs(" fieldname ") - gncCommodity.fraction * float8"); \
+            "abs(abs(" fieldname ") - abs(gncCommodity.fraction * float8"); \
          sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
-         sq->pq = stpcpy(sq->pq, ") < 1");			\
+         sq->pq = stpcpy(sq->pq, ")) < 1");			\
          break;							\
    }								\
    if (0 == pd->amount.sense)					\
@@ -853,7 +856,9 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
             }
 
             default:
-               PERR ("unkown query term type %d", pd->base.term_type);
+               PERR ("unknown query term type %d", pd->base.term_type);
+               more_and = 0;
+               break;
          }
       }
 
