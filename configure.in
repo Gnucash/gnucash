@@ -267,6 +267,10 @@ AC_CHECK_LIB(readline, readline)
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
 
+AC_ARG_WITH( guile, 
+       [  --with-guile=PATH       specify where to look for guile includes and libs],
+       LIBS="-L$with_guile/lib ${LIBS}"  CFLAGS="$CFLAGS -I$with_guile/include" )
+
 # Have to use AC_TRY_LINK here because AC_CHECK_LIB caches the
 # results, so one failure makes all further attempts fail.
 
