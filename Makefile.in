@@ -172,7 +172,7 @@ install:
 #  done
 
 .PHONY: default install-private install motif motif-static 
-.PHONY: depend clean distclean
+.PHONY: depend dist clean distclean
 
 # Local Variables:
 # tab-width: 2
