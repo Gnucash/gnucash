@@ -375,6 +375,42 @@ gnc_iso8601_to_timespec(const char *str)
 
 /********************************************************************\
 \********************************************************************/
+
+char * 
+gnc_timespec_to_iso8601_buff (Timespec ts, char * buff)
+{
+  int len;
+  int tz_hour, tz_min;
+  char cyn;
+  time_t tmp;
+  struct tm parsed;
+
+  tmp = ts.tv_sec;
+  localtime_r(&tmp, &parsed);
+
+  tz_hour = timezone/3600;
+  tz_min = (timezone - 3600*tz_hour)/60;
+  if (0>tz_min) { tz_min +=60; tz_hour --; }
+
+  /* we also have to print the sign by hand, to work around a bug
+   * in the glibc 2.1.3 printf (where %+02d fails to zero-pad)
+   */
+  cyn = '+';
+  if (0>tz_hour) { cyn = '-'; tz_hour = -tz_hour; }
+
+  len = sprintf (buff, "%4d-%02d-%02d %02d:%02d:%02d.%06ld %c%02d%02d",
+       parsed.tm_year+1900, parsed.tm_mon+1, parsed.tm_mday,
+       parsed.tm_hour, parsed.tm_min, parsed.tm_sec,
+       ts.tv_nsec/1000, cyn, tz_hour, tz_min);
+
+  /* return pointer to end of string */
+  buff += len;
+  return buff;
+}
+
+
+/********************************************************************\
+\********************************************************************/
 /* hack alert -- this routine returns incorrect values for 
  * dates before 1970 */
 
