@@ -320,7 +320,6 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
                      GNCBookLockFailHandler handler)
 {
   if (!book) return FALSE;
-  if (!book) return FALSE;
 
   /* clear the error condition of previous errors */
   book->errtype = 0;
