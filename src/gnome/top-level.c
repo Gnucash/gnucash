@@ -42,10 +42,12 @@
 #include "combocell.h"
 #include "date.h"
 #include "dialog-account.h"
+#include "dialog-commodity.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "file-utils.h"
 #include "global-options.h"
+#include "gnc-account-tree.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-menu-extensions.h"
@@ -119,15 +121,11 @@ static SCM register_font_callback_id = SCM_UNDEFINED;
 static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
 
-/* ============================================================== */
-
 gboolean
 gnucash_ui_is_running(void)
 {
   return gnome_is_running;
 }
-
-/* ============================================================== */
 
 gboolean 
 gnucash_ui_is_terminating(void)
@@ -135,18 +133,10 @@ gnucash_ui_is_terminating(void)
   return gnome_is_terminating;
 }
 
-/* ============================================================== */
-
 GNCMainInfo *
-gnc_ui_get_data(void)
+gnc_ui_get_data (void)
 {
   return app;
-}
-
-gncUIWidget
-gnc_ui_get_toplevel(void) {
-  /* FIXME */
-  return gnc_main_window_get_toplevel(app);
 }
 
 gboolean
@@ -373,6 +363,34 @@ gnc_html_options_url_cb (const char *location, const char *label,
   }
 }
 
+static gboolean
+gnc_html_help_url_cb (const char *location, const char *label,
+                      gboolean new_window, GNCURLResult *result)
+{
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  if (new_window)
+  {
+    gnc_help_window * help;
+
+    help = gnc_help_window_new ();
+    gnc_help_window_show_help (help, location, label);
+
+    result->load_to_stream = FALSE;
+  }
+  else
+    result->load_to_stream = TRUE;
+
+  return TRUE;
+}
+
+static void
+gnc_commodity_help_cb (void)
+{
+  helpWindow (NULL, _("Help"), HH_COMMODITY);
+}
+
 /* ============================================================== */
 
 /* These gnucash_ui_init and gnucash_ui functions are just hacks to get
@@ -523,6 +541,11 @@ gnucash_ui_init(void)
                                    gnc_html_register_url_cb);
     gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
     gnc_html_register_url_handler (URL_TYPE_OPTIONS, gnc_html_options_url_cb);
+    gnc_html_register_url_handler (URL_TYPE_HELP, gnc_html_help_url_cb);
+
+    gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
+
+    gnc_account_tree_set_group_handler (gncGetCurrentGroup);
 
     /* initialize gnome MDI and set up application window defaults  */
     app = gnc_main_window_new();

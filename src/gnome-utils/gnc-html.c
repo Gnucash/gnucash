@@ -57,7 +57,6 @@
 #include "gnc-network.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "window-help.h"
 #include "window-main.h"
 #include "messages.h"
 
@@ -864,26 +863,6 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
 
 
 /********************************************************************
- * gnc_html_open_help
- * open a help window 
- ********************************************************************/
-
-static void
-gnc_html_open_help(gnc_html * html, const gchar * location,
-                   const gchar * label, int newwin) {
-  gnc_help_window * help = NULL;
-  
-  if(newwin) {
-    help = gnc_help_window_new();
-    gnc_help_window_show_help(help, location, label);
-  }
-  else {
-    gnc_html_show_url(html, URL_TYPE_FILE, location, label, 0);
-  }      
-}
-
-
-/********************************************************************
  * gnc_html_open_scm
  * insert some scheme-generated HTML
  ********************************************************************/
@@ -1009,10 +988,6 @@ gnc_html_show_url(gnc_html * html, URLType type,
   }
 
   switch(type) {
-  case URL_TYPE_HELP:
-    gnc_html_open_help(html, location, label, new_window);
-    break;
-
   case URL_TYPE_SCHEME:
     gnc_html_open_scm(html, location, label, new_window);
     break;

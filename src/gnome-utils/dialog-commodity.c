@@ -35,7 +35,7 @@
 #include "window-help.h"
 
 
-struct _selectcommoditywindow {
+struct select_commodity_window {
   GtkWidget * dialog;
   GtkWidget * namespace_combo;
   GtkWidget * commodity_combo;
@@ -45,7 +45,7 @@ struct _selectcommoditywindow {
   void      * callback_data;
 };
 
-struct _commoditywindow {
+struct commodity_window {
   GtkWidget * dialog;
   GtkWidget * fullname_entry;
   GtkWidget * mnemonic_entry;
@@ -59,6 +59,8 @@ struct _commoditywindow {
   gnc_commodity *edit_commodity;
 };
 
+
+static gnc_commodity_help_callback help_callback = NULL;
 
 static SelectCommodityWindow *
 gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
@@ -84,6 +86,13 @@ static void gnc_ui_commodity_help_cb(GtkButton * button, gpointer user_data);
 static void 
 select_modal_callback(const gnc_commodity * arg, void * data) {
   *((const gnc_commodity **)data) = arg;
+}
+
+
+void
+gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb)
+{
+  help_callback = cb;
 }
 
 /********************************************************************
@@ -441,6 +450,7 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
                             gnc_commodity_callback callback, 
                             void * callback_data) {
   CommodityWindow * retval = g_new0(CommodityWindow, 1);
+  GtkWidget *help_button;
   GladeXML *xml;
   char *namespace;
 
@@ -457,6 +467,10 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
   glade_xml_signal_connect_data
     (xml, "gnc_ui_commodity_help_cb",
      GTK_SIGNAL_FUNC (gnc_ui_commodity_help_cb), retval);
+
+  help_button = glade_xml_get_widget (xml, "help_button");
+  if (!help_callback)
+    gtk_widget_hide (help_button);
 
   retval->dialog = glade_xml_get_widget (xml, "Commodity Dialog");
 
@@ -668,7 +682,8 @@ gnc_ui_commodity_ok_cb(GtkButton * button,
 static void
 gnc_ui_commodity_help_cb(GtkButton * button,
                          gpointer user_data) {
-  helpWindow(NULL, _("Help"), HH_COMMODITY);
+  if (help_callback)
+    help_callback ();
 }
 
 

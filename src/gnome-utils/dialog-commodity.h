@@ -29,11 +29,14 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 
-typedef struct _selectcommoditywindow SelectCommodityWindow;
-typedef struct _commoditywindow CommodityWindow;
+typedef struct select_commodity_window SelectCommodityWindow;
+typedef struct commodity_window CommodityWindow;
 
 typedef void (* gnc_commodity_callback)(const gnc_commodity *, void * data);
- 
+typedef void (* gnc_commodity_help_callback)(void);
+
+void gnc_ui_commodity_set_help_callback (gnc_commodity_help_callback cb);
+
 void gnc_ui_select_commodity_destroy(SelectCommodityWindow * w);
 
 void gnc_ui_commodity_destroy(CommodityWindow * w);

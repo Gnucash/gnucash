@@ -308,7 +308,7 @@
 
       <widget>
 	<class>GtkButton</class>
-	<name>button68</name>
+	<name>help_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<signal>
@@ -856,6 +856,7 @@ Click &quot;Back&quot; to review your currency selections.</text>
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Add</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 
 	    <widget>
@@ -865,6 +866,7 @@ Click &quot;Back&quot; to review your currency selections.</text>
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Remove</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 
 	    <widget>
@@ -873,6 +875,7 @@ Click &quot;Back&quot; to review your currency selections.</text>
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Edit</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 	  </widget>
 	</widget>

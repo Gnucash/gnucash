@@ -58,7 +58,6 @@ gboolean        gnc_main_window_can_cancel_save (GNCMainInfo *wind);
 void            gnc_main_window_save(GNCMainInfo * wind, char * session);
 void            gnc_main_window_restore(GNCMainInfo * wind,
                                         const char * session);
-GtkWidget     * gnc_main_window_get_toplevel(GNCMainInfo * wind);
 void            gnc_main_window_create_child_toolbar(GNCMainInfo * mi, 
                                                      GNCMainChildInfo * child);
 void            gnc_main_window_add_child(GNCMainInfo * main,

@@ -1,4 +1,4 @@
-SUBDIRS = . #test
+SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
@@ -39,6 +39,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-html-history.c \
   gnc-html-guppi.c \
   gnc-html.c \
+  gnc-mdi-utils.c \
   gnc-menu-extensions.c \
   gncmod-gnome-utils.c \
   gtkselect.c \

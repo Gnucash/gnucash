@@ -26,6 +26,7 @@
 
 #include <gtk/gtkctree.h>
 
+#include "Group.h"
 #include "gnc-ui-util.h"
 
 #ifdef __cplusplus
@@ -38,20 +39,21 @@ extern "C" {
 #define IS_GNC_ACCOUNT_TREE(obj)  (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_ACCOUNT_TREE))
 #define IS_GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_ACCOUNT_TREE))
 
-typedef struct _GNCAccountTree      GNCAccountTree;
-typedef struct _GNCAccountTreeClass GNCAccountTreeClass;
-typedef struct _AccountViewInfo     AccountViewInfo;
+typedef struct GNCAccountTree_s      GNCAccountTree;
+typedef struct GNCAccountTreeClass_s GNCAccountTreeClass;
+typedef struct AccountViewInfo_s     AccountViewInfo;
 
 typedef gboolean (*AccountFilter) (Account *account, gpointer user_data);
+typedef AccountGroup * (*GNCAccountTreeGroupCB) (void);
 
-struct _AccountViewInfo
+struct AccountViewInfo_s
 {
   gboolean include_type[NUM_ACCOUNT_TYPES];
 
   gboolean show_field[NUM_ACCOUNT_FIELDS];
 };
 
-struct _GNCAccountTree
+struct GNCAccountTree_s
 {
   GtkCTree ctree;
 
@@ -79,7 +81,7 @@ struct _GNCAccountTree
   gboolean ignore_unselect;
 };
 
-struct _GNCAccountTreeClass
+struct GNCAccountTreeClass_s
 {
   GtkCTreeClass parent_class;
 
@@ -96,6 +98,8 @@ struct _GNCAccountTreeClass
 /***********************************************************
  *                public functions                         *
  ***********************************************************/
+
+void gnc_account_tree_set_group_handler (GNCAccountTreeGroupCB cb);
 
 GtkType gnc_account_tree_get_type (void);
 

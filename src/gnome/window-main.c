@@ -134,6 +134,9 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
   /* enable save and restore of menubar positions */
   gnome_app_enable_layout_config( app, TRUE );
 
+  /* flag the app as gnc mdi created */
+  gtk_object_set_data (GTK_OBJECT (app), "gnc_mdi", mdi);
+
   /* add the summarybar */
   summarybar = gnc_main_window_summary_new();
 
@@ -665,22 +668,6 @@ gnc_main_window_child_refresh(gpointer data) {
   if((gnc_ui_get_data()->mdi->active_child == child->child) && child->app) {
     gnc_main_window_child_set_title (child);
   }
-}
-
-
-/********************************************************************
- * gnc_main_window_get_toplevel()
- * get the currently-active top-level widget 
- ********************************************************************/
-
-GtkWidget * 
-gnc_main_window_get_toplevel(GNCMainInfo * wind) {
-  GnomeApp *app = gnome_mdi_get_active_window(GNOME_MDI(wind->mdi));
-
-  if (app)
-    return GTK_WIDGET(app);
-
-  return NULL;
 }
 
 

@@ -1,3 +1,21 @@
+2001-09-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/gw-gnc-spec.scm: remove some unused wrappings
+
+	* src/gnome-utils/Makefile.am: enable test dir
+
+	* src/gnome-utils/dialog-commodity.c: refactor help handler
+
+	* src/gnome-utils/gnc-account-tree.c: refactor account group handler
+
+	* src/gnome-utils/gnc-html.c: refactor help url handler
+
+	* src/gnome/glade/commodity.glade: name help button
+
+	* src/gnome/top-level.c: add in new handlers
+
+	* src/gnome/window-main.c: remove toplevel api
+
 2001-09-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/Makefile.am: install public headers

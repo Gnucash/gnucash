@@ -21,8 +21,6 @@
 #ifndef GNC_UI_H
 #define GNC_UI_H
 
-#include "config.h"
-
 #include <glib.h>
 
 #include "gnc-ui-common.h"
@@ -111,7 +109,7 @@ void gnc_ui_hierarchy_druid (void);
 
 void        gnc_ui_shutdown (void);
 void        gnc_ui_destroy_all_subwindows (void);
-gncUIWidget gnc_ui_get_toplevel(void);
+gncUIWidget gnc_ui_get_toplevel (void);
 
 gboolean    gnc_ui_can_cancel_save (void);
 
