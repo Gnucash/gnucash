@@ -54,10 +54,11 @@
 #define MOD_IO         2
 #define MOD_REGISTER   3
 #define MOD_LEDGER     4
-#define MOD_GUI        5
-#define MOD_SCRUB      6
-#define MOD_GTK_REG    7
-#define MODULE_MAX     8
+#define MOD_HTML       5
+#define MOD_GUI        6
+#define MOD_SCRUB      7
+#define MOD_GTK_REG    8
+#define MODULE_MAX     9
 
 extern int loglevel[MODULE_MAX];
 

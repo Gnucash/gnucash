@@ -47,6 +47,7 @@ int loglevel[MODULE_MAX] =
  2,      /* IO */
  2,      /* REGISTER */
  2,      /* LEDGER */
+ 4,      /* HTML */
  2,      /* GUI */
  4,      /* SCRUB */
  4,      /* GTK_REG */
