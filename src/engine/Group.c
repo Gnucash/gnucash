@@ -396,7 +396,6 @@ xaccInsertSubAccount( Account *adult, Account *child )
   int retval;
 
   if (NULL == adult) return -1;
-  if (NULL == child) return -1;
 
   /* if a container for the children doesn't yet exist, add it */
   if (NULL == adult->children) {
@@ -405,6 +404,9 @@ xaccInsertSubAccount( Account *adult, Account *child )
 
   /* set back-pointer to parent */
   adult->children->parent = adult;
+
+  /* allow side-effect of creating a child-less account group */
+  if (NULL == child) return -1;
 
   retval = insertAccount (adult->children, child);
   return retval;
