@@ -56,10 +56,11 @@ typedef enum
 {
   RANDOM_QT      = 0,
   SIMPLE_QT      = 1 << 0,
-  SPLIT_KVP_QT   = 1 << 1,
-  TRANS_KVP_QT   = 1 << 2,
-  ACCOUNT_KVP_QT = 1 << 3,
-  GUID_QT        = 1 << 4,
+  ACCOUNT_QT     = 1 << 1,
+  SPLIT_KVP_QT   = 1 << 2,
+  TRANS_KVP_QT   = 1 << 3,
+  ACCOUNT_KVP_QT = 1 << 4,
+  GUID_QT        = 1 << 5,
   ALL_QT         = (1 << 8) - 1
 } TestQueryTypes;
 

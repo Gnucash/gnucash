@@ -294,7 +294,7 @@ GUID*
 get_random_guid(void)
 {
     GUID *ret;
-    
+
     ret = g_new(GUID, 1);
     guid_new(ret);
 
@@ -1694,6 +1694,41 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
 
       xaccQueryAddClearedMatch (q, how, QUERY_AND);
     }
+  }
+
+  if (query_types & ACCOUNT_QT)
+  {
+    GList * list;
+    GList * node;
+
+    /* ACCT_MATCH_ALL */
+    list = NULL;
+    for (node = xaccTransGetSplitList (trans); node; node = node->next)
+    {
+      Split * split = node->data;
+      list = g_list_prepend (list, xaccSplitGetAccount (split));
+    }
+    xaccQueryAddAccountMatch (q, list, ACCT_MATCH_ALL, QUERY_AND);
+    g_list_free (list);
+
+    /* ACCT_MATCH_NONE */
+    list = NULL;
+    list = g_list_prepend (list, get_random_guid ());
+    list = g_list_prepend (list, get_random_guid ());
+    list = g_list_prepend (list, get_random_guid ());
+    xaccQueryAddAccountGUIDMatch (q, list, ACCT_MATCH_NONE, QUERY_AND);
+
+    /* ACCT_MATCH_ANY */
+    {
+      GUID * guid = get_random_guid ();
+      *guid = *xaccAccountGetGUID (a);
+      list = g_list_prepend (list, guid);
+    }
+    xaccQueryAddAccountGUIDMatch (q, list, ACCT_MATCH_ANY, QUERY_AND);
+
+    for (node = list; node; node = node->next)
+      g_free (node->data);
+    g_list_free (list);
   }
 
   if (query_types & GUID_QT)
