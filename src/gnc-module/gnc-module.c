@@ -3,6 +3,8 @@
  * Copyright 2001 Linux Developers Group, Inc.
  *************************************************************/
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
@@ -129,7 +131,7 @@ gnc_module_system_setup_load_path(void)
   g_list_free(dirs);
 
   put_str = g_strdup_printf ("LD_LIBRARY_PATH=%s", envt);
-  if(putenv(put_str) == -1)
+  if (putenv(put_str) != 0)
   {
     g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
   }

@@ -373,7 +373,9 @@ gnc_timegm (struct tm *tm)
   put_str = g_strdup_printf ("TZ=%s", old_tz ? old_tz : "");
   putenv (put_str);
 
-  g_free (put_str);
+  /* We can't free put_str since it is used directly.
+   * This is a memory leak, but how to solve it? *?
+  /* g_free (put_str); */
   g_free (old_tz);
 
   return result;

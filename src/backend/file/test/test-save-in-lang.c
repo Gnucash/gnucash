@@ -91,7 +91,6 @@ test_file(const char *filename)
 
         putenv_str = g_strdup_printf ("%s=%s", "LANG", possible_envs[i]);
         putenv (putenv_str);
-        g_free (putenv_str);
 
         new_session = gnc_session_new();
         
@@ -163,7 +162,6 @@ main(int argc, char **argv)
 
             putenv_str = g_strdup_printf ("%s=%s", "LANG", base_env);
             putenv (putenv_str);
-            g_free (putenv_str);
 
             if(!S_ISDIR(file_info.st_mode))
             {

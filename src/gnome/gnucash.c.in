@@ -84,14 +84,12 @@ gnucash_main_helper (int argc, char *argv[])
       exit(1);
     }
 
-    if(putenv(string) != 0) {
+    if (putenv(string) != 0) {
       FATAL("putenv(%s) failed. Aborting.\n", string);
       exit(1);
     }
 
     bootstrap_scm = GNC_BOOTSTRAP_SCM;
-
-    g_free(string);
   }
 
   PINFO("bootstrap file is %s\n", bootstrap_scm);
@@ -101,7 +99,6 @@ gnucash_main_helper (int argc, char *argv[])
     FATAL("(load %s) failed\n", bootstrap_scm);
     exit(1);
   }
-
 
 
   if(run_as_shell) {
