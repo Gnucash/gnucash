@@ -1,3 +1,10 @@
+2003-09-01  David Hampton  <hampton@employees.org>
+
+	* configure.in:
+	* src/gnome-utils/print-session.[ch]: Tony Watts'
+	<tjawatts@totalise.co.uk> fix for compiling with either
+	libgnomeprint 2.0 or 2.2.
+
 2003-08-23  David Hampton  <hampton@employees.org>
 
 	* src/scm/main.scm: Set next version number to 2.0.

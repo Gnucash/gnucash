@@ -28,13 +28,22 @@
 
 #include <gnome.h>
 #include <libgnomeprint/gnome-print.h>
+
+#if GNOME_PRINT_VER==2
+#include <libgnomeprint/gnome-print-job.h>
+#else
 #include <libgnomeprint/gnome-print-master.h>
+#endif
 
 #include <libgnomeprintui/gnome-print-dialog.h>
 #include <libgnomeprintui/gnome-print-preview.h>
 
 typedef struct {
+#if GNOME_PRINT_VER==2
+  GnomePrintJob      * master;
+#else
   GnomePrintMaster   * master;
+#endif
   GnomePrintContext  * meta;
   GnomeFont          * default_font;
   GnomePrintPaper    * paper;

@@ -820,8 +820,22 @@ then
     AC_SUBST(GDK_PIXBUF_LIBS)
 
     # Gnome-Print -- some people already have/need libgnomeprint-2.2
-    #PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2)
-    PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.0 libgnomeprintui-2.0)
+    # Yep, so lets test to see if it is 2.0 or 2.2, 
+    # Anyone know why gnome has versions in the package config? 
+    # Why cant I just ask for the version of 'libgnomeprint'
+
+    # If 2.2 doesnt exist set gpv to 0
+    PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2 libgnomeprintui-2.2,,gpv=0)
+    if test $gpv
+     then 
+	#If no 2.2 check for 2.0
+      	PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.0 libgnomeprintui-2.0)
+      	AC_DEFINE_UNQUOTED(GNOME_PRINT_VER,0,[gnome print version])
+     else
+	#if 2.2 set header variable
+	AC_DEFINE_UNQUOTED(GNOME_PRINT_VER,2,[gnome print version])
+    fi
+  
     AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
     AC_SUBST(GNOME_PRINT_CFLAGS)
     AC_SUBST(GNOME_PRINT_LIBS)
