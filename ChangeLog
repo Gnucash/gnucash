@@ -1,3 +1,8 @@
+2003-05-09  Christian Stimming  <stimming@tuhh.de>
+
+	* macros/openhbci.m4: Fix openhbci macro again so that it uses a C
+	check program.
+
 2003-05-08  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: add AC_PREREQ(2.53) to require 2.53 :)

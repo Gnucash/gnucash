@@ -1,5 +1,5 @@
 # Configure paths for OpenHBCI
-# by Christian Stimming 2002-07-30
+# by Christian Stimming 2002-07-30, updated 2003-05-09
 # Copied from glib-2.0.m4 by Owen Taylor     1997-2001
 
 dnl AM_PATH_OPENHBCI([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
@@ -44,12 +44,12 @@ AC_MSG_RESULT($hbci_dir)
 
 min_openhbci_version=ifelse([$1], ,0.9.0.0,$1)
 AC_MSG_CHECKING(for OpenHBCI - version >= $min_openhbci_version)
-AC_LANG_PUSH(C++)
+dnl AC_LANG_PUSH(C++) -- DON'T use C++ here!!!
 
 if test "x$enable_openhbcitest" = "xyes" ; then
-  ac_save_CXXFLAGS="$CXXFLAGS"
+  ac_save_CFLAGS="$CFLAGS"
   ac_save_LIBS="$LIBS"
-  CXXFLAGS="$CXXFLAGS $OPENHBCI_CXXFLAGS"
+  CFLAGS="$CFLAGS $OPENHBCI_CFLAGS"
   LIBS="$OPENHBCI_LIBS $LIBS"
 dnl
 dnl Now check if the installed OpenHBCI is sufficiently new. (Also sanity
@@ -95,13 +95,16 @@ main ()
     }
   }
 
-  /* in C: HBCI_Hbci_libraryVersion(&getmajor, &getminor, &getmicro); */
 #if ((OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || \
+      (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>17))
+  /* Four-argument libraryVersion_build() was introduced with 0.9.9.18. */
+  HBCI_Hbci_libraryVersion_build(&getmajor, &getminor, &getmicro, &getbuild);
+#elif ((OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || \
       (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>8))
   /* Four-argument libraryVersion() was introduced with 0.9.9.9. */
-  HBCI::Hbci::libraryVersion(getmajor, getminor, getmicro, getbuild);
+  HBCI_Hbci_libraryVersion(&getmajor, &getminor, &getmicro, &getbuild);
 #else
-  HBCI::Hbci::libraryVersion(getmajor, getminor, getmicro);
+  HBCI_Hbci_libraryVersion(&getmajor, &getminor, &getmicro);
   getbuild = OPENHBCI_VERSION_BUILD;
 #endif
 
@@ -152,7 +155,7 @@ main ()
   return 1;
 }
 ],, no_openhbci=yes,[echo $ac_n "cross compiling; assumed OK... $ac_c"])
-  CXXFLAGS="$ac_save_CXXFLAGS"
+  CFLAGS="$ac_save_CFLAGS"
   LIBS="$ac_save_LIBS"
 fi
 if test "x$no_openhbci" = x ; then
@@ -164,9 +167,9 @@ else
     :
   else
     echo "*** Could not run OpenHBCI test program, checking why..."
-    ac_save_CXXFLAGS="$CXXFLAGS"
+    ac_save_CFLAGS="$CFLAGS"
     ac_save_LIBS="$LIBS"
-    CXXFLAGS="$CXXFLAGS $OPENHBCI_CXXFLAGS"
+    CFLAGS="$CFLAGS $OPENHBCI_CFLAGS"
     LIBS="$LIBS $OPENHBCI_LIBS"
     AC_TRY_LINK([
 #include <openhbci.h>
@@ -186,10 +189,10 @@ else
         [ echo "***"
 	  echo "*** The test program failed to compile or link. See the file config.log for the"
           echo "*** exact error that occured. This usually means OpenHBCI is incorrectly installed."])
-    CXXFLAGS="$ac_save_CXXFLAGS"
+    CFLAGS="$ac_save_CFLAGS"
     LIBS="$ac_save_LIBS"
   fi
-  OPENHBCI_CXXFLAGS=""
+  OPENHBCI_CFLAGS=""
   OPENHBCI_LIBS=""
   ifelse([$3], , :, [$3])
   exit 1;
@@ -197,6 +200,6 @@ fi
 AC_SUBST(OPENHBCI_CFLAGS)
 AC_SUBST(OPENHBCI_LIBS)
 AC_SUBST(OPENHBCI_CXXFLAGS)
-AC_LANG_POP(C++)
+dnl AC_LANG_POP(C++)
 rm -f conf.openhbcitest
 ])
