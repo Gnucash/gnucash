@@ -1080,18 +1080,22 @@ xaccReadQIFData( char *datafile )
               freeAccount(acc); 
               continue;
            }
-           if (-1 == acc->type) {  /* free up malloced data if unknown account type */
-              freeAccount(acc); 
-              continue;
-           }
 
            /* check to see if we already know this account;
             * if we do, use it, otherwise create it */
            preexisting = xaccGetAccountFromName (grp, acc->accountName);
-           if (preexisting) {
+           if (preexisting) 
+           {
               freeAccount (acc);
               acc = preexisting;
-           } else {
+           } 
+           else if (-1 == acc->type)   /* free up malloced data if unknown account type */
+           {
+              freeAccount(acc); 
+              continue;
+           }
+           else
+           {
               insertAccount( grp, acc );
            }
    
