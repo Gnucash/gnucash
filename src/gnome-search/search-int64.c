@@ -22,7 +22,7 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "gnc-amount-edit.h"
 #include "QueryCore.h"
@@ -57,17 +57,21 @@ gnc_search_int64_get_type (void)
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchInt64",
-      sizeof(GNCSearchInt64),
-      sizeof(GNCSearchInt64Class),
-      (GtkClassInitFunc)gnc_search_int64_class_init,
-      (GtkObjectInitFunc)gnc_search_int64_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchInt64Class),      /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_int64_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchInt64),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_int64_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchInt64",
+				   &type_info, 0);
   }
 	
   return type;
@@ -80,7 +84,7 @@ gnc_search_int64_class_init (GNCSearchInt64Class *class)
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
   object_class = G_OBJECT_CLASS (class);
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gnc_search_int64_finalize;
 
@@ -121,7 +125,7 @@ gnc_search_int64_finalize (GObject *obj)
 GNCSearchInt64 *
 gnc_search_int64_new (void)
 {
-  GNCSearchInt64 *o = (GNCSearchInt64 *)gtk_type_new(gnc_search_int64_get_type ());
+  GNCSearchInt64 *o = g_object_new(gnc_search_int64_get_type (), NULL);
   return o;
 }
 

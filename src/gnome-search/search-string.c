@@ -25,7 +25,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <regex.h>
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "search-string.h"
 #include "QueryCore.h"
@@ -57,17 +57,21 @@ gnc_search_string_get_type (void)
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchString",
-      sizeof(GNCSearchString),
-      sizeof(GNCSearchStringClass),
-      (GtkClassInitFunc)gnc_search_string_class_init,
-      (GtkObjectInitFunc)gnc_search_string_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchStringClass),     /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_string_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchString),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_string_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchString",
+				   &type_info, 0);
   }
 	
   return type;
@@ -80,7 +84,7 @@ gnc_search_string_class_init (GNCSearchStringClass *class)
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
   object_class = G_OBJECT_CLASS (class);
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gnc_search_string_finalize;
 
@@ -124,7 +128,7 @@ gnc_search_string_finalize (GObject *obj)
 GNCSearchString *
 gnc_search_string_new (void)
 {
-  GNCSearchString *o = (GNCSearchString *)gtk_type_new(gnc_search_string_get_type ());
+  GNCSearchString *o = g_object_new(gnc_search_string_get_type (), NULL);
   return o;
 }
 
@@ -167,8 +171,13 @@ gncs_validate (GNCSearchCoreType *fe)
 	
   if (!fi->value || *(fi->value) == '\0') {
     GtkWidget *dialog;
-    dialog = gnome_ok_dialog (_("You need to enter a string value"));
-    gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+    dialog = gtk_message_dialog_new (NULL,
+				     GTK_DIALOG_MODAL,
+				     GTK_MESSAGE_ERROR,
+				     GTK_BUTTONS_OK,
+				     _("You need to enter a string value"));
+    gtk_dialog_run (GTK_DIALOG (dialog));
+    gtk_widget_destroy(dialog);
     return FALSE;
   }
 
@@ -197,10 +206,13 @@ gncs_validate (GNCSearchCoreType *fe)
 				fi->value, regmsg);
       g_free (regmsg);
 			
-      dialog = gnome_ok_dialog (errmsg);
-			
-      gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
-			
+      dialog = gtk_message_dialog_new (NULL,
+				       GTK_DIALOG_MODAL,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_OK,
+				       errmsg);
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy(dialog);
       g_free (errmsg);
       valid = FALSE;
     }

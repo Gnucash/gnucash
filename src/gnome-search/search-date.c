@@ -22,7 +22,7 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
@@ -51,31 +51,27 @@ struct _GNCSearchDatePrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
-
 guint
 gnc_search_date_get_type (void)
 {
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchDate",
-      sizeof(GNCSearchDate),
-      sizeof(GNCSearchDateClass),
-      (GtkClassInitFunc)gnc_search_date_class_init,
-      (GtkObjectInitFunc)gnc_search_date_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchDateClass),       /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_date_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchDate),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_date_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchDate",
+				   &type_info, 0);
   }
 	
   return type;
@@ -88,7 +84,7 @@ gnc_search_date_class_init (GNCSearchDateClass *class)
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
   object_class = G_OBJECT_CLASS (class);
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gnc_search_date_finalize;
 
@@ -130,7 +126,7 @@ gnc_search_date_finalize (GObject *obj)
 GNCSearchDate *
 gnc_search_date_new (void)
 {
-  GNCSearchDate *o = (GNCSearchDate *)gtk_type_new(gnc_search_date_get_type ());
+  GNCSearchDate *o = g_object_new(gnc_search_date_get_type (), NULL);
   return o;
 }
 
@@ -243,7 +239,7 @@ editable_enters (GNCSearchCoreType *fe)
   g_return_if_fail (IS_GNCSEARCH_DATE (fi));
 
   if (fi->priv->entry)
-    gtk_entry_set_activates_default(GTK_ENTRY (fi->priv->entry), TRUE);
+    gnc_date_editable_enters (GNC_DATE_EDIT (fi->priv->entry), TRUE);
 }
 
 static GtkWidget *

@@ -22,7 +22,7 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "gnc-amount-edit.h"
 #include "QueryCore.h"
@@ -58,17 +58,21 @@ gnc_search_numeric_get_type (void)
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchNumeric",
-      sizeof(GNCSearchNumeric),
-      sizeof(GNCSearchNumericClass),
-      (GtkClassInitFunc)gnc_search_numeric_class_init,
-      (GtkObjectInitFunc)gnc_search_numeric_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchNumericClass),    /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_numeric_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchNumeric),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_numeric_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchNumeric",
+				   &type_info, 0);
   }
 	
   return type;
@@ -81,7 +85,7 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *class)
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
   object_class = G_OBJECT_CLASS (class);
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gnc_search_numeric_finalize;
 
@@ -124,7 +128,7 @@ gnc_search_numeric_finalize (GObject *obj)
 GNCSearchNumeric *
 gnc_search_numeric_new (void)
 {
-  GNCSearchNumeric *o = (GNCSearchNumeric *)gtk_type_new(gnc_search_numeric_get_type ());
+  GNCSearchNumeric *o = g_object_new(gnc_search_numeric_get_type (), NULL);
   return o;
 }
 
@@ -138,7 +142,7 @@ gnc_search_numeric_new (void)
 GNCSearchNumeric *
 gnc_search_numeric_debcred_new (void)
 {
-  GNCSearchNumeric *o = (GNCSearchNumeric *)gtk_type_new(gnc_search_numeric_get_type ());
+  GNCSearchNumeric *o = g_object_new(gnc_search_numeric_get_type (), NULL);
   o->priv->is_debcred = TRUE;
   return o;
 }

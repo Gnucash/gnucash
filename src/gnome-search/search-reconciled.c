@@ -22,7 +22,7 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "QueryCore.h"
 #include "Transaction.h"	/* for ?REC */
@@ -53,17 +53,21 @@ gnc_search_reconciled_get_type (void)
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchReconciled",
-      sizeof(GNCSearchReconciled),
-      sizeof(GNCSearchReconciledClass),
-      (GtkClassInitFunc)gnc_search_reconciled_class_init,
-      (GtkObjectInitFunc)gnc_search_reconciled_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchReconciledClass), /* class_size */
+      NULL,   			        /* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_reconciled_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchReconciled),	/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_reconciled_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchReconciled",
+				   &type_info, 0);
   }
 	
   return type;
@@ -76,7 +80,7 @@ gnc_search_reconciled_class_init (GNCSearchReconciledClass *class)
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
   object_class = G_OBJECT_CLASS (class);
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gnc_search_reconciled_finalize;
 
@@ -116,7 +120,7 @@ gnc_search_reconciled_finalize (GObject *obj)
 GNCSearchReconciled *
 gnc_search_reconciled_new (void)
 {
-  GNCSearchReconciled *o = (GNCSearchReconciled *)gtk_type_new(gnc_search_reconciled_get_type ());
+  GNCSearchReconciled *o = g_object_new(gnc_search_reconciled_get_type (), NULL);
   return o;
 }
 

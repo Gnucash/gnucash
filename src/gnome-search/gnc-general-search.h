@@ -32,7 +32,7 @@
 #ifndef GNC_GENERAL_SEARCH_H
 #define GNC_GENERAL_SEARCH_H
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 #include "dialog-search.h"
 #include "gnc-book.h"
 

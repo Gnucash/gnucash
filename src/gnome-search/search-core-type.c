@@ -23,7 +23,7 @@
 #endif
 
 #include <string.h>
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "QueryCore.h"
 #include "QueryNew.h"
@@ -54,15 +54,7 @@ struct _GNCSearchCoreTypePrivate {
 
 static GtkObjectClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
 static GHashTable *typeTable = NULL;
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
 
 GType
 gnc_search_core_type_get_type (void)

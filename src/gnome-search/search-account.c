@@ -22,11 +22,11 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "Account.h"
 #include "QueryCore.h"
-#include "gnc-account-tree.h"
+#include "gnc-tree-view-account.h"
 #include "gnc-gui-query.h"
 
 #include "search-account.h"
@@ -51,13 +51,6 @@ struct _GNCSearchAccountPrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
 
 guint
 gnc_search_account_get_type (void)
@@ -65,17 +58,21 @@ gnc_search_account_get_type (void)
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchAccount",
-      sizeof(GNCSearchAccount),
-      sizeof(GNCSearchAccountClass),
-      (GtkClassInitFunc)gnc_search_account_class_init,
-      (GtkObjectInitFunc)gnc_search_account_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchAccountClass),    /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_account_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchAccount),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_account_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchAccount",
+				   &type_info, 0);
   }
 	
   return type;
@@ -88,7 +85,7 @@ gnc_search_account_class_init (GNCSearchAccountClass *class)
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
   object_class = G_OBJECT_CLASS (class);
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gnc_search_account_finalize;
 
@@ -127,7 +124,7 @@ gnc_search_account_finalize (GObject *obj)
 GNCSearchAccount *
 gnc_search_account_new (void)
 {
-  GNCSearchAccount *o = (GNCSearchAccount *)gtk_type_new(gnc_search_account_get_type ());
+  GNCSearchAccount *o = g_object_new(gnc_search_account_get_type (), NULL);
   return o;
 }
 
@@ -141,7 +138,7 @@ gnc_search_account_new (void)
 GNCSearchAccount *
 gnc_search_account_matchall_new (void)
 {
-  GNCSearchAccount *o = (GNCSearchAccount *)gtk_type_new(gnc_search_account_get_type ());
+  GNCSearchAccount *o = g_object_new(gnc_search_account_get_type (), NULL);
   o->priv->match_all = TRUE;
   o->how = GUID_MATCH_ALL;
   return o;
@@ -234,19 +231,18 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
   GtkWidget *accounts_scroller;
   GtkWidget *label;
   char *desc;
+  GtkTreeSelection *selection;
 
   /* Create the account tree */
-  account_tree = gnc_account_tree_new ();
-  gtk_clist_column_titles_hide(GTK_CLIST(account_tree));
-  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(account_tree));
-  gnc_account_tree_refresh(GNC_ACCOUNT_TREE(account_tree));
-  gtk_clist_set_selection_mode(GTK_CLIST(account_tree),
-			       GTK_SELECTION_MULTIPLE);
+  account_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(account_tree), FALSE);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(account_tree));
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
   /* Select the currently-selected accounts */
   if (fi->priv->selected_accounts)
-    gnc_account_tree_select_accounts (GNC_ACCOUNT_TREE(account_tree),
-				      fi->priv->selected_accounts, FALSE);
+    gnc_tree_view_account_set_selected_accounts (GNC_TREE_VIEW_ACCOUNT(account_tree),
+						 fi->priv->selected_accounts, FALSE);
 
   /* Create the account scroller and put the tree in it */
   accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
@@ -279,7 +275,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
       g_list_free (fi->priv->selected_accounts);
 
     fi->priv->selected_accounts =
-      gnc_account_tree_get_current_accounts (GNC_ACCOUNT_TREE (account_tree));
+      gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
 
     desc = describe_button (fi);
     gtk_label_set_text (GTK_LABEL (GTK_BIN (button)->child), desc);

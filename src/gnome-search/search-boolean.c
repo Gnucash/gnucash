@@ -22,7 +22,7 @@
 #include <config.h>
 #endif
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "QueryCore.h"
 
@@ -46,31 +46,27 @@ struct _GNCSearchBooleanPrivate {
 
 static GNCSearchCoreTypeClass *parent_class;
 
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
-
 guint
 gnc_search_boolean_get_type (void)
 {
   static guint type = 0;
 	
   if (!type) {
-    GtkTypeInfo type_info = {
-      "GNCSearchBoolean",
-      sizeof(GNCSearchBoolean),
-      sizeof(GNCSearchBooleanClass),
-      (GtkClassInitFunc)gnc_search_boolean_class_init,
-      (GtkObjectInitFunc)gnc_search_boolean_init,
-      NULL,
-      NULL
+    GTypeInfo type_info = {
+      sizeof(GNCSearchBooleanClass),    /* class_size */
+      NULL,   				/* base_init */
+      NULL,				/* base_finalize */
+      (GClassInitFunc)gnc_search_boolean_class_init,
+      NULL,				/* class_finalize */
+      NULL,				/* class_data */
+      sizeof(GNCSearchBoolean),		/* */
+      0,				/* n_preallocs */
+      (GInstanceInitFunc)gnc_search_boolean_init,
     };
 		
-    type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
+    type = g_type_register_static (GNC_TYPE_SEARCH_CORE_TYPE,
+				   "GNCSearchBoolean",
+				   &type_info, 0);
   }
 	
   return type;
@@ -83,7 +79,7 @@ gnc_search_boolean_class_init (GNCSearchBooleanClass *class)
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
   object_class = G_OBJECT_CLASS (class);
-  parent_class = gtk_type_class(gnc_search_core_type_get_type ());
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gnc_search_boolean_finalize;
 
@@ -123,7 +119,7 @@ gnc_search_boolean_finalize (GObject *obj)
 GNCSearchBoolean *
 gnc_search_boolean_new (void)
 {
-  GNCSearchBoolean *o = (GNCSearchBoolean *)gtk_type_new(gnc_search_boolean_get_type ());
+  GNCSearchBoolean *o = g_object_new(gnc_search_boolean_get_type (), NULL);
   return o;
 }
 

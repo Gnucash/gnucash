@@ -81,18 +81,21 @@ gnc_general_search_get_type (void)
 	static guint general_search_type = 0;
 
 	if (!general_search_type){
-		GtkTypeInfo general_search_info = {
-			"GNCGeneralSearch",
-			sizeof (GNCGeneralSearch),
-			sizeof (GNCGeneralSearchClass),
-			(GtkClassInitFunc) gnc_general_search_class_init,
-			(GtkObjectInitFunc) gnc_general_search_init,
-			NULL,
-			NULL,
+		static const GTypeInfo our_info = {
+			sizeof (GNCGeneralSearchClass),    /* class_size */
+			NULL,   			   /* base_init */
+			NULL,				   /* base_finalize */
+			(GClassInitFunc) gnc_general_search_class_init,
+			NULL,				   /* class_finalize */
+			NULL,				   /* class_data */
+			sizeof (GNCGeneralSearch),	   /* */
+			0,				   /* n_preallocs */
+			(GInstanceInitFunc) gnc_general_search_init,
 		};
 
-		general_search_type = gtk_type_unique (gtk_hbox_get_type (),
-						       &general_search_info);
+		general_search_type = g_type_register_static (GTK_TYPE_HBOX,
+							      "GNCGeneralSearch",
+							      &our_info, 0);
 	}
 
 	return general_search_type;
@@ -225,7 +228,7 @@ new_item_selected_cb (gpointer item, gpointer user_data)
 
 /* The search dialog has closed; let's forget about her */
 static int
-on_close_cb (GnomeDialog *dialog, gpointer user_data)
+on_close_cb (GtkDialog *dialog, gpointer user_data)
 {
 	GNCGeneralSearch *gsl = user_data;
 	gsl->priv->sw = NULL;
@@ -298,7 +301,7 @@ gnc_general_search_new (GNCIdTypeConst type, const char *label,
 	get_guid = gncQueryObjectGetParameterGetter (type, QUERY_PARAM_GUID);
 	g_return_val_if_fail (get_guid, NULL);
 
-	gsl = gtk_type_new (gnc_general_search_get_type ());
+	gsl = g_object_new (gnc_general_search_get_type (), NULL);
 
 	create_children (gsl, label);
 
