@@ -63,10 +63,29 @@ xaccSaveRegEntry (BasicRegister *reg)
 
 /* ======================================================== */
 
+static Account *
+GetPeerAcc (Split *split)
+{
+   Account *acc;
+   Transaction *trans;
+   trans = (Transaction *) (split->parent);
+
+   /* hack alert -- this is incorrect for splits in general */
+   if (split != &(trans->credit_split)) {
+      acc = (Account *) trans->credit_split.acc;
+   } else {
+      acc = (Account *) trans->debit_splits[0]->acc;
+   }
+   return acc;
+}
+
+/* ======================================================== */
+
 void
 xaccLoadRegEntry (BasicRegister *reg, Split *split)
 {
    Transaction *trans;
+   Account *acc;
    char buff[2];
 
    if (!split) return;
@@ -84,6 +103,10 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    buff[0] = split->reconciled;
    buff[1] = 0x0;
    xaccSetBasicCellValue (reg->recnCell, buff);
+
+   /* the transfer account */
+   acc = GetPeerAcc (split);
+   xaccSetBasicCellValue (&(reg->xfrmCell->cell), acc->accountName);
 
    xaccSetDebCredCellValue (reg->debitCell, 
                             reg->creditCell, split->damount);
