@@ -73,7 +73,7 @@ sub checkprice
   $query = gnucash::xaccMallocQuery();
   gnucash::xaccQuerySetGroup($query, gnucash::xaccAccountGetParent($acct));
   gnucash::xaccQueryAddSingleAccountMatch ($query, $acct, $gnucash::QUERY_AND);
-  gnucash::xaccQueryAddDateMatchTT ($query, $earliest, $latest,
+  gnucash::xaccQueryAddDateMatchTT ($query, 1, $earliest, 1, $latest,
                                     $gnucash::QUERY_AND);
   $splitlist = gnucash::xaccQueryGetSplits ($query);
 
