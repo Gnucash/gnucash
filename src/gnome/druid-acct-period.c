@@ -27,6 +27,7 @@
 #include <gnome.h>
 #include <libgnomeui/gnome-window-icon.h>
 
+#include "FreqSpec.h"
 #include "dialog-utils.h"
 #include "druid-acct-period.h"
 #include "druid-utils.h"
@@ -86,7 +87,7 @@ ap_changed (GtkWidget *widget,
                     gpointer user_data)
 {
   AcctPeriodInfo *info = user_data;
-  time_t closing_date;
+  time_t closing_date = 0;
   GtkMenuItem *item;
 
 /*
