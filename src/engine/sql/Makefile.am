@@ -7,6 +7,7 @@ libgnc_postgres_la_LDFLAGS = -version-info 7:0:7
 
 libgnc_postgres_la_SOURCES = \
   PostgresBackend.c \
+  account.c \
   builder.c \
   checkpoint.c \
   escape.c \
@@ -18,6 +19,7 @@ libgnc_postgres_la_SOURCES = \
 
 noinst_HEADERS = \
   PostgresBackend.h \
+  account.h \
   builder.h \
   checkpoint.h \
   escape.h \
