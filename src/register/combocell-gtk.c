@@ -174,10 +174,10 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
 {
   PopBox * box;
   
+  if(!str) str = "";
+  
   SET (&(cell->cell), str);
   box = (PopBox *) (cell->cell.gui_private);
-  
-  if(!str) str = "";
   
   gtk_entry_set_text(GTK_ENTRY(box->combobox->entry), str);
 }
