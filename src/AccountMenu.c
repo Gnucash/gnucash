@@ -53,7 +53,7 @@ xaccFreeAccountMenu (AccountMenu * menu) {
    int i;
 
    for( i=0; i<menu->numMenuEntries; i++ ) {
-      _free (menu->menuEntry[i]);
+      if (menu->menuEntry[i]) _free (menu->menuEntry[i]);
       menu->menuEntry[i] = NULL;
    }
 
@@ -218,6 +218,10 @@ xaccBuildAccountMenu (AccountGroup *grp, Widget parent, char * label)
   accData->menuEntry = (AccMenuEntry **)_malloc((nacc+pad)*sizeof(AccMenuEntry *));
   accData->numMenuEntries = nacc+pad;
   
+  for (i=0; i<accData->numMenuEntries; i++) {
+    accData->menuEntry[i] = NULL;
+  }
+
   offset = 0;
   menuList = xaccBuildAccountSubMenu (grp, accData, &offset, pad);
   
