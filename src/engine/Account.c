@@ -1182,7 +1182,7 @@ xaccAccountRecomputeBalance (Account * acc)
 
     balance = gnc_numeric_add_fixed(balance, split->amount);
 
-    if (NREC != split->reconciled)
+    if (CREC == split->reconciled)
       cleared_balance = gnc_numeric_add_fixed(cleared_balance, split->amount);
 
     if (YREC == split->reconciled ||
@@ -1855,6 +1855,38 @@ xaccAccountGetReconciledBalance (Account *acc)
    return acc->reconciled_balance;
 }
 
+gnc_numeric
+xaccAccountGetProjectedMinimumBalance (Account *account)
+{
+  GList *node;
+  time_t today;
+  gnc_numeric lowest = gnc_numeric_zero ();
+  int seen_a_transaction = 0;
+
+  if (!account)
+    return gnc_numeric_zero ();
+
+  today = gnc_timet_get_today_end();
+  for (node = g_list_last (account->splits); node; node = node->prev)
+  {
+    Split *split = node->data;
+
+    if (!seen_a_transaction)
+    {
+      lowest = xaccSplitGetBalance (split);
+      seen_a_transaction = 1;
+    } else if (gnc_numeric_compare(xaccSplitGetBalance (split), lowest) < 0) {
+      lowest = xaccSplitGetBalance (split);
+    }
+
+    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
+      return lowest;
+  }
+
+  return lowest;
+}
+
+
 /********************************************************************\
 \********************************************************************/
 
@@ -1910,6 +1942,258 @@ xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
    */
 
   return( balance );
+}
+
+/*
+ * Originally gsr_account_present_balance in gnc-split-reg.c
+ *
+ * How does this routine compare to xaccAccountGetBalanceAsOfDate just
+ * above?  These two routines should eventually be collapsed into one.
+ * Perhaps the startup logic from that one, and the logic from this
+ * one that walks from the tail of the split list.
+ */
+gnc_numeric
+xaccAccountGetPresentBalance (Account *account)
+{
+  GList *node;
+  time_t today;
+
+  if (!account)
+    return gnc_numeric_zero ();
+
+  today = gnc_timet_get_today_end();
+  for (node = g_list_last (account->splits); node; node = node->prev)
+  {
+    Split *split = node->data;
+
+    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
+      return xaccSplitGetBalance (split);
+  }
+
+  return gnc_numeric_zero ();
+}
+
+
+/********************************************************************\
+\********************************************************************/
+
+/*
+ * Convert a balance from one currency to another.
+ */
+gnc_numeric
+xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
+				    gnc_numeric balance,
+				    gnc_commodity *balance_currency,
+				    gnc_commodity *new_currency)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  GNCPrice *price, *currency_price;
+  GList *price_list, *list_helper;
+  gnc_numeric currency_price_value;
+  gnc_commodity *intermediate_currency;
+
+  if (gnc_numeric_zero_p (balance) ||
+      gnc_commodity_equiv (balance_currency, new_currency))
+    return balance;
+
+  book = xaccGroupGetBook (xaccAccountGetRoot (account));
+  pdb = gnc_book_get_pricedb (book);
+
+  /* Look for a direct price. */
+  price = gnc_pricedb_lookup_latest (pdb, balance_currency, new_currency);
+  if (price) {
+    balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+			       gnc_commodity_get_fraction (new_currency),
+			       GNC_RND_ROUND);
+    gnc_price_unref (price);
+    return balance;
+  }
+
+  /*
+   * no direct price found, try if we find a price in another currency
+   * and convert in two stages
+   */
+  price_list = gnc_pricedb_lookup_latest_any_currency(pdb, balance_currency);
+  if (!price_list) {
+    balance =  gnc_numeric_zero ();
+    return balance;
+  }
+
+  list_helper = price_list;
+  currency_price_value = gnc_numeric_zero();
+
+  do {
+    price = (GNCPrice *)(list_helper->data);
+
+    intermediate_currency = gnc_price_get_currency(price);
+    currency_price = gnc_pricedb_lookup_latest(pdb, intermediate_currency,
+					       new_currency);
+    if(currency_price) {
+      currency_price_value = gnc_price_get_value(currency_price);
+      gnc_price_unref(currency_price);
+    } else {
+      currency_price = gnc_pricedb_lookup_latest(pdb, new_currency,
+						 intermediate_currency);
+      if (currency_price) {
+	/* here we need the reciprocal */
+	currency_price_value = gnc_numeric_div(gnc_numeric_create(1, 1),
+					       gnc_price_get_value(currency_price),
+					       gnc_commodity_get_fraction (new_currency),
+					       GNC_RND_ROUND);
+	gnc_price_unref(currency_price);
+      }
+    }
+
+    list_helper = list_helper->next;
+  } while((list_helper != NULL) &&
+	  (!gnc_numeric_zero_p(currency_price_value)));
+
+  balance = gnc_numeric_mul (balance, currency_price_value,
+			     gnc_commodity_get_fraction (new_currency),
+			     GNC_RND_ROUND);      
+  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+			     gnc_commodity_get_fraction (new_currency),
+			     GNC_RND_ROUND);      
+
+  gnc_price_list_destroy(price_list);
+  return balance;
+}
+
+/*
+ * Given an account and a GetBalanceFn pointer, extract the requested
+ * balance from the account and then convert it to the desired
+ * currency.
+ */
+static gnc_numeric
+xaccAccountGetXxxBalanceInCurrency (Account *account,
+				    xaccGetBalanceFn fn,
+				    gnc_commodity *report_currency)
+{
+  gnc_numeric balance;
+
+  if (!account || !fn || !report_currency)
+    return gnc_numeric_zero ();
+  balance = fn(account);
+  return xaccAccountConvertBalanceToCurrency(account, balance,
+					     account->commodity,
+					     report_currency);
+}
+
+/*
+ * Data structure used to pass various arguments into the following fn.
+ */
+typedef struct
+{
+  gnc_commodity *currency;
+  gnc_numeric balance;
+  xaccGetBalanceFn fn;
+} CurrencyBalance;
+
+
+/*
+ * A helper function for iterating over all the accounts in a list or
+ * tree.  This function is called once per account, and sums up the
+ * values of all these accounts.
+ */
+static gpointer
+xaccAccountBalanceHelper (Account *account, gpointer data)
+{
+  CurrencyBalance *cb = data;
+  gnc_numeric balance;
+
+  if (!cb->fn || !cb->currency)
+    return NULL;
+  balance = xaccAccountGetXxxBalanceInCurrency (account, cb->fn, cb->currency);
+  cb->balance = gnc_numeric_add (cb->balance, balance,
+                                 gnc_commodity_get_fraction (cb->currency),
+                                 GNC_RND_ROUND);
+  return NULL;
+}
+
+/*
+ * Common function that iterates recursively over all accounts below
+ * the specified account.  It uses the previous routine to sum up the
+ * balances of all its children, and uses the specified function for
+ * extracting the balance.  This function may extract the current
+ * value, the reconciled value, etc.
+ */
+static gnc_numeric
+xaccAccountGetXxxBalanceInCurrencyRecursive (Account *account,
+					     xaccGetBalanceFn fn,
+					     gnc_commodity *report_commodity,
+					     gboolean include_children)
+{
+  gnc_numeric balance;
+
+  if (account == NULL)
+    return gnc_numeric_zero ();
+  if (!report_commodity)
+    report_commodity = xaccAccountGetCommodity (account);
+  balance = xaccAccountGetXxxBalanceInCurrency (account, fn, report_commodity);
+
+  /* If needed, sum up the children converting to *this* account's commodity. */
+  if (include_children)
+  {
+    CurrencyBalance cb = { report_commodity, balance, fn };
+
+    xaccGroupForEachAccount (account->children, xaccAccountBalanceHelper, &cb, TRUE);
+    balance = cb.balance;
+  }
+
+  return balance;
+}
+
+gnc_numeric
+xaccAccountGetBalanceInCurrency (Account *account,
+				 gnc_commodity *report_commodity,
+				 gboolean include_children)
+{
+  return
+    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetBalance,
+						 report_commodity, include_children);
+}
+
+
+gnc_numeric
+xaccAccountGetClearedBalanceInCurrency (Account *account,
+					gnc_commodity *report_commodity,
+					gboolean include_children)
+{
+  return
+    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetClearedBalance,
+						 report_commodity, include_children);
+}
+
+
+gnc_numeric
+xaccAccountGetReconciledBalanceInCurrency (Account *account,
+				 gnc_commodity *report_commodity,
+				 gboolean include_children)
+{
+  return
+    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetReconciledBalance,
+						 report_commodity, include_children);
+}
+
+gnc_numeric
+xaccAccountGetPresentBalanceInCurrency (Account *account,
+					gnc_commodity *report_commodity,
+					gboolean include_children)
+{
+  return
+    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetPresentBalance,
+						 report_commodity, include_children);
+}
+
+gnc_numeric
+xaccAccountGetProjectedMinimumBalanceInCurrency (Account *account,
+						 gnc_commodity *report_commodity,
+						 gboolean include_children)
+{
+  return
+    xaccAccountGetXxxBalanceInCurrencyRecursive (account, xaccAccountGetProjectedMinimumBalance,
+						 report_commodity, include_children);
 }
 
 /********************************************************************\
@@ -2950,9 +3234,11 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_CODE_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetCode },
     { ACCOUNT_DESCRIPTION_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetDescription },
     { ACCOUNT_NOTES_, QUERYCORE_STRING, (QueryAccess)xaccAccountGetNotes },
+    { ACCOUNT_PRESENT_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetPresentBalance },
     { ACCOUNT_BALANCE_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetBalance },
-    { ACCOUNT_CLEARED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetClearedBalance },
-    { ACCOUNT_RECONCILED_BALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetReconciledBalance },
+    { ACCOUNT_CLEARED_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetClearedBalance },
+    { ACCOUNT_RECONCILED_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetReconciledBalance },
+    { ACCOUNT_FUTURE_MINIMUM_, QUERYCORE_NUMERIC, (QueryAccess)xaccAccountGetProjectedMinimumBalance },
     { ACCOUNT_TAX_RELATED, QUERYCORE_BOOLEAN, (QueryAccess)xaccAccountGetTaxRelated },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)xaccAccountGetBook },
     { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)xaccAccountGetGUID },

@@ -34,6 +34,10 @@
 #include "kvp_frame.h"
 
 
+typedef gnc_numeric (*xaccGetBalanceFn)( Account *account );
+typedef gnc_numeric (*xaccGetBalanceInCurrencyFn) (Account *account,
+						   gnc_commodity *report_commodity,
+						   gboolean include_children);
 
 /** The account types are used to determine how the transaction data
  * in the account is displayed.   These values can be safely changed
@@ -311,8 +315,30 @@ gnc_numeric     xaccAccountGetBalance (Account *account);
 gnc_numeric     xaccAccountGetClearedBalance (Account *account);
 /** Get the current balance of the account, only including reconciled transactions */
 gnc_numeric     xaccAccountGetReconciledBalance (Account *account);
+gnc_numeric     xaccAccountGetPresentBalance (Account *account);
+gnc_numeric     xaccAccountGetProjectedMinimumBalance (Account *account);
 /** Get the balance of the account as of the date specified */
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
+
+gnc_numeric xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
+						gnc_numeric balance,
+						gnc_commodity *balance_currency,
+						gnc_commodity *new_currency);
+gnc_numeric xaccAccountGetBalanceInCurrency (Account *account,
+					     gnc_commodity *report_commodity,
+					     gboolean include_children);
+gnc_numeric xaccAccountGetClearedBalanceInCurrency (Account *account,
+						    gnc_commodity *report_commodity,
+						    gboolean include_children);
+gnc_numeric xaccAccountGetReconciledBalanceInCurrency (Account *account,
+						       gnc_commodity *report_commodity,
+						       gboolean include_children);
+gnc_numeric xaccAccountGetPresentBalanceInCurrency (Account *account,
+						    gnc_commodity *report_commodity,
+						    gboolean include_children);
+gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (Account *account,
+							     gnc_commodity *report_commodity,
+							     gboolean include_children);
 /*@}*/
 
 
@@ -689,8 +715,10 @@ const char * xaccAccountGetQuoteTZ (Account *account);
 #define ACCOUNT_DESCRIPTION_	"desc"
 #define ACCOUNT_NOTES_		"notes"
 #define ACCOUNT_BALANCE_	"balance"
-#define ACCOUNT_CLEARED_BALANCE	"cleared-balance"
-#define ACCOUNT_RECONCILED_BALANCE	"reconciled-balance"
+#define ACCOUNT_CLEARED_	"cleared"
+#define ACCOUNT_RECONCILED_	"reconciled"
+#define ACCOUNT_PRESENT_	"present"
+#define ACCOUNT_FUTURE_MINIMUM_ "future-minimum"
 #define ACCOUNT_TAX_RELATED	"tax-related-p"
 /** @} */
 

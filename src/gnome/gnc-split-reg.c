@@ -92,8 +92,6 @@ static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 static void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
-static gnc_numeric gsr_account_present_balance( Account *account );
-static gnc_numeric gsr_account_projectedminimum_balance( Account *account );
 static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
 
 static void gsr_create_menus( GNCSplitReg *gsr );
@@ -106,13 +104,8 @@ static void gsr_setup_status_widgets( GNCSplitReg *gsr );
 static GtkWidget* gsr_create_popup_menu( GNCSplitReg *gsr );
 
 
-/**
- * Defines a function pointer def to get a gnc_numeric from an account.
- **/
-typedef gnc_numeric (*AmountGetterFn)(Account*);
-
 static void gsr_update_summary_label( GtkWidget *label,
-                                      AmountGetterFn getter,
+                                      xaccGetBalanceFn getter,
                                       Account *leader,
                                       GNCPrintAmountInfo print_info,
                                       gnc_commodity *cmdty,
@@ -596,7 +589,7 @@ gnc_split_reg_raise( GNCSplitReg *gsr )
 static
 void
 gsr_update_summary_label( GtkWidget *label,
-                          AmountGetterFn getter,
+                          xaccGetBalanceFn getter,
                           Account *leader,
                           GNCPrintAmountInfo print_info,
                           gnc_commodity *cmdty,
@@ -703,19 +696,19 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
   if ( gsr->createFlags & CREATE_SUMMARYBAR ) {
     gsr_update_summary_label( gsr->balance_label,
-                              (AmountGetterFn)gsr_account_present_balance,
+                              xaccAccountGetPresentBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->cleared_label,
-                              (AmountGetterFn)xaccAccountGetClearedBalance,
+                              xaccAccountGetClearedBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->reconciled_label,
-                              (AmountGetterFn)xaccAccountGetReconciledBalance,
+                              xaccAccountGetReconciledBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->future_label,
-                              (AmountGetterFn)xaccAccountGetBalance,
+                              xaccAccountGetBalance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->projectedminimum_label,
-                              (AmountGetterFn)gsr_account_projectedminimum_balance,
+                              xaccAccountGetProjectedMinimumBalance,
                               leader, print_info, commodity, reverse, euro );
 
     if (gsr->shares_label != NULL)
@@ -759,12 +752,15 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 		if (reverse)
 		  amount = gnc_numeric_neg (amount);
 
-                currency_amount = gnc_ui_convert_balance_to_currency(amount, commodity, currency);
-
+                currency_amount =
+		  xaccAccountConvertBalanceToCurrency(leader, amount,
+						      commodity, currency);
 		xaccSPrintAmount (string, currency_amount, print_info);
 
-                default_currency_amount = gnc_ui_convert_balance_to_currency(amount, commodity,
-                                                                             default_currency);
+                default_currency_amount =
+		  xaccAccountConvertBalanceToCurrency(leader, amount,
+						      commodity,
+						      default_currency);
 		if(!gnc_numeric_zero_p(default_currency_amount))
 		  {
 		    strcat( string, " / " );
@@ -2123,74 +2119,6 @@ gnc_toolbar_change_cb (void *data)
   GNCSplitReg *gsr = data;
   gnc_split_reg_refresh_toolbar( gsr );
 }
-
-/**
- * A utility function which retreives the present balance from an Account.
- * This should move somewhere more general?
- **/
-static
-gnc_numeric
-gsr_account_present_balance (Account *account)
-{
-  GList *list;
-  GList *node;
-  time_t today;
-
-  if (!account)
-    return gnc_numeric_zero ();
-
-  today = gnc_timet_get_today_end();
-  list = xaccAccountGetSplitList (account);
-  for (node = g_list_last (list); node; node = node->prev)
-  {
-    Split *split = node->data;
-
-    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
-      return xaccSplitGetBalance (split);
-  }
-
-  return gnc_numeric_zero ();
-}
-
-/**
- * A utility function which retreives the present balance from an Account.
- * This should move somewhere more general?
- **/
-static
-gnc_numeric
-gsr_account_projectedminimum_balance (Account *account)
-{
-  GList *list;
-  GList *node;
-  time_t today;
-  gnc_numeric lowest = gnc_numeric_zero ();
-  int seen_a_transaction = 0;
-
-  if (!account)
-    return gnc_numeric_zero ();
-
-  today = gnc_timet_get_today_end();
-  list = xaccAccountGetSplitList (account);
-  for (node = g_list_last (list); node; node = node->prev)
-  {
-    Split *split = node->data;
-
-    if (!seen_a_transaction)
-    {
-      lowest = xaccSplitGetBalance (split);
-      seen_a_transaction = 1;
-    }
-
-    if ( gnc_numeric_compare(xaccSplitGetBalance (split), lowest) < 0 )
-      lowest = xaccSplitGetBalance (split);
-      
-    if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
-      return lowest;
-  }
-
-  return lowest;
-}
-
 
 static
 gncUIWidget
