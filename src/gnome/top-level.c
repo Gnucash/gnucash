@@ -315,7 +315,7 @@ gnucash_ui_init(void)
                                           NULL, "Register",
                                           "Register hint font");
 
-    xaccRecnCellSetStringGetter(gnc_get_reconcile_str);
+    gnc_recn_cell_set_string_getter (gnc_get_reconcile_str);
 
     /* gnc_default_ui_start */
     gnucash_style_init();

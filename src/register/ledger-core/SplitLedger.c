@@ -1286,7 +1286,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     char flag;
 
     cell = gnc_table_layout_get_cell (reg->table->layout, RECN_CELL);
-    flag = xaccRecnCellGetFlag ((RecnCell *) cell);
+    flag = gnc_recn_cell_get_flag ((RecnCell *) cell);
 
     gnc_split_scm_set_reconcile_state(split_scm, flag);
   }
@@ -2095,9 +2095,9 @@ xaccSRActuallySaveChangedCells (SplitRegister *reg,
     cell = (RecnCell *) gnc_table_layout_get_cell (reg->table->layout,
                                                    RECN_CELL);
 
-    DEBUG ("RECN: %c", xaccRecnCellGetFlag (cell));
+    DEBUG ("RECN: %c", gnc_recn_cell_get_flag (cell));
 
-    xaccSplitSetReconcile (split, xaccRecnCellGetFlag (cell));
+    xaccSplitSetReconcile (split, gnc_recn_cell_get_flag (cell));
   }
 
   if (gnc_table_layout_get_cell_changed (reg->table->layout, ACTN_CELL, TRUE))
@@ -3351,9 +3351,8 @@ xaccSRConfirmHandler (VirtualLocation virt_loc,
     return TRUE;
 
   if (gnc_table_layout_get_cell_changed (reg->table->layout, RECN_CELL, FALSE))
-    recn = xaccRecnCellGetFlag ((RecnCell *)
-                                gnc_table_layout_get_cell (reg->table->layout,
-                                                           RECN_CELL));
+    recn = gnc_recn_cell_get_flag
+      ((RecnCell *) gnc_table_layout_get_cell (reg->table->layout, RECN_CELL));
   else
     recn = xaccSplitGetReconcile (split);
 
@@ -3879,7 +3878,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
      gnc_get_account_separator ());
 
   /* set the confirmation callback for the reconcile cell */
-  xaccRecnCellSetConfirmCB
+  gnc_recn_cell_set_confirm_cb
     ((RecnCell *)
      gnc_table_layout_get_cell (reg->table->layout, RECN_CELL),
      recn_cell_confirm, reg);

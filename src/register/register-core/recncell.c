@@ -56,13 +56,11 @@ static RecnCellStringGetter string_getter = NULL;
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
-static void RecnSetValue (BasicCell *_cell, const char *value);
+static void gnc_recn_cell_set_value (BasicCell *_cell, const char *value);
 
-
-/* ================================================ */
 
 static const char *
-RecnCellGetString (char reconciled_flag)
+gnc_recn_cell_get_string (char reconciled_flag)
 {
   static char str[2] = { 0, 0 };
 
@@ -74,13 +72,11 @@ RecnCellGetString (char reconciled_flag)
   return str;
 }
 
-/* ================================================ */
-
 static gboolean
-RecnEnter (BasicCell *_cell,
-           int *cursor_position,
-           int *start_selection,
-           int *end_selection)
+gnc_recn_cell_enter (BasicCell *_cell,
+                     int *cursor_position,
+                     int *start_selection,
+                     int *end_selection)
 {
   RecnCell *cell = (RecnCell *) _cell;
 
@@ -93,42 +89,38 @@ RecnEnter (BasicCell *_cell,
   else
     cell->reconciled_flag = NREC;
 
-  xaccRecnCellSetFlag (cell, cell->reconciled_flag);
+  gnc_recn_cell_set_flag (cell, cell->reconciled_flag);
 
   return FALSE;
 }
 
-/* ================================================ */
-
 static void
-xaccInitRecnCell (RecnCell *cell)
+gnc_recn_cell_init (RecnCell *cell)
 {
   gnc_basic_cell_init (&cell->cell);
 
-  xaccRecnCellSetFlag (cell, NREC);
+  gnc_recn_cell_set_flag (cell, NREC);
   cell->confirm_cb = NULL;
 
-  cell->cell.enter_cell = RecnEnter;
-  cell->cell.set_value = RecnSetValue;
+  cell->cell.enter_cell = gnc_recn_cell_enter;
+  cell->cell.set_value = gnc_recn_cell_set_value;
 }
 
 BasicCell *
-xaccMallocRecnCell (void)
+gnc_recn_cell_new (void)
 {
   RecnCell * cell;
 
   cell = g_new0 (RecnCell, 1);
 
-  xaccInitRecnCell (cell);
+  gnc_recn_cell_init (cell);
 
   return &cell->cell;
 }
 
-/* ================================================ */
-
 /* assumes we are given the untranslated form */
 static void
-RecnSetValue (BasicCell *_cell, const char *value)
+gnc_recn_cell_set_value (BasicCell *_cell, const char *value)
 {
   RecnCell *cell = (RecnCell *) _cell;
   char flag;
@@ -155,13 +147,11 @@ RecnSetValue (BasicCell *_cell, const char *value)
       break;
   }
 
-  xaccRecnCellSetFlag (cell, flag);
+  gnc_recn_cell_set_flag (cell, flag);
 }
 
-/* ================================================ */
-
 void
-xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
+gnc_recn_cell_set_flag (RecnCell *cell, char reconciled_flag)
 {
   const char *string;
 
@@ -169,39 +159,31 @@ xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
 
   cell->reconciled_flag = reconciled_flag;
 
-  string = RecnCellGetString (reconciled_flag);
+  string = gnc_recn_cell_get_string (reconciled_flag);
 
   gnc_basic_cell_set_value_internal (&cell->cell, string);
 }
 
-/* ================================================ */
-
 char
-xaccRecnCellGetFlag (RecnCell *cell)
+gnc_recn_cell_get_flag (RecnCell *cell)
 {
   g_return_val_if_fail (cell != NULL, NREC);
 
   return cell->reconciled_flag;
 }
 
-/* ================================================ */
-
 void
-xaccRecnCellSetStringGetter (RecnCellStringGetter getter)
+gnc_recn_cell_set_string_getter (RecnCellStringGetter getter)
 {
   string_getter = getter;
 }
 
-/* ================================================ */
-
 void
-xaccRecnCellSetConfirmCB (RecnCell *cell, RecnCellConfirm confirm_cb,
-                          gpointer data)
+gnc_recn_cell_set_confirm_cb (RecnCell *cell, RecnCellConfirm confirm_cb,
+                              gpointer data)
 {
   g_return_if_fail (cell != NULL);
 
   cell->confirm_cb = confirm_cb;
   cell->confirm_data = data;
 }
-
-/* --------------- end of file ---------------------- */

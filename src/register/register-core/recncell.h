@@ -57,18 +57,15 @@ typedef struct _RecnCell
   gpointer confirm_data;
 } RecnCell;
 
-BasicCell * xaccMallocRecnCell (void);
+BasicCell * gnc_recn_cell_new (void);
 
-void       xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag);
-char       xaccRecnCellGetFlag (RecnCell *cell);
+void        gnc_recn_cell_set_flag (RecnCell *cell, char reconciled_flag);
+char        gnc_recn_cell_get_flag (RecnCell *cell);
 
-void       xaccRecnCellSetConfirmCB (RecnCell *cell,
-                                     RecnCellConfirm confirm_cb,
-                                     gpointer data);
+void        gnc_recn_cell_set_confirm_cb (RecnCell *cell,
+                                          RecnCellConfirm confirm_cb,
+                                          gpointer data);
  
-void       xaccRecnCellSetStringGetter (RecnCellStringGetter getter);
+void        gnc_recn_cell_set_string_getter (RecnCellStringGetter getter);
 
-
-#endif /* __RECN_CELL_C__ */
-
-/* --------------- end of file ---------------------- */
+#endif
