@@ -425,6 +425,7 @@ void         xaccAccountSetQuoteTZ (Account *account, const char *tz);
 const char * xaccAccountGetQuoteTZ (Account *account);
 
 
+/* Unimplemented */
 typedef  gpointer (*SplitCallback)(Split *s, gpointer data);
 gpointer xaccAccountForEachSplit(Account *account,
                                  SplitCallback,

@@ -67,6 +67,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_TRACE,        /* TEST */
   GNC_LOG_DEBUG,        /* LOT */
   GNC_LOG_WARNING,      /* ACCOUNT */
+  GNC_LOG_DEBUG,	/* IMPORT */
 };
 
 static FILE *fout = NULL;
