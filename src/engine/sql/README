@@ -94,6 +94,18 @@ Note: GnuCash will automatically create the database if it does
 not already exist. Do *not* try to create the database by hand,
 or to specify a database that wasn't created by GnuCash.  
 
+Warning: the postgres backend is in active development, 
+and occasionally the database format changes in a way that is
+not backwards compatible.  If you have data that you want to 
+move from older to newer versions, you can do the following:
+-- start up older version of gnucash, open your postgres://...
+   URL.
+-- 'save as' to an ordinary gnucash file (its a flat XML file)
+-- exit the program.
+-- start the newer version of gnucash, open the XML file.
+-- 'save as' a new postgres database. (be sure to pick a new name).
+   
+
 Remote Access
 -------------
 In principle, you can use URL's such as:
