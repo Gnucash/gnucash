@@ -1,6 +1,6 @@
 /* 
  * FILE:
- * PostgressBackend.c
+ * PostgresBackend.c
  *
  * FUNCTION:
  * Implements the callbacks for the Postgres backend.
@@ -277,7 +277,7 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
 }
 
 /* ============================================================= */
-/* The pgendStoreGroup() routine stores the account heirarchy to
+/* The pgendStoreGroup() routine stores the account hierarchy to
  * the sql database.  That is, it stores not oonly the top-level
  * accounts, but all of thier children too.   It also stores the
  * commodities associated with the accounts.  It does *not* store
@@ -419,10 +419,10 @@ pgendGetAllCommodities (PGBackend *be)
 }
 
 /* ============================================================= */
-/* The pgendGetAllAccounts() routine restores the account heirarchy 
+/* The pgendGetAllAccounts() routine restores the account hierarchy 
  * of *all* accounts in the DB.
  * It implicitly assumes that the database has only one account
- * heirarchy in it, i.e. any accounts without a parent will be stuffed
+ * hierarchy in it, i.e. any accounts without a parent will be stuffed
  * into the same top group.
  */
 
@@ -438,7 +438,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    PINFO ("account GUID=%s", DB_GET_VAL("accountGUID",j));
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-   acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+   acc = xaccAccountLookup (&guid);
    if (!acc) 
    {
       acc = xaccMallocAccount();
@@ -472,7 +472,7 @@ get_account_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    {
       /* if we haven't restored the parent account, create
        * an empty holder for it */
-      parent = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+      parent = xaccAccountLookup (&guid);
       if (!parent)
       {
          parent = xaccMallocAccount();
@@ -610,7 +610,7 @@ delete_list_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    string_to_guid (DB_GET_VAL ("entryGuid", j), &guid);
    /* If the database has splits that the engine doesn't,
     * collect 'em up & we'll have to delete em */
-   if (NULL == xaccLookupEntity (&guid, GNC_ID_SPLIT))
+   if (NULL == xaccSplitLookup (&guid))
    {
       deletelist = g_list_prepend (deletelist, 
                    g_strdup(DB_GET_VAL ("entryGuid", j)));
@@ -818,7 +818,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
    pgendDisable(be);
 
    /* first, see if we already have such a transaction */
-   trans = (Transaction *) xaccLookupEntity (trans_guid, GNC_ID_TRANS);
+   trans = xaccTransLookup (trans_guid);
    if (!trans)
    {
       trans = xaccMallocTransaction();
@@ -971,7 +971,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             PINFO ("split GUID=%s", DB_GET_VAL("entryGUID",j));
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("entryGUID",j), &guid);
-            s = (Split *) xaccLookupEntity (&guid, GNC_ID_SPLIT);
+            s = xaccSplitLookup (&guid);
             if (!s)
             {
                s = xaccMallocSplit();
@@ -1002,7 +1002,7 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             /* next, find the account that this split goes into */
             guid = nullguid;  /* just in case the read fails ... */
             string_to_guid (DB_GET_VAL("accountGUID",j), &guid);
-            acc = (Account *) xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+            acc = xaccAccountLookup (&guid);
             if (!acc)
             {
                PERR ("account not found, will delete this split\n"
@@ -1129,7 +1129,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
             "\tto the database.  This mode of operation is\n"
             "\tguarenteed to clobber other user's updates.\n");
 
-      trans = (Transaction *) xaccLookupEntity (trans_guid, GNC_ID_TRANS);
+      trans = xaccTransLookup (trans_guid);
 
       /* hack alert -- basically, we should use the pgend_commit_transaction
        * routine instead, and in fact, 'StoreTransaction'
@@ -1309,9 +1309,9 @@ pgend_account_commit_edit (Backend * bend,
 
       /* hack alert -- we should restore the account data from the 
        * sql back end at this point ! !!! */
-PWARN(" account data in engine is newer\n"
-      " account must be rolled back.  This function\n"
-      " is not completely implemented !! \n");
+      PWARN(" account data in engine is newer\n"
+            " account must be rolled back.  This function\n"
+            " is not completely implemented !! \n");
       LEAVE ("rolled back");
       return 445;
    }
@@ -1485,7 +1485,7 @@ pgendSync (Backend *bend, AccountGroup *grp)
    PGBackend *be = (PGBackend *)bend;
    ENTER ("be=%p, grp=%p", be, grp);
 
-   /* store the account group heirarchy, and then all transactions */
+   /* store the account group hierarchy, and then all transactions */
    pgendStoreGroup (be, grp);
    pgendStoreAllTransactions (be, grp);
 
