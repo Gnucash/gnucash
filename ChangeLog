@@ -1,3 +1,12 @@
+2004-02-09  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/Makefile.am: added new 'format' provider desc
+	* src/import-export/gnc-import-format-cb.[ch]:
+	  Callback object for the import format provider
+	* src/import-export/gnc-import-desc-format.[ch]:
+	  Descriptor for the Import Format Provider, used to choose
+	  Date and Number formats.
+
 2004-02-08  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc-file.c:

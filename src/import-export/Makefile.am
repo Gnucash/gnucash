@@ -16,11 +16,15 @@ libgncmod_generic_import_la_SOURCES = \
 	import-settings.c \
 	import-match-map.c \
 	import-main-matcher.c \
+	gnc-import-desc-format.c \
+	gnc-import-format-cb.c \
 	gncmod-generic-import.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   import-match-map.h \
+  gnc-import-desc-format.h \
+  gnc-import-format-cb.h \
   import-parse.h
 
 noinst_HEADERS = \
