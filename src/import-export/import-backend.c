@@ -198,7 +198,10 @@ void gnc_import_TransInfo_set_destacc (GNCImportTransInfo *info,
   info->dest_acc_selected_manually = selected_manually;
 
   /* Store the mapping to the other account in the MatchMap. */
-  matchmap_store_destination (NULL, info, FALSE);
+  if(selected_manually)
+    {
+      matchmap_store_destination (NULL, info, FALSE);
+    }
 }
 
 gboolean
@@ -358,10 +361,16 @@ matchmap_find_destination (GncImportMatchMap *matchmap,
   result = gnc_imap_find_account 
     (tmp_map, GNCIMPORT_DESC, 
      xaccTransGetDescription (gnc_import_TransInfo_get_trans (info)));
-  if (result == NULL)
-    result = gnc_imap_find_account 
-      (tmp_map, GNCIMPORT_MEMO, 
-       xaccSplitGetMemo (gnc_import_TransInfo_get_fsplit (info)));
+
+  /* Disable matching by memo, until bayesian filtering is implemented. 
+     It's currently unlikely to help, and has adverse effects, causing false positives,
+     since very often the type of the transaction is stored there.
+     
+     if (result == NULL)
+     result = gnc_imap_find_account 
+     (tmp_map, GNCIMPORT_MEMO, 
+     xaccSplitGetMemo (gnc_import_TransInfo_get_fsplit (info)));
+  */
   
   if (matchmap == NULL)
     gnc_imap_destroy (tmp_map);
@@ -846,7 +855,7 @@ gnc_import_TransInfo_new (Transaction *trans, GncImportMatchMap *matchmap)
   
   /* Try to find a previously selected destination account 
      string match for the ADD action */
-  
+  printf("Compte trouvé: %p\n",matchmap_find_destination (matchmap, transaction_info));
   gnc_import_TransInfo_set_destacc (transaction_info, 
 				    matchmap_find_destination (matchmap, transaction_info),
 				    FALSE); 
@@ -916,7 +925,6 @@ gboolean
 gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
 				      GncImportMatchMap *matchmap)
 {
-  Transaction *transaction;
   g_assert(transaction_info);
 
   Account *orig_destacc = gnc_import_TransInfo_get_destacc(transaction_info);
@@ -932,8 +940,6 @@ gnc_import_TransInfo_refresh_destacc (GNCImportTransInfo *transaction_info,
   {
     new_destacc = orig_destacc;
   }
-
-  transaction = gnc_import_TransInfo_get_trans(transaction_info);
 
   /* account has changed */
   if(new_destacc != orig_destacc)

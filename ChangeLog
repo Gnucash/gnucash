@@ -1,3 +1,10 @@
+2003-02-14  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-backend.c: 
+	-Remove unused code.
+	-Fix "destination account written to the matchmap even when autoselected" bug.
+	-Disable destination account matching by memo, until bayesian filtering is implemented.  It's currently unlikely to help, and causes false positives since very often the type of the transaction is stored there.
+
 2003-02-14  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/glade/hbci.glade: Clarify some
