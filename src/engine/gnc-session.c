@@ -43,12 +43,13 @@
 
 #include <glib.h>
 
+#include "Backend.h"
 #include "BackendP.h"
 #include "TransLog.h"
 #include "gnc-book-p.h"
-#include "gnc-date.h"
 #include "gnc-event.h"
 #include "gnc-module.h"
+#include "gnc-session.h"
 #include "gnc-session-p.h"
 #include "gnc-trace.h"
 
@@ -639,6 +640,7 @@ gnc_session_save (GNCSession *session,
 }
 
 /* ====================================================================== */
+/* XXX what does this function do ?? */
 
 gboolean
 gnc_session_export (GNCSession *tmp_session,

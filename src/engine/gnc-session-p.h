@@ -23,17 +23,13 @@
 /*
  * HISTORY:
  * Copyright (c) 2001 Linux Developers Group
- * Copyright (c) 2002 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 1998-2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef GNC_SESSION_P_H
 #define GNC_SESSION_P_H
 
-#include "BackendP.h"
-#include "GNCIdP.h"
-#include "TransLog.h"
-#include "gnc-engine-util.h"
-#include "gnc-engine.h"
+#include "gnc-book.h"
 #include "gnc-session.h"
 
 struct gnc_session_struct
@@ -42,7 +38,7 @@ struct gnc_session_struct
    * by GnuCash.  A session may have open multiple books.  */
   GList *books;
 
-  /* the requested book id, in the form or a URI, such as
+  /* The requested book id, in the form or a URI, such as
    * file:/some/where, or sql:server.host.com:555
    */
   char *book_id;
