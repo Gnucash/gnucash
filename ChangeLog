@@ -5,6 +5,9 @@
 	* src/scm/printing/print-check.scm:
 	  Apply David Reiser's patch for Quicken(tm) cheques with stub.
 
+	* src/engine/gnc-commodity.c:
+	  Apply David Grant's patch to add TD Efunds.  Fixes #145297.
+
 2004-06-30  Christian Stimming  <stimming@tuhh.de>
 
 	* src/report/report-gnome/window-report.c: Add toolbar element for

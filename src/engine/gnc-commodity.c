@@ -113,6 +113,7 @@ static gnc_quote_source single_quote_sources[] = {
   { FALSE, 0, 0, "Motley Fool", "FOOL", "fool" },
   { FALSE, 0, 0, "Fund Library", "FUNDLIBRARY", "fundlibrary" },
   { FALSE, 0, 0, "TD Waterhouse Canada", "TDWATERHOUSE", "tdwaterhouse" },
+  { FALSE, 0, 0, "TD Efunds", "TDEFUNDS", "tdefunds" },
   { FALSE, 0, 0, "TIAA-CREF", "TIAACREF", "tiaacref" },
   { FALSE, 0, 0, "T. Rowe Price", "TRPRICE_DIRECT", "troweprice_direct" },
   { FALSE, 0, 0, "Trustnet", "TRUSTNET", "trustnet" },
