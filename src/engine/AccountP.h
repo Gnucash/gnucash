@@ -46,6 +46,7 @@
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
+#include "policy.h"
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
@@ -129,6 +130,9 @@ struct account_s
 
   SplitList *splits;       /* list of split pointers */
   LotList   *lots;         /* list of lot pointers */
+
+  /* Cached pointer to policy method */
+  GNCPolicy *policy;
 
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;

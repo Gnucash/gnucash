@@ -61,11 +61,13 @@ xaccScrubLot (GNCLot *lot)
   gnc_numeric lot_baln;
   gboolean opening_baln_is_pos, lot_baln_is_pos;
   Account *acc;
+  GNCPolicy *pcy;
 
   if (!lot) return FALSE;
   ENTER (" ");
 
   acc = gnc_lot_get_account (lot);
+  pcy = acc->policy;
   xaccAccountBeginEdit(acc);
   xaccScrubMergeLotSubSplits (lot);
 
@@ -77,7 +79,7 @@ xaccScrubLot (GNCLot *lot)
     gnc_numeric opening_baln;
 
     /* Get the opening balance for this lot */
-    FIFOPolicyGetLotOpening (lot, &opening_baln, NULL, NULL, NULL);
+    pcy->PolicyGetLotOpening (pcy, lot, &opening_baln, NULL, NULL);
 
     /* If the lot is fat, give the boot to all the non-opening 
      * splits, and refill it */
@@ -90,7 +92,7 @@ rethin:
       for (node=gnc_lot_get_split_list(lot); node; node=node->next)
       {
         Split *s = node->data;
-        if (FIFOPolicyIsOpeningSplit (lot, s, NULL)) continue;
+        if (pcy->PolicyIsOpeningSplit (pcy, lot, s)) continue;
         gnc_lot_remove_split (lot, s);
         goto rethin;
       }

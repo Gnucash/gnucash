@@ -43,6 +43,7 @@
 #include "kvp_frame.h"
 #include "kvp-util-p.h"
 #include "messages.h"
+#include "policy.h"
 
 #include "qofbackend.h"
 #include "qofbackend-p.h"
@@ -117,6 +118,7 @@ xaccInitAccount (Account * acc, QofBook *book)
 
   acc->splits = NULL;
   acc->lots = NULL;
+  acc->policy = xaccGetFIFOPolicy();
 
   acc->version = 0;
   acc->version_check = 0;

@@ -27,7 +27,7 @@
  * Provides a set of functions and utilities for checking and
  * repairing ('scrubbing clean') the usage of Lots and lot balances
  * in stock and commodity accounts.  Broken lots are repaired using
- * a first-in, first-out (FIFO) accounting schedule.
+ * the accounts specific accounting policy (probably FIFO).
  */
 
 #include "config.h"
@@ -99,9 +99,11 @@ xaccLotFill (GNCLot *lot)
    gnc_numeric lot_baln;
    Account *acc;
    Split *split;
+   GNCPolicy *pcy;
 
    if (!lot) return;
    acc = lot->account;
+   pcy = acc->policy;
 
    ENTER ("acc=%s", acc->accountName);
 
@@ -109,7 +111,7 @@ xaccLotFill (GNCLot *lot)
    lot_baln = gnc_lot_get_balance (lot);
    if (gnc_numeric_zero_p (lot_baln)) return;
 
-   split = FIFOPolicyGetSplit (lot, NULL);
+   split = pcy->PolicyGetSplit (pcy, lot);
    if (!split) return;   /* Handle the common case */
 
    xaccAccountBeginEdit (acc);
@@ -131,7 +133,7 @@ xaccLotFill (GNCLot *lot)
       lot_baln = gnc_lot_get_balance (lot);
       if (gnc_numeric_zero_p (lot_baln)) break;
 
-      split = FIFOPolicyGetSplit (lot, NULL);
+      split = pcy->PolicyGetSplit (pcy, lot);
       if (!split) break;
    }
    xaccAccountCommitEdit (acc);

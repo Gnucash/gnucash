@@ -107,16 +107,32 @@ xaccAccountHasTrades (Account *acc)
 
 /* ============================================================== */
 
-struct early_lot_s
+struct find_lot_s
 {
    GNCLot *lot;
    Timespec ts;
    int (*numeric_pred)(gnc_numeric);
+   gboolean (*date_pred)(Timespec e, Timespec tr);
 };
 
-static gpointer earliest_helper (GNCLot *lot,  gpointer user_data)
+static gboolean 
+earliest_pred (Timespec earl, Timespec tran)
 {
-   struct early_lot_s *els = user_data;
+  return ((earl.tv_sec > tran.tv_sec)  ||
+       ((earl.tv_sec == tran.tv_sec) && (earl.tv_nsec > tran.tv_nsec)));
+}
+
+static gboolean 
+latest_pred (Timespec earl, Timespec tran)
+{
+  return ((earl.tv_sec < tran.tv_sec)  ||
+       ((earl.tv_sec == tran.tv_sec) && (earl.tv_nsec < tran.tv_nsec)));
+}
+
+static gpointer 
+finder_helper (GNCLot *lot,  gpointer user_data)
+{
+   struct find_lot_s *els = user_data;
    Split *s;
    Transaction *trans;
    gnc_numeric bal;
@@ -129,9 +145,7 @@ static gpointer earliest_helper (GNCLot *lot,  gpointer user_data)
    
    s = gnc_lot_get_earliest_split (lot);
    trans = s->parent;
-   if ((els->ts.tv_sec > trans->date_posted.tv_sec)  ||
-       ((els->ts.tv_sec == trans->date_posted.tv_sec) &&
-        (els->ts.tv_nsec > trans->date_posted.tv_nsec)))
+   if (els->date_pred (els->ts, trans->date_posted))
    {
       els->ts = trans->date_posted;
       els->lot = lot;
@@ -140,22 +154,47 @@ static gpointer earliest_helper (GNCLot *lot,  gpointer user_data)
    return NULL;
 }
 
-GNCLot *
-xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
+static inline GNCLot *
+xaccAccountFindOpenLot (Account *acc, gnc_numeric sign, 
+   long long guess,
+   gboolean (*date_pred)(Timespec, Timespec))
 {
-   struct early_lot_s es;
+   struct find_lot_s es;
 
-   ENTER (" sign=%lld/%lld", sign.num, sign.denom);
    es.lot = NULL;
-   es.ts.tv_sec = 10000000LL * ((long long) LONG_MAX);
+   es.ts.tv_sec = guess;
    es.ts.tv_nsec = 0;
+   es.date_pred = date_pred;
 
    if (gnc_numeric_positive_p(sign)) es.numeric_pred = gnc_numeric_negative_p;
    else es.numeric_pred = gnc_numeric_positive_p;
       
-   xaccAccountForEachLot (acc, earliest_helper, &es);
-   LEAVE ("found lot=%p %s", es.lot, gnc_lot_get_title (es.lot));
+   xaccAccountForEachLot (acc, finder_helper, &es);
    return es.lot;
+}
+
+GNCLot *
+xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
+{
+   GNCLot *lot;
+   ENTER (" sign=%lld/%lld", sign.num, sign.denom);
+      
+   lot = xaccAccountFindOpenLot (acc, sign, 
+                   10000000LL * ((long long) LONG_MAX), earliest_pred);
+   LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
+   return lot;
+}
+
+GNCLot *
+xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign)
+{
+   GNCLot *lot;
+   ENTER (" sign=%lld/%lld", sign.num, sign.denom);
+      
+   lot = xaccAccountFindOpenLot (acc, sign, 
+                   -10000000LL * ((long long) LONG_MAX), latest_pred);
+   LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
+   return lot;
 }
 
 /* ============================================================== */
@@ -476,15 +515,14 @@ MakeDefaultLot (Account *acc)
 /* Accounting-policy callback.  Given an account and an amount, 
  * this routine should return a lot.  By implementing this as 
  * a callback, we can 'easily' add other accounting policies.
- * Currently, we only implement the FIFO policy.
  */
-static gboolean
-PolicyAssignSplit (Split *split, 
-                  AccountingPolicyGetLot policy, gpointer user_data)
+gboolean
+xaccSplitAssign (Split *split)
 {
    Account *acc;
    gboolean splits_split_up = FALSE;
    GNCLot *lot;
+   GNCPolicy *pcy;
 
    if (!split) return FALSE;
 
@@ -493,6 +531,7 @@ PolicyAssignSplit (Split *split,
    /* If this split already belongs to a lot, we are done. */
    if (split->lot) return FALSE;
    acc = split->acc;
+   pcy = acc->policy;
    xaccAccountBeginEdit (acc);
 
    /* If we are here, this split does not belong to any lot.
@@ -504,7 +543,7 @@ PolicyAssignSplit (Split *split,
   {
      PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
      split->gains |= GAINS_STATUS_VDIRTY;
-     lot = policy (split, user_data);
+     lot = pcy->PolicyGetLot (pcy, split);
      if (!lot)
      {
         lot = MakeDefaultLot (acc);
@@ -517,16 +556,6 @@ PolicyAssignSplit (Split *split,
 
    LEAVE ("split_up=%d", splits_split_up);
    return splits_split_up;
-}
-
-gboolean
-xaccSplitAssign (Split *split)
-{
-   /* XXX FIXME: instead of a hard-wired fifo policy, we should 
-    * be using the policy as specified by the account. i.e.
-    * we should be using split->acc->polcy as the function 
-    */
-   return PolicyAssignSplit (split, FIFOPolicyGetLot, NULL);
 }
 
 /* ============================================================== */
@@ -558,6 +587,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 {
    SplitList *node;
    GNCLot *lot;
+   GNCPolicy *pcy;
    gnc_commodity *currency = NULL;
    gnc_numeric zero = gnc_numeric_zero();
    gnc_numeric value = zero;
@@ -567,6 +597,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (!split) return;
    lot = split->lot;
    if (!lot) return;
+   pcy = lot->account->policy;
    currency = split->parent->common_currency;
 
    ENTER ("split=%p gains=%p status=0x%x lot=%s", split, 
@@ -575,7 +606,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
    /* Make sure the status flags and pointers are initialized */
    if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
-   if (FIFOPolicyIsOpeningSplit (lot, split, NULL))
+   if (pcy->PolicyIsOpeningSplit (pcy, lot, split))
    {
 #if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
       /* Check to make sure that this opening split doesn't 
@@ -629,7 +660,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    for (node=lot->splits; node; node=node->next)
    {
       Split *s = node->data;
-      if (FIFOPolicyIsOpeningSplit(lot,s,NULL))
+      if (pcy->PolicyIsOpeningSplit(pcy,lot,s))
       {
          if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus (s);
          if (s->gains & GAINS_STATUS_VDIRTY) 
@@ -655,8 +686,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * 'dirty' and the gains really do need to be recomputed. 
     * So start working things. */
 
-   FIFOPolicyGetLotOpening (lot, &opening_amount, &opening_value,
-       &opening_currency, NULL);
+   pcy->PolicyGetLotOpening (pcy, lot, &opening_amount, &opening_value,
+       &opening_currency);
 
    /* Check to make sure the lot-opening currency and this split
     * use the same currency */
@@ -849,16 +880,18 @@ void
 xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
 {
    SplitList *node;
+   GNCPolicy *pcy;
    gboolean is_dirty = FALSE;
 
    /* Note: if the value of the 'opening' split(s) has changed,
     * then the cap gains are changed. To capture this, we need 
     * to mark all splits dirty if the opening splits are dirty. */
 
+   pcy = lot->account->policy;
    for (node=lot->splits; node; node=node->next)
    {
       Split *s = node->data;
-      if (FIFOPolicyIsOpeningSplit(lot,s,NULL))
+      if (pcy->PolicyIsOpeningSplit(pcy,lot,s))
       {
          if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus (s);
          if (s->gains & GAINS_STATUS_VDIRTY) 

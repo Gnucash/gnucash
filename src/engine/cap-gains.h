@@ -80,6 +80,7 @@ gboolean xaccAccountHasTrades (Account *);
  *   that the balance only decreases.
  */
 GNCLot * xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign);
+GNCLot * xaccAccountFindLatestOpenLot (Account *acc, gnc_numeric sign);
 
 /** The xaccAccountGetDefaultGainAccount() routine will return
  *   the account to which realized gains/losses may be posted.  
