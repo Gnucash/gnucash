@@ -83,9 +83,6 @@ static gint
 gnc_main_window_remove_view_cb(GnomeMDI * mdi, GnomeMDIChild * child, 
                                gpointer data) {
   GNCMainInfo * mainwin = data;
-  if(mainwin->last_active == child) {
-    mainwin->last_active = NULL;
-  }
   gtk_object_destroy(GTK_OBJECT(child));
   return TRUE;
 }
@@ -228,10 +225,6 @@ gnc_main_window_child_remove_cb(GnomeMDI * mdi, GnomeMDIChild * child,
                                 gpointer data) {
   GNCMainInfo * mainwin = data;
 
-  if(mainwin->last_active == child) {
-    mainwin->last_active = NULL;
-  }
-
   return TRUE;
 }
 
@@ -247,27 +240,25 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
   GNCMainInfo      * mainwin = data;
   GNCMainChildInfo * childwin = 
     gtk_object_get_user_data(GTK_OBJECT(mdi->active_child));
-  GNCMainChildInfo * oldchildwin;
-  GnomeMDIChild    * oldchild = mainwin->last_active;
   GnomeUIInfo      * hintinfo;
+  GtkWidget        * oldbar;
   GnomeApp         * new_app = gnome_mdi_get_app_from_view(childwin->contents);
 
-  /* hide the old toolbar, if needed */
-  if(oldchild) {
-    oldchildwin = gtk_object_get_user_data(GTK_OBJECT(oldchild));
-    if(oldchildwin && oldchildwin->toolbar && 
-       (oldchildwin->app == new_app)) {
-      gtk_widget_hide(GTK_WIDGET(oldchildwin->toolbar)->parent);
-    }
-  }
-
-  /* show the new one */ 
   if(childwin && childwin->toolbar) {
     if(childwin->app && (childwin->app == new_app)) {
-      gtk_widget_show(GTK_WIDGET(childwin->toolbar)->parent);
+      oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
+      if(oldbar && (oldbar != childwin->toolbar)) {
+        gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
+        gtk_widget_show(GTK_WIDGET(childwin->toolbar)->parent);
+      }
     }
     else if(childwin->app) {
-      /* we need to move the toolbar to a new APP (mdi mode probably
+      oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
+      if(oldbar && (oldbar != childwin->toolbar)) {
+        gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
+      }
+      
+      /* we need to move the toolbar to a new App (mdi mode probably
        * changed) */
       if(GTK_WIDGET(childwin->toolbar)->parent) {
         gtk_widget_ref(GTK_WIDGET(childwin->toolbar));
@@ -284,6 +275,11 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
                             gnc_get_toolbar_style());
     }
     else {
+      oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
+      if(oldbar && (oldbar != childwin->toolbar)) {
+        gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
+      }
+      
       childwin->app = new_app;
       gnome_app_add_toolbar(GNOME_APP(childwin->app), 
                             GTK_TOOLBAR(childwin->toolbar),
@@ -292,16 +288,16 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
       gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
                             gnc_get_toolbar_style());
     }
+    gtk_object_set_user_data(GTK_OBJECT(new_app), childwin->toolbar);
   }
-
+  
   /* set the window title */ 
   gnc_childwin_set_title (childwin);
-
+  
   /* install menu hints if relevant */
   if(mdi->active_child) {
     /* the arg to this callback is SUPPOSED to be the last active child, 
      * but it gets to be NULL under some circumstances */
-    mainwin->last_active = mdi->active_child;
     hintinfo = gnome_mdi_get_menubar_info(new_app);
     if(hintinfo) {
       gnome_app_install_menu_hints(new_app, hintinfo);
@@ -407,7 +403,6 @@ gnc_main_window_new(void) {
   retval->component_id = 
     gnc_register_gui_component (WINDOW_MAIN_CM_CLASS, NULL, NULL, 
                                 retval);
-  retval->last_active = NULL;
 
   /* these menu and toolbar options are the ones that are always 
    * available */ 
@@ -561,12 +556,18 @@ gnc_main_window_file_new_file_cb(GtkWidget * widget) {
 
 static void
 gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
+  URLType type;
+  char * location;
+  char * label;
+  
   if(mdi->active_child) {
     if(!strcmp(mdi->active_child->name, _("Accounts"))) {
       gnc_main_window_open_accounts(TRUE);
     }
     else {
-      gnc_main_window_open_report_url(mdi->active_child->name, TRUE);
+      GnomeMDIChild * child = 
+        gnc_main_window_create_child(mdi->active_child->name);
+      gnome_mdi_add_toplevel_view(mdi, child);
     }
   }
 }
@@ -608,9 +609,6 @@ gnc_main_window_file_close_cb(GtkWidget * widget, GnomeMDI * mdi) {
     if(inf->toolbar) {
       gtk_widget_destroy(GTK_WIDGET(inf->toolbar)->parent);
       inf->toolbar = NULL;
-    }
-    if(gnc_ui_get_data()->last_active == mdi->active_child) {
-      gnc_ui_get_data()->last_active = NULL;
     }
     gnome_mdi_remove_child(mdi, mdi->active_child, FALSE);
   }  

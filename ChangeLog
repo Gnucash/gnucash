@@ -1,3 +1,9 @@
+2001-04-17  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/window-main.c: More changes for MDI.  I think we
+	finally have toolbars handled right.  Also new windows for account
+	trees.
+
 2001-04-17  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/scm/utilities.scm (string-split): used to be string-split-on

@@ -28,8 +28,7 @@
 #include <guile/gh.h>
 
 typedef struct  {
-  GnomeMDI      * mdi;
-  GnomeMDIChild * last_active;
+  GnomeMDI * mdi;
   int      component_id;
   SCM      toolbar_change_callback_id;
   SCM      mdi_change_callback_id;
