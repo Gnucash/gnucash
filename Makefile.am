@@ -36,7 +36,11 @@ EXTRA_DIST = \
   make-gnucash-patch.in \
   po/.cvsignore \
   po/README \
+  po/glossary/da.po \
   po/glossary/de.po \
+  po/glossary/es.po \
+  po/glossary/no.po \
+  po/glossary/sv.po \
   po/glossary/gnc-glossary.txt \
   po/glossary/txt-to-pot.sh
 
