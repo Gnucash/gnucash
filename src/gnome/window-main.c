@@ -239,23 +239,6 @@ gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
   return found;
 }
 
-/* The gnc_ui_refresh_statusbar() subroutine redraws 
- *    the statusbar at the bottom of the main window. The statusbar
- *    includes two fields, titled 'profits' and 'assets'.  The total
- *    assets equal the sum of all of the non-equity, non-income
- *    accounts.  In theory, assets also equals the grand total
- *    value of the equity accounts, but that assumes that folks are
- *    using the equity account type correctly (which is not likely).
- *    Thus we show the sum of assets, rather than the sum of equities.
- *
- * The EURO gets special treatment. There can be one line with
- * EUR amounts and a EUR (total) line which summs up all EURO
- * member currencies.
- *
- * There should be a 'grand total', too, which summs up all accounts
- * converted to one common currency.
- */
-
 static void
 gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
                          gboolean euro)
@@ -322,6 +305,22 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   }
 }
 
+/* The gnc_ui_refresh_statusbar() subroutine redraws 
+ *    the statusbar at the bottom of the main window. The statusbar
+ *    includes two fields, titled 'profits' and 'assets'.  The total
+ *    assets equal the sum of all of the non-equity, non-income
+ *    accounts.  In theory, assets also equals the grand total
+ *    value of the equity accounts, but that assumes that folks are
+ *    using the equity account type correctly (which is not likely).
+ *    Thus we show the sum of assets, rather than the sum of equities.
+ *
+ * The EURO gets special treatment. There can be one line with
+ * EUR amounts and a EUR (total) line which summs up all EURO
+ * member currencies.
+ *
+ * There should be a 'grand total', too, which sums up all accounts
+ * converted to one common currency.
+ */
 static void
 gnc_ui_refresh_statusbar (void)
 {
