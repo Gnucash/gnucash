@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.X\n"
 "POT-Creation-Date: 2000-09-24 23:55-0700\n"
-"PO-Revision-Date: 2000-10-07 19:15+0100\n"
+"PO-Revision-Date: 2000-10-08 09:20+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: FRENCH  <FR@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -436,6 +436,11 @@ msgid ""
 "you need an intermediate currency account.\n"
 "Please see the GnuCash online manual"
 msgstr ""
+"Vous ne pouvez pas transférer des fonds depuis le compte %s.\n"
+"Il n'a pas la monnaie correspondante.\n"
+"Pour transférer des fonds entre comptes avec différentes monnaies\n"
+"vous avez besoin d'un compte de monnaie intermédiaire.\n"
+"S'il vous plait regardez le manuel en ligne de Gnucash"
 
 # messages-i18n.c:51
 #: messages-i18n.c:59
@@ -537,6 +542,11 @@ msgid ""
 "need an intermediate currency account.\n"
 "Please see the GnuCash online manual"
 msgstr ""
+"Vous ne pouvez pas transférer entre ces comptes.\n"
+"Ils n'ont pas une monnaie commune.\n"
+"Pour transférer des fonds entre comptes avec différentes monnaies\n"
+"vous avez besoin d'un compte de monnaie intermédiaire.\n"
+"S'il vous plait regardez le manuel en ligne de Gnucash"
 
 # messages-i18n.c:63
 #: messages-i18n.c:72
@@ -904,7 +914,7 @@ msgstr "Garder l'ordre normal du compte"
 
 #: messages-i18n.c:142
 msgid "Tips of the Day"
-msgstr "Astuce du jour"
+msgstr "Astuces du jour"
 
 # messages-i18n.c:121
 #: messages-i18n.c:143
@@ -1198,7 +1208,7 @@ msgstr "Transférer..."
 
 # messages-i18n.c:13
 #: messages-i18n.c:201
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You must enter a valid amount.\n"
 "\n"
