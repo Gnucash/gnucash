@@ -739,7 +739,7 @@ sr_get_active_cursor (SplitRegister *reg)
  * sequence of events get triggered and cascade down:
  *  xaccVerifyCursorPosition()
  *    doMoveCursor()
- *      callback for move() which is this function (LedgerMoveCursor)
+ *      callback for move() (i.e., LedgerMoveCursor)
  *        xaccSRSaveRegEntry()
  *        RedrawRegEntry()
  *          SRLoadRegister()
