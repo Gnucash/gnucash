@@ -127,6 +127,7 @@ gnc_ui_new_user_cancel_dialog (void)
 
     gncp_new_user_finish ();
   }
+  gtk_widget_destroy(dialog);
 }
 
 void
