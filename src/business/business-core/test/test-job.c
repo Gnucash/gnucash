@@ -63,7 +63,7 @@ test_job (void)
 
     test_string_fcn (book, "Id", gncJobSetID, gncJobGetID);
     test_string_fcn (book, "Name", gncJobSetName, gncJobGetName);
-    test_string_fcn (book, "Desc", gncJobSetDesc, gncJobGetDesc);
+    test_string_fcn (book, "Reference", gncJobSetReference, gncJobGetReference);
 
     test_bool_fcn (book, "Active", gncJobSetActive, gncJobGetActive);
 

@@ -60,7 +60,8 @@ update_job_select_picker (struct select_job_window *w)
 				    show_all);
       break;
     case GNC_OWNER_VENDOR:
-      /* XXX */
+      objs = gncVendorGetJoblist (gncOwnerGetVendor (&(w->owner)),
+				  show_all);
       break;
     default:
     }

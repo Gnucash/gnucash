@@ -270,7 +270,7 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
   switch (gncOwnerGetType (&(ow->owner))) {
   case GNC_OWNER_JOB:
   {
-    char const *msg = gncJobGetDesc (gncOwnerGetJob (&(ow->owner)));
+    char const *msg = gncJobGetReference (gncOwnerGetJob (&(ow->owner)));
     gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
     break;
   }

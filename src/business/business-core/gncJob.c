@@ -75,7 +75,7 @@ void gncJobDestroy (GncJob *job)
     gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
     break;
   case GNC_OWNER_VENDOR:
-    /* XXX */
+    gncVendorRemoveJob (gncOwnerGetVendor(&job->owner), job);
     break;
   default:
   }
@@ -111,7 +111,7 @@ void gncJobSetName (GncJob *job, const char *name)
   job->dirty = TRUE;
 }
 
-void gncJobSetDesc (GncJob *job, const char *desc)
+void gncJobSetReference (GncJob *job, const char *desc)
 {
   if (!job) return;
   if (!desc) return;
@@ -141,7 +141,7 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
     gncCustomerRemoveJob (gncOwnerGetCustomer(&job->owner), job);
     break;
   case GNC_OWNER_VENDOR:
-    /* XXX */
+    gncVendorRemoveJob (gncOwnerGetVendor(&job->owner), job);
     break;
   default:
   }
@@ -153,7 +153,7 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
     gncCustomerAddJob (gncOwnerGetCustomer(&job->owner), job);
     break;
   case GNC_OWNER_VENDOR:
-    /* XXX */
+    gncVendorAddJob (gncOwnerGetVendor(&job->owner), job);
     break;
   default:
   }
@@ -195,7 +195,7 @@ const char * gncJobGetName (GncJob *job)
   return job->name;
 }
 
-const char * gncJobGetDesc (GncJob *job)
+const char * gncJobGetReference (GncJob *job)
 {
   if (!job) return NULL;
   return job->desc;

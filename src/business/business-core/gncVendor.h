@@ -1,6 +1,6 @@
 /*
  * gncVendor.h -- the Core Vendor Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -11,6 +11,7 @@ typedef struct _gncVendor GncVendor;
 
 #include "gnc-book.h"
 #include "gncAddress.h"
+#include "gncJob.h"
 
 #define GNC_VENDOR_MODULE_NAME "gncVendor"
 
@@ -28,6 +29,9 @@ void gncVendorSetTerms (GncVendor *vendor, gint terms);
 void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
 
+void gncVendorAddJob (GncVendor *vendor, GncJob *job);
+void gncVendorRemoveJob (GncVendor *vendor, GncJob *job);
+
 void gncVendorCommitEdit (GncVendor *vendor);
 
 /* Get Functions */
@@ -41,6 +45,8 @@ const char * gncVendorGetNotes (GncVendor *vendor);
 gint gncVendorGetTerms (GncVendor *vendor);
 gboolean gncVendorGetTaxIncluded (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
+
+GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
 
 GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);

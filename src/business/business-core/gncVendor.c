@@ -1,6 +1,6 @@
 /*
  * gncVendor.c -- the Core Vendor Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001, 2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -30,6 +30,7 @@ struct _gncVendor {
   gint		terms;
   gboolean	taxincluded;
   gboolean	active;
+  GList *	jobs;
   gboolean	dirty;
 };
 
@@ -74,6 +75,8 @@ void gncVendorDestroy (GncVendor *vendor)
   CACHE_REMOVE (vendor->name);
   CACHE_REMOVE (vendor->notes);
   gncAddressDestroy (vendor->addr);
+  g_list_free (vendor->jobs);
+
   remObj (vendor);
 
   g_free (vendor);
@@ -204,17 +207,30 @@ gboolean gncVendorGetActive (GncVendor *vendor)
   return vendor->active;
 }
 
-GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid)
+/* Note that JobList changes do not affect the "dirtiness" of the vendor */
+void gncVendorAddJob (GncVendor *vendor, GncJob *job)
 {
-  if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
+  if (!vendor) return;
+  if (!job) return;
+
+  if (g_list_index(vendor->jobs, job) == -1)
+    vendor->jobs = g_list_insert_sorted (vendor->jobs, job, gncJobSortFunc);
 }
 
-gboolean gncVendorIsDirty (GncVendor *vendor)
+void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
 {
-  if (!vendor) return FALSE;
-  return (vendor->dirty || gncAddressIsDirty (vendor->addr));
+  GList *node;
+
+  if (!vendor) return;
+  if (!job) return;
+
+  node = g_list_find (vendor->jobs, job);
+  if (!node) {
+    /*    PERR ("split not in account"); */
+  } else {
+    vendor->jobs = g_list_remove_link (vendor->jobs, node);
+    g_list_free_1 (node);
+  }
 }
 
 void gncVendorCommitEdit (GncVendor *vendor)
@@ -230,6 +246,36 @@ static gint gncVendorSortFunc (gconstpointer a, gconstpointer b) {
   GncVendor *va = (GncVendor *) a;
   GncVendor *vb = (GncVendor *) b;
   return(strcmp(va->name, vb->name));
+}
+
+GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
+{
+  if (!vendor) return NULL;
+
+  if (show_all) {
+    return (g_list_copy (vendor->jobs));
+  } else {
+    GList *list = NULL, *iterator;
+    for (iterator = vendor->jobs; iterator; iterator=iterator->next) {
+      GncJob *j = iterator->data;
+      if (gncJobGetActive (j))
+	list = g_list_append (list, j);
+    }
+    return list;
+  }
+}
+
+GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
+gboolean gncVendorIsDirty (GncVendor *vendor)
+{
+  if (!vendor) return FALSE;
+  return (vendor->dirty || gncAddressIsDirty (vendor->addr));
 }
 
 /* Package-Private functions */

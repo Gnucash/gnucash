@@ -67,8 +67,8 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
 					    0, -1));
   gncJobSetName (job, gtk_editable_get_chars (GTK_EDITABLE (jw->name_entry),
 					      0, -1));
-  gncJobSetDesc (job, gtk_editable_get_chars (GTK_EDITABLE (jw->desc_entry),
-					      0, -1));
+  gncJobSetReference (job, gtk_editable_get_chars
+		      (GTK_EDITABLE (jw->desc_entry), 0, -1));
   gncJobSetActive (job, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
 						      (jw->active_check)));
   {
@@ -314,7 +314,7 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
     gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
     gtk_entry_set_editable (GTK_ENTRY (jw->id_entry), FALSE);
     gtk_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
-    gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetDesc (job));
+    gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (jw->active_check),
                                 gncJobGetActive (job));
 

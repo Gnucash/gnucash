@@ -22,8 +22,8 @@ void gncJobDestroy (GncJob *job);
 /* Set Functions */
 
 void gncJobSetID (GncJob *job, const char *id);
-void gncJobSetName (GncJob *job, const char *username);
-void gncJobSetDesc (GncJob *job, const char *language);
+void gncJobSetName (GncJob *job, const char *jobname);
+void gncJobSetReference (GncJob *job, const char *owner_reference);
 void gncJobSetOwner (GncJob *job, GncOwner *owner);
 void gncJobSetActive (GncJob *job, gboolean active);
 
@@ -35,7 +35,7 @@ GNCBook * gncJobGetBook (GncJob *job);
 const GUID * gncJobGetGUID (GncJob *job);
 const char * gncJobGetID (GncJob *job);
 const char * gncJobGetName (GncJob *job);
-const char * gncJobGetDesc (GncJob *job);
+const char * gncJobGetReference (GncJob *job);
 GncOwner * gncJobGetOwner (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
 
