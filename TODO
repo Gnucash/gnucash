@@ -35,7 +35,7 @@ the docs or change the menu entry name.
 
 22) add automatic interest computation
 
-23) add mortgages, bonds
+23) add mortgages, bonds, other intert bearing instruments.
 
 24) show example of how to do household assets
 
@@ -56,7 +56,39 @@ the docs or change the menu entry name.
 31) move resources out of main.c into a resource file.
     This requires fixing install first.
 
-32) make instqall should work.
+32) make instqall should work
+
+33) automatic deposit-wthdrawl on regular basis.
+
+34) create example accounts for home assets (car, jewelry, etc.
+   and how they plug into balance sheet
+
+35) balance sheet, profit&loss sheet.  I wanna know what my net worth is,
+   what percentage of it is bank, stocks, car, house.
+
+36) business features, for tracking inventory, costing jobs, etc.
+
+37) clean distinction between the data view (the register window)
+    and the data (Account.h, Transaction.h) so that data can be feteched
+    from multi-user SQL database instead of simple flat files.
+
+38) Find, if it exists, some ANSI/ISO/POSIX/whatever standard for 
+    fincancial software, and code to that.  That in heory makes it more
+    interoperable with other possible projects.
+
+39) create Java version of RegWindow, so that accounts&transactions could
+    be deleivered by a web server, and the actual data viewed/modified
+    with regwindow.
+
+40) add check-priniting ability.
+
+41) add short-cut button-bar, like quicken/lotus
+
+42) add icons for minimized windows
+
+
+
+
 
 Fixed bugs:
 -----------
