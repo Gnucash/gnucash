@@ -1,3 +1,13 @@
+2002-10-09  Benoit Grégoire  <bock@step.polymtl.ca>
+	
+	* src/import-export/Account-matcher.c: Change "Account ID" text
+	to "Full account ID" and make it translateable. 
+	* src/import-export/ofx/gnc-ofx-import.c: Use the new account 
+	name field of LibOFX to help the user identify the account.
+	Starting now, until furter notice you 	need LibOFX CVS available
+	at http://sourceforge.net/cvs/?group_id=61170 to build the
+	ofx module.
+
 2002-10-08  Derek Atkins  <derek@ihtfp.com>
 	* books do not need to generate events
 	* however they should generate destroy events

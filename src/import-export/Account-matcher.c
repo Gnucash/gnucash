@@ -246,7 +246,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	  strncat(account_description_text, account_human_description, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
 	  strncat(account_description_text, "\n", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
 	}
-      strncat(account_description_text, "(Account ID: ", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
+      strncat(account_description_text,_("(Full account ID: "), ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
       strncat(account_description_text, account_online_id_value, ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
       strncat(account_description_text, ")", ACCOUNT_DESCRIPTION_MAX_SIZE-strlen(account_description_text));
 

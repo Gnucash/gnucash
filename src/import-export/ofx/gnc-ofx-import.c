@@ -64,7 +64,6 @@ void gnc_file_ofx_import (void)
   extern int ofx_INFO_msg;
   extern int ofx_STATUS_msg;
   char *filenames[3];
-  char file[255] = "/home/bock/pfe/scratch/stmtrs_spec201.xml";
   char *selected_filename;
 
   ofx_PARSER_msg = false;
@@ -77,7 +76,7 @@ void gnc_file_ofx_import (void)
   gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
   DEBUG("gnc_file_ofx_import(): Begin...\n");
 
-selected_filename = gnc_file_dialog ("Select an OFX/QFX file to process",
+selected_filename = gnc_file_dialog("Select an OFX/QFX file to process",
 				NULL,
 				NULL);
 
@@ -98,6 +97,11 @@ selected_filename = gnc_file_dialog ("Select an OFX/QFX file to process",
 int ofx_proc_status(struct OfxStatusData data)
 {
   return 0;
+}
+
+int ofx_proc_security(const struct OfxSecurityData data)
+{
+return 0;
 }
 
 int ofx_proc_transaction(struct OfxTransactionData data)
@@ -321,7 +325,7 @@ int ofx_proc_account(struct OfxAccountData data)
       }
     }
 
-    selected_account = gnc_import_select_account(data.account_id, 1, NULL, default_commodity, default_type);
+    selected_account = gnc_import_select_account(data.account_id, 1, data.account_name, default_commodity, default_type);
   }
   else
     {
