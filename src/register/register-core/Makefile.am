@@ -76,7 +76,7 @@ gw-register-core.scm gw-register-core.c gw-register-core.h: .scm-links gw-regist
 	  (set! %load-path (cons \"${PWD}\" %load-path)) \
 	  (set! %load-path (cons \"${top_srcdir}/src/engine\" %load-path)) \
 	  (primitive-load \"./gw-register-core-spec.scm\") \
-	  (gw:generate-module \"gw-register-core\")"
+	  (gw:generate-wrapset \"gw-register-core\")"
 
 BUILT_SOURCES = gw-register-core.scm gw-register-core.c gw-register-core.h
 CLEANFILES = gw-register-core.scm gw-register-core.c gw-register-core.h \
