@@ -19,19 +19,24 @@
 /** @addtogroup Date
     @{ */
 /** @file gnc-date.h 
-    @brief Date handling routines  
+    @brief Date and Time handling routines  
     *
-    Utility functions to handle the date (adjusting, get 
-    current date, etc.) 
+    Utility functions to handle date and time (adjusting, getting 
+    the current date, printing the date and time, etc.) 
 
     \warning HACK ALERT -- the scan and print routines should probably be moved
     to somewhere else. The engine really isn't involved with things
     like printing formats. This is needed mostly by the GUI and so on.
-    If a file-io thing needs date handling, it should do it itself,
+    If a file-io backend needs date handling, it should do it itself,
     instead of depending on the routines here. 
+
+    Overall, this file is quite a mess.  Note, however, that other 
+    applications, besides just GnuCash, use this file.  In particular,
+    GnoTime (gttr.sourcefore.net) uses this file, and this file is 
+    formally a part of QOF (qof.sourceforge.net).
     *
     @author Copyright (C) 1997 Robin D. Clark
-    @author Copyright (C) 1998,1999,2000 Linas Vepstas <linas@linas.org>
+    @author Copyright (C) 1998-2001 Linas Vepstas <linas@linas.org>
 */
 
 #ifndef GNC_DATE_H
