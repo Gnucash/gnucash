@@ -172,8 +172,6 @@ gnc_help_show_topic (gnc_help_window *help, const char * location)
   GtkCTree *ctree;
   GtkCTreeRow *row;
 
-  g_warning (location);
-
   ctree = GTK_CTREE (help->topics_tree);
 
   node = gtk_ctree_find_by_row_data_custom (ctree, NULL, (gpointer) location,
