@@ -149,13 +149,13 @@ xaccCountSplits (Split **tarray)
 /********************************************************************\
 \********************************************************************/
 
-void xaccSetShareAmount (Split *s, double amt)
+void xaccSplitSetShareAmount (Split *s, double amt)
 {
    MARK_SPLIT(s);
    s -> damount = amt;
 }
 
-void xaccSetAmount (Split *s, double amt)
+void xaccSplitSetAmount (Split *s, double amt)
 {
    MARK_SPLIT(s);
    /* remember, damount is actually share price */
@@ -165,25 +165,25 @@ void xaccSetAmount (Split *s, double amt)
 /********************************************************************\
 \********************************************************************/
 
-double xaccGetBalance (Split *s) 
+double xaccSplitGetBalance (Split *s) 
 {
    if (!s) return 0.0;
    return s->balance;
 }
 
-double xaccGetClearedBalance (Split *s) 
+double xaccSplitGetClearedBalance (Split *s) 
 {
    if (!s) return 0.0;
    return s->cleared_balance;
 }
 
-double xaccGetReconciledBalance (Split *s) 
+double xaccSplitGetReconciledBalance (Split *s) 
 {
    if (!s) return 0.0;
    return s->reconciled_balance;
 }
 
-double xaccGetShareBalance (Split *s) 
+double xaccSplitGetShareBalance (Split *s) 
 {
    if (!s) return 0.0;
    return s->share_balance;

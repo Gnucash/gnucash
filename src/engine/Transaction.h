@@ -115,8 +115,8 @@ void          xaccSplitSetAction (Split *, const char *);
 void          xaccSplitSetReconcile (Split *, char);
 
 /* The following two functions set the amount on the split */
-void         xaccSetAmount (Split *, double);
-void         xaccSetShareAmount (Split *, double);
+void         xaccSplitSetAmount (Split *, double);
+void         xaccSplitSetShareAmount (Split *, double);
 
 
 /* The following four subroutines return the running balance up
@@ -137,10 +137,10 @@ void         xaccSetShareAmount (Split *, double);
  * of all transactions that have been marked as reconciled.
  */
 
-double xaccGetBalance (Split *);
-double xaccGetClearedBalance (Split *);
-double xaccGetReconciledBalance (Split *);
-double xaccGetShareBalance (Split *);
+double xaccSplitGetBalance (Split *);
+double xaccSplitGetClearedBalance (Split *);
+double xaccSplitGetReconciledBalance (Split *);
+double xaccSplitGetShareBalance (Split *);
 
 /* return teh parent transaction of the split */
 Transaction * xaccSplitGetParent (Split *);
