@@ -48,14 +48,7 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   grp->numAcc      = 0;
   grp->account     = NULL;
   
-  grp->numGroups   = 0;
-  grp->groups      = NULL;
-  
-  grp->groupName   = NULL;
-  grp->description = NULL;
-  grp->notes       = NULL;
   grp->balance     = 0.0;
-
   }
 
 /********************************************************************\
@@ -79,20 +72,11 @@ freeAccountGroup( AccountGroup *grp )
     {
     int i;
 
-    XtFree(grp->groupName);
-    XtFree(grp->description);
-    XtFree(grp->notes);
-    
     for( i=0; i<grp->numAcc; i++ )
       freeAccount( grp->account[i] );
     
     _free( grp->account );
 
-    for( i=0; i<grp->numGroups; i++ )
-      freeAccountGroup( (AccountGroup *) grp->groups[i] );
-
-    _free( grp->groups );
-    
     /* null everything out, just in case somebody 
      * tries to traverse freed memory */
     xaccInitializeAccountGroup (grp);
@@ -110,8 +94,8 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
 
    grp->saved = True;
 
-   for (i=0; i<grp->numGroups; i++) {
-      xaccAccountGroupMarkSaved (grp->groups[i]); 
+   for (i=0; i<grp->numAcc; i++) {
+      xaccAccountGroupMarkSaved (grp->account[i]->children); 
    }
 }
 
@@ -125,8 +109,8 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
 
    if (False == grp->saved) return 1;
 
-   for (i=0; i<grp->numGroups; i++) {
-      not_saved = xaccAccountGroupNotSaved (grp->groups[i]); 
+   for (i=0; i<grp->numAcc; i++) {
+      not_saved = xaccAccountGroupNotSaved (grp->account[i]->children); 
       if (not_saved) return 1;
    }
    return 0;
@@ -163,8 +147,8 @@ xaccGetNumAccounts ( AccountGroup *root )
 
   num_acc = root->numAcc;
 
-  for (i=0; i<root->numGroups; i++) {
-    num_acc += xaccGetNumAccounts (root->groups[i]);
+  for (i=0; i<root->numAcc; i++) {
+    num_acc += xaccGetNumAccounts (root->account[i]->children);
   }
 
   return num_acc;
@@ -191,12 +175,36 @@ xaccGetAccountFromID ( AccountGroup *root, int acc_id )
 
   /* if we are still here, then we haven't found the account yet.
    * Recursively search the subgroups next */
-  for (i=0; i<root->numGroups; i++) {
-    acc = xaccGetAccountFromID (root->groups[i], acc_id);
+  for (i=0; i<root->numAcc; i++) {
+    acc = xaccGetAccountFromID (root->account[i]->children, acc_id);
     if (acc) return acc;
   }
 
   return NULL;
+}
+
+/********************************************************************\
+ * Fetch the root of the tree                                       *
+\********************************************************************/
+
+AccountGroup *
+xaccGetAccountRoot (Account * acc) 
+{
+  Account *parent_acc;
+  AccountGroup * grp;
+  AccountGroup * root;
+
+  /* find the root of the account group structure */
+  grp = (AccountGroup *) acc->parent;
+  while (grp) {
+    root = grp;
+    parent_acc = grp -> parent;
+    grp = NULL;
+    if (parent_acc) {
+       grp = (AccountGroup *) parent_acc->parent;
+    }
+  }
+  return root;
 }
 
 /********************************************************************\
@@ -206,7 +214,6 @@ xaccGetAccountFromID ( AccountGroup *root, int acc_id )
 Account *
 xaccGetPeerAccountFromID ( Account *acc, int acc_id )
 {
-  AccountGroup * grp;
   AccountGroup * root;
   Account *peer_acc;
   int i;
@@ -215,11 +222,7 @@ xaccGetPeerAccountFromID ( Account *acc, int acc_id )
   if (-1 >= acc_id) return NULL;
 
   /* first, find the root of the account group structure */
-  grp = (AccountGroup *) acc->parent;
-  while (grp) {
-    root = grp;
-    grp = (AccountGroup *) grp->parent;
-  }
+  root = xaccGetAccountRoot (acc);
 
   /* now search all acounts hanging off the root */
   peer_acc = xaccGetAccountFromID (root, acc_id);
@@ -248,8 +251,8 @@ xaccGetAccountFromName ( AccountGroup *root, char * name )
 
   /* if we are still here, then we haven't found the account yet.
    * Recursively search the subgroups next */
-  for (i=0; i<root->numGroups; i++) {
-    acc = xaccGetAccountFromName (root->groups[i], name);
+  for (i=0; i<root->numAcc; i++) {
+    acc = xaccGetAccountFromName (root->account[i]->children, name);
     if (acc) return acc;
   }
 
@@ -263,7 +266,6 @@ xaccGetAccountFromName ( AccountGroup *root, char * name )
 Account *
 xaccGetPeerAccountFromName ( Account *acc, char * name )
 {
-  AccountGroup * grp;
   AccountGroup * root;
   Account *peer_acc;
   int i;
@@ -272,11 +274,7 @@ xaccGetPeerAccountFromName ( Account *acc, char * name )
   if (NULL == name) return NULL;
 
   /* first, find the root of the account group structure */
-  grp = (AccountGroup *) acc->parent;
-  while (grp) {
-    root = grp;
-    grp = (AccountGroup *) grp->parent;
-  }
+  root = xaccGetAccountRoot (acc);
 
   /* now search all acounts hanging off the root */
   peer_acc = xaccGetAccountFromName (root, name);
@@ -318,6 +316,25 @@ removeAccount( AccountGroup *grp, int num )
     }
   return acc;
   }
+
+/********************************************************************\
+\********************************************************************/
+int
+xaccInsertSubAccount( Account *parent, Account *child )
+{
+  int retval;
+
+  if (NULL == parent) return -1;
+  if (NULL == child) return -1;
+
+  /* if a container for the children doesn't yet exist, add it */
+  if (NULL == parent->children) {
+    parent->children = mallocAccountGroup();
+  }
+
+  retval = insertAccount (parent->children, child);
+  return retval;
+}
 
 /********************************************************************\
 \********************************************************************/

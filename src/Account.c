@@ -48,8 +48,10 @@ mallocAccount( void )
   acc->id = next_free_unique_account_id;
   next_free_unique_account_id ++;
 
-  acc->parent = NULL;
-  acc->balance = 0.0;
+  acc->parent   = NULL;
+  acc->children = NULL;
+
+  acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
 
   acc->flags = 0;
@@ -81,6 +83,9 @@ freeAccount( Account *acc )
     {
     int i;
     
+    /* recursively free children */
+    freeAccountGroup (acc->children);
+
     XtFree(acc->accountName);
     XtFree(acc->description);
     XtFree(acc->notes);

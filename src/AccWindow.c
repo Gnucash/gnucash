@@ -672,7 +672,8 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   /* add the new transaction to the account */
   insertTransaction( acc, trans );
   
-  /* once the account is set up, add it to data */
+  /* once the account is set up, add it to account group */
+  /* xxxxxxxxxxxxxxxxx */
   insertAccount( topgroup, acc );
   
   /* make sure the accountlist is updated to reflect the new account */
