@@ -45,5 +45,8 @@
 /* If configure found libXpm, then use it */
 #define  HAVE_XPM            
 
+/* Use the new XmHTML widdget instead of the old htmlw widget */
+#define USE_HTMLW            
+#define USE_XMHTML           
 
 #endif
