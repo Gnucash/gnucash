@@ -1,3 +1,142 @@
+2001-12-11  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/scm/command-line.scm: reorganize a little to remove some of
+	the top-level actions.  Accomodate the new -path vars instead of
+	the old -dir vars.
+	(gnc:initialize-config-vars): new function -- initialize config
+	vars to defaults, respecting any relevant envt variable
+	overrides.
+
+	* src/scm/doc.scm (gnc:find-doc-file): use
+	gnc:find-localized-file, not gnc:find-file.
+
+	* src/scm/main-window.scm: fix hooks usage to be idempotent --
+	file should (re)load safely now.
+
+	* src/scm/main.scm: migrate some loads to the top level - though
+	to really do this right, we're going to need more explicit
+	use-modules and gnc:module-load deps expressed everywhere.
+	(gnc:find-file): new exported function.
+	(gnc:find-localized-file): new exported function.
+	(gnc:*config-path*): new export.
+	(gnc:*share-path*): new export.
+	(gnc:*doc-path*): new export.
+	(gnc:flatten): new function.
+	(build-path): simplify.
+	(gnc:print-unstable-message): simplify.
+
+	* src/scm/path.scm: rework doc-path handling completely, migrating
+	much of the code to command-line.scm.
+	(gnc:expand-path): new function.
+	(gnc:load-system-config-if-needed): use gnc:*config-path*, not
+	gnc:*config-dir*.
+	(gnc:locale-prefixes): removed.
+	(gnc:default-doc-dirs): removed.
+	(gnc:_expand-doc-path_): removed.
+
+	* src/scm/price-quotes.scm
+	(gnc:*finance-quote-helper*): use gnc:*share-path*, not
+	gnc:*share-dir*.
+
+	* src/scm/tip-of-the-day.scm: rewrite to be re-loadable -- you now
+	need to call an init function after loading the file.  In the long
+	run, this should still become a module (guile or gnc).
+	(gnc:initialize-tip-of-the-day): new function.
+	(gnc:tip-of-the-day-startup-func): new function.
+
+	* src/scm/build-config.scm.in: rename -dir_ variables to -path_
+	and remove help-dir in favor of doc-path.
+
+	* src/scm/Makefile.am (build-config.scm): remove
+	GNC_PKGLIB_INSTALLDIR.
+
+	* src/report/utility-reports/hello-world.scm
+	(hello-world-renderer): modify to reflect switch from share-dir to
+	share-path.
+
+	* src/report/report-gnome/.cvsignore: add missing bits.
+
+	* configure.in: now that libgnc-engine doesn't depend on guile any
+	more, migrate the guile flags from "BASE" to the regular vars.
+	(GNUCASH_ENGINE_BASE_LIBS): remove guile bits.
+	(GNUCASH_ENGINE_LIBS): add guile bits.
+	(GNUCASH_ENGINE_BASE_CFLAGS): remove guile bits.
+	(GNUCASH_ENGINE_CFLAGS): add guile bits.
+
+	* src/engine/.cvsignore: add a few missing bits.
+
+	* src/engine/iso-currencies-to-c: new file -- convert
+	iso-4217-currencies.scm to iso-4217-currencies.c.  Amazingly
+	easily.  Woohoo for languages with built in self-parsers.
+
+	* src/engine/Makefile.am: accomodate new automatically generated C
+	code for default commodity table initialization.
+
+	* src/engine/gnc-commodity.h
+	(gnc_commodity_table_add_default_data): new prototype.
+
+	* src/engine/gnc-commodity.c
+	(gnc_commodity_table_add_default_data): new function -- populate a
+	commodity table with the "default" commodities/namespaces.
+	#includes the automatically generated code from
+	iso-4217-currencies.
+
+	* src/engine/engine-helpers.c
+	(gnc_engine_commodity_table_new): removed.
+
+	* src/engine/commodity-table.scm: migrate commodity table
+	construction to be C-only.
+	(gnc:load-iso-4217-currencies): removed.
+	(gnc:setup-default-namespaces): removed.
+
+	* src/engine/gnc-book.c (gnc_book_init): switch to use non-guile
+	based gnc_commodity_table_add_default_data.
+
+	* src/engine/engine-helpers.h: remove
+	gnc_engine_commodity_table_new.
+
+	* src/engine/engine.scm: don't export deleted
+	gnc:engine-commodity-table-construct.
+
+	* src/engine/iso-4217-currencies.scm: fix some typos.
+
+	* src/report/report-gnome/Makefile.am
+	(AM_CFLAGS): add GLADE_CFLAGS.
+	(.scm-links): add report link.
+
+	* src/report/report-gnome/.cvsignore: add *.lo and *.la.
+
+	* src/optional/.cvsignore: add *.lo and *.la.
+
+	* src/gnome/dialog-sxsincelast.c: #include gnc-gui-query.h
+
+	* src/bin/overrides/gnucash-build-env.in: add report-gnome to
+	test-env.  Change envt vars to reflect new scheme:
+	GNC_CONFIG_PATH, GNC_SHARE_PATH, and GNC_DOC_PATH. 
+
+	* src/backend/postgres/test/test-db.c
+	(db_file_url): find the postgres communication socket directory
+	via envt var TEST_DB_SOCKET_DIR.
+
+	* src/backend/postgres/test/db-control.sh: rework to communicate
+	with postgres through a filesystem socket rather than a TCP
+	connection so tests will work even on machines that don't allow
+	TCP.  This was a little tricky because shell substitutions were
+	fighting the PG_CTL "-o '-k x -p y'" syntax.
+
+	* src/backend/postgres/test/Makefile.am
+	(AM_CFLAGS): add GUILE_INCS.
+	(TESTS_ENVIRONMENT): add TEST_DB_SOCKET_DIR.
+
+	* intl-scm/Makefile.am (guile-strings.c): add top_srcdir.
+
+	* configure.in (error-on-warning): make this the default.  I'm
+	tired of having to fix missing #includes, mismatched types,
+	etc. after an update so I can get back to work, but if anyone has
+	a real problem with this, I'd be happy to reconsider.
+
+	* src/scm/bootstrap.scm.in: deleted (a few days ago actually).
+
 2001-12-11  Dave Peticolas  <dave@krondo.com>
 
 	* src/tax/us/test/Makefile.am: remove report-gnome from dirs
