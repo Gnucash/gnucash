@@ -47,7 +47,10 @@ typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
                                       gpointer backend_data,
                                       gpointer user_data);
 
-/** This is the QofObject Class descriptor */
+/** This is the QofObject Class descriptor 
+ *
+ * XXX Hmm, should we add an object factory to this?
+ */
 struct _QofObject 
 {
   gint                interface_version; /* of this object interface */
