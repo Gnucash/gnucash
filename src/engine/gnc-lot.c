@@ -81,7 +81,7 @@ gnc_lot_destroy (GNCLot *lot)
    GList *node;
    if (!lot) return;
    
-	ENTER ("(lot=%p)", lot);
+   ENTER ("(lot=%p)", lot);
    gnc_engine_generate_event (&lot->guid, GNC_EVENT_DESTROY);
 
    xaccRemoveEntity (lot->book->entity_table, &lot->guid);
@@ -219,7 +219,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
    Account * acc;
    if (!lot || !split) return;
 
-	ENTER ("(lot=%p, split=%p)", lot, split);
+   ENTER ("(lot=%p, split=%p)", lot, split);
    acc = xaccSplitGetAccount (split);
    if (NULL == lot->account)
    {
@@ -251,10 +251,10 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 {
    if (!lot || !split) return;
 
-	ENTER ("(lot=%p, split=%p)", lot, split);
+   ENTER ("(lot=%p, split=%p)", lot, split);
    lot->splits = g_list_remove (lot->splits, split);
    split->lot = NULL;
-   lot->is_closed = -1;	/* force an is-closed computation */
+   lot->is_closed = -1;   /* force an is-closed computation */
 
    if (NULL == lot->splits)
    {
@@ -262,6 +262,39 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
       lot->account = NULL;
    }
 }
+
+/* ============================================================== */
+/* Utility function, get earliest split in lot */
+
+Split *
+gnc_lot_get_earliest_split (GNCLot *lot)
+{
+   SplitList *node;
+   Timespec ts;
+   Split *earliest = NULL;
+
+   ts.tv_sec = 1000000LL * ((long long) LONG_MAX);
+   ts.tv_nsec = 0;
+   if (!lot) return NULL;
+
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      Transaction *trans = s->parent;
+      if ((ts.tv_sec > trans->date_posted.tv_sec) ||
+          ((ts.tv_sec == trans->date_posted.tv_sec) &&
+           (ts.tv_nsec > trans->date_posted.tv_nsec)))
+          
+      {
+         ts = trans->date_posted;
+         earliest = s;
+      }
+   }
+
+   return earliest;
+}
+
+/* ============================================================= */
 
 void gnc_lot_register (void)
 {

@@ -76,6 +76,13 @@ gnc_numeric gnc_lot_get_balance (GNCLot *);
  */
 gboolean gnc_lot_is_closed (GNCLot *);
 
+/** The gnc_lot_get_earliest_split() routine is a convenience routine
+ *    that helps identify the date this lot was opened.   It simply
+ *    loops over all of the splits in the lot, and returns the split
+ *    with the earliest split->transaction->date_posted.
+ */
+Split * gnc_lot_get_earliest_split (GNCLot *lot);
+
 /** Every lot has a place to hang kvp data.  This routine returns that
  * place. 
  * */
