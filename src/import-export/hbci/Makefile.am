@@ -44,6 +44,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/import-export \
   ${GNOME_INCLUDEDIR} \
   ${GLADE_CFLAGS} \
+  ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
   ${HBCI_CFLAGS} -Werror
 
