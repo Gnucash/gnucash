@@ -19,7 +19,24 @@ libgncmod_hbci_la_SOURCES = \
   hbci-account-picker.c \
   druid-hbci-initial.c 
 
-noinst_HEADERS = 
+noinst_HEADERS = \
+  dialog-daterange.h \
+  dialog-hbcitrans.h \
+  dialog-pass.h \
+  druid-hbci-final.h \
+  druid-hbci-initial.h \
+  druid-hbci-utils.h \
+  gnc-hbci-actions.h \
+  gnc-hbci-cb.h \
+  gnc-hbci-getbalance.h \
+  gnc-hbci-gettrans.h \
+  gnc-hbci-kvp.h \
+  gnc-hbci-transfer.h \
+  gnc-hbci-utils.h \
+  hbci-account-picker.h \
+  hbci-interaction.h \
+  hbci-interactionP.h
+
 
 libgncmod_hbci_la_LDFLAGS = -module
 
@@ -36,7 +53,7 @@ libgncmod_hbci_la_LIBADD = \
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/hbci
 
 gncscm_DATA = \
-	hbci.scm
+  hbci.scm
 
 #gladedir = ${GNC_GLADE_DIR}
 #glade_DATA = 
@@ -65,6 +82,6 @@ AM_CFLAGS = \
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 
 
-EXTRA_DIST = 
+EXTRA_DIST = ${gncscm_DATA}
 
 CLEANFILES = hbci import-export gnucash g-wrapped .scm-links
