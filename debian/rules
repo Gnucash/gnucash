@@ -22,7 +22,11 @@ Makefile: Makefile.in configure
 	./autogen.sh --prefix=/usr \
 		--sysconfdir=/etc \
 		--infodir=/usr/share/info \
-		--mandir=/usr/share/man
+		--mandir=/usr/share/man \
+		--enable-efence \
+		--enable-error-on-warnings
+
+# --enable-profile \
 
 build: build-stamp
 build-stamp: Makefile 

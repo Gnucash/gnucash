@@ -30,14 +30,14 @@ dom_tree_to_guid(xmlNodePtr node)
     }
     
     {
-        char *type = node->properties->val->content;
-        if(strcmp("guid", type) == 0)
+        char *type = node->properties->xmlAttrPropertyValue->content;
+        if(safe_strcmp("guid", type) == 0)
         {
             GUID *gid = g_new(GUID, 1);
             string_to_guid(node->xmlChildrenNode->content, gid);
             return gid;
         }
-        else if(strcmp("new", type) == 0)
+        else if(safe_strcmp("new", type) == 0)
         {
             /* FIXME: handle this case */
             return NULL;

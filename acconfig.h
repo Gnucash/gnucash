@@ -62,6 +62,9 @@
 /* Should we add guppi support? */
 #undef USE_GUPPI
 
+/* Should we have efence linked in */
+#undef USE_EFENCE
+
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
 

@@ -99,7 +99,7 @@ account_type_handler (xmlNodePtr node, Account* act)
 {
     int type;
 
-    xaccAccountStringToType(node->childs->content, &type);
+    xaccAccountStringToType(node->xmlChildrenNode->content, &type);
     xaccAccountSetType(act, type);
     return TRUE;
 }

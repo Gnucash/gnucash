@@ -13,8 +13,8 @@
 #include "sixtp-dom-generators.h"
 
 #include "gnc-xml.h"
-
 #include "gnc-engine-util.h"
+
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
 #include "Account.h"
@@ -71,18 +71,29 @@ struct com_char_handler com_handlers[] = {
     { 0, 0 }
 };
 
+static gboolean
+string_to_integer(const char *content, gint64 *to)
+{
+    if(sscanf(content, "%lld", to) == 1)
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
     if(safe_strcmp(node->name, "cmdty:fraction"))
     {
-      /*
         gint64 val;
-        if(string_to_integer(node, &val))
+        if(string_to_integer(node->xmlChildrenNode->content, &val))
         {
             gnc_commodity_set_fraction(com, val);
         }
-      */
     }
     else 
     {

@@ -1,3 +1,28 @@
+2001-02-27  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-account.c (node_and_account_equal): Start
+	proper comparison between node and Account.
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_guid): Merge in Hans
+	de Graaff's xml patch.  Use safe_strcmp.
+
+	* src/engine/gnc-xml-helper.h: cleanup.  Merge in Hans de Graaff's
+	xml patch.
+
+	* src/engine/gnc-account-xml-v2.c: Merge in Hans de Graaff's xml
+	patch.
+
+	* src/test/test-stuff.c (check_dom_tree_version): Add func.
+
+	* src/test/Makefile.am (LDADD): Add EFENCE_LIBS to LDADD  list.
+
+	* src/Makefile.am: Add EFENCE_LIBS to LDADD list.
+
+	* acconfig.h: Add required USE_EFENCE def.
+
+	* configure.in: Add --enable-profiling argument.
+	(GHTTP_CFLAGS): Add --enable-efence argument.
+
 2001-02-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-userpass.c: add a dialog for username/password

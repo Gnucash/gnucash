@@ -351,6 +351,18 @@ if test $USE_GUPPI = 0; then
 else
   AC_DEFINE(USE_GUPPI)
 
+
+AC_ARG_ENABLE( efence,
+  [  --enable-efence               link using efence],
+  if test $enableval = yes; then
+     EFENCE_LIBS="-lefence"
+     USE_EFENCE=1
+  fi,
+  USE_EFENCE=0
+  EFENCE_LIBS="")
+AC_DEFINE(USE_EFENCE)
+AC_SUBST(EFENCE_LIBS)
+
 ## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)
 
 # LAME: if you ask gnome-config for the zvt libs, it doesn't include

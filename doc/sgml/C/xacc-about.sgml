@@ -501,11 +501,20 @@ provide an accurate Profit & Loss statement.
 <PARA>for leap-year fix</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email>jgoerzen@complete.org</email> John
       Goerzen</GLOSSTERM>
 <GLOSSDEF>
 <PARA>file i/o fix for 64-bit architectures</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email>hans@degraaff.org</email> Hans de Graaff
+      </GLOSSTERM>
+<GLOSSDEF>
+<PARA>xml patches</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 
