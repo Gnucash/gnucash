@@ -32,6 +32,8 @@ AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
+AC_CHECK_FUNCS(stpcpy)
+
 ### --------------------------------------------------------------------------
 ### Variables
 ### Set up all the initial variable values...
@@ -204,7 +206,6 @@ AC_CHECK_LIB(nana,L_buffer_create,
 ### --------------------------------------------------------------------------
 # If readline exists, just assume that guile needs it.  It probably does.
 AC_CHECK_LIB(readline, readline)
-
 
 ### --------------------------------------------------------------------------
 ### Guile (libraries and executable)
