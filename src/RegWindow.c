@@ -42,6 +42,7 @@
 #include "date.h"
 #include "main.h"
 #include "MainWindow.h"
+#include "LedgerUtils.h"
 #include "PopBox.h"
 #include "QuickFill.h"
 #include "RecnWindow.h"
@@ -49,13 +50,23 @@
 #include "util.h"
 
 
-#define XACC_NUM_COLS  12
+#define NUM_COLUMNS           12
+#define NUM_HEADER_ROWS   1
+#define NUM_ROWS_PER_TRANS 2
+
+enum {
+   LEDGER = NUM_ACCOUNT_TYPES
+};
+
 
 /** STRUCTS *********************************************************/
 /* The RegWindow struct contains info needed by an instance of an open 
  * register.  Any state info for the regWindow goes here. */
 typedef struct _RegWindow {
-  Account *blackacc;          /* The account associated with this regwin */
+  Account **blackacc;         /* The list of accounts associated with this regwin */
+  short   numAcc;             /* number of accounts in list */
+
+  /* display widgets */
   Widget   dialog;
   Widget   reg;               /* The matrix widget...                    */
   Widget   balance;           /* The balance text field                  */
@@ -78,26 +89,28 @@ typedef struct _RegWindow {
 
   /* structures for controlling the column layout */
   short          numCols;     /* number of columns in the register       */
-  short columnLocation [XACC_NUM_COLS];  /* column ordering              */
-  short columnWidths   [XACC_NUM_COLS];  /* widths (in chars not pixels) */
-  String columnLabels  [3][XACC_NUM_COLS]; /* column labels              */
-  unsigned char alignments[XACC_NUM_COLS]; /* alignment of display chars */
+  short columnLocation [NUM_COLUMNS];  /* column ordering              */
+  short columnWidths   [NUM_COLUMNS];  /* widths (in chars not pixels) */
+  String columnLabels  [3][NUM_COLUMNS]; /* column labels              */
+  unsigned char alignments[NUM_COLUMNS]; /* alignment of display chars */
 
 } RegWindow;
 
 
 /** PROTOTYPES ******************************************************/
-double regRecalculateBalance( RegWindow *regData );
-void regSaveTransaction( RegWindow *regData, int position );
+RegWindow * regWindowLedger( Widget parent, Account **acclist );
 
-void closeRegWindow( Widget mw, XtPointer cd, XtPointer cb );
-void startRecnCB( Widget mw, XtPointer cd, XtPointer cb );
-void startAdjBCB( Widget mw, XtPointer cd, XtPointer cb );
-void recordCB( Widget mw, XtPointer cd, XtPointer cb );
-void deleteCB( Widget mw, XtPointer cd, XtPointer cb );
-void cancelCB( Widget mw, XtPointer cd, XtPointer cb );
-void regCB( Widget mw, XtPointer cd, XtPointer cb );
-void dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_year );
+static double regRecalculateBalance( RegWindow *regData );
+static void regSaveTransaction( RegWindow *regData, int position );
+
+static void closeRegWindow( Widget mw, XtPointer cd, XtPointer cb );
+static void startRecnCB( Widget mw, XtPointer cd, XtPointer cb );
+static void startAdjBCB( Widget mw, XtPointer cd, XtPointer cb );
+static void recordCB( Widget mw, XtPointer cd, XtPointer cb );
+static void deleteCB( Widget mw, XtPointer cd, XtPointer cb );
+static void cancelCB( Widget mw, XtPointer cd, XtPointer cb );
+static void regCB( Widget mw, XtPointer cd, XtPointer cb );
+static void dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_year );
 
 
 /** GLOBALS *********************************************************/
@@ -169,20 +182,20 @@ extern Pixel negPixel;
 #define MEMO_CELL_C  DESC_CELL_C  /* same column as the description */
 
 /** CELL MACROS *****************************************************/
-#define IN_DATE_CELL(R,C) (((R-1)%2==0) && (C==DATE_CELL_C))  /* Date cell        */
-#define IN_NUM_CELL(R,C)  (((R-1)%2==0) && (C==NUM_CELL_C))   /* Number cell      */
-#define IN_DESC_CELL(R,C) (((R-1)%2==0) && (C==DESC_CELL_C))  /* Description cell */
-#define IN_RECN_CELL(R,C) (((R-1)%2==0) && (C==RECN_CELL_C))  /* Reconciled cell  */
-#define IN_PAY_CELL(R,C)  (((R-1)%2==0) && (C==PAY_CELL_C))   /* Payment cell     */
-#define IN_DEP_CELL(R,C)  (((R-1)%2==0) && (C==DEP_CELL_C))   /* Deposit cell     */
-#define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==BALN_CELL_C))  /* Balance cell     */
-#define IN_PRIC_CELL(R,C) (((R-1)%2==0) && (C==PRIC_CELL_C))  /* Price cell       */
-#define IN_ACTN_CELL(R,C) (((R-1)%2==0) && (C==ACTN_CELL_C))  /* Action cell      */
+#define IN_DATE_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==DATE_CELL_C))  /* Date cell        */
+#define IN_NUM_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==NUM_CELL_C))   /* Number cell      */
+#define IN_DESC_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==DESC_CELL_C))  /* Description cell */
+#define IN_RECN_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==RECN_CELL_C))  /* Reconciled cell  */
+#define IN_PAY_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==PAY_CELL_C))   /* Payment cell     */
+#define IN_DEP_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==DEP_CELL_C))   /* Deposit cell     */
+#define IN_BALN_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==BALN_CELL_C))  /* Balance cell     */
+#define IN_PRIC_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==PRIC_CELL_C))  /* Price cell       */
+#define IN_ACTN_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==0) && (C==ACTN_CELL_C))  /* Action cell      */
 
-#define IN_YEAR_CELL(R,C) (((R-1)%2==1) && (C==DATE_CELL_C))  /* Year cell        */
-#define IN_XFER_CELL(R,C) (((R-1)%2==1) && (C==XFER_CELL_C))  /* Transfer cell    */
-#define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==MEMO_CELL_C))  /* Memo cell        */
-#define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C!=MEMO_CELL_C))  /* Not the memo cell*/
+#define IN_YEAR_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C==DATE_CELL_C))  /* Year cell        */
+#define IN_XFER_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C==XFER_CELL_C))  /* Transfer cell    */
+#define IN_MEMO_CELL(R,C) (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C==MEMO_CELL_C))  /* Memo cell        */
+#define IN_BAD_CELL(R,C)  (((R-NUM_HEADER_ROWS)%NUM_ROWS_PER_TRANS==1) && (C!=MEMO_CELL_C))  /* Not the memo cell*/
 
 
 /********************************************************************/
@@ -214,46 +227,74 @@ regRefresh( RegWindow *regData )
   if( regData != NULL )
     {
     Transaction *trans;
-    int    i,j,nrows,drows,nnrows,ncols;
+    Transaction **tarray;
+    int    old_num_rows, new_num_rows, delta_rows;
+    int    i,j, ntrans, ncols;
     char   buf[BUFSIZE];
     String **data = NULL;
     String **newData;
-    Account *acc, *xfer_acc;
+    Account *main_acc=NULL, *xfer_acc=NULL;
     double themount;  /* amount */
     
-    XtVaGetValues( regData->reg, XmNrows, &nrows, NULL );
+    /* first, build a sorted array of transactions */
+    if (1 == regData->numAcc) {
+       tarray = regData->blackacc[0]->transaction;
+       ntrans = regData->blackacc[0]->numTrans;
+
+       /* if there is only one account, then allocate one
+        * extra transaction row.  That extra row is used
+        * to allow the user to add new transactions */
+       new_num_rows = NUM_ROWS_PER_TRANS*(ntrans+1) + NUM_HEADER_ROWS;
+
+       main_acc = regData->blackacc[0];
+    } else {
+       tarray = accListGetSortedTrans (regData->blackacc);
+       ntrans = xaccCountTransactions (tarray);
+
+       /* for a multi-account ledger window, the addition of
+        * new transactions is not allowed. Thus, no blank 
+        * rows at the end. */
+       new_num_rows = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
+       main_acc = NULL;
+    }
+
+    XtVaGetValues( regData->reg, XmNrows, &old_num_rows, NULL );
     XtVaGetValues( regData->reg, XmNcells, &data, NULL );
     
     /* The number of rows we need to add/subtract (ie, delta-rows :) */
-    nnrows = (regData->blackacc->numTrans)*2 + 3; 
-    drows  = (nnrows-1) - (nrows-1);
+    delta_rows  = new_num_rows - old_num_rows;
     ncols  = regData->numCols; 
-    acc = regData->blackacc;
+
 
     /* allocate a new matrix: */
-    newData = (String **)_malloc(nnrows*sizeof(String *));
-    for( i=0; i<nnrows; i++ )
-      {
+    newData = (String **)_malloc(new_num_rows*sizeof(String *));
+    for( i=0; i<new_num_rows; i++ ) {
       newData[i] = (String *)_malloc(ncols*sizeof(String *));
-      for( j=0; j<ncols; j++ )
+      for( j=0; j<ncols; j++ ) {
         newData[i][j] = NULL;
       }
+    }
 
-    /* add the column headers, from the old data: */
-    for( j=0; j<ncols; j++ )
-      newData[0][j] = XtNewString(data[0][j]);
+    /* add the column headers, copying from the old data: */
+    for( i=0; i<NUM_HEADER_ROWS; i++ ) {
+      for( j=0; j<ncols; j++ ) {
+        newData[i][j] = XtNewString(data[i][j]);
+      }
+    }
     
     /* adjust the size of the matrix, only after copying old column headers: */
-    if( drows < 0 )
-      XbaeMatrixDeleteRows( regData->reg, 1, -drows );
-    else if( drows > 0 )
-      XbaeMatrixAddRows( regData->reg, 1, NULL, NULL, NULL, drows );
+    if( delta_rows < 0 ) {
+      XbaeMatrixDeleteRows( regData->reg, 1, -delta_rows );
+    } else if( delta_rows > 0 ) {
+      XbaeMatrixAddRows( regData->reg, 1, NULL, NULL, NULL, delta_rows );
+    }
     
     /* and fill in the data for the matrix: */
-    i=-1;
-    while( (trans = getTransaction (acc,++i)) != NULL )
-      {
-      int  row = i*2+1;
+    for (i=0; i<ntrans; i++) {
+      int  row; 
+
+      trans = tarray[i];
+      row = NUM_ROWS_PER_TRANS*i + NUM_HEADER_ROWS;
 
       XbaeMatrixSetRowUserData  ( regData->reg, row, (XPointer) trans);   
 
@@ -268,7 +309,7 @@ regRefresh( RegWindow *regData )
       newData[row][NUM_CELL_C]   = XtNewString(buf);
 
       /* XFER_CELL_C is same as NUM_CELL_C */
-      xfer_acc = xaccGetOtherAccount (acc, trans);
+      xfer_acc = xaccGetOtherAccount (main_acc, trans);
       if (xfer_acc) {
         sprintf( buf, "%s", xfer_acc->accountName );
         newData[row+1][NUM_CELL_C] = XtNewString(buf);
@@ -288,7 +329,7 @@ regRefresh( RegWindow *regData )
       
       /* ----------------------------------- */
       /* display depends on account type */
-      switch(acc->type)
+      switch(regData->type)
         {
         case BANK:
         case CASH:
@@ -298,7 +339,7 @@ regRefresh( RegWindow *regData )
         case INCOME:
         case EXPENSE:
         case EQUITY:
-          themount = xaccGetAmount (acc, trans);
+          themount = xaccGetAmount (main_acc, trans);
           if( 0.0 > themount )
             {
             sprintf( buf, "%.2f ", -themount );
@@ -314,7 +355,7 @@ regRefresh( RegWindow *regData )
           break;
         case PORTFOLIO:
         case MUTUAL:
-          themount = xaccGetShareAmount (acc, trans);
+          themount = xaccGetShareAmount (main_acc, trans);
           if( 0.0 > themount )
             {
             sprintf( buf, "%.3f ", -themount );
@@ -329,7 +370,7 @@ regRefresh( RegWindow *regData )
             }
           break;
         default:
-          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
+          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", regData->type);
         }
       
       newData[row+1][PAY_CELL_C] = XtNewString("");
@@ -340,7 +381,7 @@ regRefresh( RegWindow *regData )
 
       /* ----------------------------------- */
       /* extra columns for mutual funds, etc. */
-      switch(acc->type)
+      switch(regData->type)
         {
         case BANK:
         case CASH:
@@ -368,48 +409,57 @@ regRefresh( RegWindow *regData )
       
           break;
         default:
-          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
+          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", regData->type);
         }
       }
 
-    /* fill in the empty cells at the end: */
-    {
-    Date date;
-    todaysDate( &date );
+    if (1 == regData->numAcc) {
+      int row;
+      Date date;
+      todaysDate( &date );
     
-    for( i=(2*i)+1; i<nnrows; i++ )
-      {
-      for( j=0; j<ncols; j++ )
-        {
-        if( IN_DATE_CELL(i,j) )
-          {
-          sprintf( buf, "%2d/%2d\0", date.month, date.day );
-          newData[i][j] = XtNewString(buf);
+      /* if there is just one account for this ledger, then 
+       * there are some empty rows at the end, where the user
+       * can create new transactions. Fill them in with emptiness
+       */
+      row = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
+      XbaeMatrixSetRowUserData  ( regData->reg, row, NULL);
+
+      for( i=row; i<new_num_rows; i++ ) {
+        for( j=0; j<ncols; j++ ) {
+          if( IN_DATE_CELL(i,j) ) {
+            sprintf( buf, "%2d/%2d\0", date.month, date.day );
+            newData[i][j] = XtNewString(buf);
+          } 
+          else if( IN_YEAR_CELL(i,j) ) {
+            sprintf( buf, "%4d", date.year );
+            newData[i][j] = XtNewString(buf);
           }
-        else if( IN_YEAR_CELL(i,j) )
-          {
-          sprintf( buf, "%4d", date.year );
-          newData[i][j] = XtNewString(buf);
+          else if( IN_RECN_CELL(i,j) ) {
+            sprintf( buf, "%c", NREC );
+            newData[i][j] = XtNewString(buf);
           }
-        else if( IN_RECN_CELL(i,j) )
-          {
-          sprintf( buf, "%c", NREC );
-          newData[i][j] = XtNewString(buf);
+          else {
+            newData[i][j] = XtNewString("");
           }
-        else
-          newData[i][j] = XtNewString("");
         }
       }
+    } else {
+
+      /* If the number of accounts is greater than one, 
+       * then the flat transaction array was alloc'ed and
+       * must be freed. */
+      _free (tarray);
     }
-    
+   
     /* set the cell data: */
     XtVaSetValues( regData->reg, XmNcells, newData, NULL );
     regRecalculateBalance (regData);
     
     /* and free memory!!! */
-    /* ??? */
-    }
+    _free (data);
   }
+}
 
 
 /********************************************************************\
@@ -437,7 +487,9 @@ regRecalculateBalance( RegWindow *regData )
   if( NULL == regData ) return 0.0;
 
   reg = regData->reg;
-  acc = regData->blackacc;
+
+  /* hack alert -- nothing here is correct for a ledger xxxxxxxxxxx*/
+  acc = regData->blackacc[0];
 
   xaccRecomputeBalance (acc);
   
@@ -598,7 +650,7 @@ regRecalculateBalance( RegWindow *regData )
   }								\
 }
 
-void
+static void
 regSaveTransaction( RegWindow *regData, int position )
 {
   /* save transaction structure... in order to speed this up, 
@@ -606,15 +658,11 @@ regSaveTransaction( RegWindow *regData, int position )
    * that might have changed, so we only have to save the stuff
    * that has changed */
   char buf[BUFSIZE];
-  int  row = (position * 2) + 1;
-  Account *acc = regData->blackacc;
+  int  row = position * NUM_ROWS_PER_TRANS + NUM_HEADER_ROWS;
   Transaction *trans;
 
   /* If nothing has changed, we have nothing to do */
   if (MOD_NONE == regData->changed) return;
-
-  /* Be sure to prompt the user to save to disk after changes are made! */
-  acc->parent->saved = False;
 
   trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, row);
   
@@ -623,17 +671,33 @@ regSaveTransaction( RegWindow *regData, int position )
     /* This must be a new transaction */
     DEBUG("New Transaction\n");
     
-    trans = mallocTransaction();
-    trans->credit = (struct _account *) acc;
+    if (1 == regData->numAcc) {
+      /* Be sure to prompt the user to save to disk after changes are made! */
+      Account *acc = regData->blackacc[0];
+      acc->parent->saved = False;
 
-    /* insert the transaction now.  If we later discover that 
-     * the user hs not made any entries, we will remove it again.
-     * However, for some of the itntermediate processing, we must 
-     * have a valid transaction present in the account.
-     */
-    insertTransaction (acc, trans);
-    regData->changed = MOD_ALL;
+      trans = mallocTransaction();
+      trans->credit = (struct _account *) acc;
+  
+      /* insert the transaction now.  If we later discover that 
+       * the user hs not made any entries, we will remove it again.
+       * However, for some of the itntermediate processing, we must 
+       * have a valid transaction present in the account.
+       */
+      insertTransaction (acc, trans);
+      regData->changed = MOD_ALL;
+      } else {
+         PERR ("regSaveTransaction(): can't have new transaction in ledger \n");
+      }
+    } else {
+      /* Be sure to prompt the user to save to disk after changes are made! */
+      Account *acc;
+      acc = (Account *) trans->credit;
+      if (acc) acc->parent->saved = False;
+      acc = (Account *) trans->debit;
+      if (acc) acc->parent->saved = False;
     }
+
   if( regData->changed & MOD_NUM )
     {
     DEBUG("MOD_NUM\n");	  
@@ -646,7 +710,10 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     /* ... the transfer ... */
     char * name;
-    Account *xfer_acct = xaccGetOtherAccount (acc, trans);
+    /* hack alert xxxxxxxxxxxxx this is incorrect for ledger */
+    Account *main_acc = regData->blackacc[0];
+   
+    Account *xfer_acct = xaccGetOtherAccount (main_acc, trans);
     DEBUG("MOD_XFER\n");
 
     if (xfer_acct) {
@@ -662,7 +729,7 @@ regSaveTransaction( RegWindow *regData, int position )
     name = XbaeMatrixGetCell(regData->reg,row+XFER_CELL_R, XFER_CELL_C);
   
     /* get the new account from the name */
-    xfer_acct = xaccGetPeerAccountFromName (acc, name);
+    xfer_acct = xaccGetPeerAccountFromName (main_acc, name);
   
     if (xfer_acct) {
       /* insert the transaction into the new account */
@@ -692,7 +759,7 @@ regSaveTransaction( RegWindow *regData, int position )
   
   /* ignore MOD_ACTN for non-stock accounts */
   if( (regData->changed & MOD_ACTN) &&
-      ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
+      ((MUTUAL == regData->type) || (PORTFOLIO==regData->type)) )
     {
     String  actn = NULL;
     DEBUG("MOD_ACTN\n");
@@ -714,6 +781,8 @@ regSaveTransaction( RegWindow *regData, int position )
     String amount;
     float val=0.0;  /* must be float for sscanf to work */
     double themount = 0.0;
+    /* hack alert xxxxxxxxxx this is incorrect for ledger */
+    Account *main_acc = regData->blackacc[0];
 
     DEBUG("MOD_AMNT\n");
     /* ...and the amounts */
@@ -726,7 +795,7 @@ regSaveTransaction( RegWindow *regData, int position )
     sscanf( amount, "%f", &val );
     themount -= val;
     
-    xaccSetShareAmount (acc, trans, themount);
+    xaccSetShareAmount (main_acc, trans, themount);
 
     /* Reset so there is only one field filled */
     if( 0.0 > themount )
@@ -746,7 +815,7 @@ regSaveTransaction( RegWindow *regData, int position )
 
   /* ignore MOD_PRIC for non-stock accounts */
   if( (regData->changed & MOD_PRIC) &&
-      ((MUTUAL == acc->type) || (PORTFOLIO==acc->type)) )
+      ((MUTUAL == regData->type) || (PORTFOLIO==regData->type)) )
     {
     String price;
     float val=0.0;  /* must be float for sscanf to work */
@@ -781,6 +850,8 @@ regSaveTransaction( RegWindow *regData, int position )
     if( outOfOrder )
       {
       int pos;
+      /* hack alert xxxxxxxxxxx this is incorrect for ledger */
+      Account *main_acc = regData->blackacc[0];
 
       DATE_REORDER ((trans->credit));
       DATE_REORDER ((trans->debit));
@@ -788,7 +859,7 @@ regSaveTransaction( RegWindow *regData, int position )
       /* Scroll to the new location of the reordered transaction;
        * but do this only for this register, not any other register 
        * windows. */  
-      pos = getNumOfTransaction (acc, trans);
+      pos = getNumOfTransaction (main_acc, trans);
       XbaeMatrixMakeCellVisible( regData->reg, 2*pos+1, DESC_CELL_C );
       }
     }
@@ -798,17 +869,19 @@ regSaveTransaction( RegWindow *regData, int position )
    * actually enter any data, then we should not really
    * consider this to be a new transaction! */
   if (regData->changed & MOD_NEW) {
+    /* hack alert xxxxxxxxxxxxxxx this is icorrect for ledger */
+    Account *main_acc = regData->blackacc[0];
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
         (strcmp("",trans->memo) == 0)        &&
         (strcmp("",trans->action) == 0)      &&
         (0 == trans->catagory)               &&
-        (NULL == xaccGetOtherAccount (acc, trans)) &&
+        /* (NULL == xaccGetOtherAccount (acc, trans)) && */
         (NULL == trans->debit)               &&
         (1.0 == trans->share_price)          &&
         (0.0 == trans->damount) ) 
       {
-      xaccRemoveTransaction (acc, trans);
+      xaccRemoveTransaction (main_acc, trans);
       freeTransaction (trans);
       return;
       }
@@ -845,6 +918,26 @@ regSaveTransaction( RegWindow *regData, int position )
 }
 
 /********************************************************************\
+ * regWindowSimple                                                  *
+ *   opens up a register window for Account account                 *
+ *                                                                  *
+ * Args:   parent  - the parent of this window                      *
+ *         acc     - the account associated with this register      *
+ * Return: regData - the register window instance                   *
+\********************************************************************/
+RegWindow *
+regWindowSimple( Widget parent, Account *acc )
+  {
+  RegWindow *retval;
+  Account *acclist[2];
+
+  acclist[0] = acc;
+  acclist[1] = NULL;
+
+  retval = regWindowLedger (parent, acclist);
+  return retval;
+  }
+/********************************************************************\
  * regWindow                                                        *
  *   opens up a register window for Account account                 *
  *                                                                  *
@@ -853,13 +946,13 @@ regSaveTransaction( RegWindow *regData, int position )
  * Return: regData - the register window instance                   *
 \********************************************************************/
 RegWindow *
-regWindow( Widget parent, Account *accly )
+regWindowLedger( Widget parent, Account **acclist )
   {
-  AccountGroup *grp;
   Transaction *trans;
   RegWindow   *regData;
   Widget menubar, pane, buttonform, frame, reg, widget;
   int    position=0;
+  char *windowname;
 
   setBusyCursor( parent );
   
@@ -876,20 +969,44 @@ regWindow( Widget parent, Account *accly )
     }
   
   regData = (RegWindow *)_malloc(sizeof(RegWindow));
-  accly -> regData   = regData;    /* avoid having two open registers for one account */
-  regData->blackacc  = accly;
   regData->changed   = 0;          /* Nothing has changed yet! */
   regData->currEntry = 0;
-  regData->qf        = accly->qfRoot;
   regData->insert    = 0;          /* the insert (cursor) position in
                                     * quickfill cells */
-  regData->type      = accly->type;
+
+
+  /* count the number of accounts we are supposed to display,
+   * and then, store them. */
+  regData->numAcc = accListCount (acclist);
+  regData->blackacc = accListCopy (acclist);
+
+  if (0 == regData->numAcc) {
+    /* this is pretty much an error condition. bail out. */
+    unsetBusyCursor( parent );
+    _free (regData);
+    return NULL;
+  }
+
+  /* if there is only once account that we are supposed 
+   * to display, use that account type as the display type. */
+  if (1 == regData->numAcc) {
+    regData->type = regData->blackacc[0]->type;
+    regData->qf   = regData->blackacc[0]->qfRoot;
+
+    /* avoid having two open registers for one account */
+    regData->blackacc[0]->regData = regData;    
+    windowname = regData->blackacc[0]->accountName;
+  } else {
+    regData->type = LEDGER;
+    regData->qf   = regData->blackacc[0]->qfRoot;  /* hack alert -- this probably broken */
+    /* hack alert -- xxxx -- do the ledgerlist thing */
+  }
 
   regData->dialog =
     XtVaCreatePopupShell( "dialog", 
                           xmDialogShellWidgetClass, parent,
                           XmNdeleteResponse,   XmDESTROY,
-                          XmNtitle,            accly->accountName,
+                          XmNtitle,            windowname,
 /*
                           XmNwidth,            395,
                           XmNheight,           400,
@@ -927,43 +1044,43 @@ regWindow( Widget parent, Account *accly )
   \******************************************************************/
   {
   MenuItem reportMenu[] = {
-    { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL,
+    { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
       NULL, (XtPointer)0,  (MenuItem *)NULL },
     NULL,
   };
 
   
   MenuItem activityMenu[] = {
-    { "Transfer...",        &xmPushButtonWidgetClass, 'T', NULL, NULL, 
+    { "Transfer...",        &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "Reconcile...",       &xmPushButtonWidgetClass, 'C', NULL, NULL, 
+    { "Reconcile...",       &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       startRecnCB, NULL, (MenuItem *)NULL },
-    { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, 
+    { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       startAdjBCB, NULL, (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL,
+    { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
       NULL, (XtPointer)0,  (MenuItem *)&reportMenu },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL,
+    { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
       deleteCB,     NULL,      (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "Close Window", &xmPushButtonWidgetClass, 'Q', NULL, NULL,
+    { "Close Window",       &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
       destroyShellCB, NULL, (MenuItem *)NULL },
     NULL,
   };
 
   
   MenuItem helpMenu[] = {
-    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, 
+    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
-    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, 
+    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_REGWIN,(MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL,
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
       NULL,         NULL,                    (MenuItem *)NULL },
-    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, 
+    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
       helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
     NULL,
   };
@@ -974,6 +1091,12 @@ regWindow( Widget parent, Account *accly )
   activityMenu[3].callback_data=(XtPointer)regData;
   activityMenu[6].callback_data=(XtPointer)regData;
   activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
+
+  /* can't adjust the balance on a ledger window */
+  if (1 != regData->numAcc) {
+    activityMenu[2].sensitive = False;
+    activityMenu[3].sensitive = False;
+  }
 
   menubar = XmCreateMenuBar( pane, "menubar", NULL, 0 );  
   
@@ -1102,7 +1225,7 @@ regWindow( Widget parent, Account *accly )
     /* ----------------------------------- */
     /* Put the appropriate heading names in the column titles */
     for (i=0; i<3; i++) {
-       for (j=0; j<XACC_NUM_COLS; j++) {
+       for (j=0; j<NUM_COLUMNS; j++) {
           regData->columnLabels[i][j] = "";
        }
     }
@@ -1213,8 +1336,11 @@ regWindow( Widget parent, Account *accly )
 
   /* create the xfer account box for the first time */
   /* but first, find the topmost group */
-  grp = xaccGetRootGroupOfAcct (accly);
+  {
+  AccountGroup *grp;
+  grp = xaccGetRootGroupOfAcct (regData->blackacc[0]);
   regData->xferbox = xferBox (reg, grp);
+  }
 
   /******************************************************************\
    * The button area... also contains balance fields                *
@@ -1351,13 +1477,10 @@ regWindow( Widget parent, Account *accly )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void 
+static void 
 closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
-  Account   *acc;
-
-  acc = regData->blackacc;
   
   /* Save any unsaved changes */
   XbaeMatrixCommitEdit( regData->reg, False );
@@ -1365,8 +1488,13 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   
   /* hack alert -- free the ComboBox popup boxes data structures too */
 
+
+  if (1 == regData ->numAcc) {
+     regData->blackacc[0]->regData = NULL;
+  } else {
+     /* xxxxxxxxxxxx ledgerlist */
+  }
   _free(regData);
-  acc->regData = NULL;
   
   DEBUG("closed RegWindow\n");
   }
@@ -1380,12 +1508,21 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
+static void 
+startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
+  Account *acc;
   
-  if( regData->blackacc->adjBData == NULL )
-    regData->blackacc->adjBData = adjBWindow( toplevel, regData->blackacc );
+  /* Must have number of accounts be one.  If not one,
+   * then this callback should never have been called,
+   * since the menu entry is supposed to be greyed out.
+   */
+  if (1 != regData->numAcc) return;
+
+  acc = regData->blackacc[0];
+  if( acc->adjBData == NULL )
+    acc->adjBData = adjBWindow( toplevel, acc );
   }
 
 /********************************************************************\
@@ -1397,12 +1534,21 @@ void startAdjBCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
+static void 
+startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
+  Account *acc;
   
-  if( regData->blackacc->recnData == NULL )
-    regData->blackacc->recnData = recnWindow( toplevel, regData->blackacc );
+  /* Must have number of accounts be one.  If not one,
+   * then this callback should never have been called,
+   * since the menu entry is supposed to be greyed out.
+   */
+  if (1 != regData->numAcc) return;
+
+  acc = regData->blackacc[0];
+  if( acc->recnData == NULL )
+    acc->recnData = recnWindow( toplevel, acc );
   }
 
 /********************************************************************\
@@ -1413,7 +1559,7 @@ void startRecnCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void
+static void
 recordCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
@@ -1431,7 +1577,7 @@ recordCB( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     *
 \********************************************************************/
 
-void
+static void
 deleteCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
@@ -1472,7 +1618,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void
+static void
 cancelCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   RegWindow *regData = (RegWindow *)cd;
@@ -1491,7 +1637,7 @@ cancelCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void
+static void
 regCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   int row,col;
@@ -1502,7 +1648,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
     (XbaeMatrixDefaultActionCallbackStruct *)cb;
   
   RegWindow *regData = (RegWindow *)cd;
-  Account   *acc = regData->blackacc;
+  /* hack alert xxxxxxxxxxxxxxx incorrect for ledger */
+  Account   *acc = regData->blackacc[0];
   
   reg = regData->reg;
   
@@ -1866,7 +2013,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
  *         mvcbs - the modify-verify callback struct (from regCB)   *
  * Return: none                                                     *
 \********************************************************************/
-void
+static void
 dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_year )
   {
   /* Date format -- valid characters are numerals, '/', and

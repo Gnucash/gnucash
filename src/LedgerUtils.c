@@ -19,9 +19,8 @@
 \********************************************************************/
 
 #include "Account.h"
+#include "Transaction.h"
 #include "util.h"
-
-/** PROTOTYPES ******************************************************/
 
 int accListCount (Account **list)
 {
@@ -45,6 +44,7 @@ Account ** accListCopy (Account **list)
 
    if (!list) return NULL;
    nacc = accListCount (list);
+   if (0 == nacc) return NULL;
 
    newlist = (Account **) _malloc (nacc * sizeof (Account *));
    for (i=0; i<nacc; i++) {
@@ -53,4 +53,48 @@ Account ** accListCopy (Account **list)
    return newlist;
 }
 
+Transaction ** accListGetSortedTrans (Account **list)
+{
+   Account *acc;
+   Transaction *trans;
+   Transaction **tarray;
+   int nacc = 0;
+   int ntrans = 0;
+   int i;
+
+   if (!list) return 0;
+
+   /* count the total number of transactions */
+   nacc = 0;
+   acc = list[0];
+   while (acc) {
+      ntrans += acc->numTrans;
+      nacc++;
+      acc = list[nacc];
+   }
+   ntrans ++;
+
+   /* malloc the array of transactions */
+   tarray = (Transaction **) _malloc (ntrans * sizeof (Transaction *));
+
+   /* put all of the transactions in the flat array */
+   nacc = 0;
+   ntrans = 0;
+   acc = list[0];
+   while (acc) {
+      for (i=0; i<acc->numTrans; i++) {
+         tarray[ntrans] = getTransaction (acc, i);
+         ntrans ++;
+      }
+      nacc++;
+      acc = list[nacc];
+   }
+   tarray [ntrans] = NULL;
+
+   /* run the sort routine on the array */
+   qsort (tarray, ntrans, sizeof (Transaction *), xaccTransOrder);
+
+   return tarray;
+}   
+   
 /************************** END OF FILE *************************/

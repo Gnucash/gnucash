@@ -23,6 +23,7 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
+#include "date.h"
 #include "Transaction.h"
 #include "util.h"
 
@@ -116,6 +117,53 @@ freeTransaction( Transaction *trans )
 
   trans->write_flag  = 0;
   _free(trans);
+}
+
+/********************************************************************\
+ * sorting comparison function
+ *
+ * returns a negative value if transaction a is dated earlier than b, 
+ * returns a positive value if transaction a is dated later than b, 
+ * returns zero if both transactions are on the same date.
+ *
+\********************************************************************/
+
+int
+xaccTransOrder (Transaction **ta, Transaction **tb)
+{
+  int retval;
+  char *da, *db;
+
+  retval = datecmp (&((*ta)->date), &((*tb)->date));
+
+  /* if dates differ, return */
+  if (retval) return retval;
+
+  /* otherwise, sort on transaction strings */
+  da = (*ta)->description;
+  db = (*tb)->description;
+  if (!da) return -1;
+  if (!db) return +1;
+
+  retval = strcmp (da, db);
+  return retval;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+int
+xaccCountTransactions (Transaction **tarray)
+{
+   Transaction *trans;
+   int ntrans = 0;
+
+   trans = tarray[0];
+   while (trans) {
+      ntrans ++;
+      trans = tarray[ntrans];
+   }
+   return ntrans;
 }
 
 /************************ END OF ************************************\
