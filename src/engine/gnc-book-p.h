@@ -56,7 +56,10 @@ struct gnc_book_struct
 
   gnc_commodity_table *commodity_table;
 
-  /* XXX this should probably be in the session ??? */
+  /* To be technically correct, backends belong to sessions and
+   * not books.  So the pointer below "really shouldn't be here", 
+   * except that it provides a nice convenience, avoiding a lookup 
+   * from the session.  Better solutions welcome ... */ 
   Backend *backend;
 };
 
