@@ -263,8 +263,10 @@ Open Issues / ToDo
 ------------------
 *) Naming convention for the different books?  When the XML file backend
    is used, different books need to be stored as different files (in order
-   to avoid the performance penalty of a large file load).  This hasn't
-   been implemented yet ...
+   to avoid the performance penalty of a large file load).  
+
+*) When saving books, make the book title part of the book name (user
+   convenience).
 
 *) Special considerations for scheduled transactions/recurring transactions?
 
@@ -272,12 +274,12 @@ Open Issues / ToDo
    of making this happen....
 
 *) Lots are now implemented in the engine, but not yet used in this code.
+   -- ok, we now leave open lots in the new book.
+   -- we still need to move closed lots to closed book.
    
 *) Need to mark closed book as unalterable, and respect that markup.
 
 *) Need to trimming of price database 
-
-*) Make sure <book:slots> really works
 
 =========================== end of file ========================
 
