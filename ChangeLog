@@ -19,6 +19,10 @@
 	  tables up to date or leave the values when it was posted.
 	Fixes #113774
 
+	* src/business/business-gnome/dialog-invoice.c: don't constantly
+	  resize the invoice window every time we update ourselves.  Fixes
+	  #113775
+
 2003-05-28  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-transfer.c, dialog-hbcitrans.c,

@@ -136,6 +136,7 @@ struct _invoice_window {
   GtkWidget *	to_charge_frame;
   GtkWidget *	to_charge_edit;
 
+  gboolean	width_inited;
   gint		width;
 
   GncBillTerm *	terms;
@@ -1084,32 +1085,22 @@ gnc_invoice_save_size (InvoiceWindow *iw)
 }
 
 static void
-size_allocate (GtkWidget *widget,
-               GtkAllocation *allocation,
-               gpointer user_data)
+gnc_invoice_size_allocate (GtkWidget *widget,
+			   GtkAllocation *allocation,
+			   gpointer user_data)
 {
   InvoiceWindow *iw = user_data;
-  gboolean resize = FALSE;
 
   /* HACK ALERT. this seems to be the only thing to get the
    * freekin register window to stop freekin resizing itself
    * all the freekin time.
-   *
-   * NOTE: Only resize on the SECOND time through.  I don't know why,
-   * but this really seems to have an effect on the window the
-   * _second_ time you pop one up.
    */
 
   if (iw->width == allocation->width)
     return;
 
-  if (iw->width > 0)
-    resize = TRUE;
-
   iw->width = allocation->width;
-
-  if (resize)
-    gtk_window_set_default_size (GTK_WINDOW(iw->dialog), iw->width, 0);
+  gtk_window_set_default_size (GTK_WINDOW(iw->dialog), iw->width, 0);
 }
 
 static int
@@ -1572,6 +1563,9 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   gnc_invoice_update_job_choice (iw);
   gnc_invoice_update_proj_job (iw);
 
+  gtk_widget_show_all (iw->dialog);
+
+  if (!iw->width_inited)
   {
     int * last_width = gnc_invoice_get_width_integer (iw);
 
@@ -1587,9 +1581,9 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     default:
       break;
     }
-  }
 
-  gtk_widget_show_all (iw->dialog);
+    iw->width_inited = TRUE;
+  }
 
   /* Hide the project frame for customer invoices */
   if (iw->owner.type == GNC_OWNER_CUSTOMER)
@@ -2030,7 +2024,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
 		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
   gtk_signal_connect (GTK_OBJECT (iw->dialog), "size-allocate",
-		      GTK_SIGNAL_FUNC(size_allocate), iw);
+		      GTK_SIGNAL_FUNC(gnc_invoice_size_allocate), iw);
   gtk_signal_connect (GTK_OBJECT (iw->id_entry), "changed",
 		      gnc_invoice_id_changed_cb, iw);
 
