@@ -1,3 +1,14 @@
+2001-07-20  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/gnome/top-level.c (gnucash_ui_init): remove the \n's frome
+	the ENTER and LEAVE calls.
+
+2001-07-19  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-book.c (gnc_book_save): use all_sync if available
+	else sync separately.
+	(gnc_book_save): extract out duplicate error handling code.
+
 2001-07-19  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/payables.scm: add column totals, add some
@@ -255,6 +266,27 @@
 
 	* src/SplitLedger.c: fix for currency-in-transaction (CIT)
 
+2001-07-11  James LewisMoss  <jimdres@mindspring.com>
+
+	* configure.in (GNOME_XML_CFLAGS): add Richard Braakman's xml
+	version patch.
+
+	* src/engine/sql/PostgresBackend.c (pgend_session_begin): used
+	backend arg directly.
+
+	* src/engine/BackendP.h (struct _backend ): add Backend arg to
+	book_begin. 
+
+	* src/engine/rpc/RpcBackend.c (rpcendInit): use xaccInitBackend to
+	set everything in the backend to default values.
+	(rpcend_book_begin): use backend var directly.
+
+	* src/engine/sql/PostgresBackend.c (pgendInit): use
+	xaccInitBackend to set everything to default values.
+
+	* src/engine/gnc-book.c (gnc_book_destroy): use destroy backend
+	method to free backend if it's set.
+
 2001-07-09  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: check for ghttp_ssl.h
@@ -493,6 +525,14 @@
 	* src/engine/gnc-account-xml-v2.c: Alex Zepeda's patch
 	adding a missing include.
 
+2001-06-28  James LewisMoss  <dres@ioa.com>
+
+	* src/engine/gnc-book.c (xaccAddEndPath): new func.
+	(xaccUserPathPathGenerator): new func.
+	(xaccDataPathGenerator): new func.
+	(xaccCmdPathGenerator): new func.
+	(xaccResolveFilePath): refactor and use new funcs.
+
 2001-06-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/QuickFill.c: same as below
@@ -505,6 +545,11 @@
 	* doc/sgml/C/xacc-about.sgml: credits
 
 	* po/fr.po: Paul Poulain's french translations
+
+2001-06-26  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-book.c (gnc_book_begin): convert strncmp ->
+	g_strncasecmp (strncmp isn't universally available)
 
 2001-06-26  Dave Peticolas  <dave@krondo.com>
 
