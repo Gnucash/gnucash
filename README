@@ -88,31 +88,14 @@ versions of Motif).
 
 Running:
 --------
-The binary-only distribution includes two binary files: 'xacc.bin'
-and 'xacc-static.bin'. The former requires a Motif shared library;
+The binary-only distribution includes two binary files: 'gnucash.bin'
+and 'gnucash-static.bin'. The former requires a Motif shared library;
 the latter has Motif statically linked in.  If you have Motif,
 then just run xacc.  If you do not have Motif, then copy 
-'xacc-static.bin' to 'xacc.bin'.
-
-Access to the on-line help documentation requires the that
-the environment variable XACC_HELP be set to the 'Docs'
-directory.  The 'xacc' shell script sets this variable to
-the configured directory before running the main program,
-so you don't have to set this by hand.
-
-If you want to override the path to the Docs directory:
-
-For csh/tcsh
-
-% setenv XACC_HELP /usr/local/share/xacc/Docs
-
-or, for bash/bsh/ksh/sh
-
-% set XACC_HELP=/usr/local/share/xacc/Docs
-% export XACC_HELP
+'gnucash-static.bin' to 'gnucash.bin'.
 
 You can then start GnuCash at the command-line, with
-"xacc" or "xacc <filename>", where <filename> is a
+"gnucash" or "gnucash <filename>", where <filename> is a
 GnuCash account file.  Sample accounts can be found in 
 "data" subdirectory.  *.dat files are GnuCash accounts that can 
 opened with the "Open File" menu entry.  *.qif files are
@@ -129,7 +112,7 @@ Prior to building GnuCash, you will have to obtain and install the following
 packages:
 
 SWIG    -- available at www.swig.org need 1.1p5 or later ...
-guile   -- need version 1.3 or later ( or build 1998.09.10 or later) ...
+guile   -- need version 1.3 or later ( or build 1998.08.18 or 1998.09.10 or later) ...
            ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
 
 Motif or Lesstif  --
@@ -154,6 +137,7 @@ xpm     -- X Pixmap extension
 eperl   -- embeddedPerl needed for reports
            version eperl-2.2.14 works well with perl 5.00404
            http://www.engelschall.com/sw/eperl/
+           ftp://ftp.ultra.net/pub/eugene/RPMS/i386/eperl-2.2.14-1.i386.rpm
 
 Normally, to build and install GnuCash, all you have to do is:
 
