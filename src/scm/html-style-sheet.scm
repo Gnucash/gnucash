@@ -229,5 +229,5 @@
   (hash-ref *gnc:_style-sheets_* tname))
 
 (define (gnc:html-style-sheet-remove sheet)
-  (if (not (string=? (gnc:html-style-sheet-name sheet) (_ "Default")))
+  (if (not (string=? (gnc:html-style-sheet-name sheet) (N_ "Default")))
       (hash-remove! *gnc:_style-sheets_* (gnc:html-style-sheet-name sheet))))

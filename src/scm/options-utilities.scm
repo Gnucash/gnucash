@@ -35,7 +35,7 @@
     options  
     (gnc:make-date-option
      pagename optname 
-     sort-tag (_ "Select a date to report on")
+     sort-tag (N_ "Select a date to report on")
      (lambda ()
        (cons 'absolute 
 	     (gnc:timepair-end-day-time     
@@ -51,7 +51,7 @@
    (gnc:make-date-option
     pagename name-from 
     (string-append sort-tag "a")
-    (_ "Start of reporting period")
+    (N_ "Start of reporting period")
     (lambda ()
       (cons 'absolute 
             (gnc:get-start-cal-year)))
@@ -61,7 +61,7 @@
    (gnc:make-date-option
     pagename name-to
     (string-append sort-tag "b")
-    (_ "End of reporting period")
+    (N_ "End of reporting period")
     (lambda ()
       (cons 'absolute 
             (gnc:timepair-end-day-time     
@@ -76,12 +76,12 @@
    options
    (gnc:make-multichoice-option
     pagename optname
-    sort-tag (_ "The amount of time between data points") default
-    (list (vector 'DayDelta (_ "Day") (_ "Day"))
-	  (vector 'WeekDelta (_ "Week") (_ "Week"))
-	  (vector 'TwoWeekDelta (_ "2Week") (_ "Two Week"))
-	  (vector 'MonthDelta (_ "Month") (_ "Month"))
-	  (vector 'YearDelta (_ "Year") (_ "Year"))
+    sort-tag (N_ "The amount of time between data points") default
+    (list (vector 'DayDelta (N_ "Day") (N_ "Day"))
+	  (vector 'WeekDelta (N_ "Week") (N_ "Week"))
+	  (vector 'TwoWeekDelta (N_ "2Week") (N_ "Two Week"))
+	  (vector 'MonthDelta (N_ "Month") (N_ "Month"))
+	  (vector 'YearDelta (N_ "Year") (N_ "Year"))
 	  ))))
 
 ;; A multichoice option intended to chose the account level. Different
@@ -98,19 +98,19 @@
     help-string
     default-depth
     (list (list->vector
-	   (list 'all (_ "All") (_ "All accounts")))
+	   (list 'all (N_ "All") (N_ "All accounts")))
 	  (list->vector
-	   (list 1 "1" (_ "Top-level")))
+	   (list 1 "1" (N_ "Top-level")))
 	  (list->vector
-	   (list 2 "2" (_ "Second-level")))
+	   (list 2 "2" (N_ "Second-level")))
 	  (list->vector
-	   (list 3 "3" (_ "Third-level")))
+	   (list 3 "3" (N_ "Third-level")))
 	  (list->vector
-	   (list 4 "4" (_ "Fourth-level")))
+	   (list 4 "4" (N_ "Fourth-level")))
 	  (list->vector
-	   (list 5 "5" (_ "Fourth-level")))
+	   (list 5 "5" (N_ "Fourth-level")))
 	  (list->vector
-	   (list 6 "6" (_ "Sixth-level")))))))
+	   (list 6 "6" (N_ "Sixth-level")))))))
 
 ;; These help for selecting a bunch of accounts.
 (define (gnc:options-add-account-selection! 
@@ -120,7 +120,7 @@
   (gnc:options-add-account-levels!
    options pagename name-display-depth 
    (string-append sort-tag "a")
-   (_ "Show accounts to this depth, overriding any other option.") 
+   (N_ "Show accounts to this depth, overriding any other option.") 
    default-depth)
     
   (gnc:register-option 
@@ -128,7 +128,7 @@
    (gnc:make-simple-boolean-option
     pagename name-show-subaccounts
     (string-append sort-tag "b")
-    (_ "Override account-selection and show sub-accounts of all selected accounts?") 
+    (N_ "Override account-selection and show sub-accounts of all selected accounts?") 
     #t))
 
   ;; Semantics of the account selection, as used in the
@@ -141,7 +141,7 @@
    (gnc:make-account-list-option
     pagename name-accounts
     (string-append sort-tag "c")
-    (_ "Report on these accounts, if display depth allows.")
+    (N_ "Report on these accounts, if display depth allows.")
     default-accounts
     #f #t)))
 
@@ -153,7 +153,7 @@
     options  
     (gnc:make-simple-boolean-option
      pagename optname
-     sort-tag (_ "Include sub-account balances in printed balance?") #t)))
+     sort-tag (N_ "Include sub-account balances in printed balance?") #t)))
 
 ;; The single checkbox whether to group the accounts into main
 ;; categories and ahow a subtotal for those.
@@ -163,7 +163,7 @@
     options  
     (gnc:make-simple-boolean-option
      pagename optname
-     sort-tag (_ "Group the accounts in main categories?") default?)))
+     sort-tag (N_ "Group the accounts in main categories?") default?)))
 
 ;; To let the user select a currency for the report.
 (define (gnc:options-add-currency!
@@ -173,7 +173,7 @@
    (gnc:make-currency-option 
     pagename name-report-currency
     sort-tag 
-    (_ "Select the currency to display the values of this report in.")
+    (N_ "Select the currency to display the values of this report in.")
     (gnc:option-value
      (gnc:lookup-global-option "International"
                                "Default Currency")))))
@@ -188,7 +188,7 @@
    (gnc:make-simple-boolean-option
     pagename name-show-foreign
     (string-append sort-tag "a")
-    (_ "Display the account's foreign currency amount?") #f))
+    (N_ "Display the account's foreign currency amount?") #f))
 
   (gnc:options-add-currency! options pagename name-report-currency 
 			     (string-append sort-tag "b")))
@@ -202,7 +202,7 @@
    (gnc:make-number-range-option
     pagename name-width
     (string-append sort-tag "a")
-    (_ "Width of plot in pixels.") default-width
+    (N_ "Width of plot in pixels.") default-width
     100 1000 0 1))
 
   (gnc:register-option
@@ -210,6 +210,6 @@
    (gnc:make-number-range-option
     pagename name-height
     (string-append sort-tag "b")
-    (_ "Height of plot in pixels.") default-height
+    (N_ "Height of plot in pixels.") default-height
     100 1000 0 1)))
 

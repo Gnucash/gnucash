@@ -18,7 +18,7 @@
       (pagename-display (N_ "Display"))
       (optname-inc-exp (N_ "Show Income/Expense"))
       (optname-show-profit (N_ "Show Net Profit"))
-      (optname-stacked (N_ "Stacked"))
+      (optname-stacked (N_ "Use Stacked Bars"))
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
 
@@ -41,7 +41,7 @@
        (gnc:make-account-list-option
 	pagename-general optname-accounts
 	"c"
-	(N_ "Select accounts to calculate income on")
+	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
 	  (filter
 	   gnc:account-is-inc-exp?
@@ -67,7 +67,7 @@
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-stacked
-        "ba" (N_ "Show barchart as stacked?") #f))
+        "ba" (N_ "Show barchart as stacked barchart?") #f))
 
       (gnc:options-add-plot-size! 
        options pagename-display 
@@ -210,7 +210,7 @@
    ;; The name of this report. This will be used, among other things,
    ;; for making its menu item in the main menu. You need to use the
    ;; untranslated value here!
-   'name (N_ "Income/Expense Graph")
+   'name (N_ "Income/Expense Chart")
 
    ;; The options generator function defined above.
    'options-generator options-generator

@@ -72,7 +72,7 @@
        (gnc:make-account-list-option
 	pagename-accounts optname-accounts
 	"a"
-	(N_ "Select accounts to calculate income on")
+	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
 	  (gnc:filter-accountlist-type 
 	   (if is-income? '(income) '(expense))

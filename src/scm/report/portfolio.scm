@@ -36,14 +36,9 @@
 	(lambda (accounts) (list  #t (filter gnc:account-is-stock? accounts)))
 	#t))
 
-      (add-option
-       (gnc:make-currency-option
-	(N_ "General" "Report Currency")
-	"c"
-	(N_ "Select the displayed currency")
-	(gnc:option-value
-	 (gnc:lookup-global-option "International"
-				   "Default Currency"))))
+      (gnc:options-add-currency! 
+       options (N_ "General" "Report Currency") "c")
+
 
       (gnc:options-set-default-section options "General")      
       options))

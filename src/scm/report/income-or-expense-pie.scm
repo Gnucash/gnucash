@@ -15,7 +15,7 @@
       (optname-levels (N_ "Show Accounts until level"))
       (optname-report-currency (N_ "Report's currency"))
 
-      (pagename-display (N_ "Display Format"))
+      (pagename-display (N_ "Display"))
       (optname-fullname (N_ "Show long account names"))
       (optname-show-total (N_ "Show Totals"))
       (optname-slices (N_ "Maximum Slices"))
@@ -40,7 +40,7 @@
        (gnc:make-account-list-option
 	pagename-general optname-accounts
 	"b"
-	(N_ "Select accounts to calculate income on")
+	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
 	  (gnc:filter-accountlist-type 
 	   (if is-income? '(income) '(expense))
@@ -57,15 +57,9 @@
        (N_ "Show accounts to this depth and not further") 
        2)
 
-      (add-option
-       (gnc:make-currency-option
-	pagename-general optname-report-currency
-	"d"
-	(N_ "Select the display value for the currency")
-	(gnc:option-value
-	 (gnc:lookup-global-option "International"
-				   "Default Currency"))))
-
+      (gnc:options-add-currency! 
+       options pagename-general optname-report-currency "d")
+      
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-fullname
