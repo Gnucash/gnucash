@@ -3,9 +3,7 @@
 <ARTHEADER>
 <TITLE>GnuCash and the EURO</TITLE>
 </ARTHEADER>
-<SECT1>
-<TITLE>GnuCash and the EURO</TITLE>
-<SECT2>
+<sect1>
 <TITLE>Introduction</TITLE>
 <PARA>On January 1, 1999, eleven European Union countries formed
     an economic and monetary union (EMU) and started using a single
@@ -23,8 +21,8 @@
     <ULINK URL="http://europa.eu.int/euro">http://europa.eu.int/euro</ULINK> .
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>EMU Member Countries and Exchange Rates</TITLE>
 <PARA>    <ANCHOR ID="EUROISOCURR"> 
     The following table shows the EMU member countries and the
@@ -118,8 +116,8 @@
 </TABLE>
 
     </PARA>
-</SECT2>
-<SECT2>
+</sect1>
+<sect1>
 <TITLE>EURO support in GnuCash</TITLE>
 <PARA>You can enable euro support in GnuCash in the international
     category of the <LINK LINKEND="XACC-PREFERENCES">preferences</LINK>
@@ -131,8 +129,7 @@
 <PARA>FIXME: Actual documentation with screenshots and so on
 
 </PARA>
-</SECT2>
-</SECT1>
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
