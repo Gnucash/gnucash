@@ -232,7 +232,7 @@ configLayout (SplitRegister *reg)
 /* ============================================== */
 /* define the traversal order */
 /* negative cells mean "traverse out of table" */
-/* hack alert -- redesign so tht we hop from one row to the next, if desired. */
+/* hack alert -- redesign so that we hop from one row to the next, if desired. */
 
 static void
 configTraverse (SplitRegister *reg)
