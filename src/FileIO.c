@@ -393,7 +393,7 @@ readTransaction( int fd, Account *acc, int token )
   err = read( fd, &(trans->catagory), sizeof(int) );
   if( err != sizeof(int) )
     {
-    DEBUG ("Error: Premature end of Transaction at category");
+    DEBUG ("Error: Premature end of Transaction at catagory");
     XtFree(trans->memo);
     XtFree(trans->description);
     XtFree(trans->num);
