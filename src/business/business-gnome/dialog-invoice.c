@@ -44,6 +44,8 @@ struct _invoice_select_window {
 };
 
 typedef struct _invoice_window {
+  GladeXML *	xml;
+
   GtkWidget *	dialog;
 
   GtkWidget *	id_entry;
@@ -54,6 +56,7 @@ typedef struct _invoice_window {
   GtkWidget *	active_check;
 
   GnucashRegister *	reg;
+  GncEntryLedger *	ledger;
 
   InvoiceDialogType	dialog_type;
   GUID		invoice_guid;
@@ -63,6 +66,8 @@ typedef struct _invoice_window {
   GncOwner	owner;
 
 } InvoiceWindow;
+
+static void gnc_invoice_update_window (InvoiceWindow *iw);
 
 static GncInvoice *
 iw_get_invoice (InvoiceWindow *iw)
@@ -136,25 +141,31 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
 }
 
 static void
-gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
+gnc_invoice_window_ok_save (InvoiceWindow *iw)
 {
-  InvoiceWindow *iw = data;
-
   if (!gnc_invoice_window_verify_ok (iw))
-      return;
-  
-  /* Now save it off */
+    return;
+
   {
     GncInvoice *invoice = iw_get_invoice (iw);
     if (invoice) {
       gnc_ui_to_invoice (iw, invoice);
-
     }
+    /* Save the invoice to return it later. */
     iw->created_invoice = invoice;
-    iw->invoice_guid = *xaccGUIDNULL ();
   }
+}
 
+static void
+gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+
+  gnc_invoice_window_ok_save (iw);
   gnc_close_gui_component (iw->component_id);
+
+  /* Ok, we don't need this anymore */
+  iw->invoice_guid = *xaccGUIDNULL ();
 }
 
 static void
@@ -234,13 +245,17 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   gncInvoiceSetDateDue (invoice, &ddue);
 
   /* Yep, we're posting.  So, save the invoice... */
-  gnc_ui_to_invoice (iw, invoice);
+  gnc_invoice_window_ok_save (iw);
 
   /* ... post it; post date is set to now ... */
   gncInvoicePostToAccount (invoice, acc, &postdate, reverse);
 
-  /* ... and exit??? XXX: should we just redisplay here? */
-  return gnc_invoice_window_ok_cb (widget, data);
+  /* Reset the type; change to read-only! */
+  iw->dialog_type = VIEW_INVOICE;
+  gnc_entry_ledger_set_readonly (iw->ledger);
+
+  /* ... and redisplay here. */
+  gnc_invoice_update_window (iw);
 }
 
 static void
@@ -283,6 +298,7 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
     iw->invoice_guid = *xaccGUIDNULL ();
   }
 
+  gnc_entry_ledger_destroy (iw->ledger);
   gnc_unregister_gui_component (iw->component_id);
   gnc_resume_gui_refresh ();
 
@@ -369,146 +385,23 @@ gnc_configure_register_colors (void)
   gnc_entry_ledger_set_colors (reg_colors);
 }
 
-static InvoiceWindow *
-gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
-		      InvoiceDialogType type, GncInvoice *invoice, GncOwner *owner)
+static void
+gnc_invoice_update_window (InvoiceWindow *iw)
 {
-  InvoiceWindow *iw;
-  GladeXML *xml;
-  GtkWidget *label, *hbox, *vbox, *regWidget;
   GtkWidget *closed_date, *due_date, *acct_entry;
-  GncEntryLedger *entry_ledger = NULL;
-  GnomeDialog *iwd;
-  GList *entries;
+  GncInvoice *invoice;
+  GncOwner *owner;
   gboolean is_posted = FALSE;
   gboolean is_closed = FALSE;
 
-  gnc_configure_register_colors ();
+  invoice = iw_get_invoice (iw);
+  owner = gncInvoiceGetOwner (invoice);
 
-  iw = g_new0 (InvoiceWindow, 1);
-  iw->book = bookp;
-  iw->dialog_type = type;
+  gtk_widget_show_all (iw->dialog);
 
-  if (type == NEW_INVOICE) {
-    invoice = gncInvoiceCreate (bookp);
-    gncInvoiceSetOwner (invoice, owner);
-  }
-
-  /* Save this for later */
-  gncOwnerCopy (owner, &(iw->owner));
-
-  /* Find the dialog */
-  xml = gnc_glade_xml_new ("invoice.glade", "Invoice Entry Dialog");
-  iw->dialog = glade_xml_get_widget (xml, "Invoice Entry Dialog");
-  iwd = GNOME_DIALOG (iw->dialog);
-
-  gtk_object_set_data (GTK_OBJECT (iw->dialog), "dialog_info", iw);
-
-  /* Grab the widgets */
-  iw->id_entry = glade_xml_get_widget (xml, "id_entry");
-  iw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
-  iw->notes_text = glade_xml_get_widget (xml, "notes_text");
-  iw->opened_date = glade_xml_get_widget (xml, "opened_date");
-  iw->active_check = glade_xml_get_widget (xml, "active_check");
-
-  closed_date = glade_xml_get_widget (xml, "closed_date");
-  due_date = glade_xml_get_widget (xml, "due_date");
-  acct_entry = glade_xml_get_widget (xml, "acct_entry");
-  
-  hbox = glade_xml_get_widget (xml, "owner_hbox");
-  label = glade_xml_get_widget (xml, "owner_label");
-
-  /* default to ok */
-  gnome_dialog_editable_enters (iwd, GTK_EDITABLE (iw->id_entry));
-  gnome_dialog_set_default (iwd, 0);
-
-  /* Build the ledger */
-  switch (type) {
-  case NEW_INVOICE:
-  case EDIT_INVOICE:
-    entry_ledger = gnc_entry_ledger_new (iw->book, GNCENTRY_INVOICE_ENTRY);
-    break;
-  case VIEW_INVOICE:
-  default:
-    entry_ledger = gnc_entry_ledger_new (iw->book, GNCENTRY_INVOICE_VIEWER);
-    break;
-  }
-
-  /* Set the entry_ledger's invoice */
-  gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
-
-  //entries = gncInvoiceGetEntries (invoice);
-  /* Set watches on entries */
-  //gnc_entry_ledger_load (entry_ledger, entries);
-
-  /* Watch the invoice of operations, here... */
-  gnucash_register_set_initial_rows( 10 );
-  regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
-  gnc_table_init_gui( regWidget, entry_ledger );
-  iw->reg = GNUCASH_REGISTER (regWidget);
-  GNUCASH_SHEET (iw->reg->sheet)->window = GTK_WIDGET(iw->dialog);
-  gnc_entry_ledger_set_parent (entry_ledger, iw->dialog);
-
-  vbox = glade_xml_get_widget (xml, "ledger_vbox");
-  // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
-  gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
-
-  if (parent)
-    gnome_dialog_set_parent (iwd, GTK_WINDOW (parent));
-
-  gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
-		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
-
-  gnome_dialog_button_connect (iwd, 0,
-			       GTK_SIGNAL_FUNC(gnc_invoice_window_ok_cb), iw);
-  gnome_dialog_button_connect (iwd, 1,
-			       GTK_SIGNAL_FUNC(gnc_invoice_window_cancel_cb), iw);
-  gnome_dialog_button_connect (iwd, 2,
-			       GTK_SIGNAL_FUNC(gnc_invoice_window_help_cb), iw);
-
-  gnome_dialog_button_connect
-    (iwd, 3, GTK_SIGNAL_FUNC(gnc_invoice_window_print_invoice_cb), iw);
-
-  gnome_dialog_button_connect
-    (iwd, 4, GTK_SIGNAL_FUNC(gnc_invoice_window_post_invoice_cb), iw);
-
-  gnome_dialog_button_connect
-    (iwd, 5, GTK_SIGNAL_FUNC(gnc_invoice_window_close_invoice_cb), iw);
-
-  /* Setup initial values */
-  iw->invoice_guid = *gncInvoiceGetGUID (invoice);
-
-  {
-    char * class_name = NULL;
-
-    switch (type) {
-    case VIEW_INVOICE:
-    default:
-      class_name = DIALOG_VIEW_INVOICE_CM_CLASS;
-      /* FALLTHROUGH */
-    case EDIT_INVOICE:
-      iw->owner_choice = gnc_owner_edit_create (label, hbox, bookp, owner);
-      gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
-      
-      if (class_name == NULL)
-	class_name = DIALOG_EDIT_INVOICE_CM_CLASS;
-      break;
-
-    case NEW_INVOICE:
-      iw->owner_choice = gnc_owner_select_create (label, hbox, bookp, owner);
-      gtk_entry_set_text (GTK_ENTRY (iw->id_entry),
-			  g_strdup_printf ("%.6d", gncInvoiceNextID(bookp)));
-      
-      class_name = DIALOG_NEW_INVOICE_CM_CLASS;
-      break;
-    }
-
-    iw->component_id =
-      gnc_register_gui_component (class_name,
-				  gnc_invoice_window_refresh_handler,
-				  gnc_invoice_window_close_handler,
-				  iw);
-  }
+  closed_date = glade_xml_get_widget (iw->xml, "closed_date");
+  due_date = glade_xml_get_widget (iw->xml, "due_date");
+  acct_entry = glade_xml_get_widget (iw->xml, "acct_entry");
 
   /* We know that "invoice" (and "owner") exist now */
   do {
@@ -572,44 +465,36 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
 
   } while (FALSE);
 
-  gnc_gui_component_watch_entity_type (iw->component_id,
-				       GNC_ID_NONE,
-				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
-
-  gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
-  gtk_widget_show_all (iw->dialog);
-  gnc_table_refresh_gui (gnc_entry_ledger_get_table (entry_ledger), TRUE);
-
-  /* Hide the appropriate widgets based on our posted/closed state */
+  /* Hide/show the appropriate widgets based on our posted/closed state */
 
   if (is_closed == FALSE) {
     GtkWidget *hide;
 
-    hide = glade_xml_get_widget (xml, "cd_label");
+    hide = glade_xml_get_widget (iw->xml, "cd_label");
     gtk_widget_hide_all (hide);
     gtk_widget_hide_all (closed_date);
 
-    hide = glade_xml_get_widget (xml, "hide1");
+    hide = glade_xml_get_widget (iw->xml, "hide1");
     gtk_widget_hide_all (hide);
-    hide = glade_xml_get_widget (xml, "hide2");
+    hide = glade_xml_get_widget (iw->xml, "hide2");
     gtk_widget_hide_all (hide);
 
     if (is_posted == FALSE) {
-      hide = glade_xml_get_widget (xml, "dd_label");
+      hide = glade_xml_get_widget (iw->xml, "dd_label");
       gtk_widget_hide_all (hide);
       gtk_widget_hide_all (due_date);
 
-      hide = glade_xml_get_widget (xml, "acct_label");
+      hide = glade_xml_get_widget (iw->xml, "acct_label");
       gtk_widget_hide_all (hide);
       gtk_widget_hide_all (acct_entry);
 
       /* hide the close invoice button -- it needs to be posted first! */
-      hide = glade_xml_get_widget (xml, "close_invoice_button");
+      hide = glade_xml_get_widget (iw->xml, "close_invoice_button");
       gtk_widget_hide_all (hide);
     }
   }
 
-  if (type == VIEW_INVOICE) {
+  if (is_posted) {
     GtkWidget *hide;
 
     /* Setup viewer for read-only access */
@@ -619,15 +504,164 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
     gtk_widget_set_sensitive (iw->notes_text, FALSE); /* XXX: should notes remain writable? */
 
     /* Hide the 'post invoice' button: "VIEW" implies is_posted */
-    hide = glade_xml_get_widget (xml, "post_invoice_button");
+    hide = glade_xml_get_widget (iw->xml, "post_invoice_button");
     gtk_widget_hide_all (hide);
 
     if (is_closed) {
-      hide = glade_xml_get_widget (xml, "close_invoice_button");
+      hide = glade_xml_get_widget (iw->xml, "close_invoice_button");
       gtk_widget_hide_all (hide);
     }
+  }  
+
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
+}
+
+static InvoiceWindow *
+gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
+			InvoiceDialogType type, GncInvoice *invoice,
+			GncOwner *owner)
+{
+  InvoiceWindow *iw;
+  GladeXML *xml;
+  GtkWidget *label, *hbox, *vbox, *regWidget;
+  GncEntryLedger *entry_ledger = NULL;
+  GnomeDialog *iwd;
+
+  gnc_configure_register_colors ();
+
+  iw = g_new0 (InvoiceWindow, 1);
+  iw->book = bookp;
+  iw->dialog_type = type;
+
+  if (type == NEW_INVOICE) {
+    invoice = gncInvoiceCreate (bookp);
+    gncInvoiceSetOwner (invoice, owner);
   }
-  
+
+  /* Save this for later */
+  gncOwnerCopy (owner, &(iw->owner));
+
+  /* Find the dialog */
+  iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "Invoice Entry Dialog");
+  iw->dialog = glade_xml_get_widget (xml, "Invoice Entry Dialog");
+  iwd = GNOME_DIALOG (iw->dialog);
+
+  gtk_object_set_data (GTK_OBJECT (iw->dialog), "dialog_info", iw);
+
+  /* Grab the widgets */
+  iw->id_entry = glade_xml_get_widget (xml, "id_entry");
+  iw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
+  iw->notes_text = glade_xml_get_widget (xml, "notes_text");
+  iw->opened_date = glade_xml_get_widget (xml, "opened_date");
+  iw->active_check = glade_xml_get_widget (xml, "active_check");
+
+  hbox = glade_xml_get_widget (xml, "owner_hbox");
+  label = glade_xml_get_widget (xml, "owner_label");
+
+  /* default to ok */
+  gnome_dialog_editable_enters (iwd, GTK_EDITABLE (iw->id_entry));
+  gnome_dialog_set_default (iwd, 0);
+
+  /* Build the ledger */
+  switch (type) {
+  case NEW_INVOICE:
+  case EDIT_INVOICE:
+    entry_ledger = gnc_entry_ledger_new (iw->book, GNCENTRY_INVOICE_ENTRY);
+    break;
+  case VIEW_INVOICE:
+  default:
+    entry_ledger = gnc_entry_ledger_new (iw->book, GNCENTRY_INVOICE_VIEWER);
+    break;
+  }
+
+  /* Save the ledger... */
+  iw->ledger = entry_ledger;
+
+  /* Set the entry_ledger's invoice */
+  gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
+
+  //entries = gncInvoiceGetEntries (invoice);
+  /* Set watches on entries */
+  //gnc_entry_ledger_load (entry_ledger, entries);
+
+  /* Watch the invoice of operations, here... */
+  gnucash_register_set_initial_rows( 10 );
+  regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
+  gnc_table_init_gui( regWidget, entry_ledger );
+  iw->reg = GNUCASH_REGISTER (regWidget);
+  GNUCASH_SHEET (iw->reg->sheet)->window = GTK_WIDGET(iw->dialog);
+  gnc_entry_ledger_set_parent (entry_ledger, iw->dialog);
+
+  vbox = glade_xml_get_widget (xml, "ledger_vbox");
+  // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
+  gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
+
+  if (parent)
+    gnome_dialog_set_parent (iwd, GTK_WINDOW (parent));
+
+  gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
+		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
+
+  gnome_dialog_button_connect (iwd, 0,
+  			       GTK_SIGNAL_FUNC(gnc_invoice_window_ok_cb), iw);
+  gnome_dialog_button_connect (iwd, 1,
+  			       GTK_SIGNAL_FUNC(gnc_invoice_window_cancel_cb), iw);
+  gnome_dialog_button_connect (iwd, 2,
+  			       GTK_SIGNAL_FUNC(gnc_invoice_window_help_cb), iw);
+
+  gnome_dialog_button_connect
+    (iwd, 3, GTK_SIGNAL_FUNC(gnc_invoice_window_print_invoice_cb), iw);
+
+  gnome_dialog_button_connect
+    (iwd, 4, GTK_SIGNAL_FUNC(gnc_invoice_window_post_invoice_cb), iw);
+
+  gnome_dialog_button_connect
+    (iwd, 5, GTK_SIGNAL_FUNC(gnc_invoice_window_close_invoice_cb), iw);
+
+  /* Setup initial values */
+  iw->invoice_guid = *gncInvoiceGetGUID (invoice);
+
+  {
+    char * class_name = NULL;
+
+    switch (type) {
+    case VIEW_INVOICE:
+    default:
+      class_name = DIALOG_VIEW_INVOICE_CM_CLASS;
+      /* FALLTHROUGH */
+    case EDIT_INVOICE:
+      iw->owner_choice = gnc_owner_edit_create (label, hbox, bookp, owner);
+      gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
+      
+      if (class_name == NULL)
+	class_name = DIALOG_EDIT_INVOICE_CM_CLASS;
+      break;
+
+    case NEW_INVOICE:
+      iw->owner_choice = gnc_owner_select_create (label, hbox, bookp, owner);
+      gtk_entry_set_text (GTK_ENTRY (iw->id_entry),
+			  g_strdup_printf ("%.6d", gncInvoiceNextID(bookp)));
+      
+      class_name = DIALOG_NEW_INVOICE_CM_CLASS;
+      break;
+    }
+
+    iw->component_id =
+      gnc_register_gui_component (class_name,
+				  gnc_invoice_window_refresh_handler,
+				  gnc_invoice_window_close_handler,
+				  iw);
+  }
+
+  gnc_gui_component_watch_entity_type (iw->component_id,
+				       GNC_ID_NONE,
+				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
+
+  /* Now fill in a lot of the pieces and display properly */
+  gnc_invoice_update_window (iw);
+
   return iw;
 }
 

@@ -82,4 +82,6 @@ gboolean gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit);
 
 void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
 
+void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger);
+
 #endif /* GNC_ENTRY_LEDGER_H */
