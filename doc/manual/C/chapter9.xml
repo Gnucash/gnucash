@@ -1,0 +1,61 @@
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: November 24, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Written by Chris Lyttle
+  Originally designed by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+ <chapter id="chapter9">
+ <title>Chapter 9  Multiple Currencies</title>
+ <para>
+  </para>
+ <sect1 id="settingupacct1">
+ <title>9.1 Setting up Accounts (Discussion of ISO codes, setup of currency accounts)</title>
+ <para>
+  </para>
+ </sect1>
+ <sect1 id="entercharge1">
+ <title>9.2 GnuCash Currency Support (Discussion of Euro support, exchange rates)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="enterpay1">
+ <title>9.3 Setting International Preferences (Discussion)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="statement1">
+ <title>9.4 Recording Currency Exchange (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="adjustbal1">
+ <title>9.5 Recording Purchases in a Foreign Currency (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>9.6 Tracking Currency Investments (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>9.7 Reconciling Statements in a Foreign Currency (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>9.8 Updating Exchange Rates (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>9.9 Putting It All Together (Examples)</title>
+ <para>
+ </para>
+ </sect1>
+ </chapter>

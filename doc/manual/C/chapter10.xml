@@ -1,0 +1,46 @@
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: November 24, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Written by Chris Lyttle
+  Originally designed by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+ <chapter id="chapter10">
+ <title>Chapter 10 Reports and Graphs</title>
+ <para>
+  </para>
+ <sect1 id="settingupacct1">
+ <title>10.1 Overview of Reports and Graphs (Discussion)</title>
+ <para>
+  </para>
+ </sect1>
+ <sect1 id="entercharge1">
+ <title>10.2 Types of Reports and Graphs (Discussion)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="enterpay1">
+ <title>10.3 Creating Standard Reports and Graphs (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="statement1">
+ <title>10.4 Customizing (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="adjustbal1">
+ <title>10.5 Printing Reports and Graphs (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>10.6 Putting It All Together (Examples)</title>
+ <para>
+ </para>
+ </sect1>
+ </chapter>

@@ -1,0 +1,54 @@
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: November 24, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Written by Chris Lyttle
+  Originally designed by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+ <chapter id="appendix-a">
+ <title>Appendix A Guide for Former Users of Quicken and other QIF Applications</title>
+ <para>
+  </para>
+ <sect1 id="settingupacct1">
+ <title>Organization of QIF Files (Discussion)</title>
+ <para>
+  </para>
+ </sect1>
+ <sect1 id="entercharge1">
+ <title>Common Duplication Issues (Discussion)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="enterpay1">
+ <title>Checking QIF Data (Discussion)</title>
+ <para>
+ </para>
+ </sect1>
+ </chapter>
+ <chapter id="appendix-b">
+ <title>Appendix B Frequently Asked Questions</title>
+ <para>
+ (Notes: How to treat taxes (payable or expense?), how to record a txn on different 
+dates (actual date and bank date), how to provide security for GC data using CFS, 
+etc.)
+  </para>
+ <sect1 id="settingupacct1">
+ <title>FAQ</title>
+ <para>
+  </para>
+ </sect1>
+ </chapter>
+ <chapter id="appendix-c">
+ <title>Appendix C Troubleshooting Guide</title>
+ <para>
+   </para>
+ <sect1 id="settingupacct1">
+ <title>I'm in Trouble</title>
+ <para>
+  </para>
+ </sect1>
+ </chapter>

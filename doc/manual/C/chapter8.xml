@@ -1,0 +1,86 @@
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: November 24, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Written by Chris Lyttle
+  Originally designed by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+ <chapter id="chapter8">
+ <title>Chapter 8 Assets and Loans</title>
+ <para>
+  </para>
+ <sect1 id="settingupacct1">
+ <title>8.1 Setting up Accounts (Discussion of ways to handle appreciation, depreciation, principal and interest payments, gains)</title>
+ <para>
+  </para>
+ </sect1>
+ <sect1 id="entercharge1">
+ <title>8.2 Buying a House with Related Mortgage (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="enterpay1">
+ <title>8.3 Buying a Vehicle with Related Loan (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="statement1">
+ <title>8.4 Entering a Payment Schedule</title>
+ <para>
+ </para>
+  <sect2 id="purchase2">
+ <title>8.4.1 Monthly Payments (How-To)</title>
+ <para>
+ </para>
+  </sect2>
+  <sect2 id="purchase2">
+ <title>8.4.2 Final Payment (How-To)</title>
+ <para>
+ </para>
+  </sect2>
+ </sect1>
+ <sect1 id="adjustbal1">
+ <title>8.5 Selling a House or Vehicle (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>8.6 Recording Changes in Value</title>
+ <para>
+ </para>
+  <sect2 id="purchase2">
+ <title>8.6.1 Appreciation (How-To)</title>
+ <para>
+ </para>
+  </sect2>
+  <sect2 id="purchase2">
+ <title>8.6.2 Depreciation (How-To)</title>
+ <para>
+ </para>
+  </sect2>
+  <sect2 id="purchase2">
+ <title>8.6.3 Capital Gains (How-To)</title>
+ <para>
+ </para>
+  </sect2>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>8.7 Tracking Other Assets (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>8.8 Reconciling with the Loan Statements (How-To)</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>8.9 Putting It All Together (Examples)</title>
+ <para>
+ </para>
+ </sect1>
+ </chapter>

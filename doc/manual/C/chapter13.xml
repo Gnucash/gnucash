@@ -1,0 +1,46 @@
+<!--
+      (Do not remove this comment block.)
+  Version: 1.6.5
+  Last modified: November 24, 2001
+  Maintainers: 
+               Chris Lyttle <chris@wilddev.net>
+  Written by Chris Lyttle
+  Originally designed by Carol Champagne.
+  Translators:
+               (translators put your name and email here)
+-->
+ <chapter id="chapter13">
+ <title>Chapter 13 Business Needs</title>
+ <para>
+  </para>
+ <sect1 id="settingupacct1">
+ <title>13.1 Overview of Business vs. Personal Needs</title>
+ <para>
+  </para>
+ </sect1>
+ <sect1 id="entercharge1">
+ <title>13.2 More on Double-Entry Accounting</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="enterpay1">
+ <title>13.3 General Ledger</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="statement1">
+ <title>13.4 Payables and Receivables</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="adjustbal1">
+ <title>13.5 Inventory</title>
+ <para>
+ </para>
+ </sect1>
+ <sect1 id="creditcard1">
+ <title>13.6 Payroll</title>
+ <para>
+ </para>
+ </sect1>
+ </chapter>
