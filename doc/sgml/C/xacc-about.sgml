@@ -11,23 +11,22 @@
 include:
 
 <ITEMIZEDLIST>
-<LISTITEM> <PARA><EMPHASIS>Multiple accounts,</EMPHASIS> which can be
-open at the same time. Create a GnuCash account for each of your bank
-accounts.
-
-</PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA>Each account maintains both a running balance and a
+<LISTITEM> <PARA><EMPHASIS>Multiple Accounts.</EMPHASIS> 
+Create a GnuCash account for each of your bank
+accounts.  Each account maintains both a running balance and a
 reconciled balance, so you can keep track of the checks that
 have cleared your account.
-
 </PARA>
 </LISTITEM>
-<LISTITEM> <PARA> <EMPHASIS>A simple user interface.</EMPHASIS> </PARA>
+
+<LISTITEM> <PARA> <EMPHASIS>Simple User Interface.</EMPHASIS> </PARA>
 <PARA>If you can use the register in the back of your checkbook, you
-can use <APPLICATION>GnuCash.</APPLICATION> </PARA>
+can use <APPLICATION>GnuCash.</APPLICATION> 
+Type directly into the register, tab between fields, and use 
+quick-fill to automatically complete transactions.
+</PARA>
 </LISTITEM>
+
 <LISTITEM> <PARA> <EMPHASIS><LINK LINKEND="XACC-RECNWIN">Automated Tools
 for Reconciling Accounts.</LINK></EMPHASIS> </PARA>
 
@@ -37,61 +36,52 @@ off the transactions that appear in the bank statement. This agrees
 what you have recorded in GnuCash with what your bank has reported,
 and makes it easier to track down any discrepancies. </PARA>
 </LISTITEM>
-<LISTITEM> <PARA>        <EMPHASIS>QuickFill.</EMPHASIS>
 
- </PARA>
+<LISTITEM> <PARA> <EMPHASIS>QuickFill.</EMPHASIS> </PARA>
+
 <PARA>If you begin typing in the description field, and the text matches
 a previous transaction, hitting <KEYCAP>TAB</KEYCAP> will copy in that
 previous transaction. This is a handy time saver if you regularly create
 similar transactions.
-      
-
- </PARA>
+</PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>        <EMPHASIS>Stock/Mutual Fund Portfolios.</EMPHASIS> 
 
- </PARA>
+<LISTITEM> <PARA> <EMPHASIS>Stock/Mutual Fund Portfolios.</EMPHASIS> </PARA>
+
 <PARA>Track stocks individually (one per account) or in
         portfolio of accounts (a group of accounts that can be
         displayed together).
-
- </PARA>
-<PARA>There are tools to <LINK LINKEND="XACC-TICKER">        automatically collect stock quotes.</LINK>
-      
-
- </PARA>
+        There are tools to 
+        <LINK LINKEND="XACC-TICKER">automatically collect stock quotes.</LINK>
+</PARA>
 </LISTITEM>
+
 <LISTITEM>
 <PARA>Support for <EMPHASIS><LINK LINKEND="XACC-CURRENCYHANDLING">multiple
       currencies</LINK></EMPHASIS> and <EMPHASIS>currency trading accounts.
       </EMPHASIS>
-        (partial, still broken). 
-
- </PARA>
-<PARA>Bank accounts may be established in different
-        currencies, and trades at varying exchange rates may be
-        made, in much the same way stocks trade at varying
-        prices.
+      (partial, still broken). 
+      Bank accounts may be established in different
+      currencies, and trades at varying exchange rates may be
+      made, in much the same way stocks trade at varying
+      prices.
       
 
- </PARA>
+</PARA>
 </LISTITEM>
+
 <LISTITEM>
-<PARA>        <EMPHASIS><LINK LINKEND="QIF">Quicken File
-        Import</LINK>.</EMPHASIS> 
-
- </PARA>
-<PARA>Imports Quicken-style QIF files.
-      
-
- </PARA>
+<PARA><EMPHASIS><LINK LINKEND="QIF">Quicken File Import</LINK>.</EMPHASIS> 
+</PARA>
+<PARA>Imports Quicken-style QIF files.  The import wizard automatically
+merges duplicate transactions.
+</PARA>
 </LISTITEM>
+
 <LISTITEM>
 <PARA><EMPHASIS><LINK LINKEND="XACC-REPORTS">Reports</LINK>.</EMPHASIS> Display
       or output as HTML Balance, Transaction, and Profit/Loss
-      reports, as well as graphical account balance tracking
-      (requires gnuplot).
+      reports, as well as graphical account balance tracking.
  </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -107,7 +97,7 @@ similar transactions.
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        <EMPHASIS><LINK LINKEND="XACC-CHARTOFACCTS">Account Hierarchy</LINK></EMPHASIS> 
+<PARA> <EMPHASIS><LINK LINKEND="XACC-CHARTOFACCTS">Chart of Accounts</LINK></EMPHASIS> 
 
  </PARA>
 <PARA>A master account can have a hierarchy of more detailed
@@ -123,41 +113,32 @@ similar transactions.
       Entry</LINK></EMPHASIS> 
 
  </PARA>
-<PARA>Every transaction involves two accounts, and <EMPHASIS>each
-        transaction</EMPHASIS> is required to balance. This provides
-        assurance that the overall set of books will add up
-        correctly, and prevents out-of-balance errors
-        altogether.
+<PARA>Every transaction must debit one account and credit others
+      by an equal amount. This ensures that the 'books balance':
+      that the difference between income and outflow exactly equals
+      the sum of all assets, be they bank, cash, stock or other.
 
  </PARA>
 </LISTITEM>
 <LISTITEM>
 <PARA><EMPHASIS><LINK LINKEND="XACC-INCOMEEXPENSE">Income/Expense Account
-      Types</LINK></EMPHASIS> 
-
+      Types (Categories)</LINK></EMPHASIS> 
  </PARA>
-<PARA>Intuit's <LINK LINKEND="XACC-QUICKEN">Quicken</LINK> product
-        has what they call "categories" that are used to track
-        incomes and expenses. These may be used to create
-        Profit/Loss reports.
-
+<PARA>These serve not only to categorize your cash flow, but when used
+properly with the double-entry feature and equity accounts, these can
+provide an accurate Profit & Loss statement.
  </PARA>
 </LISTITEM>
-<LISTITEM>
-<PARA>        <EMPHASIS>General Ledger</EMPHASIS> 
 
- </PARA>
+<LISTITEM>
+<PARA><EMPHASIS>General Ledger</EMPHASIS> </PARA>
+
 <PARA>Multiple accounts may be displayed in one register
         window at the same time. This can make it easier to track
         down data errors. It also provides a convenient way of
         viewing a portfolio of many stocks, by showing all
         transactions in that portfolio.
 
- </PARA>
-</LISTITEM>
-<LISTITEM>
-<PARA><EMPHASIS>Handling of <LINK LINKEND="XACC-CURRENCYHANDLING">multiple
-      currencies</LINK></EMPHASIS>
  </PARA>
 </LISTITEM>
 </ITEMIZEDLIST>
@@ -173,19 +154,13 @@ similar transactions.
     are intended to be stable, only seeing maintenance to fix bugs,
     and "odd" sub-versions indicate an "experimental" stream that
     seeks to add enhancement.
-
- </PARA>
-<PARA>The present "experimental" stream is gnucash-1.5.x, which is
-    somewhat unstable.
-
- </PARA>
-<PARA>The latest stable release is 1.4.x; if you don't intend to
+    The latest stable release is 1.4.x; if you don't intend to
     do development work, you should be using either this version,
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
-
- </PARA>
-<PARA>Once the 1.5.x series stabilizes, the next stable series
+    The present "experimental" stream is gnucash-1.5.x, which is
+    somewhat unstable.
+    Once the 1.5.x series stabilizes, the next stable series
     will be 1.6.x.
 
  </PARA>
