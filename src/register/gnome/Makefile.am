@@ -31,5 +31,4 @@ CFLAGS = @CFLAGS@ ${GNOME_CFLAGS}
 INCLUDES = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
-  -I${top_srcdir}/src/guile \
   -I${top_srcdir}/src/register

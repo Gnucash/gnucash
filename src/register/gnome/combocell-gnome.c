@@ -41,7 +41,6 @@
 #include "gnucash-sheet.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
-#include "global-options.h"
 #include "messages.h"
 #include "util.h"
 
@@ -90,6 +89,7 @@ static const char * leaveCombo (BasicCell *bcell, const char *value);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GTK_REG;
+static gncBoolean auto_pop_combos = GNC_F;
 
 /* =============================================== */
 
@@ -505,9 +505,7 @@ ComboMV (BasicCell *_cell,
         *cursor_position += strlen(change);
 
         if (!box->list_popped)
-                pop_list = gnc_lookup_boolean_option("Register",
-                                                     "Auto-Raise Lists",
-                                                     TRUE);
+                pop_list = auto_pop_combos;
         else
                 pop_list = FALSE;
 
@@ -874,6 +872,14 @@ xaccComboCellSetIgnoreHelp (ComboCell *cell, const char *ignore_help)
 	box = (PopBox *) cell->cell.gui_private;
 
         box->ignore_help = g_strdup(ignore_help);
+}
+
+/* =============================================== */
+
+void
+xaccComboCellSetAutoPop (gncBoolean auto_pop_combos_arg)
+{
+        auto_pop_combos = auto_pop_combos_arg;
 }
 
 /* =============== end of file =================== */

@@ -52,6 +52,7 @@
 #include "SplitLedger.h"
 #include "guile-util.h"
 #include "splitreg.h"
+#include "combocell.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -68,6 +69,8 @@ static void gnc_configure_register_borders(void);
 static void gnc_configure_reverse_balance_cb(void *);
 static void gnc_configure_reverse_balance(void);
 static void gnc_configure_sr_label_callbacks();
+static void gnc_configure_auto_raise_cb(void *);
+static void gnc_configure_auto_raise(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -85,6 +88,7 @@ static SCM account_separator_callback_id = SCM_UNDEFINED;
 static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
+static SCM auto_raise_callback_id = SCM_UNDEFINED;
 
 /* ============================================================== */
 
@@ -169,6 +173,12 @@ gnucash_ui_init()
                                           NULL, "General",
                                           "Reversed-balance account types");
 
+    gnc_configure_auto_raise();
+    auto_raise_callback_id = 
+      gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
+                                          NULL, "Register",
+                                          "Auto-Raise Lists");
+
     gnc_configure_sr_label_callbacks();
 
     mainWindow();
@@ -221,6 +231,7 @@ gnc_ui_destroy (void)
   gnc_unregister_option_change_callback_id(register_colors_callback_id);
   gnc_unregister_option_change_callback_id(register_borders_callback_id);  
   gnc_unregister_option_change_callback_id(reverse_balance_callback_id);  
+  gnc_unregister_option_change_callback_id(auto_raise_callback_id);  
 
   if (app != NULL)
   {
@@ -584,6 +595,37 @@ gnc_configure_register_borders(void)
     reg_borders |= STYLE_BORDER_TOP | STYLE_BORDER_BOTTOM;
   
   gnucash_style_set_register_borders (reg_borders);
+}
+
+/* gnc_configure_auto_raise_cb
+ *    Callback called when options change - sets
+ *    auto-raise status of combocell class
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_auto_raise_cb(void *data)
+{
+  gnc_configure_auto_raise();
+}
+
+/* gnc_configure_auto_raise
+ *    sets combocell auto raise status
+ *
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_auto_raise(void)
+{
+  gncBoolean auto_pop;
+
+  auto_pop = gnc_lookup_boolean_option("Register",
+                                       "Auto-Raise Lists",
+                                       GNC_T);
+
+  xaccComboCellSetAutoPop(auto_pop);
 }
 
 /* gnc_configure_reverse_balance_cb

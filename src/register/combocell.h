@@ -60,25 +60,25 @@ void         xaccSetComboCellValue (ComboCell *, const char *);
 void         xaccClearComboCellMenu (ComboCell *);
 void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
 
-/* Only functional in Gnome, right now. Determines whether
- * the cell will accept strings not in the menu. Defaults
- * to strict, i.e., only menu items are accepted. */
+/* Determines whether the cell will accept strings not in the
+ * menu. Defaults to strict, i.e., only menu items are accepted. */
 void         xaccComboCellSetStrict (ComboCell *, gncBoolean);
 
-/* Only functional in Gnome, right now. Sets a character used
- * for special completion processing. */
+/* Sets a character used for special completion processing. */
 void         xaccComboCellSetCompleteChar (ComboCell *, char);
 
-/* Only functional in Gnome, right now. Sets a string which,
- * if the cell has that value, will be returned on an enter,
- * thus preventing the cell from being edited. This is used
- * for transactions with multiple splits. */
+/* Sets a string which, if the cell has that value, will be returned
+ * on an enter, thus preventing the cell from being edited. This is
+ * used for transactions with multiple splits. */
 void         xaccComboCellSetIgnoreString (ComboCell *, const char *);
 
-/* Only functional in Gnome, right now. Sets a string which,
- * if the cell has the ignore value, will be returned as the
- * help string. */
+/* Sets a string which, if the cell has the ignore value, will be
+ * returned as the help string. */
 void         xaccComboCellSetIgnoreHelp (ComboCell *, const char *);
+
+/* Determines whether combocells are automatically raised upon typing.
+ * Defaults to false. This is a 'class' method. */
+void         xaccComboCellSetAutoPop (gncBoolean auto_pop_combos);
 
 #endif /* __XACC_COMBO_CELL_H__ */
 

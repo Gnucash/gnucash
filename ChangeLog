@@ -1,3 +1,12 @@
+2000-06-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/top-level.c: configure list auto-popping from here.
+
+	* src/register/gnome/combocell-gnome.c: determine whether or not
+	to auto-pop lists based on a class variable, and not by looking
+	up the guile function. This removes a src/guile dependency from
+	src/register/gnome.
+
 2000-06-14  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-item-edit.c (item_edit_show_list):
