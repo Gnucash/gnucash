@@ -4,9 +4,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 1.5.6\n"
+"Project-Id-Version: GnuCash 1.5.96\n"
 "POT-Creation-Date: 2001-05-20 23:59-0700\n"
-"PO-Revision-Date: 2001-05-23 22:50-07:00\n"
+"PO-Revision-Date: 2001-05-24 17:37-07:00\n"
 "Last-Translator: Duarte Loreto <dlsl@poli.org>\n"
 "Language-Team: Portuguese Documentation Project (POLI) <info@poli.org>\n"
 "MIME-Version: 1.0\n"
@@ -2370,9 +2370,8 @@ msgid "Price Quote Source"
 msgstr "Fonte de Cotações"
 
 #: src/gnome/glade-gnc-dialogs.c:3651
-#, fuzzy
 msgid "Get Online Quotes"
-msgstr "Obter Cotações"
+msgstr "Obter Cotações \"Online\""
 
 # src/gnome/glade-gnc-dialogs.c:3613
 #: src/gnome/glade-gnc-dialogs.c:3672
@@ -2889,7 +2888,8 @@ msgid ""
 "you enter matches the ticker symbol used for the commodity on the exchange\n"
 "or listing for its type."
 msgstr ""
-"Nas próximas páginas, ser-lhe-á pedido que disponibilize informação sobre acções, \n"
+"Nas próximas páginas, ser-lhe-á pedido que disponibilize informação sobre "
+"acções, \n"
 "fundos, e outros activos transaccionáveis que surjam no(s) ficheiro(s) QIF\n"
 "que está a importar. O GnuCash necessita de mais informação sobre activos \n"
 "transaccionáveis do que a que o formato QIF pode representar. \n"
@@ -2899,8 +2899,10 @@ msgstr ""
 "etc), um nome completo, e uma abreviatura.\n"
 "\n"
 "Verifique se já existe um Tipo que seja apropriado; caso não haja, poderá\n"
-"introduzir manualmente um novo Tipo na caixa. Certifique-se que a abreviatura\n"
-"que introduzir coincide com o símbolo do \"ticker\" utilizado para o activo na\n"
+"introduzir manualmente um novo Tipo na caixa. Certifique-se que a "
+"abreviatura\n"
+"que introduzir coincide com o símbolo do \"ticker\" utilizado para o activo "
+"na\n"
 "bolsa ou listagem para o seu tipo."
 
 # src/gnome/glade-gnc-dialogs.c:4500
@@ -7045,7 +7047,6 @@ msgstr "Acções"
 
 # src/engine/Account.c:1681 src/scm/guile-strings.c:99
 #: src/scm/guile-strings.c:456
-#, fuzzy
 msgid "Mutual Funds"
 msgstr "Fundos de Investimento"
 
