@@ -47,8 +47,8 @@ typedef struct gnc_book_struct       GNCBook;
 /** GList of GNCBook */
 typedef GList                        BookList;
 
-/** Allocate, initialise and return a new GNCBook.  The new book will
-    contain a newly allocated AccountGroup */
+/** Allocate, initialise and return a new GNCBook.  Books contain references
+ *  to all of the top-level object containers. */
 GNCBook * gnc_book_new (void);
 
 /** End any editing sessions associated with book, and free all memory 
