@@ -21,10 +21,8 @@
 #  Address: 609 8th Street                                         
 #           Huntington Beach, CA 92648-4632                        
 
-srcdir   = @srcdir@
-VPATH    = @srcdir@
-CC       = @CC@
-RANLIB   = @RANLIB@
+include @top_srcdir@/Makefile.init
+
 INCLPATH = -I@srcdir@/../.. \
            -I@srcdir@/../../include \
            -I@srcdir@/../engine \
@@ -56,7 +54,7 @@ all:
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
-include ../../Makefile.common
+include @top_srcdir@/Makefile.common
 
 motif: ${MOTIF_OBJS}
 

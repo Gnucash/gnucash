@@ -1,5 +1,5 @@
-# Makefile -- makefile for gnucash/src/swig
-# Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>
+# Makefile -- makefile for gnucash/scm
+# Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              
 #                                                                  
 # This program is free software; you can redistribute it and/or    
 # modify it under the terms of the GNU General Public License as   
@@ -15,14 +15,11 @@
 # along with this program; if not, write to the Free Software      
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        
 
-# These three lines are suggested defs for autoconf (see the info pages).
-
 include @top_srcdir@/Makefile.init
 
 ######################################################################
 # See Makefile.common for information about these variables.
-INDEP_SRCS := helperfuncs.c
-CLEAN_SUBDIRS := guile
+#
 ######################################################################
 
 all: default
@@ -31,22 +28,10 @@ all: default
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
 include @top_srcdir@/Makefile.common
 
-default: guile
+default:
+	@echo Nothing to do.
 
-ifeq (${HAVE_PLOTUTILS},1)
-guile: plot.preproc.h ${OBJS}
-else
-guile: ${OBJS}
-endif
-	@cd guile && $(MAKE) default
-
-DIST_TRASH += plot.preproc.h
-
-plot.preproc.h: /usr/include/plot.h
-	cp /usr/include/plot.h plot.preproc.h
-	echo "#include <plot.h>" | gcc -E - > plot.preproc.h
-
-.PHONY: default guile
+.PHONY: default
 
 # Local Variables:
 # tab-width: 2

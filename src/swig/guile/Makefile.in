@@ -17,12 +17,8 @@
 
 # These three lines are suggested defs for autoconf (see the info pages).
 
-@SET_MAKE@
-srcdir   = @top_srcdir@
-prefix   = @prefix@
-VPATH    = @top_srcdir@
+include @top_srcdir@/Makefile.init
 
-CC       = @CC@
 INCLPATH = \
            -I. \
            -I@top_srcdir@/src \
@@ -37,8 +33,6 @@ INCLPATH = \
            -I$(prefix)/include
 
 CFLAGS   = @CFLAGS@ @X_CFLAGS@ -DCELL_WIDGETS=1 ${INCLPATH}
-
-HAVE_PLOTUTILS=@HAVE_PLOTUTILS@
 
 ######################################################################
 # SEE Makefile.common for information about these variables.

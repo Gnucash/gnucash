@@ -192,26 +192,23 @@ AC_SUBST(MOTIF_LIBS)
 
 if test ${OPT_STYLE_INSTALL} = 1
 then
-  GNC_DOCDIR=${prefix}/doc
-  GNC_BINDIR=${prefix}/bin
+  GNC_DOCDIR='${prefix}/doc'
+  GNC_BINDIR='${prefix}/bin'
   GNC_CONFIGDIR=${sysconfdir}
   GNC_SHAREDIR=${datadir}
-  GNC_STARTUP_FILE=`eval echo ${datadir}/startup.scm`
 else
-  GNC_DOCDIR=${prefix}/doc/gnucash
-  GNC_BINDIR=${prefix}/bin
+  GNC_DOCDIR='${prefix}/doc/gnucash'
+  GNC_BINDIR='${prefix}/bin'
   GNC_CONFIGDIR=${sysconfdir}/gnucash
   GNC_SHAREDIR=${datadir}/gnucash
-  GNC_STARTUP_FILE=`eval echo ${datadir}/scm/startup.scm`
 fi
-
 
 AC_SUBST(GNC_DOCDIR)
 AC_SUBST(GNC_BINDIR)
 AC_SUBST(GNC_CONFIGDIR)
 AC_SUBST(GNC_SHAREDIR)
 
-# We have to eval these because they are the *runtime* (not install
+# We have to handle these here because they are the *runtime* (not install
 # time) defaults, and they're substituted into startup.scm and gnucash.h
 # directly, so:
 #  1) We don't want them to change if you do
@@ -219,22 +216,34 @@ AC_SUBST(GNC_SHAREDIR)
 #  2) They are normally defined in terms of $prefix so we need to expand
 #     that before substituting into those source files.  I wish I knew how
 #     to force a recursive expansion...
-#
-# GNC_STARTUP_FILE=`eval echo ${GNC_SHAREDIR}/scm/startup.scm`
-GNC_DOC_DIR_DEFAULT=`eval echo ${GNC_DOCDIR}`
-GNC_HTML_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}/Docs`
-GNC_REPORT_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}/Reports`
-GNC_SHARE_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}`
-GNC_CONFIG_DIR_DEFAULT=`eval echo ${GNC_CONFIGDIR}`
 
-AC_SUBST(GNC_STARTUP_FILE)
-AC_SUBST(GNC_DOC_DIR_DEFAULT)
-AC_SUBST(GNC_SHARE_DIR_DEFAULT)
-AC_SUBST(GNC_CONFIG_DIR_DEFAULT)
+GNC_RUNTIME_SHAREDIR=`eval echo ${GNC_SHAREDIR}`
+GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
+
+AC_SUBST(GNC_RUNTIME_SHAREDIR)
+AC_SUBST(GNC_RUNTIME_CONFIGDIR)
 
 # *******************************************
 AC_CONFIG_HEADER(config.h)
 
-AC_OUTPUT(Makefile src/Makefile src/engine/Makefile src/guile/Makefile src/guile/gnucash.h src/scm/startup.scm src/gnome/Makefile src/motif/Makefile src/qt/Makefile src/register/Makefile src/reports/Makefile src/swig/Makefile src/swig/guile/Makefile lib/Makefile lib/Xbae-4.6.2-linas/Makefile lib/Xbae-4.6.2-linas/src/Makefile lib/ComboBox-1.33/Makefile)
+AC_OUTPUT(Makefile
+          Makefile.init
+          src/Makefile
+          src/engine/Makefile
+          src/guile/Makefile
+          src/guile/gnucash.h
+          src/scm/Makefile
+          src/scm/startup.scm
+          src/gnome/Makefile
+          src/motif/Makefile
+          src/qt/Makefile
+          src/register/Makefile
+          src/reports/Makefile
+          src/swig/Makefile
+          src/swig/guile/Makefile
+          lib/Makefile
+          lib/Xbae-4.6.2-linas/Makefile
+          lib/Xbae-4.6.2-linas/src/Makefile
+          lib/ComboBox-1.33/Makefile)
 
 chmod +x gnucash

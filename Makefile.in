@@ -1,4 +1,5 @@
 # Makefile -- makefile for gnucash
+# @configure_input@
 # Copyright (C) 1997 Robin Clark                                   
 # Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>
 #                                                                  
@@ -21,30 +22,7 @@
 #  Address: 609 8th Street                                         
 #           Huntington Beach, CA 92648-4632                        
 
-SHELL=/bin/bash
-export SHELL
-
-srcdir  = @srcdir@
-VPATH   = @srcdir@
-
-prefix=@prefix@
-datadir=@datadir@
-  # i.e. /usr/share
-localstatedir=@localstatedir@
-  # i.e. /var/
-sysconfdir=@sysconfdir@
-  # i.e. /etc/
-
-INSTALL = @INSTALL@
-INSTALL_DATA = @INSTALL_DATA@
-CPU     = @target_cpu@
-
-LIBS=@LIBS@
-
-GNC_DOCDIR    := @GNC_DOCDIR@
-GNC_BINDIR    := @GNC_BINDIR@
-GNC_CONFIGDIR := @GNC_CONFIGDIR@
-GNC_SHAREDIR  := @GNC_SHAREDIR@
+include @top_srcdir@/Makefile.init
 
 ######################################################################
 # Description of targets:
@@ -64,6 +42,10 @@ default:
 	@echo "gnome-static    gnome/gtk statically linked version"
 	@echo "qt              kde/qt version"
 	@echo " "
+
+# This inclusion must come after the first target, and after the
+# definitions of *_SRCS, etc., but before the usage of *_OBJS.
+include @top_srcdir@/Makefile.common
 
 # Aliases
 motif-static: motif.static
@@ -94,18 +76,13 @@ qt:
 depend:
 	@echo make depend is now superfluous.
 
-clean:
-	rm -f *~ *.o *.bak
-	@cd lib;    $(MAKE) clean
-	@cd src;    $(MAKE) clean
+CLEAN_SUBDIRS += lib src
+TRASH += *~ *.o *.bak
 
-distclean: clean
-	rm -f Makefile *~ *.o *.bak share/scm gnucash.bin
-	rm -f gnucash.motif gnucash.motif.static \
-	gnucash.gnome gnucash.gnome.static gnucash.qt gnucash-shell
-	rm -f config.cache config.log config.status config.h
-	@cd lib;    $(MAKE) distclean
-	@cd src;    $(MAKE) distclean
+DIST_TRASH += Makefile *~ *.o *.bak share/scm gnucash.bin
+DIST_TRASH += gnucash.motif gnucash.motif.static
+DIST_TRASH += gnucash.gnome gnucash.gnome.static gnucash.qt gnucash-shell
+DIST_TRASH += config.cache config.log config.status config.h
 
 tagsfiles := $(shell find -name "*.[ch]")
 

@@ -16,10 +16,8 @@
   (primitive-load boot-file))
 
 ;; Automatically generated defaults...
-(define gnc:_config-dir-default_ "@GNC_CONFIG_DIR_DEFAULT@")
-(define gnc:_share-dir-default_ "@GNC_SHARE_DIR_DEFAULT@")
-(define gnc:_doc-dir-default_ "@GNC_SHARE_DIR_DEFAULT@/Docs 
-                               @GNC_SHARE_DIR_DEFAULT@/Reports")
+(define gnc:_config-dir-default_ "@GNC_RUNTIME_CONFIGDIR@")
+(define gnc:_share-dir-default_ "@GNC_RUNTIME_SHAREDIR@")
 
 (define gnc:*command-line-files* #f)
 
@@ -368,10 +366,10 @@ default directory.  i.e. (gnc:config-var-value-set! gnc:*doc-path*
                (list result)
                #f))))
    equal?
-   (list 
-    (string-append "(" (getenv "HOME") "/.gnucash/doc)")
-    (string-append "(" gnc:_doc-dir-default_ ")"))))
-
+   (list
+    (string-append "(" (getenv "HOME") "/.gnucash/doc)")    
+    (string-append "(" gnc:_share-dir-default_ "/Docs)")
+    (string-append "(" gnc:_share-dir-default_ "/Reports)"))))
 
 (define gnc:*prefs*
   (list

@@ -22,15 +22,7 @@
 #  Address: 609 8th Street                                         
 #           Huntington Beach, CA 92648-4632                        
 
-# These three lines are suggested defs for autoconf (see the info pages).
-@SET_MAKE@
-prefix   = @prefix@
-srcdir   = @srcdir@
-VPATH    = @srcdir@
-includedir=@includedir@
-
-
-CC       = @CC@
+include @top_srcdir@/Makefile.init
 
 INCLPATH = -I.. -I../.. -I../engine -I../register -I../guile \
            -I@srcdir@/../../include \
@@ -62,7 +54,7 @@ default: $(TARGET)
 
 # This inclusion must come after the first target, and after the
 # definitions of *_SRCS, etc., but before the usage of *_OBJS.
-include ../../Makefile.common
+include @top_srcdir@/Makefile.common
 
 gnome: default
 
