@@ -56,7 +56,7 @@ static const int CLIST_TYPE = 1;
 static const int CLIST_DESCRIPTION = 2;
 static const int CLIST_ONLINE_ID = 3;
 
-/********************************************************************\
+/*-******************************************************************\
  *   Structs   *
 \********************************************************************/
 
@@ -66,43 +66,49 @@ struct _accountpickerdialog {
   AccountGroup * acct_group;
   Account * selected_acct;
   gchar * account_human_description;
+  gchar * account_online_id_value;
   gnc_commodity * new_account_default_commodity;
   GNCAccountType new_account_default_type;
-
 };
 
-/* static gint
-   test_str_cmp(gconstpointer a, gconstpointer b) {
-   return strcmp(a, b);
-   }*/
-/********************************************************************\
+/*-******************************************************************\
  * Functions needed by gnc_import_select_account
  * 
 \********************************************************************/
 
-static void acct_tree_add_accts(struct _accountpickerdialog * picker, AccountGroup * accts, GtkCTree * tree, GtkCTreeNode * parent)
+/**@return If the parent node should be expanded*/
+static gboolean acct_tree_add_accts(struct _accountpickerdialog * picker, AccountGroup * accts, GtkCTree * tree, GtkCTreeNode * parent)
 {
   GtkCTreeNode * node;
   Account *current_acct;
   guint i;
+  gboolean expand_parent = FALSE;
+  gboolean expand;
   gchar * acctinfo[NUM_COLUMNS_CLIST];
 
   for(i=0;i<xaccGroupGetNumAccounts(accts);i++)
     {
       current_acct = xaccGroupGetAccount(accts, i);
-      acctinfo[CLIST_NAME]=(gchar *)xaccAccountGetName(current_acct);
+      acctinfo[CLIST_NAME]=g_strdup(xaccAccountGetName(current_acct));
       acctinfo[CLIST_TYPE]=g_strdup(xaccAccountGetTypeStr(xaccAccountGetType(current_acct)));
-      acctinfo[CLIST_DESCRIPTION]=(gchar *)xaccAccountGetDescription(current_acct);
-      acctinfo[CLIST_ONLINE_ID]=g_strdup(gnc_import_get_acc_online_id(current_acct));
-      //printf("acct_tree_add_acct(): %s%s",xaccAccountGetName(current_acct),"\n");
-      node = gtk_ctree_insert_node         (tree,
-					    parent,
-					    NULL,
-					    acctinfo,
-					    2,
-					    NULL,NULL,NULL,NULL,
-					    FALSE,//isleaf
-					    FALSE);
+      acctinfo[CLIST_DESCRIPTION]=g_strdup(xaccAccountGetDescription(current_acct));
+      if(picker->account_online_id_value!=NULL)/* This is just a speed optimisation, so we don't access the kvp's uselessly*/
+	{
+	  acctinfo[CLIST_ONLINE_ID]=g_strdup(gnc_import_get_acc_online_id(current_acct));
+	}
+      else
+	{
+	  acctinfo[CLIST_ONLINE_ID]=g_strdup("");
+	}
+    //printf("acct_tree_add_acct(): %s%s",xaccAccountGetName(current_acct),"\n");
+      node = gtk_ctree_insert_node (tree,
+				    parent,
+				    NULL,
+				    acctinfo,
+				    2,
+				    NULL,NULL,NULL,NULL,
+				    FALSE,//isleaf
+				    FALSE);
       gtk_ctree_node_set_row_data     (tree,
 				       node,
                                        current_acct);
@@ -110,48 +116,38 @@ static void acct_tree_add_accts(struct _accountpickerdialog * picker, AccountGro
 	{
 	  gtk_ctree_select(tree,
 			   node);
+	  expand_parent=TRUE;
 	}
-      acct_tree_add_accts(picker, xaccAccountGetChildren(current_acct), tree, node);
+      expand = acct_tree_add_accts(picker, xaccAccountGetChildren(current_acct), tree, node);
+	if(expand)
+	  {
+	    gtk_ctree_expand (tree,
+			      node);
+	  }
     }
+  return expand_parent;
 }
 
 static void
 build_acct_tree(struct _accountpickerdialog * picker) {
-  GtkCTreeNode * new_sel;
   TRACE("Begin");
   
   if(picker->acct_group==NULL)
     {
       PERR("acct_group is NULL");
     }
-  gtk_clist_clear(GTK_CLIST(picker->treeview));
+  gtk_clist_freeze (GTK_CLIST(picker->treeview));
+
+  /*gtk_clist_clear(GTK_CLIST(picker->treeview));
   gtk_clist_set_column_justification (GTK_CLIST(picker->treeview),
-                                      1, GTK_JUSTIFY_CENTER);
+                                      1, GTK_JUSTIFY_CENTER);*/
+
   acct_tree_add_accts(picker, picker->acct_group,  GTK_CTREE(picker->treeview), NULL);
   
-  if(picker->selected_acct!=NULL) {
-    new_sel = gtk_ctree_find_by_row_data(GTK_CTREE(picker->treeview),
-					 NULL,
-					 picker->selected_acct);
-    
-    gtk_ctree_select(GTK_CTREE(picker->treeview), new_sel);
-    gtk_ctree_node_moveto(GTK_CTREE(picker->treeview), new_sel, 0,
-                          0.5, 0.0);
-  }
   gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
   gtk_clist_column_titles_passive (GTK_CLIST (picker->treeview));
+  gtk_clist_thaw (GTK_CLIST(picker->treeview));
 }
-
-/*static void
-  new_child_string_cb(char * string, gpointer data) {
-  printf("new_child_string_cb(char * string, gpointer data)\n");
-  if(string) {
-  strncpy(data, string, 250);
-  }
-  else {
-  *(char *)data = 0;
-  }
-  }*/
 
 /* When user clicks to create a new account */
 static void
@@ -232,6 +228,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
     {
       PWARN("The account group is NULL");
     }
+  picker->account_online_id_value = account_online_id_value;
   picker->account_human_description =  account_human_description;
   picker->new_account_default_commodity = new_account_default_commodity;
   picker->new_account_default_type = new_account_default_type;
@@ -283,9 +280,6 @@ Account * gnc_import_select_account(char * account_online_id_value,
 	}
       gtk_label_set_text((GtkLabel*)online_id_label, account_description_text);
       build_acct_tree(picker);
-
-      gtk_clist_columns_autosize (GTK_CLIST (picker->treeview));
-      gtk_clist_column_titles_passive (GTK_CLIST (picker->treeview));
 
       ui_retval = gnome_dialog_run_and_close(GNOME_DIALOG(picker->dialog));  
 

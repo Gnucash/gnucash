@@ -1,3 +1,13 @@
+2002-12-8  Benoit Grégoire  <bock@step.polymtl.ca>
+	* src/import-export/import-backend.c: Make the auto-balance 
+	split have the correct amount in all cases by using 
+	xaccTransGetImbalance() instead of the first split's value.
+	* src/import-export/import-account-matcher.c:
+	-Performance improvements in the display code, and skiping 
+	lookup of the kvp frame when not needed.
+	-Expand the tree when a subaccount is selected
+	-Remove redundant selection lookup.
+	
 2002-12-08  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/engine/SchedXaction.h: Doxygen-related changes.

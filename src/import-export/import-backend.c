@@ -641,8 +641,8 @@ gnc_import_process_trans_clist (GtkCList *clist,
 	      (gnc_import_TransInfo_get_destacc (trans_info), split);
 	    xaccSplitSetBaseValue
 	      (split, 
-	       gnc_numeric_neg(xaccSplitGetValue 
-			       (gnc_import_TransInfo_get_fsplit (trans_info))),
+	       gnc_numeric_neg(xaccTransGetImbalance 
+			       (gnc_import_TransInfo_get_trans (trans_info))),
 	       xaccTransGetCurrency 
 	       (gnc_import_TransInfo_get_trans (trans_info)));
 	    xaccSplitSetMemo (split, _("Auto-Balance split"));
