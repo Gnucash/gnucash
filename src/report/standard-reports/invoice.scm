@@ -14,7 +14,7 @@
 (require 'record)
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/business-core" 0)
+(gnc:module-load "gnucash/business-gnome" 0)
 
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
@@ -196,7 +196,8 @@
     (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-inv-option
-   (gnc:make-internal-option "__reg" "invoice" #f))
+   (gnc:make-invoice-option "__reg" "invoice" "" ""
+			    (lambda () #f) #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
