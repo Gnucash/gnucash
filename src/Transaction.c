@@ -135,7 +135,6 @@ initTransaction( Transaction * trans )
 
   xaccInitSplit ( &(trans->credit_split));
 
-  trans->reconciled  = NREC;
   trans->damount     = 0.0;
   trans->share_price = 1.0;
 
@@ -188,7 +187,6 @@ implemented and tested.
   trans->num         = 0x0;
   trans->description = 0x0;
   trans->action      = 0x0;
-  trans->reconciled  = NREC;
   trans->damount     = 0.0;
   trans->share_price = 1.0;
 
@@ -381,11 +379,24 @@ xaccCountTransactions (Transaction **tarray)
 \********************************************************************/
 
 void
+xaccTransSetDescription  (Transaction *trans, char *desc)
+{
+   if (trans->description) XtFree (trans->description);
+   trans->description = XtNewString (desc);
+}
+
+
+void
 xaccTransSetMemo (Transaction *trans, char *memo)
 {
-
    if (trans->credit_split.memo) XtFree (trans->credit_split.memo);
    trans->credit_split.memo = XtNewString (memo);
+}
+
+void
+xaccTransSetReconcile (Transaction *trans, char recn)
+{
+   trans->credit_split.reconciled = recn;
 }
 
 /************************ END OF ************************************\

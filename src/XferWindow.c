@@ -469,8 +469,8 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   trans->num         = XtNewString("");
   
   xaccTransSetMemo (trans, XmTextGetString(xferData->memo));
-  trans->description = XmTextGetString(xferData->desc);
-  trans->reconciled  = NREC;
+  xaccTransSetDescription (trans, XmTextGetString(xferData->desc));
+  xaccTransSetReconcile (trans, NREC);
   
   /* make note of which accounts this was transfered from & to */
   trans->debit       = (struct _account *) getAccount(grp,xferData->from);

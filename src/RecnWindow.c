@@ -114,11 +114,11 @@ recnRefresh( RecnWindow *recnData )
       {
       String rows[5];
       
-      if( trans->reconciled != YREC )
+      if( YREC != trans->credit_split.reconciled )
         {
         double themount;
 
-        sprintf( buf, "%c", trans->reconciled );
+        sprintf( buf, "%c", trans->credit_split.reconciled );
         rows[0] = XtNewString(buf);
         rows[1] = trans->num;
         sprintf( buf, "%2d/%2d/%02d", 
@@ -811,7 +811,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->debit, i );
-      trans->reconciled = YREC;
+      xaccTransSetReconcile (trans, YREC);
       /* mark the datafile as needing to be saved: */
       grp->saved = False;
       }
@@ -825,7 +825,7 @@ recnOkCB( Widget mw, XtPointer cd, XtPointer cb )
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->credit, i );
-      trans->reconciled = YREC;
+      xaccTransSetReconcile (trans, YREC);
       /* mark the datafile as needing to be saved: */
       grp->saved = False;
       }
@@ -860,17 +860,17 @@ recnCB( Widget mw, XtPointer cd, XtPointer cb )
   XbaeMatrixSelectRow( mw, cbs->row );
   
   /* If we are in the "reconciled" cell, toggle value */
-  if( cbs->column == 0 )
+  if( 0 == cbs->column )
     {
     char   buf[BUFSIZE];
     String val = XbaeMatrixGetCell( mw, cbs->row, cbs->column );
 
-    if( val[0] == YREC )
+    if( YREC == val[0] )
       {
       Transaction *trans =
         (Transaction *)XbaeMatrixGetRowUserData( mw, cbs->row );
       
-      sprintf( buf, "%c", trans->reconciled );
+      sprintf( buf, "%c", trans->credit_split.reconciled );
       XbaeMatrixSetCell( mw, cbs->row, cbs->column, buf );
       }
     else

@@ -659,12 +659,12 @@ xaccRecomputeBalance( Account * acc )
     share_balance += amt;
     dbalance += amt * (trans->share_price);
     
-    if( NREC != trans->reconciled ) {
+    if( NREC != trans->credit_split.reconciled ) {
       share_cleared_balance += amt;
       dcleared_balance += amt * (trans->share_price);
     }
 
-    if( YREC == trans->reconciled ) {
+    if( YREC == trans->credit_split.reconciled ) {
       share_reconciled_balance += amt;
       dreconciled_balance += amt * (trans->share_price);
     }
@@ -884,7 +884,7 @@ xaccConsolidateTransactions (Account * acc)
           * we really must match everything to get a duplicate */
          if (ta->credit != tb->credit) continue;
          if (ta->debit != tb->debit) continue;
-         if (ta->reconciled != tb->reconciled) continue;
+         if (ta->credit_split.reconciled != tb->credit_split.reconciled) continue;
          if (ta->date.year != tb->date.year) continue;
          if (ta->date.month != tb->date.month) continue;
          if (ta->date.day != tb->date.day) continue;

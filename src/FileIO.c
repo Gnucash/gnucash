@@ -485,6 +485,8 @@ readTransaction( int fd, Account *acc, int token )
   int dummy_category;
   Transaction *trans = 0x0;
   Split *split;
+  char *tmp;
+  char recn;
 
   /* create a transaction structure with at least one split */
   trans = mallocTransaction();
@@ -519,13 +521,15 @@ readTransaction( int fd, Account *acc, int token )
     return NULL;
     }
   
-  trans->credit_split.memo = readString( fd, token );
-  if( trans->credit_split.memo == NULL )
+  tmp = readString( fd, token );
+  if( NULL == tmp )
     {
     PERR ("Premature end of Transaction at memo");
     freeTransaction(trans);
     return NULL;
     }
+  xaccTransSetMemo (trans, tmp);
+  XtFree (tmp);
   
   /* action first introduced in version 3 of the file format */
   if (3 <= token) {
@@ -547,13 +551,14 @@ readTransaction( int fd, Account *acc, int token )
     return NULL;
     }
   
-  err = read( fd, &(trans->reconciled), sizeof(char) );
+  err = read( fd, &recn, sizeof(char) );
   if( err != sizeof(char) )
     {
     PERR ("Premature end of Transaction at reconciled");
     freeTransaction(trans);
     return NULL;
     }
+  xaccTransSetReconcile (trans, recn);
   
   if( 1 >= token ) {
     /* Note: this is for version 0 of file format only.
@@ -561,15 +566,19 @@ readTransaction( int fd, Account *acc, int token )
      * aren't reconciled until you get your bank statement, and
      * use the reconcile window to mark the transaction reconciled
      */
-    if( trans->reconciled == YREC ) trans->reconciled = CREC;
+    if( YREC == trans->credit_split.reconciled == YREC ) {
+      xaccTransSetReconcile (trans, CREC);
+    }
   }
 
   /* make sure the value of trans->reconciled is valid...
    * I have to do this mainly for if I change what NREC and
    * YREC are defined to be... this way it might loose all
    * the reconciled data, but at least the field is valid */
-  if( (trans->reconciled != YREC) && (trans->reconciled != CREC) )
-    trans->reconciled = NREC;
+  if( (YREC != trans->credit_split.reconciled) && 
+      (CREC != trans->credit_split.reconciled) ) {
+    xaccTransSetReconcile (trans, NREC);
+  }
   
   /* Version 1 files stored the amount as an integer,
    * with the amount recorded as pennies.
@@ -689,7 +698,7 @@ readString( int fd, int token )
   if( err != size )
     {
     printf( "Error: readString: size = %d err = %d str = %s\n", size, err, str );
-    _free(str);
+    XtFree(str);
     return NULL;
     }
   
@@ -1005,7 +1014,7 @@ writeTransaction( int fd, Transaction *trans )
   if( err != sizeof(int) )
     return -1;
   
-  err = write( fd, &(trans->reconciled), sizeof(char) );
+  err = write( fd, &(trans->credit_split.reconciled), sizeof(char) );
   if( err != sizeof(char) )
     return -1;
   

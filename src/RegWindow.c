@@ -622,7 +622,7 @@ regRefresh( RegWindow *regData )
       sprintf( buf, "%s", trans->credit_split.memo );
       newData[row+MEMO_CELL_R][MEMO_CELL_C] = XtNewString(buf);
       
-      sprintf( buf, "%c", trans->reconciled );
+      sprintf( buf, "%c", trans->credit_split.reconciled );
       newData[row+RECN_CELL_R][RECN_CELL_C]   = XtNewString(buf);
 
       sprintf( buf, "%s", trans->action );
@@ -870,7 +870,7 @@ regRecalculateBalance( RegWindow *regData )
       dbalance += tmp;
       credit_acc -> running_balance = tmp;
 
-      if( NREC != trans->reconciled ) {
+      if( NREC != trans->credit_split.reconciled ) {
         tmp = xaccGetClearedBalance (credit_acc, trans);
         dclearedBalance -= credit_acc -> running_cleared_balance;
         dclearedBalance += tmp;
@@ -884,7 +884,7 @@ regRecalculateBalance( RegWindow *regData )
       dbalance += tmp;
       debit_acc -> running_balance = tmp;
 
-      if( NREC != trans->reconciled ) {
+      if( NREC != trans->credit_split.reconciled ) {
         tmp = xaccGetClearedBalance (debit_acc, trans);
         dclearedBalance -= debit_acc -> running_cleared_balance;
         dclearedBalance += tmp;
@@ -1402,9 +1402,7 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     DEBUG("MOD_DESC\n");
     /* ... the description... */
-    XtFree( trans->description );
-    trans->description = 
-      XtNewString( 
+    xaccTransSetDescription (trans,
       XbaeMatrixGetCell(regData->reg,row+DESC_CELL_R,DESC_CELL_C) );
     }
   
@@ -1431,8 +1429,8 @@ regSaveTransaction( RegWindow *regData, int position )
     {
     DEBUG("MOD_RECN\n");
     /* ...the reconciled flag (char)... */
-    trans->reconciled = 
-       (XbaeMatrixGetCell(regData->reg,row+RECN_CELL_R,RECN_CELL_C))[0];
+    xaccTransSetReconcile (trans,
+       (XbaeMatrixGetCell(regData->reg,row+RECN_CELL_R,RECN_CELL_C))[0]);
     }
   
   if( regData->changed & MOD_AMNT )
@@ -2850,7 +2848,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         trans = (Transaction *) XbaeMatrixGetRowUserData (regData->reg, currow);
 
         /* If trans==NULL, then this must be a new transaction */
-        if( (trans != NULL) && (trans->reconciled == YREC) )
+        if( (trans != NULL) && (YREC == trans->credit_split.reconciled) )
           {
           char msg[BUFSIZE];
           sprintf( msg, RECN_TRANS_WARN );

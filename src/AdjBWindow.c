@@ -307,7 +307,7 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   /* fill out the rest of the fields */
   XtFree (trans->description);
   trans->description = XtNewString(ADJ_BALN_STR);
-  trans->reconciled  = NREC;
+  xaccTransSetReconcile (trans, NREC);
   
   pos = insertTransaction( acc, trans );
   
