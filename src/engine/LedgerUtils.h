@@ -29,7 +29,6 @@
 
 int        accListCount (Account **list);
 Account ** accListCopy (Account **list);
-Split   ** accListGetSortedSplits (Account **list);
 Account ** xaccGroupToList (Account *);
 
 
