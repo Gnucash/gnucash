@@ -1,4 +1,4 @@
-# -*- text -*-
+# -*- text; reStructuredText -*-
 
 This is a ad-hoc list of list of what works and doesn't work in the g2
 port of gnucash.  The plan is to finish porting those parts of gnucash
@@ -9,10 +9,6 @@ in gtk2 and can be used, even though they've been marked as deprecated
 and will disappear in a future release.  Its important to get this
 release out the door and not stall it until all the deprecated
 functionality has been removed.
-
-Feel free to add to, delete from, or modify anything in this list.  If
-someone wants to turn this into a columnar table with a field for
-names of active developers, that'd be great.
 
 ========================================
    Last sync with HEAD on 2004-12-30
@@ -37,185 +33,193 @@ MT940 Import (need test data file)
 Export Accounts
 Stock Split Dialog
 
-        +-----
-        | Can someone who comes across this note and wants to help please go
-        | through 1.8.9 and create a list of stuff missing from 2.0?
-        +------------
+    +-----
+    | Can someone who comes across this note and wants to help please go
+    | through 1.8.9 and create a list of stuff missing from 2.0?
+    +------------
 
 ========================================
           MISSING MENU ITEMS
 ========================================
 
-------------------------------------------------------------------------------
-| Area          | Description                                   | Developer  |
-------------------------------------------------------------------------------
-| Main Window   | - File -> Print                               |            |
-------------------------------------------------------------------------------
-| Register      | - Edit ->                                     |            |
-| Window        |    Cut Transaction                            |            |
-|               |    Copy Transaction                           |            |
-|               |    Paste Transaction                          |            |
-|               |    --                                         |            |
-|               |    Void Transaction                           |            |
-|               |    Unvoid Transaction                         |            |
-|               |    Reverse Transaction                        |            |
-|               |  Actions ->                                   |            |
-|               |    Check and Repair (all)                     |            |
-------------------------------------------------------------------------------
-| Register      | Find                                          |            |
-| Toolbar       | Report                                        |            |
-|               | Print                                         |            |
-------------------------------------------------------------------------------
+- Main Window
+  - File
+    - Print
+
+- Register Window
+  - `Edit`
+    - `Cut Transaction`
+    - `Copy Transaction`
+    - `Paste Transaction`
+    - `Void Transaction`
+    - `Unvoid Transaction`
+    - `Reverse Transaction`
+  - `Actions`
+    - `Check and Repair (all)`
+
+- Register Toolbar
+  - `Find`
+  - `Report`
+  - `Print`
+
 
 ========================================
             General Notes
 ========================================
 
+- Main Window
+
+  - New registers should open in new top-level windows.
+
+  - Summary bar select list doesn't have effect.
+
+  - Startup progress bar not working; default "window" needs to be set.
+
+- Register Core
+
+  - MOSTLY FUNCTIONAL
+
+  - Insertion point not shown. (fix gnucash-item-edit.c)
+
+  - <STRIKE>Cannot hilight text with mouse (fix gnucash-item-edit.c)</STRIKE>
+
+    - Getting better; x-position -> pango-text-index-lookup works; some
+      gtk_entry selection works.
+
+    - draging from right to left doesn't work.    
+
+    - Offset for non-LEFT_ALIGN'ed fields not correct.
+
+    - Probably need to...                         
+      1. check if it's a RIGHT [or CENTER] align.  
+      2. determine pango-layout width of the cell, plus the "indent".                         
+      3. subtract the indent as well as the cell's x-offset from the x-coord.                 
+
+    - finer points of gtk_entry selection+position setting not correct, yet.
+
+  - The first time it is used, the account popup immediately selects the
+    first account.  After that it functions normally.
+
+  - <STRIKE>The drop-down-arrow widgets for {date,action,account-sel} don't
+    seem to be showing.</STRIKE>
+
+  - selection of the date for the datecell seems to also select the
+    transaction underneath the calendar, leading to the "this transaction has
+    changed, do you want to save" dialog.
+
+  - selection events on the combo-cells aren't working.
+
+    (gnucash:26380): GLib-GObject-WARNING **: gsignal.c:989: no emission of
+    signal "key-press-event" to stop for instance `0x855a240'
+
+  - selection events on the combo-cells aren't working.
+
+    (gnucash:26380): GLib-GObject-WARNING **: gsignal.c:989: no emission of
+    signal "key-press-event" to stop for instance `0x855a240'
+
+  - Word wrap on transaction cells appears to be on.  Eg. Long account names
+    are truncated to the last space.  Specifically an account Named:
+    "Assets:XXXXXX Credit Union:XXXXXXX" is truncated to "Assets:XXXXXX
+    Credit" with no hope of seeing the remainder of the text.  PJK
+
+- Find [somewhat functional]
+
+  - Can generate a query in the dialog.        
+                                             
+- View Summary Bar
+
+  - Summarybar not ported yet. Where should it go? Wouldn't look good between
+    the toolbar and the notebook tabs.
+
+- Business Functions
+
+  - Everything works but the New Invoice/Bill code.  The dialog seems to
+    function properly but then gnucash crashed when the dialog is closed.
+
+  - The dialog-invoice.c needs to switch over to using GtkActions /
+    menu-merging so that it can call `gnc_extensions_menu_setup ( GtkWindow,
+    char*, EggMenuMerge)`
+
+- Reporting [somewhat functional]
+
+  - Graphing still unsupported; [jsled] in periodic contact with Jody
+    Goldberg of Gnumeric regarding Gnume Office Graphing [GOG] to be factored
+    out of gnumeric into libgoffice.
+
+  - Save/restore in unknown state; believed to crash on re-start.
+
+  - First report sets report name text for tab but no other report can change it.        
+
+- Importing
+
+  - HBCI - Needs new HTTP support [gnet]          
+
+- Budgeting
+
+  - Can create/modify budgets via the Budgeting
+    workbench. (Actions->Budgeting Workbench)
+
+  - Track budget tab still needs to be completed.  Should allow you to look
+    at predicted vs. actual information.
+
+  - No save to file functionality.  Therefore budgets must currently be
+    created fresh each time gnucash is started.  First thing what I want to fix.                       
+
+  - Should the budgeting workbench fit into the new windowing scheme better?
+    Currently it is its own window but maybe each workbench should be a tab
+    in the new layout.  How would this work with the sub-tabs?  Have to think
+    about this some more.
+
+  - Probably more TODO but these are the main points.                                   
+
+
 ------------------------------------------------------------------------------
-| Area          | Description                                   | Developer  |
-------------------------------------------------------------------------------
-| Main Window   | - New registers should open in new top-level  |            |
-|               |   windows.                                    |            |
-|               | - Summary bar select list doesn't have effect.|            |
-|               | - Startup progress bar not working; default   |            |
-|               |   "window" needs to be set.                   |            |
-------------------------------------------------------------------------------
-| Register Core | - Can navigate, enter transactions, etc.      |            |
-| MOSTLY        | - Insertion point not shown.                  |            |
-| FUNCTIONAL    |    (fix gnucash-item-edit.c)                  |            |
-|               | - <strike>Cannot hilight text with mouse (fix |            |
-|               |    gnucash-item-edit.c)</strike>              |            |
-|               | - Getting better; x-position ->               |            |
-|               |    pango-text-index-lookup works; some        |            |
-|               |    gtk_entry selection works.                 |            |
-|               | - draging from right to left doesn't work.    |            |
-|               | - Offset for non-LEFT_ALIGN'ed fields not     |            |
-|               |    correct.                                   |            |
-|               | - Probably need to...                         |            |
-|               |  1/ check if it's a RIGHT [or CENTER] align.  |            |
-|               |  2/ determine pango-layout width of the cell, |            |
-|               |    plus the "indent".                         |            |
-|               |  3/ subtract the indent as well as the cell's |            |
-|               |    x-offset from the x-coord.                 |            |
-|               | - finer points of gtk_entry selection+position|            |
-|               |    setting not correct, yet.                  |            |
-|               | - The first time it is used, the account popup|            |
-|               |    immediately selects the first account.     |            |
-|               |    After that it functions normally.          |            |
-|               | - <strike>The drop-down-arrow widgets for     |            |
-|               |    {date,action,account-sel} don't seem to be |            |
-|               |    showing.</strike>                          |            |
-|               | - selection of the date for the datecell seems|            |
-|               |    to also select the transaction underneath  |            |
-|               |    the calendar, leading to the "this         |            |
-|               |    transaction has changed, do you want to    |            |
-|               |    save" dialog.                              |            |
-|               | - selection events on the combo-cells aren't  |            |
-|               |    working. (gnucash:26380):                  |            |
-|               |    GLib-GObject-WARNING **: gsignal.c:989: no |            |
-|               |    emission of signal "key-press-event" to    |            |
-|               |    stop for instance `0x855a240'              |            |
-|               | - selection events on the combo-cells aren't  |            |
-|               |    working. (gnucash:26380):                  |            |
-|               |    GLib-GObject-WARNING **: gsignal.c:989: no |            |
-|               |    emission of signal "key-press-event" to    |            |
-|               |    stop for instance `0x855a240'              |            |
-|               | - Word wrap on transaction cells appears to be|            |
-|               |    on.  Eg. Long account names are truncated  |            |
-|               |    to the last space.  Specifically an account|            |
-|               |    Named: "Assets:XXXXXX Credit Union:XXXXXXX"|            |
-|               |    is truncated to "Assets:XXXXXX Credit" with|            |
-|               |    no hope of seeing the remainder of the     |            |
-|               |    text.  PJK                                 |            |
-------------------------------------------------------------------------------
-| Find          | - Can generate a query in the dialog.         |            |
-| SOMEWHAT      |                                               |            |
-| FUNCTIONAL    |                                               |            |
-------------------------------------------------------------------------------
-| View Summary  | - Summarybar not ported yet. Where should it  |            |
-| Bar           |     go? Wouldn't look good between the toolbar|            |
-|               |     and the notebook tabs.                    |            |
-------------------------------------------------------------------------------
-| Business      | - Everything works but the New Invoice/Bill   |            |
-| Functions     |     code.  The dialog seems to function       |            |
-| SOMEWHAT      |     properly but then gnucash crashed when the|            |
-| FUNCTIONAL    |     dialog is closed.                         |            |
-|               | - The dialog-invoice.c needs to switch over to|            |
-|               |     using GtkActions / menu-merging so that it|            |
-|               |     can call gnc_extensions_menu_setup (      |            |
-|               |    GtkWindow, char*, EggMenuMerge)            |            |
-------------------------------------------------------------------------------
-| Reporting     | - Graphing still unsupported; [jsled] in      |            |
-| SOMEWHAT      |     periodic contact with Jody Goldberg of    |            |
-| FUNCTIONAL    |     Gnumeric regarding Gnume Office Graphong  |            |
-|               |     [GOG] to be factored out of gnumeric into |            |
-|               |     libgoffice.                               |            |
-|               | - Save/restore in unknown state; believed to  |            |
-|               |     crash on re-start.                        |            |
-|               | - First report sets reportname text for tab   |            |
-|               |     but no other report can change it.        |            |
-------------------------------------------------------------------------------
-| Importing     | HBCI - Needs new HTTP support [gnet]          |            |
-------------------------------------------------------------------------------
-| Budgeting     | - Can create/modify budgets via the Budgeting |            |
-|               |     workbench. (Actions->Budgeting Workbench) |            |
-|               | - Track budget tab still needs to be          |            |
-|               |     completed.  Should allow you to look at   |            |
-|               |     predicted vs. actual information.         |            |
-|               | - No save to file functionality.  Therefore   |            |
-|               |     budgets must currently be created fresh   |            |
-|               |     each time gnucash is started.  First thing|            |
-|               |     that I want to fix.                       |            |
-|               | - Should the budgeting workbench fit into the |            |
-|               |     new windowing scheme better?  Currently   |            |
-|               |     it is its own window but maybe each       |            |
-|               |     workbench should be a tab in the new      |            |
-|               |     layout.  How would this work with the sub-|            |
-|               |     tabs?  Have to think about this some more.|            |
-|               | - Probably more TODO but these are the main   |            |
-|               |     points.                                   |            |
-------------------------------------------------------------------------------
-| Preferences   | - Business -> Accumulate splits on Post?      |            |
-|               |     option not present.  Not sure if this is  |            |
-|               |     intentionally missing. PJK                |            |
-|               |[ tested after g2 merge of 30 Dec 04?  -derek ]|            |
-------------------------------------------------------------------------------
-| Hierarchy     | - Doesn't let you complete the conflict       |            |
-| Merge         |     resolution process, thus you can never    |            |
-| BROKEN        |     complete the druid.                       |            |
-------------------------------------------------------------------------------
-|               |                                               |            |
-------------------------------------------------------------------------------
+- Preferences
+
+  - Business -> Accumulate splits on Post?  option not present.  Not sure if
+    this is intentionally missing. PJK [ tested after g2 merge of 30 Dec 04?
+    -derek ]
+
+- Hierarchy Merge [BROKEN]
+
+  - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.                       
 
 ========================================
               ENHANCEMENTS
 ========================================
 
-------------------------------------------------------------------------------
-| Area          | Description                                   | Developer  |
-------------------------------------------------------------------------------
-| New icons     | - Add account.                                |            |
-|               | - Register                                    |            |
-|               | - Report                                      |            |
-|               |     Report options, especially.               |            |
-------------------------------------------------------------------------------
-| Preferences   | Support a preference on whether new plugin    |            |
-|               |   pages appear in the same or a new window.   |            |
-|               |   * We definitely want register windows to    |            |
-|               |     appear in new top-levels.                 |            |
-|               |   * Reporting windows should probably appear  |            |
-|               |     in the top-level they were created from.  |            |
-------------------------------------------------------------------------------
-| In-place      | Provide in-place editing where feasable.  Eg. |            |
-| Editing       |   Editing the account code or the account     |            |
-|               |   name, but not being able to re-parent the   |            |
-|               |   account.  (Maybe add DND support for this in|            |
-|               |   long-term?)                                 |            |
-------------------------------------------------------------------------------
-| Print Preview | Print-preview support.                        |            |
-------------------------------------------------------------------------------
-| File Menu     | Rename "New Account Tree" to "Display Account |            |
-|               |   Tree" as "New" gives the impression that    |            |
-|               |   a creation of something will occur.  PJK    |            |
-------------------------------------------------------------------------------
+- New icons
+
+  - Add account.                                
+
+  - Register                                    
+
+  - Report                                      
+
+    - "Report options", especially, since it continuouly confuses users.
+
+- Preferences
+
+  - Support a preference on whether new plugin pages appear in the same or a
+    new window.
+
+     - We definitely want register windows to appear in new top-levels.
+
+     - Reporting windows should probably appear in the top-level they were
+       created from.
+
+- In-place editing
+
+  - Provide in-place editing where feasable.  Eg.  Editing the account code
+    or the account name, but not being able to re-parent the account.  (Maybe
+    add DND support for this in long-term?)
+
+- Print Preview
+
+  - Needed
+
+- File Menu
+
+  - Rename "New Account Tree" to "Display Account Tree" as "New" gives the
+    impression that a creation of something will occur.  PJK
 
