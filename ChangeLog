@@ -1,3 +1,8 @@
+2003-06-24  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*: Refactor many HBCI functions to
+	eventually enable queued processing of several HBCI jobs.
+
 2003-06-23  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-account.c: Limit the commodity choices

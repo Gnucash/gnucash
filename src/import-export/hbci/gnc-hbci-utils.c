@@ -532,3 +532,32 @@ char *gnc_hbci_memo_tognc (const HBCI_Transaction *h_trans)
   return g_memo;
 }
 
+
+/** Return the only customer that can act on the specified account, or
+    NULL if none was found. */
+const HBCI_Customer *
+gnc_hbci_get_first_customer(const HBCI_Account *h_acc)
+{
+  /* Get one customer. */
+  const list_HBCI_Customer *custlist;
+  list_HBCI_Customer_iter *iter;
+  const HBCI_Customer *customer;
+    
+  custlist = HBCI_Account_authorizedCustomers (h_acc);
+  g_assert (custlist);
+  switch (list_HBCI_Customer_size (custlist)) {
+  case 0:
+    printf("gnc_hbci_get_first_customer: No HBCI customer found.\n");
+    return NULL;
+  case 1:
+    break;
+  default:
+    gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
+				"Sorry, Choosing one out of several HBCI Customers not yet implemented.");
+    return NULL;
+  }
+  iter = list_HBCI_Customer_begin (custlist);
+  customer = list_HBCI_Customer_iter_get (iter);
+  list_HBCI_Customer_iter_delete (iter);
+  return customer;
+}
