@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "splitreg.h"
 #include "SplitLedger.h"
 #include "Transaction.h"
 
