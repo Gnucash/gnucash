@@ -20,7 +20,7 @@
     as contas que podem realmente ser pai da conta actual são mostradas.
 
     </PARA>
-<PARA>A fonte de <EMPHASIS>Cotações de Acções</EMPHASIS> pode ser seleccionada. Veja <LINK LINKEND="XACC-TICKER">o ticker</LINK> para mais 
+<PARA>A fonte de <EMPHASIS>Cotações de Acções</EMPHASIS> pode ser seleccionada. Veja <LINK LINKEND="xacc-price-sources">Seleccionar Fontes de Cotações</LINK> para mais 
     informações.
 
     </PARA>

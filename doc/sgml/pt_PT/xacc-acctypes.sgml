@@ -109,7 +109,8 @@ ajuda na decisão.
 </LISTITEM>
 </ITEMIZEDLIST>
       </PARA>
-<PARA>Mais detalhes podem ser encontrados na secção <LINK LINKEND="XACC-TICKER">"Ticker" de Acções</LINK>.</PARA>
+<PARA>Mais detalhes podem ser encontrados nas secções <LINK LINKEND="xacc-price-editor">editor de cotações</LINK>
+      e <link linkend="xacc-price-sources">fontes de cotações</link>.</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 <GLOSSENTRY>

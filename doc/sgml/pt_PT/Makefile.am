@@ -25,6 +25,8 @@ GNUCASH_SGML_FILES = \
 	xacc-pnl.sgml \
 	xacc-portfolio-report.sgml \
 	xacc-preferences.sgml \
+	xacc-price-editor.sgml \
+	xacc-price-sources.sgml \
 	xacc-print-check.sgml \
 	xacc-print.sgml \
 	xacc-qif-import.sgml \
