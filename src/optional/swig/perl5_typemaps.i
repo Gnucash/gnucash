@@ -70,7 +70,7 @@
     /* Figure out how many elements we have */
     for (node=$source; node; node=node->next) { len++; }
 
-printf ("duude got a split list !!! length=%d \n", len);
+printf ("eh duude got a split list !!! length=%d \n", len);
 
     svs = (SV **) malloc(len*sizeof(SV *));
     for (i=0, node=$source; node; node=node->next, i++) 
@@ -83,6 +83,7 @@ printf ("duude got a split list !!! length=%d \n", len);
     $target = newRV((SV*)myav);
     sv_2mortal($target);
 
+    argvi ++;
 }
 #endif
 
