@@ -1,0 +1,7 @@
+.deps
+.libs
+.scm-links
+*.la
+*.lo
+Makefile
+Makefile.in
