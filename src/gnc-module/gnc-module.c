@@ -242,7 +242,6 @@ GNCModuleInfo *
 gnc_module_get_info(const char * fullpath) 
 {
   lt_dlhandle  handle;
-  printf("gnc-module: (init) lt_dlopen '%s'\n", fullpath);
 
   handle = lt_dlopen(fullpath);
   if(handle) 
@@ -443,7 +442,6 @@ gnc_module_load(char * module_name, gint interface)
     GNCModuleInfo * modinfo = gnc_module_locate(module_name, interface);
     lt_dlhandle   handle = NULL;
     
-    printf("gnc-module: (load) dlopen '%s'\n", modinfo->module_filepath);
     if(modinfo && ((handle = lt_dlopen(modinfo->module_filepath)) != NULL)) 
     {
       lt_ptr initfunc = lt_dlsym(handle, "gnc_module_init");
