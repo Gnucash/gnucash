@@ -142,6 +142,15 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
+   p = "SELECT iguid FROM gncGUIDCache ORDER BY iguid DESC LIMIT 1;";
+   SEND_QUERY (be,p, );
+   iguid = (guint32) pgendGetResults (be, get_iguid_cb, 0);
+   iguid ++;
+
+   sprintf(buff, "CREATE SEQUENCE gnc_iguid_seq START %d;", iguid);
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
    p = "ALTER TABLE gncEntry ADD COLUMN iguid INT4 DEFAULT 0;\n"
        "UPDATE gncEntry SET iguid = 0;\n" 
        
@@ -196,15 +205,6 @@ put_iguid_in_tables (PGBackend *be)
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
 
-   p = "SELECT iguid FROM gncGUIDCache ORDER BY iguid DESC LIMIT 1;";
-   SEND_QUERY (be,p, );
-   iguid = (guint32) pgendGetResults (be, get_iguid_cb, 0);
-   iguid ++;
-
-   sprintf(buff, "CREATE SEQUENCE gnc_iguid_seq START %d;", iguid);
-   SEND_QUERY (be,buff, );
-   FINISH_QUERY(be->connection);
-
    p = "DROP TABLE gncGUIDCache; \n"
        "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,1,1,'End Put iGUID in Main Tables');";
@@ -212,12 +212,15 @@ put_iguid_in_tables (PGBackend *be)
    FINISH_QUERY(be->connection);
 }
 
+/* ============================================================= */
+
 static void 
 fix_reconciled_balance_func (PGBackend *be)
 {
    char *p;
 
-   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+   p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
+       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
        " (1,2,0,'Start Fix gncSubtotalReconedBalance');";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
@@ -248,12 +251,15 @@ fix_reconciled_balance_func (PGBackend *be)
    FINISH_QUERY(be->connection);
 }
 
+/* ============================================================= */
+
 static void
 add_kvp_timespec_tables (PGBackend *be)
 {
   char *p;
 
-  p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+  p = "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n "
+      "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
       " (1,3,0,'Start Add kvp_timespec tables');";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
@@ -277,6 +283,75 @@ add_kvp_timespec_tables (PGBackend *be)
       " (1,3,1,'End Add kvp_timespec tables');";
   SEND_QUERY (be,p, );
   FINISH_QUERY(be->connection);
+}
+
+/* ============================================================= */
+
+static void
+add_multiple_book_support (PGBackend *be)
+{
+   char buff[4000];
+   char *p;
+ 
+   p = "LOCK TABLE gncAccount IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncAccountTrail IN ACCESS EXCLUSIVE MODE;\n"
+       "LOCK TABLE gncVersion IN ACCESS EXCLUSIVE MODE;\n"
+       "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,4,0,'Start Add multiple book support');";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = "CREATE TABLE gncBook (  \n"
+       " bookGuid        CHAR(32) PRIMARY KEY, \n"
+       " version         INT4 NOT NULL, \n"
+       " iguid           INT4 DEFAULT 0 \n"
+       ");";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = "CREATE TABLE gncBookTrail ( \n"
+       " bookGuid        CHAR(32) NOT NULL, \n"
+       " version         INT4 NOT NULL, \n"
+       " iguid           INT4 DEFAULT 0 \n"
+       ") INHERITS (gncAuditTrail); \n\n"
+       "CREATE INDEX gncBookTrail_book_idx ON gncBookTrail (bookGuid);" ;
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = "ALTER TABLE gncAccount ADD COLUMN bookGuid CHAR(32) NOT NULL;\n"
+       "ALTER TABLE gncAccountTrail ADD COLUMN bookGuid CHAR(32) NOT NULL;\n";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = buff;
+   p = stpcpy (p, "UPDATE gncAccount SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   p = buff;
+   p = stpcpy (p, "UPDATE gncAccountTrail SET bookGuid = '");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "';");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   p = buff;
+   p = stpcpy (p, "INSERT INTO gncBook (bookGuid, version, iguid) "
+                  "VALUES ('");
+   p = guid_to_string_buff (gnc_book_get_guid (be->book), p);
+   p = stpcpy (p, "', 1, nextval('gnc_iguid_seq') );");
+   SEND_QUERY (be,buff, );
+   FINISH_QUERY(be->connection);
+
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
+ 
+   p = "INSERT INTO gncVersion (major,minor,rev,name) VALUES \n"
+       " (1,4,1,'End Add multiple book support');";
+   SEND_QUERY (be,p, );
+   FINISH_QUERY(be->connection);
 }
 
 /* ============================================================= */
@@ -337,6 +412,12 @@ pgendUpgradeDB (PGBackend *be)
       {
         add_kvp_timespec_tables (be);
       }
+#ifdef NOT_YET
+      if (4 > vers.minor)
+      {
+        add_multiple_book_support (be);
+      }
+#endif
    }
 }
 

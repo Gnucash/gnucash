@@ -39,6 +39,7 @@ CREATE TABLE gncAuditTrail (
 CREATE TABLE gncAccountTrail (
 	accountGuid	CHAR(32) NOT NULL,  -- override, not a primary key anymore
 	parentGuid	CHAR(32) NOT NULL,
+-- not yet	bookGuid	CHAR(32) NOT NULL,
 	accountName 	TEXT NOT NULL CHECK (accountName <> ''),
 	accountCode 	TEXT,
 	description 	TEXT,
@@ -49,6 +50,14 @@ CREATE TABLE gncAccountTrail (
 ) INHERITS (gncAuditTrail);
 
 CREATE INDEX gncAccountTrail_account_idx ON gncAccountTrail (accountGuid);
+
+-- CREATE TABLE gncBookTrail (
+--         bookGuid        CHAR(32) NOT NULL,
+--         version         INT4 NOT NULL,
+--         iguid           INT4 DEFAULT 0
+-- ) INHERITS (gncAuditTrail);
+-- 
+-- CREATE INDEX gncBookTrail_book_idx ON gncBookTrail (bookGuid);
 
 CREATE TABLE gncCommodityTrail (
         commodity	TEXT NOT NULL,  -- override, not a primary key anymore
