@@ -134,7 +134,12 @@ static void
 gnc_mainwin_account_tree_init(GNCMainWinAccountTree *mwac_tree)
 {
   mwac_tree->acc_tree = GNC_ACCOUNT_TREE(gnc_account_tree_new());
-  mwac_tree->scrolled_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL)); 
+  mwac_tree->scrolled_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
+
+  gtk_scrolled_window_set_policy (mwac_tree->scrolled_window,
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+
   gtk_signal_connect(GTK_OBJECT(mwac_tree->acc_tree), "activate_account",
 		     GTK_SIGNAL_FUNC (activate_account_callback), mwac_tree);
 
