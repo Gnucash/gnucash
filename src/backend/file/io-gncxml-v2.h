@@ -73,6 +73,7 @@ struct sixtp_gdv2
     load_counter counter;
     countCallbackFn countCallback;
     GNCBePercentageFunc gui_display_fn;
+    gboolean exporting;
 };
 
 /**

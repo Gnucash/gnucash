@@ -75,7 +75,7 @@ append_group (xmlNodePtr parent, AccountGroup *grp)
         xmlNodePtr accnode;
         AccountGroup *newgrp;
 
-        accnode = gnc_account_dom_tree_create((Account*)(node->data));
+        accnode = gnc_account_dom_tree_create((Account*)(node->data), FALSE);
         xmlAddChild (parent, accnode);
 
         newgrp = xaccAccountGetChildren((Account*)(node->data));

@@ -31,7 +31,7 @@
 #include "Group.h"
 #include "gnc-book.h"
 #include "gnc-xml.h"
-#include "gnc-xml-helper.h"
+#include "gnc-xml.h"
 #include "io-utils.h"
 
 /*
@@ -65,7 +65,8 @@ write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd)
         xmlNodePtr accnode;
         AccountGroup *newgrp;
         
-        accnode = gnc_account_dom_tree_create((Account*)(node->data));
+        accnode = gnc_account_dom_tree_create((Account*)(node->data),
+					      gd && gd->exporting);
 
         xmlElemDump(out, NULL, accnode);
         fprintf(out, "\n");

@@ -1,5 +1,15 @@
 2003-01-04  David Hampton  <hampton@employees.org>
 
+	* src/backend/file/gnc-account-xml-v2.c: 
+	* src/backend/file/gnc-book-xml-v2.c: 
+	* src/backend/file/io-gncxml-v2.c: 
+	* src/backend/file/io-utils.c:
+	* src/backend/file/test/test-xml-account.c: Don't export lots.
+
+	* src/engine/gnc-session.c (gnc_session_destroy): Don't clear the
+	current_session global unless the actual current session is being
+	destroyed. 101707.
+
 	* src/backend/file/io-gncxml-v2.c: Pipe the output through zlib if
 	the user requested compression. This request is either setting a
 	option in the preferences (for all files), or naming the

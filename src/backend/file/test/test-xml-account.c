@@ -229,7 +229,7 @@ test_account(int i, Account *test_act)
     gchar *compare_msg;
     int fd;
 
-    test_node = gnc_account_dom_tree_create(test_act);
+    test_node = gnc_account_dom_tree_create(test_act, FALSE);
 
     if(!test_node)
     {

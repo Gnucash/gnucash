@@ -647,6 +647,7 @@ add_parser_cb (const char *type, gpointer data_p, gpointer be_data_p)
 static sixtp_gdv2 *
 gnc_sixtp_gdv2_new (
     GNCBook *book,
+    gboolean exporting,
     countCallbackFn countcallback,
     GNCBePercentageFunc gui_display_fn)
 {
@@ -667,7 +668,7 @@ gnc_sixtp_gdv2_new (
     gd->counter.prices_total = 0;
     gd->counter.schedXactions_loaded = 0;
     gd->counter.schedXactions_total = 0;
-
+    gd->exporting = exporting;
     gd->countCallback = countcallback;
     gd->gui_display_fn = gui_display_fn;
     return gd;
@@ -686,7 +687,7 @@ gnc_session_load_from_xml_file_v2(GNCSession *session)
 
     book = gnc_session_get_book (session);
     be = (Backend *)gnc_book_get_backend(book);
-    gd = gnc_sixtp_gdv2_new(book, file_rw_feedback, be->percentage);
+    gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
 
     top_parser = sixtp_new();
     main_parser = sixtp_new();
@@ -1114,7 +1115,7 @@ gnc_book_write_to_xml_filehandle_v2(GNCBook *book, FILE *out)
                  NULL);
 
     be = (Backend *)gnc_book_get_backend(book);
-    gd = gnc_sixtp_gdv2_new(book, file_rw_feedback, be->percentage);
+    gd = gnc_sixtp_gdv2_new(book, FALSE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total =
       gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
     gd->counter.accounts_total = 1 + 
@@ -1151,7 +1152,7 @@ gnc_book_write_accounts_to_xml_filehandle_v2(Backend *be, GNCBook *book, FILE *o
                  1 + xaccGroupGetNumSubAccounts(gnc_book_get_group(book)),
                  NULL);
 
-    gd = gnc_sixtp_gdv2_new(book, file_rw_feedback, be->percentage);
+    gd = gnc_sixtp_gdv2_new(book, TRUE, file_rw_feedback, be->percentage);
     gd->counter.commodities_total =
       gnc_commodity_table_get_size(gnc_book_get_commodity_table(book));
     gd->counter.accounts_total = 1 +

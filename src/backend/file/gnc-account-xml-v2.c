@@ -73,7 +73,7 @@ const gchar *account_version_string = "2.0.0";
 #define act_security_scu_string "act:security-scu"
 
 xmlNodePtr
-gnc_account_dom_tree_create(Account *act)
+gnc_account_dom_tree_create(Account *act, gboolean exporting)
 {
     const char *str;
     kvp_frame *kf;
@@ -134,7 +134,7 @@ gnc_account_dom_tree_create(Account *act)
 
     n = xaccAccountGetLotList (act);
     PINFO ("lot list=%p", n);
-    if (n)
+    if (n && !exporting)
     {
        xmlNodePtr toaddto = xmlNewChild(ret, NULL, act_lots_string, NULL);
 
