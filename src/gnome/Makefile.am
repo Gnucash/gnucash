@@ -62,7 +62,6 @@ mime_DATA = gnucash.keys gnucash.mime
 
 noinst_HEADERS = \
   account-tree.h \
-  cursors.h \
   dialog-account-picker.h \
   dialog-account.h \
   dialog-budget.h \

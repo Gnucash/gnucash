@@ -27,7 +27,13 @@
 #include <gnome.h>
 
 #include "gnc-ui.h"
-#include "cursors.h"
+
+
+typedef enum
+{
+  GNC_CURSOR_NORMAL = -1,
+  GNC_CURSOR_BUSY   = GDK_WATCH
+} GNCCursorType;
 
 
 /********************************************************************\
@@ -39,7 +45,7 @@
  * Return: none                                                     * 
 \********************************************************************/
 static void
-gnc_ui_set_cursor (GdkWindow *win, int type)
+gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type)
 {
   GdkCursor *cursor = NULL;
 
@@ -47,25 +53,28 @@ gnc_ui_set_cursor (GdkWindow *win, int type)
     return;
 
   if (type != GNC_CURSOR_NORMAL)
-    cursor = gdk_cursor_new(type);
+    cursor = gdk_cursor_new (type);
 
   gdk_window_set_cursor (win, cursor);
 
-  while (gtk_events_pending())
-    gtk_main_iteration();
+  if (type != GNC_CURSOR_NORMAL)
+  {
+    while (gtk_events_pending ())
+      gtk_main_iteration ();
+  }
 
   if (type != GNC_CURSOR_NORMAL)
-    gdk_cursor_destroy(cursor);
+    gdk_cursor_destroy (cursor);
 }
 
 
 static void
-set_cursor_helper(gpointer window, gpointer data)
+set_cursor_helper (gpointer window, gpointer data)
 {
   GtkWidget *widget = GTK_WIDGET(window);
   int type = GPOINTER_TO_INT(data);
 
-  gnc_ui_set_cursor(widget->window, type);
+  gnc_ui_set_cursor (widget->window, type);
 }
 
 
@@ -78,14 +87,14 @@ set_cursor_helper(gpointer window, gpointer data)
  * Return: none                                                     * 
 \********************************************************************/
 void 
-gnc_set_busy_cursor(GtkWidget *w)
+gnc_set_busy_cursor (GtkWidget *w)
 {
   if (w != NULL)
-    gnc_ui_set_cursor(w->window, GNC_CURSOR_BUSY);
+    gnc_ui_set_cursor (w->window, GNC_CURSOR_BUSY);
   else
-    g_list_foreach(gtk_container_get_toplevels(),
-                   set_cursor_helper,
-                   GINT_TO_POINTER(GNC_CURSOR_BUSY));
+    g_list_foreach (gtk_container_get_toplevels (),
+                    set_cursor_helper,
+                    GINT_TO_POINTER (GNC_CURSOR_BUSY));
 }
 
 
@@ -98,14 +107,14 @@ gnc_set_busy_cursor(GtkWidget *w)
  * Return: none                                                     * 
 \********************************************************************/
 void 
-gnc_unset_busy_cursor(GtkWidget *w)
+gnc_unset_busy_cursor (GtkWidget *w)
 {
   if (w != NULL)
-    gnc_ui_set_cursor(w->window, GNC_CURSOR_NORMAL);
+    gnc_ui_set_cursor (w->window, GNC_CURSOR_NORMAL);
   else
-    g_list_foreach(gtk_container_get_toplevels(),
-                   set_cursor_helper,
-                   GINT_TO_POINTER(GNC_CURSOR_NORMAL));
+    g_list_foreach (gtk_container_get_toplevels (),
+                    set_cursor_helper,
+                    GINT_TO_POINTER (GNC_CURSOR_NORMAL));
 }
 
 /************************* END OF FILE ******************************\
