@@ -60,7 +60,7 @@ gnc_ok_cancel_dialog_common(gncUIWidget parent,
   gchar *buffer;
 
   buffer = g_strdup_vprintf(format, args);
-  dialog = gnome_message_box_new(format,
+  dialog = gnome_message_box_new(buffer,
                                  GNOME_MESSAGE_BOX_QUESTION,
                                  GNOME_STOCK_BUTTON_OK,
                                  GNOME_STOCK_BUTTON_CANCEL,
@@ -154,7 +154,7 @@ gnc_verify_cancel_dialog_common(GtkWidget *parent,
   gchar *buffer;
 
   buffer = g_strdup_vprintf(format, args);
-  verify_box = gnome_message_box_new(format,
+  verify_box = gnome_message_box_new(buffer,
 				     GNOME_MESSAGE_BOX_QUESTION,
 				     GNOME_STOCK_BUTTON_YES,
 				     GNOME_STOCK_BUTTON_NO,

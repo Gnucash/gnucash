@@ -3,6 +3,9 @@
 	* src/gnome/gnc-split-reg.c: remove reference to gnc-regwidget.h
 	  (which no longer exists)
 
+	* src/gnome-utils/gnc-gui-query.c: use the right string when building
+	  the dialog (use the output from vsprintf, not the input)
+	
 2002-11-03  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c: Use GNCSplitReg over
