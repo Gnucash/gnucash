@@ -207,10 +207,10 @@ typedef void     (*VirtCellDataCopy)        (gpointer to, gconstpointer from);
 
 struct _Table
 {
-  short num_virt_rows;
-  short num_virt_cols;
+  int num_virt_rows;
+  int num_virt_cols;
 
-  short num_header_phys_rows;
+  int num_header_phys_rows;
 
   CellBlock *current_cursor;
 
@@ -237,7 +237,7 @@ struct _Table
 
   /* If positive, denotes a row that marks a boundary that should
    * be visually distinguished. */
-  short dividing_row;
+  int dividing_row;
 
   /* private data */
 
