@@ -108,10 +108,10 @@
 		    ;; resolve the exchange rate to this currency.
 		    (warn "can't calculate rate for "
 			  (gnc:commodity-value->string 
-			   (list (car pair) (caadr pair)))
+			   (list (car pair) ((caadr pair) 'total #f)))
 			  " = "
 			  (gnc:commodity-value->string 
-			   (list (car otherlist) (cdadr pair)))
+			   (list (car otherlist) ((cdadr pair) 'total #f)))
 			  " to "
 			  (gnc:commodity-value->string 
 			   (list report-commodity (gnc:numeric-zero))))
@@ -122,10 +122,11 @@
 			;; better thing to do in this case.
 			(warn "Oops - exchange rate ambiguity error: "
 			      (gnc:commodity-value->string 
-			       (list (car pair) (caadr pair)))
+			       (list (car pair) ((caadr pair) 'total #f)))
 			      " = "
 				(gnc:commodity-value->string 
-				 (list (car otherlist) (cdadr pair))))
+				 (list (car otherlist) 
+				       ((cdadr pair) 'total #f))))
 			(let 
 			    ;; Usual case: one of pair-{a,b} was found
 			    ;; in reportlist, i.e. this transaction
