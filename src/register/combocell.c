@@ -21,6 +21,9 @@ typedef struct _PopBox {
 
 static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 static void dropDownCB (Widget w, XtPointer cd, XtPointer cb );
+static void realizeCombo (struct _BasicCell *bcell, void *w);
+static void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col);
+static void destroyCombo (struct _BasicCell *bcell);
 
 /* =============================================== */
 
@@ -34,34 +37,56 @@ ComboCell *xaccMallocComboCell (void)
 
 void xaccInitComboCell (ComboCell *cell)
 {
-   PopBox *box;
-
    xaccInitBasicCell ( &(cell->cell));
-
-   cell->gui = (struct _PopBox *) box;
+   cell->cell.realize = realizeCombo;
 }
 
 /* =============================================== */
 
-void RealizeCombo (struct _BasicCell *bcell, void *w)
+void 
+xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
+{
+   PopBox *box;
+   XmString str;
+   box = (PopBox *) (cell->cell.gui_private);
+
+   if (!box) return;
+
+   str = XmStringCreateLtoR (menustr, XmSTRING_DEFAULT_CHARSET);
+   XmComboBoxAddItem (box->combobox, str, 0); 
+   XmStringFree (str);
+}
+
+/* =============================================== */
+
+static
+void realizeCombo (struct _BasicCell *bcell, void *w)
 {
    ComboCell *cell;
    PopBox *box;
    Widget parent;
    Widget combobox;
-
-   int width = 10;   /* hack alert --- */
-   int drop_width = 10;
+   int width, drop_width;
 
    parent = (Widget) w;
    cell = (ComboCell *) bcell;
 
+   /* initialize gui-specific, private data */
    box = (PopBox *) malloc (sizeof (PopBox));
    box->parent   = parent;
    box->currow   = -1;
    box->curcol   = -1;
 
-   cell->gui = (struct _PopBox *) box;
+   cell->cell.gui_private = (void *) box;
+
+   /* to mark cell as realized, remove the realize method */
+   cell->cell.realize = NULL;
+   cell->cell.move = moveCombo;
+   cell->cell.destroy = destroyCombo;
+
+   /* heuristic to increase the size of the drop-down box */
+   width = cell->cell.width;
+   drop_width = (int) (1.2 * ((float) width));
 
    /* create the pop GUI */
    combobox = XtVaCreateManagedWidget
@@ -87,9 +112,91 @@ void RealizeCombo (struct _BasicCell *bcell, void *w)
    box->combobox = combobox;
 
    /* add callbacks to detect a selection */
-   XtAddCallback (combobox, XmNselectionCallback, selectCB, (XtPointer)box);
-   XtAddCallback (combobox, XmNunselectionCallback, selectCB, (XtPointer)box);
+   XtAddCallback (combobox, XmNselectionCallback, selectCB, (XtPointer)cell);
+   XtAddCallback (combobox, XmNunselectionCallback, selectCB, (XtPointer)cell);
    XtAddCallback (combobox, XmNdropDownCallback, dropDownCB, (XtPointer)box);
+}
+
+/* =============================================== */
+
+static
+void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col)
+{
+   ComboCell *cell;
+   PopBox *box;
+   String choice;
+   XmString choosen;
+
+   cell = (ComboCell *) bcell;
+   box = (PopBox *) (cell->cell.gui_private);
+
+   /* if the drop-down menu is showing, hide it now */
+   XmComboBoxHideList (box->combobox);
+
+   /* if there is an old widget, remove it */
+   if ((0 <= box->currow) && (0 <= box->curcol)) {
+      XbaeMatrixSetCellWidget (box->parent, box->currow, box->curcol, NULL);
+   }
+   box->currow = phys_row;
+   box->curcol = phys_col;
+
+   /* if the new position is valid, go to it, 
+    * otherwise, unmanage the widget */
+   if ((0 <= box->currow) && (0 <= box->curcol)) {
+
+      /* Get the current cell contents, and set the
+       * combobox menu selction to match the contents */
+      choice = cell->cell.value;
+
+      /* do a menu selection only if the cell ain't empty. */
+      if (choice) {
+         if (0x0 != choice[0]) {
+            /* convert String to XmString ... arghhh */
+            choosen = XmCvtCTToXmString (choice);
+            XmComboBoxSelectItem (box->combobox, choosen, False);
+            XmStringFree (choosen);
+         } else {
+            XmComboBoxClearItemSelection (box->combobox);
+         } 
+      } else {
+         XmComboBoxClearItemSelection (box->combobox);
+      }
+
+      /* set the cell widget */
+      XbaeMatrixSetCellWidget (box->parent, phys_row, phys_col, box->combobox);
+
+      if (!XtIsManaged (box->combobox)) {
+         XtManageChild (box->combobox);
+      }
+
+      /* drop down the menu so that its ready to go. */
+      XmComboBoxShowList (box->combobox);
+   } else {
+      XtUnmanageChild (box->combobox); 
+   }
+}
+
+/* =============================================== */
+
+static
+void destroyCombo (struct _BasicCell *bcell)
+{
+   ComboCell *cell;
+   PopBox *box;
+
+   cell = (ComboCell *) bcell;
+   box = (PopBox *) (cell->cell.gui_private);
+
+   moveCombo (bcell, -1, -1);
+
+   XtDestroyWidget (box->combobox);
+   free (box);
+
+   /* allow the widget to be created again */
+   cell->cell.gui_private = NULL;
+   cell->cell.realize = realizeCombo;
+   cell->cell.move = NULL;
+   cell->cell.destroy = NULL;
 }
 
 /* =============================================== */
@@ -97,35 +204,40 @@ void RealizeCombo (struct _BasicCell *bcell, void *w)
 static void selectCB (Widget w, XtPointer cd, XtPointer cb )
 
 {
-    PopBox *ab = (PopBox *) cd;
-    XmComboBoxSelectionCallbackStruct *selection = 
+   ComboCell *cell;
+   PopBox *box;
+   char * choice = 0x0;
+
+   XmComboBoxSelectionCallbackStruct *selection = 
                (XmComboBoxSelectionCallbackStruct *) cb;
-    char * choice = 0x0;
 
-    /* check the reason, because the unslect callback 
-     * doesn't even have a value field! */
-    if ( (XmCR_SINGLE_SELECT == selection->reason) ||
-         (XmCR_SINGLE_SELECT == selection->reason) ) {
-       choice = XmCvtXmStringToCT (selection->value);
-    }
-    if (!choice) choice = "";
+   cell = (ComboCell *) cd;
+   box = (PopBox *) (cell->cell.gui_private);
 
-printf ("yo combo select %s \n", choice);
+   /* check the reason, because the unslect callback 
+    * doesn't even have a value field! */
+   if ( (XmCR_SINGLE_SELECT == selection->reason) ||
+        (XmCR_SINGLE_SELECT == selection->reason) ) {
+      choice = XmCvtXmStringToCT (selection->value);
+   }
+   if (!choice) choice = XtNewString ("");
 
-    /* XbaeMatrixSetCell (ab->reg, ab->currow, ab->curcol, choice); */
+   XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
+   xaccSetBasicCellValue (&(cell->cell), choice);
+   XtFree (choice);
 
-    /* a diffeent way of getting the user's selection ... */
-    /* text = XmComboBoxGetString (ab->combobox); */
+   /* a diffeent way of getting the user's selection ... */
+   /* text = XmComboBoxGetString (ab->combobox); */
 }
 
 /* =============================================== */
 
-/********************************************************************\
+/*********************************************************\
  * fix traversal by going back to the register window
  * when the pull-down menu goes away.  We do NOT want to
  * go to the default next tab group, which is probably 
- * some button not in theregister window.
-\********************************************************************/
+ * some button not in the register window.
+\*********************************************************/
 
 static void dropDownCB (Widget w, XtPointer cd, XtPointer cb )
 

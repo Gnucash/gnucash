@@ -17,11 +17,12 @@
 
 typedef struct _ComboCell {
    BasicCell cell;
-   struct _PopBox *gui;   /* gui-private data */
 } ComboCell;
 
 ComboCell *  xaccMallocComboCell (void);
 void         xaccInitComboCell (ComboCell *);
+
+void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
 
 #endif /* __XACC_COMBO_CELL_C__ */
 

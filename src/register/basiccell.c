@@ -22,14 +22,15 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->modify_verify = NULL;
    cell->leave_cell = NULL;
    cell->realize = NULL;
+   cell->move = NULL;
+   cell->destroy = NULL;
+   cell->gui_private = NULL;
 }
 
 void xaccSetBasicCellValue (BasicCell *cell, char *val)
 {
-
    if (cell->value) free (cell->value);
    cell->value = strdup (val);
-
 }
 
 /* ------------------ end of file ---------------------- */

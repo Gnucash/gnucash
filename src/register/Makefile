@@ -26,7 +26,8 @@ LIBXBAE  = ../../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
 LIBTRANS = ../Account.o ../Data.o ../FileIO.o ../Transaction.o ../date.o
 ######################################################################
-SRCS = 	basiccell.c cellblock.c combocell.c datecell.c pricecell.c \
+SRCS = 	actioncell.c basiccell.c cellblock.c combocell.c \
+	datecell.c pricecell.c \
 	recncell.c register.c table.c textcell.c
 OBJS = ${SRCS:.c=.o} 
 ######################################################################

@@ -119,11 +119,35 @@ xaccSetCursor (Table *table, CellBlock *curs)
 
 void xaccMoveCursor (Table *table, int virt_row, int virt_col)
 {
+   int i,j;
+   int iphys,jphys;
+   BasicCell *cell;
+
    if ((0 > virt_row) || (0 > virt_col)) return;
    if (virt_row >= table->num_rows) return;
    if (virt_col >= table->num_cols) return;
    table->current_cursor_row = virt_row;
    table->current_cursor_col = virt_col;
+
+   /* update the cell values to reflect the new position */
+   /* also, move the cell GUI, if needed */
+   for (i=0; i<table->tile_height; i++) {
+      iphys = i + table->current_cursor_row * table->tile_height;
+      iphys += table->num_header_rows;
+      for (j=0; j<table->tile_width; j++) {
+         
+         cell = table->cursor->cells[i][j];
+         if (cell) {
+            jphys = j + table->current_cursor_col * table->tile_width;
+            xaccSetBasicCellValue (cell, table->entries[iphys][jphys]);
+
+            /* be sure to allow the GUI to move too */
+            if (cell->move) {
+               (cell->move) (cell, iphys, jphys);
+            }
+         }
+      }
+   }
 }
 
 /* ==================================================== */

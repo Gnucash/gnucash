@@ -80,6 +80,14 @@ typedef struct _BasicCell {
   /* private, GUI-specific initializer */
   void         (* realize) (struct _BasicCell *, void *gui_handle);
 
+  /* private, GUI-specific callback to move gui element */
+  void         (* move) (struct _BasicCell *, int phys_row, int phys_col);
+
+  /* private, GUI-specific callback to detroy gui element */
+  void         (* destroy) (struct _BasicCell *);
+
+  /* general hook for gui-private data */
+  void * gui_private;
 } BasicCell;
 
 
