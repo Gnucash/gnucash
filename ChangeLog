@@ -4,6 +4,13 @@
 	* src/app-utils/Makefile.am: add the gnc-druid files
 	* src/app-utils/gnc-druid*: an abstract druid creation framework.
 
+	* src/app-utils/Makefile.am: add the edge provider description.
+	* src/app-utils/gnc-druid-provider-desc-edge.*: provider descriptor
+	  for edge pages (the first and last page of the druid).
+	* src/app-utils/gnc-druid*:
+	  - add class macros
+	  - add a title to the basic provider desc and clean it up.
+	
 2004-01-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.

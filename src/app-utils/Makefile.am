@@ -22,6 +22,7 @@ libgncmod_app_utils_la_SOURCES = \
   gnc-druid-cb.c \
   gnc-druid-provider.c \
   gnc-druid-provider-desc.c \
+  gnc-druid-provider-desc-edge.c \
   gnc-err-popup.c \
   gnc-euro.c \
   gnc-exp-parser.c \
@@ -42,6 +43,7 @@ gncinclude_HEADERS = \
   gnc-druid-cb.h \
   gnc-druid-provider.h \
   gnc-druid-provider-desc.h \
+  gnc-druid-provider-desc-edge.h \
   gnc-err-popup.h \
   gnc-euro.h \
   gnc-exp-parser.h \
