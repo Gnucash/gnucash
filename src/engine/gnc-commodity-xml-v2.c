@@ -14,6 +14,7 @@
 
 #include "gnc-xml.h"
 
+#include "gnc-engine-util.h"
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
 #include "Account.h"
@@ -62,7 +63,7 @@ struct com_char_handler
     void(*func)(gnc_commodity *com, const char*val);
 };
 
-struct com_char_handlers com_handlers[] = {
+struct com_char_handler com_handlers[] = {
     { "cmdty:space", gnc_commodity_set_namespace },
     { "cmdty:id", gnc_commodity_set_mnemonic },
     { "cmdty:name", gnc_commodity_set_fullname },
@@ -75,15 +76,17 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
     if(safe_strcmp(node->name, "cmdty:fraction"))
     {
+      /*
         gint64 val;
         if(string_to_integer(node, &val))
         {
             gnc_commodity_set_fraction(com, val);
         }
+      */
     }
     else 
     {
-        struct com_char_handlers *mark;
+        struct com_char_handler *mark;
 
         for(mark = com_handlers; mark->tag; mark++)
         {
@@ -131,7 +134,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
         return FALSE;
     }
     
-    return TRUE
+    return TRUE;
 }
 
 
