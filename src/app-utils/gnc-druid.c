@@ -174,9 +174,19 @@ gnc_druid_change_page(GNCDruid *druid,
       page = next_page(prov);
     }
 
-    /* If we didn't get a page, then we should go to the next provider */
-    if (!page)
+    /* If we didn't get a page then we need to change providers.  If
+     * the callback didn't jump us elsewhere, then we should set prov
+     * to NULL and go to the next provider.  But if we jumped, then
+     * we'll assume the jump set the pages properly and we'll just go
+     * there.  Note that this means we cannot "jump" into ourself, but
+     * that's ok, because we could have jump returned our own page if
+     * we wanted to do that.
+     */
+    if (!page) {
+      if (prov != druid->provider)
+	return;
       prov = NULL;
+    }
   }
 
   if (page)

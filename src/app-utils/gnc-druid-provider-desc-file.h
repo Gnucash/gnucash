@@ -19,6 +19,7 @@ typedef struct _GNCDruidProviderDescFileClass GNCDruidProviderDescFileClass;
 
 #include "gnc-druid.h"
 #include "gnc-druid-provider-file-cb.h"
+#include "gnc-druid-provider-desc-multifile.h"
 
 #define GNC_DRUID_PROVIDER_TYPE_FILE	"file"
 
@@ -28,7 +29,10 @@ struct _GNCDruidProviderDescFile
 
   gchar* text;
   gchar* last_directory;
+  gboolean glob;
   void (*remove_file)(gpointer be_ctx, gpointer file_ctx);
+
+  GNCDruidProviderDescMultifile *multifile_provider;
 };
 
 struct _GNCDruidProviderDescFileClass
@@ -42,6 +46,7 @@ GNCDruidProviderDescFile*
 gnc_druid_provider_desc_file_new_with_data(const gchar* title,
 					   const gchar* text,
 					   const gchar* last_dir,
+					   gboolean glob,
 					   GNCDruidProviderCB next_cb,
 					   void (*remove_file)(gpointer, gpointer));
 

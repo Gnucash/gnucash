@@ -6,6 +6,7 @@
 
 static void gnc_druid_provider_class_init	(GNCDruidProviderClass *class);
 static void gnc_druid_provider_finalize		(GObject *obj);
+static GNCDruidPage* null_page(GNCDruidProvider* provider);
 static GNCDruidPage* invalid_page(GNCDruidProvider* provider);
 
 static GObjectClass *parent_class;
@@ -28,8 +29,8 @@ gnc_druid_provider_class_init (GNCDruidProviderClass *klass)
   /* override methods */
   klass->first_page = invalid_page;
   klass->last_page = invalid_page;
-  klass->next_page = invalid_page;
-  klass->prev_page = invalid_page;
+  klass->next_page = null_page;
+  klass->prev_page = null_page;
 }
 
 static void
@@ -49,7 +50,13 @@ gnc_druid_provider_finalize (GObject *obj)
 static GNCDruidPage*
 invalid_page(GNCDruidProvider* provider)
 {
-  g_warning("provider with invalid page");
+  g_warning("Provider without a valid first/last page method");
+  return NULL;
+}
+
+static GNCDruidPage*
+null_page(GNCDruidProvider* provider)
+{
   return NULL;
 }
 

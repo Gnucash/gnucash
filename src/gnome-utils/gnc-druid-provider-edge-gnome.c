@@ -5,39 +5,20 @@
 #include "gnc-druid-provider-edge-gnome.h"
 #include "gnc-druid-provider-desc-edge.h"
 
+#include "gnc-basic-gobject.h"
+
 static void gnc_druid_provider_edge_gnome_class_init	(GNCDruidProviderEdgeGnomeClass *class);
 static void gnc_druid_provider_edge_gnome_finalize		(GObject *obj);
 
 static GNCDruidPage* gnc_dp_edge_gnome_first_page(GNCDruidProvider*);
 static GNCDruidPage* gnc_dp_edge_gnome_last_page(GNCDruidProvider*);
-static GNCDruidPage* gnc_dp_edge_gnome_next_page(GNCDruidProvider*);
-static GNCDruidPage* gnc_dp_edge_gnome_prev_page(GNCDruidProvider*);
 
 static GNCDruidProviderClass *parent_class;
 
-GType
-gnc_druid_provider_edge_gnome_get_type (void)
-{
-  static GType type = 0;
-
-  if (type == 0) {
-    GTypeInfo type_info = {
-      sizeof (GNCDruidProviderEdgeGnomeClass),
-      NULL,
-      NULL,
-      (GClassInitFunc)gnc_druid_provider_edge_gnome_class_init,
-      NULL,
-      NULL,
-      sizeof (GNCDruidProviderEdgeGnome),
-      0,
-      NULL,
-    };
-		
-    type = g_type_register_static (G_TYPE_GNC_DRUID_PROVIDER, "GNCDruidProviderEdgeGnome", &type_info, 0);
-  }
-  
-  return type;
-}
+GNC_BASIC_GOBJECT_TYPE(GNCDruidProviderEdgeGnome,GNCDruidProviderEdgeGnomeClass,
+		       G_TYPE_GNC_DRUID_PROVIDER,
+		       gnc_druid_provider_edge_gnome_class_init, NULL,
+		       gnc_druid_provider_edge_gnome_get_type)
 
 static void
 gnc_druid_provider_edge_gnome_class_init (GNCDruidProviderEdgeGnomeClass *klass)
@@ -53,8 +34,6 @@ gnc_druid_provider_edge_gnome_class_init (GNCDruidProviderEdgeGnomeClass *klass)
   /* override methods */
   gdp_class->first_page = gnc_dp_edge_gnome_first_page;
   gdp_class->last_page = gnc_dp_edge_gnome_last_page;
-  gdp_class->next_page = gnc_dp_edge_gnome_next_page;
-  gdp_class->prev_page = gnc_dp_edge_gnome_prev_page;
 }
 
 static void
@@ -79,18 +58,6 @@ static GNCDruidPage*
 gnc_dp_edge_gnome_last_page(GNCDruidProvider* prov)
 {
   return prov->pages->data;
-}
-
-static GNCDruidPage*
-gnc_dp_edge_gnome_next_page(GNCDruidProvider* prov)
-{
-  return NULL;
-}
-
-static GNCDruidPage*
-gnc_dp_edge_gnome_prev_page(GNCDruidProvider* prov)
-{
-  return NULL;
 }
 
 static void

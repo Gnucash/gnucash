@@ -1,3 +1,20 @@
+2004-02-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/app-utils/gnc-druid-provider-desc-file.[ch]:
+	  Add 'glob' option (should we glob the filename?)
+	  Add a forward pointer to the multifile if we allow multiple file selection
+	* src/app-utils/gnc-druid-provider.c:
+	  Change the class functions so that children don't need to override
+	  all the page-movement functions if they don't need to do so.
+	* src/app-utils/gnc-druid.c:  handle jump_to_provider properly
+	* src/gnome-utils/Makefile.am: added file-chooser provider
+	* src/gnome-utils/gnc-druid-provider-edge-gnome.[ch]:
+	  use basic-gobject framework to reduce the code size
+	  remove non-necessary overrides
+	  remove non-ncessary definitions
+	* src/gnome-utils/gnc-druid-provider-file-gnome.[ch]:
+	  Add a new provider that allows the user to select a file.
+
 2004-01-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-*.[ch]:

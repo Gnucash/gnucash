@@ -22,8 +22,6 @@
 typedef struct _GNCDruidProviderEdgeGnome GNCDruidProviderEdgeGnome;
 typedef struct _GNCDruidProviderEdgeGnomeClass GNCDruidProviderEdgeGnomeClass;
 
-#define GNC_DRUID_PROVIDER_EDGE_GNOME_UI	"gnome"
-
 struct _GNCDruidProviderEdgeGnome
 {
   GNCDruidProvider parent;
