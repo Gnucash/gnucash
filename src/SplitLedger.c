@@ -761,6 +761,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   Split *new_split;
   CursorClass new_class;
   CursorClass old_class;
+  gboolean exact_traversal;
   gboolean do_refresh;
   gboolean saved;
 
@@ -772,6 +773,8 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   old_trans = xaccSRGetCurrentTrans (reg);
   old_trans_split = xaccSRGetCurrentTransSplit (reg, &old_trans_split_loc);
   old_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+
+  exact_traversal = info->exact_traversal;
 
   if (info->traverse_to_new)
   {
@@ -854,8 +857,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     new_class = info->cursor_hint_cursor_class;
   }
 
-  gnc_table_find_close_valid_cell (table, &new_virt_loc,
-                                   info->exact_traversal);
+  gnc_table_find_close_valid_cell (table, &new_virt_loc, exact_traversal);
 
   *p_new_virt_loc = new_virt_loc;
 
@@ -891,7 +893,7 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     xaccSRSetTransVisible (reg, vc_loc, TRUE,
                            reg->style == REG_STYLE_JOURNAL);
 
-    gnc_table_find_close_valid_cell (table, p_new_virt_loc, FALSE);
+    gnc_table_find_close_valid_cell (table, p_new_virt_loc, exact_traversal);
 
     do_refresh = TRUE;
   }

@@ -447,7 +447,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
-        set_cell (reg, curs, RECN_CELL,  0, 4);
         set_cell (reg, curs, TDEBT_CELL, 0, 5);
         set_cell (reg, curs, TCRED_CELL, 0, 6);
         set_cell (reg, curs, TBALN_CELL, 0, 7);
@@ -461,6 +460,7 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
+        set_cell (reg, curs, RECN_CELL, 0, 4);
         set_cell (reg, curs, DEBT_CELL, 0, 5);
         set_cell (reg, curs, CRED_CELL, 0, 6);
 
@@ -493,7 +493,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
         set_cell (reg, curs, XTO_CELL,   0, 3);
-        set_cell (reg, curs, RECN_CELL,  0, 5);
         set_cell (reg, curs, TDEBT_CELL, 0, 6);
         set_cell (reg, curs, TCRED_CELL, 0, 7);
 
@@ -506,6 +505,7 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 4);
+        set_cell (reg, curs, RECN_CELL, 0, 5);
         set_cell (reg, curs, DEBT_CELL, 0, 6);
         set_cell (reg, curs, CRED_CELL, 0, 7);
 
@@ -539,7 +539,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DATE_CELL,     0,  0);
         set_cell (reg, curs, NUM_CELL,      0,  1);
         set_cell (reg, curs, DESC_CELL,     0,  2);
-        set_cell (reg, curs, RECN_CELL,     0,  4);
         set_cell (reg, curs, TSHRS_CELL,    0,  5);
         set_cell (reg, curs, TDEBT_CELL,    0,  7);
         set_cell (reg, curs, TCRED_CELL,    0,  8);
@@ -555,6 +554,7 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
+        set_cell (reg, curs, RECN_CELL, 0,  4);
         set_cell (reg, curs, SHRS_CELL, 0, 5);
         set_cell (reg, curs, PRIC_CELL, 0, 6);
         set_cell (reg, curs, DEBT_CELL, 0, 7);
@@ -589,7 +589,6 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
         set_cell (reg, curs, XTO_CELL,   0, 3);
-        set_cell (reg, curs, RECN_CELL,  0, 5);
         set_cell (reg, curs, TSHRS_CELL, 0, 6);
         set_cell (reg, curs, TDEBT_CELL, 0, 8);
         set_cell (reg, curs, TCRED_CELL, 0, 9);
@@ -603,6 +602,7 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 4);
+        set_cell (reg, curs, RECN_CELL, 0, 5);
         set_cell (reg, curs, SHRS_CELL, 0, 6);
         set_cell (reg, curs, PRIC_CELL, 0, 7);
         set_cell (reg, curs, DEBT_CELL, 0, 8);

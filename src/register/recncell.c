@@ -36,9 +36,10 @@
 #include <time.h>
 
 #include "basiccell.h"
-#include "recncell.h"
+#include "gnc-engine-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
+#include "recncell.h"
 
 /* hack alert -- I am uncomfortable with including engine
  * stuff here; all code in this directory should really be 
@@ -50,11 +51,14 @@
 
 static RecnCellStringGetter string_getter = NULL;
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_REGISTER;
+
 
 /* ================================================ */
 
 static const char *
-RecnCellGetString(char reconciled_flag)
+RecnCellGetString (char reconciled_flag)
 {
   static char str[2] = { 0, 0 };
 
@@ -117,6 +121,41 @@ xaccMallocRecnCell (void)
 
 /* ================================================ */
 
+/* assumes we are given the untranslated form */
+static void
+RecnSetValue (BasicCell *_cell, const char *value)
+{
+  RecnCell *cell = (RecnCell *) _cell;
+  char flag;
+
+  if (!value || *value == '\0')
+  {
+    cell->reconciled_flag = NREC;
+    g_free (_cell->value);
+    _cell->value = g_strdup ("");
+    return;
+  }
+
+  switch (*value)
+  {
+    case NREC:
+    case CREC:
+    case YREC:
+    case FREC:
+      flag = *value;
+      break;
+
+    default:
+      PWARN ("unexpected recn flag");
+      flag = NREC;
+      break;
+  }
+
+  xaccRecnCellSetFlag (cell, flag);
+}
+
+/* ================================================ */
+
 void
 xaccInitRecnCell (RecnCell *cell)
 {
@@ -125,6 +164,7 @@ xaccInitRecnCell (RecnCell *cell)
   xaccRecnCellSetFlag(cell, NREC);
 
   cell->cell.enter_cell = RecnEnter;
+  cell->cell.set_value = RecnSetValue;
 }
 
 /* ================================================ */
@@ -146,7 +186,8 @@ xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
 
   string = RecnCellGetString(reconciled_flag);
 
-  xaccSetBasicCellValue(&cell->cell, string);
+  g_free (cell->cell.value);
+  cell->cell.value = g_strdup (string);
 }
 
 /* ================================================ */
