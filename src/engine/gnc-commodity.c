@@ -237,7 +237,8 @@ gnc_commodity_get_mark(const gnc_commodity * cm)
  ********************************************************************/
 
 void
-gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
+gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) 
+{
   if(!cm) return;
   if(cm->mnemonic == mnemonic) return;
 
@@ -253,7 +254,8 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
  ********************************************************************/
 
 void
-gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
+gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) 
+{
   if(!cm) return;
   if(cm->namespace == namespace) return;
 
@@ -269,7 +271,8 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
  ********************************************************************/
 
 void
-gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) {
+gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) 
+{
   if(!cm) return;
   if(cm->fullname == fullname) return;
 
@@ -285,7 +288,8 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) {
 
 void
 gnc_commodity_set_exchange_code(gnc_commodity * cm, 
-                                const char * exchange_code) {
+                                const char * exchange_code) 
+{
   if(!cm) return;
   if(cm->exchange_code == exchange_code) return;
 
@@ -298,7 +302,8 @@ gnc_commodity_set_exchange_code(gnc_commodity * cm,
  ********************************************************************/
 
 void
-gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) {
+gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) 
+{
   if(!cm) return;
   cm->fraction = fraction;
 }
@@ -308,7 +313,8 @@ gnc_commodity_set_fraction(gnc_commodity * cm, int fraction) {
  ********************************************************************/
 
 void
-gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) {
+gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) 
+{
   if(!cm) return;
   cm->mark = mark;
 }
@@ -319,7 +325,8 @@ gnc_commodity_set_mark(gnc_commodity * cm, gint16 mark) {
  ********************************************************************/
 
 gboolean
-gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b) {
+gnc_commodity_equiv(const gnc_commodity * a, const gnc_commodity * b) 
+{
   if(a == b) return TRUE;
   if(!a || !b) return FALSE;
   if(safe_strcmp(a->namespace, b->namespace) != 0) return FALSE;
@@ -379,7 +386,8 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
  ********************************************************************/
 
 gnc_commodity_table *
-gnc_commodity_table_new(void) {
+gnc_commodity_table_new(void) 
+{
   gnc_commodity_table * retval = g_new0(gnc_commodity_table, 1);
   retval->table = g_hash_table_new(&g_str_hash, &g_str_equal);
   return retval;
@@ -521,7 +529,8 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
 
 gnc_commodity *
 gnc_commodity_table_insert(gnc_commodity_table * table, 
-                           gnc_commodity * comm) {
+                           gnc_commodity * comm) 
+{
   gnc_commodity_namespace * nsp = NULL;
   gnc_commodity *c;
 
@@ -592,7 +601,8 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 
 int
 gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
-                                  const char * namespace) {
+                                  const char * namespace) 
+{
   gnc_commodity_namespace * nsp = NULL;
   
   if(!table || !namespace) { return 0; }
@@ -607,26 +617,30 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
 }
 
 static void 
-hash_keys_helper(gpointer key, gpointer value, gpointer data) {
+hash_keys_helper(gpointer key, gpointer value, gpointer data) 
+{
   GList ** l = data;
   *l = g_list_prepend(*l, key);
 }
 
 static GList *
-g_hash_table_keys(GHashTable * table) {
+g_hash_table_keys(GHashTable * table) 
+{
   GList * l = NULL;
   g_hash_table_foreach(table, &hash_keys_helper, (gpointer) &l);
   return l;
 }
 
 static void 
-hash_values_helper(gpointer key, gpointer value, gpointer data) {
+hash_values_helper(gpointer key, gpointer value, gpointer data) 
+{
   GList ** l = data;
   *l = g_list_prepend(*l, value);
 }
 
 static GList *
-g_hash_table_values(GHashTable * table) {
+g_hash_table_values(GHashTable * table) 
+{
   GList * l = NULL;
   g_hash_table_foreach(table, &hash_values_helper, (gpointer) &l);
   return l;
@@ -638,7 +652,8 @@ g_hash_table_values(GHashTable * table) {
  ********************************************************************/
 
 GList * 
-gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) {
+gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) 
+{
   if (!table)
     return NULL;
 
@@ -653,7 +668,8 @@ gnc_commodity_table_get_namespaces(const gnc_commodity_table * table) {
 
 GList * 
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
-                                    const char * namespace) {
+                                    const char * namespace) 
+{
   gnc_commodity_namespace * ns = NULL; 
 
   if(table) { 
@@ -675,7 +691,8 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 
 void 
 gnc_commodity_table_add_namespace(gnc_commodity_table * table,
-                                  const char * namespace) {
+                                  const char * namespace) 
+{
   gnc_commodity_namespace * ns = NULL; 
   
   if(table) { 
@@ -698,7 +715,8 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
  ********************************************************************/
 
 static int
-ns_helper(gpointer key, gpointer value, gpointer user_data) {
+ns_helper(gpointer key, gpointer value, gpointer user_data) 
+{
   gnc_commodity * c = value;
   gnc_commodity_destroy(c);
   g_free(key);
@@ -707,7 +725,8 @@ ns_helper(gpointer key, gpointer value, gpointer user_data) {
 
 void 
 gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
-                                     const char * namespace) {
+                                     const char * namespace) 
+{
   gpointer orig_key;
   gnc_commodity_namespace * value;
 
