@@ -1,18 +1,25 @@
 <html>
 <head>
-<title>X-Accountant Project Goals</title>
+<title>X-Accountant/GnoMoney Project Goals</title>
 </head>
 
 <body>
-<h1>X-Accountant Project Goals</h1>
-X-Accountant is a Motif/C (and soon C++?) personal accounting
-application.  To read more about X-Accountant, see the
-Xacc home page at
+<h1>X-Accountant/GnoMoney Project Goals</h1>
+X-Accountant/GnoMoney is a Motif/C (and soon GTK) personal finance 
+accounting application.   The project is the result of a merger 
+of the GnoMoney project with Xacc development.  There are currently
+two versions: xacc-1.0.17, and xacc-1.1.x.  The version 1.0.17
+is written in Motif, and is considered to be stable/production quality.  
+You can red more about X-Accountant at its home page 
 <a href="http://www.cs.hmc.edu/~rclark/xacc/">
 http://www.cs.hmc.edu/~rclark/xacc</a>.
-This page introduces the Xacc Project, aimed at enhanceing and
-improving X-Accountant.
-
+<p>
+The version 1.1.x is *unstable* (may not even compile), and is in 
+active development.  This page attempts to describe the current 
+goals & status.  Current efforts center around a port to GTK, and 
+the addition of various features.
+<a href="http://gnomoney.ml.org/gnomoney/index.hts">GnoMoney</a>
+presents a beautified presentation of this material.
 <p>
 We believe that a GNU GPL project should provide goals and motivations
 at both the large and the small scales, in order to focus and motivate
@@ -186,6 +193,8 @@ architectural goals.
     banking institutions are providing, or will soon be providing, to
     retail customers.  See below for OFX references.  OFX is an open spec
     from Microsot, Intuit, & Checkfree, and will be supported by Integrion.
+    The OFX DTD's are included in the 1.1 distributions. See 
+    <a href="http://www.ofx.org">OFX HomePage</a> for details.
     <p>
 
 </dl>
@@ -213,10 +222,12 @@ immediately, independent of the major goals.
 <dd>All menus, markup and help-text should be internationalized,
     so that X-Accountant could be usable in any country.  This
     would include the printing of currency values in the local 
-    country conventions.  Current status: most English-language
-    messages have been #defined and moved to a single header file.
-    Still looking for an infrastructure for choosing a message
-    catalogue.  Looking for routines that can parse and print
+    country conventions. 
+    <p>
+    Current status: most English-language messages have been 
+    #defined and moved to a single header file. (messages.h)
+    (Will use gnu gettext for the message catalogues. ??)
+    Looking for routines that can parse and print
     monetary values in different formats, as well as date/time
     parsing/printing routines.  (xacc contains such parsing
     routines, but they're not very powerful or i18n'ed.)
@@ -325,6 +336,14 @@ immediately, independent of the major goals.
     printable: it might be best to create them as ordinary HTML pages,
     and use the printing abilities of the browser.  In an ideal
     situation, the user should be able to create custom reports.
+    <p>
+    Other output format possibilites include SGML and XML.  In the
+    long run, these are preferable to HTML, since DSSSL and 
+    <a href="http://www.jclark.com/jade/"> Jade (James DSSSL Engine</a>
+    can be used to convert to RTF, PostScript, etc.  XML is the wave 
+    of the future.
+    <p>
+    The hard part of reporting is designing a configurable interface.
     <p>
 
 <dt><b>Inventory, Job Costing</b>
