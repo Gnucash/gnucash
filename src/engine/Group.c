@@ -1,7 +1,7 @@
 /********************************************************************\
  * Group.c -- chart of accounts (hierarchical tree of accounts)     *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 1997-2001 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -789,21 +789,81 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
 
 /********************************************************************\
 \********************************************************************/
+/* mark the guid and date of the copy, using kvp.  The info will be
+ * places in /gemini/ncopies, /gemini/<n>/guid, /gemini/<n>/date, 
+ * where <n> = ncopies-1.
+ */
+
+
+static void 
+gemini (kvp_frame *kvp_root, const GUID *guid, time_t secs)
+{
+   char buff[80];
+   kvp_frame *cwd, *pwd;
+   kvp_value *v_ncopies, *vvv;
+   gint64 ncopies = 0;
+   Timespec ts;
+
+   /* cwd == 'current working directory' */
+   pwd = kvp_frame_get_frame (kvp_root, "gemini");
+   if (!pwd)
+   {
+      pwd = kvp_frame_new();
+      kvp_frame_set_slot_nc (kvp_root, 
+           "gemini", kvp_value_new_frame(pwd));
+   }
+
+   /* find, increment, store number of copies */
+   v_ncopies = kvp_frame_get_slot (pwd, "ncopies");
+   if (v_ncopies)
+   { 
+      ncopies = kvp_value_get_gint64 (v_ncopies);
+   }
+
+   ncopies ++;
+   v_ncopies = kvp_value_new_gint64 (ncopies);
+   kvp_frame_set_slot_nc (pwd, "ncopies", v_ncopies);
+
+   /* OK, now create subdirectory and put the actual data */
+   --ncopies;
+   sprintf (buff, "%lld", ncopies);
+   cwd = kvp_frame_new();
+   kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame(cwd));
+
+   vvv = kvp_value_new_guid (guid);
+   kvp_frame_set_slot_nc (cwd, "guid", vvv);
+
+   ts.tv_sec = secs;
+   ts.tv_nsec = 0;
+   vvv = kvp_value_new_timespec (ts);
+   kvp_frame_set_slot_nc (cwd, "date", vvv);
+}
 
 void
 xaccGroupCopyGroup (AccountGroup *to, AccountGroup *from)
 {
+   time_t now;
    GList *node;
    if (!to || !from) return;
    if (!from->accounts || !to->book) return;
 
+   now = time(0);
    for (node = from->accounts; node; node=node->next)
    {
       Account *to_acc, *from_acc = node->data;
+
+      /* This will copy the basic data and the KVP.  It will
+       * not copy any splits/transactions. */
       to_acc = xaccCloneAccountSimple (from_acc, to->book);
 
       xaccAccountBeginEdit (to_acc);
       to->accounts = g_list_append (to->accounts, to_acc);
+
+      /* put in markers giving relationships */
+      gemini (to_acc->kvp_data, &from_acc->guid, now);
+      gemini (from_acc->kvp_data, &to_acc->guid, now);
+
+      /* copy child accounts too. */
       if (from_acc->children)
       {
          to_acc->children = xaccMallocAccountGroup (to->book);

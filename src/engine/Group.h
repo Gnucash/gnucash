@@ -53,6 +53,8 @@ void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
  *    from the "from" group to the "to" group, preserving the 
  *    account heirarchy.  It will also take care that the moved 
  *    accounts will have the "to" groups book parent as well.
+ *    This routine will *NOT* copy any splits/transactions.
+ *    It will copy the KVP tree.
  *
  * The xaccGroupMergeAccounts() subroutine will go through a group,
  *    merging all accounts that have the same name and description.

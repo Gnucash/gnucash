@@ -42,6 +42,34 @@ Entities: Transaction
 Use: Identifies that the Transaction was created from a ScheduledTransaction,
      and stores the GUID of that SX.
 
+Name: /gemini/
+Type: kvp_frame
+Entities: Accounts
+Use:  subdirectory holding identification of accounts that are copies
+      of this account.
+
+Name: /gemini/ncopies
+Type: int64
+Entities: Accounts
+Use:  number of subdirectories containing copy info.
+
+Name: /gemini/0/
+Type: kvp_frame
+Entities: Accounts
+Use:  subdirectory holding identification of the first copied account.
+      Other copies would appear in directories /gemini/1/, /gemini/2/,
+      etc.
+
+Name: /gemini/0/guid
+Type: guid
+Entities: Accounts
+Use:  guid of another account that is a copy of this one.
+
+Name: /gemini/0/date
+Type: timespec
+Entities: Accounts
+Use:  date that copy was created.
+
 Name: last-num
 Type: string
 Entities: Account
@@ -157,13 +185,13 @@ Type: gint64
 Entities: Account
 Use: A boolean flag indicated whether the Account is tax-related.
 
-Name: sched-xaction
+Name: /sched-xaction/
 Type: frame
 Entities: Split in a SchedXaction
 Use: Storage for the various fields of a scheduled transaction's
      template Splits.
 
-Name: sched-xaction/account
+Name: /sched-xaction/account
 Type: GUID
 Entities: Split associated with a SchedXaction
 Use: The GUID of this Split's xfrm account.
@@ -173,7 +201,7 @@ Type: string
 Entities: Split associated with a SchedXaction
 Use: Store the formula for the credit side of the split
 
-Name: sched-xaction/debit-formula
+Name: /sched-xaction/debit-formula
 Type: string
 Entities: Split associated with a SchedXaction
 Use: Formula for the debit.  Either the credit or the 
