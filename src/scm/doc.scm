@@ -49,9 +49,10 @@
         (else input)))
 
 (define (gnc:load-help-topics fname) 
-  (with-input-from-file
-      (gnc:find-in-directories fname
-                               (gnc:config-var-value-get gnc:*load-path*))
+  ;; Should this be %load-path, or should we use doc-path, and should
+  ;; topics be a .scm file, or just a file since there's no code in
+  ;; there?
+  (with-input-from-file (%search-load-path fname)
     (lambda ()
       (fill-out-topics (remove-i18n-macros (read))))))
 
