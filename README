@@ -396,7 +396,7 @@ The password is "guest"
 
 To get a copy of the source, do a 
 
-cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout xacc
+cvs -d :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rHEAD xacc
 
 
 Main Developers:
