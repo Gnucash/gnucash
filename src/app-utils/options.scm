@@ -1465,3 +1465,47 @@
                (display header port)
                (display code port)
                (close port)))))
+
+(define (gnc:options-make-end-date! options pagename optname sort-tag info)
+  (gnc:register-option 
+   options  
+   (gnc:make-date-option
+    pagename optname 
+    sort-tag info
+    (lambda () 
+      (cons 'relative 'today))
+    #f 'both 
+    '(
+      today 
+      end-this-month
+      end-prev-month 
+      end-current-quarter 
+      end-prev-quarter
+      end-cal-year 
+      end-prev-year 
+      end-cur-fin-year
+      end-prev-fin-year
+      ))))
+
+(define (gnc:options-make-date-interval! options pagename name-from info-from
+					 name-to info-to sort-tag)
+  (gnc:register-option 
+   options  
+   (gnc:make-date-option
+    pagename name-from
+    (string-append sort-tag "a") info-from
+    (lambda () (cons 'relative 'start-cal-year))
+    #f 'both 
+    '(
+      today
+      start-this-month 
+      start-prev-month 
+      start-current-quarter
+      start-prev-quarter
+      start-cal-year 
+      start-prev-year
+      start-cur-fin-year 
+      start-prev-fin-year
+      )))
+  (gnc:options-make-end-date! options pagename name-to
+			      (string-append sort-tag "b") info-to))

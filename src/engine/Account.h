@@ -337,6 +337,12 @@ gnc_numeric xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
 						gnc_numeric balance,
 						gnc_commodity *balance_currency,
 						gnc_commodity *new_currency);
+gnc_numeric xaccAccountConvertBalanceToCurrencyAsOfDate(Account *account, /* for book */
+							gnc_numeric balance,
+							gnc_commodity *balance_currency,
+							gnc_commodity *new_currency,
+							time_t date);
+
 gnc_numeric xaccAccountGetBalanceInCurrency (Account *account,
 					     gnc_commodity *report_commodity,
 					     gboolean include_children);

@@ -28,7 +28,6 @@
     "#include <gnc-commodity.h>\n"
     "#include <gnc-date.h>\n"
     "#include <gnc-engine.h>\n"
-    "#include <gnc-engine-util.h>\n"
     "#include <gnc-event.h>\n"
     "#include <gnc-numeric.h>\n"
     "#include <gnc-pricedb.h>\n"

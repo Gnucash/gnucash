@@ -77,7 +77,7 @@ typedef enum
   GNC_LOG_TRACE   = 6,
 } gncLogLevel;
 
-extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
+//extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
 
 /** Initialize the error logging subsystem */
 void gnc_log_init (void);
@@ -104,9 +104,17 @@ const char * gnc_log_prettify (const char *name);
  * a CPU-cucking subroutine call. Thus, this is a #define, not a
  * subroutine call.  The prototype would have been:
  * gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level); 
+ *
+ * Unfortunately this doesn't work due to circular dependencies and
+ * undefined symbols, so let's return it to a function call.  The real
+ * problem appears to be that gnc_log_modules isn't being exported
+ * so engine-helpers.c has an undefined symbol when linked into libgw-engine
+ *  -- Derek Atkins  <derek@ihtfp.com>   2004-01-06
+ *
+ * #define gnc_should_log(module,log_level) \
+ *             (log_level <= gnc_log_modules[module]) 
  */
-#define gnc_should_log(module,log_level)   \
-              (log_level <= gnc_log_modules[module]) 
+gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
 
 #define FUNK gnc_log_prettify(__FUNCTION__)
 
@@ -124,55 +132,55 @@ const char * gnc_log_prettify (const char *name);
 
 #define FATAL(format, args...) {                     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR,          \
-      "Fatal Error: %s(): " format, FUNK, ## args);  \
+      "Fatal Error: %s(): " format, FUNK , ## args); \
 }
 
 #define PERR(format, args...) {                    \
   if (gnc_should_log (module, GNC_LOG_ERROR)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_CRITICAL,     \
-      "Error: %s(): " format, FUNK, ## args);      \
+      "Error: %s(): " format, FUNK , ## args);     \
   }                                                \
 }
 
 #define PWARN(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_WARNING)) {  \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING,      \
-      "Warning: %s(): " format, FUNK, ## args);    \
+      "Warning: %s(): " format, FUNK , ## args);   \
   }                                                \
 }
 
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
-      "Info: %s(): " format, FUNK, ## args);       \
+      "Info: %s(): " format, FUNK , ## args);      \
   }                                                \
 }
 
 #define DEBUG(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Debug: %s(): " format, FUNK, ## args);      \
+      "Debug: %s(): " format, FUNK , ## args);     \
   }                                                \
 }
 
 #define ENTER(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Enter: %s" format, FUNK, ## args);          \
+      "Enter: %s" format, FUNK , ## args);         \
   }                                                \
 }
 
 #define LEAVE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Leave: %s" format, FUNK, ## args);          \
+      "Leave: %s" format, FUNK , ## args);         \
   }                                                \
 }
 
 #define TRACE(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_TRACE)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Trace: %s(): " format, FUNK, ## args);      \
+      "Trace: %s(): " format, FUNK , ## args);     \
   }                                                \
 }
 
@@ -201,19 +209,19 @@ void gnc_report_clock_total (int clockno,
 #define START_CLOCK(clockno,format, args...) {              \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_start_clock (clockno, module, GNC_LOG_INFO,         \
-             __FUNCTION__, format, ## args);                \
+             __FUNCTION__, format , ## args);               \
 }
 
 #define REPORT_CLOCK(clockno,format, args...) {             \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_report_clock (clockno, module, GNC_LOG_INFO,        \
-             __FUNCTION__, format, ## args);                \
+             __FUNCTION__, format , ## args);               \
 }
 
 #define REPORT_CLOCK_TOTAL(clockno,format, args...) {       \
   if (gnc_should_log (module, GNC_LOG_INFO))                \
     gnc_report_clock_total (clockno, module, GNC_LOG_INFO,  \
-             __FUNCTION__, format, ## args);                \
+             __FUNCTION__, format , ## args);               \
 }
 
 #endif /* GNC_TRACE_H */

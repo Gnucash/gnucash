@@ -208,7 +208,8 @@ gnc_report_clock (int clockno, gncModuleType module, gncLogLevel log_level,
   if (!fout) gnc_log_init();
 
   fprintf (fout, "Clock %d Elapsed: %ld.%06lds %s: ",
-           clockno, now.tv_sec, now.tv_usec, gnc_log_prettify (function_name));
+           clockno, (long int) now.tv_sec, (long int) now.tv_usec, 
+	   gnc_log_prettify (function_name));
 
   va_start (ap, format);
 
@@ -239,8 +240,8 @@ gnc_report_clock_total (int clockno,
 
   fprintf (fout, "Clock %d Total Elapsed: %ld.%06lds  %s: ",
            clockno,
-           gnc_clock_total[clockno].tv_sec,
-           gnc_clock_total[clockno].tv_usec,
+           (long int) gnc_clock_total[clockno].tv_sec,
+           (long int) gnc_clock_total[clockno].tv_usec,
            gnc_log_prettify (function_name));
 
   va_start (ap, format);
@@ -250,6 +251,12 @@ gnc_report_clock_total (int clockno,
   va_end (ap);
 
   fprintf (fout, "\n");
+}
+
+gboolean
+gnc_should_log(gncModuleType module, gncLogLevel log_level)
+{
+  return (log_level <= gnc_log_modules[module]);
 }
 
 /************************* END OF FILE ******************************\

@@ -26,6 +26,9 @@ EXTRA_DIST = \
   multicurrency-discussion.txt \
   netlogin.txt \
   query-api.txt \
+  guid.txt \
+  qif.txt \
+  generic-druid-framework.txt \
   user-prefs-howto.txt
 
 

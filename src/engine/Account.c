@@ -1742,6 +1742,36 @@ xaccAccountConvertBalanceToCurrency(Account *account, /* for book */
 }
 
 /*
+ * Convert a balance from one currency to another with price of
+ * a given date.
+ */
+gnc_numeric
+xaccAccountConvertBalanceToCurrencyAsOfDate(Account *account, /* for book */
+					    gnc_numeric balance,
+					    gnc_commodity *balance_currency,
+					    gnc_commodity *new_currency,
+					    time_t date)
+{
+  QofBook *book;
+  GNCPriceDB *pdb;
+  Timespec ts;
+
+  if (gnc_numeric_zero_p (balance) ||
+      gnc_commodity_equiv (balance_currency, new_currency))
+    return balance;
+
+  book = xaccGroupGetBook (xaccAccountGetRoot (account));
+  pdb = gnc_book_get_pricedb (book);
+
+  ts.tv_sec = date;
+  ts.tv_nsec = 0;
+
+  balance = gnc_pricedb_convert_balance_nearest_price(pdb, balance, balance_currency, new_currency, ts);
+
+  return balance;
+}
+
+/*
  * Given an account and a GetBalanceFn pointer, extract the requested
  * balance from the account and then convert it to the desired
  * currency.
