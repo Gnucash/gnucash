@@ -134,6 +134,7 @@ AC_MSG_RESULT($G_WRAP_LINK_ARGS)
 
 AC_MSG_CHECKING(for g-wrap module directory)
 G_WRAP_MODULE_DIR=`${G_WRAP_CONFIG} --guile-module-directory`
+G_WRAP_LIB_DIR=`echo $G_WRAP_MODULE_DIR | sed -e 's|share/guile|lib|'`
 AC_MSG_RESULT($G_WRAP_MODULE_DIR)
 
 AC_GWRAP_CHECK_GUILE
@@ -142,6 +143,7 @@ AC_SUBST(G_WRAP_CONFIG)
 AC_SUBST(G_WRAP_COMPILE_ARGS)
 AC_SUBST(G_WRAP_LINK_ARGS)
 AC_SUBST(G_WRAP_MODULE_DIR)
+AC_SUBST(G_WRAP_LIB_DIR)
 
 ### Check size of long_long - some guile's are broken.
 AC_MSG_CHECKING(if guile long_long is at least as big as gint64)

@@ -38,6 +38,7 @@ gnucash-env: gnucash-env.in
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:g' \
+	    -e 's:@-G_WRAP_LIB_DIR-@:${G_WRAP_LIB_DIR}:g' \
 	    -e 's:@-GNC_GUILE_MODULE_DIR-@:${GNC_SHAREDIR}/guile-modules:g' \
 	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
             -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
