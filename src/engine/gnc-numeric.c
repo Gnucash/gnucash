@@ -170,8 +170,9 @@ div128 (gncint128 n, gint64 d)
 }
 
 /** Return the remainder of a signed 128-bit number modulo 
- *  a signed 64-bit.  I beleive that ths algo is overflow-free,
- *  but should be audited some more ... 
+ *  a signed 64-bit.  That is, return n%d in 128-bit math.
+ *  I beleive that ths algo is overflow-free, but should be 
+ *  audited some more ... 
  */
 static inline gint64
 rem128 (gncint128 n, gint64 d)
@@ -226,6 +227,56 @@ equal128 (gncint128 a, gncint128 b)
 	if (a.hi != b.hi) return 0;
 	if (a.isneg != b.isneg) return 0;
 	return 1;
+}
+
+/** Return the greatest common factor of two 64-bit numbers */
+static inline guint64
+gcf64(guint64 num, guint64 denom)
+{
+  guint64   t;
+
+  t =  num % denom;
+  num = denom;
+  denom = t;
+
+  /* The strategy is to use Euclid's algorithm */
+  while (0 != denom) 
+  {
+    t = num % denom;
+    num = denom;
+    denom = t;
+  }
+  /* num now holds the GCD (Greatest Common Divisor) */
+  return num;
+}
+
+/** Return the least common multiple of two 64-bit numbers. */
+static inline gncint128
+lcm128 (guint64 a, guint64 b)
+{
+  guint64 gcf = gcf64 (a,b);
+  b /= gcf;
+  return mult128 (a,b);
+}
+
+/** Add a pair of 128-bit numbers, returning a 128bit number */
+static inline gncint128
+add128 (gncint128 a, gncint128 b)
+{
+  gncint128 sum;
+  if (a.isneg == b.isneg)
+  {
+    sum.isneg = a.isneg;
+    sum.hi = a.hi + b.hi;
+    sum.lo = a.lo + b.lo;
+    if ((sum.lo < a.lo) || (sum.lo < b.lo))
+    {
+     sum.hi ++;
+    }
+    sum.isbig = sum.hi || (sum.lo >> 63);
+    return sum;
+  }
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXX not done */
 }
 
 #ifdef TEST_128_BIT_MULT
@@ -326,82 +377,33 @@ gnc_numeric_check(gnc_numeric in)
   }
 }
 
-/********************************************************************
- *  gnc_numeric_lcd
- *  Find the least common multiple of the denominators of 
- *  a and b
- *  XXX FIXME this is a stunningly bad, ill-informed algorithm!!
- ********************************************************************/
+/**
+ *  Find the least common multiple of the denominators of a and b.
+ */
 
-static gint64
+static inline gint64
 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b) 
 {
-  gint64 current_divisor = 2;
-  gint64 max_square;
-  gint64 three_count = 0;
-  gint64 small_denom;
-  gint64 big_denom;
-
-  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
+  if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
+  {
     return GNC_ERROR_ARG;
   }
+
+  if (b.denom == a.denom) return a.denom;
   
-  if(b.denom < a.denom) {
-    small_denom = b.denom;
-    big_denom = a.denom;
+  /* Special case: smaller divides smoothly into larger */
+  if ((b.denom < a.denom) && ((a.denom % b.denom) == 0))
+  {
+    return a.denom;
   }
-  else {
-    small_denom = a.denom;
-    big_denom = b.denom;
+  if ((a.denom < b.denom) && ((b.denom % a.denom) == 0))
+  {
+    return b.denom;
   }
 
-  /* special case: smaller divides smoothly into larger */
-  if((big_denom % small_denom) == 0) {
-    return big_denom;
-  }
-  
-  max_square = small_denom;
-  
-  /* the LCM algorithm : factor out the union of the prime factors of the
-   * two args and then multiply the remainders together. 
-   *
-   * To do this, we find the successive prime factors of the smaller
-   * denominator and eliminate them from both the smaller and larger
-   * denominator (so we only count factors on a one-on-one basis),
-   * then multiply the original smaller by the remains of the larger.
-   *
-   * I.e. LCM 100,96875 == 2*2*5*5,31*5*5*5*5 = 2*2,31*5*5
-   *      answer: multiply 100 by 31*5*5 == 387500
-   */
-  while(current_divisor * current_divisor <= max_square) {
-    if(((small_denom % current_divisor) == 0) &&
-       ((big_denom % current_divisor) == 0)) {
-      big_denom = big_denom / current_divisor;
-      small_denom = small_denom / current_divisor;
-    }
-    else {
-      if(current_divisor == 2) {
-        current_divisor++;
-      }
-      else if(three_count == 3) { 
-        current_divisor += 4;
-        three_count = 1;
-      }
-      else {
-        current_divisor += 2;
-        three_count++;
-      }
-    }
-    
-    if((current_divisor > small_denom) ||
-       (current_divisor > big_denom)) {
-      break;
-    }
-  }
-  
-  /* max_sqaure is the original small_denom */
-  return max_square * big_denom;
-
+  gncint128 lcm = lcm128 (a.denom, b.denom);
+  if (lcm.isbig) return GNC_ERROR_ARG;
+  return lcm.lo;
 }
 
 /********************************************************************
@@ -562,9 +564,9 @@ gnc_numeric_same(gnc_numeric a, gnc_numeric b, gint64 denom,
 
 gnc_numeric
 gnc_numeric_add(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gint how) {
+                gint64 denom, gint how) 
+{
   gnc_numeric sum;
-  gint64 lcd;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
@@ -601,18 +603,35 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     sum.num = a.num + b.num;
     sum.denom = a.denom;
   }
-  else {
-    /* Computing the LCD minimizes likelyhood of overflow */
-    /* XXX although we should check for overflow ... */
+  else 
+  {
+    gint64 lcd;
+    /* We want to do this:
+     *    sum.num = a.num*b.denom + b.num*a.denom;
+     *    sum.denom = a.denom*b.denom;
+     * but the multiply could overflow.
+     * Computing the LCD minimizes likelyhood of overflow
+     */
     lcd = gnc_numeric_lcd(a,b);
-    sum.num   = a.num*(lcd/a.denom) + b.num*(lcd/b.denom);
+    if (GNC_ERROR_ARG == lcd)
+    {
+       return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+    gncint128 ca = mult128 (a.num, lcd/a.denom);
+    if (ca.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+
+    gncint128 cb = mult128 (b.num, lcd/b.denom);
+    if (cb.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+
+    /* XXX although we should check for overflow ... */
+// xxxxxxxxxx not done, use add128 for this 
+    sum.num   = ca.lo + cb.lo;
     sum.denom = lcd;
-    //    sum.num = a.num*b.denom + b.num*a.denom;
-    //    sum.denom = a.denom*b.denom;
   }
   
   if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
+  {
     denom = gnc_numeric_lcd(a, b);
     how   = how & GNC_NUMERIC_RND_MASK;
   }
@@ -626,7 +645,8 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b) {
+gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b) 
+{
   return gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
                          GNC_DENOM_FIXED | GNC_RND_NEVER);
 }
@@ -638,7 +658,8 @@ gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b) {
 
 gnc_numeric
 gnc_numeric_sub(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gint how) {
+                gint64 denom, gint how) 
+{
   gnc_numeric diff;
   gint64 lcd;
 
@@ -700,7 +721,8 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) {
+gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) 
+{
   return gnc_numeric_sub(a, b, GNC_DENOM_AUTO, 
                          GNC_DENOM_FIXED | GNC_RND_NEVER);
 }
@@ -888,7 +910,8 @@ gnc_numeric_neg(gnc_numeric a) {
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_abs(gnc_numeric a) {
+gnc_numeric_abs(gnc_numeric a) 
+{
   if(gnc_numeric_check(a)) {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
@@ -1099,7 +1122,8 @@ gnc_numeric_reduce(gnc_numeric in)
   gint64   denom = in.denom;
   gnc_numeric out;
 
-  if(gnc_numeric_check(in)) {
+  if(gnc_numeric_check(in)) 
+  {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
@@ -1123,7 +1147,8 @@ gnc_numeric_reduce(gnc_numeric in)
  ********************************************************************/
 
 gnc_numeric
-double_to_gnc_numeric(double in, gint64 denom, gint how) {
+double_to_gnc_numeric(double in, gint64 denom, gint how) 
+{
   gnc_numeric out;
   gint64 int_part=0;
   double frac_part;
@@ -1193,7 +1218,8 @@ double_to_gnc_numeric(double in, gint64 denom, gint how) {
  ********************************************************************/
 
 double
-gnc_numeric_to_double(gnc_numeric in) {
+gnc_numeric_to_double(gnc_numeric in) 
+{
   if(in.denom >= 0) {
     return (double)in.num/(double)in.denom;
   }
@@ -1208,7 +1234,8 @@ gnc_numeric_to_double(gnc_numeric in) {
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_create(gint64 num, gint64 denom) {
+gnc_numeric_create(gint64 num, gint64 denom) 
+{
   gnc_numeric out;
   out.num = num;
   out.denom = denom;
@@ -1232,7 +1259,8 @@ gnc_numeric_error(GNCNumericErrorCode error_code)
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_zero(void) {
+gnc_numeric_zero(void) 
+{
   return gnc_numeric_create(0LL, 1LL);
 }
 
@@ -1242,7 +1270,8 @@ gnc_numeric_zero(void) {
  ********************************************************************/
 
 gint64
-gnc_numeric_num(gnc_numeric a) {
+gnc_numeric_num(gnc_numeric a) 
+{
   return a.num;
 }
 
@@ -1252,7 +1281,8 @@ gnc_numeric_num(gnc_numeric a) {
  ********************************************************************/
 
 gint64
-gnc_numeric_denom(gnc_numeric a) {
+gnc_numeric_denom(gnc_numeric a) 
+{
   return a.denom;
 }
 
@@ -1264,7 +1294,8 @@ gnc_numeric_denom(gnc_numeric a) {
 gnc_numeric
 gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b, 
                            gint64 denom, gint how,
-                           gnc_numeric * error) {
+                           gnc_numeric * error) 
+{
 
   gnc_numeric sum   = gnc_numeric_add(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_add(a, b, GNC_DENOM_AUTO, 
@@ -1285,8 +1316,8 @@ gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
 gnc_numeric
 gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b, 
                            gint64 denom, gint how,
-                           gnc_numeric * error) {
-
+                           gnc_numeric * error) 
+{
   gnc_numeric diff  = gnc_numeric_sub(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
                                       GNC_DENOM_REDUCE);
@@ -1306,8 +1337,8 @@ gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
 gnc_numeric
 gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b, 
                            gint64 denom, gint how,
-                           gnc_numeric * error) {
-
+                           gnc_numeric * error) 
+{
   gnc_numeric prod  = gnc_numeric_mul(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_mul(a, b, GNC_DENOM_AUTO,
                                       GNC_DENOM_REDUCE);
@@ -1327,8 +1358,8 @@ gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
 gnc_numeric
 gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b, 
                            gint64 denom, gint how,
-                           gnc_numeric * error) {
-
+                           gnc_numeric * error) 
+{
   gnc_numeric quot  = gnc_numeric_div(a, b, denom, how);
   gnc_numeric exact = gnc_numeric_div(a, b, GNC_DENOM_AUTO, 
                                       GNC_DENOM_REDUCE);
@@ -1357,7 +1388,8 @@ gnc_numeric_to_string(gnc_numeric n)
 }
 
 const gchar *
-string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
+string_to_gnc_numeric(const gchar* str, gnc_numeric *n) 
+{
   size_t num_read;
   long long int tmpnum;
   long long int tmpdenom;
@@ -1389,7 +1421,8 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
 #ifdef _GNC_NUMERIC_TEST
 
 static char *
-gnc_numeric_print(gnc_numeric in) {
+gnc_numeric_print(gnc_numeric in) 
+{
   char * retval;
   if(gnc_numeric_check(in)) {
     retval = g_strdup_printf("<ERROR> [%lld / %lld]",
@@ -1405,15 +1438,13 @@ gnc_numeric_print(gnc_numeric in) {
 }
 
 int
-main(int argc, char ** argv) {
+main(int argc, char ** argv) 
+{
   gnc_numeric a = gnc_numeric_create(1, 3);
   gnc_numeric b = gnc_numeric_create(1, 4);
   gnc_numeric c;
-  gnc_numeric d = gnc_numeric_create(1, 2);
   
   gnc_numeric err;
-  int i;
-  gint64 v;
 
   c = gnc_numeric_add_with_error(a, b, 100, GNC_RND_ROUND, &err);
   printf("add 100ths/error : %s + %s = %s + (error) %s\n\n",
