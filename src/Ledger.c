@@ -193,8 +193,9 @@ trans->date.day, trans->date.month, trans->date.year);
    xaccSetAmountCellValue (reg->balanceCell, split->balance);
 
    xaccSetAmountCellValue (reg->priceCell, split->share_price);
-   xaccSetAmountCellValue (reg->shrsCell, split->share_balance);
-
+   xaccSetPriceCellValue  (reg->shrsCell,  split->share_balance);
+   xaccSetAmountCellValue (reg->valueCell, (split->share_price) *
+                                           (split->damount));
 
    reg->table->cursor->user_data = (void *) split;
 

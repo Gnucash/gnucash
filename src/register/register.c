@@ -42,6 +42,7 @@
 #define BALN_CELL     10
 #define SHRS_CELL     11
 #define PRIC_CELL     12
+#define VALU_CELL     13
 
 
 /* utility defines for setting of cell values */
@@ -97,8 +98,10 @@
 #define PRIC_CELL_R   (reg->rows[PRIC_CELL])
 #define PRIC_CELL_W   (reg->wids[PRIC_CELL])
 
+#define VALU_CELL_C   (reg->cols[VALU_CELL])
+#define VALU_CELL_R   (reg->rows[VALU_CELL])
+#define VALU_CELL_W   (reg->wids[VALU_CELL])
 
-#define MAX_COLS 8
 
 /* ============================================== */
 
@@ -131,7 +134,8 @@ configLayout (BasicRegister *reg, int type)
    SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
    SET (BALN_CELL,  7,  0, 12,  BALN_STR);
    SET (SHRS_CELL, -1, -1, 12,  TOT_SHRS_STR);
-   SET (PRIC_CELL, -1, -1, 12,  PRICE_STR);
+   SET (PRIC_CELL, -1, -1,  9,  PRICE_STR);
+   SET (VALU_CELL, -1, -1, 12,  VALUE_STR);
 
    switch (type) {
       case BANK_LEDGER:
@@ -145,16 +149,18 @@ configLayout (BasicRegister *reg, int type)
          reg->num_cols = 8;
          reg->num_header_rows = 1;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
+         SET (PRIC_CELL, -1, -1,  9,  PRICE_STR);
+         SET (VALU_CELL, -1, -1, 12,  VALUE_STR);
          SET (SHRS_CELL, -1, -1, 12,  TOT_SHRS_STR);
-         SET (PRIC_CELL, -1, -1, 12,  PRICE_STR);
          break;
 
       case STOCK_LEDGER:
-         reg->num_cols = 10;
+         reg->num_cols = 11;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
-         SET (SHRS_CELL,  7,  0, 12,  TOT_SHRS_STR);
-         SET (PRIC_CELL,  8,  0, 12,  PRICE_STR);
-         SET (BALN_CELL,  9,  0, 12,  BALN_STR);
+         SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
+         SET (VALU_CELL,  8,  0, 12,  VALUE_STR);
+         SET (SHRS_CELL,  9,  0, 12,  TOT_SHRS_STR);
+         SET (BALN_CELL, 10,  0, 12,  BALN_STR);
 
       default:
    }
@@ -193,6 +199,9 @@ configLayout (BasicRegister *reg, int type)
          reg->labels [DEBT_CELL] = SURPLUS_STR;
          reg->labels [CRED_CELL] = DEFICIT_STR;
          break;
+      case STOCK_LEDGER:
+         reg->labels [DEBT_CELL] = SOLD_STR;
+         reg->labels [CRED_CELL] = BOUGHT_STR;
       default:
    }
 
@@ -296,6 +305,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    HDR (BALN);
    HDR (PRIC);
    HDR (SHRS);
+   HDR (VALU);
    
    /* --------------------------- */
    /* define the ledger cursor */
@@ -314,6 +324,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    FANCY (debit,   Price,     DEBT);
    FANCY (shrs,    Price,     SHRS);
    FANCY (price,   Price,     PRIC);
+   FANCY (value,   Price,     VALU);
 
    FANCY (balance, Price,     BALN);
    reg->balanceCell->cell.input_output = 0;

@@ -70,9 +70,15 @@
 #define NUM_CELLS 20
 
 typedef struct _BasicRegister {
+   /* the table itself that implements the underlying GUI. */
    Table         * table;
+
+   /* the cursors that define thecurrently edited row */
    CellBlock     * cursor;
    CellBlock     * header;
+
+   /* the individual cells, by function */
+
    DateCell      * dateCell;
    BasicCell     * numCell;
    QuickFillCell * descCell;
@@ -81,14 +87,14 @@ typedef struct _BasicRegister {
    PriceCell     * debitCell;
    PriceCell     * shrsCell;
    PriceCell     * priceCell;
+   PriceCell     * valueCell;
    BasicCell     * memoCell;
    ComboCell     * actionCell;
    ComboCell     * xfrmCell;
    ComboCell     * xtoCell;
-
    PriceCell     * balanceCell;
 
-   /* some private data */
+   /* some private data; outsiders should not access this */
    short num_cols;
    short num_header_rows;
    char *labels[NUM_CELLS];
@@ -101,6 +107,7 @@ typedef struct _BasicRegister {
 BasicRegister * xaccMallocBasicRegister (int type);
 void            xaccInitBasicRegister (BasicRegister *, int type);
 
+/* returns non-zero value if updates have been made to data */
 unsigned int    xaccGetChangeFlag (BasicRegister *);
 
 #endif __XACC_REGISTER_H__
