@@ -1,3 +1,9 @@
+2003-07-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/qif: an incomplete implementation of a new
+	  (written-in-C) QIF importer.  The code compiles but has not
+	  been tested.  Yet to do: merging, conversion to gnc, and UI.
+
 2003-07-10  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/import-parse.[ch]: routines to parse numbers

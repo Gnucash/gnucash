@@ -1,4 +1,4 @@
-SUBDIRS = .  binary-import qif-import ${OFX_DIR} ${HBCI_DIR} test log-replay
+SUBDIRS = .  binary-import qif qif-import ${OFX_DIR} ${HBCI_DIR} test log-replay
 
 pkglib_LTLIBRARIES=libgncmod-generic-import.la
 

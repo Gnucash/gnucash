@@ -1193,12 +1193,14 @@ AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           src/import-export/binary-import/Makefile
           src/import-export/binary-import/test/Makefile
           src/import-export/qif-import/Makefile
+          src/import-export/qif/Makefile
+          src/import-export/qif/test/Makefile
           src/import-export/qif-import/test/Makefile
           src/import-export/qif-io-core/Makefile
           src/import-export/qif-io-core/test/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
-		  src/import-export/log-replay/Makefile
+          src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile
           src/import-export/hbci/test/Makefile
