@@ -640,7 +640,7 @@ int ofx_proc_account_cb(struct OfxAccountData data)
   }
   else
     {
-      PERR("Gnucash ofx_proc_account():FATAL ERROR' account online ID not available\n");
+      PERR("account online ID not available");
     }
 
   return 0;
