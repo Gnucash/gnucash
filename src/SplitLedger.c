@@ -22,6 +22,11 @@
  * To implement the above, the register "user_hook" is used
  * to store the blank split with the register window structures.
  *
+ *
+ * Hack Alert: This code calls the accRefresh routine explicitly.
+ * A more elegent way of sending an update even to the windowing
+ * code should probably be developed.
+ *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
  */
