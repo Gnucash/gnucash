@@ -10,8 +10,12 @@
  * GNU General Public License for more details.                     *
  *                                                                  *
  * You should have received a copy of the GNU General Public License*
- * along with this program; if not, write to the Free Software      *
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 /*
@@ -76,9 +80,9 @@
  *    cell, we do not even try to parse the date, lest we confuse things
  *    royally.  Normally, when the user leaves this cell, and moves to  
  *    another, we parse the date and print it nicely and cleanly into 
- *    the cell.  But it can happen that we want to get the accurate contentts 
+ *    the cell.  But it can happen that we want to get the accurate contents 
  *    of the date cell before we've left it, e.g. if the user has clicked
- *    on the "commit" button.  This is the troutine to call for that.
+ *    on the "commit" button.  This is the routine to call for that.
  *
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
@@ -90,7 +94,7 @@
 #include <time.h>
 
 #include "basiccell.h"
-#include "Transaction.h"
+#include "Transaction.h" /* This is where Timespec is declared. Why? */
 
 
 typedef struct _DateCell {
