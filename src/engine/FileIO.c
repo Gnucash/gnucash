@@ -86,6 +86,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
+#include <glib.h>
 
 #include "config.h"
 
@@ -199,7 +200,7 @@ xaccGetFileIOError (void)
 /* flip endianness of int, short, etc */
 int xaccFlipInt (int val) 
   {
-  unsigned int flip;
+  guint32 flip;
   flip = (val & 0xff000000) >> 24;
   flip |= (val & 0xff0000) >> 8;
   flip |= (val & 0xff00) << 8;
@@ -214,14 +215,14 @@ short xaccFlipShort (short val)
   flip |= (val & 0xff) << 8;
   return (short) flip;
 }
-  
+
 double xaccFlipDouble (double val) 
   {
   union {
-     unsigned int i[2];
+     guint32 i[2];
      double d;
   } u;
-  unsigned int w0, w1;
+  guint32 w0, w1;
   u.d = val;
   w0 = xaccFlipInt (u.i[0]);
   w1 = xaccFlipInt (u.i[1]);
@@ -231,13 +232,13 @@ double xaccFlipDouble (double val)
   return u.d;
 }
 
-long long xaccFlipLongLong (long long val) 
+gint64 xaccFlipLongLong (gint64 val) 
   {
   union {
-     unsigned int i[2];
-     long long d;
+     guint32 i[2];
+     gint64 d;
   } u;
-  unsigned int w0, w1;
+  guint32 w0, w1;
   u.d = val;
   w0 = xaccFlipInt (u.i[0]);
   w1 = xaccFlipInt (u.i[1]);
@@ -1199,6 +1200,11 @@ readString( int fd, int token )
   XACC_FLIP_INT (size);
   
   str = (char *) malloc (size);
+  if (!str) {
+    PERR("malloc failed on size %d bytes at position %ld\n", size,
+         (long int) lseek(fd, 0, SEEK_CUR));
+    return NULL;
+  }
   err = read( fd, str, size );
   if( err != size )
     {
@@ -1222,16 +1228,16 @@ static int
 readTSDate( int fd, Timespec *ts, int token )
   {
   int  err=0;
-  long long int secs = 0;   /* 64-bit int */
-  long int nsecs = 0;
+  gint64 secs = 0;   /* 64-bit int */
+  gint32 nsecs = 0;
   
   /* secs is a 32-bit in in version 8 & earlier files, 
    * and goes 64-bit in the later files */
   if (8 >= token) 
     {
-    long int sicks;
-    err = read( fd, &sicks, sizeof(long int) );
-    if( err != sizeof(long int) )
+    gint32 sicks;
+    err = read( fd, &sicks, sizeof(gint32) );
+    if( err != sizeof(gint32) )
       {
       return -1;
       }
@@ -1240,16 +1246,16 @@ readTSDate( int fd, Timespec *ts, int token )
     } 
   else 
     {
-    err = read( fd, &secs, sizeof(long long int) );
-    if( err != sizeof(long long int) )
+    err = read( fd, &secs, sizeof(gint64) );
+    if( err != sizeof(gint64) )
       {
       return -1;
       }
     XACC_FLIP_LONG_LONG (secs);
     }
   
-  err = read( fd, &nsecs, sizeof(long int) );
-  if( err != sizeof(long int) )
+  err = read( fd, &nsecs, sizeof(gint32) );
+  if( err != sizeof(gint32) )
     {
     return -1;
     }
@@ -1852,20 +1858,20 @@ static int
 writeTSDate( int fd, Timespec *ts)
   {
   int err=0;
-  long int tmp;
-  long long longtmp;
+  int tmp;
+  gint64 longtmp;
 
   /* write 64 bits to file format */
   longtmp = ts->tv_sec;
   XACC_FLIP_LONG_LONG (longtmp);
-  err = write( fd, &longtmp, sizeof(long long int) );
-  if( err != sizeof(long long int) )
+  err = write( fd, &longtmp, sizeof(gint64) );
+  if( err != sizeof(gint64) )
     return -1;
   
   tmp = ts->tv_nsec;
   XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(long int) );
-  if( err != sizeof(long int) )
+  err = write( fd, &tmp, sizeof(int) );
+  if( err != sizeof(int) )
     return -1;
   
   return err;
