@@ -602,19 +602,26 @@ gnc_file_be_remove_old_files(FileBackend *be)
                 (stat(name, &statbuf) == 0) &&
                 (statbuf.st_mtime <lockstatbuf.st_mtime)) {
 	            unlink(name);
-            } else if (file_retention_days != 0) {
+            } else if (file_retention_days > 0) {
 	        time_t file_time;
 	        struct tm file_tm;
 	        int days;
+		const char* res;
 
                 /* Is the backup file old enough to delete */
                 memset(&file_tm, 0, sizeof(file_tm));
-                strptime(name+pathlen+1, "%Y%m%d%H%M%S", &file_tm);
-                file_time = mktime(&file_tm);
-                days = (int)(difftime(now, file_time) / 86400);
-                if (days > file_retention_days) {
-                    unlink(name);
-                }
+                res = strptime(name+pathlen+1, "%Y%m%d%H%M%S", &file_tm);
+		file_time = mktime(&file_tm);
+		days = (int)(difftime(now, file_time) / 86400);
+
+		/* Make sure this file actually has a date before unlinking */
+		if (res && res != name+pathlen+1 &&
+		    /* We consumed some but not all of the filename */
+		    file_time > 0 &&
+		    /* we actually have a reasonable time and it is old enough */
+		    days > file_retention_days) {
+		    unlink(name);
+		}
             }
         }
         g_free(name);

@@ -10,6 +10,9 @@
 	  or the lookups fail when adding new menus.  In particular,
 	  "_Actions", "_Toolbar", and "_Status Bar".
 
+	* gnc-backend-file.c: make sure a file HAS a date before actually
+	  removing it.  Otherwise you will remove a foo.xac file by accident.
+	
 2002-10-22  Derek Atkins  <derek@ihtfp.com>
    Fix a bunch of compiler warnings:
 	* Transaction-matcher.c: use "=" not "==" to set a variable
