@@ -83,14 +83,15 @@ EXTRA_DIST = \
   gnucash-make-guids.in \
   gnucash-run-script.in
 
-CFLAGS = @CFLAGS@ ${GNOME_INCLUDEDIR} ${GUILE_INCS}
-
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I./app-utils \
   -I./engine \
   -I./guile \
   -I./register \
-  -I./gnc-module
+  -I./gnc-module \
+  ${GNOME_INCLUDEDIR} \
+  ${GUILE_INCS}
 
 bin_SCRIPTS = gnucash-run-script gnucash-make-guids
 
