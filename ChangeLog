@@ -1,3 +1,10 @@
+2001-12-05  Bill Gribble  <grib@billgribble.com>
+
+	* use AM_PATH_LIBGLADE instead of gnome-config for libglade paths 
+
+	* add --disable-gui option to configure.in and reshuffle 
+	src/Makefile.am to not build gui code if it's used. 
+
 2001-12-04  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/scm/main.scm: merge bootstrap.scm contents here and

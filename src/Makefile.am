@@ -1,29 +1,38 @@
-
-SUBDIRS = \
+DIST_SUBDIRS = \
   doc \
+  pixmaps \
+  bin 
+
+NONGUI_SUBDIRS = \
   core-utils \
   gnc-module \
   test-core \
-  network-utils \
   engine \
   backend \
+  report \
+  scm \
+  quotes 
+
+GUI_SUBDIRS = \
+  network-utils \
   calculation \
   tax \
   app-utils \
   gnome-utils \
   app-file \
   import-export \
-  report \
   dialog-account \
   register \
   gnome \
   experimental \
-  scm \
-  quotes \
-  pixmaps \
   business \
-  optional \
-  bin
+  optional 
+
+if GNUCASH_ENABLE_GUI
+SUBDIRS = $(DIST_SUBDIRS) $(NONGUI_SUBDIRS) $(GUI_SUBDIRS)
+else 
+SUBDIRS = $(DIST_SUBDIRS) $(NONGUI_SUBDIRS)
+endif
 
 noinst_HEADERS = \
   AccWindow.h \
