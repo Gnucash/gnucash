@@ -133,7 +133,7 @@ gnc_split_register_save_num_cell (BasicCell * cell,
                                           gnc_get_current_book ());
     Transaction *blank_trans = xaccSplitGetParent (blank_split);
 
-    if (sd->trans != blank_trans)
+    if (sd->trans == blank_trans)
       gnc_split_register_set_last_num (reg, gnc_basic_cell_get_value (cell));
   }
 }
