@@ -547,9 +547,9 @@ pgendRunQuery (Backend *bend, Query *q)
    /* first thing we do is convert the gnc-engine query into
     * an sql string. */
    sq = sqlQuery_new();
-   sql_query_string = sqlQuery_build (sq, q, be->book);
+   sql_query_string = sqlQuery_build (sq, q);
 
-   topgroup = pgendGetTopGroup (be);
+   topgroup = gnc_book_get_group (be->book);
 
    /* stage transactions, save some postgres overhead */
    xaccGroupBeginStagedTransactionTraversals (topgroup);
@@ -696,6 +696,7 @@ pgendSync (Backend *bend, GNCBook *book)
 
    ENTER ("be=%p, grp=%p", be, grp);
 
+   be->book = book;
    be->version_check = (guint32) time(0);
 
    /* For the multi-user modes, we allow a save only once,
@@ -782,6 +783,8 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
 
    ENTER ("be=%p, grp=%p", be, grp);
 
+   be->book = book;
+
    /* hack alert -- we shouldn't be doing a global delete, 
     * we should only be deleting the stuff that's in this particular 
     * book .... */
@@ -864,11 +867,16 @@ pgendSyncSingleFile (Backend *bend, GNCBook *book)
  */
 
 static void
-pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
+pgendSyncPriceDB (Backend *bend, GNCBook *book)
 {
+   GNCPriceDB *prdb;
    PGBackend *be = (PGBackend *)bend;
-   ENTER ("be=%p, prdb=%p", be, prdb);
-   if (!be || !prdb) return;
+   ENTER ("be=%p", be);
+   if (!be) return;
+
+   be->book = book;
+   prdb = gnc_book_get_pricedb (book);
+   if (!prdb) return;
 
    be->version_check = (guint32) time(0);
 
@@ -916,11 +924,16 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
  */
 
 static void
-pgendSyncPriceDBSingleFile (Backend *bend, GNCPriceDB *prdb)
+pgendSyncPriceDBSingleFile (Backend *bend, GNCBook *book)
 {
+   GNCPriceDB *prdb;
    char *p;
    PGBackend *be = (PGBackend *)bend;
-   ENTER ("be=%p, prdb=%p", be, prdb);
+   ENTER ("be=%p", be);
+
+   be->book = book;
+   prdb = gnc_book_get_pricedb (book);
+   if (!prdb) return;
     
    p = "BEGIN;\n"
        "LOCK TABLE gncPrice IN EXCLUSIVE MODE;\n"
@@ -962,7 +975,7 @@ pgendSessionGetMode (PGBackend *be)
 /* Instead of loading the book, just set the lock error */
 
 static void
-pgend_book_load_single_lockerr (Backend *bend)
+pgend_book_load_single_lockerr (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
 
@@ -1289,7 +1302,7 @@ pgend_session_end (Backend *bend)
  */
 
 static void
-pgend_book_load_poll (Backend *bend)
+pgend_book_load_poll (Backend *bend, GNCBook *book)
 {
    Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
    AccountGroup *grp;
@@ -1297,11 +1310,11 @@ pgend_book_load_poll (Backend *bend)
 
    if (!be) return;
 
-   be->book = gnc_session_get_book (be->session);
+   be->book = book;
 
-   pgendGetBook (be, be->book);
+   pgendGetBook (be, book);
 
-   grp = pgendGetTopGroup (be);
+   grp = gnc_book_get_group (book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
@@ -1329,18 +1342,18 @@ pgend_book_load_poll (Backend *bend)
  */
 
 static void
-pgend_book_load_single (Backend *bend)
+pgend_book_load_single (Backend *bend, GNCBook *book)
 {
    AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
 
    if (!be) return;
 
-   be->book = gnc_session_get_book (be->session);
+   be->book = book;
 
-   pgendGetBook (be, be->book);
+   pgendGetBook (be, book);
 
-   grp = pgendGetTopGroup (be);
+   grp = gnc_book_get_group (book);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
@@ -1362,21 +1375,21 @@ pgend_book_load_single (Backend *bend)
  */
 
 static void
-pgend_price_load_single (Backend *bend)
+pgend_price_load_single (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
    GNCPriceDB *db;
 
-   if (!be) return;
+   if (!be || !book) return;
 
-   be->book = gnc_session_get_book (be->session);
+   be->book = book;
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
 
-   db = gnc_book_get_pricedb (be->book);
+   db = gnc_book_get_pricedb (book);
 
    pgendGetAllPrices (be, db);
 
