@@ -41,6 +41,7 @@
 #include "MainWindow.h"
 #include "main.h"
 #include "util.h"
+#include "xtutil.h"
 
 /** STRUCTS *********************************************************/
 typedef struct _RecnWindow

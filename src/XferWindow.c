@@ -42,6 +42,7 @@
 #include "RecnWindow.h"
 #include "RegWindow.h"
 #include "util.h"
+#include "xtutil.h"
 
 
 typedef struct _menuData

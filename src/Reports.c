@@ -35,6 +35,7 @@
 #include "main.h"
 #include "Reports.h"
 #include "util.h"
+#include "xtutil.h"
 
 
 /********************************************************************\

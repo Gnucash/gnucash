@@ -912,20 +912,54 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
         }
       newfile = fileBox(toplevel,OPEN, "*.xac");
       if (newfile) {
+        int io_error;
+        char buf[BUFSIZE];
+        AccountGroup *newgrp;
+
         datafile = newfile;
 
-        /* destroy open windows first, before destroying the group itself */
-        xaccGroupWindowDestroy (grp);
-        freeAccountGroup (grp);
-      
         /* load the accounts from the users datafile */
-        grp = xaccReadData (datafile);
-      
-        if( NULL == grp ) {
-          /* the file could not be found */
-          grp = mallocAccountGroup();
+        newgrp = xaccReadData (datafile);
+
+        /* check for i/o error, put up appropriate error message */
+        io_error = xaccGetFileIOError();
+        switch (io_error) {
+           case ERR_FILEIO_NO_ERROR:
+              break;
+           case ERR_FILEIO_FILE_NOT_FOUND:
+              sprintf (buf, FILE_NOT_FOUND_MSG, datafile);
+              errorBox (toplevel, buf);
+              break;
+           case ERR_FILEIO_FILE_EMPTY:
+              sprintf (buf, FILE_EMPTY_MSG, datafile);
+              errorBox (toplevel, buf);
+              break;
+           case ERR_FILEIO_FILE_TOO_NEW:
+              errorBox (toplevel, FILE_TOO_NEW_MSG);
+              break;
+           case ERR_FILEIO_FILE_TOO_OLD:
+              if (!verifyBox( toplevel, FILE_TOO_OLD_MSG )) {
+                 freeAccountGroup (newgrp);
+                 newgrp = NULL;
+              }
+              break;
+           case ERR_FILEIO_FILE_BAD_READ:
+              if (!verifyBox( toplevel, FILE_BAD_READ_MSG )) {
+                 freeAccountGroup (newgrp);
+                 newgrp = NULL;
+              }
+              break;
+           default:
+              break;
         }
-        topgroup = grp;
+      
+        /* if we managed to read something, then go display it */
+        if (newgrp) {
+          /* destroy open windows first, before destroying the group itself */
+          xaccGroupWindowDestroy (grp);
+          freeAccountGroup (grp);
+          topgroup = newgrp;
+        }
       }
       break;
     }

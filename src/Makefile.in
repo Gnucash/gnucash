@@ -55,7 +55,7 @@ SRCS = AccWindow.c Account.c AccountMenu.c Action.c AdjBWindow.c    \
        BuildMenu.c Data.c Destroy.c FileBox.c FileIO.c HelpWindow.c \
        LedgerUtils.c MainWindow.c PopBox.c QIFIO.c QuickFill.c      \
        RecnWindow.c RegWindow.c Reports.c TextBox.c Transaction.c   \
-       XferBox.c XferWindow.c date.c main.c util.c
+       XferBox.c XferWindow.c date.c main.c util.c xtutil.c
 # OBJS = ${SRCS:.c=.o} $(LIBHTMLW) $(LIBXBAE) $(LIBCOMBO)
 OBJS = ${SRCS:.c=.o} $(LIBXMHTML) $(LIBXBAE) $(LIBCOMBO)
 ######################################################################

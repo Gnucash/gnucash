@@ -40,6 +40,7 @@
 #include "RegWindow.h"
 #include "RecnWindow.h"
 #include "util.h"
+#include "xtutil.h"
 
 /** GLOBALS *********************************************************/
 

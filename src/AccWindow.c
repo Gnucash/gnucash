@@ -47,6 +47,7 @@
 #include "RegWindow.h"
 #include "TextBox.h"
 #include "util.h"
+#include "xtutil.h"
 
 typedef struct _accwindow {
                          /* The account type buttons:               */

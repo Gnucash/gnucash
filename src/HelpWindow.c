@@ -40,16 +40,17 @@
 #  include <X11/xpm.h>
 #endif
 
-#include "main.h"
-#include "util.h"
-
 #if USE_HTMLW
-#include "HTML.h"
+#include <HTML.h>
 #endif 
 
 #if USE_XMHTML
-#include "XmHTML.h"
+#include <XmHTML.h>
 #endif 
+
+#include "main.h"
+#include "util.h"
+#include "xtutil.h"
 
 
 /********************************************************************\

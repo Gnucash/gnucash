@@ -79,12 +79,12 @@
 
 #include <fcntl.h>
 #include <unistd.h>
-#include <Xm/Xm.h>
 
 #include "config.h"
 
 #include "Account.h"
 #include "Data.h"
+#include "FileIO.h"
 #include "main.h"
 #include "util.h"
 
@@ -94,12 +94,13 @@
 #define VERSION 4
 
 /** GLOBALS *********************************************************/
-extern Widget toplevel;
 
-static AccountGroup *holder;     /* temporary holder for
-                                  *  unclassified accounts */
-static AccountGroup *maingrp;    /* temporary holder for file
-                                  * being read */
+static int          error_code=0; /* error code, if error occurred */
+
+static AccountGroup *holder;      /* temporary holder for
+                                   *  unclassified accounts */
+static AccountGroup *maingrp;     /* temporary holder for file
+                                   * being read */
 
 /** PROTOTYPES ******************************************************/
 static Account     *locateAccount (int acc_id); 
@@ -118,6 +119,13 @@ static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
 static int writeString( int fd, char *str );
 static int writeDate( int fd, Date *date );
+
+/*******************************************************/
+
+int xaccGetFileIOError (void)
+{
+   return error_code;
+}
 
 /*******************************************************/
 /* some endian stuff */
@@ -193,12 +201,12 @@ xaccReadData( char *datafile )
   char buf[BUFSIZE];
 
   maingrp = 0x0;
+  error_code = ERR_FILEIO_NO_ERROR;
   
   fd = open( datafile, RFLAGS, 0 );
-  if( fd == -1 )
+  if( fd == -1 ) 
     {
-    sprintf (buf, FILE_NOT_FOUND_MSG, datafile);
-    errorBox (toplevel, buf);
+    error_code = ERR_FILEIO_FILE_NOT_FOUND;
     return NULL;
     }
   
@@ -206,8 +214,7 @@ xaccReadData( char *datafile )
   err = read( fd, &token, sizeof(int) );
   if( sizeof(int) != err ) 
     {
-    sprintf (buf, FILE_EMPTY_MSG, datafile);
-    errorBox (toplevel, buf);
+    error_code = ERR_FILEIO_FILE_EMPTY;
     close(fd);
     return NULL;
     }
@@ -216,19 +223,15 @@ xaccReadData( char *datafile )
   /* If this is an old file, ask the user if the file
    * should be updated */
   if( VERSION > token ) {
-    if( !verifyBox( toplevel, FILE_TOO_OLD_MSG ) ) {
-      close(fd);
-      return NULL;
-    }
+    error_code = ERR_FILEIO_FILE_TOO_OLD;
   }
   
   /* If this is a newer file than we know how to deal
    * with, warn the user */
   if( VERSION < token ) {
-    if( !verifyBox( toplevel, FILE_TOO_NEW_MSG ) ) {
-      close(fd);
-      return NULL;
-    }
+    error_code = ERR_FILEIO_FILE_TOO_NEW;
+    close(fd);
+    return NULL;
   }
   
   holder = mallocAccountGroup();
@@ -239,17 +242,14 @@ xaccReadData( char *datafile )
    * error, try to continue anyway. */
   num_unclaimed = xaccGetNumAccounts (holder);
   if (num_unclaimed) {
-    if ( !verifyBox( toplevel, FILE_BAD_READ_MSG ) ) {
-       freeAccountGroup (holder);
-       freeAccountGroup (grp);
-       grp = NULL;
-    } else {
-       /* create a lost account, put the missing accounts there */
-       Account *acc = mallocAccount();
-       acc -> accountName = XtNewString (LOST_ACC_STR);
-       acc -> children = (struct _account_group *) holder;
-       insertAccount (grp, acc);
-    }
+    Account *acc;
+    error_code = ERR_FILEIO_FILE_BAD_READ;
+
+    /* create a lost account, put the missing accounts there */
+    acc = mallocAccount();
+    acc -> accountName = XtNewString (LOST_ACC_STR);
+    acc -> children = (struct _account_group *) holder;
+    insertAccount (grp, acc);
   } else {
     freeAccountGroup (holder);
     holder = NULL;

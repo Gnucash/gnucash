@@ -30,6 +30,7 @@
 #include "FileBox.h"
 #include "main.h"
 #include "util.h"
+#include "xtutil.h"
 
 /** GLOBALS *********************************************************/
 extern XtAppContext app;
