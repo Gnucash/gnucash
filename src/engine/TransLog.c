@@ -102,8 +102,8 @@
 
 
 static int gen_logs = 1;
-static FILE * trans_log = 0x0;
-static char * log_base_name = 0x0;
+static FILE * trans_log = NULL;
+static char * log_base_name = NULL;
 
 /********************************************************************\
 \********************************************************************/
@@ -145,22 +145,20 @@ xaccOpenLog (void)
    /* tag each filename with a timestamp */
    timestamp = xaccDateUtilGetStampNow ();
 
-   filename = (char *) malloc (strlen (log_base_name) + 50);
-   strcpy (filename, log_base_name);
-   strcat (filename, ".");
-   strcat (filename, timestamp);
-   strcat (filename, ".log");
+   filename = g_strconcat (log_base_name, ".", timestamp, ".log", NULL);
 
    trans_log = fopen (filename, "a");
    if (!trans_log) {
       int norr = errno;
       printf ("Error: xaccOpenLog(): cannot open journal \n"
               "\t %d %s\n", norr, strerror (norr));
-      free (filename);
-      free (timestamp);
+
+      g_free (filename);
+      g_free (timestamp);
       return;
    }
-   free (filename);
+
+   g_free (filename);
    g_free (timestamp);
 
    /* use tab-separated fields */
@@ -170,7 +168,6 @@ xaccOpenLog (void)
                        "memo	action	reconciled	" \
                        "amount	price date_reconciled\n");
    fprintf (trans_log, "-----------------\n");
-
 }
 
 /********************************************************************\
@@ -182,7 +179,7 @@ xaccCloseLog (void)
    if (!trans_log) return;
    fflush (trans_log);
    fclose (trans_log);
-   trans_log = 0x0;
+   trans_log = NULL;
 }
 
 /********************************************************************\
@@ -213,8 +210,9 @@ xaccTransWriteLog (Transaction *trans, char flag)
       drecn = xaccDateUtilGetStamp (split->date_reconciled.tv_sec);
 
       /* use tab-separated fields */
-      fprintf (trans_log, "%c	%p/%p	%s	%s	%s	%s	%s	" \
-               "%s	%s	%s	%c	%Ld/%Ld	%Ld/%Ld	%s\n",
+      fprintf (trans_log,
+               "%c\t%p/%p\t%s\t%s\t%s\t%s\t%s\t"
+               "%s\t%s\t%s\t%c\t%Ld/%Ld\t%Ld/%Ld\t%s\n",
                flag,
                trans, split,  /* trans+split make up unique id */
                dnow ? dnow : "",
@@ -230,12 +228,13 @@ xaccTransWriteLog (Transaction *trans, char flag)
                gnc_numeric_denom(split->damount),
                gnc_numeric_num(split->value), 
                gnc_numeric_denom(split->value),
-               drecn ? drecn : ""
-               );
-      free (drecn);
+               drecn ? drecn : "");
+
+      g_free (drecn);
    }
 
    fprintf (trans_log, "===== END\n");
+
    g_free (dnow);
    g_free (dent);
    g_free (dpost);
