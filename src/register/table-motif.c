@@ -208,8 +208,8 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row = table->locators[row][col]->phys_row_offset;
    rel_col = table->locators[row][col]->phys_col_offset;
 
-printf ("enter %d %d (rel=%d %d %p) %p\n", row, col, rel_row, rel_col,
-arr->cells[rel_row][rel_col], arr );
+printf ("enter %d %d (relrow=%d relcol=%d) cell=%p\n", row, col, rel_row, rel_col,
+arr->cells[rel_row][rel_col]);
 
    /* since we are here, there must be a cell handler.
     * therefore, we accept entry into the cell by default, 
@@ -544,36 +544,42 @@ xaccCreateTable (Table *table, Widget parent, char * name)
 
    table->table_widget = reg;
 
-   /* if any of the cells have GUI specific components that need 
-    * initialization, initialize them now. The realize() callback
-    * on the cursor cell is how we inform the cell handler that 
-    * now is the time to initialize it's GUI.  */
+   return (reg);
+}
 
-   curs = table->current_cursor;
-   if (curs) {
-      int i,j;
+/* ==================================================== */
+/* if any of the cells have GUI specific components that need 
+ * initialization, initialize them now. The realize() callback
+ * on the cursor cell is how we inform the cell handler that 
+ * now is the time to initialize it's GUI.  */
 
-      for (i=0; i<curs->numRows; i++) {
-         for (j=0; j<curs->numCols; j++) {
-            BasicCell *cell;
-            cell = curs->cells[i][j];
-            if (cell) {
-               void (*xt_realize) (BasicCell *, 
-                                   void *gui,
-                                   int pixel_width);
-               xt_realize = cell->realize;
-               if (xt_realize) {
-                  int pixel_width;
-                  pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);
-                  xt_realize (cell, ((void *) reg), pixel_width);
-               }
+void
+xaccCreateCursor (Table *table, CellBlock *curs) 
+{
+   int i,j;
+   Widget reg = table->table_widget;
+
+   if (!curs) return;
+
+   for (i=0; i<curs->numRows; i++) {
+      for (j=0; j<curs->numCols; j++) {
+         BasicCell *cell;
+         cell = curs->cells[i][j];
+         if (cell) {
+            void (*xt_realize) (BasicCell *, 
+                                void *gui,
+                                int pixel_width);
+            xt_realize = cell->realize;
+            if (xt_realize) {
+               int pixel_width;
+               pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);
+               xt_realize (cell, ((void *) reg), pixel_width);
             }
          }
       }
    }
-
-   return (reg);
 }
+
 
 /* ==================================================== */
 
