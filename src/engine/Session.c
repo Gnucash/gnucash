@@ -57,9 +57,11 @@ void       xaccSessionDestroy (Session *);
  *       "file:somefile.xac"
  *    then a sequence of search paths are checked for a file of this name.
  *
- *    If the file exists, can be opened and read, then an AccountGroup
- *    will be returned by xaccSessionGetGroup().  Otherwise, it returns NULL,
- *    and the reason for failure can be gotten with xaccSessionGetError().
+ *    If the file exists, can be opened and read, then the AccountGroup
+ *    will be returned.  Otherwise, NULL is returned, and the reason for 
+ *    the NULL can be gotten with xaccSessionGetError().  Note that NULL
+ *    does not always indicate an error ... e.g. if a new file is created,
+ *    NULL is returned, and xaccSessionGetError returns 0.  That's OK.
  *
  *    If the file is succesfully opened and read, then a lock will have been
  *    obtained, and all other access to the file will be denied.  This feature
@@ -71,6 +73,14 @@ void       xaccSessionDestroy (Session *);
  *    error values, e.g. in a stack, where this routine pops the top value.
  *    The current implementation has a stack that is one-deep.
  * 
+ *    Some important error values:
+ *       EINVAL  -- bad argument
+ *       ETXTBSY -- session id is in use; its locked by someone else.
+ *       ENOSYS  -- unsupported URI type.
+ *       ERANGE  -- file path too long
+ *       ENOLCK  -- session not open when SessionSave() was called.
+ * 
+ * 
  * The xaccSessionGetGroup() method will return the current top-level 
  *    account group.
  * 
@@ -78,8 +88,10 @@ void       xaccSessionDestroy (Session *);
  *
  * The xaccSessionSave() method will commit all changes that have been made to
  *    the top-level account group. In the current implementation, this is nothing
- *    more than a write to the file of the top group.  A save does *not* 
- *    release the lock on the file.
+ *    more than a write to the file of the current AccountGroup of the session. 
+ *    If the current AccountGroup is NULL, then the file will be deleted.
+ *    This routine will never release the lock on the file under any
+ *    circustances. 
  *
  * The xaccSessionEnd() method will release the session lock. It will *not*
  *    save the account group to a file.  Thus, this method acts as an "abort" or
@@ -119,7 +131,7 @@ void       xaccSessionDestroy (Session *);
  *
  */
 
-void           xaccSessionBegin (Session *, char * sessionid);
+AccountGroup * xaccSessionBegin (Session *, char * sessionid);
 int            xaccSessionGetError (Session *);
 AccountGroup * xaccSessionGetGroup (Session *);
 void           xaccSessionSetGroup (Session *, AccountGroup *topgroup);
@@ -131,13 +143,17 @@ void           xaccSessionEnd (Session *);
 #endif /* __XACC_SESSION_H__ */
 
 #include <errno.h>
+#include <fcntl.h>
 #include <limits.h>
 #include <nana.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
+#include "FileIO.h"
+#include "Group.h"
 #include "util.h"
 
 struct _session {
@@ -150,6 +166,11 @@ struct _session {
 
    /* the fully-resolved path to the file */
    char *fullpath;
+
+   /* name of lockfile, and filedescr */
+   char * lockfile;
+   char * linkfile;
+   int lockfd;
 
    /* if session failed, this records the failure reason 
     * (file not found, etc).
@@ -178,6 +199,9 @@ xaccInitSession (Session *sess)
   sess->errtype = 0;
   sess->sessionid = NULL;
   sess->fullpath = NULL;
+  sess->lockfile = NULL;
+  sess->linkfile = NULL;
+  sess->lockfd = -1;
 };
   
 /* ============================================================== */
@@ -215,15 +239,20 @@ xaccSessionSetGroup (Session *sess, AccountGroup *grp)
  * some config file 
  */
 static char * searchpaths[] = {
-   "/usr/share/gnucash/",
+   "/usr/share/gnucash/data",
    NULL,
 };
 
-void
+AccountGroup *
 xaccSessionBegin (Session *sess, char * sid)
 {
-   char * filefrag;
-   if (!sess) return;
+   struct stat statbuf;
+   char pathbuf[PATH_MAX];
+   char * filefrag,  *path = NULL;
+   int namelen, len;
+   int i, rc;
+
+   if (!sess) return NULL;
 
    /* clear the error condition of previous errors */
    sess->errtype = 0;
@@ -231,19 +260,19 @@ xaccSessionBegin (Session *sess, char * sid)
    /* seriously invalid */
    if (!sid) {
       sess->errtype = EINVAL;
-      return;
+      return NULL;
    }
 
    /* check to see if this session is already open */
    if (sess->sessionid) {
-      sess->errtype = EEXIST;
-      return;
+      sess->errtype = ETXTBSY;
+      return NULL;
    }
 
    /* check to see if this is a type we know how to handle */
    if (strncmp (sid, "file:", 5)) {
       sess->errtype = ENOSYS;
-      return;
+      return NULL;
    }
 
    /* ---------------------------------------------------- */
@@ -254,13 +283,10 @@ xaccSessionBegin (Session *sess, char * sid)
    if ('/' == *filefrag) {
       sess->fullpath = strdup (filefrag);
    } else {
-      int i, rc;
-      struct stat statbuf;
-      char pathbuf[PATH_MAX];
-      char * path = NULL;
-      int namelen, len;
 
-      namelen = strlen (filefrag) + 2;
+      /* get conservative on the length so that sprintf(getpid()) works ... */
+      /* strlen ("/.LCK") + sprintf (%x%d) */
+      namelen = strlen (filefrag) + 25; 
 
       for (i=-2; 1 ; i++) 
       {
@@ -310,12 +336,9 @@ xaccSessionBegin (Session *sess, char * sid)
       /* Lets try creating a new file in $HOME/.gnucash/data */
       if (!(sess->fullpath)) 
       {
-         /* let the user know that we're creating a new file */
-         sess->errtype = ENOENT;
-
          path = getenv ("HOME");
          if (path) {
-            len = strlen (path) + namelen + 20;
+            len = strlen (path) + namelen + 50;
             if (PATH_MAX > len) {
                strcpy (pathbuf, path);
                strcat (pathbuf, "/.gnucash/data/");
@@ -329,19 +352,16 @@ xaccSessionBegin (Session *sess, char * sid)
       /* Lets try creating a new file in the cwd */
       if (!(sess->fullpath)) 
       {
-         /* let the user know that we're creating a new file */
-         sess->errtype = ENOENT;
-
          /* create a new file in the cwd */
          path = getcwd (pathbuf, PATH_MAX);
          if (!path) {
             sess->errtype = ERANGE;  
-            return;    /* ouch */
+            return NULL;    /* ouch */
          }
          len = strlen (path) + namelen;
          if (PATH_MAX <= len) {
             sess->errtype = ERANGE;  
-            return;    /* ouch */
+            return NULL;    /* ouch */
          }
          strcat (path, "/");
          strcat (path, filefrag);
@@ -356,6 +376,128 @@ xaccSessionBegin (Session *sess, char * sid)
    /* ---------------------------------------------------- */
    /* Yow! OK, after all of that, we've finnaly got a fully 
     * resolved path name.  Lets see if we can get a lock on it */
+
+   sess->lockfile = malloc (strlen (sess->fullpath) + 5);
+   strcpy (sess->lockfile, sess->fullpath);
+   strcat (sess->lockfile, ".LCK");
+  
+   rc = stat (sess->lockfile, &statbuf);
+   if (!rc) {
+      /* oops .. file is all locked up  .. */
+      sess->errtype = ETXTBSY;  
+      free (sess->sessionid); sess->sessionid = NULL;
+      free (sess->fullpath);  sess->fullpath = NULL;
+      free (sess->lockfile);  sess->lockfile = NULL;
+      return NULL;    
+   }
+   sess->lockfd = open (sess->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
+   if (0 > sess->lockfd) {
+      /* oops .. file is all locked up  .. */
+      sess->errtype = ETXTBSY;  
+      free (sess->sessionid); sess->sessionid = NULL;
+      free (sess->fullpath);  sess->fullpath = NULL;
+      free (sess->lockfile);  sess->lockfile = NULL;
+      return NULL;    
+   }
+   
+   /* OK, now work around some NFS atomic lock race condition 
+    * mumbo-jumbo.  We do this by linking a unique file, and 
+    * then examing the link count.  At least that's what the 
+    * NFS programmers guide suggests. 
+    */
+   strcpy (pathbuf, sess->lockfile);
+   path = strrchr (pathbuf, '/') + 1;
+   sprintf (path, "%lx.%d", gethostid(), getpid());
+   link (sess->lockfile, pathbuf);
+   rc = stat (sess->lockfile, &statbuf);
+   if (rc) {
+      /* oops .. stat failed!  This can't happen! */
+      sess->errtype = ETXTBSY;  
+      unlink (pathbuf);
+      close (sess->lockfd);
+      unlink (sess->lockfile);
+      free (sess->sessionid); sess->sessionid = NULL;
+      free (sess->fullpath);  sess->fullpath = NULL;
+      free (sess->lockfile);  sess->lockfile = NULL;
+      return NULL;    
+   }
+
+   if (2 != statbuf.st_nlink) {
+      /* oops .. stat failed!  This can't happen! */
+      sess->errtype = ETXTBSY;  
+      unlink (pathbuf);
+      close (sess->lockfd);
+      unlink (sess->lockfile);
+      free (sess->sessionid); sess->sessionid = NULL;
+      free (sess->fullpath);  sess->fullpath = NULL;
+      free (sess->lockfile);  sess->lockfile = NULL;
+      return NULL;    
+   }
+   sess->linkfile = strdup (pathbuf);
+
+   /* ---------------------------------------------------- */
+   /* OK, if we've gotten this far, then we've succesfully obtained 
+    * an atomic lock on the file.  Go read the file contents ... 
+    * well, read it only if it exists ... 
+    */
+
+   sess->errtype = 0;
+   sess->topgroup = NULL;
+   rc = stat (sess->fullpath, &statbuf);
+   if (!rc) {
+      sess->topgroup = xaccReadAccountGroup (sess->fullpath);
+   }
+
+   return (sess->topgroup);
+}
+
+/* ============================================================== */
+
+void 
+xaccSessionSave (Session *sess)
+{
+   if (!sess) return;
+
+   /* if the fullpath doesn't exist, either the user failed to initialize,
+    * or the lockfile was never obtained ... either way, we can't write. */
+   if (!(sess->fullpath)) {
+      sess->errtype = ENOLCK;
+      return;
+   }
+   if (sess->topgroup) {
+      xaccWriteAccountGroup (sess->fullpath, sess->topgroup);
+   } else {
+      /* hmm ... no topgroup means delete file */
+      unlink (sess->fullpath);
+   }
+}
+
+/* ============================================================== */
+
+void
+xaccSessionEnd (Session *sess)
+{
+   if (!sess) return;
+   sess->errtype = 0;
+
+   if (sess->linkfile) unlink (sess->linkfile);
+   if (0 < sess->lockfd) close (sess->lockfd);
+   if (sess->lockfile) unlink (sess->lockfile);
+   if (sess->sessionid) free (sess->sessionid); sess->sessionid = NULL;
+   if (sess->fullpath) free (sess->fullpath);  sess->fullpath = NULL;
+   if (sess->lockfile) free (sess->lockfile);  sess->lockfile = NULL;
+   if (sess->linkfile) free (sess->linkfile);  sess->linkfile = NULL;
+   sess->topgroup = NULL;
+
+   return;    
+}
+
+void 
+xaccSessionDestroy (Session *sess) 
+{
+   if (!sess) return;
+   xaccSessionEnd (sess);
+   free (sess);
 }
 
 /* ==================== END OF FILE ================== */
