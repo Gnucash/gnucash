@@ -34,9 +34,10 @@
 
 #include "GNCId.h"
 #include "FreqSpec.h"
-#include "date.h"
-#include "kvp_frame.h"
+#include "gnc-date.h"
+#include "gnc-book.h"
 #include "gnc-engine.h"
+#include "kvp_frame.h"
 
 /* 
  * #defines for kvp_frame strings
@@ -251,6 +252,11 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
  * gnc_sx_{add,remove}_defer_instance() functions to modifiy the list.
  **/
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
+
+
+/** Returns the template group from the book.
+ **/
+AccountGroup * gnc_book_get_template_group (GNCBook *book);
 
 #endif /* XACC_SCHEDXACTION_H */
 

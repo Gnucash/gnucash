@@ -32,6 +32,7 @@
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
+#include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
@@ -789,3 +790,27 @@ gnc_sx_get_defer_instances( SchedXaction *sx )
 {
         return sx->deferredList;
 }
+
+
+#define GNC_TEMPLATE_GROUP "gnc_template_group"
+AccountGroup *
+gnc_book_get_template_group( GNCBook *book )
+{
+  if (!book) return NULL;
+  return gnc_book_get_data (book, GNC_TEMPLATE_GROUP);
+}
+
+void
+gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
+{
+  if (!book) return;
+
+  if (templateGroup && templateGroup->book != book)
+  {
+     PERR ("cannot mix and match books freely!");
+     return;
+  }
+
+  gnc_book_set_data (book, GNC_TEMPLATE_GROUP, templateGroup);
+}
+

@@ -58,9 +58,6 @@ kvp_frame           * gnc_book_get_slots (GNCBook *book);
 /** \return A GList of the scheduled transactions in the book.  */
 GList               * gnc_book_get_schedxactions( GNCBook *book );
 
-/** \return The template AccountGroup of the book.  */
-AccountGroup        * gnc_book_get_template_group( GNCBook *book );
-
 /** The gnc_book_set_data() allows
  *    arbitrary pointers to structs to be stored in GNCBook.
  *    This is the "prefered" method for extending GNCBook to hold

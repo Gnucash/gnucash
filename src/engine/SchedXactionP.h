@@ -94,4 +94,8 @@ typedef struct _temporalStateData {
   gint num_inst;
 } temporalStateData;
 
+
+/* Associate the given template group with a book */
+void gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup);
+
 #endif

@@ -84,30 +84,6 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
 }
 
 /* ====================================================================== */
-
-#define GNC_TEMPLATE_GROUP "gnc_template_group"
-AccountGroup *
-gnc_book_get_template_group( GNCBook *book )
-{
-  if (!book) return NULL;
-  return gnc_book_get_data (book, GNC_TEMPLATE_GROUP);
-}
-
-void
-gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
-{
-  if (!book) return;
-
-  if (templateGroup && templateGroup->book != book)
-  {
-     PERR ("cannot mix and match books freely!");
-     return;
-  }
-
-  gnc_book_set_data (book, GNC_TEMPLATE_GROUP, templateGroup);
-}
-
-/* ====================================================================== */
 /* dirty flag stuff */
 
 static void
@@ -164,24 +140,6 @@ gnc_book_mark_saved(GNCBook *book)
 
   /* Mark everything as clean */
   gncObjectMarkClean (book);
-}
-
-/* ====================================================================== */
-
-static gboolean
-counter_thunk(Transaction *t, void *data)
-{
-    (*((guint*)data))++;
-    return TRUE;
-}
-
-guint
-gnc_book_count_transactions(GNCBook *book)
-{
-    guint count = 0;
-    xaccGroupForEachTransaction(xaccGetAccountGroup(book),
-                                counter_thunk, (void*)&count);
-    return count;
 }
 
 /* ====================================================================== */
