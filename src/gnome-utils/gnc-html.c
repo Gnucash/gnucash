@@ -120,7 +120,8 @@ static char error_end[] = "</body></html>";
 
 
 static char * 
-extract_machine_name(const gchar * path) {
+extract_machine_name(const gchar * path)
+{
   char       machine_rexp[] = "^(//[^/]*)/*(.*)?$";
   regex_t    compiled_m;
   regmatch_t match[4];
@@ -172,7 +173,8 @@ gnc_html_register_urltype (URLType type, const char *protocol)
 
 URLType
 gnc_html_parse_url(gnc_html * html, const gchar * url, 
-                   char ** url_location, char ** url_label) {
+                   char ** url_location, char ** url_label)
+{
   char        uri_rexp[] = "^(([^:]*):)?([^#]+)?(#(.*))?$";
   regex_t     compiled;
   regmatch_t  match[6];
@@ -274,7 +276,8 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
 
 
 static char * 
-extract_base_name(URLType type, const gchar * path) {
+extract_base_name(URLType type, const gchar * path)
+{
   char       machine_rexp[] = "^(//[^/]*)/*(/.*)?$";
   char       path_rexp[] = "^/*(.*)/+([^/]*)$";
   regex_t    compiled_m, compiled_p;
@@ -379,7 +382,8 @@ gnc_html_initialize (void)
 
 
 char  *
-gnc_build_url (URLType type, const gchar * location, const gchar * label) {
+gnc_build_url (URLType type, const gchar * location, const gchar * label)
+{
   char * type_name;
 
   type_name = g_hash_table_lookup (gnc_html_type_to_proto_hash, type);
@@ -431,7 +435,8 @@ gnc_network_allowed()
 static void
 gnc_html_http_request_cb(const gchar * uri, int completed_ok, 
                          const gchar * body, gint body_len, 
-                         gpointer user_data) {
+                         gpointer user_data)
+{
   gnc_html * html = user_data; 
   URLType  type;
   char     * location = NULL;
@@ -517,7 +522,8 @@ gnc_html_http_request_cb(const gchar * uri, int completed_ok,
  ************************************************************/
 
 static void 
-gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
+gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle)
+{
   GList * handles = NULL;
   gint  need_request = FALSE;
 
@@ -634,7 +640,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
  ********************************************************************/
 
 static void 
-gnc_html_link_clicked_cb(GtkHTML * html, const gchar * url, gpointer data) {
+gnc_html_link_clicked_cb(GtkHTML * html, const gchar * url, gpointer data)
+{
   URLType   type;
   char      * location = NULL;
   char      * label = NULL;
@@ -654,7 +661,8 @@ gnc_html_link_clicked_cb(GtkHTML * html, const gchar * url, gpointer data) {
 
 static void 
 gnc_html_url_requested_cb(GtkHTML * html, char * url,
-                          GtkHTMLStream * handle, gpointer data) {
+                          GtkHTMLStream * handle, gpointer data)
+{
   URLType       type;
   char          * location=NULL;
   char          * label=NULL;
@@ -674,7 +682,8 @@ gnc_html_url_requested_cb(GtkHTML * html, char * url,
 
 static int
 gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
-                             gpointer data) {
+                             gpointer data)
+{
   gnc_html  * gnchtml = data; 
   GncHTMLObjectCB h;
 
@@ -695,7 +704,8 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
  ********************************************************************/
 
 static void 
-gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data) {
+gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data)
+{
   gnc_html * gnchtml = (gnc_html *) data;
 
   g_free(gnchtml->current_link);
@@ -712,7 +722,8 @@ gnc_html_on_url_cb(GtkHTML * html, const gchar * url, gpointer data) {
 
 static void 
 gnc_html_set_base_cb(GtkHTML * gtkhtml, const gchar * base, 
-                     gpointer data) {
+                     gpointer data)
+{
   gnc_html * html = (gnc_html *)data;
   URLType  type;
   char     * location = NULL;
@@ -735,7 +746,8 @@ gnc_html_set_base_cb(GtkHTML * gtkhtml, const gchar * base,
 
 static int
 gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
-                         gpointer user_data) {
+                         gpointer user_data)
+{
   gnc_html * html = user_data;
 
   if(html->button_cb) {
@@ -754,14 +766,16 @@ gnc_html_button_press_cb(GtkWidget * widg, GdkEventButton * event,
  ********************************************************************/
 
 GHashTable *
-gnc_html_unpack_form_data(const char * encoding) {
+gnc_html_unpack_form_data(const char * encoding)
+{
   GHashTable * rv = g_hash_table_new(g_str_hash, g_str_equal);
   gnc_html_merge_form_data(rv, encoding);
   return rv;
 }
 
 void
-gnc_html_merge_form_data(GHashTable * rv, const char * encoding) {
+gnc_html_merge_form_data(GHashTable * rv, const char * encoding)
+{
   char * next_pair = NULL; 
   char * name  = NULL;
   char * value = NULL;
@@ -799,21 +813,24 @@ gnc_html_merge_form_data(GHashTable * rv, const char * encoding) {
 }
 
 static gboolean
-free_form_data_helper(gpointer k, gpointer v, gpointer user) {
+free_form_data_helper(gpointer k, gpointer v, gpointer user)
+{
   g_free(k);
   g_free(v);
   return TRUE;
 }
 
 void 
-gnc_html_free_form_data(GHashTable * d) {
+gnc_html_free_form_data(GHashTable * d)
+{
   g_hash_table_foreach_remove(d, free_form_data_helper, NULL);
   g_hash_table_destroy(d);
 }
 
 static void
 pack_form_data_helper(gpointer key, gpointer val, 
-                      gpointer user_data) {
+                      gpointer user_data)
+{
   char * old_str = *(char **)user_data;
   char * enc_key = gnc_html_encode_string((char *)key);
   char * enc_val = gnc_html_encode_string((char *)val);
@@ -830,7 +847,8 @@ pack_form_data_helper(gpointer key, gpointer val,
 }
 
 char *
-gnc_html_pack_form_data(GHashTable * form_data) {
+gnc_html_pack_form_data(GHashTable * form_data)
+{
   char * encoded = NULL;
   g_hash_table_foreach(form_data, pack_form_data_helper, &encoded);
   return encoded;
@@ -845,7 +863,8 @@ gnc_html_pack_form_data(GHashTable * form_data) {
 static int
 gnc_html_submit_cb(GtkHTML * html, const gchar * method, 
                    const gchar * action, const gchar * encoded_form_data,
-                   gpointer user_data) {
+                   gpointer user_data)
+{
   gnc_html * gnchtml = user_data;
   char     * location = NULL;
   char     * new_loc = NULL;
@@ -908,7 +927,8 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
 
 static void
 gnc_html_open_scm(gnc_html * html, const gchar * location,
-                  const gchar * label, int newwin) {
+                  const gchar * label, int newwin)
+{
   PINFO("location='%s'", location ? location : "(null)");
 }
 
@@ -921,7 +941,8 @@ gnc_html_open_scm(gnc_html * html, const gchar * location,
 
 void
 gnc_html_show_data(gnc_html * html, const char * data, 
-                   int datalen) {
+                   int datalen)
+{
   GtkHTMLStream * handle = gtk_html_begin(GTK_HTML(html->html));
   gtk_html_write(GTK_HTML(html->html), handle, data, datalen);
   gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_OK);  
@@ -1096,7 +1117,8 @@ gnc_html_show_url(gnc_html * html, URLType type,
  ********************************************************************/
 
 void
-gnc_html_reload(gnc_html * html) {
+gnc_html_reload(gnc_html * html)
+{
   gnc_html_history_node * n = gnc_html_history_get_current(html->history);
   if(n) {
     gnc_html_show_url(html, n->type, n->location, n->label, 0);
@@ -1110,7 +1132,8 @@ gnc_html_reload(gnc_html * html) {
  ********************************************************************/
 
 gnc_html * 
-gnc_html_new(void) {
+gnc_html_new(void)
+{
   gnc_html * retval = g_new0(gnc_html, 1);
   
   retval->container = gtk_scrolled_window_new(NULL, NULL);
@@ -1172,14 +1195,16 @@ gnc_html_new(void) {
  ********************************************************************/
 
 static gboolean
-html_cancel_helper(gpointer key, gpointer value, gpointer user_data) {
+html_cancel_helper(gpointer key, gpointer value, gpointer user_data)
+{
   g_free(key);
   g_list_free((GList *)value);
   return TRUE;
 }
 
 void
-gnc_html_cancel(gnc_html * html) {
+gnc_html_cancel(gnc_html * html)
+{
   /* remove our own references to requests */ 
   gnc_http_cancel_requests(html->http);
   
@@ -1193,7 +1218,8 @@ gnc_html_cancel(gnc_html * html) {
  ********************************************************************/
 
 void
-gnc_html_destroy(gnc_html * html) {
+gnc_html_destroy(gnc_html * html)
+{
 
   if(!html) return;
 
@@ -1218,27 +1244,31 @@ gnc_html_destroy(gnc_html * html) {
 }
 
 void
-gnc_html_set_urltype_cb(gnc_html * html, GncHTMLUrltypeCB urltype_cb) {
+gnc_html_set_urltype_cb(gnc_html * html, GncHTMLUrltypeCB urltype_cb)
+{
   html->urltype_cb = urltype_cb;
 }
 
 void
 gnc_html_set_load_cb(gnc_html * html, GncHTMLLoadCB load_cb,
-                     gpointer data) {
+                     gpointer data)
+{
   html->load_cb = load_cb;
   html->load_cb_data = data;
 }
 
 void
 gnc_html_set_flyover_cb(gnc_html * html, GncHTMLFlyoverCB flyover_cb,
-                        gpointer data) {
+                        gpointer data)
+{
   html->flyover_cb       = flyover_cb;
   html->flyover_cb_data  = data;
 }
 
 void
 gnc_html_set_button_cb(gnc_html * html, GncHTMLButtonCB button_cb,
-                        gpointer data) {
+                        gpointer data)
+{
   html->button_cb       = button_cb;
   html->button_cb_data  = data;
 }
@@ -1251,14 +1281,16 @@ static gboolean
 raw_html_receiver (gpointer     engine,
                    const gchar *data,
                    guint        len,
-                   gpointer     user_data) {
+                   gpointer     user_data)
+{
   FILE *fh = (FILE *) user_data;
   fwrite (data, len, 1, fh);
   return TRUE;
 }
 
 gboolean
-gnc_html_export(gnc_html * html, const char *filepath) {
+gnc_html_export(gnc_html * html, const char *filepath)
+{
   FILE *fh;
 
   g_return_val_if_fail (html != NULL, FALSE);
@@ -1276,7 +1308,8 @@ gnc_html_export(gnc_html * html, const char *filepath) {
 }
 
 void
-gnc_html_print(gnc_html * html) {
+gnc_html_print(gnc_html * html)
+{
   PrintSession * ps = gnc_print_session_create(FALSE);
   
   gtk_html_print(GTK_HTML(html->html),
@@ -1286,21 +1319,24 @@ gnc_html_print(gnc_html * html) {
 }
 
 gnc_html_history * 
-gnc_html_get_history(gnc_html * html) {
+gnc_html_get_history(gnc_html * html)
+{
   if (!html) return NULL;
   return html->history;
 }
 
 
 GtkWidget * 
-gnc_html_get_widget(gnc_html * html) {
+gnc_html_get_widget(gnc_html * html)
+{
   if (!html) return NULL;
   return html->container;
 }
 
 void
 gnc_html_register_object_handler(const char * classid, 
-                                 GncHTMLObjectCB hand) {
+                                 GncHTMLObjectCB hand)
+{
   g_return_if_fail (classid != NULL);
 
   if(!gnc_html_object_handlers) {
@@ -1315,7 +1351,8 @@ gnc_html_register_object_handler(const char * classid,
 }
 
 void
-gnc_html_unregister_object_handler(const char * classid) {
+gnc_html_unregister_object_handler(const char * classid)
+{
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
 
@@ -1331,7 +1368,8 @@ gnc_html_unregister_object_handler(const char * classid) {
 
 void
 gnc_html_register_action_handler(const char * actionid, 
-                                 GncHTMLActionCB hand) {
+                                 GncHTMLActionCB hand)
+{
   g_return_if_fail (actionid != NULL);
 
   if(!gnc_html_action_handlers) {
@@ -1346,7 +1384,8 @@ gnc_html_register_action_handler(const char * actionid,
 }
 
 void
-gnc_html_unregister_action_handler(const char * actionid) {
+gnc_html_unregister_action_handler(const char * actionid)
+{
   gchar * keyptr=NULL;
   gchar * valptr=NULL;
 
@@ -1389,7 +1428,8 @@ gnc_html_register_url_handler (URLType url_type, GncHTMLUrlCB hand)
 {
   g_return_if_fail (url_type != NULL && *url_type != '\0');
 
-  if(!gnc_html_url_handlers) {
+  if(!gnc_html_url_handlers)
+{
     gnc_html_url_handlers = g_hash_table_new (g_str_hash, g_str_equal);
   }
 
@@ -1417,7 +1457,8 @@ gnc_html_unregister_url_handler (URLType url_type)
  ********************************************************************/
 
 char *
-gnc_html_encode_string(const char * str) {
+gnc_html_encode_string(const char * str)
+{
   static gchar *safe = "$-._!*(),"; /* RFC 1738 */
   unsigned pos      = 0;
   GString *encoded  = g_string_new ("");
@@ -1457,7 +1498,8 @@ gnc_html_encode_string(const char * str) {
 
 
 char *
-gnc_html_decode_string(const char * str) {
+gnc_html_decode_string(const char * str)
+{
   static gchar * safe = "$-._!*(),"; /* RFC 1738 */
   GString * decoded  = g_string_new ("");
   const gchar   * ptr;
@@ -1502,7 +1544,8 @@ gnc_html_decode_string(const char * str) {
  ********************************************************************/
 
 char * 
-gnc_html_unescape_newlines(const gchar * in) {
+gnc_html_unescape_newlines(const gchar * in)
+{
   const char * ip = in;
   char    * cstr = NULL;
   GString * rv = g_string_new("");
@@ -1524,7 +1567,8 @@ gnc_html_unescape_newlines(const gchar * in) {
 }
 
 char * 
-gnc_html_escape_newlines(const gchar * in) {
+gnc_html_escape_newlines(const gchar * in)
+{
   char *out;
   const char * ip   = in;
   GString * escaped = g_string_new("");
@@ -1550,7 +1594,8 @@ gnc_html_escape_newlines(const gchar * in) {
 
 void
 gnc_html_generic_get_submit(gnc_html * html, const char * action, 
-                            GHashTable * form_data) {
+                            GHashTable * form_data)
+{
   URLType type;
   char    * location = NULL;
   char    * label = NULL;
@@ -1574,7 +1619,8 @@ gnc_html_generic_get_submit(gnc_html * html, const char * action,
 
 void
 gnc_html_generic_post_submit(gnc_html * html, const char * action, 
-                             GHashTable * form_data) {
+                             GHashTable * form_data)
+{
   char * encoded = gnc_html_pack_form_data(form_data);
   char * copy = strdup(encoded);
   gnc_http_start_post(html->http, action, 
@@ -1593,7 +1639,8 @@ gnc_html_generic_post_submit(gnc_html * html, const char * action,
 
 static void
 multipart_post_helper(gpointer key, gpointer val, 
-                      gpointer user_data) {
+                      gpointer user_data)
+{
   char * old_str = *(char **)user_data;
   char * new_str = 
     g_strconcat(old_str,
@@ -1609,7 +1656,8 @@ multipart_post_helper(gpointer key, gpointer val,
 
 void
 gnc_html_multipart_post_submit(gnc_html * html, const char * action, 
-                               GHashTable * form_data) {
+                               GHashTable * form_data)
+{
 
   char * htmlstr = g_strdup("");
   char * next_htmlstr;

@@ -104,7 +104,8 @@ static gint last_height = 0;
  ********************************************************************/
 
 static int
-gnc_help_window_check_urltype(URLType t) {
+gnc_help_window_check_urltype(URLType t)
+{
   if (!safe_strcmp (t, URL_TYPE_FILE) ||
       !safe_strcmp (t, URL_TYPE_HELP) ||
       !safe_strcmp (t, URL_TYPE_HTTP) ||
@@ -124,7 +125,8 @@ gnc_help_window_check_urltype(URLType t) {
 
 static void
 gnc_help_window_url_flyover(gnc_html * html, const gchar * url,
-                            gpointer data) {
+                            gpointer data)
+{
   gnc_help_window * help = (gnc_help_window *)data;
   gtk_statusbar_pop(GTK_STATUSBAR(help->statusbar), 1);
   if(url) {
@@ -139,7 +141,8 @@ gnc_help_window_url_flyover(gnc_html * html, const gchar * url,
  ********************************************************************/
 
 static void
-gnc_help_window_set_back_button(gnc_help_window * win, int enabled) {
+gnc_help_window_set_back_button(gnc_help_window * win, int enabled)
+{
   GtkToolbar * tb = GTK_TOOLBAR(win->toolbar);
   gtk_widget_set_sensitive
     (GTK_WIDGET(((GtkToolbarChild *)g_list_nth_data(tb->children, 0))->widget),
@@ -148,7 +151,8 @@ gnc_help_window_set_back_button(gnc_help_window * win, int enabled) {
 
 
 static void
-gnc_help_window_set_fwd_button(gnc_help_window * win, int enabled) {
+gnc_help_window_set_fwd_button(gnc_help_window * win, int enabled)
+{
   GtkToolbar * tb = GTK_TOOLBAR(win->toolbar);
   gtk_widget_set_sensitive
     (GTK_WIDGET(((GtkToolbarChild *)g_list_nth_data(tb->children, 1))->widget),
@@ -233,7 +237,8 @@ gnc_help_show_topic (gnc_help_window *help, const char * location)
 static void 
 gnc_help_window_load_cb(gnc_html * html, URLType type, 
                         const gchar * location, const gchar * label, 
-                        gpointer data) {
+                        gpointer data)
+{
   gnc_help_window * win = data;
 
   if(gnc_html_history_forward_p(gnc_html_get_history(win->html))) {
@@ -259,7 +264,8 @@ gnc_help_window_load_cb(gnc_html * html, URLType type,
  ********************************************************************/
 
 static int 
-gnc_help_window_fwd_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_fwd_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window       * help = data;
   gnc_html_history_node * node;
 
@@ -270,7 +276,8 @@ gnc_help_window_fwd_cb(GtkWidget * w, gpointer data) {
 }
 
 static int 
-gnc_help_window_back_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_back_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window       * help = data;
   gnc_html_history_node * node;
 
@@ -281,21 +288,24 @@ gnc_help_window_back_cb(GtkWidget * w, gpointer data) {
 }
 
 static int
-gnc_help_window_stop_button_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_stop_button_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window       * help = data;
   gnc_html_cancel(help->html);
   return TRUE;
 }
 
 static int
-gnc_help_window_reload_button_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_reload_button_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window       * help = data;
   gnc_html_reload(help->html);
   return TRUE;
 }
 
 static void
-goto_string_cb(char * string, gpointer data) {
+goto_string_cb(char * string, gpointer data)
+{
   if(!data) return;
   if(!string) {
     *(char **)data = NULL;
@@ -306,7 +316,8 @@ goto_string_cb(char * string, gpointer data) {
 }
 
 static int
-gnc_help_window_goto_button_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_goto_button_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window * help = data;
   int             retval = -1;
   char            * url = NULL;
@@ -342,7 +353,8 @@ gnc_help_window_goto_button_cb(GtkWidget * w, gpointer data) {
 
 static void
 gnc_help_window_topic_select_cb(GtkCTree * tree, GtkCTreeNode * row, int col,
-                                gpointer user_data) {
+                                gpointer user_data)
+{
   gnc_help_window * wind = user_data;
   URLType         type;
   char            * location = NULL;
@@ -358,13 +370,15 @@ gnc_help_window_topic_select_cb(GtkCTree * tree, GtkCTreeNode * row, int col,
 }
 
 static void
-free_url_cb(gpointer user_data) {
+free_url_cb(gpointer user_data)
+{
   if(user_data) free(user_data);
 }
 
 static void 
 topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent, 
-                    gnc_help_window * help) {
+                    gnc_help_window * help)
+{
   SCM          this_topic;
   SCM          subtopics;
   GtkCTreeNode * node; 
@@ -432,7 +446,8 @@ gnc_help_window_load_topics(gnc_help_window * help, const gchar * file)
 
 
 static void
-gnc_help_window_destroy_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_destroy_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window * help = data;
 
   gnc_unregister_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
@@ -454,14 +469,16 @@ gnc_help_window_destroy_cb(GtkWidget * w, gpointer data) {
 }
 
 static void
-gnc_help_window_close_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_close_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window * help = data;
 
   gnc_close_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
 }
 
 static void
-gnc_help_window_print_cb(GtkWidget * w, gpointer data) {
+gnc_help_window_print_cb(GtkWidget * w, gpointer data)
+{
   gnc_help_window * help = data;
   
   gnc_html_print(help->html);
@@ -469,7 +486,8 @@ gnc_help_window_print_cb(GtkWidget * w, gpointer data) {
 
 
 static void 
-item_destroy_cb(GtkListItem * li, gpointer user_data) {
+item_destroy_cb(GtkListItem * li, gpointer user_data)
+{
   gpointer x = gtk_object_get_user_data(GTK_OBJECT(li));
   g_free(x);
 }
@@ -477,7 +495,8 @@ item_destroy_cb(GtkListItem * li, gpointer user_data) {
 
 static void
 show_search_results(gnc_help_window * help, const char * matches, 
-                    int match_len) {
+                    int match_len)
+{
   const char * current;
   const char * end;
   char       * this_link=NULL;
@@ -523,7 +542,8 @@ show_search_results(gnc_help_window * help, const char * matches,
 
 
 static void
-gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
+gnc_help_window_search_button_cb(GtkButton * button, gpointer data)
+{
   gnc_help_window * help = data;
   char            * search_string = 
     gtk_entry_get_text(GTK_ENTRY(help->search_entry));
@@ -549,7 +569,8 @@ gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
 }
 
 static void
-gnc_help_window_search_help_button_cb(GtkButton * button, gpointer data) {
+gnc_help_window_search_help_button_cb(GtkButton * button, gpointer data)
+{
 #if 0
   gnc_help_window * help = data;
 #endif
@@ -559,7 +580,8 @@ gnc_help_window_search_help_button_cb(GtkButton * button, gpointer data) {
 
 static void
 gnc_help_window_search_result_select_cb(GtkWidget * list, GtkWidget * child,
-                                        gpointer user_data) {
+                                        gpointer user_data)
+{
   gnc_help_window * help = user_data;
   char * helpfile = gtk_object_get_user_data(GTK_OBJECT(child));
   gnc_help_window_show_help(help, helpfile, NULL);
@@ -584,7 +606,8 @@ close_handler (gpointer user_data)
  ********************************************************************/
 
 gnc_help_window *
-gnc_help_window_new (void) {
+gnc_help_window_new (void)
+{
   
   gnc_help_window * help = g_new0(gnc_help_window, 1);
   char            * indexfile;
@@ -741,7 +764,8 @@ gnc_help_window_new (void) {
  ********************************************************************/
 
 void
-gnc_help_window_destroy(gnc_help_window * help) {
+gnc_help_window_destroy(gnc_help_window * help)
+{
   if (!help) return;
 
   gnc_unregister_gui_component_by_data (WINDOW_HELP_CM_CLASS, help);
@@ -763,7 +787,8 @@ gnc_help_window_destroy(gnc_help_window * help) {
 
 void
 gnc_help_window_show_help(gnc_help_window * help, const char * location,
-                          const char * label) {
+                          const char * label)
+{
   gnc_html_show_url(help->html, URL_TYPE_FILE, location, label, 0);
 }
 
@@ -773,7 +798,8 @@ gnc_help_window_show_help(gnc_help_window * help, const char * location,
  ********************************************************************/
 
 void
-helpWindow(GtkWidget * parent, const char * title, const char * htmlfile) {
+helpWindow(GtkWidget * parent, const char * title, const char * htmlfile)
+{
   gnc_help_window * help = gnc_help_window_new();
   gnc_help_window_show_help(help, htmlfile, NULL);
 }

@@ -89,7 +89,8 @@ static void gnc_report_window_reload_cb(GtkWidget * w, gpointer data);
 
 static GtkWidget * 
 gnc_report_window_view_labeler(GnomeMDIChild * child, GtkWidget * current,
-                               gpointer user_data) {
+                               gpointer user_data)
+{
   GNCMDIChildInfo  * rwin = gtk_object_get_user_data(GTK_OBJECT(child));
   gnc_report_window * report;
   SCM    get_name = gh_eval_str("gnc:report-name");
@@ -206,7 +207,8 @@ gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data)
  ********************************************************************/
 
 GnomeMDIChild * 
-gnc_report_window_create_child(const gchar * configstring) {
+gnc_report_window_create_child(const gchar * configstring)
+{
   GnomeMDIGenericChild * reportchild = 
     gnome_mdi_generic_child_new(configstring);
   GNCMDIInfo * maininfo = gnc_mdi_get_current();
@@ -227,7 +229,8 @@ gnc_report_window_create_child(const gchar * configstring) {
  ********************************************************************/
 
 void
-gnc_main_window_open_report(int report_id, gint toplevel) {
+gnc_main_window_open_report(int report_id, gint toplevel)
+{
   char * id_name = g_strdup_printf("id=%d", report_id);  
   char * child_name = gnc_build_url (URL_TYPE_REPORT, id_name, NULL);
   g_free (id_name);
@@ -236,7 +239,8 @@ gnc_main_window_open_report(int report_id, gint toplevel) {
 
 
 void
-gnc_main_window_open_report_url(const char * url, gint toplevel) {
+gnc_main_window_open_report_url(const char * url, gint toplevel)
+{
   GnomeMDIChild * reportchild = gnc_report_window_create_child(url);
   GNCMDIInfo   * maininfo = gnc_mdi_get_current();
   
@@ -265,7 +269,8 @@ gnc_main_window_open_report_url(const char * url, gint toplevel) {
  ********************************************************************/
 
 static int
-gnc_report_window_check_urltype(URLType t) {
+gnc_report_window_check_urltype(URLType t)
+{
   if (!safe_strcmp (t, URL_TYPE_REPORT)) {
     return TRUE;
   } else {
@@ -279,7 +284,8 @@ gnc_report_window_check_urltype(URLType t) {
  ********************************************************************/
 
 static int 
-gnc_report_window_fwd_cb(GtkWidget * w, gpointer data) {
+gnc_report_window_fwd_cb(GtkWidget * w, gpointer data)
+{
   gnc_report_window     * report = data;
   gnc_html_history_node * node = NULL;
 
@@ -293,7 +299,8 @@ gnc_report_window_fwd_cb(GtkWidget * w, gpointer data) {
 }
 
 static int 
-gnc_report_window_back_cb(GtkWidget * w, gpointer data) {
+gnc_report_window_back_cb(GtkWidget * w, gpointer data)
+{
   gnc_report_window     * report = data;
   gnc_html_history_node * node;
   
@@ -308,7 +315,8 @@ gnc_report_window_back_cb(GtkWidget * w, gpointer data) {
 
 
 static int
-gnc_report_window_stop_button_cb(GtkWidget * w, gpointer data) {
+gnc_report_window_stop_button_cb(GtkWidget * w, gpointer data)
+{
   gnc_report_window * report = data;
   gnc_html_cancel(report->html);
   return TRUE;
@@ -521,7 +529,8 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data)
 }
 
 static void
-gnc_report_window_reload_cb(GtkWidget * unused, gpointer data) {
+gnc_report_window_reload_cb(GtkWidget * unused, gpointer data)
+{
   gnc_report_window * report = data;
   SCM               dirty_report = gh_eval_str("gnc:report-set-dirty?!");
 
@@ -532,7 +541,8 @@ gnc_report_window_reload_cb(GtkWidget * unused, gpointer data) {
 }
 
 static void
-gnc_report_window_set_back_button(gnc_report_window * win, int enabled) {
+gnc_report_window_set_back_button(gnc_report_window * win, int enabled)
+{
   GnomeApp    * app = win->mc->app;
   GnomeUIInfo * info;
 
@@ -546,7 +556,8 @@ gnc_report_window_set_back_button(gnc_report_window * win, int enabled) {
 }
 
 static void
-gnc_report_window_set_fwd_button(gnc_report_window * win, int enabled) {
+gnc_report_window_set_fwd_button(gnc_report_window * win, int enabled)
+{
   GnomeApp    * app = win->mc->app;
   GnomeUIInfo * info;
 
@@ -560,12 +571,14 @@ gnc_report_window_set_fwd_button(gnc_report_window * win, int enabled) {
 }
 
 void
-gnc_report_window_reload(gnc_report_window * win) {
+gnc_report_window_reload(gnc_report_window * win)
+{
   gnc_html_reload(win->html);
 }
 
 static void
-gnc_report_window_option_change_cb(gpointer data) {
+gnc_report_window_option_change_cb(gpointer data)
+{
   gnc_report_window * report = data;
   SCM               dirty_report = gh_eval_str("gnc:report-set-dirty?!");
 
@@ -682,7 +695,8 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
  ********************************************************************/
 
 static void
-gnc_report_window_destroy_cb(GtkWidget * w, gpointer data) {
+gnc_report_window_destroy_cb(GtkWidget * w, gpointer data)
+{
   gnc_report_window * win = data;
   /* make sure we don't get a double dose -o- destruction */ 
   gtk_signal_disconnect_by_data(GTK_OBJECT(win->container), 
@@ -697,14 +711,16 @@ gnc_report_window_destroy_cb(GtkWidget * w, gpointer data) {
  ********************************************************************/
 
 static void
-gnc_report_window_print_cb(GtkWidget * w, gpointer data) {
+gnc_report_window_print_cb(GtkWidget * w, gpointer data)
+{
   gnc_report_window * win = data;
   gnc_html_print(win->html);
 }
 
 static void 
 gnc_report_window_history_destroy_cb(gnc_html_history_node * node, 
-                                     gpointer user_data) {
+                                     gpointer user_data)
+{
   static SCM         remover = SCM_BOOL_F;
   int                report_id;
   
@@ -789,7 +805,8 @@ gnc_report_window_new(GNCMDIChildInfo * mc)
 
 void
 gnc_report_window_create_toolbar(gnc_report_window * win,
-                                 GNCMDIChildInfo * child) {
+                                 GNCMDIChildInfo * child)
+{
   GnomeUIInfo       toolbar_data[] = 
   {
     { GNOME_APP_UI_ITEM,
@@ -869,7 +886,8 @@ gnc_report_window_create_toolbar(gnc_report_window * win,
  ********************************************************************/
 void
 gnc_report_window_create_menu(gnc_report_window * report, 
-                              GNCMDIChildInfo * child) {
+                              GNCMDIChildInfo * child)
+{
   child->menu_info = NULL;
 }
 
@@ -880,7 +898,8 @@ gnc_report_window_create_menu(gnc_report_window * report,
  ********************************************************************/
 
 void
-gnc_report_window_destroy(gnc_report_window * win) {
+gnc_report_window_destroy(gnc_report_window * win)
+{
 
   SCM  get_editor = gh_eval_str("gnc:report-editor-widget");
   SCM  set_editor = gh_eval_str("gnc:report-set-editor-widget!");
@@ -918,36 +937,42 @@ gnc_report_window_destroy(gnc_report_window * win) {
 }
 
 gnc_html *
-gnc_report_window_get_html(gnc_report_window * report) {
+gnc_report_window_get_html(gnc_report_window * report)
+{
   return report->html;
 }
 
 GtkWidget *
-gnc_report_window_get_container(gnc_report_window * report) {
+gnc_report_window_get_container(gnc_report_window * report)
+{
   return report->container;
 }
 
 SCM
-gnc_report_window_get_report(gnc_report_window * report) {
+gnc_report_window_get_report(gnc_report_window * report)
+{
   return report->cur_report;
 }
 
 void
-gnc_report_window_show_report(gnc_report_window * report, int report_id) {
+gnc_report_window_show_report(gnc_report_window * report, int report_id)
+{
   char * location = g_strdup_printf("id=%d", report_id);  
   gnc_html_show_url(report->html, URL_TYPE_REPORT, location, NULL, 0);
   g_free(location);
 }
 
 void
-reportWindow(int report_id) {
+reportWindow(int report_id)
+{
   gnc_set_busy_cursor (NULL, TRUE);
   gnc_main_window_open_report(report_id, FALSE);
   gnc_unset_busy_cursor (NULL);
 }
 
 void
-gnc_print_report (int report_id) {
+gnc_print_report (int report_id)
+{
   gnc_html *html;
   char * location;
 
@@ -979,7 +1004,8 @@ struct report_default_params_data {
 
 static void
 gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
-                            gpointer user_data) {
+                            gpointer user_data)
+{
   SCM  dirty_report = gh_eval_str("gnc:report-set-dirty?!");
   struct report_default_params_data * win = user_data;
   
@@ -990,13 +1016,15 @@ gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
 
 static void
 gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
-                           gpointer user_data) {
+                           gpointer user_data)
+{
   gnome_ok_dialog(_("Set the report options you want using this dialog."));
 }
 
 static void
 gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
-                            gpointer user_data) {
+                            gpointer user_data)
+{
   struct report_default_params_data * win = user_data;
   SCM    set_editor = gh_eval_str("gnc:report-set-editor-widget!");
   
@@ -1061,7 +1089,8 @@ gnc_report_window_default_params_editor(SCM options, SCM report)
 }
 
 void
-gnc_report_window_remove_edited_report(gnc_report_window * win, SCM report) { 
+gnc_report_window_remove_edited_report(gnc_report_window * win, SCM report)
+{ 
   SCM new_edited = scm_delete(win->edited_reports, report);
   scm_unprotect_object(win->edited_reports);
   win->edited_reports = new_edited;
@@ -1069,7 +1098,8 @@ gnc_report_window_remove_edited_report(gnc_report_window * win, SCM report) {
 }
 
 void
-gnc_report_window_add_edited_report(gnc_report_window * win, SCM report) {
+gnc_report_window_add_edited_report(gnc_report_window * win, SCM report)
+{
   SCM new_edited = gh_cons(report, win->edited_reports);
   scm_unprotect_object(win->edited_reports);
   win->edited_reports = new_edited;
@@ -1077,7 +1107,8 @@ gnc_report_window_add_edited_report(gnc_report_window * win, SCM report) {
 }
 
 void
-gnc_report_raise_editor(SCM report) {
+gnc_report_raise_editor(SCM report)
+{
   SCM get_editor = gh_eval_str("gnc:report-editor-widget");
   SCM editor = gh_call1(get_editor, report);
   gtk_window_present(gw_wcp_get_ptr(editor));
