@@ -162,7 +162,11 @@ gnc_ui_commodity_druid_create(const char * filename) {
                             GNOME_DRUID_PAGE(new_page->page));
     back_page = GNOME_DRUID_PAGE(new_page->page);
   }
+
   gtk_widget_show_all(d->window);
+
+  g_list_free(orphans);
+
   return d;
 }
 

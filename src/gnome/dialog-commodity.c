@@ -304,7 +304,7 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
                                const char * init_string) {
   GList * namespaces;
   char  * active;
-  
+
   /* fetch a list of the namespaces */
   namespaces = gnc_commodity_table_get_namespaces(gnc_engine_commodities());
   namespaces = g_list_sort(namespaces, g_strcmp);

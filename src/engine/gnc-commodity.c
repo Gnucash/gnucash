@@ -292,20 +292,22 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
   GList         * all;
   GList         * iterator;
 
-  all = gnc_commodity_table_get_commodities(table, namespace);
-  if(fullname && fullname[0]) {
-    for(iterator = all; iterator; iterator=iterator->next) {
-      if(!strcmp(fullname, 
-                 gnc_commodity_get_printname(iterator->data))) {
-        retval = iterator->data;
-        break;
-      }
-    }
-    return retval;
-  }
-  else {
+  if (!fullname || (fullname[0] == '\0'))
     return NULL;
+
+  all = gnc_commodity_table_get_commodities(table, namespace);
+
+  for(iterator = all; iterator; iterator=iterator->next) {
+    if(!strcmp(fullname, 
+               gnc_commodity_get_printname(iterator->data))) {
+      retval = iterator->data;
+      break;
+    }
   }
+
+  g_list_free (all);
+
+  return retval;
 }
 
 

@@ -308,7 +308,7 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   {
     GList *list;
 
-    list = gnc_scm_to_account_list(value);
+    list = gnc_scm_to_glist_account_ptr(value);
 
     gtk_clist_unselect_all(GTK_CLIST(option->widget));
     gnc_account_tree_select_accounts(GNC_ACCOUNT_TREE(option->widget),
@@ -530,9 +530,8 @@ gnc_option_get_ui_value(GNCOption *option)
     tree = GNC_ACCOUNT_TREE(option->widget);
     list = gnc_account_tree_get_current_accounts(tree);
 
-    result = gnc_account_list_to_scm(list);
-
-    g_list_free(list);
+    /* handover list */
+    result = gnc_glist_account_ptr_to_scm(list);
   }
   else if (safe_strcmp(type, "list") == 0)
   {

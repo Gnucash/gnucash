@@ -266,29 +266,46 @@ xml_add_commodity_restorer(xmlNodePtr p, gnc_commodity *c) {
   
 static gboolean
 xml_add_commodity_restorers(xmlNodePtr p) {
-  GList *lp;
   gnc_commodity_table *commodities;
+  GList *namespaces;
+  GList *lp;
 
   if(!p) return(FALSE);
 
   commodities = gnc_engine_commodities();
   if(!commodities) return(FALSE);
 
-  for(lp = gnc_commodity_table_get_namespaces(commodities); lp; lp = lp->next) {
+  namespaces = gnc_commodity_table_get_namespaces(commodities);
+
+  for(lp = namespaces; lp; lp = lp->next) {
     gchar *space;
-    if(!lp->data) return(FALSE);
-    if(!lp->data) return(FALSE);
+
+    if(!lp->data) {
+      g_list_free (namespaces);
+      return(FALSE);
+    }
+
     space = (gchar *) lp->data;
     if(strcmp(GNC_COMMODITY_NS_ISO, space) != 0) {
       GList *comms = gnc_commodity_table_get_commodities(commodities, space);
       GList *lp2;
-      
+
       for(lp2 = comms; lp2; lp2 = lp2->next) {
         gnc_commodity *com = (gnc_commodity *) lp2->data;
-        if(!xml_add_commodity_restorer(p, com)) return(FALSE);
+
+        if(!xml_add_commodity_restorer(p, com)) {
+          g_list_free (comms);
+          g_list_free (namespaces);
+          return(FALSE);
+        }
       }
+
+      g_list_free (comms);
     }
   }
+
+  g_list_free (namespaces);
+
   return(TRUE);
 }
 
