@@ -68,15 +68,19 @@ xaccInitAccount (Account * acc)
 
   acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
+  acc->reconciled_balance = 0.0;
   acc->running_balance  = 0.0;
   acc->running_cleared_balance = 0.0;
+  acc->running_reconciled_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
   
   acc->accountName = NULL;
+  acc->accountCode = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
+  acc->currency    = NULL;
   
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
@@ -111,9 +115,11 @@ xaccFreeAccount( Account *acc )
   /* recursively free children */
   xaccFreeAccountGroup (acc->children);
 
-  free(acc->accountName);
-  free(acc->description);
-  free(acc->notes);
+  if (acc->accountName) free (acc->accountName);
+  if (acc->accountCode) free (acc->accountCode);
+  if (acc->description) free (acc->description);
+  if (acc->notes) free (acc->notes);
+  if (acc->currency) free (acc->currency);
   
   /* any split pointing at this account needs to be unmarked */
   i=0;
@@ -145,6 +151,7 @@ xaccFreeAccount( Account *acc )
 
   acc->balance  = 0.0;
   acc->cleared_balance = 0.0;
+  acc->reconciled_balance = 0.0;
 
   acc->flags = 0;
   acc->type  = -1;
@@ -152,6 +159,7 @@ xaccFreeAccount( Account *acc )
   acc->accountName = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
+  acc->currency    = NULL;
   
   acc->changed     = 0;
   acc->open        = 0;

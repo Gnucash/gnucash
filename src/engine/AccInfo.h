@@ -37,25 +37,63 @@
  * Note: the actual values of these are *very* important, 
  * as it is the values, not the enums, that are stored 
  * in the file format! 
+ * hack alert  ... note that this is a bug that should be fixed ...
+ */
+
+/*
+ * The account types are used to determine how the transaction data
+ * in the account is displayed.  
  */
 enum 
 {
   BANK = 0,
+  /* The bank account type denotes a savings or checking account
+   * held at a bank.  Often interest bearing.
+   */
+
   CASH = 1,
+  /* The cash account type is used to denote a shoe-box or pillowcase
+   * stuffed with cash.
+   */
+
+  CREDIT = 3,  
+  /* The Credit card account is used to denote credit (e.g. amex) and 
+   * debit (e.g. visa, mastercard) card accounts 
+   */
+
   ASSET = 2,
-  CREDIT = 3,          /* credit card */
   LIABILITY = 4,
+  /* asset and liability accounts indicate generic, generalized accounts
+   * that are none of the above.
+   */
+
   STOCK = 5,
   MUTUAL= 6, 
+  /* Stock and Mutual Fund accounts will typically be shown in registers
+   * which show three columns: price, number of shares, and value.
+   */
+
   INCOME = 7,
   EXPENSE = 8,
+  /* Income and expense accounts are used to denote income and expenses.
+   * Thus, when data in these accountsare displayed, the sign of the
+   * splits (entries) must be reversed.
+   */ 
+
   EQUITY = 9,
+  /* Equity account is used to balance the balance sheet. */
 
   /* bank account types */
   CHECKING = 10,
   SAVINGS = 11,
   MONEYMRKT = 12,
   CREDITLINE = 13,     /* line of credit */
+
+  /* CURRENCY = 20, */
+  /* The currency account type indicates that the account is a currency trading 
+   * account.  In many ways, a currency trading account is like a stock trading
+   * account, where both quantities and prices are set.
+   */
 
   NUM_ACCOUNT_TYPES = 14
 };

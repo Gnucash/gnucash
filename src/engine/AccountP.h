@@ -50,14 +50,60 @@
 struct _account {
   /* public data, describes account */
 
+  /* The accountName is an arbitrary string assinged by the user. 
+   * It is intended to a short, 5 to 30 character long string that
+   * is displayed by the GUI as the account mnomenic. 
+   */
+  char     *accountName;
+
+  /* The accountCode is an arbitary string assigned by the user.
+   * It is intended to be reporting code that is a synonym for the 
+   * accountName. Typically, it will be a numeric value tht follows 
+   * the numbering assignments commonly used by accountants, such 
+   * as 100, 200 or 600 for top-level * accounts, and 101, 102..  etc.
+   * for detail accounts.
+   */
+  char     *accountCode;
+
+  /* The description is an arbitraary string assigned by the user. 
+   * It is intended to be a longer, 1-5 sentance description of what
+   * this account is all about.
+   */
+  char     *description;
+
+  /* The notes field is an arbitrary string assigned by the user.
+   * It is intended to hold long, free-form and/or MIME-format 
+   * arbitrary additional data about the account.
+   */
+  char     *notes;
+
+  /* The type field is the account type, picked from the enumerated 
+   * list that includes BANK, STOCK, CREDIT, INCOME, etc.  It's
+   * intended use is to be a hint to the GUI as to how to display   
+   * and format the transaction data.
+   */
+  short     type;
+
+  /* The currency field denotes the default currency in which all
+   * splits in this account are denominated.  It's value *MUST*
+   * be a three-letter ISO currency code.  Currency trading accounts
+   * are created by creating two accounts, each with a different
+   * default currency, and then having transactions with one split in one
+   * currency account, and another split in the other currency account.
+   */
+  char    *currency;
+
+  /* The parent and children pointers are used to implement an account
+   * heirarchy, of accounts that have sub-accounts ("detail accounts").
+   */
   AccountGroup *parent;    /* back-pointer to parent */
   AccountGroup *children;  /* pointer to sub-accounts */
-  int       id;                     /* unique account id, internally assigned */
+
+  /* The id number is internally assigned by the engine, and is used for 
+   * various housekeeping operations by the engine.
+   */
+  int       id;            /* unique account id, internally assigned */
   char      flags;
-  short     type;
-  char     *accountName;
-  char     *description;
-  char     *notes;
 
   /* protected data, cached parameters */
   double balance;
