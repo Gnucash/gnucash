@@ -114,11 +114,12 @@
 
 typedef struct _BasicCell {
 
-  short width;     /* column width, in chars, not pixels */
-  short alignment; /* column text alignment */
-  char  input_output;  /* zero if output-only */
+  short width;           /* column width, in chars, not pixels */
+  short alignment;       /* column text alignment */
+  char  input_output;    /* zero if output-only */
 
-  char * value;   /* current value */
+  char * value;          /* current value */
+  unsigned int changed;  /* 2^32-1 if value modified */
 
   /* "virtual", overloaded set-value method */
   void         (*set_value)     (struct _BasicCell *,

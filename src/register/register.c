@@ -41,7 +41,7 @@
 
 #define MAX_COLS 8
 
-/* ================================= */
+/* ============================================== */
 
 BasicRegister * xaccMallocBasicRegister (void)
 {
@@ -51,7 +51,7 @@ BasicRegister * xaccMallocBasicRegister (void)
    return reg;
 }
 
-/* ================================= */
+/* ============================================== */
 
 void xaccInitBasicRegister (BasicRegister *reg)
 {
@@ -186,6 +186,30 @@ void xaccInitBasicRegister (BasicRegister *reg)
    table -> header = header;
    xaccSetCursor (table, curs);
    reg->table = table;
+}
+
+/* ============================================== */
+
+unsigned int
+xaccGetChangeFlag (BasicRegister *reg)
+{
+
+   unsigned int changed = 0;
+
+   changed |= MOD_DATE && reg->dateCell->cell.changed;
+   changed |= MOD_NUM  && reg->numCell->changed;
+   changed |= MOD_DESC && reg->descCell->cell.changed;
+   changed |= MOD_RECN && reg->recnCell->changed;
+   changed |= MOD_AMNT && reg->creditCell->cell.changed;
+   changed |= MOD_AMNT && reg->debitCell->cell.changed;
+   /* changed |= MOD_SHRS && reg->xxxxxxCell->cell.changed; */
+   /* changed |= MOD_PRIC && reg->xxxxxxCell->cell.changed; */
+   changed |= MOD_MEMO && reg->memoCell->changed;
+   changed |= MOD_ACTN && reg->actionCell->cell.changed;
+   changed |= MOD_XFRM && reg->xfrmCell->cell.changed;
+   /* changed |= MOD_XTO && reg->xtoCell->cell.changed; */
+
+   return changed;
 }
 
 /* ============ END OF FILE ===================== */

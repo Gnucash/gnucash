@@ -354,6 +354,7 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
          if (cell) {
             jphys = j + table->current_cursor_col * table->tile_width;
             xaccSetBasicCellValue (cell, table->entries[iphys][jphys]);
+            cell->changed = 0;
          }
       }
    }
@@ -385,6 +386,7 @@ void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
          for (j=0; j<table->tile_width; j++) {
             cell = table->cursor->cells[i][j];
             if (cell) {
+               cell->changed = 0;
                if (cell->move) {
                   (cell->move) (cell, -1, -1);
                }
@@ -475,11 +477,6 @@ verifyCursorPosition (Table *table, int phys_row, int phys_col)
 
    if ((virt_row != table->current_cursor_row) ||
        (virt_col != table->current_cursor_col)) {
-
-printf ("verify cursor bad cur %d %d new %d %d \n",
-table->current_cursor_row,
-table->current_cursor_col,
-virt_row, virt_col);
 
       /* before leaving, the current virtual position,
        * commit any edits that have been accumulated 
@@ -655,7 +652,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row %= (arr->numRows);
    rel_col %= (arr->numCols);
 
-   printf ("enter %d %d \n", row, col);
+printf ("enter %d %d \n", row, col);
 
    /* since we are here, there must be a cell handler.
     * therefore, we accept entry into the cell by default, 
@@ -675,6 +672,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
       if (val != retval) {
          if (table->entries[row][col]) free (table->entries[row][col]);
          table->entries[row][col] = retval;
+         (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
          XbaeMatrixSetCell (mw, row, col, retval);
          XbaeMatrixRefreshCell (mw, row, col);
 
@@ -752,6 +750,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
          /* update data. bounds check done earlier */
          free (table->entries[row][col]);
          table->entries[row][col] = (char *) retval;
+         (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
 
          /* if the callback modified the display string,
           * update the display cell as well */
@@ -806,9 +805,9 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    rel_row %= (arr->numRows);
    rel_col %= (arr->numCols);
 
-   printf ("leave %d %d \n", row, col);
+printf ("leave %d %d \n", row, col);
 
-   /* by default, accept whateve the final roposed edit is */
+   /* by default, accept whatever the final proposed edit is */
    cbs->doit = True;
 
    /* OK, if there is a callback for this cell, call it */
@@ -820,16 +819,32 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
       retval = leave (arr->cells[rel_row][rel_col], val);
 
       newval = (char *) retval;
-      if (val == retval) newval = strdup (val);
       if (NULL == retval) newval = strdup (val);
+      if (val == retval) newval = strdup (val);
 
-      /* save whatever was returned */
-      if (table->entries[row][col]) free (table->entries[row][col]);
-      table->entries[row][col] = newval;
-      cbs->value = strdup (newval);
+      /* if the leave() routine declared a new string, lets use it */
+      if ( retval && (retval != val)) {
+         cbs->value = strdup (retval);
+      }
+
    } else {
-      if (table->entries[row][col]) free (table->entries[row][col]);
-      table->entries[row][col] = strdup (cbs->value);
+      newval = strdup (cbs->value);
+   }
+
+   /* save whatever was returned; but lets check for  
+    * changes to avoid roiling the cells too much */
+   if (table->entries[row][col]) {
+      if (strcmp (table->entries[row][col], newval)) {
+         free (table->entries[row][col]);
+         table->entries[row][col] = newval;
+         (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
+      } else {
+         /* leave() allocated memory, which we will not be using ... */
+         free (newval);
+      }
+   } else {
+      table->entries[row][col] = newval;
+      (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
    }
 }
 

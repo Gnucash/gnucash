@@ -22,6 +22,7 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->width = 0;
    cell->alignment = 0;
    cell->value = 0x0;
+   cell->changed = 0;
    cell->set_value = NULL;
    cell->enter_cell = NULL;
    cell->modify_verify = NULL;
