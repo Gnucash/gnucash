@@ -28,11 +28,9 @@
  * title 'in-place' in the clist, but gnome-1.2 does not allow
  * entry widgets in clist cells.
  *
- * XXX need to save title, notes on window close
- * XXX need to delete data structs on window close.
- * XXX need to listen to 'changed' events and redraw as needed.
- * XXX Show account name somewhere ... in the lot frame ?
- * XXX need to finish lot splits viewer
+ * XXX todo: The button "view lot in register" is not implemented.
+ *   it needs to open register window showing only the splits in the 
+ *     given lot ... 
  */
 
 #define _GNU_SOURCE
@@ -41,11 +39,13 @@
 
 #include <glib.h>
 #include <gnome.h>
+#include <libgnomeui/gnome-window-icon.h>
 
 #include "Account.h"
 #include "cap-gains.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
+#include "gnc-event.h"
 #include "gnc-lot.h"
 #include "kvp_frame.h"
 #include "messages.h"
@@ -54,8 +54,11 @@
 
 #include "dialog-utils.h"
 #include "lot-viewer.h"
+#include "gnc-component-manager.h"
 #include "gnc-ui-util.h"
 #include "misc-gnome-utils.h"
+
+#define LOT_VIEWER_CM_CLASS "lot-viewer"
 
 #define OPEN_COL  0
 #define CLOSE_COL 1
@@ -121,7 +124,7 @@ lv_show_splits (GNCLotViewer *lv)
       gnc_commodity *currency;
       Transaction *trans = xaccSplitGetParent (split);
       time_t date = xaccTransGetDate (trans);
-      gnc_numeric amnt, gains;
+      gnc_numeric amnt, valu, gains;
       const char *row_vals[MINI_NUM_COLS];
       int row;
 
@@ -141,13 +144,18 @@ lv_show_splits (GNCLotViewer *lv)
                  gnc_account_print_info (lv->account, TRUE));
       row_vals[MINI_AMNT_COL] = amtbuff;
 
+      /* Value. Invert the sign on the first, opening entry. */
       currency = xaccTransGetCurrency (trans);
-      xaccSPrintAmount (valbuff, 
-                 gnc_numeric_neg (xaccSplitGetValue (split)),
+      valu = xaccSplitGetValue (split);
+      if (node != split_list)
+      {
+         valu = gnc_numeric_neg (valu);
+      }
+      xaccSPrintAmount (valbuff, valu,
                  gnc_commodity_print_info (currency, TRUE));
       row_vals[MINI_VALU_COL] = valbuff;
 
-      /* Gains */
+      /* Gains. Blank if none. */
       gains = xaccSplitGetCapGains (split);
       if (gnc_numeric_zero_p(gains))
       {
@@ -201,16 +209,18 @@ lv_select_row_cb (GtkCList       *clist,
    GNCLotViewer *lv = user_data;
    GNCLot *lot;
    const char * str;
+   KvpFrame *kvp;
 
    lot = gtk_clist_get_row_data (clist, row);
+   kvp = gnc_lot_get_slots (lot);
 
-   str = kvp_frame_get_string (gnc_lot_get_slots (lot), "/title");
+   str = kvp_frame_get_string (kvp, "/title");
    if (!str) str = "";
    gtk_entry_set_text (lv->title_entry, str);
    gtk_entry_set_editable (lv->title_entry, TRUE);
    
    /* Set the notes field */
-   str = kvp_frame_get_string (gnc_lot_get_slots (lot), "/notes");
+   str = kvp_frame_get_string (kvp, "/notes");
    if (!str) str = "";
    xxxgtk_text_set_text (lv->lot_notes, str);
    gtk_text_set_editable (lv->lot_notes, TRUE);
@@ -257,14 +267,19 @@ lv_unselect_row_cb (GtkCList       *clist,
    GNCLot *lot = lv->selected_lot;
    const char * str;
 
-   /* Get the title, blank the title widget */
+   /* Get the title, plunk it into ctree */
    str = gtk_entry_get_text (lv->title_entry);
    gtk_clist_set_text (lv->lot_clist, row, TITLE_COL, str);
-   kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", str);
 
-   /* Get the notes, blank the notes area */
-   str = xxxgtk_text_get_text (lv->lot_notes);
-   kvp_frame_set_str (gnc_lot_get_slots (lot), "/notes", str);
+   if (lot)
+   {
+      KvpFrame *kvp = gnc_lot_get_slots (lot);
+      kvp_frame_set_str (kvp, "/title", str);
+
+      /* Get the notes, save the notes */
+      str = xxxgtk_text_get_text (lv->lot_notes);
+      kvp_frame_set_str (kvp, "/notes", str);
+   }
 
    lv_unset_lot (lv);
 }
@@ -296,7 +311,6 @@ lv_delete_cb (GtkButton *but, gpointer user_data)
    gnc_lot_destroy (lot);
    lv_unset_lot (lv);
    gnc_lot_viewer_fill (lv);
-printf ("duude deleted the lot\n");
 }
 
 /* ======================================================================== */
@@ -309,7 +323,6 @@ lv_scrub_lot_cb (GtkButton *but, gpointer user_data)
    if (NULL == lv->selected_lot) return; 
    xaccLotScrubDoubleBalance (lv->selected_lot);
    gnc_lot_viewer_fill (lv);
-printf ("duude done lot scrubbin lot\n");
 }
 
 /* ======================================================================== */
@@ -323,10 +336,11 @@ lv_scrub_acc_cb (GtkButton *but, gpointer user_data)
    xaccAccountScrubDoubleBalance (gnc_lot_get_account(lv->selected_lot));
    lv_unset_lot (lv);
    gnc_lot_viewer_fill (lv);
-printf ("duude done acc scrubbin lot\n");
 }
 
 /* ======================================================================== */
+/* This callback opens a register window, and shows only the splits 
+ * in this lot.  */
 
 static void
 lv_regview_cb (GtkButton *but, gpointer user_data)
@@ -455,18 +469,60 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 
 /* ======================================================================== */
 
-GNCLotViewer * 
-gnc_lot_viewer_dialog (Account *account)
+static void
+lv_refresh_handler (GHashTable *changes, gpointer user_data)
 {
-   GNCLotViewer *lv;
+   GNCLotViewer *lv = user_data;
+printf ("duuude refresh !!\n");
+   gnc_lot_viewer_fill (lv);
+}
+
+static void
+lv_close_handler (gpointer user_data)
+{
+   GNCLotViewer *lv = user_data;
+   GNCLot *lot = lv->selected_lot;
+
+   if (lot)
+   {
+      const char * str;
+      KvpFrame *kvp = gnc_lot_get_slots (lot);
+
+      /* Get the title, save the title */
+      str = gtk_entry_get_text (lv->title_entry);
+      kvp_frame_set_str (kvp, "/title", str);
+
+      /* Get the notes, save the notes */
+      str = xxxgtk_text_get_text (lv->lot_notes);
+      kvp_frame_set_str (kvp, "/notes", str);
+   }
+
+   gtk_widget_destroy (lv->window);
+}
+
+static void
+lv_window_destroy_cb (GtkObject *object, gpointer user_data)
+{
+   GNCLotViewer *lv = user_data;
+   gnc_close_gui_component_by_data (LOT_VIEWER_CM_CLASS, lv);
+   g_free (lv);
+}
+                                                                                
+
+/* ======================================================================== */
+
+static void
+lv_create (GNCLotViewer *lv)
+{
    GladeXML *xml;
-
-   if (!account) return NULL;
-
-   lv = g_new0 (GNCLotViewer, 1);
+   char win_title[251];
 
    xml = gnc_glade_xml_new ("lots.glade", "Lot Viewer Window");
    lv->window = glade_xml_get_widget (xml, "Lot Viewer Window");
+
+   snprintf (win_title, 250, _("Lots in Account %s"),
+                  xaccAccountGetName(lv->account));
+   gtk_window_set_title (GTK_WINDOW (lv->window), win_title);
 
    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (xml, "regview button"));
    lv->delete_button = GTK_BUTTON(glade_xml_get_widget (xml, "delete button"));
@@ -485,10 +541,12 @@ gnc_lot_viewer_dialog (Account *account)
    lv->mini_clist = GTK_CLIST(glade_xml_get_widget (xml, "mini clist"));
    lv->status_bar = GTK_STATUSBAR(glade_xml_get_widget (xml, "lot statusbar"));
 
-   lv->account = account;
    lv->selected_lot = NULL;
    lv->selected_row = -1;
-   
+    
+   gtk_signal_connect (GTK_OBJECT (lv->window), "destroy",
+                      GTK_SIGNAL_FUNC (lv_window_destroy_cb), lv);
+
    gtk_signal_connect (GTK_OBJECT (lv->lot_clist), "select_row",
                       GTK_SIGNAL_FUNC (lv_select_row_cb), lv);
 
@@ -510,7 +568,36 @@ gnc_lot_viewer_dialog (Account *account)
    gtk_signal_connect (GTK_OBJECT (lv->scrub_lot_button), "clicked",
                       GTK_SIGNAL_FUNC (lv_scrub_lot_cb), lv);
 
+}
+
+/* ======================================================================== */
+
+GNCLotViewer * 
+gnc_lot_viewer_dialog (Account *account)
+{
+   GNCLotViewer *lv;
+   gint component_id;
+
+   if (!account) return NULL;
+
+   lv = g_new0 (GNCLotViewer, 1);
+   lv->account = account;
+   lv_create (lv);
    gnc_lot_viewer_fill (lv);
+
+   component_id = gnc_register_gui_component (LOT_VIEWER_CM_CLASS,
+                                              lv_refresh_handler,
+                                              lv_close_handler,
+                                              lv);
+
+   gnc_gui_component_watch_entity_type (component_id,
+               GNC_ID_LOT,
+               GNC_EVENT_CREATE | GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+   gnome_window_icon_set_from_default(GTK_WINDOW(lv->window));
+   gtk_widget_show_all (lv->window);
+   gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));
+
    return lv;
 }
 
