@@ -5,14 +5,14 @@
 
 <body>
 <h1>X-Accountant Project Goals</h1>
-We beleive that a GNU GPL project should provide goals and motivations
+We believe that a GNU GPL project should provide goals and motivations
 at both the large and the small scales, in order to focus and motivate
 the developers.  Over-arching and grand goals are difficult to grasp
-and carry out; yet thier lack serves only to dissuade the grand
+and carry out; yet their lack serves only to dissuade the grand
 thinkers.  A list of detailed goals may be mind-numbing to the casual
-reader; yet, without them, the roll-up-your-sleves-and-do-it
+reader; yet, without them, the roll-up-your-sleeves-and-do-it
 coder cannot know where to begin.  Detailed goals lend a concreteness 
-to the discussion: they can be architected, designed and coded at any time
+to the discussion: they can be architect-ed, designed and coded at any time
 by coders of any ability.  Thus, we present a list of goals, large and
 small, with the hope that the small goals will fall quickly, and the
 large ones shall turn into a multitude of small ones.
@@ -36,14 +36,14 @@ charts of asset allocations, or graphs asset value over time.
 
 Create a mechanism for obtaining data from multiple financial sources.
 Currently, X-Accountant stores data in its own file format; it can also
-import Quicken(TM) QIF files.   However, other soruces & sinks of data
+import Quicken(TM) QIF files.   However, other sources & sinks of data
 might be stock-quote web sites, on-line banking interfaces, or
 access to SQL databases.  It should be possible to have any of these at
 as data sources, and with the appropriate security mechanisms, it should
 also be possible to update these.
 <p>
 
-Create both a persoanl-finacial accounting system, as well as a
+Create both a personal-financial accounting system, as well as a
 business accounting framework.  Although these two goals may seem at
 odds with each other, there is no reason why they could not share
 a considerable amount of framework.  The goals of a personal finance
@@ -55,7 +55,7 @@ multi-user use,  with support for inventory control, shipping &
 receiving, billing, accounts payable & receivable.  A pie-in-the-sky
 system might even include interfaces to on-line shopping carts, 
 credit-card clearing interfaces, or even a subset of SAP R/3 (TM)
-functions.  Note that all of these systems require at thier base
+functions.  Note that all of these systems require at their base
 both a strong model of a "financial transaction", as well as 
 a ledger window, and a report generation mechanism.   The tools
 created to allow one should be portable enough to be deployed in the
@@ -78,7 +78,7 @@ architectural goals.
     automated handling of date entry within these cells. Similarly,
     it should be possible to designate monetary cells which can handle
     input.  General text fields, for the description and the memo,
-    should be endowed with quick-fill abilites, allowing completion
+    should be endowed with quick-fill abilities, allowing completion
     by comparing the current types text to previous entries.  Finally,
     there should be pull-down (combo-box) cells that can contain
     pull-down item lists.  Each of these functions are currently
@@ -101,27 +101,27 @@ architectural goals.
     by importing QIF files.  This interface should be abstracted,
     allowing data to come from any source.  The abstraction should
     involve dynamically loadable modules, so that new modules could
-    be developed and added without the need for recompilation or
+    be developed and added without the need for recompilations or
     re-linking.
     <p>
 
 <dt><b>SQL I/O</b>
 <dd>A module is necessary to allow data to be fetched from an SQL
-    database, and for that databse to be updated.  Some thoughts:
+    database, and for that database to be updated.  Some thoughts:
     SQL databases do not need to be locked during editing: instead,
     an optimistic approach, similar to that employed by CVS (concurrent
     version system, a mechanism for storing versions of source code)
-    could be used: if the edits conflict with chnages made by others,
+    could be used: if the edits conflict with changes made by others,
     the edit could be rejected en-masse, allowing the user to merge and
-    correct thier changes.  This is a very important note: updating
+    correct their changes.  This is a very important note: updating
     SQL does NOT require locks to be held for long periods of time!
     <p>
 
 <dt><b>Financial Objects</b>
-<dd>The current system makes a distinction between te data (account,
+<dd>The current system makes a distinction between the data (account,
     transaction) and they GUI that displays it.  This distinction should
-    be further strengthened, and aset of financial objects, residing in
-    thier own library, should be created.
+    be further strengthened, and a set of financial objects, residing in
+    their own library, should be created.
 </dl>
 <p>
 
@@ -141,7 +141,7 @@ immediately, independent of the major goals.
     To actually implement this, it might be best to simple create
     a file with these in them, and load that file.  A mechanism should
     be provided to allow the user to weed-out the unwanted accounts
-    without hampering thier ability to use them at a later date, if
+    without hampering their ability to use them at a later date, if
     desired.  Current status: there exists the ability to merge 
     accounts from multiple files, and the ability to hide/show
     Income/Expense Account types.
@@ -162,7 +162,7 @@ immediately, independent of the major goals.
     it is possible to use the tab key to navigate from field to 
     field in the register window, to user arrow keys to navigate menus,
     and quick-fill to automatically complete fields.  However,
-    it is not possible to tab over to the "Commit" button. It shoudl be.
+    it is not possible to tab over to the "Commit" button. It should be.
     <p>
 
 <dt><b>Icons, Icons Icons</b>
@@ -175,21 +175,21 @@ immediately, independent of the major goals.
 <dt><b>Folder Tabs</b>
 <dd>Currently, Income/Expense accounts can be shown or hidden by
     selecting from a menu.  It would be nice to be able to examine
-    diffferent account types (Asset, Liability, Income, Expense,
+    different account types (Asset, Liability, Income, Expense,
     Payables, Receivables, Inventory) by selecting a tab folder.
 
 <dt><b>Fly-Over Help</b>
 <dd>When the user pauses the mouse over a button, "fly-over" pop-up
-    help windows shold appear. 
+    help windows should appear. 
     <p>
 
 <dt><b>Simplified Stock Ledger</b>
-<dd>Stocks and Mutual funds are handled by placing them each in thier
+<dd>Stocks and Mutual funds are handled by placing them each in their
     own account.  Each account can be viewed individually.  If all of
     the stock accounts are children of a master trading account, then
     the trading account can be viewed and modified in a General Ledger 
     window.  The current stock general ledger window is a bit obtuse,
-    and difficult ot understand and use.  A simplified but still
+    and difficult to understand and use.  A simplified but still
     powerful ledger window is desperately needed.
     <p>
 
@@ -200,7 +200,7 @@ immediately, independent of the major goals.
     of the financial data.  Currently, while double-entry is supported,
     its use is not forced:  the user can create dangling transactions,
     where only one account is indicated.  Although this is acceptable
-    for home use (even diesriable, since it allows the casual user
+    for home use (even desirable, since it allows the casual user
     the simplicity they desire), it is not acceptable for business use.
     It must be possible to enable forced-double entry, so that a
     transaction cannot be completed until two accounts have been specified.
@@ -211,7 +211,7 @@ immediately, independent of the major goals.
 <dt><b>Transaction Window Fixes</b>
 <dd>The transaction window should allow the user to specify a share
     price (when purchasing/selling shares) as well as the load
-    and/or fees associated with the pruchase.   Fees, of course,
+    and/or fees associated with the purchase.   Fees, of course,
     are handled as separate transactions: however, it should
     still be possible to specify the fees, the transfer, and other
     details from a single window.
@@ -221,11 +221,11 @@ immediately, independent of the major goals.
 <dd>Support should be added for Mortgages, Bonds, CD's and other
     instruments (e.g. savings accounts) that pay interest on a regular
     basis.  It should be possible to specify the interest rate,
-    the payment schedule, and other regularrly recurring transacitons.
+    the payment schedule, and other regularly recurring transactions.
     <p>
 
 <dt><b>Household Assets</b>
-<dd>Add an example showing how regular ousehold assets (house, car,
+<dd>Add an example showing how regular household assets (house, car,
     jewelry, etc.) should be treated.  In particular, show how
     appreciation and depreciation should be treated.
     <p>
@@ -235,11 +235,11 @@ immediately, independent of the major goals.
     <p>
 
 <dt><b>Add Reports</b>
-<dd>Add the whole host of reports, including NetWorth statements,
+<dd>Add the whole host of reports, including Net Worth statements,
     Balance Sheets, and Profit & Loss statements.  These should be
-    prinatable: it might be best to create them as ordinary HTML pages,
-    and use the printing abilites of the browser.  In an ideal
-    situatuation, the user should be able to create custom reports.
+    printable: it might be best to create them as ordinary HTML pages,
+    and use the printing abilities of the browser.  In an ideal
+    situation, the user should be able to create custom reports.
     <p>
 
 <dt><b>Inventory, Job Costing</b>
@@ -248,15 +248,15 @@ immediately, independent of the major goals.
     <p>
 
 <dt><b>Payables & Receivables</b>
-<dd>Add feautures to track sales receipts and other pending sources
+<dd>Add features to track sales receipts and other pending sources
     of income, as well as owed sums.
     <p>
 
 <dt><b>Check Printing</b>
 <dd>Create a check-printing ability.
     <p>
-<dt><b>Greyed-out Form Help</b>
-<dd>Create greyed out entries in the ledger, titled "Memo",
+<dt><b>Grayed-out Form Help</b>
+<dd>Create grayed out entries in the ledger, titled "Memo",
     "Description", etc, helping users understand what should be typed into
     each field.
 
