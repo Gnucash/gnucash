@@ -422,7 +422,7 @@ regRefresh( RegWindow *regData )
 
           /* don't set number of shares here -- this is computed later,
            * in recomputeBalance. */
-          newData[row+SHRS_CELL_C][SHRS_CELL_C]   = XtNewString("");
+          newData[row+SHRS_CELL_R][SHRS_CELL_C]   = XtNewString("");
           break;
         default:
           break;
