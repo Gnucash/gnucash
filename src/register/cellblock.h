@@ -1,8 +1,8 @@
 
-#ifndef __XACC_CELL_H__
-#define __XACC_CELL_H__
+#ifndef __XACC_CELL_BLOCK_H__
+#define __XACC_CELL_BLOCK_H__
 
-#include "single.h"
+#include "basiccell.h"
 
 /* a cell array is a traversal group for one entry in the register */
 
@@ -11,7 +11,7 @@ typedef struct _CellBlock {
   short numRows;
   short numCols;
 
-  SingleCell ***cells;  /* row-col array */
+  BasicCell ***cells;  /* row-col array */
 
   /* private, utility cahced data */
   short         *widths;        /* column widths */
@@ -25,6 +25,6 @@ CellBlock * xaccMallocCellBlock (int numrows, int numcols);
 void        xaccInitCellBlock (CellBlock *, int numrows, int numcols);
 
 /* add a cell to the array */
-void        xaccAddCell (CellBlock *, SingleCell *, int row, int col);
+void        xaccAddCell (CellBlock *, BasicCell *, int row, int col);
 
-#endif __XACC_CELL_H__
+#endif __XACC_CELL_BLOCK_H__

@@ -3,7 +3,7 @@
 
 #include <Xbae/Matrix.h>
 
-#include "cell.h"
+#include "cellblock.h"
 #include "table.h"
 
 static void enterCB (Widget mw, XtPointer cd, XtPointer cb);
@@ -243,7 +243,7 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixEnterCellCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*enter) (struct _SingleCell *, const char *);
+   const char * (*enter) (struct _BasicCell *, const char *);
 
    table = (Table *) cd;
    arr = table->cursor;
@@ -296,7 +296,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixModifyVerifyCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*mv) (struct _SingleCell *, 
+   const char * (*mv) (struct _BasicCell *, 
                        const char *, 
                        const char *, 
                        const char *);
@@ -386,7 +386,7 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
    XbaeMatrixLeaveCellCallbackStruct *cbs;
    int row, col;
    int rel_row, rel_col;
-   const char * (*leave) (struct _SingleCell *, const char *);
+   const char * (*leave) (struct _BasicCell *, const char *);
    char * newval;
 
    table = (Table *) cd;

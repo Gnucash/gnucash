@@ -2,8 +2,8 @@
 #include <string.h>
 #include <time.h>
 
+#include "basiccell.h"
 #include "datecell.h"
-#include "single.h"
 
 #define DATE_SEP '/'
 
@@ -122,7 +122,7 @@ xaccValidateDate (struct tm *date, int recur)
 /* ================================================ */
 
 static const char * 
-DateEnter (struct _SingleCell *_cell, const char * curr)
+DateEnter (struct _BasicCell *_cell, const char * curr)
 {
    DateCell *cell = (DateCell *) _cell;
 
@@ -136,7 +136,7 @@ DateEnter (struct _SingleCell *_cell, const char * curr)
 /* ================================================ */
 
 static const char * 
-DateMV (struct _SingleCell *_cell, 
+DateMV (struct _BasicCell *_cell, 
         const char *oldval, 
         const char *change, 
         const char *newval)
@@ -247,7 +247,7 @@ DateMV (struct _SingleCell *_cell,
 /* ================================================ */
 
 static const char * 
-DateLeave (struct _SingleCell *_cell, const char * curr)
+DateLeave (struct _BasicCell *_cell, const char * curr)
 {
    DateCell *cell = (DateCell *) _cell;
    char buff[30];
@@ -285,7 +285,7 @@ xaccInitDateCell (DateCell *cell)
   struct tm *now;
   char buff[30];
 
-  xaccInitSingleCell (&(cell->cell));
+  xaccInitBasicCell (&(cell->cell));
 
   /* default value is today's date */
   time (&secs);

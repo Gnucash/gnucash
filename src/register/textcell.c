@@ -1,15 +1,15 @@
 
 #include <string.h>
 
+#include "basiccell.h"
 #include "textcell.h"
-#include "single.h"
 
 /* ================================================ */
 /* by definition, all text is valid text.  So accept
  * all modifications */
 
 static const char * 
-TextMV (struct _SingleCell *_cell,
+TextMV (struct _BasicCell *_cell,
         const char *oldval, 
         const char *change, 
         const char *newval)
@@ -19,11 +19,11 @@ TextMV (struct _SingleCell *_cell,
 
 /* ================================================ */
 
-SingleCell *
+BasicCell *
 xaccMallocTextCell (void)
 {
-   SingleCell *cell;
-   cell = xaccMallocSingleCell();
+   BasicCell *cell;
+   cell = xaccMallocBasicCell();
    xaccInitTextCell (cell);
    return cell;
 }
@@ -31,7 +31,7 @@ xaccMallocTextCell (void)
 /* ================================================ */
 
 void
-xaccInitTextCell (SingleCell *cell)
+xaccInitTextCell (BasicCell *cell)
 {
   if (cell->value) free (cell->value);
   cell->value = strdup ("");

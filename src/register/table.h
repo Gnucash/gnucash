@@ -3,8 +3,8 @@
 #define __XACC_TABLE_H__
 
 #include <Xm/Xm.h>
-#include "cell.h"
-#include "single.h"
+#include "basiccell.h"
+#include "cellblock.h"
 
 /* the table is the complete, displayed table. */
 /* It consists of a header, followed by a simple 

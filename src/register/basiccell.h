@@ -1,9 +1,10 @@
 /*
- * single.h
+ * basiccell.h
  */
 
-#ifndef __XACC_SINGLE_H__
-#define __XACC_SINGLE_H__
+#ifndef __XACC_BASIC_CELL_H__
+#define __XACC_BASIC_CELL_H__
+
 /* cell types */
 enum {
   DATE,     
@@ -52,7 +53,7 @@ enum {
  *     to worry about garbage collection.
  */
 
-typedef struct _SingleCell {
+typedef struct _BasicCell {
 
   short type;     /* cell type */
   short row;      /* relative row position */
@@ -63,23 +64,23 @@ typedef struct _SingleCell {
   /* private data */
   char * value;   /* current value */
 
-  const char * (*enter_cell) (struct _SingleCell *,
+  const char * (*enter_cell) (struct _BasicCell *,
                               const char * current);
-  const char * (*modify_verify) (struct _SingleCell *,
+  const char * (*modify_verify) (struct _BasicCell *,
                                  const char *old, 
                                  const char *add, 
                                  const char *new); 
-  const char * (*leave_cell) (struct _SingleCell *,
+  const char * (*leave_cell) (struct _BasicCell *,
                               const char * current);
 
   struct _CellBlock *block;  /* back-pointer to parent container */
-} SingleCell;
+} BasicCell;
 
 
-SingleCell * xaccMallocSingleCell (void);
-void         xaccInitSingleCell (SingleCell *);
+BasicCell * xaccMallocBasicCell (void);
+void         xaccInitBasicCell (BasicCell *);
 
-void         xaccSetSingleCellValue (SingleCell *, char *);
+void         xaccSetBasicCellValue (BasicCell *, char *);
 
-#endif /* __XACC_SINGLE_H__ */
+#endif /* __XACC_BASIC_CELL_H__ */
 /* ------------------ end of file ---------------------- */

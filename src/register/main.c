@@ -3,6 +3,7 @@
 #include <Xm/Form.h>
 #include <Xm/MainW.h>
 
+#include "basiccell.h"
 #include "datecell.h"
 #include "pricecell.h"
 #include "table.h"
@@ -36,10 +37,10 @@ typedef struct _BasicRegister {
    Table       * table;
    CellBlock   * cursor;
    CellBlock   * header;
-   SingleCell  * dateCell;
-   SingleCell  * descCell;
-   SingleCell  * memoCell;
-   SingleCell  * recnCell;
+   BasicCell  * dateCell;
+   BasicCell  * descCell;
+   BasicCell  * memoCell;
+   BasicCell  * recnCell;
    PriceCell   * creditCell;
    PriceCell   * debitCell;
 
@@ -64,49 +65,49 @@ void xaccInitBasicRegister (BasicRegister *reg)
 {
    Table * table;
    CellBlock *curs, *header;
-   SingleCell *cell;
+   BasicCell *cell;
 
    /* define the header */
 
    header = xaccMallocCellBlock (1, MAX_COLS);
    reg->header = header;
 
-   cell = (SingleCell *) xaccMallocDateCell();
+   cell = (BasicCell *) xaccMallocDateCell();
    cell->width = 11;
    xaccAddCell (header, cell, 0, DATE_CELL_C);
-   xaccSetSingleCellValue (cell, "Date");
+   xaccSetBasicCellValue (cell, "Date");
    
    cell = xaccMallocTextCell();
    cell->width = 19;
    xaccAddCell (header, cell, 0, DESC_CELL_C);
-   xaccSetSingleCellValue (cell, "Description");
+   xaccSetBasicCellValue (cell, "Description");
 
    cell = xaccMallocRecnCell();
    cell->width = 1;
    xaccAddCell (header, cell, 0, RECN_CELL_C);
-   xaccSetSingleCellValue (cell, "R");
+   xaccSetBasicCellValue (cell, "R");
 
-   cell = (SingleCell *) xaccMallocPriceCell();
+   cell = (BasicCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, CRED_CELL_C);
-   xaccSetSingleCellValue (cell, "Credit");
+   xaccSetBasicCellValue (cell, "Credit");
    
-   cell = (SingleCell *) xaccMallocPriceCell();
+   cell = (BasicCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, DEBT_CELL_C);
-   xaccSetSingleCellValue (cell, "Debit");
+   xaccSetBasicCellValue (cell, "Debit");
 
-   cell = (SingleCell *) xaccMallocPriceCell();
+   cell = (BasicCell *) xaccMallocPriceCell();
    cell->width = 9;
    xaccAddCell (header, cell, 0, BALN_CELL_C);
-   xaccSetSingleCellValue (cell, "Balance");
+   xaccSetBasicCellValue (cell, "Balance");
 
    
    /* --------------------------- */
    curs = xaccMallocCellBlock (2, MAX_COLS);
    reg->cursor = curs;
    
-   cell = (SingleCell *) xaccMallocDateCell();
+   cell = (BasicCell *) xaccMallocDateCell();
    cell->width = 9;
    xaccAddCell (curs, cell, DATE_CELL_R, DATE_CELL_C);
    reg->dateCell = cell;

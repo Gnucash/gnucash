@@ -3,10 +3,10 @@
 #define __XACC_DATE_CELL_C__
 
 #include <time.h>
-#include "single.h"
+#include "basiccell.h"
 
 typedef struct _DateCell {
-   SingleCell cell;
+   BasicCell cell;
    struct tm date;
 } DateCell;
 

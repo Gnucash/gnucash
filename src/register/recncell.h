@@ -2,11 +2,11 @@
 #ifndef __XACC_RECN_CELL_C__
 #define __XACC_RECN_CELL_C__
 
-#include "single.h"
+#include "basiccell.h"
 
 /* installs a callback to handle reconcile flag */
-SingleCell * xaccMallocRecnCell (void);
-void         xaccInitRecnCell (SingleCell *);
+BasicCell * xaccMallocRecnCell (void);
+void         xaccInitRecnCell (BasicCell *);
 
 #endif /* __XACC_RECN_CELL_C__ */
 

@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "single.h"
+#include "basiccell.h"
 
-SingleCell * xaccMallocSingleCell (void)
+BasicCell * xaccMallocBasicCell (void)
 {
-   SingleCell * cell;
-   cell = (SingleCell *) malloc (sizeof (SingleCell));
-   xaccInitSingleCell (cell);
+   BasicCell * cell;
+   cell = (BasicCell *) malloc (sizeof (BasicCell));
+   xaccInitBasicCell (cell);
    return cell;
 }
 
-void xaccInitSingleCell (SingleCell *cell)
+void xaccInitBasicCell (BasicCell *cell)
 {
    cell->type = 0;
    cell->row = 0;
@@ -26,7 +26,7 @@ void xaccInitSingleCell (SingleCell *cell)
    cell->block = NULL;
 }
 
-void xaccSetSingleCellValue (SingleCell *cell, char *val)
+void xaccSetBasicCellValue (BasicCell *cell, char *val)
 {
 
    if (cell->value) free (cell->value);

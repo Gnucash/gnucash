@@ -1,8 +1,8 @@
 
 #include <string.h>
 
+#include "basiccell.h"
 #include "pricecell.h"
-#include "single.h"
 
 #define DECIMAL_PT  '.'
 
@@ -11,7 +11,7 @@
  * decimal point in them */
 
 static const char * 
-PriceMV (struct _SingleCell *_cell, 
+PriceMV (struct _BasicCell *_cell, 
          const char * oldval, 
          const char *change, 
          const char *newval)
@@ -53,10 +53,10 @@ xaccMallocPriceCell (void)
 void
 xaccInitPriceCell (PriceCell *cell)
 {
-   xaccInitSingleCell( &(cell->cell));
+   xaccInitBasicCell( &(cell->cell));
    cell->amount = 0.0;
 
-   xaccSetSingleCellValue ( &(cell->cell), "0.0");
+   xaccSetBasicCellValue ( &(cell->cell), "0.0");
 
    cell->cell.modify_verify = PriceMV;
 }

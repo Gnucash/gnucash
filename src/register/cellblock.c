@@ -1,6 +1,6 @@
 
 #include <stdlib.h>
-#include "cell.h"
+#include "cellblock.h"
 
 CellBlock * xaccMallocCellBlock (int numrows, int numcols)
 {
@@ -38,9 +38,9 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
 
    /* malloc new cell array */
 
-   arr->cells = (SingleCell ***) malloc (numrows * sizeof (SingleCell **));
+   arr->cells = (BasicCell ***) malloc (numrows * sizeof (BasicCell **));
    for (i=0; i<numrows; i++) {
-      (arr->cells)[i] = (SingleCell **) malloc (numcols * sizeof (SingleCell *));
+      (arr->cells)[i] = (BasicCell **) malloc (numcols * sizeof (BasicCell *));
    }
 
    /* free old  widths, alignments */
@@ -59,7 +59,7 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
 /* =================================================== */
 
 void        
-xaccAddCell (CellBlock *arr, SingleCell *cell, int row, int col) 
+xaccAddCell (CellBlock *arr, BasicCell *cell, int row, int col) 
 {
    if (!arr) return;
    if (!cell) return;

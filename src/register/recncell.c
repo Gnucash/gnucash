@@ -2,8 +2,8 @@
 #include <string.h>
 #include <time.h>
 
+#include "basiccell.h"
 #include "recncell.h"
-#include "single.h"
 
 /* hack alert -- temp defs should include Transaction.h */
 #define NREC 'n'
@@ -12,7 +12,7 @@
 /* ================================================ */
 
 static const char * 
-ToggleRecn (struct _SingleCell *_cell, const char *cur_val)
+ToggleRecn (struct _BasicCell *_cell, const char *cur_val)
 {
    char buff[2];
 
@@ -28,11 +28,11 @@ ToggleRecn (struct _SingleCell *_cell, const char *cur_val)
 
 /* ================================================ */
 
-SingleCell *
+BasicCell *
 xaccMallocRecnCell (void)
 {
-   SingleCell *cell;
-   cell = xaccMallocSingleCell();
+   BasicCell *cell;
+   cell = xaccMallocBasicCell();
    xaccInitRecnCell (cell);
    return cell;
 }
@@ -40,7 +40,7 @@ xaccMallocRecnCell (void)
 /* ================================================ */
 
 void
-xaccInitRecnCell (SingleCell *cell)
+xaccInitRecnCell (BasicCell *cell)
 {
    char buff[2];
 

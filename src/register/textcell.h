@@ -2,11 +2,11 @@
 #ifndef __XACC_TEXT_CELL_C__
 #define __XACC_TEXT_CELL_C__
 
-#include "single.h"
+#include "basiccell.h"
 
 /* installs a callback to handle text recording */
-SingleCell * xaccMallocTextCell (void);
-void         xaccInitTextCell (SingleCell *);
+BasicCell * xaccMallocTextCell (void);
+void         xaccInitTextCell (BasicCell *);
 
 #endif /* __XACC_TEXT_CELL_C__ */
 

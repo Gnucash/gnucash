@@ -1,11 +1,11 @@
 
-#ifndef __XACC_PRICE_C__
-#define __XACC_PRICE_C__
+#ifndef __XACC_PRICE_CELL_C__
+#define __XACC_PRICE_CELL_C__
 
-#include "single.h"
+#include "basiccell.h"
 
 typedef struct _PriceCell {
-   SingleCell cell;
+   BasicCell cell;
    double amount;
 } PriceCell;
 
@@ -13,6 +13,6 @@ typedef struct _PriceCell {
 PriceCell *  xaccMallocPriceCell (void);
 void         xaccInitPriceCell (PriceCell *);
 
-#endif /* __XACC_PRICE_C__ */
+#endif /* __XACC_PRICE_CELL_C__ */
 
 /* --------------- end of file ---------------------- */
