@@ -68,8 +68,7 @@ typedef enum
 {
   CELL_ALIGN_RIGHT,
   CELL_ALIGN_CENTER,
-  CELL_ALIGN_LEFT,
-  CELL_ALIGN_FILL,
+  CELL_ALIGN_LEFT
 } CellAlignment;
 
 typedef struct

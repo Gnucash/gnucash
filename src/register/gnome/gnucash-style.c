@@ -530,7 +530,6 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, SplitRegister *sr,
                                         cs->alignment = GTK_JUSTIFY_CENTER;
                                         break;
                                 default:
-                                case CELL_ALIGN_FILL:
                                 case CELL_ALIGN_LEFT:
                                         cs->alignment = GTK_JUSTIFY_LEFT;
                                         break;

@@ -199,7 +199,6 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
                                 break;
                 default:
                 case GTK_JUSTIFY_LEFT:
-                case GTK_JUSTIFY_FILL:
                 case GTK_JUSTIFY_CENTER:
                         xoffset = MIN (CELL_HPADDING,
                                        info->text_rect.width -

@@ -106,6 +106,9 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                    That way we'll be sure everything is drawn
                    consistently, and cut down on maintenance issues. */
                 for (j = 0; j < style->ncols; j++) {
+                        gint x_offset, y_offset;
+                        GdkRectangle rect;
+
                         cd = gnucash_style_get_cell_dimensions (style, i, j);
                         cs = gnucash_style_get_cell_style (style, i, j);
 
@@ -120,45 +123,43 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                                             xpaint, ypaint, w, h);
 
                         text = cs->label;
+                        if (!text)
+                                text = "";
 
-                        if (text) {
-                                gint x_offset, y_offset;
-                                GdkRectangle rect;
+                        y_offset = h - MAX(CELL_VPADDING, font->descent + 4);
 
-                                y_offset = h - MAX(CELL_VPADDING,
-                                                   font->descent + 4);
-
-                                switch (cs->alignment) {
-                                default:
-                                case GTK_JUSTIFY_LEFT:
-                                case GTK_JUSTIFY_FILL:
-                                case GTK_JUSTIFY_CENTER:
+                        switch (cs->alignment) {
+                        default:
+                        case GTK_JUSTIFY_LEFT:
+                                x_offset = CELL_HPADDING;
+                                break;
+                        case GTK_JUSTIFY_RIGHT:
+                                x_offset = w - CELL_HPADDING;
+                                x_offset -= gdk_string_measure(font, text);
+                                break;
+                        case GTK_JUSTIFY_CENTER:
+                                if (w < gdk_string_measure (font, text))
                                         x_offset = CELL_HPADDING;
-                                        break;
-                                case GTK_JUSTIFY_RIGHT:
-                                        x_offset = w - CELL_HPADDING
-                                                - gdk_string_measure(font,
-                                                                     text);
-                                        break;
+                                else {
+                                        x_offset = w / 2;
+                                        x_offset -= gdk_string_measure (font, text) / 2;
                                 }
-
-                                rect.x = xpaint + CELL_HPADDING;
-                                rect.y = ypaint + CELL_VPADDING;
-                                rect.width = MAX(0, w - 2*CELL_HPADDING);
-                                rect.height = h;
-                                
-                                gdk_gc_set_clip_rectangle (header->gc, &rect);
-                                
-                                gdk_draw_string (drawable,
-                                                 font,
-                                                 header->gc,
-                                                 xpaint + x_offset,
-                                                 ypaint + y_offset,
-                                                 text);
-                                gdk_gc_set_clip_rectangle (header->gc, NULL);
-                                
+                                break;
                         }
-                        
+
+                        rect.x = xpaint + CELL_HPADDING;
+                        rect.y = ypaint + CELL_VPADDING;
+                        rect.width = MAX(0, w - 2*CELL_HPADDING);
+                        rect.height = h;
+
+                        gdk_gc_set_clip_rectangle (header->gc, &rect);
+
+                        gdk_draw_string (drawable, font, header->gc,
+                                         xpaint + x_offset,
+                                         ypaint + y_offset, text);
+
+                        gdk_gc_set_clip_rectangle (header->gc, NULL);
+
                         xpaint += w;
                 }
                 ypaint += h;
@@ -181,13 +182,12 @@ gnucash_header_realize (GnomeCanvasItem *item)
         GnucashHeader *header = GNUCASH_HEADER (item);
         GdkWindow *window;
 
-        	
         if (GNOME_CANVAS_ITEM_CLASS (gnucash_header_parent_class)->realize)
                 (*GNOME_CANVAS_ITEM_CLASS
 		 (gnucash_header_parent_class)->realize)(item);
 
         window = GTK_WIDGET (item->canvas)->window;
-        
+
         header->gc = gdk_gc_new (window);
 }
 
@@ -340,11 +340,9 @@ find_resize_col (GnucashHeader *header, int col)
 }
 
 static void
-gnucash_header_auto_resize_column (GnucashHeader *header, gint col)
+gnucash_header_resize_column (GnucashHeader *header, gint col, gint width)
 {
         GnucashSheet *sheet = header->sheet;
-
-        int width = gnucash_sheet_col_max_width (sheet, 0, col);
 
         gnucash_sheet_set_col_width (sheet, col, width);
 
@@ -355,7 +353,18 @@ gnucash_header_auto_resize_column (GnucashHeader *header, gint col)
         gnucash_sheet_set_scroll_region (sheet);
         gnucash_sheet_update_adjustments (sheet);
 
+        gnucash_header_request_redraw (header);
         gnucash_sheet_redraw_all (sheet);
+}
+
+static void
+gnucash_header_auto_resize_column (GnucashHeader *header, gint col)
+{
+        int width;
+
+        width = gnucash_sheet_col_max_width (header->sheet, 0, col);
+
+        gnucash_header_resize_column (header, col, width);
 }
 
 static gint
@@ -437,8 +446,6 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
         }
         case GDK_BUTTON_RELEASE: 
         {
-                GnucashSheet *sheet = header->sheet;
-
                 if (event->button.button != 1)
                         break;
 
@@ -451,19 +458,10 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                                                           event->button.time);
                                 header->needs_ungrab = FALSE;
 
-                                gnucash_sheet_set_col_width (sheet,
-                                                             header->resize_col, header->resize_col_width);
-
-                                gtk_window_set_default_size(GTK_WINDOW(sheet->window), 0, 0);
-
-                                gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
-                                item_edit_configure (ITEM_EDIT(sheet->item_editor));
-
-                                gnucash_header_reconfigure (header);
-                                gnucash_sheet_set_scroll_region (sheet);
-                                gnucash_sheet_update_adjustments (sheet);
-
-                                gnucash_sheet_redraw_all (sheet);
+                                gnucash_header_resize_column
+                                        (header,
+                                         header->resize_col,
+                                         header->resize_col_width);
                         }
                         header->in_resize = FALSE;
                         header->resize_col = -1;

@@ -49,7 +49,7 @@ gnucash_grid_realize (GnomeCanvasItem *item)
         GdkGC *gc;
 
         if (GNOME_CANVAS_ITEM_CLASS (gnucash_grid_parent_class)->realize)
-                (*GNOME_CANVAS_ITEM_CLASS
+                (GNOME_CANVAS_ITEM_CLASS
 		 (gnucash_grid_parent_class)->realize)(item);
 
         gnucash_grid = GNUCASH_GRID (item);
@@ -64,7 +64,6 @@ gnucash_grid_realize (GnomeCanvasItem *item)
         gnucash_grid->background = gn_white;
         gnucash_grid->grid_color = gn_black;
         gnucash_grid->default_color = gn_black;
-
 
         gdk_gc_set_foreground (gc, &gnucash_grid->grid_color);
         gdk_gc_set_background (gc, &gnucash_grid->background);
@@ -352,13 +351,19 @@ draw_cell (GnucashGrid *grid, int block,
                 switch (cs->alignment) {
                 default:
                 case GTK_JUSTIFY_LEFT:
-                case GTK_JUSTIFY_FILL:
-                case GTK_JUSTIFY_CENTER:
                         x_offset = CELL_HPADDING;
                         break;
                 case GTK_JUSTIFY_RIGHT:
                         x_offset = width - CELL_HPADDING
                                 - gdk_string_measure (font, text);
+                        break;
+                case GTK_JUSTIFY_CENTER:
+                        if (width < gdk_string_measure (font, text))
+                                x_offset = CELL_HPADDING;
+                        else {
+                                x_offset = width / 2;
+                                x_offset -= gdk_string_measure (font, text) / 2;
+                        }
                         break;
                 }
 
