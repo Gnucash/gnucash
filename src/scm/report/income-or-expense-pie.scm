@@ -35,13 +35,13 @@
 	  (gnc:filter-accountlist-type 
 	   (if is-income? '(income) '(expense))
 	   (gnc:group-get-subaccounts (gnc:get-current-group))))
-	(lambda (account)
-	  (let ((type (gw:enum-<gnc:AccountType>-val->sym
-		       (gnc:account-get-type account)
-		       #f)))
-	    (member type (if is-income? '(income) '(expense)))))
+	(lambda (accounts)
+	  (list #t
+		(gnc:filter-accountlist-type
+		 (if is-income? '(income) '(expense))
+		 accounts)))
 	#t))
-
+      
       (add-option
        (gnc:make-currency-option
 	(N_ "Report Options") (N_ "Report Currency")
