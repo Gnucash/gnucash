@@ -187,7 +187,7 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
 
   /* connect the double-click signal of the qlist */
   gtk_signal_connect (GTK_OBJECT (dql->qlist), "double_click_entry",
-		      gnc_dialog_query_list_double_click_entry, dql);
+		      GTK_SIGNAL_FUNC(gnc_dialog_query_list_double_click_entry), dql);
   
 
   /* connect to the close button */
@@ -246,7 +246,7 @@ void gnc_dialog_query_list_set_buttons (DialogQueryList *dql,
     button = gtk_button_new_with_label (buttons[i].label);
     gtk_object_set_data (GTK_OBJECT (button), "data", &(dql->buttons[i]));
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			gnc_dialog_query_list_button_clicked, dql);
+			GTK_SIGNAL_FUNC(gnc_dialog_query_list_button_clicked), dql);
     gtk_box_pack_start (GTK_BOX (dql->button_box), button, FALSE, FALSE, 3);
   }
 }

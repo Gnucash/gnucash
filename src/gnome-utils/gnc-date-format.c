@@ -119,15 +119,20 @@ gnc_date_format_class_init (GNCDateFormatClass *class)
   parent_class = gtk_type_class (gtk_hbox_get_type ());
 
   date_format_signals [FORMAT_CHANGED] =
-    gtk_signal_new ("format_changed",
-		    GTK_RUN_FIRST, object_class->type, 
-		    GTK_SIGNAL_OFFSET (GNCDateFormatClass,
-				       format_changed),
-		    gtk_signal_default_marshaller,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("format_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GNCDateFormatClass, format_changed),
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE,
+		  0);
 
+#if 0
   gtk_object_class_add_signals (object_class, date_format_signals,
 				LAST_SIGNAL);
+#endif
 
   object_class->destroy = gnc_date_format_destroy;
 
@@ -171,7 +176,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
   /* Initialize the format menu */
   gnc_option_menu_init_w_signal(gdf->priv->format_omenu,
-				gnc_ui_date_format_changed_cb, gdf);
+				GTK_SIGNAL_FUNC(gnc_ui_date_format_changed_cb), gdf);
 
   /* Set initial format to gnucash default */
   gnc_date_format_set_format(gdf, getDateFormat());
@@ -501,5 +506,5 @@ gnc_date_format_compute_format(GNCDateFormat *gdf)
   gnc_date_format_refresh(gdf);
 
   /* Emit a signal that we've changed */
-  gtk_signal_emit(GTK_OBJECT(gdf), date_format_signals[FORMAT_CHANGED]);
+  g_signal_emit(G_OBJECT(gdf), date_format_signals[FORMAT_CHANGED], 0);
 }

@@ -262,7 +262,9 @@ gnc_query_list_init_clist (GNCQueryList *list)
   }
 
   /* construct the clist */
+#if NEEDS_FIXING_IN_G2
   gtk_clist_construct (clist, list->num_columns, titles);
+#endif
   gtk_clist_set_shadow_type (clist, GTK_SHADOW_IN);
 
   /* build all the column titles */
@@ -290,6 +292,7 @@ gnc_query_list_init_clist (GNCQueryList *list)
 
   style = gtk_widget_get_style (GTK_WIDGET(list));
 
+#if 0
   {
     GdkFont *font = NULL;
     gint width;
@@ -308,6 +311,7 @@ gnc_query_list_init_clist (GNCQueryList *list)
       }
     }
   }
+#endif
   g_free(titles);
 }
 
@@ -327,28 +331,32 @@ gnc_query_list_class_init (GNCQueryListClass *klass)
   parent_class = gtk_type_class(GTK_TYPE_CLIST);
 
   query_list_signals[LINE_TOGGLED] =
-    gtk_signal_new("line_toggled",
-		   GTK_RUN_FIRST,
-		   object_class->type,
-		   GTK_SIGNAL_OFFSET(GNCQueryListClass,
-				     line_toggled),
-		   gtk_marshal_NONE__POINTER,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_POINTER);
+    g_signal_new("line_toggled",
+		 G_TYPE_FROM_CLASS (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET(GNCQueryListClass, line_toggled),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE,
+		 1,
+		 G_TYPE_POINTER);
 
   query_list_signals[DOUBLE_CLICK_ENTRY] =
-    gtk_signal_new("double_click_entry",
-		   GTK_RUN_FIRST,
-		   object_class->type,
-		   GTK_SIGNAL_OFFSET(GNCQueryListClass,
-				     double_click_entry),
-		   gtk_marshal_NONE__POINTER,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_POINTER);
+    g_signal_new("double_click_entry",
+		 G_TYPE_FROM_CLASS (object_class),
+		 G_SIGNAL_RUN_FIRST,
+		 G_STRUCT_OFFSET(GNCQueryListClass, double_click_entry),
+		 NULL, NULL,
+		 g_cclosure_marshal_VOID__POINTER,
+		 G_TYPE_NONE,
+		 1,
+		 G_TYPE_POINTER);
 
+#if 0
   gtk_object_class_add_signals(object_class,
 			       query_list_signals,
 			       LAST_SIGNAL);
+#endif
 
   object_class->destroy = gnc_query_list_destroy;
 
@@ -490,7 +498,7 @@ gnc_query_list_get_needed_height (GNCQueryList *list, gint num_rows)
 
   /* sync with gtkclist.c */
   title_height = (clist->column_title_area.height +
-                  (GTK_WIDGET(list)->style->klass->ythickness +
+                  (GTK_WIDGET(list)->style->ythickness +
                    GTK_CONTAINER(list)->border_width) * 2);
   list_height = (clist->row_height * num_rows) + (num_rows + 1);
 
