@@ -113,7 +113,6 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     HBCI_Date *from_date, *to_date;
     gboolean use_last_date = TRUE, 
       use_earliest_date = TRUE, use_until_now = TRUE;
-    GNCGenTransaction *importer_gui;
 
     /* Get time of last retrieval */
     last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
@@ -174,29 +173,43 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     /* Store the date of this retrieval */
     gnc_hbci_set_account_trans_retrieval (gnc_acc, until_timespec);
 
-    importer_gui = gnc_gen_trans_new (NULL, NULL);
-    gnc_gen_trans_freeze (importer_gui);
-    gnc_gen_trans_set_fuzzy_amount (importer_gui, 0.0);
-    
     {
       /* Now add the retrieved transactions to the gnucash account. */
       const list_HBCI_Transaction *trans_list;
-      struct trans_list_data data;
-      
-      data.gnc_acc = gnc_acc;
-      data.importer = importer_gui;
       
       trans_list = HBCI_OutboxJobGetTransactions_transactions (trans_job);
       printf("gnc_hbci_gettrans: Got %d transactions.\n", 
 	     list_HBCI_Transaction_size(trans_list));
-      list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
+
+      if (list_HBCI_Transaction_size(trans_list) > 0) {
+	struct trans_list_data data;
+	GNCGenTransaction *importer_gui;
+
+	importer_gui = gnc_gen_trans_new (NULL, NULL);
+	gnc_gen_trans_freeze (importer_gui);
+	gnc_gen_trans_set_fuzzy_amount (importer_gui, 0.0);
+    
+	data.gnc_acc = gnc_acc;
+	data.importer = importer_gui;
+      
+	list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
+
+	gnc_gen_trans_thaw (importer_gui);
+	GNCInteractor_hide (interactor);
+
+	gnc_gen_trans_run (importer_gui);
+      }
+      else {
+	GNCInteractor_hide (interactor);
+	gnome_ok_dialog_parented 
+	  (_("The HBCI import returned no transactions for the selected time period."),
+	   GTK_WINDOW (parent));
+      }
+      
     }
 
-    gnc_gen_trans_thaw (importer_gui);
-    GNCInteractor_hide (interactor);
     /* Clean up behind ourself. */
     HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
-    gnc_gen_trans_run (importer_gui);
   }
 }
 

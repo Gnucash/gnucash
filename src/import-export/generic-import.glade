@@ -846,6 +846,28 @@
 	  </widget>
 	</widget>
       </widget>
+
+      <widget>
+	<class>GtkLabel</class>
+	<name>explanation_label</name>
+	<label>For a new transaction, click on the &quot;Other Account&quot; entry to choose the other (destination) account of this transaction.
+For a transaction that is a duplicate of an existing one, click on the &quot;Other Account&quot; or &quot;Description&quot; entry to 
+check whether GnuCash chose the right existing transaction.
+To switch transactions between both states, click on the checkmark in the &quot;New&quot; column.
+When all new transactions have the correct destination account and all duplicates are matched with the right existing transaction, 
+click &quot;Ok&quot;.</label>
+	<justify>GTK_JUSTIFY_LEFT</justify>
+	<wrap>False</wrap>
+	<xalign>0.5</xalign>
+	<yalign>0.5</yalign>
+	<xpad>0</xpad>
+	<ypad>0</ypad>
+	<child>
+	  <padding>0</padding>
+	  <expand>False</expand>
+	  <fill>False</fill>
+	</child>
+      </widget>
     </widget>
   </widget>
 </widget>
