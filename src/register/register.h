@@ -3,7 +3,15 @@
  * register.h
  *
  * FUNCTION:
- * implements a basic display register/ledger
+ * Implements a basic display register/ledger.
+ * This object makes specific cell have specific properties
+ * (price, text, date, etc).  and specific names that correspond.
+ * it also determines the actual phyisical layout, arrengement
+ * of columns, etc.
+ *
+ * DESIGN HOPES:
+ * Should probably move at least some of the layout to a config 
+ * file.  Might make good sense to use scheme/guile for the layout.
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas

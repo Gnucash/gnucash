@@ -133,9 +133,9 @@ configLayout (BasicRegister *reg, int type)
    SET (DEBT_CELL,  5,  0, 12,  DEBIT_STR);
    SET (CRED_CELL,  6,  0, 12,  CREDIT_STR);
    SET (BALN_CELL,  7,  0, 12,  BALN_STR);
-   SET (SHRS_CELL, -1, -1, 12,  TOT_SHRS_STR);
    SET (PRIC_CELL, -1, -1,  9,  PRICE_STR);
-   SET (VALU_CELL, -1, -1, 12,  VALUE_STR);
+   SET (VALU_CELL, -1, -1, 10,  VALUE_STR);
+   SET (SHRS_CELL, -1, -1, 10,  TOT_SHRS_STR);
 
    switch (type) {
       case BANK_LEDGER:
@@ -150,16 +150,16 @@ configLayout (BasicRegister *reg, int type)
          reg->num_header_rows = 1;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
          SET (PRIC_CELL, -1, -1,  9,  PRICE_STR);
-         SET (VALU_CELL, -1, -1, 12,  VALUE_STR);
-         SET (SHRS_CELL, -1, -1, 12,  TOT_SHRS_STR);
+         SET (VALU_CELL, -1, -1, 10,  VALUE_STR);
+         SET (SHRS_CELL, -1, -1, 10,  TOT_SHRS_STR);
          break;
 
       case STOCK_LEDGER:
          reg->num_cols = 11;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
          SET (PRIC_CELL,  7,  0,  9,  PRICE_STR);
-         SET (VALU_CELL,  8,  0, 12,  VALUE_STR);
-         SET (SHRS_CELL,  9,  0, 12,  TOT_SHRS_STR);
+         SET (VALU_CELL,  8,  0, 10,  VALUE_STR);
+         SET (SHRS_CELL,  9,  0, 10,  TOT_SHRS_STR);
          SET (BALN_CELL, 10,  0, 12,  BALN_STR);
 
       default:
@@ -233,9 +233,22 @@ configTraverse (BasicRegister *reg, int type)
          xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
          xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
          xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
+         break;
 
       case STOCK_LEDGER:
+         xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
+         xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, XFRM_CELL_R, XFRM_CELL_C);
+         xaccNextRight (curs, XFRM_CELL_R, XFRM_CELL_C, DESC_CELL_R, DESC_CELL_C);
+         xaccNextRight (curs, DESC_CELL_R, DESC_CELL_C, DEBT_CELL_R, DEBT_CELL_C);
+         xaccNextRight (curs, DEBT_CELL_R, DEBT_CELL_C, CRED_CELL_R, CRED_CELL_C);
+         xaccNextRight (curs, CRED_CELL_R, CRED_CELL_C, PRIC_CELL_R, PRIC_CELL_C);
+         xaccNextRight (curs, PRIC_CELL_R, PRIC_CELL_C, ACTN_CELL_R, ACTN_CELL_C);
+         xaccNextRight (curs, ACTN_CELL_R, ACTN_CELL_C, MEMO_CELL_R, MEMO_CELL_C);
+         xaccNextRight (curs, MEMO_CELL_R, MEMO_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
+         break;
+
       default:
+         xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C, -1-DATE_CELL_R, -1-DATE_CELL_C);
 
    }
 }

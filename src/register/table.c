@@ -1,6 +1,35 @@
+/*
+ * FILE:
+ * table.c
+ *
+ * FUNCTION:
+ * Implements the infrastructure for the displayed table.
+ * This is the Motif implementation; this needs to be 
+ * ported to GTK, etc. 
+ *
+ * HISTORY:
+ * Copyright (c) 1988 Linas Vepstas
+ */
+
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
 
 #include <stdlib.h>
 
+#include <Xm/Xm.h>
 #include <Xbae/Matrix.h>
 
 #include "cellblock.h"
@@ -867,8 +896,6 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
    row = cbs->row;
    col = cbs->column;
 
-printf ("traverse from %d %d %s %d\n", row, col, cbs->param, cbs->qparam);
-
    /* If the quark is zero, then it is likely that we are
     * here because we traversed out of a cell that had a 
     * ComboBox in it.  The ComboCell is clever enough to put
@@ -890,7 +917,6 @@ printf ("traverse from %d %d %s %d\n", row, col, cbs->param, cbs->qparam);
           cbs->qparam = QRight;
           row = table->prev_phys_traverse_row;
           col = table->prev_phys_traverse_col;
-printf ("null quark emulate rows %d %d \n", row, col);
         }
       }
    }
@@ -928,13 +954,7 @@ printf ("null quark emulate rows %d %d \n", row, col);
 
    table->prev_phys_traverse_row = cbs->next_row;
    table->prev_phys_traverse_col = cbs->next_column;
-
-printf ("traverse all said & done %d %d \n", 
-table->prev_phys_traverse_row,
-table->prev_phys_traverse_col);
-
 }
-
 
 /* ==================================================== */
 
