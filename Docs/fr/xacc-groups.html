@@ -1,24 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-   <META NAME="GENERATOR" CONTENT="Mozilla/4.06 [fr] (Win98; I) [Netscape]">
-   <TITLE>Chart of Accounts and Account Numbering</TITLE>
-</HEAD>
-<BODY BGCOLOR="#EEEEEE">
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [fr] (Win98; I) [Netscape]">
+   <title>Tableau de comptes et numérotation des comptes</title>
+   <link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+</head>
+<body bgcolor="#EEEEEE">
 
-<H1>
-Tableau de comptes</H1>
+<h1>
+Tableau de comptes</h1>
 Typiquement les comptes sont arrang&eacute;s comme un arbre, dans une forme
-hi&eacute;rarchique. Le tronc principal repr&eacute;sente les cat&eacute;gories
-ou groupes en entier, tandis que les feuillles de l'arbre contiennent des
-comptes bancaires individuels ou des cat&eacute;gories de d&eacute;penses.
-Quand un rapport sommaire est demand&eacute;, typiquement seulement les
-branches principales sont montr&eacute;s dans le rapport, pas chacun des
-comptes individuels. Par example, un tableau de comptes devrait ressembler
-&agrave; ce
-<BR>qui suit:
-<PRE>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 300&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D&eacute;penses
+hi&eacute;rarchique.
+<p>Le tronc principal repr&eacute;sente les cat&eacute;gories ou groupes
+en entier, tandis que les feuillles de l'arbre contiennent des comptes
+bancaires individuels ou des cat&eacute;gories de d&eacute;penses.
+<p>Quand un rapport sommaire est demand&eacute;, typiquement seulement
+les branches principales sont montr&eacute;s dans le rapport, plut&ocirc;t
+que les comptes individuels. Par example, un tableau de comptes devrait
+ressembler &agrave; ce qui suit:
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 300&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D&eacute;penses
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +--310&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D&eacute;penses en cours
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |
@@ -30,343 +31,399 @@ comptes individuels. Par example, un tableau de comptes devrait ressembler
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; +--321&nbsp;&nbsp;&nbsp;&nbsp; Disquettes 8 pouces
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp; :</PRE>
-Noter que les comptes sont cod&eacute;s: quand un rapport est g&eacute;n&eacute;r&eacute;,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp; :</pre>
+Noter que les comptes n'ont pas seulement des noms; ils ont des <b>codes,</b>afin
+de fournir un <i>ordre</i>. Quand un rapport est g&eacute;n&eacute;r&eacute;,
 l'ordre de tri est d&eacute;termin&eacute; enti&egrave;rement par la num&eacute;rotation.
-Par tradition et pratique habituelle, les comptes qui ne sont des comptes
-feuilles ont un nombre qui tends vers z&eacute;ro; chaque niveau sup&eacute;rieur
-a un plus zero dans le code du compte.
-<P>Quand vous faites une <A HREF="xacc-accwin.html">cr&eacute;ation d'un
-nouveau compte</A>, GnuCash offre une possibilit&eacute; de deviner &agrave;
-quoi il pense que le code du compte devrait &ecirc;tre; vous &ecirc;tes
-libre de le changer. GnuCash ne pr&eacute;vient pas la duplication de num&eacute;rotation,
+<p>Une arborescence logique g&eacute;n&eacute;rallement aura la fin des
+comptes "feuilles" en chiffre diff&eacute;rent de z&eacute;ro, tandis que
+les noeuds&nbsp; parents ont des num&eacute;ros croissant de z&eacute;ro.
+Par exemple, les comptes "liquidit&eacute;s" devraient logiquement &ecirc;tre
+arrang&eacute;s ainsi:
+<ul>
+<li>
+Avoirs globaux: <tt>100</tt></li>
+
+<ul>
+<li>
+Liquidit&eacute;s globales: <tt>110</tt></li>
+
+<ul>
+<li>
+Esp&egrave;ces dans le portefeuille: <tt>111</tt></li>
+
+<li>
+Esp&egrave;ces dans la chaussette dans le placard: <tt>112</tt></li>
+
+<li>
+Esp&egrave;ces dans le matelas: <tt>113</tt></li>
+
+<li>
+Boite &agrave; petits frais: <tt>114</tt></li>
+</ul>
+
+<li>
+Avoirs bancaires globaux: <tt>120</tt></li>
+
+<ul>
+<li>
+Compte ch&egrave;ques: <tt>121</tt></li>
+
+<li>
+Compte d'&eacute;pargne: <tt>122</tt></li>
+</ul>
+</ul>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Quand
+vous faites une <a href="xacc-accwin.html">cr&eacute;ation d'un nouveau
+compte</a>, GnuCash offre une possibilit&eacute; de deviner &agrave; quoi
+il pense que
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+le code du compte devrait &ecirc;tre; vous &ecirc;tes libre de le changer.
+GnuCash ne pr&eacute;vient pas la duplication de num&eacute;rotation,
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 bien que vous &ecirc;tes encourag&eacute;s &agrave; l'&eacute;viter. Les
 codes de compte sont trait&eacute;s comme des num&eacute;ros, base-36:
-ainsi, s'il n'y a plus de num&eacute;ros, vous pouvez utiliser les lettres,
-de a jusqu'&agrave; z.
-<H2>
-Un gros example</H2>
-Un tableau "typique" de comptes est montr&eacute; ci-dessous. C'est une
+ainsi, s'il n'y
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+a plus de num&eacute;ros, vous pouvez utiliser les lettres, de a jusqu'&agrave;
+z.
+<p><b><font size=+3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Un exemple de tableaux
+de comptes</font></b>
+<p><a NAME="SAMPLECHART"></a>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Un
+tableau "typique" de comptes est montr&eacute; ci-dessous. Chaque compte
+est un <a href="xacc-acctypes.html">type de compte donn&eacute;</a>.C'est
+une
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 combinaison de quelques comptes commerciaux et personnels typiques.
-<UL>
-<LI>
-Actifs</LI>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+>>>>>>> 1.2
+<ul>
+<li>
+Actifs</li>
 
-<UL>
-<LI>
-Argent &agrave; port&eacute;e de main / Liquidit&eacute;s</LI>
+<ul>
+<li>
+Argent &agrave; port&eacute;e de main / Liquidit&eacute;s</li>
 
-<UL>
-<LI>
-Compte ch&egrave;ques ou courant</LI>
+<ul>
+<li>
+Compte ch&egrave;ques ou courant</li>
 
-<LI>
-Compte de march&eacute; mon&eacute;taire</LI>
+<li>
+Compte de march&eacute; mon&eacute;taire</li>
 
-<LI>
-Certificat de d&eacute;p&ocirc;t</LI>
-</UL>
+<li>
+Certificat de d&eacute;p&ocirc;t</li>
+</ul>
 
-<LI>
-Actifs fixes / Immobilisations</LI>
+<li>
+Actifs fixes / Immobilisations</li>
 
-<UL>
-<LI>
-Meubles</LI>
+<ul>
+<li>
+Meubles</li>
 
-<LI>
-Ordinateurs</LI>
+<li>
+Ordinateurs</li>
 
-<LI>
-Bijoux, articles de collection</LI>
+<li>
+Bijoux, articles de collection</li>
 
-<LI>
-Outils, machines</LI>
-</UL>
+<li>
+Outils, machines</li>
+</ul>
 
-<LI>
-Investissements</LI>
+<li>
+Investissements</li>
 
-<UL>
-<LI>
-Actions</LI>
+<ul>
+<li>
+Actions</li>
 
-<LI>
-Obligations</LI>
+<li>
+Obligations</li>
 
-<LI>
+<li>
 Soci&eacute;t&eacute;s d'investissements (n.d.t.: SICAV, FCP, OPCVM, SCPI
-en france)</LI>
+en france)</li>
 
-<LI>
-Biens immobiliers</LI>
-</UL>
-</UL>
+<li>
+Biens immobiliers</li>
+</ul>
+</ul>
 
-<LI>
-Passifs</LI>
+<li>
+Passifs</li>
 
-<UL>
-<LI>
-Imp&ocirc;t/Taxes</LI>
+<ul>
+<li>
+Imp&ocirc;t/Taxes</li>
 
-<UL>
-<LI>
-S&eacute;curit&eacute; sociale</LI>
+<ul>
+<li>
+S&eacute;curit&eacute; sociale</li>
 
-<LI>
-Imp&ocirc;t sur le revenu</LI>
+<li>
+Imp&ocirc;t sur le revenu</li>
 
-<LI>
-Taxe d'habitation</LI>
+<li>
+Taxe d'habitation</li>
 
-<LI>
-Imp&ocirc;t foncier</LI>
+<li>
+Imp&ocirc;t foncier</li>
 
-<LI>
-Vignette automobile</LI>
-</UL>
+<li>
+Vignette automobile</li>
+</ul>
 
-<LI>
-Carte de cr&eacute;dit et carte a d&eacute;bit diff&eacute;r&eacute;</LI>
+<li>
+Carte de cr&eacute;dit et carte a d&eacute;bit diff&eacute;r&eacute;</li>
 
-<UL>
-<LI>
-Eurocard/MasterCard</LI>
+<ul>
+<li>
+Eurocard/MasterCard</li>
 
-<LI>
-Visa</LI>
+<li>
+Visa</li>
 
-<LI>
-American Express</LI>
+<li>
+American Express</li>
 
-<LI>
-Diner's Club</LI>
-</UL>
+<li>
+Diner's Club</li>
+</ul>
 
-<LI>
-Emprunts</LI>
+<li>
+Emprunts</li>
 
-<UL>
-<LI>
-Obligations(bourse)</LI>
+<ul>
+<li>
+Obligations(bourse)</li>
 
-<LI>
-Pr&ecirc;t &eacute;tudiant</LI>
+<li>
+Pr&ecirc;t &eacute;tudiant</li>
 
-<LI>
-Pr&ecirc;t personel d'oncle Jean</LI>
+<li>
+Pr&ecirc;t personel d'oncle Jean</li>
 
-<LI>
-Pr&ecirc;t immobilier</LI>
-</UL>
-</UL>
+<li>
+Pr&ecirc;t immobilier</li>
+</ul>
+</ul>
 
-<LI>
-Capitaux propres</LI>
+<li>
+Capitaux propres</li>
 
-<UL>
-<LI>
-Reste de profits</LI>
+<ul>
+<li>
+Reste de profits</li>
 
-<LI>
-Primes et profits de l'ann&eacute;e en cours</LI>
+<li>
+Primes et profits de l'ann&eacute;e en cours</li>
 
-<LI>
-R&egrave;glement d'une demande (justice)</LI>
-</UL>
+<li>
+R&egrave;glement d'une demande (justice)</li>
+</ul>
 
-<LI>
-Revenus</LI>
+<li>
+Revenus</li>
 
-<UL>
-<LI>
-Revenus d'int&eacute;r&ecirc;ts</LI>
+<ul>
+<li>
+Revenus d'int&eacute;r&ecirc;ts</li>
 
-<UL>
-<LI>
-Int&eacute;r&ecirc;t du compte bancaire (compte r&eacute;mun&eacute;r&eacute;)</LI>
+<ul>
+<li>
+Int&eacute;r&ecirc;t du compte bancaire (compte r&eacute;mun&eacute;r&eacute;)</li>
 
-<LI>
-Certificat de dep&ocirc;t</LI>
+<li>
+Certificat de dep&ocirc;t</li>
 
-<LI>
-Inter&ecirc;ts d'obligations</LI>
-</UL>
+<li>
+Inter&ecirc;ts d'obligations</li>
+</ul>
 
-<LI>
-Dividendes</LI>
+<li>
+Dividendes</li>
 
-<UL>
-<LI>
-Actions</LI>
+<ul>
+<li>
+Actions</li>
 
-<LI>
+<li>
 Soci&eacute;t&eacute;s d'investissements (n.d.t.: SICAV, FCP, OPCVM, SCPI
-en france)</LI>
-</UL>
+en france)</li>
+</ul>
 
-<LI>
-Consultant</LI>
+<li>
+Consultant</li>
 
-<UL>
-<LI>
-ABC Design</LI>
+<ul>
+<li>
+ABC Design</li>
 
-<LI>
-PQR Infomatics</LI>
-</UL>
+<li>
+PQR Infomatics</li>
+</ul>
 
-<LI>
-Salaire</LI>
+<li>
+Salaire</li>
 
-<UL>
-<LI>
-Mon travail de jour</LI>
-</UL>
+<ul>
+<li>
+Mon travail de jour</li>
+</ul>
 
-<LI>
-Commissions</LI>
+<li>
+Commissions</li>
 
-<UL>
-<LI>
-Royalties</LI>
-</UL>
-</UL>
+<ul>
+<li>
+Royalties</li>
+</ul>
+</ul>
 
-<LI>
-D&eacute;penses</LI>
+<li>
+D&eacute;penses</li>
 
-<UL>
-<LI>
-Loyer and Sevices</LI>
+<ul>
+<li>
+Loyer and Sevices</li>
 
-<UL>
-<LI>
-Loyer</LI>
+<ul>
+<li>
+Loyer</li>
 
-<LI>
-Int&eacute;r&ecirc;ts sur le loyer en retard</LI>
+<li>
+Int&eacute;r&ecirc;ts sur le loyer en retard</li>
 
-<LI>
-Electricit&eacute;</LI>
+<li>
+Electricit&eacute;</li>
 
-<LI>
-Gaz</LI>
+<li>
+Gaz</li>
 
-<LI>
-T&eacute;l&eacute;phone</LI>
+<li>
+T&eacute;l&eacute;phone</li>
 
-<LI>
-Internet</LI>
+<li>
+Internet</li>
 
-<LI>
-TV par cable</LI>
-</UL>
+<li>
+TV par cable</li>
+</ul>
 
-<LI>
-D&eacute;penses de bureau</LI>
+<li>
+D&eacute;penses de bureau</li>
 
-<UL>
-<LI>
-Comptabilit&eacute;</LI>
+<ul>
+<li>
+Comptabilit&eacute;</li>
 
-<LI>
-Avocat (pour les USA)</LI>
+<li>
+Avocat (pour les USA)</li>
 
-<LI>
-Logiciels</LI>
+<li>
+Logiciels</li>
 
-<LI>
-Poste</LI>
+<li>
+Poste</li>
 
-<LI>
-Frais bancaires</LI>
+<li>
+Frais bancaires</li>
 
-<LI>
-Frais de cartes de cr&eacute;dit</LI>
+<li>
+Frais de cartes de cr&eacute;dit</li>
 
-<LI>
-Toner, Papier, Paper Clips</LI>
-</UL>
+<li>
+Toner, Papier, Paper Clips</li>
+</ul>
 
-<LI>
-D&eacute;penses automobiles</LI>
+<li>
+D&eacute;penses automobiles</li>
 
-<UL>
-<LI>
-Carburant</LI>
+<ul>
+<li>
+Carburant</li>
 
-<LI>
-Assurance</LI>
+<li>
+Assurance</li>
 
-<LI>
-R&eacute;paration</LI>
+<li>
+R&eacute;paration</li>
 
-<LI>
-Location</LI>
-</UL>
+<li>
+Location</li>
+</ul>
 
-<LI>
-Taxes</LI>
+<li>
+Taxes</li>
 
-<UL>
-<LI>
-S&eacute;curit&eacute; sociale</LI>
+<ul>
+<li>
+S&eacute;curit&eacute; sociale</li>
 
-<LI>
-Assurance chomage</LI>
+<li>
+Assurance chomage</li>
 
-<LI>
-Amende des imp&ocirc;ts</LI>
-</UL>
+<li>
+Amende des imp&ocirc;ts</li>
+</ul>
 
-<LI>
-Salaires et primes</LI>
+<li>
+Salaires et primes</li>
 
-<UL>
-<LI>
-Consultant</LI>
+<ul>
+<li>
+Consultant</li>
 
-<LI>
-Primes</LI>
+<li>
+Primes</li>
 
-<LI>
-Assurance sant&eacute;</LI>
-</UL>
+<li>
+Assurance sant&eacute;</li>
+</ul>
 
-<LI>
-Voyage</LI>
+<li>
+Voyage</li>
 
-<UL>
-<LI>
-Avion</LI>
+<ul>
+<li>
+Avion</li>
 
-<LI>
-Hotel</LI>
+<li>
+Hotel</li>
 
-<LI>
-Repas</LI>
+<li>
+Repas</li>
 
-<LI>
-Auto</LI>
-</UL>
+<li>
+Auto</li>
+</ul>
 
-<LI>
-Marketing/Mercatique</LI>
+<li>
+Marketing/Mercatique</li>
 
-<UL>
-<LI>
-Publicit&eacute;</LI>
+<ul>
+<li>
+Publicit&eacute;</li>
 
-<LI>
-Salon professionnel / Foire commerciale</LI>
+<li>
+Salon professionnel / Foire commerciale</li>
 
-<LI>
-Donations/Gadgets</LI>
-</UL>
-</UL>
-</UL>
+<li>
+Donations/Gadgets</li>
 
-</BODY>
-</HTML>
+<li>
+Un tableau "typique" de comptes est montr&eacute; ci-dessous. C'est une
+combinaison de quelques comptes commerciaux et personnels typiques.</li>
+</ul>
+
+<hr WIDTH="100%">
+<p>Retour &agrave; la <a href="xacc-main.html">Page principale de la documentation.</a></ul>
+</ul>
+
+</body>
+</html>

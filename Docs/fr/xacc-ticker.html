@@ -1,66 +1,75 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-   <META NAME="GENERATOR" CONTENT="Mozilla/4.06 [fr] (Win98; I) [Netscape]">
-   <TITLE>Stock Ticker</TITLE>
-</HEAD>
-<BODY BGCOLOR="#EEEEEE">
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [fr] (Win98; I) [Netscape]">
+   <title>Codes/symboles des actions</title>
+<link rel="stylesheet" title="normal" type="text/css" href="gnucash.css">
+</head>
+<body bgcolor="#EEEEEE">
 
-<H1>
-Cours des actions et codes des titres</H1>
-GnuCash actuellement fournit des possibilit&eacute;s de cotation d'actions
-automatis&eacute;. Si un compte est correctement configur&eacute;, et l'ordinateur
-h&ocirc;te est connect&eacute; sur internet, l'ex&eacute;cutable <TT>gnc-prices</TT>
-peut &ecirc;tre utilis&eacute; pour chargerv les cotations des cours d'actions
-ou FCP et SICAV &agrave; partir de divers sites web directement dans GnuCash.
-<P>Pour utiliser cette fonctionnalit&eacute;, ce qui suit doit &ecirc;tre
+<h1>
+Cours des actions et codes des titres</h1>
+GnuCash actuellement fournit dans une certaine mesure uns syst&egrave;me
+rudimentaire de r&eacute;cup&eacute;ration automatis&eacute;e des cours
+d'actions.
+<p>Si un <a href="xacc-acctypes.html#stockacct">compte d'actions</a> de
+Gnucash est convenablement configur&eacute;, et l'ordinateur h&ocirc;te
+est connect&eacute; sur internet, le programme <tt>gnc-prices</tt> peut
+&ecirc;tre utilis&eacute; pour r&eacute;cup&eacute;rer&nbsp; les cotations
+des cours d'actions ou FCP et SICAV &agrave; partir de divers sites web
+directement dans GnuCash.
+<p>Pour utiliser cette fonctionnalit&eacute;, ce qui suit doit &ecirc;tre
 fait:
-<UL>
-<LI>
+<ul>
+<li>
 Cr&eacute;er un compte et marquer le comme &eacute;tant du type "FCP/SICAV"
-ou "Actions".</LI>
+ou "Actions".</li>
 
-<LI>
+<li>
 Entrer un code de titre valide (ndt : code SICOVAM en france) dans le champ
-marqu&eacute; "Valeur:"</LI>
+marqu&eacute; "Valeur:"</li>
 
-<LI>
+<li>
 S&eacute;lectionner une source de cotations depuis le menu d&eacute;roulant.
-Actuellement les sources de cotations support&eacute;s incluent <B>Yahoo</B>,
-<B>Fidelity Investments</B>, <B>T. Rowe Price</B> et le <B>Vanguard Group</B>.
-Noter que Yahoo fournira le cours des cotations pour la plupart des fonds
-communs , incluant Fidelity, T.Rowe Price and Vanguard, et les cours/NAV
-cot&eacute;s&nbsp; devrait &ecirc;tre identique &agrave; ceux sur les sites
-sources.</LI>
-</UL>
+Actuellement les sources de cotations support&eacute;s incluent <b>Yahoo</b>,
+<b>Fidelity
+Investments</b>, <b>T. Rowe Price</b> et le <b>Vanguard Group</b>. Noter
+que Yahoo fournira le cours des valeurs pour la plupart des fonds communs
+, <i>incluant</i> Fidelity, T.Rowe Price and Vanguard, et que les valeurs
+cot&eacute;es &agrave; Yahoo devrait &ecirc;tre identique &agrave; ceux
+qui sont sur les sites sources.(Autrement, quelqu'un rapportera une mauvaise
+information!)</li>
+</ul>
 Un exemple d'image est montr&eacute; ci-dessous:
-<P><IMG SRC="ticker-a.gif" HEIGHT=347 WIDTH=405>
-<P>Pour mettre &agrave; jour les cours stock&eacute;s dans un fichier de
-compte de gnucash, lancez en ligne de commande <TT>gnc-price</TT>, en specifiant
+<p><img SRC="Ticker-a.gif" NOSAVE height=347 width=405>
+<p>Pour mettre &agrave; jour les cours stock&eacute;s dans un fichier de
+compte de gnucash, lancez en ligne de commande <tt>gnc-price</tt>, en specifiant
 le nom du fichier; par exemple:
-<PRE>&nbsp;&nbsp;&nbsp; gnc-prices myaccts.xac</PRE>
+<pre>&nbsp;&nbsp;&nbsp; gnc-prices myaccts.xac</pre>
 En lan&ccedil;ant cette commande, elle affichera divers messages de diagnostic
 vers l'&eacute;cran tandis qu'elle chargera les donn&eacute;es. Elle fonctionnera
 seulement quand l'ordinateur h&ocirc;te est connect&eacute; &agrave; internet.
-Elle fonctionnera si l'h&ocirc;te est derri&egrave;re un parefeu/firewall
-de style masqu&eacute;. Elle ne fonctionne pas actuellement depuis derri&egrave;re
-un proxy ou des parefeu de style socks. La commande peut &ecirc;tre lanc&eacute;e
-plusieurs fois dans une journ&eacute;e;&nbsp; pourtant, elle mettra les
-comptes &agrave; jour au maximum une fois avec la plupart des donn&eacute;es
-de cours de la journ&eacute;e &eacute;chang&eacute; derni&egrave;rement.
-Ainsi, si&nbsp; gnc-prices est lanc&eacute; le vendredi, samedi, dimanche
-et&nbsp; lundi, seulement deux chargement de cours seront effectu&eacute;:
+Elle <i>peut</i> fonctionner ensemble avec un parefeu/firewall de style
+masqu&eacute;. Elle ne fonctionne pas actuellement depuis derri&egrave;re
+un proxy ou des parefeu de style socks.
+<p>La commande peut &ecirc;tre lanc&eacute;e plusieurs fois dans une journ&eacute;e;&nbsp;
+pourtant, elle mettra les comptes &agrave; jour au maximum une fois avec
+les plus r&eacute;centes donn&eacute;es du cours des &eacute;changes de
+la journ&eacute;e.
+<p>Ainsi, si&nbsp; <tt>gnc-prices</tt> est lanc&eacute; le vendredi, samedi,
+dimanche et&nbsp; lundi, seulement deux chargement de cours seront effectu&eacute;s:
 un contenant les donn&eacute;es du vendredi, et un contenant les donn&eacute;es
-du lundi, tandis que celui du samedi et dimanche lanc&eacute; retrouvera
-seulement les cours de cloture du vendredi. Pour emp&ecirc;cher&nbsp; gnc-prices
-de mettre &agrave; jour un compte, tandis que vous lui permettez de mettre
-&agrave; jour un autre compte, simplement marqu&eacute; les donn&eacute;es
-source pour ce compte comme "(aucun)". Vous pouvez le faire depuis la fen&ecirc;tre
-"Afficher un compte".
-<P>Apr&egrave;s avoir lanc&eacute; gnc-prices pendant quelques jours, vos
+du lundi, tandis que celui lanc&eacute; le samedi et dimanche retrouvera
+seulement les cours de cl&ocirc;ture du vendredi.
+<p>Pour emp&ecirc;cher&nbsp; gnc-prices de mettre &agrave; jour un compte,
+tandis que vous lui permettez de mettre &agrave; jour un autre compte,
+marquez simplement les donn&eacute;es source pour ce compte comme "(aucun)".
+Vous pouvez le faire depuis la fen&ecirc;tre "<tt>Afficher un compte</tt>".
+<p>Apr&egrave;s avoir lanc&eacute; gnc-prices pendant quelques jours, vos
 comptes commenceront &agrave; ressembler&nbsp; &agrave; ce qui suit:
-<P><IMG SRC="ticker-b.gif" HEIGHT=372 WIDTH=881>
-<HR>
-</BODY>
-</HTML>
+<p><img SRC="Ticker-b.gif" NOSAVE height=372 width=881>
+<hr>
+<br>Retour &agrave; la <a href="xacc-main.html">Page principale de la documentation.</a>
+</body>
+</html>
