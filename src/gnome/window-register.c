@@ -1721,8 +1721,15 @@ regRefresh(xaccLedgerDisplay *ledger)
   const char *currency = xaccAccountGetCurrency(ledger->leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
-  euro = (euro && strncasecmp("EUR", currency, 3) &&
-          gnc_is_euro_currency(currency));
+  if(currency != NULL)
+  {
+    euro = (euro && strncasecmp("EUR", currency, 3) &&
+	    gnc_is_euro_currency(currency));
+  }
+  else
+  {
+    euro = FALSE;
+  }
 
   xaccSRLoadXferCells(ledger->ledger, ledger->leader);
 

@@ -146,3 +146,14 @@ make-gnucash-patch
 rpm/gnucash.spec
 src/gnome/glade-cb-gnc-dialogs.c
 src/gnome/glade-support-gnc-dialogs.c
+intl/libintl.h
+lib/gtkhtml/ABOUT-NLS
+lib/gtkhtml/po
+lib/gtkhtml/config.guess
+lib/gtkhtml/config.sub
+lib/gtkhtml/gtkhtml.spec
+lib/gtkhtml/gtkhtmlConf.sh
+lib/gtkhtml/ltconfig
+lib/gtkhtml/ltmain.sh
+lib/gtkhtml/intl
+lib/gtkhtml/src/libgtkhtml.la
