@@ -1,3 +1,14 @@
+2003-03-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/glossary/da.po: Updated glossary translation by Keld Simonsen
+	<keld@dkuug.dk>.
+
+	* po/glossary/sv.po: Updated glossary translation by Christian
+	Rose <menthos@menthos.com>.
+
+	* po/it.po: Updated Italian translation by Lorenzo Cappelletti
+	<lorenzo.cappelletti@email.it>.
+
 2003-03-09  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: release 1.8.2
