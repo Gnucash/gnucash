@@ -12,6 +12,10 @@
 #include "qofbook.h"
 #include "qofid.h"
 
+/* XXXX this is to be replaced by QofCollection shortly,
+ * which should provide the dirty flag, as well as defualt 
+ * for-each'es.
+ * */
 typedef struct _gncBookInfo {
   gboolean	is_dirty;
 } GncBookInfo;
