@@ -166,5 +166,13 @@ gnc_numeric gnc_split_register_debcred_cell_value (SplitRegister *reg);
 gboolean gnc_split_register_needs_conv_rate (Transaction *txn, Account *acc);
 gnc_numeric gnc_split_register_get_conv_rate (Transaction *txn, Account *acc);
 
+/* (maybe) pop up the exchange-rate dialog for the current split.
+ * if force_dialog is TRUE, the forces the dialog to to be called.
+ * If the dialog does not complete successfully, then return TRUE.
+ * Return FALSE in all other cases (meaning "move on")
+ */
+gboolean
+gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog);
+
 
 #endif

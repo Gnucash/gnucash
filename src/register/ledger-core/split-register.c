@@ -1374,6 +1374,10 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
    (void *)gnc_split_register_get_account (reg, MXFRM_CELL);
    (void *)gnc_split_register_get_account (reg, XFRM_CELL);
 
+   /* Maybe deal with exchange-rate transfers */
+   if (gnc_split_register_handle_exchange (reg, FALSE))
+     return TRUE;
+
    gnc_suspend_gui_refresh ();
 
    /* determine whether we should commit the pending transaction */

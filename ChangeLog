@@ -1,3 +1,19 @@
+2002-12-03  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c:
+	  export the 'handle_exchange()' interface
+	* src/register/ledger-core/split-register-p.h:
+	  add the 'handle_exchange()' prototype
+	* src/register/ledger-core/split-register.c:
+	  call handle_exchange() from the save() function to make sure we
+	  have an exchange rate if the user hits "Enter" instead of
+	  tabbing off the end.  For the record, the logic of the register
+	  is HORRIBLE, in that there are multiple code paths to deal with
+	  moving the "current location" depending on _how_ you move!  This
+	  is awful, and means you need a lot of duplicated code to deal
+	  with all the different corner cases.  Someone should re-write
+	  this all.
+
 2002-12-03  David Hampton  <hampton@employees.org>
 
 	* src/register/ledger-core/split-register-control.c
