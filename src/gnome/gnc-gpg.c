@@ -60,21 +60,26 @@ gnc_gpg_transform_helper(gpointer data, gint fd, GdkInputCondition cond) {
   char   * cstr;
 
   buf[1024] = 0;
-
-  while((bytes_read = read(fd, buf, 1024)) == 1024) {
-    g_string_append(td->str, buf);
+  
+  if(cond == GDK_INPUT_READ) {
+    while((bytes_read = read(fd, buf, 1024)) == 1024) {
+      g_string_append(td->str, buf);
+    }
+    if(bytes_read > 0) {
+      buf[bytes_read] = 0;
+      g_string_append(td->str, buf);
+    }
+    else {
+      /* we're done.  call the callback */ 
+      gdk_input_remove(td->tag);
+      cstr = td->str->str;
+      g_string_free(td->str, FALSE);
+      (td->cb)(cstr, td->data);
+      g_free(td);    
+    }
   }
-  if(bytes_read > 0) {
-    buf[bytes_read] = 0;
-    g_string_append(td->str, buf);
-  }
-  else if(bytes_read == 0) {
-    /* we're done.  call the callback */ 
+  else {
     gdk_input_remove(td->tag);
-    cstr = td->str->str;
-    g_string_free(td->str, FALSE);
-    (td->cb)(cstr, td->data);
-    g_free(td);    
   }
 }
 
@@ -106,7 +111,9 @@ gnc_gpg_transform_async(const gchar * input, gint input_size,
         bytes = write(to_child[1], 
                       passphrase+total_bytes, 
                       strlen(passphrase)-total_bytes); 
-        if(bytes < 0) break;
+        if(bytes < 0) {
+          break;
+        }
         else {
           total_bytes += bytes;
         }
@@ -140,7 +147,8 @@ gnc_gpg_transform_async(const gchar * input, gint input_size,
     /* child process. Set up pipes. */
     close(0);
     close(1);
-    close(2);  /* stderr to /dev/null ... gpg is a chatty thing */
+    /* stderr to /dev/null ... gpg is a chatty thing */
+    close(2);
 
     /* hook up the pipes */
     dup(to_child[0]);
@@ -150,7 +158,14 @@ gnc_gpg_transform_async(const gchar * input, gint input_size,
     umask(077);
 
     if(execvp("gpg", gpg_argv)) {
-      exit(-1);
+      char buf[1024];
+      /* get data from parent */
+      while((bytes = read(to_child[0], buf, 1024)) > 0) {        
+        bytes = 0;
+      }
+      /* give 'em a little back */
+      write(from_child[1], "\n", 1);
+      _exit(0);
     }
   }
 }

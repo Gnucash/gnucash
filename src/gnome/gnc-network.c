@@ -22,7 +22,6 @@
  ********************************************************************/
 
 #include "config.h"
-
 #include <gnome.h>
 #include <gtkhtml/gtkhtml.h>
 #include <gtkhtml/gtkhtml-embedded.h>
@@ -34,7 +33,6 @@
 #include "gnc-network.h"
 #include "query-user.h"
 #include "messages.h"
-
 
 /********************************************************************
  *  THIS IS PRIVACY-SENSITIVE CODE.  The actions handled here are run
@@ -223,7 +221,8 @@ gnc_network_auth_check(gpointer data) {
       gnc_html_show_url(na->html, URL_TYPE_ACTION, na->url, NULL, 0);
     }
     else {
-      gnc_warning_dialog(_("GnuCash Network authorization failed."));
+      gnc_warning_dialog(_("GnuCash Network authorization failed."));      
+      gnc_passphrase = NULL;
     }
     /* clean up */ 
     g_free(na->cryptext);
@@ -470,7 +469,12 @@ gnc_network_get_with_auth_handler(gnc_html * html,
                                   GHashTable * form_data) {
   char * new_action = 
     gnc_network_build_url("gnc-network-auth.php");
-  
+
+  if(!g_hash_table_lookup(form_data, "submit")) {
+    g_hash_table_insert(form_data, g_strdup("submit"), 
+                        g_strdup("gtkhtml-bug"));
+  }
+
   g_hash_table_insert(form_data, g_strdup("sid"), 
                       g_strdup(gnc_network_get_session_id()));
   g_hash_table_insert(form_data, g_strdup("uid"), 
@@ -502,6 +506,11 @@ gnc_network_get_handler(gnc_html * html,
   char * new_action = 
     gnc_network_build_url("gnc-network-get.php");
   
+  if(!g_hash_table_lookup(form_data, "submit")) {
+    g_hash_table_insert(form_data, g_strdup("submit"), 
+                        g_strdup("gtkhtml-bug"));
+  }
+
   g_hash_table_insert(form_data, g_strdup("uid"),
                       g_strdup(gnc_network_get_uid()));
   g_hash_table_insert(form_data, g_strdup("gnc_browser"),
@@ -533,6 +542,11 @@ gnc_network_send_info_handler(gnc_html * html,
   char * new_action = NULL;
   char * version_string = NULL;
   char * feature_string = NULL;
+  
+  if(!g_hash_table_lookup(form_data, "submit")) {
+    g_hash_table_insert(form_data, g_strdup("submit"), 
+                        g_strdup("gtkhtml-bug"));
+  }
   
   if(!method || !action 
      || strcmp(action, "get/info")) {
@@ -588,9 +602,13 @@ gnc_network_submit_key_handler(gnc_html * html,
   char * new_action = 
     gnc_network_build_url("gnc-network-get.php");
   
+  if(!g_hash_table_lookup(form_data, "submit")) {
+    g_hash_table_insert(form_data, g_strdup("submit"), 
+                        g_strdup("gtkhtml-bug"));
+  }
   g_hash_table_insert(form_data, g_strdup("gnc_browser"), g_strdup("true"));
 
-  if(!strcmp(submit, "OK")) {
+  if(!submit || !strcmp(submit, "OK")) {
     /* get the public key */
     if(keyid) {
       keytext = gnc_gpg_export(keyid);
@@ -638,3 +656,7 @@ gnc_network_init(void) {
   gnc_html_register_action_handler("submit-key",
                                    gnc_network_submit_key_handler); 
 }
+
+
+
+
