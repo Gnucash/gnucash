@@ -51,7 +51,8 @@ void    xaccMergeAccounts (AccountGroup *grp);
  *    any subgroup hasn't been saved.
  *
  * The xaccAccountGroupMarkSaved() subroutine will mark
- *    the entire group as having been saved.
+ *    the entire group as having been saved, including 
+ *    all of the child accounts.
  */
 int     xaccAccountGroupNotSaved  (AccountGroup *grp);
 void    xaccAccountGroupMarkSaved (AccountGroup *grp);

@@ -285,6 +285,11 @@ xaccReadAccountGroup( char *datafile )
   holder = xaccMallocAccountGroup();
   grp = readGroup (fd, NULL, token);
 
+  /* mark the newly read group as saved, since the act of putting 
+   * it together will have caused it to be marked up as not-saved. 
+   */
+  xaccAccountGroupMarkSaved (grp);
+
   /* the number of unclaimed accounts should be zero if the 
    * read succeeded.  But just in case of a very unlikely 
    * error, try to continue anyway. */
