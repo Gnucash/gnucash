@@ -94,7 +94,7 @@ xaccScrubLot (GNCLot *lot)
   GNCPolicy *pcy;
 
   if (!lot) return FALSE;
-  ENTER ("(lot=%p)", lot);
+  ENTER ("(lot=%p) %s", lot, gnc_lot_get_title(lot));
 
   acc = gnc_lot_get_account (lot);
   pcy = acc->policy;
@@ -103,7 +103,8 @@ xaccScrubLot (GNCLot *lot)
 
   /* If the lot balance is zero, we don't need to rebalance */
   lot_baln = gnc_lot_get_balance (lot);
-  PINFO ("lot baln=%s", gnc_numeric_to_string (lot_baln));
+  PINFO ("lot baln=%s for %s", gnc_numeric_to_string (lot_baln), 
+                               gnc_lot_get_title(lot));
   if (! gnc_numeric_zero_p (lot_baln))
   {
     SplitList *node;
