@@ -143,7 +143,7 @@ void gncAccountValueDestroy (GList *list);
 
 /** deprecated routine */
 #define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
-#define gncTaxTableRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
+#define gncTaxTableRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncTaxTableLookupDirect(G,B) gncTaxTableLookup((B), &(G))
 
 #endif /* GNC_TAXTABLE_H_ */

@@ -1,5 +1,21 @@
 2004-01-06  Derek Atkins  <derek@ihtfp.com>
 
+	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.
+	  Fix the actual problem, all the ...ReturnGUID() #define's which
+	  don't check that it's passed a NULL value.
+	* src/engine/Transaction.h:
+	* src/engine/Account.h:
+	  Fix ...ReturnGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+	* src/business/business-core/gncCustomer.h:
+	* src/business/business-core/gncEmployee.h:
+	* src/business/business-core/gncInvoice.h:
+	* src/business/business-core/gncJob.h:
+	* src/business/business-core/gncTaxTable.h:
+	* src/business/business-core/gncVendor.h:
+	  Fix ...RetGUID() to check whether it was passed a NULL object
+	  and, if so, return the null GUID instead of crashing.
+	
 	* README.cvs: make it even more explicit that you should not run configure
 	* src/engine/Makefile.am: remove the circular dependency I added earlier
 	* src/engine/gw-engine-spec.scm: don't include gnc-engine-util.h (it's

@@ -111,7 +111,7 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 
 /* deprecated functions, should be removed */
 #define gncCustomerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
-#define gncCustomerRetGUID(x) (*(qof_instance_get_guid(QOF_INSTANCE(x))))
+#define gncCustomerRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))
 #define gncCustomerGetBook(x) qof_instance_get_book(QOF_INSTANCE(x))
 #define gncCustomerLookupDirect(g,b) gncCustomerLookup((b), &(g))
 
