@@ -1,0 +1,29 @@
+
+
+The engine API documentation can be found in the src/doc/design/engine.texinfo file.
+
+This file contains some extra meta-information that is not directly relevant
+to the API documentation.
+
+
+First Class Objects (C structs) vs. Storing Data in KVP Trees
+-------------------------------------------------------------
+Suppose you have a neat idea for a new feature for the GnuCash engine.
+Should you create a C structure (a "first class object") and all
+of the required machinery for it (e.g. an SQL backend), or should you
+just put all of the data in a suitable KVP frame somewhere? 
+
+The answer depends on whether the concept requires extensive
+pointer chasing between different types of existing C structs,
+or whether it more naturally can hang with some existing object.
+
+If it seems to be an independent concept, it can still be placed
+in the KVP tree of the book, which gives it a 'top-level' existance.
+
+If the concept is used only infreqeuntly, then it probably belongs 
+in a KVP tree.  If the concept has performance-critical requriements,
+then it is better to implement it as a C struct, and similarly
+design an appropriate SQL table around it, so that the database
+can be queried efficiently and rapidly.
+
+
