@@ -69,8 +69,8 @@ August 22, 2000
 
 --------------------------------------------------
 
-Starting GnuCash in GDB -- Oct 2002
+Starting GnuCash in GDB -- Aug 2003
 
-% gnucash-env gdb /path/to/guile
+% gnucash-env gdb /usr/bin/guile
 [gdb output]
-% gdb> run -e main -s /path/to/devel-gnucash/libexec/overrides/gnucash --g-fatal-warnings
+% gdb> run -e main -s ./src/bin/overrides/gnucash --g-fatal-warnings
