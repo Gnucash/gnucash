@@ -775,7 +775,7 @@ wrapVerifyCursorPosition (Table *table, int row, int col)
        (save_phys_col != table->current_cursor_phys_col))
    {
       /* make sure *both* the old and the new cursor rows get redrawn */
-      xaccRefreshCursorGUI (table);  
+      xaccRefreshCursorGUI (table);
       doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
    }
 }
@@ -793,7 +793,8 @@ xaccRefreshCursorGUI (Table * table)
 /* ==================================================== */
 
 int
-gnc_register_cell_valid(Table *table, int row, int col) {
+gnc_register_cell_valid(Table *table, int row, int col) 
+{
   int invalid = 0;
   int rel_row, rel_col;
   CellBlock *arr, *header;
@@ -855,16 +856,17 @@ gnc_register_cell_valid(Table *table, int row, int col) {
    Handle the non gui-specific parts of a cell enter callback
 */
 
-void
+const char *
 gnc_table_enter_update(Table *table,
-                       int row, int col,
-                       char **new_text) {
+                       int row, int col)
+{
   /* If text should be changed, then new_text will be set to non-null
      on return */
 
   CellBlock *arr = table->current_cursor;
   const int rel_row = table->locators[row][col]->phys_row_offset;
   const int rel_col = table->locators[row][col]->phys_col_offset;
+  char *retval = NULL;
   
   const char * (*enter) (BasicCell *, const char *);
   
@@ -876,7 +878,6 @@ gnc_table_enter_update(Table *table,
         row, col, rel_row, rel_col, 
         arr->cells[rel_row][rel_col], table->entries[row][col]);
   
-  *new_text = NULL;
   
   /* OK, if there is a callback for this cell, call it */
   enter = arr->cells[rel_row][rel_col]->enter_cell;
@@ -885,18 +886,21 @@ gnc_table_enter_update(Table *table,
 
   if (enter) {
     const char *val;
-    char *retval;
 
     PINFO("has enter handler");
     
     val = table->entries[row][col];
     retval = (char *) enter(arr->cells[rel_row][rel_col], val);
-    if (NULL == retval) retval = (char *) val;
-    if (val != retval) {
+
+    /* enter() might return null, or it might return a pointer to
+     * val, or it might return a new pointer (to newly malloc memory). 
+     * Replace the old pointer with a new one only if the new one is 
+     * different, freeing the old one.  (Doing a strcmp would leak memory). 
+     */
+    if (retval && (val != retval)) {
       if (table->entries[row][col]) free (table->entries[row][col]);
       table->entries[row][col] = retval;
       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
-      *new_text = retval;
     }
   }
   PINFO(")\n");
@@ -905,43 +909,41 @@ gnc_table_enter_update(Table *table,
    * traversed out of if a traverse even happens */
   table->prev_phys_traverse_row = row;
   table->prev_phys_traverse_col = col;
+
+  return retval;
 }
 
-void
+/* ==================================================== */
+
+const char *
 gnc_table_leave_update(Table *table, int row, int col,
-                       const char* old_text,
-                       char **new_text) {
+                       const char* callback_text)
+{
   CellBlock *arr = table->current_cursor;
   const int rel_row = table->locators[row][col]->phys_row_offset;
   const int rel_col = table->locators[row][col]->phys_col_offset;
   const char * (*leave) (BasicCell *, const char *);
-  char *newval;
+  char *newval = NULL;
   
   PINFO("table: leave -- proposed (%d %d) rel(%d %d) \"%s\"\n",
-        row, col, rel_row, rel_col, old_text);
+        row, col, rel_row, rel_col, callback_text);
 
-  *new_text = NULL;
-  
   /* OK, if there is a callback for this cell, call it */
   leave = arr->cells[rel_row][rel_col]->leave_cell;
   if (leave) {
-    const char *val, *retval;
+    const char * retval;
+    retval = leave(arr->cells[rel_row][rel_col], callback_text);
     
-    val = old_text;
-    retval = leave(arr->cells[rel_row][rel_col], val);
-    
-    newval = (char *) retval;
-    if (NULL == retval) newval = strdup (val);
-    if (val == retval) newval = strdup (val);
-    
-    /* if the leave() routine declared a new string, lets use it */
-    if ( retval && (retval != val)) {
-      *new_text = strdup (retval);
+    /* leave() might return null, or it might return a pointer to
+     * callback_text, or it might return a new pointer (to newly 
+     * malloced memory). 
+     */
+    if (retval && (retval != callback_text)) {
+       newval = (char *) retval;
     }
-    
-  } else {
-    newval = strdup (old_text);
   }
+
+  if (!newval) newval = strdup (callback_text);
   
   /* save whatever was returned; but lets check for  
    * changes to avoid roiling the cells too much */
@@ -967,12 +969,14 @@ gnc_table_leave_update(Table *table, int row, int col,
                             table->reverify_phys_col);
 }
 
+/* ==================================================== */
 
 const char *
 gnc_table_modify_update(Table *table, int row, int col,
                         const char *oldval,
                         const char *change,
-                        char *newval) {
+                        char *newval) 
+{
   /* returned result should not be touched by the caller */
   /* NULL return value means the edit was rejected */
 
@@ -989,18 +993,17 @@ gnc_table_modify_update(Table *table, int row, int col,
   mv = arr->cells[rel_row][rel_col]->modify_verify;
   if (mv) {
     retval = (*mv) (arr->cells[rel_row][rel_col], oldval, change, newval);
-    
+
     /* if the callback returned a non-null value, allow the edit */
     if (retval) {
-      
       /* update data. bounds check done earlier */
-      free (table->entries[row][col]);
+      if (table->entries[row][col]) free (table->entries[row][col]);
       table->entries[row][col] = (char *) retval;
       (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
     }
   } else {
     /* update data. bounds check done earlier */
-    free (table->entries[row][col]);
+    if (table->entries[row][col]) free (table->entries[row][col]);
     table->entries[row][col] = newval;
     (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
   }
@@ -1011,11 +1014,14 @@ gnc_table_modify_update(Table *table, int row, int col,
   return(retval);
 }
 
+/* ==================================================== */
+
 gncBoolean
 gnc_table_traverse_update(Table *table, int row, int col,
                           gncTableTraversalDir dir,
                           int *dest_row,
-                          int *dest_col) {
+                          int *dest_col) 
+{
   gncBoolean exit_register = FALSE;
   CellBlock *arr = table->current_cursor;
   
