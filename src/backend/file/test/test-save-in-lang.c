@@ -11,6 +11,7 @@
 #include "test-engine-stuff.h"
 #include "test-file-stuff.h"
 
+#include "core-utils.h"
 #include "gnc-book.h"
 #include "gnc-engine.h"
 #include "TransLog.h"
@@ -71,7 +72,6 @@ test_file(const char *filename)
         GNCSession *session;
         char *cmd;
         char *new_file = gen_new_file_name(filename, possible_envs[i]);
-        char *putenv_str;
         GNCSession *new_session;
         
         session = gnc_session_new();
@@ -89,8 +89,8 @@ test_file(const char *filename)
             return g_strdup_printf("gnc_session_load errorid %d", error);
         }
 
-        putenv_str = g_strdup_printf ("%s=%s", "LANG", possible_envs[i]);
-        putenv (putenv_str);
+        if(gnc_setenv("LANG", possible_envs[i], 1) != 0)
+          return g_strdup_printf("gnc_setenv for LANG");
 
         new_session = gnc_session_new();
         
@@ -147,7 +147,6 @@ main(int argc, char **argv)
         {
             struct stat file_info;
             char* filename;
-            char* putenv_str;
 
             filename = g_strdup_printf("%s/%s", test_dir, next_file->d_name);
             
@@ -160,8 +159,13 @@ main(int argc, char **argv)
                 break;
             }
 
-            putenv_str = g_strdup_printf ("%s=%s", "LANG", base_env);
-            putenv (putenv_str);
+            if(gnc_setenv("LANG", base_env, 1) != 0)
+            {
+              failure_args("gnc_setenv", __FILE__, __LINE__,
+                           "gnc_setenv of LANG failed");
+              g_free(filename);
+              break;
+            }
 
             if(!S_ISDIR(file_info.st_mode))
             {
