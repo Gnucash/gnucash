@@ -506,6 +506,18 @@
       </tr>
 
       <tr>
+        <td><a href="#tech">Technical Stock Analysis</a></td>
+
+        <td>Medium</td>
+      </tr>
+
+      <tr>
+        <td><a href="#sink">Depreciation, Sinking Funds</a></td>
+
+        <td>Medium</td>
+      </tr>
+
+      <tr>
         <td><a href="#ofx">OFX, Online Banking, Trading,
         Bill-pay</a></td>
 
@@ -734,6 +746,7 @@ we've been, and where we're going.
               generate reports from the command line ...
           <li>A list of 'required reports' is needed.  Then these need
               to be implemented.
+          <li> Heavy discussion by matt martin, Robert Merkel ... 
         </ul>
       </p>
       </dd>
@@ -874,6 +887,13 @@ we've been, and where we're going.
 
           <li>
             <p>
+            <b>Cut-n-paste</b> 
+            Cut-n-paste of items in the regsiter window...
+            </p>
+          </li>
+
+          <li>
+            <p>
             <b>Bank name in combo-box pull-down</b> 
             When user enters a new bank name, should be presented with
             a combo-box listing other bank-account names ... 
@@ -918,9 +938,45 @@ we've been, and where we're going.
 
           <li>
             <p>
+            <b>Autocompletion</b> 
+            Quickfill should also auto-complete amount, memo fields.
+            </p>
+          </li>
+
+          <li>
+            <p>
+            <b>Autoincrement</b> 
+            Check numbers should auto-increment.
+            </p>
+          </li>
+
+          <li>
+            <p>
+            <b>Configurable main-window Status Bar</b> 
+            Bottom of main window currently shows total assest, and 
+            total income-expense (profits).  Make this configurable, 
+            so that user can show arbitrary sums of arbitrary accounts.
+            </p>
+          </li>
+
+          <li>
+            <p>
+            <b>Dockable Registers/ aka "Browser Mode"</b>. 
+            Currently, when each new register opens, it opens in a new
+            window.  An alternate style would be to 'dock' the register
+            window in a bigger frame, and just have 'backward/forward'
+            buttons to navigate through different registers (the way
+            that a browser navigates web pages.)  This of course would
+            be a user preference.
+            </p>
+          </li>
+
+          <li>
+            <p>
             <b>Wizards/Context sensitive help</b>. 
             When users create new accounts, need to suggest stuff if
-            its strange ...
+            the user typed something unexpected ... (e.g. non-alphanumeric
+            input) ...
             </p>
           </li>
 
@@ -1043,6 +1099,23 @@ we've been, and where we're going.
         Note that session management and preferences are related things
         ... sort-of. Right now, we don't treat themn as such ... 
         </p>
+        <p>
+          Session management is not implemented; viz, we don't
+              remember where things were left at when the user shut down
+              the windowing system, and we don't restore the session 
+              afterwords.  This includes: which register windows
+              were left open, what sizes they were, what thier
+              placements on the screen were, etc.  I beleive session
+              management needs to be coordinated with KDE and with
+              gnome, and all compliant window maangers will do the rest (?)
+        </p>
+        <p>
+        Independently of session management, the register windows should 
+        remember how big they were last time they were poped up, and
+        they should pop up the same size, again.  The app should
+        remember these sizes from invocation to invocation.
+        
+        </p>
 
         <p> <b>Status:</b>
         <ul>
@@ -1051,10 +1124,6 @@ we've been, and where we're going.
           <li>These are saved in the '.gnucash/config.auto' file.
               The current file format is raw scheme code, rather
               delicate to tweak by hand ...
-          <li>Session management is not implemented; viz, we don't
-              remember where things were left at when the user shut down
-              the windowing system, and we don't restore the session 
-              afterwords.
         </ul>
         </p>
       </dd>
@@ -1237,9 +1306,10 @@ next due date mm/dd/yy
         <p>More complex financial instrucments may need a guile-based
            extension mechanism to compute values .... simple
            interest/mortgage calculators should be done in C in 
-           the engine ...
+           the engine ...  (e.g. depreciation schedules ... under us tax
+           law, a variety of different schedules are allowed ... )
         <p> May need interfaces to email for emailed alerts.</p>
-        <p>Plot forcast graphs based on scheduled income & opayments ... 
+        <p>Plot forcast graphs based on scheduled income & payments ... 
            is this tied into budgeting ????
         <p><b>Status:</b>
 
@@ -1317,6 +1387,13 @@ next due date mm/dd/yy
       <dd>
         Ability to export Quicken QIF files. 
         <p>
+        Several design alternatives are available: 1) a special 
+        'report' that writes out qif could be created.  This would use
+        the 'reports' infrastructure to generate qif's.  2) Its fairly
+        easy to traverse the data in the engine to write out qif files.
+        Just do it.
+        </p>
+        <p>
         <b>Status:</b> not started
         </p>
       </dd>
@@ -1361,6 +1438,21 @@ next due date mm/dd/yy
         </ul>
         </p>
 
+      </dd>
+
+      <dt><a name="tech"><b>Technical Stock Analysis</b></a></dt>
+
+      <dd>
+      Provide technical sotck analysis graphs, e.g. volume, 90 moving
+      avg, beta, etc.  See gstalker for example of how to do it ... 
+      <p>
+      </p>
+      </dd>
+
+      <dt><a name="sink"><b>Depreciation, Sinking Funds</b></a></dt>
+      <dd>
+      Hmm ... some variation on the concept of loans?  Need to support
+      different deprciation schedules (see IRS books for that).
       </dd>
 
       <dt><a name="ofx"><b>OFX support</b></a></dt>
@@ -1799,7 +1891,12 @@ doesn't pass the 'ACID' test</a>.
 
       <dt><a name="invoice"><b>Invoicing</b></a></dt>
 
-      <dd>Invoicing.</dd>
+      <dd>Invoicing.  To design an invoice, need to have a
+          mini-word-processor/simple drawing plug-in.
+          Is Abisource/Abiword a candidate?  Probably needs bonobo...
+      <p>
+      </p>
+      </dd>
 
       <dt><a name="estimate"><b>Job Costing</b></a></dt>
 
@@ -1836,6 +1933,10 @@ doesn't pass the 'ACID' test</a>.
 
       <li><a href="http://www.daveware.com/linuxrapid.html">
       Xrapid</a> stock technical analysis.</li>
+
+<li> <a href="http://sourceforge.net/project/?group_id=3522">
+    Accountant</a> project at sourcforge aims to create a generic
+    business library.
 
       <li><a href="http://www.ios-online.de/Linux-Kontor/">
       Linux-Kontor</a> - an industrial accounting package that uses

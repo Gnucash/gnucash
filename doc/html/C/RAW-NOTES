@@ -43,3 +43,54 @@ Note there is still an invarient:
 (old price of A) * 20s == (new price of A) *20s + (price of B) * 1s
 
 
+=========================================================================
+
+Depreciation, Sinking Funds ...
+
+On 21 Apr 2000 20:39:43 CDT, the world broke into rejoicing as
+John Hasler <john@dhh.gt.org>  said:
+> Lauren writes:
+> > I'm not familliar with sinking funds, but what makes them a bit different
+> > from a book entry like depreciation (also somewhat virtual) is that they
+> > are happening with real accounts that need to be reconciled against an
+> > outside statement.
+>
+> I don't see that.  While the purpose of a sinking fund may be to pay off
+> some bonds in ten years and there may even exist a legal obligation to have
+> it, the funds being transferred to it now have nothing to do with any
+> outside statement.
+>
+> A sinking fund to pay off some bonds is pretty much the same thing as
+> saving up to pay off the balloon payment on the morgage.
+>
+> When you transfer funds to your "Savings Goal" or your "Sinking Fund" you
+> are transferring funds from one asset account to another.  Just credit
+> 'Cash' and debit 'Savings Goals:Honeymoon'.
+
+The problem with proceeding to credit Cash and debit "Savings Goal" is
+that this invalidates any reconciliation of Cash.  I'd be game to do
+this if I credited not Cash, but rather "Cash:Goals", a subaccount of
+Cash that can be ignored when it needs to be,
+
+For different purposes, I will want both to consider and ignore these
+"funds reservations."
+
+a) When making up a _budget_, I care about what funds are reserved for
+   particular purposes.
+
+b) When trying to figure out if my bank account is going to be
+overdrawn,
+   "reserved" funds are _irrelevant._
+
+I would thus suggest that the "gentle user" use the budget system to
+manage this rather than having these be "true" transactions in the
+ledger.
+
+======================================================================
+document the 'security' and the 'price quotes' fields.
+fix em up too ...
+
+======================================================================
+Instructins for how to do QIF import should be reviewed/redone
+======================================================================
+typing + in the check-number field uses the next check number ..
