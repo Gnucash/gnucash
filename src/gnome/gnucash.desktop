@@ -5,6 +5,7 @@ Name[fr]=GnuCash
 Comment=GnuCash Personal Finance
 Comment[sv]=GnuCash Personliga Finanser
 Comment[fr]=GnuCash Finances personnelles
+Comment[pt_PT]=GnuCash Finanças Pessoais
 TryExec=gnucash
 Exec=gnucash
 Icon=gnome-money.png
