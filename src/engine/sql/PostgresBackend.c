@@ -59,6 +59,7 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
+#include "gnc-event-p.h"
 #include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
 #include "guid.h"
@@ -239,99 +240,68 @@ static const char *table_drop_str =
 /* ============================================================= */
 /* ============================================================= */
 
-#define NOTIFY_ACCOUNT(be,x) {			\
-   if ((MODE_POLL == be->session_mode) ||	\
-       (MODE_EVENT == be->session_mode))	\
-   {						\
-      SEND_QUERY (be,"NOTIFY gncAccount;", x);	\
-      FINISH_QUERY(be->connection);		\
-   }						\
-}
-
-#define NOTIFY_CHECKPOINT(be,x) {		\
-   if ((MODE_POLL == be->session_mode) ||	\
-       (MODE_EVENT == be->session_mode))	\
-   {						\
-      SEND_QUERY (be,"NOTIFY gncCheckpoint;", x);\
-      FINISH_QUERY(be->connection);		\
-   }						\
-}
-
-#define NOTIFY_PRICE(be,x) {			\
-   if ((MODE_POLL == be->session_mode) ||	\
-       (MODE_EVENT == be->session_mode))	\
-   {						\
-      SEND_QUERY (be,"NOTIFY gncPrice;", x);	\
-      FINISH_QUERY(be->connection);		\
-   }						\
-}
-
-#define NOTIFY_TRANSACTION(be,x) {		\
-   if ((MODE_POLL == be->session_mode) ||	\
-       (MODE_EVENT == be->session_mode))	\
-   {						\
-      SEND_QUERY (be,"NOTIFY gncTransaction;", x);\
-      FINISH_QUERY(be->connection);		\
-   }						\
-}
-
-static void 
-pgendHandleEvents (PGBackend *be)
+static gboolean
+pgendEventsPending (Backend *bend)
 {
+   PGBackend *be = (PGBackend *) bend;
    PGnotify *note;
    char *p;
-   int do_account=0, do_checkpoint=0, do_price=0;
-   int do_session=0, do_transaction=0;
+   int rc;
 
-   /* no need to handle events in single-modes, since
-    * they shouldn't be generated nor received. */
+   if (!be) return FALSE;
+   ENTER ("mypid=%d", be->my_pid);
+
+   /* No need to handle events in single-modes */
    if ((MODE_SINGLE_UPDATE == be->session_mode) ||
        (MODE_SINGLE_FILE == be->session_mode))
    {
-      note = PQnotifies (be->connection);
-      while (note)
-      {
-         note = PQnotifies (be->connection);
-      }
-      return;
+      return FALSE;
    }
 
    /* consolidate multiple event notifications */
+   rc = PQconsumeInput (be->connection);
+   if (1 != rc) 
+   {
+      PERR ("consume input failed: %s", PQerrorMessage(be->connection));
+   }
+
    note = PQnotifies (be->connection);
    while (note)
    {
       /* ignore notifies from myself */
       if (note->be_pid == be->my_pid)
       {
+         PINFO ("this event from myself: %s from pid=%d", note->relname, note->be_pid);
+         free (note);
          note = PQnotifies (be->connection);
          continue;
       }
 
-      PINFO ("%s", note->relname);
+      PINFO ("notify event %s from pid=%d", note->relname, note->be_pid);
 
       if (0 == strcasecmp ("gncTransaction", note->relname))
       {
-         do_transaction ++;
+         be->do_transaction ++;
       } 
       else
       if (0 == strcasecmp ("gncCheckpoint", note->relname))
       {
-         do_checkpoint ++;
+         be->do_checkpoint ++;
       } 
       else
       if (0 == strcasecmp ("gncPrice", note->relname))
       {
-         do_price ++;
+         be->do_price ++;
       } 
       else
       if (0 == strcasecmp ("gncAccount", note->relname))
       {
-         do_account ++;
+         be->do_account ++;
       } 
       else
       if (0 == strcasecmp ("gncSession", note->relname))
       {
-         do_session ++;
+         be->do_session ++;
       } 
       else
       {
@@ -339,30 +309,104 @@ pgendHandleEvents (PGBackend *be)
       }
 
       /* get the next one */
+      free (note);
       note = PQnotifies (be->connection);
    } 
 
-   /* handle each event type */
-   if (do_account)
-   {
-   }
-
-   if (do_checkpoint)
-   {
-   }
-
-   if (do_price)
-   {
-   }
-
-   if (do_session)
-   {
-   }
-
-   if (do_transaction)
-   {
-   }
+   /* for now, we ignore session and checkpoint events */
+   if (be->do_transaction + be->do_price + be->do_account) return TRUE;
+   return FALSE;
 }
+
+static gpointer
+get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   GNCEngineEventType type;
+   GUID guid;
+   Timespec ts;
+   Timespec *latest = (Timespec *) data;
+   char change = (DB_GET_VAL("change",j))[0];
+
+   string_to_guid (DB_GET_VAL("guid",j), &guid);
+   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+
+   if (0 < timespec_cmp(&ts, latest)) *latest = ts;
+
+   switch (change)
+   {
+      case 'a': type = GNC_EVENT_CREATE; break;
+      case 'm': type = GNC_EVENT_MODIFY; break;
+      case 'd': type = GNC_EVENT_DESTROY; break;
+      default:
+         PERR ("unknown change type %c", change);
+         return data;
+   }
+
+   PINFO ("event %c for %s", change, DB_GET_VAL("guid",j));
+   gnc_engine_generate_event (&guid, type);
+
+   return data;
+}
+
+#define GET_EVENTS(guid_name,table,timestamp)			\
+{								\
+   Timespec latest;						\
+   char *p;							\
+   latest.tv_sec = -2;						\
+   latest.tv_nsec = 0;						\
+								\
+   p = be->buff; *p = 0;					\
+   p = stpcpy (p, "SELECT change, date_changed, " #guid_name 	\
+                  " AS guid  FROM " #table			\
+                  "  WHERE sessionGuid <> '");			\
+   p = stpcpy (p, be->session_guid_str);			\
+   p = stpcpy (p, "' AND date_changed >= '");			\
+   p = gnc_timespec_to_iso8601_buff (timestamp, p);		\
+   p = stpcpy (p, "';");					\
+								\
+   SEND_QUERY (be, be->buff, FALSE);				\
+   pgendGetResults (be, get_event_cb, &latest);			\
+								\
+   if (0 < timespec_cmp(&latest, &(timestamp))) 		\
+   {								\
+      (timestamp) = latest;					\
+   }								\
+}
+
+static gboolean
+pgendProcessEvents (Backend *bend)
+{
+   PGBackend *be = (PGBackend *) bend;
+
+   if (!be) return FALSE;
+
+   ENTER (" ");
+
+   /* handle each event type */
+   if (be->do_account)
+   {
+      GET_EVENTS (accountGuid, gncAccountTrail, be->last_account);
+   }
+   if (be->do_price)
+   {
+      GET_EVENTS (priceGuid, gncPriceTrail, be->last_price);
+   }
+   if (be->do_transaction)
+   {
+      GET_EVENTS (transGuid, gncTransactionTrail, be->last_transaction);
+
+      /* gnc_cm_event_handler() doesn't really want to see any split guids */
+      // GET_EVENTS (entryGuid, gncEntryTrail, be->last_transaction);
+   }
+
+   be->do_account = 0;
+   be->do_checkpoint = 0;
+   be->do_price = 0;
+   be->do_session = 0;
+   be->do_transaction = 0;
+   return FALSE;
+}
+
 
 /* ============================================================= */
 /* ============================================================= */
@@ -1081,7 +1125,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
                     guid_to_string (trans_guid));
              if (jrows != nrows) xaccTransCommitEdit (trans);
              xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
-             pgendHandleEvents(be);
              pgendEnable(be);
              gnc_engine_resume_events();
              return 0;
@@ -1147,7 +1190,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
        * punt for now ... */
       PERR ("no such transaction in the database. This is unexpected ...\n");
       xaccBackendSetError (&be->be, ERR_SQL_MISSING_DATA);
-      pgendHandleEvents(be);
       pgendEnable(be);
       gnc_engine_resume_events();
       return 0;
@@ -1156,7 +1198,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    /* if engine data was newer, we are done */
    if (0 <= engine_data_is_newer) 
    {
-      pgendHandleEvents(be);
       pgendEnable(be);
       gnc_engine_resume_events();
       return engine_data_is_newer;
@@ -1317,7 +1358,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    xaccTransCommitEdit (trans);
 
    /* re-enable events to the backend and GUI */
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1383,7 +1423,6 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
    }
 
    /* re-enable events to the backend and GUI */
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1614,7 +1653,6 @@ pgendRunQuery (Backend *bend, Query *q)
     * mark it all as having been saved. */
    xaccGroupMarkSaved (be->topgroup);
 
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -1651,7 +1689,6 @@ pgendGetAllTransactions (PGBackend *be, AccountGroup *grp)
    }
    g_list_free(xaction_list);
 
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 }
@@ -1944,7 +1981,6 @@ pgendPriceLookup (Backend *bend, GNCPriceLookup *look)
    gnc_pricedb_mark_clean (look->prdb);
 
    /* re-enable events */
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -2369,7 +2405,6 @@ pgendSync (Backend *bend, AccountGroup *grp)
    }
 
    /* re-enable events */
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -2448,7 +2483,6 @@ pgendSyncPriceDB (Backend *bend, GNCPriceDB *prdb)
    pgendGetAllPrices (be, prdb);
 
    /* re-enable events */
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -2726,6 +2760,7 @@ pgendSessionValidate (PGBackend *be, int break_lock)
       /* make note of the session. */
       be->sessionGuid = xaccGUIDMalloc();
       guid_new (be->sessionGuid);
+      guid_to_string_buff (be->sessionGuid, be->session_guid_str);
       pgendStoreOneSessionOnly (be, (void *)-1, SQL_INSERT);
       retval = TRUE;
    }
@@ -2754,7 +2789,7 @@ pgendSessionEnd (PGBackend *be)
    p = be->buff; *p=0;
    p = stpcpy (p, "UPDATE gncSession SET time_off='NOW' "
                   "WHERE sessionGuid='");
-   p = guid_to_string_buff (be->sessionGuid, p);
+   p = stpcpy (p, be->session_guid_str);
    p = stpcpy (p, "';\n"
                   "NOTIFY gncSession;");
   
@@ -2762,6 +2797,7 @@ pgendSessionEnd (PGBackend *be)
    FINISH_QUERY(be->connection);
 
    xaccGUIDFree (be->sessionGuid); be->sessionGuid = NULL;
+   guid_to_string_buff (&nullguid, be->session_guid_str);
 }
 
 /* ============================================================= */
@@ -2860,7 +2896,6 @@ pgend_book_load_poll (Backend *bend)
    pgendGroupGetAllBalances (be, grp, ts);
 
    /* re-enable events */
-   pgendHandleEvents(be);
    pgendEnable(be);
    gnc_engine_resume_events();
 
@@ -3053,17 +3088,17 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          if (0 == strcasecmp (start, "single-update")) {
              be->session_mode = MODE_SINGLE_UPDATE;
          } else
-         if (0 == strcasecmp (start, "multi-user")) {
+         if (0 == strcasecmp (start, "multi-user-poll")) {
              be->session_mode = MODE_POLL;
          } else
-         if (0 == strcasecmp (start, "multi-user-event")) {
+         if (0 == strcasecmp (start, "multi-user")) {
              be->session_mode = MODE_EVENT;
          } else
          {
              PWARN ("the following message should be shown in a gui");
-             PWARN ("unknown mode %s, will use single-update mode",
+             PWARN ("unknown mode %s, will use multi-user mode",
                     start ? start : "(null)");
-             be->session_mode = MODE_SINGLE_UPDATE;
+             be->session_mode = MODE_EVENT;
          } 
          
       } else
@@ -3344,7 +3379,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_lookup = NULL;
             be->be.sync = pgendSyncSingleFile;
             be->be.sync_price = pgendSyncPriceDBSingleFile;
-            PWARN ("MODE_SINGLE_FILE is final beta -- \n"
+            be->be.events_pending = NULL;
+            be->be.process_events = NULL;
+            PWARN ("mode=single-file is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
                    "there aren't any! We think its safe to use.\n");
             break;
@@ -3364,12 +3401,38 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             be->be.price_lookup = NULL;
             be->be.sync = pgendSync;
             be->be.sync_price = pgendSyncPriceDB;
-            PWARN ("MODE_SINGLE_UPDATE is final beta -- \n"
+            be->be.events_pending = NULL;
+            be->be.process_events = NULL;
+            PWARN ("mode=single-update is final beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
                    "there aren't any! We think its safe to use.\n");
             break;
 
          case MODE_POLL:
+            pgendEnable(be);
+            be->be.book_load = pgend_book_load_poll;
+            be->be.price_load = pgend_price_load_poll;
+            be->be.account_begin_edit = NULL;
+            be->be.account_commit_edit = pgend_account_commit_edit;
+            be->be.trans_begin_edit = NULL;
+            be->be.trans_commit_edit = pgend_trans_commit_edit;
+            be->be.trans_rollback_edit = pgend_trans_rollback_edit;
+            be->be.price_begin_edit = pgend_price_begin_edit;
+            be->be.price_commit_edit = pgend_price_commit_edit;
+            be->be.run_query = pgendRunQuery;
+            be->be.price_lookup = pgendPriceLookup;
+            // be->be.sync = pgendSync;
+            be->be.sync = NULL;
+            be->be.sync_price = pgendSyncPriceDB;
+            be->be.events_pending = NULL;
+            be->be.process_events = NULL;
+
+            PWARN ("mode=multi-user-poll is beta -- \n"
+                   "we've fixed all known bugs but that doesn't mean\n"
+                   "there aren't any! If something seems weird, let us know.\n");
+            break;
+
+         case MODE_EVENT:
             pgendEnable(be);
 
             pgendSessionGetPid (be);
@@ -3389,13 +3452,13 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             // be->be.sync = pgendSync;
             be->be.sync = NULL;
             be->be.sync_price = pgendSyncPriceDB;
-            PWARN ("MODE_POLL is beta -- \n"
+            be->be.events_pending = pgendEventsPending;
+            be->be.process_events = pgendProcessEvents;
+
+            PWARN ("mode=multi-user is beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"
                    "there aren't any! If something seems weird, let us know.\n");
-            break;
 
-         case MODE_EVENT:
-            PERR ("MODE_EVENT is unimplemented");
             break;
 
          default:
@@ -3433,6 +3496,8 @@ pgendDisable (PGBackend *be)
    be->snr.price_lookup        = be->be.price_lookup;
    be->snr.sync                = be->be.sync;
    be->snr.sync_price          = be->be.sync_price;
+   be->snr.events_pending      = be->be.events_pending;
+   be->snr.process_events      = be->be.process_events;
 
    be->be.account_begin_edit  = NULL;
    be->be.account_commit_edit = NULL;
@@ -3445,6 +3510,8 @@ pgendDisable (PGBackend *be)
    be->be.price_lookup        = NULL;
    be->be.sync                = NULL;
    be->be.sync_price          = NULL;
+   be->be.events_pending      = NULL;
+   be->be.process_events      = NULL;
 }
 
 /* ============================================================= */
@@ -3472,6 +3539,8 @@ pgendEnable (PGBackend *be)
    be->be.price_lookup        = be->snr.price_lookup;
    be->be.sync                = be->snr.sync;
    be->be.sync_price          = be->snr.sync_price;
+   be->be.events_pending      = be->snr.events_pending;
+   be->be.process_events      = be->snr.process_events;
 }
 
 /* ============================================================= */
@@ -3483,13 +3552,15 @@ static void
 pgendInit (PGBackend *be)
 {
    int i;
+   Timespec ts;
 
    /* initialize global variable */
    nullguid = *(xaccGUIDNULL());
 
    /* access mode */
-   be->session_mode = MODE_SINGLE_UPDATE;
+   be->session_mode = MODE_EVENT;
    be->sessionGuid = NULL;
+   guid_to_string_buff (&nullguid, be->session_guid_str);
 
    /* generic backend handlers */
    be->be.book_begin = pgend_session_begin;
@@ -3524,6 +3595,18 @@ pgendInit (PGBackend *be)
    be->connection = NULL;
 
    be->my_pid = 0;
+   be->do_account = 0;
+   be->do_checkpoint = 0;
+   be->do_price = 0;
+   be->do_session = 0;
+   be->do_transaction = 0;
+
+   ts.tv_sec = time (0);
+   ts.tv_nsec = 0;
+
+   be->last_account = ts;
+   be->last_price = ts;
+   be->last_transaction = ts;
 
    be->builder = sqlBuilder_new();
 

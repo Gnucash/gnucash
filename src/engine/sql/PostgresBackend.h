@@ -59,6 +59,7 @@ struct _pgend {
    /* session mode */
    AccessMode session_mode;
    GUID *sessionGuid;
+   char session_guid_str[GUID_ENCODING_LENGTH+1];
 
    /* sql query compiler */
    sqlBuilder *builder;
@@ -77,6 +78,18 @@ struct _pgend {
 
    /* my postgres backend pid, used for telling apart notifies */
    int my_pid;
+
+   /* notify counters */
+   int do_account;
+   int do_checkpoint;
+   int do_price;
+   int do_session;
+   int do_transaction;
+
+   /* notify dates */
+   Timespec last_account;
+   Timespec last_price;
+   Timespec last_transaction;
 
    /* scratch space for constructing queries */ 
    int bufflen;

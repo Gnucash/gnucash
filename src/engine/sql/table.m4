@@ -401,7 +401,8 @@ pgendStoreAudit`'func_name($@)`' (PGBackend *be,
 #undef sqlBuild_Where_GUID
 #undef sqlBuild_Where_Int32
    sqlBuild_Set_Str (be->builder, "date_changed", "NOW");
-   sqlBuild_Set_GUID (be->builder, "sessionGUID", be->sessionGuid);
+   /* sqlBuild_Set_GUID (be->builder, "sessionGUID", be->sessionGuid); */
+   sqlBuild_Set_Str (be->builder, "sessionGUID", be->session_guid_str);
    sqlBuild_Set_Char (be->builder, "change", update);
 
    buf = sqlBuild_Query (be->builder);

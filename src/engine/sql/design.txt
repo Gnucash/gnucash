@@ -168,7 +168,12 @@ trail.
 
 The audit trails are used internally to resolve certain multi-user 
 editing conflicts, for example, when one user attempts to edit a 
-transaction that has been deleteed by another.
+transaction that has been deleted by another.
+
+They are also used to discover changes that other users have made, 
+and thus update the local GUI display.  This is done in the 
+pgendProcessEvents() routine and specifically, in the get_event_cb()
+callback.
 
 
 Balances
