@@ -155,7 +155,7 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
 #endif
 
     /* associate a pointer to the actual account with the row */
-    XbaeMatrixSetRowUserData ( acctrix, currow, (XtPointer *) acc); 
+    XbaeMatrixSetRowUserData ( acctrix, currow, (XtPointer) acc); 
 
     /* If the account has sub-accounts, then add an arrow button 
      * next to the account name.  Clicking on the arrow button will 
