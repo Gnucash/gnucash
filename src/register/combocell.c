@@ -59,6 +59,7 @@ static const char * leaveCombo (BasicCell *bcell, const char *value);
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
    (cell)->value = strdup (str);		\
+   (cell)->changed = 0xffffffff;		\
 }
 
 /* =============================================== */

@@ -573,6 +573,7 @@ xaccMoveFarEnd (Split *split, Account *new_acc)
    Split *partner_split = 0x0;
    Transaction *trans;
    Account * acc;
+   int create_far_end = 0;
 
    if (!split) return;
    
@@ -589,8 +590,22 @@ xaccMoveFarEnd (Split *split, Account *new_acc)
             if (0x0 == trans->dest_splits[1]) {
                partner_split = trans->dest_splits[0];
             }
+         } else {
+            /* Gosh, the far end doesn't exist! create it! */
+            create_far_end = 1;
          }
+      } else {
+         /* Gosh, the far end doesn't exist! create it! */
+         create_far_end = 1;
       }
+   }
+
+   /* Gosh, the far end doesn't exist! create it! */
+   if (create_far_end && new_acc) {
+      partner_split = xaccMallocSplit ();
+      xaccTransAppendSplit (trans, partner_split);
+      xaccAccountInsertSplit (new_acc, partner_split);
+      return;
    }
 
    if (partner_split) {
@@ -616,7 +631,6 @@ xaccMoveFarEndByName (Split *split, const char *new_acc_name)
 
    acc = (Account *) split->acc;
    acc = xaccGetPeerAccountFromName (acc, new_acc_name);
-
    xaccMoveFarEnd (split, acc);
 }
 

@@ -174,8 +174,9 @@ xaccSaveRegEntry (BasicRegister *reg)
    if (MOD_ACTN & changed) 
       xaccSplitSetAction (split, reg->actionCell->cell.value);
 
-   if (MOD_XFRM & changed) 
+   if (MOD_XFRM & changed) {
       xaccMoveFarEndByName (split, reg->xfrmCell->cell.value);
+   }
 
    if (MOD_XTO & changed) {
       /* hack alert -- implement this */

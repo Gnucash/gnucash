@@ -36,7 +36,7 @@
  * template.  This one will resize a 2D array.
  */
 
-#define RESIZE_ARR(table_rows,table_cols,new_rows,new_cols,arr,type,null_val) \
+#define RESIZE_ARR(table_rows,table_cols,new_rows,new_cols,arr,type,null_val,do_free_cell_contents) \
 {									\
    int old_rows, old_cols;						\
    int i,j;								\
@@ -56,7 +56,7 @@
          /* simply truncate columns */					\
          for (i=0; i<new_rows; i++) {					\
             for (j=new_cols; j<old_cols; j++) {				\
-               free (arr[i][j]);					\
+               if (do_free_cell_contents) free (arr[i][j]);		\
                arr[i][j] = NULL;					\
             }								\
          }								\
@@ -82,7 +82,7 @@
       /* new table has fewer rows.  Simply truncate the rows */		\
       for (i=new_rows; i<old_rows; i++) {				\
          for (j=0; j<old_cols; j++) {					\
-            free (arr[i][j]);						\
+            if (do_free_cell_contents) free (arr[i][j]);		\
          }								\
          free (arr[i]);							\
          arr[i] = NULL;							\
@@ -98,7 +98,7 @@
          /* Simply truncate the columns  */				\
          for (i=0; i<old_rows; i++) {					\
             for (j=new_cols; j<old_cols; j++) {				\
-               free (arr[i][j]);					\
+               if (do_free_cell_contents) free (arr[i][j]);		\
                arr[i][j] = NULL;					\
             }								\
          }								\
@@ -206,7 +206,8 @@ xaccTableResize (Table * table,
                new_phys_cols,
                (table->entries),
                char,
-               (strdup ("")));
+               (strdup ("")),
+               1);
 
    /* resize the locator array */
    RESIZE_ARR ((table->num_phys_rows),
@@ -215,7 +216,8 @@ xaccTableResize (Table * table,
                new_phys_cols,
                (table->locators),
                Locator,
-               (xaccMallocLocator ()));
+               (xaccMallocLocator ()),
+               1);
 
    /* we are done with the physical dimensions. 
     * record them for posterity. */
@@ -230,7 +232,8 @@ xaccTableResize (Table * table,
                new_virt_cols,
                (table->user_data),
                void,
-               (NULL));
+               (NULL),
+               0);
 
    /* resize the handler array */
    RESIZE_ARR ((table->num_virt_rows),
@@ -239,7 +242,8 @@ xaccTableResize (Table * table,
                new_virt_cols,
                (table->handlers),
                CellBlock,
-               (NULL));
+               (NULL),
+               0);
 
    /* we are done with the virtual dimensions. 
     * record them for posterity. */

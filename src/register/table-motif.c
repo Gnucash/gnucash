@@ -385,6 +385,7 @@ modifyCB (Widget mw, XtPointer cd, XtPointer cb)
       /* update data. bounds check done earlier */
       free (table->entries[row][col]);
       table->entries[row][col] = newval;
+      (arr->cells[rel_row][rel_col])->changed = 0xffffffff;
    }
 }
 
@@ -632,9 +633,10 @@ void
 xaccRefreshTableGUI (Table * table)
 {
 {int i;
-printf (" refresh %d %d \n",  table->num_phys_rows,table->num_phys_cols);
+printf (" refresh numphysrows=%d numphyscols=%d \n",  table->num_phys_rows,table->num_phys_cols);
 for (i=0; i<table->num_phys_rows; i++) {
-printf ("cell %d descr: %s \n", i, table->entries[i][3]);
+printf ("cell %d act:%s descr: %s \n", i, table->entries[i][2],
+table->entries[i][3]);
 }}
   XtVaSetValues (table->table_widget, XmNrows,    table->num_phys_rows,
                                       XmNcolumns, table->num_phys_cols,
