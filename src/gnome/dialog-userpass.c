@@ -25,8 +25,7 @@
 
 #include <gnome.h>
 
-#include "glade-gnc-dialogs.h"
-#include "glade-support.h"
+#include "dialog-utils.h"
 #include "gnc-ui.h"
 
 
@@ -42,19 +41,22 @@ gnc_get_username_password (GtkWidget *parent,
   GtkWidget *heading_label;
   GtkWidget *username_entry;
   GtkWidget *password_entry;
+  GladeXML *xml;
   gint result;
 
   g_return_val_if_fail (username != NULL, FALSE);
   g_return_val_if_fail (password != NULL, FALSE);
 
-  dialog = create_Username_Password_Dialog ();
+  xml = gnc_glade_xml_new ("userpass.glade", "Username Password Dialog");
+
+  dialog = dialog = glade_xml_get_widget (xml, "Username Password Dialog");
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
 
-  heading_label  = lookup_widget (dialog, "heading_label");
-  username_entry = lookup_widget (dialog, "username_entry");
-  password_entry = lookup_widget (dialog, "password_entry");
+  heading_label  = glade_xml_get_widget (xml, "heading_label");
+  username_entry = glade_xml_get_widget (xml, "username_entry");
+  password_entry = glade_xml_get_widget (xml, "password_entry");
 
   gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
 
