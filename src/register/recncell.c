@@ -39,7 +39,7 @@
 /* ================================================ */
 
 static const char * 
-ToggleRecn (struct _BasicCell *_cell, const char *cur_val)
+ToggleRecn (BasicCell *_cell, const char *cur_val)
 {
    BasicCell *cell = (BasicCell *) _cell;
    char buff[2];

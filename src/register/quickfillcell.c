@@ -39,7 +39,7 @@
 /* ================================================ */
 
 static void 
-quick_set (struct _BasicCell *_cell,
+quick_set (BasicCell *_cell,
            const char *val) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
@@ -50,7 +50,7 @@ quick_set (struct _BasicCell *_cell,
 /* when entering new cell, reset pointer to root    */
 
 static const char * 
-quick_enter (struct _BasicCell *_cell,
+quick_enter (BasicCell *_cell,
              const char *val) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;
@@ -64,7 +64,7 @@ quick_enter (struct _BasicCell *_cell,
  * all modifications */
 
 static const char * 
-quick_modify (struct _BasicCell *_cell,
+quick_modify (BasicCell *_cell,
         const char *oldval, 
         const char *change, 
         const char *newval)
@@ -111,7 +111,7 @@ quick_modify (struct _BasicCell *_cell,
 /* when leaving cell, make sure that text was put into the qf    */
 
 static const char * 
-quick_leave (struct _BasicCell *_cell,
+quick_leave (BasicCell *_cell,
              const char *val) 
 {
    QuickFillCell *cell = (QuickFillCell *) _cell;

@@ -159,7 +159,7 @@ PriceSetValue (BasicCell *_cell, const char *str)
    char buff[40];
    PriceCell *cell = (PriceCell *) _cell;
 
-   SET (((BasicCell *)_cell), str);
+   SET (_cell, str);
 
    cell->amount = xaccParseUSAmount (str);
 
