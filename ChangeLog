@@ -1,5 +1,8 @@
 2000-04-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/engine/Query.c: (xaccFreeQuery): free the split list
+	(xaccQueryGetSplits) handle a null account group
+
 	* src/gnome/dialog-edit.c: figure out all the accounts affected
 	by a currency/security/type change and ask the user whether the
 	needed changes should be made.

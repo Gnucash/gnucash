@@ -47,24 +47,28 @@ sub account_flatlist
 }
 
 # --------------------------------------------------
-# &checkprice ($account, $date);
+# &checkprice ($account, $date, $price);
 # This routine checks to see if the account has already stored a
-# price for this day, returning 1 if yes otherwise 0/undefined.
+# price for this day, returning 1 if yes and the price is the same
+# as the one given, otherwise 0/undefined.
 
 sub checkprice
 {
   my $acct  = $_[0];
   my $dayte = $_[1];
+  my $price = $_[2];
   my ($query, $datesecs, $earliest, $latest);
-  my ($splitlist, $i, $split, $action);
+  my ($splitlist, $i, $split, $action, $pryce);
   my $retn_value = 0;
 
   $datesecs = gnucash::xaccScanDateS ($dayte);
   $earliest = $datesecs - 16*3600;        # subtract 16 hours
   $latest = $datesecs + 16*3600;          # add 16 hours
   $query = gnucash::xaccMallocQuery();
-  gnucash::xaccQueryAddAccount ($query, $acct);
-  gnucash::xaccQuerySetDateRange ($query, $earliest, $latest);
+  gnucash::xaccQuerySetGroup($query, gnucash::xaccAccountGetParent($acct));
+  gnucash::xaccQueryAddSingleAccountMatch ($query, $acct, $gnucash::QUERY_AND);
+  gnucash::xaccQueryAddDateMatchTT ($query, $earliest, $latest,
+                                    $gnucash::QUERY_AND);
   $splitlist = gnucash::xaccQueryGetSplits ($query);
 
   $i = 0;
@@ -72,7 +76,8 @@ sub checkprice
   while ($split && ($retn_value == 0))
   {
     $action = gnucash::xaccSplitGetAction ($split);
-    if ($action eq "Price") { $retn_value = 1; }
+    $pryce = gnucash::xaccSplitGetSharePrice ($split);
+    if (($action eq "Price") && ($price == $pryce)) { $retn_value = 1; }
     $i++;
     $split = gnucash::IthSplit ($splitlist, $i);
   }
@@ -208,7 +213,8 @@ foreach $acct (@acctlist)
         print "$security $prodname last price = $price at $dayte\n";
         # This || construction will store the price if its not already 
         # stored (in the 28 hour period surrounding "dayte")
-        &checkprice ($acct, $dayte) || &setprice ($acct, $dayte, $price);
+        &checkprice ($acct, $dayte, $price) ||
+          &setprice ($acct, $dayte, $price);
       }
     }
   }

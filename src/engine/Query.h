@@ -217,6 +217,3 @@ time_t xaccQueryGetLatestDateFound(Query * q);
 
 
 #endif
-
-
-

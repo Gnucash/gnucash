@@ -96,7 +96,6 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
   q->primary_sort = BY_STANDARD;
   q->secondary_sort = BY_NONE;
   q->tertiary_sort = BY_NONE;
-
 }
 
 
@@ -133,7 +132,6 @@ xaccQuerySingleTerm(Query * q, QueryTerm * qt) {
   and->data = qt;
   or->data  = and;
   q->terms = or;
-    
 }
 
 
@@ -163,6 +161,7 @@ xaccFreeQuery(Query * q) {
     g_list_free(g_list_nth_data(gl, i));
   }
   g_list_free(gl);
+  g_free(q->split_list);
   g_free(q);
 }
 
@@ -655,12 +654,12 @@ xaccQueryGetSplits(Query * q) {
     and_ptr = or_ptr->data;
     or_ptr->data = g_list_sort(and_ptr, query_sort_func);
   }
-  
+
   /* iterate over accounts */
   all_accts = xaccGetAccounts(q->acct_group);
-  for(ptr = all_accts; *ptr; ptr++) {
+  for(ptr = all_accts; ptr && *ptr; ptr++) {
     current = *ptr;
-    
+
     /* first, check this account to see if we need to look at it at
      * all.  If the query is "ANY" matching or "NONE" matching, you
      * get what you expect; if it's "ALL" matching, only the first
@@ -804,7 +803,7 @@ xaccQueryAddSingleAccountMatch(Query * q, Account * acct,
   }
   else {
     qr = xaccQueryMerge(q, qs, QUERY_OR);
-  }        
+  }
   xaccQuerySwapTerms(q, qr);
   xaccFreeQuery(qs);
   xaccFreeQuery(qr);
@@ -1508,6 +1507,15 @@ xaccMemoMatchPredicate(Split * s, PredicateData * pd) {
   memo = xaccSplitGetMemo(s);
   
   return string_match_predicate(memo, pd);
+}
+
+
+/*******************************************************************
+ *  xaccMiscMatchPredicate
+ *  *** Bill, please complete! ***
+ *******************************************************************/
+int xaccMiscMatchPredicate(Split * s, PredicateData * pd) {
+  return 0;
 }
 
 
