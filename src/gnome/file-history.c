@@ -161,18 +161,32 @@ gnc_history_update_menu(void)
   GtkWidget *app_w;
   GnomeApp *app;
   GnomeUIInfo *menu;
+  GnomeDockItem *di;
+  GtkWidget *menushell;
   char *path;
   char *file;
   char *name;
   char *p, *q;
   int count;
   int i, n;
+  int pos;
 
   app_w = gnc_get_ui_data ();
   if (!app_w)
     return;
 
   app = GNOME_APP (app_w);
+
+  di = gnome_app_get_dock_item_by_name(app, GNOME_APP_MENUBAR_NAME);
+  if (di == NULL)
+    return;
+
+  menushell = gnome_dock_item_get_child(di);
+  if (menushell == NULL)
+    return;
+
+  if (!gnome_app_find_menu_pos (menushell, GNOME_MENU_FILE_PATH, &pos))
+    return;
 
   gnome_app_remove_menu_range(app, GNOME_MENU_FILE_PATH,
                               7, 1 + num_menu_entries);
