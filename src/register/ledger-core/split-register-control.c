@@ -1354,7 +1354,6 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   }
  
   /* See if we are tabbing off the end of the very last line */
-  do
   {
     VirtualLocation virt_loc;
 
@@ -1385,7 +1384,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     return FALSE;
 
-  } while (FALSE);
+  }
 
   /* Now see if we are changing cursors. If not, we may be able to
    * auto-complete. */
@@ -1396,7 +1395,6 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   }
 
   /* See if we are tabbing off the end of a blank split */
-  do
   {
     VirtualLocation virt_loc;
     int old_virt_row;
@@ -1437,8 +1435,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
 
     return FALSE;
 
-  } while (FALSE);
-
+  } 
 
   {
     int old_virt_row;
