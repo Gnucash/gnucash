@@ -159,11 +159,13 @@ xaccSaveRegEntry (BasicRegister *reg)
    }
 
    if (MOD_SHRS & changed) {
-      /* hack alert -- implement this */
+      xaccSplitSetShareAmount (split, reg->shrsCell->amount);
+      xaccSplitRebalance (split);
    }
 
    if (MOD_PRIC & changed) {
-      /* hack alert -- implement this */
+      xaccSplitSetSharePrice (split, reg->priceCell->amount);
+      xaccSplitRebalance (split);
    }
 
    if (MOD_MEMO & changed) 
