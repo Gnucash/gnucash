@@ -73,7 +73,7 @@
 #include "split-register.h"
 #include "gnc-ledger-display.h"
 #include "gnucash-sheet.h"
-#include "gnc-regwidget.h"
+#include "gnc-split-reg.h"
 
 #include "dialog-sxsincelast.h"
 #include "dialog-scheduledxaction.h"
@@ -278,13 +278,13 @@ typedef struct _sxSinceLastData {
         gint autoCreatedCount;
 
         GNCLedgerDisplay *ac_ledger;
-        GNCRegWidget *ac_regWidget;
+        GNCSplitReg *ac_gsr;
 
         GNCLedgerDisplay *created_ledger;
-        GNCRegWidget *created_regWidget;
+        GNCSplitReg *created_gsr;
 
         GNCLedgerDisplay *to_create_ledger;
-        GNCRegWidget *to_create_regWidget;
+        GNCSplitReg *to_create_gsr;
 
 } sxSinceLastData;
 
@@ -2825,7 +2825,7 @@ sxsincelast_tc_row_sel( GtkCTree *ct,
                 sxGUIDstr = guid_to_string( xaccSchedXactionGetGUID( tci->parentTCT->sx ) );
 
                 sxsld->to_create_ledger = gnc_ledger_display_template_gl( sxGUIDstr );
-                gnc_regWidget_set_ledger_display( sxsld->to_create_regWidget,
+                gnc_split_reg_set_ledger_display( sxsld->to_create_gsr,
                                                   sxsld->to_create_ledger );
         }
 
@@ -3493,19 +3493,20 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
                                          sxsld_ledger_get_parent );
         gnc_ledger_display_set_user_data( sxsld->ac_ledger, (gpointer)sxsld );
         splitreg = gnc_ledger_display_get_split_register( sxsld->ac_ledger );
-        /* FIXME: make configurable? */
-        gnucash_register_set_initial_rows( 4 );
 
-        sxsld->ac_regWidget =
-                GNC_REGWIDGET(gnc_regWidget_new( sxsld->ac_ledger,
-                                                 GTK_WINDOW( sxsld->sincelast_window ),
-                                                 CAP_SCHEDULE ));
+        /* FIXME: Make numRows configurable. */
+        sxsld->ac_gsr =
+                gnc_split_reg_new( sxsld->ac_ledger,
+                                   GTK_WINDOW( sxsld->sincelast_window ),
+                                   4,
+                                   (CREATE_TOOLBAR | CREATE_POPUP),
+                                   CAP_SCHEDULE );
 
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
-        toolbar = gnc_regWidget_get_toolbar( sxsld->ac_regWidget );
+        toolbar = gnc_split_reg_get_toolbar( sxsld->ac_gsr );
 
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
-        gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->ac_regWidget), TRUE, TRUE, 2 );
+        gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->ac_gsr), TRUE, TRUE, 2 );
 
         /* FIXME: we should do all the happy-fun register stuff... button bar
          * controls ... popups ... */
@@ -3541,19 +3542,19 @@ create_created_ledger( sxSinceLastData *sxsld )
                                          sxsld_ledger_get_parent );
         gnc_ledger_display_set_user_data( sxsld->created_ledger, (gpointer)sxsld );
         splitreg = gnc_ledger_display_get_split_register( sxsld->created_ledger );
-        /* FIXME: make configurable? */
-        gnucash_register_set_initial_rows( 4 );
-
-        sxsld->created_regWidget =
-          GNC_REGWIDGET(gnc_regWidget_new( sxsld->created_ledger,
-                                           GTK_WINDOW( sxsld->sincelast_window ),
-                                           CAP_SCHEDULE ));
+        /* FIXME: make numRows configurable? */
+        sxsld->created_gsr =
+                gnc_split_reg_new( sxsld->created_ledger,
+                                   GTK_WINDOW( sxsld->sincelast_window ),
+                                   4,
+                                   ( CREATE_TOOLBAR | CREATE_POPUP ),
+                                   CAP_SCHEDULE );
 
         vbox = glade_xml_get_widget( sxsld->gxml, CREATED_VBOX );
-        toolbar = gnc_regWidget_get_toolbar( sxsld->created_regWidget );
+        toolbar = gnc_split_reg_get_toolbar( sxsld->created_gsr );
 
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
-        gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->created_regWidget), TRUE, TRUE, 2 );
+        gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->created_gsr), TRUE, TRUE, 2 );
 
 
         /* FIXME: we should do all the happy-fun register stuff... button bar
@@ -3590,17 +3591,17 @@ create_to_create_ledger( sxSinceLastData *sxsld )
                                          sxsld_ledger_get_parent );
         gnc_ledger_display_set_user_data( sxsld->to_create_ledger, (gpointer)sxsld );
         splitreg = gnc_ledger_display_get_split_register( sxsld->to_create_ledger );
-        /* FIXME: make configurable? */
-        gnucash_register_set_initial_rows( 4 );
-
-        sxsld->to_create_regWidget =
-          GNC_REGWIDGET(gnc_regWidget_new( sxsld->to_create_ledger,
-                                           GTK_WINDOW( sxsld->sincelast_window ),
-                                           CAP_SCHEDULE ));
+        /* FIXME: make numRows configurable? */
+        sxsld->to_create_gsr =
+                gnc_split_reg_new( sxsld->to_create_ledger,
+                                   GTK_WINDOW( sxsld->sincelast_window ),
+                                   4,
+                                   ( CREATE_TOOLBAR | CREATE_POPUP ),
+                                   ( CAP_READ_ONLY | CAP_SCHEDULE) );
 
         txn_reg_frame = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_REG_FRAME );
         gtk_container_add( GTK_CONTAINER( txn_reg_frame ),
-                           GTK_WIDGET( sxsld->to_create_regWidget ) );
+                           GTK_WIDGET( sxsld->to_create_gsr ) );
 
 
         /* configure... */

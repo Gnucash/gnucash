@@ -66,3 +66,11 @@ Scheme:
 
 Dave Peticolas <dave@krondo.com>
 August 22, 2000
+
+--------------------------------------------------
+
+Starting GnuCash in GDB -- Oct 2002
+
+% gnucash-env gdb /path/to/guile
+[gdb output]
+% gdb> run -e main -s /path/to/devel-gnucash/libexec/overrides/gnucash --g-fatal-warnings

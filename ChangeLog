@@ -1,3 +1,35 @@
+2002-11-03  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c: Use GNCSplitReg over
+	GNCRegWidget.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(schedXact_editor_create_ledger): Use GNCSplitReg over
+	GNCRegWidget.
+
+	* src/gnome/glade/register.glade: Moved a bunch of the
+	previously-shared widget definitions into seperate places to be
+	accessed by window-register.c and gnc-split-reg.c.
+
+	* src/gnome/window-register.c: Massive code-sucking into
+	gnc-split-reg.c; this file now only handles the details of being
+	the register window: dealing with dates and the extended menus and
+	whatnot.
+
+	* src/gnome/gnc-split-reg.c: Added; a better implementation of
+	gnc-regWidget.  All the "common" register-editing code has been
+	moved here from window-register.c.
+
+	* src/register/ledger-core/gnc-regwidget.c: Removed; replaced with
+	src/gnome/gnc-split-reg.c.
+
+	* src/register/register-gnome/gnucash-date-picker.c
+	(gnc_date_picker_new): Call gtk_widget_show_all rather than
+	gtk_widget_realize in order to setup the calendar to a state
+	sufficient for subsequent calls.
+
+	* HACKING: Added description of how to start GnuCash in GDB.
+
 2002-11-03  Derek Atkins  <derek@ihtfp.com>
 	* engine/gnc-be-utils.h: implement macro helpers for begin/commit functions
 	* business/business-core/*.c: Implement BeginEdit()/CommitEdit() functions

@@ -119,7 +119,6 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
   return TRUE;
 }
 
-
 static void
 gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 {
@@ -166,7 +165,6 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
   date_picker_class->date_picked = NULL;
   date_picker_class->key_press_event = NULL;
 }
-
 
 GtkType
 gnc_date_picker_get_type (void)
@@ -233,8 +231,8 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
                                   "x", -10000.0,
                                   "y", -10000.0,
                                   NULL);
-
-    gtk_widget_realize (calendar);
+    gtk_widget_realize( hbox );
+    gtk_widget_show_all( hbox );
 
     gtk_widget_size_request (calendar, &requisition);
 

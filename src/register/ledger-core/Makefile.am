@@ -12,8 +12,7 @@ libgncmod_ledger_core_la_SOURCES = \
   split-register-load.c \
   split-register-model.c \
   split-register-model-save.c \
-  split-register-util.c \
-  gnc-regwidget.c
+  split-register-util.c
 
 noinst_HEADERS = \
   gnc-ledger-display.h \
@@ -22,8 +21,7 @@ noinst_HEADERS = \
   split-register-layout.h \
   split-register-model.h \
   split-register-model-save.h \
-  split-register-p.h \
-  gnc-regwidget.h
+  split-register-p.h
 
 libgncmod_ledger_core_la_LDFLAGS = -module
 libgncmod_ledger_core_la_LIBADD = \

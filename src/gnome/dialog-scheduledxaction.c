@@ -48,7 +48,7 @@
 #include "window-help.h"
 #include "window-register.h"
 
-#include "gnc-regwidget.h"
+#include "gnc-split-reg.h"
 
 /* FIXME: temp until variable-related-stuff settled. */
 #include "dialog-sxsincelast.h"
@@ -1333,7 +1333,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 {
         GtkFrame *tempxaction_frame;
         SplitRegister *splitreg;
-        GtkWidget *regWidget, *vbox;
+        GtkWidget *gsr, *vbox;
         int numLedgerLines = NUM_LEDGER_LINES_DEFAULT;
 
         tempxaction_frame =
@@ -1349,39 +1349,39 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
                 (int)gnc_lookup_number_option( SX_OPT_STR,
                                                "Template Register Lines",
                                                NUM_LEDGER_LINES_DEFAULT );
-        gnucash_register_set_initial_rows(numLedgerLines);
+        gsr = gnc_split_reg_new( sxed->ledger, GTK_WINDOW(sxed->dialog),
+                                 numLedgerLines,
+                                 (CREATE_TOOLBAR | CREATE_POPUP | CREATE_MENUS),
+                                 (CAP_JUMP | CAP_SCHEDULE) );
 
-        regWidget = gnc_regWidget_new( sxed->ledger,
-                                       GTK_WINDOW(sxed->dialog),
-                                       CAP_SCHEDULE | CAP_JUMP );
         gtk_box_pack_start( GTK_BOX(vbox),
-                            gnc_regWidget_get_toolbar( GNC_REGWIDGET(regWidget) ),
+                            gnc_split_reg_get_toolbar( GNC_SPLIT_REG(gsr) ),
                             FALSE, TRUE, 2 );
         {
                 GtkWidget *popup, *tmpMenu, *tmpMI;
                 /* Fixup the popup menu with the menus that would normally be in the
                  * menu-bar of the window-register. */
-                popup = gnc_regWidget_get_popup( GNC_REGWIDGET(regWidget) );
+                popup = gnc_split_reg_get_popup( GNC_SPLIT_REG(gsr) );
                 gtk_menu_append( GTK_MENU(popup), gtk_menu_item_new() );
 
-                tmpMenu = gnc_regWidget_get_edit_menu( GNC_REGWIDGET(regWidget) );
+                tmpMenu = gnc_split_reg_get_edit_menu( GNC_SPLIT_REG(gsr) );
                 tmpMI = gtk_menu_item_new_with_label( N_("Edit") );
                 gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
                 gtk_menu_append( GTK_MENU(popup), tmpMI );
 
-                tmpMenu = gnc_regWidget_get_style_menu( GNC_REGWIDGET(regWidget) );
+                tmpMenu = gnc_split_reg_get_style_menu( GNC_SPLIT_REG(gsr) );
                 tmpMI = gtk_menu_item_new_with_label( N_("Style") );
                 gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
                 gtk_menu_append( GTK_MENU(popup), tmpMI );
 
-                tmpMenu = gnc_regWidget_get_sort_menu( GNC_REGWIDGET(regWidget) );
+                tmpMenu = gnc_split_reg_get_sort_menu( GNC_SPLIT_REG(gsr) );
                 tmpMI = gtk_menu_item_new_with_label( N_("Sort") );
                 gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
                 gtk_menu_append( GTK_MENU(popup), tmpMI );
 
                 gtk_widget_show_all( popup );
         }
-        gtk_box_pack_start( GTK_BOX(vbox), regWidget, TRUE, TRUE, 2 );
+        gtk_box_pack_start( GTK_BOX(vbox), gsr, TRUE, TRUE, 2 );
 
         /* configure... */
         /* don't use double-line */

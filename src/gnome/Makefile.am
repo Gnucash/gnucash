@@ -44,6 +44,7 @@ libgncgnome_la_SOURCES = \
   druid-loan.c \
   druid-stock-split.c \
   gnc-splash.c \
+  gnc-split-reg.c \
   mainwindow-account-tree.c \
   reconcile-list.c \
   tip-of-the-day.c \
@@ -80,6 +81,7 @@ noinst_HEADERS = \
   druid-loan.h \
   gnc-network.h \
   gnc-splash.h \
+  gnc-split-reg.h \
   gw-gnc.h \
   mainwindow-account-tree.h \
   reconcile-list.h \
