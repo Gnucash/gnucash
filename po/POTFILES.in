@@ -45,7 +45,6 @@ src/gnome/window-register.c
 src/gnome/window-report.c
 src/guile/gnucash.c
 src/register/gnome/gnucash-style.c
-src/register/recncell.c
 src/register/splitreg.c
 src/scm/gnumeric/guile-strings.c
 src/scm/guile-strings.c

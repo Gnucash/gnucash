@@ -701,7 +701,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
           (GTK_TOGGLE_BUTTON(xferData->amount_radio)))
       {
 	gnc_parse_error_dialog (xferData,
-                                _("You must enter a valie `to' amount."));
+                                _("You must enter a valid `to' amount."));
 	return;
       }
     }

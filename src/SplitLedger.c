@@ -4471,6 +4471,30 @@ xaccSRConfirmHandler (VirtualLocation virt_loc,
   return TRUE;
 }
 
+static gboolean
+recn_cell_confirm (char old_flag, gpointer data)
+{
+  SplitRegister *reg = data;
+
+  if (old_flag == YREC)
+  {
+    const char *message = _("Do you really want to mark this transaction "
+                            "not reconciled?\nDoing so might make future "
+                            "reconciliation difficult!");
+    gboolean confirm;
+
+    confirm = gnc_lookup_boolean_option ("Register",
+                                         "Confirm before changing reconciled",
+                                         TRUE);
+    if (!confirm)
+      return TRUE;
+
+    return gnc_verify_dialog_parented (xaccSRGetParent (reg), message, TRUE);
+  }
+
+  return TRUE;
+}
+
 /* ======================================================== */
 
 G_INLINE_FUNC void
@@ -4916,8 +4940,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   xaccComboCellSetCompleteChar (reg->mxfrmCell, account_separator);
   xaccComboCellSetCompleteChar (reg->xfrmCell, account_separator);
 
-  /* set the dialog parent for the reconcile cell */
-  xaccRecnCellSetParent (reg->recnCell, xaccSRGetParent (reg));
+  /* set the confirmation callback for the reconcile cell */
+  xaccRecnCellSetConfirmCB (reg->recnCell, recn_cell_confirm, reg);
 
   /* enable callback for cursor user-driven moves */
   table->move_cursor = LedgerMoveCursor;

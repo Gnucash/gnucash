@@ -41,8 +41,6 @@
 
 #include "basiccell.h"
 #include "gnc-engine-util.h"
-#include "gnc-ui.h"
-#include "messages.h"
 #include "recncell.h"
 
 /* hack alert -- I am uncomfortable with including engine
@@ -86,21 +84,9 @@ RecnEnter (BasicCell *_cell,
 {
   RecnCell *cell = (RecnCell *) _cell;
 
-  /* throw up a popup if the user tries to undo a reconciled transaction
-     hack alert -- this sets a new precedent. gnc_verify_dialog is defined
-     in both the motif and the gnome subdirs; I don't think I like it that
-     way. Now it's in ui-callbacks.h which is UI independent, but that's
-     still perhaps not optimal. */
-
-  if (cell->reconciled_flag == YREC)
-  {
-    const char *message = _("Do you really want to mark this transaction "
-                            "not reconciled?\nDoing so might make future "
-                            "reconciliation difficult!");
-
-    if (!gnc_verify_dialog_parented (cell->parent, message, TRUE))
-      return FALSE;
-  }
+  if (cell->confirm_cb &&
+      ! (cell->confirm_cb (cell->reconciled_flag, cell->confirm_data)))
+    return FALSE;
 
   if (cell->reconciled_flag == NREC)
     cell->reconciled_flag = CREC;
@@ -120,6 +106,7 @@ xaccInitRecnCell (RecnCell *cell)
   xaccInitBasicCell (&cell->cell);
 
   xaccRecnCellSetFlag (cell, NREC);
+  cell->confirm_cb = NULL;
 
   cell->cell.enter_cell = RecnEnter;
   cell->cell.set_value = RecnSetValue;
@@ -219,11 +206,13 @@ xaccRecnCellSetStringGetter (RecnCellStringGetter getter)
 /* ================================================ */
 
 void
-xaccRecnCellSetParent (RecnCell *cell, gncUIWidget parent)
+xaccRecnCellSetConfirmCB (RecnCell *cell, RecnCellConfirm confirm_cb,
+                          gpointer data)
 {
   g_return_if_fail (cell != NULL);
 
-  cell->parent = parent;
+  cell->confirm_cb = confirm_cb;
+  cell->confirm_data = data;
 }
 
 /* --------------- end of file ---------------------- */

@@ -224,8 +224,14 @@ gnc_main_window_open_report_url(const char * url, gint toplevel) {
                                 GNOME_MDI_CHILD(reportchild));
   }
   else {
+    GNCMainChildInfo * childwin;
+
     gnome_mdi_add_view(GNOME_MDI(maininfo->mdi), 
                        GNOME_MDI_CHILD(reportchild));
+
+    childwin = gtk_object_get_user_data(GTK_OBJECT(reportchild));
+    if (childwin && childwin->app && GTK_WIDGET (childwin->app)->window)
+      gdk_window_raise (GTK_WIDGET (childwin->app)->window);
   }
 }
 
