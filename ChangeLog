@@ -1,5 +1,8 @@
 2000-06-20  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/util.c (xaccParseAmount): accept 8 decimal places
+	instead of 6, and trucate if more than 8.
+
 	* src/gnome/dialog-add.c: make this window modeless.
 	(gnc_ui_accWindow_ok_cb): don't let the user add an account with
 	the same fully-qualified name as another account.

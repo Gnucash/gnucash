@@ -890,9 +890,22 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
          /* strip off garbage at end of the line */
          tok = strchr (str, ' ');
          if (tok) *tok = '\0';
-   
+
          /* adjust for number of decimal places */
          len = strlen(str);
+
+         if (len > 8)
+         {
+           str[8] = '\0';
+           len = 8;
+         }
+
+         if (8 == len) {
+            amount += 0.00000001 * ((double) atoi (str));
+         } else
+         if (7 == len) {
+            amount += 0.0000001 * ((double) atoi (str));
+         } else
          if (6 == len) {
             amount += 0.000001 * ((double) atoi (str));
          } else
