@@ -301,41 +301,36 @@
       (lambda (x) (list #t x))
       #f #f #f #f)))
 
+
 (define (gnc:make-simple-boolean-option
  	 section
  	 name
  	 sort-tag
  	 documentation-string
  	 default-value)
-  (let* ((value default-value)
-	 (value->string (lambda () (gnc:value->string value))))
-    (gnc:make-option
-     section name sort-tag 'boolean documentation-string
-     (lambda () value)
-     (lambda (x) (set! value x))
-     (lambda () default-value)
-     (gnc:restore-form-generator value->string)
-     (lambda (x)
-       (if (boolean? x)
-	   (list #t x)
-	   (list #f "boolean-option: not a boolean")))
-     #f #f #f #f))) 
+  (gnc:make-complex-boolean-option section
+				   name
+				   sort-tag
+				   documentation-string
+				   default-value
+				   #f 
+				   #f))
 
-
-;; Complex boolean options are the same as simple boolean options,
-;; with the addition of two function arguments.  Both functions should
-;; expect one boolean argument.  When the option's value is changed,
-;; one function will be called with the new option value at the time
-;; that the GUI widget representing the option is changed, and the
-;; other function will be called when the option's setter is called
-;; (that is, when the user selects "OK" or "Apply").
+;; Complex boolean options are the same as simple boolean options (see
+;; above), with the addition of two function arguments. (If both of
+;; them are #f, you have exactly a simple-boolean-option.) Both
+;; functions should expect one boolean argument.  When the option's
+;; value is changed, the function option-widget-changed-cb will be
+;; called with the new option value at the time that the GUI widget
+;; representing the option is changed, and the function
+;; setter-function-called-cb will be called when the option's setter
+;; is called (that is, when the user selects "OK" or "Apply").
 
 ;; The option-widget-changed-cb is tested for procedurehood before
 ;; it is called, so it is not validated to be a procedure here.
 ;; However, since there could be an option-widget-changed-cb but not
 ;; a setter-function-called-cb, the procedurehood of the
 ;; setter-function-called-cb is checked here.
-
 (define (gnc:make-complex-boolean-option
  	 section
  	 name
@@ -358,7 +353,8 @@
         (if (boolean? x)
             (list #t x)
             (list #f "boolean-option: not a boolean")))
-      #f #f #f (lambda (x) (option-widget-changed-cb x)))))
+      #f #f #f (and option-widget-changed-cb
+		    (lambda (x) (option-widget-changed-cb x))))))
 
 
 (define (gnc:make-pixmap-option 
@@ -536,6 +532,34 @@
          documentation-string
          default-value
          ok-values)
+  (gnc:make-multichoice-callback-option section
+					name
+					sort-tag
+					documentation-string
+					default-value
+					ok-values
+					#f
+					#f))
+
+;; The multichoice-option with callback function is the same as the
+;; usual multichoice options (see above), with the addition of two
+;; function arguments. (If both of them are #f, you have exactly a
+;; multichoice-option.) Both functions should expect one argument.
+;; When the option's value is changed, the function
+;; option-widget-changed-cb will be called with the new option value
+;; at the time that the GUI widget representing the option is changed,
+;; and the function setter-function-called-cb will be called when the
+;; option's setter is called (that is, when the user selects "OK" or
+;; "Apply").
+(define (gnc:make-multichoice-callback-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-value
+         ok-values
+         setter-function-called-cb
+         option-widget-changed-cb)
   (define (multichoice-legal val p-vals)
     (cond ((null? p-vals) #f)
           ((eq? val (vector-ref (car p-vals) 0)) #t)
@@ -556,7 +580,10 @@
      (lambda () value)
      (lambda (x)
        (if (multichoice-legal x ok-values)
-           (set! value x)
+           (begin
+	     (set! value x)
+	     (if (procedure? setter-function-called-cb)
+		 (setter-function-called-cb x)))
            (gnc:error "Illegal Multichoice option set")))
      (lambda () default-value)
      (gnc:restore-form-generator value->string)
@@ -571,7 +598,10 @@
        (lambda (x) (vector-ref (list-ref ok-values x) 2))
        (lambda (x)
 	 (gnc:multichoice-list-lookup ok-values x)))
-     (lambda () (multichoice-strings ok-values)) #f)))
+     (lambda () (multichoice-strings ok-values)) 
+     (and option-widget-changed-cb
+	  (lambda (x) (option-widget-changed-cb x))))))
+
 
 ;; list options use the option-data in the same way as multichoice
 ;; options. List options allow the user to select more than one option.

@@ -1,5 +1,9 @@
 2001-04-21  Christian Stimming  <stimming@tuhh.de>
 
+	* src/scm/options.scm (gnc:make-multichoice-callback-option):
+	Added multichoice option with callback functions, just like the
+	complex-boolean-option.
+
 	* src/scm/report/transaction-report.scm: Fixed date bug.
 
 2001-04-21  Dave Peticolas  <dave@krondo.com>
