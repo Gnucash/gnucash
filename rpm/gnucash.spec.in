@@ -3,18 +3,17 @@ Summary:   	GnuCash is an application to keep track of your finances.
 Version:   	@-VERSION-@
 Release:  	1
 Copyright: 	Free Software Foundation
-Group:     	Applications/Finance
+Group:     	Applications/Productivity
 Source:    	http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{PACKAGE_VERSION}.tar.gz
-BuildRoot: 	/var/tmp/gnucash-%version
-Requires:  	gnome-libs >= 1.2.0
-Requires:	gdk-pixbuf >= 0.2.5
-Requires:	gnome-print >= 0.21
-Requires:	guile >= 1.3.4
-Requires:	gtkhtml >= 0.8
-Requires:	Guppi >= 0.35.3
-Requires:	g-wrap >= 1.1.5
-Requires:	umb-scheme >= 3.2
-Requires:	gal >= 0.8
+BuildRoot: 	%{_tmppath}/%{name}-%{version}-root
+Requires:  	gnome-libs >= 1.2.0, gdk-pixbuf >= 0.2.5, gnome-print >= 0.21
+Requires:	guile >= 1.3.4, gtkhtml >= 0.8, Guppi >= 0.35.3
+Requires:	g-wrap >= 1.1.11, umb-scheme >= 3.2, gal >= 0.8
+BuildPrereq: 	g-wrap-devel >= 1.1.11, gtkhtml-devel >= 0.8,
+BuildPrereq: 	Guppi-devel, postgresql-devel, gal-devel, libxml-devel
+BuildPrereq: 	libglade-devel, libghttp-devel, python-devel, libtermcap-devel
+BuildPrereq: 	readline-devel
+Prereq: 	/sbin/ldconfig /sbin/install-info
 
 %description
 GnuCash is a personal finance manager. A check-book like
@@ -29,10 +28,14 @@ double-entry accounting principles to ensure balanced books.
 
 
 %build
+autoconf
 ./configure --enable-sql --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} \
 --infodir=%{_infodir} --mandir=%{_mandir}
+make || :
+cd src/engine
+make libgncengine.la
+cd ../..
 make
-
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -43,11 +46,22 @@ infodir=$RPM_BUILD_ROOT/%{_infodir} mandir=$RPM_BUILD_ROOT/%{_mandir} install
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+/sbin/ldconfig
+/sbin/install-info %{_infodir}/gnucash-design.info.gz %{_infodir}/dir
+
+%postun
+/sbin/ldconfig
+if [ $1 = 0 ]; then
+   /sbin/install-info --delete %{_infodir}/gnucash-design.info.gz
+   %{_infodir}/dir
+fi
+
 %files -f %{name}.lang
 %defattr(444,root,root,755)
 %attr(555,root,root) %{_bindir}/*
 %attr(555,root,root) %{_datadir}/gnucash/finance-quote-helper
-%{_mandir}/man1/*
+%{_mandir}/man*/*
 %{_infodir}/*.gz
 %{_libdir}/*
 %dir %{_datadir}/gnucash
