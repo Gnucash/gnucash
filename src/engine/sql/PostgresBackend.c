@@ -62,8 +62,8 @@ GUID nullguid;
 
 /* hack alert -- this is the query buffer size, it can be overflowed.
  * Ideally, its dynamically resized.  On the other hand, Postgres
- * rejects queries longer than 8192 bytes,(according to the
- * documentation) so theres not much point in getting fancy ... 
+ * rejects queries longer than 8192 bytes, (according to the
+ * documentation) so there's not much point in getting fancy ... 
  */
 #define QBUFSIZE 16350
 
@@ -1247,12 +1247,12 @@ pgendRunQuery (Backend *bend, Query *q)
 
 /* ============================================================= */
 /* The pgendGetAllTransactions() routine sucks *all* of the 
- * transactions out of the database.  This is a potential 
- * CPU and memory-burner; its use is not suggested for anything
- * but single-user mode.
+ *    transactions out of the database.  This is a potential 
+ *    CPU and memory-burner; its use is not suggested for anything
+ *    but single-user mode.
  *
- * To add injury to insult, this routine fetches in a rather 
- * inefficient manner, in particular, the account query.
+ *    To add injury to insult, this routine fetches in a rather 
+ *    inefficient manner, in particular, the account query.
  */
 
 static void
@@ -1524,14 +1524,19 @@ pgendSync (Backend *bend, AccountGroup *grp)
 }
 
 /* ============================================================= */
-/* In single file mode, we treat 'sync' as 'file save'.
- * We start by deleting *everything*, and then writing 
- * everything out.  This is rather nasty, ugly and dangerous,
- * but that's the nature of single-file mode.  Note: we
- * have to delete everything because in this mode, there is 
- * no other way of finding out that an account, transaction 
- * or split was deleted. i.e. there's no other way to delete.  
- * So start with a clean slate.
+/* The pgendSyncSingleFile() routine syncs the engine and database.
+ *    In single file mode, we treat 'sync' as 'file save'.
+ *    We start by deleting *everything*, and then writing 
+ *    everything out.  This is rather nasty, ugly and dangerous,
+ *    but that's the nature of single-file mode.  Note: we
+ *    have to delete everything because in this mode, there is 
+ *    no other way of finding out that an account, transaction 
+ *    or split was deleted. i.e. there's no other way to delete.  
+ *    So start with a clean slate.
+ *
+ *    The use of this routine/this mode is 'depricated'.
+ *    Its handy for testing, sanity-checking, and as a failsafe,
+ *    but its use shouldn't be encouraged.
  */
 
 static void
@@ -1604,17 +1609,18 @@ pgend_book_load_single_lockerr (Backend *bend)
 }
 
 /* ============================================================= */
-/* Determine whether we can start a session of the desired type.
- * The logic used is as follows:
- * -- if there is any session at all, and we want single
- *    (exclusive) access, then fail.
- * -- if we want any kind of session, and there is a single
- *    (exclusive) session going, then fail.
- * -- otherwise, suceed.
- * Return TRUE if we can get a session.
+/* The get_session_cb() routine can determine whether we can start 
+ *    a session of the desired type.
+ *    The logic used is as follows:
+ *    -- if there is any (other) session at all, and we want single
+ *       (exclusive) access, then fail.
+ *    -- if we want any kind of session, and there is a single
+ *       (exclusive) session going, then fail.
+ *    -- otherwise, suceed.
+ *    Return TRUE if we can get a session.
  *
- * This routine does not lock, but may be used inside a 
- * test-n-set atomic operation.
+ *    This routine does not lock, but may be used inside a 
+ *    test-n-set atomic operation.
  */
 
 static gpointer
@@ -1694,9 +1700,11 @@ pgendSessionCanStart (PGBackend *be, int break_lock)
 
 /* ============================================================= */
 /* The pgendSessionValidate() routine determines whether a valid 
- * session could be obtained.
- * Return TRUE if we have a session.
- * This routine is implemented attomically as a test-n-set.
+ *    session could be obtained.  It checks to see if:
+ *    1) Database appers to have gnucash data in it
+ *    2) the session table can be locked and updated to start
+ *       a session.  The update is handled as an atomic test-n-set.
+ *    Return TRUE if we have a session.
  */
 
 static gpointer 
@@ -1737,11 +1745,13 @@ pgendSessionValidate (PGBackend *be, int break_lock)
    SEND_QUERY (be,p, FALSE);
    FINISH_QUERY(be->connection);
 
-   /* check to see if we can start a session of the desired type.  */
+   /* Check to see if we can start a session of the desired type.  */
    if (FALSE == pgendSessionCanStart (be, break_lock))
    {
-      /* this error should be treated just like the 
-       * file-lock error from the GUI perspective */
+      /* This error should be treated just like the 
+       * file-lock error from the GUI perspective:
+       * (The GUI allows users to break the lock, if desired).
+       */
       be->be.book_load = pgend_book_load_single_lockerr;
       xaccBackendSetError (&be->be, ERR_BACKEND_LOCKED);
       retval = FALSE;
@@ -1763,7 +1773,9 @@ pgendSessionValidate (PGBackend *be, int break_lock)
 }
 
 /* ============================================================= */
-/* log end of session in the database. */
+/* The pgendSessionEnd() routine will log the end of session in 
+ *    the session table of the database. 
+ */
 
 static void
 pgendSessionEnd (PGBackend *be)
@@ -1785,6 +1797,11 @@ pgendSessionEnd (PGBackend *be)
 }
 
 /* ============================================================= */
+/* The pgend_session_end() routine is the main entrypoint into
+ *    this backend for terminating a session.  It logs the
+ *    end of the session into the gncsession table,  disconnects
+ *    from the database, and finally frees all malloced memory.
+ */
 
 static void
 pgend_session_end (Backend *bend)
@@ -1827,8 +1844,11 @@ pgend_session_end (Backend *bend)
 }
 
 /* ============================================================= */
-/* the poll & event style load only loads accounts, never the
- * transactions. */
+/* The pgend_book_load_poll() routine loads account info from
+ *    the database into the engine.   Its to be used only for 
+ *    the poll & event style load, where only the accounts, 
+ *    and never the transactions, need to be loaded. 
+ */
 
 static AccountGroup *
 pgend_book_load_poll (Backend *bend)
@@ -1853,8 +1873,12 @@ pgend_book_load_poll (Backend *bend)
 }
 
 /* ============================================================= */
-/* The single-user mode loads all transactions.  Doesn't bother
- * with checkpoints */
+/* The pgend_book_load_single() routine loads the engine with
+ *    data from the database.  Used only in single-user mode,
+ *    it loads account *and* transaction data.  Single-user
+ *    mode doesn't require balance checkpoingts, to these are
+ *    not handled.
+ */
 
 static AccountGroup *
 pgend_book_load_single (Backend *bend)
@@ -1879,6 +1903,17 @@ pgend_book_load_single (Backend *bend)
 }
 
 /* ============================================================= */
+/* The pgend_session_begin() routine implements the main entrypoint
+ *    into the SQL backend code.
+ *
+ *    1) It parses the URL to find the database, username, password, etc.
+ *    2) It makes the first contact to the database, and tries to 
+ *       initiate a user session.
+ *    3) It creates the GnuCash tables for the first time, if these
+ *       need to be created.
+ *    4) It logs the user session in the database (gncsession table).
+ *    5) loads data from the database into the engine.
+ */
 
 static void
 pgend_session_begin (GNCBook *sess, const char * sessionid, 
@@ -2277,6 +2312,9 @@ pgendEnable (PGBackend *be)
 }
 
 /* ============================================================= */
+/* The pgendInit() routine initializes the backend private 
+ *    structures, mallocs any needed memory, etc.
+ */
 
 static void 
 pgendInit (PGBackend *be)
