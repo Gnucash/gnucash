@@ -1,0 +1,8 @@
+Makefile
+tmp
+obj
+*.diff
+*.diffs
+*.patch
+*.log
+*.xac.*.xac
