@@ -146,7 +146,8 @@ xaccQueryPrint(Query * q)
           break;
         }
         case PR_ACTION:
-          printf ("action\n");
+          printf ("action sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_AMOUNT:
           printf ("amount\n");
@@ -175,16 +176,19 @@ xaccQueryPrint(Query * q)
           break;
         }
         case PR_DESC:
-          printf ("desc\n");
+          printf ("desc sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_MEMO:
-          printf ("memo\n");
+          printf ("memo sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_MISC:
           printf ("misc\n");
           break;
         case PR_NUM:
-          printf ("num\n");
+          printf ("num sense=%d case sensitive=%d\n", qt->data.str.sense, qt->data.str.case_sens);
+          printf ("\tmatch string=%s \n", qt->data.str.matchstring);
           break;
         case PR_PRICE:
           printf ("price\n");
