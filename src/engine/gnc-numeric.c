@@ -41,28 +41,34 @@
 /* static short module = MOD_ENGINE; */
 
 /* =============================================================== */
-/* Quick-n-dirty 128-bit math lib */
+/* Quick-n-dirty 128-bit math lib. The mult128 routine should work 
+ * great; I think that div128 works, but its not really tested.
+ */
 
 typedef struct {
-  gint64 hi;
+  guint64 hi;
   guint64 lo;
+  short isneg;
 } gncint128;
 
+/** Multiply a pair of signed 64-bit numbers, 
+ *  returning a signed 128-bit number.
+ */
 static inline gncint128
 mult128 (gint64 a, gint64 b)
 {
   gncint128 prod;
-  short aneg=0, bneg=0;
 
+  prod.isneg = 0;
   if (0>a)
   {
-    aneg = 1;
+    prod.isneg = !prod.isneg;
     a = -a;
   }
 
   if (0>b)
   {
-    bneg = 1;
+    prod.isneg = !prod.isneg;
     b = -b;
   }
 
@@ -104,10 +110,109 @@ mult128 (gint64 a, gint64 b)
   prod.lo = d0 + (sum<<32);
   prod.hi = carry + e1 + f1 + g0 + (g1<<32);
 
-  if (aneg) prod.hi = -prod.hi;
-  if (bneg) prod.hi = -prod.hi;
-
   return prod;
+}
+
+/** Divide a signed 128-bit number by a signed 64-bit,
+ *  returning a signed 128-bit number.
+ */
+static inline gncint128
+div128 (gncint128 n, gint64 d)
+{
+  gncint128 quotient;
+  guint64 hirem;   /* hi remainder */
+  guint64 qlo;
+
+  quotient.isneg = n.isneg;
+  if (0 > d)
+  {
+    d = -d;
+    quotient.isneg = !quotient.isneg;
+  }
+
+  quotient.hi = n.hi / d;
+  hirem = n.hi - quotient.hi * d;
+  
+  guint64 lo = 1<<30;
+  lo <<= 33;
+  lo /= d;
+  lo <<= 1;
+
+  lo *= hirem; 
+  quotient.lo = lo + n.lo/d;
+
+  /* Deal with low remainder bits.
+   * There's probably a more efficient way of doing this.
+   * XXX This algo breaks if the value of teh denominator 
+   * is larger than 2 billion.
+   */
+  guint64 rnd = quotient.lo;
+  // rnd &= 0x7fffffff;
+  rnd *= d;
+  rnd &= 0x7fffffff;
+  rnd = (n.lo & 0x7fffffff) - rnd;
+  rnd &= 0x7fffffff;
+  rnd /= d;
+
+  /* ?? will this ever overflow ? */
+  qlo = quotient.lo;
+  quotient.lo += rnd;
+  if (lo > quotient.lo)
+  {
+    quotient.hi += 1;
+  }
+
+  return quotient;
+}
+
+/** Return the remainder of a signed 128-bit number modulo a signed 64-bit,
+ *  XXX the current algo only works for divisor values less than 2 billion.
+ */
+static inline gint64
+rem128 (gncint128 n, gint64 d)
+{
+  gncint128 quotient = div128 (n,d);
+
+  guint64 rnd = quotient.lo;
+  // rnd &= 0x7fffffff;
+  rnd *= d;
+  rnd &= 0x7fffffff;
+  rnd = (n.lo & 0x7fffffff) - rnd;
+  rnd &= 0x7fffffff;
+  return rnd;
+}
+
+/** Return the ratio n/d reduced so that there are no common factors. */
+static inline gnc_numeric
+reduce128(gncint128 n, gint64 d)
+{
+  gint64   t;
+  gint64   num;
+  gint64   denom;
+  gnc_numeric out;
+
+  t =  rem128 (n, d);
+  num = d;
+  denom = t;
+
+  /* The strategy is to use Euclid's algorithm */
+  while (denom > 0) 
+  {
+    t = num % denom;
+    num = denom;
+    denom = t;
+  }
+  /* num now holds the GCD (Greatest Common Divisor) */
+
+  gncint128 red = div128 (n, num);
+  if (red.hi)
+  {
+    return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+  }
+  out.num   = red.lo;
+  if (red.isneg) out.num = -out.num;
+  out.denom = d / num;
+  return out;
 }
 
 #ifdef TEST_128_BIT_MULT
@@ -115,6 +220,15 @@ void pr (gint64 a, gint64 b)
 {
    gncint128 prod = mult128 (a,b);
    printf ("%lld * %lld = %lld %llu (0x%llx %llx)\n", a,b, prod.hi, prod.lo, prod.hi, prod.lo);
+}
+
+void prd (gint64 a, gint64 b, gint64 c)
+{
+   gncint128 prod = mult128 (a,b);
+   gncint128 quot = div128 (prod, c);
+   gint64 rem = rem128 (prod, c);
+   printf ("%lld * %lld / %lld = %lld %llu + %lld (0x%llx %llx)\n", a,b, c, quot.hi,
+quot.lo, rem, quot.hi, quot.lo);
 }
 
 main ()
@@ -137,7 +251,23 @@ main ()
   x <<= 1;
   pr (x,x);
   pr (x,-x);
+
+  prd (x,x,2);
+  prd (x,x,3);
+  prd (x,x,4);
+  prd (x,x,5);
+  prd (x,x,6);
+
+  x <<= 29;
+  prd (3,x,3);
+  prd (6,x,3);
+  prd (99,x,3);
+  prd (100,x,5);
+  prd (540,x,5);
+  prd (777,x,7);
+  prd (1111,x,11);
 }
+
 #endif /* TEST_128_BIT_MULT */
 
 /* =============================================================== */
@@ -504,10 +634,14 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   product.num   = a.num*b.num;
   product.denom = a.denom*b.denom;
 
+  /* If it looks to be overflowing, try to reduce the fraction ... */
   if (0 != bigprod.hi)
   {
-    /* We can try to do better, by reducing the fraction ... */
-    return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+    product = reduce128 (bigprod, product.denom);
+    if (gnc_numeric_check (product))
+    {
+      return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+    }
   }
   
 #if 0  /* currently, product denom won't ever be zero */
