@@ -24,6 +24,9 @@
 
 #include <Xm/Xm.h>
 #include <Xm/FileSB.h>
+
+#include "config.h"
+
 #include "FileBox.h"
 #include "util.h"
 

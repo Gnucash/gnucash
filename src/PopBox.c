@@ -21,6 +21,9 @@
 #include <Xm/Xm.h>
 #include <ComboBox.h>
 #include <Xbae/Matrix.h>
+
+#include "config.h"
+
 #include "util.h"
 
 /** STRUCTS *********************************************************/

@@ -33,6 +33,8 @@
 #include <Xm/Text.h>
 #include <Xbae/Matrix.h>
 
+#include "config.h"
+
 #include "Account.h"
 #include "Data.h"
 #include "RegWindow.h"

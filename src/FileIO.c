@@ -79,6 +79,8 @@
 #include <fcntl.h>
 #include <Xm/Xm.h>
 
+#include "config.h"
+
 #include "Account.h"
 #include "Data.h"
 #include "main.h"
@@ -151,8 +153,10 @@ double xaccFlipDouble (double val)
   return u.d;
 }
 
-#define XACC_FLIP_ENDIAN
-#ifdef XACC_FLIP_ENDIAN
+/* if we are running on a little-endian system, we need to
+ * do some endian flipping, because the xacc native data
+ * format is big-endian */
+#ifndef WORDS_BIGENDIAN
   #define XACC_FLIP_DOUBLE(x) { (x) = xaccFlipDouble (x); }
   #define XACC_FLIP_INT(x) { (x) = xaccFlipInt (x); }
   #define XACC_FLIP_SHORT(x) { (x) = xaccFlipShort (x); }
@@ -160,9 +164,9 @@ double xaccFlipDouble (double val)
   #define XACC_FLIP_DOUBLE(x)
   #define XACC_FLIP_INT(x) 
   #define XACC_FLIP_SHORT(x) 
-#endif /* XACC_FLIP_ENDIAN */
+#endif /* WORDS_BIGENDIAN */
 
-  
+
 /********************************************************************\
  ********************** LOAD DATA ***********************************
 \********************************************************************/

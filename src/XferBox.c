@@ -20,6 +20,8 @@
 
 #include <Xm/Xm.h>
 
+#include "config.h"
+
 #include "Data.h"
 #include "PopBox.h"
 #include "util.h"

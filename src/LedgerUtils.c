@@ -18,6 +18,8 @@
  *                                                                  *
 \********************************************************************/
 
+#include "config.h"
+
 #include "Account.h"
 #include "Data.h"
 #include "Transaction.h"

@@ -37,6 +37,8 @@
 #include <Xm/MessageB.h>
 #include <Xbae/Matrix.h>
 
+#include "config.h"
+
 #include "util.h"
 
 /********************************************************************\
