@@ -53,6 +53,7 @@ Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Matthew Condell <mcondell@bbn.com> FreeBSD patch
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
+Raphael Dechenaux <raphael.dechenaux@worldonline.fr> register patch
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Glen Ditchfield <gjditchfield@acm.org> updated documentation
 Tyson Dowd <tyson@tyse.net> for config/make patches & debian maint

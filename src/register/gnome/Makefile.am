@@ -11,7 +11,8 @@ libgncregistergnome_a_SOURCES = \
   gnucash-item-list.c \
   gnucash-sheet.c \
   gnucash-style.c \
-  quickfillcell-gnome.c
+  quickfillcell-gnome.c \
+  pricecell-gnome.c
 
 noinst_HEADERS = \
   gnucash-color.h \

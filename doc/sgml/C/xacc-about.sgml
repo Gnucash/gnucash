@@ -369,11 +369,20 @@ Motif as a school project, taking it to version 0.9 by October
 <PARA>FreeBSD patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
+
 <GLOSSENTRY>
 <GLOSSTERM><email> pcondon@rackspace.com</email> Patrick
       Condron</GLOSSTERM>
 <GLOSSDEF>
 <PARA>for webserver and T1 connection.</PARA>
+</GLOSSDEF>
+</GLOSSENTRY>
+
+<GLOSSENTRY>
+<GLOSSTERM><email> raphael.dechenaux@worldonline.fr</email> Raphael
+      Dechenaux</GLOSSTERM>
+<GLOSSDEF>
+<PARA>register patch</PARA>
 </GLOSSDEF>
 </GLOSSENTRY>
 

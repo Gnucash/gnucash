@@ -40,6 +40,8 @@
 #include "basiccell.h"
 #include "pricecell.h"
 
+/* GUI-dependent */
+extern void xaccPriceGUIInit (PriceCell *);
 
 static void PriceSetValue (BasicCell *, const char *);
 static char * xaccPriceCellPrintValue (PriceCell *cell);
@@ -228,6 +230,8 @@ xaccInitPriceCell (PriceCell *cell)
    cell->cell.leave_cell = PriceLeave;
    cell->cell.set_value = PriceSetValue;
    cell->cell.get_help_value = PriceHelp;
+
+   xaccPriceGUIInit( cell);
 }
 
 /* ================================================ */

@@ -117,7 +117,7 @@ l = @l@
 
 noinst_LIBRARIES = libgncregistergnome.a
 
-libgncregistergnome_a_SOURCES =    combocell-gnome.c   gnucash-color.c   gnucash-cursor.c   gnucash-grid.c   gnucash-header.c   gnucash-item-edit.c   gnucash-item-list.c   gnucash-sheet.c   gnucash-style.c   quickfillcell-gnome.c
+libgncregistergnome_a_SOURCES =    combocell-gnome.c   gnucash-color.c   gnucash-cursor.c   gnucash-grid.c   gnucash-header.c   gnucash-item-edit.c   gnucash-item-list.c   gnucash-sheet.c   gnucash-style.c   quickfillcell-gnome.c   pricecell-gnome.c
 
 
 noinst_HEADERS =    gnucash-color.h   gnucash-cursor.h   gnucash-grid.h   gnucash-header.h   gnucash-item-edit.h   gnucash-item-list.h   gnucash-sheet.h   gnucash-style.h
@@ -148,7 +148,7 @@ libgncregistergnome_a_LIBADD =
 libgncregistergnome_a_OBJECTS =  combocell-gnome.o gnucash-color.o \
 gnucash-cursor.o gnucash-grid.o gnucash-header.o gnucash-item-edit.o \
 gnucash-item-list.o gnucash-sheet.o gnucash-style.o \
-quickfillcell-gnome.o
+quickfillcell-gnome.o pricecell-gnome.o
 AR = ar
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -166,7 +166,8 @@ GZIP_ENV = --best
 DEP_FILES =  .deps/combocell-gnome.P .deps/gnucash-color.P \
 .deps/gnucash-cursor.P .deps/gnucash-grid.P .deps/gnucash-header.P \
 .deps/gnucash-item-edit.P .deps/gnucash-item-list.P \
-.deps/gnucash-sheet.P .deps/gnucash-style.P .deps/quickfillcell-gnome.P
+.deps/gnucash-sheet.P .deps/gnucash-style.P .deps/pricecell-gnome.P \
+.deps/quickfillcell-gnome.P
 SOURCES = $(libgncregistergnome_a_SOURCES)
 OBJECTS = $(libgncregistergnome_a_OBJECTS)
 
