@@ -106,6 +106,13 @@ AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
 
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
+if test $am_cv_scanf_lld = "no"; then
+  SCANF_QD_CHECK
+
+  if test $am_cv_scanf_qs = "no"; then
+    AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
+  fi
+fi
 
 AC_CHECK_HEADERS(ltdl.h)
 if test "x$ac_cv_header_ltdl_h" = xno; then
@@ -1029,31 +1036,6 @@ else
   LC_MESSAGES_ENUM="LC_MESSAGES"
 fi
 AC_SUBST(LC_MESSAGES_ENUM)
-
-if test $am_cv_scanf_lld = "no"; then
-  AC_MSG_CHECKING(if scanf supports %qd conversion)
-  AC_TRY_RUN([
-#include <stdio.h>
-#include <stdlib.h>
-
-int main ()
-{
-  long long int d;
-  d = 0;
-  if ((sscanf ("10000000000", "%qd", &d) != 1) || (d != 10000000000))
-    exit (1);
-  exit (0);
-}
-],[
-        AC_DEFINE(HAVE_SCANF_QD, 1,
-            [Define if scanf supports %qd conversions.])
-        AC_MSG_RESULT(yes)
-        ],[
-        AC_MSG_RESULT(no)
-        AC_MSG_ERROR([cannot continue, no long long conversion support in scanf])
-        ])
-fi
-
 
 ### --------------------------------------------------------------------------
 ### GnuCash flags and libs configuration

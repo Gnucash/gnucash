@@ -1,3 +1,10 @@
+2004-07-04  Derek Atkins  <derek@ihtfp.com>
+
+	* acinclude.m4: create a SCANF_QD_CHECK and make sure both
+	  that and SCANF_LLD_CHECK are "long long" constant-safe 
+	* configure.in: use the new SCANF_QD_CHECK and use it
+	  earlier in the configuration.
+
 2004-07-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/dialog-print-check.c:
