@@ -228,6 +228,7 @@ Banks report transactions from *their* perspective, not yours.  Their perspectiv
 When you take money out of your bank account, the balance in your account decreases.  To you, this is a decrease in an asset, so you *credit* your bank account.  To the bank, this is a decrease in a liability, so they *debit* your bank account.    (?/SIDEBAR)
      </para>
    </sect2>
+   </sect1>
    <sect1 id="chart1">
     <title>3.3 Setting Up a Chart of Accounts (Discussion)</title>
      <para>
