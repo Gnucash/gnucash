@@ -25,13 +25,14 @@ TESTS = \
   test-group-vs-book \
   test-object \
   test-period \
-  test-query \
   test-querynew \
+  test-query \
   test-resolve-file-path \
   test-split-vs-account  \
   test-transaction-voiding \
   test-freq-spec \
-  test-scm-query 
+  test-scm-query \
+  test-scm-query-import
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
@@ -59,11 +60,14 @@ noinst_PROGRAMS = \
   test-resolve-file-path \
   test-scm-query \
   test-split-vs-account \
-  test-transaction-voiding
+  test-transaction-voiding \
+  test-print-queries
 
 EXTRA_DIST = \
   test-create-account \
-  test-create-account.scm
+  test-create-account.scm \
+  test-scm-query-import \
+  test-scm-query-import.scm
 
 clean:
 	rm -f translog.*
