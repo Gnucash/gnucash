@@ -24,6 +24,7 @@ TESTS = \
   test-commodities \
   test-date \
   test-group-vs-book \
+  test-period \
   test-query \
   test-resolve-file-path \
   test-split-vs-account  \
@@ -45,6 +46,7 @@ noinst_PROGRAMS = \
   test-freq-spec \
   test-group-vs-book \
   test-load-engine \
+  test-period \
   test-query \
   test-resolve-file-path \
   test-scm-query \
