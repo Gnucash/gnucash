@@ -1,3 +1,13 @@
+2002-07-02  Derek Atkins  <derek@ihtfp.com>
+
+	* register/register-gnome/gnucash-sheet.c: allow a caller to
+	"unset" the popup menu by passing a NULL popup.
+
+	* business/business-gnome/dialog-invoice.c: use glade for the
+	popup.  Only set the popup for Read-Write invoices.
+	* business/business-gnome/glade/invoice.glade: define the popup
+	menu in glade.
+	
 2002-07-01  Derek Atkins  <derek@ihtfp.com>
 
 	* business-gnome/dialog-invoice.c: make all my callbacks

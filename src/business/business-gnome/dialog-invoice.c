@@ -64,6 +64,9 @@ struct _invoice_window {
   GtkWidget *	menubar;
   GtkWidget *	statusbar;
 
+  /* Popup Menu */
+  GtkWidget *	popup_menu;
+
   /* Toolbar Widgets */
   GtkWidget *	toolbar_dock;
   GtkWidget *	edit_button;
@@ -504,58 +507,25 @@ static GtkWidget *
 gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
 {
   GtkWidget *popup;
+  GladeXML *xml;
 
-  GnomeUIInfo transaction_menu[] =
-  {
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Enter"),
-      N_("Record the current entry"),
-      gnc_invoice_window_recordCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Cancel"),
-      N_("Cancel the current entry"),
-      gnc_invoice_window_cancelCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Delete"),
-      N_("Delete the current entry"),
-      gnc_invoice_window_deleteCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("D_uplicate"),
-      N_("Make a copy of the current entry"),
-      gnc_invoice_window_duplicateCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_SEPARATOR,
-    {
-      GNOME_APP_UI_ITEM,
-      N_("_Blank"),
-      N_("Move to the blank entry at the "
-         "bottom of the register"),
-      gnc_invoice_window_blankCB, NULL, NULL,
-      GNOME_APP_PIXMAP_NONE, NULL,
-      0, 0, NULL
-    },
-    GNOMEUIINFO_END
-  };
+  xml = gnc_glade_xml_new ("invoice.glade", "Invoice Window Popup Menu");
 
-  gnc_fill_menu_with_data (transaction_menu, iw);
+  popup = glade_xml_get_widget (xml, "Invoice Window Popup Menu");
 
-  popup = gnome_popup_menu_new (transaction_menu);
+  glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func, iw);
+
+  /* Glade insists on making this a tearoff menu. */
+  if (gnome_preferences_get_menus_have_tearoff ()) {
+    GtkMenuShell *ms = GTK_MENU_SHELL (popup);
+    GtkWidget *tearoff;
+
+    tearoff = g_list_nth_data (ms->children, 0);
+    ms->children = g_list_remove (ms->children, tearoff);
+    gtk_widget_destroy (tearoff);
+  }
+
+  iw->popup_menu = popup;
 
   return popup;
 }
@@ -970,6 +940,9 @@ gnc_invoice_update_window (InvoiceWindow *iw)
       hide = glade_xml_get_widget (iw->xml, "hide4");
       gtk_widget_hide_all (hide);
 
+      /* Remove the popup menu */
+      gnucash_register_attach_popup (iw->reg, NULL, iw);
+
     } else {			/* ! posted */
       hide = glade_xml_get_widget (iw->xml, "posted_label");
       gtk_widget_hide_all (hide);
@@ -1225,9 +1198,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 			GTK_SIGNAL_FUNC(gnc_invoice_redraw_help_cb), iw);
 
     popup = gnc_invoice_window_create_popup_menu (iw);
-    gnucash_register_attach_popup (GNUCASH_REGISTER (regWidget),
-				   popup, iw);
-
+    gnucash_register_attach_popup (GNUCASH_REGISTER (regWidget), popup, iw);
   }
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));

@@ -1177,4 +1177,80 @@
   </widget>
 </widget>
 
+<widget>
+  <class>GtkMenu</class>
+  <name>Invoice Window Popup Menu</name>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>enter_item</name>
+    <tooltip>Record the current entry</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_invoice_window_recordCB</handler>
+      <last_modification_time>Tue, 02 Jul 2002 14:52:15 GMT</last_modification_time>
+    </signal>
+    <label>Enter</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>cancel_item</name>
+    <tooltip>Cancel the current entry</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_invoice_window_cancelCB</handler>
+      <last_modification_time>Tue, 02 Jul 2002 14:52:15 GMT</last_modification_time>
+    </signal>
+    <label>Cancel</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>delete_item</name>
+    <tooltip>Delete the current entry</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_invoice_window_deleteCB</handler>
+      <last_modification_time>Tue, 02 Jul 2002 14:52:15 GMT</last_modification_time>
+    </signal>
+    <label>Delete</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>separator1</name>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>duplicate_item</name>
+    <tooltip>Make a copy of the current entry</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_invoice_window_duplicateCB</handler>
+      <last_modification_time>Tue, 02 Jul 2002 14:52:15 GMT</last_modification_time>
+    </signal>
+    <label>Duplicate</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>blank_item</name>
+    <tooltip>Move to the blank entry at the bottom of the Invoice</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_invoice_window_blankCB</handler>
+      <last_modification_time>Tue, 02 Jul 2002 14:52:15 GMT</last_modification_time>
+    </signal>
+    <label>Blank</label>
+    <right_justify>False</right_justify>
+  </widget>
+</widget>
+
 </GTK-Interface>
