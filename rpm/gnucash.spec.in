@@ -1,21 +1,17 @@
-# Check whether GnuCash should be build with or without the Postgres backend.
-# When building GnuCash, pass "--with postgres" or "--without postgres"
-# options, as in
-#    rpmbuild --with postgres -bb gnucash.spec
-%if "%{_with_postgres}" == "--with-postgres"
-  %define _with_postgres 1
-  %define sql_config --enable-sql
-%else
-  %define _with_postgres 0
-  %define sql_config --disable-sql
-%endif
+# Check whether GnuCash should build optional modules.
+# To modify parameters, edit the .spec file, 0 is off, 1 is on
+%define _with_postgres 0
+%define _with_ofx 0
+%define _with_hbci 0
+
+%define rh_rel %(rpm -q --queryformat='%{VERSION}' redhat-release)
 %define version @-VERSION-@
 %define __libtoolize /bin/true
 
 Name:      	gnucash
 Summary:   	GnuCash is an application to keep track of your finances.
 Version:   	%{version}
-Release:  	1
+Release:  	1.RH%{rh_rel}
 Copyright: 	Free Software Foundation
 Group:     	Applications/Finance
 URL:            http://www.gnucash.org
@@ -38,22 +34,6 @@ designed to be simple and easy to use, but is backed with
 double-entry accounting principles to ensure balanced books.
 
 
-%if %{_with_postgres}
-%package backend-postgres
-Summary: Backend for storing GnuCash data in a PostgreSQL database.
-Group: Applications/Finance
-Requires: gnucash = %{version}
-Requires: postgres >= 7.1.3
-
-%description backend-postgres
-
-This package contains a backend for storing your GnuCash accounts and
-transactions in a PostgreSQL database.  Install this package if you
-want to keep your financial data in a database instead of a flat file
-(recommended for large volumes of data and commercial sites).
-%endif
-
-
 %package devel
 Summary: Header files for GnuCash development.
 Group: Development/Libraries
@@ -64,12 +44,67 @@ This package contains header files for GnuCash development.
 Install this package if you want to use GnuCash libraries
 in C programs.
 
+
+%if %{_with_ofx}
+%package ofx
+Summary: Enables OFX importing in GnuCash
+Group: Applications/Finance
+Requires: gnucash = %{version} libofx >= 0.6.2
+BuildPrereq: libofx
+
+%description ofx
+This package adds OFX file import support to the base
+GnuCash package. Install this package if you want to
+import OFX files.
+%endif
+
+%if %{_with_hbci}
+%package hbci
+Summary: Enables HBCI importing in GnuCash
+Group: Applications/Finance
+Requires: gnucash = %{version} openhbci >= 0.9.6
+BuildPrereq: openhbci
+
+%description hbci
+This package adds HBCI file import support to the base
+GnuCash package. Install this package if you want to
+import HBCI files.
+%endif
+
+%if %{_with_postgres}
+%package backend-postgres
+Summary: Backend for storing GnuCash data in a PostgreSQL database.
+Group: Applications/Finance
+Requires: gnucash = %{version}
+Requires: postgresql >= 7.1.3
+BuildPrereq: postgresql-devel
+
+%description backend-postgres
+
+This package contains a backend for storing your GnuCash accounts and
+transactions in a PostgreSQL database.  Install this package if you
+want to keep your financial data in a database instead of a flat file
+(recommended for large volumes of data and commercial sites).
+%endif
+
+
 %prep
 %setup -q
 
 %build
 autoconf
-%configure %{sql_config}
+%configure \
+%if %{_with_ofx}
+ --enable-ofx \
+%endif
+%if %{_with_hbci}
+ --enable-hbci \
+%endif
+%if %{_with_postgres}
+ --enable-sql \
+%endif
+ --enable-gui
+
 
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
 
@@ -81,6 +116,8 @@ cp -p src/backend/postgres/README README.postgres
 LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}:$RPM_BUILD_ROOT%{_libdir}/gnucash make DESTDIR=$RPM_BUILD_ROOT install
 
 %find_lang %name
+
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT/%{_infodir}/dir
 
 %clean
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -101,35 +138,54 @@ fi
 %attr(555,root,root) %{_libexecdir}/gnucash
 %attr(555,root,root) %{_datadir}/gnucash/finance-quote-helper
 %attr(555,root,root) %{_datadir}/gnucash/finance-quote-check
-%{_mandir}/man1/*
+%{_mandir}/man*/*
 %{_infodir}/*.gz
-%{_libdir}/gnucash/libgnc-*
-%{_libdir}/gnucash/libgncmod-[a,c-z]*
-%{_libdir}/gnucash/libgncmod-b[b-z]*
-%{_libdir}/gnucash/libgncmod-backend-file*
-%{_libdir}/gnucash/libgw*
-%{_libdir}/lib*
-%dir %{_datadir}/gnucash
-%{_datadir}/gnucash/accounts
-%{_datadir}/gnucash/doc
-%{_datadir}/gnucash/glade
-%{_datadir}/gnucash/guile-modules
-%{_datadir}/gnucash/scm
+%{_libdir}/*
+%{_datadir}/gnucash
 %{_datadir}/gnome/apps/Applications/*
 %{_datadir}/pixmaps/gnucash
 %{_datadir}/mime-info/gnucash.*
+%if %{_with_ofx}
+%exclude %{_libdir}/gnucash/libgncmod-ofx*
+%exclude %{_datadir}/gnucash/scm/ofx/*
+%endif
+%if %{_with_hbci}
+%exclude %{_libdir}/gnucash/libgncmod-hbci*
+%exclude %{_datadir}/gnucash/glade/hbci*
+%exclude %{_datadir}/gnucash/scm/hbci/*
+%endif
+%if %{_with_postgres}
+%exclude %{_libdir}/gnucash/libgncmod-backend-postgres*
+%endif
 %config %{_sysconfdir}/gnucash
 %doc AUTHORS COPYING ChangeLog ChangeLog.1 HACKING NEWS README README.patches
 %doc doc/README.german doc/README.francais doc/guile-hackers.txt
-
-
-%if %{_with_postgres}
-%files backend-postgres
-%{_libdir}/gnucash/libgncmod-backend-postgres*
-%doc README.postgres
-%endif
 
 %files devel
 %defattr(444,root,root,755)
 %{_includedir}/gnucash
 %{_datadir}/aclocal/gnucash.m4
+
+%if %{_with_ofx}
+%files ofx
+%defattr(444,root,root,755)
+%{_libdir}/gnucash/libgncmod-ofx*
+%{_datadir}/gnucash/scm/ofx/*
+%doc doc/README.OFX
+%endif
+
+%if %{_with_hbci}
+%files hbci
+%defattr(444,root,root,755)
+%{_libdir}/gnucash/libgncmod-hbci*
+%{_datadir}/gnucash/glade/hbci*
+%{_datadir}/gnucash/scm/hbci/*
+%doc doc/README.HBCI
+%endif
+
+%if %{_with_postgres}
+%files backend-postgres
+%defattr(444,root,root,755)
+%{_libdir}/gnucash/libgncmod-backend-postgres*
+%doc README.postgres
+%endif
