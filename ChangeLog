@@ -1,5 +1,9 @@
 2000-06-21  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/splitreg.h: break out the register type and the
+	register style into two separate struct members, instead of using
+	bitmasks. This is much, much simpler.
+
 	* src/optional/swig/Makefile.am (gnucash-engine-perl5_wrap.c):
 	remove the -stat argument, it's no longer support in later swig
 	versions.

@@ -1384,7 +1384,7 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
 
         style  = g_new0(SheetBlockStyle, 1);
 
-        style->reg_type = sr->type & REG_TYPE_MASK;
+        style->reg_type = sr->type;
         style->cursor_type = cursor_type;
 
         style->nrows = cellblock->numRows;

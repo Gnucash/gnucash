@@ -168,9 +168,11 @@ xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter)
 static void
 configLabels (SplitRegister *reg)
 {
+  SplitRegisterType type;
   BasicCell *hc;
-  int type = (reg->type) & REG_TYPE_MASK;
   char *string;
+
+  type = reg->type;
 
   LABEL (DATE,  DATE_STR);
   LABEL (NUM,   NUM_STR);
@@ -222,10 +224,8 @@ configLabels (SplitRegister *reg)
 static void
 configAction (SplitRegister *reg)
 {
-   int type = (reg->type) & REG_TYPE_MASK;
-
    /* setup strings in the action pull-down */
-   switch (type) {
+   switch (reg->type) {
       case BANK_REGISTER:
       case SEARCH_LEDGER:  /* broken ! FIXME bg */
          xaccAddComboCellMenuItem ( reg->actionCell, DEPOSIT_STR);
@@ -346,7 +346,6 @@ static void
 configLayout (SplitRegister *reg)
 {
    CellBlock *curs, *header;
-   int type = (reg->type) & REG_TYPE_MASK;
    int i;
 
    /* define header for macros */
@@ -362,7 +361,7 @@ configLayout (SplitRegister *reg)
       reg->double_cursor->cells[1][i] = reg->nullCell;
    }
 
-   switch (type) {
+   switch (reg->type) {
       case BANK_REGISTER:
       case CASH_REGISTER:
       case ASSET_REGISTER:
@@ -576,7 +575,7 @@ configLayout (SplitRegister *reg)
 
       /* --------------------------------------------------------- */
       default:
-         PERR ("unknown register type %d \n", type);
+         PERR ("unknown register type %d \n", reg->type);
          break;
    }
 }
@@ -816,11 +815,13 @@ configTraverse (SplitRegister *reg)
 /* ============================================== */
 
 SplitRegister *
-xaccMallocSplitRegister (int type)
+xaccMallocSplitRegister (SplitRegisterType type, SplitRegisterStyle style)
 {
    SplitRegister * reg;
-   reg = (SplitRegister *) malloc (sizeof (SplitRegister));
-   xaccInitSplitRegister (reg, type);
+
+   reg = malloc (sizeof (SplitRegister));
+   xaccInitSplitRegister (reg, type, style);
+
    return reg;
 }
 
@@ -837,12 +838,10 @@ xaccSetSplitRegisterColors (SplitRegisterColors reg_colors_new)
 static void
 configTable(SplitRegister *reg)
 {
-  int style = reg->type & REG_STYLE_MASK;
-
   if ((reg == NULL) || (reg->table == NULL))
     return;
 
-  switch (style) {
+  switch (reg->style) {
     case REG_SINGLE_LINE:
     case REG_SINGLE_DYNAMIC:
       reg->table->alternate_bg_colors = GNC_T;
@@ -910,9 +909,7 @@ configCursors (SplitRegister *reg)
 static void
 mallocCursors (SplitRegister *reg)
 {
-  int type = (reg->type) & REG_TYPE_MASK;
-
-  switch (type) {
+  switch (reg->type) {
     case BANK_REGISTER:
     case CASH_REGISTER:
     case ASSET_REGISTER:
@@ -968,7 +965,9 @@ mallocCursors (SplitRegister *reg)
    reg->CN##Cell = xaccMalloc##TYPE##Cell();			\
 
 void 
-xaccInitSplitRegister (SplitRegister *reg, int type)
+xaccInitSplitRegister (SplitRegister *reg,
+                       SplitRegisterType type,
+                       SplitRegisterStyle style)
 {
    Table * table;
    CellBlock *header;
@@ -978,6 +977,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    reg->user_data = NULL;
    reg->destroy = NULL;
    reg->type = type;
+   reg->style = style;
 
    /* --------------------------- */
    /* define the number of columns in the display, malloc the cursors */
@@ -1107,7 +1107,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccSetBasicCellBlankHelp (&reg->actionCell->cell, ACTION_CELL_HELP);
 
    /* number format for share quantities in stock ledgers */
-   switch (type & REG_TYPE_MASK) {
+   switch (type) {
       case CURRENCY_REGISTER:
         xaccSetPriceCellIsCurrency (reg->priceCell, GNC_T);
 
@@ -1173,11 +1173,14 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 /* ============================================== */
 
 void
-xaccConfigSplitRegister (SplitRegister *reg, int newtype)
+xaccConfigSplitRegister (SplitRegister *reg,
+                         SplitRegisterType newtype,
+                         SplitRegisterStyle newstyle)
 {
    if (!reg) return;
 
    reg->type = newtype;
+   reg->style = newstyle;
 
    /* Make sure that any GUI elements associated with this reconfig 
     * are properly initialized. */

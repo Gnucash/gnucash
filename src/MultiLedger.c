@@ -153,9 +153,8 @@ ledgerIsMember (xaccLedgerDisplay *reg, Account * acc)
 xaccLedgerDisplay *
 xaccLedgerDisplaySimple (Account *acc)
 {
-  xaccLedgerDisplay *retval;
-  int acc_type;
-  int reg_type = -1;
+  SplitRegisterType reg_type;
+  GNCAccountType acc_type;
 
   acc_type = xaccAccountGetType (acc);
 
@@ -197,11 +196,7 @@ xaccLedgerDisplaySimple (Account *acc)
       return NULL;
   }
 
-  /* default to single-line display */
-  reg_type |= REG_SINGLE_LINE;
-
-  retval = xaccLedgerDisplayGeneral (acc, NULL, reg_type);
-  return retval;
+  return xaccLedgerDisplayGeneral (acc, NULL, reg_type, REG_SINGLE_LINE);
 }
 
 /********************************************************************\
@@ -216,12 +211,13 @@ xaccLedgerDisplaySimple (Account *acc)
 xaccLedgerDisplay *
 xaccLedgerDisplayAccGroup (Account *acc)
 {
+  SplitRegisterType ledger_type;
   xaccLedgerDisplay *retval;
+  GNCAccountType acc_type;
+  GNCAccountType le_type;
   Account **list;
-  int ledger_type;
   Account *le;
   int n;
-  int acc_type, le_type;
 
   /* build a flat list from the tree */
   list = xaccGroupToList (acc);
@@ -270,12 +266,10 @@ xaccLedgerDisplayAccGroup (Account *acc)
       return NULL;
   }
 
-  /* default to single-line display */
-  ledger_type |= REG_SINGLE_LINE;
-
-  retval = xaccLedgerDisplayGeneral (acc, list, ledger_type);
+  retval = xaccLedgerDisplayGeneral (acc, list, ledger_type, REG_SINGLE_LINE);
 
   if (list) _free (list);
+
   return retval;
 }
 
@@ -320,7 +314,7 @@ xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
 
 xaccLedgerDisplay *
 xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
-                          int ledger_type)
+                          SplitRegisterType type, SplitRegisterStyle style)
 {
   xaccLedgerDisplay *regData = NULL;
   gboolean show_all;
@@ -373,7 +367,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
    * and then, store them. */
   regData->numAcc = accListCount (acclist);
   regData->displayed_accounts = accListCopy (acclist);
-  regData->type = ledger_type;
+  regData->type = type;
 
   show_all = gnc_lookup_boolean_option("Register",
                                        "Show All Transactions",
@@ -386,7 +380,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
    * configurable, or maybe we should go back a time range instead
    * of picking a number, or maybe we should be able to exclude
    * based on reconciled status. Anyway, this works for now. */
-  if (!show_all && ((ledger_type & REG_TYPE_MASK) != SEARCH_LEDGER))
+  if (!show_all && (type != SEARCH_LEDGER))
     xaccQuerySetMaxSplits(regData->query, 30);
 
   xaccQuerySetGroup(regData->query, gncGetCurrentGroup());
@@ -410,7 +404,7 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  regData->ledger = xaccMallocSplitRegister (ledger_type);
+  regData->ledger = xaccMallocSplitRegister (type, style);
 
   xaccSRSetData(regData->ledger, regData,
                 xaccLedgerDisplayParent,

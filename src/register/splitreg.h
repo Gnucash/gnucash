@@ -80,8 +80,6 @@ typedef enum
   SEARCH_LEDGER       = 14
 } SplitRegisterType;
 
-#define REG_TYPE_MASK       0xff
-
 /* These values are used to identify the cells in the register. */
 typedef enum
 {
@@ -119,12 +117,14 @@ typedef enum
  * REG_DOUBLE_DYNAMIC -- dynamically expand edited transaction,
  *                       all other transactions on two lines
  */
-#define REG_SINGLE_LINE        (1 << 8)
-#define REG_DOUBLE_LINE        (2 << 8)
-#define REG_MULTI_LINE         (3 << 8)
-#define REG_SINGLE_DYNAMIC     (4 << 8)
-#define REG_DOUBLE_DYNAMIC     (5 << 8) 
-#define REG_STYLE_MASK      (0xff << 8) 
+typedef enum
+{
+  REG_SINGLE_LINE    = 1,
+  REG_DOUBLE_LINE    = 2,
+  REG_MULTI_LINE     = 3,
+  REG_SINGLE_DYNAMIC = 4,
+  REG_DOUBLE_DYNAMIC = 5
+} SplitRegisterStyle;
 
 /* modified flags -- indicate which cell values have been modified by user */
 #define MOD_NONE   0x0000
@@ -193,9 +193,11 @@ struct _SplitRegister {
    PriceCell     * ncreditCell;
    PriceCell     * ndebitCell;
 
-   /* the type of the register, must be one of the enumerated types
-    * above *_REGISTER, *_LEDGER, above */
-   int type;
+   /* The type of the register, must be one of the enumerated types
+    * named *_REGISTER, *_LEDGER, above */
+   SplitRegisterType type;
+
+   SplitRegisterStyle style;
 
    /* some private data; outsiders should not access this */
    int num_cols;
@@ -247,16 +249,21 @@ typedef char* (*SRStringGetter) (SplitRegisterType);
 void            xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter);
 void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 
-SplitRegister * xaccMallocSplitRegister (int type);
-void            xaccInitSplitRegister (SplitRegister *, int type);
-void            xaccConfigSplitRegister (SplitRegister *, int type);
-void            xaccDestroySplitRegister (SplitRegister *);
+SplitRegister * xaccMallocSplitRegister (SplitRegisterType type,
+                                         SplitRegisterStyle style);
+void            xaccInitSplitRegister (SplitRegister *reg,
+                                       SplitRegisterType type,
+                                       SplitRegisterStyle style);
+void            xaccConfigSplitRegister (SplitRegister *reg,
+                                         SplitRegisterType type,
+                                         SplitRegisterStyle style);
+void            xaccDestroySplitRegister (SplitRegister *reg);
 
 void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
 void            xaccSplitRegisterConfigColors (SplitRegister *reg);
 
 /* returns non-zero value if updates have been made to data */
-unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *);
+unsigned int    xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
 
 /* Clears all change flags in the register. Does not alter values */
 void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);

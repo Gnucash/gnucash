@@ -642,7 +642,6 @@ LedgerMoveCursor (Table *table,
   int new_cell_col;
   int phys_row_offset;
   int phys_col_offset;
-  int style;
 
   PINFO ("start callback %d %d \n", new_phys_row, new_phys_col);
 
@@ -759,9 +758,8 @@ LedgerMoveCursor (Table *table,
    * to expand out the splits at the new location. We use the
    * cursor_hint data members to tell the refresh routine where
    * to go. */
-  style = ((reg->type) & REG_STYLE_MASK);
-  if ((REG_SINGLE_DYNAMIC == style) ||
-      (REG_DOUBLE_DYNAMIC == style)) 
+  if ((REG_SINGLE_DYNAMIC == reg->style) ||
+      (REG_DOUBLE_DYNAMIC == reg->style)) 
   {
     new_trans = xaccSRGetTrans(reg, new_phys_row, new_phys_col);
     info->cursor_hint_trans = new_trans;
@@ -808,6 +806,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   SRInfo *info = xaccSRGetInfo(reg);
   Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+  SplitRegisterType reg_type;
   CursorType cursor_type;
   unsigned int changed;
   CellType cell_type;
@@ -826,6 +825,7 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   if (trans == NULL)
     return;
 
+  reg_type = reg->type;
   cursor_type = xaccSplitRegisterGetCursorType(reg);
   cell_type = xaccSplitRegisterGetCellType(reg);
   changed = xaccSplitRegisterGetChangeFlag(reg);
@@ -940,7 +940,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     break;
 
     case CURSOR_SPLIT: {
-      SplitRegisterType typo = reg->type & REG_TYPE_MASK;
       char *memo, *fullname;
       gboolean unit_price;
       Split *auto_split;
@@ -999,9 +998,9 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       xaccBasicCellSetChanged(&(reg->xfrmCell->cell), GNC_T);
 
       /* auto-complete the amounts */
-      if ((STOCK_REGISTER    == typo) ||
-          (CURRENCY_REGISTER == typo) ||
-          (PORTFOLIO_LEDGER  == typo)) 
+      if ((STOCK_REGISTER    == reg_type) ||
+          (CURRENCY_REGISTER == reg_type) ||
+          (PORTFOLIO_LEDGER  == reg_type)) 
         amount = xaccSplitGetShareAmount (auto_split);
       else
         amount = xaccSplitGetValue (auto_split);
@@ -2181,7 +2180,6 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 {
   Transaction *trans;
   unsigned int changed;
-  int style;
 
   /* use the changed flag to avoid heavy-weight updates
    * of the split & transaction fields. This will help
@@ -2189,8 +2187,6 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
   changed = xaccSplitRegisterGetChangeFlag (reg);
   if (!changed)
     return GNC_F;
-
-  style = (reg->type) & REG_STYLE_MASK;   
 
   /* get the handle to the current split and transaction */
   trans = xaccSRGetCurrentTrans (reg);
@@ -2301,9 +2297,9 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 
     price = gnc_split_scm_get_share_price(split_scm);
 
-    if ((STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
-        (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-        (PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))
+    if ((STOCK_REGISTER    == (reg->type)) ||
+        (CURRENCY_REGISTER == (reg->type)) ||
+        (PORTFOLIO_LEDGER  == (reg->type)))
       ;
     else
       new_amount = new_amount / price;
@@ -2486,10 +2482,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 {
   GList *refresh_accounts = NULL;
   unsigned int changed;
-  int style;
 
   changed = xaccSplitRegisterGetChangeFlag (reg);
-  style = (reg->type) & REG_STYLE_MASK;   
 
   /* copy the contents from the cursor to the split */
   if (MOD_DATE & changed) {
@@ -2676,9 +2670,9 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
 
   if (((MOD_AMNT | MOD_PRIC | MOD_VALU) & changed) &&
-      ((STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
-       (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-       (PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))) {
+      ((STOCK_REGISTER    == (reg->type)) ||
+       (CURRENCY_REGISTER == (reg->type)) ||
+       (PORTFOLIO_LEDGER  == (reg->type)))) {
 
     double value;
     double price;
@@ -2803,9 +2797,9 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_AMNT: %f\n", new_amount);
 
-    if ((STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
-        (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-        (PORTFOLIO_LEDGER  == (reg->type & REG_TYPE_MASK)))
+    if ((STOCK_REGISTER    == (reg->type)) ||
+        (CURRENCY_REGISTER == (reg->type)) ||
+        (PORTFOLIO_LEDGER  == (reg->type)))
       xaccSplitSetShareAmount (split, new_amount);
     else
       xaccSplitSetValue (split, new_amount);
@@ -2839,7 +2833,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 {
    SRInfo *info = xaccSRGetInfo(reg);
    Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
-   int typo = reg->type & REG_TYPE_MASK;
+   SplitRegisterType reg_type = reg->type;
    char buff[2];
    double baln;
 
@@ -2899,8 +2893,8 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
         if (reverse_balance(account))
           baln = -baln;
       }
-      else if ((INCOME_REGISTER == typo) ||
-               (EXPENSE_REGISTER == typo)) { 
+      else if ((INCOME_REGISTER == reg_type) ||
+               (EXPENSE_REGISTER == reg_type)) { 
          baln = -baln;
       }
 
@@ -2969,9 +2963,9 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
 
-      if ((STOCK_REGISTER    == typo) ||
-          (CURRENCY_REGISTER == typo) ||
-          (PORTFOLIO_LEDGER  == typo)) 
+      if ((STOCK_REGISTER    == reg_type) ||
+          (CURRENCY_REGISTER == reg_type) ||
+          (PORTFOLIO_LEDGER  == reg_type)) 
       { 
          amt = xaccSplitGetShareAmount (split);
       } else {
@@ -2984,7 +2978,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetPriceCellValue (reg->valueCell, xaccSplitGetValue (split));
    }
 
-   reg->table->current_cursor->user_data = (void *) split;
+   reg->table->current_cursor->user_data = split;
 
    /* copy cursor contents into the table */
    xaccCommitCursor (reg->table);
@@ -3022,16 +3016,16 @@ xaccSRCountRows (SplitRegister *reg,
    gncBoolean multi_line;
    gncBoolean dynamic;
 
+   SplitRegisterStyle style;
    int save_cursor_phys_row;
    int save_cursor_virt_row;
    int save_cell_row;
    int num_phys_rows;
    int num_virt_rows;
-   int style;
    int i;
 
    table = reg->table;
-   style = (reg->type) & REG_STYLE_MASK;
+   style = reg->style;
    multi_line  = (REG_MULTI_LINE == style);
    dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
    if ((REG_SINGLE_LINE == style) ||
@@ -3329,9 +3323,10 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    gncBoolean multi_line;
    gncBoolean dynamic;
 
+   SplitRegisterType type;
+   SplitRegisterStyle style;
    unsigned int changed;
    int save_phys_col;
-   int type, style;
    int phys_row;
    int vrow;
    int i;
@@ -3357,8 +3352,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    info->default_source_account = default_source_acc;
 
    table = reg->table;
-   type  = (reg->type) & REG_TYPE_MASK;
-   style = (reg->type) & REG_STYLE_MASK;
+   type  = reg->type;
+   style = reg->style;
    multi_line  = (REG_MULTI_LINE == style);
    dynamic = ((REG_SINGLE_DYNAMIC == style) || (REG_DOUBLE_DYNAMIC == style));
    if ((REG_SINGLE_LINE == style) ||

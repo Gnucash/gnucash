@@ -231,14 +231,11 @@ gnc_register_jump_to_split(RegWindow *regData, Split *split)
 }
 
 
-static int
-gnc_register_get_default_type(SplitRegister *reg)
+static SplitRegisterStyle
+gnc_get_default_register_style()
 {
+  SplitRegisterStyle new_style = REG_SINGLE_LINE;
   char *style_string;
-  int new_style = REG_SINGLE_LINE;
-  int type = reg->type;
-
-  type &= ~REG_STYLE_MASK;
 
   style_string = gnc_lookup_multichoice_option("Register", 
                                                "Default Register Mode",
@@ -255,25 +252,19 @@ gnc_register_get_default_type(SplitRegister *reg)
   else if (safe_strcmp(style_string, "auto_double") == 0)
     new_style = REG_DOUBLE_DYNAMIC;
 
-  type |= new_style;
-
   if (style_string != NULL)
     free(style_string);
 
-  return type;
+  return new_style;
 }
 
 
 static void
-gnc_register_change_style(RegWindow *regData, int style_code)
+gnc_register_change_style(RegWindow *regData, SplitRegisterStyle style)
 {
   SplitRegister *reg = regData->ledger->ledger;
-  int type = reg->type;
 
-  type &= ~REG_STYLE_MASK;
-  type |=  style_code;
-
-  xaccConfigSplitRegister(reg, type);
+  xaccConfigSplitRegister(reg, reg->type, style);
 
   regData->ledger->dirty = 1;
   xaccLedgerDisplayRefresh(regData->ledger);
@@ -892,7 +883,7 @@ gnc_register_create_status_bar(RegWindow *regData)
 
   regData->statusbar = statusbar;
 
-  switch (regData->ledger->ledger->type & REG_TYPE_MASK)
+  switch (regData->ledger->type)
   {
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
@@ -1318,12 +1309,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     GtkWidget *widget;
     int index;
-    int style;
 
-    style = gnc_register_get_default_type(regData->ledger->ledger);
-    style &= REG_STYLE_MASK;
-
-    switch (style)
+    switch (gnc_get_default_register_style())
     {
       default:
       case REG_SINGLE_LINE:
@@ -1430,11 +1417,9 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
    * when you are entering transactions. */
   {
     SplitRegister *sr = regData->ledger->ledger;
-    int type = sr->type;
+    SplitRegisterStyle style = sr->style;
 
-    type &= REG_STYLE_MASK;
-
-    if ((type == REG_SINGLE_LINE) || (type == REG_DOUBLE_LINE))
+    if ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE))
     {
       Split *blank_split;
 
@@ -1496,7 +1481,7 @@ gnc_reg_set_window_name(RegWindow *regData)
   if (regData == NULL)
     return;
 
-  switch (regData->ledger->type & REG_TYPE_MASK)
+  switch (regData->ledger->type)
   {
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
@@ -1667,19 +1652,17 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   }
 
   /* be sure to initialize the gui elements associated with the cursor */
-  xaccConfigSplitRegister(ledger->ledger,
-                          gnc_register_get_default_type(ledger->ledger));
+  xaccConfigSplitRegister(ledger->ledger, ledger->type,
+                          gnc_get_default_register_style());
 
   /* Allow grow, allow shrink, auto-shrink */
   gtk_window_set_policy(GTK_WINDOW(register_window), TRUE, TRUE, TRUE);
 
   {
-    int type;
     int *width;
     char *prefix;
 
-    type = ledger->ledger->type & REG_TYPE_MASK;
-    switch (type)
+    switch (ledger->type)
     {
       case STOCK_REGISTER:
       case PORTFOLIO_LEDGER:
@@ -1798,7 +1781,7 @@ gnc_reg_save_size(RegWindow *regData)
   int *width;
   char *prefix;
 
-  switch (regData->ledger->ledger->type & REG_TYPE_MASK)
+  switch (regData->ledger->type)
   {
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
@@ -2261,13 +2244,13 @@ gnc_transaction_delete_query(GtkWindow *parent)
 static void
 deleteCB(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
+  SplitRegisterStyle style;
   CursorType cursor_type;
   Transaction *trans;
   char *buf = NULL;
   Split *split;
   gint result;
-  int style;
 
   /* get the current split based on cursor position */
   split = xaccSRGetCurrentSplit(regData->ledger->ledger);
@@ -2278,7 +2261,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   }
 
   trans = xaccSplitGetParent(split);
-  style = regData->ledger->ledger->type & REG_STYLE_MASK;
+  style = regData->ledger->ledger->style;
   cursor_type = xaccSplitRegisterGetCursorType(regData->ledger->ledger);
 
   /* Deleting the blank split just cancels */
