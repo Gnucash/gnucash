@@ -3,5 +3,6 @@ Makefile.in
 *.lo
 *.la
 .deps
+.libs
 *.diff
 gnc-dir.h
