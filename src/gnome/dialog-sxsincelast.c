@@ -791,6 +791,7 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
                                                    &maybeKey, &maybeValue ) ) {
                         g_hash_table_remove( tct->varBindings, maybeKey );
                         g_free( maybeValue );
+                        /* Does the maybeKey need to be freed? */
                 }
                 g_hash_table_insert( tct->varBindings, maybeKey, num );
         }
