@@ -207,7 +207,8 @@
     
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
-     doc (sprintf #f (_ "Balance sheet at %s")
+     doc (sprintf #f "%s %s"
+		  (get-option gnc:pagename-general gnc:optname-reportname)
                   (gnc:print-date to-date-tp)))
 
     (if (not (null? accounts))
