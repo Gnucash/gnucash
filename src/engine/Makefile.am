@@ -46,6 +46,7 @@ libgncmod_engine_la_SOURCES = \
   qofbook.c \
   qofclass.c \
   qofid.c \
+  qofinstance.c \
   qofobject.c \
   qofquery.c \
   qofquerycore.c \
@@ -100,6 +101,7 @@ gncinclude_HEADERS = \
   qofbook.h \
   qofclass.h \
   qofid.h \
+  qofinstance.h \
   qofobject.h \
   qofquery.h \
   qofquerycore.h \
