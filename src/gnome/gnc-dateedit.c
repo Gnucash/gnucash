@@ -32,7 +32,6 @@
  */
 
 #include <config.h>
-#include <gnomesupport.h>
 #include <string.h>
 #include <stdlib.h> /* atoi */
 #include <ctype.h> /* isdigit */
@@ -93,6 +92,35 @@ gnc_date_edit_get_type (void)
 	}
 	
 	return date_edit_type;
+}
+
+
+static char *
+gnc_strtok_r (char *s, const char *delim, char **save_ptr)
+{
+  char *token;
+
+  if (s == NULL)
+    s = *save_ptr;
+
+  /* Scan leading delimiters.  */
+  s += strspn (s, delim);
+  if (*s == '\0')
+    return NULL;
+
+  /* Find the end of the token.  */
+  token = s;
+  s = strpbrk (token, delim);
+  if (s == NULL)
+    /* This token finishes the string.  */
+    *save_ptr = strchr (token, '\0');
+  else
+    {
+      /* Terminate the token and make *SAVE_PTR point past it.  */
+      *s = '\0';
+      *save_ptr = s + 1;
+    }
+  return token;
 }
 
 static void
@@ -758,18 +786,20 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 
 		str = g_strdup (gtk_entry_get_text
                                 (GTK_ENTRY (gde->time_entry)));
-		temp = strtok_r (str, ": ", &tokp);
+		temp = gnc_strtok_r (str, ": ", &tokp);
 		if (temp) {
 			tm.tm_hour = atoi (temp);
-			temp = strtok_r (NULL, ": ", &tokp);
+			temp = gnc_strtok_r (NULL, ": ", &tokp);
 			if (temp) {
 				if (isdigit (*temp)) {
 					tm.tm_min = atoi (temp);
-					flags = strtok_r (NULL, ": ", &tokp);
+					flags = gnc_strtok_r (NULL, ": ",
+                                                              &tokp);
 					if (flags && isdigit (*flags)) {
 						tm.tm_sec = atoi (flags);
-						flags = strtok_r (NULL, ": ",
-                                                                  &tokp);
+						flags = gnc_strtok_r (NULL,
+                                                                      ": ",
+                                                                      &tokp);
 					}
 				} else
 					flags = temp;
