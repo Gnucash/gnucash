@@ -1899,6 +1899,24 @@ xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts)
    *ts = (trans->date_entered);
 }
 
+Timespec
+xaccTransRetDatePostedTS (Transaction *trans)
+{
+   Timespec ts;
+   ts.tv_sec = 0; ts.tv_nsec = 0;
+   if (!trans) return ts;
+   return (trans->date_posted);
+}
+
+Timespec
+xaccTransRetDateEnteredTS (Transaction *trans)
+{
+   Timespec ts;
+   ts.tv_sec = 0; ts.tv_nsec = 0;
+   if (!trans) return ts;
+   return (trans->date_entered);
+}
+
 int
 xaccTransCountSplits (Transaction *trans)
 {

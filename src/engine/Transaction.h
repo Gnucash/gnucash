@@ -217,6 +217,9 @@ void          xaccTransGetDateTS (Transaction *trans, Timespec *ts);
 
 void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
 
+Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
+Timespec      xaccTransRetDatePostedTS (Transaction *trans);
+
 /* The xaccTransCountSplits() method returns the number of splits
  * in a transaction.
  */
