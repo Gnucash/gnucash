@@ -67,6 +67,7 @@ enum
 {
         ACTIVATE_CURSOR,
         REDRAW_ALL,
+        REDRAW_HELP,
         LAST_SIGNAL
 };
 
@@ -535,6 +536,14 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
         gtk_signal_emit_by_name (GTK_OBJECT (sheet->reg), "redraw_all");
 }
 
+void
+gnucash_sheet_redraw_help (GnucashSheet *sheet)
+{
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET(sheet));
+
+        gtk_signal_emit_by_name (GTK_OBJECT (sheet->reg), "redraw_help");
+}
 
 void
 gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
@@ -1893,14 +1902,16 @@ gnucash_sheet_block_set_from_table (GnucashSheet *sheet,
 
         vcell = gnc_table_get_virtual_cell (table, vcell_loc);
 
-        if (block->style && (block->style != style)) {
+        if (block->style && (block->style != style))
+        {
                 gnucash_style_unref (block->style);
                 block->style = NULL;
         }
 
         block->visible = (vcell) ? vcell->visible : TRUE;
 
-        if (block->style == NULL) {
+        if (block->style == NULL)
+        {
                 block->style = style;
                 gnucash_style_ref(block->style);
                 return TRUE;
@@ -2074,7 +2085,7 @@ void
 gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
 {
         Table *table;
-        gint num_virt_rows;
+        gint num_header_phys_rows;
         gint i, j;
 
         g_return_if_fail (sheet != NULL);
@@ -2082,24 +2093,34 @@ gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll)
         g_return_if_fail (sheet->table != NULL);
 
         table = sheet->table;
-        num_virt_rows = table->num_virt_rows;
-
-        gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
 
         gtk_layout_freeze (GTK_LAYOUT(sheet));
 
         gnucash_sheet_stop_editing (sheet);
 
-        /* resize the sheet */
         gnucash_sheet_resize (sheet);
+
+        num_header_phys_rows = 0;
 
         /* fill it up */
         for (i = 0; i < table->num_virt_rows; i++)
-                for (j = 0; j < table->num_virt_cols; j++) {
+                for (j = 0; j < table->num_virt_cols; j++)
+                {
                         VirtualCellLocation vcell_loc = { i, j };
+                        VirtualCell *vcell;
 
                         gnucash_sheet_block_set_from_table (sheet, vcell_loc);
+
+                        vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+
+                        num_header_phys_rows =
+                                MAX (num_header_phys_rows,
+                                     vcell->cellblock->num_rows);
                 }
+
+        gnucash_header_set_header_rows (GNUCASH_HEADER (sheet->header_item),
+                                        num_header_phys_rows);
+        gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
 
         gnucash_sheet_recompute_block_offsets (sheet);
 
@@ -2337,11 +2358,21 @@ gnucash_register_class_init (GnucashRegisterClass *class)
                                gtk_marshal_NONE__NONE,
                                GTK_TYPE_NONE, 0);
 
+        register_signals[REDRAW_HELP] =
+                gtk_signal_new("redraw_help",
+                               GTK_RUN_LAST,
+                               object_class->type,
+                               GTK_SIGNAL_OFFSET(GnucashRegisterClass,
+                                                 redraw_help),
+                               gtk_marshal_NONE__NONE,
+                               GTK_TYPE_NONE, 0);
+
         gtk_object_class_add_signals(object_class, register_signals,
                                      LAST_SIGNAL);
 
         class->activate_cursor = NULL;
         class->redraw_all = NULL;
+        class->redraw_help = NULL;
 }
 
 

@@ -39,12 +39,15 @@ typedef struct {
 
         char *cursor_name;
 
-        int row;
+        int num_phys_rows;
+
         int in_resize;
         int resize_col_width;
         int resize_x;
         int resize_col;
-        int needs_ungrab;
+
+        gboolean needs_ungrab;
+
         int height;
         int width;
 
@@ -62,6 +65,8 @@ typedef struct {
 GtkWidget *gnucash_header_new (GnucashSheet *sheet);
 void gnucash_header_reconfigure (GnucashHeader *header);
 
+void gnucash_header_set_header_rows (GnucashHeader *header,
+                                     int num_phys_rows);
 
 #endif /* GNUCASH_HEADER_H */
 

@@ -94,20 +94,15 @@ gnc_table_init (Table * table)
   table->num_virt_rows = -1;
   table->num_virt_cols = -1;
 
-  table->num_header_phys_rows = -1;
-
   table->current_cursor = NULL;
 
   gnc_virtual_location_init (&table->current_cursor_loc);
 
-  table->set_help = NULL;
-
-  table->dividing_row = -1;
-
   /* initialize private data */
 
   table->virt_cells = NULL;
-
+  table->ui_redraw_help = NULL;
+  table->ui_destroy = NULL;
   table->ui_data = NULL;
 }
 
@@ -368,7 +363,31 @@ gnc_table_is_popup (Table *table, VirtualLocation virt_loc)
   return cb_cell->cell->is_popup;
 }
 
-/* ==================================================== */
+char *
+gnc_table_get_help (Table *table)
+{
+  VirtualCell *vcell;
+  CellBlockCell *cb_cell;
+  VirtualLocation virt_loc;
+
+  if (!table)
+    return NULL;
+
+  virt_loc = table->current_cursor_loc;
+
+  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
+  if (!vcell)
+    return NULL;
+
+  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
+                                    virt_loc.phys_row_offset,
+                                    virt_loc.phys_col_offset);
+
+  if (!cb_cell || !cb_cell->cell)
+    return FALSE;
+
+  return xaccBasicCellGetHelp (cb_cell->cell);
+}
 
 void 
 gnc_table_set_size (Table * table, int virt_rows, int virt_cols)
@@ -920,16 +939,8 @@ gnc_table_enter_update(Table *table,
     g_free (old_value);
   }
 
-  if (table->set_help)
-  {
-    char *help_str;
-
-    help_str = xaccBasicCellGetHelp(cell);
-
-    table->set_help(table, help_str);
-
-    g_free(help_str);
-  }
+  if (table->ui_redraw_help)
+    table->ui_redraw_help (table);
 
   LEAVE("return %d\n", can_edit);
 
@@ -1072,16 +1083,8 @@ gnc_table_modify_update(Table *table,
 
   g_free (old_value);
 
-  if (table->set_help)
-  {
-    char *help_str;
-
-    help_str = xaccBasicCellGetHelp (cell);
-
-    table->set_help (table, help_str);
-
-    g_free (help_str);
-  }
+  if (table->ui_redraw_help)
+    table->ui_redraw_help (table);
 
   LEAVE ("change %d %d (relrow=%d relcol=%d) val=%s\n", 
          virt_loc.vcell_loc.virt_row,
@@ -1156,16 +1159,8 @@ gnc_table_direct_update (Table *table,
 
   g_free (old_value);
 
-  if (table->set_help)
-  {
-    char *help_str;
-
-    help_str = xaccBasicCellGetHelp (cell);
-
-    table->set_help (table, help_str);
-
-    g_free (help_str);
-  }
+  if (table->ui_redraw_help)
+    table->ui_redraw_help (table);
 
   return result;
 }

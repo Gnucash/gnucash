@@ -115,10 +115,8 @@ struct _VirtualCell
 
 typedef struct table Table;
 
+typedef void (*TableRedrawHelpFunc) (Table *table);
 typedef void (*TableDestroyFunc) (Table *table);
-
-typedef void (*TableSetHelpFunc) (Table *table,
-                                  const char *help_str);
 
 struct table
 {
@@ -126,29 +124,19 @@ struct table
   TableLayout *layout;
   TableModel *model;
 
-  short num_virt_rows;
-  short num_virt_cols;
-
-  short num_header_phys_rows;
+  int num_virt_rows;
+  int num_virt_cols;
 
   CellBlock *current_cursor;
 
   VirtualLocation current_cursor_loc;
 
-  /* callback to set a help string associated with a cell */
-  TableSetHelpFunc set_help;
-
-  /* If positive, denotes a row that marks a boundary that should
-   * be visually distinguished. */
-  short dividing_row;
-
   /* private data */
-
-  /* This is black-box stuff that higher-level code should not access */
 
   /* The virtual cell table */
   GTable *virt_cells;
 
+  TableRedrawHelpFunc ui_redraw_help;
   TableDestroyFunc ui_destroy;
   gpointer ui_data;
 };
@@ -178,7 +166,7 @@ gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
                                                VirtualCellLocation vcell_loc);
 
 /* This function returns the virtual cell associated with a particular
- *   virtual location. If the location is out of bounds, NULL is
+ *   virtual location. If the location is out of bounds, NULL is *
  *   returned. */
 VirtualCell *  gnc_table_get_virtual_cell (Table *table,
                                            VirtualCellLocation vcell_loc);
@@ -201,14 +189,15 @@ CellAlignment  gnc_table_get_align (Table *table, VirtualLocation virt_loc);
 
 gboolean       gnc_table_is_popup (Table *table, VirtualLocation virt_loc);
 
+char *         gnc_table_get_help (Table *table);
+
+
 /* Return the virtual cell of the header */
 VirtualCell *  gnc_table_get_header_cell (Table *table);
 
 /* The gnc_table_set_size() method will resize the table to the
  *   indicated dimensions.  */
 void        gnc_table_set_size (Table * table, int virt_rows, int virt_cols);
-
-void        gnc_table_realize_gui (Table *table);
 
 /* Indicate what handler should be used for a given virtual block */
 void        gnc_table_set_vcell (Table *table, CellBlock *cursor,
@@ -270,6 +259,8 @@ gboolean    gnc_table_find_close_valid_cell (Table *table,
 
 /* Initialize the GUI from a table */
 void        gnc_table_init_gui (gncUIWidget widget, gpointer data);
+
+void        gnc_table_realize_gui (Table *table);
 
 /* Refresh the current cursor gui */
 void        gnc_table_refresh_current_cursor_gui (Table * table,

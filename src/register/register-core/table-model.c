@@ -34,6 +34,8 @@ gnc_table_model_new (void)
 
   model = g_new0 (TableModel, 1);
 
+  model->dividing_row = -1;
+
   return model;
 }
 

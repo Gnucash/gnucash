@@ -119,7 +119,6 @@ static void advance_toggle( GtkButton *b, SchedXactionEditorDialog *sxed );
 /* ledger standard-handlers */
 static void sxe_ledger_destroy( xaccLedgerDisplay *ld );
 static gncUIWidget sxe_ledger_get_parent( xaccLedgerDisplay *ld );
-static void sxe_ledger_set_help( xaccLedgerDisplay *ld, const char *help_str );
 
 /* ledger callbacks */
 static void sxe_register_record_cb( GnucashRegister *reg, gpointer d );
@@ -681,8 +680,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 
         xaccLedgerDisplaySetHandlers( sxed->ledger,
                                       sxe_ledger_destroy,
-                                      sxe_ledger_get_parent,
-                                      sxe_ledger_set_help );
+                                      sxe_ledger_get_parent );
         xaccLedgerDisplaySetUserData( sxed->ledger, (gpointer)sxed );
 
         splitreg = xaccLedgerDisplayGetSR( sxed->ledger );
@@ -1056,19 +1054,6 @@ sxe_ledger_get_parent( xaccLedgerDisplay *ld )
            doesn't look like it from window-register.c:gnc_register_get_parent
         */
         return sxed->dialog;
-}
-
-static
-void
-sxe_ledger_set_help( xaccLedgerDisplay *ld, const char *help_str )
-{
-        /* FIXME: display the given help text somewhere.
-           FIXME: well, we have the place, but this is called far too often
-        */
-#if 0
-        DEBUG( "FIXME: sxe_ledger_set_help called with \"%s\"\n",
-                help_str );
-#endif /* 0 */
 }
 
 static

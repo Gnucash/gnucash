@@ -69,7 +69,7 @@ typedef enum
   INCOME_LEDGER,
   PORTFOLIO_LEDGER,
   SEARCH_LEDGER,
-  
+
   NUM_REGISTER_TYPES
 } SplitRegisterType;
 
@@ -133,14 +133,14 @@ typedef enum
 #define CURSOR_DOUBLE_JOURNAL "cursor-double-journal"
 #define CURSOR_SPLIT          "cursor-split"
 
-typedef struct _SplitRegister SplitRegister;
+typedef struct split_register SplitRegister;
 
 typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
 
-struct _SplitRegister
+struct split_register
 {
   /* the table itself that implements the underlying GUI. */
-  Table         * table;
+  Table * table;
 
   SplitRegisterType type;
   SplitRegisterStyle style;

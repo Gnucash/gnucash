@@ -150,6 +150,7 @@ gint gnucash_sheet_col_max_width (GnucashSheet *sheet,
                                   gint virt_col, gint cell_col);
 
 void gnucash_sheet_redraw_all (GnucashSheet *sheet);
+void gnucash_sheet_redraw_help (GnucashSheet *sheet);
 
 void gnucash_sheet_redraw_block (GnucashSheet *sheet,
                                  VirtualCellLocation vcell_loc);
@@ -210,6 +211,7 @@ typedef struct
 
         void (*activate_cursor) (GnucashRegister *reg);
         void (*redraw_all)      (GnucashRegister *reg);
+        void (*redraw_help)     (GnucashRegister *reg);
 } GnucashRegisterClass;
 
 #endif

@@ -172,8 +172,7 @@ xaccSRDestroyRegisterData (SplitRegister *reg)
 
 void
 xaccSRSetData (SplitRegister *reg, void *user_data,
-               SRGetParentCallback get_parent,
-               SRSetHelpCallback set_help)
+               SRGetParentCallback get_parent)
 {
   SRInfo *info = xaccSRGetInfo (reg);
 
@@ -181,7 +180,6 @@ xaccSRSetData (SplitRegister *reg, void *user_data,
 
   info->user_data = user_data;
   info->get_parent = get_parent;
-  info->set_help = set_help;
 }
 
 void
@@ -356,26 +354,6 @@ xaccSRCurrentTransExpanded (SplitRegister *reg)
 
   return info->trans_expanded;
 }
-
-/* ======================================================== */
-
-static void
-LedgerSetHelp (Table *table, const char *help_str)
-{
-  /* FIXME */
-  return;
-#if 0
-  SplitRegister *reg = table->user_data;
-  SRInfo *info = xaccSRGetInfo(reg);
-
-  if (info->set_help == NULL)
-    return;
-
-  info->set_help(info->user_data, help_str);
-#endif
-}
-
-/* ======================================================== */
 
 static void
 LedgerDestroy (SplitRegister *reg)
@@ -3596,7 +3574,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
   /* disable move callback -- we don't want the cascade of 
    * callbacks while we are fiddling with loading the register */
-  table->control->allow_move = FALSE;
+  gnc_table_control_allow_move (table->control, FALSE);
 
   /* invalidate the cursor */
   {
@@ -3649,7 +3627,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     }
   }
 
-  table->dividing_row = -1;
+  table->model->dividing_row = -1;
 
   if (multi_line)
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -3682,7 +3660,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
         !found_divider &&
         (present < xaccTransGetDate (trans)))
     {
-      table->dividing_row = vcell_loc.virt_row;
+      table->model->dividing_row = vcell_loc.virt_row;
       found_divider = TRUE;
     }
 
@@ -3853,9 +3831,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
                             recn_cell_confirm, reg);
 
   /* enable callback for cursor user-driven moves */
-  table->control->allow_move = TRUE;
-
-  table->set_help = LedgerSetHelp;
+  gnc_table_control_allow_move (table->control, TRUE);
 
   reg->destroy = LedgerDestroy;
 

@@ -99,7 +99,23 @@ gnc_table_save_state (Table *table)
 }
 
 static void
-table_destroy_cb(Table *table)
+table_ui_redraw_cb (Table *table)
+{
+        GnucashSheet *sheet;
+
+        if (table == NULL)
+                return;
+
+        if (table->ui_data == NULL)
+                return;
+
+        sheet = GNUCASH_SHEET (table->ui_data);
+
+        gnucash_sheet_redraw_help (sheet);
+}
+
+static void
+table_destroy_cb (Table *table)
 {
         GnucashSheet *sheet;
 
@@ -130,10 +146,11 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
         g_return_if_fail (data != NULL);
 
-        greg = GNUCASH_REGISTER(widget);
-        sheet = GNUCASH_SHEET(greg->sheet);
+        greg = GNUCASH_REGISTER (widget);
+        sheet = GNUCASH_SHEET (greg->sheet);
         table = sheet->table;
 
+        table->ui_redraw_help = table_ui_redraw_cb;
         table->ui_destroy = table_destroy_cb;
         table->ui_data = sheet;
 
@@ -150,7 +167,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
         else
                 alist = SCM_EOL;
 
-        while (gh_list_p(alist) && !gh_null_p(alist))
+        while (gh_list_p (alist) && !gh_null_p (alist))
         {
                 char *name;
                 CellType ctype;

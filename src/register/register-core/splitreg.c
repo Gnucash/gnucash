@@ -866,8 +866,6 @@ xaccInitSplitRegister (SplitRegister *reg,
     header = gnc_table_layout_get_cursor (reg->table->layout, CURSOR_HEADER);
 
     gnc_table_set_vcell (reg->table, header, NULL, TRUE, TRUE, vcell_loc);
-
-    reg->table->num_header_phys_rows = use_double_line ? 2 : 1;
   }
 
   /* Set up first and only initial row */
@@ -905,8 +903,6 @@ xaccConfigSplitRegister (SplitRegister *reg,
 
   reg->style = newstyle;
   reg->use_double_line = use_double_line;
-
-  reg->table->num_header_phys_rows = use_double_line ? 2 : 1;
 
   gnc_table_realize_gui (reg->table);
 }

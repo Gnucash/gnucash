@@ -70,8 +70,7 @@ gpointer xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld);
 /* set the handlers used by the ledger display */
 void xaccLedgerDisplaySetHandlers (xaccLedgerDisplay *ld,
                                    LedgerDisplayDestroy destroy,
-                                   LedgerDisplayGetParent get_parent,
-                                   LedgerDisplaySetHelp set_help);
+                                   LedgerDisplayGetParent get_parent);
 
 /* return the split register associated with a ledger display */
 SplitRegister * xaccLedgerDisplayGetSR (xaccLedgerDisplay *ld);

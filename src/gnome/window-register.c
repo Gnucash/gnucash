@@ -117,9 +117,10 @@ static int last_stock_width = 0;
 
 /** PROTOTYPES ******************************************************/
 static void gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
+static void gnc_register_redraw_help_cb (GnucashRegister *g_reg,
+                                         gpointer data);
 static void gnc_reg_refresh_toolbar(RegWindow *regData);
 static void regDestroy(xaccLedgerDisplay *ledger);
-static void regSetHelp(xaccLedgerDisplay *ledger, const char *help_str);
 static void gnc_register_check_close(RegWindow *regData);
 static void cutCB(GtkWidget *w, gpointer data);
 static void copyCB(GtkWidget *w, gpointer data);
@@ -1985,8 +1986,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
   xaccLedgerDisplaySetHandlers (ledger,
                                 regDestroy,
-                                gnc_register_get_parent,
-                                regSetHelp);
+                                gnc_register_get_parent);
 
   register_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 
@@ -2133,6 +2133,8 @@ regWindowLedger (xaccLedgerDisplay *ledger)
                         GTK_SIGNAL_FUNC(gnc_register_record_cb), regData);
     gtk_signal_connect (GTK_OBJECT(register_widget), "redraw_all",
                         GTK_SIGNAL_FUNC(gnc_register_redraw_all_cb), regData);
+    gtk_signal_connect (GTK_OBJECT(register_widget), "redraw_help",
+                        GTK_SIGNAL_FUNC(gnc_register_redraw_help_cb), regData);
 
     popup = gnc_register_create_popup_menu (regData);
     gnucash_register_attach_popup (GNUCASH_REGISTER(register_widget),
@@ -2450,6 +2452,27 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
   }
 }
 
+static void
+gnc_register_redraw_help_cb (GnucashRegister *g_reg, gpointer data)
+{
+  RegWindow *regData = data;
+  SplitRegister *reg;
+  const char *status;
+  char *help;
+
+  if (!regData)
+    return;
+
+  reg = xaccLedgerDisplayGetSR (regData->ledger);
+
+  help = gnc_table_get_help (reg->table);
+
+  status = help ? help : "";
+
+  gnome_appbar_set_default (GNOME_APPBAR(regData->statusbar), status);
+
+  g_free (help);
+}
 
 static void
 gnc_reg_save_size (RegWindow *regData)
@@ -2505,24 +2528,6 @@ regDestroy (xaccLedgerDisplay *ledger)
   }
 
   xaccLedgerDisplaySetUserData (ledger, NULL);
-}
-
-
-static void
-regSetHelp (xaccLedgerDisplay *ledger, const char *help_str)
-{
-  RegWindow *regData = xaccLedgerDisplayGetUserData (ledger);
-  const gchar *status;
-
-  if (!regData)
-    return;
-
-  if (help_str != NULL)
-    status = help_str;
-  else
-    status = "";
-
-  gnome_appbar_set_default (GNOME_APPBAR(regData->statusbar), status);
 }
 
 

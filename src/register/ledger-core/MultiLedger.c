@@ -62,7 +62,6 @@ struct _xaccLedgerDisplay
 
   LedgerDisplayDestroy destroy;
   LedgerDisplayGetParent get_parent;
-  LedgerDisplaySetHelp set_help;
 
   gpointer user_data;
 
@@ -126,15 +125,13 @@ xaccLedgerDisplayGetUserData (xaccLedgerDisplay *ld)
 void
 xaccLedgerDisplaySetHandlers (xaccLedgerDisplay *ld,
                               LedgerDisplayDestroy destroy,
-                              LedgerDisplayGetParent get_parent,
-                              LedgerDisplaySetHelp set_help)
+                              LedgerDisplayGetParent get_parent)
 {
   if (!ld)
     return;
 
   ld->destroy = destroy;
   ld->get_parent = get_parent;
-  ld->set_help = set_help;
 }
 
 SplitRegister *
@@ -489,20 +486,6 @@ xaccLedgerDisplayParent (void *user_data)
   return regData->get_parent (regData);
 }
 
-static void
-xaccLedgerDisplaySetHelp (void *user_data, const char *help_str)
-{
-  xaccLedgerDisplay *regData = user_data;
-
-  if (regData == NULL)
-    return;
-
-  if (regData->set_help == NULL)
-    return;
-
-  regData->set_help (regData, help_str);
-}
-
 static gpointer
 xaccMLGUIDMalloc (void)
 {
@@ -786,7 +769,6 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   ld->loading = FALSE;
   ld->destroy = NULL;
   ld->get_parent = NULL;
-  ld->set_help = NULL;
   ld->user_data = NULL;
 
   show_all = gnc_lookup_boolean_option ("Register",
@@ -838,9 +820,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   ld->control->user_data = ld->reg;
 
-  xaccSRSetData (ld->reg, ld,
-                 xaccLedgerDisplayParent,
-                 xaccLedgerDisplaySetHelp);
+  xaccSRSetData (ld->reg, ld, xaccLedgerDisplayParent);
 
   ld->reg->template = templateMode;
 

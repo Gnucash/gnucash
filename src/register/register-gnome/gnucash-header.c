@@ -90,9 +90,8 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         bg_color = gnucash_color_argb_to_gdk (argb);
 
         h = style->dimensions->height;
-        if (header->style->nrows == 1 &&
-            header->sheet->table->num_header_phys_rows == 2)
-                h *= 2;
+        h *= header->num_phys_rows;
+        h /= header->style->nrows;
 
         gdk_gc_set_foreground (header->gc, bg_color);
 
@@ -282,12 +281,11 @@ gnucash_header_destroy (GtkObject *object)
 void
 gnucash_header_reconfigure (GnucashHeader *header)
 {
-        int w, h;
-
         GnomeCanvas *canvas;
         GtkWidget *widget;
         GnucashSheet *sheet;
         SheetBlockStyle *old_style;
+        int w, h;
 
         g_return_if_fail (header != NULL);
         g_return_if_fail (GNUCASH_IS_HEADER (header));
@@ -303,18 +301,12 @@ gnucash_header_reconfigure (GnucashHeader *header)
         if (header->style == NULL)
                 return;
 
-        /* Check for a valid header row. This can be invalid during
-           arg setting. */
-        if (header->row < 0 || header->row >= header->style->nrows)
-                return;
-
         sheet->width = header->style->dimensions->width;
 
         w = header->style->dimensions->width;
         h = header->style->dimensions->height;
-        if (header->style->nrows == 1 &&
-            header->sheet->table->num_header_phys_rows == 2)
-                h *= 2;
+        h *= header->num_phys_rows;
+        h /= header->style->nrows;
         h += 2;
 
         if (header->height != h ||
@@ -331,6 +323,16 @@ gnucash_header_reconfigure (GnucashHeader *header)
 
                 gnucash_header_request_redraw (header);
         }
+}
+
+void
+gnucash_header_set_header_rows (GnucashHeader *header,
+                                int num_phys_rows)
+{
+        g_return_if_fail (header != NULL);
+        g_return_if_fail (GNUCASH_IS_HEADER (header));
+
+        header->num_phys_rows = num_phys_rows;
 }
 
 static double
@@ -357,7 +359,7 @@ pointer_on_resize_line (GnucashHeader *header, int x, int y, int *col)
         int j;
 
         for (j = 0; j < style->ncols; j++) {
-                cd = gnucash_style_get_cell_dimensions (style, header->row, j);
+                cd = gnucash_style_get_cell_dimensions (style, 0, j);
                 pixels += cd->pixel_width;
                 if (x >= pixels - 1 && x <= pixels + 1)
                         on_the_line = TRUE;
@@ -370,7 +372,6 @@ pointer_on_resize_line (GnucashHeader *header, int x, int y, int *col)
 
         return on_the_line;
 }
-
 
 static int
 find_resize_col (GnucashHeader *header, int col)
@@ -493,9 +494,8 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
                 if (col > -1) {
                         CellDimensions *cd;
 
-                        cd = gnucash_style_get_cell_dimensions (header->style,
-                                                                header->row,
-                                                                col);
+                        cd = gnucash_style_get_cell_dimensions
+                                (header->style, 0, col);
 
                         header->in_resize = TRUE;
                         header->resize_col = col;

@@ -98,9 +98,6 @@ struct _SRInfo
 
   /* hook to get parent widget */
   SRGetParentCallback get_parent;
-
-  /* hook to set help string */
-  SRSetHelpCallback set_help;
 };
 
 

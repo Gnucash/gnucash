@@ -97,6 +97,10 @@ typedef struct
 
   gpointer handler_user_data;
 
+  /* If positive, denotes a row that marks a boundary that should
+   * be visually distinguished. */
+  int dividing_row;
+
   VirtCellDataAllocator cell_data_allocator;
   VirtCellDataDeallocator cell_data_deallocator;
   VirtCellDataCopy cell_data_copy;

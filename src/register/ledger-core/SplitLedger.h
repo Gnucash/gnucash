@@ -61,8 +61,7 @@ typedef gboolean (*SRReverseBalanceCallback) (Account *account);
 /* The xaccSRSetData() method sets the user data and callback
  *    hooks for the register. */
 void xaccSRSetData(SplitRegister *reg, gpointer user_data,
-                   SRGetParentCallback get_parent,
-                   SRSetHelpCallback set_help);
+                   SRGetParentCallback get_parent);
 
 /* The xaccSRSetReverseBalanceCallback() method sets up
  *    a callback used to determine whether split balances
