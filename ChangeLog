@@ -1,3 +1,11 @@
+2003-03-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/import-backend.c:
+	* src/import-export/import-match-map.c:
+	* src/import-export/import-match-map.h:
+	  Chris Morgan's Baysian Matching code, to match transactions
+	  based on Bayesian filtering of previously matched transactions.
+
 2003-03-06  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Include a latest
