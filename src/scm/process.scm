@@ -20,7 +20,11 @@
 ;;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "process.scm")
+(define-module (gnucash process))
+
+(export gnc:run-sub-process)
+(export gnc:cleanup-sub-process)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -35,7 +39,7 @@
 ;;;
 ;;; For example:
 ;;;
-;;;   (run-sub-process "/bin/date" "--rfc-822")
+;;;   (run-sub-process #f "/bin/date" "/bin/date" "--rfc-822")
 ;;;
 
 (define (gnc:run-sub-process envt path . args)
@@ -50,6 +54,9 @@
                (child-write-pipe (cdr child-to-parent-pipe))
                (pid (false-if-exception (primitive-fork))))
           
+          (setvbuf parent-write-pipe _IONBF)
+          (setvbuf child-write-pipe _IONBF)
+
           (if (not (zero? pid))
               ;; we're the parent
               (begin
@@ -93,12 +100,12 @@
              ((= kill-level SIGINT)
               (kill pid SIGINT)
               (sleep clean-secs)
-              (loop (waitpid waitopt) SIGKILL))
+              (loop (waitpid pid waitopt) SIGKILL))
              ;; cut the cord on the piano.
              (else
               (kill pid SIGKILL)
               (sleep clean-secs)
-              (loop (waitpid waitopt) SIGKILL))))))))
+              (loop (waitpid pid waitopt) SIGKILL))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
