@@ -1,3 +1,13 @@
+2001-06-24  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/sql/kvp-sql.c: same as below
+
+	* src/engine/sql/txn.c: same as below
+
+	* src/engine/sql/price.c: same as below
+
+	* src/engine/sql/checkpoint.c: use strtoll instead of atoll
+
 2001-06-24  Kevin Finn  <kevinfinn@mediaone.net>
 
 	* src/gnome/dialog-transfer.[ch]: reformatted my previous changes

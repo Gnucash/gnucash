@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <stdio.h>  
+#include <stdlib.h>
 #include <string.h>  
 
 #include <libpq-fe.h>  
@@ -547,7 +548,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
               (DB_GET_VAL("date_reconciled",j));
             xaccSplitSetDateReconciledTS (s, &ts);
 
-            num = atoll (DB_GET_VAL("value", j));
+            num = strtoll (DB_GET_VAL("value", j), NULL, 0);
             value = gnc_numeric_create (num, trans_frac);
             xaccSplitSetValue (s, value);
 
@@ -572,7 +573,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             {
                gnc_commodity *modity;
                gint64 acct_frac;
-               num = atoll (DB_GET_VAL("amount", j));
+               num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
                modity = xaccAccountGetCommodity (acc);
                acct_frac = gnc_commodity_get_fraction (modity);
                amount = gnc_numeric_create (num, acct_frac);
