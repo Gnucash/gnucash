@@ -325,22 +325,44 @@ gnc_table_get_label (Table *table, VirtualLocation virt_loc)
 guint32
 gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 {
-  if (!table || !table->model->fg_color_handler)
+  TableGetFGColorHandler fg_color_handler;
+  int cell_type;
+
+  if (!table || !table->model)
     return 0x0; /* black */
 
-  return table->model->fg_color_handler (virt_loc,
-                                         table->model->handler_user_data);
+  cell_type = gnc_table_get_cell_type (table, virt_loc);
+
+  fg_color_handler = gnc_table_model_get_fg_color_handler (table->model,
+                                                           cell_type);
+  if (!fg_color_handler)
+    return 0x0;
+
+  return fg_color_handler (virt_loc, table->model->handler_user_data);
 }
 
 guint32
 gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                         gboolean *hatching)
 {
-  if (!table || !table->model->bg_color_handler)
+  TableGetBGColorHandler bg_color_handler;
+  int cell_type;
+
+  if (!table || !table->model)
     return 0xffffff; /* white */
 
-  return table->model->bg_color_handler (virt_loc, hatching,
-                                         table->model->handler_user_data);
+  if (hatching)
+    *hatching = FALSE;
+
+  cell_type = gnc_table_get_cell_type (table, virt_loc);
+
+  bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
+                                                           cell_type);
+  if (!bg_color_handler)
+    return 0x0;
+
+  return bg_color_handler (virt_loc, hatching,
+                           table->model->handler_user_data);
 }
 
 void
