@@ -197,7 +197,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
 	GncTaxTable *table = NULL;
 	GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
-	gboolean taxincluded;
+	gboolean taxincluded = FALSE;
 	gnc_numeric discount = gnc_numeric_zero ();
 
 	owner = gncOwnerGetEndOwner (owner);

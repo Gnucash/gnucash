@@ -16,6 +16,9 @@
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/business-gnome" 0)
 
+(define invoice-page gnc:pagename-general)
+(define invoice-name (N_ "Invoice Number"))
+
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
 
@@ -196,7 +199,7 @@
     (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-inv-option
-   (gnc:make-invoice-option "__reg" "invoice" "" ""
+   (gnc:make-invoice-option invoice-page invoice-name "x" ""
 			    (lambda () #f) #f))
 
   (gnc:register-inv-option
@@ -504,113 +507,133 @@
   (let* ((document (gnc:make-html-document))
 	 (table '())
 	 (orders '())
-	 (invoice (opt-val "__reg" "invoice"))
-	 (owner (gnc:invoice-get-owner invoice))
-	 (entries (gnc:invoice-get-entries invoice))
+	 (invoice (opt-val invoice-page invoice-name))
+	 (owner #f)
+	 (entries #f)
 	 (references? (opt-val "Display" "References"))
-	 (title (string-append (_ "Invoice #") (gnc:invoice-get-id invoice))))
+	 (title (_ "Invoice")))
 
     (define (add-order o)
       (if (and references? (not (member o orders)))
 	  (addto! orders o)))
 
-    (set! table (make-entry-table entries
-				  (gnc:report-options report-obj)
-				  add-order))
+    (if invoice
+	(begin
+	  (set! owner (gnc:invoice-get-owner invoice))
+	  (set! entries (gnc:invoice-get-entries invoice))
+	  (set! title (string-append title " #"
+				     (gnc:invoice-get-id invoice)))))
 
     (gnc:html-document-set-title! document title)
 
-    (gnc:html-table-set-style!
-     table "table"
-     'attribute (list "border" 1)
-     'attribute (list "cellspacing" 0)
-     'attribute (list "cellpadding" 4))
+    (if invoice
+	(begin
+	  (set! table (make-entry-table entries
+					(gnc:report-options report-obj)
+					add-order))
 
-    (gnc:html-document-add-object!
-     document
-     (make-myname-table (opt-val "Display" "Today Date Format")))
+	  (gnc:html-table-set-style!
+	   table "table"
+	   'attribute (list "border" 1)
+	   'attribute (list "cellspacing" 0)
+	   'attribute (list "cellpadding" 4))
 
-    (let ((date-table (make-date-table)))
-      (make-date-row!
-       date-table
-       (_ "Invoice Date")
-       (gnc:invoice-get-date-posted invoice))
-      (make-date-row!
-       date-table
-       (_ "Due Date")
-       (gnc:invoice-get-date-due invoice))
-      (gnc:html-document-add-object! document date-table))
+	  (gnc:html-document-add-object!
+	   document
+	   (make-myname-table (opt-val "Display" "Today Date Format")))
 
-    (make-break! document)
-    (make-break! document)
+	  (let ((date-table #f)
+		(post-date (gnc:invoice-get-date-posted invoice))
+		(due-date (gnc:invoice-get-date-due invoice)))
 
-    (gnc:html-document-add-object!
-     document
-     (make-client-table owner orders))
-
-    (make-break! document)
-    (make-break! document)
-
-    (if (opt-val "Display" "Billing ID")
-	(let ((billing-id (gnc:invoice-get-billing-id invoice)))
-	  (if (and billing-id (> (string-length billing-id) 0))
-	      (begin
+	    (if (not (equal? post-date (cons 0 0)))
+		(begin
+		  (set! date-table (make-date-table))
+		  (make-date-row! date-table (_ "Invoice Date") post-date)
+		  (make-date-row! date-table (_ "Due Date") due-date)
+		  (gnc:html-document-add-object! document date-table))
 		(gnc:html-document-add-object!
 		 document
 		 (gnc:make-html-text
-		  (string-append
-		   (_ "Reference") ":&nbsp;" 
-		   (string-expand billing-id #\newline "<br>"))))
-		(make-break! document)))))
+		  (N_ "Invoice in progress....")))))
 
-    (if (opt-val "Display" "Invoice Terms")
-	(let* ((term (gnc:invoice-get-terms invoice))
-	       (terms (gnc:bill-term-get-description term)))
-	  (if (and terms (> (string-length terms) 0))
-	      (gnc:html-document-add-object!
-	       document
-	       (gnc:make-html-text
-		(string-append
-		 (_ "Terms") ":&nbsp;" 
-		 (string-expand terms #\newline "<br>")))))))
+	  (make-break! document)
+	  (make-break! document)
 
-    (make-break! document)
+	  (gnc:html-document-add-object!
+	   document
+	   (make-client-table owner orders))
 
-    (gnc:html-document-add-object! document table)
+	  (make-break! document)
+	  (make-break! document)
 
-    (make-break! document)
-    (make-break! document)
+	  (if (opt-val "Display" "Billing ID")
+	      (let ((billing-id (gnc:invoice-get-billing-id invoice)))
+		(if (and billing-id (> (string-length billing-id) 0))
+		    (begin
+		      (gnc:html-document-add-object!
+		       document
+		       (gnc:make-html-text
+			(string-append
+			 (_ "Reference") ":&nbsp;" 
+			 (string-expand billing-id #\newline "<br>"))))
+		      (make-break! document)))))
 
-    (if (opt-val "Display" "Invoice Notes")
-	(let ((notes (gnc:invoice-get-notes invoice)))
+	  (if (opt-val "Display" "Invoice Terms")
+	      (let* ((term (gnc:invoice-get-terms invoice))
+		     (terms (gnc:bill-term-get-description term)))
+		(if (and terms (> (string-length terms) 0))
+		    (gnc:html-document-add-object!
+		     document
+		     (gnc:make-html-text
+		      (string-append
+		       (_ "Terms") ":&nbsp;" 
+		       (string-expand terms #\newline "<br>")))))))
+
+	  (make-break! document)
+
+	  (gnc:html-document-add-object! document table)
+
+	  (make-break! document)
+	  (make-break! document)
+
+	  (if (opt-val "Display" "Invoice Notes")
+	      (let ((notes (gnc:invoice-get-notes invoice)))
+		(gnc:html-document-add-object!
+		 document
+		 (gnc:make-html-text
+		  (string-expand notes #\newline "<br>")))))
+	  
+	  (make-break! document)
+
 	  (gnc:html-document-add-object!
 	   document
 	   (gnc:make-html-text
-	    (string-expand notes #\newline "<br>")))))
+	    (gnc:html-markup-br)
+	    (string-expand (opt-val "Display" "Extra Notes") #\newline "<br>")
+	    (gnc:html-markup-br))))
 
-    (make-break! document)
-
-    (gnc:html-document-add-object!
-     document
-     (gnc:make-html-text
-      (gnc:html-markup-br)
-      (string-expand (opt-val "Display" "Extra Notes") #\newline "<br>")
-      (gnc:html-markup-br)))
+	; else
+	(gnc:html-document-add-object!
+	 document
+	 (gnc:make-html-text
+	  (N_ "No Valid Invoice Selected"))))
 
     document))
 
 (gnc:define-report
  'version 1
- 'name (N_ "Invoice")
+ 'name (N_ "Print Invoice")
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator options-generator
  'renderer reg-renderer
- 'in-menu? #f)
+ 'in-menu? #t)
 
 (define (gnc:invoice-report-create-internal invoice)
-  (let* ((options (gnc:make-report-options "Invoice"))
-         (invoice-op (gnc:lookup-option options "__reg" "invoice")))
+  (let* ((options (gnc:make-report-options (N_ "Print Invoice")))
+         (invoice-op (gnc:lookup-option options invoice-page invoice-name)))
 
     (gnc:option-set-value invoice-op invoice)
-    (gnc:make-report "Invoice" options)))
+    (gnc:make-report (N_ "Print Invoice") options)))
 
 (export gnc:invoice-report-create-internal)

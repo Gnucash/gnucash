@@ -96,7 +96,7 @@
       (else ""))))
 
 (define (gnc:entry-type-percent-p type-val)
-  (let ((type (gw:enum-<gnc:GncAmountType>-val->sym type #f)))
+  (let ((type (gw:enum-<gnc:GncAmountType>-val->sym type-val #f)))
     (equal? type 'gnc-amount-type-percent)))
 
 (define (gnc:owner-from-split split result-owner)

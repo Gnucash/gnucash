@@ -10,6 +10,14 @@
 	* business-utils: pack into box FALSE, not TRUE
 	* owner-report: put the company into the options dialog instead of
 	  hiding it.
+
+	* business-core.scm: fix a typo
+	* business-options.c: implement invoice option for the dialog
+	* gncEntryLedgerLoad.c: fix a compiler warning
+	* invoice.scm: make report visible; deal with no invoice; make
+	  invoice a visible option on the general page; deal with "printing"
+	  un-posted invoices.
+	* receivables.scm: remove code I don't need
 	
 2002-07-03  Derek Atkins  <derek@ihtfp.com>
 

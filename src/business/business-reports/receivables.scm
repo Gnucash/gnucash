@@ -43,9 +43,6 @@
           (lambda (new-option)
             (gnc:register-option options new-option))))
 
-;    (add-option
-;     (gnc:make-internal-option "__reg" this-acc #f))
-
     (add-option
      (gnc:make-account-list-limited-option
       acc-page this-acc
