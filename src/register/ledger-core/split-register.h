@@ -163,6 +163,9 @@ void gnc_split_register_config (SplitRegister *reg,
 /* Destroy the split register. */
 void gnc_split_register_destroy (SplitRegister *reg);
 
+/* Make a register window read-only. */
+void gnc_split_register_set_read_only (SplitRegister *reg, gboolean read_only);
+
 /* Set the template account used by template registers */
 void gnc_split_register_set_template_account (SplitRegister *reg,
                                               Account *template_account);

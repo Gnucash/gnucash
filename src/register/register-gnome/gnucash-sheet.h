@@ -136,8 +136,6 @@ void gnucash_sheet_recompute_block_offsets (GnucashSheet *sheet);
 
 GtkType gnucash_register_get_type (void);
 
-void gnucash_register_set_sensitive (GnucashRegister *reg, gboolean sensitive);
-
 /* this already has scrollbars attached */
 GtkWidget *gnucash_register_new (Table *table);
 

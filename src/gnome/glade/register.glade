@@ -744,7 +744,7 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>reinitialize_transaction</name>
+	      <name>menu_reinitialize</name>
 	      <tooltip>Erase all splits except the one for this account.</tooltip>
 	      <signal>
 		<name>activate</name>

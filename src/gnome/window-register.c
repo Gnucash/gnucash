@@ -125,6 +125,7 @@ struct _RegWindow
 
   RegDateWindow *date_window;
   gpointer pcd;
+  gboolean read_only;
 };
 GtkWidget *gnc_RegWindow_window (RegWindow *data)
 {
@@ -1188,7 +1189,7 @@ gnc_register_setup_menu_widgets(RegWindow *regData, GladeXML *xml)
 static GtkWidget *
 gnc_register_create_popup_menu (RegWindow *regData)
 {
-  GtkWidget *popup;
+  GtkWidget *popup, *menuitem;
   GladeXML *xml;
 
   xml = gnc_glade_xml_new ("register.glade", "Check Register Popup Menu");
@@ -1210,6 +1211,14 @@ gnc_register_create_popup_menu (RegWindow *regData)
 
   regData->split_popup_check = glade_xml_get_widget (xml, "popup_splits");
 
+  if (regData->read_only) {
+    menuitem = glade_xml_get_widget (xml, "popup_delete");
+    gtk_widget_set_sensitive(menuitem, FALSE);
+    menuitem = glade_xml_get_widget (xml, "popup_duplicate");
+    gtk_widget_set_sensitive(menuitem, FALSE);
+    menuitem = glade_xml_get_widget (xml, "popup_reinitialize");
+    gtk_widget_set_sensitive(menuitem, FALSE);
+  }
   return popup;
 }
 
@@ -1509,21 +1518,23 @@ gtk_callback_bug_workaround (gpointer argp)
 }
 
 /********************************************************************\
- * regWindowDetermineReadOnly                                       *
+ * gnc_reg_determine_read_only                                      *
  *   determines whether this register window should be read-only    *
  *                                                                  *
  * Args:   regData - the register window instance                   *
  * Return: none                                                     *
 \********************************************************************/
 static void
-regWindowDetermineReadOnly (RegWindow *regData)
+gnc_reg_determine_read_only (RegWindow *regData)
 {
   dialog_args *args = g_malloc(sizeof(dialog_args));
   gchar *old_title, *new_title;
+  SplitRegister *reg;
   GtkArg objarg;
 
   switch (gnc_reg_get_placeholder(regData)) {
    case PLACEHOLDER_NONE:
+    regData->read_only = FALSE;
     return;
 
    case PLACEHOLDER_THIS:
@@ -1542,13 +1553,15 @@ regWindowDetermineReadOnly (RegWindow *regData)
 		    "of a set of accounts.");
     break;
   }
+  regData->read_only = TRUE;
 
   /* Put up a warning dialog */
   args->regData = regData;
   gtk_timeout_add (250, gtk_callback_bug_workaround, args); /* 0.25 seconds */
 
   /* Make the contents immutable */
-  gnucash_register_set_sensitive(regData->reg, FALSE);
+  reg = gnc_ledger_display_get_split_register (regData->ledger);
+  gnc_split_register_set_read_only (reg, TRUE);
 
   /* Rename the window title */
   objarg.name = "GtkWindow::title";
@@ -1601,7 +1614,7 @@ regWindowLedger (GNCLedgerDisplay *ledger)
   SplitRegister *reg;
   RegWindow *regData;
   GtkWidget *register_window;
-  GtkWidget *table_frame;
+  GtkWidget *table_frame, *widget;
   gboolean show_all;
   gboolean has_date;
   GladeXML *xml;
@@ -1637,6 +1650,7 @@ regWindowLedger (GNCLedgerDisplay *ledger)
   regData->width = -1;
 
   gnc_reg_set_window_name(regData);
+  gnc_reg_determine_read_only(regData);
 
   show_all = gnc_lookup_boolean_option ("Register",
                                         "Show All Transactions",
@@ -1678,6 +1692,20 @@ regWindowLedger (GNCLedgerDisplay *ledger)
       glade_xml_get_widget (xml, "menu_splits");
     
     gnc_register_setup_menu_widgets(regData, xml);
+    if (regData->read_only) {
+      widget = glade_xml_get_widget (xml, "menu_paste");
+      gtk_widget_set_sensitive(widget, FALSE);
+      widget = glade_xml_get_widget (xml, "menu_cut_trans");
+      gtk_widget_set_sensitive(widget, FALSE);
+      widget = glade_xml_get_widget (xml, "menu_paste_trans");
+      gtk_widget_set_sensitive(widget, FALSE);
+      widget = glade_xml_get_widget (xml, "menu_delete");
+      gtk_widget_set_sensitive(widget, FALSE);
+      widget = glade_xml_get_widget (xml, "menu_duplicate");
+      gtk_widget_set_sensitive(widget, FALSE);
+      widget = glade_xml_get_widget (xml, "menu_reinitialize");
+      gtk_widget_set_sensitive(widget, FALSE);
+    }
   }
 
   /* The tool bar */
@@ -1691,6 +1719,13 @@ regWindowLedger (GNCLedgerDisplay *ledger)
     id = gnc_register_option_change_callback(gnc_toolbar_change_cb, regData,
                                              "General", "Toolbar Buttons");
     regData->toolbar_change_callback_id = id;
+
+    if (regData->read_only) {
+      widget = glade_xml_get_widget (xml, "toolbar_delete");
+      gtk_widget_set_sensitive(widget, FALSE);
+      widget = glade_xml_get_widget (xml, "toolbar_duplicate");
+      gtk_widget_set_sensitive(widget, FALSE);
+    }
   }
 
   /* The summary bar */
@@ -1790,7 +1825,6 @@ regWindowLedger (GNCLedgerDisplay *ledger)
   gnc_reg_refresh_toolbar (regData);
 
   gnc_window_adjust_for_screen (GTK_WINDOW(register_window));
-  regWindowDetermineReadOnly(regData);
 
   return regData;
 }

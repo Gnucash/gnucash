@@ -2447,16 +2447,6 @@ gnucash_register_attach_popup (GnucashRegister *reg,
 }
 
 
-void
-gnucash_register_set_sensitive (GnucashRegister *reg, gboolean sensitive)
-{
-        g_return_if_fail (GNUCASH_IS_REGISTER(reg));
-        g_return_if_fail (reg->sheet != NULL);
-
-	gtk_widget_set_sensitive(reg->sheet, sensitive);
-}
-
-
 GtkWidget *
 gnucash_register_new (Table *table)
 {

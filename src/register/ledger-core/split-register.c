@@ -2327,3 +2327,9 @@ gnc_split_register_destroy (SplitRegister *reg)
   /* free the memory itself */
   g_free (reg);
 }
+
+void 
+gnc_split_register_set_read_only (SplitRegister *reg, gboolean read_only)
+{
+  gnc_table_model_set_read_only (reg->table->model, read_only);
+}
