@@ -35,34 +35,34 @@
               (gnc:register-option options opt))))
       (opt-register
        (gnc:make-color-option
-        (_ "General")
-        (_ "Background Color") "a" (_ "Background color for reports.")
+        (N_ "General")
+        (N_ "Background Color") "a" (N_ "Background color for reports.")
         (list #xff #xff #xff 0)
         255 #f))
       (opt-register
        (gnc:make-pixmap-option
-        (_ "General")
-        (_ "Background Pixmap") "b" (_ "Background tile for reports.")
+        (N_ "General")
+        (N_ "Background Pixmap") "b" (N_ "Background tile for reports.")
         ""))
       (opt-register
        (gnc:make-simple-boolean-option
-        (_ "General")
-        (_ "Enable Links") "c" (_ "Enable hyperlinks in reports.")
+        (N_ "General")
+        (N_ "Enable Links") "c" (N_ "Enable hyperlinks in reports.")
         #t))
       (opt-register 
        (gnc:make-number-range-option 
-        (_ "Tables")
-        (_ "Table cell spacing") "c" (_ "Space between table cells")
+        (N_ "Tables")
+        (N_ "Table cell spacing") "c" (N_ "Space between table cells")
         1 0 20 0 1))
       (opt-register 
        (gnc:make-number-range-option 
-        (_ "Tables")
-        (_ "Table cell padding") "d" (_ "Space between table cells")
+        (N_ "Tables")
+        (N_ "Table cell padding") "d" (N_ "Space between table cells")
         1 0 20 0 1))
       (opt-register 
        (gnc:make-number-range-option 
-        (_ "Tables")
-        (_ "Table border width") "e" (_ "Bevel depth on tables")
+        (N_ "Tables")
+        (N_ "Table border width") "e" (N_ "Bevel depth on tables")
         0 0 20 0 1))
       options))
   
@@ -75,13 +75,13 @@
            (bgcolor 
             (gnc:color-option->html
              (gnc:lookup-option options 
-                                (_ "General")
-                                (_ "Background Color"))))
-           (bgpixmap (opt-val (_ "General") (_ "Background Pixmap")))
-           (links? (opt-val (_ "General") (_ "Enable Links")))
-           (spacing (opt-val (_ "Tables") (_ "Table cell spacing")))
-           (padding (opt-val (_ "Tables") (_ "Table cell padding")))
-           (border (opt-val (_ "Tables") (_ "Table border width"))))
+                                (N_ "General")
+                                (N_ "Background Color"))))
+           (bgpixmap (opt-val (N_ "General") (N_ "Background Pixmap")))
+           (links? (opt-val (N_ "General") (N_ "Enable Links")))
+           (spacing (opt-val (N_ "Tables") (N_ "Table cell spacing")))
+           (padding (opt-val (N_ "Tables") (N_ "Table cell padding")))
+           (border (opt-val (N_ "Tables") (N_ "Table border width"))))
       
 
       (gnc:html-document-set-style! 

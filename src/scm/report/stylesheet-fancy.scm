@@ -36,84 +36,84 @@
               (gnc:register-option options opt))))
       (opt-register 
        (gnc:make-string-option
-        (_ "General")
-        (_ "Preparer") "a"
-        (_ "Name of person preparing the report") 
+        (N_ "General")
+        (N_ "Preparer") "a"
+        (N_ "Name of person preparing the report") 
         ""))
       (opt-register 
        (gnc:make-string-option
-        (_ "General")
-        (_ "Prepared for") "b"
-        (_ "Name of organization or company prepared for") 
+        (N_ "General")
+        (N_ "Prepared for") "b"
+        (N_ "Name of organization or company prepared for") 
         ""))
       (opt-register 
        (gnc:make-simple-boolean-option
-        (_ "General")
-        (_ "Show preparer info") "c"
-        (_ "Name of organization or company") 
+        (N_ "General")
+        (N_ "Show preparer info") "c"
+        (N_ "Name of organization or company") 
         #f))
       (opt-register 
        (gnc:make-simple-boolean-option
-        (_ "General")
-        (_ "Enable Links") "c"
-        (_ "Enable hyperlinks in reports") 
+        (N_ "General")
+        (N_ "Enable Links") "c"
+        (N_ "Enable hyperlinks in reports") 
         #t))
       
       (opt-register
        (gnc:make-pixmap-option
-        (_ "Images")
-        (_ "Background Tile") "a" (_ "Background tile for reports.")
+        (N_ "Images")
+        (N_ "Background Tile") "a" (N_ "Background tile for reports.")
         ""))
       (opt-register
        (gnc:make-pixmap-option
-        (_ "Images")
-        (_ "Heading Banner") "b" (_ "Banner for top of report.")
+        (N_ "Images")
+        (N_ "Heading Banner") "b" (N_ "Banner for top of report.")
         ""))
       (opt-register
        (gnc:make-pixmap-option
-        (_ "Images")
-        (_ "Logo") "c" (_ "Company logo image.")
+        (N_ "Images")
+        (N_ "Logo") "c" (N_ "Company logo image.")
         ""))
 
       (opt-register
        (gnc:make-color-option
-        (_ "Colors")
-        (_ "Background Color") "a" (_ "General background color for report.")
+        (N_ "Colors")
+        (N_ "Background Color") "a" (N_ "General background color for report.")
         (list #xff #x88 #xff 0)
         255 #f))      
       (opt-register
        (gnc:make-color-option
-        (_ "Colors")
-        (_ "Text Color") "b" (_ "Normal body text color.")
+        (N_ "Colors")
+        (N_ "Text Color") "b" (N_ "Normal body text color.")
         (list #x00 #x00 #x00 0)
         255 #f))      
       (opt-register
        (gnc:make-color-option
-        (_ "Colors")
-        (_ "Link Color") "c" (_ "Link text color.")
+        (N_ "Colors")
+        (N_ "Link Color") "c" (N_ "Link text color.")
         (list #x00 #xff #xff 0)
         255 #f))      
       (opt-register
        (gnc:make-color-option
-        (_ "Colors")
-        (_ "Table Cell Color") "c" (_ "Default background for table cells.")
+        (N_ "Colors")
+        (N_ "Table Cell Color") "c" (N_ "Default background for table cells.")
         (list #xff #x00 #xff 0)
         255 #f))      
 
       (opt-register 
        (gnc:make-number-range-option 
-        (_ "Tables")
-        (_ "Table cell spacing") "a" (_ "Space between table cells")
+        (N_ "Tables")
+        (N_ "Table cell spacing") "a" (N_ "Space between table cells")
         1 0 20 0 1))
       (opt-register 
        (gnc:make-number-range-option 
-        (_ "Tables")
-        (_ "Table cell padding") "b" (_ "Space between table cells")
+        (N_ "Tables")
+        (N_ "Table cell padding") "b" (N_ "Space between table cells")
         1 0 20 0 1))
       (opt-register 
        (gnc:make-number-range-option 
-        (_ "Tables")
-        (_ "Table border width") "c" (_ "Bevel depth on tables")
+        (N_ "Tables")
+        (N_ "Table border width") "c" (N_ "Bevel depth on tables")
         1 0 20 0 1))
       options))
   
@@ -127,20 +127,20 @@
             (lambda (section name)
               (gnc:color-option->html
                (gnc:lookup-option options section name))))
-           (preparer (opt-val (_ "General") (_ "Preparer")))
-           (prepared-for (opt-val (_ "General") (_ "Prepared for")))
-           (show-preparer? (opt-val (_ "General") (_ "Show preparer info")))
-           (links? (opt-val (_ "General") (_ "Enable Links")))           
-           (bgcolor (color-val (_ "Colors") (_ "Background Color")))
-           (textcolor (color-val (_ "Colors") (_ "Text Color")))
-           (linkcolor (color-val (_ "Colors") (_ "Link Color")))
-           (cellcolor (color-val (_ "Colors") (_ "Table Cell Color")))
-           (bgpixmap (opt-val (_ "Images") (_ "Background Tile")))
-           (headpixmap (opt-val (_ "Images") (_ "Heading Banner")))
-           (logopixmap (opt-val (_ "Images") (_ "Logo")))
-           (spacing (opt-val (_ "Tables") (_ "Table cell spacing")))
-           (padding (opt-val (_ "Tables") (_ "Table cell padding")))
-           (border (opt-val (_ "Tables") (_ "Table border width"))))
+           (preparer (opt-val (N_ "General") (N_ "Preparer")))
+           (prepared-for (opt-val (N_ "General") (N_ "Prepared for")))
+           (show-preparer? (opt-val (N_ "General") (N_ "Show preparer info")))
+           (links? (opt-val (N_ "General") (N_ "Enable Links")))           
+           (bgcolor (color-val (N_ "Colors") (N_ "Background Color")))
+           (textcolor (color-val (N_ "Colors") (N_ "Text Color")))
+           (linkcolor (color-val (N_ "Colors") (N_ "Link Color")))
+           (cellcolor (color-val (N_ "Colors") (N_ "Table Cell Color")))
+           (bgpixmap (opt-val (N_ "Images") (N_ "Background Tile")))
+           (headpixmap (opt-val (N_ "Images") (N_ "Heading Banner")))
+           (logopixmap (opt-val (N_ "Images") (N_ "Logo")))
+           (spacing (opt-val (N_ "Tables") (N_ "Table cell spacing")))
+           (padding (opt-val (N_ "Tables") (N_ "Table cell padding")))
+           (border (opt-val (N_ "Tables") (N_ "Table border width"))))
             
       (gnc:html-document-set-style! 
        ssdoc "body" 

@@ -27,8 +27,8 @@
       ;; From date  
       (register-option
        (gnc:make-date-option
-        (_ "General") (_ "From")
-        "a" (_ "Report Items from this date") 
+        (N_ "General") (N_ "From")
+        "a" (N_ "Report Items from this date") 
         (lambda ()
           (let ((bdtime (localtime (current-time))))
             (set-tm:sec bdtime 0)
@@ -43,8 +43,8 @@
       ;; to-date
       (register-option
        (gnc:make-date-option
-        (_ "General") (_ "To")
-        "c" (_ "Report items up to and including this date")
+        (N_ "General") (N_ "To")
+        "c" (N_ "Report items up to and including this date")
         (lambda ()
           (let ((bdtime (localtime (current-time))))
             (set-tm:sec bdtime 59)
@@ -56,8 +56,8 @@
       ;; account(s) to do report on
       (register-option
        (gnc:make-account-list-option
-        (_ "General") (_ "Accounts")
-        "d" (_ "Do transaction report on this account")
+        (N_ "General") (N_ "Accounts")
+        "d" (N_ "Do transaction report on this account")
         (lambda ()
           (let ((current-accounts (gnc:get-current-accounts)))
             (cond ((not (null? current-accounts)) current-accounts)
@@ -67,8 +67,8 @@
 
       (register-option
        (gnc:make-multichoice-option
-        (_ "General") (_ "Step Size")
-        "b" (_ "The amount of time between data points") 'WeekDelta
+        (N_ "General") (N_ "Step Size")
+        "b" (N_ "The amount of time between data points") 'WeekDelta
         (list #(DayDelta "Day" "Day")
               #(WeekDelta "Week" "Week")
               #(TwoWeekDelta "2Week" "Two Week")
@@ -78,41 +78,41 @@
 
       (register-option
        (gnc:make-simple-boolean-option
-        (_ "General") (_ "Sub-Accounts")
-        "e" (_ "Include sub-accounts of all selected accounts") #f))
+        (N_ "General") (N_ "Sub-Accounts")
+        "e" (N_ "Include sub-accounts of all selected accounts") #f))
 
       (register-option
        (gnc:make-list-option
-        (_ "Output") (_ "Plot Type")
-        "a" (_ "The type of graph to generate") (list 'AvgBalPlot)
+        (N_ "Output") (N_ "Plot Type")
+        "a" (N_ "The type of graph to generate") (list 'AvgBalPlot)
         (list (list->vector
-               (list 'AvgBalPlot (_ "Average") (_ "Average Balance")))
+               (list 'AvgBalPlot (N_ "Average") (N_ "Average Balance")))
               (list->vector
-               (list 'GainPlot (_ "Net Gain") (_ "Net Gain")))
+               (list 'GainPlot (N_ "Net Gain") (N_ "Net Gain")))
               (list->vector
-               (list 'GLPlot (_ "Gain/Loss") (_ "Gain And Loss"))))))
+               (list 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss"))))))
 
       (register-option
        (gnc:make-number-range-option
-        (_ "Output") (_ "Plot Width")
-        "b" (_ "Width of plot in pixels.") 400
+        (N_ "Output") (N_ "Plot Width")
+        "b" (N_ "Width of plot in pixels.") 400
         100 1000 0 1))
 
       (register-option
        (gnc:make-number-range-option
-        (_ "Output") (_ "Plot Height")
-        "b" (_ "Height of plot in pixels.") 400
+        (N_ "Output") (N_ "Plot Height")
+        "b" (N_ "Height of plot in pixels.") 400
         100 1000 0 1))
 
       (register-option
        (gnc:make-simple-boolean-option
-        (_ "Output") (_ "Show plot")
-        "b" (_ "Display a graph of the selected data.") #t))
+        (N_ "Output") (N_ "Show plot")
+        "b" (N_ "Display a graph of the selected data.") #t))
 
       (register-option
        (gnc:make-simple-boolean-option
-        (_ "Output") (_ "Show table")
-        "b" (_ "Display a table of the selected data.") #f))
+        (N_ "Output") (N_ "Show table")
+        "b" (N_ "Display a table of the selected data.") #f))
 
       
       options))
@@ -234,20 +234,20 @@
               (gnc:option-value 
                (gnc:lookup-option (gnc:report-options report-obj) sec value))))
            (begindate (gnc:date-option-absolute-time 
-                       (opt-val  (_ "General") (_ "From"))))
+                       (opt-val  (N_ "General") (N_ "From"))))
            (enddate   (gnc:timepair-end-day-time 
                        (gnc:date-option-absolute-time 
-                        (opt-val  (_ "General") (_ "To")))))
-           (stepsize  (eval (opt-val  (_ "General") (_ "Step Size"))))
-           (accounts  (opt-val  (_ "General") (_ "Accounts")))
-           (dosubs?   (opt-val  (_ "General") (_ "Sub-Accounts")))
-           (plot-type (opt-val  (_ "Output") (_ "Plot Type")))
-           (show-plot?  (opt-val (_ "Output") (_ "Show plot")))
-           (show-table? (opt-val (_ "Output") (_ "Show table")))
+                        (opt-val  (N_ "General") (N_ "To")))))
+           (stepsize  (eval (opt-val  (N_ "General") (N_ "Step Size"))))
+           (accounts  (opt-val  (N_ "General") (N_ "Accounts")))
+           (dosubs?   (opt-val  (N_ "General") (N_ "Sub-Accounts")))
+           (plot-type (opt-val  (N_ "Output") (N_ "Plot Type")))
+           (show-plot?  (opt-val (N_ "Output") (N_ "Show plot")))
+           (show-table? (opt-val (N_ "Output") (N_ "Show table")))
            (document  (gnc:make-html-document))
            (startbal  0.0))
       
-      (gnc:html-document-set-title! document (_ "Average Balance"))
+      (gnc:html-document-set-title! document (N_ "Average Balance"))
 
       (if (not (null? accounts))
           (let ((query (gnc:malloc-query))
@@ -303,8 +303,8 @@
             ;; plot comes first. 
             (if show-plot?
                 (let ((barchart (gnc:make-html-barchart))
-                      (width (opt-val (_ "Output") (_ "Plot Width")))
-                      (height (opt-val (_ "Output") (_ "Plot Height")))
+                      (width (opt-val (N_ "Output") (N_ "Plot Width")))
+                      (height (opt-val (N_ "Output") (N_ "Plot Height")))
                       (col-labels '())
                       (col-colors '()))
                   (if (memq 'AvgBalPlot plot-type)
@@ -395,7 +395,7 @@
   
   (gnc:define-report
    'version 1
-   'name (_ "Average Balance Tracker")
+   'name (N_ "Average Balance")
    'options-generator options-generator
    'renderer renderer))
   

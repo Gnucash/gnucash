@@ -125,15 +125,16 @@
   (let ((generator (gnc:report-template-options-generator report-template))
         (stylesheet 
          (gnc:make-multichoice-option 
-          (_ "General") (_ "Stylesheet") "0a"
-          (_ "Select a stylesheet for the report.")
-          (string->symbol (_ "Default"))
+          (N_ "General") (N_ "Stylesheet") "0a"
+          (N_ "Select a stylesheet for the report.")
+          (string->symbol (N_ "Default"))
           (map 
            (lambda (ss)
              (vector 
               (string->symbol (gnc:html-style-sheet-name ss))
               (gnc:html-style-sheet-name ss)
-              (string-append (gnc:html-style-sheet-name ss) " Stylesheet")))
+              (string-append (gnc:html-style-sheet-name ss) 
+                             (_ " Stylesheet"))))
            (gnc:get-html-style-sheets)))))
     (if (procedure? generator)
         (let ((options (generator)))
@@ -230,7 +231,7 @@
     retval))
 
 
-(define (gnc:report-run id)
+(define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
     (let ((stack (make-stack #t dumper)))
       (display-backtrace stack (current-error-port))
@@ -241,11 +242,13 @@
    'ignore
    (lambda () 
      (lazy-catch #t 
-                 (lambda () (gnc:report-run-unsafe id))
+                 (lambda () (apply proc args))
                  dumper))
    (lambda (key . args)
      #f)))
 
+(define (gnc:report-run id)
+  (gnc:backtrace-if-exception gnc:report-run-unsafe id))
 
 (define (gnc:report-run-unsafe id)
   (let ((report (gnc:find-report id))
@@ -255,7 +258,6 @@
                  (gnc:report-ctext report))
             ;; if there's clean cached text, return it 
             (begin 
-              (display "using cached text.\n")
               (gnc:report-ctext report))
             
             ;; otherwise, rerun the report 
@@ -267,7 +269,8 @@
                           (symbol->string (gnc:option-value
                                            (gnc:lookup-option 
                                             (gnc:report-options report)
-                                            (_ "General") (_ "Stylesheet")))))
+                                            (N_ "General") 
+                                            (N_ "Stylesheet")))))
                          (stylesheet 
                           (gnc:html-style-sheet-find stylesheet-name))
                          (doc (renderer report))

@@ -329,8 +329,8 @@
             #t)
           (begin 
             (kvt-fold key-merger #f (gnc:html-style-table-primary next))
-            (if (not (null? (cdr antecedents)))
-                (compile-worker (cdr antecedents))
+            (if (not (null? (cdr table-list)))
+                (compile-worker (cdr table-list))
                 #t)))))
   ;; make the compiled kvt table 
   (gnc:html-style-table-set-compiled! table (make-kvtable))
@@ -340,7 +340,8 @@
   (kvt-fold key-merger #f (gnc:html-style-table-primary table))
   
   ;; now merge in the antecedents 
-  (compile-worker antecedents))
+  (if (not (null? antecedents))
+      (compile-worker antecedents)))
 
   
 (define (gnc:html-style-table-uncompile table)

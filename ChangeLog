@@ -1,5 +1,11 @@
 2001-02-12  Bill Gribble  <grib@billgribble.com>
 
+	* src/scm/html-style-info.scm: minor fixes to html style
+	compile
+
+	* various in src/scm: fixes for i18n .. use (N_ instead of (_ 
+	where appropriate. 
+
 	* src/engine/gnc-numeric.{c,h}, src/scm/gnc-numeric.scm: add
 	support for a new auto-denom type, GNC_DENOM_SIGFIGS(x), where x
 	is the number of "significant figures" you want in the output.

@@ -31,20 +31,20 @@
 
 ;; first define all option's names so that they are properly defined
 ;; in *one* place.
-(let* ((pagename-general (_ "General"))
-      (optname-from-date (_ "From"))
-      (optname-to-date (_ "To"))
-
-      (pagename-accounts (_ "Accounts"))
-      (optname-display-depth (_ "Account Display Depth"))
-      (optname-show-subaccounts (_ "Always show sub-accounts"))
-      (optname-accounts (_ "Account"))
-      (optname-include-subbalances (_ "Include Sub-Account balances"))
-
-;;      (pagename-currencies (_ "Currencies")) too little options :)
-      (pagename-currencies pagename-general)
-      (optname-show-foreign (_ "Show Foreign Currencies"))
-      (optname-report-currency (_ "Report's currency")))
+(let* ((pagename-general (N_ "General"))
+       (optname-from-date (N_ "From"))
+       (optname-to-date (N_ "To"))
+       
+       (pagename-accounts (N_ "Accounts"))
+       (optname-display-depth (N_ "Account Display Depth"))
+       (optname-show-subaccounts (N_ "Always show sub-accounts"))
+       (optname-accounts (N_ "Account"))
+       (optname-include-subbalances (N_ "Include Sub-Account balances"))
+       
+;;      (pagename-currencies (N_ "Currencies")) too little options :)
+       (pagename-currencies pagename-general)
+       (optname-show-foreign (N_ "Show Foreign Currencies"))
+       (optname-report-currency (N_ "Report's currency")))
   
   ;; options generator
   (define (pnl-options-generator)
@@ -170,6 +170,6 @@
   
   (gnc:define-report 
    'version 1
-   'name (_ "Profit And Loss")
+   'name (N_ "Profit And Loss")
    'options-generator pnl-options-generator
    'renderer pnl-renderer))

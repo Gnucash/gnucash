@@ -170,24 +170,9 @@
                                qif-acct-map qif-cat-map 
                                qif-memo-map stock-map 
                                default-currency-name)
-  (define (dumper key . args)
-    (let ((stack (make-stack #t dumper)))
-      (display-backtrace stack (current-error-port))
-      (apply display-error stack (current-error-port) args)
-      (throw 'ignore)))
-  
-  (catch 
-   'ignore
-   (lambda () 
-     (lazy-catch #t 
-                 (lambda () (qif-import:qif-to-gnc-unsafe 
-                             qif-files-list 
-                             qif-acct-map qif-cat-map
-                             qif-memo-map stock-map
-                             default-currency-name))
-                 dumper))
-   (lambda (key . args)
-     #f)))
+  (gnc:backtrace-if-exception 
+   qif-import:qif-to-gnc-unsafe 
+   qif-acct-map qif-cat-map qif-memo-map stock-map default-currency-name))
 
 (define (qif-import:qif-to-gnc-unsafe qif-files-list 
                                       qif-acct-map qif-cat-map qif-memo-map

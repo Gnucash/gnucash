@@ -35,14 +35,14 @@
 
 ;; first define all option's names such that typos etc. are no longer
 ;; possible.
-(let ((pagename-general (_ "General"))
-      (optname-date (_ "Date"))
-      (optname-display-depth (_ "Account Display Depth"))
-      (optname-show-subaccounts (_ "Always show sub-accounts"))
-      (optname-accounts (_ "Account"))
-      (optname-include-subbalances (_ "Include Sub-Account balances"))
-      (optname-show-foreign (_ "Show Foreign Currencies"))
-      (optname-report-currency (_ "Report's currency")))
+(let ((pagename-general (N_ "General"))
+      (optname-date (N_ "Date"))
+      (optname-display-depth (N_ "Account Display Depth"))
+      (optname-show-subaccounts (N_ "Always show sub-accounts"))
+      (optname-accounts (N_ "Account"))
+      (optname-include-subbalances (N_ "Include Sub-Account balances"))
+      (optname-show-foreign (N_ "Show Foreign Currencies"))
+      (optname-report-currency (N_ "Report's currency")))
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; options generator
@@ -107,7 +107,7 @@
           (doc (gnc:make-html-document))
 	  (txt (gnc:make-html-text)))
       
-      (gnc:html-document-set-title! doc "Account Summary")
+      (gnc:html-document-set-title! doc (_ "Account Summary"))
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
@@ -158,6 +158,6 @@
   
   (gnc:define-report 
    'version 1
-   'name (_ "Account Summary")
+   'name (N_ "Account Summary")
    'options-generator accsum-options-generator
    'renderer accsum-renderer))
