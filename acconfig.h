@@ -63,7 +63,7 @@
 #undef HAVE_JPEG            
 
 /* Configure found the function malloc_usable_size */
-#define  HAVE_MALLOC_USABLE_SIZE  
+#undef HAVE_MALLOC_USABLE_SIZE  
 
 /*** Begin i18n ***/
 
