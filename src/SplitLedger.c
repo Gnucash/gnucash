@@ -940,7 +940,6 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
     break;
 
     case CURSOR_SPLIT: {
-      SplitRegisterType typo = reg->type & REG_TYPE_MASK;
       char *memo, *fullname;
       gboolean unit_price;
       Split *auto_split;
