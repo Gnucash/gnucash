@@ -1,3 +1,5 @@
+-*-text-*-
+
 'Modules' in Gnucash are relatively self-contained segments of code that
 can be dynamically loaded at runtime.  Eventually we want the whole gnucash
 source tree to be a set of modules and the app itself to be a short Scheme
@@ -7,6 +9,8 @@ We're not there yet :)
 
 Here are the bits that have been converted to use the module system so
 far.
+
+core-utils                  The lowest level.  Very basic code.
 
 gnc-module                  The module system (actually not a module itself)
 
