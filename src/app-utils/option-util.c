@@ -1124,8 +1124,13 @@ gboolean gnc_option_get_range_info(GNCOption *option,
   if (!gh_number_p(value))
     return FALSE;
 
-  if (num_decimals != NULL)
-    *num_decimals = gh_scm2int(value);
+  /* Guile-1.6 returns this as a double, so let's use that in all cases.
+   * This is still safe for earlier guiles, too -- tested with 1.3.4.
+   */
+  if (num_decimals != NULL) {
+    double decimals = gh_scm2double(value);
+    *num_decimals = (int)decimals;
+  }
 
   if (!gh_list_p(list) || gh_null_p(list))
     return FALSE;

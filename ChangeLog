@@ -11,6 +11,10 @@
 	  translation was not being used.   Fixes # 105036
 
 	* src/backend/postgres/gncquery.c:  change INITIAL_BUFSZ to 32000
+
+	* src/app-utils/option-util.c: use gh_scm2double() instead of
+	  gh_scm2int() because guile-1.6 prefers it.  Fixes a crash when
+	  opening the Pref's dialog when using guile-1.6.1
 	
 2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
 
