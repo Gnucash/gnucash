@@ -558,7 +558,7 @@
     (if (= (tm:mon now) 0)
 	(begin
 	  (set-tm:mon now 11)
-	  (set-tm:year (- (tm:year now) 1)))
+	  (set-tm:year now (- (tm:year now) 1)))
 	(set-tm:mon now (- (tm:mon now) 1)))
     (set-tm:mday now (gnc:days-in-month (+ (tm:mon now) 1) 
 					(+ (tm:year now) 1900)))
