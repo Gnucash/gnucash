@@ -318,17 +318,13 @@ horrible things happen to the "master" database file.
 
 Remaining Work Items
 --------------------
-The date handling functions need to be replaced with something that
-handles time, down to milliseconds.  I know millisecs sounds stupid, but
-big banks use this for various consistency reasons.
-
 To find other remaining work items in the code, grep for the string 
 "hack alert".
 
 
 Ideas for engine enhancements:
 -----------------------------
-  1) Have (by default) xacc immediately re-read a file after every
+  1) Have (by default) gnucash immediately re-read a file after every
      write, and compare the two resulting AccountGroups for equality.
 
      During development, this is a good idea, as it will help uncover
