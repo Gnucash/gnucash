@@ -2,7 +2,8 @@ SUBDIRS = .
 
 pkglib_LTLIBRARIES = libgncmod-backend-net.la
 
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I.. -I../.. \
   -I../../engine \
   -I../../gnc-module \
