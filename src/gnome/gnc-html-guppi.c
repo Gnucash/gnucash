@@ -736,7 +736,10 @@ gnc_html_embedded_barchart(gnc_html * parent,
   }
 
   if (barchart && argind > 0)
+  {
     gtk_object_setv (GTK_OBJECT (barchart), argind, arglist);
+    guppi_object_update (barchart);
+  }
 
   if(barchart) {
     if((gtitle = g_hash_table_lookup(params, "title")) != NULL) {      
