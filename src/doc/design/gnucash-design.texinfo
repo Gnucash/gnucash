@@ -6,7 +6,7 @@
 
 @comment 'version.texi' is a magic filename that, when included,
 @comment will be auto-generated courtesy of automake.
-@include version.texi
+@c @include version.texi
 
 @ifinfo
 This file documents the design of the GnuCash program.
@@ -95,6 +95,9 @@ of the @cite{GnuCash Design Document}, version @value{VERSION}.
 Register
 
 * Cells::                       
+* Cellblocks::                  
+* Table::                       
+* Split Register::              
 
 @end detailmenu
 @end menu

@@ -13,14 +13,17 @@ model of GnuCash or of the workings of the main application. The
 register should not be specific to a particular GUI (such as Gnome/GTK).
 It should be possible to use the register in a stand-alone fashion.
 
-The register is built from severl types of components: Cells,
+The register is built from sever types of components: Cells,
 Cellblocks, Cursors, the Table, and the Split Register.
 
 @menu
 * Cells::                       
+* Cellblocks::                  
+* Table::                       
+* Split Register::              
 @end menu
 
-@node Cells,  , Register, Register
+@node Cells, Cellblocks, Register, Register
 @section Cells
 
 A @dfn{Cell} is an active object which is designed to read a specific
@@ -39,3 +42,70 @@ require only that text be displayed are completely "GUI-independent",
 that is, they depend on the underlying table to display the text. Cells
 which require additional GUI elements (such as pull-down menus) must
 implement the proper GUI handling on their own (using, e.g., GTK).
+
+
+@node Cellblocks, Table, Cells, Register
+@section Cellblocks
+
+A @dfn{Cellblock} is an array of active cells. The cells are laid out in
+rows and columns order. The cellblock serves as a convenient container
+for organizing active cells in an array. It provides several functions.
+First, it defines a tab-group (group of cells that can be traversed by
+hitting the tab-key).  More importantly, through the mechanism of
+Cursors (defined below), it allows a group of cells to be treated as a
+single transactional entity. That is, the cursor/cellblock allows all
+edits to a groups of cells to be simultaneously committed or rejected by
+underlying engines. This makes it appropriate for use as a GUI for
+transaction-processing applications with two-phase commit requirements.
+
+
+@node Table, Split Register, Cellblocks, Register
+@section Table
+
+The @dfn{Table} is a displayed matrix. The table is a complex object;
+it is NOT merely a cellblock.  The table provides all of the GUI
+infrastructure for displaying a row-column matrix of strings.
+
+The table provides one very important function for minimizing memory
+usage for large matrixes. It defines the notion of a @dfn{Cursor}. The
+cursor is a cellblock (an array of active cells) that is moved to the
+location that the user is currently editing. The cursor "virtualizes"
+cell functions; that is, it makes it seem to the user as if all cells in
+the table are active, when in fact the only cell that actually needs to
+be active is the one that the user is currently editing.
+
+The table design allows multiple cursors to be defined. When a user
+enters a cell, the appropriate cursor is positioned within the table.
+Cursors cannot overlap: any given cell can be mapped to at most one
+cursor. Multiple-cursor support allows tables to be designed that have a
+non-uniform layout. For example, the multiple-cursor support can be used
+to define a tree structure of headings and sub-headings, where the
+layout/format of the heading is different from the sub-headings. A
+financial example is a table which lists splits underneath their parent
+transaction. This is very different from a checkbook register, where all
+entries are uniform, and can be handled with a single repeated cursor.
+
+
+@node Split Register,  , Table, Register
+@section Split Register
+
+The split register is a special-purpose object aimed at the display
+of financial transactions. It includes cells for the date, prices,
+balances, transfer accounts, etc.  The register is where the cells,
+cursor and table get put together into a unified whole. The register
+defines specific, actual layouts and widths of the date, price, etc.
+cells in a table. It includes a table header, and defines more than
+ten specific layouts: bank, credit-card, stock, general ledger, etc.
+
+The split register implementation is divided into two components. The
+first (src/register/splitreg.[ch]) defines the basic structure and
+implementation of a split register, but does not specifically use or
+depend on the other GnuCash modules, including the Engine. Of course,
+this implementation was created with the engine financial structures
+in mind.
+
+The second component (src/SplitLedger.[ch]) implements the full register
+behavior and makes full use of the Engine API. This component is
+responsible for loading transactions and splits into the register,
+modifying transactions and splits according to user input, and
+accomplishing tasks such as performing automatic completion.
