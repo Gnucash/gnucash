@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-02 18:44+0200\n"
-"PO-Revision-Date: 2004-10-02 18:45+0200\n"
+"POT-Creation-Date: 2004-10-30 19:02+0200\n"
+"PO-Revision-Date: 2004-10-30 19:05+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -419,8 +419,8 @@ msgid "Opening Balances"
 msgstr "Anfangsbestand"
 
 #: src/app-utils/gnc-ui-util.c:856 intl-scm/guile-strings.c:2486
-#: intl-scm/guile-strings.c:3486 intl-scm/guile-strings.c:3488
-#: intl-scm/guile-strings.c:3508 intl-scm/guile-strings.c:3510
+#: intl-scm/guile-strings.c:3470 intl-scm/guile-strings.c:3472
+#: intl-scm/guile-strings.c:3492 intl-scm/guile-strings.c:3494
 msgid "Retained Earnings"
 msgstr "Gewinnrücklagen"
 
@@ -465,14 +465,14 @@ msgstr ""
 #: src/business/business-core/gncInvoice.c:509
 #: src/business/business-gnome/glade/invoice.glade:538
 #: src/register/ledger-core/split-register.c:2033 intl-scm/guile-strings.c:953
-#: intl-scm/guile-strings.c:3088 intl-scm/guile-strings.c:3874
-#: intl-scm/guile-strings.c:3968 intl-scm/guile-strings.c:4198
+#: intl-scm/guile-strings.c:3088 intl-scm/guile-strings.c:3860
+#: intl-scm/guile-strings.c:3954 intl-scm/guile-strings.c:4184
 msgid "Invoice"
 msgstr "Rechnung"
 
 #: src/business/business-core/gncInvoice.c:511 intl-scm/guile-strings.c:979
-#: intl-scm/guile-strings.c:3876 intl-scm/guile-strings.c:3970
-#: intl-scm/guile-strings.c:4200
+#: intl-scm/guile-strings.c:3862 intl-scm/guile-strings.c:3956
+#: intl-scm/guile-strings.c:4186
 msgid "Bill"
 msgstr "Rechnung"
 
@@ -482,26 +482,26 @@ msgstr "Rechnung"
 msgid "Expense"
 msgstr "Aufwendungen"
 
-#: src/business/business-core/gncInvoice.c:868
+#: src/business/business-core/gncInvoice.c:887
 msgid "Extra to Charge Card"
 msgstr "Zusätzliche Belastung Karte"
 
-#: src/business/business-core/gncInvoice.c:907
+#: src/business/business-core/gncInvoice.c:926
 msgid "Generated from an invoice.  Try unposting the invoice."
 msgstr ""
 "Aus einer Rechnung erzeugt. Für Änderungen müssen Sie die Buchung der "
 "Rechnung löschen."
 
-#: src/business/business-core/gncInvoice.c:925
+#: src/business/business-core/gncInvoice.c:944
 msgid "Automatic Payment Forward"
 msgstr "Automatische Zahlungsweiterleitung"
 
-#: src/business/business-core/gncInvoice.c:926
+#: src/business/business-core/gncInvoice.c:945
 msgid "Auto Split"
 msgstr "Automatische Buchung"
 
-#: src/business/business-core/gncInvoice.c:1097
-#: src/business/business-core/gncInvoice.c:1159
+#: src/business/business-core/gncInvoice.c:1116
+#: src/business/business-core/gncInvoice.c:1178
 #: src/business/business-ledger/gncEntryLedgerModel.c:125
 #: src/gnome/druid-loan.c:1784 src/gnome/druid-loan.c:2260
 #: src/gnome/druid-loan.c:2323 src/gnome/druid-loan.c:2337
@@ -513,11 +513,11 @@ msgstr "Automatische Buchung"
 msgid "Payment"
 msgstr "Zahlung"
 
-#: src/business/business-core/gncInvoice.c:1181
+#: src/business/business-core/gncInvoice.c:1200
 msgid "Pre-Payment"
 msgstr "Vorauszahlung"
 
-#: src/business/business-core/gncInvoice.c:1329
+#: src/business/business-core/gncInvoice.c:1348
 msgid " (posted)"
 msgstr " (gebucht)"
 
@@ -558,9 +558,9 @@ msgstr "(Mandant)"
 #: intl-scm/guile-strings.c:2680 intl-scm/guile-strings.c:2774
 #: intl-scm/guile-strings.c:2862 intl-scm/guile-strings.c:2988
 #: intl-scm/guile-strings.c:3020 intl-scm/guile-strings.c:3086
-#: intl-scm/guile-strings.c:3736 intl-scm/guile-strings.c:3760
-#: intl-scm/guile-strings.c:3904 intl-scm/guile-strings.c:4060
-#: intl-scm/guile-strings.c:4084
+#: intl-scm/guile-strings.c:3722 intl-scm/guile-strings.c:3746
+#: intl-scm/guile-strings.c:3890 intl-scm/guile-strings.c:4046
+#: intl-scm/guile-strings.c:4070
 msgid "Date"
 msgstr "Datum"
 
@@ -576,12 +576,12 @@ msgstr "Datum"
 #: intl-scm/guile-strings.c:2646 intl-scm/guile-strings.c:2698
 #: intl-scm/guile-strings.c:2798 intl-scm/guile-strings.c:2922
 #: intl-scm/guile-strings.c:3054 intl-scm/guile-strings.c:3092
-#: intl-scm/guile-strings.c:3576 intl-scm/guile-strings.c:3914
+#: intl-scm/guile-strings.c:3560 intl-scm/guile-strings.c:3900
 msgid "Amount"
 msgstr "Betrag"
 
 #: src/business/business-gnome/glade/payment.glade:171
-#: src/business/business-gnome/dialog-invoice.c:2328
+#: src/business/business-gnome/dialog-invoice.c:2333
 #: src/business/business-gnome/dialog-order.c:866
 #: src/gnome/reconcile-list.c:216
 #: src/register/ledger-core/split-register-model.c:137
@@ -614,7 +614,7 @@ msgstr "Herkunftskonto"
 #: src/business/business-gnome/glade/billterms.glade:87
 #: src/business/business-gnome/glade/invoice.glade:295
 #: src/business/business-gnome/glade/invoice.glade:1758
-#: intl-scm/guile-strings.c:3888 intl-scm/guile-strings.c:4212
+#: intl-scm/guile-strings.c:3874 intl-scm/guile-strings.c:4198
 msgid "Terms"
 msgstr "Bedingungen"
 
@@ -820,7 +820,7 @@ msgstr "Tabelle"
 
 #: src/business/business-gnome/glade/customer.glade:22
 #: src/business/business-gnome/dialog-customer.c:340
-#: intl-scm/guile-strings.c:3580 intl-scm/guile-strings.c:3582
+#: intl-scm/guile-strings.c:3564 intl-scm/guile-strings.c:3566
 msgid "New Customer"
 msgstr "Neuer Kunde"
 
@@ -906,7 +906,7 @@ msgstr "Bemerkung"
 #: src/business/business-gnome/glade/invoice.glade:420
 #: src/business/business-gnome/search-owner.c:233
 #: src/register/ledger-core/split-register-model.c:149
-#: intl-scm/guile-strings.c:3978
+#: intl-scm/guile-strings.c:3964
 msgid "Customer"
 msgstr "Kunde"
 
@@ -992,9 +992,9 @@ msgstr "Fällig"
 #: intl-scm/guile-strings.c:141 intl-scm/guile-strings.c:2626
 #: intl-scm/guile-strings.c:2686 intl-scm/guile-strings.c:2802
 #: intl-scm/guile-strings.c:2874 intl-scm/guile-strings.c:2992
-#: intl-scm/guile-strings.c:3032 intl-scm/guile-strings.c:3738
-#: intl-scm/guile-strings.c:3766 intl-scm/guile-strings.c:3912
-#: intl-scm/guile-strings.c:4062 intl-scm/guile-strings.c:4090
+#: intl-scm/guile-strings.c:3032 intl-scm/guile-strings.c:3724
+#: intl-scm/guile-strings.c:3752 intl-scm/guile-strings.c:3898
+#: intl-scm/guile-strings.c:4048 intl-scm/guile-strings.c:4076
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -1002,9 +1002,13 @@ msgstr "Beschreibung"
 msgid "acct"
 msgstr "Konto"
 
+#: src/business/business-gnome/glade/date-close.glade:482
+msgid "question"
+msgstr "Frage"
+
 #: src/business/business-gnome/glade/employee.glade:22
 #: src/business/business-gnome/dialog-employee.c:284
-#: intl-scm/guile-strings.c:3640 intl-scm/guile-strings.c:3642
+#: intl-scm/guile-strings.c:3624 intl-scm/guile-strings.c:3626
 msgid "New Employee"
 msgstr "Neuer Mitarbeiter"
 
@@ -1055,7 +1059,7 @@ msgstr "Gutschriftskonto:"
 
 #: src/business/business-gnome/glade/employee.glade:845
 #: src/business/business-gnome/search-owner.c:236
-#: intl-scm/guile-strings.c:3982
+#: intl-scm/guile-strings.c:3968
 msgid "Employee"
 msgstr "Mitarbeiter"
 
@@ -1068,8 +1072,8 @@ msgid "Access Control"
 msgstr "Zugriffskontrolle"
 
 #: src/business/business-gnome/glade/invoice.glade:22
-#: src/business/business-gnome/dialog-invoice.c:1726
-#: intl-scm/guile-strings.c:3588 intl-scm/guile-strings.c:3590
+#: src/business/business-gnome/dialog-invoice.c:1731
+#: intl-scm/guile-strings.c:3572 intl-scm/guile-strings.c:3574
 msgid "New Invoice"
 msgstr "Neue Rechnung"
 
@@ -1080,7 +1084,7 @@ msgstr "Rechnungs-Informationen"
 
 #: src/business/business-gnome/glade/invoice.glade:131
 #: src/business/business-gnome/glade/invoice.glade:1462
-#: src/business/business-gnome/dialog-invoice.c:2309
+#: src/business/business-gnome/dialog-invoice.c:2314
 msgid "Invoice ID"
 msgstr "Rechnungsnummer"
 
@@ -1089,7 +1093,7 @@ msgstr "Rechnungsnummer"
 #: src/business/business-gnome/glade/order.glade:168
 #: src/business/business-gnome/glade/order.glade:665
 #: src/business/business-gnome/glade/order.glade:1005
-#: src/business/business-gnome/dialog-invoice.c:2304
+#: src/business/business-gnome/dialog-invoice.c:2309
 #: src/business/business-gnome/dialog-order.c:847
 msgid "Date Opened"
 msgstr "Eröffnungsdatum"
@@ -1112,12 +1116,12 @@ msgstr "Auftrag"
 #: src/business/business-gnome/glade/invoice.glade:278
 #: src/business/business-gnome/glade/invoice.glade:1741
 #: src/business/business-gnome/glade/job.glade:265
-#: src/business/business-gnome/dialog-invoice.c:2296
-#: src/business/business-gnome/dialog-invoice.c:2315
+#: src/business/business-gnome/dialog-invoice.c:2301
+#: src/business/business-gnome/dialog-invoice.c:2320
 #: src/business/business-gnome/dialog-job.c:531
 #: src/business/business-gnome/dialog-job.c:541
 #: src/business/business-gnome/dialog-order.c:857
-#: intl-scm/guile-strings.c:3836 intl-scm/guile-strings.c:4160
+#: intl-scm/guile-strings.c:3822 intl-scm/guile-strings.c:4146
 msgid "Billing ID"
 msgstr "Rechnungsnummer"
 
@@ -1470,7 +1474,7 @@ msgid "Unpost"
 msgstr "Buchung löschen"
 
 #: src/business/business-gnome/glade/invoice.glade:1496
-#: src/business/business-gnome/dialog-invoice.c:2300
+#: src/business/business-gnome/dialog-invoice.c:2305
 msgid "Date Posted"
 msgstr "Buchungsdatum"
 
@@ -1567,8 +1571,8 @@ msgstr "Schließdatum"
 #: src/business/business-gnome/glade/order.glade:343
 #: src/business/business-gnome/glade/order.glade:777
 #: src/business/business-gnome/glade/order.glade:1179
-#: intl-scm/guile-strings.c:3886 intl-scm/guile-strings.c:3908
-#: intl-scm/guile-strings.c:4210
+#: intl-scm/guile-strings.c:3872 intl-scm/guile-strings.c:3894
+#: intl-scm/guile-strings.c:4196
 msgid "Reference"
 msgstr "Referenz"
 
@@ -1595,7 +1599,7 @@ msgstr "Bestellung"
 
 #: src/business/business-gnome/glade/vendor.glade:22
 #: src/business/business-gnome/dialog-vendor.c:263
-#: intl-scm/guile-strings.c:3610 intl-scm/guile-strings.c:3612
+#: intl-scm/guile-strings.c:3594 intl-scm/guile-strings.c:3596
 msgid "New Vendor"
 msgstr "Neuer Zulieferer"
 
@@ -1614,7 +1618,7 @@ msgstr ""
 #: src/business/business-gnome/glade/vendor.glade:596
 #: src/business/business-gnome/search-owner.c:235
 #: src/register/ledger-core/split-register-model.c:151
-#: intl-scm/guile-strings.c:3980
+#: intl-scm/guile-strings.c:3966
 msgid "Vendor"
 msgstr "Zulieferer"
 
@@ -1730,7 +1734,7 @@ msgstr ""
 "angeben. Ihre Auswahl \"%s\" wird bereits benutzt."
 
 #: src/business/business-gnome/dialog-billterms.c:484
-#: src/engine/FreqSpec.c:989 intl-scm/guile-strings.c:3926
+#: src/engine/FreqSpec.c:989 intl-scm/guile-strings.c:3912
 msgid "Unknown"
 msgstr "Unbekannt"
 
@@ -1795,12 +1799,12 @@ msgstr "Rechnungen des Kunden"
 
 #: src/business/business-gnome/dialog-customer.c:798
 #: src/business/business-gnome/dialog-employee.c:698
-#: src/business/business-gnome/dialog-invoice.c:2284
+#: src/business/business-gnome/dialog-invoice.c:2289
 #: src/business/business-gnome/dialog-job.c:519 intl-scm/guile-strings.c:655
-#: intl-scm/guile-strings.c:689 intl-scm/guile-strings.c:3604
-#: intl-scm/guile-strings.c:3606 intl-scm/guile-strings.c:3634
-#: intl-scm/guile-strings.c:3636 intl-scm/guile-strings.c:3656
-#: intl-scm/guile-strings.c:3658
+#: intl-scm/guile-strings.c:689 intl-scm/guile-strings.c:3588
+#: intl-scm/guile-strings.c:3590 intl-scm/guile-strings.c:3618
+#: intl-scm/guile-strings.c:3620 intl-scm/guile-strings.c:3640
+#: intl-scm/guile-strings.c:3642
 msgid "Process Payment"
 msgstr "Zahlung verarbeiten"
 
@@ -1819,7 +1823,7 @@ msgstr "Kundennummer"
 
 #: src/business/business-gnome/dialog-customer.c:813
 #: src/business/business-gnome/dialog-vendor.c:670
-#: intl-scm/guile-strings.c:3722
+#: intl-scm/guile-strings.c:3708
 msgid "Company Name"
 msgstr "Firmenname"
 
@@ -1829,12 +1833,12 @@ msgid "Contact"
 msgstr "Kontaktadresse"
 
 #: src/business/business-gnome/dialog-customer.c:821
-#: src/business/business-gnome/dialog-invoice.c:2323
+#: src/business/business-gnome/dialog-invoice.c:2328
 #: src/business/business-gnome/dialog-job.c:543
 #: src/business/business-gnome/dialog-order.c:859
 #: src/business/business-gnome/dialog-vendor.c:678
-#: intl-scm/guile-strings.c:3574 intl-scm/guile-strings.c:3902
-#: intl-scm/guile-strings.c:4042
+#: intl-scm/guile-strings.c:3558 intl-scm/guile-strings.c:3888
+#: intl-scm/guile-strings.c:4028
 msgid "Company"
 msgstr "Firma"
 
@@ -1845,7 +1849,7 @@ msgstr "Firma"
 msgid "ID #"
 msgstr "Nummer"
 
-#: src/business/business-gnome/dialog-date-close.c:49
+#: src/business/business-gnome/dialog-date-close.c:51
 msgid "No Account selected.  Please try again."
 msgstr "Kein Konto ausgewählt. Bitte erneut versuchen."
 
@@ -1893,7 +1897,7 @@ msgstr "Benutzername"
 #: src/gnome/glade/commodities.glade:169 src/gnome/glade/sched-xact.glade:2520
 #: src/gnome/glade/sched-xact.glade:3853 src/gnome/glade/sched-xact.glade:4194
 #: src/gnome/dialog-commodities.c:355 src/gnome-utils/gnc-dense-cal.c:274
-#: intl-scm/guile-strings.c:4018
+#: intl-scm/guile-strings.c:4004
 msgid "Name"
 msgstr "Name"
 
@@ -1913,58 +1917,62 @@ msgstr ""
 "Dieser Posten ist mit einer Bestellung verbunden und würde dadurch auch von "
 "der Bestellung gelöscht."
 
-#: src/business/business-gnome/dialog-invoice.c:555
+#: src/business/business-gnome/dialog-invoice.c:556
 msgid "The Invoice must have at least one Entry."
 msgstr "Die Rechnung muß mindestens einen Posten enthalten."
 
-#: src/business/business-gnome/dialog-invoice.c:562
+#: src/business/business-gnome/dialog-invoice.c:563
 msgid "Do you really want to post the invoice?"
 msgstr "Wollen Sie diese Rechnung wirklich buchen?"
 
-#: src/business/business-gnome/dialog-invoice.c:563
+#: src/business/business-gnome/dialog-invoice.c:564
 #: src/register/ledger-core/split-register-model.c:123
-#: intl-scm/guile-strings.c:3572 intl-scm/guile-strings.c:3906
-#: intl-scm/guile-strings.c:4206
+#: intl-scm/guile-strings.c:3556 intl-scm/guile-strings.c:3892
+#: intl-scm/guile-strings.c:4192
 msgid "Due Date"
 msgstr "Fälligkeitsdatum"
 
-#: src/business/business-gnome/dialog-invoice.c:564
+#: src/business/business-gnome/dialog-invoice.c:565
 msgid "Post Date"
 msgstr "Buchungsdatum"
 
-#: src/business/business-gnome/dialog-invoice.c:565
+#: src/business/business-gnome/dialog-invoice.c:566
 msgid "Post to Account"
 msgstr "Buchen nach Konto"
 
-#: src/business/business-gnome/dialog-invoice.c:619
+#: src/business/business-gnome/dialog-invoice.c:567
+msgid "Accumulate Splits?"
+msgstr "Buchungen kumulieren?"
+
+#: src/business/business-gnome/dialog-invoice.c:624
 msgid ""
 "Unposting this Invoice will delete the posted transaction.  Are you sure you "
 "want to unpost it?"
 msgstr "Wollen Sie wirklich die bestehende Buchung zu dieser Rechnung löschen?"
 
-#: src/business/business-gnome/dialog-invoice.c:954
+#: src/business/business-gnome/dialog-invoice.c:959
 #: src/gnome/window-reconcile.c:1013
 msgid "Total:"
 msgstr "Betrag:"
 
-#: src/business/business-gnome/dialog-invoice.c:959
+#: src/business/business-gnome/dialog-invoice.c:964
 msgid "Subtotal:"
 msgstr "Zwischensumme:"
 
-#: src/business/business-gnome/dialog-invoice.c:960
+#: src/business/business-gnome/dialog-invoice.c:965
 msgid "Tax:"
 msgstr "Steuern:"
 
-#: src/business/business-gnome/dialog-invoice.c:964
+#: src/business/business-gnome/dialog-invoice.c:969
 msgid "Total Cash:"
 msgstr "Betrag Bar:"
 
-#: src/business/business-gnome/dialog-invoice.c:965
+#: src/business/business-gnome/dialog-invoice.c:970
 msgid "Total Charge:"
 msgstr "Gesamt Belastung:"
 
-#: src/business/business-gnome/dialog-invoice.c:1128
-#: src/business/business-gnome/dialog-invoice.c:1200
+#: src/business/business-gnome/dialog-invoice.c:1133
+#: src/business/business-gnome/dialog-invoice.c:1205
 #: src/business/business-gnome/business-options-gnome.c:353
 #: src/business/business-gnome/business-gnome-utils.c:47
 #: src/gnome-utils/gnc-general-select.c:185
@@ -1973,85 +1981,85 @@ msgstr "Gesamt Belastung:"
 msgid "Select..."
 msgstr "Auswählen..."
 
-#: src/business/business-gnome/dialog-invoice.c:1730
+#: src/business/business-gnome/dialog-invoice.c:1735
 msgid "Edit Invoice"
 msgstr "Rechnung bearbeiten"
 
-#: src/business/business-gnome/dialog-invoice.c:1733
+#: src/business/business-gnome/dialog-invoice.c:1738
 msgid "View Invoice"
 msgstr "Rechnung anzeigen"
 
-#: src/business/business-gnome/dialog-invoice.c:1741
-#: intl-scm/guile-strings.c:3618 intl-scm/guile-strings.c:3620
+#: src/business/business-gnome/dialog-invoice.c:1746
+#: intl-scm/guile-strings.c:3602 intl-scm/guile-strings.c:3604
 msgid "New Bill"
 msgstr "Neue Rechnung"
 
-#: src/business/business-gnome/dialog-invoice.c:1745
+#: src/business/business-gnome/dialog-invoice.c:1750
 msgid "Edit Bill"
 msgstr "Rechnung bearbeiten"
 
-#: src/business/business-gnome/dialog-invoice.c:1748
+#: src/business/business-gnome/dialog-invoice.c:1753
 msgid "View Bill"
 msgstr "Rechnung anzeigen"
 
-#: src/business/business-gnome/dialog-invoice.c:1756
-#: intl-scm/guile-strings.c:3648 intl-scm/guile-strings.c:3650
+#: src/business/business-gnome/dialog-invoice.c:1761
+#: intl-scm/guile-strings.c:3632 intl-scm/guile-strings.c:3634
 msgid "New Expense Voucher"
 msgstr "Neue Auslagenerstattung"
 
-#: src/business/business-gnome/dialog-invoice.c:1760
+#: src/business/business-gnome/dialog-invoice.c:1765
 msgid "Edit Expense Voucher"
 msgstr "Auslagenerstattung bearbeiten"
 
-#: src/business/business-gnome/dialog-invoice.c:1763
+#: src/business/business-gnome/dialog-invoice.c:1768
 msgid "View Expense Voucher"
 msgstr "Auslagenerstattung anzeigen"
 
-#: src/business/business-gnome/dialog-invoice.c:2283
+#: src/business/business-gnome/dialog-invoice.c:2288
 msgid "View/Edit Invoice"
 msgstr "Rechnung anzeigen/bearbeiten"
 
-#: src/business/business-gnome/dialog-invoice.c:2292
+#: src/business/business-gnome/dialog-invoice.c:2297
 msgid "Invoice Owner"
 msgstr "Rechnungsmandant"
 
-#: src/business/business-gnome/dialog-invoice.c:2294
-#: intl-scm/guile-strings.c:3842 intl-scm/guile-strings.c:4166
+#: src/business/business-gnome/dialog-invoice.c:2299
+#: intl-scm/guile-strings.c:3828 intl-scm/guile-strings.c:4152
 msgid "Invoice Notes"
 msgstr "Bemerkungen Rechnung"
 
-#: src/business/business-gnome/dialog-invoice.c:2298
+#: src/business/business-gnome/dialog-invoice.c:2303
 msgid "Is Paid?"
 msgstr "Bezahlt?"
 
-#: src/business/business-gnome/dialog-invoice.c:2302
+#: src/business/business-gnome/dialog-invoice.c:2307
 msgid "Is Posted?"
 msgstr "Ist Gebucht?"
 
-#: src/business/business-gnome/dialog-invoice.c:2306
+#: src/business/business-gnome/dialog-invoice.c:2311
 msgid "Company Name "
 msgstr "Firmenname "
 
-#: src/business/business-gnome/dialog-invoice.c:2317
+#: src/business/business-gnome/dialog-invoice.c:2322
 #: src/gnome/glade/account.glade:1356 src/gnome/glade/commodities.glade:143
 #: src/gnome/glade/price.glade:231 src/gnome/dialog-commodities.c:353
 #: src/gnome/dialog-price-edit-db.c:503 src/gnome-utils/gnc-account-tree.c:89
 #: src/import-export/generic-import.glade:174
 #: src/register/ledger-core/split-register-model.c:212
-#: intl-scm/guile-strings.c:137 intl-scm/guile-strings.c:3910
+#: intl-scm/guile-strings.c:137 intl-scm/guile-strings.c:3896
 msgid "Type"
 msgstr "Art"
 
-#: src/business/business-gnome/dialog-invoice.c:2319
+#: src/business/business-gnome/dialog-invoice.c:2324
 #: src/register/ledger-core/split-register-model.c:166
 msgid "Paid"
 msgstr "Bezahlt"
 
-#: src/business/business-gnome/dialog-invoice.c:2321
+#: src/business/business-gnome/dialog-invoice.c:2326
 msgid "Posted"
 msgstr "Gebucht"
 
-#: src/business/business-gnome/dialog-invoice.c:2326
+#: src/business/business-gnome/dialog-invoice.c:2331
 #: src/business/business-gnome/dialog-order.c:864
 msgid "Opened"
 msgstr "Geöffnet"
@@ -2068,9 +2076,9 @@ msgstr "Sie müssen einen Mandanten für diesen Auftrag auswählen."
 msgid "Edit Job"
 msgstr "Auftrag bearbeiten"
 
-#: src/business/business-gnome/dialog-job.c:212 intl-scm/guile-strings.c:3596
-#: intl-scm/guile-strings.c:3598 intl-scm/guile-strings.c:3626
-#: intl-scm/guile-strings.c:3628
+#: src/business/business-gnome/dialog-job.c:212 intl-scm/guile-strings.c:3580
+#: intl-scm/guile-strings.c:3582 intl-scm/guile-strings.c:3610
+#: intl-scm/guile-strings.c:3612
 msgid "New Job"
 msgstr "Neuer Auftrag"
 
@@ -2376,8 +2384,8 @@ msgid "$"
 msgstr "$"
 
 #: src/business/business-ledger/gncEntryLedgerLoad.c:33
-#: src/gnome/glade/sched-xact.glade:4641 intl-scm/guile-strings.c:3754
-#: intl-scm/guile-strings.c:4078
+#: src/gnome/glade/sched-xact.glade:4641 intl-scm/guile-strings.c:3740
+#: intl-scm/guile-strings.c:4064
 msgid "%"
 msgstr "%"
 
@@ -2420,13 +2428,13 @@ msgstr "Aufwandskonten"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:50
 #: src/register/ledger-core/split-register-model.c:184
-#: intl-scm/guile-strings.c:3772 intl-scm/guile-strings.c:4096
+#: intl-scm/guile-strings.c:3758 intl-scm/guile-strings.c:4082
 msgid "Action"
 msgstr "Aktion"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:65
-#: intl-scm/guile-strings.c:3746 intl-scm/guile-strings.c:3788
-#: intl-scm/guile-strings.c:4070 intl-scm/guile-strings.c:4112
+#: intl-scm/guile-strings.c:3732 intl-scm/guile-strings.c:3774
+#: intl-scm/guile-strings.c:4056 intl-scm/guile-strings.c:4098
 msgid "Discount"
 msgstr "Skonto"
 
@@ -2439,13 +2447,13 @@ msgid "Discount How"
 msgstr "Berechnung Skonto"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:80
-#: intl-scm/guile-strings.c:3744 intl-scm/guile-strings.c:4068
+#: intl-scm/guile-strings.c:3730 intl-scm/guile-strings.c:4054
 msgid "Unit Price"
 msgstr "Stückpreis"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:85
-#: intl-scm/guile-strings.c:3742 intl-scm/guile-strings.c:3778
-#: intl-scm/guile-strings.c:4066 intl-scm/guile-strings.c:4102
+#: intl-scm/guile-strings.c:3728 intl-scm/guile-strings.c:3764
+#: intl-scm/guile-strings.c:4052 intl-scm/guile-strings.c:4088
 msgid "Quantity"
 msgstr "Anzahl"
 
@@ -2467,12 +2475,12 @@ msgid "Invoiced?"
 msgstr "Rechnung erhalten?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:110
-#: intl-scm/guile-strings.c:3866 intl-scm/guile-strings.c:4190
+#: intl-scm/guile-strings.c:3852 intl-scm/guile-strings.c:4176
 msgid "Subtotal"
 msgstr "Zwischensumme"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:115
-#: intl-scm/guile-strings.c:3868 intl-scm/guile-strings.c:4192
+#: intl-scm/guile-strings.c:3854 intl-scm/guile-strings.c:4178
 msgid "Tax"
 msgstr "Steuern"
 
@@ -2586,7 +2594,7 @@ msgstr "Wie wurde dieser Artikel bezahlt?"
 
 #: src/business/dialog-tax-table/tax-tables.glade:23
 #: src/business/dialog-tax-table/tax-tables.glade:86
-#: intl-scm/guile-strings.c:3668
+#: intl-scm/guile-strings.c:3652
 msgid "Tax Tables"
 msgstr "Steuertabellen"
 
@@ -2671,7 +2679,7 @@ msgstr ""
 "Fehler aufgetreten beim Speichern eines Kontos:\n"
 "%d: %s"
 
-#: src/engine/Account.c:2513 src/import-export/hbci/gnc-hbci-utils.c:550
+#: src/engine/Account.c:2513 src/import-export/hbci/gnc-hbci-utils.c:559
 #: intl-scm/guile-strings.c:107 intl-scm/guile-strings.c:1874
 msgid "Bank"
 msgstr "Bank"
@@ -3300,7 +3308,7 @@ msgstr "Buchen"
 
 #: src/gnome/glade/register.glade:2219 src/gnome-search/search.glade:74
 #: intl-scm/guile-strings.c:647 intl-scm/guile-strings.c:685
-#: intl-scm/guile-strings.c:3566
+#: intl-scm/guile-strings.c:3550
 msgid "Find"
 msgstr "Suche"
 
@@ -3555,14 +3563,14 @@ msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 #: src/import-export/generic-import.glade:161
 #: src/import-export/generic-import.glade:389
 #: src/import-export/generic-import.glade:899
-#: src/import-export/hbci/gnc-hbci-utils.c:549
+#: src/import-export/hbci/gnc-hbci-utils.c:558
 #: src/import-export/qif-import/qif.glade:125
 #: src/register/ledger-core/split-register-model.c:191
 #: intl-scm/guile-strings.c:2304 intl-scm/guile-strings.c:2424
 #: intl-scm/guile-strings.c:2448 intl-scm/guile-strings.c:2564
 #: intl-scm/guile-strings.c:2690 intl-scm/guile-strings.c:2994
 #: intl-scm/guile-strings.c:3038 intl-scm/guile-strings.c:3182
-#: intl-scm/guile-strings.c:3900
+#: intl-scm/guile-strings.c:3886
 msgid "Account"
 msgstr "Konto"
 
@@ -3800,8 +3808,8 @@ msgstr "Quelle"
 #: intl-scm/guile-strings.c:2432 intl-scm/guile-strings.c:2572
 #: intl-scm/guile-strings.c:2642 intl-scm/guile-strings.c:2696
 #: intl-scm/guile-strings.c:2910 intl-scm/guile-strings.c:3000
-#: intl-scm/guile-strings.c:3050 intl-scm/guile-strings.c:3784
-#: intl-scm/guile-strings.c:4108
+#: intl-scm/guile-strings.c:3050 intl-scm/guile-strings.c:3770
+#: intl-scm/guile-strings.c:4094
 msgid "Price"
 msgstr "Preis"
 
@@ -4187,7 +4195,7 @@ msgstr "Nächstes Auftreten"
 #: src/gnome/glade/sched-xact.glade:2577 src/gnome/window-acct-tree.c:878
 #: src/gnome/window-reconcile.c:1438 intl-scm/guile-strings.c:635
 #: intl-scm/guile-strings.c:641 intl-scm/guile-strings.c:673
-#: intl-scm/guile-strings.c:679 intl-scm/guile-strings.c:3564
+#: intl-scm/guile-strings.c:679 intl-scm/guile-strings.c:3548
 msgid "New"
 msgstr "Neu"
 
@@ -4471,7 +4479,7 @@ msgstr "Kontrolle"
 msgid "Range: "
 msgstr "Bereich: "
 
-#: src/gnome/glade/sched-xact.glade:5678 intl-scm/guile-strings.c:3988
+#: src/gnome/glade/sched-xact.glade:5678 intl-scm/guile-strings.c:3974
 msgid "Date Range"
 msgstr "Datumsbereich"
 
@@ -5006,7 +5014,7 @@ msgstr "Endbetrag Kapital"
 
 #: src/gnome/druid-loan.c:1786 src/gnome/druid-loan.c:2379
 #: src/register/ledger-core/split-register.c:2035
-#: intl-scm/guile-strings.c:3476 intl-scm/guile-strings.c:3498
+#: intl-scm/guile-strings.c:3460 intl-scm/guile-strings.c:3482
 msgid "Interest"
 msgstr "Zinsen"
 
@@ -6387,7 +6395,7 @@ msgstr "Aktuell (als Bericht)"
 #: src/register/ledger-core/split-register-model.c:317
 #: intl-scm/guile-strings.c:147 intl-scm/guile-strings.c:1916
 #: intl-scm/guile-strings.c:2704 intl-scm/guile-strings.c:3002
-#: intl-scm/guile-strings.c:3928
+#: intl-scm/guile-strings.c:3914
 msgid "Balance"
 msgstr "Saldo"
 
@@ -6414,10 +6422,10 @@ msgstr "Zukünftiges Minimum (als Bericht)"
 #: src/gnome-utils/gnc-account-tree.c:103 intl-scm/guile-strings.c:167
 #: intl-scm/guile-strings.c:1912 intl-scm/guile-strings.c:2436
 #: intl-scm/guile-strings.c:2528 intl-scm/guile-strings.c:2584
-#: intl-scm/guile-strings.c:3410 intl-scm/guile-strings.c:3752
-#: intl-scm/guile-strings.c:3806 intl-scm/guile-strings.c:4052
-#: intl-scm/guile-strings.c:4056 intl-scm/guile-strings.c:4076
-#: intl-scm/guile-strings.c:4130
+#: intl-scm/guile-strings.c:3410 intl-scm/guile-strings.c:3738
+#: intl-scm/guile-strings.c:3792 intl-scm/guile-strings.c:4038
+#: intl-scm/guile-strings.c:4042 intl-scm/guile-strings.c:4062
+#: intl-scm/guile-strings.c:4116
 msgid "Total"
 msgstr "Betrag"
 
@@ -7013,8 +7021,7 @@ msgstr ""
 "Klicken Sie \"Weiter\", wenn alle gewünschten Konten zugeordnet sind."
 
 #: src/import-export/hbci/glade/hbci.glade:293 intl-scm/guile-strings.c:3438
-#: intl-scm/guile-strings.c:3440 intl-scm/guile-strings.c:3454
-#: intl-scm/guile-strings.c:3456
+#: intl-scm/guile-strings.c:3440
 msgid "HBCI Setup"
 msgstr "HBCI Einrichtung"
 
@@ -7140,8 +7147,8 @@ msgid "HBCI Connection Window"
 msgstr "HBCI Verbindungsfenster"
 
 #: src/import-export/hbci/glade/hbci.glade:1447
-#: src/import-export/hbci/glade/hbci.glade:1520 intl-scm/guile-strings.c:3518
-#: intl-scm/guile-strings.c:3524 intl-scm/guile-strings.c:3532
+#: src/import-export/hbci/glade/hbci.glade:1520 intl-scm/guile-strings.c:3502
+#: intl-scm/guile-strings.c:3508 intl-scm/guile-strings.c:3516
 msgid "Progress"
 msgstr "Verlauf"
 
@@ -7175,7 +7182,7 @@ msgstr "Datumsbereich der abzurufenden Buchungen:"
 #: intl-scm/guile-strings.c:2706 intl-scm/guile-strings.c:3098
 #: intl-scm/guile-strings.c:3174 intl-scm/guile-strings.c:3228
 #: intl-scm/guile-strings.c:3302 intl-scm/guile-strings.c:3346
-#: intl-scm/guile-strings.c:3938 intl-scm/guile-strings.c:3974
+#: intl-scm/guile-strings.c:3924 intl-scm/guile-strings.c:3960
 msgid "From"
 msgstr "Von"
 
@@ -7198,8 +7205,8 @@ msgstr "Frühestes mögliches Datum"
 #: intl-scm/guile-strings.c:2708 intl-scm/guile-strings.c:3100
 #: intl-scm/guile-strings.c:3176 intl-scm/guile-strings.c:3230
 #: intl-scm/guile-strings.c:3304 intl-scm/guile-strings.c:3348
-#: intl-scm/guile-strings.c:3940 intl-scm/guile-strings.c:3976
-#: intl-scm/guile-strings.c:4002 intl-scm/guile-strings.c:4054
+#: intl-scm/guile-strings.c:3926 intl-scm/guile-strings.c:3962
+#: intl-scm/guile-strings.c:3988 intl-scm/guile-strings.c:4040
 msgid "To"
 msgstr "Bis"
 
@@ -7279,7 +7286,7 @@ msgstr ""
 "existiert nicht.\n"
 "Bitte wählen Sie einen anderen Ort für diese Datei."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:254
+#: src/import-export/hbci/gnc-hbci-utils.c:255
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -7287,7 +7294,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:260
+#: src/import-export/hbci/gnc-hbci-utils.c:261
 msgid ""
 "The PIN you entered was wrong.\n"
 "ATTENTION: You have zero further wrong retries left!\n"
@@ -7297,7 +7304,7 @@ msgstr ""
 "VORSICHT: Es ist kein weiterer Fehlversuch möglich!\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:267
+#: src/import-export/hbci/gnc-hbci-utils.c:268
 msgid ""
 "The PIN you entered was wrong.\n"
 "You have one further wrong retry left.\n"
@@ -7307,7 +7314,7 @@ msgstr ""
 "Es ist genau ein weiterer Fehlversuch möglich.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:274
+#: src/import-export/hbci/gnc-hbci-utils.c:275
 msgid ""
 "The PIN you entered was wrong.\n"
 "You have two further wrong retries left.\n"
@@ -7317,7 +7324,7 @@ msgstr ""
 "Es sind zwei weitere Fehlversuche möglich.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:284
+#: src/import-export/hbci/gnc-hbci-utils.c:285
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -7325,7 +7332,7 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:290
+#: src/import-export/hbci/gnc-hbci-utils.c:291
 msgid ""
 "Unfortunately you entered a wrong PIN for too many times.\n"
 "Your chip card is therefore destroyed. Aborting."
@@ -7333,7 +7340,7 @@ msgstr ""
 "Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist\n"
 "damit leider unbrauchbar geworden. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:299
+#: src/import-export/hbci/gnc-hbci-utils.c:300
 msgid ""
 "No chip card has been found in the chip card reader.\n"
 "Do you want to try again?"
@@ -7341,7 +7348,7 @@ msgstr ""
 "Im Kartenleser wurde keine Chipkarte erkannt.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:305
+#: src/import-export/hbci/gnc-hbci-utils.c:306
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
@@ -7349,7 +7356,7 @@ msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
 "unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:313
+#: src/import-export/hbci/gnc-hbci-utils.c:314
 msgid ""
 "The server of your bank refused the HBCI connection.\n"
 "Please try again later. Aborting."
@@ -7357,7 +7364,7 @@ msgstr ""
 "Der HBCI Server der Bank hat die Verbindung abgewiesen. Bitte\n"
 "versuchen Sie es später noch einmal. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:320
+#: src/import-export/hbci/gnc-hbci-utils.c:321
 msgid ""
 "There was an error when loading the plugin for your security medium \n"
 "(see log window). Probably the versions of your currently installed \n"
@@ -7370,7 +7377,7 @@ msgstr ""
 "zusammen. In diesem Fall müssten Sie das Plugin neu kompilieren und\n"
 "neu installieren. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:329
+#: src/import-export/hbci/gnc-hbci-utils.c:330
 msgid ""
 "Your security medium is not supported. No appropriate plugin \n"
 "has been found for that medium. Aborting."
@@ -7378,21 +7385,21 @@ msgstr ""
 "Ihr Sicherheitsmedium wird nicht unterstützt. Es konnte kein passendes\n"
 "Plugin für dieses Medium gefunden werden. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:519 intl-scm/guile-strings.c:3494
-#: intl-scm/guile-strings.c:3516
+#: src/import-export/hbci/gnc-hbci-utils.c:528 intl-scm/guile-strings.c:3478
+#: intl-scm/guile-strings.c:3500
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:537
-#: src/import-export/hbci/gnc-hbci-utils.c:539
+#: src/import-export/hbci/gnc-hbci-utils.c:546
+#: src/import-export/hbci/gnc-hbci-utils.c:548
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:632
+#: src/import-export/hbci/gnc-hbci-utils.c:641
 msgid "Choose HBCI bank"
 msgstr "HBCI Bank auswählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:633
+#: src/import-export/hbci/gnc-hbci-utils.c:642
 msgid ""
 "More than one HBCI bank is available for \n"
 "the requested operation. Please choose \n"
@@ -7401,17 +7408,17 @@ msgstr ""
 "Für die gewünschte Operation stehen mehr als eine HBCI Bank zur\n"
 "Verfügung. Bitte wählen Sie, welche benutzt werden soll."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:702
-#: src/import-export/hbci/gnc-hbci-utils.c:778
+#: src/import-export/hbci/gnc-hbci-utils.c:711
+#: src/import-export/hbci/gnc-hbci-utils.c:787
 #, c-format
 msgid "%s (%s) at bank %s (%s)"
 msgstr "%s (%s) bei Bank %s (BLZ %s)"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:712
+#: src/import-export/hbci/gnc-hbci-utils.c:721
 msgid "Choose HBCI customer"
 msgstr "HBCI Kundennummer wählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:713
+#: src/import-export/hbci/gnc-hbci-utils.c:722
 msgid ""
 "More than one HBCI customer is available for \n"
 "the requested operation. Please choose \n"
@@ -7421,11 +7428,11 @@ msgstr ""
 "Verfügung, unterschieden nach Kundennummer. Bitte wählen Sie, welcher\n"
 "benutzt werden soll."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:788
+#: src/import-export/hbci/gnc-hbci-utils.c:797
 msgid "Choose HBCI user"
 msgstr "HBCI Benutzerkennung wählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:789
+#: src/import-export/hbci/gnc-hbci-utils.c:798
 msgid ""
 "More than one HBCI user is available for \n"
 "the requested operation. Please choose \n"
@@ -7472,9 +7479,8 @@ msgstr "Online Aktionen"
 
 #: src/import-export/hbci/hbci-interaction.c:46 intl-scm/guile-strings.c:887
 #: intl-scm/guile-strings.c:1292 intl-scm/guile-strings.c:3442
-#: intl-scm/guile-strings.c:3458 intl-scm/guile-strings.c:3536
-#: intl-scm/guile-strings.c:3542 intl-scm/guile-strings.c:3548
-#: intl-scm/guile-strings.c:3554
+#: intl-scm/guile-strings.c:3520 intl-scm/guile-strings.c:3526
+#: intl-scm/guile-strings.c:3532 intl-scm/guile-strings.c:3538
 msgid "Online Banking & Importing"
 msgstr "Online Banking & Import"
 
@@ -7653,47 +7659,47 @@ msgstr "Online-Auftrag Einzellastschrift"
 msgid "Online HBCI Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
-#: src/import-export/ofx/gnc-ofx-import.c:100
-msgid "Select an OFX/QFX file to process"
-msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
-
-#: src/import-export/ofx/gnc-ofx-import.c:403
+#: src/import-export/ofx/gnc-ofx-import.c:358
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Aktienkonto für Aktie \"%s\""
 
-#: src/import-export/ofx/gnc-ofx-import.c:467
+#: src/import-export/ofx/gnc-ofx-import.c:422
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Einnahmenkonto für Aktie \"%s\""
 
-#: src/import-export/ofx/gnc-ofx-import.c:600
+#: src/import-export/ofx/gnc-ofx-import.c:557
 msgid "Unknown OFX checking account"
 msgstr "Unbekanntes OFX Girokonto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:604
+#: src/import-export/ofx/gnc-ofx-import.c:561
 msgid "Unknown OFX savings account"
 msgstr "Unbekanntes OFX Sparkonto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:608
+#: src/import-export/ofx/gnc-ofx-import.c:565
 msgid "Unknown OFX money market account"
 msgstr "Unbekannter OFX Fondskonto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:612
+#: src/import-export/ofx/gnc-ofx-import.c:569
 msgid "Unknown OFX credit line account"
 msgstr "Unbekanntes OFX Kreditlinien-Konto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:616
+#: src/import-export/ofx/gnc-ofx-import.c:573
 msgid "Unknown OFX CMA account"
 msgstr "Unbekannter OFX CMA Konto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:620
+#: src/import-export/ofx/gnc-ofx-import.c:577
 msgid "Unknown OFX credit card account"
 msgstr "Unbekanntes OFX Kreditkartenkonto"
 
-#: src/import-export/ofx/gnc-ofx-import.c:624
+#: src/import-export/ofx/gnc-ofx-import.c:581
 msgid "Unknown OFX investment account"
 msgstr "Unbekanntes OFX Investment-Konto"
+
+#: src/import-export/ofx/gnc-ofx-import.c:631
+msgid "Select an OFX/QFX file to process"
+msgstr "Zu verarbeitende OFX/QFX-Datei auswählen"
 
 #: src/import-export/ofx/ofx.glade:22
 msgid "OFX Import"
@@ -9584,7 +9590,7 @@ msgid "Setting Preferences"
 msgstr "GnuCash Einstellungen anpassen"
 
 #: intl-scm/guile-strings.c:367 intl-scm/guile-strings.c:881
-#: intl-scm/guile-strings.c:3720
+#: intl-scm/guile-strings.c:3706
 msgid "Business"
 msgstr "Geschäft"
 
@@ -9922,8 +9928,8 @@ msgstr "Aktienkurs automatisch eintragen"
 msgid "Display Stock Value"
 msgstr "Aktienwert anzeigen"
 
-#: intl-scm/guile-strings.c:559 intl-scm/guile-strings.c:3474
-#: intl-scm/guile-strings.c:3496
+#: intl-scm/guile-strings.c:559 intl-scm/guile-strings.c:3458
+#: intl-scm/guile-strings.c:3480
 msgid "Dividends"
 msgstr "Dividenden"
 
@@ -10019,7 +10025,7 @@ msgstr "Geschäft einrichten"
 msgid "System Components"
 msgstr "Systembestandteile"
 
-#: intl-scm/guile-strings.c:633 intl-scm/guile-strings.c:3578
+#: intl-scm/guile-strings.c:633 intl-scm/guile-strings.c:3562
 msgid "Customers"
 msgstr "Kunden"
 
@@ -10039,7 +10045,7 @@ msgstr "Aufträge des Kunden"
 msgid "Changing the Invoice Appearance"
 msgstr "Aussehen der Rechnung ändern"
 
-#: intl-scm/guile-strings.c:671 intl-scm/guile-strings.c:3608
+#: intl-scm/guile-strings.c:671 intl-scm/guile-strings.c:3592
 msgid "Vendors"
 msgstr "Zulieferer"
 
@@ -10299,7 +10305,7 @@ msgstr "Aktiva & Passiva"
 msgid "Income & Expense"
 msgstr "Erträge & Aufwendungen"
 
-#: intl-scm/guile-strings.c:865 intl-scm/guile-strings.c:3898
+#: intl-scm/guile-strings.c:865 intl-scm/guile-strings.c:3884
 msgid "Business Reports"
 msgstr "Geschäftliche Berichte"
 
@@ -10962,7 +10968,7 @@ msgstr "Wieviele Zeilen in der Kontobuch-Vorlage?"
 #: intl-scm/guile-strings.c:1362 intl-scm/guile-strings.c:1368
 #: intl-scm/guile-strings.c:1374 intl-scm/guile-strings.c:1380
 #: intl-scm/guile-strings.c:1386 intl-scm/guile-strings.c:1392
-#: intl-scm/guile-strings.c:3448 intl-scm/guile-strings.c:3464
+#: intl-scm/guile-strings.c:3448
 msgid "_+Advanced"
 msgstr "_+Erweitert"
 
@@ -11054,7 +11060,7 @@ msgstr "Alle Buchungssätze anzeigen"
 msgid "By default, show every transaction in an account."
 msgstr "Standardeinstellung: Zeige jeden Buchungssatz im Konto"
 
-#: intl-scm/guile-strings.c:1388 intl-scm/guile-strings.c:3692
+#: intl-scm/guile-strings.c:1388 intl-scm/guile-strings.c:3676
 msgid "Number of Rows"
 msgstr "Anzahl der Zeilen"
 
@@ -11631,15 +11637,15 @@ msgstr "Benutzer_definiert"
 #: intl-scm/guile-strings.c:3036 intl-scm/guile-strings.c:3042
 #: intl-scm/guile-strings.c:3048 intl-scm/guile-strings.c:3052
 #: intl-scm/guile-strings.c:3066 intl-scm/guile-strings.c:3072
-#: intl-scm/guile-strings.c:3810 intl-scm/guile-strings.c:3816
-#: intl-scm/guile-strings.c:3822 intl-scm/guile-strings.c:3828
-#: intl-scm/guile-strings.c:3834 intl-scm/guile-strings.c:3840
-#: intl-scm/guile-strings.c:3846 intl-scm/guile-strings.c:3852
-#: intl-scm/guile-strings.c:3858 intl-scm/guile-strings.c:4134
-#: intl-scm/guile-strings.c:4140 intl-scm/guile-strings.c:4146
-#: intl-scm/guile-strings.c:4152 intl-scm/guile-strings.c:4158
-#: intl-scm/guile-strings.c:4164 intl-scm/guile-strings.c:4170
-#: intl-scm/guile-strings.c:4176 intl-scm/guile-strings.c:4182
+#: intl-scm/guile-strings.c:3796 intl-scm/guile-strings.c:3802
+#: intl-scm/guile-strings.c:3808 intl-scm/guile-strings.c:3814
+#: intl-scm/guile-strings.c:3820 intl-scm/guile-strings.c:3826
+#: intl-scm/guile-strings.c:3832 intl-scm/guile-strings.c:3838
+#: intl-scm/guile-strings.c:3844 intl-scm/guile-strings.c:4120
+#: intl-scm/guile-strings.c:4126 intl-scm/guile-strings.c:4132
+#: intl-scm/guile-strings.c:4138 intl-scm/guile-strings.c:4144
+#: intl-scm/guile-strings.c:4150 intl-scm/guile-strings.c:4156
+#: intl-scm/guile-strings.c:4162 intl-scm/guile-strings.c:4168
 msgid "Display"
 msgstr "Anzeige"
 
@@ -12121,7 +12127,7 @@ msgstr "Schrittgrösse"
 #: intl-scm/guile-strings.c:2454 intl-scm/guile-strings.c:2504
 #: intl-scm/guile-strings.c:3104 intl-scm/guile-strings.c:3192
 #: intl-scm/guile-strings.c:3232 intl-scm/guile-strings.c:3306
-#: intl-scm/guile-strings.c:4008
+#: intl-scm/guile-strings.c:3994
 msgid "Report's currency"
 msgstr "Währung des Berichts"
 
@@ -12135,7 +12141,7 @@ msgstr "Preis der Währung/Aktie"
 #: intl-scm/guile-strings.c:2506 intl-scm/guile-strings.c:2532
 #: intl-scm/guile-strings.c:3106 intl-scm/guile-strings.c:3194
 #: intl-scm/guile-strings.c:3234 intl-scm/guile-strings.c:3308
-#: intl-scm/guile-strings.c:4010
+#: intl-scm/guile-strings.c:3996
 msgid "Price Source"
 msgstr "Preisberechnungsquelle"
 
@@ -12920,7 +12926,7 @@ msgid "Order of Secondary sorting"
 msgstr "Reihenfolge der zweiten Sortierung"
 
 #: intl-scm/guile-strings.c:2864 intl-scm/guile-strings.c:3022
-#: intl-scm/guile-strings.c:3762 intl-scm/guile-strings.c:4086
+#: intl-scm/guile-strings.c:3748 intl-scm/guile-strings.c:4072
 msgid "Display the date?"
 msgstr "Anzeigen des Datums?"
 
@@ -12933,7 +12939,7 @@ msgid "Display the check number?"
 msgstr "Anzeigen der Schecknummer?"
 
 #: intl-scm/guile-strings.c:2876 intl-scm/guile-strings.c:3034
-#: intl-scm/guile-strings.c:3768 intl-scm/guile-strings.c:4092
+#: intl-scm/guile-strings.c:3754 intl-scm/guile-strings.c:4078
 msgid "Display the description?"
 msgstr "Anzeigen der Beschreibung?"
 
@@ -12978,12 +12984,12 @@ msgid "Display a running balance"
 msgstr "Einen laufenden Saldo anzeigen"
 
 #: intl-scm/guile-strings.c:2918 intl-scm/guile-strings.c:3074
-#: intl-scm/guile-strings.c:3818 intl-scm/guile-strings.c:4142
+#: intl-scm/guile-strings.c:3804 intl-scm/guile-strings.c:4128
 msgid "Totals"
 msgstr "Beträge"
 
 #: intl-scm/guile-strings.c:2920 intl-scm/guile-strings.c:3076
-#: intl-scm/guile-strings.c:3820 intl-scm/guile-strings.c:4144
+#: intl-scm/guile-strings.c:3806 intl-scm/guile-strings.c:4130
 msgid "Display the totals?"
 msgstr "Anzeigen der Bilanz"
 
@@ -13448,86 +13454,86 @@ msgstr "OFX/QFX importieren"
 msgid "Process an OFX/QFX response file"
 msgstr "Eine OFX/QFX Datei verarbeiten"
 
-#: intl-scm/guile-strings.c:3444 intl-scm/guile-strings.c:3460
+#: intl-scm/guile-strings.c:3444
 msgid "HBCI Remember PIN in memory"
 msgstr "HBCI PIN im Speicher merken"
 
-#: intl-scm/guile-strings.c:3446 intl-scm/guile-strings.c:3462
+#: intl-scm/guile-strings.c:3446
 msgid "Remember the PIN for HBCI in memory during a session"
 msgstr "Die PIN für HBCI während einer GnuCash-Sitzung im Speicher merken"
 
-#: intl-scm/guile-strings.c:3450 intl-scm/guile-strings.c:3466
+#: intl-scm/guile-strings.c:3450
 msgid "HBCI Verbose Debug Messages"
 msgstr "HBCI Ausführliche Fehlermeldungen"
 
-#: intl-scm/guile-strings.c:3452 intl-scm/guile-strings.c:3468
+#: intl-scm/guile-strings.c:3452
 msgid "Activate verbose debug messages for HBCI Online Banking."
 msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
 
-#: intl-scm/guile-strings.c:3470
+#: intl-scm/guile-strings.c:3454
 msgid "Replay GnuCash .log file"
 msgstr "Einträge aus Logdatei abspielen"
 
-#: intl-scm/guile-strings.c:3472
+#: intl-scm/guile-strings.c:3456
 msgid "Replay a gnucash log file after a crash.  This cannot be undone."
 msgstr ""
 "Einträge aus Logdatei nach einem Programmabsturz abspielen. Dies kann nicht "
 "rückgängig gemacht werden."
 
-#: intl-scm/guile-strings.c:3478 intl-scm/guile-strings.c:3500
+#: intl-scm/guile-strings.c:3462 intl-scm/guile-strings.c:3484
 msgid "Cap Return"
 msgstr "Kapitalverzinsung"
 
-#: intl-scm/guile-strings.c:3480 intl-scm/guile-strings.c:3502
+#: intl-scm/guile-strings.c:3464 intl-scm/guile-strings.c:3486
 msgid "Cap. gain (long)"
 msgstr "Kapitalertrag (langfristig)"
 
-#: intl-scm/guile-strings.c:3482 intl-scm/guile-strings.c:3504
+#: intl-scm/guile-strings.c:3466 intl-scm/guile-strings.c:3488
 msgid "Cap. gain (mid)"
 msgstr "Kapitalertrag (mittelfristig)"
 
-#: intl-scm/guile-strings.c:3484 intl-scm/guile-strings.c:3506
+#: intl-scm/guile-strings.c:3468 intl-scm/guile-strings.c:3490
 msgid "Cap. gain (short)"
 msgstr "Kapitalertrag (kurzfristig)"
 
-#: intl-scm/guile-strings.c:3490 intl-scm/guile-strings.c:3512
+#: intl-scm/guile-strings.c:3474 intl-scm/guile-strings.c:3496
 msgid "Commissions"
 msgstr "Kommissionen"
 
-#: intl-scm/guile-strings.c:3492 intl-scm/guile-strings.c:3514
+#: intl-scm/guile-strings.c:3476 intl-scm/guile-strings.c:3498
 msgid "Margin Interest"
 msgstr "Zinsmarge"
 
-#: intl-scm/guile-strings.c:3520
+#: intl-scm/guile-strings.c:3504
 msgid "Loading QIF file..."
 msgstr "QIF Datei lesen..."
 
-#: intl-scm/guile-strings.c:3522
+#: intl-scm/guile-strings.c:3506
 msgid "QIF import: Name conflict with another account."
 msgstr "QIF-Import: Namenskonflikt mit bestehendem Konto."
 
-#: intl-scm/guile-strings.c:3526
+#: intl-scm/guile-strings.c:3510
 msgid "Importing transactions..."
 msgstr "Buchungen importieren..."
 
-#: intl-scm/guile-strings.c:3528
+#: intl-scm/guile-strings.c:3512
 #, c-format
 msgid "The file contains an unknown Action '%s'."
 msgstr "Diese Datei enthält eine unbekannte Aktion '%s'."
 
-#: intl-scm/guile-strings.c:3530
+#: intl-scm/guile-strings.c:3514
 msgid "Some transactions may be discarded."
 msgstr "Einige Buchungen sind eventuell verworfen worden."
 
-#: intl-scm/guile-strings.c:3534
+#: intl-scm/guile-strings.c:3518
 msgid "Finding duplicate transactions..."
 msgstr "Duplizierte Buchungen finden..."
 
-#: intl-scm/guile-strings.c:3538
+#: intl-scm/guile-strings.c:3522
 msgid "Match display threshold"
 msgstr "Entscheidungsschwelle für Anzeige in Zuordnung"
 
-#: intl-scm/guile-strings.c:3540
+#: intl-scm/guile-strings.c:3524
 msgid ""
 "The minimum score a potential match must have to be displayed in the match "
 "list."
@@ -13536,11 +13542,11 @@ msgstr ""
 "existierenden Buchung im Buchungs-Import überhaupt berücksichtigt und "
 "angezeigt wird."
 
-#: intl-scm/guile-strings.c:3544
+#: intl-scm/guile-strings.c:3528
 msgid "Auto-ADD threshold"
 msgstr "Entscheidungsschwelle für automatisches Hinzufügen"
 
-#: intl-scm/guile-strings.c:3546
+#: intl-scm/guile-strings.c:3530
 msgid ""
 "A transaction whose best match's score is in the red zone (above the display "
 "threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
@@ -13550,11 +13556,11 @@ msgstr ""
 "roten Bereich liegt (größer als Anzeige-Schwelle, aber kleiner oder gleich "
 "der Auto-Hinzufügen-Schwelle), hat als Voreinstellung 'Hinzufügen'."
 
-#: intl-scm/guile-strings.c:3550
+#: intl-scm/guile-strings.c:3534
 msgid "Auto-CLEAR threshold"
 msgstr "Entscheidungsschwelle für automatisches Abgleichen"
 
-#: intl-scm/guile-strings.c:3552
+#: intl-scm/guile-strings.c:3536
 msgid ""
 "A transaction whose best match's score is in the green zone (above or equal "
 "to the Auto-CLEAR threshold) will be CLEARed by default."
@@ -13563,11 +13569,11 @@ msgstr ""
 "grünen Bereich liegt (größer oder gleich der Auto-Abgleich-Schwelle) hat als "
 "Voreinstellung 'Abgleichen'."
 
-#: intl-scm/guile-strings.c:3556
+#: intl-scm/guile-strings.c:3540
 msgid "Commercial ATM fees threshold"
 msgstr "Auszahlungsgebühren"
 
-#: intl-scm/guile-strings.c:3558
+#: intl-scm/guile-strings.c:3542
 msgid ""
 "In some places commercial ATMs (not belonging to a financial institution) "
 "are installed in places like convienience store.  These ATM add its fee "
@@ -13583,415 +13589,419 @@ msgstr ""
 "existierende Buchung richtig zuzuordnen, können Sie hier die Höhe für solche "
 "zusätzlichen Auszahlungsgebühren in Ihrer lokalen Währung angeben."
 
-#: intl-scm/guile-strings.c:3560
+#: intl-scm/guile-strings.c:3544
 msgid "Extensions"
 msgstr "Erweiterungen"
 
-#: intl-scm/guile-strings.c:3562
+#: intl-scm/guile-strings.c:3546
 msgid "_Business"
 msgstr "_Geschäft"
 
-#: intl-scm/guile-strings.c:3568
+#: intl-scm/guile-strings.c:3552
 msgid "The following bills are due:"
 msgstr "Die folgenden Rechnungen sind fällig:"
 
-#: intl-scm/guile-strings.c:3570
+#: intl-scm/guile-strings.c:3554
 msgid "The following bill is due:"
 msgstr "Die folgende Rechnung ist fällig:"
 
-#: intl-scm/guile-strings.c:3584 intl-scm/guile-strings.c:3586
+#: intl-scm/guile-strings.c:3568 intl-scm/guile-strings.c:3570
 msgid "Find Customer"
 msgstr "Kunde suchen"
 
-#: intl-scm/guile-strings.c:3592 intl-scm/guile-strings.c:3594
+#: intl-scm/guile-strings.c:3576 intl-scm/guile-strings.c:3578
 msgid "Find Invoice"
 msgstr "Rechnung suchen"
 
-#: intl-scm/guile-strings.c:3600 intl-scm/guile-strings.c:3602
-#: intl-scm/guile-strings.c:3630 intl-scm/guile-strings.c:3632
+#: intl-scm/guile-strings.c:3584 intl-scm/guile-strings.c:3586
+#: intl-scm/guile-strings.c:3614 intl-scm/guile-strings.c:3616
 msgid "Find Job"
 msgstr "Auftrag suchen"
 
-#: intl-scm/guile-strings.c:3614 intl-scm/guile-strings.c:3616
+#: intl-scm/guile-strings.c:3598 intl-scm/guile-strings.c:3600
 msgid "Find Vendor"
 msgstr "Zulieferer suchen"
 
-#: intl-scm/guile-strings.c:3622 intl-scm/guile-strings.c:3624
+#: intl-scm/guile-strings.c:3606 intl-scm/guile-strings.c:3608
 msgid "Find Bill"
 msgstr "Rechnung suchen"
 
-#: intl-scm/guile-strings.c:3638
+#: intl-scm/guile-strings.c:3622
 msgid "Employees"
 msgstr "Mitarbeiter"
 
-#: intl-scm/guile-strings.c:3644 intl-scm/guile-strings.c:3646
+#: intl-scm/guile-strings.c:3628 intl-scm/guile-strings.c:3630
 msgid "Find Employee"
 msgstr "Mitarbeiter suchen"
 
-#: intl-scm/guile-strings.c:3652 intl-scm/guile-strings.c:3654
+#: intl-scm/guile-strings.c:3636 intl-scm/guile-strings.c:3638
 msgid "Find Expense Voucher"
 msgstr "Auslagenerstattung suchen"
 
-#: intl-scm/guile-strings.c:3660
+#: intl-scm/guile-strings.c:3644
 msgid "Bills Due Reminder"
 msgstr "Erinnerung für fällige Rechnungen"
 
-#: intl-scm/guile-strings.c:3662
+#: intl-scm/guile-strings.c:3646
 msgid "View the quick report of bills coming due soon."
 msgstr "Bericht über demnächst fällige Rechnungen anzeigen."
 
-#: intl-scm/guile-strings.c:3664 intl-scm/guile-strings.c:3830
-#: intl-scm/guile-strings.c:4154
+#: intl-scm/guile-strings.c:3648 intl-scm/guile-strings.c:3816
+#: intl-scm/guile-strings.c:4140
 msgid "Billing Terms"
 msgstr "Zahlungsbedingungen"
 
-#: intl-scm/guile-strings.c:3666
+#: intl-scm/guile-strings.c:3650
 msgid "View and Edit the available Billing Terms"
 msgstr "Die verfügbaren Zahlungsbedingungen anzeigen und bearbeiten."
 
-#: intl-scm/guile-strings.c:3670
+#: intl-scm/guile-strings.c:3654
 msgid "View and Edit the available Tax Tables"
 msgstr "Die verfügbaren Steuertabellen anzeigen und bearbeiten"
 
-#: intl-scm/guile-strings.c:3672 intl-scm/guile-strings.c:3674
+#: intl-scm/guile-strings.c:3656 intl-scm/guile-strings.c:3658
 msgid "Test Search Dialog"
 msgstr "Den Such-Dialog testen"
 
-#: intl-scm/guile-strings.c:3676
+#: intl-scm/guile-strings.c:3660
 msgid "Reload invoice report"
 msgstr "Rechnungsbericht neu laden"
 
-#: intl-scm/guile-strings.c:3678
+#: intl-scm/guile-strings.c:3662
 msgid "Reload invoice report scheme file"
 msgstr "Rechnungsbericht Quelltext-Datei neu laden"
 
-#: intl-scm/guile-strings.c:3680
+#: intl-scm/guile-strings.c:3664
 msgid "Reload owner report"
 msgstr "Mandantenbericht neu laden"
 
-#: intl-scm/guile-strings.c:3682
+#: intl-scm/guile-strings.c:3666
 msgid "Reload owner report scheme file"
 msgstr "Mandantenbericht Quelltext-Datei neu laden"
 
-#: intl-scm/guile-strings.c:3684
+#: intl-scm/guile-strings.c:3668
 msgid "Reload receivable report"
 msgstr "Forderungs-Bericht neu laden"
 
-#: intl-scm/guile-strings.c:3686
+#: intl-scm/guile-strings.c:3670
 msgid "Reload receivable report scheme file"
 msgstr "Forderungs-Bericht Quelltext-Datei neu laden"
 
-#: intl-scm/guile-strings.c:3688 intl-scm/guile-strings.c:3690
+#: intl-scm/guile-strings.c:3672 intl-scm/guile-strings.c:3674
 msgid "Initialize Test Data"
 msgstr "Testdaten zurücksetzen"
 
-#: intl-scm/guile-strings.c:3694
+#: intl-scm/guile-strings.c:3678
 msgid "Default number of register rows to display in Invoices."
 msgstr "Standardanzahl von Zeilen, die in Rechnungen angezeigt werden sollen"
 
-#: intl-scm/guile-strings.c:3696
+#: intl-scm/guile-strings.c:3680
+msgid "Accumulate splits on Post?"
+msgstr "Buchungen bei Ausstellung kumulieren?"
+
+#: intl-scm/guile-strings.c:3682
 msgid "Invoice Tax Included?"
 msgstr "Rechnung mit MWSt?"
 
-#: intl-scm/guile-strings.c:3698
+#: intl-scm/guile-strings.c:3684
 msgid "Bill Tax Included?"
 msgstr "Rechnungen mit Steuern erstellen?"
 
-#: intl-scm/guile-strings.c:3700
+#: intl-scm/guile-strings.c:3686
 msgid "Notify Bills Due?"
 msgstr "Benachrichtigung bei fälligen Rechnungen?"
 
-#: intl-scm/guile-strings.c:3702
+#: intl-scm/guile-strings.c:3688
 msgid "Whether to display the list of Bills Due at startup."
 msgstr ""
 "Wählen Sie, ob die Liste von fälligen Rechnungen beim Programmstart "
 "angezeigt werden soll."
 
-#: intl-scm/guile-strings.c:3704
+#: intl-scm/guile-strings.c:3690
 msgid "Bills Due Days"
 msgstr "Zeitraum Fälligkeit"
 
-#: intl-scm/guile-strings.c:3706
+#: intl-scm/guile-strings.c:3692
 msgid "How many days in the future to warn about Bills coming due."
 msgstr "Anzahl Tage im voraus, die an fällige Rechnungen erinnert werden soll."
 
-#: intl-scm/guile-strings.c:3708
+#: intl-scm/guile-strings.c:3694
 msgid "The name of your business"
 msgstr "Der Name Ihres Geschäfts"
 
-#: intl-scm/guile-strings.c:3710
+#: intl-scm/guile-strings.c:3696
 msgid "The address of your business"
 msgstr "Die Anschrift Ihres Geschäfts"
 
-#: intl-scm/guile-strings.c:3712
+#: intl-scm/guile-strings.c:3698
 msgid "Default Customer TaxTable"
 msgstr "Voreinstellung Kunde Steuertabelle"
 
-#: intl-scm/guile-strings.c:3714
+#: intl-scm/guile-strings.c:3700
 msgid "The default tax table to apply to customers."
 msgstr ""
 "Voreinstellung für die Steuertabelle, die bei Kunden angewandt werden soll."
 
-#: intl-scm/guile-strings.c:3716
+#: intl-scm/guile-strings.c:3702
 msgid "Default Vendor TaxTable"
 msgstr "Voreinstellung Zulieferer Steuertabelle"
 
-#: intl-scm/guile-strings.c:3718
+#: intl-scm/guile-strings.c:3704
 msgid "The default tax table to apply to vendors."
 msgstr ""
 "Voreinstellung für die Steuertabelle, die bei Zulieferern angewandt werden "
 "soll."
 
-#: intl-scm/guile-strings.c:3724
+#: intl-scm/guile-strings.c:3710
 msgid "Company Address"
 msgstr "Firmenadresse"
 
-#: intl-scm/guile-strings.c:3726
+#: intl-scm/guile-strings.c:3712
 msgid "Payable Account"
 msgstr "Verbindlichkeiten Konto"
 
-#: intl-scm/guile-strings.c:3728
+#: intl-scm/guile-strings.c:3714
 msgid "The payable account you wish to examine"
 msgstr "Folgendes Verbindlichkeiten-Konto wollen Sie untersuchen"
 
-#: intl-scm/guile-strings.c:3730 intl-scm/guile-strings.c:3732
+#: intl-scm/guile-strings.c:3716 intl-scm/guile-strings.c:3718
 msgid "Payable Aging"
 msgstr "Entwicklung Verbindlichkeiten"
 
-#: intl-scm/guile-strings.c:3734 intl-scm/guile-strings.c:4058
+#: intl-scm/guile-strings.c:3720 intl-scm/guile-strings.c:4044
 msgid "Invoice Number"
 msgstr "Rechnungsnummer"
 
-#: intl-scm/guile-strings.c:3740 intl-scm/guile-strings.c:4064
+#: intl-scm/guile-strings.c:3726 intl-scm/guile-strings.c:4050
 msgid "Charge Type"
 msgstr "Einheit"
 
-#: intl-scm/guile-strings.c:3748 intl-scm/guile-strings.c:3794
-#: intl-scm/guile-strings.c:4072 intl-scm/guile-strings.c:4118
+#: intl-scm/guile-strings.c:3734 intl-scm/guile-strings.c:3780
+#: intl-scm/guile-strings.c:4058 intl-scm/guile-strings.c:4104
 msgid "Taxable"
 msgstr "Steuerwirksam"
 
-#: intl-scm/guile-strings.c:3750 intl-scm/guile-strings.c:3800
-#: intl-scm/guile-strings.c:4074 intl-scm/guile-strings.c:4124
+#: intl-scm/guile-strings.c:3736 intl-scm/guile-strings.c:3786
+#: intl-scm/guile-strings.c:4060 intl-scm/guile-strings.c:4110
 msgid "Tax Amount"
 msgstr "Betrag Steuern"
 
-#: intl-scm/guile-strings.c:3756 intl-scm/guile-strings.c:4080
+#: intl-scm/guile-strings.c:3742 intl-scm/guile-strings.c:4066
 msgid "T"
 msgstr "S"
 
-#: intl-scm/guile-strings.c:3758 intl-scm/guile-strings.c:3764
-#: intl-scm/guile-strings.c:3770 intl-scm/guile-strings.c:3776
-#: intl-scm/guile-strings.c:3782 intl-scm/guile-strings.c:3786
-#: intl-scm/guile-strings.c:3792 intl-scm/guile-strings.c:3798
-#: intl-scm/guile-strings.c:3804 intl-scm/guile-strings.c:3942
-#: intl-scm/guile-strings.c:3946 intl-scm/guile-strings.c:3950
-#: intl-scm/guile-strings.c:3954 intl-scm/guile-strings.c:3958
-#: intl-scm/guile-strings.c:3962 intl-scm/guile-strings.c:4082
-#: intl-scm/guile-strings.c:4088 intl-scm/guile-strings.c:4094
-#: intl-scm/guile-strings.c:4100 intl-scm/guile-strings.c:4106
-#: intl-scm/guile-strings.c:4110 intl-scm/guile-strings.c:4116
-#: intl-scm/guile-strings.c:4122 intl-scm/guile-strings.c:4128
+#: intl-scm/guile-strings.c:3744 intl-scm/guile-strings.c:3750
+#: intl-scm/guile-strings.c:3756 intl-scm/guile-strings.c:3762
+#: intl-scm/guile-strings.c:3768 intl-scm/guile-strings.c:3772
+#: intl-scm/guile-strings.c:3778 intl-scm/guile-strings.c:3784
+#: intl-scm/guile-strings.c:3790 intl-scm/guile-strings.c:3928
+#: intl-scm/guile-strings.c:3932 intl-scm/guile-strings.c:3936
+#: intl-scm/guile-strings.c:3940 intl-scm/guile-strings.c:3944
+#: intl-scm/guile-strings.c:3948 intl-scm/guile-strings.c:4068
+#: intl-scm/guile-strings.c:4074 intl-scm/guile-strings.c:4080
+#: intl-scm/guile-strings.c:4086 intl-scm/guile-strings.c:4092
+#: intl-scm/guile-strings.c:4096 intl-scm/guile-strings.c:4102
+#: intl-scm/guile-strings.c:4108 intl-scm/guile-strings.c:4114
 msgid "Display Columns"
 msgstr "Spalten anzeigen"
 
-#: intl-scm/guile-strings.c:3774 intl-scm/guile-strings.c:4098
+#: intl-scm/guile-strings.c:3760 intl-scm/guile-strings.c:4084
 msgid "Display the action?"
 msgstr "Aktion anzeigen?"
 
-#: intl-scm/guile-strings.c:3780 intl-scm/guile-strings.c:4104
+#: intl-scm/guile-strings.c:3766 intl-scm/guile-strings.c:4090
 msgid "Display the quantity of items?"
 msgstr "Anzeigen der Menge?"
 
-#: intl-scm/guile-strings.c:3790 intl-scm/guile-strings.c:4114
+#: intl-scm/guile-strings.c:3776 intl-scm/guile-strings.c:4100
 msgid "Display the entry's discount"
 msgstr "Anzeigen der Ermäßigung des Postens"
 
-#: intl-scm/guile-strings.c:3796 intl-scm/guile-strings.c:4120
+#: intl-scm/guile-strings.c:3782 intl-scm/guile-strings.c:4106
 msgid "Display the entry's taxable status"
 msgstr "Anzeigen der Steuerwirksamkeit des Postens"
 
-#: intl-scm/guile-strings.c:3802 intl-scm/guile-strings.c:4126
+#: intl-scm/guile-strings.c:3788 intl-scm/guile-strings.c:4112
 msgid "Display each entry's total total tax"
 msgstr "Anzeigen des gesamten Steueranteils jedes Postens"
 
-#: intl-scm/guile-strings.c:3808 intl-scm/guile-strings.c:4132
+#: intl-scm/guile-strings.c:3794 intl-scm/guile-strings.c:4118
 msgid "Display the entry's value"
 msgstr "Anzeigen des Betrags des Postens"
 
-#: intl-scm/guile-strings.c:3812 intl-scm/guile-strings.c:4136
+#: intl-scm/guile-strings.c:3798 intl-scm/guile-strings.c:4122
 msgid "Individual Taxes"
 msgstr "Einzelne Steueranteile"
 
-#: intl-scm/guile-strings.c:3814 intl-scm/guile-strings.c:4138
+#: intl-scm/guile-strings.c:3800 intl-scm/guile-strings.c:4124
 msgid "Display all the individual taxes?"
 msgstr "Alle einzelnen Steueranteile anzeigen?"
 
-#: intl-scm/guile-strings.c:3824 intl-scm/guile-strings.c:4148
+#: intl-scm/guile-strings.c:3810 intl-scm/guile-strings.c:4134
 msgid "References"
 msgstr "Referenz"
 
-#: intl-scm/guile-strings.c:3826 intl-scm/guile-strings.c:4150
+#: intl-scm/guile-strings.c:3812 intl-scm/guile-strings.c:4136
 msgid "Display the invoice references?"
 msgstr "Rechnungsreferenz anzeigen?"
 
-#: intl-scm/guile-strings.c:3832 intl-scm/guile-strings.c:4156
+#: intl-scm/guile-strings.c:3818 intl-scm/guile-strings.c:4142
 msgid "Display the invoice billing terms?"
 msgstr "Zahlungsbedingungen der Rechnung anzeigen?"
 
-#: intl-scm/guile-strings.c:3838 intl-scm/guile-strings.c:4162
+#: intl-scm/guile-strings.c:3824 intl-scm/guile-strings.c:4148
 msgid "Display the billing id?"
 msgstr "Rechnungsnummer anzeigen?"
 
-#: intl-scm/guile-strings.c:3844 intl-scm/guile-strings.c:4168
+#: intl-scm/guile-strings.c:3830 intl-scm/guile-strings.c:4154
 msgid "Display the invoice notes?"
 msgstr "Rechnungsbemerkungen anzeigen?"
 
-#: intl-scm/guile-strings.c:3848 intl-scm/guile-strings.c:4172
+#: intl-scm/guile-strings.c:3834 intl-scm/guile-strings.c:4158
 msgid "Payments"
 msgstr "Zahlungen"
 
-#: intl-scm/guile-strings.c:3850 intl-scm/guile-strings.c:4174
+#: intl-scm/guile-strings.c:3836 intl-scm/guile-strings.c:4160
 msgid "Display the payments applied to this invoice?"
 msgstr "Die Zahlungen in dieser Rechnung anzeigen?"
 
-#: intl-scm/guile-strings.c:3854 intl-scm/guile-strings.c:4178
+#: intl-scm/guile-strings.c:3840 intl-scm/guile-strings.c:4164
 msgid "Extra Notes"
 msgstr "Zusätzliche Bemerkungen"
 
-#: intl-scm/guile-strings.c:3856 intl-scm/guile-strings.c:4180
+#: intl-scm/guile-strings.c:3842 intl-scm/guile-strings.c:4166
 msgid "Extra notes to put on the invoice"
 msgstr "Zusätzliche Bemerkungen, die auf die Rechnung gedruckt werden sollen"
 
-#: intl-scm/guile-strings.c:3860 intl-scm/guile-strings.c:3964
-#: intl-scm/guile-strings.c:3986 intl-scm/guile-strings.c:4184
+#: intl-scm/guile-strings.c:3846 intl-scm/guile-strings.c:3950
+#: intl-scm/guile-strings.c:3972 intl-scm/guile-strings.c:4170
 msgid "Today Date Format"
 msgstr "Datumsformat heute"
 
-#: intl-scm/guile-strings.c:3862 intl-scm/guile-strings.c:3966
-#: intl-scm/guile-strings.c:4186
+#: intl-scm/guile-strings.c:3848 intl-scm/guile-strings.c:3952
+#: intl-scm/guile-strings.c:4172
 msgid "The format for the date->string conversion for today's date."
 msgstr "Das Datumsformat für den Ausdruck des heutigen Datums."
 
-#: intl-scm/guile-strings.c:3864 intl-scm/guile-strings.c:3924
-#: intl-scm/guile-strings.c:4188
+#: intl-scm/guile-strings.c:3850 intl-scm/guile-strings.c:3910
+#: intl-scm/guile-strings.c:4174
 msgid "Payment, thank you"
 msgstr "Vielen Dank für Ihre Zahlung"
 
-#: intl-scm/guile-strings.c:3870 intl-scm/guile-strings.c:4194
+#: intl-scm/guile-strings.c:3856 intl-scm/guile-strings.c:4180
 msgid "Amount Due"
 msgstr "Fälliger Betrag"
 
-#: intl-scm/guile-strings.c:3872 intl-scm/guile-strings.c:4196
+#: intl-scm/guile-strings.c:3858 intl-scm/guile-strings.c:4182
 msgid "REF"
 msgstr "Referenz"
 
-#: intl-scm/guile-strings.c:3878 intl-scm/guile-strings.c:4202
+#: intl-scm/guile-strings.c:3864 intl-scm/guile-strings.c:4188
 msgid "Expense Voucher"
 msgstr "Auslagenerstattung"
 
-#: intl-scm/guile-strings.c:3880
+#: intl-scm/guile-strings.c:3866
 msgid "Invoice&nbsp;Date"
 msgstr "Rechnungsdatum"
 
-#: intl-scm/guile-strings.c:3882
+#: intl-scm/guile-strings.c:3868
 msgid "Due&nbsp;Date"
 msgstr "Fälligkeitsdatum"
 
-#: intl-scm/guile-strings.c:3884
+#: intl-scm/guile-strings.c:3870
 msgid "<br>Invoice&nbsp;in&nbsp;progress...."
 msgstr "Rechnung in Bearbeitung..."
 
-#: intl-scm/guile-strings.c:3890 intl-scm/guile-strings.c:4214
+#: intl-scm/guile-strings.c:3876 intl-scm/guile-strings.c:4200
 msgid "No Valid Invoice Selected"
 msgstr "Keine gültige Rechnung ausgewählt"
 
-#: intl-scm/guile-strings.c:3892 intl-scm/guile-strings.c:3894
-#: intl-scm/guile-strings.c:3896
+#: intl-scm/guile-strings.c:3878 intl-scm/guile-strings.c:3880
+#: intl-scm/guile-strings.c:3882
 msgid "Fancy Invoice"
 msgstr "Elegante Rechnung"
 
-#: intl-scm/guile-strings.c:3916 intl-scm/guile-strings.c:4044
+#: intl-scm/guile-strings.c:3902 intl-scm/guile-strings.c:4030
 msgid "0-30 days"
 msgstr "0-30 Tage"
 
-#: intl-scm/guile-strings.c:3918 intl-scm/guile-strings.c:4046
+#: intl-scm/guile-strings.c:3904 intl-scm/guile-strings.c:4032
 msgid "31-60 days"
 msgstr "31-60 Tage"
 
-#: intl-scm/guile-strings.c:3920 intl-scm/guile-strings.c:4048
+#: intl-scm/guile-strings.c:3906 intl-scm/guile-strings.c:4034
 msgid "61-90 days"
 msgstr "61-90 Tage"
 
-#: intl-scm/guile-strings.c:3922 intl-scm/guile-strings.c:4050
+#: intl-scm/guile-strings.c:3908 intl-scm/guile-strings.c:4036
 msgid "91+ days"
 msgstr "Mehr als 91 Tage"
 
-#: intl-scm/guile-strings.c:3930
+#: intl-scm/guile-strings.c:3916
 msgid "Total Credit"
 msgstr "Gesamt Gutschrift"
 
-#: intl-scm/guile-strings.c:3932
+#: intl-scm/guile-strings.c:3918
 msgid "Total Due"
 msgstr "Gesamt fällig"
 
-#: intl-scm/guile-strings.c:3934
+#: intl-scm/guile-strings.c:3920
 msgid "The company for this report"
 msgstr "Die Firma dieses Berichts"
 
-#: intl-scm/guile-strings.c:3936
+#: intl-scm/guile-strings.c:3922
 msgid "The account to search for transactions"
 msgstr "Das Konto, in dem nach Buchungen gesucht werden soll"
 
-#: intl-scm/guile-strings.c:3944 intl-scm/guile-strings.c:3948
+#: intl-scm/guile-strings.c:3930 intl-scm/guile-strings.c:3934
 msgid "Display the transaction date?"
 msgstr "Anzeigen des Buchungsdatum?"
 
-#: intl-scm/guile-strings.c:3952
+#: intl-scm/guile-strings.c:3938
 msgid "Display the transaction reference?"
 msgstr "Anzeigen der Buchungsreferenz?"
 
-#: intl-scm/guile-strings.c:3956
+#: intl-scm/guile-strings.c:3942
 msgid "Display the transaction type?"
 msgstr "Anzeigen der Buchungsart?"
 
-#: intl-scm/guile-strings.c:3960
+#: intl-scm/guile-strings.c:3946
 msgid "Display the transaction description?"
 msgstr "Anzeigen der Buchungsbeschreibung?"
 
-#: intl-scm/guile-strings.c:3972
+#: intl-scm/guile-strings.c:3958
 msgid "Expense Report"
 msgstr "Bericht Aufwendungen"
 
-#: intl-scm/guile-strings.c:3984
+#: intl-scm/guile-strings.c:3970
 msgid " Report: "
 msgstr " Bericht: "
 
-#: intl-scm/guile-strings.c:3990 intl-scm/guile-strings.c:3996
+#: intl-scm/guile-strings.c:3976 intl-scm/guile-strings.c:3982
 msgid "Customer Report"
 msgstr "Kundenbericht"
 
-#: intl-scm/guile-strings.c:3992 intl-scm/guile-strings.c:3998
+#: intl-scm/guile-strings.c:3978 intl-scm/guile-strings.c:3984
 msgid "Vendor Report"
 msgstr "Zuliefererbericht"
 
-#: intl-scm/guile-strings.c:3994 intl-scm/guile-strings.c:4000
+#: intl-scm/guile-strings.c:3980 intl-scm/guile-strings.c:3986
 msgid "Employee Report"
 msgstr "Mitarbeiterbericht"
 
-#: intl-scm/guile-strings.c:4004
+#: intl-scm/guile-strings.c:3990
 msgid "Sort By"
 msgstr "Sortiere nach"
 
-#: intl-scm/guile-strings.c:4006
+#: intl-scm/guile-strings.c:3992
 msgid "Sort Order"
 msgstr "Sortierreihenfolge"
 
-#: intl-scm/guile-strings.c:4012
+#: intl-scm/guile-strings.c:3998
 msgid "Show Multi-currency Totals?"
 msgstr "Multi-Währung Gesamt anzeigen?"
 
-#: intl-scm/guile-strings.c:4014
+#: intl-scm/guile-strings.c:4000
 #, c-format
 msgid ""
 "Transactions relating to company  %d contain more than one currency.  This "
@@ -14000,53 +14010,53 @@ msgstr ""
 "Die Buchungen mit Firma %d enthält mehr als eine Währung. Dieser Bericht ist "
 "für diese Möglichkeit nicht ausgelegt."
 
-#: intl-scm/guile-strings.c:4016
+#: intl-scm/guile-strings.c:4002
 msgid "Sort companys by"
 msgstr "Firmen sortieren nach"
 
-#: intl-scm/guile-strings.c:4020
+#: intl-scm/guile-strings.c:4006
 msgid "Name of the company"
 msgstr "Name der Organisation/Firma"
 
-#: intl-scm/guile-strings.c:4022
+#: intl-scm/guile-strings.c:4008
 msgid "Total Owed"
 msgstr "Gesamter offener Betrag"
 
-#: intl-scm/guile-strings.c:4024
+#: intl-scm/guile-strings.c:4010
 msgid "Total amount owed to/from Company"
 msgstr "Gesamter offener Betrag von/an Firma"
 
-#: intl-scm/guile-strings.c:4026
+#: intl-scm/guile-strings.c:4012
 msgid "Bracket Total Owed"
 msgstr "Intervall Gesamter offener Betrag"
 
-#: intl-scm/guile-strings.c:4028
+#: intl-scm/guile-strings.c:4014
 msgid "Amount owed in oldest bracket - if same go to next oldest"
 msgstr ""
 "Offener Betrag in ältestem Intervall. Falls identisch, wird nächstältestes "
 "angezeigt"
 
-#: intl-scm/guile-strings.c:4030
+#: intl-scm/guile-strings.c:4016
 msgid "Sort order"
 msgstr "Sortierreihenfolge"
 
-#: intl-scm/guile-strings.c:4032
+#: intl-scm/guile-strings.c:4018
 msgid "Increasing"
 msgstr "Aufsteigend"
 
-#: intl-scm/guile-strings.c:4034
+#: intl-scm/guile-strings.c:4020
 msgid "0 -> $999,999.99, A->Z"
 msgstr "0,00 -> 9.999,99; A->Z"
 
-#: intl-scm/guile-strings.c:4036
+#: intl-scm/guile-strings.c:4022
 msgid "Decreasing"
 msgstr "Absteigend"
 
-#: intl-scm/guile-strings.c:4038
+#: intl-scm/guile-strings.c:4024
 msgid "$999,999.99 -> $0, Z->A"
 msgstr "9.999,99 -> 0,00; Z->A"
 
-#: intl-scm/guile-strings.c:4040
+#: intl-scm/guile-strings.c:4026
 msgid ""
 "Show multi-currency totals.  If not selected, convert all totals to report "
 "currency"
@@ -14054,27 +14064,27 @@ msgstr ""
 "Summen in mehreren Währungen anzeigen. Falls nicht aktiviert, werden alle "
 "Summen in die Berichtswährung umgerechnet"
 
-#: intl-scm/guile-strings.c:4204
+#: intl-scm/guile-strings.c:4190
 msgid "Invoice Date"
 msgstr "Rechnungsdatum"
 
-#: intl-scm/guile-strings.c:4208
+#: intl-scm/guile-strings.c:4194
 msgid "Invoice in progress...."
 msgstr "Rechnung in Bearbeitung..."
 
-#: intl-scm/guile-strings.c:4216 intl-scm/guile-strings.c:4218
-#: intl-scm/guile-strings.c:4220
+#: intl-scm/guile-strings.c:4202 intl-scm/guile-strings.c:4204
+#: intl-scm/guile-strings.c:4206
 msgid "Printable Invoice"
 msgstr "Druckbare Rechnung"
 
-#: intl-scm/guile-strings.c:4222
+#: intl-scm/guile-strings.c:4208
 msgid "Receivables Account"
 msgstr "Forderungen Konto"
 
-#: intl-scm/guile-strings.c:4224
+#: intl-scm/guile-strings.c:4210
 msgid "The receivables account you wish to examine"
 msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 
-#: intl-scm/guile-strings.c:4226 intl-scm/guile-strings.c:4228
+#: intl-scm/guile-strings.c:4212 intl-scm/guile-strings.c:4214
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
