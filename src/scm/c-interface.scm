@@ -45,7 +45,7 @@
 (define _ gnc:gettext)
 (define-syntax N_
   (syntax-rules ()
-                ((_ x) x)))
+    ((_ x) x)))
 
 
 ;; This database can be used to store and retrieve translatable

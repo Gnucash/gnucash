@@ -61,8 +61,10 @@
                 ;; set standard-input and standard-output at the fd
                 ;; level -- which is really all that matters since
                 ;; we're about to exec...
-                (close-input-port parent-read-pipe)
-                (close-output-port parent-write-pipe)
+                (set-batch-mode?! #t)
+                (close-all-ports-except child-read-pipe child-write-pipe)
+                ;;(close-input-port parent-read-pipe)
+                ;;(close-output-port parent-write-pipe)
                 (dup->fdes child-read-pipe 0)
                 (dup->fdes child-write-pipe 1)
                 ;; now launch the child process.

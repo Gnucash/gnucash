@@ -1,3 +1,8 @@
+2001-04-06  Rob Browning  <rlb@cs.utexas.edu>
+
+	* src/scm/process.scm (gnc:run-sub-process): some process control
+	fixes seen on guile-devel.	
+
 2001-04-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-price-editor.c: new file with price db
