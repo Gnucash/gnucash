@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-06-04 15:44-0700\n"
+"POT-Creation-Date: 2000-06-04 17:16-0700\n"
 "PO-Revision-Date: 2000-04-25 00:00+0900\n"
 "Last-Translator: Shimpei Yamashita <shimpei@gol.com>\n"
 "Language-Team: \n"
@@ -175,28 +175,34 @@ msgstr ""
 "このまま続行しますか?"
 
 #: messages-i18n.c:35
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "There was an error writing the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 "ファイルに書き込む際にエラーが発生しました\n"
 "     %s。"
 
 #: messages-i18n.c:36
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "There was an error opening the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 "ファイルを開く際にエラーが発生しました\n"
 "     %s。"
 
 #: messages-i18n.c:37
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "There was an error closing the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 "ファイルを閉じる際にエラーが発生しました\n"
 "     %s。"

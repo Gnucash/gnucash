@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.3.X\n"
-"POT-Creation-Date: 2000-06-04 15:44-0700\n"
+"POT-Creation-Date: 2000-06-04 17:16-0700\n"
 "PO-Revision-Date: 2000-05-14 18:15+0100\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -213,30 +213,36 @@ msgstr ""
 
 # messages-i18n.c:34
 #: messages-i18n.c:35
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "There was an error writing the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 "Il y a une erreur d'écriture du fichier\n"
 "     %s."
 
 # messages-i18n.c:35
 #: messages-i18n.c:36
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "There was an error opening the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 "Il y a une erreur d'ouverture du fichier\n"
 "     %s."
 
 # messages-i18n.c:36
 #: messages-i18n.c:37
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "There was an error closing the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 "Il y a une erreur de fermeture du fichier\n"
 "      %s."

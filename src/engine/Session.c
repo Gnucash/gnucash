@@ -360,12 +360,16 @@ xaccSessionSave (Session *sess)
    /* if the fullpath doesn't exist, either the user failed to initialize,
     * or the lockfile was never obtained ... either way, we can't write. */
    sess->errtype = 0;
+
    if (!(sess->fullpath)) {
       sess->errtype = ENOLCK;
       return;
    }
+
    if (sess->topgroup) {
-      xaccWriteAccountGroupFile (sess->fullpath, sess->topgroup);
+      int error = xaccWriteAccountGroupFile (sess->fullpath, sess->topgroup);
+      if (error < 0)
+        sess->errtype = errno;
    } else {
       /* hmm ... no topgroup means delete file */
       unlink (sess->fullpath);

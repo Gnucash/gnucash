@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-06-04 15:44-0700\n"
+"POT-Creation-Date: 2000-06-04 17:16-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,21 +157,27 @@ msgstr ""
 #, c-format
 msgid ""
 "There was an error writing the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 
 #: messages-i18n.c:36
 #, c-format
 msgid ""
 "There was an error opening the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 
 #: messages-i18n.c:37
 #, c-format
 msgid ""
 "There was an error closing the file\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 msgstr ""
 
 #: messages-i18n.c:38

@@ -953,7 +953,10 @@ gnc_register_jump_to_blank(RegWindow *regData)
 static void
 new_trans_cb(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
+
+  if (xaccSRSaveRegEntry(regData->ledger->ledger, GNC_T))
+    xaccSRRedrawRegEntry(regData->ledger->ledger);
 
   gnc_register_jump_to_blank(regData);
 }
@@ -2273,9 +2276,8 @@ deleteCB(GtkWidget *widget, gpointer data)
   /* Deleting the blank split just cancels */
   {
     Split *blank_split = xaccSRGetBlankSplit(regData->ledger->ledger);
-    Transaction *blank_trans = xaccSplitGetParent(blank_split);
 
-    if (trans == blank_trans)
+    if (split == blank_split)
     {
       xaccSRCancelCursorTransChanges(regData->ledger->ledger);
       return;

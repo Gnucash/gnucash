@@ -28,6 +28,7 @@
 #include <gnome.h>
 #include <sys/stat.h>
 #include <stdio.h>
+#include <errno.h>
 
 #include "window-report.h"
 #include "window-html.h"
@@ -340,7 +341,8 @@ gnc_report_export(ReportData *report_data)
   export_dest = fopen(export_filename, "w");
   if (export_dest == NULL)
   {
-    message = g_strdup_printf(FILE_EOPEN_MSG, export_filename);
+    message = g_strdup_printf(FILE_EOPEN_MSG, export_filename,
+                              g_strerror(errno));
     gnc_error_dialog_parented(parent, message);
     g_free(message);
 
@@ -350,7 +352,8 @@ gnc_report_export(ReportData *report_data)
   /* Write the data */
   if (fputs(text, export_dest) == EOF)
   {
-    message = g_strdup_printf(FILE_EWRITE_MSG, export_filename);
+    message = g_strdup_printf(FILE_EWRITE_MSG, export_filename,
+                              g_strerror(errno));
     gnc_error_dialog_parented(parent, message);
     g_free(message);
 
@@ -360,7 +363,8 @@ gnc_report_export(ReportData *report_data)
   /* Close the file */
   if (fclose(export_dest) == EOF)
   {
-    message = g_strdup_printf(FILE_ECLOSE_MSG, export_filename);
+    message = g_strdup_printf(FILE_ECLOSE_MSG, export_filename,
+                              g_strerror(errno));
     gnc_error_dialog_parented(parent, message);
     g_free(message);
 

@@ -19,8 +19,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#include <errno.h>
 #include <string.h>
+#include <glib.h>
 
 #include "top-level.h"
 
@@ -365,16 +365,30 @@ gncFileSave (void)
   /* in theory, no error should have occured, but just in case, 
    * we're gonna check and handle ... */
   norr = xaccSessionGetError (current_session);
-  if (norr) 
+  if (norr)
   {
+    char *message;
+
+    newfile = xaccSessionGetFilePath(current_session);
+    if (newfile == NULL)
+      newfile = "";
+
+    message = g_strdup_printf(FILE_EWRITE_MSG, newfile, g_strerror(norr));
+    gnc_error_dialog(message);
+    g_free(message);
+
     if (been_here_before) return;
+
     been_here_before = 1;
     gncFileSaveAs();   /* been_here prevents infinite recuirsion */
     been_here_before = 0;
+
     return;
   }
 
-  /* check for i/o error, put up appropriate error message */
+  /* check for i/o error, put up appropriate error message.
+   * NOTE: the file-writing routines never set the file io
+   * error code, so this seems to be unneccesary. */
   io_error = xaccGetFileIOError();
   newfile = xaccSessionGetFilePath(current_session);
   gnc_history_add_file(newfile);

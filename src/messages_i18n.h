@@ -107,9 +107,12 @@
                             "this file.")
 #define FILE_BAD_READ_MSG _("There was an error reading the file. \n"\
                             "Do you want to continue?")
-#define FILE_EWRITE_MSG   _("There was an error writing the file\n     %s.")
-#define FILE_EOPEN_MSG    _("There was an error opening the file\n     %s.")
-#define FILE_ECLOSE_MSG   _("There was an error closing the file\n     %s.")
+#define FILE_EWRITE_MSG   _("There was an error writing the file\n     %s" \
+                            "\n\n%s")
+#define FILE_EOPEN_MSG    _("There was an error opening the file\n     %s" \
+                            "\n\n%s")
+#define FILE_ECLOSE_MSG   _("There was an error closing the file\n     %s" \
+                            "\n\n%s")
 #define FILE_NOT_FOUND_MSG _("The file \n    %s\n could not be found.")
 #define FILE_EMPTY_MSG    _("The file \n    %s\n is empty.")
 #define FMB_SAVE_MSG      _("Changes have been made since the last " \

@@ -2356,9 +2356,6 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
    {
      Transaction *blank_trans;
 
-     if (!xaccTransIsOpen(trans))
-       return GNC_F;
-
      if (!do_commit)
        return GNC_F;
 
@@ -2366,12 +2363,21 @@ xaccSRSaveRegEntry (SplitRegister *reg, gncBoolean do_commit)
 
      if (trans == blank_trans)
      {
-       info->last_date_entered = xaccTransGetDate(trans);
-       info->blank_split_guid = *xaccGUIDNULL();
-       blank_split = NULL;
+       if (xaccTransIsOpen(trans) || (info->blank_split_edited))
+       {
+         info->last_date_entered = xaccTransGetDate(trans);
+         info->blank_split_guid = *xaccGUIDNULL();
+         info->blank_split_edited = GNC_F;
+         blank_split = NULL;
+       }
+       else
+         return GNC_F;
      }
+     else if (!xaccTransIsOpen(trans))
+       return GNC_F;
 
-     xaccTransCommitEdit(trans);
+     if (xaccTransIsOpen(trans))
+       xaccTransCommitEdit(trans);
 
      if (pending_trans == trans)
      {
