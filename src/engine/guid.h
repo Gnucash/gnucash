@@ -48,32 +48,68 @@ typedef union _GUID
 #define GUID_ENCODING_LENGTH 32
 
 
-/** Three functions to initialize the id generator. Only one needs to
- * be called. Calling any initialization function a second time will
- * reset the generator and erase the effect of the first call.
+/** Initialize the id generator with a variety of random
+ *  sources.
  *
- * guid_init() will initialize the generator with a variety of random
- * sources.
- *
- * guid_init_with_salt() will initialize the generator with guid_init()
- * and with the data given in the salt argument. This argument can be
- * used to add additional randomness to the generated ids.
- *
- * guid_init_only_salt() will initialize the generator with the data
- * given in the salt argument, but not with any other source. Calling
- * guid_init_only_salt() with a specific argument will produce a
- * specific sequence of ids reliably. 
+ *  @note Only one of guid_init(), guid_init_with_salt() and
+ *  guid_init_only_salt() should be called.  Calling any
+ *  initialization function a second time will reset the generator and
+ *  erase the effect of the first call.
  */
 void guid_init(void);
+
+/** Initialize the id generator with a variety of random sources. and
+ *  with the data given in the salt argument. This argument can be
+ *  used to add additional randomness to the generated ids.
+ *
+ *  @param salt The additional random values to add to the generator.
+ *
+ *  @param salt_len The length of the additional random values.
+ *
+ *  @note Only one of guid_init(), guid_init_with_salt() and
+ *  guid_init_only_salt() should be called.  Calling any
+ *  initialization function a second time will reset the generator and
+ *  erase the effect of the first call.
+ */
 void guid_init_with_salt(const void *salt, size_t salt_len);
+
+/** Initialize the id generator with the data given in the salt
+ *  argument, but not with any other source. Calling this function with
+ *  a specific argument will reliably produce a specific sequence of
+ *  ids.
+ *
+ *  @param salt The additional random values to add to the generator.
+ *
+ *  @param salt_len The length of the additional random values.
+ *
+ *  @note Only one of guid_init(), guid_init_with_salt() and
+ *  guid_init_only_salt() should be called.  Calling any
+ *  initialization function a second time will reset the generator and
+ *  erase the effect of the first call.
+ */
 void guid_init_only_salt(const void *salt, size_t salt_len);
+
+/** Release the memory chunk associated with gui storage. Use this
+ *  only when shutting down the program, as it invalidates *all*
+ *  GUIDs at once. */
 void guid_shutdown (void);
 
-
-/* Generate a new id. If no initialization function has been called,
- * guid_init() will be called before the id is created. */
+/** Generate a new id. If no initialization function has been called,
+ *  guid_init() will be called before the id is created.
+ *
+ *  @param guid A pointer to an existing guid data structure.  The
+ *  existing value will be replaced with a new value.
+ */
 void guid_new(GUID *guid);
-GUID guid_new_return(void);
+
+/** Generate a new id. If no initialization function has been called,
+ *  guid_init() will be called before the id is created.
+ *
+ *  @return guid A pointer to a data structure contaiing a new GUID.
+ *  The memory pointed to is owned by this routine and the guid must
+ *  be copied out.
+ */
+const GUID guid_new_return(void);
 
 /** Returns a GUID which is guaranteed to never reference any entity. */
 const GUID * guid_null (void);
@@ -85,20 +121,33 @@ GUID * guid_malloc (void);
 void   guid_free (GUID *guid);
 
 /** The guid_to_string() routine returns a null-terminated string 
- *    encoding of the id. String encodings of identifiers are hex 
- *    numbers printed only with the characters '0' through '9' and 
- *    'a' through 'f'. The encoding will always be GUID_ENCODING_LENGTH 
- *    characters long. The returned string should be freed when no 
- *    longer needed. 
+ *  encoding of the id. String encodings of identifiers are hex 
+ *  numbers printed only with the characters '0' through '9' and 
+ *  'a' through 'f'. The encoding will always be GUID_ENCODING_LENGTH 
+ *  characters long. The returned string should be freed when no 
+ *  longer needed. 
  *
- * The guid_to_string_buff() routine does the same, except that the
- *    string is written into the memory pointed at by buff.  The
- *    buffer must be at least GUID_ENCODING_LENGTH+1 characters long.
- *    This routine is handy for avoiding a malloc/free cycle.
- *    It returns a pointer to the >>end<< of what was written.
- *    (i.e. it can be used like 'stpcpy' during string concatenation)
+ *  @param guid The guid to print.
+ *
+ *  @return A pointer to the starting character of the string.  The
+ *  returned memory is owned by this routine and may not be freed by
+ *  the caller.
  */
-char * guid_to_string (const GUID * guid);
+const char * guid_to_string (const GUID * guid);
+
+/** The guid_to_string_buff() routine puts a null-terminated string
+ *  encoding of the id into the memory pointed at by buff.  The
+ *  buffer must be at least GUID_ENCODING_LENGTH+1 characters long.
+ *  This routine is handy for avoiding a malloc/free cycle.  It
+ *  returns a pointer to the >>end<< of what was written.  (i.e. it
+ *  can be used like 'stpcpy' during string concatenation)
+ *
+ *  @param guid The guid to print.
+ *
+ *  @param buff The buffer to print it into.
+ *
+ *  @return A pointer to the terminating null character of the string.
+ */
 char * guid_to_string_buff (const GUID * guid, char *buff);
 
 
