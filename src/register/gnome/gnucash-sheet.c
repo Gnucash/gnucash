@@ -1248,14 +1248,14 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                                                 GNC_TABLE_TRAVERSE_POINTER,
                                                 &new_virt_loc);
 
-        gnucash_sheet_check_grab(sheet);
+        gnucash_sheet_check_grab (sheet);
 
         if (abort_move)
 		return TRUE;
 
-        changed_cells = gnucash_sheet_cursor_move(sheet, new_virt_loc);
+        changed_cells = gnucash_sheet_cursor_move (sheet, new_virt_loc);
 
-        gnucash_sheet_check_grab(sheet);
+        gnucash_sheet_check_grab (sheet);
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &new_virt_loc);
 

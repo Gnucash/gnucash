@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnucash-item-edit.c -- cell editor cut-npaste from gnumeric      *
+ * gnucash-item-edit.c -- cell editor cut-n-paste from gnumeric     *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +23,8 @@
 /*
  *  An editor for the gnucash sheet.
  *  Cut and pasted from the gnumeric item-edit.c file.
+ *
+ *  And then substantially rewritten by Dave Peticolas <dave@krondo.com>.
  */
 
 
@@ -220,7 +222,7 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         {
                 case CELL_ALIGN_RIGHT:
                         xoffset = info->text_rect.width -
-                                  (2*CELL_HPADDING + total_width);
+                                  (CELL_HPADDING + total_width);
                         if (xoffset > 0)
                                 break;
 
@@ -714,7 +716,8 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
 
         editable = GTK_EDITABLE (item_edit->editor);
 
-        if (changed_cells) {
+        if (changed_cells)
+        {
                 CellAlignment align;
 
                 align = gnc_table_get_align (table, item_edit->virt_loc);
@@ -723,9 +726,12 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
                         gtk_editable_set_position(editable, -1);
                 else
                         gtk_editable_set_position(editable, 0);
+
+                if (item_edit->is_popup)
+                        x -= item_edit->popup_toggle.toggle_offset;
         }
 
-        item_edit_draw_info(item_edit, o_x, o_y, &info);
+        item_edit_draw_info (item_edit, o_x, o_y, &info);
 
         if (info.text_1 == NULL)
         {
