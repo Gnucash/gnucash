@@ -330,6 +330,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
    if (!grp) return 0x0;
    do { 
       acc = xaccMallocAccount();
+      xaccAccountSetCurrency (acc, "USD");
       if (cat) { 
          qifline = xaccReadQIFCategory (fd, acc);
       } else {
@@ -501,6 +502,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
       xaccAccountSetName (xfer_acc, qifline);
       xaccAccountSetDescription (xfer_acc, "");
       xaccAccountSetNotes (xfer_acc, "");
+      xaccAccountSetCurrency (xfer_acc, "USD");
 
       if (0 > acc_type) acc_type = GuessAccountType (qifline);
       xaccAccountSetType (xfer_acc, acc_type);
@@ -586,6 +588,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
       xaccAccountSetName (xfer_acc, qifline);
       xaccAccountSetDescription (xfer_acc, "");
       xaccAccountSetNotes (xfer_acc, "");
+      xaccAccountSetCurrency (xfer_acc, "USD");
 
       xaccAccountSetType (xfer_acc, STOCK);
       xaccInsertSubAccount (acc, xfer_acc);
@@ -1016,6 +1019,7 @@ xaccReadQIFAccountGroup( char *datafile )
         Account * acc = xaccMallocAccount();
         xaccAccountSetType (acc, typo);
         xaccAccountSetName (acc, name);
+        xaccAccountSetCurrency (acc, "USD");
 
         xaccGroupInsertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc, &bogus_acc_name);
@@ -1072,6 +1076,7 @@ xaccReadQIFAccountGroup( char *datafile )
            int guess_acc_name = 0;
 
            DEBUG ("got account\n");
+           xaccAccountSetCurrency (acc, "USD");
            qifline = xaccReadQIFAccount (fd, acc);
            if (!qifline) {  /* free up malloced data if the read bombed. */
               xaccFreeAccount(acc); 
