@@ -86,6 +86,50 @@ restart_loop:
 /* ============================================================== */
 
 void
+xaccLotFill (GNCLot *lot)
+{
+   gnc_numeric lot_baln;
+   Account *acc;
+   SplitList *node;
+
+   if (!lot) return;
+   acc = lot->account;
+
+   ENTER ("acc=%s", acc->accountName);
+
+   /* If balance already zero, we have nothing to do. */
+   lot_baln = gnc_lot_get_balance (lot);
+   if (gnc_numeric_zero_p (lot_baln)) return;
+
+   xaccAccountBeginEdit (acc);
+
+   /* Loop over all splits, until we find one that's
+    * not in a lot.  Poke it into this lot.  Keep 
+    * going until the balance is zero.
+    */
+restart_loop:
+   for (node=acc->splits; node; node=node->next)
+   {
+      Split * split = node->data;
+      gboolean restart;
+
+      /* If already in lot, then no-op */
+      if (split->lot) continue;
+      restart = xaccSplitAssignToLot (split);
+xxxxxxxxxxxxxxxxxxx not assign to any lot; assign to *THIS* lot.
+
+      lot_baln = gnc_lot_get_balance (lot);
+      if (gnc_numeric_zero_p (lot_baln)) break;
+      if (restart) goto restart_loop;
+   }
+   xaccAccountCommitEdit (acc);
+   LEAVE ("acc=%s", acc->accountName);
+}
+
+
+/* ============================================================== */
+
+void
 xaccAccountScrubDoubleBalance (Account *acc)
 {
    LotList *node;

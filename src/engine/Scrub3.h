@@ -62,11 +62,14 @@ void xaccScrubSubSplitPrice (Split *split);
  *    The routine returns TRUE if a merger was performed, else 
  *    it returns FALSE. 
  *
- *  The xaccScrubMergeTxnSubSplits() routine does the same, except 
+ *  The xaccScrubMergeTransSubSplits() routine does the same, except 
  *    that it does it for all of the splits in the transaction.
+ *  The xaccScrubMergeLotSubSplits() routine does the same, except 
+ *    that it does it for all of the splits in the lot.
  */
 gboolean xaccScrubMergeSubSplits (Split *split);
-gboolean xaccScrubMergeTxnSubSplits (Transaction *txn);
+gboolean xaccScrubMergeTransSubSplits (Transaction *txn);
+gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
 
 #endif /* XACC_SCRUB3_H */
 /** @} */

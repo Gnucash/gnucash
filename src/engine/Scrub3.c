@@ -181,6 +181,9 @@ merge_splits (Split *sa, Split *sb)
    /* Finally, delete sb */
    xaccSplitDestroy(sb);
 
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+/* XXX need to kill any associated gains splits too */
+
    xaccTransCommitEdit (txn);
    xaccAccountCommitEdit (act);
 }
@@ -220,7 +223,7 @@ restart:
 }
 
 gboolean 
-xaccScrubMergeTxnSubSplits (Transaction *txn)
+xaccScrubMergeTransSubSplits (Transaction *txn)
 {
    gboolean rc = FALSE;
    SplitList *node;
@@ -230,6 +233,28 @@ xaccScrubMergeTxnSubSplits (Transaction *txn)
    ENTER (" ");
 restart:
    for (node=txn->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (!xaccScrubMergeSubSplits(s)) continue;
+
+      rc = TRUE;
+      goto restart;
+   }
+   LEAVE (" splits merged=%d", rc);
+   return rc;
+}
+
+gboolean 
+xaccScrubMergeLotSubSplits (GNCLot *lot)
+{
+   gboolean rc = FALSE;
+   SplitList *node;
+
+   if (!lot) return FALSE;
+
+   ENTER (" ");
+restart:
+   for (node=lot->splits; node; node=node->next)
    {
       Split *s = node->data;
       if (!xaccScrubMergeSubSplits(s)) continue;

@@ -146,9 +146,13 @@ gboolean xaccSplitAssignToLot (Split *split);
  *  and must be equal to or smaller, than the 'amount' of the opening
  *  split; its an error otherwise.  If the 'amount' of the split is
  *  less than the opening amount, the gains are pro-rated.
+ *
+ *  The xaccLotComputeCapGains() routine merely invokes the above on
+ *    each split in the lot.
  */
 
 void xaccSplitComputeCapGains(Split *split, Account *gain_acc);
+void xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc);
 
 #endif /* XACC_CAP_GAINS_H */
 /** @} */

@@ -68,6 +68,7 @@ ToDo List:
 #include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "Scrub3.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "cap-gains.h"
@@ -308,8 +309,8 @@ typedef GNCLot * (*AccountingPolicy) (Account *,
                                       Split *, 
                                       gpointer user_data);
 static gboolean
-xaccSplitAssignToLot (Split *split, 
-                      AccountingPolicy policy, gpointer user_data)
+PolicyAssignToLot (Split *split, 
+                  AccountingPolicy policy, gpointer user_data)
 {
    Account *acc;
    gboolean splits_added = FALSE;
@@ -475,7 +476,7 @@ xaccSplitAssignToLot (Split *split)
     * be using the policy as specified by the account. i.e.
     * we should be using split->acc->polcy as the function 
     */
-   return xaccSplitAssignToLot (split, FIFOPolicy, NULL);
+   return PolicyAssignToLot (split, FIFOPolicy, NULL);
 }
 
 /* ============================================================== */
@@ -500,22 +501,42 @@ xaccSplitGetCapGainsSplit (Split *split)
 }
 
 /* ============================================================== */
-/* XXX Note that xaccSplitComputeCapGains makes some subtle assumptions
- * about the accounting policy that may introduce bugs when used with
- * other policies.  In particular, it assumes the earliest split is the
- * 'opening' split, and that its amount will be larger and of opposite
- * sign of all the other splits. This is a characteristic of FIFO's but 
- * might not be of other policies.
+/* The FIFOPolicy routines try to encapsulate the FIFO-specific
+ * parts of the cap-gains routine, and can eb replaced by something
+ * else for other policies (e.g. LIFO)
  */
+
+static void
+FIFOPolicyGetLotOpening (GNCLot *lot,
+        gnc_numeric *ret_amount, gnc_numeric *ret_value,
+        gnc_commodity **ret_currency,
+        void * user_data)
+{
+   Split *opening_split;
+   opening_split = gnc_lot_get_earliest_split(lot);
+
+   if (ret_amount) *ret_amount = opening_split->amount;
+   if (ret_value) *ret_value = opening_split->value;
+   if (ret_currency) *ret_currency = opening_split->parent->common_currency;
+}
+
+static gboolean
+FIFOPolicyIsOpeningSplit (GNCLot *lot, Split *split)
+{
+   Split *opening_split;
+   opening_split = gnc_lot_get_earliest_split(lot);
+   return (split == opening_split);
+}
 
 void
 xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 {
-   Split *opening_split;
    GNCLot *lot;
    gnc_commodity *currency = NULL;
    gnc_numeric zero = gnc_numeric_zero();
    gnc_numeric value = zero;
+   gnc_numeric opening_amount, opening_value;
+   gnc_commodity *opening_currency;
 
    if (!split) return;
    lot = split->lot;
@@ -560,16 +581,18 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * may exist if users attempted to manually record gains. */
    if (gnc_numeric_zero_p (split->amount)) return;
 
-   opening_split = gnc_lot_get_earliest_split(lot);
-   if (split == opening_split)
+   FIFOPolicyGetLotOpening (lot, &opening_amount, &opening_value,
+       &opening_currency, NULL);
+
+   if (FIFOPolicyIsOpeningSplit (lot, split))
    {
+#if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
       /* Check to make sure that this opening split doesn't 
        * have a cap-gain transaction associated with it.  
        * If it does, that's wrong, and we ruthlessly destroy it.
        * XXX Don't do this, it leads to infinite loops.
        * We need to scrub out errors like this elsewhere!
        */
-#if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
       if (xaccSplitGetCapGainsSplit (split))
       {
          Split *gains_split = xaccSplitGetCapGainsSplit(split);
@@ -584,10 +607,9 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       return;
    }
    
-   /* Check to make sure the opening split and this split
+   /* Check to make sure the lot-opening currency and this split
     * use the same currency */
-   if (FALSE == gnc_commodity_equiv (currency, 
-                           opening_split->parent->common_currency))
+   if (FALSE == gnc_commodity_equiv (currency, opening_currency))
    {
       /* OK, the purchase and the sale were made in different currencies.
        * I don't know how to compute cap gains for that.  This is not
@@ -600,15 +622,15 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * and it should be of the opposite sign.
 XXX this should be a part of a scrub routine !
     */
-   if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_split->amount),
+   if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_amount),
                                 gnc_numeric_abs(split->amount)))
    {
       PERR ("Malformed Lot! (too thin!)\n");
       return;
    }
-   if ( (gnc_numeric_negative_p(opening_split->amount) ||
+   if ( (gnc_numeric_negative_p(opening_amount) ||
          gnc_numeric_positive_p(split->amount)) &&
-        (gnc_numeric_positive_p(opening_split->amount) ||
+        (gnc_numeric_positive_p(opening_amount) ||
          gnc_numeric_negative_p(split->amount)))
    {
       PERR ("Malformed Lot! (too fat!)\n");
@@ -622,16 +644,16 @@ XXX this should be a part of a scrub routine !
     * cost_basis = purchase_price * current_amount
     * cap_gain = current_value - cost_basis 
     */
-   value = gnc_numeric_mul (opening_split->value, split->amount,
+   value = gnc_numeric_mul (opening_value, split->amount,
                    GNC_DENOM_AUTO, GNC_RND_NEVER);
-   value = gnc_numeric_div (value, opening_split->amount, 
-                   gnc_numeric_denom(opening_split->value), GNC_DENOM_EXACT);
+   value = gnc_numeric_div (value, opening_amount, 
+                   gnc_numeric_denom(opening_value), GNC_DENOM_EXACT);
    
    value = gnc_numeric_sub (value, split->value,
                            GNC_DENOM_AUTO, GNC_DENOM_LCD);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
-          gnc_numeric_to_string (opening_split->amount),
-          gnc_numeric_to_string (opening_split->value),
+          gnc_numeric_to_string (opening_amount),
+          gnc_numeric_to_string (opening_value),
           gnc_numeric_to_string (split->amount),
           gnc_numeric_to_string (split->value),
           gnc_numeric_to_string (value));
@@ -642,7 +664,7 @@ XXX this should be a part of a scrub routine !
     * not to upset the lot balance), the amt of the other is the same 
     * as its value (its the realized gain/loss).
     */
-   if (FALSE == gnc_numeric_equal (value, zero))
+   if (FALSE == gnc_numeric_zero_p (value))
    {
       Transaction *trans;
       Split *lot_split, *gain_split;
@@ -766,6 +788,74 @@ xaccSplitGetCapGains(Split * split)
    if (!split) return gnc_numeric_zero();
 
    return split->value;
+}
+
+/* ============================================================== */
+
+void 
+xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
+{
+   SplitList *node;
+
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      xaccSplitComputeCapGains (s, gain_acc);
+   }
+}
+
+/* ============================================================== */
+
+void 
+xaccScrubLot (GNCLot *lot)
+{
+  gnc_numeric lot_baln;
+  if (!lot) return;
+  ENTER (" ");
+
+  xaccAccountBeginEdit(lot->account);
+  xaccScrubMergeLotSubSplits (lot);
+
+  /* If the lot balance is zero, we don't need to rebalance */
+  lot_baln = gnc_lot_get_balance (lot);
+  if (! gnc_numeric_zero_p (lot_baln))
+  {
+    SplitList *node;
+    gnc_numeric opening_baln;
+
+    /* Get the opening balance for this lot */
+    FIFOPolicyGetLotOpening (lot, &opening_baln, NULL, NULL, NULL);
+
+    /* If the lot is fat, give the boot to all the non-opening 
+     * splits, and refill it */
+    if ( (gnc_numeric_negative_p(opening_baln) ||
+          gnc_numeric_negative_p(lot_baln)) &&
+         (gnc_numeric_positive_p(opening_baln) ||
+          gnc_numeric_positive_p(lot_baln)))
+    {
+rethin:
+      for (node=lot->splits; node; node=node->next)
+      {
+        Split *s = node->data;
+        if (FIFOPolicyIsOpeningSplit (lot, s)) continue;
+        gnc_lot_remove_split (lot, s);
+        goto rethin;
+      }
+    }
+
+    /* At this point the lot is thin, so try to fill it */
+    xaccLotFill (lot);
+
+    /* Make sure there are no subsplits. */
+    xaccScrubMergeLotSubSplits (lot);
+  }
+
+  /* Now re-compute cap gains, and then double-check that. */
+  xaccLotComputeCapGains (lot, NULL);
+  xaccLotScrubDoubleBalance (lot);
+  xaccAccountCommitEdit(lot->account);
+
+  LEAVE (" ");
 }
 
 /* =========================== END OF FILE ======================= */
