@@ -54,7 +54,8 @@ typedef struct {
 GNCMainInfo   * gnc_main_window_new(void);
 void            gnc_main_window_destroy(GNCMainInfo * wind); 
 void            gnc_main_window_save(GNCMainInfo * wind, char * session);
-void            gnc_main_window_restore(GNCMainInfo * wind, char * session);
+void            gnc_main_window_restore(GNCMainInfo * wind,
+                                        const char * session);
 GtkWidget     * gnc_main_window_get_toplevel(GNCMainInfo * wind);
 void            gnc_main_window_create_child_toolbar(GNCMainInfo * mi, 
                                                      GNCMainChildInfo * child);

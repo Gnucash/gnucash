@@ -479,7 +479,8 @@ gnc_main_window_save(GNCMainInfo * wind, char * filename) {
  ********************************************************************/
 
 void
-gnc_main_window_restore(GNCMainInfo * wind, char * filename) {
+gnc_main_window_restore(GNCMainInfo * wind, const char * filename)
+{
   char * encoded;
   char * session_name;
   gboolean old_format_file;
