@@ -52,15 +52,15 @@ typedef struct _gncAccountValue GncAccountValue;
  * You can interpret it as a VALUE or a PERCENT.
  */
 typedef enum {
-  GNC_AMT_TYPE_VALUE = 1,
-  GNC_AMT_TYPE_PERCENT
+  GNC_AMT_TYPE_VALUE = 1, 	/**< tax is a number */
+  GNC_AMT_TYPE_PERCENT		/**< tax is a percentage */
 } GncAmountType;
 
 /** How to interpret the TaxIncluded */
 typedef enum {
-  GNC_TAXINCLUDED_YES = 1,
-  GNC_TAXINCLUDED_NO,
-  GNC_TAXINCLUDED_USEGLOBAL,
+  GNC_TAXINCLUDED_YES = 1,  /**< tax is included */
+  GNC_TAXINCLUDED_NO,		/**< tax is not included */
+  GNC_TAXINCLUDED_USEGLOBAL, /**< use the global setting */
 } GncTaxIncluded;
 
 const char * gncAmountTypeToString (GncAmountType type);
@@ -91,6 +91,11 @@ void gncTaxTableRemoveEntry (GncTaxTable *table, GncTaxTableEntry *entry);
 void gncTaxTableChanged (GncTaxTable *table);
 void gncTaxTableBeginEdit (GncTaxTable *table);
 void gncTaxTableCommitEdit (GncTaxTable *table);
+
+/** added for later QOF standardisation */
+gint gncTaxTableEntryGetType_q (GncTaxTableEntry *entry);
+void gncTaxTableEntrySetType_q (GncTaxTableEntry *entry, gint type);
+
 /** @} */
 
 /** @name Get Functions */
@@ -146,6 +151,10 @@ gnc_numeric gncAccountValueTotal (GList *list);
 
 /** Destroy a list of accountvalues */
 void gncAccountValueDestroy (GList *list);
+
+/** QOF parameter definitions */
+#define GNC_TT_NAME "tax table name"
+#define GNC_TT_REFCOUNT "reference count"
 
 /** @deprecated routine */
 #define gncTaxTableGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))

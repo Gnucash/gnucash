@@ -156,6 +156,7 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
 {
    gnc_commodity *currency = NULL;
    SplitList *snode;
+   GList *node;
    gnc_numeric zero = gnc_numeric_zero();
    gnc_numeric value = zero;
 
@@ -211,7 +212,6 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
        */
       PERR ("Closed lot fails to double-balance !! lot value=%s",
             gnc_num_dbg_to_string (value));
-      GList *node;
       for (node=lot->splits; node; node=node->next)
       {
         Split *s = node->data;

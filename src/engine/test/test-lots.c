@@ -59,16 +59,18 @@ main_helper (void *closure, int argc, char **argv)
    * automatically fail! */
   g_log_set_always_fatal( G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING );
 
-  set_success_print (TRUE);
+  //set_success_print (TRUE);
 
   do_test((NULL!=gnc_module_load("gnucash/engine", 0)), "load engine");
 
-  /* set the rng to a known starting point */
+  /* Set up a reproducible test-case */
   srand(0);
 
   /* Iterate the test a number of times */
-  for (i=0; i< 20; i++)
+  for (i=0; i< 100; i++)
+  {
     run_test ();
+  }
 
   print_test_results();
   exit(get_rv());

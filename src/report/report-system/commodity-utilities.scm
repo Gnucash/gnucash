@@ -906,3 +906,30 @@
 	 #f)
 	balance)
       #f))
+
+;; Returns the number of commodities in a commodity-collector.
+;; (If this were implemented as a record, I would be able to
+;; just (length ...) the alist, but....)
+(define (gnc:commodity-collector-commodity-count collector)
+    (let ((commodities 0))
+	(gnc:commodity-collector-map
+	    collector
+		(lambda (comm amt)
+		  (set! commodities (+ commodities 1))))
+	commodities
+    ))
+
+(define (gnc:uniform-commodity? amt report-commodity)
+  ;; function to see if the commodity-collector amt
+  ;; contains any foreign commodities
+  (let ((elts (gnc:commodity-collector-commodity-count amt))
+	)
+    (or (equal? elts 0)
+	(and (equal? elts 1)
+	     (gnc:commodity-collector-contains-commodity?
+	      amt report-commodity)
+	     )
+	)
+    )
+  )
+

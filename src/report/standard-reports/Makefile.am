@@ -32,11 +32,14 @@ gncscmmod_DATA = \
    daily-reports.scm \
    equity-statement.scm \
    net-barchart.scm \
-   pnl.scm \
+   income-statement.scm \
    portfolio.scm \
    price-scatter.scm \
    register.scm \
    standard-reports.scm \
+   trial-balance.scm \
+   general-journal.scm \
+   general-ledger.scm \
    transaction.scm 
 
 EXTRA_DIST = ${gncscmmod_DATA}

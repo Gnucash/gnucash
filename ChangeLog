@@ -2702,6 +2702,140 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2004-18-21  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	  Add option to include zero-amount splits in computations.
+	  Fixes #143722.
+
+2004-18-19  Derek Atkins  <derek@ihtfp.com>
+
+	Neil Williams's "QOF create: functionality added" patch:
+
+	QOF create: adding functions to be used with
+	qof_object_new_instance for new qof_book_merge objects, including
+	business objects.
+
+	Small documentation tweak to make QofEntity and QofParam
+	structures visible to doxygen.
+
+	* src/import-export/qif-import/qif-dialog-utils.scm:
+	  Perry Smith's Null Account Patch.  Make sure the security is
+	  a real string before appending an account separator, so we
+	  don't try to create a "null" account.
+
+2004-08-19  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: change the gtkhtml order to search for >= 1.1 before
+	  < 1.1, in order to try to fix #84707 on systems with multiple
+	  versions of gtkhtml.
+
+2004-08-12  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/trial-balance.scm:
+	    src/report/standard-reports/equity-statement.scm:
+	    src/report/report-system/report-utilities.scm:
+	    Added to the work sheet special handling of
+	    inventory and income summary accounts for
+	    merchandising businesses.  Fixes #150008.
+
+2004-08-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/gnucash.desktop.in: make the desktop HIG compliant.
+	  Fixes #145545
+
+2004-07-20  Derek Atkins <derek@ihtfp.com>
+
+	* src/engine/Scrub.c
+	* src/engine/Scrub2.c
+	* src/engine/gnc-numeric.c
+	* src/engine/gnc-pricedb.c
+	* src/engine/kvp-util.c
+	* src/engine/qofid.c
+	* src/engine/qofmath128.c
+	* src/engine/qofquery.c
+	* src/engine/qofsession.c
+	* src/engine/test/test-numeric.c
+	  Priit Laes' patch for C90 compliance.
+
+2004-07-13  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/general-ledger.scm:
+	  src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Added General Ledger report, a Transaction Report
+          with a pre-set set of options.
+
+	* src/report/standard-reports/transaction.scm:
+          FIXME - All accounts now selected by default, avoids
+          confusing error message. Error message also clarified.
+          Fixed "Totals" option so that it works.
+
+        * src/report/standard-reports/balance-sheet.scm:
+        * src/report/standard-reports/equity-statement.scm:
+        * src/report/standard-reports/trial-balance.scm:
+        Updated comments
+	* Fixes #144268
+
+        * src/report/standard-reports/income-statement.scm:
+          src/report/standard-reports/pnl.scm:
+          src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Rewrote pnl.scm, renamed it to income-statement.scm.
+          Can now create a meaningful statement post-closing.
+
+        * src/report/report-system/html-acct-table.scm:
+          Updated to include ability to "see through" closing
+          and/or adjusting entries.
+	* Fixes #105330.
+
+        * src/report/standard-reports/general-journal.scm:
+          src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Added General Journal report, a Register Report
+          with a pre-set set of options.
+	* Bug #109738.
+
+2004-07-13  David Montenegro  <sunrise2000@comcast.net>
+
+        * src/report/standard-reports/trial-balance.scm:
+        * src/report/standard-reports/standard-reports.scm:
+        * src/report/standard-reports/Makefile.am
+          added Trial Balance/Work Sheet report
+
+        * src/report/standard-reports/balance-sheet.scm:
+          added drop-down choices missing in previous version
+          added support for adjusting/closing entries
+
+        * src/report/standard-reports/equity-statement.scm:
+          added support for adjusting/closing entries
+          fixed "For Period Covering" label
+          fixed handling of unrealized gains
+          investment/draw discrimination based on shares sign
+          omit unrealized gains when zero
+
+        * src/report/report-system/html-acct-table.scm:
+        * src/report/report-system/html-table.scm:
+          null reference bug fixes
+
+        * src/report/report-system/report-utilities.scm:
+          added utility functions for accessing splits
+          and creating double-column balance HTML
+          gnc:double-col,
+          gnc:account-get-trans-type-balance-interval,
+          gnc:account-get-pos-trans-total-interval
+
+        * src/report/report-system/commodity-utilities.scm:
+        * src/report/report-system/html-acct-table.scm:
+        * src/report/report-system/report-utilities.scm:
+          moved gnc:commodity-collector-commodity-count and
+          gnc:uniform-commodity? into commodity-utilities.scm
+
+        * src/report/report-system/report-system.scm:
+          added some additional exports
+
+	Bug #144265
+
 2004-07-04  Derek Atkins  <derek@ihtfp.com>
 
 	* acinclude.m4: create a SCANF_QD_CHECK and make sure both

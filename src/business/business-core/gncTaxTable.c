@@ -464,6 +464,12 @@ void gncTaxTableEntrySetAccount (GncTaxTableEntry *entry, Account *account)
     mod_table (entry->table);
   }
 }
+void gncTaxTableEntrySetType_q (GncTaxTableEntry *entry, gint type)
+{
+	GncAmountType q = type;
+	if(!q) return;
+	gncTaxTableEntrySetType(entry,q);
+}
 
 void gncTaxTableEntrySetType (GncTaxTableEntry *entry, GncAmountType type)
 {
@@ -663,6 +669,11 @@ Account * gncTaxTableEntryGetAccount (GncTaxTableEntry *entry)
   return entry->account;
 }
 
+gint gncTaxTableEntryGetType_q (GncTaxTableEntry *entry)
+{
+	return (GncAmountType)gncTaxTableEntryGetType(entry);
+}
+
 GncAmountType gncTaxTableEntryGetType (GncTaxTableEntry *entry)
 {
   if (!entry) return 0;
@@ -799,7 +810,7 @@ static QofObject gncTaxTableDesc =
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,
   type_label:         "Tax Table",
-  create:             NULL,
+  create:             (gpointer)gncTaxTableCreate,
   book_begin:         _gncTaxTableCreate,
   book_end:           _gncTaxTableDestroy,
   is_dirty:           qof_collection_is_dirty,
@@ -812,6 +823,8 @@ static QofObject gncTaxTableDesc =
 gboolean gncTaxTableRegister (void)
 {
   static QofParam params[] = {
+	{ GNC_TT_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncTaxTableGetName, (QofSetterFunc)gncTaxTableSetName },
+	{ GNC_TT_REFCOUNT, QOF_TYPE_INT64, (QofAccessFunc)gncTaxTableGetRefcount, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
@@ -821,3 +834,7 @@ gboolean gncTaxTableRegister (void)
 
   return qof_object_register (&gncTaxTableDesc);
 }
+
+/* need a QOF tax table entry object */
+//gncTaxTableEntrySetType_q int32
+//gint gncTaxTableEntryGetType_q (GncTaxTableEntry *entry);

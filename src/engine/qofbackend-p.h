@@ -72,9 +72,17 @@
  *    exist.  This flag is used to implement the 'SaveAs' GUI, where
  *    the user requests to save data to a new backend.
  *
- * The load() routine should return at least an account tree,
- *    all currencies, pricedb, and any other data that needs to be
- *    loaded at start time.  It does not have to return any
+ * The load() routine should load the minimal set of application data
+ *    needed for the application to be operable at initial startup.
+ *    It is assumed that the application will perform a 'run_query()'
+ *    to obtain any additional data that it needs.  For file-based
+ *    backends, it is acceptable for the backend to return all data
+ *    at load time; for SQL-based backends, it is acceptable for the
+ *    backend to return no data.
+ *
+ *    Thus, for example, for GnuCash, the postrges backend returns
+ *    the account tree, all currencies, and the pricedb, as these
+ *    are needed at startup.  It does not have to return any
  *    transactions whatsoever, as these are obtained at a later stage
  *    when a user opens a register, resulting in a query being sent to
  *    the backend.

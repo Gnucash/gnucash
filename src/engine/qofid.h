@@ -69,7 +69,9 @@
 #include <string.h>
 #include "guid.h"
 
+/** QofIdType declaration */
 typedef const char * QofIdType;
+/** QofIdTypeConst declaration */
 typedef const char * QofIdTypeConst;
 
 #define QOF_ID_NONE           NULL
@@ -112,9 +114,24 @@ typedef const char * QofIdTypeConst;
      (obj);                                                   \
   }))
 
-
+/** QofEntity declaration */
 typedef struct QofEntity_s QofEntity;
+/** QofCollection declaration 
+
+@param e_type QofIdType
+@param is_dirty gboolean
+@param hash_of_entities GHashTable
+@param data gpointer, place where object class can hang arbitrari data
+
+*/
 typedef struct QofCollection_s QofCollection;
+
+/** QofEntity structure
+
+@param e_type 	Entity type
+@param guid		GUID for the entity
+@param collection	Entity collection
+*/
 
 struct QofEntity_s
 {
@@ -171,4 +188,3 @@ gboolean qof_collection_is_dirty (QofCollection *col);
 #endif /* QOF_ID_H */
 /** @} */
 /** @} */
-

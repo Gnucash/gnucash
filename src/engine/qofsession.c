@@ -476,6 +476,7 @@ void
 qof_session_begin (QofSession *session, const char * book_id, 
                    gboolean ignore_lock, gboolean create_if_nonexistent)
 {
+  char * p;
   if (!session) return;
 
   ENTER (" sess=%p ignore_lock=%d, book-id=%s", 
@@ -511,7 +512,7 @@ qof_session_begin (QofSession *session, const char * book_id,
    * "postgres://". Everything before the colon is the access 
    * method.  Load the first backend found for that access method.
    */
-  char * p = strchr (book_id, ':');
+  p = strchr (book_id, ':');
   if (p)
   {
     char * access_method = g_strdup (book_id);
@@ -588,6 +589,11 @@ qof_session_load (QofSession *session,
    * id and a lock on the file. */
 
   oldbooks = session->books;
+
+  /* XXX why are we creating a book here? I think the books
+   * need to be handled by the backend ... especially since 
+   * the backend may need to load multiple books ... XXX. FIXME.
+   */
   newbook = qof_book_new();
   session->books = g_list_append (NULL, newbook);
   PINFO ("new book=%p", newbook);
@@ -619,6 +625,11 @@ qof_session_load (QofSession *session,
       }
   }
 
+  /* XXX if the load fails, then we try to restore the old set of books;
+   * however, we don't undo the session id (the URL).  Thus if the 
+   * user attempts to save after a failed load, they weill be trying to 
+   * save to some bogus URL.   This is wrong. XXX  FIXME.
+   */
   err = qof_session_get_error(session);
   if ((err != ERR_BACKEND_NO_ERR) &&
       (err != ERR_FILEIO_FILE_TOO_OLD) &&

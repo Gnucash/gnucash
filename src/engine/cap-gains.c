@@ -27,15 +27,12 @@
  *  This file implements the various routines to automatically
  *  compute and handle Cap Gains/Losses resulting from trading 
  *  activities.  Some of these routines might have broader 
- *  applicability, for handling depreciation *  & etc. 
+ *  applicability, for handling depreciation & etc. 
  *
- *  This code is under development, and is 'alpha': many important
- *  routines are missing, many existing routines are not called 
- *  from inside the engine as needed, and routines may be buggy.
- *
- *  This code does not currently handle tax distinctions, e.g
- *  the different tax treatment that short-term and long-term 
- *  cap gains have. 
+ *  This code is under development, and is 'beta': we think we're
+ *  mostly done, and we've tested and "things work for us", but there
+ *  may still be something missing, and there might still be some 
+ *  bugs.
  *
  * This code uses a 'gains dirty' flag: A 'dirty' flag on the source 
  * split indicates that the gains transaction needs to be recomputed.
@@ -192,7 +189,8 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign,
       
    lot = xaccAccountFindOpenLot (acc, sign, currency,
                    10000000LL * ((long long) LONG_MAX), earliest_pred);
-   LEAVE ("found lot=%p %s", lot, gnc_lot_get_title (lot));
+   LEAVE ("found lot=%p %s baln=%s", lot, gnc_lot_get_title (lot),
+               gnc_num_dbg_to_string(gnc_lot_get_balance(lot)));
    return lot;
 }
 
@@ -488,7 +486,7 @@ xaccSplitAssignToLot (Split *split, GNCLot *lot)
       val_a = gnc_numeric_mul (frac, val_tot, 
                         gnc_numeric_denom(val_tot), 
                         GNC_HOW_RND_ROUND| GNC_HOW_DENOM_EXACT);
-
+ 
       val_b = gnc_numeric_sub_fixed (val_tot, val_a);
       if (gnc_numeric_check(val_a))
       {
@@ -608,7 +606,8 @@ xaccSplitAssign (Split *split)
     */
    while (split)
    {
-     PINFO ("have split amount=%s", gnc_num_dbg_to_string (split->amount));
+     PINFO ("have split %p amount=%s", split, 
+             gnc_num_dbg_to_string (split->amount));
      split->gains |= GAINS_STATUS_VDIRTY;
      lot = pcy->PolicyGetLot (pcy, split);
      if (!lot)
@@ -674,6 +673,16 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
    /* Make sure the status flags and pointers are initialized */
    if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
+
+   /* Not possible to have gains if the transaction currency and 
+    * account commodity are identical. */
+   if (gnc_commodity_equal (currency,
+                            xaccAccountGetCommodity(split->acc)))
+   {
+      LEAVE ("Currency transfer, gains not possible, returning.");
+      return;
+   }
+
    if (pcy->PolicyIsOpeningSplit (pcy, lot, split))
    {
 #if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
@@ -928,6 +937,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
           * just in case someone screwed with it! */
          if (FALSE == gnc_commodity_equiv(currency,trans->common_currency))
          {
+            PWARN ("Resetting the transaction currency!");
             xaccTransSetCurrency (trans, currency);
          }
       }
@@ -955,7 +965,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
       xaccTransCommitEdit (trans);
    }
-   LEAVE ("(lot=%s)", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+   LEAVE ("(lot=%s)", gnc_lot_get_title(lot));
 }
 
 /* ============================================================== */

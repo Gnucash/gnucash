@@ -137,6 +137,8 @@ void
 xaccTransScrubOrphans (Transaction *trans)
 {
   SplitList *node;
+  QofBook *book = NULL;
+  AccountGroup *root = NULL;
   for (node = trans->splits; node; node = node->next)
   {
     Split *split = node->data;
@@ -154,8 +156,8 @@ xaccTransScrubOrphans (Transaction *trans)
    * XXX we should probably *always* to this, instead of the above loop!
    */
   PINFO ("Free Floating Transaction!");
-  QofBook *book = xaccTransGetBook (trans);
-  AccountGroup *root = xaccGetAccountGroup (book);
+  book = xaccTransGetBook (trans);
+  root = xaccGetAccountGroup (book);
   TransScrubOrphansFast (trans, root);
 }
 
@@ -198,13 +200,22 @@ xaccAccountScrubSplits (Account *account)
 void
 xaccTransScrubSplits (Transaction *trans)
 {
+  gnc_commodity *currency;
   GList *node;
 
-  if (!trans)
-    return;
+  if (!trans) return;
+
+  /* The split scrub expects the transaction to have a currency! */
+  currency = xaccTransGetCurrency (trans);
+  if (!currency) 
+  {
+    PERR ("Transaction doesn't have a currency!");
+  }
 
   for (node = trans->splits; node; node = node->next)
+  {
     xaccSplitScrub (node->data);
+  }
 }
 
 void
@@ -212,11 +223,12 @@ xaccSplitScrub (Split *split)
 {
   Account *account;
   Transaction *trans;
-  gnc_numeric value;
+  gnc_numeric value, amount;
   gnc_commodity *currency;
   int scu;
 
   if (!split) return;
+  ENTER ("(split=%p)", split);
 
   trans = xaccSplitGetParent (split);
   if (!trans) return;
@@ -242,6 +254,21 @@ xaccSplitScrub (Split *split)
     return;  
   }
 
+  /* Split amounts and values should be valid numbers */
+  value = xaccSplitGetValue (split);
+  if (gnc_numeric_check (value))
+  {
+    value = gnc_numeric_zero();
+    xaccSplitSetValue (split, value);
+  }
+
+  amount = xaccSplitGetAmount (split);
+  if (gnc_numeric_check (amount))
+  {
+    amount = gnc_numeric_zero();
+    xaccSplitSetAmount (split, amount);
+  }
+
   currency = xaccTransGetCurrency (trans);
 
   /* If the account doesn't have a commodity, 
@@ -251,16 +278,17 @@ xaccSplitScrub (Split *split)
   {
     xaccAccountScrubCommodity (account);
   }
-  if (!account->commodity || !gnc_commodity_equiv (account->commodity, currency))
+  if (!account->commodity || 
+      !gnc_commodity_equiv (account->commodity, currency))
+  {
+    LEAVE ("(split=%p) inequiv currency", split);
     return;
+  }
 
   scu = MIN (xaccAccountGetCommoditySCU (account),
              gnc_commodity_get_fraction (currency));
 
-  value = xaccSplitGetValue (split);
-
-  if (gnc_numeric_same (xaccSplitGetAmount (split),
-                        value, scu, GNC_HOW_RND_ROUND))
+  if (gnc_numeric_same (amount, value, scu, GNC_HOW_RND_ROUND))
   {
     return;
   }
@@ -279,6 +307,7 @@ xaccSplitScrub (Split *split)
   xaccTransBeginEdit (trans);
   xaccSplitSetAmount (split, value);
   xaccTransCommitEdit (trans);
+  LEAVE ("(split=%p)", split);
 }
 
 /* ================================================================ */
@@ -334,12 +363,14 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
                          Account *parent)
 {
   Split *balance_split = NULL;
+  QofBook *book = NULL;
   gnc_numeric imbalance;
   Account *account;
   SplitList *node, *slist;
 
   if (!trans) return;
 
+  ENTER ("()");
   xaccTransScrubSplits (trans);
 
   /* If the transaction is balanced, nothing more to do */
@@ -366,7 +397,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
           /* This should never occur, accounts are always 
            * in an account group */
           PERR ("Can't find root account");
-          QofBook *book = xaccTransGetBook (trans);
+          book = xaccTransGetBook (trans);
           root = xaccGetAccountGroup (book);
        }
        if (NULL == root)
@@ -442,6 +473,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     xaccSplitScrub (balance_split);
     xaccTransCommitEdit (trans);
   }
+  LEAVE ("()");
 }
 
 /* ================================================================ */

@@ -31,7 +31,22 @@
  *
  * Lots are required to correctly implement invoices, inventory,
  * depreciation and stock market investment gains. See the file
- * src/doc/lots.txt for implmentation overview.
+ * src/doc/lots.txt for a detailed implementation overview.
+ *
+ * A lot is "closed" when the number of items in the lot has gone to zero.
+ * It is very easy to compute the gains/losses for a closed lot: it is the
+ * sum-total of the values of the items put into/taken out of the lot.
+ * (Realized) Gains on still-open lots can be computed by pro-rating the 
+ * purchase prices. 
+ * 
+ * Lots are nothing more than a collection or grouping of splits in an
+ * account. All of the splits in a lot must belong to the same account;
+ * there's no mix-n-match.  Thus, in this sense, a lot belongs to an
+ * accunt as well.
+ *
+ * Lots have an implicit "opening date": the date of the earliest split in
+ * the lot. The "close date" is the date of the split that brought the lot
+ * item balance down to zero. 
  *
  @{ */
 

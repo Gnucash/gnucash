@@ -20,6 +20,22 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Account
+    Splits are grouped into Accounts which are also known
+    as "Ledgers" in accounting practice. Each Account consists of a list of
+    Splits that debit that Account. To ensure consistency, if a Split points
+    to an Account, then the Account must point to the Split, and vice-versa.
+    A Split can belong to at most one Account. Besides merely containing a
+    list of Splits, the Account structure also give the Account a name, a
+    code number, description and notes fields, a key-value frame, a pointer
+    to the commodity that is used for all splits in this account. The
+    commodity can be the name of anything traded and tradable: a stock
+    (e.g. "IBM", "McDonald's"), a currency (e.g. "USD", "GBP"), or
+    anything added to the commodity table.
+
+    Accounts can be arranged in a hierarchical tree. The nodes of the tree
+    are called "Account Groups" (@pxref{Account Groups}). By accounting
+    convention, the value of an Account is equal to the value of all of its
+    Splits plus the value of all of its sub-Accounts.
     @{ */
 /** @file Account.h 
     @brief Account handling public routines   

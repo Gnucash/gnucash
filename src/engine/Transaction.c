@@ -749,7 +749,7 @@ void
 xaccSplitSetAmount (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("split=%p old amt=%lld/%lld new amt=%lld/%lld", s,
+  ENTER ("(split=%p) old amt=%lld/%lld new amt=%lld/%lld", s,
         s->amount.num, s->amount.denom, amt.num, amt.denom);
 
   check_open (s->parent);
@@ -764,7 +764,7 @@ void
 xaccSplitSetValue (Split *s, gnc_numeric amt) 
 {
   if(!s) return;
-  ENTER ("split=%p old val=%lld/%lld new val=%lld/%lld", s,
+  ENTER ("(split=%p) old val=%lld/%lld new val=%lld/%lld", s,
         s->value.num, s->value.denom, amt.num, amt.denom);
 
   check_open (s->parent);
@@ -1006,7 +1006,7 @@ xaccFreeTransaction (Transaction *trans)
 
   if (!trans) return;
 
-  ENTER ("addr=%p", trans);
+  ENTER ("(addr=%p)", trans);
   if (((char *) 1) == trans->num)
   {
     PERR ("double-free %p", trans);
@@ -1044,7 +1044,7 @@ xaccFreeTransaction (Transaction *trans)
   qof_instance_release (&trans->inst);
   g_free(trans);
 
-  LEAVE ("addr=%p", trans);
+  LEAVE ("(addr=%p)", trans);
 }
 
 /********************************************************************
@@ -1379,11 +1379,20 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 gnc_numeric
 xaccTransGetImbalance (const Transaction * trans)
 {
-  if (!trans)
-    return gnc_numeric_zero ();
+  GList *node;
+  gnc_numeric imbal = gnc_numeric_zero();
+  if (!trans) return imbal;
 
-  return xaccSplitsComputeValue (trans->splits, NULL, 
-        trans->common_currency);
+  ENTER("(trans=%p)", trans);
+
+  for (node=trans->splits; node; node=node->next)
+  {
+    Split *s = node->data;
+    imbal = gnc_numeric_add(imbal, xaccSplitGetValue(s),
+                              GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
+  }
+  LEAVE("(trans=%p) imbal=%s", trans, gnc_num_dbg_to_string(imbal));
+  return imbal;
 }
 
 gnc_numeric
@@ -1402,7 +1411,7 @@ xaccTransGetAccountValue (const Transaction *trans,
     Account *a = xaccSplitGetAccount (s);
     if (a == account)
       total = gnc_numeric_add (total, xaccSplitGetValue (s),
-                               GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+                               GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
   }
   return total;
 }
@@ -1552,6 +1561,9 @@ void
 xaccTransCommitEdit (Transaction *trans)
 {
    QofBackend *be;
+
+   if (!trans) return;
+
    QOF_COMMIT_EDIT_PART1 (&trans->inst);
 
    /* We increment this for the duration of the call
@@ -1654,7 +1666,7 @@ xaccTransCommitEdit (Transaction *trans)
    trans->inst.editlevel--;
 
    gen_event_trans (trans);
-   LEAVE ("trans addr=%p\n", trans);
+   LEAVE ("(trans=%p)", trans);
 }
 
 /* Ughhh. The Rollback function is terribly complex, and, what's worse,
@@ -2835,8 +2847,9 @@ xaccSplitGetSharePrice (const Split * split)
    * handle some overflow and other error conditions by returning
    * zero.  But still print an error to let us know it happened.
    */
-  if (gnc_numeric_check(price)) {
-    PERR("Computing Shares Price Failed (%d): [ %lld / %lld ] / [ %lld / %lld ]",
+  if (gnc_numeric_check(price)) 
+  {
+    PERR("Computing share price failed (%d): [ %lld / %lld ] / [ %lld / %lld ]",
 	 gnc_numeric_check(price), val.num, val.denom, amt.num, amt.denom);
     return gnc_numeric_create(0,1);
   }
@@ -3201,7 +3214,7 @@ static QofObject split_object_def = {
   interface_version:       QOF_OBJECT_VERSION,
   e_type:                  GNC_ID_SPLIT,
   type_label:              "Split",
-  create:                  NULL,
+  create:                  (gpointer)xaccMallocSplit,
   book_begin:              NULL,
   book_end:                NULL,
   is_dirty:                NULL,
@@ -3252,13 +3265,13 @@ gboolean xaccSplitRegister (void)
       (QofAccessFunc)xaccSplitGetClearedBalance, NULL },
     { SPLIT_RECONCILED_BALANCE, QOF_TYPE_NUMERIC,
       (QofAccessFunc)xaccSplitGetReconciledBalance, NULL },
-    { SPLIT_MEMO, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetMemo, NULL },
-    { SPLIT_ACTION, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetAction, NULL },
-    { SPLIT_RECONCILE, QOF_TYPE_CHAR, (QofAccessFunc)xaccSplitGetReconcile, NULL },
-    { SPLIT_AMOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetAmount, NULL },
+    { SPLIT_MEMO, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetMemo, (QofSetterFunc)xaccSplitSetMemo },
+    { SPLIT_ACTION, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetAction, (QofSetterFunc)xaccSplitSetAction },
+    { SPLIT_RECONCILE, QOF_TYPE_CHAR, (QofAccessFunc)xaccSplitGetReconcile, (QofSetterFunc)xaccSplitSetReconcile },
+    { SPLIT_AMOUNT, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccSplitGetAmount, (QofSetterFunc)xaccSplitSetAmount },
     { SPLIT_SHARE_PRICE, QOF_TYPE_NUMERIC,
-      (QofAccessFunc)xaccSplitGetSharePrice, NULL },
-    { SPLIT_VALUE, QOF_TYPE_DEBCRED, (QofAccessFunc)xaccSplitGetValue, NULL },
+      (QofAccessFunc)xaccSplitGetSharePrice, (QofSetterFunc)xaccSplitSetSharePrice },
+    { SPLIT_VALUE, QOF_TYPE_DEBCRED, (QofAccessFunc)xaccSplitGetValue, (QofSetterFunc)xaccSplitSetValue },
     { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType, NULL },
     { SPLIT_VOIDED_AMOUNT, QOF_TYPE_NUMERIC,
       (QofAccessFunc)xaccSplitVoidFormerAmount, NULL },
@@ -3273,7 +3286,7 @@ gboolean xaccSplitRegister (void)
     { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
     { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
     { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
-    { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, NULL },
+    { SPLIT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccSplitGetSlots, (QofSetterFunc)xaccSplitSetSlots_nc },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
     { NULL },
@@ -3297,7 +3310,7 @@ static QofObject trans_object_def = {
   interface_version:   QOF_OBJECT_VERSION,
   e_type:              GNC_ID_TRANS,
   type_label:          "Transaction",
-  create:              NULL,
+  create:              (gpointer)xaccMallocTransaction,
   book_begin:          NULL,
   book_end:            NULL,
   is_dirty:            NULL,
@@ -3318,15 +3331,15 @@ trans_is_balanced_p (const Transaction *txn)
 gboolean xaccTransRegister (void)
 {
   static QofParam params[] = {
-    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum,NULL },
-    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription,NULL },
-    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS,NULL },
-    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS,NULL },
-    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS,NULL },
+    { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
+    { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
+    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)xaccTransSetDateEnteredTS },
+    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)xaccTransSetDatePostedTS },
+    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS, (QofSetterFunc)xaccTransSetDateDueTS },
     { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccTransGetImbalance,NULL },
-    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes,NULL },
+    { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes, (QofSetterFunc)xaccTransSetNotes },
     { TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN, (QofAccessFunc)trans_is_balanced_p,NULL },
-    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType,NULL },
+    { TRANS_TYPE, QOF_TYPE_CHAR, (QofAccessFunc)xaccTransGetTxnType, (QofSetterFunc)xaccTransSetTxnType },
     { TRANS_VOID_STATUS, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccTransGetVoidStatus,NULL },
     { TRANS_VOID_REASON, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetVoidReason,NULL },
     { TRANS_VOID_TIME, QOF_TYPE_DATE, (QofAccessFunc)xaccTransGetVoidTime,NULL },

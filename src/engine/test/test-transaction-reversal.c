@@ -49,12 +49,15 @@ run_test (void)
   if (!acc1 || !acc2)
   {
     failure("accounts not created");
+    return;
   }
 
+  /* Find a transaction that isn't voided */
   do
   {
     transaction = get_random_transaction (book);
-    if (xaccTransGetVoidStatus (transaction))
+    gboolean voyd = xaccTransGetVoidStatus (transaction);
+    if (voyd)
     {
       xaccTransBeginEdit (transaction);
       xaccTransDestroy (transaction);
@@ -62,13 +65,14 @@ run_test (void)
       transaction = NULL;
     }
   } while (!transaction);
-
   transaction_set_splits_to_accounts(transaction, acc1, acc2);
   xaccTransSortSplits(transaction);
 
   new_trans = xaccTransClone(transaction);
   if (!xaccTransEqual(transaction, new_trans, FALSE, TRUE, FALSE, TRUE))
+  {
     failure("xaccTransClone failed.");
+  }
 
   xaccTransReverse(new_trans);
   for (i = 0; i < 2; i++) 
@@ -78,7 +82,7 @@ run_test (void)
     result = gnc_numeric_add(old, new, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
     if (gnc_numeric_eq(old, gnc_numeric_neg(new))) 
     {
-      msg = g_strdup_printf("Amount of split %d wrong after reversal", i);
+      msg = g_strdup_printf("Amount of split %d wrong after reversal\n", i);
       failure(msg);
     }
 
@@ -87,7 +91,7 @@ run_test (void)
     result = gnc_numeric_add(old, new, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
     if (gnc_numeric_eq(old, gnc_numeric_neg(new))) 
     {
-      msg = g_strdup_printf("Value of split %d wrong after reversal", i);
+      msg = g_strdup_printf("Value of split %d wrong after reversal\n", i);
       failure(msg);
     }
 
@@ -101,6 +105,7 @@ main_helper (void *closure, int argc, char **argv)
   gnc_module_load("gnucash/engine", 0);
 
   xaccLogDisable ();
+  set_success_print (TRUE);
 
   run_test ();
 

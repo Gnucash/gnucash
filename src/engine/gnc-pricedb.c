@@ -553,13 +553,14 @@ GNCPriceDB *
 gnc_pricedb_create(QofBook * book)
 {
   GNCPriceDB * result;
+  QofCollection *col;
 
   g_return_val_if_fail (book, NULL);
 
   /* There can only be one pricedb per book.  So if one exits already,
    * then use that.  Warn user, they shouldn't be creating two ... 
    */
-  QofCollection *col = qof_book_get_collection (book, GNC_ID_PRICEDB);
+  col = qof_book_get_collection (book, GNC_ID_PRICEDB);
   result = qof_collection_get_data (col);
   if (result) 
   {
@@ -584,10 +585,11 @@ destroy_pricedb_currency_hash_data(gpointer key,
 {
   GList *price_list = (GList *) data;
   GList *node;
+  GNCPrice *p;
 
   for (node = price_list; node; node = node->next)
   {
-    GNCPrice *p = node->data;
+    p = node->data;
 
     p->db = NULL;
   }
@@ -2045,7 +2047,7 @@ static QofObject pricedb_object_def =
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_PRICE,
   type_label:        "Price",
-  create:            NULL,
+  create:            (gpointer)gnc_price_create,
   book_begin:        pricedb_book_begin,
   book_end:          pricedb_book_end,
   is_dirty:          pricedb_is_dirty,
@@ -2059,12 +2061,12 @@ gboolean
 gnc_pricedb_register (void)
 {
   static QofParam params[] = {
-    { PRICE_COMMODITY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_commodity, NULL },
-    { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency, NULL },
-    { PRICE_DATE, QOF_TYPE_DATE, (QofAccessFunc)gnc_price_get_time, NULL },
-    { PRICE_SOURCE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_source, NULL },
-    { PRICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_type, NULL },
-    { PRICE_VALUE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_price_get_value, NULL },
+    { PRICE_COMMODITY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_commodity, (QofSetterFunc)gnc_price_set_commodity },
+    { PRICE_CURRENCY, GNC_ID_COMMODITY, (QofAccessFunc)gnc_price_get_currency, (QofSetterFunc)gnc_price_set_currency },
+    { PRICE_DATE, QOF_TYPE_DATE, (QofAccessFunc)gnc_price_get_time, (QofSetterFunc)gnc_price_set_time },
+    { PRICE_SOURCE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_source, (QofSetterFunc)gnc_price_set_source },
+    { PRICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gnc_price_get_type, (QofSetterFunc)gnc_price_set_type },
+    { PRICE_VALUE, QOF_TYPE_NUMERIC, (QofAccessFunc)gnc_price_get_value, (QofSetterFunc)gnc_price_set_value },
     { NULL },
   };
 

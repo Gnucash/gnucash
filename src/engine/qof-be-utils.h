@@ -57,7 +57,7 @@
     PERR ("unbalanced call - resetting (was %d)", (inst)->editlevel); \
     (inst)->editlevel = 1;                                          \
   }                                                                 \
-  ENTER ("inst=%p", (inst));                                        \
+  ENTER ("(inst=%p)", (inst));                                      \
                                                                     \
   /* See if there's a backend.  If there is, invoke it. */          \
   be = qof_book_get_backend ((inst)->book);                         \
@@ -107,7 +107,7 @@
     PERR ("unbalanced call - resetting (was %d)", (inst)->editlevel); \
     (inst)->editlevel = 0;                                       \
   }                                                              \
-  ENTER ("inst=%p, dirty=%d do-free=%d",                         \
+  ENTER ("(inst=%p) dirty=%d do-free=%d",                        \
             (inst), (inst)->dirty, (inst)->do_free);             \
 }
 

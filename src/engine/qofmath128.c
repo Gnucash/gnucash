@@ -43,6 +43,13 @@ inline qofint128
 mult128 (gint64 a, gint64 b)
 {
   qofint128 prod;
+  guint64 a0, a1;
+  guint64 b0, b1;
+  guint64 d, d0, d1;
+  guint64 e, e0, e1;
+  guint64 f, f0, f1;
+  guint64 g, g0, g1;
+  guint64 sum, carry, roll, pmax;
 
   prod.isneg = 0;
   if (0>a)
@@ -57,35 +64,35 @@ mult128 (gint64 a, gint64 b)
     b = -b;
   }
 
-  guint64 a1 = a >> 32;
-  guint64 a0 = a - (a1<<32);
+  a1 = a >> 32;
+  a0 = a - (a1<<32);
 
-  guint64 b1 = b >> 32;
-  guint64 b0 = b - (b1<<32);
+  b1 = b >> 32;
+  b0 = b - (b1<<32);
 
-  guint64 d = a0*b0;
-  guint64 d1 = d >> 32;
-  guint64 d0 = d - (d1<<32);
+  d = a0*b0;
+  d1 = d >> 32;
+  d0 = d - (d1<<32);
 
-  guint64 e = a0*b1;
-  guint64 e1 = e >> 32;
-  guint64 e0 = e - (e1<<32);
+  e = a0*b1;
+  e1 = e >> 32;
+  e0 = e - (e1<<32);
 
-  guint64 f = a1*b0;
-  guint64 f1 = f >> 32;
-  guint64 f0 = f - (f1<<32);
+  f = a1*b0;
+  f1 = f >> 32;
+  f0 = f - (f1<<32);
 
-  guint64 g = a1*b1;
-  guint64 g1 = g >> 32;
-  guint64 g0 = g - (g1<<32);
+  g = a1*b1;
+  g1 = g >> 32;
+  g0 = g - (g1<<32);
 
-  guint64 sum = d1+e0+f0;
-  guint64 carry = 0;
+  sum = d1+e0+f0;
+  carry = 0;
   /* Can't say 1<<32 cause cpp will goof it up; 1ULL<<32 might work */
-  guint64 roll = 1<<30;
+  roll = 1<<30;
   roll <<= 2;
 
-  guint64 pmax = roll-1;
+  pmax = roll-1;
   while (pmax < sum)
   {
     sum -= roll;
@@ -125,7 +132,8 @@ shift128 (qofint128 x)
 inline qofint128
 shiftleft128 (qofint128 x)
 {
-  guint64 sbit = x.lo & HIBIT;
+  guint64 sbit;
+  sbit = x.lo & HIBIT;
   x.hi <<= 1;
   x.lo <<= 1;
   x.isbig = 0;
@@ -174,6 +182,7 @@ inline qofint128
 div128 (qofint128 n, gint64 d)
 {
   qofint128 quotient;
+  int i;
   guint64 remainder = 0;
 
   quotient = n;
@@ -184,7 +193,6 @@ div128 (qofint128 n, gint64 d)
   }
 
   /* Use grade-school long division algorithm */
-  int i;
   for (i=0; i<128; i++)
   {
     guint64 sbit = HIBIT & quotient.hi;
