@@ -58,7 +58,6 @@ xaccMallocCellBlock (int numrows, int numcols)
    cellblock->right_traverse_c = NULL;
    cellblock->left_traverse_r = NULL;
    cellblock->left_traverse_c = NULL;
-   cellblock->widths = NULL;
    cellblock->alignments = NULL;
 
    xaccInitCellBlock (cellblock, numrows, numcols);
@@ -127,10 +126,7 @@ FreeCellBlockMem (CellBlock *cellblock)
       cellblock->left_traverse_c = NULL;
    }
 
-   /* free widths, alignments */
-   g_free (cellblock->widths);
-   cellblock->widths = NULL;
-
+   /* free alignments */
    g_free (cellblock->alignments);
    cellblock->alignments = NULL;
 }
@@ -208,13 +204,10 @@ xaccInitCellBlock (CellBlock *cellblock, int numrows, int numcols)
    cellblock->last_left_reenter_traverse_row = 0;
    cellblock->last_left_reenter_traverse_col = 0;
 
-   cellblock->widths = g_new(short, numcols);
    cellblock->alignments = g_new(Alignments, numcols);
 
-   for (j = 0; j < numcols; j++) {
-      cellblock->widths[j] = 0;
+   for (j = 0; j < numcols; j++)
       cellblock->alignments[j] = ALIGN_RIGHT;
-   }
 }
 
 /* =================================================== */

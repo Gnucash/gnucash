@@ -100,7 +100,6 @@ struct _CellBlock {
   guint32 passive_bg_color2;
 
   /* other attributes */
-  short      *widths;        /* column widths */
   Alignments *alignments;    /* column text alignments */
 
   short     **right_traverse_r;

@@ -103,26 +103,6 @@ static SplitRegisterColors reg_colors = {
   0xffffff  /* white, header color */
 };
 
-
-#define DATE_CELL_WIDTH    11
-#define NUM_CELL_WIDTH      7
-#define ACTN_CELL_WIDTH     7
-#define XFRM_CELL_WIDTH    14
-#define MXFRM_CELL_WIDTH   14
-#define XTO_CELL_WIDTH     14
-#define DESC_CELL_WIDTH    29
-#define MEMO_CELL_WIDTH    29
-#define RECN_CELL_WIDTH     1
-#define DEBT_CELL_WIDTH    12
-#define CRED_CELL_WIDTH    12
-#define NDEBT_CELL_WIDTH   12
-#define NCRED_CELL_WIDTH   12
-#define PRIC_CELL_WIDTH     9
-#define VALU_CELL_WIDTH    10
-#define SHRS_CELL_WIDTH    10
-#define BALN_CELL_WIDTH    12
-
-
 #define DATE_CELL_ALIGN    ALIGN_RIGHT
 #define NUM_CELL_ALIGN     ALIGN_LEFT
 #define ACTN_CELL_ALIGN    ALIGN_LEFT
@@ -321,9 +301,7 @@ configAction (SplitRegister *reg)
    if ((0<=row) && (0<=col)) {					\
       curs->cells [row][col] = (handler);			\
       curs->cell_types[row][col] = NAME##_CELL;                 \
-      header->widths[col] = NAME##_CELL_WIDTH;			\
       header->alignments[col] = NAME##_CELL_ALIGN;		\
-      curs->widths[col] = NAME##_CELL_WIDTH;			\
       curs->alignments[col] = NAME##_CELL_ALIGN;		\
       if (hcell) {						\
          if (row < reg->num_header_rows) {			\

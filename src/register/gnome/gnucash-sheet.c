@@ -778,7 +778,7 @@ compute_optimal_width (GnucashSheet *sheet)
 #endif
         style = sheet->cursor_style[GNUCASH_CURSOR_HEADER];
 
-        if ((style == NULL) || (style->widths == NULL))
+        if ((style == NULL) || (style->dimensions == NULL))
                 return DEFAULT_REGISTER_WIDTH;
 
         sheet->default_width = style->dimensions->width;

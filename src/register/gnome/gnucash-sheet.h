@@ -89,9 +89,6 @@ typedef struct
         gint reg_type;
         gint cursor_type;
 
-        /* this one comes from the cellblock */
-        gint **widths;              /* in characters */
-
         CellLayoutInfo *layout_info;
         CellDimensions *dimensions;
 

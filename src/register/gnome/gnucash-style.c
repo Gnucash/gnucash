@@ -1226,7 +1226,6 @@ gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
         g_return_if_fail (style != NULL);
 
         for ( i = 0; i < style->nrows; i++) {
-                g_free(style->widths[i]);
                 g_free(style->alignments[i]);
                 g_free(style->fonts[i]);
                 g_free(style->active_bg_color[i]);
@@ -1237,7 +1236,6 @@ gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style)
                 g_free (style->borders[i]);
         }
 
-        g_free(style->widths);
         g_free(style->alignments);
         g_free(style->fonts);
         g_free(style->active_bg_color);
@@ -1279,8 +1277,6 @@ gnucash_sheet_style_recompile(SheetBlockStyle *style, CellBlock *cellblock,
         for (i = 0; i < style->nrows; i++) {
                 for (j = 0; j < style->ncols; j++) {
                         type = cellblock->cell_types[i][j];
-
-                        style->widths[i][j] = cellblock->widths[j];
 
                         style->fonts[i][j] = NULL;
                         style->header_font = gnucash_register_font;
@@ -1383,8 +1379,7 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
         g_return_val_if_fail (GNUCASH_IS_SHEET (sheet), NULL);
         g_return_val_if_fail (cellblock != NULL, NULL);
 
-
-        sr = (SplitRegister *)sheet->split_register;
+        sr = sheet->split_register;
 
         style  = g_new0(SheetBlockStyle, 1);
 
@@ -1394,7 +1389,6 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
         style->nrows = cellblock->numRows;
         style->ncols = cellblock->numCols;
 
-        style->widths = g_new0(gint *, style->nrows);
         style->alignments = g_new0 (GtkJustification *, style->nrows);
         style->fonts = g_new0 (GdkFont **, style->nrows);
         style->active_bg_color = g_new0 (GdkColor **, style->nrows);
@@ -1403,7 +1397,6 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
         style->borders = g_new0 (int *, style->nrows);
 
         for ( i = 0; i < style->nrows; i++) {
-                style->widths[i] = g_new0(gint, style->ncols);
                 style->alignments[i] = g_new0 (GtkJustification, style->ncols);
                 style->fonts[i] = g_new0 (GdkFont *, style->ncols);
                 style->active_bg_color[i] = g_new0 (GdkColor *, style->ncols);
