@@ -220,12 +220,12 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
   if (!owner) return;
   if (gncOwnerEqual (owner, &(job->owner))) return;
 
-  switch (gncOwnerGetType (&(job->owner))) {
+  switch (gncOwnerGetType (owner)) {
   case GNC_OWNER_CUSTOMER:
   case GNC_OWNER_VENDOR:
     break;
   default:
-    PERR("Unsupported Owner type");
+    PERR("Unsupported Owner type: %d", gncOwnerGetType(owner));
     return;
   }
 

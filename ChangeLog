@@ -1,3 +1,10 @@
+2004-02-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncJob.c: Linas checked the wrong
+	  argument in SetOwner() in revision 1.40 thereby causing ALL new
+	  jobs to fail to work.  Check the new owner, not the original.
+	  Fixes #133392.
+
 2004-01-31  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/gnc-commodity.c, src/engine/iso-4217-currencies.scm:
