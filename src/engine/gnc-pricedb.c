@@ -642,6 +642,7 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_LATEST;
+     pl.prdb = db;
      pl.commodity = commodity;
      pl.currency = currency;
      (db->backend->price_lookup) (db->backend, &pl);
@@ -678,6 +679,7 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_ALL;
+     pl.prdb = db;
      pl.commodity = commodity;
      pl.currency = currency;
      (db->backend->price_lookup) (db->backend, &pl);
@@ -715,6 +717,7 @@ gnc_pricedb_lookup_at_time(GNCPriceDB *db,
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_AT_TIME;
+     pl.prdb = db;
      pl.commodity = c;
      pl.currency = currency;
      pl.date = t;
@@ -762,6 +765,7 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
   {
      GNCPriceLookup pl;
      pl.type = LOOKUP_NEAREST_IN_TIME;
+     pl.prdb = db;
      pl.commodity = c;
      pl.currency = currency;
      pl.date = t;

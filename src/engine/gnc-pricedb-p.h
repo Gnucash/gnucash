@@ -64,12 +64,15 @@ typedef enum {
   LOOKUP_LATEST = 1,
   LOOKUP_ALL,
   LOOKUP_AT_TIME,
-  LOOKUP_NEAREST_IN_TIME
+  LOOKUP_NEAREST_IN_TIME,
+  LOOKUP_LATEST_BEFORE,
+  LOOKUP_EARLIEST_AFTER
 } PriceLookupType;
 
 
 struct _GNCPriceLookup {
   PriceLookupType type;
+  GNCPriceDB     *prdb;
   gnc_commodity  *commodity;
   gnc_commodity  *currency;
   Timespec        date;
