@@ -1,5 +1,7 @@
 2001-08-13  Christian Stimming  <stimming@tuhh.de>
 
+	* src/gnome/window-reconcile.c: see below.
+
 	* src/gnome/window-register.c, src/gnome/window-acct-tree.c,
 	po/gnc-glossary.txt: Changed the term 'to scrub' to 'to check and
 	repair'.
