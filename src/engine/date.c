@@ -263,6 +263,13 @@ xaccDMYToSec (int day, int month, int year)
    return (secs);
 }
 
+time_t
+xaccScanDateS (const char *str)
+{
+   int month,day,year;
+   scanDate (str, &day, &month, &year);
+   return (xaccDMYToSec (day,month,year));
+}
 
 /********************** END OF FILE *********************************\
 \********************************************************************/
