@@ -89,6 +89,8 @@ struct _RegWindow
 
   GtkWidget * statusbar;
 
+  GtkWidget * double_line_check;
+
   GtkWidget * split_button;
   GtkWidget * split_menu_check;
   GtkWidget * split_popup_check;
@@ -1597,6 +1599,7 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   gnome_app_install_appbar_menu_hints(GNOME_APPBAR(statusbar),
                                       register_window_menu);
 
+  regData->double_line_check = style_menu[2].widget;
   regData->split_menu_check = transaction_menu[6].widget;
 
   /* Make sure the right style radio item is active */
@@ -2143,6 +2146,7 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
   {
     gboolean use_double_line;
+    GtkCheckMenuItem *check;
 
     use_double_line = gnc_lookup_boolean_option ("Register",
                                                  "Double Line Mode",
@@ -2150,6 +2154,18 @@ regWindowLedger (xaccLedgerDisplay *ledger)
 
     /* be sure to initialize the gui elements associated with the cursor */
     xaccConfigSplitRegister (reg, reg->type, reg->style, use_double_line);
+
+    check = GTK_CHECK_MENU_ITEM (regData->double_line_check);
+
+    gtk_signal_handler_block_by_func
+      (GTK_OBJECT (check),
+       GTK_SIGNAL_FUNC (gnc_register_double_line_cb), regData);
+
+    gtk_check_menu_item_set_active (check, use_double_line);
+
+    gtk_signal_handler_unblock_by_func
+      (GTK_OBJECT (check),
+       GTK_SIGNAL_FUNC (gnc_register_double_line_cb), regData);
   }
 
   /* Allow grow, allow shrink, auto-shrink */
