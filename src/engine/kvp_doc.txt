@@ -30,7 +30,7 @@ Use: The use to which the key will be put. Include any requirements
 
 Example:
 
-Name: my-favorite-thing
+Name: /my-favorite-thing
 Type: string
 Entities: Account
 Use:  xaccGetMyFavoriteThing(), xaccSetMyFavoriteThing()
@@ -249,16 +249,22 @@ Entities: Account
 Use: When a lot in this account is double-balanced, this key specifies
      the account to which realized gains are to be posted.
 
+Name: /lot-mgmt/next-id
+Type: int64
+Entities: Account
+Use: The next unused lot id number, used to autogenerate
+     a lot title.
+
 
 -----------------------
 
-Name: notes
+Name: /notes
 Type: string
 Entities: Account, Lot, Transaction
-Use: xaccAccountGetNotes(), xaccAccountSetNotes(),
-     xaccTransGetNotes(), xaccTransSetNotes(),
-     gnc_lot_get_notes(), gnc_lot_set_notes()
-     Store the 'Notes' string.
+Use: A user-suplied 'Notes' text field.  The user can set this to 
+     any value and change it at any time for any reason.
+     Accessors: xaccAccountGetNotes(), xaccAccountSetNotes(),
+     xaccTransGetNotes(), xaccTransSetNotes()
 
 Name: old-currency
 Type: string
@@ -302,7 +308,7 @@ Use: This holds the old security scu. This may be deleted at
 
 -----------------------
 
-Name: /reconcile-info
+Name: /reconcile-info/
 Type: frame
 Entities: Account
 Use: store reconcile information about accounts
@@ -381,6 +387,12 @@ Name: tax-related
 Type: gint64
 Entities: Account
 Use: A boolean flag indicated whether the Account is tax-related.
+
+Name: /title
+Type: string
+Entities: Lot
+Use:  A user-suplied title for the lot.  The user can set this to 
+      any value and change it at any time for any reason.
 
 Name: trans-date-due
 Type: Timespec

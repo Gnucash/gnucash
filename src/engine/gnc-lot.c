@@ -28,9 +28,14 @@
  * inventory lots, and stock market investment lots.  See the file
  * src/doc/lots.txt for implmentation overview.
  *
+ * XXX Lots are not currently treated in a correct transactional
+ * manner.  There's no dirty flag, and, at this time, the backend
+ * is not signalled about the fact that a lot has changed.  This
+ * is true both in the Scrub2.c and in src/gnome/lot-viewer.c
+ *
  * HISTORY:
  * Created by Linas Vepstas May 2002
- * Copyright (c) 2002.2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
 #include "Account.h"
@@ -55,7 +60,7 @@ static void
 gnc_lot_init (GNCLot *lot, QofBook *book)
 {
    ENTER ("(lot=%p, book=%p)", lot, book);
-   lot->kvp_data = kvp_frame_new();;
+   lot->kvp_data = kvp_frame_new();
    lot->account = NULL;
    lot->splits = NULL;
    lot->is_closed = -1;
