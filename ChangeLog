@@ -1,3 +1,9 @@
+2003-06-17  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/QueryNew.h: change QUERY_FIRST_TERM to a #define.
+	  It does not need to be part of the enum (it's not even used anywhere)
+	* src/engine/QueryCore.h: gint32 prints as a "%d", not a "%ld".
+
 2003-06-16  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-register.c: Register with the component manager

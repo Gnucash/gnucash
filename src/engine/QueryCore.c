@@ -730,7 +730,7 @@ static char * int32_to_string (gpointer object, QueryAccess get)
 {
   gint32 num = ((query_int32_getter)get)(object);
 
-  return g_strdup_printf ("%ld", num);
+  return g_strdup_printf ("%d", num);
 }
 
 /* ================================================================ */

@@ -38,13 +38,15 @@ typedef struct querynew_s QueryNew;
 
 /** Query Term Operators, for combining Query Terms */
 typedef enum {
-  QUERY_FIRST_TERM=1,  /* First/only term is same as 'and' */
   QUERY_AND=1,
   QUERY_OR,
   QUERY_NAND,
   QUERY_NOR,
   QUERY_XOR
 } QueryOp;
+
+/* First/only term is same as 'and' */
+#define QUERY_FIRST_TERM QUERY_AND
 
 /** Default sort object type */
 #define QUERY_DEFAULT_SORT	"GnucashQueryDefaultSortObject"
