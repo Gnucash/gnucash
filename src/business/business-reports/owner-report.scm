@@ -358,6 +358,9 @@
 (define (vendor-options-generator)
   (options-generator '(payable) 'gnc-owner-vendor (_ "Bill") #t))
 
+(define (employee-options-generator)
+  (options-generator '(payable) 'gnc-owner-employee (_ "Expense Report") #t))
+
 (define (string-expand string character replace-string)
   (define (car-line chars)
     (take-while (lambda (c) (not (eqv? c character))) chars))
@@ -498,7 +501,10 @@
 	       (set! type-str (N_ "Customer")))
 	      
 	      ((gnc-owner-vendor)
-	       (set! type-str (N_ "Vendor"))))
+	       (set! type-str (N_ "Vendor")))
+
+	      ((gnc-owner-employee)
+	       (set! type-str (N_ "Employee"))))
 
 	    (set! title (gnc:html-markup
 			 "!" 
@@ -572,6 +578,9 @@
       ((gnc-owner-vendor)
        (find-first-account 'payable))
 
+      ((gnc-owner-employee)
+       (find-first-account 'payable))
+
       ((gnc-owner-job)
        (find-first-account-for-owner (gnc:owner-get-end-owner owner)))
 
@@ -594,6 +603,14 @@
  'renderer reg-renderer
  'in-menu? #t)
 
+(gnc:define-report
+ 'version 1
+ 'name (N_ "Employee Report")
+ 'menu-path (list gnc:menuname-business-reports)
+ 'options-generator employee-options-generator
+ 'renderer reg-renderer
+ 'in-menu? #t)
+
 (define (owner-report-create-internal report-name owner account)
   (let* ((options (gnc:make-report-options report-name))
 	 (owner-op (gnc:lookup-option options owner-page owner-string))
@@ -612,6 +629,9 @@
 
       ((gnc-owner-vendor)
        (owner-report-create-internal (N_ "Vendor Report") owner account))
+
+      ((gnc-owner-employee)
+       (owner-report-create-internal (N_ "Employee Report") owner account))
 
       (else #f))))
 

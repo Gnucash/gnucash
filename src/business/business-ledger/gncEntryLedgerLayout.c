@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerLayout.c -- Layout for GncEntry ledger
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -76,9 +76,11 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
     /* xgettext:no-c-format */
     { ENTRY_DISHOW_CELL, RECN_CELL_TYPE_NAME, N_("sample(DH):+%")+11,
       CELL_ALIGN_LEFT, FALSE, FALSE },
-    { ENTRY_IACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
+    { ENTRY_IACCT_CELL, COMBO_CELL_TYPE_NAME,
+      N_("sample:Expenses:Automobile:Gasoline") + 7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
-    { ENTRY_BACCT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Xfer:Account")+7,
+    { ENTRY_BACCT_CELL, COMBO_CELL_TYPE_NAME,
+      N_("sample:Expenses:Automobile:Gasoline") + 7,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_TAXABLE_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:T?")+7,
       CELL_ALIGN_LEFT, FALSE, FALSE },
@@ -92,6 +94,8 @@ static void gnc_entry_ledger_layout_add_cells (GncEntryLedger *ledger,
       CELL_ALIGN_RIGHT, FALSE, FALSE },
     { ENTRY_BILLABLE_CELL, CHECKBOX_CELL_TYPE_NAME, N_("sample:BI")+7,
       CELL_ALIGN_LEFT, FALSE, FALSE },
+    { ENTRY_PAYMENT_CELL, COMBO_CELL_TYPE_NAME, N_("sample:Payment")+7,
+      CELL_ALIGN_LEFT, FALSE, FALSE }
   };
   int i;
 
@@ -117,6 +121,10 @@ static void gnc_entry_ledger_layout_add_cursors (GncEntryLedger *ledger,
   case GNCENTRY_BILL_ENTRY:
   case GNCENTRY_BILL_VIEWER:
     num_cols = 12;
+    break;
+  case GNCENTRY_EXPVOUCHER_ENTRY:
+  case GNCENTRY_EXPVOUCHER_VIEWER:
+    num_cols = 10;
     break;
   default:
     g_assert (FALSE);
@@ -177,6 +185,23 @@ static void gnc_entry_ledger_set_cells (GncEntryLedger *ledger,
     gnc_table_layout_set_cell (layout, curs, ENTRY_TAXTABLE_CELL, 0, 9);
     gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, 10);
     gnc_table_layout_set_cell (layout, curs, ENTRY_BILLABLE_CELL, 0, 11);
+
+    break;
+
+  case GNCENTRY_EXPVOUCHER_ENTRY:
+  case GNCENTRY_EXPVOUCHER_VIEWER:
+
+    curs = gnc_table_layout_get_cursor (layout, "cursor");
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DATE_CELL, 0, 0);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_INV_CELL, 0, 1);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_DESC_CELL, 0, 2);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_ACTN_CELL, 0, 3);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_BACCT_CELL, 0, 4);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_QTY_CELL, 0, 5);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_PRIC_CELL, 0, 6);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_VALUE_CELL, 0, 7);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_BILLABLE_CELL, 0, 8);
+    gnc_table_layout_set_cell (layout, curs, ENTRY_PAYMENT_CELL, 0, 9);
 
     break;
 

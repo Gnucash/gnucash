@@ -644,7 +644,10 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   GList *splitinfo = NULL;
   gnc_numeric total;
   gboolean reverse;
-  const char *name;
+  const char *name, *type;
+  char *built_name;
+  Account *ccard_acct = NULL;
+  GncOwner *owner;
 
   if (!invoice || !acc) return NULL;
 
@@ -658,13 +661,18 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   /* Figure out if we need to "reverse" the numbers. */
   reverse = (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_CUSTOMER);
 
+  /* Figure out if we need to separate out "credit-card" items */
+  owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+  if (gncInvoiceGetOwnerType (invoice) == GNC_OWNER_EMPLOYEE)
+    ccard_acct = gncEmployeeGetCCard (gncOwnerGetEmployee (owner));
+
   /* Find an existing payment-lot for this owner */
   {
     LotList *lot_list;
     struct lotmatch lm;
 
     lm.reverse = reverse;
-    lm.owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice));
+    lm.owner = owner;
 
     lot_list = xaccAccountFindOpenLots (acc, gnc_lot_match_owner_payment,
 					&lm, NULL);
@@ -683,9 +691,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   xaccTransBeginEdit (txn);
 
   name = gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice)));
+  type = gncInvoiceGetType (invoice);
+  built_name = g_strdup_printf ("%s: %s", type ? type : "", name ? name : "");
 
   /* Set Transaction Description (Owner Name) , Num (invoice ID), Currency */
-  xaccTransSetDescription (txn, name);
+  xaccTransSetDescription (txn, built_name);
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
   xaccTransSetCurrency (txn, invoice->currency);
 
@@ -733,7 +743,32 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     if (this_acc) {
       if (gnc_numeric_check (value) == GNC_ERROR_OK) {
 	splitinfo = gncAccountValueAdd (splitinfo, this_acc, value);
-	total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+
+	/* If there is a credit-card account, and this is a CCard
+	 * payment type, the don't add it to the total, and instead
+	 * create a split to the CC Acct with a memo of the entry
+	 * description instead of the provided memo.  Note that the
+	 * value reversal is the same as the post account.
+	 *
+	 * Note: we don't have to worry about the tax values --
+	 * expense vouchers don't have them.
+	 */
+	if (ccard_acct && gncEntryGetBillPayment (entry) == GNC_PAYMENT_CARD) {
+	  Split *split;
+
+	  split = xaccMallocSplit (invoice->book);
+	  /* set action? */
+	  xaccSplitSetMemo (split, gncEntryGetDescription (entry));
+	  xaccSplitSetBaseValue (split, (reverse ? value : gnc_numeric_neg (value)),
+				 invoice->currency);
+	  xaccAccountBeginEdit (ccard_acct);
+	  xaccAccountInsertSplit (ccard_acct, split);
+	  xaccAccountCommitEdit (ccard_acct);
+	  xaccTransAppendSplit (txn, split);
+	  
+	} else
+	  total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+
       } else
 	g_warning ("bad value in our entry");
     }
@@ -774,7 +809,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
     /* Set action/memo */
     xaccSplitSetMemo (split, memo);
-    xaccSplitSetAction (split, gncInvoiceGetType (invoice));
+    xaccSplitSetAction (split, type);
 			   
     xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
 			   invoice->currency);
@@ -821,7 +856,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccAccountBeginEdit (acc);
 
     /* Set Transaction Description (Owner Name), Currency */
-    xaccTransSetDescription (t2, name);
+    xaccTransSetDescription (t2, built_name);
     xaccTransSetCurrency (t2, invoice->currency);
 
     /* Entered and Posted at date */
@@ -852,6 +887,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   }
 
   gncInvoiceCommitEdit (invoice);
+
+  g_free (built_name);
 
   return txn;
 }
@@ -952,6 +989,7 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   GList *lot_list, *fifo = NULL;
   GNCLot *lot, *prepay_lot = NULL;
   const char *name;
+  char *built_name;
   gnc_commodity *commodity;
   gnc_numeric split_amt;
   gboolean reverse;
@@ -966,16 +1004,20 @@ gncOwnerApplyPayment (GncOwner *owner, Account *posted_acc, Account *xfer_acc,
   commodity = gncOwnerGetCurrency (owner);
   reverse = (gncOwnerGetType (owner) == GNC_OWNER_CUSTOMER);
 
+  built_name = g_strdup_printf ("%s: %s", _("Payment"), name ? name : "");
+
   txn = xaccMallocTransaction (book);
   xaccTransBeginEdit (txn);
 
   /* Set up the transaction */
-  xaccTransSetDescription (txn, name);
+  xaccTransSetDescription (txn, built_name);
   xaccTransSetNum (txn, num);
   xaccTransSetCurrency (txn, commodity);
   xaccTransSetDateEnteredTS (txn, &date);
   xaccTransSetDatePostedTS (txn, &date);
   xaccTransSetTxnType (txn, TXN_TYPE_PAYMENT);
+
+  g_free (built_name);
 
   /* The split for the transfer account */
   split = xaccMallocSplit (book);

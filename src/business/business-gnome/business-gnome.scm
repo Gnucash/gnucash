@@ -274,6 +274,63 @@
     (gnc:add-extension new-vendor-item)
     ))
 
+(define (add-employee-items)
+  (let ((last-employee (gnc:owner-create))
+	(employee (N_ "Employees")))
+
+    (define employee-menu
+      (gnc:make-menu employee (list main-window top-level "")))
+
+    (define new-employee-item
+      (gnc:make-menu-item (N_ "New Employee")
+			  (N_ "New Employee")
+			  (list main-window top-level employee "")
+			  (lambda ()
+			    (gnc:employee-new (gnc:get-current-book)))))
+
+    (define find-employee-item
+      (gnc:make-menu-item (N_ "Find Employee")
+			  (N_ "Find Employee")
+			  (list main-window top-level employee "")
+			  (lambda ()
+			    (gnc:employee-search (gnc:owner-get-employee 
+						  last-employee)
+						 (gnc:get-current-book)))))
+
+    (define new-invoice-item
+      (gnc:make-menu-item (N_ "New Expense Voucher")
+			  (N_ "New Expense Voucher")
+			  (list main-window top-level employee "")
+			  (lambda ()
+			    (gnc:invoice-new last-employee
+					     (gnc:get-current-book)))))
+
+    (define find-invoice-item
+      (gnc:make-menu-item (N_ "Find Expense Voucher")
+			  (N_ "Find Expense Voucher")
+			  (list main-window top-level employee "")
+			  (lambda ()
+			    (gnc:invoice-search #f last-employee
+					      (gnc:get-current-book)))))
+
+    (define payment-item
+      (gnc:make-menu-item (N_ "Process Payment")
+			  (N_ "Process Payment")
+			  (list main-window top-level employee "")
+			  (lambda ()
+			    (gnc:payment-new last-employee
+					     (gnc:get-current-book)))))
+
+    (gnc:owner-init-employee last-employee #f)
+
+    (gnc:add-extension employee-menu)
+    (gnc:add-extension payment-item)
+    (gnc:add-extension find-invoice-item)
+    (gnc:add-extension new-invoice-item)
+    (gnc:add-extension find-employee-item)
+    (gnc:add-extension new-employee-item)
+    ))
+
 (define (add-business-items)
   (define menu (gnc:make-menu top-level (list "Main" "_Actions")))
   ;;(define new (gnc:make-menu (N_ new-label) (list main-window top-level "")))
@@ -304,6 +361,7 @@
 		       (list main-window top-level "")
 		       (lambda ()
 			 (gnc:tax-table-new (gnc:get-current-book)))))
+  (add-employee-items)
   (add-vendor-items)
   (add-customer-items)
 
@@ -332,33 +390,6 @@
 		  (list "Main" gnc:menuname-reports gnc:menuname-income-expense))))
 
 
-
-(define (add-employee-extensions)
-  (let ((last-employee #f))
-
-    (define employee-menu
-      (gnc:make-menu (N_ "Employees")
-		     (list main-window "Extensions" "")))
-
-    (define new-employee-item
-      (gnc:make-menu-item (N_ "New Employee")
-			  (N_ "New Employee")
-			  (list main-window "Extensions" "Employees" "")
-			  (lambda ()
-			    (gnc:employee-new (gnc:get-current-book)))))
-
-    (define find-employee-item
-      (gnc:make-menu-item (N_ "Find Employee")
-			  (N_ "Find Employee")
-			  (list main-window "Extensions" "Employees" "")
-			  (lambda ()
-			    (gnc:employee-search last-employee
-					       (gnc:get-current-book)))))
-
-    (gnc:add-extension employee-menu)
-    (gnc:add-extension find-employee-item)
-    (gnc:add-extension new-employee-item)
-    ))
 
 (define (add-business-test)
 
@@ -485,8 +516,6 @@
   (gnc:add-extension reload-invoice)
   (gnc:add-extension reload-owner)
   (gnc:add-extension test-search)
-
-  (add-employee-extensions)
 )
 
 (define (business-book-opened session)

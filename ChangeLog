@@ -1,5 +1,58 @@
 2003-03-10  Derek Atkins  <derek@ihtfp.com>
 
+	* src/business/business-core/gncEmployee.c: name the employee name
+	  the specific 'printable' name.
+	* src/business/business-core/gncInvoice.c: if an invoice is owned
+	  by an EMPLOYEE, then consider it an expense voucher.  Check the
+	  entry payment-type and post directly to a CC account if one is
+	  available.
+	* src/business/business-core/gncOwner.c: use the employee->address->name
+	  instead of the employee->username
+	* src/business/business-gnome/business-gnome.scm: add employee items
+	  to the main menu
+	* src/business/business-gnome/dialog-employee.c:
+	  - add a UI to choose an employee credit-card account
+	  - add "expense vouchers" and "payments" to the employee search results
+	  - change the search criteria and result column order
+	* src/business/business-gnome/dialog-invoice.c:
+	  - hide the 'job' if this is an expense voucher
+	  - create an expense-voucher register is the invoice owner is an employee
+	* src/business/business-gnome/gw-business-gnome-spec.scm:
+	  add gnc:url-type-employee
+	* src/business/business-gnome/glade/employee.glade: add the
+	  UI for the CCard account
+	* src/business/business-gnome/glade/invoice.glade: name the job label
+	  widget
+	* src/business/business-ledger/gncEntryLedger.[ch]:
+	  - define an expense voucher register
+	* src/business/business-ledger/gncEntryLedgerControl.c:
+	  add support for expense vouchers
+	* src/business/business-ledger/gncEntryLedgerDisplay.c:
+	  - add support for expense vouchers
+	  - add a component watch on the employee and refresh if it changes.
+	    this lets us change the available payment options based on whether
+	    the employee has a ccard account assigned.
+	* src/business/business-ledger/gncEntryLedgerLayout.c:
+	  - create the layout for an expense voucher register
+	  - widen the account columns
+	* src/business/business-ledger/gncEntryLedgerLoad.c:
+	  - add support for expense vouchers
+	  - load the payment cell based on the invoice owner -- don't allow
+	    'charge' unless the employee actually has an assigned ccard account.
+	* src/business/business-ledger/gncEntryLedgerModel.c:
+	  - add functions to support the payment cell
+	  - add support for expense vouchers
+	* src/business/business-reports/business-reports.scm:
+	  - add gnc:employee-anchor-text
+	  - add support for employee "owner reports" and an employee link
+	* src/business/business-reports/invoice.scm:
+	  label the Expense Report "properly"
+	* src/business/busines-reports/owner-report.scm:
+	  create an "employee report"
+	* src/business/business-utils/business-prefs.scm:
+	  save the voucher register width
+	Implements RFE #90371	
+	
 	* src/gnome-utils/gnc-account-sel.c:
 	  If the nameList == NULL then add a blank line, to make sure
 	  the selector list is really empty, rather than defaulting to all of

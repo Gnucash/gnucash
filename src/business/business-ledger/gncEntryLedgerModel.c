@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerModel.c -- Model for GncEntry ledger
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -13,6 +13,7 @@
 #include "messages.h"
 #include "Account.h"
 #include "gnc-ui-util.h"
+#include "gnc-engine-util.h"	/* for safe_strcmp */
 
 #include "datecell.h"
 #include "checkboxcell.h"
@@ -117,6 +118,11 @@ static const char * get_taxval_label (VirtualLocation virt_loc, gpointer data)
 static const char * get_billable_label (VirtualLocation virt_loc, gpointer data)
 {
   return _("Billable?");
+}
+
+static const char * get_payment_label (VirtualLocation virt_loc, gpointer data)
+{
+  return _("Payment");
 }
 
 /* GET_ENTRY */
@@ -470,6 +476,33 @@ static const char * get_billable_entry (VirtualLocation virt_loc,
   return gnc_checkbox_cell_get_string (gncEntryGetBillable (entry));
 }
 
+static const char * get_payment_entry (VirtualLocation virt_loc,
+				       gboolean translate,
+				       gboolean *conditionally_changed,
+				       gpointer user_data)
+{
+  GncEntryLedger *ledger = user_data;
+  GncEntry *entry;
+  GncEntryPaymentType type;
+
+  entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
+
+  if (!entry)
+    return "";
+
+  type = gncEntryGetBillPayment (entry);
+
+  switch (type) {
+  case GNC_PAYMENT_CASH:
+    return _("Cash");
+  case GNC_PAYMENT_CARD:
+    return _("Charge");
+  default:
+    g_warning ("Invalid payment type: %d", type);
+    return "";
+  }
+}
+
 /* GET_HELP */
 
 static char * get_acct_help (VirtualLocation virt_loc, gpointer user_data)
@@ -667,6 +700,8 @@ static char * get_inv_help (VirtualLocation virt_loc, gpointer user_data)
   case GNCENTRY_ORDER_VIEWER:
   case GNCENTRY_BILL_ENTRY:
   case GNCENTRY_BILL_VIEWER:
+  case GNCENTRY_EXPVOUCHER_ENTRY:
+  case GNCENTRY_EXPVOUCHER_VIEWER:
     help = _("Is this entry Invoiced?");
     break;
   case GNCENTRY_INVOICE_ENTRY:
@@ -713,6 +748,15 @@ static char * get_billable_help (VirtualLocation virt_loc, gpointer user_data)
   return g_strdup (help);
 }
 
+static char * get_payment_help (VirtualLocation virt_loc, gpointer user_data)
+{
+  const char *help;
+
+  help = _("How did you pay for this item?");
+
+  return g_strdup (help);
+}
+
 /* GET_IO_FLAGS */
 
 static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
@@ -722,6 +766,7 @@ static CellIOFlags get_standard_io_flags (VirtualLocation virt_loc,
   switch (ledger->type) {
   case GNCENTRY_ORDER_ENTRY:
   case GNCENTRY_BILL_ENTRY:
+  case GNCENTRY_EXPVOUCHER_ENTRY:
     {
       GncEntry *entry =
 	gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
@@ -970,6 +1015,20 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,
+					 ENTRY_PAYMENT_CELL, TRUE)) {
+    const char *value;
+
+    value = gnc_table_layout_get_cell_value (ledger->table->layout,
+					     ENTRY_PAYMENT_CELL);
+    if (!safe_strcmp (value, _("Cash")))
+      gncEntrySetBillPayment (entry, GNC_PAYMENT_CASH);
+    else if (!safe_strcmp (value, _("Charge")))
+      gncEntrySetBillPayment (entry, GNC_PAYMENT_CARD);
+    else
+      g_warning ("Invalid Payment cell: %s", value ? value : "(null)");
+  }
+
+  if (gnc_table_layout_get_cell_changed (ledger->table->layout,
 					  ENTRY_PRIC_CELL, TRUE)) {
     gnc_numeric amount;
 
@@ -1066,6 +1125,7 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
     { ENTRY_VALUE_CELL, get_value_entry, get_value_label, get_value_help, get_value_io_flags },
     { ENTRY_TAXVAL_CELL, get_taxval_entry, get_taxval_label, get_taxval_help, get_value_io_flags },
     { ENTRY_BILLABLE_CELL, get_billable_entry, get_billable_label, get_billable_help, get_typecell_io_flags },
+    { ENTRY_PAYMENT_CELL, get_payment_entry, get_payment_label, get_payment_help, get_standard_io_flags },
   };
   int i;
 
@@ -1100,6 +1160,7 @@ static void gnc_entry_ledger_model_new_handlers (TableModel *model,
   case GNCENTRY_ORDER_VIEWER:
   case GNCENTRY_INVOICE_VIEWER:
   case GNCENTRY_BILL_VIEWER:
+  case GNCENTRY_EXPVOUCHER_VIEWER:
     /* make this table read-only */
     gnc_table_model_set_read_only (model, TRUE);
     break;

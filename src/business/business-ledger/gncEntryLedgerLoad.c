@@ -1,6 +1,6 @@
 /*
  * gncEntryLedgerLoad.c -- a Ledger widget for entering GncEntry objects
- * Copyright (C) 2001,2002 Derek Atkins
+ * Copyright (C) 2001, 2002, 2003 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -79,6 +79,32 @@ static void load_discount_how_cells (GncEntryLedger *ledger)
   gnc_recn_cell_set_string_getter (cell, gnc_entry_ledger_how_string_getter);
 }
 
+static void load_payment_type_cells (GncEntryLedger *ledger)
+{
+  ComboCell *cell;
+  GncOwner *owner;
+  GncEmployee *employee;
+
+  cell = (ComboCell *) gnc_table_layout_get_cell (ledger->table->layout,
+						  ENTRY_PAYMENT_CELL);
+  if (!cell) return;
+
+  if (!ledger->invoice) return;
+
+  owner = gncOwnerGetEndOwner (gncInvoiceGetOwner (ledger->invoice));
+  if (gncOwnerGetType (owner) != GNC_OWNER_EMPLOYEE)
+    return;
+
+  employee = gncOwnerGetEmployee (owner);
+  g_return_if_fail (employee);
+
+  gnc_combo_cell_clear_menu (cell);
+  gnc_combo_cell_add_menu_item (cell, _("Cash"));
+
+  if (gncEmployeeGetCCard (employee))
+    gnc_combo_cell_add_menu_item (cell, _("Charge"));
+}
+
 static void load_xfer_cell (ComboCell * cell, AccountGroup * grp,
 			    GncEntryLedgerType ledger_type)
 {
@@ -119,6 +145,8 @@ static void load_xfer_cell (ComboCell * cell, AccountGroup * grp,
 
     case GNCENTRY_BILL_ENTRY:
     case GNCENTRY_BILL_VIEWER:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
+    case GNCENTRY_EXPVOUCHER_VIEWER:
     case GNCENTRY_NUM_REGISTER_TYPES:
       if (type == INCOME) continue;
       break;
@@ -190,6 +218,7 @@ void gnc_entry_ledger_load_xfer_cells (GncEntryLedger *ledger)
 {
   load_xfer_type_cells (ledger);
   load_taxtable_type_cells (ledger);
+  load_payment_type_cells (ledger);
 }
 
 /* XXX (FIXME): This should be in a config file! */
@@ -228,6 +257,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
     case GNCENTRY_ORDER_ENTRY:
     case GNCENTRY_INVOICE_ENTRY:
     case GNCENTRY_BILL_ENTRY:
+    case GNCENTRY_EXPVOUCHER_ENTRY:
 
       gnc_suspend_gui_refresh ();
 
@@ -237,6 +267,8 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
       gnc_resume_gui_refresh ();
 
+      /* The rest of this does not apply to expense vouchers */
+      if (ledger->type != GNCENTRY_EXPVOUCHER_ENTRY)
       {
 	GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
 	GncTaxTable *table = NULL;

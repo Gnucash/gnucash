@@ -114,6 +114,7 @@ struct _invoice_window {
   GtkWidget *	owner_box;
   GtkWidget *	owner_label;
   GtkWidget *	owner_choice;
+  GtkWidget *	job_label;
   GtkWidget *	job_box;
   GtkWidget *	job_choice;
   GtkWidget *	billing_id_entry;
@@ -185,8 +186,10 @@ void gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
 
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
+#define VOUCHER_WIDTH_PREFIX "voucher_reg"
 static int inv_last_width = 0;
 static int bill_last_width = 0;
+static int voucher_last_width = 0;
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
 static InvoiceWindow * gnc_ui_invoice_modify (GncInvoice *invoice);
@@ -950,8 +953,9 @@ gnc_invoice_get_width_prefix (InvoiceWindow *iw)
   case GNC_OWNER_CUSTOMER:
     return INV_WIDTH_PREFIX;
   case GNC_OWNER_VENDOR:
+    return BILL_WIDTH_PREFIX;
   case GNC_OWNER_EMPLOYEE:
-    return  BILL_WIDTH_PREFIX;
+    return VOUCHER_WIDTH_PREFIX;
   default:
     g_warning ("invalid owner");
     return INV_WIDTH_PREFIX;
@@ -965,8 +969,9 @@ gnc_invoice_get_width_integer (InvoiceWindow *iw)
   case GNC_OWNER_CUSTOMER:
     return &inv_last_width;
   case GNC_OWNER_VENDOR:
+    return &bill_last_width;
   case GNC_OWNER_EMPLOYEE:
-    return  &bill_last_width;
+    return &voucher_last_width; 
   default:
     g_warning ("invalid owner");
     return &inv_last_width;
@@ -1465,6 +1470,12 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   if (iw->owner.type == GNC_OWNER_CUSTOMER)
     gtk_widget_hide_all (iw->proj_frame);
 
+  /* Hide the "job" label and entry for employee invoices */
+  if (iw->owner.type == GNC_OWNER_EMPLOYEE) {
+    gtk_widget_hide_all (iw->job_label);
+    gtk_widget_hide_all (iw->job_box);
+  }
+
   acct_entry = glade_xml_get_widget (iw->xml, "acct_entry");
 
   /* We know that "invoice" (and "owner") exist now */
@@ -1735,6 +1746,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->active_check = glade_xml_get_widget (xml, "active_check");
   iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");
+  iw->job_label = glade_xml_get_widget (xml, "job_label");
   iw->job_box = glade_xml_get_widget (xml, "job_hbox");
 
   /* grab the project widgets */
@@ -1798,11 +1810,9 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     case GNC_OWNER_VENDOR:
       ledger_type = GNCENTRY_BILL_ENTRY;
       break;
-#if 0
     case GNC_OWNER_EMPLOYEE:
-      ledger_type = GNCENTRY_VOUCHER_ENTRY;
+      ledger_type = GNCENTRY_EXPVOUCHER_ENTRY;
       break;
-#endif
     default:
       g_warning ("Invalid owner type");
     }
@@ -1816,11 +1826,9 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     case GNC_OWNER_VENDOR:
       ledger_type = GNCENTRY_BILL_VIEWER;
       break;
-#if 0
     case GNC_OWNER_EMPLOYEE:
-      ledger_type = GNCENTRY_VOUCHER_VIEWER;
+      ledger_type = GNCENTRY_EXPVOUCHER_VIEWER;
       break;
-#endif
     default:
       g_warning ("Invalid owner type");
     }
@@ -1965,6 +1973,7 @@ gnc_invoice_window_new_invoice (GNCBook *bookp, GncOwner *owner,
   iw->notes_text = glade_xml_get_widget (xml, "notes_text");
   iw->owner_box = glade_xml_get_widget (xml, "owner_hbox");
   iw->owner_label = glade_xml_get_widget (xml, "owner_label");
+  iw->job_label = glade_xml_get_widget (xml, "job_label");
   iw->job_box = glade_xml_get_widget (xml, "job_hbox");
 
   /* grab the project widgets */

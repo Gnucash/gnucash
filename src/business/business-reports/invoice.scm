@@ -627,7 +627,9 @@
 	      ((gnc-owner-customer)
 	       (set! invoice? #t))
 	      ((gnc-owner-vendor)
-	       (set! title (_ "Bill")))))
+	       (set! title (_ "Bill")))
+	      ((gnc-owner-employee)
+	       (set! title (_ "Expense Voucher")))))
 	  (set! title (string-append title " #"
 				     (gnc:invoice-get-id invoice)))))
 
