@@ -1,5 +1,8 @@
 2003-05-30  Christian Stimming  <stimming@tuhh.de>
 
+	* lib/guppi-legend.patch: Include patch for Guppi that fixes
+	reversed legend problem.
+
 	* po/de.po, po/glossary/de.po: Updated German translation. Changed
 	translation of "depot" to "Aktienkonto".
 
