@@ -88,7 +88,7 @@ string_to_integer(const char *content, gint64 *to)
 static void
 set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 {
-    if(safe_strcmp(node->name, "cmdty:fraction"))
+    if(safe_strcmp(node->name, "cmdty:fraction") == 0)
     {
         gint64 val;
         if(string_to_integer(node->xmlChildrenNode->content, &val))
@@ -102,7 +102,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 
         for(mark = com_handlers; mark->tag; mark++)
         {
-            if(safe_strcmp(mark->tag, node->name))
+            if(safe_strcmp(mark->tag, node->name) == 0)
             {
                 gchar* val = dom_tree_to_text(node);
                 (mark->func)(com, val);
@@ -116,6 +116,21 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
 static gboolean
 valid_commodity(gnc_commodity *com)
 {
+    if(gnc_commodity_get_namespace(com) == NULL)
+    {
+        g_warning("Invalid commodity: no namespace");
+        return FALSE;
+    }
+    if(gnc_commodity_get_mnemonic(com) == NULL)
+    {
+        g_warning("Invalid commodity: no mnemonic");
+        return FALSE;
+    }
+    if(gnc_commodity_get_fraction(com) == 0)
+    {
+        g_warning("Invalid commodity: 0 fraction");
+        return FALSE;
+    }
     return TRUE;
 }
 
@@ -134,6 +149,15 @@ gnc_commodity_end_handler(gpointer data_for_children,
     {
         return TRUE;
     }
+
+    /* OK.  For some messed up reason this is getting called again with a
+       NULL tag.  So we ignore those cases */
+    if(!tag)
+    {
+        return TRUE;
+    }
+    
+    g_return_val_if_fail(tree, FALSE);
     
     com = gnc_commodity_new(NULL, NULL, NULL, NULL, 0);
 
@@ -144,13 +168,18 @@ gnc_commodity_end_handler(gpointer data_for_children,
 
     if(!valid_commodity(com))
     {
+        g_warning("Invalid commodity parsed");
+        xmlElemDump(stdout, NULL, tree);
+        printf("\n");
+        fflush(stdout);
         gnc_commodity_destroy(com);
         return FALSE;
     }
 
     globaldata->addCommodityFunc(globaldata, com);
 
-    gnc_commodity_destroy(com);
+    xmlFreeNode(tree);
+    
     return TRUE;
 }
 

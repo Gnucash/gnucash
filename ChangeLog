@@ -1,5 +1,31 @@
 2001-02-28  James LewisMoss  <jimdres@mindspring.com>
 
+	* src/engine/gnc-commodity-xml-v2.c (gnc_commodity_end_handler):
+	mem leak.  free the node in the end handler.
+
+	* src/engine/gnc-commodity.c (reset_unique_name): new func.
+	(reset_printname): new func.
+	(gnc_commodity_new): use new funcs
+	(gnc_commodity_set_mnemonic): use new funcs.
+	(gnc_commodity_set_namespace): use new funcs.
+	(gnc_commodity_set_fullname): use new funcs.
+
+	* src/engine/gnc-commodity-xml-v2.c (gnc_commodity_end_handler):
+	Don't free commodity.  That's the globaldata funcs job if it wants
+	to.
+	(set_commodity_value): Must remember compare equals == 0.  Duh.
+
+	* src/engine/sixtp.c (sixtp_parse_file): Only run end handler if
+	parsing is already ok.
+
+	* src/test/test-xml-account.c (test_generation): oops should have
+	continued here.
+
+	* src/engine/gnc-commodity-xml-v2.c (valid_commodity): Complete func.
+
+	* configure.in (LIBS): disable libxml/xmlversion.h checks so we can't
+	compile for libxml2 for now.
+
 	* src/test/test-xml-account.c (node_and_account_equal): fix mem
 	leak. 
 	(test_add_account): new func.

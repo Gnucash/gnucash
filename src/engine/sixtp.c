@@ -605,10 +605,9 @@ sixtp_parse_file(sixtp *sixtp,
 
     xmlSAXUserParseFile(&ctxt->handler, &ctxt->data, filename);
 
-    sixtp_context_run_end_handler(ctxt);
-    
     if(ctxt->data.parsing_ok)
     {
+        sixtp_context_run_end_handler(ctxt);
         if(parse_result)
             *parse_result = ctxt->top_frame->frame_data;
         sixtp_context_destroy(ctxt);

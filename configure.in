@@ -76,10 +76,10 @@ GNOME_CHECK_GUILE
 GNOME_PRINT_CHECK
 GNOME_XML_CHECK
 
-AC_CHECK_HEADER(libxml/xmlversion.h, [
-  HAVE_XML_VERSION_HEADER=1
-  AC_DEFINE(HAVE_XML_VERSION_HEADER)
-])
+#AC_CHECK_HEADER(libxml/xmlversion.h, [
+#  HAVE_XML_VERSION_HEADER=1
+#  AC_DEFINE(HAVE_XML_VERSION_HEADER)
+#])
 
 dnl Set of available languages.
 ALL_LINGUAS="de en_GB es fr it ja ru sv"

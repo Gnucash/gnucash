@@ -61,12 +61,31 @@ typedef struct _gnc_commodity_namespace gnc_commodity_namespace;
  * gnc_commodity_new
  ********************************************************************/
 
+static void
+reset_printname(gnc_commodity *com)
+{
+    if(com->printname) { g_free(com->printname); }
+    com->printname = g_strdup_printf("%s:%s (%s)",
+                                     com->namespace,
+                                     com->mnemonic,
+                                     com->fullname);
+}
+
+static void
+reset_unique_name(gnc_commodity *com)
+{
+    if(com->unique_name) { g_free(com->unique_name); }
+    com->unique_name = g_strdup_printf("%s::%s",
+                                       com->namespace,
+                                       com->mnemonic);
+}
+    
 gnc_commodity *
 gnc_commodity_new(const char * fullname, 
                   const char * namespace, const char * mnemonic, 
                   const char * exchange_code, 
-                  int fraction) {
-  
+                  int fraction)
+{
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
   
   retval->fullname  = g_strdup(fullname);
@@ -75,14 +94,8 @@ gnc_commodity_new(const char * fullname,
   retval->exchange_code = g_strdup(exchange_code);
   retval->fraction = fraction;
 
-  retval->printname = g_strdup_printf("%s:%s (%s)",
-                                      retval->namespace,
-                                      retval->mnemonic,
-                                      retval->fullname);
-  
-  retval->unique_name = g_strdup_printf("%s::%s",
-                                      retval->namespace,
-                                      retval->mnemonic);
+  reset_printname(retval);
+  reset_unique_name(retval);
   
   return retval;
 }
@@ -191,13 +204,8 @@ gnc_commodity_set_mnemonic(gnc_commodity * cm, const char * mnemonic) {
   g_free(cm->mnemonic);
   cm->mnemonic = g_strdup(mnemonic);
 
-  g_free(cm->printname);
-  cm->printname = g_strdup_printf("%s:%s (%s)", 
-                                  cm->namespace, cm->mnemonic, cm->fullname);
-
-  g_free(cm->unique_name);
-  cm->unique_name = g_strdup_printf("%s::%s", 
-                                  cm->namespace, cm->mnemonic);
+  reset_printname(cm);
+  reset_unique_name(cm);
 }
 
 /********************************************************************
@@ -211,12 +219,8 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * namespace) {
   g_free(cm->namespace);
   cm->namespace = g_strdup(namespace);
 
-  g_free(cm->printname);
-  cm->printname = g_strdup_printf("%s:%s (%s)", 
-                                  cm->namespace, cm->mnemonic, cm->fullname);
-  g_free(cm->unique_name);
-  cm->unique_name = g_strdup_printf("%s::%s", 
-                                  cm->namespace, cm->mnemonic);
+  reset_printname(cm);
+  reset_unique_name(cm);
 }
 
 /********************************************************************
@@ -230,9 +234,7 @@ gnc_commodity_set_fullname(gnc_commodity * cm, const char * fullname) {
   g_free(cm->fullname);
   cm->fullname = g_strdup(fullname);
 
-  g_free(cm->printname);
-  cm->printname = g_strdup_printf("%s:%s (%s)", 
-                                  cm->namespace, cm->mnemonic, cm->fullname);
+  reset_printname(cm);
 }
 
 /********************************************************************
