@@ -2573,30 +2573,6 @@ Press 'Finish' now.</text>
 	</widget>
 
 	<widget>
-	  <class>GtkEntry</class>
-	  <name>amount_entry</name>
-	  <can_focus>True</can_focus>
-	  <editable>True</editable>
-	  <text_visible>True</text_visible>
-	  <text_max_length>0</text_max_length>
-	  <text></text>
-	  <child>
-	    <left_attach>0</left_attach>
-	    <right_attach>1</right_attach>
-	    <top_attach>8</top_attach>
-	    <bottom_attach>9</bottom_attach>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <xexpand>True</xexpand>
-	    <yexpand>False</yexpand>
-	    <xshrink>False</xshrink>
-	    <yshrink>False</yshrink>
-	    <xfill>True</xfill>
-	    <yfill>False</yfill>
-	  </child>
-	</widget>
-
-	<widget>
 	  <class>GtkHSeparator</class>
 	  <name>hseparator6</name>
 	  <child>
@@ -2940,6 +2916,31 @@ Press 'Finish' now.</text>
 	    <xfill>True</xfill>
 	    <yfill>True</yfill>
 	  </child>
+	</widget>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>amount_hbox</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <left_attach>0</left_attach>
+	    <right_attach>1</right_attach>
+	    <top_attach>8</top_attach>
+	    <bottom_attach>9</bottom_attach>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <xexpand>True</xexpand>
+	    <yexpand>True</yexpand>
+	    <xshrink>False</xshrink>
+	    <yshrink>False</yshrink>
+	    <xfill>True</xfill>
+	    <yfill>True</yfill>
+	  </child>
+
+	  <widget>
+	    <class>Placeholder</class>
+	  </widget>
 	</widget>
       </widget>
     </widget>

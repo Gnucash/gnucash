@@ -1,3 +1,11 @@
+2002-09-25  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-actions.c: Distinguish
+	booked/noted balance now.
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Extend HBCI
+	transaction dialog to use the gnc-amount-edit widget.
+
 2002-09-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-actions.c,

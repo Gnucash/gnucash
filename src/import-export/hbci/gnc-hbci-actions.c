@@ -28,6 +28,7 @@
 #include "gnc-ui.h"
 #include "gnc-numeric.h"
 #include "dialog-transfer.h"
+#include "date.h"
 
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
@@ -56,8 +57,8 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     printf("gnc_hbci_getbalance: No HBCI account found.\n");
     return;
   }
-  printf("gnc_hbci_getbalance: HBCI account no. %s found.\n",
-	 HBCI_Account_accountId (h_acc));
+  /* printf("gnc_hbci_getbalance: HBCI account no. %s found.\n",
+     HBCI_Account_accountId (h_acc)); */
   
   {
     /* Get one customer. */
@@ -82,8 +83,8 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     list_HBCI_Customer_iter_delete (iter);
   }
   g_assert (customer);
-  printf("gnc_hbci_getbalance: Customer id %s found.\n",
-	 HBCI_Customer_custId ((HBCI_Customer *)customer));
+  /* printf("gnc_hbci_getbalance: Customer id %s found.\n",
+     HBCI_Customer_custId ((HBCI_Customer *)customer)); */
 
   {
     /* Execute a GetBalance job. */
@@ -120,15 +121,31 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     
     {
       const HBCI_AccountBalance *acc_bal;
-      const HBCI_Balance *bal;
+      const HBCI_Balance *bal1, *bal2;
       const HBCI_Value *val;
-      
+      struct tm tm1, tm2;
+      time_t tt1, tt2;
+      int choose1;
+      Timespec ts1, ts2;
+	    
       acc_bal = HBCI_OutboxJobGetBalance_getBalance (balance_job);
-      bal = HBCI_AccountBalance_notedBalance (acc_bal);
-      val = HBCI_Balance_value (bal);
+      bal1 = HBCI_AccountBalance_notedBalance (acc_bal);
+      bal2 = HBCI_AccountBalance_bookedBalance (acc_bal);
+      tm1 = HBCI_DateTime_to_tm (HBCI_Balance_date (bal1), 
+				 HBCI_Balance_time (bal1));
+      tt1 = mktime (&tm1);
+      timespecFromTime_t (&ts1, tt1);
+      tm2 = HBCI_DateTime_to_tm (HBCI_Balance_date (bal2), 
+				 HBCI_Balance_time (bal2));
+      tt2 = mktime (&tm2);
+      timespecFromTime_t (&ts2, tt2);
+      choose1 = (timespec_cmp (&ts1, &ts2) == 1);
       
+      val = HBCI_Balance_value (choose1 ? bal1 : bal2);
+		  
       gnc_verify_dialog(TRUE,
-			"Result of HBCI job: \nAccount balance is %f.",
+			"Result of HBCI job: \nAccount %s balance is %f.",
+			(choose1 ? "noted" : "booked"),
 			HBCI_Value_getValue (val));
     }
   }
@@ -200,7 +217,9 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc)
       
       amount = double_to_gnc_numeric 
 	(HBCI_Value_getValue (HBCI_Transaction_value (trans)),
-	 100, GNC_RND_FLOOR);
+	 100, GNC_RND_ROUND); 
+      /* FIXME: This '100' must go away and instead some function of
+       * the account's currency has to be used here. */
       description = g_strdup_printf("HBCI to %s", 
 				    HBCI_Transaction_otherAccountId (trans));
       

@@ -38,14 +38,15 @@ gnc_hbci_acct_tree_menu_getbalance_cb (GtkWidget * widget,
   Account        * account = NULL;
 
   g_assert (child);
-  mc = gtk_object_get_user_data(GTK_OBJECT(child));
+  mc = gtk_object_get_user_data (GTK_OBJECT (child));
   g_assert (mc);
   win = mc->user_data;
   g_assert (win);
-  account = gnc_acct_tree_window_get_current_account(win);
+  account = gnc_acct_tree_window_get_current_account (win);
   g_assert (account);
     
-  gnc_hbci_getbalance (gnc_ui_get_toplevel (), account);
+  gnc_hbci_getbalance (gnc_acct_tree_window_get_widget (win),
+		       account);
 }
 
 void
@@ -56,7 +57,6 @@ gnc_hbci_register_menu_getbalance_cb (GtkWidget * widget,
   GNCLedgerDisplay *ledger = NULL;
   Account *account = NULL;
 
-  /* g_assert (widget);*/
   g_assert (regData);
   ledger = gnc_RegWindow_ledger (regData);
   g_assert (ledger);
@@ -70,13 +70,20 @@ void
 gnc_hbci_acct_tree_menu_gettrans_cb (GtkWidget * widget, 
 				     GnomeMDIChild * child)
 {
-  /*GNCMDIChildInfo * mc = gtk_object_get_user_data(GTK_OBJECT(child));
-  GNCAcctTreeWin   * win = mc->user_data;
-  Account        * account = gnc_acct_tree_window_get_current_account(win);*/
-  
-  gnc_warning_dialog_parented(gnc_ui_get_toplevel (), 
-			      "Sorry, Transaction retrieval not yet implemented.");
-  
+  GNCMDIChildInfo * mc = NULL;
+  GNCAcctTreeWin   * win = NULL;
+  Account        * account = NULL;
+
+  g_assert (child);
+  mc = gtk_object_get_user_data (GTK_OBJECT (child));
+  g_assert (mc);
+  win = mc->user_data;
+  g_assert (win);
+  account = gnc_acct_tree_window_get_current_account (win);
+  g_assert (account);
+    
+  gnc_hbci_maketrans (gnc_acct_tree_window_get_widget (win),
+		      account);
 }
 
 void
@@ -87,7 +94,6 @@ gnc_hbci_register_menu_maketrans_cb (GtkWidget * widget,
   GNCLedgerDisplay *ledger = NULL;
   Account *account = NULL;
 
-  /* g_assert (widget);*/
   g_assert (regData);
   ledger = gnc_RegWindow_ledger (regData);
   g_assert (ledger);

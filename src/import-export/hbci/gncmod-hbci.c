@@ -31,6 +31,7 @@ char *gnc_module_description(void);
 int gnc_module_init(int refcount);
 int gnc_module_end(int refcount);
 
+void gnc_hbci_addmenus(void);
 
 char *
 gnc_module_path(void) {
@@ -70,30 +71,8 @@ gnc_module_init(int refcount)
 		   scm_hbci_initial_druid, 0, 0, 0);
 
   /* Add menu items with C callbacks */
-  {
-    static GnomeUIInfo reg_online_submenu[] =    
-      {
-	GNOMEUIINFO_ITEM ( N_("HBCI Get Balance"),
-			   N_("Get the account balance online through HBCI"),
-			   gnc_hbci_register_menu_getbalance_cb, 
-			   GNOME_APP_PIXMAP_NONE),
-	GNOMEUIINFO_ITEM ( N_("HBCI Make Transaction"),
-			   N_("Invoke a new transaction online through HBCI"),
-			   gnc_hbci_register_menu_maketrans_cb, 
-			   GNOME_APP_PIXMAP_NONE),
-	GNOMEUIINFO_END
-      };
-    
-    static GnomeUIInfo reg_online_menu[] =
-      {
-	GNOMEUIINFO_SUBTREE( N_("Online Actions"),
-			     reg_online_submenu ),
-	GNOMEUIINFO_END
-      };
-    
-    
-    gnc_add_c_extension (reg_online_menu, WINDOW_NAME_REGISTER "/Actions/");
-  }
+  gnc_hbci_addmenus();
+  
   
   //gh_new_procedure("gnc:hbci-finish-setup", 
   //scm_hbci_final_druid, 0, 0, 0);
@@ -104,4 +83,31 @@ gnc_module_init(int refcount)
 int
 gnc_module_end(int refcount) {
   return TRUE;
+}
+
+void
+gnc_hbci_addmenus(void)
+{
+  static GnomeUIInfo reg_online_submenu[] =    
+    {
+      GNOMEUIINFO_ITEM ( N_("HBCI Get Balance"),
+			 N_("Get the account balance online through HBCI"),
+			 gnc_hbci_register_menu_getbalance_cb, 
+			 GNOME_APP_PIXMAP_NONE),
+      GNOMEUIINFO_ITEM ( N_("HBCI Make Transaction"),
+			 N_("Invoke a new transaction online through HBCI"),
+			 gnc_hbci_register_menu_maketrans_cb, 
+			 GNOME_APP_PIXMAP_NONE),
+      GNOMEUIINFO_END
+    };
+    
+  static GnomeUIInfo reg_online_menu[] =
+    {
+      GNOMEUIINFO_SUBTREE( N_("Online Actions"),
+			   reg_online_submenu ),
+      GNOMEUIINFO_END
+    };
+    
+    
+  gnc_add_c_extension (reg_online_menu, WINDOW_NAME_REGISTER "/Actions/");
 }

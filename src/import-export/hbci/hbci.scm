@@ -7,12 +7,12 @@
 
 (define (add-hbci-menu-items)
   (gnc:add-extension 
-   (gnc:make-menu "HBCI" (list gnc:window-name-main "_Tools" "")))
+   (gnc:make-menu (N_ "HBCI") (list gnc:window-name-main (N_ "_Tools") "")))
 
   (gnc:add-extension
    (gnc:make-menu-item (N_ "HBCI Setup")
 		       (N_ "HBCI Setup")
-		       (list gnc:window-name-main "_Tools" "HBCI" "")
+		       (list gnc:window-name-main (N_ "_Tools") (N_ "HBCI") "")
 		       (lambda ()
 			 (gnc:hbci-initial-setup))))
 

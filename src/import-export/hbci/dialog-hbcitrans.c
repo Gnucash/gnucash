@@ -28,6 +28,7 @@
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
+#include "gnc-amount-edit.h"
 
 #include "gnc-hbci-utils.h"
 #include "dialog-hbcitrans.h"
@@ -49,7 +50,8 @@ gnc_hbci_trans (GtkWidget *parent,
   g_assert (h_acc);
   g_assert (customer);
   bank = HBCI_Account_bank (h_acc);
-    
+  g_assert (bank);
+      
   xml = gnc_glade_xml_new ("hbci.glade", "HBCI_trans_dialog");
 
   dialog = glade_xml_get_widget (xml, "HBCI_trans_dialog");
@@ -62,13 +64,14 @@ gnc_hbci_trans (GtkWidget *parent,
     GtkWidget *recp_account_entry;
     GtkWidget *recp_bankcode_entry;
     GtkWidget *recp_bankname_label;
-    GtkWidget *amount_entry;
+    GtkWidget *amount_hbox;
     GtkWidget *purpose_entry;
     GtkWidget *purpose_cont_entry;
     GtkWidget *orig_name_label;
     GtkWidget *orig_account_label;
     GtkWidget *orig_bankname_label;
     GtkWidget *orig_bankcode_label;
+    GtkWidget *amount_edit;
     
     g_assert 
       (recp_name_entry = glade_xml_get_widget (xml, "recp_name_entry"));
@@ -79,7 +82,7 @@ gnc_hbci_trans (GtkWidget *parent,
     g_assert
       (recp_bankname_label = glade_xml_get_widget (xml, "recp_bankname_label"));
     g_assert
-      (amount_entry = glade_xml_get_widget (xml, "amount_entry"));
+      (amount_hbox = glade_xml_get_widget (xml, "amount_hbox"));
     g_assert
       (purpose_entry = glade_xml_get_widget (xml, "purpose_entry"));
     g_assert
@@ -93,6 +96,11 @@ gnc_hbci_trans (GtkWidget *parent,
     g_assert
       (orig_bankcode_label = glade_xml_get_widget (xml, "orig_bankcode_label"));
 
+    amount_edit = gnc_amount_edit_new();
+    gtk_box_pack_start_defaults(GTK_BOX(amount_hbox), amount_edit);
+    gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount_edit), 
+      TRUE);
+    
     /* Fill in the values from the objects */
     gtk_label_set_text (GTK_LABEL (orig_name_label), 
 			(strlen(HBCI_Customer_custName (customer))>0 ? 
@@ -106,13 +114,18 @@ gnc_hbci_trans (GtkWidget *parent,
 			 _("(unknown)")));
     gtk_label_set_text (GTK_LABEL (orig_bankcode_label), 
 			HBCI_Bank_bankCode (bank));
-    
+
+    /* Default button */
     gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
     
     gtk_widget_grab_focus (recp_name_entry);
 
+    /* Hide on close instead of destroy since we still need the values
+       from the boxes. */
     gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
-  
+
+    gtk_widget_show_all (GTK_WIDGET (dialog)); 
+
     result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
     /* printf("hbci_trans: result button was %d.\n", result); */
     
@@ -133,12 +146,12 @@ gnc_hbci_trans (GtkWidget *parent,
     HBCI_Transaction_setOtherCountryCode (trans, 280);
     HBCI_Transaction_setOtherBankCode 
       (trans, gtk_entry_get_text (GTK_ENTRY (recp_bankcode_entry)));
-    printf("Got otherBankCode %s.\n",
-	   HBCI_Transaction_otherBankCode (trans));
+    /* printf("Got otherBankCode %s.\n",
+       HBCI_Transaction_otherBankCode (trans)); */
     HBCI_Transaction_setOtherAccountId
       (trans, gtk_entry_get_text (GTK_ENTRY (recp_account_entry)));
-    printf("Got otherAccountId %s.\n",
-	   HBCI_Transaction_otherAccountId (trans));
+    /* printf("Got otherAccountId %s.\n",
+       HBCI_Transaction_otherAccountId (trans)); */
     HBCI_Transaction_addOtherName
       (trans, gtk_entry_get_text (GTK_ENTRY (recp_name_entry)));
     
@@ -147,14 +160,13 @@ gnc_hbci_trans (GtkWidget *parent,
     HBCI_Transaction_addDescription
       (trans, gtk_entry_get_text (GTK_ENTRY (purpose_cont_entry)));
     
-    {
-      const char *amount = gtk_entry_get_text (GTK_ENTRY (amount_entry));
-      HBCI_Value *val = HBCI_Value_new_double (atof(amount), "EUR");
-      printf("Got value as %s .\n", 
-	     HBCI_Value_toReadableString (val));
-      HBCI_Transaction_setValue (trans, val);
-    }
-
+    HBCI_Transaction_setValue 
+      (trans, HBCI_Value_new_double 
+       (gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (amount_edit)), "EUR"));
+    /* FIXME: Replace "EUR" by account-dependent string here. */
+    printf("Got value as %s .\n", 
+	   HBCI_Value_toReadableString (HBCI_Transaction_value (trans)));
+    
     {
       /* Create a Do-Transaction (Transfer) job. */
       HBCI_OutboxJobTransfer *transfer_job;
