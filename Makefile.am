@@ -1,5 +1,5 @@
 
-SUBDIRS = macros debian doc-tools doc intl lib src po rpm accounts
+SUBDIRS = macros debian intl doc-tools doc lib src po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
