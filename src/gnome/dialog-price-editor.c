@@ -508,9 +508,7 @@ gnc_price_edit_dialog (GtkWidget * parent, GNCPrice * price, GNCPriceEditType ty
 GNCPrice *
 gnc_price_edit_by_guid (GtkWidget * parent, const GUID * guid)
 {
-  PriceEditDialog *pedit_dialog;
   GNCPrice *price;
-  gint component_id;
 
   price = gnc_price_lookup (guid, gnc_get_current_book ());
   if (price == NULL)

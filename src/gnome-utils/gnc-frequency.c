@@ -589,7 +589,6 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
   UIFreqType uift;
   FreqSpec *tmpFS;
   gint tmpInt;
-  char *str;
   int i;
   GDate *gd;
   GDate *gd2;
@@ -677,8 +676,7 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
 
     /*  now, go through the check boxes and add composites based on that date. */
     for ( i=0; CHECKBOX_NAMES[i]!=NULL; i++ ) {
-      str = CHECKBOX_NAMES[i];
-      o = glade_xml_get_widget( gf->gxml, str );
+      o = glade_xml_get_widget( gf->gxml, CHECKBOX_NAMES[i] );
       if ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(o) ) ) {
 
         tmpFS = xaccFreqSpecMalloc

@@ -262,7 +262,7 @@ gnc_style_sheet_dialog_create() {
 void
 gnc_style_sheet_dialog_open(void) {
   if(gnc_style_sheet_dialog) {
-    gtk_window_present(GTK_WIDGET(gnc_style_sheet_dialog->toplevel));
+    gtk_window_present(GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
   }
   else {
     gnc_style_sheet_dialog = 
