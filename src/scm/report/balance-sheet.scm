@@ -174,9 +174,9 @@
       (define (add-subtotal-line table label balance)
 	(if show-fcur?
 	  (gnc:html-acct-table-comm-row-helper! 
-	   table tree-depth 1 label 
-	   report-currency (gnc:sum-collector-stocks 
-			    balance report-currency exchange-fn)
+	   table tree-depth report-currency exchange-fn
+	   1 label report-currency 
+	   (gnc:sum-collector-stocks balance report-currency exchange-fn)
 	   #f #f #t #f)
 	  (gnc:html-acct-table-row-helper! 
 	   table tree-depth 1 label 	   

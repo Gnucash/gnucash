@@ -174,7 +174,7 @@
 ;; printed. If reverse-balance? == #t then the balance's signs get
 ;; reversed.
 (define (gnc:html-acct-table-comm-row-helper!
-	 table tree-depth
+	 table tree-depth report-commodity exchange-fn
 	 current-depth my-name my-commodity balance 
 	 reverse-balance? is-stock-account? boldface? group-header-line?) 
   ;; Adds one row to the table. my-name is the html-object
@@ -397,7 +397,7 @@
 	     current-depth my-name my-commodity balance 
 	     reverse-balance? is-stock-account? boldface? group-header-line?) 
       (gnc:html-acct-table-comm-row-helper!
-       table tree-depth
+       table tree-depth report-commodity exchange-fn
        current-depth my-name my-commodity balance 
        reverse-balance? is-stock-account? boldface? group-header-line?))
         
