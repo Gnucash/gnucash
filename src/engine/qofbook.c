@@ -60,8 +60,9 @@ qof_book_init (QofBook *book)
 {
   if (!book) return;
 
-  book->entity_table = qof_entity_new ();
+  book->hash_of_collections = g_hash_table_new (g_str_hash, g_str_equal);
 
+  qof_entity_store (entity_table, NULL, guid_null(), QOF_ID_NULL);
   qof_entity_guid_new (book->entity_table, &book->guid);
   qof_entity_store(book->entity_table, book, &book->guid, QOF_ID_BOOK);
 
@@ -89,6 +90,14 @@ qof_book_new (void)
   return book;
 }
 
+static gboolean
+coll_destroy(gpointer key, gpointer value, gpointer not_used)
+{
+  QofCollection *col = value;
+  qof_collection_destroy (col);
+  return TRUE;
+}
+
 void
 qof_book_destroy (QofBook *book) 
 {
@@ -100,8 +109,11 @@ qof_book_destroy (QofBook *book)
   qof_object_book_end (book);
 
   qof_entity_remove (book->entity_table, &book->guid);
-  qof_entity_destroy (book->entity_table);
-  book->entity_table = NULL;
+  
+  g_hash_table_foreach_remove (book->hash_of_collections,
+                               coll_destroy, NULL);
+  g_hash_table_destroy (book->hash_of_collections);
+  book->hash_of_collections = NULL;
 
   kvp_frame_delete (book->kvp_data);
 
@@ -226,6 +238,28 @@ qof_book_get_data (QofBook *book, const char *key)
 {
   if (!book || !key) return NULL;
   return g_hash_table_lookup (book->data_tables, (gpointer)key);
+}
+
+/* ====================================================================== */
+
+QofCollection *
+qof_book_get_collection (QofBook *book, QofIdType entity_type)
+{
+  QofCollection *col;
+                                                                                
+  col = g_hash_table_lookup (book->hash_of_collections, entity_type);
+  if (col) return col;
+                                                                                
+  col = qof_collection_new (entity_type);
+                                                                                
+  /* XXX should use string_cache instead of strdup */
+  /* Need strdup because values are sometimes freed */
+  /* this is a memory leak, since malloc'ed value is not freed */
+  /* ??? huh ?? freed where? by whom? */
+  g_hash_table_insert (book->hash_of_collections,
+          (gpointer)g_strdup(entity_type), col);
+                                                                                
+  return col;
 }
 
 /* ====================================================================== */

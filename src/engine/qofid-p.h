@@ -32,44 +32,6 @@
  * identifiers. */
 
 void qof_entity_set_guid (QofEntity *ent, const GUID *guid);
-		  
 
-/* Create and destroy entity tables */
-QofEntityTable * qof_entity_new (void);
-void qof_entity_destroy (QofEntityTable *table);
-
-/* Generate a new id. This function is guaranteed to return an id that
- * is unique within the scope of all GnuCash entities being managed by
- * the current invocation of GnuCash. GnuCash routines should always
- * use this function and not guid_new! 
- *
- * When considered over all possible instances of gnucash, the odds of 
- * this routine returning a non-unique id are still astronomically small.
- * If you had a gazzillion computers computing new ids, for the entire
- * age of the universe, you'd still have a one-in-a-million chance of
- * coming up with a duplicate.  2^128 is a really really big number.
- */
-void qof_entity_guid_new (QofEntityTable *entity_table, GUID *guid);
-
-/* Lookup an entity given an id and a type. If there is no entity
- * associated with the id, or if it has a different type, NULL
- * is returned. Input: GUID, returns reference (pointer) to object. 
- */
-gpointer qof_entity_lookup (QofEntityTable *entity_table,
-                           const GUID * guid, QofIdType entity_type);
-
-/* Store the given entity under the given id with the given type. */
-/* this routine obsolete, remove asap */
-void qof_entity_store (QofEntityTable *entity_table,
-                      gpointer entity, const GUID * guid,
-                      QofIdType entity_type);
-
-/* Remove any existing association between an entity and the given
- * id. The entity is not changed in any way. */
-void qof_entity_remove (QofEntityTable *entity_table, const GUID * guid);
-
-/* Call a function for each object of type 'type' in the entity table */
-void qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
-			QofEntityForeachCB cb_func, gpointer user_data);
 
 #endif /* QOF_ID_P_H */

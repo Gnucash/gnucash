@@ -95,8 +95,6 @@ back_associate_expense_accounts(Account *stock_account,
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
-    g_return_if_fail(GNC_ID_NONE == qof_entity_type (qof_book_get_entity_table (stock_account->inst.book), existing_acc_guid));
-    
     kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
                           stock_acc_guid_kvpval);
     
@@ -130,9 +128,6 @@ back_associate_income_accounts(Account *stock_account,
     g_return_if_fail(kvp_value_get_type(val) == KVP_TYPE_GUID);
     existing_acc_guid = kvp_value_get_guid(val);
 
-    g_return_if_fail(qof_entity_type(qof_book_get_entity_table(stock_account->inst.book), existing_acc_guid) == 
-                     GNC_ID_NONE);
-    
     kvp_frame_set_slot_nc(acc_frame, "associated-stock-account",
 		       stock_acc_guid_kvpval);
     kvp_frame_set_slot_nc(acc_frame, "associated-stock-account-category",
@@ -448,10 +443,6 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
 					    "associated-stock-account");
   
   stock_account_guid = kvp_value_get_guid(stock_account_kvpval);
-  if(!safe_strcmp
-     (qof_entity_type(qof_book_get_entity_table(inc_or_expense_account->inst.book), stock_account_guid),
-      GNC_ID_NULL))
-    return;
 
   category_kvpval = kvp_frame_get_slot(current_account_kvpframe,
 				       "associated-stock-account-category");
