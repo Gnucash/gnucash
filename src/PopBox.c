@@ -210,9 +210,10 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
 }
 
 /********************************************************************\
- * fix traversal by assuming that menu up due to a tab key 
- * is a traversal change.  Return focus to the matrix widget,
- * instead of letting it default to the next tab group.
+ * fix traversal by going back to the register window
+ * when the pull-down menu goes away.  We do NOT want to
+ * go to the default next tab group, which is probably 
+ * some button not in theregister window.
 \********************************************************************/
 
 static void dropDownCB (Widget w, XtPointer cd, XtPointer cb )
@@ -222,17 +223,37 @@ static void dropDownCB (Widget w, XtPointer cd, XtPointer cb )
     XmComboBoxDropDownCallbackStruct *ddcb = 
                (XmComboBoxDropDownCallbackStruct *) cb;
 
+
+   if (XmCR_HIDE_LIST == ddcb->reason) {
+      XmProcessTraversal(ab->reg, XmTRAVERSE_CURRENT);
+   }
+ 
+#ifdef USE_COMPLEX_TRAVERSAL_LOGIC
+   /* continue traversal only under certain special curcumstances */
    if (XmCR_HIDE_LIST == ddcb->reason) {
       if (ddcb->event) {
+
+         /* don't leave if only a focus-out */
+         if (FocusOut == ddcb->event->type) {
+            XmProcessTraversal(ab->combobox, XmTRAVERSE_CURRENT);
+         } else 
+
+         /* if user selected something, then go to next cell */
+         if (ButtonRelease == ddcb->event->type) {
+            XmProcessTraversal(ab->reg, XmTRAVERSE_CURRENT);
+         } else 
+
+         /* if user hit the tab key, go to next cell */
          if ((KeyPress == ddcb->event->type) || (KeyRelease == ddcb->event->type)) {
             KeySym sim;
             XKeyEvent *kev = (XKeyEvent *) ddcb->event;
             sim = XLookupKeysym (kev, 0);
-            if (XK_Tab == sim) {
+            if (XK_Tab == sim) {   /* did the user hit the tab key ?? */
                XmProcessTraversal(ab->reg, XmTRAVERSE_CURRENT);
             }
          }
       }
    }
+#endif /* USE_COMPLEX_TRAVERSAL_LOGIC */
 }
 /************************* END OF FILE ******************************/
