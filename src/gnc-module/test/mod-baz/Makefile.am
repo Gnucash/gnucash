@@ -29,7 +29,7 @@ baz-gwrap.c baz-gwrap.h: baz-gwrap.scm
 	FLAVOR=gnome guile -c \
 	  "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	  (primitive-load \"./baz-gwrap.scm\") \
-	  (gw:generate-module \"baz-gwrap\")"
+	  (gw:generate-wrapset \"baz-gwrap\")"
 
 BUILT_SOURCES = baz-gwrap.c baz-gwrap.h
 CLEANFILES = *.so* *.a baz-gwrap.c baz-gwrap.h baz-gwrap.html
