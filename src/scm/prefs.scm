@@ -56,6 +56,7 @@
 ;;    eq?
 ;;    #f))
 
+(gnc:support "prefs.scm")
 
 (define gnc:*options-entries* (gnc:new-options))
 
@@ -381,6 +382,11 @@ the account instead of opening a register." #f))
  (gnc:make-simple-boolean-option
   "General" "Use accounting labels"
   "e" "Only use 'debit' and 'credit' instead of informal synonyms" #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Display \"Tip of the Day\""
+  "f" "Display hints for using GnuCash at startup" #t))
 
 ;(gnc:register-configuration-option
 ; (gnc:make-number-range-option

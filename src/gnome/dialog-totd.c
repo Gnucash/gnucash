@@ -1,0 +1,276 @@
+/********************************************************************\
+ * dialog-totd.c -- Dialog to display a "tip of the day"            *
+ * Copyright (C) 2000 Robert Merkel <rgmerk@mira.net>               *
+ * Large fractions borrowed from gnome-hint (Copyright (C) 2000)    *
+ * Free Software Foundation                                         *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+
+#include "top-level.h"
+
+#include <gnome.h>
+#include <libgnomeui/gnome-window-icon.h>
+
+#include "global-options.h"
+#include "query-user.h"
+#include "messages.h"
+#include "util.h"
+#include "tip-of-the-day.h"
+#include "dialog-totd.h"
+
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
+
+static GtkWidget *disable_cb = NULL;
+static GtkWidget *canvas = NULL;
+static GtkWidget *scrollwin = NULL;
+
+static GnomeCanvasItem *hint_item;
+static GnomeCanvasItem *blue_background;
+static GnomeCanvasItem *white_background;
+static int width = 400, height = 200;
+
+
+/** Prototypes *********************************************************/
+static void draw_on_canvas(GtkWidget *canvas, char *hint);
+static void grow_text_if_necessary(void);
+
+
+/** Implementations ***************************************************/
+
+/************************************************************************\
+ * gnc_ui_totd_dialog_create_and_run                                    *
+ *   display and run the "Tip of the Day" dialog                        *
+ *                                                                      *
+ * Returns: nothing                                                     *
+\************************************************************************/
+
+void 
+gnc_ui_totd_dialog_create_and_run(void)
+{
+  GtkWidget *win;
+  gint status;
+  gboolean config_set_success;
+  char *new_hint;
+  gboolean old_enabled, new_enabled;
+  win = gnome_dialog_new(TOTD_STR, 
+			 GNOME_STOCK_BUTTON_PREV, 
+			 GNOME_STOCK_BUTTON_NEXT, 
+			 GNOME_STOCK_BUTTON_CLOSE, 
+			 NULL);	
+
+  gnome_dialog_set_parent(GNOME_DIALOG(win), GTK_WINDOW(gnc_get_ui_data()));
+
+  scrollwin = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
+				 GTK_POLICY_NEVER,
+				 GTK_POLICY_NEVER);
+  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox), scrollwin, TRUE, TRUE, 0);
+  canvas = gnome_canvas_new();
+  gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
+  				 0.0,0.0,width,height);
+  gtk_widget_set_usize(canvas,width,height);
+  gtk_widget_ensure_style(canvas);
+  gtk_container_add(GTK_CONTAINER(scrollwin), canvas);
+  new_hint = gnc_get_current_tip();
+  draw_on_canvas(canvas, new_hint);
+  free(new_hint);
+  gtk_widget_show_all(scrollwin);
+
+  old_enabled = gnc_lookup_boolean_option("General",
+					  "Display \"Tip of the Day\"",
+					  TRUE);
+  disable_cb = gtk_check_button_new_with_label(DISPLAY_NEXT_TIME_STR);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_cb),
+  				old_enabled);
+
+  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox), disable_cb, TRUE, TRUE, 0);
+  gtk_widget_show(disable_cb);
+
+  do
+  {
+    status = gnome_dialog_run(GNOME_DIALOG(win));
+//    printf("status = %d\n", status);
+    switch(status)
+    {
+    case 0:  /* previous hint */
+      gnc_decrement_tip();
+      new_hint = gnc_get_current_tip();
+      gnome_canvas_item_set(hint_item,
+			    "text",new_hint,
+			    NULL);
+      grow_text_if_necessary();
+      free(new_hint);
+      break;
+    case 1: /* next hint */
+      gnc_increment_tip();
+      new_hint = gnc_get_current_tip();
+      gnome_canvas_item_set(hint_item,
+			    "text",new_hint,
+			    NULL);
+      grow_text_if_necessary();
+      free(new_hint);
+      break;
+    default: 
+      status = -1;
+      break;
+    }
+  } while(status >= 0);
+
+  new_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
+  gtk_widget_destroy(win);
+  gnc_increment_tip();
+
+  if(new_enabled != old_enabled)
+  {
+    config_set_success = gnc_set_boolean_option("General",
+			   "Display \"Tip of the Day\"",
+			   new_enabled);
+    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");
+
+    if(new_enabled == FALSE)
+    {
+      gnc_info_dialog(REENABLE_TIPS_MSG);
+    }
+  }
+}
+
+/* increases the size of the canvas and enables scrolling if the text
+   gets big enough */
+
+static void
+grow_text_if_necessary(void)
+{
+  double w,h;
+  int ww,hh;
+  int changed = FALSE;
+
+  gtk_object_get(GTK_OBJECT(hint_item),
+		 "text_width",&w,
+		 "text_height",&h,
+		 NULL);
+  /*add border, and 10 pixels around*/
+  w+=75+10;
+  h+=50+10;
+  /*some sanity limits*/
+  /*if(w>800) w = 800;
+    if(h>600) h = 600;*/
+
+  if(w>width) {
+    width = w;
+    changed = TRUE;
+  }
+  if(h>height) {
+    height = h;
+    changed = TRUE;
+  }
+
+  if(!changed)
+    return;
+
+  /*limits on size*/
+  ww = width; hh = height;
+  if(ww>720) ww = 720;
+  if(hh>450) hh = 450;
+
+  if(ww != width || hh != height)
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
+				   GTK_POLICY_AUTOMATIC,
+				   GTK_POLICY_AUTOMATIC);
+  else
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
+				   GTK_POLICY_NEVER,
+				   GTK_POLICY_NEVER);
+
+  /*here we grow the canvas*/
+  gtk_widget_set_usize(canvas,ww,hh);
+  gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
+				 0.0,0.0,width,height);
+
+  gnome_canvas_item_set(blue_background,
+			"x2",(double)width,
+			"y2",(double)height,
+			NULL);
+  gnome_canvas_item_set(white_background,
+			"x2",(double)width,
+			"y2",(double)height,
+			NULL);
+  gnome_canvas_item_set(hint_item,
+			"x",(double)(((width-75)/2)+75),
+			"y",(double)(((height-50)/2)+50),
+			"clip_width",(double)(width-75),
+			"clip_height",(double)(height-50),
+			NULL);
+}
+
+/* places items on the canvas to make up the tip of the day */
+
+static void
+draw_on_canvas(GtkWidget *canvas, char *hint)
+{
+  GnomeCanvasItem *item;
+
+  blue_background = gnome_canvas_item_new(
+    gnome_canvas_root(GNOME_CANVAS(canvas)),
+    gnome_canvas_rect_get_type(),
+    "x1",(double)0.0,
+    "y1",(double)0.0,
+    "x2",(double)400.0,
+    "y2",(double)200.0,
+    "fill_color","sea green",
+    NULL);
+
+  white_background = gnome_canvas_item_new(
+    gnome_canvas_root(GNOME_CANVAS(canvas)),
+    gnome_canvas_rect_get_type(),
+    "x1",(double)75.0,
+    "y1",(double)50.0,
+    "x2",(double)400.0,
+    "y2",(double)200.0,
+    "fill_color","white",
+    NULL);
+
+  hint_item = gnome_canvas_item_new(
+    gnome_canvas_root(GNOME_CANVAS(canvas)),
+    gnome_canvas_text_get_type(),
+    "x",(double)237.5,
+    "y",(double)125.0,
+    "fill_color","black",
+    "font_gdk",canvas->style->font,
+    "clip_width",(double)325.0,
+    "clip_height",(double)150.0,
+    "clip",TRUE,
+    "text",hint,
+    NULL);
+
+  item = gnome_canvas_item_new(
+    gnome_canvas_root(GNOME_CANVAS(canvas)),
+    gnome_canvas_text_get_type(),
+    "x",(double)200.0,
+    "y",(double)25.0,
+    "fill_color","white",
+    "font",_("-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"),
+    "text",TOTD_STR,
+    NULL);
+
+  grow_text_if_necessary();
+}
+/********************** END OF FILE *********************************\
+\********************************************************************/

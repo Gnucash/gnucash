@@ -18,6 +18,7 @@ libgncgnome_a_SOURCES = \
   dialog-add.c \
   dialog-edit.c \
   dialog-utils.c \
+  dialog-totd.c \
   extensions.c \
   query-user.c \
   reconcile-list.c \
@@ -48,6 +49,7 @@ noinst_HEADERS = \
   dialog-options.h \
   dialog-print-check.h \
   dialog-qif-import.h \
+  dialog-totd.h \
   dialog-transfer.h \
   dialog-utils.h \
   extensions.h \

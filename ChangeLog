@@ -1,3 +1,34 @@
+2000-06-26  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/guile/global-options.[ch] (gnc_option_refresh_ui_by_name):
+	New function to make refreshing the GUI options possible from C as
+	well as scheme.
+	(gnc_set_boolean_option): C function to set boolean options from
+	outside the options dialog.
+
+	* src/gnome/dialog-totd.[ch]: New files containing the GUI
+	functions for doing tips of the day.
+
+	* src/guile/tip-of-the-day.[ch]: New files with a C interface for
+	the scheme tip of the day engine.
+
+	* src/guile/option-util.[ch] (gnc_option_db_set_boolean_option):
+	New function to set a boolean option.
+	
+	* src/scm/tip-of-the-day.scm: New file: an interface for reading
+	in and passing tips to the gui in text form.
+
+	* src/scm/tip-list.scm: A list of tips as a Scheme list.  File
+	should probably be shifted somewhere else.
+
+	* src/scm/startup.scm: Loads tip-of-the-day.scm
+
+	* src/scm/prefs.scm: Add an option for displaying tips of the day
+	at startup.  Also added gnc:support line.
+
+	* src/gnome/window-main.c (gnc_ui_totd_cb): Added menu entries and
+	callbacks to add "tips of the day" to help menu.
+
 2000-06-23  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-utils.c (gnc_window_adjust_for_screen): new

@@ -52,6 +52,7 @@
 #include "dialog-edit.h"
 #include "dialog-qif-import.h"
 #include "dialog-find-transactions.h"
+#include "dialog-totd.h"
 #include "file-history.h"
 #include "EuroUtils.h"
 #include "Scrub.h"
@@ -260,6 +261,13 @@ gnc_ui_about_cb (GtkWidget *widget, gpointer data)
   gnome_dialog_run_and_close(GNOME_DIALOG(about));
 }
 
+static void
+gnc_ui_totd_cb (GtkWidget *widget, gpointer data)
+{
+  gnc_ui_totd_dialog_create_and_run();
+  return;
+}
+    
 static void
 gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 {
@@ -952,7 +960,16 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      TOTD_MENU_STR_N, TOOLTIP_TOTD_N,
+      gnc_ui_totd_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+
     GNOMEUIINFO_MENU_ABOUT_ITEM(gnc_ui_about_cb, NULL),
+    
     GNOMEUIINFO_END
   };
 

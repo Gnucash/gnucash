@@ -139,6 +139,10 @@
                             "window.\nAre you sure you want to cancel?")
 #define RECN_TRANS_WARN   _("Warning! This is a reconciled transaction. " \
                             "Do you want do continue?")
+
+#define REENABLE_TIPS_MSG _("You have disabled \"Tip of the Day\"\n" \
+                            "You can re-enable them from the General\n" \
+                            "section of the Preferences menu")
 #define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
                             "account.\nIt does not have a matching " \
                             "currency.")
@@ -314,6 +318,8 @@
 #define TOOLTIP_SORT_BY_STMT    _(TOOLTIP_SORT_BY_STMT_N)
 #define TOOLTIP_STANDARD_ORD_N N_("Keep normal account order")
 #define TOOLTIP_STANDARD_ORD    _(TOOLTIP_STANDARD_ORD_N)
+#define TOOLTIP_TOTD_N         N_("Tips of the Day")
+#define TOOLTIP_TOTD            _(TOOLTIP_TOTD_N)
 #define TOOLTIP_TRANSFER_N     N_("Transfer funds from one account to "\
                                   "another")
 #define TOOLTIP_TRANSFER        _(TOOLTIP_TRANSFER_N)
@@ -409,6 +415,8 @@
 #define SORT_ORDER_MENU_STR       _(SORT_ORDER_MENU_STR_N)
 #define STYLE_MENU_STR_N         N_("_Style")
 #define STYLE_MENU_STR            _(STYLE_MENU_STR_N)
+#define TOTD_MENU_STR_N          N_("_Tips Of The Day")
+#define TOTD_MENU_STR             _(TOTD_MENU_STR_N)
 #define TRANSACTION_MENU_STR_N   N_("_Transaction")
 #define TRANSACTION_MENU_STR      _(TRANSACTION_MENU_STR_N)
 #define TRANSFER_MENU_STR         _("_Transfer")
@@ -433,6 +441,7 @@
 #define DATE_RANGE_STR      _("Date Range")
 #define DEL_ACC_STR         _("Delete Account")
 #define DEL_TRANS_STR       _("Delete Transaction")
+#define DISPLAY_NEXT_TIME_STR _("Display this dialog next time")
 #define DOUBLE_LINE_STR_N  N_("Double Line")
 #define DOUBLE_LINE_STR     _(DOUBLE_LINE_STR_N)
 #define EDIT_ACCT_STR       _("Edit Account")
@@ -507,6 +516,7 @@
 #define STANDARD_ORDER_STR_N N_("Standard order")
 #define STANDARD_ORDER_STR    _(STANDARD_ORDER_STR_N)
 #define STATEMENT_DATE_C_STR _("Statement Date:")
+#define TOTD_STR            _("Tip of the Day:")
 #define TOP_ACCT_STR        _("Top level account")
 #define TOTAL_SHARES_STR    _("Total Shares")
 #define VERIFY_CHANGES_STR  _("Verify Changes")

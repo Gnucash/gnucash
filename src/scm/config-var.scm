@@ -33,6 +33,8 @@
 ;;; permanent, and if they leave the variable value different from the
 ;;; default, should be saved to ~/.gnucash/config.auto.
 
+(gnc:support "config-var.scm")
+
 (define (gnc:make-config-var description
                              set-action-func
                              equality-func

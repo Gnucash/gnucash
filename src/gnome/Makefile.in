@@ -118,14 +118,14 @@ l = @l@
 
 noinst_LIBRARIES = libgncgnome.a
 
-libgncgnome_a_SOURCES =    top-level.c   window-main.c   window-register.c   window-adjust.c   window-help.c   cursors.c   account-tree.c   dialog-budget.c   window-reconcile.c   window-html.c   dialog-options.c   dialog-filebox.c   dialog-transfer.c   dialog-add.c   dialog-edit.c   dialog-utils.c   extensions.c   query-user.c   reconcile-list.c   window-report.c   gnc-dateedit.c gnc-currency-edit.c   dialog-qif-import.c   glade-gnc-dialogs.c   gnc-datedelta.c   dialog-account-picker.c   print-session.c   file-history.c   dialog-print-check.c   dialog-find-transactions.c
+libgncgnome_a_SOURCES =    top-level.c   window-main.c   window-register.c   window-adjust.c   window-help.c   cursors.c   account-tree.c   dialog-budget.c   window-reconcile.c   window-html.c   dialog-options.c   dialog-filebox.c   dialog-transfer.c   dialog-add.c   dialog-edit.c   dialog-utils.c   dialog-totd.c   extensions.c   query-user.c   reconcile-list.c   window-report.c   gnc-dateedit.c gnc-currency-edit.c   dialog-qif-import.c   glade-gnc-dialogs.c   gnc-datedelta.c   dialog-account-picker.c   print-session.c   file-history.c   dialog-print-check.c   dialog-find-transactions.c
 
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
 gnomeapp_DATA = gnucash.desktop
 
-noinst_HEADERS =    account-tree.h   account-treeP.h   cursors.h   dialog-account-picker.h   dialog-add.h   dialog-budget.h   dialog-edit.h   dialog-find-transactions.h   dialog-options.h   dialog-print-check.h   dialog-qif-import.h   dialog-transfer.h   dialog-utils.h   extensions.h   glade-cb-gnc-dialogs.h   glade-gnc-dialogs.h   glade-support-gnc-dialogs.h   gnc-currency-edit.h   gnc-datedelta.h   gnc-dateedit.h   gnome-top-level.h   print-session.h   query-user.h   reconcile-list.h   reconcile-listP.h   window-help.h   window-html.h   window-main.h   window-mainP.h   window-reconcile.h   window-register.h   window-report.h
+noinst_HEADERS =    account-tree.h   account-treeP.h   cursors.h   dialog-account-picker.h   dialog-add.h   dialog-budget.h   dialog-edit.h   dialog-find-transactions.h   dialog-options.h   dialog-print-check.h   dialog-qif-import.h   dialog-totd.h   dialog-transfer.h   dialog-utils.h   extensions.h   glade-cb-gnc-dialogs.h   glade-gnc-dialogs.h   glade-support-gnc-dialogs.h   gnc-currency-edit.h   gnc-datedelta.h   gnc-dateedit.h   gnome-top-level.h   print-session.h   query-user.h   reconcile-list.h   reconcile-listP.h   window-help.h   window-html.h   window-main.h   window-mainP.h   window-reconcile.h   window-register.h   window-report.h
 
 
 EXTRA_DIST =    .cvsignore   gnc-dialogs.glade   gnucash.desktop
@@ -154,8 +154,8 @@ libgncgnome_a_OBJECTS =  top-level.o window-main.o window-register.o \
 window-adjust.o window-help.o cursors.o account-tree.o dialog-budget.o \
 window-reconcile.o window-html.o dialog-options.o dialog-filebox.o \
 dialog-transfer.o dialog-add.o dialog-edit.o dialog-utils.o \
-extensions.o query-user.o reconcile-list.o window-report.o \
-gnc-dateedit.o gnc-currency-edit.o dialog-qif-import.o \
+dialog-totd.o extensions.o query-user.o reconcile-list.o \
+window-report.o gnc-dateedit.o gnc-currency-edit.o dialog-qif-import.o \
 glade-gnc-dialogs.o gnc-datedelta.o dialog-account-picker.o \
 print-session.o file-history.o dialog-print-check.o \
 dialog-find-transactions.o
@@ -180,8 +180,8 @@ DEP_FILES =  .deps/account-tree.P .deps/cursors.P \
 .deps/dialog-edit.P .deps/dialog-filebox.P \
 .deps/dialog-find-transactions.P .deps/dialog-options.P \
 .deps/dialog-print-check.P .deps/dialog-qif-import.P \
-.deps/dialog-transfer.P .deps/dialog-utils.P .deps/extensions.P \
-.deps/file-history.P .deps/glade-gnc-dialogs.P \
+.deps/dialog-totd.P .deps/dialog-transfer.P .deps/dialog-utils.P \
+.deps/extensions.P .deps/file-history.P .deps/glade-gnc-dialogs.P \
 .deps/gnc-currency-edit.P .deps/gnc-datedelta.P .deps/gnc-dateedit.P \
 .deps/print-session.P .deps/query-user.P .deps/reconcile-list.P \
 .deps/top-level.P .deps/window-adjust.P .deps/window-help.P \

@@ -1,15 +1,18 @@
-###########################################################################
-                       DEVELOPMENT  RELEASE
+============================================================
+          Gnucash 1.5.x README file.
 
-The version 1.3.x series of GnuCash are experimental development
-releases.  They may or may not work. Use at your own risk.
+NOTE: THIS IS A DEVELOPMENT RELEASE!!! THIS VERSION HAS NOT
+BEEN TESTED PROPERLY AND MAY DO ABSOLUTELY ANYTHING!  
 
-The last stable, production version was gnucash-1.2.5.
-The next stable, production version will be gnucash-1.4.x
+USE AT YOUR OWN RISK (AND KEEP *LOTS* OF BACKUPS)
 
-###########################################################################
+If you want something a bit more tested, please use the
+1.4 stable series.
+------------------------------------------------------------
 
+==================
 Table of Contents:
+------------------
 
   - Overview
   - Upgrading from 1.2.x
@@ -342,14 +345,10 @@ Supported OS's
 
 GnuCash 1.3.x is known to work with the following operating systems:
 
-GNU/Linux             -- x86 & Alpha
+GNU/Linux             -- x86, Sparc, Alpha
 Solaris		      -- Sparc
 FreeBSD               -- x86
-
-It probably works with the following :
-
-OpenBSD               -- x86 (needs to be confirmed one way or another)
-
+OpenBSD               -- x86
 
 Previous versions have been known to work on the following platforms, but
 their current status is unknown:

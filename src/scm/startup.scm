@@ -34,4 +34,5 @@
 (gnc:load "prefs.scm")
 (gnc:load "command-line.scm")
 (gnc:load "hooks.scm")
+(gnc:load "tip-of-the-day.scm")
 (gnc:load "main.scm")
