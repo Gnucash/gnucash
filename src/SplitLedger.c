@@ -167,6 +167,7 @@ new_phys_row, new_phys_col);
          reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
       }
       xaccRegisterRefresh (reg);
+      refreshMainWindow();
 
       /* indicate what row we *should* have gone to */
       *p_new_phys_row = table->current_cursor_phys_row;
@@ -306,14 +307,8 @@ xaccSRRedrawRegEntry (SplitRegister *reg)
     * in this transaction.  So basically, send redraw events to all
     * of the splits.
     */
-   i = 0;
-   split = xaccTransGetSplit (trans, i);
-   while (split) {
-      acc = xaccSplitGetAccount (split);
-      xaccAccountDisplayRefresh (acc);
-      i++;
-      split = xaccTransGetSplit (trans, i);
-   }
+   xaccTransDisplayRefresh (trans);
+   refreshMainWindow();
 }
 
 /* ======================================================== */
@@ -435,6 +430,7 @@ printf ("save split is %p \n", split);
    
       /* make sure any open windows of the old account get redrawn */
       xaccAccountDisplayRefresh (old_acc);
+      refreshMainWindow();
    }
 
    if (MOD_MXFRM & changed) {
@@ -471,6 +467,7 @@ printf ("save split is %p \n", split);
    
          /* make sure any open windows of the old account get redrawn */
          xaccAccountDisplayRefresh (old_acc);
+         refreshMainWindow();
       }
    }
 
