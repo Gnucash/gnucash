@@ -1738,11 +1738,12 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
         GnucashSheet *sheet;
         VirtualLocation virt_loc;
 
-        g_return_if_fail(GNUCASH_IS_REGISTER(reg));
+        g_return_if_fail (reg != NULL);
+        g_return_if_fail (GNUCASH_IS_REGISTER(reg));
 
         sheet = GNUCASH_SHEET(reg->sheet);
 
-        gnucash_cursor_get_virt(GNUCASH_CURSOR(sheet->cursor), &virt_loc);
+        gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         gnc_table_move_vertical_position (sheet->table, &virt_loc, 1);
         if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
@@ -1751,9 +1752,45 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
         virt_loc.phys_row_offset = 0;
         virt_loc.phys_col_offset = 0;
 
-        gnucash_sheet_goto_virt_loc(sheet, virt_loc);
+        gnucash_sheet_goto_virt_loc (sheet, virt_loc);
 }
 
+void
+gnucash_register_goto_next_trans_row (GnucashRegister *reg)
+{
+        GnucashSheet *sheet;
+        SheetBlockStyle *style;
+        VirtualLocation virt_loc;
+        CursorClass cursor_class;
+
+        g_return_if_fail (reg != NULL);
+        g_return_if_fail (GNUCASH_IS_REGISTER(reg));
+
+        sheet = GNUCASH_SHEET(reg->sheet);
+
+        gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
+
+        do
+        {
+                gnc_table_move_vertical_position (sheet->table, &virt_loc, 1);
+                if (virt_loc.vcell_loc.virt_row >= sheet->num_virt_rows)
+                        return;
+
+                style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
+                if (!style)
+                        return;
+
+                cursor_class = xaccCursorTypeToClass (style->cursor_type);
+        } while (cursor_class == CURSOR_CLASS_SPLIT);
+
+        if (cursor_class != CURSOR_CLASS_TRANS)
+                return;
+
+        virt_loc.phys_row_offset = 0;
+        virt_loc.phys_col_offset = 0;
+
+        gnucash_sheet_goto_virt_loc (sheet, virt_loc);
+}
 
 SheetBlock *
 gnucash_sheet_get_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)

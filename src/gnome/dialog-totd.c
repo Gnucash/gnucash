@@ -181,14 +181,7 @@ totd_close_cb(GtkWidget *widget, gpointer data)
     gnc_set_boolean_option("General", 
 			   "Display \"Tip of the Day\"",
 			   new_enabled);
-    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");    
-    if(new_enabled == FALSE)
-    {
-      const char *message = _("You have disabled \"Tip of the Day\"\n"
-                              "You can re-enable tips from the General\n"
-                              "section of the Preferences menu");
-      gnc_info_dialog(message);
-    }
+    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");
   }
   return;
 }

@@ -73,6 +73,8 @@ struct _AccountWindow
 
   GNCAccountType type;
 
+  GtkWidget * notebook;
+
   GtkWidget * name_entry;
   GtkWidget * description_entry;
   GtkWidget * code_entry;
@@ -86,7 +88,11 @@ struct _AccountWindow
 
   GtkWidget * opening_balance_edit;
   GtkWidget * opening_balance_date_edit;
-  GtkWidget * opening_balance_frame;
+  GtkWidget * opening_balance_page;
+
+  GtkWidget * opening_equity_radio;
+  GtkWidget * transfer_account_frame;
+  GtkWidget * transfer_tree;
 
   /* These probably don't belong here anymore, but until we figure out
      what we want, we'll leave them alone. */
@@ -203,6 +209,56 @@ gnc_account_to_ui(AccountWindow *aw)
 }
 
 
+static gboolean
+gnc_account_create_transfer_balance (Account *account,
+                                     Account *transfer,
+                                     gnc_numeric balance,
+                                     time_t date)
+{
+  Transaction *trans;
+  Split *split;
+
+  if (gnc_numeric_zero_p (balance))
+    return TRUE;
+
+  g_return_val_if_fail (account != NULL, FALSE);
+  g_return_val_if_fail (transfer != NULL, FALSE);
+
+  xaccAccountBeginEdit (account);
+  xaccAccountBeginEdit (transfer);
+
+  trans = xaccMallocTransaction ();
+
+  xaccTransBeginEdit (trans);
+
+  xaccTransSetDateSecs (trans, date);
+  xaccTransSetDescription (trans, _("Opening Balance"));
+
+  split = xaccMallocSplit ();
+
+  xaccTransAppendSplit (trans, split);
+  xaccAccountInsertSplit (account, split);
+
+  xaccSplitSetShareAmount (split, balance);
+  xaccSplitSetValue (split, balance);
+
+  balance = gnc_numeric_neg (balance);
+
+  split = xaccMallocSplit ();
+
+  xaccTransAppendSplit (trans, split);
+  xaccAccountInsertSplit (transfer, split);
+
+  xaccSplitSetShareAmount (split, balance);
+  xaccSplitSetValue (split, balance);
+
+  xaccTransCommitEdit (trans);
+  xaccAccountCommitEdit (transfer);
+  xaccAccountCommitEdit (account);
+
+  return TRUE;
+}
+
 /* Record the GUI values into the Account structure */
 static void
 gnc_ui_to_account(AccountWindow *aw)
@@ -214,6 +270,7 @@ gnc_ui_to_account(AccountWindow *aw)
   const char *string;
   gboolean tax_related;
   gnc_numeric balance;
+  gboolean use_equity;
   time_t date;
 
   if (!account)
@@ -300,13 +357,34 @@ gnc_ui_to_account(AccountWindow *aw)
 
   balance = gnc_amount_edit_get_amount
     (GNC_AMOUNT_EDIT (aw->opening_balance_edit));
+
+  if (gnc_numeric_zero_p (balance))
+    return;
+
   date = gnc_date_edit_get_date
     (GNC_DATE_EDIT (aw->opening_balance_date_edit));
 
-  if (!gnc_account_create_opening_balance (account, balance, date))
+  use_equity = gtk_toggle_button_get_active
+    (GTK_TOGGLE_BUTTON (aw->opening_equity_radio));
+
+  if (use_equity)
   {
-    const char *message = _("Could not create opening balance.");
-    gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    if (!gnc_account_create_opening_balance (account, balance, date))
+    {
+      const char *message = _("Could not create opening balance.");
+      gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
+    }
+  }
+  else
+  {
+    Account *transfer;
+
+    transfer = gnc_account_tree_get_current_account
+      (GNC_ACCOUNT_TREE (aw->transfer_tree));
+    if (!transfer)
+      return;
+
+    gnc_account_create_transfer_balance (account, transfer, balance, date);
   }
 }
 
@@ -975,6 +1053,7 @@ gnc_new_account_ok (AccountWindow *aw)
   const gnc_commodity * currency;
   const gnc_commodity * security;
   Account *parent_account;
+  gnc_numeric balance;
   char *name;
 
   /* check for valid name */
@@ -1065,6 +1144,33 @@ gnc_new_account_ok (AccountWindow *aw)
                             "or leave it blank.");
     gnc_error_dialog_parented(GTK_WINDOW(aw->dialog), message);
     return;
+  }
+
+  balance = gnc_amount_edit_get_amount
+    (GNC_AMOUNT_EDIT (aw->opening_balance_edit));
+
+  if (!gnc_numeric_zero_p (balance))
+  {
+    gboolean use_equity;
+
+    use_equity = gtk_toggle_button_get_active
+      (GTK_TOGGLE_BUTTON (aw->opening_equity_radio));
+
+    if (!use_equity)
+    {
+      Account *transfer;
+
+      transfer = gnc_account_tree_get_current_account
+        (GNC_ACCOUNT_TREE (aw->transfer_tree));
+
+      if (!transfer)
+      {
+        const char *message = _("You must select a transfer account or choose"
+                                "\nthe opening balances equity account.");
+        gnc_error_dialog_parented (GTK_WINDOW(aw->dialog), message);
+        return;
+      }
+    }
   }
 
   gnc_finish_ok (aw, NULL, NULL, NULL);
@@ -1208,7 +1314,13 @@ gnc_type_list_select_cb(GtkCList * type_list, gint row, gint column,
                aw->type != STOCK &&
                aw->type != MUTUAL);
 
-  gtk_widget_set_sensitive(aw->opening_balance_frame, sensitive);
+  gtk_widget_set_sensitive(aw->opening_balance_page, sensitive);
+  if (!sensitive)
+  {
+    gtk_notebook_set_page (GTK_NOTEBOOK (aw->notebook), 0);
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
+                                gnc_numeric_zero ());
+  }
 }
 
 
@@ -1351,6 +1463,34 @@ currency_changed_cb (GNCCommodityEdit *gce, gpointer data)
                                 gnc_commodity_get_fraction (currency));
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (aw->opening_balance_edit),
                                   gnc_commodity_print_info (currency, FALSE));
+
+  gnc_account_tree_refresh (GNC_ACCOUNT_TREE (aw->transfer_tree));
+}
+
+static gboolean
+account_currency_filter (Account *account, gpointer user_data)
+{
+  AccountWindow *aw = user_data;
+  gnc_commodity *currency;
+
+  if (!account)
+    return FALSE;
+
+  currency =
+    gnc_commodity_edit_get_commodity (GNC_COMMODITY_EDIT (aw->currency_edit));
+
+  return gnc_commodity_equiv (xaccAccountGetCurrency (account), currency);
+}
+
+static void
+opening_equity_cb (GtkWidget *w, gpointer data)
+{
+  AccountWindow *aw = data;
+  gboolean use_equity;
+
+  use_equity = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
+
+  gtk_widget_set_sensitive (aw->transfer_account_frame, !use_equity);
 }
 
 /********************************************************************\
@@ -1388,7 +1528,9 @@ gnc_account_window_create(AccountWindow *aw)
   gnome_dialog_button_connect
     (awd, 2, GTK_SIGNAL_FUNC(gnc_account_window_help_cb), aw);
 
-  aw->name_entry =        gtk_object_get_data(awo, "name_entry");
+  aw->notebook = gtk_object_get_data (awo, "account_notebook");
+
+  aw->name_entry = gtk_object_get_data(awo, "name_entry");
   gtk_signal_connect(GTK_OBJECT (aw->name_entry), "changed",
 		     GTK_SIGNAL_FUNC(gnc_account_name_changed_cb), aw);
 
@@ -1423,23 +1565,6 @@ gnc_account_window_create(AccountWindow *aw)
 
   aw->quote_frame = gtk_object_get_data (awo, "price_quote_frame");
 
-  box = gtk_object_get_data(awo, "opening_balance_box");
-  amount = gnc_amount_edit_new ();
-  aw->opening_balance_edit = amount;
-  gtk_box_pack_start(GTK_BOX(box), amount, TRUE, TRUE, 0);
-  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-
-  box = gtk_object_get_data (awo, "opening_balance_date_box");
-  date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
-  aw->opening_balance_date_edit = date;
-  gtk_box_pack_start(GTK_BOX(box), date, TRUE, TRUE, 0);
-
-  aw->opening_balance_frame =
-    gtk_object_get_data (awo, "opening_balance_frame");
-
-  aw->type_list = gtk_object_get_data(awo, "type_list");
-  gnc_account_type_list_create (aw);
-
   box = gtk_object_get_data(awo, "parent_scroll");
 
   aw->top_level_account = xaccMallocAccount();
@@ -1459,6 +1584,42 @@ gnc_account_window_create(AccountWindow *aw)
 		     GTK_SIGNAL_FUNC(gnc_parent_tree_select), aw);
 
   aw->tax_related_button = gtk_object_get_data (awo, "tax_related_button");
+
+  box = gtk_object_get_data(awo, "opening_balance_box");
+  amount = gnc_amount_edit_new ();
+  aw->opening_balance_edit = amount;
+  gtk_box_pack_start(GTK_BOX(box), amount, TRUE, TRUE, 0);
+  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
+
+  box = gtk_object_get_data (awo, "opening_balance_date_box");
+  date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
+  aw->opening_balance_date_edit = date;
+  gtk_box_pack_start(GTK_BOX(box), date, TRUE, TRUE, 0);
+
+  aw->opening_balance_page =
+    gtk_notebook_get_nth_page (GTK_NOTEBOOK (aw->notebook), 1);
+
+  aw->opening_equity_radio = gtk_object_get_data (awo, "opening_equity_radio");
+  gtk_signal_connect (GTK_OBJECT (aw->opening_equity_radio), "toggled",
+                      GTK_SIGNAL_FUNC (opening_equity_cb), aw);
+
+  aw->transfer_account_frame =
+    gtk_object_get_data (awo, "transfer_account_frame");
+
+  box = gtk_object_get_data(awo, "transfer_account_scroll");
+
+  aw->transfer_tree = gnc_account_tree_new ();
+  gtk_clist_column_titles_hide (GTK_CLIST (aw->transfer_tree));
+  gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(aw->parent_tree));
+
+  gnc_account_tree_set_selectable_filter (GNC_ACCOUNT_TREE (aw->transfer_tree),
+                                          account_currency_filter, aw);
+
+  gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->transfer_tree));
+
+  /* This goes at the end so the select callback has good data. */
+  aw->type_list = gtk_object_get_data(awo, "type_list");
+  gnc_account_type_list_create (aw);
 
   if (last_width == 0)
     gnc_get_window_size("account_win", &last_width, &last_height);
@@ -1815,7 +1976,7 @@ gnc_ui_edit_account_window(Account *account)
   gnc_resume_gui_refresh ();
 
   gtk_widget_show_all (aw->dialog);
-  gtk_widget_hide (aw->opening_balance_frame);
+  gtk_widget_hide (aw->opening_balance_page);
 
   parent = xaccAccountGetParentAccount (account);
   if (parent == NULL)

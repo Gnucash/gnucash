@@ -2833,7 +2833,7 @@ create_Amortization_Schedule_Dialog (void)
   GtkWidget *button61;
   GtkWidget *button62;
 
-  Amortization_Schedule_Dialog = gnome_dialog_new (NULL, NULL);
+  Amortization_Schedule_Dialog = gnome_dialog_new (_("Account Information"), NULL);
   gtk_object_set_data (GTK_OBJECT (Amortization_Schedule_Dialog), "Amortization_Schedule_Dialog", Amortization_Schedule_Dialog);
   gtk_window_set_policy (GTK_WINDOW (Amortization_Schedule_Dialog), FALSE, FALSE, FALSE);
 
@@ -3378,6 +3378,7 @@ create_Account_Dialog (void)
 {
   GtkWidget *Account_Dialog;
   GtkWidget *dialog_vbox12;
+  GtkWidget *account_notebook;
   GtkWidget *vbox75;
   GtkWidget *frame28;
   GtkWidget *hbox62;
@@ -3400,14 +3401,6 @@ create_Account_Dialog (void)
   GtkWidget *label812;
   GtkWidget *frame30;
   GtkWidget *parent_scroll;
-  GtkWidget *opening_balance_frame;
-  GtkWidget *hbox101;
-  GtkWidget *vbox114;
-  GtkWidget *label847737;
-  GtkWidget *label847738;
-  GtkWidget *vbox115;
-  GtkWidget *opening_balance_box;
-  GtkWidget *opening_balance_date_box;
   GtkWidget *price_quote_frame;
   GtkWidget *hbox103;
   GtkWidget *vbox116;
@@ -3420,10 +3413,31 @@ create_Account_Dialog (void)
   GtkWidget *scrolledwindow9;
   GtkWidget *notes_text;
   GtkWidget *tax_related_button;
+  GtkWidget *label8477388;
+  GtkWidget *vbox118;
+  GtkWidget *opening_balance_frame;
+  GtkWidget *hbox101;
+  GtkWidget *vbox114;
+  GtkWidget *label847737;
+  GtkWidget *label847738;
+  GtkWidget *vbox115;
+  GtkWidget *opening_balance_box;
+  GtkWidget *opening_balance_date_box;
+  GtkWidget *frame49;
+  GtkWidget *vbox120;
+  GSList *vbox120_group = NULL;
+  GtkWidget *opening_equity_radio;
+  GtkWidget *radiobutton8;
+  GtkWidget *transfer_account_frame;
+  GtkWidget *transfer_account_scroll;
+  GtkWidget *label847739;
   GtkWidget *dialog_action_area12;
   GtkWidget *button63;
   GtkWidget *cancel_button;
   GtkWidget *button72;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
 
   Account_Dialog = gnome_dialog_new (_("New Account"), NULL);
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "Account_Dialog", Account_Dialog);
@@ -3433,12 +3447,19 @@ create_Account_Dialog (void)
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "dialog_vbox12", dialog_vbox12);
   gtk_widget_show (dialog_vbox12);
 
+  account_notebook = gtk_notebook_new ();
+  gtk_widget_ref (account_notebook);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "account_notebook", account_notebook,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (account_notebook);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox12), account_notebook, TRUE, TRUE, 0);
+
   vbox75 = gtk_vbox_new (FALSE, 0);
   gtk_widget_ref (vbox75);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox75", vbox75,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox75);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox12), vbox75, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (account_notebook), vbox75);
 
   frame28 = gtk_frame_new (_("Account Information"));
   gtk_widget_ref (frame28);
@@ -3607,68 +3628,6 @@ create_Account_Dialog (void)
   gtk_container_set_border_width (GTK_CONTAINER (parent_scroll), 3);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (parent_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
-  opening_balance_frame = gtk_frame_new (_("Opening Balance"));
-  gtk_widget_ref (opening_balance_frame);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_frame", opening_balance_frame,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (opening_balance_frame);
-  gtk_box_pack_start (GTK_BOX (vbox75), opening_balance_frame, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (opening_balance_frame), 3);
-
-  hbox101 = gtk_hbox_new (FALSE, 2);
-  gtk_widget_ref (hbox101);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox101", hbox101,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox101);
-  gtk_container_add (GTK_CONTAINER (opening_balance_frame), hbox101);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox101), 3);
-
-  vbox114 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox114);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox114", vbox114,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox114);
-  gtk_box_pack_start (GTK_BOX (hbox101), vbox114, FALSE, FALSE, 0);
-
-  label847737 = gtk_label_new (_("Balance:"));
-  gtk_widget_ref (label847737);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847737", label847737,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label847737);
-  gtk_box_pack_start (GTK_BOX (vbox114), label847737, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (label847737), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (label847737), 1, 0.5);
-
-  label847738 = gtk_label_new (_("Date:"));
-  gtk_widget_ref (label847738);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847738", label847738,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label847738);
-  gtk_box_pack_start (GTK_BOX (vbox114), label847738, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (label847738), GTK_JUSTIFY_RIGHT);
-  gtk_misc_set_alignment (GTK_MISC (label847738), 1, 0.5);
-
-  vbox115 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox115);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox115", vbox115,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox115);
-  gtk_box_pack_start (GTK_BOX (hbox101), vbox115, TRUE, TRUE, 0);
-
-  opening_balance_box = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (opening_balance_box);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_box", opening_balance_box,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (opening_balance_box);
-  gtk_box_pack_start (GTK_BOX (vbox115), opening_balance_box, TRUE, TRUE, 0);
-
-  opening_balance_date_box = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (opening_balance_date_box);
-  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_date_box", opening_balance_date_box,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (opening_balance_date_box);
-  gtk_box_pack_start (GTK_BOX (vbox115), opening_balance_date_box, TRUE, TRUE, 0);
-
   price_quote_frame = gtk_frame_new (_("Price Quote Source"));
   gtk_widget_ref (price_quote_frame);
   gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "price_quote_frame", price_quote_frame,
@@ -3764,6 +3723,141 @@ create_Account_Dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox75), tax_related_button, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (tax_related_button), 3);
 
+  label8477388 = gtk_label_new (_("General Information"));
+  gtk_widget_ref (label8477388);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label8477388", label8477388,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label8477388);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (account_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (account_notebook), 0), label8477388);
+
+  vbox118 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox118);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox118", vbox118,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox118);
+  gtk_container_add (GTK_CONTAINER (account_notebook), vbox118);
+
+  opening_balance_frame = gtk_frame_new (_("Balance Information"));
+  gtk_widget_ref (opening_balance_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_frame", opening_balance_frame,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (opening_balance_frame);
+  gtk_box_pack_start (GTK_BOX (vbox118), opening_balance_frame, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (opening_balance_frame), 3);
+
+  hbox101 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox101);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "hbox101", hbox101,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox101);
+  gtk_container_add (GTK_CONTAINER (opening_balance_frame), hbox101);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox101), 3);
+
+  vbox114 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox114);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox114", vbox114,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox114);
+  gtk_box_pack_start (GTK_BOX (hbox101), vbox114, FALSE, FALSE, 0);
+
+  label847737 = gtk_label_new (_("Balance:"));
+  gtk_widget_ref (label847737);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847737", label847737,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847737);
+  gtk_box_pack_start (GTK_BOX (vbox114), label847737, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label847737), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label847737), 1, 0.5);
+
+  label847738 = gtk_label_new (_("Date:"));
+  gtk_widget_ref (label847738);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847738", label847738,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847738);
+  gtk_box_pack_start (GTK_BOX (vbox114), label847738, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label847738), GTK_JUSTIFY_RIGHT);
+  gtk_misc_set_alignment (GTK_MISC (label847738), 1, 0.5);
+
+  vbox115 = gtk_vbox_new (TRUE, 0);
+  gtk_widget_ref (vbox115);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox115", vbox115,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox115);
+  gtk_box_pack_start (GTK_BOX (hbox101), vbox115, TRUE, TRUE, 0);
+
+  opening_balance_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (opening_balance_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_box", opening_balance_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (opening_balance_box);
+  gtk_box_pack_start (GTK_BOX (vbox115), opening_balance_box, TRUE, TRUE, 0);
+
+  opening_balance_date_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (opening_balance_date_box);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_balance_date_box", opening_balance_date_box,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (opening_balance_date_box);
+  gtk_box_pack_start (GTK_BOX (vbox115), opening_balance_date_box, TRUE, TRUE, 0);
+
+  frame49 = gtk_frame_new (_("Transfer Type"));
+  gtk_widget_ref (frame49);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "frame49", frame49,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame49);
+  gtk_box_pack_start (GTK_BOX (vbox118), frame49, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (frame49), 3);
+
+  vbox120 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox120);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "vbox120", vbox120,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox120);
+  gtk_container_add (GTK_CONTAINER (frame49), vbox120);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox120), 3);
+
+  opening_equity_radio = gtk_radio_button_new_with_label (vbox120_group, _("Use Opening Balances Equity account"));
+  vbox120_group = gtk_radio_button_group (GTK_RADIO_BUTTON (opening_equity_radio));
+  gtk_widget_ref (opening_equity_radio);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "opening_equity_radio", opening_equity_radio,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (opening_equity_radio);
+  gtk_box_pack_start (GTK_BOX (vbox120), opening_equity_radio, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, opening_equity_radio, _("Use an Equity account to transfer the opening balance. The Equity account will be created if it doesn't exist already."), NULL);
+
+  radiobutton8 = gtk_radio_button_new_with_label (vbox120_group, _("Select Transfer Account"));
+  vbox120_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton8));
+  gtk_widget_ref (radiobutton8);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "radiobutton8", radiobutton8,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (radiobutton8);
+  gtk_box_pack_start (GTK_BOX (vbox120), radiobutton8, FALSE, FALSE, 0);
+  gtk_tooltips_set_tip (tooltips, radiobutton8, _("Use the account select below to transfer the opening balance."), NULL);
+
+  transfer_account_frame = gtk_frame_new (_("Transfer Account"));
+  gtk_widget_ref (transfer_account_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "transfer_account_frame", transfer_account_frame,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (transfer_account_frame);
+  gtk_box_pack_start (GTK_BOX (vbox118), transfer_account_frame, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (transfer_account_frame), 3);
+  gtk_widget_set_sensitive (transfer_account_frame, FALSE);
+
+  transfer_account_scroll = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (transfer_account_scroll);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "transfer_account_scroll", transfer_account_scroll,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (transfer_account_scroll);
+  gtk_container_add (GTK_CONTAINER (transfer_account_frame), transfer_account_scroll);
+  gtk_container_set_border_width (GTK_CONTAINER (transfer_account_scroll), 3);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (transfer_account_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  label847739 = gtk_label_new (_("Opening Balance"));
+  gtk_widget_ref (label847739);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "label847739", label847739,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847739);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (account_notebook), gtk_notebook_get_nth_page (GTK_NOTEBOOK (account_notebook), 1), label847739);
+
   dialog_action_area12 = GNOME_DIALOG (Account_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "dialog_action_area12", dialog_action_area12);
   gtk_widget_show (dialog_action_area12);
@@ -3793,6 +3887,8 @@ create_Account_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (button72);
   GTK_WIDGET_SET_FLAGS (button72, GTK_CAN_DEFAULT);
+
+  gtk_object_set_data (GTK_OBJECT (Account_Dialog), "tooltips", tooltips);
 
   return Account_Dialog;
 }
@@ -5805,7 +5901,7 @@ create_Tax_Information_Dialog (void)
   GtkWidget *txf_category_clist;
   GtkWidget *label847734;
   GtkWidget *label847735;
-  GtkWidget *scrolledwindow19;
+  GtkWidget *help_scroll;
   GtkWidget *txf_help_text;
   GtkWidget *payer_name_source_frame;
   GtkWidget *vbox97;
@@ -5963,7 +6059,7 @@ create_Tax_Information_Dialog (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (scrolledwindow28);
   gtk_box_pack_start (GTK_BOX (vbox113), scrolledwindow28, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow28), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow28), GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
 
   txf_category_clist = gtk_clist_new (2);
   gtk_widget_ref (txf_category_clist);
@@ -5973,6 +6069,7 @@ create_Tax_Information_Dialog (void)
   gtk_container_add (GTK_CONTAINER (scrolledwindow28), txf_category_clist);
   gtk_clist_set_column_width (GTK_CLIST (txf_category_clist), 0, 80);
   gtk_clist_set_column_width (GTK_CLIST (txf_category_clist), 1, 80);
+  gtk_clist_set_selection_mode (GTK_CLIST (txf_category_clist), GTK_SELECTION_BROWSE);
   gtk_clist_column_titles_show (GTK_CLIST (txf_category_clist));
 
   label847734 = gtk_label_new (_("Form"));
@@ -5989,20 +6086,20 @@ create_Tax_Information_Dialog (void)
   gtk_widget_show (label847735);
   gtk_clist_set_column_widget (GTK_CLIST (txf_category_clist), 1, label847735);
 
-  scrolledwindow19 = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_ref (scrolledwindow19);
-  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "scrolledwindow19", scrolledwindow19,
+  help_scroll = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (help_scroll);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "help_scroll", help_scroll,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (scrolledwindow19);
-  gtk_box_pack_start (GTK_BOX (vbox113), scrolledwindow19, TRUE, TRUE, 0);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow19), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+  gtk_widget_show (help_scroll);
+  gtk_box_pack_start (GTK_BOX (vbox113), help_scroll, FALSE, FALSE, 0);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (help_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
   txf_help_text = gtk_text_new (NULL, NULL);
   gtk_widget_ref (txf_help_text);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "txf_help_text", txf_help_text,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (txf_help_text);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow19), txf_help_text);
+  gtk_container_add (GTK_CONTAINER (help_scroll), txf_help_text);
 
   payer_name_source_frame = gtk_frame_new (_("Payer Name Source"));
   gtk_widget_ref (payer_name_source_frame);

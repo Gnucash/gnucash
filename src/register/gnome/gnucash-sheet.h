@@ -186,6 +186,8 @@ void gnucash_register_goto_virt_loc (GnucashRegister *reg,
 
 void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
 
+void gnucash_register_goto_next_trans_row (GnucashRegister *reg);
+
 void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
                                    gpointer data);
 

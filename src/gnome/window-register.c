@@ -1783,6 +1783,8 @@ gnc_register_enter (RegWindow *regData, gboolean next_transaction)
   /* Now move. */
   if (goto_blank)
     gnc_register_jump_to_blank (regData);
+  else if (next_transaction)
+    gnucash_register_goto_next_trans_row (regData->reg);
   else
     gnucash_register_goto_next_virt_row (regData->reg);
 }

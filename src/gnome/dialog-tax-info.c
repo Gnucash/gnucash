@@ -545,6 +545,8 @@ txf_code_select_row_cb (GtkCList *clist,
 {
   TaxInfoDialog *ti_dialog = user_data;
   TXFInfo *txf_info;
+  GtkAdjustment *adj;
+  GtkWidget *scroll;
   GtkWidget *frame;
   GtkEditable *ge;
   const char *text;
@@ -558,6 +560,11 @@ txf_code_select_row_cb (GtkCList *clist,
 
   gtk_editable_delete_text (ge, 0, -1);
   gtk_editable_insert_text (ge, text, strlen (text), &pos);
+
+  scroll = lookup_widget (GTK_WIDGET (clist), "help_scroll");
+
+  adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scroll));
+  gtk_adjustment_set_value (adj, 0.0);
 
   frame = lookup_widget (GTK_WIDGET (clist), "payer_name_source_frame");
 
@@ -736,7 +743,10 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     gnc_get_window_size ("tax_info_win", &last_width, &last_height);
 
   if (last_height == 0)
+  {
     last_height = 400;
+    last_width = 500;
+  }
 
   gtk_window_set_default_size (GTK_WINDOW(ti_dialog->dialog),
                                last_width, last_height);

@@ -1,3 +1,19 @@
+2001-04-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_register_goto_next_trans_row): new func.
+
+	* src/gnome/window-register.c: make 'enter' toolbar button
+	move to next transaction
+
+	* src/gnome/dialog-tax-info.c: more work
+
+	* src/gnome/dialog-account.c: allow opening balances to come
+	from other accounts
+
+	* src/gnome/dialog-totd.c (totd_close_cb): don't bother with the
+	help dialog after disabling tips
+
 2001-04-04  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/gnc-html-guppi.c, src/scm/html-barchart.scm: Added new
