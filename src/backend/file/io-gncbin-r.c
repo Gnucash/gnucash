@@ -119,7 +119,7 @@
 #define VERSION 10
 
 
-/* hack alert the current file format does not support most of the
+/* The binary file format does not support most of the
  * new/improved account & transaction structures
  */
 
@@ -179,6 +179,11 @@ typedef struct {
 } GNCPotentialQuote;
 
 static GSList     *potential_quotes;
+
+
+#define EPS  (1.0e-6)
+#define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
+#define DEQ(x,y) DEQEPS(x,y,EPS)
 
 static void
 mark_potential_quote(Split *s, double price, double quantity)
