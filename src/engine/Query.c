@@ -754,7 +754,6 @@ static int
 acct_query_matches(QueryTerm * qt, Account * acct) {
   GList *node;
   gboolean account_in_set = FALSE;
-  gboolean first_account = TRUE;
 
   g_return_val_if_fail(qt && acct, FALSE);
   g_return_val_if_fail(qt->data.type == PD_ACCOUNT, FALSE);
@@ -764,14 +763,13 @@ acct_query_matches(QueryTerm * qt, Account * acct) {
       account_in_set = TRUE;
       break;
     }
-    first_account = FALSE;
   }
 
   /* if we need the query to match "ALL" accounts, we only return 
    * true for the first acct in the set. */
   switch(qt->data.acct.how) {
   case ACCT_MATCH_ALL:
-    return (account_in_set && first_account);
+    return account_in_set;
     break;
 
   case ACCT_MATCH_ANY:
@@ -1177,16 +1175,12 @@ xaccQueryGetSplits(Query * q)
     if (!current)
       continue;
 
-    /* first, check this account to see if we need to look at it at
-     * all.  If the query is "ANY" matching or "NONE" matching, you
-     * get what you expect; if it's "ALL" matching, only the first
-     * account in the query matches.  This could be optimized to only
-     * look at the smallest account. */
+    /* check this account to see if we need to look at it at all */
     acct_ok = 0;
     for(or_ptr = q->terms; or_ptr ; or_ptr = or_ptr->next) {
       and_ptr = or_ptr->data;
       qt = and_ptr->data;
-      
+
       if(qt->data.type == PD_ACCOUNT) {
         if(acct_query_matches(qt, current)) {
           acct_ok = 1;
@@ -1202,7 +1196,7 @@ xaccQueryGetSplits(Query * q)
         break;
       }
     }
-    
+
     if(acct_ok) {
       GList *lp;
 
@@ -2394,55 +2388,64 @@ value_match_predicate(double splitamt, PredicateData * pd) {
  *  xaccAccountMatchPredicate 
  *******************************************************************/
 static int 
-xaccAccountMatchPredicate(Split * s, PredicateData * pd) { 
+xaccAccountMatchPredicate(Split * s, PredicateData * pd)
+{
   Transaction * parent;
   Split       * split;
   Account     * split_acct;
   GList       * acct_node;
-  int         i;
-  int         numsplits;
 
   g_return_val_if_fail(s && pd, FALSE);
   g_return_val_if_fail(pd->type == PD_ACCOUNT, FALSE);
 
-  switch(pd->acct.how) {
-  case ACCT_MATCH_ALL:
-    /* there must be a split in parent that matches each of the 
-     * accounts listed in pd. */
-    parent = xaccSplitGetParent(s);
-    g_return_val_if_fail(parent, FALSE);
-    numsplits = xaccTransCountSplits(parent);
-    for(acct_node=pd->acct.accounts; acct_node; acct_node=acct_node->next) {
-      for(i=0; i < numsplits; i++) {
-        split = xaccTransGetSplit(parent, i);
-        if(acct_node->data == xaccSplitGetAccount(split)) {
-          /* break here means we found a match before running out 
-           * of splits (success) */
+  switch(pd->acct.how)
+  {
+    case ACCT_MATCH_ALL:
+      /* there must be a split in parent that matches each of the 
+       * accounts listed in pd. */
+      parent = xaccSplitGetParent(s);
+      g_return_val_if_fail(parent, FALSE);
+
+      for (acct_node=pd->acct.accounts; acct_node; acct_node=acct_node->next)
+      {
+        GList * split_node = xaccTransGetSplitList (parent);
+
+        for ( ; split_node; split_node = split_node->next)
+        {
+          split = split_node->data;
+
+          if (acct_node->data == xaccSplitGetAccount(split))
+          {
+            /* break here means we found a match before running out 
+             * of splits (success) */
+            break;
+          }
+        }
+
+        if (!split_node)
+        {
+          /* break here means we ran out of splits before finding 
+           * an account (failure) */
           break;
         }
       }
-      if(i == numsplits) {
-        /* break here means we ran out of splits before finding 
-         * an account (failure) */
-        break;
-      }
-    }
-    if(acct_node) return 0;
-    else return 1;
 
-    break;
+      if (acct_node) return 0;
+      else return 1;
 
-  case ACCT_MATCH_ANY:
-    /* s must match an account in pd */
-    split_acct = xaccSplitGetAccount(s);
-    return (g_list_find(pd->acct.accounts, split_acct) != NULL);
-    break;
+      break;
 
-  case ACCT_MATCH_NONE:
-    /* s must match no account in pd */
-    split_acct = xaccSplitGetAccount(s);
-    return (g_list_find(pd->acct.accounts, split_acct) == NULL);
-    break;
+    case ACCT_MATCH_ANY:
+      /* s must match an account in pd */
+      split_acct = xaccSplitGetAccount(s);
+      return (g_list_find(pd->acct.accounts, split_acct) != NULL);
+      break;
+
+    case ACCT_MATCH_NONE:
+      /* s must match no account in pd */
+      split_acct = xaccSplitGetAccount(s);
+      return (g_list_find(pd->acct.accounts, split_acct) == NULL);
+      break;
   }
 
   return 0;
