@@ -1,0 +1,34 @@
+
+Business Design & Implenmentation Notes
+---------------------------------------
+Version of October 2003
+
+The gncTaxTable and gncBillTerm business objects have parent, child,
+refcount, invisible field in thier structures that deserve some
+explanation:
+
+- a child is a 'frozen' instance of a parent.  For example, the tax
+  percentage in a particular tax table may change over time, but you
+  dont want that change to affect already-posted invoices...  So you
+  make sure there is an immutable 'copy' (read: child) of the tax
+  table when you post the invoice and repoint at the child.
+                                                                                
+- a parent can have many children, but it will only have a 'child'
+  pointer if the parent has not been modified.  Think of this as a
+  copy-on-write mechanism.  posted invoices will continue to use the
+  _same_ child until the parent is modified, at which point a new
+  child will be created.
+                                                                                
+- invisible means "dont show this in the list".  It's so you dont
+  get all the children in the tax table list -- you only see parents.
+  I suppose this flag could also be called "is-child" as I believe that
+  only children can be invisible, and ALL children are invisible.
+                                                                                
+- refcount is a listing of how many objects are referencing it.
+  Basically, it's letting you know how many customer, vendor, entries,
+  etc are referencing e.g. a particular tax table object.  mostly this
+  was done to make sure you cannot delete an in-use taxtable.
+                                                                                
+- children don't use refcounts, only parents do.
+
+------------------------- end of file ------------------------------
