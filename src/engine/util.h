@@ -191,7 +191,7 @@ extern char * strpskip (const char * s, const char *reject);
 /********************************************************/
 /* the ultostr() subroutine is the inverse of strtoul().
  *    It accepts a number and prints it in the indicated base.
- *    The returned string should be freed when done.
+ *    The returned string should be g_freed when done.
  */
 char * ultostr (unsigned long val, int base);
 

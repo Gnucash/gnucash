@@ -352,7 +352,7 @@ ultostr (unsigned long val, int base)
   }
   buf[places] = 0x0;
 
-  return strdup (buf);
+  return g_strdup (buf);
 }
 
 /********************************************************************\

@@ -57,7 +57,7 @@ xaccInitializeAccountGroup (AccountGroup *grp)
 
   grp->parent      = NULL;
   grp->numAcc      = 0;
-  grp->account     = _malloc (sizeof (Account *));
+  grp->account     = g_malloc (sizeof(Account *));
   grp->account[0]  = NULL;   /* null-terminated array */
 
   grp->balance     = gnc_numeric_zero();
@@ -72,7 +72,7 @@ xaccInitializeAccountGroup (AccountGroup *grp)
 AccountGroup *
 xaccMallocAccountGroup( void )
 {
-  AccountGroup *grp = (AccountGroup *)_malloc(sizeof(AccountGroup));
+  AccountGroup *grp = g_new(AccountGroup, 1);
 
   xaccInitializeAccountGroup (grp);
 
@@ -130,7 +130,7 @@ xaccAccountGroupBeginEdit( AccountGroup *grp, int defer )
     xaccAccountBeginEdit(grp->account[i]);
     xaccAccountGroupBeginEdit (grp->account[i]->children, defer);
   }
-}  
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -147,7 +147,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
   for( i=0; i<grp->numAcc; i++ )
     xaccFreeAccount( grp->account[i] );
 
-  _free( grp->account );
+  g_free(grp->account);
 
   /* null everything out, just in case somebody 
    * tries to traverse freed memory */
@@ -156,7 +156,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
   grp->account     = NULL;
   grp->balance     = gnc_numeric_zero();
 
-  _free(grp);
+  g_free(grp);
 }
 
 /********************************************************************\
@@ -560,7 +560,7 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
   nacc = grp->numAcc;
   arr = grp->account;
   if (ralo) {
-     arr = (Account **) realloc (arr, (nacc+2)*sizeof(Account *));
+     arr = g_realloc (arr, (nacc+2)*sizeof(Account *));
   }
 
   /* insert account in proper sort order */
@@ -588,18 +588,18 @@ xaccRecomputeGroupBalance (AccountGroup *grp) {
   int i;
   Account *acc;
   const gnc_commodity * default_currency;
-  
+
   if (!grp) return;
   if (!(grp->account)) return;
-  
+
   acc = grp->account[0];
   if (!acc) return;
   default_currency = acc->currency;
-  
+
   grp->balance = gnc_numeric_zero();
   for (i=0; i<grp->numAcc; i++) {
     acc = grp->account[i];
-    
+
     /* first, get subtotals recursively */
     if (acc->children) {
       xaccRecomputeGroupBalance (acc->children);
@@ -610,7 +610,7 @@ xaccRecomputeGroupBalance (AccountGroup *grp) {
                           GNC_DENOM_AUTO, GNC_DENOM_LCD | GNC_RND_NEVER);
       }
     }
-    
+
     /* then add up accounts in this group */
     xaccAccountRecomputeBalance (acc);
     if (gnc_commodity_equiv(default_currency, acc->currency)) {
@@ -804,7 +804,7 @@ xaccMergeAccounts (AccountGroup *grp)
    GList *lp;
 
    if (!grp) return;
-   
+
    for (i=0; i<grp->numAcc; i++) {
       acc_a = grp->account[i];
       for (j=i+1; j<grp->numAcc; j++) {
@@ -1085,7 +1085,7 @@ xaccGroupVisitUnvisitedTransactions(AccountGroup *g,
 
   accounts = xaccGetAccounts(g);
   if(!accounts) return(FALSE);
-  
+
   while(*accounts && keep_going) {
     Account *acc = *accounts;
     
