@@ -661,6 +661,7 @@ user input.
 @menu
 * General Split API::           
 * Split Getters::               
+* Split Setters::               
 @end menu
 
 @node General Split API, Split Getters, Splits, Splits
@@ -689,7 +690,7 @@ Associate a copy of @var{value} with @var{key} in @var{split}.
 @end deftypefun
 
 
-@node Split Getters,  , General Split API, Splits
+@node Split Getters, Split Setters, General Split API, Splits
 @subsection Split Getters
 
 @deftypefun {Account *} xaccSplitGetAccount (Split * @var{split})
@@ -711,6 +712,13 @@ Return the 'share price' of @var{split}.
 @deftypefun double xaccSplitGetValue (Split * @var{split})
 Return the value of @var{split}, which is equal to the share quantity
 multiplied by the share price.
+@end deftypefun
+
+@deftypefun double xaccSplitGetBaseValue (Split * @var{split}, const char * @var{base_currency})
+Return either the share quantity or the value of @var{split}, depending
+upon whether @var{base_currency} matches the security or currency of the
+parent Account, respectively. No other value for @var{base_currency} is
+legal.
 @end deftypefun
 
 @deftypefun char xaccSplitGetReconcile (Split * @var{split})
@@ -775,6 +783,59 @@ and including @var{split}. See @ref{Accounts} for details.
 @deftypefun double xaccSplitGetShareReconciledBalance (Split * @code{split})
 Return the share reconciled balance of @var{split}'s parent Account up
 to and including @var{split}. See @ref{Accounts} for details.
+@end deftypefun
+
+
+@node Split Setters,  , Split Getters, Splits
+@subsection Split Setters
+
+@deftypefun void xaccSplitSetMemo (Split * @var{split}, const char * @var{memo})
+Set the memo field of @var{split} to @var{memo}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetAction (Split * @var{split}, const char * @var{action})
+Set the action field of @var{split} to @var{memo}. The action field is
+an arbitrary string, but is intended to be conveniently limited to a
+menu of selections such as "Buy", "Sell", "Interest", etc.
+@end deftypefun
+
+@deftypefun void xaccSplitSetReconcile (Split * @var{split}, char @var{reconciled_flag})
+Set the reconciled flag of @var{split} to @var{reconciled_flag}. For the
+possible values and meanings of @var{reconciled_flag}, see @ref{Split Getters}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetDateReconciledSecs (Split * @var{split}, time_t @var{time})
+Set the reconciliation date of @var{split} to @var{time}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetDateReconciledTS (Split * @var{split}, Timespec * @var{ts})
+Set the reconciliation date of @var{split} to @var{ts}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetShareAmount (Split * @var{split}, double amount)
+Set the share quantity of @var{split} to @var{amount}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetSharePrice (Split * @var{split}, double @var{price})
+Set the share price of @var{split} to @var{price}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, double @var{price}, double @var{amount})
+Set both the share price and share quantity of @var{split}. This routine
+is more efficent than calling @code{xaccSplitSetShareAmount} and
+@code{xaccSplitSetSharePrice} in succesion, because the parent Transaction
+is only rebalanced once. @xref{Transactions}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetValue (Split * @var{split}, double @var{value})
+Adjust the share quantity of @var{split} so that @var{split}'s value is
+equal to @var{value}.
+@end deftypefun
+
+@deftypefun void xaccSplitSetBaseValue (Split * @var{split}, double @var{value}, const char * @var{base_currency})
+Set either the share quantity or value of @var{split} depending upon
+whether @var{base_currency} is the security or current of @var{split}'s
+parent Account. @xref{Accounts}.
 @end deftypefun
 
 
