@@ -154,24 +154,59 @@ AC_SUBST(XMHTML_INC)
 
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
-AC_CHECK_LIB(guile, gh_enter,
-   GUILELIBS="$GUILELIBS -lguile",
-   AC_CHECK_LIB(guile, gh_define,
-      GUILELIBS="$GUILELIBS -lguile -ldl -lreadline",
-      AC_CHECK_LIB(guile, gh_eval_file,
-         GUILELIBS="$GUILELIBS -lguile -ltermcap",
-         AC_CHECK_LIB(guile, gh_eval_file,
-            GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap",
-            AC_CHECK_LIB(guile, gh_eval_file,
-               GUILELIBS="$GUILELIBS -lguile -ldl -lreadline -ltermcap -lqthreads",
-               AC_MSG_ERROR(cannot link with guile),
-               -ldl -lreadline -ltermcap -lqthreads),
-            -ldl -lreadline -ltermcap)
-         -ltermcap)
-      -ldl -lreadline)
-   )
+
+# If readline exists, just assume that guile needs it.  It probably does.
+AC_CHECK_LIB(readline, readline)
+
+# Have to use AC_TRY_LINK here because AC_CHECK_LIB caches the
+# results, so one failure makes all further attempts fail.
+
+AC_MSG_CHECKING([for guile])
+
+GNC_LIBS_SAFE=${LIBS}
+
+GNC_TEST_LIBS="-lguile"
+LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
+  GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
+LIBS="${LIBS_SAFE}"
+            
+if test x"${GUILELIBS}" == x;
+then
+  GNC_TEST_LIBS="-lguile -lqthreads"
+  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
+    GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
+  LIBS="${LIBS_SAFE}"
+fi
+
+if test x"${GUILELIBS}" == x;
+then
+  GNC_TEST_LIBS="-lguile -ltermcap"
+  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
+    GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
+  LIBS="${LIBS_SAFE}"
+fi
+
+if test x"${GUILELIBS}" == x;
+then
+  GNC_TEST_LIBS="-lguile -lqthreads -ltermcap"
+  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
+    GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
+  LIBS="${LIBS_SAFE}"
+fi
+
+if test x"${GUILELIBS}" == x;
+then
+  AC_MSG_ERROR(Cannot link with guile.  Do you have guile 1.3 installed?)
+fi
+
 AC_SUBST(GUILE_INC)
 AC_SUBST(GUILELIBS)
+
+AC_MSG_RESULT([yes])
 
 ### Plotutils
 
@@ -237,10 +272,8 @@ AC_OUTPUT(Makefile
           src/Makefile
           src/engine/Makefile
           src/guile/Makefile
-          src/guile/gnucash.h
           src/scm/Makefile
           src/scm/startup/Makefile
-          src/scm/startup/init.scm
           src/gnome/Makefile
           src/motif/Makefile
           src/qt/Makefile
@@ -254,3 +287,7 @@ AC_OUTPUT(Makefile
           lib/ComboBox-1.33/Makefile)
 
 chmod +x gnucash
+
+make -f Makefile.config.finish prefix=${prefix} \
+                               GNC_SHAREDIR=${GNC_SHAREDIR} \
+                               GNC_CONFIGDIR=${GNC_SHAREDIR} 
