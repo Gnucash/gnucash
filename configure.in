@@ -32,6 +32,7 @@ X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
 MOTIF_LIBS="-lXm"
 
 # Let the user specify gnome paths:
+GNOME_CONFIG_BIN="gnome-config"
 AC_ARG_WITH( gnome-config, 
   [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
   GNOME_CONFIG_BIN="$with_gnome_config")
