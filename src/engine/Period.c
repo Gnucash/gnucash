@@ -12,7 +12,7 @@ Open questions: how do we deal with the backends ???
  *
  * HISTORY:
  * created by Linas Vepstas November 2001
- * Copyright (c) 2001 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2001, 2002 Linas Vepstas <linas@linas.org>
  */
 
 #include "AccountP.h"
@@ -29,12 +29,14 @@ Open questions: how do we deal with the backends ???
 static short module = MOD_ENGINE;
 
 /* ================================================================ */
-/* Reparent transaction to new book, and do it so backends 
- * handle it correctly.
-*/
+/* Reparent transaction to new book.  This routine does this by 
+ * deleting the transaction in the old book, and creating a copy
+ * in the new book.  While technically correct, this is maybe too 
+ * much churn on the backend ... 
+ */
 
 void
-gnc_book_insert_trans (GNCBook *book, Transaction *trans)
+gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
 {
    Transaction *newtrans;
    GList *node;
@@ -50,7 +52,6 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
       Split *s = node->data;
       s->parent = newtrans;
    }
-
 
    /* Utterly wipe out the transaction from the old book. */
    xaccTransBeginEdit (trans);
@@ -89,6 +90,58 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
 
    xaccTransCommitEdit (newtrans);
    gnc_engine_generate_event (&newtrans->guid, GNC_EVENT_CREATE);
+}
+
+/* ================================================================ */
+/* Reparent transaction to new book.  This routine does this by simply
+ * moving GUID's to the new book's entity tables.
+ */
+
+void
+gnc_book_insert_trans (GNCBook *book, Transaction *trans)
+{
+   GList *node;
+
+   if (!trans || !book) return;
+   
+   /* if this is the same book, its a no-op. */
+   if (trans->book == book) return;
+
+   /* fiddle the transaction into place in the new book */
+   xaccTransBeginEdit (trans);
+
+   xaccRemoveEntity (trans->book->entity_table, &trans->guid);
+   trans->book = book;
+   xaccStoreEntity(book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
+
+   for (node = trans->splits; node; node = node->next)
+   {
+      Account *twin;
+      Split *s = node->data;
+
+      /* move the split into the new book ... */
+      xaccRemoveEntity (s->book->entity_table, &s->guid);
+      s->book = book;
+      xaccStoreEntity(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+
+      /* find the twin account, and re-parent to that. */
+      twin = xaccAccountLookupTwin (s->acc, book);
+      if (!twin)
+      {
+         PERR ("near-fatal: twin account not found");
+      }
+      else
+      {
+        /* force to null, so remove doesn't occur */
+        xaccSplitSetAccount (s, NULL);  
+        xaccAccountInsertSplit (twin, s);
+        twin->balance_dirty = TRUE;
+        twin->sort_dirty = TRUE;
+      }
+   }
+
+   xaccTransCommitEdit (trans);
+   gnc_engine_generate_event (&trans->guid, GNC_EVENT_MODIFY);
 }
 
 /* ================================================================ */
@@ -352,6 +405,7 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
                                    TRUE, calve_date,
                                    QUERY_OR);
    closing_book = gnc_book_new();
+   closing_book->book_open = 'n';
    gnc_book_partition (closing_book, existing_book, query);
 
    xaccFreeQuery (query);
