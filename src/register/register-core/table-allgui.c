@@ -543,6 +543,7 @@ gnc_table_save_cells (Table *table, gpointer save_data)
   for (node = cells; node; node = node->next)
   {
     BasicCell * cell = node->data;
+    TableSaveCellHandler save_cell_handler;
 
     if (!cell) continue;
 
@@ -550,10 +551,10 @@ gnc_table_save_cells (Table *table, gpointer save_data)
                                             cell->cell_name, TRUE))
       continue;
 
-    save_handler = gnc_table_model_get_save_handler (table->model,
-                                                     cell->cell_name);
-    if (save_handler)
-      save_handler (save_data, table->model->handler_user_data);
+    save_cell_handler = gnc_table_model_get_save_handler (table->model,
+                                                          cell->cell_name);
+    if (save_cell_handler)
+      save_cell_handler (cell, save_data, table->model->handler_user_data);
   }
 
   save_handler = gnc_table_model_get_post_save_handler (table->model);

@@ -84,6 +84,10 @@ typedef void (*TableGetCellBorderHandler) (VirtualLocation virt_loc,
 typedef gboolean (*TableConfirmHandler) (VirtualLocation virt_loc,
                                          gpointer user_data);
 
+typedef void (*TableSaveCellHandler) (BasicCell * cell,
+                                      gpointer save_data,
+                                      gpointer user_data);
+
 typedef void (*TableSaveHandler) (gpointer save_data,
                                   gpointer user_data);
 
@@ -211,7 +215,7 @@ TableConfirmHandler gnc_table_model_get_confirm_handler
 
 void gnc_table_model_set_save_handler
                                  (TableModel *model,
-                                  TableSaveHandler save_handler,
+                                  TableSaveCellHandler save_handler,
                                   const char * cell_name);
 void gnc_table_model_set_pre_save_handler
                                  (TableModel *model,
@@ -219,7 +223,7 @@ void gnc_table_model_set_pre_save_handler
 void gnc_table_model_set_post_save_handler
                                  (TableModel *model,
                                   TableSaveHandler save_handler);
-TableSaveHandler gnc_table_model_get_save_handler
+TableSaveCellHandler gnc_table_model_get_save_handler
                                  (TableModel *model,
                                   const char * cell_name);
 TableSaveHandler gnc_table_model_get_pre_save_handler

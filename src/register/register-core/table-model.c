@@ -138,6 +138,7 @@ gnc_table_model_new (void)
   model->bg_color_handlers = gnc_table_model_handler_hash_new ();
   model->cell_border_handlers = gnc_table_model_handler_hash_new ();
   model->confirm_handlers = gnc_table_model_handler_hash_new ();
+  model->save_handlers = gnc_table_model_handler_hash_new ();
 
   model->dividing_row = -1;
 
@@ -172,6 +173,9 @@ gnc_table_model_destroy (TableModel *model)
 
   gnc_table_model_handler_hash_destroy (model->confirm_handlers);
   model->confirm_handlers = NULL;
+
+  gnc_table_model_handler_hash_destroy (model->save_handlers);
+  model->save_handlers = NULL;
 
   g_free (model);
 }
@@ -457,7 +461,7 @@ gnc_table_model_get_confirm_handler (TableModel *model,
 void
 gnc_table_model_set_save_handler
                                  (TableModel *model,
-                                  TableSaveHandler save_handler,
+                                  TableSaveCellHandler save_handler,
                                   const char * cell_name)
 {
   g_return_if_fail (model != NULL);
@@ -488,7 +492,7 @@ gnc_table_model_set_post_save_handler
   model->post_save_handler = save_handler;
 }
 
-TableSaveHandler
+TableSaveCellHandler
 gnc_table_model_get_save_handler
                                  (TableModel *model,
                                   const char * cell_name)

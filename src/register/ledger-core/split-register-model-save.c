@@ -46,6 +46,54 @@ static short module = MOD_LEDGER;
 
 
 static void
+gnc_split_register_save_date_cell (BasicCell * cell,
+                                   gpointer save_data,
+                                   gpointer user_data)
+{
+  SRSaveData *sd = save_data;
+  SplitRegister *reg = user_data;
+  const char *value;
+  Timespec ts;
+
+  g_return_if_fail (gnc_basic_cell_has_name (cell, DATE_CELL));
+
+  value = gnc_basic_cell_get_value (cell);
+
+  /* commit any pending changes */
+  gnc_date_cell_commit ((DateCell *) cell);
+
+  DEBUG ("DATE: %s", value ? value : "(null)");
+
+  gnc_date_cell_get_date ((DateCell *) cell, &ts);
+
+  xaccTransSetDatePostedTS (sd->trans, &ts);
+}
+
+static void
+gnc_split_register_save_due_date_cell (BasicCell * cell,
+                                       gpointer save_data,
+                                       gpointer user_data)
+{
+  SRSaveData *sd = save_data;
+  SplitRegister *reg = user_data;
+  const char *value;
+  Timespec ts;
+
+  g_return_if_fail (gnc_basic_cell_has_name (cell, DDUE_CELL));
+
+  value = gnc_basic_cell_get_value (cell);
+
+  /* commit any pending changes */
+  gnc_date_cell_commit ((DateCell *) cell);
+
+  DEBUG ("DATE: %s", value ? value : "(null)");
+
+  gnc_date_cell_get_date ((DateCell *) cell, &ts);
+
+  xaccTransSetDateDueTS (sd->trans, &ts);
+}
+
+static void
 gnc_split_register_save_cells (gpointer save_data,
                                gpointer user_data)
 {
@@ -60,45 +108,6 @@ gnc_split_register_save_cells (gpointer save_data,
 
   trans = sd->trans;
   split = sd->split;
-
-  /* copy the contents from the cursor to the split */
-  if (gnc_table_layout_get_cell_changed (reg->table->layout, DATE_CELL, TRUE))
-  {
-    BasicCell *cell;
-    const char *value;
-    Timespec ts;
-
-    cell = gnc_table_layout_get_cell (reg->table->layout, DATE_CELL);
-    value = gnc_basic_cell_get_value (cell);
-
-    /* commit any pending changes */
-    gnc_date_cell_commit ((DateCell *) cell);
-
-    DEBUG ("DATE: %s", value ? value : "(null)");
-
-    gnc_date_cell_get_date ((DateCell *) cell, &ts);
-
-    xaccTransSetDatePostedTS (trans, &ts);
-  }
-
-  if (gnc_table_layout_get_cell_changed (reg->table->layout, DDUE_CELL, TRUE))
-  {
-    BasicCell *cell;
-    const char *value;
-    Timespec ts;
-
-    cell = gnc_table_layout_get_cell (reg->table->layout, DDUE_CELL);
-    value = gnc_basic_cell_get_value (cell);
-
-    /* commit any pending changes */
-    gnc_date_cell_commit ((DateCell *) cell);
-
-    DEBUG ("DATE: %s", value ? value : "(null)");
-
-    gnc_date_cell_get_date ((DateCell *) cell, &ts);
-
-    xaccTransSetDateDueTS (trans, &ts);
-  }
 
   if (gnc_table_layout_get_cell_changed (reg->table->layout, NUM_CELL, TRUE))
   {
@@ -374,8 +383,6 @@ gnc_split_register_save_template_cells (gpointer save_data,
 
     acctGUID = xaccAccountGetGUID (acct);
 
-    /* FIXME: replace these with #defines - is it ok to #include "SchedXaction.h" ?? */
-
     kvp_frame_set_slot_path (kvpf, kvp_value_new_guid(acctGUID),
                              GNC_SX_ID, GNC_SX_ACCOUNT, NULL);
 
@@ -465,6 +472,15 @@ void
 gnc_split_register_model_add_save_handlers (TableModel *model)
 {
   g_return_if_fail (model != NULL);
+
+  gnc_table_model_set_save_handler (model,
+                                    gnc_split_register_save_date_cell,
+                                    DATE_CELL);
+
+  gnc_table_model_set_save_handler (model,
+                                    gnc_split_register_save_due_date_cell,
+                                    DDUE_CELL);
+
   gnc_table_model_set_post_save_handler (model, gnc_split_register_save_cells);
 }
 
@@ -472,6 +488,7 @@ void
 gnc_template_register_model_add_save_handlers (TableModel *model)
 {
   g_return_if_fail (model != NULL);
+
   gnc_table_model_set_post_save_handler
     (model, gnc_split_register_save_template_cells);
 }
