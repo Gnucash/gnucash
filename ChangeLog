@@ -1,3 +1,22 @@
+2003-09-16  David Hampton  <hampton@employees.org>
+
+	* lib/egg/egg-menu-merge.[ch]: Back port the GTK2.4 UI description
+	language.
+	
+	* src/business/business-gnome/ui/gnc-plugin-business-ui.xml:
+	* src/gnome/ui/gnc-main-window-ui.xml:
+	* src/gnome/ui/gnc-plugin-account-tree-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
+	* src/gnome/ui/gnc-plugin-register-ui.xml:
+	* src/import-export/qif-import/gnc-plugin-qif-import-ui.xml:
+	Switch to the new UI description language.
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c: Check the error return
+	value after calling the menu-merge routines.
+
 2003-09-13  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-main-window.c: Collapse common functions into one.

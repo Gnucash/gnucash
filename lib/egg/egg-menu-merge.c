@@ -114,11 +114,8 @@ egg_menu_merge_init (EggMenuMerge *self)
 
 
   merge_id = egg_menu_merge_next_merge_id(self);
-  node = get_child_node(self, NULL, "Root", 4,
+  node = get_child_node(self, NULL, "ui", 4,
 			EGG_MENU_MERGE_ROOT, TRUE, FALSE);
-  egg_menu_merge_node_prepend_ui_reference(NODE_INFO(node), merge_id, 0);
-  node = get_child_node(self, self->root_node, "popups", 6,
-			EGG_MENU_MERGE_POPUPS, TRUE, FALSE);
   egg_menu_merge_node_prepend_ui_reference(NODE_INFO(node), merge_id, 0);
 }
 
@@ -337,7 +334,6 @@ typedef enum {
   STATE_ROOT,
   STATE_MENU,
   STATE_TOOLBAR,
-  STATE_POPUPS,
   STATE_MENUITEM,
   STATE_TOOLITEM,
   STATE_END
@@ -369,18 +365,15 @@ start_element_handler (GMarkupParseContext *context,
 
   gint i;
   const gchar *node_name;
-  GQuark verb_quark;
+  const gchar *action;
+  GQuark action_quark;
   gboolean top;
 
   gboolean raise_error = TRUE;
-  gchar *error_attr = NULL;
 
-  //g_message("starting element %s", element_name);
-
-  /* work out a name for this node.  Either the name attribute, or
-   * element name */
-  node_name = element_name;
-  verb_quark = 0;
+  node_name = NULL;
+  action = NULL;
+  action_quark = 0;
   top = FALSE;
   for (i = 0; attribute_names[i] != NULL; i++)
     {
@@ -388,34 +381,56 @@ start_element_handler (GMarkupParseContext *context,
 	{
 	  node_name = attribute_values[i];
 	}
-      else if (!strcmp(attribute_names[i], "verb"))
+      else if (!strcmp(attribute_names[i], "action"))
 	{
-	  verb_quark = g_quark_from_string(attribute_values[i]);
+	  action = attribute_values[i];
+	  action_quark = g_quark_from_string(attribute_values[i]);
 	}
-      else if (!strcmp(attribute_names[i], "pos"))
+      else if (!strcmp(attribute_names[i], "position"))
 	{
 	  top = !strcmp(attribute_values[i], "top");
 	}
+      else
+	{
+	  gint line_number, char_number;
+	  
+	  g_markup_parse_context_get_position (context,
+					       &line_number, &char_number);
+	  g_set_error (error,
+		       G_MARKUP_ERROR,
+		       G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
+		       _("Unknown attribute '%s' on line %d char %d"),
+		       attribute_names[i],
+		       line_number, char_number);
+	  return;
+	}
     }
-  /* if no verb, then set it to the node's name */
-  if (verb_quark == 0)
-    verb_quark = g_quark_from_string(node_name);
+
+  /* Work out a name for this node.  Either the name attribute, or
+   * the action, or the element name */
+  if (node_name == NULL) 
+    {
+      if (action != NULL)
+	node_name = action;
+      else 
+	node_name = element_name;
+    }
 
   switch (element_name[0])
     {
-    case 'R':
-      if (ctx->state == STATE_START && !strcmp(element_name, "Root"))
+    case 'u':
+      if (ctx->state == STATE_START && !strcmp(element_name, "ui"))
 	{
 	  ctx->state = STATE_ROOT;
 	  ctx->current = self->root_node;
 	  raise_error = FALSE;
 
 	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	}
       break;
     case 'm':
-      if (ctx->state == STATE_ROOT && !strcmp(element_name, "menu"))
+      if (ctx->state == STATE_ROOT && !strcmp(element_name, "menubar"))
 	{
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node(self, ctx->current,
@@ -423,10 +438,25 @@ start_element_handler (GMarkupParseContext *context,
 					EGG_MENU_MERGE_MENUBAR,
 					TRUE, FALSE);
 	  if (NODE_INFO(ctx->current)->action_name == 0)
-	    NODE_INFO(ctx->current)->action_name = verb_quark;
+	    NODE_INFO(ctx->current)->action_name = action_quark;
 
 	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
+	  NODE_INFO(ctx->current)->dirty = TRUE;
+
+	  raise_error = FALSE;
+	}
+      else if (ctx->state == STATE_MENU && !strcmp(element_name, "menu"))
+	{
+	  ctx->current = get_child_node(self, ctx->current,
+					node_name, strlen(node_name),
+					EGG_MENU_MERGE_MENU,
+					TRUE, top);
+	  if (NODE_INFO(ctx->current)->action_name == 0)
+	    NODE_INFO(ctx->current)->action_name = action_quark;
+
+	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+						    ctx->merge_id, action_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
 	  raise_error = FALSE;
@@ -441,60 +471,28 @@ start_element_handler (GMarkupParseContext *context,
 				EGG_MENU_MERGE_MENUITEM,
 				TRUE, top);
 	  if (NODE_INFO(node)->action_name == 0)
-	    NODE_INFO(node)->action_name = verb_quark;
+	    NODE_INFO(node)->action_name = action_quark;
 
 	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO(node)->dirty = TRUE;
 
 	  raise_error = FALSE;
 	}
       break;
-    case 'd':
-      if (ctx->state == STATE_ROOT && !strcmp(element_name, "dockitem"))
-	{
-	  ctx->state = STATE_TOOLBAR;
-	  ctx->current = get_child_node(self, ctx->current,
-					node_name, strlen(node_name),
-					EGG_MENU_MERGE_TOOLBAR,
-					TRUE, FALSE);
-	  if (NODE_INFO(ctx->current)->action_name == 0)
-	    NODE_INFO(ctx->current)->action_name = verb_quark;
-
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
-	  NODE_INFO(ctx->current)->dirty = TRUE;
-
-	  raise_error = FALSE;
-	}
-      break;
     case 'p':
-      if (ctx->state == STATE_ROOT && !strcmp(element_name, "popups"))
-	{
-	  ctx->state = STATE_POPUPS;
-	  ctx->current = get_child_node(self, ctx->current,
-					node_name, strlen(node_name),
-					EGG_MENU_MERGE_POPUPS,
-					TRUE, FALSE);
-
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
-	  NODE_INFO(ctx->current)->dirty = TRUE;
-
-	  raise_error = FALSE;
-	}
-      else if (ctx->state == STATE_POPUPS && !strcmp(element_name, "popup"))
+      if (ctx->state == STATE_ROOT && !strcmp(element_name, "popup"))
 	{
 	  ctx->state = STATE_MENU;
 	  ctx->current = get_child_node(self, ctx->current,
 					node_name, strlen(node_name),
-					EGG_MENU_MERGE_MENU,
+					EGG_MENU_MERGE_POPUP,
 					TRUE, FALSE);
 	  if (NODE_INFO(ctx->current)->action_name == 0)
-	    NODE_INFO(ctx->current)->action_name = verb_quark;
+	    NODE_INFO(ctx->current)->action_name = action_quark;
 
 	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
 	  raise_error = FALSE;
@@ -502,66 +500,66 @@ start_element_handler (GMarkupParseContext *context,
       else if ((ctx->state == STATE_MENU || ctx->state == STATE_TOOLBAR) &&
 	       !strcmp(element_name, "placeholder"))
 	{
-	  if (ctx->state == STATE_MENU)
-	    ctx->current = get_child_node(self, ctx->current,
-					  node_name, strlen(node_name),
-					  EGG_MENU_MERGE_MENU_PLACEHOLDER,
-					  TRUE, top);
-	  else
+	  if (ctx->state == STATE_TOOLBAR)
 	    ctx->current = get_child_node(self, ctx->current,
 					  node_name, strlen(node_name),
 					  EGG_MENU_MERGE_TOOLBAR_PLACEHOLDER,
 					  TRUE, top);
+	  else
+	    ctx->current = get_child_node(self, ctx->current,
+					  node_name, strlen(node_name),
+					  EGG_MENU_MERGE_MENU_PLACEHOLDER,
+					  TRUE, top);
 
 	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO(ctx->current)->dirty = TRUE;
 
 	  raise_error = FALSE;
 	}
       break;
     case 's':
-      if (ctx->state == STATE_MENU && !strcmp(element_name, "submenu"))
-	{
-	  ctx->state = STATE_MENU;
-	  ctx->current = get_child_node(self, ctx->current,
-					node_name, strlen(node_name),
-					EGG_MENU_MERGE_MENU,
-					TRUE, top);
-	  if (NODE_INFO(ctx->current)->action_name == 0)
-	    NODE_INFO(ctx->current)->action_name = verb_quark;
-
-	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
-						    ctx->merge_id, verb_quark);
-	  NODE_INFO(ctx->current)->dirty = TRUE;
-
-	  raise_error = FALSE;
-	}
-      else if ((ctx->state == STATE_MENU || ctx->state == STATE_TOOLBAR) &&
+      if ((ctx->state == STATE_MENU || ctx->state == STATE_TOOLBAR) &&
 	       !strcmp(element_name, "separator"))
 	{
 	  GNode *node;
 
-	  if (ctx->state == STATE_MENU)
-	    ctx->state = STATE_MENUITEM;
-	  else
+	  if (ctx->state == STATE_TOOLBAR)
 	    ctx->state = STATE_TOOLITEM;
+	  else
+	    ctx->state = STATE_MENUITEM;
 	  node = get_child_node(self, ctx->current,
 				node_name, strlen(node_name),
 				EGG_MENU_MERGE_SEPARATOR,
 				TRUE, top);
 	  if (NODE_INFO(node)->action_name == 0)
-	    NODE_INFO(node)->action_name = verb_quark;
+	    NODE_INFO(node)->action_name = action_quark;
 
 	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO(node)->dirty = TRUE;
 
 	  raise_error = FALSE;
 	}
       break;
     case 't':
-      if (ctx->state == STATE_TOOLBAR && !strcmp(element_name, "toolitem"))
+      if (ctx->state == STATE_ROOT && !strcmp(element_name, "toolbar"))
+	{
+	  ctx->state = STATE_TOOLBAR;
+	  ctx->current = get_child_node(self, ctx->current,
+					node_name, strlen(node_name),
+					EGG_MENU_MERGE_TOOLBAR,
+					TRUE, FALSE);
+	  if (NODE_INFO(ctx->current)->action_name == 0)
+	    NODE_INFO(ctx->current)->action_name = action_quark;
+
+	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (ctx->current),
+						    ctx->merge_id, action_quark);
+	  NODE_INFO(ctx->current)->dirty = TRUE;
+
+	  raise_error = FALSE;
+	}
+      else if (ctx->state == STATE_TOOLBAR && !strcmp(element_name, "toolitem"))
 	{
 	  GNode *node;
 
@@ -571,10 +569,10 @@ start_element_handler (GMarkupParseContext *context,
 				EGG_MENU_MERGE_TOOLITEM,
 				TRUE, top);
 	  if (NODE_INFO(node)->action_name == 0)
-	    NODE_INFO(node)->action_name = verb_quark;
+	    NODE_INFO(node)->action_name = action_quark;
 
 	  egg_menu_merge_node_prepend_ui_reference (NODE_INFO (node),
-						    ctx->merge_id, verb_quark);
+						    ctx->merge_id, action_quark);
 	  NODE_INFO(node)->dirty = TRUE;
 
 	  raise_error = FALSE;
@@ -589,20 +587,12 @@ start_element_handler (GMarkupParseContext *context,
  
       g_markup_parse_context_get_position (context,
 					   &line_number, &char_number);
-      if (error_attr)
-	g_set_error (error,
-		     G_MARKUP_ERROR,
-		     G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE,
-		     _("Unknown attribute '%s' on line %d char %d"),
-		     error_attr,
-		     line_number, char_number);
-      else
-	g_set_error (error,
-		     G_MARKUP_ERROR,
-		     G_MARKUP_ERROR_UNKNOWN_ELEMENT,
-		     _("Unknown tag '%s' on line %d char %d"),
-		     element_name,
-		     line_number, char_number);
+      g_set_error (error,
+		   G_MARKUP_ERROR,
+		   G_MARKUP_ERROR_UNKNOWN_ELEMENT,
+		   _("Unknown tag '%s' on line %d char %d"),
+		   element_name,
+		   line_number, char_number);
     }
 }
 
@@ -633,8 +623,6 @@ end_element_handler (GMarkupParseContext *context,
       ctx->current = ctx->current->parent;
       if (NODE_INFO(ctx->current)->type == EGG_MENU_MERGE_ROOT) /* menubar */
 	ctx->state = STATE_ROOT;
-      else if (NODE_INFO(ctx->current)->type == EGG_MENU_MERGE_POPUPS) /* popup */
-	ctx->state = STATE_POPUPS;
       /* else, stay in STATE_MENU state */
       break;
     case STATE_TOOLBAR:
@@ -644,10 +632,6 @@ end_element_handler (GMarkupParseContext *context,
       if (NODE_INFO(ctx->current)->type == EGG_MENU_MERGE_ROOT)
 	ctx->state = STATE_ROOT;
       /* else, stay in STATE_TOOLBAR state */
-      break;
-    case STATE_POPUPS:
-      ctx->current = ctx->current->parent;
-      ctx->state = STATE_ROOT;
       break;
     case STATE_MENUITEM:
       ctx->state = STATE_MENU;
@@ -794,6 +778,7 @@ find_menu_position (GNode *node, GtkWidget **menushell_p, gint *pos_p)
 
   g_return_val_if_fail(node != NULL, FALSE);
   g_return_val_if_fail(NODE_INFO(node)->type == EGG_MENU_MERGE_MENU ||
+		       NODE_INFO(node)->type == EGG_MENU_MERGE_POPUP ||
 		       NODE_INFO(node)->type == EGG_MENU_MERGE_MENU_PLACEHOLDER ||
 		       NODE_INFO(node)->type == EGG_MENU_MERGE_MENUITEM ||
 		       NODE_INFO(node)->type == EGG_MENU_MERGE_SEPARATOR,
@@ -808,6 +793,7 @@ find_menu_position (GNode *node, GtkWidget **menushell_p, gint *pos_p)
       switch (NODE_INFO(parent)->type)
 	{
 	case EGG_MENU_MERGE_MENUBAR:
+	case EGG_MENU_MERGE_POPUP:
 	  menushell = NODE_INFO(parent)->proxy;
 	  pos = 0;
 	  break;
@@ -822,10 +808,6 @@ find_menu_position (GNode *node, GtkWidget **menushell_p, gint *pos_p)
 	  g_return_val_if_fail(GTK_IS_MENU_SHELL(menushell), FALSE);
 	  pos = g_list_index(GTK_MENU_SHELL(menushell)->children,
 			     NODE_INFO(parent)->proxy) + 1;
-	  break;
-	case EGG_MENU_MERGE_POPUPS:
-	  menushell = NULL;
-	  pos = 0;
 	  break;
 	default:
 	  g_warning("%s: bad parent node type %d", G_STRLOC,
@@ -1005,6 +987,14 @@ update_node (EggMenuMerge *self, GNode *node)
 	      g_signal_emit (self, merge_signals[ADD_WIDGET], 0, info->proxy);
 	    }
 	  break;
+	case EGG_MENU_MERGE_POPUP:
+	  if (info->proxy == NULL)
+	    {
+	      info->proxy = gtk_menu_new ();
+	      gtk_menu_set_accel_group (GTK_MENU (info->proxy),
+					self->accel_group);
+	    }
+	  break;
 	case EGG_MENU_MERGE_MENU:
 	  {
 	    GtkWidget *prev_submenu = NULL;
@@ -1132,8 +1122,6 @@ update_node (EggMenuMerge *self, GNode *node)
 		  //gtk_widget_show(NODE_INFO(node)->extra);
 		}
 	    }
-	  break;
-	case EGG_MENU_MERGE_POPUPS:
 	  break;
 	case EGG_MENU_MERGE_MENUITEM:
 	  /* remove the proxy if it is of the wrong type ... */

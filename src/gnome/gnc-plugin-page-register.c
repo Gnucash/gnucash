@@ -332,17 +332,26 @@ gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
 					    EggMenuMerge *ui_merge)
 {
 	GncPluginPageRegister *plugin_page_register = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+	GError *error = NULL;
 	
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page_register));
 
 	egg_menu_merge_insert_action_group (ui_merge, plugin_page_register->priv->action_group, 0);
 
-	plugin_page_register->priv->merge_id = egg_menu_merge_add_ui_from_file (ui_merge,
-									       GNC_UI_DIR "/gnc-plugin-page-register-ui.xml",
-									       NULL);
-	egg_menu_merge_ensure_update (ui_merge);
+	plugin_page_register->priv->merge_id =
+	  egg_menu_merge_add_ui_from_file (ui_merge,
+					   GNC_UI_DIR "/gnc-plugin-page-register-ui.xml",
+					   &error);
 
-	plugin_page_register->priv->ui_merge = ui_merge;
+	g_assert(plugin_page_register->priv->merge_id || error);
+	if (plugin_page_register->priv->merge_id) {
+	  egg_menu_merge_ensure_update (ui_merge);
+	  plugin_page_register->priv->ui_merge = ui_merge;
+	} else {
+	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
+		     "gnc-plugin-page-register-ui.xml", error->message);
+	  g_error_free(error);
+	}
 }
 	
 static void

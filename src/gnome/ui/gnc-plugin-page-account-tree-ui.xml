@@ -1,71 +1,71 @@
-<Root>
-<menu>
-<submenu name="File" verb="FileAction">
-	<placeholder name="FileNewPlaceholder">
-		<menuitem name="FileNewAccount" verb="FileNewAccountAction"/>
-	</placeholder>
-	<placeholder name="FileOpenPlaceholder">
-		<menuitem name="FileOpenAccount" verb="FileOpenAccountAction"/>
-		<menuitem name="FileOpenSubaccounts" verb="FileOpenSubaccountsAction"/>
-	</placeholder>
-</submenu>
-<submenu name="Edit" verb="EditAction">
-	<placeholder name="EditPlaceholder">
-		<menuitem name="EditEditAccount" verb="EditEditAccountAction"/>
-		<menuitem name="EditDeleteAccount" verb="EditDeleteAccountAction"/>
-		<separator name="EditSep2"/>
-	</placeholder>
-	<placeholder name="EditPreferencesPlaceholder">
-		<menuitem name="EditAccountViewOptions" verb="EditAccountViewOptionsAction"/>
-	</placeholder>
-</submenu>
-<submenu name="Actions" verb="ActionsAction">
-	<placeholder name="ActionsPlaceholder">
-		<separator name="ActionsSep1"/>
-		<menuitem name="ActionsReconcile" verb="ActionsReconcileAction"/>
-		<menuitem name="ActionsTransfer" verb="ActionsTransferAction"/>
-		<menuitem name="ActionsStockSplit" verb="ActionsStockSplitAction"/>
-		<separator name="ActionsSep2"/>
-		<submenu name="ScrubMenu" verb="ScrubMenuAction">
-			<menuitem name="Scrub" verb="ScrubAction"/>
-			<menuitem name="ScrubSub" verb="ScrubSubAction"/>
-			<menuitem name="ScrubAll" verb="ScrubAllAction"/>
-		</submenu>
-	</placeholder>
-</submenu>
-</menu>
-<popups>
-<popup name="AccountPopup" verb="FakeToplevel">
-	<menuitem name="AccountOpenAccount" verb="FileOpenAccountAction"/>
-	<menuitem name="AccountOpenSubaccounts" verb="FileOpenSubaccountsAction"/>
-	<menuitem name="AccountEditAccount" verb="EditEditAccountAction"/>
-	<separator name="AccountSep1"/>
-	<menuitem name="AccountReconcile" verb="ActionsReconcileAction"/>
-	<menuitem name="AccountTransfer" verb="ActionsTransferAction"/>
-	<menuitem name="AccountStockSplit" verb="ActionsStockSplitAction"/>
-	<separator name="AccountSep2"/>
-	<menuitem name="AccountNewAccount" verb="FileNewAccountAction"/>
-	<menuitem name="AccountDeleteAccount" verb="EditDeleteAccountAction"/>
-	<separator name="AccountSep3"/>
-	<submenu name="ScrubMenu" verb="ScrubMenuAction">
-		<menuitem name="Scrub" verb="ScrubAction"/>
-		<menuitem name="ScrubSub" verb="ScrubSubAction"/>
-		<menuitem name="ScrubAll" verb="ScrubAllAction"/>
-	</submenu>
-	<separator name="AccountSep4"/>
-	<menuitem name="AccountViewOptions" verb="EditAccountViewOptionsAction"/>
-</popup>
-</popups>
-<dockitem name="DefaultToolbar">
-	<placeholder name="DefaultToolbarPlaceholder">
-		<separator name="ToolbarSep2"/>
-		<toolitem name="ToolbarOpenAccount" verb="FileOpenAccountAction"/>
-		<toolitem name="ToolbarEditAccount" verb="EditEditAccountAction"/>
-		<separator name="ToolbarSep3"/>
-		<toolitem name="ToolbarAccountViewOptions" verb="EditAccountViewOptionsAction"/>
-		<separator name="ToolbarSep4"/>
-		<toolitem name="ToolbarNewAccount" verb="FileNewAccountAction"/>
-		<toolitem name="ToolbarDeleteAccount" verb="EditDeleteAccountAction"/>
-	</placeholder>
-</dockitem>
-</Root>
+<ui>
+  <menubar>
+    <menu name="File" action="FileAction">
+      <placeholder name="FileNewPlaceholder">
+        <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
+      </placeholder>
+      <placeholder name="FileOpenPlaceholder">
+        <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
+        <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
+      </placeholder>
+    </menu>
+    <menu name="Edit" action="EditAction">
+      <placeholder name="EditPlaceholder">
+        <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
+	<menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
+	<separator name="EditSep2"/>
+      </placeholder>
+      <placeholder name="EditPreferencesPlaceholder">
+        <menuitem name="EditAccountViewOptions" action="EditAccountViewOptionsAction"/>
+      </placeholder>
+    </menu>
+    <menu name="Actions" action="ActionsAction">
+      <placeholder name="ActionsPlaceholder">
+        <separator name="ActionsSep1"/>
+	<menuitem name="ActionsReconcile" action="ActionsReconcileAction"/>
+	<menuitem name="ActionsTransfer" action="ActionsTransferAction"/>
+	<menuitem name="ActionsStockSplit" action="ActionsStockSplitAction"/>
+	<separator name="ActionsSep2"/>
+	<menu name="ScrubMenu" action="ScrubMenuAction">
+	  <menuitem name="Scrub" action="ScrubAction"/>
+	  <menuitem name="ScrubSub" action="ScrubSubAction"/>
+	  <menuitem name="ScrubAll" action="ScrubAllAction"/>
+	</menu>
+      </placeholder>
+    </menu>
+  </menubar>
+
+  <popup name="AccountPopup" action="FakeToplevel">
+    <menuitem name="AccountOpenAccount" action="FileOpenAccountAction"/>
+    <menuitem name="AccountOpenSubaccounts" action="FileOpenSubaccountsAction"/>
+    <menuitem name="AccountEditAccount" action="EditEditAccountAction"/>
+    <separator name="AccountSep1"/>
+    <menuitem name="AccountReconcile" action="ActionsReconcileAction"/>
+    <menuitem name="AccountTransfer" action="ActionsTransferAction"/>
+    <menuitem name="AccountStockSplit" action="ActionsStockSplitAction"/>
+    <separator name="AccountSep2"/>
+    <menuitem name="AccountNewAccount" action="FileNewAccountAction"/>
+    <menuitem name="AccountDeleteAccount" action="EditDeleteAccountAction"/>
+    <separator name="AccountSep3"/>
+    <menu name="ScrubMenu" action="ScrubMenuAction">
+      <menuitem name="Scrub" action="ScrubAction"/>
+      <menuitem name="ScrubSub" action="ScrubSubAction"/>
+      <menuitem name="ScrubAll" action="ScrubAllAction"/>
+    </menu>
+    <separator name="AccountSep4"/>
+    <menuitem name="AccountViewOptions" action="EditAccountViewOptionsAction"/>
+  </popup>
+
+  <toolbar name="DefaultToolbar">
+    <placeholder name="DefaultToolbarPlaceholder">
+      <separator name="ToolbarSep2"/>
+      <toolitem name="ToolbarOpenAccount" action="FileOpenAccountAction"/>
+      <toolitem name="ToolbarEditAccount" action="EditEditAccountAction"/>
+      <separator name="ToolbarSep3"/>
+      <toolitem name="ToolbarAccountViewOptions" action="EditAccountViewOptionsAction"/>
+      <separator name="ToolbarSep4"/>
+      <toolitem name="ToolbarNewAccount" action="FileNewAccountAction"/>
+      <toolitem name="ToolbarDeleteAccount" action="EditDeleteAccountAction"/>
+    </placeholder>
+  </toolbar>
+</ui>

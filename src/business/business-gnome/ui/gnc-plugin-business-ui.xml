@@ -1,41 +1,39 @@
-<Root>
-<menu>
+<ui>
+  <menubar>
+    <placeholder name="AdditionalMenusPlaceholder">
+      <menu action="BusinessAction">
+	<menu name="CustomerMenu" action="CustomerMenuAction">
+	  <menuitem name="CustomerNewCustomerOpen"  action="CustomerNewCustomerOpenAction"/>
+	  <menuitem name="CustomerFindCustomerOpen" action="CustomerFindCustomerOpenAction"/>
+	  <menuitem name="CustomerNewInvoiceOpen"   action="CustomerNewInvoiceOpenAction"/>
+	  <menuitem name="CustomerFindInvoiceOpen"  action="CustomerFindInvoiceOpenAction"/>
+	  <menuitem name="CustomerNewJobOpen"       action="CustomerNewJobOpenAction"/>
+	  <menuitem name="CustomerFindJobOpen"      action="CustomerFindJobOpenAction"/>
+	  <menuitem name="CustomerProcessPayment"   action="CustomerProcessPaymentAction"/>
+	</menu>
 
-<placeholder name="AdditionalMenusPlaceholder">
-    <submenu verb="BusinessAction">
-	<submenu name="CustomerMenu" verb="CustomerMenuAction">
-	    <menuitem name="CustomerNewCustomerOpen"  verb="CustomerNewCustomerOpenAction"/>
-	    <menuitem name="CustomerFindCustomerOpen" verb="CustomerFindCustomerOpenAction"/>
-	    <menuitem name="CustomerNewInvoiceOpen"   verb="CustomerNewInvoiceOpenAction"/>
-	    <menuitem name="CustomerFindInvoiceOpen"  verb="CustomerFindInvoiceOpenAction"/>
-	    <menuitem name="CustomerNewJobOpen"       verb="CustomerNewJobOpenAction"/>
-	    <menuitem name="CustomerFindJobOpen"      verb="CustomerFindJobOpenAction"/>
-	    <menuitem name="CustomerProcessPayment"   verb="CustomerProcessPaymentAction"/>
-	</submenu>
+	<menu name="VendorMenu" action="VendorMenuAction">
+	  <menuitem name="VendorNewVendorOpen"  action="VendorNewVendorOpenAction"/>
+	  <menuitem name="VendorFindVendorOpen" action="VendorFindVendorOpenAction"/>
+	  <menuitem name="VendorNewBillOpen"    action="VendorNewBillOpenAction"/>
+	  <menuitem name="VendorFindBillOpen"   action="VendorFindBillOpenAction"/>
+	  <menuitem name="VendorNewJobOpen"     action="VendorNewJobOpenAction"/>
+	  <menuitem name="VendorFindJobOpen"    action="VendorFindJobOpenAction"/>
+	  <menuitem name="VendorProcessPayment" action="VendorProcessPaymentAction"/>
+	</menu>
 
-	<submenu name="VendorMenu" verb="VendorMenuAction">
-	    <menuitem name="VendorNewVendorOpen"  verb="VendorNewVendorOpenAction"/>
-	    <menuitem name="VendorFindVendorOpen" verb="VendorFindVendorOpenAction"/>
-	    <menuitem name="VendorNewBillOpen"    verb="VendorNewBillOpenAction"/>
-	    <menuitem name="VendorFindBillOpen"   verb="VendorFindBillOpenAction"/>
-	    <menuitem name="VendorNewJobOpen"     verb="VendorNewJobOpenAction"/>
-	    <menuitem name="VendorFindJobOpen"    verb="VendorFindJobOpenAction"/>
-	    <menuitem name="VendorProcessPayment" verb="VendorProcessPaymentAction"/>
-	</submenu>
+	<menu name="EmployeeMenu" action="EmployeeMenuAction">
+	  <menuitem name="EmployeeNewEmployeeOpen"  action="EmployeeNewEmployeeOpenAction"/>
+	  <menuitem name="EmployeeFindEmployeeOpen" action="EmployeeFindEmployeeOpenAction"/>
+	  <menuitem name="EmployeeNewExpenseOpen"   action="EmployeeNewExpenseVoucherOpenAction"/>
+	  <menuitem name="EmployeeFindExpenseOpen"  action="EmployeeFindExpenseVoucherOpenAction"/>
+	  <menuitem name="EmployeeProcessPayment"   action="EmployeeProcessPaymentAction"/>
+	</menu>
 
-	<submenu name="EmployeeMenu" verb="EmployeeMenuAction">
-	    <menuitem name="EmployeeNewEmployeeOpen"  verb="EmployeeNewEmployeeOpenAction"/>
-	    <menuitem name="EmployeeFindEmployeeOpen" verb="EmployeeFindEmployeeOpenAction"/>
-	    <menuitem name="EmployeeNewExpenseOpen"   verb="EmployeeNewExpenseVoucherOpenAction"/>
-	    <menuitem name="EmployeeFindExpenseOpen"  verb="EmployeeFindExpenseVoucherOpenAction"/>
-	    <menuitem name="EmployeeProcessPayment"   verb="EmployeeProcessPaymentAction"/>
-	</submenu>
-
-	<menuitem name="TaxTablesOpen" verb="TaxTablesOpenAction"/>
-	<menuitem name="BillingTermsOpen" verb="BillingTermsOpenAction"/>
-	<menuitem name="BillsDueReminderOpen" verb="BillsDueReminderOpenAction"/>
-    </submenu>
-</placeholder>
-
-</menu>
-</Root>
+	<menuitem name="TaxTablesOpen" action="TaxTablesOpenAction"/>
+	<menuitem name="BillingTermsOpen" action="BillingTermsOpenAction"/>
+	<menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
+      </menu>
+    </placeholder>
+  </menubar>
+</ui>

@@ -389,6 +389,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	GncMainWindowActionData *data;
 	guint i;
 	MergedActionEntry *entry;
+	GError *error = NULL;
 
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (group_name != NULL);
@@ -408,10 +409,17 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	entry->action_group = egg_action_group_new (group_name);
 	egg_action_group_add_actions (entry->action_group, actions, n_actions);
 	egg_menu_merge_insert_action_group (window->ui_merge, entry->action_group, 0);
-	entry->merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge, ui_file, NULL);
-	egg_menu_merge_ensure_update (window->ui_merge);
-
-	g_hash_table_insert (window->priv->merged_actions_table, g_strdup (group_name), entry);
+	entry->merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge, ui_file, &error);
+	g_assert(entry->merge_id || error);
+	if (entry->merge_id) {
+	  egg_menu_merge_ensure_update (window->ui_merge);
+	  g_hash_table_insert (window->priv->merged_actions_table, g_strdup (group_name), entry);
+	} else {
+	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
+		     ui_file, error->message);
+	  g_error_free(error);
+	  g_free(entry);
+	}
 }
 
 void
@@ -524,9 +532,10 @@ static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
 	GtkWidget *main_vbox;
-	guint i;
+	guint i, merge_id;
 	GncPluginManager *manager;
 	GList *plugins;
+	GError *error = NULL;
 
 	/* Create widgets and add them to the window */
 	main_vbox = gtk_vbox_new (FALSE, 0);
@@ -566,9 +575,19 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
 			  G_CALLBACK (gnc_main_window_add_widget), window);
-	egg_menu_merge_add_ui_from_file (window->ui_merge, GNC_UI_DIR "/gnc-main-window-ui.xml", NULL);
-	gtk_window_add_accel_group (GTK_WINDOW (window), window->ui_merge->accel_group);
-	egg_menu_merge_ensure_update (window->ui_merge);
+	merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge,
+						    GNC_UI_DIR "/gnc-main-window-ui.xml",
+						    &error);
+	g_assert(merge_id || error);
+	if (merge_id) {
+	  gtk_window_add_accel_group (GTK_WINDOW (window), window->ui_merge->accel_group);
+	  egg_menu_merge_ensure_update (window->ui_merge);
+	} else {
+	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
+		     GNC_UI_DIR "/gnc-main-window-ui.xml", error->message);
+	  g_error_free(error);
+	  g_assert(merge_id != 0);
+	}
 
 	/* GncPluginManager stuff */
 	manager = gnc_plugin_manager_get ();
