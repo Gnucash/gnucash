@@ -84,6 +84,9 @@ typedef GList * (*query_glist_getter) (gpointer);
 typedef const GUID * (*query_guid_getter) (gpointer);
 static const char * query_guid_type = QUERYCORE_GUID;
 
+typedef gint32 (*query_int32_getter) (gpointer);
+static const char * query_int32_type = QUERYCORE_INT32;
+
 typedef gint64 (*query_int64_getter) (gpointer);
 static const char * query_int64_type = QUERYCORE_INT64;
 
@@ -646,6 +649,91 @@ QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids)
   return ((QueryPredData_t)pdata);
 }
 
+/* ================================================================ */
+/* QUERYCORE_INT32 */
+
+static int int32_match_predicate (gpointer object, QueryAccess get_fcn,
+				 QueryPredData_t pd)
+{
+  gint32 val;
+  query_int32_t pdata = (query_int32_t)pd;
+
+  VERIFY_PREDICATE (query_int32_type);
+
+  val = ((query_int32_getter)get_fcn) (object);
+
+  switch (pd->how) {
+  case COMPARE_LT:
+    return (val < pdata->val);
+  case COMPARE_LTE:
+    return (val <= pdata->val);
+  case COMPARE_EQUAL:
+    return (val == pdata->val);
+  case COMPARE_GT:
+    return (val > pdata->val);
+  case COMPARE_GTE:
+    return (val >= pdata->val);
+  case COMPARE_NEQ:
+    return (val != pdata->val);
+  default:
+    PWARN ("bad match type: %d", pd->how);
+    return 0;
+  }
+}
+
+static int int32_compare_func (gpointer a, gpointer b, gint options,
+			      QueryAccess get_fcn)
+{
+  gint32 v1, v2;
+  g_return_val_if_fail (a && b && get_fcn, COMPARE_ERROR);
+
+  v1 = ((query_int32_getter)get_fcn)(a);
+  v2 = ((query_int32_getter)get_fcn)(b);
+
+  if (v1 < v2) return -1;
+  if (v1 > v2) return 1;
+  return 0;
+}
+
+static void int32_free_pdata (QueryPredData_t pd)
+{
+  query_int32_t pdata = (query_int32_t)pd;
+  VERIFY_PDATA (query_int32_type);
+  g_free (pdata);
+}
+
+static QueryPredData_t int32_copy_predicate (QueryPredData_t pd)
+{
+  query_int32_t pdata = (query_int32_t)pd;
+  VERIFY_PDATA_R (query_int32_type);
+  return gncQueryInt32Predicate (pd->how, pdata->val);
+}
+
+static gboolean int32_predicate_equal (QueryPredData_t p1, QueryPredData_t p2)
+{
+  query_int32_t pd1 = (query_int32_t) p1;
+  query_int32_t pd2 = (query_int32_t) p2;
+
+  return (pd1->val == pd2->val);
+}
+
+QueryPredData_t gncQueryInt32Predicate (query_compare_t how, gint32 val)
+{
+  query_int32_t pdata = g_new0 (query_int32_def, 1);
+  pdata->pd.type_name = query_int32_type;
+  pdata->pd.how = how;
+  pdata->val = val;
+  return ((QueryPredData_t)pdata);
+}
+
+static char * int32_to_string (gpointer object, QueryAccess get)
+{
+  gint32 num = ((query_int32_getter)get)(object);
+
+  return g_strdup_printf ("%ld", num);
+}
+
+/* ================================================================ */
 /* QUERYCORE_INT64 */
 
 static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
@@ -729,6 +817,7 @@ static char * int64_to_string (gpointer object, QueryAccess get)
   return g_strdup_printf (GNC_SCANF_LLD, num);
 }
 
+/* ================================================================ */
 /* QUERYCORE_DOUBLE */
 
 static int double_match_predicate (gpointer object, QueryAccess get_fcn,
@@ -1100,6 +1189,9 @@ static void init_tables (void)
     { QUERYCORE_GUID, guid_match_predicate, NULL,
       guid_copy_predicate, guid_free_pdata, NULL,
       guid_predicate_equal },
+    { QUERYCORE_INT32, int32_match_predicate, int32_compare_func,
+      int32_copy_predicate, int32_free_pdata, int32_to_string,
+      int32_predicate_equal },
     { QUERYCORE_INT64, int64_match_predicate, int64_compare_func,
       int64_copy_predicate, int64_free_pdata, int64_to_string,
       int64_predicate_equal },
@@ -1130,8 +1222,10 @@ static void init_tables (void)
 
 static QueryPredicateCopy gncQueryCoreGetCopy (char const *type)
 {
+  QueryPredicateCopy rc;
   g_return_val_if_fail (type, NULL);
-  return g_hash_table_lookup (copyTable, type);
+  rc = g_hash_table_lookup (copyTable, type);
+  return rc;
 }
 
 static QueryPredDataFree gncQueryCoreGetPredFree (char const *type)

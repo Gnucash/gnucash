@@ -99,6 +99,11 @@ typedef struct {
 
 typedef struct {
   QueryPredDataDef	pd;
+  gint32	val;
+} query_int32_def, *query_int32_t;
+
+typedef struct {
+  QueryPredDataDef	pd;
   gint64	val;
 } query_int64_def, *query_int64_t;
 

@@ -98,6 +98,7 @@ typedef enum {
   GUID_MATCH_LIST_ANY,
 } guid_match_t;
 
+#define QUERYCORE_INT32		"gint32"
 #define QUERYCORE_INT64		"gint64"
 #define QUERYCORE_DOUBLE	"double"
 #define QUERYCORE_BOOLEAN	"boolean"
@@ -126,6 +127,7 @@ QueryPredData_t gncQueryNumericPredicate (query_compare_t how,
 					  numeric_match_t options,
 					  gnc_numeric value);
 QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids);
+QueryPredData_t gncQueryInt32Predicate (query_compare_t how, gint32 val);
 QueryPredData_t gncQueryInt64Predicate (query_compare_t how, gint64 val);
 QueryPredData_t gncQueryDoublePredicate (query_compare_t how, double val);
 QueryPredData_t gncQueryBooleanPredicate (query_compare_t how, gboolean val);

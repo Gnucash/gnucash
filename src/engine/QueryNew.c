@@ -185,8 +185,8 @@ static QueryNewTerm * copy_query_term (QueryNewTerm *qt)
 
   new_qt = g_new0 (QueryNewTerm, 1);
   memcpy (new_qt, qt, sizeof(QueryNewTerm));
-  new_qt->param_list = g_slist_copy (new_qt->param_list);
-  new_qt->param_fcns = g_slist_copy (new_qt->param_fcns);
+  new_qt->param_list = g_slist_copy (qt->param_list);
+  new_qt->param_fcns = g_slist_copy (qt->param_fcns);
   new_qt->pdata = gncQueryCorePredicateCopy (qt->pdata);
   return new_qt;
 }
@@ -607,7 +607,6 @@ void gncQueryAddTerm (QueryNew *q, GSList *param_list,
   qt = g_new0 (QueryNewTerm, 1);
   qt->param_list = param_list;
   qt->pdata = pred_data;
-
   qs = gncQueryCreate ();
   query_init (qs, qt);
 
