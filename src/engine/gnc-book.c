@@ -578,6 +578,8 @@ gnc_book_save (GNCBook *book)
      if (ERR_BACKEND_NO_ERR != retval) 
      {
        gnc_book_push_error (book, retval);
+
+       /* we close the backend here ... isn't this a bit harsh ??? */
        if (be->book_end)
        {
           (be->book_end)(be);
@@ -655,6 +657,7 @@ gnc_book_destroy (GNCBook *book)
 
   /* destroy the backend */
   if (book->backend) g_free(book->backend);
+  xaccGroupSetBackend (book->topgroup, NULL);
 
   xaccFreeAccountGroup (book->topgroup);
   book->topgroup = NULL;

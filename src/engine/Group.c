@@ -159,28 +159,37 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
 void
 xaccFreeAccountGroup (AccountGroup *grp)
 {
-  GList *node;
-
   if (!grp) return;
 
-  xaccAccountGroupBeginEdit (grp);
-
-  for (node = grp->accounts; node; node = node->next)
+  if (grp->accounts)
   {
-    Account *account = node->data;
-
-    xaccFreeAccount (account);
+    Account *account;
+    /* This is a weird iterator & needs some explanation.
+     * xaccAccountDestroy() will rip the account out  
+     * of the list, thus iterating while grp->accounts 
+     * is non-null is enough to iterate the loop.  But
+     * when it deletes the last account, then it will also 
+     * delete the group, making the grp pointer invalid. 
+     * So we have to be careful with the last deletion:
+     * in particular, g_free(grp) would be freeing that 
+     * memory a second time, so don't do it.
+     */
+    while (grp->accounts->next)
+    {
+      account = grp->accounts->next->data;
+      xaccAccountBeginEdit (account);
+      xaccAccountDestroy (account);
+    }
+    account = grp->accounts->data;
+    xaccAccountBeginEdit (account);
+    xaccAccountDestroy (account);
+  } 
+  else
+  {
+    grp->parent   = NULL;
+    grp->balance  = gnc_numeric_zero();
+    g_free (grp);
   }
-
-  g_list_free (grp->accounts);
-
-  /* null everything out, just in case somebody 
-   * tries to traverse freed memory */
-  grp->parent   = NULL;
-  grp->accounts = NULL;
-  grp->balance  = gnc_numeric_zero();
-
-  g_free (grp);
 }
 
 /********************************************************************\
@@ -925,7 +934,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
         /* remove from list -- node_a is ok, it's before node_b */
         grp->accounts = g_list_remove (grp->accounts, acc_b);
 
-        xaccFreeAccount (acc_b);
+        xaccAccountBeginEdit (acc_b);
+        xaccAccountDestroy (acc_b);
         break;
       }
     }

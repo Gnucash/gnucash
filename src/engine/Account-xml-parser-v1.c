@@ -478,7 +478,6 @@ acc_restore_parent_end_handler(gpointer data_for_children,
   
   g_return_val_if_fail(parent, FALSE);
 
-  xaccRemoveAccount(acc); /* just to be anal */
   xaccAccountInsertSubAccount(parent, acc);
 
   return(TRUE);

@@ -1118,6 +1118,13 @@ xaccTransFindCommonCurrency (Transaction *trans)
         gnc_commodity_get_unique_name (retval));
   }
 
+  if (NULL == retval)
+  {
+     /* in every situation I can think of, this routine should return 
+      * common currency.  So make note of this ... */
+     PWARN ("unable to find a common currency, and that is strange.");
+  }
+
   return retval;
 }
 
@@ -1298,7 +1305,8 @@ xaccTransCommitEdit (Transaction *trans)
    /* See if there's a backend.  If there is, invoke it. */
    PINFO ("descr is %s", xaccTransGetDescription(trans));
    be = xaccTransactionGetBackend (trans);
-   if (be && be->trans_commit_edit) {
+   if (be && be->trans_commit_edit) 
+   {
       int rc = 0;
       rc = (be->trans_commit_edit) (be, trans, trans->orig);
 
@@ -1593,21 +1601,20 @@ xaccSplitDestroy (Split *split)
    if (!split) return;
 
    trans = split->parent;
+   if (trans)
+   {
+     check_open (trans);
+   }
 
-   check_open (trans);
-
+   mark_split (split);
    xaccRemoveEntity (&split->guid);
 
    if (trans)
    {
      gboolean ismember = (g_list_find (trans->splits, split) != NULL);
      assert (ismember);
-   }
-
-   mark_split (split);
-
-   if (trans)
      xaccTransRemoveSplit (trans, split);
+   }
 
    xaccAccountRemoveSplit (split->acc, split);
    xaccAccountRecomputeBalance (split->acc);
@@ -1623,8 +1630,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 {
    Transaction *oldtrans;
 
-   if (!trans) return;
-   if (!split) return;
+   if (!trans || !split) return;
 
    check_open (trans);
 

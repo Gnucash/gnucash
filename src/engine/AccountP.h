@@ -126,36 +126,19 @@ struct _account {
 
   GList *splits;           /* list of split pointers */
 
-  /* The "changed" flag is used to invalidate cached values in this structure.
-   * Currently, the balances and the cost basis are cached.
-   */
-  /*short changed;*/
-
-  /* The "open" flag indicates if the account has been 
-   * opened for editing. */
-  /* short open; */
-
   /* keep track of nesting level of begin/end edit calls */
   gint32 editlevel;
 
   gboolean balance_dirty;
   gboolean sort_dirty;
+  gboolean core_dirty;     /* fields in this struct have changed */
+  gboolean do_free;
 
   /* The "mark" flag can be used by the user to mark this account
    * in any way desired.  Handy for specialty traversals of the 
    * account tree. */
   short mark;
 };
-
-/* bitfields for the changed flag */
-#define ACC_INVALID_BALN      0x1
-#define ACC_INVALID_COSTB     0x2
-#define ACC_INVALIDATE_ALL    0x3
-
-/* bitflields for the open flag */
-#define ACC_BEGIN_EDIT        0x1
-#define ACC_DEFER_REBALANCE   0x2
-#define ACC_BEING_DESTROYED   0x4
 
 
 /* The xaccAccountRemoveSplit() routine will remove the indicated split
@@ -197,4 +180,11 @@ void xaccAccountSetStartingBalance(Account *account,
                                    const gnc_numeric start_cleared_baln, 
                                    const gnc_numeric start_reconciled_baln); 
 
+/* The xaccFreeAccount() routine releases memory associated with the
+ *    account.  It should never be called directly from user code;
+ *    instead, the xaccAccountDestroy() routine should be used
+ *    (because xaccAccountDestroy() has the correct commit semantics).
+ */
+
+void xaccFreeAccount (Account *account);
 #endif /* __XACC_ACCOUNT_P_H__ */

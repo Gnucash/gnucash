@@ -21,6 +21,8 @@
  *                                                                  *
 \********************************************************************/
 
+#include <glib.h>
+
 #include "Account.h"
 #include "AccountP.h"
 #include "BackendP.h"
@@ -68,13 +70,13 @@ xaccAccountGetBackend (Account * acc)
   if (!acc) return NULL;
 
   /* find the first account group that has a backend */
-  grp = (AccountGroup *) acc->parent;
+  grp = acc->parent;
   while (grp) {
     if (grp->backend) return (grp->backend);
     parent_acc = grp -> parent;
     grp = NULL;
     if (parent_acc) {
-       grp = (AccountGroup *) parent_acc->parent;
+       grp = parent_acc->parent;
     }
   }
   return NULL;
@@ -87,17 +89,34 @@ xaccAccountGetBackend (Account * acc)
 Backend *
 xaccTransactionGetBackend (Transaction *trans)
 {
-  Split *s;
+  GList *snode, *node;
+  Split *s=NULL;
 
   if (!trans) return NULL;
 
   /* find an account */
-  s = xaccTransGetSplit (trans, 0);
-  if (!s) {
-     s = xaccTransGetSplit (trans->orig, 0);
-     if (!s) return NULL;
-   }
+  snode = xaccTransGetSplitList(trans);
+  for (node = snode; node; node=node->next)
+  {
+    s = node->data;
+    if (s->acc) break;
+    s = NULL;
+  }
 
+  /* if transaction is being deleted, it won't have any splits
+   * so lets take a look at the 'original' transaction */
+  if (!s)
+  {
+    snode = xaccTransGetSplitList(trans->orig);
+    for (node = snode; node; node=node->next)
+    {
+      s = node->data;
+      if (s->acc) break;
+      s = NULL;
+    }
+  }
+  if (!s) return NULL;
+  
   /* I suppose it would be more 'technically correct' to make sure that
    * all splits share the same backend, and flag an error if they
    * don't.  However, at this point, it seems quite unlikely, so we'll

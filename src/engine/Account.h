@@ -116,21 +116,22 @@ GNCAccountType xaccAccountStringToEnum (const char* str);
 
 gboolean xaccAccountTypesCompatible (int parent_type, int child_type);
 
-Account     *xaccMallocAccount (void);
-void         xaccFreeAccount (Account *account);
-
 /* Compare two accounts for equality - this is a deep compare. */
 gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
 
 /* 
  * The xaccAccountBeginEdit() and xaccAccountCommitEdit() subroutines
- * provide a pseudo-two-phase-commit wrapper for account updates. 
- * They are mildly useful for detecting attempted updates outside
- * of their scope. However, they do not provide any true two-phase-anything
- * in the current implementation.
+ * provide a two-phase-commit wrapper for account updates. 
+ * They are incompletely implemented ....
+ *
+ * The xaccAccountDestroy() routine can be used to get rid of an
+ *    account.  The account should have been opened for editing 
+ *    (by calling xaccAccountBeginEdit()) before calling this routine.
  */
+Account     *xaccMallocAccount (void);
 void         xaccAccountBeginEdit (Account *account);
 void         xaccAccountCommitEdit (Account *account);
+void         xaccAccountDestroy (Account *account);
 
 kvp_frame * xaccAccountGetSlots (Account *account);
 

@@ -53,6 +53,8 @@ static short module = MOD_ENGINE;
  * of the internals of the Account in one file.                     *
 \********************************************************************/
 
+static void xaccAccountBringUpToDate(Account *acc);
+
 /********************************************************************\
 \********************************************************************/
 
@@ -109,6 +111,8 @@ xaccInitAccount (Account * acc)
   acc->editlevel = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
+  acc->core_dirty = FALSE;
+  acc->do_free = FALSE;
 
   xaccGUIDNew(&acc->guid);
   xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
@@ -145,36 +149,52 @@ xaccFreeAccount (Account *acc)
 
   xaccRemoveEntity(&acc->guid);
 
-  /* First, recursively free children */
-  xaccFreeAccountGroup (acc->children);
+  if (acc->children) 
+  {
+    PERR (" xinstead of calling xaccFreeAccount(), please call \n"
+          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+  
+     /* First, recursively free children */
+     xaccFreeAccountGroup (acc->children);
+     acc->children = NULL;
+  }
 
   /* Next, clean up the splits */
-  /* any split pointing at this account needs to be unmarked */
-  for(lp = acc->splits; lp; lp = lp->next) {
-    Split *s = (Split *) lp->data;
-    s->acc = NULL;
+  /* NB there shouldn't be any splits by now ... they should 
+   * have been all been freed by CommitEdit().  We can remove this
+   * check once we know the warning isn't occurring any more. */
+  if (acc->splits) 
+  {
+    PERR (" instead of calling xaccFreeAccount(), please call \n"
+          " xaccAccountBeginEdit(); xaccAccountDestroy(); \n");
+  
+    /* any split pointing at this account needs to be unmarked */
+    for(lp = acc->splits; lp; lp = lp->next) 
+    {
+      Split *s = (Split *) lp->data;
+      s->acc = NULL;
+    }
+  
+    acc->editlevel = 0;
+  
+    for(lp = acc->splits; lp; lp = lp->next) {
+      Split *s = (Split *) lp->data;
+      t = s->parent;
+      xaccTransBeginEdit (t);
+      xaccSplitDestroy (s);
+      xaccTransCommitEdit (t);
+    }
+  
+    /* free up array of split pointers */
+    g_list_free(acc->splits);
+    acc->splits = NULL;
   }
 
-  /* FIXME: is this right? */
-  acc->editlevel = 0;
-
-  for(lp = acc->splits; lp; lp = lp->next) {
-    Split *s = (Split *) lp->data;
-    t = s->parent;
-    xaccTransBeginEdit (t);
-    xaccSplitDestroy (s);
-    xaccTransCommitEdit (t);
-  }
-
-  /* free up array of split pointers */
-  g_list_free(acc->splits);
-  acc->splits = NULL;
-
-  g_free (acc->accountName);
+  if (acc->accountName) g_free (acc->accountName);
   acc->accountName = NULL;
-  g_free (acc->accountCode);
+  if (acc->accountCode) g_free (acc->accountCode);
   acc->accountCode = NULL;
-  g_free (acc->description);
+  if (acc->description) g_free (acc->description);
   acc->description = NULL;
 
   kvp_frame_delete (acc->kvp_data);
@@ -207,8 +227,127 @@ xaccFreeAccount (Account *acc)
   acc->editlevel = 0;
   acc->balance_dirty = FALSE;
   acc->sort_dirty = FALSE;
+  acc->core_dirty = FALSE;
 
   g_free(acc);
+}
+
+/********************************************************************\
+ * transactional routines
+\********************************************************************/
+
+void 
+xaccAccountBeginEdit (Account *acc) 
+{
+  Backend * be;
+  if (!acc) return;
+
+  acc->editlevel++;
+  if (1 < acc->editlevel) return;
+
+  if (0 >= acc->editlevel) 
+  {
+    PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
+    acc->editlevel = 0;
+  }
+
+  acc->core_dirty = FALSE;
+
+  /* See if there's a backend.  If there is, invoke it. */
+  be = xaccAccountGetBackend (acc);
+  if (be && be->account_begin_edit) {
+     (be->account_begin_edit) (be, acc);
+  }
+}
+
+void 
+xaccAccountCommitEdit (Account *acc) 
+{
+  Backend * be;
+  int rc;
+
+  if (!acc) return;
+
+  acc->editlevel--;
+  if (0 < acc->editlevel) return;
+
+  if (0 > acc->editlevel) 
+  {
+    PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
+    acc->editlevel = 0;
+  }
+
+  /* If marked for deletion, get rid of subaccounts first,
+   * and then the splits ... */
+  if (acc->do_free)
+  {
+    GList *lp;
+
+    /* First, recursively free children */
+    xaccFreeAccountGroup (acc->children);
+    acc->children = NULL;
+
+    PINFO ("freeing splits for account %p (%s)\n", acc, acc->accountName);
+
+    /* any split pointing at this account needs to be unmarked */
+    for(lp = acc->splits; lp; lp = lp->next) 
+    {
+      Split *s = (Split *) lp->data;
+      s->acc = NULL;
+    }
+
+    for(lp = acc->splits; lp; lp = lp->next) 
+    {
+      Split *s = (Split *) lp->data;
+      Transaction *t = s->parent;
+      xaccTransBeginEdit (t);
+      xaccSplitDestroy (s);
+      xaccTransCommitEdit (t);
+    }
+
+    /* free up array of split pointers */
+    g_list_free(acc->splits);
+    acc->splits = NULL;
+
+    acc->core_dirty = TRUE;
+  }
+  else 
+  {
+    xaccAccountBringUpToDate(acc);
+  }
+
+  /* See if there's a backend.  If there is, invoke it. */
+  be = xaccAccountGetBackend (acc);
+  if (be && be->account_commit_edit) 
+  {
+    rc = (be->account_commit_edit) (be, acc);
+    /* hack alert -- we really really should be checking 
+     * for errors returned by the back end ... */
+    if (rc)
+    {
+      /* destroys must be rolled back as well ... ??? */
+      acc->do_free = FALSE;
+      PERR (" backend asked engine to rollback, but this isn't"
+            " handled yet. Return code=%d", rc);
+    }
+  }
+  acc->core_dirty = FALSE;
+
+  /* final stages of freeing the account */
+  if (acc->do_free)
+  {
+    xaccRemoveAccount(acc);
+    xaccFreeAccount(acc);
+  }
+}
+
+void 
+xaccAccountDestroy (Account *acc) 
+{
+  if (!acc) return;
+  acc->do_free = TRUE;
+
+  xaccAccountCommitEdit (acc);
 }
 
 /********************************************************************\
@@ -272,7 +411,8 @@ split_sort_func(gconstpointer a, gconstpointer b) {
 }
 
 static void
-xaccAccountSortSplits (Account *acc) {
+xaccAccountSortSplits (Account *acc) 
+{
   if(!acc) return;
 
   if(!acc->sort_dirty) return;
@@ -282,67 +422,14 @@ xaccAccountSortSplits (Account *acc) {
 }
 
 static void
-xaccAccountBringUpToDate(Account *acc) {
+xaccAccountBringUpToDate(Account *acc) 
+{
   if(!acc) return;
 
   /* if a re-sort happens here, then everything will update, so the
      cost basis and balance calls are no-ops */
   xaccAccountSortSplits(acc);
   xaccAccountRecomputeBalance(acc);
-}
-
-void 
-xaccAccountBeginEdit (Account *acc) 
-{
-   Backend * be;
-   if (!acc) return;
-
-   acc->editlevel++;
-   if (1 < acc->editlevel) return;
-
-   if (0 >= acc->editlevel) 
-   {
-     PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
-     acc->editlevel = 0;
-   }
-
-   /* See if there's a backend.  If there is, invoke it. */
-   be = xaccAccountGetBackend (acc);
-   if (be && be->account_begin_edit) {
-      (be->account_begin_edit) (be, acc);
-   }
-}
-
-void 
-xaccAccountCommitEdit (Account *acc) 
-{
-   Backend * be;
-   int rc;
-
-   if (!acc) return;
-
-   acc->editlevel--;
-   if (0 < acc->editlevel) return;
-
-   if (0 > acc->editlevel) 
-   {
-     PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
-     acc->editlevel = 0;
-   }
-   xaccAccountBringUpToDate(acc);
-
-   /* See if there's a backend.  If there is, invoke it. */
-   be = xaccAccountGetBackend (acc);
-   if (be && be->account_commit_edit) {
-      rc = (be->account_commit_edit) (be, acc);
-      /* hack alert -- we really really should be checking 
-       * for errors returned by the back end ... */
-      if (rc)
-      {
-         PERR (" backend asked engine to rollback, but this isn't"
-               " handled yet. Return code=%d", rc);
-      }
-   }
 }
 
 
@@ -376,11 +463,14 @@ xaccAccountSetGUID (Account *account, GUID *guid)
   if (!account || !guid) return;
 
   PINFO("acct=%p", account);
+  xaccAccountBeginEdit (account);
   xaccRemoveEntity(&account->guid);
 
   account->guid = *guid;
 
   xaccStoreEntity(account, &account->guid, GNC_ID_ACCOUNT);
+  account->core_dirty = TRUE;
+  xaccAccountCommitEdit (account);
 }
 
 /********************************************************************\
@@ -482,22 +572,6 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void check_open (Account *account);
-G_INLINE_FUNC void
-check_open (Account *account)
-{
-  if (account->editlevel <= 0)
-  {
-    /* not today, some day in the future ... */
-    /* PERR ("Account not open for editing\n"); */
-    /* assert (0); */
-    /* return; */
-  }
-}
-
-/********************************************************************\
-\********************************************************************/
-
 void
 xaccAccountInsertSplit (Account *acc, Split *split)
 {
@@ -520,7 +594,6 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   xaccAccountBeginEdit(acc);
   {
     Account *oldacc;
-    check_open (acc);
 
     acc->balance_dirty = TRUE;
     acc->sort_dirty = TRUE;
@@ -571,8 +644,6 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
   xaccAccountBeginEdit(acc);
   {
     GList *node;
-
-    check_open (acc);
 
     node = g_list_find (acc->splits, split);
     if (!node)
@@ -793,16 +864,15 @@ xaccAccountSetStartingBalance(Account *acc,
 \********************************************************************/
 
 void
-xaccAccountFixSplitDateOrder (Account * acc, Split *split ) {
+xaccAccountFixSplitDateOrder (Account * acc, Split *split ) 
+{
   if (NULL == acc) return;
   if (NULL == split) return;
 
-  xaccAccountBeginEdit(acc);
   {
     acc->sort_dirty = TRUE;
     acc->balance_dirty = TRUE;
   }
-  xaccAccountCommitEdit(acc);
 }
 
 /********************************************************************\
@@ -913,6 +983,7 @@ xaccAccountAutoCode (Account *acc, int digits) {
   {
     acc->accountCode = xaccGroupGetNextFreeCode (acc->parent, digits);
     acc->parent->saved = FALSE;
+    acc->core_dirty = TRUE;
   }
   xaccAccountCommitEdit(acc);
 }
@@ -927,8 +998,6 @@ xaccAccountSetType (Account *acc, int tip) {
 
   xaccAccountBeginEdit(acc);
   {
-    check_open (acc);
-    
     /* refuse invalid account types, and don't bother if not new type. */
     if((NUM_ACCOUNT_TYPES > tip) && (acc->type != tip)) {
       acc->type = tip;
@@ -937,6 +1006,7 @@ xaccAccountSetType (Account *acc, int tip) {
 
     mark_account (acc);
   }
+  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
@@ -948,15 +1018,14 @@ xaccAccountSetName (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     check_open (acc);
-
-     /* make strdup before freeing */
+     /* make strdup before freeing (just in case str==accountName !!) */
      tmp = g_strdup (str);
      g_free (acc->accountName);
      acc->accountName = tmp;
 
      mark_account (acc);
    }
+   acc->core_dirty = TRUE;
    xaccAccountCommitEdit(acc);
 }
 
@@ -967,8 +1036,6 @@ xaccAccountSetCode (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     check_open (acc);
-     
      /* make strdup before freeing */
      tmp = g_strdup (str);
      g_free (acc->accountCode);
@@ -976,6 +1043,7 @@ xaccAccountSetCode (Account *acc, const char *str) {
 
      mark_account (acc);
    }
+   acc->core_dirty = TRUE;
    xaccAccountCommitEdit(acc);
 }
 
@@ -986,15 +1054,14 @@ xaccAccountSetDescription (Account *acc, const char *str) {
 
    xaccAccountBeginEdit(acc);
    {
-     check_open (acc);
-     
-     /* make strdup before freeing */
+     /* make strdup before freeing (just in case str==description !!) */
      tmp = g_strdup (str);
      g_free (acc->description);
      acc->description = tmp;
 
      mark_account (acc);
    }
+   acc->core_dirty = TRUE;
    xaccAccountCommitEdit(acc);
 }
 
@@ -1006,8 +1073,6 @@ xaccAccountSetNotes (Account *acc, const char *str) {
 
   xaccAccountBeginEdit(acc);
   {
-    check_open (acc);
-    
     new_value = kvp_value_new_string(str);
     if(new_value) {
       kvp_frame_set_slot(xaccAccountGetSlots(acc), "notes", new_value);
@@ -1019,16 +1084,19 @@ xaccAccountSetNotes (Account *acc, const char *str) {
 
     mark_account (acc);
   }
+  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
 /* FIXME : is this the right way to do this? */
 static void
-update_split_currency(Account * acc) {
+update_split_currency(Account * acc) 
+{
   GList *lp;
 
   if(!acc) return;
 
+  xaccAccountBeginEdit(acc);
   /* iterate over splits */
   for(lp = acc->splits; lp; lp = lp->next) {
     Split *s = (Split *) lp->data;
@@ -1039,6 +1107,7 @@ update_split_currency(Account * acc) {
                                      xaccAccountGetSecuritySCU(acc),
 				     GNC_RND_ROUND);
   }
+  xaccAccountCommitEdit(acc);
 }
 
 /********************************************************************\
@@ -1053,6 +1122,7 @@ xaccAccountSetCommodity (Account * acc, const gnc_commodity * com)
 {
   if ((!acc) || (!com)) return;
 
+  xaccAccountBeginEdit(acc);
   switch (acc->type) 
   {
      case BANK:
@@ -1072,6 +1142,8 @@ xaccAccountSetCommodity (Account * acc, const gnc_commodity * com)
         break;
      default:
   }
+  acc->core_dirty = TRUE;
+  xaccAccountCommitEdit(acc);
 }
 
 /********************************************************************\
@@ -1085,8 +1157,6 @@ xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {
   
   xaccAccountBeginEdit(acc);
   {
-    check_open (acc);
-    
     acc->currency     = currency;
     acc->currency_scu = gnc_commodity_get_fraction(currency);
     update_split_currency(acc);
@@ -1096,6 +1166,7 @@ xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency) {
 
     mark_account (acc);
   }
+  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
@@ -1106,8 +1177,6 @@ xaccAccountSetSecurity (Account *acc, const gnc_commodity * security) {
   
   xaccAccountBeginEdit(acc);
   {
-    check_open (acc);
-
     acc->security     = security;
     acc->security_scu = gnc_commodity_get_fraction(security);    
     update_split_currency(acc);
@@ -1117,6 +1186,7 @@ xaccAccountSetSecurity (Account *acc, const gnc_commodity * security) {
 
     mark_account (acc);
   }
+  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
@@ -1127,10 +1197,10 @@ xaccAccountSetCurrencySCU (Account * acc, int scu) {
 
   xaccAccountBeginEdit(acc);
   {
-    check_open (acc);
     acc->currency_scu = scu;
     mark_account (acc);
   }
+  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
@@ -1141,10 +1211,10 @@ xaccAccountSetSecuritySCU (Account *acc, int scu) {
 
   xaccAccountBeginEdit(acc);
   {
-    check_open (acc);
     acc->security_scu = scu;
     mark_account (acc);
   }
+  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
@@ -1449,8 +1519,6 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 
   xaccAccountBeginEdit (account);
   {
-    check_open (account);
-
     kvp_frame_set_slot(xaccAccountGetSlots (account),
                        "tax-related", new_value);
 
@@ -1459,6 +1527,7 @@ xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
 
     mark_account (account);
   }
+  account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
@@ -1685,9 +1754,6 @@ xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
   xaccAccountBeginEdit (account);
   {
     kvp_value *value;
-
-    check_open (account);
-
     value = kvp_value_new_gint64 (last_date);
 
     kvp_frame_set_slot_path (xaccAccountGetSlots (account), value,
@@ -1697,6 +1763,7 @@ xaccAccountSetReconcileLastDate (Account *account, time_t last_date)
 
     mark_account (account);
   }
+  account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
@@ -1740,8 +1807,6 @@ xaccAccountSetReconcilePostponeDate (Account *account,
   {
     kvp_value *value;
 
-    check_open (account);
-
     value = kvp_value_new_gint64 (postpone_date);
 
     kvp_frame_set_slot_path (xaccAccountGetSlots (account), value,
@@ -1751,6 +1816,7 @@ xaccAccountSetReconcilePostponeDate (Account *account,
 
     mark_account (account);
   }
+  account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
@@ -1795,8 +1861,6 @@ xaccAccountSetReconcilePostponeBalance (Account *account,
   {
     kvp_value *value;
 
-    check_open (account);
-
     value = kvp_value_new_gnc_numeric (balance);
 
     kvp_frame_set_slot_path (xaccAccountGetSlots (account), value,
@@ -1806,6 +1870,7 @@ xaccAccountSetReconcilePostponeBalance (Account *account,
 
     mark_account (account);
   }
+  account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
@@ -1819,13 +1884,12 @@ xaccAccountClearReconcilePostpone (Account *account)
 
   xaccAccountBeginEdit (account);
   {
-    check_open (account);
-
     kvp_frame_set_slot_path (xaccAccountGetSlots (account), NULL,
                              "reconcile-info", "postpone", NULL);
 
     mark_account (account);
   }
+  account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
@@ -1858,8 +1922,6 @@ xaccAccountSetLastNum (Account *account, const char *num)
   {
     kvp_value *value;
 
-    check_open (account);
-
     value = kvp_value_new_string (num);
 
     kvp_frame_set_slot (xaccAccountGetSlots (account), "last-num", value);
@@ -1868,6 +1930,7 @@ xaccAccountSetLastNum (Account *account, const char *num)
 
     mark_account (account);
   }
+  account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
 
@@ -1886,7 +1949,6 @@ xaccAccountSetPriceSrc(Account *acc, const char *src) {
     if((t == STOCK) || (t == MUTUAL)) {
       kvp_value *new_value = kvp_value_new_string(src);
       if(new_value) {
-        check_open (acc);
         kvp_frame_set_slot(xaccAccountGetSlots(acc),
                            "old-price-source",
                            new_value);
@@ -1897,6 +1959,7 @@ xaccAccountSetPriceSrc(Account *acc, const char *src) {
       }
     }
   }
+  acc->core_dirty = TRUE;
   xaccAccountCommitEdit(acc);
 }
 
