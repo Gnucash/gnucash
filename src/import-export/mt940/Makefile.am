@@ -34,11 +34,11 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
   -I$(top_srcdir)/src/import-export/hbci \
-  ${GNOME_INCLUDEDIR} \
-  ${GTKHTML_CFLAGS} \
-  ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
+  ${GLADE_CFLAGS} \
+  ${GNOME_CFLAGS} \
+  ${GTKHTML_CFLAGS} \
   $(HBCI_CFLAGS)
 
 EXTRA_DIST = \
