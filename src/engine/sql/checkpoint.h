@@ -56,7 +56,7 @@
  * bunch of entries with the same date will go into the same 
  * checkpoint (and there might be an arbitrarily large number of these)
  */
-#define MIN_CHECKPOINT_COUNT 3
+#define MIN_CHECKPOINT_COUNT 30
 
 typedef struct _checkpoint {
    const GUID *account_guid;
