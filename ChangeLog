@@ -1,3 +1,21 @@
+2003-03-31  David Hampton  <hampton@employees.org>
+
+	* src/engine/Account.c:
+	* src/gnome/gnc-split-reg.c:
+	* src/app-utils/gnc-ui-util.c: Push gui independent functions into
+	the engine.
+
+	* src/gnome/window-acct-tree.c:
+	* src/gnome-utils/gnc-account-tree.c:
+	* src/scm/main-window.scm: Collapse the account tree data
+	declarations into a common table.  Change functions to be driven
+	off this data table instead of explicitly coding each field.  Add
+	new fields in the account tree window for present, cleared,
+	reconciled, and future minimum balances.  #95628
+	
+	* src/gnome-utils/dialog-account.c: Update for changes to function
+	parameters.
+
 2003-03-31  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/engine/gnc-pricedb.c
