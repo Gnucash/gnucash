@@ -16,62 +16,9 @@ use lib '/usr/local/gnucash-1.4/lib/gnucash/perl';
 use lib '/usr/local/gnucash-1.4/share/gnucash/perl';
 use gnucash;
 
-# --------------------------------------------------
-# @account_list = &account_flatlist ($account_group);
-# This routine accepts a pointer to a group, returns 
-# a flat list of all of the children in the group.
-
-sub account_flatlist 
-{
-  my $grp = $_[0];
-  my $naccts = gnucash::xaccGroupGetNumAccounts ($grp);
-  my $n;
-  my (@acctlist, @childlist);
-  my $children;
-
-  foreach $n (0..$naccts-1)
-  {
-    $acct = gnucash::xaccGroupGetAccount ($grp, $n);
-    push (@acctlist, $acct);
-
-    $children = gnucash::xaccAccountGetChildren ($acct);
-    if ($children)
-    {
-      @childlist = &account_flatlist ($children);
-      push (@acctlist, @childlist);
-    }
-  }
-
-  return (@acctlist);
-}
-
-# --------------------------------------------------
-# If the gnucash engine had a 'get account by name' 
-# utility function, then we wouldn't need this and the above mess.
-
-sub get_account_by_name
-{
-  my $accname = $_[0];
-  my $name;
-
-  # loop over the accounts, try to match the name
-  foreach $acct (@acctlist)
-  {
-    $name = gnucash::xaccAccountGetName ($acct);
-    if ($name eq $accname) {
-       $found = $acct;
-       break;
-    }
-  }
-
-  return ($found);
-}
-  
-# --------------------------------------------------
   
 die "Usage: cat <logfile> | $0 <gnucash-filename>" if $#ARGV < 0;
   
-
 # open the file
 print "Opening file $ARGV[0]\n";
 $sess = gnucash::xaccMallocSession ();
@@ -79,13 +26,10 @@ $grp = gnucash::xaccSessionBeginFile ($sess,$ARGV[0]);
 
 die "failed to read file $ARGV[0], maybe its locked? " if (! $grp);
 
-# get a flat list of accounts in the file
-@acctlist = &account_flatlist ($grp);
-
-
 $got_data = 0;
 $nsplit = 0;
 
+# --------------------------------------------------
 while (<STDIN>) {
 
   # start of transaction
@@ -122,7 +66,7 @@ while (<STDIN>) {
     = split (/	/);
 
   # parse amount & price 
-  # gnucash-1.4 : float pt, gnucash1.5 : ratio
+  # gnucash-1.4.x : float point;  gnucash-1.5.x: fractional ratio
   ($anum, $adeno) = split (/\//, $amount);
   if (0 != $adeno) {
      $amount = $anum / $adeno;
@@ -131,7 +75,7 @@ while (<STDIN>) {
   ($pnum, $pdeno) = split (/\//, $price);
   if (0 != $pdeno) {
      $price = $pnum / $pdeno;
-     # value, not price ... 
+     # value, not price in gnucash-1.5.x
      if (0 != $amount) {
         $price = $price/$amount;
      }
@@ -145,8 +89,7 @@ while (<STDIN>) {
 
   # do a 'commit'
   if ($mod == C) { 
-     print "restoring '$account' '$description' for $pric and '$quant'\n";
-     print "date is $dpost  $date_posted\n";
+     print "restoring '$account' $dpost '$description' for $amount at price $price\n";
      
      if ($got_data == 0) {
         $trans = gnucash::xaccMallocTransaction();
@@ -173,7 +116,7 @@ while (<STDIN>) {
      # gnucash::xaccSplitSetDateReconciled ($split, $date_reconciled);
      gnucash::xaccSplitSetSharePriceAndAmount($split, $price, $amount);
 
-     $acct = get_account_by_name ($account);
+     $acct = gnucash::xaccGetAccountFromName ($grp,$account);
      gnucash::xaccAccountBeginEdit ($acct, 1);
      gnucash::xaccAccountInsertSplit ($acct, $split);
      gnucash::xaccAccountCommitEdit ($acct);
