@@ -90,6 +90,11 @@ typedef struct
 
         GdkGC *gc;
 
+#ifdef USE_XIM
+        GdkIC     *ic;
+        GdkICAttr *ic_attr;
+#endif
+
         /* Where are we */
         VirtualLocation virt_loc;
 

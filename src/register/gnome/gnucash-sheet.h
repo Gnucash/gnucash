@@ -113,7 +113,7 @@ typedef struct
 } GnucashSheet;
 
 
-typedef struct 
+typedef struct
 {
         GtkTable table;
 

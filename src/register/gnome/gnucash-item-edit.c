@@ -426,6 +426,92 @@ item_edit_realize (GnomeCanvasItem *item)
         window = GTK_WIDGET (canvas)->window;
 
         item_edit->gc = gdk_gc_new (window);
+
+        if (gdk_im_ready ())
+                g_warning ("xim ready");
+
+#ifdef USE_XIM
+        if (gdk_im_ready () &&
+            (item_edit->ic_attr = gdk_ic_attr_new ()) != NULL)
+        {
+                gint width, height;
+                GdkEventMask mask;
+                GdkColormap *colormap;
+                GdkICAttr *attr = item_edit->ic_attr;
+                GdkICAttributesType attrmask = GDK_IC_ALL_REQ;
+                GdkIMStyle style;
+                GdkIMStyle supported_style =
+                        GDK_IM_PREEDIT_NONE |
+                        GDK_IM_PREEDIT_NOTHING |
+                        GDK_IM_PREEDIT_POSITION |
+                        GDK_IM_STATUS_NONE |
+                        GDK_IM_STATUS_NOTHING;
+                GtkWidget *sheet_widget;
+
+                sheet_widget = GTK_WIDGET (item_edit->sheet);
+
+                if (sheet_widget->style &&
+                    sheet_widget->style->font->type != GDK_FONT_FONTSET)
+                        supported_style &= ~GDK_IM_PREEDIT_POSITION;
+
+                attr->style = style = gdk_im_decide_style (supported_style);
+                attr->client_window = sheet_widget->window;
+
+                if ((colormap = gtk_widget_get_colormap (sheet_widget)) !=
+                    gtk_widget_get_default_colormap ())
+                {
+                        attrmask |= GDK_IC_PREEDIT_COLORMAP;
+                        attr->preedit_colormap = colormap;
+                }
+
+                attrmask |= GDK_IC_PREEDIT_FOREGROUND;
+                attrmask |= GDK_IC_PREEDIT_BACKGROUND;
+                attr->preedit_foreground = sheet_widget->style->fg[GTK_STATE_NORMAL];
+                attr->preedit_background = sheet_widget->style->base[GTK_STATE_NORMAL];
+
+                switch (style & GDK_IM_PREEDIT_MASK)
+                {
+                        case GDK_IM_PREEDIT_POSITION:
+                                if (sheet_widget->style &&
+                                    sheet_widget->style->font->type != GDK_FONT_FONTSET)
+                                {
+                                        g_warning ("over-the-spot style requires fontset");
+                                        break;
+                                }
+
+                                gdk_window_get_size (attr->client_window,
+                                                     &width, &height);
+
+                                attrmask |= GDK_IC_PREEDIT_POSITION_REQ;
+
+                                attr->spot_location.x = 0;
+                                attr->spot_location.y = height;
+                                attr->preedit_area.x = 0;
+                                attr->preedit_area.y = 0;
+                                attr->preedit_area.width = width;
+                                attr->preedit_area.height = height;
+                                attr->preedit_fontset = sheet_widget->style->font;
+
+                                break;
+                }
+
+                item_edit->ic = gdk_ic_new (attr, attrmask);
+
+                if (item_edit->ic == NULL)
+                        g_warning ("Can't create input context.");
+                else
+                {
+                        mask = gdk_window_get_events (attr->client_window);
+                        mask |= gdk_ic_get_events (item_edit->ic);
+
+                        gdk_window_set_events (attr->client_window, mask);
+
+                        if (GTK_WIDGET_HAS_FOCUS (sheet_widget))
+                                gdk_im_begin (item_edit->ic,
+                                              attr->client_window);
+                }
+        }
+#endif
 }
 
 
@@ -473,6 +559,11 @@ item_edit_init (ItemEdit *item_edit)
         item_edit->virt_loc.vcell_loc.virt_col = -1;
         item_edit->virt_loc.phys_row_offset = -1;
         item_edit->virt_loc.phys_col_offset = -1;
+
+#ifdef USE_XIM
+        item_edit->ic = NULL;
+        item_edit->ic_attr = NULL;
+#endif
 }
 
 

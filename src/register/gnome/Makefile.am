@@ -30,7 +30,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@
+CFLAGS = @CFLAGS@ @GTK_XIM_FLAGS@
 
 INCLUDES = \
   -I${top_srcdir}/src \
