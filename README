@@ -39,7 +39,7 @@ sorry, no "make install" yet.
 
 Status:
 -------
-As of version 0.9m:
+As of version 0.9n:
 Bugs:
 -- Cash distributions & cash dividends on stock are confusing
    without sub-accounts.  They should appear as transfers from
@@ -47,7 +47,7 @@ Bugs:
    visible in a gneral ledger that shows both the brokerage 
    account, and the stock.  However, sub-accounts are not
    yet implemented fully, and the general-ledger regsiter 
-   window is not implemented.
+   window is not implemented.  Getting close, though.
 
 -- tabbing between fields for mutual funds does not work correctly. 
 -- should add "number of shares" to transfer popup when transferring
