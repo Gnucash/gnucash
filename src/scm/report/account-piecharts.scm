@@ -263,7 +263,7 @@
 		(gnc:option-set-value
 		 (gnc:lookup-option options pagename-accounts 
 				    optname-accounts)
-		 (map car finish))
+		 (map cadr finish))
 		;; set the URL.
 		(set! other-anchor
 		      (gnc:report-anchor-text
