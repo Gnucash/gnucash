@@ -248,6 +248,23 @@ static void xaccSRSetTransVisible (SplitRegister *reg,
 
 /** implementations *******************************************************/
 
+static time_t
+get_today_midnight (void)
+{
+  time_t present;
+  struct tm tm;
+
+  present = time (NULL);
+
+  tm = *localtime (&present);
+
+  tm.tm_sec  = 0;
+  tm.tm_min  = 0;
+  tm.tm_hour = 0;
+
+  return mktime (&tm);
+}
+
 /* The routines below create, access, and destroy the SRInfo structure
  * used by SplitLedger routines to store data for a particular register.
  * This is the only code that should access the user_data member of a
@@ -265,7 +282,7 @@ xaccSRInitRegisterData(SplitRegister *reg)
 
   info->blank_split_guid = *xaccGUIDNULL ();
   info->pending_trans_guid = *xaccGUIDNULL ();
-  info->last_date_entered = time(NULL);
+  info->last_date_entered = get_today_midnight ();
   info->first_pass = TRUE;
 
   reg->user_data = info;
