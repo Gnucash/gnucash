@@ -1050,7 +1050,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
   }
   //update_accountlist(info->api);
   
@@ -1171,7 +1171,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
     info->gotkeysforCustomer = info->newcustomer;
 
   }
@@ -1303,7 +1303,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
-    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_NONE);
   }
   else {
     printf("on_iniletter_userinfo_next: Oops, already got keys for another customer. Not yet implemented.\n");

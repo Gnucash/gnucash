@@ -1,3 +1,8 @@
+2003-02-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Quick fix to avoid
+	online transfers being sent to the bank twice.
+
 2003-02-19  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: move AS_SCRUB_INCLUDE _before_ tests so it wont
