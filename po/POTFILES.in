@@ -228,11 +228,13 @@ src/optional/swig/helperfuncs.c
 src/test-core/test-stuff.c
 src/test-core/gncmod-test.c
 src/register/ledger-core/MultiLedger.c
-src/register/ledger-core/SplitLedger.c
+src/register/ledger-core/split-register.c
 src/register/ledger-core/gncmod-ledger-core.c
 src/register/ledger-core/split-register-control.c
 src/register/ledger-core/split-register-util.c
 src/register/ledger-core/split-register-model.c
+src/register/ledger-core/split-register-model-save.c
+src/register/ledger-core/split-register-load.c
 src/register/register-core/QuickFill.c
 src/register/register-core/basiccell.c
 src/register/register-core/cell-factory.c
