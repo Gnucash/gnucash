@@ -145,7 +145,6 @@ src/business/business-gnome/dialog-job.c
 src/business/business-gnome/dialog-order.c
 src/business/business-gnome/dialog-payment.c
 src/business/business-gnome/dialog-vendor.c
-src/business/business-gnome/gnc-business-utils.c
 src/business/business-gnome/search-owner.c
 src/business/business-gnome/business-options-gnome.c
 src/business/business-gnome/business-gnome-utils.c
