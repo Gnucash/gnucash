@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
 "POT-Creation-Date: 2001-05-20 23:59-0700\n"
-"PO-Revision-Date: 2001-04-28 16:42-07:00\n"
+"PO-Revision-Date: 2001-05-22 15:58-07:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -777,7 +777,7 @@ msgstr "Sie müssen auch die anderen Werte angeben."
 
 #: src/gnome/dialog-fincalc.c:332
 msgid "You must enter a valid expression."
-msgstr "Sie müssen einen gültigen Ausdruck eingeben"
+msgstr "Sie müssen einen gültigen Ausdruck eingeben."
 
 #: src/gnome/dialog-fincalc.c:373
 msgid "The interest rate cannot be zero."
@@ -850,7 +850,7 @@ msgstr "Aktuellen Preis entfernen."
 
 #: src/gnome/dialog-price-editor.c:552
 msgid "All prices before the date below will be deleted."
-msgstr "Alle Preise vor dem untenstehenden Datum werden gelöscht"
+msgstr "Alle Preise vor dem untenstehenden Datum werden gelöscht."
 
 #: src/gnome/dialog-price-editor.c:729 src/gnome/glade-gnc-dialogs.c:7386
 #: src/scm/guile-strings.c:79
@@ -925,12 +925,12 @@ msgid ""
 "(or vice versa) to transfer funds\n"
 "between the selected accounts."
 msgstr ""
-"Kein pasendes Währungskonto!\n"
+"Kein passendes Währungskonto gefunden.\n"
 "Bitte erstellen Sie ein Währungskonto\n"
-"mit Währung %s\n"
-"und Gegenwährung %s\n"
-"(oder umgekehrt) um Gelder zwischen den\n"
-"ausgewählten Konten zu transferieren"
+"mit der Währung %s\n"
+"und der Gegenwährung %s\n"
+"(oder umgekehrt), um Gelder zwischen den\n"
+"ausgewählten Konten zu transferieren."
 
 #: src/gnome/dialog-utils.c:138
 msgid "Use local time"
@@ -1059,7 +1059,7 @@ msgstr "(Split)"
 
 #: src/gnome/druid-qif-import.c:1447
 msgid "You must enter a Type for the commodity."
-msgstr "Sie müssen einen Typ für die Ware angeben"
+msgstr "Sie müssen einen Typ für die Ware angeben."
 
 #: src/gnome/druid-qif-import.c:1452
 msgid "You must enter a name for the commodity."
@@ -1087,9 +1087,7 @@ msgstr ""
 msgid ""
 "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
 "the name."
-msgstr ""
-"Geben Sie das Ticker Symbol (z.B. \"DTE\") des Wertpapiers oder eine"
-"andere eindeutige Abkürzung an."
+msgstr "Geben Sie das Tickersymbol (z.B. \"DTE\") des Wertpapiers oder eine andere eindeutige Abkürzung an."
 
 #: src/gnome/druid-qif-import.c:1672
 msgid "Click \"Next\" to accept the information and move on."
@@ -1833,31 +1831,25 @@ msgstr "Gehandelte Bruchteile:"
 
 #: src/gnome/glade-gnc-dialogs.c:3278
 msgid "Enter the full name of the commodity. Example: US Dollars"
-msgstr "Gib den vollen Namen der Währung/Ware ein, z.B.: US Dollars"
+msgstr "Bitte geben Sie den vollen Namen der Währung/Ware ein, z.B. \"US Dollar\""
 
 #: src/gnome/glade-gnc-dialogs.c:3286
 msgid ""
 "Enter the ticker symbol or currency code for the commodity. Example: USD"
-msgstr ""
-"Gib das Ticker Symbol oder den Währungscode für die Ware ein, z.B.: USD"
+msgstr "Bitte geben Sie das Tickersymbol oder den Währungscode für die Ware ein, z.B.\"USD\""
 
 #: src/gnome/glade-gnc-dialogs.c:3300
 msgid ""
 "Enter the type of commodity. For stocks, this is often an exchange on which "
 "the stock is traded. You can choose an existing type from the list or enter "
 "a new type with the keyboard."
-msgstr ""
-"Geben Sie den Typ der Währung/Ware an. Für Aktien ist dies oft die Börse an "
-"der die Aktie gehandelt wird. Sie können einen Typ aus der Liste auswählen "
-"oder einen neuen Typ eingeben."
+msgstr "Geben Sie den Typ der Währung/Ware an. Für Aktien ist dies in der Regel die Börse, an der die Aktie gehandelt wird. Sie können einen Typ aus der Liste auswählen oder einen neuen Typ eingeben."
 
 #: src/gnome/glade-gnc-dialogs.c:3308
 msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
-msgstr ""
-"Geben Sie einen eindeutigen Code für die Währung/Ware ein. Sie können "
-"dieses Feld leerlassen."
+msgstr "Geben Sie einen eindeutigen Code für die Währung/Ware ein. Sie können dieses Feld aber auch leer lassen."
 
 #: src/gnome/glade-gnc-dialogs.c:3317
 msgid "1 /"
@@ -1946,9 +1938,7 @@ msgstr "Benutze Ausgleichskonto für Eröffnungssaldo"
 msgid ""
 "Use an Equity account to transfer the opening balance. The Equity account "
 "will be created if it doesn't exist already."
-msgstr ""
-"Benutzen Sie ein Ausgleichskonto um den Eröffungssaldo zu buchen. "
-"Das Ausgleichskonto wird erzeugt werden, wenn es noch nicht existiert."
+msgstr "Ein Ausgleichskonto benutzen, um den Eröffungssaldo zu buchen. Das Ausgleichskonto wird neu angelegt, falls es noch nicht existiert."
 
 #: src/gnome/glade-gnc-dialogs.c:3845
 msgid "Select Transfer Account"
@@ -1956,9 +1946,7 @@ msgstr "Konto auswählen"
 
 #: src/gnome/glade-gnc-dialogs.c:3852
 msgid "Use the account select below to transfer the opening balance."
-msgstr ""
-"Benutzen Sie den Kontenselektor unten um den Eröffnungssaldo "
-"zu buchen."
+msgstr "Benutzen Sie den Kontenselektor unten, um den Eröffnungssaldo zu buchen."
 
 #: src/gnome/glade-gnc-dialogs.c:3854
 msgid "Transfer Account"
@@ -2389,22 +2377,24 @@ msgid ""
 "\n"
 "Click \"Next\" to find duplicate transactions. "
 msgstr ""
-"Wenn Sie eine QIF-Datei importieren kann ein Teil der Informationen in der\n"
-"QIF-Datei schon in den GnuCash Konten enthalten sein. GnuCash wird\n"
-"versuchen, doppelt vorhandene Buchungen zu finden.\n"
+"Wenn Sie eine QIF-Datei importieren, kann ein Teil der Informationen\n"
+"aus der QIF-Datei schon in den GnuCash Konten enthalten sein. GnuCash\n"
+"wird versuchen, doppelt vorhandene Buchungen zu finden.\n"
 "\n"
-"Auf der nächsten Seite werden Sie gefragt werden zu bestätigen, daß eine\n"
-"bestehende Buchung einer importierten Buchung entspricht. Importierte\n"
-"Buchungen werden auf der linken Seite angezeigt und mögliche Entsprechungen\n"
-"für die auf der linken Seite ausgewählte Buchung werden auf der rechten\n"
-"Seite angezeigt. Es ist möglich, daß mehrere existierende Buchungen einer\n"
-"importierten Buchung entsprechen können. Sie können die richtige Buchung\n"
-"durch klicken in die \"Duplikat?\" Spalte der richtigen Buchung auswählen.\n"
+"Auf der nächsten Seite können Sie bestätigen, wenn eine bestehende\n"
+"Buchung einer importierten Buchung entspricht. Importierte Buchungen\n"
+"werden auf der linken Seite angezeigt. Mögliche Entsprechungen für die\n"
+"auf der linken Seite ausgewählte Buchung werden auf der rechten Seite\n"
+"angezeigt. Es ist möglich, daß mehrere existierende Buchungen einer\n"
+"importierten Buchung entsprechen. Sie können die richtige Buchung\n"
+"durch klicken in die \"Duplikat?\"-Spalte der richtigen Buchung\n"
+"auswählen.\n"
 "\n"
-"Sie können die Regeln, die GnuCash nutzt um doppelte Buchungen zu finden,\n"
-"im \"QIF Import\" Abschnitt des GnuCash Einstellungen Dialogs beeinflussen.\n"
+"Sie können die Regeln, die GnuCash nutzt, um doppelte Buchungen zu\n"
+"finden, im \"QIF Import\"-Abschnitt der GnuCash-Einstellungen\n"
+"beeinflussen.\n"
 "\n"
-"Klicken Sie auf \"Weiter\" um doppelte Buchungen zu finden."
+"Klicken Sie nun auf \"Weiter\", um doppelte Buchungen zu finden."
 
 #: src/gnome/glade-gnc-dialogs.c:4752
 msgid "Select possible duplicates"
@@ -2527,11 +2517,7 @@ msgstr "Suchausdruck:"
 msgid ""
 "Type a single term into the box and hit 'search'. At the moment, this search "
 "engine does not support complex searches, just single words."
-msgstr ""
-"Geben Sie ein einzelnes Wort ein\n"
-"und klicken 'Suchen'. Zur Zeit werden\n"
-"keine komplexeren Ausdrücke unterstützt,\n"
-"nur einzelne Worte."
+msgstr "Geben Sie ein einzelnes Wort ein und klicken 'Suchen'. Zur Zeit werden keine komplexeren Ausdrücke unterstützt, nur einzelne Worte."
 
 #: src/gnome/glade-gnc-dialogs.c:5654 src/gnome/glade-gnc-dialogs.c:5697
 #: src/scm/guile-strings.c:89
@@ -2588,11 +2574,11 @@ msgstr "TXF Kategorien"
 
 #: src/gnome/glade-gnc-dialogs.c:6099
 msgid "Form"
-msgstr "Von"
+msgstr "Formular"
 
 #: src/gnome/glade-gnc-dialogs.c:6128
 msgid "Payer Name Source"
-msgstr "Zahler Namen Quelle"
+msgstr "Herkunft des Namen des Zahlungspflichtigen"
 
 #: src/gnome/glade-gnc-dialogs.c:6143
 msgid "Current Account"
@@ -2637,8 +2623,7 @@ msgstr "Aktiendepot"
 #: src/gnome/glade-gnc-dialogs.c:6514
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr ""
-"Wählen Sie das Konto für das ein Aktiensplit eingegeben werden soll."
+msgstr "Wählen Sie das Konto, für das ein Aktiensplit eingegeben werden soll."
 
 #: src/gnome/glade-gnc-dialogs.c:6578
 msgid "Stock Split Details"
@@ -2816,7 +2801,7 @@ msgstr "Aktuellen Preis entfernen."
 
 #: src/gnome/glade-gnc-dialogs.c:7480
 msgid "Remove Old..."
-msgstr "Alte entfernen..."
+msgstr "Alte Einträge entfernen..."
 
 #: src/gnome/glade-gnc-dialogs.c:7487
 msgid "Remove prices older than a user-entered date"
