@@ -40,7 +40,7 @@ static int color_inited;
 static GdkColorContext *gnucash_color_context;
 
 /* Public Colors */
-GdkColor gn_white, gn_black, gn_light_gray, gn_dark_gray, gn_blue;
+GdkColor gn_white, gn_black, gn_light_gray, gn_dark_gray, gn_blue, gn_red;
 
 static GHashTable *color_hash_table = NULL;
 
@@ -144,8 +144,9 @@ gnucash_color_init (void)
         GdkColormap *colormap = gtk_widget_get_default_colormap ();
 
         /* Initialize the color context */
-        gnucash_color_context = gdk_color_context_new (
-                gtk_widget_get_default_visual (), colormap);
+        gnucash_color_context =
+                gdk_color_context_new (gtk_widget_get_default_visual (),
+                                       colormap);
 
         /* Allocate the default colors */
         gdk_color_white (colormap, &gn_white);
@@ -153,10 +154,11 @@ gnucash_color_init (void)
 
         gnucash_color_alloc_name ("gray60", &gn_light_gray);
         gnucash_color_alloc_name ("gray40", &gn_dark_gray);
-        gnucash_color_alloc_name ("blue", &gn_blue);
+        gnucash_color_alloc_name ("blue",   &gn_blue);
+        gnucash_color_alloc_name ("red",    &gn_red);
 
         if (!color_hash_table)
-                color_hash_table = g_hash_table_new(color_hash, color_equal);
+                color_hash_table = g_hash_table_new (color_hash, color_equal);
 
         color_inited = 1;
 }

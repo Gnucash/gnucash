@@ -280,6 +280,10 @@ draw_cell_line (GdkDrawable *drawable,
                         fg_color = &gn_black;
                         break;
 
+                case CELL_BORDER_LINE_HIGHLIGHT:
+                        fg_color = &gn_red;
+                        break;
+
                 default:
                         return;
         }

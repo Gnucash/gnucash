@@ -23,14 +23,15 @@
 
 #include <gnome.h>
 
-void     gnucash_color_init      (void);
+void      gnucash_color_init        (void);
 
 /* Return the pixel value for the given red, green and blue */
-gulong   gnucash_color_alloc      (gushort red, gushort green, gushort blue);
-void     gnucash_color_alloc_name (const char *name, GdkColor *color);
-void     gnucash_color_alloc_gdk  (GdkColor *color);
+gulong    gnucash_color_alloc       (gushort red, gushort green, gushort blue);
+void      gnucash_color_alloc_name  (const char *name, GdkColor *color);
+void      gnucash_color_alloc_gdk   (GdkColor *color);
 GdkColor *gnucash_color_argb_to_gdk (guint32 argb);
 
-extern GdkColor gn_white, gn_light_gray, gn_dark_gray, gn_black, gn_blue;
+extern GdkColor gn_white, gn_light_gray, gn_dark_gray;
+extern GdkColor gn_black, gn_blue, gn_red;
 
 #endif /* GNUCASH_COLOR_H */
