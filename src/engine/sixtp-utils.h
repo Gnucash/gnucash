@@ -34,8 +34,9 @@ typedef struct {
   guint ns_block_count;
 } TimespecParseInfo;
 
-#define TIMESPEC_TIME_FORMAT  "%Y-%m-%d %H:%M:%S %z"
+#define TIMESPEC_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
 #define TIMESPEC_PARSE_TIME_FORMAT  "%Y-%m-%d %H:%M:%S"
+#define TIMESPEC_SEC_FORMAT_MAX 256
 
 gboolean isspace_str(const gchar *str, int nomorethan);
 
@@ -84,6 +85,9 @@ sixtp* simple_chars_only_parser_new(sixtp_end_handler end_handler);
 
 gboolean string_to_timespec_secs(const gchar *str, Timespec *ts);
 gboolean string_to_timespec_nsecs(const gchar *str, Timespec *ts);
+
+/* str must have length of at least TIMESPEC_SEC_FORMAT_MAX */
+gboolean timespec_secs_to_given_string (const Timespec *ts, gchar *str);
 
 
 gboolean generic_timespec_start_handler(GSList* sibling_data,

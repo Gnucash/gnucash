@@ -94,38 +94,22 @@ gchar *
 timespec_sec_to_string(const Timespec *ts)
 {
     gchar *ret;
-    struct tm parsed_time;
-    time_t tmp_time;
-    
-    ret = g_new(gchar, 512);
 
-    tmp_time = ts->tv_sec;
-    
-    if(!localtime_r(&tmp_time, &parsed_time))
+    ret = g_new(gchar, TIMESPEC_SEC_FORMAT_MAX);
+
+    if(!timespec_secs_to_given_string (ts, ret))
     {
         g_free(ret);
         return NULL;
     }
-    
-    if(strftime(ret, 512, TIMESPEC_TIME_FORMAT, &parsed_time) == 0)
-    {
-        g_free(ret);
-        return NULL;
-    }
-    
+
     return ret;
 }
 
 gchar *
 timespec_nsec_to_string(const Timespec *ts)
 {
-    gchar *ret;
-
-    ret = g_new(gchar, 22);
-
-    g_snprintf(ret, 22, "%ld", ts->tv_nsec);
-
-    return ret;
+    return g_strdup_printf("%ld", ts->tv_nsec);
 }
 
 xmlNodePtr

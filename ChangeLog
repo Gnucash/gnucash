@@ -1,3 +1,25 @@
+2001-04-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnc-ui-util.c (gnc_ui_account_get_balance): use current
+	stock quotes to get balances for stock/mutual/currency accounts
+
+	* src/gnome/window-main.c: check for NULL toolbar parents
+
+	* src/engine/sixtp-xml-write-utils.c: use new func below
+
+	* src/engine/sixtp-dom-generators.c (timespec_sec_to_string): use
+	new func below.
+
+	* src/engine/sixtp-utils.c (timespec_secs_to_given_string): new
+	func. format timezone string by hand (solaris fix)
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_end_handler): only
+	begin editing the account if parsing was successful
+
+	* src/test/test-xml-account.c (test_add_account): don't delete
+	the account, because it's referenced by the parser after the
+	callback.
+
 2001-04-17  Bill Gribble  <grib@billgribble.com>
 
 	* src/gnome/window-main.c: More changes for MDI.  I think we

@@ -1275,7 +1275,7 @@ xaccGroupForEachTransaction (AccountGroup *g,
 
 GSList *
 xaccGroupMapAccounts (AccountGroup *grp,
-                      gpointer (*thunk)(Account *a, void *data),
+                      gpointer (*thunk)(Account *a, gpointer data),
                       gpointer data)
 {
   GSList *result = NULL;
@@ -1298,7 +1298,7 @@ xaccGroupMapAccounts (AccountGroup *grp,
 
 gpointer
 xaccGroupForEachAccountDeeply (AccountGroup *grp,
-                               gpointer (*thunk)(Account *a, void *data),
+                               gpointer (*thunk)(Account *a, gpointer data),
                                gpointer data)
 {
   GList *node;

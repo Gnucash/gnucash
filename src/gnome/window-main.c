@@ -95,8 +95,14 @@ gnc_main_window_remove_view_cb(GnomeMDI * mdi, GnomeMDIChild * child,
 static void 
 gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
   GNCMainInfo * mainwin = user_data;
-  GNCMainChildInfo * mc = NULL; 
+  GNCMainChildInfo * mc = NULL;
+  GtkWidget *toolbar;
   GList * child; 
+
+  toolbar = gtk_object_get_user_data (GTK_OBJECT (app));
+  if (toolbar)
+    gtk_widget_unref (toolbar);
+  gtk_object_set_user_data (GTK_OBJECT (app), NULL);
 
   for(child = mainwin->children; child; child = child->next) {
     mc = child->data;
@@ -107,7 +113,6 @@ gnc_main_window_app_destroyed_cb(GnomeApp * app, gpointer user_data) {
       gtk_container_remove(GTK_CONTAINER(mc->toolbar->parent), mc->toolbar);
     }
   }
-  
 }
 
 /********************************************************************
@@ -248,16 +253,17 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
     if(childwin->app && (childwin->app == new_app)) {
       oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
       if(oldbar && (oldbar != childwin->toolbar)) {
-        gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
+        if (oldbar->parent)
+          gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
         gtk_widget_show(GTK_WIDGET(childwin->toolbar)->parent);
       }
     }
     else if(childwin->app) {
       oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
-      if(oldbar && (oldbar != childwin->toolbar)) {
+      if(oldbar && oldbar->parent && (oldbar != childwin->toolbar)) {
         gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
       }
-      
+
       /* we need to move the toolbar to a new App (mdi mode probably
        * changed) */
       if(GTK_WIDGET(childwin->toolbar)->parent) {
@@ -276,10 +282,10 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
     }
     else {
       oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
-      if(oldbar && (oldbar != childwin->toolbar)) {
+      if(oldbar && oldbar->parent && (oldbar != childwin->toolbar)) {
         gtk_widget_hide(GTK_WIDGET(oldbar)->parent);        
       }
-      
+
       childwin->app = new_app;
       gnome_app_add_toolbar(GNOME_APP(childwin->app), 
                             GTK_TOOLBAR(childwin->toolbar),
@@ -288,12 +294,20 @@ gnc_main_window_child_changed_cb(GnomeMDI * mdi, GnomeMDIChild * not_used,
       gtk_toolbar_set_style(GTK_TOOLBAR(childwin->toolbar), 
                             gnc_get_toolbar_style());
     }
+
+    oldbar = gtk_object_get_user_data(GTK_OBJECT(new_app));
+    if (oldbar)
+      gtk_widget_unref (oldbar);
+
+    if (childwin->toolbar)
+      gtk_widget_ref (childwin->toolbar);
+
     gtk_object_set_user_data(GTK_OBJECT(new_app), childwin->toolbar);
   }
-  
+
   /* set the window title */ 
   gnc_childwin_set_title (childwin);
-  
+
   /* install menu hints if relevant */
   if(mdi->active_child) {
     /* the arg to this callback is SUPPOSED to be the last active child, 

@@ -191,28 +191,61 @@ gnc_account_get_balance_in_currency (Account *account,
   if (!price)
     return gnc_numeric_zero ();
 
-  return gnc_numeric_mul (balance, gnc_price_get_value (price),
-                          gnc_commodity_get_fraction (currency),
-                          GNC_RND_ROUND);
+  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                             gnc_commodity_get_fraction (currency),
+                             GNC_RND_ROUND);
+
+  gnc_price_unref (price);
+
+  return balance;
 }
 
+
+typedef struct
+{
+  gnc_commodity *currency;
+  gnc_numeric balance;
+} CurrencyBalance;
+
+
+static gpointer
+balance_helper (Account *account, gpointer data)
+{
+  CurrencyBalance *cb = data;
+  gnc_numeric balance;
+
+  balance = gnc_account_get_balance_in_currency (account, cb->currency);
+
+  cb->balance = gnc_numeric_add (cb->balance, balance,
+                                 gnc_commodity_get_fraction (cb->currency),
+                                 GNC_RND_ROUND);
+
+  return NULL;
+}
 
 gnc_numeric
 gnc_ui_account_get_balance (Account *account, gboolean include_children)
 {
   gnc_numeric balance;
+  gnc_commodity *currency;
 
   if (account == NULL)
     return gnc_numeric_zero ();
 
-  balance = xaccAccountGetBalance (account);
+  currency = xaccAccountGetCurrency (account);
+
+  balance = gnc_account_get_balance_in_currency (account, currency);
 
   if (include_children)
   {
     AccountGroup *children;
+    CurrencyBalance cb = { currency, balance };
 
     children = xaccAccountGetChildren (account);
-    balance = gnc_numeric_add_fixed (balance, xaccGroupGetBalance (children));
+
+    xaccGroupForEachAccountDeeply (children, balance_helper, &cb);
+
+    balance = cb.balance;
   }
 
   /* reverse sign if needed */

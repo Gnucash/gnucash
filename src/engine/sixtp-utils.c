@@ -33,6 +33,8 @@
 #  include <time.h>
 #endif
 
+#define __EXTENSIONS__
+
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -394,6 +396,8 @@ string_to_timespec_secs(const gchar *str, Timespec *ts) {
   time_t parsed_secs;
   long int gmtoff;
 
+  if (!str || !ts) return FALSE;
+
   memset(&parsed_time, 0, sizeof(struct tm));
 
   /* If you change this, make sure you also change the output code, if
@@ -448,7 +452,9 @@ string_to_timespec_nsecs(const gchar *str, Timespec *ts) {
 
   long int nanosecs;
   int charcount;
-  
+
+  if (!str || !ts) return FALSE;
+
   sscanf(str, " %ld %n", &nanosecs, &charcount);
 
   if(charcount != strlen(str)) return(FALSE);
@@ -456,6 +462,55 @@ string_to_timespec_nsecs(const gchar *str, Timespec *ts) {
   ts->tv_nsec = nanosecs;
 
   return(TRUE);
+}
+
+gboolean
+timespec_secs_to_given_string (const Timespec *ts, gchar *str)
+{
+  struct tm parsed_time;
+  size_t num_chars;
+  time_t tmp_time;
+  int minutes;
+  int hours;
+  int sign;
+
+  if (!ts || !str)
+    return FALSE;
+
+  tmp_time = ts->tv_sec;
+
+  if (!localtime_r(&tmp_time, &parsed_time))
+    return FALSE;
+
+  num_chars = strftime(str, TIMESPEC_SEC_FORMAT_MAX,
+                       TIMESPEC_TIME_FORMAT, &parsed_time);
+  if (num_chars == 0)
+    return FALSE;
+
+  str += num_chars;
+
+  /* timezone is reversed */
+  sign = (timezone > 0) ? -1 : 1;
+
+  minutes = ABS (timezone) / 60;
+  hours = minutes / 60;
+  minutes -= hours * 60;
+
+  if (parsed_time.tm_isdst > 0)
+    hours += sign;
+
+  /* check for rollover */
+  if (hours == -1)
+  {
+    hours = 0;
+    minutes = 60 - minutes;
+    sign *= -1;
+  }
+
+  g_snprintf (str, TIMESPEC_SEC_FORMAT_MAX - num_chars,
+              " %c%02d%02d", (sign > 0) ? '+' : '-', hours, minutes);
+
+  return TRUE;
 }
 
 /* Top level timespec node:

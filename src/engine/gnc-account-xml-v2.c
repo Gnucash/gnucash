@@ -263,8 +263,9 @@ gnc_account_end_handler(gpointer data_for_children,
      * all the transactions, we will Commit.  This replaces #splits
      *  rebalances with #accounts rebalances at the end.  A BIG win!
      */
-    xaccAccountBeginEdit(acc);
-    
+    if (successful)
+      xaccAccountBeginEdit(acc);
+
     return successful;
 }
 

@@ -224,31 +224,23 @@ xml_add_editable_timespec(xmlNodePtr p,
   xmlNodePtr timespec_xml;
   xmlNodePtr secs_xml;
   size_t num_written;
-  struct tm parsed_time;
-  time_t tmp_timet;
-  char secs_str[512]; /* This should be way bigger than we need.
-                         Still, it's bogus, we ought to have
-                         astrftime... */
-  
+  char secs_str[TIMESPEC_SEC_FORMAT_MAX];
+
   g_return_val_if_fail(p, FALSE);
   g_return_val_if_fail(tag, FALSE);
-  g_return_val_if_fail(ts, FALSE); 
+  g_return_val_if_fail(ts, FALSE);
+
   if(!include_if_zero && (ts->tv_sec == 0) && (ts->tv_nsec == 0)) return TRUE;
 
-  tmp_timet = ts->tv_sec;
-  if(!localtime_r(&tmp_timet, &parsed_time)) return(FALSE);
+  if (!timespec_secs_to_given_string (ts, secs_str))
+    return FALSE;
 
-  num_written = strftime(secs_str, sizeof(secs_str),
-                         TIMESPEC_TIME_FORMAT,
-                         &parsed_time);
-  if(num_written == 0) return(FALSE);
-  
   timespec_xml= xmlNewTextChild(p, NULL, tag, NULL);
   g_return_val_if_fail(timespec_xml, FALSE);
 
   secs_xml = xmlNewTextChild(timespec_xml, NULL, "s", secs_str);
   g_return_val_if_fail(secs_xml, FALSE);
-  
+
   if(ts->tv_nsec) {
     xmlNodePtr nsec_xml;
     char num_string[22];
