@@ -58,6 +58,7 @@ libgncengine_la_SOURCES = \
   sixtp.c
 
 libgncengine_la_LDFLAGS = -version-info 2:3:1
+libgncengine_la_LIBADD = ${GNOME_XML_LIB} ${GLIB_LIBS} ${DL_LIB}
 
 noinst_HEADERS = \
   Account.h \
@@ -118,6 +119,6 @@ EXTRA_DIST = \
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_XML_CFLAGS} ${GHTTP_CFLAGS}
 
-LDADD = ${GNOME_XML_LIB} ${GLIB_LIBS}
+LDADD = ${GNOME_XML_LIB} ${GLIB_LIBS} ${DL_LIB}
 
 INCLUDES = -I..
