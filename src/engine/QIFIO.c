@@ -408,6 +408,10 @@ xaccParseQIFDate (char * str)
    *tok = 0x0;
    dat.tm_year = atoi (str);
 
+   /* a quickie Y2K fix: assume two digit dates with
+    * a value less than 50 are in the 21st century. */
+   if (50 > dat.tm_year) dat.tm_year += 100;
+
    dat.tm_sec = 0;
    dat.tm_min = 0;
    dat.tm_hour = 11;
