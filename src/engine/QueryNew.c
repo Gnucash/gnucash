@@ -27,7 +27,6 @@ static short module = MOD_QUERY;
 typedef struct {
   GSList *		param_list;
   QueryPredData_t	pdata;
-  query_compare_t	how;
   gboolean		invert;
 
   /* These values are filled in during "compilation" of the query
@@ -342,7 +341,7 @@ static int check_object (QueryNew *q, gpointer object)
 	  conv_obj = get_fcn (conv_obj);
 	}
 
-	if (((qt->pred_fcn)(conv_obj, get_fcn, qt->how, qt->pdata))
+	if (((qt->pred_fcn)(conv_obj, get_fcn, qt->pdata))
 	    == qt->invert) {
 	  and_terms_ok = 0;
 	  break;
@@ -529,8 +528,7 @@ void gncQueryNewShutdown (void)
 }
 
 void gncQueryAddTerm (QueryNew *q, GSList *param_list,		      
-		      query_compare_t comparitor, QueryPredData_t pred_data,
-		      QueryOp op)
+		      QueryPredData_t pred_data, QueryOp op)
 {
   QueryNewTerm *qt;
   QueryNew *qr, *qs;
@@ -540,7 +538,6 @@ void gncQueryAddTerm (QueryNew *q, GSList *param_list,
   qt = g_new0 (QueryNewTerm, 1);
   qt->param_list = param_list;
   qt->pdata = pred_data;
-  qt->how = comparitor;
 
   qs = gncQueryCreate ();
   query_init (qs, qt);
@@ -958,7 +955,7 @@ void gncQueryAddGUIDListMatch (QueryNew *q, GSList *param_list,
     g_return_if_fail (options == GUID_MATCH_NULL);
 
   pdata = gncQueryGUIDPredicate (options, guid_list);
-  gncQueryAddTerm (q, param_list, COMPARE_EQUAL, pdata, op);
+  gncQueryAddTerm (q, param_list, pdata, op);
 }
 
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,

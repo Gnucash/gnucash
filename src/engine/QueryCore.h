@@ -17,7 +17,8 @@
 
 /* Head of Predicate Data structures.  All PData must start like this. */
 typedef struct query_pred_data {
-  const char *	type_name;
+  const char *		type_name;
+  query_compare_t	how;
 } QueryPredDataDef;
 
 /* 
@@ -28,7 +29,6 @@ typedef struct query_pred_data {
  */
 typedef int (*QueryPredicate) (gpointer object,
 			       QueryAccess get_fcn,
-			       query_compare_t how,
 			       QueryPredData_t pdata);
 
 /* A callback for how to destroy a query predicate's pdata */
@@ -73,17 +73,21 @@ QueryPredData_t gncQueryCorePredicateCopy (QueryPredData_t pdata);
 void gncQueryCorePredicateFree (QueryPredData_t pdata);
 
 /* Core Data Type Predicates */
-QueryPredData_t gncQueryStringPredicate (char *str, string_match_t options,
+QueryPredData_t gncQueryStringPredicate (query_compare_t how, char *str,
+					 string_match_t options,
 					 gboolean is_regex);
-QueryPredData_t gncQueryDatePredicate (date_match_t options, Timespec date);
-QueryPredData_t gncQueryNumericPredicate (numeric_match_t options,
+QueryPredData_t gncQueryDatePredicate (query_compare_t how,
+				       date_match_t options, Timespec date);
+QueryPredData_t gncQueryNumericPredicate (query_compare_t how,
+					  numeric_match_t options,
 					  gnc_numeric value);
 QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids);
-QueryPredData_t gncQueryInt64Predicate (gint64 val);
-QueryPredData_t gncQueryDoublePredicate (double val);
-QueryPredData_t gncQueryBooleanPredicate (gboolean val);
+QueryPredData_t gncQueryInt64Predicate (query_compare_t how, gint64 val);
+QueryPredData_t gncQueryDoublePredicate (query_compare_t how, double val);
+QueryPredData_t gncQueryBooleanPredicate (query_compare_t how, gboolean val);
 QueryPredData_t gncQueryCharPredicate (char_match_t options,
 				       const char *chars);
-QueryPredData_t gncQueryKVPPredicate (GSList *path, const kvp_value *value);
+QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
+				      GSList *path, const kvp_value *value);
 
 #endif /* GNC_QUERYCORE_H */

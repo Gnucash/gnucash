@@ -123,7 +123,7 @@ static GHashTable *freeTable = NULL;
 /* QUERYCORE_STRING */
 
 static int string_match_predicate (gpointer object, QueryAccess get_fcn,
-				   query_compare_t how, QueryPredData_t pd)
+				   QueryPredData_t pd)
 {
   query_string_t pdata = (query_string_t) pd;
   const char *s;
@@ -154,13 +154,13 @@ static int string_match_predicate (gpointer object, QueryAccess get_fcn,
 
   } while (FALSE);
 
-  switch (how) {
+  switch (pd->how) {
   case COMPARE_EQUAL:
     return ret;
   case COMPARE_NEQ:
     return !ret;
   default:
-    PWARN ("bad match type: %d", how);
+    PWARN ("bad match type: %d", pd->how);
     return 0;
   }
 }
@@ -200,20 +200,23 @@ static QueryPredData_t string_copy_predicate (QueryPredData_t pd)
 
   VERIFY_PDATA_R (query_string_type);
 
-  return gncQueryStringPredicate (pdata->matchstring, pdata->options,
+  return gncQueryStringPredicate (pd->how, pdata->matchstring, pdata->options,
 				  pdata->is_regex);
 }
 
-QueryPredData_t gncQueryStringPredicate (char *str, string_match_t options,
+QueryPredData_t gncQueryStringPredicate (query_compare_t how,
+					 char *str, string_match_t options,
 					 gboolean is_regex)
 {
   query_string_t pdata;
 
   g_return_val_if_fail (str, NULL);
   g_return_val_if_fail (*str != '\0', NULL);
+  g_return_val_if_fail (how == COMPARE_EQUAL || how == COMPARE_NEQ, NULL);
 
   pdata = g_new0 (query_string_def, 1);
   pdata->pd.type_name = query_string_type;
+  pdata->pd.how = how;
   pdata->options = options;
   pdata->matchstring = g_strdup (str);
 
@@ -252,7 +255,7 @@ static int date_compare (Timespec ta, Timespec tb, date_match_t options)
 }
 
 static int date_match_predicate (gpointer object, QueryAccess get_fcn,
-				 query_compare_t how, QueryPredData_t pd)
+				 QueryPredData_t pd)
 {
   query_date_t pdata = (query_date_t)pd;
   Timespec objtime;
@@ -263,7 +266,7 @@ static int date_match_predicate (gpointer object, QueryAccess get_fcn,
   objtime = ((query_date_getter)get_fcn) (object);
   compare = date_compare (objtime, pdata->date, pdata->options);
 
-  switch (how) {
+  switch (pd->how) {
   case COMPARE_LT:
     return (compare < 0);
   case COMPARE_LTE:
@@ -277,7 +280,7 @@ static int date_match_predicate (gpointer object, QueryAccess get_fcn,
   case COMPARE_NEQ:
     return (compare != 0);
   default:
-    PWARN ("bad match type: %d", how);
+    PWARN ("bad match type: %d", pd->how);
     return 0;
   }
 }
@@ -310,15 +313,17 @@ static QueryPredData_t date_copy_predicate (QueryPredData_t pd)
 
   VERIFY_PDATA_R (query_date_type);
 
-  return gncQueryDatePredicate (pdata->options, pdata->date);
+  return gncQueryDatePredicate (pd->how, pdata->options, pdata->date);
 }
 
-QueryPredData_t gncQueryDatePredicate (date_match_t options, Timespec date)
+QueryPredData_t gncQueryDatePredicate (query_compare_t how,
+				       date_match_t options, Timespec date)
 {
   query_date_t pdata;
 
   pdata = g_new0 (query_date_def, 1);
   pdata->pd.type_name = query_date_type;
+  pdata->pd.how = how;
   pdata->options = options;
   pdata->date = date;
   return ((QueryPredData_t)pdata);
@@ -327,7 +332,7 @@ QueryPredData_t gncQueryDatePredicate (date_match_t options, Timespec date)
 /* QUERYCORE_NUMERIC */
 
 static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
-				    query_compare_t how, QueryPredData_t pd)
+				    QueryPredData_t pd)
 {
   query_numeric_t pdata = (query_numeric_t)pd;
   gnc_numeric obj_val;
@@ -348,7 +353,7 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
     break;
   }
 
-  if (how == COMPARE_EQUAL) {
+  if (pd->how == COMPARE_EQUAL) {
     gnc_numeric cmp_val = gnc_numeric_create (1, 10000);
     compare =
       (gnc_numeric_compare (gnc_numeric_sub (gnc_numeric_abs (obj_val),
@@ -358,7 +363,7 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
   } else
     compare = gnc_numeric_compare (gnc_numeric_abs (obj_val), pdata->amount);
 
-  switch (how) {
+  switch (pd->how) {
   case COMPARE_LT:
     return (compare < 0);
   case COMPARE_LTE:
@@ -372,7 +377,7 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
   case COMPARE_NEQ:
     return (!compare);
   default:
-    PWARN ("bad match type: %d", how);
+    PWARN ("bad match type: %d", pd->how);
     return 0;
   }
 }
@@ -401,15 +406,17 @@ static QueryPredData_t numeric_copy_predicate (QueryPredData_t pd)
 {
   query_numeric_t pdata = (query_numeric_t)pd;
   VERIFY_PDATA_R (query_numeric_type);
-  return gncQueryNumericPredicate (pdata->options, pdata->amount);
+  return gncQueryNumericPredicate (pd->how, pdata->options, pdata->amount);
 }
 
-QueryPredData_t gncQueryNumericPredicate (numeric_match_t options,
+QueryPredData_t gncQueryNumericPredicate (query_compare_t how,
+					  numeric_match_t options,
 					  gnc_numeric value)
 {
   query_numeric_t pdata;
   pdata = g_new0 (query_numeric_def, 1);
   pdata->pd.type_name = query_numeric_type;
+  pdata->pd.how = how;
   pdata->options = options;
   pdata->amount = value;
   return ((QueryPredData_t)pdata);
@@ -418,7 +425,7 @@ QueryPredData_t gncQueryNumericPredicate (numeric_match_t options,
 /* QUERYCORE_GUID */
 
 static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
-				 query_compare_t how, QueryPredData_t pd)
+				 QueryPredData_t pd)
 {
   query_guid_t pdata = (query_guid_t)pd;
   GList *node;
@@ -513,7 +520,7 @@ QueryPredData_t gncQueryGUIDPredicate (guid_match_t options, GList *guids)
 /* QUERYCORE_INT64 */
 
 static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
-				 query_compare_t how, QueryPredData_t pd)
+				 QueryPredData_t pd)
 {
   gint64 val;
   query_int64_t pdata = (query_int64_t)pd;
@@ -522,7 +529,7 @@ static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
 
   val = ((query_int64_getter)get_fcn) (object);
 
-  switch (how) {
+  switch (pd->how) {
   case COMPARE_LT:
     return (val < pdata->val);
   case COMPARE_LTE:
@@ -536,7 +543,7 @@ static int int64_match_predicate (gpointer object, QueryAccess get_fcn,
   case COMPARE_NEQ:
     return (val != pdata->val);
   default:
-    PWARN ("bad match type: %d", how);
+    PWARN ("bad match type: %d", pd->how);
     return 0;
   }
 }
@@ -566,13 +573,14 @@ static QueryPredData_t int64_copy_predicate (QueryPredData_t pd)
 {
   query_int64_t pdata = (query_int64_t)pd;
   VERIFY_PDATA_R (query_int64_type);
-  return gncQueryInt64Predicate (pdata->val);
+  return gncQueryInt64Predicate (pd->how, pdata->val);
 }
 
-QueryPredData_t gncQueryInt64Predicate (gint64 val)
+QueryPredData_t gncQueryInt64Predicate (query_compare_t how, gint64 val)
 {
   query_int64_t pdata = g_new0 (query_int64_def, 1);
   pdata->pd.type_name = query_int64_type;
+  pdata->pd.how = how;
   pdata->val = val;
   return ((QueryPredData_t)pdata);
 }
@@ -580,7 +588,7 @@ QueryPredData_t gncQueryInt64Predicate (gint64 val)
 /* QUERYCORE_DOUBLE */
 
 static int double_match_predicate (gpointer object, QueryAccess get_fcn,
-				 query_compare_t how, QueryPredData_t pd)
+				 QueryPredData_t pd)
 {
   double val;
   query_double_t pdata = (query_double_t)pd;
@@ -589,7 +597,7 @@ static int double_match_predicate (gpointer object, QueryAccess get_fcn,
 
   val = ((query_double_getter)get_fcn) (object);
 
-  switch (how) {
+  switch (pd->how) {
   case COMPARE_LT:
     return (val < pdata->val);
   case COMPARE_LTE:
@@ -603,7 +611,7 @@ static int double_match_predicate (gpointer object, QueryAccess get_fcn,
   case COMPARE_NEQ:
     return (val != pdata->val);
   default:
-    PWARN ("bad match type: %d", how);
+    PWARN ("bad match type: %d", pd->how);
     return 0;
   }
 }
@@ -633,13 +641,14 @@ static QueryPredData_t double_copy_predicate (QueryPredData_t pd)
 {
   query_double_t pdata = (query_double_t)pd;
   VERIFY_PDATA_R (query_double_type);
-  return gncQueryDoublePredicate (pdata->val);
+  return gncQueryDoublePredicate (pd->how, pdata->val);
 }
 
-QueryPredData_t gncQueryDoublePredicate (double val)
+QueryPredData_t gncQueryDoublePredicate (query_compare_t how, double val)
 {
   query_double_t pdata = g_new0 (query_double_def, 1);
   pdata->pd.type_name = query_double_type;
+  pdata->pd.how = how;
   pdata->val = val;
   return ((QueryPredData_t)pdata);
 }
@@ -648,7 +657,7 @@ QueryPredData_t gncQueryDoublePredicate (double val)
 /* QUERYCORE_BOOLEAN */
 
 static int boolean_match_predicate (gpointer object, QueryAccess get_fcn,
-				 query_compare_t how, QueryPredData_t pd)
+				 QueryPredData_t pd)
 {
   gboolean val;
   query_boolean_t pdata = (query_boolean_t)pd;
@@ -657,13 +666,13 @@ static int boolean_match_predicate (gpointer object, QueryAccess get_fcn,
 
   val = ((query_boolean_getter)get_fcn) (object);
 
-  switch (how) {
+  switch (pd->how) {
   case COMPARE_EQUAL:
     return (val == pdata->val);
   case  COMPARE_NEQ:
     return (val != pdata->val);
   default:
-    PWARN ("bad match type: %d", how);
+    PWARN ("bad match type: %d", pd->how);
     return 0;
   }
 }
@@ -691,13 +700,17 @@ static QueryPredData_t boolean_copy_predicate (QueryPredData_t pd)
 {
   query_boolean_t pdata = (query_boolean_t)pd;
   VERIFY_PDATA_R (query_boolean_type);
-  return gncQueryBooleanPredicate (pdata->val);
+  return gncQueryBooleanPredicate (pd->how, pdata->val);
 }
 
-QueryPredData_t gncQueryBooleanPredicate (gboolean val)
+QueryPredData_t gncQueryBooleanPredicate (query_compare_t how, gboolean val)
 {
-  query_boolean_t pdata = g_new0 (query_boolean_def, 1);
+  query_boolean_t pdata;
+  g_return_val_if_fail (how == COMPARE_EQUAL || how == COMPARE_NEQ, NULL);
+
+  pdata = g_new0 (query_boolean_def, 1);
   pdata->pd.type_name = query_boolean_type;
+  pdata->pd.how = how;
   pdata->val = val;
   return ((QueryPredData_t)pdata);
 }
@@ -705,7 +718,7 @@ QueryPredData_t gncQueryBooleanPredicate (gboolean val)
 /* QUERYCORE_CHAR */
 
 static int char_match_predicate (gpointer object, QueryAccess get_fcn,
-				 query_compare_t how, QueryPredData_t pd)
+				 QueryPredData_t pd)
 {
   char c;
   query_char_t pdata = (query_char_t)pd;
@@ -767,7 +780,7 @@ QueryPredData_t gncQueryCharPredicate (char_match_t options, const char *chars)
 /* QUERYCORE_KVP */
 
 static int kvp_match_predicate (gpointer object, QueryAccess get_fcn,
-				query_compare_t how, QueryPredData_t pd)
+				QueryPredData_t pd)
 {
   int compare;
   kvp_frame *kvp;
@@ -789,7 +802,7 @@ static int kvp_match_predicate (gpointer object, QueryAccess get_fcn,
 
   compare = kvp_value_compare (value, pdata->value);
 
-  switch (how)
+  switch (pd->how)
   {
   case COMPARE_LT:
     return (compare < 0);
@@ -804,7 +817,7 @@ static int kvp_match_predicate (gpointer object, QueryAccess get_fcn,
   case COMPARE_NEQ:
     return (compare != 0);
   default:
-    PWARN ("bad match type: %d", how);
+    PWARN ("bad match type: %d", pd->how);
     return 0;
   }
 }
@@ -828,10 +841,11 @@ static QueryPredData_t kvp_copy_predicate (QueryPredData_t pd)
 {
   query_kvp_t pdata = (query_kvp_t)pd;
   VERIFY_PDATA_R (query_kvp_type);
-  return gncQueryKVPPredicate (pdata->path, pdata->value);
+  return gncQueryKVPPredicate (pd->how, pdata->path, pdata->value);
 }
 
-QueryPredData_t gncQueryKVPPredicate (GSList *path, const kvp_value *value)
+QueryPredData_t gncQueryKVPPredicate (query_compare_t how,
+				      GSList *path, const kvp_value *value)
 {
   query_kvp_t pdata;
   GSList *node;
@@ -840,6 +854,7 @@ QueryPredData_t gncQueryKVPPredicate (GSList *path, const kvp_value *value)
 
   pdata = g_new0 (query_kvp_def, 1);
   pdata->pd.type_name = query_kvp_type;
+  pdata->pd.how = how;
   pdata->value = kvp_value_copy (value);
   pdata->path = g_slist_copy (path);
   for (node = pdata->path; node; node = node->next)

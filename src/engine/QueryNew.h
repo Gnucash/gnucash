@@ -154,8 +154,7 @@ typedef enum {
 typedef struct query_pred_data *QueryPredData_t;
 
 void gncQueryAddTerm (QueryNew *query, GSList *param_list,
-		      query_compare_t comparitor, QueryPredData_t pred_data,
-		      QueryOp op);
+		      QueryPredData_t pred_data, QueryOp op);
 
 void gncQuerySetBook (QueryNew *q, GNCBook *book);
 void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
