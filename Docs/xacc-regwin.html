@@ -25,6 +25,17 @@
     Reconciliation can be done in the <a href="xacc-recnwin.html">
     Reconcile Window</a>
     <p>
+(Not yet implemented) Transactions marked with 'y' can not be edited
+without first changing this flag.  This is because a reconciled
+transaction should be thought of as something that has been checked
+over, and therefore correct.  Changing such a transaction should
+be difficult: we want to avoid accidental errors.
+<p>
+(Not yet implemented) Transactions marked with 'f' are frozen, 
+can cannot be edited under any circumstances.  These have been 
+frozen into an accounting period. That is, the books have been closed
+for this period; they can no longer be reopened for editing.
+    <p>
     
     <h2>Stock Portfolios</h2>
     You can do stock transaction either from a single-stock window, 
