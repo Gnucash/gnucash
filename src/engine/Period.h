@@ -178,5 +178,8 @@ void gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans);
 void gnc_book_insert_lot (QofBook *book, GNCLot *lot);
 void gnc_book_insert_lot_clobber (QofBook *book, GNCLot *lot);
 
+void gnc_book_insert_price (QofBook *book, GNCPrice *prc);
+void gnc_book_insert_price_clobber (QofBook *book, GNCPrice *prc);
+
 #endif /* XACC_PERIOD_H */
 /** @} */

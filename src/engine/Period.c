@@ -39,6 +39,7 @@
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 #include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 #include "Group.h"
 #include "GroupP.h"
 #include "kvp-util-p.h"
@@ -241,6 +242,50 @@ gnc_book_insert_lot (QofBook *book, GNCLot *lot)
       xaccAccountInsertLot (twin, lot);
    }
    LEAVE ("lot=%p", lot);
+}
+
+/* ================================================================ */
+
+void
+gnc_book_insert_price (QofBook *book, GNCPrice *pr)
+{
+   if (!pr || !book) return;
+   
+   /* If this is the same book, its a no-op. */
+   if (pr->book == book) return;
+
+   /* If the old and new book don't share backends, then clobber-copy;
+    * i.e. destroy it in one backend, create it in another.  */
+   if (book->backend != pr->book->backend)
+   {
+      gnc_book_insert_price_clobber (book, pr);
+      return;
+   }
+   ENTER ("price=%p", pr);
+
+   /* Fiddle the price into place in the new book */
+   gnc_price_ref (pr);
+   gnc_price_begin_edit (pr);
+
+   qof_entity_remove (pr->book->entity_table, &pr->guid);
+   pr->book = book;
+   qof_entity_store(book->entity_table, pr, &pr->guid, GNC_ID_PRICE);
+
+   gnc_pricedb_remove_price (pr->db, pr);
+   gnc_pricedb_add_price (gnc_pricedb_get_db (book), pr);
+
+   gnc_price_commit_edit (pr);
+   gnc_price_unref (pr);
+
+   LEAVE ("price=%p", pr);
+}
+
+/* ================================================================ */
+
+void
+gnc_book_insert_price_clobber (QofBook *book, GNCPrice *pr)
+{
+	PERR ("Not Implemented");
 }
 
 /* ================================================================ */
@@ -454,13 +499,11 @@ gnc_book_partition_pricedb (QofBook *dest_book, QofBook *src_book, QofQuery *que
    qof_query_set_book (query, src_book);
    price_list = qof_query_run (query);
 
+printf ("duude XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX prices\n");
    for (pnode = price_list; pnode; pnode=pnode->next)
    {
       GNCPrice *pr = pnode->data;
-      gnc_price_ref (pr);
-      gnc_pricedb_remove_price (src_pdb, pr);
-      gnc_pricedb_add_price (dest_pdb, pr);
-      gnc_price_unref (pr);
+      gnc_book_insert_price (dest_book, pr);
    }
 
    gnc_pricedb_commit_edit (dest_pdb);
