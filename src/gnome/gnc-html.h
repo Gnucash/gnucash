@@ -27,6 +27,12 @@
 #include <ghttp.h>
 #include <gtkhtml/gtkhtml.h>
 
+/*
+ * The gnc_html_export() routine will export the html displayed to a
+ *    file. It will pop up a file dialog box to ask user for a 
+ *    filename.
+ */
+
 typedef enum { URL_TYPE_FILE, URL_TYPE_JUMP, 
                URL_TYPE_HTTP, URL_TYPE_FTP, 
                URL_TYPE_SECURE, 
@@ -55,6 +61,7 @@ void          gnc_html_show_url(gnc_html * html,
                                 URLType type, const char * location, 
                                 const char * label, int newwin_hint);
 void          gnc_html_reload(gnc_html * html);
+void          gnc_html_export(gnc_html * html);
 void          gnc_html_print(gnc_html * html);
 void          gnc_html_cancel(gnc_html * html);
 

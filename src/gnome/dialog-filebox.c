@@ -66,11 +66,10 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
  *         default_name - the default name to use                   *
  * Return: containing the name of the file the user selected        *
 \********************************************************************/
+
 const char *
 fileBox (const char * title, const char * filter, const char *default_name)
 {
-  const char *last_file;
-
   ENTER("\n");
 
   /* Set a default title if nothing was passed in */  
@@ -83,12 +82,8 @@ fileBox (const char * title, const char * filter, const char *default_name)
   fb_info.file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
   fb_info.file_name = NULL;
 
-  last_file = gnc_history_get_last();
-
   if (default_name)
     gtk_file_selection_set_filename(fb_info.file_box, default_name);
-  else if (last_file)
-    gtk_file_selection_set_filename(fb_info.file_box, last_file);
 
   /* hack alert - this was filtering directory names as well as file 
    * names, so I think we should not do this by default (rgmerk) */

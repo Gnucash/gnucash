@@ -1,6 +1,8 @@
 /********************************************************************
  * gnc-html.c -- display HTML with some special gnucash tags.       *
+ *                                                                  *
  * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ * Copyright (C) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -54,10 +56,12 @@
 #include "Group.h"
 #include "RegWindow.h"
 #include "File.h"
+#include "FileBox.h"
 #include "FileDialog.h"
 #include "dialog-utils.h"
 #include "window-register.h"
 #include "print-session.h"
+#include "gnc-engine-util.h"
 #include "gnc-gpg.h"
 #include "gnc-html.h"
 #include "gnc-html-history.h"
@@ -95,6 +99,9 @@ struct request_info {
   ghttp_request * request;
   GtkHTMLStream * handle;
 };
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_HTML;
 
 static char error_404[] = 
 "<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>";
@@ -176,8 +183,7 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
       retval = URL_TYPE_HELP;
     }
     else {
-      printf(" ** gnc-html WARNING : unhandled URL type for '%s'\n",
-             url);
+      PWARN("unhandled URL type for '%s'", url);
       retval = URL_TYPE_OTHER;
     }
   }
@@ -431,9 +437,9 @@ ghttp_check_callback(gpointer data) {
 static int
 gnc_html_certificate_check_cb(ghttp_request * req, X509 * cert, 
                               void * user_data) {
-  printf("gnc-html: checking SSL certificate...\n");
+  PINFO("checking SSL certificate...");
   X509_print_fp(stdout, cert);
-  printf(" ... done\n");
+  PINFO(" ... done\n");
   return TRUE;
 }
 #endif
@@ -534,6 +540,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
         fdata = gh_scm2newstr(scmtext, &fsize);
         if(fdata) {
           gtk_html_write(GTK_HTML(html->html), handle, fdata, fsize);
+          TRACE ("%s", fdata);
           free(fdata);
           fdata = NULL;
           fsize = 0;
@@ -544,7 +551,7 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
         else {
           gtk_html_write(GTK_HTML(html->html), handle, error_404, 
                          strlen(error_404));
-          printf(" ** gnc_html WARNING : report HTML generator failed.\n");
+          PWARN("report HTML generator failed.");
         }
       }
     }
@@ -555,8 +562,8 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
   case URL_TYPE_REGISTER:
   case URL_TYPE_SCHEME:
   default:
-    printf(" ** gnc-html WARNING : load_to_stream for inappropriate type\n");
-    printf("    url = '%s#%s'\n", location, label);
+    PWARN("load_to_stream for inappropriate type\n"
+          "\turl = '%s#%s'\n", location, label);
     gtk_html_write(GTK_HTML(html->html), handle, error_404, 
                    strlen(error_404));
     gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
@@ -890,11 +897,11 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
                    const gchar * action, const gchar * encoding,
                    gpointer user_data) {
   if(!strcasecmp(method, "get")) {
-    printf("GET submit: m='%s', a='%s', e='%s'\n",
+    PINFO("GET submit: m='%s', a='%s', e='%s'",
            method, action, encoding);
   }
   else if(!strcasecmp(method, "post")) {
-    printf("POST submit: m='%s', a='%s', e='%s'\n",
+    PINFO("POST submit: m='%s', a='%s', e='%s'",
            method, action, encoding);
   }
   return TRUE;
@@ -983,7 +990,7 @@ gnc_html_open_help(gnc_html * html, const gchar * location,
 static void
 gnc_html_open_scm(gnc_html * html, const gchar * location,
                   const gchar * label, int newwin) {
-  printf("gnc_html_open_scm : location='%s'\n", location);
+  PINFO("location='%s'", location);
 }
 
 
@@ -1221,6 +1228,44 @@ gnc_html_set_button_cb(gnc_html * html, GncHTMLButtonCB button_cb,
   html->button_cb       = button_cb;
   html->button_cb_data  = data;
 }
+
+/* ------------------------------------------------------- */
+
+static gboolean 
+raw_html_receiver (gpointer     engine,
+               const gchar *data,
+               guint        len,
+               gpointer     user_data)
+{
+  FILE *fh = (FILE *) user_data;
+  fwrite (data, len, 1, fh);
+  return TRUE;
+}
+
+void
+gnc_html_export(gnc_html * html) 
+{
+  const char *filepath;
+  FILE *fh;
+
+  filepath = fileBox (_("Save HTML To File"), NULL, NULL);
+  PINFO (" user selected file=%s\n", filepath);
+  fh = fopen (filepath, "w");
+  if (NULL == fh)
+  {
+     const char *fmt = _("Could not open the file\n"
+                         "     %s\n%s");
+     char *buf = g_strdup_printf (fmt, filepath, strerror (errno));
+     gnc_error_dialog (buf);
+     if (buf) g_free (buf);
+     return;
+  }
+
+  gtk_html_save (GTK_HTML(html->html), raw_html_receiver, fh);
+  fclose (fh);
+}
+
+/* ------------------------------------------------------- */
 
 void
 gnc_html_print(gnc_html * html) {

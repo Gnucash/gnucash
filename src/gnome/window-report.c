@@ -33,6 +33,7 @@
 #include "dialog-options.h"
 #include "glade-gnc-dialogs.h"
 #include "gnc-component-manager.h"
+#include "gnc-engine-util.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
 #include "query-user.h"
@@ -58,6 +59,10 @@ struct _gnc_report_window {
 
   gnc_html     * html;
 };
+
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_HTML;
 
 
 /********************************************************************
@@ -115,6 +120,14 @@ static int
 gnc_report_window_stop_button_cb(GtkWidget * w, gpointer data) {
   gnc_report_window       * report = data;
   gnc_html_cancel(report->html);
+  return TRUE;
+}
+
+static int
+gnc_report_window_export_button_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window       * report = data;
+  ENTER (" ");
+  gnc_html_export(report->html);
   return TRUE;
 }
 
@@ -431,7 +444,7 @@ gnc_report_window_new(GtkWidget * container) {
     { GNOME_APP_UI_ITEM,
       _("Export"),
       _("Export HTML-formatted report to file"),
-      NULL, report,
+      gnc_report_window_export_button_cb, report,
       NULL,
       GNOME_APP_PIXMAP_STOCK,
       GNOME_STOCK_PIXMAP_CONVERT,
