@@ -530,10 +530,10 @@ xaccSplitRebalance (Split *split)
    }								\
 }
 
-
 void
 xaccTransBeginEdit (Transaction *trans)
 {
+   assert (trans);
    trans->open = 1;
    xaccOpenLog ();
 }
