@@ -263,16 +263,6 @@ xaccFreqSpecSetUIType( FreqSpec *fs, UIFreqType newUIFreqType )
         fs->uift = newUIFreqType;
 }
 
-/*
-void
-xaccFreqSpecSetTypes( FreqSpec *fs, FreqType newFT, UIFreqType newUIFT )
-{
-        g_return_if_fail( fs );
-        xaccFreqSpecSetType( fs, newFT );
-        xaccFreqSpecSetUIType( fs, newUIFT );
-}
-*/
-
 static inline guint32 min( guint32 a, guint32 b )
 {
         return a > b ? b : a;

@@ -1410,9 +1410,11 @@ gnc_dense_cal_mark( GncDenseCal *dcal,
                 d = dateArray[i];
                 doc = gdc_get_doc_offset( dcal, d );
                 if ( doc < 0 ) {
+#if 0 /* Silently ignore. */
                         printf( "This is TheErrorThatShouldBeAppropriately"
                                 "Handeled @ %d for \"%s\" with %d\n",
                                 i, name, doc );
+#endif /* 0 */
                         continue;
                 }
                 l = g_list_alloc();
@@ -1431,6 +1433,11 @@ gnc_dense_cal_mark_remove( GncDenseCal *dcal, guint markToRemove )
         GList *l, *calMarkL;
         gint doc;
         gdc_mark_data *gdcmd;
+
+        /* Ignore non-realistic marks */
+        if ( markToRemove == -1 ) {
+                return;
+        }
 
         gdcmd = NULL;
         for ( l = dcal->markData; l; l=l->next ) {

@@ -108,6 +108,7 @@ FreqType xaccFreqSpecGetType( FreqSpec *fs );
  * Sets the type of a FreqSpec.
  * Setting the type re-initializes any spec-data; this means
  * destroying any sub-types in the case of COMPOSITE.
+ *
  * THESE FUNCTIONS HAVE NOT BEEN MAINTAINED THROUGH BEN'S CHANGES.
  * They need to be checked.
  **/
@@ -115,9 +116,6 @@ FreqType xaccFreqSpecGetType( FreqSpec *fs );
 
 UIFreqType xaccFreqSpecGetUIType( FreqSpec *fs );
 void xaccFreqSpecSetUIType( FreqSpec *fs, UIFreqType newUIFreqType );
-
-/* Convenience function; calls the two above. */
-/* void xaccFreqSpecSetTypes( FreqSpec *fs, FreqType newType, UIFreqType newUIType ); */
 
 /**
  * Sets the type to once-off, and initialises the
@@ -182,7 +180,7 @@ int xaccFreqSpecGetDaily( FreqSpec *fs, int *outRepeat );
 int xaccFreqSpecGetWeekly( FreqSpec *fs, int *outRepeat, int *outDayOfWeek );
 int xaccFreqSpecGetMonthly( FreqSpec *fs, int *outRepeat,
                             int *outDayOfMonth, int *outMonthOffset );
-// FIXME: add month-relative
+/* FIXME: add month-relative */
 
 /**
  * Returns the list of FreqSpecs in a COMPOSITE FreqSpec.
@@ -200,17 +198,6 @@ GList* xaccFreqSpecCompositeGet( FreqSpec *fs );
 void xaccFreqSpecCompositeAdd( FreqSpec *fs, FreqSpec *fsToAdd );
 
 /**
- * Returns the next date which the FreqSpec specifies given the
- * previous occurance.  Like the relaxed validity check, this doesn't
- * take multipliers into account; it just returns the next possible
- * occurance after the given day.
- * bstanley I think this should be private.
- **/
-/*
-time_t xaccFreqSpecGetInstanceAfter( FreqSpec *fs, time_t after );
-*/
-
-/**
  * Returns the next instance of the FreqSpec after a given input date.
  * Note that if the given date happens to be a repeat date,
  * then the next repeat date will be returned.
@@ -218,24 +205,5 @@ time_t xaccFreqSpecGetInstanceAfter( FreqSpec *fs, time_t after );
 void xaccFreqSpecGetNextInstance( FreqSpec *fs,
                                   const GDate* in_date,
                                   GDate* out_date );
-
-/**
- * Returns either NULL [valid] or a descriptive string [reason not
- * valid] for the given query date.  This is "relaxed", in that it
- * doesn't care about the frequency multiplier [e.g., For
- * WEEKLY[2]:Wed, all Wednesdays are valid; for MONTHLY[12]:16, the
- * 16th day of every month is valid.
- **/
-/*
-char* xaccFreqSpecIsValidDateRelaxed( FreqSpec *fs, time_t query );
-*/
-
-/**
- * A strict validity check.  Given a previous and query date, returns
- * NULL if the query date is valid, or a text reason if not.
- **/
-/*
-char* xaccFreqSpecIsValidDate( FreqSpec *fs, time_t previous, time_t query );
-*/
 
 #endif /* XACC_FREQSPEC_H */

@@ -201,7 +201,6 @@ xaccSchedXactionSetFreqSpec( SchedXaction *sx, FreqSpec *fs )
 {
         g_return_if_fail( fs );
 
-	DEBUG("Called xaccSchedXactionSetFreqSpec");
         xaccFreqSpecFree( sx->freq );
         sx->freq = fs;
 	sx->dirty = TRUE;
@@ -427,7 +426,6 @@ xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays )
 }
 
 
-/* FIXME: there is a bug in this, I think */
 GDate
 xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
 {
@@ -474,10 +472,8 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx, void *stateData )
                         g_date_clear( &next_occur, 1 );
                 }
         } else if ( xaccSchedXactionHasOccurDef( sx ) && stateData ) {
-                /* FIXME: does this work? */
-                gint remaining;
-                remaining = xaccSchedXactionGetRemOccur( sx );
-                if ( remaining == 0 ) {
+                temporalStateData *tsd = (temporalStateData*)stateData;
+                if ( tsd->num_occur_rem == 0 ) {
                         PINFO( "no more occurances remain" );
                         g_date_clear( &next_occur, 1 );
                 }
@@ -500,16 +496,11 @@ xaccSchedXactionGetInstanceAfter( SchedXaction *sx,
 
                 end_date = xaccSchedXactionGetEndDate( sx );
                 if ( g_date_compare( &next_occur, end_date ) > 0 ) {
-                        PINFO( "next_occur past end_date" );
                         g_date_clear( &next_occur, 1 );
                 }
         } else if ( xaccSchedXactionHasOccurDef( sx ) && stateData ) {
-                /* gint remaining = xaccSchedXactionGetRemOccur( sx ); */
-                gint *remaining = (gint*)stateData;
-                DEBUG( "stateData [remaining]: %d", *remaining );
-                if ( (*remaining - 1) < 0 ) {
-                        PINFO( "next_occur is outside "
-                               "reminaing-instances window." );
+                temporalStateData *tsd = (temporalStateData*)stateData;
+                if ( tsd->num_occur_rem == 0 ) {
                         g_date_clear( &next_occur, 1 );
                 }
         }
@@ -644,19 +635,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 void*
 xaccSchedXactionCreateSequenceState( SchedXaction *sx )
 {
-        //void *toRet = NULL;
-
         return gnc_sx_create_temporal_state_snapshot( sx );
-        /*
-        if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                toRet = g_new0( gint, 1 );
-                *(gint*)toRet = xaccSchedXactionGetRemOccur( sx );
-                DEBUG( "Returning state data [remaining]: %d", *(gint*)toRet );
-        } else {
-                DEBUG( "Returning null state data" );
-        }
-        */
-        //return toRet;
 }
 
 void
@@ -667,28 +646,16 @@ xaccSchedXactionIncrSequenceState( SchedXaction *sx,
                 temporalStateData *tsd = (temporalStateData*)stateData;
                 tsd->num_occur_rem -= 1;
         }
-#if 0 /* change to temporal_state */
-        if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                gint *remaining;
-                remaining = (gint*)stateData;
-                *remaining = *remaining - 1;
-        }
-#endif /* 0 */
 }
 
 void
 xaccSchedXactionDestroySequenceState( void *stateData )
 {
         gnc_sx_destroy_temporal_state_snapshot( stateData );
-#if 0 /* change to temporal_state */
-        if ( xaccSchedXactionHasOccurDef( sx ) ) {
-                g_free( (gint*)stateData );
-        }
-#endif /* 0 */
 }
 
-void
-*gnc_sx_create_temporal_state_snapshot( SchedXaction *sx )
+void*
+gnc_sx_create_temporal_state_snapshot( SchedXaction *sx )
 {
         temporalStateData *toRet = g_new0( temporalStateData, 1 );
         toRet->last_date       = sx->last_date;

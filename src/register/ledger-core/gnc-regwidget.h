@@ -41,8 +41,9 @@ struct _GNCRegWidget {
   /* The "parent" widget */
   GtkVBox vbox;
 
-  /* Top level window */
-  /* jsled: used by the jump cbs; can we get by w/o knowing this? inv. layering */
+  /* Top level/containing window */
+  /* jsled: used by the jump cbs; can we get by w/o knowing this? investigate
+   * layering */
   GtkWidget * window;
   gint width;
   gint height;

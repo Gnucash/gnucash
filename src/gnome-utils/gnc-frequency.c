@@ -53,8 +53,6 @@ static void update_appropriate_cal( GNCFrequency *gf );
 
 static void gnc_frequency_class_init( GNCFrequencyClass *klass );
 
-static void free_resources( GtkObject *o, gpointer d );
-
 static void freq_option_value_changed( GtkMenuShell *b, gpointer d );
 static void start_date_changed( GnomeDateEdit *gde, gpointer d );
 static void spin_changed_helper( GtkAdjustment *adj, gpointer d );
@@ -208,10 +206,6 @@ gnc_frequency_init( GNCFrequency *gf )
   vb = GTK_VBOX( glade_xml_get_widget( gf->gxml, "gncfreq_vbox" ) );
   gf->vb = vb;
   gtk_container_add( GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb) );
-
-  /* connect to the destroy signal for cleanup */
-  gtk_signal_connect( GTK_OBJECT(gf->vb), "destroy",
-                      GTK_SIGNAL_FUNC(free_resources), gf );
 
   /* intially fix the calendars. */
   for ( j=0; cals[j] != NULL; j++ ) {
@@ -636,30 +630,30 @@ gnc_frequency_save_state( GNCFrequency *gf, FreqSpec *fs, GDate *outStartDate )
   case UIFREQ_DAILY_MF:
     xaccFreqSpecSetComposite( fs );
     xaccFreqSpecSetUIType( fs, uift );
-    gd2 = g_date_new();
     o = glade_xml_get_widget( gf->gxml, "dailymf_spin" );
     tmpInt = gtk_spin_button_get_value_as_int( GTK_SPIN_BUTTON(o) );
     /*  Okay.  Assume that the calendar is upgraded to */
     /*  support selecting weeks, returning the Sunday selected. */
     /*  Normalize to sunday. */
-    tmpTm = g_new0( struct tm, 1 );
-    g_date_to_struct_tm( gd, tmpTm );
-    /*  month-day += (week-day - current-week-day ) % 7 */
-    /*  week-day <- 0 */
-    tmpTm->tm_mday -= ( tmpTm->tm_wday ) % 7;
-    g_date_set_time( gd, mktime( tmpTm ) );
+    {
+      tmpTm = g_new0( struct tm, 1 );
+      g_date_to_struct_tm( gd, tmpTm );
+      /*  month-day += (week-day - current-week-day ) % 7 */
+      /*  week-day <- 0 */
+      tmpTm->tm_mday -= ( tmpTm->tm_wday ) % 7;
+      g_date_set_time( gd, mktime( tmpTm ) );
+      g_free( tmpTm );
+    }
 
     /*  1 == "mon", 5 == "fri" */
     for ( i=1; i<6; i++ ) {
-      *gd2 = *gd; 
-      g_date_add_days( gd2, i );
+      g_date_add_days( gd, 1 );
       tmpFS = xaccFreqSpecMalloc(gnc_get_current_book ());
-      xaccFreqSpecSetWeekly( tmpFS, gd2, tmpInt );
+      xaccFreqSpecSetWeekly( tmpFS, gd, tmpInt );
       xaccFreqSpecCompositeAdd( fs, tmpFS );
     }
+
     g_date_free( gd );
-    g_date_free( gd2 );
-    g_free( tmpTm );
     break;
   case UIFREQ_WEEKLY:
     xaccFreqSpecSetComposite( fs );
@@ -895,17 +889,6 @@ update_appropriate_cal( GNCFrequency *gf )
 
   if ( o )
     update_cal( gf, GTK_CALENDAR(o) );
-}
-
-static void 
-free_resources( GtkObject *o, gpointer d )
-{
-#if 0
-  GNCFrequency *gf = (GNCFrequency*)d;
-  // FIXME: destroy an appropriate widget
-  gtk_widget_destroy( glade_xml_get_widget( gf->gxml,
-                                            "GNCFrequency widget" ) );
-#endif // 0
 }
 
 static void

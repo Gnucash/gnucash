@@ -894,12 +894,6 @@ sxsincelast_init( sxSinceLastData *sxsld )
                                     sxsincelast_close_handler,
                                     sxsld->sincelast_window );
 
-#if 0 /* FIXME: need to be fixed because 'show-test' removal, b0rk them all. */
-        gtk_signal_connect( GTK_OBJECT(sxsld->sincelast_window), "map",
-                            GTK_SIGNAL_FUNC( show_test ), sxsld );
-        gtk_signal_connect( GTK_OBJECT(sxsld->sincelast_window), "realize",
-                            GTK_SIGNAL_FUNC( show_test ), sxsld );
-#endif /* 0 */
         gtk_signal_connect( GTK_OBJECT(sxsld->sincelast_window), "destroy",
                             GTK_SIGNAL_FUNC( sxsincelast_destroy ), sxsld );
 
@@ -1171,11 +1165,6 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
 
         /* FIXME: Simulate a 'next' button press to get the right "first
          * thing" hilighted */
-#if 0
-        if ( sxsld->tcl_row > 0 ) {
-                gtk_clist_select_row( clist, 0, 0 );
-        }
-#endif /* 0 */
 }
 
 static void
@@ -1295,6 +1284,7 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
         gboolean autoCreateOpt, notifyOpt;
 
         tct = NULL;
+        act = NULL;
         for ( ; goodList ; goodList = goodList->next ) {
                 rit = (reminderInstanceTuple*)goodList->data;
 
@@ -1625,10 +1615,6 @@ create_each_transaction_helper( Transaction *t, void *d )
         /* FIXME: when we copy the trans_onto_trans, we don't want to copy
            the Split's kvp_frames... */
 
-#if 0
-        DEBUG( "I'm seeing Transaction \"%s\"", xaccTransGetDescription( t ) );
-#endif /* 0 */
-
         createUD = (createData*)d;
         tci = createUD->tci;
 
@@ -1657,10 +1643,6 @@ create_each_transaction_helper( Transaction *t, void *d )
                    will, but I'd rather not have to count on it. --jsled */
                 split_kvpf = xaccSplitGetSlots( (Split*)osList->data );
 
-#if 0
-                DEBUG( "\tProcessing Split \"%s\"", xaccSplitGetMemo( split ) );
-                DEBUG( "\tkvp_frame: %s\n", kvp_frame_to_string( split_kvpf ) );
-#endif /* 0 */
 
                 /* from-transaction of splits */
                 /* This needs to be before the value setting [below] so the
@@ -2295,72 +2277,6 @@ processed_valid_reminders_listP( sxSinceLastData *sxsld )
                         badRecentRun = NULL;
                 }
         }
-#if 0
-                /* ================================================== */
-
-                if ( xaccSchedXactionGetName( rt->sx ) != rtName ) {
-                        if ( rtName != NULL ) {
-                                /* Deal with previous sequence. */
-                                overallOkFlag &=
-                                        inform_or_add( reminderListPtr,
-                                                       prevRT, okFlag,
-                                                       badList, &goodList );
-                        }
-
-                        /* Reset loop state vars */
-                        okFlag = prevState = TRUE;
-                        rtName = xaccSchedXactionGetName( rt->sx );
-
-                        /* Cleanup */
-                        if ( badList != NULL ) {
-                                g_list_free( badList );
-                        }
-                        if ( badRecentRun != NULL ) {
-                                g_list_free( badRecentRun );
-                        }
-                        badList = badRecentRun = NULL;
-                }
-
-                /* If we haven't seen an inconsistency, then we're still ok.
-                 * "inconsistency": we can go from [isSelected ==] TRUE to
-                 * FALSE, but not back again [w/in a SX sequence, which we
-                 * are [by the outer loop]].  */
-                if ( prevState ) {
-                        prevState = rt->isSelected;
-                        if ( ! rt->isSelected ) {
-                                badRecentRun =
-                                        g_list_append( badRecentRun, rt );
-                        }
-                } else {
-                        if ( rt->isSelected ) {
-                                okFlag = FALSE;
-                                if ( g_list_length( badRecentRun ) > 0 ) {
-                                        badList =
-                                                g_list_concat( badList,
-                                                               badRecentRun );
-                                        badRecentRun = NULL;
-                                }
-                        } else {
-                                badRecentRun =
-                                        g_list_append( badRecentRun, rt );
-                        }
-
-                }
-
-                reminderListPtr = reminderListPtr->next;
-        }
-
-        /* Deal with final sequence. */
-        if ( rtName != NULL ) {
-                overallOkFlag &= inform_or_add( sxsld->reminderList,
-                                                rt, okFlag,
-                                                badList, &goodList );
-        }
-
-        /* cleanup */
-        g_list_free( badList );
-        g_list_free( badRecentRun );
-#endif /* 0 */
 
         /* Handle implications of above logic. */
         if ( !overallOkFlag ) {
@@ -2493,14 +2409,6 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
         gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->ac_regWidget), TRUE, TRUE, 2 );
 
-#if 0
-        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "activate_cursor",
-                            GTK_SIGNAL_FUNC(sxe_register_record_cb), sxed );
-        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "redraw_all",
-                            GTK_SIGNAL_FUNC(sxe_register_redraw_all_cb), sxed );
-
-#endif /* 0 */
-
         /* FIXME: we should do all the happy-fun register stuff... button bar
          * controls ... popups ... */
 
@@ -2548,13 +2456,6 @@ create_created_ledger( sxSinceLastData *sxsld )
         gtk_box_pack_start( GTK_BOX(vbox), toolbar, FALSE, FALSE, 2 );
         gtk_box_pack_end( GTK_BOX(vbox), GTK_WIDGET(sxsld->created_regWidget), TRUE, TRUE, 2 );
 
-#if 0
-        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "activate_cursor",
-                            GTK_SIGNAL_FUNC(sxe_register_record_cb), sxed );
-        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "redraw_all",
-                            GTK_SIGNAL_FUNC(sxe_register_redraw_all_cb), sxed );
-
-#endif /* 0 */
 
         /* FIXME: we should do all the happy-fun register stuff... button bar
          * controls ... popups ... */

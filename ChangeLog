@@ -1,3 +1,34 @@
+2002-07-01  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_mark_remove):
+	Unrealistic marks [such as '-1'] are now ignored instead of
+	hitting assertion.
+
+	* src/gnome/dialog-scheduledxaction.c: Dead code removal; naming
+	clarifications.
+	(gnc_sxed_check_consistent): Added.
+	(gnc_sxed_check_changed): Added; used when the cancel button is
+	pressed.  SX editor now queries the user if the SX has changed.
+	(gnc_sxed_save_sx): Added; seperated from consistency-check.
+	(_gnc_sxed_get_widgets): Added; many glade_xml_get_widget(...)s
+	removed from code.
+	(free_var_numeric): Added; we now cleanup the temporary variable
+	table correctly after doing balance checking.
+	(schedXact_editor_create_ledger): RegWidget toolbar shouldn't
+	expand; fixed.
+	(putSchedXactionInDialog): Fixed assertion-failure/abort when a
+	previously-unscheduled SX is scheduled.
+
+	* src/engine/SchedXaction.c (xaccSchedXactionGetNextInstance),
+	(xaccSchedXactionGetInstanceAfter): Fixed bug in
+	number-of-occurance instance-state processing.
+
+	* src/register/ledger-core/gnc-regwidget.c: 
+	* src/gnome/dialog-schedxaction.c:
+	* src/gnome/dialog-sxsincelast.c:
+	* src/engine/SchedXaction.[ch]:
+	* src/engine/FreqSpec.[ch]: Dead code removal/cleanup.
+
 2002-07-01  Derek Atkins   <derek@ihtfp.com>
 
 	* gnc-html: convert URLType from enum to char*

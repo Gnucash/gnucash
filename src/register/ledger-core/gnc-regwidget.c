@@ -150,11 +150,11 @@ gnc_regWidget_new( GNCLedgerDisplay *ld, GtkWindow *win )
   GNCRegWidget *rw;
   rw = GNC_REGWIDGET( gtk_type_new( gnc_regWidget_get_type() ) );
   /* IMPORTANT: If we set this to anything other than GTK_RESIZE_QUEUE, we
-   * enter into a very bad back-and-forth between the sheet and the druid [in
-   * certain conditions and circumstances not detailed here], causing in
-   * either a single instance of the druid resizing or infinite instances of
-   * the druid resizing without bound.  Contact jsled@asynchronous.org for
-   * details. -- 2002.04.15
+   * enter into a very bad back-and-forth between the sheet and a containing
+   * GnomeDruid [in certain conditions and circumstances not detailed here],
+   * resulting in either a single instance of the Druid resizing or infinite
+   * instances of the Druid resizing without bound.  Contact
+   * jsled@asynchronous.org for details. -- 2002.04.15
    */
   gtk_container_set_resize_mode( GTK_CONTAINER( rw ), GTK_RESIZE_QUEUE );
   gnc_regWidget_init2( rw, ld, win );
@@ -210,11 +210,6 @@ gnc_regWidget_new( GNCLedgerDisplay *ld, GtkWindow *win )
 #include "gnucash-sheet.h"
 #include "messages.h"
 #include "table-allgui.h"
-
-#if 0
-static int last_width = 0;
-static int last_stock_width = 0;
-#endif
 
 /** PROTOTYPES ******************************************************/
 static void gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data);
@@ -609,16 +604,13 @@ gnc_register_jump_to_blank (GNCRegWidget *rw)
 static void
 expand_ent_cb (GNCRegWidget *rw, gpointer data)
 {
-#if 0
-  GtkWidget *widget = data;
-#endif
   gboolean expand;
   SplitRegister *reg;
 
   reg = gnc_ledger_display_get_split_register (rw->ledger);
 
 #if 0
-  /* jsled: this isn't true. */
+  /* this isn't true. --jsled */
   expand = GTK_TOGGLE_BUTTON (widget)->active;
 #else
   expand = TRUE;
@@ -627,7 +619,7 @@ expand_ent_cb (GNCRegWidget *rw, gpointer data)
   gnc_split_register_expand_current_trans (reg, expand);
 }
 
-/* jsled: default handler */
+/* default handler --jsled */
 static void
 new_trans_cb (GNCRegWidget *rw, gpointer data)
 {
@@ -1082,12 +1074,6 @@ gnc_register_record (GNCRegWidget *rw)
   if (!gnc_split_register_save (reg, TRUE))
     return;
 
-#if 0
-  if (trans != NULL)
-    gnc_register_include_date (rw, xaccTransGetDate(trans));
-#endif /* 0 */
-
-  /*gnc_split_register_redraw (reg);*/
   gnc_ledger_display_refresh( rw->ledger );
 }
 
@@ -1177,11 +1163,8 @@ static gboolean
 gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
   GNCRegWidget *rw = data;
-  DEBUG( "gnc_reg[widget]_delete_cb in" );
   gnc_register_check_close (rw);
-
   gnc_ledger_display_close (rw->ledger);
-  DEBUG("gnc_reg[widget]_delete_cb out [true]");
   return FALSE; /* let the user handle correctly. */
 }
 
@@ -1192,13 +1175,9 @@ gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
   GNCRegWidget *rw = GNC_REGWIDGET(widget);
   SCM id;
 
-  DEBUG( "Got gnc_regwidget_destroy cb" );
   gnc_ledger_display_close (rw->ledger);
-
   id = rw->toolbar_change_callback_id;
   gnc_unregister_option_change_callback_id(id);
-
-  DEBUG ("destroyed GNCRegWidget");
 }
 
 /* jsled: what to do? */
@@ -1389,36 +1368,6 @@ gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win 
   }
 #endif /* 0 */
 
-  /* jsled: FIXME: prefix && loading/saving window state
-   * Some argument can be made that this is the caller's responsibility.
-   */
-#if 0
-  {
-    int *width;
-    char *prefix;
-
-    switch (reg->type)
-    {
-      case STOCK_REGISTER:
-      case PORTFOLIO_LEDGER:
-      case CURRENCY_REGISTER:
-        prefix = "reg_stock_win";
-        width = &last_stock_width;
-        break;
-
-      default:
-        prefix = "reg_win";
-        width = &last_width;
-        break;
-    }
-
-    if (*width == 0)
-      gnc_get_window_size (prefix, width, NULL);
-
-    gtk_window_set_default_size (GTK_WINDOW(win), *width, 0);
-  }
-#endif /* 0 */
-
   gtk_widget_show_all (GTK_WIDGET(rw));
 
   gnc_split_register_show_present_divider (reg, TRUE);
@@ -1505,38 +1454,6 @@ gnc_register_redraw_help_cb (GnucashRegister *g_reg, gpointer data)
   g_free (help);
 }
 
-#if 0
-/* jsled: window-manip. */
-static void
-gnc_reg_save_size (RegWindow *regData)
-{
-  SplitRegister *reg;
-  int *width;
-  char *prefix;
-
-  reg = gnc_ledger_display_get_split_register (regData->ledger);
-
-  switch (reg->type)
-  {
-    case STOCK_REGISTER:
-    case PORTFOLIO_LEDGER:
-    case CURRENCY_REGISTER:
-      prefix = "reg_stock_win";
-      width = &last_stock_width;
-      break;
-    default:
-      prefix = "reg_win";
-      width = &last_width;
-      break;
-  }
-
-  gdk_window_get_geometry (regData->window->window, NULL, NULL,
-                           width, NULL, NULL);
-
-  gnc_save_window_size (prefix, *width, 0);
-}
-#endif /* 0 */
-
 /********************************************************************\
  * regDestroy()
 \********************************************************************/
@@ -1546,16 +1463,9 @@ regDestroy (GNCLedgerDisplay *ledger)
 {
   GNCRegWidget *rw = gnc_ledger_display_get_user_data (ledger);
 
-  DEBUG("regDestroy");
-
   if (rw)
   {
     SplitRegister *reg;
-
-    /* jsled: FIXME */
-#if 0
-    gnc_reg_save_size (rw);
-#endif /* 0 */
 
     reg = gnc_ledger_display_get_split_register (ledger);
 
@@ -1563,8 +1473,6 @@ regDestroy (GNCLedgerDisplay *ledger)
       gnc_table_save_state (reg->table);
 
   }
-
-  DEBUG("regDestroy out");
   gnc_ledger_display_set_user_data (ledger, NULL);
 }
 
@@ -1665,39 +1573,6 @@ pasteTransCB (GtkWidget *w, gpointer data)
   gnc_split_register_paste_current
     (gnc_ledger_display_get_split_register (rw->ledger));
 }
-
-
-#if 0
-static gboolean
-gnc_register_include_date(RegWindow *regData, time_t date)
-{
-  RegDateWindow *regDateData;
-  time_t start, end;
-  gboolean changed = FALSE;
-
-  regDateData = regData->date_window;
-
-  start = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->start_date));
-  end   = gnc_date_edit_get_date(GNC_DATE_EDIT(regDateData->end_date));
-
-  if (date < start)
-  {
-    gnc_date_edit_set_time(GNC_DATE_EDIT(regDateData->start_date), date);
-    changed = TRUE;
-  }
-
-  if (date > end)
-  {
-    gnc_date_edit_set_time(GNC_DATE_EDIT(regDateData->end_date), date);
-    changed = TRUE;
-  }
-
-  if (changed)
-    gnc_register_set_date_range(regData);
-  
-  return changed;
-}
-#endif /* 0 */
 
 /********************************************************************\
  * recordCB                                                         *
