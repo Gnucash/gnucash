@@ -85,7 +85,7 @@
 #include "Account.h"
 #include "Data.h"
 #include "FileIO.h"
-#include "main.h"
+#include "messages.h"
 #include "util.h"
 
 #define PERMS   0666

@@ -49,6 +49,7 @@
 #endif 
 
 #include "main.h"
+#include "messages.h"
 #include "util.h"
 #include "xtutil.h"
 

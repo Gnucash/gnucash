@@ -39,7 +39,7 @@
 #include "Data.h"
 #include "RegWindow.h"
 #include "MainWindow.h"
-#include "main.h"
+#include "messages.h"
 #include "util.h"
 #include "xtutil.h"
 

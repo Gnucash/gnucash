@@ -27,11 +27,10 @@
 
 #include "config.h"
 
-#include "util.h"
-#include "main.h"
 #include "Account.h"
 #include "date.h"
 #include "QuickFill.h"
+#include "util.h"
 
 /** PROTOTYPES ******************************************************/
 void qfInsertTransactionRec( QuickFill *qf, Transaction *trans, int depth );

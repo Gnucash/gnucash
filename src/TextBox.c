@@ -38,7 +38,7 @@
 #include <Xbae/Matrix.h>
 
 #include "config.h"
-#include "main.h"
+#include "messages.h"
 #include "util.h"
 #include "xtutil.h"
 

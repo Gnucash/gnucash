@@ -138,12 +138,6 @@ void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col)
    /* if the drop-down menu is showing, hide it now */
    XmComboBoxHideList (box->combobox);
 
-printf ("move from %d %d to %d %d \n", 
-   box->currow,
-   box->curcol,
-   phys_row,
-   phys_col);
-
    /* if there is an old widget, remove it */
    if ((0 <= box->currow) && (0 <= box->curcol)) {
       XbaeMatrixSetCellWidget (box->parent, box->currow, box->curcol, NULL);
@@ -204,7 +198,6 @@ const char * enterCombo (struct _BasicCell *bcell, const char *value)
 
       /* drop down the menu so that its ready to go. */
       XmComboBoxShowList (box->combobox); 
-printf ("show at %d %d \n", phys_row, phys_col);
    } else {
       XtUnmanageChild (box->combobox); 
    }
@@ -284,7 +277,6 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
    }
    if (!choice) choice = XtNewString ("");
 
-printf ("select %s \n", choice);
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
    xaccSetBasicCellValue (&(cell->cell), choice);
    XtFree (choice);

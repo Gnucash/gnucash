@@ -37,7 +37,7 @@
 #include "Account.h"
 #include "BuildMenu.h"
 #include "Data.h"
-#include "main.h"
+#include "messages.h"
 #include "MainWindow.h"
 #include "RecnWindow.h"
 #include "RegWindow.h"

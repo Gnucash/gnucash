@@ -32,7 +32,7 @@
 #include "Account.h"
 #include "BuildMenu.h"
 #include "Data.h"
-#include "main.h"
+#include "messages.h"
 #include "util.h"
 
 typedef struct _accMenuEntry

@@ -1,5 +1,6 @@
 
 #include "actioncell.h"
+#include "messages.h"
 
 static void realizeAction (struct _BasicCell *bcell, void *w, int width);
 static void destroyAction (struct _BasicCell *bcell);

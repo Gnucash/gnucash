@@ -48,6 +48,7 @@
 #include "HelpWindow.h"
 #include "LedgerUtils.h"
 #include "main.h"
+#include "messages.h"
 #include "MainWindow.h"
 #include "RecnWindow.h"
 #include "RegWindow.h"

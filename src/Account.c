@@ -28,7 +28,6 @@
 #include "Account.h"
 #include "Data.h"
 #include "date.h"
-#include "main.h"
 #include "Transaction.h"
 #include "util.h"
 

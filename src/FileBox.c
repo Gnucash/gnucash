@@ -28,7 +28,7 @@
 #include "config.h"
 
 #include "FileBox.h"
-#include "main.h"
+#include "messages.h"
 #include "util.h"
 #include "xtutil.h"
 

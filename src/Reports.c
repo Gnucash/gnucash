@@ -32,7 +32,7 @@
 #include <Xm/LabelGP.h>
 
 #include "config.h"
-#include "main.h"
+#include "messages.h"
 #include "Reports.h"
 #include "util.h"
 #include "xtutil.h"
