@@ -1,10 +1,9 @@
 SUBDIRS = . test-core test 
 
-pkglib_LTLIBRARIES = libgncmod-engine.la
+pkglib_LTLIBRARIES = \
+  libgncmod-engine.la libgw-glib.la libgw-engine.la libgw-kvp.la
 
-CFLAGS = @CFLAGS@ ${GNUCASH_ENGINE_BASE_CFLAGS}
-
-INCLUDES = -I${top_srcdir}/src/gnc-module
+CFLAGS = @CFLAGS@ -I${top_srcdir}/src/gnc-module ${GNUCASH_ENGINE_BASE_CFLAGS}
 
 libgncmod_engine_la_SOURCES = \
   Account.c \
@@ -101,8 +100,9 @@ gncscm_DATA=commodity-table.scm engine-init.scm engine-interface.scm \
 engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm 
 
 gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_LTLIBRARIES = libgw-glib.la libgw-engine.la libgw-kvp.la
-gwmod_DATA = gw-engine-spec.scm gw-glib-spec.scm gw-kvp-spec.scm
+gwmod_DATA = \
+  gw-engine.scm gw-glib.scm gw-kvp.scm \
+  gw-engine-spec.scm gw-glib-spec.scm gw-kvp-spec.scm
 
 EXTRA_DIST = \
   .cvsignore \
@@ -120,25 +120,25 @@ EXTRA_DIST = \
 	ln -sf . g-wrapped 
 	touch .scm-links
 
-gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
+gw-engine.scm gw-engine.c gw-engine.h: .scm-links gw-engine-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-engine-spec.scm\") \
 	 (gw:generate-module \"gw-engine\")"
 
-gw-glib.c gw-glib.h: .scm-links gw-glib-spec.scm
+gw-glib.scm gw-glib.c gw-glib.h: .scm-links gw-glib-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (primitive-load \"./gw-glib-spec.scm\") \
 	 (gw:generate-module \"gw-glib\")"
 
-gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
+gw-kvp.scm gw-kvp.c gw-kvp.h: .scm-links gw-kvp-spec.scm
 	FLAVOR=gnome guile -c \
 	 "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (primitive-load \"./gw-kvp-spec.scm\") \
 	 (gw:generate-module \"gw-kvp\")"
 
-BUILT_SOURCES = gw-engine.c gw-engine.h gw-glib.c gw-glib.h gw-kvp.c gw-kvp.h
-CLEANFILES = gw-engine.c gw-engine.h gw-engine.html gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links gw-kvp.c gw-kvp.h
+BUILT_SOURCES = gw-engine.scm gw-engine.c gw-engine.h gw-glib.scm gw-glib.c gw-glib.h gw-kvp.scm gw-kvp.c gw-kvp.h
+CLEANFILES = gw-engine.scm gw-engine.c gw-engine.h gw-engine.html gw-glib.scm gw-glib.c gw-glib.h gw-glib.html gnucash g-wrapped .scm-links gw-kvp.scm gw-kvp.c gw-kvp.h
