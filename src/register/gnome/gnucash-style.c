@@ -895,8 +895,12 @@ gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths)
 
                         cd = gnucash_style_get_cell_dimensions (style,
                                                                 row, col);
+                        if (cd == NULL)
+                                continue;
 
                         cb_cell = gnc_cellblock_get_cell (header, row, col);
+                        if (cb_cell == NULL)
+                                continue;
 
                         if (cb_cell->cell_type < 0)
                                 continue;

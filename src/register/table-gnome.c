@@ -72,7 +72,8 @@ table_destroy_cb(Table *table)
         for (i = 0; i < CELL_TYPE_COUNT; i++)
                 header_widths[i] = -1;
 
-        gnucash_sheet_get_header_widths (sheet, header_widths);
+        if (!GTK_OBJECT_DESTROYED(GTK_OBJECT(sheet)))
+                gnucash_sheet_get_header_widths (sheet, header_widths);
 
         alist = SCM_EOL;
         if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
@@ -91,7 +92,8 @@ table_destroy_cb(Table *table)
                         alist = gh_cons (assoc, alist);
                 }
 
-        gnc_set_option ("__gui", "reg_column_widths", alist);
+        if (!gh_null_p(alist))
+                gnc_set_option ("__gui", "reg_column_widths", alist);
 
         gtk_widget_unref(GTK_WIDGET(sheet));
 
@@ -148,7 +150,7 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         while (gh_list_p(alist) && !gh_null_p(alist))
         {
-                const char *name;
+                char *name;
                 CellType ctype;
                 SCM assoc;
 

@@ -719,7 +719,6 @@ gnucash_sheet_destroy (GtkObject *object)
         for (i = GNUCASH_CURSOR_HEADER; i < GNUCASH_NUM_CURSORS; i++)
                 gnucash_sheet_style_destroy(sheet, sheet->cursor_styles[i]);
 
-        g_hash_table_destroy (sheet->layout_info_hash_table);
         g_hash_table_destroy (sheet->dimensions_hash_table);        
 
         if (GTK_OBJECT_CLASS (sheet_parent_class)->destroy)
@@ -2433,8 +2432,8 @@ gnucash_sheet_new (Table *table)
         sheet->grid = item;
 
         /* some register data */
-        sheet->layout_info_hash_table = g_hash_table_new (g_str_hash, g_str_equal);
-        sheet->dimensions_hash_table = g_hash_table_new (g_str_hash, g_str_equal);
+        sheet->dimensions_hash_table = g_hash_table_new (g_str_hash,
+                                                         g_str_equal);
 
         /* The cursor */
         sheet->cursor = gnucash_cursor_new (sheet_group);

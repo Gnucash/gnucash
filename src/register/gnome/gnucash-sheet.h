@@ -103,7 +103,6 @@ typedef struct {
         SheetBlockStyle *cursor_styles[GNUCASH_NUM_CURSORS];
 
         /* some style information associated to a sheet */
-        GHashTable *layout_info_hash_table;
         GHashTable *dimensions_hash_table;
 
         GTable *blocks;
