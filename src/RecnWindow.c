@@ -46,13 +46,14 @@
 typedef struct _RecnWindow
 {
   Account *acc;             /* The account that we are reconciling  */
-  double  ddiff;            /* The amount ($$$) to reconcile        */
+  double  ddiff;            /* The amount to reconcile              */
   Widget  dialog;           /* The reconcile window dialog          */
   Widget  difference;       /* Text field, amount left to reconcile */
   Widget  totDebit;         /* Text field, total debit reconciled   */
   Widget  totCredit;        /* Text field, total credit reconciled  */
   Widget  debit;            /* Debit matrix show unreconciled debit */
   Widget  credit;           /* Credit matrix, shows credits...      */
+  char *  symbol;           /* Currency symbol or 's' for shares    */
 } RecnWindow;
 
 /** PROTOTYPES ******************************************************/
@@ -115,7 +116,8 @@ recnRefresh( RecnWindow *recnData )
       
       if( trans->reconciled != YREC )
         {
-        double themount = xaccGetAmount (acc, trans);
+        double themount;
+
         sprintf( buf, "%c", trans->reconciled );
         rows[0] = XtNewString(buf);
         rows[1] = trans->num;
@@ -125,6 +127,14 @@ recnRefresh( RecnWindow *recnData )
                  (trans->date.year%100) );
         rows[2] = XtNewString(buf);
         rows[3] = trans->description;
+
+        /* for stock accounts, show share quantity, 
+         * not currency amount */
+        if ((STOCK == acc->type) || (MUTUAL == acc->type)) {
+           themount = xaccGetShareAmount (acc, trans);
+        } else {
+           themount = xaccGetAmount (acc, trans);
+        }
         sprintf( buf, "%.2f", DABS(themount) );
         rows[4] = XtNewString(buf);
         
@@ -165,28 +175,43 @@ recnRecalculateBalance( RecnWindow *recnData )
   double ddebit  = 0.0;
   double dcredit = 0.0;
   double ddiff   = 0.0;
+  short shrs = 0;
+
+  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = 1;
   
   /* Calculate the total debit: */
+  ddebit = 0.0;
   XtVaGetValues( recnData->debit, XmNrows, &nrows, NULL );
   for( i=0; i<nrows; i++ )
     {
+    double tmp;
     String recn = XbaeMatrixGetCell( recnData->debit, i, 0 );
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->debit, i );
-      ddebit += xaccGetAmount (acc, trans);
+      if (shrs) {
+        ddebit += xaccGetShareAmount (acc, trans); 
+      } else {
+        ddebit += xaccGetAmount (acc, trans); 
+      }
       }
     }
   
   /* Calculate the total credit: */
+  dcredit = 0.0;
   XtVaGetValues( recnData->credit, XmNrows, &nrows, NULL );
   for( i=0; i<nrows; i++ )
     {
+    double tmp;
     String recn = XbaeMatrixGetCell( recnData->credit, i, 0 );
     if( recn[0] == YREC )
       {
       trans  = (Transaction *)XbaeMatrixGetRowUserData( recnData->credit, i );
-      dcredit += xaccGetAmount (acc, trans);
+      if (shrs) {
+        dcredit += xaccGetShareAmount (acc, trans); 
+      } else {
+        dcredit += xaccGetAmount (acc, trans); 
+      }
       }
     }
   
