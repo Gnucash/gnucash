@@ -587,7 +587,7 @@
 ;;  new stocks or #f if none.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:update-stock-hash stock-hash acct-hash)
+(define (qif-import:update-stock-hash stock-hash ticker-map acct-hash)
   (let ((names '()))
     (hash-fold 
      (lambda (qif-name map-entry p)
@@ -625,13 +625,15 @@
                    
                    ;; we know nothing about this security.. we need to 
                    ;; ask about it
-                   (begin 
+                   (let ((ticker-symbol (qif-ticker-map:lookup-ticker ticker-map stock-name)))
+                     (if (not ticker-symbol)
+			 (set! ticker-symbol stock-name))
                      (set! names (cons stock-name names))
                      (hash-set! 
                       stock-hash stock-name 
                       (gnc:commodity-create stock-name
                                             GNC_COMMODITY_NS_NYSE
-                                            stock-name
+                                            ticker-symbol
                                             ""
                                             100000))))))
          #f))

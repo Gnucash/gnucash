@@ -554,6 +554,14 @@ Christiansen</glossterm>
 <para>for RedHat RPM packaging</para>
 </glossdef>
 </glossentry>
+
+<glossentry>
+<glossterm><email>hampton@employees.org</email> David Hampton</glossterm>
+<glossdef>
+<para>qif import patch</para>
+</glossdef>
+</glossentry>
+
 <glossentry>
 <glossterm><email>offby1@blarg.net</email> Eric Hanchrow</glossterm>
 <glossdef>

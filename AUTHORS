@@ -107,6 +107,7 @@ Hans de Graaff <hans@degraaff.org> XML patches
 Bill Gribble <grib@billgribble.com> qif importation code, and much much more
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
+David Hampton <hampton@employees.org> qif import patch
 Eric Hanchrow <offby1@blarg.net> updated currency documentation
 Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch

@@ -87,6 +87,7 @@ struct _qifimportwindow {
   SCM       gnc_acct_info;
   SCM       stock_hash;
   SCM       new_stocks;
+  SCM       ticker_map;
 
   SCM       imported_account_group;
   SCM       match_transactions;
@@ -139,6 +140,7 @@ gnc_ui_qif_import_druid_make(void)  {
   GtkObject       * wobj;
   SCM  load_map_prefs;
   SCM  mapping_info;
+  SCM  create_ticker_map;
   int  i;
 
   char * pre_page_names[NUM_PRE_PAGES] = {
@@ -173,6 +175,7 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->memo_map_info     =  SCM_BOOL_F;
   retval->stock_hash        =  SCM_BOOL_F;
   retval->new_stocks        =  SCM_BOOL_F;
+  retval->ticker_map        =  SCM_BOOL_F;
   retval->imported_account_group   = SCM_BOOL_F;
   retval->match_transactions = SCM_BOOL_F;
   retval->selected_transaction = 0;
@@ -230,6 +233,9 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->cat_map_info     = gh_list_ref(mapping_info, gh_int2scm(2));
   retval->memo_map_info    = gh_list_ref(mapping_info, gh_int2scm(3));
   retval->stock_hash       = gh_list_ref(mapping_info, gh_int2scm(4));
+
+  create_ticker_map = gh_eval_str("make-ticker-map");
+  retval->ticker_map = gh_call0(create_ticker_map);
   
   scm_protect_object(retval->imported_files);
   scm_protect_object(retval->selected_file);
@@ -242,6 +248,7 @@ gnc_ui_qif_import_druid_make(void)  {
   scm_protect_object(retval->acct_map_info);
   scm_protect_object(retval->stock_hash);
   scm_protect_object(retval->new_stocks);
+  scm_protect_object(retval->ticker_map);
   scm_protect_object(retval->imported_account_group);
   scm_protect_object(retval->match_transactions);
   
@@ -287,6 +294,7 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
   scm_unprotect_object(window->acct_map_info);
   scm_unprotect_object(window->stock_hash);
   scm_unprotect_object(window->new_stocks);
+  scm_unprotect_object(window->ticker_map);
   scm_unprotect_object(window->imported_account_group);
   scm_unprotect_object(window->match_transactions);
 
@@ -560,8 +568,8 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     scm_protect_object(wind->selected_file);      
     
     /* load the file */
-    load_return = gh_call2(qif_file_load,  gh_car(imported_files),
-                           scm_filename);
+    load_return = gh_call3(qif_file_load, gh_car(imported_files),
+                           scm_filename, wind->ticker_map);
     
     /* a list returned is (#f error-message) for an error, 
      * (#t error-message) for a warning, or just #f for an 
@@ -1325,8 +1333,8 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
     /* if we need to look at stocks, do that, otherwise import
      * xtns and go to the duplicates page */
     scm_unprotect_object(wind->new_stocks);
-    wind->new_stocks = gh_call2(update_stock, wind->stock_hash, 
-                                wind->acct_map_info);
+    wind->new_stocks = gh_call3(update_stock, wind->stock_hash,
+				wind->ticker_map, wind->acct_map_info);
     scm_protect_object(wind->new_stocks);
     
     if(wind->new_stocks != SCM_BOOL_F) {
@@ -1380,8 +1388,8 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
   int show_matches;
 
   scm_unprotect_object(wind->new_stocks);
-  wind->new_stocks =  gh_call2(update_stock, wind->stock_hash, 
-                               wind->acct_map_info);
+  wind->new_stocks =  gh_call3(update_stock, wind->stock_hash, 
+			       wind->ticker_map, wind->acct_map_info);
   scm_protect_object(wind->new_stocks);
   
   if(wind->new_stocks != SCM_BOOL_F) {

@@ -17,7 +17,7 @@
 ;;  just store the fields "raw".
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-file:read-file self path)
+(define (qif-file:read-file self path ticker-map)
   (false-if-exception
    (let* ((qstate-type #f)
           (current-xtn #f)
@@ -88,6 +88,8 @@
                        (set! current-xtn (make-qif-cat)))
                       ((account)
                        (set! current-xtn (make-qif-acct)))
+                      ((type:security)
+                       (set! current-xtn (make-qif-stock-symbol)))
                       ((option:autoswitch)
                        (set! ignore-accounts #t))
                       ((clear:autoswitch)
@@ -322,6 +324,35 @@
                         (display "qif-file:read-file : unknown Cat slot ")
                         (display tag) 
                         (display " .. continuing anyway") (newline))))
+
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    ;; Security transactions 
+                   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                    ((type:security)
+                     (case tag
+                       ;; N : stock name 
+                       ((#\N)
+                        (qif-stock-symbol:set-name! current-xtn value))
+                       
+                       ;; S : ticker symbol 
+                       ((#\S)
+                        (qif-stock-symbol:set-symbol! current-xtn value))
+                       
+                       ;; T : type 
+                       ((#\T)
+                        (qif-stock-symbol:set-type! current-xtn value))
+                       
+                       ;; end-of-record
+                       ((#\^)
+                        (qif-ticker-map:add-ticker! ticker-map current-xtn)
+                        (set! current-xtn (make-qif-stock-symbol)))
+                       
+                       (else
+                        (display "qif-file:read-file : unknown Security slot ")
+                        (display tag) 
+                        (display " .. continuing anyway.")
+                        (newline))))
+                    
                     
                     ;; trying to sneak one by, eh? 
                     (else 

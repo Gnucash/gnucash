@@ -578,3 +578,77 @@
 
 (define qif-map-entry:set-display?!
   (simple-obj-setter <qif-map-entry> 'display?))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  <qif-stock-symbol>
+;;  [N] stock name     : string 
+;;  [S] ticker symbol  : string 
+;;  [T] type           : string 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define <qif-stock-symbol>
+  (make-simple-class
+   'qif-stock-symbol
+   '(name symbol type)))
+
+(define qif-stock-symbol:name
+  (simple-obj-getter <qif-stock-symbol> 'name))
+
+(define qif-stock-symbol:set-name! 
+  (simple-obj-setter <qif-stock-symbol> 'name))
+
+(define qif-stock-symbol:symbol
+  (simple-obj-getter <qif-stock-symbol> 'symbol))
+
+(define qif-stock-symbol:set-symbol! 
+  (simple-obj-setter <qif-stock-symbol> 'symbol))
+
+(define qif-stock-symbol:type
+  (simple-obj-getter <qif-stock-symbol> 'type))
+
+(define qif-stock-symbol:set-type! 
+  (simple-obj-setter <qif-stock-symbol> 'type))
+
+(define (qif-stock-symbol:print self)
+  (simple-obj-print self))
+
+(define (make-qif-stock-symbol)
+  (make-simple-obj <qif-stock-symbol>))
+
+
+
+
+(define <qif-ticker-map>
+  (make-simple-class
+   'qif-ticker-map
+   '(stocks)))
+
+(define qif-ticker-map:ticker-map
+  (simple-obj-getter <qif-ticker-map> 'stocks))
+
+(define qif-ticker-map:set-ticker-map!
+  (simple-obj-setter <qif-ticker-map> 'stocks))
+
+(define (make-ticker-map) 
+  (let ((self (make-simple-obj <qif-ticker-map>)))
+    (qif-ticker-map:set-ticker-map! self '())
+    self))
+
+(define (qif-ticker-map:add-ticker! ticker-map stock-symbol)
+  (qif-ticker-map:set-ticker-map!
+   ticker-map
+   (cons stock-symbol (qif-ticker-map:ticker-map ticker-map))))
+
+(define (qif-ticker-map:lookup-ticker ticker-map name)
+  (let ((retval #f))
+    (for-each 
+     (lambda (symbol)
+       (if (string=? name (qif-stock-symbol:name symbol))
+	   (begin
+	     (set! retval (qif-stock-symbol:symbol symbol))
+	     (if (string=? retval "")
+		 (set! retval #f)))))
+     (qif-ticker-map:ticker-map ticker-map))
+    retval))
+
