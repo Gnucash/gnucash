@@ -1,3 +1,8 @@
+2001-03-22  Robert Graham Merkel <rgmerk@mira.net>
+
+	* src/scm/date-utilities.scm (moddate): set is-dst to unknown to
+	hopefully fix daylight-saving time errors.
+
 2001-03-21  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: take out --enable-gpg argument, is run-time dep

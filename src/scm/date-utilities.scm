@@ -144,7 +144,7 @@
       (set-tm:mday newtm (op (tm:mday newtm) (tm:mday delta)))
       (set-tm:mon newtm (op (tm:mon newtm) (tm:mon delta)))
       (set-tm:year newtm (op (tm:year newtm) (tm:year delta)))
-
+      (set-tm:isdst newtm -1)
        (let ((time (car (mktime newtm))))
 	 (cons time 0)))))
 
