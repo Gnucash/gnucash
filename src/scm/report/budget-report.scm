@@ -182,6 +182,45 @@
 (define make-nominal-mechanism
   (record-constructor budget-nominal-mechanism-structure))
 
+;; make-budget-entry:  
+;;  1: description, 
+;;  2: list of accounts
+;;  3: list of subentries.
+
+;; make-budget-subentry:
+;;  1: description
+;;  2: amount
+;;  3: period size (number of days, weeks, months or years)
+;;  4: whether #3 is in days, months, weeks or years
+;;  5: mechanism (nominal, bill, recurring or contingency)
+
+;; make-nominal-mechanism.
+;;  (no parameters).  A nominal budget line is probably the budget
+;;  type you are most used to.  The expected value for half a year of
+;;  a one year budget line would be half the amount.
+
+;; make-recurring-mechanism.
+;;  (no parameters).  This type is designed for budget items that
+;;  happen regularly, but on no fixed date.  For example, if you
+;;  service your car 3 times a year at $40 a pop, enter an amount of
+;;  $40 and a period of 4 months rather than $120 a year.
+
+;; make-bill-mechanism.
+;;  This type is designed for budget items that happen on a fixed
+;;  date.  You can specify a window around the date in case you pay a
+;;  little early or late.
+;;  The two parameters specify the start or stop day.  This is the day
+;;  number in the period.  For example, 15 would specify the 15th of
+;;  the month, 1 specifies sunday, et cetera.  The first day in the
+;;  period is "1".  The last day in the period is "0", and negative
+;;  numbers are used to count backwards from the last day.  For
+;;  example, Christmas Day is -6 for a year.
+
+;; make-contingency-mechansim.  
+;;  Use this for unexpected expenses.  The budget saves up money for
+;;  the unexpected expense, and then always keeps the full amount on
+;;  hand.
+
 (define gnc:budget-entries
   (list
    ;; first line is always the "other" collector.  It doesn't become part of the totals.
