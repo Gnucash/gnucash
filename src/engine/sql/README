@@ -128,6 +128,16 @@ password, *NOT* your unix login name and password.
 
 (A GUI dialog to prompt for your password hasn't been implemented yet.)
 
+Note that you (or your SQL database admin) will have to make sure
+that access permissions on the various GnuCash tables have been set 
+appropriately.  Typically, this will be by starting the 'psql'
+shell, listing all relations with \z, and then issueing
+a 'GRANT ALL on gncAccount TO someuser;', and so on, for each 
+relation.   Failing to do this will result in lots of unhappiness.
+The sysadmin will also need to make sure that TCP/IP connections
+are properly enabled in the postgres server hba.conf file.
+
+
 Access Modes
 ------------
 There are four different ways or 'modes' in which to access your 
