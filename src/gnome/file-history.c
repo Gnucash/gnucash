@@ -160,6 +160,7 @@ gnc_history_update_menu(GnomeApp * app)
   GnomeUIInfo *menu;
   GnomeDockItem *di;
   GtkWidget *menushell;
+  gpointer data;
   char *path;
   char *file;
   char *name;
@@ -167,6 +168,9 @@ gnc_history_update_menu(GnomeApp * app)
   int count;
   int i, n;
   int pos;
+
+  if (!app)
+    return;
 
   di = gnome_app_get_dock_item_by_name(app, GNOME_APP_MENUBAR_NAME);
   if (di == NULL)
@@ -184,8 +188,17 @@ gnc_history_update_menu(GnomeApp * app)
   if (!gnome_app_find_menu_pos (menushell, path, &pos))
     return;
 
-  gnome_app_remove_menu_range(app, GNOME_MENU_FILE_PATH,
-                              pos, 1 + num_menu_entries);
+  data = gtk_object_get_data (GTK_OBJECT (app), "gnc_set_history");
+  if (data)
+  {
+    int num_entries;
+
+    data = gtk_object_get_data (GTK_OBJECT (app), "gnc_num_history");
+    num_entries = GPOINTER_TO_INT (data);
+
+    gnome_app_remove_menu_range(app, GNOME_MENU_FILE_PATH,
+                                pos, 1 + num_entries);
+  }
 
   if(history_list == NULL)
     __gnc_history_get_list();
@@ -240,6 +253,10 @@ gnc_history_update_menu(GnomeApp * app)
 
   gnome_app_insert_menus(GNOME_APP(app), path, menu);
   num_menu_entries = n;
+
+  gtk_object_set_data (GTK_OBJECT (app), "gnc_set_history", app);
+  gtk_object_set_data (GTK_OBJECT (app), "gnc_num_history",
+                       GINT_TO_POINTER (num_menu_entries));
 
   for (i = 1; i <= n; i++)
     g_free((menu+i)->label);

@@ -1,3 +1,7 @@
+2001-04-17  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/file-history.c: fix bug
+
 2001-04-17  Bill Gribble  <grib@billgribble.com>
 
 	* fixes to MDI bugs: only one param editor for accounts and 
