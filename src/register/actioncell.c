@@ -40,8 +40,18 @@ void realizeAction (struct _BasicCell *bcell, void *w, int width)
    cell->cell.cell.destroy = destroyAction;
 
    /* finally, add menu items */
-   xaccAddComboCellMenuItem ( &(cell->cell), "yo dude");
-   xaccAddComboCellMenuItem ( &(cell->cell), "he haw");
+   xaccAddComboCellMenuItem ( &(cell->cell), BUY_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), SELL_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), PRICE_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), INT_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), DIV_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), LTCG_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), STCG_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), DIST_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), SPLIT_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), DEPOSIT_STR);
+   xaccAddComboCellMenuItem ( &(cell->cell), WITHDRAW_STR);
+
 }
 
 /* =============================================== */
