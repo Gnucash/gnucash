@@ -6,7 +6,8 @@ libgncmod_report_system_la_SOURCES = \
   gncmod-report-system.c \
   gnc-report.c
 
-noinst_HEADERS = \
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
   gnc-report.h
 
 libgncmod_report_system_la_LDFLAGS = -module
