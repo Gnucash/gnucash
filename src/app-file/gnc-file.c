@@ -49,7 +49,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-static GNCSession * current_session = NULL;
 static GNCCanCancelSaveCB can_cancel_cb = NULL;
 static GNCShutdownCB shutdown_cb = NULL;
 
@@ -76,26 +75,11 @@ gnc_file_set_pct_handler (GNCFilePercentageFunc file_percentage_func_in)
   file_percentage_func = file_percentage_func_in;
 }
 
-static GNCSession *
-gnc_get_current_session_internal (void)
-{
-  if (!current_session)
-  {
-    gnc_engine_suspend_events ();
-    current_session = gnc_session_new ();
-    gnc_engine_resume_events ();
-  }
-
-  return current_session;
-}
-
 void
 gnc_file_init (void)
 {
-  gnc_set_current_session_handler (gnc_get_current_session_internal);
-
   /* Make sure we have a current session. */
-  gnc_get_current_session_internal ();
+  gnc_get_current_session ();
 }
 
 static gboolean
@@ -259,11 +243,11 @@ gnc_add_history (GNCSession * session)
 static void
 gnc_book_opened (void)
 {
+  GNCSession *session = gnc_get_current_session();
   gh_call2 (gh_eval_str("gnc:hook-run-danglers"),
             gh_eval_str("gnc:*book-opened-hook*"),
-	    (current_session ? 
-	     gw_wcp_assimilate_ptr (current_session,
-				    gh_eval_str("<gnc:Session*>")) :
+	    (session ? 
+	     gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
 	     SCM_BOOL_F));
 }
 
@@ -277,7 +261,7 @@ gnc_file_new (void)
   if (!gnc_file_query_save ())
     return;
 
-  session = gnc_get_current_session_internal ();
+  session = gnc_get_current_session ();
 
   /* close any ongoing file sessions, and free the accounts.
    * disable events so we don't get spammed by redraws. */
@@ -290,10 +274,9 @@ gnc_file_new (void)
 	    SCM_BOOL_F));
 
   gnc_session_destroy (session);
-  current_session = NULL;
 
   /* start a new book */
-  gnc_get_current_session_internal ();
+  gnc_get_current_session ();
 
   gh_call1(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*new-book-hook*"));
@@ -307,7 +290,7 @@ gnc_file_new (void)
 gboolean
 gnc_file_query_save (void)
 {
-  GNCSession * session = gnc_get_current_session_internal ();
+  GNCSession * session = gnc_get_current_session ();
 
   /* If user wants to mess around before finishing business with
    * the old file, give em a chance to figure out what's up.  
@@ -347,7 +330,7 @@ gnc_file_query_save (void)
 static gboolean
 gnc_post_file_open (const char * filename)
 {
-  GNCSession *new_session;
+  GNCSession *current_session, *new_session;
   gboolean uh_oh = FALSE;
   char * newfile;
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
@@ -371,6 +354,7 @@ gnc_post_file_open (const char * filename)
 
   /* -------------- BEGIN CORE SESSION CODE ------------- */
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
+  current_session  = gnc_get_current_session();
   gh_call2(gh_eval_str("gnc:hook-run-danglers"),
            gh_eval_str("gnc:*book-closed-hook*"),
 	   (current_session ?
@@ -378,7 +362,6 @@ gnc_post_file_open (const char * filename)
 				   gh_eval_str("<gnc:Session*>")) :
 	    SCM_BOOL_F));
   gnc_session_destroy (current_session);
-  current_session = NULL;
 
   /* load the accounts from the users datafile */
   /* but first, check to make sure we've got a session going. */
@@ -492,7 +475,7 @@ gnc_post_file_open (const char * filename)
      * reason, we don't want to leave them high & dry without a
      * topgroup, because if the user continues, then bad things will
      * happen. */
-    current_session = gnc_get_current_session_internal ();
+    gnc_get_current_session ();
 
     g_free (newfile);
 
@@ -506,14 +489,14 @@ gnc_post_file_open (const char * filename)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  current_session = new_session;
+  gnc_set_current_session(new_session);
 
   gnc_book_opened ();
 
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
-  gnc_add_history (current_session);
+  gnc_add_history (new_session);
 
   g_free (newfile);
 
@@ -547,7 +530,7 @@ gnc_file_open (void)
    * user fails to pick a file (by e.g. hitting the cancel button), we
    * might be left with a null topgroup, which leads to nastiness when
    * user goes to create their very first account. So create one. */
-  gnc_get_current_session_internal ();
+  gnc_get_current_session ();
 
   return result;
 }
@@ -566,7 +549,7 @@ gnc_file_open_file (const char * newfile)
 void
 gnc_file_export_file(const char * newfile)
 {
-  GNCSession *new_session;
+  GNCSession *current_session, *new_session;
   gboolean ok;
   GNCBackendError io_err = ERR_BACKEND_NO_ERR;
 
@@ -619,6 +602,7 @@ gnc_file_export_file(const char * newfile)
 
   /* use the current session to save to file */
   gnc_set_busy_cursor (NULL, TRUE);
+  current_session = gnc_get_current_session();
   if (file_percentage_func) {
     file_percentage_func(_("Exporting file..."), 0.0);
     ok = gnc_session_export (new_session, current_session,
@@ -653,7 +637,7 @@ gnc_file_save (void)
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
   /* If we don't have a filename/path to save to get one. */
-  session = gnc_get_current_session_internal ();
+  session = gnc_get_current_session ();
 
   if (!gnc_session_get_file_path (session))
   {
@@ -693,9 +677,8 @@ gnc_file_save (void)
 
   /* save the main window state */
   gh_call1 (gh_eval_str("gnc:main-window-save-state"),
-	    (current_session ?
-	     gw_wcp_assimilate_ptr (current_session,
-				    gh_eval_str("<gnc:Session*>")) :
+	    (session ?
+	     gw_wcp_assimilate_ptr (session, gh_eval_str("<gnc:Session*>")) :
 	     SCM_BOOL_F));
 
   LEAVE (" ");
@@ -732,7 +715,7 @@ gnc_file_save_as (void)
      return;
   }
 
-  session = gnc_get_current_session_internal ();
+  session = gnc_get_current_session ();
   oldfile = gnc_session_get_file_path (session);
   if (oldfile && (strcmp(oldfile, newfile) == 0))
   {
@@ -788,7 +771,7 @@ gnc_file_save_as (void)
   gnc_session_destroy (session);
   session = NULL;
 
-  current_session = new_session;
+  gnc_set_current_session(new_session);
 
   /* --------------- END CORE SESSION CODE -------------- */
 
@@ -819,7 +802,7 @@ gnc_file_quit (void)
 {
   GNCSession *session;
 
-  session = gnc_get_current_session_internal ();
+  session = gnc_get_current_session ();
 
   /* disable events; otherwise the mass deletetion of accounts and
    * transactions during shutdown would cause massive redraws */
@@ -832,9 +815,8 @@ gnc_file_quit (void)
 	    SCM_BOOL_F));
   
   gnc_session_destroy (session);
-  current_session = NULL;
 
-  gnc_get_current_session_internal ();
+  gnc_get_current_session ();
 
   gnc_engine_resume_events ();
 }

@@ -1,3 +1,10 @@
+2002-10-12  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-session.c:
+	* src/app-file/gnc-file.c:
+	* src/app-utils/gnc-ui-util.c: Move gnc_get_current_session() into
+	gnc-session.c. #94551
+
 2002-10-09  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/import-export/Account-matcher.c: Change "Account ID" text

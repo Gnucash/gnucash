@@ -47,9 +47,6 @@ gboolean gnc_reverse_balance_type(GNCAccountType type);
 
 
 /* Engine enhancements & i18n ***************************************/
-void gnc_set_current_session_handler (GNCSessionCB cb);
-
-GNCSession * gnc_get_current_session (void);
 GNCBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
 gnc_commodity_table * gnc_get_current_commodities (void);

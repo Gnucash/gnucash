@@ -58,8 +58,6 @@ static gboolean reverse_balance_inited = FALSE;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
-static GNCSessionCB session_cb = NULL;
-
 
 /********************************************************************\
  * gnc_color_deficits                                               *
@@ -202,21 +200,6 @@ gnc_reverse_balance (Account *account)
     gnc_reverse_balance_init ();
 
   return reverse_type[type];
-}
-
-void
-gnc_set_current_session_handler (GNCSessionCB cb)
-{
-  session_cb = cb;
-}
-
-GNCSession *
-gnc_get_current_session (void)
-{
-  if (session_cb)
-    return session_cb ();
-
-  return NULL;
 }
 
 GNCBook *

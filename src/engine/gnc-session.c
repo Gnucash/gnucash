@@ -53,6 +53,7 @@
 #include "gnc-module.h"
 #include "gnc-session-p.h"
 
+static GNCSession * current_session = NULL;
 static short module = MOD_IO;
 
 /* ====================================================================== */
@@ -160,6 +161,25 @@ gnc_session_new (void)
   GNCSession *session = g_new0(GNCSession, 1);
   gnc_session_init(session);
   return session;
+}
+
+GNCSession *
+gnc_get_current_session (void)
+{
+  if (!current_session)
+  {
+    gnc_engine_suspend_events ();
+    current_session = gnc_session_new ();
+    gnc_engine_resume_events ();
+  }
+
+  return current_session;
+}
+
+void
+gnc_set_current_session (GNCSession *session)
+{
+  current_session = session;
 }
 
 GNCBook *
@@ -735,6 +755,7 @@ gnc_session_destroy (GNCSession *session)
   }
 
   session->books = NULL;
+  current_session=NULL;
 
   xaccLogEnable();
 
