@@ -119,8 +119,10 @@ gnc_job_verify_ok (JobWindow *jw)
     if (job) {
       gnc_ui_to_job (jw, job);
     }
-    jw->created_job = job;
   }
+
+  /* Ok, it's been saved... Change to an editor.. */
+  jw->dialog_type = EDIT_JOB;
 
   return TRUE;
 }
@@ -130,10 +132,12 @@ gnc_job_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   JobWindow *jw = data;
 
+  /* Make sure this is ok */
   if (!gnc_job_verify_ok (jw))
     return;
 
-  /* Make sure this is ok */
+  /* Now save off the job so we can return it */
+  jw->created_job = jw_get_job (jw);
   jw->job_guid = *xaccGUIDNULL ();
 
   gnc_close_gui_component (jw->component_id);
@@ -419,7 +423,7 @@ gnc_job_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
   gtk_signal_connect (GTK_OBJECT (jw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_job_on_close_cb), &created_job);
 
-  // gtk_window_set_modal (GTK_WINDOW (jw->dialog), TRUE);
+  gtk_window_set_modal (GTK_WINDOW (jw->dialog), TRUE);
 
   gtk_main ();
 

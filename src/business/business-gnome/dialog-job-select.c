@@ -189,8 +189,9 @@ gnc_ui_select_job_new_cb(GtkButton * button, gpointer user_data)
   if (new_selection) {
     gncOwnerCopy (gncJobGetOwner (new_selection), &(w->owner));
     w->job = new_selection;
-    update_owner_select_picker (w);
   }
+
+  update_owner_select_picker (w);
 }
 
 static void

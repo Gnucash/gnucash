@@ -691,7 +691,8 @@ gnc_order_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),
 		      &created_order);
 
-  // gtk_window_set_modal (GTK_WINDOW (ow->dialog), TRUE);
+  if (parent)
+    gtk_window_set_modal (GTK_WINDOW (ow->dialog), TRUE);
 
   gtk_main ();
 
@@ -720,7 +721,8 @@ gnc_order_edit (GtkWidget *parent, GncOrder *order)
 		      GTK_SIGNAL_FUNC (gnc_order_on_close_cb),
 		      NULL);
 
-  // gtk_window_set_modal (GTK_WINDOW (ow->dialog), TRUE);
+  if (parent)
+    gtk_window_set_modal (GTK_WINDOW (ow->dialog), TRUE);
 
   gtk_main ();
 

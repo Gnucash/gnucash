@@ -793,7 +793,8 @@ gnc_invoice_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
 		      GTK_SIGNAL_FUNC (gnc_invoice_on_close_cb),
 		      &created_invoice);
 
-  // gtk_window_set_modal (GTK_WINDOW (iw->dialog), TRUE);
+  if (parent)
+    gtk_window_set_modal (GTK_WINDOW (iw->dialog), TRUE);
 
   gtk_main ();
 
@@ -821,7 +822,8 @@ gnc_invoice_edit (GtkWidget *parent, GncInvoice *invoice)
 		      GTK_SIGNAL_FUNC (gnc_invoice_on_close_cb),
 		      NULL);
 
-  // gtk_window_set_modal (GTK_WINDOW (iw->dialog), TRUE);
+  if (parent)
+    gtk_window_set_modal (GTK_WINDOW (iw->dialog), TRUE);
 
   gtk_main ();
 
