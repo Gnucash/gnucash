@@ -1416,6 +1416,14 @@ when no longer needed.")
 
 (gw:wrap-function
  ws
+ 'gnc:session-get-url
+ '(<gw:mchars> callee-owned const)
+ "gnc_session_get_url"
+ '((<gnc:Session*> session))
+ "Return the URL of the opened session.")
+
+(gw:wrap-function
+ ws
  'gnc:session-pop-error
  '<gnc:BackendError>
  "gnc_session_pop_error"

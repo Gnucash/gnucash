@@ -7,6 +7,10 @@
 	  This function will clear a sub-tree out of a kvp_frame.	  
 
 	* kvp-scm: implement KVP_TYPE_FRAME kvp-values
+
+	* gw-engine-spec.scm: wrap gnc_session_get_url(), in preparation
+	  for changing the book-opened-hook and book-closed-hook
+	  prototypes.
 	
 2002-07-05  Derek Atkins  <derek@ihtfp.com>
 
