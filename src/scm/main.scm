@@ -351,7 +351,7 @@ string and 'directories' must be a list of strings."
   (gnc:setup-debugging)
 
   ;; before doing ANYTHING, set the locale!
-  (setlocale LC_ALL "")
+  (false-if-exception (setlocale LC_ALL ""))
 
   ;; initialize the gnucash module system 
   (gnc:module-system-init)

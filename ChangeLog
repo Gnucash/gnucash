@@ -1,3 +1,8 @@
+2002-12-28  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/main.scm: Patch by Peter O'Gorman <peter@pogma.com> for
+	Mac OS X.
+
 2002-12-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/test-core/Makefile.am: Fix linker errors in
