@@ -135,7 +135,6 @@ file_session_begin(QofBackend *be_start, QofSession *session, const char *book_i
 
     if (!ignore_lock && !gnc_file_be_get_file_lock (be))
     {
-        qof_backend_set_error (be_start, ERR_BACKEND_LOCKED);
         g_free (be->lockfile); be->lockfile = NULL;
         return;
     }
