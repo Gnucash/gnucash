@@ -174,3 +174,30 @@ void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent)
   if (!ledger) return;
   ledger->parent = parent;
 }
+
+gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
+				      VirtualCellLocation *vcell_loc)
+{
+  Table *table = ledger->table;
+  int v_row, v_col;
+  GncEntry *e;
+
+  for (v_row = 1; v_row < table->num_virt_rows; v_row++) {
+    VirtualCellLocation vc_loc = { v_row, 0 };
+
+    e = gnc_entry_ledger_get_entry (ledger, vc_loc);
+
+    if (e == entry) {
+      if (vcell_loc != NULL)
+	*vcell_loc = vc_loc;
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+void gnc_entry_ledger_redraw (GncEntryLedger *ledger)
+{
+  /* XXX: FIXME */
+  gnc_entry_ledger_load (ledger, gncOrderGetEntries (ledger->order));
+}

@@ -41,16 +41,59 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
   gnc_suspend_gui_refresh ();
   saved = gnc_entry_ledger_save (ledger, old_entry != new_entry);
 
+  /* XXX: This code seems to always force the cursor to stay in place.
+   * With this code commented out, the cursor will at least move if
+   * the next split already exists....
   if (old_entry && old_entry != new_entry) {
     new_entry = old_entry;
     new_virt_loc = ledger->table->current_cursor_loc;
   }
+  /*
 
   gnc_resume_gui_refresh();
+
+  /* redrawing can muck everything up */
+  if (saved) {
+    VirtualCellLocation vcell_loc;
+
+    /* redraw */
+    gnc_entry_ledger_redraw (ledger);
+
+    /* if the entry we were going to is still in the register,
+     * then it may have moved. Find out where it is now. */
+    if (gnc_entry_ledger_find_entry (ledger, new_entry, &vcell_loc)) {
+      VirtualCell *vcell;
+
+      vcell = gnc_table_get_virtual_cell (ledger->table, vcell_loc);
+      new_virt_loc.vcell_loc = vcell_loc;
+    } else
+      new_virt_loc.vcell_loc = ledger->table->current_cursor_loc.vcell_loc;
+  }
 
   gnc_table_find_close_valid_cell (ledger->table, &new_virt_loc, FALSE);
 
   *p_new_virt_loc = new_virt_loc;
+}
+
+static void gnc_entry_ledger_cancel_cursor_changes (GncEntryLedger *ledger)
+{
+  VirtualLocation virt_loc;
+
+  if (ledger == NULL)
+    return;
+
+  virt_loc = ledger->table->current_cursor_loc;
+
+  if (!gnc_table_current_cursor_changed (ledger->table, FALSE))
+    return;
+
+  /* When cancelling edits, reload the cursor from the entry. */
+  gnc_table_clear_current_cursor_changes (ledger->table);
+
+  if (gnc_table_find_close_valid_cell (ledger->table, &virt_loc, FALSE))
+    gnc_table_move_cursor_gui (ledger->table, virt_loc);
+
+  gnc_table_refresh_gui (ledger->table, TRUE);
 }
 
 static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
@@ -214,8 +257,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
   } while (FALSE);
 
   /* Check for going off the end */
-  gnc_table_find_close_valid_cell (ledger->table, &virt_loc,
-				   GNC_TABLE_TRAVERSE_POINTER);
+  gnc_table_find_close_valid_cell (ledger->table, &virt_loc, FALSE);
 
   /* Same transaction, no problem */
   new_entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
@@ -250,13 +292,12 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
 	new_entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
 
-	//	gnc_entry_ledger_cancel_cursor_changes (ledger);
+	gnc_entry_ledger_cancel_cursor_changes (ledger);
 
-	//        if (gnc_entry_ledger_find_entry (ledger, new_entry, &vcell_loc))
-	//          virt_loc.vcell_loc = vcell_loc;
+	if (gnc_entry_ledger_find_entry (ledger, new_entry, &vcell_loc))
+	  virt_loc.vcell_loc = vcell_loc;
 
-        gnc_table_find_close_valid_cell (ledger->table, &virt_loc,
-					 GNC_TABLE_TRAVERSE_POINTER);
+        gnc_table_find_close_valid_cell (ledger->table, &virt_loc, FALSE);
 
         *p_new_virt_loc = virt_loc;
       }
@@ -296,7 +337,7 @@ gboolean gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
   entry = gnc_entry_ledger_get_current_entry (ledger);
   if (entry == NULL) return FALSE;
 
-  /* Try to avoid heavy-weight updates */
+  /* Try to avoid heavy-weight updates if nothing has changed */
   if (!gnc_table_current_cursor_changed (ledger->table, FALSE)) {
     if (!do_commit) return FALSE;
 

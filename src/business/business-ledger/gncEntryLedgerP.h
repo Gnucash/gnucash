@@ -33,4 +33,9 @@ gint gnc_entry_ledger_get_type (GncEntryLedger *ledger, const char * cell_name);
 
 const char * gnc_entry_ledger_type_string_getter (char flag);
 
+gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
+				      VirtualCellLocation *vcell_loc);
+
+void gnc_entry_ledger_redraw (GncEntryLedger *ledger);
+
 #endif /* GNC_ENTRY_LEDGERP_H */
