@@ -692,7 +692,7 @@ qof_is_same_day (time_t ta, time_t tb)
  *         month - will store month of the year as 1 ... 12
  *         year - will store the year (4-digit)
  *
- * Return: nothing
+ * Return: TRUE if date appeared to be valid.
  *
  * Globals: global dateFormat value
  */
@@ -714,7 +714,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
    second_field = NULL;
    third_field = NULL;
 
-   /* use strtok to find delimiters */
+   /* Use strtok to find delimiters */
    if (tmp) {
      static char *delims = ".,-+/\\() ";
 
@@ -727,7 +727,7 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
       }
    }
 
-   /* if any fields appear blank, use today's date */
+   /* If any fields appear to be blank, use today's date */
    time (&secs);
    now = localtime (&secs);
    iday = now->tm_mday; 
@@ -837,9 +837,13 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
      {
         int tmp = imonth; imonth = iday; iday = tmp;
      } 
+	  else
+	  {
+        return FALSE;
+	  }
    }
 
-   /* if the year entered is smaller than 100, assume we mean the current
+   /* If the year entered is smaller than 100, assume we mean the current
       century (and are not revising some roman emperor's books) */
    if (iyear < 100)
      iyear += ((int) ((now->tm_year+1950-iyear)/100)) * 100;
@@ -850,10 +854,22 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
    return(TRUE);
 }
 
-void
+gboolean
 qof_scan_date (const char *buff, int *day, int *month, int *year)
 {
-  qof_scan_date_internal(buff, day, month, year, dateFormat);
+  return qof_scan_date_internal(buff, day, month, year, dateFormat);
+}
+
+gboolean
+qof_scan_date_secs (const char *buff, time_t *secs)
+{
+  gboolean rc;
+  int day, month, year;
+  
+  rc = qof_scan_date_internal(buff, &day, &month, &year, dateFormat);
+  if (secs) *secs = xaccDMYToSec (day, month, year);
+
+  return rc;
 }
 
 /**

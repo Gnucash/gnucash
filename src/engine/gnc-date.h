@@ -345,11 +345,14 @@ char * xaccDateUtilGetStamp (time_t thyme);
  *         month - will store month of the year as 1 ... 12
  *         year - will store the year (4-digit)
  *
- * Return: nothing
+ * Return: TRUE if the string seemed to be a valid date; else FALSE.
  *
- * Globals: global dateFormat value
+ * Globals: uses global dateFormat value to assist in parsing.
  */
-void qof_scan_date (const char *buff, int *day, int *month, int *year);
+gboolean qof_scan_date (const char *buff, int *day, int *month, int *year);
+
+/** as above, but returns seconds */
+gboolean qof_scan_date_secs (const char *buff, time_t *secs);
 
 
 /** @name Date Start/End Adjustment routines
