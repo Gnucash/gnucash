@@ -6,6 +6,10 @@
 	* add "centered-label-cell" markup type to define a cell with tag
 	  'b' and attribute "align center".
 
+	* owner-report.scm: add a due-date column; change "Invoice" to
+	  "Bill" for vendor reports.  Fix the aging table.  Reverse the
+	  numerics for vendor reports.
+
 2002-07-08  Derek Atkins  <derek@ihtfp.com>
 
 	* kvp-option-registry.scm: create a registry of kvp-options

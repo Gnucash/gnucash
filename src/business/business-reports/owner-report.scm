@@ -34,16 +34,18 @@
 
 (define (date-col columns-used)
   (vector-ref columns-used 0))
-(define (num-col columns-used)
+(define (date-due-col columns-used)
   (vector-ref columns-used 1))
-(define (type-col columns-used)
+(define (num-col columns-used)
   (vector-ref columns-used 2))
-(define (memo-col columns-used)
+(define (type-col columns-used)
   (vector-ref columns-used 3))
-(define (value-col columns-used)
+(define (memo-col columns-used)
   (vector-ref columns-used 4))
+(define (value-col columns-used)
+  (vector-ref columns-used 5))
 
-(define columns-used-size 5)
+(define columns-used-size 6)
 
 (define (build-column-used options)   
   (define (opt-val section name)
@@ -61,16 +63,19 @@
   (let* ((col-vector (make-vector columns-used-size #f))
          (set-col (make-set-col col-vector)))
     (set-col (opt-val "Display Columns" "Date") 0)
-    (set-col (opt-val "Display Columns" "Num") 1)
-    (set-col (opt-val "Display Columns" "Type") 2)
-    (set-col (opt-val "Display Columns" "Memo") 3)
-    (set-col (opt-val "Display Columns" "Value") 4)
+    (set-col (opt-val "Display Columns" "Due Date") 1)
+    (set-col (opt-val "Display Columns" "Num") 2)
+    (set-col (opt-val "Display Columns" "Type") 3)
+    (set-col (opt-val "Display Columns" "Memo") 4)
+    (set-col (opt-val "Display Columns" "Value") 5)
     col-vector))
 
 (define (make-heading-list column-vector)
   (let ((heading-list '()))
     (if (date-col column-vector)
         (addto! heading-list (_ "Date")))
+    (if (date-col column-vector)
+        (addto! heading-list (_ "Due Date")))
     (if (num-col column-vector)
         (addto! heading-list (_ "Reference")))
     (if (type-col column-vector)
@@ -94,7 +99,7 @@
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
 
 
-(define (make-aging-table options query bucket-intervals)
+(define (make-aging-table options query bucket-intervals reverse?)
   (let ((lots (gnc:query-get-lots query 'query-txn-match-any))
 	(buckets (new-bucket-vector))
 	(payments (gnc:numeric-zero))
@@ -129,10 +134,13 @@
 	      (post-date (gnc:invoice-get-date-posted invoice)))
 
 	 (if (not (gnc:numeric-zero-p bal))
-	     (if invoice
-		 (begin
-		   (apply-invoice post-date bal))
-		 (apply-payment bal)))))
+	     (begin
+	       (if reverse?
+		   (set! bal (gnc:numeric-neg bal)))
+	       (if invoice
+		   (begin
+		     (apply-invoice post-date bal))
+		   (apply-payment bal))))))
      lots)
 
     (gnc:html-table-set-col-headers!
@@ -156,9 +164,10 @@
 ;;
 ;; Return a pair of (date . value)
 ;;
-(define (add-txn-row table txn acc column-vector row-style)
+(define (add-txn-row table txn acc column-vector row-style inv-str reverse?)
   (let* ((type (gnc:transaction-get-txn-type txn))
 	 (date (gnc:transaction-get-date-posted txn))
+	 (due-date #f)
 	 (value (gnc:transaction-get-account-value txn acc))
 	 (split (gnc:transaction-get-split txn 0))
 	 (invoice (gnc:invoice-get-invoice-from-txn txn))
@@ -170,14 +179,26 @@
 		(gnc:make-html-text
 		 (gnc:html-markup-anchor
 		  (gnc:invoice-anchor-text invoice)
-		  (N_ "Invoice")))
-		(N_ "Invoice")))
+		  inv-str))
+		inv-str))
 	   ((equal? type gnc:transaction-type-payment) (N_ "Payment, thank you"))
 	   (else (N_ "UNK"))))
 	 (row-contents '()))
 
+    (if reverse?
+	(set! value (gnc:numeric-neg value)))
+
+    (if invoice
+	(set! due-date (gnc:invoice-get-date-due invoice)))
+
     (if (date-col column-vector)
 	(addto! row-contents (gnc:print-date date)))
+    (if (date-due-col column-vector)
+	(addto! row-contents 
+		(if (and due-date
+			 (not (equal? due-date (cons 0 0))))
+		    (gnc:print-date due-date)
+		    "")))
     (if (num-col column-vector)
 	(addto! row-contents (gnc:transaction-get-num txn)))
     (if (type-col column-vector)
@@ -202,7 +223,11 @@
 	(odd-row? #t)
 	(total (gnc:numeric-zero))
 	(currency (gnc:default-currency)) ;XXX
-	(table (gnc:make-html-table)))
+	(table (gnc:make-html-table))
+	(inv-str (gnc:option-value (gnc:lookup-option options "__reg"
+						      "inv-str")))
+	(reverse? (gnc:option-value (gnc:lookup-option options "__reg"
+						      "reverse?"))))
 
     (gnc:html-table-set-col-headers!
      table
@@ -218,7 +243,8 @@
 	 (if
 	  (or (equal? type gnc:transaction-type-invoice)
 	      (equal? type gnc:transaction-type-payment))
-	  (let ((dv (add-txn-row table txn acc used-columns row-style)))
+	  (let ((dv (add-txn-row table txn acc used-columns row-style
+				 inv-str reverse?)))
 
 	    (set! odd-row? (not odd-row?))
 	    (set! total (gnc:numeric-add-fixed total (cdr dv)))
@@ -244,18 +270,24 @@
        table
        "grand-total"
        (list (gnc:make-html-table-cell/size/markup
-	      0 (value-col used-columns)
-	      "total-number-cell"
-	      (make-aging-table options query interval-vec)))))
+	      1 (+ 1 (value-col used-columns))
+	      "centered-label-cell"
+	      (make-aging-table options query interval-vec reverse?)))))
 
     table))
 
-(define (options-generator acct-type-list owner-type)
+(define (options-generator acct-type-list owner-type inv-str reverse?)
 
   (define gnc:*report-options* (gnc:new-options))
 
   (define (gnc:register-inv-option new-option)
     (gnc:register-option gnc:*report-options* new-option))
+
+  (gnc:register-inv-option
+   (gnc:make-internal-option "__reg" "inv-str" inv-str))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option "__reg" "reverse?" "" "" reverse?))
 
   (gnc:register-inv-option
    (gnc:make-owner-option owner-page owner-string "v"
@@ -274,6 +306,11 @@
    (gnc:make-simple-boolean-option
     (N_ "Display Columns") (N_ "Date")
     "b" (N_ "Display the transaction date?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display Columns") (N_ "Due Date")
+    "c" (N_ "Display the transaction date?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
@@ -306,10 +343,10 @@
   gnc:*report-options*)
 	     
 (define (customer-options-generator)
-  (options-generator '(receivable) 'gnc-owner-customer))
+  (options-generator '(receivable) 'gnc-owner-customer (N_ "Invoice") #f))
 
 (define (vendor-options-generator)
-  (options-generator '(payable) 'gnc-owner-vendor))
+  (options-generator '(payable) 'gnc-owner-vendor (N_ "Bill") #t))
 
 (define (string-expand string character replace-string)
   (define (car-line chars)
