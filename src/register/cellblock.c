@@ -6,7 +6,7 @@ CellBlock * xaccMallocCellBlock (int numrows, int numcols)
 {
 
    CellBlock *arr;
-   arr = (CellBlock *) malloc (sizeof (CellBlock *));
+   arr = (CellBlock *) malloc (sizeof (CellBlock));
 
    arr->cells = NULL;
    arr->widths = NULL;
@@ -37,19 +37,9 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
    }
 
    /* malloc new cell array */
-{
-char * tmp;
-printf ("%d  %d \n", numrows, sizeof (SingleCell **));
-tmp = malloc (numrows * sizeof (SingleCell **));
-tmp = malloc (2);
-arr->cells = (SingleCell ***) tmp;
-printf ("%p %p %p %d \n", arr, tmp, arr->cells, numrows);
-}
 
    arr->cells = (SingleCell ***) malloc (numrows * sizeof (SingleCell **));
-printf ("%p %p %d \n", arr, arr->cells, numrows);
    for (i=0; i<numrows; i++) {
-printf ("%d %p %p \n", i, arr->cells, arr->cells[i]);
       (arr->cells)[i] = (SingleCell **) malloc (numcols * sizeof (SingleCell *));
    }
 
