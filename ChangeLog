@@ -1,5 +1,8 @@
 2003-08-10  Derek Atkins  <derek@ihtfp.com>
 
+	* src/*/Makefile.am: Make sure we define PWD, as not all shells
+	  define it properly.  Fixes #119114.
+
 	* src/gnome/reconcile-list.c: our parent is a gnc-query-list, not
 	  a clist.  Fix a bug so we properly call the parent destroy function.
 
