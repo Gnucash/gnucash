@@ -74,6 +74,8 @@ gnc_table_model_handler_hash_remove (GHashTable *hash, const char *cell_name)
   node = g_hash_table_lookup (hash, cell_name);
   if (!node) return;
 
+  g_hash_table_remove (hash, cell_name);
+
   g_free (node->cell_name);
   node->cell_name = NULL;
 
