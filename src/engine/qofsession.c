@@ -337,11 +337,43 @@ qof_session_load_backend(QofSession * session, char * backend_name)
 
 #else /* GNUCASH */
 
+/* Specify a library, and a function name. Load the library, 
+ * call the function name in the library.  */
+static void
+load_backend_library (const char * libso, const char * loadfn)
+{
+	void *dl_hand = dlopen (libso, RTLD_LAZY);
+	if (NULL == dl_hand)
+	{
+		const char * err_str = dlerror();
+		PERR("Can't load %s backend, %s\n", libso, err_str);
+		return;
+	}
+	void (*initfn) (void)  = dlsym (dl_hand, loadfn);
+	if (initfn)
+	{
+		 (*initfn)();
+	}
+	else
+	{
+		const char * err_str = dlerror();
+		PERR("Can't find %s:%s, %s\n", libso, loadfn, err_str);
+	}
+}
+
 static void
 qof_session_load_backend(QofSession * session, char * access_method)
 {
 	GSList *p;
 	ENTER (" ");
+
+	/* If the provider list is null, try to register the 'well-known'
+	 *  backends. Right now, there's only one. */
+	if (NULL == provider_list)
+	{
+		load_backend_library ("libqof_backend_dwi.so", "dwiend_provider_init");
+	}
+
 	for (p = provider_list; p; p=p->next)
 	{
 		QofBackendProvider *prov = p->data;
@@ -407,11 +439,11 @@ qof_session_begin (QofSession *session, const char * book_id,
          session, ignore_lock,
          book_id ? book_id : "(null)");
 
-  /* clear the error condition of previous errors */
+  /* Clear the error condition of previous errors */
   qof_session_clear_error (session);
 
-  /* check to see if this session is already open */
-  if (qof_session_get_url(session))
+  /* Check to see if this session is already open */
+  if (session->book_id)
   {
     qof_session_push_error (session, ERR_BACKEND_LOCKED, NULL);
     LEAVE("push error book is already open ");
@@ -467,7 +499,7 @@ qof_session_begin (QofSession *session, const char * book_id,
       char * msg;
       
       (session->backend->session_begin)(session->backend, session,
-                                  qof_session_get_url(session), ignore_lock,
+                                  session->book_id, ignore_lock,
                                   create_if_nonexistent);
       PINFO("Done running session_begin on backend");
       err = qof_backend_get_error(session->backend);
@@ -503,10 +535,10 @@ qof_session_load (QofSession *session,
   QofBackendError err;
 
   if (!session) return;
-  if (!qof_session_get_url(session)) return;
+  if (!session->book_id) return;
 
-  ENTER ("sess=%p book_id=%s", session, qof_session_get_url(session)
-         ? qof_session_get_url(session) : "(null)");
+  ENTER ("sess=%p book_id=%s", session, session->book_id
+         ? session->book_id : "(null)");
 
 
   /* At this point, we should are supposed to have a valid book 
@@ -565,8 +597,8 @@ qof_session_load (QofSession *session,
      qof_book_destroy (ob);
   }
 
-  LEAVE ("sess = %p, book_id=%s", session, qof_session_get_url(session)
-         ? qof_session_get_url(session) : "(null)");
+  LEAVE ("sess = %p, book_id=%s", session, session->book_id
+         ? session->book_id : "(null)");
 }
 
 /* ====================================================================== */
@@ -616,9 +648,7 @@ qof_session_save (QofSession *session,
   if (!session) return;
 
   ENTER ("sess=%p book_id=%s", 
-         session, 
-         qof_session_get_url(session)
-         ? qof_session_get_url(session) : "(null)");
+         session, session->book_id ? session->book_id : "(null)");
 
   /* If there is a backend, and the backend is reachable
    * (i.e. we can communicate with it), then synchronize with 
@@ -677,8 +707,8 @@ qof_session_export (QofSession *tmp_session,
   book = qof_session_get_book (real_session);
   ENTER ("tmp_session=%p real_session=%p book=%p book_id=%s", 
          tmp_session, real_session, book,
-         qof_session_get_url(tmp_session)
-         ? qof_session_get_url(tmp_session) : "(null)");
+         tmp_session -> book_id
+         ? tmp_session->book_id : "(null)");
 
   /* There must be a backend or else.  (It should always be the file
    * backend too.)
@@ -706,8 +736,8 @@ qof_session_end (QofSession *session)
 {
   if (!session) return;
 
-  ENTER ("sess=%p book_id=%s", session, qof_session_get_url(session)
-         ? qof_session_get_url(session) : "(null)");
+  ENTER ("sess=%p book_id=%s", session, session->book_id
+         ? session->book_id : "(null)");
 
   /* close down the backend first */
   if (session->backend && session->backend->session_end)
@@ -720,8 +750,8 @@ qof_session_end (QofSession *session)
   g_free (session->book_id);
   session->book_id = NULL;
 
-  LEAVE ("sess=%p book_id=%s", session, qof_session_get_url(session)
-         ? qof_session_get_url(session) : "(null)");
+  LEAVE ("sess=%p book_id=%s", session, session->book_id
+         ? session->book_id : "(null)");
 }
 
 void 
@@ -730,9 +760,8 @@ qof_session_destroy (QofSession *session)
   GList *node;
   if (!session) return;
 
-  ENTER ("sess=%p book_id=%s", session, 
-         qof_session_get_url(session)
-         ? qof_session_get_url(session) : "(null)");
+  ENTER ("sess=%p book_id=%s", session, session->book_id
+         ? session->book_id : "(null)");
 
   qof_session_end (session);
 
