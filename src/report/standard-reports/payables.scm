@@ -81,7 +81,7 @@
     (gnc:debug "payables-account" payables-account)
 
     (if (null? payables-account)
-	(set! payables-account (find-first-payables-account))
+	(set! payables-account (find-first-payable-account))
 	(set! payables-account (car payables-account)))
 
     (aging-renderer report-obj payables-account #f)))
