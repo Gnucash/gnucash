@@ -135,7 +135,8 @@ accWindow( Widget parent )
                                   */
                                  XmNresizable, FALSE,
                                  XmNallowShellResize, FALSE,
-                                 /* XmNtransient, FALSE, */ /* allow window to be repositioned */
+                                 /* allow window to be repositioned */
+                                 /* XmNtransient, FALSE, */ 
 				 NULL );
   
   XtAddCallback( dialog, XmNdestroyCallback, 
@@ -153,7 +154,7 @@ accWindow( Widget parent )
   \******************************************************************/
   
   /* Label tells the user what this area is */
-  widget = XtVaCreateManagedWidget( "Account Type",
+  widget = XtVaCreateManagedWidget( ACC_TYPE_STR,
 				    xmLabelGadgetClass, form,
 				    XmNtopAttachment,   XmATTACH_FORM,
 				    XmNtopOffset,       10,
@@ -204,7 +205,7 @@ accWindow( Widget parent )
   
     
   label = 
-    XtVaCreateManagedWidget( "Account Name:",
+    XtVaCreateManagedWidget( ACC_NAME_C_STR,
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       frame,
@@ -226,7 +227,7 @@ accWindow( Widget parent )
 			     NULL );
   
   label = 
-    XtVaCreateManagedWidget( "Description:",
+    XtVaCreateManagedWidget( DESC_C_STR,
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       accData->name, 
@@ -249,7 +250,7 @@ accWindow( Widget parent )
   
   topwid = accData->desc;
   label = 
-    XtVaCreateManagedWidget( "Parent Account:",
+    XtVaCreateManagedWidget( PARENT_ACC_C_STR,
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       topwid,
@@ -259,7 +260,7 @@ accWindow( Widget parent )
 			     NULL );
   
   /* put up a pulldown menu to let user choose an account */
-  accData->accMenu = xaccBuildAccountMenu (grp, form, "Pick One");
+  accData->accMenu = xaccBuildAccountMenu (grp, form, PICK_ONE_STR);
   group_menu = xaccGetAccountMenuWidget (accData->accMenu);
   xaccAccountMenuAddCallback (accData->accMenu, selectAccountCB, (XtPointer) accData);
 
@@ -294,7 +295,7 @@ accWindow( Widget parent )
   
   /* The "Notes" button opens a window to a few lines of notes about
    * the account */
-  widget = XtVaCreateManagedWidget( "Notes", 
+  widget = XtVaCreateManagedWidget( NOTES_STR,
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
@@ -307,7 +308,7 @@ accWindow( Widget parent )
 		 notesCB, (XtPointer)accData );  
   
   /* The "Cancel" button */
-  widget = XtVaCreateManagedWidget( "Cancel", 
+  widget = XtVaCreateManagedWidget( CANCEL_STR,
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
@@ -323,7 +324,7 @@ accWindow( Widget parent )
   
   /* The "Create" button creates the new account with the data 
    * that the user entered */
-  widget = XtVaCreateManagedWidget( "Create", 
+  widget = XtVaCreateManagedWidget( CREATE_STR,
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
@@ -441,7 +442,7 @@ editAccWindow( Widget parent, Account *account )
   \******************************************************************/
   
   label = 
-    XtVaCreateManagedWidget( "Account Name:",
+    XtVaCreateManagedWidget( ACC_NAME_C_STR,
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_FORM,
 			     XmNtopOffset,       10,
@@ -463,7 +464,7 @@ editAccWindow( Widget parent, Account *account )
 			     NULL );
   
   label = 
-    XtVaCreateManagedWidget( "Description:",
+    XtVaCreateManagedWidget( DESC_C_STR,
 			     xmLabelGadgetClass, form,
 			     XmNtopAttachment,   XmATTACH_WIDGET,
 			     XmNtopWidget,       editAccData->name,
@@ -677,7 +678,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   
   todaysDate( &(trans->date) );
   XtFree (trans->description);
-  trans->description = XtNewString("Opening Balance");
+  trans->description = XtNewString(OPEN_BALN_STR);
 
   /* add the new transaction to the account */
   insertTransaction( acc, trans );
@@ -917,7 +918,7 @@ editNotesWindow (Account *acc)
   editNotesData->account = acc;
   acc -> editNotesData = editNotesData;
  
-  editNotesData->tb = textBox( toplevel, "Notes", 
+  editNotesData->tb = textBox( toplevel, NOTES_STR, 
                               &(acc->notes),
                               closeEditNotesWindow, editNotesData);
 

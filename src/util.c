@@ -335,8 +335,8 @@ verifyBox( Widget parent, char *text )
                                  XmNdeleteResponse, XmDESTROY,
                                  NULL );
   
-  yes = XmStringCreateSimple("  Yes  ");
-  no  = XmStringCreateSimple("  No  ");
+  yes = XmStringCreateSimple(YES_STR);
+  no  = XmStringCreateSimple(NO_STR);
   
   /* Create a messagebox.... has message and "Ok","Cancel" buttons */
   msgbox = 

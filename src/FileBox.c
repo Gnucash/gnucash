@@ -28,6 +28,7 @@
 #include "config.h"
 
 #include "FileBox.h"
+#include "main.h"
 #include "util.h"
 
 /** GLOBALS *********************************************************/
@@ -64,7 +65,7 @@ fileBox( Widget parent, int type, char * filter)
     return NULL;                   /* Don't open if there already is
 				    * an instance of fileBox */
   if (!filter) {
-    filterpattern = XmStringCreateSimple( "*.dat" );
+    filterpattern = XmStringCreateSimple( "*.xac" );
   } else {
     filterpattern = XmStringCreateSimple( filter );
   }
@@ -77,13 +78,13 @@ fileBox( Widget parent, int type, char * filter)
   
   if( type == OPEN )
     {
-    dialogname = XmStringCreateSimple( "Open" );
-    dialog = XmCreateFileSelectionDialog( parent, "Open", NULL, 0 );
+    dialogname = XmStringCreateSimple( OPEN_STR );
+    dialog = XmCreateFileSelectionDialog( parent, OPEN_STR, NULL, 0 );
     }
   else if( type == SAVE )
     {
-    dialogname = XmStringCreateSimple( "Save" );
-    dialog = XmCreateFileSelectionDialog( parent, "Save", NULL, 0 );
+    dialogname = XmStringCreateSimple( SAVE_STR );
+    dialog = XmCreateFileSelectionDialog( parent, SAVE_STR, NULL, 0 );
     }
   
   XtVaSetValues( dialog,

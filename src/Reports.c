@@ -52,7 +52,7 @@ simpleReportWindow( Widget parent )
   /* force the size of the dialog so it is not resizable */
   dialog = XtVaCreatePopupShell( "dialog", 
 				 xmDialogShellWidgetClass, parent,
-				 XmNtitle,            "Report",
+				 XmNtitle,            REPORT_STR,
 				 XmNdeleteResponse,   XmDESTROY,
                                  /* 
                                   * Let the window find its own size,

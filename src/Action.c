@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "Action.h"
+#include "main.h"
 #include "PopBox.h"
 #include "util.h"
 
@@ -42,17 +43,17 @@ actionBox (Widget parent, int width, int drop_down_width)
    popGUI = popBox (parent, width, drop_down_width);
 
    /* build the action menu */
-   AddPopBoxMenuItem (popGUI, "Buy");
-   AddPopBoxMenuItem (popGUI, "Sell");
-   AddPopBoxMenuItem (popGUI, "Price");
-   AddPopBoxMenuItem (popGUI, "Int");
-   AddPopBoxMenuItem (popGUI, "Div");
-   AddPopBoxMenuItem (popGUI, "LTCG");
-   AddPopBoxMenuItem (popGUI, "STCG");
-   AddPopBoxMenuItem (popGUI, "Dist");
-   AddPopBoxMenuItem (popGUI, "Split");
-   AddPopBoxMenuItem (popGUI, "Deposit");
-   AddPopBoxMenuItem (popGUI, "Withdraw");
+   AddPopBoxMenuItem (popGUI, BUY_STR);
+   AddPopBoxMenuItem (popGUI, SELL_STR);
+   AddPopBoxMenuItem (popGUI, PRICE_STR);
+   AddPopBoxMenuItem (popGUI, INT_STR);
+   AddPopBoxMenuItem (popGUI, DIV_STR);
+   AddPopBoxMenuItem (popGUI, LTCG_STR);
+   AddPopBoxMenuItem (popGUI, STCG_STR);
+   AddPopBoxMenuItem (popGUI, DIST_STR);
+   AddPopBoxMenuItem (popGUI, SPLIT_STR);
+   AddPopBoxMenuItem (popGUI, DEPOSIT_STR);
+   AddPopBoxMenuItem (popGUI, WITHDRAW_STR);
 
    return popGUI;
 }

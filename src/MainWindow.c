@@ -627,7 +627,7 @@ mainWindow( Widget parent )
   position = 0;                    /* puts the buttons in the right place */
   
   /* The "Open" button */
-  widget = XtVaCreateManagedWidget( "Open", 
+  widget = XtVaCreateManagedWidget( OPEN_STR,
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
@@ -643,7 +643,7 @@ mainWindow( Widget parent )
 
   /* The "New" button, to create a new account */
   position += 3;
-  widget = XtVaCreateManagedWidget( "New", 
+  widget = XtVaCreateManagedWidget( NEW_STR, 
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
@@ -659,7 +659,7 @@ mainWindow( Widget parent )
   
   /* The "Edit" button */
   position += 3;
-  widget = XtVaCreateManagedWidget( "Edit", 
+  widget = XtVaCreateManagedWidget( EDIT_STR, 
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
@@ -675,7 +675,7 @@ mainWindow( Widget parent )
   
   /* The "Delete" button */
   position += 3;
-  widget = XtVaCreateManagedWidget( "Delete", 
+  widget = XtVaCreateManagedWidget( DELETE_STR, 
 				    xmPushButtonWidgetClass, buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNbottomAttachment,   XmATTACH_FORM,
@@ -696,7 +696,7 @@ mainWindow( Widget parent )
 
   /* The Asset and Profit field labels: */ 
   position +=5;
-  widget = XtVaCreateManagedWidget( "Assets:",
+  widget = XtVaCreateManagedWidget( ASSETS_C_STR,
 				    xmLabelGadgetClass,    buttonform,
 				    XmNtopAttachment,      XmATTACH_FORM,
 				    XmNleftAttachment,     XmATTACH_POSITION,
@@ -704,7 +704,7 @@ mainWindow( Widget parent )
 				    XmNrightAttachment,    XmATTACH_POSITION,
 				    XmNrightPosition,      position+3,
 				    NULL );
-  widget = XtVaCreateManagedWidget( "Profits:",
+  widget = XtVaCreateManagedWidget( PROFITS_C_STR,
 				    xmLabelGadgetClass,    buttonform,
 				    XmNtopAttachment,      XmATTACH_WIDGET,
 				    XmNtopWidget,          widget,

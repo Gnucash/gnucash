@@ -303,7 +303,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     position=1;
     
     /* The "Back" button */
-    widget = XtVaCreateManagedWidget( "Back",
+    widget = XtVaCreateManagedWidget( BACK_STR,
 				      xmPushButtonWidgetClass, buttonform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
@@ -318,7 +318,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     /* The "Forward" button */
     position +=2;
-    widget = XtVaCreateManagedWidget( "Forward",
+    widget = XtVaCreateManagedWidget( FORWARD_STR,
 				      xmPushButtonWidgetClass, buttonform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,
@@ -333,7 +333,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
     
     /* The "Close" button */
     position +=2;
-    widget = XtVaCreateManagedWidget( "Close",
+    widget = XtVaCreateManagedWidget( CLOSE_STR,
 				      xmPushButtonWidgetClass, buttonform,
 				      XmNtopAttachment,      XmATTACH_FORM,
 				      XmNbottomAttachment,   XmATTACH_FORM,

@@ -310,7 +310,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                                   xmFormWidgetClass, pane,
                                   NULL );
   
-  widget = XtVaCreateManagedWidget( PREV_BALN_STR,
+  widget = XtVaCreateManagedWidget( PREV_BALN_C_STR,
                                     xmLabelGadgetClass, controlform,
                                     XmNtopAttachment,   XmATTACH_FORM,
                                     XmNtopOffset,       10,
@@ -331,7 +331,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                                   XmNleftPosition,    50,
                                   NULL );
   
-  widget = XtVaCreateManagedWidget( END_BALN_STR,
+  widget = XtVaCreateManagedWidget( END_BALN_C_STR,
                                     xmLabelGadgetClass, controlform,
                                     XmNtopAttachment,   XmATTACH_WIDGET,
                                     XmNtopWidget,       endB,

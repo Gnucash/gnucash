@@ -243,7 +243,7 @@ readData( char *datafile )
     } else {
        /* create a lost account, put the missing accounts there */
        Account *acc = mallocAccount();
-       acc -> accountName = XtNewString ("Lost Accounts");
+       acc -> accountName = XtNewString (LOST_ACC_STR);
        acc -> children = (struct _account_group *) holder;
        insertAccount (grp, acc);
     }

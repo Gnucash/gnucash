@@ -32,6 +32,7 @@
 #include "Account.h"
 #include "BuildMenu.h"
 #include "Data.h"
+#include "main.h"
 #include "util.h"
 
 typedef struct _accMenuEntry
@@ -144,11 +145,11 @@ xaccBuildAccountSubMenu (AccountGroup *grp,
     {
     accData->menuEntry[*offset] = (AccMenuEntry *) _malloc (sizeof (AccMenuEntry));
     accData->menuEntry[*offset]->option = NULL;
-    accData->menuEntry[*offset]->label = "(none)";
+    accData->menuEntry[*offset]->label = NONE_STR;
     accData->menuEntry[*offset]->am = (struct _accountMenu *) accData;
     
-    tmp = (char *) _malloc (strlen ("(none)")+1);
-    strcpy (tmp, "(none)");
+    tmp = (char *) _malloc (strlen (NONE_STR)+1);
+    strcpy (tmp, NONE_STR);
     menuList[i].label         = tmp;
     menuList[i].wclass        = &xmPushButtonWidgetClass;
     menuList[i].mnemonic      = 0;
