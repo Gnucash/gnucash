@@ -19,6 +19,42 @@
 
 2001-10-12  Rob Browning  <rlb@defaultvalue.org>
 
+	* src/scm/printing/print-check.scm: use number-to-words module.
+
+	* src/scm/printing/number-to-words.scm: make a guile module.
+
+	* src/scm/printing/Makefile.am
+	(gncscmmoddir): added.
+	(gncscmmod_DATA): number-to-words.scm now a guile module.
+	(gncscm_DATA): removed number-to-words.scm.
+	(EXTRA_DIST): handle number-to-words.scm move.
+
+	* src/guile/Makefile.am
+	(libgncguile_la_SOURCES): libgncguile is now a shared lib.
+	(libgncguile_la_LIBADD): libgncguile is now a shared lib.
+	(libgncguile_la_LDFLAGS): libgncguile is now a shared lib.
+	(libgw_gnc_la_SOURCES): libgw-gnc is now a shared lib.
+	(libgw_gnc_la_LIBADD): libgw-gnc is now a shared lib.
+	(libgw_gnc_la_LDFLAGS): libgw-gnc is now a shared lib.
+
+	* src/guile/.cvsignore: add files for shared libs.
+
+	* src/gnome/Makefile.am
+	(lib_LTLIBRARIES): libgncgnome is now a shared lib.
+	(libgncgnome_la_SOURCES): libgncgnome is now a shared lib.
+
+	* src/gnome/.cvsignore: add files for shared libs.
+
+	* src/engine/Makefile.am
+	(libgw_glib_la_LDFLAGS): use ${G_WRAP_LINK_ARGS}.
+	(libgw_engine_la_LDFLAGS): use ${G_WRAP_LINK_ARGS}.
+	(libgw_kvp_la_LDFLAGS): use ${G_WRAP_LINK_ARGS}.
+
+	* src/Makefile.am (gnucash_LDADD): link gncguile and gncgnome as
+	shared libs now.
+
+	* .cvsignore: add stamp-h1 (where does this come from?).
+
 	* configure.in (GNC_ADD_ON_SRFIS): compute needed SRFIs.
 
 	* lib/srfi/Makefile.am: determine SRFI list via autoconf.
