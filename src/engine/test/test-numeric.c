@@ -699,6 +699,19 @@ check_mult_div (void)
 	check_binary_op (gnc_numeric_create(562854125307LL, 100),
 	                 val_a, val_tot, frac,
 	                 "expected %s got %s = %s * %s for mult round");
+
+	/* Yet another bug from bugzilla ... */
+	a = gnc_numeric_create (40066447153986554LL, 4518);
+	b = gnc_numeric_create (26703286457229LL, 3192);
+	frac = gnc_numeric_div(a, b,
+	                      GNC_DENOM_AUTO,
+	                      GNC_HOW_DENOM_SIGFIGS(6) |
+	                      GNC_HOW_RND_ROUND);
+
+	check_binary_op (gnc_numeric_create(106007, 100),
+	                 frac, a, b,
+	                 "expected %s got %s = %s / %s for mult sigfigs");
+
 }
   
 /* ======================================================= */
