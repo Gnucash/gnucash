@@ -4,9 +4,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 1.5.96\n"
+"Project-Id-Version: GnuCash 1.5.97\n"
 "POT-Creation-Date: 2001-05-27 23:32-0700\n"
-"PO-Revision-Date: 2001-05-24 17:37-07:00\n"
+"PO-Revision-Date: 2001-05-29 22:45-0700\n"
 "Last-Translator: Duarte Loreto <dlsl@poli.org>\n"
 "Language-Team: Portuguese Documentation Project (POLI) <info@poli.org>\n"
 "MIME-Version: 1.0\n"
@@ -5886,13 +5886,12 @@ msgid "No data"
 msgstr "Sem dados"
 
 #: src/scm/guile-strings.c:132
-#, fuzzy
 msgid ""
 "The selected accounts contain no data/transactions (or only zeroes) for the "
 "selected time period"
 msgstr ""
-"As contas seleccionadas não contêm dados (ou apenas zeros) para o intrevalo "
-"de datas selecionado"
+"As contas seleccionadas não contêm dados/transacções (ou apenas zeros) para o "
+"intrevalo de datas selecionado"
 
 #: src/scm/guile-strings.c:135
 msgid ""
@@ -6060,7 +6059,6 @@ msgid "Weighted Average"
 msgstr "Média Ponderada"
 
 #: src/scm/guile-strings.c:195 src/scm/report/guile-strings.c:312
-#, fuzzy
 msgid "The weighted average of all currency transactions of the past"
 msgstr "A média ponderada de todas as transacções cambiais passadas"
 
@@ -6880,7 +6878,6 @@ msgstr ""
 "actual do caminho."
 
 #: src/scm/guile-strings.c:412
-#, fuzzy
 msgid ""
 "A list of strings indicating where to look for html and parsed-html files. "
 "Each element must be a string representing a directory or a symbol where "
@@ -6888,12 +6885,9 @@ msgid ""
 "value of the path."
 msgstr ""
 "Uma lista de caminhos indicando onde procurar por ficheiros html e html "
-"parseado\n"
-"Cada elemento tem de ser um caminho que represente um directório ou uma "
-"ligação simbólica\n"
-"onde 'default se expande para o caminho de defeito, e 'current se expande "
-"para\n"
-"o valor actual do caminho."
+"parseado. Cada elemento tem de ser um caminho que represente um directório "
+"ou uma ligação simbólica onde 'default se expande para o caminho de defeito, "
+"e 'current se expande para o valor actual do caminho."
 
 #: src/scm/guile-strings.c:413 src/scm/guile-strings.c:415
 msgid ""
@@ -7112,15 +7106,16 @@ msgstr ""
 
 # src/scm/guile-strings.c:265
 #: src/scm/guile-strings.c:469
-#, fuzzy
 msgid ""
 "The GnuCash online manual has lots of helpful information.  \n"
 "If you are upgrading from GnuCash 1.4, the section \"What's new in\n"
 "GnuCash 1.6\" is particularly interesting. You can access the manual\n"
 "under the Help menu."
 msgstr ""
-"O manual electrónico do GnuCash tem imensa informação útil.\n"
-"Pode aceder ao manual a partir do menu Ajuda."
+"O manual electrónico do GnuCash tem imensa informação útil. \n"
+"Se estiver a actualizar o GnuCash 1.4, a secção \"Que Novidades há\n"
+"no GnuCash 1.6\" é particularmente interessante. Pode aceder ao manual\n"
+"através do menu Ajuda."
 
 # src/scm/guile-strings.c:267
 #: src/scm/guile-strings.c:473
@@ -7219,7 +7214,6 @@ msgstr ""
 
 # src/scm/guile-strings.c:296
 #: src/scm/guile-strings.c:502
-#, fuzzy
 msgid ""
 "To enter multiple-split transactions such as a paycheck with\n"
 "multiple deductions, click the Split button in the tool bar.\n"
@@ -7228,8 +7222,8 @@ msgid ""
 msgstr ""
 "Para introduzir transacções com várias parcelas tais como um pagamento\n"
 "com deduções múltiplas, prima o botão Parcela na barra de ferramentas.\n"
-"Ou escolha Contas de Parcela Automática ou Diário de Transacções\n"
-"do menu de opções Registo|Estilo."
+"Em alternativa, pode seleccionar o estilo de registo Parcela Automática ou\n"
+"Diário de Transacções do menu Registo|Estilo."
 
 # src/scm/guile-strings.c:300
 #: src/scm/guile-strings.c:506
@@ -7280,7 +7274,6 @@ msgstr ""
 
 # src/scm/guile-strings.c:313
 #: src/scm/guile-strings.c:519
-#, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
 "you need an intermediate currency trading account. Click the Transfer\n"
@@ -7288,8 +7281,9 @@ msgid ""
 "transaction. See the GnuCash online manual for details."
 msgstr ""
 "Para transferir fundos entre contas com moedas diferentes,\n"
-"poderá necessitar de uma conta intermédia de câmbio.\n"
-"Por favor leia o manual electrónico do GnuCash para mais detalhes."
+"necessita de uma conta intermédia de câmbio. Prima o botão Transferir\n"
+"na barra de ferramentas do registo para que o GnuCash crie a transacção\n"
+"intermédia. Consulte o manual electrónico do GnuCash para detalhes."
 
 #: src/scm/guile-strings.c:523
 msgid ""
@@ -7331,7 +7325,6 @@ msgstr ""
 "Junte-se a eles no #gnucash em irc.gnome.org"
 
 #: src/scm/guile-strings.c:534
-#, fuzzy
 msgid ""
 "There is a theory that if ever anyone discovers what\n"
 "the Universe is for and why it is here, it will instantly\n"
@@ -7340,9 +7333,10 @@ msgid ""
 "There is another theory that this has already happened.\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"Existe uma teoria que diz que se alguém descobre para que\n"
-"serve o Universo e porque existe, ele desaparecerá instantaneamente\n"
-"e será substituido por algo ainda mais bizarro e inexplicável.\n"
+"Existe uma teoria que diz que se alguém descobre para\n"
+"que serve o Universo e porque existe, ele desaparecerá\n"
+"instantaneamente e será substituido por algo ainda mais bizarro\n"
+"e inexplicável.\n"
 "Existe outra teoria de que isto já aconteceu.\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\"\n"
 "(\"O Restaurante no Fim do Universo\")"
@@ -7690,9 +7684,8 @@ msgstr "Lucro"
 
 # src/scm/report/guile-strings.c:100
 #: src/scm/report/guile-strings.c:67
-#, fuzzy
 msgid "Profit (Gain minus Loss)"
-msgstr "Lucro e Prejuizo"
+msgstr "Lucro (Ganhos menos Perdas)"
 
 # src/scm/report/guile-strings.c:38
 #: src/scm/report/guile-strings.c:68
@@ -7716,25 +7709,22 @@ msgstr "Fim do período"
 
 # src/scm/report/guile-strings.c:55
 #: src/scm/report/guile-strings.c:75
-#, fuzzy
 msgid "Maximum"
-msgstr "Nº Máximo Barras"
+msgstr "Máximo"
 
 #: src/scm/report/guile-strings.c:76
 msgid "Minimum"
-msgstr ""
+msgstr "Mínimo"
 
 # src/gnome/window-register.c:865
 #: src/scm/report/guile-strings.c:77
-#, fuzzy
 msgid "Gain"
-msgstr "Simples"
+msgstr "Ganho"
 
 # src/scm/report/guile-strings.c:38
 #: src/scm/report/guile-strings.c:78
-#, fuzzy
 msgid "Loss"
-msgstr "Ganho/Perda"
+msgstr "Perda"
 
 # src/scm/report/guile-strings.c:4 src/scm/report/guile-strings.c:93
 #: src/scm/report/guile-strings.c:96 src/scm/report/guile-strings.c:270

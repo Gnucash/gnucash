@@ -1,0 +1,164 @@
+<article id="xacc-features">
+  <artheader>
+    <title>
+      Funcionalidades
+      </title>
+  </artheader>
+
+  <sect1>
+    <title>
+      Funcionalidades básicas
+    </title>
+
+    <para>
+      O GnuCash é poderoso, versátil, e fácil de utilizar.  Se deseja ter uma 
+      ideia de tudo o que o GnuCash tem para oferecer, continue a leitura!
+    </para>
+
+    <itemizedlist>
+      <listitem> 
+  <para><emphasis>Multiplas Contas.</emphasis> Crie uma conta GnuCash
+   para cada uma das suas contas bancárias.  Cada conta mantém um saldo 
+    corrente e um saldo reconciliado, pelo que pode manter um controlo 
+    dos cheques que já foram descontados da sua conta.
+  </para>
+      </listitem>
+
+      <listitem> 
+  <para> <emphasis>Interface de Utilizador Simples.</emphasis> </para>
+  <para>Se consegue utilizar o registo no su livro de cheques, consegue 
+    utilizar o <application>GnuCash.</application> Escreva directamente 
+    no registo, prima o tab para passar de campo, e utilize o preenchimento 
+    rápido para automaticamente completar transacções.
+  </para>
+      </listitem>
+      
+      <listitem> <para> <emphasis><link linkend="xacc-recnwin">Ferramentas 
+        Automátics para Reconciliar Contas.</link></emphasis> </para>
+  
+  <para>No final do mês, abra a janela de <emphasis>reconciliação</emphasis>, 
+    introduza o saldo final do seu extracto bancário, e verifique as 
+    transacções que surgem no extracto. Isto confere o que você registou no 
+    GnuCash com o que o banco reportou, e torna mais simples encontrar 
+    discrepâncias. </para>
+      </listitem>
+      
+      <listitem> <para> <emphasis>Preenchimento Rápido.</emphasis> </para>
+  
+  <para>Se começar a escrever no campo de descrição, e o texto coincidir com 
+    o de uma transacção anterior, primindo a tecla <keycap>TAB</keycap> irá copiar 
+    a transacção anterior. Esta é uma forma de poupar tempo caso você introduza 
+    regularmente transacções semelhantes.
+  </para>
+      </listitem>
+      
+      <listitem> <para> <emphasis>Portfólios de Acções/Fundos de Investimento.</emphasis> </para>
+  
+  <para>Acompanhe acções individualmente (uma por conta) ou num protfólio 
+    de contas (um conjunto de contas que pode ser apresentado em conjunto).
+    Existem ferramentas para 
+    <link linkend="xacc-ticker">obter automaticamente cotações de acções.</link>
+  </para>
+      </listitem>
+      
+      <listitem>
+  <para>Suporte para <emphasis><link linkend="xacc-currencyhandling">multiplas
+        moedas</link></emphasis> e <emphasis>contas de câmbio.
+    </emphasis>
+    (parcial, ainda limitado). 
+    Contas bancárias podem ser estabelecidas em diferentes moedas, e transacções 
+    a taxas de câmbios diferentes podem ser efectuadas, à semelhança das acções 
+    que são transaccionadas a cotações variáveis.
+    
+    
+  </para>
+      </listitem>
+      
+      <listitem>
+  <para><emphasis><link linkend="qif">Importação de Ficheiros Quicken</link>.</emphasis> 
+  </para>
+  <para>Importa ficheiros QIF tipo-Quicken.  O ajudante de importação elimina 
+    automaticamente transacções duplicadas.
+  </para>
+      </listitem>
+      
+      <listitem>
+  <para><emphasis>Interface MDI Gnome</emphasis></para>
+  <para>Tenha várias vistas dos seus dados financeiros, defina como os quer 
+    ver, numa ou mais janelas que persistem entre sessões do GnuCash.
+  </para>
+      </listitem>
+      
+      <listitem>
+  <para><emphasis><link
+  linkend="xacc-reports">Relatórios</link>.</emphasis> Visualize,
+  exporte como HTML, ou imprima uma variedade de relatórios, incluindo 
+  Folhas de Saldos, Resumos de Contas, Lucros e Prejuizos, Protfólios 
+  de Acções, e Relatórios de Transacções.  Os relatórios são gravados 
+  entre sessões, e são possíveis relatórios deslizantes utilizando datas 
+  relativas.  O GnuCash também suporta uma variedade de gráficos de barras 
+  e circulares customizáveis e passíveis de serem impressos.
+  </para>
+      </listitem>
+      
+    </itemizedlist>
+
+  </sect1>
+  <sect1 id="xacc-advanced-features">
+    <title>Funcionalidades Avançadas</title>
+    <para>O GnuCash disponibiliza algumas funcionalidades que não se encontram 
+      em aplicações de contabilidade mais simples.</para>
+
+    <itemizedlist>
+<listitem>
+<para> <emphasis><link linkend="xacc-chartofaccts">Lista de Contas</link></emphasis> 
+
+ </para>
+<para>Uma conta pai pode ter uma hierarqui de contas mais detalhadas 
+        organizadas sob ela. Isto permite que tipos de contas relacionadas 
+        (<emphasis>por ex.</emphasis> - Dinheiro, Banco, Acção) sejam agrupadas 
+        sob uma conta pai ( <emphasis>por ex.</emphasis> - Activos).
+
+ </para>
+</listitem>
+<listitem>
+<para><emphasis><link linkend="xacc-doubleentry">Dupla Entrada</link></emphasis> 
+
+ </para>
+<para>Toda a transacção tem de debitar uma conta e creditar outras 
+      por um montante equivalente. Isto assegura que os 'livros se equilibram':
+      que a diferença entre recebimentos e pagamentos equivale exactamente 
+      à soma de todos os activos, sejam banco, dinheiro, acções ou outros.
+
+ </para>
+</listitem>
+<listitem>
+<para><emphasis><link linkend="xacc-incomeexpense">Tipos (Categorias) de 
+      Contas de Receitas/Despesas</link></emphasis> 
+ </para>
+<para>Estas servem não apenas para categorizar os seus fluxos financeiros mas, 
+quando utilizadas adequadamente com a funcionalidade de dupla entrada e contas 
+de saldos, podem também proporcionar um relatório preciso dos Lucros & Prejuizos.
+ </para>
+</listitem>
+
+<listitem>
+<para><emphasis>Plano de Contas</emphasis> </para>
+
+<para>Multiplas contas podem ser apresentadas simultaneamente 
+        numa janela de registo. Isto pode tornar mais fácil 
+        descobrir erros. Também disponibiliza uma forma conveniente 
+        de ver um portfólio de várias acções, ao mostrar todas as 
+        transacções nesse portfólio.
+
+ </para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+
+</article>
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->

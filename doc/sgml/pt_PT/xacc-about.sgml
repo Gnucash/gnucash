@@ -7,158 +7,19 @@
 <sect1>
 <title>Introdução</title>
 
-<para>GnuCash é um programa para controlar as suas finanças. As suas
-funcionalidades incluem:
+<para>O GnuCash é uma aplicação que serve para controlar as suas 
+finanças. Para poder começar desde já a registar as suas finanças, 
+veja o <link linkend="xacc-quickstart">Guia de Iniciação Rápida</link>.
 
-<itemizedlist>
-<listitem> <para><emphasis>Múltiplas Contas.</emphasis> 
-Crie uma conta GnuCash para cada uma das suas contas bancárias. Cada
-conta mantém tanto um saldo corrente como um saldo reconciliado, pelo
-que pode controlar os cheques que já foram levantados da sua conta.
+Para mais informação sobre as muitas funcionalidades que o GnuCash
+oferece, consulte a página das <link linkend="xacc-features">Funcionalidades
+</link>.
 </para>
-</listitem>
-
-<listitem> <para> <emphasis>Interface de Utilização Simples.</emphasis> </para>
-<para>Se consegue utilizar o registo que acompanha o seu livro de cheques, 
-consegue utilizar o <application>GnuCash.</application> 
-Escreva directamente no registo, navegue entre campos com o TAB, e utilize o 
-preenchimento rápido para automaticamente completar transacções.
-</para>
-</listitem>
-
-<listitem> <para> <emphasis><link linkend="xacc-recnwin">Ferramentas Automáticas
-para Reconciliar Contas.</link></emphasis> </para>
-
-<para>No final do mês, abra a janela de <emphasis>reconciliação</emphasis>, 
-introduza o saldo final do seu extracto bancário, e confira as transacções
-que surgem nesse mesmo extracto. Isto valida tudo o que você registou no 
-GnuCash com o que o seu banco lhe reportou, e torna mais fácil detectar 
-quaisquer discrepâncias. </para>
-</listitem>
-
-<listitem> <para> <emphasis>Preenchimento Rápido.</emphasis> </para>
-
-<para>Se começar a escrever no campo de descrição, e o texto coincidir
-com o de uma transacção anterior, primir <keycap>TAB</keycap> irá copiar 
-essa transacção anterior. Isto é um optimizador de tempo caso você crie 
-transacções semelhantes regularmente.
-</para>
-</listitem>
-
-<listitem> <para> <emphasis>Portfólios de Acções/Títulos.</emphasis> </para>
-
-<para>Acompanhe acções individualmente (uma por conta) ou em
-        portfólios e contas (um grupo de contas que pode ser 
-        visualisado em conjunto).
-        Existem ferramentas para 
-        <link linkend="xacc-ticker">obter cotações de acções automaticamente.</link>
-</para>
-</listitem>
-
-<listitem>
-<para>Suporte para <emphasis><link linkend="xacc-currencyhandling">várias 
-      moedas</link></emphasis> e <emphasis>contas de câmbio.
-      </emphasis>
-      (parcial, ainda em desenvolvimento). 
-      Contas bancárias podem ser definidas em moedas diferentes, 
-      e podem ser feitas trocas aos mais variados câmbios, à 
-      semelhança das acções que são transaccionadas a preços 
-      variáveis.
-      
-
-</para>
-</listitem>
-
-<listitem>
-<para><emphasis><link linkend="qif">Importação de Ficheiros Quicken</link>.</emphasis> 
-</para>
-<para>Importa Ficheiros QIF estilo-Quicken.  O ajudante de importação 
-automaticamente funde transacções duplicadas.
-</para>
-</listitem>
-
-<listitem>
-<para><emphasis>Interface MDI Gnome</emphasis></para>
-<para>Tenha várias vistas dos seus dados financeiros, dispostos como o desejar, 
-numa ou várias janelas que persistem entre sessões de utilização do GnuCash.
-</para>
-</listitem>
-
-<listitem>
-<para><emphasis><link linkend="xacc-reports">Relatórios</link>.</emphasis> Visualize,
-exporte como HTML, ou imprima uma variedade de relatórios, incluindo Sumários de 
-Saldos, Sumários de Contas, Lucros e Prejuízos, Portfólios de Acções, e Relatórios de 
-Transacções. Os relatórios são gravados entre sessões, e relatórios deslizantes são 
-possíveis com datas relativas. O GnuCash também suporta uma variedade de gráficos de
-barras e circulares, customizáveis e passíveis de serem impressos.
- </para>
-</listitem>
-
-</itemizedlist>
-
- </para>
-</sect1>
-
-<sect1 id="xacc-features">
-<title>Funcionalidades Avançadas</title>
-<para> </para>
-<para>GnuCash oferece algumas funcionalidades não disponíveis em aplicações
-    financeiras mais simples.
-
-    <itemizedlist>
-<listitem>
-<para> <emphasis><link linkend="xacc-chartofaccts">Gráfico de Contas</link></emphasis> 
-
- </para>
-<para>Uma conta principal pode ter uma hierarquia de contas mais detalhadas
-        organizadas sob si. Isto permite que tipos de contas relacionadas
-        (<emphasis>por ex.</emphasis> - Dinheiro, Banco, Acções) sejam
-        agrupadas sob uma conta principal ( <emphasis>por ex.</emphasis> -
-        Bens).
-
- </para>
-</listitem>
-<listitem>
-<para><emphasis><link linkend="xacc-doubleentry">Dupla
-      Entrada</link></emphasis> 
-
- </para>
-<para>Cada transacção tem de debitar uma conta e creditar outras 
-      pelo mesmo montante. Isto garante que 'os livros saldam': que 
-      a diferença entre receitas e despesas é exactamente igual à 
-      soma de todos os bens, sejam no banco, dinheiro, acções ou outros.
-
- </para>
-</listitem>
-<listitem>
-<para><emphasis><link linkend="xacc-incomeexpense">Tipos de Contas de 
-      Receitas/Despesas (Categorias)</link></emphasis> 
- </para>
-<para>Serve não apenas para categorizar os seus fluxos financeiros, mas quando 
-utilizado correctamente com a funcionalidade de dupla entrada e contas de 
-activos, pode disponibilizar uma listagem de Lucros & Prejuizos precisa.
- </para>
-</listitem>
-
-<listitem>
-<para><emphasis>Plano de Contas</emphasis> </para>
-
-<para>Várias contas podem ser visualisadas numa única janela de 
-        registo simultaneamente. Isto facilita o controlo de
-        erros de dados. Também permite uma forma fácil de 
-        visualisar um portfólio de várias acções, ao mostrar
-        todas as transacções desse portfólio.
-
- </para>
-</listitem>
-</itemizedlist>
-
- </para>
 </sect1>
 
 <sect1 id="xacc-versioning">
 <title>Versões</title>
-<para> </para>
+
 <para>O esquema de versões para o GnuCash é semelhante ao utilizado
     para o kernel do Linux, onde sub-versões "pares" indicam versões 
     consideradas estáveis, sujeitas apenas a manutenção ou correcção 
@@ -168,8 +29,11 @@ activos, pode disponibilizar uma listagem de Lucros & Prejuizos precisa.
     desenvolvimentos, deverá utilizar ou esta versão, ou uma estável
     anterior. Estas versões são bastante estáveis, com todos os erros
     conhecidos corrigidos.
-    O ramo "experimental" actual é o gnucash-1.5.x, que é de certa
-    forma inseguro.
+    O ramo "experimental" actual é o gnucash-1.5.x, que se encontra já 
+    em versão beta. Esta é a versão que está de momento a utilizar, 
+    obviamente! Se estiver a utilizar esta versão com dados reais, 
+    POR FAVOR FAÇA CÓPIAS DE SEGURANÇA REGULARMENTE!
+
     Quando a série 1.5.x estabilizar, a próxima série estável será
     a 1.6.x.
 
@@ -440,6 +304,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>pelo GnoMoney e conversão para GTK</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>mcondell@bbn.com</email> Matthew
       Condell</glossterm>
@@ -717,6 +582,13 @@ g-wrap</link> para guile, e as preferências de utilizador.
       Loreto</glossterm>
 <glossdef>
 <para>Traduções para Português</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>kmaraas@gnome.org</email>Kjartan Maraas</glossterm>
+<glossdef>
+<para>traduções para Norueguês</para>
 </glossdef>
 </glossentry>
 

@@ -16,6 +16,7 @@ GNUCASH_SGML_FILES = \
 	xacc-depreciation.sgml \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
+	xacc-features.sgml \
 	xacc-gpl.sgml \
 	xacc-incomeexpense.sgml \
 	xacc-locatingtxns.sgml \
@@ -28,6 +29,7 @@ GNUCASH_SGML_FILES = \
 	xacc-print.sgml \
 	xacc-qif-import.sgml \
 	xacc-quicken.sgml \
+	xacc-quickstart.sgml \
 	xacc-recnwin.sgml \
 	xacc-regwin-kbd.sgml \
 	xacc-regwin.sgml \
