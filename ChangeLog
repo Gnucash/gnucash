@@ -1,3 +1,9 @@
+2003-12-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/reconcile-list.c: make sure to verify that the items
+	  in the reconcile hash are still around after a refresh.  Fixes
+	  bug #129121.
+
 2003-12-08  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-numeric.c:  Rich Johnson's patch to convert
