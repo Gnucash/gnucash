@@ -49,6 +49,8 @@ actionBox (Widget parent)
    AddPopBoxMenuItem (popGUI, "STCG");
    AddPopBoxMenuItem (popGUI, "Dist");
    AddPopBoxMenuItem (popGUI, "Split");
+   AddPopBoxMenuItem (popGUI, "Deposit");
+   AddPopBoxMenuItem (popGUI, "Withdraw");
 
    return popGUI;
 }

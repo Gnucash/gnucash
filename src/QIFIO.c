@@ -220,7 +220,7 @@ void xaccParseQIFDate (Date * dat, char * str)
 
 /********************************************************************\
  * xaccParseQIFAmount                                               * 
- *   parses dollar ammount of the form DDD.CC                       *
+ *   parses dollar ammount of the form DDD,DDD,DDD.CC               *
  *                                                                  * 
  * Args:   str -- pointer to string rep of sum                      * 
  * Return: int -- in pennies                                        * 
@@ -229,9 +229,9 @@ void xaccParseQIFDate (Date * dat, char * str)
 double xaccParseQIFAmount (char * str) 
 {
    char * tok;
-   double dollars = 0;
+   double dollars = 0.0;
 
-   if (!str) return 0;
+   if (!str) return 0.0;
 
    tok = strchr (str, ',');
    if (tok) {
@@ -249,17 +249,103 @@ double xaccParseQIFAmount (char * str)
    }
 
    tok = strchr (str, '.');
-   if (!tok) return 0;
-   *tok = 0x0;
-   dollars += ((double) (atoi (str)));
+   if (tok) {
+      *tok = 0x0;
+      dollars += ((double) (atoi (str)));
+      str = tok+sizeof(char);
 
-   str = tok+sizeof(char);
-   tok = strchr (str, '\r');
-   if (!tok) return dollars;
-   *tok = 0x0;
-   dollars += 0.01 * ((double) atoi (str));
+      tok = strchr (str, '\r');
+      if (!tok) return dollars;
+      *tok = 0x0;
+      dollars += 0.01 * ((double) atoi (str));
+      return dollars;
+
+   } else {
+      tok = strchr (str, '\r');
+      if (tok) {
+         *tok = 0x0;
+         dollars += ((double) (atoi (str)));
+         return dollars;
+      } else {
+         return 0.0;
+      }
+   }
 
    return dollars;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+Account *
+xaccGetXferQIFAccount (Account *acc, char *qifline)
+{
+   Account *xfer_acc;
+   AccountGroup *rootgrp;
+   char * tmp;
+
+   /* remove square brackets from name, remove carriage return ... */
+   qifline = &qifline[1];
+   if ('[' == qifline[0]) {
+      qifline = &qifline[1];
+      tmp = strchr (qifline, ']');
+      if (tmp) *tmp = 0x0;
+   }
+   tmp = strchr (qifline, '\r');
+   if(tmp) *tmp = 0x0;
+   tmp = strchr (qifline, '\n');
+   if(tmp) *tmp = 0x0;
+
+   /* see if the account exists */
+   rootgrp = xaccGetRootGroupOfAcct (acc);
+   xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
+
+   /* if not, create it */
+   if (!xfer_acc) {
+      xfer_acc = mallocAccount ();
+      xfer_acc->accountName = XtNewString (qifline);
+      xfer_acc->type = BANK;
+      insertAccount (rootgrp, xfer_acc);
+   }
+
+   return xfer_acc;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+Account *
+xaccGetSecurityQIFAccount (Account *acc, char *qifline)
+{
+   Account *xfer_acc;
+   AccountGroup *rootgrp;
+   char * tmp;
+
+   /* remove square brackets from name, remove carriage return ... */
+   qifline = &qifline[1];
+   if ('[' == qifline[0]) {
+      qifline = &qifline[1];
+      tmp = strchr (qifline, ']');
+      if (tmp) *tmp = 0x0;
+   }
+   tmp = strchr (qifline, '\r');
+   if(tmp) *tmp = 0x0;
+   tmp = strchr (qifline, '\n');
+   if(tmp) *tmp = 0x0;
+
+   /* see if the account exists */
+   rootgrp = xaccGetRootGroupOfAcct (acc);
+   xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
+
+   /* if not, create it */
+   if (!xfer_acc) {
+      xfer_acc = mallocAccount ();
+      xfer_acc->accountName = XtNewString (qifline);
+      xfer_acc->type = STOCK;
+      xaccInsertSubAccount (acc, xfer_acc);
+   }
+
+   return xfer_acc;
 }
 
 /********************************************************************\
@@ -274,11 +360,20 @@ double xaccParseQIFAmount (char * str)
  * Return: first new line after end of transaction                  * 
 \********************************************************************/
 
+#define XACC_ACTION(q,x)			\
+   if (!strncmp (&qifline[1], q, strlen(q))) {	\
+      trans->action = XtNewString(x);		\
+   } else
+
+
 char * xaccReadQIFTransaction (int fd, Account *acc)
 {
    Transaction *trans;
    char * qifline;
    int isneg = 0;
+   int got_quantity = 0;
+   int do_security = 0;
+   Account *sub_acc = 0x0;
 
    if (!acc) return NULL;
    trans = (Transaction *)_malloc(sizeof(Transaction));
@@ -313,70 +408,103 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
    /* scan for transaction date, description, type */
    while (qifline) {
-     if ('M' == qifline [0]) {   /* M == memo field */
+     /* M == memo field */
+     if ('M' == qifline [0]) {  
         XACC_PREP_STRING (trans->memo);
      } else 
-     if ('P' == qifline [0]) {   /* P == Payee, for Bank accounts */
+
+     /* P == Payee, for Bank accounts */
+     if ('P' == qifline [0]) {   
         XACC_PREP_STRING (trans->description);
      } else
-     if ('Y' == qifline [0]) {   /* Y == Name of Security */
+
+     /* Y == Name of Security */
+     if ('Y' == qifline [0]) {   
         XACC_PREP_STRING (trans->description);
+
+        if (do_security) {
+           /* locate or create the sub-account account */
+           sub_acc = xaccGetSecurityQIFAccount (acc, qifline);
+   
+           /* now, insert the transaction into the 
+            * main (not sub) account as a debit. The
+            * main account will be debited, the 
+            * subaccount credited */
+           trans->debit = (struct _account *) acc;
+           insertTransaction (acc, trans);
+        }
+
      } else
+
      /* N == check numbers for Banks, but Action for portfolios */
      if ('N' == qifline [0]) {   
-        XACC_PREP_STRING (trans->num);
+
         if (!strncmp (qifline, "NSell", 5)) isneg = 1;
+        if (!strncmp (qifline, "NSell", 5)) do_security = 1;
+        if (!strncmp (qifline, "NBuy", 4)) do_security = 1;
+
+        /* if a recognized action, convert to our cannonical names */
+        XACC_ACTION ("Buy", "Buy")
+        XACC_ACTION ("Sell", "Sell")
+        XACC_ACTION ("Div", "Div")
+        XACC_ACTION ("CGLong", "LTCG")
+        XACC_ACTION ("CGShort", "STCG")
+        XACC_ACTION ("IntInc", "Int")
+        XACC_ACTION ("DEP", "Deposit")
+        XACC_ACTION ("XIn", "Deposit")
+        XACC_ACTION ("XOut", "Withdraw")
+        {
+          XACC_PREP_STRING (trans->num);
+        }
      } else
+
      if ('D' == qifline [0]) {   /* D == date */
          xaccParseQIFDate (&(trans->date), &qifline[1]);
      } else 
      if ('T' == qifline [0]) {   /* T == total */
-         trans -> damount = xaccParseQIFAmount (&qifline[1]);  /* amount is double */
-         if (isneg) trans -> damount = - (trans->damount);
+
+         /* ignore T for stock transactions, since T is a dollar amount */
+         if (0 == got_quantity) {
+            trans -> damount = xaccParseQIFAmount (&qifline[1]);  
+            if (isneg) trans -> damount = - (trans->damount);
+         }
      } else 
      if ('I' == qifline [0]) {   /* I == share price */
-         trans -> share_price = xaccParseQIFAmount (&qifline[1]);      /* amount is double */
+         trans -> share_price = xaccParseQIFAmount (&qifline[1]); 
      } else 
      if ('Q' == qifline [0]) {   /* Q == number of shares */
-         /* hack alert */
+         trans -> damount = xaccParseQIFAmount (&qifline[1]);  
+         if (isneg) trans -> damount = - (trans->damount);
+         got_quantity = 1;
      } else 
      if ('L' == qifline [0]) {   /* L == name of acount from which transfer occured */
          Account *xfer_acc;
-         AccountGroup *rootgrp;
-         char * tmp;
 
-         /* remove square brackets from name, remove carriage return ... */
-         qifline = &qifline[1];
-         if ('[' == qifline[0]) {
-            qifline = &qifline[1];
-            tmp = strchr (qifline, ']');
-            if (tmp) *tmp = 0x0;
-         }
-         tmp = strchr (qifline, '\r');
-         if(tmp) *tmp = 0x0;
-         tmp = strchr (qifline, '\n');
-         if(tmp) *tmp = 0x0;
-
-         /* see if the account exists */
-         rootgrp = xaccGetRootGroupOfAcct (acc);
-         xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
-
-         /* if not, create it */
-         if (!xfer_acc) {
-            xfer_acc = mallocAccount ();
-            xfer_acc->accountName = XtNewString (qifline);
-            xfer_acc->type = BANK;
-            insertAccount (rootgrp, xfer_acc);
-         }
+         /* locate the transfer account */
+         xfer_acc = xaccGetXferQIFAccount (acc, qifline);
 
          /* now, insert the transaction into the transfer account */
          trans->debit = (struct _account *) xfer_acc;
          insertTransaction (xfer_acc, trans);
 
      } else 
-     if ('$' == qifline [0]) {   /* $ == dollar amount -- always preceeded by 'L' */
-         /* hack alert */
+
+     /* $ == dollar amount -- always preceeded by 'L' */
+     if ('$' == qifline [0]) {   
+         /* Currently, it appears that the $ amount is a redundant 
+          * number that we can safely ignore.  If we wanted to get
+          * fancy, we could use it to double-check the above work,
+          * since it appears to always appear the last entry in the
+          * transaction. */
+        double got, wanted;
+        wanted = xaccParseQIFAmount (&qifline[1]);
+        got = (trans->damount) * (trans->share_price);
+        if (isneg) got = -got;
+        if (wanted != got) {
+           printf ("QIF Parse Error: wanted %f got %f \n", wanted, got);
+        }
      } else 
+
      if ('O' == qifline [0]) {   /* O == round-off error ??? */
          /* hack alert */
      } else 
@@ -393,12 +521,17 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       xaccRemoveTransaction ((Account *) trans->debit, trans);
       xaccRemoveTransaction ((Account *) trans->credit, trans);
       freeTransaction (trans);
+      return qifline;
    }
 
    XACC_PREP_NULL_STRING (trans->num);
    XACC_PREP_NULL_STRING (trans->memo);
    XACC_PREP_NULL_STRING (trans->description);
    XACC_PREP_NULL_STRING (trans->action);
+
+   /* if a transaction (e.g. security) belongs 
+    * in a subaccount, hnalde it now */
+   if (sub_acc) acc = sub_acc;
 
    trans->credit = (struct _account *) acc;
    insertTransaction( acc, trans );
@@ -481,6 +614,18 @@ xaccReadQIFData( char *datafile )
      if (!strcmp (qifline, "!Type:Cat\r\n")) {
         DEBUG ("got category\n");
         qifline = xaccReadQIFDiscard (fd);
+        continue;
+     } else
+
+     if (!strcmp (qifline, "!Type:Invst\r\n")) {
+        Account *acc   = mallocAccount();
+        DEBUG ("got Invst\n");
+
+        acc->type = BANK;
+        acc->accountName = XtNewString ("Quicken Investment Account");
+
+        insertAccount( grp, acc );
+        qifline = xaccReadQIFTransList (fd, acc);
         continue;
      } else
 
