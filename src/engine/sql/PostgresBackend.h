@@ -72,6 +72,8 @@ struct _pgend {
    char * username;
    char * dbName;
    PGconn * connection;
+   gboolean freshly_created_db;
+   gboolean freshly_created_prdb;
 
    /* counter used to nest callback disables */
    int nest_count;
