@@ -4,6 +4,7 @@
 #include <glib.h>
 
 #include "test-stuff.h"
+#include "gnc-engine-util.h"
 #include "gnc-book.h"
 
 struct test_strings_struct
@@ -59,7 +60,8 @@ main(int argc, char **argv)
         }
 
         daout = xaccResolveFilePath(dain);
-        do_test_args(strcmp(daout, wantout) == 0, "xaccResolveFilePath",
+        do_test_args(safe_strcmp(daout, wantout) == 0,
+                     "xaccResolveFilePath",
                      __FILE__, __LINE__,
                      "%s (%s) vs %s", daout, dain, wantout);
         g_free(dain);

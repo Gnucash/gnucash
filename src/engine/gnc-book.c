@@ -928,12 +928,17 @@ xaccResolveFilePath (const char * filefrag)
   /* make sure that the gnucash home dir exists. */
   MakeHomeDir();
 
-  /* If the user specified a simple filename (i.e. no slashes in it)
-   * then create the file.  But if it has slashes in it, then creating
-   * a bunch of directories seems like a bad idea; more likely, the user
-   * specified a bad filename.  So return with error. */
-  if (strchr (filefrag, '/'))
-    return NULL;
+  /* Replace '/' with ',' for non file backends */
+  if (strstr (filefrag, "://"))
+  {
+    char *p;
+
+    p = strchr (filefrag, '/');
+    while (p) {
+      *p = ',';
+      p = strchr (filefrag, '/');
+    }
+  }
 
   /* Lets try creating a new file in $HOME/.gnucash/data */
   if (xaccDataPathGenerator(pathbuf, 0))
