@@ -74,6 +74,9 @@ clean :
 
 really_clean : clean
 	@cd src ; $(MAKE) really_clean
+	@cd libhtmlw ; $(MAKE) really_clean
+
+realclean: really_clean
 
 depend :
 	@cd src ; $(MAKE) depend $(OPTIONS)
