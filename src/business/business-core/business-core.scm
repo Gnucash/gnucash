@@ -75,8 +75,8 @@
 	  (gnc:vendor-get-name v)
 	  (gnc:vendor-get-addr v))))
       ((gnc-owner-job)
-       (gnc:owner-get-address (gnc:job-get-owner
-			       (gnc:owner-get-job owner))))
+       (gnc:owner-get-address-dep (gnc:job-get-owner
+				   (gnc:owner-get-job owner))))
       (else ""))))
 
 (define (gnc:owner-get-owner-id owner)
@@ -90,8 +90,7 @@
        (let ((v (gnc:owner-get-vendor owner)))
 	 (gnc:vendor-get-id)))
       ((gnc-owner-job)
-       (gnc:owner-get-address (gnc:job-get-owner
-			       (gnc:owner-get-job owner))))
+       (gnc:owner-get-id (gnc:job-get-owner (gnc:owner-get-job owner))))
       (else ""))))
 
 ;; This MUST match the definitions in gncEntry.h or you'll be in trouble!
