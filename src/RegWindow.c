@@ -166,7 +166,8 @@ extern Pixel negPixel;
 #define PRIC_CELL_ID  11
 #define SHRS_CELL_ID  12
 #define BALN_CELL_ID  13
-#define VALU_CELL_ID  14
+#define VCRD_CELL_ID  14   /* value credit */
+#define VDEB_CELL_ID  15   /* value debit  */
 
 /* the actual cell location is pulled out of the location array */
 #define DATE_CELL_C  (regData->cellColLocation[DATE_CELL_ID])
@@ -183,7 +184,8 @@ extern Pixel negPixel;
 #define PRIC_CELL_C  (regData->cellColLocation[PRIC_CELL_ID])
 #define SHRS_CELL_C  (regData->cellColLocation[SHRS_CELL_ID])
 #define BALN_CELL_C  (regData->cellColLocation[BALN_CELL_ID]) 
-#define VALU_CELL_C  (regData->cellColLocation[VALU_CELL_ID]) 
+#define VCRD_CELL_C  (regData->cellColLocation[VCRD_CELL_ID]) 
+#define VDEB_CELL_C  (regData->cellColLocation[VDEB_CELL_ID]) 
 
 #define DATE_CELL_R  (regData->cellRowLocation[DATE_CELL_ID])
 #define YEAR_CELL_R  (regData->cellRowLocation[YEAR_CELL_ID])
@@ -199,7 +201,8 @@ extern Pixel negPixel;
 #define PRIC_CELL_R  (regData->cellRowLocation[PRIC_CELL_ID])
 #define SHRS_CELL_R  (regData->cellRowLocation[SHRS_CELL_ID])
 #define BALN_CELL_R  (regData->cellRowLocation[BALN_CELL_ID]) 
-#define VALU_CELL_R  (regData->cellRowLocation[VALU_CELL_ID]) 
+#define VCRD_CELL_R  (regData->cellRowLocation[VCRD_CELL_ID]) 
+#define VDEB_CELL_R  (regData->cellRowLocation[VDEB_CELL_ID]) 
 
 
 /** CELL MACROS *****************************************************/
@@ -239,8 +242,11 @@ extern Pixel negPixel;
         /* Balance cell     */
 #define IN_BALN_CELL(R,C) (RMOD(R,BALN_CELL_R) && (C==BALN_CELL_C))  
 
-        /* Transaction Value cell     */
-#define IN_VALU_CELL(R,C) (RMOD(R,VALU_CELL_R) && (C==VALU_CELL_C))  
+        /* Transaction Value credit cell     */
+#define IN_VCRD_CELL(R,C) (RMOD(R,VCRD_CELL_R) && (C==VCRD_CELL_C))  
+
+        /* Transaction Value debit cell     */
+#define IN_VDEB_CELL(R,C) (RMOD(R,VDEB_CELL_R) && (C==VDEB_CELL_C))  
 
         /* Memo cell        */
 #define IN_MEMO_CELL(R,C) (RMOD(R,MEMO_CELL_R) && (C==MEMO_CELL_C))  
@@ -437,6 +443,13 @@ regRefresh( RegWindow *regData )
         case MUTUAL: {
           Account *main_acc = regData->blackacc[0];
           themount = xaccGetShareAmount (main_acc, trans);
+
+          /* if the share amount is zero (e.g. for a price quote)
+           * then just leave both these cells blank */
+          if( DEQ (0.0,themount) ) {
+            newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+            newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+          } else 
           if( 0.0 > themount ) {
             sprintf( buf, "%.3f ", -themount );
             newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
@@ -449,17 +462,12 @@ regRefresh( RegWindow *regData )
         }  
           break;
 
-        case PORTFOLIO: 
         case INC_LEDGER: 
         case GEN_LEDGER: {
            Account * acc;
            int show;
-           themount = trans->damount;
-           if (PORTFOLIO == regData->type) {
-              sprintf( buf, "%.3f ", themount );
-           } else {
-              sprintf( buf, "%.2f ", themount );
-           }
+           themount = trans->damount * trans->share_price;
+           sprintf( buf, "%.2f ", themount );
 
            acc = (Account *) (trans->debit);
            show = xaccIsAccountInList (acc, regData->blackacc);
@@ -476,6 +484,75 @@ regRefresh( RegWindow *regData )
            } else {
               newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
            }
+        }  
+          break;
+
+        case PORTFOLIO: {
+           Account * acc;
+           int show;
+
+           /* Show the debit amount, if the debit account 
+            * is in this ledger */
+           acc = (Account *) (trans->debit);
+           if (acc) {
+             show = xaccIsAccountInList (acc, regData->blackacc);
+             if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
+                themount = trans->damount;
+                sprintf( buf, "%.3f ", themount );
+  
+                /* if the amount is zero, then leave the cell blank */
+                if (show && !(DEQ(0.0, themount)) ) {
+                   newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString(buf);
+                } else {
+                   newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+                }
+             } else {
+                themount = trans->damount * trans->share_price;
+                sprintf( buf, "%.2f ", themount );
+  
+                /* if the amount is zero, then leave the cell blank */
+                if (show && !(DEQ(0.0, themount)) ) {
+                   newData[row+VDEB_CELL_R][VDEB_CELL_C] = XtNewString(buf);
+                } else {
+                   newData[row+VDEB_CELL_R][VDEB_CELL_C] = XtNewString("");
+                }
+             }
+           } else {
+             newData[row+PAY_CELL_R][PAY_CELL_C] = XtNewString("");
+             newData[row+VDEB_CELL_R][VDEB_CELL_C] = XtNewString("");
+           }
+
+           /* Show the credit amount, if the credit account 
+            * is in this ledger */
+           acc = (Account *) (trans->credit);
+           if (acc) {
+             show = xaccIsAccountInList (acc, regData->blackacc);
+             if ((MUTUAL == acc->type) || (STOCK == acc->type) ) {
+                themount = trans->damount;
+                sprintf( buf, "%.3f ", themount );
+  
+                /* if the amount is zero, then leave the cell blank */
+                if (show && !(DEQ(0.0, themount)) ) {
+                   newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString(buf);
+                } else {
+                   newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+                }
+             } else {
+                themount = trans->damount * trans->share_price;
+                sprintf( buf, "%.2f ", themount );
+  
+                /* if the amount is zero, then leave the cell blank */
+                if (show && !(DEQ(0.0, themount)) ) {
+                   newData[row+VCRD_CELL_R][VCRD_CELL_C] = XtNewString(buf);
+                } else {
+                   newData[row+VCRD_CELL_R][VCRD_CELL_C] = XtNewString("");
+                }
+             }
+           } else {
+             newData[row+DEP_CELL_R][DEP_CELL_C] = XtNewString("");
+             newData[row+VCRD_CELL_R][VCRD_CELL_C] = XtNewString("");
+           }
+
         }  
           break;
 
@@ -500,6 +577,15 @@ regRefresh( RegWindow *regData )
           break;
         case STOCK:
         case MUTUAL:
+          sprintf( buf, "%.2f ", trans->share_price );
+          newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString(buf);
+
+          /* don't set number of shares here -- this is computed later,
+           * in recomputeBalance. */
+          newData[row+SHRS_CELL_R][SHRS_CELL_C]   = XtNewString("");
+          newData[row+VCRD_CELL_R][VCRD_CELL_C]   = XtNewString("");
+          break;
+
         case PORTFOLIO:
           sprintf( buf, "%.2f ", trans->share_price );
           newData[row+PRIC_CELL_R][PRIC_CELL_C] = XtNewString(buf);
@@ -507,6 +593,8 @@ regRefresh( RegWindow *regData )
           /* don't set number of shares here -- this is computed later,
            * in recomputeBalance. */
           newData[row+SHRS_CELL_R][SHRS_CELL_C]   = XtNewString("");
+          newData[row+VCRD_CELL_R][VCRD_CELL_C]   = XtNewString("");
+          newData[row+VDEB_CELL_R][VDEB_CELL_C]   = XtNewString("");
           break;
         default:
           break;
@@ -703,6 +791,7 @@ regRecalculateBalance( RegWindow *regData )
           (STOCK     == regData->type) || 
           (PORTFOLIO == regData->type) ) 
         {
+        double value = 0.0;
 #ifdef USE_NO_COLOR
         sprintf( buf, "%.3f ", share_balance );
 #else
@@ -718,9 +807,42 @@ regRecalculateBalance( RegWindow *regData )
                                        SHRS_CELL_C, posPixel );
         }
 #endif
+
+/* xxxxxxxxxxxxxx incorrect */
+      
+        /* Put the share balance in the cell */
+        XbaeMatrixSetCell( reg, position+SHRS_CELL_R, SHRS_CELL_C, buf );
+
+        if( (MUTUAL    == regData->type) ||
+            (STOCK     == regData->type) ) {
+          value = xaccGetAmount (regData->blackacc[0], trans);
+        }
+        
+        /* if the value is zero, just leave the cell blank */
+        if (DEQ (0.0, value)) {
+          buf[0] = 0x0;
+        } else {
+#ifdef USE_NO_COLOR
+          sprintf( buf, "%.2f ", value );
+#else
+          sprintf( buf, "%.2f ", DABS(value) );
+#endif
+        }
+        
+#ifndef USE_NO_COLOR
+        /* Set the color of the text, depending on whether the
+         * balance is negative or positive */
+        if( 0.0 > value ) {
+          XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
+                                       VCRD_CELL_C, negPixel );
+        } else {
+          XbaeMatrixSetCellColor( reg, position+VCRD_CELL_R, 
+                                       VCRD_CELL_C, posPixel );
+        }
+#endif
       
         /* Put the value in the cell */
-        XbaeMatrixSetCell( reg, position+SHRS_CELL_R, SHRS_CELL_C, buf );
+        XbaeMatrixSetCell( reg, position+VCRD_CELL_R, VCRD_CELL_C, buf );
         }
 
       }
@@ -1064,6 +1186,13 @@ regSaveTransaction( RegWindow *regData, int position )
         xaccSetShareAmount (main_acc, trans, themount);
 
         /* Reset so there is only one field filled */
+        /* if share amount is zero (e.g. for a price quote) 
+         * then leave both cells blank */
+        if (DEQ (0.0, themount) ) 
+          {
+          XbaeMatrixSetCell( regData->reg, row+PAY_CELL_R, PAY_CELL_C, "" );
+          XbaeMatrixSetCell( regData->reg, row+DEP_CELL_R, DEP_CELL_C, "" );
+          } else
         if( 0.0 > themount )
           {
           sprintf( buf, "%.3f ", -themount );
@@ -1588,6 +1717,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellColLocation [XTO_CELL_ID]  = -1;
         regData->cellColLocation [PRIC_CELL_ID] = -1;
         regData->cellColLocation [SHRS_CELL_ID] = -1;
+        regData->cellColLocation [VDEB_CELL_ID] = -1;
+        regData->cellColLocation [VCRD_CELL_ID] = -1;
         regData->cellColLocation [BALN_CELL_ID] = 7;
         regData -> numCols = 8;
         break;
@@ -1596,8 +1727,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case MUTUAL:
         regData->cellColLocation [XTO_CELL_ID]  = -1;
         regData->cellColLocation [PRIC_CELL_ID] = 7;
-        regData->cellColLocation [SHRS_CELL_ID] = 8;
-        regData->cellColLocation [VALU_CELL_ID] = 9;
+        regData->cellColLocation [VDEB_CELL_ID] = -1;
+        regData->cellColLocation [VCRD_CELL_ID] = 8;
+        regData->cellColLocation [SHRS_CELL_ID] = 9;
         regData->cellColLocation [BALN_CELL_ID] = 10;
         regData -> numCols = 11;
         break;
@@ -1607,6 +1739,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellColLocation [XTO_CELL_ID]  = 2;
         regData->cellColLocation [PRIC_CELL_ID] = -1;
         regData->cellColLocation [SHRS_CELL_ID] = -1;
+        regData->cellColLocation [VDEB_CELL_ID] = -1;
+        regData->cellColLocation [VCRD_CELL_ID] = -1;
         regData->cellColLocation [BALN_CELL_ID] = 7;
         regData -> numCols = 8;
         break;
@@ -1614,8 +1748,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case PORTFOLIO:
         regData->cellColLocation [XTO_CELL_ID]  = 2;
         regData->cellColLocation [PRIC_CELL_ID] = 7;
-        regData->cellColLocation [SHRS_CELL_ID] = 8;
-        regData->cellColLocation [VALU_CELL_ID] = 9;
+        regData->cellColLocation [VDEB_CELL_ID] = 8;
+        regData->cellColLocation [VCRD_CELL_ID] = 8;
+        regData->cellColLocation [SHRS_CELL_ID] = 9;
         regData->cellColLocation [BALN_CELL_ID] = 10;
         regData -> numCols = 11;
         break;
@@ -1639,7 +1774,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     regData->cellRowLocation [RECN_CELL_ID] = 0;
     regData->cellRowLocation [PAY_CELL_ID]  = 0;
     regData->cellRowLocation [DEP_CELL_ID]  = 0;
-    regData->cellRowLocation [VALU_CELL_ID] = 0;
+    regData->cellRowLocation [VCRD_CELL_ID] = 0;
     regData->cellRowLocation [BALN_CELL_ID] = 0;
 
     switch(regData->type)
@@ -1655,7 +1790,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellRowLocation [XTO_CELL_ID]  = -1;
         regData->cellRowLocation [PRIC_CELL_ID] = -1;
         regData->cellRowLocation [SHRS_CELL_ID] = -1;
-        regData->cellRowLocation [VALU_CELL_ID] = -1; 
+        regData->cellRowLocation [VDEB_CELL_ID] = -1; 
+        regData->cellRowLocation [VCRD_CELL_ID] = -1; 
         break;
 
       case STOCK:
@@ -1663,7 +1799,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellRowLocation [XTO_CELL_ID]  = -1;
         regData->cellRowLocation [PRIC_CELL_ID] = 0;
         regData->cellRowLocation [SHRS_CELL_ID] = 0;
-        regData->cellRowLocation [VALU_CELL_ID] = 0; 
+        regData->cellRowLocation [VDEB_CELL_ID] = -1; 
+        regData->cellRowLocation [VCRD_CELL_ID] = 0; 
         break;
 
       case INC_LEDGER:
@@ -1673,7 +1810,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellRowLocation [BALN_CELL_ID] = 1;  /* shift balance down */
         regData->cellRowLocation [PRIC_CELL_ID] = -1;
         regData->cellRowLocation [SHRS_CELL_ID] = -1;
-        regData->cellRowLocation [VALU_CELL_ID] = -1; 
+        regData->cellRowLocation [VDEB_CELL_ID] = -1; 
+        regData->cellRowLocation [VCRD_CELL_ID] = -1; 
         break;
 
       case PORTFOLIO:
@@ -1681,7 +1819,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         regData->cellRowLocation [DEP_CELL_ID]  = 1;  /* shift credit down */
         regData->cellRowLocation [PRIC_CELL_ID] = 1;
         regData->cellRowLocation [SHRS_CELL_ID] = 1;
-        regData->cellRowLocation [VALU_CELL_ID] = 1;  /* shift value down */
+        regData->cellRowLocation [VDEB_CELL_ID] = 0;  /* debit on top */
+        regData->cellRowLocation [VCRD_CELL_ID] = 1;  /* credit on bottom */
         regData->cellRowLocation [BALN_CELL_ID] = 1;  /* shift balance down */
         break;
 
@@ -1718,7 +1857,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case PORTFOLIO:
         regData -> columnWidths[PRIC_CELL_C] = 8;   /* price */
         regData -> columnWidths[SHRS_CELL_C] = 10;  /* share balance */
-        regData -> columnWidths[VALU_CELL_C] = 10;  /* transaction value */
+        regData -> columnWidths[VCRD_CELL_C] = 10;  /* transaction value */
         break;
       }
     
@@ -1754,7 +1893,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case PORTFOLIO:
         regData -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         regData -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share baln */
-        regData -> alignments[VALU_CELL_C] = XmALIGNMENT_END;  /* trans value */
+        regData -> alignments[VCRD_CELL_C] = XmALIGNMENT_END;  /* trans value */
         break;
       }
     
@@ -1796,7 +1935,7 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
       case PORTFOLIO:
         regData -> columnLabels[0][PRIC_CELL_C] = "Price";
         regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
-        regData -> columnLabels[0][VALU_CELL_C] = "Value";
+        regData -> columnLabels[0][VCRD_CELL_C] = "Value";
         break;
       }
     
