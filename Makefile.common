@@ -93,7 +93,10 @@ distclean: clean-files
 	rm -f $(foreach f,$(wildcard *.in),$(filter-out configure,$(f:.in=)))
 	-rm -rf ${DIST_TRASH}
 
-.PHONY: clean clean-files distclean
+dist:
+	$(foreach dir,${CLEAN_SUBDIRS},(cd ${dir} && $(MAKE) dist);)
+
+.PHONY: clean clean-files dist distclean
 
 # Get dependencies (if existent).
 
