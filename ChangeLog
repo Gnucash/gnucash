@@ -56,6 +56,10 @@
 	* .../business-ledger/gncEntryLedgerLoad.c: suspend events
 	  when we're creating a new entry.  Unfortunately the gnucash-sheet
 	  still never counts the blank entry, and I don't know why.
+
+	* src/engine/QueryCore.c: fix the algorithm to compute equality
+	  of numerics so it copes with numbers in the "wrong" order.
+	  Fixed bug #103341
 	
 2003-01-12  David Hampton  <hampton@employees.org>
 

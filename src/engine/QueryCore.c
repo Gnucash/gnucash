@@ -377,12 +377,13 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
     break;
   }
 
-  if (pd->how == COMPARE_EQUAL) {
+  if (pd->how == COMPARE_EQUAL || pd->how == COMPARE_NEQ) {
     gnc_numeric cmp_val = gnc_numeric_create (1, 10000);
     compare =
-      (gnc_numeric_compare (gnc_numeric_sub (gnc_numeric_abs (obj_val),
-					     gnc_numeric_abs (pdata->amount),
-					     100000, GNC_RND_ROUND),
+      (gnc_numeric_compare (gnc_numeric_abs
+			    (gnc_numeric_sub (gnc_numeric_abs (obj_val),
+					      gnc_numeric_abs (pdata->amount),
+					      100000, GNC_RND_ROUND)),
 			    cmp_val) < 0);
   } else
     compare = gnc_numeric_compare (gnc_numeric_abs (obj_val), pdata->amount);
@@ -399,7 +400,7 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
   case COMPARE_GTE:
     return (compare >= 0);
   case COMPARE_NEQ:
-    return (!compare);
+    return !compare;
   default:
     PWARN ("bad match type: %d", pd->how);
     return 0;
