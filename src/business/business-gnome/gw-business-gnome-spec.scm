@@ -38,6 +38,7 @@
       "#include <dialog-job.h>\n"
       "#include <dialog-order.h>\n"
       "#include <dialog-payment.h>\n"
+      "#include <dialog-tax-table.h>\n"
       "#include <dialog-vendor.h>\n"
       )))
 
@@ -204,6 +205,18 @@
    "gnc_ui_payment_new"
    '((<gnc:GncOwner*> owner) (<gnc:Book*> book))
    "Dialog: Enter a payment.  The owner may be NULL.")
+
+  ;;
+  ;; dialog-tax-table.h
+  ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:tax-table-new
+   '<gw:void>
+   "gnc_ui_tax_table_window_new"
+   '((<gnc:Book*> book))
+   "Dialog: Edit the Tax Tables.")
 
   ;;
   ;; dialog-vendor.h

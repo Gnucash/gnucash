@@ -1223,7 +1223,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     GtkWidget *popup;
     guint num_rows;
 
-    num_rows = (guint) gnc_lookup_number_option ("Invoice",
+    num_rows = (guint) gnc_lookup_number_option ("Business",
                                                  "Number of Rows", 10.0);
     gnucash_register_set_initial_rows( num_rows );
 

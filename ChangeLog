@@ -1,3 +1,17 @@
+2002-06-14  Derek Atkins   <derek@ihtfp.com>
+
+	* business-core/gncTaxTable*: Create a preliminary implementation
+	of Tax Tables.  They are currently not saved, and nothing uses
+	them.  Link the initialization into the module.
+
+	* business-gnome/dialog-tax-table*: Create a tax table GUI to
+	create and edit tax tables.  G-wrap the editor-window create
+	routine.
+
+	* business-gnome.scm: add the Tax Table gui; rename the 'Invoice'
+	option page to "Business".  Fix dialog-invoice to use the new
+	option name.
+	
 2002-06-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome/druid-stock-split.c: Add automatic focusing on a

@@ -62,6 +62,7 @@ gnc_module_init(int refcount)
     gncJobRegister ();
     gncOrderRegister ();
     gncOwnerRegister ();
+    gncTaxTableRegister ();
     gncVendorRegister ();
   }
   
