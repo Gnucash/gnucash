@@ -1,3 +1,20 @@
+2001-06-04  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-commodity.c (node_and_commodity_equal): use
+	string_to_gint64 rather than string_to_integer.
+
+	* src/engine/sixtp-utils.c: (string_to_gint64) return FALSE if the
+	content is NULL. 
+
+	* src/engine/gnc-commodity-xml-v2.c (set_commodity_value): use
+	string_to_gint64 rather than string_to_integer.
+
+	* src/engine/io-gncxml-v2.c (gnc_counter_end_handler): use
+	string_to_gint64 rather than string_to_integer.
+
+	* src/engine/sixtp-dom-parsers.c (string_to_integer): remove
+	func.  duplicates string_to_gint64
+
 2001-06-04  Dave Peticolas  <dave@krondo.com>
 
 	* src/SplitLedger.c: fix spelling errors
