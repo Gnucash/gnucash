@@ -49,9 +49,20 @@
  *   Constants   *
 \********************************************************************/
 
-#define NUM_ROW_DOWNLOADED_CLIST 5
-#define NUM_ROW_MATCHER_CLIST 4
+#define NUM_COLUMNS_DOWNLOADED_CLIST 6
+static const int DOWNLOADED_CLIST_ACTION = 0;
+static const int DOWNLOADED_CLIST_ACCOUNT = 1;
+static const int DOWNLOADED_CLIST_DATE = 2;
+static const int DOWNLOADED_CLIST_AMOUNT = 3;
+static const int DOWNLOADED_CLIST_DESCRIPTION = 4;
+static const int DOWNLOADED_CLIST_MEMO = 5;
 
+#define NUM_COLUMNS_MATCHER_CLIST 5
+static const int MATCHER_CLIST_CONFIDENCE = 0;
+static const int MATCHER_CLIST_DATE = 1;
+static const int MATCHER_CLIST_AMOUNT = 2;
+static const int MATCHER_CLIST_DESCRIPTION = 3;
+static const int MATCHER_CLIST_MEMO = 4;
 
 /********************************************************************\
  *   Constants, should idealy be defined a user preference dialog    *
@@ -66,6 +77,7 @@ static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
 /*Transaction who's best match probability is below or equal to 
   this will be added as new by default */
 static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
+static const int SHOW_TRANSACTIONS_WITH_UNIQUE_ID = TRUE;
 
 /********************************************************************\
  *               Structures passed between the functions             *
@@ -83,10 +95,10 @@ struct _transmatcherdialog {
   GtkWidget * transaction_matcher;
   GtkCList * downloaded_clist;
   GtkCList * match_clist;
-  GtkRadioButton * action_reconcile_button;
-  GtkRadioButton * action_add_button;
-  GtkRadioButton * action_replace_button;
-  GtkRadioButton * action_ignore_button;
+  GtkToggleButton * action_reconcile_button;
+  GtkToggleButton * action_add_button;
+  GtkToggleButton * action_replace_button;
+  GtkToggleButton * action_ignore_button;
   struct _transactioninfo * selected_trans_info;
 };
 
@@ -97,10 +109,11 @@ struct _transactioninfo
   char action_text[10];
   char date_text[20];
   char amount_text[20];
-  char * clist_text[NUM_ROW_DOWNLOADED_CLIST];
+  char * clist_text[NUM_COLUMNS_DOWNLOADED_CLIST];
   GList * match_list;
   struct _matchinfo * selected_match_info;
   Action action;
+  Action previous_action;
 
 };
 
@@ -113,7 +126,7 @@ struct _matchinfo
   char probability_text[10];
   char date_text[20];
   char amount_text[20];
-  char * clist_text[NUM_ROW_MATCHER_CLIST];
+  char * clist_text[NUM_COLUMNS_MATCHER_CLIST];
 };
 
 static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * matcher,struct _transactioninfo * transaction_info)
@@ -136,19 +149,41 @@ static void downloaded_transaction_refresh_gui( struct _transmatcherdialog * mat
     default:
       PERR("Unknown action");
     }
-  transaction_info->clist_text[0]=transaction_info->action_text;/*Action*/
-  transaction_info->clist_text[1]=xaccAccountGetName(xaccSplitGetAccount(transaction_info->first_split)); /*Account*/
+
+if(transaction_info==matcher->selected_trans_info)
+  {
+    switch(transaction_info->action)
+      {
+      case ADD: gtk_toggle_button_set_active ( matcher->action_add_button, TRUE);
+	break;
+      case RECONCILE: gtk_toggle_button_set_active (matcher->action_reconcile_button, TRUE);
+	break;
+      case REPLACE: gtk_toggle_button_set_active (matcher->action_replace_button, TRUE);
+	break;
+      case IGNORE: gtk_toggle_button_set_active (matcher->action_ignore_button, TRUE);
+	break;
+    default:
+      PERR("Unknown action");
+    }
+  }
+ 
+ transaction_info->clist_text[DOWNLOADED_CLIST_ACTION]=transaction_info->action_text;/*Action*/
+  transaction_info->clist_text[DOWNLOADED_CLIST_ACCOUNT]=xaccAccountGetName(xaccSplitGetAccount(transaction_info->first_split)); /*Account*/
   
   printDateSecs(transaction_info->date_text, xaccTransGetDate(transaction_info->trans));
-  transaction_info->clist_text[2]=transaction_info->date_text; /*Date*/
-  
+  transaction_info->clist_text[DOWNLOADED_CLIST_DATE]=transaction_info->date_text; /*Date*/
+
   sprintf(transaction_info->amount_text, 
 	  "%.2f",
 	  gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split)));
-  
-  transaction_info->clist_text[3]=transaction_info->amount_text;/*Amount*/
-  transaction_info->clist_text[4]=xaccSplitGetMemo(transaction_info->first_split);/*Description*/
-  for(i=0;i<NUM_ROW_DOWNLOADED_CLIST;i++)
+  transaction_info->clist_text[DOWNLOADED_CLIST_AMOUNT]=transaction_info->amount_text;
+
+  transaction_info->clist_text[DOWNLOADED_CLIST_DESCRIPTION]=xaccTransGetDescription(transaction_info->trans);
+  transaction_info->clist_text[DOWNLOADED_CLIST_MEMO]=xaccSplitGetMemo(transaction_info->first_split);
+ 
+
+
+  for(i=0;i<NUM_COLUMNS_DOWNLOADED_CLIST;i++)
     {
       gtk_clist_set_text              (matcher->downloaded_clist,
 				       row_number,
@@ -197,19 +232,9 @@ downloaded_transaction_select_cb (GtkCList *clist,
       
       list_element=g_list_next(list_element);
     }
-  switch(matcher->selected_trans_info->action)
-    {
-    case ADD: gtk_toggle_button_set_active ( (GtkToggleButton *)(matcher->action_add_button), TRUE);
-      break;
-    case RECONCILE: gtk_toggle_button_set_active ((GtkToggleButton *)(matcher->action_reconcile_button), TRUE);
-      break;
-    case REPLACE: gtk_toggle_button_set_active ((GtkToggleButton *)(matcher->action_replace_button), TRUE);
-      break;
-    case IGNORE: gtk_toggle_button_set_active ((GtkToggleButton *)(matcher->action_ignore_button), TRUE);
-      break;
-    default:
-      PERR("Unknown action");
-    }
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_add_button,TRUE);
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_ignore_button,TRUE);
+  downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
 }
 
 static void
@@ -222,6 +247,12 @@ downloaded_transaction_unselect_cb(GtkCList *clist,
   DEBUG("Begin");
   matcher->selected_trans_info = NULL;
   gtk_clist_clear(matcher->match_clist);
+
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_reconcile_button,FALSE);
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_replace_button,FALSE);
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_add_button,FALSE);
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_ignore_button,FALSE);
+
 }
 
 static void
@@ -234,6 +265,8 @@ match_transaction_select_cb (GtkCList *clist,
   DEBUG("Begin...");
   matcher->selected_trans_info->selected_match_info=gtk_clist_get_row_data(clist,
 									   row);
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_reconcile_button,TRUE);
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_replace_button,TRUE);
 }
 
 static void
@@ -245,11 +278,14 @@ match_transaction_unselect_cb(GtkCList *clist,
   struct _transmatcherdialog * matcher = user_data;
   DEBUG("Begin...");
   matcher->selected_trans_info->selected_match_info=NULL;
-  /*You cant replace or reconcile a nonexistent transaction*/
+
+  /*You can't replace or reconcile a nonexistent transaction*/
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_reconcile_button,FALSE);
+  gtk_widget_set_sensitive((GtkWidget *)matcher->action_replace_button,FALSE);
   if(matcher->selected_trans_info->action==RECONCILE||
      matcher->selected_trans_info->action==REPLACE)
     {
-      matcher->selected_trans_info->action=ADD;
+      matcher->selected_trans_info->action=IGNORE;
       downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
     }
 }
@@ -259,31 +295,43 @@ on_action_toggled (GtkToggleButton *togglebutton,
 		   gpointer user_data)
 {
   struct _transmatcherdialog * matcher = user_data;
+  gboolean refresh = TRUE;
   DEBUG("Begin");
-  if(gtk_toggle_button_get_active(togglebutton)==TRUE)
+  if(matcher->selected_trans_info != NULL)
     {
-      if(togglebutton== (GtkToggleButton *)(matcher->action_reconcile_button))
+      if(gtk_toggle_button_get_active(matcher->action_reconcile_button)==TRUE
+	 && matcher->selected_trans_info->selected_match_info!=NULL)
 	{
+	  DEBUG("Change to RECONCILE");
 	  matcher->selected_trans_info->action=RECONCILE;
 	}
-      else if(togglebutton== (GtkToggleButton *)(matcher->action_add_button))
+      else if(gtk_toggle_button_get_active(matcher->action_add_button)==TRUE)
 	{
+	  DEBUG("Change to ADD");
 	  matcher->selected_trans_info->action=ADD;
 	}
-      else if(togglebutton== (GtkToggleButton *)(matcher->action_replace_button))
+      else if(gtk_toggle_button_get_active(matcher->action_replace_button)==TRUE
+	      && matcher->selected_trans_info->selected_match_info!=NULL)
 	{
+	  DEBUG("Change to REPLACE");
 	  matcher->selected_trans_info->action=REPLACE;
 	}
-      else if(togglebutton== (GtkToggleButton *)(matcher->action_ignore_button))
+      else if(gtk_toggle_button_get_active(matcher->action_ignore_button)==TRUE)
 	{
+	  DEBUG("Change to IGNORE");
 	  matcher->selected_trans_info->action=IGNORE;
 	}
       else
 	{
 	  PERR("Unable to find out which button was toggled!");
+	  refresh=FALSE;
+	}
+
+      if(refresh==TRUE)
+	{
+	  downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
 	}
     }
-  downloaded_transaction_refresh_gui(matcher,matcher->selected_trans_info);
 }
 
 
@@ -319,15 +367,20 @@ on_matcher_apply_clicked (GtkButton *button,
 		}
 	      else
 		{
+		  /* Reconcile the matching transaction */
 		  xaccTransBeginEdit(transaction_info->selected_match_info->trans);
 		  xaccSplitSetReconcile(transaction_info->selected_match_info->split,YREC);
 		  /*Set reconcile date to today*/
 		  xaccSplitSetDateReconciledSecs(transaction_info->selected_match_info->split,time(NULL));
 		  PERR("WRITEME:  ADD ONLINE ID HERE");
 		  xaccTransCommitEdit(transaction_info->selected_match_info->trans);
+		  
+		  /* Erase the downloaded transaction */
+		  xaccTransRollbackEdit(transaction_info->trans);
+		  xaccTransCommitEdit(transaction_info->trans);
 		}
 	    }
-	  else if(transaction_info->action==ADD)
+	  else if(transaction_info->action==REPLACE)
 	    {
 	      if(transaction_info->selected_match_info->split==NULL)
 		{
@@ -335,6 +388,7 @@ on_matcher_apply_clicked (GtkButton *button,
 		}
 	      else
 		{
+		  DEBUG("Deleting the previous transaction");
 		  /*Erase the matching transaction*/
 		  xaccTransBeginEdit(transaction_info->selected_match_info->trans);
 		  xaccTransDestroy(transaction_info->selected_match_info->trans);
@@ -343,7 +397,7 @@ on_matcher_apply_clicked (GtkButton *button,
 		  /*Replace it with the new one*/
 		  xaccSplitSetReconcile(transaction_info->first_split,YREC);
 		  /*Set reconcile date to today*/
-		  xaccSplitSetDateReconciledSecs(transaction_info->selected_match_info->split,time(NULL));
+		  xaccSplitSetDateReconciledSecs(transaction_info->first_split,time(NULL));
 		  xaccTransCommitEdit(transaction_info->trans);
 		} 
 	    }
@@ -392,7 +446,7 @@ downloaded_trans_row_destroy_cb(gpointer data)
   /*If the transaction is still open, it must be destroyed*/
   if(xaccTransIsOpen(transaction_info->trans)==TRUE)
     {
-      xaccTransDestroy(transaction_info->trans);
+      xaccTransRollbackEdit(transaction_info->trans);
       xaccTransCommitEdit(transaction_info->trans);
     }
   g_free(transaction_info);
@@ -452,10 +506,10 @@ init_matcher_gui(struct _transmatcherdialog * matcher)
   matcher->transaction_matcher = glade_xml_get_widget (xml, "transaction_matcher");
   matcher->downloaded_clist = (GtkCList *)glade_xml_get_widget (xml, "downloaded_clist");
   matcher->match_clist =  (GtkCList *)glade_xml_get_widget (xml, "match_clist");
-  matcher->action_reconcile_button = (GtkRadioButton *)glade_xml_get_widget (xml, "action_reconcile_button");
-  matcher->action_add_button = (GtkRadioButton *)glade_xml_get_widget (xml, "action_add_button");
-  matcher->action_replace_button = (GtkRadioButton *)glade_xml_get_widget (xml, "action_replace_button");
-  matcher->action_ignore_button = (GtkRadioButton *)glade_xml_get_widget (xml, "action_ignore_button");
+  matcher->action_reconcile_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_reconcile_button");
+  matcher->action_add_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_add_button");
+  matcher->action_replace_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_replace_button");
+  matcher->action_ignore_button = (GtkToggleButton *)glade_xml_get_widget (xml, "action_ignore_button");
 
   gtk_widget_show(matcher->transaction_matcher);  
   matcher->initialised=TRUE;  
@@ -478,94 +532,111 @@ static void split_find_match( gpointer data, gpointer user_data)
   struct tm downloaded_split_date;
   struct tm match_split_date;
   DEBUG("Begin");
-  //DEBUG("%s",xaccSplitGetMemo(split));
-  match_info = g_new0(struct _matchinfo,1);
 
-  match_info->split=split;
-  match_info->trans = xaccSplitGetParent(split);
-
-  downloaded_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split));
-  DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);
-  match_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(split));
-  DEBUG(" match_split_amount=%f", match_split_amount);
-  temp_time_t = xaccTransGetDate(xaccSplitGetParent(split));
-  match_split_date = *localtime(&temp_time_t);
-  temp_time_t = xaccTransGetDate(transaction_info->trans);
-  downloaded_split_date = *localtime(&temp_time_t);
-
-  /* Matching heuristics */
-  match_info->probability=0;
-  
-  /* Amount heuristics */
-  if(gnc_numeric_equal(xaccSplitGetAmount(transaction_info->first_split),
-		       xaccSplitGetAmount(split)))
-    {
-      match_info->probability=match_info->probability+2;
-      DEBUG("heuristics:  probability + 2 (amount)");
-    }
-  else if(fabs(downloaded_split_amount-match_split_amount)<=MATCH_ATM_FEE_TRESHOLD)
-    {
-      /* ATM fees are sometimes added directly in the transaction.  So you withdraw 100$ and get charged 101,25$
-	 in the same transaction */ 
-      match_info->probability=match_info->probability+1;
-      DEBUG("heuristics:  probability + 1 (amount)");
-    }
-  
-  /* Date heuristics */
-  if(downloaded_split_date.tm_year==match_split_date.tm_year)
-    {
-      if(downloaded_split_date.tm_yday==match_split_date.tm_yday)
+  /*Ignore the split if the transaction is open for edit, meaning it was just downloaded
+    Ignore the split if the transaction has an online ID, unless overriden in prefs */
+  if(xaccTransIsOpen(xaccSplitGetParent(split))==FALSE&&
+     (SHOW_TRANSACTIONS_WITH_UNIQUE_ID==TRUE||gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL))
+  {
+    match_info = g_new0(struct _matchinfo,1);
+    
+    match_info->split=split;
+    match_info->trans = xaccSplitGetParent(split);
+    
+    downloaded_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(transaction_info->first_split));
+    DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);
+    match_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(split));
+    DEBUG(" match_split_amount=%f", match_split_amount);
+    temp_time_t = xaccTransGetDate(xaccSplitGetParent(split));
+    match_split_date = *localtime(&temp_time_t);
+    temp_time_t = xaccTransGetDate(transaction_info->trans);
+    downloaded_split_date = *localtime(&temp_time_t);
+    
+    /* Matching heuristics */
+    match_info->probability=0;
+    
+    /* Amount heuristics */
+    if(gnc_numeric_equal(xaccSplitGetAmount(transaction_info->first_split),
+			 xaccSplitGetAmount(split)))
+      {
+	match_info->probability=match_info->probability+2;
+	DEBUG("heuristics:  probability + 2 (amount)");
+      }
+    else if(fabs(downloaded_split_amount-match_split_amount)<=MATCH_ATM_FEE_TRESHOLD)
+      {
+	/* ATM fees are sometimes added directly in the transaction.  So you withdraw 100$ and get charged 101,25$
+	   in the same transaction */ 
+	match_info->probability=match_info->probability+1;
+	DEBUG("heuristics:  probability + 1 (amount)");
+      }
+    
+    /* Date heuristics */
+    if(downloaded_split_date.tm_year==match_split_date.tm_year)
+      {
+	if(downloaded_split_date.tm_yday==match_split_date.tm_yday)
+	  {
+	    match_info->probability=match_info->probability+2;
+	    DEBUG("heuristics:  probability + 2 (date)");
+	  }
+	else if(downloaded_split_date.tm_yday>match_split_date.tm_yday&&
+		downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD)
+	  {
+	    match_info->probability=match_info->probability+1;
+	    DEBUG("heuristics:  probability + 1 (date)");
+	  }
+	/*Note: The above won't won't work as expected for transactions close to the end of the year.
+	  So we have this special case to handle it:*/
+	else if(downloaded_split_date.tm_year==match_split_date.tm_year+1&&
+		match_split_date.tm_yday+MATCH_DATE_TRESHOLD>=365&&
+		downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD-365)
+	  {
+	    match_info->probability=match_info->probability+1;
+	    DEBUG("heuristics:  probability + 1 (date special case)");
+	  }
+      }
+    
+    /* Memo and Description heuristics */  
+    if((strcmp(xaccSplitGetMemo(transaction_info->first_split),
+	       xaccSplitGetMemo(match_info->split))
+	==0)
+       ||
+       (strcmp(xaccTransGetDescription(transaction_info->trans),
+	       xaccTransGetDescription(xaccSplitGetParent(match_info->split)))
+	==0))
+      {	
+	/*An exact match gives a +2, but someone should write something more fuzzy, 
+	  worth a +1*/
+	match_info->probability=match_info->probability+2;
+	DEBUG("heuristics:  probability + 2 (description or memo)");
+      }
+    
+      if(gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL)
 	{
-	  match_info->probability=match_info->probability+2;
-	  DEBUG("heuristics:  probability + 2 (date)");
+	  /*If the pref is to show match even with online ID's, reverse the confidence value to distinguish them */
+	  match_info->probability=0-match_info->probability;
 	}
-      else if(downloaded_split_date.tm_yday>match_split_date.tm_yday&&
-	      downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD)
-	{
-	  match_info->probability=match_info->probability+1;
-	  DEBUG("heuristics:  probability + 1 (date)");
-	}
-    }
-  /* Memo heuristics */
   
-  if(strcmp(xaccSplitGetMemo(transaction_info->first_split),
-	    xaccSplitGetMemo(transaction_info->first_split))
-     ==0)
-    {
-      /*An exact match gives a +2, but someone should write something more fuzzy, 
-	worth a +1*/
-      match_info->probability=match_info->probability+2;
-      DEBUG("heuristics:  probability + 2 (description)");
-    }
-  /*Note: The above won't won't work as expected for transactions close to the end of the year.
-    So we have this special case to handle it:*/
-  else if(downloaded_split_date.tm_year==match_split_date.tm_year+1&&
-	  match_split_date.tm_yday+MATCH_DATE_TRESHOLD>=365&&
-	  downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD-365)
-    {
-      match_info->probability=match_info->probability+1;
-      DEBUG("heuristics:  probability + 1 (date special case)");
-    }
-  
-
-  sprintf(match_info->probability_text, 
-	  "%d",
-	  match_info->probability);
-  match_info->clist_text[0]=match_info->probability_text;/*Probability*/
-
-  printDateSecs(match_info->date_text,
-		xaccTransGetDate(xaccSplitGetParent(split)));
-  match_info->clist_text[1]=match_info->date_text; /*Date*/
-  sprintf(match_info->amount_text, 
-	  "%.2f",
-	  match_split_amount);
-
-  match_info->clist_text[2]=match_info->amount_text;/*Amount*/
-  match_info->clist_text[3]=xaccSplitGetMemo(split);/*Description*/
-
-  transaction_info->match_list = g_list_append(transaction_info->match_list,
+    sprintf(match_info->probability_text, 
+	    "%d",
+	    match_info->probability);
+    match_info->clist_text[MATCHER_CLIST_CONFIDENCE]=match_info->probability_text;/*Probability*/
+    
+    printDateSecs(match_info->date_text,
+		  xaccTransGetDate(xaccSplitGetParent(split)));
+    match_info->clist_text[MATCHER_CLIST_DATE]=match_info->date_text; /*Date*/
+    sprintf(match_info->amount_text, 
+	    "%.2f",
+	    match_split_amount);
+    
+    match_info->clist_text[MATCHER_CLIST_AMOUNT]=match_info->amount_text;/*Amount*/
+    
+    match_info->clist_text[MATCHER_CLIST_DESCRIPTION]=xaccTransGetDescription(xaccSplitGetParent(split));/*Description*/
+    
+    match_info->clist_text[MATCHER_CLIST_MEMO]=xaccSplitGetMemo(split);/*Split memo*/
+    
+    transaction_info->match_list = g_list_append(transaction_info->match_list,
 					       match_info);
-
+  }
 }/* end split_find_match */
 
 /* compare_probability() is used by g_list_sort to sort by probability */
@@ -573,6 +644,28 @@ static gint compare_probability (gconstpointer a,
 				 gconstpointer b)
 {
   return(((struct _matchinfo *)b)->probability - ((struct _matchinfo *)a)->probability);
+}
+
+/********************************************************************\
+ * check_trans_online_id() Weird function, to be used by 
+ * xaccAccountForEachTransaction.  Takes pointers to two transaction
+ * and returns TRUE if their online_id kvp_frame do NOT match or
+ * if both pointers point to the same transaction 
+\********************************************************************/
+static gboolean check_trans_online_id(Transaction *trans1, void *trans2)
+{
+  gchar * online_id1 = gnc_import_get_trans_online_id(trans1);
+  gchar * online_id2 = gnc_import_get_trans_online_id((Transaction *)trans2);
+
+  if(trans1==(Transaction *)trans2||online_id1==NULL||online_id2==NULL||strcmp(online_id1, online_id2)!=0)
+    {
+      return TRUE;
+    }
+  else
+    {
+      //printf("test_trans_online_id(): Duplicate found\n");
+      return FALSE;
+    }
 }
 
 /********************************************************************\
@@ -588,109 +681,91 @@ void gnc_import_add_trans(Transaction *trans)
   gint i;
   Account * dest_acct;
   gboolean trans_not_found=TRUE;
-  time_t trans_date;
   struct _transactioninfo * transaction_info;
   gint row_number;
   struct _matchinfo * best_match;
+  Split * source_split;
 
   gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
 
   DEBUG("%s", "Begin...");
 
-  if(matcher == NULL)
-    {
-      DEBUG("Gui not yet opened");
-      matcher = g_new0(struct _transmatcherdialog, 1);
-      init_matcher_gui(matcher);
-      DEBUG("Gui init done");
-    }
-  else if(matcher->initialised==FALSE)
-    {
-      init_matcher_gui(matcher);
-      DEBUG("Matcher reinitialised");
-    }
-
-  transaction_info=g_new0(struct _transactioninfo,1);
-  
-  transaction_info->first_split=xaccTransGetSplit(trans,0);/*Only use first split, the source split*/
-  transaction_info->trans=trans;
-
-  g_list_foreach( xaccAccountGetSplitList(xaccSplitGetAccount(transaction_info->first_split)),
-		  split_find_match,
-		  (gpointer)transaction_info);
-
-  /*WRITEME:  sort match list and determine default action*/
-  transaction_info->match_list=g_list_sort(transaction_info->match_list,
-					   compare_probability);
-  {
-    static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
-    /*Transaction who's best match probability is below or equal to 
-      this will be added as new by default */
-    static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
-    best_match=g_list_nth_data(transaction_info->match_list,0);
-    if(best_match->probability>=TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
-      {
-	transaction_info->action=RECONCILE;
-	transaction_info->selected_match_info=best_match;
-      }
-    else if(best_match->probability<=TRANSACTION_ADD_PROBABILITY_THRESHOLD)
-      {
-	transaction_info->action=ADD;
-      }
-    else
-      {
-	transaction_info->action=IGNORE;
-      }
-  }
-  
-  row_number = gtk_clist_append(matcher->downloaded_clist,
-				transaction_info->clist_text);
-  gtk_clist_set_row_data_full(matcher->downloaded_clist,
-			      row_number,
-			      transaction_info,
-			      downloaded_trans_row_destroy_cb);
-  downloaded_transaction_refresh_gui(matcher,
-				     transaction_info);
-  
-#if 0
-  /*For each split in the transaction, check if the parent account contains a transaction with the same online id */
+  /*For each split in the transaction, check if the parent account contains a transaction
+    with the same online id.*/
   for(i=0;(source_split=xaccTransGetSplit(trans,i))!=NULL&&(trans_not_found==TRUE);i++)
     {
-      TRACE("%s%d%s","Checking split %d%s",i," for duplicates");
+      DEBUG("%s%d%s","Checking split ",i," for duplicates");
       dest_acct=xaccSplitGetAccount(source_split);
       trans_not_found = xaccAccountForEachTransaction(dest_acct,
 						      check_trans_online_id,
 						      trans);
     }
+  /*If it does, abort the process for this transaction, since it is already in the system */
   if(trans_not_found==FALSE)
     {
       DEBUG("%s","Transaction with same online ID exists, destroying current transaction");
-      xaccTransBeginEdit(trans);
-      xaccTransDestroy(trans);
+      xaccTransRollbackEdit(trans);
       xaccTransCommitEdit(trans);
-    }
-#endif /* 0 */
-  return;
-}/* end gnc_import_add_trans() */
-
-/********************************************************************\
- * check_trans_online_id() Weird function, to be used by 
- * xaccAccountForEachTransaction.  Takes pointers to two transaction
- * and returns TRUE if their online_id kvp_frame do NOT match or
- * if both pointers point to the same transaction 
-\********************************************************************/
-static gboolean check_trans_online_id(Transaction *trans1, void *trans2)
-{
-  gchar * online_id1 = gnc_import_get_trans_online_id(trans1);
-  gchar * online_id2 = gnc_import_get_trans_online_id((Transaction *)trans2);
-
-  if(trans1==(Transaction *)trans2||strcmp(online_id1, online_id2)!=0)
-    {
-      return TRUE;
     }
   else
     {
-      //printf("test_trans_online_id(): Duplicate found\n");
-      return FALSE;
+      if(matcher == NULL)
+	{
+	  DEBUG("Gui not yet opened");
+	  matcher = g_new0(struct _transmatcherdialog, 1);
+	  init_matcher_gui(matcher);
+	  DEBUG("Gui init done");
+	}
+      else if(matcher->initialised==FALSE)
+	{
+	  init_matcher_gui(matcher);
+	  DEBUG("Matcher reinitialised");
+	}
+      
+      transaction_info=g_new0(struct _transactioninfo,1);
+      
+      transaction_info->first_split=xaccTransGetSplit(trans,0);/*Only use first split, the source split*/
+      transaction_info->trans=trans;
+      
+      g_list_foreach( xaccAccountGetSplitList(xaccSplitGetAccount(transaction_info->first_split)),
+		      split_find_match,
+		      (gpointer)transaction_info);
+      
+      /*WRITEME:  sort match list and determine default action*/
+      transaction_info->match_list=g_list_sort(transaction_info->match_list,
+					       compare_probability);
+      {
+	static const int TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD = 6;
+	/*Transaction who's best match probability is below or equal to 
+	  this will be added as new by default */
+	static const int TRANSACTION_ADD_PROBABILITY_THRESHOLD = 2;
+	best_match=g_list_nth_data(transaction_info->match_list,0);
+	if(best_match->probability>=TRANSACTION_RECONCILE_PROBABILITY_THRESHOLD)
+	  {
+	    transaction_info->action=RECONCILE;
+	    transaction_info->selected_match_info=best_match;
+	  }
+	else if(best_match->probability<=TRANSACTION_ADD_PROBABILITY_THRESHOLD)
+	  {
+	    transaction_info->action=ADD;
+	  }
+	else
+	  {
+	    transaction_info->action=IGNORE;
+	  }
+      }
+      
+      row_number = gtk_clist_append(matcher->downloaded_clist,
+				    transaction_info->clist_text);
+      gtk_clist_set_row_data_full(matcher->downloaded_clist,
+				  row_number,
+				  transaction_info,
+				  downloaded_trans_row_destroy_cb);
+      downloaded_transaction_refresh_gui(matcher,
+					 transaction_info);
+      
     }
-}
+  return;
+}/* end gnc_import_add_trans() */
+
+
