@@ -42,6 +42,9 @@
  * or negative */
 #define  USE_NO_COLOR        
 
+/* Use euro-style dd.mm.yy date format */
+#define  UK_DATES            
+
 /* If configure found libXpm, then use it */
 #define  HAVE_XPM            
 

@@ -230,5 +230,75 @@ datecmp( Date *date1, Date *date2 )
     }
   }
 
+/********************************************************************\
+ * sprintdate                                                       *
+ *   format a date and write it into the given string               *
+ *                                                                  *
+ * Args:   buf -- the buffer to write the rendered date into        *
+ *         date -- the date to render                               *
+ *         flag -- indicates whether to render the whole of the     *
+ *                 or a portion. Valid values are:                  *
+                   DATE_SHORT, DATE_YEAR and DATE_FULL              *
+ * Return: number of characters written to string                   *
+\********************************************************************/
+int
+sprintdate( char *buf, Date *date, int flag )
+{
+  /* by using these variables and not the day, month, and year directly */
+  /* it allows us to rearrange the order of them more easily            */
+  int a,b,c;
+
+#ifdef UK_DATES
+  a=date->day; b=date->month; c=date->year;
+#else
+  a=date->month; b=date->day; c=date->year;
+#endif
+
+  switch (flag) 
+    {
+    case DATE_SHORT: 
+      return sprintf( buf, "%2d/%2d", a, b ); 
+    case DATE_YEAR: 
+      return sprintf( buf, "%2d", c);
+    case DATE_FULL: 
+      return sprintf( buf, "%2d/%2d/%4d", a, b, c );
+    }
+}
+
+/********************************************************************\
+ * sscandate                                                        *
+ *   parses a date from a given string                              *
+ *                                                                  *
+ * Args:   in_string -- the string to parse                         *
+ *         date -- the date into which the parsed date is placed    *
+ *         flag -- indicates whether to parse the whole of the      *
+ *                 or a portion. Valid values are:                  *
+                   DATE_SHORT, DATE_YEAR and DATE_FULL              *
+ * Return: number of characters read from string                    *
+\********************************************************************/
+int
+sscandate( const char *in_string, Date *date, int flags )
+{
+  int *a,*b,*c; /* pointers to address of day, month and year vars */
+  int ret;
+
+#ifdef UK_DATES
+  a=&date->day; b=&date->month; c=&date->year;
+#else
+  a=&date->month; b=&date->day; c=&date->year;
+#endif
+
+  switch (flags)
+    {
+    case DATE_SHORT:
+      ret=sscanf( in_string, "%d/%d", a, b ); break;
+    case DATE_YEAR:
+      ret=sscanf( in_string, "%d", c ); break;
+    case DATE_FULL:
+      ret=sscanf( in_string, "%d/%d/%d", a, b, c); break;
+    }
+  return ret;
+}
+
 /********************** END OF FILE *********************************\
 \********************************************************************/

@@ -141,7 +141,7 @@ xferWindow( Widget parent )
                            NULL );
   
   todaysDate(&date);
-  sprintf(buf,"%2d/%2d/%4d", date.month, date.day, date.year);
+  sprintdate(&buf, &date, DATE_FULL );
   
   xferData->date = 
   XtVaCreateManagedWidget( "text",
@@ -461,8 +461,8 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   /* Create the transaction */
   str = XmTextGetString(xferData->date);
   todaysDate(&(trans->date));
-  sscanf( str, "%d/%d/%d", &(trans->date.month), 
-          &(trans->date.day), &(trans->date.year) );
+  sscandate( str, &(trans->date), DATE_FULL );
+
   str = XmTextGetString(xferData->amount);
   sscanf( str, "%f", &val );  /* sscanf must take float not double arg */
   trans->damount     = val;

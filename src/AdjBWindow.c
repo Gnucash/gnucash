@@ -131,7 +131,7 @@ adjBWindow( Widget parent, Account *acc )
                                     NULL );
   
   todaysDate(&date);
-  sprintf(buf,"%2d/%2d/%4d", date.month, date.day, date.year);
+  sprintdate(&buf, &date, DATE_FULL);
   
   adjBData->date =
     XtVaCreateManagedWidget( "text",
@@ -298,8 +298,8 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   /* Create the "trans" transaction */
   str = XmTextGetString(adjBData->date);
   todaysDate(&(trans->date)); /* In case the date field is empty */
-  sscanf( str, "%d/%d/%d", &(trans->date.month), 
-          &(trans->date.day), &(trans->date.year) );
+  sscandate( str, &(trans->date), DATE_YEAR );
+
   str = XmTextGetString(adjBData->balance);
   sscanf( str, "%f", &val );  /* sscanf must take float not double as arg */
   themount = val;

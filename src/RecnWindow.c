@@ -121,10 +121,8 @@ recnRefresh( RecnWindow *recnData )
         sprintf( buf, "%c", trans->reconciled );
         rows[0] = XtNewString(buf);
         rows[1] = trans->num;
-        sprintf( buf, "%2d/%2d/%02d", 
-                 trans->date.month,
-                 trans->date.day,
-                 (trans->date.year%100) );
+	sprintdate( &buf, &(trans->date), DATE_FULL );
+
         rows[2] = XtNewString(buf);
         rows[3] = trans->description;
 

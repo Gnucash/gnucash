@@ -578,9 +578,9 @@ regRefresh( RegWindow *regData )
 
       XbaeMatrixSetRowUserData  ( regData->reg, row, (XPointer) trans);   
 
-      sprintf( buf, "%2d/%2d", trans->date.month, trans->date.day );
+      sprintdate( &buf, &(trans->date), DATE_SHORT );
       newData[row+DATE_CELL_R][DATE_CELL_C]   = XtNewString(buf);
-      sprintf( buf, "%4d", trans->date.year );
+      sprintdate( &buf, &(trans->date), DATE_YEAR );
       newData[row+YEAR_CELL_R][YEAR_CELL_C] = XtNewString(buf);  
       
       sprintf( buf, "%s", trans->num );
@@ -743,9 +743,9 @@ regRefresh( RegWindow *regData )
       row = NUM_ROWS_PER_TRANS*ntrans + NUM_HEADER_ROWS;
       XbaeMatrixSetRowUserData  ( regData->reg, row, NULL);
 
-      sprintf( buf, "%2d/%2d", date.month, date.day );
+      sprintdate( &buf, &date, DATE_SHORT );
       newData[row+DATE_CELL_R][DATE_CELL_C]   = XtNewString(buf);
-      sprintf( buf, "%4d", date.year );
+      sprintdate( &buf, &date, DATE_YEAR );
       newData[row+YEAR_CELL_R][YEAR_CELL_C] = XtNewString(buf);  
 
       sprintf( buf, "%c", NREC);
@@ -1607,10 +1607,9 @@ regSaveTransaction( RegWindow *regData, int position )
 
     DEBUG("MOD_DATE\n");
     /* read in the date stuff... */
-    sscanf( XbaeMatrixGetCell(regData->reg,row+DATE_CELL_R,DATE_CELL_C),"%d/%d",
-            &(trans->date.month),
-            &(trans->date.day) );
-    
+    sscandate ( XbaeMatrixGetCell(regData->reg, row+DATE_CELL_R,DATE_CELL_C),
+	  &(trans->date), DATE_SHORT);
+
     trans->date.year = atoi(XbaeMatrixGetCell(regData->reg,
                                     row+YEAR_CELL_R,YEAR_CELL_C));
     
@@ -3266,15 +3265,12 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
   date.year  = 0;
   
   if (do_year) {
-    sscanf( XbaeMatrixGetCell(mw,row,col),
-            "%d/%d",&(date.month), &(date.day) );
-  }else {
-    sscanf( mvcbs->prev_text, 
-            "%d/%d",&(date.month), &(date.day) );
+    sscandate( XbaeMatrixGetCell(mw, row, col), &date, DATE_SHORT );
+  } else {
+    sscandate( mvcbs->prev_text, &date, DATE_SHORT );
   }
-  sscanf( XbaeMatrixGetCell(mw,row+1,col),
-          "%d", &(date.year) );
-  
+  sscandate ( XbaeMatrixGetCell(mw,row+1,col), &date, DATE_YEAR );
+
   /* If there isn't a valid date in this field, use today's date */
   if( (date.day == 0) || (date.month == 0) || (date.year == 0) )
     todaysDate( &date );
@@ -3371,16 +3367,16 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs, int do_y
       /* only accept the input if it is a number */
       mvcbs->verify->doit = isNum(input);
     }
-  
+
   if( changed )
     {
-    sprintf( buf,"%2d/%2d", date.month, date.day );
-    XbaeMatrixSetCell( mw, row, col, buf );
-    XbaeMatrixRefreshCell( mw, row, col );
+      sprintdate( &buf, &date, DATE_SHORT );
+      XbaeMatrixSetCell( mw, row, col, buf );
+      XbaeMatrixRefreshCell( mw, row, col );
     
-    sprintf( buf,"%4d", date.year );
-    XbaeMatrixSetCell( mw, row+1, col, buf );
-    XbaeMatrixRefreshCell( mw, row+1, col );
+      sprintdate( &buf, &date, DATE_YEAR);
+      XbaeMatrixSetCell( mw, row+1, col, buf );
+      XbaeMatrixRefreshCell( mw, row+1, col );
     }
   }
  
