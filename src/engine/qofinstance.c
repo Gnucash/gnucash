@@ -150,7 +150,7 @@ qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
    ENTER (" ");
 
    fr = gnc_kvp_bag_find_by_guid (src->kvp_data, "gemini",
-                    "book_guid", &src->entity.guid);
+                    "book_guid", &target_book->entity.guid);
                                                                                 
    twin_guid = kvp_frame_get_guid (fr, "inst_guid");
 
