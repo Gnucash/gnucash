@@ -4,8 +4,7 @@
 <TITLE>Understanding Double Entry Accounting</TITLE>
 </ARTHEADER>
 <SECT1>
-<TITLE> Why Use Double Entry Accounting?</TITLE>
-<PARA>    </PARA>
+<TITLE>Why Use Double Entry Accounting?</TITLE>
 <PARA>
     Double-entry accounting helps you avoid mistakes.  This is why
     professional accountants use it.  If you are new to accounting, 
@@ -17,7 +16,6 @@
 </SECT1>
 <SECT1 ID="XACC-DOUBLEDEF">
 <TITLE> What is Double Entry Accounting?</TITLE>
-<PARA>    </PARA>
 <PARA>Double entry bookkeeping is an accounting methodology
     introduced in the 13th century to to make sure that each
     transaction and account is properly balanced.
@@ -53,9 +51,8 @@
     identity of accounting:
     <ANCHOR ID="IDENTITY">
     <ENVAR>Total of Debits = Total of Credits.</ENVAR>
-
-
     </PARA>
+
 <PARA>There is another important aspect to double-entry that
     should also be understood: to get the complete picture,
     you must also track income and expense.  When you deposit
@@ -123,30 +120,22 @@ to track the change over time.)
 </SECT1>
 
 <SECT1 ID="XACC-DOUBLEUSE">
-<TITLE> Using Double Entry</TITLE>
-<PARA>    </PARA>
+<TITLE>Using Double Entry</TITLE>
 <SECT2>
 <TITLE>Creating Transactions</TITLE>
-<PARA>    </PARA>
 <PARA>To create a double-entry transaction:
 
     <ITEMIZEDLIST>
 <LISTITEM>
-<PARA>        Click on a box in the column marked <SCREEN>Transfer From</SCREEN>
+<PARA>  Click on a box in the column marked <SCREEN>Transfer From</SCREEN>
         on the left-hand side of the register. 
-
-        </PARA>
-<PARA>A menu will drop down, listing all of the accounts from
+        A menu will drop down, listing all of the accounts from
         which a transfer may be made.
-      
-
       </PARA>
 </LISTITEM>
 <LISTITEM>
-<PARA>        Select one. 
-
-        </PARA>
-<PARA>When you record the transaction, the double-entry will
+<PARA> Select one. 
+       When you record the transaction, the double-entry will
         automatically be made, and the transaction automatically
         appear in all windows showing the transferred-from and the
         transferred-to accounts.
@@ -159,15 +148,9 @@ to track the change over time.)
 </SECT2>
 <SECT2>
 <TITLE>Changing Transactions</TITLE>
-<PARA>    </PARA>
-<PARA>To <EMPHASIS>change</EMPHASIS> a double-entry transaction:
-
-    </PARA>
-<PARA>Simply edit the transaction in any window in which it
-    appears.
-
-    </PARA>
-<PARA>Any changes made will be automatically reflected in both
+<PARA>To <EMPHASIS>change</EMPHASIS> a double-entry transaction,
+    simply edit the transaction in any window in which it
+    appears.  Any changes made will be automatically reflected in both
     accounts and all windows displaying the transaction.
 
     </PARA>
@@ -186,12 +169,9 @@ to track the change over time.)
 </SECT1>
 <SECT1 ID="XACC-SCRUBBING">
 <TITLE> Scrubbing Clean</TITLE>
-<PARA>    </PARA>
 <PARA>GnuCash may be configured to be strict about double entry,
     or you may configure it to be "loose."
-
-    </PARA>
-<PARA>In "loose" mode, you can create <EMPHASIS>unbalanced
+    In "loose" mode, you can create <EMPHASIS>unbalanced
     transactions,</EMPHASIS> that is, transactions where the "splits"
     don't balance to zero. That discards the validation that comes
     from using the more strict double entry scheme, which is
@@ -220,22 +200,17 @@ to track the change over time.)
     clean this up at some point. To clean up these unbalanced
     transactions, you <EMPHASIS>Scrub</EMPHASIS> the account clean by choosing
     <GUIMENU>Scrub</GUIMENU> from the window menu.
-
-    </PARA>
-<PARA>The process will examine each transaction; if the
+    The process will examine each transaction; if the
     transaction doesn't balance, a split entry will be created and
     placed into an account named <EMPHASIS>Unbalanced.</EMPHASIS> You may then
     review these splits and move them to their proper accounts.
 
     </PARA>
 <PARA><EMPHASIS>Warning: Functionality Changing...</EMPHASIS>
-
-    </PARA>
-<PARA>At present, control over whether GnuCash is "strict" or
-    "loose" is established at compile time, and defaults to <EMPHASIS>    strict.</EMPHASIS>
-
-    </PARA>
-<PARA>In the future, there will be no option of "looseness."
+   At present, control over whether GnuCash is "strict" or
+    "loose" is established at compile time, and defaults to 
+   <EMPHASIS>strict.</EMPHASIS>
+   In the future, there will be no option of "looseness."
 
 
 </PARA>
