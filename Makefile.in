@@ -21,6 +21,9 @@
 #  Address: 609 8th Street                                         
 #           Huntington Beach, CA 92648-4632                        
 
+SHELL=/bin/bash
+export SHELL
+
 srcdir  = @srcdir@
 VPATH   = @srcdir@
 
