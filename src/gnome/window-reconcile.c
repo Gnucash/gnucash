@@ -656,10 +656,10 @@ gnc_ui_reconcile_window_new_cb(GtkButton *button, gpointer data)
 static void
 gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 {
-  RecnWindow *recnData = (RecnWindow *) data;
-  Account **affected_accounts;
+  RecnWindow *recnData = data;
+  GList *affected_accounts = NULL;
   Transaction *trans;
-  Split *split, *s;
+  Split *split;
   int i, num_splits;
 
   split = gnc_reconcile_window_get_current_split(recnData);
@@ -682,22 +682,25 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
    * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
   num_splits = xaccTransCountSplits(trans);
-  affected_accounts = g_new(Account *, num_splits + 1);
 
   for (i = 0; i < num_splits; i++) 
   {
+    Account *a;
+    Split *s;
+
     s = xaccTransGetSplit(trans, i);
-    affected_accounts[i] = xaccSplitGetAccount(s);
+    a = xaccSplitGetAccount(s);
+    if (a != NULL)
+      affected_accounts = g_list_prepend(affected_accounts, a);
   }
-  affected_accounts[num_splits] = NULL;
 
   xaccTransBeginEdit(trans, 1);
   xaccTransDestroy(trans);
   xaccTransCommitEdit(trans);
 
-  gnc_account_list_ui_refresh(affected_accounts);
+  gnc_account_glist_ui_refresh(affected_accounts);
 
-  g_free(affected_accounts);
+  g_list_free(affected_accounts);
 
   gnc_refresh_main_window ();
 }

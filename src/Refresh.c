@@ -64,28 +64,6 @@ gnc_account_ui_refresh(Account *account)
    gnc_ui_refresh_edit_account_window(account);
 }
 
-
-/* ------------------------------------------------------ */
-void 
-gnc_account_list_ui_refresh(Account **account_list)
-{
-   Account *account;
-   int i;
-
-   xaccAccListDisplayRefresh(account_list);
-
-   i = 0;
-   account = account_list[0];
-
-   while (account != NULL)
-   {
-     recnRefresh(account);
-
-     i++;
-     account = account_list[i];
-   }
-}
-
 /* ------------------------------------------------------ */
 void
 gnc_account_glist_ui_refresh(GList *accounts)

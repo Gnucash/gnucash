@@ -35,9 +35,10 @@
 #include "Transaction.h"
 
 
-/** STRUCTS *********************************************************/
-/* The xaccLedgerDisplay struct describes a single register/ledger instance. */
+/** Structures ******************************************************/
 
+/* The xaccLedgerDisplay struct describes a single register/ledger
+ * instance. */
 typedef struct _xaccLedgerDisplay xaccLedgerDisplay;
 
 struct _xaccLedgerDisplay {
@@ -54,7 +55,7 @@ struct _xaccLedgerDisplay {
   double reconciledBalance;
 
   /* GUI related stuff */
-  short dirty;                   /* dirty flag, non zero if redraw needed   */
+  gboolean dirty;                /* dirty flag, non zero if redraw needed   */
   SplitRegister *ledger;         /* main ledger window                      */
   void *gui_hook;                /* GUI-specific state                      */
   void (*redraw) (xaccLedgerDisplay *); /* redraw callback                  */
@@ -64,70 +65,45 @@ struct _xaccLedgerDisplay {
 };
 
 
-/** PROTOTYPES ******************************************************/
+/** Prototypes ******************************************************/
 
-/*
- * opens up a register window to display a single account  
- */
-xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *acc); 
+/* opens up a register window to display a single account */
+xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *account);
 
-/*
- * opens up a register window to display the parent account
- * and all of its children.
- */
-xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *acc); 
+/* opens up a register window to display the parent account and all of
+ * its children. */
+xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *account);
 
-/*
- * display list of accounts in a general ledger.
- */
-xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_acc,
-                                              Account **acclist,
+/* display list of accounts in a general ledger. */
+xaccLedgerDisplay * xaccLedgerDisplayGeneral (Account *lead_account,
+                                              Account **account_list,
                                               SplitRegisterType type,
                                               SplitRegisterStyle style);
 
-/*
- * redisplay/redraw all windows that contain any transactions
- * that are associated with the indicated account.
- */
-void        xaccAccountDisplayRefresh (Account *acc);
-void        xaccAccListDisplayRefresh (Account **acc);
+/* redisplay/redraw all windows that contain any transactions that are
+ * associated with the indicated account. */
+void        xaccAccountDisplayRefresh (Account *account);
 void        xaccAccGListDisplayRefresh (GList *accounts);
 
-/* 
- * redisplay/redraw all windows that contain this transaction
- * (or any of its member splits).
- */
+/* redisplay/redraw all windows that contain this transaction (or any
+ * of its member splits). */
 void        xaccTransDisplayRefresh (Transaction *trans);
 
-/* 
- * redisplay/redraw only the indicated window.
- * both routines do same thing, they differ only by the argument they
- * take.
- */
-void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
-void        xaccRegisterRefresh (SplitRegister *);
+/* redisplay/redraw only the indicated window. Both routines do same
+ * thing, they differ only by the argument they take. */
+void        xaccLedgerDisplayRefresh (xaccLedgerDisplay * ledger_display);
+void        xaccRegisterRefresh (SplitRegister *reg);
 
-/*
- * Call the user refresh callback for all registers. This does not
+/* Call the user refresh callback for all registers. This does not
  * perform a full refresh, i.e., it does not reload transactions.
- * This is just for updating gui controls.
- */
+ * This is just for updating gui controls.  */
 void        xaccRegisterRefreshAllGUI (void);
 
-/*
- * return true if acc is a member of the ledger.
- */
-int         ledgerIsMember (xaccLedgerDisplay *reg, Account * acc);
+/* close the window */
+void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);
 
-/* 
- * close the window 
- */
-void        xaccLedgerDisplayClose (xaccLedgerDisplay *);
-
-/*
- * close all ledger windows containing this account.
- */
-void        xaccDestroyLedgerDisplay (Account *acc);
+/* close all ledger windows containing this account. */
+void        xaccDestroyLedgerDisplay (Account *account);
 
 #endif /* __MULTI_LEDGER_H__ */
 

@@ -324,7 +324,7 @@ gnc_trans_prepend_account_list(Transaction *trans, GList *accounts)
       accounts = g_list_prepend(accounts, account);
 
     i++;
-  } while(1);
+  } while (TRUE);
 }
 
 static GList *
@@ -346,7 +346,7 @@ gnc_trans_prepend_split_list(Transaction *trans, GList *splits)
     splits = g_list_prepend(splits, split);
 
     i++;
-  } while(1);
+  } while (TRUE);
 }
 
 static int
@@ -366,7 +366,7 @@ gnc_trans_split_index(Transaction *trans, Split *split)
       return -1;
 
     i++;
-  } while(1);
+  } while (TRUE);
 }
 
 /* Uses the scheme split copying routines */

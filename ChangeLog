@@ -1,3 +1,8 @@
+2000-08-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-reconcile.c
+	(gnc_ui_reconcile_window_delete_cb): rewrite to use g_lists.
+
 2000-08-23  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/kvp_frame.c: use g_strdup, not strdup.
