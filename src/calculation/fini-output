@@ -1,0 +1,103 @@
+Evaluate expression (y/n): Current Value, n: 0
+Enter new value
+Current Value, i: 0.00
+Enter new value
+Current Value, pv: 0.00
+Enter new value
+Current Value, pmt: 0.00
+Enter new value
+Current Value, fv: 0.00
+Enter new value
+Current Value, CF: 12
+Enter new value
+Current Value, PF: 12
+Enter new value
+Compute:
+n   - 1
+i   - 2
+pv  - 3
+pmt - 4
+fv  - 5
+1,2,3,4 or 5:Computing periodic payment
+<================================>
+Current Financial Calculator Status:
+Compounding Frequency: (CF) 12
+Payment     Frequency: (PF) 12
+Compounding: Discrete (disc = TRUE)
+Payments: End of Period (bep = FALSE)
+Number of Payment Periods (n): 360		(Years: 30)
+Nominal Annual Interest Rate (i): 14.75
+Present Value (pv): 100000.00
+Periodic Payment (pmt): -1244.48
+Future Value (fv): 0.00
+Compute Amortization Schedule (y/n)
+Another example (y/n): Evaluate expression (y/n): Enter Expression
+Evaluated Value: -1244.48
+Another expression (y/n): Current Value, n: 360
+Enter new value
+Current Value, i: 14.75
+Enter new value
+Current Value, pv: 100000.00
+Enter new value
+Current Value, pmt: -1244.48
+Enter new value
+Current Value, fv: 0.00
+Enter new value
+Current Value, CF: 12
+Enter new value
+Current Value, PF: 12
+Enter new value
+Compute:
+n   - 1
+i   - 2
+pv  - 3
+pmt - 4
+fv  - 5
+1,2,3,4 or 5:Computing periodic payment
+<================================>
+Current Financial Calculator Status:
+Compounding Frequency: (CF) 12
+Payment     Frequency: (PF) 12
+Compounding: Discrete (disc = TRUE)
+Payments: End of Period (bep = FALSE)
+Number of Payment Periods (n): 180		(Years: 15)
+Nominal Annual Interest Rate (i): 14.75
+Present Value (pv): 100000.00
+Periodic Payment (pmt): -1382.50
+Future Value (fv): 0.00
+Compute Amortization Schedule (y/n)
+Another example (y/n): Evaluate expression (y/n): Enter Expression
+Evaluated Value: -138.02
+Another expression (y/n): Current Value, n: 180
+Enter new value
+Current Value, i: 14.75
+Enter new value
+Current Value, pv: 100000.00
+Enter new value
+Current Value, pmt: -1382.50
+Enter new value
+Current Value, fv: 0.00
+Enter new value
+Current Value, CF: 12
+Enter new value
+Current Value, PF: 12
+Enter new value
+Compute:
+n   - 1
+i   - 2
+pv  - 3
+pmt - 4
+fv  - 5
+1,2,3,4 or 5:<================================>
+Current Financial Calculator Status:
+Compounding Frequency: (CF) 12
+Payment     Frequency: (PF) 12
+Compounding: Discrete (disc = TRUE)
+Payments: End of Period (bep = FALSE)
+Number of Payment Periods (n): 180		(Years: 15)
+Nominal Annual Interest Rate (i): 14.75
+Present Value (pv): 100000.00
+Periodic Payment (pmt): -1382.50
+Future Value (fv): 0.00
+Compute Amortization Schedule (y/n)
+Another example (y/n): 
