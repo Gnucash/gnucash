@@ -8,7 +8,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
-  -I${top_srcdir}/src/gnome \
   ${GUILE_INCS} \
   ${GUPPI_CFLAGS} \
   ${GLIB_CFLAGS} \
@@ -21,6 +20,7 @@ AM_CFLAGS = \
 
 libgncmod_gnome_utils_la_SOURCES = \
   cursors.c \
+  argv-list-converters.c \
   dialog-commodity.c \
   dialog-options.c \
   dialog-utils.c \
@@ -33,6 +33,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-date-edit.c \
   gnc-frequency.c \
   gnc-general-select.c \
+  gnc-gnome-utils.c \
   gnc-gui-query.c \
   gnc-html-history.c \
   gnc-html-guppi.c \
@@ -58,6 +59,7 @@ gncinclude_HEADERS = \
   gnc-date-edit.h \
   gnc-frequency.h \
   gnc-general-select.h \
+  gnc-gnome-utils.h \
   gnc-gui-query.h \
   gnc-html-history.h \
   gnc-html-guppi.h \
@@ -69,6 +71,7 @@ gncinclude_HEADERS = \
   window-help.h
 
 noinst_HEADERS = \
+  argv-list-converters.h \
   gnc-dir.h
 
 libgncmod_gnome_utils_la_LDFLAGS = -module

@@ -53,7 +53,6 @@
 #include "gnc-html.h"
 #include "gnc-http.h"
 #include "gnc-html-history.h"
-#include "gnc-network.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "messages.h"

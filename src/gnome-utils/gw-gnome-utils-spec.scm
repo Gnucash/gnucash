@@ -45,6 +45,7 @@
       "#include <druid-utils.h>\n"
       "#include <gnc-amount-edit.h>\n"
       "#include <gnc-date-edit.h>\n"
+      "#include <gnc-gnome-utils.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <gnc-html.h>\n"
       "#include <gnc-mdi-utils.h>\n"
@@ -52,6 +53,26 @@
       "#include <gnc-ui.h>\n"
       "#include <print-session.h>\n"
       )))
+
+
+  (gw:wrap-function
+   mod
+   'gnc:gnome-init
+   '<gw:scm>
+   "gnc_gnome_init"
+   '(((<gw:m-chars-caller-owned> gw:const) arg0)
+     ((<gw:m-chars-caller-owned> gw:const) progname)
+     ((<gw:m-chars-caller-owned> gw:const) version)
+     (<gw:scm> command-line))
+   "Initialize the GnuCash gnome system.")
+
+  (gw:wrap-function
+   mod
+   'gnc:gnome-shutdown
+   '<gw:void>
+   "gnc_gnome_shutdown"
+   '()
+   "Shutdown the GnuCash gnome system.")
 
   (let ((nnt (gw:wrap-non-native-type
               mod

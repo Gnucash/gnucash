@@ -8,8 +8,6 @@
 #include <stdio.h>
 #include <guile/gh.h>
 #include <glib.h>
-#include <libguile/strports.h>
-#include <libguile/modules.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
