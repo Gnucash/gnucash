@@ -1,9 +1,10 @@
-/*******************************************************************\
- * MultiLedger.h -- utilities for dealing with multiple             *
- * register/ledger windows in GnuCash                               *
+/********************************************************************\
+ * gnc-ledger-display.h -- utilities for dealing with multiple      *
+ *                         register/ledger windows in GnuCash       *
  *                                                                  *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 2001 Linux Developers Group                        *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,8 +22,8 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef MULTI_LEDGER_H
-#define MULTI_LEDGER_H
+#ifndef GNC_LEDGER_DISPLAY_H
+#define GNC_LEDGER_DISPLAY_H
 
 #include "config.h"
 
@@ -121,4 +122,3 @@ void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);
 void        xaccDestroyLedgerDisplay (Account *account);
 
 #endif
-

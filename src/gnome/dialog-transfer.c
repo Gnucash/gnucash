@@ -27,13 +27,13 @@
 #include <gnome.h>
 
 #include "FileDialog.h"
-#include "MultiLedger.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
+#include "gnc-ledger-display.h"
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
 #include "gnc-exp-parser.h"

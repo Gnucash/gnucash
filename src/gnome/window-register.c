@@ -35,7 +35,6 @@
 
 #include "AccWindow.h"
 #include "FileDialog.h"
-#include "MultiLedger.h"
 #include "RegWindow.h"
 #include "Scrub.h"
 #include "dialog-find-transactions.h"
@@ -46,6 +45,7 @@
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
+#include "gnc-ledger-display.h"
 #include "gnc-pricedb.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"

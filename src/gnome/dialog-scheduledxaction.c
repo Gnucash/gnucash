@@ -33,7 +33,6 @@
 #include "SchedXaction.h"
 #include "gnc-book.h"
 #include "FileDialog.h"
-#include "MultiLedger.h"
 #include "gnucash-sheet.h"
 
 #include "window-register.h"
@@ -44,6 +43,7 @@
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "gnc-frequency.h"
+#include "gnc-ledger-display.h"
 
 #include "messages.h"
 #include "query-user.h"

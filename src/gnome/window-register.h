@@ -25,7 +25,7 @@
 #define WINDOW_REGISTER_H
 
 #include "RegWindow.h"
-#include "MultiLedger.h"
+#include "gnc-ledger-display.h"
 
 RegWindow * regWindowLedger(xaccLedgerDisplay *ledger);
 

@@ -1,6 +1,6 @@
-/*******************************************************************\
- * MultiLedger.c -- utilities for dealing with multiple             *
- * register/ledger windows in GnuCash                               *
+/********************************************************************\
+ * gnc-ledger-display.c -- utilities for dealing with multiple      *
+ *                         register/ledger windows in GnuCash       *
  *                                                                  *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998 Linas Vepstas                           *
@@ -27,7 +27,6 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "MultiLedger.h"
 #include "Query.h"
 #include "Transaction.h"
 #include "FileDialog.h"
@@ -35,6 +34,7 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-ledger-display.h"
 #include "split-register-control.h"
 #include "split-register-model.h"
 

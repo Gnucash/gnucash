@@ -35,7 +35,6 @@
 #include <time.h>
 
 #include "AccWindow.h"
-#include "MultiLedger.h"
 #include "RegWindow.h"
 #include "Scrub.h"
 #include "date.h"
@@ -47,6 +46,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
+#include "gnc-ledger-display.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "guile-util.h"

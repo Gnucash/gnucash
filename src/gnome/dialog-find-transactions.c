@@ -31,7 +31,6 @@
 #include <time.h>
 
 #include "FileDialog.h"
-#include "MultiLedger.h"
 #include "Query.h"
 #include "RegWindow.h"
 #include "account-tree.h"
@@ -41,6 +40,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
+#include "gnc-ledger-display.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "splitreg.h"

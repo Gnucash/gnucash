@@ -24,7 +24,7 @@
 #define SPLIT_REGISTER_P_H
 
 #include "Group.h"
-#include "MultiLedger.h"
+#include "gnc-ledger-display.h"
 #include "splitreg.h"
 
 

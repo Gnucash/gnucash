@@ -26,7 +26,7 @@
 
 #include <gnome.h>
 
-#include "MultiLedger.h"
+#include "gnc-ledger-display.h"
 
 
 typedef struct _SelectDateDialog SelectDateDialog;

@@ -28,7 +28,6 @@
 
 #include "AccWindow.h"
 #include "FileDialog.h"
-#include "MultiLedger.h"
 #include "account-tree.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
@@ -40,6 +39,7 @@
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
+#include "gnc-ledger-display.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "query-user.h"
