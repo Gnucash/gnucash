@@ -453,7 +453,7 @@
    (qif-file:xtns self)
    qif-parse:print-date
    'error-on-ambiguity
-   (lambda (t e) e)))
+   (lambda (t e) e) 'date))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file:parse-fields-results results type

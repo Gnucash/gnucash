@@ -112,7 +112,7 @@ noinst_HEADERS = \
 noinst_SCRIPTS = iso-currencies-to-c
 
 libgncmod_engine_la_LDFLAGS = -module
-libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} ${INTLLIBS} \
+libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
  libgw-engine.la \
  libgw-kvp.la \
  ../gnc-module/libgncmodule.la \
