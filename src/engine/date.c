@@ -494,17 +494,31 @@ gnc_iso8601_to_timespec(const char *str, int do_localtime)
   /* adjust for the local timezone */
   if (do_localtime)
   {
+    struct tm tmp_tm;
     struct tm *tm;
+    long int tz;
     int tz_hour;
-    time_t secs = mktime (&stm);
+    time_t secs;
 
-    /* The call to localtime is 'bogus', but it forces 'timezone' to be set.
-     * Note that we must use the accurate date, since the value of 'gnc_timezone'
-     * includes daylight savings corrections for that date. */
-    tm = localtime (&secs);   
-    tz_hour = gnc_timezone(tm)/3600;
+    /* Use a temporary tm struct so the mktime call below
+     * doesn't mess up stm. */
+    tmp_tm = stm;
+    tmp_tm.tm_isdst = -1;
+
+    secs = mktime (&tmp_tm);
+
+    /* The call to localtime is 'bogus', but it forces 'timezone' to
+     * be set. Note that we must use the accurate date, since the
+     * value of 'gnc_timezone' includes daylight savings corrections
+     * for that date. */
+    tm = localtime (&secs);
+
+    tz = gnc_timezone (tm);
+
+    tz_hour = tz / 3600;
     stm.tm_hour -= tz_hour;
-    stm.tm_min -= (gnc_timezone(tm) - 3600*tz_hour)/60;
+    stm.tm_min -= (tz - (3600 * tz_hour)) / 60;
+    stm.tm_isdst = tmp_tm.tm_isdst;
   }
 
   /* compute number of seconds */

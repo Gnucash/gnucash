@@ -4,6 +4,7 @@ Makefile.in
 .libs
 test-load-engine
 test-commodities
+test-date
 test-freq-spec
 test-group-vs-book
 test-query

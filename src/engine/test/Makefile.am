@@ -22,6 +22,7 @@ TESTS = \
   test-load-engine \
   test-create-account \
   test-commodities \
+  test-date \
   test-group-vs-book \
   test-query \
   test-resolve-file-path \
@@ -38,6 +39,7 @@ TESTS_ENVIRONMENT = \
 
 noinst_PROGRAMS = \
   test-commodities \
+  test-date \
   test-freq-spec \
   test-group-vs-book \
   test-load-engine \
