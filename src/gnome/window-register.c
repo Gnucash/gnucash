@@ -332,7 +332,7 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
       xaccQuerySetSortOrder(query, BY_STANDARD, BY_NONE, BY_NONE);
       break;
     case BY_DATE:
-      xaccQuerySetSortOrder(query, BY_DATE, BY_NUM, BY_AMOUNT);
+      xaccQuerySetSortOrder(query, BY_DATE, BY_STANDARD, BY_NONE);
       break;
     case BY_DATE_ENTERED:
       xaccQuerySetSortOrder(query, BY_DATE_ENTERED, BY_STANDARD, BY_NONE);
@@ -342,16 +342,16 @@ gnc_register_sort(RegWindow *regData, sort_type_t sort_code)
                             BY_STANDARD);
       break;
     case BY_NUM:
-      xaccQuerySetSortOrder(query, BY_NUM, BY_DATE, BY_AMOUNT);
+      xaccQuerySetSortOrder(query, BY_NUM, BY_STANDARD, BY_NONE);
       break;
     case BY_AMOUNT:
-      xaccQuerySetSortOrder(query, BY_AMOUNT, BY_DATE, BY_NUM);
+      xaccQuerySetSortOrder(query, BY_AMOUNT, BY_STANDARD, BY_NONE);
       break;
     case BY_MEMO:
-      xaccQuerySetSortOrder(query, BY_MEMO, BY_DATE, BY_NUM);
+      xaccQuerySetSortOrder(query, BY_MEMO, BY_STANDARD, BY_NONE);
       break;
     case BY_DESC:
-      xaccQuerySetSortOrder(query, BY_DESC, BY_DATE, BY_NUM);
+      xaccQuerySetSortOrder(query, BY_DESC, BY_STANDARD, BY_NONE);
       break;
     default:
       assert(0); /* we should never be here */
