@@ -27,11 +27,12 @@
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 
-gboolean    gnc_is_euro_currency (gnc_commodity * currency);
-gnc_numeric gnc_convert_to_euro (gnc_commodity * currency,
+gboolean    gnc_is_euro_currency (const gnc_commodity * currency);
+gnc_numeric gnc_convert_to_euro (const gnc_commodity * currency,
                                  gnc_numeric value);
-gnc_numeric gnc_convert_from_euro (gnc_commodity * currency,
+gnc_numeric gnc_convert_from_euro (const gnc_commodity * currency,
                                    gnc_numeric value);
+gnc_numeric gnc_euro_currency_get_rate (const gnc_commodity *currency);
 
 gnc_commodity * gnc_get_euro (void);
 

@@ -36,6 +36,7 @@ typedef struct _gnc_euro_rate_struct {
 
 
 /* This array MUST be sorted ! */
+/* The rates are per EURO */
 static gnc_euro_rate_struct _gnc_euro_rate_[] =
 {
   { "ATS",  13.7603 },  /* austrian schilling */
@@ -82,7 +83,7 @@ _gnc_euro_rate_compare_(const void * key, const void * value)
 /* ------------------------------------------------------ */
 
 gboolean
-gnc_is_euro_currency(gnc_commodity * currency)
+gnc_is_euro_currency(const gnc_commodity * currency)
 {
 
   gnc_euro_rate_struct *result;
@@ -113,7 +114,7 @@ gnc_is_euro_currency(gnc_commodity * currency)
 /* ------------------------------------------------------ */
 
 gnc_numeric
-gnc_convert_to_euro(gnc_commodity * currency, gnc_numeric value) {
+gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value) {
 
   gnc_euro_rate_struct *result;
   const char *namespace;
@@ -150,7 +151,7 @@ gnc_convert_to_euro(gnc_commodity * currency, gnc_numeric value) {
 /* ------------------------------------------------------ */
 
 gnc_numeric
-gnc_convert_from_euro(gnc_commodity * currency, gnc_numeric value) {
+gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value) {
 
   gnc_euro_rate_struct * result;
   const char *namespace;
@@ -182,6 +183,37 @@ gnc_convert_from_euro(gnc_commodity * currency, gnc_numeric value) {
     return gnc_numeric_mul (value, rate, gnc_commodity_get_fraction (currency),
                             GNC_RND_ROUND);
   }
+}
+
+/* ------------------------------------------------------ */
+
+gnc_numeric
+gnc_euro_currency_get_rate (const gnc_commodity *currency)
+{
+  gnc_euro_rate_struct * result;
+  const char *namespace;
+
+  if (currency == NULL)
+    return gnc_numeric_zero ();
+
+  namespace = gnc_commodity_get_namespace (currency);
+  if (namespace == NULL)
+    return gnc_numeric_zero ();
+
+  if (strcmp (namespace, GNC_COMMODITY_NS_ISO) != 0)
+    return gnc_numeric_zero ();
+
+  result = bsearch(currency,
+                   _gnc_euro_rate_,
+                   sizeof(_gnc_euro_rate_) / sizeof(gnc_euro_rate_struct), 
+                   sizeof(gnc_euro_rate_struct),
+                   _gnc_euro_rate_compare_);
+
+  if (result == NULL)
+    return gnc_numeric_zero ();
+
+  return double_to_gnc_numeric (result->rate, GNC_DENOM_AUTO, 
+                                GNC_DENOM_SIGFIGS(6) | GNC_RND_ROUND);
 }
 
 /* ------------------------------------------------------ */
