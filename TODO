@@ -30,7 +30,7 @@ the docs or change the menu entry name.
 24) show example of how to do household assets
 
 25) provide menu item to create automaticly a default set
-    of accounts for business, home use.
+    of income/expense accounts (categories) for business, home use.
 
 26) provide menu item to not show accounts (esp inc/expense)
     acocounts with zero balances.
@@ -88,14 +88,11 @@ the docs or change the menu entry name.
 48) allow tab traversal from memo field to commit button in the ledger
     window.
 
-49) fix recn window. Its completely broken right now.
-
-50) provide a menu item to not show income/expense accounts.
-    this makes it work more like quicken categories.  See also #26
-
 52) add sql interfaces. Use optimistic record modification policies,
     to avoid record locking. Something that is CVS, as opposed to 
     RCS, in style & philosophy.
+
+53)
 
 
 Fixed bugs:
@@ -165,4 +162,11 @@ fixed.
 
 46) fix traversal for ledger windows
 fixed.
+
+49) fix recn window. Its completely broken right now.
+fixed, I think.
+
+50) provide a menu item to not show income/expense accounts.
+    this makes it work more like quicken categories.  See also #26
+done.
 
