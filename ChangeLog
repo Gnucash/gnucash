@@ -21,6 +21,9 @@
 	  Move the instantiation of File -> Properties into
 	  main-window.scm (out of business-gnome.scm) for future cases
 	  where we might decide to ship the business modules separately.
+
+	* src/import-export/ofx/test/test-link.c: fix the test program
+	  to make sure it links on many weird platforms.
 	
 2003-05-22  Derek Atkins  <derek@ihtfp.com>
 
