@@ -14,3 +14,5 @@ test-save-in-lang
 .deps
 .libs
 Makefile.in
+*.la
+*.lo
