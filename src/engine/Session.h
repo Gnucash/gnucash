@@ -88,7 +88,12 @@ void       xaccSessionDestroy (Session *);
  *
  * The xaccSessionBeginFile() routine is identical to the xaccSessionBegin()
  *    routine, except that the argument is a filename (i.e. the five
- *    letters "file:" should not be prepended).
+ *    letters "file:" should not be prepended) and there is an additional
+ *    function argument. This function is called if xaccSessionBeginFile
+ *    fails to obtain a lock for the file. If it returns true, the file
+ *    is loaded anyway. If it returns false, or the handler is NULL, a
+ *    failed lock attempt will abort the load. The lock fail handler is
+ *    passed the filename of the data file being loaded.
  *
  * The xaccSessionGetFilePath() routine returns the fully-qualified file
  *    path for the session.  That is, if a relative or partial filename
@@ -168,8 +173,11 @@ void       xaccSessionDestroy (Session *);
  *    xaccSessionDestroy (sess);
  * */
 
+typedef gboolean (*SessionLockFailHandler)(const char *file);
+
 AccountGroup * xaccSessionBegin       (Session *, const char * sessionid);
-AccountGroup * xaccSessionBeginFile   (Session *, const char * filename);
+AccountGroup * xaccSessionBeginFile   (Session *, const char * filename,
+                                       SessionLockFailHandler handler);
 int            xaccSessionGetError    (Session *);
 AccountGroup * xaccSessionGetGroup    (Session *);
 void           xaccSessionSetGroup    (Session *, AccountGroup *topgroup);

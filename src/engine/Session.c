@@ -1,15 +1,3 @@
-/*
- * FILE:
- * Session.c
- *
- * FUNCTION:
- * Provide wrappers for initiating/concluding a file-editing session.
- *
- * HISTORY:
- * Created by Linas Vepstas December 1998
- * Copyright (c) 1998-2000 Linas Vepstas
- */
-
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,6 +16,18 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
+
+/*
+ * FILE:
+ * Session.c
+ *
+ * FUNCTION:
+ * Provide wrappers for initiating/concluding a file-editing session.
+ *
+ * HISTORY:
+ * Created by Linas Vepstas December 1998
+ * Copyright (c) 1998-2000 Linas Vepstas
+ */
 
 #include <errno.h>
 #include <fcntl.h>
@@ -81,7 +81,7 @@ Session *
 xaccMallocSession (void)
 {
    Session *sess;
-   sess =  (Session *) malloc (sizeof (Session));
+   sess = g_new(Session, 1);
 
    xaccInitSession (sess);
    return sess;
@@ -179,7 +179,7 @@ xaccSessionBegin (Session *sess, const char * sid)
    }
 
    /* add 5 to space past 'file:' */
-   retval = xaccSessionBeginFile (sess, sid+5);
+   retval = xaccSessionBeginFile (sess, sid+5, NULL);
 
    return retval;
 }
@@ -217,12 +217,79 @@ extern Backend * pgendNew (void);
 
 /* ============================================================== */
 
+static gboolean
+xaccSessionGetFileLock (Session *sess)
+{
+  struct stat statbuf;
+  char pathbuf[PATH_MAX];
+  char *path = NULL;
+  int rc;
+
+  rc = stat (sess->lockfile, &statbuf);
+  if (!rc) {
+    /* oops .. file is all locked up  .. */
+    sess->errtype = ETXTBSY;  
+    return FALSE;
+  }
+
+  sess->lockfd = open (sess->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
+  if (0 > sess->lockfd) {
+    /* oops .. file is all locked up  .. */
+    sess->errtype = ETXTBSY;
+    return FALSE;
+  }
+
+  /* OK, now work around some NFS atomic lock race condition 
+   * mumbo-jumbo.  We do this by linking a unique file, and 
+   * then examing the link count.  At least that's what the 
+   * NFS programmers guide suggests. 
+   * Note: the "unique filename" must be unique for the
+   * triplet filename-host-process, otherwise accidental 
+   * aliases can occur.
+   */
+
+  /* apparently, even this code may not work for some NFS
+   * implementations. In the long run, I am told that 
+   *  ftp.debian.org
+   * /pub/debian/dists/unstable/main/source/libs/liblockfile_0.1-6.tar.gz
+   * provides a better long-term solution.
+   */
+
+  strcpy (pathbuf, sess->lockfile);
+  path = strrchr (pathbuf, '.');
+  sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
+  link (sess->lockfile, pathbuf);
+  rc = stat (sess->lockfile, &statbuf);
+  if (rc) {
+    /* oops .. stat failed!  This can't happen! */
+    sess->errtype = ETXTBSY;
+    unlink (pathbuf);
+    close (sess->lockfd);
+    unlink (sess->lockfile);
+    return FALSE;
+  }
+
+  if (2 != statbuf.st_nlink) {
+    /* oops .. stat failed!  This can't happen! */
+    sess->errtype = ETXTBSY;
+    unlink (pathbuf);
+    close (sess->lockfd);
+    unlink (sess->lockfile);
+    return FALSE;
+  }
+
+  sess->linkfile = g_strdup (pathbuf);
+
+  return TRUE;
+}
+
+/* ============================================================== */
+
 AccountGroup *
-xaccSessionBeginFile (Session *sess, const char * filefrag)
+xaccSessionBeginFile (Session *sess, const char * filefrag,
+                      SessionLockFailHandler handler)
 {
    struct stat statbuf;
-   char pathbuf[PATH_MAX];
-   char *path = NULL;
    int rc;
 
    if (!sess) return NULL;
@@ -252,87 +319,27 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
    }
 
    /* Store the sessionid URL also ... */
-   strcpy (pathbuf, "file:");
-   strcat (pathbuf, filefrag);
-   sess->sessionid = strdup (pathbuf);
+   sess->sessionid = g_strconcat ("file:", filefrag, NULL);
 
    /* ---------------------------------------------------- */
    /* We should now have a fully resolved path name.
-    * Lets see if we can get a lock on it. 
-    */
+    * Lets see if we can get a lock on it. */
 
-   sess->lockfile = malloc (strlen (sess->fullpath) + 5);
-   strcpy (sess->lockfile, sess->fullpath);
-   strcat (sess->lockfile, ".LCK");
-  
-   rc = stat (sess->lockfile, &statbuf);
-   if (!rc) {
-      /* oops .. file is all locked up  .. */
-      sess->errtype = ETXTBSY;  
-      free (sess->sessionid); sess->sessionid = NULL;
-      free (sess->fullpath);  sess->fullpath = NULL;
-      free (sess->lockfile);  sess->lockfile = NULL;
-      return NULL;    
-   }
-   sess->lockfd = open (sess->lockfile, O_RDWR | O_CREAT | O_EXCL , 0);
-   if (0 > sess->lockfd) {
-      /* oops .. file is all locked up  .. */
-      sess->errtype = ETXTBSY;  
-      free (sess->sessionid); sess->sessionid = NULL;
-      free (sess->fullpath);  sess->fullpath = NULL;
-      free (sess->lockfile);  sess->lockfile = NULL;
-      return NULL;    
-   }
+   sess->lockfile = g_strconcat(sess->fullpath, ".LCK", NULL);
 
-   /* OK, now work around some NFS atomic lock race condition 
-    * mumbo-jumbo.  We do this by linking a unique file, and 
-    * then examing the link count.  At least that's what the 
-    * NFS programmers guide suggests. 
-    * Note: the "unique filename" must be unique for the
-    * triplet filename-host-process, otherwise accidental 
-    * aliases can occur.
-    */
-   /* appearently, even this code may not work for some NFS
-    * implementations.  In the long run, I am told that 
-    *  ftp.debian.org
-    * /pub/debian/dists/unstable/main/source/libs/liblockfile_0.1-6.tar.gz
-    * provides a better long-term solution.
-    */
-   strcpy (pathbuf, sess->lockfile);
-   path = strrchr (pathbuf, '.');
-   sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
-   link (sess->lockfile, pathbuf);
-   rc = stat (sess->lockfile, &statbuf);
-   if (rc) {
-      /* oops .. stat failed!  This can't happen! */
-      sess->errtype = ETXTBSY;  
-      unlink (pathbuf);
-      close (sess->lockfd);
-      unlink (sess->lockfile);
-      free (sess->sessionid); sess->sessionid = NULL;
-      free (sess->fullpath);  sess->fullpath = NULL;
-      free (sess->lockfile);  sess->lockfile = NULL;
-      return NULL;    
+   if (!xaccSessionGetFileLock (sess)) {
+      if (!handler || !handler (sess->fullpath)) {
+        g_free (sess->sessionid); sess->sessionid = NULL;
+        g_free (sess->fullpath);  sess->fullpath = NULL;
+        g_free (sess->lockfile);  sess->lockfile = NULL;
+        return NULL;
+      }
    }
-
-   if (2 != statbuf.st_nlink) {
-      /* oops .. stat failed!  This can't happen! */
-      sess->errtype = ETXTBSY;  
-      unlink (pathbuf);
-      close (sess->lockfd);
-      unlink (sess->lockfile);
-      free (sess->sessionid); sess->sessionid = NULL;
-      free (sess->fullpath);  sess->fullpath = NULL;
-      free (sess->lockfile);  sess->lockfile = NULL;
-      return NULL;    
-   }
-   sess->linkfile = strdup (pathbuf);
 
    /* ---------------------------------------------------- */
    /* OK, if we've gotten this far, then we've succesfully obtained 
-    * an atomic lock on the file.  Go read the file contents ... 
-    * well, read it only if it exists ... 
-    */
+    * an atomic lock on the file.  Go read the file contents if it
+    * exists. */
 
    sess->errtype = 0;
    sess->topgroup = NULL;
@@ -387,13 +394,20 @@ xaccSessionEnd (Session *sess)
    if (sess->linkfile) unlink (sess->linkfile);
    if (0 < sess->lockfd) close (sess->lockfd);
    if (sess->lockfile) unlink (sess->lockfile);
-   if (sess->sessionid) free (sess->sessionid); sess->sessionid = NULL;
-   if (sess->fullpath) free (sess->fullpath);  sess->fullpath = NULL;
-   if (sess->lockfile) free (sess->lockfile);  sess->lockfile = NULL;
-   if (sess->linkfile) free (sess->linkfile);  sess->linkfile = NULL;
-   sess->topgroup = NULL;
 
-   return;    
+   g_free (sess->sessionid);
+   sess->sessionid = NULL;
+
+   g_free (sess->fullpath);
+   sess->fullpath = NULL;
+
+   g_free (sess->lockfile);
+   sess->lockfile = NULL;
+
+   g_free (sess->linkfile);
+   sess->linkfile = NULL;
+
+   sess->topgroup = NULL;
 }
 
 void 
@@ -401,7 +415,7 @@ xaccSessionDestroy (Session *sess)
 {
    if (!sess) return;
    xaccSessionEnd (sess);
-   free (sess);
+   g_free (sess);
 }
 
 
@@ -415,29 +429,32 @@ MakeHomeDir (void)
 {
    int rc;
    struct stat statbuf;
-   char *home, *path;
+   char *home;
+   char *path;
+   char *data;
 
    /* Punt. Can't figure out where home is. */
    home = getenv ("HOME");
    if (!home) return;
 
-   path = alloca (strlen (home) +50);
-   strcpy (path, home);
-   strcat (path, "/.gnucash");
+   path = g_strconcat(home, "/.gnucash", NULL);
 
    rc = stat (path, &statbuf);
    if (rc) {
       /* assume that the stat failed only because the dir is absent,
        * and not because its read-protected or other error.
        * Go ahead and make it. Don't bother much with checking mkdir 
-       * for errors; seems pointless ...  */
+       * for errors; seems pointless. */
       mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
    }
 
-   strcat (path, "/data");
-   rc = stat (path, &statbuf);
+   data = g_strconcat (path, "/data");
+   rc = stat (data, &statbuf);
    if (rc)
-      mkdir (path, S_IRWXU);
+      mkdir (data, S_IRWXU);
+
+   g_free (path);
+   g_free (data);
 }
 
 /* ============================================================== */

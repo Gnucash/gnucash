@@ -37,78 +37,86 @@
 #include "file-history.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-// static short module = MOD_GUI;
+/* static short module = MOD_GUI; */
 
 /** GLOBALS *********************************************************/
 static Session *current_session = NULL;
 static AccountGroup *topgroup = NULL; /* the current top of the hierarchy */
 
-/********************************************************************\
- * fileMenubarCB -- handles file menubar choices                    * 
-\********************************************************************/
 
-#define SHOW_IO_ERR_MSG(io_error) {				\
-  switch (io_error) {						\
-     case ERR_FILEIO_NO_ERROR:					\
-        break;							\
-     case ERR_FILEIO_FILE_NOT_FOUND:				\
-        sprintf (buf, FILE_NOT_FOUND_MSG, newfile);		\
-        gnc_error_dialog (buf);	                		\
-        uh_oh = 1;						\
-        break;							\
-     case ERR_FILEIO_FILE_EMPTY:				\
-        sprintf (buf, FILE_EMPTY_MSG, newfile);			\
-        gnc_error_dialog (buf);         			\
-        uh_oh = 1;						\
-        break;							\
-     case ERR_FILEIO_FILE_TOO_NEW:				\
-        gnc_error_dialog ( FILE_TOO_NEW_MSG);	        	\
-        uh_oh = 1;						\
-        break;							\
-     case ERR_FILEIO_FILE_TOO_OLD:				\
-        if (!gnc_verify_dialog( FILE_TOO_OLD_MSG, TRUE )) {     \
-           xaccFreeAccountGroup (newgrp);			\
-           newgrp = NULL;					\
-           uh_oh = 1;						\
-        }							\
-        break;							\
-     case ERR_FILEIO_FILE_BAD_READ:				\
-        if (!gnc_verify_dialog( FILE_BAD_READ_MSG, TRUE )) {	\
-           xaccFreeAccountGroup (newgrp);			\
-           newgrp = NULL;					\
-           uh_oh = 1;						\
-        }							\
-        break;							\
-     default:							\
-        break;							\
-  }								\
+/* ======================================================== */
+
+static gboolean
+show_file_error (int io_error, char *newfile)
+{
+  gboolean uh_oh = FALSE;
+  char *buf = NULL;
+
+  switch (io_error)
+  {
+    case ERR_FILEIO_NO_ERROR:
+      break;
+    case ERR_FILEIO_FILE_NOT_FOUND:
+      buf = g_strdup_printf (FILE_NOT_FOUND_MSG, newfile);
+      gnc_error_dialog (buf);
+      uh_oh = TRUE;
+      break;
+    case ERR_FILEIO_FILE_EMPTY:
+      buf = g_strdup_printf (FILE_EMPTY_MSG, newfile);
+      gnc_error_dialog (buf);
+      uh_oh = TRUE;
+      break;
+    case ERR_FILEIO_FILE_TOO_NEW:
+      gnc_error_dialog (FILE_TOO_NEW_MSG);
+      uh_oh = TRUE;
+      break;
+    case ERR_FILEIO_FILE_TOO_OLD:
+      if (!gnc_verify_dialog (FILE_TOO_OLD_MSG, TRUE))
+        uh_oh = TRUE;
+      break;
+    case ERR_FILEIO_FILE_BAD_READ:
+      if (!gnc_verify_dialog (FILE_BAD_READ_MSG, TRUE))
+        uh_oh = TRUE;
+      break;
+    default:
+      break;
+  }
+
+  g_free (buf);
+
+  return uh_oh;
 }
-      
 
-#define SHOW_LOCK_ERR_MSG(session) 				\
-    {								\
-    int norr = xaccSessionGetError (session);			\
-    if (ETXTBSY == norr)					\
-      {								\
-        sprintf (buf, FMB_LOCKED_MSG, newfile);			\
-        gnc_error_dialog (buf);				        \
-        uh_oh = 1;						\
-      }								\
-    else 							\
-    if (ERANGE == norr)						\
-      {								\
-        sprintf (buf, FILE_NOT_FOUND_MSG, newfile);		\
-        gnc_error_dialog (buf);				        \
-        uh_oh = 1;						\
-      }								\
-    else 							\
-    if (norr)							\
-      {								\
-        sprintf (buf, FMB_INVALID_MSG, newfile);		\
-        gnc_error_dialog (buf);				        \
-        uh_oh = 1;						\
-      }								\
-    }								\
+/* ======================================================== */
+
+static gboolean
+show_session_error(Session *session, char *newfile)
+{
+  int norr = xaccSessionGetError (session);
+  gboolean uh_oh = FALSE;
+  char *buf = NULL;
+
+  if (ETXTBSY == norr)
+  {
+    uh_oh = TRUE;
+  }
+  else if (ERANGE == norr)
+  {
+    buf = g_strdup_printf (FILE_NOT_FOUND_MSG, newfile);
+    gnc_error_dialog (buf);
+    uh_oh = TRUE;
+  }
+  else if (norr)
+  {
+    buf = (FMB_INVALID_MSG, newfile);
+    gnc_error_dialog (buf);
+    uh_oh = TRUE;
+  }
+
+  g_free(buf);
+
+  return uh_oh;
+}
 
 /* ======================================================== */
 
@@ -192,6 +200,29 @@ gncFileQuerySave (void)
 }
 
 /* ======================================================== */
+
+static gboolean
+gncLockFailHandler (const char *file)
+{
+  const char *format = _("Gnucash could not obtain the lock for\n"
+                         "   %s.\n"
+                         "That file may be in use by another user,\n"
+                         "in which case you should not open the file.\n"
+                         "\nDo you want to proceed with opening the file?");
+  char *message;
+  gboolean result;
+
+  if (file == NULL)
+    return FALSE;
+
+  message = g_strdup_printf (format, file);
+  result = gnc_verify_dialog (message, FALSE);
+  g_free (message);
+
+  return result;
+}
+
+/* ======================================================== */
 /* private utilities for file open; done in two stages */
 
 static void
@@ -199,16 +230,17 @@ gncPostFileOpen (const char * filename)
 {
   Session *newsess;
   AccountGroup *oldgrp;
-  int io_error, uh_oh=0;
-  char buf[BUFSIZE];
+  gboolean uh_oh = FALSE;
+  int io_error;
   AccountGroup *newgrp;
   char * newfile;
 
   if (!filename) return;
   newfile = xaccResolveFilePath (filename); 
   if (!newfile) {
-     sprintf (buf, FILE_NOT_FOUND_MSG, filename);
+     char *buf = g_strdup_printf (FILE_NOT_FOUND_MSG, filename);
      gnc_error_dialog (buf);
+     g_free(buf);
      return;
   }
 
@@ -227,26 +259,32 @@ gncPostFileOpen (const char * filename)
    * switchover is not something we want to keep in a journal.  */
   gnc_set_busy_cursor(NULL);
   xaccLogDisable();
-  newgrp = xaccSessionBeginFile (newsess, newfile);
+  newgrp = xaccSessionBeginFile (newsess, newfile, gncLockFailHandler);
   xaccLogEnable();
   gnc_unset_busy_cursor(NULL);
 
   /* check for session errors, put up appropriate dialog */
-  SHOW_LOCK_ERR_MSG (newsess);
+  uh_oh = show_session_error (newsess, newfile);
 
   if (!uh_oh)
   {
     /* check for i/o error, put up appropriate error message */
     io_error = xaccGetFileIOError();
-    SHOW_IO_ERR_MSG(io_error);
+    uh_oh = show_file_error (io_error, newfile);
+    if (uh_oh)
+    {
+      xaccFreeAccountGroup (newgrp);
+      newgrp = NULL;
+    }
 
     /* Umm, came up empty-handed, i.e. the file was not found. */
     /* This is almost certainly not what the user wanted. */
     if (!uh_oh && !newgrp && !io_error) 
     {
-      sprintf (buf, FILE_NOT_FOUND_MSG, newfile);	
-      gnc_error_dialog ( buf);
-      uh_oh = 1;
+      char *buf = g_strdup_printf (FILE_NOT_FOUND_MSG, newfile);	
+      gnc_error_dialog (buf);
+      g_free (buf);
+      uh_oh = TRUE;
     }
   }
 
@@ -258,9 +296,9 @@ gncPostFileOpen (const char * filename)
 
     /* well, no matter what, I think its a good idea to have 
      * a topgroup around.  For example, early in the gnucash startup
-     * sequence, the user opens a file ... if this open fails for any 
+     * sequence, the user opens a file; if this open fails for any 
      * reason, we don't want to leave them high & dry without a topgroup,
-     * because if user continues, then bad things will happen ...
+     * because if the user continues, then bad things will happen.
      */
     if (NULL == topgroup) 
     {
@@ -343,7 +381,6 @@ gncFileSave (void)
 {
   AccountGroup *newgrp = NULL;
   char * newfile;
-  char buf[BUFSIZE];
   int io_error, norr, uh_oh = 0;
 
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
@@ -392,7 +429,13 @@ gncFileSave (void)
   io_error = xaccGetFileIOError();
   newfile = xaccSessionGetFilePath(current_session);
   gnc_history_add_file(newfile);
-  SHOW_IO_ERR_MSG(io_error);
+
+  uh_oh = show_file_error (io_error, newfile);
+  if (uh_oh)
+  {
+    xaccFreeAccountGroup (newgrp);
+    newgrp = NULL;
+  }
 
   /* going down -- abandon ship */
   if (uh_oh) return;
@@ -411,8 +454,8 @@ gncFileSaveAs (void)
   char *newfile;
   AccountGroup *newgrp;
   char * oldfile;
-  char buf[BUFSIZE];
-  int io_error, uh_oh = 0;
+  int io_error;
+  gboolean uh_oh = FALSE;
 
   filename = fileBox(SAVE_STR, "*.gnc");
   if (!filename) return;
@@ -424,8 +467,9 @@ gncFileSaveAs (void)
    */
   newfile = xaccResolveFilePath (filename);
   if (!newfile) {
-     sprintf (buf, FILE_NOT_FOUND_MSG, filename);
+     char *buf = g_strdup_printf (FILE_NOT_FOUND_MSG, filename);
      gnc_error_dialog (buf);
+     g_free (buf);
      return;
   }
   oldfile = xaccSessionGetFilePath (current_session);
@@ -449,17 +493,22 @@ gncFileSaveAs (void)
    * edit; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal.  */
   xaccLogDisable();
-  newgrp = xaccSessionBeginFile (newsess, newfile);
+  newgrp = xaccSessionBeginFile (newsess, newfile, gncLockFailHandler);
   xaccLogEnable();
 
   /* check for session errors (e.g. file locked by another user) */
-  SHOW_LOCK_ERR_MSG (newsess);
+  uh_oh = show_session_error (newsess, newfile);
 
   if (!uh_oh)
   {
     /* check for i/o error, put up appropriate error message */
     io_error = xaccGetFileIOError();
-    SHOW_IO_ERR_MSG(io_error);
+    uh_oh = show_file_error (io_error, newfile);
+    if (uh_oh)
+    {
+      xaccFreeAccountGroup (newgrp);
+      newgrp = NULL;
+    }
   }
 
   /* going down -- abandon ship */
@@ -496,10 +545,15 @@ gncFileSaveAs (void)
   if (newgrp) 
   {
     char *tmpmsg;
-    tmpmsg = alloca (strlen (FMB_EEXIST_MSG) + strlen (newfile));
-    sprintf (tmpmsg, FMB_EEXIST_MSG, newfile);
+    gboolean result;
+
+    tmpmsg = g_strdup_printf (FMB_EEXIST_MSG, newfile);
+    result = gnc_verify_dialog (tmpmsg, FALSE);
+    g_free (tmpmsg);
+
     /* if user says cancel, we should break out */
-    if (! gnc_verify_dialog (tmpmsg, FALSE)) return;
+    if (!result)
+      return;
 
     /* Whoa-ok. Blow away the previous file. 
      * Do not disable logging ... we want to capture the 
@@ -537,7 +591,6 @@ gncFileQuit (void)
   xaccSessionEnd (current_session);
   xaccSessionDestroy (current_session);
   current_session = NULL;
-  //  xaccGroupWindowDestroy (grp);
   xaccFreeAccountGroup (grp);
   topgroup = NULL;
 }
