@@ -97,8 +97,8 @@ Features include:
   - Provides a byte-stream format, which allows accounts and
     account groups to be transmitted to other processes
     via pipes or sockets.
-  - European date handling, French, German, Swedish, and Great
-    Britain translations.
+  - European date handling, French, German, Swedish,
+    and Great Britain translations.
 
 
 Home Page:
@@ -147,9 +147,16 @@ The following packages are required to be installed to run gnucash:
   gnome-libs: version 1.0.40 or higher should work. These libraries
     require numerous other supporting libraries, such as gtk and glib.
 
+  gnome-print: any recent version should work.
+
+  gtkhtml: version 0.4 and later should work. A CVS snapshot of gtkhtml
+           is available in the GnuCash CVS repository under the lib
+           directory.
+
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
 below installed (in addition to those listed above).
+
 RPM's for most of these can be found at http://rufus.w3.org/linux/
 
   perl: Almost any version of perl5 should work.  I run perl-5.004 
@@ -496,4 +503,3 @@ Submitting a Patch:
   Send gnucash.diff.gz.uue to gnucash-patches@gnucash.org
 
   Thanks in advance for your contribution!
-
