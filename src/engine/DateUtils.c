@@ -38,7 +38,7 @@ xaccDateUtilGetStamp (time_t thyme)
 
    stm = localtime (&thyme);
 
-   sprintf (buf, "%4d%2d%2d%2d%2d%2d",
+   sprintf (buf, "%04d%02d%02d%02d%02d%02d",
       (stm->tm_year + 1900),
       (stm->tm_mon +1),
       stm->tm_mday,

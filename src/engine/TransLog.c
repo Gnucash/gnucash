@@ -103,7 +103,7 @@ xaccTransWriteLog (Transaction *trans)
 
    split = trans->splits[0];
    while (split) {
-      fprintf (split_log, "%s	%s	%s	%c	%g	%g\n",
+      fprintf (split_log, "%s	%s	%s	%c	%10.6f	%10.6f\n",
                trans->num,
                split->memo,
                split->action,
@@ -114,6 +114,10 @@ xaccTransWriteLog (Transaction *trans)
       i++;
       split = trans->splits[i];
    }
+
+   /* get data out to the disk */
+   fflush (trans_log);
+   fflush (split_log);
 }
 
 /************************ END OF ************************************\
