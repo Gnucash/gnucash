@@ -536,7 +536,7 @@ xaccRecomputeBalance( Account * acc )
     if (tracc == acc) {
       /* For bank accounts, the invarient subtotal is the dollar
        * amount.  For stock accoounts, the invarient is the share amount */
-      if ( (PORTFOLIO == tracc->type) || ( MUTUAL == tracc->type) ) {
+      if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
         trans -> credit_share_balance = share_balance;
         trans -> credit_share_cleared_balance = share_cleared_balance;
         trans -> credit_balance = trans->share_price * share_balance;
@@ -550,7 +550,7 @@ xaccRecomputeBalance( Account * acc )
     }
     tracc = (Account *) trans->debit;
     if (tracc == acc) {
-      if ( (PORTFOLIO == tracc->type) || ( MUTUAL == tracc->type) ) {
+      if ( (STOCK == tracc->type) || ( MUTUAL == tracc->type) ) {
         trans -> debit_share_balance = share_balance;
         trans -> debit_share_cleared_balance = share_cleared_balance;
         trans -> debit_balance = trans->share_price * share_balance;
@@ -566,7 +566,7 @@ xaccRecomputeBalance( Account * acc )
     last_trans = trans;
   }
 
-  if ( (PORTFOLIO == acc->type) || ( MUTUAL == acc->type) ) {
+  if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
     acc -> balance = share_balance * (last_trans->share_price);
     acc -> cleared_balance = share_cleared_balance * (last_trans->share_price);
   } else {

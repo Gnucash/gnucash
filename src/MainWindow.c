@@ -715,7 +715,7 @@ xaccMainWindowRedisplayBalance (void)
          case BANK:
          case CASH:
          case ASSET:
-         case PORTFOLIO:
+         case STOCK:
          case MUTUAL:
          case CREDIT:
          case LIABILITY:

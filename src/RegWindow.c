@@ -54,8 +54,10 @@
 #define NUM_HEADER_ROWS   1
 #define NUM_ROWS_PER_TRANS 2
 
+/* enumerate different ledger types */
 enum {
-   LEDGER = NUM_ACCOUNT_TYPES
+   GEN_LEDGER = NUM_ACCOUNT_TYPES,
+   PORTFOLIO = NUM_ACCOUNT_TYPES +1,
 };
 
 
@@ -353,7 +355,7 @@ regRefresh( RegWindow *regData )
             newData[row][DEP_CELL_C] = XtNewString(buf);
             }
           break;
-        case PORTFOLIO:
+        case STOCK:
         case MUTUAL:
           themount = xaccGetShareAmount (main_acc, trans);
           if( 0.0 > themount )
@@ -392,7 +394,7 @@ regRefresh( RegWindow *regData )
         case EXPENSE:
         case EQUITY:
           break;
-        case PORTFOLIO:
+        case STOCK:
         case MUTUAL:
           sprintf( buf, "%.2f ", trans->share_price );
           newData[row][PRIC_CELL_C] = XtNewString(buf);
@@ -504,8 +506,8 @@ regRecalculateBalance( RegWindow *regData )
      * system, income will show up as a credit to a 
      * bank account, and a debit to the income account.
      * Thus, positive and negative are interchanged */
-    if( (EXPENSE   == acc->type) ||
-        (INCOME    == acc->type) ) {
+    if( (EXPENSE   == regData->type) ||
+        (INCOME    == regData->type) ) {
       dbalance = - dbalance;
     }
 
@@ -528,8 +530,8 @@ regRecalculateBalance( RegWindow *regData )
       XbaeMatrixSetCell( reg, position, BALN_CELL_C, buf );
 
       /* update share balances too ... */
-      if( (MUTUAL   == acc->type) ||
-          (PORTFOLIO == acc->type) ) 
+      if( (MUTUAL == regData->type) ||
+          (STOCK  == regData->type) ) 
         {
 #ifdef USE_NO_COLOR
         sprintf( buf, "%.3f ", share_balance );
@@ -759,7 +761,7 @@ regSaveTransaction( RegWindow *regData, int position )
   
   /* ignore MOD_ACTN for non-stock accounts */
   if( (regData->changed & MOD_ACTN) &&
-      ((MUTUAL == regData->type) || (PORTFOLIO==regData->type)) )
+      ((MUTUAL == regData->type) || (STOCK==regData->type)) )
     {
     String  actn = NULL;
     DEBUG("MOD_ACTN\n");
@@ -815,7 +817,7 @@ regSaveTransaction( RegWindow *regData, int position )
 
   /* ignore MOD_PRIC for non-stock accounts */
   if( (regData->changed & MOD_PRIC) &&
-      ((MUTUAL == regData->type) || (PORTFOLIO==regData->type)) )
+      ((MUTUAL == regData->type) || (STOCK==regData->type)) )
     {
     String price;
     float val=0.0;  /* must be float for sscanf to work */
@@ -997,7 +999,7 @@ regWindowLedger( Widget parent, Account **acclist )
     regData->blackacc[0]->regData = regData;    
     windowname = regData->blackacc[0]->accountName;
   } else {
-    regData->type = LEDGER;
+    regData->type = GEN_LEDGER;
     regData->qf   = regData->blackacc[0]->qfRoot;  /* hack alert -- this probably broken */
     /* hack alert -- xxxx -- do the ledgerlist thing */
   }
@@ -1143,7 +1145,7 @@ regWindowLedger( Widget parent, Account **acclist )
         regData -> numCols = 7;
 
         break;
-      case PORTFOLIO:
+      case STOCK:
       case MUTUAL:
         regData->columnLocation [DATE_COL_ID] = 0;
         regData->columnLocation [NUM_COL_ID]  = 1;
@@ -1183,7 +1185,7 @@ regWindowLedger( Widget parent, Account **acclist )
       case EXPENSE:
       case EQUITY:
         break;
-      case PORTFOLIO:
+      case STOCK:
       case MUTUAL:
         regData -> columnWidths[PRIC_CELL_C] = 8;   /* price */
         regData -> columnWidths[SHRS_CELL_C] = 8;   /* share balance */
@@ -1214,7 +1216,7 @@ regWindowLedger( Widget parent, Account **acclist )
       case EQUITY:
         break;
 
-      case PORTFOLIO:
+      case STOCK:
       case MUTUAL:
         regData -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
         regData -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
@@ -1245,7 +1247,7 @@ regWindowLedger( Widget parent, Account **acclist )
       case EXPENSE:
       case EQUITY:
         break;
-      case PORTFOLIO:
+      case STOCK:
       case MUTUAL:
         regData -> columnLabels[0][PRIC_CELL_C] = "Price";
         regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
@@ -1287,7 +1289,7 @@ regWindowLedger( Widget parent, Account **acclist )
         regData -> columnLabels[0][PAY_CELL_C] = "Surplus";
         regData -> columnLabels[0][DEP_CELL_C] = "Deficit";
         break;
-      case PORTFOLIO:
+      case STOCK:
       case MUTUAL:
         regData -> columnLabels[0][PAY_CELL_C] = "Sold";
         regData -> columnLabels[0][DEP_CELL_C] = "Bought";
@@ -1682,10 +1684,10 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           !IN_DESC_CELL(row,col) && !IN_PAY_CELL(row,col) &&
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
           !IN_XFER_CELL(row,col) && 
-          !((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) &&
-          !((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) &&
-          !((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) &&
-          !((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) &&
+          !((STOCK  == regData->type) && IN_PRIC_CELL(row,col)) &&
+          !((MUTUAL == regData->type) && IN_PRIC_CELL(row,col)) &&
+          !((STOCK  == regData->type) && IN_ACTN_CELL(row,col)) &&
+          !((MUTUAL == regData->type) && IN_ACTN_CELL(row,col)) &&
           !IN_MEMO_CELL(row,col) && !IN_YEAR_CELL(row,col))
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;
@@ -1700,10 +1702,11 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         XtVaGetValues( mw, XmNcells, &data, NULL );
         DEBUGCMD(printf("data[%d][RECN_CELL_C] = %s\n", row, data[row][RECN_CELL_C]));
         
-        if( data[row][RECN_CELL_C][0] == NREC )
+        if( data[row][RECN_CELL_C][0] == NREC ) {
           data[row][RECN_CELL_C][0] = CREC;
-        else
+        } else {
           data[row][RECN_CELL_C][0] = NREC;
+        }
         
         /* this cell has been modified, so we need to save when we
          * leave!!! */
@@ -1714,8 +1717,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         }
 
       /* otherwise, move the ACTN widget */
-      else if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
-               ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) 
+      else if( ((STOCK  == regData->type) && IN_ACTN_CELL(row,col)) ||
+               ((MUTUAL == regData->type) && IN_ACTN_CELL(row,col)) ) 
         {
            SetPopBox (regData->actbox, row, col);
            regData->changed |= MOD_ACTN;
@@ -1841,8 +1844,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       /* look to see if numeric format is OK.  Note that
        * the share price cell exists only for certain account types */
       if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) ||
-          ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
-          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
+          ((STOCK  == regData->type) && IN_PRIC_CELL(row,col)) ||
+          ((MUTUAL == regData->type) && IN_PRIC_CELL(row,col)) )
         {
         /* text pointer is NULL if non-alpha key hit */
         /* for example, the delete key */
@@ -1891,16 +1894,16 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( IN_MEMO_CELL(row,col) )
         regData->changed |= MOD_MEMO;
       
-      if( ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
-          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
+      if( ((STOCK  == regData->type) && IN_PRIC_CELL(row,col)) ||
+          ((MUTUAL == regData->type) && IN_PRIC_CELL(row,col)) )
         regData->changed |= MOD_PRIC;
 
       /* Note: for cell widgets, this callback will never
        * indicate a row,col with a cell widget in it.  
        * Thus, the following if statment will never be true
        */
-      if( ((PORTFOLIO == acc->type) && IN_ACTN_CELL(row,col)) ||
-          ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) {
+      if( ((STOCK  == regData->type) && IN_ACTN_CELL(row,col)) ||
+          ((MUTUAL == regData->type) && IN_ACTN_CELL(row,col)) ) {
         regData->changed |= MOD_ACTN;
       }
       /* Note: for cell widgets, this callback will never
