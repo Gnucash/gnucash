@@ -34,15 +34,15 @@
 
 #include <gnome.h>
 
-#include "splitreg.h"
-#include "table-allgui.h"
 #include "combocell.h"
-#include "gnucash-sheet.h"
-#include "gnucash-item-edit.h"
-#include "gnucash-item-list.h"
-#include "messages.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui-util.h"
+#include "gnucash-item-edit.h"
+#include "gnucash-item-list.h"
+#include "gnucash-sheet.h"
+#include "messages.h"
+#include "splitreg.h"
+#include "table-allgui.h"
 
 
 typedef struct _PopBox
@@ -93,9 +93,9 @@ ComboCell *xaccMallocComboCell (void)
 {
 	ComboCell * cell;
 
-        cell = g_new(ComboCell, 1);
+        cell = g_new0 (ComboCell, 1);
 
-	xaccInitComboCell(cell);
+	xaccInitComboCell (cell);
 
 	return cell;
 }
@@ -104,12 +104,14 @@ void xaccInitComboCell (ComboCell *cell)
 {
 	PopBox *box;
 
-	xaccInitBasicCell(&(cell->cell));
+	xaccInitBasicCell (&(cell->cell));
+
+        cell->cell.is_popup = TRUE;
 
 	cell->cell.realize = realizeCombo;
 	cell->cell.destroy = destroyCombo;
 
-	box = g_new0(PopBox, 1);
+	box = g_new0 (PopBox, 1);
 
 	box->sheet = NULL;
 	box->item_edit = NULL;
@@ -142,10 +144,10 @@ select_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
 	PopBox *box = cell->cell.gui_private;
 
         box->in_list_select = TRUE;
-	gnucash_sheet_modify_current_cell(box->sheet, item_string);
+	gnucash_sheet_modify_current_cell (box->sheet, item_string);
         box->in_list_select = FALSE;
 
-        item_edit_hide_list(box->item_edit);
+        item_edit_hide_popup (box->item_edit);
         box->list_popped = FALSE;
 }
 
@@ -166,7 +168,7 @@ activate_item_cb (GNCItemList *item_list, char *item_string, gpointer data)
 	ComboCell *cell = data;
 	PopBox *box = cell->cell.gui_private;
 
-        item_edit_hide_list(box->item_edit);
+        item_edit_hide_popup (box->item_edit);
         box->list_popped = FALSE;
 }
 
@@ -178,7 +180,7 @@ key_press_item_cb (GNCItemList *item_list, GdkEventKey *event, gpointer data)
 
         switch(event->keyval) {
                 case GDK_Escape:
-                        item_edit_hide_list (box->item_edit);
+                        item_edit_hide_popup (box->item_edit);
                         box->list_popped = FALSE;
                         break;
                 default:
@@ -284,18 +286,20 @@ destroyCombo (BasicCell *bcell)
 static void
 menustring_free(gpointer string, gpointer user_data)
 {
-        g_free(string);
+        g_free (string);
 }
 
 /* =============================================== */
 
-void xaccDestroyComboCell (ComboCell *cell)
+void
+xaccDestroyComboCell (ComboCell *cell)
 {
 	PopBox *box = cell->cell.gui_private;
 
 	destroyCombo(&(cell->cell));
 
-	if (box != NULL) {
+	if (box != NULL)
+        {
 		g_list_foreach(box->menustrings, menustring_free, NULL);
 		g_list_free(box->menustrings);
                 box->menustrings = NULL;
@@ -491,7 +495,7 @@ ComboMV (BasicCell *_cell,
 
         if (pop_list)
         {
-                item_edit_show_list(box->item_edit);
+                item_edit_show_popup (box->item_edit);
                 box->list_popped = TRUE;
         }
 
@@ -757,8 +761,6 @@ enterCombo (BasicCell *bcell,
 static void
 leaveCombo (BasicCell *bcell)
 {
-        GList *find;
-
 	PopBox *box = bcell->gui_private;
 
 	combo_disconnect_signals((ComboCell *) bcell);
@@ -772,6 +774,8 @@ leaveCombo (BasicCell *bcell)
 
         if (box->strict)
         {
+                GList *find;
+
                 find = g_list_find_custom(box->menustrings,
                                           bcell->value,
                                           (GCompareFunc) safe_strcmp);

@@ -160,7 +160,7 @@ gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
                 return;
 
         gnome_canvas_item_hide(GNOME_CANVAS_ITEM (sheet->item_editor));
-        item_edit_hide_list(ITEM_EDIT(sheet->item_editor));
+        item_edit_hide_popup (ITEM_EDIT(sheet->item_editor));
 }
 
 static void
@@ -1476,9 +1476,9 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
                         {
                                 ItemEdit *item_edit;
 
-                                item_edit = ITEM_EDIT(sheet->item_editor);
+                                item_edit = ITEM_EDIT (sheet->item_editor);
 
-                                item_edit_show_list(item_edit);
+                                item_edit_show_popup (item_edit);
 
                                 return TRUE;
                         }

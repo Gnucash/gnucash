@@ -22,12 +22,6 @@
 #define GNUCASH_ITEM_LIST_H
 
 
-#include "gnucash-sheet.h"
-#include "gnucash-color.h"
-#include "gnucash-grid.h"
-#include "gnucash-cursor.h"
-
-
 #define GNC_ITEM_LIST(obj) (GTK_CHECK_CAST((obj), gnc_item_list_get_type (), GNCItemList))
 #define GNC_ITEM_LIST_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), gnc_item_list_get_type (), GNCItemListClass))
 #define IS_GNC_ITEM_LIST(o) (GTK_CHECK_TYPE((o), gnc_item_list_get_type ()))

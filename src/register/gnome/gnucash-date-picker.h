@@ -18,19 +18,47 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef GNUCASH_COLOR_H
-#define GNUCASH_COLOR_H
+#ifndef GNUCASH_DATE_PICKER_H
+#define GNUCASH_DATE_PICKER_H
 
 #include <gnome.h>
 
-void     gnucash_color_init      (void);
+#define GNC_DATE_PICKER(obj) (GTK_CHECK_CAST((obj), gnc_date_picker_get_type (), GNCDatePicker))
+#define GNC_DATE_PICKER_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), gnc_date_picker_get_type (), GNCDatePickerClass))
+#define IS_GNC_DATE_PICKER(o) (GTK_CHECK_TYPE((o), gnc_date_picker_get_type ()))
 
-/* Return the pixel value for the given red, green and blue */
-gulong   gnucash_color_alloc      (gushort red, gushort green, gushort blue);
-void     gnucash_color_alloc_name (const char *name, GdkColor *color);
-void     gnucash_color_alloc_gdk  (GdkColor *color);
-GdkColor *gnucash_color_argb_to_gdk (guint32 argb);
 
-extern GdkColor gn_white, gn_light_gray, gn_dark_gray, gn_black, gn_blue;
+typedef struct 
+{
+  GnomeCanvasWidget canvas_widget;
 
-#endif /* GNUCASH_COLOR_H */
+  GtkCalendar *calendar;
+} GNCDatePicker;
+
+
+GtkType gnc_date_picker_get_type (void);
+
+GnomeCanvasItem *gnc_date_picker_new (GnomeCanvasGroup *parent);
+
+/* days are 1-31, mon is 0-11, year 1900 == 1900 */
+void gnc_date_picker_set_date (GNCDatePicker *date_picker,
+                               guint day, guint mon, guint year);
+
+void gnc_date_picker_get_date (GNCDatePicker *date_picker,
+                               guint *day, guint *mon, guint *year);
+
+typedef struct
+{
+  GnomeCanvasWidgetClass parent_class;
+
+  void (*date_selected) (GNCDatePicker *date_picker);
+
+  void (*date_picked) (GNCDatePicker *date_picker);
+
+  void (*key_press_event) (GNCDatePicker *date_picker,
+                           GdkEventKey *event);
+
+} GNCDatePickerClass;
+
+
+#endif /* GNUCASH_DATE_PICKER_H */

@@ -3,8 +3,10 @@ noinst_LIBRARIES = libgncregistergnome.a
 
 libgncregistergnome_a_SOURCES = \
   combocell-gnome.c \
+  datecell-gnome.c \
   gnucash-color.c \
   gnucash-cursor.c \
+  gnucash-date-picker.c \
   gnucash-grid.c \
   gnucash-header.c \
   gnucash-item-edit.c \
@@ -17,6 +19,7 @@ libgncregistergnome_a_SOURCES = \
 noinst_HEADERS = \
   gnucash-color.h \
   gnucash-cursor.h \
+  gnucash-date-picker.h \
   gnucash-grid.h \
   gnucash-header.h \
   gnucash-item-edit.h \

@@ -2714,17 +2714,16 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   /* copy the contents from the cursor to the split */
   if (MOD_DATE & changed) {
+    Timespec ts;
+
     /* commit any pending changes */
     xaccCommitDateCell (reg->dateCell);
-    DEBUG ("MOD_DATE DMY= %2d/%2d/%4d \n",
-                      reg->dateCell->date.tm_mday,
-                      reg->dateCell->date.tm_mon+1,
-                      reg->dateCell->date.tm_year+1900);
 
-    xaccTransSetDate (trans,
-                      reg->dateCell->date.tm_mday,
-                      reg->dateCell->date.tm_mon+1,
-                      reg->dateCell->date.tm_year+1900);
+    DEBUG ("MOD_DATE: %s", reg->dateCell->cell.value);
+
+    xaccDateCellGetDate (reg->dateCell, &ts);
+
+    xaccTransSetDateTS (trans, &ts);
   }
 
   if (MOD_NUM & changed) {
@@ -3847,6 +3846,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   info->default_source_account = default_source_acc;
 
   table = reg->table;
+
+  gnc_table_leave_update (table, table->current_cursor_loc);
 
   multi_line = (reg->style == REG_STYLE_JOURNAL);
   dynamic    = (reg->style == REG_STYLE_AUTO_LEDGER);

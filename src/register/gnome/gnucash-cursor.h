@@ -23,6 +23,9 @@
 
 #include <gnome.h>
 
+#include "gnucash-grid.h"
+#include "gnucash-sheet.h"
+
 
 #define GNUCASH_TYPE_CURSOR     (gnucash_cursor_get_type ())
 #define GNUCASH_CURSOR(obj)     (GTK_CHECK_CAST((obj), GNUCASH_TYPE_CURSOR, GnucashCursor))

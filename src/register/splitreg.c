@@ -85,7 +85,7 @@ struct _SplitRegisterBuffer
 
 static char *cell_sample_strings[] =
 {
-  N_("sample:12/12/2000"+7),                     /* date cell */
+  N_("sample: 12/12/2000"+7),                    /* date cell */
   N_("sample:99999"+7),                          /* num cell */
   N_("sample:Description of a transaction"+7),   /* desc cell */
   N_("Reconciled:R"+11),                         /* recn cell */

@@ -24,6 +24,7 @@
 #include <gnome.h>
 
 #include "table-allgui.h"
+#include "gnucash-sheet.h"
 
 
 #define GNUCASH_TYPE_GRID     (gnucash_grid_get_type ())

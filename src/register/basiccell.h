@@ -202,12 +202,12 @@ typedef gboolean (*CellDirectUpdateFunc) (BasicCell *cell,
                                           int *cursor_position,
                                           int *start_selection,
                                           int *end_selection,
-                                          void *gui_data);
+                                          gpointer gui_data);
 
 typedef void (*CellLeaveFunc) (BasicCell *cell);
 
 typedef void (*CellRealizeFunc) (BasicCell *cell,
-                                 void *gui_handle);
+                                 gpointer gui_handle);
 
 typedef void (*CellMoveFunc) (BasicCell *cell, VirtualLocation virt_loc);
 
@@ -240,8 +240,11 @@ struct _BasicCell
 
   CellGetHelpFunc get_help_value;
 
+  /* GUI flag indicated is a popup-widget */
+  gboolean is_popup;
+
   /* general hook for gui-private data */
-  void * gui_private;
+  gpointer gui_private;
 };
 
 

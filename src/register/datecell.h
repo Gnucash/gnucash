@@ -98,21 +98,21 @@
 #include "date.h"
 
 
-typedef struct _DateCell {
-   BasicCell cell;
-   struct tm date;
+typedef struct _DateCell
+{
+  BasicCell cell;
 } DateCell;
 
 /* installs a callback to handle date recording */
 DateCell * xaccMallocDateCell (void);
-void       xaccInitDateCell (DateCell *);
-void       xaccDestroyDateCell (DateCell *);
+void       xaccDestroyDateCell (DateCell *cell);
 
-void       xaccSetDateCellValue (DateCell *, int day, int mon, int year);  
-void       xaccSetDateCellValueSecs (DateCell *, time_t secs);
-void       xaccSetDateCellValueSecsL (DateCell *, long long secs);
+/* days are 1-31, mon is 1-12, year 1900 == 1900 */
+void       xaccSetDateCellValue (DateCell *cell, int day, int mon, int year);  
+void       xaccSetDateCellValueSecs (DateCell *cell, time_t secs);
+void       xaccSetDateCellValueSecsL (DateCell *cell, long long secs);
 
-void       xaccCommitDateCell (DateCell *);
+void       xaccCommitDateCell (DateCell *cell);
 
 void       xaccDateCellGetDate (DateCell *cell, Timespec *ts);
 

@@ -24,9 +24,10 @@
 
 #include "config.h"
 
-#include "gnucash-style.h"
-#include "gnucash-grid.h"
 #include "gnucash-color.h"
+#include "gnucash-grid.h"
+#include "gnucash-item-edit.h"
+#include "gnucash-style.h"
 #include "messages.h"
 
 #include "date.h"
@@ -215,6 +216,10 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
 
                                 width = MAX (width, label_width);
                         }
+
+                        if (cb_cell->cell && cb_cell->cell->is_popup)
+                                width += item_edit_get_toggle_offset
+                                        (cd->pixel_height);
 
                         cd->pixel_width = MAX (cd->pixel_width, width);
                 }

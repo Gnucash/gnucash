@@ -5,7 +5,6 @@ libgncregister_a_SOURCES = \
   QuickFill.c \
   basiccell.c \
   cellblock.c \
-  datecell.c \
   gtable.c \
   numcell.c \
   pricecell.c \

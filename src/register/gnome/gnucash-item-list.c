@@ -391,9 +391,9 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
                                      "y", -10000.0,
 				     NULL);
 
-        item_list = GNC_ITEM_LIST(item);
+        item_list = GNC_ITEM_LIST (item);
 
-	item_list->clist = GTK_CLIST(clist);
+	item_list->clist = GTK_CLIST (clist);
 
 	gtk_signal_connect_after(GTK_OBJECT(hbox), "button_press_event",
 				 GTK_SIGNAL_FUNC(gnc_item_list_button_event),

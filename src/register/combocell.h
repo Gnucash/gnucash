@@ -51,7 +51,7 @@
 
 typedef struct _ComboCell
 {
-  BasicCell  cell;
+  BasicCell cell;
 } ComboCell;
 
 

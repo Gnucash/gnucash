@@ -22,11 +22,9 @@
 #define GNUCASH_ITEM_EDIT_H
 
 
-#include "gnucash-sheet.h"
-#include "gnucash-color.h"
-#include "gnucash-grid.h"
-#include "gnucash-cursor.h"
+#include "gnucash-date-picker.h"
 #include "gnucash-item-list.h"
+#include "gnucash-sheet.h"
 
 
 #define ITEM_EDIT(obj)          (GTK_CHECK_CAST((obj), item_edit_get_type (), ItemEdit))
@@ -34,20 +32,17 @@
 #define IS_ITEM_EDIT(o)         (GTK_CHECK_TYPE((o), item_edit_get_type ()))
 
 
-typedef struct _ComboToggle ComboToggle;
-struct _ComboToggle
+typedef struct _PopupToggle PopupToggle;
+struct _PopupToggle
 {
-	GtkToggleButton *combo_button;
-	GnomeCanvasItem *combo_button_item;
+	GtkToggleButton *toggle_button;
+	GnomeCanvasItem *toggle_button_item;
 
         gint toggle_offset;
 
 	GtkArrow *arrow;
 
 	gboolean signals_connected;
-
-	gint toggle_signal;
-	gint key_press_signal;
 };
 
 
@@ -60,26 +55,27 @@ typedef struct
         GnucashSheet *sheet;
 
         /* The editor whose status we reflect on the sheet */
-        GtkWidget  *editor;
+        GtkWidget *editor;
 
         gchar *clipboard;
 
-        guint signal;  /* the signal we connect */
-        guint signal2; /* the other signal we connect */
-
         gboolean has_selection;
-	gboolean is_combo;
-	gboolean show_list;
 
-	ComboToggle combo_toggle;
-        GNCItemList *item_list;
+	gboolean is_combo;
+        gboolean is_date;
+	gboolean show_popup;
+
+	PopupToggle popup_toggle;
+
+        GNCItemList   *item_list;
+        GNCDatePicker *date_picker;
 
         GdkGC *gc;
 
         /* Where are we */
         VirtualLocation virt_loc;
 
-        SheetBlockStyle  *style;
+        SheetBlockStyle *style;
 } ItemEdit;
 
 
@@ -87,19 +83,23 @@ GtkType item_edit_get_type (void);
 
 void item_edit_configure (ItemEdit *item_edit);
 
-void item_edit_get_pixel_coords (ItemEdit *item_edit, int *x, int *y,
+void item_edit_get_pixel_coords (ItemEdit *item_edit,
+                                 int *x, int *y,
 				 int *w, int *h);
 
 GnomeCanvasItem *item_edit_new (GnomeCanvasGroup *parent,
 				GnucashSheet *sheet, GtkWidget *entry);
 
 GNCItemList * item_edit_new_list (ItemEdit *item_edit);
+GNCDatePicker * item_edit_new_date_picker (ItemEdit *item_edit);
 
 void item_edit_set_list (ItemEdit *item_edit, GNCItemList *item_list);
+void item_edit_set_date_picker (ItemEdit *item_edit, GNCDatePicker *gdp);
 
-void item_edit_show_list (ItemEdit *item_edit);
+void item_edit_show_popup (ItemEdit *item_edit);
+void item_edit_hide_popup (ItemEdit *item_edit);
 
-void item_edit_hide_list (ItemEdit *item_edit);
+int item_edit_get_toggle_offset (int row_height);
 
 gboolean item_edit_set_cursor_pos (ItemEdit *item_edit,
                                    VirtualLocation virt_loc, int x,
