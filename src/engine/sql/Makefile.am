@@ -16,6 +16,7 @@ libgnc_postgres_la_SOURCES = \
 noinst_HEADERS = \
   PostgresBackend.h \
   builder.h \
+  checkpoint.h \
   escape.h \
   gncquery.h \
   kvp-sql.h \

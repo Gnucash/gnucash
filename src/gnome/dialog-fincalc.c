@@ -283,6 +283,22 @@ fincalc_radio_toggled(GtkToggleButton *togglebutton, gpointer data)
 }
 
 static void
+fincalc_compounding_radio_toggled(GtkToggleButton *togglebutton, gpointer data)
+{
+  FinCalcDialog *fcd = data;
+  gboolean sensitive;
+
+  if (fcd == NULL)
+    return;
+
+  fincalc_allow_calc(fcd, TRUE);
+
+  sensitive = gtk_toggle_button_get_active (togglebutton);
+
+  gtk_widget_set_sensitive (fcd->compounding_menu, sensitive);
+}
+
+static void
 close_button_clicked(GtkButton *button, FinCalcDialog *fcd)
 {
   gnc_close_gui_component_by_data (DIALOG_FINCALC_CM_CLASS, fcd);
@@ -668,7 +684,7 @@ gnc_ui_fincalc_dialog_create(void)
   button = lookup_widget (fcd->dialog, "discrete_compounding_radio");
   fcd->discrete_compounding_radio = button;
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
-                     GTK_SIGNAL_FUNC(fincalc_radio_toggled), fcd);
+                     GTK_SIGNAL_FUNC(fincalc_compounding_radio_toggled), fcd);
 
   button = lookup_widget (fcd->dialog, "close_button");
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
