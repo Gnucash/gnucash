@@ -34,7 +34,7 @@
 
 #include "hbci-interaction.h"
 
-static short module = MOD_IMPORT;
+/* static short module = MOD_IMPORT; */
 
 HBCI_API *
 gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
@@ -279,10 +279,9 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
     return FALSE;
       
   default:
-    ;
+    return FALSE;
   }
   
-  return FALSE;
 }
 
 gboolean

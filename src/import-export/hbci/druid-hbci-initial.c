@@ -729,9 +729,8 @@ on_bankpage_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->accountpage));
     return TRUE;
   default:
-    ;
+    return FALSE;
   }
-  return FALSE;
 }
 static gboolean 
 on_bankpage_next (GnomeDruidPage  *gnomedruidpage,
@@ -833,9 +832,8 @@ on_userid_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->accountpage));
     return TRUE;
   default:
-    ;
+    return FALSE;
   }
-  return FALSE;
 }
 static gboolean
 on_userid_focus_out (GtkWidget *widget,
@@ -1006,9 +1004,8 @@ on_accountinfo_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->filepage));
     return TRUE;
   default:
-    ;
+    return FALSE;
   }
-  return FALSE;
 }
 static gboolean 
 on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
@@ -1078,9 +1075,8 @@ on_accountlist_back (GnomeDruidPage  *gnomedruidpage,
 			  GNOME_DRUID_PAGE (info->filepage));
     return TRUE;
   default:
-    ;
+    return FALSE;
   }
-  return FALSE;
 }
 
 static void
