@@ -20,21 +20,7 @@ XbaeMatrix:
      row/column/cell user data.
   -- modified by deleting examples, other non-essential stuff.
 
-libhtmlw:
-  -- eliminated due to license restrictions and overall brokeness.
-     Use XmHTML instead.
-
 ComboBox:
   -- variety of assorted bug fixes & enhancements.
   -- modified by deleting examples, other non-essential stuff.
 
-XmHTML:
-  -- modified by deleting examples, other non-essential stuff.
-
-urlget:
-  -- you'll do a let better by gettig the latest from
-     http://www.fts.frontec.se/~dast/curl/
-     Its now called "curl", not "urlget".
-
-gtksheet:
-  -- This is the basis for the GNOME version's register.
