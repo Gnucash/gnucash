@@ -1,5 +1,10 @@
 2002-12-07  Christian Stimming  <stimming@tuhh.de>
 
+	* src/engine/Transaction.h: Extensively added function
+	documentation (in order to avoid further amount/value confusion
+	down the road), watch doxygen output. Added a lot of 'const' all
+	over the place.
+
 	* po/nl.po: Fix use of msgid_plural by adding the appropriate
 	header entry.
 

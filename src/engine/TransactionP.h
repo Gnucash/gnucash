@@ -241,7 +241,7 @@ gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
  *    want anyone except the backend to mess with them.
  */
 void xaccTransSetVersion (Transaction*, gint32);
-gint32 xaccTransGetVersion (Transaction*);
+gint32 xaccTransGetVersion (const Transaction*);
 
 /* The xaccTransFindCommonCurrency () method returns a gnc_commodity
  *    indicating a currency denomination that all of the splits in this

@@ -22,6 +22,10 @@
  *                                                                  *
 \********************************************************************/
 
+/** @file Transaction.h 
+ * @brief API for Transaction and Split
+ */
+
 #ifndef XACC_TRANSACTION_H
 #define XACC_TRANSACTION_H
 
@@ -118,7 +122,7 @@ void          xaccTransBeginEdit (Transaction *trans);
 void          xaccTransCommitEdit (Transaction *trans);
 void          xaccTransRollbackEdit (Transaction *trans);
 
-gboolean      xaccTransIsOpen (Transaction *trans);
+gboolean      xaccTransIsOpen (const Transaction *trans);
 
 /*
  * The xaccTransGetGUID() subroutine will return the
@@ -130,16 +134,16 @@ gboolean      xaccTransIsOpen (Transaction *trans);
  *    transaction associated with the given id, or NULL
  *    if there is no such transaction.
  */
-const GUID  * xaccTransGetGUID (Transaction *trans);
-GUID          xaccTransReturnGUID (Transaction *trans);
+const GUID  * xaccTransGetGUID (const Transaction *trans);
+GUID          xaccTransReturnGUID (const Transaction *trans);
 Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
 Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
-GNCBook *     xaccTransGetBook (Transaction *trans);
+GNCBook *     xaccTransGetBook (const Transaction *trans);
 
 /* Transaction slots are used to store arbitrary strings, numbers, and
  * structures which aren't members of the transaction struct.  */
 
-kvp_frame *xaccTransGetSlots(Transaction *trans);
+kvp_frame *xaccTransGetSlots(const Transaction *trans);
 void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
 
 /* The xaccTransSetDateSecs() method will modify the posted date of
@@ -188,21 +192,6 @@ void          xaccTransSetNotes (Transaction *trans, const char *notes);
  */
 void          xaccTransAppendSplit (Transaction *trans, Split *split);
 
-/* The xaccSplitDestroy() method will update its parent account and 
- *    transaction in a consistent manner, resulting in the complete 
- *    unlinking of the split, and the freeing of its associated memory.
- *    The goal of this routine is to perform the removal and destruction
- *    of the split in an atomic fashion, with no chance of accidentally
- *    leaving the accounting structure out-of-balance or otherwise
- *    inconsistent.
- *
- *    If the deletion of the split leaves the transaction with no
- *    splits, then the transaction will be marked for deletion. (It
- *    will not be deleted until the xaccTransCommitEdit() routine is
- *    called.)
- */
-gboolean      xaccSplitDestroy (Split *split);
-
 /* ------------- gets --------------- */
 /* The xaccTransGetSplit() method returns a pointer to each of the 
  *    splits in this transaction.  Valid values for i are zero to 
@@ -210,54 +199,54 @@ gboolean      xaccSplitDestroy (Split *split);
  *    be returned.  A convenient way of cycling through all splits is
  *    to start at zero, and keep incrementing until a null value is returned.
  */
-Split *       xaccTransGetSplit (Transaction *trans, int i);
+Split *       xaccTransGetSplit (const Transaction *trans, int i);
 
 /* The xaccTransGetSplitList() method returns a GList of the splits
  * in a transaction.  This list must not be modified.  Do *NOT* free
  * this list when you are done with it. */
-SplitList *   xaccTransGetSplitList (Transaction *trans);
+SplitList *   xaccTransGetSplitList (const Transaction *trans);
 
 /* These routines return the Num (or ID field), the description, 
  * the notes, and the date field.
  */
-const char *  xaccTransGetNum (Transaction *trans);
-const char *  xaccTransGetDescription (Transaction *trans);
-const char *  xaccTransGetNotes (Transaction *trans);
+const char *  xaccTransGetNum (const Transaction *trans);
+const char *  xaccTransGetDescription (const Transaction *trans);
+const char *  xaccTransGetNotes (const Transaction *trans);
 
 /* Retrieve the posted date of the transaction. (Although having
    different function names, GetDate and GetDatePosted refer to the
    same single date.)*/
-time_t        xaccTransGetDate (Transaction *trans);
-void          xaccTransGetDatePostedTS (Transaction *trans, Timespec *ts);
-Timespec      xaccTransRetDatePostedTS (Transaction *trans);
+time_t        xaccTransGetDate (const Transaction *trans);
+void          xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts);
+Timespec      xaccTransRetDatePostedTS (const Transaction *trans);
 
 /* Retrieve the date of when the transaction was entered. */
-void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
-Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
+void          xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts);
+Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
 
 /* Dates and txn-type for A/R and A/P "invoice" postings */
-Timespec      xaccTransRetDateDueTS (Transaction *trans);
-void	      xaccTransGetDateDueTS (Transaction *trans, Timespec *ts);
-char	      xaccTransGetTxnType (Transaction *trans);
+Timespec      xaccTransRetDateDueTS (const Transaction *trans);
+void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
+char	      xaccTransGetTxnType (const Transaction *trans);
 
 void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
-const char *  xaccTransGetReadOnly (Transaction *trans);
-gboolean      xaccTransWarnReadOnly (Transaction *trans);
+const char *  xaccTransGetReadOnly (const Transaction *trans);
+gboolean      xaccTransWarnReadOnly (const Transaction *trans);
 
 /* The xaccTransCountSplits() method returns the number of splits
  * in a transaction.
  */
-int           xaccTransCountSplits (Transaction *trans);
+int           xaccTransCountSplits (const Transaction *trans);
 
-gboolean      xaccTransHasReconciledSplits (Transaction *trans);
-gboolean      xaccTransHasReconciledSplitsByAccount (Transaction *trans,
-						     Account *account);
+gboolean      xaccTransHasReconciledSplits (const Transaction *trans);
+gboolean      xaccTransHasReconciledSplitsByAccount (const Transaction *trans,
+						     const Account *account);
 
 /* --------------------------------------------------------------- */
 /* Commmodity routines. Each transaction's 'currency' is by definition
  * the balancing common currency for the splits in that transaction.
  * */
-gnc_commodity * xaccTransGetCurrency (Transaction *trans);
+gnc_commodity * xaccTransGetCurrency (const Transaction *trans);
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 
 /* The xaccTransGetImbalance() method returns the total value of the
@@ -269,7 +258,7 @@ void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
  *    in the currency that is returned by the xaccTransFindCommonCurrency()
  *    method.
  */
-gnc_numeric xaccTransGetImbalance (Transaction * trans);
+gnc_numeric xaccTransGetImbalance (const Transaction * trans);
 
 /* The xaccTransGetAccountValue() method returns the total value applied
  *    to a paricular account.  In some cases there may be multiple Splits
@@ -277,63 +266,138 @@ gnc_numeric xaccTransGetImbalance (Transaction * trans);
  *    trying to balance Lots) -- this function is just a convienience to
  *    view everything at once.
  */
-gnc_numeric xaccTransGetAccountValue (Transaction *trans, Account *account);
+gnc_numeric xaccTransGetAccountValue (const Transaction *trans, 
+				      const Account *account);
 
-/* ------------- splits --------------- */
+
+
+/************************************************************************
+ * Splits
+ ************************************************************************/
+/** @name Split general getters/setters */
+/*@{*/
+
+/** Constructor. */
 Split       * xaccMallocSplit (GNCBook *book);
 
-gboolean xaccSplitEqual(const Split *sa, const Split *sb,
-                        gboolean check_guids,
-                        gboolean check_txn_splits);
-
-/* Split slots are used to store arbitrary strings, numbers, and
- * structures which aren't members of the transaction struct.
+/** Destructor.
  *
- * See kvp_doc.txt for reserved slot names.
+ * The xaccSplitDestroy() method will update its parent account and
+ * transaction in a consistent manner, resulting in the complete
+ * unlinking of the split, and the freeing of its associated memory.
+ * The goal of this routine is to perform the removal and destruction
+ * of the split in an atomic fashion, with no chance of accidentally
+ * leaving the accounting structure out-of-balance or otherwise
+ * inconsistent.
+ *
+ * If the deletion of the split leaves the transaction with no splits,
+ * then the transaction will be marked for deletion. (It will not be
+ * deleted until the xaccTransCommitEdit() routine is called.)
+ *
+ * @return TRUE upon successful deletion of the split. FALSE when
+ * the parenting Transaction is a read-only one.
  */
-kvp_frame *xaccSplitGetSlots(Split *split);
+gboolean      xaccSplitDestroy (Split *split);
+
+/** Returns the book of this split, i.e. the entity where this split
+ * is stored. */
+GNCBook *   xaccSplitGetBook (const Split *split);
+
+/** Returns the account of this split, which was set through
+ * xaccAccountInsertSplit(). */
+Account *     xaccSplitGetAccount (const Split *split);
+
+/** Returns the parent transaction of the split, which was set through
+ * xaccTransAppendSplit(). */
+Transaction * xaccSplitGetParent (const Split *split);
+
+/** Returns the pointer to the debited/credited Lot where this split
+ * belongs to, or NULL if it doesn't belong to any. */
+GNCLot *      xaccSplitGetLot (const Split *split);
+
+
+/** Returns the kvp_frame slots of this split for direct editing. 
+ *
+ * Split slots are used to store arbitrary strings, numbers, and
+ * structures which aren't members of the transaction struct.  See
+ * kvp_doc.txt for reserved slot names.
+ */
+kvp_frame *xaccSplitGetSlots(const Split *split);
+
+/** Set the kvp_frame slots of this split to the given frm by directly
+ * using the frm pointer (i.e. non-copying). */
 void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
 
-/* The xaccSplitGetGUID() subroutine will return the
- *    globally unique id associated with that split.
- *    xaccSplitReturnGUID also returns the guid, but
- *    in a GUID struct.
- *
- * The xaccSplitLookup() subroutine will return the
- *    split associated with the given id, or NULL
- *    if there is no such split.
- */
-const GUID * xaccSplitGetGUID (Split *split);
-GUID         xaccSplitReturnGUID (Split *split);
-Split      * xaccSplitLookup (const GUID *guid, GNCBook *book);
-Split      * xaccSplitLookupDirect (GUID guid, GNCBook *book);
 
-/* The memo is an arbitrary string associated with a split.
- *    Users typically type in free form text from the GUI.
- */
+/** The xaccSplitGetGUID() subroutine will return the
+ *    globally unique id associated with that split. */
+const GUID * xaccSplitGetGUID (const Split *split);
+
+/** xaccSplitReturnGUID also returns the guid (globally unique id),
+ * but in a GUID struct.*/
+GUID         xaccSplitReturnGUID (const Split *split);
+
+
+/** The memo is an arbitrary string associated with a split.  It is
+ * intended to hold a short (zero to forty character) string that is
+ * displayed by the GUI along with this split.  Users typically type
+ * in free form text from the GUI.  */
 void          xaccSplitSetMemo (Split *split, const char *memo);
 
-/* The Action is essentially an arbitrary string, but is 
- * meant to be conveniently limited to a menu of selections 
- * such as  "Buy", "Sell", "Interest", etc.  However,
- * as far as the engine is concerned, its an arbitrary string.
- */
+/** Returns the memo string. */
+const char *  xaccSplitGetMemo (const Split *split);
+
+/** The Action is an arbitrary user-assigned string. 
+ * The action field is an arbitrary user-assigned value.
+ * It is meant to be a very short (one to ten cahracter) string that
+ * signifies the "type" of this split, such as e.g. Buy, Sell, Div,
+ * Withdraw, Deposit, ATM, Check, etc. The idea is that this field
+ * can be used to create custom reports or graphs of data. */
 void          xaccSplitSetAction (Split *split, const char *action);
 
-/* The Reconcile is a single byte, whose values are typically
- * are "N", "C" and "R"
- */
-void          xaccSplitSetReconcile (Split *split, char reconciled_flag);
-void          xaccSplitSetDateReconciledSecs (Split *split, time_t time);
-void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
-void          xaccSplitGetDateReconciledTS (Split *split, Timespec *ts);
-Timespec      xaccSplitRetDateReconciledTS (Split *split);
+/** Returns the action string. */
+const char *  xaccSplitGetAction (const Split *split);
 
-/* 
- * The following four functions set the prices and amounts.
- * All of the routines always maintain balance: that is, 
- * invoking any of them will cause other splits in the transaction
- * to be modified so that the net value of the transaction is zero. 
+
+/** Set the reconcile flag. The Reconcile flag is a single char, whose
+ * values are typically are 'n', 'y', 'c'.  In Transaction.h, macros
+ * are defined for typical values (e.g. CREC, YREC). */
+void          xaccSplitSetReconcile (Split *split, char reconciled_flag);
+/** Returns the value of the reconcile flag. */
+char          xaccSplitGetReconcile (const Split *split);
+
+/** Set the date on which this split was reconciled by specifying the
+ * time as time_t. */
+void          xaccSplitSetDateReconciledSecs (Split *split, time_t time);
+/** Set the date on which this split was reconciled by specifying the
+ * time as Timespec. */
+void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
+/** Get the date on which this split was reconciled by having it
+ * written into the Timespec that 'ts' is pointing to. */
+void          xaccSplitGetDateReconciledTS (const Split *split, 
+					    Timespec *ts);
+/** Returns the date (as Timespec) on which this split was reconciled. */
+Timespec      xaccSplitRetDateReconciledTS (const Split *split);
+
+/*@}*/
+
+
+/** @name Split amount getters/setters 
+ *
+ * 'value' vs. 'amount' of a Split: The 'value' is the amount of the
+ * _transaction_ balancing commodity (i.e. currency) involved,
+ * 'amount' is the amount of the _account's_ commodity involved.
+*/
+/*@{*/
+
+/** The xaccSplitSetAmount() (formerly xaccSplitSetShareAmount) method
+ * sets the amount in the account's commodity that the split should
+ * have.
+ *
+ * The following four setter functions set the prices and amounts.
+ * All of the routines always maintain balance: that is, invoking any
+ * of them will cause other splits in the transaction to be modified
+ * so that the net value of the transaction is zero.
  *
  * IMPORTANT: The split should be parented by an account before
  * any of these routines are invoked!  This is because the actual
@@ -341,109 +405,137 @@ Timespec      xaccSplitRetDateReconciledTS (Split *split);
  * If these are not available, then amounts/values will be set to 
  * -1/0, which is an invalid value.  I beleive this order dependency
  * is a bug, but I'm too lazy to find, fix & test at the moment ... 
- *
- * The xaccSplitSetAmount() (formerly xaccSplitSetShareAmount) method
- *     sets the amount in the account's commodity that the split
- *     should have.
- *
- * The xaccSplitSetSharePrice() method sets the price of the
- *     split. DEPRECATED - set the value and amount instead.
- *
- * The xaccSplitSetValue() method adjusts the number of shares in 
- *     the split so that the number of shares times the share price
- *     equals the value passed in.
- *
- * The xaccSplitSetSharePriceAndAmount() method will simultaneously
- *     update the share price and the number of shares. This 
- *     is a utility routine that is equivalent to a xaccSplitSetSharePrice()
- *     followed by and xaccSplitSetAmount(), except that it incurs the
- *     processing overhead of balancing only once, instead of twice.  
- *
- * WARNING:  The xaccSplitSetValue and DxaccSplitSetValue do NOT have the same
- * behavior.  The later divides the value given by the current value and set's 
- * the result as the new split value.  Is that a but or just strange undocumented
- * feature?  Benoit Grégoire 2002-6-12 */
-
-void         DxaccSplitSetSharePriceAndAmount (Split *split, double price,
-                                               double amount);
-void         DxaccSplitSetShareAmount (Split *split, double amount);
-void         DxaccSplitSetAmount (Split *s, double damt); 
-void         DxaccSplitSetSharePrice (Split *split, double price);
-void         DxaccSplitSetValue (Split *split, double value);
-void         DxaccSplitSetBaseValue (Split *split, double value,
-                                     const gnc_commodity * base_currency);
-
-void         xaccSplitSetSharePriceAndAmount (Split *split, gnc_numeric price,
-                                              gnc_numeric amount);
+ */
 void         xaccSplitSetAmount (Split *split, gnc_numeric amount);
-void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
+
+/** Returns the amount of the split in the account's commodity. */
+gnc_numeric   xaccSplitGetAmount (const Split * split);
+
+/** The xaccSplitSetValue() method sets the value of this split in the
+ * transaction's commodity.  */
 void         xaccSplitSetValue (Split *split, gnc_numeric value);
+
+/** Returns the value of this split in the transaction's commodity. */
+gnc_numeric   xaccSplitGetValue (const Split * split);
+
+/** The xaccSplitSetSharePriceAndAmount() method will simultaneously
+ * update the share price and the number of shares. This is a utility
+ * routine that is equivalent to a xaccSplitSetSharePrice() followed
+ * by and xaccSplitSetAmount(), except that it incurs the processing
+ * overhead of balancing only once, instead of twice. */
+void         xaccSplitSetSharePriceAndAmount (Split *split, 
+					      gnc_numeric price,
+					      gnc_numeric amount);
+
+/** Returns the price of the split, that is, the value divided by the
+ * amount. If the amount is zero, returns a gnc_numeric of value
+ * one. */
+gnc_numeric   xaccSplitGetSharePrice (const Split * split);
+
+/** Depending on the base_currency, set either the value or the amount
+ * of this split or both: If the base_currency is the transaction's
+ * commodity, set the value.  If it's the account's commodity, set the
+ * amount. If both, set both.
+ *
+ * FIXME: is this function deprecated, or is this function supposed to
+ * be used? */
 void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
                                     const gnc_commodity * base_currency);
 
-/* The following four subroutines return the running balance up
- * to & including the indicated split.
- * 
+/** Depending on the base_currency, return either the value or the
+ * amount of this split: If the base_curreny is the transaction's
+ * commodity, return the value. If it is the account's commodity,
+ * return the amount. If it is neither and the force_double_entry flag
+ * is false, return the value. If is is neither and force_double_entry
+ * is true, print a warning message and return gnc_numeric_zero(). 
+ *
+ * FIXME: is this function deprecated, or is this function supposed to
+ * be used? */
+gnc_numeric xaccSplitGetBaseValue (const Split *split, 
+                                   const gnc_commodity * base_currency);
+
+
+
+/** Returns the running balance up to and including the indicated split. 
  * The balance is the currency-denominated balance.  For accounts
  * with non-unit share prices, it is correctly adjusted for
  * share prices.
- * 
- * The share-balance is the number of shares. 
- * Price fluctuations do not change the share balance.
- * 
+ *
+ * The following three subroutines return the running balance up to &
+ * including the indicated split. (The function
+ * xaccSplitGetShareBalance seems to have silently disappeared.)
+ */
+gnc_numeric xaccSplitGetBalance (const Split *split);
+
+/**
  * The cleared-balance is the currency-denominated balance 
  * of all transactions that have been marked as cleared or reconciled.
  * It is correctly adjusted for price fluctuations.
- * 
- * The reconciled-balance is the currency-denominated balance
- * of all transactions that have been marked as reconciled.
  */
+gnc_numeric xaccSplitGetClearedBalance (const Split *split);
 
-GNCBook *   xaccSplitGetBook (Split *split);
-gnc_numeric xaccSplitGetBalance (Split *split);
-gnc_numeric xaccSplitGetClearedBalance (Split *split);
-gnc_numeric xaccSplitGetReconciledBalance (Split *split);
-gnc_numeric xaccSplitGetBaseValue (Split *split, 
-                                   const gnc_commodity * base_currency);
+/**
+ * Returns the reconciled-balance of this split. The
+ * reconciled-balance is the currency-denominated balance of all
+ * transactions that have been marked as reconciled.
+ */
+gnc_numeric xaccSplitGetReconciledBalance (const Split *split);
 
-/* return the parent transaction of the split */
-Transaction * xaccSplitGetParent (Split *split);
-GNCLot *      xaccSplitGetLot (Split *);
+/*@}*/
 
-/* return the memo, action strings */
-const char *  xaccSplitGetMemo (Split *split);
-const char *  xaccSplitGetAction (Split *split);
 
-/* return the value of the reconcile flag */
-char          xaccSplitGetReconcile (Split *split);
-double        DxaccSplitGetShareAmount (Split * split);
-double        DxaccSplitGetSharePrice (Split * split);
-double        DxaccSplitGetValue (Split * split);
 
-gnc_numeric   xaccSplitGetAmount (Split * split);
-gnc_numeric   xaccSplitGetSharePrice (Split * split);
-gnc_numeric   xaccSplitGetValue (Split * split);
+/** @name Split utility functions */
+/*@{*/
 
-Account *     xaccSplitGetAccount (Split *split);
+/** Equality.
+ *
+ * @param sa First split to compare
+ * @param sb Second split to compare
+ *
+ * @param check_guids If TRUE, try a guid_equal() on the GUIDs of both
+ * splits if their pointers are not equal in the first place.
+ *
+ * @param check_txn_splits If the pointers are not equal, but
+ * everything else so far is equal (including memo, amount, value,
+ * kvp_frame), then, when comparing the parenting transactions with
+ * xaccTransEqual(), set its argument check_splits to be TRUE.
+ */
+gboolean xaccSplitEqual(const Split *sa, const Split *sb,
+                        gboolean check_guids,
+                        gboolean check_txn_splits);
 
-/* split types: normal stock-split */
+/** The xaccSplitLookup() subroutine will return the
+ *    split associated with the given id, or NULL
+ *    if there is no such split. */
+Split      * xaccSplitLookup (const GUID *guid, GNCBook *book);
+/** Returns the split associated with the given id, or NULL if there
+ * is no such split. */
+Split      * xaccSplitLookupDirect (GUID guid, GNCBook *book);
+
+
+/** 
+ * The xaccSplitGetOtherSplit() is a convenience routine that returns
+ *    the other of a pair of splits.  If there are more than two 
+ *    splits, it returns NULL.
+ */
+Split * xaccSplitGetOtherSplit (const Split *split);
+
+/** The xaccIsPeerSplit() is a convenience routine that returns TRUE
+ * (a non-zero value) if the two splits share a common parent
+ * transaction, else it returns FALSE (zero).
+ */
+gboolean xaccIsPeerSplit (const Split *split_1, const Split *split_2);
+
+/** Returns the split type, which is either the string "normal", or
+ * "stock-split" for a split from a stock split (pun intended? :-).  */
 const char *xaccSplitGetType(const Split *s);
 
-/* reconfgure a split to be a stock split - after this, you shouldn't
-   mess with the value, just the damount. */
+/** Mark a split to be of type stock split - after this, you shouldn't
+   modify the value anymore, just the amount. */
 void xaccSplitMakeStockSplit(Split *s);
 
-/********************************************************************\
- * sorting comparison function
- *
- * The xaccTransOrder(ta,tb) method is useful for sorting.
- *    return a negative value if transaction ta is dated earlier than tb, 
- *    return a positive value if transaction ta is dated later than tb,
- *    then compares num and description values, using the strcmp()
- *    c-library routine, returning  what strcmp would return.
- *    Finally, it returns zero if all of the above match.
- *    Note that it does *NOT* compare its member splits.
- *
+/**
  * The xaccSplitDateOrder(sa,sb) method is useful for sorting.
  *    if sa and sb have different transactions, return their xaccTransOrder
  *    return a negative value if split sa has a smaller currency-value than sb,
@@ -454,30 +546,32 @@ void xaccSplitMakeStockSplit(Split *s);
  *    c-library routine, returning  what strcmp would return.
  *    Then it compares the reconciled flags, then the reconciled dates,
  *    Finally, it returns zero if all of the above match.
- *
  */
+int  xaccSplitDateOrder (const Split *sa, const Split *sb);
 
-int  xaccTransOrder     (Transaction *ta, Transaction *tb);
-int  xaccSplitDateOrder (Split *sa, Split *sb);
-
-/********************************************************************\
- * Miscellaneous utility routines.
-\********************************************************************/
 
 /*
- * These functions compare two splits by different criteria.  The *Other*
- * functions attempt to find the split on the other side of a transaction
- * and compare on it.  They return similar to strcmp.
- * 
+ * These functions compare two splits by different criteria.   
+ *
  * These functions were added because converting strings to guile 
  * for comparisons in the transaction report is terribly inefficient.
  * More may be added here in future if it turns out that other types
  * of comparisons also induces guile slowdowns.
  */
 
+/** Compare two splits by full name of account. Returns similar to
+ * strcmp. */
 int xaccSplitCompareAccountFullNames(Split *sa, Split *sb);
+/** Compare two splits by code of account. Returns similar to
+ * strcmp. */
 int xaccSplitCompareAccountCodes(Split *sa, Split *sb);
+/** Compare two splits by full name of the other account. Returns
+ * similar to strcmp. This function attempts to find the split on the
+ * other side of a transaction and compare on it. */
 int xaccSplitCompareOtherAccountFullNames(Split *sa, Split *sb);
+/** Compare two splits by code of the other account. Returns similar
+ * to strcmp. This function attempts to find the split on the
+ * other side of a transaction and compare on it. */
 int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
 
 
@@ -491,9 +585,66 @@ int xaccSplitCompareOtherAccountCodes(Split *sa, Split *sb);
  * is silly. 
  */
 
-char * xaccSplitGetCorrAccountFullName(Split *sa, char seperator);
-const char * xaccSplitGetCorrAccountName(Split *sa);
-const char * xaccSplitGetCorrAccountCode(Split *sa);
+char * xaccSplitGetCorrAccountFullName(const Split *sa, char seperator);
+const char * xaccSplitGetCorrAccountName(const Split *sa);
+const char * xaccSplitGetCorrAccountCode(const Split *sa);
+
+/*@}*/
+
+
+
+/** @name Split deprecated functions */
+/*@{*/
+
+/** The xaccSplitSetSharePrice() method sets the price of the
+ * split. DEPRECATED - set the value and amount instead. */
+void         xaccSplitSetSharePrice (Split *split, gnc_numeric price);
+
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+void         DxaccSplitSetAmount (Split *s, double damt); 
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. 
+ *
+ * WARNING:  The xaccSplitSetValue and DxaccSplitSetValue do NOT have the same
+ * behavior.  The later divides the value given by the current value and set's 
+ * the result as the new split value.  Is that a but or just strange undocumented
+ * feature?  Benoit Grégoire 2002-6-12 */
+void         DxaccSplitSetValue (Split *split, double value);
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+double        DxaccSplitGetValue (const Split * split);
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+void         DxaccSplitSetSharePriceAndAmount (Split *split, double price,
+                                               double amount);
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+void         DxaccSplitSetShareAmount (Split *split, double amount);
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+double        DxaccSplitGetShareAmount (const Split * split);
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+void         DxaccSplitSetSharePrice (Split *split, double price);
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+double        DxaccSplitGetSharePrice (const Split * split);
+/** DEPRECATED. Don't use doubles anymore, only use gnc_numerics. */
+void         DxaccSplitSetBaseValue (Split *split, double value,
+                                     const gnc_commodity * base_currency);
+/*@}*/
+
+
+
+/**
+ * The xaccTransOrder(ta,tb) method is useful for sorting.
+ *    return a negative value if transaction ta is dated earlier than tb, 
+ *    return a positive value if transaction ta is dated later than tb,
+ *    then compares num and description values, using the strcmp()
+ *    c-library routine, returning  what strcmp would return.
+ *    Finally, it returns zero if all of the above match.
+ *    Note that it does *NOT* compare its member splits.
+ */
+int  xaccTransOrder     (const Transaction *ta, const Transaction *tb);
+
+
+/********************************************************************\
+ * Miscellaneous utility routines.
+\********************************************************************/
+
 
 /* 
  * The xaccGetAccountByName() is a convenience routine that 
@@ -508,20 +659,9 @@ Account * xaccGetAccountByFullName (Transaction *trans,
                                     const char *name,
                                     const char separator);
 
-/* 
- * The xaccSplitGetOtherSplit() is a convenience routine that returns
- *    the other of a pair of splits.  If there are more than two 
- *    splits, it returns NULL.
- */
-Split * xaccSplitGetOtherSplit (Split *split);
 
-/* The xaccIsPeerSplit() is a convenience routine that returns
- *    a non-zero value if the two splits share a common 
- *    parent transaction, else it returns zero.
- */
-int xaccIsPeerSplit (Split *split_1, Split *split_2);
-
-
+/** @name Transaction voiding */
+/*@{*/
 /*
  * xaccTransactionVoid voids a transaction.  A void transaction
  * has no values, is unaffected by reconciliation, and, by default
@@ -534,14 +674,15 @@ int xaccIsPeerSplit (Split *split_1, Split *split_2);
 void xaccTransVoid(Transaction *transaction, 
 			 const char *reason);
 
-gboolean xaccTransGetVoidStatus(Transaction *transaction);
+gboolean xaccTransGetVoidStatus(const Transaction *transaction);
 
-char *xaccTransGetVoidReason(Transaction *transaction);
+char *xaccTransGetVoidReason(const Transaction *transaction);
 
-gnc_numeric xaccSplitVoidFormerAmount(Split *split);
-gnc_numeric xaccSplitVoidFormerValue(Split *split);
+gnc_numeric xaccSplitVoidFormerAmount(const Split *split);
+gnc_numeric xaccSplitVoidFormerValue(const Split *split);
 
-Timespec xaccTransGetVoidTime(Transaction *tr);
+Timespec xaccTransGetVoidTime(const Transaction *tr);
+/*@}*/
 
 /* Parameter names */
 #define SPLIT_KVP		"kvp"

@@ -235,6 +235,10 @@ xaccSplitEqual(const Split *sa, const Split *sb,
     return FALSE;
   }
 
+  /* Huh? This test wasn't here before, but IMHO it should be queried
+   * as a very first thing. cstim, 2002-12-07 */
+  if (sa == sb) return TRUE;
+
   if(check_guids) {
     if(!guid_equal(&(sa->guid), &(sb->guid)))
     {
@@ -379,7 +383,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
  ********************************************************************/
 
 Account *
-xaccSplitGetAccount (Split *s)
+xaccSplitGetAccount (const Split *s)
 {
   if (!s) return NULL;
   return s->acc;
@@ -389,14 +393,14 @@ xaccSplitGetAccount (Split *s)
 \********************************************************************/
 
 const GUID *
-xaccSplitGetGUID (Split *split)
+xaccSplitGetGUID (const Split *split)
 {
   if (!split) return xaccGUIDNULL();
   return &split->guid;
 }
 
 GUID
-xaccSplitReturnGUID (Split *split)
+xaccSplitReturnGUID (const Split *split)
 {
   if (!split) return *xaccGUIDNULL();
   return split->guid;
@@ -523,7 +527,7 @@ G_INLINE_FUNC void gen_event_trans (Transaction *trans)
 \********************************************************************/
 
 static int
-get_currency_denom(Split * s)
+get_currency_denom(const Split * s)
 {
     if(!s)
     {
@@ -540,7 +544,7 @@ get_currency_denom(Split * s)
 }
 
 static int
-get_commodity_denom(Split * s) 
+get_commodity_denom(const Split * s) 
 {
     if(!s)
     {
@@ -561,7 +565,7 @@ get_commodity_denom(Split * s)
  ********************************************************************/
 
 kvp_frame * 
-xaccSplitGetSlots (Split * s)
+xaccSplitGetSlots (const Split * s)
 {
   if(!s) return NULL;
   return(s->kvp_data);
@@ -738,21 +742,21 @@ xaccSplitSetValue (Split *s, gnc_numeric amt)
 \********************************************************************/
 
 gnc_numeric 
-xaccSplitGetBalance (Split *s) 
+xaccSplitGetBalance (const Split *s) 
 {
    if (!s) return gnc_numeric_zero();
    return s->balance;
 }
 
 gnc_numeric 
-xaccSplitGetClearedBalance (Split *s) 
+xaccSplitGetClearedBalance (const Split *s) 
 {
    if (!s) return gnc_numeric_zero();
    return s->cleared_balance;
 }
 
 gnc_numeric 
-xaccSplitGetReconciledBalance (Split *s)  
+xaccSplitGetReconciledBalance (const Split *s)  
 {
    if (!s) return gnc_numeric_zero();
    return s->reconciled_balance;
@@ -813,7 +817,7 @@ xaccMallocTransaction (GNCBook *book)
 }
 
 GNCBook *
-xaccTransGetBook (Transaction *trans)
+xaccTransGetBook (const Transaction *trans)
 {
   if (!trans) return NULL;
   return trans->book;
@@ -1079,7 +1083,7 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
  ********************************************************************/
 
 kvp_frame * 
-xaccTransGetSlots (Transaction *t)
+xaccTransGetSlots (const Transaction *t)
 {
   if(!t) return NULL;
   return(t->kvp_data);
@@ -1106,14 +1110,14 @@ xaccTransSetSlots_nc (Transaction *t, kvp_frame *frm)
 \********************************************************************/
 
 const GUID *
-xaccTransGetGUID (Transaction *trans)
+xaccTransGetGUID (const Transaction *trans)
 {
   if (!trans) return xaccGUIDNULL();
   return &trans->guid;
 }
 
 GUID
-xaccTransReturnGUID (Transaction *trans)
+xaccTransReturnGUID (const Transaction *trans)
 {
   if (!trans) return *xaccGUIDNULL();
   return trans->guid;
@@ -1199,9 +1203,9 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   currency = xaccTransGetCurrency (s->parent);
   commodity = xaccAccountGetCommodity (s->acc);
 
-  /* If the base_currency is the account currency, set the 
-   * value.  If it's the account commodity, set the damount. 
-   * If both, set both. */
+  /* If the base_currency is the transaction's commodity ('currency'),
+   * set the value.  If it's the account commodity, set the
+   * amount. If both, set both. */
   if (gnc_commodity_equiv(currency, base_currency)) {
     if(gnc_commodity_equiv(commodity, base_currency)) {
       s->amount = gnc_numeric_convert(value,
@@ -1234,7 +1238,8 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
 }
 
 gnc_numeric
-xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
+xaccSplitGetBaseValue (const Split *s, 
+		       const gnc_commodity * base_currency)
 {
   const gnc_commodity *currency;
   const gnc_commodity *commodity;
@@ -1365,7 +1370,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 }
 
 gnc_numeric
-xaccTransGetImbalance (Transaction * trans)
+xaccTransGetImbalance (const Transaction * trans)
 {
   const gnc_commodity * currency;
 
@@ -1377,7 +1382,8 @@ xaccTransGetImbalance (Transaction * trans)
 }
 
 gnc_numeric
-xaccTransGetAccountValue (Transaction *trans, Account *account)
+xaccTransGetAccountValue (const Transaction *trans, 
+			  const Account *account)
 {
   gnc_numeric total = gnc_numeric_zero ();
   GList *splits;
@@ -1523,7 +1529,7 @@ xaccTransFindOldCommonCurrency (Transaction *trans, GNCBook *book)
 /* The new routine for setting the common currency */
 
 gnc_commodity *
-xaccTransGetCurrency (Transaction *trans)
+xaccTransGetCurrency (const Transaction *trans)
 {
   if (!trans) return NULL;
   return trans->common_currency;
@@ -1985,7 +1991,7 @@ xaccTransRollbackEdit (Transaction *trans)
 }
 
 gboolean
-xaccTransIsOpen (Transaction *trans)
+xaccTransIsOpen (const Transaction *trans)
 {
   if (!trans) return FALSE;
   return (0 < trans->editlevel);
@@ -1999,7 +2005,7 @@ xaccTransSetVersion (Transaction *trans, gint32 vers)
 }
 
 gint32
-xaccTransGetVersion (Transaction *trans)
+xaccTransGetVersion (const Transaction *trans)
 {
   if (!trans) return 0;
   return (trans->version);
@@ -2009,7 +2015,7 @@ xaccTransGetVersion (Transaction *trans)
 \********************************************************************/
 
 gboolean
-xaccTransWarnReadOnly (Transaction *trans)
+xaccTransWarnReadOnly (const Transaction *trans)
 {
   const gchar *reason;
 
@@ -2205,7 +2211,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
 
 
 int
-xaccSplitDateOrder (Split *sa, Split *sb)
+xaccSplitDateOrder (const Split *sa, const Split *sb)
 {
   int retval;
   int comp;
@@ -2263,7 +2269,7 @@ xaccSplitDateOrder (Split *sa, Split *sb)
 }
 
 int
-xaccTransOrder (Transaction *ta, Transaction *tb)
+xaccTransOrder (const Transaction *ta, const Transaction *tb)
 {
   char *da, *db;
   int retval, na, nb;
@@ -2296,7 +2302,7 @@ xaccTransOrder (Transaction *ta, Transaction *tb)
   return 0;
 }
 static gboolean
-get_corr_account_split(Split *sa, Split **retval)
+get_corr_account_split(const Split *sa, Split **retval)
 {
  
   Split *current_split;
@@ -2340,7 +2346,7 @@ get_corr_account_split(Split *sa, Split **retval)
 }
 
 const char *
-xaccSplitGetCorrAccountName(Split *sa)
+xaccSplitGetCorrAccountName(const Split *sa)
 {
   static const char *split_const = NULL;
   Split *other_split;
@@ -2361,7 +2367,7 @@ xaccSplitGetCorrAccountName(Split *sa)
 }
 
 char *
-xaccSplitGetCorrAccountFullName(Split *sa, char separator)
+xaccSplitGetCorrAccountFullName(const Split *sa, char separator)
 {
   static const char *split_const = NULL;
   Split *other_split;
@@ -2382,7 +2388,7 @@ xaccSplitGetCorrAccountFullName(Split *sa, char separator)
 }
 
 const char *
-xaccSplitGetCorrAccountCode(Split *sa)
+xaccSplitGetCorrAccountCode(const Split *sa)
 {
   static const char *split_const = NULL;
   Split *other_split;
@@ -2625,7 +2631,7 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
 \********************************************************************/
 
 Split *
-xaccTransGetSplit (Transaction *trans, int i) 
+xaccTransGetSplit (const Transaction *trans, int i) 
 {
    if (!trans) return NULL;
    if (i < 0) return NULL;
@@ -2634,7 +2640,7 @@ xaccTransGetSplit (Transaction *trans, int i)
 }
 
 SplitList *
-xaccTransGetSplitList (Transaction *trans)
+xaccTransGetSplitList (const Transaction *trans)
 {
   if (!trans) return NULL;
 
@@ -2642,21 +2648,21 @@ xaccTransGetSplitList (Transaction *trans)
 }
 
 const char *
-xaccTransGetNum (Transaction *trans)
+xaccTransGetNum (const Transaction *trans)
 {
    if (!trans) return NULL;
    return (trans->num);
 }
 
 const char * 
-xaccTransGetDescription (Transaction *trans)
+xaccTransGetDescription (const Transaction *trans)
 {
    if (!trans) return NULL;
    return (trans->description);
 }
 
 const char * 
-xaccTransGetNotes (Transaction *trans)
+xaccTransGetNotes (const Transaction *trans)
 {
   kvp_value *v;
 
@@ -2670,28 +2676,28 @@ xaccTransGetNotes (Transaction *trans)
 }
 
 time_t
-xaccTransGetDate (Transaction *trans)
+xaccTransGetDate (const Transaction *trans)
 {
    if (!trans) return 0;
    return (trans->date_posted.tv_sec);
 }
 
 void
-xaccTransGetDatePostedTS (Transaction *trans, Timespec *ts)
+xaccTransGetDatePostedTS (const Transaction *trans, Timespec *ts)
 {
    if (!trans || !ts) return;
    *ts = (trans->date_posted);
 }
 
 void
-xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts)
+xaccTransGetDateEnteredTS (const Transaction *trans, Timespec *ts)
 {
    if (!trans || !ts) return;
    *ts = (trans->date_entered);
 }
 
 Timespec
-xaccTransRetDatePostedTS (Transaction *trans)
+xaccTransRetDatePostedTS (const Transaction *trans)
 {
    Timespec ts;
    ts.tv_sec = 0; ts.tv_nsec = 0;
@@ -2700,7 +2706,7 @@ xaccTransRetDatePostedTS (Transaction *trans)
 }
 
 Timespec
-xaccTransRetDateEnteredTS (Transaction *trans)
+xaccTransRetDateEnteredTS (const Transaction *trans)
 {
    Timespec ts;
    ts.tv_sec = 0; ts.tv_nsec = 0;
@@ -2709,7 +2715,7 @@ xaccTransRetDateEnteredTS (Transaction *trans)
 }
 
 void
-xaccTransGetDateDueTS (Transaction *trans, Timespec *ts)
+xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts)
 {
   kvp_value *value;
 
@@ -2723,7 +2729,7 @@ xaccTransGetDateDueTS (Transaction *trans, Timespec *ts)
 }
 
 Timespec
-xaccTransRetDateDueTS (Transaction *trans)
+xaccTransRetDateDueTS (const Transaction *trans)
 {
   Timespec ts;
   ts.tv_sec = 0; ts.tv_nsec = 0;
@@ -2733,7 +2739,7 @@ xaccTransRetDateDueTS (Transaction *trans)
 }
 
 char
-xaccTransGetTxnType (Transaction *trans)
+xaccTransGetTxnType (const Transaction *trans)
 {
   kvp_value *value;
   const char *s;
@@ -2749,7 +2755,7 @@ xaccTransGetTxnType (Transaction *trans)
 }
 
 const char * 
-xaccTransGetReadOnly (Transaction *trans)
+xaccTransGetReadOnly (const Transaction *trans)
 {
   kvp_value *v;
 
@@ -2763,14 +2769,15 @@ xaccTransGetReadOnly (Transaction *trans)
 }
 
 int
-xaccTransCountSplits (Transaction *trans)
+xaccTransCountSplits (const Transaction *trans)
 {
    if (!trans) return 0;
    return g_list_length (trans->splits);
 }
 
 gboolean
-xaccTransHasReconciledSplitsByAccount (Transaction *trans, Account *account)
+xaccTransHasReconciledSplitsByAccount (const Transaction *trans, 
+				       const Account *account)
 {
   GList *node;
 
@@ -2796,7 +2803,7 @@ xaccTransHasReconciledSplitsByAccount (Transaction *trans, Account *account)
 }
 
 gboolean
-xaccTransHasReconciledSplits (Transaction *trans)
+xaccTransHasReconciledSplits (const Transaction *trans)
 {
   return xaccTransHasReconciledSplitsByAccount (trans, NULL);
 }
@@ -2883,14 +2890,14 @@ xaccSplitSetDateReconciledTS (Split *split, Timespec *ts)
 }
 
 void
-xaccSplitGetDateReconciledTS (Split * split, Timespec *ts)
+xaccSplitGetDateReconciledTS (const Split * split, Timespec *ts)
 {
    if (!split || !ts) return;
    *ts = (split->date_reconciled);
 }
 
 Timespec
-xaccSplitRetDateReconciledTS (Split * split)
+xaccSplitRetDateReconciledTS (const Split * split)
 {
    Timespec ts; ts.tv_sec=0; ts.tv_nsec=0;
    if (!split) return ts;
@@ -2902,76 +2909,76 @@ xaccSplitRetDateReconciledTS (Split * split)
 
 /* return the parent transaction of the split */
 Transaction * 
-xaccSplitGetParent (Split *split)
+xaccSplitGetParent (const Split *split)
 {
    if (!split) return NULL;
    return (split->parent);
 }
 
 GNCLot *
-xaccSplitGetLot (Split *split)
+xaccSplitGetLot (const Split *split)
 {
    if (!split) return NULL;
    return (split->lot);
 }
 
 const char *
-xaccSplitGetMemo (Split *split)
+xaccSplitGetMemo (const Split *split)
 {
    if (!split) return NULL;
    return (split->memo);
 }
 
 const char *
-xaccSplitGetAction (Split *split)
+xaccSplitGetAction (const Split *split)
 {
    if (!split) return NULL;
    return (split->action);
 }
 
 char 
-xaccSplitGetReconcile (Split *split) 
+xaccSplitGetReconcile (const Split *split) 
 {
   if (!split) return ' ';
   return (split->reconciled);
 }
 
 double
-DxaccSplitGetShareAmount (Split * split) 
+DxaccSplitGetShareAmount (const Split * split) 
 {
   if (!split) return 0.0;
   return gnc_numeric_to_double(split->amount);
 }
 
 double
-DxaccSplitGetValue (Split * split) 
+DxaccSplitGetValue (const Split * split) 
 {
   if (!split) return 0.0;
   return gnc_numeric_to_double(split->value);
 }
 
 double
-DxaccSplitGetSharePrice (Split * split)
+DxaccSplitGetSharePrice (const Split * split)
 {
   return gnc_numeric_to_double(xaccSplitGetSharePrice(split));
 }
 
 gnc_numeric
-xaccSplitGetAmount (Split * split)
+xaccSplitGetAmount (const Split * split)
 {
   if (!split) return gnc_numeric_zero();
   return split->amount;
 }
 
 gnc_numeric
-xaccSplitGetValue (Split * split) 
+xaccSplitGetValue (const Split * split) 
 {
   if (!split) return gnc_numeric_zero();
   return split->value; 
 }
 
 gnc_numeric
-xaccSplitGetSharePrice (Split * split) 
+xaccSplitGetSharePrice (const Split * split) 
 {
   if(!split || gnc_numeric_zero_p(split->amount)) 
   {
@@ -2988,7 +2995,7 @@ xaccSplitGetSharePrice (Split * split)
 \********************************************************************/
 
 GNCBook *
-xaccSplitGetBook (Split *split)
+xaccSplitGetBook (const Split *split)
 {
   if (!split) return NULL;
   return split->book;
@@ -3084,7 +3091,7 @@ xaccGetAccountByFullName (Transaction *trans, const char * name,
 \********************************************************************/
 
 Split *
-xaccSplitGetOtherSplit (Split *split)
+xaccSplitGetOtherSplit (const Split *split)
 {
   Split *s1, *s2;
   Transaction *trans;
@@ -3107,8 +3114,8 @@ xaccSplitGetOtherSplit (Split *split)
 /********************************************************************\
 \********************************************************************/
 
-int
-xaccIsPeerSplit (Split *sa, Split *sb)
+gboolean
+xaccIsPeerSplit (const Split *sa, const Split *sb)
 {
    Transaction *ta, *tb;
    if (!sa || !sb) return 0;
@@ -3180,7 +3187,7 @@ xaccTransVoid(Transaction *transaction,
 }
 
 gboolean 
-xaccTransGetVoidStatus(Transaction *trans)
+xaccTransGetVoidStatus(const Transaction *trans)
 {
   g_return_val_if_fail(trans, FALSE);
 
@@ -3188,7 +3195,7 @@ xaccTransGetVoidStatus(Transaction *trans)
 }
 
 char *
-xaccTransGetVoidReason(Transaction *trans)
+xaccTransGetVoidReason(const Transaction *trans)
 {
   kvp_value *val;
   char *reason;
@@ -3206,7 +3213,7 @@ xaccTransGetVoidReason(Transaction *trans)
 }
 
 gnc_numeric
-xaccSplitVoidFormerAmount(Split *split)
+xaccSplitVoidFormerAmount(const Split *split)
 {
   kvp_value *val;
   gnc_numeric amt = gnc_numeric_zero();
@@ -3223,7 +3230,7 @@ xaccSplitVoidFormerAmount(Split *split)
 }
 
 gnc_numeric
-xaccSplitVoidFormerValue(Split *split)
+xaccSplitVoidFormerValue(const Split *split)
 {
   kvp_value *val;
   gnc_numeric amt = gnc_numeric_zero();
@@ -3241,7 +3248,7 @@ xaccSplitVoidFormerValue(Split *split)
 }
 
 Timespec
-xaccTransGetVoidTime(Transaction *tr)
+xaccTransGetVoidTime(const Transaction *tr)
 {
   kvp_value *val;
   Timespec void_time = {0,0};
@@ -3378,7 +3385,7 @@ static GncObject_t trans_object_def = {
 };
 
 static gboolean
-trans_is_balanced_p (Transaction *txn)
+trans_is_balanced_p (const Transaction *txn)
 {
   if (!txn)
     return FALSE;
