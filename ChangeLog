@@ -30,6 +30,8 @@
 	* src/report/standard-reports/cash-flow.scm: don't crash when a
 	  user does something silly like having a split with no account.
 	  Warn the user when we find this situation.
+
+	* src/quotes/Makefile.am: add dump-finance-quote to the DIST
 	
 2003-02-01  Benoit Grégoire  <bock@step.polymtl.ca>
 

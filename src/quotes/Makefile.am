@@ -11,7 +11,8 @@ EXTRA_DIST = \
   finance-quote-helper.in \
   gnc-prices \
   update-finance-quote.in \
-  value_portfolio
+  value_portfolio \
+  dump-finance-quote
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
