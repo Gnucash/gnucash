@@ -56,4 +56,7 @@ INCLUDES = \
   -I${top_srcdir}/src/engine/test-core \
   -I..
 
-EXTRA_DIST = test-load-module
+EXTRA_DIST = \
+  grab-types.pl \
+  test-load-module \
+  test-real-data.sh

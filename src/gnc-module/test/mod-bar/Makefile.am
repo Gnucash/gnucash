@@ -14,7 +14,9 @@ libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
 libgncmodbar_la_LDFLAGS=-module
 libgncmodbar_la_LIBADD=-L. -L./.libs -lbar
 
-EXTRA_DIST = bar-gwrap.scm
+EXTRA_DIST = \
+  bar-gwrap.scm \
+  gnucash/bar.scm
 
 bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 	FLAVOR=gnome guile -c \
