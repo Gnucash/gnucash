@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/app-file \
+  ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \
   ${GLADE_CFLAGS} \
@@ -60,6 +61,7 @@ EXTRA_DIST = \
 .scm-links: 
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
+	ln -sf . report
 	ln -sf . g-wrapped 
 	ln -sf . report 
 	touch .scm-links
