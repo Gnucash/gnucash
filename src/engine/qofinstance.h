@@ -9,7 +9,10 @@
 
 #ifndef QOF_INSTANCE_H
 #define QOF_INSTANCE_H
+
+#include "guid.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
 
 /* --- type macros --- */
 /* cheesy, but will do for now, eventually should be more gtk-like, handle
@@ -22,25 +25,31 @@ struct QofInstance_s
 {
 /*
  * UNDER CONSTRUCTION!
- * This is temp scaffolding for now,
- * eventually, it should hold at least the following fields:
- * (and maybe more, such as refrence counting...)
+ * This is mostly scaffolding for now,
+ * eventually, it may hold more fields, such as refrence counting...
  *
+ */
    GUID guid;
    QofBook * book;
+   KvpFrame *kvp_data;
+
    int    editlevel;
    gboolean  do_free;
    gboolean  dirty;
- */
-   KvpFrame *kvp_data;
 };
 
 /** Initialise the memory associated with an instance */
-void qof_instance_init (QofInstance *inst);
+void qof_instance_init (QofInstance *, QofBook *);
 
 /** release the data associated with this instance. Dont actually free 
  * the memory associated with teh instance. */
 void qof_instance_release (QofInstance *inst);
+
+/** Return the book pointer */
+QofBook * qof_instance_get_book (QofInstance *);
+
+/* Return the GUID of this instance */
+const GUID * qof_instance_get_guid (QofInstance *);
 
 /** return the pointer to the kvp_data */
 KvpFrame* qof_instance_get_slots (QofInstance *);
