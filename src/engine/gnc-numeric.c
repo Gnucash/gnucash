@@ -1346,6 +1346,7 @@ main(int argc, char ** argv) {
   
   gnc_numeric err;
   int i;
+  gint64 v;
 
   printf("add exact : %s + %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
@@ -1514,6 +1515,14 @@ main(int argc, char ** argv) {
                                            GNC_RND_ROUND)));
   
    
+  v = 1000000;
+  a = gnc_numeric_create(1*v, v);
+  b = gnc_numeric_create(10000000*v, v);
+  printf("multiply (LCD): %s * %s = %s\n",
+	 gnc_numeric_print(a), gnc_numeric_print(b),
+	 gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_LCD)));
+
+
   return 0;
 }
 #endif
