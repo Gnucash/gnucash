@@ -41,7 +41,8 @@
 int    validateDate( Date *date );
 
 /** GLOBALS *********************************************************/
-char days[12] = { 31,29,31,30,31,30,31,31,30,31,30,31 };
+/** DEFAULT FOR FEBRUARY IS 28 VICE 29 (and patched by year in validateDate() **/
+char days[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };
 
 /********************************************************************\
  * adjustDay                                                        *
@@ -90,8 +91,16 @@ int
 validateDate( Date *date )
   {
   int valid = True;
+
+  /* adjust days in february for leap year */
+  if ( ( ( date->year % 4 == 0 ) && ( date->year % 100 != 0 ) )
+       || ( date->year % 400 == 0 ) )
+    days[1] = 29;
+  else 
+    days[1] = 28;
   
   /* the "% 12" business is because month might not be valid!*/
+
   while( date->day > days[(date->month+11) % 12] )
     {
     valid = False;
@@ -145,14 +154,24 @@ todaysDate( Date *date )
 
 /********************************************************************\
  * daysInMonth                                                      *
- *   returns the number of days in month                            *
+ *   returns the number of days in month. The argument "year" is    *
+ *   required to take into account leap years                       *
  *                                                                  * 
  * Args:   month - the current month                                *
+ *         year  - the current year                                 *
  * Return: the number of days in month                              *
 \********************************************************************/
-int
-daysInMonth( int month )
+
+int    daysInMonth( int month , int year )
   {
+  /* adjust for leap year */
+  if( month == 2 ) {  
+    if ( ( ( 0 == year % 4 ) && ( 0 != year % 100 ) )
+         || ( 0 == year % 400 ) ) 
+      days[1] = 29;
+    else 
+      days[1] = 28;
+  }
   return days[month-1];
   }
 
@@ -177,8 +196,10 @@ datecmp( Date *date1, Date *date2 )
     return 0;
   else
     {
-    unsigned int d1 = date1->day + (31 * date1->month) + (365 * date1->year);
-    unsigned int d2 = date2->day + (31 * date2->month) + (365 * date2->year);
+#ifdef  OLD_DATE_COMPARISON_CODE
+    /* to sort properly, must have 32 > days in month, and 500 > 12*32 */
+    unsigned int d1 = date1->day + (32 * date1->month) + (500 * date1->year);
+    unsigned int d2 = date2->day + (32 * date2->month) + (500 * date2->year);
     
     if( d1 < d2 )
       return -1;
@@ -186,6 +207,17 @@ datecmp( Date *date1, Date *date2 )
       return 0;
     else
       return 1;
+#endif /* OLD_DATE_COMPARISON_CODE */
+
+    /* this date comparison code executes faster than multiply
+     * code above, according to Dave Freese of USCG */
+    if ( date1->year > date2->year ) return 1;
+    if ( date1->year < date2->year ) return -1;
+    if ( date1->month > date2->month ) return 1;
+    if ( date1->month < date2->month ) return -1;
+    if ( date1->day > date2->day ) return 1;
+    if ( date1->day < date2->day ) return -1;
+    return 0;
     }
   }
 
