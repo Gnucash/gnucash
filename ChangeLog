@@ -5,6 +5,10 @@
 
 	* src/gnome-utils/gnc-gui-query.c: use the right string when building
 	  the dialog (use the output from vsprintf, not the input)
+
+	* src/app-utils/Makefile.am: install i18n.h but don't include it
+	  in the DIST tarball -- let it be generated from i18n.h.in, which
+	  IS distributed.
 	
 2002-11-03  Joshua Sled  <jsled@asynchronous.org>
 

@@ -38,8 +38,16 @@ gncinclude_HEADERS = \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
-  i18n.h \
   option-util.h
+
+#
+# i18n.h wants to be installed, but we do NOT want it included
+# in the DISTFILE.  So, call it data and don't add it to
+# extra_dist..
+#
+gnci18nincludedir = ${GNC_INCLUDE_DIR}
+gnci18ninclude_DATA = \
+  i18n.h
 
 libgncmod_app_utils_la_LDFLAGS = -module
 
