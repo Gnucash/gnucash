@@ -534,8 +534,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
                xaccSplitSetGUID(s, &guid);
             }
 
-            /* next, restore some split data */
-            /* hack alert - not all split fields handled */
+            /* next, restore all split data */
             xaccSplitSetMemo(s, DB_GET_VAL("memo",j));
             xaccSplitSetAction(s, DB_GET_VAL("action",j));
             ts = gnc_iso8601_to_timespec_local
