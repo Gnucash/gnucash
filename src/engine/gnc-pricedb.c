@@ -292,15 +292,17 @@ gnc_price_set_time(GNCPrice *p, Timespec t)
   if(!p) return;
   if(!timespec_equal(&(p->time), &t)) 
   {
-    /* Changing the datesatamp requires the hash table 
+    /* Changing the datestamp requires the hash table 
      * position to be modified. The easiest way of doing 
      * this is to remove and reinsert. */
+    gnc_price_ref (p);
     remove_price (p->db, p, FALSE);
     gnc_price_begin_edit (p);
     p->time = t;
     if(p->db) p->db->dirty = TRUE;
     gnc_price_commit_edit (p);
     add_price (p->db, p);
+    gnc_price_unref (p);
   }
 }
 
