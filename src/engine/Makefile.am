@@ -15,7 +15,6 @@ libgncengine_la_SOURCES = \
   Group.c \
   LedgerUtils.c \
   Query.c \
-  Queue.c \
   Scrub.c \
   Session.c \
   Transaction.c \
@@ -47,7 +46,6 @@ noinst_HEADERS = \
   GroupP.h \
   LedgerUtils.h \
   Query.h \
-  Queue.h \
   Scrub.h \
   Session.h \
   TransLog.h \

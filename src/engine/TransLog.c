@@ -210,7 +210,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
       /* use tab-separated fields */
       fprintf (trans_log, "%c	%p/%p	%s	%s	%s	%s	%s	" \
-               "%s	%s	%s	%c	%10.6f	%10.6f	%s\n",
+               "%s	%s	%s	%c	%Ld/%Ld	%Ld/%Ld	%s\n",
                flag,
                trans, split,  /* trans+split make up unique id */
                dnow,
@@ -222,8 +222,10 @@ xaccTransWriteLog (Transaction *trans, char flag)
                split->memo,
                split->action,
                split->reconciled,
-               split->damount,
-               split->share_price,
+               gnc_numeric_num(split->damount), 
+               gnc_numeric_denom(split->damount),
+               gnc_numeric_num(split->value), 
+               gnc_numeric_denom(split->value),
                drecn
                );
       free (drecn);

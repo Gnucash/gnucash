@@ -33,10 +33,133 @@
  *   64-bit-overflow-proof 
  * - numeric_to_double... is there a better way? 
  * - add a string_to_numeric
- * - banker's rounding, other rounding forms 
  */
 
 static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
+
+/********************************************************************
+ *  gnc_numeric_zero_p
+ ********************************************************************/
+
+int
+gnc_numeric_zero_p(gnc_numeric a) {
+  if(gnc_numeric_check(a)) {
+    return 0;
+  }
+  else {
+    if((a.num == 0) && (a.denom != 0)) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+}
+
+/********************************************************************
+ *  gnc_numeric_negative_p
+ ********************************************************************/
+
+int
+gnc_numeric_negative_p(gnc_numeric a) {
+  if(gnc_numeric_check(a)) {
+    return 0;
+  }
+  else {
+    if((a.num < 0) && (a.denom != 0)) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+}
+
+/********************************************************************
+ *  gnc_numeric_positive_p
+ ********************************************************************/
+
+int
+gnc_numeric_positive_p(gnc_numeric a) {
+  if(gnc_numeric_check(a)) {
+    return 0;
+  }
+  else {
+    if((a.num > 0) && (a.denom != 0)) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
+  }
+}
+
+
+/********************************************************************
+ *  gnc_numeric_compare
+ *  returns 1 if a>b, -1 if b>a, 0 if a == b 
+ ********************************************************************/
+
+int
+gnc_numeric_compare(gnc_numeric a, gnc_numeric b) {
+  gint64 ab, ba;
+
+  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
+    return 0;
+  }
+  ab = a.num * b.denom;
+  ba = b.num * a.denom;
+
+  if(ab == ba) {
+    return 0;
+  }
+  else if(ab > ba) {
+    return 1;
+  }
+  else {
+    return -1;
+  }
+}
+
+
+/********************************************************************
+ *  gnc_numeric_eq
+ ********************************************************************/
+
+int
+gnc_numeric_eq(gnc_numeric a, gnc_numeric b) {
+  return ((a.num == b.num) && (a.denom == b.denom));
+}
+
+
+/********************************************************************
+ *  gnc_numeric_equal
+ ********************************************************************/
+
+int
+gnc_numeric_equal(gnc_numeric a, gnc_numeric b) {
+  return ((a.num * b.denom) == (a.denom * b.num));
+}
+
+
+/********************************************************************
+ *  gnc_numeric_same
+ *  would a and b be equal() if they were both converted to the same 
+ *  denominator? 
+ ********************************************************************/
+
+int
+gnc_numeric_same(gnc_numeric a, gnc_numeric b, gint64 denom, 
+                 gint how) {
+  gnc_numeric aconv, bconv;
+  
+  aconv = gnc_numeric_convert(a, denom, how);
+  bconv = gnc_numeric_convert(b, denom, how);
+  
+  return(gnc_numeric_equal(aconv, bconv));
+}
+
+
 
 /********************************************************************
  *  gnc_numeric_add
@@ -44,34 +167,53 @@ static gint64 gnc_numeric_lcd(gnc_numeric a, gnc_numeric b);
 
 gnc_numeric
 gnc_numeric_add(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gnc_numeric_round_t how) {
+                gint64 denom, gint how) {
   gnc_numeric sum;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
-    GNC_NUMERIC_ERROR(GNC_ERROR_ARG);
+    return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  if(denom == GNC_DENOM_FIXED) {
+  if((denom == GNC_DENOM_AUTO) && 
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
     if(a.denom == b.denom) {
       denom = a.denom;
     }
-    else {
-      GNC_NUMERIC_ERROR(GNC_ERROR_DENOM_DIFF);
+    else if(b.num == 0) {
+      denom = a.denom;
     }
+    else if(a.num == 0) {
+      denom = b.denom;
+    }
+    else {
+      return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
+    }
+  }
+
+  if(a.denom < 0) {
+    a.num *= a.denom;
+    a.denom = 1;
+  }
+
+  if(b.denom < 0) {
+    b.num *= b.denom;
+    b.denom = 1;
   }
 
   /* get an exact answer.. same denominator is the common case. */ 
   if(a.denom == b.denom) {
     sum.num = a.num + b.num;
-    sum.denom = a.num;
+    sum.denom = a.denom;
   }
   else {
     sum.num   = a.num*b.denom + b.num*a.denom;
     sum.denom = a.denom*b.denom;
   }
-
-  if(denom == GNC_DENOM_LCD) {
+  
+  if((denom == GNC_DENOM_AUTO) &&
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
     denom = gnc_numeric_lcd(a, b);
+    how   = how & GNC_NUMERIC_RND_MASK;
   }
   
   return gnc_numeric_convert(sum, denom, how);                             
@@ -84,36 +226,54 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
 
 gnc_numeric
 gnc_numeric_sub(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gnc_numeric_round_t how) {
+                gint64 denom, gint how) {
   gnc_numeric diff;
 
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
-    GNC_NUMERIC_ERROR(GNC_ERROR_ARG);
+    return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  if(denom == GNC_DENOM_FIXED) {
+  if((denom == GNC_DENOM_AUTO) && 
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
     if(a.denom == b.denom) {
       denom = a.denom;
     }
-    else {
-      GNC_NUMERIC_ERROR(GNC_ERROR_DENOM_DIFF);
+    else if(b.num == 0) {
+      denom = a.denom;
     }
+    else if(a.num == 0) {
+      denom = b.denom;
+    }
+    else {
+      return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
+    }
+  }
+
+  if(a.denom < 0) {
+    a.num *= a.denom;
+    a.denom = 1;
+  }
+
+  if(b.denom < 0) {
+    b.num *= b.denom;
+    b.denom = 1;
   }
 
   /* get an exact answer.. same denominator is the common case. */ 
   if(a.denom == b.denom) {
     diff.num = a.num - b.num;
-    diff.denom = a.num;
+    diff.denom = a.denom;
   }
   else {
     diff.num   = a.num*b.denom - b.num*a.denom;
     diff.denom = a.denom*b.denom;
   }
   
-  if(denom == GNC_DENOM_LCD) {
+  if((denom == GNC_DENOM_AUTO) &&
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
     denom = gnc_numeric_lcd(a, b);
+    how   = how & GNC_NUMERIC_RND_MASK;
   }
-
   return gnc_numeric_convert(diff, denom, how);                             
 }
 
@@ -124,27 +284,51 @@ gnc_numeric_sub(gnc_numeric a, gnc_numeric b,
 
 gnc_numeric
 gnc_numeric_mul(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gnc_numeric_round_t how) {
+                gint64 denom, gint how) {
   gnc_numeric product;
   
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
-    GNC_NUMERIC_ERROR(GNC_ERROR_ARG);
+    return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  if(denom == GNC_DENOM_FIXED) {
+  if((denom == GNC_DENOM_AUTO) && 
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
     if(a.denom == b.denom) {
       denom = a.denom;
     }
-    else {
-      GNC_NUMERIC_ERROR(GNC_ERROR_DENOM_DIFF);
+    else if(b.num == 0) {
+      denom = a.denom;
     }
+    else if(a.num == 0) {
+      denom = b.denom;
+    }
+    else {
+      return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
+    }
+  }
+
+  if(a.denom < 0) {
+    a.num *= a.denom;
+    a.denom = 1;
+  }
+
+  if(b.denom < 0) {
+    b.num *= b.denom;
+    b.denom = 1;
   }
 
   product.num   = a.num*b.num;
   product.denom = a.denom*b.denom;
   
-  if(denom == GNC_DENOM_LCD) {
+  if(product.denom < 0) {
+    product.num   = -product.num;
+    product.denom = -product.denom;
+  }
+  
+  if((denom == GNC_DENOM_AUTO) &&
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
     denom = gnc_numeric_lcd(a, b);
+    how   = how & GNC_NUMERIC_RND_MASK;
   }
 
   return gnc_numeric_convert(product, denom, how);                             
@@ -157,111 +341,223 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
 
 gnc_numeric
 gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
-                gint64 denom, gnc_numeric_round_t how) {
+                gint64 denom, gint how) {
   gnc_numeric quotient;
-  
+  int         sgn;
+
   if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
-    GNC_NUMERIC_ERROR(GNC_ERROR_ARG);
+    return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  if(denom == GNC_DENOM_FIXED) {
+  if((denom == GNC_DENOM_AUTO) && 
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
     if(a.denom == b.denom) {
       denom = a.denom;
     }
+    else if(a.denom == 0) {
+      denom = b.denom;
+    }
     else {
-      GNC_NUMERIC_ERROR(GNC_ERROR_DENOM_DIFF);
+      return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
     }
   }
-
-  quotient.num   = a.num*b.denom;
-  quotient.denom = a.denom*b.num;
   
-  if(denom == GNC_DENOM_LCD) {
+
+  if(a.denom < 0) {
+    a.num *= a.denom;
+    a.denom = 1;
+  }
+
+  if(b.denom < 0) {
+    b.num *= b.denom;
+    b.denom = 1;
+  }
+
+  if(a.denom == b.denom) {
+    quotient.num = a.num;
+    quotient.denom = b.num;
+  }
+  else {
+    quotient.num   = a.num*b.denom;
+    quotient.denom = a.denom*b.num;
+  }
+  
+  if(quotient.denom < 0) {
+    quotient.num   = -quotient.num;
+    quotient.denom = -quotient.denom;
+  }
+  
+  if((denom == GNC_DENOM_AUTO) &&
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
     denom = gnc_numeric_lcd(a, b);
+    how   = how & GNC_NUMERIC_RND_MASK;
   }
 
   return gnc_numeric_convert(quotient, denom, how); 
 }
+ 
+/********************************************************************
+ *  gnc_numeric_neg
+ *  negate the argument 
+ ********************************************************************/
 
+gnc_numeric
+gnc_numeric_neg(gnc_numeric a) {
+  if(gnc_numeric_check(a)) {
+    return gnc_numeric_error(GNC_ERROR_ARG);
+  }
+  return gnc_numeric_create(- a.num, a.denom);
+}
 
+  
 /********************************************************************
  *  gnc_numeric_convert
  ********************************************************************/
 
 gnc_numeric
-gnc_numeric_convert(gnc_numeric in, gint64 denom, gnc_numeric_round_t how) {
+gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
   gnc_numeric out;
+  gint64      temp_bc;
+  gint64      temp_a;
   gint64      remainder;  
   gint64      sign;
-  
+  gint        denom_neg=0;
+
   if(gnc_numeric_check(in)) {
-    GNC_NUMERIC_ERROR(GNC_ERROR_ARG);
+    return gnc_numeric_error(GNC_ERROR_ARG);
   }
   
-  switch(denom) {
-  case GNC_DENOM_EXACT:
-    return in;
-    break;
-
-  case GNC_DENOM_REDUCE:
-    /* reduce the input to a relatively-prime fraction */
-    return gnc_numeric_reduce(in);
-    break;
-
-  default:
-    /* make sure we need to do the work */
-    if(in.denom == denom) {
+  if(denom == GNC_DENOM_AUTO) {
+    switch(how & GNC_NUMERIC_DENOM_MASK) {
+    case GNC_DENOM_EXACT:
       return in;
+      break;
+      
+    case GNC_DENOM_REDUCE:
+      /* reduce the input to a relatively-prime fraction */
+      return gnc_numeric_reduce(in);
+      break;
+      
+    case GNC_DENOM_FIXED:
+      if(in.denom != denom) {
+        return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
+      }
+      else {
+        return in;
+      }
+      break;
+      
+    case GNC_DENOM_LCD:
+      /* this is a no-op. */
+    default:
+      break;
     }
-    
+  }
+  
+  /* make sure we need to do the work */
+  if(in.denom == denom) {
+    return in;
+  }
+  
+  /* if the denominator of the input value is negative, get rid of that. */
+  if(in.denom < 0) {
+    in.num = in.num * (- in.denom);
+    in.denom = 1;
+  }
+  
+  sign = (in.num < 0) ? -1 : 1;
+
+  /* if the denominator is less than zero, we are to interpret it as 
+   * the reciprocal of its magnitude. */
+  if(denom < 0) {
+    denom     = - denom;
+    denom_neg = 1;
+    temp_a    = (in.num < 0) ? -in.num : in.num;
+    temp_bc   = in.denom * denom;
+    remainder = in.num % temp_bc;
+    out.num   = in.num / temp_bc;
+    out.denom = - denom;    
+  }
+  else {
     /* do all the modulo and int division on positive values to make
      * things a little clearer. */
-    sign      = (in.num < 0) ? -1 : 1;
     out.num   = in.num * denom;
     out.num   = (out.num < 0) ? -out.num : out.num;
     remainder = out.num % in.denom;
     out.num   = out.num / in.denom;
     out.denom = denom;
-
-    if(remainder > 0) {
-      switch(how) {
-      case GNC_RND_FLOOR:
-        if(sign < 0) {
-          out.num = out.num + 1;
-        }
-        break;
-
-      case GNC_RND_CEIL:
-        if(sign > 0) {
-          out.num = out.num + 1;
-        }
-        break;
-        
-      case GNC_RND_TRUNC:
-        break;
-
-      case GNC_RND_ROUND:
-        if((2 * remainder) > in.denom) {
-          out.num = out.num + 1;
-        }
-        break;
-              
-      case GNC_RND_ROUND_HALF_UP:
-        if((2 * remainder) >= in.denom) {
-          out.num = out.num + 1;
-        }
-        break;
-
-      case GNC_RND_NEVER:
-        /* signal an error */ 
-        break;
-      }
-    }
-    
-    out.num = (sign > 0) ? out.num : (-out.num);
-    
-    break;
   }
+
+  if(remainder > 0) {
+    switch(how) {
+    case GNC_RND_FLOOR:
+      if(sign < 0) {
+        out.num = out.num + 1;
+      }
+      break;
+      
+    case GNC_RND_CEIL:
+      if(sign > 0) {
+        out.num = out.num + 1;
+      }
+      break;
+      
+    case GNC_RND_TRUNC:
+      break;
+      
+    case GNC_RND_ROUND_HALF_DOWN:
+      if(denom_neg) {
+        if((2 * remainder) > in.denom*denom) {
+          out.num = out.num + 1;
+        }
+      }
+      else if((2 * remainder * denom) > in.denom) {
+        out.num = out.num + 1;
+      }
+      break;
+      
+    case GNC_RND_ROUND_HALF_UP:
+      if(denom_neg) {
+        if((2 * remainder) >= in.denom*denom) {
+          out.num = out.num + 1;
+        }
+      }
+      else if((2 * remainder * denom) >= in.denom) {
+        out.num = out.num + 1;
+      }
+      break;
+      
+    case GNC_RND_ROUND:
+      if(denom_neg) {
+        if((2 * remainder) > in.denom*denom) {
+          out.num = out.num + 1;
+        }
+        else if((2 * remainder) == in.denom*denom) {
+          if(out.num % 2) {
+            out.num = out.num + 1;
+          }
+        }        
+      }
+      else {
+        if((2 * remainder * denom) > in.denom) {
+          out.num = out.num + 1;
+        }
+        else if((2 * remainder * denom) == in.denom) {
+          if(out.num % 2) {
+            out.num = out.num + 1;
+          }
+        }    
+      }    
+      break;
+      
+    case GNC_RND_NEVER:
+      return gnc_numeric_error(GNC_ERROR_REMAINDER);
+      break;
+    }
+  }
+  
+  out.num = (sign > 0) ? out.num : (-out.num);
+  
   return out;
 }
 
@@ -414,7 +710,7 @@ gnc_numeric_reduce(gnc_numeric in) {
  ********************************************************************/
 
 gnc_numeric
-double_to_gnc_numeric(double in, gint64 denom, gnc_numeric_round_t how) {
+double_to_gnc_numeric(double in, gint64 denom, gint how) {
   gnc_numeric out;
 
   in = in * (double)denom;
@@ -455,7 +751,12 @@ double_to_gnc_numeric(double in, gint64 denom, gnc_numeric_round_t how) {
 
 double
 gnc_numeric_to_double(gnc_numeric in) {
-  return (double)in.num/(double)in.denom;
+  if(in.denom >= 0) {
+    return (double)in.num/(double)in.denom;
+  }
+  else if(in.denom < 0) {
+    return (double)(in.num * in.denom);
+  }
 }
 
 
@@ -473,12 +774,52 @@ gnc_numeric_create(gint64 num, gint64 denom) {
 
 
 /********************************************************************
+ *  gnc_numeric_error
+ ********************************************************************/
+
+gnc_numeric
+gnc_numeric_error(int error_code) {
+  return gnc_numeric_create(error_code, 0LL);
+}
+
+
+/********************************************************************
+ *  gnc_numeric_zero
+ ********************************************************************/
+
+gnc_numeric
+gnc_numeric_zero() {
+  return gnc_numeric_create(0LL, 1LL);
+}
+
+
+/********************************************************************
+ *  gnc_numeric_num
+ ********************************************************************/
+
+gint64
+gnc_numeric_num(gnc_numeric a) {
+  return a.num;
+}
+
+
+/********************************************************************
+ *  gnc_numeric_denom
+ ********************************************************************/
+
+gint64
+gnc_numeric_denom(gnc_numeric a) {
+  return a.denom;
+}
+
+
+/********************************************************************
  *  gnc_numeric_add_with_error
  ********************************************************************/
 
 gnc_numeric
 gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b, 
-                           gint64 denom, gnc_numeric_round_t how,
+                           gint64 denom, gint how,
                            gnc_numeric * error) {
 
   gnc_numeric sum   = gnc_numeric_add(a, b, denom, how);
@@ -497,7 +838,7 @@ gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
 
 gnc_numeric
 gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b, 
-                           gint64 denom, gnc_numeric_round_t how,
+                           gint64 denom, gint how,
                            gnc_numeric * error) {
 
   gnc_numeric diff  = gnc_numeric_sub(a, b, denom, how);
@@ -516,7 +857,7 @@ gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
 
 gnc_numeric
 gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b, 
-                           gint64 denom, gnc_numeric_round_t how,
+                           gint64 denom, gint how,
                            gnc_numeric * error) {
 
   gnc_numeric prod  = gnc_numeric_mul(a, b, denom, how);
@@ -535,7 +876,7 @@ gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
 
 gnc_numeric
 gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b, 
-                           gint64 denom, gnc_numeric_round_t how,
+                           gint64 denom, gint how,
                            gnc_numeric * error) {
 
   gnc_numeric quot  = gnc_numeric_div(a, b, denom, how);
@@ -549,16 +890,17 @@ gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
 
 int
 gnc_numeric_check(gnc_numeric in) {
-  if(in.denom > 0) {
+  if(in.denom != 0) {
     return GNC_ERROR_OK;
   }
   else {
-    return in.denom;
+    return in.num;
   }
 }
 
 
 
+#if 0
 static char *
 gnc_numeric_print(gnc_numeric in) {
   char * retval;
@@ -705,3 +1047,4 @@ main(int argc, char ** argv) {
 
   return 0;
 }
+#endif

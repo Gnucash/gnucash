@@ -50,6 +50,7 @@
 
 #include "config.h"
 #include "kvp_frame.h"
+#include "gnc-numeric.h"
 #include "Transaction.h"   /* for typedefs */
 #include "GNCId.h"
 
@@ -112,8 +113,12 @@ struct _split
   char    reconciled;
   Timespec date_reconciled;  /* date split was reconciled                 */
 
-  double  damount;           /* num-shares; if > 0.0, deposit, else paymt */
-  double  share_price;       /* the share price, ==1.0 for bank account   */
+  /* value is the amount of the account's currency involved,
+   * damount is the amount of the account's security.  For 
+   * bank-type accounts, currency == security and 
+   * value == damount. */
+  gnc_numeric  value;         
+  gnc_numeric  damount;  
 
   /* -------------------------------------------------------------- */
   /* Below follow some 'temporary' fields */
@@ -122,15 +127,15 @@ struct _split
    * all the splits in the account, up to and including this split.
    * These balances apply to a sorting order by date posted
    * (not by date entered). */
-  double  balance;
-  double  cleared_balance;
-  double  reconciled_balance;
+  gnc_numeric  balance;
+  gnc_numeric  cleared_balance;
+  gnc_numeric  reconciled_balance;
 
-  double  share_balance;
-  double  share_cleared_balance;
-  double  share_reconciled_balance;
+  gnc_numeric  share_balance;
+  gnc_numeric  share_cleared_balance;
+  gnc_numeric  share_reconciled_balance;
 
-  double cost_basis;
+  gnc_numeric cost_basis;
 
 
   int ticket; /* used for matching up splits for QIFIO.c */

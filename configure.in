@@ -303,12 +303,12 @@ AC_CHECK_LIB(gnomeprint, gnome_print_context_new,
              ,
              $EXTRALIBS)
 ### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml`
+EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml unicode`
 
 # check for gtkhtml and enable it via HAVE_LIBGTKHTML
 # if found
 AC_CHECK_LIB(gtkhtml, gtk_html_new,
-             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
+             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml unicode"
              AC_DEFINE(HAVE_LIBGTKHTML),
              AC_MSG_ERROR([Cannot find gtkhtml.  See the README for more info.]),
              $EXTRALIBS)

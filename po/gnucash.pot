@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-09-21 21:23-0700\n"
+"POT-Creation-Date: 2000-09-23 14:31-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1557,8 +1557,8 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: messages-i18n.c:365 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:365 src/gnome/print-session.c:112
+#: src/gnome/print-session.c:205
 msgid "(none)"
 msgstr ""
 
@@ -3913,12 +3913,13 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4447
 msgid ""
-"Please select a file to load. When you click \"Next\", the file will\n"
-"be loaded into a staging area and analyzed. You may need\n"
-"to answer some questions about the account(s) in the file.\n"
+"Please select a file to load. When you click \"Next\", the file will be "
+"loaded\n"
+"and analyzed. You may need to answer some questions about the account(s)\n"
+"in the file.\n"
 "\n"
-"You will have the opportunity to load as many files as you wish,\n"
-"so don't worry if your data is in multiple files. \n"
+"You will have the opportunity to load as many files as you wish, so don't \n"
+"worry if your data is in multiple files. \n"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4462
@@ -3931,14 +3932,12 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4502
 msgid ""
-"The QIF file that you just loaded appears to contain \n"
-"transactions for just one account, but the file does not have\n"
-"a name for that account.  \n"
+"The QIF file that you just loaded appears to contain transactions for just \n"
+"one account, but the file does not specify a name for that account.  \n"
 "\n"
-"Please enter a name for the account. If the file was exported \n"
-"from another accounting program and you are importing multiple\n"
-"files, it is important to use the same name that was used in \n"
-"that program.\n"
+"Please enter a name for the account. If the file was exported from another\n"
+"accounting program, you should use the same account name that was used \n"
+"in that program.\n"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4517
@@ -4031,11 +4030,12 @@ msgid ""
 "Gnucash uses separate Income and Expense accounts rather than categories\n"
 "to classify your transactions. Each of the categories in your QIF file will "
 "be \n"
-"converted to a Gnucash account. On the next page, you will have an "
-"opportunity\n"
-"to look at the suggested matchings between QIF categories and Gnucash "
-"accounts. \n"
-"You may change the matchings if you do not like the suggested ones. \n"
+"converted to a Gnucash account. \n"
+"\n"
+"On the next page, you will have an opportunity to look at the suggested "
+"matches\n"
+"between QIF categories and Gnucash accounts.  You may change matches \n"
+"that you do not like by clicking on the line containing the category name.\n"
 "\n"
 "If you change your mind later, you can reorganize the account structure "
 "safely\n"
@@ -4062,13 +4062,11 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4803
 msgid ""
-"The QIF importer cannot currently handle multi-currency QIF \n"
-"files. All the accounts in the QIF file(s) you are importing must\n"
-"be denominated in the same currency. This limitation should be\n"
-"removed soon.\n"
+"The QIF importer cannot currently handle multi-currency QIF files. All the \n"
+"accounts in the QIF file(s) you are importing must be denominated in the\n"
+"same currency. This limitation should be removed soon.\n"
 "\n"
-"Enter the currency to use for transactions imported from your\n"
-"QIF files:"
+"Select the currency to use for transactions imported from your QIF files:\n"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4825
@@ -4117,6 +4115,6 @@ msgid ""
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
 
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:238
 msgid "You must select a printer first."
 msgstr ""

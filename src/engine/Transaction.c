@@ -2,6 +2,7 @@
  * Transaction.c -- the transaction data structure                  *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -64,8 +65,8 @@ int force_double_entry = 0;
 #define DEFER_REBALANCE 0x2
 #define BEING_DESTROYED 0x4
 
-/* a very small number */
-#define ZERO_THRESH_VALUE 0.0000000000001
+/* arbitrary price per share increment FIXME */
+#define PRICE_DENOM 10000
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -93,19 +94,19 @@ xaccInitSplit(Split * split)
   split->memo        = strdup("");
   split->docref      = strdup("");
   split->reconciled  = NREC;
-  split->damount     = 0.0;
-  split->share_price = 1.0;
+  split->damount     = gnc_numeric_zero();
+  split->value       = gnc_numeric_zero();
 
   split->date_reconciled.tv_sec  = 0;
   split->date_reconciled.tv_nsec = 0;
 
-  split->balance             = 0.0;
-  split->cleared_balance     = 0.0;
-  split->reconciled_balance  = 0.0;
-  split->share_balance             = 0.0;
-  split->share_cleared_balance     = 0.0;
-  split->share_reconciled_balance  = 0.0;
-  split->cost_basis                = 0.0;
+  split->balance             = gnc_numeric_zero();
+  split->cleared_balance     = gnc_numeric_zero();
+  split->reconciled_balance  = gnc_numeric_zero();
+  split->share_balance             = gnc_numeric_zero();
+  split->share_cleared_balance     = gnc_numeric_zero();
+  split->share_reconciled_balance  = gnc_numeric_zero();
+  split->cost_basis                = gnc_numeric_zero();
   split->ticket = 0;
 
   split->kvp_data = NULL;
@@ -138,7 +139,7 @@ xaccCloneSplit (Split *s)
 {
   Split *split = (Split *)_malloc(sizeof(Split));
 
-  split->acc         = s ->acc;
+  split->acc         = s->acc;
   split->parent      = s->parent;
   
   split->action      = strdup(s->action);
@@ -146,7 +147,7 @@ xaccCloneSplit (Split *s)
   split->docref      = strdup(s->docref);
   split->reconciled  = s->reconciled;
   split->damount     = s->damount;
-  split->share_price = s->share_price;
+  split->value       = s->value;
 
   split->date_reconciled.tv_sec  = s->date_reconciled.tv_sec;
   split->date_reconciled.tv_nsec = s->date_reconciled.tv_nsec;
@@ -184,8 +185,8 @@ xaccFreeSplit( Split *split )
   split->action      = 0x0;
   split->docref      = 0x0;
   split->reconciled  = NREC;
-  split->damount     = 0.0;
-  split->share_price = 1.0;
+  split->damount     = gnc_numeric_zero();
+  split->value       = gnc_numeric_zero();
   split->parent      = NULL;
   split->acc         = NULL;
 
@@ -313,30 +314,68 @@ xaccCountSplits (Split **tarray)
    return nsplit;
 }
 
+static int
+get_currency_denom(Split * s) {  
+  if(!s) return 0;
+  
+  else if(!(s->acc)) {
+    return 10000;
+  }
+  else {
+    return xaccAccountGetCurrencySCU(s->acc);
+  }
+}
+
+static int
+get_security_denom(Split * s) {
+  if(!s) return 0;
+  else if(!(s->acc)) {
+    return 10000;
+  }
+  else {
+    return xaccAccountGetSecuritySCU(s->acc);
+  }
+}
+
 /********************************************************************\
 \********************************************************************/
 
-void xaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
+void 
+xaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
-   if (!s) return;
+  gnc_numeric gprice = 
+    double_to_gnc_numeric(price, PRICE_DENOM, GNC_RND_ROUND);
 
-   MARK_SPLIT(s);
-   s -> share_price = price;
-   s -> damount = amt;
-
-   /* force double entry to always balance */
-   xaccSplitRebalance (s);
+  if (!s) return;
+  
+  MARK_SPLIT(s);
+  s->damount = 
+    double_to_gnc_numeric(amt, get_security_denom(s), GNC_RND_ROUND);
+  s->value   = 
+    gnc_numeric_mul(s->damount, gprice, get_currency_denom(s), GNC_RND_ROUND);
+  
+  /* force double entry to always balance */
+  xaccSplitRebalance (s);
 }
 
 void xaccSplitSetSharePrice (Split *s, double amt)
 {
-   if (!s) return;
-
-   MARK_SPLIT(s);
-   s -> share_price = amt;
-
-   /* force double entry to always balance */
-   xaccSplitRebalance (s);
+  gnc_numeric price = double_to_gnc_numeric(amt, PRICE_DENOM, GNC_RND_ROUND);
+  
+  if (!s) return;
+  
+  MARK_SPLIT(s);
+  
+  if(!gnc_numeric_zero_p(price) && !gnc_numeric_zero_p(s->value)) {      
+    s->damount = gnc_numeric_div(s->value, price, get_security_denom(s), 
+                                 GNC_RND_ROUND);
+  }
+  else {
+    s->value = gnc_numeric_mul(s->damount, price, get_currency_denom(s), 
+                               GNC_RND_ROUND);    
+  }
+  /* force double entry to always balance */
+  xaccSplitRebalance (s);
 }
 
 void xaccSplitSetShareAmount (Split *s, double amt)
@@ -344,8 +383,13 @@ void xaccSplitSetShareAmount (Split *s, double amt)
    if (!s) return;
 
    MARK_SPLIT(s);
-   s -> damount = amt;
+   s->damount = double_to_gnc_numeric(amt, get_security_denom(s), 
+                                      GNC_RND_ROUND);
 
+   if(s->acc && gnc_commodity_equiv(s->acc->currency, s->acc->security)) {
+     s->value = s->damount;
+   }
+   
    /* force double entry to always balance */
    xaccSplitRebalance (s);
 }
@@ -355,9 +399,14 @@ void xaccSplitSetValue (Split *s, double amt)
    if (!s) return;
 
    MARK_SPLIT(s);
+   
    /* remember, damount is actually share price */
-   s -> damount = amt / (s->share_price);
-
+   s->value = double_to_gnc_numeric(amt, get_currency_denom(s), GNC_RND_ROUND);
+   
+   if(s->acc && gnc_commodity_equiv(s->acc->currency, s->acc->security)) {
+     s->damount = s->value;
+   }
+   
    /* force double entry to always balance */
    xaccSplitRebalance (s);
 }
@@ -368,44 +417,44 @@ void xaccSplitSetValue (Split *s, double amt)
 double xaccSplitGetBalance (Split *s) 
 {
    if (!s) return 0.0;
-   return s->balance;
+   return gnc_numeric_to_double(s->balance);
 }
 
 double xaccSplitGetClearedBalance (Split *s) 
 {
    if (!s) return 0.0;
-   return s->cleared_balance;
+   return gnc_numeric_to_double(s->cleared_balance);
 }
 
 double xaccSplitGetReconciledBalance (Split *s) 
 {
    if (!s) return 0.0;
-   return s->reconciled_balance;
+   return gnc_numeric_to_double(s->reconciled_balance);
 }
 
 double xaccSplitGetShareBalance (Split *s) 
 {
    if (!s) return 0.0;
-   return s->share_balance;
+   return gnc_numeric_to_double(s->share_balance);
 }
 
 double xaccSplitGetShareClearedBalance (Split *s) 
 {
    if (!s) return 0.0;
-   return s->share_cleared_balance;
+   return gnc_numeric_to_double(s->share_cleared_balance);
 }
 
 double xaccSplitGetShareReconciledBalance (Split *s) 
 {
    if (!s) return 0.0;
-   return s->share_reconciled_balance;
+   return gnc_numeric_to_double(s->share_reconciled_balance);
 }
 
 double xaccSplitGetCostBasis (Split *s) 
 {
    if (!s) return 0.0;
    xaccAccountRecomputeCostBasis (s->acc);
-   return s->cost_basis;
+   return gnc_numeric_to_double(s->cost_basis);
 }
 
 /********************************************************************\
@@ -629,81 +678,58 @@ xaccTransLookup (const GUID *guid)
 /********************************************************************\
 \********************************************************************/
 
-/* compute a=b/c unless c is zero ... */
-#define DEVIDE(a,b,c) {			\
-   if (DEQEPS (0.0, (c), 1.0e-15)) {	\
-      if (DEQEPS (0.0, (b), 1.0e-6)) {	\
-         (a) = 0.0;			\
-      } else {				\
-         PERR ("zero share price but non-zero value\n"); \
-         (a) = (b)/(c);			\
-      }					\
-   } else {				\
-      (a) = (b)/(c);			\
-   }					\
-}
-
 void
 xaccSplitSetBaseValue (Split *s, double value, 
                        const gnc_commodity * base_currency)
 {
-   int adjust_price = 0; 
+   gnc_numeric gvalue;
    if (!s) return;
 
    MARK_SPLIT(s);
-
+   
    /* Novice/casual users may not want or use the double entry 
     * features of this engine. So, in particular, there
     * may be the occasional split without a parent account. 
     * Well, that's ok, we'll just go with the flow. 
     */
    if (!(s->acc)) {
-      if (force_double_entry) {
-         PERR ("split must have a parent\n");
-         assert (s->acc);
-      } 
-      else { 
-        /* if there's already a share-amount set, we need to respect 
-         * that and adjust the price to make this balance. */
-        if (!DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
-          DEVIDE(s->share_price, value, s->damount);
-        }
-        else {
-          DEVIDE(s->damount, value, s->share_price);
-        }
-        return;
-      }
+     if (force_double_entry) {
+       PERR ("split must have a parent\n");
+       assert (s->acc);
+     } 
+     else { 
+       /* this is a change in semantics.  previously, calling 
+        * setbasevalue on the same split twice would set the 
+        * amount the first time and the value the second.  
+        * that's bogus. -- bg */
+       gvalue = double_to_gnc_numeric(value, get_currency_denom(s), 
+                                      GNC_RND_ROUND);
+       s->value = gvalue;
+       s->damount = gvalue;
+     }
+     return;
    }
-
-   if(s->acc &&
-      s->acc->security &&
-      !gnc_commodity_equiv(s->acc->security, s->acc->currency) && 
-      !DEQEPS(s->damount, 0.0, ZERO_THRESH_VALUE)) {
-     adjust_price = 1;
-   }
-
-   /* The value of a split depends on the currency we express the
-    * value in.  This may or may not require a divide.
-    */
+   
+   /* if the base_currency is the account currency, set the 
+    * value.  If it's the account security, set the damount. 
+    * If both, set both. */
    if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
-     if (adjust_price) {
-       DEVIDE(s->share_price, value, s->damount);
+     gvalue = double_to_gnc_numeric(value, get_currency_denom(s), 
+                                    GNC_RND_ROUND);
+     if(gnc_commodity_equiv(s->acc->security, base_currency)) {
+       s->damount = gvalue;
      }
-     else {
-       DEVIDE(s->damount, value, s->share_price);
-     }
+     s->value = gvalue;
    } 
    else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
-     s->damount     = value;   
-     s->share_price = 1.0;
+     gvalue = double_to_gnc_numeric(value, get_security_denom(s), 
+                                    GNC_RND_ROUND);
+     s->damount     = gvalue;   
    } 
-   else if ((0x0==base_currency) && (0 == force_double_entry)) {
-     if (adjust_price) {
-       DEVIDE(s->share_price, value, s->damount);
-     }
-     else {
-       DEVIDE(s->damount, value, s->share_price);
-     }
+   else if ((0x0==base_currency) && (0 == force_double_entry)) { 
+     gvalue = double_to_gnc_numeric(value, get_currency_denom(s), 
+                                    GNC_RND_ROUND);
+     s->value = gvalue;
    }
    else {
      PERR ("inappropriate base currency %s "
@@ -719,99 +745,106 @@ xaccSplitSetBaseValue (Split *s, double value,
 double
 xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
 {
-   double value;
+   gnc_numeric value;
    if (!s) return 0.0;
-
+   
    /* ahh -- users may not want or use the double entry 
     * features of this engine.  So, in particular, there
     * may be the occasional split without a parent account. 
     * Well, that's ok, we'll just go with the flow. 
     */
    if (!(s->acc)) {
-      if (force_double_entry) {
-         assert (s->acc);
-      } else { 
-         value = s->damount * s->share_price;   
-         return value;
-      }
+     if (force_double_entry) {
+       assert (s->acc);
+     } 
+     else { 
+       return gnc_numeric_to_double(s->value);
+     }
    }
-
+   
    /* be more precise -- the value depends on the currency 
     * we want it expressed in.
     */
    if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
-      value = s->damount * s->share_price;   
-   } else 
-   if (gnc_commodity_equiv(s->acc->security, base_currency)) {
-      value = s->damount;   
-   } else 
-   if ((NULL==base_currency) && (0 == force_double_entry)) {
-      value = s->damount * s->share_price;   
-   } else 
-   {
-      PERR ("inappropriate base currency %s "
-            "given split currency=%s and security=%s\n",
-            gnc_commodity_get_printname(base_currency), 
-            gnc_commodity_get_printname(s->acc->currency), 
-            gnc_commodity_get_printname(s->acc->security));
-      return 0.0;
+     value = s->value;
+   } 
+   else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
+     value = s->damount;   
+   } 
+   else if ((NULL==base_currency) && (0 == force_double_entry)) {
+     value = s->value;
+   } 
+   else {
+     PERR ("inappropriate base currency %s "
+           "given split currency=%s and security=%s\n",
+           gnc_commodity_get_printname(base_currency), 
+           gnc_commodity_get_printname(s->acc->currency), 
+           gnc_commodity_get_printname(s->acc->security));
+     return 0.0;
    }
-   return value;
+   return gnc_numeric_to_double(value);
 }
 
 /********************************************************************\
 \********************************************************************/
 
-static double
+static gnc_numeric
 ComputeValue (Split **sarray, Split * skip_me, 
               const gnc_commodity * base_currency)
 {
    Split *s;
    int i=0;
-   double value = 0.0;
+   gnc_numeric value;
+   
+   s     = sarray[0];
+   value = gnc_numeric_zero();
 
-   s = sarray[0];
    while (s) {
-      if (s != skip_me) {
-         /* ahh -- users may not want or use the double entry 
-          * features of this engine.  So, in particular, there
-          * may be the occasional split without a parent account. 
-          * Well, that's ok, we'll just go with the flow. 
-          */
-         if (!(s->acc)) {
-            if (force_double_entry) {
-               assert (s->acc);
-            } else { 
-               value += s->damount * s->share_price;   
-            }
-         } else 
-         if ((0x0 == base_currency) && (0 == force_double_entry)) {
-            value += s->damount * s->share_price;   
-         } else {
-
-            /* OK, we've got a parent account, we've got currency, 
-             * lets behave like professionals now, instead of the
-             * shenanigans above.
-             */
-            if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
-              value += s->share_price * s->damount;
-            } 
-            else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
-              value += s->damount;
-            } 
-            else {
-              PERR ("inconsistent currencies\n");      
-              printf("base = '%s', curr='%s', sec='%s'\n",
-                     gnc_commodity_get_printname(base_currency),
-                     gnc_commodity_get_printname(s->acc->currency),
-                     gnc_commodity_get_printname(s->acc->security));
-              assert (0);
-            }
+     if (s != skip_me) {
+       /* ahh -- users may not want or use the double entry 
+        * features of this engine.  So, in particular, there
+        * may be the occasional split without a parent account. 
+        * Well, that's ok, we'll just go with the flow. 
+        */
+       if (!(s->acc)) {
+         if (force_double_entry) {
+           assert (s->acc);
+         } 
+         else { 
+           value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
+                                   GNC_DENOM_LCD);
          }
-      }
-      i++; s = sarray [i];
+       } 
+       else if ((0x0 == base_currency) && (0 == force_double_entry)) {
+         value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
+                                 GNC_DENOM_LCD);
+       } 
+       else {         
+         /* OK, we've got a parent account, we've got currency, 
+          * lets behave like professionals now, instead of the
+          * shenanigans above.
+          */
+         if (gnc_commodity_equiv(s->acc->currency, base_currency)) {
+           value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
+                                   GNC_DENOM_FIXED | GNC_RND_NEVER);
+         } 
+         else if (gnc_commodity_equiv(s->acc->security, base_currency)) {
+           value  = gnc_numeric_add(value, s->damount, GNC_DENOM_AUTO,
+                                    GNC_DENOM_FIXED | GNC_RND_NEVER);
+         } 
+         else {
+           PERR ("inconsistent currencies\n");      
+           printf("base = '%s', curr='%s', sec='%s'\n",
+                  gnc_commodity_get_printname(base_currency),
+                  gnc_commodity_get_printname(s->acc->currency),
+                  gnc_commodity_get_printname(s->acc->security));
+           assert (0);
+         }
+       }
+     }
+     i++; s = sarray [i];
    }
-
+   
    return value;
 }
 
@@ -819,8 +852,8 @@ double
 xaccTransGetImbalance (Transaction * trans)
 {
   const gnc_commodity * currency = xaccTransFindCommonCurrency (trans);
-  double imbal = ComputeValue (trans->splits, NULL, currency);
-  return imbal;
+  gnc_numeric imbal = ComputeValue (trans->splits, NULL, currency);
+  return gnc_numeric_to_double(imbal);
 }
 
 /********************************************************************\
@@ -956,8 +989,8 @@ xaccSplitRebalance (Split *split)
   Transaction *trans;
   Split *s;
   int i = 0;
-  double value = 0.0;
-  const gnc_commodity * base_currency = NULL;
+  gnc_numeric value;
+  const gnc_commodity  * base_currency = NULL;
 
   trans = split->parent;
 
@@ -1015,56 +1048,61 @@ xaccSplitRebalance (Split *split)
     if (s) {
       /* the new value of the destination split will be the result.  */
       value = ComputeValue (trans->splits, s, base_currency);
-      xaccSplitSetBaseValue (s, -value, base_currency);
+      
+      /* KLUDGE -- bg */
+      xaccSplitSetBaseValue (s, 
+                             gnc_numeric_to_double(gnc_numeric_neg(value)), 
+                             base_currency);
       MARK_SPLIT (s);
       xaccAccountRecomputeBalance (s->acc); 
 
-    } else {
+    } 
+    else {
       /* There are no destination splits !! 
        * Either this is allowed, in which case 
        * we just blow it off, or its forbidden,
        * in which case we force a balancing split 
        * to be created.
-       *
-       * Note that its ok to have a single split whose amount is zero.
-       * this is just a split that is recording a price, and nothing
-       * else.  (i.e. it still obeys the rule that the sum of the 
-       * value of all the splits is zero).
        */
+      
+      if (force_double_entry) {
+        if (! gnc_numeric_zero_p(split->damount)) {
+          /* malloc a new split, mirror it to the source split */
+          s = xaccMallocSplit ();
+          free (s->memo);
+          free (s->action);
 
-       if (force_double_entry) {
-          if (! (DEQ (0.0, split->damount))) {
-             value = split->share_price * split->damount;
-
-             /* malloc a new split, mirror it to the source split */
-             s = xaccMallocSplit ();
-             s->damount = -value;
-             free (s->memo);
-             s->memo = strdup (split->memo);
-             free (s->action);
-             s->action = strdup (split->action);
-
-             /* insert the new split into the transaction and 
-              * the same account as the source split */
-             MARK_SPLIT (s);
-             xaccTransAppendSplit (trans, s); 
-             xaccAccountInsertSplit (split->acc, s);
-          }
-       }
+          s->value   = gnc_numeric_neg(split->value);
+          s->damount = gnc_numeric_neg(split->damount);
+          s->memo    = strdup (split->memo);
+          s->action  = strdup (split->action);
+          
+          /* insert the new split into the transaction and 
+           * the same account as the source split */
+          MARK_SPLIT (s);
+          xaccTransAppendSplit (trans, s); 
+          xaccAccountInsertSplit (split->acc, s);
+        }
+      }
     }
-  } else {
-
+  } 
+  else {
+    
     /* The indicated split is a destination split.
      * Compute grand total of all destination splits,
      * and force the source split to balance.
      */
     s = trans->splits[0];
     value = ComputeValue (trans->splits, s, base_currency);
-    xaccSplitSetBaseValue (s, -value, base_currency);
+    
+    /* KLUDGE -- bg */
+    xaccSplitSetBaseValue (s, 
+                           gnc_numeric_to_double(gnc_numeric_neg(value)), 
+                           base_currency);
     MARK_SPLIT (s);
     xaccAccountRecomputeBalance (s->acc); 
   }
-
+  
   /* hack alert -- if the "force-double-entry" flag is set,
    * we should check to make sure that every split belongs
    * to some account.  If any of them don't, force them 
@@ -1159,19 +1197,18 @@ xaccTransCommitEdit (Transaction *trans)
     * or in some dummy account (if force==2).
     */
    if ((1 == force_double_entry) &&
-       (NULL == trans->splits[1]) && (!(DEQ(0.0, split->damount))))
-   {
-      Split * s = xaccMallocSplit();
-      xaccSplitSetMemo  (s, split->memo);
-      xaccSplitSetAction (s, split->action);
-      s->damount     = -(split->damount);
-      s->share_price = split->share_price;
-
-      xaccTransAppendSplit (trans, s);
-      s->acc = NULL;
-      xaccAccountInsertSplit (split->acc, s);
+       (NULL == trans->splits[1]) && (!gnc_numeric_zero_p(split->damount))) {
+     Split * s = xaccMallocSplit();
+     xaccSplitSetMemo  (s, split->memo);
+     xaccSplitSetAction (s, split->action);
+     s->damount     = gnc_numeric_neg(split->damount);
+     s->value       = gnc_numeric_neg(split->value);
+     
+     xaccTransAppendSplit (trans, s);
+     s->acc = NULL;
+     xaccAccountInsertSplit (split->acc, s);
    }
-
+   
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
@@ -1286,11 +1323,11 @@ xaccTransRollbackEdit (Transaction *trans)
    
          s->reconciled  = so->reconciled;
          s->damount     = so->damount;
-         s->share_price = so->share_price;
-   
+         s->value       = so->value;
+         
          s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
          s->date_reconciled.tv_nsec = so->date_reconciled.tv_nsec;
-   
+         
          /* do NOT check date order until all of the other fields 
           * have been properly restored */
          xaccCheckDateOrder (s->acc, s); 
@@ -1302,7 +1339,7 @@ xaccTransRollbackEdit (Transaction *trans)
       }
       if (so != s) { force_it = 1; mismatch=i; }
    }
-
+   
    /* OK, if force_it got set, we'll have to tough it out and brute-force
     * the rest of the way.  Clobber all the edited splits, add all new splits.
     * Unfortunately, this can suck up CPU cycles in the Remove/Insert routines.
@@ -1565,6 +1602,7 @@ int
 xaccSplitDateOrder (Split **sa, Split **sb)
 {
   int retval;
+  int comp;
   char *da, *db;
 
   if ( (*sa) && !(*sb) ) return -1;
@@ -1595,11 +1633,13 @@ xaccSplitDateOrder (Split **sa, Split **sb)
   if (((*sa)->reconciled) > ((*sb)->reconciled)) return +1;
 
   /* compare amounts */
-  if ((((*sa)->damount)+EPS) < ((*sb)->damount)) return -1;
-  if ((((*sa)->damount)-EPS) > ((*sb)->damount)) return +1;
+  comp = gnc_numeric_compare((*sa)->damount, (*sb)->damount);
+  if(comp < 0) return -1;
+  if(comp > 0) return +1;
 
-  if ((((*sa)->share_price)+EPS) < ((*sb)->share_price)) return -1;
-  if ((((*sa)->share_price)-EPS) > ((*sb)->share_price)) return +1;
+  comp = gnc_numeric_compare((*sa)->value, (*sb)->value);
+  if(comp < 0) return -1;
+  if(comp > 0) return +1;
 
   /* if dates differ, return */
   DATE_CMP(sa,sb,date_reconciled);
@@ -1613,20 +1653,27 @@ xaccSplitOrder (Split **sa, Split **sb)
 {
   char *da, *db;
   char diff;
-
+  int comp;
   if ( (*sa) && !(*sb) ) return -1;
   if ( !(*sa) && (*sb) ) return +1;
   if ( !(*sa) && !(*sb) ) return 0;
 
-  /* compare amounts use parenthesis paranoia for multiplication, pointers etc. */
-  if ( ((((*sa)->damount)*((*sa)->share_price))+EPS) < 
-        (((*sb)->damount)*((*sb)->share_price))) return -1;
+  /* compare amounts */ 
+  comp = gnc_numeric_compare((*sa)->value, (*sb)->value);
+  if(comp < 0) {
+    return -1;
+  }
+  else if (comp > 0) {
+    return +1;
+  }
 
-  if ( ((((*sa)->damount)*((*sa)->share_price))-EPS) > 
-        (((*sb)->damount)*((*sb)->share_price))) return +1;
-
-  if ((((*sa)->share_price)+EPS) < ((*sb)->share_price)) return -1;
-  if ((((*sa)->share_price)-EPS) > ((*sb)->share_price)) return +1;
+  comp = gnc_numeric_compare((*sa)->damount, (*sb)->damount);
+  if(comp < 0) {
+    return -1;
+  }
+  else if (comp > 0) {
+    return +1;
+  }
 
   /* otherwise, sort on memo strings */
   da = (*sa)->memo;
@@ -1658,20 +1705,28 @@ xaccSplitMatch (Split **sa, Split **sb)
 {
   char *da, *db;
   char diff;
+  int comp;
 
   if ( (*sa) && !(*sb) ) return -1;
   if ( !(*sa) && (*sb) ) return +1;
   if ( !(*sa) && !(*sb) ) return 0;
 
-  /* compare amounts use parenthesis paranoia for multiplication, pointers etc. */
-  if ( ((((*sa)->damount)*((*sa)->share_price))+EPS) < 
-        (((*sb)->damount)*((*sb)->share_price))) return -1;
+  /* compare amounts */
+  comp = gnc_numeric_compare((*sa)->value, (*sb)->value);
+  if(comp < 0) {
+    return -1;
+  }
+  else if (comp > 0) {
+    return +1;
+  }
 
-  if ( ((((*sa)->damount)*((*sa)->share_price))-EPS) > 
-        (((*sb)->damount)*((*sb)->share_price))) return +1;
-
-  if ((((*sa)->share_price)+EPS) < ((*sb)->share_price)) return -1;
-  if ((((*sa)->share_price)-EPS) > ((*sb)->share_price)) return +1;
+  comp = gnc_numeric_compare((*sa)->damount, (*sb)->damount);
+  if(comp < 0) {
+    return -1;
+  }
+  else if (comp > 0) {
+    return +1;
+  }
 
   /* otherwise, sort on memo strings */
   da = (*sa)->memo;
@@ -2017,7 +2072,7 @@ xaccTransSetDocref (Transaction *trans, const char *docs)
 								\
    /* there must be two splits if value of one non-zero */	\
    if (force_double_entry) {					\
-     if (! (DEQ (0.0, trans->splits[0]->damount))) {		\
+     if (! gnc_numeric_zero_p(trans->splits[0]->damount)) {    \
         assert (trans->splits[1]);				\
      }								\
    }								\
@@ -2255,21 +2310,27 @@ double
 xaccSplitGetShareAmount (Split * split)
 {
    if (!split) return 0.0;
-   return (split->damount);
+   return gnc_numeric_to_double(split->damount);
 }
 
 double
 xaccSplitGetValue (Split * split)
 {
    if (!split) return 0.0;
-   return ((split->damount) * (split->share_price));
+   return gnc_numeric_to_double(split->value);
+
 }
 
 double
 xaccSplitGetSharePrice (Split * split)
 {
-   if (!split) return 1.0;
-   return (split->share_price);
+  if (!split) return 1.0;
+  if(gnc_numeric_zero_p(split->damount)) {
+    return 1.0;
+  }
+  return gnc_numeric_to_double(gnc_numeric_div(split->value, 
+                                               split->damount,
+                                               PRICE_DENOM, GNC_RND_ROUND));
 }
 
 /********************************************************************\

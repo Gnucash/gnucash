@@ -142,6 +142,10 @@ void xaccAccountSetDescription (Account *, const char *);
 void xaccAccountSetNotes (Account *, const char *);
 void xaccAccountSetCurrency (Account *, const gnc_commodity *);
 void xaccAccountSetSecurity (Account *, const gnc_commodity *);
+void xaccAccountSetCurrencySCU (Account *, int frac);
+void xaccAccountSetSecuritySCU (Account *, int frac);
+int  xaccAccountGetCurrencySCU (Account *);
+int  xaccAccountGetSecuritySCU (Account *);
 
 GNCAccountType  xaccAccountGetType (Account *);
 const char *    xaccAccountGetName (Account *);

@@ -32,6 +32,7 @@
 #include <assert.h>
 
 #include "gnc-common.h"
+#include "gnc-numeric.h"
 #include "TransactionP.h"
 #include "Transaction.h"
 #include "Account.h"
@@ -479,7 +480,7 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
   unsigned long n1;                             
   unsigned long n2;                             
   char   *da, *db;                               
-  double fa, fb;                                
+  gnc_numeric fa, fb;                                
   
   if (sa && !sb)  return -1; 
   if (!sa && sb)  return 1; 
@@ -590,17 +591,9 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb) {
     break;
 
   case BY_AMOUNT:    
-    fa = (sa->damount) * (sa->share_price); 
-    fb = (sb->damount) * (sb->share_price); 
-    if (fa < fb) { 
-      return -1; 
-    } 
-    else if (fa > fb) { 
-      return +1; 
-    } 
-    else {
-      return 0;
-    }
+    fa = sa->value;
+    fb = sa->value;
+    return gnc_numeric_compare(fa, fb);
     break;
 
   case BY_RECONCILE:

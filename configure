@@ -5568,7 +5568,7 @@ else
 fi
 
 ### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml`
+EXTRALIBS=`$GNOME_CONFIG_BIN --libs gtkhtml unicode`
 
 # check for gtkhtml and enable it via HAVE_LIBGTKHTML
 # if found
@@ -5607,7 +5607,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
+  GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml unicode"
              cat >> confdefs.h <<\EOF
 #define HAVE_LIBGTKHTML 1
 EOF

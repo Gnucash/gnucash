@@ -4444,7 +4444,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox8);
 
-  label822 = gtk_label_new (_("Please select a file to load. When you click \"Next\", the file will\nbe loaded into a staging area and analyzed. You may need\nto answer some questions about the account(s) in the file.\n\nYou will have the opportunity to load as many files as you wish,\nso don't worry if your data is in multiple files. \n"));
+  label822 = gtk_label_new (_("Please select a file to load. When you click \"Next\", the file will be loaded\nand analyzed. You may need to answer some questions about the account(s)\nin the file.\n\nYou will have the opportunity to load as many files as you wish, so don't \nworry if your data is in multiple files. \n"));
   gtk_widget_ref (label822);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label822", label822,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4499,7 +4499,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox9);
 
-  label823 = gtk_label_new (_("The QIF file that you just loaded appears to contain \ntransactions for just one account, but the file does not have\na name for that account.  \n\nPlease enter a name for the account. If the file was exported \nfrom another accounting program and you are importing multiple\nfiles, it is important to use the same name that was used in \nthat program.\n"));
+  label823 = gtk_label_new (_("The QIF file that you just loaded appears to contain transactions for just \none account, but the file does not specify a name for that account.  \n\nPlease enter a name for the account. If the file was exported from another\naccounting program, you should use the same account name that was used \nin that program.\n"));
   gtk_widget_ref (label823);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label823", label823,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4711,7 +4711,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox18);
 
-  label840 = gtk_label_new (_("Gnucash uses separate Income and Expense accounts rather than categories\nto classify your transactions. Each of the categories in your QIF file will be \nconverted to a Gnucash account. On the next page, you will have an opportunity\nto look at the suggested matchings between QIF categories and Gnucash accounts. \nYou may change the matchings if you do not like the suggested ones. \n\nIf you change your mind later, you can reorganize the account structure safely\nwithin GnuCash."));
+  label840 = gtk_label_new (_("Gnucash uses separate Income and Expense accounts rather than categories\nto classify your transactions. Each of the categories in your QIF file will be \nconverted to a Gnucash account. \n\nOn the next page, you will have an opportunity to look at the suggested matches\nbetween QIF categories and Gnucash accounts.  You may change matches \nthat you do not like by clicking on the line containing the category name.\n\nIf you change your mind later, you can reorganize the account structure safely\nwithin GnuCash."));
   gtk_widget_ref (label840);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label840", label840,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -4800,7 +4800,7 @@ create_QIF_Import_Druid (void)
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druid_vbox16);
 
-  label831 = gtk_label_new (_("The QIF importer cannot currently handle multi-currency QIF \nfiles. All the accounts in the QIF file(s) you are importing must\nbe denominated in the same currency. This limitation should be\nremoved soon.\n\nEnter the currency to use for transactions imported from your\nQIF files:"));
+  label831 = gtk_label_new (_("The QIF importer cannot currently handle multi-currency QIF files. All the \naccounts in the QIF file(s) you are importing must be denominated in the\nsame currency. This limitation should be removed soon.\n\nSelect the currency to use for transactions imported from your QIF files:\n"));
   gtk_widget_ref (label831);
   gtk_object_set_data_full (GTK_OBJECT (QIF_Import_Druid), "label831", label831,
                             (GtkDestroyNotify) gtk_widget_unref);

@@ -35,6 +35,7 @@
 #include "GroupP.h"
 #include "TransactionP.h"
 #include "gnc-common.h"
+#include "gnc-numeric.h"
 #include "util.h"
 
 /* static short module = MOD_ENGINE; */
@@ -59,7 +60,7 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   grp->account     = _malloc (sizeof (Account *));
   grp->account[0]  = NULL;   /* null-terminated array */
 
-  grp->balance     = 0.0;
+  grp->balance     = gnc_numeric_zero();
 
   grp->backend     = NULL;
 
@@ -117,7 +118,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
   grp->parent      = NULL;
   grp->numAcc      = 0;
   grp->account     = NULL;
-  grp->balance     = 0.0;
+  grp->balance     = gnc_numeric_zero();
 
   _free(grp);
 }
@@ -610,23 +611,27 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
    if (!acc) return;
    default_currency = acc->currency;
 
-   grp->balance = 0.0;
+   grp->balance = gnc_numeric_zero();
    for (i=0; i<grp->numAcc; i++) {
-      acc = grp->account[i];
-
-      /* first, get subtotals recursively */
-      if (acc->children) {
-         xaccRecomputeGroupBalance (acc->children);
-
-         if (gnc_commodity_equiv(default_currency, acc->currency)) {
-           grp->balance += acc->children->balance;
-         }
-      }
+     acc = grp->account[i];
+     
+     /* first, get subtotals recursively */
+     if (acc->children) {
+       xaccRecomputeGroupBalance (acc->children);
+       
+       if (gnc_commodity_equiv(default_currency, acc->currency)) {
+         grp->balance = 
+           gnc_numeric_add(grp->balance, acc->children->balance,
+                           GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+       }
+     }
       
       /* then add up accounts in this group */
       xaccAccountRecomputeBalance (acc);
       if (gnc_commodity_equiv(default_currency, acc->currency)) {
-        grp->balance += acc->balance;
+        grp->balance = 
+          gnc_numeric_add(grp->balance, acc->balance,
+                          GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
       }
    }
 }
@@ -895,8 +900,8 @@ xaccGroupGetParentAccount (AccountGroup * grp)
 double
 xaccGroupGetBalance (AccountGroup * grp)
 {
-   if (!grp) return 0.0;
-   return (grp->balance);
+  if (!grp) return 0.0;
+  return gnc_numeric_to_double(grp->balance);
 }
 
 /********************************************************************\

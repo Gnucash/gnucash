@@ -43,6 +43,7 @@
 #define __XACC_ACCOUNT_P_H__
 
 #include "config.h"
+#include "gnc-numeric.h"
 #include "gnc-commodity.h"
 #include "kvp_frame.h"
 #include "AccInfo.h"
@@ -111,6 +112,8 @@ struct _account {
    * currency string matches the security string.  */
   const gnc_commodity * currency;
   const gnc_commodity * security;
+  int  currency_scu;
+  int  security_scu;
 
   /* The parent and children pointers are used to implement an account
    * hierarchy, of accounts that have sub-accounts ("detail accounts").
@@ -129,13 +132,13 @@ struct _account {
   char      flags;
 
   /* protected data, cached parameters */
-  double balance;
-  double cleared_balance;
-  double reconciled_balance;
+  gnc_numeric balance;
+  gnc_numeric cleared_balance;
+  gnc_numeric reconciled_balance;
 
-  double share_balance;
-  double share_cleared_balance;
-  double share_reconciled_balance;
+  gnc_numeric share_balance;
+  gnc_numeric share_cleared_balance;
+  gnc_numeric share_reconciled_balance;
 
   int numSplits;                /* length of splits array below   */
   Split **splits;               /* ptr to array of ptrs to splits */

@@ -139,8 +139,9 @@
        (for-each 
         (lambda (hashpair)
           (let* ((acctinfo (cdr hashpair)))
-            (set! sorted-accounts-list 
-                  (cons acctinfo sorted-accounts-list))))
+            (if (qif-map-entry:display? acctinfo)
+                (set! sorted-accounts-list 
+                      (cons acctinfo sorted-accounts-list)))))
         bin))
      (vector->list qif-acct-map))
     
@@ -149,8 +150,9 @@
        (for-each 
         (lambda (hashpair)
           (let* ((acctinfo (cdr hashpair)))
-            (set! sorted-accounts-list 
-                  (cons acctinfo sorted-accounts-list))))
+            (if (qif-map-entry:display? acctinfo)
+                (set! sorted-accounts-list 
+                      (cons acctinfo sorted-accounts-list)))))
         bin))
      (vector->list qif-cat-map))
     

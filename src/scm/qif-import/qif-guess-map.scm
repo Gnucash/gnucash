@@ -137,6 +137,7 @@
      (lambda (entry)
        (let ((key (car entry))
              (value (simple-obj-from-list (cdr entry) <qif-map-entry>)))
+         (qif-map-entry:set-display?! value #f)
          (hash-set! table key value)))
      tablist)
     table))

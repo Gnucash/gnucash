@@ -36,7 +36,6 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "messages.h"
-#include "Queue.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "util.h"
@@ -79,13 +78,13 @@ xaccInitAccount (Account * acc)
   acc->parent   = NULL;
   acc->children = NULL;
 
-  acc->balance = 0.0;
-  acc->cleared_balance = 0.0;
-  acc->reconciled_balance = 0.0;
+  acc->balance = gnc_numeric_zero();
+  acc->cleared_balance = gnc_numeric_zero();
+  acc->reconciled_balance = gnc_numeric_zero();
 
-  acc->share_balance = 0.0;
-  acc->share_cleared_balance = 0.0;
-  acc->share_reconciled_balance = 0.0;
+  acc->share_balance = gnc_numeric_zero();
+  acc->share_cleared_balance = gnc_numeric_zero();
+  acc->share_reconciled_balance = gnc_numeric_zero();
 
   acc->flags = 0;
   acc->type  = -1;
@@ -97,7 +96,9 @@ xaccInitAccount (Account * acc)
   acc->notes       = strdup("");
   acc->currency    = NULL;
   acc->security    = NULL;
-
+  acc->currency_scu = 10000;
+  acc->security_scu = 10000;
+  
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
   acc->splits[0]   = NULL;
@@ -178,13 +179,13 @@ xaccFreeAccount( Account *acc )
   acc->parent   = NULL;
   acc->children = NULL;
 
-  acc->balance  = 0.0;
-  acc->cleared_balance = 0.0;
-  acc->reconciled_balance = 0.0;
+  acc->balance  = gnc_numeric_zero();
+  acc->cleared_balance = gnc_numeric_zero();
+  acc->reconciled_balance = gnc_numeric_zero();
 
-  acc->share_balance = 0.0;
-  acc->share_cleared_balance = 0.0;
-  acc->share_reconciled_balance = 0.0;
+  acc->share_balance = gnc_numeric_zero();
+  acc->share_cleared_balance = gnc_numeric_zero();
+  acc->share_reconciled_balance = gnc_numeric_zero();
 
   acc->flags = 0;
   acc->type  = -1;
@@ -418,6 +419,17 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
   /* mark the account as having changed */
   acc -> changed |= ACC_INVALIDATE_ALL;
 
+  /* convert the split to the new account's denominators */
+  /* if the denominator can't be exactly converted, it's an error */
+  /* FIXME : need to enforce ordering of insertion/value */
+  split->damount = gnc_numeric_convert(split->damount, 
+                                       xaccAccountGetSecuritySCU(acc),
+                                       GNC_RND_ROUND);
+
+  split->value   = gnc_numeric_convert(split->value, 
+                                       xaccAccountGetCurrencySCU(acc),
+                                       GNC_RND_ROUND);
+  
   /* if this split belongs to another account, remove it from 
    * there first.  We don't want to ever leave the system
    * in an inconsistent state.
@@ -563,56 +575,100 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
  * Return: void                                                     *
 \********************************************************************/
 
+static gnc_numeric
+price_xfer(Split * s, gnc_numeric share_count) {
+  gnc_numeric temp;
+  if(!gnc_numeric_zero_p(s->damount)) {
+    temp = gnc_numeric_div(s->value, s->damount,
+                           GNC_DENOM_AUTO, GNC_DENOM_EXACT);
+    printf("price_xfer: v=%Ld/%Ld, a=%Ld/%Ld, price=%Ld/%Ld\n",
+           gnc_numeric_num(s->value), gnc_numeric_denom(s->value),
+           gnc_numeric_num(s->damount), gnc_numeric_denom(s->damount),
+           gnc_numeric_num(temp), gnc_numeric_denom(temp));
+
+    temp = gnc_numeric_mul(share_count, temp,
+                           gnc_numeric_denom(s->value),
+                           GNC_RND_ROUND);
+    printf("price_xfer: n=%Ld/%Ld, value=%Ld/%Ld\n",
+           gnc_numeric_num(share_count), gnc_numeric_denom(share_count),
+           gnc_numeric_num(temp), gnc_numeric_denom(temp));
+    return temp;
+  }
+  else {
+    return gnc_numeric_zero();
+  }
+}      
+                              
 void
 xaccAccountRecomputeBalance( Account * acc )
 {
   int  i = 0; 
-  double  dbalance    = 0.0;
-  double  dcleared_balance = 0.0;
-  double  dreconciled_balance = 0.0;
-  double  share_balance    = 0.0;
-  double  share_cleared_balance = 0.0;
-  double  share_reconciled_balance = 0.0;
-  double  amt = 0.0;
+  gnc_numeric  dbalance;
+  gnc_numeric  dcleared_balance; 
+  gnc_numeric  dreconciled_balance;
+  gnc_numeric  share_balance; 
+  gnc_numeric  share_cleared_balance; 
+  gnc_numeric  share_reconciled_balance;
   Split *split, *last_split = NULL;
-
+  
   if( NULL == acc ) return;
+
+  dbalance = gnc_numeric_zero();
+  dcleared_balance = gnc_numeric_zero();
+  dreconciled_balance = gnc_numeric_zero();
+  share_balance    = gnc_numeric_zero();
+  share_cleared_balance = gnc_numeric_zero();
+  share_reconciled_balance = gnc_numeric_zero();
+  
   /*
    * if we are defering, defer!
    */
+
   if (acc->open & ACC_DEFER_REBALANCE) return;
   if (0x0 == (ACC_INVALID_BALN & acc->changed)) return;
   acc->changed &= ~ACC_INVALID_BALN;
-
+  
   split = acc->splits[0];
   while (split) {
-
+    
     /* compute both dollar and share balances */
-    amt = split->damount;
-    share_balance += amt;
-    dbalance += amt * (split->share_price);
+    share_balance = 
+      gnc_numeric_add(share_balance, split->damount, GNC_DENOM_AUTO, 
+                      GNC_DENOM_FIXED | GNC_RND_NEVER);
+    dbalance      = 
+      gnc_numeric_add(dbalance, split->value, GNC_DENOM_AUTO, 
+                      GNC_DENOM_FIXED | GNC_RND_NEVER);
     
     if( NREC != split -> reconciled ) {
-      share_cleared_balance += amt;
-      dcleared_balance += amt * (split->share_price);
+      share_cleared_balance = 
+        gnc_numeric_add(share_cleared_balance, split->damount,
+                        GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+      dcleared_balance = 
+        gnc_numeric_add(dcleared_balance, split->value, GNC_DENOM_AUTO, 
+                        GNC_DENOM_FIXED | GNC_RND_NEVER);
     }
-
+    
     if( YREC == split -> reconciled ) {
-      share_reconciled_balance += amt;
-      dreconciled_balance += amt * (split->share_price);
+      share_reconciled_balance = 
+        gnc_numeric_add(share_cleared_balance, split->damount,
+                        GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
+      dreconciled_balance =  
+        gnc_numeric_add(dreconciled_balance, split->value,
+                        GNC_DENOM_AUTO, GNC_DENOM_FIXED | GNC_RND_NEVER);
     }
-
+    
     /* For bank accounts, the invariant subtotal is the dollar
      * amount.  For stock accounts, the invariant is the share amount */
     if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
       split -> share_balance = share_balance;
       split -> share_cleared_balance = share_cleared_balance;
       split -> share_reconciled_balance = share_reconciled_balance;
-      split -> balance = split->share_price * share_balance;
-      split -> cleared_balance = split->share_price * share_cleared_balance;
-      split -> reconciled_balance = (split->share_price *
-                                     share_reconciled_balance);
-    } else {
+      split -> balance = price_xfer(split, share_balance);
+      split -> cleared_balance = price_xfer(split, share_cleared_balance);
+      split -> reconciled_balance = 
+        price_xfer(split, share_reconciled_balance);
+    } 
+    else {
       split -> share_balance = dbalance;
       split -> share_cleared_balance = dcleared_balance;
       split -> share_reconciled_balance = dreconciled_balance;
@@ -620,33 +676,36 @@ xaccAccountRecomputeBalance( Account * acc )
       split -> cleared_balance = dcleared_balance;
       split -> reconciled_balance = dreconciled_balance;
     }
+    
     /* invalidate the cost basis; this has to be computed with other routine */
-    split -> cost_basis = 0.0;
-
+    split -> cost_basis = gnc_numeric_zero();
+    
     last_split = split;
     i++;
     split = acc->splits[i];
   }
-
+  
   if ( (STOCK == acc->type) || ( MUTUAL == acc->type) ) {
     if (last_split) {
-       acc -> share_balance = share_balance;
-       acc -> share_cleared_balance = share_cleared_balance;
-       acc -> share_reconciled_balance = share_reconciled_balance;
-       acc -> balance = share_balance * (last_split->share_price);
-       acc -> cleared_balance = (share_cleared_balance *
-                                 last_split->share_price);
-       acc -> reconciled_balance = (share_reconciled_balance *
-                                    last_split->share_price);
-    } else {
-       acc -> share_balance = 0.0;
-       acc -> share_cleared_balance = 0.0;
-       acc -> share_reconciled_balance = 0.0;
-       acc -> balance = 0.0;
-       acc -> cleared_balance = 0.0;
-       acc -> reconciled_balance = 0.0;
+      acc -> share_balance = share_balance;
+      acc -> share_cleared_balance = share_cleared_balance;
+      acc -> share_reconciled_balance = share_reconciled_balance;
+      acc -> balance = price_xfer(last_split, share_balance);
+      acc -> cleared_balance = price_xfer(last_split, share_cleared_balance);
+      acc -> reconciled_balance = 
+        price_xfer(last_split, share_reconciled_balance);
+      
+    } 
+    else {
+      acc -> share_balance = gnc_numeric_zero();
+      acc -> share_cleared_balance = gnc_numeric_zero();
+      acc -> share_reconciled_balance = gnc_numeric_zero();
+      acc -> balance = gnc_numeric_zero();
+      acc -> cleared_balance = gnc_numeric_zero();
+      acc -> reconciled_balance = gnc_numeric_zero();
     }
-  } else {
+  } 
+  else {
     acc -> share_balance = dbalance;
     acc -> share_cleared_balance = dcleared_balance;
     acc -> share_reconciled_balance = dreconciled_balance;
@@ -654,7 +713,7 @@ xaccAccountRecomputeBalance( Account * acc )
     acc -> cleared_balance = dcleared_balance;
     acc -> reconciled_balance = dreconciled_balance;
   }
-
+  
   return;
 }
 
@@ -664,38 +723,42 @@ xaccAccountRecomputeBalance( Account * acc )
 void
 xaccAccountRecomputeCostBasis( Account * acc )
 {
-  int  i = 0; 
-  double  amt = 0.0;
-  Split *split = NULL;
-  Queue *q;
+  printf("Cost basis calculation temporarily disabled.\n");
+#if 0
+  int         i = 0; 
+  gnc_numeric amt;
+  Split       * split = NULL;
+  Queue       * q;
   
   if( NULL == acc ) return;
   if (0x0 == (ACC_INVALID_COSTB & acc->changed)) return;
   acc->changed &= ~ACC_INVALID_COSTB;
-
+  
   /* create the FIFO queue */
   q = xaccMallocQueue ();
-
+  
   /* loop over all splits in this account */
   split = acc->splits[0];
   while (split) {
-
+    
     /* positive amounts are a purchase, negative are a sale. 
      * Use FIFO accounting: purchase to head, sale from tail. */
     amt = split->damount;
-    if (0.0 < amt) {
-       xaccQueuePushHead (q, split);
-    } else 
-    if (0.0 > amt) {
-       xaccQueuePopTailShares (q, -amt);
+    if (gnc_numeric_positive_p(amt)) {
+      xaccQueuePushHead (q, split);
+    } 
+    else if (gnc_numeric_negative_p(amt)) {
+      xaccQueuePopTailShares (q, gnc_numeric_neg(amt));
     }
     split->cost_basis = xaccQueueGetValue (q);
-
+    
     i++;
     split = acc->splits[i];
   }
 
   xaccFreeQueue (q);
+#endif
+
 }
 
 /********************************************************************\
@@ -1059,50 +1122,79 @@ xaccAccountSetNotes (Account *acc, const char *str)
    acc->notes = tmp;
 }
 
+
+/* FIXME : is this the right way to do this? */
+static void
+update_split_currency(Account * acc) {
+  Split ** s;
+  
+  if(!acc || !(acc->splits)) return;
+  
+  /* iterate over splits */
+  for(s=acc->splits; *s; s++) {
+    (*s)->value  = gnc_numeric_convert((*s)->value, acc->currency_scu, 
+                                       GNC_RND_ROUND);
+    (*s)->damount = gnc_numeric_convert((*s)->damount, acc->security_scu, 
+                                        GNC_RND_ROUND);    
+  }
+}
+
 void 
 xaccAccountSetCurrency (Account * acc, const gnc_commodity * currency)
 {
-   if ((!acc) || (!currency)) return;
-   CHECK (acc);
+  if ((!acc) || (!currency)) return;
+  CHECK (acc);
+  
+  acc->currency     = currency;
+  acc->currency_scu = gnc_commodity_get_fraction(currency);
 
-   if (acc->currency) {
-     if (unsafe_ops) {
-       PWARN ( "it is dangerous to change the currency denomination of an account! \n"
-               "\tAccount=%s old currency=%s new currency=%s \n",
-               acc->accountName, 
-               gnc_commodity_get_printname(acc->currency), 
-               gnc_commodity_get_printname(currency));
-     } 
-     else {
-       PERR ("the currency denomination of an account cannot be changed!\n"
-             "\tAccount=%s \n", acc->accountName);
-       return;
-     }
-   }
-   acc->currency = currency;
+  update_split_currency(acc);
 }
 
 void 
 xaccAccountSetSecurity (Account *acc, const gnc_commodity * security)
 {
-   if ((!acc) || (!security)) return;
-   CHECK (acc);
-
-   if (acc->security) {
-     if (unsafe_ops) {
-       PWARN ("it is dangerous to change the security denomination of an account! \n"
-              "\tAccount=%s old security=%s new security=%s \n",
-              acc->accountName,
-              gnc_commodity_get_printname(acc->security), 
-              gnc_commodity_get_printname(security));
-     } else {
-       PERR ("the security denomination of an account cannot be changed!\n"
-             "\tAccount=%s \n", acc->accountName);
-       return;
-     }
-   }
-   acc->security = security;
+  if ((!acc) || (!security)) return;
+  CHECK (acc);
+  
+  acc->security     = security;
+  acc->security_scu = gnc_commodity_get_fraction(security);
+  
+  update_split_currency(acc);
 }
+
+void 
+xaccAccountSetCurrencySCU (Account * acc, int scu)
+{
+  if (!acc) return;
+  CHECK (acc);
+  
+  acc->currency_scu = scu;
+}
+
+void 
+xaccAccountSetSecuritySCU (Account *acc, int scu)
+{
+  if (!acc) return;
+  CHECK (acc);
+  
+  acc->security_scu = scu;
+}
+
+int
+xaccAccountGetCurrencySCU (Account * acc) {
+  if (!acc) return 0;
+  CHECK (acc);
+  return acc->currency_scu;
+}
+
+int
+xaccAccountGetSecuritySCU (Account * acc) {
+  if (!acc) return 0;
+  CHECK (acc);
+  return acc->security_scu;
+}
+
 
 /********************************************************************\
 \********************************************************************/
@@ -1249,42 +1341,42 @@ double
 xaccAccountGetBalance (Account *acc)
 {
    if (!acc) return 0.0;
-   return (acc->balance);
+   return (gnc_numeric_to_double(acc->balance));
 }
 
 double
 xaccAccountGetClearedBalance (Account *acc)
 {
    if (!acc) return 0.0;
-   return (acc->cleared_balance);
+   return (gnc_numeric_to_double(acc->cleared_balance));
 }
 
 double
 xaccAccountGetReconciledBalance (Account *acc)
 {
    if (!acc) return 0.0;
-   return (acc->reconciled_balance);
+   return (gnc_numeric_to_double(acc->reconciled_balance));
 }
 
 double
 xaccAccountGetShareBalance (Account *acc)
 {
    if (!acc) return 0.0;
-   return (acc->share_balance);
+   return (gnc_numeric_to_double(acc->share_balance));
 }
 
 double
 xaccAccountGetShareClearedBalance (Account *acc)
 {
    if (!acc) return 0.0;
-   return (acc->share_cleared_balance);
+   return (gnc_numeric_to_double(acc->share_cleared_balance));
 }
 
 double
 xaccAccountGetShareReconciledBalance (Account *acc)
 {
-   if (!acc) return 0.0;
-   return (acc->share_reconciled_balance);
+  if (!acc) return 0.0;
+  return (gnc_numeric_to_double(acc->share_reconciled_balance));
 }
 
 Split *

@@ -123,12 +123,12 @@ SUBDIRS = sql
 lib_LTLIBRARIES = libgncengine.la
 
 # Build hell from main.c and libhello.la
-libgncengine_la_SOURCES =    AccInfo.c   Account.c   Backend.c   DateUtils.c   FileIO.c   Group.c   LedgerUtils.c   Query.c   Queue.c   Scrub.c   Session.c   Transaction.c   TransLog.c   date.c   util.c   GNCId.c   guid.c   md5.c   kvp_frame.c   gnc-commodity.c   gnc-numeric.c   gnc-engine.c
+libgncengine_la_SOURCES =    AccInfo.c   Account.c   Backend.c   DateUtils.c   FileIO.c   Group.c   LedgerUtils.c   Query.c   Scrub.c   Session.c   Transaction.c   TransLog.c   date.c   util.c   GNCId.c   guid.c   md5.c   kvp_frame.c   gnc-commodity.c   gnc-numeric.c   gnc-engine.c
 
 
 libgncengine_la_LDFLAGS = -version-info 1:1:1
 
-noinst_HEADERS =    AccInfo.h   AccInfoP.h   Account.h   AccountP.h   BackendP.h   DateUtils.h   FileIO.h   FileIOP.h   GNCId.h   GNCIdP.h   Group.h   GroupP.h   LedgerUtils.h   Query.h   Queue.h   Scrub.h   Session.h   TransLog.h   Transaction.h   TransactionP.h   date.h   gnc-common.h   guid.h   md5.h   util.h   kvp_frame.h   gnc-commodity.h   gnc-numeric.h   gnc-engine.h
+noinst_HEADERS =    AccInfo.h   AccInfoP.h   Account.h   AccountP.h   BackendP.h   DateUtils.h   FileIO.h   FileIOP.h   GNCId.h   GNCIdP.h   Group.h   GroupP.h   LedgerUtils.h   Query.h   Scrub.h   Session.h   TransLog.h   Transaction.h   TransactionP.h   date.h   gnc-common.h   guid.h   md5.h   util.h   kvp_frame.h   gnc-commodity.h   gnc-numeric.h   gnc-engine.h
 
 
 EXTRA_DIST =    .cvsignore   README.query-api   README.gnc-numeric   design.txt   extensions.txt
@@ -153,7 +153,7 @@ X_EXTRA_LIBS = @X_EXTRA_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 libgncengine_la_LIBADD = 
 libgncengine_la_OBJECTS =  AccInfo.lo Account.lo Backend.lo DateUtils.lo \
-FileIO.lo Group.lo LedgerUtils.lo Query.lo Queue.lo Scrub.lo Session.lo \
+FileIO.lo Group.lo LedgerUtils.lo Query.lo Scrub.lo Session.lo \
 Transaction.lo TransLog.lo date.lo util.lo GNCId.lo guid.lo md5.lo \
 kvp_frame.lo gnc-commodity.lo gnc-numeric.lo gnc-engine.lo
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -171,10 +171,10 @@ TAR = gtar
 GZIP_ENV = --best
 DEP_FILES =  .deps/AccInfo.P .deps/Account.P .deps/Backend.P \
 .deps/DateUtils.P .deps/FileIO.P .deps/GNCId.P .deps/Group.P \
-.deps/LedgerUtils.P .deps/Query.P .deps/Queue.P .deps/Scrub.P \
-.deps/Session.P .deps/TransLog.P .deps/Transaction.P .deps/date.P \
-.deps/gnc-commodity.P .deps/gnc-engine.P .deps/gnc-numeric.P \
-.deps/guid.P .deps/kvp_frame.P .deps/md5.P .deps/util.P
+.deps/LedgerUtils.P .deps/Query.P .deps/Scrub.P .deps/Session.P \
+.deps/TransLog.P .deps/Transaction.P .deps/date.P .deps/gnc-commodity.P \
+.deps/gnc-engine.P .deps/gnc-numeric.P .deps/guid.P .deps/kvp_frame.P \
+.deps/md5.P .deps/util.P
 SOURCES = $(libgncengine_la_SOURCES)
 OBJECTS = $(libgncengine_la_OBJECTS)
 
