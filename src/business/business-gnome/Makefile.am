@@ -97,7 +97,7 @@ gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h: .scm-links gw-bus
 	 (set! %load-path (cons \"../../app-utils\" %load-path)) \
 	 (set! %load-path (cons \"../../gnome-utils\" %load-path)) \
 	 (primitive-load \"./gw-business-gnome-spec.scm\") \
-	 (gw:generate-module \"gw-business-gnome\")"
+	 (gw:generate-wrapset \"gw-business-gnome\")"
 
 BUILT_SOURCES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h
 CLEANFILES = gw-business-gnome.scm gw-business-gnome.c gw-business-gnome.h gw-business-gnome.html
