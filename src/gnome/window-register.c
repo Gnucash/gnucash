@@ -1227,6 +1227,14 @@ gnc_register_create_popup_menu(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
+      DUPLICATE_MENU_STR, TOOLTIP_DUP_TRANS,
+      duplicateCB, regData, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
       BLANK_MENU_STR, TOOLTIP_BLANK_TRANS,
       new_trans_cb, regData, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
