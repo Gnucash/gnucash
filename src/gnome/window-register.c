@@ -655,7 +655,7 @@ gnc_register_show_date_window(RegWindow *regData)
 }
 
 static RegDateWindow *
-gnc_register_date_window(RegWindow *regData)
+gnc_register_date_window (RegWindow *regData, gboolean show_all)
 {
   RegDateWindow *regDateData;
   GtkWidget *dialog;
@@ -693,11 +693,6 @@ gnc_register_date_window(RegWindow *regData)
     GtkWidget *line;
     time_t time_val;
     GSList *group;
-    gboolean show_all;
-
-    show_all = gnc_lookup_boolean_option("Register",
-                                         "Show All Transactions",
-                                         TRUE);
 
     vbox = gtk_vbox_new(FALSE, 2);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
@@ -1794,6 +1789,8 @@ regWindowLedger (xaccLedgerDisplay *ledger)
   GtkWidget *register_dock;
   GtkWidget *table_frame;
   GtkWidget *statusbar;
+  gboolean show_all;
+  gboolean has_date;
 
   reg = xaccLedgerDisplayGetSR (ledger);
 
@@ -1831,10 +1828,23 @@ regWindowLedger (xaccLedgerDisplay *ledger)
   gtk_signal_connect(GTK_OBJECT(regData->window), "delete-event",
 		     GTK_SIGNAL_FUNC (gnc_register_delete_cb), regData);
 
-  regData->date_window = gnc_register_date_window(regData);
+  show_all = gnc_lookup_boolean_option ("Register",
+                                        "Show All Transactions",
+                                        TRUE);
 
-  if (reg->type != SEARCH_LEDGER)
-    gnc_register_set_date_range(regData);
+  {
+    Query *q = xaccLedgerDisplayGetQuery (regData->ledger);
+
+    has_date = xaccQueryHasTermType (q, PD_DATE);
+  }
+
+  if (has_date)
+    show_all = FALSE;
+
+  regData->date_window = gnc_register_date_window (regData, show_all);
+
+  if (reg->type != SEARCH_LEDGER && !has_date)
+    gnc_register_set_date_range (regData);
 
   /* Now that we have a date range, remove any existing
    * maximum on the number of splits returned. */

@@ -759,6 +759,19 @@ gnc_ui_mainWindow_fincalc_cb(GtkWidget *widget, gpointer data)
   gnc_ui_fincalc_dialog_create();
 }
 
+static void
+gnc_ui_mainWindow_gl_cb(GtkWidget *widget, gpointer data)
+{
+  xaccLedgerDisplay *ld;
+  RegWindow *regData;
+
+  ld = xaccLedgerDisplayGL ();
+
+  regData = regWindowLedger (ld);
+
+  gnc_register_raise (regData);
+}
+
 static gboolean
 gnc_ui_mainWindow_delete_cb(GtkWidget *widget,
 			    GdkEvent  *event,
@@ -1232,6 +1245,14 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
 
   static GnomeUIInfo toolsmenu[] =
   {
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_General Ledger"),
+      N_("Open a general ledger window"),
+      gnc_ui_mainWindow_gl_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
     {
       GNOME_APP_UI_ITEM,
       N_("_Financial Calculator"),

@@ -23,6 +23,8 @@
 
 #include "config.h"
 
+#include <time.h>
+
 #include "Account.h"
 #include "Group.h"
 #include "MultiLedger.h"
@@ -30,6 +32,7 @@
 #include "SplitLedger.h"
 #include "Transaction.h"
 #include "FileDialog.h"
+#include "date.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -357,15 +360,57 @@ xaccLedgerDisplaySimple (Account *account)
 xaccLedgerDisplay *
 xaccLedgerDisplayAccGroup (Account *account)
 {
-  xaccLedgerDisplay *ld;
   SplitRegisterType reg_type;
 
   reg_type = get_reg_type (account, LD_SUBACCOUNT);
 
-  ld = xaccLedgerDisplayInternal (account, NULL, LD_SUBACCOUNT,
-                                  reg_type, REG_STYLE_JOURNAL);
+  return xaccLedgerDisplayInternal (account, NULL, LD_SUBACCOUNT,
+                                    reg_type, REG_STYLE_JOURNAL);
+}
 
-  return ld;
+/********************************************************************\
+ * xaccLedgerDisplayGL                                              *
+ *   opens up a general ledger window                               *
+ *                                                                  *
+ * Args:   none                                                     *
+ * Return: the register window instance                             *
+\********************************************************************/
+
+xaccLedgerDisplay *
+xaccLedgerDisplayGL (void)
+{
+  Query *query;
+  time_t start;
+  struct tm *tm;
+
+  query = xaccMallocQuery ();
+
+  xaccQuerySetGroup (query, gncGetCurrentGroup());
+
+  xaccQueryAddBalanceMatch (query,
+                            BALANCE_BALANCED | BALANCE_UNBALANCED,
+                            QUERY_AND);
+
+  start = time (NULL);
+
+  tm = localtime (&start);
+
+  tm->tm_mon--;
+  tm->tm_hour = 0;
+  tm->tm_min = 0;
+  tm->tm_sec = 0;
+  tm->tm_isdst = -1;
+
+  start = mktime (tm);
+
+  xaccQueryAddDateMatchTT (query, 
+                           TRUE, start, 
+                           FALSE, 0, 
+                           QUERY_AND);
+
+  return xaccLedgerDisplayInternal (NULL, query, LD_GL,
+                                    GENERAL_LEDGER,
+                                    REG_STYLE_JOURNAL);
 }
 
 static gncUIWidget

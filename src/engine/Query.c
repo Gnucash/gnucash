@@ -169,6 +169,10 @@ xaccMallocQuery(void) {
 static void
 xaccQuerySwapTerms(Query * q1, Query * q2) {
   GList * g;
+
+  if (!q1 || !q2)
+    return;
+
   g = q1->terms;
   q1->terms = q2->terms;
   q2->terms = g;
@@ -186,9 +190,35 @@ xaccQuerySwapTerms(Query * q1, Query * q2) {
 
 int
 xaccQueryHasTerms(Query * q) {
+  if (!q)
+    return 0;
+
   return g_list_length(q->terms);    
 }
 
+
+/********************************************************************
+ * xaccQueryHasTermType
+ * returns TRUE if the query has any terms of the given type
+ ********************************************************************/
+gboolean
+xaccQueryHasTermType(Query * q, pd_type_t type) {
+  GList *or;
+  GList *and;
+
+  if (!q)
+    return FALSE;
+
+  for(or = q->terms; or; or = or->next) {
+    for(and = or->data; and; and = and->next) {
+      QueryTerm *qt = and->data;
+      if(qt->data.type == type)
+        return TRUE;
+    }
+  }
+
+  return FALSE;
+}
 
 static void
 free_query_term(QueryTerm *qt)
@@ -1627,7 +1657,8 @@ xaccQueryPurgeTerms(Query * q, pd_type_t type) {
   GList * or;
   GList * and;
 
-  assert(q != NULL);
+  if (!q)
+    return;
 
   for(or = q->terms; or; or = or->next) {
     for(and = or->data; and; and = and->next) {

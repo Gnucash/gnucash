@@ -79,6 +79,8 @@ xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *account);
  * its children. */
 xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *account);
 
+xaccLedgerDisplay * xaccLedgerDisplayGL (void);
+
 /* display a general ledger for an arbitrary query */
 xaccLedgerDisplay * xaccLedgerDisplayQuery (Query *query,
                                             SplitRegisterType type,

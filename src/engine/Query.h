@@ -181,6 +181,7 @@ void    xaccQueryClear(Query * q);
 void    xaccQueryPurgeTerms(Query * q, pd_type_t type);
 
 int     xaccQueryHasTerms(Query * q);
+gboolean xaccQueryHasTermType(Query * q, pd_type_t type);
 
 GList   * xaccQueryGetSplits(Query * q);
 
