@@ -27,17 +27,30 @@
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-(let ((reportname-income (N_ "Income Piechart"))
-      (reportname-expense (N_ "Expense Piechart"))
-      (reportname-assets (N_ "Asset Piechart"))
-      (reportname-liabilities (N_ "Liability Piechart"))
-      ;; The names are used in the menu, as labels and as identifiers.
+(let ((menuname-income (N_ "Income Piechart"))
+      (menuname-expense (N_ "Expense Piechart"))
+      (menuname-assets (N_ "Asset Piechart"))
+      (menuname-liabilities (N_ "Liability Piechart"))
+      ;; The names are used in the menu
 
-      ;; The titels here are only printed as titles of the report.
-      (reporttitle-income (_ "Income Accounts"))
-      (reporttitle-expense (_ "Expense Accounts"))
-      (reporttitle-assets (_ "Assets"))
-      (reporttitle-liabilities (_ "Liabilities/Equity"))
+      ;; The menu statusbar tips.
+      (menutip-income 
+       (N_ "Shows a piechart with the Income per given time interval"))
+      (menutip-expense 
+       (N_ "Shows a piechart with the Expenses per given time interval"))
+      (menutip-assets 
+       (N_ "Shows a piechart with the Assets balance at a given time"))
+      (menutip-liabilities 
+       (N_ "Shows a piechart with the Liabilities and Equity \
+balance at a given time"))
+
+      ;; The names here are used 1. for internal identification, 2. as
+      ;; tab labels, 3. as default for the 'Report name' option which
+      ;; in turn is used for the printed report title.
+      (reportname-income (N_ "Income Accounts"))
+      (reportname-expense (N_ "Expense Accounts"))
+      (reportname-assets (N_ "Assets"))
+      (reportname-liabilities (N_ "Liabilities/Equity"))
 
       (pagename-general (N_ "General"))
       (optname-from-date (N_ "From"))
@@ -126,9 +139,10 @@
 
   ;; The rendering function. Since it works for a bunch of different
   ;; account settings, you have to give the reportname, the
-  ;; report-title, and tthe account-types to work on as arguments.
+  ;; account-types to work on and whether this report works on
+  ;; intervals as arguments.
   (define (piechart-renderer report-obj reportname
-			     account-types report-title do-intervals?)
+			     account-types do-intervals?)
     
     ;; This is a helper function for looking up option values.
     (define (op-value section name)
@@ -357,6 +371,23 @@
 	
 	(gnc:html-document-add-object! document chart) 
 
+	(if (gnc:option-value 
+	     (gnc:lookup-global-option "General" 
+				       "Display \"Tip of the Day\""))
+	    (gnc:html-document-add-object! 
+	     document 
+	     (gnc:make-html-text 
+	      (gnc:html-markup-p 
+	       "Double-click on any legend box opens the register \
+to that account. Double-click on a pie slice opens either the \
+register or, if the account has subaccounts, opens \
+another piechart report with precisely those subaccounts.")
+	      (gnc:html-markup-p "Dragging with left button \
+lets you drag single slices out of the pie. \
+Dragging with right button lets you rotate the pie. ")
+	      (gnc:html-markup-p "Remove this text by disabling \
+the global Preference \"Display Tip of the Day\"."))))
+	
 	document)))
   
   (for-each 
@@ -364,25 +395,27 @@
      (gnc:define-report
       'version 1
       'name (car l)
-      'menu-path (if (cadddr l)
+      'menu-path (if (caddr l)
 		     (list "_Income & Expense")
 		     (list "_Assets & Liabilities"))
+      'menu-name (cadddr l)
+      'menu-tip (car (cddddr l))
       'options-generator (lambda () (options-generator (cadr l) 
-						       (cadddr l)))
+						       (caddr l)))
       'renderer (lambda (report-obj)
 		  (piechart-renderer report-obj 
 				     (car l) 
 				     (cadr l)
-				     (caddr l)
-				     (cadddr l)))))
+				     (caddr l)))))
    (list 
-    ;; reportname, account-types, reporttitle, do-intervals?
-    (list reportname-income '(income) reporttitle-income #t)
-    (list reportname-expense '(expense) reporttitle-expense #t)
+    ;; reportname, account-types, do-intervals?, 
+    ;; menu-reportname, menu-tip
+    (list reportname-income '(income) #t menuname-income menutip-income)
+    (list reportname-expense '(expense) #t menuname-expense menutip-expense)
     (list reportname-assets 
 	  '(asset bank cash checking savings money-market 
 		  stock mutual-fund currency)
-	  reporttitle-assets #f)
+	  #f menuname-assets menutip-assets)
     (list reportname-liabilities 
 	  '(liability credit credit-line equity)
-	  reporttitle-liabilities #f))))
+	  #f menuname-liabilities menutip-liabilities))))
