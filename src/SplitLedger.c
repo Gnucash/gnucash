@@ -404,9 +404,10 @@ printf ("save split is %p \n", split);
       } else {
          new_amount = (reg->ndebitCell->amount) - (reg->ncreditCell->amount);
       }
-      if ((EQUITY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
-          (STOCK_REGISTER  == (reg->type & REG_TYPE_MASK)) ||
-          (PORTFOLIO       == (reg->type & REG_TYPE_MASK))) 
+      if ((EQUITY_REGISTER   == (reg->type & REG_TYPE_MASK)) ||
+          (STOCK_REGISTER    == (reg->type & REG_TYPE_MASK)) ||
+          (CURRENCY_REGISTER == (reg->type & REG_TYPE_MASK)) ||
+          (PORTFOLIO         == (reg->type & REG_TYPE_MASK))) 
       { 
          xaccSplitSetShareAmount (split, new_amount);
       } else {
@@ -536,9 +537,10 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
    
-      if ((EQUITY_REGISTER == typo) ||
-          (STOCK_REGISTER  == typo) ||
-          (PORTFOLIO       == typo)) 
+      if ((EQUITY_REGISTER   == typo) ||
+          (STOCK_REGISTER    == typo) ||
+          (CURRENCY_REGISTER == typo) ||
+          (PORTFOLIO         == typo)) 
       { 
          amt = xaccSplitGetShareAmount (split);
       } else {
