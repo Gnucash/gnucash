@@ -1298,6 +1298,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
   GList *node;
   gnc_numeric value;
 
+  ENTER (" currency=%s", gnc_commodity_get_mnemonic (base_currency));
   value = gnc_numeric_zero();
 
   for (node = splits; node; node = node->next)
@@ -1366,18 +1367,17 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
                                 GNC_RND_ROUND);
   else
     return gnc_numeric_convert (value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  LEAVE (" ");
 }
 
 gnc_numeric
 xaccTransGetImbalance (const Transaction * trans)
 {
-  const gnc_commodity * currency;
-
   if (!trans)
     return gnc_numeric_zero ();
 
-  currency = xaccTransGetCurrency (trans);
-  return xaccSplitsComputeValue (trans->splits, NULL, currency);
+  return xaccSplitsComputeValue (trans->splits, NULL, 
+        trans->common_currency);
 }
 
 gnc_numeric
