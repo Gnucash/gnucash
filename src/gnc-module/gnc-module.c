@@ -103,7 +103,7 @@ gnc_module_system_search_dirs(void)
  *************************************************************/
 
 static void
-gnc_module_system_setup_load_path() 
+gnc_module_system_setup_load_path(void)
 {
   GList * dirs = gnc_module_system_search_dirs();
   GList * lp;
@@ -122,7 +122,6 @@ gnc_module_system_setup_load_path()
     }
   }
 }
-
 
 /*************************************************************
  * gnc_module_system_init
