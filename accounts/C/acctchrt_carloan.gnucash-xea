@@ -40,14 +40,14 @@
   <act:parent type="new">023e2343114b3d695feaeb96904e0da6</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Expense</act:name>
+  <act:name>Expenses</act:name>
   <act:id type="new">acacdcb998e45fb741766622e8542f0b</act:id>
   <act:type>EXPENSE</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>USD</cmdty:id>
   </act:currency>
-  <act:description>Expense</act:description>
+  <act:description>Expenses</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Interest</act:name>
