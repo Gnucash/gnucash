@@ -64,6 +64,8 @@ typedef struct _order_window {
   GtkWidget *	owner_label;
   GtkWidget *	owner_choice;
 
+  GtkWidget *	parent;
+
   GnucashRegister *	reg;
   GncEntryLedger *	ledger;
 
@@ -204,9 +206,7 @@ gnc_order_window_invoice_cb (GtkWidget *widget, gpointer data)
       return;
 
   /* Ok, go make an invoice */
-  gnc_invoice_new (ow->dialog, &(ow->owner), ow->book); 
-
-  /* XXX: This should really be unparented */
+  gnc_invoice_find (ow->parent, NULL, &(ow->owner), ow->book); 
 
   /* refresh the window */
   gnc_order_update_window (ow);
@@ -518,8 +518,6 @@ gnc_order_update_window (OrderWindow *ow)
     /* Hide the 'close order' button */
     hide = glade_xml_get_widget (ow->xml, "close_order_button");
     gtk_widget_hide_all (hide);
-    hide = glade_xml_get_widget (ow->xml, "new_invoice_button");
-    gtk_widget_hide_all (hide);
   }
 }
 
@@ -538,6 +536,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   ow = g_new0 (OrderWindow, 1);
   ow->book = bookp;
   ow->dialog_type = type;
+  ow->parent = parent;
 
   /* Save this for later */
   gncOwnerCopy (owner, &(ow->owner));
@@ -826,7 +825,7 @@ new_order_cb (GtkWidget *parent, gpointer *order_p, gpointer user_data)
   
   g_return_val_if_fail (order_p && user_data, TRUE);
 
-  *order_p = gnc_order_new (parent, sw->owner, sw->book);
+  *order_p = gnc_order_new (sw->parent, sw->owner, sw->book);
   return sw->no_close;
 }
 

@@ -19,6 +19,7 @@
 #include "gnc-engine-util.h"
 #include "gnucash-sheet.h"
 #include "window-help.h"
+#include "window-report.h"
 #include "dialog-search.h"
 #include "search-param.h"
 
@@ -200,16 +201,27 @@ gnc_invoice_window_print_invoice_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice = iw_get_invoice (iw);
-  SCM func, inv;
+  SCM func, arg;
+  SCM args = SCM_EOL;
+  int report_id;
 
   g_return_if_fail (invoice);
 
   func = gh_eval_str ("gnc:invoice-make-printable");
-  inv = gw_wcp_assimilate_ptr (invoice, gh_eval_str("<gnc:GncInvoice*>"));
+  g_return_if_fail (gh_procedure_p (func));
+
+  arg = gw_wcp_assimilate_ptr (invoice, gh_eval_str("<gnc:GncInvoice*>"));
+  args = gh_cons (arg, args);
 
   /* scm_protect_object(func); */
-  gh_call1 (func, inv);
+
+  arg = gh_apply (func, args);
+  g_return_if_fail (gh_exact_p (arg));
+  report_id = gh_scm2int (arg);
+
   /* scm_unprotect_object(func); */
+  if (report_id >= 0)
+    reportWindow (report_id);
 }
 
 static void
@@ -941,7 +953,7 @@ new_invoice_cb (GtkWidget *parent, gpointer *invoice_p, gpointer user_data)
   
   g_return_val_if_fail (invoice_p && user_data, TRUE);
 
-  *invoice_p = gnc_invoice_new (parent, sw->owner, sw->book);
+  *invoice_p = gnc_invoice_new (sw->parent, sw->owner, sw->book);
   return sw->no_close;
 }
 

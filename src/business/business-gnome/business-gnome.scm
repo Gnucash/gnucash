@@ -5,6 +5,7 @@
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/business-core" 0)
 (gnc:module-load "gnucash/gnome-search" 0)
+(gnc:module-load "gnucash/report/standard-reports" 0)
 
 (define (add-customer-extensions)
   (let ((last-cust (gnc:owner-create)))
@@ -224,7 +225,6 @@
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-extensions)
 
 (define (gnc:invoice-make-printable invoice)
-  (display "I would be printing out an invoice right now...\n")
-  )
+  (gnc:invoice-report-create invoice "Invoice"))
 
 (export gnc:invoice-make-printable)

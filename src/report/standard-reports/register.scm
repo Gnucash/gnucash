@@ -73,7 +73,7 @@
     (set-col (opt-val "Display" "Account") 3)
     (set-col (opt-val "Display" "Shares") 4)
     (set-col (opt-val "Display" "Price") 5)
-    (let ((invoice? (opt-val "Invoice" "Make an invoice"))
+    (let ((invoice? #f)
           (amount-setting (opt-val "Display" "Amount")))
       (if (or invoice? (eq? amount-setting 'single))
           (set-col #t 6)
@@ -257,21 +257,6 @@
    (gnc:make-internal-option "__reg" "credit-string" (_ "Credit")))
 
   (gnc:register-reg-option
-   (gnc:make-simple-boolean-option
-    (N_ "Invoice") (N_ "Make an invoice")
-    "a" (N_ "Display this report as an invoice.") #f))
-
-  (gnc:register-reg-option
-   (gnc:make-string-option
-    (N_ "Invoice") (N_ "Client Name")
-    "b" (N_ "The name of the client to put on the invoice.") ""))
-
-  (gnc:register-reg-option
-   (gnc:make-text-option
-    (N_ "Invoice") (N_ "Client Address")
-    "c" (N_ "The address of the client to put on the invoice") ""))
-
-  (gnc:register-reg-option
    (gnc:make-string-option
     (N_ "General") (N_ "Title")
     "a" (N_ "The title of the report")
@@ -340,7 +325,7 @@
   (define (reg-report-double?)
     (opt-val "__reg" "double"))
   (define (reg-report-invoice?)
-    (opt-val "Invoice" "Make an invoice"))
+    #f)
 
   (define (add-subtotal-row leader table used-columns
                             subtotal-collector subtotal-style)
@@ -543,7 +528,7 @@
         (journal? (opt-val "__reg" "journal"))
         (debit-string (opt-val "__reg" "debit-string"))
         (credit-string (opt-val "__reg" "credit-string"))
-        (invoice? (opt-val "Invoice" "Make an invoice"))
+        (invoice? #f)
         (title (opt-val "General" "Title")))
 
     (if invoice?
@@ -585,11 +570,8 @@
           (gnc:html-document-add-object!
            document
            (make-info-table
-            (string-append
-             (opt-val "Invoice" "Client Name")
-             "\n"
-             (opt-val "Invoice" "Client Address"))))))
-
+             ""))))
+    
     (gnc:html-document-set-title! document title)
     (gnc:html-document-add-object! document table)
 
@@ -604,17 +586,9 @@
  'renderer reg-renderer
  'in-menu? #f)
 
-(gnc:define-report
- 'version 1
- 'name (N_ "Invoice")
- 'options-generator options-generator
- 'renderer reg-renderer
- 'in-menu? #f)
-
 (define (gnc:register-report-create-internal invoice? query journal? double?
                                              title debit-string credit-string)
   (let* ((options (gnc:make-report-options "Register"))
-         (invoice-op (gnc:lookup-option options "Invoice" "Make an invoice"))
          (query-op (gnc:lookup-option options "__reg" "query"))
          (journal-op (gnc:lookup-option options "__reg" "journal"))
          (double-op (gnc:lookup-option options "__reg" "double"))
@@ -628,7 +602,6 @@
           (set! journal? #f)
           (gnc:option-set-value account-op #f)))
 
-    (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)
     (gnc:option-set-value journal-op journal?)
     (gnc:option-set-value double-op double?)

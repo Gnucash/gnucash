@@ -80,7 +80,7 @@
 	<name>new_invoice_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
-	<label>New Invoice</label>
+	<label>Invoices</label>
       </widget>
 
       <widget>

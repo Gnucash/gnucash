@@ -50,6 +50,9 @@ gnc_module_init(int refcount)
   if (!gnc_module_load ("gnucash/gnome-search", 0)) {
     return FALSE;
   }
+  if (!gnc_module_load ("gnucash/report/report-gnome", 0)) {
+    return FALSE;
+  }
 
   gh_eval_str("(use-modules (g-wrapped gw-business-gnome))");
   gh_eval_str("(use-modules (gnucash business-gnome))");
