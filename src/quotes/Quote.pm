@@ -270,8 +270,9 @@ Finance::Quote - Get stock and mutual fund quotes from various exchanges
 =head1 SYNOPSIS
 
   use Finance::Quote;
-  %quotes = Quote::quote_yahoo @symbols;	# Get quotes for a bunch of symbols
-  %quotes = Quote::quote_fidelity @symbols;	# Get quotes for a bunch of symbols
+  %quotes = Quote::yahoo @symbols;	# Get quotes for a bunch of symbols
+  %quotes = Quote::fidelity @symbols;	# Get quotes for a bunch of symbols
+  %quotes = Quote::troweprice @symbols;	# Get quotes from T. Rowe Price
   print ("the last price was ", $quotes {"IBM", "last"} );
 
 =head1 DESCRIPTION
@@ -282,9 +283,9 @@ B<quote_yahoo> function will return a quote for each of the stock symbols
 passed to it.  The return value of each of the routines is an associative
 array, which may include one or more of the following elements:
 
-    name         Company Name
+    name         Company or Mutual Fund Name
     last         Last Price
-    date         Last Trade Date
+    date         Last Trade Date  (MM/DD/YY format)
     time         Last Trade Time
                  Change
                  Percent Change
@@ -302,6 +303,8 @@ array, which may include one or more of the following elements:
                  Dividend per Share
                  Dividend Yield
     cap          Market Capitalization
+    nav          Net Asset Value
+    yeild        Yeild (usually 30 day avg)
 
 =head1 COPYRIGHT
 
