@@ -25,10 +25,12 @@
 ;; depends must be outside module scope -- and should eventually go away.
 (define-module (gnucash report category-barchart))
 (use-modules (srfi srfi-1))
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
+(use-modules (gnucash gnc-module))
+
 (require 'printf)
 
-(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
 ;; The option names are defined here to 1. save typing and 2. avoid
