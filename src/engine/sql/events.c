@@ -140,31 +140,54 @@ typedef struct _event {
 static gpointer
 get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GList *list = (GList *) data;
+   GList *node, *list = (GList *) data;
    char *guid_str;
-   Event *ev;
+   Event *ev = NULL;
+   GUID guid;
+   Timespec ts;
+   GNCEngineEventType type;
    char change = (DB_GET_VAL("change",j))[0];
 
    guid_str = DB_GET_VAL("guid",j);
    PINFO ("event %c for %s", change, guid_str);
 
-   ev = g_new (Event, 1);
-
    /* convert from SQL type to engine type */
    switch (change)
    {
-      case 'a': ev->type = GNC_EVENT_CREATE; break;
-      case 'm': ev->type = GNC_EVENT_MODIFY; break;
-      case 'd': ev->type = GNC_EVENT_DESTROY; break;
+      case 'a': type = GNC_EVENT_CREATE; break;
+      case 'm': type = GNC_EVENT_MODIFY; break;
+      case 'd': type = GNC_EVENT_DESTROY; break;
       default:
          PERR ("unknown change type %c for guid=%s", change, guid_str);
-         g_free (ev);
          return data;
    }
-   string_to_guid (guid_str, &(ev->guid));
 
-   /* get event timestamp */
-   ev->stamp = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+   string_to_guid (guid_str, &guid);
+   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+
+   /* Compress multiple events for the same object.  In other
+    * words, keep only the last event for this object.
+    */
+   for (node=list; node; node=node->next)
+   {
+      ev = (Event *) node->data;
+      if (guid_equal (&(ev->guid), &guid)) 
+      {
+         if (0 >= timespec_cmp (&(ev->stamp), &ts)) 
+         {
+            ev->type = type;
+            ev->guid = guid;
+            ev->stamp = ts;
+         }
+         return (gpointer) list;
+      }
+   }
+
+   ev = g_new (Event, 1);
+
+   ev->type = type;
+   ev->guid = guid;
+   ev->stamp = ts;
 
    /* add it to our list */
    list = g_list_prepend (list, ev);
@@ -230,18 +253,45 @@ pgendProcessEvents (Backend *bend)
             PINFO ("object not present in local cache");
             break;
          case GNC_ID_ACCOUNT:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) be->last_account = ev->stamp;
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_account))) 
+            {
+               be->last_account = ev->stamp;
+            }
             break;
+
          case GNC_ID_TRANS:
-            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) be->last_transaction = ev->stamp;
-            // pgendCopyTransactionToEngine (be, &(ev->guid));
+            if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) 
+            {
+               be->last_transaction = ev->stamp;
+            }
+            switch (ev->type)
+            {
+               default:
+               case GNC_EVENT_CREATE:
+                  PERR ("cant' happen !!!!!!!");
+                  break;
+               case GNC_EVENT_MODIFY: 
+                  pgendCopyTransactionToEngine (be, &(ev->guid));
+                  break;
+               case GNC_EVENT_DESTROY: {
+                  Transaction *trans = xaccTransLookup (&(ev->guid));
+                  xaccTransBeginEdit (trans);
+                  xaccTransDestroy (trans);
+                  xaccTransCommitEdit (trans);
+                  break;
+               }
+            }
+
             break;
+
          case GNC_ID_SPLIT:
             if (0 < timespec_cmp(&(ev->stamp), &(be->last_transaction))) be->last_transaction = ev->stamp;
             break;
+
          case GNC_ID_PRICE:
             if (0 < timespec_cmp(&(ev->stamp), &(be->last_price))) be->last_price = ev->stamp;
             break;
+
          default:
             PERR ("unknown guid type %d", obj_type);
       }
