@@ -88,15 +88,13 @@ const char *void_former_notes_str = "void-former-notes";
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
 
-
 G_INLINE_FUNC void check_open (Transaction *trans);
 G_INLINE_FUNC void
 check_open (Transaction *trans)
 {
   if (trans && 0 >= trans->editlevel)
   {
-    PERR ("transaction %p not open for editing\n", trans);
-    PERR ("\t%s:%d \n", __FILE__, __LINE__);
+    PERR ("transaction %p not open for editing", trans);
   }
 }
 
@@ -1731,6 +1729,12 @@ restart_search:
 /********************************************************************\
 \********************************************************************/
 
+/* Temporary hack for data consitency */
+static int scrub_data = 1;
+void xaccEnableDataScrubbing(void) { scrub_data = 1; }
+void xaccDisableDataScrubbing(void) { scrub_data = 0; }
+
+
 void
 xaccTransCommitEdit (Transaction *trans)
 {
@@ -1762,40 +1766,43 @@ xaccTransCommitEdit (Transaction *trans)
     * can cause pointers to splits and transactions to disapear out
     * from under the holder.
     */
-   /* Lock down posted date to be synced to the source of cap gains */
-   xaccScrubGainsDate(trans);
-
-   /* Fix up split value */
-   if (trans->splits && !(trans->do_free))
+   if (scrub_data)
    {
-      SplitList *node;
+      /* Lock down posted date to be synced to the source of cap gains */
+      xaccScrubGainsDate(trans);
 
-      /* Fix up split amount */
+      /* Fix up split value */
+      if (trans->splits && !(trans->do_free))
+      {
+         SplitList *node;
+
+         /* Fix up split amount */
 restart:
-      for (node=trans->splits; node; node=node->next)
-      {
-         split = node->data;
-         CHECK_GAINS_STATUS (split);
-         if (split->gains & GAINS_STATUS_ADIRTY)
+         for (node=trans->splits; node; node=node->next)
          {
-            gboolean altered = FALSE;
-            split->gains |= ~GAINS_STATUS_ADIRTY;
-            if (split->lot) altered = xaccScrubLot (split->lot);
-            if (altered) goto restart;
+            split = node->data;
+            CHECK_GAINS_STATUS (split);
+            if (split->gains & GAINS_STATUS_ADIRTY)
+            {
+               gboolean altered = FALSE;
+               split->gains |= ~GAINS_STATUS_ADIRTY;
+               if (split->lot) altered = xaccScrubLot (split->lot);
+               if (altered) goto restart;
+            }
          }
-      }
-
-      /* Fix up gains split value */
-      for (node=trans->splits; node; node=node->next)
-      {
-         split = node->data;
-         CHECK_GAINS_STATUS (split);
-         if ((split->gains & GAINS_STATUS_GAINS) &&
-              split->gains_split &&
-             (split->gains_split->gains & GAINS_STATUS_VDIRTY))
+  
+         /* Fix up gains split value */
+         for (node=trans->splits; node; node=node->next)
          {
-            xaccSplitComputeCapGains (split, NULL);
-            split->gains_split->gains |= ~GAINS_STATUS_VDIRTY;
+            split = node->data;
+            CHECK_GAINS_STATUS (split);
+            if ((split->gains & GAINS_STATUS_GAINS) &&
+                 split->gains_split &&
+                (split->gains_split->gains & GAINS_STATUS_VDIRTY))
+            {
+               xaccSplitComputeCapGains (split, NULL);
+               split->gains_split->gains |= ~GAINS_STATUS_VDIRTY;
+            }
          }
       }
    }
