@@ -66,9 +66,29 @@ enum {
   FMB_QUIT,
 };
 
+/* The gnc_ui_refresh_statusbar() subroutine redraws 
+ *    the statusbar at the bottom of the main window. The statusbar
+ *    includes two fields, titled 'profits' and 'assets'.  The total
+ *    assets equal the sum of all of the non-equity, non-income
+ *    accounts.  In theory, assets also equals the grand total
+ *    value of the equity accounts, but that assumes that folks are
+ *    using the equity account type correctly (which is not likely).
+ *    Thus we show the sum of assets, rather than the sum of equities.
+ *
+ * hack alert XXX this routine rather incorrectly sums together 
+ * account types even if they are of different currencies.  In fact,
+ * it should check the currency types, and keep separate, distinct
+ * balances for each currency, and report each of those indivudually.
+ * Or something like that. 
+ *
+ * Note the 'convert-to-euro' is a kind of a hack to work around this
+ * bug: basically, any/all currencies are converted to the euro, and 
+ * that is the sum that is reported.  It should probably be replaced by
+ * a generic 'convert-to-common-currency' routine.
+ */
 
 static void
-gnc_ui_refresh_statusbar()
+gnc_ui_refresh_statusbar (void)
 {
   GNCMainInfo *main_info;
   double assets  = 0.0;
@@ -137,6 +157,8 @@ gnc_ui_refresh_statusbar()
 	}
 	break;
       case EQUITY:
+        /* no-op, see comments at top about summing assets */
+	break;
       case CURRENCY:
       default:
 	break;
