@@ -30,6 +30,6 @@ gw-core-utils.scm gw-core-utils.h gw-core-utils.c gw-core-utils.html: \
 	FLAVOR=gnome guile -c \
           "(set! %load-path (cons \"${G_WRAP_MODULE_DIR}\" %load-path)) \
            (primitive-load \"./gw-core-utils-spec.scm\") \
-           (gw:generate-module \"gw-core-utils\")"
+           (gw:generate-wrapset \"gw-core-utils\")"
 BUILT_SOURCES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c
 CLEANFILES = gw-core-utils.scm gw-core-utils.h gw-core-utils.c 
