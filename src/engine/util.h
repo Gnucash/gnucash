@@ -89,7 +89,7 @@ char * prettify (const char *);
 /* utility macros  */
 #define FATAL(x...)    LG(1, "Fatal Error: %s: ",  prettify(__FUNCTION__));  LG(1,       ##x);
 #define PERR(x...)     LG(LERR,    "Error: %s: ",  prettify(__FUNCTION__));  LG(LERR,    ##x);
-#define PWARN(x...)    LG(LWARN,   "Waring: %s: ", prettify(__FUNCTION__));  LG(LWARN,   ##x);
+#define PWARN(x...)    LG(LWARN,   "Warning: %s: ", prettify(__FUNCTION__));  LG(LWARN,   ##x);
 #define PINFO(x...)    LG(LINFO,   "Info: %s: ",   prettify(__FUNCTION__));  LG(LINFO,   ##x);
 #define DEBUG(x...)    LG(LDEBUG,  "Debug: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
 #define ENTER(x...)    LG(LDEBUG,  "Enter: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
