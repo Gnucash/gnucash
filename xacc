@@ -1,6 +1,13 @@
 #! /bin/sh
 # Generated automatically from xacc.in by configure.
 
-XACC_HELP=${XACC_HELP}:./Docs:/usr/local/share/xacc/Docs
+XACC_HELP=${XACC_HELP:-/usr/local/share/xacc/Docs}
 export XACC_HELP
-exec xacc.bin $@
+
+# hack alert -- we should really be using ldconfig to look for
+# this library. 
+if [ -f /usr/X11R6/lib/libXm.so -o -L /usr/X11R6/lib/libXm.so ]; then
+  exec xacc.bin $@
+else
+  exec xacc-static.bin $@
+fi
