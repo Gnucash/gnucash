@@ -3,6 +3,11 @@
 	* src/import-export/hbci/gnc-hbci-gettrans.c: Fix HBCI date range
 	for statement download.
 
+2005-02-06  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: Release 1.8.11
+	* NEWS: Release 1.8.11
+
 2005-01-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/locale-specific/us/gncmod-locale-reports-us.c:

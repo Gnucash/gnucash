@@ -1,6 +1,21 @@
 Version history:
 ------- -------
 
+ 1.8.11 - 06 Feb 2005
+ 	 o Add extra sanity checks and verbose error message if the setup
+	 wizard of aqhbci cannot be found.
+	 o Fix potentially missing initialization of gwenhywfar library, as
+	 reported by Peter O'Gorman on Max OS X.
+	 o Properly accumulate splits (bug #165053).  Also fixes a (related)
+	 memory leak
+	 o Add explicit dependency on business-utils.
+	 o Adapt to latest changes in aqbanking; external wizard name is no
+	 longer hard-coded here but is asked from aqbanking.
+	 o Enable debit notes again in HBCI.
+	 o Update German translation.
+	 o Thomas Bushnell's patch to protect non-backup pruning (#164875)
+	 o Add the transaction guid to some error warning messages.
+	 
  1.8.10 - 11 Dec 2004
  	 o Don't use C++/C99 declarations.  Declare variables at the top of
 	 the function.
