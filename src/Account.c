@@ -55,21 +55,24 @@ mallocAccount( void )
   acc->cleared_balance = 0.0;
 
   acc->flags = 0;
-  acc->type  = 0;
+  acc->type  = -1;
   
   acc->accountName = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
   
-  acc->regData  = NULL;
-  acc->recnData = NULL;
-  acc->adjBData = NULL;
-  acc->qfRoot   = mallocQuickFill();
-  
   acc->numTrans    = 0;
   acc->transaction = NULL;         /* Initially there are no transactions
                                     * in this account's transaction
                                     * array */
+  
+  /* private data */
+  acc->arrowb   = NULL;
+  acc->expand   = 0;
+  acc->regData  = NULL;
+  acc->recnData = NULL;
+  acc->adjBData = NULL;
+  acc->qfRoot   = mallocQuickFill();
   
   return acc;
   }

@@ -24,6 +24,7 @@
 \********************************************************************/
 
 #include <Xm/Xm.h>
+#include <Xm/ArrowB.h>
 #include <Xm/Form.h>
 #include <Xm/Label.h>
 #include <Xm/LabelGP.h>
@@ -46,16 +47,17 @@
 #include "XferWindow.h"
 
 /** PROTOTYPES ******************************************************/
-void closeMainWindow( Widget mw, XtPointer cd, XtPointer cb );
-void listCB( Widget mw, XtPointer cd, XtPointer cb );
-void fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
-void accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
-void helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb );
+static void closeMainWindow ( Widget mw, XtPointer cd, XtPointer cb );
+static void listCB          ( Widget mw, XtPointer cd, XtPointer cb );
+static void expandListCB    ( Widget mw, XtPointer cd, XtPointer cb );
+
+static void ArrowEventCallback (Widget w, XtPointer pClientData,
+                                XEvent *event, Boolean *ContDispatch);
 
 /** GLOBALS *********************************************************/
 extern char   *datafile;
 extern Widget toplevel;
-static int    selected_row=-1;              /* The selected row of accountlist */
+static Account *selected_acc = NULL;          /* The selected account */
 Widget accountlist;
 
 /* the english-language names here should match 
@@ -74,6 +76,99 @@ Pixel   posPixel, negPixel;
 Boolean havePixels = False;
 #endif
 
+#define XACC_MAIN_NUM_COLS 4
+#define XACC_MAIN_ACC_ARRW 0
+#define XACC_MAIN_ACC_NAME 1
+#define XACC_MAIN_ACC_TYPE 2
+#define XACC_MAIN_ACC_BALN 3
+
+/********************************************************************\
+ * xaccMainWindowAddAcct                                            *
+ *                                                                  *
+ * Args:   none                                                     *
+ * Return: none                                                     *
+\********************************************************************/
+void
+xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp )
+{
+
+  int   i, currow;
+  char  buf[BUFSIZE];
+  
+  /* Add all the top-level accounts to the list */
+  for( i=0; i<grp->numAcc; i++ )
+    {
+    String cols[XACC_MAIN_NUM_COLS];
+    Transaction *trans=NULL;
+    Account *acc = getAccount( grp, i );
+    double dbalance;
+    
+    xaccRecomputeBalance (acc);  /* hack alert -- we don't need this */
+    dbalance = acc->balance;
+    
+    if( 0.0 > dbalance )
+      sprintf( buf,"-$%.2f\0", DABS(dbalance) );
+    else
+      sprintf( buf,"$%.2f\0", DABS(dbalance) );
+    
+    cols[XACC_MAIN_ACC_ARRW] = "";
+    cols[XACC_MAIN_ACC_NAME] = acc->accountName;
+    cols[XACC_MAIN_ACC_TYPE] = account_type_name[acc->type];
+    cols[XACC_MAIN_ACC_BALN] = XtNewString(buf);
+
+    XtVaGetValues (acctrix, XmNrows, &currow, NULL);
+    XbaeMatrixAddRows( acctrix, currow, cols, NULL, NULL, 1 );
+    
+#ifndef USE_NO_COLOR
+    /* Set the color of the text, depending on whether the
+     * balance is negative or positive */
+    if( 0.0 > dbalance )
+      XbaeMatrixSetCellColor( acctrix, currow, XACC_MAIN_ACC_BALN, negPixel );
+    else
+      XbaeMatrixSetCellColor( acctrix, currow, XACC_MAIN_ACC_BALN, posPixel );    
+#endif
+
+    XbaeMatrixSetRowUserData ( acctrix, currow, (XtPointer *) acc); 
+
+    /* If the account has sub-accounts, then add an arrow button 
+     * next to the account name.  Clicking on the arrow button will 
+     * expand the display to list the sub-accounts.  The arrow button
+     * will be a cell-wdiget, and will be stored with the account 
+     * structure */
+    if (acc->children) {
+       /* if the arrow button doesn't exist, add it */
+       if (NULL == acc->arrowb) {
+          acc->arrowb = XtVaCreateManagedWidget ("accarrow", 
+                                      xmArrowButtonWidgetClass, acctrix,
+                                      XmNshadowThickness, 0,
+                                      XmNarrowDirection, XmARROW_DOWN, 
+                                      NULL);
+       }
+       XbaeMatrixSetCellWidget (acctrix, currow, XACC_MAIN_ACC_ARRW, acc->arrowb);
+
+       XtAddCallback (acc->arrowb, XmNactivateCallback, 
+                      expandListCB, (XtPointer *) acc);
+
+#define __XACC_DO_ARROW_CALLBACK
+#ifdef  __XACC_DO_ARROW_CALLBACK
+        /* add a button press event handler just in case the 
+         * XmNactivate callback is broken. See notes for the
+         * ArrowEventCallback for details.  -- Linas */
+        acc->PreviousArrowReason = 0;
+	XtAddEventHandler(acc->arrowb, 
+			  ButtonPressMask | ButtonReleaseMask,
+			  False, (XtEventHandler) ArrowEventCallback,
+			  (XtPointer) acc);
+#endif /* __XACC_DO_ARROW_CALLBACK */
+
+
+       if (acc->expand) {
+          xaccMainWindowAddAcct (acctrix, acc->children);
+       }
+    }
+  }
+}
+
 /********************************************************************\
  * refreshMainWindow                                                *
  *                                                                  *
@@ -86,45 +181,114 @@ void
 refreshMainWindow( void )
   {
 
-  int   i,nrows;
-  char  buf[BUFSIZE];
-  AccountGroup *grp = topgroup;    /* hack -- should pass as arguyment ... */
+  int   nrows;
+  AccountGroup *grp = topgroup;    /* hack -- should pass as argument ... */
   
   XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
   XbaeMatrixDeleteRows( accountlist, 0, nrows );
   
-  /* Add all the accounts to the list */
-  for( i=0; i<grp->numAcc; i++ )
-    {
-    String rows[3];
-    Transaction *trans=NULL;
-    Account *acc = getAccount( grp, i );
-    double dbalance;
-    
-    xaccRecomputeBalance (acc);
-    dbalance = acc->balance;
-    
-    if( 0.0 > dbalance )
-      sprintf( buf,"-$%.2f\0", DABS(dbalance) );
-    else
-      sprintf( buf,"$%.2f\0", DABS(dbalance) );
-    
-    rows[0] = acc->accountName;
-    rows[1] = account_type_name[acc->type];
-    rows[2] = XtNewString(buf);
-    XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
-    XbaeMatrixAddRows( accountlist, nrows, rows, NULL, NULL, 1 );
-    
-#ifndef USE_NO_COLOR
-    /* Set the color of the text, depending on whether the
-     * balance is negative or positive */
-    if( 0.0 > dbalance )
-      XbaeMatrixSetCellColor( accountlist, nrows, 2, negPixel );
-    else
-      XbaeMatrixSetCellColor( accountlist, nrows, 2, posPixel );    
-#endif
+  xaccMainWindowAddAcct (accountlist, grp);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+/* --------------------------------------------------------------------
+ * This callback is provided in order to have a separate means of detecting
+ * the arrow button activation.  It seems that some (all?) versions of Motif
+ * have trouble correctly computing the XmCR_ACTIVATE reason for the arrow
+ * button.  In particular, this occurs when the ArrowButton widget has been
+ * reparented.  (XbaeMatrix will reparent a widget so that it will
+ * be properly clipped, e.g. when it is inside of a scrolling window.
+ * The clipping is vitally important to get the widget properly drawn).
+ * 
+ * In a way, one might argue that it is not surpirsing that a reparented
+ * window (XReparentWindow) will confuse the widget: after all, the widget
+ * coordinets with respect to the parent widget differ from the window
+ * coordinates compared to the parent window.  However, this argument
+ * seems flawed: Motif seems to be able to correctly compute and deliver
+ * the XmCR_ARM reason when a button is pressed.  Why can't it get the
+ * the XmCR_ACTIVATE reason when the very same button is relased?
+ * Also, the very same versions of Motif have no problem recognizing
+ * that a button press and release has occured in the window, and have
+ * no problem calling this callback.  So, somehow, the activate computation 
+ * seems broken.
+ * 
+ * Thus, this callback provides an alternate way of getting the arrow
+ * button to work properly.  -- Linas Vepstas October 1997
+ */
+
+static void 
+ArrowEventCallback(Widget w, XtPointer pClientData,
+                   XEvent *event, Boolean *ContDispatch)
+
+{
+    Account *acc = (Account *) pClientData;
+    XButtonEvent *bev = (XButtonEvent *) event;
+    XmArrowButtonCallbackStruct many;
+
+    /* if its not the left mouse button, return */
+    if (1 != bev->button) return;
+
+    /* emulate the arm and activate callbacks */
+    switch ( event->type ) {
+        case ButtonPress:
+            many.reason = XmCR_ARM;
+            many.event = event;
+            many.click_count = 1;
+            expandListCB (w, pClientData, (XtPointer) &many);
+            break;
+        case ButtonRelease:
+            many.reason = XmCR_ACTIVATE;
+            many.event = event;
+            many.click_count = 1;
+            expandListCB (w, pClientData, (XtPointer) &many);
+            break;
     }
+} /* ArrowEventCallback */
+
+
+/********************************************************************\
+\********************************************************************/
+
+static void 
+expandListCB( Widget mw, XtPointer pClientData, XtPointer cb)
+{
+  XmAnyCallbackStruct *info = (XmAnyCallbackStruct *) cb;
+  Account *acc = (Account *)pClientData;
+
+  /* a hack to avoid double invocation */
+  switch ( info->reason ) {
+      case XmCR_ACTIVATE:
+          /* avoid double invocation */
+          if (XmCR_ACTIVATE == acc->PreviousArrowReason) return;
+          acc -> PreviousArrowReason = XmCR_ACTIVATE;
+          break;
+
+      default:
+      case XmCR_ARM:
+          /* avoid double invocation */
+          if (XmCR_ARM == acc->PreviousArrowReason) return;
+          acc -> PreviousArrowReason = XmCR_ARM;
+          return;
   }
+
+  /* change arrow direction, mark account as needing expansion */
+  if (acc->expand) {
+     acc->expand = 0;
+     XtVaSetValues (mw, 
+                    XmNarrowDirection, XmARROW_DOWN, 
+                    NULL);
+  } else {
+     acc->expand = 1;
+     XtVaSetValues (mw, 
+                    XmNarrowDirection, XmARROW_UP, 
+                    NULL);
+  }
+
+  /* finally, redraw the main window */
+  refreshMainWindow ();
+}
 
 /********************************************************************\
  * mainWindow -- the main window... (normally) the first window     *
@@ -137,6 +301,7 @@ refreshMainWindow( void )
  * Global: data        - the data from the datafile                 *
  *         accountlist - the widget that has the list of accounts   *
 \********************************************************************/
+
 void
 mainWindow( Widget parent )
   {
@@ -281,9 +446,11 @@ mainWindow( Widget parent )
    * use the matrix instead of a list to get the accounts
    * up in columns */
     {
-    String   labels[3]          = {"Account Name","Type","Balance"};
-    short    colWidths[]        = {16,10,8};
-    unsigned char alignments[3] = {XmALIGNMENT_BEGINNING,
+    String   labels[XACC_MAIN_NUM_COLS]     = {"", "Account Name","Type","Balance"};
+    short    colWidths[]        = {4,16,10,8};
+    unsigned char alignments[XACC_MAIN_NUM_COLS] = {
+                                   XmALIGNMENT_CENTER,
+                                   XmALIGNMENT_BEGINNING,
 				   XmALIGNMENT_CENTER,
 				   XmALIGNMENT_END};
     
@@ -291,7 +458,7 @@ mainWindow( Widget parent )
       = XtVaCreateWidget( "list",
 			  xbaeMatrixWidgetClass,  actionform,
 			  XmNvisibleRows,         7,
-			  XmNcolumns,             3,
+			  XmNcolumns,             XACC_MAIN_NUM_COLS,
 			  XmNcolumnWidths,        colWidths,
 			  XmNcolumnAlignments,    alignments,
 			  XmNcolumnLabels,        labels,
@@ -437,6 +604,15 @@ void
 closeMainWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   
+#ifdef __XACC_DO_ARROW_CALLBACK
+  /* this remove core-dumps motif, Don't know why --linas */
+  /* XtRemoveEventHandler(mw->arrowb, 
+   *                    ButtonPressMask | ButtonReleaseMask,
+   *                    True, (XtEventHandler) ArrowEventCallback,
+   *                    (XtPointer) mw);
+   */
+#endif /* __XACC_DO_ARROW_CALLBACK */
+
   DEBUG("closed MainWindow");
   DEBUGCMD(printf(" coresize = %d\n",_coresize()));
   exit(0);
@@ -451,7 +627,7 @@ closeMainWindow( Widget mw, XtPointer cd, XtPointer cb )
  * Return: none                                                     * 
  * Global: accountlist - the widget that has the list of accounts   *
 \********************************************************************/
-void
+static void
 listCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   XbaeMatrixEnterCellCallbackStruct *cbs =
@@ -461,9 +637,10 @@ listCB( Widget mw, XtPointer cd, XtPointer cb )
   cbs->doit = False;
   cbs->map  = False;
   
-  selected_row = cbs->row;
+  selected_acc = (Account *) XbaeMatrixGetRowUserData (accountlist, cbs->row);
+
   XbaeMatrixDeselectAll(accountlist);
-  XbaeMatrixSelectRow( accountlist, selected_row );
+  XbaeMatrixSelectRow( accountlist, cbs->row );
   }
 
 
@@ -601,7 +778,7 @@ fileMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     * 
  * Return: none                                                     * 
  * Global: data         - the data from the datafile                *
- *         selected_row - the selected row number                   *
+ *         selected_acc - the selected account                      *
  *         toplevel     - the toplevel widget                       *
 \********************************************************************/
 void
@@ -630,7 +807,7 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
     case AMB_OPEN:
       DEBUG("AMB_OPEN");
         {
-        Account *acc = getAccount (grp,selected_row);
+        Account *acc = selected_acc;
         if( NULL == acc ) {
           int make_new = verifyBox (toplevel,
 "Do you want to create a new account?\n\
@@ -650,20 +827,20 @@ to open in the main window.\n");
     case AMB_EDIT:
       DEBUG("AMB_EDIT");
       {
-        Account *acc = getAccount (grp,selected_row);
+        Account *acc = selected_acc;
         if( NULL == acc ) {
           errorBox (toplevel,
 "To edit an account, you must first \n\
 choose an account to delete.\n");
         } else {
-          editAccWindow( toplevel, getAccount(grp,selected_row) );
+          editAccWindow( toplevel, acc );
         }
       }
       break;
     case AMB_DEL:
       DEBUG("AMB_DEL");
         {
-        Account *acc = getAccount (grp,selected_row);
+        Account *acc = selected_acc;
         if( NULL == acc ) {
           errorBox (toplevel,
 "To delete an account, you must first \n\
@@ -674,7 +851,7 @@ choose an account to delete.\n");
                    "Are you sure you want to delete the %s account?", 
                    acc->accountName);
           if( verifyBox(toplevel,msg) ) {
-            freeAccount( removeAccount (grp, selected_row) );
+            xaccRemoveAccount (selected_acc);
             refreshMainWindow();
             }
           }
@@ -760,3 +937,5 @@ helpMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
       DEBUG("We shouldn't be here!");
     }
   }
+
+/********************* END OF FILE **********************************/

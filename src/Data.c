@@ -289,7 +289,7 @@ removeAccount( AccountGroup *grp, int num )
   {
   Account *acc = NULL;
   
-  if( grp != NULL )
+  if( NULL != grp )
     {
     int i,j;
     Account **oldAcc = grp->account;
@@ -316,6 +316,41 @@ removeAccount( AccountGroup *grp, int num )
     }
   return acc;
   }
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccRemoveAccount (Account *acc)
+{
+   int i,j;
+   AccountGroup *grp;
+   Account **oldAcc;
+
+   if (NULL == acc) return;
+   grp = acc->parent;
+
+   oldAcc = grp->account;
+
+   grp->saved = False;
+    
+   grp->numAcc--;
+   grp->account = (Account **)_malloc((grp->numAcc)*sizeof(Account *));
+    
+
+   for( i=0,j=0; i<grp->numAcc; i++,j++ ) {
+      if( acc != grp->account[i] ) {
+         grp->account[i] = oldAcc[j];
+      } else {
+         j--;
+      }
+   }
+    
+   _free(oldAcc);
+
+   freeAccount (acc);
+}
+
 
 /********************************************************************\
 \********************************************************************/
