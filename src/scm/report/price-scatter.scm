@@ -179,7 +179,7 @@
 	 (gnc:html-markup-anchor
 	  (sprintf #f "gnc-options:report-id=%a" 
 		   (gnc:report-id report-obj))
-	  (_ "Click here to edit the report options."))))))
+	  (_ "Edit report options"))))))
 
     (gnc:html-scatter-set-title! 
      chart report-title)

@@ -705,7 +705,7 @@
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
 	   (sprintf #f "gnc-options:report-id=%a" report-id)
-	   (_ "Click here to edit the report options.")))))
+	   (_ "Edit report options")))))
     p))
 
 (define (gnc:html-make-empty-data-warning report-title-string)
@@ -727,5 +727,5 @@
 	 (gnc:html-markup-p
 	  (gnc:html-markup-anchor
 	   (sprintf #f "gnc-options:report-id=%a" report-id)
-	   (_ "Click here to edit the report options.")))))
+	   (_ "Edit report options")))))
     p))
