@@ -1535,16 +1535,19 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
    * Invoice->owner->parentGUID.
    */
   if (owner && gncOwnerGetGUID (owner)) {
-    gncQueryAddGUIDMatch (q, g_slist_prepend
+    q2 = gncQueryCreate ();
+    gncQueryAddGUIDMatch (q2, g_slist_prepend
 			  (g_slist_prepend (NULL, QUERY_PARAM_GUID),
 			   INVOICE_OWNER),
 			  gncOwnerGetGUID (owner), QUERY_OR);
 
-    gncQueryAddGUIDMatch (q, g_slist_prepend
+    gncQueryAddGUIDMatch (q2, g_slist_prepend
 			  (g_slist_prepend (NULL, OWNER_PARENTG),
 			   INVOICE_OWNER),
 			  gncOwnerGetGUID (owner), QUERY_OR);
 
+    gncQueryMergeInPlace (q, q2, QUERY_AND);
+    gncQueryDestroy (q2);
     q2 = gncQueryCopy (q);
   }
 
