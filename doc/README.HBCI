@@ -39,15 +39,15 @@ OpenHBCI 0.9.3 or later
 http://sourceforge.net/projects/openhbci
 
 which in turn requires:
-Libchipcard 0.6, http://sourceforge.net/projects/libchipcard
+Libchipcard 0.6 or later, http://sourceforge.net/projects/libchipcard
 and OpenSSL any 0.9.x, http://www.openssl.org
 
-Then you can build GnuCash 1.7.2 with:
-   ./configure --enable-hbci --with-openhbci-prefix=/your/openhbci/prefix
+Then you can build GnuCash 1.7.x/1.8.x with:
+   ./configure --enable-hbci --with-openhbci-prefix=/your/openhbci/prefix 
 
 And you need to apply at your Bank to get HBCI access. The bank will 
 provide you with some paper work which is needed during HBCI setup in 
-GnuCash.
+GnuCash. (For problems during compile see 6. Known Problems below.)
 
 3. Quick Tour
 ----------
@@ -129,6 +129,11 @@ this new functionality.
 
 6. Known Problems
 --------------
+
+* If the compilation of GnuCash fails with 'cc1: changing search order
+  for system directory ...' as one of the last message lines, then
+  call ./configure with the additional option
+  --enable-error-on-warning=no and recompile.
 
 * If you don't see the menu items mentioned above, then GnuCash was
   not built/compiled with --enable-hbci. Please try to compile GnuCash
