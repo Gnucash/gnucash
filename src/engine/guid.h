@@ -62,7 +62,7 @@ typedef union _GUID
  * given in the salt argument, but not with any other source. Calling
  * guid_init_only_salt() with a specific argument will produce a
  * specific sequence of ids reliably. */
-void guid_init();
+void guid_init(void);
 void guid_init_with_salt(const void *salt, size_t salt_len);
 void guid_init_only_salt(const void *salt, size_t salt_len);
 

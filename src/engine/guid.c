@@ -195,7 +195,7 @@ init_from_dir(const char *dirname, unsigned int max_files)
 }
 
 static size_t
-init_from_time()
+init_from_time(void)
 {
   size_t total;
   time_t t_time;
@@ -217,7 +217,7 @@ init_from_time()
 }
 
 void
-guid_init()
+guid_init(void)
 {
   size_t bytes = 0;
 

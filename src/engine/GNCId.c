@@ -185,7 +185,7 @@ xaccGUIDNew(GUID *guid)
 }
 
 const GUID *
-xaccGUIDNULL()
+xaccGUIDNULL(void)
 {
   static int null_inited = (0 == 1);
   static GUID null_guid;
