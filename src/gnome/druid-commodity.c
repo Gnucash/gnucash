@@ -163,6 +163,7 @@ static CommodityDruidPage *
 make_commodity_druid_page(gnc_commodity * comm) {
 
   CommodityDruidPage * retval = g_new0(CommodityDruidPage, 1);
+  GtkWidget * alignment;
   GtkWidget * top_vbox;
   GtkWidget * info_label;
   GtkWidget * next_label;
@@ -175,102 +176,99 @@ make_commodity_druid_page(gnc_commodity * comm) {
   gtk_object_set_data(GTK_OBJECT(retval->page),
                       "page_struct", (gpointer)retval);
 
-  page   = GNOME_DRUID_PAGE_STANDARD(retval->page);
- 
+  page = GNOME_DRUID_PAGE_STANDARD(retval->page);
+
   /* save the old commodity name */
   retval->old_name = g_strdup(gnc_commodity_get_mnemonic(comm));
   title = g_strdup_printf("Enter information about \"%s\"",
                           retval->old_name);
-  
+
   gnome_druid_page_standard_set_bg_color(page, & std_bg_color);  
   gnome_druid_page_standard_set_logo_bg_color(page, & std_logo_bg_color);
   gnome_druid_page_standard_set_title_color(page, & std_title_color);
   gnome_druid_page_standard_set_title(page, title);
   g_free(title);
-  
+
+  alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_box_pack_start(GTK_BOX(page->vbox), alignment, FALSE, FALSE, 0);
+
   top_vbox = gtk_vbox_new(FALSE, 3);
-  gtk_box_pack_start(GTK_BOX(page->vbox), top_vbox, FALSE, FALSE, 0);
-                     
+  gtk_container_add(GTK_CONTAINER(alignment), top_vbox);
+
   info_label = 
     gtk_label_new(_("Pick the type of the currency or security. For "
-                    "national currencies, use \"ISO-4217 Currencies\".  "
+                    "national currencies, use \"ISO-4217 Currencies\". "
                     "Enter a new type in the box if the ones in the "
                     "pick list are inappropriate."));
 
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
+  gtk_misc_set_alignment (GTK_MISC(info_label), 0.0, 0.5);
   gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE);
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
 
   temp = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
 
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
   retval->new_type_combo = gtk_combo_new(); 
-  gtk_box_pack_start(GTK_BOX(temp),
-                     retval->new_type_combo, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(temp), retval->new_type_combo, TRUE, TRUE, 0);
 
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-  
   retval->new_type_entry = (GTK_COMBO(retval->new_type_combo))->entry;
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
                                  gnc_commodity_get_namespace(comm));
-  
+
+  temp = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);
+
   info_label = 
     gtk_label_new(_("Enter a descriptive name for the currency or stock, "
                     "such as \"US Dollar\" or \"Red Hat Stock\""));
-  
+
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
+  gtk_misc_set_alignment (GTK_MISC(info_label), 0.0, 0.5);
   gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE); 
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
- 
+
   temp = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
   retval->new_name_entry = gtk_entry_new();
   gtk_box_pack_start(GTK_BOX(temp), retval->new_name_entry,
                      TRUE, TRUE, 0);
   gtk_entry_set_text(GTK_ENTRY(retval->new_name_entry),
                      gnc_commodity_get_fullname(comm));
-  
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
+
+  temp = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);
 
   info_label = 
     gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\"), "
                     "ISO currency symbol (such as \"USD\"), or "
                     "other unique abbreviation for the name."));
-  
+
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_FILL);
+  gtk_misc_set_alignment (GTK_MISC(info_label), 0.0, 0.5);
   gtk_label_set_line_wrap (GTK_LABEL(info_label), TRUE); 
   gtk_box_pack_start(GTK_BOX(top_vbox), info_label, TRUE, TRUE, 0);
- 
+
   temp = gtk_hbox_new(FALSE, 0);
   gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 0);
-
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
 
   retval->new_mnemonic_entry = gtk_entry_new();
   gtk_box_pack_start(GTK_BOX(temp), retval->new_mnemonic_entry,
                      TRUE, TRUE, 0);
   gtk_entry_set_text(GTK_ENTRY(retval->new_mnemonic_entry),
                      gnc_commodity_get_mnemonic(comm));
-  
-  info_label = gtk_label_new("");
-  gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
+
+  temp = gtk_hbox_new(FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(top_vbox), temp, FALSE, FALSE, 5);
 
   next_label = gtk_label_new(_("Click \"Next\" to accept the information "
                                "and move to the next currency or stock."));
   gtk_label_set_justify (GTK_LABEL(next_label), GTK_JUSTIFY_FILL);
+  gtk_misc_set_alignment (GTK_MISC(next_label), 0.0, 0.5);
   gtk_label_set_line_wrap (GTK_LABEL(next_label), TRUE);  
   gtk_box_pack_start(GTK_BOX(top_vbox), next_label, TRUE, TRUE, 0);
-  
+
   return retval;
 }
 
