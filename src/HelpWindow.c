@@ -188,6 +188,7 @@ char      *htmlRead( char *file );
 
 #if USE_XMHTML
 void xaccJumpToLabel (Widget mw, char *jumpfile);
+XmImageInfo * htmlReadImageProc (Widget w, String file);
 #endif 
 
 #if HAVE_XPM
@@ -275,6 +276,7 @@ helpWindow( Widget parent, char *title, char *htmlfile )
 #if USE_XMHTML
                                xmHTMLWidgetClass,       controlform,
                                XmNanchorButtons,        False, 
+                               XmNimageProc,            htmlReadImageProc,
 #endif 
 			       XmNtopAttachment,        XmATTACH_FORM,
 			       XmNbottomAttachment,     XmATTACH_FORM,
@@ -560,7 +562,11 @@ htmlRead( char *file )
   int   size=0;
   int   fd;
 
-  sprintf( (char *)&filename, "%s/%s", helpPath, file );
+  /* construct absolute path */
+  strcpy (filename, helpPath);
+  strcat (filename, "/");
+  strcat (filename, file);
+
   /* Open file: */
   fd = open( filename, O_RDONLY );
   if( fd == -1 )
@@ -589,6 +595,31 @@ htmlRead( char *file )
   return buf;
   }
 
+
+/********************************************************************\
+ * htmlReadImageProc                                                * 
+ *                                                                  * 
+ * Args:   file - the name of the html file to read                 * 
+ * Return: none                                                     * 
+ * Global: helpPath - the path to the help files                    * 
+\********************************************************************/
+#if USE_XMHTML
+XmImageInfo *
+htmlReadImageProc (Widget w, String file) 
+  {
+  char  filename[BUFSIZE];
+  XmImageInfo *retval;
+
+  /* construct absolute path -- twiddle teh relative path we recieved */
+  strcpy (filename, helpPath);
+  strcat (filename, "/");
+  strcat (filename, file);
+
+  /* use the default proc for the hard work */
+  retval = XmHTMLImageDefaultProc(w, filename, NULL, 0);
+  return retval;
+}
+#endif /* USE_XMHTML */
 
 #if HAVE_XPM
 /********************************************************************\
