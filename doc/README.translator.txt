@@ -1,5 +1,8 @@
-This document describes the different things needed to translate
-GnuCash for a particular locale.
+This document describes some loosely related notes about the different
+things needed to translate GnuCash for a particular locale.
+
+NOTE: A much more up to date and exhaustive HOWTO for translators can
+be found in the file TRANSLATION_HOWTO. 
 
 
 Table Of Contents
