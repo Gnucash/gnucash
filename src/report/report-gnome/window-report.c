@@ -473,7 +473,7 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data)
     SCM res;
 
     choice = gh_cdr (choice);
-    file_scm = gh_str02scm (filepath);
+    file_scm = gh_str02scm ((char *) filepath);
 
     res = gh_call3 (export_thunk, report->cur_report, choice, file_scm);
 

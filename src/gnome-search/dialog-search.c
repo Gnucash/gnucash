@@ -262,8 +262,10 @@ gnc_search_dialog_close_cb (GnomeDialog *dialog, GNCSearchWindow *sw)
 }
 
 static void
-close_handler (GNCSearchWindow *sw)
+close_handler (gpointer data)
 {
+  GNCSearchWindow * sw = data;
+
   gnome_dialog_close (GNOME_DIALOG (sw->dialog));
 }
 
@@ -380,8 +382,8 @@ make_param (GNCIdTypeConst type, const char *title, const char *path1,
   gnc_search_param_set_title (param, title);
 
   if (path2)
-    l = g_slist_prepend (l, path2);
-  l = g_slist_prepend (l, path1);
+    l = g_slist_prepend (l, (gpointer) path2);
+  l = g_slist_prepend (l, (gpointer) path1);
 
   gnc_search_param_set_param_path (param, type, l);
 
