@@ -1,3 +1,8 @@
+2001-12-18  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sk.po: Updated Slovak translation from Zdenko Podobny
+	<zdpo@mailbox.sk>. 
+
 2001-12-12  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/druid-euro-conv.c: Fixed support for using existing

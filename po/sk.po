@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2001-12-16 21:58-0800\n"
-"PO-Revision-Date: 2001-10-26 09:08+0200\n"
+"Project-Id-Version: gnucash\n"
+"POT-Creation-Date: 2001-12-08 22:22+0100\n"
+"PO-Revision-Date: 2001-12-13 20:37GMT+0100\n"
 "Last-Translator: Zdenko Podobný <zdpo@mailbox.sk>\n"
 "Language-Team: Slovak <sk-i18n@linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -211,12 +211,12 @@ msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr "Od posledného ulo¾enia do¹lo k zmenám. Ulo¾i» údaje do súboru?"
 
 #: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
-#: src/gnome/window-acct-tree.c:723 src/gnome/window-help.c:627
+#: src/gnome/window-acct-tree.c:733 src/gnome/window-help.c:627
 #: src/gnome/window-reconcile.c:1361
 msgid "Open"
 msgstr "Otvori»"
 
-#: src/FileDialog.c:574 src/gnome/window-main.c:1143
+#: src/FileDialog.c:574 src/gnome/window-main.c:1129
 msgid "Save"
 msgstr "Ulo¾i»"
 
@@ -460,7 +460,7 @@ msgstr "Celkový debet"
 
 #: src/SplitLedger.c:4109
 msgid "Tot Shares"
-msgstr ""
+msgstr "Celkový podiel"
 
 #: src/SplitLedger.c:4118 src/gnc-ui-util.c:127
 #: src/gnome/glade-gnc-dialogs.c:3708 src/scm/guile-strings.c:158
@@ -601,7 +601,7 @@ msgstr "Kód úètu"
 
 #: src/gnc-ui-util.c:133 src/scm/guile-strings.c:160
 msgid "Security"
-msgstr "Cenný papier"
+msgstr "Security"
 
 #: src/gnc-ui-util.c:142 src/gnc-ui-util.c:145 src/scm/guile-strings.c:124
 #: src/scm/guile-strings.c:162 src/scm/report/guile-strings.c:174
@@ -951,7 +951,7 @@ msgstr "Musíte vlo¾i» platnú cenu."
 
 #: src/gnome/dialog-transfer.c:1112
 msgid "You must enter a valid `to' amount."
-msgstr ""
+msgstr "Musíte vlo¾i» platnú `na' sumu."
 
 #: src/gnome/dialog-transfer.c:1123
 #, c-format
@@ -1020,24 +1020,18 @@ msgstr ""
 msgid "You must enter an existing national currency or enter a different type."
 msgstr "Musíte vlo¾i» existujúcu národnú menu alebo vlo¾te iný typ."
 
-#. Base name for the Euro exchange account. The currency
-#. mnemonics get appended, e.g. 'Exchange DEM - EUR'.
-#: src/gnome/druid-euro-conv.c:245
-#, fuzzy
+#: src/gnome/druid-euro-conv.c:205
 msgid "Exchange"
-msgstr "Výmenný kurz"
+msgstr "Výmena"
 
-#. Account description for the Euro-related currency exchange accounts.
-#: src/gnome/druid-euro-conv.c:254 src/gnome/druid-euro-conv.c:323
-#: src/gnome/druid-euro-conv.c:344
-#, fuzzy
+#: src/gnome/druid-euro-conv.c:213 src/gnome/druid-euro-conv.c:267
+#: src/gnome/druid-euro-conv.c:286
 msgid "Euro conversion"
-msgstr "Zobrazi» verziu"
+msgstr "Konverzia eura"
 
-#: src/gnome/druid-euro-conv.c:456
-#, fuzzy
+#: src/gnome/druid-euro-conv.c:391
 msgid "You don't have any accounts of Euroland currencies."
-msgstr "Nemáte ¾iadny úèet s akciami so saldokontom!"
+msgstr "Nemáte ¾iadny úèet s menou Eurokrajiny!"
 
 #: src/gnome/druid-qif-import.c:490
 msgid "Select QIF File"
@@ -1293,7 +1287,7 @@ msgstr "31/12/2000"
 msgid "31/12/00"
 msgstr "31/12/00"
 
-#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:744
+#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:754
 #: src/gnome/window-report.c:677
 msgid "Options"
 msgstr "Mo¾nosti"
@@ -1624,7 +1618,7 @@ msgid "Add a new entry or subentry"
 msgstr "Prida» nový údaj alebo podúdaj"
 
 #: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6393
-#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1353
+#: src/gnome/window-acct-tree.c:775 src/gnome/window-reconcile.c:1353
 #: src/gnome/window-register.c:862
 msgid "Delete"
 msgstr "Odstráni»"
@@ -1868,7 +1862,7 @@ msgstr "Nový..."
 
 #: src/gnome/glade-gnc-dialogs.c:3203
 msgid "New Currency/Security"
-msgstr "Nová mena/cenný papier"
+msgstr "Nová mena/Security"
 
 #: src/gnome/glade-gnc-dialogs.c:3225
 msgid "Full name:"
@@ -1936,7 +1930,7 @@ msgstr "Mena"
 
 #: src/gnome/glade-gnc-dialogs.c:3515
 msgid "Security:"
-msgstr "Cenný papier:"
+msgstr "Security:"
 
 #: src/gnome/glade-gnc-dialogs.c:3524
 msgid "Account Code:"
@@ -1960,7 +1954,7 @@ msgstr "Zdroj cien akcií"
 
 #: src/gnome/glade-gnc-dialogs.c:3648
 msgid "Get Online Quotes"
-msgstr "Získa» akcie online"
+msgstr "Získava» online ceny"
 
 #: src/gnome/glade-gnc-dialogs.c:3669
 msgid "The source for price quotes:"
@@ -2622,7 +2616,7 @@ msgid "Style sheet template:"
 msgstr "©ablóna pre ¹týl"
 
 #: src/gnome/glade-gnc-dialogs.c:5949 src/gnome/glade-gnc-dialogs.c:6043
-#: src/gnome/window-acct-tree.c:891
+#: src/gnome/window-acct-tree.c:909
 msgid "Tax Information"
 msgstr "Daòové informácie"
 
@@ -2889,7 +2883,7 @@ msgid "Remove prices older than a user-entered date"
 msgstr "Odstráni» ceny star¹ie ne¾ u¾ívateµom vlo¾ený dátum"
 
 #: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
-#: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1346
+#: src/gnome/window-acct-tree.c:743 src/gnome/window-reconcile.c:1346
 msgid "Edit"
 msgstr "Upravi»"
 
@@ -2951,7 +2945,7 @@ msgstr "Zobrazi» národné meny"
 
 #: src/gnome/glade-gnc-dialogs.c:7975
 msgid "Euro Conversion Druid"
-msgstr ""
+msgstr "Druid Euro konverziou"
 
 #: src/gnome/glade-gnc-dialogs.c:7976
 msgid ""
@@ -2964,11 +2958,18 @@ msgid ""
 "No changes will be made until you press 'Finish' on the last page\n"
 "of this druid."
 msgstr ""
+"Tento druid vám pomô¾e pri konverzií existujúcich úètov \n"
+"na Euro menu (EUR). \n"
+"\n"
+"Nasledujúci termín 'mena Eurokrajiny' oznaèuje\n"
+"menu, ktorá bude nahradená Eurom.\n"
+"\n"
+"K zmenám príde a¾ po stlaèení tlaèítka 'Ukonèi»'\n"
+"na poslednej strane tohoto druida."
 
 #: src/gnome/glade-gnc-dialogs.c:7987
-#, fuzzy
 msgid "Where to create the Euro accounts?"
-msgstr "Vytvori» novú sadu úètov"
+msgstr "Kde vytvori» Euro úèty?"
 
 #: src/gnome/glade-gnc-dialogs.c:8003
 msgid ""
@@ -2978,37 +2979,47 @@ msgid ""
 "Please choose the place in your account hierarchy where you would\n"
 "like the EUR accounts to be created."
 msgstr ""
+"Pre ka¾dý úèet s menou Eurokrajiny druid vytvorí nový\n"
+"EUR úèet. \n"
+"\n"
+"Zvoµte si prosím miesto vo va¹ej hierarchií úètov, kde si prajete,\n"
+"aby boli vytvorené EUR úèty."
 
 #: src/gnome/glade-gnc-dialogs.c:8019
 msgid "Create a new toplevel account hierarchy as a copy of the existing one"
-msgstr ""
+msgstr "Vytvori» novú hierarchiu úètov najvy¹¹ej úrovne ako kópiu existujúcej"
 
 #: src/gnome/glade-gnc-dialogs.c:8028
 msgid "Use same toplevel accounts. Create a copy of the rest of the accounts"
-msgstr ""
+msgstr "Pou¾i» tie isté úèty najvy¹¹ej úrovni. Vytvori» kópie zvy¹ných úètov."
 
 #: src/gnome/glade-gnc-dialogs.c:8036
 msgid ""
 "Use existing account hierarchy. Create only a copy of those \n"
 "accounts that have no subaccounts"
 msgstr ""
+"Pou¾i» existujúcu hierarchiu úètov. Vytvori» kópie iba úètov, \n"
+"ktoré nemajú podúèty"
 
 #: src/gnome/glade-gnc-dialogs.c:8053
-#, fuzzy
 msgid "How to name the new accounts?"
-msgstr "Urobi» výkaz z týchto úètov"
+msgstr "Ako pomenova» nové úèty?"
 
 #: src/gnome/glade-gnc-dialogs.c:8068
 msgid ""
 "Please choose a naming scheme for the new Euro accounts \n"
 "and the old Euroland accounts."
 msgstr ""
+"Zvoµte si prosím schému pomenovania pre nové Euro úèty \n"
+"a úèty so starou menou Eurokrajiny."
 
 #: src/gnome/glade-gnc-dialogs.c:8085
 msgid ""
 "The name of each newly created Euro account is copied from\n"
 "the old Euroland account, plus an appended 'EUR'"
 msgstr ""
+"Názov novo vytvoreného úètu s Eurom bude názov skopírovaný\n"
+"zo starého úètu, plus dodatok 'EUR'"
 
 #: src/gnome/glade-gnc-dialogs.c:8094
 msgid ""
@@ -3017,10 +3028,14 @@ msgid ""
 "The name of the newly created Euro account is copied from the\n"
 "old Euroland account."
 msgstr ""
+"Názov starého úètu Eurokrajiny bude modifikovaný pridaním \n"
+"symbolu menu Eurokrajiny.\n"
+"Názov novo vytvoreného úètu bude prevzatý \n"
+"zo starého úètu Eurokrajiny."
 
 #: src/gnome/glade-gnc-dialogs.c:8112
 msgid "Finish Euro Conversion"
-msgstr ""
+msgstr "Ukonèi» Euro konverziu"
 
 #: src/gnome/glade-gnc-dialogs.c:8113
 msgid ""
@@ -3037,6 +3052,18 @@ msgid ""
 "You may also press 'Back' to review your settings, or 'Cancel'\n"
 "to quit without making any changes."
 msgstr ""
+"Ak ste dokonèitli voµbu nastavení Euro konverzie,\n"
+"stlaète 'Ukonèi»'.\n"
+"\n"
+"Druid potom vykoná naslkedujpce kroky:\n"
+"\n"
+"1. Vytvorí nové úèty podµa va¹ich nastavení.\n"
+"2. Vytvorí úèty na výmenu mien.\n"
+"3. Vymení v¹etky sumy z úètov Eurokrajín na nové \n"
+"Euro úèty.\n"
+"\n"
+"Mô¾ete tie¾ stlaèi» 'Predchádzajúci', ak si chcete prezrie»\n"
+"svoje nastavenia, alebo 'Zru¹i»', ak nechcete vykona» zmeny."
 
 #: src/gnome/glade-support.c:100 src/gnome/glade-support.c:138
 #, c-format
@@ -3237,7 +3264,7 @@ msgstr ""
 
 #: src/gnome/new-user-interface.c:450
 msgid "Finish Account Setup"
-msgstr "Dokonèi» nastavenie úètu"
+msgstr "Ukonèi» nastavenie úètu"
 
 #: src/gnome/new-user-interface.c:451
 msgid ""
@@ -3247,7 +3274,7 @@ msgid ""
 "\n"
 "Press `Cancel' to close this dialog without creating any new accounts."
 msgstr ""
-"Stlaète 'Dokonèi»', ak chcete vytvori» nové úèty.\n"
+"Stlaète 'Ukonèi»', ak chcete vytvori» nové úèty.\n"
 "\n"
 "Stlaète 'Predchádzajúci', ak si chcete prezrie» va¹e nastavenia.\n"
 "\n"
@@ -3303,7 +3330,7 @@ msgid "Name of account view"
 msgstr "Názov úètového pohµadu"
 
 #: src/gnome/window-acct-tree.c:262 src/gnome/window-acct-tree.c:352
-#: src/gnome/window-acct-tree.c:550
+#: src/gnome/window-acct-tree.c:560
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
@@ -3319,12 +3346,12 @@ msgstr ""
 "Pre úpravu úètu, musíte najskôr\n"
 "zvoli» úèet, ktorý sa má upravi».\n"
 
-#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:447
+#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:457
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Ste si istý, ¾e chcete zmaza» úèet %s?"
 
-#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:469
+#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:479
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -3340,40 +3367,40 @@ msgstr ""
 "K úhrade úètu musíte najskôr\n"
 "zvoli» úèet, ktorý sa má uhradi»."
 
-#: src/gnome/window-acct-tree.c:493 src/gnome/window-acct-tree.c:515
+#: src/gnome/window-acct-tree.c:503 src/gnome/window-acct-tree.c:525
 msgid "You must select an account to check and repair."
 msgstr "Musíte si zvoli» úèet, ktorý bude skontrolovaný a opravený."
 
-#: src/gnome/window-acct-tree.c:724 src/gnome/window-acct-tree.c:823
+#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:833
 msgid "Open the selected account"
 msgstr "Otvorí zvolený úèet"
 
-#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:839
+#: src/gnome/window-acct-tree.c:744 src/gnome/window-acct-tree.c:849
 msgid "Edit the selected account"
 msgstr "Upraví zvolený úèet"
 
-#: src/gnome/window-acct-tree.c:745
+#: src/gnome/window-acct-tree.c:755
 msgid "Edit the account view options"
 msgstr "Upravi» nastavenie úètového pohµadu"
 
-#: src/gnome/window-acct-tree.c:755 src/gnome/window-reconcile.c:1339
+#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1339
 msgid "New"
 msgstr "Nový"
 
-#: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:873
+#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:891
 #: src/gnome/window-register.c:1457
 msgid "Create a new account"
 msgstr "Vytvorí nový úèet"
 
-#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:881
+#: src/gnome/window-acct-tree.c:776 src/gnome/window-acct-tree.c:899
 msgid "Delete selected account"
 msgstr "Odstráni zvolený úèet"
 
-#: src/gnome/window-acct-tree.c:789
+#: src/gnome/window-acct-tree.c:799
 msgid "Check & Repair A_ccount"
 msgstr "Kontrola a _oprava úètu"
 
-#: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1182
+#: src/gnome/window-acct-tree.c:800 src/gnome/window-reconcile.c:1182
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -3381,11 +3408,11 @@ msgstr ""
 "Skontroluje a opraví nerovnová¾ne transakcie a osirotené rozdelenia v tomto "
 "úète"
 
-#: src/gnome/window-acct-tree.c:798
+#: src/gnome/window-acct-tree.c:808
 msgid "Check & Repair Su_baccounts"
 msgstr "Skontrolova» a opravi» po_dúèty"
 
-#: src/gnome/window-acct-tree.c:799
+#: src/gnome/window-acct-tree.c:809
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
@@ -3393,11 +3420,11 @@ msgstr ""
 "Skontroluje a opraví nerovnová¾ne transakcie a osirotené rozdelenia v tomto "
 "úète a jeho podúètoch"
 
-#: src/gnome/window-acct-tree.c:807
+#: src/gnome/window-acct-tree.c:817
 msgid "Check & Repair A_ll"
 msgstr "Skontro_lova» a opravi» v¹etko"
 
-#: src/gnome/window-acct-tree.c:808
+#: src/gnome/window-acct-tree.c:818
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
@@ -3405,66 +3432,74 @@ msgstr ""
 "Skontroluje a opraví nerovnová¾ne transakcie a osirotené rozdelenia vo "
 "v¹etkých úètoch"
 
-#: src/gnome/window-acct-tree.c:822 src/gnome/window-reconcile.c:1158
+#: src/gnome/window-acct-tree.c:832 src/gnome/window-reconcile.c:1158
 msgid "_Open Account"
 msgstr "_Otvori» úèet"
 
-#: src/gnome/window-acct-tree.c:830
+#: src/gnome/window-acct-tree.c:840
 msgid "Open S_ubaccounts"
 msgstr "O_tvori» podúèet"
 
-#: src/gnome/window-acct-tree.c:831
+#: src/gnome/window-acct-tree.c:841
 msgid "Open the selected account and all its subaccounts"
 msgstr "Otvorí zvolený úèet a v¹etky jeho podúèty"
 
-#: src/gnome/window-acct-tree.c:838 src/gnome/window-reconcile.c:1165
+#: src/gnome/window-acct-tree.c:848 src/gnome/window-reconcile.c:1165
 #: src/gnome/window-register.c:1422
 msgid "_Edit Account"
 msgstr "_Upravi» úèet"
 
-#: src/gnome/window-acct-tree.c:847 src/gnome/window-register.c:1431
+#: src/gnome/window-acct-tree.c:857 src/gnome/window-register.c:1431
 msgid "_Reconcile..."
 msgstr "_Vysporiada»..."
 
-#: src/gnome/window-acct-tree.c:848
+#: src/gnome/window-acct-tree.c:858
 msgid "Reconcile the selected account"
 msgstr "Vysporiada» zvolený úèet"
 
-#: src/gnome/window-acct-tree.c:855 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:865 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:1439
 msgid "_Transfer..."
 msgstr "_Previes»..."
 
-#: src/gnome/window-acct-tree.c:856 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:866 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:908 src/gnome/window-register.c:1440
 msgid "Transfer funds from one account to another"
 msgstr "Prevedie fondy z jedného úètu na druhý"
 
-#: src/gnome/window-acct-tree.c:863 src/gnome/window-register.c:1447
+#: src/gnome/window-acct-tree.c:873 src/gnome/window-register.c:1447
 msgid "Stock S_plit..."
 msgstr "Rozdelenie _akcií..."
 
-#: src/gnome/window-acct-tree.c:864 src/gnome/window-register.c:1448
+#: src/gnome/window-acct-tree.c:874 src/gnome/window-register.c:1448
 msgid "Record a stock split or a stock merger"
 msgstr "Zaznamena» akciové rozdelenie alebo splynutie"
 
-#: src/gnome/window-acct-tree.c:872 src/gnome/window-register.c:1456
-msgid "_New Account..."
-msgstr "_Nový úèet"
+#: src/gnome/window-acct-tree.c:881
+msgid "_Euro Conversion..."
+msgstr "Konveria _Eura..."
 
-#: src/gnome/window-acct-tree.c:880
+#: src/gnome/window-acct-tree.c:882
+msgid "Do the Euro conversion of the account hierarchy"
+msgstr "Vykona» Euro konverziu hierarchie úètov?"
+
+#: src/gnome/window-acct-tree.c:890 src/gnome/window-register.c:1456
+msgid "_New Account..."
+msgstr "_Nový úèet..."
+
+#: src/gnome/window-acct-tree.c:898
 msgid "_Delete Account"
 msgstr "O_dstráni» úèet"
 
-#: src/gnome/window-acct-tree.c:887 src/gnome/window-reconcile.c:1181
+#: src/gnome/window-acct-tree.c:905 src/gnome/window-reconcile.c:1181
 msgid "_Check & Repair"
 msgstr "_Kontrola a oprava"
 
-#: src/gnome/window-acct-tree.c:892
+#: src/gnome/window-acct-tree.c:910
 msgid "Setup tax information for all income and expense accounts"
 msgstr "Nastavenie daòových informácií pre v¹etky príjmové a výdajové úèty"
 
-#: src/gnome/window-acct-tree.c:903 src/gnome/window-reconcile.c:1233
+#: src/gnome/window-acct-tree.c:921 src/gnome/window-reconcile.c:1233
 #: src/gnome/window-register.c:1583
 msgid "_Account"
 msgstr "_Úèet"
@@ -3518,7 +3553,7 @@ msgstr "Tlaè"
 msgid "Print Help window"
 msgstr "Vytlaèi» okno pomocníka"
 
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1153
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
 #: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
 msgid "Close"
 msgstr "Zavrie»"
@@ -3551,155 +3586,145 @@ msgstr "Vyskytla sa chyba poèas ukladania do súboru"
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr "Na ukonèenie GnuCash tlaète \"Koniec\"."
 
-#: src/gnome/window-main.c:916
+#: src/gnome/window-main.c:910
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
 msgstr "GnuCash - osobný správca financií.GNU spôsob ako riadi» peniaze!"
 
-#: src/gnome/window-main.c:973
+#: src/gnome/window-main.c:967
 msgid "New _File"
 msgstr "Nový _Súbor"
 
-#: src/gnome/window-main.c:974
+#: src/gnome/window-main.c:968
 msgid "Create a new file"
 msgstr "Vytvorí nový súbor"
 
-#: src/gnome/window-main.c:981
+#: src/gnome/window-main.c:975
 msgid "Export Accounts..."
 msgstr "Exportova» úèty"
 
-#: src/gnome/window-main.c:982
+#: src/gnome/window-main.c:976
 msgid "Export the account hierarchy to a new file"
 msgstr "Exportova» hierarchiu úètov do nového súboru"
 
-#: src/gnome/window-main.c:990
+#: src/gnome/window-main.c:984
 msgid "Import QIF..."
 msgstr "Importova» QIF..."
 
-#: src/gnome/window-main.c:991
+#: src/gnome/window-main.c:985
 msgid "Import a Quicken QIF file"
 msgstr "Importuje súbor Quicken QIF"
 
-#: src/gnome/window-main.c:999
+#: src/gnome/window-main.c:993
 msgid "New _Account Tree"
 msgstr "Nový strom úèto_v"
 
-#: src/gnome/window-main.c:1000
+#: src/gnome/window-main.c:994
 msgid "Open a new account tree view"
 msgstr "Otvorí nový stromový pohµad na úèty"
 
-#: src/gnome/window-main.c:1007
+#: src/gnome/window-main.c:1001
 msgid "Move to New Window"
 msgstr "Premiestni» do nového okna"
 
-#: src/gnome/window-main.c:1008
+#: src/gnome/window-main.c:1002
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr "Otvori» nové GnuCash okno najvy¹¹ej úrovne pre aktuálny pohµad"
 
-#: src/gnome/window-main.c:1014
+#: src/gnome/window-main.c:1008
 msgid "Close _Window"
 msgstr "Zavrie» ok_no"
 
-#: src/gnome/window-main.c:1015 src/gnome/window-main.c:1154
+#: src/gnome/window-main.c:1009 src/gnome/window-main.c:1140
 msgid "Close the current notebook page"
 msgstr "Zavrie aktuálnu stránku poznámkového bloku"
 
-#: src/gnome/window-main.c:1027
+#: src/gnome/window-main.c:1021
 msgid "_Preferences..."
 msgstr "_Mo¾nosti..."
 
-#: src/gnome/window-main.c:1028
+#: src/gnome/window-main.c:1022
 msgid "Open the global preferences dialog"
 msgstr "Otvorí dialóg s globálnymi nastaveniami"
 
-#: src/gnome/window-main.c:1040
+#: src/gnome/window-main.c:1034
 msgid "_General Ledger"
 msgstr "_Hlavná kniha"
 
-#: src/gnome/window-main.c:1041
+#: src/gnome/window-main.c:1035
 msgid "Open a general ledger window"
 msgstr "Otvorí okno hlavnej úètovnej knihy"
 
-#: src/gnome/window-main.c:1048
+#: src/gnome/window-main.c:1042
 msgid "Commodity _Editor"
 msgstr "_Editor komodít"
 
-#: src/gnome/window-main.c:1049
+#: src/gnome/window-main.c:1043
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Prezeranie a úprava komodít pre akciové a investièné fondy"
 
-#: src/gnome/window-main.c:1056
+#: src/gnome/window-main.c:1050
 msgid "_Price Editor"
 msgstr "Edito_r cien"
 
-#: src/gnome/window-main.c:1057
+#: src/gnome/window-main.c:1051
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Prezeranie a úprava cien pre akciové a investièné fondy"
 
-#: src/gnome/window-main.c:1064
+#: src/gnome/window-main.c:1058
 msgid "Financial _Calculator"
 msgstr "Finanèná _kalkukaèka"
 
-#: src/gnome/window-main.c:1065
+#: src/gnome/window-main.c:1059
 msgid "Use the financial calculator"
 msgstr "Pou¾i» finanènú kalkukaèku"
 
-#: src/gnome/window-main.c:1071
+#: src/gnome/window-main.c:1065
 msgid "_Find Transactions"
 msgstr "_Nájs» transakciu"
 
-#: src/gnome/window-main.c:1072 src/gnome/window-register.c:917
+#: src/gnome/window-main.c:1066 src/gnome/window-register.c:917
 msgid "Find transactions with a search"
 msgstr "Pohµadá transakciu"
 
-#: src/gnome/window-main.c:1079
-#, fuzzy
-msgid "_Euro Conversion..."
-msgstr "Zobrazi» verziu"
-
-#: src/gnome/window-main.c:1080
-#, fuzzy
-msgid "Do the Euro conversion of the account hierarchy"
-msgstr "Odlo¾í vysporiadanie tohoto úètu"
-
-#: src/gnome/window-main.c:1092
+#: src/gnome/window-main.c:1078
 msgid "_Manual"
 msgstr "_Manuál"
 
-#: src/gnome/window-main.c:1093
+#: src/gnome/window-main.c:1079
 msgid "Open the GnuCash Manual"
 msgstr "Otvorí GnuCash Manuál"
 
-#: src/gnome/window-main.c:1100
+#: src/gnome/window-main.c:1086
 msgid "_Tips Of The Day"
 msgstr "_Tip dòa"
 
-#: src/gnome/window-main.c:1101
+#: src/gnome/window-main.c:1087
 msgid "View the Tips of the Day"
 msgstr "Prezeranie Tipov dòa"
 
-#: src/gnome/window-main.c:1120
+#: src/gnome/window-main.c:1106
 msgid "_Tools"
 msgstr "_Nástroje"
 
-#: src/gnome/window-main.c:1121
+#: src/gnome/window-main.c:1107
 msgid "_Settings"
 msgstr "Nas_tavenie"
 
-#: src/gnome/window-main.c:1122
+#: src/gnome/window-main.c:1108
 msgid "_Windows"
 msgstr "_Okná"
 
-#: src/gnome/window-main.c:1144
+#: src/gnome/window-main.c:1130
 msgid "Save the file to disk"
 msgstr "Ulo¾í súbor na disk"
 
-#: src/gnome/window-main.c:1169
+#: src/gnome/window-main.c:1155
 msgid "Exit"
 msgstr "Koniec"
 
-#: src/gnome/window-main.c:1170
+#: src/gnome/window-main.c:1156
 msgid "Exit GnuCash"
 msgstr "Ukonèí GnuCash"
 
@@ -3768,11 +3793,11 @@ msgstr ""
 
 #: src/gnome/window-reconcile.c:1074
 msgid "_Finish"
-msgstr "_Dokonèi»"
+msgstr "_Ukonèi»"
 
 #: src/gnome/window-reconcile.c:1075 src/gnome/window-reconcile.c:1369
 msgid "Finish the reconciliation of this account"
-msgstr "Dokonèi» vysporadanie tohoto úètu"
+msgstr "Ukonèi» vysporadanie tohoto úètu"
 
 #: src/gnome/window-reconcile.c:1082
 msgid "_Postpone"
@@ -4401,7 +4426,7 @@ msgstr "príklad:Príklad re»azca políèka so správou"
 
 #: src/register/splitreg.c:164 src/scm/guile-strings.c:210
 msgid "Deposit"
-msgstr "Depozit"
+msgstr "Vklad"
 
 #: src/register/splitreg.c:165
 msgid "Withdraw"
@@ -4793,7 +4818,7 @@ msgstr "Pomocné úètovanie 101"
 
 #: src/scm/guile-strings.c:67
 msgid "Setting up Accounts"
-msgstr "Nastavenie úètov"
+msgstr "Vytváranie prvých úètov"
 
 #: src/scm/guile-strings.c:68
 msgid "Importing Data"
@@ -4801,7 +4826,7 @@ msgstr "Importovanie dát"
 
 #: src/scm/guile-strings.c:69
 msgid "Basic Setup"
-msgstr "Cheque"
+msgstr "Základné nastavenia"
 
 #: src/scm/guile-strings.c:70
 msgid "Gnome MDI"
@@ -4813,7 +4838,7 @@ msgstr "Okno úètov"
 
 #: src/scm/guile-strings.c:72
 msgid "Double Entry"
-msgstr "Dvojnásobná polo¾ka"
+msgstr "Podvojné úètovanie"
 
 #: src/scm/guile-strings.c:74
 msgid "Quicken"
@@ -4829,27 +4854,27 @@ msgstr "Nastavenia"
 
 #: src/scm/guile-strings.c:78 src/scm/guile-strings.c:103
 msgid "Types"
-msgstr "Typy"
+msgstr "Typy úètov"
 
 #: src/scm/guile-strings.c:79
 msgid "Vs. Categories"
-msgstr "Vs. Kategórie"
+msgstr "Quicken kategórie"
 
 #: src/scm/guile-strings.c:80
 msgid "Income/Expense"
-msgstr "Príjmy/Výdaje"
+msgstr "Pou¾ívanie príjmových/výdajových úètov"
 
 #: src/scm/guile-strings.c:81
 msgid "New Setup"
-msgstr "Nové nastavenie"
+msgstr "Nový úèet"
 
 #: src/scm/guile-strings.c:83
 msgid "Chart of"
-msgstr "Graf"
+msgstr "Schéma úètov"
 
 #: src/scm/guile-strings.c:84
 msgid "Editing"
-msgstr "Upravovanie"
+msgstr "Úprava úètov"
 
 #: src/scm/guile-strings.c:85
 msgid "Transactions"
@@ -4857,7 +4882,7 @@ msgstr "Transakcie"
 
 #: src/scm/guile-strings.c:86
 msgid "Registers"
-msgstr "Register Colours"
+msgstr "Registre"
 
 #: src/scm/guile-strings.c:87
 msgid "Shortcuts"
@@ -4865,11 +4890,11 @@ msgstr "Klávesové skratky"
 
 #: src/scm/guile-strings.c:88
 msgid "Date Input"
-msgstr "Dátumový vstup"
+msgstr "Vkladanie dátumu"
 
 #: src/scm/guile-strings.c:89
 msgid "Keyboard"
-msgstr "Klávesnica"
+msgstr "Klávesové skratky v registry"
 
 #: src/scm/guile-strings.c:90
 msgid "Reconciliation"
@@ -4881,15 +4906,15 @@ msgstr "Udr¾iavanie záznamu"
 
 #: src/scm/guile-strings.c:93
 msgid "Check Printing"
-msgstr "Current"
+msgstr "Tlaèenie ¹ekov"
 
 #: src/scm/guile-strings.c:94
 msgid "Capital Gains"
-msgstr "Kapitálový výnos"
+msgstr "Kapitálové výnosy"
 
 #: src/scm/guile-strings.c:95 src/scm/guile-strings.c:100
 msgid "Depreciation"
-msgstr "Odpis"
+msgstr "Znehodnotenie aktív - odpisy"
 
 #: src/scm/guile-strings.c:97
 msgid "Euro"
@@ -4897,11 +4922,11 @@ msgstr "Euro"
 
 #: src/scm/guile-strings.c:98
 msgid "Business"
-msgstr "Obchod"
+msgstr "Podnikanie"
 
 #: src/scm/guile-strings.c:99
 msgid "Payables/Receivables"
-msgstr "Vyplatiteµné/Prijateµné"
+msgstr "Dodavateµské/odberateµské úèty"
 
 #: src/scm/guile-strings.c:101
 msgid "Reports"
@@ -4914,27 +4939,27 @@ msgstr "Prehµad"
 #: src/scm/guile-strings.c:104 src/scm/report/guile-strings.c:239
 #: src/scm/report/guile-strings.c:240
 msgid "Balance Sheet"
-msgstr "Súvaha"
+msgstr "Úètovná súvaha"
 
 #: src/scm/guile-strings.c:105
 msgid "Profit & Loss"
-msgstr "Zisk a strata"
+msgstr "Výkaz ziskov a strát"
 
 #: src/scm/guile-strings.c:106
 msgid "Transaction"
-msgstr "Transakcia"
+msgstr "Výkaz transakci"
 
 #: src/scm/guile-strings.c:107
 msgid "Stock Portfolio"
-msgstr "Akciové portfólio"
+msgstr "Portfóliový výkaz"
 
 #: src/scm/guile-strings.c:108
 msgid "Balance Tracking"
-msgstr "Bilanèné stopovanie"
+msgstr "Výkaz sledovanie saldokonta"
 
 #: src/scm/guile-strings.c:109
 msgid "Tax Report"
-msgstr "Daòový výkaz"
+msgstr "Daòové výkazy"
 
 #: src/scm/guile-strings.c:110
 msgid "TXF Export"
@@ -4946,7 +4971,7 @@ msgstr "TXF anomálie"
 
 #: src/scm/guile-strings.c:113
 msgid "Printing"
-msgstr "Cheque"
+msgstr "Tlaè"
 
 #: src/scm/guile-strings.c:114
 msgid "More on GnuCash"
@@ -4954,7 +4979,7 @@ msgstr "Viacej o GnuCash"
 
 #: src/scm/guile-strings.c:115
 msgid "Hacking Documentation"
-msgstr "Rozbíjanie dokumentácie"
+msgstr "Práca na dokumentácií"
 
 #: src/scm/guile-strings.c:116
 msgid "GNU GPL"
@@ -4962,7 +4987,7 @@ msgstr "GNU GPL"
 
 #: src/scm/guile-strings.c:117
 msgid "Report a bug"
-msgstr "Oznámi» chybu"
+msgstr "Oznámenie chyby"
 
 #: src/scm/guile-strings.c:118
 msgid "URL Tests"
@@ -4987,7 +5012,7 @@ msgstr "Nie je mo¾né ulo¾i» ¹týl"
 #: src/scm/guile-strings.c:123 src/scm/guile-strings.c:454
 #: src/scm/report/guile-strings.c:115
 msgid "Default"
-msgstr "©tandardný"
+msgstr "Prednastavený"
 
 #: src/scm/guile-strings.c:125
 msgid "Account name"
@@ -5835,6 +5860,10 @@ msgid ""
 "where 'default expands to the default path, and 'current expands to\n"
 "the current value of the path."
 msgstr ""
+"Zoznam re»azcov indikujúcich cestu naèítavania pre (gnc:load name).\n"
+"Ka¾dý element musí by» re»azec reprezentujpci prieèinok alebo symbol,\n"
+"kde 'prednastavené rozbalí prednastavenú cestu a' aktuálny rozbalí \n"
+"aktuálnu hodnotu cesty."
 
 #: src/scm/guile-strings.c:420
 msgid ""
@@ -5843,6 +5872,10 @@ msgid ""
 "'default expands to the default path, and 'current expands to the current "
 "value of the path."
 msgstr ""
+"Zoznam re»azcov indikujúcich , kde sa majú hµada» a analyzova»html súbory. "
+"Ka¾dý element musí by» re»azec reprezentujpci prieèinok alebo symbol, kde "
+"'prednastavené rozbalí prednastavenú cestu a' aktuálny rozbalí aktuálnu "
+"hodnotu cesty."
 
 #: src/scm/guile-strings.c:421 src/scm/guile-strings.c:423
 msgid ""
@@ -5991,7 +6024,7 @@ msgstr "Cenné papiere"
 
 #: src/scm/guile-strings.c:469
 msgid "Checking"
-msgstr ""
+msgstr "©ek"
 
 #: src/scm/guile-strings.c:470
 msgid "Savings"
@@ -7777,7 +7810,7 @@ msgstr "Sort by cheque/transaction number"
 
 #: src/scm/report/guile-strings.c:650
 msgid "Register Order"
-msgstr ""
+msgstr "Triedenie registra"
 
 #: src/scm/report/guile-strings.c:651
 msgid "Sort as with the register"
@@ -7957,32 +7990,3 @@ msgstr ""
 #: src/scm/report/guile-strings.c:738
 msgid "Transaction Report"
 msgstr "Výkaz transakcií"
-
-#~ msgid "Scrub A_ccount"
-#~ msgstr "Oèisti» úèe_t"
-
-#~ msgid "Identify and fix problems in the account"
-#~ msgstr "Identifikuje a opraví problémy v úète"
-
-#~ msgid "Scrub A_ll"
-#~ msgstr "Oèisti» v¹etk_o"
-
-#~ msgid "Identify and fix problems in all the accounts"
-#~ msgstr "Identifikuje a opraví problémy vo v¹etkých úètoch"
-
-#~ msgid "_Scrub"
-#~ msgstr "Oè_isti»"
-
-#~ msgid "_Scrub All"
-#~ msgstr "_Oèisti» v¹etko"
-
-#~ msgid ""
-#~ "Identify and fix problems in the transactions displayed in this register"
-#~ msgstr ""
-#~ "Identifikuje a opraví problémy v zobrazených transakciách v tomto registri"
-
-#~ msgid "_Scrub Current"
-#~ msgstr "Oèi_sti aktuálne"
-
-#~ msgid "Identify and fix problems in the current transaction"
-#~ msgstr "Identifikuje a opraví problémy v aktuálnej transakcií"
