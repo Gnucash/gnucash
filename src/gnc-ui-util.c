@@ -459,10 +459,10 @@ equity_base_name (GNCEquityType equity_type)
   switch (equity_type)
   {
     case EQUITY_OPENING_BALANCE:
-      return _("Opening Balances");
+      return N_("Opening Balances");
 
     case EQUITY_RETAINED_EARNINGS:
-      return _("Retained Earnings");
+      return N_("Retained Earnings");
 
     default:
       return NULL;
@@ -492,6 +492,15 @@ gnc_find_or_create_equity_account (GNCEquityType equity_type,
   account = xaccGetAccountFromName (group, base_name);
   if (account && xaccAccountGetType (account) != EQUITY)
     account = NULL;
+
+  if (!account)
+  {
+    base_name = _(base_name);
+
+    account = xaccGetAccountFromName (group, base_name);
+    if (account && xaccAccountGetType (account) != EQUITY)
+      account = NULL;
+  }
 
   base_name_exists = (account != NULL);
 

@@ -1,5 +1,8 @@
 2001-06-08  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnc-ui-util.c (gnc_find_or_create_equity_account): first
+	search for untranslated name, then translated name.
+
 	* src/gnome/new-user-callbacks.c
 	(on_chooseAccountTypesPage_prepare): suspend & resume gui
 	refreshes while loading accounts.
