@@ -32,7 +32,8 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-job.c \
   dialog-job-select.c \
   dialog-order.c \
-  dialog-vendor.c
+  dialog-vendor.c \
+  gnc-business-utils.c
 
 noinst_HEADERS = \
   business-chooser.h \
@@ -44,7 +45,8 @@ noinst_HEADERS = \
   dialog-job.h \
   dialog-job-select.h \
   dialog-order.h \
-  dialog-vendor.h
+  dialog-vendor.h \
+  gnc-business-utils.h
 
 libgncmod_business_gnome_la_LDFLAGS = -module
 
@@ -79,12 +81,16 @@ glade_DATA = \
   order.glade \
   vendor.glade
 
-EXTRA_DIST = $(glade_DATA)
-
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = \
   gw-business-gnome.scm \
   gw-business-gnome-spec.scm
+
+EXTRA_DIST = \
+  .cvsignore \
+  ${glade_DATA} \
+  ${gncmod_DATA} \
+  ${gwmod_DATA}
 
 .scm-links: 
 	rm -f gnucash g-wrapped

@@ -5,7 +5,7 @@
 
 #include <glib.h>
 
-#include "gnc-test-stuff.h"
+#include "test-stuff.h"
 
 #include "gnc-xml-helper.h"
 #include "sixtp.h"

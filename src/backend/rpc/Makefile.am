@@ -40,6 +40,7 @@ RPCGEN_FILES = \
 EXTRA_DIST = \
   .cvsignore \
   README \
+  gncRpc_server_stubs.c \
   $(RPCGEN_SRCS)
 
 LDADD = -lpthread

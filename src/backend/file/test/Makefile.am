@@ -65,5 +65,6 @@ AM_CFLAGS = \
 
 EXTRA_DIST = \
   grab-types.pl \
+  test-dom-parser1.c \
   test-load-module \
   test-real-data.sh

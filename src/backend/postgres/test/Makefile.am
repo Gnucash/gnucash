@@ -16,7 +16,8 @@ TESTS_ENVIRONMENT := \
 
 noinst_PROGRAMS = \
   test-db \
-  test-escape
+  test-escape \
+  test-period
 
 LDADD = ${top_srcdir}/src/test-core/libgncmod-test.la \
         ${top_srcdir}/src/gnc-module/libgncmodule.la \
