@@ -142,13 +142,13 @@ char * xaccReadQIFDiscard( int fd )
 	tok = strchr (&qifline[1], '\r');	\
 	if (tok) *tok = 0x0;			\
         len = strlen (&qifline[1]); 		\
-        (str) = (char *)XtMalloc (len+1);	\
+        (str) = (char *)malloc (len+1);		\
         strncpy ((str), &qifline[1], len);	\
         (str)[len] = 0x0;			\
 }
 
-#define XACC_PREP_NULL_STRING(str) {							\
-        if (!(str)) { (str) = (char *)XtMalloc (sizeof(char)); (str)[0] = 0x0; }	\
+#define XACC_PREP_NULL_STRING(str) {		\
+        if (!(str)) { (str) = strdup (""); }	\
 }
 
 char * xaccReadQIFCategory (int fd, Account * acc) 
@@ -888,7 +888,6 @@ xaccReadQIFAccountGroup( char *datafile )
   int  skip = 0;
   char * qifline;
   AccountGroup *grp;
-  char buf[BUFSIZE];
   
   fd = open( datafile, RFLAGS, 0 );
   if( fd == -1 )

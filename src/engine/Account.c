@@ -99,7 +99,6 @@ xaccFreeAccount( Account *acc )
   int i=0, j=0;
   Split *s, *debit_s;
   int dont_free_transaction = 0;
-  struct _account * _acc = (struct _account *) acc; 
 
   if (NULL == acc) return;
     
@@ -586,7 +585,7 @@ void
 xaccConsolidateTransactions (Account * acc)
 {
    Split *sa, *sb;
-   int i,j,k;
+   int i,j;
 
    if (!acc) return;
 

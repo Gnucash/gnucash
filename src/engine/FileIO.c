@@ -199,7 +199,6 @@ xaccReadAccountGroup( char *datafile )
   int  token=0;
   int  num_unclaimed;
   AccountGroup *grp = 0x0;
-  char buf[BUFSIZE];
 
   maingrp = 0x0;
   error_code = ERR_FILEIO_NO_ERROR;
@@ -1215,7 +1214,7 @@ static int
 writeSplit ( int fd, Split *split )
   {
   int err=0;
-  int tmp, acc_id;
+  int acc_id;
   double damount;
   Account *xfer_acc;
 
