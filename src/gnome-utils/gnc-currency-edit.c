@@ -61,7 +61,7 @@ gnc_currency_edit_get_type (void)
 	static GType currency_edit_type = 0;
 
 	if (currency_edit_type == 0) {
-		static GTypeInfo currency_edit_info = {
+		static const GTypeInfo currency_edit_info = {
 			sizeof (GNCCurrencyEditClass),
 			NULL,
 			NULL,
@@ -69,8 +69,9 @@ gnc_currency_edit_get_type (void)
 			NULL,
 			NULL,
 			sizeof (GNCCurrencyEdit),
-			0,
-			(GInstanceInitFunc) gnc_currency_edit_init
+			0, /* n_preallocs */
+			(GInstanceInitFunc) gnc_currency_edit_init,
+			NULL
 		};
 
 		currency_edit_type = g_type_register_static (GTK_TYPE_COMBO, 
@@ -155,7 +156,7 @@ gnc_currency_edit_new (void)
 {
 	GNCCurrencyEdit *gce;
 
-	gce = gtk_type_new (gnc_currency_edit_get_type ());
+	gce = g_object_new (GNC_TYPE_CURRENCY_EDIT, NULL, NULL);
 
 	fill_currencies (gce);
 

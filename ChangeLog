@@ -1,3 +1,25 @@
+2004-12-19  Derek Atkins  <derek@ihtfp.com>
+
+	Stephen Evanchik's Minor touch-ups to GNCCurrencyEdit:
+        * src/gnome-utils/gnc-currency-edit.c:
+          In gnc_currency_edit_get_type added 'const' keyword and
+          final NULL entry in currency_edit_info declaration
+
+          In gnc_currency_edit_new use g_type_class_ref and 
+          GNC_TYPE_CURRENCY_EDIT macro; move gtk_type_new to
+          g_object_new
+
+	Stephen Evanchik's patch to remove references to gtk_type_new
+	in converted widgets:
+        * src/gnome-utils/gnc-date-edit.h:
+          Added GNC_TYPE_DATE_EDIT macro
+        * src/gnome-utils/gnc-general-select.h:
+          Added GNC_TYPE_GENERAL_SELECT macro
+        * src/gnome-utils/gnc-date-edit.c:
+        * src/gnome-utils/gnc-general-select.c:
+        * src/gnome-utils/gnc-dense-cal.c:
+          gtk_type_new -> g_object_new
+
 2004-12-18  Derek Atkins  <derek@ihtfp.com>
 
 	Stephen Evanchik's GncDenseCal GObject patch:

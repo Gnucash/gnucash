@@ -393,7 +393,7 @@ GtkWidget*
 gnc_dense_cal_new(void)
 {
         GncDenseCal *dcal;
-        dcal = gtk_type_new (gnc_dense_cal_get_type ());
+        dcal = g_object_new(GNC_TYPE_DENSE_CAL, NULL, NULL);
 
         return GTK_WIDGET (dcal);
 }

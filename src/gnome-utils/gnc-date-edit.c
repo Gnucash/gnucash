@@ -751,7 +751,7 @@ gnc_date_edit_new_flags (time_t the_time, GNCDateEditFlags flags)
 {
 	GNCDateEdit *gde;
 
-	gde = gtk_type_new (gnc_date_edit_get_type ());
+	gde = g_object_new (GNC_TYPE_DATE_EDIT, NULL, NULL);
 
 	gde->flags = flags;
 	create_children (gde);

@@ -241,7 +241,7 @@ gnc_general_select_new (GNCGeneralSelectType type,
 	g_return_val_if_fail (get_string != NULL, NULL);
 	g_return_val_if_fail (new_select != NULL, NULL);
 
-	gsl = gtk_type_new (gnc_general_select_get_type ());
+	gsl = g_object_new(GNC_TYPE_GENERAL_SELECT, NULL, NULL);
 
 	create_children (gsl, type);
 	gsl->get_string = get_string;
