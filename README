@@ -74,6 +74,8 @@ Features include:
   - Get Stock & Mutual Fund quotes from various web sites, 
     update portfolio automatically (more funds being added 
     regularly).
+  - European date handling, French and German translations.
+
 
 Home Page:
 ----------
@@ -173,9 +175,9 @@ Lesstif 0.81: works
 Lesstif 0.82: broken
 Lesstif 0.86.0: works
 Lesstif 0.86.5: broken
-Lesstif 0.86.9  works ... but some menus come out 2 pixels high.
-Lesstif 0.87.0: works ... "" ?
-Lesstif 0.88.1: works ... "" ?
+Lesstif 0.86.9  works 
+Lesstif 0.87.0: works 
+Lesstif 0.88.1: works 
 
 Note: some versions of XmHTML have been compiled with Motif, and these
 need XmeDrawShadows to link and run.  However, this is an undefined symbol
@@ -209,7 +211,7 @@ SWIG    -- Used to autogenerate perl, tcl, guile wrappers.
            available at www.swig.org need 1.1p5 or later ...
 guile   -- Provides main extension language infrastructure.
            This is used extensively in gnucash for initialization & startup.
-           need version 1.3 or later ( or build 1998.08.18 or 1998.09.10 or later) ...
+           need version 1.3 or later (or build 1998.08.18 or 1998.09.10 or later) ...
            ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
            guile-core-19980818-1.i386.rpm works
            guile-1.3.1-1 from redhat.com/pub/rawhide works ...
@@ -258,6 +260,10 @@ Normally, to build and install GnuCash, all you have to do is:
   # make 
   # make install
 
+To build French or German language versions, or to enable European date
+handling, you will need to examine & modify the contents of the /include
+directory.
+
 You can build Motif, Gnome, and Qt versions. Currently, the Motif version
 is the most stable, bug-free, correct, and feature rich.  The gtk/gnome
 version compiles and is being actively developed, but will take a while to
@@ -281,10 +287,9 @@ rather than an install tree just like the old ./xacc script did.
 You'll use "make install" when you want to do a normal FSSTND /usr/ or
 /usr/local style install where everything scatters across the
 filesystem in foo/gnucash/* directories.  You'll use "make
-install-opt" when you want a /usr/local/opt/gnucash style install
-where everything just installs into local bin, doc, share, etc dirs.
-I couldn't think of a better way to handle this, or I would have used
-it.
+install-opt" when you want an /opt/gnucash style install where
+everything installs into /opt/gnucash/bin, /opt/gnucash/doc, share, etc
+dirs.
 
 So the two most likely sets of build instructions would be as follows:
 
@@ -313,11 +318,6 @@ Flag --with-gtk-config.  The way gtk phiolosphy goes,
 you should *only* specify the config program location and
 rely on it to tell you the right CFLAGS and XLIBS values.
 
-Anyone who's having the same problem with the added termcap libs that
-I am can look in configure.in and comment out the TERMCAP_TMP line and
-re-run autoconf and configure.  We'll have a better fix later.
-
-
 Runtime and install destinations are separate.  The --prefix
 you specify to configure determines where the resulting binary
 will look for things at runtime.  The prefix you give to make
@@ -336,9 +336,9 @@ gnucash.h, generated from gnucash.h.in.
 
 Supported OS's:
 ---------------
-GnuCash version 1.1.x is known to work in the following configs:
+GnuCash version 1.3.x is known to work in the following configs:
 
-Linux 2.x.x           -- Intel  w/ RedHat Motif
+Linux 2.x.x           -- Intel 
 FreeBSD               -- Intel
 OpenBSD               -- Intel
 
@@ -360,11 +360,7 @@ for precompiled binaries for these platforms
 
 Additional Download Sites:
 --------------------------
-All of the precompiled binaries & the latest source versions can be found
-at http://linas.org/linux/xacc  However, it is recommended that the master
-sites for each particular binary be used instead, for two reasons:
-1) bandwidth
-2) OS-specific info & support
+Precompiled binaries & pre-requisite packages can be found at
 
 IBM AIX 4.1.5 
       -- SMIT-installable images 
@@ -383,7 +379,6 @@ SGI Irix
       -- warning, this is a very down-level version
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
 
-That's all folks!
 
 Getting Source with CVS
 -----------------------
