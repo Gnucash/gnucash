@@ -177,7 +177,7 @@ recnRecalculateBalance( RecnWindow *recnData )
   double ddiff   = 0.0;
   short shrs = 0;
 
-  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = PRTSHR|PRTSYM;
+  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = 1;
   
   /* Calculate the total debit: */
   ddebit = 0.0;
@@ -215,6 +215,9 @@ recnRecalculateBalance( RecnWindow *recnData )
       }
     }
   
+  shrs *= PRTSHR;
+  shrs |= PRTSYM;
+
   /* Update the difference field, and the total fields */
   amt = xaccPrintAmount (DABS(ddebit), shrs);
   XmTextSetString( recnData->totDebit, amt );
@@ -273,7 +276,7 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
    * may have to be adjusted for stock price fluctuations.
    */
   dendBalance = acc->reconciled_balance;
-  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = PRTSYM|PRTSHR;
+  if ((STOCK == acc->type) || (MUTUAL == acc->type)) shrs = 1;
   
   /* Create the dialog box... XmNdeleteResponse is set to
    * XmDESTROY so the dialog's memory is freed when it is closed */
@@ -315,6 +318,8 @@ startRecnWindow( Widget parent, Account *acc, double *diff )
                                     XmNrightPosition,   50,
                                     NULL );
   
+  shrs *= PRTSHR;
+  shrs |= PRTSYM;
   amt = xaccPrintAmount (dendBalance, shrs);
   endB = XtVaCreateManagedWidget( "text",
                                   xmTextWidgetClass,  controlform,
@@ -566,8 +571,8 @@ recnWindow( Widget parent, Account *acc )
                                XmNeditable,        False,
                                XmNmarginHeight,    1,
                                XmNmarginWidth,     1,
-                               XmNmaxLength,       10,
-                               XmNcolumns,         10,
+                               XmNmaxLength,       13,
+                               XmNcolumns,         13,
                                XmNtopAttachment,   XmATTACH_WIDGET,
                                XmNtopWidget,       frame,
                                XmNrightAttachment, XmATTACH_FORM,
@@ -635,8 +640,8 @@ recnWindow( Widget parent, Account *acc )
                                XmNeditable,        False,
                                XmNmarginHeight,    1,
                                XmNmarginWidth,     1,
-                               XmNmaxLength,       10,
-                               XmNcolumns,         10,
+                               XmNmaxLength,       13,
+                               XmNcolumns,         13,
                                XmNtopAttachment,   XmATTACH_WIDGET,
                                XmNtopWidget,       frame,
                                XmNrightAttachment, XmATTACH_FORM,
@@ -676,8 +681,8 @@ recnWindow( Widget parent, Account *acc )
                              XmNeditable,        False,
                              XmNmarginHeight,    1,
                              XmNmarginWidth,     1,
-                             XmNmaxLength,       10,
-                             XmNcolumns,         10,
+                             XmNmaxLength,       13,
+                             XmNcolumns,         13,
                              XmNtopAttachment,   XmATTACH_FORM,
                              XmNtopOffset,       6,
                              XmNbottomAttachment,XmATTACH_FORM,
