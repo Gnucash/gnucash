@@ -1,3 +1,8 @@
+2004-04-11  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: Release 1.8.9
+	* NEWS: Release 1.8.9
+
 2004-04-10  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/de_DE/acctchrt_*: Updated placeholder settings in

@@ -1,6 +1,94 @@
 Version history:
 ------- -------
 
+ 1.8.9  - 11 Apr 2004
+ 	 o Updated Polish translation by GNOME PL Team, updated French, Czech,
+	   Spanish, Russian, Dutch, German and Italian translations.
+	 o dump-finance-quote - Be more explicit when a lookup fails.
+	 o log-replay - Increase read buffer size.
+	 o Make sure to verify that the items in the reconcile hash are still
+	   around after a refresh.
+	 o When the commodity is changed, then set the currency to the
+	   currency of the last price entered for this commodity.
+	 o Add Hungarian account templates by Sulyok Peter
+	 o Patch by Geoff Kassel to work on OpenBSD (allow user to set
+	   diffcmd).
+	 o Don't test double KVPs, on the theory that they will soon be
+	   deprecated.
+	 o  When computing the aging report, ignore splits that belong to
+	   closed lots.  This way we wont get the wrong values when the invoice
+	   falls outside the 360-day window but its payment falls inside the
+	   window.
+	 o Add gnc_getline() function to read an unlimited line-length from a
+	   file (so you're not limited to a buffer size with fgets() and the
+	   like). It is similar to the getline(3) on Linux except the API is
+	   different and it will always set the return string.
+	 o Add workaround code for openhbci/chipcard problem.
+	 o Add gnc_lookup_date_option() function.
+	 o Add gnc_ui_account_get_balance_in_currency() function.
+	 o Add preferences for summarybar.
+	 o Add xaccAccountConvertBalanceToCurrencyAsOfDate() function
+	 o Summarybar can now display a grand total of all commodities,
+	   profits of a period of time and net assets at the end of the period;
+	   summarybar can be configured with some options under
+	   edit->preferences.
+	 o Create two new functions to centralize date-selection option
+	   creation.
+	 o Export the new scheme functions.
+	 o Modify Herbert's patch to centralize the date-selection option
+	   code.
+	 o Use the new centralized date-selection option-creation code.
+	 o Fix a typo in the help (was --diable-gui).
+	 o Add db-4.2 to the list of databases we search.
+	 o Fix a problem with opt style installs.
+	 o Rename from_xxx and to_xxx account tree widgets to left_xxx and
+	   right_xxx.
+	 o If in "accountant mode" call "transfer from" "credit account" and
+	   "transfer to" "debit account" and interchange account trees.
+	 o Remove the RECN cell from payable/receivable to stop confusing
+	   people.
+	 o Change Ukrainian "UAG" into "UAH"
+	 o Commented out setting the memo always to "Auto-created split" due
+	   to popular request.
+	 o Fix for part of bug only allow auto-create SXes which have splits 
+	   to be created.
+	 o HBCI transfer template management GUI added by Bernd Wagner.
+	 o Added instructions about running under valgrind.
+	 o Added a large set of valgrind suppressions for both guile and
+	   gnucash.
+	 o Change the reg_type to SEARCH_LEDGER so all the 'action' types
+	   appear.
+	 o Remove unused 'ledger_status' widget.
+	 o At least be consistent about the background coloring of the month
+	   labels, even if we're still not using GTK themeage correctly.
+	 o Destroy the transient window when the widget is destroyed.
+	 o Make the advance and remind spin-buttons editable.
+	 o Change the upper bound on the advance and remind spins to 365
+	   [days], with a page-size of 30 [days].
+	 o Disallow the Scheduling of being-editing transactions in the
+	   Register, preventing a class of unbalacned SX template transactions
+	   from being entered and propogated through the system.
+	 o Fix nasty memory-corruption issue; insufficent bounds checking on
+	   array index.
+	 o Better handling of various error cases in transaction-creation.
+	 o When we have a problem parsing a credit/debit cell, indicate to the
+	   user what occurred.
+	 o Use the account-list filtering capability of the GncAccountSel to
+	   only show/allow-creation-of valid account-types in the loan-druid.
+	 o Add ':' to the token list of allowable characters in the formula
+	   cell.
+	 o Fix precedence bug screwing up loan review page.
+	 o Don't need to require format; main.scm handles it, and the default
+	   "format" (simple-format) is sufficient to handle everything we need.
+	   This allows gnucash to work with slib3.
+	 o Add code to remove "intl/Makefile po/Makefile" from AC_OUTPUT in
+	   configure.in prior to calling gettextize to make sure that you can
+	   build from CVS with recent versions of gettextize.  Tested with both
+	   RH9 and RH7.3 to make sure it works with both old and new.
+	 o Move variable declaration to the top of the block.
+	 o Make sure we always have intl and po Makefiles in the configure
+	   script.  Sometimes it was ripped out without being replaced.
+
  1.8.8  - 17 Nov 2003
  	 o HBCI - Improve error message when receiving zero balance from bank.
 	 o Add account template for Swiss German businesses "KMU" by Tom
