@@ -1027,6 +1027,55 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
 }
 
 GList *
+gnc_pricedb_lookup_day(GNCPriceDB *db,
+		       gnc_commodity *c,
+		       gnc_commodity *currency,
+		       Timespec t)
+{
+  GList *price_list;
+  GList *result = NULL;
+  GList *item = NULL;
+  GHashTable *currency_hash;
+
+  ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
+  if(!db || !c || !currency) return NULL;
+
+  /* Convert to noon local time. */
+  t = timespecCanonicalDayTime(t);
+
+  if (db->book && db->book->backend && db->book->backend->price_lookup)
+  {
+     GNCPriceLookup pl;
+     pl.type = LOOKUP_AT_TIME;
+     pl.prdb = db;
+     pl.commodity = c;
+     pl.currency = currency;
+     pl.date = t;
+     (db->book->backend->price_lookup) (db->book->backend, &pl);
+  }
+
+  currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+  if(!currency_hash) return NULL;
+
+  price_list = g_hash_table_lookup(currency_hash, currency);
+  if(!price_list) return NULL;
+
+  item = price_list;
+  while(item) {
+    GNCPrice *p = item->data;
+    Timespec price_time = timespecCanonicalDayTime(gnc_price_get_time(p));
+    if(timespec_equal(&price_time, &t)) {
+      result = g_list_prepend(result, p);
+      gnc_price_ref(p);
+    }
+    item = item->next;
+  }
+  LEAVE (" ");
+  return result;
+}
+
+
+GList *
 gnc_pricedb_lookup_at_time(GNCPriceDB *db,
                            gnc_commodity *c,
                            gnc_commodity *currency,
