@@ -194,10 +194,11 @@ xaccSessionBeginSQL (Session *sess, const char * dbname)
 
    if (!sess) return NULL;
 
+// #define SQLHACK
 #ifdef SQLHACK
    {
      /* for testing the sql, just a hack, remove later ... */
-     Backend * pgendNew (void);
+extern Backend * pgendNew (void);
      be = pgendNew ();
    }
 #endif
@@ -210,6 +211,8 @@ xaccSessionBeginSQL (Session *sess, const char * dbname)
    // comment out until testing done, else clobber file ...
    // sess->topgroup = grp;
    xaccGroupSetBackend (sess->topgroup, be);
+
+   return (sess->topgroup);
 }
 
 /* ============================================================== */

@@ -988,7 +988,7 @@ xaccTransBeginEdit (Transaction *trans, int defer)
 void
 xaccTransCommitEdit (Transaction *trans)
 {
-   int i, rc=0;
+   int i;
    Split *split;
    Account *acc;
    Backend *be;
@@ -1056,15 +1056,16 @@ xaccTransCommitEdit (Transaction *trans)
 
    /* See if there's a backend.  If there is, invoke it. */
    be = xaccTransactionGetBackend (trans);
-   rc = 0;
    if (be && be->trans_commit_edit) {
+      int rc = 0;
       rc = (be->trans_commit_edit) (be, trans, trans->orig);
-   }
 
-   if (rc) {
-      /* if the backend puked, then we must roll-back 
-       * at this point, and let the user know that we failed.
-       */
+      if (rc) {
+         /* if the backend puked, then we must roll-back 
+          * at this point, and let the user know that we failed.
+          */
+        /* hack alert -- finish this */
+      }
    }
 
    /* ------------------------------------------------- */
