@@ -41,6 +41,7 @@
 #include "io-gncxml-gen.h"
 
 #include "sixtp-dom-parsers.h"
+#include "AccountP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 
@@ -103,11 +104,14 @@ split_to_dom_tree(const gchar *tag, Split *spl)
     add_gnc_num(ret, "split:value", xaccSplitGetValue(spl));
 
     add_gnc_num(ret, "split:quantity", xaccSplitGetAmount(spl));
-    
-    xmlAddChild(ret, guid_to_dom_tree(
-                    "split:account",
-                    xaccSplitGetAccountGUID(spl)));
-    
+
+    {
+      Account * account = xaccSplitGetAccount (spl);
+
+      xmlAddChild (ret, guid_to_dom_tree("split:account",
+                                         xaccAccountGetGUID (account)));
+    }
+
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree("split:slots",
                                                    xaccSplitGetSlots(spl));
@@ -182,6 +186,12 @@ gnc_transaction_dom_tree_create(Transaction *trn)
 
 /***********************************************************************/
 
+struct split_pdata
+{
+  Split *split;
+  GNCBook *book;
+};
+
 static gboolean
 set_spl_string(xmlNodePtr node, Split *spl,
                void (*func)(Split *spl, const char *txt))
@@ -211,87 +221,112 @@ set_spl_gnc_num(xmlNodePtr node, Split* spl,
 }
     
 static gboolean
-spl_id_handler(xmlNodePtr node, gpointer spl)
+spl_id_handler(xmlNodePtr node, gpointer data)
 {
+    struct split_pdata *pdata = data;
     GUID *tmp = dom_tree_to_guid(node);
     g_return_val_if_fail(tmp, FALSE);
 
-    xaccSplitSetGUID((Split*)spl, tmp);
+    xaccSplitSetGUID(pdata->split, tmp);
 
     g_free(tmp);
     return TRUE;
 }
 
 static gboolean
-spl_memo_handler(xmlNodePtr node, gpointer spl)
+spl_memo_handler(xmlNodePtr node, gpointer data)
 {
-    return set_spl_string(node, (Split*)spl, xaccSplitSetMemo);
+    struct split_pdata *pdata = data;
+    return set_spl_string(node, pdata->split, xaccSplitSetMemo);
 }
 
 static gboolean
-spl_action_handler(xmlNodePtr node, gpointer spl)
+spl_action_handler(xmlNodePtr node, gpointer data)
 {
-    return set_spl_string(node, (Split*)spl, xaccSplitSetAction);
+    struct split_pdata *pdata = data;
+    return set_spl_string(node, pdata->split, xaccSplitSetAction);
 }
 
 static gboolean
-spl_reconciled_state_handler(xmlNodePtr node, gpointer spl)
+spl_reconciled_state_handler(xmlNodePtr node, gpointer data)
 {
+    struct split_pdata *pdata = data;
     gchar *tmp = dom_tree_to_text(node);
     g_return_val_if_fail(tmp, FALSE);
 
-    xaccSplitSetReconcile((Split*)spl, tmp[0]);
+    xaccSplitSetReconcile(pdata->split, tmp[0]);
 
     g_free(tmp);
-    
+
     return TRUE;
 }
 
 static gboolean
-spl_reconcile_date_handler(xmlNodePtr node, gpointer spl)
+spl_reconcile_date_handler(xmlNodePtr node, gpointer data)
 {
+    struct split_pdata *pdata = data;
     Timespec *ts;
 
     ts = dom_tree_to_timespec(node);
     g_return_val_if_fail(ts, FALSE);
 
-    xaccSplitSetDateReconciledTS((Split*)spl, ts);
+    xaccSplitSetDateReconciledTS(pdata->split, ts);
 
     g_free(ts);
-    
+
     return TRUE;
 }
 
 static gboolean
-spl_value_handler(xmlNodePtr node, gpointer spl)
+spl_value_handler(xmlNodePtr node, gpointer data)
 {
-    return set_spl_gnc_num(node, (Split*)spl, xaccSplitSetValue);
+    struct split_pdata *pdata = data;
+    return set_spl_gnc_num(node, pdata->split, xaccSplitSetValue);
 }
 
 static gboolean
-spl_quantity_handler(xmlNodePtr node, gpointer spl)
+spl_quantity_handler(xmlNodePtr node, gpointer data)
 {
-    return set_spl_gnc_num(node, (Split*)spl, xaccSplitSetAmount);
+    struct split_pdata *pdata = data;
+    return set_spl_gnc_num(node, pdata->split, xaccSplitSetAmount);
 }
 
+gboolean gnc_transaction_xml_v2_testing = FALSE;
+
 static gboolean
-spl_account_handler(xmlNodePtr node, gpointer spl)
+spl_account_handler(xmlNodePtr node, gpointer data)
 {
+    struct split_pdata *pdata = data;
     GUID *id = dom_tree_to_guid(node);
+    Account *account;
 
-    if(!id) return FALSE;
-    
-    xaccSplitSetAccountGUID((Split*)spl, *id);
+    if (!id) return FALSE;
+
+    account = xaccAccountLookup (id, pdata->book);
+    if (!account && gnc_transaction_xml_v2_testing &&
+        !guid_equal (id, xaccGUIDNULL ()))
+    {
+      account = xaccMallocAccount (pdata->book);
+      xaccAccountSetGUID (account, id);
+      xaccAccountSetCommoditySCU (account,
+                                  xaccSplitGetAmount (pdata->split).denom);
+    }
+
+    xaccAccountInsertSplit (account, pdata->split);
+
     g_free(id);
+
     return TRUE;
 }
 
 static gboolean
-spl_slots_handler(xmlNodePtr node, gpointer spl)
+spl_slots_handler(xmlNodePtr node, gpointer data)
 {
+    struct split_pdata *pdata = data;
     gboolean successful;
 
-    successful = dom_tree_to_kvp_frame_given(node, xaccSplitGetSlots (spl));
+    successful = dom_tree_to_kvp_frame_given(node,
+                                             xaccSplitGetSlots (pdata->split));
     g_return_val_if_fail(successful, FALSE);
 
     return TRUE;
@@ -314,6 +349,7 @@ struct dom_tree_handler spl_dom_handlers[] =
 Split*
 dom_tree_to_split(xmlNodePtr node, GNCBook *book)
 {
+    struct split_pdata pdata;
     Split *ret;
 
     g_return_val_if_fail (book, NULL);
@@ -321,8 +357,11 @@ dom_tree_to_split(xmlNodePtr node, GNCBook *book)
     ret = xaccMallocSplit(book);
     g_return_val_if_fail(ret, NULL);
 
+    pdata.split = ret;
+    pdata.book = book;
+
     /* this isn't going to work in a testing setup */
-    if(dom_tree_generic_parse(node, spl_dom_handlers, ret))
+    if(dom_tree_generic_parse(node, spl_dom_handlers, &pdata))
     {
         return ret;
     }
@@ -511,7 +550,6 @@ gnc_transaction_end_handler(gpointer data_for_children,
 {
     Transaction *trn = NULL;
     gboolean successful = FALSE;
-    xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
 

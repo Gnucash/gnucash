@@ -332,7 +332,6 @@ gnc_account_end_handler(gpointer data_for_children,
 {
     int successful;
     Account *acc;
-    xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
     gxpf_data *gdata = (gxpf_data*)global_data;
     GNCBook *book = gdata->bookdata;

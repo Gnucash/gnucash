@@ -160,7 +160,6 @@ xaccDupeSplit (Split *s)
   split->guid = s->guid;
   split->book = s->book;
 
-  xaccSplitSetAccountGUID(split, s->acc_guid);
   split->parent = s->parent;
 
   split->memo = g_cache_insert (gnc_engine_get_string_cache(), s->memo);
@@ -395,50 +394,18 @@ xaccSplitSetSlots_nc(Split *s, kvp_frame *frm)
  * Account funcs
  ********************************************************************/
 
-Account*
-xaccSplitGetAccount(Split *s)
+Account *
+xaccSplitGetAccount (Split *s)
 {
-    if(!s) return NULL;
-    
-    if (!s->acc)
-    {
-        s->acc = xaccAccountLookup (&s->acc_guid, s->book);
-    }
-
-    return s->acc;
-}
-
-const GUID *
-xaccSplitGetAccountGUID(Split *split)
-{
-    if (!split) return NULL;
-    return (const GUID*) &split->acc_guid;
-}
-    
-void
-xaccSplitSetAccount(Split *s, Account *act)
-{
-    if (!s) return;
-
-    if(!act)
-    {
-        s->acc_guid = *xaccGUIDNULL();
-    }
-    else
-    {
-        const GUID *id = xaccAccountGetGUID(act);
-        s->acc_guid = *id;
-    }
-
-    s->acc = act;
+  if (!s) return NULL;
+  return s->acc;
 }
 
 void
-xaccSplitSetAccountGUID(Split *s, GUID id)
+xaccSplitSetAccount (Split *s, Account *act)
 {
-    if (!s) return;
-    s->acc_guid = id;
-    s->acc = NULL;
+  if (!s) return;
+  s->acc = act;
 }
 
 
@@ -3036,6 +3003,7 @@ xaccSplitVoidFormerValue(Split *split)
   kvp_frame *frame;
   kvp_value *val;
   gnc_numeric amt = gnc_numeric_zero();
+
   g_return_val_if_fail(split, amt);
 
   frame = xaccSplitGetSlots(split);
@@ -3055,8 +3023,8 @@ xaccTransGetVoidTime(Transaction *tr)
 {
   kvp_frame *frame;
   kvp_value *val;
-  char *iso8601_str;
-  Timespec void_time= {0,0};
+  Timespec void_time = {0,0};
+
   g_return_val_if_fail(tr, void_time);
 
   frame = xaccTransGetSlots(tr);

@@ -98,8 +98,6 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    Backend *be;
    time_t now;
    GList *split_list, *snode;
-   GNCBook *partition_book;
-   AccountGroup *part_topgrp;
 
    if (!src_book || !dest_book || !query) return;
 
@@ -131,12 +129,10 @@ gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
    /* And start moving transactions over */
    for (snode = split_list; snode; snode=snode->next)
    {
-      GList *tnode;
       Split *s = snode->data;
       Transaction *trans = s->parent;
 
       gnc_book_insert_trans (dest_book, trans);
-
    }
    xaccAccountGroupCommitEdit (src_book->topgroup);
    xaccAccountGroupCommitEdit (dest_book->topgroup);

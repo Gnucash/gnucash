@@ -533,7 +533,7 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
                  Transaction *parent_trans, GNCBook *book)
 {
   Split *split;
-  kvp_frame *split_frame, *sx_frame;
+  kvp_frame *split_frame;
   kvp_value *tmp_value;
   const GUID *acc_guid; 
   

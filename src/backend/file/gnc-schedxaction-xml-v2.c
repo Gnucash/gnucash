@@ -138,7 +138,6 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 {
     xmlNodePtr	ret;
     xmlNodePtr	fsNode;
-    Timespec	ts;
     GDate	*date;
     const GUID        *templ_acc_guid;
 
@@ -355,7 +354,6 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx_pdata )
 {
     struct sx_pdata *pdata = sx_pdata;
     SchedXaction *sx = pdata->sx;
-    xmlNodePtr mark;
     FreqSpec *fs;
 
     g_return_val_if_fail( node, FALSE );
@@ -456,7 +454,6 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 {
     SchedXaction *sx;
     gboolean     successful = FALSE;
-    xmlNodePtr   achild;
     xmlNodePtr   tree = (xmlNodePtr)data_for_children;
     gxpf_data    *gdata = (gxpf_data*)global_data;
     struct sx_pdata sx_pdata;
@@ -625,7 +622,6 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
                                      const gchar *tag)
 {
         gboolean   successful = FALSE;
-        xmlNodePtr achild;
         xmlNodePtr tree = data_for_children;
         gxpf_data  *gdata = global_data;
         GNCBook    *book = gdata->bookdata;

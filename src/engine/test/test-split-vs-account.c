@@ -15,20 +15,6 @@
 #include "guid.h"
 
 
-static gboolean
-is_null_guid(const GUID *id)
-{
-    int i;
-    for(i = 0; i < 16; i++)
-    {
-        if(id->data[i] != '\0')
-        {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
-
 static void
 run_test (void)
 {
@@ -72,13 +58,6 @@ run_test (void)
         return;
     }
 
-    if(!guid_equal(xaccAccountGetGUID(act1), xaccSplitGetAccountGUID(spl)))
-    {
-        failure("xaccSplitGetAccountGUID "
-                "after xaccAccountInsertSplit failed");
-        return;
-    }
-
     /* this is weird -- we are testing an engine private function.
      * is this really what is intended here ??? */
     xaccAccountRemoveSplit (act1, spl);
@@ -87,13 +66,6 @@ run_test (void)
     {
         failure_args("xaccAccountRemoveSplit()", 
 		     __FILE__, __LINE__, "account not NULL");
-        return;
-    }
-
-    if(!is_null_guid(xaccSplitGetAccountGUID(spl)))
-    {
-        failure_args("xaccAccountRemoveSplit()", 
-		     __FILE__, __LINE__, "account guid not NULL");
         return;
     }
 }

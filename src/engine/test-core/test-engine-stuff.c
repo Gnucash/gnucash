@@ -907,17 +907,6 @@ get_random_split(GNCBook *book, gnc_numeric num)
     xaccSplitSetSharePrice(ret, oneVal);
 
     xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
-    
-    {
-        GUID *ranguid = get_random_guid();
-
-        /* ???????? this is not enough to insert the split into an account!!
-         * you need to do a 'xaccAccountInsertSplit' to do that !!! 
-         * does ths code actually work ????
-         */
-        xaccSplitSetAccountGUID(ret, *ranguid);
-        g_free(ranguid);
-    }
 
     return ret;
 }
@@ -1028,9 +1017,6 @@ get_random_transaction (GNCBook *book)
 void
 make_random_changes_to_transaction (GNCBook *book, Transaction *trans)
 {
-  GList *list;
-  GList *node;
-
   g_return_if_fail (trans && book);
 
   if (xaccTransGetVoidStatus (trans))
@@ -1278,7 +1264,6 @@ Query *
 get_random_query(void)
 {
   Query *q;
-  Query *temp_q;
   int num_terms;
 
   num_terms = get_random_int_in_range (1, 4);

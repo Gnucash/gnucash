@@ -227,7 +227,6 @@ test_account(int i, Account *test_act)
     xmlNodePtr test_node;
     gchar *filename1;
     gchar *compare_msg;
-    FILE *cmp_file;
     int fd;
 
     test_node = gnc_account_dom_tree_create(test_act);

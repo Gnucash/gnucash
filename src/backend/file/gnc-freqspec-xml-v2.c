@@ -151,10 +151,7 @@ xmlNodePtr
 gnc_freqSpec_dom_tree_create( FreqSpec *fs )
 {
         xmlNodePtr                ret;
-        xmlNodePtr                dateAnchorTmp;
         xmlNodePtr                xmlSub;
-        GString                        *tmpStr;
-        int                        i;
 
         ret = xmlNewNode( NULL, "gnc:freqspec" );
         xmlSetProp( ret, "version", freqspec_version_string );
@@ -397,7 +394,6 @@ fs_subelement_handler( xmlNodePtr node, gpointer data )
 {
         fsParseData *fspd = data;
         FreqSpec        *fs;
-        gboolean        successful;
         fs = dom_tree_to_freqSpec( node, fspd->book );
         if ( fs == NULL )
                 return FALSE;
@@ -553,7 +549,6 @@ gnc_freqSpec_end_handler(gpointer data_for_children,
 {
         fsParseData                fspd;
         gboolean                successful = FALSE;
-        xmlNodePtr                aChild;
         xmlNodePtr                tree = (xmlNodePtr)data_for_children;
         sixtp_gdv2                *globaldata = (sixtp_gdv2*)global_data;
 

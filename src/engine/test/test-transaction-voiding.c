@@ -39,8 +39,7 @@ run_test (void)
 {
   Account *acc1, *acc2;
   Transaction *transaction;
-  gnc_numeric old_amt, new_amt, new_kvp_amt, old_val, new_val, new_kvp_val;
-  int rval;
+  gnc_numeric old_amt, new_amt, old_val, new_val;
   GNCBook *book;
   Timespec ts;
   time_t now;

@@ -389,7 +389,6 @@ gnc_numeric   xaccSplitGetSharePrice (Split * split);
 gnc_numeric   xaccSplitGetValue (Split * split);
 
 Account *     xaccSplitGetAccount (Split *split);
-const GUID *  xaccSplitGetAccountGUID(Split *split);
 
 /* split types: normal stock-split */
 const char *xaccSplitGetType(const Split *s);

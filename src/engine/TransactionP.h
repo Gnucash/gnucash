@@ -80,7 +80,6 @@ struct split_s
 
   GNCBook *book;             /* The enitity table where this split is stored. */
 
-  GUID acc_guid;             /* the guid of the associated account */
   Account *acc;              /* back-pointer to debited/credited account  */
 
   Transaction *parent;       /* parent of split                           */
@@ -214,10 +213,8 @@ void xaccSplitSetGUID (Split *split, const GUID *guid);
  * routines, because they fail to actually remove the split from
  * its old parent account, or insert it into its new parent account.
  * Using these incorrectly is guarenteed to scramble your data
- * or even lead to bizarre crashes and hangs!  Achtung!
- */
-void          xaccSplitSetAccount(Split *s, Account *act);
-void          xaccSplitSetAccountGUID(Split *s, GUID id);
+ * or even lead to bizarre crashes and hangs!  Achtung! */
+void xaccSplitSetAccount(Split *s, Account *act);
 
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't
