@@ -581,6 +581,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    /* don't even bother doing a load if there is no current cursor */
    if (!(reg->table->current_cursor)) return;
 
+   ENTER ("SRLoadTransEntry(): s=%p commit=%d\n", split, do_commit);
    if (!split) {
       /* we interpret a NULL split as a blank split */
       xaccSetDateCellValueSecs (reg->dateCell, 0);
@@ -686,6 +687,7 @@ xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
    if (do_commit) {
       xaccCommitCursor (reg->table);
    }
+   LEAVE("SRLoadTransEntry():\n");
 }
 
 /* ======================================================== */
