@@ -118,9 +118,6 @@ typedef struct {
         gint top_block_offset; 
         gint left_block_offset;
 
-        gint default_width;
-        gint default_height;
-
         gint width;  /* the width in pixels of the sheet */
         gint height;
 

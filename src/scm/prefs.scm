@@ -564,6 +564,10 @@ the current value of the path."
  (gnc:make-internal-option
   "__gui" "reg_stock_win_width" 0))
 
+(gnc:register-configuration-option
+ (gnc:make-internal-option
+  "__gui" "reg_column_widths" '()))
+
 
 ;; This needs to be after all the global options definitions
 (if (gnc:debugging?)

@@ -351,8 +351,6 @@ gnucash_header_auto_resize_column (GnucashHeader *header, gint col)
         gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
         item_edit_configure (ITEM_EDIT(sheet->item_editor));
 
-        gnucash_sheet_update_adjustments (sheet);
-
         gnucash_header_reconfigure (header);
         gnucash_sheet_set_scroll_region (sheet);
         gnucash_sheet_update_adjustments (sheet);

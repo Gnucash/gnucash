@@ -112,6 +112,8 @@ void gnucash_sheet_styles_set_dimensions (GnucashSheet *sheet, int width);
 
 void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style);
 
+void gnucash_sheet_create_styles (GnucashSheet *sheet);
+
 void gnucash_sheet_compile_styles (GnucashSheet *sheet);
 
 void gnucash_sheet_styles_recompile (GnucashSheet *sheet);

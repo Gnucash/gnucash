@@ -519,7 +519,7 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
   int w, h;
   char *name;
 
-  if (gnc_lookup_boolean_option("General", "Save Window Geometry", FALSE))
+  if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
   {
     name = g_strconcat(prefix, "_width", NULL);
     w = gnc_lookup_number_option("__gui", name, 0.0);

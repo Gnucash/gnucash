@@ -190,14 +190,13 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                         cd = g_table_index (dimensions->cell_dimensions,
                                             row, col);
 
-                        if (cd->pixel_width >= 0)
-                                continue;
-
                         cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
                         text = cb_cell->sample_text;
 
-                        if (text)
+                        if (cd->pixel_width > 0)
+                                width = cd->pixel_width;
+                        else if (text)
                         {
                                 width = gdk_string_width (font, text);
                                 width += 2 * CELL_HPADDING;
@@ -446,6 +445,8 @@ gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width)
 {
         CellDimensions *cd;
         SheetBlockStyle *style;
+        int total;
+        int diff;
 
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
@@ -461,9 +462,12 @@ gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width)
         cd = gnucash_style_get_cell_dimensions (style, 0, col);
 
         /* adjust the overall width of this style */
+        diff = cd->pixel_width - width;
         cd->pixel_width = width;
 
-        set_dimensions_pass_two (sheet, width);
+        total = MAX (sheet->window_width, sheet->width - diff);
+
+        set_dimensions_pass_two (sheet, total);
         set_dimensions_pass_three (sheet);
 }
 
@@ -667,7 +671,7 @@ gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
 }
 
 void
-gnucash_sheet_compile_styles (GnucashSheet *sheet)
+gnucash_sheet_create_styles (GnucashSheet *sheet)
 {
         int i;
 
@@ -677,6 +681,13 @@ gnucash_sheet_compile_styles (GnucashSheet *sheet)
         for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
                 sheet->cursor_styles[i] = 
                         gnucash_sheet_style_new (sheet, sheet->cursors[i], i);
+}
+
+void
+gnucash_sheet_compile_styles (GnucashSheet *sheet)
+{
+        g_return_if_fail (sheet != NULL);
+        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
         gnucash_sheet_styles_set_dimensions (sheet, DEFAULT_STYLE_WIDTH);
 }
@@ -923,6 +934,9 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
                         cb_cell = gnc_cellblock_get_cell (header, row, col);
 
                         if (cb_cell->cell_type < 0)
+                                continue;
+
+                        if (header_widths[cb_cell->cell_type] < 0)
                                 continue;
 
                         cd->pixel_width = header_widths[cb_cell->cell_type];

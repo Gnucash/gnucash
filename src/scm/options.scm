@@ -568,7 +568,8 @@
          name
          default-value)
   (let* ((value default-value)
-         (value->string (lambda () (gnc:value->string value))))
+         (value->string (lambda ()
+                          (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name "" 'internal #f
      (lambda () value)

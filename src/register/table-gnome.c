@@ -40,8 +40,10 @@
 #include <string.h>
 
 #include <gnome.h>
+#include <guile/gh.h>
 
 #include "cellblock.h"
+#include "global-options.h"
 #include "table-allgui.h"
 #include "splitreg.h"
 #include "util.h"
@@ -56,6 +58,7 @@ table_destroy_cb(Table *table)
 {
         int header_widths[CELL_TYPE_COUNT];
         GnucashSheet *sheet;
+        SCM alist;
         int i;
 
         if (table == NULL)
@@ -71,6 +74,25 @@ table_destroy_cb(Table *table)
 
         gnucash_sheet_get_header_widths (sheet, header_widths);
 
+        alist = SCM_EOL;
+        if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+                for (i = 0; i < CELL_TYPE_COUNT; i++)
+                {
+                        const char *name;
+                        SCM assoc;
+
+                        if (header_widths[i] <= 0)
+                                continue;
+
+                        name = xaccSplitRegisterGetCellTypeName (i);
+                        assoc = gh_cons (gh_str02scm(name),
+                                         gh_int2scm(header_widths[i]));
+
+                        alist = gh_cons (assoc, alist);
+                }
+
+        gnc_set_option ("__gui", "reg_column_widths", alist);
+
         gtk_widget_unref(GTK_WIDGET(sheet));
 
         table->ui_data = NULL;
@@ -79,10 +101,13 @@ table_destroy_cb(Table *table)
 void
 gnc_table_init_gui (gncUIWidget widget, void *data)
 {
+        int header_widths[CELL_TYPE_COUNT];
         SplitRegister *sr;
         GnucashSheet *sheet;
         GnucashRegister *greg;
         Table *table;
+        SCM alist;
+        int i;
 
         g_return_if_fail (widget != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER (widget));
@@ -111,6 +136,39 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
                                   GNUCASH_CURSOR_TRANS);
         gnucash_sheet_set_cursor (sheet, sr->split_cursor,
                                   GNUCASH_CURSOR_SPLIT);
+
+        for (i = 0; i < CELL_TYPE_COUNT; i++)
+                header_widths[i] = -1;
+
+        if (gnc_lookup_boolean_option("General", "Save Window Geometry", TRUE))
+                alist = gnc_lookup_option ("__gui", "reg_column_widths",
+                                           SCM_EOL);
+        else
+                alist = SCM_EOL;
+
+        while (gh_list_p(alist) && !gh_null_p(alist))
+        {
+                const char *name;
+                CellType ctype;
+                SCM assoc;
+
+                assoc = gh_car (alist);
+                alist = gh_cdr (alist);
+
+                name = gh_scm2newstr(gh_car (assoc), NULL);
+                ctype = xaccSplitRegisterGetCellTypeFromName (name);
+                if (name)
+                        free(name);
+
+                if (ctype == NO_CELL)
+                        continue;
+
+                header_widths[ctype] = gh_scm2int(gh_cdr (assoc));
+        }
+
+        gnucash_sheet_create_styles (sheet);
+
+        gnucash_sheet_set_header_widths (sheet, header_widths);
 
         gnucash_sheet_compile_styles (sheet);
 
