@@ -20,11 +20,14 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+ /**@file
+ \brief Ofx import module
+ \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+ */
 #ifndef OFX_IMPORT_H
 #define OFX_IMPORT_H
 
-/* The gnc_file_ofx_import() routine will pop up a standard file
+/** The gnc_file_ofx_import() routine will pop up a standard file
  *     selection dialogue asking the user to pick a OFX/QFX file. If one
  *     is selected the the OFX file is opened and read. It's contents
  *     are merged into the existing session (if any). The current

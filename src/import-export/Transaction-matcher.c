@@ -22,7 +22,9 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+/**@file
+ * \brief Transaction duplicate matching functionnality
+ */
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -1050,8 +1052,8 @@ static void split_find_match (GNCImportTransInfo * trans_info,
 	  /* ATM fees are sometimes added directly in the transaction.
 	     So you withdraw 100$ and get charged 101,25$ in the same
 	     transaction */ 
-	  prob = prob+1;
-	  DEBUG("heuristics:  probability + 1 (amount)");
+	  prob = prob+2;
+	  DEBUG("heuristics:  probability + 2 (amount)");
 	}
       else
 	{

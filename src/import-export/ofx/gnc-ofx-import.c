@@ -20,7 +20,10 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+ /**@file
+ \brief Ofx import module code
+ \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+ */
 #define _GNU_SOURCE
 
 #include "config.h"
@@ -506,7 +509,7 @@ int ofx_proc_transaction_cb(struct OfxTransactionData data)
 		  }
 	      }
 
-
+//gnc_import_add_trans(transaction);
 	    /* Previous importer GUI: gnc_import_add_trans(transaction); */
 	    /* CS: Use new importer GUI. */
 	    if (gnc_ofx_importer_gui)
@@ -544,7 +547,7 @@ int ofx_proc_account_cb(struct OfxAccountData data)
   gnc_commodity * default_commodity;
   GNCAccountType default_type=NO_TYPE;
   gchar * account_description;
-  gchar * account_type_name;
+  gchar * account_type_name = NULL;
 
   if(data.account_id_valid==true){
     //printf("ofx_proc_account() Now calling gnc_import_select_account()\n");

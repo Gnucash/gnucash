@@ -1,10 +1,7 @@
-/*********************************************************************
- * gncmod-generic-import.c
- * module definition/initialization for the generic import 
- * infrastructure
- * 
- * Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
- *********************************************************************/
+ /**@file
+ \brief module definition/initialization for the generic import infrastructure
+ \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+ */
 
 #include <glib.h>
 #include <guile/gh.h>

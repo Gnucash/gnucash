@@ -102,3 +102,7 @@ endif
 .PHONY: TAGS
 
 ACLOCAL_AMFLAGS = -I m4
+
+.PHONY: doc
+doc:
+	$(MAKE) -C src/doc doc

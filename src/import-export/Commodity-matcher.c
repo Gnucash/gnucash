@@ -22,7 +22,9 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+/**@file
+ * \brief Generic Commodity matching functionnality
+ */
 #define _GNU_SOURCE
 
 #include "config.h"

@@ -1,3 +1,8 @@
+2002-11-27  Benoit Grégoire  <bock@step.polymtl.ca>
+	* Makefile.am configure.in src/doc/Makefile.am
+	src/doc/doxygen.cfg src/doc/doxygen_main_page.c: Added doxygen documentation support, and integrated it into the build system.  There is a new target, make doc, that can be used to build the documentation if you have doxygen installed. Any file in the src tree will be included in the documentation if it follows doxygen conventions.  The doc created in src/doc/html.  Doxygen is now required for make dist.
+	* src/import-export/:  Enable doxygen documentation.	
+	
 2002-11-27  Christian Stimming  <stimming@tuhh.de>
 
 	* accounts/pt_BR/*: Added Brazilian Portugese account templates by

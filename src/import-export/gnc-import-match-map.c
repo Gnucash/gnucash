@@ -1,13 +1,11 @@
-/*
- * gnc-import-match-map.c:
- *	an import mapper service that stores Account Maps for the
- *	generic importer.  This allows importers to map various
- *	"strings" to Gnucash accounts in a generic manner.
+/**@file
+ * \brief Generic import mapper service, maps strings->accounts
  *
- * Created by:	Derek Atkins <derek@ihtfp.com>
- *
+ An import mapper service that stores Account Maps for the
+ generic importer.  This allows importers to map various
+ "strings" to Gnucash accounts in a generic manner.
+ \author Derek Atkins <derek@ihtfp.com>
  */
-
 #include "gnc-import-match-map.h"
 #include "kvp_frame.h"
 

@@ -1,10 +1,7 @@
-/*********************************************************************
- * gncmod-ofx-import.c
- * module definition/initialization for ofx importer
- * 
- * Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
- *********************************************************************/
-
+ /**@file
+ \brief module definition/initialization for the ofx importer
+ \author Copyright (c) 2002 Benoit Grégoire bock@step.polymtl.ca
+ */
 #include <glib.h>
 #include <guile/gh.h>
 

@@ -20,7 +20,9 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
+/**@file
+ * \brief Transaction matcher main window
+ */
 #include "config.h"
 
 #include <gnome.h>
