@@ -49,10 +49,12 @@
 You first need to apply for HBCI access at your bank. If your bank 
 decides to grant you HBCI access, the bank will send you a letter, 
 containing 
+
 * The bank code of your bank
 * The user ID that identifies you to your bank
 * The Internet address of your bank's HBCI server
 * Information about the cryptographic public key of your bank (&quot;Ini-Letter&quot;).
+
 This information will be needed in the following. Press 'Next' now.
 
 Press 'Cancel' if you do not wish to setup any 
@@ -250,7 +252,7 @@ HBCI connection now.</text>
 	      <editable>True</editable>
 	      <text_visible>True</text_visible>
 	      <text_max_length>8</text_max_length>
-	      <text>10000000</text>
+	      <text></text>
 	      <child>
 		<left_attach>1</left_attach>
 		<right_attach>2</right_attach>
@@ -350,7 +352,7 @@ HBCI connection now.</text>
 	      <editable>True</editable>
 	      <text_visible>True</text_visible>
 	      <text_max_length>50</text_max_length>
-	      <text>127.0.0.1</text>
+	      <text></text>
 	      <child>
 		<left_attach>1</left_attach>
 		<right_attach>2</right_attach>
@@ -394,6 +396,109 @@ HBCI connection now.</text>
 
 	<widget>
 	  <class>GtkFrame</class>
+	  <name>frame61</name>
+	  <label>Bank</label>
+	  <label_xalign>0</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox114</name>
+	    <border_width>10</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>5</spacing>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8477419</name>
+	      <label>Bank Code:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkFrame</class>
+	      <name>frame62</name>
+	      <label_xalign>0</label_xalign>
+	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<name>user_bankcode_label</name>
+		<label>10010010</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8477421</name>
+	      <label>Name:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkFrame</class>
+	      <name>frame63</name>
+	      <label_xalign>0</label_xalign>
+	      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<name>user_bankname_label</name>
+		<label>my-bank</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkFrame</class>
 	  <name>frame59</name>
 	  <label>User Identification</label>
 	  <label_xalign>0</label_xalign>
@@ -408,8 +513,8 @@ HBCI connection now.</text>
 	    <class>GtkTable</class>
 	    <name>table3</name>
 	    <border_width>10</border_width>
-	    <rows>2</rows>
-	    <columns>3</columns>
+	    <rows>3</rows>
+	    <columns>4</columns>
 	    <homogeneous>False</homogeneous>
 	    <row_spacing>5</row_spacing>
 	    <column_spacing>0</column_spacing>
@@ -418,11 +523,11 @@ HBCI connection now.</text>
 	      <class>GtkLabel</class>
 	      <name>label8477402</name>
 	      <label>User ID</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
 	      <xalign>0</xalign>
 	      <yalign>0.5</yalign>
-	      <xpad>10</xpad>
+	      <xpad>0</xpad>
 	      <ypad>0</ypad>
 	      <child>
 		<left_attach>0</left_attach>
@@ -436,56 +541,6 @@ HBCI connection now.</text>
 		<xshrink>False</xshrink>
 		<yshrink>False</yshrink>
 		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <name>label8477410</name>
-	      <label>Customer ID</label>
-	      <justify>GTK_JUSTIFY_RIGHT</justify>
-	      <wrap>False</wrap>
-	      <xalign>0</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>10</xpad>
-	      <ypad>0</ypad>
-	      <child>
-		<left_attach>0</left_attach>
-		<right_attach>1</right_attach>
-		<top_attach>1</top_attach>
-		<bottom_attach>2</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>False</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkEntry</class>
-	      <name>customer_id_entry</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>2</right_attach>
-		<top_attach>1</top_attach>
-		<bottom_attach>2</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>True</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>False</xfill>
 		<yfill>False</yfill>
 	      </child>
 	    </widget>
@@ -503,6 +558,175 @@ HBCI connection now.</text>
 		<right_attach>2</right_attach>
 		<top_attach>0</top_attach>
 		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>False</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8477417</name>
+	      <label>Name (optional)</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>2</left_attach>
+		<right_attach>3</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>user_name_entry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>50</text_max_length>
+	      <text></text>
+	      <child>
+		<left_attach>3</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>False</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8477410</name>
+	      <label>Customer ID</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>1</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8477418</name>
+	      <label>Name (optional)</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>2</left_attach>
+		<right_attach>3</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHSeparator</class>
+	      <name>hseparator3</name>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>True</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>customer_id_entry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>50</text_max_length>
+	      <text></text>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>2</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>False</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>user_name_entry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>50</text_max_length>
+	      <text></text>
+	      <child>
+		<left_attach>3</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>True</xexpand>
@@ -612,7 +836,7 @@ HBCI connection now.</text>
 		    <editable>True</editable>
 		    <text_visible>True</text_visible>
 		    <text_max_length>0</text_max_length>
-		    <text>/floppy/</text>
+		    <text></text>
 		  </widget>
 		</widget>
 	      </widget>
@@ -902,13 +1126,11 @@ Press 'Finish' now.</text>
 	      <spacing>2</spacing>
 
 	      <widget>
-		<class>GtkTable</class>
-		<name>table4</name>
-		<rows>2</rows>
-		<columns>2</columns>
-		<homogeneous>False</homogeneous>
-		<row_spacing>2</row_spacing>
-		<column_spacing>0</column_spacing>
+		<class>GtkFrame</class>
+		<name>frame61</name>
+		<label>Bank</label>
+		<label_xalign>0</label_xalign>
+		<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -916,114 +1138,135 @@ Press 'Finish' now.</text>
 		</child>
 
 		<widget>
-		  <class>GtkEntry</class>
-		  <name>bankcode_entryview</name>
-		  <can_focus>True</can_focus>
-		  <editable>False</editable>
-		  <text_visible>True</text_visible>
-		  <text_max_length>0</text_max_length>
-		  <text></text>
-		  <child>
-		    <left_attach>1</left_attach>
-		    <right_attach>2</right_attach>
-		    <top_attach>0</top_attach>
-		    <bottom_attach>1</bottom_attach>
+		  <class>GtkHBox</class>
+		  <name>hbox114</name>
+		  <border_width>10</border_width>
+		  <homogeneous>False</homogeneous>
+		  <spacing>5</spacing>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>label8477419</name>
+		    <label>Bank Code:</label>
+		    <justify>GTK_JUSTIFY_CENTER</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
 		    <xpad>0</xpad>
 		    <ypad>0</ypad>
-		    <xexpand>True</xexpand>
-		    <yexpand>False</yexpand>
-		    <xshrink>False</xshrink>
-		    <yshrink>False</yshrink>
-		    <xfill>False</xfill>
-		    <yfill>False</yfill>
-		  </child>
-		</widget>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
 
-		<widget>
-		  <class>GtkEntry</class>
-		  <name>ipaddress_entryview</name>
-		  <can_focus>True</can_focus>
-		  <editable>False</editable>
-		  <text_visible>True</text_visible>
-		  <text_max_length>0</text_max_length>
-		  <text></text>
-		  <child>
-		    <left_attach>1</left_attach>
-		    <right_attach>2</right_attach>
-		    <top_attach>1</top_attach>
-		    <bottom_attach>2</bottom_attach>
+		  <widget>
+		    <class>GtkFrame</class>
+		    <name>frame62</name>
+		    <label_xalign>0</label_xalign>
+		    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+
+		    <widget>
+		      <class>GtkLabel</class>
+		      <name>server_bankcode_label</name>
+		      <label>10010010</label>
+		      <justify>GTK_JUSTIFY_CENTER</justify>
+		      <wrap>False</wrap>
+		      <xalign>0.5</xalign>
+		      <yalign>0.5</yalign>
+		      <xpad>0</xpad>
+		      <ypad>0</ypad>
+		    </widget>
+		  </widget>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>label8477421</name>
+		    <label>Name:</label>
+		    <justify>GTK_JUSTIFY_CENTER</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
 		    <xpad>0</xpad>
 		    <ypad>0</ypad>
-		    <xexpand>True</xexpand>
-		    <yexpand>False</yexpand>
-		    <xshrink>False</xshrink>
-		    <yshrink>False</yshrink>
-		    <xfill>False</xfill>
-		    <yfill>False</yfill>
-		  </child>
-		</widget>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
 
-		<widget>
-		  <class>GtkLabel</class>
-		  <name>label8477416</name>
-		  <label>Internet Address</label>
-		  <justify>GTK_JUSTIFY_RIGHT</justify>
-		  <wrap>False</wrap>
-		  <xalign>0</xalign>
-		  <yalign>0</yalign>
-		  <xpad>10</xpad>
-		  <ypad>0</ypad>
-		  <child>
-		    <left_attach>0</left_attach>
-		    <right_attach>1</right_attach>
-		    <top_attach>1</top_attach>
-		    <bottom_attach>2</bottom_attach>
+		  <widget>
+		    <class>GtkFrame</class>
+		    <name>frame63</name>
+		    <label_xalign>0</label_xalign>
+		    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+
+		    <widget>
+		      <class>GtkLabel</class>
+		      <name>server_bankname_label</name>
+		      <label>my-bank</label>
+		      <justify>GTK_JUSTIFY_CENTER</justify>
+		      <wrap>False</wrap>
+		      <xalign>0.5</xalign>
+		      <yalign>0.5</yalign>
+		      <xpad>0</xpad>
+		      <ypad>0</ypad>
+		    </widget>
+		  </widget>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>label8877419</name>
+		    <label>Server:</label>
+		    <justify>GTK_JUSTIFY_CENTER</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
 		    <xpad>0</xpad>
 		    <ypad>0</ypad>
-		    <xexpand>False</xexpand>
-		    <yexpand>False</yexpand>
-		    <xshrink>False</xshrink>
-		    <yshrink>False</yshrink>
-		    <xfill>True</xfill>
-		    <yfill>False</yfill>
-		  </child>
-		</widget>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
+		  </widget>
 
-		<widget>
-		  <class>GtkLabel</class>
-		  <name>label8477415</name>
-		  <label>Bank Code</label>
-		  <justify>GTK_JUSTIFY_RIGHT</justify>
-		  <wrap>False</wrap>
-		  <xalign>0</xalign>
-		  <yalign>0</yalign>
-		  <xpad>10</xpad>
-		  <ypad>0</ypad>
-		  <child>
-		    <left_attach>0</left_attach>
-		    <right_attach>1</right_attach>
-		    <top_attach>0</top_attach>
-		    <bottom_attach>1</bottom_attach>
-		    <xpad>0</xpad>
-		    <ypad>0</ypad>
-		    <xexpand>False</xexpand>
-		    <yexpand>False</yexpand>
-		    <xshrink>False</xshrink>
-		    <yshrink>False</yshrink>
-		    <xfill>True</xfill>
-		    <yfill>False</yfill>
-		  </child>
-		</widget>
-	      </widget>
+		  <widget>
+		    <class>GtkFrame</class>
+		    <name>frame65</name>
+		    <label_xalign>0</label_xalign>
+		    <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+		    <child>
+		      <padding>0</padding>
+		      <expand>False</expand>
+		      <fill>False</fill>
+		    </child>
 
-	      <widget>
-		<class>GtkHSeparator</class>
-		<name>hseparator1</name>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
+		    <widget>
+		      <class>GtkLabel</class>
+		      <name>server_bankaddr_label</name>
+		      <label>127.0.0.1</label>
+		      <justify>GTK_JUSTIFY_CENTER</justify>
+		      <wrap>False</wrap>
+		      <xalign>0.5</xalign>
+		      <yalign>0.5</yalign>
+		      <xpad>0</xpad>
+		      <ypad>0</ypad>
+		    </widget>
+		  </widget>
+		</widget>
 	      </widget>
 
 	      <widget>
@@ -1305,73 +1548,6 @@ the HBCI functionality.
 
 Press 'Finish' now.</text>
       <background_color>153,191,153</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-      <textbox_color>255,255,255</textbox_color>
-      <text_color>0,0,0</text_color>
-      <title_color>255,255,255</title_color>
-    </widget>
-  </widget>
-</widget>
-
-<widget>
-  <class>GtkWindow</class>
-  <name>Finish HBCI Setup Druid</name>
-  <title>window1</title>
-  <type>GTK_WINDOW_TOPLEVEL</type>
-  <position>GTK_WIN_POS_NONE</position>
-  <modal>False</modal>
-  <allow_shrink>False</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
-
-  <widget>
-    <class>GnomeDruid</class>
-    <name>hbci_final_druid</name>
-
-    <widget>
-      <class>GnomeDruidPageStart</class>
-      <name>druidpagestart2</name>
-      <title>Finish HBCI Setup</title>
-      <text>Sorry, nothing implemented here so far.</text>
-      <title_color>255,255,255</title_color>
-      <text_color>0,0,0</text_color>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-      <textbox_color>255,255,255</textbox_color>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>account_page</name>
-      <title></title>
-      <title_color>255,255,255</title_color>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox6</name>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>Placeholder</class>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageFinish</class>
-      <name>final_finish_page</name>
-      <title></title>
-      <text></text>
-      <background_color>25,25,112</background_color>
       <logo_background_color>255,255,255</logo_background_color>
       <textbox_color>255,255,255</textbox_color>
       <text_color>0,0,0</text_color>

@@ -30,24 +30,45 @@
 #include "gnc-book.h"
 
 /* Account */
+
+/** Returns a non-copied pointer to the accountid string in the
+ * Account a. The char* is still owned by the kvp_frame, so don't free
+ * it until you want to delete the whole kvp_frame. */
 char *gnc_hbci_get_account_accountid (Account *a);
+/** Set the accountid string in the Account a. A copy of the string
+ * will be stored. The Account will be marked as "dirty". */
 void gnc_hbci_set_account_accountid (Account *a, const char *id);
 
+/** Returns a non-copied pointer to the bankcode string in the
+ * Account a. The char* is still owned by the kvp_frame, so don't free
+ * it until you want to delete the whole kvp_frame. */
 char *gnc_hbci_get_account_bankcode (Account *a);
+/** Set the bankcode string in the Account a. A copy of the string
+ * will be stored. The Account will be marked as "dirty". */
 void gnc_hbci_set_account_bankcode (Account *a, const char *code);
 
+/** Returns the countrycode integer value from the Account a.  */
 gint gnc_hbci_get_account_countrycode (Account *a);
+/** Set the countrycode integer value in the Account a.  The Account
+ * will be marked as "dirty". */
 void gnc_hbci_set_account_countrycode (Account *a, gint code);
 
 /* GNCBook */
+
+/** Returns a non-copied pointer to the configfile string in the
+ * GNCBook b. The char* is still owned by the kvp_frame, so don't free
+ * it until you want to delete the whole kvp_frame. */
 char *gnc_hbci_get_book_configfile (GNCBook *b);
+/** Set the configfile string in the GNCBook b. A copy of the string
+ * will be stored. The Book will be marked as "dirty". */
 void gnc_hbci_set_book_configfile (GNCBook *b, const char *filename);
 
 /* lowlevel */
-/* getter for kvp frame in book */
+
+/* internal getter for kvp frame in book */
 kvp_frame *gnc_hbci_get_book_kvp (GNCBook *b);
 
-/* kvp frame in Account */
+/* internal getter for kvp frame in Account */
 kvp_frame *gnc_hbci_get_account_kvp (Account *a);
 
 

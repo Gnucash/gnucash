@@ -50,9 +50,9 @@
 
 
 
-/************************************************
+/**
  * Save the reference strings to the HBCI accounts in the kvp's of the
- * gnucash accounts. */
+ * gnucash accounts.*/
 static void
 accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
 {
@@ -60,13 +60,23 @@ accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
   Account *gnc_acc = value;
   g_assert(hbci_acc);
   g_assert(gnc_acc);
-  
-  gnc_hbci_set_account_accountid 
-    (gnc_acc, HBCI_Account_accountId (hbci_acc));
-  gnc_hbci_set_account_bankcode
-    (gnc_acc, HBCI_Bank_bankCode(HBCI_Account_bank(hbci_acc)));
-  gnc_hbci_set_account_countrycode
-    (gnc_acc, HBCI_Bank_countryCode(HBCI_Account_bank(hbci_acc)));
+
+  if ((gnc_hbci_get_account_accountid(gnc_acc) == NULL ) ||
+      (strcmp (gnc_hbci_get_account_accountid(gnc_acc), 
+	       HBCI_Account_accountId (hbci_acc)) != 0))
+    gnc_hbci_set_account_accountid 
+      (gnc_acc, HBCI_Account_accountId (hbci_acc));
+
+  if ((gnc_hbci_get_account_bankcode(gnc_acc) == NULL) ||
+      (strcmp (gnc_hbci_get_account_bankcode(gnc_acc), 
+	       HBCI_Bank_bankCode (HBCI_Account_bank (hbci_acc))) != 0))
+    gnc_hbci_set_account_bankcode
+      (gnc_acc, HBCI_Bank_bankCode (HBCI_Account_bank (hbci_acc)));
+
+  if (gnc_hbci_get_account_countrycode(gnc_acc) !=
+      HBCI_Bank_countryCode (HBCI_Account_bank (hbci_acc)))
+    gnc_hbci_set_account_countrycode
+      (gnc_acc, HBCI_Bank_countryCode (HBCI_Account_bank (hbci_acc)));
 }
 
 /* hash is a DIRECT hash from each HBCI account to each gnucash

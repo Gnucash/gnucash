@@ -1,5 +1,5 @@
 /********************************************************************\
- * druid-hbci-utils.h -- hbci  creation functionality               *
+ * dialog-pass.h -- dialog for password entry                       *
  * Copyright (C) 2002 Christian Stimming                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,37 +20,16 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef DRUID_HBCI_UTILS_H
-#define DRUID_HBCI_UTILS_H
-
 #include <gnome.h>
-#include <openhbci/api.h>
-
-
-/** Save the reference strings to the HBCI accounts in the kvp's of
- * the gnucash accounts. Each value will only be set if it is
- * different to the value stored beforehand. If any value has been
- * set, the book and/or accounts will be marked 'dirty'. */
-void accounts_save_kvp (GHashTable *hash);
-
-
-/** Update the account list in the banks stored in this
- * HBCI_API. Straightforward, if we have only one bank and one user
- * with one customer. All other cases are not currently
- * implemented. */
-void update_accounts (HBCI_API *api);
-
-/** Builds a new hash table mapping all HBCI accounts to Gnucash
- * accounts, where the Gnucash accounts already have the reference
- * strings stored in their kvp's. */
-GHashTable *
-gnc_hbci_new_hash_from_kvp (HBCI_API *api);
-
-gboolean 
-gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename);
 
 gboolean
-gnc_test_dir_exist_error (GtkWindow *parent, const char *filename);
+gnc_hbci_get_password (GtkWidget *parent,
+		       const char *heading,
+		       const char *initial_password,
+		       char **password);
+gboolean
+gnc_hbci_get_initial_password (GtkWidget *parent,
+			       const char *heading,
+			       char **password);
 
 
-#endif

@@ -23,11 +23,15 @@
 #include <stdio.h>
 #include <string.h>
 #include "hbci-interaction.h"
+
 #include <openhbci/interactorcb.h>
 #include <openhbci/progressmonitorcb.h>
+#include "dialog-utils.h"
+#include "druid-utils.h"
+#include "gnc-ui-util.h"
+#include "gnc-ui.h"
 
-
-#define LOCALSIZE 1024
+#include "dialog-pass.h"
 
 static int msgInputPin(const HBCI_User *user,
 		char *pinbuf,
@@ -35,88 +39,145 @@ static int msgInputPin(const HBCI_User *user,
 		int minsize,
 		int newPin)
 {
-    const HBCI_Bank * b;
-    char localbuf[LOCALSIZE];
+  const HBCI_Bank * b;
+  char *msgstr, *passwd;
+  int retval;
 
-    printf("Pineingabe fuer ");
-    if (user) {
-        b=HBCI_User_bank(user);
-        if (b) {
-	    printf("BLZ %s", HBCI_Bank_bankCode(b));
-        }
-        else
-            printf("<unbekannte Bank>");
-	printf(", Benutzerkennung %s", HBCI_User_userId(user));
-    } // if user is valid
-    else
-        printf("<unbekannter User>");
-    printf("\n");
+  while (TRUE) {
+    const char *username;
+    if (user != NULL) 
+      username =
+	(HBCI_User_userName (user) ? HBCI_User_userName (user) :
+	 (HBCI_User_userId (user) ? HBCI_User_userId (user) :
+	  _("Unknown")));
+    if (newPin) {
+      if (user != NULL) {
+	if (b != NULL) 
+	  msgstr = g_strdup_printf ( _("Please enter and confirm new PIN  for 
+user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
+	else 
+	  msgstr = g_strdup_printf ( _("Please enter and confirm a new PIN for 
+user '%s' at unknown bank."), username);
+      }
+      else 
+	msgstr = g_strdup ( _("Please enter and confirm a new PIN."));
 
-    // FIXME: only show asterisks, dont use gets !
-    gets(localbuf);
-    strncpy(pinbuf, localbuf, bufsize);
-    memset(localbuf, 0, LOCALSIZE);
+      retval = gnc_hbci_get_initial_password (NULL,
+					      msgstr,
+					      &passwd);
+    }
+    else {
+      if (user != NULL) {
+	if (b != NULL) 
+	  msgstr = g_strdup_printf ( _("Please enter PIN  for 
+user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
+	else 
+	  msgstr = g_strdup_printf ( _("Please enter PIN for 
+user '%s' at unknown bank."), username);
+      }
+      else 
+	msgstr = g_strdup ( _("Please enter PIN for 
+unknown user at unknown bank."));
 
-    // done
-    return 1;
+      retval = gnc_hbci_get_password (NULL,
+				      msgstr,
+				      NULL,
+				      &passwd);
+    }
+    g_free (msgstr);
+    
+    if (!retval)
+      break;
+    
+    if (strlen(passwd)<4) {
+      if (gnc_ok_cancel_dialog_parented (NULL, 
+					 GNC_VERIFY_OK,
+					 _("The PIN needs to be at least four characters long.
+Please try again.")) == GNC_VERIFY_CANCEL)
+	break;
+    }
+    else {
+      strncpy (pinbuf, passwd, bufsize);
+      memset (passwd, 0, strlen(passwd));
+      g_free (passwd);
+      return 1;
+    }
+  }
+  
+  /* User wanted to abort. */
+  return 0;
 }
 
 
 static int msgInsertCardOrAbort(const HBCI_User *user)
 {
-    const HBCI_Bank * b;
+  const HBCI_Bank * b;
+  char *msgstr;
+  GNCVerifyResult retval;
 
-    printf("Bitte Karte einlegen fuer ");
-    if (user) {
-        b=HBCI_User_bank(user);
-        if (b) {
-	    printf("BLZ %s", HBCI_Bank_bankCode(b));
-        }
-        else
-            printf("<unbekannte Bank>");
-    } // if user is valid
-    else
-        printf("<unbekannter User>");
-    printf("\n");
-    printf("<Bitte druecken Sie ENTER>\n");
-    getchar();
-
-    return 1;
+  if (user != NULL) {
+    const char *username = 
+      (HBCI_User_userName (user) ? HBCI_User_userName (user) :
+       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
+	_("Unknown")));
+    b = HBCI_User_bank (user);
+    if (b != NULL) 
+      msgstr = g_strdup_printf ( _("Please insert chip card for 
+user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
+    else 
+      msgstr = g_strdup_printf ( _("Please insert chip card for 
+user '%s' at unknown bank."), username);
+  }
+  else 
+    msgstr = g_strdup ( _("Please insert chip card for 
+unknown user at unknown bank."));
+      
+  retval = gnc_ok_cancel_dialog (GNC_VERIFY_OK, msgstr);
+  g_free (msgstr);
+  
+  return (retval == GNC_VERIFY_OK);
 }
 
 
 static int msgInsertCorrectCardOrAbort(const HBCI_User *user)
 {
-    const HBCI_Bank *b;
+  const HBCI_Bank * b;
+  char *msgstr;
+  GNCVerifyResult retval;
 
-    printf("Bitte korrekte Karte einlegen fuer ");
-    if (user) {
-        b=HBCI_User_bank(user);
-        if (b) {
-	    printf("BLZ %s", HBCI_Bank_bankCode(b));
-        }
-        else
-            printf("<unbekannt Bank>");
-    } // if user is valid
-    else
-	printf("<unbekannt Bank>");
-    printf("\n");
-    printf("<Bitte druecken Sie ENTER>\n");
-    getchar();
-
-    return 1;
+  if (user != NULL) {
+    const char *username = 
+      (HBCI_User_userName (user) ? HBCI_User_userName (user) :
+       (HBCI_User_userId (user) ? HBCI_User_userId (user) :
+	_("Unknown")));
+    b = HBCI_User_bank (user);
+    if (b != NULL) 
+      msgstr = g_strdup_printf ( _("Please insert the correct chip card for 
+user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
+    else 
+      msgstr = g_strdup_printf ( _("Please insert the correct chip card for 
+user '%s' at unknown bank."), username);
+  }
+  else 
+    msgstr = g_strdup ( _("Please insert the correct chip card for 
+unknown user at unknown bank."));
+      
+  retval = gnc_ok_cancel_dialog (GNC_VERIFY_OK, msgstr);
+  g_free (msgstr);
+  
+  return (retval == GNC_VERIFY_OK);
 }
 
 
 static void msgStateResponse(const char *msg)
 {
-    fprintf(stdout,"my-msgStateResponse: %s\n",msg);
+  fprintf(stdout,"hbci-initial-druid-msgStateResponse: %s\n",msg);
 }
 
 static int keepAlive()
 {
-    //fprintf(stdout, "my-keepAlive: returning 1\n");
-    return 1;
+  //fprintf(stdout, "my-keepAlive: returning 1\n");
+  return 1;
 }
 
 

@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-hbci.la
 libgncmod_hbci_la_SOURCES = \
   gncmod-hbci.c \
   druid-hbci-utils.c \
+  dialog-pass.c \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
   hbci-interaction.c \
@@ -43,7 +44,7 @@ AM_CFLAGS = \
   ${GNOME_INCLUDEDIR} \
   ${GLADE_CFLAGS} \
   ${GLIB_CFLAGS} \
-  ${HBCI_CFLAGS}
+  ${HBCI_CFLAGS} -Werror
 
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 
