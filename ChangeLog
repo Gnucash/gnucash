@@ -1,3 +1,95 @@
+2001-11-16  Rob Browning  <rlb@defaultvalue.org>
+
+	* configure.in (AC_OUTPUT): add src/dialog-account.
+
+	* src/.cvsignore: add gnucash.sh.
+
+	* src/gnucash.sh.in: new file -- this will eventually become the
+	primary gnucash program, but for now, let's make it available for
+	testing.
+
+	* src/Makefile.am (SUBDIRS): re-order to fix dependency problems.
+	(bin_SCRIPTS): add gnucash.sh.
+	(EXTRA_DIST): add gnucash.sh.in.
+	(gnucash.sh): new target.
+
+	* src/gnc-module/test/test-scm-init: don't set %load-path
+	internally anymore -- depend on a proper TESTS_ENVIRONMENT.
+
+	* src/gnc-module/test/test-load-scm: turn in to a self-contained
+	guile script launched by /bin/sh which will respect the PATH.
+
+	* src/gnc-module/test/test-load-deps: turn in to a self-contained
+	guile script launched by /bin/sh which will respect the PATH.
+
+	* src/gnc-module/test/Makefile.am
+	(EXTRA_DIST): remove test-load-deps.scm.
+
+	* src/tax/us/test/Makefile.am: switch to use gnc-test-env to build
+	TESTS_ENVIRONMENT.
+
+	* src/scm/main.scm (gnc:startup): very ugly hack -- right now we
+	switch the current-module briefly during the loads.  This should
+	go away once the rest of the startup process is cleaned up.
+
+	* src/gnc-module/gnc-module.c
+	(gnc_module_system_setup_load_path): don't change %load-path
+	anymore, augment LD_LIBRARY_PATH instead.  This reflects the
+	change in how guile and g-wrap now load C shared libraries.
+
+	* src/app-utils/file-utils.h: moved here from src/gnome.
+
+	* src/app-utils/file-utils.c: moved here from src/gnome.
+
+	* src/app-utils/Makefile.am: add file-utils.
+
+	* src/gnc-module/test/test-load-deps.scm: deleted - unnecessary.
+
+	* src/register/ledger-core/dialog-dup-trans.c: moved here from
+	src/gnome.
+
+	* src/register/ledger-core/Makefile.am: add dialog-dup-trans.
+	(SUBDIRS): add . first so tests will work.
+	(libgncmod_ledger_core_la_LIBADD): add missing dependencies.
+	(AM_CFLAGS): add needed -I.
+
+	* src/gnome-utils/window-help.h: moved here from src/gnome.
+
+	* src/gnome-utils/window-help.c: moved here from src/gnome.
+
+	* src/gnome-utils/Makefile.am: add window-help.
+
+	* src/gnome/gnucash.c.in: add temporary helpers for gnucash
+	scriptification.
+
+	* src/gnome/top-level.c: remove spurious dialog-account.h include.
+
+	* src/gnome/file-utils.h: moved to src/app-utils.
+
+	* src/gnome/file-utils.c: moved to src/app-utils.
+
+	* src/gnome/window-help.h: moved to src/gnome-utils.
+
+	* src/gnome/window-help.c: moved to src/gnome-utils.
+
+	* src/gnome/dialog-dup-trans.c: moved to src/register/ledger-core.
+
+	* src/gnome/dialog-account.c: moved to src/dialog-account.
+
+	* src/gnome/dialog-account.h: moved to src/dialog-account.
+
+	* src/gnome/Makefile.am: accomodate file relocations.
+
+	* src/dialog-account/dialog-account.c: moved here to break mutual
+	dependency between ledger-core and libgncgnome.
+
+	* src/dialog-account/dialog-account.h: moved here to break mutual
+	dependency between ledger-core and libgncgnome.
+
+	* src/dialog-account/Makefile.am: new file.
+
+	* src/dialog-account/.cvsignore: new file.
+
 2001-11-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/Makefile.am, src/gnome-utils/Makefile.am: Moved
