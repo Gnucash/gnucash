@@ -1,3 +1,11 @@
+2003-04-04  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-report/transactions.scm: symbols are not
+	  strings in guile-1.6.  Fixes debian bug #186004.
+	* doc/gnucash.1.in: it's --add-price-quotes (not quote)
+	* src/app-utils/date-utilities.scm: fix "WeekDelta" and add
+	  TwoWeekDelta.  Fixes debian #185860.
+
 2003-04-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/scm/main.scm: guile-1.6 requires empty lists to be quoted
