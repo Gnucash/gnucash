@@ -10,8 +10,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "date.h"
 #include "Group.h"
+#include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "Transaction.h"
