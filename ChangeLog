@@ -1,3 +1,7 @@
+2003-05-21  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: remove duplicate intl/Makefile po/Makefile.in
+
 2003-05-20  Derek Atkins  <derek@ihtfp.com>
 
 	* acinclude.m4: modify the AC_GWRAP_CHECK_GUILE() macro to

@@ -1078,7 +1078,7 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in intl/Makefile po/Makefile.in 
+AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
           dnl # Makefiles
           Makefile
           accounts/Makefile
