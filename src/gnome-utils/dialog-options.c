@@ -2949,11 +2949,11 @@ scm_close_cb (GNCOptionWin *win, gpointer data)
 
   if (cbdata->close_cb != SCM_BOOL_F) {
     scm_call_0 (cbdata->close_cb);
-    scm_unprotect_object (cbdata->close_cb);
+    scm_gc_unprotect_object (cbdata->close_cb);
   }
 
   if (cbdata->apply_cb != SCM_BOOL_F)
-    scm_unprotect_object (cbdata->apply_cb);
+    scm_gc_unprotect_object (cbdata->apply_cb);
 
   g_free (cbdata);
 }
@@ -2972,10 +2972,10 @@ gnc_options_dialog_set_scm_callbacks (GNCOptionWin *win, SCM apply_cb,
   cbdata->close_cb = close_cb;
 
   if (apply_cb != SCM_BOOL_F)
-    scm_protect_object (cbdata->apply_cb);
+    scm_gc_protect_object (cbdata->apply_cb);
 
   if (close_cb != SCM_BOOL_F)
-    scm_protect_object (cbdata->close_cb);
+    scm_gc_protect_object (cbdata->close_cb);
 
   gnc_options_dialog_set_apply_cb (win, scm_apply_cb, cbdata);
   gnc_options_dialog_set_close_cb (win, scm_close_cb, cbdata);

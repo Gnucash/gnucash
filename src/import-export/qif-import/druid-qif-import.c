@@ -156,20 +156,20 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window)
 
   gtk_widget_destroy(window->window);
 
-  scm_unprotect_object(window->imported_files);
-  scm_unprotect_object(window->selected_file);
-  scm_unprotect_object(window->gnc_acct_info);
-  scm_unprotect_object(window->cat_display_info);
-  scm_unprotect_object(window->cat_map_info);
-  scm_unprotect_object(window->memo_display_info);
-  scm_unprotect_object(window->memo_map_info);
-  scm_unprotect_object(window->acct_display_info);
-  scm_unprotect_object(window->acct_map_info);
-  scm_unprotect_object(window->stock_hash);
-  scm_unprotect_object(window->new_stocks);
-  scm_unprotect_object(window->ticker_map);
-  scm_unprotect_object(window->imported_account_group);
-  scm_unprotect_object(window->match_transactions);
+  scm_gc_unprotect_object(window->imported_files);
+  scm_gc_unprotect_object(window->selected_file);
+  scm_gc_unprotect_object(window->gnc_acct_info);
+  scm_gc_unprotect_object(window->cat_display_info);
+  scm_gc_unprotect_object(window->cat_map_info);
+  scm_gc_unprotect_object(window->memo_display_info);
+  scm_gc_unprotect_object(window->memo_map_info);
+  scm_gc_unprotect_object(window->acct_display_info);
+  scm_gc_unprotect_object(window->acct_map_info);
+  scm_gc_unprotect_object(window->stock_hash);
+  scm_gc_unprotect_object(window->new_stocks);
+  scm_gc_unprotect_object(window->ticker_map);
+  scm_gc_unprotect_object(window->imported_account_group);
+  scm_gc_unprotect_object(window->match_transactions);
 
   g_free(window);
 }
@@ -479,9 +479,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     scm_qiffile          = scm_call_0(make_qif_file);    
     imported_files       = scm_cons(scm_qiffile, imported_files);    
 
-    scm_unprotect_object(wind->selected_file);      
+    scm_gc_unprotect_object(wind->selected_file);      
     wind->selected_file  = scm_qiffile;    
-    scm_protect_object(wind->selected_file);      
+    scm_gc_protect_object(wind->selected_file);      
     
     /* load the file */
     load_return = scm_call_3(qif_file_load, SCM_CAR(imported_files),
@@ -517,9 +517,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       imported_files = 
         scm_call_2(unload_qif_file, scm_qiffile, imported_files);
             
-      scm_unprotect_object(wind->imported_files);
+      scm_gc_unprotect_object(wind->imported_files);
       wind->imported_files = imported_files;
-      scm_protect_object(wind->imported_files);
+      scm_gc_protect_object(wind->imported_files);
 
       return TRUE;
     }
@@ -590,9 +590,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       } 
     }
     
-    scm_unprotect_object(wind->imported_files);
+    scm_gc_unprotect_object(wind->imported_files);
     wind->imported_files = imported_files;
-    scm_protect_object(wind->imported_files);
+    scm_gc_protect_object(wind->imported_files);
     
     /* turn back the cursor */
     gnc_unset_busy_cursor(NULL);
@@ -677,10 +677,10 @@ gnc_ui_qif_import_select_loaded_file_cb(GtkCList   * list,
 
   if(SCM_LISTP(wind->imported_files) && 
      (scm_ilength(wind->imported_files) > row)) {
-    scm_unprotect_object(wind->selected_file);
+    scm_gc_unprotect_object(wind->selected_file);
     wind->selected_file = scm_list_ref(wind->imported_files,
 				       scm_int2num(row));   
-    scm_protect_object(wind->selected_file);
+    scm_gc_protect_object(wind->selected_file);
   } 
 }
 
@@ -741,13 +741,13 @@ gnc_ui_qif_import_unload_file_cb(GtkButton * button,
     imported_files = 
       scm_call_2(unload_qif_file, wind->selected_file, wind->imported_files);
   
-    scm_unprotect_object(wind->imported_files);
+    scm_gc_unprotect_object(wind->imported_files);
     wind->imported_files = imported_files;
-    scm_protect_object(wind->imported_files);
+    scm_gc_protect_object(wind->imported_files);
 
-    scm_unprotect_object(wind->selected_file);
+    scm_gc_unprotect_object(wind->selected_file);
     wind->selected_file = SCM_BOOL_F;
-    scm_protect_object(wind->selected_file);
+    scm_gc_protect_object(wind->selected_file);
      
     update_file_page(wind);
   }
@@ -847,13 +847,13 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
 
   files_list = scm_call_2(unload, wind->selected_file, wind->imported_files);
 
-  scm_unprotect_object(wind->imported_files);
+  scm_gc_unprotect_object(wind->imported_files);
   wind->imported_files = files_list;
-  scm_protect_object(wind->imported_files);
+  scm_gc_protect_object(wind->imported_files);
   
-  scm_unprotect_object(wind->selected_file);
+  scm_gc_unprotect_object(wind->selected_file);
   wind->selected_file = SCM_BOOL_F;
-  scm_protect_object(wind->selected_file);
+  scm_gc_protect_object(wind->selected_file);
   
   gnome_druid_set_page(GNOME_DRUID(wind->druid),
                        get_named_page(wind, "load_file_page"));
@@ -894,9 +894,9 @@ update_account_picker_page(QIFImportWindow * wind, SCM make_display,
 			  map_info, 
 			  wind->gnc_acct_info);
 
-  scm_unprotect_object(*display_info);
+  scm_gc_unprotect_object(*display_info);
   *display_info = accts_left;  
-  scm_protect_object(*display_info);
+  scm_gc_protect_object(*display_info);
   
   gtk_clist_column_titles_passive (GTK_CLIST(list));
 
@@ -1183,14 +1183,14 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 		     _("An error occurred while importing "
 		       "QIF transactions into GnuCash. Your "
 		       "accounts are unchanged."));    
-    scm_unprotect_object(wind->imported_account_group);
+    scm_gc_unprotect_object(wind->imported_account_group);
     wind->imported_account_group = SCM_BOOL_F;
-    scm_protect_object(wind->imported_account_group);
+    scm_gc_protect_object(wind->imported_account_group);
   }
   else {
-    scm_unprotect_object(wind->imported_account_group);
+    scm_gc_unprotect_object(wind->imported_account_group);
     wind->imported_account_group = retval;
-    scm_protect_object(wind->imported_account_group);
+    scm_gc_protect_object(wind->imported_account_group);
 
     /* now detect duplicate transactions */ 
     gnc_set_busy_cursor(NULL, TRUE);
@@ -1199,9 +1199,9 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind)
 			wind->imported_account_group);
     gnc_unset_busy_cursor(NULL);
     
-    scm_unprotect_object(wind->match_transactions);
+    scm_gc_unprotect_object(wind->match_transactions);
     wind->match_transactions = retval;
-    scm_protect_object(wind->match_transactions);
+    scm_gc_protect_object(wind->match_transactions);
 
     /* skip to the last page if we couldn't find duplicates 
      * in the new group */
@@ -1278,10 +1278,10 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
   else {
     /* if we need to look at stocks, do that, otherwise import
      * xtns and go to the duplicates page */
-    scm_unprotect_object(wind->new_stocks);
+    scm_gc_unprotect_object(wind->new_stocks);
     wind->new_stocks = scm_call_3(update_stock, wind->stock_hash,
 				  wind->ticker_map, wind->acct_map_info);
-    scm_protect_object(wind->new_stocks);
+    scm_gc_protect_object(wind->new_stocks);
     
     if(wind->new_stocks != SCM_BOOL_F) {
       if(wind->show_doc_pages) {
@@ -1334,10 +1334,10 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
   int show_matches;
 
   gnc_set_busy_cursor(NULL, TRUE);
-  scm_unprotect_object(wind->new_stocks);
+  scm_gc_unprotect_object(wind->new_stocks);
   wind->new_stocks =  scm_call_3(update_stock, wind->stock_hash, 
 				 wind->ticker_map, wind->acct_map_info);
-  scm_protect_object(wind->new_stocks);
+  scm_gc_protect_object(wind->new_stocks);
   
   if(wind->new_stocks != SCM_BOOL_F) {
     if(wind->show_doc_pages) {
@@ -2004,20 +2004,20 @@ gnc_ui_qif_import_druid_make(void)  {
   create_ticker_map = scm_c_eval_string("make-ticker-map");
   retval->ticker_map = scm_call_0(create_ticker_map);
   
-  scm_protect_object(retval->imported_files);
-  scm_protect_object(retval->selected_file);
-  scm_protect_object(retval->gnc_acct_info);
-  scm_protect_object(retval->cat_display_info);
-  scm_protect_object(retval->cat_map_info);
-  scm_protect_object(retval->memo_display_info);
-  scm_protect_object(retval->memo_map_info);
-  scm_protect_object(retval->acct_display_info);
-  scm_protect_object(retval->acct_map_info);
-  scm_protect_object(retval->stock_hash);
-  scm_protect_object(retval->new_stocks);
-  scm_protect_object(retval->ticker_map);
-  scm_protect_object(retval->imported_account_group);
-  scm_protect_object(retval->match_transactions);
+  scm_gc_protect_object(retval->imported_files);
+  scm_gc_protect_object(retval->selected_file);
+  scm_gc_protect_object(retval->gnc_acct_info);
+  scm_gc_protect_object(retval->cat_display_info);
+  scm_gc_protect_object(retval->cat_map_info);
+  scm_gc_protect_object(retval->memo_display_info);
+  scm_gc_protect_object(retval->memo_map_info);
+  scm_gc_protect_object(retval->acct_display_info);
+  scm_gc_protect_object(retval->acct_map_info);
+  scm_gc_protect_object(retval->stock_hash);
+  scm_gc_protect_object(retval->new_stocks);
+  scm_gc_protect_object(retval->ticker_map);
+  scm_gc_protect_object(retval->imported_account_group);
+  scm_gc_protect_object(retval->match_transactions);
   
   /* set a default currency for new accounts */
   gnc_ui_update_commodity_picker(retval->currency_picker,

@@ -695,10 +695,10 @@ gnc_split_register_copy_current_internal (SplitRegister *reg,
 
   /* unprotect the old object, if any */
   if (copied_item != SCM_UNDEFINED)
-    scm_unprotect_object(copied_item);
+    scm_gc_unprotect_object(copied_item);
 
   copied_item = new_item;
-  scm_protect_object(copied_item);
+  scm_gc_protect_object(copied_item);
 
   copied_class = cursor_class;
 }

@@ -600,13 +600,13 @@ gnc_invoice_window_printCB (GtkWidget *widget, gpointer data)
   arg = gw_wcp_assimilate_ptr (invoice, scm_c_eval_string("<gnc:GncInvoice*>"));
   args = scm_cons (arg, args);
 
-  /* scm_protect_object(func); */
+  /* scm_gc_protect_object(func); */
 
   arg = scm_apply (func, args, SCM_EOL);
   g_return_if_fail (SCM_EXACTP (arg));
   report_id = scm_num2int (arg, SCM_ARG1, __FUNCTION__);
 
-  /* scm_unprotect_object(func); */
+  /* scm_gc_unprotect_object(func); */
   if (report_id >= 0)
     reportWindow (report_id);
 }

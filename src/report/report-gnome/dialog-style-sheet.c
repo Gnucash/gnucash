@@ -87,7 +87,7 @@ row_data_destroy_cb(gpointer data) {
   struct ss_info * ss = data;
   gnc_option_db_destroy(ss->odb);
   gnc_options_dialog_destroy(ss->odialog);
-  scm_unprotect_object(ss->stylesheet);
+  scm_gc_unprotect_object(ss->stylesheet);
   g_free(ss);
 }
 
@@ -113,7 +113,7 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
     ssinfo->odb     = gnc_option_db_new(scm_options);
     ssinfo->stylesheet = SCM_CAR(stylesheets);
 
-    scm_protect_object(ssinfo->stylesheet);
+    scm_gc_protect_object(ssinfo->stylesheet);
     gtk_widget_ref(gnc_options_dialog_widget(ssinfo->odialog));
 
     gnc_build_options_dialog_contents(ssinfo->odialog, 

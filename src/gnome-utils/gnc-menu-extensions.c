@@ -279,7 +279,7 @@ gnc_create_extension_info(SCM extension)
   ext_info->info[0].pixmap_type = GNOME_APP_PIXMAP_NONE;
   ext_info->info[1].type = GNOME_APP_UI_ENDOFINFO;
 
-  scm_protect_object(extension);
+  scm_gc_protect_object(extension);
   
   /* need to append so we can run them in order */
   extension_list = g_slist_append(extension_list, ext_info);
@@ -294,7 +294,7 @@ cleanup_extension_info(gpointer extension_info, gpointer not_used)
   ExtensionInfo *ext_info = extension_info;
 
   if (ext_info->extension)
-    scm_unprotect_object(ext_info->extension);
+    scm_gc_unprotect_object(ext_info->extension);
 
   g_free(ext_info->info[0].label);
   g_free(ext_info->info[0].hint);

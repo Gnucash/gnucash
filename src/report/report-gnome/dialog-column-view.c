@@ -81,8 +81,8 @@ gnc_column_view_set_option(GNCOptionDB * odb, char * section, char * name,
 static void 
 gnc_column_view_edit_destroy(gnc_column_view_edit * view) {
   gnc_options_dialog_destroy(view->optwin);
-  scm_unprotect_object(view->options);
-  scm_unprotect_object(view->view);
+  scm_gc_unprotect_object(view->options);
+  scm_gc_unprotect_object(view->view);
   gnc_option_db_destroy(view->odb);
   g_free(view);
 }
@@ -113,9 +113,9 @@ update_display_lists(gnc_column_view_edit * view) {
     selection = SCM_UNDEFINED;
   }
 
-  scm_unprotect_object(view->available_list);
+  scm_gc_unprotect_object(view->available_list);
   view->available_list = names;
-  scm_protect_object(view->available_list);
+  scm_gc_protect_object(view->available_list);
 
   gtk_clist_freeze(view->available);
   gtk_clist_clear(view->available);
@@ -144,9 +144,9 @@ update_display_lists(gnc_column_view_edit * view) {
     selection = SCM_UNDEFINED;
   }
 
-  scm_unprotect_object(view->contents_list);
+  scm_gc_unprotect_object(view->contents_list);
   view->contents_list = contents;
-  scm_protect_object(view->contents_list);
+  scm_gc_protect_object(view->contents_list);
 
   gtk_clist_freeze(view->contents);
   gtk_clist_clear(view->contents);
@@ -273,10 +273,10 @@ gnc_column_view_edit_options(SCM options, SCM view) {
                              editor, 
                              gtk_label_new(_("Contents")));
 
-    scm_protect_object(r->options);
-    scm_protect_object(r->view);
-    scm_protect_object(r->available_list);
-    scm_protect_object(r->contents_list);
+    scm_gc_protect_object(r->options);
+    scm_gc_protect_object(r->view);
+    scm_gc_protect_object(r->available_list);
+    scm_gc_protect_object(r->contents_list);
 
     gtk_signal_connect(GTK_OBJECT(r->available), "select_row", 
                        gnc_column_view_select_avail_cb, (gpointer)r);
@@ -344,9 +344,9 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
       r->contents_selected = oldlength;
     }
     
-    scm_unprotect_object(r->contents_list);
+    scm_gc_unprotect_object(r->contents_list);
     r->contents_list = newlist;
-    scm_protect_object(r->contents_list);
+    scm_gc_protect_object(r->contents_list);
     
     gnc_column_view_set_option(r->odb, "__general", "report-list",
                                r->contents_list);
@@ -380,9 +380,9 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
       r->contents_selected --;
     }
 
-    scm_unprotect_object(r->contents_list);
+    scm_gc_unprotect_object(r->contents_list);
     r->contents_list = newlist;
-    scm_protect_object(r->contents_list);
+    scm_gc_protect_object(r->contents_list);
 
     gnc_column_view_set_option(r->odb, "__general", "report-list",
                                r->contents_list);
@@ -413,9 +413,9 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data) {
     newlist = scm_cons(temp, scm_cons(SCM_CAR(oldlist), newlist));
     newlist = scm_append(scm_listify(scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
 
-    scm_unprotect_object(r->contents_list);
+    scm_gc_unprotect_object(r->contents_list);
     r->contents_list = newlist;
-    scm_protect_object(r->contents_list);
+    scm_gc_protect_object(r->contents_list);
 
     r->contents_selected = r->contents_selected - 1;
 
@@ -448,9 +448,9 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
     newlist = scm_cons(temp, scm_cons(SCM_CAR(oldlist), newlist));
     newlist = scm_append(scm_listify(scm_reverse(newlist), SCM_CDR(oldlist), SCM_UNDEFINED));
 
-    scm_unprotect_object(r->contents_list);
+    scm_gc_unprotect_object(r->contents_list);
     r->contents_list = newlist;
-    scm_protect_object(r->contents_list);
+    scm_gc_protect_object(r->contents_list);
 
     r->contents_selected = r->contents_selected + 1;
 
@@ -501,11 +501,11 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
                           scm_int2num(gtk_spin_button_get_value_as_int
                                      (GTK_SPIN_BUTTON(rowspin))),
                           SCM_BOOL_F);
-      scm_unprotect_object(r->contents_list);
+      scm_gc_unprotect_object(r->contents_list);
       r->contents_list = scm_list_set_x(r->contents_list, 
                                         scm_int2num(r->contents_selected),
                                         current);
-      scm_protect_object(r->contents_list);
+      scm_gc_protect_object(r->contents_list);
       gnc_options_dialog_changed (r->optwin);
       update_display_lists(r);
     }

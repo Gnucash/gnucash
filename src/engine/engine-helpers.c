@@ -2102,7 +2102,7 @@ gnc_scm_traversal_adapter(Transaction *t, void *data)
   if(trans_type == SCM_BOOL_F) {
     trans_type = scm_c_eval_string("<gnc:Transaction*>");
     /* don't really need this - types are bound globally anyway. */
-    if(trans_type != SCM_BOOL_F) scm_protect_object(trans_type);
+    if(trans_type != SCM_BOOL_F) scm_gc_protect_object(trans_type);
   }
   
   scm_trans = gw_wcp_assimilate_ptr(t, trans_type);
@@ -2179,7 +2179,7 @@ gnc_scm_to_gint64(SCM num)
   
   if (bits00to15_mask == SCM_BOOL_F) {
     bits00to15_mask = scm_ulong2num(0xFFFF);
-    scm_protect_object (bits00to15_mask);
+    scm_gc_protect_object (bits00to15_mask);
   }
 
   /*
@@ -2231,8 +2231,8 @@ gnc_gh_gint64_p(SCM num)
     tmp <<= 32;
     minval = gnc_gint64_to_scm(tmp);
 
-    scm_protect_object(maxval);
-    scm_protect_object(minval);
+    scm_gc_protect_object(maxval);
+    scm_gc_protect_object(minval);
     initialized = 1;
   }
 
@@ -2301,7 +2301,7 @@ gnc_scm_to_commodity(SCM scm)
   if(commodity_type == SCM_UNDEFINED) {
     commodity_type = scm_c_eval_string("<gnc:commodity*>");
     /* don't really need this - types are bound globally anyway. */
-    if(commodity_type != SCM_UNDEFINED) scm_protect_object(commodity_type);
+    if(commodity_type != SCM_UNDEFINED) scm_gc_protect_object(commodity_type);
   }
 
   if(!gw_wcp_is_of_type_p(commodity_type, scm)) {
@@ -2325,7 +2325,7 @@ gnc_commodity_to_scm (const gnc_commodity *commodity)
   if(commodity_type == SCM_UNDEFINED) {
     commodity_type = scm_c_eval_string("<gnc:commodity*>");
     /* don't really need this - types are bound globally anyway. */
-    if(commodity_type != SCM_UNDEFINED) scm_protect_object(commodity_type);
+    if(commodity_type != SCM_UNDEFINED) scm_gc_protect_object(commodity_type);
   }
   
   return gw_wcp_assimilate_ptr((void *) commodity, commodity_type);
@@ -2348,7 +2348,7 @@ gnc_book_to_scm (QofBook *book)
 
     /* don't really need this - types are bound globally anyway. */
     if (book_type != SCM_UNDEFINED)
-      scm_protect_object (book_type);
+      scm_gc_protect_object (book_type);
   }
   
   return gw_wcp_assimilate_ptr ((void *) book, book_type);
@@ -2371,7 +2371,7 @@ qof_session_to_scm (QofSession *session)
 
     /* don't really need this - types are bound globally anyway. */
     if (session_type != SCM_UNDEFINED)
-      scm_protect_object (session_type);
+      scm_gc_protect_object (session_type);
   }
 
   return gw_wcp_assimilate_ptr ((void *) session, session_type);

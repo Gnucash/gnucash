@@ -267,7 +267,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
                                            mc, 
                                            N_("Account Tree"),
                                            N_("Name of account view"));
-  scm_protect_object(win->name_change_callback_id);
+  scm_gc_protect_object(win->name_change_callback_id);
 
   gnc_acct_tree_window_create_menu(win, mc);
   gnc_acct_tree_window_create_toolbar(win, mc);
@@ -1091,9 +1091,9 @@ gnc_acct_tree_window_options_new(GNCAcctTreeWin * win) {
   SCM func = scm_c_eval_string("gnc:make-new-acct-tree-window");
   SCM opts_and_id = scm_call_0(func);
   
-  scm_unprotect_object(win->options);
+  scm_gc_unprotect_object(win->options);
   win->options = SCM_CAR(opts_and_id);
-  scm_protect_object(win->options);
+  scm_gc_protect_object(win->options);
   win->options_id = scm_num2int(SCM_CDR(opts_and_id), SCM_ARG1, __FUNCTION__);
 }
 
@@ -1115,7 +1115,7 @@ gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
 
   scm_call_1(free_tree, scm_int2num(win->options_id));
 
-  scm_unprotect_object(win->options);
+  scm_gc_unprotect_object(win->options);
   g_free (win);
 }
 
@@ -1134,7 +1134,7 @@ gnc_acct_tree_window_new(const gchar * url)  {
                                         "Enable EURO support");
   treewin->account_tree = gnc_mainwin_account_tree_new();
   treewin->options = SCM_BOOL_F;
-  scm_protect_object(treewin->options);
+  scm_gc_protect_object(treewin->options);
   treewin->editor_dialog = NULL;
 
   /* get the options and the window ID */ 
@@ -1156,9 +1156,9 @@ gnc_acct_tree_window_new(const gchar * url)  {
       temp = scm_call_1(find_options, scm_int2num(options_id));
 
       if(temp != SCM_BOOL_F) {
-        scm_unprotect_object(treewin->options);
+        scm_gc_unprotect_object(treewin->options);
         treewin->options = temp;
-        scm_protect_object(treewin->options);
+        scm_gc_protect_object(treewin->options);
         treewin->options_id = options_id;
       }
       else {

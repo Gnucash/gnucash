@@ -209,7 +209,7 @@ gnc_option_db_new(SCM guile_options)
   odb = g_new0(GNCOptionDB, 1);
 
   odb->guile_options = guile_options;
-  scm_protect_object(guile_options);
+  scm_gc_protect_object(guile_options);
 
   odb->option_sections = NULL;
   odb->options_dirty = FALSE;
@@ -369,7 +369,7 @@ gnc_option_db_destroy(GNCOptionDB *odb)
     {
       GNCOption *option = onode->data;
 
-      scm_unprotect_object(option->guile_option);
+      scm_gc_unprotect_object(option->guile_option);
       g_free (option);
     }
 
@@ -397,7 +397,7 @@ gnc_option_db_destroy(GNCOptionDB *odb)
     option_dbs = NULL;
   }
 
-  scm_unprotect_object(odb->guile_options);
+  scm_gc_unprotect_object(odb->guile_options);
   odb->guile_options = SCM_UNDEFINED;
 
   g_free(odb);
@@ -458,13 +458,13 @@ gnc_option_db_register_change_callback(GNCOptionDB *odb,
   if(void_type == SCM_UNDEFINED) {
     void_type = scm_c_eval_string("<gw:void*>");
     /* don't really need this - types are bound globally anyway. */
-    if(void_type != SCM_UNDEFINED) scm_protect_object(void_type);
+    if(void_type != SCM_UNDEFINED) scm_gc_protect_object(void_type);
   }
   if(callback_type == SCM_UNDEFINED) {
     callback_type = scm_c_eval_string("<gnc:OptionChangeCallback>");
     /* don't really need this - types are bound globally anyway. */
     if(callback_type != SCM_UNDEFINED)
-      scm_protect_object(callback_type);
+      scm_gc_protect_object(callback_type);
   }
 
   /* Now build the args list for apply */
@@ -1461,7 +1461,7 @@ gncp_option_db_register_option(GNCOptionDBHandle handle, SCM guile_option)
   option->odb = odb;
 
   /* Prevent guile from garbage collecting the option */
-  scm_protect_object(guile_option);
+  scm_gc_protect_object(guile_option);
 
   /* Make the section structure */
   section = g_new0(GNCOptionSection, 1);

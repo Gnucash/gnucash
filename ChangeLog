@@ -1,3 +1,17 @@
+2004-06-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnc-module/gnc-module.scm: create (and export) a re-export macro
+	  is guile doesn't already provide one.  Then re-export the symbols
+	  instead of exporting them.  Fixes some deprecated guile warnings.
+	* src/guile-mappings.h: convert scm_gc_{un,}protect_object() back
+	  to its pre-1.6 type for earlier guiles, but upconvert to the new
+	  type to fix a deprecated warning.  Note that g-wrap is still
+	  outputting deprecated code.
+	* lots of other files:
+	  convert scm_{un,}protect_object -> scm_gc_{un,}protect_object because
+	  the former is now deprecated in guile.  Fixes a bunch of
+	  GUILE_WARN_DEPRECATED warnings (but probably not all of them).
+
 2004-06-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-numeric.c: small change to the 128-bit math
