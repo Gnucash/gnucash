@@ -190,7 +190,7 @@ gboolean qof_object_register (const QofObject *object)
   g_return_val_if_fail (object_is_initialized, FALSE);
 
   if (!object) return FALSE;
-  g_return_val_if_fail (object->interface_version == GNC_OBJECT_VERSION, FALSE);
+  g_return_val_if_fail (object->interface_version == QOF_OBJECT_VERSION, FALSE);
 
   if (g_list_index (object_modules, (gpointer)object) == -1)
     object_modules = g_list_prepend (object_modules, (gpointer)object);

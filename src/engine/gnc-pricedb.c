@@ -1951,7 +1951,7 @@ pricedb_mark_clean(QofBook *book)
 
 static QofObject pricedb_object_def = 
 {
-  interface_version: GNC_OBJECT_VERSION,
+  interface_version: QOF_OBJECT_VERSION,
   name:              GNC_ID_PRICEDB,
   type_label:        "PriceDB",
   book_begin:        pricedb_book_begin,

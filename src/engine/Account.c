@@ -487,7 +487,7 @@ xaccAccountCommitEdit (Account *acc)
       /* XXX hack alert FIXME implement account rollback */
       PERR (" backend asked engine to rollback, but this isn't"
             " handled yet. Return code=%d", errcode);
-      err = xaccBackendGetMessage(be);
+      err = qof_backend_get_message(be);
       /* g_strdup here, because err needs to be g_freed if from Backend */
       err = err ? err : g_strdup(_("Error message not available"));
       /* Translators: %d is the (internal) error number. %s is the
@@ -3176,7 +3176,7 @@ account_foreach (QofBook *book, QofEntityForeachCB cb, gpointer ud)
 }
 
 static QofObject account_object_def = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   GNC_ID_ACCOUNT,
   "Account",
   NULL,				/* book_begin */

@@ -57,7 +57,8 @@ qof_backend_get_error (QofBackend *be)
 }
 
 void
-qof_backend_set_message (QofBackend *be, const char *format, ...) {
+qof_backend_set_message (QofBackend *be, const char *format, ...) 
+{
    va_list args;
    char * buffer;
    
@@ -75,7 +76,8 @@ qof_backend_set_message (QofBackend *be, const char *format, ...) {
 
 /* This should always return a valid char * */
 char *
-xaccBackendGetMessage (QofBackend *be) {
+qof_backend_get_message (QofBackend *be) 
+{
    char * msg;
    
    if (!be) return g_strdup("ERR_BACKEND_NO_BACKEND");

@@ -3561,7 +3561,7 @@ split_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
 /* hook into the gncObject registry */
 
 static QofObject split_object_def = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   GNC_ID_SPLIT,
   "Split",
   NULL,				/* book_begin */
@@ -3647,7 +3647,7 @@ trans_foreach (QofBook *book, QofEntityForeachCB fcn, gpointer user_data)
 }
 
 static QofObject trans_object_def = {
-  GNC_OBJECT_VERSION,
+  QOF_OBJECT_VERSION,
   GNC_ID_TRANS,
   "Transaction",
   NULL,				/* book_begin */

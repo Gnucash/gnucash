@@ -1126,7 +1126,7 @@ commodity_table_book_end (QofBook *book)
  */
 static QofObject commodity_table_object_def = 
 {
-  interface_version: GNC_OBJECT_VERSION,
+  interface_version: QOF_OBJECT_VERSION,
   name:              GNC_ID_COMMODITY_TABLE,
   type_label:        "CommodityTable",
   book_begin:        commodity_table_book_begin,

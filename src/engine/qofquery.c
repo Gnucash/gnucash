@@ -1260,7 +1260,8 @@ gboolean qof_query_sort_get_increasing (QofQuerySort *qs)
   return qs->increasing;
 }
 
-static gboolean gncQueryTermEqual (QofQueryTerm_t qt1, QofQueryTerm_t qt2)
+static gboolean 
+qof_query_term_equal (QofQueryTerm_t qt1, QofQueryTerm_t qt2)
 {
   if (qt1 == qt2) return TRUE;
   if (!qt1 || !qt2) return FALSE;
@@ -1270,7 +1271,8 @@ static gboolean gncQueryTermEqual (QofQueryTerm_t qt1, QofQueryTerm_t qt2)
   return qof_query_core_predicate_equal (qt1->pdata, qt2->pdata);
 }
 
-static gboolean gncQuerySortEqual (QofQuerySort* qs1, QofQuerySort* qs2)
+static gboolean 
+qof_query_sort_equal (QofQuerySort* qs1, QofQuerySort* qs2)
 {
   if (qs1 == qs2) return TRUE;
   if (!qs1 || !qs2) return FALSE;
@@ -1304,15 +1306,15 @@ gboolean qof_query_equal (QofQuery *q1, QofQuery *q2)
     if (g_list_length (and1) != g_list_length (and2)) return FALSE;
 
     for ( ; and1; and1 = and1->next, and2 = and2->next)
-      if (!gncQueryTermEqual (and1->data, and2->data))
+      if (!qof_query_term_equal (and1->data, and2->data))
         return FALSE;
   }
 
-  if (!gncQuerySortEqual (&(q1->primary_sort), &(q2->primary_sort)))
+  if (!qof_query_sort_equal (&(q1->primary_sort), &(q2->primary_sort)))
     return FALSE;
-  if (!gncQuerySortEqual (&(q1->secondary_sort), &(q2->secondary_sort)))
+  if (!qof_query_sort_equal (&(q1->secondary_sort), &(q2->secondary_sort)))
     return FALSE;
-  if (!gncQuerySortEqual (&(q1->tertiary_sort), &(q2->tertiary_sort)))
+  if (!qof_query_sort_equal (&(q1->tertiary_sort), &(q2->tertiary_sort)))
     return FALSE;
 
   return TRUE;

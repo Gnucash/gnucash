@@ -13,7 +13,7 @@ foreach (@files)
 
 	while (<AF>)
 	{
-		s/GNCBook/QofBook/g;
+		# s/GNCBook/QofBook/g;
 
 		# s/GncObject_t/QofObject/g;
 		# s/gncObjectLookup/qof_object_lookup/g;
@@ -179,6 +179,7 @@ foreach (@files)
 		# s/xaccForeachEntity/qof_entity_foreach/g;
 
 		# s/foreachObjectCB/QofEntityForeachCB/g;
+		s/GNC_OBJECT_VERSION/QOF_OBJECT_VERSION/g;
 
 		# s/GNCSession/QofSession/g;
 		# s/gnc_session/qof_session/g;
@@ -193,7 +194,7 @@ foreach (@files)
 		# s/xaccBackendSetError/qof_backend_set_error/g;
 		# s/xaccBackendGetError/qof_backend_get_error/g;
 		# s/xaccBackendSetMessage/qof_backend_set_message/g;
-		# s/xaccBackendSetMessage/qof_backend_get_message/g;
+		# s/xaccBackendGetMessage/qof_backend_get_message/g;
 		# s/xaccInitBackend/qof_backend_init/g;
 
 

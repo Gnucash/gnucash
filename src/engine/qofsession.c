@@ -32,6 +32,13 @@
  * Copyright (c) 2000 Dave Peticolas
  */
 
+  /* TODO: XXX we should probably move this resolve function to the
+	* file backend.  I think the idea would be to open the backend
+	* and then ask it if it can contact it's storage media (disk,
+	* network, server, etc.) and abort if it can't.  Mal-formed
+	* file URL's would be handled the same way!
+	*/
+
 #include "config.h"
 
 #include <dlfcn.h>
@@ -350,7 +357,7 @@ qof_session_destroy_backend (QofSession *session)
   if (session->backend)
   {
     /* clear any error message */
-    char * msg = xaccBackendGetMessage (session->backend);
+    char * msg = qof_backend_get_message (session->backend);
     g_free (msg);
 
     /* Then destroy the backend */
@@ -398,6 +405,12 @@ qof_session_begin (QofSession *session, const char * book_id,
   /* Store the sessionid URL  */
   session->book_id = g_strdup (book_id);
 
+  /* XXX we should probably move this resolve function to the
+	* file backend.  I think the idea would be to open the backend
+	* and then ask it if it can contact it's storage media (disk,
+	* network, server, etc.) and abort if it can't.  Mal-formed
+	* file URL's would be handled the same way!
+	*/
   /* ResolveURL tries to find the file in the file system. */
   session->fullpath = xaccResolveURL(book_id);
   if (!session->fullpath)
@@ -450,7 +463,7 @@ qof_session_begin (QofSession *session, const char * book_id,
                                   create_if_nonexistent);
       PINFO("Done running session_begin on backend");
       err = qof_backend_get_error(session->backend);
-      msg = xaccBackendGetMessage(session->backend);
+      msg = qof_backend_get_message(session->backend);
       if (err != ERR_BACKEND_NO_ERR)
       {
           g_free(session->fullpath);

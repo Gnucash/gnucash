@@ -168,7 +168,7 @@
  *    a stack) of all the errors that have occurred.
  *
  * For support of book partitioning, use special "Book"  begin_edit()
- *    and commit_edit() GNC_ID types.
+ *    and commit_edit() QOF_ID types.
  *
  *    Call the book begin() at the begining of a book partitioning.  A
  *    'partitioning' is the splitting off of a chunk of the current
@@ -282,14 +282,14 @@ struct _QofBackend
  * The qof_backend_set_message() assigns a string to the backend error
  *   message.
  *
- * The xaccBackendGetMessage() pops the error message string from
+ * The qof_backend_get_message() pops the error message string from
  *   the Backend.  This string should be freed with g_free().
  */
 
 void qof_backend_set_error (QofBackend *be, QofBackendError err);
 QofBackendError qof_backend_get_error (QofBackend *be);
 void qof_backend_set_message(QofBackend *be, const char *format, ...);
-char * xaccBackendGetMessage(QofBackend *be);
+char * qof_backend_get_message(QofBackend *be);
 
 void qof_backend_init(QofBackend *be);
 

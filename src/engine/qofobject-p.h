@@ -1,5 +1,5 @@
 /********************************************************************\
- * gncObjectP.h -- the Core Object Registration/Lookup Interface    *
+ * qofobject-p.h -- the private Object Registration/Lookup Interface   *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,17 +20,17 @@
 \********************************************************************/
 /** @addtogroup Engine
     @{ */
-/** @file gncObject.h
+/** @file qofobject-p.h
  * @breif the Core Object Registration/Lookup Private Interface
  *
  * @author Copyright (c) 2001,2002, Derek Atkins <warlord@MIT.EDU>
  */
 
-#ifndef GNC_OBJECTP_H_
-#define GNC_OBJECTP_H_
+#ifndef QOF_OBJECT_P_H_
+#define QOF_OBJECT_P_H_
 
-#include "gncObject.h"
 #include "qofbook.h"
+#include "qofobject.h"
 
 /* Initialize the object registration subsystem */
 void qof_object_initialize (void);
@@ -44,5 +44,5 @@ void qof_object_book_end (QofBook *book);
 gboolean qof_object_is_dirty (QofBook *book);
 void qof_object_mark_clean (QofBook *book);
 
-#endif /* GNC_OBJECTP_H_ */
+#endif /* QOF_OBJECT_P_H_ */
 /** @} */
