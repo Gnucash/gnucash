@@ -128,6 +128,15 @@
 
   (gw:wrap-function
    mod
+   'gnc:parse-amount
+   '<gw:scm>
+   "gnc_parse_amount_helper"
+   '(((<gw:m-chars-caller-owned> gw:const) string)
+     (<gw:bool> monetary))
+   "Parse the expression and return either a gnc numeric or #f.")
+
+  (gw:wrap-function
+   mod
    'gnc:setup-gettext
    '<gw:void>
    "gnc_setup_gettext"

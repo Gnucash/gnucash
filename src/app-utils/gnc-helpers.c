@@ -117,3 +117,17 @@ gnc_get_account_separator_string (void)
   return sep;
 }
 
+SCM
+gnc_parse_amount_helper (const char * string, gboolean monetary)
+{
+  gnc_numeric result;
+  gboolean ok;
+
+  g_return_val_if_fail (string, SCM_BOOL_F);
+
+  ok = xaccParseAmount (string, monetary, &result, NULL);
+  if (!ok)
+    return SCM_BOOL_F;
+
+  return gnc_numeric_to_scm (result);
+}
