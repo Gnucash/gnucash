@@ -788,15 +788,18 @@ static void split_find_match( struct _transmatcherdialog * matcher,
   struct _matchinfo * match_info;
   double downloaded_split_amount;
   double match_split_amount;
-  time_t temp_time_t;
-  struct tm downloaded_split_date;
-  struct tm match_split_date;
+  time_t match_time, download_time;
+  int datediff_day;
   DEBUG("Begin");
   
-  /*Ignore the split if the transaction is open for edit, meaning it was just downloaded
-    Ignore the split if the transaction has an online ID, unless overriden in prefs */
-  if(xaccTransIsOpen(xaccSplitGetParent(split))==FALSE&&
-     (gnc_import_get_trans_online_id(xaccSplitGetParent(split))==NULL || SHOW_TRANSACTIONS_WITH_UNIQUE_ID==TRUE))
+  /*Ignore the split if the transaction is open for edit, meaning it
+    was just downloaded.  Ignore the split if the transaction has an
+    online ID , unless overriden in prefs (i.e. do not ignore the
+    split if the online_id kvp is NULL or if it has zero length). */
+  if ((xaccTransIsOpen(xaccSplitGetParent(split)) == FALSE) &&
+      ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))==NULL) ||
+       (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split))) == 0) ||
+       SHOW_TRANSACTIONS_WITH_UNIQUE_ID==TRUE))
     {
       match_info = g_new0(struct _matchinfo,1);
     
@@ -807,10 +810,8 @@ static void split_find_match( struct _transmatcherdialog * matcher,
       /*DEBUG(" downloaded_split_amount=%f", downloaded_split_amount);*/
       match_split_amount=gnc_numeric_to_double(xaccSplitGetAmount(split));
       /*DEBUG(" match_split_amount=%f", match_split_amount);*/
-      temp_time_t = xaccTransGetDate(xaccSplitGetParent(split));
-      match_split_date = *localtime(&temp_time_t);
-      temp_time_t = xaccTransGetDate(transaction_info->trans);
-      downloaded_split_date = *localtime(&temp_time_t);
+      match_time = xaccTransGetDate (xaccSplitGetParent (split));
+      download_time = xaccTransGetDate (transaction_info->trans);
     
       /* Matching heuristics */
       match_info->probability=0;
@@ -819,8 +820,8 @@ static void split_find_match( struct _transmatcherdialog * matcher,
       if(gnc_numeric_equal(xaccSplitGetAmount(transaction_info->first_split),
 			   xaccSplitGetAmount(split)))
 	{
-	  match_info->probability=match_info->probability+2;
-	  DEBUG("heuristics:  probability + 2 (amount)");
+	  match_info->probability=match_info->probability+3;
+	  DEBUG("heuristics:  probability + 3 (amount)");
 	}
       else if(fabs(downloaded_split_amount-match_split_amount)<=MATCH_ATM_FEE_TRESHOLD)
 	{
@@ -838,29 +839,24 @@ static void split_find_match( struct _transmatcherdialog * matcher,
 	}
       
       /* Date heuristics */
-      if(downloaded_split_date.tm_year==match_split_date.tm_year)
+      datediff_day = abs(match_time - download_time)/86400;
+      /* Sorry, there are not really functions around at all that
+	 provide for less hacky calculation of days of date
+	 differences. Whatever. On the other hand, the difference
+	 calculation itself will work regardless of month/year
+	 turnarounds. */
+      /*DEBUG("diff day %d", datediff_day);*/
+      if (datediff_day == 0)
 	{
-	  if(downloaded_split_date.tm_yday==match_split_date.tm_yday)
-	    {
-	      match_info->probability=match_info->probability+2;
-	      DEBUG("heuristics:  probability + 2 (date)");
-	    }
-	  else if(downloaded_split_date.tm_yday>match_split_date.tm_yday&&
-		  downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD)
-	    {
-	      match_info->probability=match_info->probability+1;
-	      DEBUG("heuristics:  probability + 1 (date)");
-	    }
-	  /*Note: The above won't won't work as expected for transactions close to the end of the year.
-	    So we have this special case to handle it:*/
-	  else if(downloaded_split_date.tm_year==match_split_date.tm_year+1&&
-		  match_split_date.tm_yday+MATCH_DATE_TRESHOLD>=365&&
-		  downloaded_split_date.tm_yday<=match_split_date.tm_yday+MATCH_DATE_TRESHOLD-365)
-	    {
-	      match_info->probability=match_info->probability+1;
-	      DEBUG("heuristics:  probability + 1 (date special case)");
-	    }
+	  match_info->probability=match_info->probability+2;
+	  DEBUG("heuristics:  probability + 2 (date)");
 	}
+      else if (datediff_day <= MATCH_DATE_TRESHOLD)
+	{
+	  match_info->probability=match_info->probability+1;
+	  DEBUG("heuristics:  probability + 1 (date)");
+	}
+      
     
       /* Memo heuristics */  
       if((strcmp(xaccSplitGetMemo(transaction_info->first_split),
@@ -902,7 +898,8 @@ static void split_find_match( struct _transmatcherdialog * matcher,
 	  DEBUG("heuristics:  probability + 1 (description)");	
 	}
 
-      if(gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL)
+      if ((gnc_import_get_trans_online_id(xaccSplitGetParent(split))!=NULL) &&
+	  (strlen(gnc_import_get_trans_online_id(xaccSplitGetParent(split)))>0))
 	{
 	  /*If the pref is to show match even with online ID's, reverse the confidence value to distinguish them */
 	  match_info->probability=0-match_info->probability;
@@ -992,7 +989,10 @@ void gnc_import_add_trans(Transaction *trans)
 
   /*For each split in the transaction, check if the parent account contains a transaction
     with the same online id.*/
-  for(i=0;(source_split=xaccTransGetSplit(trans,i))!=NULL&&(trans_not_found==TRUE);i++)
+  for (i=0; 
+       ((source_split = xaccTransGetSplit(trans, i)) != NULL) &&
+	 (trans_not_found==TRUE);
+       i++)
     {
       DEBUG("%s%d%s","Checking split ",i," for duplicates");
       dest_acct=xaccSplitGetAccount(source_split);
