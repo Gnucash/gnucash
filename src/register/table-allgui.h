@@ -413,8 +413,10 @@ void gnc_table_leave_update(Table *table, VirtualLocation virt_loc);
 
 const char * gnc_table_modify_update(Table *table,
                                      VirtualLocation virt_loc,
-                                     const char *change,
-                                     const char *newval,
+                                     const GdkWChar *change,
+                                     int change_len,
+                                     const GdkWChar *newval,
+                                     int newval_len,
                                      int *cursor_position,
                                      int *start_selection,
                                      int *end_selection);

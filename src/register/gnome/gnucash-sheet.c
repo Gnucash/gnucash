@@ -42,6 +42,10 @@
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  630
 
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GTK_REG;
+
 static guint gnucash_register_initial_rows = 15;
 
 static void gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet);
@@ -710,6 +714,8 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         GtkEditable *editable;
         Table *table = sheet->table;
         VirtualLocation virt_loc;
+        GdkWChar *new_text_wc;
+        int new_text_len;
 
         const char *retval;
 
@@ -728,10 +734,20 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         end_sel = MAX(editable->selection_start_pos,
                       editable->selection_end_pos);
 
+        new_text_len = gnc_mbstowcs (&new_text_wc, new_text);
+        if (new_text_len < 0)
+        {
+                PERR ("bad text: %s", new_text);
+                return NULL;
+        }
+
         retval = gnc_table_modify_update (table, virt_loc,
-					  new_text, new_text,
+                                          new_text_wc, new_text_len,
+                                          new_text_wc, new_text_len,
                                           &cursor_position,
                                           &start_sel, &end_sel);
+
+        g_free (new_text_wc);
 
         if (retval) {
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
@@ -758,8 +774,8 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
 
 static void
 gnucash_sheet_insert_cb (GtkWidget *widget,
-                         const gchar *new_text,
-                         const gint new_text_length,
+                         const gchar *insert_text,
+                         const gint insert_text_len,
                          gint *position,
                          GnucashSheet *sheet)
 {
@@ -767,16 +783,23 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         Table *table = sheet->table;
         VirtualLocation virt_loc;
 
+        GdkWChar *new_text_w;
+        GdkWChar *old_text_w;
+        GdkWChar *change_text_w;
+
+        int new_text_len;
+        int old_text_len;
+        int change_text_len;
+
         const char *old_text;
-        char *newval = NULL;
-        char *change = NULL;
         const char *retval;
+        char *new_text;
 
         int start_sel, end_sel;
         int old_position;
-        int old_len;
+        int i;
 
-        if (!new_text_length)
+        if (insert_text_len <= 0)
                 return;
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
@@ -784,36 +807,76 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
         if (!gnc_table_virtual_loc_valid (table, virt_loc, FALSE))
                 return;
 
+        /* insert_text is not NULL-terminated, how annoying */
+        {
+                char *temp;
+
+                temp = g_new (char, insert_text_len + 1);
+                strncpy (temp, insert_text, insert_text_len);
+                temp[insert_text_len] = '\0';
+
+                change_text_w = g_new0 (GdkWChar, insert_text_len + 1);
+                change_text_len = gdk_mbstowcs (change_text_w, temp,
+                                                insert_text_len);
+
+                g_free (temp);
+        }
+
+        if (change_text_len < 0)
+        {
+                PERR ("bad change text conversion");
+                g_free (change_text_w);
+                return;
+        }
+
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
         if (old_text == NULL)
                 old_text = "";
-        old_len = strlen(old_text);
+
+        old_text_len = gnc_mbstowcs (&old_text_w, old_text);
+        if (old_text_len < 0)
+        {
+                PERR ("bad old text conversion");
+                g_free (change_text_w);
+                return;
+        }
+
         old_position = *position;
 
-        /* we set newval to what the entry contents would be if
+        /* we set new_text_w to what the entry contents would be if
            the insert was processed */
-        newval = g_new0(char, strlen(old_text) + new_text_length + 1);
+        new_text_len = old_text_len + change_text_len;
+        new_text_w = g_new0 (GdkWChar, new_text_len + 1);
 
-        strncat (newval, old_text, *position);
-        strncat (newval, new_text, new_text_length);
-        strncat (newval, &old_text[*position], old_len - *position);
+        for (i = 0; i < old_position; i++)
+                new_text_w[i] = old_text_w[i];
 
-        change = g_new0 (char, new_text_length  + 1);
-        strncpy (change, new_text, new_text_length);
+        for (i = old_position; i < old_position + change_text_len; i++)
+                new_text_w[i] = change_text_w[i - old_position];
 
-        editable = GTK_EDITABLE(sheet->entry);
+        for (i = old_position + change_text_len; i < new_text_len; i++)
+                new_text_w[i] = old_text_w[i - change_text_len];
 
-        start_sel = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_sel = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
+        new_text_w[new_text_len] = 0;
 
-        retval = gnc_table_modify_update (table, virt_loc, change, newval,
+        new_text = gnc_wcstombs (new_text_w);
+
+        editable = GTK_EDITABLE (sheet->entry);
+
+        start_sel = MIN (editable->selection_start_pos,
+                         editable->selection_end_pos);
+        end_sel = MAX (editable->selection_start_pos,
+                       editable->selection_end_pos);
+
+        retval = gnc_table_modify_update (table, virt_loc,
+                                          change_text_w, change_text_len,
+                                          new_text_w, new_text_len,
                                           position, &start_sel, &end_sel);
 
         if (retval &&
-            ((safe_strcmp (retval, newval) != 0) ||
-             (*position != old_position))) {
+            ((safe_strcmp (retval, new_text) != 0) ||
+             (*position != old_position)))
+        {
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
                                           sheet->insert_signal);
 
@@ -831,21 +894,24 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
                                               "insert_text");
         }
-        else if (retval == NULL) {
+        else if (retval == NULL)
+        {
                 retval = old_text;
 
                 /* the entry was disallowed, so we stop the insert signal */
-                gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
+                gtk_signal_emit_stop_by_name (GTK_OBJECT (sheet->entry),
                                               "insert_text");
         }
 
         if (*position < 0)
-                *position = strlen(retval);
+                *position = strlen (retval);
 
-        gtk_entry_select_region(GTK_ENTRY(sheet->entry), start_sel, end_sel);
+        gtk_entry_select_region (GTK_ENTRY(sheet->entry), start_sel, end_sel);
 
-        g_free (change);
-        g_free (newval);
+        g_free (change_text_w);
+        g_free (old_text_w);
+        g_free (new_text_w);
+        g_free (new_text);
 }
 
 
@@ -859,12 +925,18 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         Table *table = sheet->table;
         VirtualLocation virt_loc;
 
+        GdkWChar *new_text_w;
+        GdkWChar *old_text_w;
+        int new_text_len;
+        int old_text_len;
+
         const char *old_text;
-        char *newval = NULL;
-        const char *retval = NULL;
+        const char *retval;
+        char *new_text;
 
         int cursor_position = start_pos;
         int start_sel, end_sel;
+        int i;
 
         if (end_pos <= start_pos)
                 return;
@@ -875,28 +947,42 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                 return;
 
         old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
-
-        if (old_text == NULL)
+        if (!old_text)
                 old_text = "";
 
-        newval = g_new0 (char, strlen(old_text) - (end_pos - start_pos) + 1);
+        old_text_len = gnc_mbstowcs (&old_text_w, old_text);
+        if (old_text_len < 0)
+                return;
 
-        strncat (newval, old_text, start_pos);
-        strcat (newval, &old_text[end_pos]);
+        new_text_len = old_text_len - (end_pos - start_pos);
 
-        editable = GTK_EDITABLE(sheet->entry);
+        new_text_w = g_new0 (GdkWChar, new_text_len + 1);
 
-        start_sel = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_sel = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
+        for (i = 0; i < start_pos; i++)
+                new_text_w[i] = old_text_w[i];
+
+        for (i = end_pos; i < old_text_len; i++)
+                new_text_w[i - (end_pos - start_pos)] = old_text_w[i];
+
+        new_text_w[new_text_len] = 0;
+
+        new_text = gnc_wcstombs (new_text_w);
+
+        editable = GTK_EDITABLE (sheet->entry);
+
+        start_sel = MIN (editable->selection_start_pos,
+                         editable->selection_end_pos);
+        end_sel = MAX (editable->selection_start_pos,
+                       editable->selection_end_pos);
 
         retval = gnc_table_modify_update (table, virt_loc,
-                                          NULL, newval,
+                                          NULL, 0,
+                                          new_text_w, new_text_len,
                                           &cursor_position,
                                           &start_sel, &end_sel);
 
-        if (retval && (safe_strcmp (retval, newval) != 0)) {
+        if (retval && (safe_strcmp (retval, new_text) != 0))
+        {
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
                                           sheet->insert_signal);
 
@@ -914,7 +1000,8 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
                                               "delete_text");
         }
-        else if (retval == NULL) {
+        else if (retval == NULL)
+        {
                 /* the entry was disallowed, so we stop the delete signal */
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
                                               "delete_text");
@@ -923,7 +1010,9 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         gtk_editable_set_position (editable, cursor_position);
         gtk_entry_select_region(GTK_ENTRY(sheet->entry), start_sel, end_sel);
 
-        g_free (newval);
+        g_free (old_text_w);
+        g_free (new_text_w);
+        g_free (new_text);
 }
 
 

@@ -1,10 +1,33 @@
+2000-12-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/gnome/quickfillcell-gnome.c: add support for mb
+	char sets
+
+	* src/register/gnome/pricecell-gnome.c: add support for mb char
+	sets
+
+	* src/register/gnome/gnucash-sheet.c: add support for mb char sets
+
+	* src/register/gnome/datecell-gnome.c: add support for mb char
+	sets
+
+	* src/register/gnome/combocell-gnome.c: add support for mb char
+	sets
+
+	* src/register/numcell.c: add support for mb char sets
+
+	* src/register/basiccell.c: add support for mb char sets
+
+	* src/register/QuickFill.c: add support for mb char sets
+
 2000-12-14  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/guile/Makefile.am: replace hardwired g-wrap module dir
 	with value from configure.in.
 
-	* src/engine/gnc-associate-account.[ch] : New files with code for associating
-	income/expense accounts with a stock account.  Not yet hooked up to the UI.
+	* src/engine/gnc-associate-account.[ch] : New files with code for
+	associating income/expense accounts with a stock account. Not yet
+	hooked up to the UI.
 
 2000-12-13  Rob Browning  <rlb@cs.utexas.edu>
 

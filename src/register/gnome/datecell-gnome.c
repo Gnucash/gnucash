@@ -65,13 +65,15 @@ typedef struct _PopBox
 
 static void block_picker_signals (DateCell *cell);
 static void unblock_picker_signals (DateCell *cell);
-static void realizeDate (BasicCell *bcell, void *w);
+static void realizeDate (BasicCell *bcell, gpointer w);
 static void setDateCellValue (BasicCell *bcell, const char *value);
 static void moveDate (BasicCell *bcell, VirtualLocation virt_loc);
 static void destroyDate (BasicCell *bcell);
 static void DateMV (BasicCell *_cell,
-                    const char *change,
-                    const char *newval,
+                    const GdkWChar *change,
+                    int change_len,
+                    const GdkWChar *newval,
+                    int newval_len,
                     int *cursor_position,
                     int *start_selection,
                     int *end_selection);
@@ -207,8 +209,7 @@ xaccInitDateCell (DateCell *cell)
   box->date = *localtime (&secs);
   printDateCellDate (cell, buff);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (buff);
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
 }
 
 DateCell *
@@ -412,8 +413,7 @@ xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
 
   printDate (buff, dada.tm_mday, dada.tm_mon + 1, dada.tm_year + 1900);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (buff);
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -440,8 +440,7 @@ xaccSetDateCellValueSecs (DateCell *cell, time_t secs)
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (buff);
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -505,8 +504,7 @@ xaccSetDateCellValueSecsL (DateCell *cell, long long secs)
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (buff);
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -537,8 +535,7 @@ xaccCommitDateCell (DateCell *cell)
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (buff);
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -555,8 +552,10 @@ xaccCommitDateCell (DateCell *cell)
 
 static void
 DateMV (BasicCell *_cell,
-        const char *change,
-        const char *newval,
+        const GdkWChar *change,
+        int change_len,
+        const GdkWChar *newval,
+        int newval_len,
         int *cursor_position,
         int *start_selection,
         int *end_selection)
@@ -569,14 +568,16 @@ DateMV (BasicCell *_cell,
 
   if (box->in_date_select)
   {
-    xaccSetBasicCellValue (_cell, newval);
+    char *newval_mb = gnc_wcstombs (newval);
+    xaccSetBasicCellValue (_cell, newval_mb);
+    g_free (newval_mb);
     return;
   }
 
   /* if user hit backspace, accept the change */
   if (change == NULL)
     accept = TRUE;
-  else if ('\0' == change[0])
+  else if (change_len == 0)
     accept = TRUE;
   else
   {
@@ -584,7 +585,7 @@ DateMV (BasicCell *_cell,
     char separator = dateSeparator ();
     gboolean ok = TRUE;
 
-    for (i = 0; '\0' != change[i]; i++)
+    for (i = 0; i < change_len; i++)
     {
       /* accept only numbers or a date separator. Note that the
        * separator of '-' (for DATE_FORMAT_ISO) takes precedence
@@ -596,8 +597,8 @@ DateMV (BasicCell *_cell,
         count++;
     }
 
-    for (i=0; '\0' != _cell->value[i]; i++)
-      if (separator == _cell->value[i])
+    for (i = 0; i < _cell->value_len; i++)
+      if (separator == _cell->value_w[i])
         count++;
 
     if (2 < count)
@@ -610,9 +611,11 @@ DateMV (BasicCell *_cell,
   /* keep a copy of the new value */
   if (accept)
   {
-    g_free (cell->cell.value);
-    cell->cell.value = g_strdup (newval);
-    xaccParseDate (&(box->date), newval);
+    char *newval_mb = gnc_wcstombs (newval);
+
+    xaccSetBasicCellWCValueInternal (&cell->cell, newval);
+    xaccParseDate (&(box->date), newval_mb);
+    g_free (newval_mb);
 
     if (!box->date_picker)
       return;
@@ -628,7 +631,7 @@ DateMV (BasicCell *_cell,
   }
 
   /* otherwise, maybe its an accelerator key. */
-  if (strlen(change) != 1)
+  if (change_len != 1)
     return;
 
   date = &(box->date);
@@ -710,8 +713,7 @@ DateMV (BasicCell *_cell,
 
   printDate (buff, date->tm_mday, date->tm_mon + 1, date->tm_year + 1900);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (buff);
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
 
   if (!box->date_picker)
     return;
@@ -843,8 +845,7 @@ setDateCellValue (BasicCell *_cell, const char *str)
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (buff);
+  xaccSetBasicCellValueInternal (_cell, buff);
 
   if (!box->date_picker)
     return;

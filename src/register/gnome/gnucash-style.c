@@ -24,17 +24,13 @@
 
 #include "config.h"
 
+#include <gnome.h>
+
 #include "gnucash-color.h"
 #include "gnucash-grid.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
 #include "messages.h"
-
-#include "date.h"
-
-
-#define DEFAULT_FONT _("register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"+22)
-#define HINT_FONT    _("register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"+19)
 
 
 #define DEFAULT_STYLE_WIDTH 680
@@ -47,6 +43,7 @@ static char *register_hint_font_name = NULL;
 
 static gboolean use_vertical_lines = TRUE;
 static gboolean use_horizontal_lines = TRUE;
+
 
 static char *
 style_get_key (SheetBlockStyle *style)
@@ -737,58 +734,66 @@ gnucash_style_unref (SheetBlockStyle *style)
 }
 
 void
-gnucash_style_set_register_font_name(const char *name)
+gnucash_style_set_register_font_name (const char *name)
 {
-        g_free(register_font_name);
-        register_font_name = g_strdup(name);
+        g_free (register_font_name);
+        register_font_name = g_strdup (name);
 
         if (gnucash_register_font != NULL)
         {
-                gdk_font_unref(gnucash_register_font);
+                gdk_font_unref (gnucash_register_font);
                 gnucash_register_font = NULL;
         }
 
         if (register_font_name != NULL)
-                gnucash_register_font = gdk_fontset_load(register_font_name);
+                gnucash_register_font = gdk_fontset_load (register_font_name);
 
         if (gnucash_register_font == NULL)
         {
-                g_free(register_font_name);
+                const char *name =
+                        gnucash_style_get_default_register_font_name ();
+
+                g_free (register_font_name);
                 register_font_name = NULL;
-                gnucash_register_font = gdk_fontset_load(DEFAULT_FONT);
+
+                gnucash_register_font = gdk_fontset_load (name);
         }
 
-        g_assert(gnucash_register_font != NULL);
+        g_assert (gnucash_register_font != NULL);
 
-        gdk_font_ref(gnucash_register_font);
+        gdk_font_ref (gnucash_register_font);
 }
 
 void
-gnucash_style_set_register_hint_font_name(const char *name)
+gnucash_style_set_register_hint_font_name (const char *name)
 {
-        g_free(register_hint_font_name);
-        register_hint_font_name = g_strdup(name);
+        g_free (register_hint_font_name);
+        register_hint_font_name = g_strdup (name);
 
         if (gnucash_register_hint_font != NULL)
         {
-                gdk_font_unref(gnucash_register_hint_font);
+                gdk_font_unref (gnucash_register_hint_font);
                 gnucash_register_hint_font = NULL;
         }
 
         if (register_hint_font_name != NULL)
                 gnucash_register_hint_font =
-                        gdk_fontset_load(register_hint_font_name);
+                        gdk_fontset_load (register_hint_font_name);
 
         if (gnucash_register_hint_font == NULL)
         {
-                g_free(register_hint_font_name);
+                const char *name =
+                        gnucash_style_get_default_register_hint_font_name ();
+
+                g_free (register_hint_font_name);
                 register_hint_font_name = NULL;
-                gnucash_register_hint_font = gdk_fontset_load(HINT_FONT);
+
+                gnucash_register_hint_font = gdk_fontset_load (name);
         }
 
-        g_assert(gnucash_register_hint_font != NULL);
+        g_assert (gnucash_register_hint_font != NULL);
 
-        gdk_font_ref(gnucash_register_hint_font);
+        gdk_font_ref (gnucash_register_hint_font);
 }
 
 void
@@ -867,19 +872,15 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
 }
 
 const char *
-gnucash_style_get_default_register_font_name(void)
+gnucash_style_get_default_register_font_name (void)
 {
-        /* same as DEFAULT_FONT */
-        /* repeated here so gettext will pick it up */
-        return _("register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"+22);
+        return _("register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*") + 22;
 }
 
 const char *
-gnucash_style_get_default_register_hint_font_name(void)
+gnucash_style_get_default_register_hint_font_name (void)
 {
-        /* same as HINT_FONT */
-        /* repeated here so gettext will pick it up */
-        return _("register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"+19);
+        return _("register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*") + 19;
 }
 
 void

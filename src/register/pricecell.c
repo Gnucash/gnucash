@@ -53,16 +53,9 @@
 extern void xaccPriceGUIInit (PriceCell *cell);
 
 static void xaccInitPriceCell (PriceCell *cell);
-static void PriceSetValue (BasicCell *bcell, const char *);
+static void PriceSetValue (BasicCell *bcell, const char *value);
 static const char * xaccPriceCellPrintValue (PriceCell *cell);
 
-
-/* ================================================ */
-
-#define SET(cell,str) { 			\
-   g_free ((cell)->value);	                \
-   (cell)->value = g_strdup (str);		\
-}
 
 /* ================================================ */
 
@@ -85,14 +78,16 @@ PriceEnter (BasicCell *_cell,
 
 static void
 PriceMV (BasicCell *_cell, 
-         const char *change, 
-         const char *newval,
+         const GdkWChar *change,
+         int change_len,
+         const GdkWChar *newval,
+         int newval_len,
          int *cursor_position,
          int *start_selection,
          int *end_selection)
 {
   PriceCell *cell = (PriceCell *) _cell;
-  struct lconv *lc = gnc_localeconv();
+  struct lconv *lc = gnc_localeconv ();
   const char *toks = "+-*/=()";
   char decimal_point;
   char thousands_sep;
@@ -101,7 +96,7 @@ PriceMV (BasicCell *_cell,
   /* accept the newval string if user action was delete */
   if (change == NULL)
   {
-    SET ((&(cell->cell)), newval);
+    xaccSetBasicCellWCValueInternal (_cell, newval);
     cell->need_to_parse = TRUE;
     return;
   }
@@ -116,7 +111,7 @@ PriceMV (BasicCell *_cell,
   else
     thousands_sep = lc->thousands_sep[0];
 
-  for (i = 0; change[i] != '\0'; i++)
+  for (i = 0; i < change_len; i++)
     if (!isdigit(change[i]) &&
         !isspace(change[i]) &&
         (decimal_point != change[i]) &&
@@ -124,7 +119,7 @@ PriceMV (BasicCell *_cell,
         (strchr (toks, change[i]) == NULL))
       return;
 
-  SET ((&(cell->cell)), newval);
+  xaccSetBasicCellWCValueInternal (_cell, newval);
   cell->need_to_parse = TRUE;
 }
 
@@ -154,14 +149,14 @@ PriceParse (PriceCell *cell)
   else
     cell->amount = gnc_numeric_zero ();
 
-  newval = xaccPriceCellPrintValue(cell);
+  newval = xaccPriceCellPrintValue (cell);
 
   /* If they are identical do nothing */
   if (strcmp(newval, oldval) == 0)
     return;
 
   /* Otherwise, change it */
-  SET ((&(cell->cell)), newval);
+  xaccSetBasicCellValueInternal (&cell->cell, newval);
 }
 
 /* ================================================ */
@@ -185,11 +180,11 @@ PriceHelp (BasicCell *bcell)
 
     help_str = bcell->value;
 
-    return g_strdup(help_str);
+    return g_strdup (help_str);
   }
 
   if (bcell->blank_help != NULL)
-    return g_strdup(bcell->blank_help);
+    return g_strdup (bcell->blank_help);
 
   return NULL;
 }
@@ -222,8 +217,6 @@ xaccInitPriceCell (PriceCell *cell)
    cell->print_info = gnc_default_print_info (FALSE);
 
    cell->need_to_parse = FALSE;
-
-   SET (&(cell->cell), "");
 
    cell->cell.enter_cell = PriceEnter;
    cell->cell.modify_verify = PriceMV;
@@ -282,7 +275,7 @@ xaccSetPriceCellValue (PriceCell * cell, gnc_numeric amount)
   buff = xaccPriceCellPrintValue (cell);
   cell->need_to_parse = FALSE;
 
-  SET (&(cell->cell), buff);
+  xaccSetBasicCellValueInternal (&cell->cell, buff);
 }
 
 /* ================================================ */
@@ -307,7 +300,7 @@ xaccSetPriceCellBlank (PriceCell *cell)
   cell->amount = gnc_numeric_zero ();
   cell->need_to_parse = FALSE;
 
-  SET (&(cell->cell), "");
+  xaccSetBasicCellValueInternal (&cell->cell, "");
 }
 
 /* ================================================ */

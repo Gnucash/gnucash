@@ -37,7 +37,11 @@
 #include <string.h>
 
 #include "basiccell.h"
+#include "gnc-engine-util.h"
 
+
+/* This static indicates the debugging module that this .o belongs to. */
+static short module = MOD_REGISTER;
 
 /* ===================================================== */
 
@@ -76,6 +80,9 @@ xaccClearBasicCell (BasicCell *cell)
   cell->conditionally_changed = 0;
 
   cell->value = NULL;
+  cell->value_w = NULL;
+  cell->value_len = 0;
+
   cell->blank_help = NULL;
   cell->set_value = NULL;
   cell->enter_cell = NULL;
@@ -99,6 +106,8 @@ xaccInitBasicCell (BasicCell *cell)
 
   cell->value = g_strdup ("");
 
+  cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
+
   cell->get_help_value = BasicCellHelpValue;
 }
 
@@ -114,6 +123,9 @@ xaccDestroyBasicCell (BasicCell *cell)
   /* free up data strings */
   g_free (cell->value);
   cell->value = NULL;
+
+  g_free (cell->value_w);
+  cell->value_w = NULL;
 
   g_free (cell->blank_help);
   cell->blank_help = NULL;
@@ -142,13 +154,7 @@ xaccSetBasicCellValue (BasicCell *cell, const char *val)
     cell->set_value = cb;
   }
   else
-  {
-    g_free (cell->value);
-    if (val)
-      cell->value = g_strdup (val);
-    else
-      cell->value = g_strdup ("");
-  }
+    xaccSetBasicCellValueInternal (cell, val);
 }
 
 /* ===================================================== */
@@ -190,6 +196,121 @@ xaccBasicCellSetChanged (BasicCell *cell, gboolean changed)
     return;
 
   cell->changed = changed ? GNC_CELL_CHANGED : 0;
+}
+
+/* ===================================================== */
+
+void
+xaccSetBasicCellValueInternal (BasicCell *cell, const char *value)
+{
+  if (value == NULL)
+    value = "";
+
+  g_free (cell->value);
+  cell->value = g_strdup (value);
+
+  g_free (cell->value_w);
+  cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
+}
+
+void
+xaccSetBasicCellWCValueInternal (BasicCell *cell, const GdkWChar *value)
+{
+  if (!value)
+  {
+    xaccSetBasicCellValueInternal (cell, "");
+    return;
+  }
+
+  g_free (cell->value);
+  cell->value = gnc_wcstombs (value);
+
+  g_free (cell->value_w);
+  cell->value_len = gnc_mbstowcs (&cell->value_w, cell->value);
+}
+
+/* ===================================================== */
+
+gint
+gnc_mbstowcs (GdkWChar **dest_p, const char *src)
+{
+  GdkWChar *dest;
+  gint src_len;
+  gint retval;
+
+  if (!src)
+    return -1;
+
+  src_len = strlen (src);
+
+  dest = g_new0 (GdkWChar, src_len + 1);
+
+  retval = gdk_mbstowcs (dest, src, src_len);
+
+  if (retval < 0)
+  {
+    PERR ("bad multi-byte conversion");
+  }
+
+  if (dest_p)
+    *dest_p = dest;
+  else
+    g_free (dest);
+
+  return retval;
+}
+
+char *
+gnc_wcstombs (const GdkWChar *src)
+{
+  char *retval;
+
+  if (!src)
+    return NULL;
+
+  retval = gdk_wcstombs (src);
+  if (!retval)
+  {
+    PERR ("bad multi-byte conversion");
+  }
+
+  return retval;
+}
+
+gint
+gnc_wcslen (const GdkWChar *src)
+{
+  int len = 0;
+
+  if (!src)
+    return 0;
+
+  while (src[len])
+    len++;
+
+  return len;
+}
+
+GdkWChar *
+gnc_wcsdup (const GdkWChar *src)
+{
+  GdkWChar *dest;
+  int len;
+  int i;
+
+  if (!src)
+    return NULL;
+
+  len = gnc_wcslen (src);
+
+  dest = g_new (GdkWChar, len + 1);
+
+  for (i = 0; i < len; i++)
+    dest[i] = src[i];
+
+  dest[len] = 0;
+
+  return dest;
 }
 
 /* ================== end of file ====================== */

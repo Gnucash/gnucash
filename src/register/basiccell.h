@@ -157,6 +157,7 @@
 #ifndef __BASIC_CELL_H__
 #define __BASIC_CELL_H__
 
+#include <gdk/gdk.h>
 #include <glib.h>
 
 #include "gnc-common.h"
@@ -177,8 +178,10 @@ typedef gboolean (*CellEnterFunc) (BasicCell *cell,
                                    int *end_selection);
 
 typedef void (*CellModifyVerifyFunc) (BasicCell *cell,
-                                      const char *add_str, 
-                                      const char *new_value,
+                                      const GdkWChar *add_str,
+                                      int add_str_len,
+                                      const GdkWChar *new_value,
+                                      int new_value_len,
                                       int *cursor_position,
                                       int *start_selection,
                                       int *end_selection);
@@ -191,8 +194,7 @@ typedef gboolean (*CellDirectUpdateFunc) (BasicCell *cell,
 
 typedef void (*CellLeaveFunc) (BasicCell *cell);
 
-typedef void (*CellRealizeFunc) (BasicCell *cell,
-                                 gpointer gui_handle);
+typedef void (*CellRealizeFunc) (BasicCell *cell, gpointer gui_handle);
 
 typedef void (*CellMoveFunc) (BasicCell *cell, VirtualLocation virt_loc);
 
@@ -204,6 +206,10 @@ struct _BasicCell
 {
   char * value;                  /* current value */
   char * blank_help;             /* help when value is blank */
+
+  GdkWChar * value_w;            /* value as wide chars */
+
+  gint value_len;                /* length of wide chars value */
 
   guint32 changed;               /* 2^32-1 if value modified */
   guint32 conditionally_changed; /* value if modified conditionally */
@@ -242,5 +248,18 @@ void         xaccSetBasicCellBlankHelp (BasicCell *bcell, const char *help);
 char *       xaccBasicCellGetHelp (BasicCell *bcell);
 
 void         xaccBasicCellSetChanged (BasicCell *bcell, gboolean changed);
+
+/* for sub-class use only */
+void         xaccSetBasicCellValueInternal (BasicCell *bcell,
+                                            const char *value);
+
+void         xaccSetBasicCellWCValueInternal (BasicCell *bcell,
+                                              const GdkWChar *value);
+
+/* helper function, allocates new wide char string for conversion */
+gint         gnc_mbstowcs (GdkWChar **dest_p, const char *src);
+char *       gnc_wcstombs (const GdkWChar *src);
+gint         gnc_wcslen   (const GdkWChar *src);
+GdkWChar *   gnc_wcsdup   (const GdkWChar *src);
 
 #endif /* __BASIC_CELL_H__ */

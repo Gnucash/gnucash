@@ -24,7 +24,7 @@
  *
  * Implements gnome dependent quickfill cell functions.
  *
- * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
+ * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
  */
 
 #include "config.h"
@@ -71,7 +71,7 @@ QuickFillDirect (BasicCell *bcell,
                  (*start_selection >= *cursor_position))
                 *cursor_position = *end_selection;
 
-        match = gnc_quickfill_get_string_len_match (cell->qf, bcell->value,
+        match = gnc_quickfill_get_string_len_match (cell->qf, bcell->value_w,
                                                     *cursor_position);
 
         if (match == NULL)
@@ -84,9 +84,9 @@ QuickFillDirect (BasicCell *bcell,
         match_str = gnc_quickfill_string (match);
 
         if ((match_str != NULL) &&
-            (strncmp(match_str, bcell->value, strlen(bcell->value)) == 0) && 
-            (strcmp(match_str, bcell->value) != 0))
-                xaccSetBasicCellValue(bcell, match_str);
+            (strncmp (match_str, bcell->value, strlen (bcell->value)) == 0) &&
+            (strcmp (match_str, bcell->value) != 0))
+                xaccSetBasicCellValue (bcell, match_str);
 
         *cursor_position += prefix_len;
         *start_selection = *cursor_position;

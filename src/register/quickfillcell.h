@@ -58,7 +58,7 @@ typedef struct _QuickFillCell
   QuickFillSort sort;  /* determines order of strings matched.
                         * default is QUICKFILL_LIFO. */
 
-  char *original;      /* original string entered in original case */
+  GdkWChar *original;  /* original string entered in original case */
 } QuickFillCell;
 
 QuickFillCell *  xaccMallocQuickFillCell (void);
@@ -69,8 +69,6 @@ void             xaccSetQuickFillCellValue (QuickFillCell *cell,
                                             const char *value);
 void             xaccSetQuickFillCellSort (QuickFillCell *cell,
                                            QuickFillSort sort);
-void             xaccSetQuickFillCellOriginal (QuickFillCell *cell,
-                                               const char *original);
 
 void             xaccQuickFillAddCompletion (QuickFillCell *cell,
                                              const char *completion);

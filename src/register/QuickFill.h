@@ -28,6 +28,7 @@
 
 #include "config.h"
 
+#include <gdk/gdk.h>
 #include <glib.h>
 
 
@@ -47,13 +48,20 @@ void         gnc_quickfill_destroy (QuickFill *qf);
 
 const char * gnc_quickfill_string (QuickFill *qf);
 
-QuickFill *  gnc_quickfill_get_char_match (QuickFill *qf, char c);
-QuickFill *  gnc_quickfill_get_string_match (QuickFill *qf, const char *str);
+QuickFill *  gnc_quickfill_get_char_match (QuickFill *qf, GdkWChar wc);
+
+QuickFill *  gnc_quickfill_get_string_match (QuickFill *qf,
+                                             const GdkWChar *str);
+
 QuickFill *  gnc_quickfill_get_string_len_match (QuickFill *qf,
-                                                 const char *str, int len);
+                                                 const GdkWChar *str, int len);
+
 QuickFill *  gnc_quickfill_get_unique_len_match (QuickFill *qf, int *len);
 
 void         gnc_quickfill_insert (QuickFill *qf, const char *text,
                                    QuickFillSort sort_code);
+
+void         gnc_quickfill_insert_wc (QuickFill *qf, const GdkWChar *text,
+                                      QuickFillSort sort_code);
 
 #endif /* __QUICKFILL_H__ */

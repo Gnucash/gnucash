@@ -114,9 +114,9 @@ RecnEnter (BasicCell *_cell,
 static void
 xaccInitRecnCell (RecnCell *cell)
 {
-  xaccInitBasicCell(&cell->cell);
+  xaccInitBasicCell (&cell->cell);
 
-  xaccRecnCellSetFlag(cell, NREC);
+  xaccRecnCellSetFlag (cell, NREC);
 
   cell->cell.enter_cell = RecnEnter;
   cell->cell.set_value = RecnSetValue;
@@ -146,8 +146,7 @@ RecnSetValue (BasicCell *_cell, const char *value)
   if (!value || *value == '\0')
   {
     cell->reconciled_flag = NREC;
-    g_free (_cell->value);
-    _cell->value = g_strdup ("");
+    xaccSetBasicCellValueInternal (_cell, "");
     return;
   }
 
@@ -186,10 +185,9 @@ xaccRecnCellSetFlag (RecnCell *cell, char reconciled_flag)
 
   cell->reconciled_flag = reconciled_flag;
 
-  string = RecnCellGetString(reconciled_flag);
+  string = RecnCellGetString (reconciled_flag);
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (string);
+  xaccSetBasicCellValueInternal (&cell->cell, string);
 }
 
 /* ================================================ */

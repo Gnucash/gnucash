@@ -44,15 +44,15 @@
 
 static void
 TextMV (struct _BasicCell *_cell,
-        const char *change, 
-        const char *newval,
+        const GdkWChar *change,
+        int change_len,
+        const GdkWChar *newval,
+        int newval_len,
         int *cursor_position,
         int *start_selection,
         int *end_selection)
 {
-   BasicCell *cell = (BasicCell *) _cell;
-
-   xaccSetBasicCellValue (cell, newval);
+  xaccSetBasicCellWCValueInternal (_cell, newval);
 }
 
 /* ================================================ */
@@ -60,10 +60,12 @@ TextMV (struct _BasicCell *_cell,
 BasicCell *
 xaccMallocTextCell (void)
 {
-   BasicCell *cell;
-   cell = xaccMallocBasicCell();
-   xaccInitTextCell (cell);
-   return cell;
+  BasicCell *cell;
+
+  cell = xaccMallocBasicCell ();
+  xaccInitTextCell (cell);
+
+  return cell;
 }
 
 /* ================================================ */
@@ -71,7 +73,7 @@ xaccMallocTextCell (void)
 void
 xaccInitTextCell (BasicCell *cell)
 {
-   cell->modify_verify = TextMV;
+  cell->modify_verify = TextMV;
 }
 
 /* ================================================ */
@@ -79,8 +81,8 @@ xaccInitTextCell (BasicCell *cell)
 void
 xaccDestroyTextCell (BasicCell *cell)
 {
-   cell->modify_verify = NULL;
-   xaccDestroyBasicCell (cell);
+  cell->modify_verify = NULL;
+  xaccDestroyBasicCell (cell);
 }
 
 /* --------------- end of file ---------------------- */

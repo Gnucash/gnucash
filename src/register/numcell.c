@@ -71,8 +71,10 @@ parse_num(const char *string, long int *num)
 /* ================================================ */
 static void
 NumMV (BasicCell *_cell, 
-       const char *change, 
-       const char *newval,
+       const GdkWChar *change,
+       int change_len,
+       const GdkWChar *newval,
+       int new_val_len,
        int *cursor_position,
        int *start_selection,
        int *end_selection)
@@ -82,18 +84,17 @@ NumMV (BasicCell *_cell,
   gboolean is_num;
   long int number = 0;
 
-  if ((change == NULL) || (change[0] == 0) || /* if we are deleting       */
-      (strlen(change) > 1))                   /* or entering > 1 char     */
+  if ((change == NULL) || (change_len == 0) || /* if we are deleting       */
+      (change_len > 1))                       /* or entering > 1 char     */
     /* then just accept the proposed change */
   {
-    g_free (cell->cell.value);
-    cell->cell.value = g_strdup (newval);
+    xaccSetBasicCellWCValueInternal (&cell->cell, newval);
     return;
   }
 
   /* otherwise, it may be an accelerator key. */
 
-  is_num = parse_num(_cell->value, &number);
+  is_num = parse_num (_cell->value, &number);
 
   if (is_num && (number < 0))
     is_num = FALSE;
@@ -139,22 +140,20 @@ NumMV (BasicCell *_cell,
     if (!is_num)
       number = cell->next_num;
 
-    strcpy(buff, "");
-    snprintf(buff, sizeof(buff), "%ld", number);
+    strcpy (buff, "");
+    snprintf (buff, sizeof(buff), "%ld", number);
 
     if (safe_strcmp(buff, "") == 0)
       return;
 
-    g_free (cell->cell.value);
-    cell->cell.value = g_strdup (buff);
+    xaccSetBasicCellValueInternal (&cell->cell, buff);
 
     *cursor_position = -1;
 
     return;
   }
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (newval);
+  xaccSetBasicCellWCValueInternal (&cell->cell, newval);
 }
 
 /* ================================================ */
@@ -191,15 +190,14 @@ setNumCellValue (BasicCell *_cell, const char *str)
       cell->next_num = number + 1;
   }
 
-  g_free (cell->cell.value);
-  cell->cell.value = g_strdup (str);
+  xaccSetBasicCellValueInternal (_cell, str);
 }
 
 /* ================================================ */
 void 
 xaccSetNumCellValue (NumCell *cell, const char *str)
 {
-  setNumCellValue(&cell->cell, str);
+  setNumCellValue (&cell->cell, str);
 }
 
 /* ================================================ */
@@ -208,7 +206,7 @@ xaccSetNumCellLastNum (NumCell *cell, const char *str)
 {
   long int number;
 
-  if (parse_num(str, &number))
+  if (parse_num (str, &number))
   {
     cell->next_num = number + 1;
     cell->next_num_set = TRUE;

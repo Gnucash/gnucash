@@ -940,8 +940,10 @@ gnc_table_leave_update(Table *table, VirtualLocation virt_loc)
 const char *
 gnc_table_modify_update(Table *table,
                         VirtualLocation virt_loc,
-                        const char *change,
-                        const char *newval,
+                        const GdkWChar *change,
+                        int change_len,
+                        const GdkWChar *newval,
+                        int newval_len,
                         int *cursor_position,
                         int *start_selection,
                         int *end_selection)
@@ -970,14 +972,19 @@ gnc_table_modify_update(Table *table,
   cell = cb_cell->cell;
   mv = cell->modify_verify;
 
-  old_value = g_strdup(cell->value);
+  old_value = g_strdup (cell->value);
 
   if (mv)
-    mv (cell, change, newval, cursor_position, start_selection, end_selection);
+    mv (cell, change, change_len, newval, newval_len,
+        cursor_position, start_selection, end_selection);
   else
-    xaccSetBasicCellValue (cell, newval);
+  {
+    char *newval_mb = gnc_wcstombs (newval);
+    xaccSetBasicCellValue (cell, newval_mb);
+    g_free (newval_mb);
+  }
 
-  if (safe_strcmp(old_value, cell->value) != 0)
+  if (safe_strcmp (old_value, cell->value) != 0)
   {
     changed = TRUE;
     cell->changed = GNC_CELL_CHANGED;
@@ -989,11 +996,11 @@ gnc_table_modify_update(Table *table,
   {
     char *help_str;
 
-    help_str = xaccBasicCellGetHelp(cell);
+    help_str = xaccBasicCellGetHelp (cell);
 
-    table->set_help(table, help_str);
+    table->set_help (table, help_str);
 
-    g_free(help_str);
+    g_free (help_str);
   }
 
   LEAVE ("change %d %d (relrow=%d relcol=%d) val=%s\n", 

@@ -47,11 +47,14 @@ PriceDirect (BasicCell *bcell,
     PriceCell *cell = (PriceCell *) bcell;
     GdkEventKey *event = gui_data;
     char decimal_point;
-    struct lconv *lc = gnc_localeconv();
-    char *newval;
+    struct lconv *lc;
+    GdkWChar *newval;
+    int i;
 
     if (event->type != GDK_KEY_PRESS)
 	return FALSE;
+
+    lc = gnc_localeconv ();
 
     switch (event->keyval)
     {
@@ -94,23 +97,26 @@ PriceDirect (BasicCell *bcell,
 
     /* allocate space for newval_ptr : oldval + one letter ( the
        decimal_point ) */
-    newval = g_new (char, strlen(bcell->value) + 2);
+    newval = g_new (GdkWChar, bcell->value_len + 2);
 
     /* copy oldval up to the cursor position */
-    strncpy (newval, bcell->value, *cursor_position);
+    for (i = 0; i < *cursor_position; i++)
+        newval[i] = bcell->value_w[i];
 
     /* insert the decimal_point at cursor position */
     newval[*cursor_position] = decimal_point;
 
-    /* copy the end of oldval : */
-    strcpy (newval + (*cursor_position) + 1,
-            bcell->value + (*cursor_position));
+    for (i = *cursor_position + 1; i < bcell->value_len + 1; i++)
+        newval[i] = bcell->value_w[i - 1];
+
+    newval[bcell->value_len + 1] = 0;
 
     /* update the cursor position */
     (*cursor_position)++;
 
-    g_free (bcell->value);
-    bcell->value = newval;
+    xaccSetBasicCellWCValueInternal (bcell, newval);
+
+    g_free (newval);
 
     cell->need_to_parse = TRUE;
 
