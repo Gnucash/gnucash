@@ -6,6 +6,7 @@
 static void gnc_druid_provider_class_init	(GNCDruidProviderClass *class);
 static void gnc_druid_provider_finalize		(GObject *obj);
 static GNCDruidPage* invalid_page(GNCDruidProvider* provider);
+static GList* invalid_get_pages(GNCDruidProvider* provider);
 
 static GObjectClass *parent_class;
 static GHashTable *typeTable = NULL;
@@ -48,6 +49,7 @@ gnc_druid_provider_class_init (GNCDruidProviderClass *klass)
   klass->first_page = invalid_page;
   klass->next_page = invalid_page;
   klass->prev_page = invalid_page;
+  klass->get_pages = invalid_get_pages;
 }
 
 static void
@@ -61,9 +63,17 @@ gnc_druid_provider_finalize (GObject *obj)
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
-static GNCDruidPage* invalid_page(GNCDruidProvider* provider)
+static GNCDruidPage*
+invalid_page(GNCDruidProvider* provider)
 {
   g_warning("provider with invalid page");
+  return NULL;
+}
+
+static GList*
+invalid_get_pages(GNCDruidProvider* provider)
+{
+  g_warning("provider with invalid 'get page'");
   return NULL;
 }
 
@@ -161,4 +171,16 @@ gnc_druid_provider_prev_page(GNCDruidProvider* provider)
   g_return_val_if_fail(IS_GNC_DRUID_PROVIDER(provider), NULL);
 
   return ((GNC_DRUID_PROVIDER_GET_CLASS(provider))->prev_page)(provider);
+}
+
+GList*
+gnc_druid_provider_get_pages(GNCDruidProvider* provider)
+{
+  g_return_val_if_fail(provider, NULL);
+  g_return_val_if_fail(IS_GNC_DRUID_PROVIDER(provider), NULL);
+
+  if (!provider->pages)
+    provider->pages = GNC_DRUID_PROVIDER_GET_CLASS(provider)->get_pages(provider);
+
+  return provider->pages;
 }

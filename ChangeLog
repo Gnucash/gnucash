@@ -19,6 +19,12 @@
 	    building the druid.
 	  - add a ui_type to the druid class and use that when building providers.
 
+	* src/app-utils/gnc-druid-provider.[ch]: add get_pages() class method.
+	  (I decided I don't need a special gnc-druid-provider-gnome just to
+	   add a get_pages method, as everything would need it anyways).
+	* src/gnome-utils/gnc-druid-gnome.c: use the get_pages() method
+	  to actually build the druid.
+
 2004-01-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.

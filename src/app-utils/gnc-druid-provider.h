@@ -30,6 +30,7 @@ struct _GNCDruidProvider
   GNCDruidProviderDesc *desc;	/* The description for this provider,
 				 * destroyed at finalize() */
 
+  GList *pages;			/* list of pages; owned by the provider */
 };
 
 struct _GNCDruidProviderClass
@@ -41,6 +42,9 @@ struct _GNCDruidProviderClass
   GNCDruidPage* (*first_page)(GNCDruidProvider*);
   GNCDruidPage* (*next_page)(GNCDruidProvider*);
   GNCDruidPage* (*prev_page)(GNCDruidProvider*);
+
+  /* Return the list of pages to get added to the druid */
+  GList* (*get_pages)(GNCDruidProvider*);
 };
 
 GType	gnc_druid_provider_get_type(void);
@@ -57,6 +61,8 @@ void	gnc_druid_provider_register(const gchar* ui_type, const gchar* name,
 GNCDruidPage* gnc_druid_provider_first_page(GNCDruidProvider*);
 GNCDruidPage* gnc_druid_provider_next_page(GNCDruidProvider*);
 GNCDruidPage* gnc_druid_provider_prev_page(GNCDruidProvider*);
+
+GList* gnc_druid_provider_get_pages(GNCDruidProvider*);
 
 #ifdef __cplusplus
 //}

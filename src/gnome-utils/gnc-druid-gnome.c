@@ -77,15 +77,20 @@ static void
 gnc_druid_gnome_append_provider(GNCDruid* druid_p, GNCDruidProvider* provider)
 {
   GNCDruidGnome *druid;
+  GList *pages, *node;
+  GnomeDruidPage *page;
 
   g_return_if_fail(druid_p);
   g_return_if_fail(IS_GNC_DRUID_GNOME(druid_p));
   g_return_if_fail(provider);
-  //g_return_if_fail(IS_GNC_DRUID_PROVIDER_GNOME(provider));
+  g_return_if_fail(IS_GNC_DRUID_PROVIDER(provider));
 
   druid = GNC_DRUID_GNOME(druid_p);
-
-  /* XXX:FIXME */
+  pages = gnc_druid_provider_get_pages(provider);
+  for (node = pages; node; node = node->next) {
+    page = GNOME_DRUID_PAGE(node->data);
+    gnome_druid_append_page(druid->druid, page);
+  }
 }
 
 static void
