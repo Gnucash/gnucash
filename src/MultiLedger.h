@@ -53,12 +53,14 @@ struct _xaccLedgerDisplay
   /* GUI related stuff */
   gboolean dirty;                /* dirty flag, non zero if redraw needed   */
 
-  SplitRegister *ledger;         /* main ledger window                      */
+  SplitRegister *reg;            /* main ledger window                      */
   gpointer gui_hook;             /* GUI-specific state                      */
 
   void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
   gncUIWidget (*get_parent) (xaccLedgerDisplay *); /* get parent widget     */
   void (*set_help) (xaccLedgerDisplay *, const char *); /* help string      */
+
+  gint component_id;             /* id of ledger component                  */
 };
 
 
@@ -89,7 +91,6 @@ void        xaccTransDisplayRefresh (Transaction *trans);
 /* redisplay/redraw only the indicated window. Both routines do same
  * thing, they differ only by the argument they take. */
 void        xaccLedgerDisplayRefresh (xaccLedgerDisplay * ledger_display);
-void        xaccRegisterRefresh (SplitRegister *reg);
 
 /* close the window */
 void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);

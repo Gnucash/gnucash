@@ -27,7 +27,7 @@
 
 /** Declarations ****************************************************/
 
-#define CM_DEBUG 0
+#define CM_DEBUG 1
 
 typedef struct
 {
