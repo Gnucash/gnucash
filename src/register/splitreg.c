@@ -34,7 +34,7 @@
 
 #include "messages.h"
 #include "recncell.h"
-#include "register.h"
+#include "splitreg.h"
 #include "table-allgui.h"
 #include "textcell.h"
 
@@ -424,7 +424,9 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    phys_c = header->numCols;
    xaccSetTableSize (table, phys_r, phys_c, 2, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
-   xaccSetCursor (table, reg->xxxxcurs, header->numRows, 0, 1, 0);
+
+   /* hack alert -- what does this do, how does it work ??? */
+   xaccSetCursor (table, reg->trans_cursor, header->numRows, 0, 1, 0);
    xaccMoveCursor (table, header->numRows, 0);
 
    reg->table = table;
