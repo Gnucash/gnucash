@@ -87,6 +87,12 @@ xaccInitQuery (Query *q)
    q->earliest.tv_sec = 0; 
    q->earliest.tv_nsec = 0; 
 
+/* hack alert HACK ALERT Y2K problem -- danger danger.
+ * For some stupid reason,  struct Timespec uses long int
+ * instead of time_t for seconds. This means we will have 
+ * overflow in year 2004 which is stupid, and needs to be 
+ * fixed.
+ */
    /* q->latest.tv_sec = ULONG_MAX; */
    q->latest.tv_sec = LONG_MAX;
    q->latest.tv_nsec = 0; 
