@@ -1,6 +1,7 @@
 /********************************************************************\
  * qofid.c -- QOF entity identifier implementation                  *
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -67,6 +68,9 @@ qof_entity_release (QofEntity *ent)
   ent->e_table = NULL;
 }
 
+
+/* This is a restricted function, should be used only during 
+ * read from file */
 void
 qof_entity_set_guid (QofEntity *ent, const GUID *guid)
 {
@@ -77,67 +81,19 @@ qof_entity_set_guid (QofEntity *ent, const GUID *guid)
 }
 
 /* =============================================================== */
-/* almost everything below is obsolete and should be removed */
 
+/** a collection of entities */
+/* XXX this is supposed to be a replacement for GncBookInfo/gncBusinessCreate
+ * when we finish */
+typedef struct QofCollection_s QofCollection;
 
-/** Type definitions ************************************************/
-typedef struct entity_node
+struct QofCollection_s
 {
-  QofIdType entity_type;
-  gpointer entity;
-} EntityNode;
-
-struct _QofEntityTable
-{
-  GHashTable * hash_by_guid;
-  GHashTable * hash_of_types;
+  QofIdType   e_type;
+  gboolean    is_dirty;
+  
+  GHashTable * hash_of_entities;
 };
-
-
-/** Function implementations ****************************************/
-
-static gboolean
-entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
-{
-  GUID *guid = key;
-  EntityNode *e_node = value;
-
-  CACHE_REMOVE (e_node->entity_type);
-  e_node->entity_type = QOF_ID_NONE;
-  e_node->entity = NULL;
-
-  guid_free(guid);
-  g_free(e_node);
-
-  return TRUE;
-}
-
-static gboolean
-entity_types_table_destroy(gpointer key, gpointer value, gpointer not_used)
-{
-  GHashTable *ht = value;
-  g_hash_table_destroy(ht);
-  return TRUE;
-}
-
-void
-qof_entity_destroy (QofEntityTable *entity_table)
-{
-  if (entity_table == NULL)
-    return;
-
-  g_hash_table_foreach_remove (entity_table->hash_by_guid, entity_node_destroy,
-                               NULL);
-  g_hash_table_destroy (entity_table->hash_by_guid);
-  entity_table->hash_by_guid = NULL;
-
-  g_hash_table_foreach_remove (entity_table->hash_of_types,
-                               entity_types_table_destroy, NULL);
-  g_hash_table_destroy (entity_table->hash_of_types);
-  entity_table->hash_of_types = NULL;
-
-  g_free (entity_table);
-}
 
 static guint
 id_hash (gconstpointer key)
@@ -147,6 +103,7 @@ id_hash (gconstpointer key)
   if (key == NULL)
     return 0;
 
+  /* Compiler should optimize this all away! */
   if (sizeof(guint) <= 16)
     return *((guint *) guid->data);
   else
@@ -172,6 +129,111 @@ id_compare(gconstpointer key_1, gconstpointer key_2)
 {
   return guid_equal (key_1, key_2);
 }
+
+QofCollection * qof_collection_new (QofIdType type);
+QofCollection *
+qof_collection_new (QofIdType type)
+{
+  QofCollection *col;
+  col = g_new0(QofCollection, 1);
+  col->e_type = type;
+  col->hash_of_entities = g_hash_table_new (id_hash, id_compare);
+  return col;
+}
+
+void qof_collection_destroy (QofCollection *col);
+void
+qof_collection_destroy (QofCollection *col)
+{
+  /* col->e_type = xxx */
+  g_hash_table_destroy(col->hash_of_entities);
+  g_free (col);
+}
+
+static gboolean
+coll_destroy(gpointer key, gpointer value, gpointer not_used)
+{
+  QofCollection *col = value;
+  qof_collection_destroy (col);
+  return TRUE;
+}
+
+
+struct _QofEntityTable
+{
+  GHashTable * hash_by_guid;
+  GHashTable * hash_of_collections;
+};
+
+
+static inline QofCollection *
+entity_get_collection (QofEntityTable *entity_table, QofIdType entity_type)
+{
+  QofCollection *col;
+
+  col = g_hash_table_lookup (entity_table->hash_of_collections, entity_type);
+  if (col) return col;
+
+  col = qof_collection_new (entity_type);
+  
+  /* XXX should use string_cache instead of strdup */
+  /* Need strdup because values are sometimes freed */
+  /* this is a memory leak, since malloc'ed value is not freed */
+  g_hash_table_insert (entity_table->hash_of_collections, 
+          (gpointer)g_strdup(entity_type), col);
+
+  return col;
+}
+
+
+/* =============================================================== */
+/* Almost everything below is obsolete and should be removed */
+
+/* XXX this structure should be replaced by QofEntity ASAP */
+typedef struct entity_node
+{
+  QofIdType entity_type;
+  gpointer entity;
+} EntityNode;
+
+
+/** Function implementations ****************************************/
+
+static gboolean
+entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
+{
+  GUID *guid = key;
+  EntityNode *e_node = value;
+
+  CACHE_REMOVE (e_node->entity_type);
+  e_node->entity_type = QOF_ID_NONE;
+  e_node->entity = NULL;
+
+  guid_free(guid);
+  g_free(e_node);
+
+  return TRUE;
+}
+
+void
+qof_entity_destroy (QofEntityTable *entity_table)
+{
+  if (entity_table == NULL)
+    return;
+
+  g_hash_table_foreach_remove (entity_table->hash_by_guid, entity_node_destroy,
+                               NULL);
+  g_hash_table_destroy (entity_table->hash_by_guid);
+  entity_table->hash_by_guid = NULL;
+
+  g_hash_table_foreach_remove (entity_table->hash_of_collections,
+                               coll_destroy, NULL);
+  g_hash_table_destroy (entity_table->hash_of_collections);
+  entity_table->hash_of_collections = NULL;
+
+  g_free (entity_table);
+}
+
 
 #if QOFID_DEBUG
 static void
@@ -202,13 +264,16 @@ qof_entity_new (void)
   entity_table = g_new0 (QofEntityTable, 1);
 
   entity_table->hash_by_guid = g_hash_table_new (id_hash, id_compare);
-  entity_table->hash_of_types = g_hash_table_new (g_str_hash, g_str_equal);
+  entity_table->hash_of_collections = g_hash_table_new (g_str_hash, g_str_equal);
 
   qof_entity_store (entity_table, NULL, guid_null(), QOF_ID_NULL);
 
   return entity_table;
 }
 
+/* XXX There should be no need for this after we start 
+ * using QofEntity everywhere, and, once we do that, there will be
+ * no need for the hash_by_guid */
 QofIdType 
 qof_entity_type (QofEntityTable *entity_table, const GUID * guid)
 {
@@ -249,6 +314,7 @@ gpointer
 qof_entity_lookup (QofEntityTable *entity_table,
                   const GUID * guid, QofIdType entity_type)
 {
+  QofCollection *col;		  
   EntityNode *e_node;
 
   g_return_val_if_fail (entity_table, NULL);
@@ -256,43 +322,22 @@ qof_entity_lookup (QofEntityTable *entity_table,
   if (guid == NULL)
     return NULL;
 
-  e_node = g_hash_table_lookup (entity_table->hash_by_guid, guid->data);
+  col = entity_get_collection (entity_table, entity_type);
+  
+  e_node = g_hash_table_lookup (col->hash_of_entities, guid->data);
   if (e_node == NULL)
     return NULL;
 
-  if (safe_strcmp (e_node->entity_type, entity_type))
-    return NULL;
-
   return e_node->entity;
-}
-
-static inline GHashTable *
-entity_get_types_table (QofEntityTable *entity_table, QofIdType entity_type)
-{
-  GHashTable *ht;
-
-  ht = g_hash_table_lookup (entity_table->hash_of_types, entity_type);
-  if (ht)
-    return ht;
-
-  ht = g_hash_table_new (id_hash, id_compare);
-  g_assert(ht);
-  /* XXX should use string_cache instead of strdup */
-  /* Need strdup because values are sometimes freed */
-  /* this is a memory leak, since malloc'ed value is not freed */
-  g_hash_table_insert (entity_table->hash_of_types, 
-          (gpointer)g_strdup(entity_type), ht);
-  return ht;
 }
 
 static void
 entity_store_by_type (QofEntityTable *entity_table,
                       GUID *new_guid, EntityNode *e_node)
 {
-  GHashTable *ht;
-
-  ht = entity_get_types_table (entity_table, e_node->entity_type);
-  g_hash_table_insert (ht, new_guid, e_node);
+  QofCollection *col;		  
+  col = entity_get_collection (entity_table, e_node->entity_type);
+  g_hash_table_insert (col->hash_of_entities, new_guid, e_node);
 }
 
 void
@@ -330,10 +375,9 @@ qof_entity_store (QofEntityTable *entity_table, gpointer entity,
 static void
 entity_remove_by_type (QofEntityTable *entity_table, GUID *guid, QofIdType type)
 {
-  GHashTable *ht;
-
-  ht = entity_get_types_table (entity_table, type);
-  g_hash_table_remove (ht, guid);
+  QofCollection *col;		  
+  col = entity_get_collection (entity_table, type);
+  g_hash_table_remove (col->hash_of_entities, guid);
 }
 
 void
@@ -379,7 +423,7 @@ void
 qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
                    QofEntityForeachCB cb_func, gpointer user_data)
 {
-  GHashTable *ht;
+  QofCollection *col;		  
   struct _iterate iter;
 
   g_return_if_fail (entity_table);
@@ -392,6 +436,6 @@ qof_entity_foreach (QofEntityTable *entity_table, QofIdType type,
   iter.type = type;
 
   /* Iterate over the objects of the particular type */
-  ht = entity_get_types_table (entity_table, type);
-  g_hash_table_foreach (ht, foreach_cb, &iter);
+  col = entity_get_collection (entity_table, type);
+  g_hash_table_foreach (col->hash_of_entities, foreach_cb, &iter);
 }
