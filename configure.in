@@ -1073,10 +1073,6 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           src/experimental/cbb/cbb-engine/Makefile
           src/experimental/cgi-bin/Makefile
           src/experimental/gg/Makefile
-          src/experimental/ofx/Makefile
-          src/experimental/ofx/dtd/Makefile
-          src/experimental/ofx/explore/Makefile
-          src/experimental/ofx/parser/Makefile
           src/gnc-module/Makefile
           src/gnc-module/test/Makefile
           src/gnc-module/test/mod-foo/Makefile

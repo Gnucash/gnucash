@@ -11,6 +11,8 @@
 	* README: fix references to g-wrap
 	* acinclude.m4: fix g-wrap test to fail properly if it cannot
 	  find g-wrap-config
+
+	* remove src/experimental/ofx from the build system
 	
 2002-12-03  Derek Atkins  <derek@ihtfp.com>
 
