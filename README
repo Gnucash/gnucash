@@ -409,7 +409,7 @@ Fixes & Patches:
 Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
-Christopher B. Browne <cbbrowne@hex.net> for perl stock scripts
+Christopher B. Browne <cbbrowne@hex.net> for perl, scheme scripts
 Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
@@ -422,7 +422,7 @@ Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
-Alexandru Harsanyi <haral@codec.ro> for misc core dumps & lockups.
+Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work.
 Jon K}re Hellan <jk@isdn-a33.itea.ntnu.no> misc core dump fixes
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
