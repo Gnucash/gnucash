@@ -1,15 +1,8 @@
 ;;; $Id$
 
-(gnc:support "text-export.scm")
-
 (require 'pretty-print)
-(define (gnc:group-map-accounts thunk group)
-  (let loop ((num-accounts (gnc:group-get-num-accounts group))
-             (i 0))
-    (if (= i num-accounts)
-        '()
-        (cons (thunk (gnc:group-get-account group i))
-              (loop num-accounts (+ i 1))))))
+(gnc:support "text-export.scm")
+(gnc:depend "report-utilities.scm")
 
 ; (define (gnc:account-transactions-for-each thunk account)
 ;   ;; You must call gnc:group-reset-write-flags on the account group

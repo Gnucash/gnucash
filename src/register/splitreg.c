@@ -406,7 +406,7 @@ configLayout (SplitRegister *reg)
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (BALN,   balance,  7,  0);
-  
+
          FANCY (ACTN,   action,   1,  1);
          FANCY (MEMO,   memo,     2,  1);
 
@@ -418,7 +418,7 @@ configLayout (SplitRegister *reg)
          FANCY (DEBT,   debit,    5,  0);
          FANCY (CRED,   credit,   6,  0);
          FANCY (BALN,   balance,  7,  0);
-     
+
          curs = reg->split_cursor;
          FANCY (ACTN,   action,   1,  0);
          FANCY (MEMO,   memo,     2,  0);

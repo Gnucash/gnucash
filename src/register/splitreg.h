@@ -73,7 +73,7 @@
 #define PORTFOLIO           13
 #define REG_TYPE_MASK       0xff
 
-/* 
+/*
  * enumerated display styles 
  * REG_DOUBLE_LINE  -- show two lines per transaction
  * REG_MULTI_LINE   -- show multiple lines per transaction

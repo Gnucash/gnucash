@@ -1,5 +1,10 @@
 2000-03-26  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/scm/report/transaction-report.scm: i18n the report
+
+	* src/gnome/window-register.c (gnc_transaction_delete_query):
+ 	destroy on close, don't hide.
+
 	* src/register/splitreg.c: several new functions for saving and
 	restore the contents of the cursor.
 
