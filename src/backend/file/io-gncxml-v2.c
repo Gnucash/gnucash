@@ -25,8 +25,14 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-pricedb-p.h"
+#include "gnc-session.h"
+#include "Group.h"
+#include "Scrub.h"
+#include "Transaction.h"
 #include "TransLog.h"
 
 #include "sixtp-dom-parsers.h"
@@ -37,14 +43,9 @@
 #include "sixtp-parsers.h"
 #include "sixtp-utils.h"
 #include "gnc-xml.h"
-#include "gnc-book-p.h"
-#include "gnc-pricedb-p.h"
 #include "io-utils.h"
 
-#include "Group.h"
-#include "Scrub.h"
 
-#include "Transaction.h"
 
 #define GNC_V2_STRING "gnc-v2"
 
