@@ -1,3 +1,27 @@
+2001-10-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/test-core/test-stuff.c: allow option of including funky
+	characters in random strings
+
+	* src/engine/Transaction.c (xaccTransEqual): add warning strings
+
+	* src/backend/postgres/test/.cvsignore: ignore test-escape
+
+	* src/backend/postgres/test/test-escape: test string escaping
+
+	* src/backend/postgres/test/Makefile.am: add test-escape
+
+	* src/backend/postgres/builder.c (sqlBuild_Where_Str): don't
+	escape string twice
+
+	* src/backend/postgres/escape.c (sqlEscapeString): check for
+	already-escaped string
+
+	* src/backend/postgres/kvp-sql.c: escape path strings
+
+	* src/backend/file/test/test-xml-transaction.c (test_add_transaction):
+	test in reverse order, first orig, then new.
+
 2001-10-10  Rob Browning  <rlb@defaultvalue.org>
 
 	* src/test-core/Makefile.am

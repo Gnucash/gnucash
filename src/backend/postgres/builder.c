@@ -317,7 +317,6 @@ sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 {
    if (!b || !tag || !val) return;
 
-   val = sqlEscapeString (b->escape, val);
    switch (b->qtype) 
    {
       case SQL_INSERT:
@@ -328,6 +327,8 @@ sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
       case SQL_UPDATE:
       case SQL_SELECT:
       case SQL_DELETE:
+         val = sqlEscapeString (b->escape, val);
+
          if (b->where_need_and) b->pval = stpcpy(b->pval, " AND ");
          b->where_need_and = 1;
 
@@ -338,11 +339,9 @@ sqlBuild_Where_Str (sqlBuilder *b, const char *tag, const char *val)
 
          break;
 
-
       default:
          PERR ("mustn't happen");
    };
-   
 }
 
 /* ================================================ */

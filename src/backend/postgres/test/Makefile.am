@@ -1,5 +1,6 @@
 TESTS = \
   test-load-module \
+  test-escape \
   run-tests.sh
 
 TESTS_ENVIRONMENT=\
@@ -9,7 +10,8 @@ TESTS_ENVIRONMENT=\
   LD_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs
 
 noinst_PROGRAMS = \
-  test-db
+  test-db \
+  test-escape
 
 LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
         -L${top_srcdir}/src/engine -L${top_srcdir}/src/engine/.libs \

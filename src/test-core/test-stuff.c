@@ -202,27 +202,40 @@ get_random_int_in_range(int start, int end)
     return start + (int)((double)end * rand() / (RAND_MAX + 1.0));
 }
 
-static char random_chars[] =
+static char *random_chars = NULL;
+
+static char plain_chars[] =
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 "abcdefghijklmnopqrstuvwxyz"
 "1234567890"
-" "
-#if 0
+" ";
+
+static char funky_chars[] =
 ",.'\"`~!@#$%^*(){}[]/=?+-_\\|"
 "<>&"
-"\n\t"
-#endif
-"";
+"\n\t";
+
+static int rcend = 0;
+
+void
+random_character_include_funky_chars (gboolean use_funky_chars)
+{
+  g_free (random_chars);
+
+  if (use_funky_chars)
+    random_chars = g_strconcat (plain_chars, funky_chars, NULL);
+  else
+    random_chars = g_strdup (plain_chars);
+
+  rcend = strlen (random_chars) - 1;
+}
 
 gchar
 get_random_character(void)
 {
-    static int rcend = 0;
-    if(!rcend)
-    {
-        rcend = strlen(random_chars) - 1;
-    }
-    
+    if (!rcend)
+      random_character_include_funky_chars (FALSE);
+
     return random_chars[get_random_int_in_range(0, rcend)];
 }
 
@@ -255,7 +268,8 @@ get_random_string(void)
     {
         ret[i] = get_random_character();
     }
-    return ret;
+
+    return g_strstrip (ret);
 }
 
 gint64

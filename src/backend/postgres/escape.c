@@ -53,7 +53,13 @@ sqlEscapeString (sqlEscape *b, const char *str)
    const char *p, *src_head;
    char *dst_tail;
    size_t len, slen;
-   
+
+   if (!b || !str) return NULL;
+
+   /* if a string is escaped twice, just return the first */
+   if (b->escape == str)
+     return str;
+
    /* if nothing to escape, just return */
    len = strlen (str);
    slen = strcspn (str, "\\\'");

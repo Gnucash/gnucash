@@ -87,6 +87,8 @@ guile_main (int argc, char **argv)
   set_max_group_depth (3);
   set_max_group_accounts (5);
 
+  random_character_include_funky_chars (FALSE);
+
   xaccLogDisable ();
 
   run_test ();

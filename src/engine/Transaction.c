@@ -226,29 +226,78 @@ xaccSplitEqual(const Split *sa, const Split *sb,
                gboolean check_txn_splits) {
 
   if(!sa && !sb) return TRUE;
-  if(!sa) return FALSE;
-  if(!sb) return FALSE;
+
+  if (!sa || !sb)
+  {
+    PWARN ("one is NULL");
+    return FALSE;
+  }
 
   if(check_guids) {
-    if(!guid_equal(&(sa->guid), &(sb->guid))) return FALSE;
+    if(!guid_equal(&(sa->guid), &(sb->guid)))
+    {
+      PWARN ("GUIDs differ");
+      return FALSE;
+    }
   }
 
   /* Since these strings are cached we can just use pointer equality */
-  if(sa->memo != sb->memo) return FALSE;
-  if(sa->action != sb->action) return FALSE;
+  if (sa->memo != sb->memo)
+  {
+    PWARN ("memos differ: %s vs %s", sa->memo, sb->memo);
+    return FALSE;
+  }
 
-  if(kvp_frame_compare(sa->kvp_data, sb->kvp_data) != 0) return FALSE;
+  if (sa->action != sb->action)
+  {
+    PWARN ("actions differ: %s vs %s", sa->action, sb->action);
+    return FALSE;
+  }
 
-  if(sa->reconciled != sb->reconciled) return FALSE;
-  if(timespec_cmp(&(sa->date_reconciled),
-                  &(sb->date_reconciled))) return FALSE;
+  if (kvp_frame_compare(sa->kvp_data, sb->kvp_data) != 0)
+  {
+    char *frame_a;
+    char *frame_b;
 
-  if(!gnc_numeric_eq(sa->amount, sb->amount)) return FALSE;
-  if(!gnc_numeric_eq(sa->value, sb->value)) return FALSE;
+    frame_a = kvp_frame_to_string (sa->kvp_data);
+    frame_b = kvp_frame_to_string (sb->kvp_data);
 
-  if(!xaccTransEqual(sa->parent, sb->parent,
-                     check_guids,
-                     check_txn_splits)) {
+    PWARN ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
+
+    g_free (frame_a);
+    g_free (frame_b);
+
+    return FALSE;
+  }
+
+  if (sa->reconciled != sb->reconciled)
+  {
+    PWARN ("reconcile flags differ: %c vs %c", sa->reconciled, sb->reconciled);
+    return FALSE;
+  }
+
+  if (timespec_cmp(&(sa->date_reconciled),
+                   &(sb->date_reconciled)))
+  {
+    PWARN ("reconciled date differs");
+    return FALSE;
+  }
+
+  if (!gnc_numeric_eq(sa->amount, sb->amount))
+  {
+    PWARN ("amount differs");
+    return FALSE;
+  }
+
+  if (!gnc_numeric_eq(sa->value, sb->value))
+  {
+    PWARN ("value differs");
+    return FALSE;
+  }
+
+  if (!xaccTransEqual(sa->parent, sb->parent, check_guids, check_txn_splits))
+  {
+    PWARN ("transactions differ");
     return FALSE;
   }
 
@@ -800,43 +849,103 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
                gboolean check_splits) {
 
   if(!ta && !tb) return TRUE;
-  if(!ta) return FALSE;
-  if(!tb) return FALSE;
+
+  if(!ta || !tb)
+  {
+    PWARN ("one is NULL");
+    return FALSE;
+  }
 
   if(check_guids) {
-    if(!guid_equal(&(ta->guid), &(tb->guid))) return FALSE;
+    if(!guid_equal(&(ta->guid), &(tb->guid)))
+    {
+      PWARN ("GUIDs differ");
+      return FALSE;
+    }
   }
 
   if(!gnc_commodity_equiv(ta->common_currency, tb->common_currency))
+  {
+    PWARN ("commodities differ %s vs %s",
+           gnc_commodity_get_unique_name (ta->common_currency),
+           gnc_commodity_get_unique_name (tb->common_currency));
     return FALSE;
+  }
 
-  if(timespec_cmp(&(ta->date_entered), &(tb->date_entered))) return FALSE;
-  if(timespec_cmp(&(ta->date_posted), &(tb->date_posted))) return FALSE;
+  if(timespec_cmp(&(ta->date_entered), &(tb->date_entered)))
+  {
+    PWARN ("date entered differs");
+    return FALSE;
+  }
+
+  if(timespec_cmp(&(ta->date_posted), &(tb->date_posted)))
+  {
+    PWARN ("date posted differs");
+    return FALSE;
+  }
+
   /* Since we use cached strings, we can just compare pointer
    * equality for num and description
    */
-  if(ta->num != tb->num) return FALSE;
-  if(ta->description != tb->description) return FALSE;
+  if(ta->num != tb->num)
+  {
+    PWARN ("num differs: %s vs %s", ta->num, tb->num);
+    return FALSE;
+  }
 
-  if(kvp_frame_compare(ta->kvp_data, tb->kvp_data) != 0) return FALSE;
+  if(ta->description != tb->description)
+  {
+    PWARN ("descriptions differ: %s vs %s", ta->description, tb->description);
+    return FALSE;
+  }
 
-  if(check_splits) {
+  if(kvp_frame_compare(ta->kvp_data, tb->kvp_data) != 0)
+  {
+    char *frame_a;
+    char *frame_b;
+
+    frame_a = kvp_frame_to_string (ta->kvp_data);
+    frame_b = kvp_frame_to_string (tb->kvp_data);
+
+    PWARN ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
+
+    g_free (frame_a);
+    g_free (frame_b);
+
+    return FALSE;
+  }
+
+  if (check_splits)
+  {
     GList *sa = ta->splits;
     GList *sb = tb->splits;
 
-    if(!sa && sb) return FALSE;
-    if(!sb && sa) return FALSE;
+    if ((!sa && sb) || (!sb && sa))
+    {
+      PWARN ("only one has splits");
+      return FALSE;
+    }
 
-    if(sa && sb) {
+    if (sa && sb)
+    {
       /* presume that the splits are in the same order */
-      while(sa && sb) {
-        if(!xaccSplitEqual(sa->data, sb->data, check_guids, FALSE))
+      while (sa && sb)
+      {
+        if (!xaccSplitEqual(sa->data, sb->data, check_guids, FALSE))
+        {
+          PWARN ("splits differ");
           return(FALSE);
+        }
+
         sa = sa->next;
         sb = sb->next;
       }
-      if(sa != NULL) return(FALSE);
-      if(sb != NULL) return(FALSE);
+
+      if ((sa != NULL) || (sb != NULL))
+      {
+        PWARN ("different number of splits");
+        return(FALSE);
+      }
     }
   }
 

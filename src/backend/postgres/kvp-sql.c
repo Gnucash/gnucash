@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "escape.h"
 #include "gnc-engine-util.h"
 #include "kvp-sql.h"
 #include "PostgresBackend.h"
@@ -180,6 +181,7 @@ pgendGetPathCache (PGBackend *be, const char *path_str)
 
 typedef struct store_data_s {
    PGBackend *be;
+   sqlEscape *escape;
    int iguid;
    int ipath;
    char *path;
@@ -192,7 +194,6 @@ typedef struct store_data_s {
       const GUID *guid;
       GList *list;
    } u;
-   
 } store_data_t;
 
 #include "kvp-autogen.c"
@@ -208,7 +209,8 @@ store_cb (const char *key, kvp_value *val, gpointer p)
    path_save = cb_data->path;
    cb_data->path = g_strjoin ("/", path_save, key, 0);
 
-   ipath = pgendGetPathCache (be, cb_data->path);
+   ipath = pgendGetPathCache (be, sqlEscapeString (cb_data->escape,
+                                                   cb_data->path));
    cb_data->ipath = ipath;
 
    if (ipath)
@@ -321,10 +323,14 @@ pgendKVPStore (PGBackend *be, guint32 iguid, kvp_frame *kf)
    ENTER (" ");
 
    cb_data.be = be;
+   cb_data.escape = sqlEscape_new ();
    cb_data.iguid = iguid;
    cb_data.path = "";
 
    kvp_frame_for_each_slot (kf, store_cb, &cb_data);
+
+   sqlEscape_destroy (cb_data.escape);
+
    LEAVE (" ");
 }
 
