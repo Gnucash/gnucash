@@ -95,7 +95,7 @@ xaccSRGetCurrentSplit (SplitRegister *reg)
 
    /* get the handle to the current split and transaction */
    cursor = reg->table->current_cursor;
-   assert (cursor);
+   if (!cursor) return NULL;
    split = (Split *) (cursor->user_data);
 
    return split;
@@ -470,8 +470,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 {
    int i;
    Split *split=NULL, *last_split=NULL;
+   Split *save_current_split=NULL;
+   int save_cursor_phys_row = -1;
    Table *table;
-   int save_cursor_phys_row;
    int num_phys_rows;
    int num_phys_cols;
    int num_virt_rows;
@@ -483,13 +484,16 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    double_line = (reg->type) & REG_DOUBLE_LINE;
    multi_line  = (reg->type) & REG_MULTI_LINE;
 
+   /* save the current cursor location; we do this by saving
+    * a pointer to the currently eduited split; we restore the 
+    * cursor to this location when we are done. */
+   if (reg->table->current_cursor) {
+      save_current_split = (Split *) (reg->table->current_cursor->user_data);
+   }
+
    /* disable move callback -- we con't want the cascade of 
     * callbacks while we are fiddling with loading the register */
    table->move_cursor = NULL;
-
-   /* save the current cursor location; we want to restore 
-    * it after the reload.  */
-   save_cursor_phys_row = table->current_cursor_phys_row;
    xaccMoveCursorGUI (table, -1, -1);
 
    /* set table size to number of items in list */
@@ -595,6 +599,11 @@ printf ("load register of %d virtual entries %d phys rows ----------- \n", i, nu
    split = slist[0]; 
    while (split) {
 
+      /* lets determine where to locate the cursor ... */
+      if (split == save_current_split) {
+         save_cursor_phys_row = phys_row;
+      }
+
       /* do not load the blank split */
       if (split != ((Split *) reg->user_hook)) {
          Transaction *trans;
@@ -623,6 +632,12 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
             j = 0;
             do {
                secondary = xaccTransGetSplit (trans, j);
+
+               /* lets determine where to locate the cursor ... */
+               if (secondary == save_current_split) {
+                  save_cursor_phys_row = phys_row;
+               }
+
                if (secondary != split) {
 printf ("load split %d at phys row %d \n", j, phys_row);
                   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
@@ -631,6 +646,7 @@ printf ("load split %d at phys row %d \n", j, phys_row);
                   vrow ++;
                   phys_row += reg->split_cursor->numRows; 
                }
+
                j++;
             } while (secondary);
          } 
@@ -667,6 +683,11 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       xaccSplitSetSharePrice (split, last_price);
    }
 
+   /* lets determine where to locate the cursor ... */
+   if (split == save_current_split) {
+      save_cursor_phys_row = phys_row;
+   }
+
    /* do the transaction row of the blank split */
    xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
@@ -685,9 +706,9 @@ printf ("load split %d at phys row %d \n", j, phys_row);
       vrow ++;
       phys_row += reg->split_cursor->numRows; 
    }
-   
+
    /* restore the cursor to its original location */
-   if (phys_row <= save_cursor_phys_row) {
+   if (!save_current_split || (phys_row <= save_cursor_phys_row)) {
        save_cursor_phys_row = phys_row - reg->split_cursor->numRows;
    }
    if (save_cursor_phys_row < (reg->header->numRows)) {
