@@ -6,6 +6,7 @@ libgnc_business_ledger_la_SOURCES = \
   gncEntryLedger.c \
   gncEntryLedgerControl.c \
   gncEntryLedgerLayout.c \
+  gncEntryLedgerLoad.c \
   gncEntryLedgerModel.c
 
 noinst_HEADERS = \

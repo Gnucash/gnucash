@@ -79,13 +79,6 @@ GncEntry * gnc_entry_ledger_get_current_entry (GncEntryLedger *ledger)
 				ledger->table->current_cursor_loc.vcell_loc);
 }
 
-/* Copy GncEntry information from the list to the rows of the Ledger. */
-void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
-{
-  GncEntry *entry;
-}
-
-
 /* Create and return a new GncEntry Ledger */
 GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
 {
@@ -98,10 +91,20 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
   ledger->type = type;
   ledger->book = book;
 
+  ledger->blank_entry_guid = *xaccGUIDNULL();
+  ledger->blank_entry_edited = FALSE;
+
+  {
+    Timespec ts = { 0, 0 };
+    ts.tv_sec = time (NULL);
+    ledger->last_date_entered = timespecCanonicalDayTime (ts);
+  }
+
   {
     TableLayout *layout = gnc_entry_ledger_layout_new (ledger);
     TableModel *model = gnc_entry_ledger_model_new ();
     TableControl *control = gnc_entry_ledger_control_new ();
+    model->handler_user_data = ledger;
     control->user_data = ledger;
 
     ledger->table = gnc_table_new (layout, model, control);

@@ -9,6 +9,7 @@
 #include <gnome.h>
 
 #include "dialog-utils.h"
+#include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
@@ -170,6 +171,39 @@ gnc_order_window_refresh_handler (GHashTable *changes, gpointer user_data)
   }
 }
 
+static void
+gnc_configure_register_colors (void)
+{
+  GncEntryLedgerColors reg_colors;
+
+  reg_colors.header_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Header color",
+                                 0xffffff);
+
+  reg_colors.primary_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Primary color",
+                                 0xffffff);
+
+  reg_colors.secondary_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Secondary color",
+                                 0xffffff);
+
+  reg_colors.primary_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Primary active color",
+                                 0xffffff);
+
+  reg_colors.secondary_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Secondary active color",
+                                 0xffffff);
+
+  gnc_entry_ledger_set_colors (reg_colors);
+}
+
 static OrderWindow *
 gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
 			 GncOrder *order)
@@ -181,8 +215,9 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   GnomeDialog *owd;
   GList *entries;
 
-  ow = g_new0 (OrderWindow, 1);
+  gnc_configure_register_colors ();
 
+  ow = g_new0 (OrderWindow, 1);
   ow->book = bookp;
 
   /* Find the dialog */

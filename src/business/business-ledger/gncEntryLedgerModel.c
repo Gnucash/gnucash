@@ -61,7 +61,7 @@ static const char * get_disc_label (VirtualLocation virt_loc, gpointer data)
 
 static const char * get_distype_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("Discount Type");
+  return _("DT");
 }
 
 static const char * get_pric_label (VirtualLocation virt_loc, gpointer data)
@@ -81,7 +81,7 @@ static const char * get_taxacc_label (VirtualLocation virt_loc, gpointer data)
 
 static const char * get_taxtype_label (VirtualLocation virt_loc, gpointer data)
 {
-  return _("Tax Type");
+  return _("TT");
 }
 
 static const char * get_tax_label (VirtualLocation virt_loc, gpointer data)
@@ -174,7 +174,8 @@ static const char * get_distype_entry (VirtualLocation virt_loc,
   GncEntry *entry;
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  return gncEntryGetDiscountTypeStr (gncEntryGetDiscountType (entry));
+  return gnc_entry_ledger_type_string_getter ('0' +
+					      gncEntryGetDiscountType (entry));
 }
 
 static const char * get_pric_entry (VirtualLocation virt_loc,
@@ -240,7 +241,8 @@ static const char * get_taxtype_entry (VirtualLocation virt_loc,
   GncEntry *entry;
 
   entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
-  return gncEntryGetTaxTypeStr (gncEntryGetTaxType (entry));
+  return gnc_entry_ledger_type_string_getter ('0' + 
+					      gncEntryGetTaxType (entry));
 }
 
 static const char * get_tax_entry (VirtualLocation virt_loc,
