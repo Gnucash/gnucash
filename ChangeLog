@@ -1,5 +1,20 @@
 2002-10-25  David Hampton  <hampton@employees.org>
 
+	* src/gnome/window-register.c: Use a better function for making
+	the register contents immutable.  Splits can now be viewed but not
+	changed.  Make register altering menu/toolbar items insensitive.
+
+	* src/register/ledger-core/split-register.c
+	(gnc_split_register_set_read_only): New function to set the
+	read-only bit on the table underlying the register window.
+
+	* src/register/register-gnome/gnucash-sheet.c: Remove no longer
+	used function from first pass at the placeholder account code.
+
+	* src/gnc-ui.h: 
+	* src/gnome/window-main.c: Add a new help menu item for Wildev and
+	rename another one. #96821
+
 	* src/gnome/window-register.c: Split the transaction delete
 	functionality into two functions. The first deletes a split or
 	transaction, as expected. The second handles what was an odd
