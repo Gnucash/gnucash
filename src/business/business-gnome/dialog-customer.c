@@ -576,7 +576,7 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
   }
 
   gnc_gui_component_watch_entity_type (cw->component_id,
-				       GNC_ID_NONE,
+				       GNC_CUSTOMER_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gtk_widget_show_all (cw->dialog);

@@ -342,7 +342,7 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
 
   gnc_job_name_changed_cb (NULL, jw);
   gnc_gui_component_watch_entity_type (jw->component_id,
-				       GNC_ID_NONE,
+				       GNC_JOB_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gtk_widget_show_all (jw->dialog);

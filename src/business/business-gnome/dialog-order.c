@@ -553,7 +553,7 @@ gnc_order_new_window (GtkWidget *parent, GNCBook *bookp,
   }
 
   gnc_gui_component_watch_entity_type (ow->component_id,
-				       GNC_ID_NONE,
+				       GNC_ORDER_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));

@@ -664,7 +664,7 @@ gnc_invoice_new_window (GtkWidget *parent, GNCBook *bookp,
   }
 
   gnc_gui_component_watch_entity_type (iw->component_id,
-				       GNC_ID_NONE,
+				       GNC_INVOICE_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
