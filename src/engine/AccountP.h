@@ -52,6 +52,7 @@
 #include "qofbook.h"
 #include "qofid.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 
 
 /** STRUCTS *********************************************************/
@@ -200,5 +201,10 @@ gint32 xaccAccountGetVersion (Account*);
 
 /* Register Accounts with the engine */
 gboolean xaccAccountRegister (void);
+
+/** killed for now, need to resurect this or something similar
+ *  * for transactional/dirty kvp.  Later.  Right now a place holder
+ *   */
+#define xaccAccountSetSlots_nc(A,S) qof_instance_set_slots(QOF_INSTANCE(A),S)
 
 #endif /* XACC_ACCOUNT_P_H */

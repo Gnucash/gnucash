@@ -285,6 +285,20 @@ init_from_time(void)
   return total;
 }
 
+static size_t
+init_from_int(int val)
+{
+  md5_process_bytes(&val, sizeof(val), &guid_context);
+  return sizeof(int);
+}
+
+static size_t
+init_from_buff(char * buf, size_t buflen)
+{
+  md5_process_bytes(buf, buflen, &guid_context);
+  return buflen;
+}
+
 void
 guid_init(void)
 {
@@ -457,6 +471,20 @@ guid_new(GUID *guid)
 
   /* update the global context */
   init_from_time();
+
+  /* Make it a little extra salty.  I think init_from_time was buggy,
+	* or something, since duplicate id's actually happened. Or something
+	* like that.  I think this is because init_from_time kept returning
+	* the same values too many times in a row.  So we'll do some 'block
+	* chaining', and feed in the old guid as new random data.
+	*
+	* Anyway, I think the whole fact that I saw a bunch of duplicate 
+	* id's at one point, but can't reproduce the bug is rather alarming.
+	* Something must be broken somewhere, and merely adding more salt
+	* is just hiding the problem, not fixing it.
+	*/
+  init_from_int (433781*counter);
+  init_from_buff (guid->data, 16);
 
   if (counter == 0)
   {

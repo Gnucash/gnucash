@@ -40,6 +40,7 @@
 
 
 typedef struct _QofObject QofObject;
+typedef void (*QofForeachCB) (gpointer obj, gpointer user_data);
 typedef void (*QofForeachTypeCB) (QofObject *type, gpointer user_data);
 typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
                                       gpointer backend_data,
@@ -49,7 +50,7 @@ typedef void (*QofForeachBackendTypeCB) (QofIdTypeConst type,
 struct _QofObject 
 {
   gint                interface_version; /* of this object interface */
-  QofIdType           name;              /* the Object's QOF_ID */
+  QofIdType           e_type;            /* the Object's QOF_ID */
   const char *        type_label;        /* "Printable" type-label string */
 
   /* book_begin is called from within the Book routines to create
@@ -69,7 +70,7 @@ struct _QofObject
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
-  void                (*foreach)(QofBook *, QofEntityForeachCB, gpointer);
+  void                (*foreach)(QofBook *, QofForeachCB, gpointer);
 
   /* Given a particular object, return a printable string */
   /* Argument should really be QofInstance not gpointer.. */
@@ -86,7 +87,7 @@ void qof_object_shutdown (void);
 void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-                         QofEntityForeachCB cb, gpointer user_data);
+                         QofForeachCB cb, gpointer user_data);
 
 const char * qof_object_printable (QofIdTypeConst type_name, gpointer obj);
 

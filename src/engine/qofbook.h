@@ -48,7 +48,7 @@ typedef struct _QofBook       QofBook;
 /** GList of QofBook */
 typedef GList                 QofBookList;
 
-/** Register the book boject with the QOF object system. */
+/** Register the book object with the QOF object system. */
 gboolean qof_book_register (void);
                                                                                 
 /** Allocate, initialise and return a new QofBook.  Books contain references
@@ -60,10 +60,7 @@ QofBook * qof_book_new (void);
 void      qof_book_destroy (QofBook *book);
 
 /** \return The Entity table for the book. */
-QofEntityTable      * qof_book_get_entity_table (QofBook *book);
-
-/** \return The GUID for the book. */
-const GUID          * qof_book_get_guid (QofBook *book);
+QofCollection  * qof_book_get_collection (QofBook *, QofIdType);
 
 /** \return The kvp data for the book */
 KvpFrame   * qof_book_get_slots (QofBook *book);
@@ -113,5 +110,8 @@ gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 
 /**@}*/
  
+/** deprecated */
+#define qof_book_get_guid(X) qof_entity_get_guid (QOF_ENTITY(X))
+
 #endif /* QOF_BOOK_H */
 /** @} */

@@ -731,6 +731,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
       /* switch over between books, if needed */
       if (grp->book != acc->inst.book)
       {
+         QofCollection *col;
 // xxxxxxxxxxxxxxxxxxxxxxx
          /* hack alert -- this implementation is not exactly correct.
           * If the entity tables are not identical, then the 'from' book 
@@ -746,9 +747,8 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
          PWARN ("reparenting accounts accross books is not correctly supported\n");
 
          gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_DESTROY);
-			qof_entity_release (&acc->inst.entity);
-
-         qof_entity_store (grp->book->entity_table, acc, &acc->inst.entity.guid, GNC_ID_ACCOUNT);
+         col = qof_book_get_collection (grp->book, GNC_ID_ACCOUNT);
+         qof_collection_insert_entity (col, &acc->inst.entity);
          gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_CREATE);
       }
     }
@@ -1243,7 +1243,7 @@ group_mark_clean(QofBook *book)
 static QofObject group_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
-  name:              GNC_ID_GROUP,
+  e_type:            GNC_ID_GROUP,
   type_label:        "AccountGroup",
   book_begin:        group_book_begin,
   book_end:          group_book_end,

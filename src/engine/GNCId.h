@@ -6,8 +6,7 @@
  * QofIdType xaccGUIDType (const GUID * guid, QofBook *book); 
  */
 
-#define xaccGUIDType(guid,book)      \
-    qof_entity_type (qof_book_get_entity_table (book), (guid))
+#define xaccGUIDType(obj)  (QOF_INSTANCE(obj)->e_type)
 
 /* Equivalent function prototype:
  * void xaccGUIDNew (GUID *guid, QofBook *book)

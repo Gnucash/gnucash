@@ -158,21 +158,16 @@ int          xaccAccountOrder (Account **account_1, Account **account_2);
 /** @name Account lookup and GUID routines */
 /** @{ */
 
-/** The xaccAccountGetGUID() subroutine will return the
- *    globally unique id associated with that account. */
-const GUID * xaccAccountGetGUID (Account *account);
- /**  The xaccAccountReturnGUID() subroutine returns the 
-  *   same GUID as xaccAccountGetGUID, but as a struct. */
-GUID         xaccAccountReturnGUID (Account *account);
+/** deprecated */
+#define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
+#define xaccAccountGetGUID(X)     qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccAccountReturnGUID(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
 
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account. */
 Account    * xaccAccountLookup (const GUID *guid, QofBook *book);
-
-/**    xaccAccountLookupDirect performs the same function as
- * xaccAccountLookup but takes a GUID struct directly. */
-Account    * xaccAccountLookupDirect (GUID guid, QofBook *book);
+#define  xaccAccountLookupDirect(g,b) xaccAccountLookup(&(g),b)
 
 /** @} */
 
@@ -181,8 +176,6 @@ Account    * xaccAccountLookupDirect (GUID guid, QofBook *book);
 /** @name Account general setters/getters */
 /** @{ */
 
-/** @return The book where the account is stored */
-QofBook * xaccAccountGetBook (Account *account);
 
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
@@ -409,15 +402,11 @@ gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
  *  Returns false if either one is NULL. 
  */
 gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
+
+#define xaccAccountGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
+
 /** @} */
 
-/* ------------------ */
-
-/** @name Account KvpFrame getters/setters */
-/** @{ */
-KvpFrame * xaccAccountGetSlots (Account *account);
-void xaccAccountSetSlots_nc(Account *account, KvpFrame *frame);
-/** @} */
 
 /* ------------------ */
 
@@ -571,8 +560,6 @@ LotList * xaccAccountFindOpenLots (Account *acc,
 				   gpointer user_data, GCompareFunc sort_func);
 
 /*@}*/
-
-
 /* ------------------ */
 
 /** @name Account Reconciliation information getters/setters */

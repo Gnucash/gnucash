@@ -41,36 +41,6 @@
 
 typedef struct QofInstance_s QofInstance;
 
-struct QofInstance_s
-{
-/*
- * UNDER CONSTRUCTION!
- * This is mostly scaffolding for now,
- * eventually, it may hold more fields, such as refrence counting...
- *
- */
-   /* Globally unique id identifying this instance */
-	QofEntity entity;
-
-   /* The entity_table in which this instance is stored */
-   QofBook * book;
-
-  /* kvp_data is a key-value pair database for storing arbirtary
-   * information associated with this instance.  
-   * See src/engine/kvp_doc.txt for a list and description of the 
-   * important keys. */
-   KvpFrame *kvp_data;
-
-   /* Keep track of nesting level of begin/end edit calls */
-   int    editlevel;
-
-   /* In process of being destroyed */
-   gboolean  do_free;
-
-   /* This instance has not been saved yet */
-   gboolean  dirty;
-};
-
 /** Initialise the memory associated with an instance */
 void qof_instance_init (QofInstance *, QofIdType, QofBook *);
 

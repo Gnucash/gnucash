@@ -35,6 +35,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 
 static short module = MOD_ENGINE;
 
@@ -43,13 +44,16 @@ static short module = MOD_ENGINE;
 void 
 qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 {
+   QofCollection *col;
+
    inst->book = book;
 	inst->kvp_data = kvp_frame_new();
 	inst->editlevel = 0;
 	inst->do_free = FALSE;
 	inst->dirty = FALSE;
 
-	qof_entity_init (&inst->entity, type, book->entity_table);
+   col = qof_book_get_collection (book, type);
+	qof_entity_init (&inst->entity, type, col);
 }
 
 void 
@@ -91,6 +95,29 @@ qof_instance_is_dirty (QofInstance *inst)
 }
 
 /* ========================================================== */
+/* setters */
+
+void
+qof_instance_mark_clean (QofInstance *inst)
+{
+  if(!inst) return;
+  inst->dirty = FALSE;
+}
+
+void 
+qof_instance_set_slots (QofInstance *inst, KvpFrame *frm)
+{
+  if (!inst) return;
+  if (inst->kvp_data && (inst->kvp_data != frm))
+  {
+    kvp_frame_delete(inst->kvp_data);
+  }
+                                                                                
+  inst->dirty = TRUE;
+  inst->kvp_data = frm;
+}
+
+/* ========================================================== */
 
 void
 qof_instance_gemini (QofInstance *to, QofInstance *from)
@@ -101,11 +128,11 @@ qof_instance_gemini (QofInstance *to, QofInstance *from)
   /* Make a note of where the copy came from */
   gnc_kvp_bag_add (to->kvp_data, "gemini", now,
                                   "inst_guid", &from->entity.guid,
-                                  "book_guid", &from->book->guid,
+                                  "book_guid", &from->book->entity.guid,
                                   NULL);
   gnc_kvp_bag_add (from->kvp_data, "gemini", now,
                                   "inst_guid", &to->entity.guid,
-                                  "book_guid", &to->book->guid,
+                                  "book_guid", &to->book->entity.guid,
                                   NULL);
 
   to->dirty = TRUE;
@@ -114,6 +141,7 @@ qof_instance_gemini (QofInstance *to, QofInstance *from)
 QofInstance *
 qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
 {
+	QofCollection *col;
    KvpFrame *fr;
    GUID * twin_guid;
    QofInstance * twin;
@@ -126,8 +154,8 @@ qof_instance_lookup_twin (QofInstance *src, QofBook *target_book)
                                                                                 
    twin_guid = kvp_frame_get_guid (fr, "inst_guid");
 
-   twin = qof_entity_lookup (target_book->entity_table, 
-                    twin_guid, src->entity.e_type);
+	col = qof_book_get_collection (target_book, src->entity.e_type);
+   twin = (QofInstance *) qof_collection_lookup_entity (col, twin_guid);
 
    LEAVE (" found twin=%p", twin);
    return twin;

@@ -56,6 +56,9 @@
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofid-p.h"
+#include "qofinstance.h"
+#include "qofinstance-p.h"
 
 
 /** STRUCTS *********************************************************/
@@ -90,7 +93,7 @@
 
 struct split_s
 {
-  GUID guid;  /* globally unique id */
+  QofEntity entity;          /* globally unique id */
 
   QofBook *book;             /* The enitity table where this split is stored. */
 
@@ -160,12 +163,7 @@ struct split_s
 
 struct transaction_s
 {
-  /* guid is a globally unique identifier which can be used to
-   * reference the transaction.
-   */
-  GUID guid;
-
-  QofBook *book;         /* The entity_table where the transaction is stored */
+  QofInstance inst;     /* glbally unique id */
 
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
@@ -180,12 +178,6 @@ struct transaction_s
    * It is meant to be a short descriptive phrase.
    */
   char * description;        
-
-  /* kvp_data is a key-value pair database for storing simple 
-   * "extra" information in splits, transactions, and accounts. 
-   * it's NULL until accessed. */
-  KvpFrame * kvp_data;
-
 
   /* The common_currency field is the balancing common currency for
    * all the splits in the transaction.  Alternate, better(?) name: 
@@ -207,9 +199,6 @@ struct transaction_s
    * corresponding to the current traversal. */
   unsigned char  marker;      
 
-  gint32 editlevel; /* nestcount of begin/end edit calls */
-  gboolean do_free; /* transaction in process of being destroyed */
-
   /* The orig pointer points at a copy of the original transaction,
    * before editing was started.  This orig copy is used to rollback 
    * any changes made if/when the edit is abandoned.
@@ -224,12 +213,12 @@ struct transaction_s
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */
-void xaccTransSetGUID (Transaction *trans, const GUID *guid);
+#define xaccTransSetGUID(t,g) qof_entity_set_guid(QOF_ENTITY(t),g)
 
 /* Set the split's GUID. This should only be done when reading
  * a split from a datafile, or some other external source. Never
  * call this on an existing split! */
-void xaccSplitSetGUID (Split *split, const GUID *guid);
+#define xaccSplitSetGUID(s,g) qof_entity_set_guid(QOF_ENTITY(s),g)
 
 /* The xaccFreeSplit() method simply frees all memory associated
  * with the split.  It does not verify that the split isn't
@@ -301,6 +290,14 @@ void         DxaccSplitSetSharePriceAndAmount (Split *split,
                                                double price,
                                                double amount);
 void         DxaccSplitSetShareAmount (Split *split, double amount);
+
+
+/** Set the KvpFrame slots of this transaction to the given frm by
+ *  * directly using the frm pointer (i.e. non-copying).
+ *   * XXX this is wrong, nedds to be replaced with a transactional thingy
+ *   in kvp + qofinstance. for now, this is a quasi-unctional placeholder.
+ *    */
+#define xaccTransSetSlots_nc(T,F) qof_instance_set_slots(QOF_INSTANCE(T),F)
 
 /*@}*/
 

@@ -62,31 +62,46 @@ typedef const char * QofIdTypeConst;
 #define QOF_ID_NULL           "null"
 #define QOF_ID_SESSION        "Session"
 
+/* simple,cheesy cast but holds water for now */
+#define QOF_ENTITY(object) ((QofEntity *)(object))
+
 typedef struct QofEntity_s QofEntity;
-typedef struct _QofEntityTable QofEntityTable;
+typedef struct QofCollection_s QofCollection;
 
 struct QofEntity_s
 {
    QofIdType        e_type;
 	GUID             guid;
-	QofEntityTable * e_table;
+	QofCollection  * collection;
 };
 
-
 /** Initialise the memory associated with an entity */
-void qof_entity_init (QofEntity *, QofIdType, QofEntityTable *);
+void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
                                                                                 
-/** release the data associated with this entity. Dont actually free
+/** Release the data associated with this entity. Dont actually free
  * the memory associated with the instance. */
 void qof_entity_release (QofEntity *);
 
-/** The stuff below is obsolete and should be removed ASAP. */
+/* Return the GUID of this entity */
+GUID * qof_entity_get_guid (QofEntity *);
 
-/** Return the type of the indicated guid */
-QofIdType qof_entity_type (QofEntityTable *entity_table, const GUID * guid);
+/** collections of entities */
+QofCollection * qof_collection_new (QofIdType type);
+void qof_collection_destroy (QofCollection *col);
+
+/** return the type that the collection stores */
+QofIdType qof_collection_get_type (QofCollection *);
+
+/** Find the entity going only from its guid */
+QofEntity * qof_collection_lookup_entity (QofCollection *, const GUID *);
 
 /* Callback type for qof_entity_foreach */
-typedef void (*QofEntityForeachCB) (gpointer object, gpointer user_data);
+typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
+
+void qof_collection_foreach (QofCollection *, 
+                       QofEntityForeachCB, gpointer user_data);
+
+
 
 #endif /* QOF_ID_H */
 /** @} */

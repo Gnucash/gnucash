@@ -52,6 +52,7 @@
 #include "qofbook-p.h"
 #include "qofclass.h"
 #include "qofid-p.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 
 static short module = MOD_ACCOUNT; 
@@ -69,22 +70,12 @@ static void xaccAccountBringUpToDate (Account *);
 /********************************************************************\
 \********************************************************************/
 
-G_INLINE_FUNC void account_event (Account *account);
-G_INLINE_FUNC void
-account_event (Account *account)
-{
-  gnc_engine_gen_event (&account->inst.entity, GNC_EVENT_MODIFY);
-}
-
-
 G_INLINE_FUNC void mark_account (Account *account);
 G_INLINE_FUNC void
 mark_account (Account *account)
 {
-  if (account->parent)
-    account->parent->saved = FALSE;
-
-  account_event (account);
+  if (account->parent) account->parent->saved = FALSE;
+  account->inst.dirty = TRUE;
 }
 
 /********************************************************************\
@@ -335,16 +326,27 @@ xaccFreeAccount (Account *acc)
 void 
 xaccAccountBeginEdit (Account *acc) 
 {
-  GNC_BEGIN_EDIT (&acc->inst, GNC_ID_ACCOUNT);
+  GNC_BEGIN_EDIT (&acc->inst);
+}
+
+static inline void noop(QofInstance *inst) {}
+
+static inline void on_err (QofInstance *inst, QofBackendError errcode)
+{
+  PERR("commit error: %d", errcode);
+}
+
+static inline void acc_free (QofInstance *inst)
+{
+  Account *acc = (Account *) inst;
+  xaccGroupRemoveAccount(acc->parent, acc);
+  xaccFreeAccount(acc);
 }
 
 void 
 xaccAccountCommitEdit (Account *acc) 
 {
-  QofBackend * be;
-
   GNC_COMMIT_EDIT_PART1 (&acc->inst);
-  ENTER (" ");
 
   /* If marked for deletion, get rid of subaccounts first,
    * and then the splits ... */
@@ -391,39 +393,9 @@ xaccAccountCommitEdit (Account *acc)
     xaccGroupInsertAccount(acc->parent, acc); 
   }
 
-  /* See if there's a backend.  If there is, invoke it. */
-  be = acc->inst.book->backend;
-  if (be && be->commit) 
-  {
-    QofBackendError errcode;
+  GNC_COMMIT_EDIT_PART2 (&acc->inst, on_err, noop, acc_free);
 
-    /* clear errors */
-    do {
-      errcode = qof_backend_get_error (be);
-    } while (ERR_BACKEND_NO_ERR != errcode);
-
-    (be->commit) (be, GNC_ID_ACCOUNT, acc);
-    errcode = qof_backend_get_error (be);
-
-    if (ERR_BACKEND_NO_ERR != errcode)
-    {
-      /* Destroys must be rolled back as well ... */
-      acc->inst.do_free = FALSE;
-
-      /* XXX hack alert FIXME implement account rollback */
-      PERR ("Backend asked engine to rollback, but this isn't"
-            " handled yet. Return code=%d", errcode);
-    }
-  }
-  acc->inst.dirty = FALSE;
-
-  /* final stages of freeing the account */
-  if (acc->inst.do_free)
-  {
-    xaccGroupRemoveAccount(acc->parent, acc);
-    xaccFreeAccount(acc);
-  }
-  LEAVE (" ");
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 void 
@@ -434,7 +406,6 @@ xaccAccountDestroy (Account *acc)
 
   xaccAccountCommitEdit (acc);
 }
-
 
 void 
 xaccAccountSetVersion (Account *acc, gint32 vers)
@@ -448,13 +419,6 @@ xaccAccountGetVersion (Account *acc)
 {
   if (!acc) return 0;
   return (acc->version);
-}
-
-QofBook *
-xaccAccountGetBook (Account *account)
-{
-  if (!account) return NULL;
-  return account->inst.book;
 }
 
 /********************************************************************\
@@ -705,56 +669,6 @@ xaccAccountBringUpToDate(Account *acc)
   xaccAccountRecomputeBalance(acc);
 }
 
-
-/********************************************************************
- * xaccAccountGetSlots
- ********************************************************************/
-
-KvpFrame * 
-xaccAccountGetSlots(Account * account) 
-{
-  if (!account) return NULL;
-  return(account->inst.kvp_data);
-}
-
-void
-xaccAccountSetSlots_nc(Account *account, KvpFrame *frame)
-{
-  if (!account) return;
-
-  xaccAccountBeginEdit (account);
-  if (account->inst.kvp_data && frame != account->inst.kvp_data)
-  {
-      kvp_frame_delete (account->inst.kvp_data);
-  }
-  account->inst.kvp_data = frame;
-  account->inst.dirty = TRUE;
-  mark_account (account);
-  xaccAccountCommitEdit (account);
-}
-
-
-/********************************************************************\
-\********************************************************************/
-
-const GUID *
-xaccAccountGetGUID (Account *account)
-{
-  if (!account)
-    return guid_null();
-
-  return &account->inst.entity.guid;
-}
-
-GUID
-xaccAccountReturnGUID (Account *account)
-{
-  if (!account)
-    return *guid_null();
-
-  return account->inst.entity.guid;
-}
-
 /********************************************************************\
 \********************************************************************/
 
@@ -777,17 +691,10 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 Account *
 xaccAccountLookup (const GUID *guid, QofBook *book)
 {
+  QofCollection *col;
   if (!guid || !book) return NULL;
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                           guid, GNC_ID_ACCOUNT);
-}
-
-Account *
-xaccAccountLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                           &guid, GNC_ID_ACCOUNT);
+  col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
+  return (Account *) qof_collection_lookup_entity (col, guid);
 }
 
 /********************************************************************\
@@ -1044,7 +951,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 
       mark_account (acc);
       if (split->parent)
-        gnc_engine_generate_event (&split->parent->guid, GNC_ID_TRANS, GNC_EVENT_MODIFY);
+        gnc_engine_gen_event (&split->parent->inst.entity, GNC_EVENT_MODIFY);
     }
   }
   xaccAccountCommitEdit(acc);
@@ -1131,7 +1038,7 @@ xaccAccountRecomputeBalance (Account * acc)
   acc->reconciled_balance = reconciled_balance;
 
   acc->balance_dirty = FALSE;
-  account_event (acc);
+  gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
 }
 
 /********************************************************************\
@@ -2903,33 +2810,32 @@ xaccAccountFindTransByDesc(Account *account, const char *description)
 /* gncObject function implementation and registration */
 
 static void
-account_foreach (QofBook *book, QofEntityForeachCB cb, gpointer ud)
+account_foreach (QofBook *book, QofForeachCB cb, gpointer ud)
 {
-  QofEntityTable *et;
+  QofCollection *col;
 
   g_return_if_fail (book);
   g_return_if_fail (cb);
 
-  et = qof_book_get_entity_table (book);
-  qof_entity_foreach (et, GNC_ID_ACCOUNT, cb, ud);
+  col = qof_book_get_collection (book, GNC_ID_ACCOUNT);
+  qof_collection_foreach (col, (QofEntityForeachCB) cb, ud);
 }
 
 static QofObject account_object_def = {
-  QOF_OBJECT_VERSION,
-  GNC_ID_ACCOUNT,
-  "Account",
-  NULL,				/* book_begin */
-  NULL,				/* book_end */
-  NULL,				/* is_dirty */
-  NULL,				/* mark_clean */
-  account_foreach,		/* foreach */
-  (const char* (*)(gpointer)) xaccAccountGetName /* printable */
+  interface_version:     QOF_OBJECT_VERSION,
+  e_type:                GNC_ID_ACCOUNT,
+  type_label:            "Account",
+  book_begin:            NULL,
+  book_end:              NULL,
+  is_dirty:              NULL,
+  mark_clean:            NULL,
+  foreach:               account_foreach,
+  printable:             (const char* (*)(gpointer)) xaccAccountGetName
 };
 
 gboolean xaccAccountRegister (void)
 {
   static QofParam params[] = {
-    { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)xaccAccountGetSlots, NULL },
     { ACCOUNT_NAME_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetName, NULL },
     { ACCOUNT_CODE_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetCode, NULL },
     { ACCOUNT_DESCRIPTION_, QOF_TYPE_STRING, (QofAccessFunc)xaccAccountGetDescription, NULL },
@@ -2942,6 +2848,7 @@ gboolean xaccAccountRegister (void)
     { ACCOUNT_TAX_RELATED, QOF_TYPE_BOOLEAN, (QofAccessFunc)xaccAccountGetTaxRelated, NULL },
     { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_guid, NULL },
     { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+    { ACCOUNT_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };
 

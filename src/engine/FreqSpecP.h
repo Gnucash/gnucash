@@ -52,14 +52,17 @@ Currently the only files which include this file are:
  *
  * This still needs to deal with:
  * . exceptions
+ * . 13 periods: (4 weeks/period 4x13=52 weeks/year)
  * . yearly 360/365?
  * . re-based frequencies [based around a non-standard [read:
  *   not-Jan-1-based/fiscal] year]
  * . "business days" -- m-f sans holidays [per-user list thereof]
  **/
-struct gncp_freq_spec {
+struct gncp_freq_spec 
+{
+        QofEntity       entity;
         FreqType        type;
-        UIFreqType        uift;
+        UIFreqType      uift;
         union u {
                 struct {
                          /** The date on which the single event occurs. */
@@ -107,8 +110,6 @@ struct gncp_freq_spec {
                         GList *subSpecs;
                 } composites;
         } s;
-        GUID guid;
-        QofEntityTable *entity_table;
 };
 
 #endif /* XACC_FREQSPECP_H */

@@ -31,6 +31,7 @@
 #include "gnc-numeric.h"
 #include "guid.h"
 #include "qofbook.h"
+#include "qofinstance.h"
 
 
 /** @addtogroup Engine
@@ -172,9 +173,6 @@ void gnc_price_set_version(GNCPrice *p, gint32 versn);
 /** As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
 GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
-const GUID *    gnc_price_get_guid (GNCPrice *p);
-const GUID      gnc_price_return_guid (GNCPrice *p);
-QofBook *       gnc_price_get_book (GNCPrice *p);
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
 Timespec        gnc_price_get_time(GNCPrice *p);
@@ -183,6 +181,10 @@ const char *    gnc_price_get_type(GNCPrice *p);
 gnc_numeric     gnc_price_get_value(GNCPrice *p);
 gint32          gnc_price_get_version(GNCPrice *p);
 gboolean        gnc_price_equal(GNCPrice *p1, GNCPrice *p2);
+
+#define gnc_price_get_guid(X)    qof_entity_get_guid(QOF_ENTITY(X))
+#define gnc_price_return_guid(X) (*(qof_entity_get_guid(QOF_ENTITY(X))))
+#define gnc_price_get_book(X)    qof_instance_get_book(QOF_INSTANCE(X))
 
 /* ******************************************************************** */
 /** GNCPrice lists:

@@ -36,36 +36,34 @@
 
 /* begin_edit helper
  *
- * assumes:
- *        obj->editlevel        (int)
- *        obj->book        (QofBook*)
- *
  * @args:
- *        obj: the object to begin editing
- *        type: the object type
+ *        inst: an instance of QofInstance
  *
  * The caller should use this macro first and then perform any other operations.
  */
 
-#define GNC_BEGIN_EDIT(obj,type) {                         \
-  QofBackend * be;                                         \
-  if (!(obj)) return;                                      \
-                                                           \
-  (obj)->editlevel++;                                      \
-  if (1 < (obj)->editlevel) return;                        \
-                                                           \
-  if (0 >= (obj)->editlevel)                               \
-  {                                                        \
-    PERR ("unbalanced call - resetting (was %d)", (obj)->editlevel); \
-    (obj)->editlevel = 1;                                  \
-  }                                                        \
-                                                           \
-  /* See if there's a backend.  If there is, invoke it. */ \
-  be = qof_book_get_backend ((obj)->book);                 \
-  if (be && be->begin) {                                   \
-     (be->begin) (be, (type), (obj));                      \
-  }                                                        \
-}
+#define GNC_BEGIN_EDIT(inst)                                        \
+  QofBackend * be;                                                  \
+  if (!(inst)) return;                                              \
+                                                                    \
+  (inst)->editlevel++;                                              \
+  if (1 < (inst)->editlevel) return;                                \
+                                                                    \
+  if (0 >= (inst)->editlevel)                                       \
+  {                                                                 \
+    PERR ("unbalanced call - resetting (was %d)", (inst)->editlevel); \
+    (inst)->editlevel = 1;                                          \
+  }                                                                 \
+  ENTER ("inst=%p", (inst));                                        \
+                                                                    \
+  /* See if there's a backend.  If there is, invoke it. */          \
+  be = qof_book_get_backend ((inst)->book);                         \
+  if (be && be->begin) {                                            \
+     (be->begin) (be, (inst)->entity.e_type, (inst));               \
+  } else {                                                          \
+     /* We tried and failed to start transaction! */                \
+     (inst)->dirty = TRUE;                                          \
+  }
 
 
 /*
@@ -73,84 +71,93 @@
  *
  * The caller should call PART1 as the first thing, then 
  * perform any local operations prior to calling the backend.
- * Then call PART2.  You cannot do anything after PART2.
- *
- * assumes:
- *        obj->editlevel        (int)
- *        obj->book        (QofBook*)
- *        obj->do_free        (gboolean)
- *        obj->dirty        (gboolean)
+ * Then call PART2.  
  */
 
 /*
  * part1 -- deal with the editlevel
  * 
- * assumes:
- *        obj->editlevel        (int)
- *
  * @args:
- *        obj: the object being committed
+ *        inst: an instance of QofInstance
  */
 
-#define GNC_COMMIT_EDIT_PART1(obj) {             \
-  if (!(obj)) return;                            \
-                                                 \
-  (obj)->editlevel--;                            \
-  if (0 < (obj)->editlevel) return;              \
-                                                 \
-  if (0 > (obj)->editlevel)                      \
-  {                                              \
-    PERR ("unbalanced call - resetting (was %d)", (obj)->editlevel); \
-    (obj)->editlevel = 0;                        \
-  }                                              \
+#define GNC_COMMIT_EDIT_PART1(inst) {                            \
+  if (!(inst)) return;                                           \
+                                                                 \
+  (inst)->editlevel--;                                           \
+  if (0 < (inst)->editlevel) return;                             \
+                                                                 \
+  /* The pricedb sufffers from delayed update...     */          \
+  /* This may be setting a bad precedent for other types, I fear. */ \
+  /* Other types probably really should handle begin like this. */ \
+  if ((-1 == (inst)->editlevel) && (inst)->dirty)                \
+  {                                                              \
+    QofBackend * be;                                             \
+    be = qof_book_get_backend ((inst)->book);                    \
+    if (be && be->begin) {                                       \
+     (be->begin) (be, (inst)->entity.e_type, (inst));            \
+    }                                                            \
+    (inst)->editlevel = 0;                                       \
+  }                                                              \
+  if (0 > (inst)->editlevel)                                     \
+  {                                                              \
+    PERR ("unbalanced call - resetting (was %d)", (inst)->editlevel); \
+    (inst)->editlevel = 0;                                       \
+  }                                                              \
+  ENTER ("inst=%p, dirty=%d do-free=%d",                         \
+            (inst), (inst)->dirty, (inst)->do_free);             \
 }
 
 /*
  * part2 -- deal with the backend
  * 
- * assumes:
- *        obj->book        (QofBook*)
- *        obj->do_free        (gboolean)
- *
  * @args:
- *        obj: the object being committed
- *        type: the type of the object
+ *        inst: an instance of QofInstance
  *        on_error: a function called if there is a backend error.
- *                void (*on_error)(obj, QofBackendError)
- *        on_done: a function called after the commit is complete but before
- *                the object is freed.  This is where you clear the "dirty"
- *                flag, and perform any other operations after the commit.
- *                void (*on_done)(obj)
- *        on_free: a function called if obj->do_free is TRUE. 
- *                void (*on_free)(obj)
+ *                void (*on_error)(inst, QofBackendError)
+ *        on_done: a function called after the commit is complete 
+ *                but before the instect is freed. Perform any other 
+ *                operations after the commit.
+ *                void (*on_done)(inst)
+ *        on_free: a function called if inst->do_free is TRUE. 
+ *                void (*on_free)(inst)
  */
-#define GNC_COMMIT_EDIT_PART2(obj,type,on_error,on_done,on_free) { \
-  QofBackend * be; \
-  \
-  /* See if there's a backend.  If there is, invoke it. */ \
-  be = qof_book_get_backend ((obj)->book); \
-  if (be && be->commit) \
-  { \
-    QofBackendError errcode; \
-    \
-    /* clear errors */ \
-    do { \
-      errcode = qof_backend_get_error (be); \
-    } while (ERR_BACKEND_NO_ERR != errcode); \
-    \
-    (be->commit) (be, (type), (obj)); \
-    errcode = qof_backend_get_error (be); \
-    if (ERR_BACKEND_NO_ERR != errcode) \
-    { \
-      (obj)->do_free = FALSE; \
-      (on_error)((obj), errcode); \
-      qof_backend_set_error (be, errcode); \
-    }                                      \
-  }                                        \
-  (on_done)(obj);                          \
-  (obj)->dirty = FALSE;                    \
-                                           \
-  if ((obj)->do_free) { (on_free)(obj); }  \
+#define GNC_COMMIT_EDIT_PART2(inst,on_error,on_done,on_free) {   \
+  QofBackend * be;                                               \
+                                                                 \
+  /* See if there's a backend.  If there is, invoke it. */       \
+  be = qof_book_get_backend ((inst)->book);                      \
+  if (be && be->commit)                                          \
+  {                                                              \
+    QofBackendError errcode;                                     \
+                                                                 \
+    /* clear errors */                                           \
+    do {                                                         \
+      errcode = qof_backend_get_error (be);                      \
+    } while (ERR_BACKEND_NO_ERR != errcode);                     \
+                                                                 \
+    (be->commit) (be, (inst)->entity.e_type, (inst));            \
+    errcode = qof_backend_get_error (be);                        \
+    if (ERR_BACKEND_NO_ERR != errcode)                           \
+    {                                                            \
+      /* XXX Should perform a rollback here */                   \
+      (inst)->do_free = FALSE;                                   \
+                                                                 \
+      /* Push error back onto the stack */                       \
+      qof_backend_set_error (be, errcode);                       \
+      (on_error)((inst), errcode);                               \
+    }                                                            \
+    /* XXX the backend commit code should clear dirty!! */       \
+    (inst)->dirty = FALSE;                                       \
+  }                                                              \
+  (on_done)(inst);                                               \
+                                                                 \
+  LEAVE ("inst=%p, dirty=%d do-free=%d",                         \
+            (inst), (inst)->dirty, (inst)->do_free);             \
+  if ((inst)->do_free) {                                         \
+     (on_free)(inst);                                            \
+     return;                                                     \
+  }                                                              \
 }
 
 

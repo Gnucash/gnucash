@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-lot-p.h -- AR/AP invoices; inventory lots; stock lots        *
+ * qofinstance-p.h -- private fields common to all object instances *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -17,62 +17,53 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
-
-
 /*
- * FILE:
- * gnc-lot-p.h
+ * Object instance holds many common fields that most
+ * gnucash objects use.
  * 
- * FUNCTION:
- * Lots implement the fundamental conceptual idea behind invoices,
- * inventory lots, and stock market investment lots.  See the file
- * src/doc/lots.txt for implmentation overview.
- *
- * HISTORY:
- * Created by Linas Vepstas May 2002
- * Copyright (c) 2002 Linas Vepstas <linas@linas.org>
+ * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
  */
 
-#ifndef GNC_LOT_P_H
-#define GNC_LOT_P_H
+#ifndef QOF_INSTANCE_P_H
+#define QOF_INSTANCE_P_H
 
-#include "gnc-engine.h"
-#include "kvp_frame.h"
-#include "qofbook.h"
-#include "qofid.h"
-#include "qofid-p.h"
+#include "qofinstance.h"
 
-struct gnc_lot_struct
+struct QofInstance_s
 {
-  QofEntity entity;     /* Unique guid for this lot */
+/*
+ * UNDER CONSTRUCTION!
+ * This is mostly scaffolding for now,
+ * eventually, it may hold more fields, such as refrence counting...
+ *
+ */
+   /* Globally unique id identifying this instance */
+	QofEntity entity;
 
-  /* Book that this lot belongs to */
-  QofBook *book;  
+   /* The entity_table in which this instance is stored */
+   QofBook * book;
 
-  /* Anchor for generic lot-specific data. */
-  KvpFrame *kvp_data;
+  /* kvp_data is a key-value pair database for storing arbirtary
+   * information associated with this instance.  
+   * See src/engine/kvp_doc.txt for a list and description of the 
+   * important keys. */
+   KvpFrame *kvp_data;
 
-  /* Account to which this lot applies.  All splits in the lot must
-   * belong to this account. 
-   */
-  Account * account;
+   /* Keep track of nesting level of begin/end edit calls */
+   int    editlevel;
 
-  /* List of splits that belong to this lot. */
-  SplitList *splits;
+   /* In process of being destroyed */
+   gboolean  do_free;
 
-  /* Handy cached value to indicate if lot is closed. */
-  /* If value is negative, then the cache is invalid. */
-  signed char is_closed;
-
-  /* traversal marker, handy for preventing recursion */
-  unsigned char marker;
+   /* This instance has not been saved yet */
+   gboolean  dirty;
 };
 
-#define gnc_lot_set_guid(L,G)  qof_entity_set_guid(QOF_ENTITY(L),&(G))
+/** reset the dirty flag */
+void qof_instance_mark_clean (QofInstance *);
 
-/* Register with the Query engine */
-void gnc_lot_register (void);
+void qof_instance_set_slots (QofInstance *, KvpFrame *);
 
-#endif /* GNC_LOT_P_H */
-
+#endif /* QOF_INSTANCE_P_H */
