@@ -245,15 +245,46 @@ check_equality_operator (void)
 	rfour = gnc_numeric_reduce (rfour);
 	do_test (gnc_numeric_eq(four, rfour), "reduce to four");
 
+	/* Check equality operator for some large nuer/denom values */
+	gint64 numer = 1<<30;
+	numer <<= 30;   /* we don't trust cpp to compute 1<<60 correctly */
+	gint64 deno = 1<<30;
+	deno <<= 20;
+	gnc_numeric rbig = gnc_numeric_create (numer, deno);
 	
+	gnc_numeric big = gnc_numeric_create (1<<10,1);
+	do_test (gnc_numeric_equal(big, rbig), "equal to billion");
+	
+	big = gnc_numeric_create (1<<20,1<<10);
+	do_test (gnc_numeric_equal(big, rbig), "equal to 1<<20/1<<10");
+
+	big = gnc_numeric_create (1<<30,1<<20);
+	do_test (gnc_numeric_equal(big, rbig), "equal to 1<<30/1<<20");
+
+	numer = 1<<30;
+	numer <<= 30;   /* we don't trust cpp to compute 1<<60 correctly */
+	deno = 1<<30;
+	rbig = gnc_numeric_create (numer, deno);
+	
+	big = gnc_numeric_create (1<<30,1);
+	do_test (gnc_numeric_equal(big, rbig), "equal to 1<<30");
+
+	numer = 1<<30;
+	numer <<= 10;
+	big = gnc_numeric_create (numer, 1<<10);
+	do_test (gnc_numeric_equal(big, rbig), "equal to 1<<40/1<<10");
+	
+	numer <<= 10;
+	big = gnc_numeric_create (numer, 1<<20);
+	do_test (gnc_numeric_equal(big, rbig), "equal to 1<<50/1<<20");
+
 	int i;
-	/* lim keeps denominotor in the range of 2^30 */
-	gint64 lim = RAND_MAX / (1<<15);
+	/* We assume RAND_MAX is less that 1<<32 */
 	for (i=0; i<NREPS; i++) 
 	{
-		gint64 deno = rand() / lim;
-		gint64 mult = rand() / lim;
-		gint64 numer = get_random_gint64() / (1<<16);
+		gint64 deno = rand() / 2;
+		gint64 mult = rand() / 2;
+		gint64 numer = rand() / 2;
 
 		gnc_numeric val = gnc_numeric_create (numer, deno);
 		gnc_numeric mval = gnc_numeric_create (numer*mult, deno*mult);
