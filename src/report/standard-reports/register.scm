@@ -3,11 +3,13 @@
 
 (define-module (gnucash report register))
 
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
+(use-modules (gnucash gnc-module))
+
 (require 'record)
 
-(use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
 (define-macro (addto! alist element)
