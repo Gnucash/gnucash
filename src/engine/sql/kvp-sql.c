@@ -39,7 +39,7 @@
 #include "PostgresBackend.h"
 #include "putil.h"
 
-static short module = MOD_BACKEND; 
+static short module = MOD_KVP; 
 
 /* =========================================================== */
 /* given integer ipath (path id) and a string, poke the string 
