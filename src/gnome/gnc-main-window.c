@@ -31,6 +31,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
+#include "gnc-plugin-manager.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
@@ -53,6 +54,8 @@ static void gnc_main_window_setup_window (GncMainWindow *window);
 /* Callbacks */
 static void gnc_main_window_add_widget (EggMenuMerge *merge, GtkWidget *widget, GncMainWindow *window);
 static void gnc_main_window_change_current_page (GtkNotebook *notebook, gint pos, GncMainWindow *window);
+static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
+static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 
 /* Command callbacks */
 static void gnc_main_window_cmd_file_new (EggAction *action, GncMainWindow *window);
@@ -95,7 +98,6 @@ struct GncMainWindowPrivate
 
 	EggActionGroup *action_group;
 
-	GList *plugins;
 	GncPluginPage *current_page;
 };
 
@@ -252,37 +254,6 @@ gnc_main_window_new (void)
 }
 
 void
-gnc_main_window_register_plugin   (GncMainWindow *window,
-				   GncPlugin *plugin)
-{
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
-	g_return_if_fail (plugin != NULL);
-	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-
-	if (g_list_index (window->priv->plugins, plugin) > -1) {
-		return;
-	}
-
-	window->priv->plugins = g_list_append (window->priv->plugins, plugin);
-
-	gnc_plugin_merge_actions (plugin, window->ui_merge);
-}
-
-void
-gnc_main_window_unregister_plugin (GncMainWindow *window,
-				   GncPlugin *plugin)
-{
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
-	g_return_if_fail (plugin != NULL);
-	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-	g_return_if_fail (g_list_index (window->priv->plugins, plugin) >= 0);
-
-	window->priv->plugins = g_list_remove (window->priv->plugins, plugin);
-
-	gnc_plugin_unmerge_actions (plugin, window->ui_merge);
-}
-
-void
 gnc_main_window_open_page (GncMainWindow *window,
 			   GncPluginPage *page)
 {
@@ -415,10 +386,23 @@ gnc_main_window_dispose (GObject *object)
 }
 
 static void
+gnc_main_window_add_plugin (gpointer plugin,
+			    gpointer window)
+{
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (GNC_IS_PLUGIN (plugin));
+
+	gnc_plugin_merge_actions (GNC_PLUGIN (plugin),
+				  GNC_MAIN_WINDOW (window)->ui_merge);
+}
+
+static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
 	GtkWidget *main_vbox;
 	guint i;
+	GncPluginManager *manager;
+	GList *plugins;
 
 	/* Create widgets and add them to the window */
 	main_vbox = gtk_vbox_new (FALSE, 0);
@@ -459,6 +443,16 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	egg_menu_merge_add_ui_from_file (window->ui_merge, GNC_UI_DIR "/gnc-main-window-ui.xml", NULL);
 	gtk_window_add_accel_group (GTK_WINDOW (window), window->ui_merge->accel_group);
 	egg_menu_merge_ensure_update (window->ui_merge);
+
+	/* GncPluginManager stuff */
+	manager = gnc_plugin_manager_get ();
+	plugins = gnc_plugin_manager_get_plugins (manager);
+	g_signal_connect (G_OBJECT (manager), "plugin-added",
+			  G_CALLBACK (gnc_main_window_plugin_added), window);
+	g_signal_connect (G_OBJECT (manager), "plugin-removed",
+			  G_CALLBACK (gnc_main_window_plugin_removed), window);
+	g_list_foreach (plugins, gnc_main_window_add_plugin, window);
+	g_list_free (plugins);
 }
 
 static void
@@ -499,6 +493,28 @@ gnc_main_window_change_current_page (GtkNotebook *notebook,
 		gnc_plugin_page_merge_actions (page,  window->ui_merge);
 		gnc_plugin_page_selected (page);
 	}
+}
+
+static void
+gnc_main_window_plugin_added (GncPlugin *manager,
+			      GncPlugin *plugin,
+			      GncMainWindow *window)
+{
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (GNC_IS_PLUGIN (plugin));
+
+	gnc_plugin_merge_actions (plugin, window->ui_merge);
+}
+
+static void
+gnc_main_window_plugin_removed (GncPlugin *manager,
+				GncPlugin *plugin,
+				GncMainWindow *window)
+{
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (GNC_IS_PLUGIN (plugin));
+
+	gnc_plugin_unmerge_actions (plugin, window->ui_merge);
 }
 
 

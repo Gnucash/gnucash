@@ -48,6 +48,7 @@
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-plugin-account-tree.h" /* FIXME Remove this line*/
+#include "gnc-plugin-manager.h" /* FIXME Remove this line*/
 #include "gnc-network.h"
 #include "gnc-splash.h"
 #include "gnc-html.h"
@@ -423,7 +424,7 @@ gnc_gui_init (SCM command_line)
     gtk_widget_show (GTK_WIDGET (main_window));
 
     /* FIXME Remove this test code */
-    gnc_main_window_register_plugin (main_window, gnc_plugin_account_tree_new (main_window));
+    gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_account_tree_new (main_window));
 
     /* Run the ui startup hooks. */
     {

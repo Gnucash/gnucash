@@ -44,7 +44,8 @@
 #include "gnc-engine-util.h"
 #include "gnc-file-dialog.h"
 #include "gnc-gui-query.h"
-#include "gnc-menu-extensions.h"
+#include "gnc-plugin-manager.h"
+#include "gnc-plugin-qif-import.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
@@ -2041,17 +2042,9 @@ gnc_ui_qif_import_druid_make(void)  {
 }
 
 void
-gnc_ui_qif_import_create_menus(void)
+gnc_ui_qif_import_create_plugin(void)
 {
-  static GnomeUIInfo menuitem =
-  {
-    GNOME_APP_UI_ITEM,
-    N_("Import _QIF..."),
-    N_("Import a Quicken QIF file"),
-    gnc_file_qif_import, NULL, NULL,
-    GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
-    'i', GDK_CONTROL_MASK, NULL
-  };
+	GncPlugin *plugin = gnc_plugin_qif_import_new ();
 
-  gnc_add_c_extension(&menuitem, WINDOW_NAME_MAIN "/File/_Import/");
+	gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
 }

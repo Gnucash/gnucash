@@ -5,11 +5,13 @@ pkglib_LTLIBRARIES=libgncmod-qif-import.la
 libgncmod_qif_import_la_SOURCES = \
   dialog-account-picker.c \
   druid-qif-import.c \
+  gnc-plugin-qif-import.c \
   gncmod-qif-import.c
 
 noinst_HEADERS = \
   dialog-account-picker.h \
-  druid-qif-import.h
+  druid-qif-import.h \
+  gnc-plugin-qif-import.h
 
 libgncmod_qif_import_la_LDFLAGS = -module 
 
@@ -51,6 +53,8 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
+  -I${top_srcdir}/src/gnome-utils/egg \
+  -DGNC_UI_DIR=\"$(GNC_UI_DIR)\"   \
   ${G_WRAP_COMPILE_ARGS} \
   ${GUILE_INCS} \
   ${GLIB_CFLAGS} \
@@ -60,11 +64,16 @@ AM_CFLAGS = \
   ${GDK_PIXBUF_CFLAGS} \
   ${GTKHTML_CFLAGS}
 
+uidir = $(GNC_UI_DIR)
+ui_DATA = \
+	gnc-plugin-qif-import-ui.xml
+
 EXTRA_DIST = \
   .cvsignore \
   ${gncscm_DATA} \
   ${glade_DATA} \
-  file-format.txt
+  file-format.txt \
+  $(ui_DATA)
 
 CLEANFILES =
 

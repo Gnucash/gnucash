@@ -44,6 +44,7 @@ libgncgnome_la_SOURCES = \
   gnc-main-window.c \
   gnc-plugin.c \
   gnc-plugin-account-tree.c \
+  gnc-plugin-manager.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page.c \
   gnc-splash.c \
@@ -84,6 +85,7 @@ noinst_HEADERS = \
   gnc-main-window.h \
   gnc-plugin.h \
   gnc-plugin-account-tree.h \
+  gnc-plugin-manager.h \
   gnc-plugin-page.h \
   gnc-plugin-page-account-tree.h \
   gnc-network.h \

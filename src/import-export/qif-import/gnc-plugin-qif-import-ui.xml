@@ -1,0 +1,11 @@
+<Root>
+<menu>
+<submenu name="File" verb="FileAction">
+	<submenu name="FileImport" verb="FileImportAction">
+		<placeholder name="FileImportPlaceholder">
+			<menuitem name="FileQIFImport" verb="QIFImportAction"/>
+		</placeholder>
+	</submenu>
+</submenu>
+</menu>
+</Root>

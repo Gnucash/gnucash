@@ -14,11 +14,19 @@
 #include "gnc-plugin-page-account-tree.h"
 
 #include "AccWindow.h"
+#include "Scrub.h"
+#include "Transaction.h"
 #include "dialog-account.h"
+#include "dialog-transfer.h"
 #include "gnc-book.h"
+#include "gnc-component-manager.h"
 #include "gnc-plugin-account-tree.h"
+#include "gnc-split-reg.h"
 #include "gnc-tree-model-account.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "window-reconcile.h"
+#include "window-register.h"
 
 #include "messages.h"
 
@@ -45,14 +53,17 @@ static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
 
 /* Command callbacks */
 static void gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAccountTree *plugin_page);
-static void gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, gpointer data);
-static void gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, gpointer data);
+static void gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginPageAccountTree *page);
 static void gnc_plugin_page_account_tree_cmd_edit_account (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, gpointer data);
-static void gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, gpointer data);
-static void gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action, gpointer data);
-static void gnc_plugin_page_account_tree_cmd_transfer (EggAction *action, gpointer data);
-static void gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, gpointer data);
+static void gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_transfer (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPluginPageAccountTree *page);
 
 static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	/* Toplevel */
@@ -76,7 +87,7 @@ static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "EditDeleteAccountAction", N_("_Delete Acount"), GTK_STOCK_REMOVE, NULL,
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account), NULL },
-	{ "EditAccountViewOptionsAction", N_("Options"), GTK_STOCK_PROPERTIES, NULL,
+	{ "EditAccountViewOptionsAction", N_("Account Tree Options"), GTK_STOCK_PROPERTIES, NULL,
 	  N_("Edit the account view options"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options), NULL },
 
@@ -90,6 +101,17 @@ static EggActionGroupEntry gnc_plugin_page_account_tree_actions [] = {
 	{ "ActionsStockSplitAction", N_("Stock S_plit..."), NULL, NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split), NULL },
+	{ "ScrubMenuAction", N_("Check & Repair"), NULL, NULL, NULL, NULL, NULL },
+	{ "ScrubAction", N_("Check & Repair A_ccount"), NULL, NULL,
+	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub), NULL },
+	{ "ScrubSubAction", N_("Check & Repair Su_baccount"), NULL, NULL,
+	  N_("Check for and repair unbalanced transactions and orphan splits "
+             "in this account and its subaccounts"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub), NULL },
+	{ "ScrubAllAction", N_("Check & Repair A_ll"), NULL, NULL,
+	  N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
+	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all), NULL },
 };
 static guint gnc_plugin_page_account_tree_n_actions = G_N_ELEMENTS (gnc_plugin_page_account_tree_actions);
 
@@ -371,13 +393,27 @@ gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAc
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, gpointer data)
+gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageAccountTree *page)
 {
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+	GNCSplitReg *gsr;
+
+	g_return_if_fail (account != NULL);
+
+	gsr = regWindowSimple (account);
+	gnc_split_reg_raise (gsr);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, gpointer data)
+gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginPageAccountTree *page)
 {
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+	GNCSplitReg *gsr;
+
+	g_return_if_fail (account != NULL);
+
+	gsr = regWindowAccGroup (account);
+	gnc_split_reg_raise (gsr);
 }
 
 static void
@@ -392,28 +428,183 @@ gnc_plugin_page_account_tree_cmd_edit_account (EggAction *action, GncPluginPageA
 	gnc_ui_edit_account_window_raise (account_window);
 }
 
+/********************************************************************
+ * delete_account_helper
+ * See if this account has any splits present.  Set the user data
+ * and return the same value to stop walking the account tree if
+ * appropriate.
+ ********************************************************************/
+typedef struct _delete_helper
+{
+	gboolean has_splits;
+	gboolean has_ro_splits;
+} delete_helper_t;
+
+static gpointer
+delete_account_helper (Account * account, gpointer data)
+{
+	delete_helper_t *helper_res = data;
+	GList *splits;
+
+	splits = xaccAccountGetSplitList (account);
+	if (splits) {
+		helper_res->has_splits = TRUE;
+		while (splits) {
+			Split *s = splits->data;
+			Transaction *txn = xaccSplitGetParent (s);
+			if (xaccTransGetReadOnly (txn)) {
+				helper_res->has_ro_splits = TRUE;
+				break;
+			}
+			splits = splits->next;
+		}
+	}
+
+	return (gpointer) (helper_res->has_splits || helper_res->has_ro_splits);
+}
+
 static void
-gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, gpointer data)
+gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPageAccountTree *page)
+{
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+
+	g_return_if_fail (account != NULL);
+
+	const char *no_splits_no_children = _("Are you sure you want to delete the %s account?");
+	const char *no_splits = _("Are you sure you want to delete the %s\n"
+				  "account and all its children?");
+	const char *acct_has_splits =
+		_("This account contains transactions.  Are you sure you\n"
+		  "want to delete the %s account?");
+	const char *child_has_splits =
+		_("One (or more) children of this account contain\n"
+		  "transactions.  Are you sure you want to delete the\n"
+		  "%s account and all its children?");
+	const char *acct_has_ro_splits =
+		_("This account contains read-only transactions.  You " "may not delete %s.");
+	const char *child_has_ro_splits =
+		_("One (or more) children of this account contains "
+		  "read-only transactions.  You may not delete %s.");
+	const char *format;
+	char *name;
+	GList *splits;
+
+	g_return_if_fail (account != NULL);
+
+	name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+	if (!name)
+		name = g_strdup ("");
+
+	if ((splits = xaccAccountGetSplitList (account)) != NULL) {
+		/* Check for RO txns -- if there are any, disallow deletion */
+		for (; splits; splits = splits->next) {
+			Split *s = splits->data;
+			Transaction *txn = xaccSplitGetParent (s);
+			if (xaccTransGetReadOnly (txn)) {
+				gnc_error_dialog (acct_has_ro_splits, name);
+				return;
+			}
+		}
+		format = acct_has_splits;
+	} else {
+		AccountGroup *children;
+		delete_helper_t delete_res = { FALSE, FALSE };
+
+		children = xaccAccountGetChildren (account);
+		xaccGroupForEachAccount (children, delete_account_helper, &delete_res, TRUE);
+
+		/* Check for RO txns in the children -- disallow deletion if there are any */
+		if (delete_res.has_ro_splits) {
+			gnc_error_dialog (child_has_ro_splits, name);
+			return;
+
+		} else if (delete_res.has_splits)
+			format = child_has_splits;
+		else
+			format = children ? no_splits : no_splits_no_children;
+	}
+
+	if (gnc_verify_dialog (FALSE, format, name)) {
+		gnc_suspend_gui_refresh ();
+
+		xaccAccountBeginEdit (account);
+		xaccAccountDestroy (account);
+
+		gnc_resume_gui_refresh ();
+	}
+	g_free (name);
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, GncPluginPageAccountTree *page)
 {
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, gpointer data)
+gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action, GncPluginPageAccountTree *page)
 {
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+	RecnWindow *recnData;
+
+	g_return_if_fail (account != NULL);
+
+	recnData = recnWindow (gnc_ui_get_toplevel (), account);
+	gnc_ui_reconcile_window_raise (recnData);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action, gpointer data)
+gnc_plugin_page_account_tree_cmd_transfer (EggAction *action, GncPluginPageAccountTree *page)
 {
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+
+	gnc_xfer_dialog (gnc_ui_get_toplevel (), account);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_transfer (EggAction *action, gpointer data)
+gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, GncPluginPageAccountTree *page)
 {
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+
+	gnc_stock_split_dialog (account);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, gpointer data)
+gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountTree *page)
 {
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+
+	g_return_if_fail (account != NULL);
+
+	gnc_suspend_gui_refresh ();
+
+	xaccAccountScrubOrphans (account, gnc_get_current_book ());
+	xaccAccountScrubImbalance (account, gnc_get_current_book ());
+
+	gnc_resume_gui_refresh ();
 }
 
+static void
+gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAccountTree *page)
+{
+	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
+
+	g_return_if_fail (account != NULL);
+
+	gnc_suspend_gui_refresh ();
+
+	xaccAccountTreeScrubOrphans (account, gnc_get_current_book ());
+	xaccAccountTreeScrubImbalance (account, gnc_get_current_book ());
+
+	gnc_resume_gui_refresh ();
+}
+
+static void
+gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPluginPageAccountTree *page)
+{
+	AccountGroup *group = gnc_get_current_group ();
+
+	gnc_suspend_gui_refresh ();
+
+	xaccGroupScrubOrphans (group, gnc_get_current_book ());
+	xaccGroupScrubImbalance (group, gnc_get_current_book ());
+}

@@ -25,6 +25,12 @@
 		<menuitem name="ActionsReconcile" verb="ActionsReconcileAction"/>
 		<menuitem name="ActionsTransfer" verb="ActionsTransferAction"/>
 		<menuitem name="ActionsStockSplit" verb="ActionsStockSplitAction"/>
+		<separator name="ActionsSep2"/>
+		<submenu name="ScrubMenu" verb="ScrubMenuAction">
+			<menuitem name="Scrub" verb="ScrubAction"/>
+			<menuitem name="ScrubSub" verb="ScrubSubAction"/>
+			<menuitem name="ScrubAll" verb="ScrubAllAction"/>
+		</submenu>
 	</placeholder>
 </submenu>
 </menu>
@@ -41,8 +47,12 @@
 	<menuitem name="AccountNewAccount" verb="FileNewAccountAction"/>
 	<menuitem name="AccountDeleteAccount" verb="EditDeleteAccountAction"/>
 	<separator name="AccountSep3"/>
-	<!--placeholder name="CheckAndRepairPlaceholder"/>
-	<separator name="AccountSep4"/-->
+	<submenu name="ScrubMenu" verb="ScrubMenuAction">
+		<menuitem name="Scrub" verb="ScrubAction"/>
+		<menuitem name="ScrubSub" verb="ScrubSubAction"/>
+		<menuitem name="ScrubAll" verb="ScrubAllAction"/>
+	</submenu>
+	<separator name="AccountSep4"/>
 	<menuitem name="AccountViewOptions" verb="EditAccountViewOptionsAction"/>
 </popup>
 </popups>

@@ -44,11 +44,6 @@ GType          gnc_main_window_get_type          (void);
 
 GncMainWindow *gnc_main_window_new               (void);
 
-void           gnc_main_window_register_plugin   (GncMainWindow *window,
-						  GncPlugin *plugin);
-void           gnc_main_window_unregister_plugin (GncMainWindow *window,
-						  GncPlugin *plugin);
-
 void           gnc_main_window_open_page	 (GncMainWindow *window,
 						  GncPluginPage *page);
 void           gnc_main_window_close_page	 (GncMainWindow *window,

@@ -1,3 +1,42 @@
+2003-05-26  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	Move the plugin handling from the main window into the
+	new plugin manager.
+	* src/gnome/Makefile.am:
+	* src/gnome/gnc-plugin-manager.[ch]:
+	* src/gnome/gnc-main-window.c: (gnc_main_window_add_plugin),
+	(gnc_main_window_setup_window),
+	(gnc_main_window_change_current_page),
+	(gnc_main_window_plugin_added), (gnc_main_window_plugin_removed):
+	* src/gnome/gnc-main-window.h:
+	* src/gnome/top-level.c: (gnc_gui_init):
+
+	Add scrub commands to the account tree page and implement 
+	most of the commands.
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	(gnc_plugin_page_account_tree_cmd_open_account),
+	(gnc_plugin_page_account_tree_cmd_open_subaccounts),
+	(delete_account_helper),
+	(gnc_plugin_page_account_tree_cmd_delete_account),
+	(gnc_plugin_page_account_tree_cmd_view_options),
+	(gnc_plugin_page_account_tree_cmd_reconcile),
+	(gnc_plugin_page_account_tree_cmd_transfer),
+	(gnc_plugin_page_account_tree_cmd_stock_split),
+	(gnc_plugin_page_account_tree_cmd_scrub),
+	(gnc_plugin_page_account_tree_cmd_scrub_sub),
+	(gnc_plugin_page_account_tree_cmd_scrub_all):
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml:
+
+	Use the new ui plugin system for the QIF import druid.
+	* src/import-export/qif-import/Makefile.am:
+	* src/import-export/qif-import/druid-qif-import.c:
+	(gnc_ui_qif_import_create_plugin):
+	* src/import-export/qif-import/druid-qif-import.h:
+	* src/import-export/qif-import/gncmod-qif-import.c:
+	(libgncmod_qif_import_LTX_gnc_module_init):
+	* src/import-export/qif-import/gnc-plugin-qif-import.[ch]:
+	* src/import-export/qif-import/gnc-plugin-qif-import-ui.xml:
+
 2003-05-25  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
 	Add some libegg files to the repository.
