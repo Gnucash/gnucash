@@ -1,5 +1,8 @@
 2000-07-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/SplitLedger.c (LedgerAutoCompletion): simplify, and fix a
+	bug with split auto-completion.
+
 	* src/scm/bootstrap.scm.in: add HOME/.gnucash to scm search path.
 
 2000-07-04  Dave Peticolas  <dave@krondo.com>
