@@ -187,7 +187,7 @@ xaccTransScrubImbalance (Transaction *trans)
     xaccAccountCommitEdit (account);
   }
 
-  PWARN ("unbalanced transaction: %s",
+  PINFO ("unbalanced transaction: %s",
          guid_to_string (xaccTransGetGUID (trans)));
 
   {
@@ -250,7 +250,7 @@ void xaccSplitScrubImbalance (Split *split)
     return;
 
   if (!gnc_commodity_equiv (xaccAccountGetCurrency (account),
-                            xaccAccountGetSecurity (account)))
+                            xaccAccountGetEffectiveSecurity (account)))
     return;
 
   scu = MIN (xaccAccountGetCurrencySCU (account),
@@ -261,7 +261,7 @@ void xaccSplitScrubImbalance (Split *split)
                         scu, GNC_RND_ROUND))
     return;
 
-  PWARN ("split with mismatched values: %s",
+  PINFO ("split with mismatched values: %s",
          guid_to_string (xaccSplitGetGUID (split)));
 
   trans_was_open = xaccTransIsOpen (trans);

@@ -2565,6 +2565,7 @@ static GList *
 xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 {
   GList *refresh_accounts = NULL;
+  Split *other_split = NULL;
   guint32 changed;
 
   changed = xaccSplitRegisterGetChangeFlag (reg);
@@ -2687,9 +2688,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     }
   }
 
-  if (MOD_MXFRM & changed) {
-    Split *other_split = NULL;
-
+  if (MOD_MXFRM & changed)
+  {
     DEBUG ("MOD_MXFRM: %s\n",
            reg->mxfrmCell->cell.value);
 
@@ -2710,15 +2710,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       other_split = xaccTransGetSplit (trans, 1);
       if (!other_split)
       {
-        gnc_numeric amount = xaccSplitGetShareAmount (split);
-        gnc_numeric price = xaccSplitGetSharePrice (split);
-
         other_split = xaccMallocSplit ();
-
-        amount = gnc_numeric_neg (amount);
-
-        xaccSplitSetSharePriceAndAmount (other_split, price, amount);
-
         xaccTransAppendSplit (trans, other_split);
       }
     }
@@ -2936,7 +2928,20 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
 
   if ((MOD_AMNT | MOD_PRIC | MOD_SHRS) & changed)
+  {
     xaccSplitScrubImbalance (split);
+
+    if (other_split)
+    {
+      gnc_numeric amount = xaccSplitGetShareAmount (split);
+      gnc_numeric price = xaccSplitGetSharePrice (split);
+
+      amount = gnc_numeric_neg (amount);
+
+      xaccSplitSetSharePriceAndAmount (other_split, price, amount);
+      xaccSplitScrubImbalance (other_split);
+    }
+  }
 
   return refresh_accounts;
 }

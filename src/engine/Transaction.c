@@ -813,7 +813,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   }
 
   currency = xaccAccountGetCurrency (s->acc);
-  security = xaccAccountGetSecurity (s->acc);
+  security = xaccAccountGetEffectiveSecurity (s->acc);
 
   /* if the base_currency is the account currency, set the 
    * value.  If it's the account security, set the damount. 
@@ -1141,18 +1141,11 @@ xaccTransRebalance (Transaction * trans)
 void
 xaccSplitRebalance (Split *split)
 {
+  const gnc_commodity * base_currency = NULL;
   Transaction *trans;
   gnc_numeric value;
-  const gnc_commodity * base_currency = NULL;
+  Split *s;
 
-#if 0
-  if (split->acc &&
-      gnc_commodity_equiv (xaccAccountGetCurrency (split->acc),
-                           xaccAccountGetSecurity (split->acc)))
-    split->damount = split->value;
-#endif
-
-  /* let's see how we do without all this stuff */
   return;
 
   trans = split->parent;
@@ -1166,10 +1159,11 @@ xaccSplitRebalance (Split *split)
 
   if (DEFER_REBALANCE & (trans->open)) return;
 
-  if (split->acc) {
+  if (split->acc)
+  {
     const gnc_commodity * ra, * rb;
 
-    if(split->acc->editlevel > 0) return;
+    if (split->acc->editlevel > 0) return;
 
     assert (trans->splits);
     assert (trans->splits->data);
@@ -1198,93 +1192,35 @@ xaccSplitRebalance (Split *split)
       assert (0);
       return;
     }
-  } else {
+  }
+  else
+  {
     assert (trans->splits);
     assert (trans->splits->data);
   }
 
-  if (split == trans->splits->data) {
-    Split *s;
+  if (g_list_length (trans->splits) != 2)
+    return;
 
-    /* The indicated split is the source split.
-     * Pick a destination split (by default, 
-     * the first destination split), and force 
-     * the total on it. 
-     */
-
+  /* pick the other split */
+  if (split == trans->splits->data)
     s = g_list_nth_data (trans->splits, 1);
-    if (s) {
-      /* the new value of the destination split will be the result.  */
-      value = xaccSplitsComputeValue (trans->splits, s, base_currency);
-
-      /* what do we do if the value is different in the denominator
-       * than the one for the account? */
-
-      /* KLUDGE -- bg */
-      xaccSplitSetBaseValue (s, 
-                             gnc_numeric_neg(value), 
-                             base_currency);
-      MARK_SPLIT (s);
-      xaccAccountRecomputeBalance (s->acc); 
-    } 
-    else {
-      Split *s;
-
-      /* There are no destination splits !! 
-       * Either this is allowed, in which case 
-       * we just blow it off, or its forbidden,
-       * in which case we force a balancing split 
-       * to be created.
-       */
-
-      if (force_double_entry) {
-        if (! gnc_numeric_zero_p(split->damount)) {
-          s = xaccMallocSplit ();
-
-          /* malloc a new split, mirror it to the source split */
-          /* insert the new split into the transaction and 
-           * the same account as the source split */
-          MARK_SPLIT (s);
-          xaccTransAppendSplit (trans, s); 
-          xaccAccountInsertSplit (split->acc, s);
-
-	  g_cache_remove(gnc_string_cache, s->memo);
-	  s->memo = g_cache_insert(gnc_string_cache, split->memo);
-
-	  g_cache_remove(gnc_string_cache, s->action);
-	  s->action = g_cache_insert(gnc_string_cache, split->action);
-
-          xaccSplitSetValue(s, gnc_numeric_neg(split->value));
-          xaccSplitSetShareAmount(s, gnc_numeric_neg(split->value));
-        }
-      }
-    }
-  } 
-  else {
-    Split *s;
-
-    /* The indicated split is a destination split.
-     * Compute grand total of all destination splits,
-     * and force the source split to balance.
-     */
-
+  else
     s = trans->splits->data;
-    value = xaccSplitsComputeValue (trans->splits, s, base_currency);
 
-    /* KLUDGE -- bg */
-    xaccSplitSetBaseValue (s, 
-                           gnc_numeric_neg(value), 
-                           base_currency);
-    MARK_SPLIT (s);
-    xaccAccountRecomputeBalance (s->acc); 
-  }
+  if (!s)
+    return;
 
-  /* hack alert -- if the "force-double-entry" flag is set,
-   * we should check to make sure that every split belongs
-   * to some account.  If any of them don't, force them 
-   * into the current account. If there's not current account,
-   * force them into a lost & found account */
-  /* hack alert -- implement the above */
+  /* the new value of the destination split will be the result.  */
+  value = xaccSplitsComputeValue (trans->splits, s, base_currency);
+
+  /* what do we do if the value is different in the denominator
+   * than the one for the account? */
+
+  /* KLUDGE -- bg */
+  xaccSplitSetBaseValue (s, gnc_numeric_neg (value), base_currency);
+  MARK_SPLIT (s);
+  xaccAccountRecomputeBalance (s->acc); 
 }
 
 /********************************************************************\
