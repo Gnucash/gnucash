@@ -26,7 +26,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * @author Copyright (c) 1998, 1999, 2001 Linas Vepstas <linas@linas.org>
+ * @author Copyright (c) 1998, 1999, 2001, 2003 Linas Vepstas <linas@linas.org>
  * @author Copyright (c) 2000 Dave Peticolas
  */
 
@@ -57,9 +57,6 @@ kvp_frame           * gnc_book_get_slots (GNCBook *book);
 
 /** \return The top-level group in the book.*/
 AccountGroup        * gnc_book_get_group (GNCBook *book);
-
-/** \return The pricedb of the book. */
-GNCPriceDB          * gnc_book_get_pricedb (GNCBook *book);
 
 /** \return The commodity table of the book.  */
 gnc_commodity_table * gnc_book_get_commodity_table(GNCBook *book);

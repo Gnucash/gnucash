@@ -117,31 +117,12 @@ gnc_book_set_group (GNCBook *book, AccountGroup *grp)
 
 /* ====================================================================== */
 
-#define GNC_PRICEDB "gnc_pricedb"
-GNCPriceDB *
-gnc_book_get_pricedb(GNCBook *book)
-{
-  if (!book) return NULL;
-printf ("duude get pricedb\n");
-  return gnc_book_get_data (book, GNC_PRICEDB);
-}
-
-void
-gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db)
-{
-  if(!book) return;
-  gnc_book_set_data (book, GNC_PRICEDB, db);
-  if (db) db->book = book;
-}
-
-/* ====================================================================== */
-
 #define GNC_SCHEDXACTIONS "gnc_schedxactions"
 GList *
 gnc_book_get_schedxactions( GNCBook *book )
 {
   if ( book == NULL ) return NULL;
-  return book->sched_xactions;
+  return gnc_book_get_data (book, GNC_SCHEDXACTIONS);
 }
 
 void
@@ -149,17 +130,18 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
 {
   if ( book == NULL ) return;
 
-  book->sched_xactions = newList;
+  gnc_book_set_data (book, GNC_SCHEDXACTIONS, newList);
   book->sx_notsaved = TRUE;
 }
 
 /* ====================================================================== */
 
+#define GNC_TEMPLATE_GROUP "gnc_template_group"
 AccountGroup *
 gnc_book_get_template_group( GNCBook *book )
 {
   if (!book) return NULL;
-  return book->template_group;
+  return gnc_book_get_data (book, GNC_TEMPLATE_GROUP);
 }
 
 void
@@ -167,16 +149,13 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
 {
   if (!book) return;
 
-  if (book->template_group == templateGroup)
-    return;
-
-  if (templateGroup->book != book)
+  if (templateGroup && templateGroup->book != book)
   {
      PERR ("cannot mix and match books freely!");
      return;
   }
 
-  book->template_group = templateGroup;
+  gnc_book_set_data (book, GNC_TEMPLATE_GROUP, templateGroup);
 }
 
 /* ====================================================================== */
@@ -207,9 +186,9 @@ book_sxlist_notsaved(GNCBook *book)
   SchedXaction *sx;
   if(book->sx_notsaved
      ||
-     xaccGroupNotSaved(book->template_group)) return TRUE;
+     xaccGroupNotSaved(gnc_book_get_template_group(book))) return TRUE;
  
-  for(sxlist = book->sched_xactions;
+  for(sxlist = gnc_book_get_schedxactions(book);
       sxlist != NULL;
       sxlist = g_list_next(sxlist))
   {
@@ -229,7 +208,7 @@ gnc_book_mark_saved(GNCBook *book)
   book->dirty = FALSE;
 
   xaccGroupMarkSaved(gnc_book_get_group(book));
-  gnc_pricedb_mark_clean(gnc_book_get_pricedb(book));
+  gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
 
   xaccGroupMarkSaved(gnc_book_get_template_group(book));
   book_sxns_mark_saved(book);
@@ -254,11 +233,11 @@ gnc_book_populate (GNCBook *book)
   
   gnc_book_set_group (book, xaccMallocAccountGroup(book));
   
-  gnc_book_set_pricedb (book, gnc_pricedb_create(book));
+  gnc_pricedb_set_db (book, gnc_pricedb_create(book));
 
-  book->sched_xactions = NULL;
+  gnc_book_set_schedxactions (book,NULL);
   book->sx_notsaved = FALSE;
-  book->template_group = xaccMallocAccountGroup(book);
+  gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
 
 }
 
@@ -269,14 +248,16 @@ gnc_book_depopulate (GNCBook *book)
   gnc_commodity_table *ct;
   GNCPriceDB *db;
 
+  /* unhook the top-level group */
   grp = gnc_book_get_group (book);
   xaccAccountGroupBeginEdit (grp);
   xaccAccountGroupDestroy (grp);
   gnc_book_set_group (book, NULL);
 
+  /* unhook the prices */
   db = gnc_book_get_pricedb (book);
   gnc_pricedb_destroy (db);
-  gnc_book_set_pricedb (book, NULL);
+  gnc_pricedb_set_db (book, NULL);
 
   ct = gnc_book_get_commodity_table (book);
   gnc_commodity_table_destroy (ct);

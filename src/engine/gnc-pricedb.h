@@ -227,8 +227,14 @@ typedef struct gnc_price_db_s GNCPriceDB;
 
 
 /** gnc_pricedb_create - create a new pricedb.  Normally you won't need
-     this; you will get the pricedb via gnc_book_get_pricedb. */
+     this; you will get the pricedb via gnc_pricedb_get_db. */
 GNCPriceDB * gnc_pricedb_create(GNCBook *book);
+
+/* XXX backwards-compat defines, remove these someday */
+#define gnc_book_get_pricedb  gnc_pricedb_get_db
+
+/** return the pricedb associated with the book */
+GNCPriceDB * gnc_pricedb_get_db(GNCBook *book);
 
 /** gnc_pricedb_destroy - destroy the given pricedb and unref all of
      the prices it contains.  This may not deallocate all of those

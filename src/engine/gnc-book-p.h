@@ -24,7 +24,7 @@
  * HISTORY:
  * Created 2001 by Rob Browning
  * Copyright (c) 2001 Rob Browning
- * Copyright (c) 2001 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2001,2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef GNC_BOOK_P_H
@@ -52,13 +52,7 @@ struct gnc_book_struct
    */
   GNCEntityTable *entity_table;
 
-  /* Pointers to top-level data structures. */
-
-  GList *sched_xactions;
-  AccountGroup *template_group;
   gboolean sx_notsaved; /* true if sched_xactions is changed */
-
-  gnc_commodity_table *commodity_table;
 
   /* In order to store arbitrary data, for extensibility, add a table
    * that will be used to hold arbitrary pointers.
@@ -94,7 +88,6 @@ struct gnc_book_struct
  */
 void gnc_book_set_guid(GNCBook *book, GUID guid);
 void gnc_book_set_group(GNCBook *book, AccountGroup *grp);
-void gnc_book_set_pricedb(GNCBook *book, GNCPriceDB *db);
 void gnc_book_set_schedxactions( GNCBook *book, GList *newList );
 void gnc_book_set_template_group( GNCBook *book, AccountGroup *templateGroup );
 
