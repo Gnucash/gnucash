@@ -107,6 +107,10 @@ void        xaccConsolidateTransactions (Account *);
 void xaccMoveFarEnd (Split *, Account *);
 void xaccMoveFarEndByName (Split *, const char *);
 
+char * xaccAccountGetName (Account *);
+AccountGroup *xaccAccountGetChildren (Account *);
+AccountGroup *xaccAccountGetParent (Account *);
+
 /** GLOBALS *********************************************************/
 
 extern int next_free_unique_account_id;

@@ -48,9 +48,10 @@
  * between "dining", "tips" and "taxes" categories.
  */
 
-typedef struct _account      Account;
-typedef struct _split        Split;
-typedef struct _transaction  Transaction;
+typedef struct _account       Account;
+typedef struct _account_group AccountGroup;
+typedef struct _split         Split;
+typedef struct _transaction   Transaction;
 
 
 /** PROTOTYPES ******************************************************/
@@ -94,6 +95,7 @@ Split *       xaccTransGetDestSplit (Transaction *trans, int i);
 
 char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *trans);
+Date *        xaccTransGetDate (Transaction *);
 char *        xaccTransGetDateStr (Transaction *);
 
 /* return the number of destination splits */
@@ -144,6 +146,9 @@ double xaccGetShareBalance (Split *);
 Transaction * xaccSplitGetParent (Split *);
 
 /* return the value of the reconcile flag */
+char *        xaccSplitGetMemo (Split *split);
+char *        xaccSplitGetAction (Split *split);
+
 char          xaccSplitGetReconcile (Split *split);
 double        xaccSplitGetAmount (Split * split);
 double        xaccSplitGetValue (Split * split);

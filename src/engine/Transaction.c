@@ -616,7 +616,10 @@ xaccTransGetSourceSplit (Transaction *trans)
 Split *
 xaccTransGetDestSplit (Transaction *trans, int i) 
 {
-   return (trans->dest_splits[i]);
+   if (trans->dest_splits) {
+      return (trans->dest_splits[i]);
+   }
+   return NULL;
 }
 
 char *
@@ -629,6 +632,12 @@ char *
 xaccTransGetDescription (Transaction *trans)
 {
    return (trans->description);
+}
+
+Date *
+xaccTransGetDate (Transaction *trans)
+{
+   return (&(trans->date));
 }
 
 char *
@@ -695,6 +704,18 @@ Account *
 xaccSplitGetAccount (Split *split)
 {
    return (split->acc);
+}
+
+char *
+xaccSplitGetMemo (Split *split)
+{
+   return (split->memo);
+}
+
+char *
+xaccSplitGetAction (Split *split)
+{
+   return (split->action);
 }
 
 char 

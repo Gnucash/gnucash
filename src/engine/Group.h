@@ -31,7 +31,7 @@
 #include "Account.h"
 
 /** STRUCTS *********************************************************/
-typedef struct _account_group {
+struct _account_group {
   /* The flags: */
   unsigned int saved : 1;
   unsigned int new   : 1;
@@ -44,7 +44,7 @@ typedef struct _account_group {
   /* cached parameters */
   double balance;
 
-} AccountGroup;
+};
 
 /** PROTOTYPES ******************************************************/
 AccountGroup    *xaccMallocAccountGroup( void );

@@ -43,8 +43,8 @@
 struct _account {
   /* public data, describes account */
 
-  struct _account_group *parent;    /* back-pointer to parent */
-  struct _account_group *children;  /* pointer to sub-accounts */
+  AccountGroup *parent;    /* back-pointer to parent */
+  AccountGroup *children;  /* pointer to sub-accounts */
   int       id;                     /* unique account id, internally assigned */
   char      flags;
   short     type;

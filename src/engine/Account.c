@@ -620,4 +620,26 @@ xaccConsolidateTransactions (Account * acc)
    }
 }
 
+/********************************************************************\
+\********************************************************************/
+
+AccountGroup *
+xaccAccountGetChildren (Account *acc)
+{
+   return (acc->children);
+}
+
+AccountGroup *
+xaccAccountGetParent (Account *acc)
+{
+   return (acc->parent);
+}
+
+
+char *
+xaccAccountGetName (Account *acc)
+{
+   return (acc->accountName);
+}
+
 /*************************** END OF FILE **************************** */
