@@ -87,67 +87,9 @@ main(int argc, char ** argv) {
   int i;
   gint64 v;
 
-  printf("mul 100ths : %s * %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_mul(a, b, 100,
-                                           GNC_RND_ROUND)));
-
-  c = gnc_numeric_mul_with_error(a, b, 100, GNC_RND_ROUND, &err);
-  printf("mul 100ths/error : %s * %s = %s + (error) %s\n\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(c),
-         gnc_numeric_print(err));
-  
-  printf("div exact : %s / %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_div(a, b, GNC_DENOM_AUTO, 
-                                           GNC_DENOM_EXACT)));
-  
-  printf("div least : %s / %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_div(a, b, GNC_DENOM_AUTO, 
-                                           GNC_DENOM_REDUCE)));
-  
-  printf("div 100ths : %s / %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_div(a, b, 100,
-                                           GNC_RND_ROUND)));  
-  
-  c = gnc_numeric_div_with_error(a, b, 100, GNC_RND_ROUND, &err);
-  printf("div 100ths/error : %s / %s = %s + (error) %s\n\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(c),
-         gnc_numeric_print(err));
-  
   printf("7/16 as float: %e\n",
          gnc_numeric_to_double(gnc_numeric_create(7, 16)));
   
-  printf("7/16 as 100ths (floor): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_FLOOR)));
-  printf("7/16 as 100ths (ceil): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_CEIL)));
-  printf("7/16 as 100ths (trunc): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_TRUNC)));
-  printf("7/16 as 100ths (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
-                                               100, GNC_RND_ROUND)));
-
-  printf("1511/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1511, 1000),
-                                               100, GNC_RND_ROUND)));
-  printf("1516/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1516, 1000),
-                                               100, GNC_RND_ROUND)));
-  printf("1515/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1515, 1000),
-                                               100, GNC_RND_ROUND)));
-  printf("1525/1000 as 1/100 (round): %s\n",
-         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1525, 1000),
-                                               100, GNC_RND_ROUND)));
-
   printf("100023234 / 334216654 reduced: %s\n",
          gnc_numeric_print(gnc_numeric_reduce(gnc_numeric_create(10023234LL,
                                                                  334216654LL))));
@@ -299,6 +241,8 @@ check_equality_operator (void)
       /* Certain modulo's should be very cleary un-equal; this
 		 * helps stop funky modulo-64 aliasing in compares that 
 		 * might creep in. */
+		mval.denom >>= 1;
+		mval.num >>= 1;
 		int m=0;
 		gint64 f = mval.denom;
 		while (f%2 == 0)
@@ -306,7 +250,7 @@ check_equality_operator (void)
 			f >>= 1;
 			m++;
 		}
-		if (m)
+		if (1 < m)
 		{
 			gint64 nn = 1 << (32-m);
 			nn <<= 32;
@@ -319,6 +263,38 @@ check_equality_operator (void)
 	}
 }
 	
+static void 
+check_rounding (void)
+{
+#if 0
+  printf("7/16 as 100ths (floor): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
+                                               100, GNC_RND_FLOOR)));
+  printf("7/16 as 100ths (ceil): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
+                                               100, GNC_RND_CEIL)));
+  printf("7/16 as 100ths (trunc): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
+                                               100, GNC_RND_TRUNC)));
+  printf("7/16 as 100ths (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(7, 16),
+                                               100, GNC_RND_ROUND)));
+
+  printf("1511/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1511, 1000),
+                                               100, GNC_RND_ROUND)));
+  printf("1516/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1516, 1000),
+                                               100, GNC_RND_ROUND)));
+  printf("1515/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1515, 1000),
+                                               100, GNC_RND_ROUND)));
+  printf("1525/1000 as 1/100 (round): %s\n",
+         gnc_numeric_print(gnc_numeric_convert(gnc_numeric_create(1525, 1000),
+                                               100, GNC_RND_ROUND)));
+#endif
+}
+
 static void
 check_add_subtract (void)
 {
@@ -397,10 +373,10 @@ check_add_subtract (void)
 static void
 check_mult_div (void)
 {
-  gnc_numeric a = gnc_numeric_create(1, 3);
+  gnc_numeric a = gnc_numeric_create(2, 6);
   gnc_numeric b = gnc_numeric_create(1, 4);
 
-  check_binary_op (gnc_numeric_create(1,12), 
+  check_binary_op (gnc_numeric_create(2,24), 
                    gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
 						 a, b, "expected %s got %s = %s * %s for mult exact");
 
@@ -408,6 +384,38 @@ check_mult_div (void)
                    gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
 						 a, b, "expected %s got %s = %s * %s for mult reduce");
 
+  check_binary_op (gnc_numeric_create(8,100), 
+                   gnc_numeric_mul(a, b, 100, GNC_RND_ROUND),
+						 a, b, "expected %s got %s = %s * %s for mult 100th's");
+
+  check_binary_op (gnc_numeric_create(8,6), 
+                   gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s / %s for div exact");
+
+  check_binary_op (gnc_numeric_create(4,3), 
+                   gnc_numeric_div(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+						 a, b, "expected %s got %s = %s / %s for div reduce");
+
+  check_binary_op (gnc_numeric_create(133,100), 
+                   gnc_numeric_div(a, b, 100, GNC_RND_ROUND),
+						 a, b, "expected %s got %s = %s * %s for div 100th's");
+
+#if CHECK_ERRORS_TOO
+  gnc_numeric c;
+  c = gnc_numeric_mul_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  printf("mul 100ths/error : %s * %s = %s + (error) %s\n\n",
+         gnc_numeric_print(a), gnc_numeric_print(b),
+         gnc_numeric_print(c),
+         gnc_numeric_print(err));
+
+  c = gnc_numeric_div_with_error(a, b, 100, GNC_RND_ROUND, &err);
+  printf("div 100ths/error : %s / %s = %s + (error) %s\n\n",
+         gnc_numeric_print(a), gnc_numeric_print(b),
+         gnc_numeric_print(c),
+         gnc_numeric_print(err));
+  
+#endif
+  
 }
   
 
@@ -415,6 +423,7 @@ static void
 run_test (void)
 {
 	check_equality_operator ();
+	check_rounding();
 	check_add_subtract();
 	check_mult_div ();
 }
