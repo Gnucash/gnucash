@@ -32,6 +32,7 @@
  * also, check out a stock split tooo
  */
 
+#include <errno.h>
 #include <fcntl.h>
 #include <string.h>
 #include <time.h>
@@ -55,9 +56,13 @@ static int          error_code=0; /* error code, if error occurred */
 
 /*******************************************************/
 
-int xaccGetQIFIOError (void)
+int 
+xaccGetQIFIOError (void)
 {
-   return error_code;
+   /* reset the error code */
+   int  rc = error_code;
+   error_code = 0;
+   return rc;
 }
 
 /********************************************************************\

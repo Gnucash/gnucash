@@ -169,9 +169,13 @@ static int writeDate( int fd, time_t secs );
 
 /*******************************************************/
 
-int xaccGetFileIOError (void)
+int 
+xaccGetFileIOError (void)
 {
-   return error_code;
+   /* reset the error code */
+   int rc = error_code;
+   error_code = 0;
+   return rc;
 }
 
 /*******************************************************/
