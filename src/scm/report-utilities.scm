@@ -19,28 +19,7 @@
 
 (gnc:support "report-utilities.scm")
 
-(define (gnc:amount->string amount info)
-  (define (convert-to-numeric amt)
-    (define (abs-only amt)
-	(gnc:make-gnc-numeric 
-	 (inexact->exact (round (* amt gnc:*standard-frac*)))
-	 gnc:*standard-frac*))
-    (begin
-      (gnc:debug "amt" amt)
-      (if (< amt 0.0)
-	  (let ((neg-result (abs-only (- amt))))
-	    (gnc:make-gnc-numeric
-	     (- gnc:numeric-num neg-result)
-	     (gnc:numeric-denom neg-result)))
-	  (begin
-	    (gnc:debug "abs-only amt" (abs-only amt))
-	    (abs-only amt)))))
-
-  (gnc:amount->string-helper (convert-to-numeric (exact->inexact amount)) info))
-
-
-(define (gnc:commodity-amount->string amount info)
-  (gnc:amount->string-helper amount info))
+(define gnc:amount->string gnc:amount->string-helper)
 
 ;; pair is a list of one gnc:commodity and one gnc:numeric
 ;; value. Deprecated -- use <gnc-monetary> instead.
