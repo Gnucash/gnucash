@@ -1,3 +1,9 @@
+2003-04-16  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c,
+	src/import-export/hbci/hbci-interaction.c: Adapt to latest changes
+	in OpenHBCI CVS. 
+
 2003-04-14  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c: Fix some user
