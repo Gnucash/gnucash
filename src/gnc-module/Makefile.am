@@ -20,7 +20,8 @@ gncmod_DATA = gnc-module.scm
 gwmoddir = ${GNC_GWRAP_LIBDIR}
 gwmod_DATA = gw-gnc-module.scm gw-gnc-module-spec.scm 
 
-noinst_HEADERS = \
+gncincludedir = ${GNC_INCLUDE_DIR}
+gncinclude_HEADERS = \
   gnc-module-api.h \
   gnc-module.h
 
