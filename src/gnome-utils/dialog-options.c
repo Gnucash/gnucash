@@ -123,7 +123,7 @@ gnc_options_dialog_get_cancel_button (GtkWidget *widget)
   return NULL;
 }
 
-static void
+void
 gnc_options_dialog_changed_internal (GtkWidget *widget)
 {
   GtkWidget *button;

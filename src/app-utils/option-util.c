@@ -896,6 +896,21 @@ gnc_option_show_time(GNCOption *option)
   return gh_scm2bool(value);
 }
 
+/********************************************************************\
+ * gnc_option_get_option_data                                       *
+ *   returns the option data of this option                         *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: the option data                                         *
+\********************************************************************/
+SCM
+gnc_option_get_option_data(GNCOption *option)
+{
+  initialize_getters();
+
+  return gh_call1(getters.option_data, option->guile_option);
+}
+
 
 /********************************************************************\
  * gnc_option_multiple_selection                                    *

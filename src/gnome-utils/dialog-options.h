@@ -91,4 +91,7 @@ void gnc_options_ui_initialize (void);
 void gnc_options_ui_register_option (GNCOptionDef_t *option);
 GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name);
 
+/* For option definitions outside the main module only */
+void gnc_options_dialog_changed_internal (GtkWidget *widget);
+
 #endif /* OPTIONS_DIALOG_H */
