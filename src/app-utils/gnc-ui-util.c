@@ -266,12 +266,12 @@ gnc_get_current_commodities (void)
  *                  of things like stock account values from share
  *                  values to an amount the requested currency.
  */
-static gnc_numeric
-gnc_ui_account_get_balance_internal (xaccGetBalanceInCurrencyFn fn,
-				     Account *account,
-				     gboolean recurse,
-				     gboolean *negative,
-				     gnc_commodity *commodity)
+gnc_numeric
+gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
+				 Account *account,
+				 gboolean recurse,
+				 gboolean *negative,
+				 gnc_commodity *commodity)
 {
   gnc_numeric balance;
 
@@ -295,8 +295,8 @@ gnc_ui_account_get_balance_internal (xaccGetBalanceInCurrencyFn fn,
 gnc_numeric
 gnc_ui_account_get_balance (Account *account, gboolean recurse)
 {
-  return gnc_ui_account_get_balance_internal (xaccAccountGetBalanceInCurrency,
-					      account, recurse, NULL, NULL);
+  return gnc_ui_account_get_balance_full (xaccAccountGetBalanceInCurrency,
+					  account, recurse, NULL, NULL);
 }
 
 /*
@@ -307,13 +307,13 @@ gnc_numeric
 gnc_ui_account_get_reconciled_balance (Account *account,
                                        gboolean recurse)
 {
-  return gnc_ui_account_get_balance_internal (xaccAccountGetReconciledBalanceInCurrency,
-					      account, recurse, NULL, NULL);
+  return gnc_ui_account_get_balance_full (xaccAccountGetReconciledBalanceInCurrency,
+					  account, recurse, NULL, NULL);
 }
 
 
 /**
- * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * Wrapper around gnc_ui_account_get_balance_full that converts
  * the resulting number to a character string.  The number is
  * formatted according to the specification of the account currency.
  *
@@ -334,15 +334,15 @@ gnc_ui_account_get_print_balance (xaccGetBalanceInCurrencyFn fn,
   GNCPrintAmountInfo print_info;
   gnc_numeric balance;
 
-  balance = gnc_ui_account_get_balance_internal(fn, account, recurse,
-						negative, NULL);
+  balance = gnc_ui_account_get_balance_full(fn, account, recurse,
+					    negative, NULL);
   print_info = gnc_account_print_info(account, TRUE);
   return g_strdup(xaccPrintAmount(balance, print_info));
 }
 
 
 /**
- * Wrapper around gnc_ui_account_get_balance_internal that converts
+ * Wrapper around gnc_ui_account_get_balance_full that converts
  * the resulting number to a character string.  The number is
  * formatted according to the specification of the default reporting
  * currency.
@@ -366,8 +366,8 @@ gnc_ui_account_get_print_report_balance (xaccGetBalanceInCurrencyFn fn,
   gnc_commodity *report_commodity;
 
   report_commodity = gnc_default_report_currency();
-  balance = gnc_ui_account_get_balance_internal(fn, account, recurse,
-						negative, report_commodity);
+  balance = gnc_ui_account_get_balance_full(fn, account, recurse,
+					    negative, report_commodity);
   print_info = gnc_commodity_print_info(report_commodity, TRUE);
   return g_strdup(xaccPrintAmount(balance, print_info));
 }
@@ -593,6 +593,9 @@ gnc_ui_account_get_field_value_string (Account *account,
 
     case ACCOUNT_TAX_INFO:
       return gnc_ui_account_get_tax_info_string (account);
+
+    case ACCOUNT_LAST_NUM:
+     return g_strdup(xaccAccountGetLastNum (account));
 
     default:
       break;

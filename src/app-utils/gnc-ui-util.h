@@ -92,6 +92,7 @@ typedef enum
   ACCOUNT_NOTES,
   ACCOUNT_TAX_INFO,
   ACCOUNT_PLACEHOLDER,
+  ACCOUNT_LAST_NUM,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;
 
@@ -114,6 +115,31 @@ typedef enum
 char * gnc_ui_account_get_field_value_string (Account *account,
                                               AccountFieldCode field,
 					      gboolean *negative);
+
+/*
+ * This is a wrapper routine around an xaccGetBalanceInCurrency
+ * function that handles additional needs of the gui.
+ *
+ * @param fn        The underlying function in Account.c to call to retrieve
+ *                  a specific balance from the account.
+ * @param account   The account to retrieve data about.
+ * @param recurse   Include all sub-accounts of this account.
+ * @param negative  An indication of whether or not the returned value
+ *                  is negative.  This can be used by the caller to
+ *                  easily decode whether or not to color the output.
+ * @param commodity The commodity in which the account balance should
+ *                  be returned. If NULL, the value will be returned in
+ *                  the commodity of the account. This is normally used
+ *                  to specify a currency, which forces the conversion
+ *                  of things like stock account values from share
+ *                  values to an amount the requested currency.
+ */
+gnc_numeric
+gnc_ui_account_get_balance_full (xaccGetBalanceInCurrencyFn fn,
+				 Account *account,
+				 gboolean recurse,
+				 gboolean *negative,
+				 gnc_commodity *commodity);
 
 /**
  * This routine retrives the total balance in an account, possibly
