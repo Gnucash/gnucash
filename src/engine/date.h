@@ -1,13 +1,3 @@
-
-/* 
- * Major Hack Alert ---
- * this whole file & design needs to be replaced with
- * something that can handle seconds (actually, milliseconds
- * to keep the banks happy).
- *
- * There a lot of lint here and it needs major overhaul in general.
- */
-
 /********************************************************************\
  * date.h -- utility functions to handle the date (adjusting, get   * 
  *           current date, etc.) for xacc (X-Accountant)            *
@@ -33,70 +23,62 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-/********************************************************************\
- * adjustDay                                                        *
- *   increments/decrements the date structure by the indicated      *
- *   number of days.  The month and/or year is adjusted             *
- *   appropriately, as needed.                                      *
- *                                                                  * 
- * Args:   date - the date structure to edit                        *
- *         adj  - the number of days to change the date by.         *
- * Return: none                                                     *
-\********************************************************************/
+/* 
+ * hack alert -- the scan and print routines should probably be moved 
+ * to somewhere else ... the engine really isn't involved with things 
+ * like printing formats.  This is needed mostl;y by the GUI and so on.
+ * If a file-io thing needs date handling, it should do it itself, instead
+ * of depending on the routines here ...
+ */
 
-/********************************************************************\
- * adjustMonth                                                      *
- *   adds adj to the current month of the year.. the resulting      *
- *   month of the year is corrected to be in the range [1..12],     *
- *   incrementing/decrementing the year if necessary.               * 
- *                                                                  * 
- * Args:   date - the date structure to edit                        *
- *         adj  - the number of months to change the date by.       *
- * Return: none                                                     *
-\********************************************************************/
 
-/********************************************************************\
- * todaysDate                                                       *
- *   takes a (Date *) and fills it in with today's date             *
- *                                                                  * 
- * Args:   date - the struct to be filled in                        *
- * Return: today's date                                             *
-\********************************************************************/
+/**
+ * printDate
+ *    Convert a date as day / month / year integers into a localized string
+ *    representation
+ *
+ * Args:   buff - pointer to previously allocated character array; its size
+ *                must be at lease MAX_DATE_LENTH bytes.
+ *         day - day of the month as 1 ... 31
+ *         month - month of the year as 1 ... 12
+ *         year - year (4-digit)
+ *
+ * Return: nothing
+ *
+ * Globals: global dateFormat value
+ */
 
-/********************************************************************\
- * daysInMonth                                                      *
- *   returns the number of days in month.  Leap years are handled   *
- *   correctly, based on the value of the argument "year".          *
- *                                                                  * 
- * Args:   month - a number [0..11] indicating the month            *
- *         year  - a number (e.g. 1997) indicating the year         *
-\********************************************************************/
+/**
+ * scanDate
+ *    Convert a string into  day / month / year integers according to
+ *    the current dateFormat value.
+ *
+ * Args:   buff - pointer to date string
+ *         day -  will store day of the month as 1 ... 31
+ *         month - will store month of the year as 1 ... 12
+ *         year - will store the year (4-digit)
+ *
+ * Return: 0 if conversion was successful, 1 otherwise
+ *
+ * Globals: global dateFormat value
+ */
+/**
+ * dateSeparator
+ *    Return the field separator for the current date format
+ *
+ * Args:   none
+ *
+ * Return: date character
+ *
+ * Globals: global dateFormat value
+ */
 
-/********************************************************************\
- * datecmp                                                          *
- *   compares date1 and date2                                       *
- *                                                                  *
- *   Note: for ordering transactions, don't use this routine.       *
- *   You should probably use xaccTransOrder instead.  Some          *
- *   if the algorithms used by xacc depend on the superior ordering *
- *   that xaccTransOrder provides.                                  *
- *                                                                  * 
- * Args:   date1 - the first date to look at                        *
- *         date2 - the second date in the comparison                * 
- * Return: < 0 if date1<date2, == 0 if date1==date2, > 0 otherwise  *
-\********************************************************************/
 
 #ifndef __XACC_DATE_H__
 #define __XACC_DATE_H__
 
 #include "config.h"
 #include "Transaction.h"
-
-typedef struct _date {
-  int year;
-  int month;
-  int day;
-} Date;
 
 typedef enum
 {
@@ -111,22 +93,14 @@ typedef enum
 
 /** PROTOTYPES ******************************************************/
 void printDate (char * buff, int day, int month, int year);
+void printDateSecs (char * buff, time_t secs);
+
 void scanDate (const char *buff, int *day, int *monty, int *year);
 char dateSeparator(void);
-
-void   adjustDay( Date *date, int adj );
-void   adjustMonth( Date *date, int adj );
-Date*  todaysDate( Date *date );
-
-/** daysInMonth includes "year" parameter in order to accommodate leap year
-**/
-int    daysInMonth( int month , int year );
-int    datecmp( Date *date1, Date *date2 );
 
 char * xaccTransGetDateStr (Transaction *trans);
 void   xaccTransSetDateStr (Transaction *trans, char *str);
 
-time_t xaccDateToSec (Date *);
 time_t xaccDMYToSec (int day, int month, int year);
 
 /** GLOBALS *********************************************************/
