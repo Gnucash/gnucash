@@ -107,7 +107,7 @@ void xaccAccountSetDefaultGainAccount (Account *acc, Account *gains_acct);
                                                                                 
 Split * xaccSplitGetCapGainsSplit (Split *);
 
-/** The`xaccSplitAssignToLot() routine will take the indicated
+/** The`xaccSplitAssign() routine will take the indicated
  *  split and, if it doesn't already belong to a lot, it will attempt 
  *  to assign it to an appropriate lot.
  *  If the split already belongs to a Lot, this routine does nothing.
@@ -130,7 +130,27 @@ Split * xaccSplitGetCapGainsSplit (Split *);
  *  policies should be 'easy'; read the source luke.
  */
 
-gboolean xaccSplitAssignToLot (Split *split);
+gboolean xaccSplitAssign (Split *split);
+
+/** The xaccSplitAssignToLot() routine will fit the indicated split
+ *    into the indicated lot, with the goal of closing the lot, or
+ *    at least bringing the lot balance closer to closure.  (A closed
+ *    lot has a balance of zero).  To make this "fit", a variety of
+ *    checks and actions are performed.  First, the lot must be open,
+ *    and the sign of the split amount must be opposite to the sign
+ *    of the lot balance.  The 'opposite-sign' requirement is so that
+ *    inserting the split will cause the size of the lot to decrease.
+ *    If the amount of the split is too small, or is just right to
+ *    close the lot, the split is added, and NULL is returned.  If
+ *    the split is larger than the lot balance, the split will be
+ *    divided into sub-splits, one of which is just right to close
+ *    the lot.   A pointer to the other sub-split will be returned.
+ *
+ *    If the split had to be broken up, kvp markup in the "/lot-split"
+ *    directory is used to identify the peers. 'gemini'-style kvp's
+ *    are used.
+ */
+Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
 
 /** The xaccSplitComputeCapGains() routine computes the cap gains
  *  or losses for the indicated split.  The gains are placed into

@@ -55,6 +55,10 @@ QofBook * gnc_lot_get_book (GNCLot *);
 
 /** The gnc_lot_add_split() routine adds a split to this lot.  Note
  *    that *all* splits in a lot must also be in the same account.
+ *    Note that this routine adds the split unconditionally, with
+ *    no regard for the accounting policy.  To enforce a particular
+ *    accounting polciy, use the xaccSplitAssignToLot() routine 
+ *    instead.
  */
 void gnc_lot_add_split (GNCLot *, Split *);
 void gnc_lot_remove_split (GNCLot *, Split *);

@@ -85,6 +85,9 @@ restart_loop:
 
 /* ============================================================== */
 
+xxxxxxxxxxx
+need documentation for this one.
+
 void
 xaccLotFill (GNCLot *lot)
 {
@@ -107,25 +110,32 @@ xaccLotFill (GNCLot *lot)
     * not in a lot.  Poke it into this lot.  Keep 
     * going until the balance is zero.
     */
+xxxxxxxxx  this is wrong, we need to be fetching splits based
+on policy, rather than this implicit date-order.
+
 restart_loop:
    for (node=acc->splits; node; node=node->next)
    {
       Split * split = node->data;
-      gboolean restart;
+      Split * subsplit;
 
       /* If already in lot, then no-op */
       if (split->lot) continue;
-      restart = xaccSplitAssignToLot (split);
-xxxxxxxxxxxxxxxxxxx not assign to any lot; assign to *THIS* lot.
+      subsplit = xaccSplitAssignToLot (split, lot);
+      if (subsplit == split)
+      {
+         PERR ("Accounting Policy gave us a split that "
+               "doesn't fit into this lot");
+         continue;
+      }
 
       lot_baln = gnc_lot_get_balance (lot);
       if (gnc_numeric_zero_p (lot_baln)) break;
-      if (restart) goto restart_loop;
+      if (subsplit) goto restart_loop;
    }
    xaccAccountCommitEdit (acc);
    LEAVE ("acc=%s", acc->accountName);
 }
-
 
 /* ============================================================== */
 

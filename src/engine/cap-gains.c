@@ -300,6 +300,177 @@ GetOrMakeGainAcct (Account *acc, gnc_commodity * currency)
 }
 
 /* ============================================================== */
+
+Split *
+xaccSplitAssignToLot (Split *split, GNCLot *lot)
+{
+   Account *acc;
+   gnc_numeric baln;
+   int cmp;
+
+   if (!lot) return split;
+   if (!split) return NULL;
+
+   /* If this split already belongs to a lot, we are done. */
+   if (split->lot) return NULL;
+
+   /* If the lot is closed, we can't add anything to it */
+   baln = gnc_lot_get_balance (lot);
+   if (gnc_lot_is_closed (lot)) return split;
+
+   /* If the lot balance is zero, but the lot is open, then 
+    * the lot is empty. Unconditionally add the split. */
+   if (gnc_numeric_zero_p (baln))
+   {
+      acc = split->acc;
+      xaccAccountBeginEdit (acc);
+      gnc_lot_add_split (lot, split);
+      PINFO ("simple added split to lot, new lot baln=%s", 
+           gnc_numeric_to_string (gnc_lot_get_balance(lot)));
+      xaccAccountCommitEdit (acc);
+      return NULL;
+   }
+
+   /* If the sign of the split is the same as the sign of the lot,
+    * we won't add it, because that would make the lot bigger, not
+    * smaller. Our only function here is to make lot balances smaller.
+    */
+   if ((gnc_numeric_negative_p (baln) && 
+        gnc_numeric_negative_p (split->amount)) ||
+       (gnc_numeric_positive_p (baln) && 
+        gnc_numeric_positive_p (split->amount)))
+   {
+      return split;
+   }
+
+   /* If adding the split would make the lot balance change sign,
+    * then we split the split into two pieces: one piece that will
+    * bring the lot balance to zero, and another to be dealt with
+    * later.  */
+   cmp = gnc_numeric_compare (gnc_numeric_abs(split->amount),
+                                        gnc_numeric_abs(baln));
+
+   PINFO ("found open lot with baln=%s", gnc_numeric_to_string (baln));
+   /* cmp == -1 if amt < baln, ==0 if amt==baln */
+   if (0 >= cmp) 
+   {
+      acc = split->acc;
+      xaccAccountBeginEdit (acc);
+      gnc_lot_add_split (lot, split);
+      PINFO ("simple added split to lot, new lot baln=%s", 
+           gnc_numeric_to_string (gnc_lot_get_balance(lot)));
+      xaccAccountCommitEdit (acc);
+      return NULL;
+   }
+
+   /* If we are here, then (cmp == +1 iff (amt > baln)) and we need
+    * to split up the split into pieces. Do it. */
+   {
+      time_t now = time(0);
+      Split * new_split;
+      gnc_numeric amt_a, amt_b, amt_tot;
+      gnc_numeric val_a, val_b, val_tot;
+      gnc_numeric tmp;
+      Transaction *trans;
+      Timespec ts;
+
+      acc = split->acc;
+      xaccAccountBeginEdit (acc);
+      trans = split->parent;
+      xaccTransBeginEdit (trans);
+
+      amt_tot = split->amount;
+      amt_a = gnc_numeric_neg (baln);
+      amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
+
+      PINFO ("++++++++++++++ splitting split into amt = %s + %s",
+              gnc_numeric_to_string(amt_a),
+              gnc_numeric_to_string(amt_b) );
+
+      /* Compute the value so that it holds in the same proportion:
+       * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
+       */
+      val_tot = split->value;
+      val_a = gnc_numeric_mul (amt_a, val_tot, 
+                        GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+      tmp = gnc_numeric_div (val_a, amt_tot, 
+                        gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
+
+      val_a = tmp;
+      val_b = gnc_numeric_sub_fixed (val_tot, val_a);
+
+      PINFO ("split value is = %s = %s + %s",
+              gnc_numeric_to_string(val_tot),
+              gnc_numeric_to_string(val_a),
+              gnc_numeric_to_string(val_b) );
+
+      xaccSplitSetAmount (split, amt_a);
+      xaccSplitSetValue (split, val_a);
+
+      /* Adding this split will have the effect of closing this lot,
+       * because the new balance should be precisely zero. */
+      gnc_lot_add_split (lot, split);
+
+      /* Put the remainder of the balance into a new split, 
+       * which is in other respects just a clone of this one. */
+      new_split = xaccMallocSplit (acc->book);
+
+      /* Copy most of the split attributes */
+      xaccSplitSetMemo (new_split, xaccSplitGetMemo (split));
+      xaccSplitSetAction (new_split, xaccSplitGetAction (split));
+      xaccSplitSetReconcile (new_split, xaccSplitGetReconcile (split));
+      ts = xaccSplitRetDateReconciledTS (split);
+      xaccSplitSetDateReconciledTS (new_split, &ts);
+
+      /* We do not copy the KVP tree, as it seems like a dangerous
+       * thing to do.  If the user wants to access stuff in the 'old'
+       * kvp tree from the 'new' split, they shoudl follow the 
+       * 'split-lot' pointers.  Yes, this is complicated, but what
+       * else can one do ??
+       */
+      /* Add kvp markup to indicate that these two splits used 
+       * to be one before being 'split' 
+       */
+      gnc_kvp_bag_add (split->kvp_data, "lot-split", now, 
+                       "peer_guid", xaccSplitGetGUID (new_split), 
+                       NULL);
+
+      gnc_kvp_bag_add (new_split->kvp_data, "lot-split", now, 
+                       "peer_guid", xaccSplitGetGUID (split), 
+                       NULL);
+
+      xaccSplitSetAmount (new_split, amt_b);
+      xaccSplitSetValue (new_split, val_b);
+      
+      xaccAccountInsertSplit (acc, new_split);
+      xaccTransAppendSplit (trans, new_split);
+      xaccTransCommitEdit (trans);
+      xaccAccountCommitEdit (acc);
+      return new_split;
+   }
+}
+
+/* ============================================================== */
+
+static GNCLot *
+MakeDefaultLot (Account *acc)
+{
+   GNCLot * lot;
+   gint64 id;
+   char buff[200];
+
+   lot = gnc_lot_new (acc->book);
+
+   /* Provide a reasonable title for the new lot */
+   id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
+   snprintf (buff, 200, _("Lot %lld"), id);
+   kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
+   id ++;
+   kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
+
+   return lot;
+}
+
 /* Accounting-policy callback.  Given an account and an amount, 
  * this routine should return a lot.  By implementing this as 
  * a callback, we can 'easily' add other accounting policies.
@@ -309,11 +480,11 @@ typedef GNCLot * (*AccountingPolicy) (Account *,
                                       Split *, 
                                       gpointer user_data);
 static gboolean
-PolicyAssignToLot (Split *split, 
+PolicyAssignSplit (Split *split, 
                   AccountingPolicy policy, gpointer user_data)
 {
    Account *acc;
-   gboolean splits_added = FALSE;
+   gboolean splits_split_up = FALSE;
    GNCLot *lot;
 
    if (!split) return FALSE;
@@ -335,132 +506,18 @@ PolicyAssignToLot (Split *split,
      PINFO ("have split amount=%s", gnc_numeric_to_string (split->amount));
      split->gains |= GAINS_STATUS_VDIRTY;
      lot = policy (acc, split, user_data);
-     if (lot)
+     if (!lot)
      {
-        /* If adding the split would make the lot balance change sign,
-         * then we split the split into two pieces: one piece that will
-         * bring the lot balance to zero, and another to be dealt with
-         * later.  */
-        gnc_numeric baln = gnc_lot_get_balance (lot);
-        int cmp = gnc_numeric_compare (gnc_numeric_abs(split->amount),
-                                       gnc_numeric_abs(baln));
-
-        PINFO ("found open lot with baln=%s", gnc_numeric_to_string (baln));
-        /* cmp == +1 if amt > baln */
-        if (0 < cmp) 
-        {
-           time_t now = time(0);
-           Split * new_split;
-           gnc_numeric amt_a, amt_b, amt_tot;
-           gnc_numeric val_a, val_b, val_tot;
-           gnc_numeric tmp;
-           Transaction *trans;
-           Timespec ts;
-
-           trans = split->parent;
-           xaccTransBeginEdit (trans);
-
-           amt_tot = split->amount;
-           amt_a = gnc_numeric_neg (baln);
-           amt_b = gnc_numeric_sub_fixed (amt_tot, amt_a);
-
-           PINFO ("++++++++++++++ splitting split into amt = %s + %s",
-                   gnc_numeric_to_string(amt_a),
-                   gnc_numeric_to_string(amt_b) );
-
-           /* Compute the value so that it holds in the same proportion:
-            * i.e. so that (amt_a / amt_tot) = (val_a / val_tot)
-            */
-           val_tot = split->value;
-           val_a = gnc_numeric_mul (amt_a, val_tot, 
-                             GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
-           tmp = gnc_numeric_div (val_a, amt_tot, 
-                             gnc_numeric_denom(val_tot), GNC_DENOM_EXACT);
-
-           val_a = tmp;
-           val_b = gnc_numeric_sub_fixed (val_tot, val_a);
-
-           PINFO ("split value is = %s = %s + %s",
-                   gnc_numeric_to_string(val_tot),
-                   gnc_numeric_to_string(val_a),
-                   gnc_numeric_to_string(val_b) );
-     
-           xaccSplitSetAmount (split, amt_a);
-           xaccSplitSetValue (split, val_a);
-
-           /* Adding this split will have the effect of closing this lot,
-            * because the new balance should be precisely zero. */
-           gnc_lot_add_split (lot, split);
-
-           /* Put the remainder of the balance into a new split, 
-            * which is in other respects just a clone of this one. */
-           new_split = xaccMallocSplit (acc->book);
-
-           /* Copy most of the split attributes */
-           xaccSplitSetMemo (new_split, xaccSplitGetMemo (split));
-           xaccSplitSetAction (new_split, xaccSplitGetAction (split));
-           xaccSplitSetReconcile (new_split, xaccSplitGetReconcile (split));
-           ts = xaccSplitRetDateReconciledTS (split);
-           xaccSplitSetDateReconciledTS (new_split, &ts);
-
-           /* We do not copy the KVP tree, as it seems like a dangerous
-            * thing to do.  If the user wants to access stuff in the 'old'
-            * kvp tree from the 'new' split, they shoudl follow the 
-            * 'split-lot' pointers.  Yes, this is complicated, but what
-            * else can one do ??
-            */
-           /* Add kvp markup to indicate that these two splits used 
-            * to be one before being 'split' 
-            */
-           gnc_kvp_bag_add (split->kvp_data, "lot-split", now, 
-                            "peer_guid", xaccSplitGetGUID (new_split), 
-                            NULL);
-
-           gnc_kvp_bag_add (new_split->kvp_data, "lot-split", now, 
-                            "peer_guid", xaccSplitGetGUID (split), 
-                            NULL);
-
-           xaccSplitSetAmount (new_split, amt_b);
-           xaccSplitSetValue (new_split, val_b);
-           
-           xaccAccountInsertSplit (acc, new_split);
-           xaccTransAppendSplit (trans, new_split);
-           xaccTransCommitEdit (trans);
-           split = new_split;
-
-           splits_added = TRUE;
-        }
-        else
-        {
-           gnc_lot_add_split (lot, split);
-           split = NULL;
-           PINFO ("added split to lot, new lot baln=%s", 
-                gnc_numeric_to_string (gnc_lot_get_balance(lot)));
-        }
-     }
-     else
-     {
-        gint64 id;
-        char buff[200];
-
-        /* Policy didn't give us a lot.  Start a new lot. */
+        lot = MakeDefaultLot (acc);
         PINFO ("start new lot");
-        lot = gnc_lot_new (acc->book);
-        gnc_lot_add_split (lot, split);
-        split = NULL;
-
-        /* Provide a reasonable title for the new lot */
-        id = kvp_frame_get_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id");
-        snprintf (buff, 200, _("Lot %lld"), id);
-        kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", buff);
-        id ++;
-        kvp_frame_set_gint64 (xaccAccountGetSlots (acc), "/lot-mgmt/next-id", id);
      }
+     split = xaccSplitAssignToLot (split, lot);
+     if (split) splits_split_up = TRUE;
    }
    xaccAccountCommitEdit (acc);
 
-   LEAVE ("added=%d", splits_added);
-   return splits_added;
+   LEAVE ("split_up=%d", splits_split_up);
+   return splits_split_up;
 }
 
 static GNCLot * 
@@ -470,13 +527,13 @@ FIFOPolicy (Account *acc, Split *split, gpointer user_data)
 }
 
 gboolean
-xaccSplitAssignToLot (Split *split)
+xaccSplitAssign (Split *split)
 {
    /* XXX FIXME: instead of a hard-wired fifo policy, we should 
     * be using the policy as specified by the account. i.e.
     * we should be using split->acc->polcy as the function 
     */
-   return PolicyAssignToLot (split, FIFOPolicy, NULL);
+   return PolicyAssignSplit (split, FIFOPolicy, NULL);
 }
 
 /* ============================================================== */
