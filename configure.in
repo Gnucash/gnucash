@@ -55,7 +55,7 @@ then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
-AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
+AC_CHECK_HEADERS(dlfcn.h dl.h ghttp_ssl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 DL_LIB=
 AC_CHECK_FUNCS(dlopen,,[
