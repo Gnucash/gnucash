@@ -30,6 +30,7 @@
 #include "cellblock.h"
 #include "table-allgui.h"
 
+
 /* ==================================================== */
 /* in C, we don't have templates. So cook up a $define that acts like a
  * template.  This one will resize a 2D array.
@@ -43,9 +44,6 @@
    /* save old table size */						\
    old_rows = table_rows;						\
    old_cols = table_cols;						\
-									\
-   table_rows = new_rows;						\
-   table_cols = new_cols;						\
 									\
    /* realloc to get the new table size.  Note that the */		\
    /* new table may be wider or slimmer, taller or shorter. */		\
@@ -139,9 +137,28 @@
 
 /* ==================================================== */
 
-void 
-xaccTableResizeStringArr (Table * table, int new_phys_rows, int new_phys_cols)
+static Locator *
+xaccMallocLocator (void)
 {
+   Locator *loc;
+   loc = (Locator *) malloc (sizeof (Locator));
+   loc->phys_row_offset = -1;
+   loc->phys_col_offset = -1;
+   loc->virt_row = -1;
+   loc->virt_col = -1;
+
+   return (loc);
+}
+
+/* ==================================================== */
+
+void 
+xaccTableResize (Table * table,
+                 int new_phys_rows, int new_phys_cols,
+                 int new_virt_rows, int new_virt_cols)
+{
+
+   /* resize the string data array */
    RESIZE_ARR ((table->num_phys_rows),
                (table->num_phys_cols),
                new_phys_rows,
@@ -149,13 +166,23 @@ xaccTableResizeStringArr (Table * table, int new_phys_rows, int new_phys_cols)
                (table->entries),
                char,
                (strdup ("")));
-}
 
-/* ==================================================== */
+   /* resize the locator array */
+   RESIZE_ARR ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->locators),
+               Locator,
+               (xaccMallocLocator ()));
 
-void 
-xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols)
-{
+   /* we are done with the physical dimensions. 
+    * record them for posterity. */
+   table->num_phys_rows = new_phys_rows;
+   table->num_phys_cols = new_phys_cols;
+
+
+   /* resize the user-data hooks */
    RESIZE_ARR ((table->num_virt_rows),
                (table->num_virt_cols),
                new_virt_rows,
@@ -163,22 +190,21 @@ xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols)
                (table->user_data),
                void,
                (NULL));
-}
 
-/* ==================================================== */
+   /* resize the handler array */
+   RESIZE_ARR ((table->num_virt_rows),
+               (table->num_virt_cols),
+               new_virt_rows,
+               new_virt_cols,
+               (table->handlers),
+               CellBlock,
+               (NULL));
 
-void
-xaccTableCount (Table *table, CellBlock *curse)
-{
-   if (!table) return;
-   if (!curse) return;
-   
-   /* increment rows */
-   table->cnt_phys_rows += curse->numRows;
-   table->cnt_virt_rows ++;
+   /* we are done with the virtual dimensions. 
+    * record them for posterity. */
+   table->num_virt_rows = new_virt_rows;
+   table->num_virt_cols = new_virt_cols;
 
-   /* copy columns */
-   table->cnt_phys_cols = curse->numCols;
 }
 
 /* ==================================================== */

@@ -42,17 +42,12 @@
 #endif 
 
 extern void 
-xaccTableResizeStringArr (Table * table, int num_phys_rows, int num_phys_cols);
-
-extern void 
-xaccTableResizeUserData (Table * table, int new_virt_rows, int new_virt_cols);
+xaccTableResize (Table * table, int num_phys_rows, int num_phys_cols,
+                                int new_virt_rows, int new_virt_cols);
 
 extern void 
 xaccAddCursor (Table *table, CellBlock *curs);
 
-/* count the number of phys rows we'll need, in prep for the malloc */
-extern void
-xaccTableCount (Table *table, CellBlock *curs);
 
 #endif /* __XACC_TABLE_ALLGUI_H__ */
 

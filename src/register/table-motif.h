@@ -37,6 +37,27 @@
 #include "basiccell.h"
 #include "cellblock.h"
 
+/* the Locator structure is used provide a mapping from
+ * the physical array of cells to the logical array of 
+ * virtual cell blocks.
+ *
+ * There is one instance of Locator for each physical cell.
+ * The virt_row and virt_col members identify the corresponding
+ * cellblock/virtual cell that this physical cell is a member of.
+ * The two phys_offsets provide the location of the physical cell
+ * as an offset from the cell block origin.  That is, the offsets
+ * should never be less than zero, or greater than the size of
+ * the cell block.
+ */
+struct _Locator {
+  short phys_row_offset;
+  short phys_col_offset;
+  short virt_row;
+  short virt_col;
+};
+
+typedef struct _Locator Locator;
+
 typedef struct _Table {
 
   /* The number of "physical" rows/cols is the number
@@ -66,13 +87,15 @@ typedef struct _Table {
    * of dimension num_phys_rows * num_phys_cols */
   char ***entries;
 
-  /* user hooks, of dimension num_rows * num_cols */
+  /* handler locators for each cell, 
+   * of dimension num_phys_rows * num_phys_cols */
+  Locator ***locators;
+
+  /* user hooks, of dimension num_virt_rows * num_virt_cols */
   void ***user_data;
 
-  /* protected data -- vital for the implementation, 
-   * but not something we want to generally expose */
-  Widget table_widget;          /* the XbaeMatrix */
-  Widget next_tab_group;        /* where to traverse in the end */
+  /* cell blocks, of dimension num_virt_rows * num_virt_cols */
+  CellBlock ***handlers;
 
   /* private data, caches, etc. */
   /* This is black-box stuff that no user of this class 
@@ -87,11 +110,12 @@ typedef struct _Table {
   int prev_phys_traverse_row;
   int prev_phys_traverse_col;
    
-  /* temporary counters */
-  int cnt_phys_rows;
-  int cnt_phys_cols;
-  int cnt_virt_rows;
-  int cnt_virt_cols;
+  /* Motif-only date below, gui-independent data above */
+
+  /* protected data -- vital for the implementation, 
+   * but not something we want to generally expose */
+  Widget table_widget;          /* the XbaeMatrix */
+  Widget next_tab_group;        /* where to traverse in the end */
 
 } Table;
 
