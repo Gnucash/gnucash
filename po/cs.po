@@ -5,17 +5,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.8.9\n"
+"Project-Id-Version: gnucash 1.8.10pre1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-30 19:02+0200\n"
-"PO-Revision-Date: 2004-04-16 18:32+0200\n"
+"PO-Revision-Date: 2004-11-07 13:23+0100\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: src/app-file/gnome/gnc-file-dialog.c:77 src/app-file/gnc-file.c:547
 #: src/gnome/window-acct-tree.c:846 src/gnome/window-reconcile.c:1460
@@ -222,14 +221,12 @@ msgstr ""
 
 #: src/app-file/gnc-file.c:215
 msgid ""
-"The SQL database is in use by other users, and the upgrade cannot be "
-"performed until they logoff.\n"
+"The SQL database is in use by other users, and the upgrade cannot be performed until they logoff.\n"
 "If there are currently no other users, consult the \n"
 "documentation to learn how to clear out dangling login\n"
 "sessions."
 msgstr ""
-"Databázi SQL používají jiní uživatelé a aktualizace nemůže být provedena, "
-"dokud se neodhlásí.\n"
+"Databázi SQL používají jiní uživatelé a aktualizace nemůže být provedena, dokud se neodhlásí.\n"
 "Jestliže ji momentálně žádní další uživatelé nepoužívají\n"
 "najděte v dokumentaci, jak vymazat neplatná přihlašovací\n"
 "sezení."
@@ -448,9 +445,7 @@ msgstr "Ztracené účty"
 #: src/backend/postgres/PostgresBackend.c:1881
 #, c-format
 msgid "Unknown database access mode '%s'. Using default mode: multi-user."
-msgstr ""
-"Neznámý režim přístupu k databázi '%s'. Používám implicitní režim: multi-"
-"user."
+msgstr "Neznámý režim přístupu k databázi '%s'. Používám implicitní režim: multi-user."
 
 #: src/business/business-core/gncInvoice.c:509
 #: src/business/business-gnome/glade/invoice.glade:538
@@ -753,12 +748,8 @@ msgid "The number of days to pay the bill after the post date."
 msgstr "Počet dnů pro zaplacení účtu po datu vystavení"
 
 #: src/business/business-gnome/glade/billterms.glade:821
-msgid ""
-"The number of days after the post date during which a discount will be "
-"applied for early payment."
-msgstr ""
-"Počet dnů po datu vystavení, ve kterých bude poskytnuta sleva za včasnou "
-"platbu."
+msgid "The number of days after the post date during which a discount will be applied for early payment."
+msgstr "Počet dnů po datu vystavení, ve kterých bude poskytnuta sleva za včasnou platbu."
 
 #: src/business/business-gnome/glade/billterms.glade:845
 msgid "The percentage discount applied for early payment."
@@ -789,13 +780,8 @@ msgid "The discount percentage applied if paid early."
 msgstr "Procenta slevy použité při brzké platbě."
 
 #: src/business/business-gnome/glade/billterms.glade:1065
-msgid ""
-"The cutoff day for applying bills to the next month.  After the cutoff, "
-"bills are applied to the following month.  Negative values count backwards "
-"from the end of the month."
-msgstr ""
-"Hraniční den pro počítání účtů do dalšího měsíce. Po hranici se účty "
-"počítají do dalšího měsíce. Záporné hodnoty počítají zpět od konce měsíce."
+msgid "The cutoff day for applying bills to the next month.  After the cutoff, bills are applied to the following month.  Negative values count backwards from the end of the month."
+msgstr "Hraniční den pro počítání účtů do dalšího měsíce. Po hranici se účty počítají do dalšího měsíce. Záporné hodnoty počítají zpět od konce měsíce."
 
 #: src/business/business-gnome/glade/billterms.glade:1110
 msgid "Table"
@@ -833,12 +819,8 @@ msgid "Active"
 msgstr "Aktivní"
 
 #: src/business/business-gnome/glade/customer.glade:204
-msgid ""
-"The customer ID number.  If left blank a reasonable number will be chosen "
-"for you"
-msgstr ""
-"ID číslo zákazníka. Pokud je ponecháno prázdné, bude pro vás zvoleno rozumné "
-"číslo"
+msgid "The customer ID number.  If left blank a reasonable number will be chosen for you"
+msgstr "ID číslo zákazníka. Pokud je ponecháno prázdné, bude pro vás zvoleno rozumné číslo"
 
 #: src/business/business-gnome/glade/customer.glade:257
 msgid "Billing Address"
@@ -986,9 +968,8 @@ msgid "acct"
 msgstr "zúčtování"
 
 #: src/business/business-gnome/glade/date-close.glade:482
-#, fuzzy
 msgid "question"
-msgstr "Otázka"
+msgstr "otázka"
 
 #: src/business/business-gnome/glade/employee.glade:22
 #: src/business/business-gnome/dialog-employee.c:284
@@ -1005,12 +986,8 @@ msgid "Username: "
 msgstr "Jméno uživatele: "
 
 #: src/business/business-gnome/glade/employee.glade:204
-msgid ""
-"The employee ID number.  If left blank a reasonable number will be chosen "
-"for you"
-msgstr ""
-"ID číslo zaměstnance. Pokud je ponecháno prázdné, bude pro vás zvoleno "
-"rozumné číslo"
+msgid "The employee ID number.  If left blank a reasonable number will be chosen for you"
+msgstr "ID číslo zaměstnance. Pokud je ponecháno prázdné, bude pro vás zvoleno rozumné číslo"
 
 #: src/business/business-gnome/glade/employee.glade:257
 #: src/business/business-gnome/glade/vendor.glade:258
@@ -1083,12 +1060,8 @@ msgid "Date Opened"
 msgstr "Datum otevření"
 
 #: src/business/business-gnome/glade/invoice.glade:178
-msgid ""
-"The invoice ID number.  If left blank a reasonable number will be chosen for "
-"you"
-msgstr ""
-"ID číslo faktury. Pokud je ponecháno prázdné, bude pro vás zvoleno rozumné "
-"číslo"
+msgid "The invoice ID number.  If left blank a reasonable number will be chosen for you"
+msgstr "ID číslo faktury. Pokud je ponecháno prázdné, bude pro vás zvoleno rozumné číslo"
 
 #: src/business/business-gnome/glade/invoice.glade:261
 #: src/business/business-gnome/glade/invoice.glade:437
@@ -1501,8 +1474,7 @@ msgid "Job Name"
 msgstr "Jméno práce"
 
 #: src/business/business-gnome/glade/job.glade:181
-msgid ""
-"The job ID number.  If left blank a reasonable number will be chosen for you"
+msgid "The job ID number.  If left blank a reasonable number will be chosen for you"
 msgstr "zaměstnance"
 
 #: src/business/business-gnome/glade/job.glade:216
@@ -1563,12 +1535,8 @@ msgid "New Order"
 msgstr "Nová objednávka"
 
 #: src/business/business-gnome/glade/order.glade:695
-msgid ""
-"The order ID number.  If left blank a reasonable number will be chosen for "
-"you"
-msgstr ""
-"ID číslo objednávky. Pokud je ponecháno prázdné, bude pro vás zvoleno "
-"rozumné číslo"
+msgid "The order ID number.  If left blank a reasonable number will be chosen for you"
+msgstr "ID číslo objednávky. Pokud je ponecháno prázdné, bude pro vás zvoleno rozumné číslo"
 
 #: src/business/business-gnome/glade/order.glade:876
 msgid "Order"
@@ -1585,12 +1553,8 @@ msgid "Vendor Number: "
 msgstr "Číslo dodavatele: "
 
 #: src/business/business-gnome/glade/vendor.glade:205
-msgid ""
-"The vendor ID number.  If left blank a reasonable number will be chosen for "
-"you"
-msgstr ""
-"ID číslo dodavatele. Pokud je ponecháno prázdné, bude pro vás zvoleno "
-"rozumné číslo"
+msgid "The vendor ID number.  If left blank a reasonable number will be chosen for you"
+msgstr "ID číslo dodavatele. Pokud je ponecháno prázdné, bude pro vás zvoleno rozumné číslo"
 
 #: src/business/business-gnome/glade/vendor.glade:596
 #: src/business/business-gnome/search-owner.c:235
@@ -1729,12 +1693,10 @@ msgstr "Jste si jisti, že chcete odstranit \"%s\"?"
 #: src/business/business-gnome/dialog-customer.c:234
 msgid ""
 "You must enter a company name.\n"
-"If this customer is an individual (and not a company) you should set the "
-"\"company name\" and \"contact name\" the same."
+"If this customer is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "Musíte zadat název společnosti.\n"
-"Pokud je tento zákazník jednotlivec (a ne společnost), měli byste nastavit "
-"\"název společnosti\" a \"jméno kontaktu\" stejně."
+"Pokud je tento zákazník jednotlivec (a ne společnost), měli byste nastavit \"název společnosti\" a \"jméno kontaktu\" stejně."
 
 #: src/business/business-gnome/dialog-customer.c:245
 msgid "You must enter a billing address."
@@ -1886,8 +1848,7 @@ msgid "Are you sure you want to delete the selected entry?"
 msgstr "Jste si jisti, že chcete odstranit vybranou položku?"
 
 #: src/business/business-gnome/dialog-invoice.c:448
-msgid ""
-"This entry is attached to an order and will be deleted from that as well!"
+msgid "This entry is attached to an order and will be deleted from that as well!"
 msgstr "Tato položka je připojena k objednávce a bude odstraněna i z ní!"
 
 #: src/business/business-gnome/dialog-invoice.c:556
@@ -1914,17 +1875,12 @@ msgid "Post to Account"
 msgstr "Vystavit k účtu"
 
 #: src/business/business-gnome/dialog-invoice.c:567
-#, fuzzy
 msgid "Accumulate Splits?"
-msgstr "Automatické rozdělení"
+msgstr "Akumuloat rozdělení?"
 
 #: src/business/business-gnome/dialog-invoice.c:624
-msgid ""
-"Unposting this Invoice will delete the posted transaction.  Are you sure you "
-"want to unpost it?"
-msgstr ""
-"Zrušení vystavení této faktury odstraní vystavenou účetní položku. Jste si "
-"jisti, že chcete zrušit její vystavení?"
+msgid "Unposting this Invoice will delete the posted transaction.  Are you sure you want to unpost it?"
+msgstr "Zrušení vystavení této faktury odstraní vystavenou účetní položku. Jste si jisti, že chcete zrušit její vystavení?"
 
 #: src/business/business-gnome/dialog-invoice.c:959
 #: src/gnome/window-reconcile.c:1013
@@ -2121,9 +2077,7 @@ msgid "Closed"
 msgstr "Uzavřena"
 
 #: src/business/business-gnome/dialog-payment.c:88
-msgid ""
-"You must enter the amount of the payment.  The payment amount must be "
-"greater than zero."
+msgid "You must enter the amount of the payment.  The payment amount must be greater than zero."
 msgstr "Musíte zadat částku platby. Částka musí být větší než nula."
 
 #: src/business/business-gnome/dialog-payment.c:97
@@ -2146,12 +2100,10 @@ msgstr "Vámi zvolený účet pro vystavení %s neexistuje"
 #: src/business/business-gnome/dialog-vendor.c:172
 msgid ""
 "You must enter a company name.\n"
-"If this vendor is an individual (and not a company) you should set the "
-"\"company name\" and \"contact name\" the same."
+"If this vendor is an individual (and not a company) you should set the \"company name\" and \"contact name\" the same."
 msgstr ""
 "Musíte zadat název společnosti.\n"
-"Pokud je tento dodavatel jednotlivec (a ne společnost), měli byste nastavit "
-"\"název společnosti\" a \"jméno kontaktu\" stejně."
+"Pokud je tento dodavatel jednotlivec (a ne společnost), měli byste nastavit \"název společnosti\" a \"jméno kontaktu\" stejně."
 
 #: src/business/business-gnome/dialog-vendor.c:183
 msgid "You must enter a payment address."
@@ -2465,8 +2417,7 @@ msgid "Billable?"
 msgstr "Vyúčtovatelné?"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:515
-msgid ""
-"Enter the income/expense account for the Entry, or choose one from the list"
+msgid "Enter the income/expense account for the Entry, or choose one from the list"
 msgstr "Zadejte příjmový/výdajový účet pro položku, nebo jej zvolte ze seznamu"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:528
@@ -3107,10 +3058,8 @@ msgid "[rtw] THIS WINDOW SHOULD NOT BE CREATED"
 msgstr "[rtw] TOTO OKNO BY NEMĚLO BÝT VYTVOŘENO"
 
 #: src/gnome/glade/register.glade:1589
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template"
-msgstr ""
-"Vytvořit plánovanou účetní položku podle současné účetní položky jako šablony"
+msgid "Create a Scheduled Transaction with the current transaction as a template"
+msgstr "Vytvořit plánovanou účetní položku podle současné účetní položky jako šablony"
 
 #: src/gnome/glade/register.glade:1595 src/gnome/glade/fincalc.glade:66
 msgid "Schedule"
@@ -3225,11 +3174,8 @@ msgid "_Basic Ledger"
 msgstr "_Základní účetní kniha"
 
 #: src/gnome/glade/register.glade:1956 intl-scm/guile-strings.c:1047
-msgid ""
-"Show transactions on one or two lines and expand the current transaction"
-msgstr ""
-"Zobrazit účetní položky na jednom nebo dvou řádcích a rozbalit současnou "
-"účetní položku"
+msgid "Show transactions on one or two lines and expand the current transaction"
+msgstr "Zobrazit účetní položky na jednom nebo dvou řádcích a rozbalit současnou účetní položku"
 
 #: src/gnome/glade/register.glade:1962
 msgid "_Auto-Split Ledger"
@@ -3360,13 +3306,8 @@ msgid "Tax Related"
 msgstr "Souvisí s daněmi"
 
 #: src/gnome/glade/account.glade:633
-msgid ""
-"This account is present solely as a placeholder in the hierarchy.  "
-"Transactions may not be posted to this account, only to sub-accounts of this "
-"account."
-msgstr ""
-"Tento účet existuje jen, aby držel místo v hierarchii. Účetní položky nelze "
-"vystavovat do tohoto účtu, jen do jeho podúčtů."
+msgid "This account is present solely as a placeholder in the hierarchy.  Transactions may not be posted to this account, only to sub-accounts of this account."
+msgstr "Tento účet existuje jen, aby držel místo v hierarchii. Účetní položky nelze vystavovat do tohoto účtu, jen do jeho podúčtů."
 
 #: src/gnome/glade/account.glade:635 src/gnome/glade/account.glade:1401
 msgid "Placeholder"
@@ -3483,10 +3424,8 @@ msgstr "Zadejte počáteční zůstatky"
 
 #: src/gnome/glade/account.glade:1279
 msgid ""
-"If you would like an account to have an opening balance, click on the "
-"account\n"
-"and enter the starting balance in the box on the right. All accounts except "
-"Equity\n"
+"If you would like an account to have an opening balance, click on the account\n"
+"and enter the starting balance in the box on the right. All accounts except Equity\n"
 "and placeholder accounts may have an opening balance."
 msgstr ""
 "Chcete-li, aby měl účet počáteční zůstatek, klikněte na něj a vložte\n"
@@ -3701,12 +3640,8 @@ msgid "Search Term:"
 msgstr "Hledat pojem:"
 
 #: src/gnome/glade/help.glade:189
-msgid ""
-"Type a single term into the box and hit 'search'. At the moment, this search "
-"engine does not support complex searches, just single words."
-msgstr ""
-"Napište do rámečku jeden pojem a stiskněte 'hledat'. V současné době tento "
-"hledací systém nepodporuje složitá hledání, jen jednotlivá slova."
+msgid "Type a single term into the box and hit 'search'. At the moment, this search engine does not support complex searches, just single words."
+msgstr "Napište do rámečku jeden pojem a stiskněte 'hledat'. V současné době tento hledací systém nepodporuje složitá hledání, jen jednotlivá slova."
 
 #: src/gnome/glade/help.glade:223 src/gnome/glade/help.glade:290
 msgid "Search"
@@ -3741,11 +3676,8 @@ msgid "Canceling"
 msgstr "Ruším"
 
 #: src/gnome/glade/newuser.glade:210
-msgid ""
-"Uncheck if you do not want this dialog to run if you start GnuCash up again. "
-msgstr ""
-"Zrušte označení, nechcete-li, aby byl tento dialog spuštěn, až zase spustíte "
-"GnuCash."
+msgid "Uncheck if you do not want this dialog to run if you start GnuCash up again. "
+msgstr "Zrušte označení, nechcete-li, aby byl tento dialog spuštěn, až zase spustíte GnuCash."
 
 #: src/gnome/glade/newuser.glade:228
 msgid "Run dialog for new user again?"
@@ -4482,10 +4414,8 @@ msgid "Stock Account"
 msgstr "Účet akcií"
 
 #: src/gnome/glade/stocks.glade:70
-msgid ""
-"Select the account for which you want to record a stock split or merger."
-msgstr ""
-"Zvolte účet, pro který chcete zaznamenat rozdělení nebo sloučení akcií."
+msgid "Select the account for which you want to record a stock split or merger."
+msgstr "Zvolte účet, pro který chcete zaznamenat rozdělení nebo sloučení akcií."
 
 #: src/gnome/glade/stocks.glade:146
 #: src/register/ledger-core/split-register-model.c:254
@@ -4503,17 +4433,12 @@ msgstr "Detaily rozdělení akcií"
 
 #: src/gnome/glade/stocks.glade:184
 msgid ""
-"Enter the date and the number of shares you gained or lost from the stock "
-"split or merger.\n"
-"For stock mergers (negative splits) use a negative value for the share "
-"distribution.\n"
-"You can also enter a description of the transaction, or accept the default "
-"one."
+"Enter the date and the number of shares you gained or lost from the stock split or merger.\n"
+"For stock mergers (negative splits) use a negative value for the share distribution.\n"
+"You can also enter a description of the transaction, or accept the default one."
 msgstr ""
-"Zadejte datum a počet podílů, které jste získali nebo ztratili při rozdělení "
-"nebo sloučení akcií.\n"
-"Pro sloučení akcií (záporná rozdělení) použijte pro rozdělení podílů "
-"zápornou hodnotu.\n"
+"Zadejte datum a počet podílů, které jste získali nebo ztratili při rozdělení nebo sloučení akcií.\n"
+"Pro sloučení akcií (záporná rozdělení) použijte pro rozdělení podílů zápornou hodnotu.\n"
 "Můžete také zadat popis účetní položky nebo přijmout implicitní popis."
 
 #: src/gnome/glade/stocks.glade:244
@@ -4559,8 +4484,7 @@ msgid ""
 "quit without making any changes."
 msgstr ""
 "Jestliže jste dokončili vytváření rozdělení nebo sloučení akcií, stiskněte\n"
-"'Dokončit'. Můžete také zkontrolovat své volby stisknutím 'Zpět' nebo "
-"skončit\n"
+"'Dokončit'. Můžete také zkontrolovat své volby stisknutím 'Zpět' nebo skončit\n"
 "bez provedení změn stisknutím 'Zrušit'."
 
 #: src/gnome/glade/tax.glade:22 src/gnome/glade/tax.glade:244
@@ -4771,9 +4695,7 @@ msgstr "Musí být nějaký počet výskytů."
 
 #: src/gnome/dialog-scheduledxaction.c:935
 #, c-format
-msgid ""
-"The number of remaining occurrences (%d) is greater than the number of total "
-"occurrences (%d)."
+msgid "The number of remaining occurrences (%d) is greater than the number of total occurrences (%d)."
 msgstr "Počet zbývajících výskytů (%d) je větší než počet výskytů celkem (%d)."
 
 #: src/gnome/dialog-scheduledxaction.c:969
@@ -5160,14 +5082,11 @@ msgstr ""
 #: src/gnome/window-acct-tree.c:444
 #, c-format
 msgid "This account contains read-only transactions.  You may not delete %s."
-msgstr ""
-"Tento účet obsahuje účetní položky jen pro čtení. Nemůžete odstranit %s."
+msgstr "Tento účet obsahuje účetní položky jen pro čtení. Nemůžete odstranit %s."
 
 #: src/gnome/window-acct-tree.c:447
 #, c-format
-msgid ""
-"One (or more) children of this account contains read-only transactions.  You "
-"may not delete %s."
+msgid "One (or more) children of this account contains read-only transactions.  You may not delete %s."
 msgstr ""
 "Jeden (nebo více) potomků tohoto účtu obsahuje\n"
 "účetní položky jen pro čtení. Nemůžete odstranit %s."
@@ -5216,36 +5135,24 @@ msgid "Check & Repair A_ccount"
 msgstr "Zkontrolovat & opravit _účet"
 
 #: src/gnome/window-acct-tree.c:912 src/gnome/window-reconcile.c:1293
-msgid ""
-"Check for and repair unbalanced transactions and orphan splits in this "
-"account"
-msgstr ""
-"Zkontrolovat a opravit nevyvážené účetní položky a osamocené části v tomto "
-"účtu"
+msgid "Check for and repair unbalanced transactions and orphan splits in this account"
+msgstr "Zkontrolovat a opravit nevyvážené účetní položky a osamocené části v tomto účtu"
 
 #: src/gnome/window-acct-tree.c:920
 msgid "Check & Repair Su_baccounts"
 msgstr "Zkontrolovat & opravit _podúčty"
 
 #: src/gnome/window-acct-tree.c:921
-msgid ""
-"Check for and repair unbalanced transactions and orphan splits in this "
-"account and its subaccounts"
-msgstr ""
-"Zkontrolovat a opravit nevyvážené účetní položky a osamocené části v tomto "
-"účtu a jeho podúčtech"
+msgid "Check for and repair unbalanced transactions and orphan splits in this account and its subaccounts"
+msgstr "Zkontrolovat a opravit nevyvážené účetní položky a osamocené části v tomto účtu a jeho podúčtech"
 
 #: src/gnome/window-acct-tree.c:929
 msgid "Check & Repair A_ll"
 msgstr "Zkontrolovat & opravit _vše"
 
 #: src/gnome/window-acct-tree.c:930
-msgid ""
-"Check for and repair unbalanced transactions and orphan splits in all "
-"accounts"
-msgstr ""
-"Zkontrolovat a opravit nevyvážené účetní položky a osamocené části ve všech "
-"účtech"
+msgid "Check for and repair unbalanced transactions and orphan splits in all accounts"
+msgstr "Zkontrolovat a opravit nevyvážené účetní položky a osamocené části ve všech účtech"
 
 #: src/gnome/window-acct-tree.c:964
 msgid "Open Account"
@@ -5561,10 +5468,8 @@ msgid "_Reconcile Information..."
 msgstr "Informace o _odsouhlasení..."
 
 #: src/gnome/window-reconcile.c:1231
-msgid ""
-"Change the reconcile information including statement date and ending balance."
-msgstr ""
-"Změnit informace o odsouhlasení včetně data výpisu a koncového zůstatku."
+msgid "Change the reconcile information including statement date and ending balance."
+msgstr "Změnit informace o odsouhlasení včetně data výpisu a koncového zůstatku."
 
 #: src/gnome/window-reconcile.c:1240
 msgid "_Finish"
@@ -5750,12 +5655,8 @@ msgstr ""
 "nápad, protože to způsobí neplatnost vašeho odsouhlaseného zůstatku."
 
 #: src/gnome/gnc-split-reg.c:1145
-msgid ""
-"This is the split anchoring this transaction to the register. You may not "
-"delete it from this register window."
-msgstr ""
-"Toto je část kotvicí tuto účetní položku k účetní knize. Nemůžete ji z této "
-"účetní knihy odstranit."
+msgid "This is the split anchoring this transaction to the register. You may not delete it from this register window."
+msgstr "Toto je část kotvicí tuto účetní položku k účetní knize. Nemůžete ji z této účetní knihy odstranit."
 
 #: src/gnome/gnc-split-reg.c:1158
 msgid "(no memo)"
@@ -6067,11 +5968,8 @@ msgid "Delete results from current search"
 msgstr "Odstranit výsledky z aktuálního hledání"
 
 #: src/gnome-search/search.glade:460
-msgid ""
-"Choose whether to search all your data or only that marked as \"active\""
-msgstr ""
-"Zvolte, jestli prohledávat všechna vaše data nebo jen data označená jako "
-"\"aktivní\""
+msgid "Choose whether to search all your data or only that marked as \"active\""
+msgstr "Zvolte, jestli prohledávat všechna vaše data nebo jen data označená jako \"aktivní\""
 
 #: src/gnome-search/search.glade:468
 msgid "Search only active data"
@@ -6136,39 +6034,24 @@ msgid "Enter the full name of the commodity. Example: US Dollars"
 msgstr "Zadejte úplné jméno komodity. Příklad: České koruny"
 
 #: src/gnome-utils/commodity.glade:480
-msgid ""
-"Enter the ticker symbol or currency code for the commodity. Example: USD"
+msgid "Enter the ticker symbol or currency code for the commodity. Example: USD"
 msgstr "Zadejte burzovní symbol nebo kód měny pro tuto komoditu. Příklad: CZK"
 
 #: src/gnome-utils/commodity.glade:512
-msgid ""
-"Enter the type of commodity. For stocks, this is often an exchange on which "
-"the stock is traded. You can choose an existing type from the list or enter "
-"a new type with the keyboard."
-msgstr ""
-"Zadejte typ komodity. Pro akcie je to často burza, kde se s nimi obchoduje. "
-"Můžete zvolit existující typ ze seznamu nebo zadat nový typ pomocí "
-"klávesnice."
+msgid "Enter the type of commodity. For stocks, this is often an exchange on which the stock is traded. You can choose an existing type from the list or enter a new type with the keyboard."
+msgstr "Zadejte typ komodity. Pro akcie je to často burza, kde se s nimi obchoduje. Můžete zvolit existující typ ze seznamu nebo zadat nový typ pomocí klávesnice."
 
 #: src/gnome-utils/commodity.glade:524
-msgid ""
-"Enter a unique code used to identify the commodity. Or, you may safely leave "
-"this field blank."
-msgstr ""
-"Zadejte jedinečný kód používaný pro identifikaci této komodity. Můžete toto "
-"pole také bez problémů nechat prázdné."
+msgid "Enter a unique code used to identify the commodity. Or, you may safely leave this field blank."
+msgstr "Zadejte jedinečný kód používaný pro identifikaci této komodity. Můžete toto pole také bez problémů nechat prázdné."
 
 #: src/gnome-utils/commodity.glade:551
 msgid "1 /"
 msgstr "1 /"
 
 #: src/gnome-utils/commodity.glade:568
-msgid ""
-"Enter the smallest fraction of the commodity which can be traded. For stocks "
-"which can only be traded in whole numbers, enter 1."
-msgstr ""
-"Zadejte nejmenší zlomek komodity, se kterým se dá obchodovat. Pro akcie, se "
-"kterými se dá obchodovat jen vcelku, zadejte 1."
+msgid "Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1."
+msgstr "Zadejte nejmenší zlomek komodity, se kterým se dá obchodovat. Pro akcie, se kterými se dá obchodovat jen vcelku, zadejte 1."
 
 #: src/gnome-utils/dialog-commodity.c:132
 msgid ""
@@ -6618,12 +6501,8 @@ msgstr ""
 "nedovoluje účetní položky.\n"
 
 #: src/gnome-utils/dialog-transfer.c:1406
-msgid ""
-"You can't transfer from a non-currency account.  Try reversing the \"from\" "
-"and \"to\" accounts and making the \"amount\" negative."
-msgstr ""
-"Nemůžete převádět z neměnového účtu. Zkuste prohodit účty \"od\" a \"do\" a "
-"použít zápornou \"částku\"."
+msgid "You can't transfer from a non-currency account.  Try reversing the \"from\" and \"to\" accounts and making the \"amount\" negative."
+msgstr "Nemůžete převádět z neměnového účtu. Zkuste prohodit účty \"od\" a \"do\" a použít zápornou \"částku\"."
 
 #: src/gnome-utils/dialog-transfer.c:1429
 msgid "You must enter an amount to transfer."
@@ -6793,31 +6672,22 @@ msgstr "Zvolit akci importu"
 #: src/import-export/generic-import.glade:494
 msgid ""
 "-Red transactions require your intervention or they will NOT be imported.\n"
-"-Yellow transactions probably require your intervention or they will be "
-"imported unbalanced.\n"
-"-Green transactions will be imported balanced (you may still want to double "
-"check the match or destination account).\n"
+"-Yellow transactions probably require your intervention or they will be imported unbalanced.\n"
+"-Green transactions will be imported balanced (you may still want to double check the match or destination account).\n"
 "\n"
 "-Select \"A\" to Add the transaction as new\n"
 "-Select \"R\" to Reconcile a matching transaction\n"
 "-Select neither to Skip (The transaction won't be imported at all)\n"
-"-\"Select Import Action\" allows you to change the matching transaction to "
-"reconcile, or the destination account of the auto-balance split (if "
-"required)."
+"-\"Select Import Action\" allows you to change the matching transaction to reconcile, or the destination account of the auto-balance split (if required)."
 msgstr ""
 "-Červené účetní položky vyžadují vaši intervenci, nebo NEBUDOU importovány.\n"
-"-Žluté účetní položky pravděpodobně vyžadují vaši intervenci, jinak budou "
-"importovány nevyvážené.\n"
-"-Zelená účetní položky budou importovány vyvážení (i tak možná budete chtít "
-"zkontrolovat přiřazení nebo cílový účet).\n"
+"-Žluté účetní položky pravděpodobně vyžadují vaši intervenci, jinak budou importovány nevyvážené.\n"
+"-Zelená účetní položky budou importovány vyvážení (i tak možná budete chtít zkontrolovat přiřazení nebo cílový účet).\n"
 "\n"
 "-Zvolte \"P\" pro Přidání účetní položky jako nové\n"
 "-Zvolte \"O\" pro Odsouhlasení odpovídající položky\n"
-"-Nezvolte ani jedno pro Přeskočení (Účetní položka nebude vůbec "
-"importována)\n"
-"-\"Zvolit akci importu\" vám umožňuje změnit přiřazenou účetní položku, "
-"kterou odsouhlasit, nebo cílový účet nebo část automatického vyrovnání (je-"
-"li vyžadována)."
+"-Nezvolte ani jedno pro Přeskočení (Účetní položka nebude vůbec importována)\n"
+"-\"Zvolit akci importu\" vám umožňuje změnit přiřazenou účetní položku, kterou odsouhlasit, nebo cílový účet nebo část automatického vyrovnání (je-li vyžadována)."
 
 #: src/import-export/generic-import.glade:712
 msgid "Duplicate Transaction"
@@ -6829,15 +6699,11 @@ msgstr "Jiný účet"
 
 #: src/import-export/generic-import.glade:752
 msgid ""
-"For a new transaction, click on the \"Other Account\" entry to choose the "
-"other (destination) account of this transaction.\n"
-"For a transaction that is a duplicate of an existing one, click on the "
-"\"Other Account\" or \"Description\" entry to \n"
+"For a new transaction, click on the \"Other Account\" entry to choose the other (destination) account of this transaction.\n"
+"For a transaction that is a duplicate of an existing one, click on the \"Other Account\" or \"Description\" entry to \n"
 "check whether GnuCash chose the right existing transaction.\n"
-"To switch transactions between both states, click on the checkmark in the "
-"\"New\" column.\n"
-"When all new transactions have the correct destination account and all "
-"duplicates are matched with the right existing transaction, \n"
+"To switch transactions between both states, click on the checkmark in the \"New\" column.\n"
+"When all new transactions have the correct destination account and all duplicates are matched with the right existing transaction, \n"
 "click \"Ok\"."
 msgstr ""
 "Pro novou účetní položku zvolte druhý (cílový) účet této účetní položky\n"
@@ -6845,8 +6711,7 @@ msgstr ""
 "Pro účetní položku, která je duplikátem existující, zkontrolujte, jestli\n"
 "GnuCash zvolil správnou existující účetní položku, kliknutím na pole\n"
 "\"Jiný účet\" nebo \"Popis\".\n"
-"Účetní položku přepínejte mezi oběma stavy kliknutím na zatržítko ve "
-"sloupci\n"
+"Účetní položku přepínejte mezi oběma stavy kliknutím na zatržítko ve sloupci\n"
 "\"Nový\".\n"
 "Až budou mít všechny účetní položky správný cílový účet a všechny duplikáty\n"
 "budou přiřazeny ke správným existujícím účetním položkám, klikněte na \"OK\"."
@@ -6883,8 +6748,7 @@ msgid ""
 "* The bank code of your bank\n"
 "* The user ID that identifies you to your bank\n"
 "* The Internet address of your bank's HBCI server\n"
-"* Information about the cryptographic public key of your bank (\"Ini-Letter"
-"\").\n"
+"* Information about the cryptographic public key of your bank (\"Ini-Letter\").\n"
 "\n"
 "This information will be needed in the following. Press 'Next' now.\n"
 "\n"
@@ -6918,19 +6782,15 @@ msgstr ""
 #: src/import-export/hbci/glade/hbci.glade:77
 #: src/import-export/hbci/glade/hbci.glade:146
 msgid "Start AqHBCI Wizard"
-msgstr ""
+msgstr "Spustit průvodce AqHBCI"
 
 #: src/import-export/hbci/glade/hbci.glade:98
-#, fuzzy
 msgid "Start AqHBCI Setup Wizard"
-msgstr "Počáteční nastavení HBCI dokončeno"
+msgstr "Spustit průvodce nastavením AqHBCI"
 
 #: src/import-export/hbci/glade/hbci.glade:116
-msgid ""
-"The Setup of your HBCI connection is handled by the external program "
-"\"AqHBCI Setup Wizard\". Please press the button below to start this program."
-"\t"
-msgstr ""
+msgid "The Setup of your HBCI connection is handled by the external program \"AqHBCI Setup Wizard\". Please press the button below to start this program.\t"
+msgstr "Nastavení vašeho připojení HBCI zařizuje externí program \"Průvodce nastavením AqHBCI\". Spusťte tento program stisknutím tlačítka níže.\t"
 
 #: src/import-export/hbci/glade/hbci.glade:167
 msgid "Match HBCI accounts with GnuCash accounts"
@@ -6949,12 +6809,10 @@ msgstr "Jméno účtu GnuCash"
 
 #: src/import-export/hbci/glade/hbci.glade:274
 msgid ""
-"Click on the line of a HBCI account name if you want to match it to a "
-"GnuCash account.\n"
+"Click on the line of a HBCI account name if you want to match it to a GnuCash account.\n"
 "Click \"Next\" when all desired accounts are matching."
 msgstr ""
-"Klikněte na řádek s názvem účtu HBCI, pokud jej chcete přiřadit účtu "
-"GnuCash.\n"
+"Klikněte na řádek s názvem účtu HBCI, pokud jej chcete přiřadit účtu GnuCash.\n"
 "Až budou všechny požadované účty přiřazeny, klikněte na \"Další\"."
 
 #: src/import-export/hbci/glade/hbci.glade:293 intl-scm/guile-strings.c:3438
@@ -6971,11 +6829,12 @@ msgstr ""
 "seznam účtů"
 
 #: src/import-export/hbci/glade/hbci.glade:327
-#, fuzzy
 msgid ""
 "AqHBCI \n"
 "Setup"
-msgstr "Nastavení HBCI"
+msgstr ""
+"Nastavení \n"
+"AqHBCI"
 
 #: src/import-export/hbci/glade/hbci.glade:350
 msgid "HBCI Setup Finished"
@@ -7325,9 +7184,8 @@ msgstr "Nespecifikováno"
 
 #: src/import-export/hbci/gnc-hbci-utils.c:546
 #: src/import-export/hbci/gnc-hbci-utils.c:548
-#, fuzzy
 msgid "unknown"
-msgstr "(neznámý)"
+msgstr "neznámý"
 
 #: src/import-export/hbci/gnc-hbci-utils.c:641
 msgid "Choose HBCI bank"
@@ -7430,12 +7288,12 @@ msgstr ""
 "Chcete to zkusit znovu?"
 
 #: src/import-export/hbci/hbci-interaction.c:407
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This TAN needs to be at least %d characters \n"
 "long. Do you want to try again?"
 msgstr ""
-"PIN musí být dlouhý alespoň %d znaků.\n"
+"TAN musí být dlouhý alespoň %d znaků.\n"
 "Chcete to zkusit znovu?"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:334
@@ -7502,7 +7360,6 @@ msgstr ""
 "online přesto odeslána s tímto číslem účtu?"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:665
-#, fuzzy
 msgid ""
 "The job was sent to the bank successfully, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -7548,22 +7405,22 @@ msgstr ""
 "znovu zkuste stáhnout zůstatek HBCI.\n"
 
 #: src/import-export/hbci/gnc-hbci-getbalance.c:266
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Result of HBCI job: \n"
 "Account booked balance is %s\n"
 msgstr ""
 "Výsledek úlohy HBCI: \n"
-"Zůstatek účtu je %s%s\n"
+"Zůstatek účtu je %s\n"
 
 #: src/import-export/hbci/gnc-hbci-getbalance.c:273
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For your information: This account also \n"
 "has a noted balance of %s\n"
 msgstr ""
 "Pro vaši informaci: tento účet má také \n"
-"zaznamenán zůstatek %s%s\n"
+"zaznamenán zůstatek %s\n"
 
 #: src/import-export/hbci/gnc-hbci-getbalance.c:276
 msgid "Reconcile account now?"
@@ -7673,8 +7530,7 @@ msgstr "Zvolte soubor OFX, který otevřít"
 #: src/import-export/ofx/ofx.glade:103
 #: src/import-export/qif-import/qif.glade:256
 msgid ""
-"Please select a file to load. When you click \"Next\", the file will be "
-"loaded\n"
+"Please select a file to load. When you click \"Next\", the file will be loaded\n"
 "and analyzed. You may need to answer some questions about the account(s)\n"
 "in the file.\n"
 "\n"
@@ -7685,8 +7541,7 @@ msgstr ""
 "načten a zanalyzován. Možná budete muset odpovědět na několik otázek\n"
 "o účtu (účtech) v souboru.\n"
 "\n"
-"Budete mít příležitost načíst tolik souborů, kolik chcete, takže si "
-"nedělejte\n"
+"Budete mít příležitost načíst tolik souborů, kolik chcete, takže si nedělejte\n"
 "starosti, jsou-li vaše data v několika souborech.\n"
 
 #: src/import-export/ofx/ofx.glade:137
@@ -7802,12 +7657,8 @@ msgid "You must enter an account name."
 msgstr "Musíte zadat jméno účtu."
 
 #: src/import-export/qif-import/druid-qif-import.c:1185
-msgid ""
-"An error occurred while importing QIF transactions into GnuCash. Your "
-"accounts are unchanged."
-msgstr ""
-"Při importu účetních položek QIF do GnuCash došlo k chybě. Vaše účty nebyly "
-"změněny."
+msgid "An error occurred while importing QIF transactions into GnuCash. Your accounts are unchanged."
+msgstr "Při importu účetních položek QIF do GnuCash došlo k chybě. Vaše účty nebyly změněny."
 
 #: src/import-export/qif-import/druid-qif-import.c:1232
 #: src/import-export/qif-import/druid-qif-import.c:1679
@@ -7840,11 +7691,8 @@ msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
 msgstr "Zadejte plné jméno komodity, např. \"Akcie Red Hat\""
 
 #: src/import-export/qif-import/druid-qif-import.c:1609
-msgid ""
-"Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for "
-"the name."
-msgstr ""
-"Zadejte burzovní symbol (např. \"RHAT\") nebo jinou jedinečnou zkratku jména."
+msgid "Enter the ticker symbol (such as \"RHAT\") or other unique abbreviation for the name."
+msgstr "Zadejte burzovní symbol (např. \"RHAT\") nebo jinou jedinečnou zkratku jména."
 
 #: src/import-export/qif-import/druid-qif-import.c:1630
 msgid "Click \"Next\" to accept the information and move on."
@@ -7982,39 +7830,30 @@ msgstr "Účty a vlastněné akcie"
 
 #: src/import-export/qif-import/qif.glade:769
 msgid ""
-"On the next page, the accounts in your QIF files and any stocks or mutual "
-"funds\n"
+"On the next page, the accounts in your QIF files and any stocks or mutual funds\n"
 "you own will be matched with GnuCash accounts. If a GnuCash account already\n"
-"exists with the same name, or a similar name and compatible type, that "
-"account\n"
-"will be used as a match; otherwise, GnuCash will create a new account with "
-"the\n"
+"exists with the same name, or a similar name and compatible type, that account\n"
+"will be used as a match; otherwise, GnuCash will create a new account with the\n"
 "same name and type as the QIF account. If you do not like the suggested\n"
 "GnuCash account, click to change it.\n"
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special \"Equity"
-"\"\n"
-"accounts (subaccounts of Retained Earnings, by default) which are the "
-"source\n"
-"of your opening balances, etc. All of these accounts will appear on the "
-"next \n"
-"page so you can change them if you want to, but it is safe to leave them "
-"alone.\n"
+"you own, separate accounts for the brokerage commissions, special \"Equity\"\n"
+"accounts (subaccounts of Retained Earnings, by default) which are the source\n"
+"of your opening balances, etc. All of these accounts will appear on the next \n"
+"page so you can change them if you want to, but it is safe to leave them alone.\n"
 msgstr ""
 "Na další straně budou přiřazeny účty ve vašich souborech QIF a vaše akcie\n"
 "nebo podílové fondy k účtům GnuCash. Jestliže již existuje účet GnuCash se\n"
-"stejným jménem nebo podobným jménem a kompatibilním typem, bude pro "
-"přiřazení\n"
+"stejným jménem nebo podobným jménem a kompatibilním typem, bude pro přiřazení\n"
 "použit; jinak GnuCash vytvoří nový účet se stejným jménem a typem jako účet\n"
 "QIF. Pokud se vám navržený účet GnuCash nelíbí, změňte ho kliknutím.\n"
 "\n"
 "Všimněte si, že GnuCash vytvoří mnoho účtů, které ve vašem jiném účetním\n"
 "programu neexistovaly, včetně odděleného účtu pro každé vaše akcie,\n"
 "oddělených účtů pro poplatky makléři, speciální účty \"Vlastní jmění\"\n"
-"(implicitně podúčty Nerozděleného zisku), které jsou zdroj vašich "
-"počátečních\n"
+"(implicitně podúčty Nerozděleného zisku), které jsou zdroj vašich počátečních\n"
 "zůstatků, atd. Všechny tyto účty se objeví na další straně, takže pokud\n"
 "chcete, můžete je změnit, ale můžete je bez problémů nechat beze změny.\n"
 
@@ -8037,23 +7876,18 @@ msgstr "Kategorie příjmů a výdajů"
 #: src/import-export/qif-import/qif.glade:962
 msgid ""
 "GnuCash uses separate Income and Expense accounts rather than categories\n"
-"to classify your transactions. Each of the categories in your QIF file will "
-"be \n"
+"to classify your transactions. Each of the categories in your QIF file will be \n"
 "converted to a GnuCash account. \n"
 "\n"
-"On the next page, you will have an opportunity to look at the suggested "
-"matches\n"
+"On the next page, you will have an opportunity to look at the suggested matches\n"
 "between QIF categories and GnuCash accounts. You may change matches \n"
 "that you do not like by clicking on the line containing the category name.\n"
 "\n"
-"If you change your mind later, you can reorganize the account structure "
-"safely\n"
+"If you change your mind later, you can reorganize the account structure safely\n"
 "within GnuCash."
 msgstr ""
-"GnuCash používá pro zařazení vašich účetních položek místo kategorií "
-"oddělené\n"
-"příjmové a výdajové účty. Každá kategorie ve vašem soubory QIF bude "
-"převedena\n"
+"GnuCash používá pro zařazení vašich účetních položek místo kategorií oddělené\n"
+"příjmové a výdajové účty. Každá kategorie ve vašem soubory QIF bude převedena\n"
 "na účet GnuCash.\n"
 "\n"
 "Na další straně budete mít příležitost podívat se na navržená přiřazení\n"
@@ -8072,12 +7906,8 @@ msgid "QIF category name"
 msgstr "Jméno kategorie QIF"
 
 #: src/import-export/qif-import/qif.glade:1099
-msgid ""
-"Click \"Next\" to enter information about the currency used in your QIF "
-"files."
-msgstr ""
-"Zadejte informace o měně používané ve vašich souborech QIF kliknutím na "
-"\"Další\"<."
+msgid "Click \"Next\" to enter information about the currency used in your QIF files."
+msgstr "Zadejte informace o měně používané ve vašich souborech QIF kliknutím na \"Další\"<."
 
 #: src/import-export/qif-import/qif.glade:1130
 msgid "Payees and memos"
@@ -8085,8 +7915,7 @@ msgstr "Příjemci a poznámky"
 
 #: src/import-export/qif-import/qif.glade:1151
 msgid ""
-"QIF files downloaded from banks and other financial institutions may not "
-"have\n"
+"QIF files downloaded from banks and other financial institutions may not have\n"
 "information about Accounts and Categories which would allow them to be\n"
 "correctly assigned to GnuCash accounts.  \n"
 "\n"
@@ -8155,8 +7984,7 @@ msgid ""
 "exchange or listing that it is found on (NASDAQ, NYSE, US Mutual Funds, \n"
 "etc), a full name, and an abbreviation.\n"
 "\n"
-"Check to see if there is an existing Type that is appropriate; if not, you "
-"can\n"
+"Check to see if there is an existing Type that is appropriate; if not, you can\n"
 "enter a new Type name by hand in the box. Make sure that the abbreviation\n"
 "you enter matches the ticker symbol used for the commodity on the exchange\n"
 "or listing for its type."
@@ -8182,16 +8010,14 @@ msgstr "Přiřadit duplikované účetní položky"
 #: src/import-export/qif-import/qif.glade:1495
 msgid ""
 "If you are importing a QIF file downloaded from a bank or other financial\n"
-"institution, some of the information in the QIF file may duplicate "
-"information\n"
+"institution, some of the information in the QIF file may duplicate information\n"
 "already in your GnuCash accounts.  GnuCash will try to detect duplicates \n"
 "of existing transactions.  \n"
 "\n"
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old "
-"transactions \n"
+"transaction are shown  to the right.  There may be several old transactions \n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -8200,8 +8026,7 @@ msgid ""
 "\n"
 "Click \"Next\" to find duplicate transactions. "
 msgstr ""
-"Jestliže importujete soubor QIF stažený z banky nebo jiné finanční "
-"instituce,\n"
+"Jestliže importujete soubor QIF stažený z banky nebo jiné finanční instituce,\n"
 "mohou některé informace v souboru QIF duplikovat informace již zanesené ve\n"
 "vašich účtech GnuCash. GnuCash se pokusí detekovat duplikáty existujících\n"
 "účetních položek.\n"
@@ -8269,8 +8094,7 @@ msgstr "(Úplné ID účtu: "
 #: src/import-export/import-commodity-matcher.c:121
 msgid ""
 "Please select a commodity to match the following exchange code.\n"
-"Please note that the exchange code of the commodity you select will be "
-"overwritten.\n"
+"Please note that the exchange code of the commodity you select will be overwritten.\n"
 msgstr ""
 "Vyberte prosím komoditu, které přiřadit následující burzovní kód.\n"
 "Všimněte si prosím, že burzovní kód komodity, kterou vyberete, bude \n"
@@ -8340,8 +8164,7 @@ msgid "Adjust other account split total"
 msgstr "Upravit součet částí druhého účtu"
 
 #: src/register/ledger-core/split-register-control.c:1065
-msgid ""
-"You need to expand the transaction in order to modify its exchange rates."
+msgid "You need to expand the transaction in order to modify its exchange rates."
 msgstr "Pro změnu kurzů účetní položky ji musíte rozbalit."
 
 #: src/register/ledger-core/split-register-control.c:1538
@@ -8469,18 +8292,12 @@ msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "Zadejte účet, ze kterého převést, nebo jeden zvolte ze seznamu"
 
 #: src/register/ledger-core/split-register-model.c:1255
-msgid ""
-"This transaction has multiple splits; press the Split button to see them all"
-msgstr ""
-"Tato účetní položka má více části; podívejte se na všechny stisknutím "
-"tlačítka Rozdělit"
+msgid "This transaction has multiple splits; press the Split button to see them all"
+msgstr "Tato účetní položka má více části; podívejte se na všechny stisknutím tlačítka Rozdělit"
 
 #: src/register/ledger-core/split-register-model.c:1258
-msgid ""
-"This transaction is a stock split; press the Split button to see details"
-msgstr ""
-"Tato transakce je rozdělení akcií; podívejte se na detaily stisknutím "
-"tlačítka Rozdělit"
+msgid "This transaction is a stock split; press the Split button to see details"
+msgstr "Tato transakce je rozdělení akcií; podívejte se na detaily stisknutím tlačítka Rozdělit"
 
 #: src/register/ledger-core/split-register-model.c:1697
 msgid ""
@@ -8644,10 +8461,8 @@ msgstr "-- Rozdělení akcií --"
 
 #: src/register/register-gnome/gnucash-style.c:813
 #: intl-scm/guile-strings.c:1077
-msgid ""
-"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
-msgstr ""
-"register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgid "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
+msgstr "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
 
 #: src/register/register-gnome/gnucash-style.c:819
 #: intl-scm/guile-strings.c:1085
@@ -8809,16 +8624,12 @@ msgid "Print report window"
 msgstr "Vytisknout okno sestav"
 
 #: src/report/report-gnome/window-report.c:916
-#, fuzzy
 msgid "Save report"
-msgstr "Jediná sestava"
+msgstr "Uložit sestavu"
 
 #: src/report/report-gnome/window-report.c:917
-msgid ""
-"Save the current report for later use in ~/.gnucash/saved-reports-1.8 so "
-"that they are accessible as menu entries in the report menu. Will go into "
-"effect at the next startup of gnucash."
-msgstr ""
+msgid "Save the current report for later use in ~/.gnucash/saved-reports-1.8 so that they are accessible as menu entries in the report menu. Will go into effect at the next startup of gnucash."
+msgstr "Uložit aktuální sestavu pro pozdější použití v ~/.gnucash/saved-reports-1.8, aby byla přístupná jako položka v menu sestav. Projeví se při příštím spuštění gnucash."
 
 #: src/report/report-gnome/window-report.c:1069
 msgid "Set the report options you want using this dialog."
@@ -9047,23 +8858,16 @@ msgstr ""
 "Douglas Adams, \"Restaurace na konci Vesmíru\""
 
 #: intl-scm/guile-strings.c:93
-msgid ""
-"If you keep multiple account views open, it may be helpful to give each one "
-"a descriptive name"
-msgstr ""
-"Pokud máte otevřeno více pohledů na účty, může být užitečné dát každému "
-"popisné jméno"
+msgid "If you keep multiple account views open, it may be helpful to give each one a descriptive name"
+msgstr "Pokud máte otevřeno více pohledů na účty, může být užitečné dát každému popisné jméno"
 
 #: intl-scm/guile-strings.c:99
 msgid "Double click expands parent accounts"
 msgstr "Dvojité kliknutí rozbalí rodičovské účty"
 
 #: intl-scm/guile-strings.c:101
-msgid ""
-"Double clicking on an account with children expands the account instead of "
-"opening a register."
-msgstr ""
-"Dvojité kliknutí na účet s potomky místo otevření účetní knihy účet rozbalí."
+msgid "Double clicking on an account with children expands the account instead of opening a register."
+msgstr "Dvojité kliknutí na účet s potomky místo otevření účetní knihy účet rozbalí."
 
 #: intl-scm/guile-strings.c:105
 msgid "Account types to display"
@@ -9145,9 +8949,7 @@ msgstr "Chyby a jiné problémy hlaste na gnucash-devel@gnucash.org.\n"
 
 #: intl-scm/guile-strings.c:183
 msgid "You can also lookup and file bug reports at http://bugzilla.gnome.org\n"
-msgstr ""
-"Můžete také vyhledávat a zakládat hlášení o chybách na http://bugzilla.gnome."
-"org\n"
+msgstr "Můžete také vyhledávat a zakládat hlášení o chybách na http://bugzilla.gnome.org\n"
 
 #: intl-scm/guile-strings.c:185
 msgid "The last stable version was "
@@ -9203,8 +9005,7 @@ msgstr "Vytvořit souhrn argumentů."
 
 #: intl-scm/guile-strings.c:213
 msgid "Don't load any file, including autoloading the last file."
-msgstr ""
-"Nenačítat žádný soubor, včetně automatického načtení posledního souboru."
+msgstr "Nenačítat žádný soubor, včetně automatického načtení posledního souboru."
 
 #: intl-scm/guile-strings.c:215
 msgid "Enable debugging code."
@@ -9216,41 +9017,19 @@ msgstr "Povolit vývojářský režim."
 
 #: intl-scm/guile-strings.c:219
 msgid "Logging level from 0 (least logging) to 5 (most logging)."
-msgstr ""
-"Úroveň zaznamenávání od 0 (nejméně zaznamenávání) do 5 (nejvíce "
-"zaznamenávání)"
+msgstr "Úroveň zaznamenávání od 0 (nejméně zaznamenávání) do 5 (nejvíce zaznamenávání)"
 
 #: intl-scm/guile-strings.c:221
-msgid ""
-"List of directories to search when looking for config files. Each element "
-"must be a string representing a directory or a symbol where 'default expands "
-"to the default path, and 'current expands to the current value of the path."
-msgstr ""
-"Seznam adresářů, které prohledávat při hledání konfiguračních souborů. Každý "
-"element musí být řetězec reprezentující adresář nebo symbol, kde 'default se "
-"rozvine na implicitní cestu a 'current na aktuální hodnotu cesty."
+msgid "List of directories to search when looking for config files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
+msgstr "Seznam adresářů, které prohledávat při hledání konfiguračních souborů. Každý element musí být řetězec reprezentující adresář nebo symbol, kde 'default se rozvine na implicitní cestu a 'current na aktuální hodnotu cesty."
 
 #: intl-scm/guile-strings.c:223
-msgid ""
-"List of directories to search when looking for shared data files. Each "
-"element must be a string representing a directory or a symbol where 'default "
-"expands to the default path, and 'current expands to the current value of "
-"the path."
-msgstr ""
-"Seznam adresářů, které prohledávat při hledání sdílených datových souborů. "
-"Každý element musí být řetězec reprezentující adresář nebo symbol, kde "
-"'default se rozvine na implicitní cestu a 'current na aktuální hodnotu cesty."
+msgid "List of directories to search when looking for shared data files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
+msgstr "Seznam adresářů, které prohledávat při hledání sdílených datových souborů. Každý element musí být řetězec reprezentující adresář nebo symbol, kde 'default se rozvine na implicitní cestu a 'current na aktuální hodnotu cesty."
 
 #: intl-scm/guile-strings.c:225
-msgid ""
-"A list of directories (strings) indicating where to look for html and parsed-"
-"html files. Each element must be a string representing a directory or a "
-"symbol where 'default expands to the default path, and 'current expands to "
-"the current value of the path."
-msgstr ""
-"Seznam adresářů (řetězců) indikující, kde hledat soubory html a parsed-html. "
-"Každý element musí být řetězec reprezentující adresář nebo symbol, kde "
-"'default se rozvine na implicitní cestu a 'current na aktuální hodnotu cesty."
+msgid "A list of directories (strings) indicating where to look for html and parsed-html files. Each element must be a string representing a directory or a symbol where 'default expands to the default path, and 'current expands to the current value of the path."
+msgstr "Seznam adresářů (řetězců) indikující, kde hledat soubory html a parsed-html. Každý element musí být řetězec reprezentující adresář nebo symbol, kde 'default se rozvine na implicitní cestu a 'current na aktuální hodnotu cesty."
 
 #: intl-scm/guile-strings.c:227
 msgid "Show GnuCash version"
@@ -10433,22 +10212,16 @@ msgid "'Enter' moves to blank transaction"
 msgstr "'Enter' se přesouvá na prázdnou účetní položku"
 
 #: intl-scm/guile-strings.c:1063
-msgid ""
-"If selected, move to the blank transaction after the user presses 'Enter'. "
-"Otherwise, move down one row."
-msgstr ""
-"Je-li zvoleno, přesunout se na prázdnou účetní položku poté, co uživatel "
-"stiskne 'Enter'. Jinak se posunout o jeden řádek dolů."
+msgid "If selected, move to the blank transaction after the user presses 'Enter'. Otherwise, move down one row."
+msgstr "Je-li zvoleno, přesunout se na prázdnou účetní položku poté, co uživatel stiskne 'Enter'. Jinak se posunout o jeden řádek dolů."
 
 #: intl-scm/guile-strings.c:1067
 msgid "Confirm before changing reconciled"
 msgstr "Potvrdit před změnou odsouhlaseného"
 
 #: intl-scm/guile-strings.c:1069
-msgid ""
-"If selected, use a dialog to confirm a change to a reconciled transaction."
-msgstr ""
-"Je-li zvoleno, použít dialog pro potvrzení změny odsouhlasené účetní položky."
+msgid "If selected, use a dialog to confirm a change to a reconciled transaction."
+msgstr "Je-li zvoleno, použít dialog pro potvrzení změny odsouhlasené účetní položky."
 
 #: intl-scm/guile-strings.c:1073
 msgid "Register font"
@@ -10527,12 +10300,8 @@ msgid "Double mode colors alternate with transactions"
 msgstr "Barvy v dvojitém režimu se mění s účetními položkami"
 
 #: intl-scm/guile-strings.c:1133
-msgid ""
-"Alternate the primary and secondary colors with each transaction, not each "
-"row"
-msgstr ""
-"Přepínat mezi primárními a sekundárními barvami každou účetní položku, ne "
-"každý řádek"
+msgid "Alternate the primary and secondary colors with each transaction, not each row"
+msgstr "Přepínat mezi primárními a sekundárními barvami každou účetní položku, ne každý řádek"
 
 #: intl-scm/guile-strings.c:1135 intl-scm/guile-strings.c:1141
 #: intl-scm/guile-strings.c:1147
@@ -10544,10 +10313,8 @@ msgid "Show grand total"
 msgstr "Zobrazovat úplný součet"
 
 #: intl-scm/guile-strings.c:1139
-msgid ""
-"Show a grand total of all accounts converted to the default report currency"
-msgstr ""
-"Zobrazovat úplný součet všech účtů převedený na implicitní měnu sestavy"
+msgid "Show a grand total of all accounts converted to the default report currency"
+msgstr "Zobrazovat úplný součet všech účtů převedený na implicitní měnu sestavy"
 
 #: intl-scm/guile-strings.c:1143 intl-scm/guile-strings.c:1145
 msgid "Show non currency commodities"
@@ -10575,10 +10342,8 @@ msgstr "Automatický převod úroků"
 
 #: intl-scm/guile-strings.c:1161
 msgid ""
-"Prior to reconciling an account which charges or pays interest, prompt the "
-"user to enter a transaction for the interest charge or payment.\n"
-"Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, "
-"and Liability accounts."
+"Prior to reconciling an account which charges or pays interest, prompt the user to enter a transaction for the interest charge or payment.\n"
+"Currently only enabled for Bank, Credit, Mutual, Asset, Receivable, Payable, and Liability accounts."
 msgstr ""
 "Před odsouhlasením účtu, který sráží nebo platí úroky, vyzvat uživatele,\n"
 "aby zadal účetní položky pro srážku nebo platbu úroků. V současné době\n"
@@ -10590,12 +10355,8 @@ msgid "Automatic credit card payments"
 msgstr "Automatické platby kreditní kartou"
 
 #: intl-scm/guile-strings.c:1168
-msgid ""
-"After reconciling a credit card statement, prompt the user to enter a credit "
-"card payment"
-msgstr ""
-"Po odsouhlasení výpisu kreditní karty nabídnout uživateli zadání platby "
-"kreditní karty"
+msgid "After reconciling a credit card statement, prompt the user to enter a credit card payment"
+msgstr "Po odsouhlasení výpisu kreditní karty nabídnout uživateli zadání platby kreditní karty"
 
 #: intl-scm/guile-strings.c:1172
 msgid "Check off cleared transactions"
@@ -10619,8 +10380,7 @@ msgstr "Tlačítka lišty nástrojů"
 
 #: intl-scm/guile-strings.c:1186
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
-msgstr ""
-"Zvolte, jestli zobrazovat na tlačítkách lišty nástrojů ikony, text nebo obojí"
+msgstr "Zvolte, jestli zobrazovat na tlačítkách lišty nástrojů ikony, text nebo obojí"
 
 #: intl-scm/guile-strings.c:1188
 msgid "Icons and Text"
@@ -10712,9 +10472,7 @@ msgstr "Účty Dal"
 
 #: intl-scm/guile-strings.c:1238
 msgid "Reverse Credit Card, Payable, Liability, Equity, and Income Accounts"
-msgstr ""
-"Obrátit účty kreditní karta, k zaplacení, pasiva, vlastní jmění a příjmové "
-"účty"
+msgstr "Obrátit účty kreditní karta, k zaplacení, pasiva, vlastní jmění a příjmové účty"
 
 #: intl-scm/guile-strings.c:1242
 msgid "Don't reverse any accounts"
@@ -10745,11 +10503,8 @@ msgid "Automatic Decimal Point"
 msgstr "Automatická desetinná čárka"
 
 #: intl-scm/guile-strings.c:1266
-msgid ""
-"Automatically insert a decimal point into values that are entered without "
-"one."
-msgstr ""
-"Automaticky vložit desetinnou čáru do hodnot, které jsou vloženy bez ní."
+msgid "Automatically insert a decimal point into values that are entered without one."
+msgstr "Automaticky vložit desetinnou čáru do hodnot, které jsou vloženy bez ní."
 
 #: intl-scm/guile-strings.c:1270
 msgid "Auto Decimal Places"
@@ -10764,12 +10519,8 @@ msgid "No account list setup on new file"
 msgstr "Žádné nastavení seznamů účtů při novém souboru"
 
 #: intl-scm/guile-strings.c:1278
-msgid ""
-"Don't popup the new account list dialog when you choose \"New File\" from "
-"the \"File\" menu"
-msgstr ""
-"Nezobrazovat dialog seznamu nových účtů, když zvolíte \"Nový soubor\" z menu "
-"\"Soubor\""
+msgid "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu"
+msgstr "Nezobrazovat dialog seznamu nových účtů, když zvolíte \"Nový soubor\" z menu \"Soubor\""
 
 #: intl-scm/guile-strings.c:1282
 msgid "Use file compression"
@@ -10808,24 +10559,16 @@ msgid "Auto-Create new Scheduled Transactions by default"
 msgstr "Implicitně automaticky vytvořit nové plánované účetní položky"
 
 #: intl-scm/guile-strings.c:1308
-msgid ""
-"Should new Scheduled Transactions have the 'Auto Create' flag set by default?"
-msgstr ""
-"Mají mít nové plánované účetní položky implicitně nastavenou volbu "
-"'Automaticky vytvořit'?"
+msgid "Should new Scheduled Transactions have the 'Auto Create' flag set by default?"
+msgstr "Mají mít nové plánované účetní položky implicitně nastavenou volbu 'Automaticky vytvořit'?"
 
 #: intl-scm/guile-strings.c:1312
 msgid "Notify on new, auto-created Scheduled Transactions"
-msgstr ""
-"Upozornit při nových automaticky vytvořených plánovaných účetních položkách"
+msgstr "Upozornit při nových automaticky vytvořených plánovaných účetních položkách"
 
 #: intl-scm/guile-strings.c:1314
-msgid ""
-"Should new Scheduled Transactions with the 'AutoCreate' flag set also be set "
-"to notify?"
-msgstr ""
-"Mají být nové plánované účetní položky s volbou 'Automaticky vytvořit' být "
-"také nastaveny pro upozorňování?"
+msgid "Should new Scheduled Transactions with the 'AutoCreate' flag set also be set to notify?"
+msgstr "Mají být nové plánované účetní položky s volbou 'Automaticky vytvořit' být také nastaveny pro upozorňování?"
 
 #: intl-scm/guile-strings.c:1318
 msgid "Default number of days in advance to create"
@@ -10833,18 +10576,15 @@ msgstr "Implicitní početní dní předem pro vytvoření"
 
 #: intl-scm/guile-strings.c:1320
 msgid "Default number of days in advance to create new Scheduled Transactions."
-msgstr ""
-"Implicitní počet dní předem, kdy vytvářet nové plánované účetní položky"
+msgstr "Implicitní počet dní předem, kdy vytvářet nové plánované účetní položky"
 
 #: intl-scm/guile-strings.c:1324
 msgid "Default number of days in advance to remind"
 msgstr "Implicitní počet dní předem pro upozornění"
 
 #: intl-scm/guile-strings.c:1326
-msgid ""
-"Default number of days in advance to remind on new Scheduled Transactions."
-msgstr ""
-"Implicitní počet dní předem, kdy upozornit na nové plánované účetní položky"
+msgid "Default number of days in advance to remind on new Scheduled Transactions."
+msgstr "Implicitní počet dní předem, kdy upozornit na nové plánované účetní položky"
 
 #: intl-scm/guile-strings.c:1330
 msgid "Template Register Lines"
@@ -10883,11 +10623,8 @@ msgid "Notebook"
 msgstr "Poznámkový blok"
 
 #: intl-scm/guile-strings.c:1348
-msgid ""
-"New windows are created as notebook tabs in the current top-level window"
-msgstr ""
-"Nová okna jsou vytvářena jako záložky poznámkového bloku v aktuálním okně "
-"nejvyšší úrovně"
+msgid "New windows are created as notebook tabs in the current top-level window"
+msgstr "Nová okna jsou vytvářena jako záložky poznámkového bloku v aktuálním okně nejvyšší úrovně"
 
 #: intl-scm/guile-strings.c:1350 intl-scm/guile-strings.c:1756
 msgid "Top-level"
@@ -10902,10 +10639,8 @@ msgid "Single window"
 msgstr "Jedno okno"
 
 #: intl-scm/guile-strings.c:1356
-msgid ""
-"One window is used for all displays (select contents through Window menu)"
-msgstr ""
-"Jedno okno se používá pro všechna zobrazení (vyberte obsah pomocí menu Okno)"
+msgid "One window is used for all displays (select contents through Window menu)"
+msgstr "Jedno okno se používá pro všechna zobrazení (vyberte obsah pomocí menu Okno)"
 
 #: intl-scm/guile-strings.c:1358
 msgid "Use GNOME default"
@@ -11359,8 +11094,7 @@ msgid "Show accounts to this depth, overriding any other option."
 msgstr "Zobrazovat účty po tuto hloubku, bez ohledu na jiná nastavení."
 
 #: intl-scm/guile-strings.c:1770
-msgid ""
-"Override account-selection and show sub-accounts of all selected accounts?"
+msgid "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr "Ignorovat výběr účtů a zobrazit podúčty všech vybraných účtů?"
 
 #: intl-scm/guile-strings.c:1772
@@ -11494,9 +11228,8 @@ msgid "_Sample & Custom"
 msgstr "_Ukázka & vlastní"
 
 #: intl-scm/guile-strings.c:1850
-#, fuzzy
 msgid "_Custom"
-msgstr "Zákazník"
+msgstr "_Vlastní"
 
 #: intl-scm/guile-strings.c:1856 intl-scm/guile-strings.c:2612
 #: intl-scm/guile-strings.c:2616 intl-scm/guile-strings.c:2620
@@ -11627,12 +11360,8 @@ msgid "No data"
 msgstr "Žádná data"
 
 #: intl-scm/guile-strings.c:1930
-msgid ""
-"The selected accounts contain no data/transactions (or only zeroes) for the "
-"selected time period"
-msgstr ""
-"Vybrané účty ve vybraném časovém období neobsahují žádná data/účetní položky "
-"(nebo jen nuly)"
+msgid "The selected accounts contain no data/transactions (or only zeroes) for the selected time period"
+msgstr "Vybrané účty ve vybraném časovém období neobsahují žádná data/účetní položky (nebo jen nuly)"
 
 #: intl-scm/guile-strings.c:1934
 msgid "Can't save style sheet"
@@ -11853,31 +11582,17 @@ msgid "Crash the report"
 msgstr "Shodit sestavu"
 
 #: intl-scm/guile-strings.c:2086
-msgid ""
-"This is for testing. Your reports probably shouldn't have an option like "
-"this."
-msgstr ""
-"Toto je pro testování. Vaše sestavy by pravděpodobně neměly mít takovou "
-"možnost."
+msgid "This is for testing. Your reports probably shouldn't have an option like this."
+msgstr "Toto je pro testování. Vaše sestavy by pravděpodobně neměly mít takovou možnost."
 
 #: intl-scm/guile-strings.c:2090
-msgid ""
-"This is a sample GnuCash report. See the guile (scheme) source code in the "
-"scm/report directory for details on writing your own reports, or extending "
-"existing reports."
-msgstr ""
-"Toto je jednoduchá sestava GnuCash. Pro detaily o psaní svých vlastních "
-"sestav nebo rozšiřování existujících viz zdrojový kód v adresáři scm/report "
-"v guile (scheme)"
+msgid "This is a sample GnuCash report. See the guile (scheme) source code in the scm/report directory for details on writing your own reports, or extending existing reports."
+msgstr "Toto je jednoduchá sestava GnuCash. Pro detaily o psaní svých vlastních sestav nebo rozšiřování existujících viz zdrojový kód v adresáři scm/report v guile (scheme)"
 
 #: intl-scm/guile-strings.c:2092
 #, c-format
-msgid ""
-"For help on writing reports, or to contribute your brand new, totally cool "
-"report, consult the mailing list %s."
-msgstr ""
-"Pro nápovědu o psaní sestav nebo přispění se svými úplně novými sestavami "
-"kontaktujte konferenci %s."
+msgid "For help on writing reports, or to contribute your brand new, totally cool report, consult the mailing list %s."
+msgstr "Pro nápovědu o psaní sestav nebo přispění se svými úplně novými sestavami kontaktujte konferenci %s."
 
 #: intl-scm/guile-strings.c:2094
 #, c-format
@@ -12093,56 +11808,36 @@ msgid "All Prices equal"
 msgstr "Všechny ceny stejné"
 
 #: intl-scm/guile-strings.c:2210
-msgid ""
-"All the prices found are equal. This would result in a plot with one "
-"straight line. Unfortunately, the plotting tool can't handle that."
-msgstr ""
-"Všechny nalezené ceny jsou stejné. To by vytvořilo graf s jednou rovnou "
-"čárou. To bohužel kreslící nástroj neumí."
+msgid "All the prices found are equal. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
+msgstr "Všechny nalezené ceny jsou stejné. To by vytvořilo graf s jednou rovnou čárou. To bohužel kreslící nástroj neumí."
 
 #: intl-scm/guile-strings.c:2212
 msgid "All Prices at the same date"
 msgstr "Všechny ceny ze stejného data"
 
 #: intl-scm/guile-strings.c:2214
-msgid ""
-"All the prices found are from the same date. This would result in a plot "
-"with one straight line. Unfortunately, the plotting tool can't handle that."
-msgstr ""
-"Všechny nalezené ceny jsou ze stejného data. To by vytvořilo graf s jednou "
-"rovnou čárou. To bohužel kreslící nástroj neumí."
+msgid "All the prices found are from the same date. This would result in a plot with one straight line. Unfortunately, the plotting tool can't handle that."
+msgstr "Všechny nalezené ceny jsou ze stejného data. To by vytvořilo graf s jednou rovnou čárou. To bohužel kreslící nástroj neumí."
 
 #: intl-scm/guile-strings.c:2216
 msgid "Only one price"
 msgstr "Jen jedna cena"
 
 #: intl-scm/guile-strings.c:2218
-msgid ""
-"There was only one single price found for the selected commodities in the "
-"selected time period. This doesn't give a useful plot."
-msgstr ""
-"Ve vybraném časovém období měly vybrané komodity jen jednu cenu. To "
-"neumožňuje užitečný graf."
+msgid "There was only one single price found for the selected commodities in the selected time period. This doesn't give a useful plot."
+msgstr "Ve vybraném časovém období měly vybrané komodity jen jednu cenu. To neumožňuje užitečný graf."
 
 #: intl-scm/guile-strings.c:2222
-msgid ""
-"There is no price information available for the selected commodities in the "
-"selected time period."
-msgstr ""
-"Ve vybraném časovém období není k dispozici žádná informace o cenách "
-"vybraných komodit."
+msgid "There is no price information available for the selected commodities in the selected time period."
+msgstr "Ve vybraném časovém období není k dispozici žádná informace o cenách vybraných komodit."
 
 #: intl-scm/guile-strings.c:2224
 msgid "Identical commodities"
 msgstr "Identické komodity"
 
 #: intl-scm/guile-strings.c:2226
-msgid ""
-"Your selected commodity and the currency of the report are identical. It "
-"doesn't make sense to show prices for identical commodities."
-msgstr ""
-"Vámi vybraná komodita a měna sestavy jsou identické. Nedává smysl zobrazovat "
-"ceny identických komodit."
+msgid "Your selected commodity and the currency of the report are identical. It doesn't make sense to show prices for identical commodities."
+msgstr "Vámi vybraná komodita a měna sestavy jsou identické. Nedává smysl zobrazovat ceny identických komodit."
 
 #: intl-scm/guile-strings.c:2230
 msgid "Price Scatterplot"
@@ -12155,8 +11850,7 @@ msgstr "Graf příjmů/výdajů"
 #: intl-scm/guile-strings.c:2258 intl-scm/guile-strings.c:2386
 #: intl-scm/guile-strings.c:3256 intl-scm/guile-strings.c:3326
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
-"Vytvořit sestavu o těchto účtech, pokud to dovolí zvolená hloubka účtů."
+msgstr "Vytvořit sestavu o těchto účtech, pokud to dovolí zvolená hloubka účtů."
 
 #: intl-scm/guile-strings.c:2260
 msgid "Show Income and Expenses?"
@@ -12355,8 +12049,7 @@ msgstr "Zobrazovat v legendě úplné jméno účtu?"
 
 #: intl-scm/guile-strings.c:2392
 msgid "Show barchart as stacked barchart? (Guppi>=0.35.4 required)"
-msgstr ""
-"Zobrazovat sloupcový graf se sloupci nad sebou? (vyžadováno Guppi>=0.35.4)"
+msgstr "Zobrazovat sloupcový graf se sloupci nad sebou? (vyžadováno Guppi>=0.35.4)"
 
 #: intl-scm/guile-strings.c:2394
 msgid "Maximum number of bars in the chart"
@@ -12427,9 +12120,8 @@ msgid "Show Foreign Currencies"
 msgstr "Zobrazovat cizí měny"
 
 #: intl-scm/guile-strings.c:2462
-#, fuzzy
 msgid "Show accounts with zero balance"
-msgstr "Zahrnout účty, které mají nulový zůstatek podílů."
+msgstr "Zobrazovat účty s nulovým zůstatkem"
 
 #: intl-scm/guile-strings.c:2466 intl-scm/guile-strings.c:2522
 #: intl-scm/guile-strings.c:3202
@@ -12437,9 +12129,8 @@ msgid "Show subtotals for parent accounts"
 msgstr "Zobrazovat částečné součty rodičovských účtů"
 
 #: intl-scm/guile-strings.c:2472 intl-scm/guile-strings.c:3198
-#, fuzzy
 msgid "Show accounts with a 0.0 total"
-msgstr "Zobrazovat účty po tuto hloubky a ne dál"
+msgstr "Zobrazovat účty se součtem 0.0"
 
 #: intl-scm/guile-strings.c:2482
 msgid "Unrealized Gains(Losses)"
@@ -12470,13 +12161,12 @@ msgid "Advanced Portfolio"
 msgstr "Pokročilé portfolio"
 
 #: intl-scm/guile-strings.c:2538
-#, fuzzy
 msgid "Include gains and losses"
-msgstr "Zahrnout účty bez podílů"
+msgstr "Zahrnout zisky a ztráty"
 
 #: intl-scm/guile-strings.c:2556
 msgid "Include splits with no shares for calculating money-in and money-out"
-msgstr ""
+msgstr "Zahrnout rozdělení bez podílů při počítání vstupu a výstupu peněz"
 
 #: intl-scm/guile-strings.c:2580 intl-scm/guile-strings.c:3154
 msgid "Gain"
@@ -12602,7 +12292,7 @@ msgstr "Zobrazit 1 řádek"
 
 #: intl-scm/guile-strings.c:2722
 msgid "Formats the table suitable for cut & paste exporting with extra cells"
-msgstr ""
+msgstr "Formátuje tabulku vhodně pro export vyjmutím a vložením s dalšími buňkami"
 
 #: intl-scm/guile-strings.c:2724
 msgid "Report Accounts"
@@ -12827,12 +12517,8 @@ msgid "Display the account code"
 msgstr "Zobrazovat kód účtu?"
 
 #: intl-scm/guile-strings.c:2896
-msgid ""
-"Display the other account name? (if this is a split transaction, this "
-"parameter is guessed)."
-msgstr ""
-"Zobrazovat jméno druhého účtu? (je-li to rozdělená účetní položka, je tento "
-"parametr hádán)."
+msgid "Display the other account name? (if this is a split transaction, this parameter is guessed)."
+msgstr "Zobrazovat jméno druhého účtu? (je-li to rozdělená účetní položka, je tento parametr hádán)."
 
 #: intl-scm/guile-strings.c:2904
 msgid "Display the other account code"
@@ -12901,12 +12587,8 @@ msgid "Reverse amount display for Income and Expense Accounts"
 msgstr "Obrátit zobrazované částky pro příjmové a výdajové účty"
 
 #: intl-scm/guile-strings.c:2952
-msgid ""
-"Reverse amount display for Liability, Payable, Equity, Credit Card, and "
-"Income accounts"
-msgstr ""
-"Obrátit zobrazované částky pro účty Pasiva, K zaplacení, Vlastní jmění, "
-"Kreditní karta a Příjmy"
+msgid "Reverse amount display for Liability, Payable, Equity, Credit Card, and Income accounts"
+msgstr "Obrátit zobrazované částky pro účty Pasiva, K zaplacení, Vlastní jmění, Kreditní karta a Příjmy"
 
 #: intl-scm/guile-strings.c:2954
 #, c-format
@@ -12934,12 +12616,8 @@ msgid "No matching transactions found"
 msgstr "Nenalezeny odpovídající účetní položky"
 
 #: intl-scm/guile-strings.c:2986
-msgid ""
-"No transactions were found that match the given time interval and account "
-"selection."
-msgstr ""
-"Nebyly nalezeny účetní položky, které odpovídají zadanému časovému intervalu "
-"a výběru účtů."
+msgid "No transactions were found that match the given time interval and account selection."
+msgstr "Nebyly nalezeny účetní položky, které odpovídají zadanému časovému intervalu a výběru účtů."
 
 #: intl-scm/guile-strings.c:3012
 msgid "Title"
@@ -13056,7 +12734,7 @@ msgstr "Zisk a ztráta"
 
 #: intl-scm/guile-strings.c:3208
 msgid "Show account with 0.0 balance"
-msgstr ""
+msgstr "Zobrazovat účet se zůstatkem 0.0"
 
 #: intl-scm/guile-strings.c:3210
 #, c-format
@@ -13257,12 +12935,8 @@ msgid "Print all Parent account names"
 msgstr "Vytisknout jména všech rodičovských účtů"
 
 #: intl-scm/guile-strings.c:3406
-msgid ""
-"WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
-"codes with payer sources may be repeated."
-msgstr ""
-"VAROVÁNÍ: Některým účtům jsou přiřazeny duplikátní kódy TXF. Opakovat se "
-"mohou jen kódy se zdroji plátce."
+msgid "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF codes with payer sources may be repeated."
+msgstr "VAROVÁNÍ: Některým účtům jsou přiřazeny duplikátní kódy TXF. Opakovat se mohou jen kódy se zdroji plátce."
 
 #: intl-scm/guile-strings.c:3412
 msgid "Sub-"
@@ -13278,12 +12952,8 @@ msgid "Blue items are exportable to a .TXF file."
 msgstr "Modré položky lze exportovat do souboru .TXF."
 
 #: intl-scm/guile-strings.c:3418
-msgid ""
-"No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to "
-"set up tax-related accounts."
-msgstr ""
-"Nebyly nalezeny žádné účty související s daněmi. Nastavte účty související s "
-"daněmi přechodem do dialogu Upravit->Daňová nastavení"
+msgid "No Tax Related accounts were found.  Go to the Edit->Tax Options dialog to set up tax-related accounts."
+msgstr "Nebyly nalezeny žádné účty související s daněmi. Nastavte účty související s daněmi přechodem do dialogu Upravit->Daňová nastavení"
 
 #: intl-scm/guile-strings.c:3420
 msgid "Tax Report & TXF Export"
@@ -13395,62 +13065,32 @@ msgid "Match display threshold"
 msgstr "Práh zobrazení přiřazení"
 
 #: intl-scm/guile-strings.c:3524
-msgid ""
-"The minimum score a potential match must have to be displayed in the match "
-"list."
-msgstr ""
-"Minimální skóre, kterého musí potenciální přiřazení dosáhnout, aby bylo "
-"zobrazeno v seznamu přiřazení."
+msgid "The minimum score a potential match must have to be displayed in the match list."
+msgstr "Minimální skóre, kterého musí potenciální přiřazení dosáhnout, aby bylo zobrazeno v seznamu přiřazení."
 
 #: intl-scm/guile-strings.c:3528
 msgid "Auto-ADD threshold"
 msgstr "Práh Auto-PŘIDAT"
 
 #: intl-scm/guile-strings.c:3530
-msgid ""
-"A transaction whose best match's score is in the red zone (above the display "
-"threshold but below or equal to the Auto-ADD threshold) will be ADDed by "
-"default."
-msgstr ""
-"Účetní položka, jejíž skóre nejlepšího přiřazení je v červené zóně (nad "
-"prahem zobrazení, ale pod nebo rovné prahu Auto-PŘIDAT) bude implicitně "
-"PŘIDÁNA."
+msgid "A transaction whose best match's score is in the red zone (above the display threshold but below or equal to the Auto-ADD threshold) will be ADDed by default."
+msgstr "Účetní položka, jejíž skóre nejlepšího přiřazení je v červené zóně (nad prahem zobrazení, ale pod nebo rovné prahu Auto-PŘIDAT) bude implicitně PŘIDÁNA."
 
 #: intl-scm/guile-strings.c:3534
 msgid "Auto-CLEAR threshold"
 msgstr "Práh Auto-VYMAZAT"
 
 #: intl-scm/guile-strings.c:3536
-msgid ""
-"A transaction whose best match's score is in the green zone (above or equal "
-"to the Auto-CLEAR threshold) will be CLEARed by default."
-msgstr ""
-"Účetní položka, jejíž skóre nejlepšího přiřazení je v zelené zóně (nad nebo "
-"rovné prahu Auto-VYMAZAT) bude implicitně VYMAZÁNA."
+msgid "A transaction whose best match's score is in the green zone (above or equal to the Auto-CLEAR threshold) will be CLEARed by default."
+msgstr "Účetní položka, jejíž skóre nejlepšího přiřazení je v zelené zóně (nad nebo rovné prahu Auto-VYMAZAT) bude implicitně VYMAZÁNA."
 
 #: intl-scm/guile-strings.c:3540
 msgid "Commercial ATM fees threshold"
 msgstr "Práh komerčních poplatků bankomatů"
 
 #: intl-scm/guile-strings.c:3542
-msgid ""
-"In some places commercial ATMs (not belonging to a financial institution) "
-"are installed in places like convienience store.  These ATM add its fee "
-"directly to the amount instead of showing up as a separate transaction or in "
-"your monthly banking fees.  For example, you withdraw 100$, and you are "
-"charged 101,50$ plus Interac fees.  If you manually entered that 100$, the "
-"amounts won't match.  You should set this to whatever is the maximum such "
-"fee in your area (in units of your local currency), so the transaction will "
-"be recognised as a match."
-msgstr ""
-"V některých místech (např. obchod s potravinami) jsou nainstalovány komerční "
-"bankomaty (nepatřící finanční instituci). Tyto bankomaty přidávají svůj "
-"poplatek přímo k částce místo jako oddělenou účetní položku nebo ve vašich "
-"měsíčních bankovních poplatcích. Například vyberete 100 Kč a je vám "
-"naúčtováno 101,50 Kč plus poplatky Interac. Pokud jste ručně zadali těch 100 "
-"Kč, částky nebudou souhlasit. Toto byste měli nastavit na tolik, kolik je "
-"tento poplatek ve vaší oblasti maximálně (v jednotkách vaší místní měny), "
-"aby byla účetní položka rozpoznána jako přiřazení."
+msgid "In some places commercial ATMs (not belonging to a financial institution) are installed in places like convienience store.  These ATM add its fee directly to the amount instead of showing up as a separate transaction or in your monthly banking fees.  For example, you withdraw 100$, and you are charged 101,50$ plus Interac fees.  If you manually entered that 100$, the amounts won't match.  You should set this to whatever is the maximum such fee in your area (in units of your local currency), so the transaction will be recognised as a match."
+msgstr "V některých místech (např. obchod s potravinami) jsou nainstalovány komerční bankomaty (nepatřící finanční instituci). Tyto bankomaty přidávají svůj poplatek přímo k částce místo jako oddělenou účetní položku nebo ve vašich měsíčních bankovních poplatcích. Například vyberete 100 Kč a je vám naúčtováno 101,50 Kč plus poplatky Interac. Pokud jste ručně zadali těch 100 Kč, částky nebudou souhlasit. Toto byste měli nastavit na tolik, kolik je tento poplatek ve vaší oblasti maximálně (v jednotkách vaší místní měny), aby byla účetní položka rozpoznána jako přiřazení."
 
 #: intl-scm/guile-strings.c:3544
 msgid "Extensions"
@@ -13862,12 +13502,8 @@ msgstr "Zobrazovat součty více měn?"
 
 #: intl-scm/guile-strings.c:4000
 #, c-format
-msgid ""
-"Transactions relating to company  %d contain more than one currency.  This "
-"report is not designed to cope with this possibility."
-msgstr ""
-"Účetní položky související se společností %d obsahují více než jednu měnu. "
-"Tato sestava není navržena tak, aby s tím mohla pracovat."
+msgid "Transactions relating to company  %d contain more than one currency.  This report is not designed to cope with this possibility."
+msgstr "Účetní položky související se společností %d obsahují více než jednu měnu. Tato sestava není navržena tak, aby s tím mohla pracovat."
 
 #: intl-scm/guile-strings.c:4002
 msgid "Sort companys by"
@@ -13914,12 +13550,8 @@ msgid "$999,999.99 -> $0, Z->A"
 msgstr "999 999,99 Kč -> 0 Kč, Z->A"
 
 #: intl-scm/guile-strings.c:4026
-msgid ""
-"Show multi-currency totals.  If not selected, convert all totals to report "
-"currency"
-msgstr ""
-"Zobrazovat součty ve více měnách. Není-li vybráno, konvertovat všechny "
-"součty na měnu sestavy."
+msgid "Show multi-currency totals.  If not selected, convert all totals to report currency"
+msgstr "Zobrazovat součty ve více měnách. Není-li vybráno, konvertovat všechny součty na měnu sestavy."
 
 #: intl-scm/guile-strings.c:4190
 msgid "Invoice Date"
@@ -13946,39 +13578,6 @@ msgstr "Účet k příjmu, který chcete prozkoumat"
 msgid "Receivable Aging"
 msgstr ""
 
-#~ msgid "Enter OpenHBCI Configuration File"
-#~ msgstr "Zadejte konfigurační soubor OpenHBCI"
-
-#~ msgid "OpenHBCI Configuration File"
-#~ msgstr "Konfigurační soubor OpenHBCI"
-
-#~ msgid "Configuration File"
-#~ msgstr "Konfigurační soubor"
-
-#~ msgid "Choose OpenHBCI Configuration File"
-#~ msgstr "Vyberte konfigurační soubor OpenHBCI"
-
-#~ msgid ""
-#~ "If you already have an OpenHBCI configuration file (e.g. from "
-#~ "'aqmoney'), \n"
-#~ "please select it here. GnuCash will continue to use your existing "
-#~ "configuration.\n"
-#~ "\n"
-#~ "If you do not yet have an OpenHBCI configuration file, please specify a "
-#~ "file name here. \n"
-#~ "A new OpenHBCI configuration file with that name will be created when "
-#~ "this HBCI \n"
-#~ "Setup finishes."
-#~ msgstr ""
-#~ "Jestliže již máte konfigurační soubor OpenHBCI (např. z 'aqmoney'), \n"
-#~ "vyberte jej prosí zde. GnuCash bude dále používat vaše existující "
-#~ "nastavení.\n"
-#~ "\n"
-#~ "Pokud ještě nemáte konfigurační soubor OpenHBCI, zadejte zde prosí název "
-#~ "souboru. \n"
-#~ "Po dokončení tohoto nastavení HBCI bude vytvořen nový konfigurační soubor "
-#~ "se zadaným jménem."
-
 #~ msgid "Enter Bank Information"
 #~ msgstr "Zadejte informace o bance"
 
@@ -13988,26 +13587,17 @@ msgstr ""
 #~ msgid "Country Code (Germany: 280)"
 #~ msgstr "Kód země (Německo: 280)"
 
-#~ msgid "280"
-#~ msgstr "280"
-
 #~ msgid "Server Address"
 #~ msgstr "Adresa serveru"
 
 #~ msgid "Internet Address"
 #~ msgstr "Internetová adresa"
 
-#~ msgid "www.hbci-kernel.de"
-#~ msgstr "www.hbci-kernel.de"
-
 #~ msgid "Enter User Information"
 #~ msgstr "Zadejte informace o uživateli"
 
 #~ msgid "Bank Code:"
 #~ msgstr "Kód banky:"
-
-#~ msgid "10010010"
-#~ msgstr "10010010"
 
 #~ msgid "my-bank"
 #~ msgstr "má-banka"
@@ -14027,12 +13617,8 @@ msgstr ""
 #~ msgid "If your bank did not specify a Customer ID, enter the User ID here."
 #~ msgstr "Pokud vaše banka neurčila ID zákazníka, zadejte zde ID uživatele."
 
-#~ msgid ""
-#~ "Enter the IDs given from your bank here. Please make sure the spelling is "
-#~ "correct. "
-#~ msgstr ""
-#~ "Zadejte zde ID získané od vaší banky. Přesvědčte se prosím, že je napsáno "
-#~ "správně. "
+#~ msgid "Enter the IDs given from your bank here. Please make sure the spelling is correct. "
+#~ msgstr "Zadejte zde ID získané od vaší banky. Přesvědčte se prosím, že je napsáno správně. "
 
 #~ msgid "Security Medium"
 #~ msgstr "Bezpečnostní médium"
@@ -14047,34 +13633,24 @@ msgstr ""
 #~ msgstr "Zvolte soubor pro tajný klíč."
 
 #~ msgid ""
-#~ "If you already have a key file, please choose it here and make sure the "
-#~ "User ID and\n"
+#~ "If you already have a key file, please choose it here and make sure the User ID and\n"
 #~ "Customer ID match the ones when you created that key file earlier. \n"
-#~ "If you do not have one yet, choose a filename, and a key file will be "
-#~ "created there. Make\n"
+#~ "If you do not have one yet, choose a filename, and a key file will be created there. Make\n"
 #~ "sure to remember the exact User ID and Customer ID specified now."
 #~ msgstr ""
-#~ "Máte-li již soubor s klíčem, zvolte jej prosím zde a přesvědčte se, že ID "
-#~ "uživatele\n"
-#~ "a ID zákazníka odpovídají těm, se kterými jste tento soubor klíče "
-#~ "vytvořili dříve. \n"
-#~ "Pokud jej ještě nemáte, zvolte jméno souboru, a soubor s klíčem tam bude "
-#~ "vytvořen. Ujistěte se, že si přesně pamatujete nyní zadávané ID uživatele "
-#~ "a ID zákazníka."
+#~ "Máte-li již soubor s klíčem, zvolte jej prosím zde a přesvědčte se, že ID uživatele\n"
+#~ "a ID zákazníka odpovídají těm, se kterými jste tento soubor klíče vytvořili dříve. \n"
+#~ "Pokud jej ještě nemáte, zvolte jméno souboru, a soubor s klíčem tam bude vytvořen. Ujistěte se, že si přesně pamatujete nyní zadávané ID uživatele a ID zákazníka."
 
 #~ msgid "DDV Medium (Chip Card)"
 #~ msgstr "Médium DDV (čipová karta)"
 
 #~ msgid ""
-#~ "If you have a Chip Card but are not sure about the exact User ID and "
-#~ "Customer ID, you can \n"
-#~ "use the tool 'hbcicard' from the libchipcard package to read these "
-#~ "numbers from the Chip Card."
+#~ "If you have a Chip Card but are not sure about the exact User ID and Customer ID, you can \n"
+#~ "use the tool 'hbcicard' from the libchipcard package to read these numbers from the Chip Card."
 #~ msgstr ""
-#~ "Pokud máte čipovou kartu, ale nejste si jisti s přesným ID uživatele a ID "
-#~ "zákazníka, můžete \n"
-#~ "použít nástroj 'hbcicard' z balíčku libchipcard pro přečtení těchto čísel "
-#~ "z čipové karty."
+#~ "Pokud máte čipovou kartu, ale nejste si jisti s přesným ID uživatele a ID zákazníka, můžete \n"
+#~ "použít nástroj 'hbcicard' z balíčku libchipcard pro přečtení těchto čísel z čipové karty."
 
 #~ msgid "Account list will be updated"
 #~ msgstr "Seznam účtů bude aktualizován"
@@ -14200,13 +13776,10 @@ msgstr ""
 #~ msgid ""
 #~ "This is the Ini-Letter of you, the user. Please print out a paper copy \n"
 #~ "by pressing 'Print'. Then press 'Next'."
-#~ msgstr ""
-#~ "Toto je Ini-Letter vás, uživatele. Vytiskněte prosím papírovou kopii "
-#~ "stisknutím 'Tisk'. Pak stiskněte 'Další'."
+#~ msgstr "Toto je Ini-Letter vás, uživatele. Vytiskněte prosím papírovou kopii stisknutím 'Tisk'. Pak stiskněte 'Další'."
 
 #~ msgid ""
-#~ "Now you need to sign your (the User's) Ini-Letter and send it to your "
-#~ "bank. \n"
+#~ "Now you need to sign your (the User's) Ini-Letter and send it to your bank. \n"
 #~ "\n"
 #~ "The initial HBCI setup is now finished.\n"
 #~ "\n"
@@ -14322,8 +13895,7 @@ msgstr ""
 #~ "the key file is on a floppy disk or other removable media, please make \n"
 #~ "sure the floppy disk or medium is correctly mounted."
 #~ msgstr ""
-#~ "Přesvědčte se prosím, že soubor klíče pro uživatele '%s' u banky '%s' "
-#~ "je \n"
+#~ "Přesvědčte se prosím, že soubor klíče pro uživatele '%s' u banky '%s' je \n"
 #~ "přístupný. Pokud je soubor klíče na vašem pevném disku, jednoduše \n"
 #~ "stiskněte 'Ok'. Pokud je soubor klíče na disketě nebo jiném výměnném \n"
 #~ "médiu, přesvědčte se prosím, že je disketa nebo médium správně připojeno."
@@ -14362,8 +13934,7 @@ msgstr ""
 #~ msgstr ""
 #~ "Přesvědčte se prosím, že soubor klíče nově vytvářeného uživatele je \n"
 #~ "přístupný.  Pokud chcete vytvořit soubor klíče na vašem pevném disku, \n"
-#~ "jednoduše stiskněte 'Ok'. Pokud jej chcete vytvořit na disketě nebo "
-#~ "jiném \n"
+#~ "jednoduše stiskněte 'Ok'. Pokud jej chcete vytvořit na disketě nebo jiném \n"
 #~ "výměnném médiu, přesvědčte se prosím, že je disketa nebo médium správně \n"
 #~ "připojeno."
 
