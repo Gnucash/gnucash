@@ -143,6 +143,18 @@ gnc_history_add_file(char *newfile)
   __gnc_history_config_write();
 }
 
+char *
+gnc_history_get_last()
+{
+  if(history_list == NULL)
+    __gnc_history_get_list();
+
+  if(history_list == NULL)
+    return NULL;
+
+  return history_list->data;
+}
+
 void
 gnc_history_update_menu()
 {

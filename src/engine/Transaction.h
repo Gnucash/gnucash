@@ -156,8 +156,8 @@ gncBoolean    xaccTransIsOpen (Transaction *trans);
  *    transaction associated with the given id, or NULL
  *    if there is no such transaction.
  */
-GUID        * xaccTransGetGUID (Transaction *trans);
-Transaction * xaccTransLookup (GUID *guid);
+const GUID  * xaccTransGetGUID (Transaction *trans);
+Transaction * xaccTransLookup (const GUID *guid);
 
 /* Convert a day, month, and year to a Timespec */
 Timespec      gnc_dmy2timespec(int day, int month, int year);
@@ -320,8 +320,8 @@ void          xaccInitSplit   (Split *);    /* clears a split struct */
  *    split associated with the given id, or NULL
  *    if there is no such split.
  */
-GUID  * xaccSplitGetGUID (Split *split);
-Split * xaccSplitLookup (GUID *guid);
+const GUID * xaccSplitGetGUID (Split *split);
+Split      * xaccSplitLookup (const GUID *guid);
 
 /* The memo is an arbitrary string associated with a split.
  *    Users typically type in free form text from the GUI.

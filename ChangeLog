@@ -1,3 +1,23 @@
+2000-05-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/Account.c (xaccAccountInsertSplit): check the currency
+	before inserting.
+
+2000-05-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/GNCId.c (xaccGUIDNew): new function to generate
+	IDs for gnucash. Use this, not guid_new. Also modified other
+	engine files to use this function.
+
+	* src/register/pricecell.c (COLORIZE): check for being close to
+	zero before colorizing red.
+
+	* src/scm/main.scm (gnc:main): if no filename was specified, open
+	the most recent file in the history.
+
+	* src/gnome/file-history.c (gnc_history_get_last): new function to
+	return the last filename the user opened.
+
 2000-05-08  Rob Browning  <rlb@cs.utexas.edu>
 
 	* make-gnucash-patch.in: change gnucash.h to gnucash.c in ignores.

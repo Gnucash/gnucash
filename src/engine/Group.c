@@ -36,7 +36,7 @@
 #include "util.h"
 #include "gnc-common.h"
 
-static short module = MOD_ENGINE; 
+/* static short module = MOD_ENGINE; */
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
@@ -69,14 +69,7 @@ xaccMallocAccountGroup( void )
 
   xaccInitializeAccountGroup (grp);
 
-  do {
-    guid_new(&grp->guid);
-
-    if (xaccGUIDType(&grp->guid) == GNC_ID_NONE)
-      break;
-
-    PWARN("xaccMallocAccountGroup: duplicate id\n");
-  } while(1);
+  xaccGUIDNew(&grp->guid);
 
   xaccStoreEntity(grp, &grp->guid, GNC_ID_GROUP);
 
@@ -153,19 +146,22 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
-GUID *
+const GUID *
 xaccGroupGetGUID (AccountGroup *group)
 {
-  if (!group) return NULL;
+  if (!group)
+    return xaccGUIDNULL();
+
   return &group->guid;
 }
 
 /********************************************************************\
 \********************************************************************/
 AccountGroup *
-xaccGroupLookup (GUID *guid)
+xaccGroupLookup (const GUID *guid)
 {
   if (!guid) return NULL;
+
   return xaccLookupEntity(guid, GNC_ID_GROUP);
 }
 

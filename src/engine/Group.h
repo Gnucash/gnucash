@@ -44,8 +44,8 @@ void          xaccFreeAccountGroup( AccountGroup *account_group );
  *    group associated with the given id, or NULL
  *    if there is no such group.
  */
-GUID         * xaccGroupGetGUID (AccountGroup *group);
-AccountGroup * xaccGroupLookup (GUID *guid);
+const GUID   * xaccGroupGetGUID (AccountGroup *group);
+AccountGroup * xaccGroupLookup (const GUID *guid);
 
 /*
  * The xaccConcatGroups() subroutine will move all accounts

@@ -60,8 +60,8 @@ void         xaccAccountCommitEdit (Account *);
  *    account associated with the given id, or NULL
  *    if there is no such account.
  */
-GUID       * xaccAccountGetGUID (Account *account);
-Account    * xaccAccountLookup (GUID *guid);
+const GUID * xaccAccountGetGUID (Account *account);
+Account    * xaccAccountLookup (const GUID *guid);
 
 int          xaccGetAccountID (Account *);
 char         xaccGetAccountFlags (Account *);
@@ -82,7 +82,7 @@ void         xaccAccountInsertSplit (Account *, Split *);
  *    all of the splits in this transaction are in
  *    proper date order.
  */
-int          xaccCheckDateOrder   (Account *, Split *);
+int          xaccCheckDateOrder (Account *, Split *);
 int          xaccCheckTransDateOrder (Transaction *);
 
 /* The xaccIsAccountInList() subroutine returns the number of times

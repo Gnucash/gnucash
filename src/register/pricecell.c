@@ -29,6 +29,7 @@
 #include <string.h>
 #include <locale.h>
 
+#include "gnc-common.h"
 #include "util.h"
 
 #include "basiccell.h"
@@ -40,8 +41,8 @@ static char * xaccPriceCellPrintValue (PriceCell *cell);
 
 /* set the color of the text to red, if the value is negative */
 /* hack alert -- the actual color should probably be configurable */
-#define COLORIZE(cell,amt) {			\
-   if (0.0 > amt) {				\
+#define COLORIZE(cell,amount) {			\
+   if ((0.0 > amount) && !DEQ(amount, 0.0)) {	\
       /* red */					\
       cell->cell.fg_color = 0xff0000;		\
    } else {					\
@@ -196,8 +197,9 @@ xaccInitPriceCell (PriceCell *cell)
    cell->shares_value = GNC_F;
 
    SET (&(cell->cell), "");
+   COLORIZE (cell, 0.0);
 
-   cell->cell.use_fg_color = 1;
+   cell->cell.use_fg_color = GNC_T;
    cell->cell.enter_cell = PriceEnter;
    cell->cell.modify_verify = PriceMV;
    cell->cell.leave_cell = PriceLeave;
@@ -210,8 +212,8 @@ xaccInitPriceCell (PriceCell *cell)
 void
 xaccDestroyPriceCell (PriceCell *cell)
 {
-   cell->amount = 0.0;
-   xaccDestroyBasicCell (&(cell->cell));
+  cell->amount = 0.0;
+  xaccDestroyBasicCell (&(cell->cell));
 }
 
 /* ================================================ */
@@ -236,6 +238,7 @@ xaccPriceCellPrintValue (PriceCell *cell)
 }
 
 /* ================================================ */
+
 double
 xaccGetPriceCellValue (PriceCell *cell)
 {
@@ -246,20 +249,20 @@ xaccGetPriceCellValue (PriceCell *cell)
 }
 
 void
-xaccSetPriceCellValue (PriceCell * cell, double amt)
+xaccSetPriceCellValue (PriceCell * cell, double amount)
 {
    char *buff;
 
    if (cell == NULL)
      return;
 
-   cell->amount = amt;
+   cell->amount = amount;
    buff = xaccPriceCellPrintValue (cell);
 
    SET ( &(cell->cell), buff);
 
    /* set the cell color to red if the value is negative */
-   COLORIZE (cell, amt);
+   COLORIZE (cell, amount);
 }
 
 void

@@ -42,13 +42,16 @@
 
 /* Identifiers are 'typed' with integers. The ids used in gnucash are
  * defined below. An id with type GNC_ID_NONE does not refer to any
- * entity. An identifier with a type other than GNC_ID_NONE may refer
- * to an actual entity, but that is not guaranteed. If an id does
- * refer to an entity, the type of the entity will match the type
- * of the identifier. */
+ * entity, although that may change as new ids are created. An id with
+ * type GNC_ID_NULL does not refer to any entity, and will never refer
+ * to any entity. An identifier with any other type may refer to an
+ * actual entity, but that is not guaranteed. If an id does refer to
+ * an entity, the type of the entity will match the type of the
+ * identifier. */
 typedef enum
 {
   GNC_ID_NONE = 0,
+  GNC_ID_NULL,
   GNC_ID_GROUP,
   GNC_ID_ACCOUNT,
   GNC_ID_TRANS,
@@ -58,7 +61,9 @@ typedef enum
 
 
 /* Return the type of an identifier. */
-GNCIdType xaccGUIDType(GUID * guid);
+GNCIdType xaccGUIDType(const GUID * guid);
 
+/* Returns a GUID which is guaranteed to never reference any entity. */
+const GUID * xaccGUIDNULL();
 
 #endif

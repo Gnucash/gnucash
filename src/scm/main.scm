@@ -75,9 +75,10 @@
   (if (not (= (gnc:lowlev-app-init) 0))
       (gnc:shutdown 0))
 
-  (if (pair? gnc:*command-line-files*)
-      ;; You can only open single files right now...
-      (gnc:ui-open-file (car gnc:*command-line-files*)))
+  (let ((file (if (pair? gnc:*command-line-files*)
+                  (car gnc:*command-line-files*)
+                  (gnc:history-get-last))))
+      (gnc:ui-open-file file))
 
   ;; add a hook to save the user configs on shutdown
   (gnc:hook-add-dangler gnc:*shutdown-hook* gnc:save-global-options)

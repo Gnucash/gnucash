@@ -39,6 +39,7 @@ typedef struct entity_node
 
 /** Static global variables *****************************************/
 static GHashTable * entity_table = NULL;
+static short module = MOD_ENGINE; 
 
 
 /** Function implementations ****************************************/
@@ -132,15 +133,18 @@ entity_table_init()
 
   entity_table = g_hash_table_new(id_hash, id_compare);
 
+  xaccStoreEntity(NULL, xaccGUIDNULL(), GNC_ID_NULL);
+
 #ifdef USE_DEBUG
   atexit(summarize_table);
 #endif
 }
 
 GNCIdType
-xaccGUIDType(GUID * guid)
+xaccGUIDType(const GUID * guid)
 {
   EntityNode *e_node;
+  GNCIdType entity_type;
 
   if (guid == NULL)
     return GNC_ID_NONE;
@@ -152,11 +156,51 @@ xaccGUIDType(GUID * guid)
   if (e_node == NULL)
     return GNC_ID_NONE;
 
-  return e_node->entity_type;
+  entity_type = e_node->entity_type;
+  if ((entity_type <= GNC_ID_NONE) || (entity_type > LAST_GNC_ID))
+    return GNC_ID_NONE;
+
+  return entity_type;
+}
+
+void
+xaccGUIDNew(GUID *guid)
+{
+  if (guid == NULL)
+    return;
+
+  do
+  {
+    guid_new(guid);
+
+    if (xaccGUIDType(guid) == GNC_ID_NONE)
+      break;
+
+    PWARN("xaccGUIDNew: duplicate id\n");
+  } while(1);
+}
+
+const GUID *
+xaccGUIDNULL()
+{
+  static int null_inited = (0 == 1);
+  static GUID null_guid;
+
+  if (!null_inited)
+  {
+    int i;
+
+    for (i = 0; i < 16; i++)
+      null_guid.data[i] = 0;
+
+    null_inited = (0 == 0);
+  }
+
+  return &null_guid;
 }
 
 void *
-xaccLookupEntity(GUID * guid, GNCIdType entity_type)
+xaccLookupEntity(const GUID * guid, GNCIdType entity_type)
 {
   EntityNode *e_node;
 
@@ -177,13 +221,10 @@ xaccLookupEntity(GUID * guid, GNCIdType entity_type)
 }
 
 void
-xaccStoreEntity(void * entity, GUID * guid, GNCIdType entity_type)
+xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
 {
   EntityNode *e_node;
   GUID *new_guid;
-
-  if (entity == NULL)
-    return;
 
   if (guid == NULL)
     return;
@@ -204,7 +245,7 @@ xaccStoreEntity(void * entity, GUID * guid, GNCIdType entity_type)
 }
 
 void
-xaccRemoveEntity(GUID * guid)
+xaccRemoveEntity(const GUID * guid)
 {
   gpointer e_node;
   gpointer old_guid;

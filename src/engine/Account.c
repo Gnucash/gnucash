@@ -60,7 +60,7 @@ static short module = MOD_ENGINE;
 
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
- * can't pretend too!  These functions perform actions on the       *
+ * can't pretend to!  These functions perform actions on the        *
  * account data structure, in order to encapsulate the knowledge    *
  * of the internals of the Account in one file.                     *
 \********************************************************************/
@@ -86,18 +86,18 @@ xaccInitAccount (Account * acc)
   acc->flags = 0;
   acc->type  = -1;
   acc->accInfo = NULL;
-  
+
   acc->accountName = strdup("");
   acc->accountCode = strdup("");
   acc->description = strdup("");
   acc->notes       = strdup("");
   acc->currency    = strdup("");
   acc->security    = strdup("");
-  
+
   acc->numSplits   = 0;
   acc->splits      = (Split **) _malloc (sizeof (Split *));
   acc->splits[0]   = NULL;
-  
+
   acc->changed     = 0;
   acc->open        = 0;
 }
@@ -112,14 +112,7 @@ xaccMallocAccount( void )
 
   xaccInitAccount (acc);
 
-  do {
-    guid_new(&acc->guid);
-
-    if (xaccGUIDType(&acc->guid) == GNC_ID_NONE)
-      break;
-
-    PWARN("xaccMallocAccount: duplicate id\n");
-  } while(1);
+  xaccGUIDNew(&acc->guid);
 
   xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
 
@@ -191,13 +184,13 @@ xaccFreeAccount( Account *acc )
 
   acc->flags = 0;
   acc->type  = -1;
-  
+
   acc->accountName = NULL;
   acc->description = NULL;
   acc->notes       = NULL;
   acc->currency    = NULL;
   acc->security    = NULL;
-  
+
   acc->changed     = 0;
   acc->open        = 0;
 
@@ -225,17 +218,19 @@ xaccAccountCommitEdit (Account *acc)
 
 /********************************************************************\
 \********************************************************************/
-GUID *
+const GUID *
 xaccAccountGetGUID (Account *account)
 {
-  if (!account) return NULL;
+  if (!account)
+    return xaccGUIDNULL();
+
   return &account->guid;
 }
 
 /********************************************************************\
 \********************************************************************/
 Account *
-xaccAccountLookup (GUID *guid)
+xaccAccountLookup (const GUID *guid)
 {
   if (!guid) return NULL;
   return xaccLookupEntity(guid, GNC_ID_ACCOUNT);
@@ -280,31 +275,24 @@ xaccGetAccountFlags (Account *acc)
 void
 xaccAccountInsertSplit ( Account *acc, Split *split )
 {
-  int  i,j;
+  int i,j;
   Split **oldsplits;
   Account *oldacc;
 
   if (!acc) return;
   if (!split) return;
-  CHECK (acc);
 
-  /* if this split belongs to another account, make sure that
-   * the moving it is allowed by the currency denominations of 
-   * the old and new accounts. Basically, both old and new accounts
-   * must be denominated in the same currency.
-   */
-/*
-hack alert -- in fact this logic is wildly incorrect;
-disable for now till we figure out what the right thing is.
-  if (split->acc) {
-    if (acc->currency) {
-       if (!(split->acc->currency)) return;
-       if (strcmp (acc->currency, split->acc->currency)) return;
-    }  else { 
-       if (split->acc->currency) return;
-    }
+  /* Make sure the currencies in the transaction will still
+   * be acceptable. This means either the currency or the security
+   * of the new account must be 'in common' with the currencies used
+   * in the transaction. */
+  if (xaccTransCountSplits(split->parent) > 1) {
+    if (!xaccTransIsCommonCurrency(split->parent, acc->currency) &&
+        !xaccTransIsCommonCurrency(split->parent, acc->security))
+      return;
   }
-*/
+
+  CHECK (acc);
 
   /* mark the account as having changed */
   acc -> changed |= ACC_INVALIDATE_ALL;
@@ -317,12 +305,12 @@ disable for now till we figure out what the right thing is.
   if (split->acc) xaccAccountRemoveSplit (split->acc, split);
   split->acc = acc;
 
-  /* enlarge the size of the split array to accomodate the new split,
-   * and copy all the splits over to the new array. 
+  /* enlarge the size of the split array to accomodate the
+   * new split and copy all the splits over to the new array. 
    * If the old and new accounts are the same account, then we
-   * are just shuffling around the split, resumably due to a 
-   * date reordering.  In this case, most of the malloc/copy/free bit
-   * can be avoided.
+   * are just shuffling around the split, presumably due to a 
+   * date reordering. In this case, most of the malloc/copy/free
+   * bit can be avoided.
    */
   if (oldacc != acc) {
      oldsplits = acc->splits;
@@ -391,7 +379,7 @@ disable for now till we figure out what the right thing is.
 void
 xaccAccountRemoveSplit ( Account *acc, Split *split )
 {
-  int  i,j;
+  int i,j;
 
   if (!acc) return;
   if (!split) return;
@@ -402,19 +390,18 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
 
   /* mark the account as having changed */
   acc -> changed |= ACC_INVALIDATE_ALL;
-  
+
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
     acc->splits[i] = acc->splits[j];
     if (split == acc->splits[i]) i--;
   }
-  
+
   split->acc = NULL;
 
   acc->numSplits --;
 
   /* make sure the array is NULL terminated */
   acc->splits[acc->numSplits] = NULL;
-
 }
 
 

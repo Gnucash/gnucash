@@ -115,14 +115,7 @@ xaccMallocSplit(void)
 
   xaccInitSplit (split);
 
-  do {
-    guid_new(&split->guid);
-
-    if (xaccGUIDType(&split->guid) == GNC_ID_NONE)
-      break;
-
-    PWARN("xaccMallocSplit: duplicate id\n");
-  } while (1);
+  xaccGUIDNew(&split->guid);
 
   xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
 
@@ -199,19 +192,22 @@ xaccFreeSplit( Split *split )
 
 /********************************************************************\
 \********************************************************************/
-GUID *
+const GUID *
 xaccSplitGetGUID (Split *split)
 {
-  if (!split) return NULL;
+  if (!split)
+    return xaccGUIDNULL();
+
   return &split->guid;
 }
 
 /********************************************************************\
 \********************************************************************/
 Split *
-xaccSplitLookup (GUID *guid)
+xaccSplitLookup (const GUID *guid)
 {
   if (!guid) return NULL;
+
   return xaccLookupEntity(guid, GNC_ID_SPLIT);
 }
 
@@ -391,14 +387,7 @@ xaccMallocTransaction( void )
 
   xaccInitTransaction (trans);
 
-  do {
-    guid_new(&trans->guid);
-
-    if (xaccGUIDType(&trans->guid) == GNC_ID_NONE)
-      break;
-
-    PWARN("xaccMallocTransaction: duplicate id\n");
-  } while (1);
+  xaccGUIDNew(&trans->guid);
 
   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
 
@@ -506,17 +495,19 @@ xaccFreeTransaction( Transaction *trans )
 
 /********************************************************************\
 \********************************************************************/
-GUID *
+const GUID *
 xaccTransGetGUID (Transaction *trans)
 {
-  if (!trans) return NULL;
+  if (!trans)
+    return xaccGUIDNULL();
+
   return &trans->guid;
 }
 
 /********************************************************************\
 \********************************************************************/
 Transaction *
-xaccTransLookup (GUID *guid)
+xaccTransLookup (const GUID *guid)
 {
   if (!guid) return NULL;
   return xaccLookupEntity(guid, GNC_ID_TRANS);
@@ -709,7 +700,7 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
 
   if (!slist) return NULL;
 
-  if (rb && (0x0==rb[0])) rb = 0x0;
+  if (rb && ('\0' == rb[0])) rb = NULL;
 
   i=0; s = slist[0];
   while (s) {
@@ -729,30 +720,31 @@ FindCommonCurrency (Split **slist, const char * ra, const char * rb)
 
     sa = s->acc->currency;
     sb = s->acc->security;
-    if (sb && (0x0==sb[0])) sb = 0x0;
+    if (sb && (0x0==sb[0])) sb = NULL;
 
     if (ra && rb) {
        int aa = safe_strcmp (ra,sa);
        int ab = safe_strcmp (ra,sb);
        int ba = safe_strcmp (rb,sa);
        int bb = safe_strcmp (rb,sb);
-       if ( (!aa) && bb) rb = 0x0;
-       else
-       if ( (!ab) && ba) rb = 0x0;
-       else
-       if ( (!ba) && ab) ra = 0x0;
-       else
-       if ( (!bb) && aa) ra = 0x0;
-       else
-       if ( aa && bb && ab && ba ) { ra=0x0; rb=0x0; }
 
-       if (!ra) { ra=rb; rb=0x0; }
+       if ( (!aa) && bb) rb = NULL;
+       else
+       if ( (!ab) && ba) rb = NULL;
+       else
+       if ( (!ba) && ab) ra = NULL;
+       else
+       if ( (!bb) && aa) ra = NULL;
+       else
+       if ( aa && bb && ab && ba ) { ra = NULL; rb = NULL; }
+
+       if (!ra) { ra = rb; rb = NULL; }
     } 
     else
     if (ra && !rb) {
        int aa = safe_strcmp (ra,sa);
        int ab = safe_strcmp (ra,sb);
-       if ( aa && ab )  ra= 0x0;
+       if ( aa && ab ) ra = NULL;
     }
 
     if ((!ra) && (!rb)) return NULL;

@@ -80,10 +80,6 @@ system('uuencode gnucash.diff.gz gnucash.diff.gz > gnucash.diff.gz.uue');
 
 exit(0);
 
-# Local Variables:
-# mode: perl
-# End:
-
 __DATA__
 
 obj
@@ -148,3 +144,5 @@ po/extract-macros.perl
 src/guile/i18n.h
 make-gnucash-patch
 rpm/gnucash.spec
+src/gnome/glade-cb-gnc-dialogs.c
+src/gnome/glade-support-gnc-dialogs.c

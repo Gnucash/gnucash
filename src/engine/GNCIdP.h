@@ -29,17 +29,23 @@
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
 
+/* Generate a new id. This function is guaranteed to return an
+ * id that is unique within the scope of a particular gnucash
+ * session. GnuCash routines should always use this function
+ * and not guid_new!! */
+void xaccGUIDNew(GUID *guid);
+
 /* Lookup an entity given an id and a type. If there is no entity
  * associated with the id, or if it has a different type, NULL
  * is returned. */
-void * xaccLookupEntity(GUID * guid, GNCIdType entity_type);
+void * xaccLookupEntity(const GUID * guid, GNCIdType entity_type);
 
 /* Store the given entity under the given id with the given type. */
-void xaccStoreEntity(void * entity, GUID * guid, GNCIdType entity_type);
+void xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type);
 
 /* Remove any existing association between an entity and the given
  * id. The entity is not changed in any way. */
-void xaccRemoveEntity(GUID * guid);
+void xaccRemoveEntity(const GUID * guid);
 
 
 #endif
