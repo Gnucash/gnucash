@@ -724,13 +724,18 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 void
 xaccAccountInsertSplit (Account *acc, Split *split)
 {
+  Transaction *trans;
+
   if (!acc) return;
   if (!split) return;
 
   /* check for session mix-up */
   g_return_if_fail (acc->entity_table == split->entity_table);
 
+  trans = xaccSplitGetParent (split);
+
   xaccAccountBeginEdit(acc);
+  xaccTransBeginEdit(trans);
 
   acc->balance_dirty = TRUE;
   acc->sort_dirty = TRUE;
@@ -748,10 +753,11 @@ xaccAccountInsertSplit (Account *acc, Split *split)
      * just using this call to re-order.  */
   if (xaccSplitGetAccount(split) &&
       xaccSplitGetAccount(split) != acc)
-      xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
-  xaccSplitSetAccount(split, acc);
+    xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
 
-  if(g_list_index(acc->splits, split) == -1)
+  xaccSplitSetAccount (split, acc);
+
+  if (g_list_index(acc->splits, split) == -1)
   {
       if (acc->editlevel == 1)
       {
@@ -766,7 +772,8 @@ xaccAccountInsertSplit (Account *acc, Split *split)
       if (split->parent)
           gnc_engine_generate_event (&split->parent->guid, GNC_EVENT_MODIFY);
   }
-  
+
+  xaccTransCommitEdit(trans);
   xaccAccountCommitEdit(acc);
 }
 
@@ -778,7 +785,7 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 {
   if (!acc) return;
   if (!split) return;
-  
+
   xaccAccountBeginEdit(acc);
   {
     GList *node;
@@ -790,11 +797,16 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
     }
     else
     {
+      Transaction *trans = xaccSplitGetParent (split);
+
       acc->splits = g_list_remove_link (acc->splits, node);
       g_list_free_1 (node);
 
       acc->balance_dirty = TRUE;
+
+      xaccTransBeginEdit (trans);
       xaccSplitSetAccount(split, NULL);
+      xaccTransCommitEdit (trans);
 
       mark_account (acc);
       if (split->parent)
@@ -1115,13 +1127,20 @@ update_split_commodity(Account * acc)
   if(!acc) return;
 
   xaccAccountBeginEdit(acc);
+
   /* iterate over splits */
-  for(lp = acc->splits; lp; lp = lp->next) {
+  for (lp = acc->splits; lp; lp = lp->next)
+  {
     Split *s = (Split *) lp->data;
+    Transaction *trans = xaccSplitGetParent (s);
+
+    xaccTransBeginEdit (trans);
     s->amount = gnc_numeric_convert(s->amount,
                                     xaccAccountGetCommoditySCU(acc),
                                     GNC_RND_ROUND);
+    xaccTransCommitEdit (trans);
   }
+
   xaccAccountCommitEdit(acc);
 }
 
