@@ -6,7 +6,7 @@ INCLPATH = -I/usr/include \
            -I./../include \
            -I./../lib/ComboBox-1.33 \
            -I./../lib/XmHTML-1.1.0/src \
-           -I./../lib/Xbae-4.6.2-linas 
+           -I./../../lib/Xbae-4.6.2-linas 
 
 # libhtmlw eliminated due to license restrictions 
 # and general brokenness
@@ -24,7 +24,7 @@ LIBXMHTML= ../lib/XmHTML-1.1.0/src/libXmHTML.a
 LIBXBAE  = ../lib/Xbae-4.6.2-linas/libXbae.a
 LIBCOMBO = ../lib/ComboBox-1.33/libComboBox.a
 ######################################################################
-SRCS = cell.c price.c single.c
+SRCS = cell.c price.c single.c table.c
 OBJS = ${SRCS:.c=.o} 
 ######################################################################
 
