@@ -30,5 +30,6 @@ void     gnc_pricedb_mark_clean(GNCPriceDB *db);
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
                                           gnc_commodity *old_c,
                                           gnc_commodity *new_c);
+void     gnc_price_set_guid (GNCPrice *p, const GUID *guid);
 
 #endif

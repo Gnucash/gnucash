@@ -26,10 +26,15 @@
 #include <glib.h>
 #include <string.h>
 
-#include "gnc-pricedb.h"
-#include "gnc-pricedb-p.h"
+#include "GNCId.h"
+#include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-event.h"
+#include "gnc-event-p.h"
+#include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
+#include "guid.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
@@ -40,6 +45,7 @@ struct _GNCPriceDB {
 };
 
 struct _GNCPrice {
+  GUID guid;                  /* globally unique price id */
   guint32 refcount;
   GNCPriceDB *db;
   gnc_commodity *commodity;
@@ -60,6 +66,9 @@ gnc_price_create()
 {
   GNCPrice *p = g_new0(GNCPrice, 1);
   p->refcount = 1;
+  xaccGUIDNew (&p->guid);
+  xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
+  gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
   return p;
 }
 
@@ -85,6 +94,9 @@ gnc_price_unref(GNCPrice *p)
   if(p->refcount == 0) {
     if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
     if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
+
+    gnc_engine_generate_event (&p->guid, GNC_EVENT_DESTROY);
+    xaccRemoveEntity(&p->guid);
     memset(p, 0, sizeof(GNCPrice));
     g_free(p);
   }
@@ -99,6 +111,7 @@ gnc_price_clone(GNCPrice* p)
   if(!p) return NULL;
   new_p = gnc_price_create();
   if(!new_p) return NULL;
+  /* never ever clone guid's */
   gnc_price_set_commodity(new_p, gnc_price_get_commodity(p));
   gnc_price_set_time(new_p, gnc_price_get_time(p));
   gnc_price_set_source(new_p, gnc_price_get_source(p));
@@ -109,6 +122,16 @@ gnc_price_clone(GNCPrice* p)
 }
 
 /* setters */
+void 
+gnc_price_set_guid (GNCPrice *p, const GUID *guid)
+{
+   if (!p || !guid) return;
+   xaccRemoveEntity (&p->guid);
+   p->guid = *guid;
+   if(p->db) p->db->dirty = TRUE;
+   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE);
+}
+
 void
 gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
 {
@@ -178,6 +201,21 @@ gnc_price_set_value(GNCPrice *p, gnc_numeric value)
 
 /***********/
 /* getters */
+
+GNCPrice *
+gnc_price_lookup (const GUID *guid)
+{
+  if (!guid) return NULL;
+  return xaccLookupEntity (guid, GNC_ID_PRICE);
+}
+
+const GUID *
+gnc_price_get_guid (GNCPrice *p)
+{
+  if (!p) return xaccGUIDNULL();
+  return &p->guid;
+}
+
 gnc_commodity *
 gnc_price_get_commodity(GNCPrice *p)
 {

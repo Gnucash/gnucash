@@ -38,6 +38,7 @@
 #include "io-gncxml-gen.h"
 
 #include "gnc-pricedb.h"
+#include "gnc-pricedb-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
@@ -53,6 +54,9 @@ static short module = MOD_ENGINE;
   where each price should look roughly like this:
 
   <price>
+    <price:id>
+      00000000111111112222222233333333
+    </price:id>
     <price:commodity>
       <cmdty:space>NASDAQ</cmdty:space>
       <cmdty:id>RHAT</cmdty:id>
@@ -89,7 +93,11 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node)
 {
   if(!p || !sub_node) return FALSE;
 
-  if(safe_strcmp("price:commodity", sub_node->name) == 0) {
+  if(safe_strcmp("price:id", sub_node->name) == 0) {
+    GUID *c = dom_tree_to_guid(sub_node);
+    if(!c) return FALSE; 
+    gnc_price_set_guid(p, c);
+  } else if(safe_strcmp("price:commodity", sub_node->name) == 0) {
     gnc_commodity *c = dom_tree_to_commodity_ref(sub_node);
     if(!c) return FALSE;
     gnc_price_set_commodity(p, c);
@@ -366,6 +374,9 @@ gnc_price_to_dom_tree(const char *tag, GNCPrice *price)
   currency = gnc_price_get_currency(price);
 
   if(!(commodity && currency)) return NULL;
+
+  tmpnode = guid_to_dom_tree("price:id", gnc_price_get_guid(price));
+  if(!add_child_or_kill_parent(price_xml, tmpnode)) return NULL;
 
   tmpnode = commodity_ref_to_dom_tree("price:commodity", commodity);
   if(!add_child_or_kill_parent(price_xml, tmpnode)) return NULL;

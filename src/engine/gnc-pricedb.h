@@ -27,6 +27,7 @@
 #include "date.h"
 #include "gnc-numeric.h"
 #include "gnc-commodity.h"
+#include "guid.h"
 
 #include <stdio.h>
 
@@ -150,6 +151,8 @@ void gnc_price_set_value(GNCPrice *p, gnc_numeric value);
 
 /* As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
+GNCPrice *      gnc_price_lookup (const GUID *guid);
+const GUID *    gnc_price_get_guid (GNCPrice *p);
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
 Timespec        gnc_price_get_time(GNCPrice *p);
