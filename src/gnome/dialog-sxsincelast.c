@@ -3013,6 +3013,7 @@ parse_vars_from_formula( const char *formula,
                 toRet = -1;
         }
 
+        DEBUG( "result/num: %s", gnc_numeric_to_string( *num ) );
         if ( !result ) {
                 g_free( num );
         }

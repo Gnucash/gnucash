@@ -38,6 +38,13 @@
 
 2002-12-15  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Fixed balance checks to be per-transaction; fixes Bug#97062, as
+	well as fixing another unfiled bug that would be possible with the
+	old code.
+
+2002-12-15  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/glade/sched-xact.glade: Clarified some text, removed
 	unused widgets.
 	

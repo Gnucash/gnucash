@@ -516,6 +516,68 @@ gnc_sxed_check_changed( SchedXactionEditorDialog *sxed )
 
 
 /**
+ * Holds the credit- and debit-sum for a given Transaction, as used in
+ * gnc_sxed_check_consistent.
+ **/
+typedef struct _txnCreditDebitSums {
+  gnc_numeric creditSum;
+  gnc_numeric debitSum;
+} txnCreditDebitSums;
+
+static
+void
+set_sums_to_zero( gpointer key,
+                  gpointer val,
+                  gpointer ud )
+{
+  txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
+  tcds->creditSum = gnc_numeric_zero();
+  tcds->debitSum  = gnc_numeric_zero();
+}
+
+static
+void
+free_sums( gpointer key,
+           gpointer val,
+           gpointer ud )
+{
+  txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
+  g_free( tcds );
+}
+
+static
+void
+check_credit_debit_balance( gpointer key,
+                            gpointer val,
+                            gpointer ud )
+{
+        txnCreditDebitSums *tcds = (txnCreditDebitSums*)val;
+        gboolean *unbalanced = (gboolean*)ud;
+        *unbalanced |= !(gnc_numeric_zero_p(
+                                 gnc_numeric_sub_fixed( tcds->debitSum,
+                                                        tcds->creditSum ) ));
+#if 0
+
+        if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( tcds->debitSum,
+                                                        tcds->creditSum ) ) ) {
+                DEBUG( "%.8x | true [%s - %s = %s]\n",
+                        (unsigned int)key,
+                        gnc_numeric_to_string( tcds->debitSum ),
+                        gnc_numeric_to_string( tcds->creditSum ),
+                        gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
+                                                                     tcds->creditSum )) );
+        } else {
+                DEBUG( "%.8x | false [%s - %s = %s]\n",
+                        (unsigned int)key,
+                        gnc_numeric_to_string( tcds->debitSum ),
+                        gnc_numeric_to_string( tcds->creditSum ),
+                        gnc_numeric_to_string(gnc_numeric_sub_fixed( tcds->debitSum,
+                                                                     tcds->creditSum )) );
+        }
+#endif /* DEBUG */
+}
+
+/**
  * Checks to make sure that the SX is in a reasonable state to save.
  * @return true if checks out okay, false otherwise.
  **/
@@ -550,18 +612,20 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 static const int NUM_ITERS_WITH_VARS = 5;
                 static const int NUM_ITERS_NO_VARS = 1;
                 int numIters, i;
-                GHashTable *vars;
+                GHashTable *vars, *txns;
                 GList *splitList = NULL;
                 char *str;
                 kvp_frame *f;
                 kvp_value *v;
                 Split *s;
-                gnc_numeric creditSum, debitSum, tmp;
+                Transaction *t;
+                gnc_numeric tmp;
                 gboolean unbalanceable;
                 gpointer unusedKey, unusedValue;
 
                 unbalanceable = FALSE; /* innocent until proven guilty */
                 vars = g_hash_table_new( g_str_hash, g_str_equal );
+                txns = g_hash_table_new( g_direct_hash, g_direct_equal );
                 numIters = NUM_ITERS_NO_VARS;
                 /**
                  * Plan:
@@ -597,10 +661,25 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                 for ( i=0; i < numIters && !unbalanceable; i++ ) {
                         g_hash_table_foreach( vars, set_var_to_random_value,
                                               (gpointer)vars );
-                        creditSum = debitSum = gnc_numeric_zero();
+                        g_hash_table_foreach( txns, set_sums_to_zero, NULL );
+                        tmp = gnc_numeric_zero();
                         for ( splitList = xaccSchedXactionGetSplits( sxed->sx );
-                              splitList; splitList = splitList->next ) {
+                              splitList; splitList = splitList->next )
+                        {
+                                txnCreditDebitSums *tcds;
                                 s = (Split*)splitList->data;
+                                t = xaccSplitGetParent( s );
+
+                                if ( !(tcds =
+                                       (txnCreditDebitSums*)g_hash_table_lookup( txns,
+                                                                                 (gpointer)t )) )
+                                {
+                                        tcds = g_new0( txnCreditDebitSums, 1 );
+                                        tcds->creditSum = gnc_numeric_zero();
+                                        tcds->debitSum  = gnc_numeric_zero();
+                                        g_hash_table_insert( txns, (gpointer)t, (gpointer)tcds );
+                                }
+
                                 f = xaccSplitGetSlots( s );
                                 v = kvp_frame_get_slot_path( f,
                                                              GNC_SX_ID,
@@ -615,7 +694,9 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                       xaccSchedXactionGetName( sxed->sx ) );
                                                 return FALSE;
                                         }
-                                        creditSum = gnc_numeric_add_fixed( creditSum, tmp );
+                                        tcds->creditSum =
+                                                gnc_numeric_add( tcds->creditSum, tmp, 1,
+                                                                 (GNC_DENOM_AUTO | GNC_DENOM_LCD) );
                                         tmp = gnc_numeric_zero();
                                 }
                                 v = kvp_frame_get_slot_path( f,
@@ -631,25 +712,15 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                       xaccSchedXactionGetName( sxed->sx ) );
                                                 return FALSE;
                                         }
-                                        debitSum = gnc_numeric_add_fixed( debitSum, tmp );
+                                        tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 1,
+                                                                          (GNC_DENOM_AUTO | GNC_DENOM_LCD) );
                                         tmp = gnc_numeric_zero();
                                 }
                         }
-                        unbalanceable |= !(gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ));
-#if DEBUG
 
-                        if ( gnc_numeric_zero_p( gnc_numeric_sub_fixed( debitSum, creditSum ) ) ) {
-                                printf( "true [%s - %s = %s]\n",
-                                        gnc_numeric_to_string( debitSum ),
-                                        gnc_numeric_to_string( creditSum ),
-                                        gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
-                        } else {
-                                printf( "false [%s - %s = %s]\n",
-                                        gnc_numeric_to_string( debitSum ),
-                                        gnc_numeric_to_string( creditSum ),
-                                        gnc_numeric_to_string(gnc_numeric_sub_fixed( debitSum, creditSum )) );
-                        }
-#endif /* DEBUG */
+                        g_hash_table_foreach( txns,
+                                              check_credit_debit_balance,
+                                              &unbalanceable );
                 }
 
                 /* Subtract out pre-defined vars */
@@ -664,6 +735,9 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                       NULL );
                 g_hash_table_destroy( vars );
 
+                g_hash_table_foreach( txns, free_sums, NULL );
+                g_hash_table_destroy( txns );
+
                 if ( unbalanceable
                      && !gnc_verify_dialog_parented( sxed->dialog, FALSE,
                                                      "%s",
@@ -671,7 +745,7 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                                        "cannot automatically\nbalance "
                                                        "this transaction. "
                                                        "Should it still be "
-                                                       "created?") ) ) {
+                                                       "entered?") ) ) {
                         return FALSE;
                 }
         }
