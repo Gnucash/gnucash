@@ -71,6 +71,20 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
    cell->menuitems[n+1] = NULL;
 
    free (oldarr);
+
+   /* if we are adding the menu item to a cell that 
+    * is already realized, then alose add it to the 
+    * widget directly.
+    */
+   if (!cell->cell.realize) {
+      PopBox *box;
+      XmString str;
+
+      box = (PopBox *) cell->cell.gui_private;
+      str = XmStringCreateLtoR (menustr, XmSTRING_DEFAULT_CHARSET);
+      XmComboBoxAddItem (box->combobox, str, 0); 
+      XmStringFree (str);
+   }
 }
 
 /* =============================================== */

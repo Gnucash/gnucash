@@ -40,7 +40,6 @@
 #include "AdjBWindow.h"
 #include "BuildMenu.h"
 #include "Data.h"
-#include "date.h"
 #include "Ledger.h"
 #include "LedgerUtils.h"
 #include "MainWindow.h"
@@ -576,6 +575,8 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 void regRefresh (RegWindow * regData)
 {
    xaccLoadRegister (regData->ledger, regData->blackacc[0]->splits);
+
+   xaccLoadXferCell (regData->ledger->xfrmCell, regData->blackacc[0]->parent);
 }
 
 /********************************************************************\

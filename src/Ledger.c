@@ -55,4 +55,25 @@ xaccLoadRegister (BasicRegister *reg, Split **slist)
    xaccRefreshTable (reg->table);
 }
 
+/* ======================================================== */
+
+void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
+{
+   Account * acc;
+   int n;
+
+   if (!grp) return;
+
+   /* build the xfer menu out of account names */
+   /* traverse sub-accounts ecursively */
+   n = 0;
+   acc = getAccount (grp, n);
+   while (acc) {
+      xaccAddComboCellMenuItem (cell, acc->accountName);
+      xaccLoadXferCell (cell, acc->children);
+      n++;
+      acc = getAccount (grp, n);
+   }
+}
+
 /* =======================  end of file =================== */
