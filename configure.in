@@ -770,60 +770,75 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 if test x${gnc_build_gui} = xtrue ;
 then
+#    GNOME_INIT			2/18/03 remove
+# 2/27/03 Add Gnome2 version of GNOME_INIT
     GNOME_INIT
     GNOME_COMPILE_WARNINGS
 #    GNOME_CHECK_GDK_PIXBUF
 #    GNOME_PRINT_CHECK
     
     # gnome-print-check appears tobe sort of b0rked for the time being
-    GNOME_PRINT_CFLAGS=`${PKG_CONFIG} --cflags print`
-    AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
+# 3/9/03 Disable gnome-print for Gnome2.
+#    GNOME_PRINT_CFLAGS=`${PKG_CONFIG} --cflags print`
+#    AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
+
+# 3/9/03 Add LIBGUPPI for Gnome2
+LIBGUPPI_CFLAGS=
+LIBGUPPI_LIBS=
+AC_SUBST(LIBGUPPI_CFLAGS)
+AC_SUBST(LIBGUPPI_LIBS)
     
     ### ----------------------------------------------------------------------
-    ### Check for glade
+    ### Check for glade, gtkhtml
     
-    AM_PATH_LIBGLADE
-    
-    GLADE_LIBS="$LIBGLADE_LIBS"
-    GLADE_CFLAGS="$LIBGLADE_CFLAGS"
-    
+#  3/9/03  AM_PATH_LIBGLADE  replace by PKG_CHECK_MODULES
+    PKG_CHECK_MODULES(GLADE, libglade-2.0)
     AS_SCRUB_INCLUDE(GLADE_CFLAGS)
-    AC_SUBST(GLADE_LIBS)
     AC_SUBST(GLADE_CFLAGS)
-    
-    
+    AC_SUBST(GLADE_LIBS)
+
+    PKG_CHECK_MODULES(GTKHTML, libgtkhtml-2.0)
+    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
+    AC_SUBST(GTKHTML_CFLAGS)
+    AC_SUBST(GTKHTML_LIBS)
+
+   
     ### ----------------------------------------------------------------------
+
     AC_CHECK_LIB(gal, main, true,
       [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
       `$PKG_CONFIG --libs gal`)
+
+# 3/9/03  Disable gtkhtml check
+
+# gtkhtml checked with PKG_CHECK_MODULES   2/28/03   
+#    AC_MSG_CHECKING([for gtkhtml < 1.1])
+#    GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml`
+#    GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml`
+#    if test "x$GTKHTML_LIBS" != x; then
+#	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+#	# if found
+#	AC_CHECK_LIB(gtkhtml, gtk_html_new,
+#		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS}"
+#		     AC_DEFINE(HAVE_LIBGTKHTML),
+#		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
+#		     $GTKHTML_LIBS)
+#    else
+#	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
+#	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
+#	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+#	# if found
+#	AC_MSG_CHECKING([for gtkhtml >= 1.1])
+#	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
+#		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
+#		     AC_DEFINE(HAVE_LIBGTKHTML),
+#		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
+#		     $GTKHTML_LIBS)
+#    fi
+#    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     
-    AC_MSG_CHECKING([for gtkhtml < 1.1])
-    GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml`
-    GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml`
-    if test "x$GTKHTML_LIBS" != x; then
-	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
-	# if found
-	AC_CHECK_LIB(gtkhtml, gtk_html_new,
-		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS}"
-		     AC_DEFINE(HAVE_LIBGTKHTML),
-		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
-		     $GTKHTML_LIBS)
-    else
-	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
-	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
-	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
-	# if found
-	AC_MSG_CHECKING([for gtkhtml >= 1.1])
-	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
-		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
-		     AC_DEFINE(HAVE_LIBGTKHTML),
-		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
-		     $GTKHTML_LIBS)
-    fi
-    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
-    
-    AC_SUBST(GTKHTML_LIBS)
-    AC_SUBST(GTKHTML_CFLAGS)
+#    AC_SUBST(GTKHTML_LIBS)
+#    AC_SUBST(GTKHTML_CFLAGS)
     
     
     ### ----------------------------------------------------------------------

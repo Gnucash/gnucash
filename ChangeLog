@@ -1,3 +1,10 @@
+2003-03-09 TomF changes for Gnome-2 branch
+
+	* configure.in: Disabled gnome-print.  Added LIBGUPPI.
+	  AM_PATH_LIBGLADE  replaced by PKG_CHECK_MODULES
+	  Disabled gtkhtml check
+	* gnome.m4:  Fixed use of wrong gnome2 names introduced 2/27
+
 2003-03-02 TomF changes for Gnome-2 branch
 
 	* configure.in: Change GNOME_XML_CHECK call to GNOME_XML2_CHECK

@@ -44,6 +44,11 @@ AC_DEFUN([GNOME_INIT_HOOK],[
   		fi,
 		want_gnome=yes)
 
+#
+# Change gnome1 package names to gnome2 names
+# 3/9/03 Fix use of wrong gnome2 names
+#
+
 	if test "x$want_gnome" = xyes; then
 
 	    AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
@@ -53,14 +58,16 @@ AC_DEFUN([GNOME_INIT_HOOK],[
 	      AC_MSG_CHECKING(if $PKG_CONFIG works)
 	      if $PKG_CONFIG --libs-only-l gnome >/dev/null 2>&1; then
 	        AC_MSG_RESULT(yes)
-	        #GNOME_GNORBA_HOOK([],$2)
-	        GNOME_LIBS="`$PKG_CONFIG --libs-only-l gnome2`"
-	        GNOMEUI_LIBS="`$PKG_CONFIG --libs-only-l gnomeui2`"
-	        GNOMEGNORBA_LIBS="`$PKG_CONFIG --libs-only-l gnorba2 gnomeui2`"
-	        #GTKXMHTML_LIBS="`$PKG_CONFIG --libs-only-l gtkxmhtml`"
+	        #GNOME_GNORBA_HOOK([],$2)  Not in Gnome2
+	        GNOME_LIBS="`$PKG_CONFIG --libs-only-l libgnome-2.0`"
+	        GNOMEUI_LIBS="`$PKG_CONFIG --libs-only-l libgnomeui-2.0`"
+	        GNOMEGNORBA_LIBS="`$PKG_CONFIG --libs-only-l ORBit-2.0 libgnomeui-2.0`"
+		#GNOMEGNORBA_LIBS="`$PKG_CONFIG --libs-only-l gnorba2 gnomeui2`"   Replaced
+
+	        #GTKXMHTML_LIBS="`$PKG_CONFIG --libs-only-l gtkxmhtml`"  Not in Gnome2?
 		#ZVT_LIBS="`$PKG_CONFIG --libs-only-l zvt`"
-	        GNOME_LIBDIR="`$PKG_CONFIG --libs-only-L gtk2 gnorba2 gnomeui2`"
-	        GNOME_INCLUDEDIR="`$PKG_CONFIG --cflags gtk2 gnorba2 gnomeui2`"
+	        GNOME_LIBDIR="`$PKG_CONFIG --libs-only-L libgnomeui-2.0`"
+	        GNOME_INCLUDEDIR="`$PKG_CONFIG --cflags libgnomeui-2.0`"
                 $1
 	      else
 	        AC_MSG_RESULT(no)
