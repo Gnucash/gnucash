@@ -51,7 +51,7 @@ typedef struct
 } TaxInfoDialog;
 
 
-static int
+static void
 window_destroy_cb (GtkObject *object, gpointer data)
 {
   TaxInfoDialog *ti_dialog = data;
@@ -59,8 +59,6 @@ window_destroy_cb (GtkObject *object, gpointer data)
   gnc_unregister_gui_component_by_data (DIALOG_TAX_INFO_CM_CLASS, ti_dialog);
 
   g_free (ti_dialog);
-
-  return 1;
 }
 
 static void

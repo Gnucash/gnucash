@@ -31,9 +31,11 @@
 #include "dialog-utils.h"
 #include "glade-gnc-dialogs.h"
 #include "glade-support.h"
+#include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui.h"
 #include "messages.h"
+#include "query-user.h"
 
 
 #define DRUID_STOCK_SPLIT_CM_CLASS "druid-stock-split"
@@ -42,16 +44,21 @@
 typedef struct
 {
   GtkWidget * window;
-  GtkWidget * account_list;
 
   /* account page data */
+  GtkWidget * account_list;
   GUID account;
 
-
+  /* info page data */
+  GtkWidget * account_entry;
+  GtkWidget * numerator_spin;
+  GtkWidget * denominator_spin;
+  GtkWidget * starting_entry;
+  GtkWidget * ending_edit;
 } StockSplitInfo;
 
 
-static int
+static void
 window_destroy_cb (GtkObject *object, gpointer data)
 {
   StockSplitInfo *info = data;
@@ -59,8 +66,6 @@ window_destroy_cb (GtkObject *object, gpointer data)
   gnc_unregister_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
 
   g_free (info);
-
-  return 1;
 }
 
 static int
@@ -109,6 +114,19 @@ fill_account_list (StockSplitInfo *info)
     rows++;
   }
 
+  {
+    Account *account = xaccAccountLookup (&info->account);
+    gint row = 0;
+
+    if (account)
+      row = gtk_clist_find_row_from_data (clist, account);
+
+    if (row < 0)
+      row = 0;
+
+    gtk_clist_select_row (GTK_CLIST (info->account_list), row, 0);
+  }
+
   gtk_clist_columns_autosize (clist);
 
   gtk_clist_thaw (clist);
@@ -132,6 +150,39 @@ clist_select_row (GtkCList *clist,
 }
 
 static void
+refresh_details_page (StockSplitInfo *info)
+{
+  Account *account;
+  char *name;
+
+  account = xaccAccountLookup (&info->account);
+
+  g_return_if_fail (account != NULL);
+
+  name = xaccAccountGetFullName (account, gnc_get_account_separator ());
+  gtk_entry_set_text (GTK_ENTRY (info->account_entry), name);
+
+  g_free (name);
+}
+
+static gboolean
+account_next (GnomeDruidPage *druidpage,
+              gpointer arg1,
+              gpointer user_data)
+{
+  StockSplitInfo *info = user_data;
+  Account *account;
+
+  account = xaccAccountLookup (&info->account);
+
+  g_return_val_if_fail (account != NULL, TRUE);
+
+  refresh_details_page (info);
+
+  return FALSE;
+}
+
+static void
 druid_cancel (GnomeDruid *druid, gpointer user_data)
 {
   StockSplitInfo *info = user_data;
@@ -142,17 +193,22 @@ druid_cancel (GnomeDruid *druid, gpointer user_data)
 static void
 gnc_stock_split_druid_create (StockSplitInfo *info)
 {
+  GtkWidget *druid;
+
   info->window = create_Stock_Split_Druid ();
+
+  druid = lookup_widget (info->window, "stock_split_druid");
 
   gtk_signal_connect (GTK_OBJECT (info->window), "destroy",
                       GTK_SIGNAL_FUNC (window_destroy_cb), info);
 
-  gtk_signal_connect (GTK_OBJECT (info->window), "cancel",
+  gtk_signal_connect (GTK_OBJECT (druid), "cancel",
                       GTK_SIGNAL_FUNC (druid_cancel), info);
 
   /* account list */
   {
     GtkCList *clist;
+    GtkWidget *page;
 
     info->account_list = lookup_widget (info->window, "account_clist");
 
@@ -163,7 +219,30 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
     gtk_signal_connect (GTK_OBJECT (clist), "select_row",
                         GTK_SIGNAL_FUNC (clist_select_row), info);
 
-    fill_account_list (info);
+    page = lookup_widget (info->window, "account_page");
+
+    gtk_signal_connect (GTK_OBJECT (page), "next",
+                        GTK_SIGNAL_FUNC (account_next), info);
+  }
+
+  /* info widgets */
+  {
+    GtkWidget *box;
+    GtkWidget *amount;
+    GtkWidget *page;
+
+    info->account_entry    = lookup_widget (info->window, "account_entry");
+    info->numerator_spin   = lookup_widget (info->window, "numerator_spin");
+    info->denominator_spin = lookup_widget (info->window, "denominator_spin");
+    info->starting_entry   = lookup_widget (info->window, "starting_entry");
+
+    box = lookup_widget (info->window, "ending_hbox");
+    amount = gnc_amount_edit_new();
+    gtk_box_pack_end (GTK_BOX(box), amount, TRUE, TRUE, 0);
+
+    info->ending_edit = amount;
+
+    page = lookup_widget (info->window, "details_page");
   }
 }
 
@@ -210,6 +289,13 @@ gnc_stock_split_dialog (Account * initial)
   gnc_gui_component_watch_entity_type (component_id,
                                        GNC_ID_ACCOUNT,
                                        GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  if (fill_account_list (info) == 0)
+  {
+    gnc_warning_dialog (_("You don't have any stock accounts!"));
+    gnc_close_gui_component_by_data (DRUID_STOCK_SPLIT_CM_CLASS, info);
+    return;
+  }
 
   gtk_widget_show_all (info->window);
 

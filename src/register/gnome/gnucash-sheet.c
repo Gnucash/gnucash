@@ -1053,7 +1053,7 @@ gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 
         item_edit_focus_in (ITEM_EDIT(sheet->item_editor));
 
-        return 1;
+        return FALSE;
 }
 
 static gboolean
@@ -1067,7 +1067,7 @@ gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 
         item_edit_focus_out (ITEM_EDIT(sheet->item_editor));
 
-        return 1;
+        return FALSE;
 }
 
 static void

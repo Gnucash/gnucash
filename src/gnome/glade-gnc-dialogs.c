@@ -5850,16 +5850,16 @@ GtkWidget*
 create_Stock_Split_Druid (void)
 {
   GtkWidget *Stock_Split_Druid;
-  GtkWidget *druid1;
+  GtkWidget *stock_split_druid;
   GtkWidget *druidpagestart2;
   GdkColor druidpagestart2_bg_color = { 0, 6425, 6425, 28784 };
   GdkColor druidpagestart2_textbox_color = { 0, 65535, 65535, 65535 };
   GdkColor druidpagestart2_logo_bg_color = { 0, 65535, 65535, 65535 };
   GdkColor druidpagestart2_title_color = { 0, 65535, 65535, 65535 };
-  GtkWidget *druidpagestandard11;
-  GdkColor druidpagestandard11_bg_color = { 0, 6425, 6425, 28784 };
-  GdkColor druidpagestandard11_logo_bg_color = { 0, 65535, 65535, 65535 };
-  GdkColor druidpagestandard11_title_color = { 0, 65535, 65535, 65535 };
+  GtkWidget *account_page;
+  GdkColor account_page_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor account_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor account_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *vbox98;
   GtkWidget *label847677;
   GtkWidget *alignment1;
@@ -5868,10 +5868,32 @@ create_Stock_Split_Druid (void)
   GtkWidget *label847678;
   GtkWidget *label847679;
   GtkWidget *label847680;
-  GtkWidget *druidpagestandard12;
+  GtkWidget *details_page;
+  GdkColor details_page_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor details_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor details_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *druid_vbox32;
   GtkWidget *label847681;
-  GtkWidget *druidpagestandard13;
+  GtkWidget *hbox86;
+  GtkWidget *vbox100;
+  GtkWidget *label847686;
+  GtkWidget *label847683;
+  GtkWidget *label847684;
+  GtkWidget *label847685;
+  GtkWidget *vbox101;
+  GtkWidget *account_entry;
+  GtkWidget *hbox_spin;
+  GtkObject *numerator_spin_adj;
+  GtkWidget *numerator_spin;
+  GtkWidget *label847682;
+  GtkObject *denominator_spin_adj;
+  GtkWidget *denominator_spin;
+  GtkWidget *starting_entry;
+  GtkWidget *ending_hbox;
+  GtkWidget *extra_page;
+  GdkColor extra_page_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor extra_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor extra_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *druid_vbox33;
   GtkWidget *druidpagefinish1;
   GdkColor druidpagefinish1_bg_color = { 0, 6425, 6425, 28784 };
@@ -5883,37 +5905,38 @@ create_Stock_Split_Druid (void)
   gtk_object_set_data (GTK_OBJECT (Stock_Split_Druid), "Stock_Split_Druid", Stock_Split_Druid);
   gtk_window_set_title (GTK_WINDOW (Stock_Split_Druid), _("Stock Split"));
 
-  druid1 = gnome_druid_new ();
-  gtk_widget_ref (druid1);
-  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druid1", druid1,
+  stock_split_druid = gnome_druid_new ();
+  gtk_widget_ref (stock_split_druid);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "stock_split_druid", stock_split_druid,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (druid1);
-  gtk_container_add (GTK_CONTAINER (Stock_Split_Druid), druid1);
+  gtk_widget_show (stock_split_druid);
+  gtk_container_add (GTK_CONTAINER (Stock_Split_Druid), stock_split_druid);
 
   druidpagestart2 = gnome_druid_page_start_new ();
   gtk_widget_ref (druidpagestart2);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druidpagestart2", druidpagestart2,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druidpagestart2);
-  gnome_druid_append_page (GNOME_DRUID (druid1), GNOME_DRUID_PAGE (druidpagestart2));
-  gnome_druid_set_page (GNOME_DRUID (druid1), GNOME_DRUID_PAGE (druidpagestart2));
+  gnome_druid_append_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (druidpagestart2));
+  gnome_druid_set_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (druidpagestart2));
   gnome_druid_page_start_set_bg_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_bg_color);
   gnome_druid_page_start_set_textbox_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_textbox_color);
   gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_logo_bg_color);
   gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (druidpagestart2), &druidpagestart2_title_color);
   gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (druidpagestart2), _("This wizard will help you record a stock split or stock merger."));
 
-  druidpagestandard11 = gnome_druid_page_standard_new_with_vals ("", NULL);
-  gtk_widget_ref (druidpagestandard11);
-  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druidpagestandard11", druidpagestandard11,
+  account_page = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (account_page);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "account_page", account_page,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show_all (druidpagestandard11);
-  gnome_druid_append_page (GNOME_DRUID (druid1), GNOME_DRUID_PAGE (druidpagestandard11));
-  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard11), &druidpagestandard11_bg_color);
-  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard11), &druidpagestandard11_logo_bg_color);
-  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (druidpagestandard11), &druidpagestandard11_title_color);
+  gtk_widget_show_all (account_page);
+  gnome_druid_append_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (account_page));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (account_page), &account_page_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (account_page), &account_page_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (account_page), &account_page_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (account_page), _("Stock Account"));
 
-  vbox98 = GNOME_DRUID_PAGE_STANDARD (druidpagestandard11)->vbox;
+  vbox98 = GNOME_DRUID_PAGE_STANDARD (account_page)->vbox;
   gtk_widget_ref (vbox98);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "vbox98", vbox98,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -5975,14 +5998,18 @@ create_Stock_Split_Druid (void)
   gtk_widget_show (label847680);
   gtk_clist_set_column_widget (GTK_CLIST (account_clist), 2, label847680);
 
-  druidpagestandard12 = gnome_druid_page_standard_new_with_vals ("", NULL);
-  gtk_widget_ref (druidpagestandard12);
-  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druidpagestandard12", druidpagestandard12,
+  details_page = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (details_page);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "details_page", details_page,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show_all (druidpagestandard12);
-  gnome_druid_append_page (GNOME_DRUID (druid1), GNOME_DRUID_PAGE (druidpagestandard12));
+  gtk_widget_show_all (details_page);
+  gnome_druid_append_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (details_page));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (details_page), &details_page_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (details_page), &details_page_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (details_page), &details_page_title_color);
+  gnome_druid_page_standard_set_title (GNOME_DRUID_PAGE_STANDARD (details_page), _("Stock Split Details"));
 
-  druid_vbox32 = GNOME_DRUID_PAGE_STANDARD (druidpagestandard12)->vbox;
+  druid_vbox32 = GNOME_DRUID_PAGE_STANDARD (details_page)->vbox;
   gtk_widget_ref (druid_vbox32);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druid_vbox32", druid_vbox32,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -5996,14 +6023,124 @@ create_Stock_Split_Druid (void)
   gtk_widget_show (label847681);
   gtk_box_pack_start (GTK_BOX (druid_vbox32), label847681, FALSE, FALSE, 0);
 
-  druidpagestandard13 = gnome_druid_page_standard_new_with_vals ("", NULL);
-  gtk_widget_ref (druidpagestandard13);
-  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druidpagestandard13", druidpagestandard13,
+  hbox86 = gtk_hbox_new (FALSE, 4);
+  gtk_widget_ref (hbox86);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "hbox86", hbox86,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show_all (druidpagestandard13);
-  gnome_druid_append_page (GNOME_DRUID (druid1), GNOME_DRUID_PAGE (druidpagestandard13));
+  gtk_widget_show (hbox86);
+  gtk_box_pack_start (GTK_BOX (druid_vbox32), hbox86, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox86), 10);
 
-  druid_vbox33 = GNOME_DRUID_PAGE_STANDARD (druidpagestandard13)->vbox;
+  vbox100 = gtk_vbox_new (TRUE, 4);
+  gtk_widget_ref (vbox100);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "vbox100", vbox100,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox100);
+  gtk_box_pack_start (GTK_BOX (hbox86), vbox100, TRUE, TRUE, 0);
+
+  label847686 = gtk_label_new (_("Account:"));
+  gtk_widget_ref (label847686);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847686", label847686,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847686);
+  gtk_box_pack_start (GTK_BOX (vbox100), label847686, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847686), 1, 0.5);
+
+  label847683 = gtk_label_new (_("Ratio:"));
+  gtk_widget_ref (label847683);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847683", label847683,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847683);
+  gtk_box_pack_start (GTK_BOX (vbox100), label847683, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847683), 1, 0.5);
+
+  label847684 = gtk_label_new (_("Starting Shares:"));
+  gtk_widget_ref (label847684);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847684", label847684,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847684);
+  gtk_box_pack_start (GTK_BOX (vbox100), label847684, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847684), 1, 0.5);
+
+  label847685 = gtk_label_new (_("Ending Shares:"));
+  gtk_widget_ref (label847685);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847685", label847685,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847685);
+  gtk_box_pack_start (GTK_BOX (vbox100), label847685, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847685), 1, 0.5);
+
+  vbox101 = gtk_vbox_new (TRUE, 4);
+  gtk_widget_ref (vbox101);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "vbox101", vbox101,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox101);
+  gtk_box_pack_start (GTK_BOX (hbox86), vbox101, TRUE, TRUE, 0);
+
+  account_entry = gtk_entry_new ();
+  gtk_widget_ref (account_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "account_entry", account_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (account_entry);
+  gtk_box_pack_start (GTK_BOX (vbox101), account_entry, FALSE, FALSE, 0);
+  gtk_entry_set_editable (GTK_ENTRY (account_entry), FALSE);
+
+  hbox_spin = gtk_hbox_new (FALSE, 5);
+  gtk_widget_ref (hbox_spin);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "hbox_spin", hbox_spin,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox_spin);
+  gtk_box_pack_start (GTK_BOX (vbox101), hbox_spin, FALSE, FALSE, 0);
+
+  numerator_spin_adj = gtk_adjustment_new (2, 1, 100, 1, 10, 10);
+  numerator_spin = gtk_spin_button_new (GTK_ADJUSTMENT (numerator_spin_adj), 1, 0);
+  gtk_widget_ref (numerator_spin);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "numerator_spin", numerator_spin,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (numerator_spin);
+  gtk_box_pack_start (GTK_BOX (hbox_spin), numerator_spin, FALSE, FALSE, 0);
+
+  label847682 = gtk_label_new (_("for"));
+  gtk_widget_ref (label847682);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "label847682", label847682,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847682);
+  gtk_box_pack_start (GTK_BOX (hbox_spin), label847682, FALSE, FALSE, 0);
+
+  denominator_spin_adj = gtk_adjustment_new (1, 1, 100, 1, 10, 10);
+  denominator_spin = gtk_spin_button_new (GTK_ADJUSTMENT (denominator_spin_adj), 1, 0);
+  gtk_widget_ref (denominator_spin);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "denominator_spin", denominator_spin,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (denominator_spin);
+  gtk_box_pack_start (GTK_BOX (hbox_spin), denominator_spin, FALSE, FALSE, 0);
+
+  starting_entry = gtk_entry_new ();
+  gtk_widget_ref (starting_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "starting_entry", starting_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (starting_entry);
+  gtk_box_pack_start (GTK_BOX (vbox101), starting_entry, FALSE, FALSE, 0);
+  gtk_entry_set_editable (GTK_ENTRY (starting_entry), FALSE);
+
+  ending_hbox = gtk_hbox_new (FALSE, 0);
+  gtk_widget_ref (ending_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "ending_hbox", ending_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (ending_hbox);
+  gtk_box_pack_start (GTK_BOX (vbox101), ending_hbox, TRUE, TRUE, 0);
+
+  extra_page = gnome_druid_page_standard_new_with_vals ("", NULL);
+  gtk_widget_ref (extra_page);
+  gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "extra_page", extra_page,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show_all (extra_page);
+  gnome_druid_append_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (extra_page));
+  gnome_druid_page_standard_set_bg_color (GNOME_DRUID_PAGE_STANDARD (extra_page), &extra_page_bg_color);
+  gnome_druid_page_standard_set_logo_bg_color (GNOME_DRUID_PAGE_STANDARD (extra_page), &extra_page_logo_bg_color);
+  gnome_druid_page_standard_set_title_color (GNOME_DRUID_PAGE_STANDARD (extra_page), &extra_page_title_color);
+
+  druid_vbox33 = GNOME_DRUID_PAGE_STANDARD (extra_page)->vbox;
   gtk_widget_ref (druid_vbox33);
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druid_vbox33", druid_vbox33,
                             (GtkDestroyNotify) gtk_widget_unref);
@@ -6014,7 +6151,7 @@ create_Stock_Split_Druid (void)
   gtk_object_set_data_full (GTK_OBJECT (Stock_Split_Druid), "druidpagefinish1", druidpagefinish1,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (druidpagefinish1);
-  gnome_druid_append_page (GNOME_DRUID (druid1), GNOME_DRUID_PAGE (druidpagefinish1));
+  gnome_druid_append_page (GNOME_DRUID (stock_split_druid), GNOME_DRUID_PAGE (druidpagefinish1));
   gnome_druid_page_finish_set_bg_color (GNOME_DRUID_PAGE_FINISH (druidpagefinish1), &druidpagefinish1_bg_color);
   gnome_druid_page_finish_set_textbox_color (GNOME_DRUID_PAGE_FINISH (druidpagefinish1), &druidpagefinish1_textbox_color);
   gnome_druid_page_finish_set_logo_bg_color (GNOME_DRUID_PAGE_FINISH (druidpagefinish1), &druidpagefinish1_logo_bg_color);
