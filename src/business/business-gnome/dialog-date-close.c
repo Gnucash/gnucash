@@ -15,6 +15,7 @@
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "AccWindow.h"
+#include "gnc-date-edit.h"
 
 #include "dialog-date-close.h"
 
@@ -97,15 +98,11 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
     ddc->acct = acc;
   }
 
-  if (ddc->date) {
-    time_t tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ddc->date));
-    timespecFromTime_t (ddc->ts, tt);
-  }
+  if (ddc->date)
+    *(ddc->ts) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->date));
 
-  if (ddc->post_date) {
-    time_t tt = gnome_date_edit_get_date (GNOME_DATE_EDIT (ddc->post_date));
-    timespecFromTime_t (ddc->ts2, tt);
-  }
+  if (ddc->post_date)
+    *(ddc->ts2) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->post_date));
 
   ddc->retval = TRUE;
   gnome_dialog_close (GNOME_DIALOG (ddc->dialog));
@@ -207,6 +204,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 				Timespec *ts)
 {
   DialogDateClose *ddc;
+  GtkWidget *date_box;
   GtkWidget *hbox;
   GtkWidget *label;
   GladeXML *xml;
@@ -220,16 +218,19 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Close Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Close Dialog");
-  ddc->date = glade_xml_get_widget (xml, "date");
   hbox = glade_xml_get_widget (xml, "the_hbox");
   label = glade_xml_get_widget (xml, "label");
+
+  date_box = glade_xml_get_widget (xml, "date_box");
+  ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
 
   build_date_close_window (hbox, message);
 
-  gnome_date_edit_set_time (GNOME_DATE_EDIT (ddc->date), ts->tv_sec);
+  gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ts);
   gtk_label_set_text (GTK_LABEL (label), label_message);
 
   gnome_dialog_button_connect
@@ -243,7 +244,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
                       GTK_SIGNAL_FUNC(gnc_dialog_date_close_cb), ddc);
 
   gtk_window_set_modal (GTK_WINDOW (ddc->dialog), TRUE);
-  gtk_widget_show (ddc->dialog);
+  gtk_widget_show_all (ddc->dialog);
   gtk_main ();
 
   retval = ddc->retval;
@@ -266,6 +267,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   DialogDateClose *ddc;
   GtkWidget *hbox;
   GtkWidget *label;
+  GtkWidget *date_box;
   GladeXML *xml;
   gboolean retval;
 
@@ -281,10 +283,16 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
-  ddc->date = glade_xml_get_widget (xml, "date");
-  ddc->post_date = glade_xml_get_widget (xml, "post_date");
   ddc->acct_combo = glade_xml_get_widget (xml, "acct_combo");
   hbox = glade_xml_get_widget (xml, "the_hbox");
+
+  date_box = glade_xml_get_widget (xml, "date_box");
+  ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
+
+  date_box = glade_xml_get_widget (xml, "post_date_box");
+  ddc->post_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX(date_box), ddc->post_date, TRUE, TRUE, 0);
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
@@ -300,8 +308,8 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   gtk_label_set_text (GTK_LABEL (label), acct_label_message);
 
   /* Set the date widget */
-  gnome_date_edit_set_time (GNOME_DATE_EDIT (ddc->date), ddue->tv_sec);
-  gnome_date_edit_set_time (GNOME_DATE_EDIT (ddc->post_date), post->tv_sec);
+  gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *ddue);
+  gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->post_date), *post);
 
   /* Setup the account widget */
   fill_in_acct_info (ddc);
@@ -318,7 +326,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
                       GTK_SIGNAL_FUNC(gnc_dialog_date_close_cb), ddc);
 
   gtk_window_set_modal (GTK_WINDOW (ddc->dialog), TRUE);
-  gtk_widget_show (ddc->dialog);
+  gtk_widget_show_all (ddc->dialog);
   gtk_main ();
 
   retval = ddc->retval;
@@ -340,6 +348,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   DialogDateClose *ddc;
   GtkWidget *hbox;
   GtkWidget *label;
+  GtkWidget *date_box;
   GladeXML *xml;
   gboolean retval;
 
@@ -354,9 +363,12 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
-  ddc->date = glade_xml_get_widget (xml, "date");
   ddc->acct_combo = glade_xml_get_widget (xml, "acct_combo");
   hbox = glade_xml_get_widget (xml, "the_hbox");
+
+  date_box = glade_xml_get_widget (xml, "date_box");
+  ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG(ddc->dialog), GTK_WINDOW(parent));
@@ -370,7 +382,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
   gtk_label_set_text (GTK_LABEL (label), acct_label_message);
 
   /* Set the date widget */
-  gnome_date_edit_set_time (GNOME_DATE_EDIT (ddc->date), date->tv_sec);
+  gnc_date_edit_set_time_ts (GNC_DATE_EDIT (ddc->date), *date);
 
   /* Setup the account widget */
   fill_in_acct_info (ddc);
@@ -387,7 +399,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
                       GTK_SIGNAL_FUNC(gnc_dialog_date_close_cb), ddc);
 
   gtk_window_set_modal (GTK_WINDOW (ddc->dialog), TRUE);
-  gtk_widget_show (ddc->dialog);
+  gtk_widget_show_all (ddc->dialog);
 
   gtk_widget_hide_all (glade_xml_get_widget (xml, "postdate_label"));
   gtk_widget_hide_all (glade_xml_get_widget (xml, "post_date"));

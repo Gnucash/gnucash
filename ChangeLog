@@ -1,4 +1,14 @@
-2002-0509   Derek Atkins   <derek@ihtfp.com>
+2002-05-09   Derek Atkins   <derek@ihtfp.com>
+
+	Change the Date-Close dialog to use gnc-date-edit instead of the
+	gnome-date-edit widget set.
+
+	removed unused dialogs from job.glade and invoice.glade
+
+	returned lost invoice functionality: open the invoice-register
+	window when you 'ok' a new invoice.
+	
+2002-05-09   Derek Atkins   <derek@ihtfp.com>
 
 	Fixed dialog-order.  Should now complain less during compilation.
 

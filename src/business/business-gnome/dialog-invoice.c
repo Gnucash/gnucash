@@ -207,6 +207,13 @@ gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data)
   /* Ok, we don't need this anymore */
   iw->invoice_guid = *xaccGUIDNULL ();
 
+  /* if this is a NEW_INVOICE, and created_invoice is NON-NULL, the
+   * open up a new window with the invoice.  This used to be done
+   * in gnc_ui_invoice_new() but cannot be done anymore
+   */
+  if (iw->dialog_type == NEW_INVOICE && iw->created_invoice)
+    gnc_ui_invoice_edit (iw->created_invoice);
+
   gnc_close_gui_component (iw->component_id);
 }
 
