@@ -209,6 +209,16 @@
 		  (else (cons (list curd endd '()) '())))))
 	(else '())))
 
+;; Build a list of evenly spaced times.  If dates are unevenly spaced,
+;; the last interval will be the shorter one/
+(define (gnc:dateloop-simple curd endd incr) 
+  (cond ((gnc:timepair-later curd endd)
+	 (let ((nextd (incdate curd incr)))
+	   (cons curd (gnc:dateloop-simple nextd endd incr))))
+		
+	(else (list endd))))
+
+
 ; A reference zero date - the Beginning Of The Epoch
 ; Note: use of eval is evil... by making this a generator function, 
 ; each delta function gets its own instance of Zero Date

@@ -9,6 +9,7 @@ gncscm_DATA = \
   hello-world.scm \
   income-expense-graph.scm \
   income-or-expense-pie.scm \
+  net-worth-timeseries.scm \
   pnl.scm \
   portfolio.scm \
   register.scm \

@@ -84,7 +84,7 @@
 	(cons (_ "Assets") 
 	      '(asset bank cash checking savings money-market 
 		      stock mutual-fund currency))
-	(cons (_ "Liabilities") '(liability credit-line))
+	(cons (_ "Liabilities") '(liability credit credit-line))
 	(cons (_ "Equity") '(equity))
 	(cons (_ "Income") '(income))
 	(cons (_ "Expense") '(expense)))))
@@ -430,26 +430,26 @@
              (gnc:group-get-comm-balance-at-date
               (gnc:account-get-children account) date)
              (gnc:make-commodity-collector)))
-        (query (gnc:malloc-query))
-        (splits #f))
-
-    (gnc:query-set-group query (gnc:get-current-group))
-    (gnc:query-add-single-account-match query account 'query-and)
-    (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
-    (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
-    (gnc:query-set-sort-increasing query #t #t #t)
-    (gnc:query-set-max-splits query 1)
-
-    (set! splits (gnc:glist->list 
-                  (gnc:query-get-splits query) 
+	  (query (gnc:malloc-query))
+	  (splits #f))
+      
+      (gnc:query-set-group query (gnc:get-current-group))
+      (gnc:query-add-single-account-match query account 'query-and)
+      (gnc:query-add-date-match-timepair query #f date #t date 'query-and) 
+      (gnc:query-set-sort-order query 'by-date 'by-standard 'by-none)
+      (gnc:query-set-sort-increasing query #t #t #t)
+      (gnc:query-set-max-splits query 1)
+      
+      (set! splits (gnc:glist->list 
+		    (gnc:query-get-splits query) 
                   <gnc:Split*>))
-    (gnc:free-query query)
-
-    (if (and splits (not (null? splits)))
+      (gnc:free-query query)
+      
+      (if (and splits (not (null? splits)))
 	(balance-collector 'add (gnc:account-get-commodity account)
 			   (gnc:split-get-share-balance (car splits))))
-    balance-collector))
-
+      balance-collector))
+  
 ;; get the balance of a group of accounts at the specified date
 ;; inlcuding child accounts.
 (define (gnc:group-get-balance-at-date group date)

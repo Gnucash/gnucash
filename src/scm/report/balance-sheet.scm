@@ -165,27 +165,23 @@
 					       optname-to-date) 1)))
 
 	   ;; decompose the account list
+	   (split-up-accounts (gnc:decompose-accountlist accounts))
+	   (dummy (gnc:warn "split-up-accounts" split-up-accounts))
 	   (asset-accounts
-	    (gnc:filter-accountlist-type
-	     '(bank cash asset stock mutual-fund)
-	     accounts))
+	    (assoc-ref split-up-accounts (_ "Assets")))
 	   (liability-accounts
-	    (gnc:filter-accountlist-type
-	     '(credit liability)
-	     accounts))
-	   (liability-account-names
-	    (map gnc:account-get-name liability-accounts))
+	    (assoc-ref split-up-accounts (_ "Liabilities")))
+;	   (liability-account-names
+;	    (map gnc:account-get-name liability-accounts))
+;	   (dummy2 
+;	    (gnc:warn "liability-account-names" liability-account-names))
 	   (equity-accounts
-	    (gnc:filter-accountlist-type
-	     '(equity)
-	     accounts))
+	    (assoc-ref split-up-accounts (_"Equity")))
 	   (income-expense-accounts
-	    (gnc:filter-accountlist-type
-	     '(income expense)
-	     accounts)) 
-	   ;; goonie: I would rather use gnc:decompose-accountlist and
-	   ;; then continue with a bunch of list processing. Saves
-	   ;; typing and makes changes a lot easier. -- cstim.
+	    (append (assoc-ref split-up-accounts (_ "Income"))
+		    (assoc-ref split-up-accounts (_ "Expense"))))
+
+	   ;; cstim: happy now? :->
 
 	   (doc (gnc:make-html-document))
 	   (txt (gnc:make-html-text))
@@ -292,6 +288,7 @@
 		   #f 
 		   show-parent-balance? show-parent-total?
 		   show-fcur? report-currency exchange-fn)))
+
 	    (retained-profit-balance 'minusmerge
 				     neg-retained-profit-balance
 				     #f)

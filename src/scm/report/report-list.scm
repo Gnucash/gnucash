@@ -11,6 +11,7 @@
 (gnc:depend "report/balance-sheet.scm")
 (gnc:depend "report/income-expense-graph.scm")
 (gnc:depend "report/income-or-expense-pie.scm")
+(gnc:depend "report/net-worth-timeseries.scm")
 (gnc:depend "report/category-barchart.scm")
 (gnc:depend "report/pnl.scm")
 (gnc:depend "report/hello-world.scm")
