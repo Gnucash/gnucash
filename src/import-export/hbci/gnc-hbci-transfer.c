@@ -155,8 +155,8 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     if (result >= 0) {
       /* If we wanted to do something here with the gnc txn, we could. */
       Transaction *gtrans = gnc_hbci_dialog_get_gtrans(td);
-      printf("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
-	     xaccTransGetDescription(gtrans));
+      /*printf("gnc-hbci-transfer: Got gnc txn w/ description: %s\n",
+	xaccTransGetDescription(gtrans));*/
     }
 
     /* Just to be on the safe side, clear queue once again. */
