@@ -29,7 +29,6 @@
 #include "config.h"
 
 #include <glib.h>
-#include <stdlib.h>
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "import-settings.h"
@@ -102,26 +101,26 @@ gnc_import_Settings_new (void)
   
   settings->action_skip_enabled = 
     gnc_lookup_boolean_option(MATCHER_PREF_PAGE,
-			      _("Enable SKIP transaction action"),
+			      "Enable SKIP transaction action",
 			      DEFAULT_ACTION_SKIP_ENABLED);
   settings->action_edit_enabled =
     gnc_lookup_boolean_option(MATCHER_PREF_PAGE,
-			      _("Enable EDIT match action"),
+			      "Enable EDIT match action",
 			      DEFAULT_ACTION_EDIT_ENABLED);
   settings->action_add_enabled=DEFAULT_ACTION_ADD_ENABLED;
   settings->action_clear_enabled=DEFAULT_ACTION_CLEAR_ENABLED;
   settings->clear_threshold=gnc_lookup_number_option(MATCHER_PREF_PAGE,
-						     _("Auto-CLEAR threshold"),
+						     "Auto-CLEAR threshold",
 						     DEFAULT_CLEAR_THRESHOLD);
   settings->add_threshold=gnc_lookup_number_option(MATCHER_PREF_PAGE,
-						   _("Auto-ADD threshold"),
+						   "Auto-ADD threshold",
 						   DEFAULT_ADD_THRESHOLD);
   settings->display_threshold =
-    gnc_lookup_number_option(MATCHER_PREF_PAGE,_("Match display threshold"),
+    gnc_lookup_number_option(MATCHER_PREF_PAGE,"Match display threshold",
 			     DEFAULT_DISPLAY_THRESHOLD);
 
   settings->fuzzy_amount =
-    gnc_lookup_number_option(MATCHER_PREF_PAGE,_("Commercial ATM fees threshold"),
+    gnc_lookup_number_option(MATCHER_PREF_PAGE,"Commercial ATM fees threshold",
 			     DEFAULT_ATM_FEE_THRESHOLD);
   
   return settings;

@@ -1,7 +1,4 @@
 /********************************************************************
- * gnc-numeric.h -- an exact-number library for gnucash.            *
- * Copyright (C) 2000 Bill Gribble                                  *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -21,7 +18,12 @@
  *                                                                  *
  *******************************************************************/
 
-/** @file gnc-numeric.h @brief An exact-number library for gnucash.*/
+/** @addtogroup Engine
+    @{ */
+/** @file gnc-numeric.h
+    @brief An exact-number library for gnucash.
+    @author Copyright (C) 2000 Bill Gribble
+*/
 
 #ifndef GNC_NUMERIC_H
 #define GNC_NUMERIC_H
@@ -211,3 +213,5 @@ gnc_numeric gnc_numeric_reduce(gnc_numeric in);
 
 
 #endif
+
+/*@}*/

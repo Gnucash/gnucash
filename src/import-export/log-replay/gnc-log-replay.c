@@ -1,0 +1,573 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+/** @addtogroup Import_Export
+    @{ */
+/** @internal
+    @file gnc-log-replay.c
+    @brief .log file replay code
+    @author Copyright (c) 2003 Benoit Grégoire <bock@step.polymtl.ca>
+*/
+#define _GNU_SOURCE
+
+#include "config.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <sys/time.h>
+
+#include <glib.h>
+#include <libguile.h>
+#include <gmodule.h>
+
+#include "libofx/libofx.h"
+#include "import-account-matcher.h"
+#include "import-commodity-matcher.h"
+#include "import-utilities.h"
+#include "import-main-matcher.h"
+
+#include "Account.h"
+#include "Transaction.h"
+#include "global-options.h"
+#include "gnc-associate-account.h"
+#include "gnc-log-replay.h"
+#include "gnc-file-dialog.h"
+#include "gnc-engine-util.h"
+#include "gnc-book.h"
+#include "gnc-ui-util.h"
+
+
+#include "dialog-utils.h"
+
+
+/*static short module = MOD_IMPORT;*/
+static short module = MOD_TEST;
+
+/* fprintf (trans_log, "mod	guid	time_now	" \
+   "date_entered	date_posted	" \
+   "acc_guid	acc_name	num	description	" \
+   "memo	action	reconciled	" \
+   "amount	value date_reconciled\n");
+   "%c\t%s/%s\t%s\t%s\t%s\t%s\t%s\t%s\t"
+   "%s\t%s\t%s\t%c\t%lld/%lld\t%lld/%lld\t%s\n",
+*/
+#define STRING_FIELD_SIZE 256
+typedef struct _split_record
+{
+  enum _enum_action {LOG_BEGIN_EDIT, LOG_ROLLBACK, LOG_COMMIT, LOG_DELETE} log_action;
+  int log_action_present;
+  GUID trans_guid;
+  int trans_guid_present;
+  GUID split_guid;
+  int  split_guid_present;
+  Timespec log_date;
+  int log_date_present;
+  Timespec date_entered;
+  int date_entered_present;
+  Timespec date_posted;
+  int date_posted_present;
+  GUID acc_guid;
+  int acc_guid_present;
+  char acc_name[STRING_FIELD_SIZE];
+  int acc_name_present;
+  char trans_num[STRING_FIELD_SIZE];
+  int trans_num_present;
+  char trans_descr[STRING_FIELD_SIZE];
+  int trans_descr_present;
+  char split_memo[STRING_FIELD_SIZE];
+  int split_memo_present;
+  char split_action[STRING_FIELD_SIZE];
+  int split_action_present;
+  char split_reconcile;
+  int split_reconcile_present;
+  gnc_numeric amount;
+  int amount_present;
+  gnc_numeric value;
+  int value_present;
+  Timespec date_reconciled;
+  int date_reconciled_present;
+} split_record;
+/********************************************************************\
+ * gnc_file_ofx_import
+ * Entry point
+\********************************************************************/
+
+SCM  scm_gnc_file_log_replay ()
+{
+  gnc_file_log_replay();
+  return SCM_EOL;
+}
+
+static char *olds;
+/* This version of strtok will only match SINGLE occurence of delim,
+   returning a 0 length valid string between two consecutive ocurence of delim.
+   It will also return a 0 length string instead of NULL when it reaches the end of s
+*/
+static char * my_strtok (s, delim)
+     char *s;
+     const char *delim;
+{
+  char *token;
+  /*DEBUG("strtok(): Start...");*/
+  if (s == NULL)
+    s = olds;
+
+  /* Scan leading delimiters.  */
+  /*s += strspn (s, delim);*/ /*Don't do it, or we will loose count.*/
+  if (*s == '\0')
+    {
+      olds = s;
+      return s;
+    }
+
+  /* Find the end of the token.  */
+  token = s;
+  s = strpbrk (token, delim);
+  if (s == NULL)
+    {
+      /* This token finishes the string.  */
+      olds = strchr (token, '\0');
+    }
+  else
+    {
+      /* Terminate the token and make OLDS point past it.  */
+      *s = '\0';
+      olds = s + 1;
+    }
+  return token;
+}
+
+static split_record interpret_split_record( char *record_line)
+{
+  char * tok_ptr;
+  split_record record;
+  memset(&record,0,sizeof(record));
+  DEBUG("interpret_split_record(): Start...");
+  if(strlen(tok_ptr = my_strtok(record_line,"\t"))!=0)
+    {  
+      switch(tok_ptr[0])
+	{
+	case 'B': record.log_action=LOG_BEGIN_EDIT;
+	  break;
+	case 'D': record.log_action=LOG_DELETE;
+	  break;
+	case 'C': record.log_action=LOG_COMMIT;
+	  break;
+	case 'R': record.log_action=LOG_ROLLBACK;
+	  break;
+	}
+      record.log_action_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      string_to_guid(tok_ptr, &(record.trans_guid));
+      record.trans_guid_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      string_to_guid(tok_ptr, &(record.split_guid));
+      record.split_guid_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      record.log_date = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.log_date_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      record.date_entered = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.date_entered_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      record.date_posted = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.date_posted_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      string_to_guid(tok_ptr, &(record.acc_guid));
+      record.acc_guid_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      strncpy(record.acc_name,tok_ptr,STRING_FIELD_SIZE-1);
+      record.acc_name_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      strncpy(record.trans_num,tok_ptr,STRING_FIELD_SIZE-1);
+      record.trans_num_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      strncpy(record.trans_descr,tok_ptr,STRING_FIELD_SIZE-1);
+      record.trans_descr_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      strncpy(record.split_memo,tok_ptr,STRING_FIELD_SIZE-1);
+      record.split_memo_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      strncpy(record.split_action,tok_ptr,STRING_FIELD_SIZE-1);
+      record.split_action_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      record.split_reconcile = tok_ptr[0];
+      record.split_reconcile_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      string_to_gnc_numeric(tok_ptr, &(record.amount));
+      record.amount_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      string_to_gnc_numeric(tok_ptr, &(record.value));
+      record.value_present=true;
+    }
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      record.date_reconciled = gnc_iso8601_to_timespec_local(tok_ptr);
+      record.date_reconciled_present=true;
+    }
+
+  if(strlen(tok_ptr = my_strtok(NULL,"\t"))!=0)
+    {  
+      PERR("interpret_split_record():  Expected number of fields exceeded!");
+    }
+  DEBUG("interpret_split_record(): End");
+  return record;
+}
+
+static void dump_split_record(split_record record)
+{
+  char * string_ptr = NULL;
+  char string_buf[256];
+
+  DEBUG("dump_split_record(): Start...");
+  if(record.log_action_present)
+    {
+      switch(record.log_action)
+	{
+	case LOG_BEGIN_EDIT: DEBUG("Log action: LOG_BEGIN_EDIT");
+	  break;
+	case LOG_DELETE: DEBUG("Log action: LOG_DELETE");
+	  break;
+	case LOG_COMMIT: DEBUG("Log action: LOG_COMMIT");
+	  break;
+	case LOG_ROLLBACK: DEBUG("Log action: LOG_ROLLBACK");
+	  break;
+	}
+    }
+
+  if(record.trans_guid_present)
+    {
+      string_ptr = guid_to_string (&(record.trans_guid));
+      DEBUG("Transaction GUID: %s", string_ptr);
+      g_free(string_ptr);
+    }
+
+  if(record.split_guid_present)
+    {
+      string_ptr = guid_to_string (&(record.split_guid));
+      DEBUG("Split GUID: %s", string_ptr);
+      g_free(string_ptr);
+    }
+
+  if(record.log_date_present)
+    {
+      gnc_timespec_to_iso8601_buff (record.log_date, string_buf);
+      DEBUG("Log entry date: %s", string_buf);
+    }
+
+  if(record.date_entered_present)
+    {
+      gnc_timespec_to_iso8601_buff (record.date_entered, string_buf);
+      DEBUG("Date entered: %s", string_buf);
+    }
+
+  if(record.date_posted_present)
+    {
+      gnc_timespec_to_iso8601_buff (record.date_posted, string_buf);
+      DEBUG("Date posted: %s", string_buf);
+    }
+
+  if(record.acc_guid_present)
+    {
+      string_ptr = guid_to_string (&(record.acc_guid));
+      DEBUG("Account GUID: %s", string_ptr);
+      g_free(string_ptr);
+    }
+
+  if(record.acc_name_present)
+    {
+      DEBUG("Account name: %s", record.acc_name);
+    }
+  if(record.trans_num_present)
+    {
+      DEBUG("Transaction number: %s", record.trans_num);
+    }
+  if(record.trans_descr_present)
+    {
+      DEBUG("Transaction description: %s", record.trans_descr);
+    }
+  if(record.split_memo_present)
+    {
+      DEBUG("Split memo: %s", record.split_memo);
+    }
+  if(record.split_action_present)
+    {
+      DEBUG("Split action: %s", record.split_action);
+    }
+  if(record.split_reconcile_present)
+    {
+      DEBUG("Split reconcile: %c", record.split_reconcile);
+    }
+
+  if(record.amount_present)
+    {
+      string_ptr = gnc_numeric_to_string(record.amount);
+      DEBUG("Record amount: %s", string_ptr);
+      g_free(string_ptr);
+    }
+  
+  if(record.value_present)
+    {
+      string_ptr = gnc_numeric_to_string(record.value);
+      DEBUG("Record value: %s", string_ptr);
+      g_free(string_ptr);
+    }
+
+  if(record.date_reconciled_present)
+    {
+      gnc_timespec_to_iso8601_buff (record.date_reconciled, string_buf);
+      DEBUG("Reconciled date: %s", string_buf);
+    }
+}
+
+/* File pointer must already be at the begining of a record */
+static void  process_trans_record(  FILE *log_file)
+{
+  char read_buf[256];
+  char *read_retval;
+  const char * record_end_str = "===== END";
+  int first_record=true;
+  int record_ended = false;
+  int split_num = 0;
+  split_record record;
+  Transaction * trans = NULL;
+  Split * split = NULL;
+  Account * acct = NULL;
+  GNCBook * book = gnc_get_current_book();
+
+  DEBUG("process_trans_record(): Begin...\n");
+
+  while( record_ended == false)
+    {
+      read_retval = fgets(read_buf,sizeof(read_buf),log_file);
+      if(read_retval!=NULL && strncmp(record_end_str,read_buf,strlen(record_end_str))!=0)/* If we are not at the end of the record */
+	{
+	  split_num++;
+	  /*DEBUG("process_trans_record(): Line read: %s%s",read_buf ,"\n");*/
+	  record = interpret_split_record( read_buf);
+	  dump_split_record( record);
+	  if(record.log_action_present)
+	    {
+	      switch(record.log_action)
+		{
+		case LOG_BEGIN_EDIT: DEBUG("process_trans_record():Ignoring log action: LOG_BEGIN_EDIT"); /*Do nothing, there is no point*/
+		  break;
+		case LOG_ROLLBACK: DEBUG("process_trans_record():Ignoring log action: LOG_ROLLBACK");/*Do nothing, since we didn't do the begin_edit either*/
+		  break;
+		case LOG_DELETE: DEBUG("process_trans_record(): Playing back LOG_DELETE");
+		  if((trans=xaccTransLookup (&(record.trans_guid), book))!=NULL
+		     && first_record==true)
+		    {
+		      xaccTransBeginEdit(trans);
+		      xaccTransDestroy(trans);
+		    }
+		  else if(first_record==true)
+		    {
+		      PERR("The transaction to delete was not found!");
+		    }
+		  break;
+		case LOG_COMMIT: DEBUG("process_trans_record(): Playing back LOG_COMMIT");
+		  if(record.trans_guid_present == true 
+		     && (trans=xaccTransLookupDirect (record.trans_guid, book)) != NULL
+		     && first_record == true)
+		    {
+		      DEBUG("process_trans_record(): Transaction to be edited was found");/*Destroy the current transaction, we will create a new one to replace it*/
+		      xaccTransBeginEdit(trans);
+		      xaccTransDestroy(trans);
+		      xaccTransCommitEdit(trans);
+		    }
+
+		  if(record.trans_guid_present == true 
+		     && first_record==true)
+		    {
+		      DEBUG("process_trans_record(): Creating the new transaction");
+		      trans = xaccMallocTransaction (book);
+		      xaccTransBeginEdit(trans);
+		      /*Fill the transaction info*/
+		      if(record.date_entered_present)
+			{
+			  xaccTransSetDateEnteredTS(trans,&(record.date_entered));
+			}
+		      if(record.date_posted_present)
+			{
+			  xaccTransSetDatePostedTS(trans,&(record.date_posted));
+			}
+		      if(record.trans_num_present)
+			{
+			  xaccTransSetNum(trans,record.trans_num);
+			}
+		      if(record.trans_descr_present)
+			{
+			  xaccTransSetDescription(trans,record.trans_descr);
+			}
+		    }
+		  if(record.split_guid_present == true) /*Fill the split info*/
+		    {
+		      split=xaccMallocSplit(book);
+		      if(record.acc_guid_present)
+			{
+			  acct = xaccAccountLookupDirect(record.acc_guid,book);
+			  xaccAccountInsertSplit(acct,split);
+			}
+		      xaccTransAppendSplit(trans,split);
+
+		      if(record.split_memo_present)
+			{
+			  xaccSplitSetMemo(split,record.split_memo);
+			}
+		      if(record.split_action_present)
+			{
+			  xaccSplitSetAction(split,record.split_action);
+			}
+		      if(record.date_reconciled_present)
+			{
+			  xaccSplitSetDateReconciledTS (split, &(record.date_reconciled));
+			}
+		      if(record.split_reconcile_present)
+			{
+			  xaccSplitSetReconcile(split, record.split_reconcile);
+			}
+
+		      if(record.amount_present)
+			{
+			  xaccSplitSetAmount(split, record.amount);
+			}
+		      if(record.value_present)
+			{
+			  xaccSplitSetValue(split, record.value);
+			}
+		    }
+		  first_record=false;
+		  break;
+		}
+	    }
+	  else
+	    {
+	      PERR("Corrupted record");
+	    }
+	}
+      else /* The record ended */
+	{
+	  record_ended = true;
+	  DEBUG("process_trans_record(): Record ended\n");
+	  if(trans!=NULL)/*If we played with a transaction, commit it here*/
+	    {
+	      xaccTransCommitEdit(trans);
+	    }
+	}
+    }
+}
+
+void gnc_file_log_replay (void)
+{
+  const char *selected_filename;
+  char *default_dir;
+  char read_buf[256];
+  char *read_retval;
+  FILE *log_file;
+  char * expected_header = "mod	trans_guid	split_guid	time_now	date_entered	date_posted	acc_guid	acc_name	num	description	memo	action	reconciled	amount	value	date_reconciled";
+  char * record_start_str = "===== START";
+
+  gnc_should_log(MOD_IMPORT, GNC_LOG_DEBUG);
+  DEBUG("gnc_file_log_replay(): Begin...\n");
+
+  default_dir = gnc_lookup_string_option("__paths", "Log Files", NULL);
+  if (default_dir == NULL)
+    gnc_init_default_directory(&default_dir);
+  selected_filename = gnc_file_dialog(_("Select a .log file to replay"),
+				      NULL,
+				      default_dir);
+
+  if(selected_filename!=NULL)
+    {
+      /* Remember the directory as the default. */
+      gnc_extract_directory(&default_dir, selected_filename);
+      gnc_set_string_option("__paths", "Log Files", default_dir);
+      g_free(default_dir);
+
+      /*strncpy(file,selected_filename, 255);*/
+      DEBUG("Filename found: %s",selected_filename);
+
+      DEBUG("Opening selected file");
+      log_file = fopen(selected_filename, "r");
+      if(ferror(log_file)!=0)
+	{
+	  perror("File open failed");
+	}
+      else
+	{
+	  if((read_retval = fgets(read_buf,sizeof(read_buf),log_file)) == NULL)
+	    {
+	      DEBUG("Read error or EOF");
+	    }
+	  else
+	    {
+	      if(strncmp(expected_header,read_buf,strlen(expected_header))!=0)
+		{
+		  PERR("File header not recognised:\n%s",read_buf);
+		  PERR("Expected:\n%s",expected_header);
+		}
+	      else
+		{
+		  do
+		    {
+		      read_retval = fgets(read_buf,sizeof(read_buf),log_file);
+		      /*DEBUG("Chunk read: %s",read_retval);*/
+		      if(strncmp(record_start_str,read_buf,strlen(record_start_str))==0)/* If a record started */
+			{
+			  process_trans_record(log_file);
+			}
+		    }while(feof(log_file)==0);
+		}
+	    }
+	  fclose(log_file);
+	}
+    }
+  
+}
+
+
+/** @} */

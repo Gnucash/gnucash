@@ -73,7 +73,7 @@ gnc_imap_create_from_frame (kvp_frame *frame, Account *acc, GNCBook *book)
   return imap;
 }
 
-/* Obtain an ImportMatchMap object from an Account or a Book */
+/** Obtain an ImportMatchMap object from an Account or a Book */
 GncImportMatchMap * gnc_imap_create_from_account (Account *acc)
 {
   kvp_frame * frame;
@@ -96,14 +96,14 @@ GncImportMatchMap * gnc_imap_create_from_book (GNCBook *book)
   return gnc_imap_create_from_frame (frame, NULL, book);
 }
 
-/* Destroy an import map */
+/** Destroy an import map */
 void gnc_imap_destroy (GncImportMatchMap *imap)
 {
   if (!imap) return;
   g_free (imap);
 }
 
-/* Clear an import map -- this removes ALL entries in the map */
+/** Clear an import map -- this removes ALL entries in the map */
 void gnc_imap_clear (GncImportMatchMap *imap)
 {
   if (!imap) return;
@@ -117,7 +117,7 @@ void gnc_imap_clear (GncImportMatchMap *imap)
   /* XXX: mark the account (or book) as dirty! */
 }
 
-/* Look up an Account in the map */
+/** Look up an Account in the map */
 Account * gnc_imap_find_account (GncImportMatchMap *imap, const char *category,
 				 const char *key)
 {
@@ -137,7 +137,7 @@ Account * gnc_imap_find_account (GncImportMatchMap *imap, const char *category,
   return xaccAccountLookup (guid, imap->book);
 }
 
-/* Store an Account in the map */
+/** Store an Account in the map */
 void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
 			   const char *key, Account *acc)
 {
@@ -161,24 +161,28 @@ void gnc_imap_add_account (GncImportMatchMap *imap, const char *category,
 
 
 
-/* Below here is the bayes transaction to account matching system */
+/*--------------------------------------------------------------------------
+ Below here is the bayes transaction to account matching system 
+--------------------------------------------------------------------------*/
+
+
 struct account_token_count
 {
   char* account_name;
-  gint64 token_count; /* occurances of a given token for this account_name */
+  gint64 token_count; /**< occurances of a given token for this account_name */
 };
 
-/* total_count and the token_count for a given account let us calculate the
+/** total_count and the token_count for a given account let us calculate the
  * probability of a given account with any single token
  */
 struct token_accounts_info
 {
-  GList *accounts; /* array of struct account_token_count */
+  GList *accounts; /**< array of struct account_token_count */
   gint64 total_count;
 };
 
-/* gpointer is a pointer to a struct token_accounts_info
- * NOTE: can always assume that keys are unique, reduces code in this function
+/** gpointer is a pointer to a struct token_accounts_info
+ * \note Can always assume that keys are unique, reduces code in this function
  */
 static void buildTokenInfo(const char *key, kvp_value *value, gpointer data)
 {
@@ -203,9 +207,9 @@ static void buildTokenInfo(const char *key, kvp_value *value, gpointer data)
   tokenInfo->accounts = g_list_prepend(tokenInfo->accounts, this_account);
 }
 
-/* intermediate values used to calculate the bayes probability of a given account
- * where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
- * product_difference is (1-a) * (1-b)
+/** intermediate values used to calculate the bayes probability of a given account
+  where p(AB) = (a*b)/[a*b + (1-a)(1-b)], product is (a*b),
+  product_difference is (1-a) * (1-b)
  */
 struct account_probability
 {
@@ -213,9 +217,9 @@ struct account_probability
   double product_difference; /* product of (1-probabilities) */
 };
 
-/* convert a hash table of account names and (struct account_probability*)
- * into a hash table of 100000x the percentage match value, ie. 10% would be
- * 0.10 * 100000 = 10000
+/** convert a hash table of account names and (struct account_probability*)
+  into a hash table of 100000x the percentage match value, ie. 10% would be
+  0.10 * 100000 = 10000
  */
 #define PROBABILITY_FACTOR 100000
 static void buildProbabilities(gpointer key, gpointer value, gpointer data)
@@ -237,7 +241,7 @@ static void buildProbabilities(gpointer key, gpointer value, gpointer data)
     g_hash_table_insert(final_probabilities, key, (gpointer)probability);
 }
 
-/* Frees an array of the same time that buildProperties built */
+/** Frees an array of the same time that buildProperties built */
 static void freeProbabilities(gpointer key, gpointer value, gpointer data)
 {
  /* free up the struct account_probability that was allocated
@@ -246,8 +250,8 @@ static void freeProbabilities(gpointer key, gpointer value, gpointer data)
   g_free(value);
 }
 
-/* holds an account name and its corresponding integer probability
- * the integer probability is some factor of 10
+/** holds an account name and its corresponding integer probability
+  the integer probability is some factor of 10
  */
 struct account_info
 {
@@ -255,12 +259,12 @@ struct account_info
   gint32 probability;
 };
 
-/* Find the highest probability and the corresponding account name
- * store in data, a (struct account_info*)
- * NOTE: this is a g_hash_table_foreach() function for a hash table of entries
- * key is a  pointer to the account name, value is a gint32, 100000x
- * the probability for this account
- */
+/** Find the highest probability and the corresponding account name
+    store in data, a (struct account_info*)
+    NOTE: this is a g_hash_table_foreach() function for a hash table of entries
+    key is a  pointer to the account name, value is a gint32, 100000x
+    the probability for this account
+*/
 static void highestProbability(gpointer key, gpointer value, gpointer data)
 {
   struct account_info *account_i = (struct account_info*)data;
@@ -277,19 +281,19 @@ static void highestProbability(gpointer key, gpointer value, gpointer data)
 
 #define threshold (.90 * PROBABILITY_FACTOR) /* 90% */
 
-/* Look up an Account in the map */
+/** Look up an Account in the map */
 Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
 {
-  struct token_accounts_info tokenInfo; /* holds the accounts and total 
+  struct token_accounts_info tokenInfo; /**< holds the accounts and total 
 					 * token count for a single token */
-  GList *current_token;		        /* pointer to the current token from the
+  GList *current_token;		        /**< pointer to the current token from the
 				         * input GList *tokens */
-  GList *current_account_token;		/* pointer to the struct
+  GList *current_account_token;		/**< pointer to the struct
 					 * account_token_count */
-  struct account_token_count *account_c; /* an account name and the number
+  struct account_token_count *account_c; /**< an account name and the number
 					  * of times a token has appeared
 					  * for the account */
-  struct account_probability *account_p; /* intermediate storage of values
+  struct account_probability *account_p; /**< intermediate storage of values
 					  * to compute the bayes probability
 					  * of an account */
   GHashTable *running_probabilities = g_hash_table_new(g_str_hash, g_str_equal);
@@ -299,6 +303,8 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
   kvp_frame* token_frame;
 
   ENTER(" ");
+
+gnc_set_log_level(MOD_IMPORT, GNC_LOG_INFO);
 
   /* check to see if the imap is NULL */
   if(!imap)
@@ -450,7 +456,7 @@ Account* gnc_imap_find_account_bayes(GncImportMatchMap *imap, GList *tokens)
 }
 
 
-/* Updates the imap for a given account using a list of tokens */
+/** Updates the imap for a given account using a list of tokens */
 void gnc_imap_add_account_bayes(GncImportMatchMap *imap, GList *tokens, Account *acc)
 {
   GList *current_token;
