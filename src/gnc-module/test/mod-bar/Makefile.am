@@ -10,7 +10,7 @@ libbar_la_SOURCES = bar.c
 
 libgncmodbar_la_SOURCES=bar-gwrap.c gnc-mod-bar.c
 libgncmodbar_la_LDFLAGS=-module
-libgncmodbar_la_LIBADD=-lbar
+libgncmodbar_la_LIBADD=-L. -L./.libs -lbar
 
 bar-gwrap.c bar-gwrap.h: bar-gwrap.scm
 	FLAVOR=gnome guile -c \

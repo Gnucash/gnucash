@@ -1,6 +1,6 @@
 SUBDIRS=mod-foo mod-bar mod-baz misc-mods
 
-LDADD=../libgncmodule.la ${GLIB_LIBS} -lltdl
+LDADD= ../libgncmodule.la ${GLIB_LIBS} -lltdl
 CFLAGS=@CFLAGS@ ${GLIB_CFLAGS} -I../
 
 TESTS=test-load-c test-load-scm test-gwrapped-c test-scm-module \

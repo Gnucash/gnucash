@@ -10,7 +10,7 @@ libfoo_la_SOURCES = foo.c
 
 libgncmodfoo_la_SOURCES = foo-gwrap.c gnc-mod-foo.c
 libgncmodfoo_la_LDFLAGS = -module 
-libgncmodfoo_la_LIBADD = -lfoo
+libgncmodfoo_la_LIBADD = -L. -L.libs -lfoo
 
 foo-gwrap.c foo-gwrap.h: foo-gwrap.scm
 	FLAVOR=gnome guile -c \

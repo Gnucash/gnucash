@@ -26,6 +26,7 @@ bin_PROGRAMS = gnucash gnucash-make-guids
 # problem with the current version of gwrap, and will go away when
 # that's fixed.
 gnucash_LDADD = \
+  -Lengine -Lengine/.libs \
   gnc-module/libgncmodule.la \
   engine/libgncmod-engine.la \
   engine/libgw-engine.la \

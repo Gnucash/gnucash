@@ -8,7 +8,7 @@ libbaz_la_SOURCES=baz.c
 
 libgncmodbaz_la_SOURCES=baz-gwrap.c gnc-mod-baz.c
 libgncmodbaz_la_LDFLAGS=-module -L../mod-foo
-libgncmodbaz_la_LIBADD=-lbaz -lfoo
+libgncmodbaz_la_LIBADD=-L. -L./.libs -L../mod-foo -L../mod-foo/.libs -lbaz -lfoo
 
 baz-gwrap.c baz-gwrap.h: baz-gwrap.scm
 	FLAVOR=gnome guile -c \

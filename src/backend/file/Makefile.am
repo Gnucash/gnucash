@@ -15,4 +15,4 @@ sixtp-to-dom-parser.c sixtp-utils.c sixtp.c
 libgncmod_backend_file_la_LDFLAGS = -module
 libgncmod_backend_file_la_LIBADD = \
    ${GLIB_LIBS} ${GNOME_XML_LIB}  \
-   -L../../engine -lgncmod-engine
+   -L../../engine -L../../engine/.libs -lgncmod-engine

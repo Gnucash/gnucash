@@ -1,4 +1,5 @@
 CFLAGS=@CFLAGS@ ${GLIB_CFLAGS} -I../../
+LDADD=-L../.. -L../../.libs
 
 checklibdir=${PWD}
 checklib_LTLIBRARIES=libfuturemodsys.la libincompatdep.la libagedver.la
