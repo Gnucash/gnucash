@@ -89,7 +89,7 @@ guint gnc_regWidget_get_type( void );
 
 GtkWidget *gnc_regWidget_new( GNCLedgerDisplay *ld, GtkWindow *parent );
 
-GnucashSheet *gnc_regWidget_get_sheet( GNCRegWidget *rw );
+GnucashRegister *gnc_regWidget_get_register( GNCRegWidget *rw );
 
 GtkWidget *gnc_regWidget_get_style_menu( GNCRegWidget *rw );
 GtkWidget *gnc_regWidget_get_sort_menu( GNCRegWidget *rw );
