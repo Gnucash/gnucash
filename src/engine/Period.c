@@ -26,7 +26,7 @@
  * Implement accounting periods, using design described in 
  * src/doc/books.txt
  *
- * CAUTION: probably buggy.
+ * CAUTION: poorly tested.
  *
  * HISTORY:
  * Created by Linas Vepstas November 2001
@@ -621,11 +621,11 @@ add_closing_balances (AccountGroup *closed_grp,
       Account * candidate = (Account *) node->data;
       GNCAccountType tip = xaccAccountGetType (candidate);
 
-      /* find the peer account of this account in the open book  */
+      /* Find the peer account of this account in the open book  */
       twin = xaccAccountLookupTwin (candidate, open_book);
 
       /* -------------------------------- */
-      /* add KVP to open account, indicating the progenitor
+      /* Add KVP to open account, indicating the progenitor
        * of this account. */
       xaccAccountBeginEdit (twin);
       cwd = xaccAccountGetSlots (twin);
@@ -635,7 +635,7 @@ add_closing_balances (AccountGroup *closed_grp,
       xaccAccountSetSlots_nc (twin, twin->kvp_data);
       
       /* -------------------------------- */
-      /* add KVP to closed account, indicating where 
+      /* Add KVP to closed account, indicating where 
        * the next book is. */
       xaccAccountBeginEdit (candidate);
       cwd = xaccAccountGetSlots (candidate);
@@ -649,65 +649,69 @@ add_closing_balances (AccountGroup *closed_grp,
        * and income or expense or equity account */
       if ((INCOME != tip) && (EXPENSE != tip) && (EQUITY != tip)) 
       {
-         Split *se, *st;
-         Transaction *trans;
-         Account *equity;
          gnc_numeric baln;
-
          baln = xaccAccountGetBalance (candidate);
 
-         /* Find the equity account into which we'll poke the 
-          * balancing transaction */
-         if (NULL == equity_account)
+         /* Don't bother with creating the equity balance if its zero */
+         if (FALSE == gnc_numeric_zero_p(baln)) 
          {
-            equity = find_nearest_equity_acct (twin);
-            xaccAccountBeginEdit (equity);
+            Split *se, *st;
+            Transaction *trans;
+            Account *equity;
+   
+            /* Find the equity account into which we'll poke the 
+             * balancing transaction */
+            if (NULL == equity_account)
+            {
+               equity = find_nearest_equity_acct (twin);
+               xaccAccountBeginEdit (equity);
+            }
+            else
+            {
+               equity = equity_account;
+            }
+   
+            /* -------------------------------- */
+            /* Create the balancing transaction */
+            trans = xaccMallocTransaction (open_book);
+            xaccTransBeginEdit (trans);
+   
+            xaccTransSetDatePostedTS (trans, post_date);
+            xaccTransSetDateEnteredTS (trans, date_entered);
+            xaccTransSetDescription (trans, desc);
+            xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
+   
+            st = xaccMallocSplit(open_book);
+            xaccTransAppendSplit(trans, st);
+            xaccAccountInsertSplit (twin, st);
+            
+            se = xaccMallocSplit(open_book);
+            xaccTransAppendSplit(trans, se);
+            xaccAccountInsertSplit (equity, se);
+   
+            xaccSplitSetAmount (st, baln);
+            xaccSplitSetValue (st, baln);
+            xaccSplitSetAmount (se, gnc_numeric_neg(baln));
+            xaccSplitSetValue (se, gnc_numeric_neg(baln));
+   
+            /* Add KVP data showing where the balancing 
+             * transaction came from */
+            cwd = xaccTransGetSlots (trans);
+            kvp_frame_set_guid (cwd, "/book/closed-book", &closed_book->guid);
+            kvp_frame_set_guid (cwd, "/book/closed-acct", xaccAccountGetGUID(candidate));
+            
+            xaccTransCommitEdit (trans);
+   
+            if (NULL == equity_account)
+            {
+               xaccAccountCommitEdit (equity);
+            }
+            /* -------------------------------- */
+            /* Add KVP to closed account, indicating where the
+             * balance was carried forward to. */
+            cwd = xaccAccountGetSlots (candidate);
+            kvp_frame_set_guid (cwd, "/book/balancing-trans", xaccTransGetGUID(trans));
          }
-         else
-         {
-            equity = equity_account;
-         }
-
-         /* -------------------------------- */
-         /* Create the balancing transaction */
-         trans = xaccMallocTransaction (open_book);
-         xaccTransBeginEdit (trans);
-
-         xaccTransSetDatePostedTS (trans, post_date);
-         xaccTransSetDateEnteredTS (trans, date_entered);
-         xaccTransSetDescription (trans, desc);
-         xaccTransSetCurrency (trans, xaccAccountGetCommodity(equity));
-
-         st = xaccMallocSplit(open_book);
-         xaccTransAppendSplit(trans, st);
-         xaccAccountInsertSplit (twin, st);
-         
-         se = xaccMallocSplit(open_book);
-         xaccTransAppendSplit(trans, se);
-         xaccAccountInsertSplit (equity, se);
-
-         xaccSplitSetAmount (st, baln);
-         xaccSplitSetValue (st, baln);
-         xaccSplitSetAmount (se, gnc_numeric_neg(baln));
-         xaccSplitSetValue (se, gnc_numeric_neg(baln));
-
-         /* Add KVP data showing where the balancing 
-          * transaction came from */
-         cwd = xaccTransGetSlots (trans);
-         kvp_frame_set_guid (cwd, "/book/closed-book", &closed_book->guid);
-         kvp_frame_set_guid (cwd, "/book/closed-acct", xaccAccountGetGUID(candidate));
-         
-         xaccTransCommitEdit (trans);
-
-         if (NULL == equity_account)
-         {
-            xaccAccountCommitEdit (equity);
-         }
-         /* -------------------------------- */
-         /* Add KVP to closed account, indicating where the
-          * balance was carried forward to. */
-         cwd = xaccAccountGetSlots (candidate);
-         kvp_frame_set_guid (cwd, "/book/balancing-trans", xaccTransGetGUID(trans));
       }
 
       /* We left an open dangling above ... */
