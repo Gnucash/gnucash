@@ -69,7 +69,7 @@ in C programs.
 %build
 autoconf
 
-./configure --prefix=%{_prefix} --infodir=%{_infodir} \
+./configure --prefix=%{_prefix} --infodir=%{_infodir} --sysconfdir=%{_sysconfdir}\
             --libdir=%{_libdir} --datadir=%{_datadir} \
             --includedir=%{_includedir} %{sql_config}
 
@@ -81,7 +81,7 @@ cp -p src/backend/postgres/README README.postgres
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
 LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} make prefix=$RPM_BUILD_ROOT%{_prefix} \
-    libdir=$RPM_BUILD_ROOT%{_libdir} \
+    libdir=$RPM_BUILD_ROOT%{_libdir} sysconfdir=$RPM_BUILD_ROOT%{_sysconfdir} \
     datadir=$RPM_BUILD_ROOT%{_datadir} \
     includedir=$RPM_BUILD_ROOT%{_includedir} install
 
