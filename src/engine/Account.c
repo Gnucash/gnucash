@@ -562,8 +562,7 @@ xaccAccountLookupEntityTable (const GUID *guid,
                               GNCEntityTable *entity_table)
 {
   if (!guid) return NULL;
-  /* FIXME: uncomment when entity tables are in sessions */
-  /* g_return_val_if_fail (entity_table, NULL); */
+  g_return_val_if_fail (entity_table, NULL);
   return xaccLookupEntity (entity_table, guid, GNC_ID_ACCOUNT);
 }
 
@@ -661,6 +660,9 @@ xaccAccountInsertSplit (Account *acc, Split *split)
 {
   if (!acc) return;
   if (!split) return;
+
+  /* check for session mix-up */
+  g_return_if_fail (acc->entity_table == split->entity_table);
 
   xaccAccountBeginEdit(acc);
 

@@ -132,9 +132,7 @@ xaccMallocSplitEntityTable (GNCEntityTable *entity_table)
 {
   Split *split;
 
-  /* FIXME: uncomment this when done with moving entity
-   * tables into sessions. */
-  /*  g_return_val_if_fail (entity_table, NULL); */
+  g_return_val_if_fail (entity_table, NULL);
 
   split = g_new (Split, 1);
   xaccInitSplit (split, entity_table);
@@ -162,23 +160,24 @@ xaccCloneSplit (Split *s)
 {
   Split *split = g_new0 (Split, 1);
 
-  /* copy(!) the guid.  The cloned split is *not* unique,
+  /* copy(!) the guid and entity table. The cloned split is *not* unique,
    * is a sick twisted clone that holds 'undo' information. */
   split->guid = s->guid;
+  split->entity_table = s->entity_table;
 
   xaccSplitSetAccountGUID(split, s->acc_guid);
-  split->parent      = s->parent;
+  split->parent = s->parent;
 
-  split->memo        = g_cache_insert (gnc_engine_get_string_cache(), s->memo);
-  split->action      = g_cache_insert (gnc_engine_get_string_cache(), s->action);
+  split->memo = g_cache_insert (gnc_engine_get_string_cache(), s->memo);
+  split->action = g_cache_insert (gnc_engine_get_string_cache(), s->action);
 
-  split->kvp_data    = kvp_frame_copy (s->kvp_data);
+  split->kvp_data = kvp_frame_copy (s->kvp_data);
 
-  split->reconciled  = s->reconciled;
+  split->reconciled = s->reconciled;
   split->date_reconciled = s->date_reconciled;
 
-  split->value       = s->value;
-  split->amount      = s->amount;
+  split->value = s->value;
+  split->amount = s->amount;
 
   /* no need to futz with the balances;  these get wiped each time ... 
    * split->balance             = s->balance;
@@ -377,8 +376,7 @@ Split *
 xaccSplitLookupEntityTable (const GUID *guid, GNCEntityTable *entity_table)
 {
   if (!guid) return NULL;
-  /* FIXME: uncomment soon */
-  /* g_return_val_if_fail (entity_table, NULL); */
+  g_return_val_if_fail (entity_table, NULL);
   return xaccLookupEntity(entity_table, guid, GNC_ID_SPLIT);
 }
 
@@ -726,9 +724,11 @@ xaccCloneTransaction (Transaction *t)
   trans->do_free = FALSE;
   trans->orig = NULL;
 
-  /* copy(!) the guid.  The cloned transaction is *not* unique,
-   * is a sick twisted clone that holds 'undo' information. */
+  /* copy(!) the guid and entity table.  The cloned transaction is
+   * *not* unique, is a sick twisted clone that holds 'undo'
+   * information. */
   trans->guid = t->guid;
+  trans->entity_table = t->entity_table;
 
   return trans;
 }
@@ -904,8 +904,7 @@ Transaction *
 xaccTransLookupEntityTable (const GUID *guid,
                             GNCEntityTable *entity_table)
 {
-  /* FIXME: uncomment when entity tables are in sessions */
-  /* g_return_val_if_fail (entity_table, NULL); */
+  g_return_val_if_fail (entity_table, NULL);
   return xaccLookupEntity (entity_table, guid, GNC_ID_TRANS);
 }
 
@@ -1781,6 +1780,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    Transaction *oldtrans;
 
    if (!trans || !split) return;
+   g_return_if_fail (trans->entity_table == split->entity_table);
    check_open (trans);
 
    /* first, make sure that the split isn't already inserted 
@@ -1959,7 +1959,8 @@ get_corr_account_split(Split *sa, Split **retval)
   sa_value = xaccSplitGetValue(sa);
   sa_value_positive = gnc_numeric_positive_p(sa_value);
 
-  for(split_list = xaccTransGetSplitList(ta);split_list; split_list = split_list->next)
+  for (split_list = xaccTransGetSplitList(ta);
+       split_list; split_list = split_list->next)
   {
     current_split = split_list->data;
     if(current_split != sa)

@@ -60,8 +60,14 @@
 GNCSession * gnc_session_new (void);
 void         gnc_session_destroy (GNCSession *session);
 
-/* The gnc_session_begin () method begins a new session. It takes as an argument
- *    the book id.  The book id must be a string in the form of a URI/URL.
+/* The gnc_session_swap_data () method swaps the book and
+ *    entity tables of the two given sessions. It is useful
+ *    for 'Save As' type functionality. */
+void gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2);
+
+/* The gnc_session_begin () method begins a new session.
+ *    It takes as an argument the book id. The book id must be a string
+ *    in the form of a URI/URL.
  *    In the current implementation, the following URL's are supported
  *    -- File URI of the form 
  *       "file:/home/somewhere/somedir/file.xac"

@@ -674,7 +674,7 @@ xaccFreqSpecGetMonthly( FreqSpec *fs, int *outRepeat, int *outDayOfMonth, int *o
         return 0;
 }
 
-// FIXME: add month-relative getter
+/* FIXME: add month-relative getter */
 
 GList*
 xaccFreqSpecCompositeGet( FreqSpec *fs )

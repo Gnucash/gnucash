@@ -74,8 +74,7 @@ xaccMallocAccountGroupEntityTable (GNCEntityTable *entity_table)
 {
   AccountGroup *grp;
 
-  /* FIXME: uncomment when entity tables are finally in sessions. */
-  /* g_return_val_if_fail (entity_table, NULL); */
+  g_return_val_if_fail (entity_table, NULL);
 
   grp = g_new (AccountGroup, 1);
 
@@ -650,8 +649,7 @@ xaccAccountInsertSubAccount (Account *adult, Account *child)
 {
   if (!adult || !child) return;
 
-  /* FIXME: uncomment when entity tables are finished. */
-  /* g_return_if_fail (adult->entity_table); */
+  g_return_if_fail (adult->entity_table);
   g_return_if_fail (adult->entity_table == child->entity_table);
 
   /* if a container for the children doesn't yet exist, add it */
@@ -691,6 +689,8 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   if (!grp) return;
   if (!acc) return;
 
+  g_return_if_fail (grp->entity_table == acc->entity_table);
+
   /* If the account is currently in another group, remove it there
    * first. Basically, we can't have accounts being in two places at
    * once. If old and new parents are the same, reinsertion causes
@@ -726,6 +726,8 @@ xaccGroupConcatGroup (AccountGroup *togrp, AccountGroup *fromgrp)
 {
   if (!togrp) return;
   if (!fromgrp) return;
+
+  g_return_if_fail (togrp->entity_table == fromgrp->entity_table);
 
   /* The act of inserting the account into togrp also causes it to
    * automatically be deleted from fromgrp. Be careful! */

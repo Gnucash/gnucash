@@ -561,7 +561,6 @@ gnc_file_save_as (void)
 {
   GNCSession *new_session;
   GNCSession *session;
-  GNCBook *book;
   const char *filename;
   char *newfile;
   const char *oldfile;
@@ -591,11 +590,6 @@ gnc_file_save_as (void)
   }
 
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
-
-  /* FIXME: this might want to be a function of the GNCSession, since
-   * it needs to sync with changes to the internals/structure of
-   * GNCSession. */
-  book = gnc_session_get_book (session);
 
   new_session = gnc_session_new ();
   gnc_session_begin (new_session, newfile, FALSE, FALSE);
@@ -638,8 +632,9 @@ gnc_file_save_as (void)
 
   /* if we got to here, then we've successfully gotten a new session */
   /* close up the old file session (if any) */
-  gnc_session_set_book (session, NULL);
+  gnc_session_swap_data (session, new_session);
   gnc_session_destroy (session);
+  session = NULL;
 
   current_session = new_session;
 
@@ -666,9 +661,6 @@ gnc_file_save_as (void)
 
     /* Whoa-ok. Blow away the previous file. */
   }
-
-  /* OK, save the data to the file ... */
-  gnc_session_set_book (new_session, book);
 
   gnc_file_save ();
 

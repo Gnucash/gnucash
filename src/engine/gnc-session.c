@@ -119,8 +119,8 @@ gnc_session_init (GNCSession *session)
 {
   if (!session) return;
 
+  session->entity_table = xaccEntityTableNew ();
   session->book = gnc_book_new (session);
-  session->entity_table = NULL;
   session->book_id = NULL;
   session->fullpath = NULL;
   session->logpath = NULL;
@@ -573,11 +573,36 @@ gnc_session_destroy (GNCSession *session)
   gnc_book_destroy (session->book);
   session->book = NULL;
 
+  xaccEntityTableDestroy (session->entity_table);
+  session->entity_table = NULL;
+
   xaccLogEnable();
 
   g_free (session);
 
   LEAVE(" ");
+}
+
+void
+gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
+{
+  GNCBook *book_1, *book_2;
+  GNCEntityTable *entity_table_1, *entity_table_2;
+
+  if (session_1 == session_2) return;
+  if (!session_1 || !session_2) return;
+
+  book_1 = session_1->book;
+  entity_table_1 = session_1->entity_table;
+
+  book_2 = session_2->book;
+  entity_table_2 = session_2->entity_table;
+
+  session_1->book = book_2;
+  session_1->entity_table = entity_table_2;
+
+  session_2->book = book_1;
+  session_2->entity_table = entity_table_1;
 }
 
 gboolean
@@ -839,7 +864,7 @@ xaccResolveURL (const char * pathfrag)
    * resolved.  If there's an error connecting, we'll find out later.
    *
    * FIXME -- we should probably use  ghttp_uri_validate
-   * to make sure hte uri is in good form...
+   * to make sure the uri is in good form.
    */
 
   if (!g_strncasecmp (pathfrag, "http://", 7)      ||

@@ -32,7 +32,11 @@
 /* This file defines an engine-only API for using gnucash entity
  * identifiers. */
 
-typedef GHashTable GNCEntityTable;
+typedef struct gnc_entity_table GNCEntityTable;
+
+/* Create and destroy entity tables */
+GNCEntityTable * xaccEntityTableNew (void);
+void xaccEntityTableDestroy (GNCEntityTable *table);
 
 /* Generate a new id. This function is guaranteed to return an id that
  * is unique within the scope of all GnuCash entities being managed by
@@ -59,9 +63,6 @@ void xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid);
 
 GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
                                    GNCEntityTable *entity_table);
-
-GHashTable *xaccGetAndResetEntityTable (void);
-void xaccSetEntityTable (GHashTable *et);
 
 /* Initialize and shutdown the GNC Id system. */
 void xaccGUIDInit (void);
