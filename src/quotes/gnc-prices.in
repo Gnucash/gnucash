@@ -109,7 +109,9 @@ sub setprice
   $trans = gnucash::xaccMallocTransaction();
   gnucash::xaccTransBeginEdit ($trans, 1);
   gnucash::xaccTransSetDescription ($trans, "Price");
-  gnucash::xaccTransSetDateStr ($trans,$dayte);
+
+  # Temporary hack until we get rid of this file
+  gnucash::xaccTransSetDateToday ($trans);
 
   $split = gnucash::xaccTransGetSplit ($trans, 0);
   gnucash::xaccSplitSetSharePriceAndAmount ($split, $price, 0.0);

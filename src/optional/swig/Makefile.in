@@ -116,6 +116,10 @@ USE_NLS = @USE_NLS@
 VERSION = @VERSION@
 l = @l@
 
+docdir = ${GNC_DOC_INSTALL_DIR}
+doc_DATA =    gnucash.engine_wrap.doc
+
+
 perlsharedir = ${GNC_SHAREDIR}/perl
 perlshare_DATA = gnucash.pm
 
@@ -177,7 +181,7 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CF
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-DATA =  $(perlshare_DATA)
+DATA =  $(doc_DATA) $(perlshare_DATA)
 
 HEADERS =  $(noinst_HEADERS)
 
@@ -262,6 +266,25 @@ maintainer-clean-libtool:
 
 libgncswig.la: $(libgncswig_la_OBJECTS) $(libgncswig_la_DEPENDENCIES)
 	$(LINK) -rpath $(perllibdir) $(libgncswig_la_LDFLAGS) $(libgncswig_la_OBJECTS) $(libgncswig_la_LIBADD) $(LIBS)
+
+install-docDATA: $(doc_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(docdir)
+	@list='$(doc_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(docdir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(docdir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(docdir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(docdir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-docDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(doc_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(docdir)/$$p; \
+	done
 
 install-perlshareDATA: $(perlshare_DATA)
 	@$(NORMAL_INSTALL)
@@ -376,22 +399,23 @@ installcheck: installcheck-am
 install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-perllibLTLIBRARIES install-perlshareDATA \
-		install-data-local
+install-data-am: install-perllibLTLIBRARIES install-docDATA \
+		install-perlshareDATA install-data-local
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-perllibLTLIBRARIES uninstall-perlshareDATA \
-		uninstall-local
+uninstall-am: uninstall-perllibLTLIBRARIES uninstall-docDATA \
+		uninstall-perlshareDATA uninstall-local
 uninstall: uninstall-am
 all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(perllibdir) $(DESTDIR)$(perlsharedir)
+	$(mkinstalldirs)  $(DESTDIR)$(perllibdir) $(DESTDIR)$(docdir) \
+		$(DESTDIR)$(perlsharedir)
 
 
 mostlyclean-generic:
@@ -436,11 +460,12 @@ clean-perllibLTLIBRARIES maintainer-clean-perllibLTLIBRARIES \
 uninstall-perllibLTLIBRARIES install-perllibLTLIBRARIES \
 mostlyclean-compile distclean-compile clean-compile \
 maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool uninstall-perlshareDATA \
-install-perlshareDATA tags mostlyclean-tags distclean-tags clean-tags \
-maintainer-clean-tags distdir mostlyclean-depend distclean-depend \
-clean-depend maintainer-clean-depend info-am info dvi-am dvi check \
-check-am installcheck-am installcheck install-exec-am install-exec \
+clean-libtool maintainer-clean-libtool uninstall-docDATA \
+install-docDATA uninstall-perlshareDATA install-perlshareDATA tags \
+mostlyclean-tags distclean-tags clean-tags maintainer-clean-tags \
+distdir mostlyclean-depend distclean-depend clean-depend \
+maintainer-clean-depend info-am info dvi-am dvi check check-am \
+installcheck-am installcheck install-exec-am install-exec \
 install-data-local install-data-am install-data install-am install \
 uninstall-local uninstall-am uninstall all-redirect all-am all \
 installdirs mostlyclean-generic distclean-generic clean-generic \
@@ -462,7 +487,7 @@ install-data-local: libgncswig.la
 uninstall-local:
 	rm -f ${DESTDIR}${perllibdir}/gnucash.so
 
-gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
+gnucash.engine.i: ${SWIG_INPUT_HDRS} perl5_swig_annotations.i
 	@echo Making $@.
 	@echo "%module gnucash" > $@
 	@echo "%include perl5_swig_annotations.i" >> $@
@@ -477,7 +502,7 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
           echo "%include `basename $$file`" >> $@; \
 	done
 
-gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
+gnucash.engine_wrap.doc gnucash-engine-perl5_wrap_int.c: gnucash.engine.i
 	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
 
 gnucash-engine-perl5_wrap.c: gnucash-swig-defines.c \

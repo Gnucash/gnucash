@@ -112,7 +112,7 @@ const char * gnc_print_date(Timespec ts);
  *
  * Globals: global dateFormat value
  */
-void scanDate (const char *buff, int *day, int *monty, int *year);
+void scanDate (const char *buff, int *day, int *month, int *year);
 
 /**
  * dateSeparator
