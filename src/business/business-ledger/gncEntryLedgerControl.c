@@ -41,15 +41,6 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
   gnc_suspend_gui_refresh ();
   saved = gnc_entry_ledger_save (ledger, old_entry != new_entry);
 
-  /* XXX: This code seems to always force the cursor to stay in place.
-   * With this code commented out, the cursor will at least move if
-   * the next split already exists....
-  if (old_entry && old_entry != new_entry) {
-    new_entry = old_entry;
-    new_virt_loc = ledger->table->current_cursor_loc;
-  }
-  /*
-
   gnc_resume_gui_refresh();
 
   /* redrawing can muck everything up */
@@ -58,6 +49,9 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
 
     /* redraw */
     gnc_entry_ledger_redraw (ledger);
+
+    if (ledger->traverse_to_new)
+      new_entry = gncEntryLookup (ledger->book, &ledger->blank_entry_guid);
 
     /* if the entry we were going to is still in the register,
      * then it may have moved. Find out where it is now. */
@@ -108,6 +102,8 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
   char const *cell_name;
 
   if (!ledger) return FALSE;
+
+  ledger->traverse_to_new = FALSE;
 
   entry = gnc_entry_ledger_get_current_entry (ledger);
   if (!entry)
@@ -218,7 +214,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
     p_new_virt_loc->phys_row_offset = 0;
     p_new_virt_loc->phys_col_offset = 0;
 
-    //    info->traverse_to_new = TRUE;
+    ledger->traverse_to_new = TRUE;
 
     return FALSE;
 
