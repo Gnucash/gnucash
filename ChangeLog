@@ -45,6 +45,11 @@
 	  to readwrite if the unpost succeeds
 	* src/business/business-gnome/dialog-order.c: use new set_readonly() API
 	FIXES BUG #101452
+
+	* configure.in: add a blatent warning that the RPC code is broke!
+	* src/scm/command-line.scm: change the message to let people know that
+	  the rpc-server command-line option only works if gnucash was compiled
+	  with rpc enabled.
 	
 2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/druid-hbci-initial.c

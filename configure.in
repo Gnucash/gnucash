@@ -440,7 +440,16 @@ AC_SUBST(SQL_DIR)
 ### RPC
 AC_ARG_ENABLE( rpc,
   [  --enable-rpc                 compile with rpc support],
-       RPC_DIR=rpc)
+  [
+       AC_MSG_WARN([
+
+       The RPC Backend is depricated.  You should not use it.
+       It may go away in the future.  If you need it, please
+       contact gnucash-devel@gnucash.org and let the developers
+       know.
+       ])
+       RPC_DIR=rpc
+  ])
 
 AC_SUBST(RPC_DIR)
 
@@ -1155,3 +1164,13 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           ,
           dnl # commands go here, but we don't have any right now
           )
+
+if test x$RPC_DIR = xrpc ; then
+       AC_MSG_WARN([
+
+       The RPC Backend is depricated.  You should not use it.
+       It may go away in the future.  If you need it, please
+       contact gnucash-devel@gnucash.org and let the developers
+       know.
+       ])
+fi

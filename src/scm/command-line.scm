@@ -309,7 +309,7 @@ the current value of the path.")
 	 (lambda (val)
 	   (if val (gnc:run-rpc-server)))
 	 #f
-	 (N_ "Run the RPC Server"))))
+	 (N_ "Run the RPC Server if GnuCash was configured with --enable-rpc"))))
 
 (define (gnc:cmd-line-get-boolean-arg args)
   ;; --arg         means #t
