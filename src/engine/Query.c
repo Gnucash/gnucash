@@ -264,11 +264,13 @@ xaccQueryPrint(Query * q)
 /* initial_term has hand-over semantics! Thus, initial_term must point
  * to newly allocated memory or be NULL. */
 static void
-xaccInitQuery(Query * q, QueryTerm * initial_term) {
+xaccInitQuery(Query * q, QueryTerm * initial_term) 
+{
   GList * or  = NULL;
   GList * and = NULL;
 
-  if(initial_term) {
+  if(initial_term) 
+  {
     or   = g_list_alloc();
     and  = g_list_alloc();
     and->data = initial_term;
@@ -299,7 +301,8 @@ xaccInitQuery(Query * q, QueryTerm * initial_term) {
  ********************************************************************/
 
 Query * 
-xaccMallocQuery(void) {
+xaccMallocQuery(void) 
+{
   Query * qp     = g_new0(Query, 1);
   xaccInitQuery(qp, NULL);
   return qp;
@@ -313,7 +316,8 @@ xaccMallocQuery(void) {
  ********************************************************************/
 
 static void
-xaccQuerySwapTerms(Query * q1, Query * q2) {
+xaccQuerySwapTerms(Query * q1, Query * q2) 
+{
   GList * g;
 
   if (!q1 || !q2)
@@ -370,7 +374,8 @@ xaccQueryGetTerms (Query *q)
  * returns TRUE if the query has any terms of the given type
  ********************************************************************/
 gboolean
-xaccQueryHasTermType(Query * q, pd_type_t type) {
+xaccQueryHasTermType(Query * q, pd_type_t type) 
+{
   GList *or;
   GList *and;
 
@@ -429,7 +434,8 @@ free_query_term(QueryTerm *qt)
 }
 
 static QueryTerm *
-copy_query_term(QueryTerm * qt) {
+copy_query_term(QueryTerm * qt) 
+{
   QueryTerm * nqt;
   GList *node;
 
@@ -480,7 +486,8 @@ copy_query_term(QueryTerm * qt) {
 }
 
 static GList *
-copy_and_terms(GList *and_terms) {
+copy_and_terms(GList *and_terms) 
+{
   GList *and = NULL;
   GList *cur_and;
 
@@ -491,7 +498,8 @@ copy_and_terms(GList *and_terms) {
 }
 
 static GList * 
-copy_or_terms(GList * or_terms) {
+copy_or_terms(GList * or_terms) 
+{
   GList * or = NULL;
   GList * cur_or;
 
@@ -509,7 +517,8 @@ copy_or_terms(GList * or_terms) {
  ********************************************************************/
 
 static void
-xaccFreeQueryMembers(Query *q) {
+xaccFreeQueryMembers(Query *q) 
+{
   GList * cur_or;
 
   if (q == NULL)
@@ -535,7 +544,8 @@ xaccFreeQueryMembers(Query *q) {
 }
 
 void    
-xaccFreeQuery(Query * q) {
+xaccFreeQuery(Query * q) 
+{
   if (q == NULL)
     return;
 
@@ -545,7 +555,8 @@ xaccFreeQuery(Query * q) {
 }
 
 Query *
-xaccQueryCopy(Query *q) {
+xaccQueryCopy(Query *q) 
+{
   Query *copy;
 
   if (q == NULL)
@@ -579,7 +590,8 @@ xaccQueryCopy(Query *q) {
  ********************************************************************/
 
 Query *
-xaccQueryInvert(Query * q) {
+xaccQueryInvert(Query * q) 
+{
   Query  * retval;
   Query  * right, * left, * iright, * ileft;
   QueryTerm * qt;
@@ -650,14 +662,16 @@ xaccQueryInvert(Query * q) {
  ********************************************************************/
 
 Query * 
-xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
+xaccQueryMerge(Query * q1, Query * q2, QueryOp op) 
+{
   
   Query * retval = NULL;
   Query * i1, * i2;
   Query * t1, * t2;
   GList * i, * j;
 
-  if(!q1 || !q2 || !(q1->acct_group == q2->acct_group)) {
+  if(!q1 || !q2 || !(q1->acct_group == q2->acct_group)) 
+  {
     return NULL;
   }
 
@@ -730,7 +744,8 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
 /* this sort function just puts account queries at the top of the
  * list.  this lets us skip accounts that have no chance. */
 static gint
-query_sort_func(gconstpointer pa, gconstpointer pb) {
+query_sort_func(gconstpointer pa, gconstpointer pb) 
+{
   const QueryTerm * a = pa;
   const QueryTerm * b = pb;
   if(a->data.type == PD_ACCOUNT) {
@@ -751,7 +766,8 @@ query_sort_func(gconstpointer pa, gconstpointer pb) {
 }
 
 static int 
-acct_query_matches(QueryTerm * qt, Account * acct) {
+acct_query_matches(QueryTerm * qt, Account * acct) 
+{
   GList *node;
   gboolean account_in_set = FALSE;
 
@@ -787,7 +803,8 @@ acct_query_matches(QueryTerm * qt, Account * acct) {
 static Query * split_sort_query = NULL;
 
 static int
-date_cmp_func(Timespec *t1, Timespec *t2) {
+date_cmp_func(Timespec *t1, Timespec *t2) 
+{
   /* check seconds */
   if (t1->tv_sec < t2->tv_sec) {
     return -1;
@@ -967,7 +984,8 @@ split_cmp_func(sort_type_t how, gconstpointer ga, gconstpointer gb)
 }
 
 static int
-split_sort_func(gconstpointer a, gconstpointer b) {
+split_sort_func(gconstpointer a, gconstpointer b) 
+{
   int retval;
  
   g_return_val_if_fail (split_sort_query, 0);
@@ -998,7 +1016,8 @@ split_sort_func(gconstpointer a, gconstpointer b) {
  ********************************************************************/
 
 static int
-xaccQueryCheckSplit(Query * q, Split * s) {
+xaccQueryCheckSplit(Query * q, Split * s) 
+{
   GList     * and_ptr;
   GList     * or_ptr;
   QueryTerm * qt;
@@ -1592,7 +1611,8 @@ xaccQueryAddPredicate (Query * q,
 
 void
 xaccQueryAddAccountMatch(Query * q, GList * accounts, acct_match_t how,
-                         QueryOp op) {
+                         QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -1753,7 +1773,8 @@ xaccQueryAddDescriptionMatch(Query * q, const char * matchstring,
 void
 xaccQueryAddMemoMatch(Query * q, const char * matchstring,
                       int case_sens, int use_regexp,
-                      QueryOp op) {
+                      QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -1809,7 +1830,8 @@ xaccQueryAddDateMatchTS(Query * q,
                         Timespec sts,
                         int use_end,
                         Timespec ets,
-                        QueryOp op) {
+                        QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -1890,8 +1912,8 @@ xaccQueryAddDateMatchTT(Query * q,
  ********************************************************************/
 void
 xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
-                        int use_regexp, QueryOp op) {
-  
+                        int use_regexp, QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -1942,8 +1964,8 @@ xaccQueryAddNumberMatch(Query * q, const char * matchstring, int case_sens,
  ********************************************************************/
 void
 xaccQueryAddActionMatch(Query * q, const char * matchstring, int case_sens,
-                        int use_regexp, QueryOp op) {
-  
+                        int use_regexp, QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -1998,8 +2020,8 @@ void
 DxaccQueryAddAmountMatch(Query * q, double amt, 
                          amt_match_sgn_t amt_sgn, 
                          amt_match_t how,
-                         QueryOp op) {
-
+                         QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -2036,7 +2058,8 @@ DxaccQueryAddAmountMatch(Query * q, double amt,
 void
 DxaccQueryAddSharePriceMatch(Query * q, double amt, 
                             amt_match_t how,
-                            QueryOp op) {
+                            QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -2073,7 +2096,8 @@ DxaccQueryAddSharePriceMatch(Query * q, double amt,
 void
 DxaccQueryAddSharesMatch(Query * q, double amt, 
                         amt_match_t how,
-                        QueryOp op) {
+                        QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -2109,7 +2133,8 @@ DxaccQueryAddSharesMatch(Query * q, double amt,
 
 void
 xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
-                      QueryOp op) {
+                      QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -2143,7 +2168,8 @@ xaccQueryAddMiscMatch(Query * q, Predicate p, int how, int data,
 
 void
 xaccQueryAddClearedMatch(Query * q, cleared_match_t how,
-                         QueryOp op) {
+                         QueryOp op) 
+{
   Query     * qs  = xaccMallocQuery(); 
   QueryTerm * qt  = g_new0(QueryTerm, 1);
   Query     * qr;
@@ -2280,7 +2306,8 @@ xaccQueryAddKVPMatch(Query *q, GSList *path, const kvp_value *value,
  *******************************************************************/
 
 void
-xaccQueryPurgeTerms(Query * q, pd_type_t type) {
+xaccQueryPurgeTerms(Query * q, pd_type_t type) 
+{
   QueryTerm * qt;
   GList * or;
   GList * and;
@@ -2367,7 +2394,8 @@ string_match_predicate(const char * s, PredicateData * pd)
  *  value_match_predicate
  *******************************************************************/
 static int 
-value_match_predicate(double splitamt, PredicateData * pd) {
+value_match_predicate(double splitamt, PredicateData * pd) 
+{
   switch(pd->amount.how) {
   case AMT_MATCH_ATLEAST:
     return fabs(splitamt) >= pd->amount.amount;
@@ -2456,7 +2484,8 @@ xaccAccountMatchPredicate(Split * s, PredicateData * pd)
  *  xaccDescriptionMatchPredicate 
  *******************************************************************/
 static int
-xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) {
+xaccDescriptionMatchPredicate(Split * s, PredicateData * pd) 
+{
   Transaction * parent;
   const char  * descript;
   
@@ -2582,7 +2611,8 @@ xaccKVPMatchPredicate(Split * s, PredicateData * pd)
  *  xaccNumberMatchPredicate 
  *******************************************************************/
 static int
-xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
+xaccNumberMatchPredicate(Split * s, PredicateData * pd) 
+{
   Transaction * parent;
   const char  * number;
   
@@ -2601,7 +2631,8 @@ xaccNumberMatchPredicate(Split * s, PredicateData * pd) {
  *  xaccActionMatchPredicate 
  *******************************************************************/
 static int
-xaccActionMatchPredicate(Split * s, PredicateData * pd) {
+xaccActionMatchPredicate(Split * s, PredicateData * pd) 
+{
   const char  * action;
   
   g_return_val_if_fail(s && pd, FALSE);
@@ -2656,7 +2687,8 @@ xaccAmountMatchPredicate(Split * s, PredicateData * pd) {
  *  xaccSharePriceMatchPredicate 
  *******************************************************************/
 static int
-xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
+xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) 
+{
   double   splitamt;
   Account  * acct;
   int      type;
@@ -2677,7 +2709,8 @@ xaccSharePriceMatchPredicate(Split * s, PredicateData * pd) {
  *  xaccSharesMatchPredicate 
  *******************************************************************/
 static int
-xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
+xaccSharesMatchPredicate(Split * s, PredicateData * pd) 
+{
   double   splitamt;
   Account  * acct;
   int      type;
@@ -2698,7 +2731,8 @@ xaccSharesMatchPredicate(Split * s, PredicateData * pd) {
  *  xaccDateMatchPredicate 
  *******************************************************************/
 static int
-xaccDateMatchPredicate(Split * s, PredicateData * pd) {
+xaccDateMatchPredicate(Split * s, PredicateData * pd) 
+{
   Timespec transtime;
 
   g_return_val_if_fail(s && pd, FALSE);
@@ -2725,7 +2759,8 @@ xaccDateMatchPredicate(Split * s, PredicateData * pd) {
  *  xaccClearedMatchPredicate 
  *******************************************************************/
 static int
-xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
+xaccClearedMatchPredicate(Split * s, PredicateData * pd) 
+{
   int      cstate;
 
   g_return_val_if_fail(s && pd, FALSE);
@@ -2758,7 +2793,8 @@ xaccClearedMatchPredicate(Split * s, PredicateData * pd) {
  *  xaccBalanceMatchPredicate 
  *******************************************************************/
 static int
-xaccBalanceMatchPredicate(Split * s, PredicateData * pd) {
+xaccBalanceMatchPredicate(Split * s, PredicateData * pd) 
+{
   gboolean balanced;
 
   g_return_val_if_fail(s && pd, FALSE);
@@ -2786,7 +2822,8 @@ xaccBalanceMatchPredicate(Split * s, PredicateData * pd) {
  *******************************************************************/
 void
 xaccQuerySetSortOrder(Query * q, sort_type_t primary, 
-                      sort_type_t secondary, sort_type_t tertiary) {
+                      sort_type_t secondary, sort_type_t tertiary) 
+{
   if (!q) return;
   q->primary_sort   = primary;
   q->secondary_sort = secondary;
@@ -2874,13 +2911,15 @@ xaccQueryGetSortTertiaryIncreasing (Query *q)
  *  xaccQuerySetMaxSplits
  *******************************************************************/
 void
-xaccQuerySetMaxSplits(Query * q, int n) {
+xaccQuerySetMaxSplits(Query * q, int n) 
+{
   if (!q) return;
   q->max_splits = n;
 }
 
 int
-xaccQueryGetMaxSplits(Query * q) {
+xaccQueryGetMaxSplits(Query * q) 
+{
   if (!q) return 0;
   return q->max_splits;
 }
@@ -2900,7 +2939,8 @@ xaccQuerySetGroup(Query * q, AccountGroup * g) {
  *  xaccQueryGetGroup
  *******************************************************************/
 AccountGroup *
-xaccQueryGetGroup(Query * q) {
+xaccQueryGetGroup(Query * q) 
+{
   if (!q) return NULL;
   return (q->acct_group);
 }
@@ -2910,7 +2950,8 @@ xaccQueryGetGroup(Query * q) {
  *  xaccQueryGetEarliestDateFound
  *******************************************************************/
 time_t
-xaccQueryGetEarliestDateFound(Query * q) {
+xaccQueryGetEarliestDateFound(Query * q) 
+{
   GList * spl;
   Split * sp;
   time_t earliest = LONG_MAX;
@@ -2931,7 +2972,8 @@ xaccQueryGetEarliestDateFound(Query * q) {
  *  xaccQueryGetEarliestDateFound
  *******************************************************************/
 time_t
-xaccQueryGetLatestDateFound(Query * q) {
+xaccQueryGetLatestDateFound(Query * q) 
+{
   Split  * sp;
   GList  * spl;
   time_t latest = 0;
@@ -2947,3 +2989,5 @@ xaccQueryGetLatestDateFound(Query * q) {
   }
   return latest;
 }
+
+/* ======================== END OF FILE ======================= */
