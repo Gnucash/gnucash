@@ -99,6 +99,7 @@ gnucash-run-script: gnucash-run-script.in Makefile
 	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:' \
 	    -e 's:@-G_WRAP_MODULE_DIR-@:${G_WRAP_MODULE_DIR}:'
 	mv $@.tmp $@
+BUILT_SOURCES += gnucash-run-script
 CLEANFILES += gnucash-run-script
 
 gnucash-make-guids: gnucash-make-guids.in Makefile
@@ -107,4 +108,5 @@ gnucash-make-guids: gnucash-make-guids.in Makefile
 	    -e 's:@-GNUCASH_RUN_SCRIPT-@:${bindir}/gnucash-run-script:' \
 	    -e 's:@-THIS_SCRIPT-@:${bindir}/$@:'
 	mv $@.tmp $@
+BUILT_SOURCES += gnucash-make-guids
 CLEANFILES += gnucash-make-guids

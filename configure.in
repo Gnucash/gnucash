@@ -108,30 +108,33 @@ AC_ARG_ENABLE(opt-style-install,
 if test x${gnc_opt_style_install} = xtrue
 then
   GNC_CONFIGDIR='${sysconfdir}'
-  GNC_LIBDIR='${libdir}'
-  GNC_SHAREDIR='${datadir}'
-  GNC_SCM_INSTALL_DIR='${datadir}/scm'
   GNC_DOC_INSTALL_DIR='${datadir}/doc'
+  GNC_INCLUDE_DIR=${includedir}/gnucash
+  GNC_LIBDIR='${libdir}'
+  GNC_SCM_INSTALL_DIR='${datadir}/scm'
+  GNC_SHAREDIR='${datadir}'
 else
   GNC_CONFIGDIR='${sysconfdir}/gnucash'
-  GNC_LIBDIR='${pkglibdir}'
-  GNC_SHAREDIR='${pkgdatadir}'
-  GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
   GNC_DOC_INSTALL_DIR='${pkgdatadir}/doc'
+  GNC_INCLUDE_DIR=${includedir}
+  GNC_LIBDIR='${pkglibdir}'
+  GNC_SCM_INSTALL_DIR='${pkgdatadir}/scm'
+  GNC_SHAREDIR='${pkgdatadir}'
 fi
 
 GNC_ACCOUNTS_DIR=${GNC_SHAREDIR}/accounts
 GNC_GLADE_DIR=${GNC_SHAREDIR}/glade
 GNC_PIXMAP_DIR='${datadir}/pixmaps/gnucash'
 
-AC_SUBST(GNC_CONFIGDIR)
-AC_SUBST(GNC_LIBDIR)
-AC_SUBST(GNC_SHAREDIR)
-AC_SUBST(GNC_SCM_INSTALL_DIR)
-AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_ACCOUNTS_DIR)
+AC_SUBST(GNC_CONFIGDIR)
+AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_GLADE_DIR)
+AC_SUBST(GNC_INCLUDE_DIR)
+AC_SUBST(GNC_LIBDIR)
 AC_SUBST(GNC_PIXMAP_DIR)
+AC_SUBST(GNC_SCM_INSTALL_DIR)
+AC_SUBST(GNC_SHAREDIR)
 
 # We should always see these errors...
 CFLAGS="${CFLAGS} -Wall"

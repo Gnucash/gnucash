@@ -1,5 +1,9 @@
 2001-09-05  Dave Peticolas  <dave@krondo.com>
 
+	* src/Makefile.am: identify new scripts as built sources
+
+	* configure.in: configure a gnucash-specific header directory
+
 	* src/gnucash-run-script.in: new helper script for running gnucash
 	guile scripts with the right directories set up.
 
