@@ -30,7 +30,9 @@
 #include "FileDialog.h"
 #include "Group.h"
 #include "file-history.h"
+#include "gnc-commodity.h"
 #include "gnc-component-manager.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-ui.h"
@@ -221,6 +223,8 @@ gncFileNew (void)
 
   gnc_book_destroy (book);
   current_book = NULL;
+
+  gnc_commodity_table_remove_non_iso (gnc_engine_commodities ());
 
   /* start a new book */
   gncGetCurrentBook ();

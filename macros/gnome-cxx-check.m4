@@ -1,5 +1,5 @@
 dnl GNOME_CHECK_CXX(not_found_string)
-AC_DEFUN(GNOME_CHECK_CXX,
+AC_DEFUN([GNOME_CHECK_CXX],
 [
   # see if a C++ compiler exists and works
   AC_REQUIRE([AC_PROG_CXX])dnl

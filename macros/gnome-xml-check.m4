@@ -14,6 +14,8 @@ AC_DEFUN([GNOME_XML_HOOK],[
 			AC_MSG_ERROR(Could not find gnome-config)
 		fi
 	fi
+	GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
+	AC_SUBST(GNOME_XML_CFLAGS)
 	AC_CHECK_LIB(xml, xmlNewDoc, [
 		$1
 		GNOME_XML_LIB=`$GNOME_CONFIG --libs xml`

@@ -41,8 +41,8 @@ AC_ARG_ENABLE(bonobotest, [  --disable-bonobotest       Do not try to compile an
   if test "$GNOME_CONFIG" = "no" ; then
     no_bonobo=yes
   else
-    BONOBO_CFLAGS=`$GNOME_CONFIG $bonoboconf_args --cflags bonobo`
-    BONOBO_LIBS=`$GNOME_CONFIG $bonoboconf_args --libs bonobo`
+    BONOBO_CFLAGS=`$GNOME_CONFIG $bonoboconf_args --cflags bonobo bonobox`
+    BONOBO_LIBS=`$GNOME_CONFIG $bonoboconf_args --libs bonobo bonobox`
 
     bonobo_major_version=`$GNOME_CONFIG $bonobo_args --version | \
            sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`

@@ -6,7 +6,7 @@ dnl that we need to #include some other header files on some
 dnl systems to get some types.
 
 dnl AC_LIBGTOP_CHECK_TYPE(TYPE, DEFAULT)
-AC_DEFUN(AC_LIBGTOP_CHECK_TYPE,
+AC_DEFUN([AC_LIBGTOP_CHECK_TYPE],
 [AC_REQUIRE([AC_HEADER_STDC])dnl
 AC_MSG_CHECKING(for $1)
 AC_CACHE_VAL(ac_cv_type_$1,

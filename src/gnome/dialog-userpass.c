@@ -27,6 +27,7 @@
 
 #include "glade-gnc-dialogs.h"
 #include "glade-support.h"
+#include "gnc-ui.h"
 
 
 gboolean

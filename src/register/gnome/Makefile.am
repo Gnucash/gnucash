@@ -32,7 +32,7 @@ noinst_HEADERS = \
 EXTRA_DIST = \
   .cvsignore
 
-CFLAGS = @CFLAGS@ @GTK_XIM_FLAGS@
+CFLAGS = @CFLAGS@ ${GTK_XIM_FLAGS} ${GNOME_INCLUDEDIR} ${GLIB_CFLAGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \

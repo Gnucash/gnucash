@@ -27,6 +27,10 @@ INCLUDES = -I.. -I/usr/lib/glib/include
 
 LDFLAGS= -lpq
 
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+
+LDADD = ${GLIB_LIBS}
+
 # Some of the required C files are built with the m4 pre-processor
 # As a result, we need to manually specify dependencies, clean targets.
 

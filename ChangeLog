@@ -1,3 +1,26 @@
+2001-03-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/FileDialog.c (gncFileNew): clear the non-iso commodities
+
+	* src/engine/gnc-commodity.c (gnc_commodity_table_remove_non_iso):
+	new func
+
+	* src/test/test-xml-commodity.c: remove duplicate string_to_integer
+
+	* src/gnome/dialog-userpass.c: add missing #include
+
+	* src/register/gnome/Makefile.am: add gnome & glib flags
+
+	* src/engine/Makefile.am: add glib libs
+
+	* src/engine/sql/Makefile.am: add glib flags
+
+	* configure.in: fix includes used to check for sizes
+
+	* acinclude.m4: fix guppi macro
+
+	* macros/: update m4 files
+
 2001-03-13  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/io-gncxml-v2.c (gnc_counter_end_handler): complete

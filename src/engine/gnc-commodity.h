@@ -92,6 +92,7 @@ void      gnc_commodity_table_add_namespace(gnc_commodity_table * table,
                                             const char * namespace);
 void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
                                                const char * namespace);
+
+void      gnc_commodity_table_remove_non_iso (gnc_commodity_table *t);
+
 #endif
-
-

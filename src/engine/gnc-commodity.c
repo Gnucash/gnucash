@@ -540,7 +540,7 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                     &orig_key,
                                     (gpointer)&value)) {
       g_hash_table_remove(table->table, namespace);
-      
+
       g_hash_table_foreach_remove(value->table, ns_helper, NULL);
       g_hash_table_destroy(value->table);
       g_free(value);
@@ -550,6 +550,28 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   }
 }
 
+void
+gnc_commodity_table_remove_non_iso (gnc_commodity_table *t)
+{
+  GList *namespaces;
+  GList *node;
+
+  if (!t) return;
+
+  namespaces = gnc_commodity_table_get_namespaces (t);
+
+  for (node = namespaces; node; node = node->next)
+  {
+    char *ns = node->data;
+
+    if (safe_strcmp (ns, GNC_COMMODITY_NS_ISO) == 0)
+      continue;
+
+    gnc_commodity_table_delete_namespace (t, ns);
+  }
+
+  g_list_free (namespaces);
+}
 
 /********************************************************************
  * gnc_commodity_table_destroy
@@ -575,4 +597,3 @@ gnc_commodity_table_destroy(gnc_commodity_table * t) {
   g_hash_table_destroy(t->table);
   g_free(t);
 }
- 

@@ -124,8 +124,8 @@ AC_ARG_ENABLE(libguppitest, [  --disable-libguppitest       Do not try to compil
   if test "$GNOME_CONFIG" = "no" ; then
     no_libguppi=yes
   else
-    LIBGUPPI_CFLAGS=`$GNOME_CONFIG $libguppiconf_args --cflags libguppi`
-    LIBGUPPI_LIBS=`$GNOME_CONFIG $libguppiconf_args --libs libguppi`
+    LIBGUPPI_CFLAGS=`$GNOME_CONFIG $libguppiconf_args --cflags gtk libguppi`
+    LIBGUPPI_LIBS=`$GNOME_CONFIG $libguppiconf_args --libs gtk libguppi`
 
     libguppi_major_version=`$GNOME_CONFIG --modversion libguppi | \
            sed 's/libguppi-\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
