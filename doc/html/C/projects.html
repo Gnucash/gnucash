@@ -447,6 +447,13 @@
       </tr>
 
       <tr>
+        <td><a href="#formats">Formats</a></td>
+
+        <td>Medium</td>
+        <td>?</td>
+      </tr>
+
+      <tr>
         <td><a href="#userpref">User Preferences/Session Mgmt.</a></td>
 
         <td>Medium</td>
@@ -772,6 +779,8 @@
             to be re-run.  Allow user to edit this report properties
             at a later date.
         </ul>
+        Note that the customization info should be stored in a 
+        <a href="#formats">Format File (see below)</a>.
         </p>
 
         <p>Generated reports should be exportable to other gnome
@@ -947,14 +956,20 @@
             <p><b>Button Bar</b> A user-configurable button-bar
             would be nice too. The button bar is the set of
             'buttons' (open, edit...) at the top of a register
-            window and the main window.</p>
+            window and the main window.
+            See the section <a href="#formats">Formats</a> for
+            a discussion of the customization issues.
+            </p>
           </li>
 
           <li>
             <p><b>Household Assets</b> Add an example showing how
             regular household assets (house, car, jewelry, etc.)
             should be treated. In particular, show how appreciation
-            and depreciation should be treated.</p>
+            and depreciation should be treated.
+            See the section <a href="#formats">Formats</a> for
+            a discussion of the customization issues.
+            </p>
           </li>
 
           <li>
@@ -994,7 +1009,10 @@
             main window currently shows total asset, and total
             income-expense (profits). Make this configurable, so
             that user can show arbitrary sums of arbitrary
-            accounts.</p>
+            accounts.
+            See the section <a href="#formats">Formats</a> for
+            a discussion of the customization issues.
+            </p>
           </li>
 
           <li>
@@ -1269,6 +1287,50 @@
             e.g. using foreign currency on a business trip?  
           </li>
         </ul>
+        <p></p>
+
+
+      <dt><a name="formats"><b>Formats</b></a></dt>
+
+      <dd>
+        An "application format" is the defining look-n-feel of an application.
+        The idea is similar to, but not the same as 'skins'/'themes'.  Its similar
+        to, but not the same as alllowing a user to set 'preferences'.  Its similar 
+        to, but not the same as, allowing a user to generate customized financial 
+        reports.  In the context of GnuCash, a 'format' should be a single file
+        (that can be traded by users, uploaded and shared) that controls important
+        aspects of how the application is configured.
+        <p>
+        In particular, the GnuCash Format should include the following:
+        <ul>
+        <li>A list of sample/initial accounts.  These might be tailored for a 
+            home user (groceries, gas, electric), an apartment dweller 
+            (rent, laundry), or different kinds of business users.
+            Because these sample accounts appear in the Format file, 
+            it becomes easy to create & distribute customized formats.
+        <li>A list of pre-defined reports and graphs.  The kind that you'd find
+            for a home user might be different than for a person manageing a stock
+            portfolio, which is in turn different from what a business might need.
+            The Format File should include install-specific customizations, such 
+            as the report headers, footers, etc.
+        <li>Hint of the day.  The types of 'hint of the day' would be different 
+            for new users, than it would be for advanced users.  Thus, different
+            formats would have different catalogues of 'hint of the day'.
+        <li>Menu Contents & Navigation.  New users might be presented with a simple set
+            of menu contents.  'Power Users' might be presented with deep, nested
+            sets of menus, with oodles of features.
+        <li>Register Layout.  The layout of the register might be customized for
+            different countries: e.g. in Germany, a different type of electronic
+            banking seems to require the display of account numbers in separate
+            columns in the register.
+        </ul>
+        A good format infrastructure will not only allow gnucash to be configured
+        for different application domains, but also will allow users to fine-tune
+        thier own prefered format.  The idea for formats is was inspired by 
+        Adam Curry's commentary on
+        <a href="http://adamcurry.editthispage.com/stories/storyReader$161">
+        radio formats and Napster</a>.
+        </p>
 
 
       <dt><a name="userpref"><b>User Preferences, Session Management</b></a></dt>
@@ -1686,11 +1748,19 @@
 
         <p>
         <b>Status:</b> 
-           Need to rethink whether the one-shot exchanges
-           should in fact be recorded full-fledged in the engine.
-           Also: Euro support is currently hacked in: the EURO is treated as
-           a 'special' currency. Virtually all the Euro code can be fully
-           generalized (and should be).
+           <ul>
+           <li>Need to rethink whether the one-shot exchanges
+               should in fact be recorded full-fledged in the engine.
+               Also: Euro support is currently hacked in: the EURO is treated as
+               a 'special' currency. Virtually all the Euro code can be fully
+               generalized (and should be).
+           <li>New split architecture should store quantity and value, and 
+               never the price.  This will simplify currency movements 
+               between accounts, without requiring/forcing the use of a 
+               currency trading account.  (this also solves problems with 
+               rounding that occur when a price is explicitly specified.)
+               Grib & dave are working this for next release.
+           </ul>
         </p>
      
       </dd>
@@ -1724,7 +1794,7 @@
         'a double entry account which can only be credited, or
         debited, but not both'. We need to implement this.</p>
 
-        <p><b>Current status:</b></p>
+        <p><b>Current status:</b>
 
         <ul>
           <li>April 1998 -- The engine has a couple of flags in it
@@ -1740,6 +1810,7 @@
           always. It will not be possible to disable this and move
           to single-entry.</li>
         </ul>
+        </p>
       </dd>
 
       <dt><a name="401K"><b>401(k), Retirement Savings Plans</b></a></dt>
@@ -1749,7 +1820,9 @@
         Retirement Savings Plans often do not put a high
         priority on tracking costs, as the tax implication is that
         amounts are taxable upon withdrawal, meaning that there is
-        little necessity to track capital gains. (huh??)</p>
+        little necessity to track capital gains. (huh??)
+        <p>
+        </p>
       </dd>
 
       <dt><a name="note"><b>Annotate with News Stories</b></a></dt>
@@ -1770,6 +1843,7 @@
         help. <a href="http://www.senga.org/mifluz/html/">Mifluz</a>
         might be more embeddable ... I am told that htdig-API is in
         good solid condition for this, but undocumented.
+        <p></p>
       </dd>
 
       <dt><a name="reconcile"><b>Reconcile Auditing</b></a></dt>
@@ -1780,6 +1854,7 @@
         (and date) can be later called up as a part of an audit
         procedure.  The act of reconciliation is treated as a
         historical event that needs to be logged.
+        <p></p>
       </dd>
 
       <dt><a name="loan"><b>Loan and Mortgage Calculators</b></a></dt>
