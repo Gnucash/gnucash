@@ -287,7 +287,7 @@ extract_base_name(URLType type, const gchar * path)
   char       * machine=NULL, * location = NULL, * base=NULL;
   char       * basename=NULL;
 
-  DEBUG("");
+  DEBUG(" ");
   if(!path) return NULL;
   
   regcomp(&compiled_m, machine_rexp, REG_EXTENDED);
@@ -389,7 +389,7 @@ gnc_build_url (URLType type, const gchar * location, const gchar * label)
 {
   char * type_name;
 
-  DEBUG("");
+  DEBUG(" ");
   type_name = g_hash_table_lookup (gnc_html_type_to_proto_hash, type);
   if (!type_name)
     type_name = "";
@@ -699,7 +699,7 @@ gnc_html_object_requested_cb(GtkHTML * html, GtkHTMLEmbedded * eb,
   gnc_html  * gnchtml = data; 
   GncHTMLObjectCB h;
 
-  DEBUG("");
+  DEBUG(" ");
   if(!eb || !(eb->classid) || !gnc_html_object_handlers) return FALSE;
   
   h = g_hash_table_lookup(gnc_html_object_handlers, eb->classid);
@@ -786,7 +786,7 @@ gnc_html_unpack_form_data(const char * encoding)
 {
   GHashTable * rv;
 
-  DEBUG("");
+  DEBUG(" ");
   rv = g_hash_table_new(g_str_hash, g_str_equal);
   gnc_html_merge_form_data(rv, encoding);
   return rv;
@@ -801,7 +801,7 @@ gnc_html_merge_form_data(GHashTable * rv, const char * encoding)
   char * extr_name  = NULL;
   char * extr_value = NULL;
   
-  DEBUG("");
+  DEBUG(" ");
   if(!encoding) {
     return;
   }
@@ -835,7 +835,7 @@ gnc_html_merge_form_data(GHashTable * rv, const char * encoding)
 static gboolean
 free_form_data_helper(gpointer k, gpointer v, gpointer user)
 {
-  DEBUG("");
+  DEBUG(" ");
   g_free(k);
   g_free(v);
   return TRUE;
@@ -844,7 +844,7 @@ free_form_data_helper(gpointer k, gpointer v, gpointer user)
 void 
 gnc_html_free_form_data(GHashTable * d)
 {
-  DEBUG("");
+  DEBUG(" ");
   g_hash_table_foreach_remove(d, free_form_data_helper, NULL);
   g_hash_table_destroy(d);
 }
@@ -858,7 +858,7 @@ pack_form_data_helper(gpointer key, gpointer val,
   char * enc_val = gnc_html_encode_string((char *)val);
   char * new_str = NULL;
 
-  DEBUG("");
+  DEBUG(" ");
   if(old_str) {
     new_str = g_strconcat(old_str, "&", enc_key, "=", enc_val, NULL);
   }
@@ -873,7 +873,7 @@ char *
 gnc_html_pack_form_data(GHashTable * form_data)
 {
   char * encoded = NULL;
-  DEBUG("");
+  DEBUG(" ");
   g_hash_table_foreach(form_data, pack_form_data_helper, &encoded);
   return encoded;
 }
@@ -898,7 +898,7 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
   URLType  type;
   GncHTMLActionCB cb;
 
-  DEBUG("");
+  DEBUG(" ");
   form_data = gnc_html_unpack_form_data(encoded_form_data);
   type = gnc_html_parse_url(gnchtml, action, &location, &label);
   
@@ -995,7 +995,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
   GtkHTMLStream * handle;
   gboolean new_window;
 
-  DEBUG("");
+  DEBUG(" ");
   if (!html) return;
   if (!location) return;
 
@@ -1153,7 +1153,7 @@ gnc_html_reload(gnc_html * html)
 {
   gnc_html_history_node * n;
 
-  DEBUG("");
+  DEBUG(" ");
   n = gnc_html_history_get_current(html->history);
   if(n) {
     gnc_html_show_url(html, n->type, n->location, n->label, 0);

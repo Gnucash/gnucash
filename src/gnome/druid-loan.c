@@ -1825,12 +1825,14 @@ ld_rev_fin( GnomeDruidPage *gdp, gpointer arg1, gpointer ud )
 
 }
 
+#if 0
 static
 void
 ld_gnc_ttinfo_free( gpointer data, gpointer ud )
 {
         gnc_ttinfo_free( (TTInfo*)data );
 }
+#endif
 
 static
 int

@@ -549,7 +549,6 @@ refresh_handler (GHashTable *changes, gpointer user_data)
   const EventInfo *info;
   gboolean has_leader;
   GList *splits;
-  Split *current_split;
 
   if (ld->loading)
     return;
