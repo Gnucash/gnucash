@@ -16,6 +16,7 @@
 
 Timespec* get_random_timespec(void);
 void random_timespec_zero_nsec (gboolean zero_nsec);
+void random_timespec_usec_resolution (gboolean usec_resolution);
 
 kvp_value* get_random_kvp_value(int type);
 

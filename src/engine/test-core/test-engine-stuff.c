@@ -98,17 +98,38 @@ random_timespec_zero_nsec (gboolean zero_nsec_in)
   zero_nsec = zero_nsec_in;
 }
 
+static gboolean usec_resolution = FALSE;
+
+void
+random_timespec_usec_resolution (gboolean usec_resolution_in)
+{
+  usec_resolution = usec_resolution_in;
+}
+
 Timespec*
 get_random_timespec(void)
 {
-    Timespec *ret;
+  Timespec *ret;
 
-    ret = g_new(Timespec, 1);
+  ret = g_new(Timespec, 1);
 
-    ret->tv_sec = rand();
-    ret->tv_nsec = zero_nsec ? 0 : rand();
+  ret->tv_sec = rand();
 
-    return ret;
+  if (zero_nsec)
+    ret->tv_nsec = 0;
+  else
+  {
+    ret->tv_nsec = rand();
+
+    if (usec_resolution)
+    {
+      ret->tv_nsec = MIN (ret->tv_nsec, 999999999);
+      ret->tv_nsec /= 1000;
+      ret->tv_nsec *= 1000;
+    }
+  }
+
+  return ret;
 }
 
 gnc_numeric
