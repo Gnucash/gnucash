@@ -8,11 +8,16 @@
 #ifndef GNC_DIALOG_CUSTOMER_H_
 #define GNC_DIALOG_CUSTOMER_H_
 
-/* Functions to create and edit customers */
-GncCustomer * gnc_customer_new (GtkWidget *parent, GNCBook *book);
-void gnc_customer_edit (GtkWidget *parent, GncCustomer *cust);
+typedef struct _customer_window CustomerWindow;
 
-void gnc_customer_find (GtkWidget *parent, GncCustomer *start, GNCBook *book);
+#include "gncCustomer.h"
+
+CustomerWindow * gnc_ui_customer_window_create (GncCustomer *cust);
+void gnc_customer_find (GncCustomer *start, GNCBook *book);
+
+/* Functions to create and return a customer */
+GncCustomer * gnc_customer_new (GtkWidget *parent, GNCBook *book);
+
 GncCustomer *gnc_customer_choose (GtkWidget *parent, GncCustomer *start,
 				  GNCBook *book);
 

@@ -44,7 +44,7 @@ struct _vendor_select_window {
   gboolean	no_close;
 };
 
-typedef struct _vendor_window {
+struct _vendor_window {
   GtkWidget *	dialog;
 
   GtkWidget *	id_entry;
@@ -58,8 +58,7 @@ typedef struct _vendor_window {
   GtkWidget *	phone_entry;
   GtkWidget *	fax_entry;
   GtkWidget *	email_entry;
-
-  GtkWidget *	terms_amount;
+  GtkWidget *	terms_entry;
 
   GtkWidget *	active_check;
   GtkWidget *	taxincluded_check;
@@ -71,7 +70,7 @@ typedef struct _vendor_window {
   GNCBook *	book;
   GncVendor *	created_vendor;
 
-} VendorWindow;
+};
 
 static GncVendor *
 vw_get_vendor (VendorWindow *vw)
@@ -85,7 +84,6 @@ vw_get_vendor (VendorWindow *vw)
 static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 {
   GncAddress *addr;
-  gnc_numeric num;
 
   addr = gncVendorGetAddr (vendor);
 
@@ -119,35 +117,11 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 			     (GTK_TOGGLE_BUTTON (vw->taxincluded_check)));
   gncVendorSetNotes (vendor, gtk_editable_get_chars
 		       (GTK_EDITABLE (vw->notes_text), 0, -1));
-
-  /* Parse and set the terms, discount, and credit amounts */
-  num = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (vw->terms_amount));
-  gncVendorSetTerms (vendor, gnc_numeric_num (num));
+  gncVendorSetTerms (vendor, gtk_editable_get_chars
+		       (GTK_EDITABLE (vw->terms_entry), 0, -1));
 
   gncVendorCommitEdit (vendor);
   gnc_resume_gui_refresh ();
-}
-
-static gboolean check_edit_amount (GtkWidget *dialog, GtkWidget *amount,
-				   gnc_numeric *min, gnc_numeric *max,
-				   const char * error_message)
-{
-  if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (amount))) {
-    if (error_message)
-      gnc_error_dialog_parented (GTK_WINDOW (dialog), error_message);
-    return TRUE;
-  }
-  /* We've got a valid-looking number; check mix/max */
-  if (min || max) {
-    gnc_numeric val = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (amount));
-    if ((min && gnc_numeric_compare (*min, val) > 0) ||
-	(max && gnc_numeric_compare (val, *max) > 0)) {
-      if (error_message)
-	gnc_error_dialog_parented (GTK_WINDOW (dialog), error_message);
-      return TRUE;
-    }
-  }
-  return FALSE;
 }
 
 static gboolean check_entry_nonempty (GtkWidget *dialog, GtkWidget *entry, 
@@ -166,7 +140,6 @@ static void
 gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   VendorWindow *vw = data;
-  gnc_numeric min;
 
   /* Check for valid id */
   if (check_entry_nonempty (vw->dialog, vw->id_entry,
@@ -188,12 +161,12 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
     return;
   }
 
-  /* Verify terms are valid (or empty) */
-  min = gnc_numeric_zero ();
-  if (check_edit_amount (vw->dialog, vw->terms_amount, &min, NULL,
-			 _("Terms must be a positive integer or "
-			   "you must leave it blank.")))
-    return;
+  //  /* Verify terms are valid (or empty) */
+  //  min = gnc_numeric_zero ();
+  //  if (check_edit_amount (vw->dialog, vw->terms_amount, &min, NULL,
+  //			 _("Terms must be a positive integer or "
+  //			   "you must leave it blank.")))
+  //    return;
 
   /* Now save it off */
   {
@@ -324,9 +297,7 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 {
   VendorWindow *vw;
   GladeXML *xml;
-  GtkWidget *hbox, *edit;
   GnomeDialog *vwd;
-  GNCPrintAmountInfo print_info;
 
   vw = g_new0 (VendorWindow, 1);
 
@@ -363,18 +334,7 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
   vw->active_check = glade_xml_get_widget (xml, "active_check");
   vw->taxincluded_check = glade_xml_get_widget (xml, "tax_included_check");
   vw->notes_text = glade_xml_get_widget (xml, "notes_text");
-
-  /* TERMS: Integer Value */
-  edit = gnc_amount_edit_new();
-  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
-  print_info = gnc_integral_print_info ();
-  gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
-  gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 1);
-  vw->terms_amount = edit;
-  gtk_widget_show (edit);
-
-  hbox = glade_xml_get_widget (xml, "terms_box");
-  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+  vw->terms_entry = glade_xml_get_widget (xml, "terms_entry");
 
   /* Setup Dialog for Editing */
   gnome_dialog_set_default (vwd, 0);
@@ -469,15 +429,10 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 				  vw);
   }
 
-
   /* I know that vendor exists here -- either passed in or just created */
-  {
-    gnc_numeric terms;
 
-    /* Set the Terms amounts */
-    terms = gnc_numeric_create (gncVendorGetTerms (vendor), 1);
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (vw->terms_amount), terms);
-  }
+  /* Set the Terms amounts */
+  gtk_entry_set_text (GTK_ENTRY (vw->terms_entry), gncVendorGetTerms (vendor));
 
   gnc_gui_component_watch_entity_type (vw->component_id,
 				       GNC_VENDOR_MODULE_NAME,
@@ -508,22 +463,16 @@ gnc_vendor_new (GtkWidget *parent, GNCBook *bookp)
   return created_vendor;
 }
 
-void
-gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor)
+VendorWindow *
+gnc_ui_vendor_window_create (GncVendor *vendor)
 {
   VendorWindow *vw;
 
-  if (!vendor) return;
+  if (!vendor) return NULL;
 
-  vw = gnc_vendor_new_window (parent, gncVendorGetBook(vendor), vendor);
+  vw = gnc_vendor_new_window (NULL, gncVendorGetBook(vendor), vendor);
 
-  gtk_signal_connect (GTK_OBJECT (vw->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_vendor_on_close_cb),
-		      NULL);
-
-  gtk_main ();
-
-  return;
+  return vw;
 }
 
 /* Functions for vendor selection widgets */
@@ -581,14 +530,13 @@ jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
     return TRUE;
 
   gncOwnerInitVendor (&owner, vendor);
-  gnc_job_find (sw->parent, NULL, &owner, sw->book);
+  gnc_job_find (NULL, &owner, sw->book);
   return TRUE;
 }
 
 static gboolean
 edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
-  struct _vendor_select_window *sw = user_data;
   GncVendor *vendor;
 
   g_return_val_if_fail (vendor_p && user_data, TRUE);
@@ -598,7 +546,7 @@ edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
   if (!vendor)
     return TRUE;
 
-  gnc_vendor_edit (sw->parent, vendor);
+  gnc_ui_vendor_window_create (vendor);
   return TRUE;
 }
 
@@ -676,9 +624,9 @@ gnc_vendor_select (GtkWidget *parent, GncVendor *start, GNCBook *book,
 }
 
 void
-gnc_vendor_find (GtkWidget *parent, GncVendor *start, GNCBook *book)
+gnc_vendor_find (GncVendor *start, GNCBook *book)
 {
-  gnc_vendor_select (parent, start, book, FALSE);
+  gnc_vendor_select (NULL, start, book, FALSE);
 }
 
 GncVendor *
@@ -700,6 +648,6 @@ gpointer gnc_vendor_edit_new_edit (gpointer bookp, gpointer v,
 
   g_return_val_if_fail (vendor != NULL, NULL);
 
-  gnc_vendor_edit (toplevel, vendor);
+  gnc_ui_vendor_window_create (vendor);
   return vendor;
 }

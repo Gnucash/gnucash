@@ -204,9 +204,9 @@ gnc_ui_select_job_edit_cb(GtkButton * button, gpointer user_data)
   if (w->job == NULL)
     return;
 
-  gnc_job_edit (w->dialog, w->job);
-  gncOwnerCopy (gncJobGetOwner (w->job), &(w->owner));
-  update_owner_select_picker (w);
+  gnc_ui_job_window_create (w->job);
+  //  gncOwnerCopy (gncJobGetOwner (w->job), &(w->owner));
+  //  update_owner_select_picker (w);
 }
 
 static void
@@ -339,10 +339,9 @@ gnc_job_select (GtkWidget * parent, GncJob *start_job,
 }
 
 void
-gnc_job_find (GtkWidget * parent, GncJob *start_job, 
-	      GncOwner *ownerp, GNCBook *book)
+gnc_job_find (GncJob *start_job, GncOwner *ownerp, GNCBook *book)
 {
-  gnc_job_select (parent, start_job, ownerp, book, FALSE);
+  gnc_job_select (NULL, start_job, ownerp, book, FALSE);
 }
 
 GncJob *

@@ -14,9 +14,7 @@
 /* Create a dialog to select a job based upon potentially-existing
  * owner and jobs.  Allows creation of both jobs and owners.
  */
-void
-gnc_job_find (GtkWidget * parent, GncJob *start_job,
-		GncOwner *owner, GNCBook *book);
+void gnc_job_find (GncJob *start_job, GncOwner *owner, GNCBook *book);
 GncJob *
 gnc_job_choose (GtkWidget * parent, GncJob *start_job,
 		GncOwner *owner, GNCBook *book);

@@ -27,8 +27,8 @@ struct _gncVendor {
   char *	id;
   char *	name;
   char *	notes;
+  char *	terms;
   GncAddress *	addr;
-  gint		terms;
   gboolean	taxincluded;
   gboolean	active;
   GList *	jobs;
@@ -57,8 +57,8 @@ GncVendor *gncVendorCreate (GNCBook *book)
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
+  vendor->terms = CACHE_INSERT ("");
   vendor->addr = gncAddressCreate (book);
-  vendor->terms = 0;
   vendor->taxincluded = FALSE;
   vendor->active = TRUE;
 
@@ -75,6 +75,7 @@ void gncVendorDestroy (GncVendor *vendor)
   CACHE_REMOVE (vendor->id);
   CACHE_REMOVE (vendor->name);
   CACHE_REMOVE (vendor->notes);
+  CACHE_REMOVE (vendor->terms);
   gncAddressDestroy (vendor->addr);
   g_list_free (vendor->jobs);
 
@@ -128,11 +129,10 @@ void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
   addObj (vendor);
 }
 
-void gncVendorSetTerms (GncVendor *vendor, gint terms)
+void gncVendorSetTerms (GncVendor *vendor, const char *terms)
 {
-  if (!vendor) return;
-  if (terms == vendor->terms) return;
-  vendor->terms = terms;
+  if (!vendor || !terms) return;
+  SET_STR(vendor->terms, terms);
   vendor->dirty = TRUE;
 }
 
@@ -190,7 +190,7 @@ const char * gncVendorGetNotes (GncVendor *vendor)
   return vendor->notes;
 }
 
-gint gncVendorGetTerms (GncVendor *vendor)
+const char * gncVendorGetTerms (GncVendor *vendor)
 {
   if (!vendor) return 0;
   return vendor->terms;

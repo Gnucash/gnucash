@@ -8,11 +8,17 @@
 #ifndef GNC_DIALOG_EMPLOYEE_H_
 #define GNC_DIALOG_EMPLOYEE_H_
 
+typedef struct _employee_window EmployeeWindow;
+
+#include "gncEmployee.h"
+
+/* Functions to edit and find employees */
+EmployeeWindow * gnc_ui_employee_window_create (GncEmployee *employee);
+void gnc_employee_find (GncEmployee *start, GNCBook *book);
+
 /* Functions to create and edit employees */
 GncEmployee * gnc_employee_new (GtkWidget *parent, GNCBook *book);
-void gnc_employee_edit (GtkWidget *parent, GncEmployee *employee);
 
-void gnc_employee_find (GtkWidget *parent, GncEmployee *start, GNCBook *book);
 GncEmployee *gnc_employee_choose (GtkWidget *parent, GncEmployee *start,
 				  GNCBook *book);
 

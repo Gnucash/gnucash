@@ -8,11 +8,17 @@
 #ifndef GNC_DIALOG_VENDOR_H_
 #define GNC_DIALOG_VENDOR_H_
 
-/* Functions to create and edit vendors */
-GncVendor * gnc_vendor_new (GtkWidget *parent, GNCBook *book);
-void gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor);
+typedef struct _vendor_window VendorWindow;
 
-void gnc_vendor_find (GtkWidget *parent, GncVendor *start, GNCBook *book);
+#include "gncVendor.h"
+
+/* Find or Edit Vendors */
+VendorWindow * gnc_ui_vendor_window_create (GncVendor *vendor);
+void gnc_vendor_find (GncVendor *start, GNCBook *book);
+
+/* Functions to create and return vendors */
+GncVendor * gnc_vendor_new (GtkWidget *parent, GNCBook *book);
+
 GncVendor * gnc_vendor_choose (GtkWidget *parent, GncVendor *start,
 			       GNCBook *book);
 

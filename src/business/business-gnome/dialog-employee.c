@@ -41,7 +41,7 @@ struct _employee_select_window {
   gboolean	no_close;
 };
 
-typedef struct _employee_window {
+struct _employee_window {
   GtkWidget *	dialog;
 
   GtkWidget *	id_entry;
@@ -71,7 +71,7 @@ typedef struct _employee_window {
   GNCBook *	book;
   GncEmployee *	created_employee;
 
-} EmployeeWindow;
+};
 
 static GncEmployee *
 ew_get_employee (EmployeeWindow *ew)
@@ -514,22 +514,16 @@ gnc_employee_new (GtkWidget *parent, GNCBook *bookp)
   return created_employee;
 }
 
-void
-gnc_employee_edit (GtkWidget *parent, GncEmployee *employee)
+EmployeeWindow *
+gnc_ui_employee_window_create (GncEmployee *employee)
 {
   EmployeeWindow *ew;
 
-  if (!employee) return;
+  if (!employee) return NULL;
 
-  ew = gnc_employee_new_window (parent, gncEmployeeGetBook(employee), employee);
+  ew = gnc_employee_new_window (NULL, gncEmployeeGetBook(employee), employee);
 
-  gtk_signal_connect (GTK_OBJECT (ew->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
-		      NULL);
-
-  gtk_main ();
-
-  return;
+  return ew;
 }
 
 /* Functions for employee selection widgets */
@@ -537,7 +531,6 @@ gnc_employee_edit (GtkWidget *parent, GncEmployee *employee)
 static gboolean
 edit_employee_cb (gpointer *employee_p, gpointer user_data)
 {
-  struct _employee_select_window *sw = user_data;
   GncEmployee *employee;
 
   g_return_val_if_fail (employee_p && user_data, TRUE);
@@ -547,7 +540,7 @@ edit_employee_cb (gpointer *employee_p, gpointer user_data)
   if (!employee)
     return TRUE;
 
-  gnc_employee_edit (sw->parent, employee);
+  gnc_ui_employee_window_create (employee);
   return TRUE;
 }
 
@@ -622,9 +615,9 @@ gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
 }
 
 void
-gnc_employee_find (GtkWidget *parent, GncEmployee *start, GNCBook *book)
+gnc_employee_find (GncEmployee *start, GNCBook *book)
 {
-  gnc_employee_select (parent, start, book, FALSE);
+  gnc_employee_select (NULL, start, book, FALSE);
 }
 
 GncEmployee *
@@ -646,6 +639,6 @@ gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,
 
   g_return_val_if_fail (employee != NULL, NULL);
 
-  gnc_employee_edit (toplevel, employee);
+  gnc_ui_employee_window_create (employee);
   return employee;
 }

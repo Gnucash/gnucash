@@ -25,8 +25,8 @@
 			  (N_ "Find Customer")
 			  (list "Extensions" "Customers" "")
 			  (lambda ()
-			    (gnc:customer-find #f (gnc:owner-get-customer
-						   last-cust)
+			    (gnc:customer-find (gnc:owner-get-customer
+						last-cust)
 					       (gnc:get-current-book)))))
 
     (define new-order-item
@@ -74,7 +74,7 @@
 			  (N_ "Find Job")
 			  (list "Extensions" "Customers" "")
 			  (lambda ()
-			    (gnc:job-find #f #f last-cust
+			    (gnc:job-find #f last-cust
 					  (gnc:get-current-book)))))
 
 
@@ -111,8 +111,8 @@
 			  (N_ "Find Vendor")
 			  (list "Extensions" "Vendors" "")
 			  (lambda ()
-			    (gnc:vendor-find #f (gnc:owner-get-vendor
-						 last-vendor)
+			    (gnc:vendor-find (gnc:owner-get-vendor
+					      last-vendor)
 					     (gnc:get-current-book)))))
 
     (define new-order-item
@@ -160,7 +160,7 @@
 			  (N_ "Find Job")
 			  (list "Extensions" "Vendors" "")
 			  (lambda ()
-			    (gnc:job-find #f #f last-vendor
+			    (gnc:job-find #f last-vendor
 					  (gnc:get-current-book)))))
 
 
@@ -196,7 +196,7 @@
 			  (N_ "Find Employee")
 			  (list "Extensions" "Employees" "")
 			  (lambda ()
-			    (gnc:employee-find #f last-employee
+			    (gnc:employee-find last-employee
 					       (gnc:get-current-book)))))
 
     (gnc:add-extension employee-menu)

@@ -32,7 +32,7 @@ typedef enum
   EDIT_JOB
 } JobDialogType;
 
-typedef struct _job_window {
+struct _job_window {
   GtkWidget *	dialog;
   GtkWidget *	id_entry;
   GtkWidget *	cust_edit;
@@ -48,7 +48,7 @@ typedef struct _job_window {
 
   GncOwner	owner;
 
-} JobWindow;
+};
 
 static GncJob *
 jw_get_job (JobWindow *jw)
@@ -397,22 +397,17 @@ gnc_job_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
   return created_job;
 }
 
-void
-gnc_job_edit (GtkWidget *parent, GncJob *job)
+JobWindow *
+gnc_ui_job_window_create (GncJob *job)
 {
   JobWindow *jw;
 
-  if (!job) return;
+  if (!job) return NULL;
 
-  jw = gnc_job_new_window (parent, gncJobGetBook(job),
+  jw = gnc_job_new_window (NULL, gncJobGetBook(job),
 			   gncJobGetOwner(job), job);
 
-  gtk_signal_connect (GTK_OBJECT (jw->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_job_on_close_cb), NULL);
-
-  gtk_main ();
-
-  return;
+  return jw;
 }
 
 /* Functions for widgets for job selection */
@@ -424,7 +419,7 @@ gnc_job_edit_new_edit (gpointer book, gpointer jobp, GtkWidget *toplevel)
 
   if (!j) return NULL;
 
-  gnc_job_edit (toplevel, j);
+  gnc_ui_job_window_create (j);
 
   return j;
 }

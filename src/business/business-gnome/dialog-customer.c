@@ -45,7 +45,7 @@ struct _customer_select_window {
   gboolean	no_close;
 };
 
-typedef struct _customer_window {
+struct _customer_window {
   GtkWidget *	dialog;
 
   GtkWidget *	id_entry;
@@ -83,7 +83,7 @@ typedef struct _customer_window {
   GNCBook *	book;
   GncCustomer *	created_customer;
 
-} CustomerWindow;
+};
 
 static GncCustomer *
 cw_get_customer (CustomerWindow *cw)
@@ -580,6 +580,17 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
   return cw;
 }
 
+CustomerWindow * gnc_ui_customer_window_create (GncCustomer *cust)
+{
+  CustomerWindow *cw;
+
+  if (!cust) return NULL;
+
+  cw = gnc_customer_new_window (NULL, gncCustomerGetBook(cust), cust);
+
+  return cw;
+}
+
 GncCustomer *
 gnc_customer_new (GtkWidget *parent, GNCBook *bookp)
 {
@@ -598,24 +609,6 @@ gnc_customer_new (GtkWidget *parent, GNCBook *bookp)
   gtk_main ();
 
   return created_customer;
-}
-
-void
-gnc_customer_edit (GtkWidget *parent, GncCustomer *cust)
-{
-  CustomerWindow *cw;
-
-  if (!cust) return;
-
-  cw = gnc_customer_new_window (parent, gncCustomerGetBook(cust), cust);
-
-  gtk_signal_connect (GTK_OBJECT (cw->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_customer_on_close_cb),
-		      NULL);
-
-  gtk_main ();
-
-  return;
 }
 
 /* Functions for customer selection widgets */
@@ -673,14 +666,13 @@ jobs_customer_cb (gpointer *cust_p, gpointer user_data)
     return TRUE;
 
   gncOwnerInitCustomer (&owner, cust);
-  gnc_job_find (sw->parent, NULL, &owner, sw->book);
+  gnc_job_find (NULL, &owner, sw->book);
   return TRUE;
 }
 
 static gboolean
 edit_customer_cb (gpointer *cust_p, gpointer user_data)
 {
-  struct _customer_select_window *sw = user_data;
   GncCustomer *cust;
 
   g_return_val_if_fail (cust_p && user_data, TRUE);
@@ -690,7 +682,7 @@ edit_customer_cb (gpointer *cust_p, gpointer user_data)
   if (!cust)
     return TRUE;
 
-  gnc_customer_edit (sw->parent, cust);
+  gnc_ui_customer_window_create (cust);
   return TRUE;
 }
 
@@ -770,9 +762,9 @@ gnc_customer_select (GtkWidget *parent, GncCustomer *start, GNCBook *book,
 }
 
 void
-gnc_customer_find (GtkWidget *parent, GncCustomer *start, GNCBook *book)
+gnc_customer_find (GncCustomer *start, GNCBook *book)
 {
-  gnc_customer_select (parent, start, book, FALSE);
+  gnc_customer_select (NULL, start, book, FALSE);
 }
 
 GncCustomer *
@@ -792,6 +784,6 @@ gpointer gnc_customer_edit_new_edit (gpointer bookp, gpointer cust,
 {
   g_return_val_if_fail (cust != NULL, NULL);
 
-  gnc_customer_edit (toplevel, cust);
+  gnc_ui_customer_window_create (cust);
   return cust;
 }

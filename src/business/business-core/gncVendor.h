@@ -25,7 +25,7 @@ void gncVendorDestroy (GncVendor *vendor);
 void gncVendorSetID (GncVendor *vendor, const char *id);
 void gncVendorSetName (GncVendor *vendor, const char *name);
 void gncVendorSetNotes (GncVendor *vendor, const char *notes);
-void gncVendorSetTerms (GncVendor *vendor, gint terms);
+void gncVendorSetTerms (GncVendor *vendor, const char *terms);
 void gncVendorSetTaxIncluded (GncVendor *vendor, gboolean taxincl);
 void gncVendorSetActive (GncVendor *vendor, gboolean active);
 
@@ -42,7 +42,7 @@ const char * gncVendorGetID (GncVendor *vendor);
 const char * gncVendorGetName (GncVendor *vendor);
 GncAddress * gncVendorGetAddr (GncVendor *vendor);
 const char * gncVendorGetNotes (GncVendor *vendor);
-gint gncVendorGetTerms (GncVendor *vendor);
+const char * gncVendorGetTerms (GncVendor *vendor);
 gboolean gncVendorGetTaxIncluded (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
 

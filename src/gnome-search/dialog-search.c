@@ -52,6 +52,7 @@ struct _GNCSearchWindow {
   /* What we're searching for, and how */
   GNCIdTypeConst search_for;
   GNCSearchType	grouping;	/* Match Any, Match All */
+  QueryAccess	get_guid;	/* Function to GetGUID from the object */
   int		search_type;	/* New, Narrow, Add, Delete */
 
   /* Our query status */
@@ -62,6 +63,8 @@ struct _GNCSearchWindow {
   GNCSearchParam * last_param;
   GList *	params_list;	/* List of GNCSearchParams */
   GList *	crit_list;	/* list of crit_data */
+
+  gint		component_id;
 };
 
 struct _crit_data {
@@ -85,11 +88,8 @@ gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 
   res = (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
 
-  if (res)
-    /* Update the display */
-    gnc_search_dialog_display_results (sw);
-  else
-    /* Destroy the display */
+  /* Destroy the display if asked */
+  if (!res)
     gnc_search_dialog_destroy (sw);
 }
 
@@ -153,10 +153,14 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     gtk_list_clear_items (GTK_LIST (sw->result_list), 0, -1);
   }
 
+  /* Clear the watches */
+  gnc_gui_component_clear_watches (sw->component_id);
+
   /* Compute the actual results */
   list = gncQueryRun (sw->q, sw->search_for);
 
   for (; list; list = list->next) {
+    const GUID *guid = (const GUID *) ((sw->get_guid)(list->data));
     GtkWidget *item =
       gtk_list_item_new_with_label (gncObjectPrintable (sw->search_for,
 							list->data));
@@ -167,6 +171,9 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     itemlist = g_list_prepend (itemlist, item);
     if (list->data == sw->selected_item)
       selected = item;
+
+    /* Watch this item in case it changes */
+    gnc_gui_component_watch_entity (sw->component_id, guid, GNC_EVENT_MODIFY);
   }  
 
   if (!selected)
@@ -340,10 +347,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
       gnc_search_dialog_destroy (sw);
 
     else {
-      QueryAccess get_fcn =
-	gncQueryObjectGetParameterGetter (sw->search_for,
-					  QUERY_PARAM_GUID);
-      const GUID *guid = (const GUID *) ((get_fcn)(res));
+      const GUID *guid = (const GUID *) ((sw->get_guid)(res));
       QueryOp op = QUERY_OR;
 
       if (!sw->q) {
@@ -556,7 +560,7 @@ add_criterion (GtkWidget *button, GNCSearchWindow *sw)
 static int
 gnc_search_dialog_close_cb (GnomeDialog *dialog, GNCSearchWindow *sw)
 {
-  gnc_unregister_gui_component_by_data (DIALOG_SEARCH_CM_CLASS, sw);
+  gnc_unregister_gui_component (sw->component_id);
 
   /* XXX: Clear the params_list? */
   g_list_free (sw->crit_list);
@@ -568,6 +572,14 @@ gnc_search_dialog_close_cb (GnomeDialog *dialog, GNCSearchWindow *sw)
   /* Destroy and exit */
   g_free (sw);
   return FALSE;
+}
+
+static void
+refresh_handler (GHashTable *changes, gpointer data)
+{
+  GNCSearchWindow * sw = data;
+
+  gnc_search_dialog_display_results (sw);
 }
 
 static void
@@ -675,7 +687,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 				 GTK_SIGNAL_FUNC (search_help_cb), sw);
   
   /* Register ourselves */
-  gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS, NULL, close_handler, sw);
+  sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,
+						 refresh_handler,
+						 close_handler, sw);
 
   /* And setup the close callback */
   gtk_signal_connect (GTK_OBJECT (sw->dialog), "close",
@@ -688,7 +702,7 @@ void
 gnc_search_dialog_destroy (GNCSearchWindow *sw)
 {
   if (!sw) return;
-  gnc_close_gui_component_by_data (DIALOG_SEARCH_CM_CLASS, sw);
+  gnc_close_gui_component (sw->component_id);
 }
 
 static GList *
@@ -746,6 +760,9 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   sw->new_item_cb = new_item_cb;
   sw->user_data = user_data;
 
+  /* Grab the get_guid function */
+  sw->get_guid = gncQueryObjectGetParameterGetter (sw->search_for,
+						   QUERY_PARAM_GUID);
   if (start_query)
     sw->start_q = gncQueryCopy (start_query);
 

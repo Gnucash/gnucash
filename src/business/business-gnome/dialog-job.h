@@ -8,12 +8,16 @@
 #ifndef GNC_DIALOG_JOB_H_
 #define GNC_DIALOG_JOB_H_
 
+typedef struct _job_window JobWindow;
+
 #include "gncJob.h"
 #include "gncOwner.h"
 
+/* Edit a job */
+JobWindow * gnc_ui_job_window_create (GncJob *job);
+
 /* Functions to create and edit jobs */
 GncJob * gnc_job_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
-void gnc_job_edit (GtkWidget *parent, GncJob *job);
 
 /* Callback to choose a job from a customer, for use with the
  * general-select widget.  Provides both "new" and "edit" buttons.
