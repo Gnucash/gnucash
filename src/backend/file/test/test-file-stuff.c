@@ -363,7 +363,9 @@ test_files_in_dir(int argc, char **argv, gxpf_callback cb,
         {
             if(!S_ISDIR(file_info.st_mode))
             {
+#if 0
                 printf( "testing load of file \"%s\":\n", argv[count] );
+#endif
                 test_load_file(to_open, cb, parser, parser_tag, book);
             }
         }
