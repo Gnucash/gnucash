@@ -641,7 +641,7 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   
   /* The account has to have a name! */
   if( strcmp( name, "" ) == 0 ) {
-    errorBox (toplevel, "The account must be given a name! \n");
+    errorBox (toplevel, ACC_NO_NAME_MSG);
     return;
   }
   
