@@ -8,6 +8,6 @@
 #ifndef GNC_BUSINESS_OPTIONS_H_
 #define GNC_BUSINESS_OPTIONS_H_
 
-void gnc_business_options_initialize (void);
+void gnc_business_options_gnome_initialize (void);
 
 #endif /* GNC_BUSINESS_OPTIONS_H_ */

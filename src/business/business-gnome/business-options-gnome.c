@@ -17,8 +17,8 @@
 #include "gnc-general-search.h"
 
 #include "dialog-options.h"
-#include "business-options.h"
-#include "business-utils.h"
+#include "business-options-gnome.h"
+#include "business-gnome-utils.h"
 #include "dialog-invoice.h"
 
 static int
@@ -430,7 +430,7 @@ taxtable_get_value (GNCOption *option, GtkWidget *widget)
 
 
 void
-gnc_business_options_initialize (void)
+gnc_business_options_gnome_initialize (void)
 {
   int i;
   static GNCOptionDef_t options[] = {

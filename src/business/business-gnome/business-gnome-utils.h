@@ -1,12 +1,12 @@
 /*
- * business-utils.h -- General GUI Utilities for GNC Business Objects
+ * business-gnome-utils.h -- General GUI Utilities for GNC Business Objects
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
  * Copyright (C) 2001
  */
 
-#ifndef GNC_BUSINESS_UTILS_H_
-#define GNC_BUSINESS_UTILS_H_
+#ifndef GNC_BUSINESS_GNOME_UTILS_H_
+#define GNC_BUSINESS_GNOME_UTILS_H_
 
 #include "gnc-book.h"
 #include "gncOwner.h"
@@ -63,4 +63,4 @@ gpointer gnc_ui_optionmenu_get_value (GtkWidget *omenu);
 void gnc_ui_optionmenu_set_value (GtkWidget *omenu, gpointer data);
 
 
-#endif /* GNC_BUSINESS_UTILS_H_ */
+#endif /* GNC_BUSINESS_GNOME_UTILS_H_ */

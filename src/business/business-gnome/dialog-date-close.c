@@ -16,7 +16,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-account-sel.h"
 
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "dialog-date-close.h"
 
 typedef struct _dialog_date_close_window {

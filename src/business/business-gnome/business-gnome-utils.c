@@ -1,5 +1,5 @@
 /*
- * business-utils.c -- General GUI Utilities for GNC Business Objects
+ * business-gnome-utils.c -- General GUI Utilities for GNC Business Objects
  *
  * Written By: Derek Atkins <warlord@MIT.EDU>
  * Copyright (C) 2001, 2002 Derek Atkins
@@ -22,7 +22,7 @@
 
 #include "gnc-general-search.h"
 #include "gncObject.h"
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "dialog-customer.h"
 #include "dialog-job.h"
 #include "dialog-vendor.h"

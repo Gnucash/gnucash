@@ -254,6 +254,7 @@
 (export gnc:register-kvp-option-generator)
 (export gnc:unregister-kvp-option-generator)
 (export gnc:make-kvp-options)
+(export gnc:*kvp-option-path*)
 
 (load-from-path "c-interface.scm")
 (load-from-path "config-var.scm")
@@ -263,6 +264,8 @@
 (load-from-path "prefs.scm")
 (load-from-path "date-utilities.scm")
 (load-from-path "simple-obj.scm")
+
+
 
 (gnc:hook-add-dangler gnc:*startup-hook*
                       (lambda ()

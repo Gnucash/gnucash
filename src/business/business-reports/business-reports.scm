@@ -8,7 +8,7 @@
 (define-module (gnucash report business-reports))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/standard-reports" 0)
-(gnc:module-load "gnucash/business-gnome" 0)
+(gnc:module-load "gnucash/business-utils" 0)
 
 (define gnc:menuname-business-reports (N_ "Business Reports"))
 

@@ -29,7 +29,7 @@
 #include "gnc-gui-query.h"
 #include "gncOwner.h"
 
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "search-owner.h"
 
 #define d(x)

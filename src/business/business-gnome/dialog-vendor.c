@@ -24,7 +24,7 @@
 #include "gncVendor.h"
 #include "gncVendorP.h"
 
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "dialog-vendor.h"
 #include "dialog-job.h"
 #include "dialog-order.h"

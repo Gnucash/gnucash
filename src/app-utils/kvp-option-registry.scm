@@ -23,6 +23,8 @@
 (use-modules (ice-9 slib))
 (require 'hash)
 
+(define gnc:*kvp-option-path* '("options"))
+
 (define gnc:*kvp-option-registry* (make-hash-table 23))
 
 (define (get-ref id-type)

@@ -25,7 +25,7 @@
 #include "gncInvoice.h"
 
 #include "dialog-payment.h"
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 
 #define DIALOG_PAYMENT_CUSTOMER_CM_CLASS "customer-payment-dialog"
 #define DIALOG_PAYMENT_VENDOR_CM_CLASS "vendor-payment-dialog"

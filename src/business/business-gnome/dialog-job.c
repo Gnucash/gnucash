@@ -21,7 +21,7 @@
 #include "gncJob.h"
 #include "gncJobP.h"
 
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "dialog-job.h"
 #include "dialog-invoice.h"
 #include "dialog-payment.h"

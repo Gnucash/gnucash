@@ -28,9 +28,9 @@ AM_CFLAGS = \
 
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
-  business-options.c \
+  business-options-gnome.c \
   business-urls.c \
-  business-utils.c \
+  business-gnome-utils.c \
   dialog-billterms.c \
   dialog-customer.c \
   dialog-date-close.c \
@@ -40,13 +40,12 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-order.c \
   dialog-payment.c \
   dialog-vendor.c \
-  search-owner.c \
-  gnc-business-utils.c
+  search-owner.c
 
 noinst_HEADERS = \
-  business-options.h \
+  business-options-gnome.h \
   business-urls.h \
-  business-utils.h \
+  business-gnome-utils.h \
   dialog-billterms.h \
   dialog-customer.h \
   dialog-date-close.h \
@@ -56,8 +55,7 @@ noinst_HEADERS = \
   dialog-order.h \
   dialog-payment.h \
   dialog-vendor.h \
-  search-owner.h \
-  gnc-business-utils.h
+  search-owner.h
 
 libgncmod_business_gnome_la_LDFLAGS = -module
 
@@ -79,12 +77,6 @@ libgw_business_gnome_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
 gncscmmod_DATA =
 
-# For regular scheme definitions
-gncscmdir = ${GNC_SHAREDIR}/scm
-gncscm_DATA = \
-  business-options.scm \
-  business-prefs.scm
-
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-gnome.scm
 
@@ -97,7 +89,6 @@ EXTRA_DIST = \
   .cvsignore \
   ${gncmod_DATA} \
   ${gwmod_DATA} \
-  ${gncscm_DATA} \
   ${gncscmmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR

@@ -26,7 +26,7 @@
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
 
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "dialog-customer.h"
 #include "dialog-job.h"
 #include "dialog-order.h"

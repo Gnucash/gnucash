@@ -34,6 +34,8 @@
 
 (gnc:module-load "gnucash/report/report-system" 0)
 (gnc:module-load "gnucash/business-core" 0)
+
+(use-modules (gnucash report standard-reports))
 (use-modules (gnucash report business-reports))
 
 (define optname-to-date (N_ "To"))

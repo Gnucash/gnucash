@@ -27,7 +27,7 @@
 
 #include "dialog-order.h"
 #include "dialog-invoice.h"
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "dialog-date-close.h"
 
 #define DIALOG_NEW_ORDER_CM_CLASS "dialog-new-order"

@@ -205,7 +205,7 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 
       {
 	GncOwner *owner = gncInvoiceGetOwner (ledger->invoice);
-	GncTaxTable *table;
+	GncTaxTable *table = NULL;
 	GncTaxIncluded taxincluded_p = GNC_TAXINCLUDED_USEGLOBAL;
 	gboolean taxincluded = FALSE;
 	gnc_numeric discount = gnc_numeric_zero ();
@@ -240,19 +240,30 @@ void gnc_entry_ledger_load (GncEntryLedger *ledger, GList *entry_list)
 	  break;
 	}
 
-	/* XXX: Get the default tax-table */
-	table = NULL;
-
 	/* Maybe override the global taxtable */
 	switch (gncOwnerGetType (owner)) {
 	case GNC_OWNER_CUSTOMER:
+#if 0
+	  table = gnc_lookup_taxtable_option (ledger->book,
+					      "Business",
+					      "Default Customer TaxTable",
+					      NULL);
+#endif
 	  if (gncCustomerGetTaxTableOverride (owner->owner.customer))
 	    table = gncCustomerGetTaxTable (owner->owner.customer);
 	  break;
+
 	case GNC_OWNER_VENDOR:
+#if 0
+	  table = gnc_lookup_taxtable_option (ledger->book,
+					      "Business",
+					      "Default Vendor TaxTable",
+					      NULL);
+#endif
 	  if (gncVendorGetTaxTableOverride (owner->owner.vendor))
 	    table = gncVendorGetTaxTable (owner->owner.vendor);
 	  break;
+
 	default:
 	  break;
 	}

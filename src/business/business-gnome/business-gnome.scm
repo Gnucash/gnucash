@@ -4,11 +4,13 @@
 
 (gnc:module-load "gnucash/gnome-utils" 0)
 (gnc:module-load "gnucash/business-core" 0)
+(gnc:module-load "gnucash/business-utils" 0)
 (gnc:module-load "gnucash/gnome-search" 0)
 (gnc:module-load "gnucash/business-core-file" 0)
 (gnc:module-load "gnucash/dialog-tax-table" 0)
 
 (gnc:module-load "gnucash/report/report-gnome" 0)
+
 (use-modules (gnucash report business-reports))
 (use-modules (gnucash main))		;for gnc:debug
 
@@ -16,12 +18,6 @@
 (define top-level (N_ "_Business"))
 (define new-label (N_ "New"))
 (define find-label (N_ "Find"))
-
-(define gnc:*business-label* (N_ "Business"))
-(define gnc:*company-name* (N_ "Company Name"))
-(define gnc:*company-addy* (N_ "Company Address"))
-
-(export gnc:*business-label* gnc:*company-name* gnc:*company-addy*)
 
 (define (add-customer-items)
   (let ((last-cust (gnc:owner-create))
@@ -389,6 +385,3 @@
 (gnc:hook-add-dangler gnc:*report-hook* business-report-function)
 (gnc:hook-add-dangler gnc:*ui-startup-hook* add-business-items)
 (gnc:hook-add-dangler gnc:*add-extension-hook* add-business-test)
-
-(load-from-path "business-options.scm")
-(load-from-path "business-prefs.scm")

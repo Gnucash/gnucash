@@ -18,6 +18,21 @@
 
 	  Initial fix for #93462.  Next commit will actually use the values.
 
+	move code around a lot.
+	* Rename a bunch of files:
+	  business-options to business-options-gnome
+	  business-utils to business-gnome-utils
+	  - this required changes to a bunch of files in business-gnome
+	* move business-options.scm and business-prefs.scm to business-utils
+	* create a business-utils gnc-module
+	  - required changes to configure.in, business/Makefile.am
+	  - added a bunch of files (generally moved from business-gnome)
+	* moved a bunch of other non-gnome definitions out of the gnome-specific
+	  locations (gnome-utils -> app-utils, or business-gnome -> business-utils)
+
+	* gncEntryLedgerLoad.c: commented-out code to load tax-tables from
+	  the options; waiting until code is actually written.
+	
 2003-01-16  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/commodity-table.scm: move gnc:commodity-is-currency? here

@@ -35,7 +35,7 @@
 #include "dialog-date-close.h"
 #include "dialog-invoice.h"
 #include "dialog-job.h"
-#include "business-utils.h"
+#include "business-gnome-utils.h"
 #include "dialog-payment.h"
 #include "dialog-tax-table.h"
 #include "dialog-billterms.h"

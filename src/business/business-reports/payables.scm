@@ -29,10 +29,11 @@
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/report/report-system" 0)
-(gnc:module-load "gnucash/business-gnome" 0)
+(gnc:module-load "gnucash/business-utils" 0)
 
 (use-modules (gnucash report aging))
 (use-modules (gnucash report standard-reports))
+(use-modules (gnucash report business-reports))
 
 (define acc-page gnc:pagename-general)
 (define this-acc (N_ "Payable Account"))
