@@ -373,8 +373,11 @@ static void
 gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 {
   GtkWidget *dialog;
+  GladeXML *xml;
 
-  dialog = create_Commodities_Dialog ();
+  xml = gnc_glade_xml_new ("commodity.glade", "Commodities Dialog");
+
+  dialog = glade_xml_get_widget (xml, "Commodities Dialog");
   cd->dialog = dialog;
 
   gnome_dialog_button_connect (GNOME_DIALOG (dialog), 0,
@@ -394,7 +397,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   {
     GtkWidget *list;
 
-    list = lookup_widget (dialog, "commodity_list");
+    list = glade_xml_get_widget (xml, "commodity_list");
     cd->commodity_list = list;
 
     gtk_signal_connect (GTK_OBJECT(list), "select_row",
@@ -408,24 +411,24 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   {
     GtkWidget *button;
 
-    button = lookup_widget (dialog, "edit_button");
+    button = glade_xml_get_widget (xml, "edit_button");
     cd->edit_button = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (edit_clicked), cd);
 
-    button = lookup_widget (dialog, "remove_button");
+    button = glade_xml_get_widget (xml, "remove_button");
     cd->remove_button = button;
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (remove_clicked), cd);
 
-    button = lookup_widget (dialog, "add_button");
+    button = glade_xml_get_widget (xml, "add_button");
 
     gtk_signal_connect (GTK_OBJECT (button), "clicked",
                         GTK_SIGNAL_FUNC (add_clicked), cd);
 
-    button = lookup_widget (dialog, "show_currencies_button");
+    button = glade_xml_get_widget (xml, "show_currencies_button");
 
     gtk_signal_connect (GTK_OBJECT (button), "toggled",
                         GTK_SIGNAL_FUNC (show_currencies_toggled), cd);

@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#include <glade/glade.h>
 #include <gnome.h>
 
 #include "account-tree.h"
@@ -843,4 +844,31 @@ gnc_clist_columns_autosize (GtkCList *list)
   }
 
   gtk_clist_columns_autosize (list);
+}
+
+
+static gboolean glade_inited = FALSE;
+
+GladeXML *
+gnc_glade_xml_new (const char *filename, const char *root)
+{
+  GladeXML *xml;
+  char *fname;
+
+  g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (root != NULL, NULL);
+
+  if (!glade_inited)
+  {
+    glade_gnome_init ();
+    glade_inited = TRUE;
+  }
+
+  fname = g_strconcat (GNC_GLADE_DIR, "/", filename, NULL);
+
+  xml = glade_xml_new (fname, root);
+
+  g_free (fname);
+
+  return xml;
 }

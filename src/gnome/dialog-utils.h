@@ -25,6 +25,7 @@
 #ifndef __DIALOG_UTILS_H__
 #define __DIALOG_UTILS_H__
 
+#include <glade/glade.h>
 #include <gnome.h>
 
 #include "Account.h"
@@ -88,5 +89,6 @@ void gnc_clist_set_check (GtkCList *list, int row, int col, gboolean checked);
  * also takes into account the column titles. */
 void gnc_clist_columns_autosize (GtkCList *list);
 
+GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 
 #endif

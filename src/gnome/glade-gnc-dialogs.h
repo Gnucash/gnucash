@@ -27,4 +27,3 @@ GtkWidget* create_Edit_Column_View_Page (void);
 GtkWidget* create_Edit_Report_Size (void);
 GtkWidget* create_Prices_Dialog (void);
 GtkWidget* create_Price_Dialog (void);
-GtkWidget* create_Commodities_Dialog (void);

@@ -23,7 +23,8 @@
 #ifndef __GNC_DIR_H__
 #define __GNC_DIR_H__
 
-#define GNC_PIXMAP_DIR "@-GNC_PIXMAP_DIR-@"
 #define GNC_ACCOUNTS_DIR "@-GNC_ACCOUNTS_DIR-@"
+#define GNC_GLADE_DIR "@-GNC_GLADE_DIR-@"
+#define GNC_PIXMAP_DIR "@-GNC_PIXMAP_DIR-@"
 
 #endif

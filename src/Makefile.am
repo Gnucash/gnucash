@@ -37,6 +37,7 @@ LDADD = \
   ${GUILE_LIBS} \
   ${GTKHTML_LIBS} \
   ${GHTTP_LIBS} \
+  ${GLADE_LIBS} \
   ${GUPPI_LIBS} \
   ${DB_LIBS} \
   ${INTLLIBS} \

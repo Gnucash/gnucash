@@ -1,5 +1,24 @@
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/glade/Makefile.am: new file
+
+	* src/gnome/glade/commodity.glade: new file. glade file for
+	commodity dialog
+
+	* src/gnome/dialog-commodities.c: use libglade
+
+	* src/gnome/dialog-utils.c (gnc_glade_xml_new): new func
+	(gnc_glade_xml_new_widget): new func
+
+	* rpm/gnucash.spec.in: add glade dir
+
+	* configure.in: move libglade check to glade section.
+	add configured glade file dir.
+
+	* src/gnome/Makefile.am: add glade flags & glade dir
+
+	* src/Makefile.am: add glade libs
+
 	* src/scm/report/account-piecharts.scm: same as below
 
 	* src/scm/report/category-barchart.scm: remove hint text

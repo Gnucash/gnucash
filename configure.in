@@ -121,6 +121,7 @@ else
 fi
 
 GNC_ACCOUNTS_DIR=${GNC_SHAREDIR}/accounts
+GNC_GLADE_DIR=${GNC_SHAREDIR}/glade
 GNC_PIXMAP_DIR='${datadir}/pixmaps/gnucash'
 
 AC_SUBST(GNC_CONFIGDIR)
@@ -129,6 +130,7 @@ AC_SUBST(GNC_SHAREDIR)
 AC_SUBST(GNC_SCM_INSTALL_DIR)
 AC_SUBST(GNC_DOC_INSTALL_DIR)
 AC_SUBST(GNC_ACCOUNTS_DIR)
+AC_SUBST(GNC_GLADE_DIR)
 AC_SUBST(GNC_PIXMAP_DIR)
 
 # We should always see these errors...
@@ -275,6 +277,19 @@ fi
 #fi
 
 AC_SUBST(GLADE)
+
+
+GLADE_LIBS=`$GNOME_CONFIG --libs libglade`
+GLADE_CFLAGS=`$GNOME_CONFIG --cflags libglade`
+
+# check for glade libs
+AC_CHECK_LIB(glade, glade_init,
+             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} glade",
+             AC_MSG_ERROR([Cannot find libglade. See the README for more info.]),
+             $GLADE_LIBS)
+
+AC_SUBST(GLADE_LIBS)
+AC_SUBST(GLADE_CFLAGS)
 
 
 ### --------------------------------------------------------------------------
@@ -455,11 +470,6 @@ AC_CHECK_LIB(oaf, main, true,
   [AC_MSG_ERROR([liboaf development files not found.  Guppi requires them.])],
   `$GNOME_CONFIG --libs oaf`)
 
-AC_CHECK_LIB(glade, main, true,
-  [AC_MSG_ERROR([libglade development files not found.  Guppi requires them.])]
-,
-  `$GNOME_CONFIG --libs libglade`)
-
 ## guppi itself.
 
 GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
@@ -622,6 +632,7 @@ AC_OUTPUT(
           src/experimental/ofx/explore/Makefile
           src/experimental/ofx/parser/Makefile
           src/gnome/Makefile
+          src/gnome/glade/Makefile
           src/guile/Makefile
           src/optional/Makefile
           src/pixmaps/Makefile

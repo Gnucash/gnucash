@@ -28,6 +28,7 @@ src/gnome/druid-qif-import.c
 src/gnome/druid-stock-split.c
 src/gnome/glade-gnc-dialogs.c
 src/gnome/glade-support.c
+src/gnome/glade/commodity_strings.c
 src/gnome/gnc-commodity-edit.c
 src/gnome/gnc-datedelta.c
 src/gnome/gnc-dateedit.c

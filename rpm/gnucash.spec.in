@@ -46,6 +46,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/libgncengine.*
 /usr/share/gnucash/accounts
 /usr/share/gnucash/doc
+/usr/share/gnucash/glade
 /usr/share/gnucash/guile-modules
 /usr/share/gnucash/html
 /usr/share/gnucash/scm
