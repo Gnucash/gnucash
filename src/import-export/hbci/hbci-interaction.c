@@ -179,7 +179,9 @@ Please try again."), minsize) == GNC_VERIFY_CANCEL)
 }
 
 
-static int msgInsertCardOrAbort(const HBCI_User *user, void *user_data)
+static int msgInsertMediumOrAbort(const HBCI_User *user, 
+				MediumType t, 
+				void *user_data)
 {
   GNCInteractor *data = user_data;
   const HBCI_Bank * b = NULL;
@@ -213,7 +215,8 @@ unknown user at unknown bank."));
 }
 
 
-static int msgInsertCorrectCardOrAbort(const HBCI_User *user, 
+static int msgInsertCorrectMediumOrAbort(const HBCI_User *user, 
+				       MediumType t, 
 				       void *user_data)
 {
   GNCInteractor *data = user_data;
@@ -291,8 +294,8 @@ gnc_hbci_new_interactor(GNCInteractor *data)
 
   inter = HBCI_InteractorCB_new(&destr,
 				&msgInputPin,
-				&msgInsertCardOrAbort,
-				&msgInsertCorrectCardOrAbort,
+				&msgInsertMediumOrAbort,
+				&msgInsertCorrectMediumOrAbort,
 				&msgStateResponse,
 				&keepAlive,
 				data);

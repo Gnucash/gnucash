@@ -42,7 +42,7 @@
 #include <openhbci/api.h>
 #include <openhbci/outboxjobs.h>
 #include <openhbci/outboxjobkeys.h>
-#include <openhbci/mediumrdh.h>
+#include <openhbci/mediumrdhbase.h>
 
 typedef enum _infostate {
   INI_ADD_BANK,
@@ -1062,7 +1062,7 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
   {
     char *res;
     const HBCI_Medium *med;
-    const HBCI_MediumRDH *medr;
+    const HBCI_MediumRDHBase *medr;
     const HBCI_Bank *bank;
     gboolean use_cryptkey;
     char *tmp, *hash, *exponent, *modulus;
@@ -1080,21 +1080,21 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
 
     med = HBCI_User_medium (HBCI_Customer_user
 			    ((HBCI_Customer *)info->newcustomer));
-    medr = HBCI_Medium_MediumRDH ((HBCI_Medium *)med);
+    medr = HBCI_Medium_MediumRDHBase ((HBCI_Medium *)med);
     g_assert (medr);
 
-    use_cryptkey = !HBCI_MediumRDH_hasInstSignKey (medr);
-    tmp = HBCI_MediumRDH_getInstIniLetterHash(medr, use_cryptkey);
+    use_cryptkey = !HBCI_MediumRDHBase_hasInstSignKey (medr);
+    tmp = HBCI_MediumRDHBase_getInstIniLetterHash(medr, use_cryptkey);
     hash = to_hexstring_hash (tmp);
     free (tmp);
-    tmp = HBCI_MediumRDH_getInstIniLetterExponent(medr, use_cryptkey);
+    tmp = HBCI_MediumRDHBase_getInstIniLetterExponent(medr, use_cryptkey);
     exponent = to_hexstring (tmp);
     free (tmp);
-    tmp = HBCI_MediumRDH_getInstIniLetterModulus(medr, use_cryptkey);
+    tmp = HBCI_MediumRDHBase_getInstIniLetterModulus(medr, use_cryptkey);
     modulus = to_hexstring (tmp);
     free (tmp);
-    keynumber = HBCI_MediumRDH_getInstKeyNumber(medr, use_cryptkey);
-    keyversion = HBCI_MediumRDH_getInstKeyVersion(medr, use_cryptkey);
+    keynumber = HBCI_MediumRDHBase_getInstKeyNumber(medr, use_cryptkey);
+    keyversion = HBCI_MediumRDHBase_getInstKeyVersion(medr, use_cryptkey);
 
     res = g_strdup_printf("<html><body><h1>Ini-Brief der Bank %s</h1>
 <h2>Bankdaten</h2><table>
@@ -1169,7 +1169,7 @@ on_iniletter_userinfo_next (GnomeDruidPage  *gnomedruidpage,
   if (info->gotkeysforCustomer == info->newcustomer) {
     /* Execute a SendKey job. */
     HBCI_OutboxJob *job;
-    HBCI_Error *err;
+    /*HBCI_Error *err;*/
     
     job = HBCI_OutboxJobSendKeys_OutboxJob 
       (HBCI_OutboxJobSendKeys_new (info->api, info->newcustomer));
@@ -1206,7 +1206,7 @@ Nothing has been sent to the bank.");
 
   {
     const HBCI_Medium *med;
-    const HBCI_MediumRDH *medr;
+    const HBCI_MediumRDHBase *medr;
     int keynumber, keyversion;
     char *tmp, *hash, *exponent, *modulus;
     const HBCI_User *user;
@@ -1217,20 +1217,20 @@ Nothing has been sent to the bank.");
     cust = (HBCI_Customer *)info->newcustomer;
     user = HBCI_Customer_user (cust);
     med = HBCI_User_medium (user);
-    medr = HBCI_Medium_MediumRDH ((HBCI_Medium *)med);
+    medr = HBCI_Medium_MediumRDHBase ((HBCI_Medium *)med);
     g_assert (medr);
 
-    tmp = HBCI_MediumRDH_getUserIniLetterHash(medr);
+    tmp = HBCI_MediumRDHBase_getUserIniLetterHash(medr);
     hash = to_hexstring_hash (tmp);
     g_free (tmp);
-    tmp = HBCI_MediumRDH_getUserIniLetterExponent(medr);
+    tmp = HBCI_MediumRDHBase_getUserIniLetterExponent(medr);
     exponent = to_hexstring (tmp);
     g_free (tmp);
-    tmp = HBCI_MediumRDH_getUserIniLetterModulus(medr);
+    tmp = HBCI_MediumRDHBase_getUserIniLetterModulus(medr);
     modulus = to_hexstring (tmp);
     g_free (tmp);
-    keynumber = HBCI_MediumRDH_getUserKeyNumber(medr);
-    keyversion = HBCI_MediumRDH_getUserKeyVersion(medr);
+    keynumber = HBCI_MediumRDHBase_getUserKeyNumber(medr);
+    keyversion = HBCI_MediumRDHBase_getUserKeyVersion(medr);
 
     res = g_strdup_printf("<html><body><h1>Ini-Brief</h1>
 <h2>Benutzerdaten</h2><table>
