@@ -181,6 +181,7 @@ static void
 add_closing_balances (AccountGroup *closed_grp, 
                       GNCBook *open_book,
                       GNCBook *closed_book,
+                      Account *equity_account,
                       Timespec *post_date, Timespec *date_entered, 
                       const char *desc)
 {
@@ -244,7 +245,14 @@ add_closing_balances (AccountGroup *closed_grp,
 
          /* find the equity account into which we'll poke the 
           * balancing transaction */
-         equity = find_nearest_equity_acct (twin);
+         if (NULL == equity_account)
+         {
+            equity = find_nearest_equity_acct (twin);
+         }
+         else
+         {
+            equity = equity_account;
+         }
 
          /* -------------------------------- */
          /* create the balancing transaction */
@@ -297,6 +305,7 @@ add_closing_balances (AccountGroup *closed_grp,
       if (childs) 
       {
          add_closing_balances (childs, open_book, closed_book,
+                          equity_account,
                           post_date, date_entered, desc);
       }
    }
@@ -306,7 +315,8 @@ add_closing_balances (AccountGroup *closed_grp,
 /* split a book into two by date */
 
 GNCBook * 
-gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date,
+gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
+                       Account *equity_account,
                        const char * memo)
 {
    Query *query;
@@ -314,6 +324,8 @@ gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date,
    kvp_frame *exist_cwd, *partn_cwd;
    kvp_value *vvv;
    Timespec ts;
+
+   if (!existing_book) return NULL;
 
    /* Get all transactions that are *earlier* than the calve date,
     * and put them in the new book.  */
@@ -332,14 +344,14 @@ gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date,
    
    /* Mark the boundary date between the books */
    vvv = kvp_value_new_timespec (calve_date);
-   kvp_frame_set_slot_nc (exist_cwd, "start-date", vvv);
-   kvp_frame_set_slot_nc (partn_cwd, "end-date", vvv);
+   kvp_frame_set_slot_nc (exist_cwd, "open-date", vvv);
+   kvp_frame_set_slot_nc (partn_cwd, "close-date", vvv);
 
    /* Mark partition as being closed */
    ts.tv_sec = time(0);
    ts.tv_nsec = 0;
    vvv = kvp_value_new_timespec (ts);
-   kvp_frame_set_slot_nc (partn_cwd, "close-date", vvv);
+   kvp_frame_set_slot_nc (partn_cwd, "log-date", vvv);
 
    /* Set up pointers to each book from the other. */
    vvv = kvp_value_new_guid (&existing_book->guid);
@@ -352,6 +364,7 @@ gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date,
     * hold the colsing balances */
    add_closing_balances (gnc_book_get_group(partition_book), 
                         existing_book, partition_book,
+                        equity_account,
                         &calve_date, &ts, memo);
    return partition_book;
 }

@@ -39,6 +39,73 @@ Use:  xaccGetMyFavoriteThing(), xaccSetMyFavoriteThing()
 Please put the keys in alphabetical order.
 
 --------------------------------------------------------------------------
+Name: /book/
+Type: kvp_frame
+Entities: Account, Book, Transaction
+Use:  kvp subdirectory holding info relating to accounting periods, including
+      the 'twin' of an open/closed account, pointers to the open-balance
+      transactions, the closing dates, etc.
+
+Name: /book/close-date
+Type: Timespec
+Entities: Book
+Use:  The posted closing date of this book.  This book only contains transactions
+      whose posted date is earlier than this closing date.
+
+Name: /book/closed-acct
+Type: GUID
+Entities: Transaction
+Use:  The GUID of the account for which this transaction represents the 
+      opening balance.  This value will occur *only* in transactions that
+      are opening balances.
+
+Name: /book/closed-book
+Type: GUID
+Entities: Transaction
+Use:  The GUID of the book for which this transaction represents the 
+      opening balance.  This value will occur *only* in transactions that
+      are opening balances.
+
+Name: /book/log-date
+Type: Timespec
+Entities: Book
+Use:  A log of the date which the user performed the closing of the book.
+
+Name: /book/next-acct
+Type: GUID
+Entities: Account
+Use:  The GUID of the account that follows this one, chronologically.
+      Note that the open-date of the next book should equal the close-date
+      of the book that this account belongs to.
+
+Name: /book/next-book
+Type: GUID
+Entities: Account, Book
+Use:  The GUID of the book that follows this one, chronologically.
+      Note that the open-date of the next book should equal the close-date
+      of this book.
+
+Name: /book/open-date
+Type: Timespec
+Entities: Book
+Use:  The posted opening date of this book.  This book only contains transactions
+      whose posted date is laterr than this closing date.
+
+Name: /book/prev-acct
+Type: GUID
+Entities: Account
+Use:  The GUID of the account that preceeds this one, chronologically.
+      Note that the close-date of the previous book should equal the open-date
+      of the book that this account belongs to.
+
+Name: /book/prev-book
+Type: GUID
+Entities: Account, Book
+Use:  The GUID of the book that preceeds this one, chronologically.
+      Note that the close-date of the previous book should equal the open-date
+      of this book.
+
+-----------------------
 
 Name: from-sched-xaction
 Type: GUID
@@ -146,39 +213,43 @@ Entities: Account
 Use: This holds the old security scu. This may be deleted at
      some point in the future.
 
-Name: reconcile-info
+-----------------------
+
+Name: /reconcile-info
 Type: frame
 Entities: Account
 Use: store reconcile information about accounts
 
-Name: reconcile-info/include-children
+Name: /reconcile-info/include-children
 Type: gint64
 Entities: Account
 Use: A boolean flag indicating whether transactions in sub-accounts should be
      included during reconcilition.
 
-Name: reconcile-info/last-date
+Name: /reconcile-info/last-date
 Type: frame
 Entities: Account
 Use: store the statement date of the last reconciliation
 
-Name: reconcile-info/postpone/date
+Name: /reconcile-info/postpone/date
 Type: gint64
 Entities: Account
 Use: store the ending statement date of a postponed reconciliation
 
-Name: reconcile-info/postpone/balance
+Name: /reconcile-info/postpone/balance
 Type: numeric
 Entities: Account
 Use: store the ending balance of a postponed reconciliation
 
-Name: reconcile-info/auto-interest-transfer
+Name: /reconcile-info/auto-interest-transfer
 Type: string
 Entities: Account
 Use: allows the user to override the global reconcile option
      "Automatic interest transfer" on a per-account basis.
      Acceptable values are "true" and "false".
      (This really could use a KVP_TYPE_BOOLEAN.)
+
+-----------------------
 
 Name: /sched-xaction/
 Type: frame
@@ -205,6 +276,8 @@ Name: split-type
 Entities: Split
 Use: xaccSplitGetType, xaccSplitMakeStockSplit
      Store a string representing the type of split, if not normal.
+
+-----------------------
 
 Name: /tax-US/code
 Type: string

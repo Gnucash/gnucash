@@ -22,53 +22,81 @@
 #include "Query.h"
 
 
-/* The gnc_book_calve_period() routine will split the indicated
- *    book into two books, returning a newly created book with 
- *    the older transactions placed in it. 
+/* The gnc_book_close_period() routine will 'close' a book at
+ *    the indicated date.  It returns a pointer to the closed book,
+ *    while the argument remains open.  This routine will move
+ *    all of the older transactions from the open book to the
+ *    closed book.  The guid's of the old transactions will not
+ *    be changed in the move.  Note, however, that the closed
+ *    book will have a copy of every account in the open book,
+ *    and that these copies will have new GUID's issued to them.
+ *    Thus, every account has a 'twin' in the other book.
+ * 
+ *    This routine will also create 'equity transactions' in 
+ *    order to preserve the balances on accounts.  For any
+ *    account that is not of income, expense or equity type,
+ *    this routine wil find the closing balance of each account
+ *    in the closed book.  It will then create an 'equity
+ *    transaction' in the open book, creating an opening balance 
+ *    between an equity account and the twin account to the 
+ *    closed account.  The 'memo' field will be used to set
+ *    the description in the equity transaction.  Typically,
+ *    you will want to set this field to _("Opening Balance").
  *
- * The 'memo' is used as the description in the transaction that 
- * creates the opening balances for the accounts.  Typically,
- * it should be _("Opening Balance")
+ *    The equity_account argument is supposed to indicate the 
+ *    equity account in the open book into which the opening
+ *    balances will be placed.   This argument may be NULL,
+ *    if it is NULL, then a search algorithm will be used to 
+ *    find a suitable equity account.  If NULL, this routine 
+ *    searches for the 'nearest' account of GNCAccountType EQUITY 
+ *    among its siblings, or the siblings of its parents.  It 
+ *    does not search downwards.  If it does not find such an 
+ *    account, it will create one, hanging off the top-most group.
  *
--- Make an equity transfer so that we can carry forward the balances.
-   the equity account is created if not found.   only the peers and 
-   immediate parents of an account is searchd for the qeuity account.
+ *    This routine also populates a number of KVP values in
+ *    order to make a log of the closing.  In principle, the
+ *    stored KVP's should be enough to locate everything needed
+ *    to safely re-open and re-close a closed book.  In particular,
+ *    if a closed book is re-opened, the 'equity transaction'
+ *    would need to be adjusted.
+ * 
+ *    The kvp values that are set are:
+ *
+ *    Implemented in the closed book:
+ *    /book/close-date       Latest date in this book. Must not change.
+ *    /book/log-date         Date on which user called this routine.
+ *    /book/next-book        GUID of next book (the still-open book).
+ *    
+ *    Implemented in still-open book:
+ *    /book/open-date        Earliest date in this book.
+ *    /book/prev-book        GUID of previous book (the closed book).
+ *    
+ *    Implemented in the balancing transaction:
+ *    /book/closed-acct      GUID of account whose balance was brought forward
+ *    /book/closed-book      GUID of book whose balance was brought forward
+ *    
+ *    Implemented in the closed account:
+ *    /book/balancing-trans  GUID of equity-balancing transaction.
+ *    /book/next-book        GUID of equity-balancing book.
+ *    /book/next-acct        GUID of twin of this account in the open book.
+ *    
+ *    Implemented in the still-open account:
+ *    /book/prev-acct         GUID of twin of this account in the closed book.
+ *    /book/prev-book         GUID of previous book (the closed book)
+ *    
+-- hack alert -- 
+  Not imlemented (yet), these should go into book:
+  /book/name=some-user-supplied-name
+  /book/notes=user-supplied-descriptive-comments
+  /book/accounting-period=enum {none, week, month, quarter, trimester, year}
 
 -- hack alert -- should not allow closed books to have unreconciled
    transactions ???
--- It will use the following kvp entries in /book/:
-
-Implemented in the closed book:
-/book/end-date          latest date in this book. must not change ...
-/book/close-date        date on which book was closed.
-/book/next-book         guid of next book (the still-open book)
-
-Implemented in still-open book:
-/book/start-date        earliest date in this book.
-/book/prev-book         guid of previous book (the closed book)
-
-Implemented in the balancing transaction:
-/book/closed-acct  guid of account whose balance was brought forward
-/book/closed-book  guid of book whose balance was brought forward
-
-Implemented in the closed account:
-/book/balancing-trans  GUID of equity-balancing transaction.
-/book/next-book     GUID of equity-balancing book.
-/book/next-acct     GUID of twin of this account in the open book.
-
-Implemented in the still-open account:
-/book/prev-acct         GUID of twin of this account in the closed book.
-/book/prev-book         guid of previous book (the closed book)
-
-Not imlemented (yet), these should go into book:
-/book/name=some-user-supplied-name
-/book/notes=user-supplied-descriptive-comments
-/book/accounting-period=enum {none, week, month, quarter, trimester, year}
-
-
 
  */
-GNCBook * gnc_book_calve_period (GNCBook *, Timespec, const char *memo);
+GNCBook * gnc_book_close_period (GNCBook *, Timespec, 
+                                 Account *equity_acct, 
+                                 const char *memo);
 
 /* The gnc_book_partition() uses the result of the indicated query
  *    to partition an existing book into two parts.  It returns 
