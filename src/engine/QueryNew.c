@@ -624,6 +624,10 @@ GList * gncQueryRun (QueryNew *q)
     compile_terms (q);
   }
 
+  /* Maybe log this sucker */
+  if (gnc_should_log (module, GNC_LOG_DETAIL))
+    gncQueryPrint (q);
+
   /* Now run the query over all the objects and save the results */
   {
     query_cb_t qcb;
@@ -1250,3 +1254,414 @@ gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2)
 
   return TRUE;
 }
+
+/***************************************************************************/
+/* Query Print functions.  gncQueryPrint is public; everthing else supports
+ * that.
+ * Just call gncQueryPrint(QueryNew *q), and it will print out the query 
+ * contents to stderr.
+*/
+
+/* Static prototypes */
+static GList *gncQueryPrintSearchFor (Query * query, GList * output);
+static GList *gncQueryPrintTerms (Query * query, GList * output);
+static GList *gncQueryPrintSorts (QueryNewSort_t s[], const gint numSorts,
+                                  GList * output);
+static GList *gncQueryPrintAndTerms (GList * terms, GList * output);
+static gchar *gncQueryPrintStringForHow (query_compare_t how);
+static gchar *gncQueryPrintStringMatch (string_match_t s);
+static gchar *gncQueryPrintDateMatch (date_match_t d);
+static gchar *gncQueryPrintNumericMatch (numeric_match_t n);
+static gchar *gncQueryPrintGuidMatch (guid_match_t g);
+static gchar *gncQueryPrintCharMatch (char_match_t c);
+static GString *gncQueryPrintPredData (QueryPredData_t pd);
+static GString *gncQueryPrintParamPath (GSList * parmList);
+static void gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs);
+static void gncQueryPrintOutput (GList * output);
+
+/*
+	This function cycles through a QueryNew object, and
+	prints out the values of the various members of the query
+*/
+void
+gncQueryPrint (QueryNew * query)
+{
+  GList *output;
+  GString *str;
+  QueryNewSort_t s[3];
+  gint maxResults = 0, numSorts = 3;
+
+  output = NULL;
+  str = NULL;
+  maxResults = gncQueryGetMaxResults (query);
+
+  ENTER (" ");
+  output = gncQueryPrintSearchFor (query, output);
+  output = gncQueryPrintTerms (query, output);
+
+  gncQueryGetSorts (query, &s[0], &s[1], &s[2]);
+
+  if (s[0])
+  {
+    output = gncQueryPrintSorts (s, numSorts, output);
+  }
+
+  str = g_string_new (" ");
+  g_string_sprintf (str, "Maximum number of results: %d", maxResults);
+  output = g_list_append (output, str);
+
+  gncQueryPrintOutput (output);
+  LEAVE (" ");
+}
+
+static void
+gncQueryPrintOutput (GList * output)
+{
+  GList *lst;
+
+  for (lst = output; lst; lst = lst->next)
+  {
+    GString *line = (GString *) lst->data;
+
+    fprintf (stderr, "%s\n", line->str);
+    g_string_free (line, TRUE);
+    line = NULL;
+  }
+}
+
+/*
+	Get the search_for type--This is the type of Object
+	we are searching for (SPLIT, TRANS, etc)
+*/
+static GList *
+gncQueryPrintSearchFor (Query * query, GList * output)
+{
+  GNCIdType searchFor;
+  GString *gs;
+
+  searchFor = gncQueryGetSearchFor (query);
+  gs = g_string_new ("Query Object Type: ");
+  g_string_append (gs, searchFor);
+  output = g_list_append (output, gs);
+
+  return output;
+}                               /* gncQueryPrintSearchFor */
+
+/*
+	Run through the terms of the query.  This is a outer-inner
+	loop.  The elements of the outer loop are ORed, and the
+	elements of the inner loop are ANDed.
+*/
+static GList *
+gncQueryPrintTerms (Query * query, GList * output)
+{
+
+  GList *terms, *lst;
+
+  terms = gncQueryGetTerms (query);
+
+  for (lst = terms; lst; lst = lst->next)
+  {
+    output = g_list_append (output, g_string_new ("OR and AND Terms:"));
+
+    if (lst->data)
+    {
+      output = gncQueryPrintAndTerms (lst->data, output);
+    }
+    else
+    {
+      output =
+        g_list_append (output, g_string_new ("  No data for AND terms"));
+    }
+  }
+
+  return output;
+}                               /* gncQueryPrintTerms */
+
+/*
+	Process the sort parameters
+	If this function is called, the assumption is that the first sort
+	not null.
+*/
+static GList *
+gncQueryPrintSorts (QueryNewSort_t s[], const gint numSorts, GList * output)
+{
+  GSList *gsl = NULL;
+  gint curSort;
+  GString *gs = g_string_new ("  Sort Parameters:\n");
+
+  for (curSort = 0; curSort < numSorts; curSort++)
+  {
+    gboolean increasing;
+    if (!s[curSort])
+    {
+      break;
+    }
+    increasing = gncQuerySortGetIncreasing (s[curSort]);
+
+    for (gsl = gncQuerySortGetParamPath (s[curSort]); gsl; gsl = gsl->next)
+    {
+      GString *sortParm = g_string_new (gsl->data);
+      g_string_sprintfa (gs, "    Param: %s %s\n", sortParm->str,
+                         increasing ? "DESC" : "ASC");
+      g_string_free (sortParm, TRUE);
+    }
+    /* TODO: finish this for loop */
+  }
+
+  output = g_list_append (output, gs);
+  return output;
+
+}                               /* gncQueryPrintSorts */
+
+/*
+	Process the AND terms of the query.  This is a GList
+	of WHERE terms that will be ANDed
+*/
+static GList *
+gncQueryPrintAndTerms (GList * terms, GList * output)
+{
+  const char *prefix = "  AND Terms:";
+  QueryNewTerm_t qt;
+  QueryPredData_t pd;
+  GSList *path;
+  GList *lst;
+  gboolean invert;
+
+  output = g_list_append (output, g_string_new (prefix));
+  for (lst = terms; lst; lst = lst->next)
+  {
+    qt = (QueryNewTerm_t) lst->data;
+    pd = gncQueryTermGetPredData (qt);
+    path = gncQueryTermGetParamPath (qt);
+    invert = gncQueryTermIsInverted (qt);
+
+    output = g_list_append (output, gncQueryPrintParamPath (path));
+    output = g_list_append (output, gncQueryPrintPredData (pd));
+    output = g_list_append (output, g_string_new("\n"));
+  }
+
+  return output;
+}                               /* gncQueryPrintAndTerms */
+
+/*
+	Process the parameter types of the predicate data
+*/
+static GString *
+gncQueryPrintParamPath (GSList * parmList)
+{
+  GSList *list = NULL;
+  GString *gs = g_string_new ("    Param List:\n");
+  g_string_append (gs, "      ");
+  for (list = parmList; list; list = list->next)
+  {
+    g_string_append (gs, (gchar *) list->data);
+    if (list->next)
+      g_string_append (gs, "->");
+  }
+
+  return gs;
+}                               /* gncQueryPrintParamPath */
+
+/*
+	Process the PredData of the AND terms
+*/
+static GString *
+gncQueryPrintPredData (QueryPredData_t pd)
+{
+  GString *gs;
+
+  gs = g_string_new ("    Pred Data:\n      ");
+  g_string_append (gs, (gchar *) pd->type_name);
+  g_string_sprintfa (gs, "\n      how: %s",
+                     gncQueryPrintStringForHow (pd->how));
+
+  gncQueryPrintValueForParam (pd, gs);
+
+  return gs;
+}                               /* gncQueryPrintPredData */
+
+/*
+	Get a string representation for the
+	query_compare_t enum type.
+*/
+static gchar *
+gncQueryPrintStringForHow (query_compare_t how)
+{
+
+  switch (how)
+  {
+    case COMPARE_LT:
+      return "COMPARE_LT";
+    case COMPARE_LTE:
+      return "COMPARE_LTE";
+    case COMPARE_EQUAL:
+      return "COMPARE_EQUAL";
+    case COMPARE_GT:
+      return "COMPARE_GT";
+    case COMPARE_GTE:
+      return "COMPARE_GTE";
+    case COMPARE_NEQ:
+      return "COMPARE_NEQ";
+  }
+
+  return "INVALID HOW";
+}                               /* qncQueryPrintStringForHow */
+
+
+static void
+gncQueryPrintValueForParam (QueryPredData_t pd, GString * gs)
+{
+
+  if (!safe_strcmp (pd->type_name, QUERYCORE_GUID))
+  {
+    GList *node;
+    query_guid_t pdata = (query_guid_t) pd;
+    g_string_sprintfa (gs, "\n      Match type %s",
+                       gncQueryPrintGuidMatch (pdata->options));
+    for (node = pdata->guids; node; node = node->next)
+    {
+      gchar *guid = guid_to_string ((GUID *) node->data);
+      g_string_sprintfa (gs, ", guids: %s", guid);
+    }
+    return;
+  }
+  if (!safe_strcmp (pd->type_name, QUERYCORE_STRING))
+  {
+    query_string_t pdata = (query_string_t) pd;
+    g_string_sprintfa (gs, "\n      Match type %s",
+                       gncQueryPrintStringMatch (pdata->options));
+    g_string_sprintfa (gs, " %s string: %s",
+                       pdata->is_regex ? "Regex" : "Not regex",
+                       pdata->matchstring);
+    return;
+  }
+  if (!safe_strcmp (pd->type_name, QUERYCORE_NUMERIC))
+  {
+    query_numeric_t pdata = (query_numeric_t) pd;
+    g_string_sprintfa (gs, "\n      Match type %s",
+                       gncQueryPrintNumericMatch (pdata->options));
+    g_string_sprintfa (gs, " gnc_numeric: %s",
+                       gnc_numeric_to_string (pdata->amount));
+    return;
+  }
+  if (!safe_strcmp (pd->type_name, QUERYCORE_DATE))
+  {
+    query_date_t pdata = (query_date_t) pd;
+    g_string_sprintfa (gs, "\n      Match type %s",
+                       gncQueryPrintDateMatch (pdata->options));
+    g_string_sprintfa (gs, " query_date: %s", gnc_print_date (pdata->date));
+    return;
+  }
+  if (!safe_strcmp (pd->type_name, QUERYCORE_CHAR))
+  {
+    query_char_t pdata = (query_char_t) pd;
+    g_string_sprintfa (gs, "\n      Match type %s",
+                       gncQueryPrintCharMatch (pdata->options));
+    g_string_sprintfa (gs, " char list: %s", pdata->char_list);
+    return;
+  }
+  if (!safe_strcmp (pd->type_name, QUERYCORE_KVP))
+  {
+    GSList *node;
+    query_kvp_t pdata = (query_kvp_t) pd;
+    for (node = pdata->path; node; node = node->next)
+    {
+      g_string_sprintfa (gs, "\n      kvp path: %s", (gchar *) node->data);
+      return;
+    }
+  }
+  return;
+}                               /* gncQueryPrintValueForParam */
+
+/*
+ * Print out a string representation of the
+ * string_match_t enum
+ */
+static gchar *
+gncQueryPrintStringMatch (string_match_t s)
+{
+  switch (s)
+  {
+    case STRING_MATCH_NORMAL:
+      return "STRING_MATCH_NORMAL";
+    case STRING_MATCH_CASEINSENSITIVE:
+      return "STRING_MATCH_CASEINSENSITIVE";
+  }
+  return "UNKNOWN MATCH TYPE";
+}                               /* gncQueryPrintStringMatch */
+
+/*
+ * Print out a string representation of the
+ * date_match_t enum
+ */
+static gchar *
+gncQueryPrintDateMatch (date_match_t d)
+{
+  switch (d)
+  {
+    case DATE_MATCH_NORMAL:
+      return "DATE_MATCH_NORMAL";
+    case DATE_MATCH_ROUNDED:
+      return "DATE_MATCH_ROUNDED";
+  }
+  return "UNKNOWN MATCH TYPE";
+}                               /* gncQueryPrintDateMatch */
+
+/*
+ * Print out a string representation of the
+ * numeric_match_t enum
+ */
+static gchar *
+gncQueryPrintNumericMatch (numeric_match_t n)
+{
+  switch (n)
+  {
+    case NUMERIC_MATCH_DEBIT:
+      return "NUMERIC_MATCH_DEBIT";
+    case NUMERIC_MATCH_CREDIT:
+      return "NUMERIC_MATCH_CREDIT";
+    case NUMERIC_MATCH_ANY:
+      return "NUMERIC_MATCH_ANY";
+  }
+  return "UNKNOWN MATCH TYPE";
+}                               /* gncQueryPrintNumericMatch */
+
+/*
+ * Print out a string representation of the
+ * guid_match_t enum
+ */
+static gchar *
+gncQueryPrintGuidMatch (guid_match_t g)
+{
+  switch (g)
+  {
+    case GUID_MATCH_ANY:
+      return "GUID_MATCH_ANY";
+    case GUID_MATCH_ALL:
+      return "GUID_MATCH_ALL";
+    case GUID_MATCH_NONE:
+      return "GUID_MATCH_NONE";
+    case GUID_MATCH_NULL:
+      return "GUID_MATCH_NULL";
+  }
+
+  return "UNKNOWN MATCH TYPE";
+}                               /* gncQueryPrintGuidMatch */
+
+/*
+ * Print out a string representation of the
+ * char_match_t enum
+ */
+static gchar *
+gncQueryPrintCharMatch (char_match_t c)
+{
+  switch (c)
+  {
+    case CHAR_MATCH_ANY:
+      return "CHAR_MATCH_ANY";
+    case CHAR_MATCH_NONE:
+      return "CHAR_MATCH_NONE";
+  }
+  return "UNKNOWN MATCH TYPE";
+}                               /* gncQueryPrintGuidMatch */

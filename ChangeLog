@@ -10,6 +10,8 @@
 
 	* gncEntryLedgerModel.c: don't use the currency symbol when printing
 	  value and tax cells.
+
+	* Matthew Vanecek's gncQueryPrint() patch
 	
 2002-10-18  Benoit Grégoire  <bock@step.polymtl.ca>
 	

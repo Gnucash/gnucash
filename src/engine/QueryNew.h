@@ -126,4 +126,9 @@ void gncQuerySetMaxResults (QueryNew *q, int n);
  * and/or trees are ignored. */
 gboolean gncQueryEqual (QueryNew *q1, QueryNew *q2);
 
+/* Print the Query in human-readable format.
+ * Useful for debugging and development.
+ */
+void gncQueryPrint (QueryNew *query);
+
 #endif /* GNC_QUERYNEW_H */
