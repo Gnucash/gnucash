@@ -431,7 +431,7 @@ decode_md5_string(const char *string, unsigned char *data)
   return GUID_TRUE;
 }
 
-const char *
+char *
 guid_to_string(const GUID * guid)
 {
   char *string = malloc(GUID_ENCODING_LENGTH+1);

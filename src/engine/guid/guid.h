@@ -73,7 +73,7 @@ void guid_new(GUID *guid);
  * always be 32 characters long. The returned string should be
  * freed when no longer needed.
  */
-const char * guid_to_string(const GUID * guid);
+char * guid_to_string(const GUID * guid);
 
 
 /* Given a string, decode the id into the guid if guid is non-NULL.
