@@ -72,6 +72,7 @@ mallocAccount( void )
   acc->arrowb        = NULL;
   acc->expand        = 0;
   acc->regData       = NULL;
+  acc->ledgerList    = NULL;
   acc->recnData      = NULL;
   acc->adjBData      = NULL;
   acc->editAccData   = NULL;
@@ -140,6 +141,9 @@ freeAccount( Account *acc )
   acc->regData  = NULL;
   acc->recnData = NULL;
   acc->adjBData = NULL;
+
+  if (acc->ledgerList) _free (acc->ledgerList);
+  acc->ledgerList = NULL;
 
   _free(acc);
 }

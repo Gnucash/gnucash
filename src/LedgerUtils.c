@@ -133,7 +133,6 @@ xaccGroupToList (Account *acc)
 
    list = (Account **) _malloc ((nacc+1) * sizeof (Account *));
 
-   /* hack alert xxxxxxxxxxx do children's children too */
    list[0] = acc;
    n = 1;
    if (acc->children) {
@@ -146,7 +145,10 @@ xaccGroupToList (Account *acc)
             Account *childacc;
             int ic = 0;
 
+            /* get the children */
             childlist = xaccGroupToList (acc->children->account[i]);
+
+            /* copy them over */
             childacc = childlist[0];
             while (childacc) {
               n++;
@@ -162,6 +164,116 @@ xaccGroupToList (Account *acc)
    list[n] = NULL;
 
    return list;
+}
+
+/* ------------------------------------------------------ */
+
+int 
+ledgerListCount (struct _RegWindow **list)
+{
+   struct _RegWindow *reg;
+   int n;
+
+   if (!list) return 0;
+
+   n = 0;
+   reg = list[0];
+   while (reg) {
+      n++;
+      reg = list[n];
+   }
+   return n;
+}
+
+/* ------------------------------------------------------ */
+void 
+ledgerListAdd (Account * acc, struct _RegWindow *addreg)
+{
+   struct _RegWindow **oldlist;
+   struct _RegWindow **newlist;
+   struct _RegWindow *reg;
+   int n;
+
+   if (!acc) return;
+   if (!addreg) return;
+
+   oldlist = acc->ledgerList;
+   n = ledgerListCount (oldlist);
+
+   newlist = (struct _RegWindow **) 
+               _malloc ((n+2) * sizeof (struct _RegWindow *));
+
+   n = 0;
+   reg = oldlist[0];
+   while (reg) {
+      newlist[n] = reg;
+      n++;
+      reg = oldlist[n];
+   }
+   newlist[n] = addreg;
+   newlist[n+1] = NULL;
+
+   _free (oldlist);
+   acc->ledgerList = newlist;
+}
+
+/* ------------------------------------------------------ */
+
+void 
+ledgerListDelete (Account * acc, struct _RegWindow *delreg)
+{
+   struct _RegWindow **oldlist;
+   struct _RegWindow **newlist;
+   struct _RegWindow *reg;
+   int n, i;
+
+   if (!acc) return;
+   if (!delreg) return;
+
+   oldlist = acc->ledgerList;
+   n = ledgerListCount (oldlist);
+
+   newlist = (struct _RegWindow **) 
+               _malloc ((n+1) * sizeof (struct _RegWindow *));
+
+   n = 0;
+   i = 0;
+   reg = oldlist[0];
+   while (reg) {
+      newlist[i] = reg;
+      if (delreg == reg) i--;
+      i++;
+      n++;
+      reg = oldlist[n];
+   }
+   newlist[i] = NULL;
+
+   _free (oldlist);
+   acc->ledgerList = newlist;
+}
+
+/* ------------------------------------------------------ */
+
+int
+ledgerListIsMember (Account * acc, struct _RegWindow *memreg)
+{
+   struct _RegWindow **list;
+   struct _RegWindow *reg;
+   int n;
+
+   if (!acc) return 0;
+   if (!memreg) return 0;
+
+   list = acc->ledgerList;
+
+   n = 0;
+   reg = list[0];
+   while (reg) {
+      if (memreg == reg) return 1;
+      n++;
+      reg = list[n];
+   }
+   return 0;
 }
 
 /************************** END OF FILE *************************/
