@@ -466,6 +466,11 @@ void xaccInitSplitRegister (SplitRegister *reg, int type)
    xaccSetPriceCellValue (reg->creditCell, 0.0);
    xaccSetPriceCellValue (reg->valueCell, 0.0);
 
+   /* use three decimal places to print share-related info.
+    * The format is a printf-style format for a double.  */
+   xaccSetPriceCellFormat (reg->shrsCell, "%.3f");
+   xaccSetPriceCellFormat (reg->priceCell, "%.3f");
+
    /* -------------------------------- */   
    /* define how traversal works */
    configTraverse (reg);

@@ -52,9 +52,9 @@
 
 typedef struct _PriceCell {
    BasicCell cell;
-   double amount;   /* the amount associated with this cell */
+   double amount;      /* the amount associated with this cell */
    short blank_zero;   /* controls printing of zero values */
-   
+   char *prt_format;   /* controls display of value; printf format */  
 } PriceCell;
 
 /* installs a callback to handle price recording */
@@ -65,8 +65,8 @@ void         xaccDestroyPriceCell (PriceCell *);
 /* updates amount, string format is three decimal places */
 void         xaccSetPriceCellValue (PriceCell *, double amount);
 
-/* updates amount, string format is two decimal places */
-void         xaccSetAmountCellValue (PriceCell *, double amount);
+/* use printf-style format to control display */
+void         xaccSetPriceCellFormat (PriceCell *, char * fmt);
 
 /* updates two cells; the deb cell if amt is negative,
  * the credit cell if amount is positive, and makes the other cell
