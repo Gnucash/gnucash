@@ -315,6 +315,22 @@ It also is a useful debugging tool, as if you make sure that the
 then closes and syncs, you know what is going on with the data even if
 horrible things happen to the "master" database file.
 
+Session Mgmt
+------------
+To allow the user of the engine some guarentee of atomic updates, 
+serialized file I/O, related miscellany, the concept of a session
+is supported.  No file IO can be performed until a session has 
+been created, and file updates are not guarenteed atomic unless
+performed within a SessionBegin/SessionEnd pair.
+
+Note that (in the current implementation) data can be manipulated 
+outside of the session; its just that it cannot be saved/made persistent.
+
+The goal of sessin management is to ensure that e.g. two users don't end 
+up editing the same file at the same time, or, e.g. that an automatic
+stock-quote update daemon runnig under a different pid adoesn't trash 
+data being currently edited by the user.
+
 
 Remaining Work Items
 --------------------
