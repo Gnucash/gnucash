@@ -19,6 +19,50 @@ of the features of xacc are:
     the previous transaction.  Handy if you have
     similar transactions on a regular basis.
     (such as depositing your paycheck every week :)
+  - Stock/Mutual Fund Portfolios.  Track stocks
+    individually (one per account) or in portfolio
+    of accounts (a group of accounts that can be 
+    displayed together).  
+  - Quicken File Import. Import Quicken Version 3.0 
+    QIF files.
+
+Advanced Features
+-----------------
+X-Accountant offers some features not usually found
+in simpler accounting programs.
+  - Sub-accounts: A master account can have a hierarchy
+    of detail accounts underneath it.  This allows similar
+    account types (e.g. Cash, Bank, Stock) to be grouped 
+    into one master account (e.g. Assets).
+  - Double Entry: 
+    Every transaction can appear in two
+    accounts; one account is debited and the other is 
+    credited with exactly the same amount.  With 
+    double-entry, a transaction edited in one window 
+    will be automatically updated in all other windows 
+    showing that transaction, and in both of the 
+    accounts.
+  - Income/Expense Account Types (Categories).   
+    When used properly 
+    with the double-entry feature, these can be used 
+    to create both Balance Sheet and Profits &amp; Losses
+    reports.  For example, savings account interest,
+    stock dividends, or paychecks can be marked as 
+    both a deposit in a bank account, and as income in 
+    an Income account type, using the double-entry 
+    (transfer) feature.  Similarly, credit card charges
+    can be noted in the credit card account, as well 
+    as in a corresponding expense account.
+  - General Ledger: Multiple accounts can be displayed 
+    in one register window at the same time.  This can
+    ease the trouble of tracking down typing/entry errors.
+    It also provides a convenient way of viewing a
+    portfolio of many stocks, by showing all transactions
+    in that portfolio.
+
+Home Page:
+----------
+http://www3.hmc.edu/~rclark/xacc/
 
 
 Running:
@@ -82,13 +126,6 @@ Bugs:
 -- should do something for automatic interest computations,
    also mortgages, bonds, etc.
 
-Fixed:
--- nasty bug relating to save/restore of double-entry to file
-   was fixed!
--- Nasty core dump in motif when two register windows are opened,
-   and then closed.  Beats the heck out of me. Bug with 
-   vendorShellWidgetClass
-   
 ---------------
 Bare-bones general ledger capabilities added.
 Working Features:
