@@ -1000,10 +1000,11 @@ xaccWriteAccountGroup( char *datafile, AccountGroup *grp )
   /* tag each filename with a timestamp */
   timestamp = xaccDateUtilGetStampNow ();
 
-  filenamelen = strlen (datafile) + strlen (timestamp) +5;
+  filenamelen = strlen (datafile) + strlen (timestamp) + 6;
   
   backup = (char *) malloc (filenamelen);
   strcpy (backup, datafile);
+  strcat (backup, ".");
   strcat (backup, timestamp);
   strcat (backup, ".xac");
   
