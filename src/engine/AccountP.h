@@ -1,7 +1,7 @@
 /********************************************************************\
  * AccountP.h -- Account engine-private data structure              *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997-2000, Linas Vepstas <linas@linas.org>         *
+ * Copyright (C) 1997-2001, Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -101,20 +101,10 @@ struct account_s
    */
   GNCAccountType type;
 
-  /* Old semantics: The currency field denotes the default currency in
-   * which all splits in this account are denominated.  Currency
-   * trading accounts allow splits between accounts when the currency
-   * string matches the security string.
-   *
-   * The gnc_commodity type represents the namespace, full name, and
-   * symbol for the currency.
-   *
-   * New semantics: The account structure will no longer store a
-   * 'currency' and a 'security'. Instead it will store only one
-   * commodity (i.e. currency), that is the one formerly known as
-   * 'security'. The 'amount' of each split represents the
-   * transferred amount in the account's commodity (formerly known as
-   * security).
+  /* 
+   * The commodity field denotes the kind of 'stuff' stored 
+   * in this account.  The 'amount' field of a split indicates
+   * how much of the 'stuff' there is.
    */
   gnc_commodity * commodity;
   int commodity_scu;
@@ -160,7 +150,8 @@ struct account_s
 
 
 /* The xaccAccountLookupEntityTable() routine is like xaccAccountLookup
- *    but accepts and entity table instead of a book. */
+ *    but accepts and entity table instead of a book. 
+ */
 Account * xaccAccountLookupEntityTable (const GUID *guid,
                                         GNCEntityTable *entity_table);
 
@@ -173,13 +164,15 @@ Account * xaccAccountLookupEntityTable (const GUID *guid,
  */
 void         xaccAccountRemoveSplit (Account *, Split *);
 
-/* xaccAccountSortSplits() will resort the account's splits
- * if the sort is dirty. If 'force' is true, the account is
- * sorted even if the editlevel is not zero. */
+/* The xaccAccountSortSplits() routine will resort the account's 
+ * splits if the sort is dirty. If 'force' is true, the account 
+ * is sorted even if the editlevel is not zero. 
+ */
 void xaccAccountSortSplits (Account *acc, gboolean force);
 
-/* the following recompute the partial balances (stored with the
- * transaction) and the total balance, for this account */
+/* The following recompute the partial balances (stored with the
+ * transaction) and the total balance, for this account 
+ */
 void         xaccAccountRecomputeBalance (Account *);
 
 /* Set the account's GUID. This should only be done when reading
@@ -194,10 +187,6 @@ void         xaccAccountSetGUID (Account *account, const GUID *guid);
  *    the backend will typically return all of the splits after some 
  *    certain date, and the 'starting balance' will represent the summation 
  *    of the splits up to that date.
- *
- *    Design Note: this routine assumes that there is only one commodity
- *    associated with this account, and that the reporting currency will
- *    no longer be stored with the account.
  *
  *    This routine is in the private .h file because only backends are 
  *    allowed to set the starting balance.  This is *not* a user interface
