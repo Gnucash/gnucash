@@ -1083,7 +1083,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
 
   if (!table || !namespace || !mnemonic) return NULL;
 
-  nsp = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
+  nsp = gnc_commodity_table_find_namespace(table, namespace);
 
   if(nsp) {
     /*
@@ -1201,7 +1201,7 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     return c;
   }
 
-  nsp = g_hash_table_lookup(table->ns_table, (gpointer)ns_name);
+  nsp = gnc_commodity_table_add_namespace(table, ns_name);
   str_cache = gnc_engine_get_string_cache ();
   
   PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic, nsp->cm_table, nsp->name);
@@ -1237,7 +1237,7 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
 
   gnc_engine_gen_event (&comm->inst.entity, GNC_EVENT_REMOVE);
 
-  nsp = g_hash_table_lookup (table->ns_table, ns_name);
+  nsp = gnc_commodity_table_find_namespace(table, ns_name);
   if (!nsp) return;
 
   nsp->cm_list = g_list_remove(nsp->cm_list, comm);
@@ -1258,7 +1258,7 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
   
   if(!table || !namespace) { return 0; }
 
-  nsp = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
+  nsp = gnc_commodity_table_find_namespace(table, namespace);
   if(nsp) {
     return 1;
   }
@@ -1344,7 +1344,7 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
   if (!table)
     return NULL;
 
-  ns = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
+  ns = gnc_commodity_table_find_namespace(table, namespace);
   if (!ns)
     return NULL;
 
@@ -1405,7 +1405,7 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
       namespace = tmp->data;
       if (regexec(&pattern, namespace, 0, NULL, 0) == 0) {
 	DEBUG("Running list of %s commodities", namespace);
-	ns = g_hash_table_lookup(table->ns_table, namespace);
+	ns = gnc_commodity_table_find_namespace(table, namespace);
 	if (ns) {
 	  g_hash_table_foreach(ns->cm_table, &get_quotables_helper1, (gpointer) &l);
 	}
@@ -1434,7 +1434,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   
   if (!table) return NULL;
   
-  ns = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
+  ns = gnc_commodity_table_find_namespace(table, namespace);
   if(!ns) 
   {
     GCache *str_cache = gnc_engine_get_string_cache ();
@@ -1454,7 +1454,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
 
 
 gnc_commodity_namespace * 
-gnc_commodity_table_find_namespace(gnc_commodity_table * table,
+gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
 				   const char * namespace) 
 {
   if (!table || !namespace)
@@ -1508,7 +1508,7 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
 
   if (!table) return;
 
-  ns = g_hash_table_lookup(table->ns_table, namespace);
+  ns = gnc_commodity_table_find_namespace(table, namespace);
   if (!ns)
     return;
 

@@ -727,7 +727,7 @@ gnc_commodity_namespace * gnc_commodity_table_add_namespace(gnc_commodity_table 
  *
  *  @return The a pointer to the namespace found, or NULL if the
  *  namespace doesn't exist. */
-gnc_commodity_namespace * gnc_commodity_table_find_namespace(gnc_commodity_table * table,
+gnc_commodity_namespace * gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
 							     const char * namespace);
 
 /** This function deletes a string from the list of commodity namespaces.

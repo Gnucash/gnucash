@@ -14,6 +14,10 @@
 	  QofAccessFunc - the patch changes it to the appropriate Get
 	  routine - the QofSetterFunc is OK.
 
+	* src/engine/gnc-commodity.[ch]:
+	  - Use gnc_commodity_table_find_namespace() throughout
+	  - fix a crash when adding a new namespace to the commodity table.
+
 2005-01-26  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' QSF Backend.
