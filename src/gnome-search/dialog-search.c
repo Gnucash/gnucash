@@ -44,7 +44,7 @@ struct _GNCSearchWindow {
 
   /* Callbacks */
   GNCSearchResultCB result_cb;
-  GNCSearchCallback new_item_cb;
+  GNCSearchNewItemCB new_item_cb;
   GNCSearchCallbackButton *buttons;
   gpointer		user_data;
 
@@ -330,7 +330,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 
   g_return_if_fail (sw->new_item_cb);
 
-  retval = (sw->new_item_cb)(&res, sw->user_data);
+  retval = (sw->new_item_cb)(sw->dialog, &res, sw->user_data);
   if (res) {
     sw->selected_item = res;
     if (!retval)
@@ -714,7 +714,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  QueryNew *start_query, QueryNew *show_start_query,
 			  GNCSearchCallbackButton *callbacks,
 			  GNCSearchResultCB result_callback,
-			  GNCSearchCallback new_item_cb,
+			  GNCSearchNewItemCB new_item_cb,
 			  gpointer user_data)
 {
   GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
@@ -798,7 +798,7 @@ gpointer gnc_search_dialog_choose_object (GtkWidget *parent,
 					  QueryNew *show_start_query,
 					  GNCSearchCallbackButton *callbacks,
 					  GNCSearchResultCB result_callback,
-					  GNCSearchCallback new_item_cb,
+					  GNCSearchNewItemCB new_item_cb,
 					  gpointer user_data)
 {
   gpointer result = NULL;

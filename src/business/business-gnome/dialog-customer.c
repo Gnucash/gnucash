@@ -717,13 +717,13 @@ select_customer_cb (gpointer *cust_p, gpointer user_data)
 }
 
 static gboolean
-new_customer_cb (gpointer *cust_p, gpointer user_data)
+new_customer_cb (GtkWidget *parent, gpointer *cust_p, gpointer user_data)
 {
   struct _customer_select_window *sw = user_data;
   
   g_return_val_if_fail (cust_p && user_data, TRUE);
 
-  *cust_p = gnc_customer_new (sw->parent, sw->book);
+  *cust_p = gnc_customer_new (parent, sw->book);
   return sw->no_close;
 }
 
@@ -753,10 +753,10 @@ gnc_customer_select (GtkWidget *parent, GncCustomer *start, GNCBook *book,
 				       CUSTOMER_SHIPADDR, ADDRESS_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
 				       CUSTOMER_ADDR, ADDRESS_NAME, NULL);
-    params = gnc_search_param_prepend (params, _("Customer Name"), NULL, type,
-				       CUSTOMER_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Customer ID"), NULL, type,
 				       CUSTOMER_ID, NULL);
+    params = gnc_search_param_prepend (params, _("Customer Name"), NULL, type,
+				       CUSTOMER_NAME, NULL);
   }
 
   /* Build the queries */

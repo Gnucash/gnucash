@@ -612,13 +612,13 @@ select_vendor_cb (gpointer *vendor_p, gpointer user_data)
 }
 
 static gboolean
-new_vendor_cb (gpointer *vendor_p, gpointer user_data)
+new_vendor_cb (GtkWidget *parent, gpointer *vendor_p, gpointer user_data)
 {
   struct _vendor_select_window *sw = user_data;
   
   g_return_val_if_fail (vendor_p && user_data, TRUE);
 
-  *vendor_p = gnc_vendor_new (sw->parent, sw->book);
+  *vendor_p = gnc_vendor_new (parent, sw->book);
   return sw->no_close;
 }
 
@@ -646,10 +646,10 @@ gnc_vendor_select (GtkWidget *parent, GncVendor *start, GNCBook *book,
   if (params == NULL) {
     params = gnc_search_param_prepend (params, _("Billing Contact"), NULL, type,
 				       VENDOR_ADDR, ADDRESS_NAME, NULL);
-    params = gnc_search_param_prepend (params, _("Vendor Name"), NULL, type,
-				       VENDOR_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Vendor ID"), NULL, type,
 				       VENDOR_ID, NULL);
+    params = gnc_search_param_prepend (params, _("Vendor Name"), NULL, type,
+				       VENDOR_NAME, NULL);
   }
 
   /* Build the queries */

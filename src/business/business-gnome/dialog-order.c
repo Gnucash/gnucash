@@ -820,13 +820,13 @@ select_order_cb (gpointer *order_p, gpointer user_data)
 }
 
 static gboolean
-new_order_cb (gpointer *order_p, gpointer user_data)
+new_order_cb (GtkWidget *parent, gpointer *order_p, gpointer user_data)
 {
   struct _order_select_window *sw = user_data;
   
   g_return_val_if_fail (order_p && user_data, TRUE);
 
-  *order_p = gnc_order_new (sw->parent, sw->owner, sw->book);
+  *order_p = gnc_order_new (parent, sw->owner, sw->book);
   return sw->no_close;
 }
 

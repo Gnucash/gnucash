@@ -561,13 +561,13 @@ select_employee_cb (gpointer *employee_p, gpointer user_data)
 }
 
 static gboolean
-new_employee_cb (gpointer *employee_p, gpointer user_data)
+new_employee_cb (GtkWidget *parent, gpointer *employee_p, gpointer user_data)
 {
   struct _employee_select_window *sw = user_data;
   
   g_return_val_if_fail (employee_p && user_data, TRUE);
 
-  *employee_p = gnc_employee_new (sw->parent, sw->book);
+  *employee_p = gnc_employee_new (parent, sw->book);
   return sw->no_close;
 }
 
@@ -590,12 +590,12 @@ gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
 
   /* Build parameter list in reverse order*/
   if (params == NULL) {
+    params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
+				       EMPLOYEE_ID, NULL);
     params = gnc_search_param_prepend (params, _("Employee Name"), NULL,
 				       type, EMPLOYEE_ADDR, ADDRESS_NAME, NULL);
     params = gnc_search_param_prepend (params, _("Employee Username"), NULL,
 				       type, EMPLOYEE_USERNAME, NULL);
-    params = gnc_search_param_prepend (params, _("Employee ID"), NULL, type,
-				       EMPLOYEE_ID, NULL);
   }
 
   /* Build the queries */
