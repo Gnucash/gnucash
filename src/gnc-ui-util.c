@@ -632,7 +632,7 @@ const char *
 DxaccPrintAmount (double val, GNCPrintAmountInfo info)
 {
    /* hack alert -- this is not thread safe ... */
-   static char buf[BUFSIZE];
+   static char buf[1024];
 
    DxaccSPrintAmount (buf, val, info);
 

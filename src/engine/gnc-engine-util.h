@@ -39,8 +39,6 @@
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 
-#define BUFSIZE   1024
-
 
 /** DEBUGGING MACROS ************************************************/
 /* The debuging macros enable the setting of trace messages */

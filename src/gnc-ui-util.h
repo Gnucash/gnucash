@@ -52,8 +52,8 @@ int gnc_locale_decimal_places(void);
 /*
  * The xaccPrintAmount() and xaccSPrintAmount() routines provide
  *    i18n'ed convenience routines for printing gnc_numerics.
- *    amounts. Both routines take a gnc_numeric argument and an
- *    printing information object.
+ *    amounts. Both routines take a gnc_numeric argument and
+ *    a printing information object.
  *
  * The xaccPrintAmount() routine returns a pointer to a statically
  *    allocated buffer, and is therefore not thread-safe.
