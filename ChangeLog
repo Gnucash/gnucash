@@ -1,3 +1,8 @@
+2003-04-21  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-reports/aging.scm: fix the percentage
+	  calculations so we don't get GtkCritical warnings.
+
 2003-04-20  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/transaction.scm: Applied Tomas
