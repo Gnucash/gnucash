@@ -1,11 +1,18 @@
 2001-06-07  James LewisMoss  <jimdres@mindspring.com>
 
+	* doc/README.translator.txt (variables): add instructions for
+	manual and account hierarchy files.
+
 	* src/gnome/new-user-callbacks.c: fix test for commodity added by
 	setting data on druid rather than a global variable (bad jim.
 	global variable bad).
 	(on_chooseAccountTypesPage_prepare): remove old comment.
 	(on_chooseAccountTypesPage_prepare): set object data that account
 	lists loaded.
+	(on_chooseAccountTypesPage_prepare): use new func to determine
+	locale dir.
+	(gnc_get_ea_locale_dir): new func to determine locale correct dir
+	to read account files from.
 
 	* src/gnome/new-user-funs.c (gnc_get_new_user_dialog): new func.
 
