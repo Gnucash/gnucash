@@ -321,10 +321,12 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
 
   fraction = gnc_commodity_get_fraction (currency);
 
-  cell = (PriceCell *) gnc_register_get_cell (reg, DEBT_CELL);
+  cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                  DEBT_CELL);
   xaccSetPriceCellFraction (cell, fraction);
 
-  cell = (PriceCell *) gnc_register_get_cell (reg, CRED_CELL);
+  cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                  CRED_CELL);
   xaccSetPriceCellFraction (cell, fraction);
 
   account = xaccSplitGetAccount (split);
@@ -332,7 +334,8 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
   if (account == NULL)
     account = sr_get_default_account (reg);
 
-  cell = (PriceCell *) gnc_register_get_cell (reg, SHRS_CELL);
+  cell = (PriceCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                  SHRS_CELL);
 
   if (account)
     xaccSetPriceCellFraction (cell, xaccAccountGetCommoditySCU (account));

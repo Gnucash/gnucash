@@ -138,45 +138,6 @@ gnc_register_add_cell (SplitRegister *sr,
   gnc_table_layout_add_cell (sr->table->layout, cell_type, cell);
 }
 
-BasicCell *
-gnc_register_get_cell (SplitRegister *sr, CellType cell_type)
-{
-  g_return_val_if_fail (sr != NULL, NULL);
-  g_return_val_if_fail (sr->table != NULL, NULL);
-
-  return gnc_table_layout_get_cell (sr->table->layout, cell_type);
-}
-
-const char *
-gnc_register_get_cell_value (SplitRegister *sr, CellType cell_type)
-{
-  BasicCell *cell;
-
-  cell = gnc_register_get_cell (sr, cell_type);
-  if (!cell) return NULL;
-
-  return gnc_basic_cell_get_value (cell);
-}
-
-gboolean
-gnc_register_get_cell_changed (SplitRegister *sr,
-                               CellType cell_type,
-                               gboolean include_conditional)
-{
-  BasicCell *cell;
-
-  if (!sr) return FALSE;
-
-  cell = gnc_register_get_cell (sr, cell_type);
-  if (!cell) return FALSE;
-
-  if (!include_conditional)
-    return gnc_basic_cell_get_changed (cell);
-  else
-    return (gnc_basic_cell_get_changed (cell) ||
-            gnc_basic_cell_get_conditionally_changed (cell));
-}
-
 /* ============================================== */
 /* configAction strings into the action cell */
 /* hack alert -- this stuff really, really should be in a config file ... */
@@ -186,7 +147,8 @@ configAction (SplitRegister *reg)
 {
   ComboCell *cell;
 
-  cell = (ComboCell *) gnc_register_get_cell (reg, ACTN_CELL);
+  cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                  ACTN_CELL);
 
   /* setup strings in the action pull-down */
   switch (reg->type)
@@ -304,7 +266,7 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
 
   cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
-  cb_cell->cell = gnc_register_get_cell (reg, cell_type);
+  cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
   cb_cell->cell_type = cell_type;
   cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
   cb_cell->alignment = cell_alignments[cell_type];
@@ -318,7 +280,7 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
 
   if (cb_cell && (cursor == cursor_sl))
   {
-    cb_cell->cell = gnc_register_get_cell (reg, cell_type);
+    cb_cell->cell = gnc_table_layout_get_cell (reg->table->layout, cell_type);
     cb_cell->cell_type = cell_type;
     cb_cell->sample_text = g_strdup (_(ss->string) + ss->offset);
     cb_cell->alignment = cell_alignments[cell_type];
@@ -765,7 +727,8 @@ xaccInitSplitRegister (SplitRegister *reg,
   configLayout (reg);
 
   /* The num cell is the transaction number */
-  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, NUM_CELL),
+  xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
+                                                        NUM_CELL),
                              _("Enter the transaction number, such as the "
                                "check number"));
 
@@ -773,67 +736,84 @@ xaccInitSplitRegister (SplitRegister *reg,
   {
     const char *help = _("Enter the account to transfer from, or choose "
                          "one from the list");
-    xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, MXFRM_CELL), help);
-    xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, XFRM_CELL), help);
+    xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
+                                                          MXFRM_CELL), help);
+    xaccSetBasicCellBlankHelp (gnc_table_layout_get_cell (reg->table->layout,
+                                                          XFRM_CELL), help);
   }
 
   {
     const char *help = _("This transaction has multiple splits; "
                          "press the Split button to see them all");
 
-    xaccComboCellAddIgnoreString ((ComboCell *)
-                                  gnc_register_get_cell (reg, MXFRM_CELL),
-                                  _("-- Split Transaction --"), help);
+    xaccComboCellAddIgnoreString
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       _("-- Split Transaction --"), help);
   }
 
   {
     const char *help = _("This transaction is a stock split; "
                          "press the Split button to see details");
 
-    xaccComboCellAddIgnoreString ((ComboCell *)
-                                  gnc_register_get_cell (reg, MXFRM_CELL),
-                                  _("-- Stock Split --"), help);
+    xaccComboCellAddIgnoreString
+      ((ComboCell *)
+       gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL),
+       _("-- Stock Split --"), help);
   }
 
   /* the action cell */
-  xaccComboCellSetAutoSize ((ComboCell *)
-                            gnc_register_get_cell (reg, ACTN_CELL), TRUE);
+  xaccComboCellSetAutoSize
+    ((ComboCell *)
+     gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
 
   /* the memo cell */
-  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, MEMO_CELL),
-                             _("Enter a description of the split"));
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, MEMO_CELL),
+     _("Enter a description of the split"));
 
   /* the desc cell */
-  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, DESC_CELL),
-                             _("Enter a description of the transaction"));
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
+     _("Enter a description of the transaction"));
 
   /* the notes cell */
-  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, NOTES_CELL),
-                             _("Enter notes for the transaction"));
-  /* the formula cell */
-  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, FCRED_CELL),
-                             _("Enter credit formula for real transaction"));
-  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, FDEBT_CELL),
-                             _("Enter debit formula for real transaction"));
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, NOTES_CELL),
+     _("Enter notes for the transaction"));
+
+  /* the formula cells */
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, FCRED_CELL),
+     _("Enter credit formula for real transaction"));
+
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, FDEBT_CELL),
+     _("Enter debit formula for real transaction"));
 
   /* Use 6 decimal places for prices */
-  xaccSetPriceCellFraction ((PriceCell *)
-                            gnc_register_get_cell (reg, PRIC_CELL), 1000000);
+  xaccSetPriceCellFraction
+    ((PriceCell *)
+     gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL), 1000000);
 
   /* Initialize shares and share balance cells */
   xaccSetPriceCellPrintInfo
-    ((PriceCell *) gnc_register_get_cell (reg, SHRS_CELL),
+    ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
      gnc_default_share_print_info ());
+
   xaccSetPriceCellPrintInfo
-    ((PriceCell *) gnc_register_get_cell (reg, TSHRS_CELL),
+    ((PriceCell *) gnc_table_layout_get_cell (reg->table->layout, TSHRS_CELL),
      gnc_default_share_print_info ());
 
   /* The action cell should accept strings not in the list */
-  xaccComboCellSetStrict ((ComboCell *)
-                          gnc_register_get_cell (reg, ACTN_CELL), FALSE);
-  xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, ACTN_CELL),
-                             _("Enter the type of transaction, or choose "
-                               "one from the list"));
+  xaccComboCellSetStrict
+    ((ComboCell *)
+     gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), FALSE);
+
+  xaccSetBasicCellBlankHelp
+    (gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL),
+     _("Enter the type of transaction, or choose "
+       "one from the list"));
 
   /* number format for share quantities in stock ledgers */
   switch (type)
@@ -841,15 +821,18 @@ xaccInitSplitRegister (SplitRegister *reg,
     case CURRENCY_REGISTER:
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
-      xaccSetPriceCellPrintInfo ((PriceCell *)
-                                 gnc_register_get_cell (reg, PRIC_CELL),
-                                 gnc_default_price_print_info ());
+      xaccSetPriceCellPrintInfo
+        ((PriceCell *)
+         gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+         gnc_default_price_print_info ());
 
-      xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, PRIC_CELL),
-                                 _("Enter the share price"));
-      xaccSetBasicCellBlankHelp (gnc_register_get_cell (reg, SHRS_CELL),
-                                 _("Enter the number of shares bought or "
-                                   "sold"));
+      xaccSetBasicCellBlankHelp
+        (gnc_table_layout_get_cell (reg->table->layout, PRIC_CELL),
+         _("Enter the share price"));
+
+      xaccSetBasicCellBlankHelp
+        (gnc_table_layout_get_cell (reg->table->layout, SHRS_CELL),
+         _("Enter the number of shares bought or sold"));
       break;
     default:
       break;

@@ -47,6 +47,12 @@ void gnc_table_layout_add_cell (TableLayout *layout,
                                 BasicCell *cell);
 
 BasicCell * gnc_table_layout_get_cell (TableLayout *layout, int cell_type);
+const char * gnc_table_layout_get_cell_value (TableLayout *layout,
+                                              int cell_type);
+gboolean gnc_table_layout_get_cell_changed (TableLayout *layout,
+                                            int cell_type,
+                                            gboolean include_conditional);
+
 int gnc_table_layout_get_cell_type (TableLayout *layout, BasicCell *cell);
 
 GList * gnc_table_layout_get_cells (TableLayout *layout);

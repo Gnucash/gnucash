@@ -1,7 +1,7 @@
 SUBDIRS=test
 
 pkglib_LTLIBRARIES = libgncmod-backend-postgres.la 
-libgncmod_backend_postgres_la_LDFLAGS =-module -lpq -L../../engine -lgncmod-engine ${GLIB_LIBS}
+libgncmod_backend_postgres_la_LDFLAGS =-module -lpq -L../../engine -L../../engine/.libs -lgncmod-engine ${GLIB_LIBS}
 
 libgncmod_backend_postgres_la_SOURCES = \
   PostgresBackend.c \

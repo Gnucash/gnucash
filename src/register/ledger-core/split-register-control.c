@@ -578,22 +578,32 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           return FALSE;
 
         /* nothing but the date, num, and description should be changed */
-        if (gnc_register_get_cell_changed (reg, XFRM_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, MXFRM_CELL, TRUE) ||
-            gnc_register_get_cell_changed (reg, PRIC_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, SHRS_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, DEBT_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, CRED_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, NOTES_CELL, TRUE) ||
-            gnc_register_get_cell_changed (reg, RECN_CELL, TRUE))
+        /* FIXME, this should be refactored. */
+        if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               XFRM_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               MXFRM_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               PRIC_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               SHRS_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               DEBT_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               CRED_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               NOTES_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               RECN_CELL, TRUE))
           return FALSE;
 
         /* and the description should be changed */
-        if (!gnc_register_get_cell_changed (reg, DESC_CELL, TRUE))
+        if (!gnc_table_layout_get_cell_changed (reg->table->layout,
+                                                DESC_CELL, TRUE))
           return FALSE;
 
         /* to a non-empty value */
-        desc = gnc_register_get_cell_value (reg, DESC_CELL);
+        desc = gnc_table_layout_get_cell_value (reg->table->layout, DESC_CELL);
         if ((desc == NULL) || (*desc == '\0'))
           return FALSE;
 
@@ -690,19 +700,26 @@ gnc_split_register_auto_completion (SplitRegister *reg,
           return FALSE;
 
         /* nothing but the action, memo, and amounts should be changed */
-        if (gnc_register_get_cell_changed (reg, XFRM_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, MXFRM_CELL, TRUE) ||
-            gnc_register_get_cell_changed (reg, PRIC_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, SHRS_CELL, TRUE)  ||
-            gnc_register_get_cell_changed (reg, RECN_CELL, TRUE))
+        /* FIXME. This should be refactored. */
+        if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               XFRM_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               MXFRM_CELL, TRUE) ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               PRIC_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               SHRS_CELL, TRUE)  ||
+            gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               RECN_CELL, TRUE))
           return FALSE;
 
         /* and the memo should be changed */
-        if (!gnc_register_get_cell_changed (reg, MEMO_CELL, TRUE))
+        if (!gnc_table_layout_get_cell_changed (reg->table->layout,
+                                                MEMO_CELL, TRUE))
           return FALSE;
 
         /* to a non-empty value */
-        memo = gnc_register_get_cell_value (reg, MEMO_CELL);
+        memo = gnc_table_layout_get_cell_value (reg->table->layout, MEMO_CELL);
         if ((memo == NULL) || (*memo == '\0'))
           return FALSE;
 
@@ -727,15 +744,16 @@ gnc_split_register_auto_completion (SplitRegister *reg,
         /* the auto-complete code below is taken from xaccSRGetEntryHandler */
 
         /* auto-complete the action field if it wasn't changed */
-        if (!gnc_register_get_cell_changed (reg, ACTN_CELL, TRUE))
+        if (!gnc_table_layout_get_cell_changed (reg->table->layout,
+                                                ACTN_CELL, TRUE))
         {
-          cell = gnc_register_get_cell (reg, ACTN_CELL);
+          cell = gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL);
           xaccSetComboCellValue ((ComboCell *) cell,
                                  xaccSplitGetAction (auto_split));
         }
 
         /* auto-complete the account name */
-        cell = gnc_register_get_cell (reg, XFRM_CELL);
+        cell = gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
 
         fullname = xaccAccountGetFullName (xaccSplitGetAccount (auto_split),
                                            gnc_get_account_separator ());
@@ -744,16 +762,20 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
         gnc_basic_cell_set_changed (cell, TRUE);
 
-        if (!gnc_register_get_cell_changed (reg, DEBT_CELL, TRUE) &&
-            !gnc_register_get_cell_changed (reg, CRED_CELL, TRUE))
+        if (!gnc_table_layout_get_cell_changed (reg->table->layout,
+                                                DEBT_CELL, TRUE) &&
+            !gnc_table_layout_get_cell_changed (reg->table->layout,
+                                                CRED_CELL, TRUE))
         {
           BasicCell *debit_cell;
           BasicCell *credit_cell;
 
           amount = xaccSplitGetValue (auto_split);
 
-          debit_cell = gnc_register_get_cell (reg, DEBT_CELL);
-          credit_cell = gnc_register_get_cell (reg, CRED_CELL);
+          debit_cell = gnc_table_layout_get_cell (reg->table->layout,
+                                                  DEBT_CELL);
+          credit_cell = gnc_table_layout_get_cell (reg->table->layout,
+                                                   CRED_CELL);
 
           xaccSetDebCredCellValue ((PriceCell *) debit_cell,
                                    (PriceCell *) credit_cell, amount);
@@ -845,13 +867,17 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
     switch (cell_type)
     {
       case XFRM_CELL:
-        if (gnc_register_get_cell_changed (reg, XFRM_CELL, FALSE))
-          cell = (ComboCell *) gnc_register_get_cell (reg, XFRM_CELL);
+        if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               XFRM_CELL, FALSE))
+          cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                          XFRM_CELL);
         break;
 
       case MXFRM_CELL:
-        if (gnc_register_get_cell_changed (reg, MXFRM_CELL, FALSE))
-          cell = (ComboCell *) gnc_register_get_cell (reg, MXFRM_CELL);
+        if (gnc_table_layout_get_cell_changed (reg->table->layout,
+                                               MXFRM_CELL, FALSE))
+          cell = (ComboCell *) gnc_table_layout_get_cell (reg->table->layout,
+                                                          MXFRM_CELL);
         break;
 
       default:

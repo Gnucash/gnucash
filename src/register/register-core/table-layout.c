@@ -155,6 +155,38 @@ gnc_table_layout_get_cell (TableLayout *layout, int cell_type)
   return NULL;
 }
 
+const char *
+gnc_table_layout_get_cell_value (TableLayout *layout, int cell_type)
+{
+  BasicCell *cell;
+
+  g_return_val_if_fail (layout != NULL, NULL);
+
+  cell = gnc_table_layout_get_cell (layout, cell_type);
+  if (!cell) return NULL;
+
+  return gnc_basic_cell_get_value (cell);
+}
+
+gboolean
+gnc_table_layout_get_cell_changed (TableLayout *layout,
+                                   int cell_type,
+                                   gboolean include_conditional)
+{
+  BasicCell *cell;
+
+  g_return_val_if_fail (layout != NULL, FALSE);
+
+  cell = gnc_table_layout_get_cell (layout, cell_type);
+  if (!cell) return FALSE;
+
+  if (!include_conditional)
+    return gnc_basic_cell_get_changed (cell);
+  else
+    return (gnc_basic_cell_get_changed (cell) ||
+            gnc_basic_cell_get_conditionally_changed (cell));
+}
+
 int
 gnc_table_layout_get_cell_type (TableLayout *layout, BasicCell *cell)
 {

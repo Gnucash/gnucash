@@ -2303,8 +2303,8 @@ gnucash_sheet_new (Table *table)
         sheet->grid = item;
 
         /* some register data */
-        sheet->dimensions_hash_table = g_hash_table_new (g_str_hash,
-                                                         g_str_equal);
+        sheet->dimensions_hash_table = g_hash_table_new (g_int_hash,
+                                                         g_int_equal);
 
         /* The cursor */
         sheet->cursor = gnucash_cursor_new (sheet_group);

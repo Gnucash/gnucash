@@ -190,14 +190,6 @@ void            xaccConfigSplitRegister (SplitRegister *reg,
 
 void            xaccDestroySplitRegister (SplitRegister *reg);
 
-BasicCell *     gnc_register_get_cell (SplitRegister *sr, CellType cell_type);
-const char *    gnc_register_get_cell_value (SplitRegister *sr,
-                                             CellType cell_type);
-
-gboolean        gnc_register_get_cell_changed (SplitRegister *sr,
-                                               CellType cell_type,
-                                               gboolean include_conditional);
-
 /* Returns the type of the current cursor */
 CursorClass     xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg);
 

@@ -45,21 +45,14 @@ static gboolean use_vertical_lines = TRUE;
 static gboolean use_horizontal_lines = TRUE;
 
 
-static char *
+static gpointer
 style_get_key (SheetBlockStyle *style)
 {
-        switch (style->cursor->num_rows)
-        {
-                case 1: return "singles";
-                case 2: return "doubles";
+        static gint key;
 
-                default:
-                        break;
-        }
+        key = style->cursor->num_rows;
 
-        g_warning ("style_get_key: bad cursor type\n");
-
-        return NULL;
+        return &key;
 }
 
 
