@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "Query.h"
 #include "splitreg.h"
 #include "SplitLedger.h"
 #include "Transaction.h"
@@ -41,6 +42,7 @@ struct _xaccLedgerDisplay {
   Account *leader;               /* leading. "master" account               */
   Account **displayed_accounts;  /* The list of accounts shown here         */
   short   numAcc;                /* number of accounts in list              */
+  Query   *query;                /* query engine & filter for displaying    */
 
   short type;                    /* register display type, usually equal to *
                                   * account type, but not always.           */

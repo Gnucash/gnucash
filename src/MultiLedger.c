@@ -25,9 +25,10 @@
 
 #include "Account.h"
 #include "Group.h"
-#include "MultiLedger.h"
-#include "SplitLedger.h"
 #include "LedgerUtils.h"
+#include "MultiLedger.h"
+#include "Query.h"
+#include "SplitLedger.h"
 #include "Transaction.h"
 #include "util.h"
 
@@ -329,14 +330,20 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   regData->displayed_accounts = accListCopy (acclist);
   regData->type = ledger_type;
 
+  /* set up the query filter */
+  regData->query = xaccMallocQuery();
+  xaccQuerySetAccounts (regData->query, regData->displayed_accounts);
+  xaccQueryAddAccount (regData->query, regData->leader);
+
+  /* add this register to the list of registers */
   fullList = ledgerListAdd (fullList, regData);
 
   /******************************************************************\
    * The main register window itself                                *
   \******************************************************************/
 
-  /* MallocBasicRegister will malloc & initialize the
-   * register but doesn't do the gui init */
+  /* MallocBasicRegister will malloc & initialize the register,
+   * but will not do the gui init */
   regData->ledger = xaccMallocSplitRegister (ledger_type);
   
   regData->dirty = 1;
@@ -365,7 +372,7 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
     * new splits and get them into the system.
     */
    xaccSRLoadRegister (regData->ledger, 
-                     xaccAccountGetSplitList (regData->leader),
+                     xaccQueryGetSplits (regData->query),
                      regData->leader);
 
 
@@ -609,6 +616,8 @@ xaccLedgerDisplayClose (xaccLedgerDisplay *regData)
   REMOVE_FROM_LIST (xaccLedgerDisplay, ledgerList, acc, leader);
 
   ledgerListRemove (fullList, regData);
+
+  xaccFreeQuery (regData->query);
 
   free(regData);
 }
