@@ -1,5 +1,13 @@
 Version history:
 ------- -------
+ 1.1.1 - 24 Jan 1998
+         o  Alpha level code.  Very broken.
+            All new register design -- modularized. 
+            Many versin 1.0 ledger functions missing.
+            Splits added to engine.  
+            May not compile, will probably core dump.
+            This is alpha level code, not for general use.
+
  1.0b1 - 29 Nov 97
          o  Many, many changes by Linas Vepstas to give double entry
             bookkeeping, sub-accounts, income/expense account types, and
