@@ -78,8 +78,7 @@ const char *void_former_val_str = "void-former-value";
 
 #define PRICE_SIGFIGS 6
 
-#define ISO_DATELENGTH 30 /* length of an iso 8601 date string.
-                           * not sure, can't be bothered counting :) */
+#define ISO_DATELENGTH 32 /* length of an iso 8601 date string. */
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;
@@ -1509,16 +1508,22 @@ xaccTransFindOldCommonCurrency (Transaction *trans, GNCBook *book)
   }
   else if (!gnc_commodity_equiv (retval,trans->common_currency))
   {
-    PWARN ("expected common currency %s but found %s\n",
+    char *guid_str = guid_to_string(xaccTransGetGUID(trans));
+    PWARN ("expected common currency %s but found %s in txn %s\n",
            gnc_commodity_get_unique_name (trans->common_currency),
-           gnc_commodity_get_unique_name (retval));
+           gnc_commodity_get_unique_name (retval),
+	   guid_str);
+    g_free(guid_str);
   }
 
   if (NULL == retval)
   {
      /* in every situation I can think of, this routine should return 
       * common currency.  So make note of this ... */
-     PWARN ("unable to find a common currency, and that is strange.");
+     char *guid_str = guid_to_string(xaccTransGetGUID(trans));
+     PWARN ("unable to find a common currency in txn %s, and that is strange.",
+	    guid_str);
+     g_free(guid_str);
   }
 
   return retval;
@@ -2404,7 +2409,7 @@ xaccSplitGetCorrAccountCode(const Split *sa)
   else
   {
     other_split_acc = xaccSplitGetAccount(other_split);
-    return xaccAccountGetName(other_split_acc);
+    return xaccAccountGetCode(other_split_acc);
   }
 }
 
@@ -2492,7 +2497,7 @@ xaccTransSetDateInternal(Transaction *trans, int which, time_t secs,
     check_open(trans);
 
     PINFO ("addr=%p set %d date to %lu %li %s",
-           trans, which, secs, nsecs, ctime (&secs));
+	   trans, which, (long unsigned int)secs, nsecs, ctime (&secs));
     
     dadate = ((which == TDATE_POSTED)
               ? &trans->date_posted
@@ -2987,9 +2992,23 @@ xaccSplitGetValue (const Split * split)
 gnc_numeric
 xaccSplitGetSharePrice (const Split * split) 
 {
-  if(!split || gnc_numeric_zero_p(split->amount)) 
+  if(!split)
   {
     return gnc_numeric_create(1, 1);
+  }
+
+  /* if amount == 0 and value == 0, then return 1.
+   * if amount == 0 and value != 0 then return 0.
+   * otherwise return value/amount
+   */
+
+  if(gnc_numeric_zero_p(split->amount))
+  {
+    if(gnc_numeric_zero_p(split->value))
+    {
+      return gnc_numeric_create(1, 1);
+    }
+    return gnc_numeric_create(0, 1);
   }
   return gnc_numeric_div(split->value, 
                          split->amount,

@@ -737,6 +737,21 @@ tt_trn_handler( xmlNodePtr node, gpointer data )
         if ( trn == NULL ) {
                 return FALSE;
         } else {
+                /* Handle old data saved without a 'Posted' date... new data
+                 * is created correctly. */
+                Timespec ts;
+                time_t tt;
+                xaccTransGetDatePostedTS( trn, &ts );
+                tt = timespecToTime_t( ts );
+                if ( tt == 0 )
+                {
+                        // re-use 'tt'.
+                        xaccTransBeginEdit( trn );
+                        xaccTransGetDateEnteredTS( trn, &ts );
+                        tt = timespecToTime_t( ts );
+                        xaccTransSetDatePostedSecs( trn, tt );
+                        xaccTransCommitEdit( trn );
+                }
                 txd->transactions = g_list_append( txd->transactions, trn );
         }
 

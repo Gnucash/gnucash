@@ -6,7 +6,7 @@ dnl AM_PATH_GNUCASH([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND [,
 dnl Test for GnuCash, and define GNUCASH_CFLAGS and GNUCASH_LIBS, if "gmodule" or 
 dnl gthread is specified in MODULES, pass to gnucash-config
 dnl
-AC_DEFUN(AM_PATH_GNUCASH,
+AC_DEFUN([AM_PATH_GNUCASH],
 [dnl 
 dnl Get the cflags and libraries from the gnucash-config script
 dnl

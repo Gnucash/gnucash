@@ -267,8 +267,18 @@
                                        (s-amount (gnc:split-get-amount s))
                                        (s-value (gnc:split-get-value s))
                                        (s-commodity (gnc:account-get-commodity s-account)))
+				  ;; Check if this is a dangling split
+				  ;; and print a warning
+				  (if (not s-account)
+				      (display
+				       (string-append
+					"WARNING: s-account is NULL for split: "
+					(gnc:split-get-guid s) "\n")))
+
                                   ;(gnc:debug (gnc:account-get-name s-account))
-                                  (if (not (account-in-list? s-account accounts))
+                                  (if (and	 ;; make sure we don't have
+				       s-account ;;  any dangling splits
+				       (not (account-in-list? s-account accounts)))
 				      (if (not (split-in-list? s seen-split-list))
 					  (begin  
 					    (set! seen-split-list (cons s seen-split-list))
@@ -365,6 +375,10 @@
           )
 
 
+	  (gnc:html-document-add-object!
+	   doc
+	   (gnc:make-html-text (_ "Selected Accounts")))
+
           (gnc:html-document-add-object!
            doc
            (gnc:make-html-text
@@ -377,7 +391,7 @@
            table
            "primary-subheading"
            (list
-             (_ "Money In")
+             (_ "Money into selected accounts comes from")
              ""))
 
           (set! row-num 0)
@@ -422,7 +436,7 @@
            table
            "primary-subheading"
            (list
-             (_ "Money Out")
+             (_ "Money out of selected accounts goes to")
              ""))
 
           (set! row-num 0)

@@ -1,8 +1,9 @@
 /********************************************************************\
- * file-utils.h -- simple file utilities                                  *
+ * file-utils.h -- simple file utilities                            *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1998 Rob Browning                                  *
+ * Copyright (C) 2004 Derek Atkins <derek@ihtfp.com>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -28,6 +29,8 @@
 #ifndef GNC_FILE_UTILS_H
 #define GNC_FILE_UTILS_H
 
+#include <stdio.h>		/* for FILE* */
+
 char * gncFindFile (const char * filename);
 
 /********************************************************************\
@@ -39,6 +42,21 @@ char * gncFindFile (const char * filename);
  * Global: xxxPath - the path to search                             * 
 \********************************************************************/
 int gncReadFile (const char * file, char ** data);
+
+
+/**
+ * gnc_getline -- read a line from the input file, up to and including
+ *                the newline.
+ *
+ * Args:   line - pointer to hold the buffer for the whole line (allocated by
+ *                this function)
+ *         file - the file from which to read
+ * Return: the number of bytes read
+ *
+ * The caller MUST g_free() the line returned from this call in all
+ * cases where it is non-NULL!
+ */
+gint64 gnc_getline (gchar **line, FILE *file);
 
 
 #endif /* GNC_FILE_UTILS_H */

@@ -264,7 +264,7 @@ new_billterm_ok_cb (GtkWidget *widget, gpointer data)
       message = g_strdup_printf(_(
 			 "You must provide a unique name for this Billing Term.\n"
 			 "Your choice \"%s\" is already in use."), name);
-      gnc_error_dialog_parented (GTK_WINDOW (nbt->dialog), message);
+      gnc_error_dialog_parented (GTK_WINDOW (nbt->dialog), "%s", message);
       g_free (message);
       return;
     }
@@ -604,11 +604,9 @@ billterms_delete_term_cb (GtkButton *button, BillTermsWindow *btw)
     return;
 
   if (gncBillTermGetRefcount (btw->current_term) > 0) {
-    char *message =
-      g_strdup_printf (_("Term \"%s\" is in use.  You cannot delete it."),
-		       gncBillTermGetName (btw->current_term));
-    gnc_error_dialog_parented (GTK_WINDOW (btw->dialog), message);
-    g_free (message);
+    gnc_error_dialog_parented (GTK_WINDOW (btw->dialog),
+			       _("Term \"%s\" is in use.  You cannot delete it."),
+			       gncBillTermGetName (btw->current_term));
     return;
   }
 

@@ -41,7 +41,6 @@ typedef struct {
 
   GtkWidget * format_picker;
   GtkWidget * position_picker;
-  GtkWidget * dformat_picker;
   GtkWidget * payee_x,  * payee_y;
   GtkWidget * date_x,   * date_y;
   GtkWidget * words_x,  * words_y;
@@ -53,10 +52,8 @@ typedef struct {
 
   GtkWidget * units_picker;
 
-  GtkWidget * month_label, * year_label;
-  GtkWidget * month_num,  * month_abbrev, * month_name;
-  GtkWidget * include_century, * sample_date;
-  GtkWidget * custom_label, * custom_format;
+  GtkWidget * date_format;
+
   gchar *format_string;
 
 } PrintCheckDialog;

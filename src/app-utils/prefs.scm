@@ -191,16 +191,16 @@
   'ledger
   (list (list->vector
          (list 'ledger
-               (N_ "Ledger")
+               (N_ "Basic Ledger")
                (N_ "Show transactions on one or two lines")))
         (list->vector
          (list 'auto_ledger
-               (N_ "Auto Ledger")
+               (N_ "Auto-Split Ledger")
                (N_ "Show transactions on one or two lines \
 and expand the current transaction")))
         (list->vector
          (list 'journal
-               (N_ "Journal")
+               (N_ "Transaction Journal")
                (N_ "Show expanded transactions with all splits"))))))
 
 (gnc:register-configuration-option     
@@ -301,6 +301,26 @@ transaction.") #t))
 not each row")
   #f))
 
+
+;;; Summarybar Options
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Summarybar") (N_ "Show grand total")
+  "a" (N_ "Show a grand total of all accounts converted to the default report currency")
+  #t))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "Summarybar") (N_ "Show non currency commodities")
+  "b" (N_ "Show non currency commodities")
+  #t))
+
+(gnc:options-make-date-interval!
+ gnc:*options-entries* (N_ "Summarybar")
+ (N_ "Start date") (N_ "Start date for profit/loss calculation")
+ (N_ "End date") (N_ "End date for profit/loss and date for net assets calculation")
+ "c")
 
 ;;; Reconcile Options
 

@@ -10,6 +10,7 @@ gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report
 gncscmmod_DATA = \
    business-reports.scm \
    aging.scm \
+   fancy-invoice.scm \
    payables.scm \
    receivables.scm \
    invoice.scm \

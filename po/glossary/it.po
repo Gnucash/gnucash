@@ -1,7 +1,8 @@
 # GnuCash Glossary - Italian version
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2002;
-# Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002.
+# Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
+# Lorenzo Cappelletti <lorenzo.cappelletti@email.it>, 2003.
 #
 # - I messaggi ancora dubbi sono marcati come fuzzy.
 # - Quando qui sono indicate più traduzioni, la prima è quella usata
@@ -9,13 +10,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.6.x\n"
-"POT-Creation-Date: 2002-01-06 11:28+0100\n"
-"PO-Revision-Date: 2002-04-13 15:03+02:00\n"
-"Last-Translator: Lorenzo Cappelletti <L.Cappelletti@mail.com>\n"
+"Project-Id-Version: gnucash-glossary 1.7.4\n"
+"POT-Creation-Date: 2002-12-02 14:51MET\n"
+"PO-Revision-Date: 2004-01-31 15:33+0100\n"
+"Last-Translator: Lorenzo Cappelletti <lorenzo.cappelletti@email.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #. "English Definition"
@@ -55,7 +56,6 @@ msgid "account type: Equity"
 msgstr "tipo conto: capitale, valore netto"
 
 #. "-"
-#, fuzzy
 msgid "account type: Expense"
 msgstr "tipo conto: uscite"
 
@@ -65,7 +65,7 @@ msgstr "tipo conto: entrate"
 
 #. "A debt, a financial obligation"
 msgid "account type: Liability"
-msgstr "tipo conto: passivo, obbligazione, debito"
+msgstr "tipo conto: passivo, passività, obbligazione, debito"
 
 #. "-"
 msgid "account type: money-market"
@@ -76,7 +76,6 @@ msgid "account type: Mutual fund"
 msgstr "tipo conto: fondi comuni"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
-#, fuzzy
 msgid "account type: saving"
 msgstr "tipo conto: di risparmio"
 
@@ -118,9 +117,8 @@ msgid "action: deposit"
 msgstr "operazione: deposito, versamento"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
-#, fuzzy
 msgid "action: direct debit"
-msgstr "operazione: "
+msgstr "operazione: RID (Rimessa Interbancaria Diretta)"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
@@ -169,7 +167,7 @@ msgstr "operazione: trasferimento"
 #. "-"
 #, fuzzy
 msgid "action: wire"
-msgstr "operazione: telegramma"
+msgstr "operazione:"
 
 #. "-"
 msgid "action: withdraw"
@@ -177,7 +175,7 @@ msgstr "operazione: prelievo"
 
 #. "A sum of money"
 msgid "amount"
-msgstr "ammontare, importo, totale, competenze"
+msgstr "importo, ammontare, totale, competenze"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -199,9 +197,21 @@ msgstr "essere in pareggio, pareggiare, saldare, chiudere i conti, quadrare"
 msgid "bank"
 msgstr "banca"
 
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+msgid "bill"
+msgstr "ricevuta, scontrino"
+
+#. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
+msgid "billing terms"
+msgstr "termini di pagamento"
+
 #. "-"
 msgid "business (adjective)"
 msgstr "commerciale"
+
+#. "as Menu Item: Headline for features that are related to small business accounting"
+msgid "business (noun)"
+msgstr "affare"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -220,9 +230,8 @@ msgid "check"
 msgstr "assegno"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
-#, fuzzy
 msgid "check and repair, to"
-msgstr "controllare ed aggiustare"
+msgstr "controllare e riparare"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
@@ -238,10 +247,9 @@ msgstr "listino azionario"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr ""
+msgstr "frazione"
 
 #. "e.g. USD, DEM"
-#, fuzzy
 msgid "commodity option: Symbol"
 msgstr "opzione titolo: simbolo"
 
@@ -305,10 +313,18 @@ msgstr "Descrizione (colonna nel registro)"
 msgid "double entry"
 msgstr "doppia entrata"
 
+#. "a person who works for somebody or a company in return for wages"
+msgid "employee"
+msgstr "lavoratore"
+
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 #, fuzzy
 msgid "equity"
-msgstr "valore netto"
+msgstr "1. valore netto  2. (a)  (b)"
+
+#. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
+msgid "escrow (account)"
+msgstr ""
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -350,19 +366,25 @@ msgstr "importare"
 msgid "interest"
 msgstr "interesse"
 
-#. "A list of goods sold or services provided together with the prices charged; a bill"
-#, fuzzy
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
 msgid "invoice"
-msgstr "ricevuta, scontrino"
+msgstr "fattura"
+
+#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+msgid "job"
+msgstr "lavoro, compito"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
 msgstr "libro mastro, mastro"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
-#, fuzzy
 msgid "liabilities/equity"
 msgstr "passività/nette"
+
+#. "A sum of money that is lent (by a bank)"
+msgid "loan"
+msgstr "prestito"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -381,9 +403,12 @@ msgid "MDI modus"
 msgstr "modalità MDI"
 
 #. "One textfield per split that should help you remember what this split was about."
-#, fuzzy
 msgid "Memo"
-msgstr "Memo"
+msgstr "memo"
+
+#. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
+msgid "Mortgage"
+msgstr "mutuo"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -402,7 +427,6 @@ msgid "net profit"
 msgstr "utile netto"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
-#, fuzzy
 msgid "net worth"
 msgstr "guadagno netto"
 
@@ -420,11 +444,15 @@ msgstr "aprire"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr "bilancio d'apertura"
+msgstr "saldo d'apertura"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
 msgstr "opzioni"
+
+#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+msgid "order"
+msgstr "ordine"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
@@ -450,8 +478,11 @@ msgstr "pagatore, pagante, debitore"
 msgid "payment"
 msgstr "pagamento"
 
+#. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
+msgid "placeholder"
+msgstr "segnaposto"
+
 #. "A set of investments owned by a person"
-#, fuzzy
 msgid "portfolio"
 msgstr "portafoglio, paniere"
 
@@ -464,13 +495,12 @@ msgid "price (in a split)"
 msgstr "prezzo (in una suddivisione)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
-#, fuzzy
 msgid "price type: ask"
-msgstr "tipo prezzo: "
+msgstr "tipo prezzo: lettera"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "tipo prezzo: offerta"
+msgstr "tipo prezzo: denaro"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
@@ -493,7 +523,6 @@ msgid "rebalance, to (a transaction)"
 msgstr "ripareggiare (un movimento)"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
-#, fuzzy
 msgid "reconcile, to"
 msgstr "riconciliare"
 
@@ -542,6 +571,10 @@ msgstr "guadagno ritenuto"
 msgid "save, to (to a file)"
 msgstr "salvare (su un file)"
 
+#. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
+msgid "Scheduled Transaction"
+msgstr "movimento calendarizzato"
+
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
 msgstr "cancellare, annullare"
@@ -576,11 +609,11 @@ msgstr "subtotale"
 
 #. "field of an account"
 msgid "tax info"
-msgstr "info tasse"
+msgstr "info imposte"
 
 #. "if you create a new e.g. style sheet, you can start from a template"
 msgid "template"
-msgstr ""
+msgstr "esempio"
 
 #. "see: date range"
 msgid "time period"
@@ -594,21 +627,25 @@ msgstr "Tot"
 msgid "total"
 msgstr "totale"
 
-#. "A piece of business done; the transfer of money from one account to one or more other accounts"
+#. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
 msgstr "movimento"
 
-#. "-"
+#. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "stato movimento: compensata, tolta, eliminata"
+msgstr "stato movimento: compensato, tolto, eliminato"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "stato movimento: congelata"
+msgstr "stato movimento: congelato"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
 msgstr "stato movimento: riconciliato"
+
+#. "A transaction that is void i.e. not valid (anymore)."
+msgid "transaction state: voided"
+msgstr "stato movimento: non valido"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -635,9 +672,12 @@ msgid "URL"
 msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
-#, fuzzy
 msgid "value (in a split)"
 msgstr "valore (in una suddivisione)"
+
+#. "In small business accounting: A person or company that sells items and is supplying goods"
+msgid "vendor"
+msgstr "fornitore"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"

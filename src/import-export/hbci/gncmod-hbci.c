@@ -7,8 +7,8 @@
 
 #include "config.h"
 #include <stdio.h>
-#include <guile/gh.h>
 #include <glib.h>
+#include <guile/gh.h>
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
@@ -16,6 +16,8 @@
 
 #include "gnc-hbci-cb.h"
 #include "druid-hbci-initial.h"
+#include "gnc-hbci-utils.h"
+#include <gwenhywfar/gwenhywfar.h>
 
 /* version of the gnc module system interface we require */
 int libgncmod_hbci_LTX_gnc_module_system_interface = 0;
@@ -65,23 +67,27 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
   }
 
   /* load the HBCI Scheme code */
-  gh_eval_str("(load-from-path \"hbci/hbci.scm\")");
+  scm_c_eval_string("(load-from-path \"hbci/hbci.scm\")");
 
-  gh_new_procedure("gnc:hbci-initial-setup", 
-		   scm_hbci_initial_druid, 0, 0, 0);
+  scm_c_define_gsubr("gnc:hbci-initial-setup", 
+		     0, 0, 0, scm_hbci_initial_druid);
 
   /* Add menu items with C callbacks */
   gnc_hbci_addmenus();
-  
-  
-  //gh_new_procedure("gnc:hbci-finish-setup", 
-  //scm_hbci_final_druid, 0, 0, 0);
-  
+
+  /* Initialize gwen library */
+  GWEN_Init();
+
   return TRUE;
 }
 
 int
 libgncmod_hbci_LTX_gnc_module_end(int refcount) {
+  gnc_AB_BANKING_delete(0);
+
+  /* Finalize gwen library */
+  GWEN_Fini();
+
   return TRUE;
 }
 

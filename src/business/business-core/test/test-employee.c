@@ -94,8 +94,10 @@ test_employee (void)
   {
     const char *str = get_random_string();
     const char *res;
+    GncAddress *addr;
 
-    gncEmployeeSetUsername (employee, str);
+    addr = gncEmployeeGetAddr (employee);
+    gncAddressSetName (addr, str);
     res = gncObjectPrintable (GNC_EMPLOYEE_MODULE_NAME, employee);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");

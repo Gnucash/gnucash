@@ -20,6 +20,7 @@
 <widget>
   <class>GnomeDialog</class>
   <name>Scheduled Transaction Editor</name>
+  <visible>False</visible>
   <title>Edit Scheduled Transaction</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_CENTER</position>
@@ -312,10 +313,10 @@
 		    <wrap>False</wrap>
 		    <value>0</value>
 		    <lower>0</lower>
-		    <upper>100</upper>
+		    <upper>365</upper>
 		    <step>1</step>
-		    <page>10</page>
-		    <page_size>10</page_size>
+		    <page>30</page>
+		    <page_size>30</page_size>
 		    <child>
 		      <padding>0</padding>
 		      <expand>False</expand>
@@ -389,10 +390,10 @@
 		    <wrap>False</wrap>
 		    <value>0</value>
 		    <lower>0</lower>
-		    <upper>100</upper>
+		    <upper>365</upper>
 		    <step>1</step>
-		    <page>10</page>
-		    <page_size>10</page_size>
+		    <page>30</page>
+		    <page_size>30</page_size>
 		    <child>
 		      <padding>0</padding>
 		      <expand>False</expand>
@@ -693,16 +694,6 @@
 	      <class>Placeholder</class>
 	    </widget>
 	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkStatusbar</class>
-	  <name>ledger_status</name>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
 	</widget>
       </widget>
     </widget>
@@ -2552,7 +2543,7 @@ December
 	    <class>GtkLabel</class>
 	    <child_name>CList:title</child_name>
 	    <name>label847752</name>
-	    <label>Next Occurence</label>
+	    <label>Next Occurrence</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0.5</xalign>
@@ -3071,7 +3062,7 @@ December
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label847833</name>
-		<label>Number of Occurences:</label>
+		<label>Number of Occurrences:</label>
 		<justify>GTK_JUSTIFY_LEFT</justify>
 		<wrap>False</wrap>
 		<xalign>7.45058e-09</xalign>

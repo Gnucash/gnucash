@@ -45,10 +45,8 @@
 /* #include "gnc-gui-query.h" */
 /* #include "io-example-account.h" */
 /* #include "top-level.h" */
-#include <openhbci/api.h>
-#include <openhbci/outboxjobs.h>
 
-
+#include "gnc-hbci-utils.h"
 
 /**
  * Save the reference strings to the HBCI accounts in the kvp's of the
@@ -56,27 +54,40 @@
 static void
 accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
 {
-  HBCI_Account *hbci_acc = key;
+  AB_ACCOUNT *hbci_acc = key;
   Account *gnc_acc = value;
   g_assert(hbci_acc);
   g_assert(gnc_acc);
 
-  if ((gnc_hbci_get_account_accountid(gnc_acc) == NULL ) ||
-      (strcmp (gnc_hbci_get_account_accountid(gnc_acc), 
-	       HBCI_Account_accountId (hbci_acc)) != 0))
-    gnc_hbci_set_account_accountid 
-      (gnc_acc, HBCI_Account_accountId (hbci_acc));
+  if (gnc_hbci_get_account_uid(gnc_acc) !=
+      AB_Account_GetUniqueId(hbci_acc))
+    gnc_hbci_set_account_uid
+      (gnc_acc, AB_Account_GetUniqueId(hbci_acc));
 
-  if ((gnc_hbci_get_account_bankcode(gnc_acc) == NULL) ||
-      (strcmp (gnc_hbci_get_account_bankcode(gnc_acc), 
-	       HBCI_Bank_bankCode (HBCI_Account_bank (hbci_acc))) != 0))
+  if (AB_Account_GetAccountNumber(hbci_acc) && 
+      ((gnc_hbci_get_account_accountid(gnc_acc) == NULL) ||
+       (strcmp(gnc_hbci_get_account_accountid(gnc_acc), 
+	       AB_Account_GetAccountNumber(hbci_acc)) != 0)))
+    gnc_hbci_set_account_accountid
+      (gnc_acc, AB_Account_GetAccountNumber(hbci_acc));
+
+  if (AB_Account_GetBankCode(hbci_acc) && 
+      ((gnc_hbci_get_account_bankcode(gnc_acc) == NULL) ||
+       (strcmp(gnc_hbci_get_account_bankcode(gnc_acc), 
+	       AB_Account_GetBankCode(hbci_acc)) != 0)))
     gnc_hbci_set_account_bankcode
-      (gnc_acc, HBCI_Bank_bankCode (HBCI_Account_bank (hbci_acc)));
+      (gnc_acc, AB_Account_GetBankCode(hbci_acc));
+}
 
-  if (gnc_hbci_get_account_countrycode(gnc_acc) !=
-      HBCI_Bank_countryCode (HBCI_Account_bank (hbci_acc)))
-    gnc_hbci_set_account_countrycode
-      (gnc_acc, HBCI_Bank_countryCode (HBCI_Account_bank (hbci_acc)));
+static gpointer accounts_clear_kvp (Account *gnc_acc, gpointer user_data)
+{
+  if (gnc_hbci_get_account_uid(gnc_acc))
+    gnc_hbci_set_account_uid (gnc_acc, 0);
+  if (gnc_hbci_get_account_accountid(gnc_acc))
+    gnc_hbci_set_account_accountid (gnc_acc, "");
+  if (gnc_hbci_get_account_bankcode(gnc_acc))
+    gnc_hbci_set_account_bankcode (gnc_acc, "");
+  return NULL;
 }
 
 /* hash is a DIRECT hash from each HBCI account to each gnucash
@@ -84,7 +95,14 @@ accounts_save_kvp_cb (gpointer key, gpointer value, gpointer user_data)
 void
 accounts_save_kvp (GHashTable *hash)
 {
+  AccountGroup *grp;
   g_assert(hash);
+
+  grp = gnc_book_get_group (gnc_get_current_book ());
+  xaccGroupForEachAccount (grp, 
+			   &accounts_clear_kvp,
+			   NULL, TRUE);
+
   g_hash_table_foreach (hash, &accounts_save_kvp_cb, NULL);
 }
 /*
@@ -92,120 +110,18 @@ accounts_save_kvp (GHashTable *hash)
 
 
 
-static void 
-update_accounts_forbank (GtkWidget *parent, HBCI_API *api, 
-			 const HBCI_Bank *bank, 
-			 GNCInteractor *inter);
-static void 
-update_accounts_foruser (GtkWidget *parent, HBCI_API *api, 
-			 const HBCI_User *user, 
-			 GNCInteractor *inter);
-static gboolean
-update_accounts_forcustomer (GtkWidget *parent, HBCI_API *api, 
-			     const HBCI_Customer *cust, 
-			     GNCInteractor *inter);
-
-
 void
-update_accounts (GtkWidget *parent, HBCI_API *api, GNCInteractor *inter) 
+update_accounts (GtkWidget *parent, AB_BANKING *api, GNCInteractor *inter) 
 {
-  const list_HBCI_Bank *banklist;
-  list_HBCI_Bank_iter *begin;
   g_assert(api);
 
-  banklist = HBCI_API_bankList (api);
-  //printf("%d banks found.\n", list_HBCI_Bank_size (banklist));
-  if (list_HBCI_Bank_size (banklist) == 0) {
-    // Zero banks? nothing to do.
-    return;
-  }
-  else if (list_HBCI_Bank_size (banklist) == 1) {
-    begin = list_HBCI_Bank_begin (banklist);
-    update_accounts_forbank (parent, api, 
-			     list_HBCI_Bank_iter_get (begin), inter);
-    list_HBCI_Bank_iter_delete (begin);
-  }
-  else {
-    printf("Sorry, multiple banks not yet supported.\n");
-  }
 }
-static void 
-update_accounts_forbank (GtkWidget *parent, HBCI_API *api, 
-			 const HBCI_Bank *bank, 
-			 GNCInteractor *inter)
-{
-  const list_HBCI_User *userlist;
-  list_HBCI_User_iter *begin;
-  g_assert(bank);
-
-  userlist = HBCI_Bank_users (bank);
-  if (list_HBCI_User_size (userlist) == 0) {
-    printf("update_accounts_forbank: Oops, zero users found.\n");
-    // Zero users? nothing to do.
-    return;
-  }
-  else if (list_HBCI_User_size (userlist) == 1) {
-    begin = list_HBCI_User_begin (userlist);
-    update_accounts_foruser (parent, api, 
-			     list_HBCI_User_iter_get (begin), inter);
-    list_HBCI_User_iter_delete (begin);
-  }
-  else {
-    printf("update_accounts_forbank: Sorry, multiple users not yet supported.\n");
-  }
-}
-static void 
-update_accounts_foruser (GtkWidget *parent, HBCI_API *api, 
-			 const HBCI_User *user, 
-			 GNCInteractor *inter)
-{
-  const list_HBCI_Customer *customerlist;
-  list_HBCI_Customer_iter *begin;
-  g_assert(user);
-
-  customerlist = HBCI_User_customers (user);
-  if (list_HBCI_Customer_size (customerlist) == 0) {
-    printf("update_accounts_foruser: Oops, zero customers found.\n");
-    // Zero customers? nothing to do.
-    return;
-  }
-  else if (list_HBCI_Customer_size (customerlist) == 1) {
-    begin = list_HBCI_Customer_begin (customerlist);
-    if (!update_accounts_forcustomer (parent, api, 
-				      list_HBCI_Customer_iter_get (begin),
-				      inter))
-      return;
-    list_HBCI_Customer_iter_delete (begin);
-  }
-  else {
-    printf("update_accounts_foruser: Sorry, multiple customers not yet supported.\n");
-  }
-}
-
-static gboolean
-update_accounts_forcustomer (GtkWidget *parent, HBCI_API *api, 
-			     const HBCI_Customer *cust, GNCInteractor *inter)
-{
-  HBCI_OutboxJobGetAccounts* get_job; 
-  HBCI_OutboxJob *job;
-  g_assert(cust);
-  
-  // this const-warning is okay and can be ignored.
-  get_job = HBCI_OutboxJobGetAccounts_new((HBCI_Customer *)cust); 
-  job = HBCI_OutboxJobGetAccounts_OutboxJob(get_job);
-  HBCI_API_addJob(api, job);
-  
-  /* Execute Outbox. */
-  return gnc_hbci_api_execute (parent, api, job, inter);
-}
-
-
 
 
 
 struct hbci_acc_cb_data 
 {
-  HBCI_API *api;
+  AB_BANKING *api;
   GHashTable *hash;
 };
 
@@ -213,9 +129,9 @@ static gpointer
 gnc_hbci_new_hash_from_kvp_cb (Account *gnc_acc, gpointer user_data)
 {
   struct hbci_acc_cb_data *data = user_data;
-  HBCI_Account *hbci_acc = NULL;
+  AB_ACCOUNT *hbci_acc = NULL;
 
-  hbci_acc = (HBCI_Account *) gnc_hbci_get_hbci_acc (data->api, gnc_acc);
+  hbci_acc = (AB_ACCOUNT *) gnc_hbci_get_hbci_acc (data->api, gnc_acc);
   if (hbci_acc) {
     g_hash_table_insert (data->hash, hbci_acc, gnc_acc);
   }
@@ -223,7 +139,7 @@ gnc_hbci_new_hash_from_kvp_cb (Account *gnc_acc, gpointer user_data)
 }
 
 GHashTable *
-gnc_hbci_new_hash_from_kvp (HBCI_API *api)
+gnc_hbci_new_hash_from_kvp (AB_BANKING *api)
 {
   GHashTable *hash;
 
@@ -258,14 +174,14 @@ gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename)
 }
 
 gboolean
-gnc_test_dir_exist_error (GtkWindow *parent, const char *filename) 
+gnc_test_dir_exist_error (GtkWidget *parent, const char *filename) 
 {
   char *dirname = g_dirname (filename);
   gboolean dirtest = g_file_test (dirname, G_FILE_TEST_ISDIR);
   g_free (dirname);
   if (!dirtest) {
     gnc_error_dialog_parented
-      (parent, 
+      (GTK_WINDOW (parent), 
        _("The directory for file\n"
 "%s\n"
 "does not exist. \n"
@@ -275,4 +191,5 @@ gnc_test_dir_exist_error (GtkWindow *parent, const char *filename)
   }
   return TRUE;
 }
+
 

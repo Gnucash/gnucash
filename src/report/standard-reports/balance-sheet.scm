@@ -38,6 +38,7 @@
 
 ;; define all option's names so that they are properly defined
 ;; in *one* place.
+(define optname-from-date (N_ "From"))
 (define optname-to-date (N_ "To"))
 
 (define optname-display-depth (N_ "Account Display Depth"))
@@ -51,6 +52,7 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
+(define optname-show-zeros (N_ "Show accounts with zero balance"))
 
 ;; Moderatly ugly hack here, i.e. this depends on the internal
 ;; structure of html-table -- if that is changed, this might break.
@@ -64,13 +66,35 @@
      t1 (+ (gnc:html-table-num-rows t1)
            (gnc:html-table-num-rows t2)))))
 
-(define (accountlist-get-comm-balance-at-date accountlist date)
+(define (accountlist-get-comm-balance-at-date accountlist from date)
+;;  (for-each (lambda (x) (display x))
+;;	    (list "computing from: " (gnc:print-date from) " to "
+;;		  (gnc:print-date date) "\n"))
   (let ((collector (gnc:make-commodity-collector)))
     (for-each (lambda (account)
-                (let ((balance 
-                       (gnc:account-get-comm-balance-at-date 
-                        account date #f)))
-                  (collector 'merge balance #f)))
+                (let* (
+		       (start-balance
+			(gnc:account-get-comm-balance-at-date
+			 account from #f))
+		       (sb (cadr (start-balance
+				  'getpair
+				  (gnc:account-get-commodity account)
+				  #f)))
+		       (end-balance
+			(gnc:account-get-comm-balance-at-date 
+			 account date #f))
+		       (eb (cadr (end-balance
+				  'getpair
+				  (gnc:account-get-commodity account)
+				  #f)))
+		       )
+;;		  (for-each (lambda (x) (display x))
+;;			    (list "Start balance: " sb " : "
+;;				  (gnc:account-get-name account) " : end balance: "
+;;				  eb "\n"))
+                  (collector 'merge end-balance #f)
+		  (collector 'minusmerge start-balance #f)
+		  ))
               accountlist)
     collector))
 
@@ -79,9 +103,9 @@
   (let ((options (gnc:new-options)))
 
     ;; date at which to report balance
-    (gnc:options-add-report-date!
+    (gnc:options-add-date-interval!
      options gnc:pagename-general 
-     optname-to-date "a")
+     optname-from-date optname-to-date "a")
 
     ;; all about currencies
     (gnc:options-add-currency!
@@ -130,6 +154,12 @@
       gnc:pagename-display optname-show-rates
       "f" (N_ "Show the exchange rates used") #f))
 
+    (gnc:register-option 
+     options
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-zeros
+      "g" (N_ "Show accounts with a 0.0 total") #t))
+
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)      
 
@@ -167,6 +197,13 @@
                                    optname-price-source))
          (show-rates? (get-option gnc:pagename-display 
                                   optname-show-rates))
+	 (show-zeros? (get-option gnc:pagename-display 
+                                  optname-show-zeros))
+	 (from-date-printable (gnc:date-option-absolute-time
+			       (get-option gnc:pagename-general
+					   optname-from-date)))
+	 (from-date-tp (gnc:timepair-end-day-time
+	 		(gnc:timepair-previous-day from-date-printable)))
          (to-date-tp (gnc:timepair-end-day-time 
                       (gnc:date-option-absolute-time
                        (get-option gnc:pagename-general
@@ -209,8 +246,9 @@
     
     ;;(gnc:warn "account names" liability-account-names)
     (gnc:html-document-set-title! 
-     doc (sprintf #f "%s %s"
+     doc (sprintf #f "%s %s - %s"
 		  (get-option gnc:pagename-general gnc:optname-reportname)
+		  (gnc:print-date from-date-printable)
                   (gnc:print-date to-date-tp)))
 
     (if (not (null? accounts))
@@ -219,8 +257,10 @@
                (liability-balance #f)
                (equity-balance #f)
                (sign-reversed-liability-balance #f)
-               (neg-retained-profit-balance #f)
-               (retained-profit-balance #f)
+               (neg-net-profit-balance #f)
+               (net-profit-balance #f)
+	       (neg-retained-earnings-balance #f)
+	       (retained-earnings-balance #f)
                (total-equity-balance #f)
                (equity-plus-liability #f)
                (unrealized-gain-collector #f)
@@ -251,12 +291,17 @@
 	  (set! sign-reversed-liability-balance
                 (gnc:make-commodity-collector))
 	  (gnc:report-percent-done 12)
-	  (set! neg-retained-profit-balance 
+	  (set! neg-net-profit-balance 
                 (accountlist-get-comm-balance-at-date
                  income-expense-accounts
-                 to-date-tp))
+                 from-date-tp to-date-tp))
+	  (set! neg-retained-earnings-balance
+		(accountlist-get-comm-balance-at-date
+		 income-expense-accounts
+		 (cons 0 0) from-date-tp))
 	  (gnc:report-percent-done 14)
-	  (set! retained-profit-balance (gnc:make-commodity-collector))
+	  (set! net-profit-balance (gnc:make-commodity-collector))
+	  (set! retained-earnings-balance (gnc:make-commodity-collector))
 	  (gnc:report-percent-done 16)
 	  (set! total-equity-balance (gnc:make-commodity-collector))
 	  (gnc:report-percent-done 18)
@@ -279,7 +324,7 @@
 		 30 20
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn #t))
+                 show-fcur? report-currency exchange-fn show-zeros?))
 	  (set! liability-table 
                 (gnc:html-build-acct-table
                  #f to-date-tp
@@ -288,7 +333,7 @@
 		 50 20
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn #t))
+                 show-fcur? report-currency exchange-fn show-zeros?))
 	  (set! equity-table
                 (gnc:html-build-acct-table
                  #f to-date-tp
@@ -297,14 +342,20 @@
 		 70 10
                  #f #f #f #f #f 
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn #t))
+                 show-fcur? report-currency exchange-fn show-zeros?))
 
-          (retained-profit-balance 'minusmerge
-                                   neg-retained-profit-balance
+          (net-profit-balance 'minusmerge
+                                   neg-net-profit-balance
+                                   #f)
+          (retained-earnings-balance 'minusmerge
+                                   neg-retained-earnings-balance
                                    #f)
           (total-equity-balance 'minusmerge equity-balance #f)
           (total-equity-balance 'merge
-                                retained-profit-balance
+                                net-profit-balance
+                                #f)	    
+          (total-equity-balance 'merge
+                                retained-earnings-balance
                                 #f)	    
           (sign-reversed-liability-balance 'minusmerge
                                            liability-balance
@@ -379,8 +430,10 @@
           (add-subtotal-line
            asset-table (_ "Equity") #f)
           (html-table-merge asset-table equity-table)
+	  (add-subtotal-line
+	   asset-table (_ "Retained Earnings") retained-earnings-balance)
           (add-subtotal-line
-           asset-table (_ "Net Profit") retained-profit-balance)
+           asset-table (_ "Net Profit") net-profit-balance)
           (add-subtotal-line
            asset-table (_ "Total Equity") total-equity-balance)
 

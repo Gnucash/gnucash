@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gnucash-glossary cvs\n"
-"POT-Creation-Date: 2002-02-09 06:21-0500\n"
+"POT-Creation-Date: 2004-11-20 10:32+0100\n"
 "PO-Revision-Date: 2002-02-26 00:00+100\n"
 "Last-Translator: Jan-Willem Harmanny <jwharmanny@hotmail.com>\n"
 "Language-Team: NL <NL@li.org>\n"
@@ -189,9 +189,22 @@ msgstr "balans opmaken"
 msgid "bank"
 msgstr "bank"
 
+#. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received, whereas an 'invoice' is one that we sent out."
+msgid "bill"
+msgstr ""
+
+#. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
+msgid "billing terms"
+msgstr ""
+
 #. "-"
 msgid "business (adjective)"
 msgstr "zakelijk"
+
+#. "as Menu Item: Headline for features that are related to small business accounting"
+#, fuzzy
+msgid "business (noun)"
+msgstr "saldo"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -293,9 +306,19 @@ msgstr "Beschrijving"
 msgid "double entry"
 msgstr "dubbel invoeren"
 
+#. "a person who works for somebody or a company in return for wages"
+#, fuzzy
+msgid "employee"
+msgstr "voorbeeld"
+
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
 msgstr "eigen kapitaal"
+
+#. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
+#, fuzzy
+msgid "escrow (account)"
+msgstr "begunstigde rekening"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -337,9 +360,13 @@ msgstr "importeren"
 msgid "interest"
 msgstr "interest"
 
-#. "A list of goods sold or services provided together with the prices charged; a bill"
+#. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out, whereas a 'bill' is one that we received."
 msgid "invoice"
 msgstr "rekening"
+
+#. "In small business accounting: A piece of work or task undertaken on order at a stated rate?????"
+msgid "job"
+msgstr ""
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
@@ -348,6 +375,11 @@ msgstr "grootboek"
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
 msgstr "passiva"
+
+#. "A sum of money that is lent (by a bank)"
+#, fuzzy
+msgid "loan"
+msgstr "uitboekingen rekening"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -368,6 +400,10 @@ msgstr "MDI modus"
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
 msgstr "Memo"
+
+#. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
+msgid "Mortgage"
+msgstr ""
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -409,6 +445,10 @@ msgstr "aanvangs saldo"
 msgid "options"
 msgstr "opties"
 
+#. "In small business accounting: unused term at the moment (maybe: a particular piece of work, maybe created through an order from a customer???)"
+msgid "order"
+msgstr ""
+
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
 msgstr "uitboekingen rekening"
@@ -432,6 +472,10 @@ msgstr "betaler"
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
 msgstr "betaling"
+
+#. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
+msgid "placeholder"
+msgstr ""
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
@@ -521,6 +565,11 @@ msgstr "winst reserves"
 msgid "save, to (to a file)"
 msgstr "opslaan"
 
+#. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
+#, fuzzy
+msgid "Scheduled Transaction"
+msgstr "transactie"
+
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
 msgstr "uitboeken"
@@ -573,11 +622,11 @@ msgstr "Tot"
 msgid "total"
 msgstr "totaal"
 
-#. "A piece of business done; the transfer of money from one account to one or more other accounts"
+#. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
 msgstr "transactie"
 
-#. "-"
+#. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
 msgstr "transactie status: verrekend"
 
@@ -587,6 +636,11 @@ msgstr "transactie status: bevroren"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
+msgstr "transactie status: overeengebracht"
+
+#. "A transaction that is void i.e. not valid (anymore)."
+#, fuzzy
+msgid "transaction state: voided"
 msgstr "transactie status: overeengebracht"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
@@ -617,7 +671,10 @@ msgstr "URL"
 msgid "value (in a split)"
 msgstr "waarde"
 
+#. "In small business accounting: A person or company that sells items and is supplying goods"
+msgid "vendor"
+msgstr ""
+
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "uitgave"
-
