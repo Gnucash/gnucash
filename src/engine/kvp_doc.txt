@@ -36,10 +36,12 @@ Please put the keys in alphabetical order.
 
 --------------------------------------------------------------------------
 
-Name: split-type
-Entities: Split
-Use: xaccSplitGetType, xaccSplitMakeStockSplit
-     Store a string representing the type of split, if not normal.
+Name: last-num
+Type: string
+Entities: Account
+Use: xaccAccountGetLastNum, xaccAccountSetLastNum
+     Store the last number used in an account's transactions.
+     Used in auto-filling the Num field.
 
 Name: memo
 Type: string
@@ -90,6 +92,11 @@ Name: reconcile-info/postpone/balance
 Type: numeric
 Entities: Account
 Use: store the ending balance of a postponed reconciliation
+
+Name: split-type
+Entities: Split
+Use: xaccSplitGetType, xaccSplitMakeStockSplit
+     Store a string representing the type of split, if not normal.
 
 Name: tax-related
 Type: gint64

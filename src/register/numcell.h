@@ -45,10 +45,9 @@ typedef struct _NumCell
 } NumCell;
 
 NumCell * xaccMallocNumCell (void);
-void      xaccInitNumCell (NumCell *);
-void      xaccDestroyNumCell (NumCell *);
+void      xaccDestroyNumCell (NumCell *cell);
 
 void      xaccSetNumCellValue (NumCell *cell, const char *str);
-void      xaccSetNumCellLastNum (NumCell *cell, const char *str);
+gboolean  xaccSetNumCellLastNum (NumCell *cell, const char *str);
 
 #endif /* __NUM_CELL_H__ */

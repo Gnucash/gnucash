@@ -42,6 +42,8 @@
 /* This static indicates the debugging module that this .o belongs to. */
 /* static short module = MOD_REGISTER; */
 
+static void xaccInitNumCell (NumCell *cell);
+
 
 /* ================================================ */
 /* Parses the string value and returns true if it is a
@@ -197,24 +199,33 @@ setNumCellValue (BasicCell *_cell, const char *str)
 void 
 xaccSetNumCellValue (NumCell *cell, const char *str)
 {
+  if (!cell)
+    return;
+
   setNumCellValue (&cell->cell, str);
 }
 
 /* ================================================ */
-void
+gboolean
 xaccSetNumCellLastNum (NumCell *cell, const char *str)
 {
   long int number;
+
+  if (!cell)
+    return FALSE;
 
   if (parse_num (str, &number))
   {
     cell->next_num = number + 1;
     cell->next_num_set = TRUE;
+    return TRUE;
   }
+
+  return FALSE;
 }
 
 /* ================================================ */
-void
+static void
 xaccInitNumCell (NumCell *cell)
 {
   xaccInitBasicCell (&(cell->cell));

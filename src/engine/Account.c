@@ -1710,6 +1710,48 @@ xaccAccountClearReconcilePostpone (Account *account)
 
 /********************************************************************\
 \********************************************************************/
+const char *
+xaccAccountGetLastNum (Account *account)
+{
+  kvp_value *value;
+
+  if (!account)
+    return FALSE;
+
+  value = kvp_frame_get_slot (xaccAccountGetSlots (account), "last-num");
+  if (!value)
+    return FALSE;
+
+  return kvp_value_get_string (value);
+}
+
+/********************************************************************\
+\********************************************************************/
+void
+xaccAccountSetLastNum (Account *account, const char *num)
+{
+  if (!account)
+    return;
+
+  xaccAccountBeginEdit (account);
+  {
+    kvp_value *value;
+
+    check_open (account);
+
+    value = kvp_value_new_string (num);
+
+    kvp_frame_set_slot (xaccAccountGetSlots (account), "last-num", value);
+
+    kvp_value_delete (value);
+
+    mark_account (account);
+  }
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
 void
 xaccAccountSetPriceSrc(Account *acc, const char *src) {
 

@@ -2770,6 +2770,26 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 /* ======================================================== */
 
 static void
+sr_set_last_num (SplitRegister *reg, Transaction *trans, const char *num)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+  Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
+  Transaction *blank_trans = xaccSplitGetParent (blank_split);
+  Account *account;
+
+  if (trans != blank_trans)
+    return;
+
+  account = sr_get_default_account (reg);
+  if (!account)
+    return;
+
+  xaccAccountSetLastNum (account, reg->numCell->cell.value);
+}
+
+/* ======================================================== */
+
+static void
 xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 {
   SRInfo *info = xaccSRGetInfo (reg);
@@ -2780,7 +2800,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
 
   /* copy the contents from the cursor to the split */
-  if (MOD_DATE & changed) {
+  if (MOD_DATE & changed)
+  {
     Timespec ts;
 
     /* commit any pending changes */
@@ -2793,33 +2814,40 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     xaccTransSetDateTS (trans, &ts);
   }
 
-  if (MOD_NUM & changed) {
+  if (MOD_NUM & changed)
+  {
     DEBUG ("MOD_NUM: %s\n", reg->numCell->cell.value);
     xaccTransSetNum (trans, reg->numCell->cell.value);
-    xaccSetNumCellLastNum(reg->numCell, reg->numCell->cell.value);
+    if (xaccSetNumCellLastNum (reg->numCell, reg->numCell->cell.value))
+      sr_set_last_num (reg, trans, reg->numCell->cell.value);
   }
 
-  if (MOD_DESC & changed) {
+  if (MOD_DESC & changed)
+  {
     DEBUG ("MOD_DESC: %s", reg->descCell->cell.value);
     xaccTransSetDescription (trans, reg->descCell->cell.value);
   }
 
-  if (MOD_NOTES & changed) {
+  if (MOD_NOTES & changed)
+  {
     DEBUG ("MOD_NOTES: %s", reg->notesCell->cell.value);
     xaccTransSetNotes (trans, reg->notesCell->cell.value);
   }
 
-  if (MOD_RECN & changed) {
+  if (MOD_RECN & changed)
+  {
     DEBUG ("MOD_RECN: %c", xaccRecnCellGetFlag(reg->recnCell));
     xaccSplitSetReconcile (split, xaccRecnCellGetFlag(reg->recnCell));
   }
 
-  if (MOD_ACTN & changed) {
+  if (MOD_ACTN & changed)
+  {
     DEBUG ("MOD_ACTN: %s", reg->actionCell->cell.value);
     xaccSplitSetAction (split, reg->actionCell->cell.value);
   }
 
-  if (MOD_MEMO & changed) {
+  if (MOD_MEMO & changed)
+  {
     DEBUG ("MOD_MEMO: %s", reg->memoCell->cell.value);
     xaccSplitSetMemo (split, reg->memoCell->cell.value);
   }
@@ -4181,6 +4209,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   gboolean start_primary_color = TRUE;
   gboolean found_pending = FALSE;
   gboolean found_divider = FALSE;
+  gboolean has_last_num = FALSE;
   gboolean multi_line;
   gboolean dynamic;
 
@@ -4292,13 +4321,27 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     present = mktime (tm);
   }
 
+  if (info->first_pass)
+  {
+    if (default_account)
+    {
+      const char *last_num = xaccAccountGetLastNum (default_account);
+
+      if (last_num)
+      {
+        xaccSetNumCellLastNum (reg->numCell, last_num);
+        has_last_num = TRUE;
+      }
+    }
+  }
+
   table->dividing_row = -1;
 
   if (multi_line)
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   /* populate the table */
-  for(gsplit=slist; gsplit; gsplit=gsplit->next) 
+  for (gsplit = slist; gsplit; gsplit = gsplit->next) 
   {
     split = gsplit->data;
     trans = xaccSplitGetParent (split);
@@ -4336,6 +4379,9 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 
       xaccQuickFillAddCompletion (reg->notesCell,
                                   xaccTransGetNotes (trans));
+
+      if (!has_last_num)
+        xaccSetNumCellLastNum (reg->numCell, xaccTransGetNum (trans));
 
       for (node = xaccTransGetSplitList (trans); node; node = node->next)
       {
@@ -4568,7 +4614,7 @@ xaccSRHasPendingChanges (SplitRegister *reg)
   SRInfo *info = xaccSRGetInfo(reg);
   Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
   guint32 changed;
-  
+
   if (reg == NULL)
     return FALSE;
 

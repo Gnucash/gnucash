@@ -295,6 +295,9 @@ void           xaccAccountSetReconcilePostponeBalance (Account *account,
 
 void           xaccAccountClearReconcilePostpone (Account *account);
 
+/* Get and set the last num field of an Account */
+const char *   xaccAccountGetLastNum (Account *account);
+void           xaccAccountSetLastNum (Account *account, const char *num);
 
 /* The xaccAccountSetPriceSrc() and xaccAccountGetPriceSrc() routines
   are used to get and set a string that identifies the current source
