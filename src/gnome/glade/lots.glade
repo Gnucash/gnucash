@@ -18,7 +18,7 @@
 
 <widget>
   <class>GtkWindow</class>
-  <name>lot window</name>
+  <name>Lot Viewer Window</name>
   <title>Lot Viewer</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
@@ -117,7 +117,7 @@
 
 	  <widget>
 	    <class>GtkText</class>
-	    <name>text2</name>
+	    <name>lot notes text</name>
 	    <can_focus>True</can_focus>
 	    <editable>False</editable>
 	    <text></text>
@@ -127,7 +127,7 @@
 
       <widget>
 	<class>GtkScrolledWindow</class>
-	<name>lot scrolledwindow</name>
+	<name>lot reg area scrolledwindow</name>
 	<hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
 	<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
 	<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>

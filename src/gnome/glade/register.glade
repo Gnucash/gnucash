@@ -475,6 +475,18 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
+	      <name>gnc_register_lots_mi</name>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_lots_cb</handler>
+		<last_modification_time>Tue, 29 Oct 2002 04:51:17 GMT</last_modification_time>
+	      </signal>
+	      <label>_Lot Viewer...</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
 	      <name>gnc_register_scrub_mi</name>
 	      <label>Chec_k &amp; Repair</label>
 	      <right_justify>False</right_justify>
