@@ -98,7 +98,7 @@ guile_main (int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
-  getchar ();
+  /* getchar (); */
 
   gh_enter (argc, argv, guile_main);
 

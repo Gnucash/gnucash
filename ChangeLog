@@ -1,3 +1,26 @@
+2001-10-10  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/test-core/test-engine-stuff.c
+	(get_random_kvp_frame_depth): use set kvp max elements number
+
+	* src/engine/Account.c (xaccAccountEqual): add warning strings
+
+	* src/engine/Group.c (xaccGroupEqual): add warning strings
+
+	* src/engine/gnc-book.c (gnc_book_equal): add warning strings
+
+	* src/engine/kvp_frame.c: treat empty frames as NULL
+
+	* src/backend/postgres/test/run-tests.sh: enable test
+
+	* src/backend/postgres/test/test-db.c (main): enable test
+
+	* src/backend/file/test/test-kvp-frames.c (test_kvp_xml_stuff):
+	print more debugging output
+
+	* src/backend/file/sixtp-dom-generators.c (add_kvp_value_node):
+	fix bug generating kvp string values (they weren't being escaped)
+
 2001-10-09  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/Transaction.{ch} (xaccTransGetVoidTime): new function.
@@ -16,8 +39,8 @@
 
 	* src/engine/test/test-transaction-voiding.c: new file.
 
-	* src/engine/Transaction.c: debugging stuff for transaction voiding (will be removed
-	later).
+	* src/engine/Transaction.c: debugging stuff for transaction
+	voiding (will be removed later).
 
 2001-10-03  Christian Stimming  <stimming@tuhh.de>
 
@@ -34,8 +57,8 @@
 
 	* configure.in: changes for automake 1.5 compatibility
 
-	* src/engine/transaction.c: store values as well as amounts in voided splits'
-	kvp frames
+	* src/engine/transaction.c: store values as well as amounts in
+	voided splits' kvp frames
 
 	* src/engine/gw-engine-spec.scm: wrap voiding functions
 
@@ -43,16 +66,20 @@
 	convenience functions for adding voiding checks to queries and
 	checking the voiding status of splits.
 
-	* src/report/standard-reports/*: fixed up queries to exclude voids as appropriate.
+	* src/report/standard-reports/*: fixed up queries to exclude voids
+	as appropriate.
 
 2001-10-01  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/engine/Transaction.{ch} (xaccTransVoid), (xaccTransGetVoidStatus),
-	(xaccTransGetVoidReason), (xaccSplitVoidFormerAmount): new functions.
+	* src/engine/Transaction.{ch} (xaccTransVoid),
+	(xaccTransGetVoidStatus), (xaccTransGetVoidReason),
+	(xaccSplitVoidFormerAmount): new functions.
 
-	* src/engine/kvp_doc.txt: add new entries related to transaction voiding.
+	* src/engine/kvp_doc.txt: add new entries related to transaction
+	voiding.
 
-	* src/engine/Query.{ch}: add support for filtering queries on voided state.
+	* src/engine/Query.{ch}: add support for filtering queries on
+	voided state.
 
 2001-09-30  Josh Sled  <jsled@asynchronous.org>
 
@@ -74,13 +101,13 @@
 
 2001-09-28  Robert Graham Merkel  <rgmerk@mira.net>
 
-	* src/app-utils/date-utilities.scm ((gnc:deltasym-to-delta)): new function
-	to convert datedelta symbols to the actual deltas.
+	* src/app-utils/date-utilities.scm ((gnc:deltasym-to-delta)): new
+	function to convert datedelta symbols to the actual deltas.
 
 	* src/app-utils/app-utils.scm: export gnc:deltasym-to-delta
 
-	* src/report/standard-reports/net-barchart.scm (etc.): replace eval usage
-	with gnc:deltasym-to-delta
+	* src/report/standard-reports/net-barchart.scm (etc.): replace
+	eval usage with gnc:deltasym-to-delta
 
 2001-09-21  Robert Graham Merkel  <rgmerk@mira.net>
 

@@ -207,9 +207,11 @@ static char random_chars[] =
 "abcdefghijklmnopqrstuvwxyz"
 "1234567890"
 " "
-/* ",.'\"`~!@#$%^*(){}[]/=?+-_\\|" */
-/* "<>&" */
-/* "\n\t" */
+#if 0
+",.'\"`~!@#$%^*(){}[]/=?+-_\\|"
+"<>&"
+"\n\t"
+#endif
 "";
 
 gchar

@@ -392,23 +392,69 @@ xaccAccountGetVersion (Account *acc)
 \********************************************************************/
 
 gboolean
-xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids) {
+xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids)
+{
   if(!aa && !ab) return TRUE;
-  if(!aa) return FALSE;
-  if(!ab) return FALSE;
 
-  if(aa->type != ab->type) return FALSE;
-
-  if(safe_strcmp(aa->accountName, ab->accountName) != 0) return FALSE;
-  if(safe_strcmp(aa->accountCode, ab->accountCode) != 0) return FALSE;
-  if(safe_strcmp(aa->description, ab->description) != 0) return FALSE;
-  if(!gnc_commodity_equiv(aa->commodity, ab->commodity)) return FALSE;
-
-  if(check_guids) {
-    if(!guid_equal(&aa->guid, &ab->guid)) return FALSE;
+  if(!aa || !ab)
+  {
+    PWARN ("one is NULL");
+    return FALSE;
   }
 
-  if(kvp_frame_compare(aa->kvp_data, ab->kvp_data) != 0) return FALSE;
+  if (aa->type != ab->type)
+  {
+    PWARN ("types differ");
+    return FALSE;
+  }
+
+  if (safe_strcmp(aa->accountName, ab->accountName) != 0)
+  {
+    PWARN ("names differ: %s vs %s", aa->accountName, ab->accountName);
+    return FALSE;
+  }
+
+  if (safe_strcmp(aa->accountCode, ab->accountCode) != 0)
+  {
+    PWARN ("codes differ: %s vs %s", aa->accountCode, ab->accountCode);
+    return FALSE;
+  }
+
+  if (safe_strcmp(aa->description, ab->description) != 0)
+  {
+    PWARN ("descriptions differ: %s vs %s", aa->description, ab->description);
+    return FALSE;
+  }
+
+  if (!gnc_commodity_equiv(aa->commodity, ab->commodity))
+  {
+    PWARN ("commodities differ");
+    return FALSE;
+  }
+
+  if(check_guids) {
+    if(!guid_equal(&aa->guid, &ab->guid))
+    {
+      PWARN ("GUIDs differ");
+      return FALSE;
+    }
+  }
+
+  if (kvp_frame_compare(aa->kvp_data, ab->kvp_data) != 0)
+  {
+    char *frame_a;
+    char *frame_b;
+
+    frame_a = kvp_frame_to_string (aa->kvp_data);
+    frame_b = kvp_frame_to_string (ab->kvp_data);
+
+    PWARN ("kvp frames differ:\n%s\n\nvs\n\n%s", frame_a, frame_b);
+
+    g_free (frame_a);
+    g_free (frame_b);
+
+    return FALSE;
+  }
 
   /* no parent; always compare downwards. */
 
@@ -416,22 +462,43 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids) {
     GList *la = aa->splits;
     GList *lb = ab->splits;
 
-    if( la && !lb) return FALSE;
-    if(!la &&  lb) return FALSE;
-    if(la && lb) {
+    if ((la && !lb) || (!la && lb))
+    {
+      PWARN ("only one has splits");
+      return FALSE;
+    }
+
+    if(la && lb)
+    {
       /* presume that the splits are in the same order */
-      while(la && lb) {
+      while (la && lb)
+      {
         Split *sa = (Split *) la->data;
         Split *sb = (Split *) lb->data;
-        if(!xaccSplitEqual(sa, sb, check_guids, FALSE)) return(FALSE);
+
+        if (!xaccSplitEqual(sa, sb, check_guids, FALSE))
+        {
+          PWARN ("splits differ");
+          return(FALSE);
+        }
+
         la = la->next;
         lb = lb->next;
       }
-      if((la != NULL) || (lb != NULL)) return(FALSE);
+
+      if ((la != NULL) || (lb != NULL))
+      {
+        PWARN ("number of splits differs");
+        return(FALSE);
+      }
     }
   }
 
-  if(!xaccGroupEqual(aa->children, ab->children, check_guids)) return FALSE;
+  if (!xaccGroupEqual(aa->children, ab->children, check_guids))
+  {
+    PWARN ("children differ");
+    return FALSE;
+  }
 
   return(TRUE);
 }

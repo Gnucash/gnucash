@@ -314,11 +314,17 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
   if (!xaccGroupEqual (gnc_book_get_group (book_1),
                        gnc_book_get_group (book_2),
                        TRUE))
+  {
+    PWARN ("groups differ");
     return FALSE;
+  }
 
   if (!gnc_pricedb_equal (gnc_book_get_pricedb (book_1),
                           gnc_book_get_pricedb (book_2)))
+  {
+    PWARN ("price dbs differ");
     return FALSE;
+  }
 
   /* FIXME: do scheduled transactions and template group */
 

@@ -256,7 +256,7 @@ get_random_kvp_frame_depth (gint depth)
 
     ret = kvp_frame_new();
 
-    vals_to_add = get_random_int_in_range(1,10);
+    vals_to_add = get_random_int_in_range(1,kvp_frame_max_elements);
 
     for(;vals_to_add > 0; vals_to_add--)
     {
@@ -269,6 +269,11 @@ get_random_kvp_frame_depth (gint depth)
         if(!key)
         {
             return NULL;
+        }
+        if (!val)
+        {
+          vals_to_add++;
+          continue;
         }
 
         kvp_frame_set_slot_nc(ret, key, val);

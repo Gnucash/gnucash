@@ -189,11 +189,14 @@ test_kvp_xml_stuff(void)
             {
                 gchar *tmp;
                 failure("xml stuff");
-                printf("   with xml:\n");
+                tmp = kvp_frame_to_string(test_frame1);
+                printf("   with kvp_frame 1:\n%s\n", tmp);
+                g_free(tmp);
+                printf("   and xml:\n");
                 xmlElemDump(stdout, NULL, test_node);
                 printf("\n");
                 tmp = kvp_frame_to_string(test_frame2);
-                printf("   and kvp_frame:\n%s\n", tmp);
+                printf("   and kvp_frame 2:\n%s\n", tmp);
                 g_free(tmp);
             }
             kvp_frame_delete(test_frame2);

@@ -246,8 +246,14 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
 {
     xmlNodePtr val_node;
     gchar *tmp_str1;
+    kvp_value_t kvp_type;
 
-    val_node = xmlNewTextChild(node, NULL, tag, NULL);
+    kvp_type = kvp_value_get_type(val);
+
+    if (kvp_type == KVP_TYPE_STRING)
+      val_node = xmlNewTextChild(node, NULL, tag, kvp_value_get_string(val));
+    else
+      val_node = xmlNewTextChild(node, NULL, tag, NULL);
 
     switch(kvp_value_get_type(val))
     {
@@ -267,7 +273,6 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
         break;
     case KVP_TYPE_STRING:
         xmlSetProp(val_node, "type", "string");
-        xmlNodeSetContent(val_node, kvp_value_get_string(val));
         break;
     case KVP_TYPE_GUID:
         add_text_to_node(val_node,"guid",

@@ -103,28 +103,42 @@ xaccGroupEqual(AccountGroup *ga,
   GList *nb;
 
   if (!ga && !gb) return(TRUE);
-  if (!ga) return(FALSE);
-  if (!gb) return(FALSE);
+
+  if (!ga || !gb)
+  {
+    PWARN ("one is NULL");
+    return(FALSE);
+  }
 
   na = ga->accounts;
   nb = gb->accounts;
 
-  if (!na && nb) return(FALSE);
-  if (na && !nb) return(FALSE);
+  if ((!na && nb) || (na && !nb))
+  {
+    PWARN ("only one has accounts");
+    return(FALSE);
+  }
 
   while (na && nb)
   {
     Account *aa = na->data;
     Account *ab = nb->data;
 
-    if (!xaccAccountEqual(aa, ab, check_guids)) return(FALSE);
+    if (!xaccAccountEqual(aa, ab, check_guids))
+    {
+      PWARN ("accounts differ");
+      return(FALSE);
+    }
 
     na = na->next;
     nb = nb->next;
   }
 
-  if (na) return(FALSE);
-  if (nb) return(FALSE);
+  if (na || nb)
+  {
+    PWARN ("different numbers of accounts");
+    return(FALSE);
+  }
 
   return(TRUE);
 }

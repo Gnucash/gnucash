@@ -945,7 +945,14 @@ kvp_frame_compare(const kvp_frame *fa, const kvp_frame *fb) {
 
   kvp_frame_for_each_slot((kvp_frame *) fa, kvp_frame_compare_helper, &status);
 
-  return(status.compare);
+  if (status.compare != 0)
+    return status.compare;
+
+  status.other_frame = (kvp_frame *) fa;
+
+  kvp_frame_for_each_slot((kvp_frame *) fb, kvp_frame_compare_helper, &status);
+
+  return(-status.compare);
 }
 
 gchar*
@@ -1087,7 +1094,8 @@ kvp_frame_to_string(const kvp_frame *frame)
 
     tmp1 = g_strdup_printf("{\n");
 
-    g_hash_table_foreach(frame->hash, kvp_frame_to_string_helper, &tmp1);
+    if (frame->hash)
+      g_hash_table_foreach(frame->hash, kvp_frame_to_string_helper, &tmp1);
 
     {
         gchar *tmp2;
