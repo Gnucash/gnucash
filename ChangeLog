@@ -1,3 +1,10 @@
+2001-10-05  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/test/test-transaction-voiding.c: new file.
+
+	* src/engine/Transaction.c: debugging stuff for transaction voiding (will be removed
+	later).
+
 2001-10-03  Christian Stimming  <stimming@tuhh.de>
 
 	* po/glossary/de.po, txt-to-pot.sh: Several updates from the

@@ -2308,14 +2308,15 @@ xaccSplitSetReconcile (Split *split, char recn)
 
    switch (recn)
    {
-     case NREC:
-     case CREC:
-     case YREC:
-     case FREC:
-       break;
-     default:
-       PERR("Bad reconciled flag");
-       return;
+   case NREC:
+   case CREC:
+   case YREC:
+   case FREC:
+   case VREC:
+     break;
+   default:
+     PERR("Bad reconciled flag");
+     return;
    }
 
    split->reconciled = recn;
@@ -2573,6 +2574,7 @@ xaccTransVoid(Transaction *transaction,
   Split *split;
   g_return_if_fail(transaction && reason);
 
+  xaccTransBeginEdit(transaction);
   zero = gnc_numeric_zero();
   frame = xaccTransGetSlots(transaction);
 
@@ -2601,10 +2603,26 @@ xaccTransVoid(Transaction *transaction,
     val = kvp_value_new_gnc_numeric(amt);
     kvp_frame_set_slot_nc(frame, void_former_val_str, val);
 
+    
+    
     xaccSplitSetAmount(split, zero);
+    xaccSplitSetValue(split, zero);
     xaccSplitSetReconcile(split, VREC);
+   
   }
 
+  xaccTransCommitEdit(transaction);
+
+  for(split_list = xaccTransGetSplitList(transaction);
+      split_list;
+      split_list = g_list_next(split_list))
+  {
+    char *string = gnc_numeric_to_string(xaccSplitGetAmount(split_list->data));
+
+    fprintf(stderr, "%s\n", string);
+    g_free(string);
+  }
+   
   return;
 }
 
