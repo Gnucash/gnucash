@@ -59,15 +59,22 @@
  *
  * USER CALLBACKS:
  * The enter_cell() callback is called when the user first
- *    makes a move to enter a cell.  The current value of the 
- *    cell is passed as the argument.  If the callback wishes
- *    to change the value of the cell, it can return a non-null
- *    string.  Alternately, to leave the value of the cell 
- *    unchanged, it can return NULL.  If a string is returned, 
- *    the string must be as the result of a malloc.
+ *    makes a move to enter a cell.  This might be by clicking
+ *    on the cell with the mouse, by tabbing to it, using the 
+ *    arrow keys, or otherwise "selecting" it as the current
+ *    cell to edit.  
+ *
+ *    The current value of the cell is passed as the argument.  
+ *    If the callback wishes to change the value of the cell, 
+ *    it can return a non-null string.  Alternately, to leave 
+ *    the value of the cell unchanged, it can return NULL.  
+ *    If a string is returned, the string must be as the result 
+ *    of a malloc.
  *
  * The leave_cell() callback is called when the user exits
- *    a cell.  The current value of the cell is passed as the 
+ *    a cell.  This can be by tabbing or arrow-keying away 
+ *    from it, or by using the mouse to specify a different 
+ *    cell, etc.  The current value of the cell is passed as the 
  *    argument.  If the callback wishes to change the value of 
  *    the cell, it can return a non-null string.  Alternately, 
  *    to leave the value of the cell unchanged, it can return 
@@ -75,7 +82,12 @@
  *    result of a malloc.
  *
  * The modify_verify() callback is called when a user makes a
- *    change to a cell.  The three arguments passed in are :
+ *    change to a cell.  It is called after every keystroke,
+ *    (actually, after every X11 "input-method" type input,
+ *    so that ctrl-alt-etc modifier keys are pre-processed in 
+ *    the usual X11 fashion).
+ *    
+ *    The three arguments passed in are :
  *    "old", the string prior to user's attempted modification,
  *    "add", the string the user is attemptiong to add
  *           (will be null if text is being deleted).
