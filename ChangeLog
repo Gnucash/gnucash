@@ -19,6 +19,10 @@
 	  query, otherwise the search will fail later.
 	  Fixes #141526.
 
+	* src/engine/test/test-numeric.c:
+	  Make sure we use gint64 instead of gint when trying to test
+	  values > 2^32.
+
 2004-12-02  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-ledger/Makefile.am: add explicit

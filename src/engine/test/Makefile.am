@@ -26,7 +26,6 @@ LDADD = \
 # that they should be executed, with more basic tests coming first.
 # 
 TESTS = \
-  test-book-merge \
   test-link \
   test-load-engine \
   test-guid \
