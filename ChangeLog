@@ -1,3 +1,8 @@
+2003-05-29  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: OpenHBCI version 0.9.11 is required now. Earlier
+	versions cause a segfault with any recent OpenSSL.
+
 2003-05-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-query-list.c: the query headers were restructured
