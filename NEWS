@@ -1,5 +1,11 @@
 Version history:
 ------- -------
+ 1.4.10 - 28 January 2001
+         o updated translations
+         o support for Greek Drachma as Euro currency
+         o updated tax report
+         o bug fixes
+
  1.4.9  - 05 December 2000
          o tax report
          o txf export
