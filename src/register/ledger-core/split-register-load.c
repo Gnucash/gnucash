@@ -1,5 +1,7 @@
 /********************************************************************\
  * split-register-load.c -- split register loading code             *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +25,7 @@
 #include "config.h"
 
 #include "Group.h"
+#include "account-quickfill.h"
 #include "combocell.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
@@ -587,11 +590,20 @@ gnc_load_xfer_cell (ComboCell * cell, AccountGroup * grp)
   LEAVE ("\n");
 }
 
+#define QKEY  "split_reg_shared_quickfill"
+
+static gboolean 
+skip_cb (Account *account, gpointer x)
+{
+  return xaccAccountGetPlaceholder (account);
+}
+ 
 void
 gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;
   ComboCell *cell;
+  QuickFill *qf;
 
   group = xaccAccountGetRoot(base_account);
   if (group == NULL)
@@ -600,13 +612,19 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
   if (group == NULL)
     return;
 
+  qf = gnc_get_shared_account_name_quickfill (group, QKEY, skip_cb, NULL);
+
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, XFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
   gnc_load_xfer_cell (cell, group);
 
   cell = (ComboCell *)
     gnc_table_layout_get_cell (reg->table->layout, MXFRM_CELL);
   gnc_combo_cell_clear_menu (cell);
+  gnc_combo_cell_use_quickfill_cache (cell, qf);
   gnc_load_xfer_cell (cell, group);
 }
+
+/* ====================== END OF FILE ================================== */
