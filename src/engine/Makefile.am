@@ -1,6 +1,6 @@
 SUBDIRS = . test 
 
-lib_LTLIBRARIES = libgncmod-engine.la
+pkglib_LTLIBRARIES = libgncmod-engine.la
 
 CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
 

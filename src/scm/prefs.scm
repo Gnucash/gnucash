@@ -645,6 +645,16 @@ without one.")
     #f))
   (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
 
+(let ((current-value gnc:*debugging?*))
+  (set! 
+   gnc:*develmode*
+   (gnc:make-config-var
+    (N_ "Enable developers mode.")
+    (lambda (var value) (if (boolean? value) (list value) #f))
+    eq?
+    #f))
+  (gnc:config-var-value-set! gnc:*develmode* #f current-value))
+
 (define gnc:*loglevel*
   (gnc:make-config-var
    (N_ "Logging level from 0 (least logging) to 5 (most logging).")

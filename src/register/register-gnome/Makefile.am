@@ -1,4 +1,4 @@
-lib_LTLIBRARIES = libgncmod-register-gnome.la
+pkglib_LTLIBRARIES = libgncmod-register-gnome.la
 
 libgncmod_register_gnome_la_LDFLAGS = -module
 

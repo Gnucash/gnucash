@@ -1,6 +1,6 @@
 SUBDIRS=. test
 
-lib_LTLIBRARIES=libgncmod-backend-file.la
+pkglib_LTLIBRARIES=libgncmod-backend-file.la
 
 INCLUDES= -I.. -I../../engine -I../../gnc-module ${GLIB_CFLAGS} -I../..
 

@@ -1,4 +1,4 @@
-lib_LTLIBRARIES=libgncmod-ledger-core.la
+pkglib_LTLIBRARIES=libgncmod-ledger-core.la
 
 libgncmod_ledger_core_la_SOURCES=\
   gncmod-ledger-core.c \

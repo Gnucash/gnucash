@@ -27,6 +27,13 @@
 ;; The items will be done in reverse order.
 (define gnc:*batch-mode-things-to-do* '())
 
+(define (append-path pathname val)
+  (let* ((current (getenv pathname))
+         (new-value (if current
+                        (string-append current ":" val)
+                        val)))
+    (setenv pathname new-value)))
+
 (define (gnc:startup)
   (gnc:debug "starting up.")
   (gnc:setup-debugging)
@@ -34,19 +41,10 @@
   ;; initialize the gnucash module system 
 
   ;; first make sure the search paths are reasonable. probably shouldn't
-  ;; need to do this. 
-  (let ((ev (getenv "LD_LIBRARY_PATH")))
-    (setenv "LD_LIBRARY_PATH"
-	    (if ev
-		(string-append ev ":" gnc:_lib-dir-default_)
-		gnc:_lib-dir-default_)))	  
-  (let ((ev (getenv "GNC_MODULE_PATH")))
-    (setenv "GNC_MODULE_PATH"
-	    (if ev
-		(string-append ev ":" gnc:_lib-dir-default_)
-		gnc:_lib-dir-default_)))
+  ;; need to do this.
+  (append-path "LD_LIBRARY_PATH" gnc:_pkglib-dir-default_)
+  (append-path "GNC_MODULE_PATH" gnc:_pkglib-dir-default_)
 
-  (simple-format #t "LD_LIBRARY_PATH=~S\n" (getenv "LD_LIBRARY_PATH"))
   (gnc:module-system-init)
   
   ;; right now we have to statically load all these at startup time.

@@ -1,5 +1,5 @@
 
-lib_LTLIBRARIES=libgncmod-qif-import.la
+pkglib_LTLIBRARIES=libgncmod-qif-import.la
 
 libgncmod_qif_import_la_SOURCES=gncmod-qif-import.c druid-qif-import.c dialog-account-picker.c 
 libgncmod_qif_import_la_LDFLAGS=-module \

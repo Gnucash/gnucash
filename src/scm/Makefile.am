@@ -82,6 +82,7 @@ bootstrap.scm: bootstrap.scm.in Makefile
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
             -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
             -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
+            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:' \
             -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
 CLEANFILES += bootstrap.scm

@@ -114,6 +114,13 @@
          #f
          (N_ "Enable debugging mode"))
 
+   (list "devel"
+         'boolean
+         (lambda (val)
+           (gnc:config-var-value-set! gnc:*develmode* #f val))
+         #f
+         (N_ "Enable developers mode"))
+   
    (list "loglevel"
          'integer
          (lambda (val)
