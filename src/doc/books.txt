@@ -228,5 +228,11 @@ Plan A is only a little harder than Plan C: maybe another week or two
 on top of C (??)
 
 
+Open Issues
+-----------
+*) Naming convention for the different books?  Each book is really
+   written out as a backend: although it could be a file, it could
+   also be a database, and a naming convention is needed for that ...
+
 =========================== end of file ========================
 
