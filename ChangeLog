@@ -1,3 +1,8 @@
+2001-05-02  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Fix bug with subheading
+	display.
+
 2001-05-01  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-transfer.c: fix bugs

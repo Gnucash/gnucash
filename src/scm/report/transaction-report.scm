@@ -127,10 +127,10 @@
 			table width subheading-style))
   
   (define (render-month-subheading split table width subheading-style)
-    (add-subheading-row (strftime "%B %Y" (gnc:timepair->date
-					   (gnc:transaction-get-date-posted
-					    (gnc:split-get-parent split))))
-			table width subheading-style))
+    (let ((tm (gnc:timepair->date (gnc:transaction-get-date-posted
+				     (gnc:split-get-parent split)))))
+    (add-subheading-row (strftime "%B %Y" tm)
+			table width subheading-style)))
   
   (define (render-year-subheading split table width subheading-style)
     (add-subheading-row (strftime "%Y" (gnc:timepair->date
@@ -202,7 +202,8 @@
 	(if (eq? amount-setting 'single)
 	    (vector-set! column-list 7 #t))
 	(if (eq? amount-setting 'double)
-	    (begin 
+	    (begin uary 2001
+
 	      (vector-set! column-list 8 #t)
 	      (vector-set! column-list 9 #t))))
       (if (opt-val (N_ "Display") (N_ "Running Balance"))
@@ -744,15 +745,16 @@ and Income accounts")))))
        (make-heading-list used-columns))
       ;;     (gnc:warn "Splits:" splits)
       (if (not (null? splits))
-	  (if primary-subheading-renderer 
+	  (begin
+	    (if primary-subheading-renderer 
 	      (primary-subheading-renderer
 	       (car splits) table width def:primary-subtotal-style))
-	  (if secondary-subheading-renderer
-	      (secondary-subheading-renderer
-	       (car splits) table width def:secondary-subtotal-style)))
+	    (if secondary-subheading-renderer
+		(secondary-subheading-renderer
+		 (car splits) table width def:secondary-subtotal-style))
 
-      (do-rows-with-subtotals splits table used-columns width
-			      multi-rows? #t 
+	  (do-rows-with-subtotals splits table used-columns width
+				  multi-rows? #t 
 			      account-types-to-reverse
 			      primary-subtotal-pred
 			      secondary-subtotal-pred
@@ -760,7 +762,8 @@ and Income accounts")))))
 			      secondary-subheading-renderer
 			      (gnc:make-commodity-collector)
 			      (gnc:make-commodity-collector)
-			      (gnc:make-commodity-collector))
+			      (gnc:make-commodity-collector))))
+	  
       table))
 
   ;; ;;;;;;;;;;;;;;;;;;;;
