@@ -36,18 +36,25 @@ small, with the hope that the small goals will fall quickly, and the
 large ones shall turn into a multitude of small ones.
 <p>
 
-<h2>News -- 4 March 1998</h2>
-The folks involved with 
-<a href="http://www.dnaco.net/~bcooper/watermark/index.html">
-WaterMark</a>,
-<a href="http://gnomoney.ml.org/gnomoney/index.hts">GnoMoney</a>,
-and 
-<a href="http://www.cs.hmc.edu/~rclark/xacc">
-X-Accountant</a>
-have tentatively agreed to join forces to work on a unified 
-personal-finance project.  Subscribe to the xacc mailing list 
-for more info.
-<p>
+<h2>News</h2>
+<dl>
+<dt><b>10 March 1998</b>
+<dd>Source is available with CVS. See instructions at bottom.
+    <p>
+
+<dt><b>4 March 1998</b>
+<dd>The folks involved with 
+    <a href="http://www.dnaco.net/~bcooper/watermark/index.html">
+    WaterMark</a>,
+    <a href="http://gnomoney.ml.org/gnomoney/index.hts">GnoMoney</a>,
+    and 
+    <a href="http://www.cs.hmc.edu/~rclark/xacc">
+    X-Accountant</a>
+    have tentatively agreed to join forces to work on a unified 
+    personal-finance project.  Subscribe to the xacc mailing list 
+    for more info.
+    <p>
+</dl>
 
 <h2>Meta-Architecture Goals</h2>
 
@@ -426,6 +433,28 @@ immediately, independent of the major goals.
 Well, just to show that we are getting things done.
 
 <dl>
+<dt><b>Getting Source with CVS</b>
+<dd> A read-only version of the cvs tree is available on the net.
+     To access it, first, login, as so:
+     <pre>
+     cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot login
+     </pre>
+     The password is "guest".  To get a copy of the source, do a
+     <pre>
+     cvs -d :pserver:cvs@linas.org:/home/cvs/cvsroot checkout xacc
+     </pre>
+     Note that various versions can be accessed with tags.
+     For example, the tag <tt>xacc-10b17</tt> will get you version
+     1.0.17 and the tag <tt>xacc-11b6</tt> will get you version 1.1.6
+     In particular, the latest code in the 1.0.x series (the stable series)
+     is available on the branch <tt>xacc-10-patch</tt>.  For historical 
+     record, you can view Robin Clark's original source from October 1997
+     at <tt>xacc-09a</tt>.  Things have changed a *lot* since then.
+     <p>
+     (March 1988)
+     <p>
+
+
 <dt><b>Version 1.1 Alpha</b>
 <dd>The Alpha development version 1.1 is out.  Features include:
     <ul>
