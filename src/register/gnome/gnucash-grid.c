@@ -389,13 +389,12 @@ draw_block (GnucashGrid *grid,
         gint y_paint;
         gint w, h;
 
-        virt_loc.phys_row_offset = 0;
-        virt_loc.phys_col_offset = 0;
-
-        for ( ; virt_loc.phys_row_offset < block->style->nrows ;
+        for ( virt_loc.phys_row_offset = 0;
+              virt_loc.phys_row_offset < block->style->nrows ;
               virt_loc.phys_row_offset++ )
         {
-                for ( ; virt_loc.phys_col_offset < block->style->ncols ;
+                for ( virt_loc.phys_col_offset = 0;
+                      virt_loc.phys_col_offset < block->style->ncols ;
                       virt_loc.phys_col_offset++ )
                 {
                         cd = gnucash_style_get_cell_dimensions
