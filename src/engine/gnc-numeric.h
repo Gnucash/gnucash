@@ -19,7 +19,7 @@
  *                                                                  *
  *******************************************************************/
 
-/** @addtogroup Rational
+/** @addtogroup Numeric
     The 'Numeric' functions provide a way of working with rational
     numbers while maintaining strict control over rounding errors
     when adding rationals with different denominators.  The Numeric
@@ -35,14 +35,14 @@
     addition and multiplication, but 64-bit rationals do not have 
     the dynamic range of floating point numbers.  
 
-    @{ */
+@{ */
 /** @file gnc-numeric.h
     @brief An exact-rational-number library for gnucash.
     @author Copyright (C) 2000 Bill Gribble
     @author Copyright (C) 2004 Linas Vepstas <linas@linas.org>
 */
 
-/** ----------------------------------------------------------
+/* ----------------------------------------------------------------
 
 EXAMPLE
 -------
@@ -111,19 +111,19 @@ typedef struct _gnc_numeric gnc_numeric;
   * @brief Standard Arguments to most functions
 
     Most of the gnc_numeric arithmetic functions take two arguments
-    in addition to their numeric args: @var{denom}, which is the denominator
-    to use in the output @code{gnc_numeric object}, and @var{how}, which
+    in addition to their numeric args: 'denom', which is the denominator
+    to use in the output gnc_numeric object, and 'how'. which
     describes how the arithmetic result is to be converted to that
     denominator. This combination of output denominator and rounding policy
     allows the results of financial and other rational computations to be
     properly rounded to the appropriate units.
 
-    Valid values for @var{denom} are:
+    Valid values for denom are:
     GNC_DENOM_AUTO  -- compute denominator exactly
     integer n       -- Force the denominator of teh result to be this integer
     GNC_DENOM_RECIPROCAL -- Use 1/n as the denominator (???huh???)
 
-    Valid values for @var{how} are bitwise combinations of zero or one
+    Valid values for 'how' are bitwise combinations of zero or one
     "rounding instructions" with zero or one "denominator types".
     Valid rounding instructions are:
         GNC_HOW_RND_FLOOR
@@ -136,7 +136,7 @@ typedef struct _gnc_numeric gnc_numeric;
         GNC_HOW_RND_NEVER
 
     The denominator type specifies how to compute a denominator if
-    @code{GNC_DENOM_AUTO} is specified as the @var{denom}. Valid 
+    GNC_DENOM_AUTO is specified as the 'denom'. Valid 
     denominator types are:
         GNC_HOW_DENOM_EXACT  
         GNC_HOW_DENOM_REDUCE 
@@ -146,13 +146,13 @@ typedef struct _gnc_numeric gnc_numeric;
 
    To use traditional rational-number operational semantics (all results
    are exact and are reduced to relatively-prime fractions) pass the
-   argument @code{GNC_DENOM_AUTO} as @var{denom} and 
-   @code{GNC_HOW_DENOM_REDUCE| GNC_HOW_RND_NEVER} as @var{how}.
+   argument GNC_DENOM_AUTO as 'denom' and 
+   GNC_HOW_DENOM_REDUCE| GNC_HOW_RND_NEVER as 'how'.
 
    To enforce strict financial semantics (such that all operands must have
    the same denominator as each other and as the result), use
-   @var{GNC_DENOM_AUTO} as @var{denom} and 
-   @code{GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER} as @var{how}.
+   GNC_DENOM_AUTO as 'denom' and 
+   GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER as 'how'.
 
   @{ */
 
@@ -269,17 +269,17 @@ typedef enum {
  */
 
 /** Compute an appropriate denominator automatically. Flags in 
- *  the @var{how} argument will specify how to compute the denominator.
+ *  the 'how' argument will specify how to compute the denominator.
  */
 #define GNC_DENOM_AUTO 0
 
-/** Use the value @code{1/n} as the denominator of the output value. */
+/** Use the value 1/n as the denominator of the output value. */
 #define GNC_DENOM_RECIPROCAL( a ) (- ( a ))
 
 /**  @} */
 
-/** @name Constructors 
-  @{*/
+/** @name Constructors */
+/*@{*/
 /** Make a gnc_numeric from numerator and denominator */
 static inline 
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom) {
@@ -294,8 +294,8 @@ static inline
 gnc_numeric gnc_numeric_zero(void) { return gnc_numeric_create(0, 1); }
 
 /** Convert a floating-point number to a gnc_numeric. 
- *  Both @var{denom} and @var{how} are used as in arithmetic, 
- *  but @code{GNC_DENOM_AUTO} is not recognized; a denominator
+ *  Both 'denom' and 'how' are used as in arithmetic, 
+ *  but GNC_DENOM_AUTO is not recognized; a denominator
  *  must be specified either explicitctly or through sigfigs.
  */
 gnc_numeric double_to_gnc_numeric(double in, gint64 denom,  
@@ -307,12 +307,12 @@ gnc_numeric double_to_gnc_numeric(double in, gint64 denom,
 const gchar *string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
 
 /** Create a gnc_numeric object that signals the error condition
- *  noted by @var{error_code}, rather than a number. 
+ *  noted by error_code, rather than a number. 
  */
 gnc_numeric gnc_numeric_error(GNCNumericErrorCode error_code);
 /*@}*/
 
-/** @name Value accessors */
+/** @name Value Accessors */
 /** @{*/
 /** Return numerator */
 static inline 
@@ -327,10 +327,10 @@ double      gnc_numeric_to_double(gnc_numeric in);
 /** Convert to string. The returned buffer is to be g_free'd by the
  *  caller (it was allocated through g_strdup) */
 gchar *gnc_numeric_to_string(gnc_numeric n);
-/*@}*/
+/** @}*/
 
-/** @name Tests */
-/** @{*/
+/** @name Comparisons and Predicates */
+/** @{ */
 /** Check for error signal in value. Returns GNC_ERROR_OK (==0) if
  *  the number appears to be valid, otherwise it returns the
  *  type of error.  Error values always have a denominator of zero.
@@ -343,10 +343,10 @@ int gnc_numeric_compare(gnc_numeric a, gnc_numeric b);
 /** Returns 1 if the given gnc_numeric is 0 (zero), else returns 0. */
 gboolean gnc_numeric_zero_p(gnc_numeric a);
 
-/** Returns 1 if @var{a} < 0, otherwise returns 0. */
+/** Returns 1 if a < 0, otherwise returns 0. */
 gboolean gnc_numeric_negative_p(gnc_numeric a);
 
-/** Returns 1 if @var{a} > 0, otherwise returns 0. */
+/** Returns 1 if a > 0, otherwise returns 0. */
 gboolean gnc_numeric_positive_p(gnc_numeric a);
 
 /** Equivalence predicate: Returns TRUE (1) if a and b are 
@@ -361,24 +361,22 @@ gboolean gnc_numeric_eq(gnc_numeric a, gnc_numeric b);
 gboolean gnc_numeric_equal(gnc_numeric a, gnc_numeric b);  
 
 /** Equivalence predicate: 
- *  Convert both @var{a} and @var{b} to @var{denom} using the 
+ *  Convert both a and b to denom using the 
  *  specified DENOM and method HOW, and compare numerators 
  *  the results using gnc_numeric_equal.
  *
-@example
-  For example, if @code{@var{a} == 7/16} and @code{@var{b} == 3/4},
-  @code{gnc_numeric_same(@var{a}, @var{b}, 2, GNC_HOW_RND_TRUNC) == 1}
+  For example, if a == 7/16 and b == 3/4,
+  gnc_numeric_same(a, b, 2, GNC_HOW_RND_TRUNC) == 1
   because both 7/16 and 3/4 round to 1/2 under truncation. However,
-  @code{gnc_numeric_same(@var{a}, @var{b}, 2, GNC_HOW_RND_ROUND) == 0}
+  gnc_numeric_same(a, b, 2, GNC_HOW_RND_ROUND) == 0
   because 7/16 rounds to 1/2 under unbiased rounding but 3/4 rounds
   to 2/2.
-@end example
  */ 
 int gnc_numeric_same(gnc_numeric a, gnc_numeric b,   
                      gint64 denom, gint how);
-/*@}*/
+/** @}*/
 
-/** @name Arithmetic operations */
+/** @name Arithmetic Operations */
 /** @{*/
 /** Return a+b. */
 gnc_numeric gnc_numeric_add(gnc_numeric a, gnc_numeric b, 
@@ -430,47 +428,47 @@ gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b) {
   return gnc_numeric_sub(a, b, GNC_DENOM_AUTO,
                          GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER);
 }
-/*@}*/
+/** @}*/
 
-/** @name Arithmetic functions with exact error returns */
+/** @name Arithmetic Functions with Exact Error Returns */
 /** @{*/
-/** The same as gnc_numeric_add, but uses @var{error} for accumulating
+/** The same as gnc_numeric_add, but uses 'error' for accumulating
  *  conversion roundoff error. */
 gnc_numeric gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
                                        gint64 denom, gint how,
                                        gnc_numeric * error);
 
-/** The same as gnc_numeric_sub, but uses @var{error} for accumulating
+/** The same as gnc_numeric_sub, but uses error for accumulating
  *  conversion roundoff error. */
 gnc_numeric gnc_numeric_sub_with_error(gnc_numeric a, gnc_numeric b,
                                        gint64 denom, gint how,
                                        gnc_numeric * error);
 
-/** The same as @code{gnc_numeric_mul}, but uses @var{error} for 
+/** The same as gnc_numeric_mul, but uses error for 
  *  accumulating conversion roundoff error.
  */
 gnc_numeric gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
                                        gint64 denom, gint how,
                                        gnc_numeric * error);
 
-/** The same as @code{gnc_numeric_div}, but uses @var{error} for 
+/** The same as gnc_numeric_div, but uses error for 
  *  accumulating conversion roundoff error.
  */
 gnc_numeric gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
                                        gint64 denom, gint how,
                                        gnc_numeric * error);
-/*@}*/
+/** @}*/
 
-/** @name Change denominator */
+/** @name Change Denominator */
 /** @{*/
 /** Change the denominator of a gnc_numeric value to the 
  *  specified denominator under standard arguments 
- *  @var{denom} and @var{how}. 
+ *  'denom' and 'how'. 
  */
 gnc_numeric gnc_numeric_convert(gnc_numeric in, gint64 denom, 
                                 gint how);
 
-/** Same as @code{gnc_numeric_convert}, but return a remainder 
+/** Same as gnc_numeric_convert, but return a remainder 
  *  value for accumulating conversion error. 
 */
 gnc_numeric gnc_numeric_convert_with_error(gnc_numeric in, gint64 denom, 
@@ -480,9 +478,10 @@ gnc_numeric gnc_numeric_convert_with_error(gnc_numeric in, gint64 denom,
 /** Return input after reducing it by Greated Common Factor (GCF) 
  *  elimination */
 gnc_numeric gnc_numeric_reduce(gnc_numeric in);
-/*@}*/
+/** @}*/
 
-/** Deprecated, backwards-compate definitions */
+/** @name Deprecated, backwards-compatible definitions 
+  @{ */
 #define GNC_RND_FLOOR	GNC_HOW_RND_FLOOR
 #define GNC_RND_CEIL 	GNC_HOW_RND_CEIL 
 #define GNC_RND_TRUNC	GNC_HOW_RND_TRUNC
@@ -500,4 +499,6 @@ gnc_numeric gnc_numeric_reduce(gnc_numeric in);
 
 #define GNC_DENOM_SIGFIGS(X)  GNC_HOW_DENOM_SIGFIGS(X)
 #define GNC_NUMERIC_GET_SIGFIGS(X) GNC_HOW_GET_SIGFIGS(X)
+/** @}*/
+/** @}*/
 #endif
