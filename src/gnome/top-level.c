@@ -96,6 +96,7 @@ static void gnc_configure_register_hint_font(void);
 static short module = MOD_GUI;
 
 static int gnome_is_running = FALSE;
+static int splash_is_initialized = FALSE;
 static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
 
@@ -285,6 +286,28 @@ gnc_commodity_help_cb (void)
 /* ============================================================== */
 
 SCM
+gnc_gui_init_splash (SCM command_line)
+{
+  SCM ret = command_line;
+
+  ENTER (" ");
+
+  if (!splash_is_initialized)
+  {
+    splash_is_initialized = TRUE;
+
+    ret = gnc_gnome_init ("gnucash", "GnuCash", VERSION, command_line);
+
+    /* put up splash screen */
+    gnc_show_splash_screen ();
+  }
+
+  LEAVE (" ");
+
+  return ret;
+}
+
+SCM
 gnc_gui_init (SCM command_line)
 {
   SCM ret = command_line;
@@ -293,18 +316,14 @@ gnc_gui_init (SCM command_line)
 
   if (!gnome_is_initialized)
   {
-    ret = gnc_gnome_init ("gnucash", "GnuCash", VERSION, command_line);
+    /* Make sure the splash (and hense gnome) was initialized */
+    if (!splash_is_initialized)
+      ret = gnc_gui_init_splash (ret);
+
     gnome_is_initialized = TRUE;
 
     /* load default HTML action handlers */ 
     gnc_network_init();
-
-    /* put up splash screen */
-    gnc_show_splash_screen ();
-    
-    /* make sure splash is up */
-    while (gtk_events_pending ())
-      gtk_main_iteration ();
 
     gnc_configure_date_format();
     date_callback_id =
@@ -385,6 +404,7 @@ gnc_gui_init (SCM command_line)
     /* initialize gnome MDI and set up application window defaults  */
     if (!gnc_mdi_get_current ())
       gnc_main_window_new ();
+    gnc_destroy_splash_screen();
 
     /* Run the ui startup hooks. */
     {

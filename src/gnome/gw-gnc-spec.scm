@@ -97,7 +97,23 @@
    '<gw:scm>
    "gnc_gui_init"
    '((<gw:scm> command-line))
-   "Initialize the lower level ui parts. Returns remaining command line.")
+   "Initialize the remaining parts of the lower level ui. Returns remaining command line.")
+
+  (gw:wrap-function
+   ws
+   'gnc:gui-init-splash
+   '<gw:scm>
+   "gnc_gui_init_splash"
+   '((<gw:scm> command-line))
+   "Initialize the lower level ui parts and put up the splash screen. Returns remaining command line.")
+
+  (gw:wrap-function
+   ws
+   'gnc:update-splash-screen
+   '<gw:void>
+   "gnc_update_splash_screen"
+   '(((<gw:mchars> caller-owned const) string))
+   "Update the progress box on the splash screen dialog.")
 
   (gw:wrap-function
    ws

@@ -346,9 +346,44 @@ string and 'directories' must be a list of strings."
     (_ "The next stable version will be ") "GnuCash 1.8.0"
     "\n\n")))
 
-(define (gnc:startup)
-  (gnc:debug "starting up.")
+(define (gnc:startup-pass-1)
+  (gnc:debug "starting up (1).")
   (gnc:setup-debugging)
+
+  ;; initialize the gnucash module system 
+  (gnc:module-system-init)
+  
+  ;; SUPER UGLY HACK -- this should go away when I come back for the
+  ;; second cleanup pass...
+  (let ((original-module (current-module))
+        (bootstrap (resolve-module '(gnucash main))))
+    
+    (set-current-module bootstrap)
+    
+    (gnc:module-load "gnucash/app-utils" 0)
+    (gnc:setup-gettext)
+    (setlocale LC_ALL "")
+    ;; Now we can load a bunch of files.
+    (load-from-path "path.scm")
+    (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
+    )
+
+  (gnc:initialize-config-vars)
+  (if (not (gnc:handle-command-line-args))
+      (gnc:shutdown 1))
+  (if (gnc:config-var-value-get gnc:*arg-show-version*)
+      (begin
+        (gnc:prefs-show-version)
+        (gnc:shutdown 0)))
+
+  (if (or (gnc:config-var-value-get gnc:*arg-show-usage*)
+          (gnc:config-var-value-get gnc:*arg-show-help*))
+      (begin
+        (gnc:prefs-show-usage)
+        (gnc:shutdown 0))))
+
+(define (gnc:startup-pass-2)
+  (gnc:debug "starting up (2).")
 
   ;; initialize the gnucash module system 
   (gnc:module-system-init)
@@ -362,11 +397,8 @@ string and 'directories' must be a list of strings."
     
     ;; right now we have to statically load all these at startup time.
     ;; Hopefully we can gradually make them autoloading.
+    (gnc:update-splash-screen "Loading modules...")
     (gnc:module-load "gnucash/engine" 0)
-
-    (gnc:module-load "gnucash/app-utils" 0)
-    (gnc:setup-gettext)
-    (setlocale LC_ALL "")
 
     (gnc:module-load "gnucash/app-file" 0)
     (gnc:module-load "gnucash/register/ledger-core" 0)
@@ -384,14 +416,9 @@ string and 'directories' must be a list of strings."
     (gnc:module-load "gnucash/report/report-gnome" 0)
     (gnc:module-load "gnucash/business-gnome" 0)
 
-    ;; Now we can load a bunch of files.
-    (load-from-path "path.scm")
-
     ;; files we should be able to load from the top-level because
     ;; they're "well behaved" (these should probably be in modules
     ;; eventually)
-    (load-from-path "command-line.scm") ;; depends on app-utils (N_, etc.)...
-    (gnc:initialize-config-vars)
     (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
     (load-from-path "tip-of-the-day.scm") ;; depends on app-utils (config-var...)
     (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
@@ -420,10 +447,8 @@ string and 'directories' must be a list of strings."
                             (if (and option (not (gnc:option-value option)))
                                 (gnc:ui-hierarchy-druid)))))
 
-  (if (not (gnc:handle-command-line-args))
-      (gnc:shutdown 1))
-
   ;; Load the system configs
+  (gnc:update-splash-screen "Loading configs...")
   (if (not (gnc:load-system-config-if-needed))
       (gnc:shutdown 1))
 
@@ -454,17 +479,6 @@ string and 'directories' must be a list of strings."
       (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
-
-  (if (gnc:config-var-value-get gnc:*arg-show-version*)
-      (begin
-        (gnc:prefs-show-version)
-        (gnc:shutdown 0)))
-
-  (if (or (gnc:config-var-value-get gnc:*arg-show-usage*)
-          (gnc:config-var-value-get gnc:*arg-show-help*))
-      (begin
-        (gnc:prefs-show-usage)
-        (gnc:shutdown 0)))
 
   (if (gnc:config-var-value-get gnc:*loglevel*)
       (gnc:set-log-level-global (gnc:config-var-value-get gnc:*loglevel*))))
@@ -527,9 +541,14 @@ string and 'directories' must be a list of strings."
   ;;  (statprof-start)
 
   ;; Now the fun begins.
-  (gnc:startup)
-
+  (gnc:startup-pass-1)
   (gnc:print-unstable-message)
+  (if (null? gnc:*batch-mode-things-to-do*)
+      (begin
+        (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
+        (set! gnc:*command-line-remaining*
+              (gnc:gui-init-splash gnc:*command-line-remaining*))))
+  (gnc:startup-pass-2)
 
   (if (null? gnc:*batch-mode-things-to-do*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.

@@ -1,3 +1,18 @@
+2002-09-14  David Hampton  <hampton@employees.org>
+	Refactor the startup to display the splash screen faster (bug #92192)
+
+	* src/app-utils/kvp-option-registry.scm -- use slib
+	* src/gnome/gnc-splash.c -- add a progress bar to the splash screen.
+	  don't timeout the screen, require the app to shut it down.
+	* src/gnome/gnc-splash.h -- export new splash API
+	* src/gnome/gw-gnc-spec.scm -- wrap init-splash and update-splash
+	* src/gnome/top-level.c -- refactor gui_init into splash_init and gui_init.
+	  destroy the splash screen once the main window is up.
+	* src/gnome/top-level.h -- export init_splash_screen function
+	* src/scm/main.scm -- refactor startup into multiple stages to bring the
+	  splash screen up sooner.  Update the splash screen during different
+	  stages of the startup.
+
 2002-09-14  Derek Atkins  <derek@ihtfp.com>
 	Add TaxTable entries to Vendor Invoices (Bills); make sure it does
 	not bleed over into billback items.  Fixes RFE #91415

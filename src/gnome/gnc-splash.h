@@ -24,5 +24,7 @@
 #define GNC_SPLASH_H
 
 void gnc_show_splash_screen (void);
+void gnc_destroy_splash_screen (void);
+void gnc_update_splash_screen (gchar *string);
 
 #endif
