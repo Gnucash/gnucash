@@ -1527,7 +1527,7 @@ xaccAccountGetCommoditySCU (Account * acc)
 {
   if (!acc) return 0;
 
-  if (acc->non_standard_scu)
+  if (acc->non_standard_scu || !acc->commodity)
     return acc->commodity_scu;
   return gnc_commodity_get_fraction(acc->commodity);
 }

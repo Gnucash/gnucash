@@ -28,6 +28,7 @@
 
 #include "AccountP.h"
 #include "Transaction.h"
+#include "TransactionP.h"
 #include "GNCIdP.h"
 
 static GNCBook *book;
@@ -346,7 +347,9 @@ test_transaction(void)
         ran_trn = get_random_transaction(book);
 
         {
-          GList * node = xaccTransGetSplitList (ran_trn);
+	  /* xaccAccountInsertSplit can reorder the splits. */
+          GList * list = g_list_copy(xaccTransGetSplitList (ran_trn));
+          GList * node = list;
           for ( ; node; node = node->next)
           {
             Split * s = node->data;
@@ -357,6 +360,7 @@ test_transaction(void)
             xaccAccountInsertSplit (a, s);
             xaccAccountCommitEdit (a);
           }
+	  g_list_free(list);
         }
 
         com = xaccTransGetCurrency (ran_trn);
