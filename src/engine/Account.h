@@ -134,6 +134,7 @@ void         xaccAccountCommitEdit (Account *account);
 void         xaccAccountDestroy (Account *account);
 
 kvp_frame * xaccAccountGetSlots (Account *account);
+void xaccAccountSetSlots(Account *account, kvp_frame *frame);
 
 /*
  * The xaccAccountGetGUID() subroutine will return the

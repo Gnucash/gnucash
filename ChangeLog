@@ -1,3 +1,28 @@
+2001-02-15  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/Account.h: Add prototype for SetSlots.
+
+	* src/engine/Account.c (xaccAccountSetSlots): add func.
+
+	* src/test/test-dom-converters1.c (main): Add return_value
+	handling to better be a "check"able program.
+
+	* src/test/test-date-converting.c (main): Add return_value
+	handling to better be a "check"able program.
+
+	* src/engine/kvp_frame.c (kvp_frame_get_frame): refactor to use
+	glist func.
+	(kvp_frame_parse_slash_path): extract from slashpath func
+	(kvp_frame_get_frame_slash): refactor to use gslist func
+
+	* src/test/test-dom-converters1.c
+	(test_dom_tree_to_commodity_ref): Use no_engine version.
+
+	* src/engine/sixtp-dom-parsers.c
+	(dom_tree_to_commodity_ref_no_engine): rename func.
+	(dom_tree_to_commodity_ref): Add func to do complete commodity
+	creation including adding to engine cache.
+
 2001-02-14  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-dom-converters1.c (Repository): fix mem leak.

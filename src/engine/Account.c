@@ -442,6 +442,17 @@ xaccAccountGetSlots(Account * account) {
   return(account->kvp_data);
 }
 
+void
+xaccAccountSetSlots(Account *account, kvp_frame *frame)
+{
+    if(account->kvp_data)
+    {
+        kvp_frame_delete (account->kvp_data);
+    }
+    account->kvp_data = frame;
+}
+
+
 /********************************************************************\
 \********************************************************************/
 

@@ -293,49 +293,6 @@ kvp_frame_set_slot_path_gslist (kvp_frame *frame,
 
 /* ============================================================ */
 
-kvp_frame *
-kvp_frame_get_frame (kvp_frame *frame, const char *first_key, ...) 
-{
-  va_list ap;
-  const char *key;
-
-  if (!frame || !first_key)
-    return frame;
-
-  va_start (ap, first_key);
-
-  key = first_key;
-
-  while (TRUE) {
-    kvp_value *value;
-
-    /* get the frame assoc with key, or create it if needed */
-    value = kvp_frame_get_slot (frame, key);
-    if (!value) {
-      kvp_frame *new_frame = kvp_frame_new ();
-      kvp_value *frame_value = kvp_value_new_frame (new_frame);
-
-      kvp_frame_set_slot_nc (frame, key, frame_value);
-
-      value = kvp_frame_get_slot (frame, key);
-      if (!value)
-        break;    /* error, should never occur */
-    }
-
-    frame = kvp_value_get_frame (value);
-    if (!frame)
-      break;     /* error, should never occur */
-
-    key = va_arg (ap, const char *);
-    if (!key) {
-      break;   /* the normal exit to this routine. */
-    }
-  }
-
-  va_end (ap);
-  return frame;
-}
-
 
 kvp_frame *
 kvp_frame_get_frame_gslist (kvp_frame *frame, GSList *key_path) 
@@ -375,42 +332,93 @@ kvp_frame_get_frame_gslist (kvp_frame *frame, GSList *key_path)
 }
 
 kvp_frame *
-kvp_frame_get_frame_slash (kvp_frame *frame, const char *key_path) 
+kvp_frame_get_frame (kvp_frame *frame, const char *first_key, ...) 
 {
-  char *root, *key, *next;
-  if (!frame || !key_path)
+  va_list ap;
+  const char *key;
+  GSList *lst;
+  kvp_frame *ret;
+  
+  if (!frame || !first_key)
     return frame;
 
+  va_start (ap, first_key);
+
+  key = first_key;
+
+  lst = g_slist_alloc();
+  
+  while (TRUE) {
+    g_slist_append(lst, key);
+      
+    key = va_arg (ap, const char *);
+    if (!key) {
+      break;   /* the normal exit to this routine. */
+    }
+  }
+  va_end (ap);
+
+  ret = kvp_frame_get_frame_gslist(frame, lst);
+  g_slist_free(lst);
+
+  return ret;
+}
+
+static GSList*
+kvp_frame_parse_slash_path(const char *key_path)
+{
+  char *root, *key, *next;
+  GSList *ret;
+
+  ret = g_slist_alloc();
+  
   root = g_strdup (key_path);
   key = root;
   key --;
 
   while (key) {
-    kvp_value *value;
-
     key ++;
     while ('/' == *key) { key++; }
     if (0x0 == *key) break;    /* trailing slash */   
     next = strchr (key, '/');
     if (next) *next = 0x0;
 
-    value = kvp_frame_get_slot (frame, key);
-    if (!value) {
-      kvp_frame *new_frame = kvp_frame_new ();
-      kvp_value *frame_value = kvp_value_new_frame (new_frame);
-
-      kvp_frame_set_slot_nc (frame, key, frame_value);
-      value = kvp_frame_get_slot (frame, key);
-      if (!value) break;  /* error - should never happen */
-    }
-
-    frame = kvp_value_get_frame (value);
-    if (!frame) break;  /* error - should never happen */
-
+    g_slist_append(ret, g_strdup(key));
+    
     key = next;
   }
   g_free(root);
-  return frame;  
+  return ret;
+}
+
+static void
+kvp_frame_sp_free_string(gpointer *data, gpointer *ignored)
+{
+    g_free(data);
+}
+
+static void
+kvp_frame_delete_slash_path_gslist(GSList *lst)
+{
+    g_slist_foreach(lst, kvp_frame_sp_free_string, NULL);
+    g_slist_free(lst);
+}
+
+kvp_frame *
+kvp_frame_get_frame_slash (kvp_frame *frame, const char *key_path) 
+{
+  char *root, *key, *next;
+  GSList *lst;
+  kvp_frame *ret;
+  
+  if (!frame || !key_path)
+    return frame;
+
+  lst = kvp_frame_parse_slash_path(key_path);
+  ret = kvp_frame_get_frame_gslist(frame, lst);
+  kvp_frame_delete_slash_path_gslist(lst);
+  
+  return ret;
 }
 
 /* ============================================================ */

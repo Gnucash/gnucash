@@ -221,7 +221,7 @@ dom_tree_to_timespec(xmlNodePtr node)
 }
 
 gnc_commodity *
-dom_tree_to_commodity_ref(xmlNodePtr node)
+dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
 {
   /* Turn something like this
      
@@ -281,6 +281,20 @@ dom_tree_to_commodity_ref(xmlNodePtr node)
   if(space_str) g_free(space_str);
   if(id_str) g_free(id_str);
   return c;
+}
+
+gnc_commodity*
+dom_tree_to_commodity_ref(xmlNodePtr node)
+{
+    gnc_commodity* daref;
+    gnc_commodity *ret;
+    
+    daref = dom_tree_to_commodity_ref_no_engine(node);
+    ret = associate_commodity_ref_with_engine_commodity(daref);
+
+    g_free(daref);
+
+    return ret;
 }
 
 gnc_commodity *
