@@ -130,7 +130,7 @@ password, *NOT* your unix login name and password.
 Note that you (or your SQL database admin) will have to make sure
 that access permissions on the various GnuCash tables have been set 
 appropriately.  Typically, this will be by starting the 'psql'
-shell, listing all relations with \z, and then issueing
+shell, listing all relations with \z, and then issuing
 a 'GRANT ALL on gncAccount TO someuser;', and so on, for each 
 relation.   Failing to do this will result in lots of unhappiness.
 The sysadmin will also need to make sure that TCP/IP connections
@@ -149,15 +149,18 @@ mode=multi-user
 
 The first two are single-user access modes.  These are the
 'safest' modes to use if you don't need multi-user capability.
-The single-update mode is strongly preffered over single-file.
-(single-file can loose your data if your sql connection dies
-at unexpected times).
+The single-update mode is strongly preferred over single-file.
+(The single-file mode is strongly deprecated, and can lead to 
+to massive data loss under certain circumstances: for example,
+if your sql connection dies after all the old data has been 
+deleted, but before the new data has been written out.  Bluntly: 
+DO NOT USE mode=single-file.  You won't be sorry.).
 
 The multi-user modes are intended for use when multiple users
 need to view and make changes to the data.  The default mode
 is multi-user.  
 
-If you have many users (more than a helf-dozen or so), you may 
+If you have many users (more than a half-dozen or so), you may 
 want to run in multi-user-poll mode, instead of the default 
 multi-user.  This will stop the automatic updates of the 
 local instance of gnucash, and thus reduce the amount of
@@ -178,7 +181,7 @@ You can alternate between multi-user and single-user modes for
 the same database.  Just be sure that all users have logged off,
 otherwise gnucash won't let you log on in single-user mode. 
 Users are 'logged off' automatically when they exist gnucash.
-In case they have crashed, (and thus apear to still be logged
+In case they have crashed, (and thus appear to still be logged
 in), you can log them off manually by issuing  the following:
 
 echo "UPDATE gncsession SET time_off='NOW' WHERE time_off = 'infinity';" | psql dbname
@@ -186,7 +189,7 @@ echo "UPDATE gncsession SET time_off='NOW' WHERE time_off = 'infinity';" | psql 
 Hopefully, you do not need to be warned that this dangerous
 if there really are other users logged in.  Accessing the
 database in single-user mode when there are other users logged
-in will result in thier work being clobbered.
+in will result in their work being clobbered.
 
 Other Options
 -------------
@@ -219,7 +222,7 @@ at least for medium datasets (measured at 3.5 seconds on a 700MHz
 Athalon a dataset with 3K transactions and 150 accounts, vs. 4.8 
 seconds loading from file; postgres version 7.1.2).  
 
-Hitting the 'save' button is a no-op and takes no cpu cycles.
+Hitting the 'save' button is a no-op and takes no CPU cycles.
 (date is saved as its modified, so a global save is not needed).
 
 'exit' will stall for a few seconds, while a 'vacuum analyze' is 
@@ -239,7 +242,7 @@ But to load only a subset is hard, in several ways. First, its
 technically hard to figure out what subset to load.  Then, once
 this is done, it takes about 12 millisecs to load one transaction 
 when loading them one at a time (on an Athalon 700MHz). This is
-about 75 transactions a second. Of this, 90% of the cpu cycles 
+about 75 transactions a second. Of this, 90% of the CPU cycles 
 are burned in the postgres server, so 'basic' tuning won't do 
 the trick ... some different algorithm is needed.
 
@@ -265,24 +268,28 @@ access).
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).  
 
--- The correct url format for username-password should be:
+-- The correct URL format for username-password should be:
    postgres://username:passwd@host:port/dbname?key=value&key2=val2
-   However, the username-password part of teh URI is not correctly 
+   However, the username-password part of the URI is not correctly 
    parsed at the moment.
 
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
    If user hits 'save' in the single-user or multi-user mode, it 
-   should be a no-op (since the saves have already occured).  Only 
+   should be a no-op (since the saves have already occurred).  Only 
    a 'save-as' requires a from-scratch sync.
 
--- add version number to the DB, so that new sql db's can be 
-   auto-upgraded if table schema change.
+-- document how to use the version/extension tables to allow
+   seamless upwards compatibility in the face of database schema
+   changes.
 
 -- clear up end/destroy semantics.  After book_end is called,
    its not possible to start a new session, since there are
    uninitialized pointers.  Unless to book is deleted immediately,
    everything is hosed.  This is a generic backend design problem,
    not just an sql backend problem, that needs fixing.
+   (??? Maybe this has been fixed now, in the redesigned
+   gnc-book/gnc-session code ??? Maybe we just need to cleanup in 
+   the postgres backend ??)
 
 -- allow user to enter URL in GUI dialog.  User can currently type URL
    into the file dialog window; it would be nice to have something 
@@ -297,14 +304,10 @@ access).
    grep for all PERR's that don't set backend error.
 
 -- note that transaction commit errors may in fact be i/o errors.
-   If an i/o error occured during commit, there would be some
-   abberant rollback behaviour. Ouch.
+   If an i/o error occurred during commit, there would be some
+   aberrant rollback behavior. Ouch.
 
--- the transaction rollback code needs to be a gui popup...
-
--- fix the annoying postgres:,,localhost,asdf file syntax: needs
-   mods to gnc-book to keep it happy about lock files & such.
-   (coord with rlb on gnc-book redesign)
+-- the transaction rollback code needs to be a GUI popup...
 
 -- review (actually, design & architect) the communications error
    handling policy.  For example, CopyToEngine() will leave
@@ -335,11 +338,11 @@ To Be Done, Part II
 This list only affects the multi-user and advanced/optional features.
 
 Most of the items on this list are 'good-to-fix' but are not
-truly critical.  They may result in abberations, but general
+truly critical.  They may result in aberrations, but general
 operation is probably OK.
 
 -- when an account is edited, price lookups happen *twice* !!
-   once when opend for edit, and again when committed !!
+   once when opened for edit, and again when committed !!
    (the first one is due to gnc_account_tree_refresh ()
    called by gnc_account_window_create() near dialog-account.c:1642)
 
@@ -351,7 +354,7 @@ operation is probably OK.
    seconds ...  doing this uniformly can cut down on sql traffic.
    (This is particularly egregious for price queries).  Implement this 
    by putting a datestamp in along with the version number.  Let
-   the backend check the datastamp, and if its aged less than 
+   the backend check the datestamp, and if its aged less than 
    15 seconds, skip doing the sql query.)
 
    DONE --- but we need to detect redundant price queries .. ughh
@@ -412,7 +415,7 @@ operation is probably OK.
    of the wrong version. 
    -- pgend_transaction_commit does it correctly; but the GUI doesn't
       report a rollback.  (need to get err message out of engine, into 
-      gui).
+      GUI).
    -- pgTransactionSync() is broken, but its not used anywhere.
    -- pgend_account_commit checks version but doesn't rollback.
       (nor does the GUI report a rollback.)
@@ -455,9 +458,9 @@ operation is probably OK.
    I think it might be better to leave this unbalanced, and just
    plain force everything in the database to be balanced.  In this
    case, we should then modify the code to check for unbalanced 
-   transactions before commiting them, or otherwise force the backend
+   transactions before committing them, or otherwise force the backend
    to run in balanced mode.  We could set 'force_double_entry=2'
-   but this is currently unimplmented in the engine.  Alternately, 
+   but this is currently unimplemented in the engine.  Alternately, 
    we could call 'Scrub' at appropriate times.
     
 
