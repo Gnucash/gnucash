@@ -82,7 +82,7 @@ gnc_ui_nextrun_dialog_create(void)
 static void
 nextrun_init( sxSinceLastData *sxsld )
 {
-        GtkObject        *o;
+        GtkWidget        *o;
         int                i;
         struct widgetNameSignalHandlerTuple {
                 char *name;
@@ -106,23 +106,23 @@ nextrun_init( sxSinceLastData *sxsld )
 
         for ( i=0; widgets[i].name != NULL ; i++ ) {
                 o = glade_xml_get_widget( sxsld->gxml, widgets[i].name );
-                gtk_signal_connect( o, widgets[i].signal,
+                gtk_signal_connect( GTK_OBJECT(o), widgets[i].signal,
                                     GTK_SIGNAL_FUNC(widgets[i].handlerFn),
                                     sxsld );
                 
         }
 
         o = glade_xml_get_widget( sxsld->gxml, "next" );
-        gtk_signal_connect( o, "clicked",
+        gtk_signal_connect( GTK_OBJECT(o), "clicked",
                             GTK_SIGNAL_FUNC(nr_next_clicked),
                             sxsld );
 
         o = glade_xml_get_widget( sxsld->gxml, "prev_xaction" );
-        gtk_signal_connect( o, "clicked",
+        gtk_signal_connect( GTK_OBJECT(o), "clicked",
                             GTK_SIGNAL_FUNC(nr_prev_xaction_clicked),
                             sxsld );
         o = glade_xml_get_widget( sxsld->gxml, "next_xaction" );
-        gtk_signal_connect( o, "clicked",
+        gtk_signal_connect( GTK_OBJECT(o), "clicked",
                             GTK_SIGNAL_FUNC(nr_next_xaction_clicked),
                             sxsld );
 
@@ -167,7 +167,7 @@ nr_next_clicked( GtkButton *b, gpointer ud )
 {
         sxSinceLastData *sxsld;
         GtkWidget        *dlg;
-        GtkObject        *o;
+        GtkWidget        *o;
         GtkCList        *cl;
         time_t                gdeDate;
         GList                *sxList;
