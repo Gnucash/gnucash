@@ -205,10 +205,10 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
 	 * import-export/hbci subdirectory in other countries.
 	 */
 	(_("The downloaded HBCI Balance was zero.\n"
-	   "It seems as if your bank does not support Balance download \n"
-	   "in this HBCI version. You should choose a higher HBCI version \n"
-	   "number in the HBCI Setup. After that, try again to download \n"
-	   "the HBCI Balance.\n"),
+	   "Either this is the correct balance, or your bank does not \n"
+	   "support Balance download in this HBCI version. You should \n"
+	   "choose a higher HBCI version number in the HBCI Setup. After \n"
+	   "that, try again to download the HBCI Balance.\n"),
 	 GTK_WINDOW (parent));
       dialogres = FALSE;
     }
