@@ -133,6 +133,7 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_NOTES	"notes"
 #define INVOICE_ACC	"account"
 #define INVOICE_POST_TXN	"posted_txn"
+#define INVOICE_POST_LOT	"posted_lot"
 #define INVOICE_TYPE	"type"
 #define INVOICE_BILLTO	"bill-to"
 

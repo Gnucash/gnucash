@@ -1382,6 +1382,7 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_NOTES, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetNotes },
     { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },
     { INVOICE_POST_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
+    { INVOICE_POST_LOT, GNC_ID_LOT, (QueryAccess)gncInvoiceGetPostedLot },
     { INVOICE_TYPE, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetType },
     { INVOICE_TERMS, GNC_BILLTERM_MODULE_NAME, (QueryAccess)gncInvoiceGetTerms },
     { INVOICE_BILLTO, GNC_OWNER_MODULE_NAME, (QueryAccess)gncInvoiceGetBillTo },

@@ -138,4 +138,7 @@ void gncQueryPrint (QueryNew *query);
 /* Return the type of data we're querying for */
 GNCIdType gncQueryGetSearchFor (QueryNew *q);
 
+/* Return the list of books we're using */
+GList * gncQueryGetBooks (QueryNew *q);
+
 #endif /* GNC_QUERYNEW_H */
