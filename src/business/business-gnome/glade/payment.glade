@@ -2,7 +2,6 @@
 <!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-<requires lib="gnome"/>
 
 <widget class="GtkDialog" id="Payment Dialog">
   <property name="visible">True</property>
@@ -13,6 +12,7 @@
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">True</property>
+  <signal name="destroy" handler="gnc_payment_window_destroy_cb" last_modification_time="Mon, 08 Sep 2003 02:39:12 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox1">
@@ -33,7 +33,8 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
+	      <property name="response_id">-6</property>
+	      <signal name="clicked" handler="gnc_payment_cancel_cb" last_modification_time="Mon, 08 Sep 2003 02:40:12 GMT"/>
 	    </widget>
 	  </child>
 
@@ -45,7 +46,8 @@
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
+	      <property name="response_id">-5</property>
+	      <signal name="clicked" handler="gnc_payment_ok_cb" last_modification_time="Mon, 08 Sep 2003 02:40:03 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

@@ -6,7 +6,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -317,7 +317,7 @@ gnc_employee_window_close_handler (gpointer user_data)
 {
   EmployeeWindow *ew = user_data;
 
-  gnome_dialog_close (GNOME_DIALOG (ew->dialog));
+  gtk_widget_destroy (ew->dialog);
 }
 
 static void
@@ -359,7 +359,6 @@ gnc_employee_new_window (GNCBook *bookp,
   EmployeeWindow *ew;
   GladeXML *xml;
   GtkWidget *hbox, *edit;
-  GnomeDialog *ewd;
   gnc_commodity *currency;
   GNCPrintAmountInfo print_info;
   GList *acct_types;
@@ -397,12 +396,8 @@ gnc_employee_new_window (GNCBook *bookp,
   /* Find the dialog */
   xml = gnc_glade_xml_new ("employee.glade", "Employee Dialog");
   ew->dialog = glade_xml_get_widget (xml, "Employee Dialog");
-  ewd = GNOME_DIALOG (ew->dialog);
 
   gtk_object_set_data (GTK_OBJECT (ew->dialog), "dialog_info", ew);
-
-  /* default to ok */
-  gnome_dialog_set_default (ewd, 0);
 
   /* Get entry points */
   ew->id_entry = glade_xml_get_widget (xml, "id_entry");

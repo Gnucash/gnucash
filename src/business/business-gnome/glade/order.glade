@@ -14,6 +14,7 @@
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">True</property>
+  <signal name="destroy" handler="gnc_order_window_destroy_cb" last_modification_time="Mon, 08 Sep 2003 01:36:38 GMT"/>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox1">
@@ -35,6 +36,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">-11</property>
+	      <signal name="clicked" handler="gnc_order_window_help_cb" last_modification_time="Mon, 08 Sep 2003 01:34:48 GMT"/>
 	    </widget>
 	  </child>
 
@@ -47,6 +49,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
+	      <signal name="clicked" handler="gnc_order_window_ok_cb" last_modification_time="Mon, 08 Sep 2003 01:33:56 GMT"/>
 	    </widget>
 	  </child>
 
@@ -59,6 +62,7 @@
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
+	      <signal name="clicked" handler="gnc_order_window_invoice_cb" last_modification_time="Mon, 08 Sep 2003 01:34:14 GMT"/>
 	    </widget>
 	  </child>
 
@@ -71,6 +75,7 @@
 	      <property name="use_underline">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="response_id">0</property>
+	      <signal name="clicked" handler="gnc_order_window_close_order_cb" last_modification_time="Mon, 08 Sep 2003 01:34:33 GMT"/>
 	    </widget>
 	  </child>
 	</widget>

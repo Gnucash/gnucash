@@ -169,19 +169,22 @@ gnc_general_search_destroy (GtkObject *object)
 	gsl->entry = NULL;
 	gsl->button = NULL;
 
-	if (gsl->priv->sw) {
+	if (gsl->priv) {
 		/* Clear the callbacks */
-		gnc_search_dialog_set_select_cb (gsl->priv->sw, NULL,
-						 NULL, FALSE);
-		gnc_search_dialog_disconnect (gsl->priv->sw, gsl);
-		gsl->priv->sw = NULL;
+		if (gsl->priv->sw) {
+			gnc_search_dialog_set_select_cb (gsl->priv->sw, NULL,
+							 NULL, FALSE);
+			gnc_search_dialog_disconnect (gsl->priv->sw, gsl);
+			gsl->priv->sw = NULL;
+		}
+
+		/* Unregister ourselves */
+		gnc_unregister_gui_component (gsl->priv->component_id);
+
+		/* And let go */
+		g_free (gsl->priv);
+		gsl->priv = NULL;
 	}
-
-	/* Unregister ourselves */
-	gnc_unregister_gui_component (gsl->priv->component_id);
-
-	/* And let go */
-	g_free (gsl->priv);
 
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
 		GTK_OBJECT_CLASS (parent_class)->destroy (object);

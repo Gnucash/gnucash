@@ -226,8 +226,8 @@
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
 	    </packing>
 	  </child>
 
@@ -460,8 +460,8 @@
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
 	    </packing>
 	  </child>
 
@@ -606,8 +606,8 @@
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
-	      <property name="expand">True</property>
-	      <property name="fill">True</property>
+	      <property name="expand">False</property>
+	      <property name="fill">False</property>
 	    </packing>
 	  </child>
 
@@ -1318,7 +1318,6 @@
 	      <child>
 		<widget class="GtkVSeparator" id="vseparator1">
 		  <property name="visible">True</property>
-		  <property name="new_group">True</property>
 		</widget>
 		<packing>
 		  <property name="new_group">True</property>
@@ -1361,7 +1360,6 @@
 	      <child>
 		<widget class="GtkVSeparator" id="vseparator2">
 		  <property name="visible">True</property>
-		  <property name="new_group">True</property>
 		</widget>
 		<packing>
 		  <property name="new_group">True</property>
@@ -1393,7 +1391,6 @@
 	      <child>
 		<widget class="GtkVSeparator" id="vseparator3">
 		  <property name="visible">True</property>
-		  <property name="new_group">True</property>
 		</widget>
 		<packing>
 		  <property name="new_group">True</property>
@@ -2439,7 +2436,7 @@
   </child>
 </widget>
 
-<widget class="GtkDialog" id="post Message Dialog">
+<widget class="GtkDialog" id="Unpost Message Dialog">
   <property name="visible">True</property>
   <property name="title" translatable="yes"></property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>

@@ -6,7 +6,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -110,6 +110,9 @@ vw_get_vendor (VendorWindow *vw)
 
 static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 {
+  GtkTextBuffer* text_buffer;
+  GtkTextIter start, end;
+  gchar *text;
   GncAddress *addr;
 
   addr = gncVendorGetAddr (vendor);
@@ -142,8 +145,12 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
   gncVendorSetActive (vendor, gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (vw->active_check)));
   gncVendorSetTaxIncluded (vendor, vw->taxincluded);
-  gncVendorSetNotes (vendor, gtk_editable_get_chars
-		       (GTK_EDITABLE (vw->notes_text), 0, -1));
+
+  text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(vw->notes_text));
+  gtk_text_buffer_get_bounds (text_buffer, &start, &end);
+  text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+  gncVendorSetNotes (vendor, text);
+
   gncVendorSetTerms (vendor, vw->terms);
   gncVendorSetCurrency (vendor,
 			gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT
@@ -280,7 +287,7 @@ gnc_vendor_window_close_handler (gpointer user_data)
 {
   VendorWindow *vw = user_data;
 
-  gnome_dialog_close (GNOME_DIALOG (vw->dialog));
+  gtk_widget_destroy (vw->dialog);
 }
 
 static void
@@ -320,7 +327,6 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 {
   VendorWindow *vw;
   GladeXML *xml;
-  GnomeDialog *vwd;
   GtkWidget *edit, *hbox;
   gnc_commodity *currency;
 
@@ -356,12 +362,6 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
   /* Find the dialog */
   xml = gnc_glade_xml_new ("vendor.glade", "Vendor Dialog");
   vw->dialog = glade_xml_get_widget (xml, "Vendor Dialog");
-  vwd = GNOME_DIALOG (vw->dialog);
-
-  gtk_object_set_data (GTK_OBJECT (vw->dialog), "dialog_info", vw);
-
-  /* default to ok */
-  gnome_dialog_set_default (vwd, 0);
 
   /* Get entry points */
   vw->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -399,9 +399,9 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 
   /* Setup initial values */
   if (vendor != NULL) {
+    GtkTextBuffer* text_buffer;
     GncAddress *addr;
     const char *string;
-    gint pos = 0;
 
     vw->dialog_type = EDIT_VENDOR;
     vw->vendor_guid = *gncVendorGetGUID (vendor);
@@ -426,9 +426,8 @@ gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
                                 gncVendorGetActive (vendor));
 
     string = gncVendorGetNotes (vendor);
-    gtk_editable_delete_text (GTK_EDITABLE (vw->notes_text), 0, -1);
-    gtk_editable_insert_text (GTK_EDITABLE (vw->notes_text), string,
-			      strlen(string), &pos);
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(vw->notes_text));
+    gtk_text_buffer_set_text (text_buffer, string, -1);
 
     vw->component_id =
       gnc_register_gui_component (DIALOG_EDIT_VENDOR_CM_CLASS,

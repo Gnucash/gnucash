@@ -6,7 +6,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -33,6 +33,7 @@ void gnc_job_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_job_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data);
+void gnc_job_name_changed_cb (GtkWidget *widget, gpointer data);
 
 typedef enum
 {
@@ -192,7 +193,7 @@ gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data)
   g_free (jw);
 }
 
-static void
+void
 gnc_job_name_changed_cb (GtkWidget *widget, gpointer data)
 {
   JobWindow *jw = data;
@@ -226,7 +227,8 @@ gnc_job_window_close_handler (gpointer user_data)
 {
   JobWindow *jw = user_data;
 
-  gnome_dialog_close (GNOME_DIALOG (jw->dialog));
+  gtk_widget_destroy (jw->dialog);
+  jw->dialog = NULL;
 }
 
 static void
@@ -267,7 +269,6 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
   JobWindow *jw;
   GladeXML *xml;
   GtkWidget *owner_box, *owner_label;
-  GnomeDialog *jwd;
   GtkObject *jwo;
 
   /*
@@ -299,12 +300,8 @@ gnc_job_new_window (GNCBook *bookp, GncOwner *owner, GncJob *job)
   /* Find the dialog */
   jw->dialog = glade_xml_get_widget (xml, "Job Dialog");
   jwo = GTK_OBJECT (jw->dialog);
-  jwd = GNOME_DIALOG (jwo);
 
   gtk_object_set_data (jwo, "dialog_info", jw);
-
-  /* default to ok XXX */
-  gnome_dialog_set_default (jwd, 0);
 
   /* Get entry points */
   jw->id_entry  = glade_xml_get_widget (xml, "id_entry");

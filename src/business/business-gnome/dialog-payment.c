@@ -48,6 +48,11 @@ struct _payment_window {
 };
 
 
+void gnc_payment_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_payment_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data);
+
+
 static void
 gnc_payment_window_refresh_handler (GHashTable *changes, gpointer data)
 {
@@ -62,7 +67,7 @@ gnc_payment_window_close_handler (gpointer data)
   PaymentWindow *pw = data;
 
   if (pw)
-    gnome_dialog_close (GNOME_DIALOG (pw->dialog));
+    gtk_widget_destroy (pw->dialog);
 }
 
 static void
@@ -71,7 +76,7 @@ gnc_payment_set_owner (PaymentWindow *pw, GncOwner *owner)
   gnc_owner_set_owner (pw->owner_choice, owner);
 }
 
-static void
+void
 gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
 {
   PaymentWindow *pw = data;
@@ -146,14 +151,14 @@ gnc_payment_ok_cb (GtkWidget *widget, gpointer data)
   gnc_ui_payment_window_destroy (pw);
 }
 
-static void
+void
 gnc_payment_cancel_cb (GtkWidget *widget, gpointer data)
 {
   PaymentWindow *pw = data;
   gnc_ui_payment_window_destroy (pw);
 }
 
-static void
+void
 gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   PaymentWindow *pw = data;
@@ -264,15 +269,10 @@ new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
   gnc_payment_set_account_types (GNC_TREE_VIEW_ACCOUNT (pw->acct_tree));
 
-  /* Connect the dialog buttons */
-  gnome_dialog_button_connect (GNOME_DIALOG (pw->dialog), 0,
-			       G_CALLBACK (gnc_payment_ok_cb), pw);
-  gnome_dialog_button_connect (GNOME_DIALOG (pw->dialog), 1,
-			       G_CALLBACK (gnc_payment_cancel_cb), pw);
-
-  /* Setup various signal handlers */
-  g_signal_connect (G_OBJECT (pw->dialog), "destroy",
-		    G_CALLBACK (gnc_payment_window_destroy_cb), pw);
+  /* Setup signals */
+  glade_xml_signal_autoconnect_full( xml,
+                                     gnc_glade_autoconnect_full_func,
+                                     pw);
 
   /* Register with the component manager */
   pw->component_id =

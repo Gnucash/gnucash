@@ -848,7 +848,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 						 close_handler, sw);
 
   /* And setup the close callback */
-  g_signal_connect (G_OBJECT (sw->dialog), "close",
+  g_signal_connect (G_OBJECT (sw->dialog), "destroy",
 		    G_CALLBACK (gnc_search_dialog_close_cb), sw);
 
   gnc_search_dialog_reset_widgets (sw);
@@ -927,7 +927,7 @@ guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
   g_return_val_if_fail (func, 0);
   g_return_val_if_fail (user_data, 0);
 
-  return g_signal_connect (G_OBJECT (sw->dialog), "close",
+  return g_signal_connect (G_OBJECT (sw->dialog), "destroy",
 			   func, user_data);
 
 }

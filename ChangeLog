@@ -1,3 +1,14 @@
+2003-09-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome-search/dialog-search.c:
+	* src/gnome-search/gnc-general-search.c:
+	* src/business/business-gnome/dialog-xxx.c:
+	* src/business/business-gnome/glade/xxx.glade:
+	* src/business/dialog-tax-table/dialog-tax-table.c:
+	* src/business/dialog-tax-table/tax-tables.glade: Some
+	gnome_dialog to gtk_dialog updates. Move signal information into
+	glade.
+
 2003-09-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin.c: Make the plugin widget destructor

@@ -85,6 +85,10 @@ Find - MINIMALLY FUNCTIONAL
 
 View Toolbar/Summarybar/Statusbar - NEEDS WORK
 
+Business functions - Somewhat Functional
+	- Everything works but the New Invoice/Bill code.  The dialog
+	seems to function properly but then gnucash crashes when the
+	dialog is closed.
 
 
 

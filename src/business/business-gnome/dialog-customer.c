@@ -6,7 +6,7 @@
 
 #include "config.h"
 
-#include <gnome.h>
+#include <gtk/gtk.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -35,6 +35,9 @@
 
 #define DIALOG_NEW_CUSTOMER_CM_CLASS "dialog-new-customer"
 #define DIALOG_EDIT_CUSTOMER_CM_CLASS "dialog-edit-customer"
+
+void gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
+				     gpointer user_data);
 
 void gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data);
@@ -100,7 +103,7 @@ struct _customer_window {
   GncTaxTable *	taxtable;
 };
 
-static void
+void
 gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
 				gpointer user_data)
 {
@@ -123,6 +126,9 @@ cw_get_customer (CustomerWindow *cw)
 
 static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 {
+  GtkTextBuffer* text_buffer;
+  GtkTextIter start, end;
+  gchar *text;
   GncAddress *addr, *shipaddr;
 
   addr = gncCustomerGetAddr (cust);
@@ -174,8 +180,11 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
   gncCustomerSetActive (cust, gtk_toggle_button_get_active
 			(GTK_TOGGLE_BUTTON (cw->active_check)));
   gncCustomerSetTaxIncluded (cust, cw->taxincluded);
-  gncCustomerSetNotes (cust, gtk_editable_get_chars
-		       (GTK_EDITABLE (cw->notes_text), 0, -1));
+
+  text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(cw->notes_text));
+  gtk_text_buffer_get_bounds (text_buffer, &start, &end);
+  text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+  gncCustomerSetNotes (cust, text);
 
   /* Parse and set the currency, terms, discount, and credit amounts */
   gncCustomerSetCurrency (cust,
@@ -355,7 +364,8 @@ gnc_customer_window_close_handler (gpointer user_data)
 {
   CustomerWindow *cw = user_data;
 
-  gnome_dialog_close (GNOME_DIALOG (cw->dialog));
+  gtk_widget_destroy (cw->dialog);
+  cw->dialog = NULL;
 }
 
 static void
@@ -396,7 +406,6 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   CustomerWindow *cw;
   GladeXML *xml;
   GtkWidget *hbox, *edit;
-  GnomeDialog *cwd;
   gnc_commodity *currency;
   GNCPrintAmountInfo print_info;
   
@@ -432,12 +441,8 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
   /* Find the dialog */
   xml = gnc_glade_xml_new ("customer.glade", "Customer Dialog");
   cw->dialog = glade_xml_get_widget (xml, "Customer Dialog");
-  cwd = GNOME_DIALOG (cw->dialog);
 
   gtk_object_set_data (GTK_OBJECT (cw->dialog), "dialog_info", cw);
-
-  /* default to ok */
-  gnome_dialog_set_default (cwd, 0);
 
   /* Get entry points */
   cw->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -511,9 +516,9 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
 
   /* Setup initial values */
   if (cust != NULL) {
+    GtkTextBuffer* text_buffer;
     GncAddress *addr, *shipaddr;
     const char *string;
-    gint pos = 0;
 
     cw->dialog_type = EDIT_CUSTOMER;
     cw->customer_guid = *gncCustomerGetGUID (cust);
@@ -549,9 +554,8 @@ gnc_customer_new_window (GNCBook *bookp, GncCustomer *cust)
                                 gncCustomerGetActive (cust));
 
     string = gncCustomerGetNotes (cust);
-    gtk_editable_delete_text (GTK_EDITABLE (cw->notes_text), 0, -1);
-    gtk_editable_insert_text (GTK_EDITABLE (cw->notes_text), string,
-			      strlen(string), &pos);
+    text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(cw->notes_text));
+    gtk_text_buffer_set_text (text_buffer, string, -1);
 
     cw->component_id =
       gnc_register_gui_component (DIALOG_EDIT_CUSTOMER_CM_CLASS,
