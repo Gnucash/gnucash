@@ -53,12 +53,12 @@
        (gnc:make-number-range-option 
         (N_ "Tables")
         (N_ "Table cell spacing") "c" (N_ "Space between table cells")
-        1 0 20 0 1))
+        4 0 20 0 1))
       (opt-register 
        (gnc:make-number-range-option 
         (N_ "Tables")
         (N_ "Table cell padding") "d" (N_ "Space between table cells")
-        1 0 20 0 1))
+        0 0 20 0 1))
       (opt-register 
        (gnc:make-number-range-option 
         (N_ "Tables")
@@ -86,7 +86,7 @@
       (gnc:html-document-set-style! 
        ssdoc "body" 
        'attribute (list "bgcolor" bgcolor))
-      
+
       (if (and bgpixmap
                (not (string=? bgpixmap "")))
           (gnc:html-document-set-style!
@@ -98,7 +98,7 @@
        'attribute (list "border" border)
        'attribute (list "cellspacing" spacing)
        'attribute (list "cellpadding" padding))
-      
+
       (gnc:html-document-set-style!
        ssdoc "number-cell"
        'tag "td"

@@ -140,6 +140,7 @@ static void recordCB(GtkWidget *w, gpointer data);
 static void cancelCB(GtkWidget *w, gpointer data);
 static void closeCB(GtkWidget *w, gpointer data);
 static void reportCB(GtkWidget *w, gpointer data);
+static void printReportCB(GtkWidget *w, gpointer data);
 static void dateCB(GtkWidget *w, gpointer data);
 static void expand_trans_cb(GtkWidget *widget, gpointer data);
 static void new_trans_cb(GtkWidget *widget, gpointer data);
@@ -912,6 +913,15 @@ gnc_register_create_tool_bar (RegWindow *regData)
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_BOOK_GREEN,
       0, 0, NULL
     },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Print"),
+      N_("Print a report for this register"),
+      printReportCB,
+      NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_PRINT,
+      0, 0, NULL
+    },
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
@@ -1334,6 +1344,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
       N_("Report"),
       N_("Open a report window for this register"),
       reportCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Print"),
+      N_("Print a report for this register"),
+      printReportCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -2957,23 +2975,14 @@ closeCB (GtkWidget *widget, gpointer data)
   xaccLedgerDisplayClose (regData->ledger);
 }
 
-/********************************************************************\
- * reportCB                                                         *
- *                                                                  *
- * Args:   widget - the widget that called us                       *
- *         data - regData - the data struct for this register       *
- * Return: none                                                     *
-\********************************************************************/
 static void
-reportCB (GtkWidget *widget, gpointer data)
+report_helper (RegWindow *regData, SCM func)
 {
-  RegWindow *regData = data;
   SplitRegister *reg = xaccLedgerDisplayGetSR (regData->ledger);
   Query *query;
   SCM query_type;
   SCM query_scm;
   SCM journal_scm;
-  SCM func;
 
   query_type = gh_eval_str("<gnc:Query*>");
   g_return_if_fail (query_type != SCM_UNDEFINED);
@@ -2988,10 +2997,47 @@ reportCB (GtkWidget *widget, gpointer data)
 
   journal_scm = gh_bool2scm (reg->style == REG_STYLE_JOURNAL);
 
-  func = gh_eval_str ("gnc:show-register-report");
   g_return_if_fail (gh_procedure_p (func));
 
   gh_call2 (func, query_scm, journal_scm);
+}
+
+/********************************************************************\
+ * reportCB                                                         *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+reportCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SCM func;
+
+  func = gh_eval_str ("gnc:show-register-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  report_helper (regData, func);
+}
+
+/********************************************************************\
+ * printReportCB                                                    *
+ *                                                                  *
+ * Args:   widget - the widget that called us                       *
+ *         data - regData - the data struct for this register       *
+ * Return: none                                                     *
+\********************************************************************/
+static void
+printReportCB (GtkWidget *widget, gpointer data)
+{
+  RegWindow *regData = data;
+  SCM func;
+
+  func = gh_eval_str ("gnc:print-register-report");
+  g_return_if_fail (gh_procedure_p (func));
+
+  report_helper (regData, func);
 }
 
 /********************************************************************\

@@ -219,7 +219,7 @@
                    (> (string-length colors) 0))
               (begin 
                 (push "  <param name=\"colors\" value=\"")
-                (dispaly colors)
+                (push colors)
                 (push "\">\n")))
           (if (and (string? labels)
                    (> (string-length labels) 0))

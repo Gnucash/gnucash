@@ -221,14 +221,13 @@ guppi_generic_callback(gnc_html * html, GPtrArray * array, gint index) {
   char      * url = g_ptr_array_index(array, index);
 
   if(!url) return;
-  
+  if(url[0] == '\0') return;
+
   type = gnc_html_parse_url(html, url, &location, &label);
   gnc_html_show_url(html, type, location, label, 0);
-  
+
   g_free(location);
   g_free(label);
-  
-  return;
 }
 
 static void
@@ -411,7 +410,7 @@ gnc_html_embedded_piechart(gnc_html * parent, int w, int h,
   if((param = g_hash_table_lookup(params, "legend_urls_1")) != NULL) {
     arglist[argind].name   = "legend_callback1";
     arglist[argind].type   = GTK_TYPE_POINTER;
-    GTK_VALUE_POINTER(arglist[argind]) = &guppi_slice_1_callback;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_1_callback;
     argind++;
     arglist[argind].name   = "legend_callback1_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
@@ -423,11 +422,11 @@ gnc_html_embedded_piechart(gnc_html * parent, int w, int h,
     g_free(callbacks);
   }
   if((param = g_hash_table_lookup(params, "legend_urls_2")) != NULL) {
-    arglist[argind].name   = "legend_callback1";
+    arglist[argind].name   = "legend_callback2";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_2_callback;
     argind++;
-    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].name   = "legend_callback2_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = chart;
     argind++;
@@ -437,11 +436,11 @@ gnc_html_embedded_piechart(gnc_html * parent, int w, int h,
     g_free(callbacks);
   }
   if((param = g_hash_table_lookup(params, "legend_urls_3")) != NULL) {
-    arglist[argind].name   = "legend_callback1";
+    arglist[argind].name   = "legend_callback3";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_3_callback;
     argind++;
-    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].name   = "legend_callback3_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = chart;
     argind++;
@@ -450,7 +449,7 @@ gnc_html_embedded_piechart(gnc_html * parent, int w, int h,
     chart->legend_3_callbacks = convert_string_array(callbacks, datasize);
     g_free(callbacks);
   }
-  
+
   piechart = guppi_object_newv("pie", w, h,
                                argind, arglist);
 
@@ -623,7 +622,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
   if((param = g_hash_table_lookup(params, "legend_urls_1")) != NULL) {
     arglist[argind].name   = "legend_callback1";
     arglist[argind].type   = GTK_TYPE_POINTER;
-    GTK_VALUE_POINTER(arglist[argind]) = &guppi_slice_1_callback;
+    GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_1_callback;
     argind++;
     arglist[argind].name   = "legend_callback1_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
@@ -636,11 +635,11 @@ gnc_html_embedded_barchart(gnc_html * parent,
     g_free(callbacks);
   }
   if((param = g_hash_table_lookup(params, "legend_urls_2")) != NULL) {
-    arglist[argind].name   = "legend_callback1";
+    arglist[argind].name   = "legend_callback2";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_2_callback;
     argind++;
-    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].name   = "legend_callback2_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = chart;
     argind++;
@@ -651,11 +650,11 @@ gnc_html_embedded_barchart(gnc_html * parent,
     g_free(callbacks);
   }
   if((param = g_hash_table_lookup(params, "legend_urls_3")) != NULL) {
-    arglist[argind].name   = "legend_callback1";
+    arglist[argind].name   = "legend_callback3";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = &guppi_legend_3_callback;
     argind++;
-    arglist[argind].name   = "legend_callback1_data";
+    arglist[argind].name   = "legend_callback3_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = chart;
     argind++;

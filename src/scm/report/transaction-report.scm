@@ -130,7 +130,7 @@
 	      (cons 'description (vector 'by-desc #f #f))
 	      (cons 'number (vector 'by-num #f #f))
 	      (cons 'memo   (vector 'by-memo #f #f))
-	      (cons 'none    (vector 'by-none #f #f))))
+	      (cons 'none   (vector 'by-none #f #f))))
 
       (define (used-date columns-used)
 	(vector-ref columns-used 0))
@@ -229,8 +229,8 @@
       (if (used-running-balance column-vector)
 	  (addto! heading-list (N_ "Balance")))
       (reverse heading-list)))
-  
-  (define (add-split-row table split column-vector row-style)
+
+  (define (add-split-row table split column-vector row-style transaction-row?)
     (let* ((row-contents '())
 	   (parent (gnc:split-get-parent split))
 	   (account (gnc:split-get-account split))
@@ -239,14 +239,21 @@
 	   (split-value (gnc:make-gnc-monetary currency damount)))
 
       (if (used-date column-vector)
-	  (addto! row-contents (gnc:timepair-to-datestring 
-				(gnc:transaction-get-date-posted parent))))
-
+	  (addto! row-contents
+                  (if transaction-row?
+                      (gnc:timepair-to-datestring 
+                       (gnc:transaction-get-date-posted parent))
+                      " ")))
       (if (used-num column-vector)
-	  (addto! row-contents (gnc:transaction-get-num parent)))
-      
+	  (addto! row-contents
+                  (if transaction-row?
+                      (gnc:transaction-get-num parent)
+                      " ")))
       (if (used-description column-vector)
-	  (addto! row-contents (gnc:transaction-get-description parent)))
+	  (addto! row-contents
+                  (if transaction-row?
+                      (gnc:transaction-get-description parent)
+                      " ")))
       (if (used-account column-vector)
 	  (addto! row-contents (gnc:account-get-name account)))
       (if (used-other-account column-vector)
@@ -676,7 +683,7 @@
 		((equal? current split)
 		 (other-rows-driver split parent table used-columns (+ i 1)))
 		(else (begin
-			(add-split-row table current used-columns row-style)
+			(add-split-row table current used-columns row-style #f)
 			(other-rows-driver split parent table used-columns
                                            (+ i 1)))))))
 
@@ -722,7 +729,8 @@
                                table 
                                current 
                                used-columns 
-                               current-row-style)))
+                               current-row-style
+                               #t)))
 	    (if multi-rows?
                 (add-other-split-rows 
                  current table used-columns alternate-row-style))

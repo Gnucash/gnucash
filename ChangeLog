@@ -1,4 +1,43 @@
+2001-03-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/income-expense-graph.scm: work on display
+
+	* src/scm/html-utilities.scm (gnc:account-anchor-text): new func
+
+	* src/gnome/gnc-html.c: check for null args
+
+	* src/scm/report/income-or-expense-pie.scm: work on display
+
+	* src/scm/html-utilities.scm: add function for assigning colors
+
 2001-03-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-html-guppi.c: fix callback pointer
+
+	* src/engine/Transaction.c (xaccSplitGetCorrAccountName): i18n
+	(xaccSplitGetCorrAccountCode): i18n
+
+	* src/guile/gnucash.c.in (gnucash_lowlev_app_init): update
+	last stable version
+
+	* src/scm/report.scm: more work on display
+
+	* src/scm/report/register.scm: add api for printing a
+	register report. more work on display
+
+	* src/gnome/window-report.c (gnc_print_report): add api
+	for printing reports
+
+	* src/gnome/gnc-html.c: check for no urltype callback
+
+	* src/scm/report/stylesheet-plain.scm: add some more space
+	between table cells
+
+	* src/gnome/window-register.c: add support for printing reports
+
+	* src/guile/gnc.gwp: add print report api
+
+	* src/gnome/gnc-html.c: use PWARN, not printf
 
 	* rpm/gnucash.spec.in: add finance-quote-helper as executable
 

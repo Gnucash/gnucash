@@ -39,5 +39,6 @@ void       gnc_report_window_show_report(gnc_report_window * rw, int id);
 gnc_html   * gnc_report_window_get_html(gnc_report_window * rw);
 
 void reportWindow(int id);
+void gnc_print_report (int report_id);
 
 #endif

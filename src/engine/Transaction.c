@@ -45,6 +45,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-event-p.h"
+#include "messages.h"
 
 
 /* 
@@ -1967,12 +1968,15 @@ get_corr_account_split(Split *sa, Split **retval)
 const char *
 xaccSplitGetCorrAccountName(Split *sa)
 {
-  static const char *split_const = "Split";
+  static const char *split_const = NULL;
   Split *other_split;
   Account *other_split_acc;
 
   if(get_corr_account_split(sa, &other_split))
   {
+    if (!split_const)
+      split_const = _("Split");
+
     return split_const;
   }
   else
@@ -1985,11 +1989,15 @@ xaccSplitGetCorrAccountName(Split *sa)
 const char *
 xaccSplitGetCorrAccountCode(Split *sa)
 {
-  static const char *split_const = "Split";
+  static const char *split_const = NULL;
   Split *other_split;
   Account *other_split_acc;
+
   if(get_corr_account_split(sa, &other_split))
   {
+    if (!split_const)
+      split_const = _("Split");
+
     return split_const;
   }
   else

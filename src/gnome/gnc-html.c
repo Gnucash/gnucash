@@ -870,12 +870,11 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
             cb(gnchtml, method, action_parts[0], action_parts[1], form_data);
           }
           else {
-            printf("no handler for gnc-network action '%s'\n",
-                   action);
+            PWARN ("no handler for gnc-network action '%s'\n", action);
           }
         }
         else {
-          printf("tried to split on ? but failed...\n");
+          PWARN ("tried to split on ? but failed...\n");
         }
       }
     }
@@ -1020,9 +1019,15 @@ gnc_html_show_url(gnc_html * html, URLType type,
   GtkHTMLStream * handle;
   int           newwin;
 
+  if (!html) return;
+  if (!location) return;
+
   /* make sure it's OK to show this URL type in this window */
   if(newwin_hint == 0) {
-    newwin = !((html->urltype_cb)(type));
+    if (html->urltype_cb)
+      newwin = !((html->urltype_cb)(type));
+    else
+      newwin = 0;
   }
   else {
     newwin = 1;
@@ -1071,8 +1076,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
     
     /* FIXME : handle newwin = 1 */
     gnc_html_history_append(html->history,
-                            gnc_html_history_node_new(type, 
-                                                      location, label));
+                            gnc_html_history_node_new(type, location, label));
     handle = gtk_html_begin(GTK_HTML(html->html));
     gnc_html_load_to_stream(html, handle, type, location, label);
     break;

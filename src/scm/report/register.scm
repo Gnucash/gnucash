@@ -115,7 +115,7 @@
 	  (addto! heading-list (N_ "Balance")))
       (reverse heading-list)))
 
-  (define (add-split-row table split column-vector row-style)
+  (define (add-split-row table split column-vector row-style transaction-row?)
     (let* ((row-contents '())
 	   (parent (gnc:split-get-parent split))
 	   (account (gnc:split-get-account split))
@@ -124,14 +124,21 @@
 	   (split-value (gnc:make-gnc-monetary currency damount)))
 
       (if (used-date column-vector)
-	  (addto! row-contents (gnc:timepair-to-datestring 
-				(gnc:transaction-get-date-posted parent))))
-
+	  (addto! row-contents
+                  (if transaction-row?
+                      (gnc:timepair-to-datestring 
+                       (gnc:transaction-get-date-posted parent))
+                      " ")))
       (if (used-num column-vector)
-	  (addto! row-contents (gnc:transaction-get-num parent)))
-
+	  (addto! row-contents
+                  (if transaction-row?
+                      (gnc:transaction-get-num parent)
+                      " ")))
       (if (used-description column-vector)
-	  (addto! row-contents (gnc:transaction-get-description parent)))
+	  (addto! row-contents
+                  (if transaction-row?
+                      (gnc:transaction-get-description parent)
+                      " ")))
       (if (used-account column-vector)
 	  (addto! row-contents (gnc:account-get-name account)))
       (if (used-other-account column-vector)
@@ -340,7 +347,7 @@
 		((equal? current split)
 		 (other-rows-driver split parent table used-columns (+ i 1)))
 		(else (begin
-			(add-split-row table current used-columns row-style)
+			(add-split-row table current used-columns row-style #f)
 			(other-rows-driver split parent table used-columns
                                            (+ i 1)))))))
 
@@ -371,7 +378,8 @@
                                table 
                                current 
                                used-columns 
-                               current-row-style)))
+                               current-row-style
+                               #t)))
 	    (if multi-rows?
                 (add-other-split-rows 
                  current table used-columns alternate-row-style))
@@ -457,11 +465,17 @@
    'renderer reg-renderer
    'in-menu? #f))
 
-(define (gnc:show-register-report query journal?)
+(define (gnc:apply-register-report func query journal?)
   (let* ((template (hash-ref *gnc:_report-templates_* "Register"))
          (options (gnc:report-template-new-options template))
          (qo (gnc:lookup-option options "__reg" "query"))
          (jo (gnc:lookup-option options "__reg" "journal")))
     (gnc:option-set-value qo query)
     (gnc:option-set-value jo journal?)
-    (gnc:report-window (gnc:make-report "Register" options))))
+    (func (gnc:make-report "Register" options))))
+
+(define (gnc:show-register-report query journal?)
+  (gnc:apply-register-report gnc:report-window query journal?))
+
+(define (gnc:print-register-report query journal?)
+  (gnc:apply-register-report gnc:print-report query journal?))

@@ -588,9 +588,25 @@ gnc_report_window_show_report(gnc_report_window * report, int report_id) {
   g_free(location);
 }
 
-
 void
 reportWindow(int report_id) {
   gnc_report_window * win = gnc_report_window_new(NULL);
   gnc_report_window_show_report(win, report_id);
+}
+
+void
+gnc_print_report (int report_id)
+{
+  gnc_html *html;
+  char * location;
+
+  html = gnc_html_new ();
+
+  location = g_strdup_printf("id=%d", report_id);  
+  gnc_html_show_url(html, URL_TYPE_REPORT, location, NULL, FALSE);
+  g_free(location);
+
+  gnc_html_print (html);
+
+  gnc_html_destroy (html);
 }

@@ -32,13 +32,25 @@
       (cons #f (gnc:html-make-empty-cells (- n 1)))
       '()))
 
+(define (gnc:account-anchor-text acct)
+  (string-append
+   "gnc-register:account=" 
+   (gnc:account-get-full-name acct)))
+
 ;; returns the account name as html-text and anchor to the register.
 (define (gnc:html-account-anchor acct)
   (gnc:make-html-text (gnc:html-markup-anchor
-		       (string-append 
-			"gnc-register:account=" 
-			(gnc:account-get-full-name acct))
+                       (gnc:account-anchor-text acct)
 		       (gnc:account-get-name acct))))
+
+(define (gnc:assign-colors num-colors)
+  (define base-colors '("red" "orange" "yellow" "green"
+                        "blue" "purple" "violet"))
+  (if (<= num-colors 0)
+      '()
+      (cons (list-ref base-colors
+                      (modulo (- num-colors 1) (length base-colors)))
+            (gnc:assign-colors (- num-colors 1)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; gnc:html-build-acct-table
@@ -431,4 +443,3 @@
 		1 2 (_ "Exchange rate ")))))
 
     table))
-
