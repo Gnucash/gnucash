@@ -29,6 +29,8 @@
 #include "druid-qif-import.h"
 #include "messages.h"
 
+#include "gnc-druid-test.h"
+
 static GList *active_plugins = NULL;
 
 static void gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass);
@@ -37,6 +39,7 @@ static void gnc_plugin_qif_import_finalize (GObject *object);
 
 /* Command callbacks */
 static void gnc_plugin_qif_import_cmd_new_qif_import (EggAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_qif_test_druid (EggAction *action, GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-qif-import-actions"
@@ -46,6 +49,8 @@ static EggActionEntry gnc_plugin_actions [] = {
 	{ "QIFImportAction", N_("Import _QIF..."), GTK_STOCK_CONVERT, "<control>i",
 	  N_("Import a Quicken QIF file"),
 	  G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import) },
+	{ "QIFTestDruid", "Test Druid", GTK_STOCK_CONVERT, NULL, 
+	  "Test the new Druid", G_CALLBACK(gnc_plugin_qif_test_druid) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -169,6 +174,11 @@ gnc_plugin_qif_import_cmd_new_qif_import (EggAction *action,
 	gnc_ui_qif_import_druid_make ();
 }
 
+static void
+gnc_plugin_qif_test_druid (EggAction *action, GncMainWindowActionData *data)
+{
+	gnc_druid_gnome_test();
+}
 
 /************************************************************
  *                    Plugin Bootstrapping                   *

@@ -2,12 +2,21 @@
 
 #include "config.h"
 #include "gnc-druid-gnome.h"
+#include <stdio.h> // for fprintf
 
 static void gnc_druid_gnome_class_init	(GNCDruidGnomeClass *class);
 static void gnc_druid_gnome_finalize		(GObject *obj);
 
 static void gnc_druid_gnome_set_page(GNCDruid* druid, GNCDruidPage* page);
 static void gnc_druid_gnome_append_provider(GNCDruid*, GNCDruidProvider*);
+
+static gboolean gnc_druid_gnome_next_cb(GnomeDruidPage* page, GtkWidget *arg1,
+					gpointer user_data);
+static gboolean gnc_druid_gnome_prev_cb(GnomeDruidPage* page, GtkWidget *arg1,
+					gpointer user_data);
+static gboolean gnc_druid_gnome_cancel2_cb(GnomeDruidPage* page, GtkWidget *arg1,
+					   gpointer user_data);
+
 
 static GNCDruidClass *parent_class;
 
@@ -56,7 +65,7 @@ gnc_druid_gnome_finalize (GObject *obj)
 {
   GNCDruidGnome *druid = (GNCDruidGnome *)obj;
 
-  g_object_unref(G_OBJECT(druid->druid));
+  gtk_widget_destroy(druid->window);
 
   G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
@@ -90,15 +99,13 @@ gnc_druid_gnome_append_provider(GNCDruid* druid_p, GNCDruidProvider* provider)
   for (node = pages; node; node = node->next) {
     page = GNOME_DRUID_PAGE(node->data);
     gnome_druid_append_page(druid->druid, page);
+    g_signal_connect(G_OBJECT(page), "next",
+		     (GCallback)gnc_druid_gnome_next_cb, druid);
+    g_signal_connect(G_OBJECT(page), "back",
+		     (GCallback)gnc_druid_gnome_prev_cb, druid);
+    g_signal_connect(G_OBJECT(page), "cancel",
+		     (GCallback)gnc_druid_gnome_cancel2_cb, druid);
   }
-}
-
-static void
-gnc_druid_gnome_cancel_cb(GnomeDruid* druid, gpointer user_data)
-{
-  GNCDruidGnome *dg = (GNCDruidGnome*)user_data;
-
-  g_object_unref(G_OBJECT(dg));
 }
 
 static gboolean
@@ -109,6 +116,9 @@ gnc_druid_gnome_next_cb(GnomeDruidPage* page, GtkWidget *arg1, gpointer user_dat
   g_return_val_if_fail(IS_GNC_DRUID_GNOME(user_data), FALSE);
   druid = GNC_DRUID(user_data);
 
+  fprintf(stderr, "next page cb\n");
+
+  /* Move to the next druid page */
   gnc_druid_next_page(druid);
 
   return TRUE;
@@ -122,9 +132,32 @@ gnc_druid_gnome_prev_cb(GnomeDruidPage* page, GtkWidget *arg1, gpointer user_dat
   g_return_val_if_fail(IS_GNC_DRUID_GNOME(user_data), FALSE);
   druid = GNC_DRUID(user_data);
 
+  fprintf(stderr, "prev page cb\n");
+
+  /* move to the previous druid page */
   gnc_druid_prev_page(druid);
 
   return TRUE;
+}
+
+static gboolean
+gnc_druid_gnome_cancel2_cb(GnomeDruidPage* page, GtkWidget *arg1,
+			   gpointer user_data)
+{
+  GObject *obj = (GObject*)user_data;
+
+  fprintf(stderr, "cancel page cb\n");
+
+  g_object_unref(obj);
+  return TRUE;
+}
+
+static void
+gnc_druid_gnome_cancel_cb(GnomeDruid* druid, gpointer user_data)
+{
+  GObject *obj = (GObject*)user_data;
+
+  g_object_unref(obj);
 }
 
 static GNCDruid*
@@ -132,22 +165,20 @@ gnc_druid_gnome_build(const char* title)
 {
   GNCDruidGnome *druid;
   GtkWidget *widget;
+  GtkWidget *window = NULL;
 
   /* Build myself */
   druid = GNC_DRUID_GNOME(g_object_new(G_TYPE_GNC_DRUID_GNOME, NULL));
   druid->parent.ui_type = GNC_DRUID_GNOME_UI;
 
   /* Build the gnome druid */
-  widget = gnome_druid_new_with_window(title, NULL, TRUE, NULL);
+  widget = gnome_druid_new_with_window(title, NULL, TRUE, &window);
   g_return_val_if_fail(widget, NULL);
   druid->druid = GNOME_DRUID(widget);
+  druid->window = window;
 
   g_signal_connect(G_OBJECT(widget), "cancel",
 		   (GCallback)gnc_druid_gnome_cancel_cb, druid);
-  g_signal_connect(G_OBJECT(widget), "next",
-		   (GCallback)gnc_druid_gnome_next_cb, druid);
-  g_signal_connect(G_OBJECT(widget), "back",
-		   (GCallback)gnc_druid_gnome_prev_cb, druid);
   gtk_widget_show_all(widget);
 
   return GNC_DRUID(druid);

@@ -6,11 +6,13 @@ libgncmod_qif_import_la_SOURCES = \
   dialog-account-picker.c \
   druid-qif-import.c \
   gnc-plugin-qif-import.c \
+  gnc-druid-test.c \
   gncmod-qif-import.c
 
 noinst_HEADERS = \
   dialog-account-picker.h \
   druid-qif-import.h \
+  gnc-druid-test.h \
   gnc-plugin-qif-import.h
 
 libgncmod_qif_import_la_LDFLAGS = -module 

@@ -1,3 +1,16 @@
+2004-01-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-druid-gnome.[ch]: move the next/prev signals to
+	  the pages.  Add a cancel callback to the pages (the druid's main
+	  cancel callback is never called).  Now we get our signals
+	  correct.  Save a reference to the window so we can destroy it..
+	  Use gtk_widget_destroy() instead of g_object_unref().
+	* src/import-export/qif-import/gnc-druid-test.[ch]: add some code
+	  to test the new druid framework.  Build's a test druid.
+	* src/import-export/qif-import/Makefile.am: build new test code
+	* src/import-export/qif-import/gnc-plugin-qif-import*: hook in
+	  the new druid test code; add a new menu item to test the druid.
+
 2004-01-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/app-utils/gnc-druid-provider-desc-edge.[ch]: add api to

@@ -28,6 +28,7 @@ struct _GNCDruidGnome
   GNCDruid parent;
 
   GnomeDruid*	druid;
+  GtkWidget*	window;
 };
 
 struct _GNCDruidGnomeClass
