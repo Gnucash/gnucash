@@ -1132,6 +1132,6 @@ guile_main (void *closure, int argc, char **argv)
 int
 main (int argc, char **argv)
 {
-    gh_enter(argc, argv, guile_main, NULL);
+    scm_boot_guile(argc, argv, guile_main, NULL);
     return 0;
 }
