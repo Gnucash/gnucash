@@ -58,7 +58,7 @@ $(TARGET): $(OBJS)
 	$(CC) -c $(CFLAGS) $(INCLPATH) $<
 
 swig:
-	swig -I. --guile swig.i
+	swig -I. -guile swig.i
 
 
 depend:
