@@ -188,4 +188,43 @@ CREATE TABLE gncKVPvalue_list (
 	data		TEXT[]
 ) INHERITS (gncKVPvalue);
 
+-- audit trail tables
+-- The change may be 'a' -- add, 'd' -- delete/drop, 'm' -- modify
+
+CREATE TABLE gncAuditTrail (
+	sessionGuid		CHAR(32)  NOT NULL,   -- who changed it
+	date_changed 		DATETIME,   -- when they changed it
+        change			CHAR NOT NULL      
+);
+
+CREATE TABLE gncAccountTrail (
+	accountGuid	CHAR(32) NOT NULL  -- override, not a primary key anymore
+) INHERITS (gncAccount,gncAuditTrail);
+
+CREATE INDEX gncAccountTrail_account_idx ON gncAccountTrail (accountGuid);
+
+CREATE TABLE gncCommodityTrail (
+        commodity	TEXT  NOT NULL  -- override, not a primary key anymore
+) INHERITS (gncCommodity,gncAuditTrail);
+
+CREATE INDEX gncCommodityTrail_commodity_idx ON gncCommodityTrail (commodity);
+
+CREATE TABLE gncEntryTrail (
+	entryGuid		CHAR(32) NOT NULL  -- override, not a primary key anymore
+) INHERITS (gncEntry,gncAuditTrail);
+
+CREATE INDEX gncEntryTrail_entry_idx ON gncEntryTrail (entryGuid);
+
+CREATE TABLE gncPriceTrail (
+	priceGuid	CHAR(32) NOT NULL  -- override, not a primary key anymore
+) INHERITS (gncPrice,gncAuditTrail);
+
+CREATE INDEX gncPriceTrail_price_idx ON gncPriceTrail (priceGuid);
+
+CREATE TABLE gncTransactionTrail (
+	transGuid	CHAR(32) NOT NULL  -- override, not a primary key anymore
+) INHERITS (gncTransaction,gncAuditTrail);
+
+CREATE INDEX gncTransactionTrail_trans_idx ON gncTransactionTrail (transGuid);
+
 -- end of file
