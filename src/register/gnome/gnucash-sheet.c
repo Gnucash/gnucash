@@ -2202,7 +2202,6 @@ gnucash_sheet_resize (GnucashSheet *sheet)
 
         diff_rows = sheet->table->num_virt_rows - num_virt_rows;
         sheet->num_virt_cols = 1;
-        
 
         if (diff_rows < 0) {
                 /* we need to shrink the number of rows */

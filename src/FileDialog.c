@@ -2,7 +2,7 @@
  * FileDialog.c -- file-handling utility dialogs for gnucash.       * 
  *                                                                  *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999 Linas Vepstas                           *
+ * Copyright (C) 1998, 1999,2000 Linas Vepstas                      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -180,6 +180,7 @@ gncPostFileOpen (const char * filename)
   int io_error, uh_oh=0;
   char buf[BUFSIZE];
   AccountGroup *newgrp;
+  gncUIWidget app;
   char * newfile;
 
   if (!filename) return;
@@ -199,9 +200,12 @@ gncPostFileOpen (const char * filename)
   /* disable logging while we move over to the new set of accounts to
    * edit; the mass deletetion of accounts and transactions during
    * switchover is not something we want to keep in a journal.  */
+  app = gnc_get_ui_data();
+  gnc_set_busy_cursor(app);
   xaccLogDisable();
   newgrp = xaccSessionBeginFile (newsess, newfile);
   xaccLogEnable();
+  gnc_unset_busy_cursor(app);
 
   /* check for session errors, put up appropriate dialog */
   SHOW_LOCK_ERR_MSG (newsess);
@@ -347,6 +351,7 @@ gncFileSave (void)
   char * newfile;
   char buf[BUFSIZE];
   int io_error, norr, uh_oh = 0;
+  gncUIWidget app;
   /* hack alert -- Somehow make sure all in-progress edits get committed! */
 
   /* if no session exists, then we don't have a filename/path 
@@ -359,7 +364,10 @@ gncFileSave (void)
   }
 
   /* use the current session to save to file */
+  app = gnc_get_ui_data();
+  gnc_set_busy_cursor(app);
   xaccSessionSave (current_session);
+  gnc_unset_busy_cursor(app);
 
   /* in theory, no error should have occured, but just in case, 
    * we're gonna check and handle ... */

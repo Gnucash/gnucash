@@ -71,7 +71,7 @@ gnc_ui_set_cursor (GdkWindow *win, int type)
 void 
 gnc_set_busy_cursor(GtkWidget *w)
 {
-  if (w)
+  if (w != NULL)
     gnc_ui_set_cursor(w->window, GNC_CURSOR_BUSY);
 }
 
@@ -86,7 +86,7 @@ gnc_set_busy_cursor(GtkWidget *w)
 void 
 gnc_unset_busy_cursor(GtkWidget *w)
 {
-  if (w)
+  if (w != NULL)
     gnc_ui_set_cursor(w->window, GNC_CURSOR_NORMAL);
 }
 

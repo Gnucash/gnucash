@@ -1,4 +1,20 @@
+2000-03-07  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/report/transaction-report.scm: a few bug fixes.
+
+	* src/gnome/window-main.c (gnc_ui_delete_account): destroy the
+ 	windows *then* remove the account from the tree. Sometimes,
+ 	destroying the window can result in a refresh, which will do
+ 	strange things if we have already removed the account from the
+ 	tree.
+
 2000-03-06  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-reconcile.c (recnRefresh): resize the window
+
+	* src/FileDialog.c (gncPostFileOpen): set the busy cursor while
+ 	reading the file.
+	(gncFileSave): ditto.
 
 	* src/register/gnome/gnucash-sheet.c
  	(gnucash_sheet_update_adjustments): set the step increment.

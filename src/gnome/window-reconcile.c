@@ -131,6 +131,8 @@ recnRefresh(Account *account)
   gnc_recn_set_window_name(recnData);
 
   recnRecalculateBalance(recnData);
+
+  gtk_widget_queue_resize(recnData->window);
 }
 
 

@@ -1,7 +1,36 @@
-;;; $ID$
+;;; $Id$
 ;;; Reporting utilities
 
 (gnc:support "report-utilities.scm")
+
+(define (gnc:account-separator-char)
+  (let ((option (gnc:lookup-option gnc:*options-entries*
+                                   "General" "Account Separator")))
+    (if option
+        (case (gnc:option-value option)
+          ((colon) ":")
+          ((slash) "/")
+          ((backslash) "\\")
+          ((dash) "-")
+          ((period) ".")
+          (else ":"))
+        ":")))
+
+;; get a full account name
+(define (gnc:account-get-full-name account)
+  (let ((separator (gnc:account-separator-char)))
+    (cond ((pointer-token-null? account) "")
+          (else 
+           (let ((parent-name
+                  (gnc:account-get-full-name 
+                   (gnc:group-get-parent
+                    (gnc:account-get-parent account)))))	   
+             (if (string=? parent-name "")
+                 (gnc:account-get-name account)
+                 (string-append
+                  parent-name
+                  separator
+                  (gnc:account-get-name account))))))))
 
 (define (gnc:filter-list the-list predicate)
   (cond ((not (list? the-list))

@@ -9,6 +9,7 @@
 
 ;hack alert - is this line necessary?
 (gnc:depend "text-export.scm")
+(gnc:depend "report-utilities.scm")
 
 ;; hack alert - possibly unecessary globals
 
@@ -25,17 +26,15 @@
 (define (gnc:set-total-outflow! x)
     (set! gnc:total-outflow x))
 
-(define gnc:tr-report-initialize-inflow-and-outflow!
-  (begin
-    (set! gnc:total-inflow 0)
-    (set! gnc:total-outflow 0)
-    #f))
+(define (gnc:tr-report-initialize-inflow-and-outflow!)
+  (set! gnc:total-inflow 0)
+  (set! gnc:total-outflow 0))
 
 ;;returns a list contains elements of the-list for which predictate is
 ;; true
 (define (gnc:filter-list the-list predicate)
   (cond ((not (list? the-list))
-         (gnc:error("Attempted to filter a non-list object")))
+         (gnc:error "Attempted to filter a non-list object"))
         ((null? the-list) '())
         ((predicate (car the-list))
          (cons (car the-list)
@@ -47,10 +46,10 @@
 
 (define (gnc:inorder-map the-list fn)
   (cond ((not (list? the-list))
-	 (gnc:error("Attempted to map a non-list object")))
+	 (gnc:error "Attempted to map a non-list object"))
 	((not (procedure? fn))
-	 (gnc:error("Attempted to map a non-function object to a list")))
-	((eq? the-list '()) '())
+	 (gnc:error "Attempted to map a non-function object to a list"))
+	((null? the-list) '())
 	(else (cons (fn (car the-list))
 		    (gnc:inorder-map (cdr the-list) fn)))))
 
@@ -241,22 +240,6 @@
 (define (gnc:split-get-description-from-parent split)
   (gnc:transaction-get-description (gnc:split-get-parent split)))
 
-;; get a full account name
-(define (gnc:account-get-full-name account)
-  (cond ((pointer-token-null? account) "")
-	(else 
-	 (let ((parent-name
-		(gnc:account-get-full-name 
-		 (gnc:group-get-parent
-		  (gnc:account-get-parent account)))))	   
-	   (if (string=? parent-name "")
-	       (gnc:account-get-name account)
-	       (string-append
-		parent-name
-		":"
-		(gnc:account-get-name account)))))))
-		
-
 ;; get the account name of a split
 (define (gnc:split-get-account-name split)  
   (gnc:account-get-full-name (gnc:split-get-account split)))
@@ -435,17 +418,12 @@
 ;; does not match one of the accounts
 (define (gnc:tr-report-make-sub-split-filter-predicate accounts)
   (lambda (sub-split)
-    (let ((result #t))
-      (for-each
-       (lambda (account)
-	 (set! 
-	  result
-	  (not 
-	   (string=? 
-	    (gnc:account-get-full-name account) 
-	    (car sub-split)))))
-       accounts)
-      result)))
+    (let loop
+        ((list accounts))
+      (if (null? list)
+          #f
+          (or (not (equal? (gnc:account-get-name (car list)) (car sub-split)))
+              (loop (cdr list)))))))
 
 ;; converts a scheme split representation to a line of HTML,
 ;; updates the values of total-inflow and total-outflow based
@@ -481,7 +459,7 @@
 	      (cond (first (gnc:tr-report-get-memo split-scm))
 		    (else ""))
 	      "</TD><TD>"
-	      (car split-sub)
+              (if (string? (car split-sub)) (car split-sub) "")
 	      "</TD><TD>"
 	      (cond ((< (cadr split-sub) 0)
 		     (string-append
@@ -495,8 +473,12 @@
 	      (cond ((not last) "</TR>")
 		    (else "")))))
      other-splits
-     (append (list #t) (make-list (- (length other-splits) 1) #f))
-     (append (make-list (- (length other-splits) 1) #f) (list #t)))
+     (if (null? other-splits)
+         ()
+         (append (list #t) (make-list (- (length other-splits) 1) #f)))
+     (if (null? other-splits)
+         ()
+         (append (make-list (- (length other-splits) 1) #f) (list #t))))
     (string-append
      report-string
      "<TD>"
@@ -532,8 +514,7 @@
  trep-options-generator
  ;; renderer
  (lambda (options)
-   (gnc:set-total-inflow! 0)
-   (gnc:set-total-outflow! 0)
+   (gnc:tr-report-initialize-inflow-and-outflow!)
    (let* ((begindate (gnc:lookup-option options "Report Options" "From"))
           (enddate (gnc:lookup-option options "Report Options" "To"))
           (tr-report-account-op (gnc:lookup-option options
@@ -569,9 +550,8 @@
 			     (gnc:option-value begindate) 
 			     (gnc:option-value enddate)))
 	  (sub-split-filter-pred (gnc:tr-report-make-sub-split-filter-predicate
-				  accounts))
+                                  accounts))
 	  (starting-balance 0))
-     gnc:tr-report-initialize-inflow-and-outflow!
      (if (null? accounts)
          (set! report-lines
                (list "<TR><TD>There are no accounts to report on.</TD></TR>"))
@@ -594,9 +574,11 @@
                   (gnc:tr-report-make-sort-predicate
                    tr-report-primary-key-op tr-report-primary-order-op
                    tr-report-secondary-key-op tr-report-secondary-order-op)))
-	   (let ((html-mapper (lambda (split-scm) (gnc:tr-report-split-to-html
+	   (let ((html-mapper (lambda (split-scm) (display "in!") (newline)
+                                (gnc:tr-report-split-to-html
 						  split-scm
-						  starting-balance))))
+						  starting-balance)
+                                (display "out!") (newline))))
 	     (set! report-lines (gnc:inorder-map report-lines html-mapper)))
 	   (set!
 	    balance-line 
@@ -640,14 +622,3 @@
 		  "</TD></STRONG></TR>"))))
      (append prefix balance-line report-lines
              inflow-outflow-line net-inflow-line suffix))))
-
-
-
-
-
-
-
-
-
-
-

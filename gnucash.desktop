@@ -4,3 +4,4 @@ Comment=GnuCash Personal Finance
 Exec=gnucash
 Terminal=0
 Type=Application
+Icon=gnome-money.png

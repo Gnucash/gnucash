@@ -79,7 +79,8 @@
 	 (if (string-ci=? name budget-account-name)
 	     (begin
 	       (vector-set! budget-report-line 0	
-			    (+ (gnc:budget-report-get-actual budget-report-line)
+			    (+ (gnc:budget-report-get-actual
+                                budget-report-line)
 			       value)))))
        (gnc:budget-get-accounts budget-line)))))
 
@@ -89,7 +90,6 @@
 	       (+ (gnc:budget-report-get-actual budget-report-line)
 		  value))
   budget-report-line)
-
 
 
 ;; convert budget-report to an html table

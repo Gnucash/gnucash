@@ -7,7 +7,7 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998-2000 Linas Vepstas
  */
 
 /********************************************************************\

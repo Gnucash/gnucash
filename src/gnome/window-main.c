@@ -2,7 +2,7 @@
  * window-main.c -- the main window, and associated helper functions* 
  *                  and callback functions for GnuCash              *
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
- * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 1998,1999,2000 Linas Vepstas                       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -184,11 +184,11 @@ gnc_ui_add_account ( GtkWidget *widget, gpointer data )
 static void
 gnc_ui_delete_account ( Account *account )
 {
-  /* Step 1: Remove the account from all trees */
-  gnc_account_tree_remove_account_all(account);
-
-  /* Step 2: Delete associated windows */
+  /* Step 1: Delete associated windows */
   xaccAccountWindowDestroy(account);
+
+  /* Step 2: Remove the account from all trees */
+  gnc_account_tree_remove_account_all(account);
 
   /* Step 3: Delete the actual account */  
   xaccRemoveAccount(account);
