@@ -59,6 +59,7 @@ GList * gncOrderGetEntries (GncOrder *order);
 
 GncOrder * gncOrderLookup (GNCBook *book, const GUID *guid);
 gboolean gncOrderIsDirty (GncOrder *order);
+void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
 
 #endif /* GNC_ORDER_H_ */

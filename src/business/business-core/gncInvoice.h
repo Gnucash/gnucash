@@ -74,6 +74,7 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 
 GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid);
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
+void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
 
 #endif /* GNC_INVOICE_H_ */
