@@ -150,7 +150,8 @@ The following packages are required to be installed to run gnucash:
   gnome-print: any recent version should work.
 
   gtkhtml: version 0.4 and later should work. You can obtain the latest
-    version of gtkhtml from Helix Code.
+    version of gtkhtml from Helix Code.  Note that this has changed since
+    1.4, which used the older gtkxmhtml library.
 
 To be able to use certain features of GnuCash, such as reports and
 network stock price downloads, you must have the following packages
@@ -279,6 +280,7 @@ the GnuCash specific bits.
 Prior to building GnuCash, you will have to obtain and install the
 following packages:
 
+
   libtool: Available at ftp://ftp.gnu.org/gnu.
     RPM's and debs are widely available with most distributions.
 
@@ -300,8 +302,8 @@ you'll need for the systems we know about:
   Debian/GNU/Linux:
     current:
       libgnome-dev
-      libxml-dev
-      libgtkxmhtml-dev
+      libgtkhtml-dev (you can grab this from Helixcode, it may not be 
+      in Debian itself ATM)
       guile1.3
       libguile6-dev
       libguile6-slib
@@ -340,7 +342,7 @@ If you want to make sure that all languages get installed, run
   $ unset LINGUAS
   $ ./configure
 
-The last stable release of GnuCash had a Motif based user interface,
+The 1.2 stable release of GnuCash had a Motif based user interface,
 and there was also an experimental, but never finished qt interface.
 Both of these have been removed from the source tree during the
 process of migrating to automake, but anyone who is interested in
@@ -366,6 +368,13 @@ to be installed, the above command would install
 
 DESTDIR can be helpful when trying to build install images and
 packages.
+
+NOTE: If you have installed different parts of Gnome in different
+places (for instance, if you've installed gtkhtml in /usr/local) you
+will need to set the environment variables GNOME_PATH and
+GNOME_LIBCONFIG_PATH.  See the manpage for gnome-config for more
+details.
+
 
 ###################
 Supported Platforms

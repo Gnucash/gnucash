@@ -77,10 +77,6 @@
       (newline port))))
   
     (define (report-output->string tree)
-      (display "(Report-Tree ")
-      (display tree)
-      (display ")")
-      (newline)
       (call-with-output-string
        (lambda (port)
 	 (output-tree-to-port tree port))))

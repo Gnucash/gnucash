@@ -22,6 +22,8 @@
 (gnc:support "date-utilities.scm")
 (gnc:depend "srfi/srfi-19.scm")
 
+(define gnc:reldate-list '())
+
 (define (gnc:timepair->secs tp)
   (inexact->exact
    (+ (car tp)
@@ -544,122 +546,124 @@
 	  (set-tm:mday now month-days))
       (gnc:secs->timepair (car (mktime now))))))
 
-(define (gnc:reldate-all-reldates)
-  (list 'start-cal-year 'start-prev-year 'end-prev-year 'start-cur-fin-year 'start-prev-fin-year
-		   'start-this-month 'start-prev-month 'end-prev-month 'start-current-quarter
-		   'start-prev-quarter 'end-prev-quarter 'today 'one-month-ago 'three-months-ago
-		   'six-months-ago
-		   'one-year-ago))
-		   
-   (gnc:reldate-string-db 'store 'start-cal-year-string "Current Year Start")
 
-(gnc:reldate-string-db 'store 'start-cal-year-desc "Start of the current calendar year")
-(gnc:reldate-string-db 'store 'start-prev-year-string "Previous Year Start")
-(gnc:reldate-string-db 'store 'start-prev-year-desc "Beginning of the previous calendar year")
-(gnc:reldate-string-db 'store 'end-prev-year-string "Previous Year End")
-(gnc:reldate-string-db 'store 'end-prev-year-desc "End of the Previous Year")
-(gnc:reldate-string-db 'store 'start-cur-fin-year-string "Current Financial Year Start")
-(gnc:reldate-string-db 'store 'start-cur-fin-year-desc "Start of the current financial year/accounting period")
-(gnc:reldate-string-db 'store 'start-prev-fin-year-string "Previous Financial Year Start")
-(gnc:reldate-string-db 'store 'start-prev-financial-year-desc "The start of the previous financial year/accounting period")
-(gnc:reldate-string-db 'store 'end-prev-fin-year-string "End Previous Financial Year")
-(gnc:reldate-string-db 'store 'end-prev-fin-year-desc "End of the previous Financial year/Accounting Period")
-(gnc:reldate-string-db 'store 'start-this-month-string "Start of this month")
-(gnc:reldate-string-db 'store 'start-this-month-desc "Start of the current month")
-(gnc:reldate-string-db 'store 'start-prev-month-string "Start of previous month")
-(gnc:reldate-string-db 'store 'start-prev-month-desc "The beginning of the previous month")
-(gnc:reldate-string-db 'store 'end-prev-month-string "End of previous month")
-(gnc:reldate-string-db 'store 'end-prev-month-description "Last day of previous month")
-(gnc:reldate-string-db 'store 'start-current-quarter-string "Start of current quarter")
-(gnc:reldate-string-db 'store 'start-current-quarter-desc "The start of the latest quarterly accounting period")
-(gnc:reldate-string-db 'store 'start-prev-quarter-string "Start of previous quarter")
-(gnc:reldate-string-db 'store 'start-prev-quarter-desc "The start of the previous quarterly accounting period")
-(gnc:reldate-string-db 'store 'end-prev-quarter-string "End of previous quarter")
-(gnc:reldate-string-db 'store 'end-prev-quarter-desc "End of previous quarterly accounting period")
-(gnc:reldate-string-db 'store 'today-string "Today")
-(gnc:reldate-string-db 'store 'today-desc "The current date")
-(gnc:reldate-string-db 'store 'one-month-ago-string "One Month Ago")
-(gnc:reldate-string-db 'store 'one-month-ago-desc "One Month Ago")
-(gnc:reldate-string-db 'store 'one-week-ago-string "One Week Ago")
-(gnc:reldate-string-db 'store 'one-week-ago-desc "One Week Ago")
-(gnc:reldate-string-db 'store 'three-months-ago-string "Three Months Ago")
-(gnc:reldate-string-db 'store 'three-months-ago-desc "Three Months Ago")
-(gnc:reldate-string-db 'store 'six-months-ago-string "Six Months Ago")
-(gnc:reldate-string-db 'store 'six-months-ago-string "Six Months Ago")
-(gnc:reldate-string-db 'store 'one-year-ago-string "One Year Ago")
-(gnc:reldate-string-db 'store 'one-year-ago-desc "One Year Ago") 
-
-(set! gnc:relative-date-values 
-      (list 
-       (vector 'start-cal-year 
-	 (gnc:reldate-string-db 'lookup 'start-cal-year-string)
-	 (gnc:reldate-string-db 'lookup 'start-cal-year-desc)
-	 gnc:get-start-cal-year)
-       (vector 'start-prev-year
-	 (gnc:reldate-string-db 'lookup 'start-prev-year-string)
-	 (gnc:reldate-string-db 'lookup 'start-prev-year-desc)
-	 gnc:get-start-prev-year)
-       (vector 'end-prev-year
-	 (gnc:reldate-string-db 'lookup 'end-prev-year-string)
-	 (gnc:reldate-string-db 'lookup 'end-prev-year-desc)
-	 gnc:get-end-prev-year)
-       (vector 'start-cur-fin-year
-	 (gnc:reldate-string-db 'lookup 'start-cur-fin-year-string)
-	 (gnc:reldate-string-db 'lookup 'start-cur-fin-year-desc)
-	 gnc:get-start-cur-fin-year)
-       (vector 'start-prev-fin-year
-	 (gnc:reldate-string-db 'lookup 'start-prev-fin-year-string)
-	 (gnc:reldate-string-db 'lookup 'start-prev-fin-year-desc)
-	 gnc:get-start-prev-fin-year)
-       (vector 'end-prev-fin-year
-	 (gnc:reldate-string-db 'lookup 'end-prev-fin-year-string)
-	 (gnc:reldate-string-db 'lookup 'end-prev-fin-year-desc)
-	 gnc:get-end-prev-fin-year)
-       (vector 'start-this-month
-	 (gnc:reldate-string-db 'lookup 'start-this-month-string)
-	 (gnc:reldate-string-db 'lookup 'start-this-month-desc)
-	 gnc:get-start-this-month)
-       (vector 'start-prev-month
-	 (gnc:reldate-string-db 'lookup 'start-prev-month-string)
-	 (gnc:reldate-string-db 'lookup 'start-prev-month-desc)
-	 gnc:get-start-prev-month)
-       (vector 'end-prev-month
-	 (gnc:reldate-string-db 'lookup 'end-prev-month-string)
-	 (gnc:reldate-string-db 'lookup 'end-prev-month-desc)
-	 gnc:get-end-prev-month)
-       (vector 'start-current-quarter
-	 (gnc:reldate-string-db 'lookup 'start-current-quarter-string)
-	 (gnc:reldate-string-db 'lookup 'start-current-quarter-desc)
-	 gnc:get-start-current-quarter)
-       (vector 'start-prev-quarter
-	 (gnc:reldate-string-db 'lookup 'start-prev-quarter-string)
-	 (gnc:reldate-string-db 'lookup 'start-prev-quarter-desc)
-	 gnc:get-start-prev-quarter)
-       (vector 'end-prev-quarter
-	 (gnc:reldate-string-db 'lookup 'end-prev-quarter-string)
-	 (gnc:reldate-string-db 'lookup 'end-prev-quarter-desc)
-	 gnc:get-end-prev-quarter)
-       (vector 'today
-	 (gnc:reldate-string-db 'lookup 'end-prev-quarter-string)
-	 (gnc:reldate-string-db 'lookup 'end-prev-quarter-desc)
-	 gnc:get-today)
-       (vector 'one-month-ago
-	 (gnc:reldate-string-db 'lookup 'one-month-ago-string)
-	 (gnc:reldate-string-db 'lookup 'one-month-ago-desc)
-	 gnc:get-one-month-ago)
-       (vector 'three-months-ago
-	 (gnc:reldate-string-db 'lookup 'three-months-ago-string)
-	 (gnc:reldate-string-db 'lookup 'three-months-ago-desc)
-	 gnc:get-three-months-ago)
-       (vector 'six-months-ago
-	 (gnc:reldate-string-db 'lookup 'six-months-ago-string)
-	 (gnc:reldate-string-db 'lookup 'six-months-ago-desc)
-	 gnc:get-three-months-ago)
-       (vector 'one-year-ago
-	 (gnc:reldate-string-db 'lookup 'one-year-ago-string)
-	 (gnc:reldate-string-db 'lookup 'one-year-ago-desc)
-	 gnc:get-one-year-ago)))
-
+(define (gnc:reldate-initialize)
+  (begin
+    (gnc:reldate-string-db 'store 'start-cal-year-string "Current Year Start")
+    
+    (gnc:reldate-string-db 'store 'start-cal-year-desc "Start of the current calendar year")
+    (gnc:reldate-string-db 'store 'start-prev-year-string "Previous Year Start")
+    (gnc:reldate-string-db 'store 'start-prev-year-desc "Beginning of the previous calendar year")
+    (gnc:reldate-string-db 'store 'end-prev-year-string "Previous Year End")
+    (gnc:reldate-string-db 'store 'end-prev-year-desc "End of the Previous Year")
+    (gnc:reldate-string-db 'store 'start-cur-fin-year-string "Current Financial Year Start")
+    (gnc:reldate-string-db 'store 'start-cur-fin-year-desc "Start of the current financial year/accounting period")
+    (gnc:reldate-string-db 'store 'start-prev-fin-year-string "Previous Financial Year Start")
+    (gnc:reldate-string-db 'store 'start-prev-financial-year-desc "The start of the previous financial year/accounting period")
+    (gnc:reldate-string-db 'store 'end-prev-fin-year-string "End Previous Financial Year")
+    (gnc:reldate-string-db 'store 'end-prev-fin-year-desc "End of the previous Financial year/Accounting Period")
+    (gnc:reldate-string-db 'store 'start-this-month-string "Start of this month")
+    (gnc:reldate-string-db 'store 'start-this-month-desc "Start of the current month")
+    (gnc:reldate-string-db 'store 'start-prev-month-string "Start of previous month")
+    (gnc:reldate-string-db 'store 'start-prev-month-desc "The beginning of the previous month")
+    (gnc:reldate-string-db 'store 'end-prev-month-string "End of previous month")
+    (gnc:reldate-string-db 'store 'end-prev-month-description "Last day of previous month")
+    (gnc:reldate-string-db 'store 'start-current-quarter-string "Start of current quarter")
+    (gnc:reldate-string-db 'store 'start-current-quarter-desc "The start of the latest quarterly accounting period")
+    (gnc:reldate-string-db 'store 'start-prev-quarter-string "Start of previous quarter")
+    (gnc:reldate-string-db 'store 'start-prev-quarter-desc "The start of the previous quarterly accounting period")
+    (gnc:reldate-string-db 'store 'end-prev-quarter-string "End of previous quarter")
+    (gnc:reldate-string-db 'store 'end-prev-quarter-desc "End of previous quarterly accounting period")
+    (gnc:reldate-string-db 'store 'today-string "Today")
+    (gnc:reldate-string-db 'store 'today-desc "The current date")
+    (gnc:reldate-string-db 'store 'one-month-ago-string "One Month Ago")
+    (gnc:reldate-string-db 'store 'one-month-ago-desc "One Month Ago")
+    (gnc:reldate-string-db 'store 'one-week-ago-string "One Week Ago")
+    (gnc:reldate-string-db 'store 'one-week-ago-desc "One Week Ago")
+    (gnc:reldate-string-db 'store 'three-months-ago-string "Three Months Ago")
+    (gnc:reldate-string-db 'store 'three-months-ago-desc "Three Months Ago")
+    (gnc:reldate-string-db 'store 'six-months-ago-string "Six Months Ago")
+    (gnc:reldate-string-db 'store 'six-months-ago-string "Six Months Ago")
+    (gnc:reldate-string-db 'store 'one-year-ago-string "One Year Ago")
+    (gnc:reldate-string-db 'store 'one-year-ago-desc "One Year Ago") 
+    
+    (set! gnc:relative-date-values 
+	  (list 
+	   (vector 'start-cal-year 
+		   (gnc:reldate-string-db 'lookup 'start-cal-year-string)
+		   (gnc:reldate-string-db 'lookup 'start-cal-year-desc)
+		   gnc:get-start-cal-year)
+	   (vector 'start-prev-year
+		   (gnc:reldate-string-db 'lookup 'start-prev-year-string)
+		 (gnc:reldate-string-db 'lookup 'start-prev-year-desc)
+		 gnc:get-start-prev-year)
+	   (vector 'end-prev-year
+		   (gnc:reldate-string-db 'lookup 'end-prev-year-string)
+		   (gnc:reldate-string-db 'lookup 'end-prev-year-desc)
+		   gnc:get-end-prev-year)
+	   (vector 'start-cur-fin-year
+		   (gnc:reldate-string-db 'lookup 'start-cur-fin-year-string)
+		   (gnc:reldate-string-db 'lookup 'start-cur-fin-year-desc)
+		   gnc:get-start-cur-fin-year)
+	   (vector 'start-prev-fin-year
+		   (gnc:reldate-string-db 'lookup 'start-prev-fin-year-string)
+		   (gnc:reldate-string-db 'lookup 'start-prev-fin-year-desc)
+		   gnc:get-start-prev-fin-year)
+	   (vector 'end-prev-fin-year
+		   (gnc:reldate-string-db 'lookup 'end-prev-fin-year-string)
+		   (gnc:reldate-string-db 'lookup 'end-prev-fin-year-desc)
+		   gnc:get-end-prev-fin-year)
+	   (vector 'start-this-month
+		   (gnc:reldate-string-db 'lookup 'start-this-month-string)
+		   (gnc:reldate-string-db 'lookup 'start-this-month-desc)
+		   gnc:get-start-this-month)
+	   (vector 'start-prev-month
+		   (gnc:reldate-string-db 'lookup 'start-prev-month-string)
+		   (gnc:reldate-string-db 'lookup 'start-prev-month-desc)
+		   gnc:get-start-prev-month)
+	   (vector 'end-prev-month
+		   (gnc:reldate-string-db 'lookup 'end-prev-month-string)
+		   (gnc:reldate-string-db 'lookup 'end-prev-month-desc)
+		   gnc:get-end-prev-month)
+	   (vector 'start-current-quarter
+		   (gnc:reldate-string-db 'lookup 'start-current-quarter-string)
+		   (gnc:reldate-string-db 'lookup 'start-current-quarter-desc)
+		   gnc:get-start-current-quarter)
+	   (vector 'start-prev-quarter
+		   (gnc:reldate-string-db 'lookup 'start-prev-quarter-string)
+		   (gnc:reldate-string-db 'lookup 'start-prev-quarter-desc)
+		   gnc:get-start-prev-quarter)
+	   (vector 'end-prev-quarter
+		   (gnc:reldate-string-db 'lookup 'end-prev-quarter-string)
+		   (gnc:reldate-string-db 'lookup 'end-prev-quarter-desc)
+		   gnc:get-end-prev-quarter)
+	   (vector 'today
+		   (gnc:reldate-string-db 'lookup 'end-prev-quarter-string)
+		   (gnc:reldate-string-db 'lookup 'end-prev-quarter-desc)
+		   gnc:get-today)
+	   (vector 'one-month-ago
+		   (gnc:reldate-string-db 'lookup 'one-month-ago-string)
+		   (gnc:reldate-string-db 'lookup 'one-month-ago-desc)
+		   gnc:get-one-month-ago)
+	   (vector 'three-months-ago
+		   (gnc:reldate-string-db 'lookup 'three-months-ago-string)
+		   (gnc:reldate-string-db 'lookup 'three-months-ago-desc)
+		   gnc:get-three-months-ago)
+	   (vector 'six-months-ago
+		   (gnc:reldate-string-db 'lookup 'six-months-ago-string)
+		   (gnc:reldate-string-db 'lookup 'six-months-ago-desc)
+		   gnc:get-three-months-ago)
+	   (vector 'one-year-ago
+		   (gnc:reldate-string-db 'lookup 'one-year-ago-string)
+		   (gnc:reldate-string-db 'lookup 'one-year-ago-desc)
+	       gnc:get-one-year-ago)))
+  
 
 	  
-(gnc:make-reldate-hash gnc:relative-date-hash gnc:relative-date-values)
+  (gnc:make-reldate-hash gnc:relative-date-hash gnc:relative-date-values)
+  (set! gnc:reldate-list (map (lambda (x) (vector-ref x 0)) gnc:relative-date-values))))
+
+
+;; Startup
+(let ((hook (gnc:hook-lookup 'startup-hook)))
+  (gnc:hook-add-dangler hook gnc:reldate-initialize))
