@@ -279,6 +279,7 @@
 		  )))))
     
     gnc:*tax-report-options*)
+  (define crlf (string #\return #\newline)) ; TurboTax seems to want these
   
   (define tax-key "{tax}")
   
@@ -366,6 +367,13 @@
 				      (number->string (vector-ref txf-vec 3))
 				      " \\ " (symbol->string 
 					      (car code-lst))))))))))
+  
+  ;; return a "tax category" string, if one exists
+  (define (txf-category-key code catagories-lst)
+    (let ((txf-vec (txfq-ref (string->symbol code) catagories-lst)))
+      (if txf-vec
+	  (vector-ref txf-vec 5)
+	  "_none")))
   
   ;; insert help strings in txf catagories
   (define (txf-help cat-list)
@@ -565,7 +573,15 @@
   (define (txf-special-split? code)
     (member code '("N521")))	; only one for now
   
-  (define (render-txf-account account account-value date)
+  (define (fill-clamp-sp str len)
+    (string-append (substring (string-append str (make-string len #\space))
+			      0 (- len 1)) " "))
+  
+  (define (fill-clamp str len)
+    (string-append (substring (string-append str (make-string len #\space))
+			      0 len)))
+  
+  (define (render-txf-account account account-value d? date x? x-date)
     (let ((value (gnc:amount->formatted-string account-value #f))
 	  (txf? (gnc:account-get-txf account)))
       (if (and txf?
@@ -577,6 +593,9 @@
 		 (date-str (if date
 			       (strftime "%m/%d/%Y" (localtime (car date)))
 			       #f))
+		 (x-date-str (if x-date
+				 (strftime "%m/%d/%Y" (localtime (car x-date)))
+				 #f))
 		 ;; Only formats 1,3 implimented now! Others are treated as 1.
 		 (format (gnc:account-get-txf-format account))
 		 (payer-src (gnc:account-get-txf-payer-source account))
@@ -585,11 +604,26 @@
 				    (gnc:group-get-parent
 				     (gnc:account-get-parent account)))
 				   (gnc:account-get-name account))) 
+		 (action (if (is-type-income? type)
+			     (case (string->symbol code)
+			       ((N286 N488) "ReinvD")
+			       (else "Income"))
+			     "Expense"))
+		 (category-key (if (is-type-income? type)
+				   (txf-category-key code 
+						     txf-income-catagories)
+				   (txf-category-key code 
+						     txf-expense-catagories)))
+		 (value-name (if (equal? "ReinvD" action)
+				 (string-append 
+				  (substring value 1 (string-length value))
+				  " " account-name)
+				 account-name))
 		 (value (if (is-type-income? type) ; negate expenses
 			    value
 			    (string-append 
 			     "$-" (substring value 1 (string-length value)))))
-		 (l-value (if (txf-payer? payer-src)
+		 (l-value (if (= format 3)
 			      (begin
 				(set! txf-l-count 
 				      (if (equal? txf-last-payer account-name)
@@ -598,18 +632,26 @@
 				(set! txf-last-payer account-name)
 				(number->string txf-l-count))
 			      "1")))
-	    (list (if date "\nTD" "\nTS") ; newlines are at the beginning
-		  "\n" code		; because one is added at the end, and
-		  "\nC1"		; TurboTax spits out an error msg for
-		  "\nL" l-value		; a blank line at the end of the file.
-		  (if date
-		      (list "\nD" date-str)
+	    (list (if x? "TD" "TS") crlf
+		  code crlf
+		  "C1" crlf
+		  "L" l-value crlf
+		  (if d?
+		      (list "D" date-str crlf)
 		      '())
-		  "\n" value
+		  value crlf 
 		  (case format
-		    ((3) (list "\nP" account-name))
-		    (else '()))
-		  "\n^"))
+		    ((3) (list "P" account-name crlf))
+		    (else (if (and x? (txf-special-split? code))
+			      (list "P" crlf)
+			      '())))
+		  (if x?
+		      (list "X" x-date-str " " (fill-clamp-sp account-name 31)
+			    (fill-clamp-sp action 7) 
+			    (fill-clamp-sp value-name 82)
+			    (fill-clamp category-key 15) crlf)
+		      '())
+		  "^" crlf))
 	  "")))
   
   ;; Render any level
@@ -719,7 +761,7 @@
       (let ((children (gnc:account-get-children account)))
 	(if (pointer-token-null? children)
 	    (if (and (gnc:account-get-txf account)
-		     (equal? "N521" (gnc:account-get-txf-code account)))
+		     (txf-special-split? (gnc:account-get-txf-code account)))
 		(+ gen 1)		; Est Fed Tax has a extra generation
 		gen)	       		; no kids, return input
 	    (apply max (gnc:group-map-accounts
@@ -831,7 +873,9 @@
  messages")))
 	   (txf-feedback-str-lst '()))
       
-      (define (handle-txf-special-splits level account from-value to-value)
+      ;; for quarterly estimated tax payments, we need a different period
+      ;; return the sometimes changed (from-est tp-est) dates
+      (define (txf-special-splits-period account from-value to-value)
 	(if (and (gnc:account-get-txf account)
 		 (txf-special-split? (gnc:account-get-txf-code account)))
 	    (let* 
@@ -860,52 +904,74 @@
 			       (set-tm:mon bdtm 1)   ; Feb
 			       (set-tm:year bdtm (+ (tm:year bdtm) 1))
 			       (cons (car (mktime bdtm)) 0))
-			     to-value))
-		 (split-filter-pred (split-report-make-date-filter-predicate
-				     from-est to-est))
-		 (split-list (make-split-list account split-filter-pred))
-		 (lev  (if (>= max-level (+ 1 level))
-			   (+ 1 level)
-			   level)))
-	      (map (lambda (spl) 
-		     (let* ((tmp-date (gnc:transaction-get-date-posted 
-				       (gnc:split-get-parent spl)))
-			    (value (gnc:split-get-value spl))
-			    ;; TurboTax '99 ignores dates after 12/31/1999
-			    (date (if (and full-year? 
-					   (gnc:timepair-lt to-value tmp-date))
-				      to-value
-				      tmp-date)))
-		       (if tax-mode
-			   (render-level-x-account lev max-level account
-						   value suppress-0 #f date #f)
-			   (render-txf-account account value date))))
-		   split-list))
-	    '()))
+			     to-value)))
+	      (list from-est to-est full-year?))
+	    #f))
+      
+      ;; for quarterly estimated tax payments, we need to go one level down
+      ;; and get data from splits
+      (define (handle-txf-special-splits level account from-est to-est 
+					 full-year? to-value)
+	(let* 
+	    ((split-filter-pred (split-report-make-date-filter-predicate
+				 from-est to-est))
+	     (split-list (make-split-list account split-filter-pred))
+	     (lev  (if (>= max-level (+ 1 level))
+		       (+ 1 level)
+		       level)))
+	  (map (lambda (spl) 
+		 (let* ((date (gnc:transaction-get-date-posted 
+			       (gnc:split-get-parent spl)))
+			(value (gnc:split-get-value spl))
+			;; TurboTax 1999 and 2000 ignore dates after Dec 31
+			(fudge-date (if (and full-year? 
+					     (gnc:timepair-lt to-value date))
+					to-value
+					date)))
+		   (if tax-mode
+		       (render-level-x-account lev max-level account
+					       value suppress-0 #f date #f)
+		       (render-txf-account account value
+					   #t fudge-date  #t date))))
+	       split-list)))
       
       (define (handle-level-x-account level account)
 	(let ((type (gnc:account-type->symbol
-		     (gnc:account-get-type account)))
-	      (name (gnc:account-get-name account)))
+		     (gnc:account-get-type account))))
 	  (if (or hierarchical? (is-type-income-or-expense? type))
 	      (let* ((children (gnc:account-get-children account))
-		     (childrens-output (if (and (not children)
-						(not hierarchical?))
-					   (handle-txf-special-splits 
-					    level account from-value
-					    to-value)
-					   (gnc:group-map-accounts
-					    (lambda (x)
-					      (if (>= max-level (+ 1 level))
-						  (handle-level-x-account
-						   (+ 1 level) x)
-						  '()))
-					    children)))
-		     
+		     (to-special #f)	; clear special-splits-period
+		     (from-special #f)
+		     (childrens-output
+		      (if (and (not children) (not hierarchical?))
+			  (let* ((splits-period (txf-special-splits-period
+						 account from-value to-value)))
+			    (if splits-period
+				(let* ((full-year? (caddr splits-period)))
+				  (set! from-special (car splits-period))
+				  (set! to-special (cadr splits-period))
+				  (handle-txf-special-splits level account
+							     from-special
+							     to-special
+							     full-year?
+							     to-value))
+				
+				'()))
+			  (gnc:group-map-accounts
+			   (lambda (x)
+			     (if (>= max-level (+ 1 level))
+				 (handle-level-x-account (+ 1 level) x)
+				 '()))
+			   children)))
+
 		     (account-balance (if (or hierarchical?
 					      (gnc:account-get-tax account))
-					  (gnc:account-get-balance-interval
-					   account from-value to-value #f)
+					  (if to-special
+					      (gnc:account-get-balance-interval
+					       account from-special 
+					       to-special #f)
+					      (gnc:account-get-balance-interval
+					       account from-value to-value #f))
 					  0))) ; don't add non tax related
 		
 		(set! account-balance (+ (if (> max-level level)
@@ -923,7 +989,13 @@
 						   account-balance
 						   suppress-0 full-names #f
 						   hierarchical?)
-			   (render-txf-account account account-balance #f))))
+			   (list 
+			    (if (not to-special)
+				(render-txf-account account account-balance
+						    #f #f #t from-value)
+				'())
+			    (render-txf-account account account-balance
+						#f #f #f #f)))))
 		  (if (equal? 1 level)
 		      (lx-collector 1 'reset #f))
 		  (if (> max-level level)
@@ -1027,15 +1099,14 @@
 						    1 x))
 				       selected-accounts)))
 			 (output-txf (list
-				      "V035"
-				      "\nAGnuCash 1.5.2"
-				      "\n" today-date
-				      "\n^"
+				      "V037" crlf
+				      "AGnuCash 1.4.9" crlf
+				      today-date crlf
+				      "^" crlf
 				      output)))
 		    
 		    (gnc:display-report-list-item output-txf port
 						  "taxtxf.scm - ")
-		    (newline port)
 		    (close-output-port port)))))
 	
 	(set! tax-mode #t)		; now do tax mode to display report
