@@ -1,5 +1,17 @@
 2003-03-01  Christian Stimming  <stimming@tuhh.de>
 
+	* po/de.po: Updated German translation.
+
+	* src/app-utils/prefs.scm: Adjust the names of register styles in
+	the preferences to those names used in the register View
+	menu. This didn't require changes in any option lookup code.
+
+	* src/gnome/glade/register.glade: 'Duplicate Transaction' could
+	either mean 'to duplicate a transaction' or 'the duplicate of a
+	transaction'. Both need very different translations. Therefore
+	changed 'Duplicate Transaction' in the register into 'Duplicate a
+	Transaction' to resolve that ambiguity here.
+
 	* po/sk.po: Updated Slovak translation by Zdenko Podobný
 	<zdpo@mailbox.sk>.
 

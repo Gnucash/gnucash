@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
-"POT-Creation-Date: 2003-02-21 22:46+0100\n"
-"PO-Revision-Date: 2003-02-21 22:49+0100\n"
+"POT-Creation-Date: 2003-03-01 11:15+0100\n"
+"PO-Revision-Date: 2003-03-01 11:24+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -2875,9 +2875,8 @@ msgid "Dup_licate Transaction..."
 msgstr "Buchung duplizieren..."
 
 #: src/gnome/glade/register.glade.h:24
-#: src/import-export/generic-import.glade.h:16
-msgid "Duplicate Transaction"
-msgstr "Doppelte Buchung"
+msgid "Duplicate this Transaction"
+msgstr "Buchung duplizieren"
 
 #: src/gnome/glade/register.glade.h:25
 msgid "Edit Exchange Rate"
@@ -4563,11 +4562,11 @@ msgstr "Zahlung von:"
 
 #: src/gnome/glade/sched-xact.glade.h:136
 msgid "Payment To (Escrow):"
-msgstr "Zahlung bis (Treuhandkonto):"
+msgstr "Zahlung an (Treuhandkonto):"
 
 #: src/gnome/glade/sched-xact.glade.h:137
 msgid "Payment To:"
-msgstr "Zahlung bis:"
+msgstr "Zahlung an:"
 
 #: src/gnome/glade/sched-xact.glade.h:138
 msgid "Postpone"
@@ -4575,7 +4574,7 @@ msgstr "Verschieben"
 
 #: src/gnome/glade/sched-xact.glade.h:139
 msgid "Principal To:"
-msgstr "Endbetrag Kapital bis:"
+msgstr "Endbetrag Kapital an:"
 
 #: src/gnome/glade/sched-xact.glade.h:141
 msgid "REPLACEME with the Register control box"
@@ -6045,7 +6044,7 @@ msgstr "Kassenbericht"
 msgid "Register Report"
 msgstr "Bericht zum Kassenbericht"
 
-#: src/gnome/window-register.c:1437
+#: src/gnome/window-register.c:1445
 #, c-format
 msgid "%s [Read-Only]"
 msgstr "%s [Nur-Lesen]"
@@ -6876,7 +6875,7 @@ msgstr "Herkunftskonto"
 
 #: src/gnome-utils/transfer.glade.h:13
 msgid "Transfer Funds"
-msgstr "Beträge umbuchen"
+msgstr "Buchen"
 
 #: src/gnome-utils/transfer.glade.h:14
 msgid "Transfer Information"
@@ -7079,6 +7078,10 @@ msgstr "Kontonummer"
 #: src/import-export/generic-import.glade.h:13
 msgid "Confidence"
 msgstr "Genauigkeit"
+
+#: src/import-export/generic-import.glade.h:16
+msgid "Duplicate Transaction"
+msgstr "Doppelte Buchung"
 
 #: src/import-export/generic-import.glade.h:17
 msgid "EDIT"
@@ -8957,7 +8960,7 @@ msgstr "Aktualisieren Ihrer Gnucash Konten"
 msgid "(Full account ID: "
 msgstr "(Komplette Kontonummer: "
 
-#: src/import-export/import-backend.c:673
+#: src/import-export/import-backend.c:700
 msgid "Auto-Balance split"
 msgstr "Automatische Ausgleichsbuchung"
 
@@ -10712,18 +10715,18 @@ msgstr "Wählen Sie den Standardmodus für die Kassenberichtsfenster"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:603
-msgid "Ledger"
-msgstr "Hauptbuch"
+msgid "Basic Ledger"
+msgstr "Vereinfachtes Hauptbuch"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:607
-msgid "Auto Ledger"
-msgstr "Auto-Hauptbuch"
+msgid "Auto-Split Ledger"
+msgstr "Auto-Mehrteiliges Hauptbuch"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:611
-msgid "Journal"
-msgstr "Buch"
+msgid "Transaction Journal"
+msgstr "Amerikanisches Journal"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:617
@@ -14805,11 +14808,17 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
 
+#~ msgid "Ledger"
+#~ msgstr "Hauptbuch"
+
+#~ msgid "Auto Ledger"
+#~ msgstr "Auto-Hauptbuch"
+
+#~ msgid "Journal"
+#~ msgstr "Buch"
+
 #~ msgid "User ID"
 #~ msgstr "Benutzerkennung"
-
-#~ msgid "Tax Value"
-#~ msgstr "Steueranteil"
 
 #~ msgid "At least"
 #~ msgstr "Mindestens"
@@ -14826,17 +14835,11 @@ msgstr "Entwicklung Forderungen"
 #~ msgid "Not Balanced"
 #~ msgstr "Nicht ausgeglichen"
 
-#~ msgid "Regular expression"
-#~ msgstr "Regulärer Ausdruck"
-
 #~ msgid "Transaction"
 #~ msgstr "Geschäftsvorgang"
 
 #~ msgid "Destination Account"
 #~ msgstr "Gegenkonto"
-
-#~ msgid "Welcome"
-#~ msgstr "Willkommen"
 
 #~ msgid "Double Entry"
 #~ msgstr "Doppelte Buchführung"
