@@ -50,11 +50,9 @@ int next_free_unique_account_id = 0;
 
 /********************************************************************\
 \********************************************************************/
-Account *
-xaccMallocAccount( void )
-  {
-  Account *acc = (Account *)_malloc(sizeof(Account));
-  
+void
+xaccInitAccount (Account * acc)
+{
   acc->id = next_free_unique_account_id;
   next_free_unique_account_id ++;
 
@@ -77,11 +75,23 @@ xaccMallocAccount( void )
   acc->splits      = (Split **) _malloc (sizeof (Split *));
   acc->splits[0]   = NULL;
   
-  return acc;
-  }
+  acc->changed     = 0;
+}
 
 /********************************************************************\
 \********************************************************************/
+
+Account *
+xaccMallocAccount( void )
+{
+  Account *acc = (Account *)_malloc(sizeof(Account));
+  xaccInitAccount (acc);
+  return acc;
+}
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccFreeAccount( Account *acc )
 {
@@ -177,7 +187,9 @@ xaccInsertSplit ( Account *acc, Split *split )
   if (!acc) return;
   if (!split) return;
 
-  /* mark the data file as needing to be saved: */
+  /* mark the account as having changed, and
+   * the account group as requiring a save */
+  acc -> changed = TRUE;
   if( acc->parent != NULL ) acc->parent->saved = FALSE;
 
   split->acc = (struct _account *) acc;
@@ -234,7 +246,9 @@ xaccRemoveSplit ( Account *acc, Split *split )
   if (!acc) return;
   if (!split) return;
 
-  /* mark the data file as needing to be saved: */
+  /* mark the account as having changed, and
+   * the account group as requiring a save */
+  acc -> changed = TRUE;
   if( acc->parent != NULL ) acc->parent->saved = FALSE;
   
   for( i=0,j=0; j<acc->numSplits; i++,j++ ) {
@@ -294,6 +308,7 @@ xaccRecomputeBalance( Account * acc )
   Split *split, *last_split;
   
   if( NULL == acc ) return;
+  if (FALSE == acc->changed) return;
 
   split = acc->splits[0];
   while (split) {

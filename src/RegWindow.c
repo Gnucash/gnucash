@@ -656,7 +656,7 @@ void regRefresh (RegWindow *regData)
  * refresh *all* register windows which contain this account        * 
 \********************************************************************/
 
-void accRefresh (Account *acc)
+static void Refresh (Account *acc)
 {
    RegWindow *regData;
    int n;
@@ -683,6 +683,31 @@ void accRefresh (Account *acc)
 
    /* hack alert -- refesh adjbwindow too */
    recnRefresh (acc);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+static void grpRefresh (AccountGroup *grp)
+{
+   int i;
+   Account *acc;
+
+   if (!grp) return;
+
+   for (i=0; i<grp->numAcc; i++) {
+      acc = grp->account[i];
+      if (acc->changed) Refresh (acc);
+      acc->changed = 0;
+      grpRefresh (acc->children); 
+   }
+}
+
+void accRefresh (Account *acc)
+{
+   AccountGroup * root;
+   root = xaccGetAccountRoot (acc);
+   grpRefresh (root);
 }
 
 /********************************************************************\

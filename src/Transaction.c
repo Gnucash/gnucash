@@ -27,6 +27,7 @@
 
 #include "config.h"
 
+#include "Account.h"
 #include "date.h"
 #include "Transaction.h"
 #include "util.h"
@@ -34,8 +35,8 @@
 /********************************************************************\
  * Because I can't use C++ for this project, doesn't mean that I    *
  * can't pretend too!  These functions perform actions on the       *
- * Transaction data structure, in order to encapsulate the knowledge       *
- * of the internals of the Transaction in one file.                        *
+ * Transaction data structure, in order to encapsulate the          *
+ * knowledge of the internals of the Transaction in one file.       *
 \********************************************************************/
 
 /********************************************************************\
@@ -105,6 +106,28 @@ xaccFreeSplit( Split *split )
 /********************************************************************\
 \********************************************************************/
 
+#define MARK_SPLIT(split) {			\
+   Account *acc = (Account *) ((split)->acc);	\
+   if (acc) acc->changed = 1;			\
+}
+
+static void
+MarkChanged (Transaction *trans)
+{
+   MARK_SPLIT (&(trans->credit_split));
+
+   if (trans->debit_splits) {
+      int i=0;
+      while (trans->debit_splits[i]) {
+         MARK_SPLIT (trans->debit_splits[i]);
+         i++;
+      }
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
 int
 xaccCountSplits (Split **tarray)
 {
@@ -126,11 +149,13 @@ xaccCountSplits (Split **tarray)
 
 void xaccSetShareAmount (Split *s, double amt)
 {
+   MARK_SPLIT(s);
    s -> damount = amt;
 }
 
 void xaccSetAmount (Split *s, double amt)
 {
+   MARK_SPLIT(s);
    /* remember, damount is actually share price */
    s -> damount = amt / (s->share_price);
 }
@@ -264,11 +289,12 @@ xaccTransRecomputeAmount (Transaction *trans)
     trans -> credit_split.damount = -amount;
     trans -> credit_split.share_price = 1.0;
   }
-  
+  MARK_SPLIT (&(trans->credit_split));
 }
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccTransAppendSplit (Transaction *trans, Split *split) 
 {
@@ -461,16 +487,49 @@ xaccCountTransactions (Transaction **tarray)
 void
 xaccTransSetDate (Transaction *trans, int day, int mon, int year)
 {
+   Split *split;
+   Account *acc;
+
    trans->date.year = year;
    trans->date.month = mon;
    trans->date.day = day;
+
+   /* since the date has changed, we need to be careful to 
+    * make sure all associated splits are in proper order
+    * in thier accounts
+    */
+
+   split = &(trans->credit_split);
+   acc = (Account *) split->acc;
+   xaccRemoveSplit (acc, split);
+   xaccInsertSplit (acc, split);
+   xaccRecomputeBalance (acc);
+
+   if (trans->debit_splits) {
+      int i=0;
+      split = trans->debit_splits[i];
+      while (split) {
+         acc = (Account *) split->acc;
+         xaccRemoveSplit (acc, split);
+         xaccInsertSplit (acc, split);
+         xaccRecomputeBalance (acc);
+
+         i++;
+         split = trans->debit_splits[i];
+      }
+   }
 }
+
+/********************************************************************\
+\********************************************************************/
+
 
 void
 xaccTransSetNum (Transaction *trans, const char *xnum)
 {
    if (trans->num) free (trans->num);
    trans->num = strdup (xnum);
+   MarkChanged (trans);
 }
 
 void
@@ -478,6 +537,7 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
 {
    if (trans->description) free (trans->description);
    trans->description = strdup (desc);
+   MarkChanged (trans);
 }
 
 void
@@ -485,6 +545,7 @@ xaccTransSetMemo (Transaction *trans, const char *memo)
 {
    if (trans->credit_split.memo) free (trans->credit_split.memo);
    trans->credit_split.memo = strdup (memo);
+   MARK_SPLIT (&(trans->credit_split));
 
    /* if there is only one split, then keep memos in sync. */
    if (trans->debit_splits) {
@@ -492,6 +553,7 @@ xaccTransSetMemo (Transaction *trans, const char *memo)
          if (0x0 == trans->debit_splits[1]) {
             free (trans->debit_splits[0]->memo);
             trans->debit_splits[0]->memo = strdup (memo);
+            MARK_SPLIT (trans->debit_splits[0]);
          }
       }
    }
@@ -502,6 +564,7 @@ xaccTransSetAction (Transaction *trans, const char *actn)
 {
    if (trans->credit_split.action) free (trans->credit_split.action);
    trans->credit_split.action = strdup (actn);
+   MARK_SPLIT (&(trans->credit_split));
 
    /* if there is only one split, then keep action in sync. */
    if (trans->debit_splits) {
@@ -509,6 +572,7 @@ xaccTransSetAction (Transaction *trans, const char *actn)
          if (0x0 == trans->debit_splits[1]) {
             free (trans->debit_splits[0]->action);
             trans->debit_splits[0]->action = strdup (actn);
+            MARK_SPLIT (trans->debit_splits[0]);
          }
       }
    }
@@ -518,6 +582,7 @@ void
 xaccTransSetReconcile (Transaction *trans, char recn)
 {
    trans->credit_split.reconciled = recn;
+   MARK_SPLIT (&(trans->credit_split));
 }
 
 /********************************************************************\
@@ -528,6 +593,7 @@ xaccSplitSetMemo (Split *split, const char *memo)
 {
    if (split->memo) free (split->memo);
    split->memo = strdup (memo);
+   MARK_SPLIT (split);
 }
 
 void
@@ -535,12 +601,14 @@ xaccSplitSetAction (Split *split, const char *actn)
 {
    if (split->action) free (split->action);
    split->action = strdup (actn);
+   MARK_SPLIT (split);
 }
 
 void
 xaccSplitSetReconcile (Split *split, char recn)
 {
    split->reconciled = recn;
+   MARK_SPLIT (split);
 }
 
 /************************ END OF ************************************\

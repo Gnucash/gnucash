@@ -93,13 +93,11 @@ printf ("xfr from %s to %s \n", xfr,  new_acc_name);
       /* remove the partner split from the old account */
       acc = (Account *) (partner_split->acc);
       xaccRemoveSplit (acc, partner_split);
-      accRefresh (acc);
 
       /* insert the partner split into the new account */
       acc = (Account *) split->acc;
       acc = xaccGetPeerAccountFromName (acc, new_acc_name);
       xaccInsertSplit (acc, partner_split);
-      accRefresh (acc);
 
       /* loop over all of the debit splits, and refresh,
        * since they were all affected. */
@@ -108,7 +106,6 @@ printf ("xfr from %s to %s \n", xfr,  new_acc_name);
          partner_split = trans->debit_splits[i];
          while (partner_split) {
             acc = (Account *) (partner_split->acc);
-            accRefresh (acc);
             i++;
             partner_split = trans->debit_splits[i];
          }
@@ -124,13 +121,11 @@ printf ("xfr from %s to %s \n", xfr,  new_acc_name);
                /* remove the partner split from the old account */
                acc = (Account *) (partner_split->acc);
                xaccRemoveSplit (acc, partner_split);
-               accRefresh (acc);
 
                /* insert the partner split into the new account */
                acc = (Account *) split->acc;
                acc = xaccGetPeerAccountFromName (acc, new_acc_name);
                xaccInsertSplit (acc, partner_split);
-               accRefresh (acc);
             }
          }
       }
@@ -160,13 +155,10 @@ xaccSaveRegEntry (BasicRegister *reg)
 printf ("saving %s \n", trans->description);
    /* copy the contents from the cursor to the split */
 
-   if (MOD_DATE & changed) {
+   if (MOD_DATE & changed) 
       xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
                                reg->dateCell->date.tm_mon+1,
                                reg->dateCell->date.tm_year+1900);
-
-      /* hack alert -- should resort split array's */
-   }
 
    if (MOD_NUM & changed) 
       xaccTransSetNum (trans, reg->numCell->value);
@@ -206,8 +198,6 @@ printf ("saving %s \n", trans->description);
    /* refresh the register windows *only* if something changed */
    if (changed) {
       acc = (Account *) split->acc;
-      accRefresh (acc);
-      acc = (Account *) trans->credit_split.acc;
       accRefresh (acc);
    }
 }
