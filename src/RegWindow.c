@@ -981,37 +981,53 @@ regRecalculateBalance( RegWindow *regData )
 
 /* RECALC_BALANCE recomputes the balance shown in 
  * the register window, if it is visible. 
- * hack alert -- xxxxxx 
- * this macro should also track down ledger windows displaying
- * this account, and update those as well.
  */
 
 #define RECALC_BALANCE(sacc) {					\
   Account * xfer_acc;						\
   RegWindow * xfer_reg;						\
+  struct _RegWindow **list;					\
   xfer_acc = (Account *) (sacc);				\
   if (xfer_acc) {						\
     xfer_reg = (RegWindow *) (xfer_acc->regData);		\
     if (xfer_reg) {						\
       regRecalculateBalance (xfer_reg);				\
     }								\
+    list = xfer_acc->ledgerList;				\
+    if (list) {							\
+      int n = 0;						\
+      xfer_reg = (RegWindow *) (list [0]);			\
+      while (xfer_reg) {					\
+        regRecalculateBalance (xfer_reg);			\
+        n++;							\
+        xfer_reg = (RegWindow *) (list [n]);			\
+      }								\
+    }								\
   }								\
 }
 
 /* REFRESH_REGISTER redisplays the register window,
- * if it is visible 
- * hack alert -- xxxxxx 
- * this macro should also track down ledger windows displaying
- * this account, and update those as well.
+ * if it is visible. 
  */
 #define REFRESH_REGISTER(sacc) {				\
   Account * xfer_acc;						\
   RegWindow * xfer_reg;						\
+  struct _RegWindow **list;					\
   xfer_acc = (Account *) (sacc);				\
   if (xfer_acc) {						\
     xfer_reg = (RegWindow *) (xfer_acc->regData);		\
     if (xfer_reg) {						\
       regRefresh (xfer_reg);					\
+    }								\
+    list = xfer_acc->ledgerList;				\
+    if (list) {							\
+      int n = 0;						\
+      xfer_reg = (RegWindow *) (list [0]);			\
+      while (xfer_reg) {					\
+        regRefresh (xfer_reg);					\
+        n++;							\
+        xfer_reg = (RegWindow *) (list [n]);			\
+      }								\
     }								\
   }								\
 }
@@ -1674,7 +1690,10 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
 
     /* hack alert -- quickfill for ledgers is almost certainly broken */
     regData->qf   = regData->blackacc[0]->qfRoot;  
-    /* hack alert -- xxxx -- do the ledgerlist thing */
+
+    /* associate register with account, so that we can do consistent
+     * updates */
+    ledgerListAddList (regData->blackacc, regData);
   }
 
   regData->dialog =
@@ -2309,7 +2328,7 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   if (1 == regData ->numAcc) {
      regData->blackacc[0]->regData = NULL;
   } else {
-     /* xxxxxxxxxxxx ledgerlist */
+     ledgerListRemoveList (regData->blackacc, regData);
   }
   _free(regData);
   

@@ -186,6 +186,7 @@ ledgerListCount (struct _RegWindow **list)
 }
 
 /* ------------------------------------------------------ */
+
 void 
 ledgerListAdd (Account * acc, struct _RegWindow *addreg)
 {
@@ -220,7 +221,7 @@ ledgerListAdd (Account * acc, struct _RegWindow *addreg)
 /* ------------------------------------------------------ */
 
 void 
-ledgerListDelete (Account * acc, struct _RegWindow *delreg)
+ledgerListRemove (Account * acc, struct _RegWindow *delreg)
 {
    struct _RegWindow **oldlist;
    struct _RegWindow **newlist;
@@ -274,6 +275,44 @@ ledgerListIsMember (Account * acc, struct _RegWindow *memreg)
       reg = list[n];
    }
    return 0;
+}
+
+/* ------------------------------------------------------ */
+
+void
+ledgerListAddList (Account ** list, struct _RegWindow *reg)
+{
+   Account *acc;
+   int n = 0;
+
+   if (!list) return;
+   if (!reg) return;
+
+   acc = list[0];
+   while (acc) {
+      ledgerListAdd (acc, reg);
+      n++;
+      acc = list[n];
+   }
+}
+
+/* ------------------------------------------------------ */
+
+void
+ledgerListRemoveList (Account ** list, struct _RegWindow *reg)
+{
+   Account *acc;
+   int n = 0;
+
+   if (!list) return;
+   if (!reg) return;
+
+   acc = list[0];
+   while (acc) {
+      ledgerListRemove (acc, reg);
+      n++;
+      acc = list[n];
+   }
 }
 
 /************************** END OF FILE *************************/
