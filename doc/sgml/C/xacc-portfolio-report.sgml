@@ -1,0 +1,23 @@
+
+<ARTICLE ID="XACC-PORTFOLIO-REPORT">
+<ARTHEADER>
+<TITLE>Stock Portfolio Report</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Stock Portfolio Report</TITLE>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="report-folio.gif">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>This report summarizes the value of the stocks in your
+    current portfolio.
+
+    </PARA>
+<PARA>There are currently no options for this report.
+
+</PARA>
+</SECT1>
+</ARTICLE>

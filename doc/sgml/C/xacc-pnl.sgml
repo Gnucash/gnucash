@@ -1,0 +1,24 @@
+
+<ARTICLE ID="XACC-PNL">
+<ARTHEADER>
+<TITLE>Profit And Loss Statement</TITLE>
+</ARTHEADER>
+<SECT1>
+<TITLE> Profit and Loss Statement</TITLE>
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="report-pnl.gif">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+
+    </PARA>
+<PARA>This report summarizes your sources of income and
+    expenditure.
+
+    </PARA>
+<PARA>You can specify the accounting period for the report using
+    the "parameters" toolbar button.
+
+</PARA>
+</SECT1>
+</ARTICLE>
