@@ -4,7 +4,11 @@
  *
  * FUNCTION:
  * Implements the register object.
+ * Specifies the physical layout of the register cells.
  * See the header file for additional documentation.
+ *
+ * hack alert -- most of the code in this file should be 
+ * replaced by a guile/scheme based config file.
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
@@ -361,11 +365,19 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    /* -------------------------------- */   
    /* add menu items for the action cell */
 
+   xaccAddComboCellMenuItem ( reg->actionCell, ATM_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, TELLER_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, CHECK_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, POS_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, ARU_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, ONLINE_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, ACH_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, WIRE_STR);
    xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
    xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
    xaccAddComboCellMenuItem ( reg->actionCell, PRICE_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
    xaccAddComboCellMenuItem ( reg->actionCell, DIV_STR);
+   xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
    xaccAddComboCellMenuItem ( reg->actionCell, LTCG_STR);
    xaccAddComboCellMenuItem ( reg->actionCell, STCG_STR);
    xaccAddComboCellMenuItem ( reg->actionCell, DIST_STR);
