@@ -1,3 +1,11 @@
+2001-06-15  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-account.c: use libglade
+
+	* src/gnome/dialog-userpass.c: fix bloop
+
+	* src/gnome/druid-commodity.c: use libglade
+
 2001-06-14  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/druid-qif-import.c: use libglade

@@ -32,12 +32,11 @@
 #include <assert.h>
 
 #include "FileDialog.h"
+#include "dialog-utils.h"
 #include "druid-commodity.h"
 #include "druid-utils.h"
 #include "dialog-commodity.h"
 #include "query-user.h"
-#include "glade-gnc-dialogs.h"
-#include "glade-cb-gnc-dialogs.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-ui.h"
@@ -60,7 +59,6 @@ struct _commoditydruid {
   GList      * pages;
   
   int        is_modal;
-
 };
 
 struct _commoditydruidpage {
@@ -81,6 +79,14 @@ static GdkColor std_title_color =  { 0, 65535, 65535, 65535 };
 static int gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, 
                                                 gpointer druid, 
                                                 gpointer user_data);
+
+static gboolean gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page,
+                                                 gpointer druid,
+                                                 gpointer user_data);
+
+static void gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page,
+                                             gpointer druid,
+                                             gpointer user_data);
 
 
 void
@@ -124,22 +130,32 @@ gnc_ui_commodity_druid_create(const char * filename) {
   gnc_commodity  * found;
   CommodityDruidPage * new_page;
   GnomeDruidPage * back_page;
+  GladeXML       * xml;
 
-  /* call the glade creator */
-  d->window = create_New_Commodity_Format_Druid();
+  xml = gnc_glade_xml_new ("commodity.glade", "New Commodity Format Druid");
+
+  d->window = glade_xml_get_widget (xml, "New Commodity Format Druid");
   dobj = GTK_OBJECT(d->window);
 
   gtk_signal_connect (dobj, "delete_event",
                       GTK_SIGNAL_FUNC (window_delete_cb), d);
 
-  d->druid           = gtk_object_get_data(dobj, "commodity_druid");
-  d->intro_page      = gtk_object_get_data(dobj, "start_page");
-  d->finish_page     = gtk_object_get_data(dobj, "finish_page");
+  d->druid           = glade_xml_get_widget (xml, "commodity_druid");
+  d->intro_page      = glade_xml_get_widget (xml, "start_page");
+  d->finish_page     = glade_xml_get_widget (xml, "finish_page");
   back_page = GNOME_DRUID_PAGE(d->intro_page);
 
   d->is_modal = FALSE;
 
-  gtk_object_set_data(dobj, "commodity_druid_struct", (gpointer)d);
+  gtk_object_set_data(dobj, "commodity_druid_struct", d);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_commodity_druid_cancel_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_commodity_druid_cancel_cb), d);
+
+  glade_xml_signal_connect_data
+    (xml, "gnc_ui_commodity_druid_finish_cb",
+     GTK_SIGNAL_FUNC (gnc_ui_commodity_druid_finish_cb), d);
 
   d->new_map = g_hash_table_new(g_str_hash, g_str_equal);
   d->old_map = g_hash_table_new(g_str_hash, g_str_equal);
@@ -350,12 +366,10 @@ gnc_ui_commodity_druid_destroy(CommodityDruid * cd) {
  * callbacks
  ********************************************************************/
 
-gboolean
+static gboolean
 gnc_ui_commodity_druid_cancel_cb(GnomeDruidPage * page, gpointer druid,
                                  gpointer user_data) {
-  CommodityDruid * cd = 
-    (CommodityDruid *)gtk_object_get_data(GTK_OBJECT(user_data),
-                                          "commodity_druid_struct");
+  CommodityDruid * cd = user_data;
 
   /* unload the current file (can't have out-of-date commodities) */
   gncFileQuit();
@@ -463,12 +477,10 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
 }
 
 
-void
+static void
 gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
                                  gpointer user_data) {
-  CommodityDruid * cd = 
-    (CommodityDruid *)gtk_object_get_data(GTK_OBJECT(user_data),
-                                          "commodity_druid_struct");  
+  CommodityDruid * cd = user_data;
 
   /* add the new commodities to the engine's namespace map and 
    * replace the account commodity pointers */
@@ -477,4 +489,3 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
 }
-

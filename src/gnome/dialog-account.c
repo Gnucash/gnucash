@@ -32,7 +32,6 @@
 #include "account-tree.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
-#include "glade-gnc-dialogs.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
@@ -1572,8 +1571,11 @@ gnc_account_window_create(AccountWindow *aw)
   GtkWidget *date;
   GtkObject *awo;
   GtkWidget *box;
+  GladeXML  *xml;
 
-  aw->dialog = create_Account_Dialog ();
+  xml = gnc_glade_xml_new ("account.glade", "Account Dialog");
+
+  aw->dialog = glade_xml_get_widget (xml, "Account Dialog");
   awo = GTK_OBJECT (aw->dialog);
   awd = GNOME_DIALOG (awo);
 
@@ -1592,46 +1594,44 @@ gnc_account_window_create(AccountWindow *aw)
   gnome_dialog_button_connect
     (awd, 2, GTK_SIGNAL_FUNC(gnc_account_window_help_cb), aw);
 
-  aw->notebook = gtk_object_get_data (awo, "account_notebook");
+  aw->notebook = glade_xml_get_widget (xml, "account_notebook");
 
-  aw->name_entry = gtk_object_get_data(awo, "name_entry");
+  aw->name_entry = glade_xml_get_widget (xml, "name_entry");
   gtk_signal_connect(GTK_OBJECT (aw->name_entry), "changed",
 		     GTK_SIGNAL_FUNC(gnc_account_name_changed_cb), aw);
 
-  aw->description_entry = gtk_object_get_data(awo, "description_entry");
-  aw->code_entry =        gtk_object_get_data(awo, "code_entry");
-  aw->notes_text =        gtk_object_get_data(awo, "notes_text");
-
-  gtk_object_set_data(awo, "account_window_struct", aw);
+  aw->description_entry = glade_xml_get_widget (xml, "description_entry");
+  aw->code_entry =        glade_xml_get_widget (xml, "code_entry");
+  aw->notes_text =        glade_xml_get_widget (xml, "notes_text");
 
   gnome_dialog_editable_enters(awd, GTK_EDITABLE(aw->name_entry));
   gnome_dialog_editable_enters(awd, GTK_EDITABLE(aw->description_entry));
   gnome_dialog_editable_enters(awd, GTK_EDITABLE(aw->code_entry));
 
-  box = gtk_object_get_data(awo, "currency_hbox");
+  box = glade_xml_get_widget (xml, "currency_hbox");
   aw->currency_edit = gnc_commodity_edit_new ();
   gtk_box_pack_start(GTK_BOX(box), aw->currency_edit, TRUE, TRUE, 0);
 
   gtk_signal_connect (GTK_OBJECT (aw->currency_edit), "changed",
                       GTK_SIGNAL_FUNC (currency_changed_cb), aw);
 
-  box = gtk_object_get_data(awo, "security_hbox");
+  box = glade_xml_get_widget (xml, "security_hbox");
   aw->security_edit = gnc_commodity_edit_new ();
   gtk_box_pack_start(GTK_BOX(box), aw->security_edit, TRUE, TRUE, 0);
 
-  aw->get_quote_check = gtk_object_get_data (awo, "get_quote_check");
+  aw->get_quote_check = glade_xml_get_widget (xml, "get_quote_check");
   gtk_signal_connect (GTK_OBJECT (aw->get_quote_check), "toggled",
                       GTK_SIGNAL_FUNC (get_quote_check_cb), aw);
 
-  box = gtk_object_get_data(awo, "source_box");
+  box = glade_xml_get_widget (xml, "source_box");
   aw->source_menu = gnc_ui_source_menu_create(aw_get_account (aw));
   gtk_box_pack_start(GTK_BOX(box), aw->source_menu, TRUE, TRUE, 0);
 
-  box = gtk_object_get_data(awo, "quote_tz_box");
+  box = glade_xml_get_widget (xml, "quote_tz_box");
   aw->quote_tz_menu = gnc_ui_quote_tz_menu_create(aw_get_account (aw));
   gtk_box_pack_start(GTK_BOX(box), aw->quote_tz_menu, TRUE, TRUE, 0);
 
-  box = gtk_object_get_data(awo, "parent_scroll");
+  box = glade_xml_get_widget (xml, "parent_scroll");
 
   aw->top_level_account = xaccMallocAccount();
   xaccAccountSetName(aw->top_level_account, _("New top level account"));
@@ -1657,15 +1657,15 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_signal_connect(GTK_OBJECT (aw->parent_tree), "unselect_account",
 		     GTK_SIGNAL_FUNC(gnc_parent_tree_select), aw);
 
-  aw->tax_related_button = gtk_object_get_data (awo, "tax_related_button");
+  aw->tax_related_button = glade_xml_get_widget (xml, "tax_related_button");
 
-  box = gtk_object_get_data(awo, "opening_balance_box");
+  box = glade_xml_get_widget (xml, "opening_balance_box");
   amount = gnc_amount_edit_new ();
   aw->opening_balance_edit = amount;
   gtk_box_pack_start(GTK_BOX(box), amount, TRUE, TRUE, 0);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
 
-  box = gtk_object_get_data (awo, "opening_balance_date_box");
+  box = glade_xml_get_widget (xml, "opening_balance_date_box");
   date = gnc_date_edit_new(time(NULL), FALSE, FALSE);
   aw->opening_balance_date_edit = date;
   gtk_box_pack_start(GTK_BOX(box), date, TRUE, TRUE, 0);
@@ -1673,14 +1673,15 @@ gnc_account_window_create(AccountWindow *aw)
   aw->opening_balance_page =
     gtk_notebook_get_nth_page (GTK_NOTEBOOK (aw->notebook), 1);
 
-  aw->opening_equity_radio = gtk_object_get_data (awo, "opening_equity_radio");
+  aw->opening_equity_radio = glade_xml_get_widget (xml,
+                                                   "opening_equity_radio");
   gtk_signal_connect (GTK_OBJECT (aw->opening_equity_radio), "toggled",
                       GTK_SIGNAL_FUNC (opening_equity_cb), aw);
 
   aw->transfer_account_frame =
-    gtk_object_get_data (awo, "transfer_account_frame");
+    glade_xml_get_widget (xml, "transfer_account_frame");
 
-  box = gtk_object_get_data(awo, "transfer_account_scroll");
+  box = glade_xml_get_widget (xml, "transfer_account_scroll");
 
   aw->transfer_tree = gnc_account_tree_new ();
   gtk_clist_column_titles_hide (GTK_CLIST (aw->transfer_tree));
@@ -1692,7 +1693,7 @@ gnc_account_window_create(AccountWindow *aw)
   gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->transfer_tree));
 
   /* This goes at the end so the select callback has good data. */
-  aw->type_list = gtk_object_get_data(awo, "type_list");
+  aw->type_list = glade_xml_get_widget (xml, "type_list");
   gnc_account_type_list_create (aw);
 
   if (last_width == 0)

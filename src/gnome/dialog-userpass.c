@@ -49,7 +49,7 @@ gnc_get_username_password (GtkWidget *parent,
 
   xml = gnc_glade_xml_new ("userpass.glade", "Username Password Dialog");
 
-  dialog = dialog = glade_xml_get_widget (xml, "Username Password Dialog");
+  dialog = glade_xml_get_widget (xml, "Username Password Dialog");
 
   if (parent)
     gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));

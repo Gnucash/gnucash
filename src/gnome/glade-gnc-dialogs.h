@@ -10,5 +10,3 @@ GtkWidget* create_Financial_Calculator_Dialog (void);
 GtkWidget* create_Amortization_Schedule_Dialog (void);
 GtkWidget* create_Commodity_Selector_Dialog (void);
 GtkWidget* create_Commodity_Dialog (void);
-GtkWidget* create_Account_Dialog (void);
-GtkWidget* create_New_Commodity_Format_Druid (void);
