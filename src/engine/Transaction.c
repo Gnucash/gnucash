@@ -163,6 +163,12 @@ xaccCountSplits (Split **tarray)
 /********************************************************************\
 \********************************************************************/
 
+void xaccSplitSetSharePrice (Split *s, double amt)
+{
+   MARK_SPLIT(s);
+   s -> share_price = amt;
+}
+
 void xaccSplitSetShareAmount (Split *s, double amt)
 {
    MARK_SPLIT(s);
@@ -411,7 +417,7 @@ xaccTransAppendSplit (Transaction *trans, Split *split)
    if (!split) return;
    
    /* first, insert the split into the array */
-   split->parent = (struct _transaction *) trans;
+   split->parent = trans;
    num = xaccCountSplits (trans->dest_splits);
 
    oldarray = trans->dest_splits;
@@ -651,24 +657,27 @@ xaccTransSetDateStr (Transaction *trans, char *str)
 void
 xaccTransSetNum (Transaction *trans, const char *xnum)
 {
+   char * tmp = strdup (xnum);
    if (trans->num) free (trans->num);
-   trans->num = strdup (xnum);
+   trans->num = tmp;
    MarkChanged (trans);
 }
 
 void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
+   char * tmp = strdup (desc);
    if (trans->description) free (trans->description);
-   trans->description = strdup (desc);
+   trans->description = tmp;
    MarkChanged (trans);
 }
 
 void
 xaccTransSetMemo (Transaction *trans, const char *memo)
 {
+   char * tmp = strdup (memo);
    if (trans->source_split.memo) free (trans->source_split.memo);
-   trans->source_split.memo = strdup (memo);
+   trans->source_split.memo = tmp;
    MARK_SPLIT (&(trans->source_split));
 
    /* if there is only one split, then keep memos in sync. */
@@ -676,7 +685,7 @@ xaccTransSetMemo (Transaction *trans, const char *memo)
       if (0x0 != trans->dest_splits[0]) {
          if (0x0 == trans->dest_splits[1]) {
             free (trans->dest_splits[0]->memo);
-            trans->dest_splits[0]->memo = strdup (memo);
+            trans->dest_splits[0]->memo = strdup (tmp);
             MARK_SPLIT (trans->dest_splits[0]);
          }
       }
@@ -686,8 +695,10 @@ xaccTransSetMemo (Transaction *trans, const char *memo)
 void
 xaccTransSetAction (Transaction *trans, const char *actn)
 {
+   char * tmp = strdup (actn);
+
    if (trans->source_split.action) free (trans->source_split.action);
-   trans->source_split.action = strdup (actn);
+   trans->source_split.action = tmp;
    MARK_SPLIT (&(trans->source_split));
 
    /* if there is only one split, then keep action in sync. */
@@ -695,7 +706,7 @@ xaccTransSetAction (Transaction *trans, const char *actn)
       if (0x0 != trans->dest_splits[0]) {
          if (0x0 == trans->dest_splits[1]) {
             free (trans->dest_splits[0]->action);
-            trans->dest_splits[0]->action = strdup (actn);
+            trans->dest_splits[0]->action = strdup (tmp);
             MARK_SPLIT (trans->dest_splits[0]);
          }
       }
@@ -774,16 +785,18 @@ xaccTransIsSource (Transaction *trans, Split *split)
 void
 xaccSplitSetMemo (Split *split, const char *memo)
 {
+   char * tmp = strdup (memo);
    if (split->memo) free (split->memo);
-   split->memo = strdup (memo);
+   split->memo = tmp;
    MARK_SPLIT (split);
 }
 
 void
 xaccSplitSetAction (Split *split, const char *actn)
 {
+   char * tmp = strdup (actn);
    if (split->action) free (split->action);
-   split->action = strdup (actn);
+   split->action = tmp;
    MARK_SPLIT (split);
 }
 
@@ -829,7 +842,7 @@ xaccSplitGetReconcile (Split *split)
 }
 
 double
-xaccSplitGetAmount (Split * split)
+xaccSplitGetShareAmount (Split * split)
 {
    return (split->damount);
 }

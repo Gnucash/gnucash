@@ -158,14 +158,16 @@ char * xaccReadQIFDiscard( int fd )
 char * xaccReadQIFCategory (int fd, Account * acc) 
 {
    char * qifline;
+   char * tmp;
+
 
    if (!acc) return NULL;
 
-   acc -> flags = 0x0;    /* flags is byte */
-   acc -> type = -1;      /* type is byte */
-   acc -> accountName = 0x0;  /* string */
-   acc -> description = 0x0;  /* string */
-   acc -> notes = 0x0;  /* string */
+   xaccAccountBeginEdit (acc);
+   xaccAccountSetType (acc, -1);
+   xaccAccountSetName (acc, "");
+   xaccAccountSetDescription (acc, "");
+   xaccAccountSetNotes (acc, "");
 
    qifline = xaccReadQIFLine (fd);
    if (!qifline) return NULL;
@@ -176,12 +178,14 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 
      /* N == Name */
      if ('N' == qifline [0]) {
-        XACC_PREP_STRING (acc->accountName);
+        XACC_PREP_STRING (tmp);
+        xaccAccountSetName (acc, tmp);
      } else 
 
      /* D == Description */
      if ('D' == qifline [0]) {
-        XACC_PREP_STRING (acc->description);
+        XACC_PREP_STRING (tmp);
+        xaccAccountSetDescription (acc, tmp);
      } else 
 
      /* T == Taxable -- this income is taxable */
@@ -190,12 +194,12 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 
      /* E == Expense Category */
      if ('E' == qifline [0]) {
-        acc->type = EXPENSE;
+        xaccAccountSetType (acc, EXPENSE);
      } else 
 
      /* I == Income Category */
      if ('I' == qifline [0]) {
-        acc->type = INCOME;
+        xaccAccountSetType (acc, INCOME);
      } else 
 
      /* R == Tax Rate Indicator; -- some number ... */
@@ -217,10 +221,7 @@ char * xaccReadQIFCategory (int fd, Account * acc)
      qifline = xaccReadQIFLine (fd);
    }
 
-   XACC_PREP_NULL_STRING (acc->accountName);
-   XACC_PREP_NULL_STRING (acc->description);
-   XACC_PREP_NULL_STRING (acc->notes);
-
+   xaccAccountCommitEdit (acc);
    return qifline;
 }
 
@@ -236,14 +237,15 @@ char * xaccReadQIFCategory (int fd, Account * acc)
 char * xaccReadQIFAccount (int fd, Account * acc) 
 {
    char * qifline;
+   char * tmp;
 
    if (!acc) return NULL;
 
-   acc -> flags = 0x0;    /* flags is byte */
-   acc -> type = -1;      /* type is byte  */
-   acc -> accountName = 0x0;  /* string */
-   acc -> description = 0x0;  /* string */
-   acc -> notes = 0x0;  /* string */
+   xaccAccountBeginEdit (acc);
+   xaccAccountSetType (acc, -1);
+   xaccAccountSetName (acc, "");
+   xaccAccountSetDescription (acc, "");
+   xaccAccountSetNotes (acc, "");
 
    qifline = xaccReadQIFLine (fd);
    if (!qifline) return NULL;
@@ -252,34 +254,36 @@ char * xaccReadQIFAccount (int fd, Account * acc)
    /* scan for account name, description, type */
    while (qifline) {
      if ('N' == qifline [0]) {
-        XACC_PREP_STRING (acc->accountName);
+        XACC_PREP_STRING (tmp);
+        xaccAccountSetName (acc, tmp);
      } else 
      if ('D' == qifline [0]) {
-        XACC_PREP_STRING (acc->description);
+        XACC_PREP_STRING (tmp);
+        xaccAccountSetDescription (acc, tmp);
      } else 
      if ('T' == qifline [0]) {
 
         if (NSTRNCMP (&qifline[1], "Bank")) {
-           acc -> type = BANK;
+           xaccAccountSetType (acc, BANK);
         } else
         if (NSTRNCMP (&qifline[1], "Cash")) {
-           acc -> type = CASH;
+           xaccAccountSetType (acc, CASH);
         } else
         if (NSTRNCMP (&qifline[1], "CCard")) {
-           acc -> type = CREDIT;
+           xaccAccountSetType (acc, CREDIT);
         } else
         if (NSTRNCMP (&qifline[1], "Invst")) {
-           acc -> type = STOCK;
+           xaccAccountSetType (acc, STOCK);
         } else
         if (NSTRNCMP (&qifline[1], "Oth A")) {
-           acc -> type = ASSET;
+           xaccAccountSetType (acc, ASSET);
         } else 
         if (NSTRNCMP (&qifline[1], "Oth L")) {
-           acc -> type = LIABILITY;
+           xaccAccountSetType (acc, LIABILITY);
         } else 
         {
            printf ("QIF Parse: Unsupported account type %s \n", &qifline[1]);
-           acc -> type = -1;            /* hack alert -- */
+           xaccAccountSetType (acc, -1);    /* hack alert -- */
         }
      } else 
 
@@ -297,10 +301,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
      qifline = xaccReadQIFLine (fd);
    }
 
-   XACC_PREP_NULL_STRING (acc->accountName);
-   XACC_PREP_NULL_STRING (acc->description);
-   XACC_PREP_NULL_STRING (acc->notes);
-
+   xaccAccountCommitEdit (acc);
    return qifline;
 }
 
@@ -325,7 +326,8 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
       }
       if ('!' == qifline [0]) break;
 
-      if (-1 == acc->type) {  /* free up malloced data if unknown account type */
+      /* free up malloced data if unknown account type */
+      if (-1 == xaccAccountGetType (acc)) {  
          xaccFreeAccount(acc); 
          continue;
       }
@@ -336,7 +338,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
 
       /* check to see if this is a sub-account.
        * Sub-accounts will have a colon in the name */
-      str = acc->accountName;
+      str = xaccAccountGetName (acc);
       tok = strchr (str, ':');
       if (tok) {
          Account *parent;
@@ -350,9 +352,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
 
             /* trim off the parent account name ... */
             /* tok += sizeof(char);  leave behind the colon ... */
-            str = strdup (tok);
-            free (acc->accountName);
-            acc->accountName = str;
+            xaccAccountSetName (acc, str);
 
             xaccInsertSubAccount( parent, acc );
          } else {
@@ -463,7 +463,8 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
    xfer_acc = NULL;
    for (i=0; i<rootgrp->numAcc; i++) {
       Account *acc = rootgrp->account[i];
-      if (!strcmp(acc->accountName, qifline)) {
+      char * acc_name = xaccAccountGetName (acc);
+      if (!strcmp(acc_name, qifline)) {
          xfer_acc = acc;
          break;
       }
@@ -472,12 +473,12 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
    /* if not, create it */
    if (!xfer_acc) {
       xfer_acc = xaccMallocAccount ();
-      xfer_acc->accountName = strdup (qifline);
-      xfer_acc->description = strdup ("");
-      xfer_acc->notes = strdup ("");
+      xaccAccountSetName (xfer_acc, qifline);
+      xaccAccountSetDescription (xfer_acc, "");
+      xaccAccountSetNotes (xfer_acc, "");
 
       if (0 > acc_type) acc_type = GuessAccountType (qifline);
-      xfer_acc->type = acc_type;
+      xaccAccountSetType (xfer_acc, acc_type);
       insertAccount (rootgrp, xfer_acc);
    }
 
@@ -557,10 +558,11 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    /* if not, create it */
    if (!xfer_acc) {
       xfer_acc = xaccMallocAccount ();
-      xfer_acc->accountName = strdup (qifline);
-      xfer_acc->description = strdup ("");
-      xfer_acc->notes = strdup ("");
-      xfer_acc->type = STOCK;
+      xaccAccountSetName (xfer_acc, qifline);
+      xaccAccountSetDescription (xfer_acc, "");
+      xaccAccountSetNotes (xfer_acc, "");
+
+      xaccAccountSetType (xfer_acc, STOCK);
       xaccInsertSubAccount (acc, xfer_acc);
    }
 
@@ -581,15 +583,17 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
 
 #define XACC_ACTION(q,x)				\
    if (!strncmp (&qifline[1], q, strlen(q))) {		\
-      trans->source_split.action = strdup(x);	\
+      xaccSplitSetAction (source_split, (x));		\
    } else
 
 
 char * xaccReadQIFTransaction (int fd, Account *acc)
 {
    Transaction *trans;
+   Split *source_split;
    Split *split = NULL;
    char * qifline;
+   char * tmp;
    int isneg = 0;
    int got_share_quantity = 0;
    int share_xfer = 0;
@@ -605,6 +609,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    if ('!' == qifline [0]) return qifline;
 
    trans = xaccMallocTransaction ();
+   source_split = xaccTransGetSourceSplit (trans);
 
    /* scan for transaction date, description, type */
    while (qifline) {
@@ -624,13 +629,15 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      /* E == memo for split */
      if ('E' == qifline [0]) {   
         if (split) {
-           XACC_PREP_STRING (split->memo);
+           XACC_PREP_STRING (tmp);
+           xaccSplitSetMemo (split, tmp);
         }
      } else 
 
      /* I == share price */
      if ('I' == qifline [0]) {   
-         trans -> source_split.share_price = xaccParseUSAmount (&qifline[1]); 
+         double amt = xaccParseUSAmount (&qifline[1]); 
+         xaccSplitSetSharePrice (source_split, amt);
      } else 
 
      /* L == name of acount from which transfer occured */
@@ -641,7 +648,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* M == memo field */
      if ('M' == qifline [0]) {  
-        XACC_PREP_STRING (trans->source_split.memo);
+        XACC_PREP_STRING (tmp);
+        xaccSplitSetMemo (source_split, tmp);
      } else 
 
      /* N == check numbers for Banks, but Action for portfolios */
@@ -662,7 +670,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
         XACC_ACTION ("XIn", "Deposit")
         XACC_ACTION ("XOut", "Withdraw")
         {
-          XACC_PREP_STRING (trans->num);
+          XACC_PREP_STRING (tmp);
+          xaccTransSetNum (trans, tmp);
         }
      } else
 
@@ -674,7 +683,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('O' == qifline [0]) {   
         double pute;
         adjust = xaccParseUSAmount (&qifline[1]);
-        pute = (trans->source_split.damount) * (trans->source_split.share_price);
+        pute = xaccSplitGetValue (source_split);
         if (isneg) pute = -pute;
 
         printf ("QIF Warning: Adjustment of %.2f to amount %.2f not handled \n", adjust, pute);
@@ -682,13 +691,15 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* P == Payee, for Bank accounts */
      if ('P' == qifline [0]) {   
-        XACC_PREP_STRING (trans->description);
+        XACC_PREP_STRING (tmp);
+        xaccTransSetDescription (trans, tmp);
      } else
 
      /* Q == number of shares */
      if ('Q' == qifline [0]) {   
-         trans -> source_split.damount = xaccParseUSAmount (&qifline[1]);  
-         if (isneg) trans -> source_split.damount = - (trans->source_split.damount);
+         double amt = xaccParseUSAmount (&qifline[1]);  
+         if (isneg) amt = -amt;
+         xaccSplitSetShareAmount (source_split, amt);
          got_share_quantity = 1;
      } else 
 
@@ -696,15 +707,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('S' == qifline [0]) {   
          split = xaccMallocSplit();
 
-         split -> memo = 0x0;         /* string */
-         split -> damount = 0.0;      /* amount is double */
-         split -> share_price= 1.0;   /* share_price is double */
-         split -> reconciled = NREC;  /* reconciled is byte */
-         split -> parent = trans;     /* parent transaction */
-         split -> acc = (struct _account *) xaccGetXferQIFAccount (acc, qifline);
-
          xaccTransAppendSplit (trans, split);
-
+/* xxxxx */
+         split -> acc = xaccGetXferQIFAccount (acc, qifline);
          /* hack alert -- we should insert this split into 
           * the split account, and remove the L field */
      } else 
@@ -713,14 +718,16 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('T' == qifline [0]) {   
          /* ignore T for stock transactions, since T is a dollar amount */
          if (0 == got_share_quantity) {
-            trans -> source_split.damount = xaccParseUSAmount (&qifline[1]);  
-            if (isneg) trans -> source_split.damount = - (trans->source_split.damount);
+            double amt = xaccParseUSAmount (&qifline[1]);  
+            if (isneg) amt = -amt;
+            xaccSplitSetValue (source_split, amt);
          }
      } else 
 
      /* Y == Name of Security */
      if ('Y' == qifline [0]) {   
-        XACC_PREP_STRING (trans->description);
+        XACC_PREP_STRING (tmp);
+        xaccTransSetDescription (trans, tmp);
 
         is_security = 1;
         if (share_xfer) {
@@ -734,7 +741,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('$' == qifline [0]) {   
         /* for splits, $ records the part of the total for each split */
         if (split) {
-           split -> damount = xaccParseUSAmount (&qifline[1]);  
+           double amt = xaccParseUSAmount (&qifline[1]);  
+           xaccSplitSetValue (split, amt);
         } else {
            /* Currently, it appears that the $ amount is a redundant 
             * number that we can safely ignore.  To get fancy,
@@ -746,7 +754,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
            double parse, pute;
            int got, wanted;
            parse = xaccParseUSAmount (&qifline[1]);
-           pute = (trans->source_split.damount) * (trans->source_split.share_price);
+           pute = xaccSplitGetValue (source_split);
            if (isneg) pute = -pute;
    
            wanted = (int) (100.0 * parse + 0.5);
@@ -780,12 +788,6 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       return qifline;
    }
 
-   XACC_PREP_NULL_STRING (trans->num);
-   XACC_PREP_NULL_STRING (trans->description);
-   XACC_PREP_NULL_STRING (trans->source_split.memo);
-   XACC_PREP_NULL_STRING (trans->source_split.action);
-
-
    /* fundamentally differnt handling for securities and non-securities */
    if (is_security) {
 
@@ -802,10 +804,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * account as a debit, unless an alternate account
           * was specified. */
          if (xfer_acc) {
-            split->acc = (struct _account *) xfer_acc;
             xaccAccountInsertSplit (xfer_acc, split);
          } else {
-            split->acc = (struct _account *) acc;
             xaccAccountInsertSplit (acc, split);
          }
 
@@ -813,8 +813,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * sub_acc; the security account is credited.
           * But, just in case its missing, avoid a core dump */
          if (sub_acc) {
-            trans->source_split.acc = (struct _account *) sub_acc;
-            xaccAccountInsertSplit (sub_acc, split);
+/* xxx hack alert --- is this right ??? */
+            xaccAccountInsertSplit (sub_acc, source_split);
          }
       } else {
 
@@ -825,11 +825,9 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
           * account gets the dividend credit; otherwise, the 
           * main account gets it */
          if (xfer_acc) {
-            trans->source_split.acc = (struct _account *) xfer_acc;
-            xaccAccountInsertSplit (xfer_acc, &(trans->source_split));
+            xaccAccountInsertSplit (xfer_acc, source_split);
          } else {
-            trans->source_split.acc = (struct _account *) acc;
-            xaccAccountInsertSplit (acc, &(trans->source_split));
+            xaccAccountInsertSplit (acc, source_split);
          }
       }
 
@@ -838,16 +836,16 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
       /* if a transfer account was specified,  it is the debited account */
       if (xfer_acc) {
          if (!split) {
+            double amt = xaccSplitGetValue (source_split);
             split = xaccMallocSplit ();
             xaccTransAppendSplit (trans, split);
+            xaccSplitSetValue (split, -amt);
          }
-         split->acc = (struct _account *) xfer_acc;
          xaccAccountInsertSplit (xfer_acc, split);
       }
 
       /* the transaction itself appears as a credit */
-      trans->source_split.acc = (struct _account *) acc;
-      xaccAccountInsertSplit (acc, &(trans->source_split));
+      xaccAccountInsertSplit (acc, source_split);
    }
 
    return qifline;
@@ -916,10 +914,8 @@ xaccReadQIFAccountGroup( char *datafile )
         Account *acc   = xaccMallocAccount();
         DEBUG ("got bank\n");
 
-        acc->type = BANK;
-        acc->accountName = strdup ("Quicken Bank Account");
-        acc->description = strdup ("");
-        acc->notes = strdup ("");
+        xaccAccountSetType (acc, BANK);
+        xaccAccountSetName (acc, "Quicken Bank Account");
 
         insertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc);
@@ -942,10 +938,8 @@ xaccReadQIFAccountGroup( char *datafile )
         Account *acc   = xaccMallocAccount();
         DEBUG ("got Invst\n");
 
-        acc->type = BANK;
-        acc->accountName = strdup ("Quicken Investment Account");
-        acc->description = strdup ("");
-        acc->notes = strdup ("");
+        xaccAccountSetType (acc, STOCK);
+        xaccAccountSetName (acc, "Quicken Investment Account");
 
         insertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc);
@@ -983,6 +977,7 @@ xaccReadQIFAccountGroup( char *datafile )
            }
         } else {
            /* read account name, followed by dollar data ... */
+           char * acc_name;
            Account *preexisting;
            Account *acc   = xaccMallocAccount();
            DEBUG ("got account\n");
@@ -991,14 +986,16 @@ xaccReadQIFAccountGroup( char *datafile )
               xaccFreeAccount(acc); 
               continue;
            }
-           if (-1 == acc->type) {  /* free up malloced data if unknown account type */
+           /* free up malloced data if unknown account type */
+           if (-1 == xaccAccountGetType (acc)) {  
               xaccFreeAccount(acc); 
               continue;
            }
 
            /* check to see if we already know this account;
             * if we do, use it, otherwise create it */
-           preexisting = xaccGetAccountFromName (grp, acc->accountName);
+           acc_name = xaccAccountGetName (acc);
+           preexisting = xaccGetAccountFromName (grp, acc_name);
            if (preexisting) {
               xaccFreeAccount (acc);
               acc = preexisting;

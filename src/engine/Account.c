@@ -233,7 +233,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
   acc -> changed = TRUE;
   if( acc->parent != NULL ) acc->parent->saved = FALSE;
 
-  split->acc = (struct _account *) acc;
+  split->acc = acc;
     
   oldsplits = acc->splits;
   acc->numSplits ++;
@@ -677,31 +677,40 @@ xaccAccountSetType (Account *acc, int tip)
 void 
 xaccAccountSetName (Account *acc, char *str)
 {
+   char * tmp;
    if (!acc) return;
    CHECK (acc);
 
+   /* make strdup before freeing */
+   tmp = strdup (str);
    if (acc->accountName) free (acc->accountName);
-   acc->accountName = strdup (str);
+   acc->accountName = tmp;
 }
 
 void 
 xaccAccountSetDescription (Account *acc, char *str)
 {
+   char * tmp;
    if (!acc) return;
    CHECK (acc);
 
+   /* make strdup before freeing */
+   tmp = strdup (str);
    if (acc->description) free (acc->description);
-   acc->description = strdup (str);
+   acc->description = tmp;
 }
 
 void 
 xaccAccountSetNotes (Account *acc, char *str)
 {
+   char * tmp;
    if (!acc) return;
    CHECK (acc);
 
+   /* make strdup before freeing */
+   tmp = strdup (str);
    if (acc->notes) free (acc->notes);
-   acc->notes = strdup (str);
+   acc->notes = tmp;
 }
 
 /********************************************************************\

@@ -143,8 +143,9 @@ void          xaccSplitSetAction (Split *, const char *);
 void          xaccSplitSetReconcile (Split *, char);
 
 /* The following two functions set the amount on the split */
-void         xaccSplitSetValue (Split *, double);
 void         xaccSplitSetShareAmount (Split *, double);
+void         xaccSplitSetSharePrice (Split *, double);
+void         xaccSplitSetValue (Split *, double);
 
 
 /* The following four subroutines return the running balance up
@@ -178,9 +179,9 @@ char *        xaccSplitGetMemo (Split *split);
 char *        xaccSplitGetAction (Split *split);
 
 char          xaccSplitGetReconcile (Split *split);
-double        xaccSplitGetAmount (Split * split);
-double        xaccSplitGetValue (Split * split);
+double        xaccSplitGetShareAmount (Split * split);
 double        xaccSplitGetSharePrice (Split * split);
+double        xaccSplitGetValue (Split * split);
 
 Account *     xaccSplitGetAccount (Split *);
 
