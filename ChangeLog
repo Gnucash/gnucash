@@ -1,3 +1,11 @@
+2003-02-18 TomF changes for Gnome-2 branch
+
+	* autogen.sh: Use Gnome2 libraries
+	* configure.in: Initial changes to make autogen.sh work and have
+	  make use the correct glib_2_0.  Many changes still needed for
+	  make to complete without errors.
+	* acconfig.h: Use GETTEXT_PACKAGE
+
 2003-02-15  Derek Atkins  <derek@ihtfp.com>
 
 	* Start changes for Gnome-2.

@@ -51,11 +51,17 @@ AC_DEFINE_UNQUOTED(GNUCASH_MICRO_VERSION, $GNUCASH_MICRO_VERSION)
 
 dnl Set of available languages.
 ALL_LINGUAS="da de el en_GB es es_NI fr hu it ja nb nl pl pt pt_BR ru sk sv uk zh_CN zh_TW"
-AM_GNU_GETTEXT([use-libtool])
+
+GETTEXT_PACKAGE=gnucash
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
+               
+AM_GLIB_GNU_GETTEXT([use-libtool])
 
 
 AM_MAINTAINER_MODE
 AM_ACLOCAL_INCLUDE(macros)
+
 
 AC_PROG_INSTALL
 
@@ -81,14 +87,15 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel not installed?])
 fi
 
-AM_PATH_GLIB
+AM_PATH_GLIB_2_0
+
 
 if test ${no_glib}x = yesx
 then
   AC_MSG_ERROR([Cannot find glib. Check config.log])
 fi
 
-AC_CHECK_HEADERS(dlfcn.h dl.h ghttp_ssl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
+AC_CHECK_HEADERS(dlfcn.h dl.h utmp.h locale.h mcheck.h unistd.h wctype.h)
 
 DL_LIB=
 AC_CHECK_FUNCS(dlopen,,[
@@ -275,19 +282,33 @@ else
   AC_MSG_RESULT(yes)
 fi
 
+### --------------------------------------------------------------------------
+### See if we have pkg-config
+
+AC_PATH_PROG(PKG_CONFIG,pkg-config)
+if test "x$PKG_CONFIG" = x; then
+    # @*%&$ Ximian programmers renamed this application
+    AC_PATH_PROG(PKG_CONFIG,pkgconfig)
+    if test "x$PKG_CONFIG" = x; then
+    	AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
+    fi
+fi
+
+
 AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 
 ### --------------------------------------------------------------------------
 ### Gnome XML -- GNOME_XML_LIB is defined by GNOME_XML_CHECK
 
-GNOME_XML_CHECK
-GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
+# GNOME_XML_CHECK 2/18/03 remove to bypass autogen.sh message
+GNOME_XML_CFLAGS=`$PKG_CONFIG --cflags xml`
 AS_SCRUB_INCLUDE(GNOME_XML_CFLAGS)
 
 AC_SUBST(GNOME_XML_CFLAGS)
 
 oLIBS="$LIBS"
 LIBS="$LIBS $GNOME_XML_LIB"
+
 AC_CHECK_LIB(xml, xmlElemDump, [:], [
   AC_MSG_ERROR([libxml 1.8.3 or newer required for GnuCash])
   ])
@@ -750,13 +771,13 @@ AM_CONDITIONAL(GNUCASH_ENABLE_GUI, test x${gnc_build_gui} = xtrue)
 
 if test x${gnc_build_gui} = xtrue ;
 then
-    GNOME_INIT
+#    GNOME_INIT			2/18/03 remove
     GNOME_COMPILE_WARNINGS
-    GNOME_CHECK_GDK_PIXBUF
-    GNOME_PRINT_CHECK
+#    GNOME_CHECK_GDK_PIXBUF
+#    GNOME_PRINT_CHECK
     
     # gnome-print-check appears tobe sort of b0rked for the time being
-    GNOME_PRINT_CFLAGS=`${GNOME_CONFIG} --cflags print`
+    GNOME_PRINT_CFLAGS=`${PKG_CONFIG} --cflags print`
     AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
     
     ### ----------------------------------------------------------------------
@@ -775,11 +796,11 @@ then
     ### ----------------------------------------------------------------------
     AC_CHECK_LIB(gal, main, true,
       [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
-      `$GNOME_CONFIG --libs gal`)
+      `$PKG_CONFIG --libs gal`)
     
     AC_MSG_CHECKING([for gtkhtml < 1.1])
-    GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
-    GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
+    GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml`
+    GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml`
     if test "x$GTKHTML_LIBS" != x; then
 	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
 	# if found
@@ -789,14 +810,6 @@ then
 		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
 		     $GTKHTML_LIBS)
     else
-	AC_PATH_PROG(PKG_CONFIG,pkg-config)
-	if test "x$PKG_CONFIG" = x; then
-	    # @*%&$ Ximian programmers renamed this application
-	    AC_PATH_PROG(PKG_CONFIG,pkgconfig)
-	    if test "x$PKG_CONFIG" = x; then
-	    	AC_MSG_ERROR([Could not find the pkg-config (or pkgconfig) program.],)
-	    fi
-	fi
 	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
 	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
 	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
@@ -810,48 +823,11 @@ then
     fi
     AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     
-    GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
-    GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
-    
-    # Note: this doesn't croak if GHTTP_LIBS is empty! (e.g. on RH6.2)
-    AC_CHECK_LIB(ghttp, ghttp_request_new,
-                 GNOMEBUILDLIBS="${GNOMEBUILDLIBS} ghttp"
-                 AC_DEFINE(HAVE_LIBGHTTP)
-    	     if test "x$GHTTP_LIBS" = "x" ; then
-    		GHTTP_LIBS=-lghttp
-    	     fi,
-                 AC_MSG_ERROR([Cannot find ghttp. See the README and config.log for more info.]),
-                 $GHTTP_LIBS)
-    
-    AC_CHECK_LIB(ghttp, ghttp_enable_ssl,
-                 AC_DEFINE(HAVE_OPENSSL),
-    	     AC_MSG_WARN([****** ghttp does not have SSL support.]),
-    	     $GHTTP_LIBS)
-    
-    AS_SCRUB_INCLUDE(GHTTP_CFLAGS)
     AC_SUBST(GTKHTML_LIBS)
     AC_SUBST(GTKHTML_CFLAGS)
-    AC_SUBST(GHTTP_LIBS)
-    AC_SUBST(GHTTP_CFLAGS)
     
     
     ### ----------------------------------------------------------------------
-    ### guppi
-    
-    AC_ARG_ENABLE( guppi,
-      [  --disable-guppi               compile without guppi support],
-      if test $enableval = no; then
-        USE_GUPPI=0
-      else
-        USE_GUPPI=1
-      fi,
-      USE_GUPPI=1 )
-    
-    if test ${USE_GUPPI} = 0; then
-      AC_MSG_WARN([Compiling without guppi support])
-    else
-      AC_DEFINE(USE_GUPPI)
-    
     
     AC_ARG_ENABLE( efence,
       [  --enable-efence               link using efence],
@@ -863,34 +839,6 @@ then
       USE_EFENCE=0
       EFENCE_LIBS="")
     AC_SUBST(EFENCE_LIBS)
-    
-    ## Things guppi needs (actually are these guppi dependencies or gtkhtml's?)
-    
-    # LAME: if you ask gnome-config for the zvt libs, it doesn't include
-    # imlib, though it needs it so we'll just steal gtkhtml's which does.
-    AC_CHECK_LIB(zvt, main, true,
-      [AC_MSG_ERROR([libzvt development files not found. See config.log.])],
-      `$GNOME_CONFIG --libs zvt` $GTKHTML_LIBS)
-    
-    #AC_CHECK_LIB(bonobo, main, true,
-    #  [AC_MSG_ERROR([libbonobo development files not found. See config.log.])
-    #],
-    #  `$GNOME_CONFIG --libs bonobo`)
-    
-    AC_CHECK_LIB(oaf, main, true,
-      [AC_MSG_ERROR([liboaf development files not found. See config.log.])],
-      `$GNOME_CONFIG --libs oaf`)
-    
-    ## guppi itself.
-    
-    GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
-    GUPPI_CFLAGS=`$GNOME_CONFIG --cflags libguppi`
-    AS_SCRUB_INCLUDE(GUPPI_CFLAGS)
-    LIBGUPPI_CHECK
-    AC_SUBST(GUPPI_LIBS)
-    AC_SUBST(GUPPI_CFLAGS)
-    
-    fi
     
     ### ----------------------------------------------------------------------
     ### XIM
@@ -982,14 +930,14 @@ GNUCASH_APP_UTILS_LIBS="${GNUCASH_ENGINE_LIBS} -lgncmod-calculation -lgncmod-app
 AC_SUBST(GNUCASH_APP_UTILS_CFLAGS)
 AC_SUBST(GNUCASH_APP_UTILS_LIBS)
 
-GNUCASH_NETWORK_UTILS_CFLAGS="${GLIB_CFLAGS} ${GHTTP_CFLAGS} ${GNOME_INCLUDEDIR}"
-GNUCASH_NETWORK_UTILS_LIBS="${GHTTP_LIBS} ${GNOME_LIBDIR} ${GNOME_LIBS} ${GNOMEUI_LIBS} -lgncmod-network-utils"
+GNUCASH_NETWORK_UTILS_CFLAGS="${GLIB_CFLAGS} ${GNOME_INCLUDEDIR}"
+GNUCASH_NETWORK_UTILS_LIBS="${GNOME_LIBDIR} ${GNOME_LIBS} ${GNOMEUI_LIBS} -lgncmod-network-utils"
 
 AC_SUBST(GNUCASH_NETWORK_UTILS_CFLAGS)
 AC_SUBST(GNUCASH_NETWORK_UTILS_LIBS)
 
-GNUCASH_GNOME_UTILS_CFLAGS="${GNUCASH_APP_UTILS_CFLAGS} ${GNUCASH_NETWORK_UTILS_CFLAGS} ${GNOME_PRINT_CFLAGS} ${GNOME_INCLUDEDIR} ${GUPPI_CFLAGS} ${GDK_PIXBUF_CFLAGS}"
-GNUCASH_GNOME_UTILS_LIBS="${GNUCASH_APP_UTILS_LIBS} ${GNUCASH_NETWORK_UTILS_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GNOME_PRINT_LIBS} ${GTKHTML_LIBS} ${GLADE_LIBS} ${GUPPI_LIBS} ${GDK_PIXBUF_LIBS} -lgncmod-gnome-utils"
+GNUCASH_GNOME_UTILS_CFLAGS="${GNUCASH_APP_UTILS_CFLAGS} ${GNUCASH_NETWORK_UTILS_CFLAGS} ${GNOME_PRINT_CFLAGS} ${GNOME_INCLUDEDIR} ${GDK_PIXBUF_CFLAGS}"
+GNUCASH_GNOME_UTILS_LIBS="${GNUCASH_APP_UTILS_LIBS} ${GNUCASH_NETWORK_UTILS_LIBS} ${GNOME_LIBDIR} ${GNOMEUI_LIBS} ${GNOME_PRINT_LIBS} ${GTKHTML_LIBS} ${GLADE_LIBS} ${GDK_PIXBUF_LIBS} -lgncmod-gnome-utils"
 
 AC_SUBST(GNUCASH_GNOME_UTILS_CFLAGS)
 AC_SUBST(GNUCASH_GNOME_UTILS_LIBS)
@@ -1067,7 +1015,7 @@ chmod u+x ${srcdir}/src/bin/overrides/gnucash-make-guids
 LIBOBJS_SEDSCRIPT="s,\.[[^.]]* ,$U&,g;s,\.[[^.]]*\$\$,$U&,"
 AC_SUBST(LIBOBJS_SEDSCRIPT)
 
-AC_OUTPUT( m4/Makefile  intl/Makefile po/Makefile.in
+AC_OUTPUT( m4/Makefile  po/Makefile.in intl/Makefile 
           dnl # Makefiles
           Makefile
           accounts/Makefile

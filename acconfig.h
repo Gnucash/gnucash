@@ -90,6 +90,7 @@
 
 /* internationalization with gettext */ 
 #undef HAVE_GETTEXT
+#undef GETTEXT_PACKAGE
 
 /* internationalization with catgets */ 
 #undef HAVE_CATGETS
