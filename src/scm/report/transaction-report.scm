@@ -27,24 +27,22 @@
 
   ;; returns a list contains elements of the-list for which predicate is true
   (define (gnc:filter-list the-list predicate)
-    (cond ((not (list? the-list))
-           (gnc:error "Attempted to filter a non-list object"))
-          ((null? the-list) '())
-          ((predicate (car the-list))
-           (cons (car the-list)
-                 (gnc:filter-list (cdr the-list) predicate)))
-          (else (gnc:filter-list (cdr the-list) predicate))))
+    (let loop ((rest the-list)
+               (collected '()))
+      (cond ((null? rest) (reverse collected))
+            (else (loop (cdr rest)
+                        (if (predicate (car rest))
+                            (cons (car rest) collected)
+                            collected))))))
 
   ;; like map, but restricted to one dimension, and
   ;; guaranteed to have inorder semantics.
   (define (gnc:inorder-map the-list fn)
-    (cond ((not (list? the-list))
-           (gnc:error "Attempted to map a non-list object"))
-          ((not (procedure? fn))
-           (gnc:error "Attempted to map a non-function object to a list"))
-          ((null? the-list) '())
-          (else (cons (fn (car the-list))
-                      (gnc:inorder-map (cdr the-list) fn)))))
+    (let loop ((rest the-list)
+               (collected '()))
+      (cond ((null? rest) (reverse collected))
+            (else (loop (cdr rest)
+                        (cons (fn (car rest)) collected))))))
 
   ;; extract fields out of the scheme split representation
 
@@ -83,23 +81,23 @@
 
   (define (gnc:tr-report-get-first-acc-name split-scm)
     (let ((other-splits (gnc:tr-report-get-other-splits split-scm)))
-      (cond ((= (length other-splits) 0) "-")
-            (else  (caar other-splits)))))
+      (cond ((null? other-splits) "-")
+            (else (gnc:account-get-full-name (caar other-splits))))))
 
   ;; builds a list of the account name and values for the other
   ;; splits in a transaction
-  (define (gnc:split-get-corresponding-account-name-and-values 
-           split split-filter) 
+  (define (gnc:split-get-corresponding-account-and-value
+           split split-filter)
     (let* ((diff-list '())
            (parent-transaction (gnc:split-get-parent split))
            (num-splits (gnc:transaction-get-split-count parent-transaction)))
-      (gnc:for-loop 
-       (lambda (n) 
-         (let* ((split-in-trans 
+      (gnc:for-loop
+       (lambda (n)
+         (let* ((split-in-trans
                  (gnc:transaction-get-split parent-transaction n))
                 (sub-split
-                 (list 
-                  (gnc:split-get-account-name split-in-trans)
+                 (list
+                  (gnc:split-get-account split-in-trans)
                   (gnc:split-get-value split-in-trans))))
            (if (split-filter sub-split)
                (set! diff-list
@@ -107,9 +105,8 @@
        0 num-splits 1)
       (reverse diff-list)))
 
-
   ;; takes a C split, extracts relevant data and converts to a scheme 
-  ;; representation.  split-filter is a predicate that filters the splits.
+  ;; representation. split-filter is a predicate that filters the splits.
   (define (gnc:make-split-scheme-data split split-filter)
     (vector
      (gnc:split-get-memo split) 
@@ -122,7 +119,18 @@
      (gnc:split-get-share-price split)
      (gnc:split-get-value split)
      (gnc:transaction-get-num (gnc:split-get-parent split))
-     (gnc:split-get-corresponding-account-name-and-values split split-filter)))
+     (gnc:split-get-corresponding-account-and-value split split-filter)))
+
+  (define (gnc:account->split-scm-list account sub-split-filter-pred)
+    (let ((num-splits (gnc:account-get-split-count account)))
+      (let loop ((index 0)
+                 (split (gnc:account-get-split account 0))
+                 (split-scms '()))
+        (cond ((>= index num-splits) (reverse split-scms))
+              (else (loop (+ index 1)
+                          (gnc:account-get-split account (+ index 1))
+                          (cons (gnc:make-split-scheme-data
+                                 split sub-split-filter-pred) split-scms)))))))
 
   ;; Note: This can be turned into a lookup table which will
   ;; *massively* simplify it...
@@ -231,8 +239,7 @@
           ((list accounts))
         (if (null? list)
             #f
-            (or (not (equal? (gnc:account-get-name (car list))
-                             (car sub-split)))
+            (or (not (equal? (car list) (car sub-split)))
                 (loop (cdr list)))))))
 
   ;; converts a scheme split representation to a line of HTML,
@@ -251,43 +258,44 @@
                                             split-scm))))))
       (for-each
        (lambda (split-sub first last)
-         (set! report-string
-               (string-append
-                report-string
-                "<TR><TD>"
-                (cond (first (gnc:print-date
-                              (gnc:tr-report-get-date split-scm)))
-                      (else ""))
-                "</TD><TD>"
-                (cond (first (gnc:tr-report-get-num split-scm))
-                      (else ""))
-                "</TD><TD>"
-                (cond (first (gnc:tr-report-get-description split-scm))
-                      (else ""))
-                "</TD><TD>"
-                (cond (first (gnc:tr-report-get-memo split-scm))
-                      (else ""))
-                "</TD><TD>"
-                (if (string? (car split-sub)) (car split-sub) "")
-                "</TD><TD>"
-                (cond ((< (cadr split-sub) 0)
-                       (string-append
-                        (gnc:amount->string (- (cadr split-sub)) #f #t #f)
+         (let ((account-name (gnc:account-get-full-name (car split-sub))))
+           (set! report-string
+                 (string-append
+                  report-string
+                  "<TR><TD>"
+                  (cond (first (gnc:print-date
+                                (gnc:tr-report-get-date split-scm)))
+                        (else ""))
+                  "</TD><TD>"
+                  (cond (first (gnc:tr-report-get-num split-scm))
+                        (else ""))
+                  "</TD><TD>"
+                  (cond (first (gnc:tr-report-get-description split-scm))
+                        (else ""))
+                  "</TD><TD>"
+                  (cond (first (gnc:tr-report-get-memo split-scm))
+                        (else ""))
+                  "</TD><TD>"
+                  account-name
+                  "</TD><TD>"
+                  (cond ((< (cadr split-sub) 0)
+                         (string-append
+                          (gnc:amount->string (- (cadr split-sub)) #f #t #f)
                         "</TD><TD>"))
-                      (else
-                       (string-append
-                        "</TD><TD>"	
-                        (gnc:amount->string (cadr split-sub) #f #t #f))))
+                        (else
+                         (string-append
+                          "</TD><TD>"	
+                          (gnc:amount->string (cadr split-sub) #f #t #f))))
                 "</TD>"
                 (cond ((not last) "</TR>")
-                      (else "")))))
-       other-splits
-       (if (null? other-splits)
-           ()
-           (append (list #t) (make-list (- (length other-splits) 1) #f)))
-       (if (null? other-splits)
-           ()
-           (append (make-list (- (length other-splits) 1) #f) (list #t))))
+                      (else ""))))))
+         other-splits
+         (if (null? other-splits)
+             ()
+             (append (list #t) (make-list (- (length other-splits) 1) #f)))
+         (if (null? other-splits)
+             ()
+             (append (make-list (- (length other-splits) 1) #f) (list #t))))
       (string-append
        report-string
        "<TD>"
@@ -300,18 +308,14 @@
   ;; we are doing multiple passes over the list - if it becomes a performance
   ;; problem some code optimisation will become necessary
   (define (gnc:tr-report-get-starting-balance scm-split-list beginning-date)
-    (cond ((or 
-            (eq? scm-split-list '())
-            (gnc:timepair-later-date
-             (gnc:tr-report-get-date (car scm-split-list))
-             beginning-date))
-           0)
-          (else
-           (+ 
-            (gnc:tr-report-get-value 
-             (car scm-split-list))
-            (gnc:tr-report-get-starting-balance
-             (cdr scm-split-list) beginning-date)))))
+    (let loop ((list scm-split-list)
+               (total 0))
+      (cond ((null? list) total)
+            ((gnc:timepair-lt beginning-date
+                              (gnc:tr-report-get-date (car list)))
+             total)
+            (else (loop (cdr list)
+                        (+ total (gnc:tr-report-get-value (car list))))))))
 
   ;; register a configuration option for the transaction report
   (define (trep-options-generator)
@@ -457,14 +461,19 @@
                                                           "Secondary Key"))
            (tr-report-secondary-order-op
             (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
+           (accounts (gnc:option-value tr-report-account-op))
            (prefix  (list "<HTML>" "<BODY bgcolor=#99ccff>"
-                          "<TABLE>" (gnc:titles)))
+                          "<TABLE>"
+                          "<caption><b>"
+                          (string-db 'lookup 'tr-report) " - "
+                          (gnc:account-get-full-name (car accounts))
+                          "</b></caption>"
+                          (gnc:titles)))
            (suffix (list "</TABLE>" "</BODY>" "</HTML>"))
            (balance-line '())
            (inflow-outflow-line '())
            (net-inflow-line '())
            (report-lines '())
-           (accounts (gnc:option-value tr-report-account-op))
            (date-filter-pred (gnc:tr-report-make-filter-predicate
                               (gnc:option-value begindate) 
                               (gnc:option-value enddate)))
@@ -477,18 +486,13 @@
                  "<TR><TD>" (string-db 'lookup 'no-accounts) "</TD></TR>"))
           (begin
             ; reporting on more than one account not yet supported
-            (gnc:for-each-split-in-account
-             (car accounts)
-             (lambda (split)		
-               (set! report-lines 
-                     (append! report-lines 
-                              (list (gnc:make-split-scheme-data 
-                                     split sub-split-filter-pred))))))
+            (set! report-lines
+                  (gnc:account->split-scm-list (car accounts)
+                                               sub-split-filter-pred))
             (set! starting-balance
                   (gnc:tr-report-get-starting-balance
                    report-lines (gnc:option-value begindate)))	
-            (set! report-lines (gnc:filter-list report-lines
-                                                date-filter-pred))
+            (set! report-lines (gnc:filter-list report-lines date-filter-pred))
             (set! report-lines
                   (sort!
                    report-lines 
@@ -548,6 +552,7 @@
       (append prefix balance-line report-lines
               inflow-outflow-line net-inflow-line suffix)))
 
+  (string-db 'store 'tr-report   "Transaction Report")
   (string-db 'store 'date        "Date")
   (string-db 'store 'num         "Num")
   (string-db 'store 'desc        "Description")

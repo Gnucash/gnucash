@@ -179,7 +179,7 @@
 
 ;; Find difference in seconds time 1 and time2
 (define (gnc:timepair-delta t1 t2)
-    (- (gnc:timepair->secs t2) (gnc:timepair->secs t1)))
+  (- (gnc:timepair->secs t2) (gnc:timepair->secs t1)))
 
 ;; timepair manipulation functions
 ;; hack alert  - these should probably be put somewhere else
@@ -215,3 +215,19 @@
 
 (define (gnc:timepair-later-or-eq-date t1 t2)
   (gnc:timepair-earlier-or-eq-date t2 t1))
+
+(define (gnc:timepair-start-day-time tp)
+  (let ((bdt (localtime (gnc:timepair->secs tp))))
+    (set-tm:sec bdt 0)
+    (set-tm:min bdt 0)
+    (set-tm:hour bdt 0)
+    (let ((newtime (car (mktime bdt))))
+      (cons newtime 0))))
+
+(define (gnc:timepair-end-day-time tp)
+  (let ((bdt (localtime (gnc:timepair->secs tp))))
+    (set-tm:sec bdtime 59)
+    (set-tm:min bdtime 59)
+    (set-tm:hour bdtime 23)
+    (let ((newtime (car (mktime bdt))))
+      (cons newtime 0))))

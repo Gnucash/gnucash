@@ -164,15 +164,14 @@ install:
 	$(INSTALL) src/swig/perl5/gnucash.so ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/quotes/Quote.pm ${GNC_LIBDIR}
 
-	$(INSTALL_DATA) README* ${GNC_DOCDIR}
+	$(INSTALL_DATA) doc/README* ${GNC_DOCDIR}
+	$(INSTALL_DATA) doc/*.txt ${GNC_DOCDIR}
+	$(INSTALL_DATA) doc/INSTALL ${GNC_DOCDIR}
 	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
 	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
 
 	$(INSTALL_DATA) man/gnucash.1 ${GNC_MANDIR}/man1
 	$(INSTALL_DATA) man/gnc-prices.1 ${GNC_MANDIR}/man1
-
-# 	@mkdir -p $(prefix)/toolbar
-# 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
 
   # Share directory
   # Try to do this in a platform independent way...

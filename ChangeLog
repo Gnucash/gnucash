@@ -1,5 +1,8 @@
 2000-03-29  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/scm/report/transaction-report.scm: bug fixes and speed
+ 	improvements
+
 	* src/engine/Group.c: added some new transaction traversal code
 
 	* src/scm/report/folio.scm: implement the old eperl report

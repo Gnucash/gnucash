@@ -939,8 +939,6 @@ print_check_cb(GtkWidget * widget, gpointer data)
   char         * payee;
   char         * memo;
   double       amount;
-  char         datestring[1024];
-  struct tm    * timestruct;
   time_t       date;
 
   SCM print_check = gh_eval_str("gnc:print-check");

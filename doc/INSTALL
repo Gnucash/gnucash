@@ -1,4 +1,3 @@
-
 You'll use "make install" when you want to do a normal FSSTND /usr/ or
 /usr/local style install where everything scatters across the
 filesystem in foo/gnucash/* directories.  You'll use "make
@@ -51,8 +50,3 @@ better.
 
 -- 
 Rob Browning <rlb@cs.utexas.edu> PGP=E80E0D04F521A094 532B97F5D64E3930
------ %< -------------------------------------------- >% ------
-The GnuCash / X-Accountant Mailing List
-To subscribe, send mail to majordomo@gnucash.org and
-put "subscribe gnucash-devel your@email.address" in the body
-
