@@ -173,7 +173,11 @@ typedef enum {
   STYLE_SUBMENU,
 } GNC_SPLIT_REG_ITEM;
 
-/* Easy way to pass the sort-type */
+/* Easy way to pass the sort-type 
+ * Note that this is STUPID -- we should be using parameter lists,
+ * but this provides a simple case statement internally.  This should
+ * probably not actually be exposed in the external interface....
+ */
 typedef enum {
   BY_NONE = 0,
   BY_STANDARD,
@@ -183,7 +187,9 @@ typedef enum {
   BY_NUM,
   BY_AMOUNT,
   BY_MEMO,
-  BY_DESC
+  BY_DESC,
+  BY_ACTION,
+  BY_NOTES
 } SortType;
 
 /**

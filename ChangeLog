@@ -1,3 +1,9 @@
+2003-05-29  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/glade/register.glade: add sort entries for Action and Notes
+	* src/gnome/gnc-split-reg.[ch]: add ability to sort by Action and Notes
+	Fixes #113990.
+
 2003-05-29  David Hampton  <hampton@employees.org>
 
 	* src/engine/iso-4217-currencies.scm: Update the Polish Zloty for

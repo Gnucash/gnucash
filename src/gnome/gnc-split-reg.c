@@ -174,6 +174,8 @@ void gnc_split_reg_sort_num_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_amount_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_memo_cb (GtkWidget *w, gpointer data);
 void gnc_split_reg_sort_desc_cb (GtkWidget *w, gpointer data);
+void gnc_split_reg_sort_action_cb (GtkWidget *w, gpointer data);
+void gnc_split_reg_sort_notes_cb (GtkWidget *w, gpointer data);
 
 void gnc_split_reg_destroy_cb(GtkWidget *widget, gpointer data);
 void gnc_split_reg_size_allocate( GtkWidget *widget,
@@ -1613,6 +1615,15 @@ gnc_split_reg_sort( GNCSplitReg *gsr, SortType sort_code )
       p1 = g_slist_prepend (p1, SPLIT_TRANS);
       p2 = standard;
       break;
+    case BY_ACTION:
+      p1 = g_slist_prepend (p1, SPLIT_ACTION);
+      p2 = standard;
+      break;
+    case BY_NOTES:
+      p1 = g_slist_prepend (p1, TRANS_NOTES);
+      p1 = g_slist_prepend (p1, SPLIT_TRANS);
+      p2 = standard;
+      break;
     default:
       g_slist_free (standard);
       g_return_if_fail (FALSE);
@@ -1679,6 +1690,20 @@ gnc_split_reg_sort_desc_cb(GtkWidget *w, gpointer data)
 {
   GNCSplitReg *gsr = data;
   gnc_split_reg_sort(gsr, BY_DESC);
+}
+
+void
+gnc_split_reg_sort_action_cb(GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gnc_split_reg_sort(gsr, BY_ACTION);
+}
+
+void
+gnc_split_reg_sort_notes_cb(GtkWidget *w, gpointer data)
+{
+  GNCSplitReg *gsr = data;
+  gnc_split_reg_sort(gsr, BY_NOTES);
 }
 
 void
