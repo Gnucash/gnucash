@@ -661,7 +661,6 @@ test_queries (GNCSession *session_base, const char *db_name, const char *mode)
   GNCBook *book;
   gboolean ok;
 
-  /* FIXME REMOVE */
   return TRUE;
 
   g_return_val_if_fail (db_name && mode, FALSE);

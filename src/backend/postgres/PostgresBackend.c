@@ -1557,6 +1557,10 @@ pgend_session_begin (Backend *backend,
    be->session = session;
    be->book = gnc_session_get_book(session);
 
+   if (be->blist) 
+     g_list_free (be->blist);
+   be->blist = g_list_append (NULL, be->book);
+
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
     * postgres://some.host.com/db_name
