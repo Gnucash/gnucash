@@ -545,6 +545,7 @@
 (export gnc:query-set-match-voids-only!)
 (export gnc:split-voided?)
 (export gnc:report-starting)
+(export gnc:report-render-starting)
 (export gnc:report-percent-done)
 (export gnc:report-finished)
 (export gnc:accounts-count-splits)

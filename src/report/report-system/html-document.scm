@@ -115,13 +115,17 @@
         
         ;; otherwise, do the trivial render. 
         (let* ((retval '())
-               (push (lambda (l) (set! retval (cons l retval)))))
+               (push (lambda (l) (set! retval (cons l retval))))
+	       (objs (gnc:html-document-objects doc))
+	       (work-to-do (length objs))
+	       (work-done 0))
           ;; compile the doc style 
           (gnc:html-style-table-compile (gnc:html-document-style doc)
                                         (gnc:html-document-style-stack doc))
           ;; push it 
           (gnc:html-document-push-style doc (gnc:html-document-style doc))
 
+	  (gnc:report-render-starting (gnc:html-document-title doc))
           (if (not (null? headers?))
               (begin 
                 (push "<html>\n")
@@ -138,14 +142,18 @@
           ;; now render the children
           (for-each 
            (lambda (child) 
-             (push (gnc:html-object-render child doc)))
-           (gnc:html-document-objects doc))
+	     (begin
+	       (push (gnc:html-object-render child doc))
+	       (set! work-done (+ 1 work-done))
+	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))))
+           objs)
 
           (if (not (null? headers?))
               (begin 
                 (push "</body>\n")
                 (push "</html>\n")))
           
+	  (gnc:report-finished)
           (gnc:html-document-pop-style doc)
           (gnc:html-style-table-uncompile (gnc:html-document-style doc))
 

@@ -674,6 +674,14 @@
 				  (gnc:gettext report-name))
 			 0))
 
+(define (gnc:report-render-starting report-name)
+  (gnc:mdi_show_progress (sprintf #f
+				  (_ "Rendering '%s' report ...")
+				  (if (string-null? report-name)
+				      (gnc:gettext "Untitled")
+				      (gnc:gettext report-name)))
+			 0))
+
 (define (gnc:report-percent-done percent)
   (gnc:mdi_show_progress #f (truncate percent)))
 
