@@ -109,12 +109,8 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
                                  NULL, TRUE);
 
     gnc_ui_delete_new_user_window();
-    gnc_ui_delete_nu_account_list();
 
     gh_eval_str("(gnc:default-ui-start)");
-
-    /* now we need to load all the accounts into the program */
-
     gh_eval_str("(gnc:show-main-window)");
     gh_eval_str("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
 
@@ -122,10 +118,8 @@ on_newUserDruidFinishPage_finish       (GnomeDruidPage  *gnomedruidpage,
 
     if(our_final_group)
     {
-        AccountGroup *group;
-
-        group = gnc_book_get_group(gncGetCurrentBook());
-        xaccGroupConcatGroup(group, our_final_group);
+        xaccGroupConcatGroup(gnc_book_get_group(gncGetCurrentBook()),
+                             our_final_group);
     }
 }
 
@@ -156,7 +150,6 @@ on_newAccountCancelDialog_OKButton_clicked
     
     gnc_ui_delete_new_user_window();
     gnc_ui_delete_nu_cancel_dialog();
-    gnc_ui_delete_nu_account_list();
     
     gh_eval_str("(gnc:default-ui-start)");
     gh_eval_str("(gnc:show-main-window)");
@@ -230,18 +223,6 @@ on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
     g_slist_free (list);
 }
 
-
-void
-on_newUserDruidFinishPage_prepare      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data)
-{
-    /* gnc_ui_show_nu_account_list(); */
-
-    /* need to reset the account guids merge the lists and replace the
-       commodity with the one determined earlier here */
-    /* need to fill up the account list info here */
-}
 
 static gpointer
 add_to_tree_account(Account* toadd, gpointer data)

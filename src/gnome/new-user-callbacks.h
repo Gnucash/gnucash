@@ -62,11 +62,6 @@ on_chooseAccountTypesPage_prepare      (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         user_data);
 
 void
-on_newUserDruidFinishPage_prepare      (GnomeDruidPage  *gnomedruidpage,
-                                        gpointer         arg1,
-                                        gpointer         user_data);
-
-void
 on_newAccountTypesList_select_row      (GtkCList        *clist,
                                         gint             row,
                                         gint             column,

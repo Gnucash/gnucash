@@ -35,9 +35,6 @@ int gnc_ui_delete_new_user_window(void);
 int gnc_ui_show_nu_cancel_dialog(void);
 int gnc_ui_delete_nu_cancel_dialog(void);
 
-int gnc_ui_show_nu_account_list(void);
-int gnc_ui_delete_nu_account_list(void);
-
 void gnc_new_user_set_balance (Account *account, gnc_numeric balance);
 gnc_numeric gnc_new_user_get_balance (Account *account);
 

@@ -3,5 +3,4 @@
  */
 
 GtkWidget* create_newUserDialog (void);
-GtkWidget* create_newAccountList (void);
 GtkWidget* create_addAccountCancelDialog (void);

@@ -41,7 +41,6 @@
 
 static GtkWidget *newUserDialog = NULL;
 static GtkWidget *cancelDialog = NULL;
-static GtkWidget *accountList = NULL;
 
 static Account*
 clone_account(const Account* from, gnc_commodity *com)
@@ -351,14 +350,3 @@ gnc_ui_delete_nu_cancel_dialog(void)
     return deleteit(&cancelDialog);
 }
 
-int
-gnc_ui_show_nu_account_list(void)
-{
-    return createit(create_newAccountList, &accountList);
-}
-
-int
-gnc_ui_delete_nu_account_list(void)
-{
-    return deleteit(&accountList);
-}
