@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5\n"
 "POT-Creation-Date: 2001-05-27 23:32-0700\n"
-"PO-Revision-Date: 2001-05-22 15:58-07:00\n"
+"PO-Revision-Date: 2001-06-01 11:23+00:00\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -27,17 +27,18 @@ msgid ""
 "    %s\n"
 "is not supported by this version of GnuCash."
 msgstr ""
+"Die URL\n"
+"    %s\n"
+"kann von dieser GnuCash Version nicht verarbeitet werden."
 
 #: src/FileDialog.c:77
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Can't parse the URL\n"
 "   %s\n"
 msgstr ""
-"Kann Datei\n"
+"Folgende URL konnte nicht verarbeitet werden:\n"
 "     %s\n"
-" nicht öffnen.\n"
-"%s"
 
 #: src/FileDialog.c:83
 #, c-format
@@ -142,7 +143,7 @@ msgid "An unknown I/O error occurred."
 msgstr "Ein unbekannter Eingabe/Ausgabefehler ist aufgetreten."
 
 #: src/FileDialog.c:176
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for\n"
 "   %s.\n"
@@ -151,10 +152,11 @@ msgid ""
 "\n"
 "Do you want to proceed with opening the database?"
 msgstr ""
-"Gnucash konnte die Datei %s nicht öffnen.\n"
-"Diese Datei wird möglicherweise von einem anderen\n"
-"User benutzt. In diesem Fall sollten Sie die Datei nicht\n"
-"öffnen.\n"
+"Für die Datei \n"
+"    %s\n"
+"konnte keine exklusive Schreibberechtigung erreicht werden. Diese\n"
+"Datei ist wahrscheinlich von jemand anderem in Benutzung. In diesem\n"
+"Fall sollten Sie die Datei nicht öffnen.\n"
 "\n"
 "Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
 
@@ -202,11 +204,11 @@ msgstr ""
 #: src/engine/Transaction.c:2021 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:344
 msgid "-- Split Transaction --"
-msgstr "-- Split Buchung --"
+msgstr "-- Mehrteilige Buchung --"
 
 #: src/SplitLedger.c:126 src/register/splitreg.c:747
 msgid "-- Stock Split --"
-msgstr "-- Aktien Split --"
+msgstr "-- Aktienteilung --"
 
 #: src/SplitLedger.c:822
 msgid "Rebalance Transaction"
@@ -222,7 +224,7 @@ msgstr "Per Hand ausgleichen"
 
 #: src/SplitLedger.c:861
 msgid "Let GnuCash add an adjusting split"
-msgstr "Automatisch einen ausgleichenden Split einfügen"
+msgstr "Automatisch eine ausgleichende Teilbuchung einfügen"
 
 #: src/SplitLedger.c:866
 msgid "Adjust current account split total"
@@ -255,7 +257,7 @@ msgid ""
 "You are about to overwrite an existing split.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Sie sind dabei, einen existierenden Split zu überschreiben.\n"
+"Sie sind dabei, eine bestehende Teilbuchung zu überschreiben.\n"
 "Sind Sie sicher, daß Sie das möchten?"
 
 #: src/SplitLedger.c:2360
@@ -263,7 +265,7 @@ msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Sie sind dabei eine bestehende Buchung zu überschreiben. \n"
+"Sie sind dabei, eine bestehende Buchung zu überschreiben. \n"
 "Sind Sie sicher, daß Sie das möchten?"
 
 #: src/SplitLedger.c:3088
@@ -514,7 +516,7 @@ msgstr "unausgeglichenes Saldo"
 #: src/engine/Transaction.c:2042 src/gnome/druid-stock-split.c:395
 #: src/gnome/window-register.c:865 src/register/splitreg.c:241
 msgid "Split"
-msgstr "Split"
+msgstr "Teilbuchung"
 
 #: src/engine/io-gncbin-r.c:482
 msgid "Lost Accounts"
@@ -846,9 +848,8 @@ msgid ""
 msgstr "Sind Sie sicher, dass Sie den aktuellen Preis löschen wollen?"
 
 #: src/gnome/dialog-price-editor.c:540
-#, fuzzy
 msgid "Remove old prices"
-msgstr "Aktuellen Preis entfernen."
+msgstr "Alte Preise entfernen"
 
 #: src/gnome/dialog-price-editor.c:554
 msgid "All prices before the date below will be deleted."
@@ -1057,7 +1058,7 @@ msgstr ""
 
 #: src/gnome/druid-qif-import.c:1287 src/gnome/druid-qif-import.c:1724
 msgid "(split)"
-msgstr "(Split)"
+msgstr "(Teilbuchung)"
 
 #: src/gnome/druid-qif-import.c:1451
 msgid "You must enter a Type for the commodity."
@@ -1401,7 +1402,7 @@ msgstr "Haben oder Soll"
 
 #: src/gnome/glade-gnc-dialogs.c:1130
 msgid "splits having amounts of:"
-msgstr "Splits mit folgenden Summen:"
+msgstr "Teilbuchung mit folgendem Betrag:"
 
 #: src/gnome/glade-gnc-dialogs.c:1151 src/gnome/glade-gnc-dialogs.c:1278
 #: src/gnome/glade-gnc-dialogs.c:1348
@@ -1431,7 +1432,7 @@ msgstr "Passendes Memo"
 
 #: src/gnome/glade-gnc-dialogs.c:1198
 msgid "Find splits whose Memo contains:"
-msgstr "Suche Splits, deren Memo folgendes enthält:"
+msgstr "Suche Teilbuchungen, deren Memo folgendes enthält:"
 
 #: src/gnome/glade-gnc-dialogs.c:1241
 msgid "Match number of shares"
@@ -2626,11 +2627,11 @@ msgstr "Stil Optionen"
 
 #: src/gnome/glade-gnc-dialogs.c:6474 src/gnome/glade-gnc-dialogs.c:6661
 msgid "Stock Split"
-msgstr "Aktien Split"
+msgstr "Aktienteilung"
 
 #: src/gnome/glade-gnc-dialogs.c:6494
 msgid "This wizard will help you record a stock split or stock merger."
-msgstr "Dieser Wizard wird Ihnen helfen, einen Aktiensplit einzugeben."
+msgstr "Dieser Assistent hilft Ihnen, eine Aktienteilung einzugeben."
 
 #: src/gnome/glade-gnc-dialogs.c:6505
 msgid "Stock Account"
@@ -2639,11 +2640,11 @@ msgstr "Aktiendepot"
 #: src/gnome/glade-gnc-dialogs.c:6514
 msgid ""
 "Select the account for which you want to record a stock split or merger."
-msgstr "Wählen Sie das Konto, für das ein Aktiensplit eingegeben werden soll."
+msgstr "Wählen Sie das Konto, für das Sie eine Aktienteilung eingeben möchten."
 
 #: src/gnome/glade-gnc-dialogs.c:6578
 msgid "Stock Split Details"
-msgstr "Aktiensplit Details"
+msgstr "Aktienteilung Details"
 
 #: src/gnome/glade-gnc-dialogs.c:6587
 msgid ""
@@ -2654,10 +2655,8 @@ msgid ""
 "You can also enter a description of the transaction, or accept the default "
 "one."
 msgstr ""
-"Geben Sie die Anzahl der Aktien ein, die sie durch den Aktiensplit oder "
-"Kapitalschnitt gewonnen oder verloren haben.\n"
-"Für einen Kaptialschnitt (negativer Split) geben Sie eine negative Zahl "
-"ein.\n"
+"Geben Sie die Anzahl der Aktien ein, die sie durch die Aktienteilung oder Zusammenschluß gewonnen oder verloren haben.\n"
+"Für einen Zusammenschluß geben Sie eine negative Zahl ein.\n"
 "Sie können auch eine Beschreibung der Buchung eingeben."
 
 #: src/gnome/glade-gnc-dialogs.c:6618
@@ -2669,8 +2668,8 @@ msgid ""
 "If you want to record a stock price for the split, enter it below.\n"
 "You may safely leave it blank."
 msgstr ""
-"Wenn Sie einen Aktienkurs für den Split eingeben wollen, geben Sie den\n"
-"Kurs unten an. Sie können das Kurseingabefeld auch leer lassen."
+"Wenn Sie einen Aktienkurs für die Teilbuchung eingeben wollen, geben\n"
+"Sie den Kurs unten an. Sie können das Kurseingabefeld auch leer lassen."
 
 #: src/gnome/glade-gnc-dialogs.c:6692
 msgid "New Price:"
@@ -2685,9 +2684,9 @@ msgid ""
 "If you received a cash disbursement as a result of the stock split,\n"
 "enter the details of that payment here. Otherwise, just click `Next'."
 msgstr ""
-"Wenn Sie einen Ausgleichsbetrag in Zusammenhang mit dem Aktiensplit\n"
+"Wenn Sie einen Ausgleichsbetrag in Zusammenhang mit der Aktienteilung\n"
 "erhalten haben, geben Sie diese Buchung hier ein. Wenn Sie keinen\n"
-"Ausgleichsbetrag erhalten haben, klicken Sie einfach \"Weiter\"."
+"Ausgleichsbetrag erhalten haben, klicken Sie \"Weiter\"."
 
 #: src/gnome/glade-gnc-dialogs.c:6777
 msgid "Cash Amount:"
@@ -2707,9 +2706,9 @@ msgid ""
 "You may also press `Back' to review your choices, or `Cancel' to\n"
 "quit without making any changes."
 msgstr ""
-"Wenn Sie die Eingabe des Aktiensplits abgeschlossen haben, klicken Sie\n"
-"\"Ende\". Sie können auch \"Zurück\" klicken um Ihre Eingaben zu\n"
-"überprüfen oder \"Abbrechen\" um diesen Dialog zu beenden ohne die\n"
+"Wenn Sie die Eingabe der Aktienteilung abgeschlossen haben, klicken\n"
+"Sie \"Ende\". Sie können auch \"Zurück\" klicken, um Ihre Eingaben zu\n"
+"überprüfen oder \"Abbrechen\", um diesen Dialog zu beenden, ohne die\n"
 "Änderungen zu speichern."
 
 #: src/gnome/glade-gnc-dialogs.c:6887
@@ -3081,19 +3080,16 @@ msgid "Welcome to GnuCash 1.6!"
 msgstr "Willkommen zu GnuCash 1.6"
 
 #: src/gnome/new-user-interface.c:598
-#, fuzzy
 msgid "Create a new set of accounts"
-msgstr "Ein neues Konto eröffnen"
+msgstr "Neue Konten eröffnen"
 
 #: src/gnome/new-user-interface.c:607
-#, fuzzy
 msgid "Import my QIF files"
-msgstr "QIF-Datei importieren"
+msgstr "QIF-Dateien importieren"
 
 #: src/gnome/new-user-interface.c:616
-#, fuzzy
 msgid "Open the new user tutorial"
-msgstr "Das GnuCash-Hilfe-Fenster öffnen"
+msgstr "Die Einführung für neue Benutzer öffnen"
 
 #: src/gnome/print-session.c:86
 msgid "Print GnuCash Document"
@@ -3247,7 +3243,7 @@ msgstr "Aktiensplit..."
 
 #: src/gnome/window-acct-tree.c:862 src/gnome/window-register.c:1442
 msgid "Record a stock split or a stock merger"
-msgstr ""
+msgstr "Buchen einer Aktienteilung oder eines Aktienzusammenschlusses"
 
 #: src/gnome/window-acct-tree.c:870 src/gnome/window-register.c:1450
 msgid "_New Account..."
@@ -3345,11 +3341,8 @@ msgid "You cannot save to that file."
 msgstr ""
 
 #: src/gnome/window-main.c:795
-#, fuzzy
 msgid "There was an error saving the file."
-msgstr ""
-"Es gab einen Fehler beim Öffnen der Datei. \n"
-"Möchten Sie fortfahren?"
+msgstr "Beim Speichern der Datei ist ein Fehler aufgetreten."
 
 #: src/gnome/window-main.c:835
 msgid "Select \"Exit\" to exit GnuCash."
@@ -3372,13 +3365,12 @@ msgid "Create a new file"
 msgstr "Eine neue Datei anlegen"
 
 #: src/gnome/window-main.c:930
-#, fuzzy
 msgid "Export Accounts..."
-msgstr "Verlorene Konten"
+msgstr "Konten exportieren..."
 
 #: src/gnome/window-main.c:931
 msgid "Export the account hierarchy to a new file"
-msgstr ""
+msgstr "Die Konten-Hierarchie in eine neue Datei exportieren"
 
 #: src/gnome/window-main.c:939
 msgid "Import QIF..."
@@ -3759,7 +3751,7 @@ msgstr "Aktuelle Buchung kopieren"
 #: src/gnome/window-register.c:866 src/gnome/window-register.c:1498
 #: src/gnome/window-register.c:1687
 msgid "Show all splits in the current transaction"
-msgstr "Alle Splits in aktueller Buchung anzeigen"
+msgstr "Alle Teilbuchungen in aktueller Buchung anzeigen"
 
 #: src/gnome/window-register.c:873
 msgid "Blank"
@@ -3825,7 +3817,7 @@ msgstr "Anzeigen der Buchungen auf einer oder zwei Zeilen"
 
 #: src/gnome/window-register.c:1256
 msgid "Auto-Split Ledger"
-msgstr "Auto-Split Register"
+msgstr "Auto-Teilbuchung Register"
 
 #: src/gnome/window-register.c:1257 src/scm/guile-strings.c:256
 msgid ""
@@ -3839,7 +3831,7 @@ msgstr "Buchungsbericht"
 
 #: src/gnome/window-register.c:1261 src/scm/guile-strings.c:258
 msgid "Show expanded transactions with all splits"
-msgstr "Zeige Buchungen ausführlich mit allen Splits"
+msgstr "Zeige Buchungen ausführlich mit allen Teilbuchungen"
 
 #: src/gnome/window-register.c:1271
 msgid "_Double Line"
@@ -3942,7 +3934,7 @@ msgstr "D_uplizieren"
 
 #: src/gnome/window-register.c:1497 src/gnome/window-register.c:1686
 msgid "_Split"
-msgstr "_Split"
+msgstr "_Teilbuchung"
 
 #: src/gnome/window-register.c:1505 src/gnome/window-register.c:1694
 msgid "_Blank"
@@ -3975,9 +3967,8 @@ msgid "Open an invoice report window for this transaction"
 msgstr "Rechnungsbericht für diese Buchung öffnen"
 
 #: src/gnome/window-register.c:1551
-#, fuzzy
 msgid "_Print Check..."
-msgstr "Scheck drucken"
+msgstr "Scheck _drucken..."
 
 #: src/gnome/window-register.c:1552
 msgid "Print a check using a standard format"
@@ -4049,14 +4040,11 @@ msgid ""
 "Warning: Just deleting all the other splits will make your account "
 "unbalanced. You probably shouldn't do this unless you're going to "
 "immediately add another split to bring the transaction back into balance."
-msgstr ""
-"Warnung : Das Löschen aller Splits führt zu einem unausgeglichenen Konto.Sie "
-"sollten das nicht tun, es sei denn, Sie wollen sofort einen anderen Split "
-"hinzufügen, um das Konto wieder auszugleichen."
+msgstr "Warnung : Das Löschen aller Teilbuchungen führt zu einem unausgeglichenen Konto. Sie sollten das nicht tun, es sei denn, Sie fügen sofort eine neue Teilbuchung hinzu, um das Konto wieder auszugleichen."
 
 #: src/gnome/window-register.c:2829
 msgid "You would be deleting reconciled splits!"
-msgstr ""
+msgstr "Sie würden ausgeglichene Teilbuchungen löschen."
 
 #: src/gnome/window-register.c:2837
 msgid "Delete Transaction"
@@ -4068,7 +4056,7 @@ msgstr "Die gesamte Buchung löschen"
 
 #: src/gnome/window-register.c:2869
 msgid "Delete all the other splits"
-msgstr "Alle Gegen-Splits löschen"
+msgstr "Alle Gegen-Teilbuchungen löschen"
 
 #: src/gnome/window-register.c:2962
 #, c-format
@@ -4305,20 +4293,16 @@ msgstr ""
 #: src/register/splitreg.c:735
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
-msgstr ""
-"Diese Buchung hat mehrfache Splits. Klicken Sie 'Split', um alle sehen zu "
-"können"
+msgstr "Diese Buchung hat mehrfache Teilbuchungen. Klicken Sie \"Teilbuchung\", um alle sehen zu können"
 
 #: src/register/splitreg.c:743
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
-msgstr ""
-"Diese Buchung hat Splits mit Aktien; klicken Sie 'Split', um alle sehen zu "
-"können"
+msgstr "Diese Buchung ist eine Aktienteilung; klicken Sie 'Teilbuchung', um Einzelheiten sehen zu können"
 
 #: src/register/splitreg.c:755
 msgid "Enter a description of the split"
-msgstr "Geben Sie eine Beschreibung des Splits ein"
+msgstr "Geben Sie eine Beschreibung der Teilbuchung ein"
 
 #: src/register/splitreg.c:759
 msgid "Enter a description of the transaction"
@@ -4462,14 +4446,12 @@ msgid "End of the previous Financial year/Accounting Period"
 msgstr "Ende des vorherigen Finanzjahres."
 
 #: src/scm/guile-strings.c:31
-#, fuzzy
 msgid "End Current Financial Year"
-msgstr "Beginn des aktuellen Finanzjahres"
+msgstr "Ende des aktuellen Finanzjahres"
 
 #: src/scm/guile-strings.c:32
-#, fuzzy
 msgid "End of the current Financial year/Accounting Period"
-msgstr "Ende des vorherigen Finanzjahres."
+msgstr "Ende des aktuellen Finanzjahres"
 
 #: src/scm/guile-strings.c:33
 msgid "Start of this month"
@@ -4790,9 +4772,8 @@ msgid "This report requires accounts to be selected."
 msgstr "Für diesen Bericht müssen Konten ausgewählt werden."
 
 #: src/scm/guile-strings.c:131 src/scm/report/guile-strings.c:330
-#, fuzzy
 msgid "No data"
-msgstr "Keine Summe"
+msgstr "Keine Daten gefunden"
 
 #: src/scm/guile-strings.c:132
 msgid ""
@@ -5237,21 +5218,19 @@ msgstr "Zweite Standard Hintergrundfarbe für die momentane Registerspalte"
 
 #: src/scm/guile-strings.c:305
 msgid "Split color"
-msgstr "Split Farbe"
+msgstr "Farbe Teilbuchung"
 
 #: src/scm/guile-strings.c:306
 msgid "The default background color for split rows in the register"
-msgstr "Standard Hintergrundfarbe für Zeilen im Mehrfach-Zeilen-Modus"
+msgstr "Normale Hintergrundfarbe für Teilbuchungen im Register"
 
 #: src/scm/guile-strings.c:308
 msgid "Split active color"
-msgstr "Farbe eines aktiven Split"
+msgstr "Farbe einer aktiven Teilbuchung"
 
 #: src/scm/guile-strings.c:309
 msgid "The background color for the current split row in the register"
-msgstr ""
-"Standard Hintergrundfarbe der aktiven Buchung für Zeilen im Doppel-Zeilen-"
-"Modus"
+msgstr "Hintergrundfarbe der aktiven Teilbuchung im Register"
 
 #: src/scm/guile-strings.c:311
 msgid "Double mode colors alternate with transactions"
@@ -5261,9 +5240,7 @@ msgstr "Doppel-Modus Farben wechseln sich mit jeder Buchung ab"
 msgid ""
 "Alternate the primary and secondary colors with each transaction, not each "
 "row"
-msgstr ""
-"Tausche die Farben jeder ausgeglichenen und Buchung mit Fehlern in jeder "
-"Buchung, nicht in jeder Spalte"
+msgstr "Farben mit jeder Buchung abwechseln, anstatt mit jeder Zeile"
 
 #: src/scm/guile-strings.c:314
 msgid "Automatic credit card payments"
@@ -5513,9 +5490,8 @@ msgid "How many automatic decimal places will be filled in."
 msgstr "Wieviele Dezimalstellen automatisch ausgefüllt werden."
 
 #: src/scm/guile-strings.c:383
-#, fuzzy
 msgid "No account list setup on new file"
-msgstr "Eine Kontenlisten-Option"
+msgstr "Es wird keine neue Kontostruktur für die neue Datei erstellt."
 
 #: src/scm/guile-strings.c:384
 msgid ""
@@ -5649,9 +5625,8 @@ msgid "Adding remaining good quotes."
 msgstr ""
 
 #: src/scm/guile-strings.c:428
-#, fuzzy
 msgid "_Reports"
-msgstr "Berichte"
+msgstr "_Berichte"
 
 #: src/scm/guile-strings.c:429
 msgid "_Assets & Liabilities"
@@ -5742,7 +5717,6 @@ msgid "Stocks"
 msgstr "Depots"
 
 #: src/scm/guile-strings.c:456
-#, fuzzy
 msgid "Mutual Funds"
 msgstr "Investmentfonds"
 
@@ -5759,21 +5733,18 @@ msgid "Equities"
 msgstr "Eigenkapital"
 
 #: src/scm/guile-strings.c:461
-#, fuzzy
 msgid "Checking"
-msgstr "Girokonten"
+msgstr "Girokonto"
 
 #: src/scm/guile-strings.c:462
 msgid "Savings"
 msgstr "Sparkonten"
 
 #: src/scm/guile-strings.c:463
-#, fuzzy
 msgid "Money Market"
-msgstr "Geldmarktfonds"
+msgstr "Geldmarktfond"
 
 #: src/scm/guile-strings.c:464
-#, fuzzy
 msgid "Credit Lines"
 msgstr "Kreditrahmen"
 
@@ -5790,15 +5761,16 @@ msgstr ""
 "Version der GnuCash 1.4. Serie verwenden."
 
 #: src/scm/guile-strings.c:469
-#, fuzzy
 msgid ""
 "The GnuCash online manual has lots of helpful information.  \n"
 "If you are upgrading from GnuCash 1.4, the section \"What's new in\n"
 "GnuCash 1.6\" is particularly interesting. You can access the manual\n"
 "under the Help menu."
 msgstr ""
-"Das GnuCash Online-Handbuch bietet jede Menge hilfreicher \n"
-"Informationen. Es befindet sich unter dem Hilfe-Menü."
+"Das GnuCash Online-Handbuch bietet jede Menge hilfreicher\n"
+"Informationen. Falls Sie von der GnuCash-Version 1.4 umgestiegen sind,\n"
+"ist der Abschnitt \"Was ist neu in GnuCash 1.6\" besonders interessant\n"
+"für Sie. Das Handbuch befindet sich unter dem Hilfe-Menü."
 
 #: src/scm/guile-strings.c:473
 msgid ""
@@ -5895,16 +5867,16 @@ msgid ""
 msgstr ""
 
 #: src/scm/guile-strings.c:519
-#, fuzzy
 msgid ""
 "To transfer funds between accounts with different currencies,\n"
 "you need an intermediate currency trading account. Click the Transfer\n"
 "button in the register toolbar to let GnuCash create the intermediate\n"
 "transaction. See the GnuCash online manual for details."
 msgstr ""
-"Um Beträge zwischen Konten mit verschiedenen Währungen zu\n"
-"transferieren, benötigen Sie ein Ausgleichs-Devisen-Konto. Siehe dazu\n"
-"auch das GnuCash-Online Manual."
+"Um Beträge zwischen Konten mit verschiedenen Währungen zu bewegen,\n"
+"benötigen Sie ein Devisenkonto als Zwischenschritt. Benutzen Sie den\n"
+"\"Buchen\"-Knopf im Register, um die zusätzliche Buchung von GnuCash\n"
+"erstellen zu lassen. Siehe dazu auch das GnuCash Online-Handbuch."
 
 #: src/scm/guile-strings.c:523
 msgid ""
@@ -6012,7 +5984,6 @@ msgid "Shows a piechart with the Assets balance at a given time"
 msgstr "Tortendiagramm der Aktiva eines Zeitpunkts anzeigen"
 
 #: src/scm/report/guile-strings.c:8
-#, fuzzy
 msgid "Shows a piechart with the Liabilities balance at a given time"
 msgstr "Tortendiagramm der Passiva eines Zeitpunkts anzeigen"
 
@@ -6225,9 +6196,8 @@ msgid "Profit"
 msgstr "Einnahmen"
 
 #: src/scm/report/guile-strings.c:67
-#, fuzzy
 msgid "Profit (Gain minus Loss)"
-msgstr "Einnahmen-/Ausgabenrechnung"
+msgstr "Gewinn (Einnahmen minus Verlust)"
 
 #: src/scm/report/guile-strings.c:68
 msgid "Gain/Loss"
@@ -6246,23 +6216,20 @@ msgid "Period end"
 msgstr "Periodenende"
 
 #: src/scm/report/guile-strings.c:75
-#, fuzzy
 msgid "Maximum"
-msgstr "Maximale Anzahl Segmente"
+msgstr "Maximum"
 
 #: src/scm/report/guile-strings.c:76
 msgid "Minimum"
-msgstr ""
+msgstr "Minimum"
 
 #: src/scm/report/guile-strings.c:77
-#, fuzzy
 msgid "Gain"
-msgstr "Leer"
+msgstr "Gewinn"
 
 #: src/scm/report/guile-strings.c:78
-#, fuzzy
 msgid "Loss"
-msgstr "Gewinn/Verlust"
+msgstr "Verlust"
 
 #: src/scm/report/guile-strings.c:96 src/scm/report/guile-strings.c:270
 msgid "Show Foreign Currencies"
@@ -6314,9 +6281,8 @@ msgid "Shows a barchart with the Assets developing over time"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:120
-#, fuzzy
 msgid "Shows a barchart with the Liabilities developing over time"
-msgstr "Tortendiagramm der Passiva eines Zeitpunkts anzeigen"
+msgstr "Tortendiagramm der Passiva-Entwicklung pro Zeit anzeigen"
 
 #: src/scm/report/guile-strings.c:121
 msgid "Income Over Time"
@@ -6331,7 +6297,6 @@ msgid "Assets Over Time"
 msgstr "Aktiva Entwicklung"
 
 #: src/scm/report/guile-strings.c:124
-#, fuzzy
 msgid "Liabilities Over Time"
 msgstr "Passiva Entwicklung"
 
@@ -6676,9 +6641,8 @@ msgid "Show Asset & Liability bars"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:239 src/scm/report/guile-strings.c:304
-#, fuzzy
 msgid "Show Net Worth bars"
-msgstr "Nettowert anzeigen?"
+msgstr "Nettowert anzeigen"
 
 #: src/scm/report/guile-strings.c:243
 msgid "Show Income and Expenses?"
@@ -6721,9 +6685,8 @@ msgid "Expense Chart"
 msgstr "Ausgaben Diagramm"
 
 #: src/scm/report/guile-strings.c:259
-#, fuzzy
 msgid "Liability Chart"
-msgstr "Passiva Tortendiagramm"
+msgstr "Passiva Diagramm"
 
 #: src/scm/report/guile-strings.c:260
 msgid "Net Worth Barchart"
@@ -6759,50 +6722,44 @@ msgid "Investment Portfolio"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:299
-#, fuzzy
 msgid "Price of Commodity"
-msgstr "Sortiere nach Währung/Aktie"
+msgstr "Preis der Währung/Aktie"
 
 #: src/scm/report/guile-strings.c:305
 msgid "Marker"
-msgstr ""
+msgstr "Markierung"
 
 #: src/scm/report/guile-strings.c:306
-#, fuzzy
 msgid "Marker Color"
-msgstr "Überschriften-Farbe"
+msgstr "Markierungsfarbe"
 
 #: src/scm/report/guile-strings.c:309
 msgid "Calculate the price of this commodity."
 msgstr ""
 
 #: src/scm/report/guile-strings.c:313
-#, fuzzy
 msgid "Actual Transactions"
-msgstr "Buchungen"
+msgstr "Tatsächliche Buchungen"
 
 #: src/scm/report/guile-strings.c:314
 msgid "The instantaneous price of actual currency transactions in the past"
-msgstr ""
+msgstr "Der aufgezeichnete Preis von tatsächlichen Buchungen in der Vergangenheit"
 
 #: src/scm/report/guile-strings.c:315
-#, fuzzy
 msgid "Price Database"
-msgstr "Preise"
+msgstr "Preis-Editor"
 
 #: src/scm/report/guile-strings.c:316
-#, fuzzy
 msgid "The recorded prices"
-msgstr "Quelle der Aktien-/Fonds-Kurse:"
+msgstr "Die explizit eingetragenen Preise"
 
 #: src/scm/report/guile-strings.c:317
 msgid "Color of the marker"
-msgstr ""
+msgstr "Farbe der Markierung"
 
 #: src/scm/report/guile-strings.c:321
-#, fuzzy
 msgid "Double-Weeks"
-msgstr "Doppel"
+msgstr "Zweiwöchentlich"
 
 #: src/scm/report/guile-strings.c:324
 msgid "All Prices equal"
@@ -6825,9 +6782,8 @@ msgid ""
 msgstr ""
 
 #: src/scm/report/guile-strings.c:328
-#, fuzzy
 msgid "Only one price"
-msgstr "Neuen Preis hinzufügen."
+msgstr "Nur ein Preis gefunden"
 
 #: src/scm/report/guile-strings.c:329
 msgid ""
@@ -6842,9 +6798,8 @@ msgid ""
 msgstr ""
 
 #: src/scm/report/guile-strings.c:332
-#, fuzzy
 msgid "Identical commodities"
-msgstr "Handelbare Waren"
+msgstr "Identische Währungen/Aktien"
 
 #: src/scm/report/guile-strings.c:333
 msgid ""
@@ -6853,9 +6808,8 @@ msgid ""
 msgstr ""
 
 #: src/scm/report/guile-strings.c:335
-#, fuzzy
 msgid "Price Scatterplot"
-msgstr "Preisberechnungsquelle"
+msgstr "Preisdiagramm"
 
 #: src/scm/report/guile-strings.c:348
 msgid "Make an invoice"
@@ -7058,38 +7012,32 @@ msgid "Default background for table cells."
 msgstr "Standard Hintergrundfarbe für Tabellenzellen."
 
 #: src/scm/report/guile-strings.c:433 src/scm/report/guile-strings.c:470
-#, fuzzy
 msgid "Alternate Table Cell Color"
-msgstr "Farbe für Tabellenzelle"
+msgstr "Zweite Farbe für Tabellenzelle"
 
 #: src/scm/report/guile-strings.c:434
-#, fuzzy
 msgid "Default alternate background for table cells."
 msgstr "Standard Hintergrundfarbe für Tabellenzellen."
 
 #: src/scm/report/guile-strings.c:436 src/scm/report/guile-strings.c:472
-#, fuzzy
 msgid "Subheading/Subtotal Cell Color"
-msgstr "Farbe für Tabellenzelle"
+msgstr "Farbe für Zwischenüberschrift/-summe"
 
 #: src/scm/report/guile-strings.c:437
-#, fuzzy
 msgid "Default color for subtotal rows."
-msgstr "Standard Hintergrundfarbe für Tabellenzellen."
+msgstr "Standard Hintergrundfarbe für Zwischensummen."
 
 #: src/scm/report/guile-strings.c:439 src/scm/report/guile-strings.c:474
 msgid "Sub-subheading/total Cell Color"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:440
-#, fuzzy
 msgid "Color for subsubtotals"
-msgstr "Zwischensummen anzeigen"
+msgstr "Farbe für Zwischen-Zwischensummen"
 
 #: src/scm/report/guile-strings.c:442 src/scm/report/guile-strings.c:476
-#, fuzzy
 msgid "Grand Total Cell Color"
-msgstr "Farbe für Tabellenzelle"
+msgstr "Farbe für Gesamtsumme"
 
 #: src/scm/report/guile-strings.c:443
 msgid "Color for grand totals"
@@ -7128,17 +7076,14 @@ msgid "Bevel depth on tables"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:489
-#, fuzzy
 msgid "Prepared by: "
-msgstr "Erstellt für"
+msgstr "Erstellt von:"
 
 #: src/scm/report/guile-strings.c:490
-#, fuzzy
 msgid "Prepared for: "
-msgstr "Erstellt für"
+msgstr "Erstellt für:"
 
 #: src/scm/report/guile-strings.c:491
-#, fuzzy
 msgid "Date: "
 msgstr "Datum:"
 
@@ -7147,9 +7092,8 @@ msgid "Fancy"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:493
-#, fuzzy
 msgid "Technicolor"
-msgstr "Zweite Farbe"
+msgstr "Farbenfroh"
 
 #: src/scm/report/guile-strings.c:496
 msgid "Background color for reports."
@@ -7164,16 +7108,14 @@ msgid "Enable hyperlinks in reports."
 msgstr "Hyperlinks in Berichten aktivieren."
 
 #: src/scm/report/guile-strings.c:512
-#, fuzzy
 msgid "Plain"
-msgstr "Leer"
+msgstr "Einfach"
 
 #: src/scm/report/guile-strings.c:516
 msgid "Alternate Period"
 msgstr "Abwechselnde Perioden"
 
 #: src/scm/report/guile-strings.c:517
-#, fuzzy
 msgid "Override or modify From: & To:"
 msgstr "Überschreiben oder modifizieren des Von: & An:"
 
@@ -7284,9 +7226,8 @@ msgid ""
 msgstr ""
 
 #: src/scm/report/guile-strings.c:547
-#, fuzzy
 msgid "Sub-"
-msgstr "Aus_buchen"
+msgstr "Zwischen-"
 
 #: src/scm/report/guile-strings.c:548
 msgid "Choose export format"
@@ -7331,9 +7272,8 @@ msgid ""
 msgstr ""
 
 #: src/scm/report/guile-strings.c:559
-#, fuzzy
 msgid "Tax Report / TXF Export"
-msgstr "Steuer-Bericht"
+msgstr "Steuer-Bericht / TXF Export"
 
 #: src/scm/report/guile-strings.c:560
 msgid "Taxable Income / Deductible Expenses / Export to .TXF file"
@@ -7344,18 +7284,12 @@ msgid "Taxable Income / Deductible Expenses"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:562
-#, fuzzy
 msgid "This report shows your Taxable Income and Deductible Expenses."
-msgstr ""
-"Diese Seite zeigt Ihnen zu versteuerndes Einkommen\n"
-"und absetzbare Ausgaben."
+msgstr "Diese Seite zeigt Ihnen zu versteuerndes Einkommen und absetzbare Ausgaben."
 
 #: src/scm/report/guile-strings.c:564
-#, fuzzy
 msgid "This page shows your Taxable Income and Deductible Expenses."
-msgstr ""
-"Diese Seite zeigt Ihnen zu versteuerndes Einkommen\n"
-"und absetzbare Ausgaben."
+msgstr "Diese Seite zeigt Ihnen zu versteuerndes Einkommen und absetzbare Ausgaben."
 
 #: src/scm/report/guile-strings.c:565
 msgid "Sorting"
@@ -7386,9 +7320,8 @@ msgid "Secondary Subtotal for Date Key"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:572
-#, fuzzy
 msgid "Total For "
-msgstr "Gesamt Eingänge"
+msgstr "Gesamtsumme für "
 
 #: src/scm/report/guile-strings.c:573 src/scm/report/guile-strings.c:702
 msgid "Grand Total"
@@ -7451,9 +7384,8 @@ msgid "Exact Time"
 msgstr ""
 
 #: src/scm/report/guile-strings.c:627
-#, fuzzy
 msgid "Sort by exact time"
-msgstr "Nach Datum sortieren"
+msgstr "Nach Tageszeit sortieren"
 
 #: src/scm/report/guile-strings.c:628
 msgid "Other Account Name"
@@ -7552,13 +7484,10 @@ msgid "Display the full account name"
 msgstr "Volle Kontenbezeichnung anzeigen"
 
 #: src/scm/report/guile-strings.c:673
-#, fuzzy
 msgid ""
 "Display the other account? (if this is a split transaction, this parameter "
 "is guessed)."
-msgstr ""
-"Das andere Konto anzeigen? (Wenn dies eine Split-Buchung ist, wird dieser "
-"Parameter geraten.)"
+msgstr "Das andere Konto anzeigen? (Wenn dies eine mehrteilige Buchung ist, wird dieser Parameter geraten.)"
 
 #: src/scm/report/guile-strings.c:684
 msgid "No amount display"
@@ -7581,12 +7510,9 @@ msgid "Reverse amount display for Income and Expense Accounts"
 msgstr "Einnahme- und Ausgabenkonten mit umgekehrten Vorzeichen"
 
 #: src/scm/report/guile-strings.c:695
-#, fuzzy
 msgid ""
 "Reverse amount display for Liability, Equity, Credit Card,and Income accounts"
-msgstr ""
-"Kreditkarten-, Passiva-, Ausgleichs- und Einkommenskonten mit\n"
-"umgekehrten Vorzeichen"
+msgstr "Kreditkarten-, Passiva-, Ausgleichs- und Einkommenskonten mit umgekehrten Vorzeichen"
 
 #: src/scm/report/guile-strings.c:698
 msgid "Primary Subtotals/headings"
@@ -7598,15 +7524,15 @@ msgstr ""
 
 #: src/scm/report/guile-strings.c:704
 msgid "Split Odd"
-msgstr "Ungerader Split"
+msgstr "Ungerade Teilbuchung"
 
 #: src/scm/report/guile-strings.c:706
 msgid "Split Even"
-msgstr "Gerader Split"
+msgstr "Gerade Teilbuchung"
 
 #: src/scm/report/guile-strings.c:710
 msgid "No matching transactions found"
-msgstr ""
+msgstr "Keine passenden Buchungen gefunden"
 
 #: src/scm/report/guile-strings.c:711
 msgid ""
@@ -7635,147 +7561,5 @@ msgid "GnuCash 1.6 has lots of nice features. Here are a few."
 msgstr ""
 
 #: src/scm/report/guile-strings.c:721
-#, fuzzy
 msgid "Welcome to GnuCash 1.6"
-msgstr "Mehr über GnuCash"
-
-#~ msgid "Net Gain"
-#~ msgstr "Netto Gewinn"
-
-#~ msgid "Avg Bal"
-#~ msgstr "Durchschnittl. Saldo"
-
-#~ msgid "Max Bal"
-#~ msgstr "Max. Saldo"
-
-#~ msgid "Min Bal"
-#~ msgstr "Min. Saldo"
-
-#~ msgid "Total In"
-#~ msgstr "Gesamt Eingänge"
-
-#~ msgid "Total Out"
-#~ msgstr "Gesamt Ausgänge"
-
-#~ msgid "Net Change"
-#~ msgstr "Netto Änderung"
-
-#~ msgid "New User Account Setup"
-#~ msgstr "Neue Benutzer - Konten erstellen"
-
-#~ msgid "Starting Balance"
-#~ msgstr "Eröffnungssaldo"
-
-#~ msgid "Account: "
-#~ msgstr "Konto:"
-
-#~ msgid "Enter Starting Balance"
-#~ msgstr "Bitte geben Sie den Anfangssaldo ein"
-
-#~ msgid "OK"
-#~ msgstr "Fertig"
-
-#~ msgid "New _Report"
-#~ msgstr "Neuer _Bericht"
-
-#~ msgid "Investment Portfolio Report: %s"
-#~ msgstr "Portfolio Bericht: %s"
-
-#~ msgid "Account:"
-#~ msgstr "Konto:"
-
-#~ msgid "_Print Check... (unfinished!)"
-#~ msgstr "_Scheck drucken (noch nicht fertig!)"
-
-#~ msgid "Account Chart"
-#~ msgstr "Kontendiagramm"
-
-#~ msgid "Mutual-Funds"
-#~ msgstr "Investmentfonds"
-
-#~ msgid "Liabilities/Equity"
-#~ msgstr "Passiva/Eigenkapital"
-
-#~ msgid "Show barchart as stacked barchart?"
-#~ msgstr "Balkendiagram mit gestapelten Balken anzeigen?"
-
-#~ msgid "Show net worth bars"
-#~ msgstr "Nettowert-Balken anzeigen"
-
-#~ msgid "Liability/Equity Chart"
-#~ msgstr "Passiva Diagramm"
-
-#, fuzzy
-#~ msgid "Net Worth Barchart2"
-#~ msgstr "Netto-Wert Balkendiagramm"
-
-#, fuzzy
-#~ msgid "Income/Expense Chart2"
-#~ msgstr "Einnahmen/Ausgaben Diagramm"
-
-#~ msgid "Background color for total"
-#~ msgstr "Hintergrundfarbe für Gesamtbetrag"
-
-#~ msgid "Date to report on"
-#~ msgstr "Datum des Berichts"
-
-#~ msgid "TAX Report Options"
-#~ msgstr "Optionen für den Steuer-Bericht"
-
-#~ msgid "Account Name(w/subtotal)"
-#~ msgstr "Kontoname (mit Zwischenbilanz)"
-
-#~ msgid "Account Code (w/subtotal)"
-#~ msgstr "Konto-Nummer (mit Zwischenbilanz)"
-
-#~ msgid "Date (subtotal monthly)"
-#~ msgstr "Datum (monatliche Zwischenbilanz)"
-
-#~ msgid "Sort by date & subtotal each month"
-#~ msgstr "Sortiere nach Datum mit monatlicher Zwischenzumme"
-
-#~ msgid "Transfer from/to (w/subtotal)"
-#~ msgstr "Gegenkonto (mit Summe)"
-
-#~ msgid ""
-#~ "Sort and subtotal by account transferred\n"
-#~ " from/to's name"
-#~ msgstr "Sortiere nach Namen des Gegenkontos mit Zwischensummen"
-
-#~ msgid ""
-#~ "You have disabled \"Tip of the Day\"\n"
-#~ "You can re-enable tips from the General\n"
-#~ "section of the Preferences menu"
-#~ msgstr ""
-#~ "Sie haben den \"Tipp des Tages\" abgeschaltet.\n"
-#~ "Sie können ihn wieder im Menü \"Voreinstellungen\"einschalten"
-
-#~ msgid "Choose"
-#~ msgstr "Auswählen"
-
-#~ msgid "Untitled"
-#~ msgstr "Ohne Bezeichnung"
-
-#~ msgid "Import"
-#~ msgstr "QIF Import"
-
-#~ msgid "_Accounts"
-#~ msgstr "_Konten"
-
-#~ msgid "Parameters"
-#~ msgstr "Parameter"
-
-#~ msgid "Open this report in a new window"
-#~ msgstr "Bericht in neuem Fenster öffnen"
-
-#~ msgid "Close this report window"
-#~ msgstr "Bericht schliessen"
-
-#~ msgid "Include Sub-Account balances"
-#~ msgstr "Unterkonten-Saldo einrechnen"
-
-#~ msgid "Income by Account"
-#~ msgstr "Gliederung Einkommen"
-
-#~ msgid "Tax"
-#~ msgstr "Steuer"
+msgstr "Willkommen zu GnuCash 1.6"
