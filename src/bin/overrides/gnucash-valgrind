@@ -1,4 +1,10 @@
 #!/bin/sh
+#
+# This script runs the version of gnucash in the current build tree
+# with the valgrind memory-allocation debugger.  This is a slightly
+# modified version of the overrides/gnucash shell script (and should
+# be kept in sync with that).
+#
 exec ./src/bin/overrides/gnucash-build-env valgrind -v --suppressions=./src/valgrind-gnucash.supp guile -e main -s "$0" "$@"
 !#
 
