@@ -32,18 +32,15 @@
 #include "util.h"
 
 /** GLOBALS *********************************************************/
-//extern XtAppContext app;
-//Boolean done=True;
-
-/*static GtkWidget *filebox = NULL;*/
-/*static gint       filebox_quit;*/
+#define CLOSED    1
+#define DESTROYED 2
 
 /* This static indicates the debugging module that this .o belongs to.   */
 static short module = MOD_GUI;
 
 /** PROTOTYPES ******************************************************/
-void fileBoxCB( GtkWidget mw, gpointer *data );
-void closeBoxCB( GtkWidget mw, gpointer *data );
+void fileBoxCB ( GtkWidget *mw, gpointer data );
+void closeBoxCB( GtkWidget *mw, gpointer data );
 
 /********************************************************************\
  * fileBox                                                          * 
@@ -62,31 +59,65 @@ void closeBoxCB( GtkWidget mw, gpointer *data );
  *         done    - whether fileBox should return                  * 
 \********************************************************************/
 char *
-fileBox(const char * title, const char * filter) {
-
-  PERR("STUB: FileBox not implemented for GNOME yet...\n");
-  return NULL;
-  
-#if 0
-  GtkWidget   *dialog = gtk_file_selection_new(title);
-  char*    fileName = NULL;
-
-  ENTER("fileBox");
-
-  fileName = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog));
-
-  gtk_widget_show(GTK_WIDGET(dialog));
-
-  /* Check to see if this is a valid datafile */
-  if ( fileName == NULL )
-    return NULL;
-
-//  done = True;
+fileBox(const char * title, const char * filter) 
+{
+  GtkWidget *fileBox;
+  gchar     *fileName = NULL;
+  gint      done = 0;
  
-  LEAVE("fileBox");
-  return fileName;
-#endif
+  if (title == NULL)
+  {
+    title = OPEN_STR;
+  }
 
+  if (filter == NULL)
+  {
+    // SET FILTER TO "*.xac"
+  }
+                          
+  ENTER("filebox");
+
+  fileBox = gtk_file_selection_new (title);
+  gtk_object_set_data(GTK_OBJECT(fileBox), "done", &done);
+
+  /* We should be able to set this dialog modal, but it doesn't work? */
+  /* gtk_window_set_modal(GTK_WINDOW(
+                          GTK_FILE_SELECTION(&(dialog)->window)), TRUE); */
+
+  /* Connect the dialog to the destroy even */  
+  gtk_signal_connect (GTK_OBJECT (fileBox), "destroy",
+                      (GtkSignalFunc) closeBoxCB, fileBox);
+                             
+  /* Connect the ok_button to file_ok_sel function */
+  gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (fileBox)->ok_button),
+                      "clicked", (GtkSignalFunc) fileBoxCB, fileBox );
+         
+  /* Connect the cancel_button to destroy the widget */
+  gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (fileBox)->cancel_button),
+                      "clicked", (GtkSignalFunc) closeBoxCB,
+                       fileBox);
+
+  gtk_widget_show(GTK_WIDGET(fileBox));
+
+  while ( !done )
+  {
+    gtk_main_iteration(); 
+  }
+
+  LEAVE("fileBox");
+
+  if ( done == CLOSED )
+  {
+    fileName = gtk_file_selection_get_filename(GTK_FILE_SELECTION(fileBox));  
+  }
+  if ( done == DESTROYED )
+  {
+    fileName = NULL;
+  }
+
+  /* Check validity of file here */
+
+  return fileName;
 }
 
 /********************************************************************\
@@ -101,26 +132,38 @@ fileBox(const char * title, const char * filter) {
  * Global: done    - whether fileBox should return                  * 
 \********************************************************************/
 void
-fileBoxCB( GtkWidget mw, gpointer *data )
-  {
-    /*char **fileName = (char **)data;*/
+fileBoxCB( GtkWidget *mw, gpointer data )
+{
+  gint      *done;
+  GtkWidget *fileBox;
+    
   ENTER("fileBoxCB");
 
-  /* NEED CALLBACK CODE DARNIT */
-  
-//  done = True;
+  fileBox = data;
+  done    = gtk_object_get_data(GTK_OBJECT(fileBox), "done");
+  *done   = CLOSED;
+
+  gtk_widget_hide(fileBox);
+
   LEAVE("fileBoxCB");
-  }
+}
 
 void
-closeBoxCB( GtkWidget mw, gpointer *data )
-  {
-  char **fileName = (char **)data;
-  ENTER("closeBoxCB");
-  *fileName = NULL;
-//  done = True;
-  LEAVE("closeBoxCB");
-  }
+closeBoxCB( GtkWidget *mw, gpointer data )
+{
+  gint      *done;
+  GtkWidget *fileBox;
+    
+  ENTER("fileBoxCB");
+
+  fileBox = data;
+  done    = gtk_object_get_data(GTK_OBJECT(fileBox), "done");
+  *done   = DESTROYED;
+
+  gtk_widget_destroy(fileBox);
+
+  LEAVE("fileBoxCB");
+}
 
 /* ======================== END OF FILE ======================== */
 

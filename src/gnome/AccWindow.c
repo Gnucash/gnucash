@@ -347,6 +347,9 @@ accWindow (AccountGroup *grp) {
                                   CANCEL_STR,
                                   NULL));
 
+  /* Make this dialog modal */
+  gtk_window_set_modal(GTK_WINDOW( &(accData->dialog)->window ),TRUE );
+
   /* Add accData to the dialogs object data so we can get it from anywhere later */
   gtk_object_set_data (GTK_OBJECT (accData->dialog), "accData", accData );
 
