@@ -22,6 +22,7 @@
 
 #include <ctype.h>
 #include <locale.h>
+#include <glib.h>
 #include <guile/gh.h>
 
 #include "finproto.h"
@@ -253,7 +254,7 @@ gnc_exp_parser_set_value (const char * variable_name, gnc_numeric value)
 
   key = g_strdup (variable_name);
 
-  pnum = g_new(ParserNum, 1);
+  pnum = g_new0(ParserNum, 1);
   pnum->value = value;
 
   g_hash_table_insert (variable_bindings, key, pnum);
@@ -269,7 +270,7 @@ make_predefined_vars_helper (gpointer key, gpointer value, gpointer data)
 
   var = g_new0 (var_store, 1);
 
-  pnum = g_new (ParserNum, 1);
+  pnum = g_new0 (ParserNum, 1);
   *pnum = *pnum_old;
 
   var->variable_name = g_strdup(key);
@@ -277,6 +278,16 @@ make_predefined_vars_helper (gpointer key, gpointer value, gpointer data)
   var->next_var = *vars_p;
 
   *vars_p = var;
+}
+
+static void
+make_predefined_vars_from_external_helper( gpointer key, gpointer value, gpointer data )
+{
+  ParserNum *pnum = g_new0( ParserNum, 1 );
+  if ( value != NULL )
+          pnum->value = *(gnc_numeric*)value;
+
+  make_predefined_vars_helper( key, pnum, data );
 }
 
 static var_store_ptr
@@ -354,7 +365,7 @@ numeric_ops(char op_sym,
   if ((left == NULL) || (right == NULL))
     return NULL;
 
-  result = (op_sym == ASN_OP) ? left : g_new(ParserNum, 1);
+  result = (op_sym == ASN_OP) ? left : g_new0(ParserNum, 1);
 
   switch (op_sym)
   {
@@ -396,8 +407,16 @@ negate_numeric(void *value)
 }
 
 gboolean
-gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
-                      char **error_loc_p)
+gnc_exp_parser_parse( const char * expression, gnc_numeric *value_p,
+                      char **error_loc_p )
+{
+  return gnc_exp_parser_parse_seperate_vars( expression, value_p,
+                                             error_loc_p, NULL );
+}
+
+gboolean
+gnc_exp_parser_parse_seperate_vars (const char * expression, gnc_numeric *value_p,
+                                    char **error_loc_p, GHashTable *varHash )
 {
   parser_env_ptr pe;
   var_store_ptr vars;
@@ -417,6 +436,11 @@ gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
   result.next_var = NULL;
 
   vars = make_predefined_variables ();
+
+  if ( varHash != NULL ) {
+    g_hash_table_foreach( varHash, make_predefined_vars_from_external_helper, &vars);
+  }
+
   lc = gnc_localeconv ();
 
   pe = init_parser (vars, *lc->mon_decimal_point, *lc->mon_thousands_sep,
@@ -460,8 +484,31 @@ gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
     last_error = get_parse_error (pe);
   }
 
-  update_variables (vars);
-  update_variables (parser_get_vars (pe));
+  if ( varHash != NULL ) {
+      var_store_ptr newVars;
+      gpointer maybeKey, maybeValue;
+      gnc_numeric *numericValue;
+
+      newVars = parser_get_vars( pe );
+      for ( ; newVars ; newVars = newVars->next_var ) {
+        pnum = newVars->value;
+        if ( g_hash_table_lookup_extended( varHash, newVars->variable_name,
+                                           &maybeKey, &maybeValue ) ) {
+          g_hash_table_remove( varHash, maybeKey );
+          g_free( maybeKey );
+          g_free( maybeValue );
+        }
+        numericValue = g_new0( gnc_numeric, 1 );
+        *numericValue = ((ParserNum*)newVars->value)->value;
+        numericValue = NULL;
+        g_hash_table_insert( varHash,
+                             g_strdup(newVars->variable_name),
+                             numericValue );
+      }
+  } else {
+    update_variables (vars);
+    update_variables (parser_get_vars (pe));
+  }
 
   free_predefined_variables (vars);
 

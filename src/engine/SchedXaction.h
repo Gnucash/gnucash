@@ -74,10 +74,10 @@ typedef struct gncp_SchedXaction {
         gboolean        autoCreateOption;
         gboolean        autoCreateNotify;
         gint            advanceCreateDays;
-  gint            advanceRemindDays;
+        gint            advanceRemindDays;
 
   Account        *template_acct;
-  GUID             guid;
+        GUID             guid;
         kvp_frame        *kvp_data;
 
 

@@ -360,7 +360,35 @@ gchar *s = N_("Date");
 gchar *s = N_("To-create...");
 gchar *s = N_("Name");
 gchar *s = N_("Date");
+gchar *s = N_("Ready?");
+gchar *s = N_("Variables");
+gchar *s = N_("Value");
+gchar *s = N_("Variable");
+gchar *s = N_("Edit Scheduled Transaction");
+gchar *s = N_("Name:");
+gchar *s = N_("Conditional on splits not having variables");
+gchar *s = N_("Create Automatically");
+gchar *s = N_("Notify me when created");
+gchar *s = N_("Create ");
+gchar *s = N_(" days in advance");
+gchar *s = N_("Remind me ");
+gchar *s = N_(" days in advance");
+gchar *s = N_("Creation Options");
+gchar *s = N_("No End");
+gchar *s = N_("End Date: ");
+gchar *s = N_("Number of Occurances:");
+gchar *s = N_("End");
+gchar *s = N_("Recurrence Frequency");
+gchar *s = N_("Recurrance Frequency");
+gchar *s = N_("Record");
+gchar *s = N_("REPLACEME with the Register control box");
+gchar *s = N_("Template Transactions");
 gchar *s = N_("Reminders");
+gchar *s = N_("The listed Scheduled Transactions are to-be created soon. \n"
+              "Select any which you would\n"
+              "like to create now, and click\n"
+              "\"OK\" to create them.");
+gchar *s = N_("Reminders...");
 gchar *s = N_("Name");
 gchar *s = N_("Next Date");
 gchar *s = N_("Days");

@@ -26,13 +26,13 @@
 
 #include "gnc-numeric.h"
 
-
 /* Initialize the expression parser. If this function is not
  * called before one of the other parsing routines (other than
- * gnc_exp_parser_shutdown), it will be called if needed. */
+ * gnc_exp_parser_shutdown), it will be called if needed.
+ */
 void gnc_exp_parser_init (void);
 
-/* Shutdown the expression parser and free any associated memory. */
+/* Shutdown the expression parser and free any associated memory in the ParserState. */
 void gnc_exp_parser_shutdown (void);
 
 /* Return a list of variable names which are currently defined
@@ -54,7 +54,8 @@ gboolean gnc_exp_parser_get_value (const char * variable_name,
 
 /* Set the value of the variable to the given value. If the variable is
  * not already defined, it will be after the call. */
-void gnc_exp_parser_set_value (const char * variable_name, gnc_numeric value);
+void gnc_exp_parser_set_value (const char * variable_name,
+                               gnc_numeric value);
 
 /* Parse the given expression using the current variable definitions.
  * If the parse was successful, return TRUE and, if value_p is
@@ -63,8 +64,18 @@ void gnc_exp_parser_set_value (const char * variable_name, gnc_numeric value);
  * returned and error_loc_p is non-NULL, *error_loc_p is set to the
  * character in expression where parsing aborted. If TRUE is returned
  * and error_loc_p is non-NULL, *error_loc_p is set to NULL. */
-gboolean gnc_exp_parser_parse (const char * expression, gnc_numeric *value_p,
-                               char **error_loc_p);
+gboolean gnc_exp_parser_parse (const char * expression,
+                               gnc_numeric *value_p,
+                               char **error_loc_p );
+
+/* Parses as per gnc_exp_parser_parse, but with an optional last argument
+ * dealing with a non-shared variable list and state, local to the expression
+ * being parsed.  This is a hashTable of variable names mapping to
+ * gnc_numeric pointers. */
+gboolean gnc_exp_parser_parse_seperate_vars (const char * expression,
+                                             gnc_numeric *value_p,
+                                             char **error_loc_p,
+                                             GHashTable *varHash );
 
 /* If the last parse returned FALSE, return an error string describing
  * the problem. Otherwise, return NULL. */

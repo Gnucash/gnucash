@@ -3399,12 +3399,6 @@ xaccSRSaveChangedTemplateCells( SplitRegister *reg,
     gnc_numeric credit;
     gnc_numeric debit;
 
-    /* credit = xaccGetPriceCellValue(reg->creditCell); */
-    /* debit  = xaccGetPriceCellValue(reg->debitCell); */
-    /* new_amount = gnc_numeric_sub_fixed (debit, credit); */
-
-    /* FIXME: the credit/debit cells are limited to
-       numeric values by definition [and code]. Blegh. */
     DEBUG( "kvp_frame before: %s\n", kvp_frame_to_string( kvpf ) );
 
     /* amountStr = gnc_numeric_to_string( new_amount ); */

@@ -69,13 +69,14 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
         sx->advanceCreateDays = 0;
         sx->advanceRemindDays = 0;
 
-//        sx->templateSplits = NULL;
+/*        sx->templateSplits = NULL; */
         /* create a new template account for our splits */
         sx->template_acct = xaccMallocAccount();
         name = guid_to_string( &sx->guid );
         xaccAccountSetName( sx->template_acct, name );
         xaccAccountSetCommodity( sx->template_acct,
-                                gnc_commodity_new( "template", "template", "template", "template", 1 ) );
+                                 gnc_commodity_new( "template", "template",
+                                                    "template", "template", 1 ) );
 	g_free( name );
         xaccAccountSetType( sx->template_acct, BANK );
         ag = gnc_book_get_template_group( book );
@@ -91,7 +92,6 @@ xaccSchedXactionMalloc( GNCBook *book )
         gnc_engine_generate_event( &sx->guid, GNC_EVENT_CREATE );
         return sx;
 }
-
 
 void
 sxprivtransactionListMapDelete( gpointer data, gpointer user_data )
@@ -196,14 +196,12 @@ xaccSchedXactionGetName( SchedXaction *sx )
 void
 xaccSchedXactionSetName( SchedXaction *sx, const gchar *newName )
 {
-        GString        *gstr;
         g_return_if_fail( newName != NULL );
         if ( sx->name != NULL ) {
                 g_free( sx->name );
+                sx->name = NULL;
         }
-        gstr = g_string_new( newName );
-        sx->name = gstr->str;
-        g_string_free( gstr, FALSE );
+        sx->name = g_strdup( newName );
 }
 
 GDate*
@@ -391,17 +389,17 @@ xaccSchedXactionGetNextInstance( SchedXaction *sx )
         } else {
                 g_date_set_time( &last_occur, time(NULL) );
         }
-#endif // 0
+#endif /* 0 */
         
         if ( g_date_valid( &sx->start_date )
              && ! g_date_valid( &sx->last_date ) ) {
-                // Think about this for a second, and you realize
-                // that if the start date is _today_, we need a
-                // last-occur date such that the 'next instance' is
-                // after that date... one day should be good.
-                //
-                // This only holds for the first instance [read: if the
-                // last[-occur]_date is invalid.
+                /* Think about this for a second, and you realize
+                 * that if the start date is _today_, we need a
+                 * last-occur date such that the 'next instance' is
+                 * after that date... one day should be good.
+                 *
+                 * This only holds for the first instance [read: if the
+                 * last[-occur]_date is invalid. */
                 g_date_subtract_days( &last_occur, 1 );
         }
 

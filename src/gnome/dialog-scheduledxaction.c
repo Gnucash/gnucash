@@ -351,8 +351,6 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         gtk_widget_destroy( sxed->dialog );
         sxed->sx = NULL;
 
-        /* xaccAccountDestroy( sxed->tmpAcct ); */
-
         g_free(sxed);
 }
 
@@ -485,7 +483,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         } widgets[] = {
                 { "ok_button",      "clicked", editor_ok_button_clicked,    NULL },
                 { "cancel_button",  "clicked", editor_close_button_clicked, NULL },
-		{ "help_button", "clicked", editor_help_button_clicked, NULL}, 
+		{ "help_button",    "clicked", editor_help_button_clicked,  NULL}, 
 
                 { "rb_enddate",     "toggled", endgroup_rb_toggled,         (gpointer)END_OPTION },
                 { "rb_num_occur",   "toggled", endgroup_rb_toggled,         (gpointer)NUM_OCCUR_OPTION },

@@ -153,14 +153,20 @@ Use: Storage for the various fields of a scheduled transaction's
 
 Name: sched-xaction/xfrm
 Type: GUID
-Entities: Split
+Entities: Split associated with a SchedXaction
 Use: The GUID of this Split's xfrm account.
 
 Name: sched-xaction/amnt
 Type: string
-Entities: Split in a SchedXaction
+Entities: Split associated with a SchedXaction
 Use: The amount field of a SchedXaction might be a formula, which we
      store here.
+
+Name: from-sched-xaction
+Type: GUID
+Entities: Transaction
+Use: Identifies that the Transaction was created from a ScheduledTransaction,
+     and stores the GUID of that SX.
 
 Name: user-keys
 Type: frame
@@ -168,4 +174,3 @@ Entities: All
 Use: This frame is used to store keys which are editable directly by
      the user. The program should not attach any semantics to keys
      under this frame.
-

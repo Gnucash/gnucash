@@ -1052,9 +1052,6 @@ gnc_numeric_to_string(gnc_numeric n) {
 
 const gchar *
 string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
-  /* Read a gnc_numeric from str, skipping any leading whitespace, and
-     returning a pointer to just past the last byte read.  Return NULL
-     on error. */
   int num_read;
   long long int tmpnum;
   long long int tmpdenom;

@@ -13,9 +13,12 @@ X XMLv2 I/O
 X need policy for start-dates in GNCFrequency
 X fix GetNextInstance and GetInstanceAfter, mostly for composite FreqSpecs
   X also needs to deal with >28-mday values WRT last-occur date + multipliers
+X would like "don't even tell me you instantiated it, just fscking do
+  it!" option for non-manual-conf SXes
 
 ##################################################
 ### To-Do
+### '.' = to-do, 'X' = done
 ##################################################
 
 . Engine ...Init() functions should be private.
@@ -41,18 +44,29 @@ X create a template register
 . need "since-last-run" UI for instanatiation.
   X/O create transactions
     X numeric
-    . formula
-      . need variable fill-in UI...
-        . re-use gnome-sheet code for a variable-binding table?
+    X formula
+      X need variable fill-in UI...
+        X re-use gnome-sheet code for a variable-binding table? -- ended up
+          using GtkTable [for now?]
   . need way to expire/purge scheduled transactions which have no chance of
     being created [outside their end date; once-scheduled and past].
-  . need 'reminders' of upcoming scheduled transactions during since-last-run
-    . Is it sufficient to look at the next instance of ea. transaction only?
+    . infrequent enough that a dialog should suffice.
+  X need 'reminders' of upcoming scheduled transactions during since-last-run
+    X Is it sufficient to look at the next instance of ea. transaction only?
       I think not... we probably want to look out until the transaction is
       outside the reminder range.
   . need some configuration for constantly-running GnuCash users of when to
     pop up the 'new scheduled transactions' dialog [option, time-of-day]
-  . Should deal with "nothing-to-do" better [not even show up].
+  . Should deal with "nothing-to-do" better [not even show up in the worst
+    [read: no auto-notify/to-create/reminders] case].
+  . Double-clicking on auto-create list should jump to transaction
+    . register of first split?
+  . double-clicking a reminder should [probably] move it up to the to-create
+    list.
+  X Easy UI way of moving through the SXes which need variable bindings.
+    [This presently is: click "Ok" and the next clist row which needs
+     bindings is selected.]
+  . Need some way to defer to-create SXes.
 
 . register mods
   . to see upcoming xactions, modifying future balance
@@ -64,13 +78,10 @@ X create a template register
     not-yet-created transactions.
   . The ability to turn a non-recurring transaction into a recurring one...
 
-X would like "don't even tell me you instantiated it, just fscking do
-  it!" option for non-manual-conf SXes
-
-
 . deal better with formulas in template transactions [real FormulaCell]
   . recognize purely numeric template transactions and balance at
     template-creation time.
+  . balance transaction via symbolic math?
 
 . GNCFrequency
   . initial-settings synchronization [start date, optionmenus]
@@ -82,7 +93,7 @@ X would like "don't even tell me you instantiated it, just fscking do
 
 . SX Creation...
   . Creation occurs due to a variety of circumstances:
-    . GnuCash starts and hasn't been run in some length of time; the
+    X GnuCash starts and hasn't been run in some length of time; the
       transactions which have "come due" since the last run are available for
       creation.
     . A user opens a register with future transactions in it; they manually
@@ -111,7 +122,9 @@ X would like "don't even tell me you instantiated it, just fscking do
     . reminder
       . lead-time
 
-. Changes
+
+
+. [NOTES] Dealing with SX state-changes
   . Create-into-future vs. create-normal
     . into-future -> normal : no change; the last_occur date will be
       appropriate, and will catch up eventually [unless the have-been-created
@@ -145,11 +158,13 @@ X would like "don't even tell me you instantiated it, just fscking do
     much whitespace on the two top panels]
   . Size/space issues.
   . Un-selecting "End Date" leaves calendar widget sensitive
+  . 'ESC' while editing template register causes window to go away [badly].
 
 . Scheduled Transaction List
 
 . Since-last-run
   . always goes one date past the instantiation date.
+  . tab-order on variable-entry window isn't always correct.
   X credit and debit seem reversed at instantiation time...
     . this is fixed, but is the fix correct?
 
@@ -166,7 +181,7 @@ X would like "don't even tell me you instantiated it, just fscking do
   staying around].
 . There probably wants to be a multi-month "example" View which the
   GNCFrequency can work with.
-  . jalapeno[ben] has some thoughts on this...
+  . jalapeno/ben has some thoughts on this...
 . Evolution calendar integ.
 . Evolution To-Do list integ. [SX reminders]
 

@@ -44,6 +44,8 @@
 #include "sixtp-dom-parsers.h"
 #include "SchedXaction.h"
 
+static short module = MOD_SX;
+
 /**
  * The XML output should look something like:
  * <gnc:count-data cd:type="schedXaction">XXX</gnc:count-data>
@@ -142,9 +144,6 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
                                   xaccSchedXactionGetGUID(sx)) );
 
     xmlNewTextChild( ret, NULL, SX_NAME, xaccSchedXactionGetName(sx) );
-
-    //xmlNewTextChild( ret, NULL, "sx:manual-conf",
-    //(xaccSchedXactionGetManual(sx) == 1 ? "t" : "f") );
 
     xmlNewTextChild( ret, NULL, SX_AUTOCREATE,
                      ( sx->autoCreateOption ? "y" : "n" ) );
@@ -323,24 +322,6 @@ sx_freqspec_handler( xmlNodePtr node, gpointer sx )
     return TRUE;
 }
 
-#if 0
-static
-gboolean
-sx_manualConf_handler( xmlNodePtr node, gpointer sx )
-{
-    gchar        *tmp;
-
-    tmp = dom_tree_to_text( node );
-    g_return_val_if_fail( tmp, FALSE );
-
-    xaccSchedXactionSetManual( (SchedXaction*)sx,
-                              safe_strcmp(tmp, "t") == 0 );
-
-    g_free(tmp);
-    return TRUE;
-}
-#endif //0
-
 static
 gboolean
 sx_numOccur_handler( xmlNodePtr node, gpointer sx )
@@ -408,7 +389,7 @@ struct dom_tree_handler sx_dom_handlers[] = {
     { SX_NUM_OCCUR,           sx_numOccur_handler,   0, 0 },
     { SX_REM_OCCUR,           sx_remOccur_handler,   0, 0 },
     { SX_END,                 sx_end_handler,        0, 0 },
-    { SX_TEMPL_ACCT,          sx_templ_acct_handler, 1, 0 }, 
+    { SX_TEMPL_ACCT,          sx_templ_acct_handler, 0, 0 },
     { SX_FREQSPEC,            sx_freqspec_handler,   1, 0 },
     { SX_SLOTS,               sx_slots_handler,      0, 0 },
 };
@@ -437,6 +418,15 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 
     sx = xaccSchedXactionMalloc( NULL );
 
+    /* FIXME: this should be removed somewhere near 1.8 release time. */
+    {
+            /* This is the just-created template acct.  It can safely be
+               removed, as we either will find or don't have a relevent
+               template_acct. */
+            xaccAccountDestroy( sx->template_acct );
+            sx->template_acct = NULL;
+    }
+
     successful = dom_tree_generic_parse( tree, sx_dom_handlers, sx );
 
     if ( successful ) {
@@ -444,6 +434,40 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
     } else {
             xmlElemDump( stdout, NULL, tree );
             xaccSchedXactionFree( sx );
+    }
+
+    /* FIXME: this should be removed somewhere near 1.8 release time. */
+    if ( sx->template_acct == NULL )
+    {
+            AccountGroup *ag;
+            char *id;
+            Account *acct;
+
+            ag = acct = id = NULL;
+
+            /* We're dealing with a pre-200107<near-end-of-month> rgmerk
+               change re: storing template accounts. */
+            /* Fix: get account with name of our GUID from the template
+               accounts group.  Make that our template_acct pointer. */
+            id = guid_to_string( xaccSchedXactionGetGUID( sx ) );
+            ag = gnc_book_get_template_group( ((sixtp_gdv2*)gdata->data)->book );
+            if ( ag == NULL )
+            {
+                    PERR( "Error getting template account group from being-parsed Book." );
+                    xmlFreeNode( tree );
+                    return FALSE;
+            }
+            acct = xaccGetAccountFromName( ag, id );
+            if ( acct == NULL )
+            {
+                    PERR( "Error getting template account with name \"%s\"", id );
+                    xmlFreeNode( tree );
+                    return FALSE;
+            }
+            DEBUG( "Got template account with name \"%s\" for SX with GUID \"%s\"",
+                   xaccAccountGetName( acct ), id );
+            /* FIXME: free existing template account. */
+            sx->template_acct = acct;
     }
 
     xmlFreeNode( tree );
@@ -459,14 +483,33 @@ gnc_schedXaction_sixtp_parser_create(void)
 
 static
 gboolean
-tt_act_handler( xmlNodePtr node, gpointer data)
+tt_act_handler( xmlNodePtr node, gpointer data )
 {
         gnc_template_xaction_data *txd = data;
         Account                *acc;
+        gnc_commodity *com;
+
         acc = dom_tree_to_account( node );
+
         if ( acc == NULL ) {
                 return FALSE;
         } else {
+                /* Check for the lack of a commodity [signifying that the
+                   pre-7/11/2001-CIT-change SX template Account was parsed [but
+                   incorrectly]. */
+                if ( xaccAccountGetCommodity( acc ) == NULL ) {
+                        /* FIXME: This should first look in the table of the
+                           book, maybe? The right thing happens [WRT file
+                           load/save] if we just _new all the time, but it
+                           doesn't seem right. This whole block should go
+                           away at some point, but the same concern still
+                           applies for
+                           SchedXaction.c:xaccSchedXactionInit... */
+                        com = gnc_commodity_new( "template", "template",
+                                                 "template", "template", 1 );
+                        xaccAccountSetCommodity( acc, com );
+                }
+
                 txd->accts = g_list_append( txd->accts, acc );
         }
         return TRUE;

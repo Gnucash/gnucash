@@ -1,3 +1,29 @@
+2001-07-30  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/glade/sched-xact.glade: Added seperate reminders
+	dialog from since-last-run dialog.  Removed reminders
+	frame/section from since-last-run dialog.  Added alternative SX
+	Editor UI [not presently used].
+
+	* src/gnome/dialog-sxsincelast.c: Changes for
+	reminders-as-seperate-dialog; selected reminders then update
+	since-last-run dialog [whether it's open or not]; the dialogs
+	[mostly] deal with their closing conditions correctly.  Support
+	for ad-hoc variables in template-transaction-split formulas.
+
+	* src/engine/gnc-schedxaction-xml-v2.c
+	(gnc_schedXaction_end_handler): Added support for restoring
+	in-development pre-template-account-stored-in-SX change.
+	(tt_act_handler): Added support for restoring in-devel pre-CIT
+	.gml2/XMLv2 files.
+
+	* src/gnc-exp-parser.c (gnc_exp_parser_parse_seperate_vars): Added
+	for Scheduled-Transaction-related since-last-run/split-formula
+	parsing.
+
+	* src/gnome/dialog-sxsincelast.c: Added support for variable entry
+	before creation/formulas in template transactions.
+
 2001-07-28  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/SchedXaction.{ch}: Store template account in the

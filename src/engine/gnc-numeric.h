@@ -158,6 +158,10 @@ gnc_numeric double_to_gnc_numeric(double in, gint64 denom,
 double      gnc_numeric_to_double(gnc_numeric in);
 
 gchar *gnc_numeric_to_string(gnc_numeric n);
+
+/* Read a gnc_numeric from str, skipping any leading whitespace, and
+   returning a pointer to just past the last byte read.  Return NULL
+   on error. */
 const gchar *string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
 
 #endif
