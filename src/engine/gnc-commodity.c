@@ -68,14 +68,14 @@ struct gnc_commodity_s
 struct gnc_commodity_namespace_s 
 {
   char    * namespace;
-  GHashTable * table;
-  GList      * list;
+  GHashTable * cm_table;
+  GList      * cm_list;
 };
 
 struct gnc_commodity_table_s 
 {
-  GHashTable * table;
-  GList      * list;
+  GHashTable * ns_table;
+  GList      * ns_list;
   gboolean     dirty;
 };
 
@@ -907,8 +907,8 @@ gnc_commodity_table *
 gnc_commodity_table_new(void) 
 {
   gnc_commodity_table * retval = g_new0(gnc_commodity_table, 1);
-  retval->table = g_hash_table_new(&g_str_hash, &g_str_equal);
-  retval->list = NULL;
+  retval->ns_table = g_hash_table_new(&g_str_hash, &g_str_equal);
+  retval->ns_list = NULL;
   retval->dirty = FALSE;
   return retval;
 }
@@ -967,14 +967,14 @@ guint
 gnc_commodity_table_get_number_of_namespaces(gnc_commodity_table* tbl)
 {
     g_return_val_if_fail(tbl, 0);
-    g_return_val_if_fail(tbl->table, 0);
-    return g_hash_table_size(tbl->table);
+    g_return_val_if_fail(tbl->ns_table, 0);
+    return g_hash_table_size(tbl->ns_table);
 }
 
 static void
 count_coms(gpointer key, gpointer value, gpointer user_data)
 {
-    GHashTable *tbl = ((gnc_commodity_namespace*)value)->table;
+    GHashTable *tbl = ((gnc_commodity_namespace*)value)->cm_table;
     guint *count = (guint*)user_data;
 
     if(safe_strcmp((char*)key, GNC_COMMODITY_NS_ISO) == 0)
@@ -993,9 +993,9 @@ gnc_commodity_table_get_size(gnc_commodity_table* tbl)
 {
     guint count = 0;
     g_return_val_if_fail(tbl, 0);
-    g_return_val_if_fail(tbl->table, 0);
+    g_return_val_if_fail(tbl->ns_table, 0);
 
-    g_hash_table_foreach(tbl->table, count_coms, (gpointer)&count);
+    g_hash_table_foreach(tbl->ns_table, count_coms, (gpointer)&count);
 
     return count;
 }
@@ -1014,7 +1014,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
 
   if (!table || !namespace || !mnemonic) return NULL;
 
-  nsp = g_hash_table_lookup(table->table, (gpointer)namespace);
+  nsp = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
 
   if(nsp) {
     /*
@@ -1027,7 +1027,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
 	break;
       }
     }
-    return g_hash_table_lookup(nsp->table, (gpointer)mnemonic);
+    return g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic);
   }
   else {
     return NULL;
@@ -1130,22 +1130,22 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     return c;
   }
 
-  nsp = g_hash_table_lookup(table->table, (gpointer)(comm->namespace));
+  nsp = g_hash_table_lookup(table->ns_table, (gpointer)(comm->namespace));
   str_cache = gnc_engine_get_string_cache ();
   
   if(!nsp) 
   {
     nsp = g_new0(gnc_commodity_namespace, 1);
-    nsp->table = g_hash_table_new(g_str_hash, g_str_equal);
+    nsp->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
     nsp->namespace = g_cache_insert(str_cache, comm->namespace);
-    g_hash_table_insert(table->table, 
+    g_hash_table_insert(table->ns_table, 
                         nsp->namespace, 
                         (gpointer)nsp);
-    table->list = g_list_append(table->list, nsp);
+    table->ns_list = g_list_append(table->ns_list, nsp);
   }
 
-  PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic, nsp->table, nsp->namespace);
-  g_hash_table_insert(nsp->table, 
+  PINFO ("insert %p %s into nsp=%p %s", comm->mnemonic, comm->mnemonic, nsp->cm_table, nsp->namespace);
+  g_hash_table_insert(nsp->cm_table, 
                       (gpointer)g_cache_insert(str_cache, comm->mnemonic),
                       (gpointer)comm);
 
@@ -1171,11 +1171,11 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
   c = gnc_commodity_table_lookup (table, comm->namespace, comm->mnemonic);
   if (c != comm) return;
 
-  nsp = g_hash_table_lookup (table->table, comm->namespace);
+  nsp = g_hash_table_lookup (table->ns_table, comm->namespace);
   if (!nsp) return;
 
-  nsp->list = g_list_remove(nsp->list, comm);
-  g_hash_table_remove (nsp->table, comm->mnemonic);
+  nsp->cm_list = g_list_remove(nsp->cm_list, comm);
+  g_hash_table_remove (nsp->cm_table, comm->mnemonic);
   /* XXX minor mem leak, should remove the key as well */
 }
 
@@ -1192,7 +1192,7 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
   
   if(!table || !namespace) { return 0; }
 
-  nsp = g_hash_table_lookup(table->table, (gpointer)namespace);
+  nsp = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
   if(nsp) {
     return 1;
   }
@@ -1242,7 +1242,7 @@ gnc_commodity_table_get_namespaces(const gnc_commodity_table * table)
   if (!table)
     return NULL;
 
-  return g_hash_table_keys(table->table);
+  return g_hash_table_keys(table->ns_table);
 }
 
 gboolean
@@ -1272,11 +1272,11 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
   if (!table)
     return NULL;
 
-  ns = g_hash_table_lookup(table->table, (gpointer)namespace);
+  ns = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
   if (!ns)
     return NULL;
 
-  return g_hash_table_values(ns->table);
+  return g_hash_table_values(ns->cm_table);
 }
 
 /********************************************************************
@@ -1333,9 +1333,9 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
       namespace = tmp->data;
       if (regexec(&pattern, namespace, 0, NULL, 0) == 0) {
 	DEBUG("Running list of %s commodities", namespace);
-	ns = g_hash_table_lookup(table->table, namespace);
+	ns = g_hash_table_lookup(table->ns_table, namespace);
 	if (ns) {
-	  g_hash_table_foreach(ns->table, &get_quotables_helper1, (gpointer) &l);
+	  g_hash_table_foreach(ns->cm_table, &get_quotables_helper1, (gpointer) &l);
 	}
       }
     }
@@ -1362,19 +1362,19 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   
   if(table) 
   { 
-    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
+    ns = g_hash_table_lookup(table->ns_table, (gpointer)namespace);
   }
   
   if(!ns) 
   {
     GCache *str_cache = gnc_engine_get_string_cache ();
     ns = g_new0(gnc_commodity_namespace, 1);
-    ns->table = g_hash_table_new(g_str_hash, g_str_equal);
+    ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
     ns->namespace = g_cache_insert(str_cache, (gpointer)namespace);
-    g_hash_table_insert(table->table,
+    g_hash_table_insert(table->ns_table,
                         (gpointer) ns->namespace, 
                         (gpointer) ns);
-    table->list = g_list_append(table->list, ns);
+    table->ns_list = g_list_append(table->ns_list, ns);
   }
 }
 
@@ -1401,17 +1401,17 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
   gnc_commodity_namespace * ns;
   if (!table) return;
 
-  ns = g_hash_table_lookup(table->table, namespace);
+  ns = g_hash_table_lookup(table->ns_table, namespace);
   if (ns)
   {
     GCache *str_cache = gnc_engine_get_string_cache ();
-    g_hash_table_remove(table->table, namespace);
-    table->list = g_list_remove(table->list, ns);
+    g_hash_table_remove(table->ns_table, namespace);
+    table->ns_list = g_list_remove(table->ns_list, ns);
 
-    g_list_free(ns->list);
-    ns->list = NULL;
-    g_hash_table_foreach_remove(ns->table, ns_helper, str_cache);
-    g_hash_table_destroy(ns->table);
+    g_list_free(ns->cm_list);
+    ns->cm_list = NULL;
+    g_hash_table_foreach_remove(ns->cm_table, ns_helper, str_cache);
+    g_hash_table_destroy(ns->cm_table);
     g_cache_remove (str_cache, ns->namespace);
     g_free(ns);
   }
@@ -1444,7 +1444,7 @@ iter_commodity (gpointer key, gpointer value, gpointer user_data)
 static void
 iter_namespace (gpointer key, gpointer value, gpointer user_data)
 {
-  GHashTable *namespace_hash = ((gnc_commodity_namespace *) value)->table;
+  GHashTable *namespace_hash = ((gnc_commodity_namespace *) value)->cm_table;
   g_hash_table_foreach (namespace_hash, iter_commodity, user_data);
 }
 
@@ -1461,7 +1461,7 @@ gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
   iter_data.func = f;
   iter_data.user_data = user_data;
 
-  g_hash_table_foreach(tbl->table, iter_namespace, (gpointer)&iter_data);
+  g_hash_table_foreach(tbl->ns_table, iter_namespace, (gpointer)&iter_data);
 
   return iter_data.ok;
 }
@@ -1477,12 +1477,12 @@ ct_helper(gpointer key, gpointer value, gpointer data)
   GCache *str_cache = gnc_engine_get_string_cache ();
   gnc_commodity_namespace * ns = value;
 
-  g_list_free(ns->list);
-  ns->list = NULL;
+  g_list_free(ns->cm_list);
+  ns->cm_list = NULL;
 
-  g_hash_table_foreach_remove(ns->table, ns_helper, str_cache);
-  g_hash_table_destroy(ns->table);
-  ns->table = NULL;
+  g_hash_table_foreach_remove(ns->cm_table, ns_helper, str_cache);
+  g_hash_table_destroy(ns->cm_table);
+  ns->cm_table = NULL;
   g_cache_remove (str_cache, ns->namespace);
   g_free(ns);
   return TRUE;
@@ -1494,10 +1494,10 @@ gnc_commodity_table_destroy(gnc_commodity_table * t)
   if (!t) return;
   ENTER ("table=%p", t);
   
-  g_list_free(t->list);
-  g_hash_table_foreach_remove(t->table, ct_helper, NULL);
-  g_hash_table_destroy(t->table);
-  t->table = NULL;
+  g_list_free(t->ns_list);
+  g_hash_table_foreach_remove(t->ns_table, ct_helper, NULL);
+  g_hash_table_destroy(t->ns_table);
+  t->ns_table = NULL;
   g_free(t);
   LEAVE ("table=%p", t);
 }
