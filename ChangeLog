@@ -1,3 +1,29 @@
+2002-10-06  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-utils.c (gnc_handle_date_accelerator): If
+	an alphabetic character has any modifiers applied to it, pass it
+	on to the window manager.  Fixes 88520.
+
+2002-10-05  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-engine-util.c (gnc_set_xxx_message): 
+	(gnc_send_gui_xxx): New routines that let the engine display gui
+	warning/error messages.  The callbacks must be initialized by the
+	gui layer.
+
+	* src/gnome-utils/gnc-gui-query.c: Reorganize some of the
+	gnc_xxx_dialog routines. Add a couple of new routines that take a
+	va_list but no window.
+
+	* src/gnome-utils/gncmod-gnome-utils.c: Initialize the gui
+	callbacks in the engine.
+
+	* src/gnome/glade/newuser.glade: Remove the version number. Its
+	already in the splash screen.
+
+	* src/scm/main.scm (gnc:main): Erase the splash screen before
+	starting the new user dialog.
+
 2002-10-05  Derek Atkins <derek@ihtfp.com>
 	* Fix the autoconf-2.13/2.52/2.53 problems -- Gnucash should now
 	  work on all versions of auto-tools, although it now requires GnuMake.
