@@ -1,9 +1,10 @@
 
                            Lots
-									====
-						Implementation Proposal
+                           ====
+                  Implementation Proposal
 
-						Linas Vepstas April 2002
+               Linas Vepstas <linas@linas.org>
+                  Last Revised January 2003
 
 
 'Lots' capture a fundamental accounting idea behind AR/AP, billing,
@@ -175,6 +176,83 @@ all of the lots that were closed stay with that book.  That is,
 closed lots are not propagated forward into the currently open book.
 
 
+
+The "Double Balance" Proposal
+=============================
+The following is a proposal for how to handle both realized
+and unrealized gains/losses by means of "adjusting transactions."
+It works for simple cases, but has issues for more complex cases.
+
+------------------
+Canonical transaction balancing: If all splits in a transaction 
+are in the same 'currency' as the transaction currency, then the
+sum of the splits *must* equal zero.  This is the old, existing
+double-entry requirement as implemented in Gnucash, and doesn't 
+change.
+
+If some splits are in one commodity, and others in another, then
+we can't force a zero balance as above.  Instead, we will force
+a different requirement, the 'double-balance' requirement:
+
+-- All splits that are *not* in the transaction currency C
+   must be made a part of a lot.   (Thus, for example, 
+   the transaction currency C is dollars, whereas the split
+   commodity is 'S', shares of RHAT.  If a transaction
+   has C in dollars, and 'S' in RHAT, then the S split must 
+   be made a part of a Lot.)
+   
+-- The lot will have a designated 'lot currency' L that must
+   be the same as the C of every split in the lot.  One
+   cannot enter a split into the lot if C != L.  (That is,
+   if I'm working with a Lot of RHAT shares, then *all*
+   splits in the lot must belong to dollar-denominated
+   transactions.)
+
+-- When a lot is closed, we must have the 'double-balance'
+   condition:  The sum total of all 'S' is zero, and the
+   sum total of all 'C' is zero.  Thus, if I buy 100 shares
+   of RHAT for $5 and sell 100 shares of RHAT for $10, then
+   I *must* also add an 'adjusting transaction' for zero
+   shares of RHAT, at $500.  If there is no adjusting transaction,
+   then the lot cannot be closed.  If sum 'S' is zero,
+   while sum 'C' is not zero, then the lot is declared to 
+   be 'out-of-balance', and an 'adjusting transaction' must 
+   be forced.
+
+It is only by 'closing a lot' that one is able to regain 
+'perfect balance' in the books.   That is, the 'double-balance'
+requirement is the generalization of the 'double-entry'
+requirement for stock accounts.
+
+Note that because the 'adjusting transaction' has one split
+in dollars, and another split in RHAT shares (albeit for zero 
+RHAT shares), it evades the old double-entry requriement,
+and will not be flagged as 'out of balance'.  Note also 
+that because the 'adjusting transaction' contains a split
+holding S (albeit zero S), it *must* be a part of a Lot.
+
+------------------
+The above seems to work for simple stock-transactions, but
+fails in other more complex cases.   Here's an example.
+
+Imagine 'S' is in euros, instead of 'RHAT'.  So I sell
+100 dollars, and buy 110 euros.  This causes a lot to open
+up for the euros, with the lot currency 'L' in dollars.
+Now I try to transfer the euros to other euro accounts.
+What happens to the lot?  Do I have to give up on it? 
+How can I save this bad situation?
+
+A similar problem occurs for more complex stock transactions:
+If I buy 100 shares of RHAT with Schwab, and transfer them
+to another account with Etrade, then I have the same lot
+closing problem.   There's an even worse scenario, where
+I move to brazil, and take my RHAT stock (purchased in dollars)
+to my brazilian broker (who will sell them for cruzeiros).
+
+Is the correct answer to just 'punt' in these cases? 
+How is teh closing of books to be handled in such a case?
+
+
 Implementation 
 ==============
 Every split has a pointer to a lot (which may be null).   A lot has a list
@@ -192,7 +270,7 @@ account, but this is a painful process.)
 
 Status
 ======
-Core support for Lots in the engine is complete (but untested).  
+Core support for Lots in the engine is complete (April 2002).  
 See src/engine/gnc-lot.h for the public API.
 FIFO's have not been started.
 The XML backend support for lot is complete (but untested).
