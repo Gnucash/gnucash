@@ -33,10 +33,10 @@
 
 /* ================================================================ */
  
-void 
-gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
+static void 
+gnc_kvp_array_va (KvpFrame *kvp_root, const char * path, 
+                  time_t secs, const char * first_name, va_list ap)
 {
-   va_list ap;
    char buff[80];
    KvpFrame *cwd, *pwd;
    KvpValue *v_ncopies;
@@ -44,12 +44,18 @@ gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
    Timespec ts;
    const char *name;
 
-   if (!kvp_root) return;
+   if (!kvp_root) return;  
    if (!first_name) return;
-
-   /* cwd == 'current working directory' */
-   pwd = kvp_frame_get_frame (kvp_root, "gemini", NULL);
-   if (!pwd) return;  /* error: can't ever happen */
+   
+   if (!path) 
+   {
+      pwd = kvp_root;
+   }
+   else
+   {
+      pwd = kvp_frame_get_frame_slash (kvp_root, path);
+      if (!pwd) return;  /* error: can't ever happen */
+   }
 
    /* Find, increment, store number of copies */
    v_ncopies = kvp_frame_get_slot (pwd, "ncopies");
@@ -64,6 +70,7 @@ gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
    /* OK, now create subdirectory and put the actual data */
    --ncopies;
    sprintf (buff, GNC_SCANF_LLD, (long long int) ncopies);
+
    cwd = kvp_frame_new();
    kvp_frame_set_slot_nc(pwd, buff, kvp_value_new_frame_nc(cwd));
 
@@ -73,7 +80,6 @@ gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
    kvp_frame_set_timespec (cwd, "date", ts);
 
    /* Loop over the args */
-   va_start (ap, first_name);
    name = first_name;
 
    while (name)
@@ -85,7 +91,28 @@ gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
 
       name = va_arg (ap, const char *);
    }
+}
 
+/* ================================================================ */
+
+void 
+gnc_kvp_array (KvpFrame *pwd, const char * path, 
+               time_t secs, const char *first_name, ...)
+{
+   va_list ap;
+   va_start (ap, first_name);
+   gnc_kvp_array_va (pwd, path, secs, first_name, ap);
+   va_end (ap);
+}
+
+/* ================================================================ */
+ 
+void 
+gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, const char *first_name, ...)
+{
+   va_list ap;
+   va_start (ap, first_name);
+   gnc_kvp_array_va (kvp_root, "gemini", secs, first_name, ap);
    va_end (ap);
 }
 

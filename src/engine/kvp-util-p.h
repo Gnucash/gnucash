@@ -36,7 +36,8 @@
  *    outside of the engine.
  */
 
-/** This routine is used to create a 'pointer' to an object in a kvp tree.
+/** The gnc_kvp_array() routine is used to maintain a list of pointers
+ *  in a kvp tree.
  *  The thing being pointed at is uniquely identified by its GUID. 
  *  This routine is typically used to create a linked list, and/or
  *  a collection of pointers to objects that are 'related' to each 
@@ -46,17 +47,21 @@
  *  the corresponding GUID pointer (const GUID *).  Terminate the varargs
  *  with a NULL as the last string argument.
  *
- *  The actual 'pointer' is stored in an array in the subdirectory
- *  '/gemini'.  The size of the array is in /gemini/ncopies.  The
- *  pointer is stored in /gemini/<n>/<name> where <n> = ncopies -1, 
- *  <name> was passed as an argument.  In addition, the date is 
- *  logged.  Thus, for example:
- *  gnc_kvp_gemini (kvp, secs, "acct_guid", aguid, "book_guid", bguid, NULL);
- *  will increment /gemini/ncopies, and will store aguid in 
- *  /gemini/<n>/acct_guid and bguid in /gemini/<n>/book_guid, where
- *  <n> = ncopies-1
+ *  The actual 'pointer' is stored in an array in a subdirectory
+ *  of the directory 'path'.
+ *  The size of the array is in /ncopies.  The pointer is stored in 
+ *  /<n>/<name> where <n> = ncopies -1,  <name> was passed as an argument.
+ *  In addition, the date is logged.  Thus, for example:
+ *  gnc_kvp_array (kvp, "foo", secs, "acct_guid", aguid, 
+ *                                   "book_guid", bguid, NULL);
+ *  will increment /foo/ncopies, and will store aguid in 
+ *  /foo/<n>/acct_guid and bguid in /foo/<n>/book_guid, where <n> = ncopies-1
  */
 
+void gnc_kvp_array (KvpFrame *kvp_root, const char *path, time_t secs, 
+                     const char *first_name, ...);
+
+/* Equivalent to gnc_kvp_array(kvp_root, "gemini", secs, firstname, ...); */
 void gnc_kvp_gemini (KvpFrame *kvp_root, time_t secs, 
                      const char *first_name, ...);
 
