@@ -38,6 +38,11 @@
 
 #include "dialog-pass.h"
 
+#include <openhbci.h>
+#ifndef OPENHBCI_VERSION_BUILD
+#  define OPENHBCI_VERSION_BUILD 0
+#endif
+
 #define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
 
 
@@ -298,8 +303,12 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile:
+#else /* openhbci > 0.9.9.5 */
       case MediumRDHFile:
       case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("Please make sure the key file for \n"
@@ -311,8 +320,12 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
 				       "user '%s' at unknown bank can be accessed."), 
 				     username);
 	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard:
+#else /* openhbci > 0.9.9.5 */
       case MediumDDVCard:
       case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
       default:
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
@@ -329,13 +342,21 @@ static int msgInsertMediumOrAbort(const HBCI_User *user,
   else 
     switch (mtype) 
       {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile:
+#else /* openhbci > 0.9.9.5 */
       case MediumRDHFile:
       case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
 	msgstr = g_strdup ( _("Please make sure the key file for \n"
 			      "unknown user at unknown bank can be accessed."));
 	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard:
+#else /* openhbci > 0.9.9.5 */
       case MediumDDVCard:
       case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
       default:
 	msgstr = g_strdup ( _("Please insert chip card for \n"
 			      "unknown user at unknown bank."));
@@ -368,8 +389,12 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
     b = HBCI_User_bank (user);
     switch (mtype) 
       {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile: 
+#else /* openhbci > 0.9.9.5 */
       case MediumRDHFile:
       case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
 	  msgstr = g_strdup_printf ( _("The key file does not seem to be the correct \n"
@@ -383,8 +408,12 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
 				       "sure the correct key file can be accessed."), 
 				     username);
 	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard: 
+#else /* openhbci > 0.9.9.5 */
       case MediumDDVCard:
       case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
       default:
 	if (b != NULL) 
 	  /* xgettext:c-format */	    
@@ -401,14 +430,22 @@ static int msgInsertCorrectMediumOrAbort(const HBCI_User *user,
   else 
     switch (mtype) 
       {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeFile: 
+#else /* openhbci > 0.9.9.5 */
       case MediumRDHFile:
       case MediumRDHFileOld:
+#endif /* openhbci > 0.9.9.5 */
 	msgstr = g_strdup ( _("The key file does not seem to be the correct \n"
 			      "file for unknown user at unknown bank. Please make \n"
 			      "sure the correct key file can be accessed."));
 	break;
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      case MediumTypeCard: 
+#else /* openhbci > 0.9.9.5 */
       case MediumDDVCard:
       case MediumRDHCard:
+#endif /* openhbci > 0.9.9.5 */
       default:
 	msgstr = g_strdup ( _("Please insert the correct chip card for \n"
 			      "unknown user at unknown bank."));

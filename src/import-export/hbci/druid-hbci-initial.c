@@ -44,6 +44,11 @@
 #include <openhbci/outboxjobkeys.h>
 #include <openhbci/mediumrdhbase.h>
 
+#include <openhbci.h>
+#ifndef OPENHBCI_VERSION_BUILD
+#  define OPENHBCI_VERSION_BUILD 0
+#endif
+
 typedef enum _infostate {
   INI_ADD_BANK,
   INI_ADD_USER,
@@ -886,6 +891,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
     HBCI_User *newuser;
     HBCI_Error *err;
     char *mediumname;
+    const char *mediumtype;
     int secmode;
 
     //printf("on_userid_next: Didn't find user with userid %s.\n", userid);
@@ -909,18 +915,30 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 	return TRUE;
       }
       secmode = HBCI_SECURITY_RDH;
+      mediumtype = "RDHFile";
     }
     else {
       /* Create DDV Medium */
       mediumname = g_strdup("");
       secmode = HBCI_SECURITY_DDV;
+      mediumtype = "DDVCard";
     }
 
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+    medium = HBCI_API_createNewMedium (api, 
+				       mediumtype,
+				       FALSE,
+				       HBCI_Bank_countryCode (bank),
+				       HBCI_Bank_bankCode (bank),
+				       userid, 
+				       mediumname, &err);
+#else /* openhbci > 0.9.9.5 */
     medium = HBCI_API_createNewMedium (api, 
 				       HBCI_Bank_countryCode (bank),
 				       HBCI_Bank_bankCode (bank),
 				       userid, 
 				       mediumname, secmode, &err);
+#endif /* openhbci > 0.9.9.5 */
     g_free(mediumname);
 
     if (medium == NULL) {
@@ -944,7 +962,11 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
       
     /* Test mounting only for DDV cards. RDH files should work... */
     if (secmode == HBCI_SECURITY_DDV) {
+#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>9) || (OPENHBCI_VERSION_BUILD>5)
+      err = HBCI_Medium_mountMedium (medium, NULL);
+#else /* openhbci > 0.9.9.5 */
       err = HBCI_Medium_mountMedium (medium, newuser, NULL);
+#endif /* openhbci > 0.9.9.5 */
       if (err != NULL) {
 	printf("on_userid_next: Mounting medium failed: %s.\n",
 	       HBCI_Error_message (err));
