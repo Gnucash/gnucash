@@ -1,3 +1,8 @@
+2000-06-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-utils.c (gnc_ui_install_field_strings): set the
+	code even if it's blank. Auto-coding doesn't work right now.
+
 2000-06-06  Dave Peticolas  <dave@krondo.com>
 
 	* src/SplitLedger.c (LedgerTraverse): use correct argument for

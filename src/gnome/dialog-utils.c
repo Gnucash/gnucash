@@ -544,10 +544,7 @@ gnc_ui_install_field_strings(Account * account,
   if (safe_strcmp(old, strings->currency) != 0)
     xaccAccountSetCurrency(account, strings->currency);
 
-  if (safe_strcmp(strings->code, "") != 0)
-    xaccAccountSetCode(account, strings->code);
-  else
-    xaccAccountAutoCode(account, 4);
+  xaccAccountSetCode(account, strings->code);
 
   xaccAccountSetNotes(account, strings->notes);
 
