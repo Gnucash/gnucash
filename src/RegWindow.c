@@ -2942,9 +2942,6 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           }
         }
 
-        /* hack alert -- ledger traversal is broken
-         * Note: the traversal code is fairly broken for ledger windows.
-         * Sad, but true, fixing it is a major pain in the neck. */
         if( tcbs->qparam == QRight )
           {
           /* Don't need to check IN_DATE_CELL or IN_NUM_CELL because
@@ -3011,10 +3008,15 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
               /* hmm .. for stocks & mutual funds, the next field is price.
                * ordinary accounts don't have a price so hop to action. */
               if ((STOCK     == regData->type) ||
-                  (MUTUAL    == regData->type) ||
-                  (PORTFOLIO == regData->type)) {
+                  (MUTUAL    == regData->type)) {
                 tcbs->next_column = PRCC_CELL_C;
                 tcbs->next_row    = row - PAY_CELL_R + PRCC_CELL_R;
+              } else
+
+              /* for portfolios, if a sale price is specified, hop to sale-price cell */
+              if (PORTFOLIO == regData->type) {
+                tcbs->next_column = PRCD_CELL_C;
+                tcbs->next_row    = row - PAY_CELL_R + PRCD_CELL_R;
               } else {
                 tcbs->next_column = ACTN_CELL_C;
                 tcbs->next_row    = row - PAY_CELL_R + ACTN_CELL_R;
