@@ -93,7 +93,7 @@ clean:
 distclean: clean
 	rm -f *~ *.o *.bak Makefile share/scm gnucash.bin
 	rm -f gnucash gnucash.motif gnucash.motif.static \
-        gnucash.gnome gnucash.gnome.static gnucash.qt
+	gnucash.gnome gnucash.gnome.static gnucash.qt
 	rm -f config.cache config.log config.status config.h
 	rm -f src/guile/path-defaults.h    
 	@cd lib;    $(MAKE) distclean
