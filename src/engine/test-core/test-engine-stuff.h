@@ -15,6 +15,8 @@
 #include "gnc-pricedb.h"
 
 Timespec* get_random_timespec(void);
+void random_timespec_zero_nsec (gboolean zero_nsec);
+
 kvp_value* get_random_kvp_value(int type);
 
 typedef struct
@@ -44,6 +46,8 @@ AccountGroup * get_random_group(GNCSession * session);
 Account* get_random_account(GNCSession * session);
 Split* get_random_split(GNCSession *session, gnc_numeric num);
 Transaction* get_random_transaction(GNCSession *session);
+Transaction* get_random_transaction_with_currency(GNCSession *session,
+                                                  gnc_commodity *currency);
 gnc_commodity* get_random_commodity(GNCSession *session);
 const char *get_random_commodity_namespace(void);
 
@@ -51,5 +55,8 @@ Query* get_random_query(void);
 
 GNCBook * get_random_book (GNCSession *session);
 GNCSession * get_random_session (void);
+
+void add_random_transactions_to_session (GNCSession *session,
+                                         gint num_transactions);
 
 #endif

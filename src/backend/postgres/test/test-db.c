@@ -62,6 +62,9 @@ run_test (void)
 
   session = get_random_session ();
 
+  add_random_transactions_to_session (session,
+                                      get_random_int_in_range (1, 20));
+
   filename = g_strdup ("postgres://localhost:7777/gnc_test?mode=single-file");
 
   gnc_session_begin (session, filename, FALSE, TRUE);
@@ -116,6 +119,8 @@ guile_main (int argc, char **argv)
   gnc_module_system_init ();
   gnc_module_load ("gnucash/engine", 0);
 
+  g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING);
+
   glist_exclude_type (KVP_TYPE_BINARY);
   glist_exclude_type (KVP_TYPE_GLIST);
 
@@ -128,6 +133,8 @@ guile_main (int argc, char **argv)
 
   set_max_group_depth (3);
   set_max_group_accounts (5);
+
+  random_timespec_zero_nsec (TRUE);
 
   xaccLogDisable ();
 

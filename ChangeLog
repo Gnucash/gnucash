@@ -1,3 +1,22 @@
+2001-10-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/guile/Makefile.am (libgncguile_la_LIBADD): remove gncgnome.la
+	dependency
+
+	* src/engine/test-core/test-engine-stuff.c (get_random_timespec):
+	add flag to always set nsec to 0.
+	(get_random_transaction_with_currency): new func
+	(add_random_transactions_to_session): new func
+
+	* src/backend/postgres/test/db-control.sh: add 'connect' argument
+	to start psql connection
+
+	* src/backend/postgres/test/test-db.c: add random transactions
+	to the mix
+
+	* src/backend/postgres/account.c (pgendStoreAccountNoLock): expound
+	on commodity table comment
+
 2001-10-12  Rob Browning  <rlb@defaultvalue.org>
 
 	* configure.in (GNC_ADD_ON_SRFIS): compute needed SRFIs.

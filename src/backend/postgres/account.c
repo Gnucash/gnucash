@@ -118,8 +118,13 @@ pgendStoreAccountNoLock (PGBackend *be, Account *acct,
    pgendPutOneAccountOnly (be, acct);
 
    /* make sure the account's commodity is in the commodity table */
+
    /* XXX hack alert FIXME -- it would be more efficient to do 
-    * this elsewhere, and not here.  Or put a mark on it ... 
+    * this elsewhere, and not here. Furthermore, with this method
+    * the transaction currencies must be stored in the same way,
+    * as the transactions are traversed individually, and that
+    * is even more inefficient.
+    *
     * See StoreAllPrices for an example of how to do this. 
     */
    com = xaccAccountGetCommodity (acct);

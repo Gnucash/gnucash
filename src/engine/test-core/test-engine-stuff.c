@@ -88,6 +88,14 @@ random_glist_strings_only (gboolean strings_only)
   glist_strings_only = strings_only;
 }
 
+static gboolean zero_nsec = FALSE;
+
+void
+random_timespec_zero_nsec (gboolean zero_nsec_in)
+{
+  zero_nsec = zero_nsec_in;
+}
+
 Timespec*
 get_random_timespec(void)
 {
@@ -96,7 +104,7 @@ get_random_timespec(void)
     ret = g_new(Timespec, 1);
 
     ret->tv_sec = rand();
-    ret->tv_nsec = rand();
+    ret->tv_nsec = zero_nsec ? 0 : rand();
 
     return ret;
 }
@@ -567,8 +575,9 @@ trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
 }
 
     
-Transaction*
-get_random_transaction(GNCSession *session)
+Transaction *
+get_random_transaction_with_currency(GNCSession *session,
+                                     gnc_commodity *currency)
 {
     Transaction* ret;
 
@@ -576,7 +585,9 @@ get_random_transaction(GNCSession *session)
 
     xaccTransBeginEdit(ret);
 
-    xaccTransSetCurrency(ret, get_random_commodity (session));
+    xaccTransSetCurrency (ret,
+                          currency ? currency :
+                          get_random_commodity (session));
 
     set_tran_random_string(ret, xaccTransSetNum);
 
@@ -594,6 +605,55 @@ get_random_transaction(GNCSession *session)
     return ret;
 }
 
+Transaction*
+get_random_transaction (GNCSession *session)
+{
+  return get_random_transaction_with_currency (session, NULL);
+}
+
+static gpointer
+get_random_list_element (GList *list)
+{
+  g_return_val_if_fail (list, NULL);
+
+  return g_list_nth_data (list,
+                          get_random_int_in_range (0,
+                                                   g_list_length (list) - 1));
+}
+
+static gnc_commodity *
+get_random_commodity_from_table (gnc_commodity_table *table)
+{
+  GList *namespaces;
+  gnc_commodity *com = NULL;
+
+  g_return_val_if_fail (table, NULL);
+
+  namespaces = gnc_commodity_table_get_namespaces (table);
+
+  do
+  {
+    GList *commodities;
+    char *namespace;
+
+    namespace = get_random_list_element (namespaces);
+
+    commodities = gnc_commodity_table_get_commodities (table, namespace);
+    if (!commodities)
+      continue;
+
+    com = get_random_list_element (commodities);
+
+    g_list_free (commodities);
+
+  } while (!com);
+
+
+  g_list_free (namespaces);
+
+  return com;
+}
+
 gnc_commodity*
 get_random_commodity (GNCSession *session)
 {
@@ -605,10 +665,17 @@ get_random_commodity (GNCSession *session)
     int ran_int;
     gnc_commodity_table *table;
 
+    table = gnc_book_get_commodity_table (gnc_session_get_book (session));
+
+#if 0
+    if (table &&
+        (gnc_commodity_table_get_size (table) > 0) &&
+        get_random_int_in_range (1, 5) < 5)
+      return get_random_commodity_from_table (table);
+#endif
+
     mn = get_random_string();
     space = get_random_commodity_namespace();
-
-    table = gnc_book_get_commodity_table (gnc_session_get_book (session));
 
     if (table)
     {
@@ -851,4 +918,53 @@ get_random_session (void)
   gnc_book_set_group (book, get_random_group (session));
 
   return session;
+}
+
+void
+add_random_transactions_to_session (GNCSession *session, gint num_transactions)
+{
+  gnc_commodity_table *table;
+  GList *accounts;
+  gint num_accounts;
+  GNCBook *book;
+
+  if (num_transactions <= 0) return;
+
+  g_return_if_fail (session);
+
+  book = gnc_session_get_book (session);
+
+  accounts = xaccGroupGetSubAccounts (gnc_book_get_group (book));
+
+  g_return_if_fail (accounts);
+
+  num_accounts = g_list_length (accounts);
+
+  table = gnc_book_get_commodity_table (gnc_session_get_book (session));
+
+  while (num_transactions--)
+  {
+    gnc_commodity *com;
+    Transaction *trans;
+    Account *account;
+    Split *split;
+
+    com = get_random_commodity_from_table (table);
+
+    trans = get_random_transaction_with_currency (session, com);
+
+    xaccTransBeginEdit (trans);
+
+    split = xaccTransGetSplit (trans, 0);
+    account = get_random_list_element (accounts);
+    xaccAccountInsertSplit (account, split);
+
+    split = xaccTransGetSplit (trans, 1);
+    account = get_random_list_element (accounts);
+    xaccAccountInsertSplit (account, split);
+
+    xaccTransCommitEdit (trans);
+  }
+
+  g_list_free (accounts);
 }
