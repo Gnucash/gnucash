@@ -166,7 +166,7 @@
      (string-append 
       report-title
       " "
-      (gnc:timepair-to-datestring date-tp)))
+      (gnc:print-date date-tp)))
 
     (if (not (null? accounts))
         ;; if no max. tree depth is given we have to find the
