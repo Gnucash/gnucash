@@ -29,12 +29,13 @@ require Exporter;
 use strict;
 use vars qw($VERSION @EXPORT @ISA $YAHOO_URL $FIDELITY_GANDI_URL
             $FIDELITY_GROWTH_URL $FIDELITY_CORPBOND_URL $FIDELITY_GLBND_URL
-            $FIDELITY_MM_URL $FIDELITY_ASSET_URL $TROWEPRICE_URL);
+            $FIDELITY_MM_URL $FIDELITY_ASSET_URL $TROWEPRICE_URL
+            $VANGUARD_QUERY_URL $VANGUARD_CSV_URL @vanguard_ids);
 
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
-$VERSION = '0.07';
+$VERSION = '0.08';
 @ISA = qw(Exporter);
 
 $YAHOO_URL = ("http://quote.yahoo.com/d?f=snl1d1t1c1p2va2bapomwerr1dyj1&s=");
@@ -45,9 +46,11 @@ $FIDELITY_GLBND_URL = ("http://personal441.fidelity.com/gen/prices/glbnd.csv");
 $FIDELITY_MM_URL = ("http://personal441.fidelity.com/gen/prices/mm.csv");
 $FIDELITY_ASSET_URL = ("http://personal441.fidelity.com/gen/prices/asset.csv");
 $TROWEPRICE_URL = ("http://www.troweprice.com/funds/prices.csv");
+$VANGUARD_QUERY_URL = ("http://www.vanguard.com/cgi-bin/Custom/daily/custom/CustRpt?");
+$VANGUARD_CSV_URL = ("http://www.vanguard.com/cgi-bin/Custom?ACTION=Download&FileName=");
 
 # Don't export; let user invoke with Quote::getquote syntax.
-# @EXPORT = qw(&quote_yahoo);
+# @EXPORT = qw(&yahoo, &fidelity);
 
 # =======================================================================
 # yahoo gets quotes from the Yahoo service
@@ -259,6 +262,148 @@ sub troweprice {
         }
     }
     return %aa;
+}
+
+# =======================================================================
+
+sub vanguard {
+
+    # The Vanguard Group doesn't use thier ticker symbols to look up funds.
+    # but we do use the ticker symbols.  Therefore, we need to do a reverse lookup.
+    # Load the array on first use only
+    if (! @vanguard_ids ) {
+        push (@vanguard_ids, ("0002", "Bal Index ", "VBINX"));
+        push (@vanguard_ids, ("0006", "Value Idx ", "VIVAX"));
+        push (@vanguard_ids, ("0009", "Growth Idx", "VIGRX"));
+        push (@vanguard_ids, ("0011", "Admiral MM", "VUSXX"));
+        push (@vanguard_ids, ("0012", "Admiral ST", "VASTX"));
+        push (@vanguard_ids, ("0014", "NJ Ins LT ", "VNJTX"));
+        push (@vanguard_ids, ("0018", "FL Ins LT ", "VFLTX"));
+        push (@vanguard_ids, ("0019", "Admiral IT", "VAITX"));
+        push (@vanguard_ids, ("0020", "Admiral LT", "VALGX"));
+        push (@vanguard_ids, ("0021", "Wellington", "VWELX"));
+        push (@vanguard_ids, ("0022", "Windsor   ", "VWNDX"));
+        push (@vanguard_ids, ("0023", "US Growth ", "VWUSX"));
+        push (@vanguard_ids, ("0024", "Explorer  ", "VEXPX"));
+        push (@vanguard_ids, ("0026", "Morgan Gro", "VMRGX"));
+        push (@vanguard_ids, ("0027", "Wellesley ", "VWINX"));
+        push (@vanguard_ids, ("0028", "LT Corp   ", "VWESX"));
+        push (@vanguard_ids, ("0029", "HiYld Corp", "VWEHX"));
+        push (@vanguard_ids, ("0030", "Prime MM  ", "VMMXX"));
+        push (@vanguard_ids, ("0031", "LdT Tax-Ex", "VMLTX"));
+        push (@vanguard_ids, ("0032", "ST Treas  ", "VFISX"));
+        push (@vanguard_ids, ("0033", "Federal MM", "VMFXX"));
+        push (@vanguard_ids, ("0035", "IT Treas  ", "VFITX"));
+        push (@vanguard_ids, ("0036", "GNMA Fund ", "VFIIX"));
+        push (@vanguard_ids, ("0038", "Pref Stock", "VQIIX"));
+        push (@vanguard_ids, ("0039", "ST Corp   ", "VFSTX"));
+        push (@vanguard_ids, ("0040", "500 Index ", "VFINX"));
+        push (@vanguard_ids, ("0041", "ST Tax-Ex ", "VWSTX"));
+        push (@vanguard_ids, ("0042", "IT Tax-Ex ", "VWITX"));
+        push (@vanguard_ids, ("0043", "LT Tax-Ex ", "VWLTX"));
+        push (@vanguard_ids, ("0044", "HY Tax-Ex ", "VWAHX"));
+        push (@vanguard_ids, ("0045", "Tax-Ex MM ", "VMSXX"));
+        push (@vanguard_ids, ("0046", "Intl Value", "VTRIX"));
+        push (@vanguard_ids, ("0048", "Sm-Cap Idx", "NAESX"));
+        push (@vanguard_ids, ("0049", "ST Federal", "VSGBX"));
+        push (@vanguard_ids, ("0050", "Treas MM  ", "VMPXX"));
+        push (@vanguard_ids, ("0051", "Energy    ", "VGENX"));
+        push (@vanguard_ids, ("0052", "Hlth Care ", "VGHCX"));
+        push (@vanguard_ids, ("0053", "Gold&Prec ", "VGPMX"));
+        push (@vanguard_ids, ("0057", "Util Inc  ", "VGSUX"));
+        push (@vanguard_ids, ("0058", "Ins LT TE ", "VILPX"));
+        push (@vanguard_ids, ("0059", "PRIMECAP  ", "VPMCX"));
+        push (@vanguard_ids, ("0062", "CA TE MM  ", "VCTXX"));
+        push (@vanguard_ids, ("0063", "PA TE MM  ", "VPTXX"));
+        push (@vanguard_ids, ("0065", "Equity Inc", "VEIPX"));
+        push (@vanguard_ids, ("0066", "Prime Ist ", "VMRXX"));
+        push (@vanguard_ids, ("0071", "IT Corp   ", "VFICX"));
+        push (@vanguard_ids, ("0072", "Pacif Idx ", "VPACX"));
+        push (@vanguard_ids, ("0073", "Windsor II", "VWNFX"));
+        push (@vanguard_ids, ("0075", "CA Ins LT ", "VCITX"));
+        push (@vanguard_ids, ("0076", "NY Ins LT ", "VNYTX"));
+        push (@vanguard_ids, ("0077", "PA Ins LT ", "VPAIX"));
+        push (@vanguard_ids, ("0078", "Asset Allo", "VAAPX"));
+        push (@vanguard_ids, ("0079", "Euro Index", "VEURX"));
+        push (@vanguard_ids, ("0081", "Int Growth", "VWIGX"));
+        push (@vanguard_ids, ("0082", "Conv Secur", "VCVSX"));
+        push (@vanguard_ids, ("0083", "LT Treas  ", "VUSTX"));
+        push (@vanguard_ids, ("0084", "Ttl Bnd Ix", "VBMFX"));
+        push (@vanguard_ids, ("0085", "Ttl Stk Ix", "VTSMX"));
+        push (@vanguard_ids, ("0093", "Grow & Inc", "VQNPX"));
+        push (@vanguard_ids, ("0094", "Inst Index", "VINIX"));
+        push (@vanguard_ids, ("0095", "NJ TE MM  ", "VNJXX"));
+        push (@vanguard_ids, ("0096", "OH TE MM  ", "VOHXX"));
+        push (@vanguard_ids, ("0097", "OH Ins LT ", "VOHIX"));
+        push (@vanguard_ids, ("0098", "Ext Mkt Ix", "VEXMX"));
+        push (@vanguard_ids, ("0100", "CA Ins IT ", "VCAIX"));
+        push (@vanguard_ids, ("0101", "TM Gro&Inc", "VTGIX"));
+        push (@vanguard_ids, ("0102", "TM Cap App", "VMCAX"));
+        push (@vanguard_ids, ("0103", "TM Bal    ", "VTMFX"));
+        push (@vanguard_ids, ("0111", "Cap Oppor ", "VHCOX"));
+        push (@vanguard_ids, ("0113", "Ttl Int Ix", "VGTSX"));
+        push (@vanguard_ids, ("0114", "Aggr Grow ", "VHAGX"));
+        push (@vanguard_ids, ("0115", "Glo Ast Al", "VHAAX"));
+        push (@vanguard_ids, ("0122", "LifeSt Gro", "VASGX"));
+        push (@vanguard_ids, ("0123", "REIT Index", "VGSIX"));
+        push (@vanguard_ids, ("0129", "Global Equ", "VHGEX"));
+        push (@vanguard_ids, ("0132", "ST Bnd Idx", "VBISX"));
+        push (@vanguard_ids, ("0163", "NY TE MM  ", "VYFXX"));
+        push (@vanguard_ids, ("0222", "Ttl Bd Ist", "VBTIX"));
+        push (@vanguard_ids, ("0314", "IT Bnd Idx", "VBIIX"));
+        push (@vanguard_ids, ("0522", "LT Bnd Idx", "VBLTX"));
+        push (@vanguard_ids, ("0533", "Emerg Mkts", "VEIEX"));
+        push (@vanguard_ids, ("0723", "LifeSt Inc", "VASIX"));
+        push (@vanguard_ids, ("0724", "LifeSt Con", "VSCGX"));
+        push (@vanguard_ids, ("0854", "Ins Idx Pl", "VIIIX"));
+        push (@vanguard_ids, ("0855", "Ttl Ix Ist", "VITSX"));
+        push (@vanguard_ids, ("0856", "Ex Idx Ist", "VIEIX"));
+        push (@vanguard_ids, ("0857", "SC Idx Ist", "VSCIX"));
+        push (@vanguard_ids, ("0858", "ST Crp Ist", "VFSIX"));
+        push (@vanguard_ids, ("0859", "Md-Cap Idx", "VIMSX"));
+        push (@vanguard_ids, ("0860", "SC Val Idx", "VISVX"));
+        push (@vanguard_ids, ("0861", "SC Gro Idx", "VISGX"));
+        push (@vanguard_ids, ("0864", "MC Idx Ist", "VMCIX"));
+        push (@vanguard_ids, ("0867", "Val Ix Ist", "VIVIX"));
+        push (@vanguard_ids, ("0868", "Gro Ix Ist", "VIGIX"));
+        push (@vanguard_ids, ("0914", "LifeSt Mod", "VSMGX"));
+        push (@vanguard_ids, ("0934", "Select Val", "VASVX"));
+    }
+
+    my @symbols = @_;
+    # my(@q,%aa,$ua,$url,$sym, $fid);
+    my($url, $sym, $i, $fid, $reply, $ua);
+
+    # convert ticker symbols into fund numbers; build first url
+    $url = $VANGUARD_QUERY_URL;
+    foreach $sym (@symbols) {
+       undef ($fid);
+       for ($i=2; $i<=$#vanguard_ids; $i+=3) {
+          if ($vanguard_ids[$i] =~ $sym) {
+             $fid = $vanguard_ids[$i-2];
+             last;
+          }
+       }
+       if ($fid) {
+          $url .= "ROWS=".$fid."&";  
+print "got $fid $url\n";
+       }
+    }
+    $url .="COLS=COL1%2C3&COLS=COL4&COLS=COL5&COLS=COL11%2C12&ACTION=Accept";
+    $ua = LWP::UserAgent->new;
+    $reply = $ua->request(GET $url)->content;
+
+    undef $url;
+    foreach (split('\n',$reply)) {
+       if (/FileName=V(.*)\.txt/) {
+           print "yxxxxxxxxxxxxxxxxxx $_\n";
+print "yo $1 and $2 and $3 \n";
+           $url = $VANGUARD_CSV_URL . "V" . $1 . ".txt";
+           last;
+       }
+    }
+print "its $url\n";
+1;
 }
 
 # =======================================================================
