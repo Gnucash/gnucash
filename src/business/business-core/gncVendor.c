@@ -180,7 +180,7 @@ void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
     gncBillTermDecRef (vendor->terms);
   vendor->terms = terms;
   if (vendor->terms)
-    gncBillTermDecRef (vendor->terms);
+    gncBillTermIncRef (vendor->terms);
   mark_vendor (vendor);
   gncVendorCommitEdit (vendor);
 }

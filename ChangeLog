@@ -1,3 +1,8 @@
+2003-10-21 Linas Vepstas <linas@linas.org>
+
+   * src/business/business-core/gncVendor.c: BillTermDecRef should have
+     been BillTermIncRef when setting new bill term
+
 2003-10-20  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-interaction.c,
