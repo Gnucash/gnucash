@@ -85,8 +85,9 @@ void         xaccDestroyPriceCell (PriceCell *cell);
 /* return the value of a price cell */
 gnc_numeric  xaccGetPriceCellValue (PriceCell *cell);
 
-/* updates amount, string format is three decimal places */
-void         xaccSetPriceCellValue (PriceCell *cell, gnc_numeric amount);
+/* updates amount, returns TRUE if string representation
+ * actually changed */
+gboolean     xaccSetPriceCellValue (PriceCell *cell, gnc_numeric amount);
 
 /* Sets the fraction used for rounding. If 0, no rounding is performed. */
 void         xaccSetPriceCellFraction (PriceCell *cell, int fraction);

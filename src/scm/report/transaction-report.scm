@@ -292,31 +292,9 @@
     (define (gnc:register-trep-option new-option)
       (gnc:register-option gnc:*transaction-report-options* new-option))
 
-    ;; from date
-    ;; hack alert - could somebody set this to an appropriate date?
-    (gnc:register-trep-option
-     (gnc:make-date-option
-      (N_ "Report Options") (N_ "From")
-      "a" (N_ "Report Items from this date") 
-      (lambda ()
-        (let ((bdtime (localtime (current-time))))
-          (set-tm:sec bdtime 0)
-          (set-tm:min bdtime 0)
-          (set-tm:hour bdtime 0)
-          (set-tm:mday bdtime 1)
-         (set-tm:mon bdtime 0)
-          (let ((time (car (mktime bdtime))))
-            (cons 'absolute (cons time 0)))))
-      #f 'absolute #f))   
-
-    ;; to-date
-
-    (gnc:register-trep-option
-     (gnc:make-date-option
-      (N_ "Report Options") (N_ "To")
-      "b" (N_ "Report items up to and including this date")
-      (lambda () (cons 'absolute (cons (current-time) 0)))
-      #f 'absolute #f))
+    (gnc:options-add-date-interval!
+     gnc:*transaction-report-options*
+     (N_ "Report Options") (N_ "From") (N_ "To") "a")
 
     ;; account to do report on
     (gnc:register-trep-option

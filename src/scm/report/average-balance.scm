@@ -24,35 +24,10 @@
            (register-option
             (lambda (new-option)
               (gnc:register-option options new-option))))      
-      ;; From date  
-      (register-option
-       (gnc:make-date-option
-        (N_ "General") (N_ "From")
-        "a" (N_ "Report Items from this date") 
-        (lambda ()
-          (let ((bdtime (localtime (current-time))))
-            (set-tm:sec bdtime 0)
-            (set-tm:min bdtime 0)
-            (set-tm:hour bdtime 0)
-            (set-tm:mday bdtime 1)
-            (set-tm:mon bdtime 0)
-            (cons 'absolute (cons (car (mktime bdtime)) 0))))
-        #f 
-	'absolute #f))
-      
-      ;; to-date
-      (register-option
-       (gnc:make-date-option
-        (N_ "General") (N_ "To")
-        "c" (N_ "Report items up to and including this date")
-        (lambda ()
-          (let ((bdtime (localtime (current-time))))
-            (set-tm:sec bdtime 59)
-            (set-tm:min bdtime 59)
-            (set-tm:hour bdtime 23)
-            (cons 'absolute (cons (car (mktime bdtime)) 0))))
-        #f 'absolute #f))
-      
+
+      (gnc:options-add-date-interval!
+       options (N_ "General") (N_ "From") (N_ "To") "a")
+
       ;; account(s) to do report on
       (register-option
        (gnc:make-account-list-option
@@ -398,5 +373,3 @@
    'name (N_ "Average Balance")
    'options-generator options-generator
    'renderer renderer))
-  
-            

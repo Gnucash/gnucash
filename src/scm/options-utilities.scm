@@ -46,29 +46,28 @@
 ;; This is a date-interval for a report.
 (define (gnc:options-add-date-interval!
 	 options pagename name-from name-to sort-tag)
-  (begin
-    (gnc:register-option 
-     options  
-     (gnc:make-date-option
-      pagename name-from 
-      (string-append sort-tag "a")
-      (_ "Start of reporting period")
-      (lambda ()
-	(cons 'absolute 
-	      (gnc:get-start-cal-year)))
-      #f 'absolute #f))
-    (gnc:register-option 
-     options  
-     (gnc:make-date-option
-      pagename name-to
-      (string-append sort-tag "b")
-      (_ "End of reporting period")
-      (lambda ()
-	(cons 'absolute 
-	      (gnc:timepair-end-day-time     
-	       (gnc:secs->timepair 
-		(car (mktime (localtime (current-time))))))))
-      #f 'absolute #f))))
+  (gnc:register-option 
+   options  
+   (gnc:make-date-option
+    pagename name-from 
+    (string-append sort-tag "a")
+    (_ "Start of reporting period")
+    (lambda ()
+      (cons 'absolute 
+            (gnc:get-start-cal-year)))
+    #f 'absolute #f))
+  (gnc:register-option 
+   options  
+   (gnc:make-date-option
+    pagename name-to
+    (string-append sort-tag "b")
+    (_ "End of reporting period")
+    (lambda ()
+      (cons 'absolute 
+            (gnc:timepair-end-day-time     
+             (gnc:secs->timepair 
+              (car (mktime (localtime (current-time))))))))
+    #f 'absolute #f)))
 
 ;; A multichoice option intended to chose the account level. Different
 ;; from the other functions the help string can still be given. Used
@@ -103,34 +102,33 @@
 	 options pagename 
 	 name-display-depth name-show-subaccounts name-accounts
 	 sort-tag default-depth default-accounts)
-  (begin
-    (gnc:options-add-account-levels!
-     options pagename name-display-depth 
-      (string-append sort-tag "a")
-      (_ "Show accounts to this depth, overriding any other option.") 
-      default-depth)
+  (gnc:options-add-account-levels!
+   options pagename name-display-depth 
+   (string-append sort-tag "a")
+   (_ "Show accounts to this depth, overriding any other option.") 
+   default-depth)
     
-    (gnc:register-option 
-     options  
-     (gnc:make-simple-boolean-option
-      pagename name-show-subaccounts
-      (string-append sort-tag "b")
-      (_ "Override account-selection and show sub-accounts of all selected accounts?") 
-      #t))
+  (gnc:register-option 
+   options  
+   (gnc:make-simple-boolean-option
+    pagename name-show-subaccounts
+    (string-append sort-tag "b")
+    (_ "Override account-selection and show sub-accounts of all selected accounts?") 
+    #t))
 
-    ;; Semantics of the account selection, as used in the
-    ;; gnc:html-build-acct-table: An account shows up if ( the
-    ;; tree-depth is large enough AND ( it is selected in the account
-    ;; selector OR ( always show sub-accounts is selected AND one of
-    ;; the parents is selected in the account selector. )))
-    (gnc:register-option 
-     options  
-     (gnc:make-account-list-option
-      pagename name-accounts
-      (string-append sort-tag "c")
-      (_ "Report on these accounts, if display depth allows.")
-      default-accounts
-      #f #t))))
+  ;; Semantics of the account selection, as used in the
+  ;; gnc:html-build-acct-table: An account shows up if ( the
+  ;; tree-depth is large enough AND ( it is selected in the account
+  ;; selector OR ( always show sub-accounts is selected AND one of
+  ;; the parents is selected in the account selector. )))
+  (gnc:register-option 
+   options  
+   (gnc:make-account-list-option
+    pagename name-accounts
+    (string-append sort-tag "c")
+    (_ "Report on these accounts, if display depth allows.")
+    default-accounts
+    #f #t)))
 
 ;; The single checkbox whether to include the sub-account balances
 ;; into the other balances.
@@ -157,20 +155,19 @@
 (define (gnc:options-add-currency-selection!
 	 options pagename 
 	 name-show-foreign name-report-currency sort-tag)
-  (begin
-    (gnc:register-option 
-     options 
-     (gnc:make-simple-boolean-option
-      pagename name-show-foreign
-      (string-append sort-tag "a")
-      (_ "Display the account's foreign currency amount?") #f))
+  (gnc:register-option 
+   options 
+   (gnc:make-simple-boolean-option
+    pagename name-show-foreign
+    (string-append sort-tag "a")
+    (_ "Display the account's foreign currency amount?") #f))
     
-    (gnc:register-option 
-     options 
-     (gnc:make-currency-option 
-      pagename name-report-currency
-      (string-append sort-tag "b")
-      (_ "All other currencies will get converted to this currency.")
-      (gnc:option-value
-       (gnc:lookup-global-option "International"
-				 "Default Currency"))))))
+  (gnc:register-option 
+   options 
+   (gnc:make-currency-option 
+    pagename name-report-currency
+    (string-append sort-tag "b")
+    (_ "All other currencies will get converted to this currency.")
+    (gnc:option-value
+     (gnc:lookup-global-option "International"
+                               "Default Currency")))))

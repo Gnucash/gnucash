@@ -260,13 +260,13 @@ xaccGetPriceCellValue (PriceCell *cell)
   return cell->amount;
 }
 
-void
+gboolean
 xaccSetPriceCellValue (PriceCell * cell, gnc_numeric amount)
 {
   const char *buff;
 
   if (cell == NULL)
-    return;
+    return FALSE;
 
   if (cell->fraction > 0)
     amount = gnc_numeric_convert (amount, cell->fraction, GNC_RND_ROUND);
@@ -275,7 +275,12 @@ xaccSetPriceCellValue (PriceCell * cell, gnc_numeric amount)
   buff = xaccPriceCellPrintValue (cell);
   cell->need_to_parse = FALSE;
 
+  if (safe_strcmp (buff, cell->cell.value) == 0)
+    return FALSE;
+
   xaccSetBasicCellValueInternal (&cell->cell, buff);
+
+  return TRUE;
 }
 
 /* ================================================ */

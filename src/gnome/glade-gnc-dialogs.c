@@ -5701,14 +5701,17 @@ create_Tax_Information_Dialog (void)
   GtkWidget *hbox81;
   GtkWidget *account_frame;
   GtkWidget *vbox96;
-  GtkWidget *account_scroll;
   GtkWidget *hbox97;
   GSList *tax_info_account_type_group = NULL;
   GtkWidget *income_radio;
   GtkWidget *expense_radio;
+  GtkWidget *account_scroll;
+  GtkWidget *hbox98;
+  GtkWidget *label847733;
+  GtkWidget *num_accounts_label;
   GtkWidget *select_subaccounts_button;
   GtkWidget *unselect_subaccounts_button;
-  GtkWidget *frame40;
+  GtkWidget *tax_info_frame;
   GtkWidget *vbox92;
   GtkWidget *tax_related_button;
   GtkWidget *hseparator1;
@@ -5726,7 +5729,7 @@ create_Tax_Information_Dialog (void)
   GtkWidget *parent_account_button;
   GtkWidget *dialog_action_area14;
   GtkWidget *button73;
-  GtkWidget *button74;
+  GtkWidget *apply_button;
   GtkWidget *button75;
 
   Tax_Information_Dialog = gnome_dialog_new (_("Tax Information"), NULL);
@@ -5758,21 +5761,13 @@ create_Tax_Information_Dialog (void)
   gtk_widget_show (vbox96);
   gtk_container_add (GTK_CONTAINER (account_frame), vbox96);
 
-  account_scroll = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_ref (account_scroll);
-  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "account_scroll", account_scroll,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (account_scroll);
-  gtk_box_pack_start (GTK_BOX (vbox96), account_scroll, TRUE, TRUE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (account_scroll), 3);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
-
-  hbox97 = gtk_hbox_new (TRUE, 0);
+  hbox97 = gtk_hbox_new (FALSE, 0);
   gtk_widget_ref (hbox97);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hbox97", hbox97,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (hbox97);
   gtk_box_pack_start (GTK_BOX (vbox96), hbox97, FALSE, FALSE, 2);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox97), 3);
 
   income_radio = gtk_radio_button_new_with_label (tax_info_account_type_group, _("Income"));
   tax_info_account_type_group = gtk_radio_button_group (GTK_RADIO_BUTTON (income_radio));
@@ -5791,6 +5786,38 @@ create_Tax_Information_Dialog (void)
   gtk_box_pack_start (GTK_BOX (hbox97), expense_radio, FALSE, FALSE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (expense_radio), TRUE);
 
+  account_scroll = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (account_scroll);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "account_scroll", account_scroll,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (account_scroll);
+  gtk_box_pack_start (GTK_BOX (vbox96), account_scroll, TRUE, TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (account_scroll), 3);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (account_scroll), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+
+  hbox98 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_ref (hbox98);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "hbox98", hbox98,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox98);
+  gtk_box_pack_start (GTK_BOX (vbox96), hbox98, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox98), 3);
+
+  label847733 = gtk_label_new (_("Accounts Selected:"));
+  gtk_widget_ref (label847733);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "label847733", label847733,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847733);
+  gtk_box_pack_start (GTK_BOX (hbox98), label847733, FALSE, FALSE, 0);
+  gtk_misc_set_alignment (GTK_MISC (label847733), 1, 0.5);
+
+  num_accounts_label = gtk_label_new (_("0"));
+  gtk_widget_ref (num_accounts_label);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "num_accounts_label", num_accounts_label,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (num_accounts_label);
+  gtk_box_pack_start (GTK_BOX (hbox98), num_accounts_label, FALSE, FALSE, 0);
+
   select_subaccounts_button = gtk_button_new_with_label (_("Select Subaccounts"));
   gtk_widget_ref (select_subaccounts_button);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "select_subaccounts_button", select_subaccounts_button,
@@ -5807,19 +5834,19 @@ create_Tax_Information_Dialog (void)
   gtk_box_pack_start (GTK_BOX (vbox96), unselect_subaccounts_button, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (unselect_subaccounts_button), 3);
 
-  frame40 = gtk_frame_new (_("Tax Information"));
-  gtk_widget_ref (frame40);
-  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "frame40", frame40,
+  tax_info_frame = gtk_frame_new (_("Tax Information"));
+  gtk_widget_ref (tax_info_frame);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "tax_info_frame", tax_info_frame,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (frame40);
-  gtk_box_pack_start (GTK_BOX (hbox81), frame40, TRUE, TRUE, 0);
+  gtk_widget_show (tax_info_frame);
+  gtk_box_pack_start (GTK_BOX (hbox81), tax_info_frame, TRUE, TRUE, 0);
 
   vbox92 = gtk_vbox_new (FALSE, 3);
   gtk_widget_ref (vbox92);
   gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "vbox92", vbox92,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (vbox92);
-  gtk_container_add (GTK_CONTAINER (frame40), vbox92);
+  gtk_container_add (GTK_CONTAINER (tax_info_frame), vbox92);
   gtk_container_set_border_width (GTK_CONTAINER (vbox92), 3);
 
   tax_related_button = gtk_check_button_new_with_label (_("Tax Related"));
@@ -5866,6 +5893,7 @@ create_Tax_Information_Dialog (void)
   gtk_widget_show (txf_category_clist);
   gtk_container_add (GTK_CONTAINER (scrolledwindow18), txf_category_clist);
   gtk_clist_set_column_width (GTK_CLIST (txf_category_clist), 0, 80);
+  gtk_clist_set_selection_mode (GTK_CLIST (txf_category_clist), GTK_SELECTION_BROWSE);
   gtk_clist_column_titles_hide (GTK_CLIST (txf_category_clist));
 
   label847671 = gtk_label_new (_("label847671"));
@@ -5936,12 +5964,12 @@ create_Tax_Information_Dialog (void)
   GTK_WIDGET_SET_FLAGS (button73, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_APPLY);
-  button74 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data);
-  gtk_widget_ref (button74);
-  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "button74", button74,
+  apply_button = GTK_WIDGET (g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data);
+  gtk_widget_ref (apply_button);
+  gtk_object_set_data_full (GTK_OBJECT (Tax_Information_Dialog), "apply_button", apply_button,
                             (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button74);
-  GTK_WIDGET_SET_FLAGS (button74, GTK_CAN_DEFAULT);
+  gtk_widget_show (apply_button);
+  GTK_WIDGET_SET_FLAGS (apply_button, GTK_CAN_DEFAULT);
 
   gnome_dialog_append_button (GNOME_DIALOG (Tax_Information_Dialog), GNOME_STOCK_BUTTON_CANCEL);
   button75 = GTK_WIDGET (g_list_last (GNOME_DIALOG (Tax_Information_Dialog)->buttons)->data);

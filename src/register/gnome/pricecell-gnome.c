@@ -76,7 +76,7 @@ PriceDirect (BasicCell *bcell,
 
                 if (gnc_exp_parser_parse(cell->cell.value,
                                          &amount, &error_loc))
-                    xaccSetPriceCellValue (cell, amount);
+                    return xaccSetPriceCellValue (cell, amount);
                 else
                     *cursor_position = error_loc - cell->cell.value;
 

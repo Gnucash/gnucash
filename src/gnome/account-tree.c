@@ -1108,7 +1108,7 @@ gnc_account_tree_fill(GNCAccountTree *tree,
     Account *account = n->data;
 
     PINFO ("acct=%p guid=%s\n", 
-        account, guid_to_string(xaccAccountGetGUID(account)));
+           account, guid_to_string(xaccAccountGetGUID(account)));
 
     if (tree->view_filter != NULL)
       if (!tree->view_filter(account, tree->view_filter_data))

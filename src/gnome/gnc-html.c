@@ -1645,6 +1645,7 @@ gnc_html_unescape_newlines(const gchar * in) {
 
 char * 
 gnc_html_escape_newlines(const gchar * in) {
+  char *out;
   const char * ip   = in;
   GString * escaped = g_string_new("");
 
@@ -1657,11 +1658,10 @@ gnc_html_escape_newlines(const gchar * in) {
     }
   }
   g_string_append_c(escaped, 0);
-  ip = escaped->str;
+  out = escaped->str;
   g_string_free(escaped, FALSE);
-  return ip;
+  return out;
 }
-
 
 
 /********************************************************************

@@ -1,3 +1,28 @@
+2001-03-27  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-tax-info.c: more work
+
+	* src/gnome/dialog-options.c: set apply button sensitivity
+	appropriately
+
+	* src/scm/report/average-balance.scm: use option-utilities
+
+	* src/scm/report/transaction-report.scm: use option-utilities
+
+	* src/scm/options-utilities.scm: remove superfluous (begin)'s
+
+2001-03-26  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/gnc-html.c: fix compiler warning
+
+	* src/scm/prefs.scm: add new liability/equity debit/credit labels
+
+	* src/register/gnome/pricecell-gnome.c (PriceDirect): don't use
+	key stroke if cell value doesn't change
+
+	* src/register/pricecell.c (xaccSetPriceCellValue): return TRUE
+	if cell value actually changed
+
 2001-03-27  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/io-gncxml-v2.c (add_account_local): duh.  currency

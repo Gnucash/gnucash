@@ -69,6 +69,20 @@ typedef enum {
   GNC_RD_WID_REL_BUTTON_POS,
   GNC_RD_WID_REL_WIDGET_POS} GNCRdPositions;
 
+
+static void
+gnc_option_dialog_changed (GtkWidget *dialog)
+{
+  GtkWidget *button;
+
+  button = gtk_object_get_data (GTK_OBJECT (dialog),
+                                "gnc_option_apply_button");
+  if (!button)
+    return;
+
+  gtk_widget_set_sensitive (button, TRUE);
+}
+
 static void
 gnc_option_changed_cb(GtkEditable *editable, gpointer data)
 {
@@ -81,7 +95,7 @@ gnc_option_changed_cb(GtkEditable *editable, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(raw);
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static void 
@@ -94,7 +108,7 @@ gnc_date_option_changed_cb(GtkWidget *dummy, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(option->widget);
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -695,7 +709,7 @@ default_button_cb(GtkButton *button, gpointer data)
   option->changed = TRUE;
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static GtkWidget *
@@ -725,7 +739,7 @@ gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 
@@ -754,7 +768,7 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
   pbox = gtk_widget_get_toplevel(omenu);
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -787,7 +801,7 @@ gnc_option_rd_combo_cb(GtkWidget *w, gint index, gpointer data)
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
   pbox = gtk_widget_get_toplevel(omenu);
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static GtkWidget *
@@ -971,7 +985,7 @@ gnc_option_account_cb(GNCAccountTree *tree, Account * account, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(tree));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -987,7 +1001,7 @@ gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));*/
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -1003,7 +1017,7 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 
@@ -1089,7 +1103,7 @@ gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(TRUE));
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -1106,7 +1120,7 @@ gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(FALSE));
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -1122,7 +1136,7 @@ gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));*/
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -1138,7 +1152,7 @@ gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static GtkWidget *
@@ -1240,7 +1254,7 @@ gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox));*/
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -1255,7 +1269,7 @@ gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
-  /* gnome_property_box_changed(GNOME_PROPERTY_BOX(pbox)); */
+  gnc_option_dialog_changed (pbox);
 }
 
 static void
@@ -1803,15 +1817,23 @@ gnc_options_dialog_notebook(GNCOptionWin * win) {
 }
 
 static int
-gnc_options_dialog_apply_stub_cb(GtkWidget * w, gpointer data) {
+gnc_options_dialog_apply_stub_cb(GtkWidget * w, gpointer data)
+{
   GNCOptionWin * window = data;
-  if(window->apply_cb) {
-    (window->apply_cb)(window, window->apply_cb_data);
+  GtkWidget *button;
+
+  button = gtk_object_get_data (GTK_OBJECT (window->container),
+                                "gnc_option_apply_button");
+  if (button)
+    gtk_widget_set_sensitive (button, FALSE);
+
+  if (window->apply_cb)
+  {
+    window->apply_cb (window, window->apply_cb_data);
     return TRUE;
   }
-  else {
+  else
     return FALSE;
-  }
 }
 
 static int
@@ -1883,6 +1905,11 @@ gnc_options_dialog_new(gboolean make_toplevel) {
   help_button  = gnome_stock_button (GNOME_STOCK_BUTTON_HELP);
   ok_button    = gnome_stock_button (GNOME_STOCK_BUTTON_OK);
   close_button = gnome_stock_button (GNOME_STOCK_BUTTON_CLOSE);
+
+  gtk_widget_set_sensitive (apply_button, FALSE);
+
+  gtk_object_set_data (GTK_OBJECT (retval->container),
+                       "gnc_option_apply_button", apply_button);
 
   gtk_signal_connect(GTK_OBJECT(apply_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_apply_stub_cb),
