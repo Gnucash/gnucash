@@ -31,12 +31,12 @@
 #include <stdio.h>
 #include <glib.h>
 
-#include "gncObject.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-trace.h"
 #include "guid.h"
 #include "qofbook.h"
+#include "qofobject.h"
 
 static short module = MOD_ENGINE; 
 
@@ -1124,7 +1124,7 @@ commodity_table_book_end (QofBook *book)
  * Don't we have to save user-created/modified commodities?
  * I don't get it ... does this need fixing?
  */
-static GncObject_t commodity_table_object_def = 
+static QofObject commodity_table_object_def = 
 {
   interface_version: GNC_OBJECT_VERSION,
   name:              GNC_ID_COMMODITY_TABLE,

@@ -48,8 +48,8 @@
 #include "messages.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject.h"
 
-#include "gncObject.h"
 #include "QueryObject.h"
 
 /* 
@@ -3561,7 +3561,7 @@ split_foreach (QofBook *book, foreachObjectCB fcn, gpointer user_data)
 
 /* hook into the gncObject registry */
 
-static GncObject_t split_object_def = {
+static QofObject split_object_def = {
   GNC_OBJECT_VERSION,
   GNC_ID_SPLIT,
   "Split",
@@ -3647,7 +3647,7 @@ trans_foreach (QofBook *book, foreachObjectCB fcn, gpointer user_data)
   do_foreach (book, GNC_ID_TRANS, fcn, user_data);
 }
 
-static GncObject_t trans_object_def = {
+static QofObject trans_object_def = {
   GNC_OBJECT_VERSION,
   GNC_ID_TRANS,
   "Transaction",

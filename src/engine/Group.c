@@ -38,9 +38,9 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
-#include "gncObject.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject.h"
 
 static short module = MOD_ENGINE;
 
@@ -1315,7 +1315,7 @@ group_mark_clean(QofBook *book)
   xaccGroupMarkSaved(xaccGetAccountGroup(book));
 }
 
-static GncObject_t group_object_def = 
+static QofObject group_object_def = 
 {
   interface_version: GNC_OBJECT_VERSION,
   name:              GNC_ID_GROUP,
