@@ -1404,9 +1404,9 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          PQfinish (be->connection);
    
          /* The connection may have failed either because the 
-	  * database doesn't exist, or because there was a 
-	  * network problem, or because the user supplied a 
-	  * bad password or username. Try to tell these apart.
+          * database doesn't exist, or because there was a 
+          * network problem, or because the user supplied a 
+          * bad password or username. Try to tell these apart.
           */
          be->connection = PQsetdbLogin (be->hostname,
                                   be->portno,
@@ -1433,26 +1433,26 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             return;
          }
 
-	 /* If we are here, then we've successfully connected to the
-	  * server.  Now, check to see if database exists */
-	 p = be->buff; *p = 0;
-	 p = stpcpy (p, "SELECT datname FROM pg_database "
-		        " WHERE datname='");
-	 p = stpcpy (p, be->dbName);
-	 p = stpcpy (p, "';");
+         /* If we are here, then we've successfully connected to the
+          * server.  Now, check to see if database exists */
+         p = be->buff; *p = 0;
+         p = stpcpy (p, "SELECT datname FROM pg_database "
+                        " WHERE datname='");
+         p = stpcpy (p, be->dbName);
+         p = stpcpy (p, "';");
 
          SEND_QUERY (be,be->buff, );
          db_exists = (gboolean) pgendGetResults (be, db_exists_cb, FALSE);
-	 
+         
          PQfinish (be->connection);
          be->connection = NULL;
 
-	 if (db_exists)
+         if (db_exists)
          {
-	    /* Weird.  We couldn't connect to the database, but it 
-	     * does seem to exist.  I presume that this is some 
-	     * sort of access control problem. */
-	    xaccBackendSetError (&be->be, ERR_BACKEND_PERM);
+            /* Weird.  We couldn't connect to the database, but it 
+             * does seem to exist.  I presume that this is some 
+             * sort of access control problem. */
+            xaccBackendSetError (&be->be, ERR_BACKEND_PERM);
             return;
          }
 
@@ -1497,7 +1497,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
        * server.  Now, check to see if database exists */
       p = be->buff; *p = 0;
       p = stpcpy (p, "SELECT datname FROM pg_database "
-       	             " WHERE datname='");
+                            " WHERE datname='");
       p = stpcpy (p, be->dbName);
       p = stpcpy (p, "';");
 
@@ -1534,12 +1534,12 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
                  PQerrorMessage(be->connection));
             PQfinish (be->connection);
             be->connection = NULL;
-	    /* We just created the database! If we can't connect now, 
-	     * the server is insane! */
+            /* We just created the database! If we can't connect now, 
+             * the server is insane! */
             xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR);
             return;
          }
-	 
+         
          /* Finally, create all the tables and indexes.
           * We do this in pieces, so as not to exceed the max length
           * for postgres queries (which is 8192). 
@@ -1555,15 +1555,15 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       }
       else 
       {
-	 /* Wierd. We were asked to create something that exists.
-	  * This shouldn't really happen ... */
-	 PWARN ("Asked to create the database %s,\n"
-		"\tbut it already exists!\n"
-		"\tThis shouldn't really happen.",
-		be->dbName);
-	 
+         /* Wierd. We were asked to create something that exists.
+          * This shouldn't really happen ... */
+         PWARN ("Asked to create the database %s,\n"
+                "\tbut it already exists!\n"
+                "\tThis shouldn't really happen.",
+                be->dbName);
+         
          PQfinish (be->connection);
-	 
+         
          /* Connect to the database */
          be->connection = PQsetdbLogin (be->hostname, 
                                   be->portno,
@@ -1572,7 +1572,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
                                   be->dbName, 
                                   be->username,  /* login */
                                   password);  /* pwd */
-	 
+         
          /* check the connection status */
          if (CONNECTION_BAD == PQstatus(be->connection))
          {
@@ -1583,10 +1583,10 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
             PQfinish (be->connection);
             be->connection = NULL;
 
-	    /* Well, if we are here, we were connecting just fine,
-	     * just not to this database. Therefore, it must be a 
-	     * permission problem.
-	     */
+            /* Well, if we are here, we were connecting just fine,
+             * just not to this database. Therefore, it must be a 
+             * permission problem.
+             */
             xaccBackendSetError (&be->be, ERR_BACKEND_PERM);
             return;
          }
