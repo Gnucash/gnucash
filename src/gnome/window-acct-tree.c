@@ -283,6 +283,7 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
     gnc_acct_tree_window_find_popup_item(win, popup, "Edit Account");
     gnc_acct_tree_window_find_popup_item(win, popup, "Delete Account");
     gnc_acct_tree_window_find_popup_item(win, popup, "Reconcile...");
+    gnc_acct_tree_window_find_popup_item(win, popup, "View Lots...");
   }
 
   /*
@@ -1293,6 +1294,9 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   GNCMDIInfo     * info = mc->gnc_mdi;
   GNCAcctTreeWin * win;
   GtkWidget      * widget;
+
+#if FILEITEMS_DEPRECATED
+  /* XXX I think fileitems1 and 2 do not belong in the file menu. */
   GnomeUIInfo fileitems1[] =
   {
     {
@@ -1325,6 +1329,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
     },
     GNOMEUIINFO_END
   };
+#endif
 
   GnomeUIInfo edititems[] =
   {
@@ -1409,15 +1414,19 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   dup_scrub[0].user_data = info;
   dup_scrub[1].user_data = info;
   dup_scrub[2].user_data = info;
+#if FILEITEMS_DEPRECATED
   gnc_gnome_app_insert_menus (mc->app, "_File/_New File", fileitems1);
   gnc_gnome_app_insert_menus (mc->app, "_File/_Open...", fileitems2);
+#endif
   gnc_gnome_app_insert_menus (mc->app, "_Edit/_Paste", edititems);
   gnome_app_insert_menus (mc->app, "_Actions/_Scheduled Transactions",
 			  actionitems);
 
   win = (GNCAcctTreeWin *)mc->user_data;
+#if FILEITEMS_DEPRECATED
   gnc_acct_tree_window_add_sensitive(win, fileitems2[0].widget);
   gnc_acct_tree_window_add_sensitive(win, fileitems2[1].widget);
+#endif
   gnc_acct_tree_window_add_sensitive(win, edititems[1].widget);
   gnc_acct_tree_window_add_sensitive(win, edititems[2].widget);
   gnc_acct_tree_window_add_sensitive(win, actionitems[2].widget);

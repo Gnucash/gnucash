@@ -41,10 +41,12 @@
 #include <gnome.h>
 
 #include "Account.h"
+#include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-lot.h"
 #include "kvp_frame.h"
 #include "messages.h"
+#include "Scrub2.h"
 #include "Transaction.h"
 
 #include "dialog-utils.h"
@@ -61,17 +63,22 @@
 
 struct _GNCLotViewer 
 {
-   GtkWidget   * window;
-   GtkCList    * lot_clist;
-   GtkText     * lot_notes;
-   GtkWidget   * reg_area;
-   GtkEntry    * title_entry;
-   GtkPaned    * lot_hpaned;
+   GtkWidget     * window;
+   GtkButton     * regview_button;
+   GtkButton     * delete_button;
+   GtkButton     * scrub_button;
+   GtkCList      * lot_clist;
+   GtkText       * lot_notes;
+   GtkEntry      * title_entry;
+   GtkPaned      * lot_hpaned;
+   GtkCList      * mini_clist;
 
-   Account     * account;
-   GNCLot      * selected_lot;
-   int           selected_row;
+   Account       * account;
+   GNCLot        * selected_lot;
+   int             selected_row;
 };
+
+static void gnc_lot_viewer_fill (GNCLotViewer *lv);
 
 /* ======================================================================== */
 
@@ -108,6 +115,24 @@ printf ("duuude row elect =%d %p the title=%s\n",row, lot, str);
 /* ======================================================================== */
 
 static void 
+lv_unset_lot (GNCLotViewer *lv)
+{
+   /* Set immediately, to avoid recursion in gtkentry "changed" cb. */
+   lv->selected_lot = NULL;
+   lv->selected_row = -1;
+
+   /* Blank the title widget */
+   gtk_entry_set_text (lv->title_entry, "");
+   gtk_entry_set_editable (lv->title_entry, FALSE);
+
+   /* Blank the notes area */
+   xxxgtk_text_set_text (lv->lot_notes, "");
+   gtk_text_set_editable (lv->lot_notes, FALSE);
+}
+
+/* ======================================================================== */
+
+static void 
 lv_unselect_row_cb (GtkCList       *clist,
                     gint            row,
                     gint            column,
@@ -118,23 +143,17 @@ lv_unselect_row_cb (GtkCList       *clist,
    GNCLot *lot = lv->selected_lot;
    const char * str;
 
-   /* Set immediately, to avoid recursion in gtkentry "changed" cb. */
-   lv->selected_lot = NULL;
-   lv->selected_row = -1;
-
    /* Get the title, blank the title widget */
    str = gtk_entry_get_text (lv->title_entry);
 printf ("duuude row unselect =%d %p new tite=%s\n",row, lot, str);
    gtk_clist_set_text (lv->lot_clist, row, column, str);
    kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", str);
-   gtk_entry_set_text (lv->title_entry, "");
-   gtk_entry_set_editable (lv->title_entry, FALSE);
 
    /* Get the notes, blank the notes area */
    str = xxxgtk_text_get_text (lv->lot_notes);
    kvp_frame_set_str (gnc_lot_get_slots (lot), "/notes", str);
-   xxxgtk_text_set_text (lv->lot_notes, "");
-   gtk_text_set_editable (lv->lot_notes, FALSE);
+
+   lv_unset_lot (lv);
 }
 
 /* ======================================================================== */
@@ -145,9 +164,46 @@ lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
    GNCLotViewer *lv = user_data;
    char * title;
    title = gtk_entry_get_text (lv->title_entry);
-printf ("duude entry changed=%s sel=%d\n", title, lv->selected_row);
    if (0 > lv->selected_row) return; 
    gtk_clist_set_text (lv->lot_clist, lv->selected_row, TITLE_COL, title);
+}
+
+/* ======================================================================== */
+
+static void
+lv_delete_cb (GtkButton *but, gpointer user_data)
+{
+   GNCLotViewer *lv = user_data;
+   GNCLot *lot = lv->selected_lot;
+
+   if (NULL == lot) return; 
+   xaccAccountRemoveLot (gnc_lot_get_account(lot), lot);
+   gnc_lot_destroy (lot);
+   lv_unset_lot (lv);
+   gnc_lot_viewer_fill (lv);
+printf ("duude deleted the lot\n");
+}
+
+/* ======================================================================== */
+
+static void
+lv_scrub_cb (GtkButton *but, gpointer user_data)
+{
+   GNCLotViewer *lv = user_data;
+   if (NULL == lv->selected_lot) return; 
+   xaccLotScrubDoubleBalance (lv->selected_lot);
+   gnc_lot_viewer_fill (lv);
+printf ("duude done scrubbin lot\n");
+}
+
+/* ======================================================================== */
+
+static void
+lv_regview_cb (GtkButton *but, gpointer user_data)
+{
+   GNCLotViewer *lv = user_data;
+   if (NULL == lv->selected_lot) return; 
+printf ("duude UNIMPLEMENTED: need to disply register showing only this one lot \n");
 }
 
 /* ======================================================================== */
@@ -212,6 +268,7 @@ gnc_lot_viewer_fill (GNCLotViewer *lv)
 
 printf ("duude got %d lots\n", nlots);
    gtk_clist_freeze (lv->lot_clist);
+   gtk_clist_clear (lv->lot_clist);
    for (node = lot_list; node; node=node->next)
    {
       char obuff[MAX_DATE_LENGTH];
@@ -285,13 +342,17 @@ gnc_lot_viewer_dialog (Account *account)
    xml = gnc_glade_xml_new ("lots.glade", "Lot Viewer Window");
    lv->window = glade_xml_get_widget (xml, "Lot Viewer Window");
 
+   lv->regview_button = GTK_BUTTON(glade_xml_get_widget (xml, "regview button"));
+   lv->delete_button = GTK_BUTTON(glade_xml_get_widget (xml, "delete button"));
+   lv->scrub_button = GTK_BUTTON(glade_xml_get_widget (xml, "scrub button"));
+
    lv->lot_clist = GTK_CLIST(glade_xml_get_widget (xml, "lot clist"));
    lv->lot_notes = GTK_TEXT(glade_xml_get_widget (xml, "lot notes text"));
    lv->title_entry = GTK_ENTRY (glade_xml_get_widget (xml, "lot title entry"));
    lv->lot_hpaned = GTK_PANED (glade_xml_get_widget (xml, "lot hpaned"));
    gtk_paned_set_position (lv->lot_hpaned, 100);   /* XXX hack to make visible */
 
-   lv->reg_area = glade_xml_get_widget (xml, "lot reg area scrolledwindow");
+   lv->mini_clist = GTK_CLIST(glade_xml_get_widget (xml, "mini clist"));
 
    lv->account = account;
    lv->selected_lot = NULL;
@@ -305,6 +366,15 @@ gnc_lot_viewer_dialog (Account *account)
 
    gtk_signal_connect (GTK_OBJECT (lv->title_entry), "changed",
                       GTK_SIGNAL_FUNC (lv_title_entry_changed_cb), lv);
+
+   gtk_signal_connect (GTK_OBJECT (lv->regview_button), "clicked",
+                      GTK_SIGNAL_FUNC (lv_regview_cb), lv);
+
+   gtk_signal_connect (GTK_OBJECT (lv->delete_button), "clicked",
+                      GTK_SIGNAL_FUNC (lv_delete_cb), lv);
+
+   gtk_signal_connect (GTK_OBJECT (lv->scrub_button), "clicked",
+                      GTK_SIGNAL_FUNC (lv_scrub_cb), lv);
 
    gnc_lot_viewer_fill (lv);
    return lv;

@@ -30,12 +30,14 @@
   <widget>
     <class>GtkVBox</class>
     <name>vbox1</name>
+    <border_width>3</border_width>
     <homogeneous>False</homogeneous>
     <spacing>0</spacing>
 
     <widget>
       <class>GtkToolbar</class>
       <name>toolbar1</name>
+      <border_width>3</border_width>
       <orientation>GTK_ORIENTATION_HORIZONTAL</orientation>
       <type>GTK_TOOLBAR_BOTH</type>
       <space_size>5</space_size>
@@ -51,22 +53,45 @@
       <widget>
 	<class>GtkButton</class>
 	<child_name>Toolbar:button</child_name>
-	<name>button2</name>
-	<label>Placeholder</label>
+	<name>regview button</name>
+	<border_width>3</border_width>
+	<tooltip>Open a register showing the transactions in this lot</tooltip>
+	<label>View in Register</label>
       </widget>
 
       <widget>
 	<class>GtkButton</class>
 	<child_name>Toolbar:button</child_name>
-	<name>disolve button</name>
-	<tooltip>Delete this lot</tooltip>
-	<label>Disolve</label>
+	<name>delete button</name>
+	<border_width>3</border_width>
+	<tooltip>Delete the highlighted lot</tooltip>
+	<label>Delete</label>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<child_name>Toolbar:button</child_name>
+	<name>scrub lot button</name>
+	<border_width>3</border_width>
+	<tooltip>Scrub the highlighted lot</tooltip>
+	<label>Scrub
+Lot</label>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<child_name>Toolbar:button</child_name>
+	<name>account scrub button</name>
+	<border_width>3</border_width>
+	<label>Scrub
+Account</label>
       </widget>
     </widget>
 
     <widget>
       <class>GtkHPaned</class>
       <name>lot hpaned</name>
+      <border_width>3</border_width>
       <handle_size>10</handle_size>
       <gutter_size>6</gutter_size>
       <position>0</position>
@@ -77,223 +102,307 @@
       </child>
 
       <widget>
-	<class>GtkVBox</class>
-	<name>vbox2</name>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
+	<class>GtkFrame</class>
+	<name>frame2</name>
+	<border_width>3</border_width>
+	<label>Lot Title and Notes</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	<child>
+	  <shrink>True</shrink>
+	  <resize>False</resize>
+	</child>
+
+	<widget>
+	  <class>GtkVBox</class>
+	  <name>vbox2</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+
+	  <widget>
+	    <class>GtkHBox</class>
+	    <name>hbox1</name>
+	    <border_width>3</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8</name>
+	      <label>Title:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>3</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>lot title entry</name>
+	      <tooltip>Enter a name for the highlighted lot.</tooltip>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>0</text_max_length>
+	      <text></text>
+	      <child>
+		<padding>3</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkScrolledWindow</class>
+	    <name>scrolledwindow2</name>
+	    <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_NEVER</vscrollbar_policy>
+	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkText</class>
+	      <name>lot notes text</name>
+	      <tooltip>Enter any notes you want to make about this lot.</tooltip>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text></text>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkFrame</class>
+	<name>frame3</name>
+	<border_width>3</border_width>
+	<label>Listing of Lots in This Account</label>
+	<label_xalign>0</label_xalign>
+	<shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	<child>
 	  <shrink>True</shrink>
 	  <resize>True</resize>
 	</child>
 
 	<widget>
-	  <class>GtkHBox</class>
-	  <name>hbox1</name>
-	  <homogeneous>False</homogeneous>
-	  <spacing>0</spacing>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
+	  <class>GtkCList</class>
+	  <name>lot clist</name>
+	  <tooltip>A list of all of the lots in this account.</tooltip>
+	  <can_focus>True</can_focus>
+	  <columns>5</columns>
+	  <column_widths>80,80,80,80,80</column_widths>
+	  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	  <show_titles>True</show_titles>
+	  <shadow_type>GTK_SHADOW_IN</shadow_type>
 
 	  <widget>
 	    <class>GtkLabel</class>
-	    <name>label8</name>
-	    <label>Title:</label>
+	    <child_name>CList:title</child_name>
+	    <name>label3</name>
+	    <label>Opened</label>
 	    <justify>GTK_JUSTIFY_CENTER</justify>
 	    <wrap>False</wrap>
 	    <xalign>0.5</xalign>
 	    <yalign>0.5</yalign>
 	    <xpad>0</xpad>
 	    <ypad>0</ypad>
-	    <child>
-	      <padding>0</padding>
-	      <expand>False</expand>
-	      <fill>False</fill>
-	    </child>
 	  </widget>
 
 	  <widget>
-	    <class>GtkEntry</class>
-	    <name>lot title entry</name>
-	    <tooltip>Enter a name for the highlighted lot.</tooltip>
-	    <can_focus>True</can_focus>
-	    <editable>True</editable>
-	    <text_visible>True</text_visible>
-	    <text_max_length>0</text_max_length>
-	    <text></text>
-	    <child>
-	      <padding>0</padding>
-	      <expand>True</expand>
-	      <fill>True</fill>
-	    </child>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label4</name>
+	    <label>Closed</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
 	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow2</name>
-	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_NEVER</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
 
 	  <widget>
-	    <class>GtkText</class>
-	    <name>lot notes text</name>
-	    <tooltip>Enter any notes you want to make about this lot.</tooltip>
-	    <can_focus>True</can_focus>
-	    <editable>True</editable>
-	    <text></text>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label5</name>
+	    <label>Title</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
 	  </widget>
-	</widget>
-      </widget>
-
-      <widget>
-	<class>GtkVBox</class>
-	<name>vbox3</name>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <shrink>True</shrink>
-	  <resize>True</resize>
-	</child>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label2</name>
-	  <label>Lots:</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>0</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow3</name>
-	  <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
 
 	  <widget>
-	    <class>GtkCList</class>
-	    <name>lot clist</name>
-	    <can_focus>True</can_focus>
-	    <columns>5</columns>
-	    <column_widths>80,80,80,80,80</column_widths>
-	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label6</name>
+	    <label>Balance</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
 
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label3</name>
-	      <label>Opened</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label4</name>
-	      <label>Closed</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label5</name>
-	      <label>Title</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label6</name>
-	      <label>Balance</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label7</name>
-	      <label>Gains</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label7</name>
+	    <label>Gains</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
 	  </widget>
 	</widget>
       </widget>
     </widget>
 
     <widget>
-      <class>GtkScrolledWindow</class>
-      <name>lot reg area scrolledwindow</name>
-      <hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
-      <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-      <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-      <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+      <class>GtkFrame</class>
+      <name>frame1</name>
+      <border_width>3</border_width>
+      <label>Lot Mini-View</label>
+      <label_xalign>0</label_xalign>
+      <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
       <child>
 	<padding>0</padding>
-	<expand>True</expand>
-	<fill>True</fill>
+	<expand>False</expand>
+	<fill>False</fill>
       </child>
 
       <widget>
-	<class>GtkViewport</class>
-	<name>viewport1</name>
-	<shadow_type>GTK_SHADOW_IN</shadow_type>
+	<class>GtkScrolledWindow</class>
+	<name>scrolledwindow4</name>
+	<hscrollbar_policy>GTK_POLICY_AUTOMATIC</hscrollbar_policy>
+	<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+	<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
 
 	<widget>
-	  <class>Placeholder</class>
+	  <class>GtkCList</class>
+	  <name>mini clist</name>
+	  <sensitive>False</sensitive>
+	  <tooltip>A summary of all of the transactions in the selected lot</tooltip>
+	  <columns>7</columns>
+	  <column_widths>80,80,80,80,80,80,80</column_widths>
+	  <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	  <show_titles>True</show_titles>
+	  <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label9</name>
+	    <label>Date</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label10</name>
+	    <label>Num</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label11</name>
+	    <label>Description</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label12</name>
+	    <label>Amount</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label13</name>
+	    <label>Value</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label14</name>
+	    <label>Gain/Loss</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
+	    <child_name>CList:title</child_name>
+	    <name>label15</name>
+	    <label>Balance</label>
+	    <justify>GTK_JUSTIFY_CENTER</justify>
+	    <wrap>False</wrap>
+	    <xalign>0.5</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	  </widget>
 	</widget>
       </widget>
     </widget>
