@@ -521,6 +521,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
          /* hack assert */
          printf ("Internal Error: xaccSRLoadRegister(): "
                  "Split without a parent \n");
+         assert (trans);
          break;
       } 
 
@@ -595,7 +596,7 @@ printf ("load register of %d virtual entries %d phys rows ----------- \n", i, nu
 
 printf ("load trans %d at phys row %d \n", i, phys_row);
    
-         if (multi_line || (dynamic && (split == save_current_split))) 
+         if (multi_line || (dynamic && xaccIsPeerSplit(split,save_current_split))) 
          {
             xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
             xaccMoveCursor (table, phys_row, 0);
@@ -610,12 +611,13 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
             do {
                secondary = xaccTransGetSplit (trans, j);
 
-               /* lets determine where to locate the cursor ... */
-               if (secondary == save_current_split) {
-                  save_cursor_phys_row = phys_row;
-               }
-
                if (secondary != split) {
+
+                  /* lets determine where to locate the cursor ... */
+                  if (secondary == save_current_split) {
+                     save_cursor_phys_row = phys_row;
+                  }
+
 printf ("load split %d at phys row %d \n", j, phys_row);
                   xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
                   xaccMoveCursor (table, phys_row, 0);
