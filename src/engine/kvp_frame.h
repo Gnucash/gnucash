@@ -117,15 +117,36 @@ gboolean     kvp_frame_is_empty(KvpFrame * frame);
 /** @name KvpFrame Value Storing */
 /*@{*/
 
-/** The kvp_frame_set_str() routine will store a string at the indicated path.
- *  If not all frame components of the path exist, they are created.
- * */
+/** The kvp_frame_set_gint64() routine will store the value of the 
+ *     gint64 at the indicated path. If not all frame components of the 
+ *     path exist, they are created.
+ *
+ *     Similarly, the set_double, set_numeric, and set_timespec 
+ *     routines perform the same function, for each of the respective 
+ *     types.
+ */
 void kvp_frame_set_gint64(KvpFrame * frame, const char * path, gint64 ival);
 void kvp_frame_set_double(KvpFrame * frame, const char * path, double dval);
 void kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval);
+void kvp_frame_set_timespec(KvpFrame * frame, const char * path, Timespec ts);
+
+/** The kvp_frame_set_str() routine will store a copy of the string 
+ *    at the indicated path. If not all frame components of the path 
+ *    exist, they are created.  If there was another string previously
+ *    stored at that path, the old copy is deleted.
+ *
+ *    Similarly, the set_guid and set_frame will make copies and
+ *    store those.  Old copies, if any, are deleted.  
+ *
+ * The kvp_frame_set_frame_nc() routine works as above, but does 
+ *    *NOT* copy the frame. 
+ */
 void kvp_frame_set_str(KvpFrame * frame, const char * path, const char* str);
 void kvp_frame_set_guid(KvpFrame * frame, const char * path, const GUID *guid);
-void kvp_frame_set_timespec(KvpFrame * frame, const char * path, Timespec ts);
+
+void kvp_frame_set_frame(KvpFrame *frame, const char *path, KvpFrame *chld);
+void kvp_frame_set_frame_nc(KvpFrame *frame, const char *path, KvpFrame *chld);
+
 
 /** The kvp_frame_add_url_encoding() routine will parse the
  *  value string, assuming it to be URL-encoded in the standard way,
@@ -157,7 +178,15 @@ void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
   The values returned for GUID, binary, GList, KvpFrame and string 
   are "non-copying" -- the returned item is the actual item stored.
   Do not delete this item unless you take the required care to avoid
-  possible bad pointer derefrences (i.e. core dumps).
+  possible bad pointer derefrences (i.e. core dumps).  Also, be 
+  careful anging on to those references if you are also storing
+  at the same path names: the referenced item will be freed during
+  the store.
+
+  That is, if you get a string value (or guid, binary or frame),
+  and then store something else at that path, the string that you've
+  gotten will be freed during the store (internally, by the set_*()
+  routines), and you will be left hanging onto an invalid pointer.
 */
 
 gint64      kvp_frame_get_gint64(const KvpFrame *frame, const char *path);
@@ -297,22 +326,30 @@ gint          kvp_frame_compare(const KvpFrame *fa, const KvpFrame *fb);
 
 gint          double_compare(double v1, double v2);
 
-/** list convenience funcs. */
+/** @name KvpValue List Convenience Functions */
+/*@{*/
+/** You probably shouldn't be using these low-level routines */
+
+/** kvp_glist_compare() compares <b>GLists of kvp_values</b> (not to
+ *     be confused with GLists of something else):  it iterates over
+ *     the list elements, performing a kvp_value_compare on each.
+ */
 gint        kvp_glist_compare(const GList * list1, const GList * list2);
 
-/** kvp_glist_copy() performs a deep copy of a <b>GList of
- *     kvp_frame's</b> (not to be confused with GLists of something
+/** kvp_glist_copy() performs a deep copy of a <b>GList of 
+ *     kvp_values</b> (not to be confused with GLists of something
  *     else): same as mapping kvp_value_copy() over the elements and
  *     then copying the spine.
  */
 GList     * kvp_glist_copy(const GList * list);
 
 /** kvp_glist_delete() performs a deep delete of a <b>GList of
- *     kvp_frame's</b> (not to be confused with GLists of something
+ *     kvp_values</b> (not to be confused with GLists of something
  *     else): same as mapping * kvp_value_delete() over the elements
  *     and then deleting the GList.
  */
 void        kvp_glist_delete(GList * list);
+/*@}*/
 
 
 /** @name KvpValue Constructors */
@@ -331,11 +368,11 @@ KvpValue   * kvp_value_new_string(const char * value);
 KvpValue   * kvp_value_new_guid(const GUID * guid);
 KvpValue   * kvp_value_new_timespec(Timespec timespec);
 KvpValue   * kvp_value_new_binary(const void * data, guint64 datasize);
+KvpValue   * kvp_value_new_frame(const KvpFrame * value);
 
 /** Creates a KvpValue from a <b>GList of kvp_value's</b>! (Not to be
  *  confused with GList's of something else!) */
 KvpValue   * kvp_value_new_glist(const GList * value);
-KvpValue   * kvp_value_new_frame(const KvpFrame * value);
 
 /** value constructors (non-copying - KvpValue takes pointer ownership)
    values *must* have been allocated via glib allocators! (gnew, etc.) */
