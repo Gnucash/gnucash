@@ -351,6 +351,7 @@ xaccRemoveAccount (Account *acc)
 
 /********************************************************************\
 \********************************************************************/
+
 void
 xaccInsertSubAccount( Account *adult, Account *child )
 {
@@ -463,6 +464,33 @@ xaccRecomputeGroupBalance (AccountGroup *grp)
       }
    }
 }
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccGroupDepthAutoCode (AccountGroup *grp)
+{
+   int depth;
+
+   /* get the depth */
+   depth = xaccGroupGetDepth (grp);
+   if (3>depth) depth = 3;
+
+   xaccGroupAutoCode (grp, depth);
+} 
+
+void
+xaccGroupAutoCode (AccountGroup *grp, int depth)
+{
+   int i;
+
+   for (i=0; i<grp->numAcc; i++) {
+      Account *acc = grp->account[i];
+      xaccAccountAutoCode (acc, depth);
+      xaccGroupAutoCode (acc->children, depth);
+   }
+} 
 
 /********************************************************************\
 \********************************************************************/
@@ -593,6 +621,24 @@ xaccGroupGetBalance (AccountGroup * grp)
 {
    if (!grp) return 0.0;
    return (grp->balance);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+int     
+xaccGroupGetDepth (AccountGroup *grp)
+{
+   int i, depth=0, maxdepth=0;
+   if (!grp) return 0;
+
+   for (i=0; i<grp->numAcc; i++) {
+      depth = xaccGroupGetDepth (grp->account[i]->children);
+      if (depth > maxdepth) maxdepth = depth;
+   }
+
+   maxdepth++;
+   return maxdepth;
 }
 
 /****************** END OF FILE *************************************/
