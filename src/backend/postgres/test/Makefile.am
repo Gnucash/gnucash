@@ -24,14 +24,13 @@ LDADD = -L${top_srcdir}/src/gnc-module -L${top_srcdir}/src/gnc-module/.libs \
 	${top_srcdir}/src/backend/postgres/libgncmod-backend-postgres.la \
         -lltdl
 
-CFLAGS = ${GLIB_CFLAGS}
-
-INCLUDES = \
+CFLAGS = \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \
-  -I..
+  -I.. \
+  ${GLIB_CFLAGS}
 
 EXTRA_DIST = \
   db-control.sh
