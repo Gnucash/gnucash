@@ -5,7 +5,7 @@ TESTS = \
 
 TESTS_ENVIRONMENT=\
   GNC_MODULE_PATH=${top_srcdir}/src/engine::${top_srcdir}/src/backend/file:${top_srcdir}/src/backend/postgres:${top_srcdir}/src/scm \
-  GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module \
+  GUILE_LOAD_PATH=${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine \
   LTDL_LIBRARY_PATH=${top_srcdir}/src/gnc-module \
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine
 
