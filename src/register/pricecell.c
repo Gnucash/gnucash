@@ -119,7 +119,8 @@ PriceMV (BasicCell *_cell,
         /* accept only numbers or a decimal point or a thousands sep */
         if (!isdigit(change[i]) &&
             (decimal_point != change[i]) &&
-            (thousands_sep != change[i]))
+            (thousands_sep != change[i]) &&
+            ('-' != change[i]))
           return NULL;
 
         if (decimal_point == change[i])

@@ -90,7 +90,7 @@ typedef enum
   NUM_CELL,
   DESC_CELL,
   RECN_CELL,
-  SHRS_CELL,
+  SHRBALN_CELL,
   BALN_CELL,
   ACTN_CELL,
   XFRM_CELL,
@@ -99,7 +99,7 @@ typedef enum
   CRED_CELL,
   DEBT_CELL,
   PRIC_CELL,
-  VALU_CELL,
+  SHRS_CELL,
 
   /* NCRED & NDEBT handle minus the usual quantities */
   NCRED_CELL,
@@ -145,7 +145,7 @@ typedef enum
 #define MOD_AMNT   0x0200
 #define MOD_NAMNT  0x0400
 #define MOD_PRIC   0x0800
-#define MOD_VALU   0x1000
+#define MOD_SHRS   0x1000
 #define MOD_NEW    0x2000
 #define MOD_ALL    0x3fff
 
@@ -180,7 +180,7 @@ struct _SplitRegister {
    NumCell       * numCell;
    QuickFillCell * descCell;
    RecnCell      * recnCell;   /* main transaction line reconcile */
-   PriceCell     * shrsCell;
+   PriceCell     * shrbalnCell;
    PriceCell     * balanceCell;
    BasicCell     * nullCell;
 
@@ -192,7 +192,7 @@ struct _SplitRegister {
    PriceCell     * creditCell;
    PriceCell     * debitCell;
    PriceCell     * priceCell;
-   PriceCell     * valueCell;
+   PriceCell     * sharesCell;
 
    PriceCell     * ncreditCell;
    PriceCell     * ndebitCell;

@@ -344,7 +344,7 @@
 #define NUM_CELL_HELP     _("Enter the transaction number, such as the "\
                             "check number")
 #define PRICE_CELL_HELP   _("Enter the share price")
-#define SELL_CELL_HELP    _("Enter the number of shares sold")
+#define SHARES_CELL_HELP  _("Enter the number of shares bought or sold")
 #define VALUE_CELL_HELP   _("Enter the total value of the shares")
 #define XFER_CELL_HELP    _("Enter the account to transfer from, or choose "\
                             "one from the list")
@@ -676,6 +676,7 @@
 #define SECURITY_STR        _("Security")
 #define SELL_STR            _("Sell")
 #define SETTINGS_STR        _("Settings")
+#define SHARES_STR          _("Shares")
 #define SIMPLE_STR          _("Simple")
 #define SOLD_STR            _("Sold")
 #define SPEND_STR           _("Spend")
@@ -728,5 +729,6 @@
 #define VALU_CELL_SAMPLE    DEBT_CELL_SAMPLE
 #define SHRS_CELL_SAMPLE    DEBT_CELL_SAMPLE
 #define BALN_CELL_SAMPLE    DEBT_CELL_SAMPLE
+#define SHRBALN_CELL_SAMPLE DEBT_CELL_SAMPLE
 
 #endif /* __XACC_MESSAGES_I18N_H__ */

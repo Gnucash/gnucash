@@ -68,7 +68,7 @@ struct _SplitRegisterBuffer
   CellBuffer numCell;
   CellBuffer descCell;
   CellBuffer recnCell;
-  CellBuffer shrsCell;
+  CellBuffer shrbalnCell;
   CellBuffer balanceCell;
   CellBuffer actionCell;
   CellBuffer xfrmCell;
@@ -78,7 +78,7 @@ struct _SplitRegisterBuffer
   CellBuffer creditCell;
   CellBuffer debitCell;
   CellBuffer priceCell;
-  CellBuffer valueCell;
+  CellBuffer sharesCell;
   CellBuffer ncreditCell;
   CellBuffer ndebitCell;
 };
@@ -117,8 +117,8 @@ static SplitRegisterColors reg_colors = {
 #define NDEBT_CELL_ALIGN   CELL_ALIGN_RIGHT
 #define NCRED_CELL_ALIGN   CELL_ALIGN_RIGHT
 #define PRIC_CELL_ALIGN    CELL_ALIGN_RIGHT
-#define VALU_CELL_ALIGN    CELL_ALIGN_RIGHT
 #define SHRS_CELL_ALIGN    CELL_ALIGN_RIGHT
+#define SHRBALN_CELL_ALIGN CELL_ALIGN_RIGHT
 #define BALN_CELL_ALIGN    CELL_ALIGN_RIGHT
 
 /* ============================================== */
@@ -157,21 +157,21 @@ configLabels (SplitRegister *reg)
 
   type = reg->type;
 
-  LABEL (DATE,  DATE_STR);
-  LABEL (NUM,   NUM_STR);
-  LABEL (DESC,  DESC_STR);
-  LABEL (RECN,  RECONCILE_ABBREV);
-  LABEL (SHRS,  TOTAL_SHARES_STR);
-  LABEL (BALN,  BALN_STR);
-  LABEL (ACTN,  ACTION_STR);
-  LABEL (XFRM,  ACCOUNT_STR);
-  LABEL (MXFRM, TRANSFER_STR);
-  LABEL (XTO,   ACCOUNT_STR);
-  LABEL (MEMO,  MEMO_STR);
-  LABEL (CRED,  CREDIT_STR);
-  LABEL (DEBT,  DEBIT_STR);
-  LABEL (PRIC,  PRICE_STR);
-  LABEL (VALU,  VALUE_STR);
+  LABEL (DATE,    DATE_STR);
+  LABEL (NUM,     NUM_STR);
+  LABEL (DESC,    DESC_STR);
+  LABEL (RECN,    RECONCILE_ABBREV);
+  LABEL (SHRBALN, TOTAL_SHARES_STR);
+  LABEL (BALN,    BALN_STR);
+  LABEL (ACTN,    ACTION_STR);
+  LABEL (XFRM,    ACCOUNT_STR);
+  LABEL (MXFRM,   TRANSFER_STR);
+  LABEL (XTO,     ACCOUNT_STR);
+  LABEL (MEMO,    MEMO_STR);
+  LABEL (CRED,    CREDIT_STR);
+  LABEL (DEBT,    DEBIT_STR);
+  LABEL (PRIC,    PRICE_STR);
+  LABEL (SHRS,    SHARES_STR);
 
   if (debit_getter != NULL)
   {
@@ -471,53 +471,53 @@ configLayout (SplitRegister *reg)
     case CURRENCY_REGISTER:
       {
         curs = reg->double_cursor;
-        SET_CELL (DATE,   date,     0,  0);
-        SET_CELL (NUM,    num,      1,  0);
-        SET_CELL (DESC,   desc,     2,  0);
-        SET_CELL (MXFRM,  mxfrm,    3,  0);
-        SET_CELL (RECN,   recn,     4,  0);
-        SET_CELL (DEBT,   debit,    5,  0);
-        SET_CELL (CRED,   credit,   6,  0);
-        SET_CELL (PRIC,   price,    7,  0);
-        SET_CELL (VALU,   value,    8,  0);
-        SET_CELL (SHRS,   shrs,     9,  0);
-        SET_CELL (BALN,   balance, 10,  0);
+        SET_CELL (DATE,    date,     0,  0);
+        SET_CELL (NUM,     num,      1,  0);
+        SET_CELL (DESC,    desc,     2,  0);
+        SET_CELL (MXFRM,   mxfrm,    3,  0);
+        SET_CELL (RECN,    recn,     4,  0);
+        SET_CELL (SHRS,    shares,   5,  0);
+        SET_CELL (PRIC,    price,    6,  0);
+        SET_CELL (DEBT,    debit,    7,  0);
+        SET_CELL (CRED,    credit,   8,  0);
+        SET_CELL (SHRBALN, shrbaln,  9,  0);
+        SET_CELL (BALN,    balance, 10,  0);
 
-        SET_CELL (ACTN,   action,   1,  1);
-        SET_CELL (MEMO,   memo,     2,  1);
+        SET_CELL (ACTN,    action,   1,  1);
+        SET_CELL (MEMO,    memo,     2,  1);
 
         curs = reg->trans_cursor;
-        SET_CELL (DATE,   date,     0,  0);
-        SET_CELL (NUM,    num,      1,  0);
-        SET_CELL (DESC,   desc,     2,  0);
-        SET_CELL (XTO,    xto,      3,  0);
-        SET_CELL (RECN,   recn,     4,  0);
-        SET_CELL (DEBT,   debit,    5,  0);
-        SET_CELL (CRED,   credit,   6,  0);
-        SET_CELL (PRIC,   price,    7,  0);
-        SET_CELL (VALU,   value,    8,  0);
-        SET_CELL (SHRS,   shrs,     9,  0);
-        SET_CELL (BALN,   balance,  10, 0);
+        SET_CELL (DATE,    date,     0,  0);
+        SET_CELL (NUM,     num,      1,  0);
+        SET_CELL (DESC,    desc,     2,  0);
+        SET_CELL (XTO,     xto,      3,  0);
+        SET_CELL (RECN,    recn,     4,  0);
+        SET_CELL (SHRS,    shares,   5,  0);
+        SET_CELL (PRIC,    price,    6,  0);
+        SET_CELL (DEBT,    debit,    7,  0);
+        SET_CELL (CRED,    credit,   8,  0);
+        SET_CELL (SHRBALN, shrbaln,  9,  0);
+        SET_CELL (BALN,    balance,  10, 0);
 
         curs = reg->split_cursor;
-        SET_CELL (ACTN,   action,   1,  0);
-        SET_CELL (MEMO,   memo,     2,  0);
-        SET_CELL (XFRM,   xfrm,     3,  0);
-        SET_CELL (NDEBT,  ndebit,   5,  0);
-        SET_CELL (NCRED,  ncredit,  6,  0);
+        SET_CELL (ACTN,    action,   1,  0);
+        SET_CELL (MEMO,    memo,     2,  0);
+        SET_CELL (XFRM,    xfrm,     3,  0);
+        SET_CELL (NDEBT,   ndebit,   7,  0);
+        SET_CELL (NCRED,   ncredit,  8,  0);
 
         curs = reg->single_cursor;
-        SET_CELL (DATE,   date,     0,  0);
-        SET_CELL (NUM,    num,      1,  0);
-        SET_CELL (DESC,   desc,     2,  0);
-        SET_CELL (MXFRM,  mxfrm,    3,  0);
-        SET_CELL (RECN,   recn,     4,  0);
-        SET_CELL (DEBT,   debit,    5,  0);
-        SET_CELL (CRED,   credit,   6,  0);
-        SET_CELL (PRIC,   price,    7,  0);
-        SET_CELL (VALU,   value,    8,  0);
-        SET_CELL (SHRS,   shrs,     9,  0);
-        SET_CELL (BALN,   balance, 10,  0);
+        SET_CELL (DATE,    date,     0,  0);
+        SET_CELL (NUM,     num,      1,  0);
+        SET_CELL (DESC,    desc,     2,  0);
+        SET_CELL (MXFRM,   mxfrm,    3,  0);
+        SET_CELL (RECN,    recn,     4,  0);
+        SET_CELL (SHRS,    shares,   5,  0);
+        SET_CELL (PRIC,    price,    6,  0);
+        SET_CELL (DEBT,    debit,    7,  0);
+        SET_CELL (CRED,    credit,   8,  0);
+        SET_CELL (SHRBALN, shrbaln,  9,  0);
+        SET_CELL (BALN,    balance, 10,  0);
 
         break;
       }
@@ -526,53 +526,53 @@ configLayout (SplitRegister *reg)
     case PORTFOLIO_LEDGER:
       {
         curs = reg->double_cursor;
-        SET_CELL (DATE,   date,     0,  0);
-        SET_CELL (NUM,    num,      1,  0);
-        SET_CELL (DESC,   desc,     2,  0);
-        SET_CELL (XTO,    xto,      3,  0);
-        SET_CELL (MXFRM,  mxfrm,    4,  0);
-        SET_CELL (RECN,   recn,     5,  0);
-        SET_CELL (DEBT,   debit,    6,  0);
-        SET_CELL (CRED,   credit,   7,  0);
-        SET_CELL (PRIC,   price,    8,  0);
-        SET_CELL (VALU,   value,    9,  0);
-        SET_CELL (SHRS,   shrs,    10,  0);
+        SET_CELL (DATE,    date,     0,  0);
+        SET_CELL (NUM,     num,      1,  0);
+        SET_CELL (DESC,    desc,     2,  0);
+        SET_CELL (XTO,     xto,      3,  0);
+        SET_CELL (MXFRM,   mxfrm,    4,  0);
+        SET_CELL (RECN,    recn,     5,  0);
+        SET_CELL (SHRS,    shares,   6,  0);
+        SET_CELL (PRIC,    price,    7,  0);
+        SET_CELL (DEBT,    debit,    8,  0);
+        SET_CELL (CRED,    credit,   9,  0);
+        SET_CELL (SHRBALN, shrbaln, 10,  0);
 
-        SET_CELL (ACTN,   action,   1,  1);
-        SET_CELL (MEMO,   memo,     2,  1);
+        SET_CELL (ACTN,    action,   1,  1);
+        SET_CELL (MEMO,    memo,     2,  1);
 
         curs = reg->trans_cursor;
-        SET_CELL (DATE,   date,     0,  0);
-        SET_CELL (NUM,    num,      1,  0);
-        SET_CELL (DESC,   desc,     2,  0);
-        SET_CELL (XTO,    mxfrm,    3,  0);
-        SET_CELL (XFRM,   xto,      4,  0);
-        SET_CELL (RECN,   recn,     5,  0);
-        SET_CELL (DEBT,   debit,    6,  0);
-        SET_CELL (CRED,   credit,   7,  0);
-        SET_CELL (PRIC,   price,    8,  0);
-        SET_CELL (VALU,   value,    9,  0);
-        SET_CELL (SHRS,   shrs,    10,  0);
+        SET_CELL (DATE,    date,     0,  0);
+        SET_CELL (NUM,     num,      1,  0);
+        SET_CELL (DESC,    desc,     2,  0);
+        SET_CELL (XTO,     mxfrm,    3,  0);
+        SET_CELL (XFRM,    xto,      4,  0);
+        SET_CELL (RECN,    recn,     5,  0);
+        SET_CELL (SHRS,    shares,   6,  0);
+        SET_CELL (PRIC,    price,    7,  0);
+        SET_CELL (DEBT,    debit,    8,  0);
+        SET_CELL (CRED,    credit,   9,  0);
+        SET_CELL (SHRBALN, shrbaln, 10,  0);
 
         curs = reg->split_cursor;
-        SET_CELL (ACTN,   action,   1,  0);
-        SET_CELL (MEMO,   memo,     2,  0);
-        SET_CELL (XFRM,   xfrm,     4,  0);
-        SET_CELL (NDEBT,  ndebit,   6,  0);
-        SET_CELL (NCRED,  ncredit,  7,  0);
+        SET_CELL (ACTN,    action,   1,  0);
+        SET_CELL (MEMO,    memo,     2,  0);
+        SET_CELL (XFRM,    xfrm,     4,  0);
+        SET_CELL (NDEBT,   ndebit,   8,  0);
+        SET_CELL (NCRED,   ncredit,  9,  0);
 
         curs = reg->single_cursor;
-        SET_CELL (DATE,   date,     0,  0);
-        SET_CELL (NUM,    num,      1,  0);
-        SET_CELL (DESC,   desc,     2,  0);
-        SET_CELL (XTO,    xto,      3,  0);
-        SET_CELL (MXFRM,  mxfrm,    4,  0);
-        SET_CELL (RECN,   recn,     5,  0);
-        SET_CELL (DEBT,   debit,    6,  0);
-        SET_CELL (CRED,   credit,   7,  0);
-        SET_CELL (PRIC,   price,    8,  0);
-        SET_CELL (VALU,   value,    9,  0);
-        SET_CELL (SHRS,   shrs,    10,  0);
+        SET_CELL (DATE,    date,     0,  0);
+        SET_CELL (NUM,     num,      1,  0);
+        SET_CELL (DESC,    desc,     2,  0);
+        SET_CELL (XTO,     xto,      3,  0);
+        SET_CELL (MXFRM,   mxfrm,    4,  0);
+        SET_CELL (RECN,    recn,     5,  0);
+        SET_CELL (SHRS,    shares,   6,  0);
+        SET_CELL (PRIC,    price,    7,  0);
+        SET_CELL (DEBT,    debit,    8,  0);
+        SET_CELL (CRED,    credit,   9,  0);
+        SET_CELL (SHRBALN, shrbaln, 10,  0);
 
         break;
       }
@@ -1005,8 +1005,8 @@ xaccInitSplitRegister (SplitRegister *reg,
   HDR (CRED);
   HDR (DEBT);
   HDR (PRIC);
-  HDR (VALU);
   HDR (SHRS);
+  HDR (SHRBALN);
   HDR (BALN);
 
   HDR (NCRED);
@@ -1020,7 +1020,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (num,     Num);
   NEW (desc,    QuickFill);
   NEW (recn,    Recn);
-  NEW (shrs,    Price);
+  NEW (shrbaln, Price);
   NEW (balance, Price);
 
   NEW (xfrm,    Combo);
@@ -1031,7 +1031,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   NEW (credit,  Price);
   NEW (debit,   Price);
   NEW (price,   Price);
-  NEW (value,   Price);
+  NEW (shares,  Price);
 
   NEW (ncredit, Price);
   NEW (ndebit,  Price);
@@ -1082,12 +1082,11 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetBasicCellBlankHelp (&reg->descCell->cell, DESC_CELL_HELP);
 
   /* The balance cell does not accept input; it's for display only.
-   * however, we *do* want it to shadow the true cell contents when 
-   * the cursor is repositioned.  Othewise, it will just display 
-   * whatever previous bogus value it contained.
-   */
+   * however, we *do* want it to shadow the true cell contents when
+   * the cursor is repositioned.  Othewise, it will just display
+   * whatever previous bogus value it contained. */
   reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
-  reg->shrsCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
+  reg->shrbalnCell->cell.input_output = XACC_CELL_ALLOW_SHADOW;
 
   /* by default, don't blank zeros on the balance or price cells. */
   xaccSetPriceCellBlankZero(reg->balanceCell, FALSE);
@@ -1101,12 +1100,13 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* Initialize price cells */
   xaccSetPriceCellValue (reg->debitCell, 0.0);
   xaccSetPriceCellValue (reg->creditCell, 0.0);
-  xaccSetPriceCellValue (reg->valueCell, 0.0);
+  xaccSetPriceCellValue (reg->sharesCell, 0.0);
   xaccSetPriceCellValue (reg->ndebitCell, 0.0);
   xaccSetPriceCellValue (reg->ncreditCell, 0.0);
 
-  /* Initialize shares cell */
-  xaccSetPriceCellSharesValue (reg->shrsCell, TRUE);
+  /* Initialize shares and share balance cells */
+  xaccSetPriceCellSharesValue (reg->sharesCell, TRUE);
+  xaccSetPriceCellSharesValue (reg->shrbalnCell, TRUE);
 
   /* The action cell should accept strings not in the list */
   xaccComboCellSetStrict (reg->actionCell, FALSE);
@@ -1120,30 +1120,27 @@ xaccInitSplitRegister (SplitRegister *reg,
 
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
-      xaccSetPriceCellSharesValue (reg->debitCell, TRUE);
-      xaccSetPriceCellSharesValue (reg->creditCell, TRUE);
-      xaccSetPriceCellSharesValue (reg->ndebitCell, TRUE);
-      xaccSetPriceCellSharesValue (reg->ncreditCell, TRUE);
       xaccSetPriceCellIsCurrency (reg->priceCell, TRUE);
 
       xaccSetBasicCellBlankHelp (&reg->priceCell->cell, PRICE_CELL_HELP);
-      xaccSetBasicCellBlankHelp (&reg->valueCell->cell, VALUE_CELL_HELP);
+      xaccSetBasicCellBlankHelp (&reg->sharesCell->cell, SHARES_CELL_HELP);
       break;
     default:
       break;
   }
 
-  /* -------------------------------- */   
-  /* define how traversal works. This must be done *after* the balance, etc.
-   * cells have been marked read-only, since otherwise config will try
-   * to pick them up.
-   */
+  /* -------------------------------- */
+
+  /* define how traversal works. This must be done *after* the
+   * balance, etc. cells have been marked read-only, since otherwise
+   * config will try to pick them up. */
   configTraverse (reg);
 
   /* add menu items for the action cell */
   configAction (reg);
 
-  /* -------------------------------- */   
+  /* -------------------------------- */
+
   phys_r = header->num_rows;
   reg->cursor_phys_row = phys_r;  /* cursor on first line past header */
   reg->cursor_virt_row = 1;
@@ -1164,13 +1161,13 @@ xaccInitSplitRegister (SplitRegister *reg,
     gnc_table_set_cursor (table, header, ploc, vcell_loc);
   }
 
-  /* The call below is for most practical purposes useless.
-   * It simply installs a cursor (the single-line cursor, but it
-   * could of been any of them), and moves it to the first editable
-   * row.  Whoop-de-doo, since this is promptly over-ridden when real
-   * data gets loaded. Its just sort of here as a fail-safe fallback,
-   * in case someone just creates a register but doesn't do anything
-   * with it. Don't want to freak out any programmers. */
+  /* The call below is for practical purposes useless. It installs
+   * a cursor (the single-line cursor, but it could have been any of
+   * them), and moves it to the first editable row. Whoop-de-doo,
+   * since this is promptly over-ridden when real data gets
+   * loaded. It's here as a fail-safe fallback, in case someone
+   * creates a register but doesn't do anything with it. Don't
+   * want to freak out any programmers. */
   {
     PhysicalLocation ploc = { reg->cursor_phys_row, 0 };
     VirtualCellLocation vcell_loc = { reg->cursor_virt_row, 0 };
@@ -1218,7 +1215,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
 {
   /* give the user a chance to clean up */
   if (reg->destroy)
-    (*(reg->destroy)) (reg);
+    (reg->destroy) (reg);
 
   reg->destroy = NULL;
   reg->user_data = NULL;
@@ -1242,7 +1239,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyNumCell       (reg->numCell);
   xaccDestroyQuickFillCell (reg->descCell);
   xaccDestroyRecnCell      (reg->recnCell);
-  xaccDestroyPriceCell     (reg->shrsCell);
+  xaccDestroyPriceCell     (reg->shrbalnCell);
   xaccDestroyPriceCell     (reg->balanceCell);
 
   xaccDestroyComboCell     (reg->actionCell);
@@ -1253,7 +1250,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
   xaccDestroyPriceCell     (reg->creditCell);
   xaccDestroyPriceCell     (reg->debitCell);
   xaccDestroyPriceCell     (reg->priceCell);
-  xaccDestroyPriceCell     (reg->valueCell);
+  xaccDestroyPriceCell     (reg->sharesCell);
 
   xaccDestroyPriceCell     (reg->ncreditCell);
   xaccDestroyPriceCell     (reg->ndebitCell);
@@ -1262,7 +1259,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->numCell     = NULL;
   reg->descCell    = NULL;
   reg->recnCell    = NULL;
-  reg->shrsCell    = NULL;
+  reg->shrbalnCell = NULL;
   reg->balanceCell = NULL;
 
   reg->actionCell  = NULL;
@@ -1273,7 +1270,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
   reg->creditCell  = NULL;
   reg->debitCell   = NULL;
   reg->priceCell   = NULL;
-  reg->valueCell   = NULL;
+  reg->sharesCell  = NULL;
 
   reg->ncreditCell  = NULL;
   reg->ndebitCell   = NULL;
@@ -1303,7 +1300,7 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
   changed |= MOD_AMNT  & reg->creditCell->cell.changed;
   changed |= MOD_AMNT  & reg->debitCell->cell.changed;
   changed |= MOD_PRIC  & reg->priceCell->cell.changed;
-  changed |= MOD_VALU  & reg->valueCell->cell.changed; 
+  changed |= MOD_SHRS  & reg->sharesCell->cell.changed; 
 
   changed |= MOD_NAMNT & reg->ncreditCell->cell.changed;
   changed |= MOD_NAMNT & reg->ndebitCell->cell.changed;
@@ -1329,7 +1326,7 @@ xaccSplitRegisterClearChangeFlag (SplitRegister *reg)
    reg->creditCell->cell.changed = 0;
    reg->debitCell->cell.changed = 0;
    reg->priceCell->cell.changed = 0;
-   reg->valueCell->cell.changed = 0;
+   reg->sharesCell->cell.changed = 0;
 
    reg->ncreditCell->cell.changed = 0;
    reg->ndebitCell->cell.changed = 0;
@@ -1411,8 +1408,8 @@ sr_cell_type (SplitRegister *reg, void * cell)
   if (cell == reg->recnCell)
     return RECN_CELL;
 
-  if (cell == reg->shrsCell)
-    return SHRS_CELL;
+  if (cell == reg->shrbalnCell)
+    return SHRBALN_CELL;
 
   if (cell == reg->balanceCell)
     return BALN_CELL;
@@ -1441,8 +1438,8 @@ sr_cell_type (SplitRegister *reg, void * cell)
   if (cell == reg->priceCell)
     return PRIC_CELL;
 
-  if (cell == reg->valueCell)
-    return VALU_CELL;
+  if (cell == reg->sharesCell)
+    return SHRS_CELL;
 
   if (cell == reg->ncreditCell)
     return NCRED_CELL;
@@ -1627,7 +1624,7 @@ xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
   destroyCellBuffer(&srb->numCell);
   destroyCellBuffer(&srb->descCell);
   destroyCellBuffer(&srb->recnCell);
-  destroyCellBuffer(&srb->shrsCell);
+  destroyCellBuffer(&srb->shrbalnCell);
   destroyCellBuffer(&srb->balanceCell);
   destroyCellBuffer(&srb->actionCell);
   destroyCellBuffer(&srb->xfrmCell);
@@ -1637,7 +1634,7 @@ xaccDestroySplitRegisterBuffer (SplitRegisterBuffer *srb)
   destroyCellBuffer(&srb->creditCell);
   destroyCellBuffer(&srb->debitCell);
   destroyCellBuffer(&srb->priceCell);
-  destroyCellBuffer(&srb->valueCell);
+  destroyCellBuffer(&srb->sharesCell);
   destroyCellBuffer(&srb->ncreditCell);
   destroyCellBuffer(&srb->ndebitCell);
 
@@ -1668,7 +1665,7 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
   saveCell(&sr->numCell->cell, &srb->numCell);
   saveCell(&sr->descCell->cell, &srb->descCell);
   saveCell(&sr->recnCell->cell, &srb->recnCell);
-  saveCell(&sr->shrsCell->cell, &srb->shrsCell);
+  saveCell(&sr->shrbalnCell->cell, &srb->shrbalnCell);
   saveCell(&sr->balanceCell->cell, &srb->balanceCell);
   saveCell(&sr->actionCell->cell, &srb->actionCell);
   saveCell(&sr->xfrmCell->cell, &srb->xfrmCell);
@@ -1678,7 +1675,7 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
   saveCell(&sr->creditCell->cell, &srb->creditCell);
   saveCell(&sr->debitCell->cell, &srb->debitCell);
   saveCell(&sr->priceCell->cell, &srb->priceCell);
-  saveCell(&sr->valueCell->cell, &srb->valueCell);
+  saveCell(&sr->sharesCell->cell, &srb->sharesCell);
   saveCell(&sr->ncreditCell->cell, &srb->ncreditCell);
   saveCell(&sr->ndebitCell->cell, &srb->ndebitCell);
 }
@@ -1709,7 +1706,7 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->numCell->cell, &srb->numCell);
   restoreCellChanged(&sr->descCell->cell, &srb->descCell);
   restoreCellChanged(&sr->recnCell->cell, &srb->recnCell);
-  restoreCellChanged(&sr->shrsCell->cell, &srb->shrsCell);
+  restoreCellChanged(&sr->shrbalnCell->cell, &srb->shrbalnCell);
   restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell);
   restoreCellChanged(&sr->actionCell->cell, &srb->actionCell);
   restoreCellChanged(&sr->xfrmCell->cell, &srb->xfrmCell);
@@ -1719,7 +1716,7 @@ xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
   restoreCellChanged(&sr->creditCell->cell, &srb->creditCell);
   restoreCellChanged(&sr->debitCell->cell, &srb->debitCell);
   restoreCellChanged(&sr->priceCell->cell, &srb->priceCell);
-  restoreCellChanged(&sr->valueCell->cell, &srb->valueCell);
+  restoreCellChanged(&sr->sharesCell->cell, &srb->sharesCell);
   restoreCellChanged(&sr->ncreditCell->cell, &srb->ncreditCell);
   restoreCellChanged(&sr->ndebitCell->cell, &srb->ndebitCell);
 }
@@ -1731,7 +1728,7 @@ static const char *cell_names[] =
   "num",
   "description",
   "reconcile",
-  "shares",
+  "share-balance",
   "balance",
   "action",
   "account",
@@ -1740,7 +1737,7 @@ static const char *cell_names[] =
   "credit",
   "debit",
   "price",
-  "value",
+  "shares",
   "neg-credit",
   "neg-debit",
   "transfer"

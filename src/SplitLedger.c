@@ -2351,12 +2351,7 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
 
     price = gnc_split_scm_get_share_price(split_scm);
 
-    if ((STOCK_REGISTER    == (reg->type)) ||
-        (CURRENCY_REGISTER == (reg->type)) ||
-        (PORTFOLIO_LEDGER  == (reg->type)))
-      ;
-    else
-      new_amount = new_amount / price;
+    new_amount = new_amount / price;
 
     gnc_split_scm_set_share_price_and_amount(split_scm, price, new_amount);
   }
@@ -2371,13 +2366,11 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm)
     gnc_split_scm_set_share_price_and_amount(split_scm, price, amount);
   }
 
-  if (MOD_VALU & changed) {
-    double value = xaccGetPriceCellValue(reg->valueCell);
+  if (MOD_SHRS & changed) {
+    double shares = xaccGetPriceCellValue(reg->sharesCell);
     double price = gnc_split_scm_get_share_price(split_scm);
 
-    value = value / price;
-
-    gnc_split_scm_set_share_price_and_amount(split_scm, price, value);
+    gnc_split_scm_set_share_price_and_amount(split_scm, price, shares);
   }
 
   return TRUE;
@@ -2721,19 +2714,19 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     }
   }
 
-  if (((MOD_AMNT | MOD_PRIC | MOD_VALU) & changed) &&
+  if (((MOD_AMNT | MOD_PRIC | MOD_SHRS) & changed) &&
       ((STOCK_REGISTER    == (reg->type)) ||
        (CURRENCY_REGISTER == (reg->type)) ||
-       (PORTFOLIO_LEDGER  == (reg->type)))) {
-
+       (PORTFOLIO_LEDGER  == (reg->type))))
+  {
     double value;
     double price;
-    double new_amount;
+    double amount;
 
-    if (MOD_VALU & changed)
-      value = xaccGetPriceCellValue(reg->valueCell);
+    if (MOD_SHRS & changed)
+      amount = xaccGetPriceCellValue(reg->sharesCell);
     else
-      value = xaccSplitGetValue(split);
+      amount = xaccSplitGetShareAmount(split);
 
     if (MOD_PRIC & changed)
       price = xaccGetPriceCellValue(reg->priceCell);
@@ -2743,40 +2736,40 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     if (MOD_AMNT & changed) {
       double credit = xaccGetPriceCellValue(reg->creditCell);
       double debit  = xaccGetPriceCellValue(reg->debitCell);
-      new_amount = debit - credit;
+      value = debit - credit;
     }
     else
-      new_amount = xaccSplitGetShareAmount(split);
+      value = xaccSplitGetValue(split);
 
-    if (!DEQEPS(value, price * new_amount, 1.0e-15)) {
+    if (!DEQEPS(value, price * amount, 1.0e-15)) {
       int i;
       int choice;
       int default_value;
       char *radio_list[4] = { NULL, NULL, NULL, NULL };
 
-      if (MOD_AMNT & changed)
-        radio_list[0] = g_strdup_printf("%s (%s)", AMT_STR, CHANGED_STR);
+      if (MOD_SHRS & changed)
+        radio_list[0] = g_strdup_printf("%s (%s)", SHARES_STR, CHANGED_STR);
       else
-        radio_list[0] = g_strdup(AMT_STR);
+        radio_list[0] = g_strdup(SHARES_STR);
 
       if (MOD_PRIC & changed)
         radio_list[1] = g_strdup_printf("%s (%s)", PRICE_STR, CHANGED_STR);
       else
         radio_list[1] = g_strdup(PRICE_STR);
 
-      if (MOD_VALU & changed)
+      if (MOD_AMNT & changed)
         radio_list[2] = g_strdup_printf("%s (%s)", VALUE_STR, CHANGED_STR);
       else
         radio_list[2] = g_strdup(VALUE_STR);
 
-      if (!(MOD_AMNT & changed))
-        default_value = 0;
-      else if (!(MOD_PRIC & changed))
+      if (!(MOD_PRIC & changed))
         default_value = 1;
-      else if (!(MOD_VALU & changed))
+      if (!(MOD_SHRS & changed))
+        default_value = 0;
+      else if (!(MOD_AMNT & changed))
         default_value = 2;
       else
-        default_value = 0;
+        default_value = 1;
 
       choice = gnc_choose_radio_option_dialog_parented(xaccSRGetParent(reg),
                                                        TRANS_RECALC_TITLE,
@@ -2793,36 +2786,53 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
           if (price == 0)
             break;
 
-          new_amount = value/price;
+          amount = value / price;
 
-          xaccSetDebCredCellValue (reg->debitCell,
-                                   reg->creditCell, new_amount);
-          changed |= MOD_AMNT;
+          xaccSetPriceCellValue(reg->sharesCell, amount);
+          changed |= MOD_SHRS;
           break;
         case 1: /* Modify the share price */
-          if (DEQEPS(0.0, new_amount, 1.0e-15))
+          if (DEQEPS(0.0, amount, 1.0e-15))
             break;
 
-          price = value / new_amount;
+          price = value / amount;
 
           if (price < 0) {
             price = -price;
-            xaccSetPriceCellValue(reg->valueCell, -value);  
-            changed |= MOD_VALU;
+            xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, -value);
+            changed |= MOD_AMNT;
           }
           xaccSetPriceCellValue(reg->priceCell, price);
           changed |= MOD_PRIC;
           break;
         case 2: /* Modify total value */
-          value = price * new_amount;
+          value = price * amount;
 
-          xaccSetPriceCellValue(reg->valueCell, value);
-          changed |= MOD_VALU;
+          xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, value);
+          changed |= MOD_AMNT;
           break;
         default:
           break;
       }
     }
+  }
+
+  if (MOD_SHRS & changed) {
+    double amount = xaccGetPriceCellValue(reg->sharesCell);
+
+    DEBUG ("MOD_SHRS: %f\n", amount);
+
+    xaccSplitSetShareAmount (split, amount);
+  }
+
+  if (MOD_PRIC & changed) {
+    double price;
+
+    price = xaccGetPriceCellValue(reg->priceCell);
+
+    DEBUG ("MOD_PRIC: %f\n", price);
+
+    xaccSplitSetSharePrice (split, price);
   }
 
   /* The AMNT and NAMNT updates only differ by sign. Basically, 
@@ -2846,30 +2856,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_AMNT: %f\n", new_amount);
 
-    if ((STOCK_REGISTER    == (reg->type)) ||
-        (CURRENCY_REGISTER == (reg->type)) ||
-        (PORTFOLIO_LEDGER  == (reg->type)))
-      xaccSplitSetShareAmount (split, new_amount);
-    else
-      xaccSplitSetValue (split, new_amount);
-  }
-
-  if (MOD_PRIC & changed) {
-    double price;
-
-    price = xaccGetPriceCellValue(reg->priceCell);
-
-    DEBUG ("MOD_PRIC: %f\n", price);
-
-    xaccSplitSetSharePrice (split, price);
-  }
-
-  if (MOD_VALU & changed) {
-    double value = xaccGetPriceCellValue(reg->valueCell);
-
-    DEBUG ("MOD_VALU: %f\n", value);
-
-    xaccSplitSetValue (split, value);
+    xaccSplitSetValue (split, new_amount);
   }
 
   return refresh_accounts;
@@ -2896,7 +2883,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetNumCellValue (reg->numCell, "");
       xaccSetQuickFillCellValue (reg->descCell, "");
       xaccRecnCellSetFlag (reg->recnCell, NREC);
-      xaccSetPriceCellValue  (reg->shrsCell,  0.0);
+      xaccSetPriceCellValue (reg->shrbalnCell, 0.0);
       xaccSetPriceCellValue (reg->balanceCell, 0.0);
 
       xaccSetComboCellValue (reg->actionCell, "");
@@ -2909,7 +2896,7 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetDebCredCellValue (reg->ndebitCell, 
                                reg->ncreditCell, 0.0);
       xaccSetPriceCellValue (reg->priceCell, 0.0);
-      xaccSetPriceCellValue (reg->valueCell, 0.0);
+      xaccSetPriceCellValue (reg->sharesCell, 0.0);
 
    } else {
       long long secs;
@@ -2949,7 +2936,8 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       else
         xaccSetPriceCellValue (reg->balanceCell, baln);
 
-      xaccSetPriceCellValue (reg->shrsCell, xaccSplitGetShareBalance (split));
+      xaccSetPriceCellValue (reg->shrbalnCell,
+                             xaccSplitGetShareBalance (split));
 
       xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
 
@@ -3005,19 +2993,12 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
 
       xaccSetQuickFillCellValue (reg->memoCell, xaccSplitGetMemo (split));
 
-      if ((STOCK_REGISTER    == reg_type) ||
-          (CURRENCY_REGISTER == reg_type) ||
-          (PORTFOLIO_LEDGER  == reg_type)) 
-      { 
-         amt = xaccSplitGetShareAmount (split);
-      } else {
-         amt = xaccSplitGetValue (split);
-      }
-
+      amt = xaccSplitGetValue (split);
       xaccSetDebCredCellValue (reg->debitCell, reg->creditCell, amt);
       xaccSetDebCredCellValue (reg->ndebitCell, reg->ncreditCell, -amt);
+
       xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
-      xaccSetPriceCellValue (reg->valueCell, xaccSplitGetValue (split));
+      xaccSetPriceCellValue (reg->sharesCell, xaccSplitGetShareAmount (split));
    }
 
    reg->table->current_cursor->user_data = split;
