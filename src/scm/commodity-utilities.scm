@@ -80,13 +80,16 @@
 	    (b (make-numeric-collector)))
 	(a 'add (unknown-coll 'total #f))
 	(b 'add 
+	   ;; round to (at least) 6 significant digits
 	   (gnc:numeric-div
 	    (gnc:numeric-mul 
 	     (un->known-coll 'total #f) 
 	     ((cdadr known-pair) 'total #f)
-	     GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+	     GNC-DENOM-AUTO 
+	     (logior (GNC-DENOM-SIGFIGS 7) GNC-RND-ROUND))
 	    ((caadr known-pair) 'total #f)
-	    GNC-DENOM-AUTO GNC-DENOM-REDUCE))
+	    GNC-DENOM-AUTO 
+	    (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))
 	;; in other words: (/ (* (caadr un->known-coll) (cdadr
 	;; known-pair)) (caadr known-pair) ))
 	(cons a b)))
@@ -257,8 +260,8 @@
 	   (gnc:numeric-abs
 	    (gnc:numeric-div ((cdadr e) 'total #f) 
 			     ((caadr e) 'total #f)
-			     GNC-DENOM-AUTO
-			     GNC-DENOM-REDUCE))))
+			     GNC-DENOM-AUTO 
+			     (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND)))))
    (gnc:get-exchange-totals report-commodity end-date)))
 
 ;; This one returns the ready-to-use function for calculation of the
