@@ -34,6 +34,21 @@
 void gnc_add_c_extension(GnomeUIInfo *info, gchar *path);
 void gnc_add_scm_extension(SCM extension);
 
+/* Replacement for gnome_app_insert_menus, since the original one will
+ * fail for i18n. In particular, as soon as the gnome stock menus
+ * (created through the macros in gnome-app-helper) have a different
+ * translation in the original gnome libs compared to the gnucash
+ * message catalog, then the gnome_app_insert_menus will
+ * fail. Therefore this function looks up the translation of each 'path'
+ * element in the gettext domain "gnome-libs" first. 
+ *
+ * This function should be used in all places where the 'path'
+ * contains a stock gnome menu, created through the macros in
+ * gnome-app-helper. */
+void
+gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path, 
+			    GnomeUIInfo *menuinfo);
+
 /* This is called from the window initializing code, when the actual
  * menu items stored by the above functions should now be inserted in
  * the menu of the GnomeApp app.

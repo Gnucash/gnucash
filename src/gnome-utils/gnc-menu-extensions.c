@@ -343,6 +343,161 @@ gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
   extension_list = g_slist_append(extension_list, ext_info);
 }
 
+
+/* This code is directly copied from libgnomeui's gnome-app-helper.c
+ * without modifications. */
+static gint
+g_strncmp_ignore_char( const gchar *first, const gchar *second, gint length, gchar ignored )
+{
+    gint i, j;
+    for ( i = 0, j = 0; i < length; i++, j++ )
+	{
+	    while ( first[i] == ignored && i < length ) i++;
+	    while ( second[j] == ignored ) j++;
+	    if ( i == length )
+		return 0;
+	    if ( first[i] < second[j] )
+		return -1;
+	    if ( first[i] > second[j] )
+		return 1;
+	}
+    return 0;
+}
+
+/* This code is copied from libgnomeui's gnome-app-helper.c
+ * originally. */
+static const gchar *
+gnc_gnome_app_helper_gettext (const gchar *str)
+{
+    char *s;
+
+    /* First try to look up the string in gettext domain gnome-libs,
+     * since this is where the original gnome stock labels have been
+     * translated. */
+    s = dgettext ("gnome-libs", str);
+    if ( s == str )
+	s = gettext (str);
+
+    return s;
+}
+
+/* This code is directly copied from libgnomeui's gnome-app-helper.c,
+ * except for the call to the translation lookup . */
+/**
+ * gnome_app_find_menu_pos
+ * @parent: Root menu shell widget containing menu items to be searched
+ * @path: Specifies the target menu item by menu path
+ * @pos: (output) returned item position
+ *
+ * Description:
+ * finds menu item described by path starting
+ * in the GtkMenuShell top and returns its parent GtkMenuShell and the
+ * position after this item in pos:  gtk_menu_shell_insert(p, w, pos)
+ * would then insert widget w in GtkMenuShell p right after the menu item
+ * described by path.
+ **/
+static GtkWidget *
+gnc_gnome_app_find_menu_pos (GtkWidget *parent, const gchar *path, gint *pos)
+{
+    GtkBin *item;
+    gchar *label = NULL;
+    GList *children;
+    gchar *name_end;
+    gchar *part;
+    const gchar *transl;
+    gint p;
+    int  path_len;
+
+    g_return_val_if_fail (parent != NULL, NULL);
+    g_return_val_if_fail (path != NULL, NULL);
+    g_return_val_if_fail (pos != NULL, NULL);
+
+    children = GTK_MENU_SHELL (parent)->children;
+
+    name_end = strchr(path, '/');
+    if(name_end == NULL)
+	path_len = strlen(path);
+    else
+	path_len = name_end - path;
+
+    if (path_len == 0) {
+
+	if (children && GTK_IS_TEAROFF_MENU_ITEM(children->data))
+	    /* consider the position after the tear off item as the topmost one. */
+	    *pos = 1;
+	else
+	    *pos = 0;
+	return parent;
+    }
+
+    /* this ugly thing should fix the localization problems */
+    part = g_malloc(path_len + 1);
+    if(!part)
+	return NULL;
+    strncpy(part, path, path_len);
+    part[path_len] = '\0';
+    transl = gnc_gnome_app_helper_gettext (part);
+    path_len = strlen(transl);
+
+    p = 0;
+
+    while (children){
+	item = GTK_BIN (children->data);
+	children = children->next;
+	label = NULL;
+	p++;
+
+	if (GTK_IS_TEAROFF_MENU_ITEM(item))
+	    label = NULL;
+	else if (!item->child)          /* this is a separator, right? */
+	    label = "<Separator>";
+	else if (GTK_IS_LABEL (item->child))  /* a simple item with a label */
+	    label = GTK_LABEL (item->child)->label;
+	else
+	    label = NULL; /* something that we just can't handle */
+	/*fprintf(stderr, "Transl '%s', Label '%s'\n", transl, label);*/
+	if (label && (g_strncmp_ignore_char (transl, label, path_len, '_') == 0)){
+	    if (name_end == NULL) {
+		*pos = p;
+		g_free(part);
+		return parent;
+	    }
+	    else if (GTK_MENU_ITEM (item)->submenu) {
+		g_free(part);
+		return gnc_gnome_app_find_menu_pos
+		    (GTK_MENU_ITEM (item)->submenu,
+		     (gchar *)(name_end + 1), pos);
+	    }
+	    else {
+		g_free(part);
+		return NULL;
+	    }
+	}
+    }
+
+    g_free(part);
+    return NULL;
+}
+
+/* This code is more or less copied from libgnomeui's gnome-app-helper.c . */
+void
+gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path, GnomeUIInfo *menuinfo)
+{
+    GtkWidget *menu_shell;
+    gint pos;
+
+    menu_shell = gnc_gnome_app_find_menu_pos(app->menubar, path, &pos);
+    if(menu_shell == NULL) {
+	g_warning("gnc_gnome_app_insert_menus: couldn't find "
+		  "insertion point for menus!");
+	return;
+    }
+
+    /* create menus and insert them */
+    gnome_app_fill_menu (GTK_MENU_SHELL (menu_shell), menuinfo, 
+			 app->accel_group, TRUE, pos);
+}
+
 void
 gnc_extensions_menu_setup(GnomeApp * app, gchar *window)
 {
@@ -355,7 +510,7 @@ gnc_extensions_menu_setup(GnomeApp * app, gchar *window)
 	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
       continue;
     /* fprintf(stderr, "Inserting extension menu at path '%s'\n", info->path); */
-    gnome_app_insert_menus(app, info->path, info->info);
+    gnc_gnome_app_insert_menus(app, info->path, info->info);
     gnome_app_install_menu_hints(app, info->info); 
   }
 }
@@ -372,6 +527,7 @@ gnc_extensions_menu_setup_with_data(GnomeApp * app,
     if ((strcmp(info->window, window) != 0) &&
 	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
       continue;
+    /* fprintf(stderr, "Inserting extension menu/w/d at path '%s'\n", info->path); */
     gnome_app_insert_menus_with_data(app, info->path, info->info, user_data);
     gnome_app_install_menu_hints(app, info->info); 
   }

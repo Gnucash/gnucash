@@ -42,6 +42,7 @@
 #include "gnc-engine.h"
 #include "gnc-gui-query.h"
 #include "gnc-html.h"
+#include "gnc-menu-extensions.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui.h"
 #include "gtkselect.h"
@@ -1356,16 +1357,16 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
    * menus and toolbars.  What a pain.
    */
   /* Do not i18n these strings!!! */
-  if (gnc_mdi_child_find_menu_item(mc, "File/_New Account..."))
+  if (gnc_mdi_child_find_menu_item(mc, "_File/_New Account..."))
     return;
     
   /* Do not i18n these strings!!! */
   dup_scrub[0].user_data = info;
   dup_scrub[1].user_data = info;
   dup_scrub[2].user_data = info;
-  gnome_app_insert_menus (mc->app, "File/_New File", fileitems1);
-  gnome_app_insert_menus (mc->app, "File/Open...", fileitems2);
-  gnome_app_insert_menus (mc->app, "Edit/Paste", edititems);
+  gnc_gnome_app_insert_menus (mc->app, "_File/_New File", fileitems1);
+  gnc_gnome_app_insert_menus (mc->app, "_File/_Open...", fileitems2);
+  gnc_gnome_app_insert_menus (mc->app, "_Edit/_Paste", edititems);
   gnome_app_insert_menus (mc->app, "_Actions/_Scheduled Transactions",
 			  actionitems);
 
@@ -1385,7 +1386,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   gnc_acct_tree_window_add_sensitive(win, widget);
 
   /* Do not i18n these strings!!! */
-  gnc_mdi_child_auto_menu(mc, GNC_AUTO_DISABLE, "File/Close", NULL);
+  gnc_mdi_child_auto_menu(mc, GNC_AUTO_DISABLE, "_File/_Close", NULL);
   gnc_mdi_child_auto_toolbar(mc, GNC_AUTO_DISABLE, "Close", NULL);
 
   /* Start with all the 'sensitives' disabled. */

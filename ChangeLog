@@ -1,3 +1,13 @@
+2002-12-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/window-main.c,
+	src/business/business-gnome/business-gnome.scm, src/scm/main.scm:
+	Yet more i18n menu insertion fixes.
+
+	* src/gnome-utils/gnc-menu-extensions.[hc]: Added
+	gnc_gnome_app_insert_menus to work around i18n problems with stock
+	gnome menus. This is now also used from window-acct-tree.c. 
+
 2002-12-01  Derek Atkins <derek@ihtfp.com>
 
 	* move QuickFill and dialog-transfer into gnome-utils
