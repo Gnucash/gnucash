@@ -1,3 +1,11 @@
+2001-05-10  Dave Peticolas  <dave@krondo.com>
+
+	* src/doc/design/engine.texinfo: update docs
+
+	* src/scm/command-line.scm: fix bugs
+
+	* src/engine/kvp_frame.c: handle NULL args
+
 2001-05-10  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/account-summary.scm, balance-sheet.scm, pnl.scm:

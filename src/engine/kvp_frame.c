@@ -1071,6 +1071,8 @@ kvp_frame_to_string(const kvp_frame *frame)
 {
     gchar *tmp1;
 
+    g_return_val_if_fail (frame != NULL, NULL);
+
     tmp1 = g_strdup_printf("{\n");
 
     g_hash_table_foreach(frame->hash, kvp_frame_to_string_helper, &tmp1);
@@ -1088,5 +1090,6 @@ kvp_frame_to_string(const kvp_frame *frame)
 GHashTable*
 kvp_frame_get_hash(const kvp_frame *frame)
 {
+    g_return_val_if_fail (frame != NULL, NULL);
     return frame->hash;
 }

@@ -246,8 +246,9 @@
               (list value (cdr args)))))))
 
 (define (gnc:cmd-line-get-string-arg args)
-  (gnc:debug "got string arg returning " (car args) " and " (cdr args))
-  (list (car args) (cdr args)))
+  (if (pair? args)
+      (list (car args) (cdr args))
+      (begin (gnc:warn "no argument given where one expected") #f)))
 
 (define (gnc:prefs-show-version)
   (display "GnuCash ")
@@ -370,7 +371,7 @@
 
                       (if (not arg-parse-result)
                           (begin                
-                            (set result #f)
+                            (set! result #f)
                             (set! quit? #t))
                           (let ((parsed-value (car arg-parse-result))
                                 (remaining-args (cadr arg-parse-result)))

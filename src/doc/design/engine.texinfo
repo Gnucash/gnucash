@@ -463,6 +463,10 @@ Use the number @code{n} as the denominator of the output value.
 @item GNC_DENOM_RECIPROCAL (n)
 Use the value @code{1/n} as the denominator of the output value.
 
+@item GNC_DENOM_SIGFIGS (n)
+Use a value for the denominator that will keep at least @code{n}
+significant figures in the result.
+
 @item GNC_DENOM_AUTO
 Compute an appropriate denominator automatically. Flags in the @var{how}
 argument will specify how to compute the denominator.
@@ -541,6 +545,10 @@ that as the denominator of the result.
 All arguments are required to have the same denominator, that
 denominator is to be used in the output, and an error is to be signaled
 if any argument has a different denominator.
+
+@item GNC_DENOM_SIGFIG
+Round to the number of significant figures given in the rounding
+instructions by the GNC_DENOM_SIGFIGS () macro.
 
 @end table
 
@@ -916,6 +924,12 @@ Return a deep copy of @var{frame}.
 Associate @var{key} with @var{value} in @var{frame}.
 @end deftypefun
 
+@deftypefun void kvp_frame_set_slot_nc(kvp_frame * @var{frame}, const char * @var{key}, kvp_value * @var{value})
+Same as @code{kvp_frame_set_slot}, except that @var{value} is used
+directly, instead of being copied. This call transfers 'ownership'
+of @var{value} to @var{frame}.
+@end deftypefun
+
 @deftypefun kvp_value* kvp_frame_get_slot(kvp_frame * @var{frame}, const char * @var{key})
 Return the @code{kvp_value} object associated with @var{key}
 in @var{frame} or return @code{NULL} if there is no association
@@ -942,6 +956,27 @@ The path is specified as in @code{kvp_frame_set_slot_path}.
 @deftypefun {kvp_value *} kvp_frame_get_slot_path_gslist (kvp_frame * @var{frame}, GSList * @var{key_path})
 Return the value associated with the key path, or @code{NULL} if none.
 The path is specified as in @code{kvp_frame_set_slot_path_gslist}.
+@end deftypefun
+
+@deftypefun {kvp_frame *} kvp_frame_get_frame (kvp_frame * @var{frame}, ...)
+Works like @code{kvp_frame_get_slot_path}, but returns the last frame
+in the path. All the keys should refer to frames. If the frame path
+does not exist, it is created.
+@end deftypefun
+
+@deftypefun {kvp_frame *} kvp_frame_get_frame_gslist (kvp_frame * @var{frame}, GSList * @var{key_path})
+Works like @code{kvp_frame_get_slot_path_gslist}, but returns the last
+frame in the path. All the keys should refer to frames. If the frame
+path does not exist, it is created.
+@end deftypefun
+
+@deftypefun {kvp_frame *} kvp_frame_get_frame_slash (kvp_frame * @var{frame}, const char * @var{path})
+Works like @code{kvp_frame_get_frame}, but the frame path is specified
+as a single string where the keys are separated by slashes; thus, for
+example: @code{/this/is/a/valid/path} and @code{///so//is////this/}.
+Multiple slashes are compresed and a leading slash is optional. The
+pointers @code{.} and @code{..} are @emph{not} followed/obeyed. (This
+is arguably a bug that needs fixing).
 @end deftypefun
 
 
