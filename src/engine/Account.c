@@ -95,7 +95,7 @@ xaccInitAccount (Account * acc) {
 \********************************************************************/
 
 Account *
-xaccMallocAccount( void )
+xaccMallocAccount (void)
 {
   Account *acc = g_new(Account, 1);
   xaccInitAccount (acc);
@@ -106,7 +106,7 @@ xaccMallocAccount( void )
 \********************************************************************/
 
 void
-xaccFreeAccount( Account *acc )
+xaccFreeAccount (Account *acc)
 {
   Transaction *t;
   GList *lp;
@@ -150,6 +150,9 @@ xaccFreeAccount( Account *acc )
   acc->accountCode = NULL;
   g_free (acc->description);
   acc->description = NULL;
+
+  kvp_frame_delete (acc->kvp_data);
+  acc->kvp_data = NULL;
 
   /* zero out values, just in case stray 
    * pointers are pointing here. */
