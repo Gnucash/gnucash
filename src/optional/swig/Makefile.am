@@ -80,7 +80,7 @@ install-data-local: libgncswig.la
 	fi
 
 uninstall-local:
-	rm -f ${perllibdir}/gnucash.so
+	rm -f ${DESTDIR}${perllibdir}/gnucash.so
 
 gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
 	@echo Making $@.
