@@ -107,9 +107,13 @@ void          xaccTransRemoveSplit (Transaction *, Split *);
  *     and credited to the same account as the source split.
  *     Hopefully, the user will notice this, and reparent the 
  *     destination split properly.
+ *
+ * The xaccTransRebalance() routine merely calls xaccSplitRebalance()
+ * on the source split.
  */
  
 void xaccSplitRebalance (Split *);
+void xaccTransRebalance (Transaction *);
 
 /* ------------- gets --------------- */
 /* return pointer to the source split */

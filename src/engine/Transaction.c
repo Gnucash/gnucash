@@ -271,9 +271,13 @@ xaccFreeTransaction( Transaction *trans )
 }
 
 /********************************************************************\
- * Walk the debit-splits array, and compute the new 
- * credit amounts based on that.
 \********************************************************************/
+
+void
+xaccTransRebalance (Transaction * trans)
+{
+  xaccSplitRebalance (&(trans->source_split));
+}
 
 void
 xaccSplitRebalance (Split *split)
