@@ -65,10 +65,14 @@ struct _GNCReconcileList
 
   GHashTable *reconciled;
 
-  GtkStyle *reconciled_style;
-
   Account *account;
   Query *query;
+
+  gint check_size;
+
+  GdkPixmap *on_pixmap;
+  GdkPixmap *off_pixmap;
+  GdkBitmap *mask;
 };
 
 struct _GNCReconcileListClass

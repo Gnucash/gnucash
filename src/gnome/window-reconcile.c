@@ -60,6 +60,7 @@
 
 #define WINDOW_RECONCILE_CM_CLASS "window-reconcile"
 
+
 /** STRUCTS *********************************************************/
 struct _RecnWindow
 {
