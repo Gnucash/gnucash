@@ -308,7 +308,6 @@ src/gnome-utils/QuickFill.c
 src/gnome-utils/argv-list-converters.c
 src/gnome-utils/commodity.glade
 src/gnome-utils/cursors.c
-src/gnome-utils/dialog-account-pick.c
 src/gnome-utils/dialog-account.c
 src/gnome-utils/dialog-commodity.c
 src/gnome-utils/dialog-options.c
