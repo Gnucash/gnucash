@@ -2,7 +2,8 @@ AC_INIT(src/motif/main.c)
 
 # *******************************************
 # * figure out the configure options:
-cflags=-O2
+# cflags=-O2 
+cflags=-g
 lflags=-O2
 AC_ARG_ENABLE( debug,
        [  --enable-debug          compile with debugging flags set],
