@@ -227,7 +227,6 @@ gnc_date_picker_new (GnomeCanvasGroup *parent)
                                   "x", -10000.0,
                                   "y", -10000.0,
                                   NULL);
-    gtk_widget_realize( hbox );
     gtk_widget_show_all( hbox );
 
     gtk_widget_size_request (calendar, &requisition);

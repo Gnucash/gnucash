@@ -1,3 +1,24 @@
+2003-08-15  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/global-options.c: Prevent a crash if there's no
+	callback attached to a register.  This case should only occur
+	during the g2 transition.
+		
+	* src/gnome/gnc-plugin-page-register.c: Add short labels for the
+	toolbar actions. Do more register initialization.
+
+	* src/gnome/window-register.c: Need the casts to G_OBJECT. Put
+	them back.
+
+	* src/register/register-gnome/gnucash-date-picker.c:
+	* src/register/register-gnome/gnucash-grid.c:
+	* src/register/register-gnome/gnucash-header.c:
+	* src/register/register-gnome/gnucash-item-edit.c:
+	* src/register/register-gnome/gnucash-item-list.c:
+	* src/register/register-gnome/gnucash-style.c: Fix some run time
+	warnings. Tweak the pango layout code so all the register bits are
+	visible.
+
 2003-08-10  David Hampton  <hampton@employees.org>
 
 	* lib/egg/egg-action.c: Fix problem connecting toolbar actions and

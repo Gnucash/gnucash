@@ -155,6 +155,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
         /* GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font; */
         CellDimensions *cd;
         int row, col;
+	gint default_height = 0, max_height = -1;
 	PangoLayout *layout;
 
         /* g_return_if_fail (font != NULL); */
@@ -176,8 +177,11 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
 
 
                         cell = gnc_cellblock_get_cell (cursor, row, col);
-                        if (!cell)
+                        if (!cell) {
+				if (cd->pixel_height == 0)
+					cd->pixel_height = default_height;
                                 continue;
+			}
 
                         text = cell->sample_text;
                         if (text)
@@ -198,6 +202,13 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
 				cd->pixel_height = (2 * CELL_VPADDING);
 			}
 
+			if (default_height == 0)
+				default_height = cd->pixel_height;
+			if (max_height < 0)
+				max_height = cd->pixel_height;
+			else
+				max_height = MAX(max_height, cd->pixel_height);
+
                         if (cd->pixel_width > 0)
                                 continue;
 
@@ -209,7 +220,7 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellBlock *cursor,
                 }
 
                 cd = g_table_index (dimensions->cell_dimensions, row, 0);
-                dimensions->height += cd->pixel_height;
+                dimensions->height += max_height;
         }
 }
 

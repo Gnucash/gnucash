@@ -453,6 +453,7 @@ draw_cell (GnucashGrid *grid,
         text = gnc_table_get_entry (table, virt_loc);
 
 	layout = gtk_widget_create_pango_layout (GTK_WIDGET (grid->sheet), text);
+	pango_layout_set_width (layout, (width - 2 * CELL_HPADDING) * PANGO_SCALE);
         context = pango_layout_get_context (layout);
 	font = pango_font_description_copy (pango_context_get_font_description (context));
 
@@ -461,6 +462,8 @@ draw_cell (GnucashGrid *grid,
 
         gdk_gc_set_foreground (grid->gc, fg_color);
 
+	/* If this is the currently open transaction and
+	   there is no text in this cell */
         if ((table->current_cursor_loc.vcell_loc.virt_row ==
              virt_loc.vcell_loc.virt_row) &&
 	    (!text || strlen(text) == 0)) {
@@ -468,8 +471,9 @@ draw_cell (GnucashGrid *grid,
                 gdk_gc_set_foreground (grid->gc, &gn_light_gray);
                 text = gnc_table_get_label (table, virt_loc);
 		pango_layout_set_text (layout, text, strlen (text));
-        }
-
+        } else {
+		pango_font_description_set_style (font, PANGO_STYLE_NORMAL);
+	}
 	pango_context_set_font_description (context, font);
 	pango_font_description_free (font);
 
@@ -498,7 +502,7 @@ draw_cell (GnucashGrid *grid,
                 }
 
         rect.x      = x + CELL_HPADDING;
-        rect.y      = y + 1;
+        rect.y      = y + CELL_VPADDING;
         rect.width  = MAX (0, width - (2 * CELL_HPADDING));
         rect.height = height - 2;
 
@@ -507,7 +511,7 @@ draw_cell (GnucashGrid *grid,
         gdk_draw_layout (drawable,
                          grid->gc,
                          x + CELL_HPADDING,
-                         y + CELL_HPADDING,
+                         y + 1,
                          layout);
 
 	g_object_unref (layout);

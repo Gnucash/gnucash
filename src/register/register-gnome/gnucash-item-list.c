@@ -50,10 +50,18 @@ static guint gnc_item_list_signals[LAST_SIGNAL];
 void
 gnc_item_list_clear (GncItemList *item_list)
 {
+	GtkTreeSelection* selection;
+
 	g_return_if_fail(IS_GNC_ITEM_LIST(item_list));
 	g_return_if_fail(item_list->list_store != NULL);
 
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (item_list->tree_view));
+
+        g_signal_handlers_block_matched (G_OBJECT (selection), G_SIGNAL_MATCH_DATA,
+					 0, 0, NULL, NULL, item_list);
 	gtk_list_store_clear (item_list->list_store);
+        g_signal_handlers_unblock_matched (G_OBJECT (selection), G_SIGNAL_MATCH_DATA,
+					 0, 0, NULL, NULL, item_list);
 }
 
 
@@ -369,7 +377,10 @@ gnc_item_list_new(GnomeCanvasGroup *parent)
 	g_signal_connect_after (G_OBJECT(frame), "button_press_event",
 				G_CALLBACK (gnc_item_list_button_event), item_list);
 
-	g_signal_connect (G_OBJECT (list_store), "key_press_event",
+	g_signal_connect (G_OBJECT (tree_view), "button_press_event",
+			  G_CALLBACK (gnc_item_list_key_event), item_list);
+
+	g_signal_connect (G_OBJECT (tree_view), "key_press_event",
 			  G_CALLBACK (gnc_item_list_key_event), item_list);
 
 	g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view))), "changed",

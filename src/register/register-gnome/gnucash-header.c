@@ -194,7 +194,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                         gdk_draw_layout (drawable,
 					 header->gc,
                                          xpaint + CELL_HPADDING,
-                                         ypaint + CELL_HPADDING,
+                                         ypaint + 1,
 					 layout);
 
 			g_object_unref (layout);

@@ -195,6 +195,23 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         info->text_rect.y      = dy + 1;
         info->text_rect.width  = wd - toggle_space;
         info->text_rect.height = hd - 2;
+	pango_layout_set_width (info->layout, (wd - toggle_space - 2 * CELL_HPADDING) * PANGO_SCALE);
+
+        switch (gnc_table_get_align (table, item_edit->virt_loc))
+        {
+                default:
+                case CELL_ALIGN_LEFT:
+			pango_layout_set_alignment (info->layout, PANGO_ALIGN_LEFT);
+                        break;
+
+                case CELL_ALIGN_RIGHT:
+			pango_layout_set_alignment (info->layout, PANGO_ALIGN_RIGHT);
+                        break;
+
+                case CELL_ALIGN_CENTER:
+			pango_layout_set_alignment (info->layout, PANGO_ALIGN_CENTER);
+                        break;
+	}
 
 	pango_layout_get_cursor_pos (info->layout, cursor_pos, NULL, &strong_pos);
 	info->cursor = &strong_pos;
@@ -254,8 +271,8 @@ gnc_item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 
 	gdk_draw_layout (drawable,
 			 item_edit->gc,
-			 info.text_rect.x,
-			 info.text_rect.y,
+			 info.text_rect.x + CELL_HPADDING,
+			 info.text_rect.y + 1,
 			 info.layout);
 
 	gdk_draw_line (drawable, item_edit->gc, info.cursor->x, info.cursor->y,
