@@ -449,5 +449,5 @@ Ideas for engine enhancements:
      It can be removed/disabled for product versions.
 
 
-September 1998
+This document is dated May 2000
 
