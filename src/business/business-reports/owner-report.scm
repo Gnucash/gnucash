@@ -489,8 +489,8 @@
 
   (let* ((trans (gnc:split-get-parent split))
 	 (invoice (gnc:invoice-get-invoice-from-txn trans))
-	 (q (gnc:malloc-query))
 	 (temp-owner (gnc:owner-create))
+	 (q (gnc:malloc-query))
 	 (owner #f))
 
     (if invoice
@@ -511,7 +511,23 @@
 		  (check-splits (cdr splits)))))
 	  (check-splits split-list)))
 
-    ;; XXX: Need to add checks for the ownership...
+    (let ((guid (gnc:owner-get-guid (gnc:owner-get-end-owner owner))))
+      (gnc:query-add-guid-match
+       q 
+       (list gnc:split-trans gnc:invoice-from-txn gnc:invoice-owner
+	     gnc:owner-parentg)
+       guid 'query-or)
+      (gnc:query-add-guid-match
+       q
+       (list gnc:split-lot gnc:owner-from-lot gnc:owner-parentg)
+       guid 'query-or)
+      (gnc:query-add-guid-match
+       q
+       (list gnc:split-lot gnc:invoice-from-lot gnc:invoice-owner
+	     gnc:owner-parentg)
+       guid 'query-or)
+      )
+
     (gnc:query-add-single-account-match q account 'query-and)
     (gnc:query-set-book q (gnc:get-current-book))
 
