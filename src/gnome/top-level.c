@@ -41,7 +41,6 @@
 
 /** GLOBALS *********************************************************/
 
-char    *datafile = NULL;
 GtkWidget *app;
 
 gncUIWidget gnc_get_ui_data() {
@@ -105,7 +104,7 @@ int
 gnucash_lowlev_app_main()
 {  
   /* Make main window */
-  mainWindow(xaccSessionGetGroup(current_session));
+  mainWindow();
   
   gtk_widget_realize (app);
   
@@ -115,9 +114,11 @@ gnucash_lowlev_app_main()
   return 0;
 }
 
+/* hack alert -- all we do below is rename some functions ... fix this someday */
+
 int
 gnucash_ui_open_file(const char name[]) {
-  gncFileOpenFile (datafile);
+  gncFileOpenFile(name);
   return (1);
 }
 

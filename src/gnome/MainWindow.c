@@ -18,6 +18,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+#include <nana.h>
 #include <gnome.h>
 
 #include "config.h"
@@ -99,7 +100,7 @@ gnc_ui_acct_tree_fill(GtkTree *item, AccountGroup *accts, int subtree)
   GtkTree* item_subtree;
   GtkTreeItem* tree_item;
   int no_root_item;
-  
+
   if ( subtree == -1 ) {
     item_subtree = item;
     no_root_item = 1;
@@ -338,7 +339,7 @@ gnc_ui_options_cb ( GtkWidget *widget, gpointer data ) {
 }
 
 void
-mainWindow(AccountGroup *accts) {
+mainWindow() {
 
   GtkWidget 	*scrolled_win;
   GtkWidget 	*main_vbox;
@@ -346,6 +347,7 @@ mainWindow(AccountGroup *accts) {
   GtkWidget	  *menubar;
   GtkWidget 	*clist;
   GtkWidget 	*notebook;
+  AccountGroup *accts = xaccSessionGetGroup(current_session);
   int nmenu_items;
   /*GtkAcceleratorTable *accel;*/
 
@@ -451,7 +453,8 @@ mainWindow(AccountGroup *accts) {
 //gtk_window_add_accelerator_table(GTK_WINDOW(window), accel);
   gnome_app_set_menus ( GNOME_APP (app), GTK_MENU_BAR (menubar));
   gtk_container_add( GTK_CONTAINER( main_vbox ), notebook );
-  gtk_container_add(GTK_CONTAINER(scrolled_win), GTK_WIDGET(mwindow->maintree));
+  gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_win),
+                                        GTK_WIDGET(mwindow->maintree));
 
   /* Append some pages to notebook */
   {
