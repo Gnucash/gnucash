@@ -36,6 +36,19 @@ Please put the keys in alphabetical order.
 
 --------------------------------------------------------------------------
 
+Name: memo
+Type: string
+Entities: Split
+Use: xaccSplitGetMemo, xaccSplitSetMemo
+     Store the 'Memo' string associated with Splits.
+
+Name: notes
+Type: string
+Entities: Account
+Use: xaccAccountGetNotes, xaccAccountSetNotes
+     Store the 'Notes' string which was previously stored in
+     the Account structure directly.
+
 Name: old-docref
 Type: string
 Entities: Transactions, Splits
@@ -58,9 +71,3 @@ Entities: All
 Use: This frame is used to store keys which are editable directly by
      the user. The program should not attach any semantics to keys
      under this frame.
-
-Name: notes
-Type: string
-Entities: Account
-Use: Store the 'Notes' string which was previously stored in
-     the Account structure directly.
