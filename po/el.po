@@ -1,7 +1,7 @@
+# translation of GNEel.po to Greek
 # Greek translation of GnuCash.
 # Copyright (C) 2002,2003 Free Software Foundation, Inc.
-# Nikos Charonitakis <charosn@her.forthnet.gr>, 2002,2003.
-# ta panta rei <ta_panta_rei@flashmail.com>, 2003
+#
 # Gnucash 1.6
 # Nikos: 490 translated messages, initial translation.
 # Nikos: 626 translated messages, update el.po
@@ -13,23 +13,28 @@
 # Nikos    translated messages 1090 (01-2003)
 # ta panta rei review translation (01-2003)
 # Nikos  update el.po 1370 translated messages   (Jun2003)
-# ta panta rei  review translation (06-2003)  
-# Nikos  update  1350 translated messages (19Aug2003) -from gnucash.pot- 
+# ta panta rei  review translation (06-2003)
+# Nikos  update  1350 translated messages (19Aug2003) -from gnucash.pot-
 # Nikos  update  1407 translated messages (20Aug2003)
 # Nikos  update  1522 translated messages (16Sep2003)
 # Nikos  update  1861 translated messages (19Oct2003)
 # ta panta rei update and review 1879 messages (20Oct2003)
-# 
+# ta panta rei update 1934 translated messages (16Noe2003)
+#
+# Nikos Charonitakis <charosn@her.forthnet.gr>, 2002,2003.
+# ta panta rei <ta_panta_rei@flashmail.com>, 2003.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.8\n"
+"Project-Id-Version: GNEel\n"
 "POT-Creation-Date: 2003-10-24 16:08+0300\n"
-"PO-Revision-Date: 2003-10-24 16:48-0200\n"
-"Last-Translator: Nikos Charonitakis <charosn@her.fothnet.gr>\n"
+"PO-Revision-Date: 2003-11-16 17:49+0200\n"
+"Last-Translator: Nikos Charonitakis <charosn@her.forthnet.gr>\n"
 "Language-Team: Greek <nls@hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-7\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0.2\n"
 
 #: src/app-file/gnome/gnc-file-dialog.c:77
 #: src/app-file/gnc-file.c:547
@@ -1663,12 +1668,12 @@ msgstr "Κακό URL: %s"
 #: src/gnome/top-level.c:269
 #, c-format
 msgid "No such entity: %s"
-msgstr ""
+msgstr "Δεν υπάρχει τέτοιο αντικείμενο: %s"
 
 #: src/business/business-gnome/business-urls.c:62
 #, c-format
 msgid "Entity type does not match Customer: %s"
-msgstr ""
+msgstr "Ο τύπος αντικειμένου δεν ταιριάζει με Πελάτη: %s"
 
 #: src/business/business-gnome/business-urls.c:69
 #: src/business/business-gnome/business-urls.c:119
@@ -1684,27 +1689,27 @@ msgstr "Κακοσχηματισμένο URL %s"
 #: src/business/business-gnome/business-urls.c:112
 #, c-format
 msgid "Entity type does not match Vendor: %s"
-msgstr ""
+msgstr "Ο τύπος αντικειμένου δεν ταιριάζει με Προμηθευτή: %s"
 
 #: src/business/business-gnome/business-urls.c:162
 #, c-format
 msgid "Entity type does not match Employee: %s"
-msgstr ""
+msgstr "Ο τύπος αντικειμένου δεν ταιριάζει με Εργαζόμενο: %s"
 
 #: src/business/business-gnome/business-urls.c:212
 #, c-format
 msgid "Entity type does not match Invoice: %s"
-msgstr ""
+msgstr "Ο τύπος αντικειμένου δεν ταιριάζει με Τιμολόγιο: %s"
 
 #: src/business/business-gnome/business-urls.c:283
 #, c-format
 msgid "No such owner entity: %s"
-msgstr ""
+msgstr "Δεν υπάρχει τέτοιο αντικείμενο ιδιοκτήτη: %s"
 
 #: src/business/business-gnome/business-urls.c:317
 #, c-format
 msgid "Entity type does not match %s: %s"
-msgstr ""
+msgstr "Ο τύπος αντικειμένου δεν ταιριάζει με %s: %s"
 
 #: src/business/business-gnome/business-urls.c:327
 #, c-format
@@ -1714,12 +1719,12 @@ msgstr "Κακό URL %s"
 #: src/business/business-gnome/business-urls.c:339
 #, c-format
 msgid "No such Account entity: %s"
-msgstr ""
+msgstr "Δεν υπάρχει τέτοιο αντικείμενο Λογαριασμός: %s"
 
 #: src/business/business-gnome/business-urls.c:347
 #, c-format
 msgid "Entity is not Account entity: %s"
-msgstr ""
+msgstr "Το αντικείμενο δεν είναι Λογαριασμός: %s"
 
 #: src/business/business-gnome/dialog-billterms.c:230
 #: src/business/dialog-tax-table/dialog-tax-table.c:88
@@ -2927,9 +2932,9 @@ msgstr ""
 
 #. %u is the day of month
 #: src/engine/FreqSpec.c:907
-#, fuzzy, c-format
+#, c-format
 msgid "Tri-Yearly: %u"
-msgstr "Ετήσια"
+msgstr ""
 
 #. %u is the number of intervals; %u
 #. is the day of month
@@ -6614,11 +6619,11 @@ msgid "You need to enter a string value"
 msgstr "Πρέπει να εισάγετε ένα αλφαριθμητικό"
 
 #: src/gnome-search/search-string.c:209
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error in regular expression '%s':\n"
 "%s"
-msgstr "Κανονική έκφραση"
+msgstr ""
 
 #: src/gnome-search/search-string.c:270
 msgid "contains"
@@ -7065,12 +7070,8 @@ msgid "Not found"
 msgstr "Δε βρέθηκε"
 
 #: src/gnome-utils/gnc-html.c:111
-#, fuzzy
 msgid "The specified URL could not be loaded."
 msgstr ""
-"Το αρχείο\n"
-"    %s\n"
-" δεν βρέθηκε"
 
 #: src/gnome-utils/gnc-html.c:117
 #, fuzzy
@@ -7745,9 +7746,8 @@ msgid ""
 msgstr "ένας Λογαριασμός"
 
 #: src/import-export/hbci/glade/hbci.glade.h:91
-#, fuzzy
 msgid "Match HBCI accounts with GnuCash accounts"
-msgstr "Ενημέρωση τών GnuCash λογαριασμών  σας"
+msgstr "Ενημέρωση των GnuCash λογαριασμών  σας"
 
 #: src/import-export/hbci/glade/hbci.glade.h:92
 msgid "Name (optional)"
@@ -7999,9 +7999,9 @@ msgstr ""
 
 #. Translators: Strings are 1. Account code, 2. Bank name, 3. Bank code.
 #: src/import-export/hbci/druid-hbci-initial.c:204
-#, fuzzy, c-format
+#, c-format
 msgid "%s at %s (code %s)"
-msgstr "Περίοδος από %s μέχρι %s"
+msgstr ""
 
 #: src/import-export/hbci/druid-hbci-initial.c:490
 msgid ""
@@ -8166,9 +8166,9 @@ msgstr ""
 #. * code.
 #: src/import-export/hbci/gnc-hbci-utils.c:677
 #: src/import-export/hbci/gnc-hbci-utils.c:753
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s) at bank %s (%s)"
-msgstr "Περίοδος από %s μέχρι %s"
+msgstr ""
 
 #: src/import-export/hbci/gnc-hbci-utils.c:687
 #, fuzzy
@@ -11194,9 +11194,8 @@ msgstr "Να εμφανιστούν τα σύνολα;"
 #. src/business/business-reports/fancy-invoice.scm
 #: intl-scm/guile-strings.c:795
 #: intl-scm/guile-strings.c:959
-#, fuzzy
 msgid "Display each entry's total total tax"
-msgstr "Εμφάνιση της %s αναφοράς"
+msgstr ""
 
 #. src/business/business-reports/fancy-invoice.scm
 #: intl-scm/guile-strings.c:801
@@ -12118,22 +12117,22 @@ msgstr "Έκτο-επίπεδο"
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1493
 msgid "Show accounts to this depth, overriding any other option."
-msgstr ""
+msgstr "Εμφάνιση λογαριασμών μέχρι αυτό το βάθος, παρακάμποντας όποιες άλλες επιλογές."
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1495
 msgid "Override account-selection and show sub-accounts of all selected accounts?"
-msgstr ""
+msgstr "Παράκαμψη επιλογής λογαριασμών και εμφάνιση υπολογαριασμών σε όλους τους επιλεγμένους λογαριασμούς;"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1497
 msgid "Report on these accounts, if display depth allows."
-msgstr ""
+msgstr "Αναφορά αυτών των λογαριασμών, αν το επιτρέπει το βάθος απεικόνισης."
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1499
 msgid "Include sub-account balances in printed balance?"
-msgstr ""
+msgstr "Να περιέχονται τα υπόλοιπα υπολογαριασμών στα εκτυπούμενα υπόλοιπα;"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1501
@@ -12143,7 +12142,7 @@ msgstr "Ομαδοποίηση λογαριασμών σε κύριες κατηγορίες;"
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1503
 msgid "Select the currency to display the values of this report in."
-msgstr ""
+msgstr "Επιλέξτε νόμισμα στο οποίο θα εμφανίζονται οι τιμές σε αυτή την αναφορά."
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1505
@@ -12151,14 +12150,14 @@ msgstr ""
 #: intl-scm/guile-strings.c:1891
 #: intl-scm/guile-strings.c:2181
 msgid "Display the account's foreign currency amount?"
-msgstr ""
+msgstr "Εμφάνιση ποσού λογαριασμού σε ξένο νόμισμα;"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1507
 #: intl-scm/guile-strings.c:1747
 #: intl-scm/guile-strings.c:2257
 msgid "The source of price information"
-msgstr ""
+msgstr "Η πηγή για τις πληροφορίες τιμών"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1509
@@ -12182,7 +12181,7 @@ msgstr "Πιο πρόσφατος"
 #: intl-scm/guile-strings.c:1515
 #: intl-scm/guile-strings.c:1751
 msgid "The most recent recorded price"
-msgstr ""
+msgstr "Η τιμή που καταχωρήθηκε πιο πρόσφατα"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1517
@@ -12194,7 +12193,7 @@ msgstr "Πλησιέστερο χρονικά"
 #: intl-scm/guile-strings.c:1519
 #: intl-scm/guile-strings.c:1755
 msgid "The price recorded nearest in time to the report date"
-msgstr ""
+msgstr "Η τιμή που καταχωρήθηκε την πλησιέστερη στην αναφορά ημερομηνία"
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1521
@@ -12209,7 +12208,7 @@ msgstr "Ύψος του γραφήματος σε εικονοστοιχεία."
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1525
 msgid "Choose the marker for each data point."
-msgstr ""
+msgstr "Επιλέξτε το σύμβολο για κάθε δεδομένο."
 
 #. src/report/report-system/options-utilities.scm
 #: intl-scm/guile-strings.c:1527
@@ -12356,7 +12355,7 @@ msgstr "Λογαριασμοί Πληρωτέοι"
 #. src/report/report-system/report-utilities.scm
 #: intl-scm/guile-strings.c:1597
 msgid "Credit Lines"
-msgstr ""
+msgstr "Πιστωτικά Όρια"
 
 #. src/report/report-system/report-utilities.scm
 #: intl-scm/guile-strings.c:1599
@@ -12440,22 +12439,22 @@ msgstr "Κυκλικό Διάγραμμα Παθητικού"
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1643
 msgid "Shows a piechart with the Income per given time interval"
-msgstr ""
+msgstr "Εμφανίζει ένα κυκλικό διάγραμμα με τα Έξοδα κατά χρονικό διάστημα"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1645
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr ""
+msgstr "Εμφανίζει ένα κυκλικό διάγραμμα με τα Έξοδα κατά χρονικό διάστημα"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1647
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr ""
+msgstr "Εμφανίζει ένα κυκλικό διάγραμμα με το υπόλοιπο Ενεργητικού κατά χρονικό διάστημα"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1649
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr ""
+msgstr "Εμφανίζει ένα κυκλικό διάγραμμα με το υπόλοιπο Παθητικού κατά χρονικό διάστημα"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1651
@@ -12528,7 +12527,7 @@ msgstr "Μέθοδος Ταξινόμησης"
 #: intl-scm/guile-strings.c:2067
 #: intl-scm/guile-strings.c:2115
 msgid "Report on these accounts, if chosen account level allows."
-msgstr ""
+msgstr "Αναφορά αυτών των λογαριασμών, αν το επιτρέπει το βάθος λογαριασμού."
 
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1685
@@ -12541,13 +12540,13 @@ msgstr "Εμφάνιση λογαριασμών σε αυτό το βάθος και όχι παρακάτω"
 #: intl-scm/guile-strings.c:1687
 #: intl-scm/guile-strings.c:2013
 msgid "Show the full account name in legend?"
-msgstr ""
+msgstr "Εμφάνιση του πλήρους ονόματος του λογαριασμού στο καθολικό;"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1689
 #: intl-scm/guile-strings.c:2071
 msgid "Show the total balance in legend?"
-msgstr ""
+msgstr "Εμφάνιση του συνολικού υπολοίπου στο καθολικό;"
 
 #. src/report/standard-reports/account-piecharts.scm
 #: intl-scm/guile-strings.c:1691
@@ -12647,7 +12646,7 @@ msgstr "Εμφάνιση μερικών υπολοίπων μητρικών λογαρισμών"
 #: intl-scm/guile-strings.c:1937
 #: intl-scm/guile-strings.c:2183
 msgid "Show the exchange rates used"
-msgstr ""
+msgstr "Εμφάνιση των ισοτιμιών που χρησιμοποιούνται"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1735
@@ -12664,7 +12663,7 @@ msgstr "Αυτόματη δεκαδική θέση"
 #: intl-scm/guile-strings.c:1741
 #: intl-scm/guile-strings.c:2197
 msgid "Include accounts with no shares"
-msgstr ""
+msgstr "Συμπερίληψη λογαριασμών χωρίς καθόλου μετοχές"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1745
@@ -12676,25 +12675,25 @@ msgstr "Νόμισμα Αναφοράς"
 #: intl-scm/guile-strings.c:1757
 #: intl-scm/guile-strings.c:2203
 msgid "The number of decimal places to use for share numbers"
-msgstr ""
+msgstr "Ο αριθμός των δεκαδικών ψηφίων για χρήση στους αριθμούς μετοχών"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1761
 #: intl-scm/guile-strings.c:2207
 msgid "Stock Accounts to report on"
-msgstr ""
+msgstr "Λογαριασμοί Μετοχών για αναφορά"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1763
 #: intl-scm/guile-strings.c:2209
 msgid "Include accounts that have a zero share balances."
-msgstr ""
+msgstr "Συμπερίληψη λογαριασμών με μηδενικό υπόλοιπο μετοχών."
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1769
 #: intl-scm/guile-strings.c:2215
 msgid "Listing"
-msgstr ""
+msgstr "Κατάλογος"
 
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1777
@@ -12717,7 +12716,7 @@ msgstr "Αύξηση"
 #. src/report/standard-reports/advanced-portfolio.scm
 #: intl-scm/guile-strings.c:1783
 msgid "Total Return"
-msgstr ""
+msgstr "Συνολική Απόδοση"
 
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1787
@@ -12737,18 +12736,18 @@ msgstr "Μέγεθος Βήματος"
 #: intl-scm/guile-strings.c:1799
 #: intl-scm/guile-strings.c:2051
 msgid "Include Sub-Accounts"
-msgstr ""
+msgstr "Συμπερίληψη Υπολογαριασμών"
 
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1801
 #: intl-scm/guile-strings.c:2065
 msgid "Include sub-accounts of all selected accounts"
-msgstr ""
+msgstr "Συμπερίληψη υπολογαριασμών όλων των επιλεγμένων λογαριασμών"
 
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1805
 msgid "Do transaction report on this account"
-msgstr ""
+msgstr "Να γίνει αναφορά συναλλαγών αυτού του λογαριασμού"
 
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1807
@@ -12759,7 +12758,7 @@ msgstr "Εμφάνιση πίνακα"
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1809
 msgid "Display a table of the selected data."
-msgstr ""
+msgstr "Εμφάνιση πίνακα επιλεγμένων δεδομένων."
 
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1811
@@ -12770,7 +12769,7 @@ msgstr "Εμφάνιση γραφήματος"
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1813
 msgid "Display a graph of the selected data."
-msgstr ""
+msgstr "Εμφάνιση γραφήματος επιλεγμένων δεδομένων."
 
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1815
@@ -12781,7 +12780,7 @@ msgstr "Τύπος Γραφήματος"
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1817
 msgid "The type of graph to generate"
-msgstr ""
+msgstr "Ο τύπος γραφήματος που θα παραχθεί"
 
 #. src/report/standard-reports/average-balance.scm
 #: intl-scm/guile-strings.c:1819
@@ -12883,7 +12882,7 @@ msgstr "Εμφάνιση Πλήρους Ονόματος Λογαριασμών"
 #. src/report/standard-reports/cash-flow.scm
 #: intl-scm/guile-strings.c:1939
 msgid "Show full account names (including parent accounts)"
-msgstr ""
+msgstr "Εμφάνιση Πλήρους Ονόματος Λογαριασμών (συμπερίληψη και των μητρικών λογαριασμών)"
 
 #. src/report/standard-reports/cash-flow.scm
 #: intl-scm/guile-strings.c:1941
@@ -12905,9 +12904,8 @@ msgstr "%s και επιλεγμένοι υπολογαριασμοί"
 
 #. src/report/standard-reports/cash-flow.scm
 #: intl-scm/guile-strings.c:1949
-#, fuzzy
 msgid "Money into selected accounts comes from"
-msgstr "Τα χρήματα των επιλεγμέων λογαριασμών είναι από"
+msgstr "Η εισροή ποσών των επιλεγμένων λογαριασμών είναι από"
 
 #. src/report/standard-reports/cash-flow.scm
 #: intl-scm/guile-strings.c:1953
@@ -12943,22 +12941,22 @@ msgstr "Ακιδωτό Διάγραμμα Παθητικού"
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:1967
 msgid "Shows a barchart with the Income per interval developing over time"
-msgstr ""
+msgstr "Εμφάνιση ακιδωτού διαγράμματος εξέλιξης Εσόδων χρονικά"
 
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:1969
 msgid "Shows a barchart with the Expenses per interval developing over time"
-msgstr ""
+msgstr "Εμφάνιση ακιδωτού διαγράμματος εξέλιξης Εξόδων χρονικά"
 
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:1971
 msgid "Shows a barchart with the Assets developing over time"
-msgstr ""
+msgstr "Εμφάνιση ακιδωτού διαγράμματος εξέλιξης Ενεργητικού χρονικά"
 
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:1973
 msgid "Shows a barchart with the Liabilities developing over time"
-msgstr ""
+msgstr "Εμφάνιση ακιδωτού διαγράμματος εξέλιξης Παθητικού χρονικά"
 
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:1975
@@ -12993,18 +12991,18 @@ msgstr "Μέγιστες Ακίδες"
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:2015
 msgid "Show barchart as stacked barchart? (Guppi>=0.35.4 required)"
-msgstr ""
+msgstr "Εμφάνιση ακιδωτού διαγράμματος με στιβαγμένες ακίδες; (απαιτεί Guppi έκδοσης>= 0.35.4)"
 
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:2017
 msgid "Maximum number of bars in the chart"
-msgstr ""
+msgstr "Μέγιστος αριθμός ακίδων στο διάγραμμα"
 
 #. src/report/standard-reports/category-barchart.scm
 #: intl-scm/guile-strings.c:2021
 #, c-format
 msgid "Balances %s to %s"
-msgstr ""
+msgstr "Υπόλοιπα από %s ως %s"
 
 #. src/report/standard-reports/daily-reports.scm
 #: intl-scm/guile-strings.c:2027
@@ -13021,12 +13019,12 @@ msgstr "Έξοδα ανά Ημέρα Εβδομάδας"
 #. src/report/standard-reports/daily-reports.scm
 #: intl-scm/guile-strings.c:2031
 msgid "Shows a piechart with the total income for each day of the week"
-msgstr ""
+msgstr "Εμφάνιση κυκλικού διαγράμματος με το συνολικά Έσοδα ανά ημέρα της εβδομάδας"
 
 #. src/report/standard-reports/daily-reports.scm
 #: intl-scm/guile-strings.c:2033
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr ""
+msgstr "Εμφάνιση κυκλικού διαγράμματος με το συνολικά Έξοδα ανά ημέρα της εβδομάδας"
 
 #. src/report/standard-reports/net-barchart.scm
 #: intl-scm/guile-strings.c:2089
@@ -13043,13 +13041,13 @@ msgstr "Εμφάνιση Καθαρού Κέρδους"
 #: intl-scm/guile-strings.c:2107
 #: intl-scm/guile-strings.c:2243
 msgid "Show Asset & Liability bars"
-msgstr ""
+msgstr "Εμφάνιση ακίδων Ενεργητικού & Παθητικού"
 
 #. src/report/standard-reports/net-barchart.scm
 #: intl-scm/guile-strings.c:2109
 #: intl-scm/guile-strings.c:2245
 msgid "Show Net Worth bars"
-msgstr ""
+msgstr "Εμφάνιση ακίδων Καθαρής Θέσης"
 
 #. src/report/standard-reports/net-barchart.scm
 #: intl-scm/guile-strings.c:2117
@@ -13069,7 +13067,7 @@ msgstr "Εμφάνιση καθαρού κέρδους;"
 #. src/report/standard-reports/net-barchart.scm
 #: intl-scm/guile-strings.c:2123
 msgid "Show a Net Worth bar?"
-msgstr ""
+msgstr "Εμφάνιση ακίδας Καθαρής Θέσης;"
 
 #. src/report/standard-reports/net-barchart.scm
 #: intl-scm/guile-strings.c:2137
