@@ -661,7 +661,7 @@ test_queries (GNCSession *session_base, const char *db_name, const char *mode)
   GNCBook *book;
   gboolean ok;
 
-  return TRUE;
+  // return TRUE;   /* XXX uhh, queries not curently tested ... */
 
   g_return_val_if_fail (db_name && mode, FALSE);
 

@@ -6,6 +6,8 @@ rm -f test_file_*
 ./db-control.sh create
 
 ./db-control.sh start
+# .libs/test-db  || EXIT_VALUE=1
+# gdb .libs/test-db 
 ./test-db || EXIT_VALUE=1
 ./db-control.sh stop
 
