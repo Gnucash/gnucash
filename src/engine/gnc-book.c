@@ -100,9 +100,10 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
   if (old_list && old_list->sx_list == newList) return;
   
   new_list = g_new (SchedXactionList, 1);
-  new_list->sx_notsaved = TRUE;
   new_list->book = book;
   new_list->sx_list = newList;
+  new_list->sx_notsaved = TRUE;
+  if (NULL == newList) new_list->sx_notsaved = FALSE;
   
   gnc_book_set_data (book, GNC_SCHEDXACTIONS, new_list);
 
