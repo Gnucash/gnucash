@@ -371,7 +371,10 @@
     ;;  ...)
 
     (let* ((ct (gnc:book-get-commodity-table book))
-	   (big-list (gnc:commodity-table-get-quotable-commodities-info ct ""))
+	   (big-list
+	    (gnc:commodity-table-get-quotable-commodities-info
+	     ct
+	     (gnc:config-var-value-get gnc:*namespace-regexp*)))
 	   (commodity-list #f)
 	   (currency-list (filter
 			   (lambda (a) (not (equal? (cadr a) (caddr a))))

@@ -31,6 +31,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <glib.h>
+#include <regex.h>
 
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
@@ -1233,20 +1234,37 @@ get_quotables_helper2 (gnc_commodity *comm, gpointer data)
 
 GList * 
 gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
-					     const char * namespace)
+					     const char *expression)
 {
-  gnc_commodity_namespace * ns = NULL; 
+  gnc_commodity_namespace * ns = NULL;
+  const char *namespace;
+  GList * nslist, * tmp;
   GList * l = NULL;
+  regex_t pattern;
 
-  ENTER("table=%p, namespace=%s", table, namespace);
+  ENTER("table=%p, expression=%s", table, expression);
   if (!table)
     return NULL;
 
-  if (namespace && *namespace) {
-    ns = g_hash_table_lookup(table->table, (gpointer)namespace);
-    DEBUG("ns=%p", ns);
-    if (ns)
-      g_hash_table_foreach(ns->table, &get_quotables_helper1, (gpointer) &l);
+  if (expression && *expression) {
+    if (regcomp(&pattern, expression, REG_EXTENDED|REG_ICASE) != 0) {
+      LEAVE("Cannot compile regex");
+      return NULL;
+    }
+
+    nslist = gnc_commodity_table_get_namespaces(table);
+    for (tmp = nslist; tmp; tmp = tmp->next) {
+      namespace = tmp->data;
+      if (regexec(&pattern, namespace, 0, NULL, 0) == 0) {
+	DEBUG("Running list of %s commodities", namespace);
+	ns = g_hash_table_lookup(table->table, namespace);
+	if (ns) {
+	  g_hash_table_foreach(ns->table, &get_quotables_helper1, (gpointer) &l);
+	}
+      }
+    }
+    g_list_free(nslist);
+    regfree(&pattern);
   } else {
     gnc_commodity_table_foreach_commodity(table, get_quotables_helper2,
 					  (gpointer) &l);

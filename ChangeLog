@@ -1,3 +1,15 @@
+2003-07-03  David Hampton  <hampton@employees.org>
+
+	* src/scm/price-quotes.scm:
+	* src/engine/gnc-commodity.[ch]: Allow the user to specify by
+	namespace which commodities should be retrieved when getting price
+	quotes.
+
+	* src/scm/command-line.scm:
+	* src/scm/main.scm: Support a new command line argument for
+	specifying a namespace.  To be used in conjunction with the
+	--add-price-quotes argument.
+
 2003-07-02  Chris Lyttle  <chris@wilddev.net>
 
 	* src/scm/help-topics-index.scm: add Jon Lapham's patch

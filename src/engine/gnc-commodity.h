@@ -747,10 +747,10 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
  *  @param table A pointer to the commodity table for the current
  *  book.
  *
- *  @param namespace Use the given namespace as a filter on the
- *  commodities to be returned. If non-null, only commodities in the
- *  specified namespace are checked.  If null, all commodities are
- *  checked.
+ *  @param expression Use the given expression as a filter on the
+ *  commodities to be returned. If non-null, only commodities in
+ *  namespace that match the specified regular expression are checked.
+ *  If null, all commodities are checked.
  *
  *  @return A pointer to a list of commodities.  NULL if invalid
  *  arguments were supplied or if there no commodities are flagged for
@@ -758,7 +758,7 @@ GList * gnc_commodity_table_get_commodities(const gnc_commodity_table * t,
  *
  *  @note It is the callers responsibility to free the list. */
 GList * gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table,
-						     const char * namespace);
+						     const char * expression);
 
 /** Call a function once for each commodity in the commodity table.
  *  This table walk returns whenever the end of the table is reached,

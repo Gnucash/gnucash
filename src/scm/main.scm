@@ -66,6 +66,7 @@
 (export gnc:*config-path*)
 (export gnc:*share-path*)
 (export gnc:*doc-path*)
+(export gnc:*namespace-regexp*)
 
 ;; from doc.scm
 (export gnc:find-doc-file)
