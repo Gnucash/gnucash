@@ -1,3 +1,8 @@
+2000-06-27  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-totd.c: Added code to make "Tip of the day"
+	dialog modeless
+
 2000-06-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/top-level.c (gnucash_ui_init): set the reconciled cell

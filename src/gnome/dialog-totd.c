@@ -25,7 +25,6 @@
 #include "top-level.h"
 
 #include <gnome.h>
-#include <libgnomeui/gnome-window-icon.h>
 
 #include "global-options.h"
 #include "query-user.h"
@@ -37,7 +36,7 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
-
+static GtkWidget *win = NULL;
 static GtkWidget *disable_cb = NULL;
 static GtkWidget *canvas = NULL;
 static GtkWidget *scrollwin = NULL;
@@ -45,31 +44,39 @@ static GtkWidget *scrollwin = NULL;
 static GnomeCanvasItem *hint_item;
 static GnomeCanvasItem *blue_background;
 static GnomeCanvasItem *white_background;
+static gboolean old_enabled;
+
 static int width = 400, height = 200;
 
 
 /** Prototypes *********************************************************/
 static void draw_on_canvas(GtkWidget *canvas, char *hint);
 static void grow_text_if_necessary(void);
-
+static GtkWidget *gnc_ui_totd_dialog_create(void);
+static void totd_previous_cb(GtkWidget *widget, gpointer data);
+static void totd_next_cb(GtkWidget * widget, gpointer data);
+static void totd_close_cb(GtkWidget *widget, gpointer data);
 
 /** Implementations ***************************************************/
 
 /************************************************************************\
- * gnc_ui_totd_dialog_create_and_run                                    *
+ * gnc_ui_totd_dialog_crfeate_and_run                                   *
  *   display and run the "Tip of the Day" dialog                        *
  *                                                                      *
  * Returns: nothing                                                     *
 \************************************************************************/
 
-void 
-gnc_ui_totd_dialog_create_and_run(void)
+void gnc_ui_totd_dialog_create_and_run(void)
 {
-  GtkWidget *win;
-  gint status;
-  gboolean config_set_success;
+  gnc_ui_totd_dialog_create();
+  gtk_widget_show_all(win);
+  return;
+}
+
+static GtkWidget *
+gnc_ui_totd_dialog_create(void)
+{
   char *new_hint;
-  gboolean old_enabled, new_enabled;
   win = gnome_dialog_new(TOTD_STR, 
 			 GNOME_STOCK_BUTTON_PREV, 
 			 GNOME_STOCK_BUTTON_NEXT, 
@@ -78,6 +85,9 @@ gnc_ui_totd_dialog_create_and_run(void)
 
   gnome_dialog_set_parent(GNOME_DIALOG(win), GTK_WINDOW(gnc_get_ui_data()));
 
+  gnome_dialog_set_default(GNOME_DIALOG(win), 2);
+  gnome_dialog_close_hides(GNOME_DIALOG(win), FALSE);
+			   
   scrollwin = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
 				 GTK_POLICY_NEVER,
@@ -104,53 +114,64 @@ gnc_ui_totd_dialog_create_and_run(void)
   gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox), disable_cb, TRUE, TRUE, 0);
   gtk_widget_show(disable_cb);
 
-  do
-  {
-    status = gnome_dialog_run(GNOME_DIALOG(win));
-//    printf("status = %d\n", status);
-    switch(status)
-    {
-    case 0:  /* previous hint */
-      gnc_decrement_tip();
-      new_hint = gnc_get_current_tip();
-      gnome_canvas_item_set(hint_item,
-			    "text",new_hint,
-			    NULL);
-      grow_text_if_necessary();
-      free(new_hint);
-      break;
-    case 1: /* next hint */
-      gnc_increment_tip();
-      new_hint = gnc_get_current_tip();
-      gnome_canvas_item_set(hint_item,
-			    "text",new_hint,
-			    NULL);
-      grow_text_if_necessary();
-      free(new_hint);
-      break;
-    default: 
-      status = -1;
-      break;
-    }
-  } while(status >= 0);
+  gnome_dialog_button_connect(GNOME_DIALOG(win), 0,
+			      GTK_SIGNAL_FUNC(totd_previous_cb), NULL);
+  gnome_dialog_button_connect(GNOME_DIALOG(win), 1,
+			      GTK_SIGNAL_FUNC(totd_next_cb), NULL);
+  gnome_dialog_button_connect(GNOME_DIALOG(win), 2,
+			      GTK_SIGNAL_FUNC(totd_close_cb), NULL);
+  gtk_signal_connect(GTK_OBJECT(win), "close",
+		     GTK_SIGNAL_FUNC(totd_close_cb), NULL);
 
-  new_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
-  gtk_widget_destroy(win);
+  return win;
+}
+
+static void
+totd_previous_cb(GtkWidget *widget, gpointer data)
+{
+  char *new_hint;
+  gnc_decrement_tip();
+  new_hint = gnc_get_current_tip();
+  gnome_canvas_item_set(hint_item,
+			"text",new_hint,
+			NULL);
+  grow_text_if_necessary();
+  free(new_hint);
+  return;
+}
+
+static void
+totd_next_cb(GtkWidget * widget, gpointer data)
+{
+  char *new_hint;
   gnc_increment_tip();
+  new_hint = gnc_get_current_tip();
+  gnome_canvas_item_set(hint_item,
+			"text", new_hint, NULL);
+  grow_text_if_necessary();
+  free(new_hint);
+  return;
+}
 
+static void
+totd_close_cb(GtkWidget *widget, gpointer data)
+{
+  gboolean new_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
+  gtk_widget_destroy(GTK_WIDGET(win));
   if(new_enabled != old_enabled)
   {
-    config_set_success = gnc_set_boolean_option("General",
+    gnc_set_boolean_option("General", 
 			   "Display \"Tip of the Day\"",
 			   new_enabled);
-    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");
-
+    gnc_option_refresh_ui_by_name("General", "Display \"Tip of the Day\"");    
     if(new_enabled == FALSE)
     {
       gnc_info_dialog(REENABLE_TIPS_MSG);
     }
   }
+  return;
 }
+
 
 /* increases the size of the canvas and enables scrolling if the text
    gets big enough */
