@@ -5,4 +5,5 @@ gnucash_design_TEXINFOS = concept-index.texinfo \
                           intro.texinfo \
                           register.texinfo \
                           reports.texinfo \
-                          top-level.texinfo
+                          top-level.texinfo \
+                          type-index.texinfo
