@@ -1065,6 +1065,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 
     /* If we're forcing, then compare the current account
      * commodity to the transaction commodity.
+     * XXX: we only need to do this for two-split, basic, non-expanded registers
      */
 
     xfer_acc = gnc_split_register_get_default_account (reg);

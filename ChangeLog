@@ -11,7 +11,7 @@
 	  "read-only" registers
 	* src/register/ledger-core/split-register-control.c -- fix the logic
 	  for when we pop-up the exchange-rate dialog, in particular when the
-	  user requests it.
+	  user requests it.   Fixes #100285
 	
 2002-12-04  David Hampton  <hampton@employees.org>
 
