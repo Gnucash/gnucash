@@ -1,92 +1,308 @@
 ;;;; $Id$
-;;;; HTML Support functions
+;;;; HTML Support functions 
+
+;; primarily Bryan Larsen (blarsen@ada-works.com) with help from
+;; pretty much everybody involved with reports.
 
 (gnc:support "html-generator.scm")
 
-(define (html-table-row-manual items)
-  (list
-   '("<TR>")
-   items
-   '("</TR>")))
 
-(define (html-table-row-guess header? strong? items)
+;; How this mechanism works:
+;;
+;; To do a report, first collect all of your results into a list.
+;; Each item in the list corresponds to one entry.  One entry may
+;; correspond to more than one line in the report, though.
+;; 
+;; Assemble a list of report-spec-structure's.  Each entry in the
+;; report-spec-structure corresponds to one column in the HTML report.
+;; Perhaps the most important parameter in the structure is
+;; get-value-proc, which extracts the value to print in the column
+;; from the entry.
+;;
+;; If total-proc and total-html-proc are defined, the column is totalled.
+;;
+;; Subentries are handled several different ways, depending on what
+;; function is used to convert the results into an html table.  If
+;; subs-list-proc and subentry-html-proc are #f, there are no
+;; subentries in this column.  Instead, false-proc is called to
+;; assemble the list.  false-proc is a parameter that is passed to the
+;; function that converts the results into an HTML table.  false-proc,
+;; when passed an entry, returns a list of #f's the same length as the
+;; number of subentries.
+;;
+;; Subsections (which are not yet implemented) are defined in the
+;; report-sort-spec-structure.  Define subtotal-html-proc to allow
+;; this column to be totalled.
+;;
+;; Note that pretty much every parameter may be set to #f.  For
+;; example, to define a "total column", you may wish to add an entry
+;; to the spec list that sets html-proc to #f, but sets
+;; total-html-proc and subtotal-html-proc.  This way, subtotals really
+;; stand out.
+;;
+;; 
+;; report-spec-structure 
+;;  header: string describing the column
+;;  get-value-proc:  given the entry, finds the value
+;;  html-proc: converts the value into html
+;;  total-proc:  usually + or #f
+;;  subtotal-html-proc: converts the subtotal into html
+;;  total-html-proc: converts the total into html
+;;  first-last-preference: #t if, for this column, entries should be
+;;                         displayed before subentries.  #f is
+;;                         subentries before entries.  This parameter
+;;                         may be ignored, depending on the report
+;;                         style chosen.
+;;  subs-list-proc: a procedure that returns a list of subentry values
+;;  subentry-html-proc: converts a subentry value into html
+(define report-spec-structure
+  (make-record-type
+   "report-spec-structure"
+   '(header get-value-proc html-proc total-proc
+	    subtotal-html-proc total-html-proc
+	    first-last-preference subs-list-proc subentry-html-proc)))
+
+;; The proposed sorting mechanism.  Of course, if you just wanted it
+;; sorted, you could sort the list before converting it into HTML.
+;; However, by doing it this way, we can divide things into
+;; subsections as well.
+;;
+;; To sort, collect a list of report-sort-spec-structure's.  The first
+;; item in the list is the primary sort, and so on down.
+;;
+;; Optionally, one can divide the report into subsections.  To do so,
+;; set the subsection-pred.  subsection-pred returns true if two
+;; values are in the same subsection.  All values in the subsection
+;; must be adjacent for the sort-pred.  For example, one could sort by
+;; date, and then supply a subsection-pred that determines whether two
+;; dates are within the same month.
+;;
+;; report-sort-spec-structure
+;;  get-value-proc:  given the entry, finds the value.  Required.
+;;  sort-pred:  usually <.  Required.
+;;  subsection-pred: often = or #f.  Returns #t if both values are in
+;;                   the same subsection
+;;  subsection-title-proc: returns the title of the subsection given a
+;;                         value.  #f indicates no title.
+(define report-sort-spec-structure
+  (make-record-type
+   "report-sort-spec-structure"
+   '(get-value-proc sort-pred subsection-pred subsection-title-proc)))
+
+(define make-report-sort-spec
+  (record-constructor report-sort-spec-structure))
+
+(define report-sort-spec-get-get-value-proc
+  (record-accessor report-sort-spec-structure 'get-value-proc))
+
+(define report-sort-spec-get-sort-pred
+  (record-accessor report-sort-spec-structure 'sort-pred))
+
+(define report-sort-spec-get-subsection-pred
+  (record-accessor report-sort-spec-structure 'subsection-pred))
+
+(define report-sort-spec-get-subsection-title-proc
+  (record-accessor report-sort-spec-structure 'subsection-title-proc))
+
+(define make-report-spec
+  (record-constructor report-spec-structure))
+
+(define report-spec-get-header
+  (record-accessor report-spec-structure 'header))
+
+(define report-spec-get-get-value-proc
+  (record-accessor report-spec-structure 'get-value-proc))
+
+(define report-spec-get-html-proc
+  (record-accessor report-spec-structure 'html-proc))
+
+(define report-spec-get-total-proc
+  (record-accessor report-spec-structure 'total-proc))
+
+(define report-spec-get-subtotal-html-proc
+  (record-accessor report-spec-structure 'subtotal-html-proc))
+
+(define report-spec-get-total-html-proc
+  (record-accessor report-spec-structure 'total-html-proc))
+
+(define report-spec-get-subs-list-proc
+  (record-accessor report-spec-structure 'subs-list-proc))
+
+(define report-spec-get-subentry-html-proc
+  (record-accessor report-spec-structure 'subentry-html-proc))
+
+(define report-spec-get-first-last-preference
+  (record-accessor report-spec-structure 'first-last-preference))
+
+;; convert table to html.  Subentries follow entries
+(define (html-table-entries-first lst specs false-proc)
+  (map  ;; map-in-order when it's fixed
+   (lambda (line)
+     (html-table-row-group
+      (list
+       (html-table-row-manual (html-table-do-entry line specs))
+       (map
+	html-table-row-manual
+	(html-table-collect-subentries line specs false-proc)))))
+   lst))
+
+;; convert table to html.  The first subentry is merged with the
+;; entries on the first line.     
+(define (html-table-subentries-merged lst specs false-proc)
+  (map ;; map-in-order
+   (lambda (line)
+     (let ((subs-lines (html-table-collect-subentries line specs false-proc)))
+       (html-table-row-group
+	(list
+	(html-table-row-manual
+	 (map
+	  (lambda (entry sub)
+	    (if (not sub) entry sub))
+	  (html-table-do-entry line specs)
+	  (car subs-lines)))
+	(map html-table-row-manual (cdr subs-lines))))))
+   lst))
+
+;; convert table to html.  Entries only
+(define (html-table-entries-only lst specs false-proc)
+  (map ;; map-in-order
+   (lambda (line)
+     (html-table-row-manual (html-table-do-entry line specs)))
+   lst))
+
+;; convert totals to html
+(define (html-table-totals lst specs)
   (html-table-row-manual
    (map
-    (lambda (item)
-      (html-cell header? strong? item))
-    items)))
+    (lambda (spec)
+      (cond ((report-spec-get-total-html-proc spec)
+	     ((report-spec-get-total-html-proc spec)
+	      (apply
+	       (report-spec-get-total-proc spec)
+	       (map (report-spec-get-get-value-proc spec) lst))))
+	    (else #f)))
+    specs)))
 
-(define (html-strong cell)
-  (string-append
-   "<STRONG>"
-   cell
-   "</STRONG>"))
+;; convert headers to html
+(define (html-table-headers specs)
+  (map
+   (lambda (spec) 
+     (html-header-cell 
+      (report-spec-get-header spec)))
+   specs))
 
-(define (html-currency-cell header? strong? amount)
-  (html-generic-cell
-   #t
-   header?
-   strong?
-   (string-append
-    "<font face=\"Courier\""
-    (if (< amount 0)
-	(string-append
-	 "color=#ff0000>("
-	 (gnc:amount->string (- amount) #f #t #f)
-	 ")")
-	(string-append
-	 ">&nbsp;"
-	 (gnc:amount->string amount #f #t #f)
-	 "&nbsp;"))
-    "</font>")))
+;; converts from col order to row order.
+;; ex.  ((a b) (c d) (e f)) -> ((a c e) (b d f))
+(define (col-list->row-list lst)
+  (apply map list lst))
 
-(define (html-generic-cell right-align? header? strong? item)
-  (string-append
-   (if header? "<TH justify=center" "<TD")
-   (if right-align? " align=right>" ">")
-   (if strong? "<strong>" "")
-   item
-   (if strong? "</strong>" "")
-   (if header? "</TH>" "</TD>")))
+;;;;;;;;;;;;;;;;
+;; the rest are just helper functions
 
-(define (html-number-cell header? strong? format number)
-  (html-generic-cell
-   #t
-   header?
-   strong?
-   (sprintf #f format number)))
+;; converts subentries into html and collects into a list of lists of
+;; html cells.
+(define (html-table-collect-subentries line specs false-proc)
+  (col-list->row-list
+   (map
+    (lambda (spec)
+      (cond ((report-spec-get-subs-list-proc spec) 
+	     (map
+	      (report-spec-get-subentry-html-proc spec)
+	      ((report-spec-get-subs-list-proc spec) line)))
+	    (else (false-proc line))))
+    specs)))
 
-(define (html-add-cell header? strong? cline item)
-  (string-append cline (html-cell header? strong? item)))
+;; converts entry into a list of html cells.
+(define (html-table-do-entry line specs)
+  (map
+   (lambda (spec)
+     (cond ((report-spec-get-get-value-proc spec)
+	    ((report-spec-get-html-proc spec)
+	     ((report-spec-get-get-value-proc spec) line)))
+	   (else #f)))
+   specs))
 
-;; guess at what type they want
-(define (html-cell header? strong? item)
-  (cond ((string? item) 
-	 (html-generic-cell #f header? strong? item))
-	((number? item)
-	 (html-currency-cell header? strong? item))
-	(else "")))
+(define (html-table-row-manual items)
+  (list
+   "<TR>"
+   (map
+    (lambda (cell)
+      (cond (cell cell)
+	    (else html-blank-cell)))
+    items)
+   "</TR>"))
 
-(define (html-cell-header item)
-  (html-cell #t #f item))
+;; help! this doesn't work!  I want something to group several rows
+;; together so that an "entry" is noticably one unit.
+(define (html-table-row-group rows)
+  (list  "<TBODY>" rows  "</TBODY>"))
 
-(define (html-cell-body item)
-  (html-cell #f #f item))
+(define (html-strong html)
+  (if html 
+      (string-append "<STRONG>" html "</STRONG>")
+      #f))
 
-(define (html-cell-header-strong item)
-  (html-cell #t #t item))
+(define (html-make-strong proc)
+  (lambda (val)
+    (html-strong (proc val))))
 
-(define (html-cell-body-strong item)
-  (html-cell #f #t item))
+(define (html-ital html)
+  (if html
+      (string-append  "<i>"  html "</i>")
+      #f))
 
-(define (html-cell-header-right item)
-  (html-generic-cell #t #t #f item))
+(define (html-make-ital proc)
+  (lambda (val)
+    (html-ital (proc val))))
+
+(define (html-currency amount)
+  (if amount
+      (string-append
+       "<font face=\"Courier\""
+       (if (< amount 0)
+	   (string-append
+	    "color=#ff0000>("
+	    (gnc:amount->string (- amount) #f #t #f)
+	    ")")
+	   (string-append
+	    ">&nbsp;"
+	    (gnc:amount->string amount #f #t #f)
+	    "&nbsp;"))
+       "</font>")
+      #f))
+
+(define (html-left-cell item)
+  (if item
+      (string-append "<TD>" item "</TD>")
+      #f))
+
+(define (html-make-left-cell proc)
+  (lambda (val)
+    (html-left-cell (proc val))))
+
+(define (html-right-cell item)
+  (if item
+      (string-append "<TD align=right>" item "</TD>")
+      #f))
+
+(define html-blank-cell
+  "<TD></TD>")
+
+(define (html-make-right-cell proc)
+  (lambda (val)
+    (html-right-cell (proc val))))
+
+(define (html-header-cell item)
+  (string-append "<TH justify=left>" item "</TH>"))
+
+(define (html-string string)
+  (if string string #f))
+
+(define (html-number format number)
+  (if number (sprintf #f format number) #f))
 
 (define (html-para text)
   (string-append "<P>" text "</P>\n"))
-
-(define (html-cell-attributes value attributes)
-  (string-append "<TD " attributes ">" value "</TD>"))
 
 (define (html-start-document-title title)
   (list 
@@ -112,7 +328,7 @@
    "</HTML>"))
 
 (define (html-start-table)
-  (list "<TABLE border=1>"))
+  (list "<TABLE border=2 rules=\"groups\">"))
 
 (define (html-end-table)
   (list "</table>"))
@@ -120,6 +336,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; HTML Table
+;; This is used by balance-and-pnl.
 ;;;;;;;;;;;;;;;;;;;;
 
 ; Convert to string
