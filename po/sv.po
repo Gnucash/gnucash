@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.5\n"
-"POT-Creation-Date: 2000-11-20 00:39-0800\n"
+"POT-Creation-Date: 2000-12-05 02:10-0800\n"
 "PO-Revision-Date: 2000-09-17 09:18+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
@@ -690,14 +690,14 @@ msgstr "Justera saldot på huvudkontot i detta register"
 # messages-i18n.c:69 po/guile_strings.txt:103
 # messages-i18n.c:73 po/guile_strings.txt:119
 # messages-i18n.c:75 po/guile_strings.txt:120
-#: messages-i18n.c:75 po/guile_strings.txt:315
+#: messages-i18n.c:75 po/guile_strings.txt:317
 msgid "Double line mode with a multi-line cursor"
 msgstr "Läge för dubbla rader med fler-raders markör"
 
 # messages-i18n.c:70 po/guile_strings.txt:104
 # messages-i18n.c:74 po/guile_strings.txt:120
 # messages-i18n.c:76 po/guile_strings.txt:121
-#: messages-i18n.c:76 po/guile_strings.txt:316
+#: messages-i18n.c:76 po/guile_strings.txt:318
 msgid "Single line mode with a multi-line cursor"
 msgstr "Läge för enkelrader med flerrads markör"
 
@@ -773,7 +773,7 @@ msgstr "Radera den aktuella transaktionen"
 # messages-i18n.c:78 po/guile_strings.txt:126
 # messages-i18n.c:85 po/guile_strings.txt:147
 # messages-i18n.c:87 po/guile_strings.txt:148
-#: messages-i18n.c:87 po/guile_strings.txt:386
+#: messages-i18n.c:87 po/guile_strings.txt:388
 msgid "Show transactions on two lines with more information"
 msgstr "Visa transaktioner på två rader med mer information"
 
@@ -1057,7 +1057,7 @@ msgstr "Visa alla transaktioner i kontot"
 # messages-i18n.c:114 po/guile_strings.txt:130
 # messages-i18n.c:125 po/guile_strings.txt:151
 # messages-i18n.c:127 po/guile_strings.txt:152
-#: messages-i18n.c:127 po/guile_strings.txt:396
+#: messages-i18n.c:127 po/guile_strings.txt:398
 msgid "Show transactions on single lines"
 msgstr "Visa transaktioner på enkla rader"
 
@@ -1538,14 +1538,14 @@ msgstr "Kontosaldo"
 # messages-i18n.c:176 po/guile_strings.txt:260
 # messages-i18n.c:194 po/guile_strings.txt:310
 # messages-i18n.c:196 po/guile_strings.txt:310
-#: messages-i18n.c:196 po/guile_strings.txt:834
+#: messages-i18n.c:196 po/guile_strings.txt:837
 msgid "Auto Double"
 msgstr "Automatisk dubbel"
 
 # messages-i18n.c:177 po/guile_strings.txt:62
 # messages-i18n.c:195 po/guile_strings.txt:70
 # messages-i18n.c:197 po/guile_strings.txt:71
-#: messages-i18n.c:197 po/guile_strings.txt:185
+#: messages-i18n.c:197 po/guile_strings.txt:186
 msgid "Auto Single"
 msgstr "Automatisk enkel"
 
@@ -1762,7 +1762,7 @@ msgstr "Öppna konto"
 # messages-i18n.c:204
 # messages-i18n.c:226
 # messages-i18n.c:228 po/guile_strings.txt:113
-#: messages-i18n.c:228 po/guile_strings.txt:302
+#: messages-i18n.c:228 po/guile_strings.txt:304
 msgid "Opening Balance"
 msgstr "Startsaldo"
 
@@ -1944,7 +1944,7 @@ msgstr "Visa senaste"
 # messages-i18n.c:229 po/guile_strings.txt:165
 # messages-i18n.c:253 po/guile_strings.txt:190
 # messages-i18n.c:254 po/guile_strings.txt:190
-#: messages-i18n.c:254 po/guile_strings.txt:509
+#: messages-i18n.c:254 po/guile_strings.txt:511
 msgid "Single Line"
 msgstr "Enkel rad"
 
@@ -2057,7 +2057,7 @@ msgstr "Om"
 # src/gnome/glade-gnc-dialogs.c:1844
 # messages-i18n.c:275 po/guile_strings.txt:65
 # src/gnome/glade-gnc-dialogs.c:1784
-#: messages-i18n.c:275 po/guile_strings.txt:170
+#: messages-i18n.c:275 po/guile_strings.txt:171
 #: src/gnome/glade-gnc-dialogs.c:1771
 msgid "Account"
 msgstr "Konto"
@@ -2120,7 +2120,7 @@ msgstr "Belopp"
 # messages-i18n.c:252
 # messages-i18n.c:282 po/guile_strings.txt:239
 # messages-i18n.c:283 po/guile_strings.txt:239
-#: messages-i18n.c:283 po/guile_strings.txt:631
+#: messages-i18n.c:283 po/guile_strings.txt:633
 msgid "Appreciation"
 msgstr "Värdestegring"
 
@@ -2137,7 +2137,7 @@ msgstr "Telefon"
 # src/gnome/glade-gnc-dialogs.c:634
 # messages-i18n.c:285 po/guile_strings.txt:174
 # src/gnome/glade-gnc-dialogs.c:567
-#: messages-i18n.c:285 po/guile_strings.txt:463
+#: messages-i18n.c:285 po/guile_strings.txt:465
 #: src/gnome/glade-gnc-dialogs.c:567
 msgid "Asset"
 msgstr "Tillgång"
@@ -2176,7 +2176,7 @@ msgstr "Saldo"
 # src/gnome/glade-gnc-dialogs.c:628
 # messages-i18n.c:291 po/guile_strings.txt:107
 # src/gnome/glade-gnc-dialogs.c:561
-#: messages-i18n.c:291 po/guile_strings.txt:287
+#: messages-i18n.c:291 po/guile_strings.txt:289
 #: src/gnome/glade-gnc-dialogs.c:561
 msgid "Bank"
 msgstr "Bank"
@@ -2191,7 +2191,7 @@ msgstr "Tom"
 # messages-i18n.c:261
 # messages-i18n.c:292 po/guile_strings.txt:123
 # messages-i18n.c:293 po/guile_strings.txt:124
-#: messages-i18n.c:293 po/guile_strings.txt:325
+#: messages-i18n.c:293 po/guile_strings.txt:327
 msgid "Bought"
 msgstr "Köpte"
 
@@ -2215,7 +2215,7 @@ msgstr "Avbryt"
 # src/gnome/glade-gnc-dialogs.c:631
 # messages-i18n.c:296 po/guile_strings.txt:137
 # src/gnome/glade-gnc-dialogs.c:564
-#: messages-i18n.c:296 po/guile_strings.txt:372
+#: messages-i18n.c:296 po/guile_strings.txt:374
 #: src/gnome/glade-gnc-dialogs.c:564
 msgid "Cash"
 msgstr "Kontant"
@@ -2230,7 +2230,7 @@ msgstr "Ändrad"
 # messages-i18n.c:266
 # messages-i18n.c:297 po/guile_strings.txt:205
 # messages-i18n.c:298 po/guile_strings.txt:205
-#: messages-i18n.c:298 po/guile_strings.txt:555
+#: messages-i18n.c:298 po/guile_strings.txt:557
 msgid "Charge"
 msgstr "Avgift"
 
@@ -2282,7 +2282,7 @@ msgstr "Skapa"
 # src/gnome/glade-gnc-dialogs.c:637 src/gnome/glade-gnc-dialogs.c:2142
 # messages-i18n.c:305 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2082
-#: messages-i18n.c:305 po/guile_strings.txt:674
+#: messages-i18n.c:305 po/guile_strings.txt:677
 #: src/gnome/glade-gnc-dialogs.c:570 src/gnome/glade-gnc-dialogs.c:2015
 msgid "Credit"
 msgstr "Kredit"
@@ -2300,7 +2300,7 @@ msgstr "Krediter"
 # src/gnome/glade-gnc-dialogs.c:649
 # messages-i18n.c:307 po/guile_strings.txt:134
 # src/gnome/glade-gnc-dialogs.c:582
-#: messages-i18n.c:307 po/guile_strings.txt:366
+#: messages-i18n.c:307 po/guile_strings.txt:368
 #: src/gnome/glade-gnc-dialogs.c:582
 msgid "Currency"
 msgstr "Valuta"
@@ -2363,14 +2363,14 @@ msgstr "Radera"
 # messages-i18n.c:282
 # messages-i18n.c:314 po/guile_strings.txt:200
 # messages-i18n.c:315 po/guile_strings.txt:200
-#: messages-i18n.c:315 po/guile_strings.txt:538
+#: messages-i18n.c:315 po/guile_strings.txt:540
 msgid "Deposit"
 msgstr "Insättning"
 
 # messages-i18n.c:283
 # messages-i18n.c:315 po/guile_strings.txt:159
 # messages-i18n.c:316 po/guile_strings.txt:160
-#: messages-i18n.c:316 po/guile_strings.txt:424
+#: messages-i18n.c:316 po/guile_strings.txt:426
 msgid "Depreciation"
 msgstr "Värdeminskning"
 
@@ -2379,7 +2379,7 @@ msgstr "Värdeminskning"
 # src/gnome/glade-gnc-dialogs.c:2038
 # messages-i18n.c:317 po/guile_strings.txt:153
 # src/gnome/glade-gnc-dialogs.c:1978
-#: messages-i18n.c:317 po/guile_strings.txt:397
+#: messages-i18n.c:317 po/guile_strings.txt:399
 #: src/gnome/glade-gnc-dialogs.c:1911
 msgid "Description"
 msgstr "Beskrivning"
@@ -2454,7 +2454,7 @@ msgstr "Avsluta"
 # src/gnome/glade-gnc-dialogs.c:655
 # messages-i18n.c:326 po/guile_strings.txt:327
 # src/gnome/glade-gnc-dialogs.c:588
-#: messages-i18n.c:327 po/guile_strings.txt:883
+#: messages-i18n.c:327 po/guile_strings.txt:886
 #: src/gnome/glade-gnc-dialogs.c:588
 msgid "Expense"
 msgstr "Utgift"
@@ -2469,7 +2469,7 @@ msgstr "Export"
 # messages-i18n.c:295 po/guile_strings.txt:301
 # messages-i18n.c:327 po/guile_strings.txt:356
 # messages-i18n.c:328 po/guile_strings.txt:355
-#: messages-i18n.c:329 po/guile_strings.txt:964
+#: messages-i18n.c:329 po/guile_strings.txt:967
 msgid "Extensions"
 msgstr "Utvidgningar"
 
@@ -2511,7 +2511,7 @@ msgstr "Framåt"
 # messages-i18n.c:299 po/guile_strings.txt:108
 # messages-i18n.c:333 po/guile_strings.txt:125
 # messages-i18n.c:334 po/guile_strings.txt:126
-#: messages-i18n.c:335 po/guile_strings.txt:330
+#: messages-i18n.c:335 po/guile_strings.txt:332
 msgid "From"
 msgstr "Från"
 
@@ -2549,7 +2549,7 @@ msgstr "Importera"
 # src/gnome/glade-gnc-dialogs.c:652
 # messages-i18n.c:339 po/guile_strings.txt:244
 # src/gnome/glade-gnc-dialogs.c:585
-#: messages-i18n.c:340 po/guile_strings.txt:651
+#: messages-i18n.c:340 po/guile_strings.txt:653
 #: src/gnome/glade-gnc-dialogs.c:585
 msgid "Income"
 msgstr "Inkomst"
@@ -2581,7 +2581,7 @@ msgstr "Hoppa"
 # src/gnome/glade-gnc-dialogs.c:640
 # messages-i18n.c:343 po/guile_strings.txt:194
 # src/gnome/glade-gnc-dialogs.c:573
-#: messages-i18n.c:344 po/guile_strings.txt:524
+#: messages-i18n.c:344 po/guile_strings.txt:526
 #: src/gnome/glade-gnc-dialogs.c:573
 msgid "Liability"
 msgstr "Skuld"
@@ -2652,14 +2652,14 @@ msgstr "(ingen)"
 # messages-i18n.c:315 po/guile_strings.txt:179
 # messages-i18n.c:351 po/guile_strings.txt:209
 # messages-i18n.c:352 po/guile_strings.txt:209
-#: messages-i18n.c:353 po/guile_strings.txt:562
+#: messages-i18n.c:353 po/guile_strings.txt:564
 msgid "Notes"
 msgstr "Anteckningar"
 
 # messages-i18n.c:316 po/guile_strings.txt:151
 # messages-i18n.c:352 po/guile_strings.txt:175
 # messages-i18n.c:353 po/guile_strings.txt:176
-#: messages-i18n.c:354 po/guile_strings.txt:467
+#: messages-i18n.c:354 po/guile_strings.txt:469
 msgid "Num"
 msgstr "Num"
 
@@ -2701,7 +2701,7 @@ msgstr "Parametrar"
 # messages-i18n.c:321
 # messages-i18n.c:358 po/guile_strings.txt:113
 # messages-i18n.c:359 po/guile_strings.txt:114
-#: messages-i18n.c:360 po/guile_strings.txt:303
+#: messages-i18n.c:360 po/guile_strings.txt:305
 msgid "Payment"
 msgstr "Utgift"
 
@@ -2764,7 +2764,7 @@ msgstr "Återbäring"
 # messages-i18n.c:330
 # messages-i18n.c:367 po/guile_strings.txt:191
 # messages-i18n.c:368 po/guile_strings.txt:191
-#: messages-i18n.c:369 po/guile_strings.txt:515
+#: messages-i18n.c:369 po/guile_strings.txt:517
 msgid "Receive"
 msgstr "Ta emot"
 
@@ -2785,14 +2785,14 @@ msgstr "Spara"
 # messages-i18n.c:333 po/guile_strings.txt:184
 # messages-i18n.c:370 po/guile_strings.txt:215
 # messages-i18n.c:371 po/guile_strings.txt:215
-#: messages-i18n.c:372 po/guile_strings.txt:572
+#: messages-i18n.c:372 po/guile_strings.txt:574
 msgid "Register"
 msgstr "Kontoutdrag"
 
 # messages-i18n.c:334 po/guile_strings.txt:178
 # messages-i18n.c:371 po/guile_strings.txt:208
 # messages-i18n.c:372 po/guile_strings.txt:208
-#: messages-i18n.c:373 po/guile_strings.txt:561
+#: messages-i18n.c:373 po/guile_strings.txt:563
 msgid "Report"
 msgstr "Rapport"
 
@@ -2834,7 +2834,7 @@ msgstr "Sökresultat"
 # messages-i18n.c:340 po/guile_strings.txt:164
 # messages-i18n.c:377 po/guile_strings.txt:189
 # messages-i18n.c:378 po/guile_strings.txt:189
-#: messages-i18n.c:379 po/guile_strings.txt:502
+#: messages-i18n.c:379 po/guile_strings.txt:504
 msgid "Security"
 msgstr "Säkerhet"
 
@@ -2862,7 +2862,7 @@ msgstr "Enkel"
 # messages-i18n.c:344
 # messages-i18n.c:381 po/guile_strings.txt:313
 # messages-i18n.c:382 po/guile_strings.txt:313
-#: messages-i18n.c:383 po/guile_strings.txt:845
+#: messages-i18n.c:383 po/guile_strings.txt:848
 msgid "Sold"
 msgstr "Sålde"
 
@@ -2893,7 +2893,7 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:643
 # messages-i18n.c:386 po/guile_strings.txt:353
 # src/gnome/glade-gnc-dialogs.c:576
-#: messages-i18n.c:387 po/guile_strings.txt:961
+#: messages-i18n.c:387 po/guile_strings.txt:964
 #: src/gnome/glade-gnc-dialogs.c:576
 msgid "Stock"
 msgstr "Aktie"
@@ -2901,7 +2901,7 @@ msgstr "Aktie"
 # messages-i18n.c:349
 # messages-i18n.c:386 po/guile_strings.txt:246
 # messages-i18n.c:387 po/guile_strings.txt:246
-#: messages-i18n.c:388 po/guile_strings.txt:655
+#: messages-i18n.c:388 po/guile_strings.txt:657
 msgid "Style"
 msgstr "Stil"
 
@@ -2922,7 +2922,7 @@ msgstr "Kassör"
 # messages-i18n.c:352 po/guile_strings.txt:253
 # messages-i18n.c:389 po/guile_strings.txt:302
 # messages-i18n.c:390 po/guile_strings.txt:302
-#: messages-i18n.c:391 po/guile_strings.txt:810
+#: messages-i18n.c:391 po/guile_strings.txt:813
 msgid "To"
 msgstr "Till"
 
@@ -2936,7 +2936,7 @@ msgstr "Idag"
 # messages-i18n.c:354
 # messages-i18n.c:391 messages-i18n.c:392 po/guile_strings.txt:207
 # messages-i18n.c:392 messages-i18n.c:393 po/guile_strings.txt:207
-#: messages-i18n.c:393 messages-i18n.c:394 po/guile_strings.txt:558
+#: messages-i18n.c:393 messages-i18n.c:394 po/guile_strings.txt:560
 msgid "Total"
 msgstr "Totalt"
 
@@ -2946,7 +2946,7 @@ msgstr "Totalt"
 # src/gnome/glade-gnc-dialogs.c:362 src/gnome/glade-gnc-dialogs.c:416
 # messages-i18n.c:394 po/guile_strings.txt:304
 # src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
-#: messages-i18n.c:395 po/guile_strings.txt:814
+#: messages-i18n.c:395 po/guile_strings.txt:817
 #: src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
 msgid "Type"
 msgstr "Typ"
@@ -2972,7 +2972,7 @@ msgstr ""
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:396 po/guile_strings.txt:65
 # messages-i18n.c:397 po/guile_strings.txt:66
-#: messages-i18n.c:399 po/guile_strings.txt:175
+#: messages-i18n.c:399 po/guile_strings.txt:176
 msgid "Value"
 msgstr "Värde"
 
@@ -3007,7 +3007,7 @@ msgstr "Uttag"
 # messages-i18n.c:361
 # messages-i18n.c:400
 # messages-i18n.c:402 po/guile_strings.txt:60
-#: messages-i18n.c:404 po/guile_strings.txt:148
+#: messages-i18n.c:404 po/guile_strings.txt:149
 msgid "Withdrawal"
 msgstr "Uttagning"
 
@@ -3823,100 +3823,104 @@ msgstr ""
 msgid "No amount display"
 msgstr "Visa inget belopp"
 
-#: po/guile_strings.txt:149
-msgid "  F1099-MISC \\ Nonemployee compensation"
+#: po/guile_strings.txt:148
+msgid "Minimum displayed decimal places"
 msgstr ""
 
 #: po/guile_strings.txt:150
-msgid "  Sched F \\ Crop ins. proceeds received"
+msgid "  F1099-MISC \\ Nonemployee compensation"
 msgstr ""
 
 #: po/guile_strings.txt:151
-msgid "  Sched F \\ Crop ins. proceeds deferred"
+msgid "  Sched F \\ Crop ins. proceeds received"
 msgstr ""
 
 #: po/guile_strings.txt:152
+msgid "  Sched F \\ Crop ins. proceeds deferred"
+msgstr ""
+
+#: po/guile_strings.txt:153
 msgid ""
 "The amount of local taxes withheld from your wages. (Use the line 'Local tax "
 "withheld, spouse' below for your spouse's local tax withholding.)"
 msgstr ""
 
-#: po/guile_strings.txt:153
+#: po/guile_strings.txt:154
 msgid ""
 "Amount of travel expenses incurred while away from your tax home overnight, "
 "including lodging, airplane, car rental, etc.  Do not include meal and "
 "entertainment expenses here."
 msgstr ""
 
-#: po/guile_strings.txt:154
+#: po/guile_strings.txt:155
 msgid "  Sched F \\ Car and truck expenses"
 msgstr ""
 
-#: po/guile_strings.txt:155
+#: po/guile_strings.txt:156
 msgid "  Sched C \\ Car and truck expenses"
 msgstr ""
 
-#: po/guile_strings.txt:156
+#: po/guile_strings.txt:157
 msgid "  F4835 \\ Storage and warehousing"
 msgstr ""
 
-#: po/guile_strings.txt:157
+#: po/guile_strings.txt:158
 msgid "Txf Export Init"
 msgstr ""
 
 # po/guile_strings.txt:53
 # po/guile_strings.txt:61
 # po/guile_strings.txt:62
-#: po/guile_strings.txt:158
+#: po/guile_strings.txt:159
 msgid "The default background color for odd rows in double mode"
 msgstr "Standardbakgrundsfärgen för udda rader i dubbelradsläge"
 
-#: po/guile_strings.txt:159
+#: po/guile_strings.txt:160
 msgid "  Sched E \\ Repairs"
 msgstr ""
 
-#: po/guile_strings.txt:160
+#: po/guile_strings.txt:161
 msgid "  F1040 \\ RR retirement income, self"
 msgstr ""
 
-#: po/guile_strings.txt:161
+#: po/guile_strings.txt:162
 msgid "  F1040 \\ RR retirement inc., spouse"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:347 src/gnome/glade-gnc-dialogs.c:401
 # src/gnome/glade-gnc-dialogs.c:355 src/gnome/glade-gnc-dialogs.c:409
 # src/gnome/glade-gnc-dialogs.c:288 src/gnome/glade-gnc-dialogs.c:342
-#: po/guile_strings.txt:162
+#: po/guile_strings.txt:163
 #, fuzzy
 msgid "Use Current Account Name"
 msgstr "GNUCash Kontonamn"
 
-#: po/guile_strings.txt:163
+#: po/guile_strings.txt:164
 msgid ""
 "Other expenses that do not appropriately match the other tax lines on the "
 "Schedule E.  Examples might include the cost of gardening and/or snow "
 "removal services, association dues, bank charges, etc."
 msgstr ""
 
-#: po/guile_strings.txt:164
+#: po/guile_strings.txt:165
 msgid "  F2106 \\ Employee home office expenses"
 msgstr ""
 
 # po/guile_strings.txt:54
 # po/guile_strings.txt:62
 # po/guile_strings.txt:63
-#: po/guile_strings.txt:165
+#: po/guile_strings.txt:166
 msgid "UK-style dd/mm/yyyy"
 msgstr "UK-stil: dd/mm/åååå"
 
-#: po/guile_strings.txt:166
+#: po/guile_strings.txt:167
 msgid ""
 "Interest income from a qualified tax-exempt private activity bond is not "
 "taxable if it meets all requirements. This income is included on your "
 "Schedule B as non-taxable interest income."
 msgstr ""
 
-#: po/guile_strings.txt:167
+#: po/guile_strings.txt:168
 msgid ""
 "Incidental repair costs that are ordinary and necessary to maintain the "
 "property in safe rentable condition (painting, roof repairs, plumbing, "
@@ -3924,38 +3928,38 @@ msgid ""
 "rental property are depreciated."
 msgstr ""
 
-#: po/guile_strings.txt:168
+#: po/guile_strings.txt:169
 msgid "  F4835 \\ Supplies purchased"
 msgstr ""
 
-#: po/guile_strings.txt:169
+#: po/guile_strings.txt:170
 msgid "Last Yr 3rd Est Tax Qtr"
 msgstr ""
 
-#: po/guile_strings.txt:171
+#: po/guile_strings.txt:172
 msgid "  Sched F \\ Chemicals"
 msgstr ""
 
-#: po/guile_strings.txt:172
+#: po/guile_strings.txt:173
 msgid "  Sched E \\ Taxes"
 msgstr ""
 
-#: po/guile_strings.txt:173
+#: po/guile_strings.txt:174
 msgid "  Sched C \\ Travel"
 msgstr ""
 
-#: po/guile_strings.txt:174
+#: po/guile_strings.txt:175
 msgid "  Sched F \\ CCC loans reported/election"
 msgstr ""
 
 # po/guile_strings.txt:58
 # po/guile_strings.txt:66
 # po/guile_strings.txt:67
-#: po/guile_strings.txt:176
+#: po/guile_strings.txt:177
 msgid "Header background"
 msgstr "Rubrikbakgrund"
 
-#: po/guile_strings.txt:177
+#: po/guile_strings.txt:178
 msgid ""
 "Payment for the use or occupation of property, including monthly rent for an "
 "apartment, house, garage; advance rent; payment for canceling a lease; "
@@ -3963,7 +3967,7 @@ msgid ""
 "forfeited by the tenant."
 msgstr ""
 
-#: po/guile_strings.txt:178
+#: po/guile_strings.txt:179
 msgid ""
 "In order to take a bad debt deduction, you must show there was a true "
 "debtor-creditor relationship between you and the person who owes you money, "
@@ -3974,22 +3978,22 @@ msgstr ""
 # po/guile_strings.txt:59
 # po/guile_strings.txt:67
 # po/guile_strings.txt:68
-#: po/guile_strings.txt:179
+#: po/guile_strings.txt:180
 msgid "Sorting"
 msgstr "Sorterar"
 
-#: po/guile_strings.txt:180
+#: po/guile_strings.txt:181
 msgid "Blue items were exported to file: \""
 msgstr ""
 
 # po/guile_strings.txt:60
 # po/guile_strings.txt:68
 # po/guile_strings.txt:69
-#: po/guile_strings.txt:181
+#: po/guile_strings.txt:182
 msgid "Show icons only"
 msgstr "Visa bara ikoner"
 
-#: po/guile_strings.txt:182
+#: po/guile_strings.txt:183
 msgid ""
 "Livestock or crop share rentals you received and converted into money or its "
 "equivalent during the year whether you use the cash or accrual method of "
@@ -3997,7 +4001,7 @@ msgid ""
 "those you give to others."
 msgstr ""
 
-#: po/guile_strings.txt:183
+#: po/guile_strings.txt:184
 msgid ""
 "The amount of federal income taxes withheld from your social security "
 "benefits. (Use the line, 'Fed tax w/h, Soc. Sec., spouse' below for federal "
@@ -4007,58 +4011,58 @@ msgstr ""
 # po/guile_strings.txt:61
 # po/guile_strings.txt:69
 # po/guile_strings.txt:70
-#: po/guile_strings.txt:184
+#: po/guile_strings.txt:185
 msgid "The default background color for odd rows in single mode"
 msgstr "Standardbakgrundsfärgen för udda rader i enkelradsläge"
 
-#: po/guile_strings.txt:186
+#: po/guile_strings.txt:187
 msgid "  F4952 \\ Investment interest expense"
 msgstr ""
 
-#: po/guile_strings.txt:187
+#: po/guile_strings.txt:188
 msgid "Print all Parent account names"
 msgstr ""
 
-#: po/guile_strings.txt:188
+#: po/guile_strings.txt:189
 msgid "Reset Selected accounts as not Tax Related"
 msgstr ""
 
-#: po/guile_strings.txt:189
+#: po/guile_strings.txt:190
 msgid "  F4835 \\ Vet, breeding, medicine"
 msgstr ""
 
 # po/guile_strings.txt:63
 # po/guile_strings.txt:71
 # po/guile_strings.txt:72
-#: po/guile_strings.txt:190
+#: po/guile_strings.txt:191
 msgid "Display the Hello, World report."
 msgstr "Visa Hej, Världen rapporten."
 
 # po/guile_strings.txt:64
 # po/guile_strings.txt:72
 # po/guile_strings.txt:73
-#: po/guile_strings.txt:191
+#: po/guile_strings.txt:192
 msgid "Gain"
 msgstr "Vinst"
 
-#: po/guile_strings.txt:192
+#: po/guile_strings.txt:193
 msgid ""
 "Reimbursement for meal expenses from your employer that is NOT included on "
 "your Form W-2."
 msgstr ""
 
-#: po/guile_strings.txt:193
+#: po/guile_strings.txt:194
 msgid ""
 "Costs incurred to conserve soil or water or to prevent erosion of land.  "
 "These expenses must be consistent with a conservation plan approved by the "
 "Soil Conservation Service of the Dept. of Agriculture."
 msgstr ""
 
-#: po/guile_strings.txt:194
+#: po/guile_strings.txt:195
 msgid "Last Yr 4th Est Tax Qtr"
 msgstr ""
 
-#: po/guile_strings.txt:195
+#: po/guile_strings.txt:196
 msgid ""
 "Government payments received for price support payments, diversion payments, "
 "cost-share payments (sight drafts), payments in the form of materials or "
@@ -4066,19 +4070,19 @@ msgid ""
 "you on Form 1099-G."
 msgstr ""
 
-#: po/guile_strings.txt:196
+#: po/guile_strings.txt:197
 msgid "  F8839 \\ Other expenses"
 msgstr ""
 
-#: po/guile_strings.txt:197
+#: po/guile_strings.txt:198
 msgid "  F8829 \\ Other expenses"
 msgstr ""
 
-#: po/guile_strings.txt:198
+#: po/guile_strings.txt:199
 msgid "  F4835 \\ Other expenses"
 msgstr ""
 
-#: po/guile_strings.txt:199
+#: po/guile_strings.txt:200
 msgid ""
 "The amount of federal income taxes withheld from your tier 1 railroad "
 "retirement benefits. (Use the line, 'Fed tax w/h, RR retire, spouse' below "
@@ -4086,23 +4090,23 @@ msgid ""
 "benefits.)"
 msgstr ""
 
-#: po/guile_strings.txt:200
+#: po/guile_strings.txt:201
 msgid "  Sched A \\ Home mortgage int. (no 1098)"
 msgstr ""
 
-#: po/guile_strings.txt:201
+#: po/guile_strings.txt:202
 msgid "Reset Selected & sub-accounts as not Tax Related"
 msgstr ""
 
-#: po/guile_strings.txt:202
+#: po/guile_strings.txt:203
 msgid "  F1099-R \\ Total IRA taxable distrib."
 msgstr ""
 
-#: po/guile_strings.txt:203
+#: po/guile_strings.txt:204
 msgid "  Sched E \\ Supplies"
 msgstr ""
 
-#: po/guile_strings.txt:204
+#: po/guile_strings.txt:205
 msgid ""
 "Contributions made to a H.R.10 (Keogh) Plan of a sole proprietor or "
 "partnership.  Depending on the type of plan, the deduction limit for a "
@@ -4113,77 +4117,77 @@ msgstr ""
 # po/guile_strings.txt:65
 # po/guile_strings.txt:73
 # po/guile_strings.txt:74
-#: po/guile_strings.txt:205
+#: po/guile_strings.txt:206
 msgid "Hello Again"
 msgstr "Hej igen"
 
-#: po/guile_strings.txt:206
+#: po/guile_strings.txt:207
 msgid ""
 "The amount of qualified tuition and enrollment fees for the Lifetime "
 "Learning credit. The credit for lifetime learning applies to post-June 30, "
 "'98 expenses for education beginning after that date. "
 msgstr ""
 
-#: po/guile_strings.txt:207
+#: po/guile_strings.txt:208
 msgid ""
 "Amounts you have paid to advertise your rental unit(s) in newspapers or "
 "other media or paid to realtors to obtain tenants."
 msgstr ""
 
-#: po/guile_strings.txt:208
+#: po/guile_strings.txt:209
 msgid ""
 "Freight costs or the expense of trucking produce or livestock.  Do not "
 "include freight costs for livestock purchased and held for resale."
 msgstr ""
 
-#: po/guile_strings.txt:209
+#: po/guile_strings.txt:210
 msgid "  F1040 \\ Alimony paid"
 msgstr ""
 
-#: po/guile_strings.txt:210
+#: po/guile_strings.txt:211
 msgid "1st Est Tax Quarter"
 msgstr ""
 
 # po/guile_strings.txt:66
 # po/guile_strings.txt:74
 # po/guile_strings.txt:75
-#: po/guile_strings.txt:211
+#: po/guile_strings.txt:212
 msgid "This page shows your profits and losses."
 msgstr "Denna sida visar dina vinster och förluster."
 
 # po/guile_strings.txt:67
 # po/guile_strings.txt:75
 # po/guile_strings.txt:76
-#: po/guile_strings.txt:212
+#: po/guile_strings.txt:213
 msgid "Show Vertical Borders"
 msgstr "Visa vertikala kanter"
 
-#: po/guile_strings.txt:213
+#: po/guile_strings.txt:214
 msgid ""
 "The amount of gross winnings from gambling.  This may include winnings from "
 "horse racing, dog racing, jai alai, lotteries, keno, bingo, slot machines, "
 "sweepstakes, and wagering pools."
 msgstr ""
 
-#: po/guile_strings.txt:214
+#: po/guile_strings.txt:215
 msgid "For INCOME accounts, select here.   < ^ # see help"
 msgstr ""
 
 # po/guile_strings.txt:68
 # po/guile_strings.txt:76
 # po/guile_strings.txt:77
-#: po/guile_strings.txt:215
+#: po/guile_strings.txt:216
 msgid "This is a boolean option."
 msgstr "Detta är ett boolskt alternativ."
 
 # po/guile_strings.txt:69
 # po/guile_strings.txt:77
 # po/guile_strings.txt:78
-#: po/guile_strings.txt:216
+#: po/guile_strings.txt:217
 msgid "_Profit and Loss"
 msgstr "_Vinst och förlust"
 
-#: po/guile_strings.txt:217
+#: po/guile_strings.txt:218
 msgid ""
 "Spouse's portion of tier 1 railroad retirement benefits that are equivalent "
 "to social security benefits is reported on Form RRB-1099.  These benefits "
@@ -4191,39 +4195,39 @@ msgid ""
 "taxable amount."
 msgstr ""
 
-#: po/guile_strings.txt:218
+#: po/guile_strings.txt:219
 msgid "  F1099-R \\ IRA state tax withheld"
 msgstr ""
 
-#: po/guile_strings.txt:219
+#: po/guile_strings.txt:220
 msgid "  F1099-R \\ IRA local tax withheld"
 msgstr ""
 
 # po/guile_strings.txt:78
 # po/guile_strings.txt:79
-#: po/guile_strings.txt:220
+#: po/guile_strings.txt:221
 msgid "Display 1 line"
 msgstr "Visa en rad"
 
-#: po/guile_strings.txt:221
+#: po/guile_strings.txt:222
 msgid "  F4835 \\ Rent/lease land, animals"
 msgstr ""
 
-#: po/guile_strings.txt:222
+#: po/guile_strings.txt:223
 msgid "  F4835 \\ Custom hire expenses"
 msgstr ""
 
 # po/guile_strings.txt:70
 # po/guile_strings.txt:79
 # po/guile_strings.txt:80
-#: po/guile_strings.txt:223
+#: po/guile_strings.txt:224
 msgid "Background Color"
 msgstr "Bakgrundsfärg"
 
 # po/guile_strings.txt:71
 # po/guile_strings.txt:80
 # po/guile_strings.txt:81
-#: po/guile_strings.txt:224
+#: po/guile_strings.txt:225
 #, c-format
 msgid "The number option formatted as currency is %s."
 msgstr "Nummeralternativet visad som valuta är %s."
@@ -4231,55 +4235,55 @@ msgstr "Nummeralternativet visad som valuta är %s."
 # po/guile_strings.txt:72
 # po/guile_strings.txt:81
 # po/guile_strings.txt:82
-#: po/guile_strings.txt:225
+#: po/guile_strings.txt:226
 msgid "Income/Salary/Taxable"
 msgstr "Inkomst/Lön/Taxerbar"
 
-#: po/guile_strings.txt:226
+#: po/guile_strings.txt:227
 msgid "  Sched F \\ Pension/profit sharing plans"
 msgstr ""
 
-#: po/guile_strings.txt:227
+#: po/guile_strings.txt:228
 msgid "  Sched F \\ Cost of resale livestock/items"
 msgstr ""
 
-#: po/guile_strings.txt:228
+#: po/guile_strings.txt:229
 msgid "  Sched C \\ Pension/profit sharing plans"
 msgstr ""
 
 # po/guile_strings.txt:73
 # po/guile_strings.txt:82
 # po/guile_strings.txt:83
-#: po/guile_strings.txt:229
+#: po/guile_strings.txt:230
 msgid "There are no selected accounts in the account list option."
 msgstr "Det finns inga valda konton i kontolistalternativet."
 
-#: po/guile_strings.txt:230
+#: po/guile_strings.txt:231
 msgid ""
 "The income or (loss) from rental real estate activities engaged in by the "
 "partnership. This amount is reported to you on line 2 of the Schedule K-1."
 msgstr ""
 
-#: po/guile_strings.txt:231
+#: po/guile_strings.txt:232
 msgid ""
 "The cost of consumable office supplies such as stationery, pens, pencils, "
 "computer supplies, etc.  Include cost of postage stamps, business cards, UPS "
 "and Federal Express charges, rental of postal box or postage machines."
 msgstr ""
 
-#: po/guile_strings.txt:232
+#: po/guile_strings.txt:233
 msgid "  F8829 \\ Deductible mortgage expense"
 msgstr ""
 
-#: po/guile_strings.txt:233
+#: po/guile_strings.txt:234
 msgid "  F2106 \\ Special clothing expenses"
 msgstr ""
 
-#: po/guile_strings.txt:234
+#: po/guile_strings.txt:235
 msgid "  F4835 \\ Labor hired"
 msgstr ""
 
-#: po/guile_strings.txt:235
+#: po/guile_strings.txt:236
 msgid ""
 "The costs of travel from your old home to your new home. Include "
 "transportation and lodging, but not meals, on the way. Although not all "
@@ -4289,19 +4293,19 @@ msgstr ""
 
 # po/guile_strings.txt:83
 # po/guile_strings.txt:84
-#: po/guile_strings.txt:236
+#: po/guile_strings.txt:237
 msgid "Funds Out"
 msgstr "Tillgångar ut"
 
-#: po/guile_strings.txt:237
+#: po/guile_strings.txt:238
 msgid "  Sched K-1 \\ Royalties"
 msgstr ""
 
-#: po/guile_strings.txt:238
+#: po/guile_strings.txt:239
 msgid "# Sched K-1 \\ Net ST capital gain or loss"
 msgstr ""
 
-#: po/guile_strings.txt:239
+#: po/guile_strings.txt:240
 msgid ""
 "Real estate or personal property taxes paid on farm property such as "
 "equipment, animals, buildings, land. Also include your portion of employment "
@@ -4309,7 +4313,7 @@ msgid ""
 "truck-tractors is deductible."
 msgstr ""
 
-#: po/guile_strings.txt:240
+#: po/guile_strings.txt:241
 msgid ""
 "Real estate taxes and personal property taxes.  Do not include special "
 "assessments that are paid for paving, sewer, or local improvements which "
@@ -4320,11 +4324,11 @@ msgstr ""
 # po/guile_strings.txt:74
 # po/guile_strings.txt:84
 # po/guile_strings.txt:85
-#: po/guile_strings.txt:241
+#: po/guile_strings.txt:242
 msgid "This page shows your net worth."
 msgstr "Denna sida visar dtt nettovärde."
 
-#: po/guile_strings.txt:242
+#: po/guile_strings.txt:243
 msgid ""
 "The amount of federal income taxes withheld from dividend income. This is "
 "usually reported on Form 1099-DIV."
@@ -4333,23 +4337,23 @@ msgstr ""
 # po/guile_strings.txt:63
 # po/guile_strings.txt:71
 # po/guile_strings.txt:72
-#: po/guile_strings.txt:243
+#: po/guile_strings.txt:244
 #, fuzzy
 msgid "Display the Hierarchical report."
 msgstr "Visa Hej, Världen rapporten."
 
-#: po/guile_strings.txt:244
+#: po/guile_strings.txt:245
 msgid "  F4835 \\ CCC loans reported/election"
 msgstr ""
 
-#: po/guile_strings.txt:245
+#: po/guile_strings.txt:246
 msgid "  Home Sale \\ Cost of new home"
 msgstr ""
 
 # messages-i18n.c:76
 # messages-i18n.c:83
 # messages-i18n.c:85
-#: po/guile_strings.txt:246
+#: po/guile_strings.txt:247
 #, fuzzy
 msgid "Set/Reset Selected Account Tax Status"
 msgstr "Radera det valda kontot"
@@ -4357,11 +4361,11 @@ msgstr "Radera det valda kontot"
 # po/guile_strings.txt:76
 # po/guile_strings.txt:86
 # po/guile_strings.txt:87
-#: po/guile_strings.txt:247
+#: po/guile_strings.txt:248
 msgid "Continental Europe: dd.mm.yyyy"
 msgstr "Kontinentaleuropa: dd.mm.åååå"
 
-#: po/guile_strings.txt:248
+#: po/guile_strings.txt:249
 msgid ""
 "Commodity Credit Corp. loan proceeds are generally not reported as income. "
 "If you pledge part/all of production to secure a CCC loan, you may elect to "
@@ -4369,71 +4373,71 @@ msgid ""
 "crop is sold."
 msgstr ""
 
-#: po/guile_strings.txt:249
+#: po/guile_strings.txt:250
 msgid "  Sched F \\ Supplies purchased"
 msgstr ""
 
-#: po/guile_strings.txt:250
+#: po/guile_strings.txt:251
 msgid "The amount of social security taxes withheld from your spouse's wages."
 msgstr ""
 
 # messages-i18n.c:177 po/guile_strings.txt:62
 # po/guile_strings.txt:89
 # po/guile_strings.txt:89
-#: po/guile_strings.txt:251
+#: po/guile_strings.txt:252
 msgid "Single"
 msgstr "Enkel"
 
 # po/guile_strings.txt:80
 # po/guile_strings.txt:90
 # po/guile_strings.txt:90
-#: po/guile_strings.txt:252
+#: po/guile_strings.txt:253
 msgid "Show Horizontal Borders"
 msgstr "Visa horisontella kanter"
 
 # po/guile_strings.txt:81
 # po/guile_strings.txt:91
 # po/guile_strings.txt:91
-#: po/guile_strings.txt:253
+#: po/guile_strings.txt:254
 msgid "Sort by check/transaction number"
 msgstr "Sortera efter check/transaktions-nummer"
 
 # po/guile_strings.txt:82
 # po/guile_strings.txt:92
 # po/guile_strings.txt:92
-#: po/guile_strings.txt:254
+#: po/guile_strings.txt:255
 msgid "The background color for the active transaction in double mode"
 msgstr "Bakgrundsfärgen för den aktiva transaktionen dubbelradsläge"
 
 # po/guile_strings.txt:83
 # po/guile_strings.txt:93
 # po/guile_strings.txt:93
-#: po/guile_strings.txt:255
+#: po/guile_strings.txt:256
 msgid "Register Colors"
 msgstr "Färger på kontoutdrag"
 
 # po/guile_strings.txt:84
 # po/guile_strings.txt:94
 # po/guile_strings.txt:94
-#: po/guile_strings.txt:256
+#: po/guile_strings.txt:257
 #, c-format
 msgid "The boolean option is %s."
 msgstr "Detta boolska alternativ är %s."
 
-#: po/guile_strings.txt:257
+#: po/guile_strings.txt:258
 msgid ""
 "The gross amount of a distribution from a qualified pension or annuity plan. "
 "Do not include IRA distributions here."
 msgstr ""
 
-#: po/guile_strings.txt:258
+#: po/guile_strings.txt:259
 msgid ""
 "Miscellaneous income such as jury duty fees, hobby income, amounts recovered "
 "on expenses deducted in previous years.  Do not include prizes, awards, "
 "gambling winnings or income from self employment."
 msgstr ""
 
-#: po/guile_strings.txt:259
+#: po/guile_strings.txt:260
 msgid ""
 "The cost of other expenses directly related to your farm that may not be "
 "applicable to the other tax lines of the Schedule F (e.g., dues and "
@@ -4443,28 +4447,28 @@ msgstr ""
 # po/guile_strings.txt:222
 # po/guile_strings.txt:95
 # po/guile_strings.txt:95
-#: po/guile_strings.txt:260
+#: po/guile_strings.txt:261
 msgid "Display the memo?"
 msgstr "Visa anteckning?"
 
 # po/guile_strings.txt:166
 # po/guile_strings.txt:96
 # po/guile_strings.txt:96
-#: po/guile_strings.txt:261
+#: po/guile_strings.txt:262
 msgid "(subaccounts)"
 msgstr "(underkonton)"
 
-#: po/guile_strings.txt:262
+#: po/guile_strings.txt:263
 msgid "Select a TXF Income catagory"
 msgstr ""
 
-#: po/guile_strings.txt:263
+#: po/guile_strings.txt:264
 msgid ""
 "The amount of federal income taxes withheld from your unemployment "
 "compensation."
 msgstr ""
 
-#: po/guile_strings.txt:264
+#: po/guile_strings.txt:265
 msgid ""
 "The amount of gross wages, tips and other compensation your spouse receives "
 "from his/her employer."
@@ -4473,25 +4477,25 @@ msgstr ""
 # po/guile_strings.txt:85
 # po/guile_strings.txt:97
 # po/guile_strings.txt:97
-#: po/guile_strings.txt:265
+#: po/guile_strings.txt:266
 msgid "Multi mode default transaction background"
 msgstr "Standardbakgrund för transaktioner i flerradsläge"
 
-#: po/guile_strings.txt:266
+#: po/guile_strings.txt:267
 msgid ""
 "Taxable interest includes interest you receive from bank accounts, credit "
 "unions, loans you made to others.  Assign interest from U.S. obligations "
 "such as Treasury bills, notes, and bonds to the tax line 'US govt interest'."
 msgstr ""
 
-#: po/guile_strings.txt:267
+#: po/guile_strings.txt:268
 msgid "  F1040 \\ SEP deduction, self"
 msgstr ""
 
 # po/guile_strings.txt:86
 # po/guile_strings.txt:98
 # po/guile_strings.txt:98
-#: po/guile_strings.txt:268
+#: po/guile_strings.txt:269
 msgid ""
 "Double clicking on an account with children expands the account instead of "
 "opening a register."
@@ -4502,94 +4506,102 @@ msgstr ""
 # po/guile_strings.txt:87
 # po/guile_strings.txt:99
 # po/guile_strings.txt:99
-#: po/guile_strings.txt:269
+#: po/guile_strings.txt:270
 msgid "The background color for the active transaction in single mode"
 msgstr "Bakgrundsfärgen för den aktiva transaktionen i enkelradsläge"
 
-#: po/guile_strings.txt:270
+#: po/guile_strings.txt:271
 msgid "  Sched K-1 \\ Dividends"
 msgstr ""
 
-#: po/guile_strings.txt:271
+#: po/guile_strings.txt:272
 msgid "  F3903 \\ Transport/storage of goods"
 msgstr ""
 
-#: po/guile_strings.txt:272
+#: po/guile_strings.txt:273
 msgid "The amount of state income taxes withheld from your IRA distribution."
 msgstr ""
 
-#: po/guile_strings.txt:273
+#: po/guile_strings.txt:274
 msgid "The amount of local income taxes withheld from your IRA distribution."
 msgstr ""
 
 # po/guile_strings.txt:88
 # po/guile_strings.txt:100
 # po/guile_strings.txt:100
-#: po/guile_strings.txt:274
+#: po/guile_strings.txt:275
 msgid "Loss"
 msgstr "Förlust"
 
 # po/guile_strings.txt:89
 # po/guile_strings.txt:101
 # po/guile_strings.txt:101
-#: po/guile_strings.txt:275
+#: po/guile_strings.txt:276
 msgid "Credit Accounts"
 msgstr "Kreditkonton"
 
-#: po/guile_strings.txt:276
+#: po/guile_strings.txt:277
 msgid "  F1040 \\ Alimony received"
 msgstr ""
 
-#: po/guile_strings.txt:277
+#: po/guile_strings.txt:278
 msgid "  F1099-MISC \\ State tax withheld"
 msgstr ""
 
 # po/guile_strings.txt:90
 # po/guile_strings.txt:102
 # po/guile_strings.txt:102
-#: po/guile_strings.txt:278
+#: po/guile_strings.txt:279
 msgid "Sort by description"
 msgstr "Sortera efter beskrivning"
 
 # po/guile_strings.txt:91
 # po/guile_strings.txt:103
 # po/guile_strings.txt:103
-#: po/guile_strings.txt:279
+#: po/guile_strings.txt:280
 msgid "largest to smallest, latest to earliest"
 msgstr "största till minsta, senaste till tidigaste"
 
-#: po/guile_strings.txt:280
+#: po/guile_strings.txt:281
 msgid ""
 "The gross amount of a distribution from a qualified Individual Retirement "
 "Arrangement (IRA) plan."
 msgstr ""
 
-#: po/guile_strings.txt:281
+#: po/guile_strings.txt:282
 msgid "Use From - To"
 msgstr ""
 
 # po/guile_strings.txt:92
 # po/guile_strings.txt:105
 # po/guile_strings.txt:105
-#: po/guile_strings.txt:282
+#: po/guile_strings.txt:283
 msgid "Secondary Key"
 msgstr "Sekundärnyckel"
 
 # po/guile_strings.txt:222
 # po/guile_strings.txt:104
 # po/guile_strings.txt:104
-#: po/guile_strings.txt:283
+#: po/guile_strings.txt:284
 msgid "Display the description?"
 msgstr "Visa beskrivning?"
 
-#: po/guile_strings.txt:284
+# po/guile_strings.txt:242
+# po/guile_strings.txt:290
+# po/guile_strings.txt:290
+#: po/guile_strings.txt:285
+#, fuzzy
+msgid "Minimum number of decimal places to display"
+msgstr "Antalet registerrader som visas som standard."
+
+#: po/guile_strings.txt:286
 msgid "  F4835 \\ Fertilizers and lime"
 msgstr ""
 
 # messages-i18n.c:338
 # messages-i18n.c:375
 # messages-i18n.c:376
-#: po/guile_strings.txt:285
+#: po/guile_strings.txt:287
 #, fuzzy
 msgid "(Sub "
 msgstr "Städa upp"
@@ -4597,65 +4609,65 @@ msgstr "Städa upp"
 # po/guile_strings.txt:93
 # po/guile_strings.txt:106
 # po/guile_strings.txt:106
-#: po/guile_strings.txt:286
+#: po/guile_strings.txt:288
 msgid "Save window sizes and positions."
 msgstr "Spara fönsterstorlekar och positioner."
 
-#: po/guile_strings.txt:288
+#: po/guile_strings.txt:290
 msgid "  Sched F \\ Interest expense, other"
 msgstr ""
 
-#: po/guile_strings.txt:289
+#: po/guile_strings.txt:291
 msgid "  Sched C \\ Interest expense, other"
 msgstr ""
 
-#: po/guile_strings.txt:290
+#: po/guile_strings.txt:292
 msgid "  Sched A \\ Home mortgage interest (1098)"
 msgstr ""
 
 # po/guile_strings.txt:95
 # po/guile_strings.txt:108
 # po/guile_strings.txt:108
-#: po/guile_strings.txt:291
+#: po/guile_strings.txt:293
 msgid "Number Option"
 msgstr "Nummeralternativ"
 
-#: po/guile_strings.txt:292
+#: po/guile_strings.txt:294
 msgid "Hierarchical Options"
 msgstr ""
 
-#: po/guile_strings.txt:293
+#: po/guile_strings.txt:295
 msgid "Print extended TXF HELP messages"
 msgstr ""
 
-#: po/guile_strings.txt:294
+#: po/guile_strings.txt:296
 msgid "Set/Reset Tax Status"
 msgstr ""
 
 # po/guile_strings.txt:97
 # po/guile_strings.txt:110
 # po/guile_strings.txt:110
-#: po/guile_strings.txt:295
+#: po/guile_strings.txt:297
 #, c-format
 msgid "Report for %s."
 msgstr "Rapport för %s."
 
-#: po/guile_strings.txt:296
+#: po/guile_strings.txt:298
 msgid "  F4835 \\ CCC loans forfeited/repaid"
 msgstr ""
 
 # po/guile_strings.txt:98
 # po/guile_strings.txt:111
 # po/guile_strings.txt:111
-#: po/guile_strings.txt:297
+#: po/guile_strings.txt:299
 msgid "Reverse Income and Expense Accounts"
 msgstr "Kasta om inkomst och utgiftskonton."
 
-#: po/guile_strings.txt:298
+#: po/guile_strings.txt:300
 msgid "  W-2 \\ Reimbursed moving expenses"
 msgstr ""
 
-#: po/guile_strings.txt:299
+#: po/guile_strings.txt:301
 msgid ""
 "Amounts paid as contributions to a qualified pension, profit-sharing, or "
 "annuity plan for your employees.  Amounts you contribute for yourself are "
@@ -4665,11 +4677,11 @@ msgstr ""
 # po/guile_strings.txt:99
 # po/guile_strings.txt:112
 # po/guile_strings.txt:112
-#: po/guile_strings.txt:300
+#: po/guile_strings.txt:302
 msgid "Europe"
 msgstr "Europa"
 
-#: po/guile_strings.txt:301
+#: po/guile_strings.txt:303
 msgid ""
 "Expenses paid for cleaning services (carpet, drapes), cleaning supplies, "
 "pest control, pool service, locks and keys and general cost of upkeep of the "
@@ -4679,17 +4691,17 @@ msgstr ""
 # po/guile_strings.txt:101
 # po/guile_strings.txt:114
 # po/guile_strings.txt:115
-#: po/guile_strings.txt:304
+#: po/guile_strings.txt:306
 msgid "Day"
 msgstr "Dag"
 
-#: po/guile_strings.txt:305
+#: po/guile_strings.txt:307
 msgid ""
 "The long-term gain or (loss) from the sale of assets reported to you by the "
 "partnership on line 4e of the Schedule K-1."
 msgstr ""
 
-#: po/guile_strings.txt:306
+#: po/guile_strings.txt:308
 msgid ""
 "Commissions paid to realtors or management companies to collect rent.  "
 "However, commissions paid to secure long-term rentals must be deducted over "
@@ -4699,7 +4711,7 @@ msgstr ""
 # messages-i18n.c:76
 # messages-i18n.c:83
 # messages-i18n.c:85
-#: po/guile_strings.txt:307
+#: po/guile_strings.txt:309
 #, fuzzy
 msgid "Set Selected accounts as Tax Related"
 msgstr "Radera det valda kontot"
@@ -4707,37 +4719,37 @@ msgstr "Radera det valda kontot"
 # po/guile_strings.txt:222
 # po/guile_strings.txt:116
 # po/guile_strings.txt:117
-#: po/guile_strings.txt:308
+#: po/guile_strings.txt:310
 msgid "Display the headers?"
 msgstr "Visa rubriker?"
 
 # po/guile_strings.txt:156
 # po/guile_strings.txt:117
 # po/guile_strings.txt:118
-#: po/guile_strings.txt:309
+#: po/guile_strings.txt:311
 msgid "Do transaction report on these accounts"
 msgstr "Skapa transaktionsrapport på dessa konton"
 
-#: po/guile_strings.txt:310
+#: po/guile_strings.txt:312
 msgid "  F8829 \\ Insurance"
 msgstr ""
 
-#: po/guile_strings.txt:311
+#: po/guile_strings.txt:313
 msgid "  F2106 \\ Local transportation exp."
 msgstr ""
 
 # po/guile_strings.txt:234
 # po/guile_strings.txt:118
 # po/guile_strings.txt:119
-#: po/guile_strings.txt:312
+#: po/guile_strings.txt:314
 msgid "Sort and subtotal by account transferred from/to's name"
 msgstr "Sortera och delsumma per kontoöverföringens från/till-namn"
 
-#: po/guile_strings.txt:313
+#: po/guile_strings.txt:315
 msgid "  F4137 \\ Total cash/tips received"
 msgstr ""
 
-#: po/guile_strings.txt:314
+#: po/guile_strings.txt:316
 msgid ""
 "The most common taxable fringe benefits are the value of your personal use "
 "of a company-provided car or a membership in a country or health club.  "
@@ -4745,71 +4757,71 @@ msgid ""
 "includes it in your wages."
 msgstr ""
 
-#: po/guile_strings.txt:317
+#: po/guile_strings.txt:319
 msgid "  F4835 \\ Sale of livestock/produce"
 msgstr ""
 
-#: po/guile_strings.txt:318
+#: po/guile_strings.txt:320
 msgid "Amounts paid as rent to store or warehouse crops, grains, etc."
 msgstr ""
 
-#: po/guile_strings.txt:319
+#: po/guile_strings.txt:321
 msgid "  F4684 \\ FMV before casualty"
 msgstr ""
 
-#: po/guile_strings.txt:320
+#: po/guile_strings.txt:322
 msgid "  W-2 \\ State tax withheld, self"
 msgstr ""
 
-#: po/guile_strings.txt:321
+#: po/guile_strings.txt:323
 msgid ""
 "The cost of feed for livestock.  If you pay in advance for feed the "
 "livestock will consume in a later year, refer to IRS Pub 225 to see if you "
 "qualify to deduct the total advance payment for feed in the year paid."
 msgstr ""
 
-#: po/guile_strings.txt:322
+#: po/guile_strings.txt:324
 msgid "Print Full account names"
 msgstr ""
 
 # po/guile_strings.txt:105
 # po/guile_strings.txt:121
 # po/guile_strings.txt:122
-#: po/guile_strings.txt:323
+#: po/guile_strings.txt:325
 msgid "The items selected in the list option are:"
 msgstr "De valda listalternativen är:"
 
 # po/guile_strings.txt:106
 # po/guile_strings.txt:122
 # po/guile_strings.txt:123
-#: po/guile_strings.txt:324
+#: po/guile_strings.txt:326
 msgid "Average"
 msgstr "Genomsnitt"
 
 # po/guile_strings.txt:107
 # po/guile_strings.txt:124
 # po/guile_strings.txt:125
-#: po/guile_strings.txt:326
+#: po/guile_strings.txt:328
 msgid "A_ccount Balance Tracker"
 msgstr "_Saldospårare"
 
-#: po/guile_strings.txt:327
+#: po/guile_strings.txt:329
 msgid "< Sched B \\ Div. income, non-taxable"
 msgstr ""
 
-#: po/guile_strings.txt:328
+#: po/guile_strings.txt:330
 msgid "  W-2 \\ Medicare tax withheld, spouse"
 msgstr ""
 
-#: po/guile_strings.txt:329
+#: po/guile_strings.txt:331
 msgid "  none \\ Tax Report Only - No TXF Export"
 msgstr ""
 
-#: po/guile_strings.txt:331
+#: po/guile_strings.txt:333
 msgid "  F1099-R \\ SIMPLE total taxable distrib."
 msgstr ""
 
-#: po/guile_strings.txt:332
+#: po/guile_strings.txt:334
 msgid ""
 "The cost of electricity, water, gas, etc., used in the farming operation.  "
 "Do not include the cost of utilities for personal use or the base rate of "
@@ -4819,17 +4831,17 @@ msgstr ""
 # po/guile_strings.txt:109
 # po/guile_strings.txt:126
 # po/guile_strings.txt:127
-#: po/guile_strings.txt:333
+#: po/guile_strings.txt:335
 msgid "Start of reporting period"
 msgstr "Start på rapporteringsperiod"
 
-#: po/guile_strings.txt:334
+#: po/guile_strings.txt:336
 msgid ""
 "The short-term gain or (loss) from sale of assets reported to you by the "
 "partnership on line 4d of Schedule K-1."
 msgstr ""
 
-#: po/guile_strings.txt:335
+#: po/guile_strings.txt:337
 msgid ""
 "Cost of tuition, books, fees, transportation if the education is required by "
 "your employer or maintains or improves current job skills. Cost of courses "
@@ -4840,32 +4852,32 @@ msgstr ""
 # po/guile_strings.txt:110
 # po/guile_strings.txt:127
 # po/guile_strings.txt:128
-#: po/guile_strings.txt:336
+#: po/guile_strings.txt:338
 msgid "Sort by exact entry time"
 msgstr "Sortera efter den exakta inmatningstiden"
 
 # po/guile_strings.txt:128
 # po/guile_strings.txt:129
-#: po/guile_strings.txt:337
+#: po/guile_strings.txt:339
 msgid "Use accounting labels"
 msgstr "Använd bokföringstermer i rubriker"
 
-#: po/guile_strings.txt:338
+#: po/guile_strings.txt:340
 msgid ""
 "The amount of qualified tuition and enrollment fees for the Hope credit. The "
 "credit applies only to tuition paid for the first two years of a student's "
 "post-secondary education. You may qualify for up to $1500 per student."
 msgstr ""
 
-#: po/guile_strings.txt:339
+#: po/guile_strings.txt:341
 msgid "  F4684 \\ FMV after casualty"
 msgstr ""
 
-#: po/guile_strings.txt:340
+#: po/guile_strings.txt:342
 msgid "  F2106 \\ Reimb. meal/entertainment exp."
 msgstr ""
 
-#: po/guile_strings.txt:341
+#: po/guile_strings.txt:343
 msgid ""
 "Freight costs or the expense of trucking produce or livestock. Do not "
 "include freight costs for livestock purchased and held for resale. These "
@@ -4873,7 +4885,7 @@ msgid ""
 "amount of capital gain or loss."
 msgstr ""
 
-#: po/guile_strings.txt:342
+#: po/guile_strings.txt:344
 msgid ""
 "Ordinary and necessary business-related meals and entertainment, including "
 "meals while away from your tax home overnight and local business meals and "
@@ -4881,48 +4893,48 @@ msgid ""
 "detailed records."
 msgstr ""
 
-#: po/guile_strings.txt:343
+#: po/guile_strings.txt:345
 msgid "  F1040 \\ Social Security income, self"
 msgstr ""
 
-#: po/guile_strings.txt:344
+#: po/guile_strings.txt:346
 msgid ""
 "Contributions made to your spouse's medical savings account that were not "
 "reported on their Form W-2."
 msgstr ""
 
-#: po/guile_strings.txt:345
+#: po/guile_strings.txt:347
 msgid "  F1040 \\ Fed tax w/h,Soc. Sec.,spouse"
 msgstr ""
 
-#: po/guile_strings.txt:346
+#: po/guile_strings.txt:348
 msgid ""
 "Chemicals used in the farming operation such as insect sprays and dusts."
 msgstr ""
 
-#: po/guile_strings.txt:347
+#: po/guile_strings.txt:349
 msgid ""
 "The amount of unemployment compensation that you repaid to the federal or "
 "state government during the current year."
 msgstr ""
 
-#: po/guile_strings.txt:348
+#: po/guile_strings.txt:350
 msgid "# Sched K-1 \\ Net LT capital gain or loss"
 msgstr ""
 
-#: po/guile_strings.txt:349
+#: po/guile_strings.txt:351
 msgid "  Sched K-1 \\ Guaranteed partner payments"
 msgstr ""
 
-#: po/guile_strings.txt:350
+#: po/guile_strings.txt:352
 msgid "  F4684 \\ Insurance/reimbursement"
 msgstr ""
 
-#: po/guile_strings.txt:351
+#: po/guile_strings.txt:353
 msgid "  F1099-MISC \\ Rents"
 msgstr ""
 
-#: po/guile_strings.txt:352
+#: po/guile_strings.txt:354
 msgid ""
 "Amount of interest you paid this year on qualified student loans. This "
 "deduction is an adjustment to income so you can claim it even if you do not "
@@ -4931,36 +4943,36 @@ msgstr ""
 
 # po/guile_strings.txt:130
 # po/guile_strings.txt:131
-#: po/guile_strings.txt:353
+#: po/guile_strings.txt:355
 msgid "The amount of time between data points"
 msgstr "Tiden mellan två värden"
 
-#: po/guile_strings.txt:354
+#: po/guile_strings.txt:356
 msgid ""
 "Credits you allow customers for returned merchandise and any other "
 "allowances you make on sales.  These are deducted only if they were "
 "originally included in income."
 msgstr ""
 
-#: po/guile_strings.txt:355
+#: po/guile_strings.txt:357
 msgid ""
 "The amount of federal income taxes withheld from interest income. This is "
 "usually reported on Form 1099-INT."
 msgstr ""
 
-#: po/guile_strings.txt:356
+#: po/guile_strings.txt:358
 msgid "  Sched A \\ State estimated tax, qrtrly"
 msgstr ""
 
-#: po/guile_strings.txt:357
+#: po/guile_strings.txt:359
 msgid "  Sched F \\ Sales livestock/product raised"
 msgstr ""
 
-#: po/guile_strings.txt:358
+#: po/guile_strings.txt:360
 msgid "  Sched F \\ CCC loans forfeited or repaid"
 msgstr ""
 
-#: po/guile_strings.txt:359
+#: po/guile_strings.txt:361
 msgid ""
 "ERROR: There are duplicate TXF codes assigned to some accounts.  Only TXF "
 "codes prefixed with \"&lt;\" or \"^\" may be repeated."
@@ -4969,28 +4981,28 @@ msgstr ""
 # po/guile_strings.txt:113
 # po/guile_strings.txt:132
 # po/guile_strings.txt:133
-#: po/guile_strings.txt:360
+#: po/guile_strings.txt:362
 msgid "Multi mode default split background"
 msgstr "Standardbakgrund för delning i flerradsläge"
 
-#: po/guile_strings.txt:361
+#: po/guile_strings.txt:363
 msgid "  Sched F \\ Repairs and maintenance"
 msgstr ""
 
-#: po/guile_strings.txt:362
+#: po/guile_strings.txt:364
 msgid ""
 "Chemicals used in your farming operation such as insect sprays and dusts."
 msgstr ""
 
-#: po/guile_strings.txt:363
+#: po/guile_strings.txt:365
 msgid "  Sched E \\ Advertising"
 msgstr ""
 
-#: po/guile_strings.txt:364
+#: po/guile_strings.txt:366
 msgid "  Sched C \\ Supplies (not from COGS)"
 msgstr ""
 
-#: po/guile_strings.txt:365
+#: po/guile_strings.txt:367
 msgid ""
 "Taxes based on the value of the personal property and charged on a yearly "
 "basis. Most common is the auto registration fees charged by the DMV. All or "
@@ -4998,7 +5010,7 @@ msgid ""
 "is deductible."
 msgstr ""
 
-#: po/guile_strings.txt:367
+#: po/guile_strings.txt:369
 msgid ""
 "Other farm income may include illegal federal irrigation subsidies, "
 "bartering income, debt forgiveness, state gasoline or fuel tax refund, gains "
@@ -5006,22 +5018,22 @@ msgid ""
 "and right-of-way, etc."
 msgstr ""
 
-#: po/guile_strings.txt:368
+#: po/guile_strings.txt:370
 msgid "Select the source of the Payer Name"
 msgstr ""
 
-#: po/guile_strings.txt:369
+#: po/guile_strings.txt:371
 msgid "  Sched C \\ Office expenses"
 msgstr ""
 
 # po/guile_strings.txt:115
 # po/guile_strings.txt:134
 # po/guile_strings.txt:135
-#: po/guile_strings.txt:370
+#: po/guile_strings.txt:372
 msgid "Week"
 msgstr "Vecka"
 
-#: po/guile_strings.txt:371
+#: po/guile_strings.txt:373
 msgid ""
 "Interest income that is taxed on your federal return, but not on your state "
 "income tax return - other than interest paid on U.S. obligations."
@@ -5030,29 +5042,29 @@ msgstr ""
 # po/guile_strings.txt:119
 # po/guile_strings.txt:137
 # po/guile_strings.txt:138
-#: po/guile_strings.txt:373
+#: po/guile_strings.txt:375
 msgid "Step Size"
 msgstr "Stegstorlek"
 
-#: po/guile_strings.txt:374
+#: po/guile_strings.txt:376
 msgid "  F4835 \\ Insurance (other than health)"
 msgstr ""
 
 # po/guile_strings.txt:120
 # po/guile_strings.txt:138
 # po/guile_strings.txt:139
-#: po/guile_strings.txt:375
+#: po/guile_strings.txt:377
 msgid "Hello, World!"
 msgstr "Hej, Världen!"
 
 # po/guile_strings.txt:121
 # po/guile_strings.txt:139
 # po/guile_strings.txt:140
-#: po/guile_strings.txt:376
+#: po/guile_strings.txt:378
 msgid "ISO"
 msgstr "ISO"
 
-#: po/guile_strings.txt:377
+#: po/guile_strings.txt:379
 msgid ""
 "The only properties subject to depletion are oil or gas wells, exhaustible "
 "natural deposits and timber.  This is a deduction for the amount the natural "
@@ -5062,72 +5074,72 @@ msgstr ""
 # messages-i18n.c:96
 # po/guile_strings.txt:141
 # po/guile_strings.txt:142
-#: po/guile_strings.txt:378
+#: po/guile_strings.txt:380
 msgid "Display the amount?"
 msgstr "Visa beloppet?"
 
 # messages-i18n.c:197 po/guile_strings.txt:51
 # po/guile_strings.txt:142
 # po/guile_strings.txt:143
-#: po/guile_strings.txt:379
+#: po/guile_strings.txt:381
 msgid "Multi-Line"
 msgstr "Flerraders"
 
 # po/guile_strings.txt:143
 # po/guile_strings.txt:144
-#: po/guile_strings.txt:380
+#: po/guile_strings.txt:382
 msgid "Two Column Display"
 msgstr "Tvåkolumnsvisning"
 
 # po/guile_strings.txt:123
 # po/guile_strings.txt:144
 # po/guile_strings.txt:145
-#: po/guile_strings.txt:381
+#: po/guile_strings.txt:383
 msgid "Date Format Display"
 msgstr "Visa datum format"
 
-#: po/guile_strings.txt:382
+#: po/guile_strings.txt:384
 msgid "  W-2 \\ Federal tax withheld, spouse"
 msgstr ""
 
 # po/guile_strings.txt:124
 # po/guile_strings.txt:145
 # po/guile_strings.txt:146
-#: po/guile_strings.txt:383
+#: po/guile_strings.txt:385
 msgid "Ending"
 msgstr "Slut"
 
-#: po/guile_strings.txt:384
+#: po/guile_strings.txt:386
 msgid "  Sched F \\ Rent/lease land, animals"
 msgstr ""
 
 # po/guile_strings.txt:125
 # po/guile_strings.txt:146
 # po/guile_strings.txt:147
-#: po/guile_strings.txt:385
+#: po/guile_strings.txt:387
 msgid "Reversed-balance account types"
 msgstr "Kontotyper för omkastat saldo"
 
 # po/guile_strings.txt:127
 # po/guile_strings.txt:148
 # po/guile_strings.txt:149
-#: po/guile_strings.txt:387
+#: po/guile_strings.txt:389
 msgid "Account fields to display"
 msgstr "Kontofält att visa"
 
 # messages-i18n.c:208
 # messages-i18n.c:230
 # messages-i18n.c:232
-#: po/guile_strings.txt:388
+#: po/guile_strings.txt:390
 #, fuzzy
 msgid "< Current Account"
 msgstr "Föräldrakonto"
 
-#: po/guile_strings.txt:389
+#: po/guile_strings.txt:391
 msgid "  Sched A \\ Misc., subject to 2% AGI limit"
 msgstr ""
 
-#: po/guile_strings.txt:390
+#: po/guile_strings.txt:392
 msgid ""
 "This is a dummy category and only shows up on the tax report, but is not "
 "exported."
@@ -5136,11 +5148,11 @@ msgstr ""
 # po/guile_strings.txt:128
 # po/guile_strings.txt:149
 # po/guile_strings.txt:150
-#: po/guile_strings.txt:391
+#: po/guile_strings.txt:393
 msgid "Account Balance Tracker"
 msgstr "Saldospårare"
 
-#: po/guile_strings.txt:392
+#: po/guile_strings.txt:394
 #, c-format
 msgid ""
 "Net social security benefits you receive reported on Form SSA-1099. A "
@@ -5149,56 +5161,56 @@ msgid ""
 "together this year.)"
 msgstr ""
 
-#: po/guile_strings.txt:393
+#: po/guile_strings.txt:395
 msgid ""
 "The amount of federal income taxes withheld from a SIMPLE distribution "
 "received."
 msgstr ""
 
-#: po/guile_strings.txt:394
+#: po/guile_strings.txt:396
 msgid "  Sched F \\ Gasoline, fuel, and oil"
 msgstr ""
 
 # po/guile_strings.txt:129
 # po/guile_strings.txt:150
 # po/guile_strings.txt:151
-#: po/guile_strings.txt:395
+#: po/guile_strings.txt:397
 msgid "Report Options"
 msgstr "Rapport alternativ"
 
 # po/guile_strings.txt:132
 # po/guile_strings.txt:153
 # po/guile_strings.txt:154
-#: po/guile_strings.txt:398
+#: po/guile_strings.txt:400
 msgid "Calculate balance sheet up to this date"
 msgstr "Beräkna saldobladet fram till denna datum"
 
-#: po/guile_strings.txt:399
+#: po/guile_strings.txt:401
 msgid "  F6252 \\ Selling price"
 msgstr ""
 
 # po/guile_strings.txt:133
 # po/guile_strings.txt:154
 # po/guile_strings.txt:155
-#: po/guile_strings.txt:400
+#: po/guile_strings.txt:402
 msgid "Transaction Report"
 msgstr "Transaktionsrapport"
 
-#: po/guile_strings.txt:401
+#: po/guile_strings.txt:403
 msgid ""
 "Ordinary and necessary salaries, wages, and other compensation for services "
 "you pay to employees who are directly connected to your trade or business.  "
 "Do not include amounts paid to yourself as salary or draw."
 msgstr ""
 
-#: po/guile_strings.txt:402
+#: po/guile_strings.txt:404
 msgid ""
 "Total real estate taxes paid for your home, in which an area or room is used "
 "regularly and exclusively for business.  Complete Form 8829 to compute the "
 "deductible business portion of real estate taxes."
 msgstr ""
 
-#: po/guile_strings.txt:403
+#: po/guile_strings.txt:405
 msgid ""
 "Amounts contributed to fringe benefit programs you provide for your "
 "employees - accident or health plans; educational assistance; group-term "
@@ -5209,11 +5221,11 @@ msgstr ""
 # po/guile_strings.txt:134
 # po/guile_strings.txt:155
 # po/guile_strings.txt:156
-#: po/guile_strings.txt:404
+#: po/guile_strings.txt:406
 msgid "Alternate the even and odd colors with each transaction, not each row"
 msgstr "Alternera udda och jämna färger med varje transaktion, inte varje rad"
 
-#: po/guile_strings.txt:405
+#: po/guile_strings.txt:407
 msgid ""
 "Generally, you do not pay federal income tax (but you may pay state income "
 "tax) on interest on bonds or notes of states, counties, the District of "
@@ -5221,49 +5233,49 @@ msgid ""
 "on Schedule B."
 msgstr ""
 
-#: po/guile_strings.txt:406
+#: po/guile_strings.txt:408
 msgid "< F2441 \\ Qualifying household expenses"
 msgstr ""
 
-#: po/guile_strings.txt:407
+#: po/guile_strings.txt:409
 msgid "Sep 1 - Dec 31, Last year"
 msgstr ""
 
-#: po/guile_strings.txt:408
+#: po/guile_strings.txt:410
 msgid "Jun 1 - Aug 31, Last year"
 msgstr ""
 
-#: po/guile_strings.txt:409
+#: po/guile_strings.txt:411
 msgid "Apr 1 - May 31, Last year"
 msgstr ""
 
-#: po/guile_strings.txt:410
+#: po/guile_strings.txt:412
 msgid "Jan 1 - Mar 31, Last year"
 msgstr ""
 
 # po/guile_strings.txt:135
 # po/guile_strings.txt:156
 # po/guile_strings.txt:157
-#: po/guile_strings.txt:411
+#: po/guile_strings.txt:413
 msgid "Gain/Loss"
 msgstr "Vinst/Förlust"
 
-#: po/guile_strings.txt:412
+#: po/guile_strings.txt:414
 msgid "  W-2 \\ Reimbursed moving exp.,spouse"
 msgstr ""
 
-#: po/guile_strings.txt:413
+#: po/guile_strings.txt:415
 msgid "  Sched C \\ Gross receipts or sales"
 msgstr ""
 
-#: po/guile_strings.txt:414
+#: po/guile_strings.txt:416
 msgid ""
 "Ordinary (taxable) dividends are the most common type of distribution from a "
 "corporation.  They are reported to you on a 1099-DIV.  Do not include "
 "capital gain distributions or non-taxable dividends here."
 msgstr ""
 
-#: po/guile_strings.txt:415
+#: po/guile_strings.txt:417
 msgid ""
 "The amount of nonemployee compensation received for services performed.  "
 "This may include fees, commissions, prizes and awards, the value of bartered "
@@ -5274,11 +5286,11 @@ msgstr ""
 # po/guile_strings.txt:136
 # po/guile_strings.txt:157
 # po/guile_strings.txt:158
-#: po/guile_strings.txt:416
+#: po/guile_strings.txt:418
 msgid "Transfer from/to"
 msgstr "Överföring från/till"
 
-#: po/guile_strings.txt:417
+#: po/guile_strings.txt:419
 msgid ""
 "Interest paid to a financial institution on real property used in your "
 "business for which you receive a Form 1098. If the interest is paid in "
@@ -5289,21 +5301,21 @@ msgstr ""
 # po/guile_strings.txt:137
 # po/guile_strings.txt:158
 # po/guile_strings.txt:159
-#: po/guile_strings.txt:418
+#: po/guile_strings.txt:420
 msgid "Text only"
 msgstr "Bara text"
 
-#: po/guile_strings.txt:419
+#: po/guile_strings.txt:421
 msgid "  F8815 \\ EE US svgs. bonds proceeds"
 msgstr ""
 
-#: po/guile_strings.txt:420
+#: po/guile_strings.txt:422
 msgid ""
 "The amount of royalty payments received from copyrights, patents, and oil, "
 "gas, and mineral properties."
 msgstr ""
 
-#: po/guile_strings.txt:421
+#: po/guile_strings.txt:423
 msgid ""
 "A manufacturer or producer includes the cost of all raw materials or parts "
 "purchased for manufacture into a finished product. A resaler includes all "
@@ -5311,18 +5323,18 @@ msgid ""
 "personal use."
 msgstr ""
 
-#: po/guile_strings.txt:422
+#: po/guile_strings.txt:424
 msgid "  Sched A \\ Investment management fees"
 msgstr ""
 
-#: po/guile_strings.txt:423
+#: po/guile_strings.txt:425
 msgid "  F4835 \\ Freight and trucking"
 msgstr ""
 
 # messages-i18n.c:219
 # messages-i18n.c:243
 # messages-i18n.c:245
-#: po/guile_strings.txt:425
+#: po/guile_strings.txt:427
 #, fuzzy
 msgid "Use Indicated Default"
 msgstr "Välj standard"
@@ -5330,29 +5342,29 @@ msgstr "Välj standard"
 # po/guile_strings.txt:138
 # po/guile_strings.txt:160
 # po/guile_strings.txt:161
-#: po/guile_strings.txt:426
+#: po/guile_strings.txt:428
 msgid "Toolbar Buttons"
 msgstr "Verktygsfältknappar"
 
 # messages-i18n.c:189
 # messages-i18n.c:207
 # messages-i18n.c:209
-#: po/guile_strings.txt:427
+#: po/guile_strings.txt:429
 #, fuzzy
 msgid "_Export .TXF"
 msgstr "Exportera till"
 
-#: po/guile_strings.txt:428
+#: po/guile_strings.txt:430
 msgid "  F8863 \\ Lifetime learning credit"
 msgstr ""
 
-#: po/guile_strings.txt:429
+#: po/guile_strings.txt:431
 msgid ""
 "Alimony or spousal support payments received from a former spouse.  Do not "
 "include child support payments since they are not considered taxable income."
 msgstr ""
 
-#: po/guile_strings.txt:430
+#: po/guile_strings.txt:432
 msgid ""
 "Legal and accounting fees that are directly connected to the rental "
 "property, including fees for legal advice to evict a tenant, fees paid to a "
@@ -5360,7 +5372,7 @@ msgid ""
 "rental or royalty property."
 msgstr ""
 
-#: po/guile_strings.txt:431
+#: po/guile_strings.txt:433
 msgid ""
 "Qualified higher education expenses include only tuition and fees required "
 "for enrollment or attendance of the eligible person(s).  Do not include room "
@@ -5370,14 +5382,14 @@ msgstr ""
 # po/guile_strings.txt:139
 # po/guile_strings.txt:161
 # po/guile_strings.txt:162
-#: po/guile_strings.txt:432
+#: po/guile_strings.txt:434
 msgid "Report Items from this date"
 msgstr "Rapportera saker från detta datum"
 
 # po/guile_strings.txt:140
 # po/guile_strings.txt:163
 # po/guile_strings.txt:164
-#: po/guile_strings.txt:433
+#: po/guile_strings.txt:435
 msgid ""
 "The default background color for transactions in multi-line mode and the "
 "auto modes"
@@ -5386,30 +5398,30 @@ msgstr "Standardbakgrundsfärgen för transaktioner i flerradsläge och autolägen"
 # po/guile_strings.txt:141
 # po/guile_strings.txt:164
 # po/guile_strings.txt:165
-#: po/guile_strings.txt:434
+#: po/guile_strings.txt:436
 msgid "Fourth Options"
 msgstr "Fjärde alternativet"
 
-#: po/guile_strings.txt:435
+#: po/guile_strings.txt:437
 msgid ""
 "The total expenses you paid to sell your old home.  These expenses include "
 "commissions, advertising, attorney and legal fees, title insurance, transfer "
 "and stamp taxes, and recording fees."
 msgstr ""
 
-#: po/guile_strings.txt:436
+#: po/guile_strings.txt:438
 msgid ""
 "The taxable amount of a distribution from a qualified Individual Retirement "
 "Arrangement (IRA) plan."
 msgstr ""
 
-#: po/guile_strings.txt:437
+#: po/guile_strings.txt:439
 msgid ""
 "The cost of electricity, water, gas, telephone, trash disposal for your "
 "rental property that is paid by you."
 msgstr ""
 
-#: po/guile_strings.txt:438
+#: po/guile_strings.txt:440
 msgid ""
 "The cost of services needed to care for the qualifying person as well as to "
 "run the home.  They include the services of a cook, maid, babysitter, "
@@ -5420,15 +5432,15 @@ msgstr ""
 # po/guile_strings.txt:142
 # po/guile_strings.txt:165
 # po/guile_strings.txt:166
-#: po/guile_strings.txt:439
+#: po/guile_strings.txt:441
 msgid "Sort by this criterion first"
 msgstr "Sortera efter detta kriterium först"
 
-#: po/guile_strings.txt:440
+#: po/guile_strings.txt:442
 msgid "< Sched B \\ TE private activity bond int."
 msgstr ""
 
-#: po/guile_strings.txt:441
+#: po/guile_strings.txt:443
 msgid ""
 "The portion of tier 1 railroad retirement benefits that are equivalent to "
 "social security benefits is reported on Form RRB-1099.  These benefits are "
@@ -5439,107 +5451,107 @@ msgstr ""
 # messages-i18n.c:176 po/guile_strings.txt:260
 # po/guile_strings.txt:166
 # po/guile_strings.txt:167
-#: po/guile_strings.txt:442
+#: po/guile_strings.txt:444
 msgid "Double"
 msgstr "Dubbel"
 
 # po/guile_strings.txt:143
 # po/guile_strings.txt:167
 # po/guile_strings.txt:168
-#: po/guile_strings.txt:443
+#: po/guile_strings.txt:445
 msgid "Ugly option"
 msgstr "Fula alternativ"
 
 # messages-i18n.c:76
 # messages-i18n.c:83
 # messages-i18n.c:85
-#: po/guile_strings.txt:444
+#: po/guile_strings.txt:446
 #, fuzzy
 msgid "Reset Tax Related & sub-accounts"
 msgstr "Radera det valda kontot"
 
-#: po/guile_strings.txt:445
+#: po/guile_strings.txt:447
 msgid "  F8829 \\ Real estate taxes"
 msgstr ""
 
 # po/guile_strings.txt:145
 # po/guile_strings.txt:169
 # po/guile_strings.txt:170
-#: po/guile_strings.txt:446
+#: po/guile_strings.txt:448
 msgid "Save Translatable Strings"
 msgstr "Spara översättningsbara strängar"
 
-#: po/guile_strings.txt:447
+#: po/guile_strings.txt:449
 msgid ""
 "All depreciation or amortization you deducted or should have deducted from "
 "the date of purchase until date of sale. Include any section 179 expense "
 "deduction."
 msgstr ""
 
-#: po/guile_strings.txt:448
+#: po/guile_strings.txt:450
 msgid "  F4835 \\ Feed purchased"
 msgstr ""
 
-#: po/guile_strings.txt:449
+#: po/guile_strings.txt:451
 msgid "  F1099-R \\ Pension state tax withheld"
 msgstr ""
 
 # po/guile_strings.txt:146
 # po/guile_strings.txt:170
 # po/guile_strings.txt:171
-#: po/guile_strings.txt:450
+#: po/guile_strings.txt:452
 msgid "Save strings that need to be translated"
 msgstr "Spara strängar som måste översättas"
 
-#: po/guile_strings.txt:451
+#: po/guile_strings.txt:453
 msgid "# Sched K-1 \\ Ordinary income or loss"
 msgstr ""
 
-#: po/guile_strings.txt:452
+#: po/guile_strings.txt:454
 msgid "  Sched C \\ Depletion"
 msgstr ""
 
 # po/guile_strings.txt:147
 # po/guile_strings.txt:171
 # po/guile_strings.txt:172
-#: po/guile_strings.txt:453
+#: po/guile_strings.txt:455
 msgid "Number of Rows"
 msgstr "Antal rader"
 
-#: po/guile_strings.txt:454
+#: po/guile_strings.txt:456
 msgid "  Sched F \\ Resales of livestock/items"
 msgstr ""
 
-#: po/guile_strings.txt:455
+#: po/guile_strings.txt:457
 msgid "The amount of state income taxes withheld from gross gambling winnings."
 msgstr ""
 
-#: po/guile_strings.txt:456
+#: po/guile_strings.txt:458
 msgid ""
 "Interest paid to a recipient other than a financial institution or on other "
 "loans related to the farm.  Do not deduct interest you prepaid for later "
 "years."
 msgstr ""
 
-#: po/guile_strings.txt:457
+#: po/guile_strings.txt:459
 msgid "Select a TXF Expense catagory"
 msgstr ""
 
-#: po/guile_strings.txt:458
+#: po/guile_strings.txt:460
 msgid ""
 "The amount of mortgages or other debts the buyer assumed or took the "
 "property subject to.  Do not include a second trust deed taken by the seller "
 "or any new mortgages the buyer gets from a bank, from you, or other sources."
 msgstr ""
 
-#: po/guile_strings.txt:459
+#: po/guile_strings.txt:461
 msgid ""
 "The maximum contribution to your spouse's qualified IRA is $2,000 per year. "
 "If you or your spouse are covered by a company retirement plan, the "
 "deductible contribution could be limited or eliminated."
 msgstr ""
 
-#: po/guile_strings.txt:460
+#: po/guile_strings.txt:462
 msgid ""
 "Reasonable and necessary adoption fees for the legal adoption of an eligible "
 "child under age 18, even if the adoption is unsuccessful. Your spouse's "
@@ -5549,46 +5561,46 @@ msgstr ""
 # po/guile_strings.txt:148
 # po/guile_strings.txt:172
 # po/guile_strings.txt:173
-#: po/guile_strings.txt:461
+#: po/guile_strings.txt:463
 msgid "/ (Slash)"
 msgstr "/ (Snedstreck)"
 
-#: po/guile_strings.txt:462
+#: po/guile_strings.txt:464
 msgid ""
 "If you are a manufacturer or producer, include the cost of materials and "
 "supplies that are used in manufacturing the goods, but not the raw materials "
 "for the product.  Examples would be hardware, chemicals, etc."
 msgstr ""
 
-#: po/guile_strings.txt:464
+#: po/guile_strings.txt:466
 msgid ""
 "The amount of medical and health care payments you received as a physician "
 "or other supplier/provider of medical and health care services."
 msgstr ""
 
-#: po/guile_strings.txt:465
+#: po/guile_strings.txt:467
 msgid "Reset Tax Related"
 msgstr ""
 
 # po/guile_strings.txt:150
 # po/guile_strings.txt:174
 # po/guile_strings.txt:175
-#: po/guile_strings.txt:466
+#: po/guile_strings.txt:468
 msgid "Use 24-hour time format"
 msgstr "Använd 24-timmars tidsformat"
 
-#: po/guile_strings.txt:468
+#: po/guile_strings.txt:470
 msgid "  Sched F \\ Custom hire expenses"
 msgstr ""
 
 # po/guile_strings.txt:152
 # po/guile_strings.txt:176
 # po/guile_strings.txt:177
-#: po/guile_strings.txt:469
+#: po/guile_strings.txt:471
 msgid "Date Format"
 msgstr "Datumformat"
 
-#: po/guile_strings.txt:470
+#: po/guile_strings.txt:472
 msgid ""
 "Amounts received from your spouse's employer to reimburse them for qualified "
 "moving expenses.  Under new law, reimbursements may be excludable from "
@@ -5596,45 +5608,45 @@ msgid ""
 "in spouse's wages."
 msgstr ""
 
-#: po/guile_strings.txt:471
+#: po/guile_strings.txt:473
 msgid ""
 "The total proceeds from all series EE U.S. savings bonds issued after 1989 "
 "you cashed during this tax year.  Include both principal and interest."
 msgstr ""
 
-#: po/guile_strings.txt:472
+#: po/guile_strings.txt:474
 msgid "  F6252 \\ Payments rec'd this year"
 msgstr ""
 
 # po/guile_strings.txt:153
 # po/guile_strings.txt:177
 # po/guile_strings.txt:178
-#: po/guile_strings.txt:473
+#: po/guile_strings.txt:475
 msgid "A list option"
 msgstr "Ett listalternativ"
 
 # po/guile_strings.txt:154
 # po/guile_strings.txt:178
 # po/guile_strings.txt:179
-#: po/guile_strings.txt:474
+#: po/guile_strings.txt:476
 msgid "ISO Standard: yyyy-mm-dd"
 msgstr "ISO standard: åååå-mm-dd"
 
 # po/guile_strings.txt:155
 # po/guile_strings.txt:179
 # po/guile_strings.txt:180
-#: po/guile_strings.txt:475
+#: po/guile_strings.txt:477
 msgid "Default Currency"
 msgstr "Standardvaluta"
 
-#: po/guile_strings.txt:476
+#: po/guile_strings.txt:478
 msgid ""
 "Non-taxable interest income other than from bonds or notes of states, "
 "counties, the District of Columbia, or a possession of the United States, or "
 "from a qualified private activity bond."
 msgstr ""
 
-#: po/guile_strings.txt:477
+#: po/guile_strings.txt:479
 msgid ""
 "The fair market value (FMV) is the price at which the property would change "
 "hands between a willing buyer and seller. The FMV after a theft is zero if "
@@ -5642,7 +5654,7 @@ msgid ""
 "by competent appraisal."
 msgstr ""
 
-#: po/guile_strings.txt:478
+#: po/guile_strings.txt:480
 msgid ""
 "The actual cost to pack, crate and move your household goods and personal "
 "effects.  You may include the cost to store and insure household goods and "
@@ -5653,11 +5665,11 @@ msgstr ""
 # po/guile_strings.txt:156
 # po/guile_strings.txt:181
 # po/guile_strings.txt:181
-#: po/guile_strings.txt:479
+#: po/guile_strings.txt:481
 msgid "Do transaction report on this account"
 msgstr "Skapa transaktionsrapport för detta kontot"
 
-#: po/guile_strings.txt:480
+#: po/guile_strings.txt:482
 msgid ""
 "Cash or fair market value of property received as a prize in a television or "
 "radio quiz program, beauty contest or lottery."
@@ -5666,11 +5678,11 @@ msgstr ""
 # po/guile_strings.txt:157
 # po/guile_strings.txt:182
 # po/guile_strings.txt:182
-#: po/guile_strings.txt:481
+#: po/guile_strings.txt:483
 msgid "Recent Price"
 msgstr "Senaste pris"
 
-#: po/guile_strings.txt:482
+#: po/guile_strings.txt:484
 msgid ""
 "If this is the year of damage and you receive crop insurance proceeds, you "
 "may elect to include insurance proceeds in the following year's income.  A "
@@ -5678,17 +5690,17 @@ msgid ""
 "more information."
 msgstr ""
 
-#: po/guile_strings.txt:483
+#: po/guile_strings.txt:485
 msgid "  Sched A \\ Personal property taxes"
 msgstr ""
 
-#: po/guile_strings.txt:484
+#: po/guile_strings.txt:486
 msgid ""
 "Please choose appropriate dates - the \"To\" date should be *after* the "
 "\"From\" date."
 msgstr ""
 
-#: po/guile_strings.txt:485
+#: po/guile_strings.txt:487
 #, c-format
 msgid ""
 "Ordinary and necessary business-related meal and entertainment expenses to "
@@ -5697,43 +5709,43 @@ msgid ""
 "463. Keep detailed records."
 msgstr ""
 
-#: po/guile_strings.txt:486
+#: po/guile_strings.txt:488
 msgid "  Home Sale \\ Fixing-up expenses"
 msgstr ""
 
 # po/guile_strings.txt:159
 # po/guile_strings.txt:184
 # po/guile_strings.txt:184
-#: po/guile_strings.txt:487
+#: po/guile_strings.txt:489
 msgid "Single mode default even row background"
 msgstr "Alternera färger för transaktioner i enkelradsläge"
 
 # po/guile_strings.txt:160
 # po/guile_strings.txt:185
 # po/guile_strings.txt:185
-#: po/guile_strings.txt:488
+#: po/guile_strings.txt:490
 msgid "Double mode default even row background"
 msgstr "Standardbakgrund för udda rader i dubbelradsläge"
 
-#: po/guile_strings.txt:489
+#: po/guile_strings.txt:491
 msgid ""
 "Your share of the royalty income reported to you by the partnership on line "
 "4c of the Schedule K-1."
 msgstr ""
 
-#: po/guile_strings.txt:490
+#: po/guile_strings.txt:492
 msgid "  Sched F \\ Total co-op. distributions"
 msgstr ""
 
-#: po/guile_strings.txt:491
+#: po/guile_strings.txt:493
 msgid "  Sched F \\ Agricultural program payments"
 msgstr ""
 
-#: po/guile_strings.txt:492
+#: po/guile_strings.txt:494
 msgid "  F1040 \\ Sick pay or disability pay"
 msgstr ""
 
-#: po/guile_strings.txt:493
+#: po/guile_strings.txt:495
 msgid ""
 "Reasonable costs of advertising your trade or business in newspapers, "
 "publications, radio or television. Also include cost of brochures, business "
@@ -5741,14 +5753,14 @@ msgid ""
 "incurred to influence legislation."
 msgstr ""
 
-#: po/guile_strings.txt:494
+#: po/guile_strings.txt:496
 msgid "  F2106 \\ Job seeking expenses"
 msgstr ""
 
 # po/guile_strings.txt:161
 # po/guile_strings.txt:186
 # po/guile_strings.txt:186
-#: po/guile_strings.txt:495
+#: po/guile_strings.txt:497
 #, c-format
 msgid "The multi-choice option is %s."
 msgstr "Flervalsalternativet är %s."
@@ -5756,19 +5768,19 @@ msgstr "Flervalsalternativet är %s."
 # po/guile_strings.txt:162
 # po/guile_strings.txt:187
 # po/guile_strings.txt:187
-#: po/guile_strings.txt:496
+#: po/guile_strings.txt:498
 msgid "Double mode colors alternate with transactions"
 msgstr "Alternera färger för transaktioner i dubbelradsläge"
 
-#: po/guile_strings.txt:497
+#: po/guile_strings.txt:499
 msgid "< Sched B \\ Interest income"
 msgstr ""
 
-#: po/guile_strings.txt:498
+#: po/guile_strings.txt:500
 msgid "  F4835 \\ Total co-op distributions"
 msgstr ""
 
-#: po/guile_strings.txt:499
+#: po/guile_strings.txt:501
 msgid ""
 "Fees or commissions paid to independent contractors (nonemployees) for "
 "services.  Do not include any amounts already included as cost of goods "
@@ -5776,7 +5788,7 @@ msgid ""
 "individual during the year."
 msgstr ""
 
-#: po/guile_strings.txt:500
+#: po/guile_strings.txt:502
 msgid ""
 "Fees paid to a tax professional to prepare your federal and state tax "
 "returns.  These fees can also include the cost of tax preparation software "
@@ -5787,11 +5799,11 @@ msgstr ""
 # po/guile_strings.txt:163
 # po/guile_strings.txt:188
 # po/guile_strings.txt:188
-#: po/guile_strings.txt:501
+#: po/guile_strings.txt:503
 msgid "General"
 msgstr "Allmän"
 
-#: po/guile_strings.txt:503
+#: po/guile_strings.txt:505
 msgid ""
 "Miscellaneous income related to your trade or business that is not included "
 "in gross receipts (e.g., bad debts you recovered, scrap sales, interest on "
@@ -5799,39 +5811,39 @@ msgid ""
 "included on Schedule B."
 msgstr ""
 
-#: po/guile_strings.txt:504
+#: po/guile_strings.txt:506
 msgid "  F4835 \\ Crop ins. proceeds rec'd"
 msgstr ""
 
-#: po/guile_strings.txt:505
+#: po/guile_strings.txt:507
 msgid "  Sched A \\ Medicine and drugs"
 msgstr ""
 
-#: po/guile_strings.txt:506
+#: po/guile_strings.txt:508
 msgid "  F1040 \\ Keogh deduction, spouse"
 msgstr ""
 
 # po/guile_strings.txt:222
 # po/guile_strings.txt:266
 # po/guile_strings.txt:266
-#: po/guile_strings.txt:507
+#: po/guile_strings.txt:509
 #, fuzzy
 msgid "Display the Export .TXF report."
 msgstr "Visa budgetrapport."
 
-#: po/guile_strings.txt:508
+#: po/guile_strings.txt:510
 msgid "  F2106 \\ Meal/entertainment expenses"
 msgstr ""
 
-#: po/guile_strings.txt:510
+#: po/guile_strings.txt:512
 msgid "  W-2 \\ Salary or wages, spouse"
 msgstr ""
 
-#: po/guile_strings.txt:511
+#: po/guile_strings.txt:513
 msgid "  W-2 \\ Dep. care benefits, self"
 msgstr ""
 
-#: po/guile_strings.txt:512
+#: po/guile_strings.txt:514
 msgid ""
 "The gross sales price of your old home. Generally includes the amount of "
 "money you received, plus all notes, mortgages, or other debts that are part "
@@ -5839,7 +5851,7 @@ msgid ""
 "Real Estate Transactions."
 msgstr ""
 
-#: po/guile_strings.txt:513
+#: po/guile_strings.txt:515
 msgid ""
 "Money and fair market value (FMV) of property you received before this tax "
 "year for the sale.  FMV is the amount a willing buyer and seller would pay - "
@@ -5847,11 +5859,11 @@ msgid ""
 "FMV."
 msgstr ""
 
-#: po/guile_strings.txt:514
+#: po/guile_strings.txt:516
 msgid "  F1040 \\ Social Security inc., spouse"
 msgstr ""
 
-#: po/guile_strings.txt:516
+#: po/guile_strings.txt:518
 msgid ""
 "Other farm income may include illegal federal irrigation subsidies, "
 "bartering income, debt forgiveness, gasoline or fuel tax refunds or credits, "
@@ -5859,32 +5871,32 @@ msgid ""
 "easements and right-of-way, etc."
 msgstr ""
 
-#: po/guile_strings.txt:517
+#: po/guile_strings.txt:519
 msgid "  F1040 \\ IRA contribution, self"
 msgstr ""
 
 # po/guile_strings.txt:166
 # po/guile_strings.txt:192
 # po/guile_strings.txt:192
-#: po/guile_strings.txt:518
+#: po/guile_strings.txt:520
 msgid "Sub-Accounts"
 msgstr "Underkonton"
 
-#: po/guile_strings.txt:519
+#: po/guile_strings.txt:521
 msgid "T_ax"
 msgstr ""
 
-#: po/guile_strings.txt:520
+#: po/guile_strings.txt:522
 msgid ""
 "The amount of state taxes withheld from your wages. (Use the line 'State tax "
 "withheld, spouse' below for your spouse's state tax withholding.)"
 msgstr ""
 
-#: po/guile_strings.txt:521
+#: po/guile_strings.txt:523
 msgid "  Sched C \\ Returns and allowances"
 msgstr ""
 
-#: po/guile_strings.txt:522
+#: po/guile_strings.txt:524
 msgid ""
 "Ordinary and necessary fees (eg, accountant's fees, licenses) which are "
 "directly related to your trade or business. Legal fees you paid to acquire "
@@ -5895,33 +5907,33 @@ msgstr ""
 # po/guile_strings.txt:167
 # po/guile_strings.txt:193
 # po/guile_strings.txt:193
-#: po/guile_strings.txt:523
+#: po/guile_strings.txt:525
 #, c-format
 msgid "The date and time option is %s."
 msgstr "Datum och tidsalternativet är %s."
 
-#: po/guile_strings.txt:525
+#: po/guile_strings.txt:527
 msgid "< ^   Payer Name source"
 msgstr ""
 
 # po/guile_strings.txt:169
 # po/guile_strings.txt:195
 # po/guile_strings.txt:195
-#: po/guile_strings.txt:526
+#: po/guile_strings.txt:528
 msgid "End of reporting period"
 msgstr "Slut på rapporteringperiod"
 
 # po/guile_strings.txt:170
 # po/guile_strings.txt:196
 # po/guile_strings.txt:196
-#: po/guile_strings.txt:527
+#: po/guile_strings.txt:529
 msgid "Don't reverse any accounts"
 msgstr "Kasta inte om några konton"
 
 # messages-i18n.c:208
 # messages-i18n.c:230
 # messages-i18n.c:232
-#: po/guile_strings.txt:528
+#: po/guile_strings.txt:530
 #, fuzzy
 msgid "^ Parent Account"
 msgstr "Föräldrakonto"
@@ -5929,59 +5941,59 @@ msgstr "Föräldrakonto"
 # po/guile_strings.txt:171
 # po/guile_strings.txt:197
 # po/guile_strings.txt:197
-#: po/guile_strings.txt:529
+#: po/guile_strings.txt:531
 msgid "Good option"
 msgstr "Goda alternativ"
 
 # po/guile_strings.txt:172
 # po/guile_strings.txt:198
 # po/guile_strings.txt:198
-#: po/guile_strings.txt:530
+#: po/guile_strings.txt:532
 msgid "US"
 msgstr "US"
 
-#: po/guile_strings.txt:531
+#: po/guile_strings.txt:533
 msgid "# Sched K-1 \\ Other rental income or loss"
 msgstr ""
 
-#: po/guile_strings.txt:532
+#: po/guile_strings.txt:534
 #, c-format
 msgid ""
 "The taxable amount of a distribution received from a qualified SIMPLE plan. "
 "This amount may be subject to a federal penalty of up to 25%."
 msgstr ""
 
-#: po/guile_strings.txt:533
+#: po/guile_strings.txt:535
 msgid "  W-2 \\ Soc. Sec. tax withheld, self"
 msgstr ""
 
-#: po/guile_strings.txt:534
+#: po/guile_strings.txt:536
 msgid "The amount of federal income taxes withheld from your spouse's wages."
 msgstr ""
 
-#: po/guile_strings.txt:535
+#: po/guile_strings.txt:537
 msgid "  Sched F \\ Rent/lease vehicles, equip."
 msgstr ""
 
-#: po/guile_strings.txt:536
+#: po/guile_strings.txt:538
 msgid "  Sched C \\ Rent/lease vehicles, equip."
 msgstr ""
 
 # po/guile_strings.txt:133
 # po/guile_strings.txt:199
 # po/guile_strings.txt:199
-#: po/guile_strings.txt:537
+#: po/guile_strings.txt:539
 msgid "_Transaction Report"
 msgstr "_Transaktionsrapport"
 
-#: po/guile_strings.txt:539
+#: po/guile_strings.txt:541
 msgid "The face value of all post-1989 bonds cashed this tax year."
 msgstr ""
 
 # messages-i18n.c:219
 # messages-i18n.c:243
 # messages-i18n.c:245
-#: po/guile_strings.txt:540
+#: po/guile_strings.txt:542
 #, fuzzy
 msgid "Default"
 msgstr "Välj standard"
@@ -5989,19 +6001,19 @@ msgstr "Välj standard"
 # po/guile_strings.txt:198
 # po/guile_strings.txt:230
 # po/guile_strings.txt:230
-#: po/guile_strings.txt:541
+#: po/guile_strings.txt:543
 #, fuzzy
 msgid "_Balance sheet"
 msgstr "Saldoblad"
 
-#: po/guile_strings.txt:542
+#: po/guile_strings.txt:544
 msgid ""
 "The amount your employer paid or provided to you or someone else on your "
 "behalf for child and dependent care. (Use the line 'Dep. care benefits, "
 "spouse' below for the dependent care benefits your spouse receives.)"
 msgstr ""
 
-#: po/guile_strings.txt:543
+#: po/guile_strings.txt:545
 msgid ""
 "Premiums paid for fire, storm, crop, theft and liability protection of farm "
 "assets.  Do not include amounts credited to a reserve for self-insurance or "
@@ -6009,56 +6021,56 @@ msgid ""
 "or disability."
 msgstr ""
 
-#: po/guile_strings.txt:544
+#: po/guile_strings.txt:546
 msgid "  Sched C \\ Wages paid"
 msgstr ""
 
-#: po/guile_strings.txt:545
+#: po/guile_strings.txt:547
 msgid "3rd Est Tax Quarter"
 msgstr ""
 
 # po/guile_strings.txt:175
 # po/guile_strings.txt:202
 # po/guile_strings.txt:202
-#: po/guile_strings.txt:546
+#: po/guile_strings.txt:548
 msgid "Help for first option"
 msgstr "Hjälp för första alternativet"
 
 # src/gnome/glade-gnc-dialogs.c:914
 # src/gnome/glade-gnc-dialogs.c:947
 # src/gnome/glade-gnc-dialogs.c:880
-#: po/guile_strings.txt:547
+#: po/guile_strings.txt:549
 #, fuzzy
 msgid "  To: "
 msgstr "Till:"
 
-#: po/guile_strings.txt:548
+#: po/guile_strings.txt:550
 msgid "  Sched F \\ Taxes"
 msgstr ""
 
 # po/guile_strings.txt:176
 # po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:2096
 # po/guile_strings.txt:203 src/gnome/glade-gnc-dialogs.c:2036
-#: po/guile_strings.txt:549 src/gnome/glade-gnc-dialogs.c:1969
+#: po/guile_strings.txt:551 src/gnome/glade-gnc-dialogs.c:1969
 msgid "Number"
 msgstr "Nummer"
 
 # po/guile_strings.txt:177
 # po/guile_strings.txt:204
 # po/guile_strings.txt:204
-#: po/guile_strings.txt:550
+#: po/guile_strings.txt:552
 msgid "Show both icons and text"
 msgstr "Visa både ikoner och text"
 
-#: po/guile_strings.txt:551
+#: po/guile_strings.txt:553
 msgid "  F8829 \\ Utilities"
 msgstr ""
 
-#: po/guile_strings.txt:552
+#: po/guile_strings.txt:554
 msgid "  F4835 \\ Rent/lease vehicles, equip."
 msgstr ""
 
-#: po/guile_strings.txt:553
+#: po/guile_strings.txt:555
 msgid ""
 "The quarterly payments you make to the IRS to cover the estimated tax due on "
 "income that is not subject to withholding (e.g., self-employment income, "
@@ -6068,13 +6080,13 @@ msgid ""
 "correct year."
 msgstr ""
 
-#: po/guile_strings.txt:554
+#: po/guile_strings.txt:556
 msgid ""
 "No Tax Related accounts were found. Click \"Parameters\" to set some  with "
 "the \"Set/Reset Tax Status:\" parameter."
 msgstr ""
 
-#: po/guile_strings.txt:556
+#: po/guile_strings.txt:558
 msgid ""
 "Lease payments for real estate or property (office, building, warehouse) "
 "used in your trade or business.  Advance lease payments which cover more "
@@ -6085,23 +6097,23 @@ msgstr ""
 # po/guile_strings.txt:136
 # po/guile_strings.txt:206
 # po/guile_strings.txt:206
-#: po/guile_strings.txt:557
+#: po/guile_strings.txt:559
 msgid "Transfer from/to (w/subtotal)"
 msgstr "Överföring från/till (m/delsumma)"
 
-#: po/guile_strings.txt:559
+#: po/guile_strings.txt:561
 msgid "  Sched C \\ Labor, Cost of Goods"
 msgstr ""
 
-#: po/guile_strings.txt:560
+#: po/guile_strings.txt:562
 msgid "  Sched C \\ Commissions and fees"
 msgstr ""
 
-#: po/guile_strings.txt:563
+#: po/guile_strings.txt:565
 msgid "  F1040 \\ State and local tax refunds"
 msgstr ""
 
-#: po/guile_strings.txt:564
+#: po/guile_strings.txt:566
 msgid ""
 "Sales commissions, advertising expenses, attorney and legal fees, escrow "
 "fees, title insurance and other selling expenses (usually found on the "
@@ -6112,7 +6124,7 @@ msgstr ""
 # po/guile_strings.txt:180
 # po/guile_strings.txt:210
 # po/guile_strings.txt:210
-#: po/guile_strings.txt:565
+#: po/guile_strings.txt:567
 #, c-format
 msgid "The number option is %s."
 msgstr "Nummeralternativet är %s."
@@ -6120,12 +6132,12 @@ msgstr "Nummeralternativet är %s."
 # po/guile_strings.txt:181
 # po/guile_strings.txt:211
 # po/guile_strings.txt:211
-#: po/guile_strings.txt:566
+#: po/guile_strings.txt:568
 #, c-format
 msgid "The string option is %s."
 msgstr "Strängalternativet är %s."
 
-#: po/guile_strings.txt:567
+#: po/guile_strings.txt:569
 msgid ""
 "If you rent rather than own your home, include rent paid for your home, in "
 "which an area or room is used regularly and exclusively for business.  "
@@ -6135,11 +6147,11 @@ msgstr ""
 # messages-i18n.c:335
 # po/guile_strings.txt:212
 # po/guile_strings.txt:212
-#: po/guile_strings.txt:568
+#: po/guile_strings.txt:570
 msgid "Report style"
 msgstr "Rapportstil"
 
-#: po/guile_strings.txt:569
+#: po/guile_strings.txt:571
 msgid ""
 "Rent you pay to lease vehicles, machinery or equipment used in your trade or "
 "business. If you lease a car for 30 days or more for use in your business, "
@@ -6149,32 +6161,32 @@ msgstr ""
 # po/guile_strings.txt:182
 # po/guile_strings.txt:213
 # po/guile_strings.txt:213
-#: po/guile_strings.txt:570
+#: po/guile_strings.txt:572
 msgid "_Reports"
 msgstr "_Rapporter"
 
 # po/guile_strings.txt:183
 # po/guile_strings.txt:214
 # po/guile_strings.txt:214
-#: po/guile_strings.txt:571
+#: po/guile_strings.txt:573
 msgid "Single mode active background"
 msgstr "Aktiv bakgrund i enkelradsläge"
 
 # po/guile_strings.txt:185
 # po/guile_strings.txt:216
 # po/guile_strings.txt:216
-#: po/guile_strings.txt:573
+#: po/guile_strings.txt:575
 msgid "Year"
 msgstr "År"
 
-#: po/guile_strings.txt:574
+#: po/guile_strings.txt:576
 msgid ""
 "The amount of gross wages, tips and other compensation you receive from your "
 "employer. (Use the line 'Salary or wages, spouse' below for your spouse's "
 "wages.)"
 msgstr ""
 
-#: po/guile_strings.txt:575
+#: po/guile_strings.txt:577
 #, c-format
 msgid ""
 "Gambling losses are deductible as a miscellaneous deduction which is not "
@@ -6183,7 +6195,7 @@ msgid ""
 "Income on Form 1040."
 msgstr ""
 
-#: po/guile_strings.txt:576
+#: po/guile_strings.txt:578
 msgid ""
 "The original cost plus the cost of improvements.  Refer to IRS Pub 551 for "
 "special rules that apply to property received as a gift or by inheritance."
@@ -6192,12 +6204,12 @@ msgstr ""
 # messages-i18n.c:208
 # messages-i18n.c:230
 # messages-i18n.c:232
-#: po/guile_strings.txt:577
+#: po/guile_strings.txt:579
 #, fuzzy
 msgid "Use Parent Account Name"
 msgstr "Föräldrakonto"
 
-#: po/guile_strings.txt:578
+#: po/guile_strings.txt:580
 msgid ""
 "Real estate or personal property taxes paid on farm property such as "
 "equipment, animals, buildings, land. Also include your portion of employment "
@@ -6208,22 +6220,22 @@ msgstr ""
 # po/guile_strings.txt:186
 # po/guile_strings.txt:217
 # po/guile_strings.txt:217
-#: po/guile_strings.txt:579
+#: po/guile_strings.txt:581
 msgid "Profit and Loss"
 msgstr "Vinst och förlust"
 
 # po/guile_strings.txt:187
 # po/guile_strings.txt:218
 # po/guile_strings.txt:218
-#: po/guile_strings.txt:580
+#: po/guile_strings.txt:582
 msgid "Month"
 msgstr "Månad"
 
-#: po/guile_strings.txt:581
+#: po/guile_strings.txt:583
 msgid "Use From - To period"
 msgstr ""
 
-#: po/guile_strings.txt:582
+#: po/guile_strings.txt:584
 msgid ""
 "The amount of qualified state tuition earnings that was distributed to you."
 msgstr ""
@@ -6231,131 +6243,131 @@ msgstr ""
 # po/guile_strings.txt:188
 # po/guile_strings.txt:219
 # po/guile_strings.txt:219
-#: po/guile_strings.txt:583
+#: po/guile_strings.txt:585
 msgid "Multi mode active transaction background"
 msgstr "Bakgrund för aktiv transaktion i flerradsläge"
 
-#: po/guile_strings.txt:584
+#: po/guile_strings.txt:586
 msgid ""
 "The amount of your share of all proceeds from the sale of a catch or the "
 "fair market value of a distribution in kind received as a crew member of a "
 "fishing boat."
 msgstr ""
 
-#: po/guile_strings.txt:585
+#: po/guile_strings.txt:587
 msgid ""
 "Total insurance paid for your home, in which an area or room is used "
 "regularly and exclusively for business.  Complete Form 8829 to compute the "
 "deductible business portion of home insurance."
 msgstr ""
 
-#: po/guile_strings.txt:586
+#: po/guile_strings.txt:588
 msgid "The costs of gas, fuel, oil, etc. for farm equipment."
 msgstr ""
 
 # po/guile_strings.txt:189
 # po/guile_strings.txt:220
 # po/guile_strings.txt:220
-#: po/guile_strings.txt:587
+#: po/guile_strings.txt:589
 msgid ". (Period)"
 msgstr ". (Punkt)"
 
-#: po/guile_strings.txt:588
+#: po/guile_strings.txt:590
 msgid "  F8839 \\ Attorney fees"
 msgstr ""
 
-#: po/guile_strings.txt:589
+#: po/guile_strings.txt:591
 msgid "  Sched F \\ Feed purchased"
 msgstr ""
 
-#: po/guile_strings.txt:590
+#: po/guile_strings.txt:592
 msgid "  Sched A \\ Real estate taxes"
 msgstr ""
 
-#: po/guile_strings.txt:591
+#: po/guile_strings.txt:593
 msgid "  F8839 \\ Court costs"
 msgstr ""
 
-#: po/guile_strings.txt:592
+#: po/guile_strings.txt:594
 msgid "  F1040 \\ Student loan interest"
 msgstr ""
 
 # po/guile_strings.txt:190
 # po/guile_strings.txt:221
 # po/guile_strings.txt:221
-#: po/guile_strings.txt:593
+#: po/guile_strings.txt:595
 msgid "Primary Sort Order"
 msgstr "Primär sorteringsordning"
 
 # po/guile_strings.txt:191
 # po/guile_strings.txt:222
 # po/guile_strings.txt:222
-#: po/guile_strings.txt:594
+#: po/guile_strings.txt:596
 msgid "Name"
 msgstr "Namn"
 
-#: po/guile_strings.txt:595
+#: po/guile_strings.txt:597
 msgid "  Sched F \\ Labor hired"
 msgstr ""
 
-#: po/guile_strings.txt:596
+#: po/guile_strings.txt:598
 msgid "  Sched E \\ Mortgage interest expense"
 msgstr ""
 
 # po/guile_strings.txt:192
 # po/guile_strings.txt:224
 # po/guile_strings.txt:224
-#: po/guile_strings.txt:597
+#: po/guile_strings.txt:599
 msgid "Descending"
 msgstr "Fallande"
 
 # po/guile_strings.txt:222
 # po/guile_strings.txt:223
 # po/guile_strings.txt:223
-#: po/guile_strings.txt:598
+#: po/guile_strings.txt:600
 msgid "Display the date?"
 msgstr "Visa datum?"
 
 # po/guile_strings.txt:193
 # po/guile_strings.txt:225
 # po/guile_strings.txt:225
-#: po/guile_strings.txt:599
+#: po/guile_strings.txt:601
 msgid "This is a date option"
 msgstr "Detta är ett datumalternativ"
 
 # po/guile_strings.txt:194
 # po/guile_strings.txt:226
 # po/guile_strings.txt:226
-#: po/guile_strings.txt:600
+#: po/guile_strings.txt:602
 msgid "Two Week"
 msgstr "Två veckor"
 
-#: po/guile_strings.txt:601
+#: po/guile_strings.txt:603
 msgid "Last Yr 2nd Est Tax Qtr"
 msgstr ""
 
 # po/guile_strings.txt:195
 # po/guile_strings.txt:227
 # po/guile_strings.txt:227
-#: po/guile_strings.txt:602
+#: po/guile_strings.txt:604
 msgid "Save Window Geometry"
 msgstr "Spara fönstergeometri"
 
 # po/guile_strings.txt:196
 # po/guile_strings.txt:228
 # po/guile_strings.txt:228
-#: po/guile_strings.txt:603
+#: po/guile_strings.txt:605
 msgid "Income\\Salary\\Taxable"
 msgstr "Inkomst\\Lön\\Taxerbar"
 
 # po/guile_strings.txt:197
 # po/guile_strings.txt:229
 # po/guile_strings.txt:229
-#: po/guile_strings.txt:604
+#: po/guile_strings.txt:606
 msgid "Code"
 msgstr "Kod"
 
-#: po/guile_strings.txt:605
+#: po/guile_strings.txt:607
 msgid ""
 "Costs incurred to maintain business property in ordinary and efficient "
 "operating condition.  Include parts and labor.  If repairs materially add to "
@@ -6366,15 +6378,15 @@ msgstr ""
 # po/guile_strings.txt:198
 # po/guile_strings.txt:230
 # po/guile_strings.txt:230
-#: po/guile_strings.txt:606
+#: po/guile_strings.txt:608
 msgid "Balance sheet"
 msgstr "Saldoblad"
 
-#: po/guile_strings.txt:607
+#: po/guile_strings.txt:609
 msgid "< Sched B \\ Int. inc., taxed only by fed"
 msgstr ""
 
-#: po/guile_strings.txt:608
+#: po/guile_strings.txt:610
 msgid ""
 "The full amount forfeited or repaid with certificates, even if you reported "
 "the loan proceeds as income.  Refer to IRS Pub 225 for more information on "
@@ -6382,25 +6394,25 @@ msgid ""
 "certificates."
 msgstr ""
 
-#: po/guile_strings.txt:609
+#: po/guile_strings.txt:611
 msgid ""
 "Reimbursement for business expenses from your employer that is NOT included "
 "on your Form W-2."
 msgstr ""
 
-#: po/guile_strings.txt:610
+#: po/guile_strings.txt:612
 msgid "The amount of state taxes withheld from your spouse's wages."
 msgstr ""
 
-#: po/guile_strings.txt:611
+#: po/guile_strings.txt:613
 msgid "The amount of local taxes withheld from your spouse's wages."
 msgstr ""
 
-#: po/guile_strings.txt:612
+#: po/guile_strings.txt:614
 msgid "  Sched A \\ Medical travel and lodging"
 msgstr ""
 
-#: po/guile_strings.txt:613
+#: po/guile_strings.txt:615
 msgid ""
 "The penalty charged to withdraw funds from a time savings account before "
 "maturity.  Do not reduce total interest earned on that account by the "
@@ -6411,24 +6423,24 @@ msgstr ""
 # po/guile_strings.txt:200
 # po/guile_strings.txt:232
 # po/guile_strings.txt:232
-#: po/guile_strings.txt:614
+#: po/guile_strings.txt:616
 msgid "Balance Sheet"
 msgstr "Saldoblad"
 
 # po/guile_strings.txt:201
 # po/guile_strings.txt:233
 # po/guile_strings.txt:233
-#: po/guile_strings.txt:615
+#: po/guile_strings.txt:617
 msgid "- (Dash)"
 msgstr "- (Bindestreck)"
 
 # po/guile_strings.txt:234
 # po/guile_strings.txt:234
-#: po/guile_strings.txt:616
+#: po/guile_strings.txt:618
 msgid "Funds In"
 msgstr "Tillångar in"
 
-#: po/guile_strings.txt:617
+#: po/guile_strings.txt:619
 msgid ""
 "State, local or foreign taxes paid on real property. Taxes must be based on "
 "the assessed value of the real property. Do not include taxes charged for "
@@ -6436,7 +6448,7 @@ msgid ""
 "(assessments for streets, etc.)."
 msgstr ""
 
-#: po/guile_strings.txt:618
+#: po/guile_strings.txt:620
 msgid ""
 "A partnership treats payments or credits to a partner for services (or for "
 "use of capital) as guaranteed payments. The payments are deductible by the "
@@ -6447,59 +6459,59 @@ msgstr ""
 # po/guile_strings.txt:202
 # po/guile_strings.txt:235
 # po/guile_strings.txt:235
-#: po/guile_strings.txt:619
+#: po/guile_strings.txt:621
 msgid "Order of primary sorting"
 msgstr "Primär sorteringsordning"
 
-#: po/guile_strings.txt:620
+#: po/guile_strings.txt:622
 msgid "  F2106 \\ Reimb. exp. (non-meal/ent.)"
 msgstr ""
 
-#: po/guile_strings.txt:621
+#: po/guile_strings.txt:623
 msgid ""
 "The amount of social security taxes withheld from your wages. (Use the line "
 "'Soc. Sec. tax withheld, spouse' below for your spouse's social security tax "
 "withholding.)"
 msgstr ""
 
-#: po/guile_strings.txt:622
+#: po/guile_strings.txt:624
 msgid "  Sched A \\ Other taxes"
 msgstr ""
 
 # po/guile_strings.txt:203
 # po/guile_strings.txt:236
 # po/guile_strings.txt:236
-#: po/guile_strings.txt:623
+#: po/guile_strings.txt:625
 msgid "Default Currency For New Accounts"
 msgstr "Standardvaluta för nya konton"
 
-#: po/guile_strings.txt:624
+#: po/guile_strings.txt:626
 msgid "  F6252 \\ Debt assumed by buyer"
 msgstr ""
 
 # po/guile_strings.txt:204
 # po/guile_strings.txt:237
 # po/guile_strings.txt:237
-#: po/guile_strings.txt:625
+#: po/guile_strings.txt:627
 msgid "Sort by this criterion second"
 msgstr "Sortera sedan efter detta kriterium"
 
-#: po/guile_strings.txt:626
+#: po/guile_strings.txt:628
 msgid "  Sched E \\ Rents received"
 msgstr ""
 
-#: po/guile_strings.txt:627
+#: po/guile_strings.txt:629
 msgid "  F4835 \\ Chemicals"
 msgstr ""
 
-#: po/guile_strings.txt:628
+#: po/guile_strings.txt:630
 msgid "  F3903 \\ Travel/lodging, except meals"
 msgstr ""
 
 # po/guile_strings.txt:210
 # po/guile_strings.txt:248
 # po/guile_strings.txt:248
-#: po/guile_strings.txt:629
+#: po/guile_strings.txt:631
 #, fuzzy
 msgid "Tax"
 msgstr "Max"
@@ -6507,36 +6519,36 @@ msgstr "Max"
 # po/guile_strings.txt:205
 # po/guile_strings.txt:238
 # po/guile_strings.txt:238
-#: po/guile_strings.txt:630
+#: po/guile_strings.txt:632
 msgid "true"
 msgstr "sant"
 
-#: po/guile_strings.txt:632
+#: po/guile_strings.txt:634
 msgid "  F1099-R \\ SIMPLE local tax withheld"
 msgstr ""
 
-#: po/guile_strings.txt:633
+#: po/guile_strings.txt:635
 msgid "  F1040 \\ Federal estimated tax, qrtrly"
 msgstr ""
 
-#: po/guile_strings.txt:634
+#: po/guile_strings.txt:636
 msgid ""
 "Interest income that is not taxed on your federal return, but is taxed on "
 "your state income tax return - other than interest income from state bonds "
 "or notes, the District of Columbia, or a possession of the United States."
 msgstr ""
 
-#: po/guile_strings.txt:635
+#: po/guile_strings.txt:637
 msgid ""
 "The gross amount of a distribution received from a qualified SIMPLE pension "
 "plan."
 msgstr ""
 
-#: po/guile_strings.txt:636
+#: po/guile_strings.txt:638
 msgid "  Sched H \\ Federal tax withheld"
 msgstr ""
 
-#: po/guile_strings.txt:637
+#: po/guile_strings.txt:639
 msgid ""
 "The cost of lime, fertilizers and other materials applied to farmland to "
 "enrich, neutralize or condition it and the costs of applying these "
@@ -6544,25 +6556,25 @@ msgid ""
 "expenses."
 msgstr ""
 
-#: po/guile_strings.txt:638
+#: po/guile_strings.txt:640
 msgid "  Sched A \\ Cash charity contributions"
 msgstr ""
 
-#: po/guile_strings.txt:639
+#: po/guile_strings.txt:641
 msgid ""
 "The cost of other expenses directly related to your farm rental that may not "
 "be applicable to the other tax lines of Form 4835 (e.g., dues and "
 "subscriptions, advertising, legal and accounting, etc.)."
 msgstr ""
 
-#: po/guile_strings.txt:640
+#: po/guile_strings.txt:642
 msgid ""
 "Reasonable wages paid for regular farm work, piecework, contract labor and "
 "other forms of labor hired to perform your farming operations.  Do not "
 "include amounts you paid to yourself."
 msgstr ""
 
-#: po/guile_strings.txt:641
+#: po/guile_strings.txt:643
 msgid ""
 "The cost of lime, fertilizers and other materials applied to farmland to "
 "enrich, neutralize or condition it and the costs of applying these "
@@ -6570,11 +6582,11 @@ msgid ""
 "supplies."
 msgstr ""
 
-#: po/guile_strings.txt:642
+#: po/guile_strings.txt:644
 msgid "  F4835 \\ Agricultural program paymnts"
 msgstr ""
 
-#: po/guile_strings.txt:643
+#: po/guile_strings.txt:645
 msgid ""
 "Amounts you pay for medicines and drugs that require a prescription by a "
 "doctor for yourself, spouse, children, or other qualifying dependent. Do not "
@@ -6582,66 +6594,66 @@ msgid ""
 "remedies, vitamins."
 msgstr ""
 
-#: po/guile_strings.txt:644
+#: po/guile_strings.txt:646
 msgid ""
 "Total repairs and maintenance paid for your home, in which an area or room "
 "is used regularly and exclusively for business. Complete Form 8829 to "
 "compute the deductible business portion of home repairs and maintenance."
 msgstr ""
 
-#: po/guile_strings.txt:645
+#: po/guile_strings.txt:647
 msgid "  F1099-R \\ SIMPLE state tax withheld"
 msgstr ""
 
-#: po/guile_strings.txt:646
+#: po/guile_strings.txt:648
 msgid "  F1099-R \\ IRA federal tax withheld"
 msgstr ""
 
 # po/guile_strings.txt:240
 # po/guile_strings.txt:240
-#: po/guile_strings.txt:647
+#: po/guile_strings.txt:649
 msgid "Do not sort"
 msgstr "Sortera inte"
 
 # po/guile_strings.txt:206
 # po/guile_strings.txt:241
 # po/guile_strings.txt:241
-#: po/guile_strings.txt:648
+#: po/guile_strings.txt:650
 msgid "Period Ending"
 msgstr "Periodslut"
 
 # po/guile_strings.txt:207
 # po/guile_strings.txt:242
 # po/guile_strings.txt:242
-#: po/guile_strings.txt:649
+#: po/guile_strings.txt:651
 msgid "Income.Salary.Taxable"
 msgstr "Inkomst.Lön.Taxerbar"
 
 # po/guile_strings.txt:243
 # po/guile_strings.txt:243
-#: po/guile_strings.txt:650
+#: po/guile_strings.txt:652
 msgid "Only use 'debit' and 'credit' instead of informal synonyms"
 msgstr "Använd bara 'debit' och 'kredit' istället för informella synonymer"
 
-#: po/guile_strings.txt:652
+#: po/guile_strings.txt:654
 msgid ""
 "The fair market value (FMV) of property donated to a charitable "
 "organization.  If you donate used clothing, furniture, or appliances, the "
 "FMV is usually much less than your original cost."
 msgstr ""
 
-#: po/guile_strings.txt:653
+#: po/guile_strings.txt:655
 msgid "  F1040 \\ IRA contrib., non-work spouse"
 msgstr ""
 
 # po/guile_strings.txt:100
 # po/guile_strings.txt:245
 # po/guile_strings.txt:245
-#: po/guile_strings.txt:654
+#: po/guile_strings.txt:656
 msgid "Include sub-accounts of all selected accounts"
 msgstr "Ta med underkonton till varje valt konto"
 
-#: po/guile_strings.txt:656
+#: po/guile_strings.txt:658
 msgid ""
 "Contributions made to your spouse's SIMPLE retirement plan that were not "
 "reported on their Form W-2."
@@ -6650,33 +6662,41 @@ msgstr ""
 # po/guile_strings.txt:209
 # po/guile_strings.txt:247
 # po/guile_strings.txt:247
-#: po/guile_strings.txt:657
+#: po/guile_strings.txt:659
 msgid "The Ugly"
 msgstr "Den fula"
+
+# po/guile_strings.txt:63
+# po/guile_strings.txt:71
+# po/guile_strings.txt:72
+#: po/guile_strings.txt:660
+#, fuzzy
+msgid "Hierarchical Accounts Report"
+msgstr "Visa Hej, Världen rapporten."
 
 # po/guile_strings.txt:210
 # po/guile_strings.txt:248
 # po/guile_strings.txt:248
-#: po/guile_strings.txt:658
+#: po/guile_strings.txt:661
 msgid "Max"
 msgstr "Max"
 
-#: po/guile_strings.txt:659
+#: po/guile_strings.txt:662
 msgid "  Sched E \\ Royalties received"
 msgstr ""
 
-#: po/guile_strings.txt:660
+#: po/guile_strings.txt:663
 msgid ""
 "The amount of money you received this year.  This includes any down payment "
 "as well as the principal portion of any installment payments.  Do not "
 "include the amount that is interest. (Interest is reported on Schedule B.)"
 msgstr ""
 
-#: po/guile_strings.txt:661
+#: po/guile_strings.txt:664
 msgid "  F1099-MISC \\ Medical/health payments"
 msgstr ""
 
-#: po/guile_strings.txt:662
+#: po/guile_strings.txt:665
 msgid ""
 "Amounts paid for transportation and lodging primarily for, and essential to, "
 "medical care provided by a doctor. Include mileage to and from doctor; taxi, "
@@ -6684,42 +6704,42 @@ msgid ""
 "obtain medical care."
 msgstr ""
 
-#: po/guile_strings.txt:663
+#: po/guile_strings.txt:666
 msgid "  F4835 \\ Employee benefit programs"
 msgstr ""
 
 # messages-i18n.c:265
 # messages-i18n.c:296
 # messages-i18n.c:297
-#: po/guile_strings.txt:664
+#: po/guile_strings.txt:667
 #, fuzzy
 msgid "No Change"
 msgstr "Ändrad"
 
-#: po/guile_strings.txt:665
+#: po/guile_strings.txt:668
 msgid "  W-2 \\ State tax withheld, spouse"
 msgstr ""
 
-#: po/guile_strings.txt:666
+#: po/guile_strings.txt:669
 msgid "  W-2 \\ Local tax withheld, spouse"
 msgstr ""
 
-#: po/guile_strings.txt:667
+#: po/guile_strings.txt:670
 msgid "The amount of federal income taxes withheld from your IRA distribution."
 msgstr ""
 
-#: po/guile_strings.txt:668
+#: po/guile_strings.txt:671
 msgid "< F1040 \\ Early withdrawal penalty"
 msgstr ""
 
 # po/guile_strings.txt:211
 # po/guile_strings.txt:250
 # po/guile_strings.txt:250
-#: po/guile_strings.txt:669
+#: po/guile_strings.txt:672
 msgid "By default, show horizontal borders on the cells."
 msgstr "Visa horisontella kanter i celler som standard."
 
-#: po/guile_strings.txt:670
+#: po/guile_strings.txt:673
 msgid ""
 "The taxable amount of a distribution from a qualified pension or annuity "
 "plan. Do not include IRA distributions here."
@@ -6728,25 +6748,25 @@ msgstr ""
 # po/guile_strings.txt:222
 # po/guile_strings.txt:251
 # po/guile_strings.txt:251
-#: po/guile_strings.txt:671
+#: po/guile_strings.txt:674
 msgid "Display the totals?"
 msgstr "Visa totalvärdet?"
 
 # po/guile_strings.txt:212
 # po/guile_strings.txt:252
 # po/guile_strings.txt:252
-#: po/guile_strings.txt:672
+#: po/guile_strings.txt:675
 msgid ": (Colon)"
 msgstr ": (Kolon)"
 
 # po/guile_strings.txt:213
 # po/guile_strings.txt:253
 # po/guile_strings.txt:253
-#: po/guile_strings.txt:673
+#: po/guile_strings.txt:676
 msgid "By default, show vertical borders on the cells."
 msgstr "Visa vertikala kanter i celler som standard."
 
-#: po/guile_strings.txt:675
+#: po/guile_strings.txt:678
 msgid ""
 "Gross receipts or sales from your business before deducting adjustments for "
 "returns and allowances and cost of goods sold."
@@ -6755,30 +6775,30 @@ msgstr ""
 # po/guile_strings.txt:129
 # po/guile_strings.txt:150
 # po/guile_strings.txt:151
-#: po/guile_strings.txt:676
+#: po/guile_strings.txt:679
 #, fuzzy
 msgid "Tax Report Options"
 msgstr "Rapport alternativ"
 
 # po/guile_strings.txt:256
 # po/guile_strings.txt:256
-#: po/guile_strings.txt:677
+#: po/guile_strings.txt:680
 msgid "Enable EURO support"
 msgstr "Aktivera EURO stöd"
 
-#: po/guile_strings.txt:678
+#: po/guile_strings.txt:681
 msgid "  Sched C \\ Repairs and maintenance"
 msgstr ""
 
-#: po/guile_strings.txt:679
+#: po/guile_strings.txt:682
 msgid "  F8839 \\ Traveling expenses"
 msgstr ""
 
-#: po/guile_strings.txt:680
+#: po/guile_strings.txt:683
 msgid "  W-2 \\ Soc. Sec. tax withheld, spouse"
 msgstr ""
 
-#: po/guile_strings.txt:681
+#: po/guile_strings.txt:684
 msgid ""
 "Reasonable and necessary attorney fees you paid for the legal adoption of an "
 "eligible child, even if the adoption is unsuccessful. Your spouse's child, a "
@@ -6788,43 +6808,43 @@ msgstr ""
 # po/guile_strings.txt:215
 # po/guile_strings.txt:257
 # po/guile_strings.txt:257
-#: po/guile_strings.txt:682
+#: po/guile_strings.txt:685
 msgid "Ascending"
 msgstr "Stigande"
 
 # po/guile_strings.txt:216
 # po/guile_strings.txt:258
 # po/guile_strings.txt:258
-#: po/guile_strings.txt:683
+#: po/guile_strings.txt:686
 msgid "The Bad"
 msgstr "Det onda"
 
 # po/guile_strings.txt:217
 # po/guile_strings.txt:259
 # po/guile_strings.txt:259
-#: po/guile_strings.txt:684
+#: po/guile_strings.txt:687
 msgid "Just a Date Option"
 msgstr "Bara ett datumalternativ"
 
 # po/guile_strings.txt:218
 # po/guile_strings.txt:260
 # po/guile_strings.txt:260
-#: po/guile_strings.txt:685
+#: po/guile_strings.txt:688
 msgid "The accounts selected in the account list option are:"
 msgstr "De valda kontona i kontovalslistan är:"
 
-#: po/guile_strings.txt:686
+#: po/guile_strings.txt:689
 msgid ""
 "Interest you receive on a take-back mortgage or other form of "
 "seller-financing that resulted from the sale of your home or other property. "
 " The buyer used the property as a personal residence."
 msgstr ""
 
-#: po/guile_strings.txt:687
+#: po/guile_strings.txt:690
 msgid "  Sched F \\ Storage and warehousing"
 msgstr ""
 
-#: po/guile_strings.txt:688
+#: po/guile_strings.txt:691
 msgid ""
 "Amounts paid for subscriptions to magazines or services that are directly "
 "related to the production or collection of taxable income.  (e.g., "
@@ -6834,7 +6854,7 @@ msgstr ""
 # po/guile_strings.txt:219
 # po/guile_strings.txt:261
 # po/guile_strings.txt:261
-#: po/guile_strings.txt:689
+#: po/guile_strings.txt:692
 #, c-format
 msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
@@ -6846,11 +6866,11 @@ msgstr ""
 
 # po/guile_strings.txt:262
 # po/guile_strings.txt:262
-#: po/guile_strings.txt:690
+#: po/guile_strings.txt:693
 msgid "Enables support for the European Union EURO currency"
 msgstr "Aktiverar stöd för Europiska Unionens valuta EURO"
 
-#: po/guile_strings.txt:691
+#: po/guile_strings.txt:694
 msgid ""
 "Refund of state or local taxes which you deducted as an itemized deduction "
 "in a prior year.If you did not itemize and take a deduction for state and "
@@ -6858,7 +6878,7 @@ msgid ""
 "Reported to you on a 1099-G."
 msgstr ""
 
-#: po/guile_strings.txt:692
+#: po/guile_strings.txt:695
 msgid ""
 "Real estate and personal property taxes imposed on business property. "
 "Include your share of employment taxes paid on behalf of your employees, "
@@ -6866,29 +6886,29 @@ msgid ""
 "etc."
 msgstr ""
 
-#: po/guile_strings.txt:693
+#: po/guile_strings.txt:696
 msgid "  F1040 \\ Fed tax w/h, RR retire,self"
 msgstr ""
 
-#: po/guile_strings.txt:694
+#: po/guile_strings.txt:697
 msgid "Taxable Income / Deductable Expenses"
 msgstr ""
 
 # po/guile_strings.txt:220
 # po/guile_strings.txt:264
 # po/guile_strings.txt:264
-#: po/guile_strings.txt:695
+#: po/guile_strings.txt:698
 msgid "The default background color for even rows in single mode"
 msgstr "Standardbakgrundsfärgen för jämna rader i enkelradsläge"
 
 # po/guile_strings.txt:221
 # po/guile_strings.txt:265
 # po/guile_strings.txt:265
-#: po/guile_strings.txt:696
+#: po/guile_strings.txt:699
 msgid "The default background color for even rows in double mode"
 msgstr "Standardbakgrundsfärgen för jämna rader i dubbelradsläge"
 
-#: po/guile_strings.txt:697
+#: po/guile_strings.txt:700
 msgid ""
 "Non-taxable benefits received, such as scholarship or fellowship grants "
 "excludable from income and veterans' and employer-provided educational "
@@ -6899,31 +6919,31 @@ msgstr ""
 # messages-i18n.c:96
 # po/guile_strings.txt:267
 # po/guile_strings.txt:267
-#: po/guile_strings.txt:698
+#: po/guile_strings.txt:701
 msgid "Display the account?"
 msgstr "Visa kontot?"
 
 # po/guile_strings.txt:222
 # po/guile_strings.txt:268
 # po/guile_strings.txt:268
-#: po/guile_strings.txt:699
+#: po/guile_strings.txt:702
 msgid "Display the cheque number?"
 msgstr "Visa checknummer?"
 
 # po/guile_strings.txt:269
 # po/guile_strings.txt:269
-#: po/guile_strings.txt:700
+#: po/guile_strings.txt:703
 msgid "Display N lines"
 msgstr "Visa N rader"
 
 # po/guile_strings.txt:223
 # po/guile_strings.txt:270
 # po/guile_strings.txt:270
-#: po/guile_strings.txt:701
+#: po/guile_strings.txt:704
 msgid "_Hello, World"
 msgstr "_Hello, World"
 
-#: po/guile_strings.txt:702
+#: po/guile_strings.txt:705
 msgid ""
 "Amounts paid for incidental supplies or small tools having a useful life "
 "less than one year used in the farming operation. Other supplies could "
@@ -6933,11 +6953,11 @@ msgstr ""
 # po/guile_strings.txt:224
 # po/guile_strings.txt:271
 # po/guile_strings.txt:271
-#: po/guile_strings.txt:703
+#: po/guile_strings.txt:706
 msgid "First Option"
 msgstr "Första alternativet"
 
-#: po/guile_strings.txt:704
+#: po/guile_strings.txt:707
 msgid ""
 "The amount of federal income taxes withheld from gross gambling winnings."
 msgstr ""
@@ -6945,11 +6965,11 @@ msgstr ""
 # po/guile_strings.txt:225
 # po/guile_strings.txt:272
 # po/guile_strings.txt:272
-#: po/guile_strings.txt:705
+#: po/guile_strings.txt:708
 msgid "Display the Stock Portfolio report."
 msgstr "Visa aktieportföljrapporten."
 
-#: po/guile_strings.txt:706
+#: po/guile_strings.txt:709
 msgid ""
 "Government payments received for price support payments, diversion payments, "
 "cost-share payments (sight drafts), payments in the form of materials or "
@@ -6957,21 +6977,21 @@ msgid ""
 "you on Form 1099-G."
 msgstr ""
 
-#: po/guile_strings.txt:707
+#: po/guile_strings.txt:710
 msgid ""
 "The gross amount of distributions made from a qualified Medical Savings "
 "Account. The distributions can be made to you or to a provider on your "
 "behalf."
 msgstr ""
 
-#: po/guile_strings.txt:708
+#: po/guile_strings.txt:711
 msgid ""
 "Interest you pay on a loan secured by your main home or a second home, but "
 "not paid to a financial institution or not reported to you on federal Form "
 "1098, Mortgage Interest Statement."
 msgstr ""
 
-#: po/guile_strings.txt:709
+#: po/guile_strings.txt:712
 msgid ""
 "Spouse contributions made to a simplified employee pension plan (SEP) set up "
 "by a sole proprietor or partnership. The deduction limit for a self-employed "
@@ -6981,7 +7001,7 @@ msgstr ""
 # po/guile_strings.txt:226
 # po/guile_strings.txt:273
 # po/guile_strings.txt:273
-#: po/guile_strings.txt:710
+#: po/guile_strings.txt:713
 msgid ""
 "Show transactions on multiple lines with one line for each split in the "
 "transaction"
@@ -6989,11 +7009,11 @@ msgstr ""
 "Visa transaktioner över flera rader med en rad för varje delning i "
 "transaktionen"
 
-#: po/guile_strings.txt:711
+#: po/guile_strings.txt:714
 msgid "  Sched K-1 \\ Tax-exempt interest income"
 msgstr ""
 
-#: po/guile_strings.txt:712
+#: po/guile_strings.txt:715
 msgid ""
 "Fixing-up expenses (not capital improvements) paid to sell your old home.  "
 "The work must be done during the 90-day period ending the day you signed the "
@@ -7001,25 +7021,21 @@ msgid ""
 "after the date of sale."
 msgstr ""
 
-#: po/guile_strings.txt:713
+#: po/guile_strings.txt:716
 msgid ""
 "The business portion of rental or lease payments for vehicles, machinery, or "
 "equipment.  If renting or leasing a vehicle for 30 days or more, refer to "
 "IRS Pub 535 for inclusion amount information."
 msgstr ""
 
-#: po/guile_strings.txt:714
+#: po/guile_strings.txt:717
 msgid ""
 "Contributions you have made to any employee pension, profit-sharing, or "
 "annuity plan for this farm rental.  Do not include amounts contributed for "
 "your own benefits (your SEP or Keogh)."
 msgstr ""
 
-#: po/guile_strings.txt:715
-msgid "Hierarchical Account Report"
-msgstr ""
-
-#: po/guile_strings.txt:716
+#: po/guile_strings.txt:718
 msgid ""
 "If the loan is used to buy or improve your main home, you may be able to "
 "deduct the points in one year. Points paid to refinance your existing home "
@@ -7027,27 +7043,27 @@ msgid ""
 "reported on Form 1098."
 msgstr ""
 
-#: po/guile_strings.txt:717
+#: po/guile_strings.txt:719
 msgid "For EXPENSE accounts, select here.   < ^ # see help"
 msgstr ""
 
 # po/guile_strings.txt:228
 # po/guile_strings.txt:274
 # po/guile_strings.txt:274
-#: po/guile_strings.txt:718
+#: po/guile_strings.txt:720
 msgid "Plot Type"
 msgstr "Graftyp"
 
-#: po/guile_strings.txt:719
+#: po/guile_strings.txt:721
 msgid "  F8815 \\ Post-89 EE bond face value"
 msgstr ""
 
-#: po/guile_strings.txt:720
+#: po/guile_strings.txt:722
 msgid ""
 "The amount of federal income taxes withheld from your pension distribution."
 msgstr ""
 
-#: po/guile_strings.txt:721
+#: po/guile_strings.txt:723
 msgid ""
 "The amount forfeited or repaid with certificates, even if you reported the "
 "loan proceeds as income.  Refer to IRS Pub 225 for more information on tax "
@@ -7055,11 +7071,11 @@ msgid ""
 "certificates."
 msgstr ""
 
-#: po/guile_strings.txt:722
+#: po/guile_strings.txt:724
 msgid "  F1099-R \\ Total pension gross distrib."
 msgstr ""
 
-#: po/guile_strings.txt:723
+#: po/guile_strings.txt:725
 msgid ""
 "Car and truck expenses you incur to manage your rental or royalty property. "
 "Deduct the business portion of operating your car or truck - gas/oil, "
@@ -7067,63 +7083,63 @@ msgid ""
 "mileage rate per business mile."
 msgstr ""
 
-#: po/guile_strings.txt:724
+#: po/guile_strings.txt:726
 msgid "< Sched B \\ Fed tax w/h, dividend income"
 msgstr ""
 
-#: po/guile_strings.txt:725
+#: po/guile_strings.txt:727
 msgid "  Sched A \\ Points paid (no 1098)"
 msgstr ""
 
-#: po/guile_strings.txt:726
+#: po/guile_strings.txt:728
 msgid "  F1040 \\ SIMPLE contribution, self"
 msgstr ""
 
 # po/guile_strings.txt:230
 # po/guile_strings.txt:276
 # po/guile_strings.txt:276
-#: po/guile_strings.txt:727
+#: po/guile_strings.txt:729
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
 msgstr ""
 "Välj om man skall visa ikoner, text, eller både och för verktygsfältknappar"
 
 # po/guile_strings.txt:277
 # po/guile_strings.txt:277
-#: po/guile_strings.txt:728
+#: po/guile_strings.txt:730
 msgid "Sort by date & subtotal each year"
 msgstr "Sortera efter datum & delsumma varje år"
 
-#: po/guile_strings.txt:729
+#: po/guile_strings.txt:731
 msgid ""
 "The costs you pay to heat, light, and power your business property.  Include "
 "also telephone charges for monthly service and long distance business calls."
 msgstr ""
 
-#: po/guile_strings.txt:730
+#: po/guile_strings.txt:732
 msgid "4th Est Tax Quarter"
 msgstr ""
 
 # po/guile_strings.txt:231
 # po/guile_strings.txt:278
 # po/guile_strings.txt:278
-#: po/guile_strings.txt:731
+#: po/guile_strings.txt:733
 msgid "Show text only"
 msgstr "Visa bara text"
 
 # po/guile_strings.txt:232
 # po/guile_strings.txt:279
 # po/guile_strings.txt:279
-#: po/guile_strings.txt:732
+#: po/guile_strings.txt:734
 msgid "Icons and Text"
 msgstr "Ikoner och text"
 
 # po/guile_strings.txt:280
 # po/guile_strings.txt:280
-#: po/guile_strings.txt:733
+#: po/guile_strings.txt:735
 msgid "The type of graph to generate"
 msgstr "Vilken sorts graf att generera"
 
-#: po/guile_strings.txt:734
+#: po/guile_strings.txt:736
 msgid ""
 "Donations by cash or check to religious, charitable, educational, "
 "scientific, literary, or philanthropic organizations. Obtain a written "
@@ -7131,18 +7147,18 @@ msgid ""
 "canceled check is not sufficient."
 msgstr ""
 
-#: po/guile_strings.txt:735
+#: po/guile_strings.txt:737
 msgid ""
 "Amounts you paid for custom hire or machine work (the machine operator "
 "furnished the equipment).  Do not include amounts paid for rental or lease "
 "of equipment you operated yourself."
 msgstr ""
 
-#: po/guile_strings.txt:736
+#: po/guile_strings.txt:738
 msgid "  Home Sale \\ Selling price of old home"
 msgstr ""
 
-#: po/guile_strings.txt:737
+#: po/guile_strings.txt:739
 msgid ""
 "Expenses incurred in looking for a new job in your present occupation, even "
 "if you do not get a new job.  Include employment and outplacement agency "
@@ -7150,35 +7166,35 @@ msgid ""
 "and travel expenses."
 msgstr ""
 
-#: po/guile_strings.txt:738
+#: po/guile_strings.txt:740
 msgid ""
 "Contributions made to your medical savings account that were not reported on "
 "your Form W-2."
 msgstr ""
 
-#: po/guile_strings.txt:739
+#: po/guile_strings.txt:741
 msgid "$0.00 valued Accounts won't be printed."
 msgstr ""
 
 # po/guile_strings.txt:233
 # po/guile_strings.txt:281
 # po/guile_strings.txt:281
-#: po/guile_strings.txt:740
+#: po/guile_strings.txt:742
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr "Automatiskt höja listor för konton eller händelser vid inmatning."
 
-#: po/guile_strings.txt:741
+#: po/guile_strings.txt:743
 msgid "  F4835 \\ Crop ins. proceeds deferred"
 msgstr ""
 
-#: po/guile_strings.txt:742
+#: po/guile_strings.txt:744
 msgid ""
 "The fair market value (FMV) is the price at which the property would change "
 "hands between a willing buyer and seller - neither being compelled to buy or "
 "sell. FMV is generally determined by competent appraisal."
 msgstr ""
 
-#: po/guile_strings.txt:743
+#: po/guile_strings.txt:745
 msgid ""
 "Other interest paid on business indebtedness which is not mortgage interest "
 "paid to a financial institution.  Include interest on loans to purchase the "
@@ -7186,22 +7202,22 @@ msgid ""
 "tax year is deductible."
 msgstr ""
 
-#: po/guile_strings.txt:744
+#: po/guile_strings.txt:746
 msgid "< Sched B \\ State and muni bond interest"
 msgstr ""
 
-#: po/guile_strings.txt:745
+#: po/guile_strings.txt:747
 msgid "  F8863 \\ Hope credit"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:506
 # src/gnome/glade-gnc-dialogs.c:514
 # src/gnome/glade-gnc-dialogs.c:447
-#: po/guile_strings.txt:746 src/gnome/glade-gnc-dialogs.c:447
+#: po/guile_strings.txt:748 src/gnome/glade-gnc-dialogs.c:447
 msgid "Select Account"
 msgstr "Välj konto"
 
-#: po/guile_strings.txt:747
+#: po/guile_strings.txt:749
 #, c-format
 msgid ""
 "Other miscellaneous itemized deductions that are not reduced by 2% of "
@@ -7210,14 +7226,14 @@ msgid ""
 "expenses of a disabled person."
 msgstr ""
 
-#: po/guile_strings.txt:748
+#: po/guile_strings.txt:750
 msgid "  F1040 \\ SEP deduction, spouse"
 msgstr ""
 
 # src/gnome/glade-gnc-dialogs.c:506
 # src/gnome/glade-gnc-dialogs.c:514
 # src/gnome/glade-gnc-dialogs.c:447
-#: po/guile_strings.txt:749
+#: po/guile_strings.txt:751
 #, fuzzy
 msgid "Select accounts"
 msgstr "Välj konto"
@@ -7225,11 +7241,11 @@ msgstr "Välj konto"
 # po/guile_strings.txt:234
 # po/guile_strings.txt:282
 # po/guile_strings.txt:282
-#: po/guile_strings.txt:750
+#: po/guile_strings.txt:752
 msgid "Sort by account transferred from/to's name"
 msgstr "Sortera efter kontots överförings från/till namn"
 
-#: po/guile_strings.txt:751
+#: po/guile_strings.txt:753
 msgid ""
 "Amounts contributed to fringe benefit programs you provide for employees - "
 "accident or health plans; educational assistance; group-term life insurance, "
@@ -7240,83 +7256,83 @@ msgstr ""
 # po/guile_strings.txt:235
 # po/guile_strings.txt:283
 # po/guile_strings.txt:283
-#: po/guile_strings.txt:752
+#: po/guile_strings.txt:754
 msgid "Net Gain"
 msgstr "Nettovinst"
 
 # po/guile_strings.txt:236
 # po/guile_strings.txt:284
 # po/guile_strings.txt:284
-#: po/guile_strings.txt:753
+#: po/guile_strings.txt:755
 msgid "The fourth option rules!"
 msgstr "Det fjärde alternativet regerar!"
 
 # po/guile_strings.txt:237
 # po/guile_strings.txt:285
 # po/guile_strings.txt:285
-#: po/guile_strings.txt:754
+#: po/guile_strings.txt:756
 msgid "This is a date option with time"
 msgstr "Detta är ett datumalternativ med tid"
 
 # po/guile_strings.txt:238
 # po/guile_strings.txt:286
 # po/guile_strings.txt:286
-#: po/guile_strings.txt:755
+#: po/guile_strings.txt:757
 msgid "The header background color"
 msgstr "Rubrikernas bakgrundsfärg"
 
-#: po/guile_strings.txt:756
+#: po/guile_strings.txt:758
 msgid "  W-2 \\ Salary or wages, self"
 msgstr ""
 
-#: po/guile_strings.txt:757
+#: po/guile_strings.txt:759
 msgid "  Sched C \\ Meals and entertainment"
 msgstr ""
 
 # po/guile_strings.txt:239
 # po/guile_strings.txt:287
 # po/guile_strings.txt:287
-#: po/guile_strings.txt:758
+#: po/guile_strings.txt:760
 msgid "Sort by memo"
 msgstr "Sortera efter anteckning"
 
 # po/guile_strings.txt:240
 # po/guile_strings.txt:288
 # po/guile_strings.txt:288
-#: po/guile_strings.txt:759
+#: po/guile_strings.txt:761
 msgid "Third Option"
 msgstr "Tredje alternativet"
 
 # po/guile_strings.txt:241
 # po/guile_strings.txt:289
 # po/guile_strings.txt:289
-#: po/guile_strings.txt:760
+#: po/guile_strings.txt:762
 msgid "Choose the default mode for register windows"
 msgstr "Välj standardläge för registerfönster"
 
 # po/guile_strings.txt:242
 # po/guile_strings.txt:290
 # po/guile_strings.txt:290
-#: po/guile_strings.txt:761
+#: po/guile_strings.txt:763
 msgid "Default number of register rows to display."
 msgstr "Antalet registerrader som visas som standard."
 
-#: po/guile_strings.txt:762
+#: po/guile_strings.txt:764
 msgid ""
 "The cost of electricity, water, gas, etc., used in your farming operation.  "
 "Do not include the cost of utilities for personal use or the base rate of "
 "the first telephone line into your residence."
 msgstr ""
 
-#: po/guile_strings.txt:763
+#: po/guile_strings.txt:765
 msgid "  Sched A \\ Gambling losses"
 msgstr ""
 
-#: po/guile_strings.txt:764
+#: po/guile_strings.txt:766
 msgid "  Sched A \\ Non-cash charity contributions"
 msgstr ""
 
-#: po/guile_strings.txt:765
+#: po/guile_strings.txt:767
 msgid ""
 "Interest (or qualifying points) paid on a loan secured by your main home or "
 "a second home, including a mortgage, a second mortgage, a line of credit, "
@@ -7324,45 +7340,49 @@ msgid ""
 "Interest Statement."
 msgstr ""
 
-#: po/guile_strings.txt:766
+#: po/guile_strings.txt:768
 msgid ""
 "The amount of crop insurance proceeds received by farmers from insurance "
 "companies unless the expenses were capitalized under section 278, 263A, or "
 "447."
 msgstr ""
 
-#: po/guile_strings.txt:767
+#: po/guile_strings.txt:769
 msgid "  Sched A \\ State income taxes"
 msgstr ""
 
-#: po/guile_strings.txt:768
+#: po/guile_strings.txt:770
 msgid "  Sched A \\ Local income taxes"
 msgstr ""
 
 # po/guile_strings.txt:244
 # po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1823
 # po/guile_strings.txt:292 src/gnome/glade-gnc-dialogs.c:1763
-#: po/guile_strings.txt:769 src/gnome/glade-gnc-dialogs.c:1750
+#: po/guile_strings.txt:771 src/gnome/glade-gnc-dialogs.c:1750
 msgid "None"
 msgstr "Inget"
 
-#: po/guile_strings.txt:770
+#: po/guile_strings.txt:772
 msgid "  Sched F \\ Interest expense, mortgage"
 msgstr ""
 
-#: po/guile_strings.txt:771
+#: po/guile_strings.txt:773
 msgid "  Sched C \\ Interest expense, mortgage"
 msgstr ""
 
-#: po/guile_strings.txt:772
+#: po/guile_strings.txt:774
+msgid "No accounts were found."
+msgstr ""
+
+#: po/guile_strings.txt:775
 msgid "Hierarchical"
 msgstr ""
 
-#: po/guile_strings.txt:773
+#: po/guile_strings.txt:776
 msgid "< Sched B \\ Int. inc., taxed only by state"
 msgstr ""
 
-#: po/guile_strings.txt:774
+#: po/guile_strings.txt:777
 msgid ""
 "Business portion of the operating expenses of your home. You must use part "
 "of your home regularly and exclusively for business.  The use must be for "
@@ -7370,18 +7390,18 @@ msgid ""
 "IRS Pub 587."
 msgstr ""
 
-#: po/guile_strings.txt:775
+#: po/guile_strings.txt:778
 msgid ""
 "The amount of federal income taxes withheld from your wages. (Use the line "
 "'Federal tax withheld, spouse' below for your spouse's federal tax "
 "withholding.)"
 msgstr ""
 
-#: po/guile_strings.txt:776
+#: po/guile_strings.txt:779
 msgid "  Sched C \\ Taxes and licenses"
 msgstr ""
 
-#: po/guile_strings.txt:777
+#: po/guile_strings.txt:780
 msgid ""
 "The amounts you paid to child care provider(s) to care for your child (under "
 "age 13) or qualifying person.  This does not include the cost of clothing, "
@@ -7389,40 +7409,40 @@ msgid ""
 "expenses for overnight camp."
 msgstr ""
 
-#: po/guile_strings.txt:778
+#: po/guile_strings.txt:781
 msgid "  Sched F \\ Other farm income"
 msgstr ""
 
-#: po/guile_strings.txt:779
+#: po/guile_strings.txt:782
 msgid "  F1099-MISC \\ Crop insurance proceeds"
 msgstr ""
 
-#: po/guile_strings.txt:780
+#: po/guile_strings.txt:783
 msgid "  F1099-R \\ Pension local tax withheld"
 msgstr ""
 
-#: po/guile_strings.txt:781
+#: po/guile_strings.txt:784
 msgid ""
 "The total combined contribution you can make each year to a qualified IRA on "
 "a joint return is $4,000."
 msgstr ""
 
-#: po/guile_strings.txt:782
+#: po/guile_strings.txt:785
 msgid "< Sched B \\ Int. income, non-taxable"
 msgstr ""
 
-#: po/guile_strings.txt:783
+#: po/guile_strings.txt:786
 msgid ""
 "Generally, part of the original issue discount (OID) on these bonds must be "
 "reported as interest income each year you hold the bond.  The issuer of the "
 "bond will make the OID computation and report it on Form 1099-OID."
 msgstr ""
 
-#: po/guile_strings.txt:784
+#: po/guile_strings.txt:787
 msgid "The amount of insurance or other reimbursement you received."
 msgstr ""
 
-#: po/guile_strings.txt:785
+#: po/guile_strings.txt:788
 msgid ""
 "Commodity Credit Corp. loan proceeds are generally not reported as income. "
 "If you pledge part/all of your production to secure a CCC loan, you may "
@@ -7430,28 +7450,28 @@ msgid ""
 "year the crop is sold."
 msgstr ""
 
-#: po/guile_strings.txt:786
+#: po/guile_strings.txt:789
 msgid "Last Yr 1st Est Tax Qtr"
 msgstr ""
 
 # po/guile_strings.txt:246
 # po/guile_strings.txt:294
 # po/guile_strings.txt:294
-#: po/guile_strings.txt:787
+#: po/guile_strings.txt:790
 msgid "Primary Key"
 msgstr "Primärnyckel"
 
-#: po/guile_strings.txt:788
+#: po/guile_strings.txt:791
 msgid ""
 "Royalties received from copyrights, patents, and oil, gas, and mineral "
 "properties are included as ordinary income."
 msgstr ""
 
-#: po/guile_strings.txt:789
+#: po/guile_strings.txt:792
 msgid "  F1099-MISC \\ Prizes and awards"
 msgstr ""
 
-#: po/guile_strings.txt:790
+#: po/guile_strings.txt:793
 msgid ""
 "Premiums paid for fire, theft, liability, worker's compensation, business "
 "interruption insurance.  If your premium pays for insurance which covers "
@@ -7462,46 +7482,46 @@ msgstr ""
 # po/guile_strings.txt:247
 # po/guile_strings.txt:295
 # po/guile_strings.txt:295
-#: po/guile_strings.txt:791
+#: po/guile_strings.txt:794
 msgid "Ticker"
 msgstr ""
 
-#: po/guile_strings.txt:792
+#: po/guile_strings.txt:795
 msgid ""
 "If you are a manufacturer or producer, include the cost of labor directly "
 "involved with manufacturing the finished product. Do not include amounts "
 "paid to yourself as salary or draw."
 msgstr ""
 
-#: po/guile_strings.txt:793
+#: po/guile_strings.txt:796
 msgid ""
 "Ordinary and necessary business expenses such as business gifts, trade or "
 "professional publications."
 msgstr ""
 
-#: po/guile_strings.txt:794
+#: po/guile_strings.txt:797
 msgid "Suppress $0.00 values"
 msgstr ""
 
-#: po/guile_strings.txt:795
+#: po/guile_strings.txt:798
 msgid ""
 "The income you receive for work that you or your hired help perform as "
 "contract work or custom work done for others, or for the use of your "
 "property or machines."
 msgstr ""
 
-#: po/guile_strings.txt:796
+#: po/guile_strings.txt:799
 msgid ""
 "The cost or other basis of the livestock and other items you actually sold."
 msgstr ""
 
-#: po/guile_strings.txt:797
+#: po/guile_strings.txt:800
 msgid "  F4684 \\ Basis of casualty property"
 msgstr ""
 
 # po/guile_strings.txt:296
 # po/guile_strings.txt:296
-#: po/guile_strings.txt:798
+#: po/guile_strings.txt:801
 msgid ""
 "Display the other account?  (if this is a split transaction, this parameter "
 "is guessed)."
@@ -7512,88 +7532,88 @@ msgstr ""
 # po/guile_strings.txt:248
 # po/guile_strings.txt:297
 # po/guile_strings.txt:297
-#: po/guile_strings.txt:799
+#: po/guile_strings.txt:802
 msgid "Time and Date Option"
 msgstr "Tid och datumalternativ"
 
 # po/guile_strings.txt:249
 # po/guile_strings.txt:298
 # po/guile_strings.txt:298
-#: po/guile_strings.txt:800
+#: po/guile_strings.txt:803
 msgid "Single mode default odd row background"
 msgstr "Bakgrund för udda rader i enradsläge"
 
 # po/guile_strings.txt:250
 # po/guile_strings.txt:299
 # po/guile_strings.txt:299
-#: po/guile_strings.txt:801
+#: po/guile_strings.txt:804
 msgid "Double mode default odd row background"
 msgstr "Bakgrund för udda rader i dubbelradsläge"
 
 # po/guile_strings.txt:251
 # po/guile_strings.txt:300
 # po/guile_strings.txt:300
-#: po/guile_strings.txt:802
+#: po/guile_strings.txt:805
 msgid "The character used to separate fully-qualified account names"
 msgstr "Tecknet som används för att separera helt kvantifierade kontonamn"
 
-#: po/guile_strings.txt:803
+#: po/guile_strings.txt:806
 msgid ""
 "Short-term gain or loss from the sale of a security. If you use the "
 "Investment Tracking that is available in Quicken, you should not need to "
 "assign any of your categories to this tax line."
 msgstr ""
 
-#: po/guile_strings.txt:804
+#: po/guile_strings.txt:807
 msgid "# Sched D \\ ST gain/loss - security"
 msgstr ""
 
-#: po/guile_strings.txt:805
+#: po/guile_strings.txt:808
 msgid ""
 "Long-term gain or loss from the sale of a security.  If you use the "
 "Investment Tracking that is available in Quicken, you should not need to "
 "assign any of your categories to this tax line."
 msgstr ""
 
-#: po/guile_strings.txt:806
+#: po/guile_strings.txt:809
 msgid "# Sched D \\ LT gain/loss - security"
 msgstr ""
 
-#: po/guile_strings.txt:807
+#: po/guile_strings.txt:810
 msgid "  Sched E \\ Insurance"
 msgstr ""
 
-#: po/guile_strings.txt:808
+#: po/guile_strings.txt:811
 msgid ""
 "Total mortgage interest paid for your home, in which an area or room is used "
 "regularly and exclusively for business.  Complete Form 8829 to compute the "
 "deductible business portion of home mortgage interest."
 msgstr ""
 
-#: po/guile_strings.txt:809
+#: po/guile_strings.txt:812
 msgid "2nd Est Tax Quarter"
 msgstr ""
 
-#: po/guile_strings.txt:811
+#: po/guile_strings.txt:814
 msgid "  Sched C \\ Advertising"
 msgstr ""
 
-#: po/guile_strings.txt:812
+#: po/guile_strings.txt:815
 msgid "  F1099-G \\ Fed tax w/h, unemplymt comp"
 msgstr ""
 
 # po/guile_strings.txt:254
 # po/guile_strings.txt:303
 # po/guile_strings.txt:303
-#: po/guile_strings.txt:813
+#: po/guile_strings.txt:816
 msgid "smallest to largest, earliest to latest"
 msgstr "minsta till största, tidigaste till senaste"
 
-#: po/guile_strings.txt:815
+#: po/guile_strings.txt:818
 msgid "  F1099-G \\ Qualified state tuition earnings"
 msgstr ""
 
-#: po/guile_strings.txt:816
+#: po/guile_strings.txt:819
 msgid ""
 "The maximum contribution to a qualified IRA is $2,000 per year.  If you or "
 "your spouse are covered by a company retirement plan, this amount could be "
@@ -7603,33 +7623,33 @@ msgstr ""
 # po/guile_strings.txt:283
 # po/guile_strings.txt:305
 # po/guile_strings.txt:305
-#: po/guile_strings.txt:817
+#: po/guile_strings.txt:820
 msgid "Display the Transaction Report report."
 msgstr "Visa transaktionsrapport rapporten."
 
 # po/guile_strings.txt:256
 # po/guile_strings.txt:306
 # po/guile_strings.txt:306
-#: po/guile_strings.txt:818
+#: po/guile_strings.txt:821
 msgid "\\ (Backslash)"
 msgstr "\\ (bakåtlutande snedstreck)"
 
-#: po/guile_strings.txt:819
+#: po/guile_strings.txt:822
 msgid ""
 "The cost of incidental materials and supplies (such as cleaning fluids, "
 "small tools, wrapping materials, etc.) used in your trade or business during "
 "the tax year."
 msgstr ""
 
-#: po/guile_strings.txt:820
+#: po/guile_strings.txt:823
 msgid "  Sched C \\ Purchases, Cost of Goods"
 msgstr ""
 
-#: po/guile_strings.txt:821
+#: po/guile_strings.txt:824
 msgid "  F1099-G \\ Unemployment comp repaid"
 msgstr ""
 
-#: po/guile_strings.txt:822
+#: po/guile_strings.txt:825
 msgid ""
 "If this is the year of damage and you received crop insurance proceeds, you "
 "may elect to include insurance proceeds in the following year's income.  A "
@@ -7637,25 +7657,25 @@ msgid ""
 "more information."
 msgstr ""
 
-#: po/guile_strings.txt:823
+#: po/guile_strings.txt:826
 msgid ""
 "These are any other costs directly related to creating the salable product.  "
 "This could include the costs for containers, freight-in, overhead expenses, "
 "packaging."
 msgstr ""
 
-#: po/guile_strings.txt:824
+#: po/guile_strings.txt:827
 msgid "  F4835 \\ Seeds and plants purchased"
 msgstr ""
 
 # po/guile_strings.txt:257
 # po/guile_strings.txt:307
 # po/guile_strings.txt:307
-#: po/guile_strings.txt:825
+#: po/guile_strings.txt:828
 msgid "Icons only"
 msgstr "Bara ikoner"
 
-#: po/guile_strings.txt:826
+#: po/guile_strings.txt:829
 msgid ""
 "The amount of federal income taxes withheld from your spouse's social "
 "security benefits. (Use the line, 'Fed tax w/h, RR retire, self.' above for "
@@ -7665,22 +7685,22 @@ msgstr ""
 # po/guile_strings.txt:258
 # po/guile_strings.txt:308
 # po/guile_strings.txt:308
-#: po/guile_strings.txt:827
+#: po/guile_strings.txt:830
 msgid "Help for third option"
 msgstr "Hjälp för det tredje alternativet"
 
 # po/guile_strings.txt:259
 # po/guile_strings.txt:309
 # po/guile_strings.txt:309
-#: po/guile_strings.txt:828
+#: po/guile_strings.txt:831
 msgid "Default Register Mode"
 msgstr "Standardläge för kontoutdrag"
 
-#: po/guile_strings.txt:829
+#: po/guile_strings.txt:832
 msgid "The amount of Medicare taxes withheld from your spouse's wages."
 msgstr ""
 
-#: po/guile_strings.txt:830
+#: po/guile_strings.txt:833
 msgid ""
 "Ordinary and necessary business expenses for travel away from your tax home. "
 " Do not include meals and entertainment here. Include transportation between "
@@ -7688,29 +7708,29 @@ msgid ""
 "laundry, etc."
 msgstr ""
 
-#: po/guile_strings.txt:831
+#: po/guile_strings.txt:834
 msgid "  Sched A \\ Tax preparation fees"
 msgstr ""
 
-#: po/guile_strings.txt:832
+#: po/guile_strings.txt:835
 msgid "  F1040 \\ Other income, misc."
 msgstr ""
 
-#: po/guile_strings.txt:833
+#: po/guile_strings.txt:836
 msgid "  Sched C \\ Other business expenses"
 msgstr ""
 
-#: po/guile_strings.txt:835
+#: po/guile_strings.txt:838
 msgid ""
 "The income or (loss) from rental activities, other than the rental of real "
 "estate.  This amount is reported to you on line 3 of the Schedule K-1."
 msgstr ""
 
-#: po/guile_strings.txt:836
+#: po/guile_strings.txt:839
 msgid "  Sched F \\ Other farm expenses"
 msgstr ""
 
-#: po/guile_strings.txt:837
+#: po/guile_strings.txt:840
 msgid ""
 "Amounts paid for repairs/maintenance of farm buildings, machinery, "
 "equipment. Include tools of short life or minimal cost (eg., shovels or "
@@ -7718,23 +7738,23 @@ msgid ""
 "to a different use are depreciated."
 msgstr ""
 
-#: po/guile_strings.txt:838
+#: po/guile_strings.txt:841
 msgid "  F2106 \\ Other business expenses"
 msgstr ""
 
-#: po/guile_strings.txt:839
+#: po/guile_strings.txt:842
 msgid "< Sched B \\ Int. inc., OID bonds"
 msgstr ""
 
-#: po/guile_strings.txt:840
+#: po/guile_strings.txt:843
 msgid "  Sched A \\ Doctors, dentists, hospitals"
 msgstr ""
 
-#: po/guile_strings.txt:841
+#: po/guile_strings.txt:844
 msgid "  F4835 \\ Car and truck expenses"
 msgstr ""
 
-#: po/guile_strings.txt:842
+#: po/guile_strings.txt:845
 msgid ""
 "Cost and upkeep of work clothes only if you must wear them as a condition of "
 "employment AND they are not suitable for everyday wear.  The cost of "
@@ -7742,7 +7762,7 @@ msgid ""
 "gloves) are also deductible."
 msgstr ""
 
-#: po/guile_strings.txt:843
+#: po/guile_strings.txt:846
 msgid ""
 "Total utilities paid for your home, in which an area or room is used "
 "regularly and exclusively for business.  Complete a Form 8829 to compute the "
@@ -7752,18 +7772,18 @@ msgstr ""
 # po/guile_strings.txt:262
 # po/guile_strings.txt:312
 # po/guile_strings.txt:312
-#: po/guile_strings.txt:844
+#: po/guile_strings.txt:847
 msgid "Sort by amount"
 msgstr "Sortera efter belopp"
 
-#: po/guile_strings.txt:846
+#: po/guile_strings.txt:849
 msgid ""
 "State income taxes other than those withheld from your salary. (Assign state "
 "wage withholding to W-2 state tax withholding.) Include state income taxes "
 "you paid this year for a prior year."
 msgstr ""
 
-#: po/guile_strings.txt:847
+#: po/guile_strings.txt:850
 msgid ""
 "Local income taxes other than those withheld from your salary. (Assign local "
 "wage withholding to W-2 local tax withholding.) Include local income taxes "
@@ -7773,22 +7793,22 @@ msgstr ""
 # po/guile_strings.txt:263
 # po/guile_strings.txt:314
 # po/guile_strings.txt:314
-#: po/guile_strings.txt:848
+#: po/guile_strings.txt:851
 msgid "This is an account list option"
 msgstr "Detta är ett kontolist-alternativ"
 
 # po/guile_strings.txt:264
 # po/guile_strings.txt:315
 # po/guile_strings.txt:315
-#: po/guile_strings.txt:849
+#: po/guile_strings.txt:852
 msgid "Average Balance"
 msgstr "Genomsnittligt saldo"
 
-#: po/guile_strings.txt:850
+#: po/guile_strings.txt:853
 msgid "  Sched F \\ Fertilizers and lime"
 msgstr ""
 
-#: po/guile_strings.txt:851
+#: po/guile_strings.txt:854
 msgid ""
 "Operating costs of your business vehicle: gas, oil, tires, repairs, "
 "insurance, etc."
@@ -7797,24 +7817,24 @@ msgstr ""
 # po/guile_strings.txt:265
 # po/guile_strings.txt:316
 # po/guile_strings.txt:316
-#: po/guile_strings.txt:852
+#: po/guile_strings.txt:855
 msgid "Totals"
 msgstr "Totalt"
 
 # po/guile_strings.txt:266
 # po/guile_strings.txt:317
 # po/guile_strings.txt:317
-#: po/guile_strings.txt:853
+#: po/guile_strings.txt:856
 msgid "Profit/Loss"
 msgstr "Vinst/Förlust"
 
-#: po/guile_strings.txt:854
+#: po/guile_strings.txt:857
 msgid ""
 "The gain or (loss) from sale of Section 1231 assets reported to you on line "
 "6 of the Schedule K-1."
 msgstr ""
 
-#: po/guile_strings.txt:855
+#: po/guile_strings.txt:858
 msgid ""
 "Spouse contributions to a H.R.10 (Keogh) Plan set up by a sole proprietor or "
 "partnership. Depending on the type of plan, the deduction limit for a "
@@ -7825,25 +7845,25 @@ msgstr ""
 # po/guile_strings.txt:267
 # po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2328
 # po/guile_strings.txt:318 src/gnome/glade-gnc-dialogs.c:2268
-#: po/guile_strings.txt:856 src/gnome/glade-gnc-dialogs.c:2201
+#: po/guile_strings.txt:859 src/gnome/glade-gnc-dialogs.c:2201
 msgid "Shares"
 msgstr "Andelar"
 
 # po/guile_strings.txt:268
 # po/guile_strings.txt:319
 # po/guile_strings.txt:319
-#: po/guile_strings.txt:857
+#: po/guile_strings.txt:860
 msgid "Show All Transactions"
 msgstr "Visa alla transaktioner"
 
 # po/guile_strings.txt:269
 # po/guile_strings.txt:320
 # po/guile_strings.txt:320
-#: po/guile_strings.txt:858
+#: po/guile_strings.txt:861
 msgid "Display the Profit and Loss report."
 msgstr "Visa vinst och förlust-rapporten."
 
-#: po/guile_strings.txt:859
+#: po/guile_strings.txt:862
 msgid ""
 "Total cash wages of $1,000 or more paid to each employee during the year.  "
 "Refer to the IRS instructions for Household Employers (Schedule H) for "
@@ -7852,32 +7872,32 @@ msgstr ""
 
 # po/guile_strings.txt:321
 # po/guile_strings.txt:321
-#: po/guile_strings.txt:860
+#: po/guile_strings.txt:863
 msgid "Date (subtotal yearly)"
 msgstr "Datum (delsummor årligen)"
 
 # po/guile_strings.txt:270
 # po/guile_strings.txt:322
 # po/guile_strings.txt:322
-#: po/guile_strings.txt:861
+#: po/guile_strings.txt:864
 msgid "Display the Account Balance Tracker report."
 msgstr "Visa rapport med saldospårning."
 
 # po/guile_strings.txt:271
 # po/guile_strings.txt:323
 # po/guile_strings.txt:323
-#: po/guile_strings.txt:862
+#: po/guile_strings.txt:865
 msgid "2Week"
 msgstr "2Veckor"
 
 # po/guile_strings.txt:272
 # po/guile_strings.txt:324
 # po/guile_strings.txt:324
-#: po/guile_strings.txt:863
+#: po/guile_strings.txt:866
 msgid "Nothing"
 msgstr "Inget"
 
-#: po/guile_strings.txt:864
+#: po/guile_strings.txt:867
 msgid ""
 "The amount or FMV of prizes and awards received, but not for services "
 "performed. This may include game show winnings, punitive damages from cases "
@@ -7885,18 +7905,18 @@ msgid ""
 "their estate or beneficiary."
 msgstr ""
 
-#: po/guile_strings.txt:865
+#: po/guile_strings.txt:868
 msgid "Blue items are exportable to a TXF file"
 msgstr ""
 
-#: po/guile_strings.txt:866
+#: po/guile_strings.txt:869
 msgid ""
 "These distributions represent your share of the fund's long-term profits on "
 "sales of securities and are taxable income.  Your monthly statements or Form "
 "1099-DIV should designate which dividends are capital gain distributions."
 msgstr ""
 
-#: po/guile_strings.txt:867
+#: po/guile_strings.txt:870
 msgid ""
 "Interest paid to a financial institution on a mortgage on real property used "
 "in your farming business. If you paid interest on a debt secured by your "
@@ -7904,70 +7924,70 @@ msgid ""
 "operation, read IRS Pub 225."
 msgstr ""
 
-#: po/guile_strings.txt:868
+#: po/guile_strings.txt:871
 msgid "  W-2G \\ Federal tax withheld"
 msgstr ""
 
 # po/guile_strings.txt:273
 # po/guile_strings.txt:325
 # po/guile_strings.txt:325
-#: po/guile_strings.txt:869
+#: po/guile_strings.txt:872
 msgid "You have selected no values in the list option."
 msgstr "Du har inte valt något i list-alternativet."
 
-#: po/guile_strings.txt:870
+#: po/guile_strings.txt:873
 msgid ""
 "The amount your spouse's employer paid or provided to your spouse or to "
 "someone else on his/her behalf for child and dependent care."
 msgstr ""
 
-#: po/guile_strings.txt:871
+#: po/guile_strings.txt:874
 msgid "  F6252 \\ Payments rec'd prior years"
 msgstr ""
 
-#: po/guile_strings.txt:872
+#: po/guile_strings.txt:875
 msgid "  F1099-MISC \\ Royalties"
 msgstr ""
 
-#: po/guile_strings.txt:873
+#: po/guile_strings.txt:876
 msgid "  F1099-MISC \\ Fishing boat proceeds"
 msgstr ""
 
 # po/guile_strings.txt:274
 # po/guile_strings.txt:326
 # po/guile_strings.txt:326
-#: po/guile_strings.txt:874
+#: po/guile_strings.txt:877
 msgid "false"
 msgstr "falsk"
 
-#: po/guile_strings.txt:875
+#: po/guile_strings.txt:878
 msgid "  F6252 \\ Depreciation allowed"
 msgstr ""
 
 # po/guile_strings.txt:130
 # po/guile_strings.txt:131
-#: po/guile_strings.txt:876
+#: po/guile_strings.txt:879
 #, fuzzy
 msgid "The amount of rent payments received from a trade or business."
 msgstr "Tiden mellan två värden"
 
-#: po/guile_strings.txt:877
+#: po/guile_strings.txt:880
 msgid "Sep 1 - Dec 31"
 msgstr ""
 
-#: po/guile_strings.txt:878
+#: po/guile_strings.txt:881
 msgid "Jun 1 - Aug 31"
 msgstr ""
 
-#: po/guile_strings.txt:879
+#: po/guile_strings.txt:882
 msgid "Apr 1 - May 31"
 msgstr ""
 
-#: po/guile_strings.txt:880
+#: po/guile_strings.txt:883
 msgid "Jan 1 - Mar 31"
 msgstr ""
 
-#: po/guile_strings.txt:881
+#: po/guile_strings.txt:884
 msgid ""
 "Interest paid to a financial institution on a mortgage on real property used "
 "in your farming business. If you paid interest on a debt secured by your "
@@ -7975,54 +7995,54 @@ msgid ""
 "operation, refer to IRS Pub 225."
 msgstr ""
 
-#: po/guile_strings.txt:882
+#: po/guile_strings.txt:885
 msgid ""
 "The amount of state income tax withheld (state backup withholding) from "
 "1099-MISC income."
 msgstr ""
 
-#: po/guile_strings.txt:884
+#: po/guile_strings.txt:887
 msgid "  F1099-G \\ State and local tax refunds"
 msgstr ""
 
-#: po/guile_strings.txt:885
+#: po/guile_strings.txt:888
 msgid "  Sched C \\ Other costs, COGS"
 msgstr ""
 
-#: po/guile_strings.txt:886
+#: po/guile_strings.txt:889
 msgid "  F8815 \\ Qual. higher ed. expenses"
 msgstr ""
 
 # po/guile_strings.txt:276
 # po/guile_strings.txt:328
 # po/guile_strings.txt:328
-#: po/guile_strings.txt:887
+#: po/guile_strings.txt:890
 msgid "An account list option"
 msgstr "Ett kontolist-alternativ"
 
 # po/guile_strings.txt:277
 # po/guile_strings.txt:329
 # po/guile_strings.txt:329
-#: po/guile_strings.txt:888
+#: po/guile_strings.txt:891
 msgid "Multi Choice Option"
 msgstr "Flervalsalternativ"
 
 # po/guile_strings.txt:278
 # po/guile_strings.txt:330
 # po/guile_strings.txt:330
-#: po/guile_strings.txt:889
+#: po/guile_strings.txt:892
 msgid "This is a color option"
 msgstr "Detta är ett färgalternativ"
 
-#: po/guile_strings.txt:890
+#: po/guile_strings.txt:893
 msgid "  F4835 \\ Utilities"
 msgstr ""
 
-#: po/guile_strings.txt:891
+#: po/guile_strings.txt:894
 msgid "  F2106 \\ Travel (away from home)"
 msgstr ""
 
-#: po/guile_strings.txt:892
+#: po/guile_strings.txt:895
 msgid ""
 "The portion of rental or lease payments for vehicles, machinery, or "
 "equipment used in your farm.  If renting or leasing a vehicle for 30 days or "
@@ -8032,33 +8052,33 @@ msgstr ""
 # po/guile_strings.txt:280
 # po/guile_strings.txt:332
 # po/guile_strings.txt:331
-#: po/guile_strings.txt:893
+#: po/guile_strings.txt:896
 msgid "Make No Plot"
 msgstr "Skapa ingen graf"
 
-#: po/guile_strings.txt:894
+#: po/guile_strings.txt:897
 msgid "< Sched B \\ Seller-financed mortgage int."
 msgstr ""
 
-#: po/guile_strings.txt:895
+#: po/guile_strings.txt:898
 msgid "^ Sched B \\ Dividend income"
 msgstr ""
 
 # po/guile_strings.txt:281
 # po/guile_strings.txt:333
 # po/guile_strings.txt:332
-#: po/guile_strings.txt:896
+#: po/guile_strings.txt:899
 msgid "Bad option"
 msgstr "Onda alternativ"
 
 # po/guile_strings.txt:282
 # po/guile_strings.txt:334
 # po/guile_strings.txt:333
-#: po/guile_strings.txt:897
+#: po/guile_strings.txt:900
 msgid "Display the Balance sheet report."
 msgstr "Visa saldoblad rapport."
 
-#: po/guile_strings.txt:898
+#: po/guile_strings.txt:901
 msgid ""
 "Amounts received from your employer to reimburse you for qualified moving "
 "expenses.  Under new law, reimbursements may be excludable from taxable "
@@ -8069,41 +8089,41 @@ msgstr ""
 # messages-i18n.c:116
 # po/guile_strings.txt:335
 # po/guile_strings.txt:334
-#: po/guile_strings.txt:899
+#: po/guile_strings.txt:902
 msgid "Sort by date & subtotal each month"
 msgstr "Sortera på datum & delsumma varje månad"
 
-#: po/guile_strings.txt:900
+#: po/guile_strings.txt:903
 msgid "  F4835 \\ Interest expense, mortgage"
 msgstr ""
 
-#: po/guile_strings.txt:901
+#: po/guile_strings.txt:904
 msgid "  W-2G \\ State tax withheld"
 msgstr ""
 
 # po/guile_strings.txt:284
 # po/guile_strings.txt:337
 # po/guile_strings.txt:336
-#: po/guile_strings.txt:902
+#: po/guile_strings.txt:905
 msgid "Net"
 msgstr "Netto"
 
-#: po/guile_strings.txt:903
+#: po/guile_strings.txt:906
 msgid "Extended TXF Help messages"
 msgstr ""
 
 # po/guile_strings.txt:285
 # po/guile_strings.txt:338
 # po/guile_strings.txt:337
-#: po/guile_strings.txt:904
+#: po/guile_strings.txt:907
 msgid "Have a nice day!"
 msgstr "Ha en trevlig dag!"
 
-#: po/guile_strings.txt:905
+#: po/guile_strings.txt:908
 msgid "  F1099-MISC \\ Other income"
 msgstr ""
 
-#: po/guile_strings.txt:906
+#: po/guile_strings.txt:909
 msgid ""
 "A payment to you to replace your regular wages while you are temporarily "
 "absent from work due to sickness or personal injury.  This does not usually "
@@ -8111,18 +8131,18 @@ msgid ""
 "Compensatory Damages."
 msgstr ""
 
-#: po/guile_strings.txt:907
+#: po/guile_strings.txt:910
 msgid "< F2441 \\ Qualifying childcare expenses"
 msgstr ""
 
 # po/guile_strings.txt:286
 # po/guile_strings.txt:339
 # po/guile_strings.txt:338
-#: po/guile_strings.txt:908
+#: po/guile_strings.txt:911
 msgid "This is a list option"
 msgstr "Detta är ett listalternativ"
 
-#: po/guile_strings.txt:909
+#: po/guile_strings.txt:912
 msgid ""
 "The fees you pay to a manager or property management company to oversee your "
 "rental or royalty property.  Often the fee is a percentage of the gross "
@@ -8132,80 +8152,80 @@ msgstr ""
 # po/guile_strings.txt:287
 # po/guile_strings.txt:340
 # po/guile_strings.txt:339
-#: po/guile_strings.txt:910
+#: po/guile_strings.txt:913
 msgid "Min"
 msgstr "Min"
 
-#: po/guile_strings.txt:911
+#: po/guile_strings.txt:914
 msgid "  F8829 \\ Repairs and maintenance"
 msgstr ""
 
-#: po/guile_strings.txt:912
+#: po/guile_strings.txt:915
 msgid "  F4835 \\ Repairs and maintenance"
 msgstr ""
 
 # po/guile_strings.txt:288
 # po/guile_strings.txt:341
 # po/guile_strings.txt:340
-#: po/guile_strings.txt:913
+#: po/guile_strings.txt:916
 msgid "Order of Secondary sorting"
 msgstr "Ordning på sekundär sortering"
 
-#: po/guile_strings.txt:914
+#: po/guile_strings.txt:917
 msgid "Tax Form \\ TXF Code"
 msgstr ""
 
-#: po/guile_strings.txt:915
+#: po/guile_strings.txt:918
 msgid "  W-2 \\ Local tax withheld, self"
 msgstr ""
 
 # po/guile_strings.txt:289
 # po/guile_strings.txt:342
 # po/guile_strings.txt:341
-#: po/guile_strings.txt:916
+#: po/guile_strings.txt:919
 msgid "Help for second option"
 msgstr "Hjälp för andra alternativet"
 
-#: po/guile_strings.txt:917
+#: po/guile_strings.txt:920
 msgid "Overide or modify From: & To:"
 msgstr ""
 
 # messages-i18n.c:76
 # messages-i18n.c:83
 # messages-i18n.c:85
-#: po/guile_strings.txt:918
+#: po/guile_strings.txt:921
 #, fuzzy
 msgid "Set Tax Related & sub-accounts"
 msgstr "Radera det valda kontot"
 
-#: po/guile_strings.txt:919
+#: po/guile_strings.txt:922
 msgid "  Sched E \\ Other expenses"
 msgstr ""
 
-#: po/guile_strings.txt:920
+#: po/guile_strings.txt:923
 msgid "  F6252 \\ Expenses of sale"
 msgstr ""
 
-#: po/guile_strings.txt:921
+#: po/guile_strings.txt:924
 msgid "  F4835 \\ Pension/profit-sharing plans"
 msgstr ""
 
 # po/guile_strings.txt:291
 # po/guile_strings.txt:343
 # po/guile_strings.txt:342
-#: po/guile_strings.txt:922
+#: po/guile_strings.txt:925
 msgid "Report items up to and including this date"
 msgstr "Rapportera saker till och med denna datum"
 
-#: po/guile_strings.txt:923
+#: po/guile_strings.txt:926
 msgid "  Sched F \\ Insurance, other than health"
 msgstr ""
 
-#: po/guile_strings.txt:924
+#: po/guile_strings.txt:927
 msgid "  Sched C \\ Insurance, other than health"
 msgstr ""
 
-#: po/guile_strings.txt:925
+#: po/guile_strings.txt:928
 msgid ""
 "Include the business portion of car or truck gas/oil, repairs, insurance, "
 "interest, taxes, tires, etc.  Your tax software should compare these actual "
@@ -8216,22 +8236,22 @@ msgstr ""
 # po/guile_strings.txt:101
 # po/guile_strings.txt:344
 # po/guile_strings.txt:343
-#: po/guile_strings.txt:926
+#: po/guile_strings.txt:929
 msgid "Display"
 msgstr "Visa"
 
 # po/guile_strings.txt:292
 # po/guile_strings.txt:346
 # po/guile_strings.txt:345
-#: po/guile_strings.txt:927
+#: po/guile_strings.txt:930
 msgid "Beginning"
 msgstr "Start"
 
-#: po/guile_strings.txt:928
+#: po/guile_strings.txt:931
 msgid "  Sched C \\ Other business income"
 msgstr ""
 
-#: po/guile_strings.txt:929
+#: po/guile_strings.txt:932
 msgid ""
 "Premiums paid to protect the business against losses by fire, accident, "
 "theft, errors and omissions, malpractice, liability, business interruption. "
@@ -8239,11 +8259,11 @@ msgid ""
 "on cash or accrual basis."
 msgstr ""
 
-#: po/guile_strings.txt:930
+#: po/guile_strings.txt:933
 msgid "  F4835 \\ Gasoline, fuel, and oil"
 msgstr ""
 
-#: po/guile_strings.txt:931
+#: po/guile_strings.txt:934
 msgid ""
 "Contributions made to your SIMPLE retirement plan that were not reported on "
 "your Form W-2."
@@ -8252,7 +8272,7 @@ msgstr ""
 # po/guile_strings.txt:293
 # po/guile_strings.txt:347
 # po/guile_strings.txt:346
-#: po/guile_strings.txt:932
+#: po/guile_strings.txt:935
 #, c-format
 msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
@@ -8266,72 +8286,72 @@ msgstr ""
 # po/guile_strings.txt:294
 # po/guile_strings.txt:348
 # po/guile_strings.txt:347
-#: po/guile_strings.txt:933
+#: po/guile_strings.txt:936
 msgid ""
 "The background color for an active transaction in multi-line mode and the "
 "auto modes"
 msgstr "Bakgrundsfärgen för en aktiv transaktion i flerradsläge och autolägen"
 
-#: po/guile_strings.txt:934
+#: po/guile_strings.txt:937
 msgid "  Sched F \\ Custom hire income"
 msgstr ""
 
-#: po/guile_strings.txt:935
+#: po/guile_strings.txt:938
 msgid "  F1099-R \\ SIMPLE total gross distrib."
 msgstr ""
 
-#: po/guile_strings.txt:936
+#: po/guile_strings.txt:939
 msgid "  F1099-R \\ SIMPLE federal tax withheld"
 msgstr ""
 
 # po/guile_strings.txt:295
 # po/guile_strings.txt:349
 # po/guile_strings.txt:348
-#: po/guile_strings.txt:937
+#: po/guile_strings.txt:940
 msgid "This is a multi choice option."
 msgstr "Detta är ett flervalsalternativ."
 
 # po/guile_strings.txt:296
 # po/guile_strings.txt:350
 # po/guile_strings.txt:349
-#: po/guile_strings.txt:938
+#: po/guile_strings.txt:941
 msgid "Income & Expense"
 msgstr "Inkomst & Utgift"
 
-#: po/guile_strings.txt:939
+#: po/guile_strings.txt:942
 msgid ""
 "Your share of tax-exempt interest income received or accrued by the "
 "partnership reported to you on line 19 of Schedule K-1."
 msgstr ""
 
-#: po/guile_strings.txt:940
+#: po/guile_strings.txt:943
 msgid ""
 "Income in the form of patronage dividends, nonpatronage distributions, "
 "per-unit retain allocations, and redemption of nonqualified notices and "
 "per-unit retain allocations.  These are reported to you on Form 1099-PATR."
 msgstr ""
 
-#: po/guile_strings.txt:941
+#: po/guile_strings.txt:944
 msgid "  F1099-G \\ Unemployment compensation"
 msgstr ""
 
-#: po/guile_strings.txt:942
+#: po/guile_strings.txt:945
 msgid "  Sched F \\ Employee benefit programs"
 msgstr ""
 
-#: po/guile_strings.txt:943
+#: po/guile_strings.txt:946
 msgid "  Sched C \\ Employee benefit programs"
 msgstr ""
 
-#: po/guile_strings.txt:944
+#: po/guile_strings.txt:947
 msgid "< Sched B \\ Fed tax w/h, interest income"
 msgstr ""
 
-#: po/guile_strings.txt:945
+#: po/guile_strings.txt:948
 msgid "# Sched D \\ ST/LT gain or loss"
 msgstr ""
 
-#: po/guile_strings.txt:946
+#: po/guile_strings.txt:949
 msgid ""
 "Fringe benefit programs you provide for employees, such as accident or "
 "health plans; disability or wage continuation plans; medical or dental "
@@ -8339,43 +8359,43 @@ msgid ""
 "your own benefits."
 msgstr ""
 
-#: po/guile_strings.txt:947
+#: po/guile_strings.txt:950
 msgid "  W-2 \\ Federal tax withheld, self"
 msgstr ""
 
 # po/guile_strings.txt:297
 # po/guile_strings.txt:351
 # po/guile_strings.txt:350
-#: po/guile_strings.txt:948
+#: po/guile_strings.txt:951
 msgid "Hello, World"
 msgstr "Hej, Världen"
 
-#: po/guile_strings.txt:949
+#: po/guile_strings.txt:952
 msgid ""
 "Mutual funds pay shareholders several kinds of dividends.  Refer to your "
 "monthly statements or Form 1099-DIV for the amount of non-taxable dividends "
 "paid to you."
 msgstr ""
 
-#: po/guile_strings.txt:950
+#: po/guile_strings.txt:953
 msgid ""
 "In general, you must report crop insurance proceeds in the year you receive "
 "them.  Federal crop disaster payments are treated as crop insurance proceeds."
 msgstr ""
 
-#: po/guile_strings.txt:951
+#: po/guile_strings.txt:954
 msgid ""
 "Payments received as Unemployment Compensation from federal or state sources "
 "are taxable on your federal tax return."
 msgstr ""
 
-#: po/guile_strings.txt:952
+#: po/guile_strings.txt:955
 msgid ""
 "The amount of state income taxes withheld from a SIMPLE distribution "
 "received."
 msgstr ""
 
-#: po/guile_strings.txt:953
+#: po/guile_strings.txt:956
 msgid ""
 "The amount of local income taxes withheld from a SIMPLE distribution "
 "received."
@@ -8384,30 +8404,30 @@ msgstr ""
 # po/guile_strings.txt:262
 # po/guile_strings.txt:352
 # po/guile_strings.txt:351
-#: po/guile_strings.txt:954
+#: po/guile_strings.txt:957
 msgid "Sort & subtotal by account"
 msgstr "Sortera & delsumma per konto"
 
 # po/guile_strings.txt:298
 # po/guile_strings.txt:353
 # po/guile_strings.txt:352
-#: po/guile_strings.txt:955
+#: po/guile_strings.txt:958
 msgid "Reverse Credit Card, Liability, Equity, and Income Accounts"
 msgstr "Kasta om Kreditkort-, Skuld-, Utjämning- och Inkomst-konton"
 
-#: po/guile_strings.txt:956
+#: po/guile_strings.txt:959
 msgid "# Sched K-1 \\ Rental RE income or loss"
 msgstr ""
 
-#: po/guile_strings.txt:957
+#: po/guile_strings.txt:960
 msgid "  Sched E \\ Other interest expense"
 msgstr ""
 
-#: po/guile_strings.txt:958
+#: po/guile_strings.txt:961
 msgid "  Sched E \\ Cleaning and maintenance"
 msgstr ""
 
-#: po/guile_strings.txt:959
+#: po/guile_strings.txt:962
 msgid ""
 "Deductible medical service fees paid to doctors, dentists, surgeons; the "
 "cost of hospitalization and related fees (lab, therapy, etc.); medical "
@@ -8415,25 +8435,25 @@ msgid ""
 "reimbursements.  See IRS Pub 502."
 msgstr ""
 
-#: po/guile_strings.txt:960
+#: po/guile_strings.txt:963
 msgid "  F2106 \\ Education expenses"
 msgstr ""
 
-#: po/guile_strings.txt:962
+#: po/guile_strings.txt:965
 msgid "  F4835 \\ Other income"
 msgstr ""
 
 # po/guile_strings.txt:300
 # po/guile_strings.txt:355
 # po/guile_strings.txt:354
-#: po/guile_strings.txt:963
+#: po/guile_strings.txt:966
 msgid "This is a number option."
 msgstr "Detta är ett nummer-alternativ."
 
 # po/guile_strings.txt:302
 # po/guile_strings.txt:357
 # po/guile_strings.txt:356
-#: po/guile_strings.txt:965
+#: po/guile_strings.txt:968
 msgid "Multi mode active split background"
 msgstr "Bakgrund för aktiv delning i flerradsläge"
 
@@ -9409,7 +9429,7 @@ msgstr "Du måste välja en skrivare först."
 # messages-i18n.c:47
 # messages-i18n.c:48
 # messages-i18n.c:50
-#: src/SplitLedger.c:1816
+#: src/SplitLedger.c:1833
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
@@ -9421,7 +9441,7 @@ msgstr ""
 # messages-i18n.c:48
 # messages-i18n.c:49
 # messages-i18n.c:51
-#: src/SplitLedger.c:1846
+#: src/SplitLedger.c:1863
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction.\n"
