@@ -239,7 +239,7 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
     * aliases can occur.
     */
    strcpy (pathbuf, sess->lockfile);
-   path = strrchr (pathbuf, '.') + 1;
+   path = strrchr (pathbuf, '.');
    sprintf (path, ".%lx.%d.LNK", gethostid(), getpid());
    link (sess->lockfile, pathbuf);
    rc = stat (sess->lockfile, &statbuf);
