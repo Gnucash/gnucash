@@ -1012,7 +1012,7 @@ sxsincelast_populate( sxSinceLastData *sxsld )
                                     &sxsld->toRemoveList );
 
                 if ( instanceList == NULL ) {
-                        break;
+                        continue;
                 }
 
                 xaccSchedXactionGetAutoCreate( sx, &autocreateState,

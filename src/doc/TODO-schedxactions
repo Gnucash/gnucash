@@ -82,7 +82,7 @@ X create a template register
   . tab order
 
 . SX editor
-  . 'Cancel' button should auto-cancel ledger changes
+  X 'Cancel' button should auto-cancel ledger changes
   . tab order
 
 . make-from-transaction
@@ -90,8 +90,8 @@ X create a template register
     X need to remove '-' from printed credit value.
   X pull accounts over.
   X pull initial SX name from the Transaction name?
-  . need start-date on Make dialog
-    . [initially starts as the next occurance after the created-from SX,
+  X need start-date on Make dialog
+    X [initially starts as the next occurance after the created-from SX,
        which may not be the Right Thing]
   . better frequency guess?
     . non-trivial problem
@@ -126,7 +126,7 @@ X create a template register
       stating there's nothing to do].
   . Double-clicking on auto-create list should jump to transaction
     . register of first split?
-  . double-clicking a reminder should [probably] move it up to the to-create
+  X double-clicking a reminder should [probably] move it up to the to-create
     list.
   X Easy UI way of moving through the SXes which need variable bindings.
     [This presently is: click "Ok" and the next clist row which needs
@@ -150,7 +150,7 @@ X create a template register
 . deal better with formulas in template transactions [real FormulaCell]
   . recognize purely numeric template transactions and balance at
     template-creation time.
-  . balance transaction via variable cancellation?
+  . balance transaction with vars?
 
 . GNCFrequency
   . initial-settings synchronization [start date, optionmenus]
@@ -236,11 +236,15 @@ X General
 
 . Since-last-run
   . correct "Back" button behavior in new Druid paradigm
+  . correct "Cancel" behavior in Druid
+    . reset SX state to before creation
+    . delete any created SXes.
+    . restore any obsolete-n-deleted SXes.
+  . tab-order on variable-entry window isn't always correct.
   X any [horizontal] window size change height-grows the top/auto-create GL.
   X always goes one date past the instantiation date.
-  . tab-order on variable-entry window isn't always correct.
-  ? credit and debit seem reversed at instantiation time...
-    . this is fixed, but is the fix correct?
+  X credit and debit seem reversed at instantiation time...
+    X this is fixed, but is the fix correct?
 
 . SX-from-trans
   . you can delete a freshly-from-trans'd SX from the list with the
