@@ -80,7 +80,7 @@ obj/qt/%.o: %.c
 	${cleanupdeps}
 
 clean-files:
-	rm -f *~ *.bak \#* $(TRASH)
+	rm -f *~ *.bak \#*
 	rm -rf obj
 	-rm -rf ${TRASH}
 

@@ -3,6 +3,8 @@
 #
 # Secrets: gdb requires that parens be escaped as well as quotes ...
 
+THESE ARE BROKEN  We need a new strategy that handles the GNC_ envt vars.
+
 file gnucash.bin
 
 define run-gnucash

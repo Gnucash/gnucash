@@ -305,23 +305,6 @@
    eq?
    #f))
 
-(define gnc:*debugging?*
-  (gnc:make-config-var
-   "Enable debugging code."
-   (lambda (var value) (if (boolean? value) (list value) #f))
-   eq?
-   #f))
-
-(define gnc:*startup-dir*
-  (gnc:make-config-var
-   "Location of initial lowest level scheme startup files."
-   (lambda (var value)
-     ;; You can't change the startup dir from here.  It's considered
-     ;; hard-coded once known -- see startup/init.scm.
-     #f)
-   string=?
-   gnc:_startup-dir-default_))
-
 (define gnc:*config-dir*
   (gnc:make-config-var
    "Configuration directory."
@@ -336,41 +319,46 @@
    string=?
    gnc:_share-dir-default_))
 
-(define gnc:*load-path*
-  (gnc:make-config-var
-   "A list of strings indicating the load path for (gnc:load name).
-Any path element enclosed in parentheses will automatically be
-expanded to that directory and all its subdirectories whenever this
-variable is modified.  The symbol element default will expand to the default directory.  i.e. (gnc:config-var-value-set! gnc:*load-path* '(\"/my/dir/\" default))"
-   (lambda (var value)
-     (if (not (list? value))
-         #f
-         (let ((result (gnc:_load-path-update_ var value)))
-           (if (list? result)
-               (list result)
-               #f))))
-   equal?
-   (list 
-    (string-append "(" (getenv "HOME") "/.gnucash/scm)")
-    (string-append "(" gnc:_share-dir-default_ "/scm)"))))
+;; Convert the temporary startup value into a config var.
+(let ((current-value gnc:*debugging?*))
+  (set! 
+   gnc:*debugging?*
+   (gnc:make-config-var
+    "Enable debugging code."
+    (lambda (var value) (if (boolean? value) (list value) #f))
+    eq?
+    #f))
+  (gnc:config-var-value-set! gnc:*debugging?* #f current-value))
+
+;; Convert the temporary startup value into a config var.
+(let ((current-load-path gnc:*load-path*))
+  (set!
+   gnc:*load-path*
+   (gnc:make-config-var
+    "A list of strings indicating the load path for (gnc:load name).
+Each element must be a string representing a directory or a symbol
+where 'default expands to the default path, and 'current expands to
+the current value of the path."
+    (lambda (var value)
+      (let ((result (gnc:_expand-load-path_ value)))
+        (if (list? result)
+            (list result)
+            #f)))
+    equal?
+    '(default)))
+  (gnc:config-var-value-set! gnc:*load-path* #f current-load-path))
 
 (define gnc:*doc-path*
   (gnc:make-config-var
    "A list of strings indicating where to look for html and parsed-html files
-Any path element enclosed in parentheses will automatically be
-expanded to that directory and all its subdirectories whenever this
-variable is modified.  The symbol element default will expand to the
-default directory.  i.e. (gnc:config-var-value-set! gnc:*doc-path*
-'(\"/my/dir/\" default))"
+Each element must be a string representing a directory or a symbol
+where 'default expands to the default path, and 'current expands to
+the current value of the path."
    (lambda (var value)
-     (if (not (list? value))
-         #f
-         (let ((result (gnc:_doc-path-update_ var value)))
-           (if (list? result)
-               (list result)
-               #f))))
+     (let ((result (gnc:_expand-doc-path_ value)))
+       (if (list? result)
+           (list result)
+           #f)))
    equal?
-   (list
-    (string-append "(" (getenv "HOME") "/.gnucash/doc)")    
-    (string-append "(" gnc:_share-dir-default_ "/Docs)")
-    (string-append "(" gnc:_share-dir-default_ "/Reports)"))))
+   '(default)))
+

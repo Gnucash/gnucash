@@ -20,7 +20,7 @@ include @top_srcdir@/Makefile.init
 ######################################################################
 # See Makefile.common for information about these variables.
 #
-CLEAN_SUBDIRS := startup
+# CLEAN_SUBDIRS := 
 ######################################################################
 
 all: default

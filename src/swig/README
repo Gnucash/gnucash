@@ -1,20 +1,19 @@
 
 This README needs some serious help.
 
+SWIG is now used only to wrap perl5, and I make no guarantees about
+the safety of the resulting interface.  It may or may not have large
+memory leaks and other problems.  Anyone who wants to investigate this
+is welcome to. (RLB)
+
+The guile interface is now handled via g-wrap (../../lib/g-wrap).  As
+far as I know, it is reasonably solid.  Anyone who wants to know why I
+switched to g-wrap can ask, and I'll explain.  Sooner or later I'll
+probably generate a FAQ entry, but I want to get this out the door.
+Part of the reason has to do with the fact the SWIG's guile interface
+leaked memory like a sieve. (RLB)
+
 ./examples contains whatever examples we've accumulated to date.
-
-Each language interface is built in a separate subdirectory.  Right
-now we have guile and perl5.  A simple "make" should build everything.
-
-Building guile will result in guile/xacc-guile, a simple interpreter
-that will let you execute scheme forms (including xacc commands).  We
-need to add an example of building a dynamically loadable guile module
-later, but guile/xacc-guile.c shows you how easy it is to embed a
-guile interpreter in your app, and then load all the xacc functions
-into the interpreter.
-
-Building perl5 will result in a perl module.  For an example of how to
-use it, see ../cbb/cbb-to-xacc.
 
 ----------------------
 TBD:

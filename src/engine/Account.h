@@ -51,6 +51,7 @@ void         xaccAccountBeginEdit (Account *, int defer);
 void         xaccAccountCommitEdit (Account *);
 
 int          xaccGetAccountID (Account *);
+char         xaccGetAccountFlags (Account *);
 
 /*
  * The xaccAccountInsertSplit() method will insert the indicated
@@ -154,4 +155,5 @@ int            xaccAccountGetNumSplits (Account *acc);
  */
 
 Account *      IthAccount (Account **list, int i);
+
 #endif /* __XACC_ACCOUNT_H__ */

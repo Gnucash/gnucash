@@ -7,10 +7,6 @@
   (list
    
    (cons
-    "shell"
-    (cons 'boolean (lambda (val) #t)))
-
-   (cons
     "usage"
     (cons 'boolean
           (lambda (val)
@@ -25,12 +21,6 @@
     (cons 'boolean
           (lambda (val)
             (gnc:config-var-value-set! gnc:*debugging?* #f val))))
-   
-   (cons
-    "startup-dir"
-    (cons 'string
-          (lambda (val)
-            (gnc:config-var-value-set! gnc:*startup-dir* #f val))))
    
    (cons
     "config-dir"
@@ -61,6 +51,7 @@
     "doc-path"
     (cons 'string
           (lambda (val)
+            (gnc:debug "parsing --doc-path " val)
             (let ((path-list
                    (call-with-input-string val (lambda (port) (read port)))))
               (if (list? path-list)
@@ -98,6 +89,7 @@
               (list value (cdr args)))))))
 
 (define (gnc:cmd-line-get-string-arg args)
+  (gnc:debug "got string arg returning " (car args) " and " (cdr args))
   (list (car args) (cdr args)))
 
 (define (gnc:prefs-show-usage)
@@ -105,7 +97,7 @@
 
 
 (define (gnc:handle-command-line-args)
-  (gnc:debug "handling command line arguments")
+  (gnc:debug "handling command line arguments" (program-arguments))
   
   (let ((files-to-open '())
         (result #t))

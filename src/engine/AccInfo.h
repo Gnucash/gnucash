@@ -34,7 +34,11 @@
  * from one release to the next.  Note that if values are added,
  * the file IO translation routines need to be updated. Note 
  * also that GUI code depends on these numbers.
+ *
+ * If you do change the enumeration names (not the numbers), you need
+ * to update xaccAccountTypeEnumAsString --- used for text file exports
  */
+
 enum 
 {
   BANK = 0,
@@ -92,7 +96,11 @@ enum
 
 };
 
-char * xaccAccountGetTypeStr (int type);
+char * xaccAccountGetTypeStr (int type); /* GUI names */
+
+/* Just the name of the enum as a string.  i.e. INCOME -> "INCOME".
+   Used for text exports */
+char * xaccAccountTypeEnumAsString (int type); 
 
 typedef struct _BankAcct BankAcct;
 typedef struct _InvAcct  InvAcct;

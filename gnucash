@@ -1,11 +1,13 @@
 #! /bin/sh
 
-GNC_ARGS="${GNC_ARGS} --debug"
-GNC_ARGS="${GNC_ARGS} --startup-dir ./share/scm/startup"
-GNC_ARGS="${GNC_ARGS} --share-dir ./share"
-GNC_ARGS="${GNC_ARGS} --config-dir ./etc"
-GNC_ARGS="${GNC_ARGS} --load-path (\"(./share/scm)\")"
-GNC_ARGS="${GNC_ARGS} --doc-path  (\"(./Docs)\"\"(./Reports)\")"
+export GNC_BOOTSTRAP_SCM=./share/scm/bootstrap.scm
+export GNC_SCM_LOAD_PATH='("./share/scm")'
+export GNC_DEBUG=t
 
 # Run whichever one was built last.
-exec ./gnucash.bin ${GNC_ARGS} "$@"
+exec ./gnucash.bin \
+ --debug \
+ --share-dir ./share \
+ --config-dir ./etc \
+ --doc-path '("./Docs" "./Reports")' \
+ "$@"

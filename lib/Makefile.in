@@ -36,7 +36,7 @@ GTKSHEET_DIR := @GTKSHEET_DIR@
 
 ######################################################################
 # See Makefile.common for information about these variables.
-CLEAN_SUBDIRS := XmHTML-1.1.0 ComboBox-1.33 Xbae-4.6.2-linas
+CLEAN_SUBDIRS := XmHTML-1.1.0 ComboBox-1.33 Xbae-4.6.2-linas g-wrap
 CLEAN_SUBDIRS += ${GTKSHEET_DIR}
 ######################################################################
 

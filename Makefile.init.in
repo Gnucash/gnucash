@@ -2,6 +2,8 @@
 
 @SET_MAKE@
 
+export PATH := @GUILE_BIN@:@ABSOLUTE_TOP_SRCDIR@/lib/g-wrap-install/bin/:${PATH}
+
 srcdir  = @srcdir@
 VPATH   = @srcdir@
 
@@ -29,6 +31,7 @@ RANLIB       = @RANLIB@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 SWIG         = @SWIG@
+GWRAP        = @top_srcdir@/lib/g-wrap-install/bin
 PERL         = @PERL@
 
 CPU          = @target_cpu@

@@ -1,8 +1,0 @@
-Makefile
-tmp
-obj
-gnucash.all.i
-gnucash.engine.i
-gnucash.gnome.i
-*_wrap.c
-*_wrap.doc

@@ -22,7 +22,7 @@ include @top_srcdir@/Makefile.init
 ######################################################################
 # See Makefile.common for information about these variables.
 INDEP_SRCS := helperfuncs.c
-CLEAN_SUBDIRS := guile perl5
+CLEAN_SUBDIRS := perl5
 ######################################################################
 
 # This inclusion must come after the first target, and after the
@@ -35,17 +35,7 @@ else
 plotutils:
 endif
 
-guile: plotutils ${OBJS}
-	@cd guile && $(MAKE) default
-
-gnome: plotutils ${OBJS} perl5
-	@cd guile && $(MAKE) gnome
-
-motif: plotutils ${OBJS} perl5
-	@cd guile && $(MAKE) motif
-
-qt: plotutils ${OBJS} perl5
-	@cd guile && $(MAKE) qt
+gnome motif qt: plotutils ${OBJS} perl5
 
 DIST_TRASH += plot.preproc.h
 
@@ -56,7 +46,7 @@ plot.preproc.h: /usr/include/plot.h
 perl5: ${OBJS} ../engine/libengine.a
 	@cd perl5 && $(MAKE) default
 
-.PHONY: guile motif
+.PHONY: motif
 
 # Local Variables:
 # tab-width: 2

@@ -1,25 +1,25 @@
 The startup process looks like this right now:
 
-  1) (at the C level) search args from right to left to see if there's
-     any --startup-dir override, use it if there is.
+  * (at the C level) look for any environment variables affecting
+    startup (GNC_BOOTSTRAP_SCM, GNC_SCM_LOAD_PATH, GNC_RUN_AS_SHELL).
 
-  2) load the desired <startup-dir>/init.scm (either the default or
-     the override) -- all the rest of the steps happen from init.scm
-     and files loaded from there.  Any files in <startup>/ cannot be
-     overridden by --load-path because they'll be loaded before the
-     load-path mechanism is operational.
+  * load the desired bootstrap file (either the default
+    sharedir/scm/bootstrap.scm, or the override).  This sets up
+    gnc:load, and minimal defaults.
 
-  3) setup the default config-vars (including the ones that represent
-     the command-line options).
+  * (gnc:load "startup.scm")
 
-  4) parse the command line
+  * setup the default config-vars (including the ones that represent
+    the command-line options).
 
-  5) load the system config if we haven't already (there's a
-     command-line option to load the file earlier,
-     --load-system-config)
+  * parse the command line
 
-  6) load the user's ~/gnucash/config.user if it exists, otherwise
-     load the user's ~/gnucash/config.auto if it exists.
+  * load the system config if we haven't already (there's a
+    command-line option to load the file earlier,
+    --load-system-config)
+
+  * load the user's ~/gnucash/config.user if it exists, otherwise
+    load the user's ~/gnucash/config.auto if it exists.
 
 config.auto is where we'll eventually spit out UI selected prefs.
 

@@ -1,3 +1,4 @@
+-*-text-*-
 
 ************ BETA  RELEASE ******************
 The version 1.1.x series of gnucash are considered BETA development code.
@@ -129,13 +130,41 @@ the latter has Motif statically linked in.  If you have Motif,
 then just run xacc.  If you do not have Motif, then copy 
 'gnucash-static.bin' to 'gnucash.bin'.
 
-You can then start GnuCash at the command-line, with
-"gnucash" or "gnucash <filename>", where <filename> is a
-GnuCash account file.  Sample accounts can be found in 
-"data" subdirectory.  *.dat files are GnuCash accounts that can 
-opened with the "Open File" menu entry.  *.qif files are
-Quicken Import Format files that can be opened with the 
-"Import QIF" menu entry.
+Invocation:
+-----------
+
+You can start GnuCash at the command-line, with "gnucash" or "gnucash
+<filename>", where <filename> is a GnuCash account file.  Sample
+accounts can be found in "data" subdirectory.  *.dat files are GnuCash
+accounts that can opened with the "Open File" menu entry.  *.qif files
+are Quicken Import Format files that can be opened with the "Import
+QIF" menu entry.
+
+GnuCash responds to the following environment variables:
+
+  GNC_RUN_AS_SHELL - if set, makes GnuCash pop up in a guile shell
+  with all the gnucash functions loaded.  From there, you can get the
+  normal startup behavior like this:
+
+    GNC_RUN_AS_SHELL=t ./gnucash
+    guile> (primitive-load (getenv "GNC_BOOTSTRAP_SCM"))
+    guile> (gnc:load "startup.scm")
+    guile> (gnc:main)
+
+  which is the same thing that happens if you don't use the --shell
+  option.  This can be helpful when trying to write and test new .scm
+  files.
+
+  GNC_BOOTSTRAP_SCM - the location of the initial bootstrapping scheme code.
+
+  GNC_SCM_LOAD_PATH - an override for the GnuCash scheme load path.
+  it should be a string representing a proper scheme list.  Each
+  element can either be a string representing a directory, the symbol
+  'default which will expand to the default path, or 'current which
+  will expand to the current load-path.
+
+  GNC_DEBUG - enable debugging output.  This allows you to turn on
+  debugging earlier in the startup process than you can with --debug.
 
 Important Note:
 ---------------
@@ -282,23 +311,6 @@ Examples of other funny configure options:
 Flag --with-gtk-config.  The way gtk phiolosphy goes,
 you should *only* specify the config program location and
 rely on it to tell you the right CFLAGS and XLIBS values.
-
-The new --shell option should work properly now too.  There is no
-gnucash-shell anymore.  There's just one binary.  You can invoke
-gnucash with the --shell option now to get a guile shell with all the
-gnucash functions loaded.  You can also get the normal startup
-behavior from that shell like this:
-
-  ./gnucash --shell
-  guile> (load (string-append gnc:_startup-dir-default_ "/init.scm"))
-  guile> (gnc:main)
-
-which is the same thing that happens if you don't use the --shell
-option.
-
-The --shell option can be helpful when trying to write and test new
-.scm files.  I set it up so that I (or someone else) could
-(eventually) work on the graphing stuff...
 
 Anyone who's having the same problem with the added termcap libs that
 I am can look in configure.in and comment out the TERMCAP_TMP line and

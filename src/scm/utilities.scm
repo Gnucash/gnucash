@@ -1,30 +1,4 @@
 
-
-;;;; Warning functions...
-
-(define (gnc:warn . items)
-  (display "gnucash: [W] ")
-  (for-each (lambda (i) (display i)) items)
-  (newline))
-
-(define (gnc:error . items)
-  (display "gnucash: [E] ")
-  (for-each (lambda (i) (display i)) items)
-  (newline))
-
-(define (gnc:msg . items)
-  (display "gnucash: [M] ")
-  (for-each (lambda (i) (display i)) items)
-  (newline))
-
-(define (gnc:debug . items)
-  (if (gnc:config-var-value-get gnc:*debugging?*)
-      (begin
-        (display "gnucash: [D] ")
-        (for-each (lambda (i) (display i)) items)
-        (newline))))
-
-
 (define (directory? path)
   ;; This follows symlinks normally.
   (let* ((status (false-if-exception (stat path)))
