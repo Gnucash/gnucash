@@ -2,5 +2,10 @@
 *.lo
 .deps
 .libs
+.scm-links
 Makefile
 Makefile.in
+gw-core-utils.c
+gw-core-utils.h
+gw-core-utils.html
+gw-core-utils.scm
