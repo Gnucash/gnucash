@@ -848,7 +848,7 @@ xaccAccountSetType (Account *acc, int tip)
 
    /* initialize the auxilliary account info as well */
    if (acc->accInfo) xaccFreeAccInfo (acc->accInfo); 
-   acc->accInfo = xaccMallocAccountInfo (tip);
+   acc->accInfo = xaccMallocAccInfo (tip);
 }
 
 void 
