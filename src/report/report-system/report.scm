@@ -20,7 +20,7 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-modules (gnucash bootstrap))
+(use-modules (gnucash main))
 
 ;; This hash should contain all the reports available and will be used
 ;; to generate the reports menu whenever a new window opens and to
