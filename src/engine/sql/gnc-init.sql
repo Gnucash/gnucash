@@ -9,6 +9,8 @@ CREATE TABLE gncGroup (
 	parentGuid	CHAR(32)
 );
 
+CREATE INDEX gncGroup_pg_idx ON gncGroup (parentGuid);
+
 -- hack alert -- docref ??
 
 DROP TABLE gncAccount;
@@ -24,6 +26,9 @@ CREATE TABLE gncAccount (
 	currency	TEXT,
 	security	TEXT
 );
+
+CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
+CREATE INDEX gncAccount_ch_idx ON gncAccount (childrenGuid);
 
 -- hack alert -- docref ??
 
@@ -50,4 +55,7 @@ CREATE TABLE gncEntry (
 	amount			FLOAT8 DEFAULT '0.0',
 	share_price		FLOAT8 DEFAULT '0.0'
 );
+
+CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid);
+CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 

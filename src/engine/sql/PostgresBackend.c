@@ -615,7 +615,7 @@ ah hell. this is a bad idea maybe ....
  */
 
 static void
-pgendStoreAccount (PGBackend *be, Account *acct)
+pgendStoreAccountMarkNoLock (PGBackend *be, Account *acct)
 {
    int i, ndiffs, nsplits;
 
@@ -647,7 +647,7 @@ pgendStoreAccount (PGBackend *be, Account *acct)
  */
 
 static void
-pgendStoreTransaction (PGBackend *be, Transaction *trans)
+pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans)
 {
    int i, ndiffs, nsplits;
 
@@ -674,7 +674,7 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
 
       /* check to see if the account that this split references is in
        * storage; if not, add it */
-      pgendStoreAccount (be, acct);
+      pgendStoreAccountMarkNoLock (be, acct);
    }
 }
 
@@ -686,17 +686,12 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
 static int
 traverse_cb (Transaction *trans, void *cb_data)
 {
-   /* clear marks .. is this a good thing to do here ???
-    * hack alert rexaminte this issue .. */
-   Split * s = xaccTransGetSplit (trans, 0);
-   Account * acc = xaccSplitGetAccount (s);
-   xaccClearMark (acc, 0);
-   pgendStoreTransaction ((PGBackend *) cb_data, trans);
+   pgendStoreTransactionNoLock ((PGBackend *) cb_data, trans);
    return 0;
 }
 
 static void
-pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp)
+pgendStoreGroupMarkNoLock (PGBackend *be, AccountGroup *grp)
 {
    int i, nacc, ndiffs;
 
@@ -716,15 +711,11 @@ pgendStoreGroupNoLock (PGBackend *be, AccountGroup *grp)
       AccountGroup *subgrp;
       Account *acc = xaccGroupGetAccount(grp, i);
 
-      int ndiffs = pgendCompareOneAccountOnly (be, acc);
-      /* update account if there are differences ... */
-      if (0<ndiffs) pgendStoreOneAccountOnly (be, acc, 1);
-      /* insert account if it doesn't exist */
-      if (0>ndiffs) pgendStoreOneAccountOnly (be, acc, 0);
+      pgendStoreAccountMarkNoLock (be, acc);
 
       /* recursively walk to child accounts */
       subgrp = xaccAccountGetChildren (acc);
-      if (subgrp) pgendStoreGroupNoLock(be, subgrp);
+      if (subgrp) pgendStoreGroupMarkNoLock(be, subgrp);
    }
 }
 
@@ -740,18 +731,19 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
    SEND_QUERY (be);
    FINISH_QUERY(be->connection);
 
-   /* clear the account marks; useful later to avoid recurision
+   /* Clear the account marks; useful later to avoid recurision
     * during account consistency checks. */
    xaccClearMarkDownGr (grp, 0);
 
-   /* reset the write flags. We use this to amek sure we don't
+   /* reset the write flags. We use this to make sure we don't
     * get caught in infinite recursion */
    xaccGroupBeginStagedTransactionTraversals(grp);
-   pgendStoreGroupNoLock (be, grp);
+   pgendStoreGroupMarkNoLock (be, grp);
 
    /* recursively walk transactions */
    xaccGroupStagedTransactionTraversal (grp, 1, traverse_cb, be);
 
+   /* reset the write flags again */
    xaccClearMarkDownGr (grp, 0);
 
    snprintf (be->buff, be->bufflen, "COMMIT;");
@@ -821,7 +813,7 @@ pgend_session_begin (Session *sess, const char * sessionid)
    DEBUGCMD (PQtrace(be->connection, stderr));
 
 /* hack alert --- */
-/* just a quickie place to duimp stuff */
+/* just a quickie place to dump stuff */
 xaccGroupSetBackend (xaccSessionGetGroup(sess), &(be->be));
 pgendStoreGroup (be, xaccSessionGetGroup(sess));
 
@@ -832,38 +824,63 @@ pgendStoreGroup (be, xaccSessionGetGroup(sess));
 /* ============================================================= */
 
 int
-pgend_trans_commit_edit (Backend * bend, Transaction * trans)
+pgend_trans_commit_edit (Backend * bend, 
+                         Transaction * trans,
+                         Transaction * oldtrans)
 {
+   int i, ndiffs, nsplits, rollback=0;
    PGBackend *be = (PGBackend *)bend;
-   int i, nsplits;
-   int rc;
 
    ENTER ("be=%p, trans=%p\n", be, trans);
    if (!be || !trans) return 1;  /* hack alert hardcode literal */
 
-   nsplits = xaccTransCountSplits (trans);
+   /* lock it up so that we query and store atomically */
+   /* its not at all clear to me that this isn't rife with deadlocks. */
+   snprintf (be->buff, be->bufflen, 
+             "BEGIN; "
+             "LOCK TABLE gncTransaction IN EXCLUSIVE MODE; "
+             "LOCK TABLE gncEntry IN EXCLUSIVE MODE; "
+             "LOCK TABLE gncAccount IN EXCLUSIVE MODE; "
+             );
+   SEND_QUERY (be);
+   FINISH_QUERY(be->connection);
+
+   /* See if the database is in the state that we last left it in.
+    * Basically, the database should contain the 'old transaction'.
+    * If it doesn't, then someone else has modified this transaction,
+    * and thus, any further action on our part would be unsafe.  It
+    * would be best to spit this back at the GUI, and let a human
+    * decide.
+    */
+   ndiffs = pgendCompareOneTransactionOnly (be, oldtrans); 
+   if (ndiffs) rollback++;
+
+   /* be sure to check the old splits as well ... */
+   nsplits = xaccTransCountSplits (oldtrans);
    for (i=0; i<nsplits; i++) {
-      Split *s =  xaccTransGetSplit (trans, i);
-      int ndiffs = pgendCompareOneSplitOnly (be, s);
-      /* update split if there are differences ... */
-      if (0<ndiffs) pgendStoreOneSplitOnly (be, s, 1);
-      /* insert split if it doesn't exist */
-      if (0>ndiffs) pgendStoreOneSplitOnly (be, s, 0);
+      Split * s = xaccTransGetSplit (oldtrans, i);
+      ndiffs = pgendCompareOneSplitOnly (be, s);
+      if (ndiffs) rollback++;
    }
 
-#if 0
-   rc = PQsendQuery (be->connection, "SELECT * FROM gncAccount;");
-   if (!rc)
-   {
-      PERR("send query failed:\n"
-           "\t%s", PQerrorMessage(be->connection));
-      PQfinish (be->connection);
-      return 2; /* hack alert hardcode literal */ 
-   }
-#endif
+   if (rollback) {
+      snprintf (be->buff, be->bufflen, "ROLLBACK;");
+      SEND_QUERY (be);
+      FINISH_QUERY(be->connection);
 
+      LEAVE ("\n");
+      return 666;   /* hack alert */
+   } 
+
+   /* if we are here, we are good to go */
+   pgendStoreTransactionNoLock (be, trans);
+
+   snprintf (be->buff, be->bufflen, "COMMIT;");
+   SEND_QUERY (be);
+   FINISH_QUERY(be->connection);
 
    LEAVE ("\n");
+   return 0;
 }
 
 /* ============================================================= */
