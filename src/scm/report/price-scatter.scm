@@ -86,27 +86,27 @@
        options gnc:pagename-display 
        optname-plot-width optname-plot-height "c" 500 400)
 
-;      (add-option
-;       (gnc:make-multichoice-option
-;	gnc:pagename-display optname-marker
-;	"a"
-;	(N_ "Choose a marker")
-;	"cross"
-;	(list
-;	 (vector "circle" "circle" "circle")
-;	 (vector "cross" "cross" "cross")
-;	 (vector "square" "square" "square")
-;	 (vector "asterisk" "asterisk" "asterisk")
-;	 (vector "filled circle" "filled circle" "filled circle")
-;	 (vector "filled square" "filled square" "filled square"))))
+      (add-option
+       (gnc:make-multichoice-option
+	gnc:pagename-display optname-marker
+	"a"
+	(N_ "Choose a marker")
+	'filledsquare
+	(list
+	 (vector 'circle "circle" "circle")
+	 (vector 'cross "cross" "cross")
+	 (vector 'square "square" "square")
+	 (vector 'asterisk "asterisk" "asterisk")
+	 (vector 'filledcircle "filled circle" "filled circle")
+	 (vector 'filledsquare "filled square" "filled square"))))
 
-;      (add-option
-;       (gnc:make-color-option
-;	gnc:pagename-display optname-markercolor
-;	"b"
-;	(N_ "Color of the marker")
-;	(list #xb2 #x22 #x22 0)
-;	255 #f))
+      (add-option
+       (gnc:make-color-option
+	gnc:pagename-display optname-markercolor
+	"b"
+	(N_ "Color of the marker")
+	(list #xb2 #x22 #x22 0)
+	255 #f))
 
       (gnc:options-set-default-section options gnc:pagename-general)
 
@@ -140,11 +140,11 @@
 
 	   (height (op-value gnc:pagename-display optname-plot-height))
 	   (width (op-value gnc:pagename-display optname-plot-width))
-	   ;;(marker (op-value gnc:pagename-display optname-marker))
-;	   (mcolor 
-;	    (gnc:color-option->hex-string
-;	     (gnc:lookup-option (gnc:report-options report-obj)
-;				gnc:pagename-display optname-markercolor)))
+	   (marker (op-value gnc:pagename-display optname-marker))
+	   (mcolor 
+	    (gnc:color-option->hex-string
+	     (gnc:lookup-option (gnc:report-options report-obj)
+				gnc:pagename-display optname-markercolor)))
 	   
            (report-currency (op-value gnc:pagename-general
                                       optname-report-currency))
@@ -173,9 +173,18 @@
                       (gnc:timepair-to-datestring to-date-tp)))
       (gnc:html-scatter-set-width! chart width)
       (gnc:html-scatter-set-height! chart height)
+      (gnc:html-scatter-set-marker! chart 
+				    (case marker
+				      ('circle "circle")
+				      ('cross "cross")
+				      ('square "square")
+				      ('asterisk "asterisk")
+				      ('filledcircle "filled circle")
+				      ('filledsquare "filled square")))
       ;;(warn marker mcolor)
-      ;;(gnc:html-scatter-set-marker! chart marker)
-      ;;(gnc:html-scatter-set-markercolor! chart mcolor)
+      ;; FIXME: workaround to set the alpha channel
+      (set! mcolor (string-append mcolor "ff"))
+      (gnc:html-scatter-set-markercolor! chart mcolor)
       (gnc:html-scatter-set-y-axis-label!
        chart (gnc:commodity-get-mnemonic report-currency))
       (gnc:html-scatter-set-x-axis-label!
