@@ -1746,6 +1746,28 @@ gnc_register_record (RegWindow *regData)
   xaccSRRedrawReg (reg);
 }
 
+static gboolean
+gnc_register_match_trans_row (VirtualLocation virt_loc,
+                              gpointer user_data)
+{
+  RegWindow *regData = user_data;
+  CursorClass cursor_class;
+  SplitRegister *sr;
+
+  sr = xaccLedgerDisplayGetSR (regData->ledger);
+  cursor_class = xaccSplitRegisterGetCursorClass (sr, virt_loc.vcell_loc);
+
+  return (cursor_class == CURSOR_CLASS_TRANS);
+}
+
+static void
+gnc_register_goto_next_trans_row (RegWindow *regData)
+{
+  gnucash_register_goto_next_matching_row (regData->reg,
+                                           gnc_register_match_trans_row,
+                                           regData);
+}
+
 static void
 gnc_register_enter (RegWindow *regData, gboolean next_transaction)
 {
@@ -1791,7 +1813,7 @@ gnc_register_enter (RegWindow *regData, gboolean next_transaction)
   if (goto_blank)
     gnc_register_jump_to_blank (regData);
   else if (next_transaction)
-    gnucash_register_goto_next_trans_row (regData->reg);
+    gnc_register_goto_next_trans_row (regData);
   else
     gnucash_register_goto_next_virt_row (regData->reg);
 }

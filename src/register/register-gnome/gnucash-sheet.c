@@ -40,8 +40,6 @@
 #include "gnucash-item-edit.h"
 #include "gnc-engine-util.h"
 
-#include "splitreg.h"
-
 #define DEFAULT_REGISTER_HEIGHT 400
 #define DEFAULT_REGISTER_WIDTH  630
 
@@ -1829,17 +1827,19 @@ gnucash_register_goto_next_virt_row (GnucashRegister *reg)
 }
 
 void
-gnucash_register_goto_next_trans_row (GnucashRegister *reg)
+gnucash_register_goto_next_matching_row (GnucashRegister *reg,
+                                         VirtualLocationMatchFunc match,
+                                         gpointer user_data)
 {
         GnucashSheet *sheet;
         SheetBlockStyle *style;
         VirtualLocation virt_loc;
-        CursorClass cursor_class;
 
         g_return_if_fail (reg != NULL);
         g_return_if_fail (GNUCASH_IS_REGISTER(reg));
+        g_return_if_fail (match != NULL);
 
-        sheet = GNUCASH_SHEET(reg->sheet);
+        sheet = GNUCASH_SHEET (reg->sheet);
 
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
@@ -1855,13 +1855,7 @@ gnucash_register_goto_next_trans_row (GnucashRegister *reg)
                 style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
                 if (!style || !style->cursor)
                         return;
-
-                cursor_class = xaccCursorNameToClass
-                        (style->cursor->cursor_name);
-        } while (cursor_class == CURSOR_CLASS_SPLIT);
-
-        if (cursor_class != CURSOR_CLASS_TRANS)
-                return;
+        } while (!match (virt_loc, user_data));
 
         virt_loc.phys_row_offset = 0;
         virt_loc.phys_col_offset = 0;

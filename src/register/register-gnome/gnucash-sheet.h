@@ -187,7 +187,12 @@ void gnucash_register_goto_virt_loc (GnucashRegister *reg,
 
 void gnucash_register_goto_next_virt_row (GnucashRegister *reg);
 
-void gnucash_register_goto_next_trans_row (GnucashRegister *reg);
+typedef gboolean (*VirtualLocationMatchFunc) (VirtualLocation virt_loc,
+                                              gpointer user_data);
+
+void gnucash_register_goto_next_matching_row (GnucashRegister *reg,
+                                              VirtualLocationMatchFunc match,
+                                              gpointer user_data);
 
 void gnucash_register_attach_popup(GnucashRegister *reg, GtkWidget *popup,
                                    gpointer data);
