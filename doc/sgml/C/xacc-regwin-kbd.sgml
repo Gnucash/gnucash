@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>Register Keyboard Shortcuts</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>    The following keys can be used to move around in the register:
     <EMPHASIS>Please check that I didn't miss any</EMPHASIS> 
 
@@ -69,7 +70,7 @@
 
 
 </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
