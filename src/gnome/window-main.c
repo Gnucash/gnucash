@@ -581,11 +581,17 @@ gnc_ui_delete_account_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
+gnc_tax_info_cb (GtkWidget *widget, gpointer data)
+{
+  gnc_tax_info_dialog (gnc_get_ui_data ());
+}
+
+static void
 gnc_ui_mainWindow_toolbar_open (GtkWidget *widget, gpointer data)
 {
   RegWindow *regData;
   Account *account = gnc_get_current_account();
-  
+
   if (account == NULL)
   {
     const char *message = _("To open an account, you must first\n"
@@ -1240,6 +1246,14 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     },
     GNOMEUIINFO_SEPARATOR,
     GNOMEUIINFO_SUBTREE(N_("_Scrub"), scrubmenu),
+    {
+      GNOME_APP_UI_ITEM,
+      N_("Tax Information"),
+      N_("Setup tax information for all income and expense accounts"),
+      gnc_tax_info_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_REMOVE,
+      0, 0, NULL
+    },
     GNOMEUIINFO_END
   };
 
