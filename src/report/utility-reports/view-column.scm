@@ -54,9 +54,6 @@
     
     options))
 
-(define (edit-options option-obj report-obj)
-  (gnc:column-view-edit-options option-obj report-obj))
-
 (define (make-child-options-callback view child)
   (let* ((view-opts (gnc:report-options view))
 	 (child-opts (gnc:report-options child))
@@ -225,8 +222,5 @@
  'menu-path (list gnc:menuname-utility)
  'renderer render-view
  'options-generator make-options
- 'options-editor edit-options
  'options-cleanup-cb cleanup-options 
  'options-changed-cb options-changed-cb)
-
-

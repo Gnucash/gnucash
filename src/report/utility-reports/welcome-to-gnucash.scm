@@ -68,7 +68,6 @@
     (set! options (gnc:report-options (gnc:find-report sub-bar)))
     (set-option! "Display" "Plot Width" 800)
 
-    (gnc:main-window-open-report view #f)
     view))
 
 (define (options) 
