@@ -1,3 +1,7 @@
+2001-08-11  Christian Stimming  <stimming@tuhh.de>
+
+	* src/FileDialog.c (show_book_error): fix message.
+
 2001-08-11  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/register-core/table-allgui.[ch]: update for
