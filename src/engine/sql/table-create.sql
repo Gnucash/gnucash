@@ -107,6 +107,18 @@ CREATE TABLE gncCheckpoint (
         PRIMARY KEY (accountGuid, date_xpoint, commodity)
 );
 
+-- The price table stores the price of 'commodity' valued
+-- in units of 'currency'
+CREATE TABLE gncPrice (
+	commodity	TEXT NOT NULL CHECK (commodity <>''),
+	currency	TEXT NOT NULL CHECK (commodity <>''),
+	time		DATETIME,
+	source		TEXT,
+	type		TEXT,
+	valueNum	INT8 DEFAULT '0',
+	valueDenom	INT4 DEFAULT '100'
+);
+
 
 -- The session directory serves several purposes.  First and formost,
 -- it notes the database access type.  There are three modes:

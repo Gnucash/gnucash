@@ -11,6 +11,7 @@ store_one_only(modity)
 store_one_only(session)
 store_one_only(split)
 store_one_only(transaction)
+store_one_only(price)
 
 compare_one_only(account)
 compare_one_only(modity)

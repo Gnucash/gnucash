@@ -71,6 +71,17 @@ define(`checkpoint', `gncCheckpoint, Checkpoint, Checkpoint,
        ')
        
 
+define(`price', `gncPrice, Price, GNCPrice,
+       commodity,   , commod,   gnc_commodity_get_unique_name(gnc_price_get_commodity(ptr)),
+       currency,    , commod,   gnc_commodity_get_unique_name(gnc_price_get_currency(ptr)),
+       time,        , Timespec, *gnc_price_get_time(ptr),
+       source,      , char *,   gnc_price_get_source(ptr),
+       type,        , char *,   gnc_price_get_type(ptr),
+       valueNum,    , int64,    gnc_numeric_num(gnc_price_get_value(ptr)),
+       valueDenom,  , int64,    gnc_numeric_denom(gnc_price_get_value(ptr)),
+       ')
+       
+
 define(`session', `gncSession, Session, void,
        session_mode,        , char *, pgendSessionGetMode(be),
        hostname,            , char *, pgendGetHostname(be),
