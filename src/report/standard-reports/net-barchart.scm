@@ -363,7 +363,7 @@
 
 (gnc:define-report
  'version 1
- 'name (N_ "Income/Expense Chart")
+ 'name (N_ "Income & Expense Chart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t))
  'renderer (lambda (report-obj) (net-renderer report-obj #t)))

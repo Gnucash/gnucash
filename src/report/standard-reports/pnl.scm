@@ -211,7 +211,7 @@
 
 (gnc:define-report 
  'version 1
- 'name (N_ "Profit And Loss")
+ 'name (N_ "Profit & Loss")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator pnl-options-generator
  'renderer pnl-renderer)

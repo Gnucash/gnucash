@@ -37,12 +37,10 @@
 
 ;; Define those strings here to make changes easier and avoid typos.
 (define gnc:menuname-reports (N_ "_Reports"))
-(define gnc:menuname-asset-liability
-  (N_ "_Assets & Liabilities"))
-(define gnc:menuname-income-expense 
-  (N_ "_Income & Expense"))
+(define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
+(define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))
-(define gnc:menuname-utility (N_ "_Utility"))
+(define gnc:menuname-utility (N_ "_Sample & Custom"))
 (define gnc:pagename-general (N_ "General"))
 (define gnc:pagename-accounts (N_ "Accounts"))
 (define gnc:pagename-display (N_ "Display"))

@@ -30,11 +30,11 @@
 
 (define (gnc:make-welcome-report)
   (let* ((view (gnc:make-report "Multicolumn View"))
-         (sub-welcome (gnc:make-report "Welcome to GnuCash 1.6"))
+         (sub-welcome (gnc:make-report "Welcome to GnuCash"))
          (sub-accounts (gnc:make-report "Account Summary"))
          (sub-expense-pie (gnc:make-report "Expense Accounts"))
          (sub-income-pie (gnc:make-report "Income Accounts"))
-         (sub-bar (gnc:make-report "Income/Expense Chart"))
+         (sub-bar (gnc:make-report "Income & Expense Chart"))
          (options #f))
 
     (define (set-option! section name value)
@@ -42,7 +42,7 @@
        (gnc:lookup-option options section name) value))
 
     (set! options (gnc:report-options (gnc:find-report view)))
-    (set-option! "General" "Report name" (_ "Welcome to GnuCash 1.6"))
+    (set-option! "General" "Report name" (_ "Welcome to GnuCash"))
     (set-option! "General" "Number of columns" 2)
 
     ;; mark the reports as needing to be saved 
@@ -78,13 +78,13 @@
     (gnc:html-document-add-object! 
      doc
      (gnc:make-html-text 
-      (gnc:html-markup-h2 (_ "Welcome to GnuCash 1.6!"))
+      (gnc:html-markup-h2 (_ "Welcome to GnuCash 1.8!"))
       (gnc:html-markup-p
        (_ "GnuCash 1.6 has lots of nice features. Here are a few."))))
     doc))
 
 (gnc:define-report 
- 'name (N_ "Welcome to GnuCash 1.6")
+ 'name (N_ "Welcome to GnuCash")
  'in-menu? #f
  'options-generator options
  'renderer renderer)
