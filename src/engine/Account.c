@@ -30,16 +30,16 @@
 
 #include "Account.h"
 #include "AccountP.h"
-#include "date.h"
-#include "gnc-commodity.h"
-#include "gnc-engine-util.h"
 #include "GNCIdP.h"
 #include "Group.h"
 #include "GroupP.h"
-#include "kvp_frame.h"
-#include "messages.h"
 #include "Transaction.h"
 #include "TransactionP.h"
+#include "date.h"
+#include "gnc-commodity.h"
+#include "gnc-engine-util.h"
+#include "kvp_frame.h"
+#include "messages.h"
 
 static short module = MOD_ENGINE; 
 
@@ -192,8 +192,8 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids) {
   if(!ab) return FALSE;
 
   if(aa->type != ab->type) {
-    fprintf(stderr, "Account types don't match (%d != %d)\n",
-            aa->type, ab->type);
+    PERR ("Account types don't match (%d != %d)\n",
+          aa->type, ab->type);
     return FALSE;
   }
 
@@ -205,8 +205,8 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids) {
 
   if(check_guids) {
     if(!guid_equal(&aa->guid, &ab->guid)) {
-      fprintf(stderr, "Account guids don't match for %s ?= %s\n",
-              aa->accountName, ab->accountName);
+      PERR ("Account guids don't match for %s ?= %s\n",
+            aa->accountName, ab->accountName);
       return FALSE;
     }
   }
@@ -285,9 +285,9 @@ xaccAccountCommitEdit (Account *acc) {
    if (!acc) return;
    acc->editlevel--;
    if(acc->editlevel < 0) {
-     fprintf(stderr,
-             "ERROR: unbalanced call to xaccAccountCommitEdit - resetting.\n");
-   } else if(acc->editlevel == 0) {
+     PERR ("unbalanced call to xaccAccountCommitEdit - resetting");
+   }
+   else if(acc->editlevel == 0) {
      xaccAccountBringUpToDate(acc);
    }
 }
@@ -868,7 +868,7 @@ xaccAccountSetCode (Account *acc, const char *str) {
    xaccAccountCommitEdit(acc);
 }
 
-void 
+void
 xaccAccountSetDescription (Account *acc, const char *str) {
    char * tmp;
    if ((!acc) || (!str)) return;
@@ -885,7 +885,7 @@ xaccAccountSetDescription (Account *acc, const char *str) {
    xaccAccountCommitEdit(acc);
 }
 
-void 
+void
 xaccAccountSetNotes (Account *acc, const char *str) {
   kvp_value *new_value;
   
@@ -899,8 +899,9 @@ xaccAccountSetNotes (Account *acc, const char *str) {
     if(new_value) {
       kvp_frame_set_slot(xaccAccountGetSlots(acc), "notes", new_value);
       kvp_value_delete(new_value);
-    } else {
-      fprintf(stderr, "xaccAccountSetNotes: failed to allocate kvp.\n");
+    }
+    else {
+      PERR ("failed to allocate kvp");
     }
   }
   xaccAccountCommitEdit(acc);
@@ -1217,7 +1218,7 @@ xaccAccountGetShareReconciledBalance (Account *acc)
 Split *
 xaccAccountGetSplit(Account *acc, int i) {
   GList *result;
-  fprintf(stderr, "Calling xaccAccountGetSplit: welcome to pokeyland.\n");
+  PWARN ("welcome to pokeyland");
 
   if (!acc) return(NULL);
   result = g_list_nth(acc->splits, i);
@@ -1233,7 +1234,7 @@ xaccAccountGetSplitList (Account *acc) {
 
 int
 xaccAccountGetNumSplits (Account *acc) {
-  fprintf(stderr, "Calling xaccAccountGetNumSplits: welcome to pokeyland.\n");
+  PWARN ("welcome to pokeyland");
   if (!acc) return 0;
   return g_list_length(acc->splits);
 }

@@ -1927,6 +1927,27 @@ xaccTransSetDescription (Transaction *trans, const char *desc)
    MarkChanged (trans);
 }
 
+void
+xaccTransSetNotes (Transaction *trans, const char *notes)
+{
+  kvp_value *new_value;
+  
+  if (!trans || !notes) return;
+  CHECK_OPEN (trans);
+
+  new_value = kvp_value_new_string(notes);
+
+  if (new_value)
+  {
+    kvp_frame_set_slot (xaccTransGetSlots (trans), "notes", new_value);
+    kvp_value_delete (new_value);
+  }
+  else
+  {
+    PERR ("failed to allocate kvp");
+  }
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -1959,6 +1980,20 @@ xaccTransGetDescription (Transaction *trans)
 {
    if (!trans) return NULL;
    return (trans->description);
+}
+
+const char * 
+xaccTransGetNotes (Transaction *trans)
+{
+  kvp_value *v;
+
+  if (!trans) return NULL;
+
+  v = kvp_frame_get_slot (xaccTransGetSlots (trans), "notes");
+  if (!v)
+    return NULL;
+
+  return kvp_value_get_string (v);
 }
 
 time_t

@@ -44,8 +44,9 @@ Use: xaccSplitGetMemo, xaccSplitSetMemo
 
 Name: notes
 Type: string
-Entities: Account
-Use: xaccAccountGetNotes, xaccAccountSetNotes
+Entities: Account, Transaction
+Use: xaccAccountGetNotes, xaccAccountSetNotes,
+     xaccTransGetNotes, xaccTransSetNotes
      Store the 'Notes' string which was previously stored in
      the Account structure directly.
 

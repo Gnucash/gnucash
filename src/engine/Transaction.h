@@ -168,9 +168,10 @@ void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
                                          const Timespec *ts);
 
-/* set the Num and Description fields ... */
+/* set the Num, Description, and Notes fields */
 void          xaccTransSetNum (Transaction *trans, const char *num);
 void          xaccTransSetDescription (Transaction *trans, const char *desc);
+void          xaccTransSetNotes (Transaction *trans, const char *notes);
 
 /* The xaccTransAppendSplit() method will append the indicated 
  *    split to the collection of splits in this transaction.
@@ -208,10 +209,11 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 GList *       xaccTransGetSplitList (Transaction *trans);
 
 /* These routines return the Num (or ID field), the description, 
- * and the date field.
+ * the notes, and the date field.
  */
 const char *  xaccTransGetNum (Transaction *trans);
 const char *  xaccTransGetDescription (Transaction *trans);
+const char *  xaccTransGetNotes (Transaction *trans);
 time_t        xaccTransGetDate (Transaction *trans);
 #ifndef SWIG  /* swig chokes on long long */
 long long     xaccTransGetDateL (Transaction *trans);
@@ -496,6 +498,6 @@ int xaccIsPeerSplit (Split *split_1, Split *split_2);
  *    This routine is needed by the perl swig wrappers, which
  *    is unable to dereference on their own.
  */
-Split       * IthSplit       (Split **sarray,       int i);
+Split       * IthSplit (Split **sarray, int i);
 
 #endif /* __XACC_TRANSACTION_H__ */

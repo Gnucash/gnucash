@@ -43,11 +43,11 @@
 #include "gnc-numeric.h"
 
 /** STRUCTS *********************************************************/
-struct _account_group {
+struct _account_group
+{
   /* The flags: */
   unsigned int saved : 1;
-  /* unsigned int new   : 1; */
-  
+
   Account *parent;                 /* back-pointer to parent */
 
   int      numAcc;                 /* number of accounts in array */
