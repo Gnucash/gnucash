@@ -18,6 +18,8 @@
 
 	* src/scm/main.scm -- fix menu issue for LANG=de_DE.. "Preferences" is
 	  really "_Preferences"
+
+	* src/gnc-test-env: define LTDL_LIBRARY_PATH
 	
 2002-09-29  Joshua Sled  <jsled@asynchronous.org>
 

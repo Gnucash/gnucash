@@ -29,3 +29,4 @@ TESTS_ENVIRONMENT := \
 
 print_test_env:
 	echo ${GNC_TEST_DEPS}
+	echo ${TESTS_ENVIRONMENT}

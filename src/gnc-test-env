@@ -78,12 +78,25 @@ exec guile -s $0 "$@"
                    (string-append ":" dir ":" dir "/.libs"))
                  library-dirs)))
 
+(display " LTDL_LIBRARY_PATH=${LTDL_LIBRARY_PATH}")
+(display (apply string-append
+                (map
+                 (lambda (dir)
+                   (string-append ":" dir ":" dir "/.libs"))
+                 gnc-module-dirs)))
+(display (apply string-append
+                (map
+                 (lambda (dir)
+                   (string-append ":" dir ":" dir "/.libs"))
+                 library-dirs)))
+
 (if display-exports?
     (begin
       (display "; ")
       (display " export GNC_MODULE_PATH;")
       (display " export GUILE_LOAD_PATH;")
-      (display " export LD_LIBRARY_PATH;")))
+      (display " export LD_LIBRARY_PATH;")
+      (display " export LTDL_LIBRARY_PATH;")))
 
 ;; Local Variables:
 ;; mode: scheme
