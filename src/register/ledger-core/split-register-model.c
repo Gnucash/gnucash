@@ -1626,6 +1626,7 @@ gnc_template_register_get_debcred_entry (VirtualLocation virt_loc,
                                                  user_data);
 
   kvpf = xaccSplitGetSlots (split);
+  PWARN( "We're very close to \"wrong\".  \"Fix it immediately!!!\"" );
 
   if (kvpf)
   {

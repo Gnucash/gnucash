@@ -107,6 +107,8 @@ GtkWidget *gnc_regWidget_new( GNCLedgerDisplay *ld,
                               GtkWindow *parent,
                               int disallowCapabilities );
 
+void gnc_regWidget_set_ledger_display( GNCRegWidget *gncrw, GNCLedgerDisplay *ld );
+
 GnucashRegister *gnc_regWidget_get_register( GNCRegWidget *rw );
 
 GtkWidget *gnc_regWidget_get_style_menu( GNCRegWidget *rw );

@@ -159,14 +159,14 @@ gnc_regWidget_class_init (GNCRegWidgetClass *class)
     const char *signal_name;
     guint offset;
   } signals[] = {
-    { ENTER_ENT_SIGNAL, "enter_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, enter_ent_cb ) },
-    { CANCEL_ENT_SIGNAL, "cancel_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, cancel_ent_cb ) },
-    { DELETE_ENT_SIGNAL, "delete_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, delete_ent_cb ) },
-    { DUP_ENT_SIGNAL, "dup_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, dup_ent_cb ) },
+    { ENTER_ENT_SIGNAL,    "enter_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, enter_ent_cb ) },
+    { CANCEL_ENT_SIGNAL,   "cancel_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, cancel_ent_cb ) },
+    { DELETE_ENT_SIGNAL,   "delete_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, delete_ent_cb ) },
+    { DUP_ENT_SIGNAL,      "dup_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, dup_ent_cb ) },
     { SCHEDULE_ENT_SIGNAL, "schedule_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, schedule_ent_cb ) },
-    { EXPAND_ENT_SIGNAL, "expand_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, expand_ent_cb ) },
-    { BLANK_SIGNAL, "blank", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, blank_cb ) },
-    { JUMP_SIGNAL, "jump", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, jump_cb ) },
+    { EXPAND_ENT_SIGNAL,   "expand_ent", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, expand_ent_cb ) },
+    { BLANK_SIGNAL,        "blank", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, blank_cb ) },
+    { JUMP_SIGNAL,         "jump", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, jump_cb ) },
 #if 0
     { ACTIVATE_CURSOR_SIGNAL, "activate_cursor", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, activate_cursor ) },
     { REDRAW_ALL_SIGNAL, "redraw_all", GTK_SIGNAL_OFFSET( GNCRegWidgetClass, redraw_all ) },
@@ -196,16 +196,35 @@ gnc_regWidget_new( GNCLedgerDisplay *ld,
   GNCRegWidget *rw;
   rw = GNC_REGWIDGET( gtk_type_new( gnc_regWidget_get_type() ) );
   rw->disallowedCaps = disallowCapabilities;
+
   /* IMPORTANT: If we set this to anything other than GTK_RESIZE_QUEUE, we
    * enter into a very bad back-and-forth between the sheet and a containing
    * GnomeDruid [in certain conditions and circumstances not detailed here],
-   * resulting in either a single instance of the Druid resizing or infinite
-   * instances of the Druid resizing without bound.  Contact
+   * resulting in either a single iteration of the Druid resizing or infinite
+   * iterations of the Druid resizing without bound.  Contact
    * jsled@asynchronous.org for details. -- 2002.04.15
    */
   gtk_container_set_resize_mode( GTK_CONTAINER( rw ), GTK_RESIZE_QUEUE );
+
   gnc_regWidget_init2( rw, ld, win );
   return GTK_WIDGET( rw );
+}
+
+void
+gnc_regWidget_set_ledger_display( GNCRegWidget *gncrw,
+                                  GNCLedgerDisplay *ld )
+{
+
+
+  /* FIXME:
+   * This _shouldn't_ leak memory since we're asking for the old gnc_ledger
+   * [and associated table, &c.] to be closed.  The other work that
+   * gnc_regWidget_init2 does [menu, toolbar, &c.], however, is leaked. */
+
+  gtk_container_remove( GTK_CONTAINER(gncrw), GTK_WIDGET( gncrw->reg ) );
+  gnc_ledger_display_close( gncrw->ledger );
+  gncrw->ledger = NULL;
+  gnc_regWidget_init2( gncrw, ld, GTK_WINDOW(gncrw->window) );
 }
 
 /********************************************************************\
@@ -1319,7 +1338,6 @@ gnc_regWidget_init2( GNCRegWidget *rw, GNCLedgerDisplay *ledger, GtkWindow *win 
 
   {
     Query *q = gnc_ledger_display_get_query (rw->ledger);
-
     has_date = gncQueryHasTermType (q, date_param);
   }
 
