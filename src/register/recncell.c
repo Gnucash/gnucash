@@ -7,7 +7,7 @@
  * of values to be clicked through.
  *
  * HISTORY:
- * Copyright (c) Linas Vepstas
+ * Copyright (c) 1998 Linas Vepstas
  */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *
@@ -80,6 +80,14 @@ xaccInitRecnCell (BasicCell *cell)
    cell ->value = strdup (buff);
 
    cell->enter_cell = ToggleRecn;
+}
+
+/* ================================================ */
+
+void
+xaccDestroyRecnCell (BasicCell *cell)
+{
+   xaccDestroyBasicCell (cell);
 }
 
 /* --------------- end of file ---------------------- */
