@@ -160,11 +160,4 @@
    'renderer render-view
    'options-generator make-options
    'options-editor edit-options))
-       
-         
-                
-           
-                
-                
 
-      #### End of Patch data ####
