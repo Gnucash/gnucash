@@ -211,7 +211,7 @@ static const char * get_pric_entry (VirtualLocation virt_loc,
   if (gnc_numeric_zero_p (price))
     return NULL;
 
-  return xaccPrintAmount (price, gnc_default_print_info (TRUE));
+  return xaccPrintAmount (price, gnc_default_print_info (FALSE));
 }
 
 static const char * get_qty_entry (VirtualLocation virt_loc,
