@@ -329,3 +329,48 @@ SELECT gnctransaction.date_posted
    LIMIT 2 OFFSET 10;
    
 ----------------------------
+
+Upgrading
+---------
+If you find you need to change the structure of the sql tables, then
+note that there is a fully general automatic upgrade mechanism.  Its
+in upgrade.c, upgrade.h.  
+
+Upgrades are treated like patches; the sql db is 'patched'.  Each patch
+carries three version numbers: major, minor, rev.  A client can work 
+with a database only if the client's & database's major verion numbers 
+are equal, and the client's minor number is equal or newer than the db.
+The third number, the rev number, is irrelevant if the above condition 
+is met.  The rev number is handy only for making sure that patches are 
+applied in a specified order.
+
+The gncVersion table stores these three numbers.  It also stores a 
+human-readable text string, so that a sysadmin can review the installed
+upgrades.
+
+Most of the contents of of upgrade.c is a mechanism to make sure that 
+'ad hoc' upgrades are installed in the appropriate order; i.e. that
+the upgrade process stays 'safe' and backwards-compatible. The login 
+process in PostegresBackend.c is structured so that older databases
+are detected: the GUI should pop up a message asking the user if they
+want to upgrade or not.
+
+If the user wants to upgrade, then the pgendUpgradeDB() routine is 
+to be called.  This routine is a set of nested case statements that 
+compare version numbers, and apply patches as needed.  As of this 
+writing, there is only one upgrade: 'put_iguid_in_tables()'.  Note 
+how 'put_iguid_in_tables()' is written in a simple ad-hoc manner.  
+That's because everything else in upgrade.c is focused on trying to 
+figure out when its appropriate to call 'put_iguid_in_tables()'.  
+Other upgrades should follow this same pattern: create the adhoc 
+routine, and plug it into a case statement in the pgendUpgradeDB() 
+call.  Everything else is automatic.
+
+This upgrade process only applies to newer clients connecting to 
+older databases.  Otherise, if the client is creating a fresh, brand 
+new db, then one does not need to upgrade: put the newest db design
+into table-create.sql, as usual, and stick in the version number 
+into table-version.sql
+
+-----------------------------------------------------------------------
+End of Document.
