@@ -82,6 +82,8 @@ typedef enum
 
 //extern gncLogLevel gnc_log_modules[MOD_LAST + 1];
 
+#define GNC_TRACE_INDENT_WIDTH 4
+
 /** Initialize the error logging subsystem */
 void gnc_log_init (void);
 
@@ -104,7 +106,7 @@ void gnc_set_logfile (FILE *outfile);
 const char * gnc_log_prettify (const char *name);
 
 /* We want logging decisions to be made inline, rather than through
- * a CPU-cucking subroutine call. Thus, this is a #define, not a
+ * a CPU-sucking subroutine call. Thus, this is a #define, not a
  * subroutine call.  The prototype would have been:
  * gboolean gnc_should_log (gncModuleType module, gncLogLevel log_level); 
  *
@@ -159,7 +161,8 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
 #define PINFO(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_INFO)) {     \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_INFO,         \
-      "Info: %s(): " format, FUNK , ## args);      \
+      "Info: %s(): " format,                       \
+      FUNK , ## args);                             \
   }                                                \
 }
 
@@ -167,23 +170,30 @@ gboolean gnc_should_log(gncModuleType module, gncLogLevel log_level);
 #define DEBUG(format, args...) {                   \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Debug: %s(): " format, FUNK , ## args);     \
+      "Debug: %s(): " format,                      \
+      FUNK , ## args);                             \
   }                                                \
 }
 
 /** Print an function entry debugging message */
 #define ENTER(format, args...) {                   \
+  extern gint gnc_trace_num_spaces;                \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Enter: %s" format, FUNK , ## args);         \
+      "Enter in %s: %s()" format, __FILE__,        \
+      FUNK , ## args);                             \
+    gnc_trace_num_spaces += GNC_TRACE_INDENT_WIDTH;\
   }                                                \
 }
 
 /** Print an function exit debugging message */
 #define LEAVE(format, args...) {                   \
+  extern gint gnc_trace_num_spaces;                \
   if (gnc_should_log (module, GNC_LOG_DEBUG)) {    \
+    gnc_trace_num_spaces -= GNC_TRACE_INDENT_WIDTH;\
     g_log (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG,        \
-      "Leave: %s" format, FUNK , ## args);         \
+      "Leave: %s()" format,                        \
+      FUNK , ## args);                             \
   }                                                \
 }
 

@@ -72,14 +72,21 @@ gncLogLevel gnc_log_modules[MOD_LAST + 1] =
 static FILE *fout = NULL;
 static const int MAX_TRACE_FILENAME = 100;
 
+/* Don't be fooled: gnc_trace_num_spaces has external linkage and
+   static storage, but can't be defined with 'extern' because it has
+   an initializer, and can't be declared with 'static' because that
+   would give it internal linkage. */
+gint __attribute__ ((unused)) gnc_trace_num_spaces = 0;
+
 static void
 fh_printer (const gchar   *log_domain,
             GLogLevelFlags    log_level,
             const gchar   *message,
             gpointer    user_data)
 {
+  extern gint gnc_trace_num_spaces;
   FILE *fh = user_data;
-  fprintf (fh, "%s\n", message);
+  fprintf (fh, "%*s%s\n", gnc_trace_num_spaces, "", message);
   fflush(fh);
 }
 
@@ -90,9 +97,11 @@ gnc_log_init (void)
 
    fout = fopen ("/tmp/gnucash.trace", "w");
 
-   if(!fout && (filename = (char *)malloc(MAX_TRACE_FILENAME))) {
-      snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/gnucash.trace.%d", getpid());
+   if(!fout && (filename = (char *)g_malloc(MAX_TRACE_FILENAME))) {
+      snprintf(filename, MAX_TRACE_FILENAME-1, "/tmp/gnucash.trace.%d", 
+	       getpid());
       fout = fopen (filename, "w");
+      g_free(filename);
    }
 
    if(!fout)

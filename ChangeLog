@@ -2,6 +2,13 @@
 
 	John Ellson's patch to fix some gcc4 warnings (bug #162582).
 
+	Chris Shoemaker's gnc-trace patch.
+	* src/engine/gnc-trace.[ch]:
+	  - Recent use of malloc in gnc-trace breaks my compile, use g_malloc
+	  - Fix leak of filename mem
+	  - add indenting of trace file according to ENTER/LEAVE stack depth
+	  - have ENTER report file name of function along with function name
+
 2004-12-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/tax/us/txf-de_DE.scm: Add Tax TXF categories for the de_DE
