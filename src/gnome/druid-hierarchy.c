@@ -33,12 +33,13 @@
 #include "druid-hierarchy.h"
 #include "druid-utils.h"
 #include "gnc-amount-edit.h"
-#include "gnc-commodity-edit.h"
+#include "gnc-currency-edit.h"
 #include "gnc-general-select.h"
 #include "gnc-component-manager.h"
 #include "../gnome-utils/gnc-dir.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
+#include "global-options.h"
 #include "io-example-account.h"
 #include "top-level.h"
 
@@ -105,32 +106,21 @@ get_account_types_clist (void)
   return GTK_CLIST(hierarchy_get_widget ("account_types_clist"));
 }
 
-static GNCGeneralSelect *
-get_commodity_editor(void)
+static GtkWidget *
+get_currency_editor(void)
 {
+  GtkWidget *selector;
   GtkWidget *tmp_wid = gtk_object_get_data (GTK_OBJECT (hierarchy_window),
-                                            "commod_editor");
+                                            "currency_editor");
+  if (tmp_wid)
+    return tmp_wid;
 
-  if(!tmp_wid)
-  {
-    GNCGeneralSelect *cur_editor;
-
-    cur_editor =
-      GNC_GENERAL_SELECT (gnc_general_select_new(GNC_GENERAL_SELECT_TYPE_SELECT,
-						 gnc_commodity_edit_get_string,
-						 gnc_commodity_edit_new_select,
-						 NULL));
-    gtk_widget_show (GTK_WIDGET(cur_editor));
-    gnc_general_select_set_selected (cur_editor,
-                                      gnc_locale_default_currency());
-    gtk_object_set_data(GTK_OBJECT(hierarchy_window),
-                        "commod_editor", cur_editor);
-    return cur_editor;
-  }
-  else
-  {
-    return GNC_GENERAL_SELECT(tmp_wid);
-  }
+  selector = gnc_currency_edit_new();
+  gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(selector), gnc_default_currency());
+  gtk_widget_show (selector);
+  gtk_object_set_data(GTK_OBJECT(hierarchy_window),
+		      "currency_editor", selector);
+  return selector;
 }
 
 static void
@@ -293,14 +283,14 @@ on_choose_currency_prepare (GnomeDruidPage  *gnomedruidpage,
                             gpointer         user_data)
 {
   if(!GPOINTER_TO_INT (gtk_object_get_data
-                       (GTK_OBJECT(hierarchy_window), "commod_added")))
+                       (GTK_OBJECT(hierarchy_window), "currency_added")))
   {
     gtk_object_set_data (GTK_OBJECT(hierarchy_window),
-                         "commod_added", GINT_TO_POINTER (1));
+                         "currency_added", GINT_TO_POINTER (1));
 
     gtk_box_pack_start(GTK_BOX(gnc_glade_lookup_widget
                                (hierarchy_window, "currency_chooser_vbox")),
-                       GTK_WIDGET(get_commodity_editor()), FALSE, FALSE, 0);
+                       GTK_WIDGET(get_currency_editor()), FALSE, FALSE, 0);
   }
 }
 
@@ -664,7 +654,7 @@ hierarchy_merge_groups (GSList *dalist)
   gnc_commodity *com;
   AccountGroup *ret = xaccMallocAccountGroup (gnc_get_current_book ());
 
-  com = gnc_general_select_get_selected (get_commodity_editor ());
+  com = gnc_currency_edit_get_currency (GNC_CURRENCY_EDIT(get_currency_editor ()));
 
   for (mark = dalist; mark; mark = mark->next)
   {
