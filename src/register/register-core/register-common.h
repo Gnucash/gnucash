@@ -31,7 +31,6 @@
 #define BASIC_CELL_TYPE_NAME     "basic-cell"
 #define COMBO_CELL_TYPE_NAME     "combo-cell"
 #define DATE_CELL_TYPE_NAME      "date-cell"
-#define INACTIVE_DATE_CELL_TYPE_NAME "inactive-date-cell"
 #define NUM_CELL_TYPE_NAME       "num-cell"
 #define PRICE_CELL_TYPE_NAME     "price-cell"
 #define RECN_CELL_TYPE_NAME      "recn-cell"
