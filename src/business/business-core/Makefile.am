@@ -34,9 +34,11 @@ noinst_HEADERS = \
   gncEntry.h \
   gncEntryP.h \
   gncInvoice.h \
+  gncInvoiceP.h \
   gncJob.h \
   gncJobP.h \
   gncOrder.h \
+  gncOrderP.h \
   gncOwner.h \
   gncVendor.h \
   gncVendorP.h
