@@ -26,13 +26,23 @@
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
-;; The option names are defined here to a) save typing and b) avoid
+;; The option names are defined here to 1. save typing and 2. avoid
 ;; spelling errors. The *reportnames* are defined here (and not only
 ;; once at the very end) because I need them to define the "other"
 ;; report, thus needing them twice.
 (let ((reportname-income (N_ "Income Barchart"))
       (reportname-expense (N_ "Expense Barchart"))
-      
+      (reportname-assets (N_ "Asset Barchart"))
+      (reportname-liabilities (N_ "Liability Barchart"))
+      ;; The names are used in the menu, as labels and as identifiers.
+
+      ;; The titels here are only printed as titles of the report.
+      (reporttitle-income (_ "Income Accounts"))
+      (reporttitle-expense (_ "Expense Accounts"))
+      (reporttitle-assets (_ "Asset Accounts"))
+      (reporttitle-liabilities (_ "Liability/Equity Accounts"))
+
+      ;; Option names
       (pagename-general (N_ "General"))
       (optname-from-date (N_ "From"))
       (optname-to-date (N_ "To"))
@@ -50,7 +60,7 @@
       (optname-plot-width (N_ "Plot Width"))
       (optname-plot-height (N_ "Plot Height")))
 
-  (define (options-generator is-income?)    
+  (define (options-generator account-types)
     (let* ((options (gnc:new-options)) 
            (add-option 
             (lambda (new-option)
@@ -75,13 +85,11 @@
 	(N_ "Report on these accounts, if chosen account level allows.")
 	(lambda ()
 	  (gnc:filter-accountlist-type 
-	   (if is-income? '(income) '(expense))
+	   account-types
 	   (gnc:group-get-subaccounts (gnc:get-current-group))))
 	(lambda (accounts)
 	  (list #t
-		(gnc:filter-accountlist-type
-		 (if is-income? '(income) '(expense))
-		 accounts)))
+		(gnc:filter-accountlist-type account-types accounts)))
 	#t))
       
       (gnc:options-add-account-levels! 
@@ -98,7 +106,9 @@
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-stacked
-        "b" (N_ "Show barchart as stacked barchart? (Guppi>=0.35.4 required)") #t))
+        "b" 
+	(N_ "Show barchart as stacked barchart? (Guppi>=0.35.4 required)") 
+	#t))
 
       (add-option
        (gnc:make-number-range-option
@@ -126,13 +136,14 @@
   ;; constant over the whole report period. Note that this might get
   ;; *really* complicated.
 
-  (define (category-barchart-renderer report-obj is-income?)
+  (define (category-barchart-renderer report-obj reportname 
+				      account-types report-title)
     ;; A helper functions for looking up option values.
     (define (get-option section name)
       (gnc:option-value 
        (gnc:lookup-option 
 	(gnc:report-options report-obj) section name)))
-
+    
     (let ((to-date-tp (gnc:timepair-end-day-time 
 		       (vector-ref (get-option pagename-general
 					       optname-to-date) 1)))
@@ -153,15 +164,12 @@
 	  (width (get-option pagename-display optname-plot-width))
 	  
 	  (document (gnc:make-html-document))
-	  (report-title (if is-income?
-			   (_ "Income Categories") 
-			   (_ "Expense Categories")))
 	  (chart (gnc:make-html-barchart))
 	  (topl-accounts (gnc:filter-accountlist-type 
-			  (if is-income? '(income) '(expense))
+			  account-types
 			  (gnc:group-get-account-list 
 			   (gnc:get-current-group)))))
-
+      
       ;; Returns true if the account a was selected in the account
       ;; selection option.
       (define (show-acct? a)
@@ -200,7 +208,7 @@
 	    (gnc:sum-collector-commodity 
 	     c report-currency 
 	     exchange-fn))))
-      
+	
 	;; Calculates the net balance (profit or loss) of an account in
 	;; the given time interval. date-list-entry is a pair containing
 	;; the start- and end-date of that interval. If subacct?==#t,
@@ -269,11 +277,11 @@
 			  (string<? (gnc:account-get-code (car a))
 				    (gnc:account-get-code (car b))))))
 	;; Or rather sort by total amount?
-;			  (< (apply + (cadr a)) 
-;			     (apply + (cadr b))))))
-;; Other sort criteria: max. amount, standard deviation of amount,
-;; min. amount; ascending, descending. FIXME: Add user options to
-;; choose sorting.
+	;;(< (apply + (cadr a)) 
+	;;   (apply + (cadr b))))))
+	;; Other sort criteria: max. amount, standard deviation of amount,
+	;; min. amount; ascending, descending. FIXME: Add user options to
+	;; choose sorting.
 
 
 	;;(warn "all-data" all-data)
@@ -310,8 +318,7 @@
 	      (set! all-data
 		    (append start
 			    (list (list (_ "Other") other-sum))))
-	      (let* ((name (if is-income?
-			       reportname-income reportname-expense))
+	      (let* ((name reportname)
 		     (options (gnc:make-report-options name)))
 		;; now copy all the options
 		(define (set-option! pagename optname value)
@@ -370,17 +377,25 @@
 	(gnc:html-document-add-object! document chart) 
 	document)))
 
-  (gnc:define-report
-   'version 1
-   ;; why I use a variable here? See comment at the top.
-   'name reportname-income 
-   'options-generator (lambda () (options-generator #t))
-   'renderer (lambda (report-obj)
-               (category-barchart-renderer report-obj #t)))
-
-  (gnc:define-report
-   'version 1
-   'name reportname-expense
-   'options-generator (lambda () (options-generator #f))
-   'renderer (lambda (report-obj)
-               (category-barchart-renderer report-obj #f))))
+  (for-each 
+   (lambda (l)
+     (gnc:define-report
+      'version 1
+      ;; why I use a variable here? See comment at the top.
+      'name (car l)
+      'options-generator (lambda () (options-generator (cadr l)))
+      'renderer (lambda (report-obj)
+		  (category-barchart-renderer report-obj 
+					      (car l) 
+					      (cadr l)
+					      (caddr l)))))
+   (list 
+    (list reportname-income '(income) reporttitle-income)
+    (list reportname-expense '(expense) reporttitle-expense)
+    (list reportname-assets 
+	  '(asset bank cash checking savings money-market 
+		  stock mutual-fund currency)
+	  reporttitle-assets)
+    (list reportname-liabilities 
+	  '(liability credit credit-line equity)
+	  reporttitle-liabilities))))
