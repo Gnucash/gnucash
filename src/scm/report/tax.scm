@@ -40,6 +40,8 @@
 
 ;; do loop string-search
 (define (string-search string sub-str start)
+  (if (not string)
+      (set! string ""))
   (do ((sub-len (string-length sub-str))
        ;; must recompute sub-len because order is unknown
        (limit (- (string-length string) (string-length sub-str)))
@@ -166,7 +168,8 @@
 	    (if (or full-names (equal? level 1))
 		(gnc:account-get-full-name account)
 		(gnc:account-get-name account)))
-	   (value (gnc:amount->formatted-string lx-value #f))
+	   (value (gnc:amount->string lx-value
+                                      (gnc:account-value-print-info #f)))
 	   (account-name (do ((i 1 (+ i 1))
 			      (accum account-name
 				     (string-append indent-1 accum)))
@@ -183,7 +186,9 @@
 					  "right")))))
       ;;(if (not (equal? lx-value 0.0)) ; this fails, round off, I guess
       (if (or (not suppress-0) (= level 1)
-              (not (equal? value (gnc:amount->formatted-string 0.0 #f))))
+              (not (equal? value
+                           (gnc:amount->formatted-string
+                            0.0 (gnc:account-value-print-info #f)))))
 	  (html-table-row-align
 	   (append (list account-name) nbsp-x-value)
 	   align-x)

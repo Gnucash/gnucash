@@ -38,7 +38,8 @@
 		    " ("
 		    (string-db 'lookup 'open-bal-string) 
 		    " "
-		    (gnc:amount->formatted-string signed-balance #f)
+		    (gnc:amount->string signed-balance
+                                        (gnc:account-value-print-info acc #f))
 		    ")"
 		    )))
 

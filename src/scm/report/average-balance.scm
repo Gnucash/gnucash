@@ -233,14 +233,16 @@
     (reduce-splits deltas splits))
 
   (define (format-numbers-in-list list)
-    (if (null? list)
-        '()
-        (cond ((number? (car list))
-               (cons (gnc:amount->string (car list) #f #t #f)
-                     (format-numbers-in-list (cdr list))))
-              (else
-               (cons (car list)
-                     (format-numbers-in-list (cdr list)))))))
+    (define print-info (gnc:default-print-info #f))
+    (define (format-internal list)
+      (cond ((null? list) '())
+            ((number? (car list))
+             (cons (gnc:amount->string (car list) print-info)
+                   (format-internal (cdr list))))
+            (else
+             (cons (car list)
+                   (format-internal (cdr list))))))
+    (format-internal list))
 
   (define (format-reduced-list list)
     (define (reduce-line line)

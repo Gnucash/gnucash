@@ -50,7 +50,12 @@
         (let ((shares (gnc:split-get-share-balance last-split))
               (price (gnc:split-get-share-price last-split))
               (balance (gnc:split-get-balance last-split))
-              (cost (gnc:split-get-cost-basis last-split)))
+              (cost 0) ; fixme (gnc:split-get-cost-basis last-split)))
+              (quantity-print-info
+               (gnc:split-quantity-print-info last-split #f))
+              (price-print-info (gnc:default-price-print-info))
+              (value-print-info
+               (gnc:split-value-print-info last-split #f)))
 
           (total-value 'add balance)
           (total-cost 'add cost)
@@ -59,20 +64,21 @@
            (gnc:account-get-name account)
            (gnc:commodity-get-printname 
             (gnc:account-get-security account))
-           (gnc:amount->string shares #f #t #t)
-           (gnc:amount->string price #f #t #f)
-           (gnc:amount->string balance #f #t #f)
-           (gnc:amount->string cost #f #t #f)
-           (gnc:amount->string (- balance cost) #f #t #f)))))
+           (gnc:amount->string shares quantity-print-info)
+           (gnc:amount->string price price-print-info)
+           (gnc:amount->string balance value-print-info)
+           (gnc:amount->string cost value-print-info)
+           (gnc:amount->string (- balance cost) value-print-info)))))
 
     (define (net-row)
       (let ((value (total-value 'total #f))
-            (cost (total-cost 'total #f)))
+            (cost (total-cost 'total #f))
+            (print-info (gnc:default-print-info #f)))
         (list (html-strong (string-db 'lookup 'net))
               "&nbsp" "&nbsp" "&nbsp"
-              (gnc:amount->string value #f #t #f)
-              (gnc:amount->string cost #f #t #f)
-              (gnc:amount->string (- value cost) #f #t #f))))
+              (gnc:amount->string value print-info)
+              (gnc:amount->string cost print-info)
+              (gnc:amount->string (- value cost) print-info))))
 
     (define (report-rows-main)
       (gnc:group-map-all-accounts

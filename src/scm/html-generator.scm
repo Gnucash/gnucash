@@ -432,11 +432,11 @@
        (if (< amount 0)
 	   (string-append
 	    "color=#ff0000>("
-	    (gnc:amount->string (- amount) #f #t #f)
+	    (gnc:amount->string (- amount) (gnc:default-print-info #f))
 	    ")")
 	   (string-append
 	    ">&nbsp;"
-	    (gnc:amount->string amount #f #t #f)
+	    (gnc:amount->string amount (gnc:default-print-info #f))
 	    "&nbsp;"))
        "</font>")
       #f))
@@ -462,8 +462,9 @@
 	   (color (if neg "ff0000" #f))
 	   (prefix (if neg "(" NBSP))
 	   (suffix (if neg ")" NBSP))
-	   (displayamt (gnc:amount->string absamt #f #t #f)))
-	
+	   (displayamt
+            (gnc:amount->string absamt (gnc:default-print-info #f))))
+
 	(html-font-and-color "Courier" color
 			     (list prefix displayamt suffix)))
       #f))

@@ -20,24 +20,17 @@
 (gnc:support "report-utilities.scm")
 (gnc:depend "engine-utilities.scm")
 
-(define (gnc:amount->string amount print_currency_symbol?
-                            print_separators? shares_value?)
-  (gnc:amount->string-helper (exact->inexact amount)
-                             print_currency_symbol?
-                             print_separators?
-                             shares_value?
-                             ;; fixme
-                             (gnc:commodity-get-mnemonic 
-                              (gnc:locale-default-currency))))
+(define (gnc:amount->string amount info)
+  (gnc:amount->string-helper (exact->inexact amount) info))
 
-(define (gnc:amount->formatted-string amount shares_value?)
-  (gnc:amount->string amount #t #t shares_value?))
+;(define (gnc:amount->formatted-string amount shares_value?)
+;  (gnc:amount->string amount #t #t shares_value?))
 
-(define (gnc:amount->formatted-currency-string amount 
-					       this_currency shares_value?)
-  (gnc:amount->string-helper (exact->inexact amount)
-			     #t #t shares_value?
-                             this_currency))
+;(define (gnc:amount->formatted-currency-string amount 
+;					       this_currency shares_value?)
+;  (gnc:amount->string-helper (exact->inexact amount)
+;			     #t #t shares_value?
+;                             this_currency))
 
 (define (gnc:account-has-shares? account)
   (let ((type (gnc:account-type->symbol (gnc:account-get-type account))))

@@ -159,7 +159,8 @@
                            (non-zero-at-date-accounts
                             (gnc:group-get-accounts children) date) date #t))
            (gnc:account-get-name account))
-       (gnc:amount->string acc-bal #f #t #f))))
+       (gnc:amount->string acc-bal
+                           (gnc:account-value-print-info account #t)))))
 
   ;; build the table for the list of 'accounts' passed
   (define (acc-sum-table accnts date do-children?)
@@ -204,7 +205,10 @@
                         "</TD></TR>"))
             (begin
 
-              (set! rept-total (gnc:amount->string (account-total-at-date accounts enddate) #f #t #f))
+              (set! rept-total
+                    (gnc:amount->string
+                     (account-total-at-date accounts enddate)
+                     (gnc:account-value-print-info (car accounts) #t)))
 
               ; Grab account names
               (set! acctname

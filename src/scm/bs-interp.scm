@@ -23,4 +23,3 @@
 (gnc:load "startup.scm")
 (gnc:load "main.scm")
 (gnc:startup)
-
