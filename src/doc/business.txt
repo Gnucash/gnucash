@@ -1,5 +1,41 @@
 
-Business Design & Implenmentation Notes
+Business Object Overview
+------------------------
+
+The GnuCash Businesness objects, in src/business/business-core, implement
+certain basic small-business accounting functions.  Below follows a summary
+overview of the objects and the data that they store.  These are listed in
+order of complexity; with the basic building blocks first, and the more 
+complex structures last.
+
+Address:
+A very simple object, stores strings for name/street-address/phone/fax/email
+The address is not a separate entity, but is meant to be embedded in other 
+objects (that is, there is no addressbook; there is no address database that
+is separate from the objects that use addresses; there is no 'foreach'
+that can be used to iterate over all addresses.)
+
+BillTerm:
+Describes billing terms, that is when a bill is due, and what sort of a 
+discount is applied (if any).  The BillTerm object currently supports:
+-- the discount applied to a bill (absolute numeric value),
+-- the number of days until payment is due, 
+-- the number of days until a discount expires.
+-- cutoff ??
+The proximo type does what ???
+
+
+Entry:
+
+Invoice:
+Pulls together info needed to geenrate an invoice, including addresses,
+job, the dates, the billing terms, the amounts, and the accounts
+to be credited.
+
+
+
+
+Business Design & Implementation Notes
 ---------------------------------------
 Derek Atkins <warlord@mit.edu>
 Version of October 2003
