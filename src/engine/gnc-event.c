@@ -150,7 +150,7 @@ gnc_engine_resume_events (void)
 }
 
 void
-gnc_engine_generate_event (GUID *entity, GNCEngineEventType event_type)
+gnc_engine_generate_event (const GUID *entity, GNCEngineEventType event_type)
 {
   GList *node;
 
@@ -180,6 +180,6 @@ gnc_engine_generate_event (GUID *entity, GNCEngineEventType event_type)
     HandlerInfo *hi = node->data;
 
     if (hi->handler)
-      hi->handler (entity, event_type, hi->user_data);
+      hi->handler ((GUID *)entity, event_type, hi->user_data);
   }
 }
