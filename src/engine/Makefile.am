@@ -102,7 +102,8 @@ libgncmod_engine_la_LDFLAGS = -module
 libgncmod_engine_la_LIBADD = ${GNUCASH_ENGINE_BASE_LIBS} \
  ${top_builddir}/src/gnc-module/libgncmodule.la \
  ${top_builddir}/src/engine/libgw-engine.la \
- ${top_builddir}/src/engine/libgw-kvp.la 
+ ${top_builddir}/src/engine/libgw-kvp.la \
+ ${top_builddir}/lib/libc/libc_missing.a
 
 libgw_kvp_la_SOURCES = gw-kvp.c kvp-scm.c
 libgw_kvp_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}

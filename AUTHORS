@@ -162,7 +162,7 @@ Stefan Nobis <stefan-ml@snobis.de> German translation patch
 Martin Norbäck <d95mback@dtek.chalmers.se> Swedish translation
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 Bill Nottingham <notting@redhat.com> guile configure patch
-Peter O'Gorman <peter@pogma.com> file i/o patches
+Peter O'Gorman <peter@pogma.com> file i/o patches, Mac OS X patches
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager

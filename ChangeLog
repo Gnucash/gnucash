@@ -1,3 +1,11 @@
+2002-05-07  David Hampton  <hampton@employees.org>
+
+	Pogma's Mac OS X patches committed.  Added a new directory
+	src/lib/libc for library routines not available on Mac OS X.
+	Changed all of the module function names required by gnucash
+	according to libltdl rules so that they are unique, though they
+	all still appear the same to callers of libltdl.
+
 2002-05-06  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-pricedb.[ch]:

@@ -13,25 +13,25 @@
 #include "gnc-module-api.h"
 
 /* version of the gnc module system interface we require */
-int gnc_module_system_interface = 0;
+int libgncmod_locale_reports_us_LTX_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 0;
-int gnc_module_revision = 0;
-int gnc_module_age      = 0;
+int libgncmod_locale_reports_us_LTX_gnc_module_current  = 0;
+int libgncmod_locale_reports_us_LTX_gnc_module_revision = 0;
+int libgncmod_locale_reports_us_LTX_gnc_module_age      = 0;
 
 char *
-gnc_module_path(void) {
+libgncmod_locale_reports_us_LTX_gnc_module_path(void) {
   return g_strdup("gnucash/report/locale-specific/us");
 }
 
 char * 
-gnc_module_description(void) {
+libgncmod_locale_reports_us_LTX_gnc_module_description(void) {
   return g_strdup("US income tax reports and related material");
 }
 
 int
-gnc_module_init(int refcount) {
+libgncmod_locale_reports_us_LTX_gnc_module_init(int refcount) {
   /* load us tax info */
   if(!gnc_module_load("gnucash/tax/us", 0)) {
     return FALSE;
@@ -58,6 +58,6 @@ gnc_module_init(int refcount) {
 }
 
 int
-gnc_module_end(int refcount) {
+libgncmod_locale_reports_us_LTX_gnc_module_end(int refcount) {
   return TRUE;
 }

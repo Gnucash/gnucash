@@ -49,7 +49,7 @@
 #include "gnc-engine-util.h"
 #include "Group.h"
 
-const gchar *book_version_string = "2.0.0";
+static const gchar *book_version_string = "2.0.0";
 
 /* ids */
 #define gnc_book_string "gnc:book"

@@ -712,6 +712,45 @@ then
 
 fi
 
+###-------------------------------------------------------------------------
+### Stuff from Mac OS X Port
+###-------------------------------------------------------------------------
+
+AC_CHECK_FUNCS(pthread_mutex_init)
+AC_REPLACE_FUNCS(strptime localtime_r)
+#AC_REPLACE_FUNCS(scm_strptime)
+
+if test $am_cv_val_LC_MESSAGES = "no"; then
+  LC_MESSAGES_ENUM="LC_ALL"
+else
+  LC_MESSAGES_ENUM="LC_MESSAGES"
+fi
+AC_SUBST(LC_MESSAGES_ENUM)
+
+if test $am_cv_scanf_lld=no; then
+  AC_MSG_CHECKING(if scanf supports %qd conversion)
+  AC_TRY_RUN([
+#include <stdio.h>
+#include <stdlib.h>
+
+int main ()
+{
+  long long int d;
+  d = 0;
+  if ((sscanf ("10000000000", "%qd", &d) != 1) || (d != 10000000000))
+    exit (1);
+  exit (0);
+}
+],[
+        AC_DEFINE(HAVE_SCANF_QD, 1,
+            [Define if scanf supports %qd conversions.])
+        AC_MSG_RESULT(yes)
+        ],[
+        AC_MSG_RESULT(no)
+        AC_MSG_ERROR(cannot continue, no long long conversion support in scanf)
+        ])
+fi
+
 
 ### --------------------------------------------------------------------------
 ### GnuCash flags and libs configuration
@@ -796,6 +835,7 @@ AC_OUTPUT(
           lib/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
+	  lib/libc/Makefile
           macros/Makefile
 	  po/Makefile.in
           po/Makefile

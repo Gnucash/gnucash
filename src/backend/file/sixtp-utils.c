@@ -35,6 +35,7 @@
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
+#include "core-utils.h"
 
 #include "date.h"
 #include "guid.h"
@@ -388,7 +389,8 @@ gnc_timegm (struct tm *tm)
   else
   {
     /* FIXME: there's no way to report this error to the caller. */
-    if(gnc_unsetenv("TZ") != 0)
+    gnc_unsetenv("TZ");
+    if(errno != 0)
       PERR ("couldn't restore the TZ to undefined.");
   }
   return result;

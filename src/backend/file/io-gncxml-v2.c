@@ -62,7 +62,7 @@ struct file_backend {
 };
 
 #define GNC_V2_STRING "gnc-v2"
-const gchar *book_version_string;
+static const gchar *book_version_string;
 
 static void
 run_callback(sixtp_gdv2 *data, const char *type)

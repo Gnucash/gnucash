@@ -237,10 +237,10 @@ static void invoiceTransCB(GtkWidget *w, gpointer data) { }
 static void printReportCB(GtkWidget *w, gpointer data) { }
 static void dateCB(GtkWidget *w, gpointer data) { }
 
-void gnc_register_raise (GNCRegWidget *rw);
-void gnc_register_jump_to_split(GNCRegWidget *rw, Split *split);
-void gnc_register_jump_to_split_amount(GNCRegWidget *rw, Split *split);
-void gnc_register_jump_to_blank (GNCRegWidget *rw);
+static void gnc_register_raise (GNCRegWidget *rw);
+static void gnc_register_jump_to_split(GNCRegWidget *rw, Split *split);
+static void gnc_register_jump_to_split_amount(GNCRegWidget *rw, Split *split);
+static void gnc_register_jump_to_blank (GNCRegWidget *rw);
 
 /********************************************************************\
  * gnc_register_raise                                               *
@@ -249,7 +249,7 @@ void gnc_register_jump_to_blank (GNCRegWidget *rw);
  * Args:   rw - the register widget data structure                  *
  * Return: nothing                                                  *
 \********************************************************************/
-void
+static void
 gnc_register_raise (GNCRegWidget *rw)
 {
   if (rw == NULL)
@@ -269,7 +269,7 @@ gnc_register_raise (GNCRegWidget *rw)
  *         split   - the split to jump to                           *
  * Return: nothing                                                  *
 \********************************************************************/
-void
+static void
 gnc_register_jump_to_split(GNCRegWidget *rw, Split *split)
 {
   Transaction *trans;
@@ -303,7 +303,7 @@ gnc_register_jump_to_split(GNCRegWidget *rw, Split *split)
  *         split   - the split to jump to                           *
  * Return: nothing                                                  *
 \********************************************************************/
-void
+static void
 gnc_register_jump_to_split_amount(GNCRegWidget *rw, Split *split)
 {
   Transaction *trans;
@@ -608,7 +608,7 @@ gnc_regWidget_create_status_bar (GNCRegWidget *rw)
   return statusbar;
 }
 
-void
+static void
 gnc_register_jump_to_blank (GNCRegWidget *rw)
 {
   SplitRegister *reg = gnc_ledger_display_get_split_register (rw->ledger);

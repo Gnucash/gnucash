@@ -14,27 +14,27 @@
 #include "gw-business-gnome.h"
 
 /* version of the gnc module system interface we require */
-int gnc_module_system_interface = 0;
+int libgncmod_business_gnome_LTX_gnc_module_system_interface = 0;
 
 /* module versioning uses libtool semantics. */
-int gnc_module_current  = 0;
-int gnc_module_revision = 0;
-int gnc_module_age      = 0;
+int libgncmod_business_gnome_LTX_gnc_module_current  = 0;
+int libgncmod_business_gnome_LTX_gnc_module_revision = 0;
+int libgncmod_business_gnome_LTX_gnc_module_age      = 0;
 
 char *
-gnc_module_path(void) 
+libgncmod_business_gnome_LTX_gnc_module_path(void) 
 {
   return g_strdup("gnucash/business-gnome");
 }
 
 char * 
-gnc_module_description(void) 
+libgncmod_business_gnome_LTX_gnc_module_description(void) 
 {
   return g_strdup("The Gnucash business module GNOME UI");
 }
 
 int
-gnc_module_init(int refcount) 
+libgncmod_business_gnome_LTX_gnc_module_init(int refcount) 
 {
   /* load business-core: we depend on it -- and it depends on the engine */
   if (!gnc_module_load ("gnucash/business-core", 0)) {
@@ -64,7 +64,7 @@ gnc_module_init(int refcount)
 }
 
 int
-gnc_module_end(int refcount) {
+libgncmod_business_gnome_LTX_gnc_module_end(int refcount) {
   return TRUE;
 }
 

@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/backend \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
+  -I${top_srcdir}/src/core-utils\
   ${GLIB_CFLAGS}
 
 libgncmod_backend_file_la_SOURCES = \
