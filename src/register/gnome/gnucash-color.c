@@ -153,7 +153,7 @@ gnucash_color_init (void)
 
         gnucash_color_alloc_name ("gray60", &gn_light_gray);
         gnucash_color_alloc_name ("gray40", &gn_dark_gray);
-        gnucash_color_alloc_name ("sky blue", &gn_blue);
+        gnucash_color_alloc_name ("blue", &gn_blue);
 
         if (!color_hash_table)
                 color_hash_table = g_hash_table_new(color_hash, color_equal);
