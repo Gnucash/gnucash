@@ -323,6 +323,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   int i;
   int numTrans, accID;
   Account *acc;
+  char acctype;
 
   ENTER ("readAccount");
   
@@ -340,8 +341,9 @@ readAccount( int fd, AccountGroup *grp, int token )
   err = read( fd, &(acc->flags), sizeof(char) );
   if( err != sizeof(char) ) { return NULL; }
   
-  err = read( fd, &(acc->type), sizeof(char) );
+  err = read( fd, &(acctype), sizeof(char) );
   if( err != sizeof(char) ) { return NULL; }
+  acc->type = acctype;
   
   acc->accountName = readString( fd, token );
   if( acc->accountName == NULL ) { return NULL; }
@@ -861,6 +863,7 @@ writeAccount( int fd, Account *acc )
   int i, numUnwrittenTrans, ntrans;
   int acc_id;
   int numChildren = 0;
+  char acctype;
   
   INFO_2 ("writeAccount(): writing acct %s \n", acc->accountName);
 
@@ -874,7 +877,8 @@ writeAccount( int fd, Account *acc )
   if( err != sizeof(char) )
     return -1;
   
-  err = write( fd, &(acc->type), sizeof(char) );
+  acctype = (char) (acc->type);
+  err = write( fd, &(acctype), sizeof(char) );
   if( err != sizeof(char) )
     return -1;
   

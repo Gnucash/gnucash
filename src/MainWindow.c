@@ -103,7 +103,7 @@ void
 xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
 {
 
-  int   i, j, currow;
+  int   i, j, k, currow;
   char  buf[BUFSIZE];
   
   /* Add all the top-level accounts to the list */
@@ -115,7 +115,7 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
     
     /* fill in the arrow and the account type fileds */
     cols[XACC_MAIN_ACC_ARRW] = XtNewString("");
-    cols[XACC_MAIN_ACC_TYPE] = account_type_name[acc->type];
+    cols[XACC_MAIN_ACC_TYPE] = XtNewString(account_type_name[acc->type]);
 
     /* fill in the account name field, indenting for sub-accounts */
     buf[0] = 0x0;
@@ -148,6 +148,10 @@ xaccMainWindowAddAcct (Widget acctrix, AccountGroup *grp, int depth )
     
     XtVaGetValues (acctrix, XmNrows, &currow, NULL);
     XbaeMatrixAddRows( acctrix, currow, cols, NULL, NULL, 1 );
+
+    for (k=0; k<XACC_MAIN_NUM_COLS; k++) {
+      XtFree (cols[k]);
+    }
     
 #if !USE_NO_COLOR
     /* Set the color of the text, depending on whether the
