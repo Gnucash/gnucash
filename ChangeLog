@@ -1,3 +1,8 @@
+2003-02-04  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-backend.c: Add heuristic for duplicate matching by check number.  
+	* doc/README.OFX: Update
+
 2003-02-04  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif-import/qif-file.scm: mark "splits" as negative
