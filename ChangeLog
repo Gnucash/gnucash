@@ -1,3 +1,13 @@
+2005-01-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Enable debit notes
+	again. Various other improvements.
+
+	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button),
+	configure.in: Adapt to latest changes in aqbanking; external
+	wizard name is no longer hard-coded here but is asked from
+	aqbanking.
+
 2005-01-23  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.c: Properly accumulate

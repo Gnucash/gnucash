@@ -29,6 +29,7 @@
 #include <gnome.h>
 #include <aqbanking/account.h>
 #include <aqbanking/jobsingletransfer.h>
+#include <aqbanking/jobsingledebitnote.h>
 
 #include "dialog-utils.h"
 #include "gnc-ui.h"
@@ -624,7 +625,14 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
   AB_JOB *job;
 
   /* Create a Do-Transaction (Transfer) job. */
-  job = AB_JobSingleTransfer_new(h_acc);
+  switch (trans_type) {
+  case SINGLE_DEBITNOTE:
+    job = AB_JobSingleDebitNote_new(h_acc);
+    break;
+  default:
+  case SINGLE_TRANSFER:
+    job = AB_JobSingleTransfer_new(h_acc);
+  };
   if (AB_Job_CheckAvailability(job)) {
     printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
     return NULL;
