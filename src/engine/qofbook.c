@@ -46,9 +46,9 @@
 #include "gnc-event.h"
 #include "gnc-event-p.h"
 #include "gnc-trace.h"
-#include "gncObjectP.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofobject-p.h"
 
 static short module = MOD_ENGINE;
 
