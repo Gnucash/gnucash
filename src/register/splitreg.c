@@ -328,6 +328,8 @@ configTraverse (SplitRegister *reg)
    int show_tamount = (reg->type) & REG_SHOW_TAMOUNT;
    int show_samount = (reg->type) & REG_SHOW_SAMOUNT;
    int show_txfrm = (reg->type) & REG_SHOW_TXFRM;
+   int double_line = (reg->type) & REG_DOUBLE_LINE;
+   int multi_line = (reg->type) & REG_MULTI_LINE;
 
    switch (type) {
       case BANK_REGISTER:
@@ -351,7 +353,13 @@ configTraverse (SplitRegister *reg)
             NEXT_RIGHT (TDEBT_CELL_R, TDEBT_CELL_C);
             NEXT_RIGHT (TCRED_CELL_R, TCRED_CELL_C);
          }
-         NEXT_RIGHT  (-1-DATE_CELL_R, -1-DATE_CELL_C);
+
+         /* if a multi-line display, hop down one line to the split cursor */
+         if (!double_line && !multi_line) {
+            NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
+         } else {
+            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
+         }
 
          curs = reg->split_cursor;
          FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
@@ -361,7 +369,16 @@ configTraverse (SplitRegister *reg)
             NEXT_RIGHT (DEBT_CELL_R, DEBT_CELL_C);
             NEXT_RIGHT (CRED_CELL_R, CRED_CELL_C);
          }
-         NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
+         if (multi_line) {
+            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
+         } else
+         if (double_line) {
+            /* if double-line, hop back one row */
+            NEXT_RIGHT (-1-DATE_CELL_R + curs->numRows, -1-DATE_CELL_C);
+         } else {
+            /* normally, this statement should enver be reached */
+            NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
+         }
          break;
 
       case STOCK_REGISTER:
@@ -379,7 +396,12 @@ configTraverse (SplitRegister *reg)
             NEXT_RIGHT (TPRIC_CELL_R, TPRIC_CELL_C);
             NEXT_RIGHT (TVALU_CELL_R, TVALU_CELL_C);
          }
-         NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
+         /* if a multi-line display, hop down one line to the split cursor */
+         if (!double_line && !multi_line) {
+            NEXT_RIGHT (-1-DATE_CELL_R, -1-DATE_CELL_C);
+         } else {
+            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
+         }
 
          curs = reg->split_cursor;
          FIRST_RIGHT (ACTN_CELL_R, ACTN_CELL_C);
@@ -391,7 +413,15 @@ configTraverse (SplitRegister *reg)
             NEXT_RIGHT (PRIC_CELL_R, PRIC_CELL_C);
             NEXT_RIGHT (VALU_CELL_R, VALU_CELL_C);
          }
-         NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
+         if (multi_line) {
+            NEXT_RIGHT (ACTN_CELL_R + curs->numRows, ACTN_CELL_C);
+         } else
+         if (double_line) {
+            /* if double-line, hop back one row */
+            NEXT_RIGHT (-1-DATE_CELL_R + curs->numRows, -1-DATE_CELL_C);
+         } else {
+            NEXT_RIGHT (-1-ACTN_CELL_R, -1-ACTN_CELL_C);
+         }
          break;
 
       default:
