@@ -30,59 +30,13 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
-#ifndef __XACC_QUEUE_H__
-#define __XACC_QUEUE_H__
-
-#include "Transaction.h"
-
-typedef struct _Queue Queue;
-
-/*
- * The xaccQueuePushHead() routine pushes a split onto the head 
- *    of the queue.
- *
- * The xaccQueuePopTailShares() routine removes the indicated
- *    number of shares from the bottom of the queue.  If the queue
- *    does not contain that many shares, it dequeues all of the 
- *    shares. This routine returns the actual number of shares dequeued.
- *    Use this routine for FIFO accounting.
- *
- * The xaccQueuePopTailValue() routine removes the indicated
- *    value from the bottom of the queue.  If the value of the queue is less
- *    than this amount, the value of the queue is set to zero, and the
- *    actual value poped is returned.
- *    Use this routine for FIFO accounting.
- *
- * The xaccQueuePopHeadShares() and xaccQueuePopHeadValue() routines
- *    behave in the same way as the *Tail* versions, except that they act
- *    on the head of the queue.  Use these routines for LIFO accounting.
- *
- * The xaccQueueGetValue() routine returns the value of the queue.
- * The xaccQueueGetShares() routine returns the number of shares in the queue.
- */
-
-Queue * xaccMallocQueue (void);
-void xaccInitQueue (Queue *q);
-void xaccFreeQueue (Queue *q);
-
-void xaccQueuePushHead (Split *s);
-
-double xaccQueuePopHeadShares (Queue *, double);
-double xaccQueuePopHeadValue (Queue *, double);
-double xaccQueuePopTailShares (Queue *, double);
-double xaccQueuePopTailValue (Queue *, double);
-
-double xaccQueueGetValue (Queue *);
-double xaccQueueGetShares (Queue *);
-
-#endif /* __XACC_QUEUE_H__ */
-
 #include <limits.h>
 #include <stdlib.h>
 #include <strings.h>
 
 #include "config.h"
 
+#include "Queue.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "util.h"
@@ -190,7 +144,7 @@ ExtendHead (Queue * q)
       return;
    }
 
-   /* if we got to here, we need to malloc more memory.
+   /* if we got to here, we need to malloc more memory. */
    newlist = (Split **) malloc (2*(q->list_len)*sizeof (Split *));
    q->list_len *= 2;
 
@@ -228,7 +182,7 @@ xaccQueuePushHead (Queue *q, Split *s)
   ExtendHead (q);
 
   q->head_split ++;
-  q->split_list [ q->head_list ] = s;
+  q->split_list [ q->head_split ] = s;
 }
 
 /* ================================================== */
@@ -402,8 +356,8 @@ double
 xaccQueueGetShares (Queue *q)
 {
    Split **list;
-   int val = 0.0;
-   int i, len;
+   int shrs = 0.0;
+   int i, len, tail;
    if (!q) return 0.0;
 
    shrs += q->head_amount;
@@ -423,7 +377,7 @@ xaccQueueGetValue (Queue *q)
 {
    Split **list;
    int shrs = 0.0;
-   int i, len;
+   int i, len, tail;
    if (!q) return 0.0;
 
    shrs += q->head_amount * q->head_price;
