@@ -1,3 +1,8 @@
+2004-01-07  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.h: fix the xaccTransOrder() documentation
+	  to be more accurate with the actual implementation.
+
 2004-01-06  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/qofinstance.c: revert fix from 01-01, because it's wrong.

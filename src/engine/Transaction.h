@@ -280,10 +280,17 @@ gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
 
 /**
  * The xaccTransOrder(ta,tb) method is useful for sorting.
- *    return a negative value if transaction ta is dated earlier than tb, 
- *    return a positive value if transaction ta is dated later than tb,
- *    then compares num and description values, using the strcmp()
- *    c-library routine, returning  what strcmp would return.
+ *    Orders ta and tb
+ *      return <0 if ta sorts before tb
+ *      return >0 if ta sorts after tb
+ *      return 0 if they are absolutely equal
+ *
+ *    The comparrison uses the following fields, in order:
+ *      date posted  (compare as a date)
+ *      num field (compare as an integer)
+ *      date entered (compare as a date)
+ *      description field (comcpare as a string using strcmp())
+ *      GUID (compare as a guid)
  *    Finally, it returns zero if all of the above match.
  *    Note that it does *NOT* compare its member splits.
  */
