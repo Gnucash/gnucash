@@ -687,14 +687,14 @@
   <act:description>Resultado</act:description>
 </gnc:account>
 <gnc:account version="2.0.0">
-  <act:name>Saldo Inicial</act:name>
+  <act:name>Saldos Iniciais</act:name>
   <act:id type="new">a0a622a30410f75eba35d2875a843da8</act:id>
   <act:type>EQUITY</act:type>
   <act:currency>
     <cmdty:space>ISO4217</cmdty:space>
     <cmdty:id>PTE</cmdty:id>
   </act:currency>
-  <act:description>Saldo Inicial</act:description>
+  <act:description>Saldos Iniciais</act:description>
   <act:parent type="new">3ab6a6d97b216c11333e48aa2b749a91</act:parent>
 </gnc:account>
 </gnc-account-example>
