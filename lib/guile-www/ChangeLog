@@ -1,5 +1,7 @@
 2001-11-28  Rob Browning  <rlb@defaultvalue.org>
 
+	* .cvsignore: add .scm-links
+
 	* lib/guile-www/Makefile.am
 	(.scm-links): create so we can run from gnucash build dir.
 
