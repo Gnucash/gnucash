@@ -35,7 +35,8 @@ gnc_numeric_print(gnc_numeric in) {
 }
 
 static void
-check_unary_op (gnc_numeric expected, 
+check_unary_op (gboolean (*eqtest) (gnc_numeric, gnc_numeric), 
+                gnc_numeric expected, 
                 gnc_numeric actual, 
                 gnc_numeric input, 
                 const char * errmsg)
@@ -45,7 +46,7 @@ check_unary_op (gnc_numeric expected,
 	char *a = gnc_numeric_print (input);
 	char *str = g_strdup_printf (errmsg, e,r, a);
 	
-	do_test (gnc_numeric_eq(expected, actual), str);
+	do_test (eqtest(expected, actual), str);
 	
 	g_free (a);
 	g_free (r);
@@ -86,16 +87,6 @@ main(int argc, char ** argv) {
   int i;
   gint64 v;
 
-  printf("mul exact : %s * %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, 
-                                           GNC_DENOM_EXACT)));
-
-  printf("mul least : %s * %s = %s\n",
-         gnc_numeric_print(a), gnc_numeric_print(b),
-         gnc_numeric_print(gnc_numeric_mul(a, b, GNC_DENOM_AUTO, 
-                                           GNC_DENOM_REDUCE)));
-  
   printf("mul 100ths : %s * %s = %s\n",
          gnc_numeric_print(a), gnc_numeric_print(b),
          gnc_numeric_print(gnc_numeric_mul(a, b, 100,
@@ -219,6 +210,12 @@ main(int argc, char ** argv) {
 }
 #endif
 
+static gboolean
+gnc_numeric_unequal (gnc_numeric a, gnc_numeric b)
+{
+	return (0 == gnc_numeric_equal (a,b));
+}
+
 /* Make sure that the equivalence operator we use for 
  * later tests actually works */
 static void
@@ -245,7 +242,7 @@ check_equality_operator (void)
 	rfour = gnc_numeric_reduce (rfour);
 	do_test (gnc_numeric_eq(four, rfour), "reduce to four");
 
-	/* Check equality operator for some large nuer/denom values */
+	/* Check equality operator for some large numer/denom values */
 	gint64 numer = 1<<30;
 	numer <<= 30;   /* we don't trust cpp to compute 1<<60 correctly */
 	gint64 deno = 1<<30;
@@ -292,12 +289,34 @@ check_equality_operator (void)
 		/* The reduced version should be equivalent */
 		gnc_numeric bval = gnc_numeric_reduce (val);
 		gnc_numeric rval = gnc_numeric_reduce (mval);
-		check_unary_op (bval, rval, mval, "expected %s = %s = reduce(%s)");
+		check_unary_op (gnc_numeric_eq, 
+                      bval, rval, mval, "expected %s = %s = reduce(%s)");
 		
 		/* The unreduced versions should be equal */
-		do_test (gnc_numeric_equal(val, mval), "equal");
+		check_unary_op (gnc_numeric_equal, 
+                      val, mval, mval, "expected %s = %s");
+		
+      /* Certain modulo's should be very cleary un-equal; this
+		 * helps stop funky modulo-64 aliasing in compares that 
+		 * might creep in. */
+		int m=0;
+		gint64 f = mval.denom;
+		while (f%2 == 0)
+		{
+			f >>= 1;
+			m++;
+		}
+		if (m)
+		{
+			gint64 nn = 1 << (32-m);
+			nn <<= 32;
+			nn += mval.num;
+			val = gnc_numeric_create (2*nn, 2*mval.denom);
+			check_unary_op (gnc_numeric_unequal, 
+                      val, mval, mval, "expected unequality %s != %s");
+		
+		}
 	}
-	
 }
 	
 static void
@@ -376,10 +395,28 @@ check_add_subtract (void)
 }
 
 static void
+check_mult_div (void)
+{
+  gnc_numeric a = gnc_numeric_create(1, 3);
+  gnc_numeric b = gnc_numeric_create(1, 4);
+
+  check_binary_op (gnc_numeric_create(1,12), 
+                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_EXACT),
+						 a, b, "expected %s got %s = %s * %s for mult exact");
+
+  check_binary_op (gnc_numeric_create(1,12), 
+                   gnc_numeric_mul(a, b, GNC_DENOM_AUTO, GNC_DENOM_REDUCE),
+						 a, b, "expected %s got %s = %s * %s for mult reduce");
+
+}
+  
+
+static void
 run_test (void)
 {
 	check_equality_operator ();
 	check_add_subtract();
+	check_mult_div ();
 }
 
 static void
