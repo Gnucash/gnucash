@@ -230,10 +230,10 @@ gnc_ui_qif_import_load_file_cb(GtkButton * button, gpointer user_data) {
   char * path_to_load;
   char * qif_account;
   char * currency;
-  char * error_string = NULL;
-  
+  char * error_string;
+
   struct timeval start, end;
-  
+
   SCM make_qif_file, qif_file_load, qif_file_loaded, unload_qif_file;
   SCM qif_file_parse;
   SCM scm_filename, scm_currency, scm_qif_account;
@@ -313,28 +313,30 @@ gnc_ui_qif_import_load_file_cb(GtkButton * button, gpointer user_data) {
       wind->selected_file = scm_qiffile;
 
       scm_protect_object(wind->selected_file);      
-      
+
       load_return = gh_call2(qif_file_load,  gh_car(imported_files),
                              scm_filename);
-      
+
       /* a list returned is (#f error-message) for an error, 
        * (#t error-message) for a warning */
       if(gh_list_p(load_return) &&
          (gh_car(load_return) == SCM_BOOL_T)) {
-        asprintf(&error_string,
-                 QIF_LOAD_WARNING_FORMAT_MSG,
-                 gh_scm2newstr(gh_cadr(load_return), NULL));
+        error_string = g_strdup_printf(QIF_LOAD_WARNING_FORMAT_MSG,
+                                       gh_scm2newstr(gh_cadr(load_return),
+                                                     NULL));
         gnc_warning_dialog_parented(GTK_WIDGET(wind->dialog), error_string);
+        g_free(error_string);
       }      
-        
+
       if((load_return != SCM_BOOL_T) &&
          (!gh_list_p(load_return) || 
           (gh_car(load_return) != SCM_BOOL_T))) {
-        asprintf(&error_string,
-                 QIF_LOAD_FAILED_FORMAT_MSG,
-                 gh_scm2newstr(gh_cadr(load_return), NULL));
+        error_string = g_strdup_printf(QIF_LOAD_FAILED_FORMAT_MSG,
+                                       gh_scm2newstr(gh_cadr(load_return),
+                                                     NULL));
         gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), error_string);
-        
+        g_free(error_string);
+
         imported_files = 
           gh_call2(unload_qif_file, scm_filename, imported_files);
       }
@@ -343,18 +345,21 @@ gnc_ui_qif_import_load_file_cb(GtkButton * button, gpointer user_data) {
         
         if(gh_list_p(parse_return) && 
            (gh_car(parse_return) == SCM_BOOL_T)) {
-          asprintf(&error_string,
-                   QIF_PARSE_WARNING_FORMAT_MSG,
-                   gh_scm2newstr(gh_cadr(parse_return), NULL));
+          error_string = g_strdup_printf(QIF_PARSE_WARNING_FORMAT_MSG,
+                                         gh_scm2newstr(gh_cadr(parse_return),
+                                                       NULL));
           gnc_warning_dialog_parented(GTK_WIDGET(wind->dialog), error_string);
+          g_free(error_string);
         }
         if((parse_return != SCM_BOOL_T) &&
            (!gh_list_p(parse_return) ||
             (gh_car(parse_return) != SCM_BOOL_T))) {
-          asprintf(&error_string,
-                   QIF_PARSE_FAILED_FORMAT_MSG,
-                   gh_scm2newstr(gh_cadr(parse_return), NULL));
+          error_string = g_strdup_printf(QIF_PARSE_FAILED_FORMAT_MSG,
+                                         gh_scm2newstr(gh_cadr(parse_return),
+                                                       NULL));
           gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), error_string);
+          g_free(error_string);
+
           imported_files = 
             gh_call2(unload_qif_file, scm_filename, imported_files);
         }
@@ -722,25 +727,28 @@ update_accounts_page(QIFImportWindow * wind) {
     row_text[0] = gh_scm2newstr(gh_caar(strings_left), &scheme_strlen);
     xtn_count   = gh_scm2int(gh_list_ref(gh_car(strings_left),
                                          gh_int2scm(4)));
-    asprintf(&xtn_count_string, "%d", xtn_count);
+    xtn_count_string = g_strdup_printf("%d", xtn_count);
     row_text[1] = xtn_count_string;
     row_text[2] = gh_scm2newstr(gh_cadr(gh_car(strings_left)), 
                                 &scheme_strlen);    
     row_text[3] = 
       xaccAccountTypeEnumAsString(gh_scm2int
                                   (gh_caddr(gh_car(strings_left))));
-    
+
     gtk_clist_append(GTK_CLIST(wind->acct_list), row_text);
 
     gtk_clist_set_row_data(GTK_CLIST(wind->acct_list), row,
                            GINT_TO_POINTER((gh_car(strings_left))));
-    
+
     scm_protect_object(gh_car(strings_left));
-    
+
     strings_left = gh_cdr(strings_left);
     row++;
+
+    free(row_text[0]);
+    g_free(row_text[1]);
+    free(row_text[2]);
   }
-  
 
   gtk_clist_thaw(GTK_CLIST(wind->acct_list));
 }
@@ -819,7 +827,7 @@ update_categories_page(QIFImportWindow * wind) {
     row_text[0] = gh_scm2newstr(gh_caar(strings_left), &scheme_strlen);
     xtn_count   = gh_scm2int(gh_list_ref(gh_car(strings_left), 
                                          gh_int2scm(4)));
-    asprintf(&xtn_count_string, "%d", xtn_count);
+    xtn_count_string = g_strdup_printf("%d", xtn_count);
     row_text[1] = xtn_count_string;
     row_text[2] = gh_scm2newstr(gh_cadr(gh_car(strings_left)), 
                                 &scheme_strlen);
@@ -832,7 +840,11 @@ update_categories_page(QIFImportWindow * wind) {
     scm_protect_object(gh_car(strings_left));
     strings_left = gh_cdr(strings_left);
     row++;
+
+    free(row_text[0]);
+    g_free(row_text[1]);
+    free(row_text[2]);
   }
-  
+
   gtk_clist_thaw(GTK_CLIST(wind->cat_list));
 }

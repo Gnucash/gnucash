@@ -100,20 +100,23 @@ gnc_ui_print_dialog_create(PrintSession * ps) {
   
   if(ps->printer->driver) {
     if(ps->printer->filename) {
-      asprintf(&printer_string, "(%s) %s",
-               ps->printer->driver, ps->printer->filename);
+      printer_string = g_strdup_printf("(%s) %s",
+                                       ps->printer->driver,
+                                       ps->printer->filename);
     }
     else {
-      printer_string = ps->printer->driver;
+      printer_string = g_strdup(ps->printer->driver);
     }
   }
   else {
-    printer_string = _("(none)");
+    printer_string = g_strdup(_("(none)"));
   }
 
   gtk_entry_set_text(GTK_ENTRY(pcd->paper_entry), ps->paper);
   gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
   gtk_widget_show_all(pcd->toplevel);
+
+  g_free(printer_string);
 
   return pcd;
 }
@@ -188,19 +191,20 @@ gnc_ui_print_dialog_select_printer_cb(GtkButton * button, gpointer user_data) {
 
       if(pcd->session->printer->driver) {
         if(pcd->session->printer->filename) {
-          asprintf(&printer_string, "(%s) %s",
-                   pcd->session->printer->driver, 
-                   pcd->session->printer->filename);
+          printer_string = g_strdup_printf("(%s) %s",
+                                           pcd->session->printer->driver, 
+                                           pcd->session->printer->filename);
         }
         else {
-          printer_string = pcd->session->printer->driver;
+          printer_string = g_strdup(pcd->session->printer->driver);
         }
       }
       else {
-        printer_string = _("(none)");
+        printer_string = g_strdup(_("(none)"));
       }
 
       gtk_entry_set_text(GTK_ENTRY(pcd->printer_entry), printer_string);
+      g_free(printer_string);
     }
   }
 }
