@@ -3636,7 +3636,7 @@ use_security_cells (SplitRegister *reg, VirtualLocation virt_loc)
 }
 
 const char *
-xaccSRGetEntryHandler (VirtualLocation virt_loc,
+xaccSRGetEntryHandler (VirtualLocation virt_loc, gboolean translate,
                        gboolean *conditionally_changed, gpointer user_data)
 {
   SplitRegister *reg = user_data;
@@ -3724,6 +3724,9 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc,
       break;
 
     case RECN_CELL:
+      if (translate)
+        return gnc_get_reconcile_str (xaccSplitGetReconcile (split));
+      else
       {
         static char s[2];
 

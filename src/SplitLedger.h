@@ -206,6 +206,7 @@ gboolean xaccSRFullRefreshOK (SplitRegister *reg);
 void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
 
 const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,
+                                    gboolean translate,
                                     gboolean *changed,
                                     gpointer user_data);
 const char * xaccSRGetLabelHandler (VirtualLocation virt_loc,

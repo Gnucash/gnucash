@@ -172,7 +172,7 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
 {
   const char *entry;
 
-  entry = table->view.entry_handler (virt_loc,
+  entry = table->view.entry_handler (virt_loc, FALSE,
                                      conditionally_changed,
                                      table->view.handler_user_data);
   if (!entry)
@@ -211,7 +211,7 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
       return cb_cell->cell->value;
   }
 
-  entry = table->view.entry_handler (virt_loc, NULL,
+  entry = table->view.entry_handler (virt_loc, TRUE, NULL,
                                      table->view.handler_user_data);
   if (!entry)
     entry = "";

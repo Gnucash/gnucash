@@ -164,6 +164,7 @@ typedef void (*TableSetHelpFunc) (Table *table,
 typedef void (*TableDestroyFunc) (Table *table);
 
 typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
+                                              gboolean translate,
                                               gboolean *conditionally_changed,
                                               gpointer user_data);
 

@@ -1,3 +1,15 @@
+2001-06-08  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c (xaccSRGetEntryHandler): handle reconcile
+	cell string as appropriate for translate flag.
+
+	* src/register/table-allgui.c (gnc_table_get_entry): return
+	translated version
+	(gnc_table_get_entry_internal): return untranslated version
+
+	* src/register/table-allgui.h: add 'translate' argument to
+	entry handler api.
+
 2001-06-08 Christian Stimming <stimming@tuhh.de>
 
 	* configure.in, accounts/Makefile.am, accounts/de_DE/*: add
