@@ -109,6 +109,8 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
     params = gnc_search_param_prepend (params, "Date Posted", NULL,
 				       type, SPLIT_TRANS, TRANS_DATE_POSTED,
 				       NULL);
+    params = gnc_search_param_prepend (params, "Notes", NULL,
+				       type, SPLIT_TRANS, TRANS_NOTES, NULL);
     params = gnc_search_param_prepend (params, "Action", NULL,
 				       type, SPLIT_ACTION, NULL);
     params = gnc_search_param_prepend (params, "Number", NULL,
@@ -128,6 +130,31 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
   } else {
     start_q = gncQueryCreate ();
     gncQuerySetBook (start_q, gnc_get_current_book ());
+
+    /* In lieu of not "mis-using" some portion of the infrastructure by writing
+     * a bunch of new code, we just filter out the accounts of the template
+     * transactions.  While these are in a seperate AccountGroup just for this
+     * reason, the query engine makes no distinction between AccountGroups.
+     * See Gnome Bug 86302.
+     * 	-- jsled 
+     *
+     * copied from gnc-ledger-display.c:gnc_ledger_display_gl()  -- warlord
+     *
+     * <jsled> Alternatively, you could look for a GNC_SX_ACCOUNT [SchedAction.h] 
+     * key in the KVP frame of the split.
+     */
+    {
+      AccountGroup *tAG;
+      AccountList *al;
+    
+      tAG = gnc_book_get_template_group( gnc_get_current_book() );
+      al = xaccGroupGetSubAccounts( tAG );
+      xaccQueryAddAccountMatch( start_q, al, GUID_MATCH_NONE, QUERY_AND );
+      g_list_free (al);
+      al = NULL;
+      tAG = NULL;
+    }
+
     ftd->q = start_q;		/* save this to destroy it later */
   }
 

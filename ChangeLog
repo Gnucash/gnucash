@@ -18,7 +18,11 @@
 
 	* src/engine/Transaction.[ch]: add TRANS_NOTES and supporting routines
 	  to enable searching for notes.
-	
+
+	* src/gnome/dialog-find-transactions.c: search on NOTES
+	  add code to prevent searching on template-txn accounts so SXes don't
+	  show up in find results.
+	  
 2003-01-03  David Hampton  <hampton@employees.org>
 
 	* src/gnome/druid-hierarchy.c:
