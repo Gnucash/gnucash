@@ -44,6 +44,11 @@ enum
 };
 
 
+/* Impossible to get at runtime. Assume this is a reasonable number */
+#define ARROW_SIZE      14
+#define VSCROLLBAR_SLOP 40
+
+
 /** Static Globals ****************************************************/
 static GtkCListClass *parent_class = NULL;
 static guint reconcile_list_signals[LAST_SIGNAL] = {0};
@@ -58,8 +63,11 @@ static void gnc_reconcile_list_unselect_row(GtkCList *clist, gint row,
 					    gint column, GdkEvent *event);
 static void gnc_reconcile_list_destroy(GtkObject *object);
 static void gnc_reconcile_list_fill(GNCReconcileList *list);
-static void gnc_reconcile_click_column_cb(GtkWidget *w, gint column,
-					  gpointer data);
+static void gnc_reconcile_list_click_column_cb(GtkWidget *w, gint column,
+					       gpointer data);
+static void gnc_reconcile_list_size_allocate_cb(GtkWidget *w,
+						GtkAllocation *allocation,
+						gpointer data);
 
 
 GtkType
@@ -158,26 +166,25 @@ update_toggle (GtkCList *list, gint row)
   gnc_clist_set_check (list, row, 4, reconciled);
 }
 
-static GtkWidget *
-gnc_reconcile_list_column_title (GtkCList *clist, gint column,
+static void
+gnc_reconcile_list_column_title (GNCReconcileList *list, gint column,
 				 const gchar *title)
 {
   GtkWidget *hbox, *label, *arrow;
 
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_widget_show(hbox);
-  gtk_clist_set_column_widget(clist, column, hbox);
+  gtk_clist_set_column_widget(GTK_CLIST(list), column, hbox);
 
   label = gtk_label_new(title);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
   arrow = gtk_arrow_new(GTK_ARROW_DOWN, GTK_SHADOW_ETCHED_IN);
-  gtk_widget_show(arrow);
-  gtk_widget_set_sensitive(arrow, column == 0);
+  list->title_arrow[column] = arrow;
+  if (column == 0)
+    gtk_widget_show(arrow);
   gtk_box_pack_end(GTK_BOX(hbox), arrow, FALSE, FALSE, 0);
-
-  return(arrow);
 }
 
 static void
@@ -202,6 +209,7 @@ gnc_reconcile_list_init (GNCReconcileList *list)
   list->current_split = NULL;
   list->no_toggle = FALSE;
   list->always_unselect = FALSE;
+  list->prev_allocation = -1;
   list->first_fill = TRUE;
   list->query = NULL;
 
@@ -211,10 +219,10 @@ gnc_reconcile_list_init (GNCReconcileList *list)
   gtk_clist_construct (clist, list->num_columns, titles);
   gtk_clist_set_shadow_type (clist, GTK_SHADOW_IN);
 
-  list->date_arrow   = gnc_reconcile_list_column_title(clist, 0, titles[0]);
-  list->num_arrow    = gnc_reconcile_list_column_title(clist, 1, titles[1]);
-  list->desc_arrow   = gnc_reconcile_list_column_title(clist, 2, titles[2]);
-  list->amount_arrow = gnc_reconcile_list_column_title(clist, 3, titles[3]);
+  gnc_reconcile_list_column_title(list, 0, titles[0]);
+  gnc_reconcile_list_column_title(list, 1, titles[1]);
+  gnc_reconcile_list_column_title(list, 2, titles[2]);
+  gnc_reconcile_list_column_title(list, 3, titles[3]);
 
   gtk_clist_set_column_justification (clist, 1, GTK_JUSTIFY_CENTER);
   gtk_clist_set_column_justification (clist, 3, GTK_JUSTIFY_RIGHT);
@@ -223,7 +231,11 @@ gnc_reconcile_list_init (GNCReconcileList *list)
   gtk_clist_set_column_resizeable (clist, 4, FALSE);
 
   gtk_signal_connect (GTK_OBJECT (clist), "click_column",
-		      GTK_SIGNAL_FUNC(gnc_reconcile_click_column_cb), NULL);
+		      GTK_SIGNAL_FUNC(gnc_reconcile_list_click_column_cb),
+		      NULL);
+  gtk_signal_connect (GTK_OBJECT (clist), "size_allocate",
+		      GTK_SIGNAL_FUNC(gnc_reconcile_list_size_allocate_cb),
+		      NULL);
 
   list->key = BY_STANDARD;
   list->increasing = TRUE;
@@ -240,10 +252,11 @@ gnc_reconcile_list_init (GNCReconcileList *list)
     {
       for (i = 0; i < list->num_columns; i++)
       {
-	width = gdk_string_width (font, titles[i]);
-	gtk_clist_set_column_min_width (clist, i, width + 5);
-	if (i == 4)
-	  gtk_clist_set_column_max_width (clist, i, width + 5);
+	width = gdk_string_width (font, titles[i]) + 5;
+	if (i != 4)
+	  width += ARROW_SIZE;
+	gtk_clist_set_column_min_width (clist, i, width);
+	list->title_width[i] = width;
       }
     }
   }
@@ -518,6 +531,77 @@ gnc_reconcile_list_get_current_split (GNCReconcileList *list)
 }
 
 /********************************************************************\
+ * gnc_reconcile_list_recompute_widths                              *
+ *   Given a new widget width, recompute the widths of each column. *
+ *   Give any excess allocation to the description field. This also * 
+ *   handles the case of allocating column widths when the list is  *
+ *   first filled with data.                                        *
+ *                                                                  *
+ * Args: list - a GncReconcileList widget                           *
+ *       allocated - the allocated width for this list              *
+ * Returns: nothing                                                 *
+\********************************************************************/
+static void
+gnc_reconcile_list_recompute_widths (GNCReconcileList *list, gint allocated)
+{
+  GtkCList *clist = GTK_CLIST(list);
+  gint total_width, desc_width = 0, excess, i;
+
+  /* Prevent loops when allocation is bigger than total widths */
+  if (allocated == list->prev_allocation)
+    return;
+
+  /* Enforce column minimum widths */
+  total_width = 0;
+  for (i = 0; i < list->num_columns; i++)
+  {
+    gint width;
+
+    width = gtk_clist_optimal_column_width(clist, i);
+    if (width < list->title_width[i])
+      width = list->title_width[i];
+    total_width += width;
+    gtk_clist_set_column_width (clist, i, width);
+    if (i == 2)
+      desc_width = width;
+  }
+
+  /* Did the list use its full allocation? */
+  if (allocated <= 1)
+    allocated = list->prev_allocation;
+  if (allocated <= 0)
+    return;
+  list->prev_allocation = allocated;
+  excess = allocated - total_width - VSCROLLBAR_SLOP;
+  if (excess <= 0)
+    return;
+
+  /* Add any extra allocation to the description column */
+  gtk_clist_set_column_width (clist, 2, desc_width + excess);
+}
+
+/********************************************************************\
+ * gnc_reconcile_list_size_allocate_cb                              *
+ *   The allocated size has changed. Need to recompute the          *
+ *   column widths                                                  * 
+ *                                                                  *
+ * Args: w - a GncReconcileList widget                              *
+ *       allocation - a widget allocation desctiption               *
+ *       data - unused                                              *
+ * Returns: nothing                                                 *
+\********************************************************************/
+static void
+gnc_reconcile_list_size_allocate_cb (GtkWidget *w,
+				     GtkAllocation *allocation,
+				     gpointer data)
+{
+  GNCReconcileList *list = GNC_RECONCILE_LIST(w);
+
+  g_return_if_fail (list != NULL);
+  gnc_reconcile_list_recompute_widths(list, allocation->width);
+}
+
+/********************************************************************\
  * gnc_reconcile_list_refresh                                       *
  *   refreshes the list                                             *
  *                                                                  *
@@ -556,7 +640,7 @@ gnc_reconcile_list_refresh (GNCReconcileList *list)
 
   gnc_reconcile_list_fill (list);
 
-  gtk_clist_columns_autosize (clist);
+  gnc_reconcile_list_recompute_widths (list, -1);
 
   if (adjustment)
   {
@@ -759,46 +843,54 @@ gnc_reconcile_list_changed (GNCReconcileList *list)
 void
 gnc_reconcile_list_set_sort_order (GNCReconcileList *list, sort_type_t key)
 {
-  GtkWidget *arrow;
+  gint column;
 
   g_return_if_fail (list != NULL);
   g_return_if_fail (IS_GNC_RECONCILE_LIST(list));
   g_return_if_fail (list->query != NULL);
 
+  /* Clear all arrows */
+  for (column = 0; column < list->num_columns; column++)
+  {
+    if (list->title_arrow[column])
+      gtk_widget_hide(list->title_arrow[column]);
+  }
+
+  /* Figure out new sort column and direction. */
+  switch (key) {
+    default:
+    case BY_STANDARD:	column = 0;	break;
+    case BY_NUM:	column = 1;     break;
+    case BY_DESC:	column = 2;	break;
+    case BY_AMOUNT:	column = 3;	break;
+  }
   list->increasing = (list->key == key) ? !list->increasing : TRUE;
   list->key = key;
 
-  gtk_widget_set_sensitive(list->date_arrow, FALSE);
-  gtk_widget_set_sensitive(list->num_arrow, FALSE);
-  gtk_widget_set_sensitive(list->amount_arrow, FALSE);
-  gtk_widget_set_sensitive(list->desc_arrow, FALSE);
-  switch (key) {
-    default:
-    case BY_STANDARD:	arrow = list->date_arrow;    break;
-    case BY_NUM:	arrow = list->num_arrow;     break;
-    case BY_AMOUNT:	arrow = list->amount_arrow;  break;
-    case BY_DESC:	arrow = list->desc_arrow;    break;
-  }
-
-  gtk_arrow_set(GTK_ARROW(arrow),
+  /* Set the appropriate arrow */
+  gtk_arrow_set(GTK_ARROW(list->title_arrow[column]),
 		list->increasing ? GTK_ARROW_DOWN : GTK_ARROW_UP,
 		GTK_SHADOW_ETCHED_IN);
-  gtk_widget_set_sensitive(arrow, TRUE);
+  gtk_widget_show(list->title_arrow[column]);
 
+  /* Set the sort order for the engine */
   xaccQuerySetSortOrder (list->query, key,
                          (key == BY_STANDARD) ? BY_NONE : BY_STANDARD,
                          BY_NONE);
-
   xaccQuerySetSortIncreasing (list->query,
 			      list->increasing,
 			      list->increasing,
 			      list->increasing);
 
+  /*
+   * Recompute the list. Is this really necessary? Why not just sort
+   * the rows already in the clist?
+   */
   gnc_reconcile_list_refresh(list);
 }
 
 static void
-gnc_reconcile_click_column_cb(GtkWidget *w, gint column, gpointer data)
+gnc_reconcile_list_click_column_cb(GtkWidget *w, gint column, gpointer data)
 {
   GNCReconcileList *list = GNC_RECONCILE_LIST(w);
   sort_type_t type;

@@ -73,10 +73,11 @@ struct _GNCReconcileList
   /* Sorting info */
   sort_type_t key;
   gboolean increasing;
-  GtkWidget *date_arrow;
-  GtkWidget *num_arrow;
-  GtkWidget *amount_arrow;
-  GtkWidget *desc_arrow;
+  GtkWidget *title_arrow[5];
+
+  /* Column resizing */
+  gint prev_allocation;
+  gint title_width[5];
 };
 
 struct _GNCReconcileListClass
