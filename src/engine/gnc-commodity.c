@@ -85,6 +85,7 @@ struct gnc_new_iso_code
 } gnc_new_iso_codes[] = {
   {"RUB", "RUR"}, // Russian Ruble
   {"PLZ", "PLN"}, // Polish Zloty
+  {"UAG", "UAH"}, // Ukraine Hryvnia
 };
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
