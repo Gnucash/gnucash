@@ -20,6 +20,7 @@ AM_CFLAGS = \
 
 libgncmod_gnome_utils_la_SOURCES = \
   QuickFill.c \
+  account-quickfill.c \
   cursors.c \
   argv-list-converters.c \
   dialog-account.c \
@@ -59,6 +60,7 @@ libgncmod_gnome_utils_la_SOURCES = \
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
   QuickFill.h \
+  account-quickfill.h \
   dialog-account.h \
   dialog-commodity.h \
   dialog-options.h \

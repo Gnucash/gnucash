@@ -22,6 +22,11 @@
 \********************************************************************/
 
 #include "config.h"
+#include "account-quickfill.h"
+#include "gnc-engine-util.h"
+#include "gnc-event.h"
+#include "gnc-trace.h"
+#include "gnc-ui-util.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_REGISTER;
