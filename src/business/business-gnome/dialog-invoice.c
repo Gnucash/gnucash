@@ -119,7 +119,6 @@ static gboolean
 gnc_invoice_window_verify_ok (InvoiceWindow *iw)
 {
   const char *res;
-  GncInvoice *invoice;
 
   /* Check the ID */
   res = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
@@ -135,14 +134,6 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
   if (res == NULL || safe_strcmp (res, "") == 0) {
     gnc_error_dialog_parented (GTK_WINDOW (iw->dialog),
   			       _("You need to supply Billing Information."));
-    return FALSE;
-  }
-
-  /* Check that there is at least one Entry */
-  invoice = iw_get_invoice (iw);
-  if (gncInvoiceGetEntries (invoice) == NULL) {
-    gnc_error_dialog_parented (GTK_WINDOW (iw->dialog),
-			       _("The Invoice must have at least one Entry."));
     return FALSE;
   }
 
@@ -226,6 +217,14 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   invoice = iw_get_invoice (iw);
   if (!invoice)
     return;
+
+  /* Check that there is at least one Entry */
+  invoice = iw_get_invoice (iw);
+  if (gncInvoiceGetEntries (invoice) == NULL) {
+    gnc_error_dialog_parented (GTK_WINDOW (iw->dialog),
+			       _("The Invoice must have at least one Entry."));
+    return;
+  }
 
   /* Ok, we can post this invoice.  Ask for verification, set the due date,
    * post date, and posted account

@@ -120,7 +120,6 @@ static gboolean
 gnc_order_window_verify_ok (OrderWindow *ow)
 {
   const char *res;
-  GncOrder *order;
 
   /* Check the ID */
   res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
@@ -136,14 +135,6 @@ gnc_order_window_verify_ok (OrderWindow *ow)
   if (res == NULL || safe_strcmp (res, "") == 0) {
     gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
   			       _("You need to supply Billing Information."));
-    return FALSE;
-  }
-
-  /* Check that there is at least one Entry */
-  order = ow_get_order (ow);
-  if (gncOrderGetEntries (order) == NULL) {
-    gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
-			       _("The Order must have at least one Entry."));
     return FALSE;
   }
 
@@ -233,11 +224,19 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
   if (!gnc_order_window_verify_ok (ow))
     return;
 
-  /* Make sure we can close the order. Are there any uninvoiced entries? */
+  /* Make sure the order exists */
   order = ow_get_order (ow);
   if (!order)
     return;
 
+  /* Check that there is at least one Entry */
+  if (gncOrderGetEntries (order) == NULL) {
+    gnc_error_dialog_parented (GTK_WINDOW (ow->dialog),
+			       _("The Order must have at least one Entry."));
+    return;
+  }
+
+  /* Make sure we can close the order. Are there any uninvoiced entries? */
   entries = gncOrderGetEntries (order);
   for ( ; entries ; entries = entries->next) {
     GncEntry *entry = entries->data;
