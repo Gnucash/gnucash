@@ -121,7 +121,7 @@ xaccInitSplit(Split * split, GNCEntityTable *entity_table)
   split->entity_table = entity_table;
 
   xaccGUIDNew(&split->guid);
-  xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
+  xaccStoreEntity(split->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
@@ -365,9 +365,9 @@ xaccSplitSetGUID (Split *split, const GUID *guid)
 {
   if (!split || !guid) return;
   check_open (split->parent);
-  xaccRemoveEntity(&split->guid);
+  xaccRemoveEntity(split->entity_table, &split->guid);
   split->guid = *guid;
-  xaccStoreEntity(split, &split->guid, GNC_ID_SPLIT);
+  xaccStoreEntity(split->entity_table, split, &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
@@ -379,7 +379,7 @@ xaccSplitLookupEntityTable (const GUID *guid, GNCEntityTable *entity_table)
   if (!guid) return NULL;
   /* FIXME: uncomment soon */
   /* g_return_val_if_fail (entity_table, NULL); */
-  return xaccLookupEntity(guid, GNC_ID_SPLIT);
+  return xaccLookupEntity(entity_table, guid, GNC_ID_SPLIT);
 }
 
 Split *
@@ -387,7 +387,8 @@ xaccSplitLookup (const GUID *guid, GNCSession *session)
 {
   if (!guid) return NULL;
   g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity(guid, GNC_ID_SPLIT);
+  return xaccLookupEntity(gnc_session_get_entity_table (session),
+                          guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
@@ -671,7 +672,7 @@ xaccInitTransaction (Transaction * trans, GNCSession *session)
   trans->entity_table = gnc_session_get_entity_table (session);
 
   xaccGUIDNew(&trans->guid);
-  xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
+  xaccStoreEntity(trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\
@@ -890,9 +891,9 @@ void
 xaccTransSetGUID (Transaction *trans, const GUID *guid)
 {
   if (!trans || !guid) return;
-  xaccRemoveEntity(&trans->guid);
+  xaccRemoveEntity(trans->entity_table, &trans->guid);
   trans->guid = *guid;
-  xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
+  xaccStoreEntity(trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 }
 
 
@@ -905,7 +906,7 @@ xaccTransLookupEntityTable (const GUID *guid,
 {
   /* FIXME: uncomment when entity tables are in sessions */
   /* g_return_val_if_fail (entity_table, NULL); */
-  return xaccLookupEntity (guid, GNC_ID_TRANS);
+  return xaccLookupEntity (entity_table, guid, GNC_ID_TRANS);
 }
 
 Transaction *
@@ -913,7 +914,8 @@ xaccTransLookup (const GUID *guid, GNCSession *session)
 {
   if (!guid) return NULL;
   g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity (guid, GNC_ID_TRANS);
+  return xaccLookupEntity (gnc_session_get_entity_table (session),
+                           guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\
@@ -1433,7 +1435,7 @@ xaccTransCommitEdit (Transaction *trans)
       PINFO ("delete trans at addr=%p", trans);
       /* Make a log in the journal before destruction.  */
       xaccTransWriteLog (trans, 'D');
-      xaccRemoveEntity(&trans->guid);
+      xaccRemoveEntity(trans->entity_table, &trans->guid);
       xaccFreeTransaction (trans);
       return;
    }
@@ -1478,7 +1480,7 @@ xaccTransRollbackEdit (Transaction *trans)
 
    /* If the transaction had been deleted before the rollback,
     * the guid would have been unlisted. Restore that */
-   xaccStoreEntity(trans, &trans->guid, GNC_ID_TRANS);
+   xaccStoreEntity(trans->entity_table, trans, &trans->guid, GNC_ID_TRANS);
 
    g_cache_remove (gnc_engine_get_string_cache(), trans->num);
    trans->num = orig->num;
@@ -1598,7 +1600,7 @@ xaccTransRollbackEdit (Transaction *trans)
          mark_split (s);
          xaccAccountRemoveSplit (xaccSplitGetAccount(s), s);
          xaccAccountRecomputeBalance (xaccSplitGetAccount(s));
-         xaccRemoveEntity(&s->guid);
+         xaccRemoveEntity(s->entity_table, &s->guid);
          xaccFreeSplit (s);
       }
 
@@ -1614,7 +1616,7 @@ xaccTransRollbackEdit (Transaction *trans)
          Account *account = xaccSplitGetAccount(s);
 
          xaccSplitSetAccount(s, NULL);
-         xaccStoreEntity(s, &s->guid, GNC_ID_SPLIT);
+         xaccStoreEntity(s->entity_table, s, &s->guid, GNC_ID_SPLIT);
          xaccAccountInsertSplit (account, s);
          xaccAccountRecomputeBalance (account);
          mark_split (s);
@@ -1712,7 +1714,7 @@ xaccTransDestroy (Transaction *trans)
 
     xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
     xaccAccountRecomputeBalance (xaccSplitGetAccount(split));
-    xaccRemoveEntity(&split->guid);
+    xaccRemoveEntity(split->entity_table, &split->guid);
     xaccFreeSplit (split);
 
     node->data = NULL;
@@ -1721,7 +1723,7 @@ xaccTransDestroy (Transaction *trans)
   g_list_free (trans->splits);
   trans->splits = NULL;
 
-  xaccRemoveEntity(&trans->guid);
+  xaccRemoveEntity(trans->entity_table, &trans->guid);
 
   /* the actual free is done with the commit call, else its rolled back */
   /* xaccFreeTransaction (trans);  don't do this here ... */
@@ -1755,7 +1757,7 @@ xaccSplitDestroy (Split *split)
    check_open (trans);
 
    mark_split (split);
-   xaccRemoveEntity (&split->guid);
+   xaccRemoveEntity (split->entity_table, &split->guid);
 
    if (trans)
    {
@@ -2710,7 +2712,8 @@ xaccTransGetVoidReason(Transaction *trans)
   return NULL;
 }
 
-gnc_numeric xaccSplitVoidFormerAmount(Split *split)
+gnc_numeric
+xaccSplitVoidFormerAmount(Split *split)
 {
   kvp_frame *frame;
   kvp_value *val;
@@ -2730,7 +2733,8 @@ gnc_numeric xaccSplitVoidFormerAmount(Split *split)
   
 }
 
-gnc_numeric xaccSplitVoidFormerValue(Split *split)
+gnc_numeric
+xaccSplitVoidFormerValue(Split *split)
 {
   kvp_frame *frame;
   kvp_value *val;
@@ -2749,7 +2753,8 @@ gnc_numeric xaccSplitVoidFormerValue(Split *split)
   return amt;
 }
 
-Timespec xaccTransGetVoidTime(Transaction *tr)
+Timespec
+xaccTransGetVoidTime(Transaction *tr)
 {
   kvp_frame *frame;
   kvp_value *val;

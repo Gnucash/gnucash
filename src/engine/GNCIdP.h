@@ -43,14 +43,17 @@ GUID xaccGUIDNewReturn (void);
 /* Lookup an entity given an id and a type. If there is no entity
  * associated with the id, or if it has a different type, NULL
  * is returned. */
-void * xaccLookupEntity (const GUID * guid, GNCIdType entity_type);
+gpointer xaccLookupEntity (GNCEntityTable *entity_table,
+                           const GUID * guid, GNCIdType entity_type);
 
 /* Store the given entity under the given id with the given type. */
-void xaccStoreEntity (void * entity, const GUID * guid, GNCIdType entity_type);
+void xaccStoreEntity (GNCEntityTable *entity_table,
+                      gpointer entity, const GUID * guid,
+                      GNCIdType entity_type);
 
 /* Remove any existing association between an entity and the given
  * id. The entity is not changed in any way. */
-void xaccRemoveEntity (const GUID * guid);
+void xaccRemoveEntity (GNCEntityTable *entity_table, const GUID * guid);
 
 GHashTable *xaccGetAndResetEntityTable (void);
 void xaccSetEntityTable (GHashTable *et);

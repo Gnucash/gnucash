@@ -26,14 +26,17 @@
 
 #include <glib.h>
 
-#include "gnc-book.h"
 #include "BackendP.h"
+#include "GNCIdP.h"
+#include "gnc-book.h"
 #include "gnc-pricedb.h"
 
 struct gnc_price_s
 {
   /* 'public' data fields */
   GUID    guid;                  /* globally unique price id */
+  GNCEntityTable *entity_table;  /* table in which price is stored */
+
   GNCPriceDB *db;
   gnc_commodity *commodity;
   gnc_commodity *currency;

@@ -236,7 +236,7 @@ get_price_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* first, lets see if we've already got this one */
    string_to_guid (DB_GET_VAL ("priceGuid", j), &guid);
-   pr = gnc_price_lookup (&guid);
+   pr = gnc_price_lookup (&guid, be->session);
 
    if (!pr) 
    { 

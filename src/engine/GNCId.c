@@ -172,7 +172,7 @@ entity_table_init(void)
 
   entity_table = g_hash_table_new(id_hash, id_compare);
 
-  xaccStoreEntity(NULL, xaccGUIDNULL(), GNC_ID_NULL);
+  xaccStoreEntity(entity_table, NULL, xaccGUIDNULL(), GNC_ID_NULL);
 
 #if GNCID_DEBUG
   atexit(summarize_table);
@@ -248,8 +248,9 @@ xaccGUIDNULL(void)
   return &null_guid;
 }
 
-void *
-xaccLookupEntity(const GUID * guid, GNCIdType entity_type)
+gpointer
+xaccLookupEntity (GNCEntityTable *entity_table_tmp,
+                  const GUID * guid, GNCIdType entity_type)
 {
   EntityNode *e_node;
 
@@ -270,7 +271,8 @@ xaccLookupEntity(const GUID * guid, GNCIdType entity_type)
 }
 
 void
-xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
+xaccStoreEntity (GNCEntityTable *entity_table_tmp, gpointer entity,
+                 const GUID * guid, GNCIdType entity_type)
 {
   EntityNode *e_node;
   GUID *new_guid;
@@ -283,7 +285,7 @@ xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
 
   if (guid_equal(guid, xaccGUIDNULL())) return;
 
-  xaccRemoveEntity(guid);
+  xaccRemoveEntity(entity_table, guid);
 
   e_node = g_new(EntityNode, 1);
   e_node->entity_type = entity_type;
@@ -299,7 +301,7 @@ xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
 }
 
 void
-xaccRemoveEntity(const GUID * guid)
+xaccRemoveEntity (GNCEntityTable *entity_table_tmp, const GUID * guid)
 {
   EntityNode *e_node;
   gpointer old_guid;

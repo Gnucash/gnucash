@@ -86,11 +86,10 @@
 
 #include "FreqSpecP.h"
 #include "GNCIdP.h"
-/*#include "Transaction.h"*/
-/*#include "TransactionP.h"*/
 #include "date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "gnc-session-p.h"
 #include "messages.h"
 
 /* I have done this to prevent compiler warnings...
@@ -178,8 +177,10 @@ xaccFreqSpecInit( FreqSpec *fs, GNCSession *session )
         g_return_if_fail( fs );
         g_return_if_fail (session);
 
+        fs->entity_table = gnc_session_get_entity_table (session);
+
         xaccGUIDNew( &fs->guid );
-        xaccStoreEntity( fs, &fs->guid, GNC_ID_FREQSPEC );
+        xaccStoreEntity( fs->entity_table, fs, &fs->guid, GNC_ID_FREQSPEC );
 
         fs->type = INVALID;
         fs->uift = UIFREQ_ONCE;
@@ -229,7 +230,7 @@ xaccFreqSpecFree( FreqSpec *fs )
 {
         if ( fs == NULL ) return;
         gnc_engine_generate_event( &fs->guid, GNC_EVENT_DESTROY );
-        xaccRemoveEntity( &fs->guid );
+        xaccRemoveEntity( fs->entity_table, &fs->guid );
 
         xaccFreqSpecCleanUp( fs );
 

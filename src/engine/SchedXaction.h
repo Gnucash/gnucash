@@ -24,10 +24,9 @@
 #ifndef XACC_SCHEDXACTION_H
 #define XACC_SCHEDXACTION_H
 
-#include "config.h"
-
 #include <time.h>
 #include <glib.h>
+
 #include "GNCId.h"
 #include "FreqSpec.h"
 #include "date.h"
@@ -37,6 +36,8 @@
 /* 
  * #defines for kvp_frame strings
  * FIXME: Is this the right spot for them <rgmerk>?
+ * FIXME: No, they should be private data and there should
+ *        be an api for getting/setting the values <dave_p>
  */
 
 #define GNC_SX_ID                    "sched-xaction"
@@ -47,58 +48,7 @@
 #define GNC_SX_AMOUNT                "amnt"
 #define GNC_SX_FROM_SCHED_XACTION    "from-sched-xaction"
 
-/**
- * A single scheduled transaction.
- *
- * Scheduled transactions have a list of transactions, and a frequency
- * [and associated date anchors] with which they are scheduled.
- *
- * Things that make sense to have in a template transaction:
- *   [not] Date [though eventually some/multiple template transactions
- *               might have relative dates].
- *   Memo
- *   Account
- *   Funds In/Out... or an expr involving 'amt' [A, x, y, a?] for
- *     variable expenses.
- *
- * Template transactions are instantiated by:
- *  . copying the fields of the template
- *  . setting the date to the calculated "due" date.
- *
- * We should be able to use the GeneralLedger [or, yet-another-subtype
- * of the internal ledger] for this editing.
- **/
-typedef struct gncp_SchedXaction {
-  gchar           *name;
-  
-  FreqSpec        *freq;
-  
-  GDate           last_date;
-  
-  GDate           start_date;
-  /* if end_date is invalid, then no end. */
-  GDate           end_date;
-
-  /* if num_occurances_total == 0, then no limit */
-  gint            num_occurances_total;
-  /* reminaing occurances are as-of the 'last_date'. */
-  gint            num_occurances_remain;
-  
-  gboolean        autoCreateOption;
-  gboolean        autoCreateNotify;
-  gint            advanceCreateDays;
-  gint            advanceRemindDays;
- 
-  Account        *template_acct;
-  GUID             guid;
-  
-  /* Changed since last save? */
-  gboolean       dirty;
-
-  kvp_frame        *kvp_data;
-
-
-} SchedXaction;
+typedef struct gncp_SchedXaction SchedXaction;
 
 /**
  * Creates and initializes a scheduled transaction.

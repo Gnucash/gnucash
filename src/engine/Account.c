@@ -109,7 +109,7 @@ xaccInitAccount (Account * acc, GNCSession *session)
   acc->entity_table = gnc_session_get_entity_table (session);
 
   xaccGUIDNew(&acc->guid);
-  xaccStoreEntity(acc, &acc->guid, GNC_ID_ACCOUNT);
+  xaccStoreEntity(acc->entity_table, acc, &acc->guid, GNC_ID_ACCOUNT);
   LEAVE ("account=%p\n", acc);
 }
 
@@ -167,7 +167,7 @@ xaccFreeAccount (Account *acc)
 
   gnc_engine_generate_event (&acc->guid, GNC_EVENT_DESTROY);
 
-  xaccRemoveEntity(&acc->guid);
+  xaccRemoveEntity (acc->entity_table, &acc->guid);
 
   if (acc->children) 
   {
@@ -527,11 +527,12 @@ xaccAccountSetGUID (Account *account, const GUID *guid)
 
   PINFO("acct=%p", account);
   xaccAccountBeginEdit (account);
-  xaccRemoveEntity(&account->guid);
+  xaccRemoveEntity (account->entity_table, &account->guid);
 
   account->guid = *guid;
 
-  xaccStoreEntity(account, &account->guid, GNC_ID_ACCOUNT);
+  xaccStoreEntity (account->entity_table, account,
+                   &account->guid, GNC_ID_ACCOUNT);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
 }
@@ -544,14 +545,16 @@ xaccAccountLookup (const GUID *guid, GNCSession *session)
 {
   if (!guid) return NULL;
   g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity (guid, GNC_ID_ACCOUNT);
+  return xaccLookupEntity (gnc_session_get_entity_table (session),
+                           guid, GNC_ID_ACCOUNT);
 }
 
 Account *
 xaccAccountLookupDirect (GUID guid, GNCSession *session)
 {
   g_return_val_if_fail (session, NULL);
-  return xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
+  return xaccLookupEntity (gnc_session_get_entity_table (session),
+                           &guid, GNC_ID_ACCOUNT);
 }
 
 Account *
@@ -561,7 +564,7 @@ xaccAccountLookupEntityTable (const GUID *guid,
   if (!guid) return NULL;
   /* FIXME: uncomment when entity tables are in sessions */
   /* g_return_val_if_fail (entity_table, NULL); */
-  return xaccLookupEntity (guid, GNC_ID_ACCOUNT);
+  return xaccLookupEntity (entity_table, guid, GNC_ID_ACCOUNT);
 }
 
 /********************************************************************\

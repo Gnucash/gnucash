@@ -29,12 +29,12 @@
 #include "FreqSpec.h"
 #include "GNCIdP.h"
 #include "SX-ttinfo.h"
-#include "SchedXaction.h"
+#include "SchedXactionP.h"
 #include "TransactionP.h"
 #include "date.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "gnc-session.h"
+#include "gnc-session-p.h"
 #include "guid.h"
 #include "messages.h"
 
@@ -53,12 +53,15 @@ xaccSchedXactionInit( SchedXaction *sx, GNCSession *session)
         AccountGroup        *ag;
         char                *name;
 
+        sx->entity_table = gnc_session_get_entity_table (session);
+
         sx->freq = xaccFreqSpecMalloc(session);
 
         book = gnc_session_get_book (session);
 
         xaccGUIDNew( &sx->guid );
-        xaccStoreEntity( sx, &sx->guid, GNC_ID_SCHEDXACTION );
+        xaccStoreEntity( sx->entity_table, sx,
+                         &sx->guid, GNC_ID_SCHEDXACTION );
         g_date_clear( &sx->last_date, 1 );
         g_date_clear( &sx->start_date, 1 );
         g_date_clear( &sx->end_date, 1 );
@@ -150,13 +153,11 @@ xaccSchedXactionFree( SchedXaction *sx )
   
   xaccFreqSpecFree( sx->freq );
   gnc_engine_generate_event( &sx->guid, GNC_EVENT_DESTROY );
-  xaccRemoveEntity( &sx->guid );
+  xaccRemoveEntity( sx->entity_table, &sx->guid );
   
   if ( sx->name )
     g_free( sx->name );
-  
-  
-  
+
   /* 
    * we have to delete the transactions in the 
    * template account ourselves

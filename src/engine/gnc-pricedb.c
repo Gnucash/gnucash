@@ -27,14 +27,12 @@
 #include <string.h>
 
 #include "Backend.h"
-#include "GNCId.h"
 #include "GNCIdP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "gnc-event.h"
 #include "gnc-event-p.h"
-#include "gnc-pricedb.h"
 #include "gnc-pricedb-p.h"
+#include "gnc-session-p.h"
 #include "guid.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -64,8 +62,10 @@ gnc_price_create (GNCSession *session)
   p->version = 0;
   p->version_check = 0;
 
+  p->entity_table = gnc_session_get_entity_table (session);
+
   xaccGUIDNew (&p->guid);
-  xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
+  xaccStoreEntity(p->entity_table, p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
 
   return p;
@@ -76,7 +76,7 @@ gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
   gnc_engine_generate_event (&p->guid, GNC_EVENT_DESTROY);
-  xaccRemoveEntity(&p->guid);
+  xaccRemoveEntity(p->entity_table, &p->guid);
 
   if(p->type) g_cache_remove(gnc_engine_get_string_cache(), p->type);
   if(p->source) g_cache_remove(gnc_engine_get_string_cache(), p->source);
@@ -237,10 +237,10 @@ void
 gnc_price_set_guid (GNCPrice *p, const GUID *guid)
 {
    if (!p || !guid) return;
-   xaccRemoveEntity (&p->guid);
+   xaccRemoveEntity (p->entity_table, &p->guid);
    p->guid = *guid;
    if(p->db) p->db->dirty = TRUE;
-   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE);
+   xaccStoreEntity(p->entity_table, p, &p->guid, GNC_ID_PRICE);
 }
 
 void
@@ -368,10 +368,12 @@ gnc_price_set_version(GNCPrice *p, gint32 vers)
 /* getters */
 
 GNCPrice *
-gnc_price_lookup (const GUID *guid)
+gnc_price_lookup (const GUID *guid, GNCSession *session)
 {
   if (!guid) return NULL;
-  return xaccLookupEntity (guid, GNC_ID_PRICE);
+  g_return_val_if_fail (session, NULL);
+  return xaccLookupEntity (gnc_session_get_entity_table (session),
+                           guid, GNC_ID_PRICE);
 }
 
 const GUID *

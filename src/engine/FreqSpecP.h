@@ -34,6 +34,7 @@ Currently the only files which include this file are:
 #define XACC_FREQSPECP_H
 
 #include "FreqSpec.h"
+#include "GNCIdP.h"
 
 /**
  * Scheduled transactions have a frequency defined by a frequency
@@ -107,6 +108,7 @@ struct gncp_freq_spec {
                 } composites;
         } s;
         GUID guid;
+        GNCEntityTable *entity_table;
 };
 
 #endif /* XACC_FREQSPECP_H */

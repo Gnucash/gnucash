@@ -42,7 +42,7 @@
 #include "io-gncxml-gen.h"
 
 #include "sixtp-dom-parsers.h"
-#include "SchedXaction.h"
+#include "SchedXactionP.h"
 
 static short module = MOD_SX;
 
