@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2002-11-05 00:13+0100\n"
-"PO-Revision-Date: 2002-11-05 00:38+0100\n"
+"Project-Id-Version: gnucash 1.7\n"
+"POT-Creation-Date: 2002-11-05 23:04+0100\n"
+"PO-Revision-Date: 2002-11-05 23:05+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -550,10 +550,6 @@ msgstr "Hauptbuch"
 #. "another form of register"
 msgid "register: transaction journal"
 msgstr "Amerikanisches Journal"
-
-#. "to reinitialize a transaction: Remove all splits in the transaction except the one that is attached to the currently opened register. WARNING: This word should better be replaced with something else."
-msgid "reinitialize, to"
-msgstr ""
 
 #. "reload the current document"
 msgid "reload, to"

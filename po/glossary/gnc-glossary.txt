@@ -132,7 +132,6 @@
 "register: basic ledger"	"another form of register"
 "register: general ledger"	"another form of register"
 "register: transaction journal"	"another form of register"
-"reinitialize, to"	"to reinitialize a transaction: Remove all splits in the transaction except the one that is attached to the currently opened register. WARNING: This word should better be replaced with something else."
 "reload, to"	"reload the current document"
 "Retained Earnings"	"name of an equity account (?); to be distinguished from the opening balance."
 "save, to (to a file)"	"To write data (typically a file) to a storage medium, such as a disk or tape."

@@ -182,7 +182,7 @@
 		  inv-str))
 		inv-str))
 	   ((equal? type gnc:transaction-type-payment) (N_ "Payment, thank you"))
-	   (else (N_ "UNK"))))
+	   (else (N_ "Unknown"))))
 	 (row-contents '()))
 
     (if reverse?

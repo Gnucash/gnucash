@@ -796,6 +796,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Transaction *t2;
     GNCLot *lot2;
     Split *split;
+    /* Translators: This is the memo of an auto-created split */
     char *memo2 = _("Automatic Payment Forward");
 
     t2 = xaccMallocTransaction (invoice->book);

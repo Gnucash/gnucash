@@ -508,7 +508,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 
       if (gncEntryGetOrder (entry) != NULL) {
 	message = _("The current entry has been changed.\n"
-		    "However, this entry is part of an existing order\n"
+		    "However, this entry is part of an existing order.\n"
 		    "Would you like to record the change and\n"
 		    "effectively change your order?");
 	break;
