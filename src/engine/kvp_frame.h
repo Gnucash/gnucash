@@ -70,7 +70,10 @@ typedef struct _KvpFrame KvpFrame;
  * KvpValueType enum. */
 typedef struct _KvpValue KvpValue;
  
-/** Enum to enumerate possible types in the union KvpValue */
+/** Enum to enumerate possible types in the union KvpValue 
+ *  XXX FIXME TODO: People have asked for boolean values, 
+ *  e.g. in xaccAccountSetAutoInterestXfer
+ */
 typedef enum {
   KVP_TYPE_GINT64,
   KVP_TYPE_DOUBLE,
@@ -114,12 +117,12 @@ gboolean     kvp_frame_is_empty(KvpFrame * frame);
 /*@}*/
 
 /* -------------------------------------------------------- */
-/** @name KvpFrame Value Storing */
+/** @name KvpFrame Basic Value Storing */
 /*@{*/
 
 /** The kvp_frame_set_gint64() routine will store the value of the 
- *     gint64 at the indicated path. If not all frame components of the 
- *     path exist, they are created.
+ *     gint64 at the indicated path. If not all frame components of 
+ *     the path exist, they are created.
  *
  *     Similarly, the set_double, set_numeric, and set_timespec 
  *     routines perform the same function, for each of the respective 
@@ -147,7 +150,6 @@ void kvp_frame_set_guid(KvpFrame * frame, const char * path, const GUID *guid);
 void kvp_frame_set_frame(KvpFrame *frame, const char *path, KvpFrame *chld);
 void kvp_frame_set_frame_nc(KvpFrame *frame, const char *path, KvpFrame *chld);
 
-
 /** The kvp_frame_add_url_encoding() routine will parse the
  *  value string, assuming it to be URL-encoded in the standard way,
  *  turning it into a set of key-value pairs, and adding those to the
@@ -163,6 +165,46 @@ void kvp_frame_set_frame_nc(KvpFrame *frame, const char *path, KvpFrame *chld);
 void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
 /*@}*/
 
+/** @name KvpFrame Glist Bag Storing */
+/*@{*/
+
+/** The kvp_frame_add_gint64() routine will add the value of the 
+ *     gint64 to the glist bag of values at the indicated path. 
+ *     If not all frame components of the path exist, they are 
+ *     created.  If the value previously stored at this path was 
+ *     not a glist bag, then a bag will be formed there, the old 
+ *     value placed in the bag, and the new value added to the bag.
+ *
+ *     Similarly, the add_double, add_numeric, and add_timespec 
+ *     routines perform the same function, for each of the respective 
+ *     types.
+ */
+void kvp_frame_add_gint64(KvpFrame * frame, const char * path, gint64 ival);
+void kvp_frame_add_double(KvpFrame * frame, const char * path, double dval);
+void kvp_frame_add_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval);
+void kvp_frame_add_timespec(KvpFrame * frame, const char * path, Timespec ts);
+
+/** The kvp_frame_add_str() routine will add a copy of the string 
+ *    to the glist bag at the indicated path. If not all frame components 
+ *    of the path exist, they are created.  If there was another 
+ *    item previously stored at that path, then the path is converted
+ *    to a bag, and the old value, along with the new value, is added
+ *    to the bag.
+ *
+ *    Similarly, the add_guid and add_frame will make copies and
+ *    add those.  
+ *
+ * The kvp_frame_add_frame_nc() routine works as above, but does 
+ *    *NOT* copy the frame. 
+ */
+void kvp_frame_add_str(KvpFrame * frame, const char * path, const char* str);
+void kvp_frame_add_guid(KvpFrame * frame, const char * path, const GUID *guid);
+
+void kvp_frame_add_frame(KvpFrame *frame, const char *path, KvpFrame *chld);
+void kvp_frame_add_frame_nc(KvpFrame *frame, const char *path, KvpFrame *chld);
+
+/*@}*/
+
 /* -------------------------------------------------------- */
 /** @name KvpFrame Value Fetching */
 /*@{*/
@@ -173,7 +215,11 @@ void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
   asked for, then a NULL or a zero is returned.  So, for example,
   asking for a string when the path stored an int will return a NULL.
   In some future date, this may be changed to a looser type system, 
-  such as perl's automatic re-typing.
+  such as perl's automatic re-typing (e.g. an integer value might be
+  converted to a printed string representing that value).
+
+  If any part of the path does not exist, then NULL or zero will be
+  returned.
 
   The values returned for GUID, binary, GList, KvpFrame and string 
   are "non-copying" -- the returned item is the actual item stored.
@@ -197,20 +243,24 @@ GUID      * kvp_frame_get_guid(const KvpFrame *frame, const char *path);
 void      * kvp_frame_get_binary(const KvpFrame *frame, const char *path,
                                    guint64 * size_return); 
 Timespec    kvp_frame_get_timespec(const KvpFrame *frame, const char *path);
+KvpFrame  * kvp_frame_get_frame(const KvpFrame *frame, const char *path);
 
 /** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
+ *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
  */
-KvpFrame    * kvp_frame_get_frame (KvpFrame *frame, const char *,...);
+KvpFrame    * kvp_frame_get_frame_path (KvpFrame *frame, const char *,...);
 
 /** This routine return the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
+ *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
  */
 KvpFrame    * kvp_frame_get_frame_gslist (KvpFrame *frame,
                                            GSList *key_path);
 
 /** This routine return the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
+ *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
  *
  * The kvp_frame_get_frame_slash() routine takes a single string
  *    where the keys are separated by slashes; thus, for example:
@@ -297,7 +347,9 @@ void          kvp_frame_set_slot_path_gslist (KvpFrame *frame,
 /** You probably shouldn't be using these low-level routines */
 
 /** Returns the KvpValue in the given KvpFrame 'frame' that is 
- *  associated with 'key'.
+ *  associated with 'key'.  If there is no key in the frame, NULL
+ *  is returned.  If the value associated with the key is NULL, 
+ *  NULL is returned.
  *
  *  Pointers passed as arguments into get_slot are the responsibility
  *  of the caller.  Pointers returned by get_slot are owned by the

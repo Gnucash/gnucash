@@ -1,5 +1,5 @@
 /********************************************************************
- * kvp_frame.c -- a key-value frame system for gnucash.             *
+ * kvp_frame.c -- Implements a key-value frame system               *
  * Copyright (C) 2000 Bill Gribble                                  *
  * Copyright (C) 2001,2003 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
@@ -171,18 +171,19 @@ kvp_frame_copy(const KvpFrame * frame)
   return retval;
 }
 
+/* Passing in a null value into this routine has the effect
+ * of deleting the old value stored at this slot.
+ */
 static void
 kvp_frame_set_slot_destructively(KvpFrame * frame, const char * slot, 
                                  KvpValue * new_value) 
 {
-  /* FIXME: no way to indicate errors... */
-
   gpointer orig_key;
   gpointer orig_value;
   int      key_exists;
 
-  if(!new_value && !frame->hash) return; /* don't need to do anything */
-  if(!init_frame_body_if_needed(frame)) return;
+  if(!frame->hash) return; /*  Error ...  */
+  if(!init_frame_body_if_needed(frame)) return; /* Error ... */
 
   g_hash_table_freeze(frame->hash);
 
@@ -282,6 +283,44 @@ kvp_frame_set_frame_nc(KvpFrame * frame, const char * path, KvpFrame *fr)
 
 /* ============================================================ */
 
+#if UNDER_CONSTRUCTION
+void
+kvp_frame_add_gint64(KvpFrame * frame, const char * path, gint64 ival) 
+{
+  KvpValue *value, *oldvalue;
+  value = kvp_value_new_gint64 (ival);
+
+  oldvalue = kvp_frame_get_value (frame, path);
+  if (oldvalue)
+  {
+    if (KVP_TYPE_GLIST == oldvalue->type)
+    {
+       GList * vlist = oldvalue->value.list;
+       vlist = g_list_append (vlist, value);
+       oldvalue->value.list = vlist;
+       return;
+    }
+    else
+    {
+       GList *vlist = NULL;
+       /* XXX don't copy oldvalue, dont't set destructo */
+       vlist = g_list_append (vlist, kvp_value_copy(oldvalue));
+       vlist = g_list_append (vlist, value);
+       kvp_value_new_glist_nc (vlist);
+       kvp_frame_set_slot_destructively (frame,xxx,vvv);
+       return;
+    }
+  }
+xxxxxxxxxxx
+  
+
+  frame = kvp_frame_set_slot_slash_nc (frame, path, value);
+  if (!frame) kvp_value_delete (value);
+}
+#endif
+
+/* ============================================================ */
+
 void
 kvp_frame_set_slot(KvpFrame * frame, const char * slot, 
                    const KvpValue * value) 
@@ -311,7 +350,7 @@ KvpValue *
 kvp_frame_get_slot(const KvpFrame * frame, const char * slot) 
 {
   if (!frame) return NULL;
-  if(!frame->hash) return(NULL);
+  if (!frame->hash) return NULL;  /* Error ... */
   return (KvpValue *)g_hash_table_lookup(frame->hash, slot);
 }
 
@@ -463,7 +502,7 @@ kvp_frame_get_frame_slash_trash (KvpFrame *frame, char *key_path)
   return frame;
 }
 
-/* return pointer to last frame in path, and also store the
+/* Return pointer to last frame in path, and also store the
  * last dangling part of path in 'end_key'.
  */
 
@@ -641,7 +680,7 @@ kvp_frame_get_frame_or_null_slash_trash (const KvpFrame *frame, char *key_path)
   return frame;
 }
 
-/* return pointer to last frame in path, or NULL if the path
+/* Return pointer to last frame in path, or NULL if the path
  * doesn't exist.  Also store the last dangling part of path
  * in 'end_key'.
  */
@@ -739,6 +778,22 @@ kvp_frame_get_timespec(const KvpFrame *frame, const char *path)
   return kvp_value_get_timespec(kvp_frame_get_slot (frame, key));
 }
 
+KvpFrame *
+kvp_frame_get_frame(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_value_get_frame(kvp_frame_get_slot (frame, key));
+}
+
+KvpValue *
+kvp_frame_get_value(const KvpFrame *frame, const char *path)
+{
+  char *key = NULL;
+  frame = get_trailer_or_null (frame, path, &key);
+  return kvp_frame_get_slot (frame, key);
+}
+
 /* ============================================================ */
 
 KvpFrame *
@@ -762,7 +817,7 @@ kvp_frame_get_frame_gslist (KvpFrame *frame, GSList *key_path)
 
 
 KvpFrame *
-kvp_frame_get_frame (KvpFrame *frame, const char *key,  ...) 
+kvp_frame_get_frame_path (KvpFrame *frame, const char *key,  ...) 
 {
   va_list ap;
   if (!frame || !key) return frame;
@@ -881,7 +936,7 @@ kvp_glist_copy(const GList * list)
   GList * retval = NULL;
   GList * lptr;
 
-  if(!list) return retval;
+  if (!list) return retval;
   
   /* Duplicate the backbone of the list (this duplicates the POINTERS
    * to the values; we need to deep-copy the values separately) */
@@ -958,7 +1013,10 @@ kvp_value_new_gnc_numeric(gnc_numeric value)
 KvpValue *
 kvp_value_new_string(const char * value) 
 {
-  KvpValue * retval = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_STRING;
   retval->value.str  = g_strdup(value);
   return retval;
@@ -967,7 +1025,10 @@ kvp_value_new_string(const char * value)
 KvpValue *
 kvp_value_new_guid(const GUID * value) 
 {
-  KvpValue * retval = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_GUID;
   retval->value.guid = g_new0(GUID, 1);
   memcpy(retval->value.guid, value, sizeof(GUID));
@@ -986,7 +1047,10 @@ kvp_value_new_timespec(Timespec value)
 KvpValue *
 kvp_value_new_binary(const void * value, guint64 datasize) 
 {
-  KvpValue * retval = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval = g_new0(KvpValue, 1);
   retval->type = KVP_TYPE_BINARY;
   retval->value.binary.data = g_new0(char, datasize);
   retval->value.binary.datasize = datasize;
@@ -997,7 +1061,10 @@ kvp_value_new_binary(const void * value, guint64 datasize)
 KvpValue *
 kvp_value_new_binary_nc(void * value, guint64 datasize) 
 {
-  KvpValue * retval = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval = g_new0(KvpValue, 1);
   retval->type = KVP_TYPE_BINARY;
   retval->value.binary.data = value;
   retval->value.binary.datasize = datasize;
@@ -1007,7 +1074,10 @@ kvp_value_new_binary_nc(void * value, guint64 datasize)
 KvpValue *
 kvp_value_new_glist(const GList * value) 
 {
-  KvpValue * retval = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_GLIST;
   retval->value.list = kvp_glist_copy(value);
   return retval;
@@ -1016,7 +1086,10 @@ kvp_value_new_glist(const GList * value)
 KvpValue *
 kvp_value_new_glist_nc(GList * value) 
 {
-  KvpValue * retval = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval = g_new0(KvpValue, 1);
   retval->type       = KVP_TYPE_GLIST;
   retval->value.list = value;
   return retval;
@@ -1025,7 +1098,10 @@ kvp_value_new_glist_nc(GList * value)
 KvpValue *
 kvp_value_new_frame(const KvpFrame * value) 
 {
-  KvpValue * retval  = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval  = g_new0(KvpValue, 1);
   retval->type        = KVP_TYPE_FRAME;
   retval->value.frame = kvp_frame_copy(value);
   return retval;  
@@ -1034,7 +1110,10 @@ kvp_value_new_frame(const KvpFrame * value)
 KvpValue *
 kvp_value_new_frame_nc(KvpFrame * value) 
 {
-  KvpValue * retval  = g_new0(KvpValue, 1);
+  KvpValue * retval;
+  if (!value) return NULL;
+
+  retval  = g_new0(KvpValue, 1);
   retval->type        = KVP_TYPE_FRAME;
   retval->value.frame = value;
   return retval;  
