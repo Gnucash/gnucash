@@ -146,11 +146,11 @@ gnc_book_set_backend (GNCBook *book, Backend *be)
 
 /* ---------------------------------------------------------------------- */
 
-static int
+static gboolean
 counter_thunk(Transaction *t, void *data)
 {
     (*((guint*)data))++;
-    return 0;
+    return TRUE;
 }
 
 guint

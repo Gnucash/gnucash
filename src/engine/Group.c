@@ -1078,6 +1078,7 @@ xaccGroupVisitUnvisitedTransactions_thunk(Transaction *trn,
 {
     gpointer test_trn;
     struct group_visit_data *grdata = (struct group_visit_data*)data;
+    gboolean result;
 
     test_trn = g_hash_table_lookup(grdata->visit_table, trn);
 
@@ -1085,10 +1086,12 @@ xaccGroupVisitUnvisitedTransactions_thunk(Transaction *trn,
     {
         g_hash_table_insert(grdata->visit_table, trn, "");
 
-        grdata->proc(trn, grdata->up_data);
+        result = grdata->proc(trn, grdata->up_data);
     }
+    else
+      result = TRUE;
 
-    return TRUE;
+    return result;
 }
 
 gboolean
