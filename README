@@ -227,6 +227,13 @@ German version:
     export LINGUAS=de_DE
 
 
+Other locales that should mostly work, but are still in development:
+en_US
+en_GB
+fr_CH
+de_CH
+
+
 
 
 Other Tools
