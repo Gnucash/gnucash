@@ -805,7 +805,7 @@ chmod u+x src/bin/overrides/gnucash-make-guids
 ### --------------------------------------------------------------------------
 ### Makefile creation
 
-AC_OUTPUT(
+AC_OUTPUT( m4/Makefile  intl/Makefile 
           dnl # Makefiles
           Makefile
           accounts/Makefile
@@ -829,7 +829,6 @@ AC_OUTPUT(
           doc/sgml/es/Makefile
           doc/sgml/pt_PT/Makefile
           doc-tools/Makefile
-          intl/Makefile
           intl-scm/Makefile
           lib/Makefile
           lib/guile-www/Makefile

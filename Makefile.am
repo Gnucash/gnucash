@@ -1,5 +1,5 @@
 
-SUBDIRS = macros debian intl doc-tools doc lib src intl-scm po rpm accounts
+SUBDIRS = intl  m4  macros debian doc-tools doc lib src intl-scm po rpm accounts
 
 docdir = ${GNC_DOC_INSTALL_DIR}
 
@@ -30,7 +30,7 @@ m4data_DATA = gnucash.m4
 # Don't list any directories or you'll get *everything*, including the
 # CVS dirs.
 
-EXTRA_DIST = \
+EXTRA_DIST = config.rpath  \
   .cvsignore \
   ChangeLog.1 \
   HACKING \
