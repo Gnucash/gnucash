@@ -43,6 +43,7 @@
 #include <gnome.h>
 
 #include "Account.h"
+#include "cap-gains.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-lot.h"
@@ -114,11 +115,15 @@ lv_show_splits (GNCLotViewer *lv)
       char dbuff[MAX_DATE_LENGTH];
       char amtbuff[200];
       char valbuff[200];
+      char gainbuff[200];
       gnc_commodity *currency;
       Transaction *trans = xaccSplitGetParent (split);
       time_t date = xaccTransGetDate (trans);
       const char *row_vals[MINI_NUM_COLS];
       int row;
+
+      /* Do not show gains splits */
+      if (gnc_numeric_zero_p (xaccSplitGetAmount(split))) continue;
 
       /* Opening date */
       qof_print_date_buff (dbuff, MAX_DATE_LENGTH, date);
@@ -137,7 +142,9 @@ lv_show_splits (GNCLotViewer *lv)
                  gnc_commodity_print_info (currency, TRUE));
       row_vals[MINI_VALU_COL] = valbuff;
 
-      row_vals[MINI_GAIN_COL] = "-";
+      xaccSPrintAmount (gainbuff, xaccSplitGetCapGains (split),
+                 gnc_commodity_print_info (currency, TRUE));
+      row_vals[MINI_GAIN_COL] = gainbuff;
       row_vals[MINI_BALN_COL] = "-";
 
       /* Self-reference */
