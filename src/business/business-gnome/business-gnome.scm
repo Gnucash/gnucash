@@ -39,10 +39,12 @@
       accts))
 
   (define (make-query book accts)
-    (let ((q (gnc:malloc-query)))
-      (gnc:query-add-account-match q accts 'guid-match-any 'query-and)
-      (gnc:query-set-book q book)
-      q))
+    (if (and accts (not (null? accts)))
+	(let ((q (gnc:malloc-query)))
+	  (gnc:query-add-account-match q accts 'guid-match-any 'query-and)
+	  (gnc:query-set-book q book)
+	  q)
+	#f))
 
   (define (get-open-lots query)
     (let ((all-lots (gnc:query-get-lots query 'query-txn-match-any))
@@ -64,13 +66,13 @@
 	(let* ((book (gnc:session-get-book session))
 	       (payables-accounts (get-payables book))
 	       (query (make-query book payables-accounts))
-	       (open-lots (get-open-lots query))
+	       (open-lots (if query (get-open-lots query) '()))
 	       (days (option-value "Bills Due Days"))
 	       (compare-date (compute-date (gnc:get-today) days))
 	       (bills '()))
 
 	  ;; free up the space we don't need right now...
-	  (gnc:free-query query)
+	  (if query (gnc:free-query query))
 
 	  ;; compute the bills that are soon to be (or over-) due
 	  (for-each

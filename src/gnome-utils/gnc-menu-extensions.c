@@ -369,7 +369,7 @@ g_strncmp_ignore_char( const gchar *first, const gchar *second, gint length, gch
 static const gchar *
 gnc_gnome_app_helper_gettext (const gchar *str)
 {
-    char *s;
+    const char *s;
 
     /* First try to look up the string in gettext domain gnome-libs,
      * since this is where the original gnome stock labels have been

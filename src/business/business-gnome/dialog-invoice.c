@@ -179,6 +179,9 @@ void gnc_invoice_window_toolbar_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_statusbar_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_summarybar_cb (GtkWidget *widget, gpointer data);
 
+void gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
+
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
 static int inv_last_width = 0;
@@ -851,6 +854,31 @@ gnc_invoice_window_summarybar_cb (GtkWidget *widget, gpointer data)
     gtk_widget_hide(iw->summarybar_dock);
     gtk_widget_queue_resize(iw->summarybar_dock);
   }
+}
+
+void
+gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice = iw_get_invoice(iw);
+
+  if (!invoice) return;
+
+  gncInvoiceSetActive (invoice,
+		       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
+}
+
+void
+gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
+				   gpointer data)
+{
+  InvoiceWindow *iw = data;
+  GncInvoice *invoice = iw_get_invoice(iw);
+
+  if (!invoice) return;
+
+  gncInvoiceSetNotes (invoice, gtk_editable_get_chars
+		      (GTK_EDITABLE (widget), 0, -1));
 }
 
 static GtkWidget *

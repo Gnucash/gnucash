@@ -14,6 +14,22 @@
 
 	  Fixes Morrison J. Chang's QIF import problem.
 
+	* src/business/business-gnome/dialog-invoice.c:
+	* src/business/business-gnome/glade/invoice.glade:
+	  add handlers to immediately save the active and notes fields
+	  as they are edited.  Fixes #104954
+
+	  NOTE: This has a side effect of removing an invoice from any
+	  open searches, but NOT replacing it if you click on the "active"
+	  button.
+
+	* src/business/business-gnome/business-gnome.scm: fix the "bill
+	  reminder" so it doesn't create a query if there are no payables
+	  accounts.
+
+	* src/gnome-utils/gnc-menu-extensions.c: dgettext() and gettext()
+	  return const char*.
+	
 2003-01-30  Derek Atkins  <derek@ihtfp.com>
 
 	* po/np.po -- add the proper "Plural" header so it builds again.

@@ -1636,6 +1636,12 @@
 		<class>GtkCheckButton</class>
 		<name>active_check</name>
 		<can_focus>True</can_focus>
+		<signal>
+		  <name>toggled</name>
+		  <handler>gnc_invoice_window_active_toggled_cb</handler>
+		  <data>Invoice Entry Window</data>
+		  <last_modification_time>Sat, 01 Feb 2003 01:03:48 GMT</last_modification_time>
+		</signal>
 		<label>Active</label>
 		<active>False</active>
 		<draw_indicator>True</draw_indicator>
@@ -1898,6 +1904,12 @@
 	      <class>GtkText</class>
 	      <name>notes_text</name>
 	      <can_focus>True</can_focus>
+	      <signal>
+		<name>focus-out-event</name>
+		<handler>gnc_invoice_window_leave_notes_cb</handler>
+		<data>Invoice Entry Window</data>
+		<last_modification_time>Sat, 01 Feb 2003 01:12:00 GMT</last_modification_time>
+	      </signal>
 	      <editable>True</editable>
 	      <text></text>
 	    </widget>
