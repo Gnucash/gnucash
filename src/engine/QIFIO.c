@@ -623,6 +623,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    Account *sub_acc = 0x0;
    Account *xfer_acc = 0x0;
    double adjust = 0.0;
+   int name_not_yet_set = 1;
 
    if (!acc) return NULL;
 
@@ -672,8 +673,30 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* L == name of acount from which transfer occured */
      if ('L' == qifline [0]) {   
-         /* locate the transfer account */
-         xfer_acc = xaccGetXferQIFAccount (acc, qifline);
+        /* MSMoney uses a cute trick to overcome the lack of an account name
+         * in the QIF format.  Basically, if the very very first transaction
+         * has a payee field of "Opening Balance", then the L field is the name
+         * of this account, and not the transfer account.  But this only works
+         * for the very, very first transaction.
+         */
+        if (name_not_yet_set) {
+            name_not_yet_set = 0;
+            /* remove square brackets from name, remove carriage return ... */
+            qifline = &qifline[1];
+            if ('[' == qifline[0]) {
+               qifline = &qifline[1];
+               tmp = strchr (qifline, ']');
+               if (tmp) *tmp = 0x0;
+            }
+            tmp = strchr (qifline, '\r');
+            if(tmp) *tmp = 0x0;
+            tmp = strchr (qifline, '\n');
+            if(tmp) *tmp = 0x0;
+            xaccAccountSetName (acc, qifline);
+        } else {
+            /* locate the transfer account */
+            xfer_acc = xaccGetXferQIFAccount (acc, qifline);
+        }
      } else 
 
      /* M == memo field */
@@ -723,6 +746,16 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if ('P' == qifline [0]) {   
         XACC_PREP_STRING (tmp);
         xaccTransSetDescription (trans, tmp);
+
+        /* MSMoney uses a cute trick to overcome the lack of an account name
+         * in the QIF format.  Basically, if the very very first transaction
+         * has a payee field of "Opening Balance", then the L field is the name
+         * of this account, and not the transfer account.  But this only works
+         * for the very, very first transaction.
+         */
+        if (name_not_yet_set) {
+           if (! NSTRNCMP (qifline, "POpening Balance")) name_not_yet_set = 0;
+        }
      } else
 
      /* Q == number of shares */
@@ -945,15 +978,44 @@ xaccReadQIFAccountGroup( char *datafile )
   grp = xaccMallocAccountGroup();
   
   while (qifline) {
-     if (STRSTR (qifline, "Type:Bank")) {
-        Account *acc   = xaccMallocAccount();
-        DEBUG ("got bank\n");
+     int typo = -1;
+     char * name = NULL;
 
-        xaccAccountSetType (acc, BANK);
-        xaccAccountSetName (acc, "Quicken Bank Account");
+     if (STRSTR (qifline, "Type:")) {
+        if (STRSTR (qifline, "Type:Bank")) {
+           typo = BANK;
+           name = "Quicken Bank Account";
+        }
+        if (STRSTR (qifline, "Type:Cash")) {
+           typo = CASH;
+           name = "Quicken Cash Account";
+        }
+        if (STRSTR (qifline, "Type:CCard")) {
+           typo = CREDIT;
+           name = "Quicken Credit Card";
+        }
+        if (STRSTR (qifline, "Type:Invst")) {
+           typo = STOCK;
+           name = "Quicken Investment Account";
+        }
+        if (STRSTR (qifline, "Type:Oth A")) {
+           typo = ASSET;
+           name = "Quicken Asset";
+        }
+        if (STRSTR (qifline, "Type:Oth L")) {
+           typo = LIABILITY;
+           name = "Quicken Liability";
+        }
+     } 
+        
+     if (name) {
+        Account * acc = xaccMallocAccount();
+        xaccAccountSetType (acc, typo);
+        xaccAccountSetName (acc, name);
 
         insertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc);
+        typo = -1; name = NULL;
         continue;
      } else
 
@@ -966,18 +1028,6 @@ xaccReadQIFAccountGroup( char *datafile )
      if (STRSTR (qifline, "Type:Class")) {
         DEBUG ("got class\n");
         qifline = xaccReadQIFDiscard (fd);
-        continue;
-     } else
-
-     if (STRSTR (qifline, "Type:Invst")) {
-        Account *acc   = xaccMallocAccount();
-        DEBUG ("got Invst\n");
-
-        xaccAccountSetType (acc, STOCK);
-        xaccAccountSetName (acc, "Quicken Investment Account");
-
-        insertAccount( grp, acc );
-        qifline = xaccReadQIFTransList (fd, acc);
         continue;
      } else
 
