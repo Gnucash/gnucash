@@ -1,3 +1,8 @@
+2002-10-18  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in, macros/openhbci.m4: Add version control macro for
+	OpenHBCI.
+
 2002-10-18  Derek Atkins  <derek@ihtfp.com>
 	* dialog-date-close.c: remove unused function and non-necessary header
 
