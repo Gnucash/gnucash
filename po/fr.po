@@ -809,7 +809,8 @@ msgstr "Identifier et corriger les problèmes dans tous les comptes."
 # messages-i18n.c:110
 #: messages-i18n.c:123
 msgid "Identify and fix problems in the account and its subaccounts"
-msgstr "Identifier et corriger les problèmes dans le compte et ces sous-comptes."
+msgstr ""
+"Identifier et corriger les problèmes dans le compte et ces sous-comptes."
 
 # messages-i18n.c:111
 #: messages-i18n.c:124
@@ -3497,8 +3498,8 @@ msgid ""
 "Display the other account?  (if this is a split transaction, this parameter "
 "is guessed)."
 msgstr ""
-"Afficher l'autre compte? (si c'est une transaction répartie, ce paramètre est "
-"deviné)."
+"Afficher l'autre compte? (si c'est une transaction répartie, ce paramètre "
+"est deviné)."
 
 # po/guile_strings.txt:247
 #: po/guile_strings.txt:297

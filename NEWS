@@ -1,5 +1,11 @@
 Version history:
 ------- -------
+ 1.4.2  - 9 July 2000
+         o updated French translations
+         o improved qif importing
+         o fix for g-wrap 0.9.4
+         o misc bug fixes
+
  1.4.1  - 26 June 2000
          o translations are loaded correctly
          o improved qif importing
