@@ -1,3 +1,11 @@
+2001-02-15  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/qif-import/qif-guess-map.scm: add stock hash
+	save/restore to map IO
+
+	* src/scm/qif-import/qif-to-gnc.scm: bug fixes to remove duplicate
+	account problems
+	
 2001-02-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report-utilities.scm: Added functions to filter accounts

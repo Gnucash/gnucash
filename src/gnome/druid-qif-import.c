@@ -86,6 +86,7 @@ struct _qifimportwindow {
 
   SCM       gnc_acct_info;
   SCM       stock_hash;
+  SCM       new_stocks;
 
   SCM       imported_account_group;
   SCM       match_transactions;
@@ -167,6 +168,7 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->memo_display_info =  SCM_BOOL_F;
   retval->memo_map_info     =  SCM_BOOL_F;
   retval->stock_hash        =  SCM_BOOL_F;
+  retval->new_stocks        =  SCM_BOOL_F;
   retval->imported_account_group   = SCM_BOOL_F;
   retval->match_transactions = SCM_BOOL_F;
   retval->selected_transaction = 0;
@@ -223,6 +225,7 @@ gnc_ui_qif_import_druid_make(void)  {
   retval->acct_map_info    = gh_list_ref(mapping_info, gh_int2scm(1));
   retval->cat_map_info     = gh_list_ref(mapping_info, gh_int2scm(2));
   retval->memo_map_info    = gh_list_ref(mapping_info, gh_int2scm(3));
+  retval->stock_hash       = gh_list_ref(mapping_info, gh_int2scm(4));
   
   scm_protect_object(retval->imported_files);
   scm_protect_object(retval->selected_file);
@@ -234,6 +237,7 @@ gnc_ui_qif_import_druid_make(void)  {
   scm_protect_object(retval->acct_display_info);
   scm_protect_object(retval->acct_map_info);
   scm_protect_object(retval->stock_hash);
+  scm_protect_object(retval->new_stocks);
   scm_protect_object(retval->imported_account_group);
   scm_protect_object(retval->match_transactions);
   
@@ -278,6 +282,7 @@ gnc_ui_qif_import_druid_destroy (QIFImportWindow * window) {
   scm_unprotect_object(window->acct_display_info);
   scm_unprotect_object(window->acct_map_info);
   scm_unprotect_object(window->stock_hash);
+  scm_unprotect_object(window->new_stocks);
   scm_unprotect_object(window->imported_account_group);
   scm_unprotect_object(window->match_transactions);
 
@@ -1283,7 +1288,6 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
   /* get the default currency */
   char * currname = gtk_entry_get_text(GTK_ENTRY(wind->currency_entry));
 
-
   /* busy cursor */
   gnc_suspend_gui_refresh ();
   gnc_set_busy_cursor(NULL);
@@ -1340,7 +1344,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
     scm_unprotect_object(wind->match_transactions);
     wind->match_transactions = retval;
     scm_protect_object(wind->match_transactions);
-    
+
     /* skip to the last page if we couldn't find duplicates 
      * in the new group */
     if((retval == SCM_BOOL_F) ||
@@ -1402,10 +1406,11 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
   
-  SCM any_new   = gh_eval_str("qif-import:any-new-accts?");
-  SCM any_stock = gh_eval_str("qif-import:any-new-stock-accts?");
-  int show_matches;
+  SCM any_new      = gh_eval_str("qif-import:any-new-accts?");
+  SCM update_stock = gh_eval_str("qif-import:update-stock-hash");
 
+  int show_matches;
+  
   /* if any accounts are new, ask about the currency; else,
    * just skip that page */
   if((gh_call1(any_new, wind->acct_map_info) == SCM_BOOL_T) ||
@@ -1416,7 +1421,12 @@ gnc_ui_qif_import_memo_next_cb(GnomeDruidPage * page,
   else {
     /* if we need to look at stocks, do that, otherwise import
      * xtns and go to the duplicates page */
-    if(gh_call1(any_stock, wind->acct_map_info) == SCM_BOOL_T) {
+    scm_unprotect_object(wind->new_stocks);
+    wind->new_stocks = gh_call2(update_stock, wind->stock_hash, 
+                                wind->acct_map_info);
+    scm_protect_object(wind->new_stocks);
+    
+    if(wind->new_stocks != SCM_BOOL_F) {
       if(wind->show_doc_pages) {
         gnome_druid_set_page(GNOME_DRUID(wind->druid),
                              get_named_page(wind, "commodity_doc_page"));
@@ -1463,10 +1473,15 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
                                    gpointer user_data) {
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
-  SCM any_stock = gh_eval_str("qif-import:any-new-stock-accts?");
+  SCM update_stock = gh_eval_str("qif-import:update-stock-hash");
   int show_matches;
 
-  if(gh_call1(any_stock, wind->acct_map_info) == SCM_BOOL_T) {
+  scm_unprotect_object(wind->new_stocks);
+  wind->new_stocks =  gh_call2(update_stock, wind->stock_hash, 
+                               wind->acct_map_info);
+  scm_protect_object(wind->new_stocks);
+  
+  if(wind->new_stocks != SCM_BOOL_F) {
     if(wind->show_doc_pages) {
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            get_named_page(wind, "commodity_doc_page"));
@@ -1569,10 +1584,9 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
     gtk_object_get_data(GTK_OBJECT(user_data), "qif_window_struct");
 
   SCM   hash_ref          = gh_eval_str("hash-ref");
-  SCM   setup_stock_hash  = gh_eval_str("qif-import:setup-stock-hash");
-  SCM   setup_info;
-  SCM   stock_names;
+  SCM   stocks;
   SCM   comm_ptr_token;
+  SCM   show_matches;
 
   gnc_commodity  * commodity;
   GnomeDruidPage * back_page = get_named_page(wind, "commodity_doc_page");  
@@ -1580,18 +1594,33 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   
   /* only set up once */
   if(wind->commodity_pages) return;
-
-  /* make a list of the new stocks that we need info about */
-  setup_info       = gh_call1(setup_stock_hash, wind->acct_map_info);  
-  stock_names      = gh_cadr(setup_info);
-
-  scm_unprotect_object(wind->stock_hash);
-  wind->stock_hash = gh_car(setup_info);
-  scm_protect_object(wind->stock_hash);
   
+  /* this shouldn't happen, but DTRT if it does */
+  if(gh_null_p(wind->new_stocks)) {
+    printf("somehow got to commodity doc page with nothing to do... BUG!\n");
+    show_matches = gnc_ui_qif_import_convert(wind);
+    
+    if(show_matches) {
+      if(wind->show_doc_pages) {
+        /* check for matches .. the docpage does it automatically */ 
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "match_doc_page"));
+      }
+      else {
+        gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                             get_named_page(wind, "match_duplicates_page"));
+      }
+    }
+    else {
+      gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                           get_named_page(wind, "end_page"));
+    } 
+  }
+
   /* insert new pages, one for each stock */
-  while(!gh_null_p(stock_names)) {
-    comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stock_names));
+  stocks = wind->new_stocks;
+  while(!gh_null_p(stocks)) {
+    comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stocks));
     commodity      = gw_wcp_get_ptr(comm_ptr_token);
     
     new_page = make_qif_druid_page(commodity);
@@ -1608,7 +1637,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
                             GNOME_DRUID_PAGE(new_page->page));
     back_page = GNOME_DRUID_PAGE(new_page->page);
     
-    stock_names = gh_cdr(stock_names);
+    stocks = gh_cdr(stocks);
     gtk_widget_show_all(new_page->page);
   }
 }
@@ -1833,8 +1862,9 @@ gnc_ui_qif_import_finish_cb(GnomeDruidPage * gpage,
   gnc_resume_gui_refresh();
   
   /* write out mapping info before destroying the window */
-  gh_call3(save_map_prefs, wind->acct_map_info, wind->cat_map_info,
-           wind->memo_map_info); 
+  gh_apply(save_map_prefs, 
+           SCM_LIST4(wind->acct_map_info, wind->cat_map_info,
+                     wind->memo_map_info, wind->stock_hash));
   
   gnc_ui_qif_import_druid_destroy(wind);  
 }

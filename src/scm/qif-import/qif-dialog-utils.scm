@@ -544,25 +544,6 @@
      (vector->list hash-table))
     retval))
 
-(define (qif-import:any-new-stock-accts? hash-table) 
-  (let ((retval #f))
-    (for-each 
-     (lambda (bin)
-       (for-each 
-        (lambda (elt)
-          (if (and 
-               (qif-map-entry:new-acct? (cdr elt))
-               (qif-map-entry:display? (cdr elt))
-               (or 
-                (memv GNC-STOCK-TYPE 
-                      (qif-map-entry:allowed-types (cdr elt)))
-                (memv GNC-MUTUAL-TYPE 
-                      (qif-map-entry:allowed-types (cdr elt)))))
-              (set! retval #t)))
-        bin))
-     (vector->list hash-table))
-    retval))
-
 (define (qif-import:fix-from-acct qif-file new-acct-name) 
   (for-each 
    (lambda (xtn)
@@ -589,42 +570,59 @@
                 (match:substring match 2))))
         fullname)))
 
-(define (qif-import:setup-stock-hash hash-table)
-  (let ((newhash (make-hash-table 20))
-        (names '()))
-    (for-each 
-     (lambda (bin)
-       (for-each 
-        (lambda (elt)
-          (if (and 
-               (qif-map-entry:new-acct? (cdr elt))
-               (qif-map-entry:display? (cdr elt)) 
-               (or 
-                (memv GNC-STOCK-TYPE 
-                      (qif-map-entry:allowed-types (cdr elt)))
-                (memv GNC-MUTUAL-TYPE 
-                      (qif-map-entry:allowed-types (cdr elt)))))
-              (let* ((name (qif-map-entry:qif-name (cdr elt)))
-                     (stock-name (qif-import:get-account-name name)))
-                (if (not stock-name)
-                    (begin
-                      (display "stock-name #f.. name ==")
-                      (display name)(newline)))
-                
-                (if (not (hash-ref newhash stock-name))
-                    (begin 
-                      (set! names (cons stock-name names))
-                      (hash-set! newhash stock-name 
-                                 (gnc:commodity-create 
-                                  stock-name
-                                  GNC_COMMODITY_NS_NYSE
-                                  stock-name
-                                  ""
-                                  100000)))))))
-        bin))
-     (vector->list hash-table))
-    (list newhash (sort names string<?))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-import:update-stock-hash
+;;
+;;  make new commodities for each new stock in acct-hash that isn't
+;;  already in stock-hash.  Return a list of the QIF names of the
+;;  new stocks or #f if none.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-import:update-stock-hash stock-hash acct-hash)
+  (let ((names '()))
+    (hash-fold 
+     (lambda (qif-name map-entry p)
+       (let ((stock-name (qif-import:get-account-name qif-name)))         
+         ;; is it: a stock or mutual fund and displayed and not already in
+         ;; the stock-hash?
+         (if (and 
+              stock-name 
+              (qif-map-entry:display? map-entry)
+              (or (memv GNC-STOCK-TYPE 
+                        (qif-map-entry:allowed-types map-entry))
+                  (memv GNC-MUTUAL-TYPE 
+                        (qif-map-entry:allowed-types map-entry)))
+              (not (hash-ref stock-hash stock-name)))
+             (let* ((separator (string-ref (gnc:account-separator-char) 0))
+                    (existing-gnc-acct 
+                     (gnc:get-account-from-full-name 
+                      (gnc:get-current-group)
+                      (qif-map-entry:gnc-name map-entry)
+                      separator)))
+               (if existing-gnc-acct
+                   ;; gnc account already exists... we *know* what the 
+                   ;; security is supposed to be 
+                   (hash-set! 
+                    stock-hash stock-name
+                    (gnc:account-get-security existing-gnc-acct))
+                   ;; we know nothing about this security.. we need to 
+                   ;; ask about it
+                   (begin 
+                     (set! names (cons stock-name names))
+                     (hash-set! 
+                      stock-hash stock-name 
+                      (gnc:commodity-create stock-name
+                                            GNC_COMMODITY_NS_NYSE
+                                            stock-name
+                                            ""
+                                            100000))))))
+         #f))
+     #f acct-hash)
+
+    (if (not (null? names))
+        (sort names string<?)
+        #f)))
 
 ;; this is used within the dialog to get a list of all the new
 ;; accounts the importer thinks it's going to make.  Passed to the

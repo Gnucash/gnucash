@@ -57,12 +57,14 @@
     (false-if-exception 
      (read)))
 
-  ;; we'll be returning a list of 4 elements:  
+  ;; we'll be returning a list:  
   ;;  - a list of all the known gnucash accounts in 
-  ;;    (shortname fullname account) format.
+  ;;    (shortname fullname account*) format.
   ;;  - a hash of QIF account name to gnucash account info
   ;;  - a hash of QIF category to gnucash account info
   ;;  - a hash of QIF memo/payee to gnucash account info  
+  ;;    (older saved prefs may not have this one)
+  ;;  - a hash of QIF stock name to gnc-commodity*
   ;;    (older saved prefs may not have this one)
   (let* ((pref-dir (build-path (getenv "HOME") ".gnucash"))
          (pref-filename (build-path pref-dir "qif-accounts-map"))
@@ -78,9 +80,11 @@
             (let ((qif-account-list #f)
                   (qif-cat-list #f)
                   (qif-memo-list #f)
+                  (qif-stock-list #f)
                   (qif-account-hash #f)
                   (qif-cat-hash #f)
-                  (qif-memo-hash #f))
+                  (qif-memo-hash #f)
+                  (qif-stock-hash #f))
               (set! qif-account-list (safe-read))
               (if (not (list? qif-account-list))
                   (set! qif-account-hash (make-hash-table 20))
@@ -96,11 +100,18 @@
               (if (not (list? qif-memo-list))
                   (set! qif-memo-hash (make-hash-table 20))
                   (set! qif-memo-hash (qif-import:read-map qif-memo-list)))
-              
+
+              (set! qif-stock-list (safe-read))
+              (if (not (list? qif-stock-list))
+                  (set! qif-stock-hash (make-hash-table 20))
+                  (set! qif-stock-hash (qif-import:read-commodities
+                                        qif-stock-list)))              
               (set! results 
-                    (list qif-account-hash qif-cat-hash qif-memo-hash)))))
+                    (list qif-account-hash qif-cat-hash 
+                          qif-memo-hash qif-stock-hash)))))
         (begin 
           (set! results (list (make-hash-table 20)
+                              (make-hash-table 20)
                               (make-hash-table 20)
                               (make-hash-table 20)))))
     
@@ -121,15 +132,10 @@
 
 (define (qif-import:write-map hashtab)
   (let ((table '()))
-    (for-each 
-     (lambda (bin)
-       (for-each 
-        (lambda (entry)
-          (let ((key (car entry))
-                (value (cdr entry)))
-            (set! table (cons (cons key (simple-obj-to-list value)) table))))
-        bin))
-     (vector->list hashtab))
+    (hash-fold 
+     (lambda (key value p)
+       (set! table (cons (cons key (simple-obj-to-list value)) table))
+       #f) #f hashtab)
     (write table)))
 
 (define (qif-import:read-map tablist)
@@ -143,7 +149,36 @@
      tablist)
     table))
 
-(define (qif-import:save-map-prefs acct-map cat-map memo-map)
+(define (qif-import:read-commodities commlist)
+  (let ((table (make-hash-table 20)))
+    (for-each 
+     (lambda (entry)
+       (if (and (list? entry) 
+                (= 3 (length entry)))
+           (let ((name (car entry))
+                 (namespace (cadr entry))
+                 (mnemonic (caddr entry)))
+             (hash-set! table name
+                        (gnc:commodity-table-lookup (gnc:engine-commodities) 
+                                                    namespace mnemonic)))))
+     commlist)
+    table))
+                              
+(define (qif-import:write-commodities hashtab)
+  (let ((table '()))
+    (hash-fold
+     (lambda (key value p)
+       (if (gw:wcp-is-of-type? <gnc:commodity*> value)
+           (set! table
+                 (cons (list key 
+                             (gnc:commodity-get-namespace value)
+                             (gnc:commodity-get-mnemonic value))
+                       table)))
+       #f) #f hashtab)
+    (write table)))
+        
+
+(define (qif-import:save-map-prefs acct-map cat-map memo-map stock-map)
   (let* ((pref-dir (build-path (getenv "HOME") ".gnucash"))
          (pref-filename (build-path pref-dir "qif-accounts-map"))
          (save-ok #f))
@@ -168,12 +203,18 @@
             
             (display ";;; map from QIF accounts to GNC accounts") (newline) 
             (qif-import:write-map acct-map)
-            
+            (newline)
+
             (display ";;; map from QIF categories to GNC accounts") (newline)
             (qif-import:write-map cat-map)
-            
+            (newline)
+
             (display ";;; map from QIF payee/memo to GNC accounts") (newline)
             (qif-import:write-map memo-map)
+            (newline)
+
+            (display ";;; map from QIF stock name to GNC commodity") (newline)
+            (qif-import:write-commodities stock-map)           
             (newline))))))
 
 

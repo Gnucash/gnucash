@@ -154,12 +154,11 @@
      ((string=? mangled-string "invst") ;; these are brokerage accounts.
       (list GNC-BANK-TYPE))
      ((string=? mangled-string "oth a")
-      (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE GNC-STOCK-TYPE 
-            GNC-MUTUAL-TYPE))
+      (list GNC-ASSET-TYPE GNC-BANK-TYPE GNC-CASH-TYPE))
      ((string=? mangled-string "oth l")
       (list GNC-LIABILITY-TYPE GNC-CCARD-TYPE))
      ((string=? mangled-string "mutual")
-      (list GNC-MUTUAL-TYPE GNC-STOCK-TYPE))
+      (list GNC-BANK-TYPE))
      (#t
       (display "qif-parse:parse-acct-type : unhandled account type ")
       (display read-value)

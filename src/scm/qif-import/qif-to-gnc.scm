@@ -41,19 +41,28 @@
                   (string-append short-name (sprintf #f " %a" count)))))
           short-name))
     
+    (define (compatible? account)
+      (let ((acc-type (gnc:account-get-type account))
+            (acc-currency (gnc:account-get-currency account))
+            (acc-security (gnc:account-get-security account)))
+        (if (memv acc-type 
+                  (list GNC-STOCK-TYPE GNC-MUTUAL-TYPE))
+            (and 
+             (list? allowed-types)
+             (memv acc-type allowed-types)
+             (gnc:commodity-equiv? acc-currency currency)
+             (gnc:commodity-equiv? acc-security security))
+            (and 
+             (list? allowed-types)
+             (memv acc-type allowed-types)
+             (gnc:commodity-equiv? acc-currency currency)))))
+                 
     ;; just because we found an account doesn't mean we can use it.
     ;; if the name is in use but the currency, security, or type are
     ;; incompatible, we need to create a new account with a modified
     ;; name.
     (if same-gnc-account 
-        (if (and (gnc:commodity-equiv? 
-                  currency (gnc:account-get-currency same-gnc-account))
-                 (or (eq? (gnc:account-get-security same-gnc-account) #f)
-                     (gnc:commodity-equiv? 
-                      security (gnc:account-get-security same-gnc-account)))
-                 (list? allowed-types)
-                 (memv (gnc:account-get-type same-gnc-account)
-                       allowed-types))
+        (if (compatible? same-gnc-account)
             (begin 
               ;; everything is ok, so we can just use the same
               ;; account.  Make sure we make the same type. 
