@@ -35,7 +35,7 @@
 #include "gnc-amount-edit.h"
 #include "gnc-commodity-edit.h"
 #include "gnc-component-manager.h"
-#include "gnc-dir.h"
+#include "../gnome-utils/gnc-dir.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "io-example-account.h"
