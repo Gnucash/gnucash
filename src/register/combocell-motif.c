@@ -317,6 +317,21 @@ void realizeCombo (BasicCell *bcell, void *w, int pixel_width)
          menustr = cell->menuitems[i];
       }
    }
+
+   /* work around some current lesstif bugs.
+    * Currently there appear to be two:
+    * (1) the combobox is too big, and 
+    * (2) the dropdown is 1 pixel high when no drop-down item is selected.
+    * At this point all lesstif versions seem to be affected ...  */
+//  #if (defined (LesstifVersion)) || (88 < LesstifVersion) 
+#if (defined (LesstifVersion)) 
+   XtVaSetValues (combobox, XmNdropDownHeight, 100, NULL);
+   {
+   int hi;
+   hi = XbaeMatrixGetRowPixelHeight (box->parent);
+   XtVaSetValues (combobox, XmNheight, hi, NULL);
+   }
+#endif /* LESSTIF_VERSION */
 }
 
 /* =============================================== */
