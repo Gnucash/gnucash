@@ -131,7 +131,9 @@ show_session_error(Session *session, char *newfile)
   }
   else if (norr)
   {
-    buf = (FMB_INVALID_MSG, newfile);
+    const char *format = _("The filepath \n    %s\n"
+                           "is not a valid location in the filesystem.");
+    buf = g_strdup_printf (format, newfile);
     gnc_error_dialog (buf);
     uh_oh = TRUE;
   }
@@ -377,7 +379,7 @@ gncFileOpen (void)
   if (!gncFileQuerySave ())
     return;
 
-  newfile = fileBox( OPEN_STR, "*.gnc");
+  newfile = fileBox(_("Open"), "*.gnc");
   gncPostFileOpen (newfile);
 
   /* This dialogue can show up early in the startup process.
@@ -435,13 +437,15 @@ gncFileSave (void)
   norr = xaccSessionGetError (current_session);
   if (norr)
   {
+    const char *format = _("There was an error writing the file\n     %s"
+                           "\n\n%s");
     char *message;
 
     newfile = xaccSessionGetFilePath(current_session);
     if (newfile == NULL)
       newfile = "";
 
-    message = g_strdup_printf(FILE_EWRITE_MSG, newfile, g_strerror(norr));
+    message = g_strdup_printf(format, newfile, g_strerror(norr));
     gnc_error_dialog(message);
     g_free(message);
 
@@ -486,7 +490,7 @@ gncFileSaveAs (void)
   char * oldfile;
   gboolean uh_oh = FALSE;
 
-  filename = fileBox(SAVE_STR, "*.gnc");
+  filename = fileBox(_("Save"), "*.gnc");
   if (!filename) return;
 
   /* check to see if the user did something silly, 
@@ -554,10 +558,12 @@ gncFileSaveAs (void)
 
   /* oops ... file already exists ... ask user what to do... */
   if(xaccSessionSaveMayClobberData(newsess)) {
+    const char *format = _("The file \n    %s\n already exists.\n"
+                           "Are you sure you want to overwrite it?");
     char *tmpmsg;
     gboolean result;
 
-    tmpmsg = g_strdup_printf (FMB_EEXIST_MSG, newfile);
+    tmpmsg = g_strdup_printf (format, newfile);
     result = gnc_verify_dialog (tmpmsg, FALSE);
     g_free (tmpmsg);
 

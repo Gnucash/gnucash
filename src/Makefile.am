@@ -61,7 +61,6 @@ noinst_HEADERS = \
   gnc-exp-parser.h \
   gnc-ui-common.h \
   messages.h \
-  messages_i18n.h \
   top-level.h \
   ui-callbacks.h
 

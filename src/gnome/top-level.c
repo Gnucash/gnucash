@@ -575,65 +575,45 @@ gnc_configure_register_colors(void)
 {
   SplitRegisterColors reg_colors;
 
-  reg_colors.single_cursor_passive_bg_color =
+  reg_colors.header_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Single mode default even row background",
-                                 0xccccff);
+                                 "Header color",
+                                 0xffffff);
 
-  reg_colors.single_cursor_passive_bg_color2 =
+  reg_colors.primary_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Single mode default odd row background",
-                                 0xccccff);
+                                 "Primary color",
+                                 0xffffff);
 
-  reg_colors.single_cursor_active_bg_color =
+  reg_colors.secondary_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Single mode active background",
-                                 0xffdddd);
+                                 "Secondary color",
+                                 0xffffff);
 
-  reg_colors.double_cursor_passive_bg_color =
+  reg_colors.primary_active_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Double mode default even row background",
-                                 0xccccff);
+                                 "Primary active color",
+                                 0xffffff);
 
-  reg_colors.double_cursor_passive_bg_color2 =
+  reg_colors.secondary_active_bg_color =
     gnc_lookup_color_option_argb("Register Colors",
-                                 "Double mode default odd row background",
+                                 "Secondary active color",
+                                 0xffffff);
+
+  reg_colors.split_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Split color",
+                                 0xffffff);
+
+  reg_colors.split_active_bg_color =
+    gnc_lookup_color_option_argb("Register Colors",
+                                 "Split active color",
                                  0xffffff);
 
   reg_colors.double_alternate_virt =
     gnc_lookup_boolean_option("Register Colors",
                               "Double mode colors alternate with transactions",
                               FALSE);
-
-  reg_colors.double_cursor_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Double mode active background",
-                                 0xffdddd);
-
-  reg_colors.trans_cursor_passive_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode default transaction background",
-                                 0xccccff);
-
-  reg_colors.trans_cursor_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode active transaction background",
-                                 0xffdddd);
-
-  reg_colors.split_cursor_passive_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode default split background",
-                                 0xffffff);
-
-  reg_colors.split_cursor_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Multi mode active split background",
-                                 0xffffdd);
-
-  reg_colors.header_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Header background",
-                                 0xffffff);
 
   xaccSetSplitRegisterColors(reg_colors);
 }

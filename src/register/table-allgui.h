@@ -111,7 +111,10 @@ struct _VirtualCell
 {
   CellBlock *cellblock;  /* Array of physical cells */
   gpointer   vcell_data; /* Used by higher-level code */
-  gboolean   visible;    /* visible in the GUI */
+
+  /* flags */
+  unsigned int visible : 1;             /* visible in the GUI */
+  unsigned int start_primary_color : 1; /* color usage flag */
 };
 
 
@@ -136,6 +139,8 @@ typedef const char * (*TableGetEntryHandler) (gpointer vcell_data,
 typedef guint32 (*TableGetFGColorHandler) (gpointer vcell_data,
                                            short cell_type,
                                            gpointer user_data);
+
+typedef guint32 (*TableGetBGColorHandler) (VirtualCell *vcell);
 
 typedef gpointer (*VirtCellDataAllocator)   (void);
 typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
@@ -254,12 +259,19 @@ void        gnc_table_create_cursor (Table *table, CellBlock *cursor);
 /* Indicate what handler should be used for a given virtual block */
 void        gnc_table_set_vcell (Table *table, CellBlock *cursor,
                                  gconstpointer vcell_data,
+                                 gboolean visible,
+                                 gboolean start_primary_color,
                                  VirtualCellLocation vcell_loc);
 
 /* Set the virtual cell data for a particular location. */
 void        gnc_table_set_virt_cell_data (Table *table,
                                           VirtualCellLocation vcell_loc,
                                           gconstpointer vcell_data);
+
+/* Set the visibility flag for a particular location. */
+void        gnc_table_set_virt_cell_visible (Table *table,
+                                             VirtualCellLocation vcell_loc,
+                                             gboolean visible);
 
 /* The gnc_table_move_cursor() method will move the cursor (but not
  *   the cursor GUI) to the indicated location. This function is

@@ -31,7 +31,7 @@
 #include <assert.h>
 
 #include "top-level.h"
-#include "messages_i18n.h"
+#include "messages.h"
 #include "ui-callbacks.h"
 #include "RegWindow.h"
 #include "window-register.h"
@@ -268,7 +268,7 @@ gnc_ui_find_transactions_dialog_cancel_cb(GtkButton * button,
 void
 gnc_ui_find_transactions_dialog_help_cb(GtkButton * button, 
                                         gpointer user_data) {
-  helpWindow(NULL, HELP_STR, HH_FIND_TRANSACTIONS);
+  helpWindow(NULL, NULL, HH_FIND_TRANSACTIONS);
 }
 
 

@@ -39,13 +39,15 @@ static void gnc_cellblock_init (CellBlock *cellblock, int rows, int cols);
 /* =================================================== */
 
 CellBlock *
-gnc_cellblock_new (int rows, int cols)
+gnc_cellblock_new (int rows, int cols, int cursor_type)
 {
   CellBlock *cellblock;
 
   cellblock = g_new0(CellBlock, 1);
 
   gnc_cellblock_init (cellblock, rows, cols);
+
+  cellblock->cursor_type = cursor_type;
 
   return cellblock;
 }

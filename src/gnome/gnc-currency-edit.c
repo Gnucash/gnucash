@@ -124,9 +124,9 @@ gnc_currency_edit_init (GNCCurrencyEdit *gce)
 #endif
 
         tooltips = gtk_tooltips_new();
-        gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips),
-                             GTK_COMBO(gce)->entry,
-                             TOOLTIP_CURRENCY, NULL);
+        gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips), GTK_COMBO(gce)->entry,
+                             _("Enter a 3-letter ISO currency code such "
+                               "as USD (US Dollars)"), NULL);
 }
 
 static void

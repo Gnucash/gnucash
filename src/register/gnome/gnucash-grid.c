@@ -413,6 +413,9 @@ draw_block (GnucashGrid *grid,
                         h = cd->pixel_height;
                         w = cd->pixel_width;
 
+                        if (w == 0)
+                                continue;
+
                         if (x_paint + w < x)
                                 continue;
 

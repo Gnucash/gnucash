@@ -66,11 +66,9 @@ struct _SheetBlockStyle
         gint nrows;
         gint ncols;
 
-        gint cursor_type;
+        CursorType cursor_type;
 
         BlockDimensions *dimensions;
-
-        GdkFont *header_font;          
 
         gint refcount;
 };

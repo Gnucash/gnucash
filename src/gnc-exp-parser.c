@@ -424,16 +424,16 @@ gnc_exp_parser_error_string (void)
     case PARSER_NO_ERROR:
       return NULL;
     case UNBALANCED_PARENS:
-      return PARSER_UNBALANCED_PARENS;
+      return _("Unbalanced parenthesis");
     case STACK_OVERFLOW:
-      return PARSER_STACK_OVERFLOW;
+      return _("Stack overflow");
     case STACK_UNDERFLOW:
-      return PARSER_STACK_OVERFLOW;
+      return _("Stack underflow");
     case UNDEFINED_CHARACTER:
-      return PARSER_UNDEFINED_CHARACTER;
+      return _("Undefined character");
     case NOT_A_VARIABLE:
-      return PARSER_NOT_A_VARIABLE;
+      return _("Not a variable");
     case PARSER_OUT_OF_MEMORY:
-      return PARSER_OUT_OF_MEMORY_STR;
+      return _("Out of memory");
   }
 }

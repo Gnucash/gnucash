@@ -45,7 +45,7 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "query-user.h"
-#include "enriched-messages.h"
+#include "messages.h"
 #include "table-allgui.h"
 #include "gnucash-sheet.h"
 #include "global-options.h"
@@ -664,7 +664,7 @@ gnc_register_date_window(RegWindow *regData)
   regDateData = g_new0(RegDateWindow, 1);
   regData->date_window = regDateData;
 
-  dialog = gnome_dialog_new(REG_DATE_RANGES_STR,
+  dialog = gnome_dialog_new(_("Register date ranges"),
                             GNOME_STOCK_BUTTON_CLOSE,
                             NULL);
 
@@ -706,7 +706,7 @@ gnc_register_date_window(RegWindow *regData)
     vbox2 = gtk_vbox_new(TRUE, 2);
     gtk_box_pack_start(GTK_BOX(vbox), vbox2, FALSE, FALSE, 0);
 
-    radio = gtk_radio_button_new_with_label(NULL, SHOW_EARLIEST_STR);
+    radio = gtk_radio_button_new_with_label(NULL, _("Show Earliest"));
     gtk_box_pack_start(GTK_BOX(vbox2), radio, FALSE, FALSE, 0);
     regDateData->show_earliest = radio;
 
@@ -717,7 +717,7 @@ gnc_register_date_window(RegWindow *regData)
     gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 
     group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio));
-    radio = gtk_radio_button_new_with_label(group, START_DATE_C_STR);
+    radio = gtk_radio_button_new_with_label(group, _("Start date:"));
     gtk_box_pack_start(GTK_BOX(hbox), radio, FALSE, FALSE, 0);
 
     if (!show_all)
@@ -755,7 +755,7 @@ gnc_register_date_window(RegWindow *regData)
     vbox2 = gtk_vbox_new(TRUE, 2);
     gtk_box_pack_start(GTK_BOX(vbox), vbox2, FALSE, FALSE, 0);
 
-    radio = gtk_radio_button_new_with_label(NULL, SHOW_LATEST_STR);
+    radio = gtk_radio_button_new_with_label(NULL, _("Show Latest"));
     gtk_box_pack_start(GTK_BOX(vbox2), radio, FALSE, FALSE, 0);
     regDateData->show_latest = radio;
 
@@ -766,7 +766,7 @@ gnc_register_date_window(RegWindow *regData)
     gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, FALSE, 0);
 
     group = gtk_radio_button_group(GTK_RADIO_BUTTON(radio));
-    radio = gtk_radio_button_new_with_label(group, END_DATE_C_STR);
+    radio = gtk_radio_button_new_with_label(group, _("End date:"));
     gtk_box_pack_start(GTK_BOX(hbox), radio, FALSE, FALSE, 0);
 
     if (!show_all)
@@ -792,13 +792,13 @@ gnc_register_date_window(RegWindow *regData)
     gtk_signal_connect(GTK_OBJECT(entry), "changed",
 		       GTK_SIGNAL_FUNC(gnc_register_date_changed_cb), regData);
 
-    button = gtk_button_new_with_label(TODAY_STR);
+    button = gtk_button_new_with_label(_("Today"));
     gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
     gtk_signal_connect(GTK_OBJECT(button), "clicked",
 		       GTK_SIGNAL_FUNC(gnc_register_today_cb), regData);
     regDateData->today_button = button;
 
-    button = gtk_button_new_with_label(SET_DATE_RANGE_STR);
+    button = gtk_button_new_with_label(_("Set Date Range"));
     gtk_box_pack_start(GTK_BOX(dvbox), button, FALSE, FALSE, 5);
     gtk_widget_set_sensitive(button, FALSE);
     regDateData->set_button = button;
@@ -819,21 +819,24 @@ gnc_register_create_tool_bar(RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_STR_N, TOOLTIP_RECORD_N,
+      N_("Record"),
+      N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      N_("Cancel"),
+      N_("Cancel the current transaction"),
       cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_UNDELETE,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_STR_N, TOOLTIP_DEL_TRANS_N,
+      N_("Delete"),
+      N_("Delete the current transaction"),
       deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
       0, 0, NULL
@@ -841,7 +844,8 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      DUPLICATE_STR_N, TOOLTIP_DUP_TRANS_N,
+      N_("Duplicate"),
+      N_("Make a copy of the current transaction"),
       duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_COPY,
       0, 0, NULL
@@ -849,14 +853,18 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_STR_N, TOOLTIP_BLANK_TRANS_N,
+      N_("Blank"),
+      N_("Move to the blank transaction at the "\
+         "bottom of the register"),
       new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_NEW,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_STR_N, TOOLTIP_JUMP_TRANS_N,
+      N_("Jump"),
+      N_("Jump to the corresponding transaction in "
+         "the other account"),
       jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_JUMP_TO,
       0, 0, NULL
@@ -864,7 +872,8 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_STR_N, TOOLTIP_TRANSFER_N,
+      N_("Transfer"),
+      N_("Transfer funds from one account to another"),
       xferCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CONVERT,
       0, 0, NULL
@@ -872,7 +881,8 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      FIND_STR_N, TOOLTIP_FIND_N,
+      N_("Find"),
+      N_("Find transactions with a search"),
       gnc_ui_find_transactions_cb, 
       NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_SEARCH,
@@ -881,7 +891,8 @@ gnc_register_create_tool_bar(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      CLOSE_STR_N, TOOLTIP_CLOSE_REG_N,
+      N_("Close"),
+      N_("Close this register window"),
       closeCB, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_CLOSE,
       0, 0, NULL
@@ -941,7 +952,7 @@ gnc_register_create_status_bar(RegWindow *regData)
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(CLEARED_C_STR);
+  label = gtk_label_new(_("Cleared:"));
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
@@ -953,7 +964,7 @@ gnc_register_create_status_bar(RegWindow *regData)
   hbox = gtk_hbox_new(FALSE, 2);
   gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(BALN_C_STR);
+  label = gtk_label_new(_("Balance:"));
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
 
@@ -1089,16 +1100,23 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo style_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(SINGLE_LINE_STR_N, TOOLTIP_SINGLE_LINE_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Single Line"),
+                               N_("Show transactions on single lines"),
                                gnc_register_style_single_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(DOUBLE_LINE_STR_N, TOOLTIP_DOUBLE_LINE_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Double Line"),
+                               N_("Show transactions on two lines with "
+                                  "more information"),
                                gnc_register_style_double_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(MULTI_LINE_STR_N, TOOLTIP_MULTI_LINE_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Multi Line"),
+                               N_("Show transactions on multiple lines with "
+                                  "one line for each split"),
                                gnc_register_style_multi_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(AUTO_SINGLE_STR_N, TOOLTIP_AUTO_SINGLE_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto Single"),
+                               N_("Single line mode with a multi-line cursor"),
                                gnc_register_style_auto_single_cb,
                                NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(AUTO_DOUBLE_STR_N, TOOLTIP_AUTO_DOUBLE_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Auto Double"),
+                               N_("Double line mode with a multi-line cursor"),
                                gnc_register_style_auto_double_cb,
                                NULL, NULL),
     GNOMEUIINFO_END
@@ -1112,25 +1130,32 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo sort_list[] =
   {
-    GNOMEUIINFO_RADIOITEM_DATA(STANDARD_ORDER_STR_N, TOOLTIP_STANDARD_ORD_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Standard order"),
+                               N_("Keep normal account order"),
                                gnc_register_sort_standard_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DATE_STR_N, TOOLTIP_SORT_BY_DATE_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Date"),
+                               N_("Sort by Date"),
                                gnc_register_sort_date_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_ENTERED_STR_N,
-                               TOOLTIP_SORT_BY_ENTERED_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by date of entry"),
+                               N_("Sort by the date of entry"),
                                gnc_register_sort_date_entered_cb,
                                NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_STMT_STR_N,
-                               TOOLTIP_SORT_BY_STMT_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by statement date"),
+                               N_("Sort by the statement date "
+                                  "(unreconciled items last)"),
                                gnc_register_sort_date_reconciled_cb,
                                NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_NUM_STR_N, TOOLTIP_SORT_BY_NUM_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Num"),
+                               N_("Sort by Num"),
                                gnc_register_sort_num_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_AMNT_STR_N, TOOLTIP_SORT_BY_AMNT_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Amount"),
+                               N_("Sort by Amount"),
                                gnc_register_sort_amount_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_MEMO_STR_N, TOOLTIP_SORT_BY_MEMO_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Memo"),
+                               N_("Sort by Memo"),
                                gnc_register_sort_memo_cb, NULL, NULL),
-    GNOMEUIINFO_RADIOITEM_DATA(SORT_BY_DESC_STR_N, TOOLTIP_SORT_BY_DESC_N,
+    GNOMEUIINFO_RADIOITEM_DATA(N_("Sort by Description"),
+                               N_("Sort by Description"),
                                gnc_register_sort_desc_cb, NULL, NULL),
     GNOMEUIINFO_END
   };
@@ -1145,14 +1170,16 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      SHOW_ALL_MENU_STR_N, TOOLTIP_SHOW_ALL_N,
+      N_("Show _All"),
+      N_("Show all of the transactions in the account"),
       show_all_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      SET_RANGE_MENU_E_STR_N, TOOLTIP_DATE_RANGE_N,
+      N_("Set _Range..."),
+      N_("Set the date range of this register"),
       dateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1162,13 +1189,14 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo register_menu[] =
   {
-    GNOMEUIINFO_SUBTREE(STYLE_MENU_STR_N, style_menu),
-    GNOMEUIINFO_SUBTREE(SORT_ORDER_MENU_STR_N, sort_menu),
-    GNOMEUIINFO_SUBTREE(DATE_RANGE_MENU_STR_N, date_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Style"), style_menu),
+    GNOMEUIINFO_SUBTREE(N_("Sort _Order"), sort_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Date Range"), date_menu),
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      CLOSE_STR_N, TOOLTIP_CLOSE_REG_N,
+      N_("Close"),
+      N_("Close this register window"),
       closeCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1184,21 +1212,24 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      CUT_TRANS_STR_N, TOOLTIP_CUT_TRANS_N,
+      N_("Cut Transaction"),
+      N_("Cut the selected transaction"),
       cutTransCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      COPY_TRANS_STR_N, TOOLTIP_COPY_TRANS_N,
+      N_("Copy Transaction"),
+      N_("Copy the selected transaction"),
       copyTransCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      PASTE_TRANS_STR_N, TOOLTIP_PASTE_TRANS_N,
+      N_("Paste Transaction"),
+      N_("Paste the transaction clipboard"),
       pasteTransCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1210,7 +1241,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      EDIT_ACC_MENU_STR_N, TOOLTIP_EDIT_REG_N,
+      N_("_Edit Account"),
+      N_("Edit the main account for this register"),
       editCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1218,14 +1250,16 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      RECONCILE_MENU_E_STR_N, TOOLTIP_RECN_REG_N,
+      N_("_Reconcile..."),
+      N_("Reconcile the main account for this register"),
       startRecnCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
+      N_("_Transfer..."),
+      N_("Transfer funds from one account to another"),
       xferCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1233,7 +1267,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      NEW_ACC_MENU_E_STR_N, TOOLTIP_NEW_N,
+      N_("_New Account..."),
+      N_("Create a new account"),
       newAccountCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1241,7 +1276,9 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_MENU_STR_N, TOOLTIP_SCRUB_REG_N,
+      N_("_Scrub"),
+      N_("Identify and fix problems in the "
+         "accounts of this register"),
       gnc_register_scrub_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1253,21 +1290,24 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_MENU_STR_N, TOOLTIP_RECORD_N,
+      N_("_Record"),
+      N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_MENU_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      N_("_Cancel"),
+      N_("Cancel the current transaction"),
       cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_MENU_STR_N, TOOLTIP_DEL_TRANS_N,
+      N_("_Delete"),
+      N_("Delete the current transaction"),
       deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1275,7 +1315,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      DUPLICATE_MENU_STR_N, TOOLTIP_DUP_TRANS_N,
+      N_("D_uplicate"),
+      N_("Make a copy of the current transaction"),
       duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1283,14 +1324,18 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_MENU_STR_N, TOOLTIP_BLANK_TRANS_N,
+      N_("_Blank"),
+      N_("Move to the blank transaction at the "
+         "bottom of the register"),
       new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_MENU_STR_N, TOOLTIP_JUMP_TRANS_N,
+      N_("_Jump"),
+      N_("Jump to the corresponding transaction in "
+         "the other account"),
       jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1298,7 +1343,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      PRINT_CHECK_MENU_E_STR_N, TOOLTIP_PRINT_CHECK_N,
+      N_("_Print Check... (unfinished!)"),
+      N_("Print a check using a standard format"),
       print_check_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1310,7 +1356,8 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
   {
     {
       GNOME_APP_UI_ITEM,
-      HELP_MENU_STR_N, TOOLTIP_HELP_N,
+      N_("_Help"),
+      N_("Open the GnuCash help window"),
       helpCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1320,10 +1367,10 @@ gnc_register_create_menu_bar(RegWindow *regData, GtkWidget *statusbar)
 
   static GnomeUIInfo register_window_menu[] =
   {
-    GNOMEUIINFO_SUBTREE(REGISTER_MENU_STR_N, register_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Register"), register_menu),
     GNOMEUIINFO_MENU_EDIT_TREE(edit_menu),
-    GNOMEUIINFO_SUBTREE(ACCOUNT_MENU_STR_N, account_menu),
-    GNOMEUIINFO_SUBTREE(TRANSACTION_MENU_STR_N, transaction_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Account"), account_menu),
+    GNOMEUIINFO_SUBTREE(N_("_Transaction"), transaction_menu),
     GNOMEUIINFO_MENU_HELP_TREE(help_menu),
     GNOMEUIINFO_END
   };
@@ -1388,21 +1435,24 @@ gnc_register_create_popup_menu(RegWindow *regData)
   {
     {
       GNOME_APP_UI_ITEM,
-      RECORD_MENU_STR_N, TOOLTIP_RECORD_N,
+      N_("_Record"),
+      N_("Record the current transaction"),
       recordCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      CANCEL_MENU_STR_N, TOOLTIP_CANCEL_TRANS_N,
+      N_("_Cancel"),
+      N_("Cancel the current transaction"),
       cancelCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DELETE_MENU_STR_N, TOOLTIP_DEL_TRANS_N,
+      N_("_Delete"),
+      N_("Delete the current transaction"),
       deleteCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1410,7 +1460,8 @@ gnc_register_create_popup_menu(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      DUPLICATE_MENU_STR_N, TOOLTIP_DUP_TRANS_N,
+      N_("D_uplicate"),
+      N_("Make a copy of the current transaction"),
       duplicateCB, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1418,14 +1469,18 @@ gnc_register_create_popup_menu(RegWindow *regData)
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      BLANK_MENU_STR_N, TOOLTIP_BLANK_TRANS_N,
+      N_("_Blank"),
+      N_("Move to the blank transaction at the "
+         "bottom of the register"),
       new_trans_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      JUMP_MENU_STR_N, TOOLTIP_JUMP_TRANS_N,
+      N_("_Jump"),
+      N_("Jump to the corresponding transaction in "
+         "the other account"),
       jump_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1526,19 +1581,19 @@ gnc_reg_set_window_name(RegWindow *regData)
   {
     case GENERAL_LEDGER:
     case INCOME_LEDGER:
-      reg_name = GENERAL_LEDGER_STR;
+      reg_name = _("General Ledger");
       single_account = FALSE;
       break;
     case PORTFOLIO_LEDGER:
-      reg_name = PORTFOLIO_STR;
+      reg_name = _("Portfolio");
       single_account = FALSE;
       break;
     case SEARCH_LEDGER:
-      reg_name = SEARCH_RESULTS_STR;
+      reg_name = _("Search Results");
       single_account = FALSE;
       break;
     default:
-      reg_name = REGISTER_STR;
+      reg_name = _("Register");
       single_account = TRUE;
       break;
   }
@@ -2215,7 +2270,7 @@ gnc_transaction_delete_query(GtkWindow *parent)
 
   DeleteType return_value;
 
-  dialog = gnome_dialog_new(DEL_TRANS_STR,
+  dialog = gnome_dialog_new(_("Delete Transaction"),
                             GNOME_STOCK_BUTTON_OK,
                             GNOME_STOCK_BUTTON_CANCEL,
                             NULL);
@@ -2324,14 +2379,16 @@ deleteCB(GtkWidget *widget, gpointer data)
     }
   }
 
-  if (cursor_class == CURSOR_NONE)
+  if (cursor_class == CURSOR_CLASS_NONE)
     return;
 
   /* On a split cursor, just delete the one split. */
-  if (cursor_class == CURSOR_SPLIT)
+  if (cursor_class == CURSOR_CLASS_SPLIT)
   {
+    const char *format = _("Are you sure you want to delete\n   %s\n"
+                           "from the transaction\n   %s ?");
     /* ask for user confirmation before performing permanent damage */
-    buf = g_strdup_printf(TRANS_DEL_MSG, xaccSplitGetMemo(split),
+    buf = g_strdup_printf(format, xaccSplitGetMemo(split),
                           xaccTransGetDescription(trans));
 
     result = gnc_verify_dialog_parented(regData->window, buf, FALSE);
@@ -2345,15 +2402,17 @@ deleteCB(GtkWidget *widget, gpointer data)
     return;
   }
 
-  assert(cursor_class == CURSOR_TRANS);
+  assert(cursor_class == CURSOR_CLASS_TRANS);
 
   /* On a transaction cursor with 2 or fewer splits in single or double
    * mode, we just delete the whole transaction, kerblooie */
   if ((xaccTransCountSplits(trans) <= 2) &&
       ((style == REG_SINGLE_LINE) || (style == REG_DOUBLE_LINE)))
   {
-    result = gnc_verify_dialog_parented(regData->window,
-                                        TRANS_DEL2_MSG, FALSE);
+    const char *message = _("Are you sure you want to delete the current "
+                            "transaction?");
+
+    result = gnc_verify_dialog_parented(regData->window, message, FALSE);
 
     if (!result)
       return;
@@ -2434,7 +2493,9 @@ gnc_register_check_close(RegWindow *regData)
   pending_changes = xaccSRHasPendingChanges(regData->ledger->ledger);
   if (pending_changes)
   {
-    if (gnc_verify_dialog_parented(regData->window, TRANS_CHANGED_MSG, TRUE))
+    const char *message = _("The current transaction has been changed.\n"
+                            "Would you like to record it?");
+    if (gnc_verify_dialog_parented(regData->window, message, TRUE))
       recordCB(regData->window, regData);
     else
       xaccSRCancelCursorTransChanges(regData->ledger->ledger);
@@ -2485,7 +2546,7 @@ dateCB(GtkWidget *widget, gpointer data)
 static void
 helpCB(GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, HELP_STR, HH_REGWIN);
+  helpWindow(NULL, NULL, HH_REGWIN);
 }
 
 /************************** END OF FILE **************************/

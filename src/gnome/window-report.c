@@ -193,15 +193,16 @@ reportAnchorCB(URLType url_type, char * location, char * label,
 static void
 gnc_report_error_dialog(const char *message)
 {
+  const char *err_msg = _("Error executing scheme report.");
   GtkWindow *parent;
   gchar *text;
 
   parent = GTK_WINDOW(gnc_html_window_get_window(reportwindow));
 
   if (message == NULL)
-    text = REPORT_ERR_MSG;
+    text = err_msg;
   else
-    text = g_strconcat(REPORT_ERR_MSG, "\n\n", message, NULL);
+    text = g_strconcat(err_msg, "\n\n", message, NULL);
 
   PERR("gnc_report_error_dialog: error running report.\n%s\n", message);
 
@@ -288,7 +289,8 @@ gnc_report_properties_cb(GtkWidget *widget, gpointer data)
   if (report_data->option_dialog == NULL)
   {
     GtkWidget *window = gnc_html_window_get_window(reportwindow);
-    gnc_info_dialog_parented(GTK_WINDOW(window), REPORT_NOPARM_MSG);
+    gnc_info_dialog_parented(GTK_WINDOW(window),
+                             _("This report has no parameters."));
     return;
   }
 
@@ -313,7 +315,7 @@ gnc_report_export(ReportData *report_data)
     text = report_data->text;
 
   /* Get the filename */
-  export_filename = fileBox(EXPORT_TO_STR, NULL);
+  export_filename = fileBox(_("Export To"), NULL);
   if (export_filename == NULL)
     return;
 
@@ -322,9 +324,11 @@ gnc_report_export(ReportData *report_data)
   /* See if the file exists */
   if ((stat(export_filename, &file_status) == 0))
   {
+    const char *format = _("The file \n    %s\n already exists.\n"
+                           "Are you sure you want to overwrite it?");
     gboolean result;
 
-    message = g_strdup_printf(FMB_EEXIST_MSG, export_filename);
+    message = g_strdup_printf(format, export_filename);
     result = gnc_verify_dialog_parented(GTK_WIDGET(parent), message, FALSE);
     g_free(message);
 
@@ -336,8 +340,9 @@ gnc_report_export(ReportData *report_data)
   export_dest = fopen(export_filename, "w");
   if (export_dest == NULL)
   {
-    message = g_strdup_printf(FILE_EOPEN_MSG, export_filename,
-                              g_strerror(errno));
+    const char *format = _("There was an error opening the file\n"
+                           "     %s\n\n%s");
+    message = g_strdup_printf(format, export_filename, g_strerror(errno));
     gnc_error_dialog_parented(parent, message);
     g_free(message);
 
@@ -347,8 +352,9 @@ gnc_report_export(ReportData *report_data)
   /* Write the data */
   if (fputs(text, export_dest) == EOF)
   {
-    message = g_strdup_printf(FILE_EWRITE_MSG, export_filename,
-                              g_strerror(errno));
+    const char *format = _("There was an error writing the file\n"
+                           "     %s\n\n%s");
+    message = g_strdup_printf(format, export_filename, g_strerror(errno));
     gnc_error_dialog_parented(parent, message);
     g_free(message);
 
@@ -358,8 +364,9 @@ gnc_report_export(ReportData *report_data)
   /* Close the file */
   if (fclose(export_dest) == EOF)
   {
-    message = g_strdup_printf(FILE_ECLOSE_MSG, export_filename,
-                              g_strerror(errno));
+    const char *format = _("There was an error closing the file\n"
+                           "     %s\n\n%s");
+    message = g_strdup_printf(format, export_filename, g_strerror(errno));
     gnc_error_dialog_parented(parent, message);
     g_free(message);
 
@@ -407,7 +414,7 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
   {
     gchar *prop_title;
 
-    prop_title = g_strconcat(title, " (", PARAMETERS_STR, ")", NULL);
+    prop_title = g_strconcat(title, " (", _("Parameters"), ")", NULL);
     gtk_window_set_title(GTK_WINDOW(report_data->option_dialog), prop_title);
     g_free(prop_title);
   }
@@ -416,8 +423,8 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
     GnomeUIInfo user_buttons[] =
     {
       { GNOME_APP_UI_ITEM,
-        PARAMETERS_STR,
-        TOOLTIP_REPORT_PARM,
+        _("Parameters"),
+        _("Set the parameters for this report"),
         gnc_report_properties_cb, report_data,
         NULL,
         GNOME_APP_PIXMAP_STOCK, 
@@ -425,8 +432,8 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
         0, 0, NULL
       },
       { GNOME_APP_UI_ITEM,
-        EXPORT_STR,
-        TOOLTIP_EXPORT_REPORT,
+        _("Export"),
+        _("Export HTML-formatted report to file"),
         gnc_report_export_cb, report_data,
         NULL,
         GNOME_APP_PIXMAP_STOCK,

@@ -128,15 +128,15 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         /* config the cell-block styles */
 
-        gnucash_sheet_set_cursor (sheet, sr->header, GNUCASH_CURSOR_HEADER);
+        gnucash_sheet_set_cursor (sheet, sr->header, CURSOR_TYPE_HEADER);
         gnucash_sheet_set_cursor (sheet, sr->single_cursor,
-                                  GNUCASH_CURSOR_SINGLE);
+                                  CURSOR_TYPE_SINGLE);
         gnucash_sheet_set_cursor (sheet, sr->double_cursor,
-                                  GNUCASH_CURSOR_DOUBLE);
+                                  CURSOR_TYPE_DOUBLE);
         gnucash_sheet_set_cursor (sheet, sr->trans_cursor,
-                                  GNUCASH_CURSOR_TRANS);
+                                  CURSOR_TYPE_TRANS);
         gnucash_sheet_set_cursor (sheet, sr->split_cursor,
-                                  GNUCASH_CURSOR_SPLIT);
+                                  CURSOR_TYPE_SPLIT);
 
         for (i = 0; i < CELL_TYPE_COUNT; i++)
                 header_widths[i] = -1;
@@ -219,7 +219,10 @@ gnc_table_refresh_cursor_gui (Table * table,
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
         if (gnucash_sheet_block_set_from_table (sheet, vcell_loc))
         {
+                g_warning ("woops");
                 gnucash_sheet_recompute_block_offsets (sheet);
+                gnucash_sheet_set_scroll_region (sheet);
+                gnucash_sheet_compute_visible_range(sheet);
                 gnucash_sheet_redraw_all (sheet);
         }
         else

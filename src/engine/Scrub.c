@@ -68,10 +68,6 @@ xaccAccountTreeScrubOrphans (Account *acc)
    xaccAccountScrubOrphans (acc);
 }
 
-#ifndef ORPHAN_STR
-#  define ORPHAN_STR "Orphan"
-#endif
-
 void
 xaccAccountScrubOrphans (Account *acc) {
   GList *slp;
@@ -93,7 +89,7 @@ xaccAccountScrubOrphans (Account *acc) {
         Account *orph;
         DEBUG ("Found an orphan \n");
         /* OK, we found an orphan.  Put it in an orphan account. */
-        orph = GetOrMakeAccount (acc, trans, ORPHAN_STR);
+        orph = GetOrMakeAccount (acc, trans, _("Orphan"));
         xaccAccountBeginEdit (orph);
         xaccAccountInsertSplit (orph, tsplit);
         xaccAccountCommitEdit (orph);
@@ -125,10 +121,6 @@ xaccAccountTreeScrubImbalance (Account *acc)
    xaccAccountScrubImbalance (acc);
 }
 
-#ifndef IMBALANCE_STR
-#  define IMBALANCE_STR "Imbalance"
-#endif
-
 void
 xaccAccountScrubImbalance (Account *acc) {
    GList *slp;
@@ -146,7 +138,7 @@ xaccAccountScrubImbalance (Account *acc) {
          Account *orph;
          DEBUG ("Found imbalance of %g\n", imbalance);
          /* OK, we found an imbalanced trans.  Put it in the imbal account. */
-         orph = GetOrMakeAccount (acc, trans, IMBALANCE_STR);
+         orph = GetOrMakeAccount (acc, trans, _("Imbalance"));
          
          /* put split into account before setting split value */
          splat = xaccMallocSplit();

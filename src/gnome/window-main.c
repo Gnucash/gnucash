@@ -37,7 +37,7 @@
 #include "MainWindow.h"
 #include "Destroy.h"
 #include "ui-callbacks.h"
-#include "enriched-messages.h"
+#include "messages.h"
 #include "RegWindow.h"
 #include "Refresh.h"
 #include "window-main.h"
@@ -159,7 +159,7 @@ gnc_ui_build_currency_item(const gnc_commodity * currency)
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(ASSETS_C_STR);
+  label = gtk_label_new(_("Net Assets:"));
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -174,7 +174,7 @@ gnc_ui_build_currency_item(const gnc_commodity * currency)
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label = gtk_label_new(PROFITS_C_STR);
+  label = gtk_label_new(_("Profits:"));
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
   gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
@@ -279,7 +279,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
     euro_accum = gnc_ui_get_currency_accumulator(currency_list,
 						 euro_commodity);
   }
-  
+
   num_accounts = xaccGroupGetNumAccounts(group);
   for (i = 0; i < num_accounts; i++)
   {
@@ -459,12 +459,12 @@ gnc_refresh_main_window_title()
   session = gncGetCurrentSession();
 
   if (session == NULL)
-    filename = UNTITLED_STR;
+    filename = _("Untitled");
   else
     filename = xaccSessionGetFilePath(session);
 
   if ((filename == NULL) || (*filename == '\0'))
-    filename = UNTITLED_STR;
+    filename = _("Untitled");
 
   title = g_strconcat("GnuCash - ", filename, NULL);
 
@@ -524,7 +524,7 @@ gnc_ui_totd_cb (GtkWidget *widget, gpointer data)
 static void
 gnc_ui_help_cb ( GtkWidget *widget, gpointer data )
 {
-  helpWindow(NULL, HELP_STR, HH_MAIN);
+  helpWindow(NULL, NULL, HH_MAIN);
 }
 
 static void
@@ -994,8 +994,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
   static GnomeUIInfo toolbar[] = 
   {
     { GNOME_APP_UI_ITEM,
-      SAVE_STR_N,
-      TOOLTIP_SAVE_FILE_N,
+      N_("Save"),
+      N_("Save the file to disk"),
       gnc_ui_filemenu_cb, 
       GINT_TO_POINTER(FMB_SAVE),
       NULL,
@@ -1004,8 +1004,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      IMPORT_STR_N,
-      TOOLTIP_IMPORT_QIF_N,
+      N_("Import"),
+      N_("Import a Quicken QIF file"),
       gnc_ui_filemenu_cb, 
       GINT_TO_POINTER(FMB_IMPORT),
       NULL,
@@ -1015,8 +1015,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM, 
-      OPEN_STR_N,
-      TOOLTIP_OPEN_N,
+      N_("Open"),
+      N_("Open the selected account"),
       gnc_ui_mainWindow_toolbar_open, 
       NULL,
       NULL,
@@ -1025,8 +1025,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       0, 0, NULL 
     },
     { GNOME_APP_UI_ITEM,
-      EDIT_STR_N,
-      TOOLTIP_EDIT_N,
+      N_("Edit"),
+      N_("Edit the selected account"),
       gnc_ui_mainWindow_toolbar_edit, 
       NULL,
       NULL,
@@ -1036,8 +1036,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      NEW_STR_N,
-      TOOLTIP_NEW_N,
+      N_("New"),
+      N_("Create a new account"),
       gnc_ui_add_account, 
       NULL,
       NULL,
@@ -1046,8 +1046,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      DELETE_STR_N,
-      TOOLTIP_DELETE_N,
+      N_("Delete"),
+      N_("Delete selected account"),
       gnc_ui_delete_account_cb, 
       NULL,
       NULL,
@@ -1057,8 +1057,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      FIND_STR_N,
-      TOOLTIP_FIND_N,
+      N_("Find"),
+      N_("Find transactions with a search"),
       gnc_ui_find_transactions_cb, 
       NULL,
       NULL,
@@ -1068,8 +1068,8 @@ gnc_main_create_toolbar(GnomeApp *app, GNCMainInfo *main_info)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      EXIT_STR_N,
-      TOOLTIP_EXIT_N,
+      N_("Exit"),
+      N_("Exit GnuCash"),
       gnc_ui_exit_cb, 
       NULL,
       NULL,
@@ -1098,9 +1098,10 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
   GtkWidget *popup;
   GSList *list;
 
-  static GnomeUIInfo filemenu[] = {
-    GNOMEUIINFO_MENU_NEW_ITEM(NEW_FILE_STR_N,
-                              TOOLTIP_NEW_FILE_N,
+  static GnomeUIInfo filemenu[] =
+  {
+    GNOMEUIINFO_MENU_NEW_ITEM(N_("New File"),
+                              N_("Create a new file"),
                               gnc_ui_filemenu_cb,
                               GINT_TO_POINTER(FMB_NEW)),
     GNOMEUIINFO_MENU_OPEN_ITEM(gnc_ui_filemenu_cb,
@@ -1112,7 +1113,8 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      IMPORT_QIF_E_STR_N, TOOLTIP_IMPORT_QIF_N,
+      N_("Import QIF..."),
+      N_("Import a Quicken QIF file"),
       gnc_ui_filemenu_cb, GINT_TO_POINTER(FMB_IMPORT), NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_CONVERT,
       'i', GDK_CONTROL_MASK, NULL
@@ -1123,10 +1125,12 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  static GnomeUIInfo optionsmenu[] = {
+  static GnomeUIInfo optionsmenu[] =
+  {
     {
       GNOME_APP_UI_ITEM,
-      PREFERENCES_MENU_E_STR_N, TOOLTIP_PREFERENCES_N,
+      N_("_Preferences..."),
+      N_("Open the global preferences dialog"),
       gnc_ui_options_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PREF,
       0, 0, NULL
@@ -1134,24 +1138,29 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  static GnomeUIInfo scrubmenu[] = {
+  static GnomeUIInfo scrubmenu[] =
+  {
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_ACC_MENU_STR_N, TOOLTIP_SCRUB_ACCT_N,
+      N_("Scrub A_ccount"),
+      N_("Identify and fix problems in the account"),
       gnc_ui_mainWindow_scrub, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_SUB_MENU_STR_N, TOOLTIP_SCRUB_SUB_N,
+      N_("Scrub Su_baccounts"),
+      N_("Identify and fix problems in the account "
+         "and its subaccounts"),
       gnc_ui_mainWindow_scrub_sub, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      SCRUB_ALL_MENU_STR_N, TOOLTIP_SCRUB_ALL_N,
+      N_("Scrub A_ll"),
+      N_("Identify and fix problems in all the accounts"),
       gnc_ui_mainWindow_scrub_all, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1159,24 +1168,28 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  static GnomeUIInfo accountsmenu[] = {
+  static GnomeUIInfo accountsmenu[] =
+  {
     {
       GNOME_APP_UI_ITEM,
-      OPEN_ACC_MENU_STR_N, TOOLTIP_OPEN_N,
+      N_("_Open Account"),
+      N_("Open the selected account"),
       gnc_ui_mainWindow_toolbar_open, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       'o', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      OPEN_SUB_MENU_STR_N, TOOLTIP_OPEN_SUB_N,
+      N_("Open S_ubaccounts"),
+      N_("Open the selected account and all its subaccounts"),
       gnc_ui_mainWindow_toolbar_open_subs, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_OPEN,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      EDIT_ACC_MENU_STR_N, TOOLTIP_EDIT_N,
+      N_("_Edit Account"),
+      N_("Edit the selected account"),
       gnc_ui_mainWindow_toolbar_edit, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_MENU_PROP,
       'e', GDK_CONTROL_MASK, NULL
@@ -1184,14 +1197,16 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      RECONCILE_MENU_E_STR_N, TOOLTIP_RECONCILE_N,
+      N_("_Reconcile..."),
+      N_("Reconcile the selected account"),
       gnc_ui_mainWindow_reconcile, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'r', GDK_CONTROL_MASK, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      TRANSFER_MENU_E_STR_N, TOOLTIP_TRANSFER_N,
+      N_("_Transfer..."),
+      N_("Transfer funds from one account to another"),
       gnc_ui_mainWindow_transfer, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       't', GDK_CONTROL_MASK, NULL
@@ -1199,27 +1214,31 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_SEPARATOR,
     {
       GNOME_APP_UI_ITEM,
-      NEW_ACC_MENU_E_STR_N, TOOLTIP_NEW_N,
+      N_("_New Account..."),
+      N_("Create a new account"),
       gnc_ui_add_account, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_ADD,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      DEL_ACC_MENU_STR_N, TOOLTIP_DELETE_N,
+      N_("_Delete Account"),
+      N_("Delete selected account"),
       gnc_ui_delete_account_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_REMOVE,
       0, 0, NULL
     },
     GNOMEUIINFO_SEPARATOR,
-    GNOMEUIINFO_SUBTREE(SCRUB_MENU_STR_N, scrubmenu),
+    GNOMEUIINFO_SUBTREE(N_("_Scrub"), scrubmenu),
     GNOMEUIINFO_END
   };
 
-  static GnomeUIInfo toolsmenu[] = {
+  static GnomeUIInfo toolsmenu[] =
+  {
     {
       GNOME_APP_UI_ITEM,
-      FIN_CALC_STR_N, TOOLTIP_FIN_CALC_N,
+      N_("_Financial Calculator"),
+      N_("Use the financial calculator"),
       gnc_ui_mainWindow_fincalc_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1227,17 +1246,20 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  static GnomeUIInfo helpmenu[] = {
+  static GnomeUIInfo helpmenu[] =
+  {
     {
       GNOME_APP_UI_ITEM,
-      MAN_MENU_STR_N, TOOLTIP_MAN_N,
+      N_("_Manual"),
+      N_("Open the GnuCash Manual"),
       gnc_ui_help_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
     {
       GNOME_APP_UI_ITEM,
-      TOTD_MENU_STR_N, TOOLTIP_TOTD_N,
+      N_("_Tips Of The Day"),
+      N_("View the Tips of the Day"),
       gnc_ui_totd_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
@@ -1248,10 +1270,11 @@ gnc_main_create_menus(GnomeApp *app, GtkWidget *account_tree,
     GNOMEUIINFO_END
   };
 
-  static GnomeUIInfo mainmenu[] = {
+  static GnomeUIInfo mainmenu[] =
+  {
     GNOMEUIINFO_MENU_FILE_TREE(filemenu),
-    GNOMEUIINFO_SUBTREE(ACCOUNTS_MENU_STR_N, accountsmenu),
-    GNOMEUIINFO_SUBTREE(TOOLS_MENU_STR_N, toolsmenu),
+    GNOMEUIINFO_SUBTREE(N_("_Accounts"), accountsmenu),
+    GNOMEUIINFO_SUBTREE(N_("_Tools"), toolsmenu),
     GNOMEUIINFO_MENU_SETTINGS_TREE(optionsmenu),
     GNOMEUIINFO_MENU_HELP_TREE(helpmenu),
     GNOMEUIINFO_END

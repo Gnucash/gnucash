@@ -140,11 +140,22 @@ typedef enum
 /* Types of cursors */
 typedef enum
 {
-  CURSOR_SPLIT,
-  CURSOR_TRANS,
-  CURSOR_NONE
+  CURSOR_CLASS_NONE = -1,
+  CURSOR_CLASS_SPLIT,
+  CURSOR_CLASS_TRANS,
+  NUM_CURSOR_CLASSES
 } CursorClass;
 
+typedef enum
+{
+  CURSOR_TYPE_NONE = -1,
+  CURSOR_TYPE_HEADER,
+  CURSOR_TYPE_SINGLE,
+  CURSOR_TYPE_DOUBLE,
+  CURSOR_TYPE_TRANS,
+  CURSOR_TYPE_SPLIT,
+  NUM_CURSOR_TYPES
+} CursorType;
 
 typedef struct _SplitRegisterBuffer SplitRegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
@@ -185,7 +196,6 @@ struct _SplitRegister
    SplitRegisterStyle style;
 
    /* some private data; outsiders should not access this */
-   int cursor_virt_row;
 
    BasicCell *header_cells[CELL_TYPE_COUNT];
 
@@ -203,23 +213,18 @@ typedef struct _SplitRegisterColors SplitRegisterColors;
 
 struct _SplitRegisterColors
 {
-  guint32 single_cursor_active_bg_color;
-  guint32 single_cursor_passive_bg_color;
-  guint32 single_cursor_passive_bg_color2;
+  guint32 header_bg_color;
 
-  guint32 double_cursor_active_bg_color;
-  guint32 double_cursor_passive_bg_color;
-  guint32 double_cursor_passive_bg_color2;
+  guint32 primary_bg_color;
+  guint32 secondary_bg_color;
+
+  guint32 primary_active_bg_color;
+  guint32 secondary_active_bg_color;
+
+  guint32 split_bg_color;
+  guint32 split_active_bg_color;
 
   gboolean double_alternate_virt;
-
-  guint32 trans_cursor_active_bg_color;
-  guint32 trans_cursor_passive_bg_color;
-
-  guint32 split_cursor_active_bg_color;
-  guint32 split_cursor_passive_bg_color;
-
-  guint32 header_bg_color;
 };
 
 typedef char* (*SRStringGetter) (SplitRegisterType);

@@ -629,14 +629,15 @@ default_button_cb(GtkButton *button, gpointer data)
 static GtkWidget *
 gnc_option_create_default_button(GNCOption *option, GtkTooltips *tooltips)
 {
-  GtkWidget *default_button = gtk_button_new_with_label(SET_TO_DEFAULT_STR);
+  GtkWidget *default_button = gtk_button_new_with_label(_("Set to default"));
 
   gtk_container_set_border_width(GTK_CONTAINER(default_button), 2);
 
   gtk_signal_connect(GTK_OBJECT(default_button), "clicked",
 		     GTK_SIGNAL_FUNC(default_button_cb), option);
 
-  gtk_tooltips_set_tip(tooltips, default_button, TOOLTIP_SET_DEFAULT, NULL);
+  gtk_tooltips_set_tip(tooltips, default_button,
+                       _("Set the option to its default value"), NULL);
 
   return default_button;
 }
@@ -972,14 +973,14 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
 
   if (multiple_selection)
   {
-    button = gtk_button_new_with_label(SELECT_ALL_STR);
+    button = gtk_button_new_with_label(_("Select All"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
     gtk_signal_connect(GTK_OBJECT(button), "clicked",
                        GTK_SIGNAL_FUNC(gnc_option_account_select_all_cb),
                        option);
 
-    button = gtk_button_new_with_label(CLEAR_ALL_STR);
+    button = gtk_button_new_with_label(_("Clear All"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
     gtk_signal_connect(GTK_OBJECT(button), "clicked",
@@ -987,7 +988,7 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
                        option);
   }
 
-  button = gtk_button_new_with_label(SELECT_DEFAULT_STR);
+  button = gtk_button_new_with_label(_("Select Default"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
@@ -1126,21 +1127,21 @@ gnc_option_create_list_widget(GNCOption *option, char *name)
   gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
   gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 10);
 
-  button = gtk_button_new_with_label(SELECT_ALL_STR);
+  button = gtk_button_new_with_label(_("Select All"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_option_list_select_all_cb),
                      option);
 
-  button = gtk_button_new_with_label(CLEAR_ALL_STR);
+  button = gtk_button_new_with_label(_("Clear All"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_option_list_clear_all_cb),
                      option);
 
-  button = gtk_button_new_with_label(SELECT_DEFAULT_STR);
+  button = gtk_button_new_with_label(_("Select Default"));
   gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
   gtk_signal_connect(GTK_OBJECT(button), "clicked",
@@ -1653,7 +1654,7 @@ static void
 gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
 			   gint arg1, gpointer user_data)
 {
-  helpWindow(NULL, HELP_STR, HH_GLOBPREFS);
+  helpWindow(NULL, NULL, HH_GLOBPREFS);
 }
 
 /* Options dialog... this should house all of the config options     */
@@ -1688,7 +1689,7 @@ gnc_show_options_dialog(void)
     gnc_build_options_dialog_contents(options_dialog, global_options);
     gnc_option_db_clean(global_options);
 
-    gtk_window_set_title(GTK_WINDOW(options_dialog), GNC_PREFS);
+    gtk_window_set_title(GTK_WINDOW(options_dialog), _("GnuCash Preferences"));
 
     gtk_signal_connect(GTK_OBJECT(options_dialog), "apply",
 		       GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb),

@@ -81,24 +81,37 @@ struct _SplitRegisterBuffer
   CellBuffer sharesCell;
 };
 
-static SplitRegisterColors reg_colors = {
-  0xffdddd, /* pale red, single cursor active */
-  0xccccff, /* pale blue, single cursor passive */
-  0xccccff, /* pale blue, single cursor passive 2 */
+static SplitRegisterColors reg_colors =
+{
+  0xffffff, /* white */
+  0xffffff,
+  0xffffff,
 
-  0xffdddd, /* pale red, double cursor active */
-  0xccccff, /* pale blue, double cursor passive */
-  0xffffff, /* white, double cursor passive 2 */
+  0xffffff,
+  0xffffff,
+  0xffffff,
+  0xffffff,
 
-  FALSE,    /* double mode alternate by physical row */
+  FALSE /* double mode alternate by physical row */
+};
 
-  0xffdddd, /* pale red, trans cursor active */
-  0xccccff, /* pale blue, trans cursor passive */
-
-  0xffffdd, /* pale yellow, split cursor active */
-  0xffffff, /* white, split cursor passive */
-
-  0xffffff  /* white, header color */
+static char *cell_sample_strings[] =
+{
+  N_("sample:12/12/2000"+7),                    /* date cell */
+  N_("sample:99999"+7),                         /* num cell */
+  N_("sample:Description of a transaction"+7),  /* desc cell */
+  N_("Reconciled:R"+11),                        /* recn cell */
+  N_("sample:999,999.000"+7),                   /* share balance cell */
+  N_("sample:999,999.000"+7),                   /* balance cell */
+  N_("Transfer"),                               /* action cell */
+  N_("sample:Expenses:Automobile:Gasoline"+7),  /* xfrm cell */
+  N_("sample:Expenses:Automobile:Gasoline"+7),  /* xto cell */
+  N_("sample:Memo field sample text string"+7), /* memo cell */
+  N_("sample:999,999.000"+7),                   /* credit cell */
+  N_("sample:999,999.000"+7),                   /* debit cell */
+  N_("sample:999,999.000"+7),                   /* price cell */
+  N_("sample:999,999.000"+7),                   /* shares cell */
+  N_("sample:Expenses:Automobile:Gasoline"+7),  /* mxfrm cell */
 };
 
 #define DATE_CELL_ALIGN    CELL_ALIGN_RIGHT
@@ -164,21 +177,21 @@ configLabels (SplitRegister *reg)
 
   type = reg->type;
 
-  LABEL (DATE,    DATE_STR);
-  LABEL (NUM,     NUM_STR);
-  LABEL (DESC,    DESC_STR);
-  LABEL (RECN,    RECONCILE_ABBREV);
-  LABEL (SHRBALN, TOTAL_SHARES_STR);
-  LABEL (BALN,    BALN_STR);
-  LABEL (ACTN,    ACTION_STR);
-  LABEL (XFRM,    ACCOUNT_STR);
-  LABEL (MXFRM,   TRANSFER_STR);
-  LABEL (XTO,     ACCOUNT_STR);
-  LABEL (MEMO,    MEMO_STR);
-  LABEL (CRED,    CREDIT_STR);
-  LABEL (DEBT,    DEBIT_STR);
-  LABEL (PRIC,    PRICE_STR);
-  LABEL (SHRS,    SHARES_STR);
+  LABEL (DATE,    _("Date"));
+  LABEL (NUM,     _("Num"));
+  LABEL (DESC,    _("Description"));
+  LABEL (RECN,    _("Reconciled:R"+11));
+  LABEL (SHRBALN, _("Total Shares"));
+  LABEL (BALN,    _("Balance"));
+  LABEL (ACTN,    _("Action"));
+  LABEL (XFRM,    _("Account"));
+  LABEL (MXFRM,   _("Transfer"));
+  LABEL (XTO,     _("Account"));
+  LABEL (MEMO,    _("Memo"));
+  LABEL (CRED,    _("Credit"));
+  LABEL (DEBT,    _("Debit"));
+  LABEL (PRIC,    _("Price"));
+  LABEL (SHRS,    _("Shares"));
 
   if (debit_getter != NULL)
   {
@@ -213,82 +226,84 @@ configAction (SplitRegister *reg)
   {
     case BANK_REGISTER:
     case SEARCH_LEDGER:  /* broken ! FIXME bg */
-      xaccAddComboCellMenuItem ( reg->actionCell, DEPOSIT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, CHECK_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, ATM_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, TELLER_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, POS_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, ARU_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, ONLINE_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, ACH_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, WIRE_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, CREDIT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, DIRECTDEBIT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, TRANSFER_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Deposit"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Withdraw"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Check"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("ATM"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Teller"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("POS"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Phone"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Online"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("AutoDep"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Wire"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Credit"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Direct Debit"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Transfer"));
       break;
     case CASH_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
       break;
     case ASSET_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, FEE_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Fee"));
       break;
     case CREDIT_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, ATM_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, CREDIT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, FEE_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, ONLINE_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("ATM"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Credit"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Fee"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Online"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
       break;
     case LIABILITY_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, LOAN_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, PAYMENT_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Loan"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Payment"));
       break;
     case INCOME_LEDGER:
     case INCOME_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, PAYMENT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, REBATE_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Payment"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Rebate"));
       break;
     case EXPENSE_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
       break;
     case GENERAL_LEDGER:
     case EQUITY_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, EQUITY_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Equity"));
       break;
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
     case CURRENCY_REGISTER:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, PRICE_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, FEE_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, DIV_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, LTCG_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, STCG_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, INCOME_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, DIST_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SPLIT_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Price"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Fee"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Div")); /* Dividend */
+      xaccAddComboCellMenuItem (reg->actionCell, _("Int"));
+      /* Long Term Capital Gains */
+      xaccAddComboCellMenuItem (reg->actionCell, _("LTCG"));
+      /* Short Term Captial Gains */
+      xaccAddComboCellMenuItem (reg->actionCell, _("STCG"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Income"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Dist")); /* Distribution */
+      xaccAddComboCellMenuItem (reg->actionCell, _("Split"));
       break;
     default:
-      xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-      xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+      xaccAddComboCellMenuItem (reg->actionCell, _("Buy"));
+      xaccAddComboCellMenuItem (reg->actionCell, _("Sell"));
       break;
   }
 }
@@ -308,20 +323,26 @@ configAction (SplitRegister *reg)
       cb_cell->cell = (handler);			      \
       cb_cell->cell_type = NAME##_CELL;                       \
       cb_cell->label = g_strdup (hcell->value);               \
-      cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE);   \
+      cb_cell->sample_text =                                  \
+        g_strdup (_(cell_sample_strings[NAME##_CELL]));       \
       cb_cell->alignment = NAME##_CELL_ALIGN;		      \
-      cb_cell->expandable = ((handler) == (BasicCell *) reg->descCell);     \
-      cb_cell->span = ((handler) == (BasicCell *) reg->memoCell);     \
+      cb_cell->expandable =                                   \
+        ((handler) == (BasicCell *) reg->descCell);           \
+      cb_cell->span =                                         \
+        ((handler) == (BasicCell *) reg->memoCell);           \
                                                               \
       cb_cell = gnc_cellblock_get_cell (header, row, col);    \
       if (cb_cell && (curs == reg->single_cursor)) {          \
         cb_cell->cell = hcell;			              \
         cb_cell->cell_type = NAME##_CELL;                     \
         cb_cell->label = g_strdup (hcell->value);             \
-        cb_cell->sample_text = g_strdup (NAME##_CELL_SAMPLE); \
+        cb_cell->sample_text =                                \
+          g_strdup (_(cell_sample_strings[NAME##_CELL]));     \
         cb_cell->alignment = NAME##_CELL_ALIGN;		      \
-        cb_cell->expandable = ((handler) == (BasicCell *) reg->descCell);   \
-        cb_cell->span = ((handler) == (BasicCell *) reg->memoCell);   \
+        cb_cell->expandable =                                 \
+          ((handler) == (BasicCell *) reg->descCell);         \
+        cb_cell->span =                                       \
+          ((handler) == (BasicCell *) reg->memoCell);         \
       }							      \
    }                                                          \
 }
@@ -405,8 +426,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,   action,   1,  0);
         SET_CELL (MEMO,   memo,     2,  0);
         SET_CELL (XFRM,   xfrm,     3,  0);
-        SET_CELL (CRED,   credit,   5,  0);
-        SET_CELL (DEBT,   debit,    6,  0);
+        SET_CELL (DEBT,   debit,    5,  0);
+        SET_CELL (CRED,   credit,   6,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,   date,     0,  0);
@@ -453,8 +474,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,   action,   1,  0);
         SET_CELL (MEMO,   memo,     2,  0);
         SET_CELL (XFRM,   xfrm,     4,  0);
-        SET_CELL (CRED,   credit,   6,  0);
-        SET_CELL (DEBT,   debit,    7,  0);
+        SET_CELL (DEBT,   debit,    6,  0);
+        SET_CELL (CRED,   credit,   7,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,   date,     0,  0);
@@ -506,8 +527,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,    action,   1,  0);
         SET_CELL (MEMO,    memo,     2,  0);
         SET_CELL (XFRM,    xfrm,     3,  0);
-        SET_CELL (CRED,    credit,   7,  0);
-        SET_CELL (DEBT,    debit,    8,  0);
+        SET_CELL (DEBT,    debit,    7,  0);
+        SET_CELL (CRED,    credit,   8,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,    date,     0,  0);
@@ -561,8 +582,8 @@ configLayout (SplitRegister *reg)
         SET_CELL (ACTN,    action,   1,  0);
         SET_CELL (MEMO,    memo,     2,  0);
         SET_CELL (XFRM,    xfrm,     4,  0);
-        SET_CELL (CRED,    credit,   8,  0);
-        SET_CELL (DEBT,    debit,    9,  0);
+        SET_CELL (DEBT,    debit,    8,  0);
+        SET_CELL (CRED,    credit,   9,  0);
 
         curs = reg->single_cursor;
         SET_CELL (DATE,    date,     0,  0);
@@ -645,33 +666,21 @@ configTable(SplitRegister *reg)
 void
 xaccSplitRegisterConfigColors (SplitRegister *reg)
 {
-  reg->single_cursor->active_bg_color =
-    reg_colors.single_cursor_active_bg_color;
-  reg->single_cursor->passive_bg_color =
-    reg_colors.single_cursor_passive_bg_color;
-  reg->single_cursor->passive_bg_color2 =
-    reg_colors.single_cursor_passive_bg_color2;
+  reg->single_cursor->active_bg_color = reg_colors.primary_active_bg_color;
+  reg->single_cursor->passive_bg_color = reg_colors.primary_bg_color;
+  reg->single_cursor->passive_bg_color2 = reg_colors.secondary_bg_color;
 
-  reg->double_cursor->active_bg_color =
-    reg_colors.double_cursor_active_bg_color;
-  reg->double_cursor->passive_bg_color =
-    reg_colors.double_cursor_passive_bg_color;
-  reg->double_cursor->passive_bg_color2 =
-    reg_colors.double_cursor_passive_bg_color2;
+  reg->double_cursor->active_bg_color = reg_colors.primary_active_bg_color;
+  reg->double_cursor->passive_bg_color = reg_colors.primary_bg_color;
+  reg->double_cursor->passive_bg_color2 = reg_colors.secondary_bg_color;
 
-  reg->trans_cursor->active_bg_color =
-    reg_colors.trans_cursor_active_bg_color;
-  reg->trans_cursor->passive_bg_color =
-    reg_colors.trans_cursor_passive_bg_color;
-  reg->trans_cursor->passive_bg_color2 =
-    reg_colors.trans_cursor_passive_bg_color;
+  reg->trans_cursor->active_bg_color = reg_colors.primary_active_bg_color;
+  reg->trans_cursor->passive_bg_color = reg_colors.primary_bg_color;
+  reg->trans_cursor->passive_bg_color2 = reg_colors.secondary_bg_color;
 
-  reg->split_cursor->active_bg_color =
-    reg_colors.split_cursor_active_bg_color;
-  reg->split_cursor->passive_bg_color =
-    reg_colors.split_cursor_passive_bg_color;
-  reg->split_cursor->passive_bg_color2 =
-    reg_colors.split_cursor_passive_bg_color;
+  reg->split_cursor->active_bg_color = reg_colors.split_active_bg_color;
+  reg->split_cursor->passive_bg_color = reg_colors.split_bg_color;
+  reg->split_cursor->passive_bg_color2 = reg_colors.split_bg_color;
 
   reg->header->active_bg_color = reg_colors.header_bg_color;
   reg->header->passive_bg_color = reg_colors.header_bg_color;
@@ -728,15 +737,15 @@ mallocCursors (SplitRegister *reg)
       return;
   }
 
-  reg->header = gnc_cellblock_new (1, num_cols);
+  reg->header = gnc_cellblock_new (1, num_cols, CURSOR_TYPE_HEADER);
 
   /* cursors used in the single & double line displays */
-  reg->single_cursor = gnc_cellblock_new (1, num_cols);
-  reg->double_cursor = gnc_cellblock_new (2, num_cols);
+  reg->single_cursor = gnc_cellblock_new (1, num_cols, CURSOR_TYPE_SINGLE);
+  reg->double_cursor = gnc_cellblock_new (2, num_cols, CURSOR_TYPE_DOUBLE);
 
   /* the two cursors used for multi-line and dynamic displays */
-  reg->trans_cursor = gnc_cellblock_new (1, num_cols);
-  reg->split_cursor = gnc_cellblock_new (1, num_cols);
+  reg->trans_cursor = gnc_cellblock_new (1, num_cols, CURSOR_TYPE_TRANS);
+  reg->split_cursor = gnc_cellblock_new (1, num_cols, CURSOR_TYPE_SPLIT);
 }
 
 /* ============================================== */
@@ -762,7 +771,6 @@ xaccInitSplitRegister (SplitRegister *reg,
                        VirtCellDataCopy copy)
 {
   Table * table;
-  CellBlock *header;
 
   reg->table = NULL;
   reg->user_data = NULL;
@@ -776,8 +784,6 @@ xaccInitSplitRegister (SplitRegister *reg,
 
   /* --------------------------- */
   /* malloc the header (label) cells */
-  header = reg->header;
-
   HDR (DATE);
   HDR (NUM);
   HDR (ACTN);
@@ -841,24 +847,40 @@ xaccInitSplitRegister (SplitRegister *reg,
   xaccSetBasicCellValue (reg->nullCell, "");
 
   /* The num cell is the transaction number */
-  xaccSetBasicCellBlankHelp (&reg->numCell->cell, NUM_CELL_HELP);
+  xaccSetBasicCellBlankHelp (&reg->numCell->cell,
+                             _("Enter the transaction number, such as the "
+                               "check number"));
 
   /* the xfer cells */
-  xaccSetBasicCellBlankHelp (&reg->mxfrmCell->cell, XFER_CELL_HELP);
-  xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, XFER_CELL_HELP);
-  xaccSetBasicCellBlankHelp (&reg->xtoCell->cell, XFER_TO_CELL_HELP);
+  {
+    const char *help = _("Enter the account to transfer from, or choose "
+                         "one from the list");
+    xaccSetBasicCellBlankHelp (&reg->mxfrmCell->cell, help);
+    xaccSetBasicCellBlankHelp (&reg->xfrmCell->cell, help);
+  }
 
-  xaccComboCellSetIgnoreString (reg->mxfrmCell, SPLIT_STR);
-  xaccComboCellSetIgnoreString (reg->xtoCell, SPLIT_STR);
+  xaccSetBasicCellBlankHelp (&reg->xtoCell->cell,
+                             _("Enter the account to transfer to, or choose "
+                               "one from the list"));
 
-  xaccComboCellSetIgnoreHelp (reg->mxfrmCell, TOOLTIP_MULTI_SPLIT);
-  xaccComboCellSetIgnoreHelp (reg->xtoCell, TOOLTIP_MULTI_SPLIT);
+  xaccComboCellSetIgnoreString (reg->mxfrmCell, _("Split"));
+  xaccComboCellSetIgnoreString (reg->xtoCell, _("Split"));
+
+
+  {
+    const char *help = _("This transaction has multiple splits; "
+                         "switch to multi-line mode to see them all");
+    xaccComboCellSetIgnoreHelp (reg->mxfrmCell, help);
+    xaccComboCellSetIgnoreHelp (reg->xtoCell, help);
+  }
 
   /* the memo cell */
-  xaccSetBasicCellBlankHelp (&reg->memoCell->cell, MEMO_CELL_HELP);
+  xaccSetBasicCellBlankHelp (&reg->memoCell->cell,
+                             _("Enter a description of the split"));
 
   /* the desc cell */
-  xaccSetBasicCellBlankHelp (&reg->descCell->cell, DESC_CELL_HELP);
+  xaccSetBasicCellBlankHelp (&reg->descCell->cell,
+                             _("Enter a description of the transaction"));
 
   /* The balance cells are just placeholders */
   reg->balanceCell->cell.input_output = XACC_CELL_ALLOW_NONE;
@@ -882,20 +904,25 @@ xaccInitSplitRegister (SplitRegister *reg,
 
   /* The action cell should accept strings not in the list */
   xaccComboCellSetStrict (reg->actionCell, FALSE);
-  xaccSetBasicCellBlankHelp (&reg->actionCell->cell, ACTION_CELL_HELP);
+  xaccSetBasicCellBlankHelp (&reg->actionCell->cell,
+                             _("Enter the type of transaction, or choose "
+                               "one from the list"));
 
   /* number format for share quantities in stock ledgers */
   switch (type)
   {
     case CURRENCY_REGISTER:
       xaccSetPriceCellIsCurrency (reg->priceCell, TRUE);
-
+      /* fall through */
     case STOCK_REGISTER:
     case PORTFOLIO_LEDGER:
       xaccSetPriceCellIsCurrency (reg->priceCell, TRUE);
 
-      xaccSetBasicCellBlankHelp (&reg->priceCell->cell, PRICE_CELL_HELP);
-      xaccSetBasicCellBlankHelp (&reg->sharesCell->cell, SHARES_CELL_HELP);
+      xaccSetBasicCellBlankHelp (&reg->priceCell->cell,
+                                 _("Enter the share price"));
+      xaccSetBasicCellBlankHelp (&reg->sharesCell->cell,
+                                 _("Enter the number of shares bought or "
+                                   "sold"));
       break;
     default:
       break;
@@ -911,7 +938,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   {
     VirtualCellLocation vcell_loc = { 0, 0 };
 
-    gnc_table_set_vcell (table, header, NULL, vcell_loc);
+    gnc_table_set_vcell (table, reg->header, NULL, TRUE, TRUE, vcell_loc);
   }
 
   /* Set up first and only initial row */
@@ -923,9 +950,9 @@ xaccInitSplitRegister (SplitRegister *reg,
     vloc.phys_row_offset = 0;
     vloc.phys_col_offset = 0;
 
-    gnc_table_set_vcell (table, reg->single_cursor, NULL, vloc.vcell_loc);
+    gnc_table_set_vcell (table, reg->single_cursor, NULL, TRUE, TRUE,
+                         vloc.vcell_loc);
     gnc_table_move_cursor (table, vloc);
-    reg->cursor_virt_row = 1;
   }
 
   reg->table = table;
@@ -1085,17 +1112,17 @@ static CursorClass
 sr_cellblock_cursor_class(SplitRegister *reg, CellBlock *cursor)
 {
   if (cursor == NULL)
-    return CURSOR_NONE;
+    return CURSOR_CLASS_NONE;
 
   if ((cursor == reg->single_cursor) ||
       (cursor == reg->double_cursor) ||
       (cursor == reg->trans_cursor))
-    return CURSOR_TRANS;
+    return CURSOR_CLASS_TRANS;
 
   if (cursor == reg->split_cursor)
-    return CURSOR_SPLIT;
+    return CURSOR_CLASS_SPLIT;
 
-  return CURSOR_NONE;
+  return CURSOR_CLASS_NONE;
 }
 
 /* ============================================== */
@@ -1106,11 +1133,11 @@ xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg)
   Table *table;
 
   if (reg == NULL)
-    return CURSOR_NONE;
+    return CURSOR_CLASS_NONE;
 
   table = reg->table;
   if (table == NULL)
-    return CURSOR_NONE;
+    return CURSOR_CLASS_NONE;
 
   return sr_cellblock_cursor_class(reg, table->current_cursor);
 }
@@ -1125,15 +1152,15 @@ xaccSplitRegisterGetCursorClass (SplitRegister *reg,
   Table *table;
 
   if (reg == NULL)
-    return CURSOR_NONE;
+    return CURSOR_CLASS_NONE;
 
   table = reg->table;
   if (table == NULL)
-    return CURSOR_NONE;
+    return CURSOR_CLASS_NONE;
 
   vcell = gnc_table_get_virtual_cell (table, vcell_loc);
   if (vcell == NULL)
-    return CURSOR_NONE;
+    return CURSOR_CLASS_NONE;
 
   return sr_cellblock_cursor_class(reg, vcell->cellblock);
 }
@@ -1414,40 +1441,63 @@ xaccSplitRegisterSaveCursor(SplitRegister *sr, SplitRegisterBuffer *srb)
 /* ============================================== */
 
 static void
-restoreCellChanged(BasicCell *bcell, CellBuffer *cb)
+restoreCellChanged(BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
 {
+  int r, c;
+
   if ((bcell == NULL) || (cb == NULL))
     return;
 
-  if (cb->changed)
-  {
-    xaccSetBasicCellValue(bcell, cb->value);
-    bcell->changed = cb->changed;
-  }
+  if (!cb->changed)
+    return;
+
+  /* only restore if it's in the current cursor */
+  for (r = 0; r < cursor->num_rows; r++)
+    for (c = 0; c < cursor->num_cols; c++)
+    {
+      CellBlockCell *cb_cell;
+
+      cb_cell = gnc_cellblock_get_cell (cursor, r, c);
+      if (cb_cell == NULL)
+        continue;
+
+      if (cb_cell->cell == bcell)
+      {
+        xaccSetBasicCellValue(bcell, cb->value);
+        bcell->changed = cb->changed;
+        return;
+      }
+    }
 }
 
 void
 xaccSplitRegisterRestoreCursorChanged(SplitRegister *sr,
                                       SplitRegisterBuffer *srb)
 {
-  if ((sr == NULL) || (srb == NULL))
+  CellBlock *cursor;
+
+  if ((sr == NULL) || (sr->table == NULL) || (srb == NULL))
     return;
 
-  restoreCellChanged(&sr->dateCell->cell, &srb->dateCell);
-  restoreCellChanged(&sr->numCell->cell, &srb->numCell);
-  restoreCellChanged(&sr->descCell->cell, &srb->descCell);
-  restoreCellChanged(&sr->recnCell->cell, &srb->recnCell);
-  restoreCellChanged(&sr->shrbalnCell->cell, &srb->shrbalnCell);
-  restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell);
-  restoreCellChanged(&sr->actionCell->cell, &srb->actionCell);
-  restoreCellChanged(&sr->xfrmCell->cell, &srb->xfrmCell);
-  restoreCellChanged(&sr->mxfrmCell->cell, &srb->mxfrmCell);
-  restoreCellChanged(&sr->xtoCell->cell, &srb->xtoCell);
-  restoreCellChanged(&sr->memoCell->cell, &srb->memoCell);
-  restoreCellChanged(&sr->creditCell->cell, &srb->creditCell);
-  restoreCellChanged(&sr->debitCell->cell, &srb->debitCell);
-  restoreCellChanged(&sr->priceCell->cell, &srb->priceCell);
-  restoreCellChanged(&sr->sharesCell->cell, &srb->sharesCell);
+  cursor = sr->table->current_cursor;
+  if (cursor == NULL)
+    return;
+
+  restoreCellChanged(&sr->dateCell->cell, &srb->dateCell, cursor);
+  restoreCellChanged(&sr->numCell->cell, &srb->numCell, cursor);
+  restoreCellChanged(&sr->descCell->cell, &srb->descCell, cursor);
+  restoreCellChanged(&sr->recnCell->cell, &srb->recnCell, cursor);
+  restoreCellChanged(&sr->shrbalnCell->cell, &srb->shrbalnCell, cursor);
+  restoreCellChanged(&sr->balanceCell->cell, &srb->balanceCell, cursor);
+  restoreCellChanged(&sr->actionCell->cell, &srb->actionCell, cursor);
+  restoreCellChanged(&sr->xfrmCell->cell, &srb->xfrmCell, cursor);
+  restoreCellChanged(&sr->mxfrmCell->cell, &srb->mxfrmCell, cursor);
+  restoreCellChanged(&sr->xtoCell->cell, &srb->xtoCell, cursor);
+  restoreCellChanged(&sr->memoCell->cell, &srb->memoCell, cursor);
+  restoreCellChanged(&sr->creditCell->cell, &srb->creditCell, cursor);
+  restoreCellChanged(&sr->debitCell->cell, &srb->debitCell, cursor);
+  restoreCellChanged(&sr->priceCell->cell, &srb->priceCell, cursor);
+  restoreCellChanged(&sr->sharesCell->cell, &srb->sharesCell, cursor);
 }
 
 /* keep in sync with CellType enum */

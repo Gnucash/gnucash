@@ -49,15 +49,18 @@ static char *
 style_get_key (SheetBlockStyle *style)
 {
         switch (style->cursor_type) {
-        case GNUCASH_CURSOR_HEADER:
-        case GNUCASH_CURSOR_SINGLE:
-        case GNUCASH_CURSOR_TRANS:
-        case GNUCASH_CURSOR_SPLIT:
+        case CURSOR_TYPE_HEADER:
+        case CURSOR_TYPE_SINGLE:
+        case CURSOR_TYPE_TRANS:
+        case CURSOR_TYPE_SPLIT:
                 return "singles";
                 break;
 
-        case GNUCASH_CURSOR_DOUBLE:
+        case CURSOR_TYPE_DOUBLE:
                 return "doubles";
+                break;
+
+        default:
                 break;
         }
 
@@ -228,9 +231,9 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         int row, col;
         int i;
 
-        dimensions = sheet->cursor_styles[GNUCASH_CURSOR_HEADER]->dimensions;
+        dimensions = sheet->cursor_styles[CURSOR_TYPE_HEADER]->dimensions;
         cd_table = dimensions->cell_dimensions;
-        cursor = sheet->cursors[GNUCASH_CURSOR_HEADER];
+        cursor = sheet->cursors[CURSOR_TYPE_HEADER];
 
         width = 0;
         num_cols = cursor->num_cols;
@@ -265,7 +268,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
                 }
 
         /* adjust widths to be consistent */
-        for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
+        for (i = 0; i < NUM_CURSOR_TYPES; i++)
         {
                 style = sheet->cursor_styles[i];
                 dimensions = style->dimensions;
@@ -282,7 +285,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
         }
 
         /* now expand spanning cells */
-        for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
+        for (i = 0; i < NUM_CURSOR_TYPES; i++)
         {
                 CellDimensions *cd_span;
 
@@ -387,7 +390,7 @@ set_dimensions_pass_three (GnucashSheet *sheet)
 {
         int i;
 
-        for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
+        for (i = 0; i < NUM_CURSOR_TYPES; i++)
         {
                 BlockDimensions *dimensions;
 
@@ -409,7 +412,7 @@ styles_recompute_layout_dimensions (GnucashSheet *sheet, int default_width)
         BlockDimensions *dimensions;
         int i;
 
-        for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
+        for (i = 0; i < NUM_CURSOR_TYPES; i++)
         {
                 cursor = sheet->cursors[i];
                 dimensions = sheet->cursor_styles[i]->dimensions;
@@ -457,7 +460,7 @@ gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width)
         if (width < 0)
                 return;
 
-        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
+        style = sheet->cursor_styles[CURSOR_TYPE_HEADER];
 
         g_return_if_fail (col < style->ncols);
 
@@ -474,33 +477,9 @@ gnucash_sheet_set_col_width (GnucashSheet *sheet, int col, int width)
 }
 
 
-/* Recompiles the style information from the cellblock, without
- * recomputing the layout info or the dimensions. WARNING: this
- * function assumes that the space for the style info has been
- * allocated already. */
-static void
-gnucash_sheet_style_recompile(SheetBlockStyle *style, gint cursor_type)
-{
-        CellBlock *cursor;
-
-        g_assert (style != NULL);
-        g_assert (style->cursor != NULL);
-
-        cursor = style->cursor;
-
-        style->header_font = gnucash_register_font;
-}
-
 void
 gnucash_sheet_styles_recompile(GnucashSheet *sheet)
 {
-        int i;
-
-        g_return_if_fail (sheet != NULL);
-        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
-
-        for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
-                gnucash_sheet_style_recompile (sheet->cursor_styles[i], i);
 }
 
 
@@ -525,7 +504,7 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc)
         if (virt_loc.phys_col_offset == 0)
                 return borders |= STYLE_BORDER_LEFT;
 
-        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
+        style = sheet->cursor_styles[CURSOR_TYPE_HEADER];
         if (style == NULL)
                 return borders;
 
@@ -537,8 +516,7 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc)
 
 
 static SheetBlockStyle *
-gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
-                         GNCCursorType cursor_type)
+gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor)
 {
         SheetBlockStyle *style;
 
@@ -549,12 +527,10 @@ gnucash_sheet_style_new (GnucashSheet *sheet, CellBlock *cursor,
         style = g_new0(SheetBlockStyle, 1);
 
         style->cursor = cursor;
-        style->cursor_type = cursor_type;
+        style->cursor_type = cursor->cursor_type;
 
         style->nrows = cursor->num_rows;
         style->ncols = cursor->num_cols;
-
-        gnucash_sheet_style_recompile(style, cursor_type);
 
         gnucash_style_dimensions_init (sheet, style);
 
@@ -569,9 +545,9 @@ gnucash_sheet_create_styles (GnucashSheet *sheet)
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-        for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
+        for (i = 0; i < NUM_CURSOR_TYPES; i++)
                 sheet->cursor_styles[i] = 
-                        gnucash_sheet_style_new (sheet, sheet->cursors[i], i);
+                        gnucash_sheet_style_new (sheet, sheet->cursors[i]);
 }
 
 void
@@ -659,11 +635,11 @@ gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
 
         cursor = vcell->cellblock;
 
-        for (i = 0; i < GNUCASH_NUM_CURSORS; i++)
+        for (i = 0; i < NUM_CURSOR_TYPES; i++)
                 if (cursor == sheet->cursors[i])
                         return sheet->cursor_styles[i];
 
-        return sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
+        return sheet->cursor_styles[CURSOR_TYPE_HEADER];
 }
 
 
@@ -757,8 +733,8 @@ gnucash_sheet_get_header_widths (GnucashSheet *sheet, int *header_widths)
         g_return_if_fail(sheet != NULL);
         g_return_if_fail(GNUCASH_IS_SHEET(sheet));
 
-        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
-        header = sheet->cursors[GNUCASH_CURSOR_HEADER];
+        style = sheet->cursor_styles[CURSOR_TYPE_HEADER];
+        header = sheet->cursors[CURSOR_TYPE_HEADER];
 
         g_return_if_fail(style != NULL);
         g_return_if_fail(header != NULL);
@@ -795,8 +771,8 @@ gnucash_sheet_set_header_widths (GnucashSheet *sheet, int *header_widths)
         g_return_if_fail(sheet != NULL);
         g_return_if_fail(GNUCASH_IS_SHEET(sheet));
 
-        style = sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
-        header = sheet->cursors[GNUCASH_CURSOR_HEADER];
+        style = sheet->cursor_styles[CURSOR_TYPE_HEADER];
+        header = sheet->cursors[CURSOR_TYPE_HEADER];
 
         g_return_if_fail(style != NULL);
         g_return_if_fail(header != NULL);

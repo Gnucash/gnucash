@@ -77,7 +77,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         GdkColor *bg_color;
         guint32 argb;
 
-        header_style = header->sheet->cursor_styles[GNUCASH_CURSOR_HEADER];
+        header_style = header->sheet->cursor_styles[CURSOR_TYPE_HEADER];
 
         virt_loc.vcell_loc.virt_row = 0;
         virt_loc.vcell_loc.virt_col = 0;
@@ -103,7 +103,7 @@ gnucash_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         gdk_gc_set_line_attributes (header->gc, 1, GDK_LINE_SOLID, -1, -1);
         gdk_gc_set_background (header->gc, &gn_white);
         gdk_gc_set_foreground (header->gc, &gn_black);
-        font = style->header_font;
+        font = gnucash_register_font;
 
         ypaint = -y;
 
@@ -546,7 +546,7 @@ gnucash_header_set_arg (GtkObject *o, GtkArg *arg, guint arg_id)
         case ARG_CURSOR_TYPE: 
         {
                 gint old_type = header->type;
-                
+
                 header->type = GTK_VALUE_INT (*arg);
                 needs_update = (old_type != header->type);
                 break;
@@ -654,7 +654,7 @@ gnucash_header_new (GnucashSheet *sheet)
                                       gnucash_header_get_type (),
                                       "GnucashHeader::sheet", sheet,
                                       "GnucashHeader::cursor_type",
-                                      GNUCASH_CURSOR_HEADER,
+                                      CURSOR_TYPE_HEADER,
                                       NULL);
 
         sheet->header_item = item;

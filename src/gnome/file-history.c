@@ -224,7 +224,7 @@ gnc_history_update_menu(void)
   }
   (menu+i)->type = GNOME_APP_UI_ENDOFINFO;
 
-  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, IMPORT_QIF_E_STR_N);
+  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, "Import QIF...");
   gnome_app_insert_menus(GNOME_APP(app), path, menu);
   num_menu_entries = n;
   g_free(path);

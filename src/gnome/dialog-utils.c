@@ -45,7 +45,7 @@ gnc_get_source_name(gint source)
   switch (source)
   {
     case SOURCE_NONE :
-      return NONE_STR;
+      return _("(none)");
     case SOURCE_YAHOO :
       return "Yahoo";
     case SOURCE_YAHOO_EUROPE :
@@ -174,37 +174,37 @@ gnc_ui_get_account_field_name(int field)
   switch (field)
   {
     case ACCOUNT_TYPE :
-      return TYPE_STR;
+      return _("Type");
       break;
     case ACCOUNT_NAME :
-      return ACC_NAME_STR;
+      return _("Account Name");
       break;
     case ACCOUNT_CODE :
-      return ACC_CODE_STR;
+      return _("Account Code");
       break;
     case ACCOUNT_DESCRIPTION :
-      return DESC_STR;
+      return _("Description");
       break;
     case ACCOUNT_NOTES :
-      return NOTES_STR;
+      return _("Notes");
       break;
     case ACCOUNT_CURRENCY :
-      return CURRENCY_STR;
+      return _("Currency");
       break;
     case ACCOUNT_SECURITY :
-      return SECURITY_STR;
+      return _("Security");
       break;
     case ACCOUNT_BALANCE :
-      return BALN_STR;
+      return _("Balance");
       break;
     case ACCOUNT_BALANCE_EURO :
-      return BALN_EURO_STR;
+      return _("Balance");
       break;
     case ACCOUNT_TOTAL :
-      return TOTAL_STR;
+      return _("Total");
       break;
     case ACCOUNT_TOTAL_EURO :
-      return TOTAL_EURO_STR;
+      return _("Total");
       break;
   }
 
@@ -725,10 +725,10 @@ gnc_get_reconcile_str(char reconciled_flag)
 {
   switch (reconciled_flag)
   {
-    case NREC: return NOT_CLEARED_ABBREV;
-    case CREC: return CLEARED_ABBREV;
-    case YREC: return RECONCILED_ABBREV;
-    case FREC: return FROZEN_ABBREV;
+    case NREC: return _("not cleared:n"+12);
+    case CREC: return _("cleared:c"+8);
+    case YREC: return _("reconciled:y"+11);
+    case FREC: return _("frozen:f"+7);
     default:
       PERR("Bad reconciled flag\n");
       return NULL;

@@ -42,24 +42,6 @@
 #define GNUCASH_IS_SHEET(o)    (GTK_CHECK_TYPE((o), GNUCASH_TYPE_SHEET))
 
 
-typedef enum
-{
-        GNUCASH_CURSOR_HEADER = 0,
-        GNUCASH_CURSOR_SINGLE,
-        GNUCASH_CURSOR_DOUBLE,
-        GNUCASH_CURSOR_TRANS,
-        GNUCASH_CURSOR_SPLIT,
-        GNUCASH_NUM_CURSORS
-} GNCCursorType;
-
-
-typedef enum {
-        GNUCASH_ALIGN_TOP,
-        GNUCASH_ALIGN_BOTTOM,
-        GNUCASH_ALIGN_SAME,   /* keep the alignment the same */
-} GnucashSheetAlignment;
-
-
 typedef struct _SheetBlockStyle SheetBlockStyle;
 
 typedef struct  
@@ -90,8 +72,8 @@ typedef struct {
         GnomeCanvasItem *cursor;
         GnomeCanvasItem *grid;
 
-        CellBlock *cursors[GNUCASH_NUM_CURSORS];
-        SheetBlockStyle *cursor_styles[GNUCASH_NUM_CURSORS];
+        CellBlock *cursors[NUM_CURSOR_TYPES];
+        SheetBlockStyle *cursor_styles[NUM_CURSOR_TYPES];
 
         /* some style information associated to a sheet */
         GHashTable *dimensions_hash_table;
@@ -103,18 +85,17 @@ typedef struct {
 
         gint top_block;  /* maybe not fully visible */
         gint bottom_block;
-        gint left_block, right_block;
+        gint left_block;
+        gint right_block;
 
-        gint top_block_offset; 
-        gint left_block_offset;
+        gint num_visible_blocks;
+        gint num_visible_phys_rows;
 
         gint width;  /* the width in pixels of the sheet */
         gint height;
 
         gint window_height;
         gint window_width;
-
-        gint alignment;
 
         gint cell_borders;
 
@@ -127,7 +108,6 @@ typedef struct {
         guint delete_signal;
         guint changed_signal;
 
-        gint smooth_scroll;
         GtkAdjustment *hadj, *vadj;
 } GnucashSheet;
 
@@ -185,15 +165,11 @@ void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
 
 void gnucash_sheet_compute_visible_range (GnucashSheet *sheet);
 
-void gnucash_sheet_block_pixel_origin (GnucashSheet *sheet,
-                                       VirtualCellLocation vcell_loc,
-                                       gint *x, gint *y);
-
 void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
                                       VirtualLocation virt_loc);
 
 void gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor,
-                               GNCCursorType cursor_type);
+                               CursorType cursor_type);
 
 void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 

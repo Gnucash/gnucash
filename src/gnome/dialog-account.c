@@ -593,10 +593,10 @@ extra_change_verify(AccountWindow *aw,
 
   account = aw->account;
 
-  titles[0] = ACCOUNT_STR;
-  titles[1] = FIELD_STR;
-  titles[2] = OLD_VALUE_STR;
-  titles[3] = NEW_VALUE_STR;
+  titles[0] = _("Account");
+  titles[1] = _("Field");
+  titles[2] = _("Old Value");
+  titles[3] = _("New Value");
   titles[4] = NULL;
 
   list = GTK_CLIST(gtk_clist_new_with_titles(4, titles));
@@ -624,7 +624,7 @@ extra_change_verify(AccountWindow *aw,
     GtkWidget *frame;
     GtkWidget *vbox;
 
-    dialog = gnome_dialog_new(VERIFY_CHANGES_STR,
+    dialog = gnome_dialog_new(_("Verify Changes"),
                               GNOME_STOCK_BUTTON_OK,
                               GNOME_STOCK_BUTTON_CANCEL,
                               NULL);
@@ -638,7 +638,7 @@ extra_change_verify(AccountWindow *aw,
 
     vbox = GNOME_DIALOG(dialog)->vbox;
 
-    label = gtk_label_new(VERIFY_CHANGE_MSG);
+    label = gtk_label_new(_("The following changes must be made. Continue?"));
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 
     frame = gtk_frame_new(NULL);
@@ -979,7 +979,7 @@ gnc_account_window_help_cb(GtkWidget *widget, gpointer data)
       return;
   }
 
-  helpWindow(NULL, HELP_STR, help_file);
+  helpWindow(NULL, NULL, help_file);
 }
 
 
@@ -1229,7 +1229,7 @@ gnc_account_window_create(AccountWindow *aw)
   box = gtk_object_get_data(awo, "parent_scroll");
 
   aw->top_level_account = xaccMallocAccount();
-  xaccAccountSetName(aw->top_level_account, NEW_TOP_ACCT_STR);
+  xaccAccountSetName(aw->top_level_account, _("New top level account"));
 
   aw->parent_tree = gnc_account_tree_new_with_root(aw->top_level_account);
   gtk_clist_column_titles_hide(GTK_CLIST(aw->parent_tree));
@@ -1303,7 +1303,7 @@ gnc_edit_window_set_name(AccountWindow *aw)
   char *title;
 
   fullname = xaccAccountGetFullName(aw->account, gnc_get_account_separator());
-  title = g_strconcat(fullname, " - ", EDIT_ACCT_STR, NULL);
+  title = g_strconcat(fullname, " - ", _("Edit Account"), NULL);
 
   free(fullname);
 

@@ -37,7 +37,6 @@
 #include "dialog-commodity.h"
 #include "window-help.h"
 #include "messages.h"
-#include "messages_i18n.h"
 #include "gnome-top-level.h"
 #include "ui-callbacks.h"
 
@@ -329,7 +328,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
      * (#t error-message) for a warning */
     if(gh_list_p(load_return) &&
        (gh_car(load_return) == SCM_BOOL_T)) {
-      error_string = g_strdup_printf(QIF_LOAD_WARNING_FORMAT_MSG,
+      error_string = g_strdup_printf(_("QIF file load warning:\n%s"),
                                      gh_scm2newstr(gh_cadr(load_return),
                                                    NULL));
       gnc_warning_dialog_parented(GTK_WIDGET(wind->window), error_string);
@@ -340,7 +339,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     if((load_return != SCM_BOOL_T) &&
        (!gh_list_p(load_return) || 
         (gh_car(load_return) != SCM_BOOL_T))) {
-      error_string = g_strdup_printf(QIF_LOAD_FAILED_FORMAT_MSG,
+      error_string = g_strdup_printf(_("QIF file load failed:\n%s"),
                                      gh_scm2newstr(gh_cadr(load_return),
                                                    NULL));
       gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
@@ -387,7 +386,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
       if((parse_return != SCM_BOOL_T) &&
          (!gh_list_p(parse_return) ||
           (gh_car(parse_return) != SCM_BOOL_T))) {
-        error_string = g_strdup_printf(QIF_PARSE_FAILED_FORMAT_MSG,
+        error_string = g_strdup_printf(_("QIF file parse failed:\n%s"),
                                        gh_scm2newstr(gh_cadr(parse_return),
                                                      NULL));
         gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);

@@ -131,11 +131,11 @@ gnc_reconcile_list_init(GNCReconcileList *list)
   GtkCList *clist = GTK_CLIST(list);
   gchar * titles[] =
     {
-      DATE_STR,
-      NUM_STR,
-      DESC_STR,
-      AMT_STR,
-      RECONCILE_ABBREV,
+      _("Date"),
+      _("Num"),
+      _("Description"),
+      _("Amount"),
+      _("Reconciled:R"+11),
       NULL
     };
 

@@ -22,14 +22,10 @@
  *                                                                  *
 \********************************************************************/
 
-#include <assert.h>
-#include <string.h>
-
 #include "config.h"
 
-#define DISABLE_GETTEXT_UNDERSCORE /* required to include messages.h */
-#include "messages.h"
-#undef DISABLE_GETTEXT_UNDERSCORE /* do we want this? */
+#include <assert.h>
+#include <string.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -829,73 +825,6 @@ xaccAccountRecomputeBalances( Account **list )
 /********************************************************************\
 \********************************************************************/
 
-void
-xaccMoveFarEnd (Split *split, Account *new_acc)
-{
-   Split *partner_split = 0x0;
-   Transaction *trans;
-   Account * acc;
-   int numsplits = 0;
-
-   if (!split) return;
-   
-   /* if the transaction has two splits, then the "far end" 
-    * is the other one. Otherwise, far end is undefined. 
-    * If the new destination does not match the current dest,
-    * then move the far end of the split to the new location.
-    */
-   trans = (Transaction *) (split->parent);
-   assert (trans);
-   assert (trans->splits);
-
-   numsplits = xaccCountSplits (trans->splits);
-   if (2 < numsplits) return;
-
-   if (split == trans->splits[0]) {
-      partner_split = trans->splits [1];
-   } else
-
-   if (split == trans->splits[1]) {
-      partner_split = trans->splits [0];
-   } else 
-
-   if (new_acc) {
-      /* Gosh, the far end doesn't exist! create it! */
-      partner_split = xaccMallocSplit ();
-      xaccTransAppendSplit (trans, partner_split);
-      xaccAccountInsertSplit (new_acc, partner_split);
-      return;
-   } else {
-      /* no partner split, AND no far-end accouont. return */
-      return;
-   }
-
-   /* move the partner split from the old account to the new */ 
-   acc = (Account *) (partner_split->acc);
-   if (acc != new_acc) {
-      xaccAccountInsertSplit (new_acc, partner_split);
-   }
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccMoveFarEndByName (Split *split, const char *new_acc_name)
-{
-   Account *acc;
-
-   if (!split) return;
-   if (0 == strcmp (SPLIT_STR, new_acc_name)) return;
-
-   acc = (Account *) split->acc;
-   acc = xaccGetPeerAccountFromName (acc, new_acc_name);
-   xaccMoveFarEnd (split, acc);
-}
-
-/********************************************************************\
-\********************************************************************/
-
 void 
 xaccAccountSetType (Account *acc, int tip) {
 
@@ -1424,22 +1353,22 @@ xaccAccountStringToType(const char* str, int *type) {
 
 static char *
 account_type_name[NUM_ACCOUNT_TYPES] = { 
-  BANK_STR, 
-  CASH_STR, 
-  ASSET_STR, 
-  CREDIT_CARD_STR,
-  LIABILITY_STR, 
-  STOCK_STR, 
-  MUTUAL_FUND_STR,
-  CURRENCY_STR,
-  INCOME_STR, 
-  EXPENSE_STR, 
-  EQUITY_STR
+  N_("Bank"),
+  N_("Cash"),
+  N_("Asset"),
+  N_("Credit Card"),
+  N_("Liability"),
+  N_("Stock"),
+  N_("Mutual Fund"),
+  N_("Currency"),
+  N_("Income"),
+  N_("Expense"),
+  N_("Equity")
   /*
-    CHECKING_STR,
-    SAVINGS_STR,
-    MONEYMRKT_STR,
-    CREDITLINE_STR
+    N_("Checking"),
+    N_("Savings"),
+    N_("Money Market"),
+    N_("Credit Line")
   */
 };
 
@@ -1447,7 +1376,7 @@ char *
 xaccAccountGetTypeStr(int type) {
   if (0 > type) return "";
   if (NUM_ACCOUNT_TYPES <= type) return "";
-  return gettext (account_type_name [type]);
+  return _(account_type_name [type]);
 }
 
 /********************************************************************\

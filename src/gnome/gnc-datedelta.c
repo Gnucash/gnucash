@@ -203,10 +203,10 @@ fill_units_menu(GNCDateDelta *gdd)
   GtkWidget *menu;
   GtkWidget *item;
   char *strings[] = {
-    DAYS_STR,
-    WEEKS_STR,
-    MONTHS_STR,
-    YEARS_STR,
+    _("Days"),
+    _("Weeks"),
+    _("Months"),
+    _("Years"),
     NULL
   };
   gint i;
@@ -249,8 +249,8 @@ fill_polarity_menu(GNCDateDelta *gdd)
   GtkWidget *menu;
   GtkWidget *item;
   char *strings[] = {
-    AGO_STR,
-    FROM_NOW_STR,
+    _("Ago"),
+    _("From Now"),
     NULL
   };
   gint i;

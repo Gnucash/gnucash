@@ -449,8 +449,8 @@ html_window_fill_toolbar(HTMLWindow *hw)
   GnomeUIInfo toolbar_start[] = 
   {
     { GNOME_APP_UI_ITEM,
-      BACK_STR,
-      TOOLTIP_HTML_BACK,
+      _("Back"),
+      _("Move back one step in the history"),
       htmlBackCB, hw,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -458,8 +458,8 @@ html_window_fill_toolbar(HTMLWindow *hw)
       0, 0, NULL
     },
     { GNOME_APP_UI_ITEM,
-      FORWARD_STR,
-      TOOLTIP_HTML_FORW,
+      _("Forward"),
+      _("Move forward one step in the history"),
       htmlFwdCB, hw,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -472,8 +472,8 @@ html_window_fill_toolbar(HTMLWindow *hw)
   {
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      PRINT_STR,
-      "Print HTML Window",
+      _("Print"),
+      _("Print HTML Window"),
       htmlPrintCB, hw,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 
@@ -482,8 +482,8 @@ html_window_fill_toolbar(HTMLWindow *hw)
     },
     GNOMEUIINFO_SEPARATOR,
     { GNOME_APP_UI_ITEM,
-      CLOSE_STR,
-      TOOLTIP_CLOSE_HTML,
+      _("Close"),
+      _("Close this HTML window"),
       closeHtmlWinCB, hw,
       NULL,
       GNOME_APP_PIXMAP_STOCK, 

@@ -278,8 +278,6 @@ guint32
 gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc)
 {
   VirtualCell *vcell;
-  CellBlockCell *cb_cell;
-  BasicCell *cell;
   guint32 bg_color;
 
   bg_color = 0xffffff; /* white */
@@ -297,7 +295,7 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc)
       bg_color = vcell->cellblock->passive_bg_color;
     else if (table->alternate_bg_colors)
     {
-      if ((virt_loc.vcell_loc.virt_row % 2) == 1)
+      if (vcell->start_primary_color)
         bg_color = vcell->cellblock->passive_bg_color;
       else
         bg_color = vcell->cellblock->passive_bg_color2;
@@ -306,22 +304,7 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc)
       bg_color = vcell->cellblock->passive_bg_color;
     else
       bg_color = vcell->cellblock->passive_bg_color2;
-
-    return bg_color;
   }
-
-  cb_cell = gnc_cellblock_get_cell (vcell->cellblock,
-                                    virt_loc.phys_row_offset,
-                                    virt_loc.phys_col_offset);
-  if (cb_cell == NULL)
-    return bg_color;
-
-  cell = cb_cell->cell;
-  if (cell == NULL)
-    return bg_color;
-
-  if (cell->use_bg_color)
-    bg_color = cell->bg_color;
 
   return bg_color;
 }
@@ -406,7 +389,7 @@ gnc_virtual_cell_construct (gpointer _vcell, gpointer user_data)
   else
     vcell->vcell_data = NULL;
 
-  vcell->visible = TRUE;
+  vcell->visible = 1;
 }
 
 /* ==================================================== */
@@ -442,6 +425,8 @@ void
 gnc_table_set_vcell (Table *table,
                      CellBlock *cursor,
                      gconstpointer vcell_data,
+                     gboolean visible,
+                     gboolean start_primary_color,
                      VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
@@ -467,6 +452,9 @@ gnc_table_set_vcell (Table *table,
     table->vcell_data_copy (vcell->vcell_data, vcell_data);
   else
     vcell->vcell_data = (gpointer) vcell_data;
+
+  vcell->visible = visible ? 1 : 0;
+  vcell->start_primary_color = start_primary_color ? 1 : 0;
 }
 
 /* ==================================================== */
@@ -489,6 +477,25 @@ gnc_table_set_virt_cell_data (Table *table,
     table->vcell_data_copy (vcell->vcell_data, vcell_data);
   else
     vcell->vcell_data = (gpointer) vcell_data;
+}
+
+/* ==================================================== */
+
+void
+gnc_table_set_virt_cell_visible (Table *table,
+                                 VirtualCellLocation vcell_loc,
+                                 gboolean visible)
+{
+  VirtualCell *vcell;
+
+  if (table == NULL)
+    return;
+
+  vcell = gnc_table_get_virtual_cell (table, vcell_loc);
+  if (vcell == NULL)
+    return;
+
+  vcell->visible = visible ? 1 : 0;
 }
 
 /* ==================================================== */
@@ -1296,16 +1303,21 @@ gnc_table_move_vertical_position (Table *table,
                                   int phys_row_offset)
 {
   VirtualLocation vloc;
+  VirtualCell *vcell;
+  gint last_visible_row;
 
   if ((table == NULL) || (virt_loc == NULL))
     return FALSE;
 
   vloc = *virt_loc;
+  last_visible_row = vloc.vcell_loc.virt_row;
+
+  vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+  if ((vcell == NULL) || (vcell->cellblock == NULL))
+    return FALSE;
 
   while (phys_row_offset != 0)
   {
-    VirtualCell *vcell;
-
     /* going up */
     if (phys_row_offset < 0)
     {
@@ -1327,27 +1339,17 @@ gnc_table_move_vertical_position (Table *table,
         vloc.vcell_loc.virt_row--;
 
         vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
-        if ((vcell == NULL) || (vcell->cellblock == NULL))
-          return FALSE;
-      } while (!vcell->visible);
+      } while (vcell && vcell->cellblock && !vcell->visible);
 
+      if (!vcell || !vcell->cellblock)
+        break;
+
+      last_visible_row = vloc.vcell_loc.virt_row;
       vloc.phys_row_offset = vcell->cellblock->num_rows - 1;
     }
     /* going down */
     else
     {
-      do
-      {
-        vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
-        if ((vcell == NULL) || (vcell->cellblock == NULL))
-          return FALSE;
-
-        if (vcell->visible)
-          break;
-
-        vloc.vcell_loc.virt_row++;
-      } while (TRUE);
-
       phys_row_offset--;
 
       /* room left in the current cursor */
@@ -1361,10 +1363,22 @@ gnc_table_move_vertical_position (Table *table,
       if (vloc.vcell_loc.virt_row == (table->num_virt_rows - 1))
         break;
 
-      vloc.vcell_loc.virt_row++;
+      do
+      {
+        vloc.vcell_loc.virt_row++;
+
+        vcell = gnc_table_get_virtual_cell (table, vloc.vcell_loc);
+      } while (vcell && vcell->cellblock && !vcell->visible);
+
+      if (!vcell || !vcell->cellblock)
+        break;
+
+      last_visible_row = vloc.vcell_loc.virt_row;
       vloc.phys_row_offset = 0;
     }
   }
+
+  vloc.vcell_loc.virt_row = last_visible_row;
 
   {
     gboolean changed = !virt_loc_equal (vloc, *virt_loc);

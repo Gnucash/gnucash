@@ -85,7 +85,7 @@ static GtkWidget *
 gnc_ui_totd_dialog_create(void)
 {
   char *new_hint;
-  win = gnome_dialog_new(TOTD_STR, 
+  win = gnome_dialog_new(_("Tip of the Day:"), 
 			 GNOME_STOCK_BUTTON_PREV, 
 			 GNOME_STOCK_BUTTON_NEXT, 
 			 GNOME_STOCK_BUTTON_CLOSE, 
@@ -100,7 +100,8 @@ gnc_ui_totd_dialog_create(void)
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollwin),
 				 GTK_POLICY_NEVER,
 				 GTK_POLICY_NEVER);
-  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox), scrollwin, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox),
+                     scrollwin, TRUE, TRUE, 0);
   canvas = gnome_canvas_new();
   gnome_canvas_set_scroll_region(GNOME_CANVAS(canvas),
   				 0.0,0.0,width,height);
@@ -115,11 +116,14 @@ gnc_ui_totd_dialog_create(void)
   old_enabled = gnc_lookup_boolean_option("General",
 					  "Display \"Tip of the Day\"",
 					  TRUE);
-  disable_cb = gtk_check_button_new_with_label(DISPLAY_NEXT_TIME_STR);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_cb),
-  				old_enabled);
+  {
+    const char *message = _("Display this dialog next time");
+    disable_cb = gtk_check_button_new_with_label(message);
+  }
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_cb), old_enabled);
 
-  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox), disable_cb, TRUE, TRUE, 0);
+  gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(win)->vbox),
+                     disable_cb, TRUE, TRUE, 0);
   gtk_widget_show(disable_cb);
 
   gnome_dialog_button_connect(GNOME_DIALOG(win), 0,
@@ -302,7 +306,7 @@ draw_on_canvas(GtkWidget *canvas, char *hint)
     "y",(double)25.0,
     "fill_color","white",
     "font",_("-*-helvetica-bold-r-normal-*-*-180-*-*-p-*-*-*"),
-    "text",TOTD_STR,
+    "text",_("Tip of the Day:"),
     NULL);
 
   grow_text_if_necessary();

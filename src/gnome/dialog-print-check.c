@@ -29,7 +29,7 @@
 #include <guile/gh.h>
 
 #include "top-level.h"
-#include "messages_i18n.h"
+#include "messages.h"
 #include "dialog-print-check.h"
 #include "dialog-utils.h"
 #include "window-help.h"
@@ -250,6 +250,6 @@ gnc_ui_print_check_dialog_cancel_cb(GtkButton * button,
 void
 gnc_ui_print_check_dialog_help_cb(GtkButton * button, 
                                   gpointer user_data) {
-  helpWindow(NULL, HELP_STR, HH_PRINTCHECK);
+  helpWindow(NULL, NULL, HH_PRINTCHECK);
 }
 

@@ -91,6 +91,8 @@ typedef struct
   short num_rows;
   short num_cols;
 
+  short cursor_type;
+
   GTable *cb_cells; /* Holds the CellBlockCell data */
 
   /* The active_bg_color is the default color (in argb) for the cell
@@ -110,7 +112,7 @@ typedef struct
 } CellBlock;
 
 
-CellBlock * gnc_cellblock_new (int rows, int cols);
+CellBlock * gnc_cellblock_new (int rows, int cols, int cursor_type);
 
 void        gnc_cellblock_destroy (CellBlock *cellblock);
 

@@ -99,10 +99,15 @@ item_edit_get_pixel_coords (ItemEdit *item_edit,
                             int *w, int *h)
 {
         GnucashSheet *sheet = item_edit->sheet;
+        SheetBlock *block;
         int xd, yd;
 
-        gnucash_sheet_block_pixel_origin (sheet, item_edit->virt_loc.vcell_loc,
-                                          &xd, &yd);
+        block = gnucash_sheet_get_block (sheet, item_edit->virt_loc.vcell_loc);
+        if (block == NULL)
+                return;
+
+        xd = block->origin_x;
+        yd = block->origin_y;
 
         gnucash_sheet_style_get_cell_pixel_rel_coords
                 (item_edit->style,
@@ -118,6 +123,7 @@ item_edit_get_pixel_coords (ItemEdit *item_edit,
 static void
 item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
 {
+        SheetBlock *block;
         SheetBlockStyle *style;
         GtkEditable *editable;
         Table *table;
@@ -135,6 +141,9 @@ item_edit_draw_info(ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         table = item_edit->sheet->table;
 
         info->font = GNUCASH_GRID(item_edit->sheet->grid)->normal_font;
+
+        block = gnucash_sheet_get_block (item_edit->sheet,
+                                         item_edit->virt_loc.vcell_loc);
 
         argb = gnc_table_get_bg_color (table, item_edit->virt_loc);
 

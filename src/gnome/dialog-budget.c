@@ -238,7 +238,7 @@ string_to_description(char *string, gboolean no_blank)
   if ((string == NULL) || (*string == '\0'))
   {
     if (no_blank)
-      return g_strconcat("<", NO_DESC_STR, ">", NULL);
+      return g_strconcat("<", _("No description"), ">", NULL);
     else
       return g_strdup("");
   }

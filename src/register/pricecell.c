@@ -152,6 +152,8 @@ PriceParse (PriceCell *cell)
   else
     cell->amount = 0.0;
 
+  COLORIZE (cell, cell->amount);
+
   newval = xaccPriceCellPrintValue(cell);
 
   /* If they are identical do nothing */

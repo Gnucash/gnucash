@@ -89,6 +89,7 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
                                 XferDirection direction,
                                 GtkTooltips *tooltips)
 {
+  const char *show_inc_exp_message = _("Show the income and expense accounts");
   GNCAccountTree *atree;
   GtkWidget *scroll_win;
   GtkWidget *button;
@@ -140,7 +141,7 @@ gnc_xfer_dialog_fill_tree_frame(XferDialog *xferData,
     xferData->from_show_button = button;
 
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
-  gtk_tooltips_set_tip(tooltips, button, SHOW_INC_EXP_MSG, NULL);
+  gtk_tooltips_set_tip(tooltips, button, show_inc_exp_message, NULL);
 
   gtk_signal_connect(GTK_OBJECT(button), "toggled",
 		     GTK_SIGNAL_FUNC(gnc_xfer_dialog_toggle_cb), tree);
@@ -157,7 +158,8 @@ gnc_parse_error_dialog (XferDialog *xferData)
   if (error_string == NULL)
     error_string = "";
 
-  error_phrase = g_strdup_printf(ERROR_IN_AMOUNT, error_string);
+  error_phrase = g_strdup_printf(_("You must enter a valid amount.\n\n"
+                                   "Error: %s."), error_string);
 
   gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), error_phrase);
 
@@ -321,19 +323,30 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 
   if ((from == NULL) || (to == NULL))
   {
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), XFER_NO_ACC_MSG);
+    const char *message = _("You must specify an account to transfer from,\n"
+                            "or to, or both, for this transaction.\n"
+                            "Otherwise, it will not be recorded.");
+    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
     return;
   }
 
   if (from == to)
   {
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), XFER_SAME_MSG);
+    const char *message = _("You can't transfer from and to the same "
+                            "account!");
+    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
     return;
   }
 
   if (!xaccAccountsHaveCommonCurrency(from, to))
   {
-    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), XFER_CURR_MSG);
+    const char *message = _("You cannot transfer between those accounts.\n"
+                            "They do not have a common currency.\n"
+                            "To transfer funds between "
+                            "accounts with different currencies you\n"
+                            "need an intermediate currency account.\n"
+                            "Please see the GnuCash online manual");
+    gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
     return;
   }
 

@@ -192,7 +192,7 @@ helpJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
  *   opens up a help window, and displays html                      * 
  *                                                                  * 
  * Args:   parent   - the parent widget                             * 
- *         title    - the title of the window                       * 
+ *         title    - the title of the window, defaults to "Help"   * 
  *         htmlfile - the file name of the help file to display     * 
  * Return: none                                                     * 
 \********************************************************************/
@@ -201,6 +201,9 @@ helpWindow(GtkWidget *parent, const char *title, const char *htmlfile)
 {
   HTMLData *html_data;
   HelpData *help_data;
+
+  if (title == NULL)
+    title = _("Help");
 
   if (helpwindow == NULL)
     helpwindow = gnc_html_window_new(helpAnchorCB, helpJumpCB);

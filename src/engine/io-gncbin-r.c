@@ -419,7 +419,7 @@ xaccReadAccountGroup(int fd)
     /* create a lost account, put the missing accounts there */
     acc = xaccMallocAccount();
     xaccAccountBeginEdit (acc);
-    xaccAccountSetName (acc, LOST_ACC_STR);
+    xaccAccountSetName (acc, _("Lost Accounts"));
     acc -> children = holder;
     xaccAccountCommitEdit (acc);
     xaccGroupInsertAccount (grp, acc);

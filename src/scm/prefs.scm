@@ -274,7 +274,7 @@ transaction." #t))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Header background"
+  "Register Colors" "Header color"
   "a" "The header background color"
   (list #x96 #xb2 #x84 0)
   255
@@ -282,88 +282,56 @@ transaction." #t))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Single mode default even row background"
-  "b" "The default background color for even rows in single mode"
+  "Register Colors" "Primary color"
+  "b" "The default background color for register rows"
+  (list #xbf #xde #xba 0)
+  255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-color-option
+  "Register Colors" "Secondary color"
+  "c" "The default secondary background color for register rows"
   (list #xf6 #xff #xdb 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Single mode default odd row background"
-  "bb" "The default background color for odd rows in single mode"
-  (list #xbf #xde #xba 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  "Register Colors" "Single mode active background"
-  "c" "The background color for the active transaction in single mode"
+  "Register Colors" "Primary active color"
+  "d" "The background color for the current register row"
   (list #xff #xf7 #xba 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Double mode default even row background"
-  "d" "The default background color for even rows in double mode"
-  (list #xf6 #xff #xdb 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  "Register Colors" "Double mode default odd row background"
-  "e" "The default background color for odd rows in double mode"
-  (list #xbf #xde #xba 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  "Register Colors" "Double mode colors alternate with transactions"
-  "ee" "Alternate the even and odd colors with each transaction, not each row"
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  "Register Colors" "Double mode active background"
-  "f" "The background color for the active transaction in double mode"
-  (list #xff #xf7 #xba 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  "Register Colors" "Multi mode default transaction background"
-  "g" "The default background color for transactions in multi-line mode and the auto modes"
-  (list #xbf #xde #xba 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  "Register Colors" "Multi mode active transaction background"
-  "h" "The background color for an active transaction in multi-line mode and the auto modes"
+  "Register Colors" "Secondary active color"
+  "e" "The secondary background color for the current register row"
   (list #xff #xf0 #x99 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Multi mode default split background"
-  "i" "The default background color for splits in multi-line mode and the auto modes"
+  "Register Colors" "Split color"
+  "f" "The default background color for split rows in the register"
   (list #xff #xfa #xd9 0)
   255
   #f))
 
 (gnc:register-configuration-option
  (gnc:make-color-option
-  "Register Colors" "Multi mode active split background"
-  "j" "The background color for an active split in multi-line mode and the auto modes"
+  "Register Colors" "Split active color"
+  "g" "The background color for the current split row in the register"
   (list #xff #xf2 #xab 0)
   255
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "Register Colors" "Double mode colors alternate with transactions"
+  "h" "Alternate the primary and secondary colors with each transaction, not each row"
   #f))
 
 

@@ -73,7 +73,7 @@ fileBox(const char * title, const char * filter)
 
   /* Set a default title if nothing was passed in */  
   if (title == NULL)
-    title = OPEN_STR;
+    title = _("Open");
 
   if (fb_info.file_name != NULL)
     g_free(fb_info.file_name);

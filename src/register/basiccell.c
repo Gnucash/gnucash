@@ -71,9 +71,7 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->input_output = XACC_CELL_ALLOW_ALL;
    cell->changed = 0;
 
-   cell->bg_color = 0xffffff;  /* white */
    cell->fg_color = 0x0;       /* black */
-   cell->use_bg_color = 0;     /* ignore the color */
    cell->use_fg_color = 0;     /* ignore the color */
 
    cell->value = g_strdup("");

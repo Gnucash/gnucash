@@ -263,7 +263,7 @@ gnc_ui_print_dialog_cancel_cb(GtkButton * button, gpointer user_data) {
 
 void
 gnc_ui_print_dialog_help_cb(GtkButton * button, gpointer user_data) {
-  helpWindow(NULL, HELP_STR, HH_PRINT);
+  helpWindow(NULL, NULL, HH_PRINT);
 }
 
 
