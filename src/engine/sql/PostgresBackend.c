@@ -211,6 +211,10 @@ static const char *table_create_str =
 #include "table-create.c"
 ;
 
+static const char *sql_functions_str = 
+#include "functions.c"
+;
+
 static const char *table_drop_str = 
 #include "table-drop.c"
 ;
@@ -2675,8 +2679,13 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          return;
       }
 
-      /* finally, create all the tables and indexes */
+      /* Finally, create all the tables and indexes.
+       * We do this in pieces, so as not to exceed the max length
+       * for postgres queries (which is 8192). 
+       */
       SEND_QUERY (be,table_create_str, );
+      FINISH_QUERY(be->connection);
+      SEND_QUERY (be,sql_functions_str, );
       FINISH_QUERY(be->connection);
    }
 #endif
