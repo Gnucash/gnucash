@@ -2,7 +2,7 @@ Source: xacc
 Section: utils
 Priority: extra
 Maintainer: Tyson Dowd <trd@cs.mu.oz.au>
-Standards-Version: 2.1.2.2
+Standards-Version: 2.3.0.1
 
 Package: xacc
 Architecture: any
