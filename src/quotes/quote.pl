@@ -1,19 +1,23 @@
 #!/usr/bin/perl
+# real file name  value_portfolio
 #######################################################################
 # $Id$
 # Looks up investment prices on the web, and builds a report
 # to summarize the results
 #######################################################################
-$HISTORYFILE="/home/cbbrowne/financial/histprices";
+$HISTORYFILE="histprices";
 $newprices = "NO";  # Haven't found *any* new prices so far...
 
 #######################################################################
 # Start by initializing the security list
 #######################################################################
 # My TSE stocks...  
+
 #######################################################################
 &add_stock("T", 100, 1670.5, "TSE");
-&add_stock("NVA", 100, 1345.5, "TSE");
+#&add_stock("NVA", 100, 1345.5, "TSE");
+&add_stock("NVA", 100, -10.16, "TSE");
+&add_stock("TRP", 52, 1345.50, "TSE");
 &add_stock("PCA", 100, 1733, "TSE");
 &add_stock("TOC", 50, 21.035*50, "TSE");
 &add_stock("RY", 50, 32.785*50, "TSE");
@@ -33,26 +37,39 @@ $newprices = "NO";  # Haven't found *any* new prices so far...
 #&add_stock("CTEMER", 27.463, 266.67, "CTE");
 #&add_stock("CTIBND", 84.879, 907.37, "CTE");
 
-# Units as at Dec 31/97
-&add_stock("CTMM", 87.033, 839.51, "CTE"); 
-&add_stock("CTBOND", 131.818, 1315.17, "CTE");
-&add_stock("CTSTK", 57.425, 832.73, "CTE");
+# Units as at Oct 31/98
+&add_stock("CTMM", 89.572, 839.51, "CTE"); 
+
+&add_stock("CTBOND", 137.398, 1315.17, "CTE");
+&add_stock("CTSTK", 62.896, 832.73, "CTE");
 &add_stock("CTSPEC", 28.263, 504.07, "CTE");
-&add_stock("CTAMER", 206.301, 1983.05, "CTE");
-&add_stock("CTUSEQ", 19.644, 294.91, "CTE");
+&add_stock("CTAMER", 251.604, 1983.05, "CTE");
+&add_stock("CTUSEQ", 20.467, 294.91, "CTE");
 &add_stock("CTASIA", 28.238, 251.99, "CTE");
-&add_stock("CTEURO", 71.689, 530.50, "CTE");
+&add_stock("CTEURO", 91.298, 530.50, "CTE");
 &add_stock("CTEMER", 27.463, 266.67, "CTE");
-&add_stock("CTIBND", 91.056, 907.37, "CTE");
+&add_stock("CTIBND", 94.264, 907.37, "CTE");
 
 # Stuff on NYSE
 &add_stock("MOT", 15, (62+5/8)*15, "NYSE");
 #&add_stock("IFMXE", 0.1, 0.1, "NYSE");
 &add_stock("TSG", 13.0289, 43.02*5+43.75+44.48, "NYSE");
+&add_stock("TSG", 27.619-13.0289, 44.48*8, "NYSE");
+
+# SuperSaver 401(k)... Approximate...
+&add_stock("AADBX", 0.3*2115.93/14, 0.3*1604.85, "NYSE");
+&add_stock("AADEX", 0.5*2115.93/19, 0.5*1604.85, "NYSE");
+&add_stock("AAIEX", 0.2*2115.93/15, 0.2*1604.85, "NYSE");
+
+# SGRP Balances: Approximate...
+&add_stock("AADBX", 712.33/14.9, 700, "NYSE");  # Balanced
+&add_stock("AADEX", 4556.64/22.5 + (533.94+200.24+183.55)/22.5, 3500+(533.94+200.24+183.55), "NYSE");  # Equity
+&add_stock("AAIEX", 1829.63/18.8 + (213.57+80.1+73.41)/18.8, 1700+(213.57+80.1+73.41), "NYSE");  # Int'l Equity
+&add_stock("AASPX", 2104.81/15 + (320.37+120.12+110.13)/15, 1900 + (320.37+120.12+110.13), "NYSE");  # Stock Index
 
 
 #######################################################################
-# Working Ventures fund... Not currently updatable via the Web...
+# Working Ventures fund...  
 #######################################################################
 &add_stock("WORKVE", 219.701, 3000, "OTHER");
 $PRICE{"WORKVE"} = 3000/219.701;   # Hack in a price for Working Ventures
@@ -76,7 +93,7 @@ $CURRNAME{"CDN"} = "Canadian";
 $CURRNAME{"USD"} = "United States";
 $CURRATE{"CDN"} = 1;
 $CURRATE{"USD"} = 1.37;
-# &get_currency("USD");
+&get_currency("USD");
 #######################################################################
 # Now, get the current prices by sundry queries of web sites
 #######################################################################
@@ -123,8 +140,8 @@ exit 0;   # Done
 #######################################################################
 sub add_stock {
     local($ticker, $num, $cost, $exchange) = @_;
-    $NUM{$ticker} = $num;
-    $COST{$ticker} = $cost;
+    $NUM{$ticker} += $num;
+    $COST{$ticker} += $cost;
     $EXCHANGE{$ticker} = $exchange;
     local ($currency) = "CDN";
     if ($exchange eq "TSE") {
@@ -160,7 +177,7 @@ sub get_url_command {
 #######################################################################
 sub search_web_for_prices {
     local ($ticker);
-    
+
     # Do some per-ticker searching
     foreach $ticker (keys EXCHANGE) {
 	local($exchange) = $EXCHANGE{$ticker};
@@ -168,7 +185,7 @@ sub search_web_for_prices {
 	    &get_TSE($ticker);
 	    &get_yahoo($ticker, "TSE");
 	}
-      
+
 	if ($exchange eq "CTE") {
 	    # Do nothing; data is coming
 	    # in en masse via &get_all_everest_rates;
@@ -177,13 +194,13 @@ sub search_web_for_prices {
 	    &get_yahoo($ticker, $EXCHANGE{$ticker});
 	}
     }
-    
+
     # search for CT Everest fund data
     &get_CT_Everest;  # Get Everest mutual fund data
-    
+
     # Search for Working Ventures fund data
     &get_WV;
-    
+
     # get all of the TSE stock prices
     #    foreach $ticker (ord("a")..ord("z")) {
     #      &get_TSE( chr($ticker) );
@@ -198,6 +215,7 @@ sub search_web_for_prices {
 sub get_TSE {
     local ($stock) = @_;
     local ($page) = "http://www.telenium.ca/TSE/" . 
+
 	lc(
            substr($stock, 0, 1)
           ) 
@@ -214,12 +232,12 @@ sub get_TSE {
 #	print $line, "\n";
 	if ($line =~ /(\d*\.\d*)\D+\d+\S*\s+\d+\s+\S+\s+\d+\/\d+\s+(\S*)\s*$/) {
 	    local($lp, $ls) = (sprintf("%.4f", $1), $2);
-            
+
 #	    print "Found $ls @ $lp\n";
-            #... 21.3  21.35 21.2  21.2 -0.15   142300  193     02/14     T
-            #... 19.4  19.5  19.2  19.35-0.1    687239  181     02/04     T
-            #... 51.5  52    50.6  51.4  0     1527378  583     02/05     RY
-	    
+            #... 21.3  21.35 21.2  21.2 -0.15   142300  193     02/14    T
+            #... 19.4  19.5  19.2  19.35-0.1    687239  181     02/04    T
+            #... 51.5  52    50.6  51.4  0     1527378  583     02/05    RY
+
 	    #... 1.18  1.2   1.1   1.2   0.02   44700   29      02/03     NBX
 	    #                      ^^^
 	    #                      Want this "close" value...
@@ -256,6 +274,7 @@ sub get_yahoo {
 	$exchange = ".TO";
     }
     local ($page) = "http://quote.yahoo.com/download/quotes.csv?symbols=" . 
+
            $stock . $exchange .
 	       "&format=sl1d1t1c1ohgv&ext=.csv";
     if ($OLD{$stock} eq "NO!") {  # We've already priced this stock
@@ -304,7 +323,8 @@ sub get_CT_Everest {
 		    $newprices = "YES";
 		    print "NEW PRICE: $fund, $value\n";
 
-		}	
+		}
+
 		$PRICE{$ID{$fund}} = $value;
 		$OLD{$ID{$fund}} = "NO!";  # Indicate that this is an update...
 #		print "CT Price: $value ", $ID{$fund}, "\n";
@@ -329,7 +349,8 @@ sub get_WV {
 		if (($1 * 1.0) != $PRICE{"WORKVE"}) {
 		    $newprices = "YES";
 		    print "NEW PRICE: WV, $1\n";
-		}	
+		}
+
 		$PRICE{"WORKVE"} = sprintf("%.4f", $1);
 		$OLD{"WORKVE"} = "NO!";  # Indicate that this is an update...
 	}
@@ -354,7 +375,7 @@ sub ct_fund_ids {
 	   "DIV INCOME     ", "CTDIV", 
 	   "STOCK          ", "CTSTK", 
 	   "SPECIAL EQUITY ", "CTSPEC", 
-	   "INT'L BOND     ", "CTIBND", 
+	   "INT'L BOND     ", "CTIBND",
 	   "NORTH AMERICAN ", "CTNA",
 	   "AMERIGROWTH    ", "CTAMER", 
 	   "U.S. EQUITY    ", "CTUSEQ", 
@@ -412,6 +433,7 @@ sub load_prices {
 }   
 
 
+
 #######################################################################
 ############################ &show_report();###########################
 #######################################################################
@@ -423,4 +445,229 @@ sub show_report {
     chop $date;
     local($ticker, $shares, $price, $value, $cost, $profitloss);
     local ($tp, $tv, $tc);
+format STDOUT_TOP =
+                          Portfolio Valuation
+                  as at @<<<<<<<<<<<<<<<<<<<<<<<<<<<
+$date                          
+Ticker     Shares  Recent Price   Value        Cost       Profit/Loss
+------------------------------------------------------------------------
+.
+
+
+format STDOUT = 
+@<<<<<<<  @>>>>>>>  @>>>>>>>>  @>>>>>>>>>>> @>>>>>>>>>>>  @>>>>>>>>>>>>
+$ticker, $shares, $price, $value, $cost, $profitloss
+.
+
+
+    foreach $stock (sort keys EXCHANGE) {
+        if ($stock ne "zPortfolio") {
+	    $ticker = $stock;
+	    $shares = sprintf("%.4f", $NUM{$stock});
+	    $price = sprintf("%.4f", $PRICE{$stock});
+	    $value = sprintf("%.2f", $shares * $price * $CURRATE{$CURRENCY{$stock}});
+	    $cost = sprintf("%.2f", $COST{$stock} * $CURRATE{$CURRENCY{$stock} });
+	    $profitloss = sprintf("%.2f", $value - $cost);
+	    $tv += $value;
+	    $tc += $cost;
+	    $tp += $profitloss;
+	    write;
+        }
+    }
+
+($ticker, $shares, $price, $value, $cost, $profitloss) =
+    ("", "", "", "---------------", "---------------", "---------------");
+write;
+
+($ticker, $shares, $price, $value, $cost, $profitloss) =
+    ("Total", "", "",  sprintf("%.2f", $tv), sprintf("%.2f" ,$tc),
+     sprintf("%.2f" ,$tp));
+
+write;
+($ticker, $shares, $price, $value, $cost, $profitloss) =
+    ("", "", "", "===============", "===============", "===============");
+write;
 }
+
+
+
+#########################################################################=
+#####
+##############################  Find Variances  #########################=
+#####
+#########################################################################=
+#####
+sub calc_variances {
+    local ($x);
+    open(PRICEF, "<$HISTORYFILE");
+    while (<PRICEF>) {
+	($date, $id, $price) = split(/\|/, $_);
+	$XCOUNT{$id} ++;
+	$quantity = $NUM{$id};
+        $x = $quantity * $price * $CURRATE{$CURRENCY{$id}};
+	$XSUM{$id} += $x;
+	$XSQUARESUM{$id} += ($x * $x);
+
+	$DATES{$date} ++;
+	$PRICES{"$date|$id"} = $price;
+#    printf "XC: %9.2f  XSUM: %9.2f  XSQ: %9.2f\n", $XCOUNT{$id}, $XSUM{$id}, $XSQUARESUM{$id};
+    }
+
+    &complete_price_list();   # Get prices for *every* day
+    &value_portfolios();      # Value the portfolio for every day
+}
+
+# Need to make sure that we have prices for each stock for each date
+# This is done by (for each stock) going thru all the dates, and
+# inserting prices for dates where prices are missing.  We use the
+# last price present for the stock.
+sub complete_price_list {
+    foreach $stock (keys XCOUNT) {
+	$current_price = $XSUM{$stock} / $XCOUNT{$stock};
+
+	# Move forwards until a price gets found.  That price
+	# is then used for all "empty" price slots up to the first
+	# actual measurement
+      FIRSTPRICE:
+	foreach $date (sort keys DATES) {
+	    if ($PRICES{"$date|$stock"}) {
+		$current_price = $PRICES{"$date|$stock"};
+		last FIRSTPRICE;
+	    }
+	}
+
+	# Now, proceed onwards...
+	foreach $date (sort keys DATES) {
+	    if ($PRICES{"$date|$stock"}) {
+		# There's a price
+		$current_price = $PRICES{"$date|$stock"};
+	    } else {
+		$PRICES{"$date|$stock"} = $current_price;
+	    }
+	}
+    }
+}
+
+sub value_portfolios {
+#    &setup_portfolio_quantities();
+    $NUM{"zPortfolio"}=1;
+    foreach $date (sort keys DATES) {
+	$price = 0;
+	foreach $stock (keys XCOUNT) {
+	    $price += $NUM{$stock} * $PRICES{"$date|$stock"}* $CURRATE{$CURRENCY{$stock}};
+	}
+	$XCOUNT{"zPortfolio"} ++;
+	$XSUM{"zPortfolio"} += $price;
+	$XSQUARESUM{"zPortfolio"} += ($price * $price);
+#    printf "Portfolio on %15s valued at %14.2f\n", $date, $price;
+
+    }
+}
+
+sub hilo_portfolios {
+   local($date, $hi, $lo, $hival, $loval);
+   local ($stock, $price, $latest_date);
+   foreach $stock (keys XCOUNT) {
+        $LO{$stock} =  99999999;
+        $HI{$stock} =  -99999999;
+   }
+   $HI{"zPortfolio"} = -99999999;
+   $LO{"zPortfolio"} = 99999999;
+   foreach $date (keys DATES) {
+       local ($pprice);
+       local($dt) = split(/-/, $date);
+       foreach $stock (keys XCOUNT) {
+	   $price = $PRICES{"$date|$stock"};
+	   if ($date >= $latest_date) {
+	       $latest_date = $date;
+	       $CURRENT{$stock} = $price;
+	   }
+	   if ($price > $HI{$stock}) {
+	       ($HI{$stock}, $HIDATE{$stock}) = ($price, $dt);
+	   }
+	   if ($price < $LO{$stock}) {
+	       ($LO{$stock}, $LODATE{$stock}) = ($price, $dt);
+	   }
+	   $pprice += $NUM{$stock} * $price;
+       }
+       if ($date >= $latest_date) {
+	   $latest_date = $date;
+	   $CURRENT{"zPortfolio"} = $pprice;
+       }
+       if ($pprice > $HI{"zPortfolio"}) {
+	   ($HI{"zPortfolio"}, $HIDATE{"zPortfolio"}) = ($pprice, $dt);
+       }
+       if ($pprice > $LO{"zPortfolio"}) {
+	   ($LO{"zPortfolio"}, $LODATE{"zPortfolio"}) = ($pprice, $dt);
+       }
+   }
+   # Report results...
+   print
+"-----------------------------------------------------------------------
+         Highs/Lows
+-----------------------------------------------------------------------
+";
+  printf "%10s  %10s %10s  %10s %10s  %10s\n", "Stock", "High Date", "High",
+  "Low Date", "Low Price", "Current";
+   print "-----------------------------------------------------------------------";
+  foreach $stock (sort keys XCOUNT) {
+    printf "%10s  %10s %10.2f  %10s %10.2f %10.2f\n", $stock, $HIDATE{$stock},
+    $HI{$stock}, $LODATE{$stock}, $LO{$stock}, $CURRENT{$stock};
+  }
+   print "-----------------------------------------------------------------------";
+
+}
+
+sub show_variances {
+    print
+	"-----------------------------------------------------------------------
+          Variance/Standard Deviations for Portfolio *VALUE*
+------------------------------------------------------------------------
+ Security    Mean           Variance    Std. Dev.  % Std.Dev
+------------------------------------------------------------------------
+";
+
+    foreach $i (sort keys XCOUNT) {
+	if ($XCOUNT{$i} > 2) {
+	    $variance = (($XCOUNT{$i} * $XSQUARESUM{$i}) 
+			 - ($XSUM{$i} * $XSUM{$i})) / 
+			     ($XCOUNT{$i} * ($XCOUNT{$i}-1));  
+
+	}
+	$variance = -$variance if ($variance < 0);
+	$deviation = sqrt($variance);
+
+#    printf "XC: %5d  XSUM: %9.2f  XSQ: %9.2f\n", $XCOUNT{$i}, $XSUM{$i}, $XSQUARESUM{$i};
+	# Divide by mean price to determine volatility of price
+	if ($XCOUNT{$i} != 0 && $XSUM{$i} != 0) {
+	    $volatility = $deviation / ($XSUM{$i} / $XCOUNT{$i});
+	    printf "%10s %10.2f  %14.3f  %9.3f  %9.3f\n", $i, $XSUM{$i}/$XCOUNT{$i},
+	    $variance, $deviation,
+	    $volatility *100; 
+
+	    ($VARIANCE{$i}, $STD{$i}, $VOLATILITY{$i}) = ($variance, $deviation,
+							  $volatility);
+	}
+    }
+	print "------------------------------------------------------------------------";
+
+}
+
+sub get_currency {
+    local ($to) = @_;
+    local($url) =
+	"http://www.dna.lth.se/cgi-bin/kurt/rates/rates?CAD+$to";
+    local($line, $rate);
+    local ($command) = &get_url_command($url);
+
+    local($fromname, $toname) = ($CURRNAME{"CDN"}, $CURRNAME{$to});
+    open(CURRS, "$command |");
+    while ($line = <CURRS>) {
+	if ($line =~ /Rate: $fromname.*$toname.*:\s*(\d*.\d+)/) {
+	    $rate = $1;
+	    $CURRATE{$toname} = sprintf("%f", $rate);
+	    return;
+	}
+    }
+}
+
