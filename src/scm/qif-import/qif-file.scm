@@ -23,6 +23,7 @@
         (current-xtn #f)
         (current-split #f)
         (current-account-name #f)
+        (last-seen-account-name #f)
         (default-split #f)
         (first-xtn #f)
         (ignore-accounts #f)
@@ -60,6 +61,8 @@
                    (case qstate-type 
                      ((type:bank type:cash type:ccard type:invst
                                  #{type:oth\ a}#  #{type:oth\ l}#)
+                      (if ignore-accounts (set! current-account-name last-seen-account-name))
+                      (set! ignore-accounts #f)
                       (set! current-xtn (make-qif-xtn))
                       (set! default-split (make-qif-split))
                       (qif-split:set-category! default-split "")
@@ -234,7 +237,8 @@
                    ((account)
                     (case tag
                       ((#\N)
-                       (qif-acct:set-name! current-xtn value))
+                       (qif-acct:set-name! current-xtn value)
+                       (set! last-seen-account-name value))
                       ((#\D)
                        (qif-acct:set-description! current-xtn value))
                       ((#\T)
