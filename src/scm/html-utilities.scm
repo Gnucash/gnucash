@@ -87,7 +87,10 @@
 ;; gnc:html-build-acct-table
 ;;
 ;; Builds and returns a tree-(hierarchy-)shaped table as a html-table
-;; object.
+;; object. 
+;;
+;; Note: The returned table object will have 2*tree-depth columns if
+;; show-other-curr?==#f, else it will have 3*tree-depth columns.
 ;;
 ;; Arguments: 
 ;;
@@ -416,7 +419,8 @@
            table
            (list
             (gnc:make-html-table-cell/size
-             1 (* 2 tree-depth) (gnc:make-html-text (gnc:html-markup-hr)))))
+             1 (* (if show-other-curr? 3 2)
+		  tree-depth) (gnc:make-html-text (gnc:html-markup-hr)))))
           (add-subtotal-row! 
            1 total-name 
            (get-total-fn (filter show-acct? topl-accounts) my-get-balance)

@@ -1,3 +1,8 @@
+2001-03-31  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/html-utilities.scm (gnc:html-build-acct-table): fix
+	horizontal line width if foreign currencies are shown.  
+
 2001-03-31  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/options.scm: add a text option type
