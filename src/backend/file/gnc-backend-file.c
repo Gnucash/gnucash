@@ -46,6 +46,7 @@
 #include "gnc-date.h"
 #include "gnc-trace.h"
 #include "gnc-engine-util.h"
+#include "gnc-filepath-utils.h"
 
 #include "io-gncxml.h"
 #include "io-gncbin.h"
@@ -63,18 +64,6 @@ static short module = MOD_BACKEND;
 static int file_retention_days = 0;
 static gboolean file_compression = FALSE;
 
-static void gnc_file_be_load_from_file(QofBackend *, QofBook *);
-
-static gboolean gnc_file_be_get_file_lock (FileBackend *be);
-static gboolean gnc_file_be_write_to_file(FileBackend *be, QofBook *,
-                                          const gchar *filepath,
-                                          gboolean make_backup);
-static void gnc_file_be_write_accounts_to_file(QofBackend *be,
-                                               QofBook *book);
-static void gnc_file_be_remove_old_files(FileBackend *be);
-
-QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
-
 void
 gnc_file_be_set_retention_days (int days)
 {
@@ -85,263 +74,6 @@ void
 gnc_file_be_set_compression (gboolean compress)
 {
     file_compression = compress;
-}
-
-/* ================================================================= */
-
-static void
-file_session_begin(QofBackend *be_start, QofSession *session, 
-                   const char *book_id,
-                   gboolean ignore_lock, gboolean create_if_nonexistent)
-{
-    FileBackend *be = (FileBackend*) be_start;
-    char *p;
-
-    ENTER (" ");
-
-    /* Make sure the directory is there */
-    be->dirname = g_strdup (qof_session_get_file_path (session));
-    be->fullpath = g_strdup (be->dirname);
-    p = strrchr (be->dirname, '/');
-    if (p && p != be->dirname)
-    {
-        struct stat statbuf;
-        int rc;
-
-        *p = '\0';
-        rc = stat (be->dirname, &statbuf);
-        if (rc != 0 || !S_ISDIR(statbuf.st_mode))
-        {
-            qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
-            g_free (be->fullpath); be->fullpath = NULL;
-            g_free (be->dirname); be->dirname = NULL;
-            return;
-        }
-        rc = stat (be->fullpath, &statbuf);
-        if (rc == 0 && S_ISDIR(statbuf.st_mode))
-       {
-            qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
-            g_free (be->fullpath); be->fullpath = NULL;
-            g_free (be->dirname); be->dirname = NULL;
-            return;
-        }
-    }
-
-    /* ---------------------------------------------------- */
-    /* We should now have a fully resolved path name.
-     * Lets see if we can get a lock on it. */
-
-    be->lockfile = g_strconcat(be->fullpath, ".LCK", NULL);
-
-    if (!ignore_lock && !gnc_file_be_get_file_lock (be))
-    {
-        g_free (be->lockfile); be->lockfile = NULL;
-        return;
-    }
-
-    LEAVE (" ");
-    return;
-}
-
-/* ================================================================= */
-
-static void
-file_session_end(QofBackend *be_start)
-{
-    FileBackend *be = (FileBackend*)be_start;
-    ENTER (" ");
-
-    if (be->linkfile)
-        unlink (be->linkfile);
-
-    if (be->lockfd > 0)
-        close (be->lockfd);
-
-    if (be->lockfile)
-        unlink (be->lockfile);
-
-    g_free (be->dirname);
-    be->dirname = NULL;
-
-    g_free (be->fullpath);
-    be->fullpath = NULL;
-
-    g_free (be->lockfile);
-    be->lockfile = NULL;
-
-    g_free (be->linkfile);
-    be->linkfile = NULL;
-    LEAVE (" ");
-}
-
-static void
-file_destroy_backend(QofBackend *be)
-{
-    g_free(be);
-}
-
-static void
-file_sync_all(QofBackend* be, QofBook *book)
-{
-    FileBackend *fbe = (FileBackend *) be;
-    ENTER ("book=%p, primary=%p", book, fbe->primary_book);
-
-    /* We make an important assumption here, that we might want to change
-     * in the future: when the user says 'save', we really save the one,
-     * the only, the current open book, and nothing else.  We do this
-     * because we assume that any other books that we are dealing with
-     * are 'read-only', non-editable, because they are closed books.
-     * If we ever want to have more than one book open read-write,
-     * this will have to change.
-     */
-    if (NULL == fbe->primary_book) fbe->primary_book = book;
-    if (book != fbe->primary_book) return;
-
-    gnc_file_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
-    gnc_file_be_remove_old_files (fbe);
-    LEAVE ("book=%p", book);
-}
-
-/* ================================================================= */
-/* Routines to deal with the creation of multiple books.
- * The core design assumption here is that the book
- * begin-edit/commit-edit routines are used solely to write out
- * closed accounting periods to files.  They're not currently
- * designed to do anything other than this. (Although they could be).
- */
-
-static char *
-build_period_filepath (FileBackend *fbe, QofBook *book)
-{
-    int len;
-    char *str, *p, *q;
-
-    len = strlen (fbe->fullpath) + GUID_ENCODING_LENGTH + 14;
-    str = g_new (char, len);
-    strcpy (str, fbe->fullpath);
-
-    /* XXX it would be nice for the user if we made the book 
-     * closing date and/or title part of the file-name. */
-    p = strrchr (str, '/');
-    p++;
-    p = stpcpy (p, "book-");
-    p = guid_to_string_buff (qof_book_get_guid(book), p);
-    p = stpcpy (p, "-");
-    q = strrchr (fbe->fullpath, '/');
-    q++;
-    p = stpcpy (p, q);
-    p = stpcpy (p, ".gml");
-
-    return str;
-}
-
-static void
-file_begin_edit (QofBackend *be, QofInstance *inst)
-{
-    if (0) build_period_filepath(0, 0);
-#if BORKEN_FOR_NOW
-    FileBackend *fbe = (FileBackend *) be;
-    QofBook *book = gp;
-    const char * filepath;
-
-    QofIdTypeConst typ = QOF_ENTITY(inst)->e_type;
-    if (strcmp (GNC_ID_PERIOD, typ)) return;
-    filepath = build_period_filepath(fbe, book);
-    PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
-
-    if (NULL == fbe->primary_book)
-    {
-        PERR ("You should have saved the data "
-              "at least once before closing the books!\n");
-    }
-    /* XXX To be anal about it, we should really be checking to see
-     * if there already is a file with this book GUID, and disallowing
-     * further progress.  This is because we are not allowed to 
-     * modify books that are closed (They should be treated as 
-     * 'read-only').
-     */
-#endif
-}
-
-static void
-file_rollback_edit (QofBackend *be, QofInstance *inst)
-{
-#if BORKEN_FOR_NOW
-    QofBook *book = gp;
-
-    if (strcmp (GNC_ID_PERIOD, typ)) return;
-    PINFO ("book=%p", book);
-#endif
-}
-
-static void
-file_commit_edit (QofBackend *be, QofInstance *inst)
-{
-#if BORKEN_FOR_NOW
-    FileBackend *fbe = (FileBackend *) be;
-    QofBook *book = gp;
-    const char * filepath;
-
-    if (strcmp (GNC_ID_PERIOD, typ)) return;
-    filepath = build_period_filepath(fbe, book);
-    PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
-    gnc_file_be_write_to_file(fbe, book, filepath, FALSE);
-
-    /* We want to force a save of the current book at this point,
-     * because if we don't, and the user forgets to do so, then
-     * there'll be the same transactions in the closed book,
-     * and also in the current book. */
-    gnc_file_be_write_to_file (fbe, fbe->primary_book, fbe->fullpath, TRUE);
-#endif
-}
-
-/* ================================================================= */
-
-QofBackend *
-libgncmod_backend_file_LTX_gnc_backend_new(void)
-{
-    FileBackend *fbe;
-    QofBackend *be;
-    
-    fbe = g_new0(FileBackend, 1);
-    be = (QofBackend*)fbe;
-    qof_backend_init(be);
-    
-    be->session_begin = file_session_begin;
-    be->session_end = file_session_end;
-    be->destroy_backend = file_destroy_backend;
-
-    be->load = gnc_file_be_load_from_file;
-
-    /* The file backend treats accounting periods transactionally. */
-    be->begin = file_begin_edit;
-    be->commit = file_commit_edit;
-    be->rollback = file_rollback_edit;
-
-    /* The file backend always loads all data ... */
-    be->compile_query = NULL;
-    be->free_query = NULL;
-    be->run_query = NULL;
-    be->price_lookup = NULL;
-
-    be->counter = NULL;
-
-    /* The file backend will never be multi-user... */
-    be->events_pending = NULL;
-    be->process_events = NULL;
-
-    be->sync = file_sync_all;
-    be->export = gnc_file_be_write_accounts_to_file;
-
-    fbe->dirname = NULL;
-    fbe->fullpath = NULL;
-    fbe->lockfile = NULL;
-    fbe->linkfile = NULL;
-    fbe->lockfd = -1;
-
-    fbe->primary_book = NULL;
-
-    return be;
 }
 
 /* ================================================================= */
@@ -444,96 +176,106 @@ gnc_file_be_get_file_lock (FileBackend *be)
     return TRUE;
 }
 
-/* ---------------------------------------------------------------------- */
-
-static gboolean
-is_gzipped_file(const gchar *name)
-{
-    unsigned char buf[2];
-    int fd = open(name, O_RDONLY);
-
-    if(fd == 0)
-    {
-        return FALSE;
-    }
-
-    if(read(fd, buf, 2) != 2)
-    {
-        return FALSE;
-    }
-
-    if(buf[0] == 037 && buf[1] == 0213)
-    {
-        return TRUE;
-    }
-    
-    return FALSE;
-}
-    
-static QofBookFileType
-gnc_file_be_determine_file_type(const char *path)
-{
-    if(gnc_is_xml_data_file_v2(path)) {
-        return GNC_BOOK_XML2_FILE;
-    } else if(gnc_is_xml_data_file(path)) {
-        return GNC_BOOK_XML1_FILE;
-    } else if(is_gzipped_file(path)) {
-        return GNC_BOOK_XML2_FILE;
-    } else {
-        return GNC_BOOK_BIN_FILE;
-    }
-}
-
-
-/* Load financial data from a file into the book, automtically
-   detecting the format of the file, if possible.  Return FALSE on
-   error, and set the error parameter to indicate what went wrong if
-   it's not NULL.  This function does not manage file locks in any
-   way. */
+/* ================================================================= */
 
 static void
-gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
+file_session_begin(QofBackend *be_start, QofSession *session, 
+                   const char *book_id,
+                   gboolean ignore_lock, gboolean create_if_nonexistent)
 {
-    QofBackendError error = ERR_BACKEND_NO_ERR;
-    gboolean rc;
-    FileBackend *be = (FileBackend *) bend;
+    FileBackend *be = (FileBackend*) be_start;
+    char *p;
 
-    be->primary_book = book;
+    ENTER (" ");
 
-    switch (gnc_file_be_determine_file_type(be->fullpath))
+    /* Make sure the directory is there */
+    be->dirname = xaccResolveFilePath(book_id);
+    if (NULL == be->dirname)
     {
-    case GNC_BOOK_XML2_FILE:
-        rc = qof_session_load_from_xml_file_v2 (be, book);
-        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
-        break;
+        qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+        return;
+    }
+    be->fullpath = g_strdup (be->dirname);
+    be->be.fullpath = be->fullpath;
+    p = strrchr (be->dirname, '/');
+    if (p && p != be->dirname)
+    {
+        struct stat statbuf;
+        int rc;
 
-    case GNC_BOOK_XML1_FILE:
-        rc = qof_session_load_from_xml_file (book, be->fullpath);
-        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
-        break;
-
-    case GNC_BOOK_BIN_FILE:
-        /* presume it's an old-style binary file */
-        qof_session_load_from_binfile(book, be->fullpath);
-        error = gnc_get_binfile_io_error();
-        break;
-
-    default:
-        PWARN("File not any known type");
-        error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
-        break;
+        *p = '\0';
+        rc = stat (be->dirname, &statbuf);
+        if (rc != 0 || !S_ISDIR(statbuf.st_mode))
+        {
+            qof_backend_set_error (be_start, ERR_FILEIO_FILE_NOT_FOUND);
+            g_free (be->fullpath); be->fullpath = NULL;
+            g_free (be->dirname); be->dirname = NULL;
+            return;
+        }
+        rc = stat (be->fullpath, &statbuf);
+        if (rc == 0 && S_ISDIR(statbuf.st_mode))
+       {
+            qof_backend_set_error (be_start, ERR_FILEIO_UNKNOWN_FILE_TYPE);
+            g_free (be->fullpath); be->fullpath = NULL;
+            g_free (be->dirname); be->dirname = NULL;
+            return;
+        }
     }
 
-    if(error != ERR_BACKEND_NO_ERR) 
+    /* ---------------------------------------------------- */
+    /* We should now have a fully resolved path name.
+     * Lets see if we can get a lock on it. */
+
+    be->lockfile = g_strconcat(be->fullpath, ".LCK", NULL);
+
+    if (!ignore_lock && !gnc_file_be_get_file_lock (be))
     {
-        qof_backend_set_error(bend, error);
+        g_free (be->lockfile); be->lockfile = NULL;
+        return;
     }
 
-    /* We just got done loading, it can't possibly be dirty !! */
-    qof_book_mark_saved (book);
+    LEAVE (" ");
+    return;
 }
 
-/* ---------------------------------------------------------------------- */
+/* ================================================================= */
+
+static void
+file_session_end(QofBackend *be_start)
+{
+    FileBackend *be = (FileBackend*)be_start;
+    ENTER (" ");
+
+    if (be->linkfile)
+        unlink (be->linkfile);
+
+    if (be->lockfd > 0)
+        close (be->lockfd);
+
+    if (be->lockfile)
+        unlink (be->lockfile);
+
+    g_free (be->dirname);
+    be->dirname = NULL;
+
+    g_free (be->fullpath);
+    be->fullpath = NULL;
+
+    g_free (be->lockfile);
+    be->lockfile = NULL;
+
+    g_free (be->linkfile);
+    be->linkfile = NULL;
+    LEAVE (" ");
+}
+
+static void
+file_destroy_backend(QofBackend *be)
+{
+    g_free(be);
+}
+
+/* ================================================================= */
 /* Write the financial data in a book to a file, returning FALSE on
    error and setting the error_result to indicate what went wrong if
    it's not NULL.  This function does not manage file locks in any
@@ -594,6 +336,8 @@ copy_file(const char *orig, const char *bkup)
     return TRUE;
 }
         
+/* ================================================================= */
+
 static gboolean
 gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 {
@@ -616,6 +360,47 @@ gnc_int_link_or_make_backup(FileBackend *be, const char *orig, const char *bkup)
 
     return TRUE;
 }
+
+/* ================================================================= */
+
+static gboolean
+is_gzipped_file(const gchar *name)
+{
+    unsigned char buf[2];
+    int fd = open(name, O_RDONLY);
+
+    if(fd == 0)
+    {
+        return FALSE;
+    }
+
+    if(read(fd, buf, 2) != 2)
+    {
+        return FALSE;
+    }
+
+    if(buf[0] == 037 && buf[1] == 0213)
+    {
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+    
+static QofBookFileType
+gnc_file_be_determine_file_type(const char *path)
+{
+    if(gnc_is_xml_data_file_v2(path)) {
+        return GNC_BOOK_XML2_FILE;
+    } else if(gnc_is_xml_data_file(path)) {
+        return GNC_BOOK_XML1_FILE;
+    } else if(is_gzipped_file(path)) {
+        return GNC_BOOK_XML2_FILE;
+    } else {
+        return GNC_BOOK_BIN_FILE;
+    }
+}
+
 
 static gboolean
 gnc_file_be_backup_file(FileBackend *be)
@@ -662,112 +447,8 @@ gnc_file_be_backup_file(FileBackend *be)
     return bkup_ret;
 }
 
-static int
-gnc_file_be_select_files (const struct dirent *d)
-{
-    int len = strlen(d->d_name) - 4;
-
-    if (len <= 0)
-        return(0);
-  
-    return((strcmp(d->d_name + len, ".LNK") == 0) ||
-           (strcmp(d->d_name + len, ".xac") == 0) ||
-           (strcmp(d->d_name + len, ".log") == 0));
-}
-
-static void
-gnc_file_be_remove_old_files(FileBackend *be)
-{
-    struct dirent *dent;
-    DIR *dir;
-    struct stat lockstatbuf, statbuf;
-    int pathlen;
-    time_t now;
-
-    if (stat (be->lockfile, &lockstatbuf) != 0)
-        return;
-    pathlen = strlen(be->fullpath);
-
-    /*
-     * Clean up any lockfiles from prior crashes, and clean up old
-     * data and log files.  Scandir will do a fist pass on the
-     * filenames and cull the directory down to just files with the
-     * appropriate extensions.  Pity you can't pass user data into
-     * scandir...
-     */
-
-    /*
-     * Unfortunately scandir() is not portable, so re-write this
-     * function without it.  Note that this version will be even a bit
-     * faster because it does not have to sort, malloc, or anything
-     * else that scandir did, and it only performs a single pass
-     * through the directory rather than one pass through the
-     * directory and then one pass over the 'matching' files. --
-     * warlord@MIT.EDU 2002-05-06
-     */
-    
-    dir = opendir (be->dirname);
-    if (!dir)
-        return;
-
-    now = time(NULL);
-    while((dent = readdir(dir)) != NULL) {
-        char *name;
-        int len;
-
-        if (gnc_file_be_select_files (dent) == 0)
-             continue;
-
-        name = g_strconcat(be->dirname, "/", dent->d_name, NULL);
-        len = strlen(name) - 4;
-
-        /* Is this file associated with the current data file */
-        if (strncmp(name, be->fullpath, pathlen) == 0) 
-        {
-            if ((safe_strcmp(name + len, ".LNK") == 0) &&
-                /* Is a lock file. Skip the active lock file */
-                (safe_strcmp(name, be->linkfile) != 0) &&
-                /* Only delete lock files older than the active one */
-                (stat(name, &statbuf) == 0) &&
-                (statbuf.st_mtime <lockstatbuf.st_mtime)) 
-            {
-                PINFO ("unlink lock file: %s", name);
-                unlink(name);
-            } 
-            else if (file_retention_days > 0) 
-            {
-                time_t file_time;
-                struct tm file_tm;
-                int days;
-                const char* res;
-
-                PINFO ("file retention = %d days", file_retention_days);
-
-                /* Is the backup file old enough to delete */
-                memset(&file_tm, 0, sizeof(file_tm));
-                res = strptime(name+pathlen+1, "%Y%m%d%H%M%S", &file_tm);
-                file_time = mktime(&file_tm);
-                days = (int)(difftime(now, file_time) / 86400);
-
-                /* Make sure this file actually has a date before unlinking */
-                if (res && res != name+pathlen+1 &&
-                    /* We consumed some but not all of the filename */
-                    file_time > 0 &&
-                    /* we actually have a reasonable time and it is old enough */
-                    days > file_retention_days) 
-                {
-                    PINFO ("unlink stale (%d days old) file: %s", days, name);
-                    unlink(name);
-                }
-            }
-        }
-        g_free(name);
-    }
-    closedir (dir);
-}
-
-/* ---------------------------------------------------------------------- */
-    
+/* ================================================================= */
+ 
 static gboolean
 gnc_file_be_write_to_file(FileBackend *fbe, 
                           QofBook *book, 
@@ -892,6 +573,295 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     return TRUE;
 }
 
+/* ================================================================= */
+
+static int
+gnc_file_be_select_files (const struct dirent *d)
+{
+    int len = strlen(d->d_name) - 4;
+
+    if (len <= 0)
+        return(0);
+  
+    return((strcmp(d->d_name + len, ".LNK") == 0) ||
+           (strcmp(d->d_name + len, ".xac") == 0) ||
+           (strcmp(d->d_name + len, ".log") == 0));
+}
+
+static void
+gnc_file_be_remove_old_files(FileBackend *be)
+{
+    struct dirent *dent;
+    DIR *dir;
+    struct stat lockstatbuf, statbuf;
+    int pathlen;
+    time_t now;
+
+    if (stat (be->lockfile, &lockstatbuf) != 0)
+        return;
+    pathlen = strlen(be->fullpath);
+
+    /*
+     * Clean up any lockfiles from prior crashes, and clean up old
+     * data and log files.  Scandir will do a fist pass on the
+     * filenames and cull the directory down to just files with the
+     * appropriate extensions.  Pity you can't pass user data into
+     * scandir...
+     */
+
+    /*
+     * Unfortunately scandir() is not portable, so re-write this
+     * function without it.  Note that this version will be even a bit
+     * faster because it does not have to sort, malloc, or anything
+     * else that scandir did, and it only performs a single pass
+     * through the directory rather than one pass through the
+     * directory and then one pass over the 'matching' files. --
+     * warlord@MIT.EDU 2002-05-06
+     */
+    
+    dir = opendir (be->dirname);
+    if (!dir)
+        return;
+
+    now = time(NULL);
+    while((dent = readdir(dir)) != NULL) {
+        char *name;
+        int len;
+
+        if (gnc_file_be_select_files (dent) == 0)
+             continue;
+
+        name = g_strconcat(be->dirname, "/", dent->d_name, NULL);
+        len = strlen(name) - 4;
+
+        /* Is this file associated with the current data file */
+        if (strncmp(name, be->fullpath, pathlen) == 0) 
+        {
+            if ((safe_strcmp(name + len, ".LNK") == 0) &&
+                /* Is a lock file. Skip the active lock file */
+                (safe_strcmp(name, be->linkfile) != 0) &&
+                /* Only delete lock files older than the active one */
+                (stat(name, &statbuf) == 0) &&
+                (statbuf.st_mtime <lockstatbuf.st_mtime)) 
+            {
+                PINFO ("unlink lock file: %s", name);
+                unlink(name);
+            } 
+            else if (file_retention_days > 0) 
+            {
+                time_t file_time;
+                struct tm file_tm;
+                int days;
+                const char* res;
+
+                PINFO ("file retention = %d days", file_retention_days);
+
+                /* Is the backup file old enough to delete */
+                memset(&file_tm, 0, sizeof(file_tm));
+                res = strptime(name+pathlen+1, "%Y%m%d%H%M%S", &file_tm);
+                file_time = mktime(&file_tm);
+                days = (int)(difftime(now, file_time) / 86400);
+
+                /* Make sure this file actually has a date before unlinking */
+                if (res && res != name+pathlen+1 &&
+                    /* We consumed some but not all of the filename */
+                    file_time > 0 &&
+                    /* we actually have a reasonable time and it is old enough */
+                    days > file_retention_days) 
+                {
+                    PINFO ("unlink stale (%d days old) file: %s", days, name);
+                    unlink(name);
+                }
+            }
+        }
+        g_free(name);
+    }
+    closedir (dir);
+}
+
+static void
+file_sync_all(QofBackend* be, QofBook *book)
+{
+    FileBackend *fbe = (FileBackend *) be;
+    ENTER ("book=%p, primary=%p", book, fbe->primary_book);
+
+    /* We make an important assumption here, that we might want to change
+     * in the future: when the user says 'save', we really save the one,
+     * the only, the current open book, and nothing else.  We do this
+     * because we assume that any other books that we are dealing with
+     * are 'read-only', non-editable, because they are closed books.
+     * If we ever want to have more than one book open read-write,
+     * this will have to change.
+     */
+    if (NULL == fbe->primary_book) fbe->primary_book = book;
+    if (book != fbe->primary_book) return;
+
+    gnc_file_be_write_to_file (fbe, book, fbe->fullpath, TRUE);
+    gnc_file_be_remove_old_files (fbe);
+    LEAVE ("book=%p", book);
+}
+
+/* ================================================================= */
+/* Routines to deal with the creation of multiple books.
+ * The core design assumption here is that the book
+ * begin-edit/commit-edit routines are used solely to write out
+ * closed accounting periods to files.  They're not currently
+ * designed to do anything other than this. (Although they could be).
+ */
+
+static char *
+build_period_filepath (FileBackend *fbe, QofBook *book)
+{
+    int len;
+    char *str, *p, *q;
+
+    len = strlen (fbe->fullpath) + GUID_ENCODING_LENGTH + 14;
+    str = g_new (char, len);
+    strcpy (str, fbe->fullpath);
+
+    /* XXX it would be nice for the user if we made the book 
+     * closing date and/or title part of the file-name. */
+    p = strrchr (str, '/');
+    p++;
+    p = stpcpy (p, "book-");
+    p = guid_to_string_buff (qof_book_get_guid(book), p);
+    p = stpcpy (p, "-");
+    q = strrchr (fbe->fullpath, '/');
+    q++;
+    p = stpcpy (p, q);
+    p = stpcpy (p, ".gml");
+
+    return str;
+}
+
+static void
+file_begin_edit (QofBackend *be, QofInstance *inst)
+{
+    if (0) build_period_filepath(0, 0);
+#if BORKEN_FOR_NOW
+    FileBackend *fbe = (FileBackend *) be;
+    QofBook *book = gp;
+    const char * filepath;
+
+    QofIdTypeConst typ = QOF_ENTITY(inst)->e_type;
+    if (strcmp (GNC_ID_PERIOD, typ)) return;
+    filepath = build_period_filepath(fbe, book);
+    PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
+
+    if (NULL == fbe->primary_book)
+    {
+        PERR ("You should have saved the data "
+              "at least once before closing the books!\n");
+    }
+    /* XXX To be anal about it, we should really be checking to see
+     * if there already is a file with this book GUID, and disallowing
+     * further progress.  This is because we are not allowed to 
+     * modify books that are closed (They should be treated as 
+     * 'read-only').
+     */
+#endif
+}
+
+static void
+file_rollback_edit (QofBackend *be, QofInstance *inst)
+{
+#if BORKEN_FOR_NOW
+    QofBook *book = gp;
+
+    if (strcmp (GNC_ID_PERIOD, typ)) return;
+    PINFO ("book=%p", book);
+#endif
+}
+
+static void
+file_commit_edit (QofBackend *be, QofInstance *inst)
+{
+#if BORKEN_FOR_NOW
+    FileBackend *fbe = (FileBackend *) be;
+    QofBook *book = gp;
+    const char * filepath;
+
+    if (strcmp (GNC_ID_PERIOD, typ)) return;
+    filepath = build_period_filepath(fbe, book);
+    PINFO (" ====================== book=%p filepath=%s\n", book, filepath);
+    gnc_file_be_write_to_file(fbe, book, filepath, FALSE);
+
+    /* We want to force a save of the current book at this point,
+     * because if we don't, and the user forgets to do so, then
+     * there'll be the same transactions in the closed book,
+     * and also in the current book. */
+    gnc_file_be_write_to_file (fbe, fbe->primary_book, fbe->fullpath, TRUE);
+#endif
+}
+
+/* ---------------------------------------------------------------------- */
+
+
+/* Load financial data from a file into the book, automtically
+   detecting the format of the file, if possible.  Return FALSE on
+   error, and set the error parameter to indicate what went wrong if
+   it's not NULL.  This function does not manage file locks in any
+   way. */
+
+static void
+gnc_file_be_load_from_file (QofBackend *bend, QofBook *book)
+{
+    QofBackendError error = ERR_BACKEND_NO_ERR;
+    gboolean rc;
+    FileBackend *be = (FileBackend *) bend;
+
+    be->primary_book = book;
+
+    switch (gnc_file_be_determine_file_type(be->fullpath))
+    {
+    case GNC_BOOK_XML2_FILE:
+        rc = qof_session_load_from_xml_file_v2 (be, book);
+        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        break;
+
+    case GNC_BOOK_XML1_FILE:
+        rc = qof_session_load_from_xml_file (book, be->fullpath);
+        if (FALSE == rc) error = ERR_FILEIO_PARSE_ERROR;
+        break;
+
+    case GNC_BOOK_BIN_FILE:
+        /* presume it's an old-style binary file */
+        qof_session_load_from_binfile(book, be->fullpath);
+        error = gnc_get_binfile_io_error();
+        break;
+
+    default:
+        PWARN("File not any known type");
+        error = ERR_FILEIO_UNKNOWN_FILE_TYPE;
+        break;
+    }
+
+    if(error != ERR_BACKEND_NO_ERR) 
+    {
+        qof_backend_set_error(bend, error);
+    }
+
+    /* We just got done loading, it can't possibly be dirty !! */
+    qof_book_mark_saved (book);
+}
+
+/* ---------------------------------------------------------------------- */
+
+static gboolean
+gnc_file_be_save_may_clobber_data (QofBackend *bend)
+{
+  struct stat statbuf;
+
+  if (!bend->fullpath) return FALSE;
+
+  /* FIXME: Make sure this doesn't need more sophisticated semantics
+   * in the face of special file, devices, pipes, symlinks, etc. */
+  if (stat(bend->fullpath, &statbuf) == 0) return TRUE;
+                                                                                
+  return FALSE;
+}
+
+
 static void
 gnc_file_be_write_accounts_to_file(QofBackend *be, QofBook *book)
 {
@@ -899,6 +869,56 @@ gnc_file_be_write_accounts_to_file(QofBackend *be, QofBook *book)
 
     datafile = ((FileBackend *)be)->fullpath;
     gnc_book_write_accounts_to_xml_file_v2(be, book, datafile);
+}
+
+/* ================================================================= */
+
+QofBackend *
+libgncmod_backend_file_LTX_gnc_backend_new(void)
+{
+    FileBackend *fbe;
+    QofBackend *be;
+    
+    fbe = g_new0(FileBackend, 1);
+    be = (QofBackend*)fbe;
+    qof_backend_init(be);
+    
+    be->session_begin = file_session_begin;
+    be->session_end = file_session_end;
+    be->destroy_backend = file_destroy_backend;
+
+    be->load = gnc_file_be_load_from_file;
+    be->save_may_clobber_data = gnc_file_be_save_may_clobber_data;
+
+    /* The file backend treats accounting periods transactionally. */
+    be->begin = file_begin_edit;
+    be->commit = file_commit_edit;
+    be->rollback = file_rollback_edit;
+
+    /* The file backend always loads all data ... */
+    be->compile_query = NULL;
+    be->free_query = NULL;
+    be->run_query = NULL;
+    be->price_lookup = NULL;
+
+    be->counter = NULL;
+
+    /* The file backend will never be multi-user... */
+    be->events_pending = NULL;
+    be->process_events = NULL;
+
+    be->sync = file_sync_all;
+    be->export = gnc_file_be_write_accounts_to_file;
+
+    fbe->dirname = NULL;
+    fbe->fullpath = NULL;
+    fbe->lockfile = NULL;
+    fbe->linkfile = NULL;
+    fbe->lockfd = -1;
+
+    fbe->primary_book = NULL;
+
+    return be;
 }
 
 /* ========================== END OF FILE ===================== */

@@ -130,9 +130,12 @@ qof_backend_init(QofBackend *be)
     be->error_msg = NULL;
     be->percentage = NULL;
 
+#ifdef GNUCASH_MAJOR_VERSION
     /* XXX remove these */
+    be->fullpath = NULL;
     be->price_lookup = NULL;
     be->export = NULL;
+#endif
 }
 
 /************************* END OF FILE ********************************/

@@ -57,4 +57,6 @@ typedef enum
     GNC_BOOK_XML2_FILE,
 } QofBookFileType;
 
+QofBackend * libgncmod_backend_file_LTX_gnc_backend_new(void);
+
 #endif /* GNC_BACKEND_FILE_H_ */

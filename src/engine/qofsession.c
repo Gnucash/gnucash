@@ -59,13 +59,8 @@
 #include "qofsession-p.h"
 
 /* Some gnucash-specific code */
-#ifdef GNUCASH
+#ifdef GNUCASH_MAJOR_VERSION
 #include "gnc-module.h"
-#include "TransLog.h"
-#else
-#define xaccLogSetBaseName(x)
-#define xaccLogEnable()
-#define xaccLogDisable()
 #endif /* GNUCASH */
 
 static QofSession * current_session = NULL;
@@ -172,8 +167,6 @@ qof_session_init (QofSession *session)
 
   session->books = g_list_append (NULL, qof_book_new ());
   session->book_id = NULL;
-  session->fullpath = NULL;
-  session->logpath = NULL;
   session->backend = NULL;
 
   qof_session_clear_error (session);
@@ -265,7 +258,8 @@ const char *
 qof_session_get_file_path (QofSession *session)
 {
    if (!session) return NULL;
-   return session->fullpath;
+   if (!session->backend) return NULL;
+   return session->backend->fullpath;
 }
 
 const char *
@@ -277,19 +271,13 @@ qof_session_get_url (QofSession *session)
 
 /* ====================================================================== */
 
-#ifdef GNUCASH 
+#ifdef GNUCASH_MAJOR_VERSION 
 
 static void
 qof_session_int_backend_load_error(QofSession *session,
                                    char *message, char *dll_err)
 {
     PWARN ("%s %s", message, dll_err ? dll_err : "");
-
-    g_free(session->fullpath);
-    session->fullpath = NULL;
-
-    g_free(session->logpath);
-    session->logpath = NULL;
 
     g_free(session->book_id);
     session->book_id = NULL;
@@ -437,57 +425,30 @@ qof_session_begin (QofSession *session, const char * book_id,
     LEAVE("push error missing book_id");
     return;
   }
-  /* Store the sessionid URL  */
+
+  /* Store the session URL  */
   session->book_id = g_strdup (book_id);
-
-  /* XXX we should probably move this resolve function to the
-   * file backend.  I think the idea would be to open the backend
-   * and then ask it if it can contact it's storage media (disk,
-   * network, server, etc.) and abort if it can't.  Mal-formed
-   * file URL's would be handled the same way!
-   */
-  /* ResolveURL tries to find the file in the file system. */
-  session->fullpath = xaccResolveURL(book_id);
-  if (!session->fullpath)
-  {
-    qof_session_push_error (session, ERR_FILEIO_FILE_NOT_FOUND, NULL);
-    LEAVE("push error: can't resolve file path");
-    return;  
-  }
-  PINFO ("filepath=%s", session->fullpath ? session->fullpath : "(null)");
-
-  session->logpath = xaccResolveFilePath(session->fullpath);
-  PINFO ("logpath=%s", session->logpath ? session->logpath : "(null)");
 
   /* destroy the old backend */
   qof_session_destroy_backend(session);
 
-  /* check to see if this is a type we know how to handle */
-  if (!g_strncasecmp(book_id, "file:", 5) ||
-      *session->fullpath == '/')
+  /* Look for somthing of the form of "file:/", "http://" or 
+   * "postgres://". Everything before the colon is the access 
+   * method.  Load the first backend found for that access method.
+   */
+  char * p = strchr (book_id, ':');
+  if (p)
   {
-    qof_session_load_backend(session, "file" ); 
+    char * access_method = g_strdup (book_id);
+    p = strchr (access_method, ':');
+    *p = 0;
+    qof_session_load_backend(session, access_method);
+    g_free (access_method);
   }
   else
   {
-    /* Look for somthing of the form of "http://" or 
-     * "postgres://". Everything before the colon is the access 
-     * method.  Load the first backend found for that access method.
-     */
-    char * p = strchr (book_id, ':');
-    if (p)
-    {
-      char * access_method = g_strdup (book_id);
-      p = strchr (access_method, ':');
-      *p = 0;
-      qof_session_load_backend(session, access_method);
-      g_free (access_method);
-    }
-    else
-    {
-       /* If no colon found, assume it must be a file-path */
-       qof_session_load_backend(session, "file"); 
-    }
+     /* If no colon found, assume it must be a file-path */
+     qof_session_load_backend(session, "file"); 
   }
 
   /* No backend was found. That's bad. */
@@ -513,10 +474,6 @@ qof_session_begin (QofSession *session, const char * book_id,
       msg = qof_backend_get_message(session->backend);
       if (err != ERR_BACKEND_NO_ERR)
       {
-          g_free(session->fullpath);
-          session->fullpath = NULL;
-          g_free(session->logpath);
-          session->logpath = NULL;
           g_free(session->book_id);
           session->book_id = NULL;
           qof_session_push_error (session, err, msg);
@@ -560,8 +517,6 @@ qof_session_load (QofSession *session,
   session->books = g_list_append (NULL, newbook);
   PINFO ("new book=%p", newbook);
 
-  xaccLogSetBaseName(session->logpath);
-
   qof_session_clear_error (session);
 
   /* This code should be sufficient to initialize *any* backend,
@@ -580,7 +535,6 @@ qof_session_load (QofSession *session,
    */
   if (be)
   {
-      xaccLogDisable();
       be->percentage = percentage_func;
 
       if (be->load) 
@@ -588,7 +542,6 @@ qof_session_load (QofSession *session,
           be->load (be, newbook);
           qof_session_push_error (session, qof_backend_get_error(be), NULL);
       }
-      xaccLogEnable();
   }
 
   err = qof_session_get_error(session);
@@ -597,24 +550,20 @@ qof_session_load (QofSession *session,
       (err != ERR_SQL_DB_TOO_OLD))
   {
       /* Something broke, put back the old stuff */
-      xaccLogDisable();
       qof_book_set_backend (newbook, NULL);
       qof_book_destroy (newbook);
       g_list_free (session->books);
       session->books = oldbooks;
       LEAVE("error from backend %d", qof_session_get_error(session));
-      xaccLogEnable();
       return;
   }
 
-  xaccLogDisable();
   for (node=oldbooks; node; node=node->next)
   {
      QofBook *ob = node->data;
      qof_book_set_backend (ob, NULL);
      qof_book_destroy (ob);
   }
-  xaccLogEnable();
 
   LEAVE ("sess = %p, book_id=%s", session, qof_session_get_url(session)
          ? qof_session_get_url(session) : "(null)");
@@ -625,19 +574,11 @@ qof_session_load (QofSession *session,
 gboolean
 qof_session_save_may_clobber_data (QofSession *session)
 {
-  struct stat statbuf;
-
   if (!session) return FALSE;
-  if (!session->fullpath) return FALSE;
+  if (!session->backend) return FALSE;
+  if (!session->backend->save_may_clobber_data) return FALSE;
 
-  /* FIXME: This should really be sent to the backend.  The stat is
-   * correct only for the file backend */
-
-  /* FIXME: Make sure this doesn't need more sophisticated semantics
-   * in the face of special file, devices, pipes, symlinks, etc. */
-  if (stat(session->fullpath, &statbuf) == 0) return TRUE;
-
-  return FALSE;
+  return (*(session->backend->save_may_clobber_data)) (session->backend);
 }
 
 static gboolean
@@ -717,7 +658,11 @@ qof_session_save (QofSession *session,
 }
 
 /* ====================================================================== */
-/* XXX what does this function do ?? */
+/* XXX This exports the list of accounts to a file.  It does not export
+ * any transactions.  Its a place-holder until full book-closing is implemented.
+ */
+
+#ifdef GNUCASH_MAJOR_VERSION
 
 gboolean
 qof_session_export (QofSession *tmp_session,
@@ -752,6 +697,7 @@ qof_session_export (QofSession *tmp_session,
 
   return TRUE;
 }
+#endif /* GNUCASH_MAJOR_VERSION */
 
 /* ====================================================================== */
 
@@ -771,12 +717,6 @@ qof_session_end (QofSession *session)
 
   qof_session_clear_error (session);
 
-  g_free (session->fullpath);
-  session->fullpath = NULL;
-
-  g_free (session->logpath);
-  session->logpath = NULL;
-
   g_free (session->book_id);
   session->book_id = NULL;
 
@@ -794,7 +734,6 @@ qof_session_destroy (QofSession *session)
          qof_session_get_url(session)
          ? qof_session_get_url(session) : "(null)");
 
-  xaccLogDisable();
   qof_session_end (session);
 
   /* destroy the backend */
@@ -810,8 +749,6 @@ qof_session_destroy (QofSession *session)
   session->books  = NULL;
   if (session == current_session)
     current_session = NULL;
-
-  xaccLogEnable();
 
   g_free (session);
 
@@ -874,273 +811,14 @@ qof_session_process_events (QofSession *session)
 }
 
 /* ====================================================================== */
-/* 
- * If $HOME/.gnucash/data directory doesn't exist, then create it.
- */
 
-static void 
-MakeHomeDir (void) 
-{
-  int rc;
-  struct stat statbuf;
-  char *home;
-  char *path;
-  char *data;
-
-  /* Punt. Can't figure out where home is. */
-  home = getenv ("HOME");
-  if (!home) return;
-
-  path = g_strconcat(home, "/.gnucash", NULL);
-
-  rc = stat (path, &statbuf);
-  if (rc)
-  {
-    /* assume that the stat failed only because the dir is absent,
-     * and not because its read-protected or other error.
-     * Go ahead and make it. Don't bother much with checking mkdir 
-     * for errors; seems pointless. */
-    mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
-  }
-
-  data = g_strconcat (path, "/data", NULL);
-  rc = stat (data, &statbuf);
-  if (rc)
-    mkdir (data, S_IRWXU);
-
-  g_free (path);
-  g_free (data);
-}
-
-/* ====================================================================== */
-
-/* XXX hack alert -- we should be yanking this out of some config file */
-static char * searchpaths[] =
-{
-   "/usr/share/gnucash/data/",
-   "/usr/local/share/gnucash/data/",
-   "/usr/share/gnucash/accounts/",
-   "/usr/local/share/gnucash/accounts/",
-   NULL,
-};
-
-typedef gboolean (*pathGenerator)(char *pathbuf, int which);
-
-static gboolean
-xaccAddEndPath(char *pathbuf, const char *ending, int len)
-{
-    if(len + strlen(pathbuf) >= PATH_MAX)
-        return FALSE;
-          
-    strcat (pathbuf, ending);
-    return TRUE;
-}
-
-static gboolean
-xaccCwdPathGenerator(char *pathbuf, int which)
-{
-    if(which != 0)
-    {
-        return FALSE;
-    }
-    else
-    {
-        /* try to find a file by this name in the cwd ... */
-        if (getcwd (pathbuf, PATH_MAX) == NULL)
-            return FALSE;
-
-        strcat (pathbuf, "/");
-        return TRUE;
-    }
-}
-
-static gboolean
-xaccDataPathGenerator(char *pathbuf, int which)
-{
-    char *path;
-    
-    if(which != 0)
-    {
-        return FALSE;
-    }
-    else
-    {
-        path = getenv ("HOME");
-        if (!path)
-            return FALSE;
-
-        if (PATH_MAX <= (strlen (path) + 20))
-            return FALSE;
-
-        strcpy (pathbuf, path);
-        strcat (pathbuf, "/.gnucash/data/");
-        return TRUE;
-    }
-}
-
-static gboolean
-xaccUserPathPathGenerator(char *pathbuf, int which)
-{
-    char *path = NULL;
-    
-    if(searchpaths[which] == NULL)
-    {
-        return FALSE;
-    }
-    else
-    {
-        path = searchpaths[which];
-        
-        if (PATH_MAX <= strlen(path))
-            return FALSE;
-
-        strcpy (pathbuf, path);
-        return TRUE;
-    }
-}
-
-/* ====================================================================== */
-
-char * 
-xaccResolveFilePath (const char * filefrag)
-{
-  struct stat statbuf;
-  char pathbuf[PATH_MAX];
-  pathGenerator gens[4];
-  char *filefrag_dup;
-  int namelen;
-  int i;
-
-  /* seriously invalid */
-  if (!filefrag)
-  {
-      PERR("filefrag is NULL");
-      return NULL;
-  }
-
-  ENTER ("filefrag=%s", filefrag);
-
-  /* ---------------------------------------------------- */
-  /* OK, now we try to find or build an absolute file path */
-
-  /* check for an absolute file path */
-  if (*filefrag == '/')
-    return g_strdup (filefrag);
-
-  if (!g_strncasecmp(filefrag, "file:", 5))
-  {
-      char *ret = g_new(char, strlen(filefrag) - 5 + 1);
-      strcpy(ret, filefrag + 5);
-      return ret;
-  }
-
-  /* get conservative on the length so that sprintf(getpid()) works ... */
-  /* strlen ("/.LCK") + sprintf (%x%d) */
-  namelen = strlen (filefrag) + 25; 
-
-  gens[0] = xaccCwdPathGenerator;
-  gens[1] = xaccDataPathGenerator;
-  gens[2] = xaccUserPathPathGenerator;
-  gens[3] = NULL;
-
-  for (i = 0; gens[i] != NULL; i++) 
-  {
-      int j;
-      for(j = 0; gens[i](pathbuf, j) ; j++)
-      {
-          if(xaccAddEndPath(pathbuf, filefrag, namelen))
-          {
-              int rc = stat (pathbuf, &statbuf);
-              if ((!rc) && (S_ISREG(statbuf.st_mode)))
-              {
-                  return (g_strdup (pathbuf));
-              }
-          }
-      }
-  }
-  /* OK, we didn't find the file. */
-
-  /* make sure that the gnucash home dir exists. */
-  MakeHomeDir();
-
-  filefrag_dup = g_strdup (filefrag);
-
-  /* Replace '/' with ',' for non file backends */
-  if (strstr (filefrag, "://"))
-  {
-    char *p;
-
-    p = strchr (filefrag_dup, '/');
-    while (p) {
-      *p = ',';
-      p = strchr (filefrag_dup, '/');
-    }
-  }
-
-  /* Lets try creating a new file in $HOME/.gnucash/data */
-  if (xaccDataPathGenerator(pathbuf, 0))
-  {
-      if(xaccAddEndPath(pathbuf, filefrag_dup, namelen))
-      {
-          g_free (filefrag_dup);
-          return (g_strdup (pathbuf));
-      }
-  } 
-
-  /* OK, we still didn't find the file */
-  /* Lets try creating a new file in the cwd */
-  if (xaccCwdPathGenerator(pathbuf, 0))
-  {
-      if(xaccAddEndPath(pathbuf, filefrag_dup, namelen))
-      {
-          g_free (filefrag_dup);
-          return (g_strdup (pathbuf));
-      }
-  }
-
-  g_free (filefrag_dup);
-
-  return NULL;
-}
-
-/* ====================================================================== */
-
-char * 
-xaccResolveURL (const char * pathfrag)
-{
-  /* seriously invalid */
-  if (!pathfrag) return NULL;
-
-  /* At this stage of checking, URL's are always, by definition,
-   * resolved.  If there's an error connecting, we'll find out later.
-   *
-   * FIXME -- we should probably use  ghttp_uri_validate
-   * to make sure the uri is in good form.
-   */
-
-  if (!g_strncasecmp (pathfrag, "http://", 7)      ||
-      !g_strncasecmp (pathfrag, "https://", 8)     ||
-      !g_strncasecmp (pathfrag, "postgres://", 11) ||
-      !g_strncasecmp (pathfrag, "rpc://", 6))
-  {
-    return g_strdup(pathfrag);
-  }
-
-  if (!g_strncasecmp (pathfrag, "file:", 5)) {
-    return (xaccResolveFilePath (pathfrag));
-  }
-
-  return (xaccResolveFilePath (pathfrag));
-}
-
-/* ====================================================================== */
+#ifdef GNUCASH_MAJOR_VERSION
 
 /* this should go in a separate binary to create a rpc server */
 
 void
 gnc_run_rpc_server (void)
 {
-#ifdef GNUCASH
   const char * dll_err;
   void * dll_handle;
   int (*rpc_run)(short);
@@ -1173,7 +851,7 @@ gnc_run_rpc_server (void)
   ret = (*rpc_run)(0);
 
   /* XXX How do we force an exit? */
-#endif /* GNUCASH */
 }
+#endif /* GNUCASH_MAJOR_VERSION */
 
 /* =================== END OF FILE ====================================== */

@@ -1,8 +1,6 @@
 /********************************************************************\
  * qofbackend-p.h -- private api for data storage backend           *
  *                                                                  *
- * Copyright (c) 2000, 2001 Linas Vepstas <linas@linas.org>         *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -34,6 +32,10 @@
    
    The callbacks will be called at the appropriate times during 
    a book session to allow the backend to store the data as needed.
+
+   @file qofbackend-p.h
+   @brief private api for data storage backend
+   @author Copyright (c) 2000,2001,2004 Linas Vepstas <linas@linas.org> 
 @{ */
 
 #ifndef QOF_BACKEND_P_H
@@ -242,7 +244,6 @@ struct QofBackendProvider_s
 
 struct QofBackend_s
 {
-
   void (*session_begin) (QofBackend *be,
                          QofSession *session,
                          const char *book_id, 
@@ -265,14 +266,24 @@ struct QofBackend_s
 
   gint64 (*counter) (QofBackend *, const char *counter_name);
 
-  gboolean (*events_pending) (QofBackend *be);
-  gboolean (*process_events) (QofBackend *be);
+  gboolean (*events_pending) (QofBackend *);
+  gboolean (*process_events) (QofBackend *);
 
   QofBePercentageFunc percentage;
+
+  /** Document Me !!! what is this supposed to do ?? */
+  gboolean (*save_may_clobber_data) (QofBackend *);
 
   QofBackendError last_err;
   char * error_msg;
 
+  /** XXX the file backend resolves the if to a fully-qualified file
+   *  path.  This holds the filepath and communicates it to the GUI.
+   *  This is temprary scaffolding and should be removed.  Deprecated.
+   */
+  char * fullpath;
+
+#ifdef GNUCASH_MAJOR_VERSION
   /** XXX price_lookup should be removed during the redesign
    * of the SQL backend... prices can now be queried using
    * the generic query mechanism.
@@ -285,12 +296,15 @@ struct QofBackend_s
 
   /** XXX Export should really _NOT_ be here, but is left here for now.
    * I'm not sure where this should be going to. It should be
-   * removed ASAP. 
+   * removed ASAP.   This is a temporary hack-around until period-closing
+   * is fully implemented.
    */
   void (*export) (QofBackend *, QofBook *);
+#endif
+
 };
 
-/** Let the ssytem know about a new provider of backends.  This function
+/** Let the sytem know about a new provider of backends.  This function
  *  is typically called by the provider library at library load time.
  *  This function allows the backend library to tell the QOF infrastructure
  *  that it can handle URL's of a certain type.  Note that a single
@@ -299,26 +313,21 @@ struct QofBackend_s
  */
 void qof_backend_register_provider (QofBackendProvider *);
 
-/**
- * The qof_backend_set_error() routine pushes an error code onto the error
- *   stack. (FIXME: the stack is 1 deep in current implementation).
+/** The qof_backend_set_error() routine pushes an error code onto the error
+ *  stack. (FIXME: the stack is 1 deep in current implementation).
  */
 void qof_backend_set_error (QofBackend *be, QofBackendError err);
 
-/**
- * The qof_backend_get_error() routine pops an error code off the error
- *   stack.
+/** The qof_backend_get_error() routine pops an error code off the error stack.
  */
 QofBackendError qof_backend_get_error (QofBackend *be);
-/** 
- * The qof_backend_set_message() assigns a string to the backend error
- *   message.
+
+/** The qof_backend_set_message() assigns a string to the backend error message.
  */
 void qof_backend_set_message(QofBackend *be, const char *format, ...);
 
-/**
- * The qof_backend_get_message() pops the error message string from
- *   the Backend.  This string should be freed with g_free().
+/** The qof_backend_get_message() pops the error message string from
+ *  the Backend.  This string should be freed with g_free().
  */
 char * qof_backend_get_message(QofBackend *be);
 

@@ -30,6 +30,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-engine-util.c \
   gnc-engine.c \
   gnc-event.c \
+  gnc-filepath-utils.c \
   gnc-lot.c \
   gnc-numeric.c \
   gnc-pricedb.c \
@@ -83,6 +84,7 @@ gncinclude_HEADERS = \
   gnc-engine-util.h \
   gnc-engine.h \
   gnc-event.h \
+  gnc-filepath-utils.h \
   gnc-numeric.h \
   gnc-pricedb.h \
   gnc-session.h \

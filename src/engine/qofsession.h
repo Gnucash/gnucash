@@ -156,11 +156,6 @@ typedef void (*QofPercentageFunc) (const char *message, double percent);
 void qof_session_load (QofSession *session,
 		       QofPercentageFunc percentage_func);
 
-/** XXX session_export really doesn't belong here */
-gboolean qof_session_export (QofSession *tmp_session,
-			     QofSession *real_session,
-			     QofPercentageFunc percentage_func);
-
 /** @name Session Errors 
  @{ */
 /** The qof_session_get_error() routine can be used to obtain the reason
@@ -251,22 +246,20 @@ gboolean qof_session_events_pending (QofSession *session);
 gboolean qof_session_process_events (QofSession *session);
 /* @} */
 
-/** The xaccResolveFilePath() routine is a utility that will accept
- *    a fragmentary filename as input, and resolve it into a fully
- *    qualified path in the file system, i.e. a path that begins with
- *    a leading slash.  First, the current working directory is
- *    searched for the file.  Next, the directory $HOME/.gnucash/data,
- *    and finally, a list of other (configurable) paths.  If the file
- *    is not found, then the path $HOME/.gnucash/data is used.  If
- *    $HOME is not defined, then the current working directory is
- *    used.
- */
-char * xaccResolveFilePath (const char * filefrag);
-char * xaccResolveURL (const char * pathfrag);
-
+#ifdef GNUCASH_MAJOR_VERSION
 /** Run the RPC Server 
  *  @deprecated  will go away */
 void gnc_run_rpc_server (void);
+
+/** XXX session_export really doesn't belong here .
+ * This functino exports the list of accounts to a file.  Its a stop-gap 
+ * measure until full book-closing is implemented.
+ */
+gboolean qof_session_export (QofSession *tmp_session,
+			     QofSession *real_session,
+			     QofPercentageFunc percentage_func);
+
+#endif /* GNUCASH_MJOR_VERSION */
 
 #endif /* QOF_SESSION_H */
 /** @} */
