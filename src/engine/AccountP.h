@@ -1,7 +1,7 @@
 /********************************************************************\
- * Account.h -- the Account data structure                          *
+ * AccountP.h -- the Account data structure                         *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999 Linas Vepstas                     *
+ * Copyright (C) 1997-2000, Linas Vepstas <linas@linas.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -44,8 +44,8 @@
 
 #include "config.h"
 #include "AccInfo.h"
-#include "Transaction.h"
 #include "GNCId.h"
+#include "Transaction.h"
 
 
 /** STRUCTS *********************************************************/

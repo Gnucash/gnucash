@@ -275,7 +275,7 @@ xaccGetAccountFlags (Account *acc)
 #define CHECK(acc) {					\
    if (0 == acc->open) {				\
       /* not today, some day in the future ... */	\
-      /* printf ("Error: Account not open for editing\n"); */	\
+      /* PERR ("Account not open for editing\n"); */	\
       /* assert (0); */					\
       /* return; */					\
    }							\
@@ -345,7 +345,7 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
      }
      /* Insertion point is now i */
    
-     //fprintf(stderr, "Insertion position is: %d\n", i);
+     PINFO ("Insertion position is: %d\n", i);
    
      /* Move all the other splits down (this could be done faster with memmove)*/
      for( j = acc->numSplits; j > i; j--) {
@@ -600,8 +600,7 @@ xaccCheckDateOrder (Account * acc, Split *split )
   }
 
   if (!s) {
-     printf ("Internal Error: xaccCheckDateOrder(): ");
-     printf (" split %p not present in account \n", split);
+     PERR ("split %p not present in account \n", split);
      return 0;
   }
 
@@ -1056,13 +1055,11 @@ xaccAccountSetCurrency (Account *acc, const char *str)
 
    if (acc->currency && (0x0 != acc->currency[0])) {
       if (unsafe_ops) {
-         PWARN ("xaccAccountSetCurrency(): "
-                "it is dangerous to change the currency denomination of an account! \n"
+         PWARN ( "it is dangerous to change the currency denomination of an account! \n"
                 "\tAccount=%s old currency=%s new currency=%s \n",
                 acc->accountName, acc->currency, str);
       } else {
-         PERR ("xaccAccountSetCurrency(): "
-               "the currency denomination of an account cannot be changed!\n"
+         PERR ("the currency denomination of an account cannot be changed!\n"
                 "\tAccount=%s \n", acc->accountName);
          return;
       }
@@ -1080,14 +1077,12 @@ xaccAccountSetSecurity (Account *acc, const char *str)
 
    if (acc->security && (0x0 != acc->security[0])) {
       if (unsafe_ops) {
-         PWARN ("xaccAccountSetSecurity(): "
-                "it is dangerous to change the security denomination of an account! \n"
+         PWARN ("it is dangerous to change the security denomination of an account! \n"
                 "\tAccount=%s old security=%s new security=%s \n",
                 acc->accountName, acc->security, str);
       } else {
-         PERR ("xaccAccountSetSecurity(): "
-               "the security denomination of an account cannot be changed!\n"
-                "\tAccount=%s \n", acc->accountName);
+         PERR ("the security denomination of an account cannot be changed!\n"
+               "\tAccount=%s \n", acc->accountName);
          return;
       }
    }

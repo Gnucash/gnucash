@@ -97,7 +97,7 @@ xaccGroupToList (Account *acc)
 
    if (!acc) return NULL;
 
-   ENTER ("xaccGroupToList(): acc=%p \n", acc);
+   ENTER ("acc=%p \n", acc);
    nacc = xaccGetNumAccounts (acc->children);
    nacc ++;  /* add one for this account */
 
@@ -132,7 +132,7 @@ xaccGroupToList (Account *acc)
       }
    }
    list[n] = NULL;
-   LEAVE ("xaccGroupToList(): n=%d nacc=%d \n", n, nacc);
+   LEAVE ("n=%d nacc=%d \n", n, nacc);
    assert (n==nacc);
 
    return list;

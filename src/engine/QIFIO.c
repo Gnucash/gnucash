@@ -316,7 +316,7 @@ char * xaccReadQIFAccount (int fd, Account * acc)
 			 xaccAccountSetType (acc, LIABILITY);
 		       } else 
 			 {
-			   printf ("QIF Parse: Unsupported account type %s \n", &qifline[1]);
+			   PERR("Unsupported account type %s \n", &qifline[1]);
 			   xaccAccountSetType (acc, -1);    /* hack alert -- */
 			 }
 	   break;
@@ -914,7 +914,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	   pute = xaccSplitGetValue (source_split);
 	   if (isneg) pute = -pute;
 
-	   printf ("QIF Warning: Adjustment of %.2f to amount %.2f not handled \n", adjust, pute);
+	   PWARN("Adjustment of %.2f to amount %.2f not handled \n", adjust, pute);
 	 }
 	 break;
        case 'P':
@@ -998,7 +998,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	   wanted = (int) (100.0 * parse + 0.5);
 	   got = (int) (100.0 * (pute+adjust) + 0.5);
 	     if (wanted != got) {
-	       printf ("QIF Parse Error: wanted %f got %f \n", parse, pute);
+	       PERR("Parse $: wanted %f got %f \n", parse, pute);
 	     }
 	 }
        }

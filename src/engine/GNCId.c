@@ -180,7 +180,7 @@ xaccGUIDNew(GUID *guid)
     if (xaccGUIDType(guid) == GNC_ID_NONE)
       break;
 
-    PWARN("xaccGUIDNew: duplicate id\n");
+    PWARN("duplicate id\n");
   } while(1);
 }
 

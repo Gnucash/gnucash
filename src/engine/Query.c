@@ -208,8 +208,8 @@ xaccQueryInvert(Query * q) {
 
   num_or_terms = g_list_length(q->terms);
   
-  /*  printf("inverting query: ");
-      print_query(q); */
+  DEBUG("inverting query: ");
+  DEBUGCMD (print_query(q));
 
   switch(num_or_terms) {
   case 0:
@@ -284,9 +284,8 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op) {
   Query * t1, * t2;
   GList * i, * j;
 
-  /*  printf("merging queries: op=%d\n", op);
-      print_query(q1);
-      print_query(q2); */
+  DEBUG("merging queries: op=%d\n", op);
+  DEBUGCMD(print_query(q1); print_query(q2);) 
 
   switch(op) {
   case QUERY_OR:
@@ -758,13 +757,11 @@ xaccQueryGetSplits(Query * q) {
 
   gettimeofday(&end, NULL);
 
-#if 0
-  printf("xaccQueryGetSplits: elapsed time = %e ms\n",
+  PINFO("elapsed time = %e ms\n",
          (end.tv_sec - start.tv_sec)*1000.0 +
          (end.tv_usec - start.tv_usec)/1000.0);
-  printf("xaccQueryGetSplits: %d splits checked, %d splits matched.\n",
+  PINFO("%d splits checked, %d splits matched.\n",
          total_splits_checked, split_count);
-#endif
 
   q->changed = 0;
   if(q->split_list) {

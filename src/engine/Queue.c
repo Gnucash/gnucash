@@ -173,7 +173,7 @@ xaccQueuePushHead (Queue *q, Split *s)
   /* I'm too lazy to code up a more complex feature that no one will use ... */
   /* If you are reading this, you are invited to do so yourself :-) */
   if ( !DEQ (q->head_amount, 0.0)) {
-    PERR ("xaccQueuePushHead(): The current implementation does not\n"
+    PERR ("The current implementation does not\n"
           "\tsupport pushing onto a queue that has been popped \n");
     return;
   }
@@ -342,14 +342,14 @@ xaccQueuePopTailValue (Queue *q, double val)
 double 
 xaccQueuePopHeadValue (Queue *q, double val)
 {
-   PERR("xaccQueuePopHeadValue(): not implemented\n");
+   PERR("not implemented\n");
    return 0.0;
 }
 
 double 
 xaccQueuePopHeadShares (Queue *q, double val)
 {
-   PERR("xaccQueuePopHeadsahres(): not implemented\n");
+   PERR("not implemented\n");
    return 0.0;
 }
 

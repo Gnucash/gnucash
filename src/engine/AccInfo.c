@@ -57,8 +57,7 @@ xaccAccountTypeEnumAsString(int type) {
     GNC_RETURN_ENUM_AS_STRING(MONEYMRKT);
     GNC_RETURN_ENUM_AS_STRING(CREDITLINE);
     default:
-      fprintf(stderr,
-              "Big problem asked to translate unknown account type %d.\n", type);
+      PERR ("asked to translate unknown account type %d.\n", type);
       break;
   };
   return(NULL);
@@ -128,7 +127,7 @@ xaccAccountTypesCompatible (int parent_type, int child_type)
       compatible = (child_type == EQUITY);
       break;
     default:
-      PERR("xaccAccountTypesCompatible: bad account type: %d", parent_type);
+      PERR("bad account type: %d", parent_type);
       break;
   }
 

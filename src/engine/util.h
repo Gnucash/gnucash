@@ -2,7 +2,7 @@
  * util.h -- utility functions that are used everywhere for         *
  *           gnucash (ex-xacc (X-Accountant))                       *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1998, 1999, 2000 Linas Vepstas                     *
+ * Copyright (C) 1998-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -51,7 +51,8 @@
 #define MOD_SCRUB      7
 #define MOD_GTK_REG    8
 #define MOD_GUILE      9
-#define MODULE_MAX    10
+#define MOD_BACKEND   10
+#define MODULE_MAX    11
 
 extern int loglevel[MODULE_MAX];
 
@@ -65,15 +66,18 @@ extern int loglevel[MODULE_MAX];
 #undef DEBUG
 #endif
 
+/* some preprocessors use ugly __FUNCTION__ substitution ... */
+char * prettify (const char *); 
+
 /* utility macros  */
-#define FATAL(x...)    LG(1, "Fatal Error: ");   LG(1,       ##x);
-#define PERR(x...)     LG(LERR,    "Error: ");   LG(LERR,    ##x);
-#define PWARN(x...)    LG(LWARN,   "Waring: ");  LG(LWARN,   ##x);
-#define PINFO(x...)    LG(LINFO,   "Info: ");    LG(LINFO,   ##x);
-#define DEBUG(x...)    LG(LDEBUG,  "Debug: ");   LG(LDEBUG,  ##x);
-#define ENTER(x...)    LG(LDEBUG,  "Enter: ");   LG(LDEBUG,  ##x);
-#define LEAVE(x...)    LG(LDEBUG,  "Leave: ");   LG(LDEBUG,  ##x);
-#define DETAIL(x...)   LG(LDETAIL, "Detail: ");  LG(LDETAIL, ##x);
+#define FATAL(x...)    LG(1, "Fatal Error: %s: ",  prettify(__FUNCTION__));  LG(1,       ##x);
+#define PERR(x...)     LG(LERR,    "Error: %s: ",  prettify(__FUNCTION__));  LG(LERR,    ##x);
+#define PWARN(x...)    LG(LWARN,   "Waring: %s: ", prettify(__FUNCTION__));  LG(LWARN,   ##x);
+#define PINFO(x...)    LG(LINFO,   "Info: %s: ",   prettify(__FUNCTION__));  LG(LINFO,   ##x);
+#define DEBUG(x...)    LG(LDEBUG,  "Debug: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
+#define ENTER(x...)    LG(LDEBUG,  "Enter: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
+#define LEAVE(x...)    LG(LDEBUG,  "Leave: %s: ",  prettify(__FUNCTION__));  LG(LDEBUG,  ##x);
+#define DETAIL(x...)   LG(LDETAIL, "Detail: %s: ", prettify(__FUNCTION__));  LG(LDETAIL, ##x);
 
 #define DEBUGCMD(x) { if (LINFO) { x; }}
 

@@ -2,7 +2,7 @@
  * util.c -- utility functions that are used everywhere else for    *
  *           xacc (X-Accountant)                                    *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
+ * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -60,7 +60,38 @@ int loglevel[MODULE_MAX] =
  2,      /* GUI */
  2,      /* SCRUB */
  2,      /* GTK_REG */
+ 2,      /* GUILE */
+ 4,      /* BACKEND */
 };
+
+/********************************************************************\
+\********************************************************************/
+/* prettify() cleans up subroutine names.
+ * AIX/xlC has the habit of printing signatures not names; clean this up.
+ * On other operating systems, truncate name to 30 chars.
+ * Note this routine is not thread safe. Note we wouldn't need this
+ * routine if AIX did something more reasonable.  Hope thread safety
+ * doesn't poke us in eye.
+ */
+char *
+prettify (const char *name)
+{
+   static char bf[35];
+   char *p;
+   strncpy (bf, name, 29); bf[28] = 0;
+   p = strchr (bf, '(');
+   if (p)
+   {
+      *(p+1) = ')';
+      *(p+2) = 0x0;
+   }
+   else
+   {
+      strcpy (&bf[26], "...()");
+   }
+   return bf;
+}
+
 
 /********************************************************************\
  * DEBUGGING MEMORY ALLOCATION STUFF                                * 

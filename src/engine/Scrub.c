@@ -87,8 +87,7 @@ xaccAccountScrubOrphans (Account *acc)
    Transaction *trans;
    Account * parent;
 
-   PINFO ("xaccAccountScrubOrphans(): "
-          "Looking for orphans in account %s \n", xaccAccountGetName(acc));
+   PINFO ("Looking for orphans in account %s \n", xaccAccountGetName(acc));
 
    slist = xaccAccountGetSplitList (acc);
    split = slist[0];
@@ -102,7 +101,7 @@ xaccAccountScrubOrphans (Account *acc)
          parent = xaccSplitGetAccount (s);
          if (!parent) {
             Account *orph;
-            DEBUG ("xaccAccountScrubOrphans(): Found an orphan \n");
+            DEBUG ("Found an orphan \n");
             /* OK, we found an orphan.  Put it in an orphan account. */
             orph = GetOrMakeAccount (acc, trans, ORPHAN_STR);
             xaccAccountBeginEdit (orph, 1);
@@ -148,8 +147,7 @@ xaccAccountScrubImbalance (Account *acc)
    Split *split, **slist;
    Transaction *trans;
 
-   PINFO ("xaccAccountScrubImbalance(): "
-          "Looking for imbalance in account %s \n", xaccAccountGetName(acc));
+   PINFO ("Looking for imbalance in account %s \n", xaccAccountGetName(acc));
 
    slist = xaccAccountGetSplitList (acc);
    split = slist[0];
@@ -161,8 +159,7 @@ xaccAccountScrubImbalance (Account *acc)
       if (!(DEQ (imbalance, 0.0))) {
          Split *splat;
          Account *orph;
-         DEBUG ("xaccAccountScrubImbalance(): "
-                "Found imbalance of %g\n", imbalance);
+         DEBUG ("Found imbalance of %g\n", imbalance);
          /* OK, we found an imbalanced trans.  Put it in the imbal account. */
          orph = GetOrMakeAccount (acc, trans, IMBALANCE_STR);
          
