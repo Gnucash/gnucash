@@ -14,6 +14,8 @@
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
+#include "GNCIdP.h"
 
 #include "gncBusiness.h"
 #include "gncCustomer.h"
@@ -24,7 +26,7 @@
 #include "gncInvoiceP.h"
 
 struct _gncInvoice {
-  GncBusiness *business;
+  GNCBook *book;
   
   GUID		guid;
   char *	id;
@@ -48,6 +50,8 @@ struct _gncInvoice {
   gboolean	dirty;
 };
 
+#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+
 #define GNC_INVOICE_ID		"gncInvoice"
 #define GNC_INVOICE_GUID	"invoice-guid"
 
@@ -63,17 +67,20 @@ struct _gncInvoice {
 	member = tmp; \
 	}
 
+static void addObj (GncInvoice *invoice);
+static void remObj (GncInvoice *invoice);
+
 /* Create/Destroy Functions */
 
-GncInvoice *gncInvoiceCreate (GncBusiness *business, GncInvoiceType type)
+GncInvoice *gncInvoiceCreate (GNCBook *book, GncInvoiceType type)
 {
   GncInvoice *invoice;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
   if (type != GNC_INVOICE_CUSTOMER && type != GNC_INVOICE_VENDOR) return NULL;
 
   invoice = g_new0 (GncInvoice, 1);
-  invoice->business = business;
+  invoice->book = book;
 
   invoice->id = CACHE_INSERT ("");
   invoice->notes = CACHE_INSERT ("");
@@ -81,9 +88,8 @@ GncInvoice *gncInvoiceCreate (GncBusiness *business, GncInvoiceType type)
   invoice->active = TRUE;
   invoice->type = type;
 
-  guid_new (&invoice->guid);
-  gncBusinessAddEntity (business, GNC_INVOICE_MODULE_NAME, &invoice->guid,
-			invoice);
+  xaccGUIDNew (&invoice->guid, book);
+  addObj (invoice);
 
   return invoice;
 }
@@ -95,8 +101,8 @@ void gncInvoiceDestroy (GncInvoice *invoice)
   CACHE_REMOVE (invoice->id);
   CACHE_REMOVE (invoice->notes);
   g_list_free (invoice->entries);
-  gncBusinessRemoveEntity (invoice->business, GNC_INVOICE_MODULE_NAME,
-			   &invoice->guid);
+  remObj (invoice);
+
   g_free (invoice);
 }
 
@@ -105,11 +111,11 @@ void gncInvoiceDestroy (GncInvoice *invoice)
 void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid)
 {
   if (!invoice || !guid) return;
-  gncBusinessRemoveEntity (invoice->business, GNC_INVOICE_MODULE_NAME,
-			   &invoice->guid);
+  if (guid_equal (guid, &invoice->guid)) return;
+
+  remObj (invoice);
   invoice->guid = *guid;
-  gncBusinessAddEntity (invoice->business, GNC_INVOICE_MODULE_NAME,
-			&invoice->guid, invoice);
+  addObj (invoice);
 }
 
 void gncInvoiceSetID (GncInvoice *invoice, const char *id)
@@ -225,10 +231,10 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry)
 
 /* Get Functions */
 
-GncBusiness * gncInvoiceGetBusiness (GncInvoice *invoice)
+GNCBook * gncInvoiceGetBook (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
-  return invoice->business;
+  return invoice->book;
 }
 
 const GUID * gncInvoiceGetGUID (GncInvoice *invoice)
@@ -369,7 +375,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   Transaction *txn;
   GList *item, *iter;
   GList *splitinfo = NULL;
-  GNCBook *book;
   gnc_numeric total;
   gnc_commodity *commonCommodity = NULL;
   struct acct_val {
@@ -380,7 +385,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   if (!invoice || !acc) return NULL;
 
   /* XXX: Need to obtain the book */
-  txn = xaccMallocTransaction (book);
+  txn = xaccMallocTransaction (invoice->book);
   xaccTransBeginEdit (txn);
 
   /* Figure out the common currency */
@@ -457,7 +462,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     Split *split;
     acc_val = iter->data;
 
-    split = xaccMallocSplit (book);
+    split = xaccMallocSplit (invoice->book);
     /* set action and memo? */
 
     xaccSplitSetBaseValue (split, acc_val->val, commonCommodity);
@@ -469,7 +474,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Now create the Posted split (which is negative -- it's a credit) */
   {
-    Split *split = xaccMallocSplit (book);
+    Split *split = xaccMallocSplit (invoice->book);
     /* Set action/memo */
     xaccSplitSetBaseValue (split, gnc_numeric_neg (total), commonCommodity);
     xaccAccountBeginEdit (acc);
@@ -491,7 +496,7 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
   kvp_frame *kvp;
   kvp_value *value;
   GUID *guid;
-  GncBusiness *business;
+  GNCBook *book;		/* XXX: FIXME */
 
   if (!txn) return NULL;
 
@@ -503,7 +508,15 @@ GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
   /* XXX: Need to get GNCBook from Transaction */
   /* XXX: lookup invoice from session/guid */
 
-  return gncBusinessLookupGUID (business, GNC_INVOICE_MODULE_NAME, guid);
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
+GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
 }
 
 void gncInvoiceBeginEdit (GncInvoice *invoice)
@@ -515,11 +528,56 @@ void gncInvoiceCommitEdit (GncInvoice *invoice)
   if (!invoice) return;
 }
 
+/* Package-Private functions */
+
+static void addObj (GncInvoice *invoice)
+{
+  GHashTable *ht;
+
+  xaccStoreEntity (gnc_book_get_entity_table (invoice->book),
+		   invoice, &invoice->guid, _GNC_MOD_NAME);
+
+  ht = gnc_book_get_data (invoice->book, _GNC_MOD_NAME);
+  g_hash_table_insert (ht, &invoice->guid, invoice);
+}
+
+static void remObj (GncInvoice *invoice)
+{
+  GHashTable *ht;
+
+  xaccRemoveEntity (gnc_book_get_entity_table (invoice->book), &invoice->guid);
+  ht = gnc_book_get_data (invoice->book, _GNC_MOD_NAME);
+  g_hash_table_remove (ht, &invoice->guid);
+}
+
+static void _gncInvoiceCreate (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = guid_hash_table_new ();
+  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+}
+
+static void _gncInvoiceDestroy (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
+
+  /* XXX : Destroy the objects? */
+  g_hash_table_destroy (ht);
+}
+
 static GncBusinessObject gncInvoiceDesc = {
   GNC_BUSINESS_VERSION,
-  GNC_INVOICE_MODULE_NAME,
+  _GNC_MOD_NAME,
   "Purchase/Sales Invoice",
-  NULL,				/* destroy */
+  _gncInvoiceCreate,
+  _gncInvoiceDestroy,
   NULL,				/* get list */
   NULL				/* printable */
 };
@@ -531,7 +589,7 @@ gboolean gncInvoiceRegister (void)
 
 static gint lastId = 187;	/* XXX */
 
-gint gncInvoiceNextID (GncBusiness *business)
+gint gncInvoiceNextID (GNCBook *book)
 {
   return lastId++;
 }

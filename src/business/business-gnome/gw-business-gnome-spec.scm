@@ -34,6 +34,7 @@
   
   (gw:module-depends-on mod "gw-runtime")
   (gw:module-depends-on mod "gw-business-core")
+  (gw:module-depends-on mod "gw-engine")
   (gw:module-depends-on mod "gw-gnc")
   
   (gw:module-set-guile-module! mod '(g-wrapped gw-business-gnome))
@@ -65,7 +66,7 @@
    'gnc:customer-new
    '<gnc:GncCustomer*>
    "gnc_customer_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncBusiness*> business))
+   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
    "Dialog: create a new GncCustomer.  Parent may be NULL.")
 
   (gw:wrap-function
@@ -82,7 +83,7 @@
    'gnc:customer-select
    '<gnc:GncCustomer*>
    "gnc_customer_edit_new_select"
-   '((<gnc:GncBusiness*> business) (<gnc:GncCustomer*> start_selection)
+   '((<gnc:Book*> book) (<gnc:GncCustomer*> start_selection)
      (<gnc:UIWidget> parent))
    "Dialog: Select a GncCustomer.  Parent and start_selection may be NULL.")
 
@@ -95,7 +96,7 @@
    'gnc:employee-new
    '<gnc:GncEmployee*>
    "gnc_employee_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncBusiness*> business))
+   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
    "Dialog: create a new GncEmployee.  Parent may be NULL.")
 
   (gw:wrap-function
@@ -112,7 +113,7 @@
    'gnc:employee-select
    '<gnc:GncEmployee*>
    "gnc_employee_edit_new_select"
-   '((<gnc:GncBusiness*> business) (<gnc:GncEmployee*> start_selection)
+   '((<gnc:Book*> book) (<gnc:GncEmployee*> start_selection)
      (<gnc:UIWidget> parent))
    "Dialog: Select a GncEmployee.  Parent and start_selection may be NULL.")
 
@@ -125,7 +126,7 @@
    'gnc:job-new
    '<gnc:GncJob*>
    "gnc_job_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncBusiness*> business_state)
+   '((<gnc:UIWidget> parent) (<gnc:Book*> book)
      (<gnc:GncCustomer*> default_customer))
    "Dialog: create a new GncJob.  Parent and Customer may be NULL.")
 
@@ -146,7 +147,7 @@
    'gnc:job-select
    '<gnc:GncJob*>
    "gnc_ui_select_job_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncBusiness*> business)
+   '((<gnc:UIWidget> parent) (<gnc:Book*> book)
      (<gnc:GncCustomer*> cust) (<gnc:GncJob*> job))
    "Dialog: Select a new job.  Parent and Customer may be NULL.")
 
@@ -159,7 +160,7 @@
    'gnc:vendor-new
    '<gnc:GncVendor*>
    "gnc_vendor_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncBusiness*> business))
+   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
    "Dialog: create a new GncVendor.  Parent may be NULL.")
 
   (gw:wrap-function
@@ -176,7 +177,7 @@
    'gnc:vendor-select
    '<gnc:GncVendor*>
    "gnc_vendor_edit_new_select"
-   '((<gnc:GncBusiness*> business) (<gnc:GncVendor*> start_selection)
+   '((<gnc:Book*> book) (<gnc:GncVendor*> start_selection)
      (<gnc:UIWidget> parent))
    "Dialog: Select a GncVendor.  Parent and start_selection may be NULL.")
   

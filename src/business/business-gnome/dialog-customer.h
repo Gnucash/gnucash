@@ -9,7 +9,7 @@
 #define GNC_DIALOG_CUSTOMER_H_
 
 /* Functions to create and edit customers */
-GncCustomer * gnc_customer_new (GtkWidget *parent, GncBusiness *bus);
+GncCustomer * gnc_customer_new (GtkWidget *parent, GNCBook *book);
 void gnc_customer_edit (GtkWidget *parent, GncCustomer *cust);
 
 /* Callbacks to select a customer that match the necessary functions
@@ -19,9 +19,9 @@ void gnc_customer_edit (GtkWidget *parent, GncCustomer *cust);
  *	customers.
  * new_edit provides only the ability to edit the current selection
  */
-gpointer        gnc_customer_edit_new_select (gpointer bus, gpointer c,
+gpointer        gnc_customer_edit_new_select (gpointer book, gpointer c,
 					      GtkWidget *toplevel);
-gpointer	gnc_customer_edit_new_edit (gpointer bus, gpointer cust,
+gpointer	gnc_customer_edit_new_edit (gpointer book, gpointer cust,
 					    GtkWidget *toplevel);
 
 #endif /* GNC_DIALOG_CUSTOMER_H_ */

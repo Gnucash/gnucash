@@ -9,7 +9,7 @@
 #define GNC_DIALOG_VENDOR_H_
 
 /* Functions to create and edit vendors */
-GncVendor * gnc_vendor_new (GtkWidget *parent, GncBusiness *bus);
+GncVendor * gnc_vendor_new (GtkWidget *parent, GNCBook *book);
 void gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor);
 
 /* Callbacks to select a vendor that match the necessary functions
@@ -19,9 +19,9 @@ void gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor);
  *	vendors.
  * new_edit provides only the ability to edit the current selection
  */
-gpointer        gnc_vendor_edit_new_select (gpointer bus, gpointer c,
+gpointer        gnc_vendor_edit_new_select (gpointer book, gpointer c,
 					      GtkWidget *toplevel);
-gpointer	gnc_vendor_edit_new_edit (gpointer bus, gpointer vendor,
+gpointer	gnc_vendor_edit_new_edit (gpointer book, gpointer vendor,
 					    GtkWidget *toplevel);
 
 #endif /* GNC_DIALOG_VENDOR_H_ */

@@ -12,6 +12,8 @@
 #include "gnc-numeric.h"
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
+#include "GNCIdP.h"
 
 #include "gncBusiness.h"
 #include "gncJob.h"
@@ -22,7 +24,7 @@
 #include "gncOrderP.h"
 
 struct _gncOrder {
-  GncBusiness *business;
+  GNCBook *book;
 
   GUID		guid;
   char *	id;
@@ -40,6 +42,8 @@ struct _gncOrder {
   gboolean	dirty;
 };
 
+#define _GNC_MOD_NAME	GNC_ORDER_MODULE_NAME
+
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
@@ -52,17 +56,20 @@ struct _gncOrder {
 	member = tmp; \
 	}
 
+static void addObj (GncOrder *order);
+static void remObj (GncOrder *order);
+
 /* Create/Destroy Functions */
 
-GncOrder *gncOrderCreate (GncBusiness *business, GncOrderType type)
+GncOrder *gncOrderCreate (GNCBook *book, GncOrderType type)
 {
   GncOrder *order;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
   if (type != GNC_ORDER_SALES && type != GNC_ORDER_PURCHASE) return NULL;
 
   order = g_new0 (GncOrder, 1);
-  order->business = business;
+  order->book = book;
 
   order->id = CACHE_INSERT ("");
   order->notes = CACHE_INSERT ("");
@@ -70,8 +77,8 @@ GncOrder *gncOrderCreate (GncBusiness *business, GncOrderType type)
   order->active = TRUE;
   order->type = type;
 
-  guid_new (&order->guid);
-  gncBusinessAddEntity (business, GNC_ORDER_MODULE_NAME, &order->guid, order);
+  xaccGUIDNew (&order->guid, book);
+  addObj (order);
 
   return order;
 }
@@ -85,8 +92,7 @@ void gncOrderDestroy (GncOrder *order)
   g_list_free (order->entries);
   CACHE_REMOVE (order->id);
   CACHE_REMOVE (order->notes);
-  gncBusinessRemoveEntity (order->business, GNC_ORDER_MODULE_NAME,
-			   &order->guid);
+  remObj (order);
 
   g_free (order);
 }
@@ -96,11 +102,11 @@ void gncOrderDestroy (GncOrder *order)
 void gncOrderSetGUID (GncOrder *order, const GUID *guid)
 {
   if (!order || !guid) return;
-  gncBusinessRemoveEntity (order->business, GNC_ORDER_MODULE_NAME,
-			   &order->guid);
+  if (guid_equal (guid, &order->guid)) return;
+
+  remObj (order);
   order->guid = *guid;
-  gncBusinessAddEntity (order->business, GNC_ORDER_MODULE_NAME,
-			&order->guid, order);
+  addObj (order);
 }
 
 void gncOrderSetID (GncOrder *order, const char *id)
@@ -188,10 +194,10 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry)
 
 /* Get Functions */
 
-GncBusiness * gncOrderGetBusiness (GncOrder *order)
+GNCBook * gncOrderGetBook (GncOrder *order)
 {
   if (!order) return NULL;
-  return order->business;
+  return order->book;
 }
 
 const GUID * gncOrderGetGUID (GncOrder *order)
@@ -259,6 +265,13 @@ GList * gncOrderGetEntries (GncOrder *order)
   return order->entries;
 }
 
+GncOrder * gncOrderLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
 gboolean gncOrderIsDirty (GncOrder *order)
 {
   if (!order) return FALSE;
@@ -275,11 +288,56 @@ void gncOrderCommitEdit (GncOrder *order)
   if (!order) return;
 }
 
+/* Package-Private functions */
+
+static void addObj (GncOrder *order)
+{
+  GHashTable *ht;
+
+  xaccStoreEntity (gnc_book_get_entity_table (order->book),
+		   order, &order->guid, _GNC_MOD_NAME);
+
+  ht = gnc_book_get_data (order->book, _GNC_MOD_NAME);
+  g_hash_table_insert (ht, &order->guid, order);
+}
+
+static void remObj (GncOrder *order)
+{
+  GHashTable *ht;
+
+  xaccRemoveEntity (gnc_book_get_entity_table (order->book), &order->guid);
+  ht = gnc_book_get_data (order->book, _GNC_MOD_NAME);
+  g_hash_table_remove (ht, &order->guid);
+}
+
+static void _gncOrderCreate (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = guid_hash_table_new ();
+  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+}
+
+static void _gncOrderDestroy (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
+
+  /* XXX : Destroy the objects? */
+  g_hash_table_destroy (ht);
+}
+
 static GncBusinessObject gncOrderDesc = {
   GNC_BUSINESS_VERSION,
-  GNC_ORDER_MODULE_NAME,
+  _GNC_MOD_NAME,
   "Purchase/Sales Order",
-  NULL,				/* destroy */
+  _gncOrderCreate,
+  _gncOrderDestroy,
   NULL,				/* get list */
   NULL				/* printable */
 };
@@ -291,7 +349,7 @@ gboolean gncOrderRegister (void)
 
 static gint lastId = 471;	/* XXX */
 
-gint gncOrderNextID (GncBusiness *business)
+gint gncOrderNextID (GNCBook *book)
 {
   return lastId++;
 }

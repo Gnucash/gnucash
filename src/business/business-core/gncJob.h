@@ -7,10 +7,8 @@
 #ifndef GNC_JOB_H_
 #define GNC_JOB_H_
 
-struct _gncJob;
 typedef struct _gncJob GncJob;
 
-#include "gncBusiness.h"
 #include "gncAddress.h"
 #include "gncCustomer.h"
 
@@ -18,7 +16,7 @@ typedef struct _gncJob GncJob;
 
 /* Create/Destroy Functions */
 
-GncJob *gncJobCreate (GncBusiness *business);
+GncJob *gncJobCreate (GNCBook *book);
 void gncJobDestroy (GncJob *job);
 
 /* Set Functions */
@@ -33,7 +31,7 @@ void gncJobCommitEdit (GncJob *job);
 
 /* Get Functions */
 
-GncBusiness * gncJobGetBusiness (GncJob *job);
+GNCBook * gncJobGetBook (GncJob *job);
 const GUID * gncJobGetGUID (GncJob *job);
 const char * gncJobGetID (GncJob *job);
 const char * gncJobGetName (GncJob *job);
@@ -41,6 +39,7 @@ const char * gncJobGetDesc (GncJob *job);
 GncCustomer * gncJobGetCustomer (GncJob *job);
 gboolean gncJobGetActive (GncJob *job);
 
+GncJob * gncJobLookup (GNCBook *book, const GUID *guid);
 gboolean gncJobIsDirty (GncJob *job);
 
 /* Other functions */

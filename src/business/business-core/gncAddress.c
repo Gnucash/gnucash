@@ -12,7 +12,7 @@
 #include "gncAddress.h"
 
 struct _gncAddress {
-  GncBusiness *	business;
+  GNCBook *	book;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -30,14 +30,14 @@ struct _gncAddress {
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (GncBusiness *business)
+GncAddress * gncAddressCreate (GNCBook *book)
 {
   GncAddress *addr;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
 
   addr = g_new0 (GncAddress, 1);
-  addr->business = business;
+  addr->book = book;
   addr->dirty = FALSE;
 
   addr->name = CACHE_INSERT ("");

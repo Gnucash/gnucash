@@ -10,7 +10,7 @@
 typedef struct _gncEntry GncEntry;
 
 #include "date.h"
-#include "gncBusiness.h"
+#include "gnc-book.h"
 #include "gncOrder.h"
 #include "gncInvoice.h"
 
@@ -29,7 +29,7 @@ typedef struct _gncEntry GncEntry;
 
 /* Create/Destroy Functions */
 
-GncEntry *gncEntryCreate (GncBusiness *business);
+GncEntry *gncEntryCreate (GNCBook *book);
 void gncEntryDestroy (GncEntry *entry);
 
 /* Set Functions */
@@ -49,7 +49,7 @@ void gncEntrySetTaxAccount (GncEntry *entry, Account *acc);
 
 /* Get Functions */
 
-GncBusiness * gncEntryGetBusiness (GncEntry *entry);
+GNCBook * gncEntryGetBook (GncEntry *entry);
 const GUID * gncEntryGetGUID (GncEntry *entry);
 Timespec gncEntryGetDate (GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
@@ -68,6 +68,7 @@ Account * gncEntryGetTaxAccount (GncEntry *entry);
 GncOrder * gncEntryGetOrder (GncEntry *entry);
 GncInvoice * gncEntryGetInvoice (GncEntry *entry);
 
+GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid);
 
 void gncEntryCommitEdit (GncEntry *entry);
 

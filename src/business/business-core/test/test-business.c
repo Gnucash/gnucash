@@ -12,14 +12,16 @@
 #define TEST_MODULE_NAME "business-test"
 #define TEST_MODULE_DESC "Test Business"
 
-static GList * get_list (GncBusiness *, gboolean show_all);
+static GList * get_list (GNCBook *, gboolean show_all);
 static const char * printable (gpointer obj);
-static void test_printable (GncBusiness *bus, const char *name, gpointer obj);
+static void test_printable (const char *name, gpointer obj);
+static void test_get_list (GNCBook *, const char *);
 
 static GncBusinessObject bus_obj = {
   GNC_BUSINESS_VERSION,
   TEST_MODULE_NAME,
   TEST_MODULE_DESC,
+  NULL,				/* create */
   NULL,				/* destroy */
   get_list,
   printable,
@@ -27,8 +29,6 @@ static GncBusinessObject bus_obj = {
 
 static void test_business (void)
 {
-  GncBusiness *bus;
-
   /* Test the global registration and lookup functions */
   {
     do_test (!gncBusinessRegister (NULL), "register NULL");
@@ -44,93 +44,14 @@ static void test_business (void)
 	     "test description return");
   }
 
-  /* Test creation and session handling */
-  {
-    bus = gncBusinessCreate (NULL);
-    do_test (bus == NULL, "business create NULL");
-    bus = gncBusinessCreate ((GNCBook *)1);
-    do_test (bus != NULL, "business create non-NULL");
-
-    do_test (gncBusinessGetBook (NULL) == NULL,
-	     "business get session NULL");
-    do_test (gncBusinessGetBook (bus) == (GNCBook *)1,
-	     "business get session");
-
-    gncBusinessDestroy (bus);
-    success ("business create and destroy");
-  }
-
-  /* Test the entity tables */
-  {
-    GUID guid;
-    gpointer ptr, res;
-    GHashTable *ht;
-
-    bus = gncBusinessCreate ((GNCBook *)1);
-    do_test (gncBusinessEntityTable (NULL, NULL) == NULL,
-	     "business entity table NULL NULL");
-    do_test (gncBusinessEntityTable (NULL, TEST_MODULE_NAME) == NULL,
-	     "business entity table NULL module_name");
-    do_test (gncBusinessEntityTable (bus, NULL) == NULL,
-	     "business entity table bus NULL");
-    ht = gncBusinessEntityTable (bus, TEST_MODULE_NAME);
-    do_test (ht != NULL, "business entity table bus, module_name");
-
-    guid_new (&guid);
-
-    /* Check the lookup functions before we add anything to the table */
-    do_test (gncBusinessLookupGUID (NULL, NULL, NULL) == NULL,
-	     "business: lookupGUID: NULL, NULL, NULL");
-    do_test (gncBusinessLookupGUID (NULL, NULL, &guid) == NULL,
-	     "business: lookupGUID: NULL, NULL, guid");
-    do_test (gncBusinessLookupGUID (NULL, TEST_MODULE_NAME, NULL) == NULL,
-	     "business: lookupGUID: NULL, mod_name, NULL");
-    do_test (gncBusinessLookupGUID (NULL, TEST_MODULE_NAME, &guid) == NULL,
-	     "business: lookupGUID: NULL, mod_name, guid");
-    do_test (gncBusinessLookupGUID (bus, NULL, NULL) == NULL,
-	     "business: lookupGUID: bus, NULL, NULL");
-    do_test (gncBusinessLookupGUID (bus, NULL, &guid) == NULL,
-	     "business: lookupGUID: bus, NULL, guid");
-    do_test (gncBusinessLookupGUID (bus, TEST_MODULE_NAME, NULL) == NULL,
-	     "business: lookupGUID: bus, mod_name, NULL");
-    do_test (gncBusinessLookupGUID (bus, TEST_MODULE_NAME, &guid) == NULL,
-	     "business: lookupGUID: bus, mod_name, guid");
-
-    /* Now add to the table and look up again */
-    ptr = get_random_string ();
-    gncBusinessAddEntity (bus, TEST_MODULE_NAME, &guid, ptr);
-
-    /* now let's see if we can look for it */
-    do_test (gncBusinessLookupGUID (NULL, NULL, NULL) == NULL,
-	     "business: lookupGUID(2): NULL, NULL, NULL");
-    do_test (gncBusinessLookupGUID (NULL, NULL, &guid) == NULL,
-	     "business: lookupGUID(2): NULL, NULL, guid");
-    do_test (gncBusinessLookupGUID (NULL, TEST_MODULE_NAME, NULL) == NULL,
-	     "business: lookupGUID(2): NULL, mod_name, NULL");
-    do_test (gncBusinessLookupGUID (NULL, TEST_MODULE_NAME, &guid) == NULL,
-	     "business: lookupGUID(2): NULL, mod_name, guid");
-    do_test (gncBusinessLookupGUID (bus, NULL, NULL) == NULL,
-	     "business: lookupGUID(2): bus, NULL, NULL");
-    do_test (gncBusinessLookupGUID (bus, NULL, &guid) == NULL,
-	     "business: lookupGUID(2): bus, NULL, guid");
-    do_test (gncBusinessLookupGUID (bus, TEST_MODULE_NAME, NULL) == NULL,
-	     "business: lookupGUID(2): bus, mod_name, NULL");
-    res = gncBusinessLookupGUID (bus, TEST_MODULE_NAME, &guid);
-    do_test (res != NULL, "business: lookupGUID(2): bus, mod_name, guid");
-    do_test (res == ptr, "business: lookupGUID(2): check the same pointer");
-
-    gncBusinessRemoveEntity (bus, TEST_MODULE_NAME, &guid);
-    res = gncBusinessLookupGUID (bus, TEST_MODULE_NAME, &guid);
-    do_test (res == NULL, "business: lookupGUID(3): bus, mod_name, guid");
-
-    test_printable (bus, TEST_MODULE_NAME, ptr);
-  }
+  test_get_list ((GNCBook*)1, TEST_MODULE_NAME);
+  test_printable (TEST_MODULE_NAME, (gpointer)1);
 }
 
 static GList *
-get_list (GncBusiness *bus, gboolean show_all)
+get_list (GNCBook *book, gboolean show_all)
 {
-  do_test (bus != NULL, "get_list: NULL business");
+  do_test (book != NULL, "get_list: NULL business");
   success ("called get_list callback");
   return ((GList *)1);
 }
@@ -144,7 +65,7 @@ printable (gpointer obj)
 }
 
 static void
-test_get_list (GncBusiness *bus, const char *name)
+test_get_list (GNCBook *book, const char *name)
 {
   GList *res;
 
@@ -152,34 +73,25 @@ test_get_list (GncBusiness *bus, const char *name)
 	   "business: GetList: NULL, NULL, FALSE");
   do_test (gncBusinessGetList (NULL, name, FALSE) == NULL,
 	   "business: GetList: NULL, mod_name, FALSE");
-  do_test (gncBusinessGetList (bus, NULL, FALSE) == NULL,
-	   "business: GetList: bus, NULL, FALSE");
-  res = gncBusinessGetList (bus, name, FALSE);
-  do_test (res != NULL, "business: GetList: bus, mod_name, FALSE");
+  do_test (gncBusinessGetList (book, NULL, FALSE) == NULL,
+	   "business: GetList: book, NULL, FALSE");
+  res = gncBusinessGetList (book, name, FALSE);
+  do_test (res != NULL, "business: GetList: book, mod_name, FALSE");
 }
 
 static void
-test_printable (GncBusiness *bus, const char *name, gpointer obj)
+test_printable (const char *name, gpointer obj)
 {
   const char *res;
 
-  do_test (gncBusinessPrintable (NULL, NULL, NULL) == NULL,
-	   "business: Printable: NULL, NULL, NULL");
-  do_test (gncBusinessPrintable (NULL, NULL, obj) == NULL,
-	   "business: Printable: NULL, NULL, object");
-  do_test (gncBusinessPrintable (NULL, name, NULL) == NULL,
-	   "business: Printable: NULL, mod_name, NULL");
-  do_test (gncBusinessPrintable (NULL, name, obj) == NULL,
-	   "business: Printable: NULL, mod_name, object");
-  do_test (gncBusinessPrintable (bus, NULL, NULL) == NULL,
-	   "business: Printable: bus, NULL, NULL");
-  do_test (gncBusinessPrintable (bus, NULL, obj) == NULL,
-	   "business: Printable: bus, NULL, object");
-  do_test (gncBusinessPrintable (bus, name, NULL) == NULL,
-	   "business: Printable: bus, mod_name, NULL");
-
-  res = gncBusinessPrintable (bus, name, obj);
-  do_test (res != NULL, "business: Printable: bus, mod_name, object");
+  do_test (gncBusinessPrintable (NULL, NULL) == NULL,
+	   "business: Printable: NULL, NULL");
+  do_test (gncBusinessPrintable (NULL, obj) == NULL,
+	   "business: Printable: NULL, object");
+  do_test (gncBusinessPrintable (name, NULL) == NULL,
+	   "business: Printable: mod_name, NULL");
+  res = gncBusinessPrintable (name, obj);
+  do_test (res != NULL, "business: Printable: mod_name, object");
 }
 
 static void

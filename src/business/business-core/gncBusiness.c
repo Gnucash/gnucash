@@ -17,88 +17,53 @@
 static gboolean business_is_initialized = FALSE;
 static GList *business_modules = NULL;
 
-struct _gncBusiness {
-  GHashTable *	objects;
-  GNCBook *	book;
-};
-
-GncBusiness *gncBusinessCreate (GNCBook *book)
+void gncBusinessCreateBook (GNCBook *book)
 {
-  GncBusiness *bus;
-  GList *iter;
+  GList *l;
 
-  if (!book) return NULL;
-
-  bus = g_new0 (GncBusiness, 1);
-  bus->objects = g_hash_table_new (g_str_hash, g_str_equal);
-  bus->book = book;
-
-  /* Populate the objects hash table with hash tables for
-   * each of the business objects.
-   */
-  for (iter = business_modules; iter; iter = iter->next) {
-    const GncBusinessObject *obj = iter->data;
-    g_hash_table_insert (bus->objects, (gpointer)obj->name,
-			 guid_hash_table_new ());
+  if (!book) return;
+  for (l = business_modules; l; l = l->next) {
+    GncBusinessObject *obj = l->data;
+    if (obj->create)
+      obj->create (book);
   }
-
-  return bus;
 }
 
-void gncBusinessDestroy (GncBusiness *bus)
+void gncBusinessDestroyBook (GNCBook *book)
 {
-  if (!bus) return;
+  GList *l;
 
-  /* XXX: destroy the objects under us... */
-  g_hash_table_destroy (bus->objects);
-  g_free (bus);
-}
-
-GNCBook * gncBusinessGetBook (const GncBusiness *bus)
-{
-  if (!bus) return NULL;
-
-  return bus->book;
-}
-
-gpointer
-gncBusinessLookupGUID (GncBusiness *business, const char *type_name,
-		       const GUID * guid)
-{
-  GHashTable *table;
-
-  if (!business || !type_name || !guid) return NULL;
-
-  table = gncBusinessEntityTable (business, type_name);
-  if (!table) return NULL;
-
-  return g_hash_table_lookup (table, guid);
+  if (!book) return;
+  for (l = business_modules; l; l = l->next) {
+    GncBusinessObject *obj = l->data;
+    if (obj->destroy)
+      obj->destroy (book);
+  }
 }
 
 GList *
-gncBusinessGetList (GncBusiness *business, const char *type_name,
+gncBusinessGetList (GNCBook *book, const char *type_name,
 		    gboolean show_all)
 {
   const GncBusinessObject *obj;
 
-  if (!business || !type_name) return NULL;
+  if (!book || !type_name) return NULL;
 
   obj = gncBusinessLookup (type_name);
   if (!obj) return NULL;
 
   if (obj->get_list)
-    return ((*(obj->get_list))(business, show_all));
+    return ((*(obj->get_list))(book, show_all));
 
   return NULL;	    
 }
 
 const char *
-gncBusinessPrintable (GncBusiness *business, const char *type_name,
-		      gpointer obj)
+gncBusinessPrintable (const char *type_name, gpointer obj)
 {
   const GncBusinessObject *b_obj;
 
-  if (!business || !type_name || !obj) return NULL;
+  if (!type_name || !obj) return NULL;
 
   b_obj = gncBusinessLookup (type_name);
   if (!b_obj) return NULL;
@@ -163,26 +128,3 @@ const GncBusinessObject * gncBusinessLookup (const char *name)
   }
   return NULL;
 }
-
-GHashTable * gncBusinessEntityTable (GncBusiness *bus, const char *name)
-{
-  if (!bus || !name) return NULL;
-  return (g_hash_table_lookup (bus->objects, name));
-}
-
-void gncBusinessAddEntity (GncBusiness *bus, const char *name,
-			   const GUID *guid, gpointer obj)
-{
-  GHashTable *ht = gncBusinessEntityTable (bus, name);
-  if (!ht || !obj || !guid) return;
-  g_hash_table_insert (ht, (gpointer)guid, obj);
-}
-
-void gncBusinessRemoveEntity (GncBusiness *bus, const char *name,
-			      const GUID *guid)
-{
-  GHashTable *ht = gncBusinessEntityTable (bus, name);
-  if (!ht || !guid) return;
-  g_hash_table_remove (ht, guid);
-}
-

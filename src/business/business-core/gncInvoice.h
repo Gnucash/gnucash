@@ -16,13 +16,11 @@ typedef enum {
   GNC_INVOICE_VENDOR = 2
 } GncInvoiceType;
 
-#include "gncBusiness.h"
-
 #define GNC_INVOICE_MODULE_NAME "gncInvoice"
 
 /* Create/Destroy Functions */
 
-GncInvoice *gncInvoiceCreate (GncBusiness *business, GncInvoiceType type);
+GncInvoice *gncInvoiceCreate (GNCBook *book, GncInvoiceType type);
 void gncInvoiceDestroy (GncInvoice *invoice);
 
 /* Set Functions */
@@ -42,7 +40,7 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 
 /* Get Functions */
 
-GncBusiness * gncInvoiceGetBusiness (GncInvoice *invoice);
+GNCBook * gncInvoiceGetBook (GncInvoice *invoice);
 const GUID * gncInvoiceGetGUID (GncInvoice *invoice);
 const char * gncInvoiceGetID (GncInvoice *invoice);
 GncInvoiceType gncInvoiceGetType (GncInvoice *invoice);
@@ -70,6 +68,7 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 /* Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 
+GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid);
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
 

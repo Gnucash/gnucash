@@ -9,7 +9,7 @@
 #define GNC_DIALOG_JOB_H_
 
 /* Functions to create and edit jobs */
-GncJob * gnc_job_new (GtkWidget *parent, GncBusiness *bus, GncCustomer *cust);
+GncJob * gnc_job_new (GtkWidget *parent, GNCBook *book, GncCustomer *cust);
 void gnc_job_edit (GtkWidget *parent, GncJob *job);
 
 /* Callback to choose a job from a customer, for use with the

@@ -7,11 +7,10 @@
 #ifndef GNC_ORDERP_H_
 #define GNC_ORDERP_H_
 
-#include "gncBusiness.h"
 #include "gncOrder.h"
 
 gboolean gncOrderRegister (void);
-gint gncOrderNextID (GncBusiness *business);
+gint gncOrderNextID (GNCBook *book);
 void gncOrderSetGUID (GncOrder *order, const GUID *guid);
 void gncOrderSetDirty (GncOrder *order, gboolean dirty);
 

@@ -7,11 +7,10 @@
 #ifndef GNC_JOBP_H_
 #define GNC_JOBP_H_
 
-#include "gncBusiness.h"
 #include "gncJob.h"
 
 gboolean gncJobRegister (void);
-gint gncJobNextID (GncBusiness *business);
+gint gncJobNextID (GNCBook *book);
 void gncJobSetGUID (GncJob *job, const GUID *guid);
 
 #endif /* GNC_JOBP_H_ */

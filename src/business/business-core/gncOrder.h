@@ -15,7 +15,7 @@ typedef enum {
   GNC_ORDER_PURCHASE = 2
 } GncOrderType;
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
 #include "gncJob.h"
 #include "gncVendor.h"
 
@@ -23,7 +23,7 @@ typedef enum {
 
 /* Create/Destroy Functions */
 
-GncOrder *gncOrderCreate (GncBusiness *business, GncOrderType type);
+GncOrder *gncOrderCreate (GNCBook *book, GncOrderType type);
 void gncOrderDestroy (GncOrder *order);
 
 /* Set Functions */
@@ -42,7 +42,7 @@ void gncOrderRemoveEntry (GncOrder *order, GncEntry *entry);
 
 /* Get Functions */
 
-GncBusiness * gncOrderGetBusiness (GncOrder *order);
+GNCBook * gncOrderGetBook (GncOrder *order);
 const GUID * gncOrderGetGUID (GncOrder *order);
 const char * gncOrderGetID (GncOrder *order);
 GncOrderType gncOrderGetType (GncOrder *order);
@@ -56,6 +56,7 @@ gboolean gncOrderGetActive (GncOrder *order);
 /* Get the list Entries */
 GList * gncOrderGetEntries (GncOrder *order);
 
+GncOrder * gncOrderLookup (GNCBook *book, const GUID *guid);
 gboolean gncOrderIsDirty (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
 

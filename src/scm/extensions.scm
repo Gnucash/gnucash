@@ -56,15 +56,16 @@
 
 (gnc:module-load "gnucash/business-gnome" 0)
 
-(define gnc:extensions-temp-business #f)
+(define gnc:extensions-temp-book #f)
 
-(define (gnc:extensions-get-business)
-  (if gnc:extensions-temp-business
-      gnc:extensions-temp-business
+(define (gnc:extensions-get-book)
+  (if gnc:extensions-temp-book
+      gnc:extensions-temp-book
       (begin
-	(set! gnc:extensions-temp-business (gnc:business-create
+	(set! gnc:extensions-temp-book (gnc:book-create
 					    (gnc:get-current-book)))
-	gnc:extensions-temp-business)))
+	(gnc:business-create-book gnc:extensions-temp-book)
+	gnc:extensions-temp-book)))
 
 (define (gnc:extensions-menu-setup)
   (define menu (gnc:make-menu "Extensions" (list "_Settings")))
@@ -75,7 +76,7 @@
 			(N_ "Test New Job Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:job-new #f (gnc:extensions-get-business)
+			  (gnc:job-new #f (gnc:extensions-get-book)
 				       #f))))
 
   (define select-job-item
@@ -83,7 +84,7 @@
 			(N_ "Test Job Selection Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:job-select #f (gnc:extensions-get-business)
+			  (gnc:job-select #f (gnc:extensions-get-book)
 				       #f #f))))
 
   (define new-vendor-item
@@ -91,7 +92,7 @@
 			(N_ "Test New Vendor Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:vendor-new #f (gnc:extensions-get-business)))))
+			  (gnc:vendor-new #f (gnc:extensions-get-book)))))
 
 
   (define select-vendor-item
@@ -99,7 +100,7 @@
 			(N_ "Test Vendor Selection Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:vendor-select (gnc:extensions-get-business)
+			  (gnc:vendor-select (gnc:extensions-get-book)
 				       #f #f))))
 
   (define new-employee-item
@@ -107,7 +108,7 @@
 			(N_ "Test New Employee Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:employee-new #f (gnc:extensions-get-business)))))
+			  (gnc:employee-new #f (gnc:extensions-get-book)))))
 
 
   (define select-employee-item
@@ -115,7 +116,7 @@
 			(N_ "Test Employee Selection Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:employee-select (gnc:extensions-get-business)
+			  (gnc:employee-select (gnc:extensions-get-book)
 				       #f #f))))
 
   (gnc:add-extension menu)

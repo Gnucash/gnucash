@@ -7,11 +7,10 @@
 #ifndef GNC_CUSTOMERP_H_
 #define GNC_CUSTOMERP_H_
 
-#include "gncBusiness.h"
 #include "gncCustomer.h"
 
 gboolean gncCustomerRegister (void);
-gint gncCustomerNextID (GncBusiness *business);
+gint gncCustomerNextID (GNCBook *book);
 void gncCustomerSetGUID (GncCustomer *customer, const GUID *guid);
 
 #endif /* GNC_CUSTOMERP_H_ */

@@ -28,7 +28,7 @@ struct select_job_window {
   GtkWidget * showcust_check;
   GtkWidget * showjobs_check;
 
-  GncBusiness *	business;
+  GNCBook *	book;
   GncCustomer *	customer;
   GncJob *	job;
 
@@ -110,7 +110,7 @@ update_customer_select_picker (struct select_job_window *w)
   saved_cust = w->customer;
 
   /* Get the list of objects */
-  custs = (*(w->cust_type->get_list))(w->business, show_all);
+  custs = (*(w->cust_type->get_list))(w->book, show_all);
 
   /* Build a list of strings (objs is pre-sorted, so keep the order!) */
   for (iterator = custs; iterator; iterator = iterator->next) {
@@ -197,7 +197,7 @@ static void
 gnc_ui_select_job_new_cb(GtkButton * button, gpointer user_data)
 {
   struct select_job_window * w = user_data;
-  GncJob * new_selection = gnc_job_new (w->dialog, w->business, w->customer);
+  GncJob * new_selection = gnc_job_new (w->dialog, w->book, w->customer);
 
   if (new_selection) {
     w->customer = gncJobGetCustomer (new_selection);
@@ -256,7 +256,7 @@ select_job_close (GnomeDialog *dialog, gpointer data)
 }
 
 GncJob *
-gnc_ui_select_job_new (GtkWidget * parent, GncBusiness *business,
+gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
 		       GncCustomer *cust, GncJob *job)
 {
   struct select_job_window * win =
@@ -265,8 +265,8 @@ gnc_ui_select_job_new (GtkWidget * parent, GncBusiness *business,
   GtkWidget *choice_name_label;
   GncJob *retval;
 
-  g_return_val_if_fail (business != NULL, NULL);
-  win->business = business;
+  g_return_val_if_fail (book != NULL, NULL);
+  win->book = book;
 
   win->cust_type = gncBusinessLookup (GNC_CUSTOMER_MODULE_NAME);
   win->job_type = gncBusinessLookup (GNC_JOB_MODULE_NAME);

@@ -7,14 +7,14 @@
 #ifndef GNC_ADDRESS_H_
 #define GNC_ADDRESS_H_
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
 
 struct _gncAddress;
 typedef struct _gncAddress GncAddress;
 
 /* Create/Destroy functions */
 
-GncAddress * gncAddressCreate (GncBusiness *business);
+GncAddress * gncAddressCreate (GNCBook *book);
 void gncAddressDestroy (GncAddress *addr);
 
 /* Set functions */

@@ -18,7 +18,6 @@
 #include "gnc-engine-util.h"
 #include "window-help.h"
 
-#include "gncBusiness.h"
 #include "gncAddress.h"
 #include "gncCustomer.h"
 #include "gncCustomerP.h"
@@ -36,7 +35,7 @@ typedef enum
 } CustomerDialogType;
 
 struct _customer_select_window {
-  GncBusiness *	business;
+  GNCBook *	book;
 };
 
 typedef struct _customer_window {
@@ -74,7 +73,7 @@ typedef struct _customer_window {
   CustomerDialogType	dialog_type;
   GUID		customer_guid;
   gint		component_id;
-  GncBusiness *	business;
+  GNCBook *	book;
   GncCustomer *	created_customer;
 
 } CustomerWindow;
@@ -85,8 +84,7 @@ cw_get_customer (CustomerWindow *cw)
   if (!cw)
     return NULL;
 
-  return gncBusinessLookupGUID (cw->business, GNC_CUSTOMER_MODULE_NAME,
-				&cw->customer_guid);
+  return gncCustomerLookup (cw->book, &cw->customer_guid);
 }
 
 static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
@@ -362,7 +360,7 @@ gnc_customer_window_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static CustomerWindow *
-gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
+gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
 			 GncCustomer *cust)
 {
   CustomerWindow *cw;
@@ -374,7 +372,7 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
 
   cw = g_new0 (CustomerWindow, 1);
 
-  cw->business = bus;
+  cw->book = bookp;
 
   /* Find the dialog */
   xml = gnc_glade_xml_new ("customer.glade", "Customer Dialog");
@@ -554,12 +552,12 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
 				  cw);
   } else {
     gnc_numeric num;
-    cust = gncCustomerCreate (bus);
+    cust = gncCustomerCreate (bookp);
     cw->customer_guid = *gncCustomerGetGUID (cust);
 
     cw->dialog_type = NEW_CUSTOMER;
     gtk_entry_set_text (GTK_ENTRY (cw->id_entry),
-			g_strdup_printf ("%.6d", gncCustomerNextID(bus)));
+			g_strdup_printf ("%.6d", gncCustomerNextID(bookp)));
     cw->component_id =
       gnc_register_gui_component (DIALOG_NEW_CUSTOMER_CM_CLASS,
 				  gnc_customer_window_refresh_handler,
@@ -591,15 +589,15 @@ gnc_customer_new_window (GtkWidget *parent, GncBusiness *bus,
 }
 
 GncCustomer *
-gnc_customer_new (GtkWidget *parent, GncBusiness *bus)
+gnc_customer_new (GtkWidget *parent, GNCBook *bookp)
 {
   CustomerWindow *cw;
   GncCustomer *created_customer = NULL;
 
   /* Make sure required options exist */
-  if (!bus) return NULL;
+  if (!bookp) return NULL;
 
-  cw = gnc_customer_new_window (parent, bus, NULL);
+  cw = gnc_customer_new_window (parent, bookp, NULL);
 
   gtk_signal_connect (GTK_OBJECT (cw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_customer_on_close_cb),
@@ -619,7 +617,7 @@ gnc_customer_edit (GtkWidget *parent, GncCustomer *cust)
 
   if (!cust) return;
 
-  cw = gnc_customer_new_window (parent, gncCustomerGetBusiness(cust), cust);
+  cw = gnc_customer_new_window (parent, gncCustomerGetBook(cust), cust);
 
   gtk_signal_connect (GTK_OBJECT (cw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_customer_on_close_cb),
@@ -640,7 +638,7 @@ static gpointer gnc_customer_edit_new_cb (gpointer arg, GtkWidget *toplevel)
 
   if (!arg) return NULL;
 
-  return gnc_customer_new (toplevel, sw->business);
+  return gnc_customer_new (toplevel, sw->book);
 }
 
 static void gnc_customer_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
@@ -653,27 +651,27 @@ static void gnc_customer_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *to
   gnc_customer_edit (toplevel, cust);
 }
 
-gpointer gnc_customer_edit_new_select (gpointer bus, gpointer cust,
+gpointer gnc_customer_edit_new_select (gpointer bookp, gpointer cust,
 				       GtkWidget *toplevel)
 {
-  GncBusiness *business = bus;
+  GNCBook *book = bookp;
   struct _customer_select_window sw;
 
-  g_return_val_if_fail (bus != NULL, NULL);
+  g_return_val_if_fail (bookp != NULL, NULL);
 
-  sw.business = business;
+  sw.book = book;
 
   return
     gnc_ui_business_chooser_new (toplevel, cust,
-				 business, GNC_CUSTOMER_MODULE_NAME,
+				 book, GNC_CUSTOMER_MODULE_NAME,
 				 gnc_customer_edit_new_cb,
 				 gnc_customer_edit_edit_cb, &sw);
 }
 
-gpointer gnc_customer_edit_new_edit (gpointer bus, gpointer cust,
+gpointer gnc_customer_edit_new_edit (gpointer bookp, gpointer cust,
 				     GtkWidget *toplevel)
 {
-  GncBusiness *busiess = bus;
+  GNCBook *book = bookp;
   GncCustomer *customer = cust;
 
   g_return_val_if_fail (cust != NULL, NULL);

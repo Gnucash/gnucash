@@ -7,17 +7,16 @@
 #ifndef GNC_EMPLOYEE_H_
 #define GNC_EMPLOYEE_H_
 
-struct _gncEmployee;
 typedef struct _gncEmployee GncEmployee;
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
 #include "gncAddress.h"
 
 #define GNC_EMPLOYEE_MODULE_NAME "gncEmployee"
 
 /* Create/Destroy Functions */
 
-GncEmployee *gncEmployeeCreate (GncBusiness *business);
+GncEmployee *gncEmployeeCreate (GNCBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
 
 /* Set Functions */
@@ -32,7 +31,7 @@ void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
 
 /* Get Functions */
 
-GncBusiness * gncEmployeeGetBusiness (GncEmployee *employee);
+GNCBook * gncEmployeeGetBook (GncEmployee *employee);
 const GUID * gncEmployeeGetGUID (GncEmployee *employee);
 const char * gncEmployeeGetID (GncEmployee *employee);
 const char * gncEmployeeGetUsername (GncEmployee *employee);
@@ -43,6 +42,7 @@ gnc_numeric gncEmployeeGetWorkday (GncEmployee *employee);
 gnc_numeric gncEmployeeGetRate (GncEmployee *employee);
 gboolean gncEmployeeGetActive (GncEmployee *employee);
 
+GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
 void gncEmployeeCommitEdit (GncEmployee *employee);

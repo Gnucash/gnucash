@@ -18,12 +18,13 @@ LDADD = \
   -lltdl
 
 TESTS = \
+  test-load-module \
   test-business \
   test-address \
   test-customer \
-  test-vendor \
   test-employee \
-  test-job
+  test-job \
+  test-vendor
 
 GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
@@ -35,11 +36,12 @@ TESTS_ENVIRONMENT := \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
 noinst_PROGRAMS = \
+  test-load-module \
   test-business \
   test-address \
   test-customer \
-  test-vendor \
   test-employee \
-  test-job
+  test-job \
+  test-vendor
 
 EXTRA_DIST = 

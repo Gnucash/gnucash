@@ -12,14 +12,17 @@
 #include "guid.h"
 #include "messages.h"
 #include "gnc-engine-util.h"
-
 #include "gnc-numeric.h"
+#include "gnc-book-p.h"
+#include "GNCIdP.h"
+
+#include "gncBusiness.h"
 #include "gncJob.h"
 #include "gncJobP.h"
 #include "gncCustomer.h"
 
 struct _gncJob {
-  GncBusiness *	business;
+  GNCBook *	book;
   GUID		guid;
   char *	id;
   char *	name;
@@ -29,19 +32,24 @@ struct _gncJob {
   gboolean	dirty;
 };
 
+#define _GNC_MOD_NAME	GNC_JOB_MODULE_NAME
+
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
+static void addObj (GncJob *job);
+static void remObj (GncJob *job);
+
 /* Create/Destroy Functions */
 
-GncJob *gncJobCreate (GncBusiness *business)
+GncJob *gncJobCreate (GNCBook *book)
 {
   GncJob *job;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
 
   job = g_new0 (GncJob, 1);
-  job->business = business;
+  job->book = book;
   job->dirty = FALSE;
 
   job->id = CACHE_INSERT ("");
@@ -50,8 +58,8 @@ GncJob *gncJobCreate (GncBusiness *business)
   job->cust = NULL;
   job->active = TRUE;
 
-  guid_new (&job->guid);
-  gncBusinessAddEntity (business, GNC_JOB_MODULE_NAME, &job->guid, job);
+  xaccGUIDNew (&job->guid, book);
+  addObj (job);
 
   return job;
 }
@@ -67,7 +75,7 @@ void gncJobDestroy (GncJob *job)
   if (job->cust)
     gncCustomerRemoveJob (job->cust, job);
 
-  gncBusinessRemoveEntity (job->business, GNC_JOB_MODULE_NAME, &job->guid);
+  remObj (job);
 
   g_free (job);
 }
@@ -108,13 +116,12 @@ void gncJobSetDesc (GncJob *job, const char *desc)
 
 void gncJobSetGUID (GncJob *job, const GUID *guid)
 {
-  if (!job) return;
-  if (!guid) return;
+  if (!job || !guid) return;
   if (guid_equal (guid, &job->guid)) return;
 
-  gncBusinessRemoveEntity (job->business, GNC_JOB_MODULE_NAME, &job->guid);
+  remObj (job);
   job->guid = *guid;
-  gncBusinessAddEntity (job->business, GNC_JOB_MODULE_NAME, &job->guid, job);
+  addObj (job);
 }
 
 void gncJobSetCustomer (GncJob *job, GncCustomer *cust)
@@ -148,10 +155,10 @@ void gncJobCommitEdit (GncJob *job)
 
 /* Get Functions */
 
-GncBusiness * gncJobGetBusiness (GncJob *job)
+GNCBook * gncJobGetBook (GncJob *job)
 {
   if (!job) return NULL;
-  return job->business;
+  return job->book;
 }
 
 const char * gncJobGetID (GncJob *job)
@@ -190,6 +197,13 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
+GncJob * gncJobLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
 gboolean gncJobIsDirty (GncJob *job)
 {
   if (!job) return FALSE;
@@ -210,9 +224,28 @@ gint gncJobSortFunc (gconstpointer a, gconstpointer b) {
 
 /* Package-Private functions */
 
-static GList * _gncJobGetList (GncBusiness *obj, gboolean show_all)
+static void addObj (GncJob *job)
 {
+  GHashTable *ht;
 
+  xaccStoreEntity (gnc_book_get_entity_table (job->book),
+		   job, &job->guid, _GNC_MOD_NAME);
+
+  ht = gnc_book_get_data (job->book, _GNC_MOD_NAME);
+  g_hash_table_insert (ht, &job->guid, job);
+}
+
+static void remObj (GncJob *job)
+{
+  GHashTable *ht;
+
+  xaccRemoveEntity (gnc_book_get_entity_table (job->book), &job->guid);
+  ht = gnc_book_get_data (job->book, _GNC_MOD_NAME);
+  g_hash_table_remove (ht, &job->guid);
+}
+
+static GList * _gncJobGetList (GNCBook *obj, gboolean show_all)
+{
   if (!obj) return NULL;
 
   /* XXX */
@@ -229,19 +262,35 @@ static const char * _gncJobPrintable (gpointer item)
   return c->name;
 }
 
-static void _gncJobDestroy (GncBusiness *obj)
+static void _gncJobCreate (GNCBook *book)
 {
-  if (!obj) return;
+  GHashTable *ht;
 
-  /* XXX: should we be sure to destroy all the job objects? */
+  if (!book) return;
+
+  ht = guid_hash_table_new ();
+  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+}
+
+static void _gncJobDestroy (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
+
+  /* XXX : Destroy the objects? */
+  g_hash_table_destroy (ht);
 }
 
 static GncBusinessObject gncJobDesc = {
   GNC_BUSINESS_VERSION,
   GNC_JOB_MODULE_NAME,
   "Job",
+  _gncJobCreate,
   _gncJobDestroy,
-  NULL,
+  NULL,				/* get_list */
   _gncJobPrintable
 };
 
@@ -252,7 +301,7 @@ gboolean gncJobRegister (void)
 
 static gint lastJob = 57;
 
-gint gncJobNextID (GncBusiness *business)
+gint gncJobNextID (GNCBook *book)
 {
   return ++lastJob;	/* XXX: Look into Database! */
 }

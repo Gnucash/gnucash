@@ -22,7 +22,7 @@ struct business_chooser_window {
   GtkWidget * choice_entry;
   GtkWidget * showall_check;
 
-  GncBusiness * 		business;
+  GNCBook * 		book;
   const GncBusinessObject * 	obj_type;
   gnc_business_chooser_new_cb	new_cb;
   gnc_business_chooser_edit_cb	edit_cb;
@@ -57,7 +57,7 @@ update_selection_picker (struct business_chooser_window *w)
   selected = w->selected;
 
   /* Get the list of objects */
-  obj_list = (*(w->obj_type->get_list))(w->business, show_all);
+  obj_list = (*(w->obj_type->get_list))(w->book, show_all);
 
   /* Build a list of strings (objs is pre-sorted, so keep the order!) */
   for (iterator = obj_list; iterator; iterator = iterator->next) {
@@ -164,7 +164,7 @@ business_chooser_close (GnomeDialog *dialog, gpointer data)
 gpointer
 gnc_ui_business_chooser_new (GtkWidget * parent,
 			     gpointer orig_sel,
-			     GncBusiness *business, const char *type_name,
+			     GNCBook *book, const char *type_name,
 			     gnc_business_chooser_new_cb new_cb,
 			     gnc_business_chooser_edit_cb edit_cb,
 			     gpointer cbarg)
@@ -175,7 +175,7 @@ gnc_ui_business_chooser_new (GtkWidget * parent,
   GtkWidget *choice_name_label;
   gpointer retval;
 
-  if (!business || !type_name) return NULL;
+  if (!book || !type_name) return NULL;
 
   xml = gnc_glade_xml_new ("business-chooser.glade",
 			   "Business Chooser Dialog");
@@ -225,7 +225,7 @@ gnc_ui_business_chooser_new (GtkWidget * parent,
                       GTK_SIGNAL_FUNC(business_chooser_close), win);
 
   /* Save the callbacks */
-  win->business = business;
+  win->book = book;
   win->obj_type = gncBusinessLookup (type_name);
   win->new_cb = new_cb;
   win->edit_cb = edit_cb;

@@ -16,46 +16,27 @@
 #define GNC_BUSINESS_VERSION 1
 
 typedef struct _gncBusinessObject GncBusinessObject;
-typedef struct _gncBusiness GncBusiness;
 
 /* This is the Business Object descriptor */
 struct _gncBusinessObject {
   gint		version;
   const char *	name;
   const char *	type_label;
-  void		(*destroy)(GncBusiness *);
-  GList *	(*get_list)(GncBusiness *, gboolean show_all);
+  void		(*create)(GNCBook *);
+  void		(*destroy)(GNCBook *);
+  GList *	(*get_list)(GNCBook *, gboolean show_all);
   const char *	(*printable)(gpointer obj);
 };
 
-/* Create and Destroy the Gnc Business subsystem state */
-GncBusiness *gncBusinessCreate (GNCBook *book);
-void gncBusinessDestroy (GncBusiness *business);
+void gncBusinessCreateBook (GNCBook *book);
 
-/* Return the GNCBook from the Business Object */
-GNCBook * gncBusinessGetBook (const GncBusiness *bus);
+void gncBusinessDestroyBook (GNCBook *book);
 
-/* Obtain an object from the type and GUID */
-gpointer gncBusinessLookupGUID (GncBusiness *business, const char *type_name,
-				const GUID * guid);
-
-GList * gncBusinessGetList (GncBusiness *business, const char *type_name,
+GList * gncBusinessGetList (GNCBook *book, const char *type_name,
 			    gboolean show_all);
 
-const char * gncBusinessPrintable (GncBusiness *business,
-				   const char *type_name,
-				   gpointer obj);
+const char * gncBusinessPrintable (const char *type_name, gpointer obj);
 
-/* Grab the entity table for an object */
-GHashTable * gncBusinessEntityTable (GncBusiness *business, const char *name);
-
-/* Add an entity to the table */
-void gncBusinessAddEntity (GncBusiness *business, const char *name,
-			   const GUID *guid, gpointer obj);
-
-/* Remove it from the table */
-void gncBusinessRemoveEntity (GncBusiness *business, const char *name,
-			      const GUID *guid);
 
 /* REGISTRATION AND REG-LOOKUP FUNCTIONS */
 

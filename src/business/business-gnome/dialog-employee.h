@@ -9,7 +9,7 @@
 #define GNC_DIALOG_EMPLOYEE_H_
 
 /* Functions to create and edit employees */
-GncEmployee * gnc_employee_new (GtkWidget *parent, GncBusiness *bus);
+GncEmployee * gnc_employee_new (GtkWidget *parent, GNCBook *book);
 void gnc_employee_edit (GtkWidget *parent, GncEmployee *employee);
 
 /* Callbacks to select a employee that match the necessary functions
@@ -19,9 +19,9 @@ void gnc_employee_edit (GtkWidget *parent, GncEmployee *employee);
  *	employees.
  * new_edit provides only the ability to edit the current selection
  */
-gpointer        gnc_employee_edit_new_select (gpointer bus, gpointer c,
+gpointer        gnc_employee_edit_new_select (gpointer book, gpointer c,
 					      GtkWidget *toplevel);
-gpointer	gnc_employee_edit_new_edit (gpointer bus, gpointer employee,
+gpointer	gnc_employee_edit_new_edit (gpointer book, gpointer employee,
 					    GtkWidget *toplevel);
 
 #endif /* GNC_DIALOG_EMPLOYEE_H_ */

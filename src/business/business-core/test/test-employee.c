@@ -13,40 +13,41 @@
 static int count = 0;
 
 static void
-test_string_fcn (GncBusiness *bus, const char *message,
+test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncEmployee *, const char *str),
 		 const char * (*get)(GncEmployee *));
 
 static void
-test_numeric_fcn (GncBusiness *bus, const char *message,
+test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncEmployee *, gnc_numeric),
 		  gnc_numeric (*get)(GncEmployee *));
 
 static void
-test_bool_fcn (GncBusiness *bus, const char *message,
+test_bool_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncEmployee *, gboolean),
 		  gboolean (*get) (GncEmployee *));
 
 static void
-test_gint_fcn (GncBusiness *bus, const char *message,
+test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncEmployee *, gint),
 	       gint (*get) (GncEmployee *));
 
 static void
 test_employee (void)
 {
-  GncBusiness *bus;
+  GNCBook *book;
   GncEmployee *employee;
 
-  bus = gncBusinessCreate ((GNCBook *)1);
+  book = gnc_book_new ();
+  gncBusinessCreateBook (book);
 
   /* Test creation/destruction */
   {
     do_test (gncEmployeeCreate (NULL) == NULL, "employee create NULL");
-    employee = gncEmployeeCreate (bus);
+    employee = gncEmployeeCreate (book);
     do_test (employee != NULL, "employee create");
-    do_test (gncEmployeeGetBusiness (employee) == bus,
-	     "getbusiness");
+    do_test (gncEmployeeGetBook (employee) == book,
+	     "getbook");
 
     gncEmployeeDestroy (employee);
     success ("create/destroy");
@@ -56,32 +57,32 @@ test_employee (void)
   {
     GUID guid;
 
-    test_string_fcn (bus, "Id", gncEmployeeSetID, gncEmployeeGetID);
-    test_string_fcn (bus, "Username", gncEmployeeSetUsername, gncEmployeeGetUsername);
-    test_string_fcn (bus, "Language", gncEmployeeSetLanguage, gncEmployeeGetLanguage);
-    test_string_fcn (bus, "Acl", gncEmployeeSetAcl, gncEmployeeGetAcl);
+    test_string_fcn (book, "Id", gncEmployeeSetID, gncEmployeeGetID);
+    test_string_fcn (book, "Username", gncEmployeeSetUsername, gncEmployeeGetUsername);
+    test_string_fcn (book, "Language", gncEmployeeSetLanguage, gncEmployeeGetLanguage);
+    test_string_fcn (book, "Acl", gncEmployeeSetAcl, gncEmployeeGetAcl);
 
-    test_numeric_fcn (bus, "Workday", gncEmployeeSetWorkday, gncEmployeeGetWorkday);
-    test_numeric_fcn (bus, "Rate", gncEmployeeSetRate, gncEmployeeGetRate);
+    test_numeric_fcn (book, "Workday", gncEmployeeSetWorkday, gncEmployeeGetWorkday);
+    test_numeric_fcn (book, "Rate", gncEmployeeSetRate, gncEmployeeGetRate);
 
-    test_bool_fcn (bus, "Active", gncEmployeeSetActive, gncEmployeeGetActive);
+    test_bool_fcn (book, "Active", gncEmployeeSetActive, gncEmployeeGetActive);
 
     do_test (gncEmployeeGetAddr (employee) != NULL, "Addr");
 
     guid_new (&guid);
-    employee = gncEmployeeCreate (bus); count++;
+    employee = gncEmployeeCreate (book); count++;
     gncEmployeeSetGUID (employee, &guid);
     do_test (guid_equal (&guid, gncEmployeeGetGUID (employee)), "guid compare");
   }
   {
     GList *list;
 
-    list = gncBusinessGetList (bus, GNC_EMPLOYEE_MODULE_NAME, TRUE);
+    list = gncBusinessGetList (book, GNC_EMPLOYEE_MODULE_NAME, TRUE);
     do_test (list != NULL, "getList all");
     do_test (g_list_length (list) == count, "correct length: all");
     g_list_free (list);
 
-    list = gncBusinessGetList (bus, GNC_EMPLOYEE_MODULE_NAME, FALSE);
+    list = gncBusinessGetList (book, GNC_EMPLOYEE_MODULE_NAME, FALSE);
     do_test (list != NULL, "getList active");
     do_test (g_list_length (list) == 1, "correct length: active");
     g_list_free (list);
@@ -91,18 +92,18 @@ test_employee (void)
     const char *res;
 
     gncEmployeeSetUsername (employee, str);
-    res = gncBusinessPrintable (bus, GNC_EMPLOYEE_MODULE_NAME, employee);
+    res = gncBusinessPrintable (GNC_EMPLOYEE_MODULE_NAME, employee);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
 }
 
 static void
-test_string_fcn (GncBusiness *bus, const char *message,
+test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncEmployee *, const char *str),
 		 const char * (*get)(GncEmployee *))
 {
-  GncEmployee *employee = gncEmployeeCreate (bus);
+  GncEmployee *employee = gncEmployeeCreate (book);
   char const *str = get_random_string ();
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
@@ -114,11 +115,11 @@ test_string_fcn (GncBusiness *bus, const char *message,
 }
 
 static void
-test_numeric_fcn (GncBusiness *bus, const char *message,
+test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncEmployee *, gnc_numeric),
 		  gnc_numeric (*get)(GncEmployee *))
 {
-  GncEmployee *employee = gncEmployeeCreate (bus);
+  GncEmployee *employee = gncEmployeeCreate (book);
   gnc_numeric num = gnc_numeric_create (17, 1);
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
@@ -130,11 +131,11 @@ test_numeric_fcn (GncBusiness *bus, const char *message,
 }
 
 static void
-test_bool_fcn (GncBusiness *bus, const char *message,
+test_bool_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncEmployee *, gboolean),
 	       gboolean (*get) (GncEmployee *))
 {
-  GncEmployee *employee = gncEmployeeCreate (bus);
+  GncEmployee *employee = gncEmployeeCreate (book);
   gboolean num = get_random_boolean ();
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
@@ -148,11 +149,11 @@ test_bool_fcn (GncBusiness *bus, const char *message,
 }
 
 static void
-test_gint_fcn (GncBusiness *bus, const char *message,
+test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncEmployee *, gint),
 	       gint (*get) (GncEmployee *))
 {
-  GncEmployee *employee = gncEmployeeCreate (bus);
+  GncEmployee *employee = gncEmployeeCreate (book);
   gint num = 17;
 
   do_test (!gncEmployeeIsDirty (employee), "test if start dirty");

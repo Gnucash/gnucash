@@ -58,11 +58,6 @@
          '()
          (gw:inline-scheme '(use-modules (gnucash business-core))))))
 
-  ;; The core Business Object
-
-  (gw:wrap-non-native-type mod '<gnc:GncBusiness*> "GncBusiness*"
-			   "const GncBusiness*")
-
   ;; The core Business Object Types
   ;; XXX: Need to add lists of all of these!
 
@@ -89,19 +84,11 @@
 
   (gw:wrap-function
    mod
-   'gnc:business-create
-   '<gnc:GncBusiness*>
-   "gncBusinessCreate"
-   '((<gnc:Book*> book))
-   "Return a newly-created GncBusiness state object.")
-
-  (gw:wrap-function
-   mod
-   'gnc:business-destroy
+   'gnc:business-create-book
    '<gw:void>
-   "gncBusinessDestroy"
-   '((<gnc:GncBusiness*> business))
-   "Destroy a GncBusiness object")
+   "gncBusinessCreateBook"
+   '((<gnc:Book*> book))
+   "Create the Business data tables in the book")
 
   ;; gncAddress.h
 

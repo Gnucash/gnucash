@@ -13,40 +13,41 @@
 static int count = 0;
 
 static void
-test_string_fcn (GncBusiness *bus, const char *message,
+test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncCustomer *, const char *str),
 		 const char * (*get)(GncCustomer *));
 
 static void
-test_numeric_fcn (GncBusiness *bus, const char *message,
+test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncCustomer *, gnc_numeric),
 		  gnc_numeric (*get)(GncCustomer *));
 
 static void
-test_bool_fcn (GncBusiness *bus, const char *message,
+test_bool_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncCustomer *, gboolean),
 		  gboolean (*get) (GncCustomer *));
 
 static void
-test_gint_fcn (GncBusiness *bus, const char *message,
+test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncCustomer *, gint),
 	       gint (*get) (GncCustomer *));
 
 static void
 test_customer (void)
 {
-  GncBusiness *bus;
+  GNCBook *book;
   GncCustomer *customer;
 
-  bus = gncBusinessCreate ((GNCBook *)1);
+  book = gnc_book_new ();
+  gncBusinessCreateBook (book);
 
   /* Test creation/destruction */
   {
     do_test (gncCustomerCreate (NULL) == NULL, "customer create NULL");
-    customer = gncCustomerCreate (bus);
+    customer = gncCustomerCreate (book);
     do_test (customer != NULL, "customer create");
-    do_test (gncCustomerGetBusiness (customer) == bus,
-	     "getbusiness");
+    do_test (gncCustomerGetBook (customer) == book,
+	     "getbook");
 
     gncCustomerDestroy (customer);
     success ("create/destroy");
@@ -56,35 +57,35 @@ test_customer (void)
   {
     GUID guid;
 
-    test_string_fcn (bus, "Id", gncCustomerSetID, gncCustomerGetID);
-    test_string_fcn (bus, "Name", gncCustomerSetName, gncCustomerGetName);
-    test_string_fcn (bus, "Notes", gncCustomerSetNotes, gncCustomerGetNotes);
+    test_string_fcn (book, "Id", gncCustomerSetID, gncCustomerGetID);
+    test_string_fcn (book, "Name", gncCustomerSetName, gncCustomerGetName);
+    test_string_fcn (book, "Notes", gncCustomerSetNotes, gncCustomerGetNotes);
 
-    test_gint_fcn (bus, "Terms", gncCustomerSetTerms, gncCustomerGetTerms);
+    test_gint_fcn (book, "Terms", gncCustomerSetTerms, gncCustomerGetTerms);
 
-    test_numeric_fcn (bus, "Discount", gncCustomerSetDiscount, gncCustomerGetDiscount);
-    test_numeric_fcn (bus, "Credit", gncCustomerSetCredit, gncCustomerGetCredit);
+    test_numeric_fcn (book, "Discount", gncCustomerSetDiscount, gncCustomerGetDiscount);
+    test_numeric_fcn (book, "Credit", gncCustomerSetCredit, gncCustomerGetCredit);
 
-    test_bool_fcn (bus, "TaxIncluded", gncCustomerSetTaxIncluded, gncCustomerGetTaxIncluded);
-    test_bool_fcn (bus, "Active", gncCustomerSetActive, gncCustomerGetActive);
+    test_bool_fcn (book, "TaxIncluded", gncCustomerSetTaxIncluded, gncCustomerGetTaxIncluded);
+    test_bool_fcn (book, "Active", gncCustomerSetActive, gncCustomerGetActive);
 
     do_test (gncCustomerGetAddr (customer) != NULL, "Addr");
     do_test (gncCustomerGetShipAddr (customer) != NULL, "ShipAddr");
 
     guid_new (&guid);
-    customer = gncCustomerCreate (bus); count++;
+    customer = gncCustomerCreate (book); count++;
     gncCustomerSetGUID (customer, &guid);
     do_test (guid_equal (&guid, gncCustomerGetGUID (customer)), "guid compare");
   }
   {
     GList *list;
 
-    list = gncBusinessGetList (bus, GNC_CUSTOMER_MODULE_NAME, TRUE);
+    list = gncBusinessGetList (book, GNC_CUSTOMER_MODULE_NAME, TRUE);
     do_test (list != NULL, "getList all");
     do_test (g_list_length (list) == count, "correct length: all");
     g_list_free (list);
 
-    list = gncBusinessGetList (bus, GNC_CUSTOMER_MODULE_NAME, FALSE);
+    list = gncBusinessGetList (book, GNC_CUSTOMER_MODULE_NAME, FALSE);
     do_test (list != NULL, "getList active");
     do_test (g_list_length (list) == 1, "correct length: active");
     g_list_free (list);
@@ -94,7 +95,7 @@ test_customer (void)
     const char *res;
 
     gncCustomerSetName (customer, str);
-    res = gncBusinessPrintable (bus, GNC_CUSTOMER_MODULE_NAME, customer);
+    res = gncBusinessPrintable (GNC_CUSTOMER_MODULE_NAME, customer);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    
@@ -106,19 +107,18 @@ test_customer (void)
     const GUID *guid;
 
     guid = gncCustomerGetGUID (customer);
-    do_test (gncBusinessLookupGUID (bus, GNC_CUSTOMER_MODULE_NAME, guid)
-	     == customer, "Entity Table");
+    do_test (gncCustomerLookup (book, guid) == customer, "Entity Table");
   }
 
   /* Note: JobList is tested from the Job tests */
 }
 
 static void
-test_string_fcn (GncBusiness *bus, const char *message,
+test_string_fcn (GNCBook *book, const char *message,
 		 void (*set) (GncCustomer *, const char *str),
 		 const char * (*get)(GncCustomer *))
 {
-  GncCustomer *customer = gncCustomerCreate (bus);
+  GncCustomer *customer = gncCustomerCreate (book);
   char const *str = get_random_string ();
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");
@@ -130,11 +130,11 @@ test_string_fcn (GncBusiness *bus, const char *message,
 }
 
 static void
-test_numeric_fcn (GncBusiness *bus, const char *message,
+test_numeric_fcn (GNCBook *book, const char *message,
 		  void (*set) (GncCustomer *, gnc_numeric),
 		  gnc_numeric (*get)(GncCustomer *))
 {
-  GncCustomer *customer = gncCustomerCreate (bus);
+  GncCustomer *customer = gncCustomerCreate (book);
   gnc_numeric num = gnc_numeric_create (17, 1);
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");
@@ -146,11 +146,11 @@ test_numeric_fcn (GncBusiness *bus, const char *message,
 }
 
 static void
-test_bool_fcn (GncBusiness *bus, const char *message,
+test_bool_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncCustomer *, gboolean),
 	       gboolean (*get) (GncCustomer *))
 {
-  GncCustomer *customer = gncCustomerCreate (bus);
+  GncCustomer *customer = gncCustomerCreate (book);
   gboolean num = get_random_boolean ();
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");
@@ -164,11 +164,11 @@ test_bool_fcn (GncBusiness *bus, const char *message,
 }
 
 static void
-test_gint_fcn (GncBusiness *bus, const char *message,
+test_gint_fcn (GNCBook *book, const char *message,
 	       void (*set) (GncCustomer *, gint),
 	       gint (*get) (GncCustomer *))
 {
-  GncCustomer *customer = gncCustomerCreate (bus);
+  GncCustomer *customer = gncCustomerCreate (book);
   gint num = 17;
 
   do_test (!gncCustomerIsDirty (customer), "test if start dirty");

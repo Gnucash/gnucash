@@ -7,17 +7,16 @@
 #ifndef GNC_VENDOR_H_
 #define GNC_VENDOR_H_
 
-struct _gncVendor;
 typedef struct _gncVendor GncVendor;
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
 #include "gncAddress.h"
 
 #define GNC_VENDOR_MODULE_NAME "gncVendor"
 
 /* Create/Destroy Functions */
 
-GncVendor *gncVendorCreate (GncBusiness *business);
+GncVendor *gncVendorCreate (GNCBook *book);
 void gncVendorDestroy (GncVendor *vendor);
 
 /* Set Functions */
@@ -33,7 +32,7 @@ void gncVendorCommitEdit (GncVendor *vendor);
 
 /* Get Functions */
 
-GncBusiness * gncVendorGetBusiness (GncVendor *vendor);
+GNCBook * gncVendorGetBook (GncVendor *vendor);
 const GUID * gncVendorGetGUID (GncVendor *vendor);
 const char * gncVendorGetID (GncVendor *vendor);
 const char * gncVendorGetName (GncVendor *vendor);
@@ -43,6 +42,7 @@ gint gncVendorGetTerms (GncVendor *vendor);
 gboolean gncVendorGetTaxIncluded (GncVendor *vendor);
 gboolean gncVendorGetActive (GncVendor *vendor);
 
+GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
 
 #endif /* GNC_VENDOR_H_ */

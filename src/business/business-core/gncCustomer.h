@@ -7,10 +7,9 @@
 #ifndef GNC_CUSTOMER_H_
 #define GNC_CUSTOMER_H_
 
-struct _gncCustomer;
 typedef struct _gncCustomer GncCustomer;
 
-#include "gncBusiness.h"
+#include "gnc-book.h"
 #include "gncAddress.h"
 #include "gncJob.h"
 
@@ -20,7 +19,7 @@ typedef struct _gncCustomer GncCustomer;
 
 /* Create/Destroy Functions */
 
-GncCustomer *gncCustomerCreate (GncBusiness *business);
+GncCustomer *gncCustomerCreate (GNCBook *book);
 void gncCustomerDestroy (GncCustomer *customer);
 
 /* Set Functions */
@@ -41,7 +40,7 @@ void gncCustomerCommitEdit (GncCustomer *customer);
 
 /* Get Functions */
 
-GncBusiness * gncCustomerGetBusiness (GncCustomer *business);
+GNCBook * gncCustomerGetBook (GncCustomer *customer);
 const GUID * gncCustomerGetGUID (GncCustomer *customer);
 const char * gncCustomerGetID (GncCustomer *customer);
 const char * gncCustomerGetName (GncCustomer *customer);
@@ -55,6 +54,8 @@ gnc_numeric gncCustomerGetDiscount (GncCustomer *customer);
 gnc_numeric gncCustomerGetCredit (GncCustomer *customer);
 
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
+
+GncCustomer * gncCustomerLookup (GNCBook *book, const GUID *guid);
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 

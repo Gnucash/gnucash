@@ -7,7 +7,6 @@
 #ifndef GNC_ENTRYP_H_
 #define GNC_ENTRYP_H_
 
-#include "gncBusiness.h"
 #include "gncEntry.h"
 
 gboolean gncEntryRegister (void);

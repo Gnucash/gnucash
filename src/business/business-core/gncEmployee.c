@@ -12,14 +12,16 @@
 #include "guid.h"
 #include "messages.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
+#include "GNCIdP.h"
 
+#include "gncBusiness.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
 #include "gncAddress.h"
-#include "gncBusiness.h"
 
 struct _gncEmployee {
-  GncBusiness *	business;
+  GNCBook *	book;
   GUID		guid;
   char *	id;
   char *	username;
@@ -32,34 +34,37 @@ struct _gncEmployee {
   gboolean	dirty;
 };
 
+#define _GNC_MOD_NAME	GNC_EMPLOYEE_MODULE_NAME
+
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
+static void addObj (GncEmployee *employee);
+static void remObj (GncEmployee *employee);
+
 /* Create/Destroy Functions */
 
-GncEmployee *gncEmployeeCreate (GncBusiness *business)
+GncEmployee *gncEmployeeCreate (GNCBook *book)
 {
   GncEmployee *employee;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
 
   employee = g_new0 (GncEmployee, 1);
-  employee->business = business;
+  employee->book = book;
   employee->dirty = FALSE;
 
   employee->id = CACHE_INSERT ("");
   employee->username = CACHE_INSERT ("");
   employee->language = CACHE_INSERT ("");
   employee->acl = CACHE_INSERT ("");
-  employee->addr = gncAddressCreate (business);
+  employee->addr = gncAddressCreate (book);
   employee->workday = gnc_numeric_zero();
   employee->rate = gnc_numeric_zero();
   employee->active = TRUE;
   
-  guid_new (&employee->guid);
-
-  gncBusinessAddEntity (business, GNC_EMPLOYEE_MODULE_NAME, &employee->guid,
-			employee);
+  xaccGUIDNew (&employee->guid, book);
+  addObj (employee);
 
   return employee;
 }
@@ -74,9 +79,7 @@ void gncEmployeeDestroy (GncEmployee *employee)
   CACHE_REMOVE (employee->acl);
   gncAddressDestroy (employee->addr);
 
-  gncBusinessRemoveEntity (employee->business, GNC_EMPLOYEE_MODULE_NAME,
-			   &employee->guid);
-
+  remObj (employee);
   g_free (employee);
 }
 
@@ -119,11 +122,9 @@ void gncEmployeeSetGUID (GncEmployee *employee, const GUID *guid)
 {
   if (!employee || !guid) return;
   if (guid_equal (guid, &employee->guid)) return;
-  gncBusinessRemoveEntity (employee->business, GNC_EMPLOYEE_MODULE_NAME,
-			   &employee->guid);
+  remObj (employee);
   employee->guid = *guid;
-  gncBusinessAddEntity (employee->business, GNC_EMPLOYEE_MODULE_NAME,
-			&employee->guid, employee);
+  addObj (employee);
 }
 
 void gncEmployeeSetAcl (GncEmployee *employee, const char *acl)
@@ -160,10 +161,10 @@ void gncEmployeeSetActive (GncEmployee *employee, gboolean active)
 
 /* Get Functions */
 
-GncBusiness * gncEmployeeGetBusiness (GncEmployee *employee)
+GNCBook * gncEmployeeGetBook (GncEmployee *employee)
 {
   if (!employee) return NULL;
-  return employee->business;
+  return employee->book;
 }
 
 const GUID * gncEmployeeGetGUID (GncEmployee *employee)
@@ -220,6 +221,13 @@ gboolean gncEmployeeGetActive (GncEmployee *employee)
   return employee->active;
 }
 
+GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
 gboolean gncEmployeeIsDirty (GncEmployee *employee)
 {
   if (!employee) return FALSE;
@@ -243,6 +251,27 @@ static gint gncEmployeeSortFunc (gconstpointer a, gconstpointer b) {
 
 /* Package-Private functions */
 
+static void addObj (GncEmployee *employee)
+{
+  GHashTable *ht;
+
+  xaccStoreEntity (gnc_book_get_entity_table (employee->book),
+		   employee, &employee->guid, _GNC_MOD_NAME);
+
+  ht = gnc_book_get_data (employee->book, _GNC_MOD_NAME);
+  g_hash_table_insert (ht, &employee->guid, employee);
+}
+
+static void remObj (GncEmployee *employee)
+{
+  GHashTable *ht;
+
+  xaccRemoveEntity (gnc_book_get_entity_table (employee->book),
+		    &employee->guid);
+  ht = gnc_book_get_data (employee->book, _GNC_MOD_NAME);
+  g_hash_table_remove (ht, &employee->guid);
+}
+
 struct _iterate {
   GList *list;
   gboolean show_all;
@@ -258,17 +287,17 @@ static void get_list (gpointer key, gpointer item, gpointer arg)
   }
 }
 
-static GList * _gncEmployeeGetList (GncBusiness *bus, gboolean show_all)
+static GList * _gncEmployeeGetList (GNCBook *book, gboolean show_all)
 {
   GHashTable *ht;
   struct _iterate iter;
 
-  if (!bus) return NULL;
+  if (!book) return NULL;
 
   iter.list = NULL;
   iter.show_all = show_all;
 
-  ht = gncBusinessEntityTable (bus, GNC_EMPLOYEE_MODULE_NAME);
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
   if (ht)
     g_hash_table_foreach (ht, get_list, &iter);
 
@@ -285,17 +314,33 @@ static const char * _gncEmployeePrintable (gpointer item)
   return v->username;
 }
 
-static void _gncEmployeeDestroy (GncBusiness *bus)
+static void _gncEmployeeCreate (GNCBook *book)
 {
-  if (!bus) return;
+  GHashTable *ht;
 
-  /* XXX: should we be sure to destroy all the employee objects? */
+  if (!book) return;
+
+  ht = guid_hash_table_new ();
+  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+}
+
+static void _gncEmployeeDestroy (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
+
+  /* XXX : Destroy the objects? */
+  g_hash_table_destroy (ht);
 }
 
 static GncBusinessObject gncEmployeeDesc = {
   GNC_BUSINESS_VERSION,
-  GNC_EMPLOYEE_MODULE_NAME,
+  _GNC_MOD_NAME,
   "Employee",
+  _gncEmployeeCreate,
   _gncEmployeeDestroy,
   _gncEmployeeGetList,
   _gncEmployeePrintable
@@ -308,7 +353,7 @@ gboolean gncEmployeeRegister (void)
 
 static gint lastEmployee = 2;
 
-gint gncEmployeeNextID (GncBusiness *business)
+gint gncEmployeeNextID (GNCBook *book)
 {
   return ++lastEmployee;		/* XXX: Look into Database! */
 }

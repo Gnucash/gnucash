@@ -12,14 +12,16 @@
 #include "guid.h"
 #include "messages.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
+#include "GNCIdP.h"
 
+#include "gncBusiness.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
 #include "gncAddress.h"
-#include "gncBusiness.h"
 
 struct _gncVendor {
-  GncBusiness *	business;
+  GNCBook *	book;
   GUID		guid;
   char *	id;
   char *	name;
@@ -31,32 +33,35 @@ struct _gncVendor {
   gboolean	dirty;
 };
 
+#define _GNC_MOD_NAME	GNC_VENDOR_MODULE_NAME
+
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
+static void addObj (GncVendor *vendor);
+static void remObj (GncVendor *vendor);
+
 /* Create/Destroy Functions */
 
-GncVendor *gncVendorCreate (GncBusiness *business)
+GncVendor *gncVendorCreate (GNCBook *book)
 {
   GncVendor *vendor;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
 
   vendor = g_new0 (GncVendor, 1);
-  vendor->business = business;
+  vendor->book = book;
   vendor->dirty = FALSE;
   vendor->id = CACHE_INSERT ("");
   vendor->name = CACHE_INSERT ("");
   vendor->notes = CACHE_INSERT ("");
-  vendor->addr = gncAddressCreate (business);
+  vendor->addr = gncAddressCreate (book);
   vendor->terms = 0;
   vendor->taxincluded = FALSE;
   vendor->active = TRUE;
 
-  guid_new (&vendor->guid);
-
-  gncBusinessAddEntity (business, GNC_VENDOR_MODULE_NAME, &vendor->guid,
-			vendor);
+  xaccGUIDNew (&vendor->guid, book);
+  addObj (vendor);
 
   return vendor;
 }
@@ -69,9 +74,7 @@ void gncVendorDestroy (GncVendor *vendor)
   CACHE_REMOVE (vendor->name);
   CACHE_REMOVE (vendor->notes);
   gncAddressDestroy (vendor->addr);
-
-  gncBusinessRemoveEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
-			   &vendor->guid);
+  remObj (vendor);
 
   g_free (vendor);
 }
@@ -115,11 +118,10 @@ void gncVendorSetGUID (GncVendor *vendor, const GUID *guid)
 {
   if (!vendor || !guid) return;
   if (guid_equal (guid, &vendor->guid)) return;
-  gncBusinessRemoveEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
-			   &vendor->guid);
+
+  remObj (vendor);
   vendor->guid = *guid;
-  gncBusinessAddEntity (vendor->business, GNC_VENDOR_MODULE_NAME,
-			&vendor->guid, vendor);
+  addObj (vendor);
 }
 
 void gncVendorSetTerms (GncVendor *vendor, gint terms)
@@ -148,10 +150,10 @@ void gncVendorSetActive (GncVendor *vendor, gboolean active)
 
 /* Get Functions */
 
-GncBusiness * gncVendorGetBusiness (GncVendor *vendor)
+GNCBook * gncVendorGetBook (GncVendor *vendor)
 {
   if (!vendor) return NULL;
-  return vendor->business;
+  return vendor->book;
 }
 
 const GUID * gncVendorGetGUID (GncVendor *vendor)
@@ -202,6 +204,13 @@ gboolean gncVendorGetActive (GncVendor *vendor)
   return vendor->active;
 }
 
+GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
 gboolean gncVendorIsDirty (GncVendor *vendor)
 {
   if (!vendor) return FALSE;
@@ -225,6 +234,26 @@ static gint gncVendorSortFunc (gconstpointer a, gconstpointer b) {
 
 /* Package-Private functions */
 
+static void addObj (GncVendor *vendor)
+{
+  GHashTable *ht;
+
+  xaccStoreEntity (gnc_book_get_entity_table (vendor->book),
+		   vendor, &vendor->guid, _GNC_MOD_NAME);
+
+  ht = gnc_book_get_data (vendor->book, _GNC_MOD_NAME);
+  g_hash_table_insert (ht, &vendor->guid, vendor);
+}
+
+static void remObj (GncVendor *vendor)
+{
+  GHashTable *ht;
+
+  xaccRemoveEntity (gnc_book_get_entity_table (vendor->book), &vendor->guid);
+  ht = gnc_book_get_data (vendor->book, _GNC_MOD_NAME);
+  g_hash_table_remove (ht, &vendor->guid);
+}
+
 struct _iterate {
   GList *list;
   gboolean show_all;
@@ -240,17 +269,17 @@ static void get_list (gpointer key, gpointer item, gpointer arg)
   }
 }
 
-static GList * _gncVendorGetList (GncBusiness *bus, gboolean show_all)
+static GList * _gncVendorGetList (GNCBook *book, gboolean show_all)
 {
   GHashTable *ht;
   struct _iterate iter;
 
-  if (!bus) return NULL;
+  if (!book) return NULL;
 
   iter.list = NULL;
   iter.show_all = show_all;
 
-  ht = gncBusinessEntityTable (bus, GNC_VENDOR_MODULE_NAME);
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
   if (ht)
     g_hash_table_foreach (ht, get_list, &iter);
 
@@ -267,17 +296,33 @@ static const char * _gncVendorPrintable (gpointer item)
   return v->name;
 }
 
-static void _gncVendorDestroy (GncBusiness *obj)
+static void _gncVendorCreate (GNCBook *book)
 {
-  if (!obj) return;
+  GHashTable *ht;
 
-  /* XXX: should we be sure to destroy all the vendor objects? */
+  if (!book) return;
+
+  ht = guid_hash_table_new ();
+  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+}
+
+static void _gncVendorDestroy (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
+
+  /* XXX : Destroy the objects? */
+  g_hash_table_destroy (ht);
 }
 
 static GncBusinessObject gncVendorDesc = {
   GNC_BUSINESS_VERSION,
-  GNC_VENDOR_MODULE_NAME,
+  _GNC_MOD_NAME,
   "Vendor",
+  _gncVendorCreate,
   _gncVendorDestroy,
   _gncVendorGetList,
   _gncVendorPrintable
@@ -290,7 +335,7 @@ gboolean gncVendorRegister (void)
 
 static gint lastVendor = 17;
 
-gint gncVendorNextID (GncBusiness *business)
+gint gncVendorNextID (GNCBook *book)
 {
   return ++lastVendor;		/* XXX: Look into Database! */
 }

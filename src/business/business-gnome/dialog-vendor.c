@@ -18,7 +18,6 @@
 #include "gnc-engine-util.h"
 #include "window-help.h"
 
-#include "gncBusiness.h"
 #include "gncAddress.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
@@ -36,7 +35,7 @@ typedef enum
 } VendorDialogType;
 
 struct _vendor_select_window {
-  GncBusiness *	business;
+  GNCBook *	book;
 };
 
 typedef struct _vendor_window {
@@ -63,7 +62,7 @@ typedef struct _vendor_window {
   VendorDialogType	dialog_type;
   GUID		vendor_guid;
   gint		component_id;
-  GncBusiness *	business;
+  GNCBook *	book;
   GncVendor *	created_vendor;
 
 } VendorWindow;
@@ -74,8 +73,7 @@ vw_get_vendor (VendorWindow *vw)
   if (!vw)
     return NULL;
 
-  return gncBusinessLookupGUID (vw->business, GNC_VENDOR_MODULE_NAME,
-				&vw->vendor_guid);
+  return gncVendorLookup (vw->book, &vw->vendor_guid);
 }
 
 static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
@@ -318,7 +316,7 @@ gnc_vendor_window_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static VendorWindow *
-gnc_vendor_new_window (GtkWidget *parent, GncBusiness *bus,
+gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 			 GncVendor *vendor)
 {
   VendorWindow *vw;
@@ -330,7 +328,7 @@ gnc_vendor_new_window (GtkWidget *parent, GncBusiness *bus,
 
   vw = g_new0 (VendorWindow, 1);
 
-  vw->business = bus;
+  vw->book = bookp;
 
   /* Find the dialog */
   xml = gnc_glade_xml_new ("vendor.glade", "Vendor Dialog");
@@ -455,12 +453,12 @@ gnc_vendor_new_window (GtkWidget *parent, GncBusiness *bus,
 				  vw);
   } else {
     gnc_numeric num;
-    vendor = gncVendorCreate (bus);
+    vendor = gncVendorCreate (bookp);
     vw->vendor_guid = *gncVendorGetGUID (vendor);
 
     vw->dialog_type = NEW_VENDOR;
     gtk_entry_set_text (GTK_ENTRY (vw->id_entry),
-			g_strdup_printf ("%.6d", gncVendorNextID(bus)));
+			g_strdup_printf ("%.6d", gncVendorNextID(bookp)));
     vw->component_id =
       gnc_register_gui_component (DIALOG_NEW_VENDOR_CM_CLASS,
 				  gnc_vendor_window_refresh_handler,
@@ -488,15 +486,15 @@ gnc_vendor_new_window (GtkWidget *parent, GncBusiness *bus,
 }
 
 GncVendor *
-gnc_vendor_new (GtkWidget *parent, GncBusiness *bus)
+gnc_vendor_new (GtkWidget *parent, GNCBook *bookp)
 {
   VendorWindow *vw;
   GncVendor *created_vendor = NULL;
 
   /* Make sure required options exist */
-  if (!bus) return NULL;
+  if (!bookp) return NULL;
 
-  vw = gnc_vendor_new_window (parent, bus, NULL);
+  vw = gnc_vendor_new_window (parent, bookp, NULL);
 
   gtk_signal_connect (GTK_OBJECT (vw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_vendor_on_close_cb),
@@ -516,7 +514,7 @@ gnc_vendor_edit (GtkWidget *parent, GncVendor *vendor)
 
   if (!vendor) return;
 
-  vw = gnc_vendor_new_window (parent, gncVendorGetBusiness(vendor), vendor);
+  vw = gnc_vendor_new_window (parent, gncVendorGetBook(vendor), vendor);
 
   gtk_signal_connect (GTK_OBJECT (vw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_vendor_on_close_cb),
@@ -537,7 +535,7 @@ static gpointer gnc_vendor_edit_new_cb (gpointer arg, GtkWidget *toplevel)
 
   if (!arg) return NULL;
 
-  return gnc_vendor_new (toplevel, sw->business);
+  return gnc_vendor_new (toplevel, sw->book);
 }
 
 static void gnc_vendor_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
@@ -550,27 +548,27 @@ static void gnc_vendor_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *topl
   gnc_vendor_edit (toplevel, vendor);
 }
 
-gpointer gnc_vendor_edit_new_select (gpointer bus, gpointer vendor,
+gpointer gnc_vendor_edit_new_select (gpointer bookp, gpointer vendor,
 				       GtkWidget *toplevel)
 {
-  GncBusiness *business = bus;
+  GNCBook *book = bookp;
   struct _vendor_select_window sw;
 
-  g_return_val_if_fail (bus != NULL, NULL);
+  g_return_val_if_fail (bookp != NULL, NULL);
 
-  sw.business = business;
+  sw.book = book;
 
   return
     gnc_ui_business_chooser_new (toplevel, vendor,
-				 business, GNC_VENDOR_MODULE_NAME,
+				 book, GNC_VENDOR_MODULE_NAME,
 				 gnc_vendor_edit_new_cb,
 				 gnc_vendor_edit_edit_cb, &sw);
 }
 
-gpointer gnc_vendor_edit_new_edit (gpointer bus, gpointer v,
+gpointer gnc_vendor_edit_new_edit (gpointer bookp, gpointer v,
 				     GtkWidget *toplevel)
 {
-  GncBusiness *busiess = bus;
+  GNCBook *book = bookp;
   GncVendor *vendor = v;
 
   g_return_val_if_fail (vendor != NULL, NULL);

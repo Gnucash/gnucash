@@ -18,7 +18,6 @@
 #include "gnc-engine-util.h"
 #include "window-help.h"
 
-#include "gncBusiness.h"
 #include "gncAddress.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
@@ -36,7 +35,7 @@ typedef enum
 } EmployeeDialogType;
 
 struct _employee_select_window {
-  GncBusiness *	business;
+  GNCBook *	book;
 };
 
 typedef struct _employee_window {
@@ -66,7 +65,7 @@ typedef struct _employee_window {
   EmployeeDialogType	dialog_type;
   GUID		employee_guid;
   gint		component_id;
-  GncBusiness *	business;
+  GNCBook *	book;
   GncEmployee *	created_employee;
 
 } EmployeeWindow;
@@ -77,8 +76,7 @@ ew_get_employee (EmployeeWindow *ew)
   if (!ew)
     return NULL;
 
-  return gncBusinessLookupGUID (ew->business, GNC_EMPLOYEE_MODULE_NAME,
-				&ew->employee_guid);
+  return gncEmployeeLookup (ew->book, &ew->employee_guid);
 }
 
 static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
@@ -319,7 +317,7 @@ gnc_employee_window_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static EmployeeWindow *
-gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
+gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
 			 GncEmployee *employee)
 {
   EmployeeWindow *ew;
@@ -331,7 +329,7 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
 
   ew = g_new0 (EmployeeWindow, 1);
 
-  ew->business = bus;
+  ew->book = bookp;
 
   /* Find the dialog */
   xml = gnc_glade_xml_new ("employee.glade", "Employee Dialog");
@@ -465,12 +463,12 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
 				  ew);
   } else {
     gnc_numeric num;
-    employee = gncEmployeeCreate (bus);
+    employee = gncEmployeeCreate (bookp);
     ew->employee_guid = *gncEmployeeGetGUID (employee);
 
     ew->dialog_type = NEW_EMPLOYEE;
     gtk_entry_set_text (GTK_ENTRY (ew->id_entry),
-			g_strdup_printf ("%.6d", gncEmployeeNextID(bus)));
+			g_strdup_printf ("%.6d", gncEmployeeNextID(bookp)));
     ew->component_id =
       gnc_register_gui_component (DIALOG_NEW_EMPLOYEE_CM_CLASS,
 				  gnc_employee_window_refresh_handler,
@@ -498,15 +496,15 @@ gnc_employee_new_window (GtkWidget *parent, GncBusiness *bus,
 }
 
 GncEmployee *
-gnc_employee_new (GtkWidget *parent, GncBusiness *bus)
+gnc_employee_new (GtkWidget *parent, GNCBook *bookp)
 {
   EmployeeWindow *ew;
   GncEmployee *created_employee = NULL;
 
   /* Make sure required options exist */
-  if (!bus) return NULL;
+  if (!bookp) return NULL;
 
-  ew = gnc_employee_new_window (parent, bus, NULL);
+  ew = gnc_employee_new_window (parent, bookp, NULL);
 
   gtk_signal_connect (GTK_OBJECT (ew->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
@@ -526,7 +524,7 @@ gnc_employee_edit (GtkWidget *parent, GncEmployee *employee)
 
   if (!employee) return;
 
-  ew = gnc_employee_new_window (parent, gncEmployeeGetBusiness(employee), employee);
+  ew = gnc_employee_new_window (parent, gncEmployeeGetBook(employee), employee);
 
   gtk_signal_connect (GTK_OBJECT (ew->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
@@ -547,7 +545,7 @@ static gpointer gnc_employee_edit_new_cb (gpointer arg, GtkWidget *toplevel)
 
   if (!arg) return NULL;
 
-  return gnc_employee_new (toplevel, sw->business);
+  return gnc_employee_new (toplevel, sw->book);
 }
 
 static void gnc_employee_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *toplevel)
@@ -560,27 +558,27 @@ static void gnc_employee_edit_edit_cb (gpointer arg, gpointer obj, GtkWidget *to
   gnc_employee_edit (toplevel, employee);
 }
 
-gpointer gnc_employee_edit_new_select (gpointer bus, gpointer employee,
+gpointer gnc_employee_edit_new_select (gpointer bookp, gpointer employee,
 				       GtkWidget *toplevel)
 {
-  GncBusiness *business = bus;
+  GNCBook *book = bookp;
   struct _employee_select_window sw;
 
-  g_return_val_if_fail (bus != NULL, NULL);
+  g_return_val_if_fail (bookp != NULL, NULL);
 
-  sw.business = business;
+  sw.book = book;
 
   return
     gnc_ui_business_chooser_new (toplevel, employee,
-				 business, GNC_EMPLOYEE_MODULE_NAME,
+				 book, GNC_EMPLOYEE_MODULE_NAME,
 				 gnc_employee_edit_new_cb,
 				 gnc_employee_edit_edit_cb, &sw);
 }
 
-gpointer gnc_employee_edit_new_edit (gpointer bus, gpointer v,
+gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,
 				     GtkWidget *toplevel)
 {
-  GncBusiness *busiess = bus;
+  GNCBook *book = bookp;
   GncEmployee *employee = v;
 
   g_return_val_if_fail (employee != NULL, NULL);

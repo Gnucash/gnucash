@@ -12,7 +12,7 @@
  * customer and jobs.  Allows creation of both jobs and customers.
  */
 GncJob *
-gnc_ui_select_job_new (GtkWidget * parent, GncBusiness *business,
+gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
 		       GncCustomer *cust, GncJob *job);
 
 #endif /* GNC_DIALOG_JOB_SELECT_H_ */

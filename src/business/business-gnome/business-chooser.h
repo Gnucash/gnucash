@@ -26,7 +26,7 @@ typedef void (*gnc_business_chooser_edit_cb)(gpointer cbarg, gpointer sel_obj, G
 gpointer
 gnc_ui_business_chooser_new (GtkWidget * parent,
 			     gpointer orig_sel,
-			     GncBusiness *business, const char *type_name,
+			     GNCBook *book, const char *type_name,
 			     gnc_business_chooser_new_cb new_cb,
 			     gnc_business_chooser_edit_cb edit_cb,
 			     gpointer cbarg);

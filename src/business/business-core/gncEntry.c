@@ -11,6 +11,8 @@
 #include "messages.h"
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
+#include "gnc-book-p.h"
+#include "GNCIdP.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -19,7 +21,7 @@
 #include "gncOrder.h"
 
 struct _gncEntry {
-  GncBusiness *	business;
+  GNCBook *	book;
 
   GUID		guid;
   Timespec	date;
@@ -40,6 +42,8 @@ struct _gncEntry {
   gboolean	dirty;
 };
 
+#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
 
@@ -52,16 +56,19 @@ struct _gncEntry {
 	member = tmp; \
 	}
 
+static void addObj (GncEntry *entry);
+static void remObj (GncEntry *entry);
+
 /* Create/Destroy Functions */
 
-GncEntry *gncEntryCreate (GncBusiness *business)
+GncEntry *gncEntryCreate (GNCBook *book)
 {
   GncEntry *entry;
 
-  if (!business) return NULL;
+  if (!book) return NULL;
 
   entry = g_new0 (GncEntry, 1);
-  entry->business = business;
+  entry->book = book;
 
   entry->desc = CACHE_INSERT ("");
   entry->action = CACHE_INSERT ("");
@@ -75,8 +82,8 @@ GncEntry *gncEntryCreate (GncBusiness *business)
   }
   entry->dirty = FALSE;
 
-  guid_new (&entry->guid);
-  gncBusinessAddEntity (business, GNC_ENTRY_MODULE_NAME, &entry->guid, entry);
+  xaccGUIDNew (&entry->guid, book);
+  addObj (entry);
 
   return entry;
 }
@@ -87,9 +94,7 @@ void gncEntryDestroy (GncEntry *entry)
 
   CACHE_REMOVE (entry->desc);
   CACHE_REMOVE (entry->action);
-
-  gncBusinessRemoveEntity (entry->business, GNC_ENTRY_MODULE_NAME,
-			   &entry->guid);
+  remObj (entry);
 
   g_free (entry);
 }
@@ -99,11 +104,11 @@ void gncEntryDestroy (GncEntry *entry)
 void gncEntrySetGUID (GncEntry *entry, const GUID *guid)
 {
   if (!entry || !guid) return;
-  gncBusinessRemoveEntity (entry->business, GNC_ENTRY_MODULE_NAME,
-			   &entry->guid);
+  if (guid_equal (guid, &entry->guid)) return;
+
+  remObj (entry);
   entry->guid = *guid;
-  gncBusinessAddEntity (entry->business, GNC_ENTRY_MODULE_NAME, &entry->guid,
-			entry);
+  addObj (entry);
 }
 
 void gncEntrySetDate (GncEntry *entry, Timespec *date)
@@ -211,10 +216,10 @@ void gncEntrySetDirty (GncEntry *entry, gboolean dirty)
 
 /* Get Functions */
 
-GncBusiness * gncEntryGetBusiness (GncEntry *entry)
+GNCBook * gncEntryGetBook (GncEntry *entry)
 {
   if (!entry) return NULL;
-  return entry->business;
+  return entry->book;
 }
 
 const GUID * gncEntryGetGUID (GncEntry *entry)
@@ -302,17 +307,69 @@ gint gncEntryGetDiscountType (GncEntry *entry)
   return entry->disc_type;
 }
 
+GncEntry * gncEntryLookup (GNCBook *book, const GUID *guid)
+{
+  if (!book || !guid) return NULL;
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
 void gncEntryCommitEdit (GncEntry *entry)
 {
   if (!entry) return;
   /* XXX */
 }
 
+/* Package-Private functions */
+
+static void addObj (GncEntry *entry)
+{
+  GHashTable *ht;
+
+  xaccStoreEntity (gnc_book_get_entity_table (entry->book),
+		   entry, &entry->guid, _GNC_MOD_NAME);
+
+  ht = gnc_book_get_data (entry->book, _GNC_MOD_NAME);
+  g_hash_table_insert (ht, &entry->guid, entry);
+}
+
+static void remObj (GncEntry *entry)
+{
+  GHashTable *ht;
+
+  xaccRemoveEntity (gnc_book_get_entity_table (entry->book), &entry->guid);
+  ht = gnc_book_get_data (entry->book, _GNC_MOD_NAME);
+  g_hash_table_remove (ht, &entry->guid);
+}
+
+static void _gncEntryCreate (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = guid_hash_table_new ();
+  gnc_book_set_data (book, _GNC_MOD_NAME, ht);
+}
+
+static void _gncEntryDestroy (GNCBook *book)
+{
+  GHashTable *ht;
+
+  if (!book) return;
+
+  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
+
+  /* XXX : Destroy the objects? */
+  g_hash_table_destroy (ht);
+}
+
 static GncBusinessObject gncEntryDesc = {
   GNC_BUSINESS_VERSION,
-  GNC_ENTRY_MODULE_NAME,
+  _GNC_MOD_NAME,
   "Order/Invoice Entry",
-  NULL,				/* destroy */
+  _gncEntryCreate,
+  _gncEntryDestroy,
   NULL,				/* get list */
   NULL				/* printable */
 };

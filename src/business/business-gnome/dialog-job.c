@@ -37,7 +37,7 @@ typedef enum
 
 struct _job_select_window {
   GtkWidget *	toplevel;
-  GncBusiness *	business;
+  GNCBook *	book;
 };
 
 typedef struct _job_window {
@@ -51,7 +51,7 @@ typedef struct _job_window {
   JobDialogType	dialog_type;
   GUID		job_guid;
   gint		component_id;
-  GncBusiness *	business;
+  GNCBook *	book;
   GncJob *	created_job;
 
   GNCGeneralSelectGetStringCB cust_print;
@@ -64,8 +64,7 @@ jw_get_job (JobWindow *jw)
   if (!jw)
     return NULL;
 
-  return gncBusinessLookupGUID (jw->business, GNC_JOB_MODULE_NAME,
-				&jw->job_guid);
+  return gncJobLookup (jw->book, &jw->job_guid);
 }
 
 static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
@@ -249,7 +248,7 @@ gnc_job_window_refresh_handler (GHashTable *changes, gpointer user_data)
 }
 
 static JobWindow *
-gnc_job_new_window (GtkWidget *parent, GncBusiness *bus, GncCustomer *cust,
+gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncCustomer *cust,
 		    GncJob *job)
 {
   JobWindow *jw;
@@ -259,7 +258,7 @@ gnc_job_new_window (GtkWidget *parent, GncBusiness *bus, GncCustomer *cust,
   GtkObject *jwo;
 
   jw = g_new0 (JobWindow, 1);
-  jw->business = bus;
+  jw->book = bookp;
 
   /* Load the XML */
   xml = gnc_glade_xml_new ("job.glade", "Job Dialog");
@@ -304,8 +303,7 @@ gnc_job_new_window (GtkWidget *parent, GncBusiness *bus, GncCustomer *cust,
 
   /* grab the printable routine */
   {
-    const GncBusinessObject *obj =
-      gncBusinessLookup (GNC_CUSTOMER_MODULE_NAME);
+    const GncBusinessObject *obj = gncBusinessLookup(GNC_CUSTOMER_MODULE_NAME);
     if (!obj)
       printf ("NO CUSTOMER OBJECT LOADED");
     jw->cust_print = obj->printable;
@@ -326,7 +324,7 @@ gnc_job_new_window (GtkWidget *parent, GncBusiness *bus, GncCustomer *cust,
     jw->dialog_type = EDIT_JOB;
     jw->cust_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_EDIT,
 					    jw->cust_print,
-					    gnc_customer_edit_new_edit, bus);
+					    gnc_customer_edit_new_edit, bookp);
     gtk_box_pack_start(GTK_BOX(cust_box), jw->cust_edit, TRUE, TRUE, 0);
 
     gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
@@ -343,17 +341,17 @@ gnc_job_new_window (GtkWidget *parent, GncBusiness *bus, GncCustomer *cust,
 						   gnc_job_window_close_handler,
 						   jw);
   } else {
-    job = gncJobCreate (bus);
+    job = gncJobCreate (bookp);
     jw->job_guid = *gncJobGetGUID (job);
       
     jw->dialog_type = NEW_JOB;
     jw->cust_edit = gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
 					    jw->cust_print,
-					    gnc_customer_edit_new_select, bus);
+					    gnc_customer_edit_new_select, bookp);
     gtk_box_pack_start(GTK_BOX(cust_box), jw->cust_edit, TRUE, TRUE, 0);
 
     gtk_entry_set_text (GTK_ENTRY (jw->id_entry),
-			g_strdup_printf ("%.6d", gncJobNextID(bus)));
+			g_strdup_printf ("%.6d", gncJobNextID(bookp)));
 
     gnc_general_select_set_selected (GNC_GENERAL_SELECT(jw->cust_edit),
 				     cust);
@@ -374,15 +372,15 @@ gnc_job_new_window (GtkWidget *parent, GncBusiness *bus, GncCustomer *cust,
 }
 
 GncJob *
-gnc_job_new (GtkWidget *parent, GncBusiness *bus, GncCustomer *customer)
+gnc_job_new (GtkWidget *parent, GNCBook *bookp, GncCustomer *customer)
 {
   JobWindow *jw;
   GncJob *created_job = NULL;
 
   /* Make sure required options exist */
-  if (!bus) return NULL;
+  if (!bookp) return NULL;
 
-  jw = gnc_job_new_window (parent, bus, customer, NULL);
+  jw = gnc_job_new_window (parent, bookp, customer, NULL);
 
   gtk_signal_connect (GTK_OBJECT (jw->dialog), "close",
 		      GTK_SIGNAL_FUNC (gnc_job_on_close_cb), &created_job);
@@ -401,7 +399,7 @@ gnc_job_edit (GtkWidget *parent, GncJob *job)
 
   if (!job) return;
 
-  jw = gnc_job_new_window (parent, gncJobGetBusiness(job),
+  jw = gnc_job_new_window (parent, gncJobGetBook(job),
 			   gncJobGetCustomer(job), job);
 
   gtk_signal_connect (GTK_OBJECT (jw->dialog), "close",
@@ -420,7 +418,7 @@ static gpointer gnc_job_edit_new_cb (gpointer arg)
 {
   struct _job_select_window *sw = arg;
 
-  return gnc_job_new (sw->toplevel, sw->business, NULL);
+  return gnc_job_new (sw->toplevel, sw->book, NULL);
 }
 
 static void gnc_job_edit_edit_cb (gpointer arg, gpointer obj)
@@ -437,25 +435,24 @@ static void gnc_job_edit_edit_cb (gpointer arg, gpointer obj)
 gpointer gnc_job_edit_new_select (gpointer job, GtkWidget *toplevel,
 				  GncCustomer *cust)
 {
-  GncBusiness *business;
+  GNCBook *book;
   GncJob *j = job;
   struct _job_select_window sw;
 
   if (!cust) return NULL;
 
-  business = gncCustomerGetBusiness (cust);
+  book = gncCustomerGetBook (cust);
   sw.toplevel = toplevel;
-  sw.business = business;
+  sw.book = book;
 
 
   return
-    gnc_ui_select_job_new (toplevel, business, cust, j);
+    gnc_ui_select_job_new (toplevel, book, cust, j);
 
   /*
   return
     gnc_ui_business_chooser_new (toplevel, job,
-				 gncBusinessLookup (business,
-						    GNC_JOB_MODULE_NAME),
+				 gncBusinessLookup (GNC_JOB_MODULE_NAME),
 				 gnc_job_edit_new_cb,
 				 gnc_job_edit_edit_cb, &sw, cust);
   */

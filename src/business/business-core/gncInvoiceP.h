@@ -7,13 +7,12 @@
 #ifndef GNC_INVOICEP_H_
 #define GNC_INVOICEP_H_
 
-#include "gncBusiness.h"
 #include "gncInvoice.h"
 #include "Account.h"
 #include "Transaction.h"
 
 gboolean gncInvoiceRegister (void);
-gint gncInvoiceNextID (GncBusiness *business);
+gint gncInvoiceNextID (GNCBook *book);
 void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid);
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);
