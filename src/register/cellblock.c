@@ -131,6 +131,10 @@ xaccInitCellBlock (CellBlock *arr, int numrows, int numcols)
    (arr->right_traverse_r)[numrows-1][numcols-1] = 0;
    (arr->right_traverse_c)[numrows-1][numcols-1] = 0;
 
+   /* last is last ... */
+   arr->last_reenter_traverse_row = numrows-1;
+   arr->last_reenter_traverse_col = numcols-1;
+
    arr->widths = (short *) malloc (numcols * sizeof(short));
    arr->alignments = (unsigned char *) malloc (numcols * sizeof(unsigned char));
    
@@ -182,13 +186,19 @@ xaccNextRight (CellBlock *arr, int row,      int col,
    if ((0 > row) || (0 > col)) return;
    if ((row >= arr->numRows) || (col >= arr->numCols)) return;
 
-   /* -1 is a valid value for next ... it signifies 
-    * that traversal should go to next tab group */
+   /* -1 is a valid value for next ... it signifies that traversal
+    * should go to next tab group, so do not check for neg values */
    /* if ((0 > next_row) || (0 > next_col)) return; */
    if ((next_row >= arr->numRows) || (next_col >= arr->numCols)) return;
 
    (arr->right_traverse_r)[row][col] = next_row;
    (arr->right_traverse_c)[row][col] = next_col;
+
+   /* if traversing out (neg values) record this as the last ... */
+   if ((0 > next_row) || (0 > next_col)) {
+      arr->last_reenter_traverse_row = row;
+      arr->last_reenter_traverse_col = col;
+   }
 
 }
 

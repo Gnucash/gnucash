@@ -91,6 +91,14 @@ struct _CellBlock {
    * shift-tab is hit), but we haven't (yet) done so.
    */
 
+  /* the last-reneter row and column should contain the very last
+   * cell when the cursor was traversed out of.  They determine 
+   * the first cell that will be entered (since the first follows 
+   * the last).
+   */
+  short last_reenter_traverse_row;
+  short last_reenter_traverse_col;
+
   void * user_data;
   /* above is a pointer to anything the programmer-user of this struct
    * wants it to be.  Handy for stuff.

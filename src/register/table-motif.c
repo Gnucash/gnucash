@@ -433,16 +433,22 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
     * row and column to that of the ComboCell, which we had
     * previously recorded, and continue on as if nothing 
     * happened.  
+    *
     * BTW -- note that we are emulating a normal, right-moving tab. 
     * Backwards tabs are broken. 
+    *
+    * Note that the quark may also be zero if we are entering 
+    * the register for the first time after a table resize.
     */
-   if (NULLQUARK == cbs->qparam) {
+   if (NULLQUARK == cbs->qparam) { 
       if ((0==row) && (0==col)) {
         if ((0 <= table->prev_phys_traverse_row) && 
             (0 <= table->prev_phys_traverse_col)) {
           cbs->qparam = QRight;
           row = table->prev_phys_traverse_row;
           col = table->prev_phys_traverse_col;
+          if (0 > row) row = 0;
+          if (0 > col) col = 0;
         }
       }
    }

@@ -383,8 +383,8 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
    table->current_cursor_phys_col = -1;
    table->current_cursor_virt_row = -1;
    table->current_cursor_virt_col = -1;
-   table->prev_phys_traverse_row = 0;
-   table->prev_phys_traverse_col = 0;
+   table->prev_phys_traverse_row = -1;
+   table->prev_phys_traverse_col = -1;
    curs = table->current_cursor;
    if (curs) curs->user_data = NULL;
    table->current_cursor = NULL;
@@ -433,8 +433,11 @@ doMoveCursor (Table *table, int new_phys_row, int new_phys_col, int do_move_gui)
 
    table->current_cursor_phys_row = phys_row_origin;
    table->current_cursor_phys_col = phys_col_origin;
-   table->prev_phys_traverse_row  = phys_row_origin;
-   table->prev_phys_traverse_col  = phys_col_origin;
+
+   /* setting the previous traversal value to the last of a traversal chain will
+    * gaurentee that first entry into a register will occur at the first cell */
+   table->prev_phys_traverse_row  = phys_row_origin + curs->last_reenter_traverse_row;
+   table->prev_phys_traverse_col  = phys_col_origin + curs->last_reenter_traverse_col; 
 
    /* update the cell values to reflect the new position */
    for (i=0; i<curs->numRows; i++) {
