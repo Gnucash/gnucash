@@ -1,0 +1,272 @@
+<html>
+<head>
+<title>X-Accountant Project Goals</title>
+</head>
+
+<body>
+<h1>X-Accountant Project Goals</h1>
+We beleive that a GNU GPL project should provide goals and motivations
+at both the large and the small scales, in order to focus and motivate
+the developers.  Over-arching and grand goals are difficult to grasp
+and carry out; yet thier lack serves only to dissuade the grand
+thinkers.  A list of detailed goals may be mind-numbing to the casual
+reader; yet, without them, the roll-up-your-sleves-and-do-it
+coder cannot know where to begin.  Detailed goals lend a concreteness 
+to the discussion: they can be architected, designed and coded at any time
+by coders of any ability.  Thus, we present a list of goals, large and
+small, with the hope that the small goals will fall quickly, and the
+large ones shall turn into a multitude of small ones.
+
+<h2>Meta-Architecture Goals</h2>
+
+Create a clean separation between the data structures and the
+GUI that manipulates them, along the lines of a "Model-View-Controller"
+paradigm.   Lists of accounts and the transactions in
+them can be thought of as a representation of financial data,
+a "Model".   The GUI that adds, modifies and deletes these should 
+be thought of as a manipulator of the data, a "Controller".  
+The current Motif GUI is just
+one possible manipulator of the data; other GUI's,
+some simple, some complex, some possibly based on other graphical
+toolkits (QT, Fresco) should be possible.  The "View" of the data
+is the modern way of saying a "report".  A report generator 
+can create balance sheets and profit&loss statements, it can create pie
+charts of asset allocations, or graphs asset value over time.
+<p>
+
+Create a mechanism for obtaining data from multiple financial sources.
+Currently, X-Accountant stores data in its own file format; it can also
+import Quicken(TM) QIF files.   However, other soruces & sinks of data
+might be stock-quote web sites, on-line banking interfaces, or
+access to SQL databases.  It should be possible to have any of these at
+as data sources, and with the appropriate security mechanisms, it should
+also be possible to update these.
+<p>
+
+Create both a persoanl-finacial accounting system, as well as a
+business accounting framework.  Although these two goals may seem at
+odds with each other, there is no reason why they could not share
+a considerable amount of framework.  The goals of a personal finance
+system is a system that is easy to use, has a simple yet powerful menu
+system, provides graphs, charts, and interfaces to on-line banking and
+stock systems.  The goals of a business system is multi-user
+capabilities built on an SQL database and/or CORBA objects for 
+multi-user use,  with support for inventory control, shipping &
+receiving, billing, accounts payable & receivable.  A pie-in-the-sky
+system might even include interfaces to on-line shopping carts, 
+credit-card clearing interfaces, or even a subset of SAP R/3 (TM)
+functions.  Note that all of these systems require at thier base
+both a strong model of a "financial transaction", as well as 
+a ledger window, and a report generation mechanism.   The tools
+created to allow one should be portable enough to be deployed in the
+other application as well.
+<p>
+
+
+<h2>Concrete Architectural and Development Goals</h2>
+The following is a list of the larger, more abstract, and more difficult 
+architectural goals.  
+
+<dl>
+<dt><b>Ledger Widget</b>
+<dd>Create a more powerful ledger widget.  Currently, the X-Accountant
+    uses the powerful XbaeMatrix widget to display the ledger windows.
+    This is a good widget for displaying and maintaining tables.  
+    However, it could, and should, be further customized to handle 
+    the needs of accounting use.  Thus, it should be possible to
+    designate cells as being date cells, and provide completely
+    automated handling of date entry within these cells. Similarly,
+    it should be possible to designate monetary cells which can handle
+    input.  General text fields, for the description and the memo,
+    should be endowed with quick-fill abilites, allowing completion
+    by comparing the current types text to previous entries.  Finally,
+    there should be pull-down (combo-box) cells that can contain
+    pull-down item lists.  Each of these functions are currently
+    implemented in X-Accountant; however, there is no separation between
+    these features and the specific accounting functions.  A clean
+    separation would make the design and implementation of new ledger
+    windows much simpler and easier.
+    <p>
+
+<dt><b>C++</b>
+<dd>The current code is written in C, in an object-oriented fashion.
+    However, C++ has many benefits;  a major overhaul and conversion
+    to C++ would benefit the project.  However, this is a large task,
+    with few obvious rewards, and little short-term benefit to the
+    project.
+    <p>
+
+<dt><b>Loadable Modules</b>
+<dd>Data is currently available by reading the xacc file format, and 
+    by importing QIF files.  This interface should be abstracted,
+    allowing data to come from any source.  The abstraction should
+    involve dynamically loadable modules, so that new modules could
+    be developed and added without the need for recompilation or
+    re-linking.
+    <p>
+
+<dt><b>SQL I/O</b>
+<dd>A module is necessary to allow data to be fetched from an SQL
+    database, and for that databse to be updated.  Some thoughts:
+    SQL databases do not need to be locked during editing: instead,
+    an optimistic approach, similar to that employed by CVS (concurrent
+    version system, a mechanism for storing versions of source code)
+    could be used: if the edits conflict with chnages made by others,
+    the edit could be rejected en-masse, allowing the user to merge and
+    correct thier changes.  This is a very important note: updating
+    SQL does NOT require locks to be held for long periods of time!
+    <p>
+
+<dt><b>Financial Objects</b>
+<dd>The current system makes a distinction between te data (account,
+    transaction) and they GUI that displays it.  This distinction should
+    be further strengthened, and aset of financial objects, residing in
+    thier own library, should be created.
+</dl>
+<p>
+
+
+</dl>
+
+<h2>Incremental Development Goals</h2>
+The following is a list of goals and "bug fixes" that should be solved
+immediately, independent of the major goals.
+
+<dl>
+<dt><b>Categories</b>
+<dd>Provide a default list of "Categories" (Income/Expense Accounts).
+    These are categories such as "Automobile Expense", "Bank Interest
+    Income", and "Employment Income".  The user should be able to 
+    select a default set of accounts, and have those be created.
+    To actually implement this, it might be best to simple create
+    a file with these in them, and load that file.  A mechanism should
+    be provided to allow the user to weed-out the unwanted accounts
+    without hampering thier ability to use them at a later date, if
+    desired.  Current status: there exists the ability to merge 
+    accounts from multiple files, and the ability to hide/show
+    Income/Expense Account types.
+    <p>
+
+<dt><b>Internationalization</b>
+<dd>All menus, markup and help-text should be internationalized,
+    so that X-Accountant could be usable in any country.  This
+    would include the printing of currency values in the local 
+    country conventions.  Current status: most messages have been 
+    moved to a single header file.
+    <p>
+
+<dt><b>Navigation</b>
+<dd>Menu navigation using the keyboard should be possible.  
+    Although menu mnomenics exist, they seem to be broken.
+    Similarly, tab-key navigation should be possible.   Currently,
+    it is possible to use the tab key to navigate from field to 
+    field in the register window, to user arrow keys to navigate menus,
+    and quick-fill to automatically complete fields.  However,
+    it is not possible to tab over to the "Commit" button. It shoudl be.
+    <p>
+
+<dt><b>Icons, Icons Icons</b>
+<dd>A set of pretty icons and button pixmaps should be created for
+    minimized windows, and for the various buttons.  A user-configurable
+    button-bar would be nice too.  This should probably be coupled with
+    the creation of an X resource file, which does not currenyl exist.
+    <p>
+
+<dt><b>Folder Tabs</b>
+<dd>Currently, Income/Expense accounts can be shown or hidden by
+    selecting from a menu.  It would be nice to be able to examine
+    diffferent account types (Asset, Liability, Income, Expense,
+    Payables, Receivables, Inventory) by selecting a tab folder.
+
+<dt><b>Fly-Over Help</b>
+<dd>When the user pauses the mouse over a button, "fly-over" pop-up
+    help windows shold appear. 
+    <p>
+
+<dt><b>Simplified Stock Ledger</b>
+<dd>Stocks and Mutual funds are handled by placing them each in thier
+    own account.  Each account can be viewed individually.  If all of
+    the stock accounts are children of a master trading account, then
+    the trading account can be viewed and modified in a General Ledger 
+    window.  The current stock general ledger window is a bit obtuse,
+    and difficult ot understand and use.  A simplified but still
+    powerful ledger window is desperately needed.
+    <p>
+
+<dt><b>Forced Double-Entry</b>
+<dd>The system supports double-entry: every transaction
+    indicates a pair of accounts: one is debited, and one is credited.
+    Double-entry is a powerful way of ensuring the integrity of 
+    of the financial data.  Currently, while double-entry is supported,
+    its use is not forced:  the user can create dangling transactions,
+    where only one account is indicated.  Although this is acceptable
+    for home use (even diesriable, since it allows the casual user
+    the simplicity they desire), it is not acceptable for business use.
+    It must be possible to enable forced-double entry, so that a
+    transaction cannot be completed until two accounts have been specified.
+    It should also be possible to sweep through the date, and find all
+    dangling transactions.
+    <p>
+
+<dt><b>Transaction Window Fixes</b>
+<dd>The transaction window should allow the user to specify a share
+    price (when purchasing/selling shares) as well as the load
+    and/or fees associated with the pruchase.   Fees, of course,
+    are handled as separate transactions: however, it should
+    still be possible to specify the fees, the transfer, and other
+    details from a single window.
+    <p>
+
+<dt><b>Bonds & Interest Bearing Instruments</b>
+<dd>Support should be added for Mortgages, Bonds, CD's and other
+    instruments (e.g. savings accounts) that pay interest on a regular
+    basis.  It should be possible to specify the interest rate,
+    the payment schedule, and other regularrly recurring transacitons.
+    <p>
+
+<dt><b>Household Assets</b>
+<dd>Add an example showing how regular ousehold assets (house, car,
+    jewelry, etc.) should be treated.  In particular, show how
+    appreciation and depreciation should be treated.
+    <p>
+
+<dt><b>Add Graphs</b>
+<dd>Add the whole rainbow of graphs, charts, etc.
+    <p>
+
+<dt><b>Add Reports</b>
+<dd>Add the whole host of reports, including NetWorth statements,
+    Balance Sheets, and Profit & Loss statements.  These should be
+    prinatable: it might be best to create them as ordinary HTML pages,
+    and use the printing abilites of the browser.  In an ideal
+    situatuation, the user should be able to create custom reports.
+    <p>
+
+<dt><b>Inventory, Job Costing</b>
+<dd>Add the business features needed to maintain a stock of items for
+    sale, estimating jobs.
+    <p>
+
+<dt><b>Payables & Receivables</b>
+<dd>Add feautures to track sales receipts and other pending sources
+    of income, as well as owed sums.
+    <p>
+
+<dt><b>Check Printing</b>
+<dd>Create a check-printing ability.
+    <p>
+<dt><b>Greyed-out Form Help</b>
+<dd>Create greyed out entries in the ledger, titled "Memo",
+    "Description", etc, helping users understand what should be typed into
+    each field.
+
+
+</dl>
+</p>
+
+<hr>
+Draft version 0.1 December 1997<br>
+Linas Vepstas linas@linas.org <br>
+Robin Clark rclark@hmc.edu<br>
+</body>
+</html>
