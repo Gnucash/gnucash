@@ -44,6 +44,8 @@
    /* save old table size */						\
    old_rows = table_rows;						\
    old_cols = table_cols;						\
+   if (0 > old_rows) old_rows = 0;					\
+   if (0 > old_cols) old_cols = 0;					\
 									\
    /* realloc to get the new table size.  Note that the */		\
    /* new table may be wider or slimmer, taller or shorter. */		\
@@ -467,26 +469,19 @@ xaccRefreshHeader (Table *table)
 
    /* copy header data into entries cache */
    arr = table->handlers[0][0];
-printf ("have loop %d %d \n", arr->numRows, arr->numCols);
    if (arr) {
       for (i=0; i<arr->numRows; i++) {
          for (j=0; j<arr->numCols; j++) {
-printf ("gonna %d %d \n", i,j);
             if (table->entries[i][j]) free (table->entries[i][j]);
-printf ("OK\n");
             if (arr->cells[i][j]) {
-printf ("OK\n");
                if ((arr->cells[i][j])->value) {
-printf ("gonna %d %d %s \n", i,j, (arr->cells[i][j])->value);
 
                   table->entries[i][j] = strdup ((arr->cells[i][j])->value);
                } else {
                   table->entries[i][j] = strdup ("");
-printf ("alt OK\n");
                }
             } else {
                table->entries[i][j] = strdup ("");
-printf ("conkalt OK\n");
             }
          }
       }
