@@ -292,7 +292,7 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   acc->parent->saved = False;
   
   /* allocate mem for the new transaction */
-  trans   = (Transaction *)_malloc(sizeof(Transaction));
+  trans   = mallocTransaction();
   
   /* Create the "trans" transaction */
   str = XmTextGetString(adjBData->date);
@@ -304,20 +304,19 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   themount = val;
   
   /* fill out the rest of the fields */
-  trans->num         = XtNewString("");
-  trans->memo        = XtNewString("");
+  XtFree (trans->description);
   trans->description = XtNewString("Adjust Balance");
-  trans->catagory    = 0;
   trans->reconciled  = NREC;
   
   pos = insertTransaction( acc, trans );
   
   /* figure out what the amount for this transaction... figure out
    * the current balance, and take the diff from amount */
+  dcurrAmount = 0.0;
   for( i=0; i<pos; i++ )
     {
     tempTrans = getTransaction(acc,i);
-    dcurrAmount += xaccGetAmount (acc, trans);
+    dcurrAmount += xaccGetAmount (acc, tempTrans);
     }
   xaccSetAmount (acc, trans, themount - dcurrAmount);
   
