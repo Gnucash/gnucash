@@ -213,10 +213,12 @@ gnc_get_default_register_style (GNCAccountType type)
   char *style_string;
 
   switch (type) {
+#if 0
   case PAYABLE:
   case RECEIVABLE:
     new_style = REG_STYLE_LEDGER;
     break;
+#endif
 
   default:
     style_string = gnc_lookup_multichoice_option("Register", 

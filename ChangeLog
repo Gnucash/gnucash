@@ -29,6 +29,8 @@
 
 	* src/engine/test/test-querynew.c -- add a warning message about
 	  known CRITICAL messages, which are safe to ignore..
+
+	* gnc-ledger-display.c -- honor user defaults for A/R and A/P windows
 	
 2002-10-16  Joshua Sled  <jsled@asynchronous.org>
 
