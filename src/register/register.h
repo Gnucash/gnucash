@@ -41,9 +41,14 @@
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
+
+#ifdef MOTIF
 #include "table-motif.h"
-#include "recncell.h"
-#include "textcell.h"
+#endif
+
+#ifdef GNOME
+#include "table-gtk.h"
+#endif 
 
 /* defined register types */
 /* "registers" are single-account display windows.

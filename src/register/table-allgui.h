@@ -34,8 +34,7 @@
  * is ugly. 
  */
 
-#define XMOTIF
-#ifdef XMOTIF
+#ifdef MOTIF
 #include "table-motif.h"
 #endif 
 

@@ -26,6 +26,7 @@
 \********************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "cellblock.h"
 #include "table-allgui.h"

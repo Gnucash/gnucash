@@ -26,11 +26,15 @@
 \********************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <X11/keysym.h>
+
+#ifdef MOTIF
 #include <Xm/Xm.h>
 #include <ComboBox.h>
 #include <Xbae/Matrix.h>
+#endif
 
 #include "combocell.h"
 
@@ -38,6 +42,8 @@
  * the public interface.  In this impelmentation, 
  * it holds XtMotif data that we need.
  */
+
+#ifdef MOTIF
 
 typedef struct _PopBox {
    Widget combobox;
@@ -56,11 +62,26 @@ static void setComboValue (BasicCell *bcell, const char *value);
 static const char * enterCombo (BasicCell *bcell, const char *value);
 static const char * leaveCombo (BasicCell *bcell, const char *value);
 
+#endif
+
 #define SET(cell,str) { 			\
    if ((cell)->value) free ((cell)->value);	\
    (cell)->value = strdup (str);		\
    (cell)->changed = 0xffffffff;		\
 }
+
+#ifdef GNOME
+
+typedef struct _PopBox {
+   int currow;
+   int curcol;
+} PopBox;
+
+void xaccDestroyComboCell (ComboCell *cell) { }
+void xaccAddComboCellMenuItem (ComboCell *cell, char * menustr) {}
+void xaccInitComboCell (ComboCell *cell) {}
+
+#endif
 
 /* =============================================== */
 
@@ -71,6 +92,8 @@ ComboCell *xaccMallocComboCell (void)
    xaccInitComboCell (cell);
    return cell;
 }
+
+#ifndef GNOME
 
 void xaccInitComboCell (ComboCell *cell)
 {
@@ -184,6 +207,8 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
    }
 }
 
+#endif
+
 /* =============================================== */
 /* not only do we set the cell contents, but we 
  * make the gui reflect the right value too.
@@ -201,6 +226,7 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
     * If so, then be sure to bail out now. */
    if (!box) return;
 
+#ifndef GNOME
    if (str) {
       if (0x0 != str[0]) {
          XmString choosen;
@@ -224,7 +250,7 @@ xaccSetComboCellValue (ComboCell *cell, const char * str)
          XbaeMatrixSetCell (box->parent, box->currow, box->curcol, "");
       }
    }
-
+#endif
 }
 
 /* =============================================== */
@@ -235,6 +261,8 @@ setComboValue (BasicCell *_cell, const char *str)
    ComboCell * cell = (ComboCell *) _cell;
    xaccSetComboCellValue (cell, str);
 }
+
+#ifndef GNOME
 
 /* =============================================== */
 
@@ -518,5 +546,7 @@ static void dropDownCB (Widget w, XtPointer cd, XtPointer cb )
    }
 #endif /* USE_COMPLEX_TRAVERSAL_LOGIC */
 }
+
+#endif /* #ifndef GNOME */
 
 /* =============== end of file =================== */
