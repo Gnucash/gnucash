@@ -126,14 +126,14 @@
     (let* ((to-date-tp (gnc:timepair-end-day-time 
 			(gnc:date-option-absolute-time
                          (get-option gnc:pagename-general 
-				   optname-to-date))))
+				     optname-to-date))))
 	   (from-date-tp (gnc:timepair-start-day-time 
 			  (gnc:date-option-absolute-time
                            (get-option gnc:pagename-general 
-				     optname-from-date))))
+				       optname-from-date))))
 	   (interval (get-option gnc:pagename-general optname-stepsize))
 	   (report-title (get-option gnc:pagename-general 
-				   gnc:optname-reportname))
+				     gnc:optname-reportname))
 
 	   (height (get-option gnc:pagename-display optname-plot-height))
 	   (width (get-option gnc:pagename-display optname-plot-width))
@@ -144,11 +144,11 @@
 				gnc:pagename-display optname-markercolor)))
 	   
            (report-currency (get-option pagename-price
-                                      optname-report-currency))
+					optname-report-currency))
 	   (price-commodity (get-option pagename-price
-				      optname-price-commodity))
+					optname-price-commodity))
 	   (price-source (get-option pagename-price
-				   optname-price-source))
+				     optname-price-source))
 
 	   (dates-list (gnc:make-date-list
 			(gnc:timepair-end-day-time from-date-tp) 
@@ -161,7 +161,15 @@
 	    (filter gnc:account-has-shares? (gnc:group-get-subaccounts
 					     (gnc:get-current-group))))
 	   (data '()))
-      
+
+      ;; Short helper for all the warnings below
+      (define (make-warning title text)
+	(gnc:html-document-add-object! 
+	 document 
+	 (gnc:make-html-text 
+	  (gnc:html-markup-h2 title)
+	  (gnc:html-markup-p text))))
+
       (gnc:html-scatter-set-title! 
        chart report-title)
       (gnc:html-scatter-set-subtitle!
@@ -258,22 +266,41 @@
 	 
 	 (gnc:html-scatter-set-data! 
 	  chart data)
-	 
+
+	 ;; Make tons of tests so that Guppi won't barf
 	 (if (not (null? data))
-	     (gnc:html-document-add-object! document chart) 
-	     (gnc:html-document-add-object!
-	      document
-	      (gnc:html-make-empty-data-warning))))
+	     (if (> (length data) 1)
+		 (if (apply equal? (map second data))
+		     (make-warning 
+		      (_ "All Prices equal")
+		      (_ "All the prices found are equal. \
+This would result in a plot with one straight line. \
+Unfortunately, the plotting tool can't handle that."))
+		     (if (apply equal? (map first data))
+			 (make-warning
+			  (_ "All Prices at the same date")
+			  (_ "All the prices found are from the same date. \
+This would result in a plot with one straight line. \
+Unfortunately, the plotting tool can't handle that."))
+
+			 (gnc:html-document-add-object! document chart)))
+
+		 (make-warning
+		  (_ "Only one price")
+		  (_ "There was only one single price found for the \
+selected commodities in the selected time period. This doesn't give \
+a useful plot.")))
+	     (make-warning
+	      (_ "No data")
+	      (_ "There is no price information available for the \
+selected commodities in the selected time period."))))
 
        ;; warning if report-currency == price-commodity
-       (gnc:html-document-add-object! 
-	document 
-	(gnc:make-html-text 
-	 (gnc:html-markup-h2 (_ "Identical commodities"))
-	 (gnc:html-markup-p 
-	  (_ "Your selected commodity and the currency of the report \
+       (make-warning 
+	(_ "Identical commodities")
+	(_ "Your selected commodity and the currency of the report \
 are identical. It doesn't make sense to show prices for identical \
-commodities.")))))
+commodities.")))
       
       document))
 

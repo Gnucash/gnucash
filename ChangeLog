@@ -1,15 +1,10 @@
-2001-05-16  Robert Graham Merkel  <rgmerk@mira.net>
+2001-05-15  Christian Stimming  <stimming@tuhh.de>
 
-	* src/scm/report/transaction-report.scm: use colspan to make
-	room for long subtotal labels.
+	* src/scm/commodity-utilities.scm: added another case to 
+	gnc:case-exchange-time-fn. Needs more work. 
 
-	* src/scm/doc.scm: remove unnecessary debugging output inadvertantly
-	added.
-
-2001-05-15  Bill Gribble  <grib@billgribble.com>
-
-	* fix report updating problem.  should reload multicolumn reports
-	correctly when "reload" is hit.
+	* src/scm/report/price-scatter.scm: Catch all cases that would
+	cause Guppi's scatterplot to barf.
 
 2001-05-15  Rob Browning  <rlb@cs.utexas.edu>
 

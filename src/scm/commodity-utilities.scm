@@ -661,6 +661,14 @@
         pricealist (gnc:gnc-monetary-commodity foreign)	date))
       #f))
 
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Choosing exchange functions made easy -- get the right function by
+;; the value of a multichoice option.
+
+
 ;; Return a ready-to-use function. Which one to use is determined by
 ;; the value of 'source-option', whose possible values are set in
 ;; gnc:options-add-price-source!.
@@ -688,10 +696,25 @@
 			 (lambda (foreign domestic date)
 			   (gnc:exchange-by-pricealist-nearest
 			    pricealist foreign domestic date))))
+    ('actual-transactions (let ((pricealist
+				 (gnc:get-commoditylist-inst-prices
+				  commodity-list report-currency to-date-tp)))
+			    (lambda (foreign domestic date)
+			      (gnc:exchange-by-pricealist-nearest
+			       pricealist foreign domestic date))))
     ('pricedb-latest (lambda (foreign domestic date)
 		       (gnc:exchange-by-pricedb-latest foreign domestic)))
     ('pricedb-nearest gnc:exchange-by-pricedb-nearest)
     (else (gnc:warn "gnc:case-exchange-time-fn: bad price-source value"))))
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions using the exchange-fn's above to get from a
+;; commodity-collector to one value.
+
 
 ;; Adds all different commodities in the commodity-collector <foreign>
 ;; by using the exchange rates of <exchange-fn> to calculate the
