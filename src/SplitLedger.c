@@ -247,11 +247,10 @@ xaccTransGetDescription(trans));
 
 /* ======================================================== */
 
-void
-xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
+static void
+xaccSRLoadTransEntry (SplitRegister *reg, Split *split, int do_commit)
 {
    Transaction *trans;
-   char *accname;
    char buff[2];
    time_t secs;
    double baln;
@@ -260,17 +259,14 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       /* we interpret a NULL split as a blank split */
       xaccSetDateCellValueSecs (reg->dateCell, 0);
       xaccSetBasicCellValue (reg->numCell, "");
-      xaccSetComboCellValue (reg->actionCell, "");
       xaccSetQuickFillCellValue (reg->descCell, "");
-      xaccSetBasicCellValue (reg->memoCell, "");
       xaccSetBasicCellValue (reg->recnCell, "");
-      xaccSetComboCellValue (reg->xfrmCell, "");
-      xaccSetDebCredCellValue (reg->debitCell, 
-                               reg->creditCell, 0.0);
-      xaccSetPriceCellValue (reg->balanceCell, 0.0);
-      xaccSetPriceCellValue (reg->priceCell, 0.0);
+      xaccSetDebCredCellValue (reg->debitTransCell, 
+                               reg->creditTransCell, 0.0);
+      xaccSetPriceCellValue (reg->priceTransCell, 0.0);
+      xaccSetPriceCellValue (reg->valueTransCell, 0.0);
       xaccSetPriceCellValue  (reg->shrsCell,  0.0);
-      xaccSetPriceCellValue (reg->valueCell, 0.0);
+      xaccSetPriceCellValue (reg->balanceCell, 0.0);
 
    } else {
       trans = xaccSplitGetParent (split);
@@ -279,20 +275,16 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       xaccSetDateCellValueSecs (reg->dateCell, secs);
    
       xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
-      xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
       xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
-      xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
    
       buff[0] = xaccSplitGetReconcile (split);
       buff[1] = 0x0;
       xaccSetBasicCellValue (reg->recnCell, buff);
    
-      /* the transfer account */
-      accname = xaccAccountGetName (xaccSplitGetAccount (split));
-      xaccSetComboCellValue (reg->xfrmCell, accname);
-   
-      xaccSetDebCredCellValue (reg->debitCell, 
-                               reg->creditCell, -xaccSplitGetValue (split));
+      xaccSetDebCredCellValue (reg->debitTransCell, 
+                               reg->creditTransCell, xaccSplitGetValue (split));
+      xaccSetPriceCellValue (reg->priceTransCell, xaccSplitGetSharePrice (split));
+      xaccSetPriceCellValue (reg->valueTransCell, xaccSplitGetValue (split));
    
       /* For income and expense acounts, we have to reverse
        * the meaning of balance, since, in a dual entry
@@ -306,12 +298,72 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
       }
       xaccSetPriceCellValue (reg->balanceCell, baln);
    
-      xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
       xaccSetPriceCellValue (reg->shrsCell,  xaccSplitGetShareBalance (split));
+   }
+
+   reg->table->current_cursor->user_data = (void *) split;
+
+   /* copy cursor contents into the table */
+   if (do_commit) {
+      xaccCommitCursor (reg->table);
+   }
+}
+
+/* ======================================================== */
+
+static void
+xaccSRLoadSplitEntry (SplitRegister *reg, Split *split, int do_commit)
+{
+   Transaction *trans;
+   char *accname;
+   char buff[2];
+
+   if (!split) {
+      /* we interpret a NULL split as a blank split */
+      xaccSetComboCellValue (reg->actionCell, "");
+      xaccSetBasicCellValue (reg->memoCell, "");
+      xaccSetComboCellValue (reg->xfrmCell, "");
+      xaccSetDebCredCellValue (reg->debitCell, 
+                               reg->creditCell, 0.0);
+      xaccSetPriceCellValue (reg->priceCell, 0.0);
+      xaccSetPriceCellValue (reg->valueCell, 0.0);
+
+   } else {
+      trans = xaccSplitGetParent (split);
+   
+      xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
+      xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
+   
+      buff[0] = xaccSplitGetReconcile (split);
+      buff[1] = 0x0;
+      xaccSetBasicCellValue (reg->recsCell, buff);
+   
+      /* the transfer account */
+      accname = xaccAccountGetName (xaccSplitGetAccount (split));
+      xaccSetComboCellValue (reg->xfrmCell, accname);
+   
+      xaccSetDebCredCellValue (reg->debitCell, 
+                               reg->creditCell, -xaccSplitGetValue (split));
+   
+      xaccSetPriceCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
       xaccSetPriceCellValue (reg->valueCell, -xaccSplitGetValue (split));
    }
 
    reg->table->current_cursor->user_data = (void *) split;
+
+   /* copy cursor contents into the table */
+   if (do_commit) {
+      xaccCommitCursor (reg->table);
+   }
+}
+
+/* ======================================================== */
+
+void
+xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
+{
+   xaccSRLoadTransEntry (reg, split, 0);
+   xaccSRLoadSplitEntry (reg, split, 0);
 
    /* copy cursor contents into the table */
    xaccCommitCursor (reg->table);
@@ -425,14 +477,10 @@ printf ("load register of %d virtual entries %d phys rows ----------- \n", i, nu
          Split * secondary;
          int j = 0;
 
-/* hack alert it would be more efficient to have two different
-loads, one to handle teh transaction side, one to handle the 
-split side.  But, for now a single load works just fine.
-*/
 printf ("load trans %d at phys row %d \n", i, phys_row);
          xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
          xaccMoveCursor (table, phys_row, 0);
-         xaccSRLoadRegEntry (reg, split);
+         xaccSRLoadTransEntry (reg, split, 1);
          vrow ++;
          phys_row += reg->trans_cursor->numRows; 
    
@@ -446,7 +494,7 @@ printf ("load trans %d at phys row %d \n", i, phys_row);
 printf ("load split %d at phys row %d \n", j, phys_row);
                xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
                xaccMoveCursor (table, phys_row, 0);
-               xaccSRLoadRegEntry (reg, secondary);
+               xaccSRLoadSplitEntry (reg, secondary, 1);
                vrow ++;
                phys_row += reg->split_cursor->numRows; 
             }
