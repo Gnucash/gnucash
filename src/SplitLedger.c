@@ -166,8 +166,9 @@ printf ("save split is %p \n", split);
    if (MOD_DESC & changed) 
       xaccTransSetDescription (trans, reg->descCell->cell.value);
 
-   if (MOD_RECN & changed) 
+   if (MOD_RECN & changed) {
       xaccSplitSetReconcile (split, reg->recnCell->value[0]);
+   }
 
    if (MOD_AMNT & changed) {
       double new_amount;
