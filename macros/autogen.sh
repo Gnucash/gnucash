@@ -249,15 +249,9 @@ do
       echo "*** Ignore any instruction above about running aclocal by hand."
       echo "*** I repeat, do not run aclocal by hand.  You have been warned....."
       echo
-      case $gettext_version in
-      0.10.*)
-    	grep "intl/Makefile" configure.in > /dev/null ||
-	( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
+      grep "intl/Makefile" configure.in > /dev/null ||
+      ( sed -e 's#^AC_OUTPUT(#AC_OUTPUT( intl/Makefile po/Makefile.in#' \
 	configure.in >configure.in.new && mv configure.in.new configure.in )
-	;;
-      *)
-        ;;
-      esac
       if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
         echo "Running ${INTLTOOLIZE} ..."
         ${INTLTOOLIZE} --copy --force --automake
