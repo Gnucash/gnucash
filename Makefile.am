@@ -85,19 +85,11 @@ cscope.out: cscope.files
 
 if GNC_TAGS_FILE
 
-etags.files: $(shell find . -type d)
-	find . -path './debian' -prune -o -name '*.[ch]' -print -o -name '*.scm' -print | sort > etags.files.tmp
-	@if cmp --quiet etags.files etags.files.tmp; \
-        then \
-          echo "TAGS file list hasn't changed."; \
-          rm -f etags.files.tmp; \
-        else \
-          echo "TAGS file list has changed."; \
-          mv etags.files.tmp etags.files; \
-        fi
-
-TAGS: etags.files $(shell cat etags.files)
-	etags `cat etags.files`
+TAGS:
+        # make sure etags.files is up to date.
+	${MAKE} -f Makefile.TAGS etags.files
+        # now use the contents of etags.files to re-make TAGS if needed.
+	${MAKE} -f Makefile.TAGS TAGS
 
 else
 
