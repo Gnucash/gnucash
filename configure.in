@@ -680,20 +680,38 @@ then
     
     
     ### ----------------------------------------------------------------------
-    GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
-    GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
-    
     AC_CHECK_LIB(gal, main, true,
       [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
       `$GNOME_CONFIG --libs gal`)
     
-    # check for gtkhtml and enable it via HAVE_LIBGTKHTML
-    # if found
-    AC_CHECK_LIB(gtkhtml, gtk_html_new,
-                 GNOMEBUILDLIBS="${GNOMEBUILDLIBS} gtkhtml"
-                 AC_DEFINE(HAVE_LIBGTKHTML),
-                 AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
-                 $GTKHTML_LIBS)
+    AC_MSG_CHECKING([for gtkhtml < 1.1])
+    GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
+    GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
+    if test "x$GTKHTML_LIBS" != x; then
+	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+	# if found
+	AC_CHECK_LIB(gtkhtml, gtk_html_new,
+		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS}"
+		     AC_DEFINE(HAVE_LIBGTKHTML),
+		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
+		     $GTKHTML_LIBS)
+	AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
+    else
+	AC_MSG_CHECKING([for gtkhtml >= 1.1])
+	AC_PATH_PROG(PKG_CONFIG,pkg-config,no)
+	if test "x$PKG_CONFIG" = x; then
+	    AC_MSG_ERROR([Could not find pkg-config file that is needed by gtkhtml-1.1],)
+	fi
+	GTKHTML_LIBS=`$PKG_CONFIG --libs gtkhtml-1.1`
+	GTKHTML_CFLAGS=`$PKG_CONFIG --cflags gtkhtml-1.1`
+	# check for gtkhtml and enable it via HAVE_LIBGTKHTML
+	# if found
+	AC_CHECK_LIB(gtkhtml-1.1, gtk_html_new,
+		     GNOMEBUILDLIBS="${GNOMEBUILDLIBS} $GTKHTML_TEST_LIB"
+		     AC_DEFINE(HAVE_LIBGTKHTML),
+		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
+		     $GTKHTML_LIBS)
+    fi
     
     GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
     GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
@@ -714,7 +732,6 @@ then
     	     $GHTTP_LIBS)
     
     AS_SCRUB_INCLUDE(GHTTP_CFLAGS)
-    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     AC_SUBST(GTKHTML_LIBS)
     AC_SUBST(GTKHTML_CFLAGS)
     AC_SUBST(GHTTP_LIBS)

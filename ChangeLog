@@ -38,6 +38,8 @@
 
 2002-11-17  David Hampton  <hampton@employees.org>
 
+	* configure.in: Add support for gtkhtml 1.1.
+
 	* various: Clean up compilation warnings.
 	
 	* src/gnome/window-reconcile.c: Fix a couple of functions that
