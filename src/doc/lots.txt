@@ -419,16 +419,19 @@ Status
  o See src/engine/gnc-lot.h for the public API.
  o The XML backend support for lot is complete (April 2002,  ships in 
    version 1.8.x).
- o The Postgres backend does not yet support lots.
  o Scrub routines to automatically take old gnucash datasets and
    transition them to double-balanced lots have been implemented.
    These implement a FIFO accounting policy (April 2003)
  o Closed/Open lots are handled correctly during book closing.
    See src/engine/Period.c (August 2003)
 
-XXX need to add a lot id, have it auto-gened by the scrubber.
+ o The Postgres backend does not yet support lots.
+   XXX In particular, the programming API for Lots is currently
+   non-transactional. There's no dirty flag, and the backend is not 
+   signalled that the lots have changed.  This is the case both for
+   Scrub2.c and for src/gnome/lot-viewer.c (which changes KVP's).
 
- o No GUI yet.
+ o prototype GUI in src/gnome/lot-viewer.c
 
 XXX It is a good idea to generate a gain/loss split for ever sale, not
 just the lot closure.  Need to tweak the register to hide/show as appropriate.
