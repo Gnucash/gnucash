@@ -252,12 +252,13 @@
            'xout)
 ;          ((vest) 
 ;           'vest)
-          (else 
+          (else
            (gnc:warning-dialog 
-            (string-append 
-             (sprintf #f "The file contains an unknown Action '%s'.\n"
+            (string-append
+             (sprintf #f (_ "The file contains an unknown Action '%s'.")
                       read-value)
-             "Some transactions may be discarded."))
+             "\n"
+             (_ "Some transactions may be discarded.")))
            #f)))
       #f))
 

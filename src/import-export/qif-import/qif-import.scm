@@ -7,7 +7,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-module (gnucash import-export qif-import))
-(use-modules (gnucash main) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
+(use-modules (gnucash main)) ;; FIXME: delete after we finish modularizing.
 (use-modules (g-wrapped gw-runtime))
 (use-modules (gnucash gnc-module))
 (use-modules (ice-9 slib))
@@ -19,6 +19,7 @@
 
 (gnc:module-load "gnucash/engine" 0)
 (gnc:module-load "gnucash/app-utils" 0)
+(gnc:module-load "gnucash/gnome-utils" 0)
 
 (load-from-path "qif-import/qif-objects.scm")      ;; class definitions 
 (load-from-path "qif-import/qif-parse.scm")        ;; string-to-value
