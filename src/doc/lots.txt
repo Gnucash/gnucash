@@ -334,7 +334,7 @@ we want to show only one of these two splits.   Whichever method
 is chosen, the register has to filter out some of the splits 
 that it shows.
 
-The implementation that seems best is to represnet the sale
+The implementation that seems best is to represent the sale
 with two separate transactions: one for the sale itself, and a
 separate one for the gains.  This makes computing the balance 
 easier, although it makes the logic for setting the date
@@ -357,8 +357,35 @@ Quick API Overview:
 TODO:
 -- need to recompute lot membership when source split 'amount' changes.
 -- need to recompute gain value when source split value changes.
--- need to copy dates, etc. when source split date changes.
+-- need to copy void status when source split date changes.
 
+Cap Gains Actual Implementation
+===============================
+Cap Gains are noted by creating a separate transaction with two 
+splits in it.  One of the splits is as described above: zero
+amount, non-zero value.   There is a GUI requirement that when
+the looking at a gains transaction, certain things need to be
+kept in sync with the transaction that is the source of the gains.
+In order to accomplish this, the engine uses a set of 'dirty'
+flags, and a pair of pointers between the gains split and the
+source split, so that the one can be quickly found from the other.
+
+Things kept in sync:
+-- date posted
+-- value
+-- void status
+-- other things ?
+
+Things not kept in sync:
+-- kvp trees
+-- description, memo,  other things?
+
+The posted date is kept in sync using a lazy-evaluation scheme.
+If xaccTransactionSetDatePosted() is called, the date change is
+accepted, and the split is marked date-dirty.  If the posted date
+is queried for (using GetDatePosted()), then the transaction is
+evaluated. If its a gains-transaction, then it's date is copied 
+from the source transaction that created the gains. 
 
 Conversion
 ==========
