@@ -1,6 +1,6 @@
-
+--
 -- FILE:
--- gnc-init.sql
+-- table-create.sql
 --
 -- FUNCTION:
 -- Define the tables needed to initialize a new GnuCash database
@@ -24,7 +24,6 @@
 -- ISO4217 for currencies, NASDAQ, AMEX, NYSE, EUREX for 
 -- stocks.   See the C documentation for details.
 
-DROP TABLE gncCommodity;
 CREATE TABLE gncCommodity (
         commodity	TEXT PRIMARY KEY,
 	fullname	TEXT,
@@ -40,7 +39,6 @@ CREATE TABLE gncCommodity (
 --
 -- hack alert -- add kvp frames, 
 
-DROP TABLE gncAccount;
 CREATE TABLE gncAccount (
 	accountGuid	CHAR(32) PRIMARY KEY,
 	parentGuid	CHAR(32) NOT NULL,
@@ -57,7 +55,6 @@ CREATE TABLE gncAccount (
 
 -- hack alert -- add kvp frames ??
 
-DROP TABLE gncTransaction;
 CREATE TABLE gncTransaction (
 	transGuid		CHAR(32) PRIMARY KEY,
 	date_entered	 	DATETIME DEFAULT 'NOW',
@@ -72,7 +69,6 @@ CREATE INDEX gncTransaction_posted_idx ON gncTransaction (date_posted);
 -- a gncEntry is what we call 'Split' elsewhere in the engine
 -- Here, we call it a 'journal entry'
 
-DROP TABLE gncEntry;
 CREATE TABLE gncEntry (
 	entryGuid		CHAR(32) PRIMARY KEY,
 	accountGuid		CHAR(32) NOT NULL,
@@ -97,7 +93,6 @@ CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 -- (e.g. report stock account balances in shares of stock, 
 -- and in dollars)
 
-DROP TABLE gncCheckpoint;
 CREATE TABLE gncCheckpoint (
 	accountGuid		CHAR(32) NOT NULL,
 	date_xpoint	 	DATETIME NOT NULL,
@@ -112,15 +107,14 @@ CREATE TABLE gncCheckpoint (
 
 -- The session directory serves several purposes.  First and formost,
 -- it notes the database access type.  There are three modes:
---  o "Single User" -- Only one user can have access to the database
+--  o 'Single User' -- Only one user can have access to the database
 --                     at a time. 
---  o "Multi-User Polled" -- multiple users
---  o "Muilti-User Event Driven" 
+--  o 'Multi-User Polled' -- multiple users
+--  o 'Muilti-User Event Driven'
 --  See Design.txt for more info.
 -- Note that a client can lie about its identity, sign-on time, etc.
 -- so these records aren't really sufficient for a true audit.
 
-DROP TABLE gncSession;
 CREATE TABLE gncSession (
 	sessionGuid		CHAR(32) PRIMARY KEY,
 	session_mode		CHAR(16) NOT NULL,
