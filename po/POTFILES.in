@@ -26,7 +26,6 @@ src/gnome/gnc-commodity-edit.c
 src/gnome/gnc-datedelta.c
 src/gnome/print-session.c
 src/gnome/reconcile-list.c
-src/gnome/window-html.c
 src/gnome/window-main.c
 src/gnome/window-reconcile.c
 src/gnome/window-register.c

@@ -77,3 +77,9 @@
                             (gnc:commodity-table-insert table comm)))))
                 (loop (read)))))))))
 
+(define (gnc:load-help-topics fname) 
+  (with-input-from-file
+      (gnc:find-in-directories fname
+                               (gnc:config-var-value-get gnc:*load-path*))
+    (lambda () (read))))
+

@@ -375,8 +375,7 @@
                     (gnc:commodity-get-printname 
                      (gnc:account-get-currency (car accounts))))
 
-              (set! report-lines 
-                    (gnc:convert-split-list (gnc:query-get-splits gncq)))
+              (set! report-lines (gnc:query-get-splits gncq))
 
               (gnc:free-query gncq)
 

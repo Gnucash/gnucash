@@ -92,6 +92,7 @@ gnc_commodity_destroy(gnc_commodity * cm) {
   g_free(cm->fullname);
   g_free(cm->printname);
   g_free(cm->namespace);
+  g_free(cm->exchange_code);
   g_free(cm->mnemonic);
   g_free(cm);
 }
@@ -329,12 +330,13 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
   if(!nsp) {
     nsp = g_new0(gnc_commodity_namespace, 1);
     nsp->table = g_hash_table_new(g_str_hash, g_str_equal);
-    g_hash_table_insert(table->table, (gpointer)(comm->namespace), 
+    g_hash_table_insert(table->table, 
+                        g_strdup(comm->namespace), 
                         (gpointer)nsp);
   }
 
   return g_hash_table_insert(nsp->table, 
-                             (gpointer)comm->mnemonic,
+                             (gpointer)g_strdup(comm->mnemonic),
                              (gpointer)comm);  
 }
 
@@ -461,24 +463,65 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
   }
 }
 
+
 /********************************************************************
  * gnc_commodity_table_delete_namespace
  * delete a namespace  
  ********************************************************************/
 
+static int
+ns_helper(gpointer key, gpointer value, gpointer user_data) {
+  gnc_commodity * c = value;
+  gnc_commodity_destroy(c);
+  g_free(key);
+  return TRUE;
+}
+
 void 
 gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                      const char * namespace) {
   gpointer orig_key;
-  gpointer value;
+  gnc_commodity_namespace * value;
 
   if(table) { 
     if(g_hash_table_lookup_extended(table->table,
                                     (gpointer) namespace,
                                     &orig_key,
-                                    &value)) {
+                                    (gpointer)&value)) {
       g_hash_table_remove(table->table, namespace);
+      
+      g_hash_table_foreach_remove(value->table, ns_helper, NULL);
+      g_hash_table_destroy(value->table);
+      g_free(value);
+
       g_free(orig_key);
     }
   }
 }
+
+
+/********************************************************************
+ * gnc_commodity_table_destroy
+ * cleanup and free. 
+ ********************************************************************/
+
+static int
+ct_helper(gpointer key, gpointer value, gpointer data) {
+  gnc_commodity_namespace * ns = value;
+  g_hash_table_foreach_remove(ns->table, ns_helper, NULL);
+  g_hash_table_destroy(ns->table);
+  ns->table = NULL;
+  g_free(ns);
+  g_free(key);
+  return TRUE;
+}
+
+void
+gnc_commodity_table_destroy(gnc_commodity_table * t) {
+  if (!t) return;
+  
+  g_hash_table_foreach_remove(t->table, ct_helper, t);
+  g_hash_table_destroy(t->table);
+  g_free(t);
+}
+ 

@@ -180,7 +180,7 @@ void    xaccQueryPurgeTerms(Query * q, pd_type_t type);
 
 int     xaccQueryHasTerms(Query * q);
 
-Split   ** xaccQueryGetSplits(Query * q);
+GList   * xaccQueryGetSplits(Query * q);
 
 /*******************************************************************
  *  match-adding API 

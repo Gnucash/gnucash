@@ -33,11 +33,13 @@ libgncgnome_a_SOURCES = \
   query-user.c \
   reconcile-list.c \
   top-level.c \
-  window-help.c \
-  window-html.c \
   window-main.c \
   window-reconcile.c \
   window-register.c \
+  gnc-html.c \
+  gnc-html-history.c \
+  gnc-html-embedded.c \
+  window-help.c \
   window-report.c 
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
@@ -79,12 +81,15 @@ noinst_HEADERS = \
   print-session.h \
   query-user.h \
   reconcile-list.h \
-  window-help.h \
-  window-html.h \
   window-main.h \
   window-reconcile.h \
   window-register.h \
+  gnc-html.h \
+  gnc-html-history.h \
+  gnc-html-embedded.h \
+  window-help.h \
   window-report.h
+
 
 GLADE_FILES = \
   glade-gnc-dialogs.c \
@@ -105,7 +110,9 @@ EXTRA_DIST = \
 CFLAGS = @CFLAGS@ \
          ${G_WRAP_COMPILE_ARGS} \
          ${GNOME_PRINT_CFLAGS} \
-         ${GTKHTML_CFLAGS}
+         ${GTKHTML_CFLAGS} \
+	 ${GHTTP_CFLAGS} \
+	 ${GUPPI_CFLAGS} 
 
 INCLUDES = \
   -I${top_srcdir}/src \

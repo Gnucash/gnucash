@@ -4198,7 +4198,7 @@ sr_add_transaction (SplitRegister *reg,
 /* ======================================================== */
 
 void
-xaccSRLoadRegister (SplitRegister *reg, Split **slist, 
+xaccSRLoadRegister (SplitRegister *reg, GList * slist,
                     Account *default_source_acc)
 {
   SRInfo *info = xaccSRGetInfo(reg);
@@ -4214,6 +4214,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   Split *find_split;
   Split *split;
   Table *table;
+  GList *gsplit;
 
   gboolean start_primary_color = TRUE;
   gboolean found_pending = FALSE;
@@ -4229,7 +4230,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   int new_trans_row = -1;
   int new_split_row = -1;
   time_t present;
-  int i;
 
   /* make sure we have a blank split */
   if (blank_split == NULL)
@@ -4332,13 +4332,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
     trans_table = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   /* populate the table */
-  if (slist)
-    split = slist[0]; 
-  else
-    split = NULL;
-
-  for (i = 0; split; i++, split = slist[i])
+  for(gsplit=slist; gsplit; gsplit=gsplit->next) 
   {
+    split = gsplit->data;
     trans = xaccSplitGetParent (split);
 
     if (pending_trans == trans)

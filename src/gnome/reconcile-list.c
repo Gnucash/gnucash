@@ -633,7 +633,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   gboolean reconciled;
 
   Transaction *trans;
-  Split **splits;
+  GList *splits;
   Split *split;
 
   gnc_numeric amount;
@@ -649,11 +649,11 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   else
     print_info = gnc_account_value_print_info (list->account, FALSE);
 
-  for (splits = xaccQueryGetSplits(list->query); *splits != NULL; splits++)
+  for (splits = xaccQueryGetSplits(list->query); splits; splits=splits->next)
   {
     Timespec ts;
 
-    split = *splits;
+    split = splits->data;
 
     recn = xaccSplitGetReconcile(split);
     if ((recn != NREC) && (recn != CREC))

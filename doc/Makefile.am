@@ -7,7 +7,7 @@ doc_DATA = \
   README.francais \
   README.german \
   guile-hackers.txt \
-  projects.html
+  projects.html 
 
 man_MANS = \
   gnc-prices.1 \

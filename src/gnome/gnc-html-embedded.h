@@ -1,6 +1,6 @@
-/********************************************************************\
- * window-help.h -- a help window for hypertext help.               *
- * Copyright (C) 1997 Robin D. Clark                                *
+/********************************************************************
+ * gnc-html-embedded.h -- embed objects in the html stream          *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -20,24 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef __GNC_HELP_WINDOW_H__
-#define __GNC_HELP_WINDOW_H__
+#ifndef __GNC_HTML_EMBEDDED_H__
+#define __GNC_HTML_EMBEDDED_H__
 
 #include <gnome.h>
-#include "gnc-html.h"
 
-typedef struct _gnc_help_window gnc_help_window;
-
-/** PROTOTYPES ******************************************************/
-
-void helpWindow(GtkWidget *parent, const char *title, const char * htmlfile);
-
-gnc_help_window  * gnc_help_window_new();
-void             gnc_help_window_destroy(gnc_help_window * help);
-void             gnc_help_window_show_help(gnc_help_window * hw, 
-                                           const gchar * loc,
-                                           const gchar * label);
-
-void gnc_ui_destroy_help_windows(void);
+GtkWidget * gnc_html_embedded_piechart(gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_barchart(gint w, gint h, GHashTable * params);
+GtkWidget * gnc_html_embedded_scatter(gint w, gint h, GHashTable * params);
 
 #endif

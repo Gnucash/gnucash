@@ -28,9 +28,28 @@
 
 #include "option-util.h"
 
-void gnc_show_options_dialog(void);
+typedef struct _gnc_option_win GNCOptionWin;
 
-void gnc_build_options_dialog_contents(GnomePropertyBox *propertybox,
-                                       GNCOptionDB *odb);
+typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
+
+GNCOptionWin * gnc_options_dialog_new(int make_toplevel);
+void gnc_options_dialog_destroy(GNCOptionWin * win);
+
+GtkWidget * gnc_options_dialog_widget(GNCOptionWin * win);
+
+void gnc_options_dialog_set_apply_cb(GNCOptionWin * win,
+                                     GNCOptionWinCallback thunk,
+                                     gpointer cb_data);
+void gnc_options_dialog_set_help_cb(GNCOptionWin * win,
+                                    GNCOptionWinCallback thunk,
+                                    gpointer cb_data);
+void gnc_options_dialog_set_close_cb(GNCOptionWin * win,
+                                     GNCOptionWinCallback thunk,
+                                     gpointer cb_data);
+                                     
+
+void gnc_show_options_dialog(void);
+void gnc_build_options_dialog_contents(GNCOptionWin *win,
+                                       GNCOptionDB  *odb);
 
 #endif /* __OPTIONS_DIALOG_H__ */

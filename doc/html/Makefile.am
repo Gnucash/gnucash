@@ -5,7 +5,7 @@ SUBDIRS = fr
 
 doc_DATA = \
   gnucash.css \
-  index.html
+  index.html 
 
 EXTRA_DIST = \
   .cvsignore \

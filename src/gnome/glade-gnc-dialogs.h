@@ -3,9 +3,6 @@
  */
 
 GtkWidget* create_QIF_Import_Account_Picker (void);
-GtkWidget* create_Print_Preview_Dialog (void);
-GtkWidget* create_Print_Dialog (void);
-GtkWidget* create_Paper_Size_Selector_Dialog (void);
 GtkWidget* create_Print_Check_Dialog (void);
 GtkWidget* create_Find_Transactions (void);
 GtkWidget* create_Budget_Dialog (void);
@@ -18,3 +15,5 @@ GtkWidget* create_New_Commodity_Format_Druid (void);
 GtkWidget* create_QIF_Import_Druid (void);
 GtkWidget* create_Transfer_Dialog (void);
 GtkWidget* create_Progress_Dialog (void);
+GtkWidget* create_Help_Window (void);
+GtkWidget* create_Report_Window (void);

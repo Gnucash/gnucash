@@ -1,3 +1,55 @@
+2000-12-20  Bill Gribble  <grib@billgribble.com>
+
+	* src/scm/report.scm: minor changes to allow report URLs
+	(mainly a structure for "instantiated" reports and a global index
+	of instantiated reports).
+
+	* src/scm/help-topics-index.scm: first pass at an index of the
+	user manual.  Mainly just to see how it looks.
+
+	* src/gnome/window-report.c: major surgery.  Add embedded
+	parameters editor, constructor option for putting in an external
+	container, popup menu when no toolbar.
+
+	* src/gnome/window-help.c: major surgery. add topics browser, 
+	keyword search, etc etc.  
+
+	* src/gnome/print-session.{c,h}: fix b0rken printing stuff and
+	start using gnome-print's print dialog and preview.  Now prints to
+	PDF!
+	
+	* src/gnome/gnc-html*.c: new html infrastructure.  gnc-html.c is
+	the basic struct and operations; gnc-html-history is the history
+	object; gnc-html-embedded is support for creating embedded graphs
+	in HTML.
+
+	* gnc-dialogs.glade: get rid of homemade print preview window; 
+	we're using gnome's now.  Add nifty features to help and 
+	report windows.
+
+	* src/gnome/dialog-options.c: redo to allow embedding in a 
+	pane within a report window.  this means not being a 
+	GnomePropertyBox.
+
+	* src/engine/gnc-commodity.c: memory management cleanups 
+	(thanx memprof!)
+
+	* src/engine/Query.c: get rid of Split** internally and in 
+	return from xaccQueryGetSplits
+
+	* src/SplitLedger.c: update for GList return from 
+	xaccQueryGetSplits
+
+	* doc/html/C/guppi*.html: some simple demos of the guppi
+	plot system.  You can get at them through the help topics
+	browser.
+
+	* build-help-index.pl : a dirt stupid HTML index builder. 
+	Constructs a DB2 file from a list of input files. 
+
+	* Add configure checks for guppi, libghttp
+	
+
 2000-12-18  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/quickfillcell-gnome.c: add support for mb

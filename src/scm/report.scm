@@ -16,8 +16,8 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
 (require 'hash-table)
-
 (require 'record)
+
 (gnc:support "report.scm")
 
 ;; We use a hash to store the report info so that whenever a report
@@ -25,14 +25,20 @@
 ;; makes it easier for us to allow changing the report definitions
 ;; on the fly later, and it should have no appreciable performance
 ;; effect.
-
-(define *gnc:_report-info_* (make-hash-table 23))
+;;
 ;; This hash should contain all the reports available and will be used
 ;; to generate the reports menu whenever a new window opens and to
 ;; figure out what to do when a report needs to be generated.
 ;;
 ;; The key is the string naming the report and the value is the report
 ;; structure.
+(define *gnc:_report-info_* (make-hash-table 23))
+
+;; this is a hash of 'report ID' to instantiated report.  the 
+;; report id is generated at report-record creation time. 
+(define *gnc:_instantiated-reports_* (make-hash-table 23))
+(define *gnc:_report-next-serial_* 0)
+
 
 (define (gnc:run-report report-name options)
   ;; Return a string consisting of the contents of the report.
@@ -110,15 +116,12 @@
              (string-append "Display the " name " report.")
              (list "_Reports" "")
              (lambda ()
-               (let ((options (false-if-exception
-                               (gnc:report-new-options report))))
-                 (gnc:report-window title
-                                    (lambda () (gnc:run-report name options))
-                                    options)))))
-      (gnc:add-extension item)))
-
+               (let ((rept
+                      (gnc:make-inst-report (gnc:report-name report))))
+                 (gnc:report-window rept)))))
+      (gnc:add-extension item)))  
   (gnc:add-extension menu)
-
+  
   (hash-for-each add-report-menu-item *gnc:_report-info_*))
 
 (define report-record-structure
@@ -192,4 +195,55 @@
         (generator)
         #f)))
 
+(define <inst-report> 
+  (make-record-type "<inst-report>" '(name id options ctext)))
+
+(define gnc:inst-report-name 
+  (record-accessor <inst-report> 'name))
+
+(define gnc:set-inst-report-name!
+  (record-modifier <inst-report> 'name))
+
+(define gnc:inst-report-id 
+  (record-accessor <inst-report> 'id))
+
+(define gnc:set-inst-report-id!
+  (record-modifier <inst-report> 'id))
+
+(define gnc:inst-report-options 
+  (record-accessor <inst-report> 'options))
+
+(define gnc:set-inst-report-options!
+  (record-modifier <inst-report> 'options))
+
+(define gnc:inst-report-ctext 
+  (record-accessor <inst-report> 'ctext))
+
+(define gnc:set-inst-report-ctext!
+  (record-modifier <inst-report> 'ctext))
+
+(define (gnc:make-inst-report report-name)
+  (let ((r ((record-constructor <inst-report>) report-name #f #f #f))
+        (report (hash-ref *gnc:_report-info_* report-name))
+        (id *gnc:_report-next-serial_*))
+    (gnc:set-inst-report-id! r id)
+    (set! *gnc:_report-next-serial_* (+ 1 id))
+    (gnc:set-inst-report-options! r (gnc:report-new-options report))
+    
+    (hash-set! *gnc:_instantiated-reports_* 
+               (gnc:inst-report-id r) r)
+    id))
+
+(define (gnc:find-inst-report id) 
+  (hash-ref  *gnc:_instantiated-reports_* id))
+
+(define (gnc:inst-report-run id)
+  (let* ((rept (hash-ref *gnc:_instantiated-reports_* id))
+         (htext (gnc:run-report 
+                 (gnc:inst-report-name rept)
+                 (gnc:inst-report-options rept))))
+    (gnc:set-inst-report-ctext! rept htext)
+    htext))
+
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)
+

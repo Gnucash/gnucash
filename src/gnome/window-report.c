@@ -1,9 +1,10 @@
 /********************************************************************\
- * window-report.c -- a report window for hypertext help.           *
- * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
- * Copyright (C) 1998 Linas Vepstas  <linas@linas.org>              *
+ * gnc-report-window.c
+ * Copyright (C) 1997 Robin D. Clark                                *
+ * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
- * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
+ * Copyright (C) 2000 Dave Peticolas                                *
+ * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,451 +22,446 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
 \********************************************************************/
 
 #include "config.h"
-
 #include <gnome.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <errno.h>
 
+#include <guile/gh.h>
+
+#include "glade-gnc-dialogs.h"
 #include "window-report.h"
-#include "window-html.h"
-#include "option-util.h"
-#include "guile-util.h"
+#include "gnc-html.h"
+#include "gnc-html-history.h"
 #include "dialog-options.h"
-#include "gnc-ui.h"
 #include "query-user.h"
-#include "messages.h"
-#include "gnc-engine-util.h"
-#include "FileBox.h"
-#include "File.h"
-#include "gfec.h"
 
-static short module = MOD_HTML; 
+struct _gnc_report_window {
+  GtkWidget   * toplevel;  
+  GtkWidget   * paned;
 
-static HTMLWindow *reportwindow = NULL;
+  GtkWidget   * popup;
+  GtkWidget   * back_widg;
+  GtkWidget   * fwd_widg;
 
+  GNCOptionWin * option_dialog;
+  GNCOptionDB  * odb;
+  SCM          scm_options;
 
-typedef struct _ReportData ReportData;
-struct _ReportData
-{
-  gchar *text;
-
-  GNCOptionDB *odb;
-
-  GtkWidget *option_dialog;
-
-  SCM rendering_thunk;
-  SCM change_callback_id;
+  gnc_html   * html;
 };
 
+/* all open report windows... makes cleanup easier */
+static GList * open_report_windows = NULL;
 
-static ReportData *
-report_data_new()
-{
-  ReportData *report_data;
+
+/********************************************************************
+ * gnc_report_window_check_urltype
+ * is it OK to show a certain URLType in this window?
+ ********************************************************************/
+
+static int
+gnc_report_window_check_urltype(URLType t) {
+  switch (t) {
+  case URL_TYPE_REPORT:
+    return TRUE;
+    break;
+  default:
+    return FALSE;
+    break;
+  }
+}
+
+
+/********************************************************************
+ * toolbar callbacks
+ ********************************************************************/
+
+static int 
+gnc_report_window_fwd_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window     * report = data;
+  gnc_html_history_node * node = NULL;
+
+  gnc_html_history_forward(gnc_html_get_history(report->html));
+  node = gnc_html_history_get_current(gnc_html_get_history(report->html));
+  if(node) {
+    gnc_html_show_url(report->html, node->type, node->location, 
+                      node->label, 0);
+  }
+  return TRUE;
+}
+
+static int 
+gnc_report_window_back_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window     * report = data;
+  gnc_html_history_node * node;
   
-  report_data = g_new0(ReportData, 1);
+  gnc_html_history_back(gnc_html_get_history(report->html));
+  node = gnc_html_history_get_current(gnc_html_get_history(report->html));
+  if(node) {
+    gnc_html_show_url(report->html, node->type, node->location, 
+                      node->label, 0);
+  }
+  return TRUE;
+}
 
-  report_data->rendering_thunk = SCM_UNDEFINED;
-  report_data->change_callback_id = SCM_UNDEFINED;
 
-  return report_data;
+static void
+gnc_report_window_set_back_button(gnc_report_window * win, int enabled) {
+  gtk_widget_set_sensitive(win->back_widg, enabled);
+}
+
+
+static void
+gnc_report_window_set_fwd_button(gnc_report_window * win, int enabled) {
+  gtk_widget_set_sensitive(win->fwd_widg, enabled);
+}
+
+
+static void
+gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
+			    gpointer user_data) {
+  gnc_report_window * win = user_data;
+  gnc_option_db_commit(win->odb);
+  gnc_html_reload(win->html);
 }
 
 static void
-report_data_destroy(HTMLUserData user_data)
-{
-  ReportData *report_data = user_data;
-
-  g_free(report_data->text);
-  report_data->text = NULL;
-
-  if (report_data->change_callback_id != SCM_UNDEFINED)
-    gnc_option_db_unregister_change_callback_id
-      (report_data->odb, report_data->change_callback_id);
-  report_data->change_callback_id = SCM_UNDEFINED;
-
-  gnc_option_db_destroy(report_data->odb);
-  report_data->odb = NULL;
-
-  if (report_data->option_dialog != NULL)
-    gtk_widget_destroy(report_data->option_dialog);
-  report_data->option_dialog = NULL;
-
-  if (report_data->rendering_thunk != SCM_UNDEFINED)
-    scm_unprotect_object(report_data->rendering_thunk);
-  report_data->rendering_thunk = SCM_UNDEFINED;
-
-  g_free(report_data);
-}
-
-static void
-report_data_set_text(ReportData *report_data, const gchar *text)
-{
-  g_free(report_data->text);
-  report_data->text = g_strdup(text);
-}
-
-static void
-report_data_set_rendering_thunk(ReportData *report_data,
-                                const SCM rendering_thunk)
-{
-  if (report_data->rendering_thunk != SCM_UNDEFINED)
-    scm_unprotect_object(report_data->rendering_thunk);
-
-  report_data->rendering_thunk = rendering_thunk;
-  scm_protect_object(rendering_thunk);
-}
-
-static void
-gnc_options_dialog_apply_cb(GnomePropertyBox *propertybox,
-			    gint arg1, gpointer user_data)
-{
-  ReportData *report_data = user_data;
-
-  if (arg1 == -1)
-    gnc_option_db_commit(report_data->odb);
-}
-
-static void
-gnc_options_dialog_help_cb(GnomePropertyBox *propertybox,
-			   gint arg1, gpointer user_data)
-{
+gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
+			   gpointer user_data) {
   gnome_ok_dialog("Set the report options you want using this dialog.");
 }
 
 static void
-report_data_set_guile_options(ReportData *report_data, const SCM guile_options)
-{
-  GnomePropertyBox *prop_box;
-
-  if (report_data->odb != NULL)
-  {
-    gnc_option_db_destroy(report_data->odb);
-    report_data->odb = NULL;
-  }
-
-  if (report_data->option_dialog != NULL)
-  {
-    gtk_widget_destroy(report_data->option_dialog);
-    report_data->option_dialog = NULL;
-  }
-
-  if (guile_options == SCM_BOOL_F)
-    return;
-
-  report_data->odb = gnc_option_db_new(guile_options);
-
-  report_data->option_dialog = gnome_property_box_new();
-  gnome_dialog_close_hides(GNOME_DIALOG(report_data->option_dialog), TRUE);
-
-  prop_box = GNOME_PROPERTY_BOX(report_data->option_dialog);
-  gnc_build_options_dialog_contents(prop_box, report_data->odb);
-
-  gnc_option_db_clean(report_data->odb);
-
-  gtk_signal_connect(GTK_OBJECT(report_data->option_dialog), "apply",
-                     GTK_SIGNAL_FUNC(gnc_options_dialog_apply_cb),
-                     report_data);
-
-  gtk_signal_connect(GTK_OBJECT(report_data->option_dialog), "help",
-                     GTK_SIGNAL_FUNC(gnc_options_dialog_help_cb),
-                     report_data);
+gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
+                            gpointer user_data) {
+  gnc_report_window * win = user_data;
+  gtk_widget_hide(gnc_options_dialog_widget(win->option_dialog));
+  gtk_paned_set_position(GTK_PANED(win->paned), 0);
 }
 
 
-static HTMLData *
-reportAnchorCB(URLType url_type, char * location, char * label,
-               HTMLUserData user_data)
-{
-  /* this isn't called for "jump to anchor" clicks.  That's */
-  /* handled internally in the HTML widget. */
-  switch(url_type) {
-  default:
-    gnc_url_show(url_type, location, label);
-    break;
-  }
-  return NULL;
-}
-
-static void
-gnc_report_error_dialog(const char *message)
-{
-  const char *err_msg = _("Error executing scheme report.");
-  GtkWindow *parent;
-  gchar *text;
-
-  parent = GTK_WINDOW(gnc_html_window_get_window(reportwindow));
-
-  if (message == NULL)
-    text = g_strdup (err_msg);
-  else
-    text = g_strconcat (err_msg, "\n\n", message, NULL);
-
-  PERR("gnc_report_error_dialog: error running report.\n%s\n", message);
-
-  gnc_error_dialog_parented(parent, text);
-
-  g_free(text);
-}
-
-static char *
-gnc_run_report(ReportData *report_data)
-{
-  SCM result;
-
-  if (!gh_procedure_p(report_data->rendering_thunk))
-    return NULL;
-
-  gnc_set_busy_cursor(NULL);
-
-  result = gfec_apply(report_data->rendering_thunk, SCM_EOL,
-                      gnc_report_error_dialog);
-
-  gnc_unset_busy_cursor(NULL);
-
-  if (!gh_string_p(result))
-  {
-    PERR("Report output was not a string.\n");
-    return NULL;
-  }
-
-  return gh_scm2newstr(result, NULL);
-}
-
-static void
-reportJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
-{
-  ReportData *report_data = user_data;
-  char *text;
-
-  *set_text = NULL;
-  *set_label = NULL;
-
-  if (report_data->text != NULL)
-  {
-    *set_text = report_data->text;
-    return;
-  }
-
-  text = gnc_run_report(report_data);
-  if (text == NULL)
-    return;
-
-  report_data_set_text(report_data, text);
-  free(text);
-
-  *set_text = report_data->text;
-}
-
-
-static void
-gnc_report_options_changed_cb(void *data)
-{
-  ReportData *report_data = data;
-  ReportData *real_data;
-
-  if (report_data == NULL)
-    return;
-
-  report_data_set_text(report_data, NULL);
-
-  real_data = gnc_html_window_user_data(reportwindow);
-  if (report_data != real_data)
-    return;
-
-  gnc_html_load(reportwindow);
-}
-
-
-static void
-gnc_report_properties_cb(GtkWidget *widget, gpointer data)
-{
-  ReportData *report_data = data;
-
-  if (report_data->option_dialog == NULL)
-  {
-    GtkWidget *window = gnc_html_window_get_window(reportwindow);
-    gnc_info_dialog_parented(GTK_WINDOW(window),
-                             _("This report has no parameters."));
-    return;
-  }
-
-  gtk_widget_show_all(report_data->option_dialog);
-  gdk_window_raise(GTK_WIDGET(report_data->option_dialog)->window);
-}
-
-
-static void
-gnc_report_export(ReportData *report_data)
-{
-  GtkWindow *parent;
-  const char *export_filename;
-  struct stat file_status;
-  FILE *export_dest;
-  char *message;
-  char *text;
-
-  if (report_data->text == NULL)
-    text = "";
-  else
-    text = report_data->text;
-
-  /* Get the filename */
-  export_filename = fileBox(_("Export To"), NULL, "");
-  if (export_filename == NULL)
-    return;
-
-  parent = GTK_WINDOW(gnc_html_window_get_window(reportwindow));
-
-  /* See if the file exists */
-  if ((stat(export_filename, &file_status) == 0))
-  {
-    const char *format = _("The file \n    %s\n already exists.\n"
-                           "Are you sure you want to overwrite it?");
-    gboolean result;
-
-    message = g_strdup_printf(format, export_filename);
-    result = gnc_verify_dialog_parented(GTK_WIDGET(parent), message, FALSE);
-    g_free(message);
-
-    if (!result)
-      return;
-  }
-
-  /* Open the file */
-  export_dest = fopen(export_filename, "w");
-  if (export_dest == NULL)
-  {
-    const char *format = _("There was an error opening the file\n"
-                           "     %s\n\n%s");
-    message = g_strdup_printf(format, export_filename, g_strerror(errno));
-    gnc_error_dialog_parented(parent, message);
-    g_free(message);
-
-    return;
-  }
-
-  /* Write the data */
-  if (fputs(text, export_dest) == EOF)
-  {
-    const char *format = _("There was an error writing the file\n"
-                           "     %s\n\n%s");
-    message = g_strdup_printf(format, export_filename, g_strerror(errno));
-    gnc_error_dialog_parented(parent, message);
-    g_free(message);
-
-    return;
-  }
-
-  /* Close the file */
-  if (fclose(export_dest) == EOF)
-  {
-    const char *format = _("There was an error closing the file\n"
-                           "     %s\n\n%s");
-    message = g_strdup_printf(format, export_filename, g_strerror(errno));
-    gnc_error_dialog_parented(parent, message);
-    g_free(message);
-
-    return;
-  }
-}
+/********************************************************************
+ * gnc_report_window_load_cb
+ * called after a report is loaded into the gnc_html widget 
+ ********************************************************************/
 
 static void 
-gnc_report_export_cb(GtkWidget *widget, gpointer data)
-{
-  ReportData *report_data = data;
+gnc_report_window_load_cb(gnc_html * html, URLType type, 
+                          const gchar * location, const gchar * label, 
+                          gpointer data) {
+  gnc_report_window * win = data;
+  int  report_id;
+  SCM  find_report = gh_eval_str("gnc:find-inst-report");
+  SCM  get_options = gh_eval_str("gnc:inst-report-options");
+  SCM  inst_report;
+  SCM  inst_options;
+  
+  if(!strncmp("id=", location, 3)) {
+    sscanf(location+3, "%d", &report_id);
+  }
+  else {
+    return;
+  }
+  
+  /* get the inst-report from the Scheme-side hash, and get its
+   * options */
+  inst_report   = gh_call1(find_report, gh_int2scm(report_id));
+  inst_options  = gh_call1(get_options, inst_report); 
 
-  gnc_report_export(report_data);
+  /* get rid of the options dialog, unless it's just for a reload */
+  if(!gh_eq_p(inst_options, win->scm_options)) {
+    if(win->odb) 
+      gnc_option_db_destroy(win->odb);
+
+    if(win->option_dialog) 
+      gnc_options_dialog_destroy(win->option_dialog);
+
+    win->odb           = NULL;
+    win->option_dialog = NULL;
+  }
+
+  if(inst_options != SCM_BOOL_F) {  
+    if(!win->odb) {
+      win->odb           = gnc_option_db_new(inst_options);
+      gnc_option_db_clean(win->odb);
+    }
+    if(!win->option_dialog) {
+      win->option_dialog = gnc_options_dialog_new(FALSE);
+      gtk_paned_add1(GTK_PANED(win->paned), 
+                     gnc_options_dialog_widget(win->option_dialog));
+      gnc_build_options_dialog_contents(win->option_dialog,
+                                        win->odb);
+      gtk_widget_show_all(win->paned);
+      gtk_widget_hide(gnc_options_dialog_widget(win->option_dialog));
+    }
+    
+    gnc_options_dialog_set_apply_cb(win->option_dialog,
+                                    gnc_options_dialog_apply_cb,
+                                    win);
+    
+    gnc_options_dialog_set_help_cb(win->option_dialog,
+                                   gnc_options_dialog_help_cb,
+                                   win);
+
+    gnc_options_dialog_set_close_cb(win->option_dialog,
+                                    gnc_options_dialog_close_cb,
+                                    win);
+  }
+  
+  scm_unprotect_object(win->scm_options);
+  win->scm_options = inst_options;
+  scm_protect_object(win->scm_options);
+
+  if(gnc_html_history_forward_p(gnc_html_get_history(win->html))) {
+    gnc_report_window_set_fwd_button(win, TRUE); 
+  }
+  else {
+    gnc_report_window_set_fwd_button(win, FALSE); 
+  }
+
+  if(gnc_html_history_back_p(gnc_html_get_history(win->html))) {
+    gnc_report_window_set_back_button(win, TRUE); 
+  }
+  else {
+    gnc_report_window_set_back_button(win, FALSE); 
+  }
 }
 
 
-/********************************************************************\
- * reportWindow                                                     * 
- *   opens up a report window, and displays html                    * 
- *                                                                  * 
- * Args:   title - the title of the window                          * 
- *         text  - the html text to display                         * 
- * Return: none                                                     * 
-\********************************************************************/
-void
-reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
-{
-  ReportData *report_data;
-  HTMLData *html_data;
 
-  if (reportwindow == NULL)
-    reportwindow = gnc_html_window_new(reportAnchorCB, reportJumpCB);
+/********************************************************************
+ * gnc_report_window_destroy_cb
+ ********************************************************************/
 
-  report_data = report_data_new();
-  report_data_set_rendering_thunk(report_data, rendering_thunk);
-  report_data_set_guile_options(report_data, guile_options);
+static void
+gnc_report_window_destroy_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window * rw = data;
+  gnc_report_window_destroy(rw);
+}
 
-  if (report_data->odb != NULL)
-    report_data->change_callback_id =
-      gnc_option_db_register_change_callback(report_data->odb,
-                                             gnc_report_options_changed_cb,
-                                             report_data, NULL, NULL);
 
-  if (report_data->option_dialog != NULL)
-  {
-    gchar *prop_title;
+/********************************************************************
+ * gnc_report_window_button_cb
+ * mouse button clicks
+ ********************************************************************/
 
-    prop_title = g_strconcat(title, " (", _("Parameters"), ")", NULL);
-    gtk_window_set_title(GTK_WINDOW(report_data->option_dialog), prop_title);
-    g_free(prop_title);
-  }
-
-  {
-    GnomeUIInfo user_buttons[] =
-    {
-      { GNOME_APP_UI_ITEM,
-        _("Parameters"),
-        _("Set the parameters for this report"),
-        gnc_report_properties_cb, report_data,
-        NULL,
-        GNOME_APP_PIXMAP_STOCK, 
-        GNOME_STOCK_PIXMAP_PROPERTIES,
-        0, 0, NULL
-      },
-      { GNOME_APP_UI_ITEM,
-        _("Export"),
-        _("Export HTML-formatted report to file"),
-        gnc_report_export_cb, report_data,
-        NULL,
-        GNOME_APP_PIXMAP_STOCK,
-        GNOME_STOCK_PIXMAP_CONVERT,
-        0, 0, NULL
+static int
+gnc_report_window_button_cb(gnc_html * html, GdkEventButton * event,
+                            gpointer user_data) {
+  gnc_report_window * win = (gnc_report_window *)user_data;
+  
+  if(event->type == GDK_BUTTON_PRESS) {
+    if(event->button == 3) {      
+      if(win->popup) {
+        gnome_popup_menu_do_popup(win->popup, NULL, NULL, 
+                                  event, (gpointer)win);
+        return TRUE;
       }
-    };
+    }
+  }
+  return FALSE;
+}
 
-    gint num_buttons = sizeof(user_buttons) / sizeof(GnomeUIInfo);
+static int
+gnc_report_window_params_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window * win = data;
+  gtk_widget_show(gnc_options_dialog_widget(win->option_dialog));
+  gtk_paned_set_position(GTK_PANED(win->paned), 400);
+  return TRUE;
+}
 
-    html_data = gnc_html_data_new(title, report_data, report_data_destroy,
-                                  user_buttons, num_buttons);
+static void
+gnc_report_window_print_cb(GtkWidget * w, gpointer data) {
+  gnc_report_window * win = data;
+  gnc_html_print(win->html);
+}
+
+
+/********************************************************************
+ * gnc_report_window_new 
+ * allocates and opens up a report window
+ ********************************************************************/
+
+gnc_report_window *
+gnc_report_window_new(GtkWidget * container) {
+  
+  gnc_report_window * report = g_new0(gnc_report_window, 1);
+  GtkObject         * tlo; 
+  GtkWidget         * toolbar = NULL;
+
+  GnomeUIInfo       toolbar_data[] = 
+  {
+    { GNOME_APP_UI_ITEM,
+      _("Back"),
+      _("Move back one step in the history"),
+      gnc_report_window_back_cb, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_BACK,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      _("Forward"),
+      _("Move forward one step in the history"),
+      gnc_report_window_fwd_cb, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_FORWARD,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      _("Export"),
+      _("Export HTML-formatted report to file"),
+      NULL, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_CONVERT,
+      0, 0, NULL
+    },    
+    { GNOME_APP_UI_ITEM,
+      _("Parameters"),
+      _("Edit report options"),
+      gnc_report_window_params_cb, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK,
+      GNOME_STOCK_PIXMAP_PROPERTIES,
+      0, 0, NULL
+    },    
+    { GNOME_APP_UI_ITEM,
+      _("Print"),
+      _("Print report window"),
+      gnc_report_window_print_cb, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_PRINT,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      _("Close"),
+      _("Close this report window"),
+      gnc_report_window_destroy_cb, report,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_CLOSE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+  
+  report->html        = gnc_html_new();
+  report->scm_options = SCM_BOOL_F;
+  scm_protect_object(report->scm_options);
+
+  if(container) {
+    report->toplevel = container;    
+    report->paned    = gtk_hpaned_new();
+    gtk_paned_add2(GTK_PANED(report->paned), 
+                   gnc_html_get_widget(report->html));
+    gtk_container_add(GTK_CONTAINER(container), report->paned);
+    report->popup = gnome_popup_menu_new(toolbar_data);
+  }
+  else {
+    report->toplevel    = create_Report_Window();
+  
+    tlo = GTK_OBJECT(report->toplevel);
+    toolbar         = gtk_object_get_data(tlo, "report_toolbar");
+    report->paned   = gtk_object_get_data(tlo, "report_paned");
+    
+    gnome_app_fill_toolbar(GTK_TOOLBAR(toolbar), toolbar_data, NULL);
+    gtk_paned_add2(GTK_PANED(report->paned), 
+                   gnc_html_get_widget(report->html));
+  }
+  
+  report->back_widg = toolbar_data[0].widget;
+  report->fwd_widg  = toolbar_data[1].widget;
+  
+  gtk_paned_set_gutter_size(GTK_PANED(report->paned), 20);
+  gtk_paned_set_position(GTK_PANED(report->paned), 0);
+
+  gnc_html_set_urltype_cb(report->html, gnc_report_window_check_urltype);
+  gnc_html_set_load_cb(report->html, gnc_report_window_load_cb, report);
+  gnc_html_set_button_cb(report->html, gnc_report_window_button_cb, report);
+
+  gtk_signal_connect(GTK_OBJECT(report->toplevel), "destroy",
+                     GTK_SIGNAL_FUNC(gnc_report_window_destroy_cb), 
+                     (gpointer)report);
+
+  report->option_dialog = NULL;
+  report->odb = NULL;
+  gtk_widget_show_all(report->toplevel);
+
+  open_report_windows = g_list_append(open_report_windows, report);
+  
+  return report;
+}
+
+
+/********************************************************************
+ * gnc_report_window_destroy 
+ * free and destroy a window 
+ ********************************************************************/
+
+void
+gnc_report_window_destroy(gnc_report_window * win) {
+
+  /* delete the window from the open list */
+  open_report_windows = g_list_remove(open_report_windows, win);
+
+  gtk_signal_disconnect_by_func(GTK_OBJECT(win->toplevel), 
+                                GTK_SIGNAL_FUNC(gnc_report_window_destroy_cb), 
+                                (gpointer)win);
+  
+  /* handle the gnc-html carefully */
+  gtk_widget_ref(gnc_html_get_widget(win->html));
+  gnc_html_destroy(win->html);
+
+  if(win->option_dialog) {
+    gtk_widget_ref(gnc_options_dialog_widget(win->option_dialog));
+    gnc_options_dialog_destroy(win->option_dialog);
   }
 
-  htmlWindow(NULL, &reportwindow, html_data);
+  if(win->odb) gnc_option_db_destroy(win->odb);
+  if(win->toplevel) gtk_widget_destroy(GTK_WIDGET(win->toplevel)); 
+  
+  
+  win->toplevel      = NULL;
+  win->option_dialog = NULL;
+  win->odb           = NULL;
+  win->html          = NULL;
+
+  scm_unprotect_object(win->scm_options);
+
+  g_free(win);
 }
 
+gnc_html *
+gnc_report_window_get_html(gnc_report_window * report) {
+  return report->html;
+}
 
-/********************************************************************\
- * gnc_ui_destroy_report_windows                                    * 
- *   destroys any open report windows                               * 
- *                                                                  * 
- * Args:   none                                                     * 
- * Return: none                                                     * 
-\********************************************************************/
 void
-gnc_ui_destroy_report_windows(void)
-{
-  gnc_html_window_destroy(reportwindow);
-  reportwindow = NULL;
-
-  DEBUG("report windows destroyed.\n");
+gnc_report_window_show_report(gnc_report_window * report, int report_id) {
+  char * location = g_strdup_printf("id=%d", report_id);  
+  gnc_html_show_url(report->html, URL_TYPE_REPORT, location, NULL, 0);
+  g_free(location);
 }
 
-/* ----------------------- END OF FILE ---------------------  */
+
+void
+reportWindow(int report_id) {
+  gnc_report_window * win = gnc_report_window_new(NULL);
+  gnc_report_window_show_report(win, report_id);
+}
+
+
+void
+gnc_ui_destroy_report_windows(void) {
+  while(open_report_windows != NULL) {
+    gnc_report_window_destroy((gnc_report_window *)open_report_windows->data);
+  }
+}
+

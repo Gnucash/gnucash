@@ -228,432 +228,6 @@ create_QIF_Import_Account_Picker (void)
 }
 
 GtkWidget*
-create_Print_Preview_Dialog (void)
-{
-  GtkWidget *Print_Preview_Dialog;
-  GtkWidget *dialog_vbox3;
-  GtkWidget *frame14;
-  GtkWidget *scrolledwindow4;
-  GtkWidget *preview_canvas;
-  GtkWidget *dialog_action_area3;
-  GtkWidget *button5;
-  GtkWidget *button29;
-  GtkWidget *button30;
-
-  Print_Preview_Dialog = gnome_dialog_new (_("Print Preview"), NULL);
-  gtk_object_set_data (GTK_OBJECT (Print_Preview_Dialog), "Print_Preview_Dialog", Print_Preview_Dialog);
-  gtk_window_set_policy (GTK_WINDOW (Print_Preview_Dialog), TRUE, TRUE, FALSE);
-
-  dialog_vbox3 = GNOME_DIALOG (Print_Preview_Dialog)->vbox;
-  gtk_object_set_data (GTK_OBJECT (Print_Preview_Dialog), "dialog_vbox3", dialog_vbox3);
-  gtk_widget_show (dialog_vbox3);
-
-  frame14 = gtk_frame_new (_("Print Preview"));
-  gtk_widget_ref (frame14);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "frame14", frame14,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (frame14);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox3), frame14, TRUE, TRUE, 0);
-
-  scrolledwindow4 = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_ref (scrolledwindow4);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "scrolledwindow4", scrolledwindow4,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (scrolledwindow4);
-  gtk_container_add (GTK_CONTAINER (frame14), scrolledwindow4);
-  gtk_container_set_border_width (GTK_CONTAINER (scrolledwindow4), 1);
-
-  gdk_rgb_init ();
-  gtk_widget_push_visual (gdk_rgb_get_visual ());
-  gtk_widget_push_colormap (gdk_rgb_get_cmap ());
-  preview_canvas = gnome_canvas_new_aa ();
-  gtk_widget_pop_colormap ();
-  gtk_widget_pop_visual ();
-  gtk_widget_ref (preview_canvas);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "preview_canvas", preview_canvas,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (preview_canvas);
-  gtk_container_add (GTK_CONTAINER (scrolledwindow4), preview_canvas);
-  gnome_canvas_set_scroll_region (GNOME_CANVAS (preview_canvas), 0, 0, 100, 100);
-
-  dialog_action_area3 = GNOME_DIALOG (Print_Preview_Dialog)->action_area;
-  gtk_object_set_data (GTK_OBJECT (Print_Preview_Dialog), "dialog_action_area3", dialog_action_area3);
-  gtk_widget_show (dialog_action_area3);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area3), GTK_BUTTONBOX_SPREAD);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area3), 8);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Print_Preview_Dialog), GNOME_STOCK_BUTTON_OK);
-  button5 = g_list_last (GNOME_DIALOG (Print_Preview_Dialog)->buttons)->data;
-  gtk_widget_ref (button5);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "button5", button5,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button5);
-  GTK_WIDGET_SET_FLAGS (button5, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Print_Preview_Dialog), _("Zoom in"));
-  button29 = g_list_last (GNOME_DIALOG (Print_Preview_Dialog)->buttons)->data;
-  gtk_widget_ref (button29);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "button29", button29,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button29);
-  GTK_WIDGET_SET_FLAGS (button29, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Print_Preview_Dialog), _("Zoom out"));
-  button30 = g_list_last (GNOME_DIALOG (Print_Preview_Dialog)->buttons)->data;
-  gtk_widget_ref (button30);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Preview_Dialog), "button30", button30,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button30);
-  GTK_WIDGET_SET_FLAGS (button30, GTK_CAN_DEFAULT);
-
-  gtk_signal_connect (GTK_OBJECT (button5), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_print_preview_OK_cb),
-                      Print_Preview_Dialog);
-
-  return Print_Preview_Dialog;
-}
-
-GtkWidget*
-create_Print_Dialog (void)
-{
-  GtkWidget *Print_Dialog;
-  GtkWidget *dialog_vbox4;
-  GtkWidget *hbox12;
-  GtkWidget *vbox7;
-  GtkWidget *label690;
-  GtkWidget *label691;
-  GtkWidget *label692;
-  GtkWidget *label695;
-  GtkWidget *vbox8;
-  GtkWidget *printer_entry;
-  GtkWidget *paper_entry;
-  GtkWidget *hbox13;
-  GSList *hbox13_group = NULL;
-  GtkWidget *radiobutton1;
-  GtkWidget *radiobutton2;
-  GtkWidget *label693;
-  GtkWidget *hbox14;
-  GtkWidget *label696;
-  GtkWidget *entry3;
-  GtkWidget *label697;
-  GtkWidget *entry4;
-  GtkWidget *vbox9;
-  GtkWidget *button12;
-  GtkWidget *button17;
-  GtkWidget *label694;
-  GtkWidget *label698;
-  GtkWidget *dialog_action_area4;
-  GtkWidget *button9;
-  GtkWidget *button13;
-  GtkWidget *button24;
-  GtkWidget *button25;
-
-  Print_Dialog = gnome_dialog_new (_("Print Setup"), NULL);
-  gtk_object_set_data (GTK_OBJECT (Print_Dialog), "Print_Dialog", Print_Dialog);
-  gtk_window_set_policy (GTK_WINDOW (Print_Dialog), TRUE, TRUE, FALSE);
-
-  dialog_vbox4 = GNOME_DIALOG (Print_Dialog)->vbox;
-  gtk_object_set_data (GTK_OBJECT (Print_Dialog), "dialog_vbox4", dialog_vbox4);
-  gtk_widget_show (dialog_vbox4);
-
-  hbox12 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox12);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "hbox12", hbox12,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox12);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox4), hbox12, TRUE, TRUE, 0);
-
-  vbox7 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox7);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "vbox7", vbox7,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox7);
-  gtk_box_pack_start (GTK_BOX (hbox12), vbox7, TRUE, TRUE, 5);
-
-  label690 = gtk_label_new (_("Printer:"));
-  gtk_widget_ref (label690);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label690", label690,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label690);
-  gtk_box_pack_start (GTK_BOX (vbox7), label690, FALSE, FALSE, 5);
-  gtk_misc_set_alignment (GTK_MISC (label690), 1, 0.5);
-
-  label691 = gtk_label_new (_("Paper size:"));
-  gtk_widget_ref (label691);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label691", label691,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label691);
-  gtk_box_pack_start (GTK_BOX (vbox7), label691, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (label691), 1, 0.5);
-
-  label692 = gtk_label_new (_("Pages to print:"));
-  gtk_widget_ref (label692);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label692", label692,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label692);
-  gtk_box_pack_start (GTK_BOX (vbox7), label692, FALSE, FALSE, 0);
-  gtk_misc_set_alignment (GTK_MISC (label692), 1, 0.5);
-
-  label695 = gtk_label_new ("");
-  gtk_widget_ref (label695);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label695", label695,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label695);
-  gtk_box_pack_start (GTK_BOX (vbox7), label695, FALSE, FALSE, 0);
-
-  vbox8 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox8);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "vbox8", vbox8,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox8);
-  gtk_box_pack_start (GTK_BOX (hbox12), vbox8, TRUE, TRUE, 0);
-
-  printer_entry = gtk_entry_new ();
-  gtk_widget_ref (printer_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "printer_entry", printer_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (printer_entry);
-  gtk_box_pack_start (GTK_BOX (vbox8), printer_entry, FALSE, FALSE, 5);
-  gtk_entry_set_editable (GTK_ENTRY (printer_entry), FALSE);
-
-  paper_entry = gtk_entry_new ();
-  gtk_widget_ref (paper_entry);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "paper_entry", paper_entry,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (paper_entry);
-  gtk_box_pack_start (GTK_BOX (vbox8), paper_entry, FALSE, FALSE, 0);
-  gtk_entry_set_editable (GTK_ENTRY (paper_entry), FALSE);
-
-  hbox13 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox13);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "hbox13", hbox13,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox13);
-  gtk_box_pack_start (GTK_BOX (vbox8), hbox13, TRUE, TRUE, 0);
-
-  radiobutton1 = gtk_radio_button_new_with_label (hbox13_group, _("All"));
-  hbox13_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton1));
-  gtk_widget_ref (radiobutton1);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "radiobutton1", radiobutton1,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (radiobutton1);
-  gtk_box_pack_start (GTK_BOX (hbox13), radiobutton1, FALSE, FALSE, 0);
-
-  radiobutton2 = gtk_radio_button_new_with_label (hbox13_group, _("Selected"));
-  hbox13_group = gtk_radio_button_group (GTK_RADIO_BUTTON (radiobutton2));
-  gtk_widget_ref (radiobutton2);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "radiobutton2", radiobutton2,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (radiobutton2);
-  gtk_box_pack_start (GTK_BOX (hbox13), radiobutton2, FALSE, FALSE, 0);
-
-  label693 = gtk_label_new ("");
-  gtk_widget_ref (label693);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label693", label693,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label693);
-  gtk_box_pack_start (GTK_BOX (hbox13), label693, FALSE, FALSE, 0);
-
-  hbox14 = gtk_hbox_new (FALSE, 0);
-  gtk_widget_ref (hbox14);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "hbox14", hbox14,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (hbox14);
-  gtk_box_pack_start (GTK_BOX (vbox8), hbox14, TRUE, TRUE, 0);
-
-  label696 = gtk_label_new (_("From:"));
-  gtk_widget_ref (label696);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label696", label696,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label696);
-  gtk_box_pack_start (GTK_BOX (hbox14), label696, FALSE, FALSE, 5);
-
-  entry3 = gtk_entry_new_with_max_length (5);
-  gtk_widget_ref (entry3);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "entry3", entry3,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (entry3);
-  gtk_box_pack_start (GTK_BOX (hbox14), entry3, FALSE, FALSE, 0);
-  gtk_widget_set_usize (entry3, 80, -2);
-
-  label697 = gtk_label_new (_("To:"));
-  gtk_widget_ref (label697);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label697", label697,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label697);
-  gtk_box_pack_start (GTK_BOX (hbox14), label697, FALSE, FALSE, 5);
-
-  entry4 = gtk_entry_new_with_max_length (5);
-  gtk_widget_ref (entry4);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "entry4", entry4,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (entry4);
-  gtk_box_pack_start (GTK_BOX (hbox14), entry4, FALSE, FALSE, 0);
-  gtk_widget_set_usize (entry4, 80, -2);
-
-  vbox9 = gtk_vbox_new (TRUE, 0);
-  gtk_widget_ref (vbox9);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "vbox9", vbox9,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (vbox9);
-  gtk_box_pack_start (GTK_BOX (hbox12), vbox9, TRUE, TRUE, 5);
-
-  button12 = gtk_button_new_with_label (_("Select..."));
-  gtk_widget_ref (button12);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "button12", button12,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button12);
-  gtk_box_pack_start (GTK_BOX (vbox9), button12, TRUE, FALSE, 5);
-
-  button17 = gtk_button_new_with_label (_("Select..."));
-  gtk_widget_ref (button17);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "button17", button17,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button17);
-  gtk_box_pack_start (GTK_BOX (vbox9), button17, FALSE, FALSE, 0);
-
-  label694 = gtk_label_new ("");
-  gtk_widget_ref (label694);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label694", label694,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label694);
-  gtk_box_pack_start (GTK_BOX (vbox9), label694, FALSE, FALSE, 0);
-
-  label698 = gtk_label_new ("");
-  gtk_widget_ref (label698);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "label698", label698,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (label698);
-  gtk_box_pack_start (GTK_BOX (vbox9), label698, FALSE, FALSE, 0);
-
-  dialog_action_area4 = GNOME_DIALOG (Print_Dialog)->action_area;
-  gtk_object_set_data (GTK_OBJECT (Print_Dialog), "dialog_action_area4", dialog_action_area4);
-  gtk_widget_show (dialog_action_area4);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area4), GTK_BUTTONBOX_SPREAD);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area4), 8);
-
-  gnome_dialog_append_button_with_pixmap (GNOME_DIALOG (Print_Dialog),
-                                          _("Print"), GNOME_STOCK_PIXMAP_PRINT);
-  button9 = g_list_last (GNOME_DIALOG (Print_Dialog)->buttons)->data;
-  gtk_widget_ref (button9);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "button9", button9,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button9);
-  GTK_WIDGET_SET_FLAGS (button9, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Print_Dialog), _("Preview"));
-  button13 = g_list_last (GNOME_DIALOG (Print_Dialog)->buttons)->data;
-  gtk_widget_ref (button13);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "button13", button13,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button13);
-  GTK_WIDGET_SET_FLAGS (button13, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Print_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button24 = g_list_last (GNOME_DIALOG (Print_Dialog)->buttons)->data;
-  gtk_widget_ref (button24);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "button24", button24,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button24);
-  GTK_WIDGET_SET_FLAGS (button24, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Print_Dialog), GNOME_STOCK_BUTTON_HELP);
-  button25 = g_list_last (GNOME_DIALOG (Print_Dialog)->buttons)->data;
-  gtk_widget_ref (button25);
-  gtk_object_set_data_full (GTK_OBJECT (Print_Dialog), "button25", button25,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button25);
-  GTK_WIDGET_SET_FLAGS (button25, GTK_CAN_DEFAULT);
-
-  gtk_signal_connect (GTK_OBJECT (button12), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_print_dialog_select_printer_cb),
-                      Print_Dialog);
-  gtk_signal_connect (GTK_OBJECT (button17), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_print_dialog_select_paper_cb),
-                      Print_Dialog);
-  gtk_signal_connect (GTK_OBJECT (button9), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_print_dialog_ok_cb),
-                      Print_Dialog);
-  gtk_signal_connect (GTK_OBJECT (button13), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_print_dialog_preview_cb),
-                      Print_Dialog);
-  gtk_signal_connect (GTK_OBJECT (button24), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_print_dialog_cancel_cb),
-                      Print_Dialog);
-  gtk_signal_connect (GTK_OBJECT (button25), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_print_dialog_help_cb),
-                      Print_Dialog);
-
-  return Print_Dialog;
-}
-
-GtkWidget*
-create_Paper_Size_Selector_Dialog (void)
-{
-  GtkWidget *Paper_Size_Selector_Dialog;
-  GtkWidget *dialog_vbox5;
-  GtkWidget *paperselector1;
-  GtkWidget *dialog_action_area5;
-  GtkWidget *button18;
-  GtkWidget *button19;
-  GtkWidget *button20;
-
-  Paper_Size_Selector_Dialog = gnome_dialog_new (_("Select Paper Size"), NULL);
-  gtk_object_set_data (GTK_OBJECT (Paper_Size_Selector_Dialog), "Paper_Size_Selector_Dialog", Paper_Size_Selector_Dialog);
-  gtk_window_set_policy (GTK_WINDOW (Paper_Size_Selector_Dialog), FALSE, FALSE, FALSE);
-
-  dialog_vbox5 = GNOME_DIALOG (Paper_Size_Selector_Dialog)->vbox;
-  gtk_object_set_data (GTK_OBJECT (Paper_Size_Selector_Dialog), "dialog_vbox5", dialog_vbox5);
-  gtk_widget_show (dialog_vbox5);
-
-  paperselector1 = gnome_paper_selector_new ();
-  gtk_widget_ref (paperselector1);
-  gtk_object_set_data_full (GTK_OBJECT (Paper_Size_Selector_Dialog), "paperselector1", paperselector1,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (paperselector1);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox5), paperselector1, TRUE, TRUE, 0);
-
-  dialog_action_area5 = GNOME_DIALOG (Paper_Size_Selector_Dialog)->action_area;
-  gtk_object_set_data (GTK_OBJECT (Paper_Size_Selector_Dialog), "dialog_action_area5", dialog_action_area5);
-  gtk_widget_show (dialog_action_area5);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area5), GTK_BUTTONBOX_SPREAD);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog_action_area5), 8);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Paper_Size_Selector_Dialog), GNOME_STOCK_BUTTON_OK);
-  button18 = g_list_last (GNOME_DIALOG (Paper_Size_Selector_Dialog)->buttons)->data;
-  gtk_widget_ref (button18);
-  gtk_object_set_data_full (GTK_OBJECT (Paper_Size_Selector_Dialog), "button18", button18,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button18);
-  GTK_WIDGET_SET_FLAGS (button18, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Paper_Size_Selector_Dialog), GNOME_STOCK_BUTTON_APPLY);
-  button19 = g_list_last (GNOME_DIALOG (Paper_Size_Selector_Dialog)->buttons)->data;
-  gtk_widget_ref (button19);
-  gtk_object_set_data_full (GTK_OBJECT (Paper_Size_Selector_Dialog), "button19", button19,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button19);
-  GTK_WIDGET_SET_FLAGS (button19, GTK_CAN_DEFAULT);
-
-  gnome_dialog_append_button (GNOME_DIALOG (Paper_Size_Selector_Dialog), GNOME_STOCK_BUTTON_CANCEL);
-  button20 = g_list_last (GNOME_DIALOG (Paper_Size_Selector_Dialog)->buttons)->data;
-  gtk_widget_ref (button20);
-  gtk_object_set_data_full (GTK_OBJECT (Paper_Size_Selector_Dialog), "button20", button20,
-                            (GtkDestroyNotify) gtk_widget_unref);
-  gtk_widget_show (button20);
-  GTK_WIDGET_SET_FLAGS (button20, GTK_CAN_DEFAULT);
-
-  gtk_signal_connect (GTK_OBJECT (button18), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_paper_dialog_ok_cb),
-                      Paper_Size_Selector_Dialog);
-  gtk_signal_connect (GTK_OBJECT (button20), "clicked",
-                      GTK_SIGNAL_FUNC (gnc_ui_paper_dialog_cancel_cb),
-                      Paper_Size_Selector_Dialog);
-
-  return Paper_Size_Selector_Dialog;
-}
-
-GtkWidget*
 create_Print_Check_Dialog (void)
 {
   GtkWidget *Print_Check_Dialog;
@@ -5408,5 +4982,278 @@ create_Progress_Dialog (void)
   GTK_WIDGET_SET_FLAGS (cancel_button, GTK_CAN_DEFAULT);
 
   return Progress_Dialog;
+}
+
+GtkWidget*
+create_Help_Window (void)
+{
+  GtkWidget *Help_Window;
+  GtkWidget *vbox90;
+  GtkWidget *handlebox1;
+  GtkWidget *help_toolbar;
+  GtkWidget *help_paned;
+  GtkWidget *notebook3;
+  GtkWidget *scrolledwindow15;
+  GtkWidget *viewport3;
+  GtkWidget *help_topics_tree;
+  GtkWidget *label847;
+  GtkWidget *label847666;
+  GtkWidget *frame37;
+  GtkWidget *vbox91;
+  GtkWidget *label849;
+  GtkWidget *help_search_entry;
+  GtkWidget *hbox80;
+  GtkWidget *help_search_button;
+  GtkWidget *help_search_help_button;
+  GtkWidget *frame38;
+  GtkWidget *scrolledwindow16;
+  GtkWidget *viewport4;
+  GtkWidget *search_results_list;
+  GtkWidget *label848;
+  GtkWidget *help_html_vbox;
+  GtkWidget *statusbar_hbox;
+  GtkWidget *help_statusbar;
+
+  Help_Window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (Help_Window), "Help_Window", Help_Window);
+  gtk_window_set_title (GTK_WINDOW (Help_Window), _("Gnucash Help"));
+
+  vbox90 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (vbox90);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "vbox90", vbox90,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox90);
+  gtk_container_add (GTK_CONTAINER (Help_Window), vbox90);
+
+  handlebox1 = gtk_handle_box_new ();
+  gtk_widget_ref (handlebox1);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "handlebox1", handlebox1,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (handlebox1);
+  gtk_box_pack_start (GTK_BOX (vbox90), handlebox1, FALSE, FALSE, 0);
+
+  help_toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  gtk_widget_ref (help_toolbar);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_toolbar", help_toolbar,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_toolbar);
+  gtk_container_add (GTK_CONTAINER (handlebox1), help_toolbar);
+
+  help_paned = gtk_hpaned_new ();
+  gtk_widget_ref (help_paned);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_paned", help_paned,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_paned);
+  gtk_box_pack_start (GTK_BOX (vbox90), help_paned, TRUE, TRUE, 0);
+  gtk_paned_set_gutter_size (GTK_PANED (help_paned), 15);
+  gtk_paned_set_position (GTK_PANED (help_paned), 200);
+
+  notebook3 = gtk_notebook_new ();
+  gtk_widget_ref (notebook3);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "notebook3", notebook3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (notebook3);
+  gtk_paned_pack1 (GTK_PANED (help_paned), notebook3, FALSE, TRUE);
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook3), GTK_POS_BOTTOM);
+
+  scrolledwindow15 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow15);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "scrolledwindow15", scrolledwindow15,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow15);
+  gtk_container_add (GTK_CONTAINER (notebook3), scrolledwindow15);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow15), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  viewport3 = gtk_viewport_new (NULL, NULL);
+  gtk_widget_ref (viewport3);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "viewport3", viewport3,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (viewport3);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow15), viewport3);
+
+  help_topics_tree = gtk_ctree_new (1, 0);
+  gtk_widget_ref (help_topics_tree);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_topics_tree", help_topics_tree,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_topics_tree);
+  gtk_container_add (GTK_CONTAINER (viewport3), help_topics_tree);
+  gtk_clist_set_column_width (GTK_CLIST (help_topics_tree), 0, 80);
+  gtk_clist_column_titles_hide (GTK_CLIST (help_topics_tree));
+
+  label847 = gtk_label_new (_("Help Topics"));
+  gtk_widget_ref (label847);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "label847", label847,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847);
+  gtk_clist_set_column_widget (GTK_CLIST (help_topics_tree), 0, label847);
+
+  label847666 = gtk_label_new (_("Topics"));
+  gtk_widget_ref (label847666);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "label847666", label847666,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label847666);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook3), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook3), 0), label847666);
+
+  frame37 = gtk_frame_new (_("Search Gnucash  Help"));
+  gtk_widget_ref (frame37);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "frame37", frame37,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame37);
+  gtk_container_add (GTK_CONTAINER (notebook3), frame37);
+
+  vbox91 = gtk_vbox_new (FALSE, 5);
+  gtk_widget_ref (vbox91);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "vbox91", vbox91,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (vbox91);
+  gtk_container_add (GTK_CONTAINER (frame37), vbox91);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox91), 3);
+
+  label849 = gtk_label_new (_("Type a single term into the box\nand hit 'search'.  At the moment,\nthis search engine supports NO \ncomplex searches, just single\nwords.\n"));
+  gtk_widget_ref (label849);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "label849", label849,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label849);
+  gtk_box_pack_start (GTK_BOX (vbox91), label849, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label849), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC (label849), 7.45058e-09, 0.5);
+
+  help_search_entry = gtk_entry_new ();
+  gtk_widget_ref (help_search_entry);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_search_entry", help_search_entry,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_search_entry);
+  gtk_box_pack_start (GTK_BOX (vbox91), help_search_entry, FALSE, FALSE, 0);
+
+  hbox80 = gtk_hbox_new (TRUE, 0);
+  gtk_widget_ref (hbox80);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "hbox80", hbox80,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (hbox80);
+  gtk_box_pack_start (GTK_BOX (vbox91), hbox80, FALSE, FALSE, 0);
+
+  help_search_button = gtk_button_new_with_label (_("Search"));
+  gtk_widget_ref (help_search_button);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_search_button", help_search_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_search_button);
+  gtk_box_pack_start (GTK_BOX (hbox80), help_search_button, TRUE, TRUE, 0);
+
+  help_search_help_button = gtk_button_new_with_label (_("Help"));
+  gtk_widget_ref (help_search_help_button);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_search_help_button", help_search_help_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_search_help_button);
+  gtk_box_pack_start (GTK_BOX (hbox80), help_search_help_button, TRUE, TRUE, 0);
+
+  frame38 = gtk_frame_new (_("Search results"));
+  gtk_widget_ref (frame38);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "frame38", frame38,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (frame38);
+  gtk_box_pack_start (GTK_BOX (vbox91), frame38, TRUE, TRUE, 0);
+
+  scrolledwindow16 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_ref (scrolledwindow16);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "scrolledwindow16", scrolledwindow16,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (scrolledwindow16);
+  gtk_container_add (GTK_CONTAINER (frame38), scrolledwindow16);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow16), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  viewport4 = gtk_viewport_new (NULL, NULL);
+  gtk_widget_ref (viewport4);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "viewport4", viewport4,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (viewport4);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow16), viewport4);
+
+  search_results_list = gtk_list_new ();
+  gtk_widget_ref (search_results_list);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "search_results_list", search_results_list,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (search_results_list);
+  gtk_container_add (GTK_CONTAINER (viewport4), search_results_list);
+
+  label848 = gtk_label_new (_("Search"));
+  gtk_widget_ref (label848);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "label848", label848,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (label848);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook3), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook3), 1), label848);
+
+  help_html_vbox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (help_html_vbox);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_html_vbox", help_html_vbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_html_vbox);
+  gtk_paned_pack2 (GTK_PANED (help_paned), help_html_vbox, TRUE, FALSE);
+
+  statusbar_hbox = gtk_hbox_new (FALSE, 5);
+  gtk_widget_ref (statusbar_hbox);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "statusbar_hbox", statusbar_hbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (statusbar_hbox);
+  gtk_box_pack_end (GTK_BOX (help_html_vbox), statusbar_hbox, FALSE, FALSE, 0);
+
+  help_statusbar = gtk_statusbar_new ();
+  gtk_widget_ref (help_statusbar);
+  gtk_object_set_data_full (GTK_OBJECT (Help_Window), "help_statusbar", help_statusbar,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (help_statusbar);
+  gtk_box_pack_end (GTK_BOX (statusbar_hbox), help_statusbar, TRUE, TRUE, 0);
+
+  gtk_signal_connect (GTK_OBJECT (help_search_button), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_help_window_search_button_cb),
+                      Help_Window);
+  gtk_signal_connect (GTK_OBJECT (help_search_help_button), "clicked",
+                      GTK_SIGNAL_FUNC (gnc_help_window_search_help_button_cb),
+                      Help_Window);
+
+  return Help_Window;
+}
+
+GtkWidget*
+create_Report_Window (void)
+{
+  GtkWidget *Report_Window;
+  GtkWidget *report_vbox;
+  GtkWidget *handlebox2;
+  GtkWidget *report_toolbar;
+  GtkWidget *report_paned;
+
+  Report_Window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_object_set_data (GTK_OBJECT (Report_Window), "Report_Window", Report_Window);
+
+  report_vbox = gtk_vbox_new (FALSE, 0);
+  gtk_widget_ref (report_vbox);
+  gtk_object_set_data_full (GTK_OBJECT (Report_Window), "report_vbox", report_vbox,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (report_vbox);
+  gtk_container_add (GTK_CONTAINER (Report_Window), report_vbox);
+
+  handlebox2 = gtk_handle_box_new ();
+  gtk_widget_ref (handlebox2);
+  gtk_object_set_data_full (GTK_OBJECT (Report_Window), "handlebox2", handlebox2,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (handlebox2);
+  gtk_box_pack_start (GTK_BOX (report_vbox), handlebox2, FALSE, FALSE, 0);
+
+  report_toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+  gtk_widget_ref (report_toolbar);
+  gtk_object_set_data_full (GTK_OBJECT (Report_Window), "report_toolbar", report_toolbar,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (report_toolbar);
+  gtk_container_add (GTK_CONTAINER (handlebox2), report_toolbar);
+
+  report_paned = gtk_hpaned_new ();
+  gtk_widget_ref (report_paned);
+  gtk_object_set_data_full (GTK_OBJECT (Report_Window), "report_paned", report_paned,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (report_paned);
+  gtk_box_pack_start (GTK_BOX (report_vbox), report_paned, TRUE, TRUE, 0);
+  gtk_paned_set_position (GTK_PANED (report_paned), 0);
+
+  return Report_Window;
 }
 

@@ -70,6 +70,9 @@ gnc_engine_shutdown (void)
 {
   g_cache_destroy (gnc_string_cache);
   gnc_string_cache = NULL;
+
+  gnc_commodity_table_destroy(known_commodities);
+  known_commodities = NULL;
 }
 
 /********************************************************************

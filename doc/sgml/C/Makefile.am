@@ -49,14 +49,20 @@ gnucash_html_dir = $(top_srcdir)/doc/html/C
 
 GNUCASH_HTML_FILES = \
 	$(gnucash_html_dir)/xacc-tax-report-example.html \
-	$(gnucash_html_dir)/xacc-txf-categories.html
+	$(gnucash_html_dir)/xacc-txf-categories.html \
+        $(gnucash_html_dir)/guppi-pie-demo.html \
+        $(gnucash_html_dir)/guppi-bar-demo.html \
+        $(gnucash_html_dir)/guppi-points-demo.html
 
-install-data-local: gnucash/index.html
+
+install-data-local: gnucash/index.html gnucash/help-search-index.db
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/image
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)/stylesheet-images
 	$(INSTALL_DATA) $(srcdir)/topic.dat \
 			$(DESTDIR)$(gnucash_helpdir)/topic.dat
+	$(INSTALL_DATA) gnucash/help-search-index.db \
+			$(DESTDIR)$(gnucash_helpdir)/help-search-index.db
 	-(for file in gnucash/*.html; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) $(srcdir)/$$file \
@@ -104,8 +110,11 @@ gnucash/index.html: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
 	-(db2html gnucash.sgml \
 	  && cp $(GNUCASH_HTML_FILES) gnucash \
 	  && mkdir -p gnucash/image \
-	  && cp $(srcdir)/image/*.png gnucash/image || exit 1)
+	  && cp $(srcdir)/image/*.png gnucash/image || exit 1) 
 
+gnucash/help-search-index.db: $(GNUCASH_SGML_FILES) $(GNUCASH_HTML_FILES)
+	-(chmod a+x $(top_srcdir)/build-help-index.pl && cd gnucash \
+	  && ../$(top_srcdir)/build-help-index.pl help-search-index.db *.html)
 
 dist-hook:
 	mkdir $(distdir)/gnucash

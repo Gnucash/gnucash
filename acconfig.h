@@ -56,8 +56,13 @@
 /* New or old Guile Smob for G-wrap */
 #undef GWRAP_OLD_GUILE_SMOB
 
+/* The db2 database library */
+#undef HAVE_DB2
+
 /* Use the new gtkhtml widget instead of the old xmhtml widget */
 #undef HAVE_LIBGTKHTML
+
+#undef HAVE_LIBGHTTP
 
 /* misc image and compression libs needed by html widget */
 #undef HAVE_ZLIB               

@@ -120,14 +120,6 @@ void
 gnc_ui_new_commodity_help_cb           (GtkButton       *button,
                                         gpointer         user_data);
 
-void
-gnc_account_window_select_currency_cb  (GtkButton       *button,
-                                        gpointer         user_data);
-
-void
-gnc_account_window_select_security_cb  (GtkButton       *button,
-                                        gpointer         user_data);
-
 gboolean
 gnc_ui_commodity_druid_cancel_cb       (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
@@ -233,4 +225,12 @@ gnc_ui_qif_import_commodity_prepare_cb (GnomeDruidPage  *gnomedruidpage,
 void
 gnc_ui_qif_import_finish_cb            (GnomeDruidPage  *gnomedruidpage,
                                         gpointer         arg1,
+                                        gpointer         user_data);
+
+void
+gnc_help_window_search_button_cb       (GtkButton       *button,
+                                        gpointer         user_data);
+
+void
+gnc_help_window_search_help_button_cb  (GtkButton       *button,
                                         gpointer         user_data);

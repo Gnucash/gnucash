@@ -4,6 +4,7 @@
  * Copyright (C) 1998 Linas Vepstas                                 *
  * Copyright (C) 1999 Jeremy Collins ( gtk-xmhtml port )            *
  * Copyright (C) 2000 Dave Peticolas                                *
+ * Copyright (C) 2000 Bill Gribble                                  *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -25,213 +26,526 @@
 \********************************************************************/
 
 #include "config.h"
-
 #include <gnome.h>
 
+#include <guile/gh.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <unistd.h>
+#include <db2/db.h>
+
+#include "glade-gnc-dialogs.h"
+#include "glade-cb-gnc-dialogs.h"
 #include "window-help.h"
-#include "window-html.h"
+#include "gnc-html.h"
+#include "gnc-html-history.h"
 #include "File.h"
-#include "messages.h"
-#include "gnc-engine-util.h"
 
-static short module = MOD_HTML; 
+struct _gnc_help_window {
+  GtkWidget   * toplevel;
 
-static HTMLWindow *helpwindow = NULL;
+  GtkWidget   * toolbar;
+  GtkWidget   * statusbar;  
+  GtkWidget   * statusbar_hbox;
+  GtkWidget   * html_vbox;
+  GtkWidget   * topics_tree;
+  GtkWidget   * paned;
 
+  GtkWidget   * search_entry;
+  GtkWidget   * search_results;
+  GtkWidget   * type_pixmap;
 
-typedef struct _HelpData HelpData;
-struct _HelpData
-{
-  gchar *htmlfile;
-  gchar *title;
-  gchar *label;
-  gchar *text;
+  DB          * index_db;
+  gnc_html    * html;
 };
-
-
-static HelpData *
-help_data_new()
-{
-  HelpData *help_data;
   
-  help_data = g_new0(HelpData, 1);
+static GList * open_help_windows = NULL;
 
-  return help_data;
-}
+/********************************************************************
+ * gnc_help_window_check_urltype
+ * is it OK to show a certain URLType in this window?
+ ********************************************************************/
 
-static void
-help_data_destroy(HTMLUserData history_data)
-{
-  HelpData *help_data = history_data;
-
-  g_free(help_data->htmlfile);
-  help_data->htmlfile = NULL;
-
-  g_free(help_data->title);
-  help_data->title = NULL;
-
-  g_free(help_data->label);
-  help_data->label = NULL;
-
-  g_free(help_data->text);
-  help_data->text = NULL;
-
-  g_free(help_data);
-}
-
-static void
-help_data_set_file(HelpData *help_data, const gchar *htmlfile)
-{
-  g_free(help_data->htmlfile);
-  help_data->htmlfile = g_strdup(htmlfile);
-}
-
-static void
-help_data_set_title(HelpData *help_data, const gchar *title)
-{
-  g_free(help_data->title);
-  help_data->title = g_strdup(title);
-}
-
-static void
-help_data_set_label(HelpData *help_data, const gchar *label)
-{
-  g_free(help_data->label);
-  help_data->label = g_strdup(label);
-}
-
-static void
-help_data_set_text(HelpData *help_data, const gchar *text)
-{
-  g_free(help_data->text);
-  help_data->text = g_strdup(text);
-}
-
-
-static HTMLData *
-helpAnchorCB(URLType url_type, char * location, char * label, 
-             HTMLUserData user_data)
-{
-  HelpData *user = user_data;
-  HTMLData *html_data;
-  HelpData *help_data;
-
-  switch(url_type) {
-    /* a local file with a possible jump to label */
+static int
+gnc_help_window_check_urltype(URLType t) {
+  switch (t) {
   case URL_TYPE_FILE:
-    help_data = help_data_new();
-    help_data_set_file(help_data, location);
-    help_data_set_title(help_data, user->title);
-
-    html_data = gnc_html_data_new(user->title, help_data,
-                                  help_data_destroy,
-                                  NULL, 0);    
-    return html_data;
+  case URL_TYPE_HELP:
+  case URL_TYPE_HTTP:
+  case URL_TYPE_SECURE:
+    return TRUE;
     break;
-
-    /* other types use gnc_url_show */
   default:
-    gnc_url_show(url_type, location, label);
-    return NULL;
-    break;
+    return FALSE;
   }
+}
 
-  g_warning("What's going on?\n");
 
-  return NULL;
+/********************************************************************
+ * gnc_help_window_check_urltype
+ * is it OK to show a certain URLType in this window?
+ ********************************************************************/
+
+static void
+gnc_help_window_url_flyover(gnc_html * html, const gchar * url,
+                            gpointer data) {
+  gnc_help_window * help = (gnc_help_window *)data;
+  gtk_statusbar_pop(GTK_STATUSBAR(help->statusbar), 1);
+  if(url) {
+    gtk_statusbar_push(GTK_STATUSBAR(help->statusbar),
+                       1, url);
+  }
+}
+
+
+/********************************************************************
+ * after-load cb : enable/disable history buttons
+ ********************************************************************/
+
+static void
+gnc_help_window_set_back_button(gnc_help_window * win, int enabled) {
+  GtkToolbar * tb = GTK_TOOLBAR(win->toolbar);
+  gtk_widget_set_sensitive
+    (GTK_WIDGET(((GtkToolbarChild *)g_list_nth_data(tb->children, 0))->widget),
+     enabled);
+}
+
+
+static void
+gnc_help_window_set_fwd_button(gnc_help_window * win, int enabled) {
+  GtkToolbar * tb = GTK_TOOLBAR(win->toolbar);
+  gtk_widget_set_sensitive
+    (GTK_WIDGET(((GtkToolbarChild *)g_list_nth_data(tb->children, 1))->widget),
+     enabled);
+}
+
+
+static void 
+gnc_help_window_load_cb(gnc_html * html, URLType type, 
+                        const gchar * location, const gchar * label, 
+                        gpointer data) {
+  gnc_help_window * win = data;
+
+  if(gnc_html_history_forward_p(gnc_html_get_history(win->html))) {
+    gnc_help_window_set_fwd_button(win, TRUE); 
+  }
+  else {
+    gnc_help_window_set_fwd_button(win, FALSE); 
+  }
+  
+  if(gnc_html_history_back_p(gnc_html_get_history(win->html))) {
+    gnc_help_window_set_back_button(win, TRUE); 
+  }
+  else {
+    gnc_help_window_set_back_button(win, FALSE); 
+  }
+}
+
+
+/********************************************************************
+ * toolbar callbacks
+ ********************************************************************/
+
+static int 
+gnc_help_window_fwd_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window       * help = data;
+  gnc_html_history_node * node;
+
+  gnc_html_history_forward(gnc_html_get_history(help->html));
+  node = gnc_html_history_get_current(gnc_html_get_history(help->html));
+  gnc_html_show_url(help->html, node->type, node->location, node->label, 0);
+  return TRUE;
+}
+
+static int 
+gnc_help_window_back_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window       * help = data;
+  gnc_html_history_node * node;
+
+  gnc_html_history_back(gnc_html_get_history(help->html));
+  node = gnc_html_history_get_current(gnc_html_get_history(help->html));
+  gnc_html_show_url(help->html, node->type, node->location, node->label, 0);
+  return TRUE;
+}
+
+
+/********************************************************************
+ * topics-browser callbacks 
+ * silly tree building and clicking stuff
+ ********************************************************************/
+
+static void
+gnc_help_window_topic_select_cb(GtkCTree * tree, GtkCTreeNode * row, int col,
+                                gpointer user_data) {
+  gnc_help_window * wind = user_data;
+  URLType         type;
+  char            * location = NULL;
+  char            * label = NULL;
+  char            * url = gtk_ctree_node_get_row_data(tree, row);
+
+  if(url && strlen(url) > 0) {
+    type = gnc_html_parse_url(wind->html, url, &location, &label);
+    gnc_html_show_url(wind->html, type, location, label, 0);
+    g_free(location);
+    g_free(label);
+  }
 }
 
 static void
-helpJumpCB(HTMLUserData user_data, char **set_text, char **set_label)
-{
-  HelpData *help_data = user_data;
-  char *text = NULL;
-  char *label = NULL;
+free_url_cb(gpointer user_data) {
+  if(user_data) free(user_data);
+}
 
-  *set_text = NULL;
-  *set_label = NULL;
+static void 
+topics_add_children(SCM topics, GtkCTree * tree, GtkCTreeNode * parent, 
+                    gnc_help_window * help) {
+  SCM          this_topic;
+  SCM          subtopics;
+  GtkCTreeNode * node; 
+  char         * ctopics[1];
+  char         * curl = NULL;
+  gboolean     leafnode;
 
-  if (help_data->text != NULL)
-  {
-    *set_text = help_data->text;
-    *set_label = help_data->label;
+  if(!gh_list_p(topics)) return;
+  
+  for(; !gh_null_p(topics); topics = gh_cdr(topics)) {
+    this_topic = gh_car(topics);
+
+    if(!gh_list_p(this_topic)) continue;
+
+    if(!gh_null_p(gh_cdr(this_topic)) && !gh_null_p(gh_cddr(this_topic))) {
+      subtopics  = gh_caddr(this_topic);
+    }
+    else {
+      subtopics = SCM_BOOL_F;
+    }
+
+    ctopics[0] = gh_scm2newstr(gh_car(this_topic), NULL);
+
+    if(!gh_null_p(gh_cdr(this_topic))) {
+      curl = gh_scm2newstr(gh_cadr(this_topic), NULL);
+    }
+   
+    if(gh_list_p(subtopics)) {
+      leafnode = FALSE;
+    }
+    else {
+      leafnode = TRUE;
+    }
+    
+    node = gtk_ctree_insert_node(GTK_CTREE(tree),
+                                 GTK_CTREE_NODE(parent), NULL,
+                                 ctopics, 1,
+                                 NULL, NULL, NULL, NULL,
+                                 leafnode, TRUE);
+    
+    gtk_ctree_node_set_row_data_full(GTK_CTREE(tree), 
+                                     GTK_CTREE_NODE(node), curl,
+                                     free_url_cb);
+    free(ctopics[0]);
+    if(gh_list_p(subtopics)) {
+      topics_add_children(subtopics, tree, node, help);
+    }
+  }
+}
+
+static void
+gnc_help_window_load_topics(gnc_help_window * help, const gchar * file) {
+  
+  SCM topics;
+  SCM load_topics =  gh_eval_str("gnc:load-help-topics");
+
+  topics = gh_call1(load_topics, gh_str02scm(file));
+  topics_add_children(topics, GTK_CTREE(help->topics_tree), NULL, help);
+  gtk_widget_show_all(help->topics_tree);
+}
+
+
+static void
+gnc_help_window_destroy_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window * help = data;
+  
+  gnc_help_window_destroy(help);
+}
+
+static void
+gnc_help_window_print_cb(GtkWidget * w, gpointer data) {
+  gnc_help_window * help = data;
+  
+  gnc_html_print(help->html);
+}
+
+static void 
+item_destroy_cb(GtkListItem * li, gpointer user_data) {
+  g_free(gtk_object_get_user_data(GTK_OBJECT(li)));
+}
+
+static void
+show_search_results(gnc_help_window * help, const char * matches) {
+  const char * current;
+  const char * end;
+  char       * this_link=NULL;
+  int        link_len;
+  GList      * results = NULL; 
+  GtkWidget  * listitem;
+
+  if(!matches) {
+    if(GTK_LIST(help->search_results)->children) {
+      gtk_list_remove_items(GTK_LIST(help->search_results),
+                            GTK_LIST(help->search_results)->children);
+    }
     return;
   }
 
-  if (help_data->htmlfile == NULL)
-    return;
-
-  /* see if this anchor contains a jump */
-  label = strpbrk(help_data->htmlfile, "#?");
-  if (label != NULL)
-  {
-    help_data_set_label(help_data, label);
-
-    /* truncate # from name */
-    help_data->htmlfile[label - help_data->htmlfile] = 0x0;
+  current = matches;  
+  while((end = strchr(current, '\n')) != NULL) {
+    link_len  = end - current;
+    this_link = g_new0(char, link_len + 1);
+    strncpy(this_link, current, link_len);
+    listitem = gtk_list_item_new_with_label(this_link);
+    gtk_object_set_user_data(GTK_OBJECT(listitem), this_link);
+    gtk_signal_connect(GTK_OBJECT(listitem), "destroy",
+                       GTK_SIGNAL_FUNC(item_destroy_cb), NULL);
+    
+    gtk_widget_show(listitem);
+    results = g_list_append(results, listitem);
+    current = end+1;
+  }
+ 
+  /* get rid of the old items */ 
+  if(GTK_LIST(help->search_results)->children) {
+    gtk_list_remove_items(GTK_LIST(help->search_results),
+                          GTK_LIST(help->search_results)->children);
   }
 
-  /* if text to display wasn't specified, use the truncated name to read */
-  if (text == NULL) {
-    gncReadFile(help_data->htmlfile, &text);
+  /* add the new ones */ 
+  if(results) {
+    gtk_list_append_items(GTK_LIST(help->search_results),
+                          results);
   }
-
-  if (text != NULL)
-  {
-    help_data_set_text(help_data, text);
-    free(text);
-  }
-
-  *set_text = help_data->text;
-  *set_label = help_data->label;
 }
 
 
-/********************************************************************\
- * helpWindow                                                       * 
- *   opens up a help window, and displays html                      * 
- *                                                                  * 
- * Args:   parent   - the parent widget                             * 
- *         title    - the title of the window, defaults to "Help"   * 
- *         htmlfile - the file name of the help file to display     * 
- * Return: none                                                     * 
-\********************************************************************/
 void
-helpWindow(GtkWidget *parent, const char *title, const char *htmlfile)
-{
-  HTMLData *html_data;
-  HelpData *help_data;
+gnc_help_window_search_button_cb(GtkButton * button, gpointer data) {
+  GtkObject       * hw   = data;
+  gnc_help_window * help = gtk_object_get_data(hw, "help_window_struct");
+  char            * search_string = 
+    gtk_entry_get_text(GTK_ENTRY(help->search_entry));
+  DBT             key, value;
+  int             err=1;
+  
+  /* initialize search key/value */
+  memset(&key, 0, sizeof(DBT));
+  memset(&value, 0, sizeof(DBT));
+  key.data    = search_string;
+  key.size    = strlen(search_string);
+  value.flags = DB_DBT_MALLOC;
 
-  if (title == NULL)
-    title = _("Help");
+  /* do the search */
+  if(help->index_db) {
+    err = help->index_db->get(help->index_db, NULL, &key, &value, 0);
+  }
 
-  if (helpwindow == NULL)
-    helpwindow = gnc_html_window_new(helpAnchorCB, helpJumpCB);
-
-  help_data = help_data_new();
-  help_data_set_file(help_data, htmlfile);
-  help_data_set_title(help_data, title);
-
-  html_data = gnc_html_data_new(title, help_data, help_data_destroy, NULL, 0);
-
-  htmlWindow(parent, &helpwindow, html_data);
+  if((err == 0) || (err == DB_NOTFOUND)) {
+    /* the data in the DB is a newline-separated list of filenames */
+    show_search_results(help, value.data);    
+  }
 }
 
-
-/********************************************************************\
- * gnc_ui_destroy_help_windows                                      * 
- *   destroys any open help windows                                 * 
- *                                                                  * 
- * Args:   none                                                     * 
- * Return: none                                                     * 
-\********************************************************************/
 void
-gnc_ui_destroy_help_windows(void)
-{
-  gnc_html_window_destroy(helpwindow);
-  helpwindow = NULL;
-
-  DEBUG("help windows destroyed.\n");
+gnc_help_window_search_help_button_cb(GtkButton * button, gpointer data) {
+  GtkObject       * hw   = data;
+  gnc_help_window * help = gtk_object_get_data(hw, "help_window_struct");
+  
+  printf("help on help\n");
 }
 
-/* ----------------------- END OF FILE ---------------------  */
+void
+gnc_help_window_search_result_select_cb(GtkWidget * list, GtkWidget * child,
+                                        gpointer user_data) {
+  gnc_help_window * help = user_data;
+  char * helpfile = gtk_object_get_user_data(GTK_OBJECT(child));
+  gnc_help_window_show_help(help, helpfile, NULL);
+}
+
+/********************************************************************
+ * gnc_help_window_new 
+ * allocates and opens up a help window
+ ********************************************************************/
+
+gnc_help_window *
+gnc_help_window_new() {
+  
+  gnc_help_window * help = g_new0(gnc_help_window, 1);
+  GtkObject       * tlo;
+  DB_INFO         dbinfo;
+  DB_ENV          dbenv;
+  char            * indexfile;
+  int             err;
+  GnomeUIInfo     toolbar_data[] = 
+  {
+    { GNOME_APP_UI_ITEM,
+      _("Back"),
+      _("Move back one step in the history"),
+      gnc_help_window_back_cb, help,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_BACK,
+      0, 0, NULL
+    },
+    { GNOME_APP_UI_ITEM,
+      _("Forward"),
+      _("Move forward one step in the history"),
+      gnc_help_window_fwd_cb, help,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_FORWARD,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      _("Print"),
+      _("Print Help window"),
+      gnc_help_window_print_cb, help,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_PRINT,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      _("Close"),
+      _("Close this Help window"),
+      gnc_help_window_destroy_cb, help,
+      NULL,
+      GNOME_APP_PIXMAP_STOCK, 
+      GNOME_STOCK_PIXMAP_CLOSE,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+  
+  help->toplevel = create_Help_Window();
+  tlo = GTK_OBJECT(help->toplevel);
+  
+  help->toolbar      = gtk_object_get_data(tlo, "help_toolbar");
+  help->statusbar    = gtk_object_get_data(tlo, "help_statusbar");
+  help->statusbar_hbox = gtk_object_get_data(tlo, "statusbar_hbox");
+  help->html_vbox    = gtk_object_get_data(tlo, "help_html_vbox");
+  help->topics_tree  = gtk_object_get_data(tlo, "help_topics_tree");
+  help->paned        = gtk_object_get_data(tlo, "help_paned");
+  help->search_entry = gtk_object_get_data(tlo, "help_search_entry");
+  help->search_results = gtk_object_get_data(tlo, "search_results_list");
+  help->type_pixmap  = gtk_object_get_data(tlo, "file_type_pixmap");
+  
+  help->html         = gnc_html_new();
+
+  gtk_object_set_data(tlo, "help_window_struct", (gpointer)help);
+
+  gnome_app_fill_toolbar(GTK_TOOLBAR(help->toolbar), toolbar_data, NULL);
+  gtk_box_pack_start(GTK_BOX(help->html_vbox), 
+                     gnc_html_get_widget(help->html),
+                     TRUE, TRUE, 0);
+  gtk_paned_set_position(GTK_PANED(help->paned), 200);
+  
+  gnc_html_set_urltype_cb(help->html, gnc_help_window_check_urltype);
+  gnc_html_set_flyover_cb(help->html, gnc_help_window_url_flyover, 
+                          (gpointer)help);
+  gnc_html_set_load_cb(help->html, gnc_help_window_load_cb, 
+                       (gpointer)help);
+  
+  gnc_help_window_load_topics(help, "help-topics-index.scm"); 
+
+  gtk_signal_connect(GTK_OBJECT(help->toplevel), "destroy",
+                     GTK_SIGNAL_FUNC(gnc_help_window_destroy_cb), 
+                     (gpointer)help);
+  
+  gtk_signal_connect(GTK_OBJECT(help->topics_tree), "tree_select_row",
+                     GTK_SIGNAL_FUNC(gnc_help_window_topic_select_cb), 
+                     (gpointer)help);
+
+  gtk_signal_connect(GTK_OBJECT(help->search_results), "select_child",
+                     GTK_SIGNAL_FUNC(gnc_help_window_search_result_select_cb), 
+                     (gpointer)help);
+
+  indexfile = gncFindFile("help-search-index.db");
+  if((err = db_open(indexfile,
+                    DB_UNKNOWN, 0, 0666, 
+                    NULL, NULL, &(help->index_db))) != 0) {
+    printf("Failed to open help index DB '%s' : %s\n",
+           indexfile, strerror(err));
+    help->index_db = NULL;
+  }
+  g_free(indexfile);
+
+  gtk_widget_show_all(help->toplevel);
+  
+  open_help_windows = g_list_append(open_help_windows, help);
+  return help;
+}
+
+
+/********************************************************************
+ * gnc_help_window_destroy
+ * delete a help window 
+ ********************************************************************/
+
+void
+gnc_help_window_destroy(gnc_help_window * help) {
+  
+  /* take the window off the open list */
+  open_help_windows = g_list_remove(open_help_windows, help);
+
+  gtk_signal_disconnect_by_func(GTK_OBJECT(help->toplevel), 
+                                GTK_SIGNAL_FUNC(gnc_help_window_destroy_cb), 
+                                (gpointer)help);
+  /* close the help index db */
+  if(help->index_db) {
+    help->index_db->close(help->index_db, 0);
+  }
+
+  /* take care of the gnc-html object specially */
+  gtk_widget_ref(gnc_html_get_widget(help->html));
+  gnc_html_destroy(help->html);
+
+  gtk_widget_destroy(GTK_WIDGET(help->toplevel)); 
+
+  help->html        = NULL;
+  help->toplevel    = NULL;
+  help->statusbar   = NULL;
+  help->html_vbox   = NULL;
+  help->topics_tree = NULL;
+
+  g_free(help);
+}
+
+
+void
+gnc_help_window_show_help(gnc_help_window * help, const char * location,
+                          const char * label) {
+  gnc_html_show_url(help->html, URL_TYPE_FILE, location, label, 0);
+}
+
+
+/********************************************************************
+ * compatibility stuff (temporary)
+ ********************************************************************/
+
+void
+helpWindow(GtkWidget * parent, const char * title, const char * htmlfile) {
+  gnc_help_window * help = gnc_help_window_new();
+  gnc_help_window_show_help(help, htmlfile, NULL);
+}
+
+void
+gnc_ui_destroy_help_windows() {
+  while(open_help_windows != NULL) {
+    gnc_help_window_destroy((gnc_help_window *)(open_help_windows->data));
+  }
+}
+
+
+

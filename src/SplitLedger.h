@@ -153,7 +153,7 @@ void    xaccSRCancelCursorTransChanges (SplitRegister *reg);
  *    blank split appended to the tail end of the register.
  *    This "blank split" is the place where the user can 
  *    edit info to create new tranasactions. */
-void    xaccSRLoadRegister (SplitRegister *reg, Split **slist,
+void    xaccSRLoadRegister (SplitRegister *reg, GList * slist,
                             Account *default_source_acc);
 
 /* The xaccSRSaveRegEntry() method will copy the contents 

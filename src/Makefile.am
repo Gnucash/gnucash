@@ -34,6 +34,9 @@ LDADD = \
   ${G_WRAP_LINK_ARGS} \
   ${GUILE_LIBS} \
   ${GTKHTML_LIBS} \
+  ${GHTTP_LIBS} \
+  ${GUPPI_LIBS} \
+  ${DB2_LIBS} \
   ${INTLLIBS}
 
 gnucash_SOURCES = \

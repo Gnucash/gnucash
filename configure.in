@@ -216,6 +216,17 @@ LIBS="$LIBS -lm"
 
 
 ### --------------------------------------------------------------------------
+DB2_LIBS="-ldb2"
+
+AC_CHECK_LIB(db2, db_open,
+             AC_DEFINE(HAVE_DB2),
+             AC_MSG_ERROR([Cannot find db2. See the README for more info.]),
+             $DB2_LIBS)
+
+AC_SUBST(DB2_LIBS)
+
+
+### --------------------------------------------------------------------------
 ### Gnome XML -- GNOME_XML_LIB is define by GNOME_XML_CHECK
 GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
 
@@ -226,6 +237,7 @@ AC_SUBST(GNOME_XML_CFLAGS)
 GTKHTML_LIBS=`$GNOME_CONFIG --libs gtkhtml`
 GTKHTML_CFLAGS=`$GNOME_CONFIG --cflags gtkhtml`
 
+
 # check for gtkhtml and enable it via HAVE_LIBGTKHTML
 # if found
 AC_CHECK_LIB(gtkhtml, gtk_html_new,
@@ -234,8 +246,30 @@ AC_CHECK_LIB(gtkhtml, gtk_html_new,
              AC_MSG_ERROR([Cannot find gtkhtml.  See the README for more info.]),
              $GTKHTML_LIBS)
 
+GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
+GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
+
+AC_CHECK_LIB(ghttp, ghttp_request_new,
+             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} ghttp"
+             AC_DEFINE(HAVE_LIBGHTTP),
+             AC_MSG_ERROR([Cannot find ghttp.  See the README for more info.]),
+             $GHTTP_LIBS)
+
+
 AC_SUBST(GTKHTML_LIBS)
 AC_SUBST(GTKHTML_CFLAGS)
+AC_SUBST(GHTTP_LIBS)
+AC_SUBST(GHTTP_CFLAGS)
+
+
+### --------------------------------------------------------------------------
+### guppi
+
+GUPPI_LIBS=`$GNOME_CONFIG --libs libguppi`
+GUPPI_CFLAGS=`$GNOME_CONFIG --cflags libguppi`
+LIBGUPPI_CHECK
+AC_SUBST(GUPPI_LIBS)
+AC_SUBST(GUPPI_CFLAGS)
 
 
 ### --------------------------------------------------------------------------

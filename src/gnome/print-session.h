@@ -32,14 +32,17 @@
 #include <libgnomeprint/gnome-print-meta.h>
 #include <libgnomeprint/gnome-print-preview.h>
 #include <libgnomeprint/gnome-printer-dialog.h>
+#include <libgnomeprint/gnome-print-dialog.h>
+#include <libgnomeprint/gnome-print-master.h>
+#include <libgnomeprint/gnome-print-master-preview.h>
 /* #include <libgnomeprint/gnome-printer-profile.h> */
 #include <libgnomeprint/gnome-font.h>
 
 #include "glade-gnc-dialogs.h"
 
 typedef struct {
+  GnomePrintMaster   * master;
   GnomePrintMeta     * meta;
-  GnomePrinter       * printer;
   GnomeFont          * default_font;
   char               * paper;
 } PrintSession;
@@ -88,5 +91,6 @@ void gnc_print_session_done(PrintSession * ps);
 
 void gnc_print_session_preview(PrintSession * ps);
 void gnc_print_session_print(PrintSession * ps);
+void gnc_print_session_render(PrintSession * ps);
 
 #endif

@@ -65,7 +65,7 @@ struct _querystruct {
    * again until it's really necessary */
   int      changed;
   AccountGroup * acct_group;
-  Split ** split_list;
+  GList        * split_list;
 };
 
 /*******************************************************************
@@ -294,7 +294,7 @@ xaccFreeQuery(Query * q) {
   g_list_free(q->terms);
   q->terms = NULL;
 
-  g_free(q->split_list);
+  g_list_free(q->split_list);
   q->split_list = NULL;
 
   g_free(q);
@@ -762,7 +762,7 @@ xaccQueryCheckSplit(Query * q, Split * s) {
  * Run the search.
  ********************************************************************/
 
-Split **
+GList *
 xaccQueryGetSplits(Query * q) {
   GList     * matching_splits=NULL;
   GList     * or_ptr, * and_ptr, * mptr;  
@@ -773,11 +773,6 @@ xaccQueryGetSplits(Query * q) {
   int       total_splits_checked = 0;
   int       split_count = 0;
   int       acct_ok;
-  int       posn;
-
-  struct timeval start, end;
-
-  gettimeofday(&start, NULL);
 
   /* tmp hack alert */
   q->changed = 1;
@@ -881,33 +876,13 @@ xaccQueryGetSplits(Query * q) {
     }
     split_count = q->max_splits;
   }
-
-  { /* convert the g_list into a split array. */
-
-    Split **splits = g_new0(Split *, split_count+1);
-    posn = 0;
-    for(mptr = matching_splits; mptr; mptr=mptr->next) {
-      splits[posn] = mptr->data;
-      posn++;
-    }
-    splits[split_count] = NULL;
-    g_list_free(matching_splits);
-    
-    gettimeofday(&end, NULL);
-    
-    PINFO("elapsed time = %e ms\n",
-          (end.tv_sec - start.tv_sec)*1000.0 +
-          (end.tv_usec - start.tv_usec)/1000.0);
-    PINFO("%d splits checked, %d splits matched.\n",
-          total_splits_checked, split_count);
-    
-    q->changed = 0;
-    
-    g_free(q->split_list);
-    q->split_list = splits;
-    
-    return splits;
-  }
+  
+  q->changed = 0;
+  
+  g_list_free(q->split_list);
+  q->split_list = matching_splits;
+  
+  return matching_splits;
 }
 
 
@@ -1948,14 +1923,16 @@ xaccQuerySetGroup(Query * q, AccountGroup * g) {
  *******************************************************************/
 time_t
 xaccQueryGetEarliestDateFound(Query * q) {
-  Split  ** sp;
+  GList * spl;
+  Split * sp;
   time_t earliest = LONG_MAX;
 
   if(!q->split_list) { return 0; }
 
-  for(sp = q->split_list; *sp; sp++) {
-    if((*sp)->parent->date_posted.tv_sec < earliest) {
-      earliest = (*sp)->parent->date_posted.tv_sec;
+  for(spl = q->split_list; spl; spl=spl->next) {
+    sp = spl->data;
+    if(sp->parent->date_posted.tv_sec < earliest) {
+      earliest = (time_t) sp->parent->date_posted.tv_sec;
     }
   }
   return earliest;
@@ -1966,14 +1943,16 @@ xaccQueryGetEarliestDateFound(Query * q) {
  *******************************************************************/
 time_t
 xaccQueryGetLatestDateFound(Query * q) {
-  Split  ** sp;
+  Split  * sp;
+  GList  * spl;
   time_t latest = 0;
 
   if(!q->split_list) { return 0; }
 
-  for(sp = q->split_list; *sp; sp++) {
-    if((*sp)->parent->date_posted.tv_sec > latest) {
-      latest = (*sp)->parent->date_posted.tv_sec;
+  for(spl = q->split_list; spl; spl=spl->next) {
+    sp = spl->data;
+    if(sp->parent->date_posted.tv_sec > latest) {
+      latest = (time_t) sp->parent->date_posted.tv_sec;
     }
   }
   return latest;

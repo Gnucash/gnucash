@@ -38,7 +38,8 @@ gnc_regular_scm_files = \
   iso-4217-currencies.scm \
   engine-init.scm \
   commodity-table.scm \
-  commodity-import.scm
+  commodity-import.scm \
+  help-topics-index.scm
 
 gncscm_DATA = ${gnc_autogen_scm_files} ${gnc_regular_scm_files}
 
