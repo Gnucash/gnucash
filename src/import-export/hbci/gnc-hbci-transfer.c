@@ -168,10 +168,15 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	g_strstrip (h_otherBankCode);
 
 	g_memo = 
-	  g_strdup_printf ("%s %s %s %s %s",
-			   h_transactionText,
-			   _("Account"), h_otherAccountId,
-			   _("Bank"), h_otherBankCode);
+	  ((strlen(h_transactionText) > 0) ?
+	   g_strdup_printf ("%s %s %s %s %s",
+			    h_transactionText,
+			    _("Account"), h_otherAccountId,
+			    _("Bank"), h_otherBankCode) :
+	   g_strdup_printf ("%s %s %s %s",
+			    _("Account"), h_otherAccountId,
+			    _("Bank"), h_otherBankCode));
+	   
 	gnc_xfer_dialog_set_memo (transdialog, g_memo);
 
 	g_free (h_transactionText);

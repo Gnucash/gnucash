@@ -298,10 +298,14 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
     g_strstrip (h_otherBankCode);
 
     g_memo = 
-      g_strdup_printf ("%s %s %s %s %s",
-		       h_transactionText,
-		       _("Account"), h_otherAccountId,
-		       _("Bank"), h_otherBankCode);
+      ((strlen(h_transactionText) > 0) ?
+       g_strdup_printf ("%s %s %s %s %s",
+			h_transactionText,
+			_("Account"), h_otherAccountId,
+			_("Bank"), h_otherBankCode) :
+       g_strdup_printf ("%s %s %s %s",
+			_("Account"), h_otherAccountId,
+			_("Bank"), h_otherBankCode));
     xaccSplitSetMemo(split, g_memo);
 
     g_free (h_transactionText);
