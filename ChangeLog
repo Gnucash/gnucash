@@ -1,3 +1,8 @@
+2000-05-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/engine/util.c (xaccSPrintAmount): add a space after the
+	currency code to make the currency symbol.
+
 2000-05-02  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* man/gnc-prices.1: fixed typo.

@@ -557,13 +557,21 @@ xaccSPrintAmount (char * bufp, double val, short shrs, const char *curr_code)
    struct lconv *lc;
    int precision;
    int min_trailing_zeros;
+   char curr_sym[5];
 
    lc = gnc_localeconv();
 
    if (curr_code && (strncmp(curr_code, lc->int_curr_symbol, 3) == 0))
      curr_code = NULL;
+   else if (curr_code)
+   {
+     strncpy(curr_sym, curr_code, 3);
+     curr_sym[3] = '\0';
+     strcat(curr_sym, " ");
+     curr_code = curr_sym;
+   }
 
-   if (curr_code && (safe_strcmp(curr_code, "EUR") == 0))
+   if (curr_code && (strncmp(curr_code, "EUR", 3) == 0))
      shrs |= PRTEUR;
 
    if (shrs & PRTSHR)
