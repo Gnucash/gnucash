@@ -1,8 +1,11 @@
-2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
-	* src/import-export/import-backend.c:  Fix for gcc2
+2002-13-6  Benoit Grégoire  <bock@step.polymtl.ca>
 	
-2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
-	* src/import-export/import-backend.c:  Fix for gcc2
+	* src/import-export/ofx/gnc-ofx-import.c:  Do the "right" 
+	thing for setting split amount and value.
+	* src/import-export/import-main-matcher.c: Cosmetic
+	improvements for balance display and window resizing.
+	* All other affected files:  Doxygenify everything.  Take a 
+	look, run make doc, and open src/doc/html/index.html
 
 2002-12-06  Derek Atkins  <derek@ihtfp.com>
 
@@ -10,7 +13,11 @@
 	  by _value_ -- ALWAYS.
 
 	* po/nl.po -- don't use msgid_plural -- it fails to work.
+		
+2002-12-6  Benoit Grégoire  <bock@step.polymtl.ca>
 	
+	* src/import-export/import-backend.c:  Fix for gcc2
+
 2002-12-06  Benoit Grégoire  <bock@step.polymtl.ca>
 
 	Huge patch, this is the new generic import 
