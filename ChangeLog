@@ -1,3 +1,113 @@
+2001-06-05  James LewisMoss  <jimdres@mindspring.com>
+
+	* doc/sgml/C/xacc-gpl.sgml: more cleanups.
+
+	* doc/sgml/C/xacc-locatingtxns.sgml: promote sect3's to sect2's.
+
+	* doc/sgml/C/xacc-gpl.sgml: remove sect1.  cleanup.
+
+	* doc/sgml/C/xacc-print.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-gpl.sgml: remove sect1.  promote rest of
+	sections.
+
+	* doc/sgml/C/xacc-y2k.sgml: wrap content in sect1
+
+	* doc/sgml/C/xacc-stock-price-report.sgml: remove section title.
+
+	* doc/sgml/C/xacc-txf-export.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-txf-export-anomalies.sgml: wrap content in
+	sect1. 
+
+	* doc/sgml/C/xacc-txf-categories.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-trans-report.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-tax-report.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-reports.sgml: remove sectionness of first section.
+
+	* doc/sgml/C/xacc-regwin-kbd.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-regwin.sgml: remove sectionness of first
+	section. 
+
+	* doc/sgml/C/xacc-quickstart.sgml: remove sect1.  promote sect2's
+	to sect1's.
+
+	* doc/sgml/C/xacc-qif-import.sgml: remove sect1.  promote sect2's
+	and sect3's one up.
+
+	* doc/sgml/C/xacc-print-check.sgml: remove sect1.  promote sect2's
+	to sect1's.
+
+	* doc/sgml/C/xacc-portfolio-report.sgml: remove section title.
+
+	* doc/sgml/C/xacc-pnl.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-net-worth-barchart.sgml: remove section title.
+
+	* doc/sgml/C/xacc-multicolumn-view-reports.sgml: remove section
+	title. 
+
+	* doc/sgml/C/xacc-mainwin.sgml: wrap content in sect1.
+
+	* doc/sgml/C/xacc-locatingtxns.sgml: remove sect1. promote sect2's
+	to sect1's.
+
+	* doc/sgml/C/xacc-income-expense-piecharts.sgml: remove section
+	title. 
+
+	* doc/sgml/C/xacc-income-expense-barcharts.sgml: remove section
+	title. 
+
+	* doc/sgml/C/xacc-gnucash-web-browser.sgml: remove section title.
+
+	* doc/sgml/C/xacc-gnome-mdi.sgml: remove first section's
+	sectionness. 
+
+	* doc/sgml/C/xacc-dateinput.sgml: remove section title.
+
+	* doc/sgml/C/xacc-euro.sgml: remove top level sect1 and promote
+	all sect2's to sect1's.
+
+	* doc/sgml/C/xacc-currencyhandling.sgml (LINKEND): remove first
+	section.
+
+	* doc/sgml/C/xacc-common-report-options.sgml: remove section
+	title. 
+
+	* doc/sgml/C/xacc-commodity.sgml: insert section around
+	everything. 
+
+	* doc/sgml/C/xacc-balancesheet.sgml: remove section title.
+
+	* doc/sgml/C/xacc-balancereport.sgml: insert section around
+	everything. 
+
+	* doc/sgml/C/xacc-depreciation.sgml: remove sectionness of first
+	bit.  leave para's as top level.
+
+	* doc/sgml/C/xacc-apar.sgml: remove sectionness of first bit.
+	leave para's as top level.
+
+	* doc/sgml/C/xacc-adjbalwin.sgml: remove section title.
+
+	* doc/sgml/C/xacc-newacctwin.sgml: remove section title.
+
+	* doc/sgml/C/xacc-asset-liability-piecharts.sgml: remove section
+	title. 
+
+	* doc/sgml/C/xacc-asset-liability-barcharts.sgml: remove section
+	title.  
+
+	* doc/sgml/C/xacc-accountedit.sgml: Remove title for section so
+	"Editing an Account" doesn't appear twice.
+
+	* doc/sgml/C/xacc-acctypes.sgml: Remove title for section so
+	"Account Types" doesn't appear twice.
+
 2001-06-05  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/druid-commodity.c: use new func
