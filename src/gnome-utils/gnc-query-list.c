@@ -137,11 +137,15 @@ GtkWidget *
 gnc_query_list_new(GList *param_list, Query *query)
 {
   GNCQueryList *list;
+  gint columns;
 
   g_return_val_if_fail(param_list, NULL);
   g_return_val_if_fail(query, NULL);
 
-  list = GNC_QUERY_LIST(gtk_type_new(gnc_query_list_get_type()));
+  columns = g_list_length(param_list);
+  list = GNC_QUERY_LIST(g_object_new(gnc_query_list_get_type(),
+				     "n_columns", columns,
+				     NULL));
 
   gnc_query_list_construct(list, param_list, query);
 
@@ -261,10 +265,7 @@ gnc_query_list_init_clist (GNCQueryList *list)
     titles[i] = (gchar *)param->title;
   }
 
-  /* construct the clist */
-#if NEEDS_FIXING_IN_G2
-  gtk_clist_construct (clist, list->num_columns, titles);
-#endif
+  gtk_clist_column_titles_show (clist);
   gtk_clist_set_shadow_type (clist, GTK_SHADOW_IN);
 
   /* build all the column titles */
