@@ -217,6 +217,8 @@
 			    (gnc:kvp-option-dialog gnc:id-book
 						   slots "Book Options"
 						   changed_cb)))))
+  (gnc:add-extension (gnc:make-separator (list "File" "Print")))
+
   )
 
 
