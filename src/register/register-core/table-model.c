@@ -181,6 +181,22 @@ gnc_table_model_destroy (TableModel *model)
 }
 
 void
+gnc_table_model_set_read_only (TableModel *model, gboolean read_only)
+{
+  g_return_if_fail (model);
+
+  model->read_only = read_only;
+}
+
+gboolean
+gnc_table_model_read_only (TableModel *model)
+{
+  g_return_val_if_fail (model, FALSE);
+
+  return model->read_only;
+}
+
+void
 gnc_table_model_set_entry_handler (TableModel *model,
                                    TableGetEntryHandler entry_handler,
                                    const char * cell_name)

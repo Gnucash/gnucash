@@ -304,6 +304,7 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
 {
   TableGetCellIOFlagsHandler io_flags_handler;
   const char *cell_name;
+  CellIOFlags flags;
 
   if (!table || !table->model)
     return XACC_CELL_ALLOW_NONE;
@@ -315,7 +316,12 @@ gnc_table_get_io_flags (Table *table, VirtualLocation virt_loc)
   if (!io_flags_handler)
     return XACC_CELL_ALLOW_NONE;
 
-  return io_flags_handler (virt_loc, table->model->handler_user_data);
+  flags = io_flags_handler (virt_loc, table->model->handler_user_data);
+
+  if (gnc_table_model_read_only (table->model))
+    flags &= XACC_CELL_ALLOW_SHADOW;
+
+  return flags;
 }
 
 const char *
@@ -1008,6 +1014,9 @@ gnc_table_virtual_loc_valid(Table *table,
 
   /* check for a cell handler, but only if cell address is valid */
   if (vcell->cellblock == NULL) return FALSE;
+
+  /* if table is read-only, any cell is ok :) */
+  if (gnc_table_model_read_only (table->model)) return TRUE;
 
   io_flags = gnc_table_get_io_flags (table, virt_loc);
   /* if cell is marked as output-only, you can't enter */

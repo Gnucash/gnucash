@@ -112,6 +112,10 @@ typedef struct
 
   gpointer handler_user_data;
 
+  /* If true, denotes that this table is read-only
+   * and edits should not be allowed. */
+  gboolean read_only;
+
   /* If positive, denotes a row that marks a boundary that should
    * be visually distinguished. */
   int dividing_row;
@@ -124,6 +128,10 @@ typedef struct
 
 TableModel * gnc_table_model_new (void);
 void         gnc_table_model_destroy (TableModel *model);
+
+void         gnc_table_model_set_read_only (TableModel *model,
+                                            gboolean read_only);
+gboolean     gnc_table_model_read_only (TableModel *model);
 
 void gnc_table_model_set_entry_handler
                                      (TableModel *model,
