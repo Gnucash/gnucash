@@ -121,18 +121,18 @@ struct uiFreqTypeTuple uiFreqTypeStrs[] = {
  * Struct passed around as user-data when parsing the FreqSpec.
  **/
 typedef struct _freqSpecParseData {
-        FreqSpec        *fs;              // FreqSpec we're parsing into.
-        // fields used in the union of unions... :)
-        GDate                once_day;     // once
-        gint64                interval;     // all [except once]
-        gint64                offset;       // all [except once]
-        gint64                day;          // monthly or month-relative
-        gint64                occurrence;   // month-relative
-        GList                *list;        // composite
+        FreqSpec        *fs;              /* FreqSpec we're parsing into. */
+        /* fields used in the union of unions... :) */
+        GDate                 once_day;     /* once */
+        gint64                interval;     /* all [except once] */
+        gint64                offset;       /* all [except once] */
+        gint64                day;          /* monthly or month-relative */
+        gint64                occurrence;   /* month-relative */
+        GList                *list;         /* composite */
 } fsParseData;
 
-void
-_fspd_init( fsParseData *fspd )
+static void
+fspd_init( fsParseData *fspd )
 {
         fspd->fs   = NULL;
         fspd->list = NULL;
@@ -274,15 +274,16 @@ static
 gboolean
 gnc_fs_handler( xmlNodePtr node, gpointer d )
 {
-        // we ignore the wrapper... we were just called at the wrong
-        // level.
+        /* we ignore the wrapper... we were just called at the wrong
+           level. */
         return TRUE;
 }
 
 static
 gboolean
-fs_uift_handler( xmlNodePtr node, fsParseData *fspd )
+fs_uift_handler( xmlNodePtr node, gpointer data)
 {
+        fsParseData *fspd = data;
         int            i;
         char        *nodeTxt;
         char            *tmp;
@@ -303,8 +304,9 @@ fs_uift_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_date_handler( xmlNodePtr node, fsParseData *fspd )
+fs_date_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         GDate                *foo;
         foo = dom_tree_to_gdate( node );
         if ( foo == NULL )
@@ -316,10 +318,11 @@ fs_date_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_interval_handler( xmlNodePtr node, fsParseData *fspd )
+fs_interval_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         gboolean        ret;
-        gint64                foo;
+        gint64          foo;
 
         ret = dom_tree_to_integer( node, &foo );
         if ( ! ret ) {
@@ -331,10 +334,11 @@ fs_interval_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_offset_handler( xmlNodePtr node, fsParseData *fspd )
+fs_offset_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         gboolean        ret;
-        gint64                foo;
+        gint64          foo;
 
         ret = dom_tree_to_integer( node, &foo );
         if ( ! ret )
@@ -345,10 +349,11 @@ fs_offset_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_day_handler( xmlNodePtr node, fsParseData *fspd )
+fs_day_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         gboolean        ret;
-        gint64                foo;
+        gint64          foo;
 
         ret = dom_tree_to_integer( node, &foo );
         if ( ! ret )
@@ -359,10 +364,11 @@ fs_day_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_weekday_handler( xmlNodePtr node, fsParseData *fspd )
+fs_weekday_handler( xmlNodePtr node, gpointer data)
 {
+        fsParseData *fspd = data;
         gboolean        ret;
-        gint64                foo;
+        gint64          foo;
         ret = dom_tree_to_integer( node, &foo );
         if ( !ret )
                 return ret;
@@ -372,10 +378,11 @@ fs_weekday_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_occurrence_handler( xmlNodePtr node, fsParseData *fspd )
+fs_occurrence_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         gboolean        ret;
-        gint64                foo;
+        gint64          foo;
         ret = dom_tree_to_integer( node, &foo );
         if ( !ret )
                 return ret;
@@ -385,8 +392,9 @@ fs_occurrence_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_subelement_handler( xmlNodePtr node, fsParseData *fspd )
+fs_subelement_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         FreqSpec        *fs;
         gboolean        successful;
         fs = dom_tree_to_freqSpec( node );
@@ -409,8 +417,9 @@ struct dom_tree_handler fs_union_dom_handlers[] = {
 
 static
 gboolean
-fs_once_handler( xmlNodePtr node, fsParseData *fspd )
+fs_once_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         gboolean        successful;
 
         successful = dom_tree_generic_parse( node,
@@ -425,8 +434,9 @@ fs_once_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_daily_handler( xmlNodePtr node, fsParseData *fspd )
+fs_daily_handler( xmlNodePtr node, gpointer data)
 {
+        fsParseData *fspd = data;
         gboolean        successful;
         successful = dom_tree_generic_parse( node,
                                              fs_union_dom_handlers,
@@ -441,8 +451,9 @@ fs_daily_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_weekly_handler( xmlNodePtr node, fsParseData *fspd )
+fs_weekly_handler( xmlNodePtr node, gpointer data )
 {
+        fsParseData *fspd = data;
         gboolean        successful;
         successful = dom_tree_generic_parse( node,
                                              fs_union_dom_handlers,
@@ -457,8 +468,9 @@ fs_weekly_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_monthly_handler( xmlNodePtr node, fsParseData *fspd )
+fs_monthly_handler( xmlNodePtr node, gpointer data)
 {
+        fsParseData *fspd = data;
         gboolean        successful;
         successful = dom_tree_generic_parse( node,
                                              fs_union_dom_handlers,
@@ -474,8 +486,9 @@ fs_monthly_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_month_relative_handler( xmlNodePtr node, fsParseData *fspd )
+fs_month_relative_handler( xmlNodePtr node, gpointer data)
 {
+        fsParseData *fspd = data;
         gboolean        successful;
         successful = dom_tree_generic_parse( node,
                                              fs_union_dom_handlers,
@@ -492,8 +505,9 @@ fs_month_relative_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_guid_handler( xmlNodePtr node, fsParseData *fspd )
+fs_guid_handler( xmlNodePtr node, gpointer data)
 {
+        fsParseData *fspd = data;
         GUID        *guid;
         guid = dom_tree_to_guid( node );
         fspd->fs->guid = *guid;
@@ -502,8 +516,9 @@ fs_guid_handler( xmlNodePtr node, fsParseData *fspd )
 
 static
 gboolean
-fs_composite_handler( xmlNodePtr node, fsParseData *fspd )
+fs_composite_handler( xmlNodePtr node, gpointer data)
 {
+        fsParseData *fspd = data;
         gboolean        successful;
         successful = dom_tree_generic_parse( node,
                                              fs_union_dom_handlers,
@@ -541,10 +556,10 @@ gnc_freqSpec_end_handler(gpointer data_for_children,
         xmlNodePtr                tree = (xmlNodePtr)data_for_children;
         sixtp_gdv2                *globaldata = (sixtp_gdv2*)global_data;
 
-        _fspd_init( &fspd );
+        fspd_init( &fspd );
 
-        // this won't actually get invoked [FreqSpecs aren't top-level
-        // elements]; see dom_tree_to_freqSpec(), below.
+        /* this won't actually get invoked [FreqSpecs aren't top-level
+           elements]; see dom_tree_to_freqSpec(), below. */
         if ( parent_data )
                 return TRUE;
 
@@ -577,7 +592,7 @@ dom_tree_to_freqSpec(xmlNodePtr node)
     gboolean        successful;
     fsParseData        fspd;
 
-    _fspd_init( &fspd );
+    fspd_init( &fspd );
 
     fspd.fs = xaccFreqSpecMalloc();
     successful = dom_tree_generic_parse( node, fs_dom_handlers, &fspd );

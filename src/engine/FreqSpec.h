@@ -40,11 +40,11 @@ typedef enum gncp_FreqType {
         ONCE,
         DAILY,
         WEEKLY, /* Hmmm... This is sort of DAILY[7]... */
-        // BI_WEEKLY: weekly[2]
-        // SEMI_MONTHLY: use composite
+        /* BI_WEEKLY: weekly[2] */
+        /* SEMI_MONTHLY: use composite */
         MONTHLY,
         MONTH_RELATIVE,
-        // YEARLY: monthly[12]
+        /* YEARLY: monthly[12] */
         COMPOSITE,
 } FreqType;
 
@@ -85,7 +85,7 @@ typedef struct gncp_freq_spec FreqSpec;
  * Allocates memory for a FreqSpec.
  * Calls xaccFreqSpecInit() to initialise.
  **/
-FreqSpec* xaccFreqSpecMalloc();
+FreqSpec* xaccFreqSpecMalloc(void);
 
 /**
  * Initializes a FreqSpec by setting it's to type INVALID.

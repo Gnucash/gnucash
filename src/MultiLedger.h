@@ -84,7 +84,7 @@ xaccLedgerDisplay * xaccLedgerDisplaySimple (Account *account);
 xaccLedgerDisplay * xaccLedgerDisplayAccGroup (Account *account);
 
 xaccLedgerDisplay * xaccLedgerDisplayGL (void);
-xaccLedgerDisplay * xaccLedgerDisplayGLTemplate( char *id );
+xaccLedgerDisplay * xaccLedgerDisplayGLTemplate (char *id);
 
 /**
  * Displays a template ledger.
@@ -93,7 +93,7 @@ xaccLedgerDisplay * xaccLedgerDisplayGLTemplate( char *id );
  * Really, requires a GList of scheduled transactions and kvp-frame
  * data.
  **/
-xaccLedgerDisplay * xaccLedgerDisplayTemplateGL( );
+xaccLedgerDisplay * xaccLedgerDisplayTemplateGL (char *id);
 
 /* display a general ledger for an arbitrary query */
 xaccLedgerDisplay * xaccLedgerDisplayQuery (Query *query,

@@ -173,6 +173,15 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossdef>
 </glossentry>
 
+<glossentry>
+<glossterm><email>jsled@asynchronous.org</email>Joshua Sled</glossterm>
+<glossdef>
+<para>
+  works on scheduled transactions and budgeting.
+   </para>
+</glossdef>
+</glossentry>
+
 </glosslist>
 
 </para>

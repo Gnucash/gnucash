@@ -454,7 +454,7 @@ xaccLedgerDisplayTemplateGL( char *id )
   ag = gnc_book_get_template_group( gncGetCurrentBook() );
   acct = xaccGetAccountFromName( ag, id );
   if ( acct == NULL ) {
-    // FIXME
+    /* FIXME */
     printf( "can't get template account for id \"%s\"\n", id );
   }
   xaccQueryAddSingleAccountMatch( q, acct, QUERY_AND );
@@ -464,7 +464,7 @@ xaccLedgerDisplayTemplateGL( char *id )
   ld = xaccLedgerDisplayInternal( NULL, q, LD_GL,
                                   GENERAL_LEDGER,
                                   REG_STYLE_JOURNAL,
-                                  TRUE ); // template mode?  TRUE.
+                                  TRUE ); /* template mode?  TRUE. */
 
   sr = xaccLedgerDisplayGetSR( ld );
   sr->templateAcct = acct;
@@ -759,8 +759,8 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
 
   case LD_TEMPLATE:
     class = REGISTER_TEMPLATE_CM_CLASS;
-    // FIXME: sanity checks?
-    // Check for kvp-frame data?
+    /* FIXME: sanity checks?
+       Check for kvp-frame data? */
     break;
     
     default:
@@ -805,7 +805,7 @@ xaccLedgerDisplayInternal (Account *lead_account, Query *q,
   view.bg_color_handler    = xaccSRGetBGColorHandler;
   view.cell_border_handler = xaccSRGetCellBorderHandler;
   view.handler_user_data   = NULL;
-  // The following handlers are changed in template mode.
+  /* The following handlers are changed in template mode. */
   if ( templateMode ) {
     view.entry_handler     = xaccSRTemplateGetEntryHandler;
     view.io_flag_handler   = xaccSRTemplateGetIOFlagsHandler;
@@ -886,8 +886,6 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *ld)
   if (!ld || ld->loading)
     return;
 
-  //xaccQueryPrint( ld->query );
-
   xaccLedgerDisplayRefreshInternal (ld, xaccQueryGetSplits (ld->query));
 }
 
@@ -962,8 +960,8 @@ xaccDestroyLedgerDisplay (Account *account)
   xaccDestroyLedgerDisplayClass (account, REGISTER_SINGLE_CM_CLASS);
   xaccDestroyLedgerDisplayClass (account, REGISTER_SUBACCOUNT_CM_CLASS);
   xaccDestroyLedgerDisplayClass (account, REGISTER_GL_CM_CLASS);
-  // no TEMPLATE_CM_CLASS, because it doesn't correspond to any account
-  // FIXME: but there probably should be an analagous method
+  /* no TEMPLATE_CM_CLASS, because it doesn't correspond to any account
+   * FIXME: but there probably should be an analagous method */
 }
 
 void

@@ -1,3 +1,16 @@
+2001-06-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/MultiLedger.c: same as below
+
+	* src/SplitLedger.c: same as below. fix indentation. please
+	use the indentation style already present in the file.
+
+	* src/engine/gnc-freqspec-xml-v2.c: same as below
+
+	* src/engine/FreqSpec.[ch]: fix warnings. use standard C comments
+
+	* doc/sgml/C/xacc-about.sgml: update credits
+
 2001-06-17  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/engine/gnc-account-xml-v2.c (dom_tree_to_account): Added.

@@ -166,11 +166,11 @@ struct monthDesc monthInfo[] = {
 /** Local Prototypes *****/
 
 FreqSpec*
-xaccFreqSpecMalloc()
+xaccFreqSpecMalloc(void)
 {
         FreqSpec        *fs = g_new0(FreqSpec, 1);
         xaccFreqSpecInit( fs );
-        // FIXME:event
+        /* FIXME:event */
         gnc_engine_generate_event( &fs->guid, GNC_EVENT_CREATE );
         return fs;
 }
@@ -654,11 +654,11 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         char                *tmpStr;
         int                i;
 
-        // FIXME: fill in.
+        /* FIXME: fill in. */
         switch( xaccFreqSpecGetUIType( fs ) ) {
         case UIFREQ_ONCE:
                 tmpStr = g_new0( char, 25 );
-                // this is now a GDate.
+                /* this is now a GDate. */
                 g_date_strftime( tmpStr, 25,
                                  "%a, %b %e, %Y",
                                  &fs->s.once.date );
@@ -701,11 +701,11 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                         if ( tmpInt == -1 ) {
                                 tmpInt = tmpFS->s.weekly.interval_weeks;
                         }
-                        // put the first letter of the weekday name in
-                        // the appropriate position.
+                        /* put the first letter of the weekday name in
+                           the appropriate position.
 
-                        // FIXME: need the offset from the day-of-week
-                        // of the Julian epoch
+                           FIXME: need the offset from the day-of-week
+                           of the Julian epoch */
                         /*
                         tmpStr[tmpFS->specData.dateAnchor[1]] =
                                 weekDayNames[tmpFS->specData.dateAnchor[1]][0];
@@ -775,7 +775,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 g_string_sprintf( str, "Semi-Yearly" );
                 if ( fs->s.monthly.interval_months != 6 ) {
                         if ( (fs->s.monthly.interval_months % 6) != 0 ) {
-                                // FIXME:error
+                                /* FIXME:error */
                                 printf( "ERROR: FreqSpec Semi-Yearly month-interval "
                                         "is not a multiple of 6 [%d]",
                                         fs->s.monthly.interval_months );
@@ -791,7 +791,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 g_string_sprintf( str, "Yearly" );
                 if ( fs->s.monthly.interval_months != 12 ) {
                         if ( (fs->s.monthly.interval_months % 12) != 0 ) {
-                                // FIXME:error
+                                /* FIXME:error */
                                 printf( "ERROR: \"Yearly\" FreqSpec month-interval "
                                         "is not a multiple of 12 [%d]",
                                         fs->s.monthly.interval_months );
@@ -800,7 +800,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                                            fs->s.monthly.interval_months/12 );
                 }
                 g_string_sprintfa( str, ": %s/%u",
-                                   // FIXME: need the year-of-month value.
+                                   /* FIXME: need the year-of-month value. */
                                    monthInfo[/*fs->specData.dateAnchor[2]*/ 0].dshort,
                                    fs->s.monthly.day_of_month );
                 break;

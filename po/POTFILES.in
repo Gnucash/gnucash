@@ -16,9 +16,11 @@ src/gnome/dialog-commodities.c
 src/gnome/dialog-commodity.c
 src/gnome/dialog-filebox.c
 src/gnome/dialog-fincalc.c
+src/gnome/dialog-nextrun.c
 src/gnome/dialog-options.c
 src/gnome/dialog-price-editor.c
 src/gnome/dialog-progress.c
+src/gnome/dialog-scheduledxaction.c
 src/gnome/dialog-totd.c
 src/gnome/dialog-transfer.c
 src/gnome/dialog-utils.c
@@ -37,6 +39,7 @@ src/gnome/glade/progress_strings.c
 src/gnome/glade/qif_strings.c
 src/gnome/glade/register_strings.c
 src/gnome/glade/report_strings.c
+src/gnome/glade/sched-xact_strings.c
 src/gnome/glade/stocks_strings.c
 src/gnome/glade/tax_strings.c
 src/gnome/glade/transfer_strings.c
