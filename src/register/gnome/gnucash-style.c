@@ -268,6 +268,46 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
                         break;
                 }
+        else if (width > default_width && width == sheet->window_width)
+        {
+                GdkFont *font = GNUCASH_GRID(sheet->grid)->normal_font;
+
+                for (col = 0; col < num_cols; col++)
+                {
+                        CellBlockCell *cb_cell;
+                        const char *text;
+                        int sample_width;
+                        int old_width;
+
+                        cb_cell = gnc_cellblock_get_cell (cursor, 0, col);
+
+                        if (!cb_cell->expandable)
+                                continue;
+
+                        cd = g_table_index (cd_table, 0, col);
+
+                        old_width = cd->pixel_width;
+
+                        cd->pixel_width += (default_width - width);
+
+                        text = cb_cell->sample_text;
+                        if (text)
+                        {
+                                sample_width = gdk_string_width (font, text);
+                                sample_width += 2 * CELL_HPADDING;
+                        }
+                        else
+                                sample_width = 0;
+
+                        cd->pixel_width = MAX (cd->pixel_width, sample_width);
+
+                        width += cd->pixel_width - old_width;
+                        widths[col] = cd->pixel_width;
+
+                        break;
+                }
+        }
+                
 
         /* adjust widths to be consistent */
         for (i = 0; i < NUM_CURSOR_TYPES; i++)

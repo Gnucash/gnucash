@@ -937,10 +937,10 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             allocation->width == sheet->window_width)
                 return;
 
-        sheet->window_height = allocation->height;
-        sheet->window_width = allocation->width;
+        gnucash_sheet_styles_set_dimensions (sheet, allocation->width);
 
-        gnucash_sheet_styles_set_dimensions(sheet, allocation->width);
+        sheet->window_height = allocation->height;
+        sheet->window_width  = allocation->width;
 
         gnucash_cursor_configure (GNUCASH_CURSOR (sheet->cursor));
         gnucash_header_reconfigure (GNUCASH_HEADER(sheet->header_item));
