@@ -1,0 +1,341 @@
+<?xml version="1.0"?>
+<GTK-Interface>
+
+<project>
+  <name>Glade</name>
+  <program_name>glade</program_name>
+  <directory></directory>
+  <source_directory></source_directory>
+  <pixmaps_directory></pixmaps_directory>
+  <language>C</language>
+  <gnome_support>True</gnome_support>
+  <gettext_support>True</gettext_support>
+  <output_main_file>False</output_main_file>
+  <output_support_files>False</output_support_files>
+  <output_build_files>False</output_build_files>
+  <backup_source_files>False</backup_source_files>
+</project>
+
+<widget>
+  <class>GtkWindow</class>
+  <name>Merge Druid</name>
+  <height>560</height>
+  <title>Merge Account Hierarchy Setup</title>
+  <type>GTK_WINDOW_TOPLEVEL</type>
+  <position>GTK_WIN_POS_CENTER</position>
+  <modal>False</modal>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>True</allow_grow>
+  <auto_shrink>False</auto_shrink>
+
+  <widget>
+    <class>GnomeDruid</class>
+    <name>merge_druid</name>
+    <signal>
+      <name>cancel</name>
+      <handler>on_cancel</handler>
+      <last_modification_time>Sat, 16 Jun 2001 23:54:54 GMT</last_modification_time>
+    </signal>
+
+    <widget>
+      <class>GnomeDruidPageStart</class>
+      <name>start_page</name>
+      <signal>
+	<name>next</name>
+	<handler>on_start_page_next</handler>
+	<last_modification_time>Mon, 20 Sep 2004 11:46:19 GMT</last_modification_time>
+      </signal>
+      <title>Merge Account Hierarchy Setup</title>
+      <text>This druid will merge your new hierarchy into the currently open 
+GnuCash file.
+
+You will be asked how to proceed if some accounts clash with the
+account tree in your existing GnuCash data file.
+
+There is NO way to undo this operation! Please ensure you 
+have a backup of your file BEFORE continuing! You will be 
+given the option to cancel the merge at all stages until the 
+final merge operation. Once you click Finish, the new 
+account tree will be committed to your current data file.
+
+There is currently no currency or price support in the merge 
+operation, the new accounts will inherit any default currency
+ or you can change the currency after the merge is complete.
+
+Click 'Cancel'  if you do not wish to merge your new 
+account types now.</text>
+      <title_color>255,255,255</title_color>
+      <text_color>0,0,0</text_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>summary_page</name>
+      <title>Your new accounts are ready to merge</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox7</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label2</name>
+	  <label>The next screen will allow you to resolve
+any conflicts in merging your new account
+tree into your current GnuCash file.</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>qof_book_merge</name>
+      <signal>
+	<name>prepare</name>
+	<handler>on_qof_book_merge_prepare</handler>
+	<last_modification_time>Tue, 14 Sep 2004 10:06:26 GMT</last_modification_time>
+      </signal>
+      <signal>
+	<name>next</name>
+	<handler>on_qof_book_merge_next</handler>
+	<last_modification_time>Tue, 14 Sep 2004 14:19:07 GMT</last_modification_time>
+      </signal>
+      <title>Please resolve any conflicts in the merge</title>
+      <title_color>255,255,255</title_color>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox6</name>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox105</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox121</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>ResultsBox</name>
+	      <label>Number of reports still to be reconciled.</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkHBox</class>
+	      <name>hbox106</name>
+	      <homogeneous>False</homogeneous>
+	      <spacing>0</spacing>
+	      <child>
+		<padding>0</padding>
+		<expand>True</expand>
+		<fill>True</fill>
+	      </child>
+
+	      <widget>
+		<class>GtkScrolledWindow</class>
+		<name>scrolledwindow27</name>
+		<hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
+		<vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
+		<hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+		<vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+		<child>
+		  <padding>0</padding>
+		  <expand>True</expand>
+		  <fill>True</fill>
+		</child>
+
+		<widget>
+		  <class>GtkViewport</class>
+		  <name>viewport1</name>
+		  <border_width>5</border_width>
+		  <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+		  <widget>
+		    <class>GtkLabel</class>
+		    <name>OutPut</name>
+		    <label></label>
+		    <justify>GTK_JUSTIFY_LEFT</justify>
+		    <wrap>False</wrap>
+		    <xalign>0.5</xalign>
+		    <yalign>0.5</yalign>
+		    <xpad>0</xpad>
+		    <ypad>0</ypad>
+		    <focus_target>MergeUpdate</focus_target>
+		  </widget>
+		</widget>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>Static</name>
+	      <label>You have three choices for each collision.
+The import object can be allowed to overwrite the target - use this to update your existing book.
+The import object can be ignored - use this if the import is a duplicate of an object in the existing book.
+The import object can be created as a new object in the existing book.</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>0.5</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>MergeUpdate</name>
+	      <border_width>5</border_width>
+	      <tooltip>overwrite the original with the import data</tooltip>
+	      <can_focus>True</can_focus>
+	      <has_focus>True</has_focus>
+	      <signal>
+		<name>clicked</name>
+		<handler>on_MergeUpdate_clicked</handler>
+		<last_modification_time>Wed, 22 Sep 2004 09:42:48 GMT</last_modification_time>
+	      </signal>
+	      <label>1. Update your existing book with the import data</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>MergeDuplicate</name>
+	      <border_width>5</border_width>
+	      <tooltip>ignore the import, leave the original untouched</tooltip>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>clicked</name>
+		<handler>on_MergeDuplicate_clicked</handler>
+		<last_modification_time>Wed, 22 Sep 2004 09:43:50 GMT</last_modification_time>
+	      </signal>
+	      <label>2. Ignore the import data, leave original unchanged</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>MergeNew</name>
+	      <border_width>5</border_width>
+	      <tooltip>Add the import as a new object, leave original in place</tooltip>
+	      <can_focus>True</can_focus>
+	      <signal>
+		<name>clicked</name>
+		<handler>on_MergeNew_clicked</handler>
+		<last_modification_time>Wed, 22 Sep 2004 09:44:59 GMT</last_modification_time>
+	      </signal>
+	      <label>3.  Import the data as a NEW object</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageFinish</class>
+      <name>MergeDruidFinishPage</name>
+      <signal>
+	<name>finish</name>
+	<handler>on_finish</handler>
+	<last_modification_time>Sat, 16 Jun 2001 23:41:40 GMT</last_modification_time>
+      </signal>
+      <title>Commit Merged Account Hierachy to data file</title>
+      <text>Press `Finish' to merge your new accounts into the current GnuCash file.
+
+Press `Back' to review your selections.
+
+Press `Cancel' to close this dialog without creating any new accounts.
+
+REMEMBER: There is no way to undo this final operation!
+Make sure you have a backup before clicking Finish.</text>
+      <background_color>25,25,112</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+      <text_color>0,0,0</text_color>
+      <title_color>255,255,255</title_color>
+    </widget>
+  </widget>
+</widget>
+
+</GTK-Interface>

@@ -285,10 +285,14 @@ gboolean gncAddressRegister (void)
 {
   static QofParam params[] = {
 
-    { ADDRESS_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName, (QofSetterFunc)gncAddressSetName },
-    { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, (QofSetterFunc)gncAddressSetPhone },
-    { ADDRESS_FAX, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax, (QofSetterFunc)gncAddressSetFax },
-    { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, (QofSetterFunc)gncAddressSetEmail },
+    { ADDRESS_NAME, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName, 	(QofSetterFunc)gncAddressSetName },
+    { ADDRESS_ONE, 		QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr1, (QofSetterFunc)gncAddressSetAddr1 },
+    { ADDRESS_TWO, 		QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr2, (QofSetterFunc)gncAddressSetAddr2 },
+    { ADDRESS_THREE, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr3, (QofSetterFunc)gncAddressSetAddr3 },
+    { ADDRESS_FOUR, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr4, (QofSetterFunc)gncAddressSetAddr4 },
+    { ADDRESS_PHONE, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, (QofSetterFunc)gncAddressSetPhone },
+    { ADDRESS_FAX, 		QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax, 	(QofSetterFunc)gncAddressSetFax },
+    { ADDRESS_EMAIL, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, (QofSetterFunc)gncAddressSetEmail },
     { NULL },
   };
 

@@ -1,7 +1,11 @@
+#INCLUDES = /usr/include/glib-1.2 /usr/lib/glib/include
+
+qof_book_merge_lo_INCLUDES = -DG_LOG_DOMAIN=\"qof-book-merge\"
+
 SUBDIRS = . test-core test 
 PWD := $(shell pwd)
 
-pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la 
+pkglib_LTLIBRARIES = libgw-engine.la libgw-kvp.la libgncmod-engine.la
 
 AM_CFLAGS = \
 	-I${top_srcdir}/lib/libc \
@@ -44,6 +48,7 @@ libgncmod_engine_la_SOURCES = \
   messages.c \
   policy.c \
   qofbackend.c \
+  qof_book_merge.c \
   qofbook.c \
   qofclass.c \
   qofid.c \
@@ -51,7 +56,7 @@ libgncmod_engine_la_SOURCES = \
   qofobject.c \
   qofquery.c \
   qofquerycore.c \
-  qofsession.c
+  qofsession.c 
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -101,6 +106,7 @@ gncinclude_HEADERS = \
   qofbackend.h \
   qof-be-utils.h \
   qofbook.h \
+  qof_book_merge.h \
   qofclass.h \
   qofid.h \
   qofinstance.h \
@@ -195,6 +201,7 @@ endif
 	rm -f gnucash g-wrapped
 	ln -sf . gnucash 
 	ln -sf . g-wrapped 
+	ln -sf ${srcdir} qof
 if GNUCASH_SEPARATE_BUILDDIR
 	for X in ${SCM_FILE_LINKS} ; do \
 	  ln -sf ${srcdir}/$$X . ; \
@@ -227,6 +234,5 @@ BUILT_SOURCES = \
   gw-engine.scm gw-engine.c gw-engine.h \
   gw-kvp.scm gw-kvp.c gw-kvp.h 
 
-DISTCLEANFILES = gnucash g-wrapped .scm-links ${SCM_FILE_LINKS} \
+DISTCLEANFILES = gnucash g-wrapped qof .scm-links ${SCM_FILE_LINKS} \
                  gw-engine.html gw-kvp.html
-

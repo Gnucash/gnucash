@@ -76,7 +76,7 @@ gnc_price_create (QofBook *book)
   return p;
 }
 
-static void 
+static void
 gnc_price_destroy (GNCPrice *p)
 {
   ENTER(" ");
@@ -151,20 +151,20 @@ gnc_price_clone (GNCPrice* p, QofBook *book)
 
 /* ==================================================================== */
 
-void 
+void
 gnc_price_begin_edit (GNCPrice *p)
 {
   QOF_BEGIN_EDIT (&p->inst);
 }
 
-static inline void commit_err (QofInstance *inst, QofBackendError errcode) 
+static inline void commit_err (QofInstance *inst, QofBackendError errcode)
 {
   PERR ("Failed to commit: %d", errcode);
 }
 
 static inline void noop (QofInstance *inst) {}
 
-void 
+void
 gnc_price_commit_edit (GNCPrice *p)
 {
   QOF_COMMIT_EDIT_PART1 (&p->inst);
@@ -173,13 +173,13 @@ gnc_price_commit_edit (GNCPrice *p)
 
 /* ==================================================================== */
 
-void 
+void
 gnc_pricedb_begin_edit (GNCPriceDB *pdb)
 {
   QOF_BEGIN_EDIT (&pdb->inst);
 }
 
-void 
+void
 gnc_pricedb_commit_edit (GNCPriceDB *pdb)
 {
   QOF_COMMIT_EDIT_PART1 (&pdb->inst);
@@ -194,10 +194,10 @@ gnc_price_set_commodity(GNCPrice *p, gnc_commodity *c)
 {
   if(!p) return;
 
-  if(!gnc_commodity_equiv(p->commodity, c)) 
+  if(!gnc_commodity_equiv(p->commodity, c))
   {
-    /* Changing the commodity requires the hash table 
-     * position to be modified. The easiest way of doing 
+    /* Changing the commodity requires the hash table
+     * position to be modified. The easiest way of doing
      * this is to remove and reinsert. */
     gnc_price_ref (p);
     remove_price (p->db, p, TRUE);
@@ -216,10 +216,10 @@ gnc_price_set_currency(GNCPrice *p, gnc_commodity *c)
 {
   if(!p) return;
 
-  if(!gnc_commodity_equiv(p->currency, c)) 
+  if(!gnc_commodity_equiv(p->currency, c))
   {
-    /* Changing the currency requires the hash table 
-     * position to be modified. The easiest way of doing 
+    /* Changing the currency requires the hash table
+     * position to be modified. The easiest way of doing
      * this is to remove and reinsert. */
     gnc_price_ref (p);
     remove_price (p->db, p, TRUE);
@@ -236,10 +236,10 @@ void
 gnc_price_set_time(GNCPrice *p, Timespec t)
 {
   if(!p) return;
-  if(!timespec_equal(&(p->tmspec), &t)) 
+  if(!timespec_equal(&(p->tmspec), &t))
   {
-    /* Changing the datestamp requires the hash table 
-     * position to be modified. The easiest way of doing 
+    /* Changing the datestamp requires the hash table
+     * position to be modified. The easiest way of doing
      * this is to remove and reinsert. */
     gnc_price_ref (p);
     remove_price (p->db, p, FALSE);
@@ -256,7 +256,7 @@ void
 gnc_price_set_source(GNCPrice *p, const char *s)
 {
   if(!p) return;
-  if(safe_strcmp(p->source, s) != 0) 
+  if(safe_strcmp(p->source, s) != 0)
   {
     GCache *cache;
     char *tmp;
@@ -275,7 +275,7 @@ void
 gnc_price_set_type(GNCPrice *p, const char* type)
 {
   if(!p) return;
-  if(safe_strcmp(p->type, type) != 0) 
+  if(safe_strcmp(p->type, type) != 0)
   {
     GCache *cache;
     gchar *tmp;
@@ -294,7 +294,7 @@ void
 gnc_price_set_value(GNCPrice *p, gnc_numeric value)
 {
   if(!p) return;
-  if(!gnc_numeric_eq(p->value, value)) 
+  if(!gnc_numeric_eq(p->value, value))
   {
     gnc_price_begin_edit (p);
     p->value = value;
@@ -319,7 +319,7 @@ GNCPrice *
 gnc_price_lookup (const GUID *guid, QofBook *book)
 {
   QofCollection *col;
-  
+
   if (!guid || !book) return NULL;
   col = qof_book_get_collection (book, GNC_ID_PRICE);
   return (GNCPrice *) qof_collection_lookup_entity (col, guid);
@@ -465,7 +465,7 @@ gnc_price_list_remove(GList **prices, GNCPrice *p)
   GList *found_element;
 
   if(!prices || !p) return FALSE;
-  
+
   found_element = g_list_find(*prices, p);
   if(!found_element) return TRUE;
 
@@ -558,11 +558,11 @@ gnc_pricedb_create(QofBook * book)
   g_return_val_if_fail (book, NULL);
 
   /* There can only be one pricedb per book.  So if one exits already,
-   * then use that.  Warn user, they shouldn't be creating two ... 
+   * then use that.  Warn user, they shouldn't be creating two ...
    */
   col = qof_book_get_collection (book, GNC_ID_PRICEDB);
   result = qof_collection_get_data (col);
-  if (result) 
+  if (result)
   {
     PWARN ("A price database already exists for this book!");
     return result;
@@ -736,7 +736,7 @@ gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
 }
 
 /* ==================================================================== */
-/* The add_price() function is a utility that only manages the 
+/* The add_price() function is a utility that only manages the
  * dual hash table instertion */
 
 static gboolean
@@ -804,7 +804,7 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
   if (FALSE == add_price(db, p)) return FALSE;
 
   /* If we haven't been able to call the backend before, call it now */
-  if (TRUE == p->inst.dirty) 
+  if (TRUE == p->inst.dirty)
   {
     gnc_price_begin_edit(p);
     db->inst.dirty = TRUE;
@@ -986,8 +986,8 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
 }
 
 
-static void 
-hash_values_helper(gpointer key, gpointer value, gpointer data) 
+static void
+hash_values_helper(gpointer key, gpointer value, gpointer data)
 {
   GList ** l = data;
   *l = g_list_concat(*l, g_list_copy (value));
@@ -1313,7 +1313,7 @@ gnc_pricedb_lookup_nearest_in_time(GNCPriceDB *db,
       Timespec diff_next = timespec_diff(&next_t, &t);
       Timespec abs_current = timespec_abs(&diff_current);
       Timespec abs_next = timespec_abs(&diff_next);
-      
+
       if (timespec_cmp(&abs_current, &abs_next) <= 0) {
         result = current_price;
       } else {
@@ -1368,7 +1368,7 @@ lookup_nearest(gpointer key, gpointer val, gpointer user_data)
       Timespec diff_next = timespec_diff(&next_t, &t);
       Timespec abs_current = timespec_abs(&diff_current);
       Timespec abs_next = timespec_abs(&diff_next);
-      
+
       if (timespec_cmp(&abs_current, &abs_next) <= 0) {
         result = current_price;
       } else {
@@ -1488,10 +1488,10 @@ gnc_pricedb_convert_balance_latest_price(GNCPriceDB *pdb,
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              gnc_commodity_get_fraction (new_currency),
-                             GNC_HOW_RND_ROUND);      
+                             GNC_HOW_RND_ROUND);
   balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                              gnc_commodity_get_fraction (new_currency),
-                             GNC_HOW_RND_ROUND);      
+                             GNC_HOW_RND_ROUND);
 
   gnc_price_list_destroy(price_list);
   return balance;
@@ -1564,10 +1564,10 @@ gnc_pricedb_convert_balance_nearest_price(GNCPriceDB *pdb,
 
   balance = gnc_numeric_mul (balance, currency_price_value,
                              gnc_commodity_get_fraction (new_currency),
-                             GNC_HOW_RND_ROUND);      
+                             GNC_HOW_RND_ROUND);
   balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
                              gnc_commodity_get_fraction (new_currency),
-                             GNC_HOW_RND_ROUND);      
+                             GNC_HOW_RND_ROUND);
 
   gnc_price_list_destroy(price_list);
   return balance;
@@ -1612,7 +1612,7 @@ unstable_price_traversal(GNCPriceDB *db,
                        gpointer user_data)
 {
   GNCPriceDBForeachData foreach_data;
-  
+
   if(!db || !f) return FALSE;
   foreach_data.ok = TRUE;
   foreach_data.func = f;
@@ -1638,13 +1638,13 @@ compare_kvpairs_by_commodity_key(gconstpointer a, gconstpointer b)
   if(!a && !b) return 0;
   if(!a) return -1;
   if(!b) return 1;
-  
+
   ca = (gnc_commodity *) kvpa->key;
   cb = (gnc_commodity *) kvpb->key;
 
   cmp_result = safe_strcmp(gnc_commodity_get_namespace(ca),
                            gnc_commodity_get_namespace(cb));
-  
+
   if(cmp_result != 0) return cmp_result;
 
   return safe_strcmp(gnc_commodity_get_mnemonic(ca),
@@ -1659,7 +1659,7 @@ stable_price_traversal(GNCPriceDB *db,
   GSList *currency_hashes = NULL;
   gboolean ok = TRUE;
   GSList *i = NULL;
-  
+
   if(!db || !f) return FALSE;
 
   currency_hashes = g_hash_table_key_value_pairs(db->commodity_hash);
@@ -1843,13 +1843,13 @@ gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f)
 /* ==================================================================== */
 /* gncObject function implementation and registration */
 
-static void 
+static void
 pricedb_book_begin (QofBook *book)
 {
   gnc_pricedb_create(book);
 }
 
-static void 
+static void
 pricedb_book_end (QofBook *book)
 {
   /* ????? */
@@ -1870,11 +1870,11 @@ pricedb_mark_clean(QofCollection *col)
 /* ==================================================================== */
 /* a non-boolean foreach. Ugh */
 
-typedef struct 
+typedef struct
 {
   void (*func)(GNCPrice *p, gpointer user_data);
   gpointer user_data;
-} 
+}
 VoidGNCPriceDBForeachData;
 
 static void
@@ -1884,7 +1884,7 @@ void_pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
   GList *node = price_list;
   VoidGNCPriceDBForeachData *foreach_data = (VoidGNCPriceDBForeachData *) user_data;
 
-  while(node) 
+  while(node)
   {
     GNCPrice *p = (GNCPrice *) node->data;
     foreach_data->func(p, foreach_data->user_data);
@@ -1905,7 +1905,7 @@ void_unstable_price_traversal(GNCPriceDB *db,
                        gpointer user_data)
 {
   VoidGNCPriceDBForeachData foreach_data;
-  
+
   if(!db || !f) return;
   foreach_data.func = f;
   foreach_data.user_data = user_data;
@@ -1915,11 +1915,11 @@ void_unstable_price_traversal(GNCPriceDB *db,
                        &foreach_data);
 }
 
-static void 
+static void
 pricedb_foreach(QofCollection *col, QofEntityForeachCB cb, gpointer data)
 {
   GNCPriceDB *db = gnc_collection_get_pricedb(col);
-  void_unstable_price_traversal(db, 
+  void_unstable_price_traversal(db,
                        (void (*)(GNCPrice *, gpointer)) cb,
                        data);
 }
@@ -1939,7 +1939,7 @@ pricedb_printable(gpointer obj)
 
   val = gnc_numeric_to_string (pr->value);
   da = qof_print_date (pr->tmspec.tv_sec);
-  
+
   commodity = gnc_price_get_commodity(pr);
   currency = gnc_price_get_currency(pr);
 
@@ -1952,7 +1952,7 @@ pricedb_printable(gpointer obj)
   return buff;
 }
 
-static QofObject pricedb_object_def = 
+static QofObject pricedb_object_def =
 {
   interface_version: QOF_OBJECT_VERSION,
   e_type:            GNC_ID_PRICE,
@@ -1967,7 +1967,7 @@ static QofObject pricedb_object_def =
   version_cmp:       NULL,
 };
 
-gboolean 
+gboolean
 gnc_pricedb_register (void)
 {
   static QofParam params[] = {

@@ -33,15 +33,35 @@
 
 #include "qofbook.h"
 #include "qofid.h"
+#include "qofobject.h"
+#include "qofinstance.h"
+#include "qofid-p.h"
 
 #define GNC_ADDRESS_MODULE_NAME        "gncAddress"
 
+/** \struct GncAddress
+
+@param	QofBook *	book;
+@param	QofEntity * parent;
+@param	gboolean	dirty;
+@param	char *	name;
+@param	char *	addr1;
+@param	char *	addr2;
+@param	char *	addr3;
+@param	char *	addr4;
+@param	char *	phone;
+@param	char *	fax;
+@param	char *	email;
+*/
 typedef struct _gncAddress GncAddress;
 
 /** @name Create/Destroy functions */
 /** @{ */
+/** create a new address */
 GncAddress * gncAddressCreate (QofBook *book, QofEntity *parent);
+/** destroy an address */
 void gncAddressDestroy (GncAddress *addr);
+
 /** @} */
 
 /** @name Set functions */
@@ -73,9 +93,18 @@ const char * gncAddressGetEmail (const GncAddress *addr);
 
 gboolean gncAddressIsDirty (const GncAddress *addr);
 
+/** \brief compare two addresses 
+
+\return 0 if identical, -1 if a is empty or less than b 
+and +1 if a is more than b or if b is empty. 
+*/
 int gncAddressCompare (const GncAddress *a, const GncAddress *b);
 
 #define ADDRESS_NAME    "name"
+#define ADDRESS_ONE		"number"
+#define ADDRESS_TWO		"street"
+#define ADDRESS_THREE   "locality"
+#define ADDRESS_FOUR	"city"
 #define ADDRESS_PHONE   "phone"
 #define ADDRESS_FAX     "fax"
 #define ADDRESS_EMAIL   "email"

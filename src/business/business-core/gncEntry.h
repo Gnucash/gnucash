@@ -100,6 +100,7 @@ void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table);
 void gncEntrySetInvDiscount (GncEntry *entry, gnc_numeric discount);
 void gncEntrySetInvDiscountType (GncEntry *entry, GncAmountType type);
 void gncEntrySetInvDiscountHow (GncEntry *entry, GncDiscountHow how);
+
 /** @} */
 
 /** @name Vendor Bills (and Employee Expenses) */
@@ -208,21 +209,32 @@ void gncEntryBeginEdit (GncEntry *entry);
 void gncEntryCommitEdit (GncEntry *entry);
 int gncEntryCompare (GncEntry *a, GncEntry *b);
 
-#define ENTRY_DATE	"date"
-#define ENTRY_DATE_ENTERED "date-entered"
-#define ENTRY_DESC	"desc"
-#define ENTRY_ACTION	"action"
-#define ENTRY_NOTES	"notes"
-#define ENTRY_QTY	"qty"
+#define ENTRY_DATE			"date"
+#define ENTRY_DATE_ENTERED 	"date-entered"
+#define ENTRY_DESC			"desc"
+#define ENTRY_ACTION		"action"
+#define ENTRY_NOTES			"notes"
+#define ENTRY_QTY			"qty"
 
-#define ENTRY_IPRICE	"iprice"
-#define ENTRY_BPRICE	"bprice"
-#define ENTRY_BILLABLE	"billable?"
-#define ENTRY_BILLTO	"bill-to"
+#define ENTRY_IPRICE		"iprice"
+#define ENTRY_BPRICE		"bprice"
+#define ENTRY_BILLABLE		"billable?"
+#define ENTRY_BILLTO		"bill-to"
 
-#define ENTRY_ORDER	"order"
-#define ENTRY_INVOICE	"invoice"
-#define ENTRY_BILL	"bill"
+#define ENTRY_ORDER			"order"
+#define ENTRY_INVOICE		"invoice"
+#define ENTRY_BILL			"bill"
+
+#define ENTRY_INV_DISC_TYPE		"discount-type"
+#define ENTRY_INV_DISC_HOW		"discount-method"
+
+#define ENTRY_INV_TAXABLE	"invoice-taxable"
+#define ENTRY_BILL_TAXABLE	"bill-taxable"
+#define ENTRY_INV_TAX_INC	"invoice-tax-included"
+#define ENTRY_BILL_TAX_INC	"bill-tax-included"
+#define ENTRY_INV_DISCOUNT	"invoice-discount"
+#define ENTRY_BILL_PAY_TYPE "bill-payment-type"
+
 
 /* deprecated functions, should be removed */
 #define gncEntryGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))

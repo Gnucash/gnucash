@@ -32,6 +32,7 @@
 #include "dialog-new-user.h"
 #include "dialog-utils.h"
 #include "druid-hierarchy.h"
+#include "druid-merge.h"
 #include "druid-utils.h"
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
@@ -44,7 +45,11 @@
 #include "io-example-account.h"
 #include "top-level.h"
 
+#include "gnc-trace.h"
+static short module = MOD_IMPORT; 
+
 static GtkWidget *hierarchy_window = NULL;
+GtkWidget *qof_book_merge_window = NULL;
 static AccountGroup *our_final_group = NULL;
 
 
@@ -907,120 +912,139 @@ on_finish (GnomeDruidPage  *gnomedruidpage,
            gpointer         arg1,
            gpointer         user_data)
 {
-  gnc_suspend_gui_refresh ();
+	gnc_suspend_gui_refresh ();
+	
+	if (our_final_group)
+	xaccGroupForEachAccount (our_final_group, starting_balance_helper,
+							 NULL, TRUE);
 
-  if (our_final_group)
-    xaccGroupForEachAccount (our_final_group, starting_balance_helper,
-                             NULL, TRUE);
-
-  delete_hierarchy_window ();
-
-  gncp_new_user_finish ();
-
-  gnc_set_first_startup (FALSE);
-
-  if (our_final_group)
-    xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
-
-  gnc_resume_gui_refresh ();
+	ENTER (" ");
+	qof_book_merge_window = gtk_object_get_data (GTK_OBJECT (hierarchy_window), "Merge Druid");
+	if(qof_book_merge_window) {
+		DEBUG ("qof_book_merge_window found");
+		gtk_widget_show(qof_book_merge_window);
+		delete_hierarchy_window ();
+		gnc_resume_gui_refresh ();
+		LEAVE (" ");
+		return;
+	}
+	delete_hierarchy_window ();
+	
+	gncp_new_user_finish ();
+	
+	gnc_set_first_startup (FALSE);
+	
+	if (our_final_group)
+	xaccGroupConcatGroup (gnc_get_current_group (), our_final_group);
+	
+	gnc_resume_gui_refresh ();
+	LEAVE (" ");
 }
 
 static GtkWidget *
 gnc_create_hierarchy_druid (void)
 {
-  GtkWidget *balance_edit;
-  GtkWidget *dialog;
-  GtkWidget *druid;
-  GtkWidget *clist;
-  GtkWidget *box;
-  GHashTable *hash;
-  GladeXML *xml;
+	GtkWidget *balance_edit;
+	GtkWidget *dialog;
+	GtkWidget *druid;
+	GtkWidget *clist;
+	GtkWidget *box;
+	GHashTable *hash;
+	GladeXML *xml;
+	
+	xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
+	
+	glade_xml_signal_connect
+	(xml, "on_choose_currency_prepare",
+		 GTK_SIGNAL_FUNC (on_choose_currency_prepare));
+	
+	glade_xml_signal_connect
+	(xml, "on_choose_account_types_prepare",
+		 GTK_SIGNAL_FUNC (on_choose_account_types_prepare));
+	
+	glade_xml_signal_connect
+	(xml, "on_account_types_list_select_row",
+		 GTK_SIGNAL_FUNC (on_account_types_list_select_row));
+	
+	glade_xml_signal_connect
+	(xml, "on_account_types_list_unselect_row",
+		 GTK_SIGNAL_FUNC (on_account_types_list_unselect_row));
+	
+	glade_xml_signal_connect
+	(xml, "on_final_account_prepare",
+		 GTK_SIGNAL_FUNC (on_final_account_prepare));
+	
+	glade_xml_signal_connect
+	(xml, "on_final_account_tree_select_row",
+		 GTK_SIGNAL_FUNC (on_final_account_tree_select_row));
+	
+	glade_xml_signal_connect
+	(xml, "on_final_account_tree_unselect_row",
+		 GTK_SIGNAL_FUNC (on_final_account_tree_unselect_row));
+	
+	glade_xml_signal_connect
+	(xml, "on_final_account_tree_placeholder_toggled",
+		 GTK_SIGNAL_FUNC (on_final_account_tree_placeholder_toggled));
+	
+	glade_xml_signal_connect
+	(xml, "on_final_account_next",
+		 GTK_SIGNAL_FUNC (on_final_account_next));
+	
+	glade_xml_signal_connect
+	(xml, "select_all_clicked", GTK_SIGNAL_FUNC (select_all_clicked));
+	
+	glade_xml_signal_connect
+	(xml, "clear_all_clicked", GTK_SIGNAL_FUNC (clear_all_clicked));
+	
+	glade_xml_signal_connect (xml, "on_finish", GTK_SIGNAL_FUNC (on_finish));
+	
+	glade_xml_signal_connect (xml, "on_cancel", GTK_SIGNAL_FUNC (on_cancel));
+	
+	dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
+	gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
+	
+	druid = glade_xml_get_widget (xml, "hierarchy_druid");
+	gnc_druid_set_colors (GNOME_DRUID (druid));
+	
+	balance_edit = gnc_amount_edit_new ();
+	gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (balance_edit), TRUE);
+	gtk_widget_show (balance_edit);
+	
+	gtk_signal_connect (GTK_OBJECT (balance_edit), "amount_changed",
+					  GTK_SIGNAL_FUNC(on_balance_changed), NULL);
+	
+	clist = glade_xml_get_widget (xml, "account_types_clist");
+	gtk_clist_column_titles_passive (GTK_CLIST (clist));
+	
+	box = glade_xml_get_widget (xml, "start_balance_box");
+	gtk_box_pack_start (GTK_BOX (box), balance_edit, TRUE, TRUE, 0);
+	
+	gtk_object_set_data (GTK_OBJECT(dialog), "balance_editor", balance_edit);
+	
+	hash = g_hash_table_new (g_str_hash, g_str_equal);
+	
+	gtk_object_set_data (GTK_OBJECT(dialog), "balance_hash", hash);
+	
+	gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
+					  GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);
+	
+	return dialog;
+}
 
-  xml = gnc_glade_xml_new ("account.glade", "Hierarchy Druid");
-
-  glade_xml_signal_connect
-    (xml, "on_choose_currency_prepare",
-     GTK_SIGNAL_FUNC (on_choose_currency_prepare));
-
-  glade_xml_signal_connect
-    (xml, "on_choose_account_types_prepare",
-     GTK_SIGNAL_FUNC (on_choose_account_types_prepare));
-
-  glade_xml_signal_connect
-    (xml, "on_account_types_list_select_row",
-     GTK_SIGNAL_FUNC (on_account_types_list_select_row));
-
-  glade_xml_signal_connect
-    (xml, "on_account_types_list_unselect_row",
-     GTK_SIGNAL_FUNC (on_account_types_list_unselect_row));
-
-  glade_xml_signal_connect
-    (xml, "on_final_account_prepare",
-     GTK_SIGNAL_FUNC (on_final_account_prepare));
-
-  glade_xml_signal_connect
-    (xml, "on_final_account_tree_select_row",
-     GTK_SIGNAL_FUNC (on_final_account_tree_select_row));
-
-  glade_xml_signal_connect
-    (xml, "on_final_account_tree_unselect_row",
-     GTK_SIGNAL_FUNC (on_final_account_tree_unselect_row));
-
-  glade_xml_signal_connect
-    (xml, "on_final_account_tree_placeholder_toggled",
-     GTK_SIGNAL_FUNC (on_final_account_tree_placeholder_toggled));
-
-  glade_xml_signal_connect
-    (xml, "on_final_account_next",
-     GTK_SIGNAL_FUNC (on_final_account_next));
-
-  glade_xml_signal_connect
-    (xml, "select_all_clicked", GTK_SIGNAL_FUNC (select_all_clicked));
-
-  glade_xml_signal_connect
-    (xml, "clear_all_clicked", GTK_SIGNAL_FUNC (clear_all_clicked));
-
-  glade_xml_signal_connect (xml, "on_finish", GTK_SIGNAL_FUNC (on_finish));
-
-  glade_xml_signal_connect (xml, "on_cancel", GTK_SIGNAL_FUNC (on_cancel));
-
-  dialog = glade_xml_get_widget (xml, "Hierarchy Druid");
-  gnome_window_icon_set_from_default (GTK_WINDOW (dialog));
-
-  druid = glade_xml_get_widget (xml, "hierarchy_druid");
-  gnc_druid_set_colors (GNOME_DRUID (druid));
-
-  balance_edit = gnc_amount_edit_new ();
-  gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (balance_edit), TRUE);
-  gtk_widget_show (balance_edit);
-
-  gtk_signal_connect (GTK_OBJECT (balance_edit), "amount_changed",
-                      GTK_SIGNAL_FUNC(on_balance_changed), NULL);
-
-  clist = glade_xml_get_widget (xml, "account_types_clist");
-  gtk_clist_column_titles_passive (GTK_CLIST (clist));
-
-  box = glade_xml_get_widget (xml, "start_balance_box");
-  gtk_box_pack_start (GTK_BOX (box), balance_edit, TRUE, TRUE, 0);
-
-  gtk_object_set_data (GTK_OBJECT(dialog), "balance_editor", balance_edit);
-
-  hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-  gtk_object_set_data (GTK_OBJECT(dialog), "balance_hash", hash);
-
-  gtk_signal_connect (GTK_OBJECT(dialog), "destroy",
-                      GTK_SIGNAL_FUNC(gnc_hierarchy_destroy_cb), NULL);
-
-  return dialog;
+GtkWidget*
+gnc_ui_hierarchy_running (void)
+{
+	if (hierarchy_window) return hierarchy_window;
+	return NULL;
 }
 
 void
 gnc_ui_hierarchy_druid (void)
 {
-  if (hierarchy_window) return;
+	if (hierarchy_window) return;
 
-  hierarchy_window = gnc_create_hierarchy_druid ();
+	hierarchy_window = gnc_create_hierarchy_druid ();
 
-  return;
+//	qof_book_merge_window = qof_book_merge_running();
+	return;
 }

@@ -44,6 +44,7 @@
 #include "dialog-utils.h"
 #include "druid-acct-period.h"
 #include "druid-loan.h"
+#include "druid-merge.h"
 #include "gfec.h"
 #include "global-options.h"
 #include "gnc-engine.h"
@@ -76,7 +77,6 @@ static short module = MOD_GUI;
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
 static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
-
 
 /**
  * gnc_main_window_get_mdi_child
@@ -746,6 +746,12 @@ gnc_main_window_exit_cb (GtkWidget *widget, gpointer data)
 }
 
 static void
+gnc_main_window_file_hierarchy_merge_cb(GtkWidget *w, gpointer data)
+{
+	gnc_ui_qof_book_merge_druid();
+}
+
+static void
 gnc_main_window_file_new_account_tree_cb(GtkWidget * w, gpointer data)
 {
   gnc_main_window_open_accounts(FALSE);
@@ -789,6 +795,13 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
       gnc_main_window_file_new_account_tree_cb, NULL, NULL, 
       GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
     },    
+	{
+		GNOME_APP_UI_ITEM,
+		N_("Add New Account Hierarchy"),
+		N_("Extend the current book by merging with new account type categories"),
+		gnc_main_window_file_hierarchy_merge_cb, NULL, NULL,
+		GNOME_APP_PIXMAP_NONE, NULL, 0, 0, NULL
+	},
     GNOMEUIINFO_SEPARATOR,
     GNOMEUIINFO_MENU_OPEN_ITEM(gnc_main_window_file_open_cb, NULL),
     {

@@ -56,7 +56,7 @@
 #include "gncJobP.h"
 #include "gncTaxTableP.h"
 
-struct _gncCustomer 
+struct _gncCustomer
 {
   QofInstance     inst;
 
@@ -270,13 +270,6 @@ void gncCustomerSetTerms (GncCustomer *cust, GncBillTerm *terms)
   gncCustomerCommitEdit (cust);
 }
 
-void gncCustomerSetTaxIncluded_q (GncCustomer *cust, gint taxincl)
-{
-	GncTaxIncluded g = taxincl;
-	if(!g) return;
-	gncCustomerSetTaxIncluded(cust, g);
-}
-
 void gncCustomerSetTaxIncluded (GncCustomer *cust, GncTaxIncluded taxincl)
 {
   if (!cust) return;
@@ -451,11 +444,6 @@ GncBillTerm * gncCustomerGetTerms (GncCustomer *cust)
   return cust->terms;
 }
 
-gint gncCustomerGetTaxIncluded_q (GncCustomer *cust)
-{
-	return (GncTaxIncluded)gncCustomerGetTaxIncluded(cust);
-}
-
 GncTaxIncluded gncCustomerGetTaxIncluded (GncCustomer *cust)
 {
   if (!cust) return GNC_TAXINCLUDED_USEGLOBAL;
@@ -543,7 +531,7 @@ static const char * _gncCustomerPrintable (gpointer item)
   return c->name;
 }
 
-static QofObject gncCustomerDesc = 
+static QofObject gncCustomerDesc =
 {
   interface_version:  QOF_OBJECT_VERSION,
   e_type:             _GNC_MOD_NAME,

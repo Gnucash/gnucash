@@ -39,6 +39,7 @@ libgncgnome_la_SOURCES = \
   dialog-scheduledxaction.c \
   druid-acct-period.c \
   druid-hierarchy.c \
+  druid-merge.c \
   druid-loan.c \
   druid-stock-split.c \
   gnc-split-reg.c \
@@ -76,6 +77,7 @@ noinst_HEADERS = \
   dialog-scheduledxaction.h \
   druid-acct-period.h \
   druid-hierarchy.h \
+  druid-merge.h \
   druid-loan.h \
   druid-stock-split.h \
   gnc-network.h \
