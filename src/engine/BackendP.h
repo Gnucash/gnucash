@@ -5,7 +5,7 @@
  * FUNCTION:
  * Pseudo-object defining how the engine can interact with different
  * back-ends (which may be SQL databases, or network interfaces to 
- * remote gnucash servers.  In theory, file-io should be a type of 
+ * remote GnuCash servers.  In theory, file-io should be a type of 
  * backend).
  * 
  * The callbacks will be called at the appropriate times during 
@@ -35,19 +35,27 @@ typedef struct _backend Backend;
  *    the actual network connection.
  *
  *    The 'ignore_lock' argument indicates whether the single-user
- *    lock on the backend should be cleared.  The typical gui sequence
- *    leading to this is: (1) gui attempts to open the backend
+ *    lock on the backend should be cleared.  The typical GUI sequence
+ *    leading to this is: (1) GUI attempts to open the backend
  *    by calling this routine with FALSE==ignore_lock.  (2) If backend  
  *    error'ed BACKEND_LOCK, then GUI asks user what to do. (3) if user 
  *    answers 'break & enter' then this routine is called again with
- *    TURE==ignore_lock.
+ *    TRUE==ignore_lock.
+ *
+ *    The 'create_if_nonexistent' argument indicates whether this
+ *    routine should create a new 'database', if it doesn't already
+ *    exist. For example, for a file-backend, this would create the
+ *    file, if it didn't already exist.  For an SQL backend, this
+ *    would create the database (the schema) if it didn't already 
+ *    exist.  This flag is used to implement the 'SaveAs' GUI, where
+ *    the user requests to save data to a new backend.
  *
  * The book_load() routine should return at least an account tree,
  *    and all currencies.  It does not have to return any transactions
  *    whatsoever, as these are obtained at a later stage when a user
  *    opens a register, resulting in a query being sent to the backend.
  *
- *    (Its OK to send over transactinos at this point, but one should 
+ *    (Its OK to send over transactions at this point, but one should 
  *    be careful of the network load; also, its possible that whatever 
  *    is sent is not what the user wanted anyway, which is why its 
  *    better to wait for the query).
@@ -55,19 +63,19 @@ typedef struct _backend Backend;
  * The trans_commit_edit() routine takes two transaction arguments:
  *    the first is the proposed new transaction; the second is the
  *    'original' transaction. The second argument is here for 
- *    convencience; it had better be substantially equivalent to
+ *    convenience; it had better be substantially equivalent to
  *    the argument for the trans_begin_edit() callback.  (It doesn't
  *    have to be identical, it can be a clone).
  *
- * The run_query() callback takes a gnucash query object. 
- *    For an sql backend,  the contents of the query object need to 
- *    be turned into a corresponsing sql query statement, and sent 
+ * The run_query() callback takes a GnuCash query object. 
+ *    For an SQL backend,  the contents of the query object need to 
+ *    be turned into a corresponding SQL query statement, and sent 
  *    to the database for evaluation. The database will return a 
  *    set of splits and transactions, and this callback needs
- *    to poke these into the account-group heirarchy held by the 
+ *    to poke these into the account-group hierarchy held by the 
  *    query object. 
  *
- *    For a network-communications backend, esentially the same is 
+ *    For a network-communications backend, essentially the same is 
  *    done, except that this routine would convert the query to wire 
  *    protocol, get an answer from the remote server, and push that
  *    into the account-group object.
@@ -75,8 +83,8 @@ typedef struct _backend Backend;
  *    Note a peculiar design decision we've used here. The query
  *    callback has returned a list of splits; these could be returned
  *    directly to the caller. They are not.  By poking them into the
- *    existing account heirarchy, we are essentially building a local
- *    cache of the split data.  This will allow the gnucash client to 
+ *    existing account hierarchy, we are essentially building a local
+ *    cache of the split data.  This will allow the GnuCash client to 
  *    continue functioning even when disconnected from the server:
  *    this is because it will have its local cache of data to work from.
  *
@@ -94,14 +102,15 @@ typedef struct _backend Backend;
  *    needed to update an existing transaction.  It might pull new 
  *    currencies (??))
  *    
- * The last_err member indicates the last error that occured.
+ * The last_err member indicates the last error that occurred.
  *    It should probably be implemented as an array (actually,
  *    a stack) of all the errors that have occurred.
  */
 
 struct _backend 
 {
-  void (*book_begin) (GNCBook *, const char *book_id, int ignore_lock);
+  void (*book_begin) (GNCBook *, const char *book_id, 
+                      gboolean ignore_lock, gboolean create_if_nonexistent);
   AccountGroup * (*book_load) (Backend *);
   void (*book_end) (Backend *);
   int (*account_begin_edit) (Backend *, Account *);

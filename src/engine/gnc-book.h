@@ -67,26 +67,33 @@ void      gnc_book_destroy (GNCBook *book);
 
 /* The gnc_book_begin () method begins a new book. It takes as an argument
  *    the book id.  The book id must be a string in the form of a URI/URL.
- *    In the current implementation, only the file URI type is fully 
- *    supported, (with others in various stages of prototyping).
- *    A file URI is of the form 
+ *    In the current implementation, the following URL's are supported
+ *    -- File URI of the form 
  *       "file:/home/somewhere/somedir/file.xac"
- *    The path part must be a valid path.  The file-part must be a valid
- *    xacc/gnucash-format file. Paths may be relative or absolute. If the
- *    path is relative; that is, if the argument is
- *       "file:somefile.xac"
- *    then a sequence of search paths are checked for a file of this name.
+ *       The path part must be a valid path.  The file-part must be 
+ *       a valid old-style-xacc or new-style-gnucash-format file. Paths
+ *       may be relative or absolute. If the path is relative; that is, 
+ *       if the argument is  "file:somefile.xac" then a sequence of 
+ *       search paths are checked for a file of this name.
+ *
+ *    -- Postgres URI of the form
+ *       "postgres://hostname.com/dbname"
+ *       See the sql subdirectory for more info.
  *
  *    The 'ignore_lock' argument, if set to TRUE, will cause this routine
  *    to ignore any file locks that it finds.  If set to FALSE, then
  *    file locks will be tested and obeyed.
  *
  *    If the file exists, can be opened and read, and a lock can be obtained
- *    then a lock will be obtained and the function returns TRUE. Otherwise
- *    the function returns FALSE.
+ *    then a lock will be obtained and the function returns TRUE. 
+ *
+ *    If the file/database doesn't exist, and the create_if_nonexistent
+ *    flag is set to TRUE, then the database is created.
+ *
+ *    Otherwise the function returns FALSE.
  */
 gboolean gnc_book_begin (GNCBook *book, const char * book_id,
-                             gboolean ignore_lock);
+                         gboolean ignore_lock, gboolean create_if_nonexistent);
 
 
 /* The gnc_book_load() method loads the data associated with the book.

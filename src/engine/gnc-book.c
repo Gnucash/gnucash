@@ -63,7 +63,7 @@ struct _gnc_book
    */
   char *book_id;
 
-  /* if book_begin failed, this records the failure reason 
+  /* if any book subroutine failed, this records the failure reason 
    * (file not found, etc).
    * This is a 'stack' that is one deep.
    * FIXME: This is a hack.  I'm trying to move us away from static
@@ -301,7 +301,8 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
 /* ============================================================== */
 
 gboolean
-gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
+gnc_book_begin (GNCBook *book, const char * book_id, 
+                gboolean ignore_lock, gboolean create_if_nonexistent)
 {
   int rc;
 
@@ -394,7 +395,9 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
         return FALSE;
       }
 
-      // book->backend = pgendNew ();
+      /* For the postgres backend, do the equivalent of 
+       * the statically loaded
+       * book->backend = pgendNew (); */
       pg_new = dlsym (dll_handle, "pgendNew");
       dll_err = dlerror();
       if (dll_err) 
@@ -416,7 +419,9 @@ gnc_book_begin (GNCBook *book, const char * book_id, gboolean ignore_lock)
     {
       GNCBackendError err;
 
-      (book->backend->book_begin)(book, book->book_id, ignore_lock);
+      (book->backend->book_begin)(book, book->book_id, ignore_lock,
+                                  create_if_nonexistent);
+
       err = xaccBackendGetError(book->backend);
       if (ERR_BACKEND_NO_ERR != err)
       {
