@@ -18,6 +18,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Aktiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Sachanlagen</act:name>
@@ -28,6 +34,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Sachanlagen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -50,6 +62,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Passiva</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Kredite</act:name>
@@ -60,6 +78,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Kredite</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">60d5e7e410dc5fdf91cf2ecbb5b7245c</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -82,6 +106,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Aufwendungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
 </gnc:account>
 <gnc:account version="2.0.0">
   <act:name>Versicherungen</act:name>
@@ -92,6 +122,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Versicherungen</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">
@@ -114,6 +150,12 @@
     <cmdty:id>USD</cmdty:id>
   </act:commodity>
   <act:description>Ausgaben f&#252;r Wohnung/Haus</act:description>
+  <act:slots>
+    <slot>
+      <slot:key>placeholder</slot:key>
+      <slot:value type="string">true</slot:value>
+    </slot>
+  </act:slots>
   <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
 </gnc:account>
 <gnc:account version="2.0.0">

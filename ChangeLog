@@ -1,5 +1,8 @@
 2004-04-10  Christian Stimming  <stimming@tuhh.de>
 
+	* accounts/de_DE/acctchrt_*: Updated placeholder settings in
+	account templates by Joerg Sommer <joerg@alea.gnuu.de>
+
 	* po/cs.po: Updated Czech translation by Miloslav Trmac
 	<mitr@volny.cz>
 
