@@ -67,7 +67,7 @@ static Widget baln_widget;
  * the enumerated types in Account.h */
 char *account_type_name[] = 
        { "Bank","Cash","Asset","Credit Card",
-         "Liability","Portfolio","Mutual Fund",
+         "Liability","Stock","Mutual Fund",
          "Income", "Expense", "Equity" };
 
 /* Pixel values are used to color the balance field text 

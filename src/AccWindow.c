@@ -543,6 +543,9 @@ void
 closeEditAccWindow( Widget mw, XtPointer cd, XtPointer cb )
   {
   EditAccWindow *editAccData = (EditAccWindow *)cd;
+
+printf ("close edit acc window %x %s \n", editAccData,
+editAccData->notes);
   
   _free(editAccData);
   DEBUG("close EditAccWindow");
@@ -562,7 +565,10 @@ notesCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   AccWindow *accData = (AccWindow *)cd;
   
+  /* hack alert -- isn't this a memory leak ????? */
+printf ("orig notes are %x %s \n", accData, accData->notes);
   accData->notes = textBox( toplevel, "Notes", accData->notes, True );
+printf ("new notes are %s \n", accData->notes);
   }
 
 /********************************************************************\
@@ -663,7 +669,7 @@ editCB( Widget mw, XtPointer cd, XtPointer cb )
     }
   
   XtFree(editAccData->account->description);
-  editAccData->account->description = name;
+  editAccData->account->description = desc;
   
   refreshMainWindow();
   }
