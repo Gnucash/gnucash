@@ -96,9 +96,18 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
         AC_DEFINE(HAVE_XPM,0), -L $x_libraries -lX11) 
 
+# Don't build the xmhtml source if user already has it installed...
+# this is ugly, there must be a nicer way of setting this up ...
 AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
-        AC_DEFINE(HAVE_XMHTML,1) X_LIBS="-lXmHTML $X_LIBS",
-        AC_DEFINE(HAVE_XMHTML,0), -lXm -L $x_libraries -lXext -lX11) 
+        X_LIBS="-lXmHTML $X_LIBS",
+        X_LIBS="-lXmHTML $X_LIBS"
+        XMHTML_TARGET=default 
+        XMHTML_INC=/lib/XmHTML-1.1.0/src 
+        LIBS="-L $srcdir/lib/XmHTML-1.1.0 $LIBS" , 
+        -lXm -L $x_libraries -lXext -lX11) 
+
+AC_SUBST(XMHTML_TARGET)
+AC_SUBST(XMHTML_INC)
 
 # Set GUILELIBS according to the set of libraries needed to link
 # with guile.
