@@ -231,7 +231,7 @@ gnc_column_view_edit_options(SCM options, SCM view) {
     gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
     GladeXML *xml;
 
-    r->optwin = gnc_options_dialog_new(TRUE, NULL);
+    r->optwin = gnc_options_dialog_new(NULL);
 
     xml = gnc_glade_xml_new ("report.glade", "view_contents_hbox");
 

@@ -1109,7 +1109,8 @@ gnc_acct_tree_window_create_menu(GNCAcctTreeWin * main_info,
 static void
 gnc_acct_tree_window_select_cb(GNCMainWinAccountTree *tree, 
                                Account *account, 
-                               GNCAcctTreeWin * win) {
+                               GNCAcctTreeWin * win)
+{
   gboolean sensitive;
   
   account = gnc_mainwin_account_tree_get_current_account(tree);
@@ -1121,7 +1122,8 @@ gnc_acct_tree_window_select_cb(GNCMainWinAccountTree *tree,
 
 
 Account * 
-gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * win) {
+gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * win)
+{
   GtkTreeSelection *selection;
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -1138,7 +1140,8 @@ gnc_acct_tree_window_get_current_account(GNCAcctTreeWin * win) {
 
 
 static void
-gnc_acct_tree_window_options_new(GNCAcctTreeWin * win) {
+gnc_acct_tree_window_options_new(GNCAcctTreeWin * win)
+{
   SCM func = scm_c_eval_string("gnc:make-new-acct-tree-window");
   SCM opts_and_id = scm_call_0(func);
   
@@ -1149,7 +1152,8 @@ gnc_acct_tree_window_options_new(GNCAcctTreeWin * win) {
 }
 
 void
-gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
+gnc_acct_tree_window_destroy(GNCAcctTreeWin * win)
+{
   SCM  free_tree = scm_c_eval_string("gnc:free-acct-tree-window");
   gnc_unregister_option_change_callback_id
     (win->euro_change_callback_id);
@@ -1199,7 +1203,8 @@ gnc_acct_tree_button_press_cb (GtkWidget *widget,
 }
 
 GNCAcctTreeWin *
-gnc_acct_tree_window_new(const gchar * url)  {
+gnc_acct_tree_window_new(const gchar * url)
+{
   GNCAcctTreeWin * treewin = g_new0(GNCAcctTreeWin, 1);
   EggMenuMerge *merge;
   EggActionGroup *action_group;
@@ -1325,17 +1330,20 @@ gnc_acct_tree_window_new(const gchar * url)  {
 } 
 
 GtkWidget * 
-gnc_acct_tree_window_get_widget(GNCAcctTreeWin * win) {
+gnc_acct_tree_window_get_widget(GNCAcctTreeWin * win)
+{
   return GTK_WIDGET (win->account_tree_view);
 }
 
 SCM 
-gnc_acct_tree_window_get_options(GNCAcctTreeWin * w) {
+gnc_acct_tree_window_get_options(GNCAcctTreeWin * w)
+{
   return w->options;
 }
 
 int
-gnc_acct_tree_window_get_id(GNCAcctTreeWin * w) {
+gnc_acct_tree_window_get_id(GNCAcctTreeWin * w)
+{
   return w->options_id;
 }
 
@@ -1345,7 +1353,8 @@ gnc_acct_tree_window_get_id(GNCAcctTreeWin * w) {
 
 static void
 gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
-                            gpointer user_data) {
+                            gpointer user_data)
+{
   GNCAcctTreeWin * win = user_data;
   if(!win) return;
 
@@ -1371,7 +1380,8 @@ gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
 
 static void
 gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
-                            gpointer user_data) {
+                            gpointer user_data)
+{
   GNCAcctTreeWin * win = user_data; 
   gnc_options_dialog_destroy(win->editor_dialog);
   win->editor_dialog = NULL;
@@ -1379,7 +1389,8 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 
 
 void
-gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
+gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data)
+{
   GNCAcctTreeWin * win = data;
 
   if(win->editor_dialog) {
@@ -1387,7 +1398,7 @@ gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
                      (gnc_options_dialog_widget(win->editor_dialog)));
   }
   else {
-    win->editor_dialog = gnc_options_dialog_new(TRUE, NULL);
+    win->editor_dialog = gnc_options_dialog_new(NULL);
     gnc_build_options_dialog_contents(win->editor_dialog, 
                                       win->odb);
     

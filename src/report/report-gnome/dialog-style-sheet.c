@@ -93,7 +93,8 @@ row_data_destroy_cb(gpointer data) {
 
 
 static void
-gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
+gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected)
+{
   SCM stylesheets = scm_c_eval_string("(gnc:get-html-style-sheets)");
   SCM get_options = scm_c_eval_string("gnc:html-style-sheet-options");
   SCM get_name    = scm_c_eval_string("gnc:html-style-sheet-name");
@@ -109,7 +110,7 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
     char           * c_name;
 
     /* make the options DB and dialog, but don't parent it yet */ 
-    ssinfo->odialog = gnc_options_dialog_new(FALSE, NULL);
+    ssinfo->odialog = gnc_options_dialog_new(NULL);
     ssinfo->odb     = gnc_option_db_new(scm_options);
     ssinfo->stylesheet = SCM_CAR(stylesheets);
 
@@ -147,7 +148,8 @@ gnc_style_sheet_dialog_fill(StyleSheetDialog * ss, SCM selected) {
 
 
 static void
-gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data) {
+gnc_style_sheet_new_cb(GtkWidget * w, gpointer user_data)
+{
   StyleSheetDialog * ssd = user_data;
   SCM              make_ss   = scm_c_eval_string("gnc:make-html-style-sheet");
   SCM              templates = scm_c_eval_string("(gnc:get-html-templates)");
@@ -223,7 +225,8 @@ gnc_style_sheet_dialog_close_cb(GtkWidget * w, GdkEventAny * ev,
 }
 
 static StyleSheetDialog *
-gnc_style_sheet_dialog_create() {
+gnc_style_sheet_dialog_create()
+{
   StyleSheetDialog  * ss = g_new0(StyleSheetDialog, 1);
   GtkWidget         * new_button=NULL;
   GtkWidget         * delete_button=NULL;

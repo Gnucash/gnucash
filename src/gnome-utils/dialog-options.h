@@ -36,7 +36,8 @@ typedef struct gnc_option_win GNCOptionWin;
 
 typedef void (* GNCOptionWinCallback)(GNCOptionWin *, gpointer data);
 
-GNCOptionWin * gnc_options_dialog_new(gboolean make_toplevel, gchar *title);
+GNCOptionWin * gnc_options_dialog_new(gchar *title);
+GNCOptionWin * gnc_options_dialog_new_w_dialog(gchar *title, GtkWidget *dialog);
 void gnc_options_dialog_destroy(GNCOptionWin * win);
 void gnc_options_register_stocks (void);
 
@@ -44,6 +45,8 @@ GtkWidget * gnc_options_dialog_widget(GNCOptionWin * win);
 GtkWidget * gnc_options_dialog_notebook(GNCOptionWin * win);
 
 void gnc_options_dialog_changed (GNCOptionWin *win);
+void gnc_option_changed_widget_cb(GtkWidget *widget, GNCOption *option);
+void gnc_option_changed_option_cb(GtkWidget *dummy, GNCOption *option);
 
 void gnc_options_dialog_set_apply_cb(GNCOptionWin * win,
                                      GNCOptionWinCallback thunk,
@@ -99,11 +102,7 @@ typedef struct gnc_option_def {
 
 
 /* Register a new option type in the UI */
-void gnc_options_ui_initialize (void);
 void gnc_options_ui_register_option (GNCOptionDef_t *option);
 GNCOptionDef_t * gnc_options_ui_get_option (const char *option_name);
-
-/* For option definitions outside the main module only */
-void gnc_options_dialog_changed_internal (GtkWidget *widget);
 
 #endif /* OPTIONS_DIALOG_H */

@@ -98,7 +98,7 @@
    'gnc:option-dialog-new
    '<gnc:OptionWin*>
    "gnc_options_dialog_new"
-   '((<gw:bool> make-toplevel) ((<gw:mchars> caller-owned) title))
+   '(((<gw:mchars> caller-owned) title))
    "Create a new option dialog")
 
   (gw:wrap-function
