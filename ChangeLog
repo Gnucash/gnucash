@@ -1,3 +1,9 @@
+2004-03-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c, dialog-hbcitrans.h,
+	glade/hbci.glade, gnc-hbci-transfer.c: Transfer template management
+	GUI added by Bernd Wagner <F.J.Bernd.Wagner@t-online.de>
+
 2004-03-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-load.c: make the code a

@@ -1,6 +1,8 @@
 /********************************************************************\
  * dialog-hbcitrans.h -- dialog for HBCI transaction data           *
  * Copyright (C) 2002 Christian Stimming                            *
+ * Copyright (C) 2004 Bernd Wagner (changes for                     *
+ *                     online transaction templates)                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -68,6 +70,8 @@ void gnc_hbci_dialog_delete(HBCITransDialog *td);
 GtkWidget *gnc_hbci_dialog_get_parent(const HBCITransDialog *td);
 /** Return the GList of transaction templates. */
 GList *gnc_hbci_dialog_get_templ(const HBCITransDialog *td);
+/** Return the change status of the template list */
+gboolean gnc_hbci_dialog_get_templ_changed(const HBCITransDialog *td) ;
 /** Return the HBCI_Transaction. */
 const HBCI_Transaction *gnc_hbci_dialog_get_htrans(const HBCITransDialog *td);
 /** Return the gnucash Transaction. */
