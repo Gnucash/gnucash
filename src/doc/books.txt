@@ -316,5 +316,13 @@ Open Issues / ToDo
 *) book closing GUI needs to save/restore period end date to KVP on 
    open book.
 
+*) Possibly neat idea: 
+   Book closing, as currently implemented in the GUI, is driven entirely
+   by the date-posted.  There is no (planned) interface to allow you to
+   exclude some certain transactions from a particular closing (although
+   it would be 'easy' to add this: right be fore I close a book, I have a
+   list of transactions which can be added to/removed from).
+
+
 =========================== end of file ========================
 
