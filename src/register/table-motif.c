@@ -447,6 +447,22 @@ traverseCB (Widget mw, XtPointer cd, XtPointer cb)
       }
    }
 
+   /* Don't do a thing unless we verify that the row and column
+    * are in bounds. Ordinarily, they are always in bounds, except 
+    * in an unusual, arguably buggy situation: If the table has 
+    * been recently resized smaller, then the Xbae code might report
+    * a traverse out of a cell that was in the larger array, but not
+    * in the smaller array.  This is probably an Xbae bug. It 
+    * will core dump array access.
+    */
+   if ((row >= table->num_phys_rows) || 
+       (col >= table->num_phys_cols)) {
+
+      table->prev_phys_traverse_row = cbs->next_row;
+      table->prev_phys_traverse_col = cbs->next_column;
+      return;
+   }
+
    xaccVerifyCursorPosition (table, row, col);
 
    /* compute the cell location */
