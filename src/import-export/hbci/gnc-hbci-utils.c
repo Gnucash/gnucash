@@ -460,6 +460,7 @@ static void *gnc_list_string_cb (const char *string, void *user_data)
   gchar **res = user_data;
   gchar *tmp1, *tmp2;
 
+  if (!string) return NULL;
   tmp1 = g_strdup (string);
   g_strstrip (tmp1);
 
@@ -487,17 +488,21 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
   char *h_descr = NULL;
   char *othername = NULL;
   char *g_descr;
+  const GWEN_STRINGLIST *h_purpose = AB_Transaction_GetPurpose (h_trans);
+  const GWEN_STRINGLIST *h_remotename = AB_Transaction_GetRemoteName (h_trans);
 
   /* Don't use list_string_concat_delim here since we need to
      g_strstrip every single element of the string list, which is
      only done in our callback gnc_list_string_cb. The separator is
      also set there. */
-  GWEN_StringList_ForEach (AB_Transaction_GetPurpose (h_trans), 
-			   &gnc_list_string_cb,
-			   &h_descr);
-  GWEN_StringList_ForEach (AB_Transaction_GetRemoteName (h_trans), 
-			   &gnc_list_string_cb,
-			   &othername);
+  if (h_purpose)
+    GWEN_StringList_ForEach (h_purpose,
+			     &gnc_list_string_cb,
+			     &h_descr);
+  if (h_remotename)
+    GWEN_StringList_ForEach (h_remotename,
+			     &gnc_list_string_cb,
+			     &othername);
   /*DEBUG("HBCI Description '%s'", h_descr);*/
 
   if (othername && (strlen (othername) > 0))
@@ -524,10 +529,14 @@ char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans)
    * "STANDING ORDER", "UEBERWEISUNGSGUTSCHRIFT", etc.  */
   /*   char *h_transactionText =  */
   /*     g_strdup (AB_TRANSACTION_transactionText (h_trans)); */
+  const char *h_remoteAccountNumber = 
+    AB_Transaction_GetRemoteAccountNumber (h_trans);
+  const char *h_remoteBankCode = 
+    AB_Transaction_GetRemoteBankCode (h_trans);
   char *h_otherAccountId =
-    g_strdup (AB_Transaction_GetRemoteAccountNumber (h_trans));
+    g_strdup (h_remoteAccountNumber ? h_remoteAccountNumber : _("unknown"));
   char *h_otherBankCode =
-    g_strdup (AB_Transaction_GetRemoteBankCode (h_trans));
+    g_strdup (h_remoteBankCode ? h_remoteBankCode : _("unknown"));
   char *g_memo;
 
   /*   g_strstrip (h_transactionText); */
