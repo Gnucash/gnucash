@@ -55,9 +55,6 @@ GType       gnc_plugin_file_history_get_type (void);
 
 GncPlugin  *gnc_plugin_file_history_new      (void);
 
-void        gnc_history_add_file 	     (const char *newfile);
-const char *gnc_history_get_last 	     (void);
-
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_FILE_HISTORY_H */
