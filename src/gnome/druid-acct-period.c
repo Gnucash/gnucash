@@ -362,25 +362,18 @@ ap_validate_menu (GnomeDruidPage *druidpage,
   /* Pull info from widget, push into freq spec */
   gnc_frequency_save_state (info->period_menu, info->period, &info->closing_date);
 
-  if (0 >= g_date_compare(&info->prev_closing_date, &info->closing_date));
+  if (0 <= g_date_compare(&info->prev_closing_date, &info->closing_date))
   {
     const char *msg = _("You must select closing date that\n"
                         "is greater than the closing date\n"
                         "of the previous book.");
     gnc_error_dialog_parented (GTK_WINDOW (info->window), msg);
- PINFO ("duuude prevdate=%d/%d/%d  date = %d/%d/%d ", 
-                   g_date_month(&info->prev_closing_date),
-                      g_date_day(&info->prev_closing_date),
-                      g_date_year(&info->prev_closing_date),
-                   g_date_month(&info->closing_date),
-                      g_date_day(&info->closing_date),
-                      g_date_year(&info->closing_date));
     return TRUE;
   }
 
   g_date_clear (&date_now, 1);
   g_date_set_time (&date_now, time(0));
-  if (0 > g_date_compare(&date_now, &info->closing_date));
+  if (0 < g_date_compare(&info->closing_date, &date_now))
   {
     const char *msg = _("You must select closing date\n"
                         "that is not in the future.");
@@ -411,18 +404,36 @@ ap_close_period (GnomeDruidPage *druidpage,
                 gpointer user_data)
 {
   AcctPeriodInfo *info = user_data;
-  // QofBook *closed_book = NULL, *current_book;
-  QofBook *current_book;
+  QofBook *closed_book = NULL, *current_book;
+  const char *btitle, *bnotes;
+  Timespec closing_date;
+  KvpFrame *book_frame;
+
   ENTER("info=%p", info);
 
   current_book = gnc_get_current_book ();
 
-// #define REALLY_DO_CLOSE_BOOKS
+  btitle = gtk_entry_get_text (info->book_title);
+  bnotes = xxxgtk_text_get_text (info->book_notes);
+printf ("duuude tit=%s no=%s\n", btitle, bnotes);
+
+  timespecFromTime_t (&closing_date,
+          gnc_timet_get_day_end_gdate (&info->closing_date));
+
+#define REALLY_DO_CLOSE_BOOKS
 #ifdef REALLY_DO_CLOSE_BOOKS
   /* Close the books ! */
   gnc_suspend_gui_refresh ();
 
-  closed_book = gnc_book_close_period (current_book, 
+/* XXX we need to split the pricedb to, 
+ * and lots too
+ * and handle file storage which is not currently handled.
+ */
+  closed_book = gnc_book_close_period (current_book, closing_date, NULL, btitle);
+
+  book_frame = qof_book_get_slots(closed_book);
+  kvp_frame_set_str (book_frame, "/book/title", btitle);
+  kvp_frame_set_str (book_frame, "/book/notes", bnotes);
 
   gnc_resume_gui_refresh ();
 #endif /* REALLY_DO_CLOSE_BOOKS */
