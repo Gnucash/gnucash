@@ -107,5 +107,5 @@ gw-app-utils.scm gw-app-utils.c gw-app-utils.h: .scm-links gw-app-utils-spec.scm
 	  (gw:generate-wrapset \"gw-app-utils\")"
 
 BUILT_SOURCES += gw-app-utils.scm gw-app-utils.c gw-app-utils.h
-CLEANFILES = gw-app-utils.scm gw-app-utils.c gw-app-utils.h gw-app-utils.html \
+CLEANFILES = ${BUILT_SOURCES} gw-app-utils.html \
               gnucash g-wrapped .scm-links

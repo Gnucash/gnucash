@@ -155,5 +155,5 @@ gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h: .scm-links gw-gnome-utils-
 	  (gw:generate-wrapset \"gw-gnome-utils\")"
 
 BUILT_SOURCES += gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h
-CLEANFILES = gw-gnome-utils.scm gw-gnome-utils.c gw-gnome-utils.h \
+CLEANFILES = ${BUILT_SOURCES} \
              gw-gnome-utils.html gnucash g-wrapped .scm-links
