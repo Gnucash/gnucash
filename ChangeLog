@@ -1,4 +1,19 @@
+2003-01-02  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/window-help.c (helpWindow): Correctly pass on
+	the label when first opening a help window.
+
+	* src/gnome-utils/gnc-html.c (gnc_html_load_to_stream): Delay
+	jumping to a label until after the help window has been created on
+	the screen. Without this gtk-html computes the wrong scroll offset
+	for the window.
+
+	* src/scm/price-quotes.scm: Remove the "checking sources" message.
+
 2003-01-01  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/window-help.c (helpWindow): Correctly open a
+	help window when the initial URL contains a label component to it.
 
 	* src/gnome/window-reconcile.c: Make the reconciliation window
 	respect the 'include subaccount' flag any time it opens a

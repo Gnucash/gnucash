@@ -800,6 +800,13 @@ gnc_help_window_show_help(gnc_help_window * help, const char * location,
 void
 helpWindow(GtkWidget * parent, const char * title, const char * htmlfile)
 {
-  gnc_help_window * help = gnc_help_window_new();
-  gnc_help_window_show_help(help, htmlfile, NULL);
+  gnc_help_window * help;
+  char * location = NULL;
+  char * label = NULL;
+
+  help = gnc_help_window_new();
+  gnc_html_parse_url(NULL, htmlfile, &location, &label);
+  gnc_help_window_show_help(help, location, label);
+  g_free(location);
+  g_free(label);
 }
