@@ -57,24 +57,49 @@ GNCBook * gnc_book_partition (GNCBook *, Query *);
 static void
 reparent (Transaction *trans, GNCBook *book)
 {
+   Transaction *newtrans;
    GList *node;
 
-   xaccTransBeginEdit (trans);
+   if (!trans) return;
 
-   for (node = trans->splits; node; node = node->next)
+   newtrans = xaccDupeTransaction (trans);
+
+   /* Utterly wipe out the transaction from the old book. */
+   xaccTransBeginEdit (trans);
+   xaccTransDestroy (trans);
+   xaccTransCommitEdit (trans);
+
+   /* fiddle the transaction into place in the new book */
+   xaccStoreEntity(book->entity_table, newtrans, &newtrans->guid, GNC_ID_TRANS);
+   newtrans->book = book;
+
+   xaccTransBeginEdit (newtrans);
+   for (node = newtrans->splits; node; node = node->next)
    {
       Account *twin;
       Split *s = node->data;
 
+      /* move the split into the new book ... */
+      s->book = book;
+      xaccStoreEntity(book->entity_table, s, &s->guid, GNC_ID_SPLIT);
+
+      /* find the twin account, and re-parent to that. */
       twin = xaccAccountLookupTwin (s->acc, book);
-      xaccSplitSetAccount
+      if (!twin)
+      {
+         PERR ("near-fatal: twin account not found");
+      }
+
+      /* force to null, so remove doesn't occur */
+      xaccSplitSetAccount (s, NULL);  
+      xaccAccountInsertSplit (twin, s);
+      xaccAccountRecomputeBalance (twin); /* XXX is this really needed ??? */
+      twin->balance_dirty = TRUE;
+      twin->sort_dirty = TRUE;
    }
 
-   xaccRemoveEntity(trans->book->entity_table, &trans->guid);
-
-   xaccStoreEntity(book->entity_table, trans, &trans->guid, GNC_ID_TRANS);
-   trans->book = book;
-   xaccTransCommitEdit (trans);
+   xaccTransCommitEdit (newtrans);
+   gnc_engine_generate_event (&newtrans->guid, GNC_EVENT_CREATE);
 
 }
 
@@ -98,6 +123,8 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
    split_list = xaccQueryGetSplitsUniqueTrans (query);
 
    /* and start moving transactions over */
+   xaccAccountGroupBeginEdit (partition_book->topgroup);
+   xaccAccountGroupBeginEdit (existing_book->topgroup);
    for (snode = split_list; snode; snode=snode->next)
    {
       GList *tnode;
@@ -105,6 +132,8 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
       Transaction *trans = s->parent;
 
    }
+   xaccAccountGroupCommitEdit (existing_book->topgroup);
+   xaccAccountGroupCommitEdit (partition_book->topgroup);
 
    return partition_book;
 }
