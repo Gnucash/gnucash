@@ -504,6 +504,8 @@ gnc_job_search (GncJob *start, GncOwner *owner, GNCBook *book)
   if (params == NULL) {
     params = gnc_search_param_prepend (params, _("Owner's Name"), NULL, type,
 				       JOB_OWNER, OWNER_NAME, NULL);
+    params = gnc_search_param_prepend (params, _("Only Active?"), NULL, type,
+				       JOB_ACTIVE, NULL);
     params = gnc_search_param_prepend (params, _("Billing ID"), NULL, type,
 				       JOB_ID, NULL);
     params = gnc_search_param_prepend (params, _("Job Number"), NULL, type,
