@@ -1,5 +1,10 @@
 2001-10-22  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/window-main.c (gnc_ui_mainWindow_nextrun_cb):
+	Removed obsolete dialog.
+
+2001-10-22  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/gnome/Makefile.am: Removed obsolete dialog-nextrun.{c,h}
 
 	* src/gnome/window-main.c (gnc_main_window_create_menus): Added

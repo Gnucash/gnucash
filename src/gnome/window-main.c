@@ -36,7 +36,6 @@
 #include "dialog-account.h"
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
-#include "dialog-nextrun.h"
 #include "dialog-options.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-sxsincelast.h"
@@ -460,12 +459,6 @@ static void
 gnc_ui_mainWindow_scheduled_xaction_cb(GtkWidget *widget, gpointer data)
 {
   gnc_ui_scheduled_xaction_dialog_create();
-}
-
-static void
-gnc_ui_mainWindow_nextrun_cb (GtkWidget *widget, gpointer data)
-{
-  gnc_ui_nextrun_dialog_create();
 }
 
 static void
