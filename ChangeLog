@@ -6,6 +6,19 @@
 	* src/gnome-utils/gnc-date-format.c: ignore empty "custom" formats.
 	* src/gnome-utils/gnc-query-list.c: add a test for NULL.
 
+	* src/app-utils/app-utils/scm: export new dateformat option symbols
+	* src/app-utils/option-util.[ch]: create dateformat option utility functions
+	* src/app-utils/options.scm: create a dateformat option
+	* src/engine/date.[ch]: create APIs to handle date-format types.
+	  - conversions of date-format to/from strings
+	  - move the month format enum to here
+	  - conversion of month format to/from strings
+	* src/gnome/top-level.c: move date-format string conversion from here
+	* src/gnome-utils/dialog-options.c: implement a date-format options
+	  that uses the gnc-date-format widget.
+	* src/gnome-utils/gnc-date-format.h: remove month format (to date.h)
+	Initial fix for #99574
+
 2003-06-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*.c: Remove old unused code.

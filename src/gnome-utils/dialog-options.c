@@ -44,6 +44,7 @@
 #include "messages.h"
 #include "option-util.h"
 #include "guile-mappings.h"
+#include "gnc-date-format.h"
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -2160,6 +2161,23 @@ gnc_option_set_ui_widget_radiobutton (GNCOption *option, GtkBox *page_box,
   return value;
 }
 
+static GtkWidget *
+gnc_option_set_ui_widget_dateformat (GNCOption *option, GtkBox *page_box,
+				     GtkTooltips *tooltips,
+				     char *name, char *documentation,
+				     /* Return values */
+				     GtkWidget **enclosing, gboolean *packed)
+{
+  *enclosing = gnc_date_format_new_with_label(name);
+  gnc_option_set_widget (option, *enclosing);
+
+  gnc_option_set_ui_value(option, FALSE);
+  gtk_signal_connect(GTK_OBJECT(*enclosing), "format_changed",
+		     GTK_SIGNAL_FUNC(gnc_date_option_changed_cb), option);
+  gtk_widget_show_all(*enclosing);
+  return *enclosing;
+}
+
 /* SET VALUE */
 
 static gboolean
@@ -2539,6 +2557,31 @@ gnc_option_set_ui_value_radiobutton (GNCOption *option, gboolean use_default,
   }
 }
 
+static gboolean
+gnc_option_set_ui_value_dateformat (GNCOption *option, gboolean use_default,
+				    GtkWidget *widget, SCM value)
+{
+  GNCDateFormat * gdf = GNC_DATE_FORMAT(widget);
+  DateFormat format;
+  GNCDateMonthFormat months;
+  gboolean years;
+  char *custom;
+
+  if (gnc_dateformat_option_value_parse(value, &format, &months, &years, &custom))
+    return TRUE;
+
+  gnc_date_format_set_format(gdf, format);
+  gnc_date_format_set_months(gdf, months);
+  gnc_date_format_set_years(gdf, years);
+  gnc_date_format_set_custom(gdf, custom);
+  gnc_date_format_refresh(gdf);
+
+  if (custom)
+    free(custom);
+
+  return FALSE;
+}
+
 /* GET VALUE */
 
 static SCM
@@ -2784,6 +2827,23 @@ gnc_option_get_ui_value_radiobutton (GNCOption *option, GtkWidget *widget)
   return (gnc_option_permissible_value(option, index));
 }
 
+static SCM
+gnc_option_get_ui_value_dateformat (GNCOption *option, GtkWidget *widget)
+{
+  GNCDateFormat *gdf = GNC_DATE_FORMAT(widget);
+  DateFormat format;
+  GNCDateMonthFormat months;
+  gboolean years;
+  const char* custom;
+
+  format = gnc_date_format_get_format(gdf);
+  months = gnc_date_format_get_months(gdf);
+  years = gnc_date_format_get_years(gdf);
+  custom = gnc_date_format_get_custom(gdf);
+
+  return (gnc_dateformat_option_set_value(format, months, years, custom));
+}
+
 /* INITIALIZATION */
 
 static void gnc_options_initialize_options (void)
@@ -2819,6 +2879,8 @@ static void gnc_options_initialize_options (void)
       gnc_option_set_ui_value_pixmap, gnc_option_get_ui_value_pixmap },
     { "radiobutton", gnc_option_set_ui_widget_radiobutton,
       gnc_option_set_ui_value_radiobutton, gnc_option_get_ui_value_radiobutton },
+    { "dateformat", gnc_option_set_ui_widget_dateformat,
+      gnc_option_set_ui_value_dateformat, gnc_option_get_ui_value_dateformat },
     { NULL, NULL, NULL, NULL }
   };
   int i;

@@ -61,6 +61,28 @@ typedef enum
 #define MAX_DATE_LENGTH 11
 
 
+/**
+ * This is how to format the month, as a number, an abbreviated string,
+ * or the full name.
+ */
+typedef enum {
+  GNCDATE_MONTH_NUMBER,
+  GNCDATE_MONTH_ABBREV,
+  GNCDATE_MONTH_NAME
+} GNCDateMonthFormat;
+
+
+/* The string->value versions return 0 on success and 1 on failure */
+const char* gnc_date_dateformat_to_string(DateFormat format);
+gboolean gnc_date_string_to_dateformat(const char* format_string,
+				       DateFormat *format);
+
+
+const char* gnc_date_monthformat_to_string(GNCDateMonthFormat format);
+gboolean gnc_date_string_to_monthformat(const char *format_string,
+					GNCDateMonthFormat *format);
+
+
 /** Datatypes *******************************************************/
 
 /** struct timespec64 is just like the unix 'struct timespec' except 

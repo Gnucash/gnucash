@@ -577,34 +577,11 @@ gnc_configure_date_format (void)
 
   DateFormat df;
 
-  if( safe_strcmp(format_code, "us") == 0)
-  {
-    df = DATE_FORMAT_US;
-  }
-
-  else if( safe_strcmp(format_code, "uk") == 0)
-  {
-    df = DATE_FORMAT_UK;
-  }
-
-  else if( safe_strcmp(format_code, "ce") == 0)
-  {
-    df = DATE_FORMAT_CE;
-  }
-
-  else if( safe_strcmp(format_code, "iso") == 0)
-  {
-    df = DATE_FORMAT_ISO;
-  }
-
-  else if( safe_strcmp(format_code, "locale") == 0)
-  {
-    df = DATE_FORMAT_LOCALE;
-  }
-
-  else
+  if (gnc_date_string_to_dateformat(format_code, &df))
   {
     PERR("Incorrect date format code");
+    if (format_code != NULL)
+      free(format_code);
     return;
   }
 

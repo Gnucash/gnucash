@@ -68,6 +68,87 @@ static DateFormat prevDateFormat = DATE_FORMAT_LOCALE;
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_ENGINE;
 
+/********************************************************************\
+\********************************************************************/
+
+const char*
+gnc_date_dateformat_to_string(DateFormat format)
+{
+  switch (format) {
+  case DATE_FORMAT_US:
+    return "us";
+  case DATE_FORMAT_UK:
+    return "uk";
+  case DATE_FORMAT_CE:
+    return "ce";
+  case DATE_FORMAT_ISO:
+    return "iso";
+  case DATE_FORMAT_LOCALE:
+    return "locale";
+  case DATE_FORMAT_CUSTOM:
+    return "custom";
+  default:
+    return NULL;    
+  }
+}
+
+gboolean
+gnc_date_string_to_dateformat(const char* fmt_str, DateFormat *format)
+{
+  if (!fmt_str)
+    return TRUE;
+
+  if (!strcmp(fmt_str, "us"))
+    *format = DATE_FORMAT_US;
+  else if (!strcmp(fmt_str, "uk"))
+    *format = DATE_FORMAT_UK;
+  else if (!strcmp(fmt_str, "ce"))
+    *format = DATE_FORMAT_CE;
+  else if (!strcmp(fmt_str, "iso"))
+    *format = DATE_FORMAT_ISO;
+  else if (!strcmp(fmt_str, "locale"))
+    *format = DATE_FORMAT_LOCALE;
+  else if (!strcmp(fmt_str, "custom"))
+    *format = DATE_FORMAT_CUSTOM;
+  else
+    return TRUE;
+
+  return FALSE;
+}
+
+
+const char*
+gnc_date_monthformat_to_string(GNCDateMonthFormat format)
+{
+  switch (format) {
+  case GNCDATE_MONTH_NUMBER:
+    return "number";
+  case GNCDATE_MONTH_ABBREV:
+    return "abbrev";
+  case GNCDATE_MONTH_NAME:
+    return "name";
+  default:
+    return NULL;
+  }
+}
+
+gboolean
+gnc_date_string_to_monthformat(const char *fmt_str, GNCDateMonthFormat *format)
+{
+  if (!fmt_str)
+    return TRUE;
+
+  if (!strcmp(fmt_str, "number"))
+    *format = GNCDATE_MONTH_NUMBER;
+  else if (!strcmp(fmt_str, "abbrev"))
+    *format = GNCDATE_MONTH_ABBREV;
+  else if (!strcmp(fmt_str, "name"))
+    *format = GNCDATE_MONTH_NAME;
+  else
+    return TRUE;
+
+  return FALSE;
+}
 
 /********************************************************************\
 \********************************************************************/

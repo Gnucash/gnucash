@@ -254,6 +254,13 @@ void gnc_option_db_set_option_selectable_by_name(SCM guile_options,
                                                  const char *name,
                                                  gboolean selectable);
 
+gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
+					   GNCDateMonthFormat *months,
+					   gboolean *years, char **custom);
+SCM gnc_dateformat_option_set_value(DateFormat format, GNCDateMonthFormat months,
+				    gboolean years, const char *custom);
+
+
 /* private */
 void gncp_option_db_register_option(GNCOptionDBHandle handle,
                                     SCM guile_option);

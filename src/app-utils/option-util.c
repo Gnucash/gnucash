@@ -2688,3 +2688,112 @@ gnc_option_db_set_option_selectable_by_name(SCM guile_option,
 
   gnc_option_set_selectable (option, selectable);
 }
+
+/* the value is a list of:
+ * format(symbol), month(symbol), include-years(bool), custom-string(string)
+ */
+
+gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
+					   GNCDateMonthFormat *months,
+					   gboolean *years, char **custom)
+{
+  SCM val;
+  char *str;
+
+  if (!SCM_LISTP(value) || SCM_NULLP(value))
+    return TRUE;
+
+  do {
+
+    /* Parse the format */
+    val = SCM_CAR(value);
+    value = SCM_CDR(value);
+    if (!SCM_SYMBOLP(val))
+      break;
+    str = gh_symbol2newstr (val, NULL);
+    if (!str)
+      break;
+
+    if (format) {
+      if (gnc_date_string_to_dateformat(str, format)) {
+	free(str);
+	break;
+      }
+    }
+
+    /* parse the months */
+    val = SCM_CAR(value);
+    value = SCM_CDR(value);
+    if (!SCM_SYMBOLP(val))
+      break;
+    str = gh_symbol2newstr (val, NULL);
+    if (!str)
+      break;
+
+    if (months) {
+      if (gnc_date_string_to_monthformat(str, months)) {
+	free(str);
+	break;
+      }
+    }
+
+    /* parse the years */
+    val = SCM_CAR(value);
+    value = SCM_CDR(value);
+    if (!SCM_BOOLP(val))
+      break;
+
+    if (years)
+      *years = SCM_NFALSEP(val);
+
+    /* parse the custom */
+    val = SCM_CAR(value);
+    value = SCM_CDR(value);
+    if (!SCM_STRINGP(val))
+      break;
+    if (!SCM_NULLP(value))
+      break;
+
+    if (custom)
+      *custom = gh_scm2newstr(val, NULL);
+
+    return FALSE;
+
+  } while (FALSE);
+
+  return TRUE;
+}
+
+SCM gnc_dateformat_option_set_value(DateFormat format, GNCDateMonthFormat months,
+				    gboolean years, const char *custom)
+{
+  SCM value = SCM_EOL;
+  SCM val;
+  const char *str;
+
+  /* build the list in reverse order */
+  if (custom)
+    val = scm_mem2string(custom, strlen(custom));
+  else
+    val = SCM_BOOL_F;
+  value = scm_cons(val, value);
+
+  val = SCM_BOOL(years);
+  value = scm_cons(val, value);
+
+  str = gnc_date_monthformat_to_string(months);
+  if (str)
+    val = scm_str2symbol(str);
+  else
+    val = SCM_BOOL_F;
+  value = scm_cons(val, value);
+
+  str = gnc_date_dateformat_to_string(format);
+  if (str)
+    val = scm_str2symbol(str);
+  else
+    val = SCM_BOOL_F;
+  value = scm_cons(val, value);
+
+  return value;
+}

@@ -32,16 +32,6 @@
 #include <gnome.h>
 #include "date.h"
 
-/**
- * This is how to format the month, as a number, an abbreviated string,
- * or the full name.
- */
-typedef enum {
-  GNCDATE_MONTH_NUMBER,
-  GNCDATE_MONTH_ABBREV,
-  GNCDATE_MONTH_NAME
-} GNCDateMonthFormat;
-
 #define GNC_DATE_FORMAT(obj)          GTK_CHECK_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
 #define GNC_DATE_FORMAT_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
 #define GNC_IS_DATE_FORMAT(obj)       GTK_CHECK_TYPE (obj, gnc_date_format_get_type ())
