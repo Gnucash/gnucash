@@ -114,6 +114,9 @@ void          xaccTransRollbackEdit (Transaction *);
  * The xaccTransSetDate() method does the same thing as 
  *    xaccTransSetDateSecs(), but takes a convenient day-month-year format.
  *
+ * The xaccTransSetDateTS() method does the same thing as 
+ *    xaccTransSetDateSecs(), but takes a struct timespec.
+ *
  * The xaccTransSetDateToday() method does the same thing as 
  *    xaccTransSetDateSecs(), but sets the date to the current system
  *    date/time.
@@ -121,6 +124,11 @@ void          xaccTransRollbackEdit (Transaction *);
 void          xaccTransSetDate (Transaction *, int day, int mon, int year);
 void          xaccTransSetDateSecs (Transaction *, time_t);
 void          xaccTransSetDateToday (Transaction *);
+void          xaccTransSetDateTS (Transaction *, struct timespec *);
+
+void          xaccTransSetDateEnteredSecs (Transaction *, time_t);
+void          xaccTransSetDateEnteredTS (Transaction *, struct timespec *);
+
 
 /* set the Num and Description fields ... */
 void          xaccTransSetNum (Transaction *, const char *);
@@ -178,6 +186,8 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
 char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
+void          xaccTransGetDateTS (Transaction *, struct timespec *);
+void          xaccTransGetDateEnteredTS (Transaction *, struct timespec *);
 
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);

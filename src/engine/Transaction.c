@@ -1385,6 +1385,36 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
     * that until the commit phase, i.e. until the user has called the
     * xaccTransCommitEdit() routine.  So, for now, we are done.
     */
+
+}
+
+void
+xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
+{
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   trans->date_entered.tv_sec = secs;
+}
+
+void
+xaccTransSetDateTS (Transaction *trans, struct timespec *ts)
+{
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   trans->date_posted.tv_sec = ts->tv_sec;
+   trans->date_posted.tv_nsec = ts->tv_nsec;
+}
+
+void
+xaccTransSetDateEnteredTS (Transaction *trans, struct timespec *ts)
+{
+   if (!trans) return;
+   CHECK_OPEN (trans);
+
+   trans->date_entered.tv_sec = ts->tv_sec;
+   trans->date_entered.tv_nsec = ts->tv_nsec;
 }
 
 void
@@ -1523,6 +1553,20 @@ xaccTransGetDate (Transaction *trans)
 {
    if (!trans) return 0;
    return (trans->date_posted.tv_sec);
+}
+
+void
+xaccTransGetDateTS (Transaction *trans, Timespec *ts)
+{
+   if (!trans || !ts) return;
+   *ts = (trans->date_posted);
+}
+
+void
+xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts)
+{
+   if (!trans || !ts) return;
+   *ts = (trans->date_entered);
 }
 
 int 

@@ -81,10 +81,9 @@
  *   account     ::== int                                           *
  *   String      ::== size (char)^size                              * 
  *   size        ::== int                                           * 
- *   Date        ::== year month day                                * 
- *   month       ::== int                                           * 
- *   day         ::== int                                           * 
- *   year        ::== int                                           * 
+ *   Date        ::== seconds nanoseconds                           * 
+ *   seconds     ::== unsigned 32 bit int                           * 
+ *   nanoseconds ::== unsigned 32 bit int                           * 
 \********************************************************************/
 
 #include <fcntl.h>
@@ -141,7 +140,8 @@ static Account      *readAccount( int fd, AccountGroup *, int token );
 static Transaction  *readTransaction( int fd, Account *, int token );
 static Split        *readSplit( int fd, int token );
 static char         *readString( int fd, int token );
-static time_t        readDate( int fd, int token );
+static time_t        readDMYDate( int fd, int token );
+static int           readTSDate( int fd, Timespec *, int token );
 
 static int writeAccountGroupToFile( char *datafile, AccountGroup *grp );
 static int writeGroup( int fd, AccountGroup *grp );
@@ -149,7 +149,7 @@ static int writeAccount( int fd, Account *account );
 static int writeTransaction( int fd, Transaction *trans );
 static int writeSplit( int fd, Split *split);
 static int writeString( int fd, char *str );
-static int writeDate( int fd, time_t secs );
+static int writeTSDate( int fd, struct timespec *);
 
 /*******************************************************/
 /* backwards compatibility definitions for numeric value 
@@ -634,7 +634,6 @@ readTransaction( int fd, Account *acc, int token )
   char recn;
   double num_shares = 0.0;
   double share_price = 0.0;
-  time_t secs;
 
   ENTER ("readTransaction");
 
@@ -653,15 +652,44 @@ readTransaction( int fd, Account *acc, int token )
   xaccTransSetNum (trans, tmp);
   free (tmp);
   
-  secs = readDate( fd, token );
-  if( 0 == secs )
-    {
-    PERR ("Premature end of Transaction at date");
-    xaccTransDestroy(trans);
-    xaccTransCommitEdit (trans);
-    return NULL;
-    }
-  xaccTransSetDateSecs (trans, secs);
+  if (7 >= token) {
+     time_t secs;
+     secs = readDMYDate( fd, token );
+     if( 0 == secs )
+       {
+       PERR ("Premature end of Transaction at date");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDateSecs (trans, secs);
+     xaccTransSetDateEnteredSecs (trans, secs);
+  } else  {
+     struct timespec ts;
+     int rc;
+
+     /* read posted date first ... */
+     rc = readTSDate( fd, &ts, token );
+     if( -1 == rc )
+       {
+       PERR ("Premature end of Transaction at date");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDateTS (trans, &ts);
+
+     /* then the entered date ... */
+     rc = readTSDate( fd, &ts, token );
+     if( -1 == rc )
+       {
+       PERR ("Premature end of Transaction at date");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDateEnteredTS (trans, &ts);
+  }
   
   tmp = readString( fd, token );
   if( NULL == tmp )
@@ -1034,7 +1062,41 @@ readString( int fd, int token )
   }
 
 /********************************************************************\
- * readDate                                                         * 
+ * readTSDate                                                       * 
+ *   reads in a Date struct from the datafile                       *
+ *                                                                  * 
+ * Args:   fd    - the filedescriptor of the data file              * 
+ *         token - the datafile version                             * 
+ * Return: the Date struct                                          * 
+\********************************************************************/
+static int
+readTSDate( int fd, struct timespec *ts, int token )
+  {
+  int  err=0;
+  unsigned int secs, nsecs;
+  
+  err = read( fd, &secs, sizeof(unsigned int) );
+  if( err != sizeof(unsigned int) )
+    {
+    return -1;
+    }
+  XACC_FLIP_INT (secs);
+  
+  err = read( fd, &nsecs, sizeof(unsigned int) );
+  if( err != sizeof(unsigned int) )
+    {
+    return -1;
+    }
+  XACC_FLIP_INT (nsecs);
+
+  ts->tv_sec = secs;
+  ts->tv_nsec = nsecs;
+  
+  return 2*err;
+  }
+
+/********************************************************************\
+ * readDMYDate                                                      * 
  *   reads in a Date struct from the datafile                       *
  *                                                                  * 
  * Args:   fd    - the filedescriptor of the data file              * 
@@ -1042,7 +1104,7 @@ readString( int fd, int token )
  * Return: the Date struct                                          * 
 \********************************************************************/
 static time_t
-readDate( int fd, int token )
+readDMYDate( int fd, int token )
   {
   int  err=0;
   int day, month, year;
@@ -1395,7 +1457,7 @@ writeTransaction( int fd, Transaction *trans )
   Split *s;
   int err=0;
   int i=0;
-  time_t secs;
+  struct timespec ts;
 
   ENTER ("writeTransaction");
   /* If we've already written this transaction, don't write 
@@ -1408,8 +1470,12 @@ writeTransaction( int fd, Transaction *trans )
   err = writeString( fd, trans->num );
   if( -1 == err ) return err;
   
-  secs = xaccTransGetDate (trans);
-  err = writeDate( fd, secs );
+  xaccTransGetDateTS (trans, &ts);
+  err = writeTSDate( fd, &ts);
+  if( -1 == err ) return err;
+  
+  xaccTransGetDateEnteredTS (trans, &ts);
+  err = writeTSDate( fd, &ts);
   if( -1 == err ) return err;
   
   err = writeString( fd, trans->description );
@@ -1524,7 +1590,7 @@ writeString( int fd, char *str )
   }
 
 /********************************************************************\
- * writeDate                                                        * 
+ * writeTSDate                                                        * 
  *   saves a Date to the datafile                                   *
  *                                                                  * 
  * Args:   fd       - the filedescriptor of the data file           * 
@@ -1532,29 +1598,21 @@ writeString( int fd, char *str )
  * Return: -1 on failure                                            * 
 \********************************************************************/
 static int
-writeDate( int fd, time_t secs )
+writeTSDate( int fd, struct timespec *ts)
   {
   int err=0;
-  int tmp;
-  struct tm *stm;
+  unsigned int tmp;
 
-  stm = localtime (&secs);
-  
-  tmp = stm->tm_year +1900;
+  /* write 32 bits to file format, even if time_t is 64 bits */
+  tmp = ts->tv_sec;
   XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(int) );
+  err = write( fd, &tmp, sizeof(unsigned int) );
   if( err != sizeof(int) )
     return -1;
   
-  tmp = stm->tm_mon+1;
+  tmp = ts->tv_nsec;
   XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(int) );
-  if( err != sizeof(int) )
-    return -1;
-  
-  tmp = stm->tm_mday;
-  XACC_FLIP_INT (tmp);
-  err = write( fd, &tmp, sizeof(int) );
+  err = write( fd, &tmp, sizeof(unsigned int) );
   if( err != sizeof(int) )
     return -1;
   
