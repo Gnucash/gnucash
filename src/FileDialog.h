@@ -94,7 +94,7 @@
  *    case it is up to the user to try again, or to pick
  *    a different filename).
  *
- * The gncFileOpenFile() routine behaves much like the gncFileOpenFile()
+ * The gncFileOpenFile() routine behaves much like the gncFileOpen()
  *    routine, except that the new file to open is passed as a char *
  *    argument.
  *
