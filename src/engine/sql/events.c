@@ -52,7 +52,7 @@
 
 #include "putil.h"
 
-static short module = MOD_BACKEND; 
+static short module = MOD_EVENT; 
 
 
 /* ============================================================= */
@@ -71,7 +71,6 @@ pgendEventsPending (Backend *bend)
 
    if (!be) return FALSE;
    ENTER ("mypid=%d", be->my_pid);
-PWARN("mypid=%d", be->my_pid);
 
    /* No need to handle events in single-modes */
    if ((MODE_SINGLE_UPDATE == be->session_mode) ||
@@ -100,7 +99,6 @@ PWARN("mypid=%d", be->my_pid);
       }
 
       PINFO ("notify event %s from pid=%d", note->relname, note->be_pid);
-PWARN ("notify event %s from pid=%d", note->relname, note->be_pid);
 
       if (0 == strcasecmp ("gncTransaction", note->relname))
       {
@@ -145,16 +143,42 @@ static gpointer
 get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    GNCEngineEventType type;
+   char * guid_str;
    GUID guid;
+   GNCIdType obj_type;
    Timespec ts;
    Timespec *latest = (Timespec *) data;
    char change = (DB_GET_VAL("change",j))[0];
 
-   string_to_guid (DB_GET_VAL("guid",j), &guid);
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
+   guid_str = DB_GET_VAL("guid",j);
+   string_to_guid (guid_str, &guid);
 
+   /* lets see if the local cache has this item in it */
+   obj_type = xaccGUIDType (&guid);
+   switch (obj_type)
+   {
+      case GNC_ID_NONE:
+      case GNC_ID_NULL:
+         PINFO ("unknown object for guid=%s", guid_str);
+         break;
+      case GNC_ID_ACCOUNT:
+         break;
+      case GNC_ID_TRANS:
+//         pgendCopyTransactionToEngine (be, &guid);
+         break;
+      case GNC_ID_SPLIT:
+         break;
+      case GNC_ID_PRICE:
+         break;
+      default:
+         PERR ("unknown guid type %d for guid=%s", obj_type, guid_str);
+   }
+
+   /* get event timestamp */
+   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_changed",j));
    if (0 < timespec_cmp(&ts, latest)) *latest = ts;
 
+   /* send out the event to listeners */
    switch (change)
    {
       case 'a': type = GNC_EVENT_CREATE; break;
@@ -165,8 +189,7 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
          return data;
    }
 
-   PINFO ("event %c for %s", change, DB_GET_VAL("guid",j));
-PWARN ("event %c for %s", change, DB_GET_VAL("guid",j));
+   PINFO ("event %c for %s", change, guid_str);
    gnc_engine_generate_event (&guid, type);
 
    return data;
