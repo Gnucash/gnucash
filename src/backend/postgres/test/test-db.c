@@ -579,7 +579,7 @@ test_trans_query(Transaction * trans, gpointer data)
     qtd->loaded += session_num_trans(session);
     qtd->total += session_num_trans(qtd->session_base);
 
-    if (!xaccTransEqual(trans, list->data, TRUE, TRUE)) {
+    if (!xaccTransEqual(trans, list->data, TRUE, TRUE, TRUE, FALSE)) {
         failure("matching transaction is wrong");
         g_list_free(list);
         return FALSE;
@@ -742,7 +742,7 @@ test_trans_update(Transaction * trans, gpointer data)
 
     trans_2 = xaccTransLookup(&guid, book_2);
 
-    ok = xaccTransEqual(trans, trans_2, TRUE, TRUE);
+    ok = xaccTransEqual(trans, trans_2, TRUE, TRUE, TRUE, FALSE);
     if (trans && trans_2)
         ok = ok && (trans->version == trans_2->version);
 
@@ -907,7 +907,7 @@ test_updates_2(GNCSession * session_base, DbInfo *dbinfo)
                 xaccAccountLookup(xaccAccountGetGUID(account), td.book_2);
             child_2 = xaccAccountLookup(xaccAccountGetGUID(child), td.book_2);
 
-            ok = ok && xaccTransEqual(trans, trans_2, TRUE, TRUE);
+            ok = ok && xaccTransEqual(trans, trans_2, TRUE, TRUE, TRUE, FALSE);
             ok = ok && xaccAccountEqual(account, account_2, TRUE);
             ok = ok && xaccAccountEqual(child, child_2, TRUE);
         }

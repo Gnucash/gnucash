@@ -319,7 +319,7 @@ test_add_transaction(const char *tag, gpointer globaldata, gpointer data)
     xaccTransSetCurrency (trans, gdata->com);
     xaccTransCommitEdit (trans);
 
-    if (!do_test_args(xaccTransEqual(gdata->trn, trans, TRUE, TRUE),
+    if (!do_test_args(xaccTransEqual(gdata->trn, trans, TRUE, TRUE, TRUE, FALSE),
 		      "gnc_transaction_sixtp_parser_create",
 		      __FILE__, __LINE__,
 		      "%d", gdata->value))

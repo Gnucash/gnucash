@@ -728,7 +728,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids)
         Split *sa = (Split *) la->data;
         Split *sb = (Split *) lb->data;
 
-        if (!xaccSplitEqual(sa, sb, check_guids, FALSE))
+        if (!xaccSplitEqual(sa, sb, check_guids, TRUE, FALSE))
         {
           PWARN ("splits differ");
           return(FALSE);
