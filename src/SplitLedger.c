@@ -102,9 +102,17 @@ LedgerMoveCursor  (Table *table,
    if ((REG_SINGLE_DYNAMIC == style) ||
        (REG_DOUBLE_DYNAMIC == style)) 
    {
-      Split * split;
+      Split *split, *oldsplit;
+      oldsplit = xaccSRGetCurrentSplit (reg);
       split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
       reg->table->current_cursor->user_data = (void *) split;
+
+      /* if a null split, provide a hint for where the cursor should go */
+      if (NULL == split) {
+         reg->cursor_phys_row = new_phys_row;
+         // reg->cursor_virt_row = reg->table->current_cursor_virt_row;
+         reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
+      }
       xaccRegisterRefresh (reg);
 
       /* indicate what row we *should* have gone to */
@@ -529,6 +537,10 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
     * a pointer to the currently edited split; we restore the 
     * cursor to this location when we are done. */
    save_current_split = xaccSRGetCurrentSplit (reg);
+   if (NULL == save_current_split) {
+      save_cursor_phys_row = reg->cursor_phys_row;
+      save_cursor_virt_row = reg->cursor_virt_row;
+   }
 
    /* num_phys_rows is the number of rows in all the cursors.
     * num_virt_rows is the number of cursors (including the header).
@@ -546,12 +558,10 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
    i=0;
    split = slist[0]; 
    while (split) {
-
       /* do not count the blank split */
       if (split != ((Split *) reg->user_hook)) {
          Transaction *trans;
-         Split * secondary;
-         int j = 0;
+         int do_expand = 0;
 
          /* lets determine where to locate the cursor ... */
          if (split == save_current_split) {
@@ -559,19 +569,22 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
             save_cursor_virt_row = num_virt_rows;
          }
 
-         trans = xaccSplitGetParent (split);
-         if (!trans) {
-            printf ("Internal Error: xaccSRLoadRegister(): "
-                    "Split without a parent \n");
-            assert (trans);
-            break;
-         } 
-
          /* if multi-line, then show all splits.  If dynamic then
           * show all splits only if this is the hot split. 
           */
-         if (multi_line || (dynamic && xaccIsPeerSplit(split,save_current_split))) 
+         do_expand = multi_line;
+         do_expand = do_expand || 
+                     (dynamic && xaccIsPeerSplit(split,save_current_split)); 
+         if (NULL == save_current_split) {
+            trans = xaccSplitGetParent (split);
+            do_expand = do_expand || (trans == reg->user_hack);
+         }
+
+         if (do_expand) 
          {
+            Split * secondary;
+            int j = 0;
+
             /* add one row for a transaction */
             num_virt_rows ++;
             num_phys_rows += reg->trans_cursor->numRows; 
@@ -608,7 +621,6 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
             num_virt_rows ++;
             num_phys_rows += lead_cursor->numRows; 
          }
-      
       }
       i++;
       split = slist[i];
@@ -636,9 +648,8 @@ xaccSRCountRows (SplitRegister *reg, Split **slist,
    }
 
    /* check to make sure we got a good cursor position */
-   if (!save_current_split || 
-      (num_phys_rows <= save_cursor_phys_row) ||
-      (num_virt_rows <= save_cursor_virt_row)) 
+   if ((num_phys_rows <= save_cursor_phys_row) ||
+       (num_virt_rows <= save_cursor_virt_row)) 
    {
        save_cursor_phys_row = num_phys_rows - reg->split_cursor->numRows;
        save_cursor_virt_row = num_virt_rows - 1;
@@ -684,6 +695,9 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
       lead_cursor = reg->double_cursor;
    }
 
+   /* count the number of rows */
+   xaccSRCountRows (reg, slist, default_source_acc);
+
    /* save the current cursor location; we do this by saving
     * a pointer to the currently edited split; we restore the 
     * cursor to this location when we are done. */
@@ -694,8 +708,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    table->move_cursor = NULL;
    xaccMoveCursorGUI (table, -1, -1);
 
-   xaccSRCountRows (reg, slist, default_source_acc);
-
    /* num_virt_cols is always one. */
    xaccSetTableSize (table, reg->num_phys_rows, reg->num_cols, 
                             reg->num_virt_rows, 1);
@@ -703,8 +715,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    /* make sure that the header is loaded */
    xaccSetCursor (table, reg->header, 0, 0, 0, 0);
 
-printf ("load register of %d virtual entries %d phys rows ----------- \n", 
-i, reg->num_phys_rows);
+printf ("load register of %d phys rows ----------- \n", reg->num_phys_rows);
 
    /* populate the table */
    i=0;
@@ -716,13 +727,26 @@ i, reg->num_phys_rows);
       /* do not load the blank split */
       if (split != ((Split *) reg->user_hook)) {
          Transaction *trans;
-         Split * secondary;
-         int j = 0;
+         int do_expand;
 
 printf ("load trans %d at phys row %d \n", i, phys_row);
    
-         if (multi_line || (dynamic && xaccIsPeerSplit(split,save_current_split))) 
+         /* if multi-line, then show all splits.  If dynamic then
+          * show all splits only if this is the hot split. 
+          */
+         do_expand = multi_line;
+         do_expand = do_expand || 
+                     (dynamic && xaccIsPeerSplit(split,save_current_split)); 
+         if (NULL == save_current_split) {
+            trans = xaccSplitGetParent (split);
+            do_expand = do_expand || (trans == reg->user_hack);
+         }
+
+         if (do_expand) 
          {
+            Split * secondary;
+            int j = 0;
+
             xaccSetCursor (table, reg->trans_cursor, phys_row, 0, vrow, 0);
             xaccMoveCursor (table, phys_row, 0);
             xaccSRLoadTransEntry (reg, split, 1);
