@@ -9,38 +9,26 @@
 
   <body>
     <h1>Managing Your Money --&gt; GnuCash</h1>
-    I have finally put the Perl script that allowed me to use
-    GnuCash up on a web site. I had a couple years of data in
-    Managing Your Money 2.x that I didn't want to reenter. The
-    script will output a single QIF file with all transactions,
-    accounts, and categories. (Currently only non-investment
-    transactions are handled.) The QIF file can be imported to
-    xacc-1.0.18 if a small patch is applied to QIFIO.c. The site is
-    
 
+    Ken Yamaguchi has kindly made available a Perl script that allows
+    Managing Your Money 2.x data to be converted into QIF format, which
+    can then be imported into GnuCash.  It has been tested with 1.3.99 and
+    works well.  The script is available
+    from:</P>
     <p><a href=
     "http://www-cad.eecs.berkeley.edu/~gooch/mymdump.html">
-    MyMdump</a></p>
+    http://www-cad.eecs.berkeley.edu/~gooch/mymdump.html</a></p>
 
     <h1>Duplicate Transactions</h1>
-    I also have a script that I use to remove duplicate
-    transactions at the QIF level. I use this script because Xacc
-    is very strict about duplicates (which is good) and because
-    editing imported transactions will cause a re-import of the
-    same transactions to produce duplicates. (I download the same
-    month's transactions from my bank several times each month, so
-    each downloaded QIF file--after the first--contains
-    transactions I have already imported. I don't want to rely on
-    the bank sending me the transactions in the same order or with
-    the same formatting.) The site is 
-
+    Ken has also written a script that removes duplicate
+    transactions at the QIF level. GnuCash
+    is very strict about duplicates, and this script is useful for
+    successfully importing a succession of QIF files provided by a bank for
+    overlapping time periods, for instance.
+    This script is available from:
     <p><a href=
     "http://www-cad.eecs.berkeley.edu/~gooch/qifuniq.html">
-    qifuniq</a></p>
-
-    <p>I hope others find these scripts useful.</p>
-
-    <p>Ken Yamaguchi October 1998</p>
+    "http://www-cad.eecs.berkeley.edu/~gooch/qifuniq.html</a></p>
   </body>
 </html>
 

@@ -103,6 +103,7 @@ errs*
 .#*
 TAGS
 #*#
+aclocal.m4
 libtool
 conf.h
 stamp-h
@@ -113,15 +114,18 @@ gnucash.engine.i
 gnucash.pm
 gnucash-engine-perl5_wrap.c
 g-wrap-guile
+libgncengine.la
 libgwrapguile.la
 libgwraprs.la
 gnc-autogen.h
+src/gnucash
 src/guile/gnc.c
 src/guile/gnc.h
 src/guile/gnc.html
 src/guile/gnucash.c
 src/scm/bootstrap.scm
-src/swig/perl5/gnucash.engine_wrap.doc
+src/optional/swig/libgncswig.la
+src/optional/swig/gnucash.engine_wrap.doc
 g-wrap.info
 src/quotes/gnc-prices
 *.wrap

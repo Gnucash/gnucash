@@ -29,12 +29,14 @@ doc_DATA = \
   xacc-main.html \
   xacc-mainwin.html \
   xacc-pnl.html \
+  xacc-portfolio_report.html \
   xacc-print-check.html \
   xacc-print.html \
   xacc-qif-import.html \
   xacc-quicken.html \
   xacc-recnwin.html \
   xacc-regwin.html \
+  xacc-regwin_kbd.html \
   xacc-reports.html \
   xacc-ticker.html \
   xacc-trans_report.html \

@@ -7,6 +7,7 @@ doc_DATA = \
   appr-income.gif \
   appr-main1.gif \
   appr-main2.gif \
+  bal-graph.gif \
   contract.gif \
   depr-asset.gif \
   depr-main.gif \
@@ -22,16 +23,16 @@ doc_DATA = \
   logo-skunkware.gif \
   newaccwin-code.gif \
   newaccwin-trade.gif \
-  newaccwin.gif \
   recnwin.gif \
   regwin-double.gif \
   regwin-multi.gif \
   regwin-single.gif \
   regwin-single2.gif \
-  regwin.gif \
+  report-av-baln.gif \
   report-baln.gif \
   report-folio.gif \
   report-option.gif \
+  report-pnl.gif \
   reportwin.gif \
   ticker-a.gif \
   ticker-b.gif
