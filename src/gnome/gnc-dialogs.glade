@@ -9443,8 +9443,8 @@ words.
       <text>This wizard will help you record a stock split or stock merger.</text>
       <title_color>255,255,255</title_color>
       <text_color>0,0,0</text_color>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
       <textbox_color>255,255,255</textbox_color>
     </widget>
 
@@ -9453,8 +9453,8 @@ words.
       <name>account_page</name>
       <title>Stock Account</title>
       <title_color>255,255,255</title_color>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
 
       <widget>
 	<class>GtkVBox</class>
@@ -9567,8 +9567,8 @@ words.
       <name>details_page</name>
       <title>Stock Split Details</title>
       <title_color>255,255,255</title_color>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
 
       <widget>
 	<class>GtkVBox</class>
@@ -9876,8 +9876,8 @@ You may safely leave it blank.</label>
       <name>cash_page</name>
       <title>Cash In Lieu</title>
       <title_color>255,255,255</title_color>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
 
       <widget>
 	<class>GtkVBox</class>
@@ -10099,8 +10099,8 @@ enter the details of that payment here. Otherwise, just click `Next'.</label>
       <text>If you are finished creating the stock split or merger, press `Finish'.
 You may also press `Back' to review your choices, or `Cancel' to
 quit without making any changes.</text>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
+      <background_color>102,102,153</background_color>
+      <logo_background_color>102,102,153</logo_background_color>
       <textbox_color>255,255,255</textbox_color>
       <text_color>0,0,0</text_color>
       <title_color>255,255,255</title_color>

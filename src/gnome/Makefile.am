@@ -26,6 +26,7 @@ libgncgnome_a_SOURCES = \
   druid-commodity.c \
   druid-qif-import.c \
   druid-stock-split.c \
+  druid-utils.c \
   extensions.c \
   file-history.c \
   glade-gnc-dialogs.c \
@@ -84,6 +85,7 @@ noinst_HEADERS = \
   dialog-utils.h \
   druid-commodity.h \
   druid-qif-import.h \
+  druid-utils.h \
   extensions.h \
   glade-cb-gnc-dialogs.h \
   glade-gnc-dialogs.h \

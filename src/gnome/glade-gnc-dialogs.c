@@ -6381,13 +6381,13 @@ create_Stock_Split_Druid (void)
   GtkWidget *Stock_Split_Druid;
   GtkWidget *stock_split_druid;
   GtkWidget *start_page;
-  GdkColor start_page_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor start_page_bg_color = { 0, 26214, 26214, 39321 };
   GdkColor start_page_textbox_color = { 0, 65535, 65535, 65535 };
-  GdkColor start_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor start_page_logo_bg_color = { 0, 26214, 26214, 39321 };
   GdkColor start_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *account_page;
-  GdkColor account_page_bg_color = { 0, 6425, 6425, 28784 };
-  GdkColor account_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor account_page_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor account_page_logo_bg_color = { 0, 26214, 26214, 39321 };
   GdkColor account_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *vbox98;
   GtkWidget *label847677;
@@ -6398,8 +6398,8 @@ create_Stock_Split_Druid (void)
   GtkWidget *label847679;
   GtkWidget *label847680;
   GtkWidget *details_page;
-  GdkColor details_page_bg_color = { 0, 6425, 6425, 28784 };
-  GdkColor details_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor details_page_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor details_page_logo_bg_color = { 0, 26214, 26214, 39321 };
   GdkColor details_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *druid_vbox32;
   GtkWidget *label847681;
@@ -6422,8 +6422,8 @@ create_Stock_Split_Druid (void)
   GtkWidget *price_box;
   GtkWidget *price_currency_box;
   GtkWidget *cash_page;
-  GdkColor cash_page_bg_color = { 0, 6425, 6425, 28784 };
-  GdkColor cash_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor cash_page_bg_color = { 0, 26214, 26214, 39321 };
+  GdkColor cash_page_logo_bg_color = { 0, 26214, 26214, 39321 };
   GdkColor cash_page_title_color = { 0, 65535, 65535, 65535 };
   GtkWidget *druid_vbox33;
   GtkWidget *label847687;
@@ -6441,9 +6441,9 @@ create_Stock_Split_Druid (void)
   GtkWidget *frame44;
   GtkWidget *asset_scroll;
   GtkWidget *finish_page;
-  GdkColor finish_page_bg_color = { 0, 6425, 6425, 28784 };
+  GdkColor finish_page_bg_color = { 0, 26214, 26214, 39321 };
   GdkColor finish_page_textbox_color = { 0, 65535, 65535, 65535 };
-  GdkColor finish_page_logo_bg_color = { 0, 65535, 65535, 65535 };
+  GdkColor finish_page_logo_bg_color = { 0, 26214, 26214, 39321 };
   GdkColor finish_page_title_color = { 0, 65535, 65535, 65535 };
 
   Stock_Split_Druid = gtk_window_new (GTK_WINDOW_TOPLEVEL);

@@ -29,6 +29,7 @@
 #include "Group.h"
 #include "account-tree.h"
 #include "dialog-utils.h"
+#include "druid-utils.h"
 #include "glade-gnc-dialogs.h"
 #include "glade-support.h"
 #include "gnc-amount-edit.h"
@@ -514,6 +515,9 @@ gnc_stock_split_druid_create (StockSplitInfo *info)
 
   gtk_signal_connect (GTK_OBJECT (info->druid), "cancel",
                       GTK_SIGNAL_FUNC (druid_cancel), info);
+
+	gnc_druid_set_title_image (GNOME_DRUID(info->druid), "stock_split_title.png");
+	gnc_druid_set_watermark_image (GNOME_DRUID(info->druid), "stock_split_watermark.png");
 
   /* account list */
   {
