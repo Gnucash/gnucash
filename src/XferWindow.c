@@ -468,7 +468,7 @@ xferCB( Widget mw, XtPointer cd, XtPointer cb )
   trans->damount     = val;
   trans->num         = XtNewString("");
   
-  trans->memo        = XmTextGetString(xferData->memo);
+  xaccTransSetMemo (trans, XmTextGetString(xferData->memo));
   trans->description = XmTextGetString(xferData->desc);
   trans->reconciled  = NREC;
   

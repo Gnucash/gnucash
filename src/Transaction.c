@@ -128,7 +128,6 @@ initTransaction( Transaction * trans )
   
   trans->num         = XtNewString("");
   trans->description = XtNewString("");
-  trans->memo        = XtNewString("");
   trans->action      = XtNewString("");
 
   trans->debit_splits    = (Split **) _malloc (sizeof (Split *));
@@ -183,13 +182,11 @@ implemented and tested.
   _free (trans->debit_splits);
   XtFree(trans->num);
   XtFree(trans->description);
-  XtFree(trans->memo);
   XtFree(trans->action);
 
   /* just in case someone looks up freed memory ... */
   trans->num         = 0x0;
   trans->description = 0x0;
-  trans->memo        = 0x0;
   trans->action      = 0x0;
   trans->reconciled  = NREC;
   trans->damount     = 0.0;
@@ -329,8 +326,8 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   }
 
   /* otherwise, sort on transaction strings */
-  da = (*ta)->memo;
-  db = (*tb)->memo;
+  da = (*ta)->credit_split.memo;
+  db = (*tb)->credit_split.memo;
   if (da && db) {
     retval = strcmp (da, db);
     /* if strings differ, return */
@@ -378,6 +375,17 @@ xaccCountTransactions (Transaction **tarray)
       trans = tarray[ntrans];
    }
    return ntrans;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccTransSetMemo (Transaction *trans, char *memo)
+{
+
+   if (trans->credit_split.memo) XtFree (trans->credit_split.memo);
+   trans->credit_split.memo = XtNewString (memo);
 }
 
 /************************ END OF ************************************\

@@ -619,7 +619,7 @@ regRefresh( RegWindow *regData )
 
       sprintf( buf, "%s", trans->description );
       newData[row+DESC_CELL_R][DESC_CELL_C]   = XtNewString(buf);
-      sprintf( buf, "%s", trans->memo );
+      sprintf( buf, "%s", trans->credit_split.memo );
       newData[row+MEMO_CELL_R][MEMO_CELL_C] = XtNewString(buf);
       
       sprintf( buf, "%c", trans->reconciled );
@@ -1413,9 +1413,8 @@ regSaveTransaction( RegWindow *regData, int position )
     String tmp;
     DEBUG("MOD_MEMO\n");
     /* ... the memo ... */
-    XtFree( trans->memo );
     tmp = XbaeMatrixGetCell(regData->reg,row+MEMO_CELL_R,MEMO_CELL_C);
-    trans->memo = XtNewString( tmp );
+    xaccTransSetMemo (trans, tmp);
     }
   
   if( regData->changed & MOD_ACTN )
@@ -1558,7 +1557,7 @@ regSaveTransaction( RegWindow *regData, int position )
   if (regData->changed & MOD_NEW) {
     if( (strcmp("",trans->num) == 0)         &&
         (strcmp("",trans->description) == 0) &&
-        (strcmp("",trans->memo) == 0)        &&
+        (strcmp("",trans->credit_split.memo) == 0)        &&
         /* (strcmp("",trans->action) == 0)      && annoying! */
         /* (0 == trans->catagory)               && not implemented ! */
         /* (NULL == trans->credit)              && annoying! */
@@ -3080,7 +3079,7 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
               if( regData->qf != NULL ) {
                 if( regData->qf->trans != NULL ) {
                   XbaeMatrixSetCell( reg, tcbs->next_row, tcbs->next_column,
-                                     regData->qf->trans->memo );
+                                     regData->qf->trans->credit_split.memo );
                 }
               }
             }

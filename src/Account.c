@@ -890,7 +890,7 @@ xaccConsolidateTransactions (Account * acc)
          if (ta->date.day != tb->date.day) continue;
          if (strcmp (ta->num, tb->num)) continue;
          if (strcmp (ta->description, tb->description)) continue;
-         if (strcmp (ta->memo, tb->memo)) continue;
+         if (strcmp (ta->credit_split.memo, tb->credit_split.memo)) continue;
          if (strcmp (ta->action, tb->action)) continue;
          if (0 == DEQ(ta->damount, tb->damount)) continue;
          if (0 == DEQ(ta->share_price, tb->share_price)) continue;

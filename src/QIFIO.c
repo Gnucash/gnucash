@@ -600,25 +600,8 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    double adjust = 0.0;
 
    if (!acc) return NULL;
-   trans = (Transaction *)_malloc(sizeof(Transaction));
+   trans = mallocTransaction ();
 
-   trans -> num = 0x0;          /* string */ 
-   trans -> description = 0x0;  /* string */
-   trans -> memo = 0x0;         /* string */
-   trans -> action = 0x0;       /* string */
-   trans -> damount = 0.0;      /* amount is double */
-   trans -> share_price= 1.0;   /* share_price is double */
-   trans -> reconciled = NREC;  /* reconciled is byte */
-   /* other possible values ... */
-   /* trans->reconciled = YREC;  trans->reconciled = CREC; */
-
-   trans -> date.year = 1970;   /* int */
-   trans -> date.month = 1;     /* int */
-   trans -> date.day = 1;       /* int */
-
-   trans -> debit = NULL;
-   trans -> credit = NULL;
-  
    qifline = xaccReadQIFLine (fd);
 
    if (!qifline) {
@@ -656,7 +639,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
 
      /* M == memo field */
      if ('M' == qifline [0]) {  
-        XACC_PREP_STRING (trans->memo);
+        XACC_PREP_STRING (trans->credit_split.memo);
      } else 
 
      /* N == check numbers for Banks, but Action for portfolios */
@@ -797,7 +780,7 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
    }
 
    XACC_PREP_NULL_STRING (trans->num);
-   XACC_PREP_NULL_STRING (trans->memo);
+   XACC_PREP_NULL_STRING (trans->credit_split.memo);
    XACC_PREP_NULL_STRING (trans->description);
    XACC_PREP_NULL_STRING (trans->action);
 

@@ -519,8 +519,8 @@ readTransaction( int fd, Account *acc, int token )
     return NULL;
     }
   
-  trans->memo = readString( fd, token );
-  if( trans->memo == NULL )
+  trans->credit_split.memo = readString( fd, token );
+  if( trans->credit_split.memo == NULL )
     {
     PERR ("Premature end of Transaction at memo");
     freeTransaction(trans);
@@ -990,7 +990,7 @@ writeTransaction( int fd, Transaction *trans )
   if( -1 == err )
     return err;
   
-  err = writeString( fd, trans->memo );
+  err = writeString( fd, trans->credit_split.memo );
   if( -1 == err )
     return err;
   
