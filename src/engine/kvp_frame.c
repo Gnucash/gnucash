@@ -667,9 +667,11 @@ kvp_frame_set_slot_nc(KvpFrame * frame, const char * slot,
 KvpValue * 
 kvp_frame_get_slot(const KvpFrame * frame, const char * slot) 
 {
+  KvpValue *v;
   if (!frame) return NULL;
   if (!frame->hash) return NULL;  /* Error ... */
-  return (KvpValue *)g_hash_table_lookup(frame->hash, slot);
+  v = g_hash_table_lookup(frame->hash, slot);
+  return v;
 }
 
 /* ============================================================ */
