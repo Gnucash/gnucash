@@ -1,4 +1,4 @@
-============================================================
+#######################################################################
           Fichier README de Gnucash 1.5.x .
 
 NOTE: C'EST UNE VERSION DE DEVELOPPEMENT!!! CETTE VERSION N'A PAS
@@ -8,11 +8,11 @@ UTILISEZ LA A VOS PROPRES RISQUES (ET FAITES *BEAUCOUP* DE SAUVEGARDES)
 
 Si vous voulez quelque chose de plus testé, s'il vous plaît utilisez
 les series stables 1.4.
-------------------------------------------------------------
+-----------------------------------------------------------------------
 
-==================
+#########
 Sommaire:
-------------------
+---------
 
   - Vue d'ensemble
   - Mise à jour depuis la version 1.2.x
@@ -25,7 +25,7 @@ Sommaire:
   - Récupérer les sources avec CVS
   - Développement de GnuCash
 
-===============
+###############
 Vue d'ensemble
 ---------------
 
@@ -110,7 +110,7 @@ Quelques une de ces caractéristiques sont:
 
 
 Home Page:
-----------
+
 http://gnucash.org/ (site officiel - version anglaise)
 http://www.multimania.com/yleny/gnucash (version française)
 
@@ -121,7 +121,7 @@ Versions de développement:
 http://www.gnucash.org/source_code.php3
 
 
-===================================
+###################################
 Mise à jour depuis la version 1.2.x
 -----------------------------------
 
@@ -135,7 +135,7 @@ de détails. Le format de fichier n'a pas changé
 
 Nous espérons que vous vous amuserez avec toutes les nouvelles fonctionnalités!
 
-============
+############
 Dépendences
 ------------
 
@@ -161,6 +161,8 @@ xpm     -- extension Pixmap pour X. N'importe quelle version.
 gnome-libs: la version 1.0.40 ou ultérieure/plus récente devrait fonctionner.
             Ces librairies requièrent des librairies supportant de nombreuses
 	      autres, tel que gtk et glib.
+
+gnome-print: N'importe quelle version récente devrait fonctionner.
 
 gtkhtml:   La version 0.4 ou ultérieure/plus récente devrait fonctionner.
            Une capture du CVS de gtkhtml est disponible dans le répertoire CVS de
@@ -202,7 +204,7 @@ perl-HTML/HTML-Parser-2.20
 	       Vous pouvez récupérer les sources depuis:
              http://www.gnuplot.vt.edu/ 
 
-=============
+#############
 Mise en route
 -------------
 
@@ -230,7 +232,7 @@ GnuCash répond aux variables d'environnement suivantes:
     guile> (gnc:load "startup.scm")
     guile> (gnc:main)
 
-  c'est la même chose qui se passe si vous n'utilisez pas cette variable
+  C'est la même chose qui se passe si vous n'utilisez pas cette variable
   d'environnement. Celà peut être utile quand vous essayez d'écrire et tester
   de nouveaux fichiers .scm.
 
@@ -247,7 +249,7 @@ GnuCash répond aux variables d'environnement suivantes:
   le débogage précédent dans le processus de démarrage que vous pouvez faire
   avec --debug.
 
-comme exemple, voici un script d'encapsulation (wrapper script) que nous
+Comme exemple, voici un script d'encapsulation (wrapper script) que nous
 utilisons pour vous permettre d'utiliser de lancer gnucash depuis le répertoire
 local:
 
@@ -268,7 +270,7 @@ local:
     "$@"
 
 
-===========================
+###########################
 Internationalisation (i18n)
 ---------------------------
 
@@ -301,7 +303,7 @@ redhat 6.1 GPL dans /usr/share/locale/fr/LC_MESSAGES et vous aurez vos menus
 et messages en français.)
 
 
-============================
+############################
 Compilation et installation:
 ----------------------------
 
@@ -329,8 +331,30 @@ SWIG    : Utilisé pour autogénérer les encapsuleurs perl.
            Disponible à www.swig.org
            nécessite 1.1p5 ou ultérieure ...
 
+système de développement gnome: en-têtes (headers), librairies, etc.
+
+libxml: disponible sur ftp.gnome.org
+
 g-wrap  : Les RPM's, debs, et sources sont disponibles à 
           ftp://ftp.gnucash.org/pub/g-wrap.
+
+Ce que vous aurez besoin de récupérer et installer dans l'ordre pour être
+sûr que vous avez tous ces éléments coorectement installés pour votre
+système d'exploitation favorit en particulier variera, mais ici se trouve au
+moins une liste partielle de ce que vous aurez besoin pour les systèmes
+que nous connaissons:
+
+  Debian/GNU/Linux:
+    actuel:
+      libgnome-dev
+      libxml-dev
+      libgtkxmhtml-dev
+      guile1.3
+      libguile6-dev
+      libguile6-slib
+
+  RedHat:
+    ???
 
 GnuCash comprend quelques options de ./configure non-standard. Vous
 devriez lancer ./configure --help pour le résumé le plus à jour des options
@@ -369,7 +393,7 @@ L'ensemble de ceux-ci ont été enlevé de l'arborescence des sources durant le
 processus de migration vers automake, mais quelqu'un qui est intéressé par la
 resurrection de ces parties peut facilement les retrouver dans le CVS.
 Notez que  tandis que vous avez besoin des librairies Gnome installées, vous 
-n'avez pas besoin d'avoir le bureau/inteface Gnome.  
+n'avez pas besoin d'avoir le bureau/interface Gnome.  
 
 Les destinations de lancement et d'installations sont séparées.  Le --prefix
 que vous spécifiez à configure détermine où les exécutables résultant seront
@@ -377,8 +401,7 @@ regardé pour des choses au lancement.  Normallement celà détermine où un
 "make install" mettra tous les fichiers.  Toutefois, automake aussi supporte la
 variable.  DESTDIR est utilisé durant l'étape `make install' pour relocaliser
 les ojets d'installation dans un endroit prédisposé.  Chaque objet et chemin
-est
- préfixés avec la valeur de `DESTDIR' avant d'être copié dans l'endroit
+est préfixé avec la valeur de `DESTDIR' avant d'être copié dans l'endroit
 d'installation.
 Voici un exemple d'usage typique de DESTDIR:
 
@@ -394,14 +417,14 @@ DESTDIR peut être utile quand on essaie de construire des images d'installation
 et des packages.
 
 
-===============
+###############
 Os supportés  :
 ---------------
 La version 1.5.X de GnuCash est connu pour fonctionner sur les systèmes
 d'exploitation suivants:
 
 GNU/Linux             -- x86, Sparc, Alpha
-Solaris		    -- Sparc
+Solaris		      -- Sparc
 FreeBSD               -- x86
 OpenBSD               -- x86
 
@@ -420,7 +443,7 @@ pour les binaires précompilés ( mais *très vieilles*) pour ces plateformes.
 Gnucash peut probablement être fait pour fonctionner avec la plupart des
 plateformes POSIX, si les les librairies fournies et les outils sont disponibles.
 
-=====================================
+#####################################
 Sites additionnels de téléchargement:
 -------------------------------------
 
@@ -459,7 +482,7 @@ SGI Irix
       -- warning, this is a very down-level version
       http://linas.org/linux/xacc/xacc-1.0b7-sgi-irix.inst.tar
 
-===============================
+###############################
 Récupérer les sources avec CVS
 -------------------------------
 
@@ -481,7 +504,7 @@ production stable gnucash-1.2, faites un
 
 cvs -z3 -Pd :pserver:cvs@cvs.gnucash.org:/home/cvs/cvsroot checkout -rxacc-12-patch gnucash
 
-========================
+########################
 Développement de GnuCash
 ------------------------
 Avant de démarrer à développer sur GnuCash, vous devriez faire les choses
@@ -503,7 +526,6 @@ suivantes:
 
 
 Soumettre un patch
-------------------
 
 Dès que vous avez fait un certain travail que vous aimeriez soumettre, vous
 avez besoin d'envoyer un patch. Il y a un script perl appelé make-gnucash-patch
@@ -574,10 +596,13 @@ Envoyez gnucash.diff.gz.uue à gnucash-patches@gnucash.org
 
 Merci par avance pour votre contribution!
 
-_______________________________________________________________________________
 
-Traduction faite le 29/07/00 par Yannick LE NY
+Traduction faite le 13/08/00 par Yannick LE NY
 Cette traduction n'est peut-etre plus a jour,
-donc referez vous au fichier README en anglais.
+donc référez vous au fichier README en anglais.
 Pour toutes remarques ou suggestions:
 y-le-ny@ifrance.com
+
+Local Variables:
+mode: text
+End:
