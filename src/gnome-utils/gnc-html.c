@@ -235,7 +235,7 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
         *url_location = g_strdup(path);
       }
       else {
-        *url_location = g_strconcat(html->base_location, path, NULL);
+        *url_location = g_strconcat(html->base_location, "/", path, NULL);
       }
       g_free(path);
     }
