@@ -9,12 +9,15 @@
 #include <guile/gh.h>
 #include <time.h>
 
+#include "Account.h"
+#include "Group.h"
 #include "Period.h"
 #include "gnc-book.h"
 #include "gnc-book-p.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
+#include "Transaction.h"
 
 
 
@@ -22,10 +25,15 @@ static void
 run_test (void)
 {
   AccountGroup *grp;
-  GNCBook *book;
+  Account * acc;
+  GNCBook *openbook, *closedbook;
   Timespec ts;
+  SplitList *splist;
+  Split *sfirst, *slast;
+  Transaction *tfirst, *tlast;
+  Timespec tsfirst, tslast, tsmiddle;
+  
 
-  int ok = 1;
 
   if(!gnc_module_load("gnucash/engine", 0))
   {
@@ -33,26 +41,73 @@ run_test (void)
     exit(get_rv());
   }
 
-  if (!ok)
-  {
-    failure ("its borken");
-  }
-  
-  book = gnc_book_new ();
-  if (!book)
+  openbook = gnc_book_new ();
+  if (!openbook)
   {
     failure("book not created");
     exit(get_rv());
   }
 
-  grp = get_random_group (book);
+  grp = get_random_group (openbook);
   if(!grp)
   {
     failure("group not created");
     exit(get_rv());
   }
 
-  gnc_book_set_group (book, grp);
+  gnc_book_set_group (openbook, grp);
+  acc = xaccGroupGetAccount (grp, 0);
+  if(!acc)
+  {
+    failure("group was empty");
+    exit(get_rv());
+  }
+
+  splist = xaccAccountGetSplitList(acc);
+  if(!splist)
+  {
+    failure("account has no transactions");
+    exit(get_rv());
+  }
+
+  sfirst = splist->data;
+  slast = g_list_last(splist) ->data;
+  if (sfirst == slast)
+  {
+    failure("account doesn't have enough transactions");
+    exit(get_rv());
+  }
+
+  tfirst = xaccSplitGetParent (sfirst);
+  tlast = xaccSplitGetParent (slast);
+  
+  if (!tfirst || !tlast)
+  {
+    failure("malformed transactions in account");
+    exit(get_rv());
+  }
+
+  tsfirst = xaccTransRetDatePostedTS (tfirst);
+  tslast = xaccTransRetDatePostedTS (tlast);
+
+  if (tsfirst.tv_sec == tslast.tv_sec)
+  {
+    failure("transactions not time separated");
+    exit(get_rv());
+  }
+
+  tsmiddle = tsfirst;
+  tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
+
+  closedbook = gnc_book_close_period (openbook, tsmiddle, 
+                  NULL, "this is opening balance dude");
+
+  if (!closedbook)
+  {
+    failure("closed book not created");
+    exit(get_rv());
+  }
+
 
   success ("periods work but wern't really tested yet");
 }
