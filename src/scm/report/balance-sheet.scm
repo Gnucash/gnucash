@@ -39,15 +39,16 @@
        (optname-display-depth (N_ "Account Display Depth"))
        (optname-show-subaccounts (N_ "Always show sub-accounts"))
        (optname-accounts (N_ "Account"))
-;      (optname-group-accounts (N_ "Group the accounts"))
-       (optname-include-subbalances (N_ "Include Sub-Account balances"))
+       (optname-show-parent-balance (N_ "Show balances for parent accounts"))
+       (optname-show-parent-total (N_ "Show subtotals"))
        
 ;;      (pagename-currencies (N_ "Currencies")) too little options :)
        (pagename-currencies pagename-general)
        (optname-show-foreign (N_ "Show Foreign Currencies"))
        (optname-report-currency (N_ "Report's currency")))
 
-;;; FIXME: UGLY HACK OCCURRING HERE!!!!!!!
+  ;; Moderatly ugly hack here, i.e. this depends on the internal
+  ;; structure of html-table -- if that is changed, this might break.
   (define (html-table-merge t1 t2)
     (begin 
       (gnc:html-table-set-data! t1
@@ -55,8 +56,29 @@
 			       (gnc:html-table-data t2)
 			       (gnc:html-table-data t1)))
       (gnc:html-table-set-num-rows-internal!
-       t1 (length (gnc:html-table-data t1)))))
-      
+       t1 (+ (gnc:html-table-num-rows t1)
+	     (gnc:html-table-num-rows t2)))))
+
+  ;; Copied from html-utilities.scm.
+  ;; Creates the table cell with given colspan (and rowspan=1), with
+  ;; the content content and in boldface if boldface? is true. content
+  ;; may be #f (empty cell), or a string, or a html-text
+  ;; object. Returns a html-table-cell object.
+  (define (my-table-cell colspan content boldface?)
+    (gnc:make-html-table-cell/size 
+     1 colspan 
+     (and content ;; if content == #f, just use #f
+	  (if boldface? 
+	      ;; Further improvement: use some other table cell
+	      ;; style here ("grand-total") instead of the direct
+	      ;; markup-b.
+	      (gnc:make-html-text
+	       (if (gnc:html-text? content)
+		   (apply gnc:html-markup-b 
+			  (gnc:html-text-body content))
+		   (gnc:html-markup-b content)))
+	      content))))
+  
   (define (accountlist-get-comm-balance-at-date accountlist date)
     (let ((collector (gnc:make-commodity-collector)))
       (for-each (lambda (account)
@@ -92,15 +114,21 @@
 	  '(bank cash credit asset liability stock mutual-fund currency
             equity income expense)
 	  (gnc:group-get-subaccounts (gnc:get-current-group)))))
-
-      ;; with or without grouping
-;      (gnc:options-add-group-accounts!      
-;       options pagename-accounts optname-group-accounts "b" #t)
-
-      ;; with or without subaccounts
-      (gnc:options-add-include-subaccounts!
-       options pagename-accounts optname-include-subbalances "c")
       
+      ;; what to show about non-leaf accounts
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	pagename-accounts optname-show-parent-balance 
+	"c" (N_ "Show balances for parent accounts") #f))
+
+      ;; have a subtotal for each parent account?
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	pagename-accounts optname-show-parent-total
+	"d" (N_ "Show subtotals for parent accounts") #f))
+
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options pagename-general)      
 
@@ -117,54 +145,26 @@
        (gnc:lookup-option 
         (gnc:report-options report-obj) pagename optname)))
 
-    (define (add-retained-profits-line
-             table balance show-fcur? exchange-fn report-commodity)
-      (if show-fcur?
-	  (let ((first-row #t))
-	    (balance 'format
-                     (lambda (commodity amount)
-                       (html-table-append-row!
-                        (list (if first-row
-                                  (begin 
-                                    (set! first-row #f)
-                                    (_ "Net Profit"))
-                                  " ")
-                              (gnc:make-gnc-monetary
-                               commodity amount))))
-		     #f))
-	  (gnc:html-table-append-row!
-           table (list (_ "Net Profit") 
-                       (gnc:sum-collector-commodity 
-                        balance report-commodity exchange-fn)))))
-				   
-
-    (define (add-subtotal-line
-             table label total show-fcur? exchange-fn report-commodity)
-      (if show-fcur?
-	  (let ((first-row #t))
-	    (total 'format
-                   (lambda (commodity amount)
-                     (html-table-append-row!
-                      (list (if first-row
-                                (begin 
-                                  (set! first-row #f)
-                                  label)
-                                " ")
-                            (gnc:make-gnc-monetary
-                             commodity amount))))
-		   #f))
-	  (gnc:html-table-append-row!
-           table (list label
-                       (gnc:sum-collector-commodity 
-                        total report-commodity exchange-fn)))))
-
     ;; get all option's values
     (let* ((display-depth (get-option pagename-accounts 
 				      optname-display-depth))
 	   (show-subaccts? (get-option pagename-accounts
 				      optname-show-subaccounts))
 	   (accounts (get-option pagename-accounts
-				 optname-accounts))
+				 optname-accounts))	 
+	   (show-parent-balance? (get-option pagename-accounts
+					     optname-show-parent-balance))
+	   (show-parent-total? (get-option pagename-accounts
+					   optname-show-parent-total))
+	   (show-fcur? (get-option pagename-currencies
+				   optname-show-foreign))
+	   (report-currency (get-option pagename-currencies
+					optname-report-currency))
+	   (to-date-tp (gnc:timepair-end-day-time 
+		       (vector-ref (get-option pagename-general
+					       optname-to-date) 1)))
+
+	   ;; decompose the account list
 	   (asset-accounts
 	    (gnc:filter-accountlist-type
 	     '(bank cash asset stock mutual-fund)
@@ -182,44 +182,68 @@
 	   (income-expense-accounts
 	    (gnc:filter-accountlist-type
 	     '(income expense)
-	     accounts))
-	 
-;	   (do-grouping? (get-option pagename-accounts
-;				     optname-group-accounts))
-	   (do-subtotals? (get-option pagename-accounts
-				      optname-include-subbalances))
-	   (show-fcur? (get-option pagename-currencies
-				   optname-show-foreign))
-	   (report-currency (get-option pagename-currencies
-					optname-report-currency))
-	   (to-date-tp (gnc:timepair-end-day-time 
-		       (vector-ref (get-option pagename-general
-					       optname-to-date) 1)))
-	 
+	     accounts)) 
+	   ;; goonie: I would rather use gnc:decompose-accountlist and
+	   ;; then continue with a bunch of list processing. Saves
+	   ;; typing and makes changes a lot easier. -- cstim.
+
 	   (doc (gnc:make-html-document))
-	   (txt (gnc:make-html-text)))
-      (gnc:warn "account names" liability-account-names)
+	   (txt (gnc:make-html-text))
+	   (tree-depth (if (equal? display-depth 'all)
+			   (gnc:get-current-group-depth) 
+			   display-depth))
+	   ;; calculate the exchange rates  
+	   (exchange-alist (gnc:make-exchange-alist 
+			    report-currency to-date-tp))
+	   (exchange-fn (gnc:make-exchange-function exchange-alist))
+	   (totals-get-balance (lambda (account)
+				 (gnc:account-get-comm-balance-at-date 
+				  account to-date-tp #f))))
+
+      (define (add-subtotal-line table label balance)
+	(if show-fcur?
+	    ;; FIXME: The multi-currency format is not yet adapted to
+	    ;; take tree-depth into account. Instead of coding that
+	    ;; here it would definitely be better to extract the
+	    ;; necessary function out of html-build-acct-table into
+	    ;; the global namespace.
+	    (let ((first-row #t))
+	      (balance 'format
+		       (lambda (commodity amount)
+			 (html-table-append-row!
+			  (list (if first-row
+				    (begin 
+				      (set! first-row #f)
+				      label)
+				    #f)
+				(gnc:make-gnc-monetary
+				 commodity amount))))
+		       #f))
+	    (gnc:html-table-append-row!
+	     table (append 
+		    ;; FIXME: is it possible to get rid of my private
+		    ;; definition of my-table-cell? Maybe as another
+		    ;; extracted funtion from html-build-acct-tree.
+		    (list (my-table-cell tree-depth label #t))
+		    (gnc:html-make-empty-cells (- tree-depth 1))
+		    (list (and balance
+			       (gnc:make-html-text
+				;; FIXME: this markup-b can go away as
+				;; soon as we have styles here.
+				(gnc:html-markup-b
+				 (gnc:sum-collector-commodity 
+				  balance report-currency exchange-fn)))))))))
+      
+      
+      ;;(gnc:warn "account names" liability-account-names)
       (gnc:html-document-set-title! 
        ;; FIXME: Use magic sprintf code.
        doc (sprintf #f (N_ "Balance sheet at %s")
-			  (gnc:timepair-to-datestring to-date-tp)))
-      (if (not (null? accounts))
-	  ;; if no max. tree depth is given we have to find the
-	  ;; maximum existing depth
-	  (let* ((tree-depth (if (equal? display-depth 'all)
-				 (+ (gnc:get-current-group-depth) 
-				    (if do-grouping? 1 0))
-				 display-depth))
-		 ;; calculate the exchange rates  
-		 
-		 (exchange-alist (gnc:make-exchange-alist 
-				  report-currency to-date-tp))
-		 (exchange-fn (gnc:make-exchange-function exchange-alist))
-		 (totals-get-balance (lambda (account)
-				    (gnc:account-get-comm-balance-at-date 
-				     account to-date-tp #f)))
+		    (gnc:timepair-to-datestring to-date-tp)))
 
-		 (asset-balance 
+      (if (not (null? accounts))
+	  ;; Get all the balances for each account group.
+	  (let* ((asset-balance 
 		  (gnc:accounts-get-comm-total-assets 
 		   asset-accounts totals-get-balance))
 		 (liability-balance
@@ -238,35 +262,36 @@
 		 (total-equity-balance (gnc:make-commodity-collector))
 		 (equity-plus-liability (gnc:make-commodity-collector))
 
-		 ;; do the processing here
-		 (asset-table (gnc:html-build-acct-table 
-			 #f  to-date-tp 
-			 tree-depth show-subaccts? asset-accounts
-			 #f #f
-			 gnc:accounts-get-comm-total-assets
-			 (_ "Assets") #f do-subtotals?
-			 show-fcur? report-currency exchange-fn))
+		 ;; Create the account tables here.
+		 (asset-table 
+		  (gnc:html-build-acct-table 
+		   #f to-date-tp 
+		   tree-depth show-subaccts? 
+		   asset-accounts
+		   #f #f #f #f
+		   ;;gnc:accounts-get-comm-total-assets (_ "Assets") 
+		   #f
+		   show-parent-balance? show-parent-total?
+		   show-fcur? report-currency exchange-fn))
 		 (liability-table 
 		  (gnc:html-build-acct-table
-			#f
-			to-date-tp
-			tree-depth
-			show-subaccts?
-			liability-accounts
-			#f #f
-			gnc:accounts-get-comm-total-assets
-			(_ "Liabilities") #f do-subtotals?
-			show-fcur? report-currency exchange-fn))
+		   #f to-date-tp
+		   tree-depth show-subaccts?
+		   liability-accounts
+		   #f #f #f #f
+		   ;;gnc:accounts-get-comm-total-assets (_ "Liabilities") 
+		   #f
+		   show-parent-balance? show-parent-total?
+		   show-fcur? report-currency exchange-fn))
 		 (equity-table
 		  (gnc:html-build-acct-table
-		   #f
-		   to-date-tp
-		   tree-depth
-		   show-subaccts?
+		   #f to-date-tp
+		   tree-depth show-subaccts?
 		   equity-accounts
-		   #f #f
-		   gnc:accounts-get-comm-total-assets
-		   (_ "Equity") #f do-subtotals?
+		   #f #f #f #f 
+		   ;;gnc:accounts-get-comm-total-assets (_ "Equity") 
+		   #f 
+		   show-parent-balance? show-parent-total?
 		   show-fcur? report-currency exchange-fn)))
 	    (retained-profit-balance 'minusmerge
 				     neg-retained-profit-balance
@@ -284,33 +309,44 @@
 	    (equity-plus-liability 'merge
 				   total-equity-balance
 				   #f)
-				  
-			       
 
 	    
-	    ;; add the tables
-	    (gnc:html-table-prepend-row! asset-table (list "Assets"))	    
-	    (add-subtotal-line
-	     asset-table "Assets" 
-	     asset-balance show-fcur? exchange-fn
-	     report-currency)	    
-	    (gnc:html-table-append-row! asset-table (list "Liabilities"))
+	    ;; Now concatenate the tables. This first prepend-row has
+	    ;; to be written out by hand -- we can't use the function
+	    ;; append-something because we have to prepend.
+	    (gnc:html-table-prepend-row! 
+	     asset-table 
+	     (list (my-table-cell (* (if show-fcur? 3 2) 
+				     tree-depth) 
+				  (_ "Assets") #t)))
+	    
+	    (add-subtotal-line 
+	     asset-table (_ "Assets") asset-balance)	    
+	    
+	    ;; add a horizontal ruler
+	    (gnc:html-table-append-ruler! 
+	     asset-table (* (if show-fcur? 3 2) tree-depth))
+	    
+	    (add-subtotal-line 
+	     asset-table (_ "Liabilities") #f)
 	    (html-table-merge asset-table liability-table)
 	    (add-subtotal-line
-	     asset-table "Liabilities" 
-	     sign-reversed-liability-balance show-fcur? exchange-fn
-	     report-currency)
-	    (gnc:html-table-append-row! asset-table (list "Equity"))
+	     asset-table (_ "Liabilities") sign-reversed-liability-balance)
+
+	    (gnc:html-table-append-ruler! 
+	     asset-table (* (if show-fcur? 3 2) tree-depth))
+	    (add-subtotal-line
+	     asset-table (_ "Equity") #f)
 	    (html-table-merge asset-table equity-table)
-	    (add-retained-profits-line
-             asset-table retained-profit-balance
-             show-fcur? exchange-fn report-currency)
 	    (add-subtotal-line
-             asset-table "Total Equity" total-equity-balance show-fcur?
-             exchange-fn report-currency)
+             asset-table (_ "Net Profit") retained-profit-balance)
 	    (add-subtotal-line
-	     asset-table "Liabilities & Equity" equity-plus-liability
-	     show-fcur? exchange-fn report-currency)
+             asset-table (_ "Total Equity") total-equity-balance)
+
+	    (gnc:html-table-append-ruler! 
+	     asset-table (* (if show-fcur? 3 2) tree-depth))
+	    (add-subtotal-line
+	     asset-table (_ "Liabilities & Equity") equity-plus-liability)
 	    (gnc:html-document-add-object! doc asset-table)
 
 	    ;; add currency information
@@ -318,7 +354,7 @@
 ;	     doc ;;(gnc:html-markup-p
 ;	     (gnc:html-make-exchangerates 
 ;	      report-currency exchange-alist accounts #f)))
-)
+	    )
 	  
 	  ;; error condition: no accounts specified
           (let ((p (gnc:make-html-text)))

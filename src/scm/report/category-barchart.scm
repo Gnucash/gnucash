@@ -98,7 +98,7 @@
       (add-option
        (gnc:make-simple-boolean-option
         pagename-display optname-stacked
-        "b" (N_ "Show barchart as stacked barchart?") #t))
+        "b" (N_ "Show barchart as stacked barchart? (Guppi>=0.35.4 required)") #t))
 
       (add-option
        (gnc:make-number-range-option

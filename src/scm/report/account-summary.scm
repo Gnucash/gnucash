@@ -46,7 +46,8 @@
       (optname-show-subaccounts (N_ "Always show sub-accounts"))
       (optname-accounts (N_ "Account"))
       (optname-group-accounts (N_ "Group the accounts"))
-      (optname-include-subbalances (N_ "Include Sub-Account balances")))
+      (optname-show-parent-balance (N_ "Show balances for parent accounts"))
+      (optname-show-parent-total (N_ "Show subtotals")))
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; options generator
@@ -81,11 +82,20 @@
 
       ;; with or without grouping
       (gnc:options-add-group-accounts!      
-       options pagename-accounts optname-group-accounts "b" #f)
+       options pagename-accounts optname-group-accounts "b" #t)
 
-      ;; with or without subaccounts
-      (gnc:options-add-include-subaccounts!
-       options pagename-accounts optname-include-subbalances "c")
+      ;; new options here
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	pagename-accounts optname-show-parent-balance 
+	"c" (N_ "Show balances for parent accounts") #t))
+
+      (gnc:register-option 
+       options
+       (gnc:make-simple-boolean-option
+	pagename-accounts optname-show-parent-total
+	"d" (N_ "Show subtotals for parent accounts") #t))
 
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options pagename-general)      
@@ -110,8 +120,10 @@
 	  (accounts (get-option pagename-accounts optname-accounts))
           (do-grouping? (get-option pagename-accounts
 				    optname-group-accounts))
-          (do-subtotals? (get-option pagename-accounts
-				     optname-include-subbalances))
+          (show-parent-balance? (get-option pagename-accounts
+					    optname-show-parent-balance))
+          (show-parent-total? (get-option pagename-accounts
+					  optname-show-parent-total))
 	  (show-fcur? (get-option pagename-general optname-show-foreign))
 	  (report-currency (get-option pagename-general 
 				       optname-report-currency))
@@ -138,7 +150,8 @@
 			 tree-depth show-subaccts? accounts
 			 #t
 			 #t gnc:accounts-get-comm-total-assets 
-			 (_ "Total") do-grouping? do-subtotals?
+			 (_ "Total") do-grouping? 
+			 show-parent-balance? show-parent-total?
 			 show-fcur? report-currency exchange-fn)))
 
 	    ;; add the table 

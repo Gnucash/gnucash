@@ -84,7 +84,8 @@
 	(cons (_ "Assets") 
 	      '(asset bank cash checking savings money-market 
 		      stock mutual-fund currency))
-	(cons (_ "Liabilities") '(liability equity credit-line))
+	(cons (_ "Liabilities") '(liability credit-line))
+	(cons (_ "Equity") '(equity))
 	(cons (_ "Income") '(income))
 	(cons (_ "Expense") '(expense)))))
 

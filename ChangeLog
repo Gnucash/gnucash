@@ -1,3 +1,21 @@
+2001-04-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/balance-sheet.scm: Major overhaul. Adapted to new
+	options in gnc:html-build-acct-table. Cleaned up code. Corrected
+	column alignment.
+
+	* src/scm/html-utilities.scm (gnc:html-table-append-ruler!): New
+	function.
+	(gnc:html-build-acct-table): Added new arguments for how to show
+	non-leaf accounts: with subtotal or not, with own balance or
+	not. Removed some empty lines in the html-table.
+
+	* src/scm/report/pnl.scm, account-summary.scm: Added support for
+	new gnc:html-build-acct-tree options.
+
+	* src/scm/report-utilities.scm (gnc:decompose-accountlist): Added
+	equity accounts.
+
 2001-04-05  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/test/test-xml-transaction.c: guess what?
