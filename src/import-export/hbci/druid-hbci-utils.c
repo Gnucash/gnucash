@@ -47,6 +47,8 @@
 /* #include "top-level.h" */
 #include <openhbci2/api.h>
 #include <openhbci2/outboxjob.h>
+#include <openhbci2/mediumrdhbase.h>
+#include <openhbci2/rsakey.h>
 
 #include "gnc-hbci-utils.h"
 
@@ -408,3 +410,171 @@ gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox,
   
   return accountlist;
 }
+
+
+gboolean
+gnc_hbci_evaluate_GetKeys(HBCI_Outbox *outbox, HBCI_OutboxJob *job,
+			  HBCI_Customer *newcustomer)
+{
+  GWEN_DB_NODE *rsp;
+  GWEN_DB_NODE *n;
+  /*HBCI_Error *err;*/
+  HBCI_RSAKey *_cryptKey = NULL;
+  HBCI_RSAKey *_signKey = NULL;
+
+  g_assert(outbox);
+  g_assert(newcustomer);
+  
+  rsp = HBCI_Job_responseData(HBCI_OutboxJob_Job(job));
+  if (!rsp) {
+    fprintf(stderr, "JobGetKeys::evaluate: no response data\n");
+    return FALSE;
+  }
+
+  printf("JobGetKeys: Complete response:\n");
+  GWEN_DB_Dump(rsp, stderr, 1);
+
+  n=GWEN_DB_GetFirstGroup(rsp);
+  while(n) {
+    if (strcasecmp(GWEN_DB_GroupName(n), "GetKeyResponse")==0) {
+      unsigned int bs;
+      const void *p;
+      GWEN_DB_NODE *keydb;
+      const char defaultExpo[3]={0x01, 0x00, 0x01};
+      gboolean iscrypt;
+
+      //DBG_NOTICE(0, "Found Key response");
+      iscrypt=FALSE;
+
+      keydb=GWEN_DB_Group_new("key");
+      GWEN_DB_SetCharValue(keydb,
+                           GWEN_DB_FLAGS_OVERWRITE_VARS,
+                           "type",
+                           "RSA");
+      // TODO: check for the correct exponent (for now assume 65537)
+      GWEN_DB_SetBinValue(keydb,
+                          GWEN_DB_FLAGS_OVERWRITE_VARS,
+                          "data/e",
+                          defaultExpo,
+                          sizeof(defaultExpo));
+
+      GWEN_DB_SetIntValue(keydb,
+                          GWEN_DB_FLAGS_OVERWRITE_VARS,
+                          "data/public",
+                          1);
+
+      iscrypt=(strcasecmp(GWEN_DB_GetCharValue(n,
+                                               "keyname/keytype", 0,
+                                               "V"), "V")==0);
+      GWEN_DB_SetCharValue(keydb,
+                           GWEN_DB_FLAGS_OVERWRITE_VARS,
+                           "name",
+                           GWEN_DB_GetCharValue(n,
+                                                "keyname/keytype", 0,
+                                                "V"));
+      GWEN_DB_SetCharValue(keydb,
+                           GWEN_DB_FLAGS_OVERWRITE_VARS,
+                           "owner",
+                           GWEN_DB_GetCharValue(n, "keyname/userId", 0, ""));
+      GWEN_DB_SetIntValue(keydb,
+                          GWEN_DB_FLAGS_OVERWRITE_VARS,
+                          "number",
+                          GWEN_DB_GetIntValue(n, "keyname/keynum", 0, 0));
+      GWEN_DB_SetIntValue(keydb,
+                          GWEN_DB_FLAGS_OVERWRITE_VARS,
+                          "version",
+                          GWEN_DB_GetIntValue(n, "keyname/keyversion", 0, 0));
+
+
+      p=GWEN_DB_GetBinValue(n, "key/modulus", 0, 0, 0 , &bs);
+      if (!p || !bs) {
+	fprintf(stderr, "JobGetKeys::evaluate: no modulus\n");
+	return FALSE;
+      }
+      GWEN_DB_SetBinValue(keydb,
+			  GWEN_DB_FLAGS_OVERWRITE_VARS,
+                          "data/n",
+			  p, bs);
+
+      if (iscrypt)
+	_cryptKey = HBCI_RSAKey_new(iscrypt, keydb);
+      else
+	_signKey = HBCI_RSAKey_new(iscrypt, keydb);
+      fprintf(stderr, "Created %s key", iscrypt?"crypt":"sign");
+    } // if we have a key response
+    n=GWEN_DB_GetNextGroup(n);
+  } // while
+
+  // Key creation finished. Now add them to the medium @§%$!!!
+  
+  {
+    HBCI_MediumRDHBase *mrdh;
+    HBCI_Medium *medium;
+    const HBCI_Bank *bank;
+    const HBCI_User *user;
+    HBCI_Error *err;
+
+    // get some vars
+    user = HBCI_Customer_user(newcustomer);
+    bank = HBCI_User_bank(user);
+    medium = (HBCI_Medium *) HBCI_User_medium(user);
+    mrdh = HBCI_Medium_MediumRDHBase (medium);
+
+    // mount medium
+    err = HBCI_Medium_mountMedium(medium, "");
+    if (err && !HBCI_Error_isOk(err)) {
+      fprintf(stderr, "JobGetKeys::commit: 1\n");
+      return FALSE;
+    }
+
+    // select context
+    err = HBCI_Medium_selectContext(medium, HBCI_Bank_country(bank),
+				    HBCI_Bank_bankCode(bank),
+				    HBCI_User_userId(user));
+    if (err && !HBCI_Error_isOk(err)) {
+      HBCI_Medium_unmountMedium(medium, "");
+      fprintf(stderr, "JobGetKeys::commit: 2\n");
+      return FALSE;
+    }
+
+    // set crypt key
+    if (_cryptKey) {
+      fprintf(stderr, "Setting Institute Crypt Key\n");
+      if (!HBCI_RSAKey_isCryptoKey(_cryptKey)) {
+	fprintf(stderr, "Crypt key expected\n");
+	return FALSE;
+      }
+      err = HBCI_MediumRDHBase_setInstituteCryptKey(mrdh, _cryptKey);
+      if (err && !HBCI_Error_isOk(err)) {
+	HBCI_Medium_unmountMedium(medium, "");
+	fprintf(stderr, "JobGetKeys::commit: 3\n");
+	return FALSE;
+      }
+    }
+
+    // set sign key
+    if (_signKey) {
+      fprintf(stderr, "Setting Institute Sign Key\n");
+      err=HBCI_MediumRDHBase_setInstituteSignKey(mrdh, _signKey);
+      if (err && !HBCI_Error_isOk(err)) {
+	HBCI_Medium_unmountMedium(medium, "");
+	fprintf(stderr, "JobGetKeys::commit: 4\n");
+	return FALSE;
+      }
+      if (!HBCI_MediumRDHBase_hasInstSignKey(mrdh)) {
+	fprintf(stderr, "What ??? I just set the signkey but there is none ?!\n");
+      }
+    }
+
+    err = HBCI_Medium_unmountMedium(medium, "");
+    if (err && !HBCI_Error_isOk(err)) {
+      fprintf(stderr, "JobGetKeys::commit: 5\n");
+      return FALSE;
+    }
+    fprintf(stderr, "New institute keys activated\n");
+  }
+  
+  // use result returned from lower class
+  return TRUE;
+}
+

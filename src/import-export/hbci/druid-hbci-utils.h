@@ -58,5 +58,9 @@ GList *
 gnc_processOutboxResponse(HBCI_API *api, HBCI_Outbox *outbox, 
 			  GList *accountlist);
 
+/* Get keys from Job; store them in the customer's medium @§%&! */
+gboolean
+gnc_hbci_evaluate_GetKeys(HBCI_Outbox *outbox, HBCI_OutboxJob *job,
+			  HBCI_Customer *newcustomer);
 
 #endif

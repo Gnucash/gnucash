@@ -1276,6 +1276,21 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
     
     job = HBCI_OutboxJob_new("JobGetKeys", 
 			     (HBCI_Customer*)info->newcustomer, "");
+    
+    {
+      HBCI_Job *jjob = HBCI_OutboxJob_Job(job);
+      /* Copied from libaqmoney's JobGetKeys::JobGetKeys(Pointer<Customer> c) */
+      HBCI_Job_setIntProperty(jjob, "open/ident/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty(jjob, "open/ident/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty(jjob, "open/ident/customerId", "9999999999");
+      HBCI_Job_setProperty(jjob, "open/ident/systemId", "0");
+
+      HBCI_Job_setIntProperty(jjob, "open/signkey/key/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty(jjob, "open/signkey/key/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+
+      HBCI_Job_setIntProperty(jjob, "open/cryptkey/key/country", HBCI_Bank_country(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+      HBCI_Job_setProperty(jjob, "open/cryptkey/key/bankcode", HBCI_Bank_bankCode(HBCI_User_bank(HBCI_Customer_user(info->newcustomer))));
+    }
     HBCI_Outbox_addJob (info->outbox, job);
 
     /* Execute Outbox. */
@@ -1285,6 +1300,12 @@ on_iniletter_info_next (GnomeDruidPage  *gnomedruidpage,
       return FALSE;
     }
 
+    /* Get keys from Job; store them in the customer's medium @§%&! */
+    if (!gnc_hbci_evaluate_GetKeys(info->outbox, job,
+				   (HBCI_Customer *)info->newcustomer)) {
+      return FALSE;
+    }
+    
     HBCI_Outbox_removeByStatus (info->outbox, HBCI_JOB_STATUS_NONE);
     info->gotkeysforCustomer = info->newcustomer;
 
