@@ -185,8 +185,8 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
       const list_HBCI_Transaction *trans_list;
       
       trans_list = HBCI_OutboxJobGetTransactions_transactions (trans_job);
-      printf("gnc_hbci_gettrans: Got %d transactions.\n", 
-	     list_HBCI_Transaction_size(trans_list));
+      /*printf("gnc_hbci_gettrans: Got %d transactions.\n", 
+	list_HBCI_Transaction_size(trans_list));*/
 
       if (list_HBCI_Transaction_size(trans_list) > 0) {
 	struct trans_list_data data;
