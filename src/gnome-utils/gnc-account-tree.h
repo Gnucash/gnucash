@@ -64,12 +64,6 @@ struct GNCAccountTree_s
 
   AccountViewInfo avi;
 
-  gint num_columns;
-  gint description_column;
-  gint balance_column;
-  gint total_column;
-  AccountFieldCode column_fields[NUM_ACCOUNT_FIELDS];
-
   const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
 
   GtkStyle *deficit_style;
@@ -164,6 +158,10 @@ void gnc_account_tree_set_view_filter (GNCAccountTree *tree,
 void gnc_account_tree_set_selectable_filter (GNCAccountTree *tree,
                                              AccountFilter filter,
                                              gpointer user_data);
+const char * gnc_ui_account_get_field_name (AccountFieldCode field);
+const char * gnc_ui_account_get_pref_name (AccountFieldCode field);
+AccountFieldCode gnc_ui_account_pref_name_to_code (const char *pref_name);
+
 
 #ifdef __cplusplus
 }

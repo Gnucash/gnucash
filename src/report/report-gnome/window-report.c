@@ -386,7 +386,7 @@ gnc_get_export_type_choice (SCM export_types)
     return SCM_BOOL_T;
 
   choice--;
-  if (choice >= gh_length (export_types))
+  if (choice >= (int)gh_length (export_types))
     return SCM_BOOL_F;
 
   return gh_list_ref (export_types, gh_int2scm (choice));

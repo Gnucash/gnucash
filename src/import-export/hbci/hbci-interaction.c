@@ -252,7 +252,7 @@ static int msgInputPin(const HBCI_User *user,
     if (!retval)
       break;
     
-    if (strlen(passwd) < minsize) {
+    if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
 	g_strdup_printf (  _("The PIN needs to be at least %d characters \n"

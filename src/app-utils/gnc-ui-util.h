@@ -20,6 +20,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
+/** @addtogroup UI
+    @{ */
+/** @file gnc-ui-util.h 
+    @brief  utility functions for the GnuCash UI
+    @author Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
+*/
+
 #ifndef GNC_UI_UTIL_H
 #define GNC_UI_UTIL_H
 
@@ -57,37 +64,75 @@ GNCBook * gnc_get_current_book (void);
 AccountGroup * gnc_get_current_group (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 
+/*
+ * These values are order according to the way they should appear in
+ * the register.  If you change this enum, you must also change the
+ * acct_tree_defaults data structure in gnc-account-tree.c.
+ */
 typedef enum
 {
-  ACCOUNT_TYPE = 0,
-  ACCOUNT_NAME,
+  ACCOUNT_NAME = 0,
+  ACCOUNT_TYPE,
+  ACCOUNT_COMMODITY,
   ACCOUNT_CODE,
   ACCOUNT_DESCRIPTION,
-  ACCOUNT_NOTES,
-  ACCOUNT_COMMODITY,
+  ACCOUNT_PRESENT,
+  ACCOUNT_PRESENT_REPORT,
   ACCOUNT_BALANCE,        /* with sign reversal */
   ACCOUNT_BALANCE_REPORT, /* ACCOUNT_BALANCE in default report currency */
+  ACCOUNT_CLEARED,
+  ACCOUNT_CLEARED_REPORT,
+  ACCOUNT_RECONCILED,
+  ACCOUNT_RECONCILED_REPORT,
+  ACCOUNT_FUTURE_MIN,
+  ACCOUNT_FUTURE_MIN_REPORT,
   ACCOUNT_TOTAL,          /* balance + children's balance with sign reversal */
   ACCOUNT_TOTAL_REPORT,   /* ACCOUNT_TOTAL in default report currency */
+  ACCOUNT_NOTES,
   ACCOUNT_TAX_INFO,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;
 
-const char * gnc_ui_account_get_field_name (AccountFieldCode field);
-
-/* Must g_free string when done */
+/**
+ * This routine retrives the content for any given field in the
+ * account tree data structure.  The account specifies the "row" and
+ * the field parameter specifies the "column".  In essence, this is
+ * one giant accessor routine for the Account object where all the
+ * results are string values.
+ *
+ * @param account  The account to retrieve data about.
+ * @param field    An indicator of which field in the account tree to return
+ * @param negative An indicator that the result was a negative numeric
+ *                 value.  May be used by the caller for colorization of the
+ *                 returned string.
+ * @return         The textual string representing the requested field.
+ *
+ * @note The caller must free the returned string when done with it.
+ */
 char * gnc_ui_account_get_field_value_string (Account *account,
-                                              AccountFieldCode field);
+                                              AccountFieldCode field,
+					      gboolean *negative);
 
-gnc_numeric gnc_ui_convert_balance_to_currency(gnc_numeric balance,
-                                               gnc_commodity *balance_currency,
-                                               gnc_commodity *currency);
-
+/**
+ * This routine retrives the total balance in an account, possibly
+ * including all sub-accounts under the specified account.
+ *
+ * @param account           The account to retrieve data about.
+ * @param include_children  Include all sub-accounts of this account.
+ */
 gnc_numeric gnc_ui_account_get_balance (Account *account,
                                         gboolean include_children);
 
+/**
+ * This routine retrives the reconciled balance in an account,
+ * possibly including all sub-accounts under the specified account.
+ *
+ * @param account           The account to retrieve data about.
+ * @param include_children  Include all sub-accounts of this account.
+ */
 gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account,
                                                   gboolean include_children);
+
 gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account,
                                                    time_t date,
                                                    gboolean include_children);
@@ -281,3 +326,4 @@ int iswlower (gint32 wc);
 #endif
 
 #endif
+/** @} */

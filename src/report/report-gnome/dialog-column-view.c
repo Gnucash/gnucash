@@ -105,7 +105,7 @@ update_display_lists(gnc_column_view_edit * view) {
   row = view->available_selected;
 
   if(gh_list_p(view->available_list) && !gh_null_p (view->available_list)) {
-    row = MIN (row, gh_length (view->available_list) - 1);
+    row = MIN (row, (int)gh_length (view->available_list) - 1);
     selection = gh_list_ref (view->available_list, gh_int2scm (row));
   }
   else {
@@ -136,7 +136,7 @@ update_display_lists(gnc_column_view_edit * view) {
   row = view->contents_selected;
 
   if(gh_list_p(view->contents_list) && !gh_null_p (view->contents_list)) {
-    row = MIN (row, gh_length (view->contents_list) - 1);
+    row = MIN (row, (int)gh_length (view->contents_list) - 1);
     selection = gh_list_ref (view->contents_list, gh_int2scm (row));
   }
   else {
@@ -309,7 +309,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
   int oldlength; 
   
   if(gh_list_p(r->available_list) && 
-     (gh_length(r->available_list) > r->available_selected)) {
+     ((int)gh_length(r->available_list) > r->available_selected)) {
     template_name = gh_list_ref(r->available_list, 
                                 gh_int2scm(r->available_selected));
     new_report = gh_call1(make_report, template_name);
