@@ -29,7 +29,7 @@ VPATH    = @srcdir@
 CC       = @CC@
 INCLPATH = -I/usr/include \
            -I.. \
-           -I@x_includes@ \
+           -I@x_includes@/. \
            -I@srcdir@/../include \
            -I@srcdir@/../lib/ComboBox-1.33 \
            -I@srcdir@/../lib/XmHTML-1.1.0/src \
@@ -38,7 +38,7 @@ INCLPATH = -I/usr/include \
 CFLAGS   = @cflags@ -DCELL_WIDGETS=1
 LFLAGS   = @lflags@
 LIBS     = @LIBS@
-LIBPATH  = -L/lib -L/usr/lib -L@x_libraries@
+LIBPATH  = -L/lib -L/usr/lib -L@x_libraries@/.
 TARGET   = ../xacc
 
 LIBHTMLW = ../lib/libhtmlw/libhtmlw.a
