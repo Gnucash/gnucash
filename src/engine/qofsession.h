@@ -153,6 +153,8 @@ void qof_session_begin (QofSession *session, const char * book_id,
 typedef void (*QofPercentageFunc) (const char *message, double percent);
 void qof_session_load (QofSession *session,
 		       QofPercentageFunc percentage_func);
+
+/* XXX session_export really doesn't belong here */
 gboolean qof_session_export (QofSession *tmp_session,
 			     QofSession *real_session,
 			     QofPercentageFunc percentage_func);
