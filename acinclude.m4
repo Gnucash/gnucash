@@ -4046,43 +4046,45 @@ max_guile_version=ifelse([$2], , 99.99.99,$2)
 
 AC_MSG_CHECKING(for guile - ${min_guile_version} <= version < ${max_guile_version})
 
-guile_version=`guile-config --version 2>&1`
-guile_version="$guile_version.0"
-guile_major_version=`echo $guile_version | \
+if test x${BUILD_GUILE} != x -a ${BUILD_GUILE} != no ; then
+  guile_version=`${name_build_guile} --version 2>&1`
+  guile_version="$guile_version.0"
+  guile_major_version=`echo $guile_version | \
 	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\1/'`
-guile_minor_version=`echo $guile_version | \
+  guile_minor_version=`echo $guile_version | \
 	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\2/'`
-guile_micro_version=`echo $guile_version | \
+  guile_micro_version=`echo $guile_version | \
 	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\3/'`
 
-major_required=`echo ${min_guile_version} |\
+  major_required=`echo ${min_guile_version} |\
         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-minor_required=`echo ${min_guile_version} |\
+  minor_required=`echo ${min_guile_version} |\
 	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-micro_required=`echo ${min_guile_version} |\
+  micro_required=`echo ${min_guile_version} |\
 	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
-major_prohibited=`echo ${max_guile_version} |\
+  major_prohibited=`echo ${max_guile_version} |\
         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-minor_prohibited=`echo ${max_guile_version} |\
+  minor_prohibited=`echo ${max_guile_version} |\
 	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-micro_prohibited=`echo ${max_guile_version} |\
+  micro_prohibited=`echo ${max_guile_version} |\
 	sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
 
 
-if ${GUILE} -c "(cond ((> ${guile_major_version} ${major_required}) (exit 0))\
+  if ${GUILE} -c "(cond ((> ${guile_major_version} ${major_required}) (exit 0))\
 	           ((< ${guile_major_version} ${major_required}) (exit 1))\
                    ((> ${guile_minor_version} ${minor_required}) (exit 0))\
 		   ((< ${guile_minor_version} ${minor_required}) (exit 1))\
 	           ((< ${guile_micro_version} ${micro_required}) (exit 1))\
 		   (else (exit 0)))" ; then
-  if ${GUILE} -c "(cond ((> ${guile_major_version} ${major_prohibited}) (exit 1))\
+    if ${GUILE} -c "(cond ((> ${guile_major_version} ${major_prohibited}) (exit 1))\
 	           ((< ${guile_major_version} ${major_prohibited}) (exit 0))\
                    ((> ${guile_minor_version} ${minor_prohibited}) (exit 1))\
 		   ((< ${guile_minor_version} ${minor_prohibited}) (exit 0))\
 	           ((< ${guile_micro_version} ${micro_prohibited}) (exit 0))\
 		   (else (exit 1)))" ; then
-	version_ok=yes
+  	version_ok=yes
+    fi
   fi
 fi
 
