@@ -168,14 +168,14 @@ gnc_ui_refresh_statusbar (void)
     }
   }
 
-  /* check to see wether GUI should display reversed signs */
-  if (GNC_F == gnc_reverse_balance_type(EQUITY)) 
-  { 
+  /* check to see whether GUI should display reversed signs */
+  if (gnc_reverse_balance_type(ASSET))
+  {
     assets = -assets;
     euro_assets = -euro_assets;
   }
-  if (GNC_F == gnc_reverse_balance_type(INCOME)) 
-  { 
+  if (!gnc_reverse_balance_type(INCOME))
+  {
     profits = -profits;
     euro_profits = -euro_profits;
   }
