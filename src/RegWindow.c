@@ -51,8 +51,6 @@
 
 
 #define NUM_COLUMNS        20
-#define NUM_HEADER_ROWS    1    /* also works if #define to 2 */
-#define NUM_ROWS_PER_TRANS 2
 
 /* enumerate different ledger types */
 enum {
@@ -80,6 +78,8 @@ typedef struct _RegWindow {
   char type;                  /* register display type, usually equal to *
                                * account type                            */
 
+  char header_rows;           /* number of header rows                   */
+
   /* quick-fill stuff */
   XmTextPosition insert;      /* used by quickfill for detecting deletes */
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
@@ -98,11 +98,18 @@ typedef struct _RegWindow {
   short  cellRowLocation [NUM_COLUMNS]; /* cell location, row            */
   short  columnWidths    [NUM_COLUMNS]; /* widths (in chars not pixels)  */
 
-  String columnLabels  [NUM_HEADER_ROWS + NUM_ROWS_PER_TRANS]
-                       [NUM_COLUMNS];    /* column labels                 */
+  String columnLabels  [5][NUM_COLUMNS];/* column labels                 */
+                                        /* first array index must be     *
+                                         * greater than                  *
+                                         * [NUM_HEADER_ROWS +            *
+                                         * NUM_ROWS_PER_TRANS]           */
   unsigned char alignments[NUM_COLUMNS]; /* alignment of display chars    */
 
 } RegWindow;
+
+
+#define NUM_HEADER_ROWS    (regData->header_rows) 
+#define NUM_ROWS_PER_TRANS 2
 
 
 /** PROTOTYPES ******************************************************/
@@ -1719,10 +1726,11 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     }
   
   regData = (RegWindow *)_malloc(sizeof(RegWindow));
-  regData->changed   = 0;          /* Nothing has changed yet! */
-  regData->currEntry = 0;
-  regData->insert    = 0;          /* the insert (cursor) position in
-                                    * quickfill cells */
+  regData->changed     = 0;          /* Nothing has changed yet! */
+  regData->header_rows = 1;
+  regData->currEntry   = 0;
+  regData->insert      = 0;          /* the insert (cursor) position in
+                                      * quickfill cells */
 
   /* count the number of accounts we are supposed to display,
    * and then, store them. */
@@ -1745,7 +1753,18 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     regData->blackacc[0]->regData = regData;    
     windowname = regData->blackacc[0]->accountName;
   } else {
-    sprintf (buf, "%s General Ledger", regData->blackacc[0]->accountName);
+
+    regData->header_rows = 2;
+
+    switch (regData->type) {
+       case GEN_LEDGER:
+       case INC_LEDGER:
+         sprintf (buf, "%s General Ledger", regData->blackacc[0]->accountName);
+         break;
+       case PORTFOLIO:
+         sprintf (buf, "%s Portfolio", regData->blackacc[0]->accountName);
+         break;
+    }
     windowname = buf;
 
     /* hack alert -- quickfill for ledgers is almost certainly broken */
@@ -2116,28 +2135,6 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     switch(regData->type)
       {
       case BANK:
-      case CASH:
-      case ASSET:
-      case CREDIT:
-      case LIABILITY:
-      case INCOME:
-      case EXPENSE:
-      case EQUITY:
-      case GEN_LEDGER:
-      case INC_LEDGER:
-        break;
-      case STOCK:
-      case MUTUAL:
-      case PORTFOLIO:
-        regData -> columnLabels[0][PRCC_CELL_C] = "Price";
-        regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
-        regData -> columnLabels[0][VCRD_CELL_C] = "Value";
-        break;
-      }
-    
-    switch(regData->type)
-      {
-      case BANK:
         regData -> columnLabels[0][PAY_CELL_C] = "Payment";
         regData -> columnLabels[0][DEP_CELL_C] = "Deposit";
         break;
@@ -2185,6 +2182,40 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
         break;
       }
     
+    switch(regData->type)
+      {
+      case BANK:
+      case CASH:
+      case ASSET:
+      case CREDIT:
+      case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
+      case GEN_LEDGER:
+      case INC_LEDGER:
+        break;
+      case STOCK:
+      case MUTUAL:
+      case PORTFOLIO:
+        regData -> columnLabels[0][PRCC_CELL_C] = "Price";
+        regData -> columnLabels[0][SHRS_CELL_C] = "Tot Shrs";
+        regData -> columnLabels[0][VCRD_CELL_C] = "Value";
+        if (1 < NUM_HEADER_ROWS) {
+          regData -> columnLabels[0][PRCC_CELL_C] = "Sale Price";
+          regData -> columnLabels[1][PRCC_CELL_C] = "Purch Price";
+          regData -> columnLabels[0][VCRD_CELL_C] = "Debit";
+          regData -> columnLabels[1][VCRD_CELL_C] = "Credit";
+          regData -> columnLabels[0][DEP_CELL_C] = "";
+          regData -> columnLabels[1][DEP_CELL_C] = "Bought";
+          regData -> columnLabels[0][SHRS_CELL_C] = "";
+          regData -> columnLabels[1][SHRS_CELL_C] = "Tot Shrs";
+          regData -> columnLabels[0][BALN_CELL_C] = "";
+          regData -> columnLabels[1][BALN_CELL_C] = "Balance";
+        }
+        break;
+      }
+
     data = (String **)XtMalloc(
                       (NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS) * 
                       sizeof(String *));
