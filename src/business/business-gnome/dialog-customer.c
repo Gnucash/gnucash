@@ -201,11 +201,6 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
   CustomerWindow *cw = data;
   gnc_numeric min, max;
 
-  /* Check for valid id */
-  if (check_entry_nonempty (cw->dialog, cw->id_entry,
-			    _("The Customer must be given an ID.")))
-    return;
-
   /* Check for valid company name */
   if (check_entry_nonempty (cw->dialog, cw->company_entry,
 		   _("You must enter a company name.")))
@@ -238,6 +233,13 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 			 _("Credit must be a positive amount or "
 			   "you must leave it blank.")))
     return;
+
+  /* Set the customer id if one has not been chosen */
+  if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (cw->id_entry)), "") == 0) {
+    gtk_entry_set_text (GTK_ENTRY (cw->id_entry),
+			g_strdup_printf ("%.6lld",
+					 gncCustomerNextID (cw->book)));
+  }
 
   /* Now save it off */
   {
@@ -580,8 +582,6 @@ gnc_customer_new_window (GtkWidget *parent, GNCBook *bookp,
     cw->customer_guid = *gncCustomerGetGUID (cust);
 
     cw->dialog_type = NEW_CUSTOMER;
-    gtk_entry_set_text (GTK_ENTRY (cw->id_entry),
-			g_strdup_printf ("%.6lld", gncCustomerNextID(bookp)));
     cw->component_id =
       gnc_register_gui_component (DIALOG_NEW_CUSTOMER_CM_CLASS,
 				  gnc_customer_window_refresh_handler,
@@ -732,7 +732,6 @@ new_customer_cb (GtkWidget *parent, gpointer *cust_p, gpointer user_data)
 {
   struct _customer_select_window *sw = user_data;
   CustomerWindow *cw;
-  GncCustomer *created_customer = NULL;
   
   g_return_val_if_fail (cust_p && user_data, TRUE);
 

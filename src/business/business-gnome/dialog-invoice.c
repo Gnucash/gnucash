@@ -24,12 +24,14 @@
 #include "dialog-search.h"
 #include "search-param.h"
 
+#include "gncObject.h"
 #include "gncInvoice.h"
 #include "gncInvoiceP.h"
 
 #include "gncEntryLedger.h"
 
 #include "dialog-invoice.h"
+#include "dialog-job-select.h"
 #include "business-utils.h"
 #include "dialog-date-close.h"
 
@@ -114,24 +116,35 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 
   gnc_suspend_gui_refresh ();
   
-  gncInvoiceSetID (invoice, gtk_editable_get_chars
-		 (GTK_EDITABLE (iw->id_entry), 0, -1));
-  gncInvoiceSetBillingID (invoice, gtk_editable_get_chars
-			  (GTK_EDITABLE (iw->billing_id_entry), 0, -1));
-  gncInvoiceSetTerms (invoice, gtk_editable_get_chars
-		    (GTK_EDITABLE (iw->terms_entry), 0, -1));
-  gncInvoiceSetNotes (invoice, gtk_editable_get_chars
-		    (GTK_EDITABLE (iw->notes_text), 0, -1));
-
-  ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (iw->opened_date));
-  gncInvoiceSetDateOpened (invoice, ts);
-
   if (iw->active_check)
     gncInvoiceSetActive (invoice, gtk_toggle_button_get_active
 			 (GTK_TOGGLE_BUTTON (iw->active_check)));
 
-  gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
-  gncInvoiceSetOwner (invoice, &(iw->owner));
+  gncInvoiceSetNotes (invoice, gtk_editable_get_chars
+		      (GTK_EDITABLE (iw->notes_text), 0, -1));
+
+  /* Only set these values for NEW/MOD INVOICE types */
+  if (iw->dialog_type != EDIT_INVOICE) {
+    gncInvoiceSetID (invoice, gtk_editable_get_chars
+		     (GTK_EDITABLE (iw->id_entry), 0, -1));
+    gncInvoiceSetBillingID (invoice, gtk_editable_get_chars
+			    (GTK_EDITABLE (iw->billing_id_entry), 0, -1));
+    gncInvoiceSetTerms (invoice, gtk_editable_get_chars
+			(GTK_EDITABLE (iw->terms_entry), 0, -1));
+
+    ts = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (iw->opened_date));
+    gncInvoiceSetDateOpened (invoice, ts);
+
+    gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
+    if (iw->job_choice)
+      gnc_owner_get_owner (iw->job_choice, &(iw->job));
+
+    /* Only set the job if we've actually got one */
+    if (gncOwnerGetJob (&(iw->job)))
+      gncInvoiceSetOwner (invoice, &(iw->job));
+    else
+      gncInvoiceSetOwner (invoice, &(iw->owner));
+  }
 
   gncInvoiceCommitEdit (invoice);
   gnc_resume_gui_refresh ();
@@ -312,6 +325,7 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
 
   /* ... and redisplay here. */
   gnc_invoice_update_window (iw);
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 }
 
 static void
@@ -498,6 +512,24 @@ gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
 
 }
 
+static gpointer
+gnc_invoice_select_job_cb (gpointer user_data, gpointer jobp, GtkWidget *parent)
+{
+  GncJob *j = jobp;
+  InvoiceWindow *iw = user_data;
+  GncOwner owner, *ownerp;
+
+  if (!iw) return NULL;
+
+  if (j) {
+    ownerp = gncJobGetOwner (j);
+    gncOwnerCopy (ownerp, &owner);
+  } else
+    gncOwnerCopy (&(iw->owner), &owner);
+
+  return gnc_job_choose (parent, j, &owner, iw->book);
+}
+
 static void
 gnc_invoice_update_job_choice (InvoiceWindow *iw)
 {
@@ -505,6 +537,7 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
     gtk_container_remove (GTK_CONTAINER (iw->job_box), iw->job_choice);
   }
 
+  /* If we don't have a real owner, then we obviously can't have a job */
   if (iw->owner.owner.undefined == NULL) {
     iw->job_choice = NULL;
 
@@ -517,13 +550,25 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
     break;
   case NEW_INVOICE:
   case MOD_INVOICE:
-    iw->job_choice =
-      gnc_owner_select_create (NULL, iw->job_box, iw->book, &(iw->job));
+    {
+      const GncObject_t *bus_obj;
 
-    gtk_signal_connect (GTK_OBJECT (iw->job_choice), "changed",
-			GTK_SIGNAL_FUNC (gnc_invoice_job_changed_cb),
-			iw);
+      bus_obj = gncObjectLookup (GNC_JOB_MODULE_NAME);
 
+      iw->job_choice =
+	gnc_general_select_new (GNC_GENERAL_SELECT_TYPE_SELECT,
+				bus_obj->printable, gnc_invoice_select_job_cb,
+				iw);
+
+      gnc_general_select_set_selected (GNC_GENERAL_SELECT (iw->job_choice),
+				       gncOwnerGetJob (&iw->job));
+      gtk_box_pack_start (GTK_BOX (iw->job_box), iw->job_choice,
+			  TRUE, TRUE, 0);
+
+      gtk_signal_connect (GTK_OBJECT (iw->job_choice), "changed",
+			  GTK_SIGNAL_FUNC (gnc_invoice_job_changed_cb),
+			  iw);
+    }
     break;
   }
 
@@ -535,8 +580,8 @@ static int
 gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
-  GncInvoice *invoice;
   char const *msg = "";
+  GncOwner owner;
   
   if (!iw)
     return FALSE;
@@ -544,10 +589,18 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
   if (iw->dialog_type == VIEW_INVOICE)
     return FALSE;
 
-  gnc_owner_get_owner (iw->owner_choice, &(iw->owner));
-  invoice = iw_get_invoice (iw);
-  gncInvoiceSetOwner (invoice, &(iw->owner));
-  gnc_entry_ledger_reset_query (iw->ledger);
+  gncOwnerCopy (&(iw->owner), &owner);
+  gnc_owner_get_owner (iw->owner_choice, &owner);
+
+  /* If this owner really changed, then reset ourselves */
+  if (!gncOwnerEqual (&owner, &(iw->owner))) {
+    GncInvoice *invoice;
+
+    gncOwnerCopy (&owner, &(iw->owner));
+    gncOwnerInitJob (&(iw->job), NULL);
+    invoice = iw_get_invoice (iw);
+    gnc_entry_ledger_reset_query (iw->ledger);
+  }
 
   if (iw->dialog_type == EDIT_INVOICE)
     return FALSE;
@@ -638,6 +691,7 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
   InvoiceWindow *iw = user_data;
   const EventInfo *info;
   GncInvoice *invoice = iw_get_invoice (iw);
+  GncOwner *owner;
 
  /* If there isn't a invoice behind us, close down */
   if (!invoice) {
@@ -654,8 +708,15 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
     }
   }
 
-  /* Ok, let's refresh ourselves */
-  //  gnc_invoice_update_window (iw);
+  /* Check the owners, and see if they have changed */
+  owner = gncInvoiceGetOwner (invoice);
+
+  /* Copy the owner information into our window */
+  gncOwnerCopy (gncOwnerGetEndOwner (owner), &(iw->owner));
+  gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
+
+  /* Ok, NOW let's refresh ourselves */
+  gnc_invoice_update_window (iw);
 }
 
 static void
@@ -696,11 +757,9 @@ gnc_invoice_update_window (InvoiceWindow *iw)
 {
   GtkWidget *acct_entry;
   GncInvoice *invoice;
-  GncOwner *owner;
   gboolean is_posted = FALSE;
 
   invoice = iw_get_invoice (iw);
-  owner = gncInvoiceGetOwner (invoice);
 
   if (iw->owner_choice) {
     gtk_container_remove (GTK_CONTAINER (iw->owner_box), iw->owner_choice);
@@ -711,13 +770,13 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   case EDIT_INVOICE:
     iw->owner_choice =
       gnc_owner_edit_create (iw->owner_label, iw->owner_box, iw->book,
-			     owner);
+			     &(iw->owner));
     break;
   case NEW_INVOICE:
   case MOD_INVOICE:
     iw->owner_choice =
       gnc_owner_select_create (iw->owner_label, iw->owner_box, iw->book,
-			       owner);
+			       &(iw->owner));
 
     gtk_signal_connect (GTK_OBJECT (iw->owner_choice), "changed",
 			GTK_SIGNAL_FUNC (gnc_invoice_owner_changed_cb),
@@ -833,8 +892,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     gtk_widget_set_sensitive (iw->notes_text, FALSE); *//* XXX: should notes remain writable? */
 
   }  
-
-  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 }
 
 static gboolean
@@ -894,8 +951,8 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   iw->dialog_type = type;
 
   /* Save this for later */
-  gncOwnerCopy (owner, &(iw->owner));
-  gncOwnerInitJob (&(iw->job), NULL);	/* XXX */
+  gncOwnerCopy (gncOwnerGetEndOwner (owner), &(iw->owner));
+  gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
 
   /* Find the dialog */
   iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "Invoice Entry Window");
@@ -1005,6 +1062,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 
   /* Now fill in a lot of the pieces and display properly */
   gnc_invoice_update_window (iw);
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 
   return iw;
 }
@@ -1023,7 +1081,6 @@ gnc_invoice_window_new_invoice (GtkWidget *parent, GNCBook *bookp,
   if (invoice == NULL) {
     iw->dialog_type = NEW_INVOICE;
     invoice = gncInvoiceCreate (bookp);
-    gncInvoiceSetOwner (invoice, owner);
     gncInvoiceSetCommonCommodity (invoice, gnc_default_currency ()); /* XXX */
     iw->book = bookp;
   } else {
@@ -1033,8 +1090,8 @@ gnc_invoice_window_new_invoice (GtkWidget *parent, GNCBook *bookp,
   }
 
   /* Save this for later */
-  gncOwnerCopy (owner, &(iw->owner));
-  gncOwnerInitJob (&(iw->job), NULL);	/* XXX */
+  gncOwnerCopy (gncOwnerGetEndOwner(owner), &(iw->owner));
+  gncOwnerInitJob (&(iw->job), gncOwnerGetJob (owner));
 
   /* Find the dialog */
   iw->xml = xml = gnc_glade_xml_new ("invoice.glade", "New Invoice Dialog");
@@ -1091,6 +1148,7 @@ gnc_invoice_window_new_invoice (GtkWidget *parent, GNCBook *bookp,
 
   /* Now fill in a lot of the pieces and display properly */
   gnc_invoice_update_window (iw);
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
 
   return iw;
 }
@@ -1130,26 +1188,9 @@ gnc_invoice_new (GtkWidget *parent, GncOwner *ownerp, GNCBook *bookp)
   InvoiceWindow *iw;
   GncInvoice *created_invoice = NULL;
   GncOwner owner;
-  gboolean repeat;
 
   if (ownerp) {
-    do {
-      repeat = FALSE;
-
-      switch (gncOwnerGetType (ownerp)) {
-      case GNC_OWNER_CUSTOMER:
-      case GNC_OWNER_VENDOR:
-	gncOwnerCopy (ownerp, &owner);
-	break;
-      case GNC_OWNER_JOB:
-	ownerp = gncJobGetOwner (gncOwnerGetJob (ownerp));
-	repeat = TRUE;
-	break;
-      default:
-	g_warning ("Cannot deal with unknown Owner types");
-	return NULL;
-      }
-    } while (repeat);
+    gncOwnerCopy (ownerp, &owner);
   } else
     gncOwnerInitCustomer (&owner, NULL); /* XXX: pass in the owner type? */
 

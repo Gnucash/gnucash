@@ -86,14 +86,6 @@ gnc_job_verify_ok (JobWindow *jw)
 {
   const char *res;
 
-  /* Check for valid id */
-  res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
-  if (safe_strcmp (res, "") == 0) {
-    const char *message = _("The Job must be given an ID.");
-    gnc_error_dialog_parented(GTK_WINDOW(jw->dialog), message);
-    return FALSE;
-  }
-
   /* Check for valid name */
   res = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
   if (safe_strcmp (res, "") == 0) {
@@ -109,6 +101,13 @@ gnc_job_verify_ok (JobWindow *jw)
     const char *message = _("You must choose an owner for this job.");
     gnc_error_dialog_parented(GTK_WINDOW(jw->dialog), message);
     return FALSE;
+  }
+
+  /* Set a valid id if one was not created */
+  res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
+  if (safe_strcmp (res, "") == 0) {
+    gtk_entry_set_text (GTK_ENTRY (jw->id_entry),
+			g_strdup_printf ("%.6lld", gncJobNextID(jw->book)));
   }
 
   /* Now save it off */
@@ -375,11 +374,15 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
     jw->job_guid = *gncJobGetGUID (job);
       
     jw->dialog_type = NEW_JOB;
-    jw->cust_edit = gnc_owner_select_create (owner_label, owner_box,
-					     bookp, owner);
 
-    gtk_entry_set_text (GTK_ENTRY (jw->id_entry),
-			g_strdup_printf ("%.6lld", gncJobNextID(bookp)));
+    /* If we are passed a real owner, don't allow the user to change it */
+    if (owner->owner.undefined) {
+      jw->cust_edit = gnc_owner_edit_create (owner_label, owner_box,
+					     bookp, owner);
+    } else {
+      jw->cust_edit = gnc_owner_select_create (owner_label, owner_box,
+					       bookp, owner);
+    }
 
     jw->component_id = gnc_register_gui_component (DIALOG_NEW_JOB_CM_CLASS,
 						   gnc_job_window_refresh_handler,

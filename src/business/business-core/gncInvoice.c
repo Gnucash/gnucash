@@ -408,7 +408,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
   /* Set Transaction Description (customer), Num (invoice ID), Currency */
   xaccTransSetDescription
-    (txn, gncOwnerGetName (gncInvoiceGetOwner (invoice)));
+    (txn,
+     gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice))));
 			   
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
   xaccTransSetCurrency (txn, invoice->common_commodity);
