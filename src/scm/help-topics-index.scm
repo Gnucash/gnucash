@@ -56,10 +56,6 @@
     "gnc-action:get?url=user-reg.php" #f)
    ((N_ "GnuCash Network Home") 
     "gnc-action:get/auth?url=gnc-network-home.php" #f)))
- ((N_ "Guppi Demos") "" 
-  (((N_ "Pie chart") "gnc-help:guppi-pie-demo.html" #f)
-   ((N_ "Bar graph") "gnc-help:guppi-bar-demo.html" #f)
-   ((N_ "Points") "gnc-help:guppi-points-demo.html" #f)))
  ((N_ "URL Tests") ""
   (((N_ "gnucash.org") "http://www.gnucash.org" #f)
    ((N_ "gnumatic.com") "http://www.gnumatic.com" #f)

@@ -1,5 +1,26 @@
 2001-03-27  Dave Peticolas  <dave@krondo.com>
 
+	* src/scm/report/stylesheet-plain.scm: more reports centered
+	by default
+
+	* src/scm/html-document.scm: Christopher Browne's markup
+	style extension.
+
+	* src/gnome/window-main.c (gnc_report_in_main_window): show new
+	page
+
+	* doc/sgml/pt_PT/Makefile.am: remove demo html files
+
+	* doc/sgml/es/Makefile.am: remove demo html files
+
+	* doc/sgml/C/Makefile.am: remove demo html files
+
+	* src/gnome/dialog-column-view.c: mark the options dialog
+	changes as appropriate
+
+	* src/gnome/dialog-options.c (gnc_options_dialog_changed): new
+	public func
+
 	* src/gnome/dialog-tax-info.c: more work
 
 	* src/gnome/dialog-options.c: set apply button sensitivity

@@ -240,8 +240,11 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
     scm_protect_object(r->contents_list);
     
     gnc_option_db_set_option(r->odb, "__general", "report-list",
-                             r->contents_list);    
-  }    
+                             r->contents_list);
+
+    gnc_options_dialog_changed (r->optwin);
+  }
+
   update_display_lists(r);
 }
 
@@ -277,10 +280,12 @@ gnc_column_view_edit_remove_cb(GtkButton * button, gpointer user_data) {
     scm_protect_object(r->contents_list);
 
     gnc_option_db_set_option(r->odb, "__general", "report-list",
-                             r->contents_list);    
-  }    
-  update_display_lists(r);
+                             r->contents_list);
 
+    gnc_options_dialog_changed (r->optwin);
+  }
+
+  update_display_lists(r);
 }
 
 void
@@ -311,7 +316,10 @@ gnc_edit_column_view_move_up_cb(GtkButton * button, gpointer user_data) {
     r->contents_selected = r->contents_selected - 1;
 
     gnc_option_db_set_option(r->odb, "__general", "report-list",
-                             r->contents_list);    
+                             r->contents_list);
+
+    gnc_options_dialog_changed (r->optwin);
+
     update_display_lists(r);
   }
 }
@@ -345,9 +353,11 @@ gnc_edit_column_view_move_down_cb(GtkButton * button, gpointer user_data) {
 
     gnc_option_db_set_option(r->odb, "__general", "report-list",
                              r->contents_list);    
+
+    gnc_options_dialog_changed (r->optwin);
+
     update_display_lists(r);
   }
-
 }
 
 void
@@ -376,7 +386,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
                               (float)gh_scm2int(gh_caddr(current)));
   
     dlg_ret = gnome_dialog_run_and_close(GNOME_DIALOG(dlg));
-    
+
     if(dlg_ret == 0) {
       current = SCM_LIST3(gh_car(current),
                           gh_int2scm(gtk_spin_button_get_value_as_int
@@ -388,6 +398,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data) {
                                         gh_int2scm(r->contents_selected),
                                         current);
       scm_protect_object(r->contents_list);
+      gnc_options_dialog_changed (r->optwin);
       update_display_lists(r);
     }
   }

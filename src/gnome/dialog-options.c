@@ -71,7 +71,7 @@ typedef enum {
 
 
 static void
-gnc_option_dialog_changed (GtkWidget *dialog)
+gnc_options_dialog_changed_internal (GtkWidget *dialog)
 {
   GtkWidget *button;
 
@@ -81,6 +81,14 @@ gnc_option_dialog_changed (GtkWidget *dialog)
     return;
 
   gtk_widget_set_sensitive (button, TRUE);
+}
+
+void
+gnc_options_dialog_changed (GNCOptionWin *win)
+{
+  if (!win) return;
+
+  gnc_options_dialog_changed_internal (win->container);
 }
 
 static void
@@ -95,7 +103,7 @@ gnc_option_changed_cb(GtkEditable *editable, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(raw);
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void 
@@ -108,7 +116,7 @@ gnc_date_option_changed_cb(GtkWidget *dummy, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(option->widget);
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -709,7 +717,7 @@ default_button_cb(GtkButton *button, gpointer data)
   option->changed = TRUE;
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static GtkWidget *
@@ -739,7 +747,7 @@ gnc_option_toggled_cb(GtkToggleButton *button, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(button));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 
@@ -768,7 +776,7 @@ gnc_option_multichoice_cb(GtkWidget *w, gint index, gpointer data)
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
   pbox = gtk_widget_get_toplevel(omenu);
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -801,7 +809,7 @@ gnc_option_rd_combo_cb(GtkWidget *w, gint index, gpointer data)
 
   omenu = gtk_object_get_data(GTK_OBJECT(w), "gnc_option_menu");
   pbox = gtk_widget_get_toplevel(omenu);
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static GtkWidget *
@@ -985,7 +993,7 @@ gnc_option_account_cb(GNCAccountTree *tree, Account * account, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(tree));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -1001,7 +1009,7 @@ gnc_option_account_select_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -1017,7 +1025,7 @@ gnc_option_account_clear_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 
@@ -1103,7 +1111,7 @@ gnc_option_list_select_cb(GtkCList *clist, gint row, gint column,
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(TRUE));
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -1120,7 +1128,7 @@ gnc_option_list_unselect_cb(GtkCList *clist, gint row, gint column,
   gtk_clist_set_row_data(clist, row, GINT_TO_POINTER(FALSE));
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(clist));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -1136,7 +1144,7 @@ gnc_option_list_select_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -1152,7 +1160,7 @@ gnc_option_list_clear_all_cb(GtkWidget *widget, gpointer data)
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(widget));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static GtkWidget *
@@ -1254,7 +1262,7 @@ gnc_option_color_changed_cb(GnomeColorPicker *picker, guint arg1, guint arg2,
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void
@@ -1269,7 +1277,7 @@ gnc_option_font_changed_cb(GnomeFontPicker *picker, gchar *font_name,
   gnc_option_call_option_widget_changed_proc(option);
 
   pbox = gtk_widget_get_toplevel(GTK_WIDGET(picker));
-  gnc_option_dialog_changed (pbox);
+  gnc_options_dialog_changed_internal (pbox);
 }
 
 static void

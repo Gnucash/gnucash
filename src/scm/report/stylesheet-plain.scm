@@ -84,7 +84,8 @@
            (border (opt-val "Tables" "Table border width")))
 
       (gnc:html-document-set-style! 
-       ssdoc "body" 
+       ssdoc "body"
+       'tag '("body" "center")
        'attribute (list "bgcolor" bgcolor))
 
       (if (and bgpixmap
