@@ -388,8 +388,7 @@
     (cons (car fq-call-data)
           (map
            (lambda (quote-item-info)
-             (string-upcase
-              (gnc:commodity-get-mnemonic (car quote-item-info))))
+             (gnc:commodity-get-mnemonic (car quote-item-info)))
            (cdr fq-call-data))))
 
   (define (fq-results->commod-tz-quote-triples fq-call-data fq-results)
@@ -473,7 +472,8 @@
            (time-zone (second c-tz-quote-triple))
            (quote-data (third c-tz-quote-triple))
            (gnc-time (assq-ref quote-data 'gnc:time-no-zone))
-           (last-price (assq-ref quote-data 'last))
+           (price #f)
+           (price-type #f)
            (currency-str (assq-ref quote-data 'currency))
            (commodity-table (gnc:book-get-commodity-table book))
            (currency
@@ -483,10 +483,26 @@
                                              "ISO4217"
                                              (string-upcase currency-str)))))
 
+      (or-map (lambda (price-sym)
+                (let ((p (assq-ref quote-data price-sym)))
+                  (if p
+                      (begin (set! price p)
+                             (set! price-type price-sym)
+                             #t)
+                      #f)))
+              '(last nav price))
+
+      (set! price-type
+            (case price-type
+              ((last) "last")
+              ((nav) "nav")
+              ((price) "unknown")
+              (else #f)))
+
       ;; FIXME: SIGFIGS is not what we want here...
-      (if last-price
-          (set! last-price
-                (gnc:double-to-gnc-numeric last-price
+      (if price
+          (set! price
+                (gnc:double-to-gnc-numeric price
                                            GNC-DENOM-AUTO
                                            (logior (GNC-DENOM-SIGFIGS 9)
                                                    GNC-RND-ROUND))))
@@ -494,22 +510,21 @@
       (if gnc-time
           (set! gnc-time (timestr->time-pair gnc-time time-zone)))
 
-      (if (not (and commodity currency gnc-time last-price))
+      (if (not (and commodity currency gnc-time price price-type))
           (string-append
            currency-str ":" (gnc:commodity-get-mnemonic commodity))
-          (let ((price (gnc:price-create)))
-            (if (not price)
+          (let ((gnc-price (gnc:price-create)))
+            (if (not gnc-price)
                 (string-append
                  currency-str ":" (gnc:commodity-get-mnemonic commodity))
                 (begin
-                  (gnc:price-set-commodity price commodity)
-                  (gnc:price-set-currency price currency)
-                  (gnc:price-set-time price gnc-time)
-                  (gnc:price-set-source price "Finance::Quote")
-                  (gnc:price-set-type price "last")
-                  (gnc:price-set-value price last-price)
-                  ;;(gnc:price-print-stdout price 2)
-                  price))))))
+                  (gnc:price-set-commodity gnc-price commodity)
+                  (gnc:price-set-currency gnc-price currency)
+                  (gnc:price-set-time gnc-price gnc-time)
+                  (gnc:price-set-source gnc-price "Finance::Quote")
+                  (gnc:price-set-type gnc-price price-type)
+                  (gnc:price-set-value gnc-price price)
+                  gnc-price))))))
 
   (define (book-add-prices! book prices)
     (let ((pricedb (gnc:book-get-pricedb book)))

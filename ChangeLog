@@ -1,3 +1,14 @@
+2001-04-30  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/portfolio.scm: fix bug
+
+	* src/scm/price-quotes.scm: handle 'nav' and 'price' types
+
+	* src/gnome/dialog-price-editor.c: update for nav price type
+
+	* src/quotes/finance-quote-helper.in: try 'nav' and 'price' if
+	'last' fails.
+
 2001-05-01  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/Query.{ch}: added date-granularity sorting functionality

@@ -75,7 +75,7 @@
         "Finance::Quote" and "old-file-import".
 
       type: the type of quote - types possible right now are bid, ask,
-        last, and unknown.
+        last, nav, and unknown.
 
     Implementation Details:
 

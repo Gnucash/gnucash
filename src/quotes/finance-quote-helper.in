@@ -50,12 +50,13 @@ use FileHandle;
 # this script knows about (and knows how to convert to scheme) are
 # returned, so the conversion function will have to be updated
 # whenever Finance::Quote changes.  Currently you'll get symbol,
-# gnc:time-no-zone, last, and currency.  Fields with gnc: prefixes are
-# non-Finance::Quote fields.  gnc:time-no-zone is returned as a string
-# of the form "YYYY-MM-DD HH:MM:SS", basically the unmolested (and
-# underspecified) output of the quote source.  It's up to you to know
-# what it's proper timezone really is.  i.e. if you know the time was
-# in America/Chicago, you'll need to convert it to that.
+# gnc:time-no-zone, and currency, and either last, nav, or price.
+# Fields with gnc: prefixes are non-Finance::Quote fields.
+# gnc:time-no-zone is returned as a string of the form "YYYY-MM-DD
+# HH:MM:SS", basically the unmolested (and underspecified) output of
+# the quote source.  It's up to you to know what it's proper timezone
+# really is.  i.e. if you know the time was in America/Chicago, you'll
+# need to convert it to that.
 
 # For example:
 
@@ -224,6 +225,13 @@ sub schemify_quote {
   $quotedata .= " ($field . $data)";
 
   $field = 'last';
+  if (!($$quotehash{$itemname, $field})) {
+    $field = 'nav';
+  }
+  if (!($$quotehash{$itemname, $field})) {
+    $field = 'price';
+  }
+
   $data = schemify_num($$quotehash{$itemname, $field});
   $quotedata .= " ($field . $data)";
 

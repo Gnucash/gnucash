@@ -11374,6 +11374,7 @@ quit without making any changes.</text>
 	      <items>Bid
 Ask
 Last
+Net Asset Value
 Unknown
 </items>
 	      <initial_choice>0</initial_choice>

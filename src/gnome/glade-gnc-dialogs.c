@@ -7653,6 +7653,9 @@ create_Price_Dialog (void)
   glade_menuitem = gtk_menu_item_new_with_label (_("Last"));
   gtk_widget_show (glade_menuitem);
   gtk_menu_append (GTK_MENU (type_option_menu), glade_menuitem);
+  glade_menuitem = gtk_menu_item_new_with_label (_("Net Asset Value"));
+  gtk_widget_show (glade_menuitem);
+  gtk_menu_append (GTK_MENU (type_option_menu), glade_menuitem);
   glade_menuitem = gtk_menu_item_new_with_label (_("Unknown"));
   gtk_widget_show (glade_menuitem);
   gtk_menu_append (GTK_MENU (type_option_menu), glade_menuitem);

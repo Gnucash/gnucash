@@ -258,7 +258,10 @@ type_string_to_index (const char *type)
   if (safe_strcmp (type, "last") == 0)
     return 2;
 
-  return 3;
+  if (safe_strcmp (type, "nav") == 0)
+    return 3;
+
+  return 4;
 }
 
 static const char *
@@ -269,6 +272,7 @@ type_index_to_string (int index)
     case 0: return "bid";
     case 1: return "ask";
     case 2: return "last";
+    case 3: return "nav";
     default: return "unknown";
   }
 }

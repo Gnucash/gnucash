@@ -54,10 +54,10 @@
     (define (op-value section name)
       (gnc:option-value (get-op section name)))
     
-    (define (table-add-stock-rows table accounts to-date currency pricedb collector)
-
-      (define (table-add-stock-rows-internal table accounts to-date odd-row?
+    (define (table-add-stock-rows table accounts to-date
                                   currency pricedb collector)
+
+      (define (table-add-stock-rows-internal accounts odd-row?)
 	(if (null? accounts) collector
 	    (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
 		   (current (car accounts))
@@ -69,7 +69,7 @@
 		   (unit-collector (gnc:account-get-comm-balance-at-date
 				    current to-date #f))
 		   (units (cadr (unit-collector 'getpair commodity #f)))
-		   
+
 		   (price (gnc:pricedb-lookup-nearest-in-time pricedb
 							      commodity
 							      currency
@@ -78,13 +78,13 @@
 		   (price-value (if price
 				    (gnc:price-get-value price)
 				    (gnc:numeric-zero)))
-		   
+
 		   (value-num (gnc:numeric-mul
 			       units 
 			       price-value
 			       (gnc:commodity-get-fraction currency)
 			       GNC-RND-ROUND))
-		   
+
 		   (value (gnc:make-gnc-monetary currency value-num)))
 	      (collector 'add currency value-num)
 	      (gnc:html-table-append-row/markup!
@@ -96,14 +96,14 @@
 		     (gnc:make-html-table-header-cell/markup
 		      "number-cell" (gnc:numeric-to-double units))
 		     (gnc:make-html-table-header-cell/markup
-		      "number-cell" (gnc:make-gnc-monetary currency price-value))
+		      "number-cell" (gnc:make-gnc-monetary currency
+                                                           price-value))
 		     (gnc:make-html-table-header-cell/markup
 		      "number-cell" value)))
 	      (gnc:price-unref price)
-	      (table-add-stock-rows-internal
-	       table rest to-date currency (not odd-row?) pricedb collector))))
-      (table-add-stock-rows-internal table accounts to-date 
-				     currency #t pricedb collector))
+	      (table-add-stock-rows-internal rest (not odd-row?)))))
+
+      (table-add-stock-rows-internal accounts #t))
 
     ;; The first thing we do is make local variables for all the specific
     ;; options in the set of options given to the function. This set will
