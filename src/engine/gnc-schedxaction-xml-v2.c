@@ -339,10 +339,7 @@ static
 gboolean
 sx_slots_handler( xmlNodePtr node, gpointer sx )
 {
-    kvp_frame        *frm;
-    frm = dom_tree_to_kvp_frame( node );
-    xaccSchedXactionSetSlots( (SchedXaction*)sx, frm );
-    return TRUE;
+    return dom_tree_to_kvp_frame_given( node, xaccSchedXactionGetSlots (sx) );
 }
 
 struct dom_tree_handler sx_dom_handlers[] = {

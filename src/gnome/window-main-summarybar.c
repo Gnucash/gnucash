@@ -277,7 +277,7 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
     Account *account = node->data;
 
     account_type = xaccAccountGetType(account);
-    account_currency = xaccAccountGetCurrency(account);
+    account_currency = xaccAccountGetCommodity(account);
     children = xaccAccountGetChildren(account);
     currency_accum = gnc_ui_get_currency_accumulator(currency_list,
 						     account_currency);

@@ -85,7 +85,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book )
         acct = xaccMallocAccount();
         name = guid_to_string( &sx->guid );
         xaccAccountSetName( acct, name );
-        xaccAccountSetCurrency( acct,
+        xaccAccountSetCommodity( acct,
                                 gnc_commodity_new( "template", "template", "template", "template", 1 ) );
         /* FIXME: g_free?
            FIXME: leaks

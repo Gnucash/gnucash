@@ -942,8 +942,7 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 
   tree->column_fields[i++] = ACCOUNT_NAME;
   tree->column_fields[i++] = ACCOUNT_TYPE;
-  tree->column_fields[i++] = ACCOUNT_CURRENCY;
-  tree->column_fields[i++] = ACCOUNT_SECURITY;
+  tree->column_fields[i++] = ACCOUNT_COMMODITY;
   tree->column_fields[i++] = ACCOUNT_CODE;
   tree->column_fields[i++] = ACCOUNT_DESCRIPTION;
 

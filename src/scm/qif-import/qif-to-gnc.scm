@@ -17,8 +17,7 @@
 ;;  an existing or new account.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:find-or-make-acct acct-info check-types? 
-                                      currency security 
+(define (qif-import:find-or-make-acct acct-info check-types? commodity
                                       gnc-acct-hash old-group new-group)
   (let* ((separator (string-ref (gnc:account-separator-char) 0))
          (gnc-name (qif-map-entry:gnc-name acct-info))
@@ -32,25 +31,13 @@
     
     (define (compatible? account)
       (let ((acc-type (gnc:account-get-type account))
-            (acc-currency (gnc:account-get-currency account))
-            (acc-security (gnc:account-get-security account)))
-        (if (memv acc-type 
-                  (list GNC-STOCK-TYPE GNC-MUTUAL-TYPE))
-            (and 
-             (if check-types? 
-                 (and (list? allowed-types)
-                      (memv acc-type allowed-types))
-                 #t)
-             (gnc:commodity-equiv? acc-currency currency)
-             (or (not security) 
-                 (gnc:commodity-equiv? acc-security security)))
-            (and 
-             (if check-types? 
-                 (and 
-                  (list? allowed-types)
+            (acc-commodity (gnc:account-get-commodity account)))
+        (and
+         (if check-types? 
+             (and (list? allowed-types)
                   (memv acc-type allowed-types))
-                 #t)
-             (gnc:commodity-equiv? acc-currency currency)))))
+             #t)
+         (gnc:commodity-equiv? acc-commodity commodity))))
     
     (define (make-unique-name-variant long-name short-name)
       (if (gnc:get-account-from-full-name old-group long-name separator)
@@ -66,7 +53,7 @@
           short-name))
     
     ;; just because we found an account doesn't mean we can use it.
-    ;; if the name is in use but the currency, security, or type are
+    ;; if the name is in use but the commodity, or type are
     ;; incompatible, we need to create a new account with a modified
     ;; name.
     (if same-gnc-account 
@@ -115,14 +102,12 @@
                  new-acct (gnc:account-get-description same-gnc-account))
                 (gnc:account-set-type
                  new-acct (gnc:account-get-type same-gnc-account))
-                (gnc:account-set-currency
-                 new-acct (gnc:account-get-currency same-gnc-account))
+                (gnc:account-set-commodity
+                 new-acct (gnc:account-get-commodity same-gnc-account))
                 (gnc:account-set-notes 
                  new-acct (gnc:account-get-notes same-gnc-account))
                 (gnc:account-set-code 
-                 new-acct (gnc:account-get-code same-gnc-account))
-                (gnc:account-set-security
-                 new-acct (gnc:account-get-security same-gnc-account))))
+                 new-acct (gnc:account-get-code same-gnc-account))))
           
           ;; make sure that if this is a nested account foo:bar:baz,
           ;; foo:bar and foo exist also.
@@ -143,8 +128,7 @@
                 (if (qif-map-entry:description acct-info)
                     (gnc:account-set-description 
                      new-acct (qif-map-entry:description acct-info)))
-                (gnc:account-set-currency new-acct currency)
-                (gnc:account-set-security new-acct security)
+                (gnc:account-set-commodity new-acct commodity)
                 
                 ;; if it's an incompatible account, set the
                 ;; name to be unique, and a description that 
@@ -173,7 +157,7 @@
                  pinfo (qif-map-entry:allowed-parent-types acct-info))
                 
                 (set! parent-acct (qif-import:find-or-make-acct 
-                                   pinfo #t currency #f 
+                                   pinfo #t commodity
                                    gnc-acct-hash old-group new-group))))
           (if parent-acct
               (gnc:account-insert-subaccount parent-acct new-acct)
@@ -280,16 +264,16 @@
 
             (cond ((and equity? security)  ;; a "retained holdings" acct
                    (qif-import:find-or-make-acct acctinfo #f
-                                                 security security
+                                                 security
                                                  gnc-acct-hash 
                                                  old-group new-group))
                   (security 
                    (qif-import:find-or-make-acct 
-                    acctinfo #f default-currency security
+                    acctinfo #f security
                     gnc-acct-hash old-group new-group))
                   (#t 
                    (qif-import:find-or-make-acct 
-                    acctinfo #f default-currency #f
+                    acctinfo #f default-currency
                     gnc-acct-hash old-group new-group)))))
         sorted-accounts-list)
        
@@ -352,7 +336,11 @@
                    ;; create and fill in the GNC transaction
                    (let ((gnc-xtn (gnc:transaction-create)))
                      (gnc:transaction-begin-edit gnc-xtn)
-                     
+
+                     ;; FIXME. This is probably wrong
+                     (gnc:transaction-set-currency gnc-xtn
+                                                   (gnc:default-currency))
+
                      ;; build the transaction
                      (qif-import:qif-xtn-to-gnc-xtn 
                       xtn qif-file gnc-xtn gnc-acct-hash 

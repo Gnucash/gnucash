@@ -637,11 +637,6 @@ gnc_gui_refresh_internal (gboolean force)
   fprintf (stderr, "refresh!\n");
 #endif
 
-  /* is this a bug? if we need this call, this seems the
-   * place to put it. But should the engine keep this up
-   * to date itself? */
-  xaccRecomputeGroupBalance (gncGetCurrentGroup());
-
   list = find_component_ids_by_class (NULL);
 
   for (node = list; node; node = node->next)

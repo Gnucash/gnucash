@@ -55,9 +55,6 @@ struct _account_group
   GList *accounts;                 /* list of account pointers */
 
   Backend *backend;                /* persistant storage backend */
-
-  /* cached parameters */
-  gnc_numeric balance;
 };
 
 #endif /* XACC_ACCOUNT_GROUP_P_H */

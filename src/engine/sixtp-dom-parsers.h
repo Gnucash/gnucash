@@ -56,6 +56,8 @@ gnc_numeric* dom_tree_to_gnc_numeric(xmlNodePtr node);
 gchar * dom_tree_to_text(xmlNodePtr tree);
 gboolean string_to_binary(const gchar *str,  void **v, guint64 *data_len);
 
+gboolean dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame);
+
 kvp_frame* dom_tree_to_kvp_frame(xmlNodePtr node);
 kvp_value* dom_tree_to_kvp_value(xmlNodePtr node);
 kvp_value* dom_tree_to_integer_kvp_value(xmlNodePtr node);

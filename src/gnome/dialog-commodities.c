@@ -244,18 +244,14 @@ remove_clicked (GtkWidget *widget, gpointer data)
   {
     Account *account = node->data;
 
-    if (cd->commodity == xaccAccountGetCurrency (account))
-    {
-      can_delete = FALSE;
-      break;
-    }
-
-    if (cd->commodity == xaccAccountGetSecurity (account))
+    if (cd->commodity == xaccAccountGetCommodity (account))
     {
       can_delete = FALSE;
       break;
     }
   }
+
+  /* FIXME check for transaction references */
 
   if (!can_delete)
   {

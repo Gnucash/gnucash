@@ -57,6 +57,18 @@ Use: xaccAccountGetNotes, xaccAccountSetNotes,
      Store the 'Notes' string which was previously stored in
      the Account structure directly.
 
+Name: old-currency
+Type: string
+Entities: Account
+Use: This string holds the canonical name of the old Account
+     currency. This may be deleted at some point in the future.
+
+Name: old-currency-scu
+Type: gint64
+Entities: Account
+Use: This holds the old currency scu. This may be deleted at
+     some point in the future.
+
 Name: old-docref
 Type: string
 Entities: Transactions, Splits
@@ -72,6 +84,18 @@ Use: This string holds the old Price Source code used by earlier versions
      this value will be deprecated when the new version of Finance::Quote
      is fully supported. The new version of Finance::Quote uses a different
      scheme to identify sources for price quotes.
+
+Name: old-security
+Type: string
+Entities: Account
+Use: This string holds the canonical name of the old Account
+     security. This may be deleted at some point in the future.
+
+Name: old-security-scu
+Type: gint64
+Entities: Account
+Use: This holds the old security scu. This may be deleted at
+     some point in the future.
 
 Name: reconcile-info
 Type: frame

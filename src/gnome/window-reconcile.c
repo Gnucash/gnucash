@@ -67,7 +67,6 @@ struct _RecnWindow
   GUID account;             /* The account that we are reconciling  */
   gnc_numeric new_ending;   /* The new ending balance               */
   time_t statement_date;    /* The statement date                   */
-  gboolean use_shares;      /* Use share balances                   */
 
   gint component_id;        /* id of component                      */
 
@@ -236,7 +235,7 @@ recnRecalculateBalance (RecnWindow *recnData)
   reverse_balance = gnc_reverse_balance(account);
 
   /* update the starting balance */
-  starting = xaccAccountGetShareReconciledBalance(account);
+  starting = xaccAccountGetReconciledBalance(account);
   print_info = gnc_account_print_info (account, TRUE);
 
   if (reverse_balance)
@@ -318,19 +317,18 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
   gnc_numeric new_balance;
   time_t new_date;
 
-    new_date = gnc_date_edit_get_date_end (gde);
+  new_date = gnc_date_edit_get_date_end (gde);
 
-    /* get the balance for the account as of the new date */
-    new_balance = data->use_shares ?
-      xaccAccountGetShareBalanceAsOfDate (data->account, new_date) :
-      xaccAccountGetBalanceAsOfDate (data->account, new_date);
+  /* get the balance for the account as of the new date */
+  xaccAccountGetBalanceAsOfDate (data->account, new_date);
 
-    /* use the correct sign */
-    if (gnc_reverse_balance (data->account))
-      new_balance = gnc_numeric_neg (new_balance);
+  /* use the correct sign */
+  if (gnc_reverse_balance (data->account))
+    new_balance = gnc_numeric_neg (new_balance);
 
-    /* update the amount edit with the amount */
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), new_balance);
+  /* update the amount edit with the amount */
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value),
+                              new_balance);
 }
 
 /* For a given account, determine if an auto interest xfer dialog should be
@@ -562,11 +560,11 @@ startRecnWindow(GtkWidget *parent, Account *account,
 {
   GtkWidget *dialog, *end_value, *date_value;
   startRecnWindowData data = { NULL };
+  gboolean auto_interest_xfer_option;
   GNCPrintAmountInfo print_info;
   gnc_numeric ending;
   char *title;
   int result;
-  gboolean auto_interest_xfer_option;
 
   /* Initialize the data structure that will be used for several callbacks
    * throughout this file with the relevant info.  Some initialization is
@@ -576,9 +574,6 @@ startRecnWindow(GtkWidget *parent, Account *account,
    */
   data.account = account;
   data.account_type = xaccAccountGetType(account);
-  data.use_shares = ((data.account_type == STOCK) ||
-                     (data.account_type == MUTUAL) ||
-                     (data.account_type == CURRENCY));
   data.date = *statement_date;
 
   /* whether to have an automatic interest xfer dialog or not */
@@ -635,12 +630,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     print_info.use_symbol = 0;
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);
-    if (data.use_shares)
-      gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (end_value),
-                                    xaccAccountGetCommoditySCU (account));
-    else
-      gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (end_value),
-                                    xaccAccountGetCurrencySCU (account));
+    gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (end_value),
+                                  xaccAccountGetCommoditySCU (account));
 
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (end_value), *new_ending);
 
@@ -1594,7 +1585,6 @@ gnc_recn_create_tool_bar(RecnWindow *recnData)
 
 static void
 gnc_get_reconcile_info (Account *account,
-                        gboolean use_shares,
                         gnc_numeric *new_ending,
                         time_t *statement_date)
 {
@@ -1617,14 +1607,8 @@ gnc_get_reconcile_info (Account *account,
     /* if the account wasn't previously postponed, try to predict
      * the statement balance based on the statement date.
      */
-    if (use_shares)
-      *new_ending =
-         xaccAccountGetShareBalanceAsOfDate(account, *statement_date);
-    else
-      *new_ending =
-         xaccAccountGetBalanceAsOfDate(account, *statement_date);
+    *new_ending = xaccAccountGetBalanceAsOfDate(account, *statement_date);
   }
-
 }
 
 static gboolean
@@ -1733,7 +1717,6 @@ recnWindow (GtkWidget *parent, Account *account)
   GtkWidget *dock;
   gnc_numeric new_ending;
   time_t statement_date;
-  GNCAccountType type;
 
   if (account == NULL)
     return NULL;
@@ -1747,11 +1730,6 @@ recnWindow (GtkWidget *parent, Account *account)
 
   recnData->account = *xaccAccountGetGUID (account);
 
-  type = xaccAccountGetType(account);
-  recnData->use_shares = ((type == STOCK) ||
-                          (type == MUTUAL) ||
-                          (type == CURRENCY));
-
   /* The last time reconciliation was attempted during the current
    * execution of gnucash, the date was stored. Use that date if
    * possible. This helps with balancing multiple accounts for which
@@ -1762,8 +1740,7 @@ recnWindow (GtkWidget *parent, Account *account)
   else
      statement_date = last_statement_date;
 
-  gnc_get_reconcile_info (account, recnData->use_shares,
-                          &new_ending, &statement_date);
+  gnc_get_reconcile_info (account, &new_ending, &statement_date);
 
   /* Popup a little window to prompt the user to enter the
    * ending balance for his/her bank statement */

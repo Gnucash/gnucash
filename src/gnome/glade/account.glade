@@ -176,24 +176,7 @@
 	      <widget>
 		<class>GtkLabel</class>
 		<name>label809</name>
-		<label>Currency:</label>
-		<justify>GTK_JUSTIFY_RIGHT</justify>
-		<wrap>False</wrap>
-		<xalign>1</xalign>
-		<yalign>0.5</yalign>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<child>
-		  <padding>0</padding>
-		  <expand>False</expand>
-		  <fill>False</fill>
-		</child>
-	      </widget>
-
-	      <widget>
-		<class>GtkLabel</class>
-		<name>label810</name>
-		<label>Security:</label>
+		<label>Commodity:</label>
 		<justify>GTK_JUSTIFY_RIGHT</justify>
 		<wrap>False</wrap>
 		<xalign>1</xalign>
@@ -269,23 +252,7 @@
 
 	      <widget>
 		<class>GtkHBox</class>
-		<name>currency_hbox</name>
-		<homogeneous>False</homogeneous>
-		<spacing>0</spacing>
-		<child>
-		  <padding>0</padding>
-		  <expand>True</expand>
-		  <fill>True</fill>
-		</child>
-
-		<widget>
-		  <class>Placeholder</class>
-		</widget>
-	      </widget>
-
-	      <widget>
-		<class>GtkHBox</class>
-		<name>security_hbox</name>
+		<name>commodity_hbox</name>
 		<homogeneous>False</homogeneous>
 		<spacing>0</spacing>
 		<child>
@@ -1067,6 +1034,7 @@ additional accounts by hand later.</label>
 		  <last_modification_time>Sun, 17 Jun 2001 00:25:54 GMT</last_modification_time>
 		</signal>
 		<label>Select All</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -1084,6 +1052,7 @@ additional accounts by hand later.</label>
 		  <last_modification_time>Sun, 17 Jun 2001 00:28:18 GMT</last_modification_time>
 		</signal>
 		<label>Clear All</label>
+		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>

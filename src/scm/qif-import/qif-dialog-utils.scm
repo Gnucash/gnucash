@@ -619,13 +619,9 @@
                                                   GNC-MUTUAL-TYPE)))
                    ;; gnc account already exists... we *know* what the 
                    ;; security is supposed to be 
-                   (let ((currency 
-                          (gnc:account-get-currency existing-gnc-acct))
-                         (security 
-                          (gnc:account-get-security existing-gnc-acct)))
-                     (if security 
-                         (hash-set! stock-hash stock-name security)
-                         (hash-set! stock-hash stock-name currency)))
+                   (let ((commodity 
+                          (gnc:account-get-commodity existing-gnc-acct)))
+                     (hash-set! stock-hash stock-name commodity))
                    
                    ;; we know nothing about this security.. we need to 
                    ;; ask about it

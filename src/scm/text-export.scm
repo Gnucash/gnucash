@@ -147,8 +147,7 @@
      (list 'code (gnc:account-get-code a))
      (list 'description (gnc:account-get-description a))
      (list 'notes (gnc:account-get-notes a))
-     (list 'currency (gnc:account-get-currency a))
-     (list 'security (gnc:account-get-security a))
+     (list 'commodity (gnc:account-get-commodity a))
      (list 'price-source (account-info->output-form a))))
   
   (define (account-txns-write account . port)
@@ -401,10 +400,7 @@
                     ((notes)
                      (handle-1-arg-form field-form
                                         string? "string" acc-info id))
-                    ((currency)
-                     (handle-1-arg-form field-form
-                                        string? "string" acc-info id))
-                    ((security)
+                    ((commodity)
                      (handle-1-arg-form field-form
                                         string? "string" acc-info id))
                     ((price-source)

@@ -224,8 +224,8 @@ xaccTransWriteLog (Transaction *trans, char flag)
                split->memo ? split->memo : "",
                split->action ? split->action : "",
                split->reconciled,
-               (long long int) gnc_numeric_num(split->damount), 
-               (long long int) gnc_numeric_denom(split->damount),
+               (long long int) gnc_numeric_num(split->amount), 
+               (long long int) gnc_numeric_denom(split->amount),
                (long long int) gnc_numeric_num(split->value), 
                (long long int) gnc_numeric_denom(split->value),
                drecn ? drecn : "");

@@ -20,6 +20,5 @@ gchar *s = N_("Currency:");
 gchar *s = N_(" ");
 gchar *s = N_("Show Income/Expense");
 gchar *s = N_("Currency Transfer");
-gchar *s = N_("Currency Account:");
 gchar *s = N_("Exchange Rate:");
 gchar *s = N_("To Amount:");

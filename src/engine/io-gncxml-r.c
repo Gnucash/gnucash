@@ -35,6 +35,7 @@
 #include "gnc-xml-helper.h"
 #include "Account.h"
 #include "Query.h"
+#include "Scrub.h"
 #include "gnc-pricedb.h"
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
@@ -340,6 +341,13 @@ gnc_book_load_from_xml_file(GNCBook *book)
 
       gnc_book_set_pricedb(book, gnc_pricedb_create());
     }
+
+    /* Fix account and transaction commodities */
+    xaccGroupScrubCommodities (gnc_book_get_group(book));
+
+    /* Fix split amount/value */
+    xaccGroupScrubSplits (gnc_book_get_group(book));
+
     return(TRUE);
   } else {
     return(FALSE);

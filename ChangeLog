@@ -1,3 +1,109 @@
+2001-07-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/test/test-xml-transaction.c: CIT (currency-in-transaction)
+
+	* src/test/test-xml-account.c: CIT
+
+	* src/test/gnc-test-stuff.c: CIT
+
+	* src/scm/report/taxtxf.scm: CIT
+
+	* src/scm/qif-import/qif-to-gnc.scm: CIT
+
+	* src/scm/qif-import/qif-dialog-utils.scm: CIT
+
+	* src/scm/text-export.scm: CIT
+
+	* src/scm/price-quotes.scm: CIT
+
+	* src/scm/main-window.scm: CIT
+
+	* src/scm/engine-interface.scm: CIT
+
+	* src/guile/gnc.gwp: CIT. remove unused api
+
+	* src/gnome/glade/transfer.glade: remove currency account list
+
+	* src/gnome/glade/account.glade: remove security gui
+
+	* src/gnome/window-reconcile.c: CIT
+
+	* src/gnome/window-main-summarybar.c: CIT
+
+	* src/gnome/window-acct-tree.c: CIT
+
+	* src/gnome/druid-stock-split.c: CIT
+
+	* src/gnome/druid-qif-import.c: CIT
+
+	* src/gnome/druid-hierarchy.c: CIT
+
+	* src/gnome/druid-commodity.c: CIT
+
+	* src/gnome/dialog-transfer.c: CIT. don't use currency accounts
+
+	* src/gnome/dialog-commodities.c: CIT
+
+	* src/gnome/dialog-account.c: CIT
+
+	* src/gnome/account-tree.c: CIT
+
+	* src/engine/sql/txn.c: fix for CIT
+
+	* src/engine/sql/account.c: remove old currency/security cruft
+
+	* src/engine/sixtp-dom-parsers.[ch]: allow parsing kvp data into
+	an existing frame
+
+	* src/engine/kvp_doc.txt: document new keys used for storing
+	old currency/security fields
+
+	* src/engine/io-gncxml-v2.c: CIT
+
+	* src/engine/io-gncxml-r.c: CIT
+
+	* src/engine/io-gncbin-r.c: CIT
+
+	* src/engine/io-example-account.c: CIT
+
+	* src/engine/gnc-transaction-xml-v2.c: CIT
+
+	* src/engine/gnc-schedxaction-xml-v2.c: load kvp data
+	into existing frame
+
+	* src/engine/gnc-commodity.[ch]: add new lookup api, fixes
+	for NULL pointers
+
+	* src/engine/gnc-book.c: don't scrub (moved elsewhere)
+
+	* src/engine/gnc-account-xml-v2.c: store transaction currency
+	and account commodity.
+
+	* src/engine/Transaction.[ch]: add a transaction currency
+
+	* src/engine/TransLog.c: CIT
+
+	* src/engine/Scrub.[ch]: add api for fixing up
+	account and transaction commodities.
+
+	* src/engine/SchedXaction.c: CIT
+
+	* src/engine/Ledger-xml-parser-v1.c: CIT
+
+	* src/engine/Group.[ch]: don't cache a group balance
+
+	* src/engine/Account.[ch]: CIT. remove currency, security
+	fields, add commodity fields. Store old currency/security
+	in kvp_data.
+
+	* src/engine/Account-xml-parser-v1.c: fix for CIT
+
+	* src/gnc-ui-util.[ch]: fix for CIT
+
+	* src/gnc-component-manager.c: remove deleted api
+
+	* src/SplitLedger.c: fix for currency-in-transaction (CIT)
+
 2001-07-09  Dave Peticolas  <dave@krondo.com>
 
 	* configure.in: check for ghttp_ssl.h

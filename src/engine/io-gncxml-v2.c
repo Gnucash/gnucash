@@ -38,6 +38,7 @@
 #include "io-utils.h"
 
 #include "Group.h"
+#include "Scrub.h"
 
 #include "Transaction.h"
 
@@ -68,7 +69,12 @@ clear_up_account_commodity(
     
     gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
                                       gnc_commodity_get_mnemonic(com));
-    if(!gcom)
+
+    if (gcom == com)
+    {
+        return;
+    }
+    else if(!gcom)
     {
         g_warning("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
@@ -81,13 +87,54 @@ clear_up_account_commodity(
     }
 }
 
+static void
+clear_up_transaction_commodity(
+    gnc_commodity_table *tbl, Transaction *trans,
+    gnc_commodity * (*getter) (Transaction *trans),
+    void (*setter) (Transaction *trans, gnc_commodity *comm))
+{
+    gnc_commodity *gcom;
+    gnc_commodity *com = getter(trans);
+
+    if(!com)
+    {
+        return;
+    }
+    
+    gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
+                                      gnc_commodity_get_mnemonic(com));
+
+    if(gcom == com)
+    {
+        return;
+    }
+    else if(!gcom)
+    {
+        g_warning("unable to find global commodity for %s adding new",
+                  gnc_commodity_get_unique_name(com));
+        gnc_commodity_table_insert(tbl, com);
+    }
+    else
+    {
+        gnc_commodity_destroy(com);
+        xaccTransBeginEdit(trans);
+        setter(trans, gcom);
+        xaccTransCommitEdit(trans);
+    }
+}
+
 static gboolean
 add_account_local(sixtp_gdv2 *data, Account *act)
 {
     clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
-                               xaccAccountGetCurrency, xaccAccountSetCurrency);
+                               DxaccAccountGetCurrency, DxaccAccountSetCurrency);
     clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
-                               xaccAccountGetSecurity, xaccAccountSetSecurity);
+                               DxaccAccountGetSecurity, DxaccAccountSetSecurity);
+    clear_up_account_commodity(gnc_book_get_commodity_table(data->book), act,
+                               xaccAccountGetCommodity, xaccAccountSetCommodity);
+
+    xaccAccountScrubCommodity (act);
+
     if(!xaccAccountGetParent(act))
     {
         xaccGroupInsertAccount(gnc_book_get_group(data->book), act);
@@ -113,6 +160,12 @@ add_transaction_local(sixtp_gdv2 *data, Transaction *trn)
     int i;
     Split *spl;
     
+    clear_up_transaction_commodity(gnc_book_get_commodity_table(data->book),
+                                   trn, xaccTransGetCurrency,
+                                   xaccTransSetCurrency);
+
+    xaccTransScrubCurrency (trn);
+
     for(i = 0, spl = xaccTransGetSplit(trn, i);
         spl;
         i++, spl = xaccTransGetSplit(trn, i))
@@ -403,13 +456,16 @@ gnc_book_load_from_xml_file_v2(
     /* auto-number the accounts, if they are not already numbered */
     xaccGroupDepthAutoCode (gnc_book_get_group(book));
 
+    /* Fix account and transaction commodities */
+    xaccGroupScrubCommodities (gnc_book_get_group(book));
+
+    /* Fix split amount/value */
+    xaccGroupScrubSplits (gnc_book_get_group(book));
+
     /* commit all groups, this completes the BeginEdit started when the
      * account_end_handler finished reading the account.
      */
     xaccAccountGroupCommitEdit (gnc_book_get_group(book));
-
-    /* set up various state that is not normally stored in the byte stream */
-    xaccRecomputeGroupBalance (gnc_book_get_group(book));
 
     /* destroy the parser */
     sixtp_destroy (top_parser);

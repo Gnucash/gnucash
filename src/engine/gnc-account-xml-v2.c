@@ -52,6 +52,8 @@ const gchar *account_version_string = "2.0.0";
 #define act_name_string "act:name"
 #define act_id_string "act:id"
 #define act_type_string "act:type"
+#define act_commodity_string "act:commodity"
+#define act_commodity_scu_string "act:commodity-scu"
 #define act_currency_string "act:currency"
 #define act_currency_scu_string "act:currency-scu"
 #define act_code_string "act:code"
@@ -77,11 +79,11 @@ gnc_account_dom_tree_create(Account *act)
                     act_type_string,
                     xaccAccountTypeEnumAsString(xaccAccountGetType(act))));
 
-    xmlAddChild(ret, commodity_ref_to_dom_tree(act_currency_string,
-                                               xaccAccountGetCurrency(act)));
+    xmlAddChild(ret, commodity_ref_to_dom_tree(act_commodity_string,
+                                               xaccAccountGetCommodity(act)));
 
-    xmlAddChild(ret, int_to_dom_tree(act_currency_scu_string,
-                                     xaccAccountGetCurrencySCU(act)));
+    xmlAddChild(ret, int_to_dom_tree(act_commodity_scu_string,
+                                     xaccAccountGetCommoditySCU(act)));
     
     if(xaccAccountGetCode(act) &&
         strlen(xaccAccountGetCode(act)) > 0)
@@ -97,14 +99,6 @@ gnc_account_dom_tree_create(Account *act)
                                           xaccAccountGetDescription(act)));
     }
        
-    if(xaccAccountGetSecurity(act))
-    {
-        xmlAddChild(ret, commodity_ref_to_dom_tree(act_security_string,
-                                                xaccAccountGetSecurity(act)));
-        xmlAddChild(ret, int_to_dom_tree(act_security_scu_string,
-                                         xaccAccountGetCommoditySCU(act)));
-    }
-
     if(xaccAccountGetSlots(act))
     {
         xmlNodePtr kvpnode = kvp_frame_to_dom_tree(act_slots_string,
@@ -176,12 +170,33 @@ account_type_handler (xmlNodePtr node, gpointer act)
 }
 
 static gboolean
+account_commodity_handler (xmlNodePtr node, gpointer act)
+{
+    gnc_commodity *ref;
+
+    ref = dom_tree_to_commodity_ref_no_engine(node);
+    xaccAccountSetCommodity((Account*)act, ref);
+
+    return TRUE;
+}
+
+static gboolean
+account_commodity_scu_handler (xmlNodePtr node, gpointer act)
+{
+    gint64 val;
+    dom_tree_to_integer(node, &val);
+    xaccAccountSetCommoditySCU((Account*)act, val);
+
+    return TRUE;
+}
+
+static gboolean
 account_currency_handler (xmlNodePtr node, gpointer act)
 {
     gnc_commodity *ref;
 
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    xaccAccountSetCurrency((Account*)act, ref);
+    DxaccAccountSetCurrency((Account*)act, ref);
 
     return TRUE;
 }
@@ -191,7 +206,7 @@ account_currency_scu_handler (xmlNodePtr node, gpointer act)
 {
     gint64 val;
     dom_tree_to_integer(node, &val);
-    xaccAccountSetCurrencySCU((Account*)act, val);
+    DxaccAccountSetCurrencySCU((Account*)act, val);
 
     return TRUE;
 }
@@ -201,7 +216,7 @@ account_security_handler (xmlNodePtr node, gpointer act)
 {
     gnc_commodity *ref;
     ref = dom_tree_to_commodity_ref_no_engine(node);
-    xaccAccountSetSecurity((Account*)act, ref);
+    DxaccAccountSetSecurity((Account*)act, ref);
 
     return TRUE;
 }
@@ -219,10 +234,10 @@ account_security_scu_handler (xmlNodePtr node, gpointer act)
 static gboolean
 account_slots_handler (xmlNodePtr node, gpointer act)
 {
-    kvp_frame *frm  = dom_tree_to_kvp_frame(node);
-    g_return_val_if_fail(frm, FALSE);
-    
-    xaccAccountSetSlots_nc((Account*)act, frm);
+    gboolean success;
+
+    success = dom_tree_to_kvp_frame_given (node, xaccAccountGetSlots (act));
+    g_return_val_if_fail(success, FALSE);
     
     return TRUE;
 }
@@ -266,7 +281,9 @@ static struct dom_tree_handler account_handlers_v2[] = {
     { act_name_string, account_name_handler, 1, 0 },
     { act_id_string, account_id_handler, 1, 0 },
     { act_type_string, account_type_handler, 1, 0 },
-    { act_currency_string, account_currency_handler, 1, 0 },
+    { act_commodity_string, account_commodity_handler, 0, 0 },
+    { act_commodity_scu_string, account_commodity_scu_handler, 0, 0 },
+    { act_currency_string, account_currency_handler, 0, 0 },
     { act_currency_scu_string, account_currency_scu_handler, 0, 0 },
     { act_code_string, account_code_handler, 0, 0 },
     { act_description_string, account_description_handler, 0, 0},

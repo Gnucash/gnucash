@@ -30,6 +30,7 @@
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "druid-utils.h"
+#include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-currency-edit.h"
@@ -98,7 +99,7 @@ fill_account_list (StockSplitInfo *info, Account *account)
   {
     Account *account = node->data;
     GNCPrintAmountInfo print_info;
-    const gnc_commodity *security;
+    const gnc_commodity *commodity;
     GNCAccountType account_type;
     gnc_numeric balance;
     char *strings[4];
@@ -113,13 +114,13 @@ fill_account_list (StockSplitInfo *info, Account *account)
     if (gnc_numeric_zero_p (balance))
       continue;
 
-    security = xaccAccountGetSecurity (account);
+    commodity = xaccAccountGetCommodity (account);
 
     print_info = gnc_account_print_info (account, FALSE);
 
     strings[0] = xaccAccountGetFullName (account,
                                          gnc_get_account_separator ());
-    strings[1] = (char *) gnc_commodity_get_mnemonic (security);
+    strings[1] = (char *) gnc_commodity_get_mnemonic (commodity);
     strings[2] = (char *) xaccPrintAmount (balance, print_info);
     strings[3] = NULL;
 
@@ -185,7 +186,7 @@ refresh_details_page (StockSplitInfo *info)
 
   gnc_currency_edit_set_currency
     (GNC_CURRENCY_EDIT (info->price_currency_edit),
-     xaccAccountGetCurrency (account));
+     xaccAccountGetCommodity (account));
 }
 
 static gboolean
@@ -369,6 +370,8 @@ stock_split_finish (GnomeDruidPage *druidpage,
 
   xaccTransBeginEdit (trans);
 
+  xaccTransSetCurrency (trans, gnc_default_currency ());
+
   date = gnc_date_edit_get_date (GNC_DATE_EDIT (info->date_edit));
   xaccTransSetDateSecs (trans, date);
 
@@ -409,7 +412,7 @@ stock_split_finish (GnomeDruidPage *druidpage,
     price = gnc_price_create ();
 
     gnc_price_begin_edit (price);
-    gnc_price_set_commodity (price, xaccAccountGetSecurity (account));
+    gnc_price_set_commodity (price, xaccAccountGetCommodity (account));
     gnc_price_set_currency (price, gnc_currency_edit_get_currency (ce));
     gnc_price_set_time (price, ts);
     gnc_price_set_source (price, "user:stock-split");
@@ -500,8 +503,8 @@ account_currency_filter (Account *account, gpointer user_data)
   if (!account)
     return FALSE;
 
-  return gnc_commodity_equiv (xaccAccountGetCurrency (split_account),
-                              xaccAccountGetCurrency (account));
+  return gnc_commodity_equiv (xaccAccountGetCommodity (split_account),
+                              xaccAccountGetCommodity (account));
 }
 
 static void

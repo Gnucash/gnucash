@@ -105,14 +105,11 @@ struct _split
   char    reconciled;        /* The reconciled field                      */
   Timespec date_reconciled;  /* date split was reconciled                 */
 
-  /* New semantics: 'value' is the amount of the transaction balancing
-   * commodity (i.e. currency) involved, 'damount' is the amount of
-   * the account's commodity (formerly known as 'security') involved.
-   *
-   * Old semantics: value is the amount of the account's currency 
-   * involved, damount is the amount of the account's security.  */
-  gnc_numeric  value;         
-  gnc_numeric  damount;  
+  /* 'value' is the amount of the transaction balancing commodity
+   * (i.e. currency) involved, 'amount' is the amount of the account's
+   * commodity (formerly known as 'security') involved. */
+  gnc_numeric  value;
+  gnc_numeric  amount;
 
   /* -------------------------------------------------------------- */
   /* Below follow some 'temporary' fields */
@@ -124,10 +121,6 @@ struct _split
   gnc_numeric  balance;
   gnc_numeric  cleared_balance;
   gnc_numeric  reconciled_balance;
-
-  gnc_numeric  share_balance;
-  gnc_numeric  share_cleared_balance;
-  gnc_numeric  share_reconciled_balance;
 };
 
 
@@ -169,7 +162,7 @@ struct _transaction
    *
    * Alternate, better(?) name: "valuation currency": it is the
    * currency in which all of the splits can be valued.  */
-  const gnc_commodity *common_currency;
+  gnc_commodity *common_currency;
 
   /* version number, used for tracking multiuser updates */
   gint32 version;
@@ -225,5 +218,11 @@ gnc_numeric xaccSplitsComputeValue (GList *splits, Split * skip_me,
  */
 void xaccTransSetVersion (Transaction*, gint32);
 gint32 xaccTransGetVersion (Transaction*);
+
+/* The xaccTransFindCommonCurrency () method returns a gnc_commodity
+ *    indicating a currency denomination that all of the splits in this
+ *    transaction have in common, using the old currency/security fields
+ *    of the split accounts. */
+gnc_commodity * xaccTransFindOldCommonCurrency (Transaction *trans);
 
 #endif /* XACC_TRANSACTION_P_H */

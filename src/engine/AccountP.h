@@ -99,22 +99,19 @@ struct _account {
    * The gnc_commodity type represents the namespace, full name, and
    * symbol for the currency.
    *
-   * New semantics, likely to appear soon: This account structure will
-   * no longer store a 'currency' and a 'security'. Instead it will
-   * store only one commodity (i.e. currency), that is the one
-   * formerly known as 'security'.  The 'damount' of each split
-   * represents the transferred amount in the account's commodity
-   * (formerly known as security).
+   * New semantics: The account structure will no longer store a
+   * 'currency' and a 'security'. Instead it will store only one
+   * commodity (i.e. currency), that is the one formerly known as
+   * 'security'. The 'amount' of each split represents the
+   * transferred amount in the account's commodity (formerly known as
+   * security).
    *
    * Meanwhile, we'll be in a transition period, where we store the
    * currency both in the account and the transaction. Warning
    * messages will print to the screen if things don't go well.
-
-*/
-  gnc_commodity * currency;
-  gnc_commodity * security;
-  int  currency_scu;
-  int  security_scu;
+   */
+  gnc_commodity * commodity;
+  int commodity_scu;
 
   /* The parent and children pointers are used to implement an account
    * hierarchy, of accounts that have sub-accounts ("detail accounts").
@@ -127,17 +124,9 @@ struct _account {
   gnc_numeric starting_cleared_balance;
   gnc_numeric starting_reconciled_balance;
 
-  gnc_numeric starting_share_balance;
-  gnc_numeric starting_share_cleared_balance;
-  gnc_numeric starting_share_reconciled_balance;
-
   gnc_numeric balance;
   gnc_numeric cleared_balance;
   gnc_numeric reconciled_balance;
-
-  gnc_numeric share_balance;
-  gnc_numeric share_cleared_balance;
-  gnc_numeric share_reconciled_balance;
 
   /* version number, used for tracking multiuser updates */
   gint32 version;

@@ -45,6 +45,7 @@
 #include "sixtp-parsers.h"
 
 #include "Group.h"
+#include "Scrub.h"
 #include "TransLog.h"
 
 #define GNC_ACCOUNT_STRING "gnc-account-example"
@@ -122,7 +123,12 @@ clear_up_account_commodity(
     
     gcom = gnc_commodity_table_lookup(tbl, gnc_commodity_get_namespace(com),
                                       gnc_commodity_get_mnemonic(com));
-    if(!gcom)
+
+    if(gcom == com)
+    {
+        return;
+    }
+    else if(!gcom)
     {
         g_warning("unable to find global commodity for %s adding new",
                   gnc_commodity_get_unique_name(com));
@@ -139,9 +145,13 @@ static void
 add_account_local(GncExampleAccount *gea, Account *act)
 {
     clear_up_account_commodity(gnc_engine_commodities(), act,
-                               xaccAccountGetCurrency, xaccAccountSetCurrency);
+                               DxaccAccountGetCurrency, DxaccAccountSetCurrency);
     clear_up_account_commodity(gnc_engine_commodities(), act,
-                               xaccAccountGetSecurity, xaccAccountSetSecurity);
+                               DxaccAccountGetSecurity, DxaccAccountSetSecurity);
+    clear_up_account_commodity(gnc_engine_commodities(), act,
+                               xaccAccountGetCommodity, xaccAccountSetCommodity);
+
+    xaccAccountScrubCommodity (act);
 
     if(!xaccAccountGetParent(act))
     {

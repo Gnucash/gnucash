@@ -254,35 +254,12 @@ int           xaccTransCountSplits (Transaction *trans);
  * attempt to do 'the right thing'.
  * */
 
-#define xaccTransGetCurrency xaccTransFindCommonCurrency
+gnc_commodity * xaccTransGetCurrency (Transaction *trans);
 void xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr);
 
 /* ---------
  * and now for the 'old' routines 
  * --------- */
-
-/* xaccIsCommonCurrency returns true if the given currency/security
- * pairs have a currency in common. It uses the same method as
- * xaccTransFindCommonCurrency. This method is useful for determining
- * whether two accounts can have transactions in common.
- */
-gboolean xaccIsCommonCurrency(const gnc_commodity * currency_1, 
-			      const gnc_commodity * security_1,
-			      const gnc_commodity * currency_2, 
-			      const gnc_commodity * security_2);
-
-/* The xaccTransFindCommonCurrency () method returns a gnc_commodity
- *    indicating a currency denomination that all of the splits in this
- *    transaction have in common.  This routine is useful in dealing
- *    with currency trading accounts and/or with "stock boxes", where
- *    securities of differing types are moved across accounts.
- *    It returns NULL if the transaction is internally inconsistent.
- *    (This should never ??? happen, as it would be an internal error).
- *
- *    If all of the splits share both a common security and a common currency,
- *    then the string name for the currency is returned.
- */
-gnc_commodity * xaccTransFindCommonCurrency (Transaction *trans);
 
 /* The xaccTransIsCommonCurrency () method compares the input commodity
  *    to the currency/security denominations of all splits in the

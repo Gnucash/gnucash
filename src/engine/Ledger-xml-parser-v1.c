@@ -135,9 +135,6 @@ ledger_data_end_handler(gpointer data_for_children,
    */
   xaccAccountGroupCommitEdit (ag);
 
-  /* set up various state that is not normally stored in the byte stream */
-  xaccRecomputeGroupBalance (ag);
-
   xaccLogEnable();
 
   *result = ag;

@@ -302,10 +302,8 @@
     ;; Return a list of accounts for whose commodities we should get
     ;; quotes.
     (define (quotable-currency-account? a)
-      (let ((currency (gnc:account-get-currency a))
-            (security (gnc:account-get-security a)))
-        (and (equal? (gnc:commodity-get-namespace currency) "ISO4217")
-             (equal? (gnc:commodity-get-namespace security) "ISO4217"))))
+      (let ((commodity (gnc:account-get-commodity a)))
+        (equal? (gnc:commodity-get-namespace commodity) "ISO4217")))
 
     (define (quotable-account? a)
       (let ((type (gw:enum-<gnc:AccountType>-val->sym (gnc:account-get-type a)
@@ -371,7 +369,7 @@
     ;; Returns (cons fq-method-sym
     ;;               (list commodity currency assumed-timezone-str))
     (let* ((commodity (gnc:account-get-commodity account))
-           (currency (gnc:account-get-currency account))
+           (currency (gnc:default-currency))
            (src (and account (gnc:account-get-price-src account)))
            (tz (gnc:account-get-quote-tz account))
 	   (fq-method-sym (and src (src->fq-method-sym src)))

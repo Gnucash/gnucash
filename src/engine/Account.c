@@ -38,6 +38,7 @@
 #include "TransactionP.h"
 #include "date.h"
 #include "gnc-commodity.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "kvp_frame.h"
@@ -81,17 +82,9 @@ xaccInitAccount (Account * acc)
   acc->cleared_balance = gnc_numeric_zero();
   acc->reconciled_balance = gnc_numeric_zero();
 
-  acc->share_balance = gnc_numeric_zero();
-  acc->share_cleared_balance = gnc_numeric_zero();
-  acc->share_reconciled_balance = gnc_numeric_zero();
-
   acc->starting_balance = gnc_numeric_zero();
   acc->starting_cleared_balance = gnc_numeric_zero();
   acc->starting_reconciled_balance = gnc_numeric_zero();
-
-  acc->starting_share_balance = gnc_numeric_zero();
-  acc->starting_share_cleared_balance = gnc_numeric_zero();
-  acc->starting_share_reconciled_balance = gnc_numeric_zero();
 
   acc->type = NO_TYPE;
 
@@ -101,12 +94,10 @@ xaccInitAccount (Account * acc)
 
   acc->kvp_data    = kvp_frame_new();
 
-  acc->currency    = NULL;
-  acc->security    = NULL;
-  acc->currency_scu = 100000;
-  acc->security_scu = 100000;
+  acc->commodity     = NULL;
+  acc->commodity_scu = 100000;
 
-  acc->splits      = NULL;
+  acc->splits = NULL;
 
   acc->version = 0;
   acc->version_check = 0;
@@ -151,7 +142,7 @@ xaccCloneAccountSimple(const Account *from)
 
     ret->kvp_data    = kvp_frame_copy(from->kvp_data);
 
-    xaccAccountSetCurrency (ret, from->currency);
+    xaccAccountSetCommodity (ret, from->commodity);
 
     return ret;
 }
@@ -224,8 +215,7 @@ xaccFreeAccount (Account *acc)
   /* zero out values, just in case stray 
    * pointers are pointing here. */
 
-  acc->currency = NULL;
-  acc->security = NULL;
+  acc->commodity = NULL;
 
   acc->parent   = NULL;
   acc->children = NULL;
@@ -234,16 +224,11 @@ xaccFreeAccount (Account *acc)
   acc->cleared_balance = gnc_numeric_zero();
   acc->reconciled_balance = gnc_numeric_zero();
 
-  acc->share_balance = gnc_numeric_zero();
-  acc->share_cleared_balance = gnc_numeric_zero();
-  acc->share_reconciled_balance = gnc_numeric_zero();
-
   acc->type = NO_TYPE;
 
   acc->accountName = NULL;
   acc->description = NULL;
-  acc->currency    = NULL;
-  acc->security    = NULL;
+  acc->commodity   = NULL;
 
   acc->version = 0;
   acc->editlevel = 0;
@@ -410,8 +395,7 @@ xaccAccountEqual(Account *aa, Account *ab, gboolean check_guids) {
   if(safe_strcmp(aa->accountName, ab->accountName) != 0) return FALSE;
   if(safe_strcmp(aa->accountCode, ab->accountCode) != 0) return FALSE;
   if(safe_strcmp(aa->description, ab->description) != 0) return FALSE;
-  if(!gnc_commodity_equiv(aa->currency, ab->currency)) return FALSE;
-  if(!gnc_commodity_equiv(aa->security, ab->security)) return FALSE;
+  if(!gnc_commodity_equiv(aa->commodity, ab->commodity)) return FALSE;
 
   if(check_guids) {
     if(!guid_equal(&aa->guid, &ab->guid)) return FALSE;
@@ -641,34 +625,17 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   if (!acc) return;
   if (!split) return;
 
-  /* Make sure the currencies in the transaction will still
-   * be acceptable. This means either the currency or the security
-   * of the new account must be 'in common' with the currencies used
-   * in the transaction. */
-#if 0
-  if (xaccTransCountSplits(split->parent) > 1) {
-    if (!xaccTransIsCommonCurrency(split->parent, acc->currency) &&
-        !xaccTransIsCommonCurrency(split->parent, acc->security))
-      
-      return;
-  }
-#endif
-
   xaccAccountBeginEdit(acc);
 
   acc->balance_dirty = TRUE;
   acc->sort_dirty = TRUE;
 
-  /* convert the split to the new account's denominators */
+  /* convert the split to the new account's denominator */
   /* if the denominator can't be exactly converted, it's an error */
   /* FIXME : need to enforce ordering of insertion/value */
-  split->damount = gnc_numeric_convert(split->damount, 
-                                       xaccAccountGetCommoditySCU(acc),
-                                       GNC_RND_ROUND);
-
-  split->value   = gnc_numeric_convert(split->value, 
-                                       xaccAccountGetCurrencySCU(acc),
-                                       GNC_RND_ROUND);
+  split->amount = gnc_numeric_convert(split->amount, 
+                                      xaccAccountGetCommoditySCU(acc),
+                                      GNC_RND_ROUND);
 
   /* if this split belongs to another account, remove it from there
      * first.  We don't want to ever leave the system in an inconsistent
@@ -761,122 +728,50 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
  * Return: void                                                     *
 \********************************************************************/
 
-static gnc_numeric
-price_xfer(Split * s, gnc_numeric share_count) {
-  gnc_numeric temp;
-  if(!gnc_numeric_zero_p(s->damount)) {
-    temp = gnc_numeric_div(s->value, s->damount,
-                           1000000, GNC_DENOM_LCD);
-    temp = gnc_numeric_mul(share_count, temp,
-                           gnc_numeric_denom(s->value),
-                           GNC_RND_ROUND);
-    return temp;
-  }
-  else {
-    return gnc_numeric_zero();
-  }
-}      
-                              
 void
 xaccAccountRecomputeBalance (Account * acc)
 {
   gnc_numeric  balance;
   gnc_numeric  cleared_balance; 
   gnc_numeric  reconciled_balance;
-  gnc_numeric  share_balance; 
-  gnc_numeric  share_cleared_balance; 
-  gnc_numeric  share_reconciled_balance;
-  Split   *last_split = NULL;
-  GList   *lp;
+  Split *last_split = NULL;
+  GList *lp;
 
-  if(NULL == acc) return;
-  if(acc->editlevel > 0) return;
-  if(!acc->balance_dirty) return;
-  if(acc->do_free) return;
+  if (NULL == acc) return;
+  if (acc->editlevel > 0) return;
+  if (!acc->balance_dirty) return;
+  if (acc->do_free) return;
 
-  balance =                  acc->starting_balance;
-  cleared_balance =          acc->starting_cleared_balance;
-  reconciled_balance =       acc->starting_reconciled_balance;
-  share_balance =            acc->starting_share_balance;
-  share_cleared_balance =    acc->starting_share_cleared_balance;
-  share_reconciled_balance = acc->starting_share_reconciled_balance;
+  balance            = acc->starting_balance;
+  cleared_balance    = acc->starting_cleared_balance;
+  reconciled_balance = acc->starting_reconciled_balance;
 
   for(lp = acc->splits; lp; lp = lp->next) {
     Split *split = (Split *) lp->data;
 
-    /* compute both dollar and share balances */
-    share_balance = gnc_numeric_add_fixed(share_balance, split->damount);
-    balance      = gnc_numeric_add_fixed(balance, split->value);
+    balance = gnc_numeric_add_fixed(balance, split->amount);
 
-    if( NREC != split -> reconciled ) {
-      share_cleared_balance = 
-        gnc_numeric_add_fixed(share_cleared_balance, split->damount);
-      cleared_balance = 
-        gnc_numeric_add_fixed(cleared_balance, split->value);
-    }
+    if (NREC != split->reconciled)
+      cleared_balance = gnc_numeric_add_fixed(cleared_balance, split->amount);
 
-    if( YREC == split -> reconciled ||
-        FREC == split -> reconciled ) {
-      share_reconciled_balance = 
-        gnc_numeric_add_fixed(share_reconciled_balance, split->damount);
-      reconciled_balance =  
-        gnc_numeric_add_fixed(reconciled_balance, split->value);
+    if (YREC == split->reconciled ||
+        FREC == split->reconciled) {
+      reconciled_balance =
+        gnc_numeric_add_fixed(reconciled_balance, split->amount);
     }
 
-    /* For bank accounts, the invariant subtotal is the dollar
-     * amount.  For stock accounts, the invariant is the share amount */
-    if ( (STOCK    == acc->type) ||
-         (MUTUAL   == acc->type) ||
-         (CURRENCY == acc->type) ) {
-      split -> share_balance = share_balance;
-      split -> share_cleared_balance = share_cleared_balance;
-      split -> share_reconciled_balance = share_reconciled_balance;
-      split -> balance = price_xfer(split, share_balance);
-      split -> cleared_balance = price_xfer(split, share_cleared_balance);
-      split -> reconciled_balance =
-        price_xfer(split, share_reconciled_balance);
-    }
-    else {
-      split -> share_balance = balance;
-      split -> share_cleared_balance = cleared_balance;
-      split -> share_reconciled_balance = reconciled_balance;
-      split -> balance = balance;
-      split -> cleared_balance = cleared_balance;
-      split -> reconciled_balance = reconciled_balance;
-    }
+    split->balance = balance;
+    split->cleared_balance = cleared_balance;
+    split->reconciled_balance = reconciled_balance;
 
     last_split = split;
   }
 
-  if ( (STOCK == acc->type)  ||
-       (MUTUAL == acc->type) ||
-       (CURRENCY == acc->type) ) {
-    acc -> share_balance = share_balance;
-    acc -> share_cleared_balance = share_cleared_balance;
-    acc -> share_reconciled_balance = share_reconciled_balance;
-    if (last_split) {
-      acc -> balance = price_xfer(last_split, share_balance);
-      acc -> cleared_balance = price_xfer(last_split, share_cleared_balance);
-      acc -> reconciled_balance =
-        price_xfer(last_split, share_reconciled_balance);
-    } 
-    else {
-      acc -> balance = balance;
-      acc -> cleared_balance = cleared_balance;
-      acc -> reconciled_balance = reconciled_balance;
-    }
-  } else {
-    acc -> share_balance = balance;
-    acc -> share_cleared_balance = cleared_balance;
-    acc -> share_reconciled_balance = reconciled_balance;
-    acc -> balance = balance;
-    acc -> cleared_balance = cleared_balance;
-    acc -> reconciled_balance = reconciled_balance;
-  }
-
+  acc->balance = balance;
+  acc->cleared_balance = cleared_balance;
+  acc->reconciled_balance = reconciled_balance;
 
   acc->balance_dirty = FALSE;
-  return;
 }
 
 /********************************************************************\
@@ -890,34 +785,9 @@ xaccAccountSetStartingBalance(Account *acc,
 {
   if (!acc) return;
 
-  /* hack alert -- this routine is meant to set the one and only
-   * account commodity starting balance. However, until we remove
-   * the 'reporting currency' from accounts, we will have to guess
-   * which to set based on the account type.
-   */
-  switch (acc->type) 
-  {
-     case BANK:
-     case CASH:
-     case CREDIT:
-     case ASSET:
-     case LIABILITY:
-     case INCOME:
-     case EXPENSE:
-     case EQUITY:
-        acc->starting_balance = start_baln;
-        acc->starting_cleared_balance = start_cleared_baln;
-        acc->starting_reconciled_balance = start_reconciled_baln;
-        break;
-     case STOCK:
-     case MUTUAL:
-     case CURRENCY:
-        acc->starting_share_balance = start_baln;
-        acc->starting_share_cleared_balance = start_cleared_baln;
-        acc->starting_share_reconciled_balance = start_reconciled_baln;
-        break;
-     default:
-  }
+  acc->starting_balance = start_baln;
+  acc->starting_cleared_balance = start_cleared_baln;
+  acc->starting_reconciled_balance = start_reconciled_baln;
 
   acc->balance_dirty = TRUE;
 }
@@ -1154,7 +1024,7 @@ xaccAccountSetNotes (Account *acc, const char *str)
 
 /* FIXME : is this the right way to do this? */
 static void
-update_split_currency(Account * acc) 
+update_split_commodity(Account * acc) 
 {
   GList *lp;
 
@@ -1164,12 +1034,9 @@ update_split_currency(Account * acc)
   /* iterate over splits */
   for(lp = acc->splits; lp; lp = lp->next) {
     Split *s = (Split *) lp->data;
-    s->value = gnc_numeric_convert(s->value,
-                                   xaccAccountGetCurrencySCU(acc),
-                                   GNC_RND_ROUND);
-    s->damount = gnc_numeric_convert(s->damount,
-                                     xaccAccountGetCommoditySCU(acc),
-				     GNC_RND_ROUND);
+    s->amount = gnc_numeric_convert(s->amount,
+                                    xaccAccountGetCommoditySCU(acc),
+                                    GNC_RND_ROUND);
   }
   xaccAccountCommitEdit(acc);
 }
@@ -1187,81 +1054,14 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
   if ((!acc) || (!com)) return;
 
   xaccAccountBeginEdit(acc);
-  switch (acc->type) 
   {
-     case BANK:
-     case CASH:
-     case CREDIT:
-     case ASSET:
-     case LIABILITY:
-     case INCOME:
-     case EXPENSE:
-     case EQUITY:
-        xaccAccountSetCurrency (acc, com);
-        break;
-     case STOCK:
-     case MUTUAL:
-     case CURRENCY:
-        xaccAccountSetSecurity (acc, com);
-        break;
-     default:
-  }
-  acc->core_dirty = TRUE;
-  xaccAccountCommitEdit(acc);
-}
-
-/********************************************************************\
-\********************************************************************/
-/* below follow the old, deprecated currency/security routines. */
-
-void 
-xaccAccountSetCurrency (Account * acc, gnc_commodity * currency) {
-
-  if ((!acc) || (!currency)) return;
-  
-  xaccAccountBeginEdit(acc);
-  {
-    acc->currency     = currency;
-    acc->currency_scu = gnc_commodity_get_fraction(currency);
-    update_split_currency(acc);
+    acc->commodity    = com;
+    acc->commodity_scu = gnc_commodity_get_fraction(com);
+    update_split_commodity(acc);
 
     acc->sort_dirty = TRUE;
     acc->balance_dirty = TRUE;
 
-    mark_account (acc);
-  }
-  acc->core_dirty = TRUE;
-  xaccAccountCommitEdit(acc);
-}
-
-void 
-xaccAccountSetSecurity (Account *acc, gnc_commodity * security) {
-  
-  if ((!acc) || (!security)) return;
-  
-  xaccAccountBeginEdit(acc);
-  {
-    acc->security     = security;
-    acc->security_scu = gnc_commodity_get_fraction(security);    
-    update_split_currency(acc);
-
-    acc->sort_dirty = TRUE;
-    acc->balance_dirty = TRUE;
-
-    mark_account (acc);
-  }
-  acc->core_dirty = TRUE;
-  xaccAccountCommitEdit(acc);
-}
-
-void 
-xaccAccountSetCurrencySCU (Account * acc, int scu) {
-
-  if (!acc) return;
-
-  xaccAccountBeginEdit(acc);
-  {
-    acc->currency_scu = scu;
     mark_account (acc);
   }
   acc->core_dirty = TRUE;
@@ -1269,13 +1069,13 @@ xaccAccountSetCurrencySCU (Account * acc, int scu) {
 }
 
 void
-xaccAccountSetCommoditySCU (Account *acc, int scu) {
-
+xaccAccountSetCommoditySCU (Account *acc, int scu)
+{
   if (!acc) return;
 
   xaccAccountBeginEdit(acc);
   {
-    acc->security_scu = scu;
+    acc->commodity_scu = scu;
     mark_account (acc);
   }
   acc->core_dirty = TRUE;
@@ -1283,21 +1083,94 @@ xaccAccountSetCommoditySCU (Account *acc, int scu) {
 }
 
 int
-xaccAccountGetCurrencySCU (Account * acc) {
-  if (!acc) return 0;
-  return acc->currency_scu;
-}
-
-int
 xaccAccountGetCommoditySCU (Account * acc) {
   if (!acc) return 0;
 
-  if (acc->security == NULL)
-    return acc->currency_scu;
-
-  return acc->security_scu;
+  return acc->commodity_scu;
 }
 
+/********************************************************************\
+\********************************************************************/
+/* below follow the old, deprecated currency/security routines. */
+
+void 
+DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency) {
+  const char *string;
+  gnc_commodity *commodity;
+
+  if ((!acc) || (!currency)) return;
+
+  xaccAccountBeginEdit(acc);
+  string = gnc_commodity_get_unique_name (currency);
+  kvp_frame_set_slot_nc(acc->kvp_data, "old-currency",
+                        kvp_value_new_string(string));
+  mark_account (acc);
+  acc->core_dirty = TRUE;
+  xaccAccountCommitEdit(acc);
+
+  commodity = DxaccAccountGetCurrency (acc);
+  if (!commodity)
+    gnc_commodity_table_insert (gnc_engine_commodities (), currency);
+}
+
+void 
+DxaccAccountSetSecurity (Account *acc, gnc_commodity * security) {
+  const char *string;
+  gnc_commodity *commodity;
+
+  if ((!acc) || (!security)) return;
+  
+  xaccAccountBeginEdit(acc);
+  string = gnc_commodity_get_unique_name (security);
+  kvp_frame_set_slot_nc(acc->kvp_data, "old-security",
+                        kvp_value_new_string(string));
+  mark_account (acc);
+  acc->core_dirty = TRUE;
+  xaccAccountCommitEdit(acc);
+
+  commodity = DxaccAccountGetSecurity (acc);
+  if (!commodity)
+    gnc_commodity_table_insert (gnc_engine_commodities (), security);
+}
+
+void 
+DxaccAccountSetCurrencySCU (Account * acc, int scu) {
+
+  if (!acc) return;
+
+  xaccAccountBeginEdit(acc);
+  kvp_frame_set_slot_nc(acc->kvp_data, "old-currency-scu",
+                        kvp_value_new_gint64(scu));
+  mark_account (acc);
+  acc->core_dirty = TRUE;
+  xaccAccountCommitEdit(acc);
+}
+
+int
+DxaccAccountGetCurrencySCU (Account * acc) {
+  kvp_value *v;
+
+  if (!acc) return 0;
+
+  v = kvp_frame_get_slot(acc->kvp_data, "old-currency-scu");
+  if (v) return kvp_value_get_gint64 (v);
+
+  return 0;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountDeleteOldData (Account *account)
+{
+  if (!account) return;
+
+  kvp_frame_set_slot_nc (account->kvp_data, "old-currency", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-security", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-currency-scu", NULL);
+  kvp_frame_set_slot_nc (account->kvp_data, "old-security-scu", NULL);
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -1421,10 +1294,20 @@ xaccAccountGetNotes (Account *acc)
 }
 
 gnc_commodity * 
-xaccAccountGetCurrency (Account *acc)
+DxaccAccountGetCurrency (Account *acc)
 {
+  kvp_value *v;
+  const char *s;
+
   if (!acc) return NULL;
-  return (acc->currency);
+
+  v = kvp_frame_get_slot(acc->kvp_data, "old-currency");
+  if (!v) return NULL;
+
+  s = kvp_value_get_string (v);
+  if (!s) return NULL;
+
+  return gnc_commodity_table_lookup_unique (gnc_engine_commodities (), s);
 }
 
 gnc_commodity * 
@@ -1432,18 +1315,24 @@ xaccAccountGetCommodity (Account *acc)
 {
   if (!acc) return NULL;
 
-  if (acc->security == NULL)
-    return acc->currency;
-
-  return (acc->security);
+  return (acc->commodity);
 }
 
 gnc_commodity *
-xaccAccountGetSecurity (Account *account)
+DxaccAccountGetSecurity (Account *acc)
 {
-  if (!account) return NULL;
+  kvp_value *v;
+  const char *s;
 
-  return account->security;
+  if (!acc) return NULL;
+
+  v = kvp_frame_get_slot(acc->kvp_data, "old-security");
+  if (!v) return NULL;
+
+  s = kvp_value_get_string (v);
+  if (!s) return NULL;
+
+  return gnc_commodity_table_lookup_unique (gnc_engine_commodities (), s);
 }
 
 double
@@ -1506,21 +1395,21 @@ gnc_numeric
 xaccAccountGetShareBalance (Account *acc)
 {
    if (!acc) return gnc_numeric_zero();
-   return acc->share_balance;
+   return acc->balance;
 }
 
 gnc_numeric
 xaccAccountGetShareClearedBalance (Account *acc)
 {
    if (!acc) return gnc_numeric_zero();
-   return acc->share_cleared_balance;
+   return acc->cleared_balance;
 }
 
 gnc_numeric
 xaccAccountGetShareReconciledBalance (Account *acc)
 {
   if (!acc) return gnc_numeric_zero();
-  return acc->share_reconciled_balance;
+  return acc->reconciled_balance;
 }
 
 /********************************************************************\
@@ -1743,19 +1632,6 @@ xaccAccountSetTaxUSPayerNameSource (Account *account, const char *source)
   mark_account (account);
   account->core_dirty = TRUE;
   xaccAccountCommitEdit (account);
-}
-
-/********************************************************************\
-\********************************************************************/
-
-gboolean
-xaccAccountsHaveCommonCurrency(Account *account_1, Account *account_2)
-{
-  if ((account_1 == NULL) || (account_2 == NULL))
-    return FALSE;
-
-  return xaccIsCommonCurrency(account_1->currency, account_1->security,
-			      account_2->currency, account_2->security);
 }
 
 /********************************************************************\

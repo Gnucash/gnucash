@@ -49,7 +49,6 @@
 #include "BackendP.h"
 #include "Group.h"
 #include "NetIO.h"
-#include "Scrub.h"
 #include "TransLog.h"
 #include "gnc-engine-util.h"
 #include "gnc-pricedb-p.h"
@@ -995,7 +994,6 @@ gnc_book_load (GNCBook *book)
   {
     xaccLogDisable();
     gnc_book_load_from_file(book);
-    xaccGroupScrubSplits (book->topgroup);
 
     /* we just got done loading, it can't possibly be dirty !! */
     gnc_book_mark_saved(book);

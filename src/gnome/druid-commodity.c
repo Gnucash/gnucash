@@ -32,6 +32,7 @@
 #include <assert.h>
 
 #include "FileDialog.h"
+#include "Scrub.h"
 #include "dialog-utils.h"
 #include "druid-commodity.h"
 #include "druid-utils.h"
@@ -434,8 +435,7 @@ static void
 finish_helper(gpointer key, gpointer value, gpointer data) {
   CommodityDruid * cd = data;
   gnc_commodity  * comm = value; 
-  gnc_commodity  * old_comm = g_hash_table_lookup(cd->old_map, 
-                                                  key);
+  gnc_commodity  * old_comm = g_hash_table_lookup(cd->old_map, key);
   GList          * accts;
   GList          * node;
   GNCBook        * book = gncGetCurrentBook();
@@ -461,14 +461,14 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
     Account *account = node->data;
 
     xaccAccountBeginEdit(account);
-    if(gnc_commodity_equiv(xaccAccountGetCurrency(account),
-                           old_comm)) {
-      xaccAccountSetCurrency(account, comm);
+    if(gnc_commodity_equiv(DxaccAccountGetCurrency(account), old_comm)) {
+      DxaccAccountSetCurrency(account, comm);
     }
-
-    if(gnc_commodity_equiv(xaccAccountGetSecurity(account),
-                           old_comm)) {
-      xaccAccountSetSecurity(account, comm);
+    if(gnc_commodity_equiv(DxaccAccountGetSecurity(account), old_comm)) {
+      DxaccAccountSetSecurity(account, comm);
+    }
+    if(gnc_commodity_equiv(xaccAccountGetCommodity(account), old_comm)) {
+      xaccAccountSetCommodity(account, comm);
     }
     xaccAccountCommitEdit(account);    
   }
@@ -485,6 +485,12 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
   /* add the new commodities to the engine's namespace map and 
    * replace the account commodity pointers */
   g_hash_table_foreach(cd->new_map, &finish_helper, (gpointer)cd);
+
+  /* Fix account and transaction commodities */
+  xaccGroupScrubCommodities (gncGetCurrentGroup());
+
+  /* Fix split amount/value */
+  xaccGroupScrubSplits (gncGetCurrentGroup());
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);

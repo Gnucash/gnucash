@@ -154,21 +154,6 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
                                          const char separator);
 
 /*
- * The xaccRecomputeGroupBalance() subroutine recursively totals
- *    up the balances of all accounts in a group.
- */
-void xaccRecomputeGroupBalance (AccountGroup *group);
-
-/*
- * The xaccGroupGetBalance() method returns the total of the balances 
- *    of all the children in this group.
- */
-
-/* deprecated double API will go away */
-double      DxaccGroupGetBalance (AccountGroup *group);
-gnc_numeric xaccGroupGetBalance (AccountGroup *group);
-
-/*
  * The xaccGetAccountRoot () subroutine will find the topmost 
  *    (root) group to which this account belongs.
  */

@@ -86,11 +86,7 @@ struct _xferDialog
   GtkWidget * to_show_button;
 
   GtkWidget * curr_transfer_frame;
-  GtkWidget * curr_acct_label;
 
-  GtkWidget * curr_acct_combo;
-  GList * curr_accts_list;
-  GtkWidget * curr_acct_combo_entry;
   GtkWidget * price_edit;
   GtkWidget * to_amount_edit;
 
@@ -123,92 +119,6 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
     gnc_account_tree_show_income_expense(tree);
   else
     gnc_account_tree_hide_income_expense(tree);
-}
-
-
-static void
-gnc_xfer_dialog_list_curr_accts(AccountGroup *group,
-				GList **list,
-				const gnc_commodity *from_curr,
-				const gnc_commodity *to_curr)
-{
-  char *name;
-  char separator_char;
-  acct_list_item *list_element;
-  GList *acct_list;
-  GList *node;
-
-  if (!group) return;
-
-  separator_char = gnc_get_account_separator();
-
-  acct_list = xaccGroupGetAccountList (group);
-  for (node = acct_list; node; node = node->next)
-  {
-    Account *acct = node->data;
-
-    if (xaccAccountGetType(acct) == CURRENCY)
-    {
-      const gnc_commodity *curr, *secu;
-
-      curr = xaccAccountGetCurrency(acct);
-      secu = xaccAccountGetSecurity(acct);
-
-      if ((gnc_commodity_equiv(from_curr, curr) && 
-           gnc_commodity_equiv(to_curr, secu)) ||
-          (gnc_commodity_equiv(to_curr, curr) && 
-           gnc_commodity_equiv(from_curr, secu)))
-      {
-	name = xaccAccountGetFullName(acct, separator_char);
-	/* xaccAccountGetFullName returns a string, which must be
-	   freed (inconsistent with the rest of the engine API).
-	   The string is freed in gnc_xfer_dialog_free_curr_accts_list. */
-	list_element = g_new(acct_list_item, 1);
-	list_element->acct_full_name = name;
-	list_element->acct = acct;
-	*list = g_list_append(*list, list_element);
-      }
-    }
-    gnc_xfer_dialog_list_curr_accts(xaccAccountGetChildren(acct),
-				    list, from_curr, to_curr);
-  }
-}
-
-
-static void
-gnc_xfer_dialog_free_curr_accts_list(gpointer data, gpointer user_data)
-{
-  acct_list_item *list_element = data;
-
-  g_free(list_element->acct_full_name);
-  g_free(list_element);
-}
-
-
-static Account *
-gnc_xfer_dialog_get_selected_curr_acct(XferDialog *xferData)
-{
-  Account *curr;
-  char *curr_acct_name;
-  GList *help;
-
-  curr = NULL;
-  curr_acct_name = gtk_editable_get_chars
-    (GTK_EDITABLE(xferData->curr_acct_combo_entry), 0, -1);
-  help = xferData->curr_accts_list;
-  while(help)
-  {
-    if(!strcmp(curr_acct_name,
-	       ((acct_list_item *)(help->data))->acct_full_name))
-    {
-      curr = ((acct_list_item *)(help->data))->acct;
-      break;
-    }
-    help = g_list_next(help);
-  }
-  g_free(curr_acct_name);
-
-  return curr;
 }
 
 static void
@@ -257,39 +167,26 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
 static void
 gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
 {
-  Account *from_account;
-  const gnc_commodity *from_currency = NULL;
   Account *to_account;
-  const gnc_commodity *to_currency = NULL;
+  Account *from_account;
+  const gnc_commodity *to_commodity = NULL;
+  const gnc_commodity *from_commodity = NULL;
   gboolean curr_active;
-
-  GList *curr_accts_name_list = NULL;
-  GList *help;
-
-  if(xferData->curr_accts_list)
-  {
-    g_list_foreach(xferData->curr_accts_list,
-		   gnc_xfer_dialog_free_curr_accts_list, NULL);
-    g_list_free(xferData->curr_accts_list);
-    xferData->curr_accts_list = NULL;
-  }
 
   from_account = 
     gnc_account_tree_get_current_account(GNC_ACCOUNT_TREE(xferData->from));
   if(from_account != NULL)
-    from_currency = xaccAccountGetCurrency(from_account);
+    from_commodity = xaccAccountGetCommodity(from_account);
 
   to_account = 
     gnc_account_tree_get_current_account(GNC_ACCOUNT_TREE(xferData->to));
   if(to_account != NULL)
-    to_currency = xaccAccountGetCurrency(to_account);
+    to_commodity = xaccAccountGetCommodity(to_account);
 
   curr_active = (from_account != NULL) && (to_account != NULL)
-    && !gnc_commodity_equiv(from_currency, to_currency);
+    && !gnc_commodity_equiv(from_commodity, to_commodity);
 
   gtk_widget_set_sensitive(xferData->curr_transfer_frame, curr_active);
-  gtk_widget_set_sensitive(xferData->curr_acct_label, curr_active);
-  gtk_widget_set_sensitive(xferData->curr_acct_combo, curr_active);
   gtk_widget_set_sensitive(xferData->price_edit,
 			   curr_active && gtk_toggle_button_get_active
 			   (GTK_TOGGLE_BUTTON(xferData->price_radio)));
@@ -300,33 +197,11 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
   gtk_widget_set_sensitive(xferData->amount_radio, curr_active);
 
   gnc_xfer_dialog_set_price_auto (xferData, curr_active,
-                                  from_currency, to_currency);
+                                  from_commodity, to_commodity);
 
-  if(curr_active)
-  {
-    gnc_xfer_dialog_list_curr_accts(gncGetCurrentGroup(),
-				    &(xferData->curr_accts_list),
-				    from_currency, to_currency);
-    help = xferData->curr_accts_list;
-    while(help)
-    {
-      curr_accts_name_list = 
-	g_list_append(curr_accts_name_list,
-		      ((acct_list_item *)(help->data))->acct_full_name);
-      help = g_list_next(help);
-    }
-    if(!curr_accts_name_list)
-      curr_accts_name_list = g_list_append(curr_accts_name_list, "");
-    gtk_combo_set_popdown_strings(GTK_COMBO(xferData->curr_acct_combo),
-				  curr_accts_name_list);
-  }
-  else
+  if (!curr_active)
   {
     GtkEntry *entry;
-
-    curr_accts_name_list = g_list_append(curr_accts_name_list, "");
-    gtk_combo_set_popdown_strings(GTK_COMBO(xferData->curr_acct_combo),
-				  curr_accts_name_list);
 
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
                                gnc_numeric_zero ());
@@ -334,8 +209,6 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
 		      (GNC_AMOUNT_EDIT(xferData->to_amount_edit)));
     gtk_entry_set_text(entry, "");
   }
-
-  g_list_free(curr_accts_name_list);
 }
 
 
@@ -395,21 +268,21 @@ gnc_xfer_dialog_from_tree_select_cb(GNCAccountTree *tree,
 {
   XferDialog *xferData = data;
   GNCPrintAmountInfo print_info;
-  const gnc_commodity *currency;
+  const gnc_commodity *commodity;
 
   account = gnc_account_tree_get_current_account(tree);
-  currency = xaccAccountGetCurrency(account);
+  commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->from_currency_label), 
-		     gnc_commodity_get_printname(currency));
+		     gnc_commodity_get_printname(commodity));
 
   gnc_xfer_dialog_curr_acct_activate(xferData);
 
-  print_info = gnc_account_value_print_info (account, FALSE);
+  print_info = gnc_account_print_info (account, FALSE);
 
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (xferData->amount_edit),
                                   print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->amount_edit),
-                                xaccAccountGetCurrencySCU (account));
+                                xaccAccountGetCommoditySCU (account));
 
   /* Reload the xferDialog quickfill if it is based on the from account */
   if( !xferData->quickfill_to )
@@ -423,21 +296,21 @@ gnc_xfer_dialog_to_tree_select_cb(GNCAccountTree *tree,
 {
   XferDialog *xferData = data;
   GNCPrintAmountInfo print_info;
-  const gnc_commodity *currency;
+  const gnc_commodity *commodity;
 
   account = gnc_account_tree_get_current_account(tree);
-  currency = xaccAccountGetCurrency(account);
+  commodity = xaccAccountGetCommodity(account);
   gtk_label_set_text(GTK_LABEL(xferData->to_currency_label),
-		     gnc_commodity_get_printname(currency));
+		     gnc_commodity_get_printname(commodity));
 
   gnc_xfer_dialog_curr_acct_activate(xferData);
 
-  print_info = gnc_account_value_print_info (account, FALSE);
+  print_info = gnc_account_print_info (account, FALSE);
 
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
                                   print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (xferData->to_amount_edit),
-                                xaccAccountGetCurrencySCU (account));
+                                xaccAccountGetCommoditySCU (account));
 
   /* Reload the xferDialog quickfill if it is based on the to account */
   if( xferData->quickfill_to )
@@ -871,17 +744,6 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 			  gpointer data)
 {
   XferDialog * xferData = data;
-  Account *from, *to, *account;
-  gnc_numeric amount, price, to_amount;
-  const gnc_commodity * currency;
-
-  from = gnc_account_tree_get_current_account(xferData->from);
-  to = gnc_account_tree_get_current_account(xferData->to);
-  account = from;
-  if (account == NULL)
-    account = to;
-
-  currency = xaccAccountGetCurrency(account);
 
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit));
 
@@ -894,7 +756,6 @@ gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
 static void
 gnc_xfer_update_to_amount (XferDialog *xferData)
 {
-  const gnc_commodity *currency;
   gnc_numeric amount, price, to_amount;
   Account *account;
 
@@ -913,8 +774,6 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
     gtk_entry_set_text(entry, "");
   }
 
-  currency = xaccAccountGetCurrency(account);
-
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->price_edit));
 
   amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
@@ -924,7 +783,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
     to_amount = gnc_numeric_zero ();
   else
     to_amount = gnc_numeric_div (amount, price,
-                                 xaccAccountGetCurrencySCU (account),
+                                 xaccAccountGetCommoditySCU (account),
                                  GNC_RND_ROUND);
 
   gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->to_amount_edit),
@@ -958,15 +817,12 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
                              gpointer data)
 {
   XferDialog *xferData = data;
-  const gnc_commodity *currency;
   gnc_numeric amount, price, to_amount;
   Account *account;
 
   account = gnc_account_tree_get_current_account(xferData->to);
   if (account == NULL)
     account = gnc_account_tree_get_current_account(xferData->from);
-
-  currency = xaccAccountGetCurrency(account);
 
   gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit));
 
@@ -1117,7 +973,6 @@ void
 gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
 {
   Account * account;
-  const gnc_commodity * currency;
 
   if (xferData == NULL)
     return;
@@ -1125,8 +980,6 @@ gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount)
   account = gnc_account_tree_get_current_account(xferData->from);
   if (account == NULL)
     account = gnc_account_tree_get_current_account(xferData->to);
-
-  currency = xaccAccountGetCurrency(account);
 
   gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (xferData->amount_edit), amount);
 }
@@ -1171,8 +1024,10 @@ static void
 gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 {
   XferDialog *xferData = data;
-  Account *from, *to, *curr;
-  const gnc_commodity *from_currency, *to_currency;
+  Account *to_account;
+  Account *from_account;
+  gnc_commodity *from_commodity;
+  gnc_commodity *to_commodity;
   gnc_numeric amount, to_amount;
   char * string;
   time_t time;
@@ -1182,13 +1037,11 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
   Transaction *trans;
   Split *from_split;
   Split *to_split;
-  Split *curr_split;
 
+  from_account = gnc_account_tree_get_current_account(xferData->from);
+  to_account   = gnc_account_tree_get_current_account(xferData->to);
 
-  from = gnc_account_tree_get_current_account(xferData->from);
-  to   = gnc_account_tree_get_current_account(xferData->to);
-
-  if ((from == NULL) || (to == NULL))
+  if ((from_account == NULL) || (to_account == NULL))
   {
     const char *message = _("You must specify an account to transfer from,\n"
                             "or to, or both, for this transaction.\n"
@@ -1197,7 +1050,7 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     return;
   }
 
-  if (from == to)
+  if (from_account == to_account)
   {
     const char *message = _("You can't transfer from and to the same "
                             "account!");
@@ -1211,10 +1064,10 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     return;
   }
 
-  from_currency = xaccAccountGetCurrency(from);
-  to_currency = xaccAccountGetCurrency(to);
+  from_commodity = xaccAccountGetCommodity(from_account);
+  to_commodity = xaccAccountGetCommodity(to_account);
 
-  curr_trans = !gnc_commodity_equiv(from_currency, to_currency);
+  curr_trans = !gnc_commodity_equiv(from_commodity, to_commodity);
 
   amount = gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit));
 
@@ -1250,166 +1103,58 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
       }
     }
 
-    curr = gnc_xfer_dialog_get_selected_curr_acct(xferData);
-    if (curr == NULL)
-    {
-      const char *from_name = gnc_commodity_get_printname(from_currency);
-      const char *to_name   = gnc_commodity_get_printname(to_currency);
-      char *message = 
-	g_strdup_printf(_("No matching currency account!\n"
-			  "Please create a currency account\n"
-			  "with currency %s\n"
-			  "and security %s\n"
-			  "(or vice versa) to transfer funds\n"
-			  "between the selected accounts."),
-                        from_name ? from_name : "(null)",
-                        to_name ? to_name : "(null)");
-
-      gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
-
-      g_free(message);
-
-      return;
-    }
- 
     to_amount = gnc_amount_edit_get_amount
       (GNC_AMOUNT_EDIT(xferData->to_amount_edit));
-
-    gnc_suspend_gui_refresh ();
-
-    /* from -> curr transaction */
-    /* Create the transaction */
-    trans = xaccMallocTransaction();
-
-    xaccTransBeginEdit(trans);
-    xaccTransSetDateSecs(trans, time);
-
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-    xaccTransSetNum(trans, string);
-
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
-    xaccTransSetDescription(trans, string);
-
-    /* create first split */
-    curr_split = xaccMallocSplit();
-    xaccTransAppendSplit(trans, curr_split); 
-
-    /* create second split */
-    from_split = xaccMallocSplit();
-    xaccTransAppendSplit(trans, from_split); 
-
-    xaccAccountBeginEdit(curr);
-    xaccAccountInsertSplit(curr, curr_split);
-    xaccAccountBeginEdit(from);
-    xaccAccountInsertSplit(from, from_split);
-
-    xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount), from_currency);
-    xaccSplitSetBaseValue(curr_split, amount, from_currency);
-    xaccSplitSetBaseValue(curr_split, to_amount, to_currency);
-
-    /* Set the memo fields */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccSplitSetMemo(curr_split, string);
-    xaccSplitSetMemo(from_split, string);
-
-    /* finish transaction */
-    xaccTransCommitEdit(trans);
-    xaccAccountCommitEdit(from);
-    xaccAccountCommitEdit(curr);
-
-    /* curr -> to transaction */
-    /* Create the transaction */
-    trans = xaccMallocTransaction();
-
-    xaccTransBeginEdit(trans);
-    xaccTransSetDateSecs(trans, time);
-
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-    xaccTransSetNum(trans, string);
-
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
-    xaccTransSetDescription(trans, string);
-
-    /* create first split */
-    curr_split = xaccMallocSplit();
-    xaccTransAppendSplit(trans, curr_split); 
-
-    /* create second split */
-    to_split = xaccMallocSplit();
-    xaccTransAppendSplit(trans, to_split); 
-
-    xaccAccountBeginEdit(to);
-    xaccAccountInsertSplit(to, to_split);
-    xaccAccountBeginEdit(curr);
-    xaccAccountInsertSplit(curr, curr_split);
-
-    xaccSplitSetBaseValue(to_split, to_amount, to_currency);
-    xaccSplitSetBaseValue(curr_split, gnc_numeric_neg(amount), from_currency);
-    xaccSplitSetBaseValue(curr_split, gnc_numeric_neg(to_amount), to_currency);
-
-    /* set the memo fields */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccSplitSetMemo(curr_split, string);
-    xaccSplitSetMemo(to_split, string);
-
-    /* finish transaction */
-    xaccTransCommitEdit(trans);
-    xaccAccountCommitEdit(curr);
-    xaccAccountCommitEdit(to);
-
-    /* Refresh everything */
-    gnc_resume_gui_refresh ();
   }
   else
-  {
-    gnc_suspend_gui_refresh ();
+    to_amount = amount;
 
-    /* Create the transaction */
-    trans = xaccMallocTransaction();
+  gnc_suspend_gui_refresh ();
 
-    xaccTransBeginEdit(trans);
-    xaccTransSetDateSecs(trans, time);
+  /* Create the transaction */
+  trans = xaccMallocTransaction();
 
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
-    xaccTransSetNum(trans, string);
+  xaccTransBeginEdit(trans);
 
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
-    xaccTransSetDescription(trans, string);
+  xaccTransSetCurrency(trans, from_commodity);
+  xaccTransSetDateSecs(trans, time);
 
-    /* create first split */
-    to_split = xaccMallocSplit();
-    xaccTransAppendSplit(trans, to_split); 
+  string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
+  xaccTransSetNum(trans, string);
 
-    /* create second split */
-    from_split = xaccMallocSplit();
-    xaccTransAppendSplit(trans, from_split); 
+  string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
+  xaccTransSetDescription(trans, string);
 
-    /* set the memo fields */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
-    xaccSplitSetMemo(to_split, string);
-    xaccSplitSetMemo(from_split, string);
+  /* create from split */
+  from_split = xaccMallocSplit();
+  xaccTransAppendSplit(trans, from_split); 
 
-    /* Now do the 'to' account */
-    xaccAccountBeginEdit(to);
-    xaccAccountInsertSplit(to, to_split);
+  /* create to split */
+  to_split = xaccMallocSplit();
+  xaccTransAppendSplit(trans, to_split); 
 
-    /* Now do the 'from' account */
-    xaccAccountBeginEdit(from);
-    xaccAccountInsertSplit(from, from_split);
+  xaccAccountBeginEdit(from_account);
+  xaccAccountInsertSplit(from_account, from_split);
 
-    /* do this after they go into their accounts */
-    xaccSplitSetBaseValue (to_split, amount, to_currency);
-    xaccSplitSetBaseValue (from_split, gnc_numeric_neg (amount),
-                           from_currency);
+  xaccAccountBeginEdit(to_account);
+  xaccAccountInsertSplit(to_account, to_split);
 
-    /* finish transaction */
-    xaccTransCommitEdit(trans);
-    xaccAccountCommitEdit(to);
-    xaccAccountCommitEdit(from);
+  xaccSplitSetBaseValue(from_split, gnc_numeric_neg (amount), from_commodity);
+  xaccSplitSetBaseValue(to_split, amount, from_commodity);
+  xaccSplitSetBaseValue(to_split, to_amount, to_commodity);
 
-    /* Refresh everything */
-    gnc_resume_gui_refresh ();
-  }
+  /* Set the memo fields */
+  string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
+  xaccSplitSetMemo(from_split, string);
+  xaccSplitSetMemo(to_split, string);
+
+  /* finish transaction */
+  xaccTransCommitEdit(trans);
+  xaccAccountCommitEdit(from_account);
+  xaccAccountCommitEdit(to_account);
+
+  /* Refresh everything */
+  gnc_resume_gui_refresh ();
 
   gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
 }
@@ -1441,14 +1186,6 @@ gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
 
   entry = xferData->description_entry;
   gtk_signal_disconnect_by_data(GTK_OBJECT(entry), xferData);
-
-  if(xferData->curr_accts_list)
-  {
-    g_list_foreach(xferData->curr_accts_list,
-                   gnc_xfer_dialog_free_curr_accts_list, NULL);
-    g_list_free(xferData->curr_accts_list);
-    xferData->curr_accts_list = NULL;
-  }
 
   gtk_object_unref (GTK_OBJECT (xferData->tips));
 
@@ -1582,17 +1319,6 @@ gnc_xfer_dialog_create(GtkWidget * parent, XferDialog *xferData)
 
     frame = glade_xml_get_widget (xml, "curr_transfer_frame");
     xferData->curr_transfer_frame = frame;
-
-    label = glade_xml_get_widget (xml, "curr_acct_label");
-    xferData->curr_acct_label = label;
-
-    combo = glade_xml_get_widget (xml, "curr_acct_combo");
-    xferData->curr_acct_combo = combo;
-
-    xferData->curr_accts_list = NULL;
-
-    entry = glade_xml_get_widget (xml, "curr_acct_combo_entry");
-    xferData->curr_acct_combo_entry = entry;
 
     edit = gnc_amount_edit_new();
     gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),

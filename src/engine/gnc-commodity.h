@@ -75,6 +75,9 @@ void          gnc_commodity_table_destroy(gnc_commodity_table * table);
 gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
                                            const char * namespace, 
                                            const char * mnemonic);
+gnc_commodity *
+gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
+                                  const char * unique_name);
 gnc_commodity * gnc_commodity_table_find_full(const gnc_commodity_table * t,
                                               const char * namespace,
                                               const char * fullname);

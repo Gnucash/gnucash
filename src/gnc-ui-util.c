@@ -126,11 +126,8 @@ gnc_ui_account_get_field_name (AccountFieldCode field)
     case ACCOUNT_NOTES :
       return _("Notes");
       break;
-    case ACCOUNT_CURRENCY :
-      return _("Currency");
-      break;
-    case ACCOUNT_SECURITY :
-      return _("Security");
+    case ACCOUNT_COMMODITY :
+      return _("Commodity");
       break;
     case ACCOUNT_BALANCE :
       return _("Balance");
@@ -161,36 +158,24 @@ gnc_account_get_balance_in_currency (Account *account,
   GNCBook *book;
   GNCPriceDB *pdb;
   GNCPrice *price;
-  gboolean has_shares;
   gnc_numeric balance;
   GNCAccountType atype;
-  gnc_commodity *balance_currency;
+  gnc_commodity *commodity;
 
   if (!account || !currency)
     return gnc_numeric_zero ();
 
-  atype = xaccAccountGetType (account);
-  has_shares = (atype == STOCK || atype == MUTUAL || atype == CURRENCY);
-
-  if (has_shares)
-  {
-    balance = xaccAccountGetShareBalance (account);
-    balance_currency = xaccAccountGetSecurity (account);
-  }
-  else
-  {
-    balance = xaccAccountGetBalance (account);
-    balance_currency = xaccAccountGetCurrency (account);
-  }
+  balance = xaccAccountGetBalance (account);
+  commodity = xaccAccountGetCommodity (account);
 
   if (gnc_numeric_zero_p (balance) ||
-      gnc_commodity_equiv (currency, balance_currency))
+      gnc_commodity_equiv (currency, commodity))
     return balance;
 
   book = gncGetCurrentBook ();
   pdb = gnc_book_get_pricedb (book);
 
-  price = gnc_pricedb_lookup_latest (pdb, balance_currency, currency);
+  price = gnc_pricedb_lookup_latest (pdb, commodity, currency);
   if (!price)
     return gnc_numeric_zero ();
 
@@ -230,19 +215,19 @@ gnc_numeric
 gnc_ui_account_get_balance (Account *account, gboolean include_children)
 {
   gnc_numeric balance;
-  gnc_commodity *currency;
+  gnc_commodity *commodity;
 
   if (account == NULL)
     return gnc_numeric_zero ();
 
-  currency = xaccAccountGetCurrency (account);
+  commodity = xaccAccountGetCommodity (account);
 
-  balance = gnc_account_get_balance_in_currency (account, currency);
+  balance = gnc_account_get_balance_in_currency (account, commodity);
 
   if (include_children)
   {
     AccountGroup *children;
-    CurrencyBalance cb = { currency, balance };
+    CurrencyBalance cb = { commodity, balance };
 
     children = xaccAccountGetChildren (account);
 
@@ -285,32 +270,24 @@ gnc_ui_account_get_field_value_string (Account *account,
     case ACCOUNT_NOTES :
       return g_strdup (xaccAccountGetNotes(account));
 
-    case ACCOUNT_CURRENCY :
+    case ACCOUNT_COMMODITY :
       return
         g_strdup
-        (gnc_commodity_get_printname(xaccAccountGetCurrency(account)));
-
-    case ACCOUNT_SECURITY :
-      return
-        g_strdup
-        (gnc_commodity_get_printname(xaccAccountGetSecurity(account)));
+        (gnc_commodity_get_printname(xaccAccountGetCommodity(account)));
 
     case ACCOUNT_BALANCE :
       {
         gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
 
         return g_strdup
-          (xaccPrintAmount (balance,
-                            gnc_account_value_print_info (account, TRUE)));
+          (xaccPrintAmount (balance, gnc_account_print_info (account, TRUE)));
       }
 
     case ACCOUNT_BALANCE_EURO :
       {
-	gnc_commodity * account_currency = 
-          xaccAccountGetCurrency(account);
+	gnc_commodity * commodity = xaccAccountGetCommodity(account);
         gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
-	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
-                                                       balance);
+	gnc_numeric euro_balance = gnc_convert_to_euro(commodity, balance);
 
         return g_strdup
           (xaccPrintAmount(euro_balance,
@@ -322,17 +299,14 @@ gnc_ui_account_get_field_value_string (Account *account,
 	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
 
         return g_strdup
-          (xaccPrintAmount(balance,
-                           gnc_account_value_print_info (account, TRUE)));
+          (xaccPrintAmount(balance, gnc_account_print_info (account, TRUE)));
       }
 
     case ACCOUNT_TOTAL_EURO :
       {
-	gnc_commodity * account_currency =
-          xaccAccountGetCurrency(account);
+	gnc_commodity * commodity = xaccAccountGetCommodity(account);
 	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
-	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
-                                                       balance);
+	gnc_numeric euro_balance = gnc_convert_to_euro(commodity, balance);
 
 	return g_strdup
           (xaccPrintAmount(euro_balance,
@@ -506,7 +480,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   base_name_exists = (account != NULL);
 
   if (account &&
-      gnc_commodity_equiv (currency, xaccAccountGetCurrency (account)))
+      gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
     return account;
 
   name = g_strconcat (base_name, " - ",
@@ -518,7 +492,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
   name_exists = (account != NULL);
 
   if (account &&
-      gnc_commodity_equiv (currency, xaccAccountGetCurrency (account)))
+      gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
     return account;
 
   /* Couldn't find one, so create it */
@@ -546,7 +520,7 @@ gnc_find_or_create_equity_account (AccountGroup *group,
 
   xaccAccountSetName (account, name);
   xaccAccountSetType (account, EQUITY);
-  xaccAccountSetCurrency (account, currency);
+  xaccAccountSetCommodity (account, currency);
 
   if (parent)
   {
@@ -581,7 +555,7 @@ gnc_account_create_opening_balance (Account *account,
   equity_account =
     gnc_find_or_create_equity_account (xaccGetAccountRoot (account),
                                        EQUITY_OPENING_BALANCE,
-                                       xaccAccountGetCurrency (account));
+                                       xaccAccountGetCommodity (account));
   if (!equity_account)
     return FALSE;
 
@@ -592,6 +566,7 @@ gnc_account_create_opening_balance (Account *account,
 
   xaccTransBeginEdit (trans);
 
+  xaccTransSetCurrency (trans, xaccAccountGetCommodity (account));
   xaccTransSetDateSecs (trans, date);
   xaccTransSetDescription (trans, _("Opening Balance"));
 
@@ -600,7 +575,7 @@ gnc_account_create_opening_balance (Account *account,
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (account, split);
 
-  xaccSplitSetShareAmount (split, balance);
+  xaccSplitSetAmount (split, balance);
   xaccSplitSetValue (split, balance);
 
   balance = gnc_numeric_neg (balance);
@@ -610,7 +585,7 @@ gnc_account_create_opening_balance (Account *account,
   xaccTransAppendSplit (trans, split);
   xaccAccountInsertSplit (equity_account, split);
 
-  xaccSplitSetShareAmount (split, balance);
+  xaccSplitSetAmount (split, balance);
   xaccSplitSetValue (split, balance);
 
   xaccTransCommitEdit (trans);
@@ -888,14 +863,6 @@ gnc_account_print_info_helper(Account *account, gboolean use_symbol,
 }
 
 GNCPrintAmountInfo
-gnc_account_value_print_info (Account *account, gboolean use_symbol)
-{
-    return gnc_account_print_info_helper(account, use_symbol,
-                                         xaccAccountGetCurrency,
-                                         xaccAccountGetCurrencySCU);
-}
-
-GNCPrintAmountInfo
 gnc_account_print_info (Account *account, gboolean use_symbol)
 {
     return gnc_account_print_info_helper(account, use_symbol,
@@ -919,9 +886,13 @@ gnc_split_quantity_print_info (Split *split, gboolean use_symbol)
 GNCPrintAmountInfo
 gnc_split_value_print_info (Split *split, gboolean use_symbol)
 {
+  Transaction *trans;
+
   if (!split) return gnc_default_print_info (use_symbol);
-  return gnc_account_value_print_info (xaccSplitGetAccount (split),
-                                       use_symbol);
+
+  trans = xaccSplitGetParent (split);
+
+  return gnc_commodity_print_info (xaccTransGetCurrency (trans), use_symbol);
 }
 
 static GNCPrintAmountInfo

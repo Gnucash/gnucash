@@ -54,8 +54,7 @@ typedef enum
   ACCOUNT_CODE,
   ACCOUNT_DESCRIPTION,
   ACCOUNT_NOTES,
-  ACCOUNT_CURRENCY,
-  ACCOUNT_SECURITY,
+  ACCOUNT_COMMODITY,
   ACCOUNT_BALANCE, /* with sign reversal */
   ACCOUNT_BALANCE_EURO,
   ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
@@ -170,8 +169,6 @@ GNCPrintAmountInfo gnc_default_print_info (gboolean use_symbol);
 GNCPrintAmountInfo gnc_commodity_print_info (const gnc_commodity *commodity,
                                              gboolean use_symbol);
 
-GNCPrintAmountInfo gnc_account_value_print_info (Account *account,
-                                                 gboolean use_symbol);
 GNCPrintAmountInfo gnc_account_print_info (Account *account,
                                            gboolean use_symbol);
 

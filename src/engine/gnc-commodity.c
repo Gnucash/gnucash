@@ -367,6 +367,8 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
                            const char * namespace, const char * mnemonic) {
   gnc_commodity_namespace * nsp = NULL;
 
+  if (!table || !namespace || !mnemonic) return NULL;
+
   nsp = g_hash_table_lookup(table->table, (gpointer)namespace);
 
   if(nsp) {
@@ -377,6 +379,38 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
   }
 }
 
+/********************************************************************
+ * gnc_commodity_table_lookup
+ * locate a commodity by unique name.
+ ********************************************************************/
+
+gnc_commodity *
+gnc_commodity_table_lookup_unique(const gnc_commodity_table *table,
+                                  const char * unique_name)
+{
+  char *namespace;
+  char *mnemonic;
+  gnc_commodity *commodity;
+
+  if (!table || !unique_name) return NULL;
+
+  namespace = g_strdup (unique_name);
+  mnemonic = strstr (namespace, "::");
+  if (!mnemonic)
+  {
+    g_free (namespace);
+    return NULL;
+  }
+
+  *mnemonic = '\0';
+  mnemonic += 2;
+
+  commodity = gnc_commodity_table_lookup (table, namespace, mnemonic);
+
+  g_free (namespace);
+
+  return commodity;
+}
 
 /********************************************************************
  * gnc_commodity_table_find_full

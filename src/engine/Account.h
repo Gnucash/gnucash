@@ -201,34 +201,36 @@ const char *   xaccAccountGetNotes (Account *account);
 
 /* New commodity access routines.
  *
- * In the near future, the account structure will no longer store two
- * commodities ('currency' and 'security'). Instead it will store only
- * one commodity, that is the one formerly known as 'security'.  Use
- * the xaccAccountSetCommodity() and xaccAccountGetCommodity()
- * routines to set and fetch it.
+ * The account structure no longer stores two commodities ('currency'
+ * and 'security'). Instead it stores only one commodity, that is the
+ * one formerly known as 'security'.  Use xaccAccountSetCommodity()
+ * and xaccAccountGetCommodity() to set and fetch it.
  *
- * Basically, the next version of the engine will eliminate the
- * 'currency' field of the Account structure.  Instead, the common
- * currency will be stored with the transaction.  The 'value' of a
- * split is a translation of the Split's 'damount' (which is the
- * amount of the Account's commodity involved) into the Transaction's
- * balancing currency.  */
+ * Basically, the engine eliminates the 'currency' field of the
+ * Account structure. Instead, the common currency is stored with the
+ * transaction.  The 'value' of a split is a translation of the
+ * Split's 'amount' (which is the amount of the Account's commodity
+ * involved) into the Transaction's balancing currency. */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 gnc_commodity * xaccAccountGetCommodity (Account *account);
 int  xaccAccountGetCommoditySCU (Account *account);
 void xaccAccountSetCommoditySCU (Account *account, int frac);
 
-/* Soon-to-be-deprecated currency/security access routines.
- * The future API will associate only one thing with an account:
- * the 'commodity'.  Use xaccAccountGetCommodity() to fetch it.
+/* Deprecated currency/security access routines.
+ * The current API associates only one thing with an account:
+ * the 'commodity'. Use xaccAccountGetCommodity() to fetch it.
  */
 /* these two funcs take control of their gnc_commodity args. Don't free */
-void xaccAccountSetCurrency (Account *account, gnc_commodity *currency);
-void xaccAccountSetSecurity (Account *account, gnc_commodity *security);
-gnc_commodity * xaccAccountGetCurrency (Account *account);
-gnc_commodity * xaccAccountGetSecurity (Account *account);
-void xaccAccountSetCurrencySCU (Account *account, int frac);
-int  xaccAccountGetCurrencySCU (Account *account);
+void DxaccAccountSetCurrency (Account *account, gnc_commodity *currency);
+void DxaccAccountSetSecurity (Account *account, gnc_commodity *security);
+gnc_commodity * DxaccAccountGetCurrency (Account *account);
+gnc_commodity * DxaccAccountGetSecurity (Account *account);
+void DxaccAccountSetCurrencySCU (Account *account, int frac);
+int  DxaccAccountGetCurrencySCU (Account *account);
+
+/* Delete any old data in the account's kvp data.
+ * This includes the old currency and security fields. */
+void xaccAccountDeleteOldData (Account *account);
 
 AccountGroup * xaccAccountGetChildren (Account *account);
 AccountGroup * xaccAccountGetParent (Account *account);

@@ -147,6 +147,9 @@ gnc_transaction_dom_tree_create(Transaction *trn)
 
     xmlAddChild(ret, guid_to_dom_tree("trn:id", xaccTransGetGUID(trn)));
 
+    xmlAddChild(ret, commodity_ref_to_dom_tree("trn:currency",
+                                               xaccTransGetCurrency(trn)));
+
     if(xaccTransGetNum(trn) && (safe_strcmp(xaccTransGetNum(trn), "") != 0))
     {
         xmlNewTextChild(ret, NULL, "trn:num", xaccTransGetNum(trn));
@@ -286,11 +289,11 @@ spl_account_handler(xmlNodePtr node, gpointer spl)
 static gboolean
 spl_slots_handler(xmlNodePtr node, gpointer spl)
 {
-    kvp_frame *frm = dom_tree_to_kvp_frame(node);
-    g_return_val_if_fail(frm, FALSE);
+    gboolean successful;
 
-    xaccSplitSetSlots_nc((Split*)spl, frm);
-    
+    successful = dom_tree_to_kvp_frame_given(node, xaccSplitGetSlots (spl));
+    g_return_val_if_fail(successful, FALSE);
+
     return TRUE;
 }
 
@@ -410,6 +413,17 @@ trn_id_handler(xmlNodePtr node, gpointer trn)
 }
 
 static gboolean
+trn_currency_handler(xmlNodePtr node, gpointer trn)
+{
+    gnc_commodity *ref;
+
+    ref = dom_tree_to_commodity_ref_no_engine(node);
+    xaccTransSetCurrency(trn, ref);
+
+    return TRUE;
+}
+
+static gboolean
 trn_num_handler(xmlNodePtr node, gpointer trn)
 {
     return set_tran_string(node, (Transaction*)trn, xaccTransSetNum);
@@ -436,12 +450,12 @@ trn_description_handler(xmlNodePtr node, gpointer trn)
 static gboolean
 trn_slots_handler(xmlNodePtr node, gpointer trn)
 {
-    kvp_frame *frm;
+    gboolean successful;
 
-    frm = dom_tree_to_kvp_frame(node);
+    successful = dom_tree_to_kvp_frame_given(node, xaccTransGetSlots(trn));
 
-    xaccTransSetSlots_nc((Transaction*)trn, frm);
-    
+    g_return_val_if_fail(successful, FALSE);
+
     return TRUE;
 }
 
@@ -449,6 +463,7 @@ trn_slots_handler(xmlNodePtr node, gpointer trn)
 struct dom_tree_handler trn_dom_handlers[] =
 {
     { "trn:id", trn_id_handler, 1, 0 },
+    { "trn:currency", trn_currency_handler, 0, 0},
     { "trn:num", trn_num_handler, 0, 0 },
     { "trn:date-posted", trn_date_posted_handler, 1, 0 },
     { "trn:date-entered", trn_date_entered_handler, 1, 0 },

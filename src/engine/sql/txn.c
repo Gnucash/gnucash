@@ -466,17 +466,11 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             xaccTransSetDateEnteredTS (trans, &ts);
             xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
 
-            /* hack alert -- don't set the transaction currency until
-             * after all splits are restored. This hack is used to set
-             * the reporting currency in an account. This hack will be 
-             * obsolete when reporting currencies are removed from the
-             * account. */
             currency = gnc_string_to_commodity (DB_GET_VAL("currency",j));
             trans_frac = gnc_commodity_get_fraction (currency);
-#if 0
+
             xaccTransSetCurrency
               (trans, gnc_string_to_commodity (DB_GET_VAL("currency",j)));
-#endif
          }
       }
       PQclear (result);
@@ -642,9 +636,6 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    }
 
    /* ------------------------------------------------- */
-
-   /* see note above as to why we do this set here ... */
-   xaccTransSetCurrency (trans, currency);
 
    xaccTransCommitEdit (trans);
 

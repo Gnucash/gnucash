@@ -34,6 +34,8 @@
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
  */
 
+#include "config.h"
+
 #include <glib.h>
 #include <stdio.h>
 #include <string.h>
@@ -187,6 +189,8 @@ xaccSplitScrub (Split *split)
   Transaction *trans;
   gnc_numeric value;
   gboolean trans_was_open;
+  gnc_commodity *commodity;
+  gnc_commodity *currency;
   int scu;
 
   if (!split)
@@ -211,16 +215,18 @@ xaccSplitScrub (Split *split)
     return;
   }
 
-  if (!gnc_commodity_equiv (xaccAccountGetCurrency (account),
-                            xaccAccountGetCommodity (account)))
+  commodity = xaccAccountGetCommodity (account);
+  currency = xaccTransGetCurrency (trans);
+
+  if (!commodity || !gnc_commodity_equiv (commodity, currency))
     return;
 
-  scu = MIN (xaccAccountGetCurrencySCU (account),
-             xaccAccountGetCommoditySCU (account));
+  scu = MIN (xaccAccountGetCommoditySCU (account),
+             gnc_commodity_get_fraction (currency));
 
   value = xaccSplitGetValue (split);
 
-  if (gnc_numeric_same (xaccSplitGetShareAmount (split),
+  if (gnc_numeric_same (xaccSplitGetAmount (split),
                         value, scu, GNC_RND_ROUND))
     return;
 
@@ -333,9 +339,10 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
   PINFO ("unbalanced transaction");
 
   {
-    const gnc_commodity *common_currency;
+    const gnc_commodity *currency;
     const gnc_commodity *commodity;
     gboolean trans_was_open;
+    gnc_numeric new_value;
     Account *account;
 
     trans_was_open = xaccTransIsOpen (trans);
@@ -343,42 +350,24 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     if (!trans_was_open)
       xaccTransBeginEdit (trans);
 
-    common_currency = xaccTransGetCurrency (trans);
+    currency = xaccTransGetCurrency (trans);
     account = xaccSplitGetAccount (balance_split);
 
-    commodity = xaccAccountGetCurrency (account);
-    if (gnc_commodity_equiv (common_currency, commodity))
+    new_value = xaccSplitGetValue (balance_split);
+
+    new_value = gnc_numeric_sub (new_value, imbalance,
+                                 new_value.denom, GNC_RND_ROUND);
+
+    xaccSplitSetValue (balance_split, new_value);
+
+    commodity = xaccAccountGetCommodity (account);
+    if (gnc_commodity_equiv (currency, commodity))
+      xaccSplitSetShareAmount (balance_split, new_value);
+
+    if (!parent && gnc_numeric_zero_p (new_value))
     {
-      gnc_numeric new_value = xaccSplitGetValue (balance_split);
-
-      new_value = gnc_numeric_sub (new_value, imbalance,
-                                   new_value.denom, GNC_RND_ROUND);
-
-      xaccSplitSetValue (balance_split, new_value);
-
-      if (!parent && gnc_numeric_zero_p (new_value))
-      {
-        xaccSplitDestroy (balance_split);
-        balance_split = NULL;
-      }
-    }
-
-    commodity = xaccAccountGetSecurity (account);
-    if (balance_split && gnc_commodity_equiv (common_currency, commodity))
-    {
-      gnc_numeric new_share_amount = xaccSplitGetShareAmount (balance_split);
-
-      new_share_amount = gnc_numeric_sub (new_share_amount, imbalance,
-                                          new_share_amount.denom,
-                                          GNC_RND_ROUND);
-
-      xaccSplitSetShareAmount (balance_split, new_share_amount);
-
-      if (!parent && gnc_numeric_zero_p (new_share_amount))
-      {
-        xaccSplitDestroy (balance_split);
-        balance_split = NULL;
-      }
+      xaccSplitDestroy (balance_split);
+      balance_split = NULL;
     }
 
     if (balance_split)
@@ -389,6 +378,87 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     if (!trans_was_open)
       xaccTransCommitEdit (trans);
   }
+}
+
+/* ================================================================ */
+
+void
+xaccTransScrubCurrency (Transaction *trans)
+{
+  gnc_commodity *currency;
+
+  if (!trans) return;
+
+  currency = xaccTransGetCurrency (trans);
+  if (currency) return;
+
+  currency = xaccTransFindOldCommonCurrency (trans);
+  if (currency)
+  {
+    xaccTransBeginEdit (trans);
+    xaccTransSetCurrency (trans, currency);
+    xaccTransCommitEdit (trans);
+  }
+  else
+  {
+    PWARN ("no common transaction currency found");
+  }
+}
+
+/* ================================================================ */
+
+void
+xaccAccountScrubCommodity (Account *account)
+{
+  gnc_commodity *commodity;
+
+  if (!account) return;
+
+  commodity = xaccAccountGetCommodity (account);
+  if (commodity) return;
+
+  commodity = DxaccAccountGetSecurity (account);
+  if (commodity)
+  {
+    xaccAccountSetCommodity (account, commodity);
+    return;
+  }
+
+  commodity = DxaccAccountGetCurrency (account);
+  if (commodity)
+  {
+    xaccAccountSetCommodity (account, commodity);
+    return;
+  }
+
+  PERR ("account with no commodity");
+}
+
+/* ================================================================ */
+
+static gboolean
+scrub_trans_currency_helper (Transaction *t, void *unused)
+{
+  xaccTransScrubCurrency (t);
+  return TRUE;
+}
+
+static gpointer
+scrub_account_commodity_helper (Account *account, gpointer unused)
+{
+  xaccAccountScrubCommodity (account);
+  xaccAccountDeleteOldData (account);
+  return NULL;
+}
+
+void
+xaccGroupScrubCommodities (AccountGroup *group)
+{
+  if (!group) return;
+
+  xaccGroupForEachTransaction (group, scrub_trans_currency_helper, NULL);
+
+  xaccGroupForEachAccount (group, scrub_account_commodity_helper, NULL, TRUE);
 }
 
 /* ================================================================ */
@@ -405,7 +475,7 @@ GetOrMakeAccount (AccountGroup *root, Transaction *trans,
   currency = xaccTransGetCurrency (trans);
 
   accname = g_strconcat (name_root, "-",
-                         gnc_commodity_get_mnemonic(currency), NULL);
+                         gnc_commodity_get_mnemonic (currency), NULL);
 
   /* see if we've got one of these going already ... */
   acc = xaccGetAccountFromName (root, accname);
@@ -416,7 +486,7 @@ GetOrMakeAccount (AccountGroup *root, Transaction *trans,
     acc = xaccMallocAccount ();
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
-    xaccAccountSetCurrency (acc, currency);
+    xaccAccountSetCommodity (acc, currency);
     xaccAccountSetType (acc, BANK);
 
     /* hang the account off the root */

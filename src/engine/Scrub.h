@@ -63,8 +63,8 @@ void xaccAccountScrubOrphans (Account *acc);
 void xaccAccountTreeScrubOrphans (Account *acc);
 void xaccGroupScrubOrphans (AccountGroup *grp);
 
-/* The ScrubSplit methods ensure that splits with the same currency
- *   and security have the same share quantity and value.
+/* The ScrubSplit methods ensure that splits with the same commodity
+ *   and command currency have the same amount and value.
  */
 void xaccSplitScrub (Split *split);
 void xaccTransScrubSplits (Transaction *trans);
@@ -82,5 +82,18 @@ void xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
 void xaccAccountScrubImbalance (Account *acc);
 void xaccAccountTreeScrubImbalance (Account *acc);
 void xaccGroupScrubImbalance (AccountGroup *grp);
+
+/* The xaccTransScrubCurrency method fixes transactions without a
+ * common_currency by using the old account currency and security
+ * fields of the parent accounts of the transaction's splits. */
+void xaccTransScrubCurrency (Transaction *trans);
+
+/* The xaccAccountScrubCommodity method fixed accounts without
+ * a commodity by using the old account currency and security. */
+void xaccAccountScrubCommodity (Account *account);
+
+/* The xaccGroupScrubCommodities will scrub the currency/commodity
+ * of all accounts & transactions in the group. */
+void xaccGroupScrubCommodities (AccountGroup *group);
 
 #endif /* XACC_SCRUB_H */

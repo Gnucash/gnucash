@@ -98,7 +98,7 @@ xaccInitSplit(Split * split)
   split->action      = g_cache_insert(gnc_engine_get_string_cache(), "");
   split->memo        = g_cache_insert(gnc_engine_get_string_cache(), "");
   split->reconciled  = NREC;
-  split->damount     = gnc_numeric_zero();
+  split->amount      = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
 
   split->date_reconciled.tv_sec  = 0;
@@ -107,9 +107,6 @@ xaccInitSplit(Split * split)
   split->balance             = gnc_numeric_zero();
   split->cleared_balance     = gnc_numeric_zero();
   split->reconciled_balance  = gnc_numeric_zero();
-  split->share_balance             = gnc_numeric_zero();
-  split->share_cleared_balance     = gnc_numeric_zero();
-  split->share_reconciled_balance  = gnc_numeric_zero();
 
   split->kvp_data = kvp_frame_new();
 
@@ -157,15 +154,12 @@ xaccCloneSplit (Split *s)
   split->date_reconciled = s->date_reconciled;
 
   split->value       = s->value;
-  split->damount     = s->damount;
+  split->amount      = s->amount;
 
   /* no need to futz with the balances;  these get wiped each time ... 
    * split->balance             = s->balance;
    * split->cleared_balance     = s->cleared_balance;
    * split->reconciled_balance  = s->reconciled_balance;
-   * split->share_balance             = s->share_balance;
-   * split->share_cleared_balance     = s->share_cleared_balance;
-   * split->share_reconciled_balance  = s->share_reconciled_balance;
    */
 
   return split;
@@ -189,7 +183,7 @@ xaccFreeSplit (Split *split)
   split->action      = NULL;
   split->kvp_data    = NULL;
   split->reconciled  = NREC;
-  split->damount     = gnc_numeric_zero();
+  split->amount      = gnc_numeric_zero();
   split->value       = gnc_numeric_zero();
   split->parent      = NULL;
   xaccSplitSetAccount(split, NULL);
@@ -226,7 +220,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
   if(timespec_cmp(&(sa->date_reconciled),
                   &(sb->date_reconciled))) return FALSE;
 
-  if(!gnc_numeric_eq(sa->damount, sb->damount)) return FALSE;
+  if(!gnc_numeric_eq(sa->amount, sb->amount)) return FALSE;
   if(!gnc_numeric_eq(sa->value, sb->value)) return FALSE;
 
   if(!xaccTransEqual(sa->parent, sb->parent,
@@ -417,7 +411,24 @@ mark_trans (Transaction *trans)
 \********************************************************************/
 
 static int
-get_denom_internal(Split *s, int (*func)(Account*))
+get_currency_denom(Split * s)
+{
+    if(!s)
+    {
+        return 0;
+    }
+    else if(!s->parent || !s->parent->common_currency)
+    {
+        return 100000;
+    }
+    else
+    {
+        return gnc_commodity_get_fraction (s->parent->common_currency);
+    }
+}
+
+static int
+get_commodity_denom(Split * s) 
 {
     if(!s)
     {
@@ -429,20 +440,8 @@ get_denom_internal(Split *s, int (*func)(Account*))
     }
     else
     {
-        return func(xaccSplitGetAccount(s));
+        return xaccAccountGetCommoditySCU(xaccSplitGetAccount(s));
     }
-}
-    
-static int
-get_currency_denom(Split * s)
-{
-    return get_denom_internal(s, xaccAccountGetCurrencySCU);
-}
-
-static int
-get_security_denom(Split * s) 
-{
-    return get_denom_internal(s, xaccAccountGetCommoditySCU);
 }
 
 /********************************************************************\
@@ -454,10 +453,10 @@ DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
   if (!s) return;
   check_open (s->parent);
 
-  s->damount = double_to_gnc_numeric(amt, get_security_denom(s),
-                                     GNC_RND_ROUND);
-  s->value   = double_to_gnc_numeric(price * amt, get_currency_denom(s),
-                                     GNC_RND_ROUND);
+  s->amount = double_to_gnc_numeric(amt, get_commodity_denom(s),
+                                    GNC_RND_ROUND);
+  s->value  = double_to_gnc_numeric(price * amt, get_currency_denom(s),
+                                    GNC_RND_ROUND);
 
   mark_split (s);
 }
@@ -469,9 +468,9 @@ xaccSplitSetSharePriceAndAmount (Split *s, gnc_numeric price,
   if (!s) return;
   check_open (s->parent);
 
-  s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);
-  s->value   = gnc_numeric_mul(s->damount, price, 
-                               get_currency_denom(s), GNC_RND_ROUND);
+  s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
+  s->value  = gnc_numeric_mul(s->amount, price, 
+                              get_currency_denom(s), GNC_RND_ROUND);
 
   mark_split (s);
 }
@@ -491,7 +490,7 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price)
   if (!s) return;
   check_open (s->parent);
 
-  s->value = gnc_numeric_mul(s->damount, price, get_currency_denom(s),
+  s->value = gnc_numeric_mul(s->amount, price, get_currency_denom(s),
                              GNC_RND_ROUND);
 
   mark_split (s);
@@ -501,24 +500,24 @@ void
 DxaccSplitSetShareAmount (Split *s, double damt) 
 {
   gnc_numeric old_price;
-  gnc_numeric amt = double_to_gnc_numeric(damt, get_security_denom(s), 
+  gnc_numeric amt = double_to_gnc_numeric(damt, get_commodity_denom(s), 
                                           GNC_RND_ROUND); 
   if (!s) return;
   check_open (s->parent);
   
-  if(!gnc_numeric_zero_p(s->damount)) {
-    old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
+  if(!gnc_numeric_zero_p(s->amount)) {
+    old_price = gnc_numeric_div(s->value, s->amount, GNC_DENOM_AUTO,
                                 GNC_DENOM_REDUCE);
   }
   else {
     old_price = gnc_numeric_create(1, 1);
   }
-  
-  s->damount = gnc_numeric_convert(amt, get_security_denom(s), 
-                                   GNC_RND_NEVER);
-  s->value   = gnc_numeric_mul(s->damount, old_price, 
-                               get_currency_denom(s), GNC_RND_ROUND);
-  
+
+  s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), 
+                                  GNC_RND_NEVER);
+  s->value  = gnc_numeric_mul(s->amount, old_price, 
+                              get_currency_denom(s), GNC_RND_ROUND);
+
   mark_split (s);
 }
 
@@ -528,7 +527,7 @@ xaccSplitSetShareAmount (Split *s, gnc_numeric amt)
   if(!s) return;
   check_open (s->parent);
 
-  s->damount = gnc_numeric_convert(amt, get_security_denom(s), GNC_RND_ROUND);
+  s->amount = gnc_numeric_convert(amt, get_commodity_denom(s), GNC_RND_ROUND);
 
   mark_split (s);
 }
@@ -543,8 +542,8 @@ DxaccSplitSetValue (Split *s, double damt)
   if (!s) return;
   check_open (s->parent);
 
-  if(!gnc_numeric_zero_p(s->damount)) {
-    old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
+  if(!gnc_numeric_zero_p(s->amount)) {
+    old_price = gnc_numeric_div(s->value, s->amount, GNC_DENOM_AUTO,
                                 GNC_DENOM_REDUCE);
   }
   else {
@@ -555,8 +554,8 @@ DxaccSplitSetValue (Split *s, double damt)
                                  GNC_RND_NEVER);
 
   if(!gnc_numeric_zero_p(old_price)) {
-    s->damount = gnc_numeric_div(s->value, old_price, get_currency_denom(s),
-                                 GNC_RND_ROUND);
+    s->amount = gnc_numeric_div(s->value, old_price, get_currency_denom(s),
+                                GNC_RND_ROUND);
   }
 
   mark_split (s);
@@ -628,19 +627,19 @@ xaccSplitGetReconciledBalance (Split *s)  {
 gnc_numeric 
 xaccSplitGetShareBalance (Split *s) {
    if (!s) return gnc_numeric_zero();
-   return s->share_balance;
+   return s->balance;
 }
 
 gnc_numeric 
 xaccSplitGetShareClearedBalance (Split *s) {
    if (!s) return gnc_numeric_zero();
-   return s->share_cleared_balance;
+   return s->cleared_balance;
 }
 
 gnc_numeric 
 xaccSplitGetShareReconciledBalance (Split *s) {
    if (!s) return gnc_numeric_zero();
-   return s->share_reconciled_balance;
+   return s->reconciled_balance;
 }
 
 
@@ -810,6 +809,9 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
     if(!guid_equal(&(ta->guid), &(tb->guid))) return FALSE;
   }
 
+  if(!gnc_commodity_equiv(ta->common_currency, tb->common_currency))
+    return FALSE;
+
   if(timespec_cmp(&(ta->date_entered), &(tb->date_entered))) return FALSE;
   if(timespec_cmp(&(ta->date_posted), &(tb->date_posted))) return FALSE;
   /* Since we use cached strings, we can just compare pointer
@@ -918,7 +920,7 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
                        const gnc_commodity * base_currency)
 {
   const gnc_commodity *currency;
-  const gnc_commodity *security;
+  const gnc_commodity *commodity;
 
   if (!s) return;
   check_open (s->parent);
@@ -938,31 +940,31 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
        * amount the first time and the value the second.  
        * that's bogus. -- bg */
       s->value = value;
-      s->damount = value;
+      s->amount = value;
     }
     mark_split (s);
     return;
   }
 
-  currency = xaccAccountGetCurrency (xaccSplitGetAccount(s));
-  security = xaccAccountGetCommodity (xaccSplitGetAccount(s));
+  currency = xaccTransGetCurrency (xaccSplitGetParent(s));
+  commodity = xaccAccountGetCommodity (xaccSplitGetAccount(s));
 
   /* if the base_currency is the account currency, set the 
    * value.  If it's the account commodity, set the damount. 
    * If both, set both. */
   if (gnc_commodity_equiv(currency, base_currency)) {
-    if(gnc_commodity_equiv(security, base_currency)) {
-      s->damount = gnc_numeric_convert(value,
-                                       get_security_denom(s), 
-                                       GNC_RND_NEVER);
+    if(gnc_commodity_equiv(commodity, base_currency)) {
+      s->amount = gnc_numeric_convert(value,
+                                      get_commodity_denom(s), 
+                                      GNC_RND_NEVER);
     }
     s->value = gnc_numeric_convert(value, 
                                    get_currency_denom(s),
                                    GNC_RND_NEVER);
   }
-  else if (gnc_commodity_equiv(security, base_currency)) {
-    s->damount = gnc_numeric_convert(value, get_security_denom(s),
-                                     GNC_RND_NEVER);
+  else if (gnc_commodity_equiv(commodity, base_currency)) {
+    s->amount = gnc_numeric_convert(value, get_commodity_denom(s),
+                                    GNC_RND_NEVER);
   }
   else if ((NULL==base_currency) && (0 == force_double_entry)) { 
     s->value = gnc_numeric_convert(value, get_currency_denom(s),
@@ -970,10 +972,10 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   }
   else {
     PERR ("inappropriate base currency %s "
-          "given split currency=%s and security=%s\n",
+          "given split currency=%s and commodity=%s\n",
           gnc_commodity_get_printname(base_currency), 
           gnc_commodity_get_printname(currency), 
-          gnc_commodity_get_printname(security));
+          gnc_commodity_get_printname(commodity));
     return;
   }
 
@@ -992,11 +994,11 @@ gnc_numeric
 xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
 {
   const gnc_commodity *currency;
-  const gnc_commodity *security;
+  const gnc_commodity *commodity;
   gnc_numeric value;
 
   if (!s) return gnc_numeric_zero();
-  
+
   /* ahh -- users may not want or use the double entry 
    * features of this engine.  So, in particular, there
    * may be the occasional split without a parent account. 
@@ -1011,26 +1013,26 @@ xaccSplitGetBaseValue (Split *s, const gnc_commodity * base_currency)
     }
   }
 
-  currency = xaccAccountGetCurrency (xaccSplitGetAccount(s));
-  security = xaccAccountGetSecurity (xaccSplitGetAccount(s));
+  currency = xaccTransGetCurrency (xaccSplitGetParent(s));
+  commodity = xaccAccountGetCommodity (xaccSplitGetAccount(s));
 
   /* be more precise -- the value depends on the currency we want it
    * expressed in.  */
   if (gnc_commodity_equiv(currency, base_currency)) {
     value = s->value;
   }
-  else if (gnc_commodity_equiv(security, base_currency)) {
-    value = s->damount;   
+  else if (gnc_commodity_equiv(commodity, base_currency)) {
+    value = s->amount;   
   }
   else if ((NULL == base_currency) && (0 == force_double_entry)) {
     value = s->value;
   }
   else {
     PERR ("inappropriate base currency %s "
-          "given split currency=%s and security=%s\n",
+          "given split currency=%s and commodity=%s\n",
           gnc_commodity_get_printname(base_currency), 
           gnc_commodity_get_printname(currency), 
-          gnc_commodity_get_printname(security));
+          gnc_commodity_get_printname(commodity));
     return gnc_numeric_zero();
   }
 
@@ -1075,10 +1077,10 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
     }
     else {
       const gnc_commodity *currency;
-      const gnc_commodity *security;
+      const gnc_commodity *commodity;
 
-      currency = xaccAccountGetCurrency (xaccSplitGetAccount(s));
-      security = xaccAccountGetSecurity (xaccSplitGetAccount(s));
+      currency = xaccTransGetCurrency (xaccSplitGetParent(s));
+      commodity = xaccAccountGetCommodity (xaccSplitGetAccount(s));
 
       /* OK, we've got a parent account, we've got currency, lets
        * behave like professionals now, instead of the shenanigans
@@ -1090,8 +1092,8 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
                                 GNC_DENOM_AUTO, GNC_DENOM_LCD);
       }
       else if (base_currency && 
-               gnc_commodity_equiv(security, base_currency)) {
-        value = gnc_numeric_add(value, s->damount,
+               gnc_commodity_equiv(commodity, base_currency)) {
+        value = gnc_numeric_add(value, s->amount,
                                 GNC_DENOM_AUTO, GNC_DENOM_LCD);
       }
       else {
@@ -1099,7 +1101,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
               "\tbase = '%s', curr='%s', sec='%s'\n",
                gnc_commodity_get_printname(base_currency),
                gnc_commodity_get_printname(currency),
-               gnc_commodity_get_printname(security));
+               gnc_commodity_get_printname(commodity));
         assert (0);
       }
     }
@@ -1128,34 +1130,6 @@ xaccTransGetImbalance (Transaction * trans)
 /********************************************************************\
 \********************************************************************/
 
-gboolean
-xaccIsCommonCurrency(const gnc_commodity * currency_1, 
-                     const gnc_commodity * security_1,
-                     const gnc_commodity * currency_2, 
-                     const gnc_commodity * security_2)
-{
-  int c1c2, c1s2, s1c2, s1s2;
-
-  if ((currency_1 == NULL) || (currency_2 == NULL))
-    return FALSE;
-
-  c1c2 = !gnc_commodity_equiv(currency_1, currency_2);
-  c1s2 = !gnc_commodity_equiv(currency_1, security_2);
-
-  if (security_1 != NULL)
-  {
-    s1c2 = !gnc_commodity_equiv(security_1, currency_2);
-    s1s2 = !gnc_commodity_equiv(security_1, security_2);
-  }
-  else /* no match */
-  {
-    s1c2 = 0;
-    s1s2 = 0;
-  }
-
-  return (c1c2 == 1) || (c1s2 == 1) || (s1c2 == 1) || (s1s2 == 1);
-}
-
 static gnc_commodity *
 FindCommonExclSCurrency (GList *splits,
                          gnc_commodity * ra, gnc_commodity * rb,
@@ -1183,8 +1157,8 @@ FindCommonExclSCurrency (GList *splits,
     else if (xaccSplitGetAccount(s) == NULL)
       continue;
 
-    sa = xaccAccountGetCurrency (xaccSplitGetAccount(s));
-    sb = xaccAccountGetSecurity (xaccSplitGetAccount(s));
+    sa = DxaccAccountGetCurrency (xaccSplitGetAccount(s));
+    sb = DxaccAccountGetSecurity (xaccSplitGetAccount(s));
 
     if (ra && rb) {
        int aa = !gnc_commodity_equiv(ra,sa);
@@ -1228,7 +1202,7 @@ FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb)
 }
 
 gnc_commodity *
-xaccTransFindCommonCurrency (Transaction *trans)
+xaccTransFindOldCommonCurrency (Transaction *trans)
 {
   gnc_commodity *ra, *rb, *retval;
   Split *split;
@@ -1241,8 +1215,8 @@ xaccTransFindCommonCurrency (Transaction *trans)
 
   if (xaccSplitGetAccount(split) == NULL) return NULL;
 
-  ra = xaccAccountGetCurrency (xaccSplitGetAccount(split));
-  rb = xaccAccountGetSecurity (xaccSplitGetAccount(split));
+  ra = DxaccAccountGetCurrency (xaccSplitGetAccount(split));
+  rb = DxaccAccountGetSecurity (xaccSplitGetAccount(split));
 
   retval = FindCommonCurrency (trans->splits, ra, rb);
 
@@ -1288,58 +1262,32 @@ xaccTransIsCommonExclSCurrency (Transaction *trans,
 \********************************************************************/
 /* The new routine for setting the common currency */
 
+gnc_commodity *
+xaccTransGetCurrency (Transaction *trans)
+{
+  if (!trans) return NULL;
+  return trans->common_currency;
+}
+
 void
 xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
 {
+  GList *splits;
+  gint fraction;
+
   if (!trans || !curr) return;
+  check_open (trans);
 
-  if (trans->common_currency)
+  trans->common_currency = curr;
+  fraction = gnc_commodity_get_fraction (curr);
+
+  for (splits = trans->splits; splits; splits = splits->next)
   {
-    if (!gnc_commodity_equiv (curr,trans->common_currency))
-    {
-      PWARN ("asked to change from common currency %s to %s\n"
-             "doing so hasn't been tested and may orrupt the system\n",
-             gnc_commodity_get_unique_name (trans->common_currency),
-             gnc_commodity_get_unique_name (curr));
-    }
+    Split *s = splits->data;
+    s->value = gnc_numeric_convert(s->value, fraction, GNC_RND_ROUND);
   }
-  else
-  {
-    const gnc_commodity *kimono;
-    GList *node;
-    trans->common_currency = curr;
 
-    /* The following code will be obsolete when we finally eliminate
-     * the storage of the reporting currency with the account. But in 
-     * the meanwhile, we will try to keep it in sync, so that both the 
-     * old and new ways work.
-     *
-     * This is a cheesy and potentially error-prone algorithm;
-     * but lets give it a spin and try our luck ...
-     */
-    for (node = trans->splits; node; node = node->next)
-    {
-      const gnc_commodity *currency;
-      const gnc_commodity *security;
-      Split *s = node->data;
-      Account *acct = xaccSplitGetAccount(s);
-
-      currency = xaccAccountGetCurrency (acct);
-      security = xaccAccountGetSecurity (acct);
-      if (!currency && security && (FALSE == gnc_commodity_equiv(curr, security)))
-      {
-        xaccAccountSetCurrency (acct, curr);
-      }
-    }
-    kimono = xaccTransFindCommonCurrency (trans);
-    if (!gnc_commodity_equiv (curr,kimono))
-    {
-      PWARN ("Transaction currency seems to be inconsistent.\n"
-             "\tdefacto common=%s, asked to set %s",
-             gnc_commodity_get_unique_name (kimono),
-             gnc_commodity_get_unique_name (curr));
-    }
-  }
+  mark_trans (trans);
 }
 
 /********************************************************************\
@@ -1423,13 +1371,13 @@ xaccTransCommitEdit (Transaction *trans)
        */
       if ((1 == force_double_entry) &&
           (NULL == g_list_nth(trans->splits, 1)) &&
-          (!gnc_numeric_zero_p(split->damount))) {
+          (!gnc_numeric_zero_p(split->amount))) {
         Split * s = xaccMallocSplit();
         xaccTransAppendSplit (trans, s);
         xaccAccountInsertSplit (xaccSplitGetAccount(s), s);
         xaccSplitSetMemo (s, split->memo);
         xaccSplitSetAction (s, split->action);
-        xaccSplitSetShareAmount(s, gnc_numeric_neg(split->damount));
+        xaccSplitSetShareAmount(s, gnc_numeric_neg(split->amount));
         xaccSplitSetValue(s, gnc_numeric_neg(split->value));
       }
    }
@@ -1606,7 +1554,7 @@ xaccTransRollbackEdit (Transaction *trans)
          so->kvp_data = kvp_frame_new ();
 
          s->reconciled  = so->reconciled;
-         s->damount     = so->damount;
+         s->amount      = so->amount;
          s->value       = so->value;
 
          s->date_reconciled.tv_sec  = so->date_reconciled.tv_sec;
@@ -1924,7 +1872,7 @@ xaccSplitDateOrder (Split *sa, Split *sb)
   if ((sa->reconciled) > (sb->reconciled)) return +1;
 
   /* compare amounts */
-  comp = gnc_numeric_compare(sa->damount, sb->damount);
+  comp = gnc_numeric_compare(sa->amount, sb->amount);
   if(comp < 0) return -1;
   if(comp > 0) return +1;
 
@@ -2515,7 +2463,7 @@ gnc_numeric
 xaccSplitGetShareAmount (Split * split)
 {
   if (!split) return gnc_numeric_zero();
-  return split->damount;
+  return split->amount;
 }
 
 gnc_numeric
@@ -2526,11 +2474,11 @@ xaccSplitGetValue (Split * split) {
 
 gnc_numeric
 xaccSplitGetSharePrice (Split * split) {
-  if(!split || gnc_numeric_zero_p(split->damount)) {
+  if(!split || gnc_numeric_zero_p(split->amount)) {
     return gnc_numeric_create(1, 1);
   }
   return gnc_numeric_div(split->value, 
-                         split->damount,
+                         split->amount,
                          GNC_DENOM_AUTO, 
                          GNC_DENOM_SIGFIGS(PRICE_SIGFIGS) |
                          GNC_RND_ROUND);
@@ -2554,8 +2502,8 @@ xaccSplitGetType(const Split *s)
   return(kvp_value_get_string(split_type));
 }
 
-/* reconfgure a split to be a stock split - after this, you shouldn't
-   mess with the value, just the damount. */
+/* reconfigure a split to be a stock split - after this, you shouldn't
+   mess with the value, just the amount. */
 void
 xaccSplitMakeStockSplit(Split *s)
 {
@@ -2563,8 +2511,8 @@ xaccSplitMakeStockSplit(Split *s)
 
   xaccSplitSetValue(s, gnc_numeric_zero());
   kvp_frame_set_slot_nc(s->kvp_data,
-                     "split-type",
-                     kvp_value_new_string("stock-split"));
+                        "split-type",
+                        kvp_value_new_string("stock-split"));
   mark_split(s);
 }
 

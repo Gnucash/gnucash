@@ -418,7 +418,7 @@ gnc_copy_trans_onto_trans(Transaction *from, Transaction *to,
 
 static Split *
 gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
-                                 Transaction *dest_trans, gboolean unit_price)
+                                 gboolean unit_price)
 {
   GList *node;
 
@@ -434,21 +434,7 @@ gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
     }
 
     if (safe_strcmp(memo, xaccSplitGetMemo(split)) == 0)
-    {
-      Account *account = xaccSplitGetAccount(split);
-      gnc_commodity *currency, *security;
-
-      if (account == NULL)
-        return split;
-
-      currency = xaccAccountGetCurrency(account);
-      if (xaccTransIsCommonCurrency(dest_trans, currency))
-        return split;
-
-      security = xaccAccountGetSecurity(account);
-      if (xaccTransIsCommonCurrency(dest_trans, security))
-        return split;
-    }
+      return split;
   }
 
   return NULL;
@@ -456,11 +442,10 @@ gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
 
 /* This routine is for finding a matching split in an account or related
  * accounts by matching on the memo field. This routine is used for auto-
- * filling in registers with a default leading account. The dest_trans
- * is a transaction used for currency checking. */
+ * filling in registers with a default leading account. */
 static Split *
 gnc_find_split_in_account_by_memo(Account *account, const char *memo,
-                                  Transaction *dest_trans, gboolean unit_price)
+                                  gboolean unit_price)
 {
   GList *slp;
 
@@ -473,8 +458,7 @@ gnc_find_split_in_account_by_memo(Account *account, const char *memo,
     Split *split = slp->data;
     Transaction *trans = xaccSplitGetParent(split);
 
-    split = gnc_find_split_in_trans_by_memo(trans, memo, dest_trans,
-                                            unit_price);
+    split = gnc_find_split_in_trans_by_memo(trans, memo, unit_price);
 
     if (split != NULL) return split;
   }
@@ -484,7 +468,7 @@ gnc_find_split_in_account_by_memo(Account *account, const char *memo,
 
 static Split *
 gnc_find_split_in_reg_by_memo (SplitRegister *reg, const char *memo,
-                               Transaction *dest_tran, gboolean unit_price)
+                               gboolean unit_price)
 {
   int virt_row, virt_col;
   int num_rows, num_cols;
@@ -514,8 +498,7 @@ gnc_find_split_in_reg_by_memo (SplitRegister *reg, const char *memo,
       if (trans == last_trans)
         continue;
 
-      split = gnc_find_split_in_trans_by_memo (trans, memo, dest_tran,
-                                               unit_price);
+      split = gnc_find_split_in_trans_by_memo (trans, memo, unit_price);
       if (split != NULL)
         return split;
 
@@ -591,9 +574,11 @@ sr_get_split (SplitRegister *reg, VirtualCellLocation vcell_loc)
 static int
 gnc_split_get_value_denom (Split *split)
 {
+  gnc_commodity *currency;
   int denom;
 
-  denom = xaccAccountGetCurrencySCU (xaccSplitGetAccount (split));
+  currency = xaccTransGetCurrency (xaccSplitGetParent (split));
+  denom = gnc_commodity_get_fraction (currency);
   if (denom == 0)
   {
     gnc_commodity *commodity = gnc_default_currency ();
@@ -626,6 +611,19 @@ static void
 sr_set_cell_fractions (SplitRegister *reg, Split *split)
 {
   Account *account;
+  Transaction *trans;
+  gnc_commodity *currency;
+  int fraction;
+
+  trans = xaccSplitGetParent (split);
+  currency = xaccTransGetCurrency (trans);
+  if (!currency)
+    currency = gnc_default_currency ();
+
+  fraction = gnc_commodity_get_fraction (currency);
+
+  xaccSetPriceCellFraction (reg->debitCell, fraction);
+  xaccSetPriceCellFraction (reg->creditCell, fraction);
 
   account = xaccSplitGetAccount (split);
 
@@ -633,29 +631,10 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
     account = sr_get_default_account (reg);
 
   if (account)
-  {
     xaccSetPriceCellFraction (reg->sharesCell,
                               xaccAccountGetCommoditySCU (account));
-    xaccSetPriceCellFraction (reg->debitCell,
-                              xaccAccountGetCurrencySCU (account));
-    xaccSetPriceCellFraction (reg->creditCell,
-                              xaccAccountGetCurrencySCU (account));
-
-    return;
-  }
-
-  {
-    gnc_commodity *commodity;
-    int fraction;
-
+  else
     xaccSetPriceCellFraction (reg->sharesCell, 10000);
-
-    commodity = gnc_default_currency ();
-    fraction = gnc_commodity_get_fraction (commodity);
-
-    xaccSetPriceCellFraction (reg->debitCell, fraction);
-    xaccSetPriceCellFraction (reg->creditCell, fraction);
-  }
 }
 
 static CellBlock *
@@ -1331,12 +1310,11 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
       {
         Account *account = sr_get_default_account (reg);
 
-        auto_split = gnc_find_split_in_account_by_memo(account, memo, trans,
+        auto_split = gnc_find_split_in_account_by_memo(account, memo,
                                                        unit_price);
       }
       else
-        auto_split = gnc_find_split_in_reg_by_memo(reg, memo, trans,
-                                                   unit_price);
+        auto_split = gnc_find_split_in_reg_by_memo(reg, memo, unit_price);
 
       if (auto_split == NULL)
         return FALSE;
@@ -3027,7 +3005,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
   if (MOD_SHRS & changed)
     amount = xaccGetPriceCellValue (reg->sharesCell);
   else
-    amount = xaccSplitGetShareAmount (split);
+    amount = xaccSplitGetAmount (split);
 
   if (MOD_PRIC & changed)
     price = xaccGetPriceCellValue (reg->priceCell);
@@ -3042,7 +3020,7 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
   }
   else
     value = xaccSplitGetValue (split);
- 
+
   /* Check if precisely one value is zero. If so, we can assume that the
    * zero value needs to be recalculated.   */
 
@@ -3060,9 +3038,9 @@ sr_split_auto_calc (SplitRegister *reg, Split *split, guint32 changed)
     if (!gnc_numeric_zero_p (value))
       recalc_shares = TRUE;
 
-  /* If we have not already flaged a recalc, check if this is a split
+  /* If we have not already flagged a recalc, check if this is a split
    * which has 2 of the 3 values changed. */
-  
+
   if((!recalc_shares) &&
      (!recalc_price)  &&
      (!recalc_value))
@@ -3442,41 +3420,7 @@ xaccSRActuallySaveChangedCells( SplitRegister *reg, Transaction *trans, Split *s
                                           new_name, account_separator);
 
     if ((new_acc != NULL) && (old_acc != new_acc))
-    {
-      gnc_commodity * currency = NULL;
-      gnc_commodity * security = NULL;
-
-      currency = xaccAccountGetCurrency(new_acc);
-      currency = xaccTransIsCommonExclSCurrency(trans, currency, split);
-
-      if (currency == NULL)
-      {
-        security = xaccAccountGetSecurity(new_acc);
-        security = xaccTransIsCommonExclSCurrency(trans, security, split);
-      }
-
-      if ((currency != NULL) || (security != NULL))
-        xaccAccountInsertSplit (new_acc, split);
-      else
-      {
-        const char *format = _("You cannot transfer funds from the %s "
-                               "account.\nIt does not have a matching "
-                               "currency.\nTo transfer funds between "
-                               "accounts with different currencies\n"
-                               "you need an intermediate currency account.\n"
-                               "Please see the GnuCash online manual.");
-        const char *name;
-        char *message;
-
-        name = xaccAccountGetName(new_acc);
-        name = name ? name : _("(no name)");
-
-        message = g_strdup_printf (format, name);
-
-        gnc_warning_dialog_parented (xaccSRGetParent(reg), message);
-        g_free(message);
-      }
-    }
+      xaccAccountInsertSplit (new_acc, split);
   }
 
   if (reg->style == REG_STYLE_LEDGER && !info->trans_expanded)
@@ -3511,7 +3455,7 @@ xaccSRActuallySaveChangedCells( SplitRegister *reg, Transaction *trans, Split *s
 
     if (other_split)
     {
-      Account *old_acc=NULL, *new_acc=NULL;
+      Account *old_acc, *new_acc;
 
       /* do some reparenting. Insertion into new account will automatically
        * delete from the old account */
@@ -3521,43 +3465,7 @@ xaccSRActuallySaveChangedCells( SplitRegister *reg, Transaction *trans, Split *s
                                             account_separator);
 
       if ((new_acc != NULL) && (old_acc != new_acc))
-      {
-        gnc_commodity * currency = NULL;
-        gnc_commodity * security = NULL;
-
-        currency = xaccAccountGetCurrency(new_acc);
-        currency = xaccTransIsCommonExclSCurrency(trans, 
-                                                  currency, other_split);
-
-        if (currency == NULL)
-        {
-          security = xaccAccountGetSecurity(new_acc);
-          security = xaccTransIsCommonExclSCurrency(trans, 
-                                                    security, other_split);
-        }
-
-        if ((currency != NULL) || (security != NULL))
-          xaccAccountInsertSplit (new_acc, other_split);
-        else
-        {
-          const char *format = _("You cannot transfer funds from the %s "
-                                 "account.\nIt does not have a matching "
-                                 "currency.\nTo transfer funds between "
-                                 "accounts with different currencies\n"
-                                 "you need an intermediate currency account.\n"
-                                 "Please see the GnuCash online manual.");
-          const char *name;
-          char *message;
-
-          name = xaccAccountGetName (new_acc);
-          name = name ? name : _("(no name)");
-
-          message = g_strdup_printf (format, name);
-
-          gnc_warning_dialog_parented (xaccSRGetParent(reg), message);
-          g_free (message);
-        }
-      }
+        xaccAccountInsertSplit (new_acc, other_split);
     }
   }
 
@@ -3648,6 +3556,7 @@ get_trans_total_value (SplitRegister *reg, Transaction *trans)
 {
   GList *node;
   Account *account;
+  gnc_commodity *currency;
   gnc_numeric total = gnc_numeric_zero ();
 
   account = sr_get_default_account (reg);
@@ -3655,7 +3564,11 @@ get_trans_total_value (SplitRegister *reg, Transaction *trans)
   if (!account)
     return total;
 
-  total = gnc_numeric_convert (total, xaccAccountGetCurrencySCU (account),
+  currency = xaccTransGetCurrency (trans);
+  if (!currency)
+    currency = gnc_default_currency ();
+
+  total = gnc_numeric_convert (total, gnc_commodity_get_fraction (currency),
                                GNC_RND_ROUND);
 
   for (node = xaccTransGetSplitList (trans); node; node = node->next)
@@ -4974,6 +4887,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     trans = xaccMallocTransaction ();
 
     xaccTransBeginEdit (trans);
+    xaccTransSetCurrency (trans, gnc_default_currency ()); /* is this lame? */
     xaccTransSetDateSecs (trans, info->last_date_entered);
     blank_split = xaccMallocSplit ();
     xaccTransAppendSplit (trans, blank_split);
@@ -5281,15 +5195,10 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
 }
 
 /* ======================================================== */
-/* walk account tree recursively, pulling out all the names */
 
 static void 
-LoadXferCell (ComboCell * cell,  
-              AccountGroup * grp,
-              gnc_commodity * base_currency,
-              gnc_commodity * base_security)
+LoadXferCell (ComboCell * cell, AccountGroup * grp)
 {
-  gboolean load_everything;
   GList *list;
   GList *node;
 
@@ -5297,59 +5206,26 @@ LoadXferCell (ComboCell * cell,
 
   if (!grp) return;
 
-  load_everything = ((base_currency == NULL) && (base_security == NULL));
+  /* Build the xfer menu out of account names. */
 
-  /* Build the xfer menu out of account names. Traverse sub-accounts
-   * recursively. Valid transfers can occur only between accounts
-   * with the same base currency. */
-
-  list = xaccGroupGetAccountList (grp);
+  list = xaccGroupGetSubAccounts (grp);
 
   for (node = list; node; node = node->next)
   {
     Account *account = node->data;
-    gnc_commodity * curr;
-    gnc_commodity * secu;
     char *name;
 
-    curr = xaccAccountGetCurrency (account);
-    secu = xaccAccountGetSecurity (account);
-
-    if (load_everything || 
-        (gnc_commodity_equiv (curr,base_currency)) ||
-        (gnc_commodity_equiv (curr,base_security)) ||
-        (secu && (gnc_commodity_equiv (secu,base_currency))) ||
-        (secu && (gnc_commodity_equiv (secu,base_security))))
+    name = xaccAccountGetFullName (account, account_separator);
+    if (name != NULL)
     {
-      name = xaccAccountGetFullName (account, account_separator);
-      if (name != NULL)
-      {
-        xaccAddComboCellMenuItem (cell, name);
-        g_free(name);
-      }
+      xaccAddComboCellMenuItem (cell, name);
+      g_free(name);
     }
-
-    LoadXferCell (cell, xaccAccountGetChildren (account),
-                  base_currency, base_security);
   }
 
+  g_list_free (list);
+
   LEAVE ("\n");
-}
-
-/* ======================================================== */
-
-static void
-xaccLoadXferCell (ComboCell *cell,  
-                  AccountGroup *grp, 
-                  Account *base_account)
-{
-  gnc_commodity * curr, * secu;
-
-  curr = xaccAccountGetCurrency (base_account);
-  secu = xaccAccountGetSecurity (base_account);
-
-  xaccClearComboCellMenu (cell);
-  LoadXferCell (cell, grp, curr, secu);
 }
 
 /* ======================================================== */
@@ -5366,8 +5242,11 @@ xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
   if (group == NULL)
     return;
 
-  xaccLoadXferCell (reg->xfrmCell, group, base_account);
-  xaccLoadXferCell (reg->mxfrmCell, group, base_account);
+  xaccClearComboCellMenu (reg->xfrmCell);
+  xaccClearComboCellMenu (reg->mxfrmCell);
+
+  LoadXferCell (reg->xfrmCell, group);
+  LoadXferCell (reg->mxfrmCell, group);
 }
 
 /* ======================================================== */

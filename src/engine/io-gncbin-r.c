@@ -220,8 +220,8 @@ cvt_potential_prices_to_pricedb_and_cleanup(GNCPriceDB **prices)
       Timespec time = xaccTransRetDateEnteredTS(txn);
 
       gnc_price_begin_edit(price);
-      gnc_price_set_commodity(price, xaccAccountGetSecurity(split_acct));
-      gnc_price_set_currency(price, xaccAccountGetCurrency(split_acct));
+      gnc_price_set_commodity(price, DxaccAccountGetSecurity(split_acct));
+      gnc_price_set_currency(price, DxaccAccountGetCurrency(split_acct));
       gnc_price_set_time(price, time);
       gnc_price_set_source(price, "old-file-import");
       gnc_price_set_type(price, "unknown");
@@ -507,9 +507,6 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
     }
   }
 
-  /* set up various state that is not normally stored in the byte stream */
-  xaccRecomputeGroupBalance (grp);
-
   xaccLogEnable();
 
   {
@@ -712,7 +709,7 @@ readAccount( int fd, AccountGroup *grp, int token )
      
      PINFO ("currency is %s", tmp);
      currency = gnc_commodity_import_legacy(tmp);
-     xaccAccountSetCurrency (acc, currency);
+     DxaccAccountSetCurrency (acc, currency);
      
      if(tmp) free (tmp);
 
@@ -737,14 +734,14 @@ readAccount( int fd, AccountGroup *grp, int token )
 
      PINFO ("security is %s", tmp);
      security = gnc_commodity_import_legacy(tmp);
-     xaccAccountSetSecurity (acc, security);
+     DxaccAccountSetSecurity (acc, security);
 
      if(tmp) free (tmp);
   } 
   else {
     /* set the default currency when importing old files */
     currency = gnc_commodity_import_legacy(DEFAULT_CURRENCY);
-    xaccAccountSetCurrency (acc, currency);
+    DxaccAccountSetCurrency (acc, currency);
   }
 
   /* aux account info first appears in version ten files */

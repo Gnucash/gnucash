@@ -348,15 +348,13 @@ dom_tree_to_kvp_value(xmlNodePtr node)
     return ret;
 }
 
-kvp_frame*
-dom_tree_to_kvp_frame(xmlNodePtr node)
+gboolean
+dom_tree_to_kvp_frame_given(xmlNodePtr node, kvp_frame *frame)
 {
-    kvp_frame *ret;
     xmlNodePtr mark;
-    
-    g_return_val_if_fail(node, NULL);
 
-    ret = kvp_frame_new();
+    g_return_val_if_fail(node, FALSE);
+    g_return_val_if_fail(frame, FALSE);
 
     for(mark = node->xmlChildrenNode; mark; mark = mark->next)
     {
@@ -386,7 +384,7 @@ dom_tree_to_kvp_frame(xmlNodePtr node)
             {
                 if(val)
                 {
-                    kvp_frame_set_slot_nc(ret, key, val);
+                    kvp_frame_set_slot_nc(frame, key, val);
                 }
                 else
                 {
@@ -397,7 +395,25 @@ dom_tree_to_kvp_frame(xmlNodePtr node)
         }
     }
 
-    return ret;
+    return TRUE;
+}
+
+
+kvp_frame*
+dom_tree_to_kvp_frame(xmlNodePtr node)
+{
+    kvp_frame *ret;
+    
+    g_return_val_if_fail(node, NULL);
+
+    ret = kvp_frame_new();
+
+    if (dom_tree_to_kvp_frame_given(node, ret))
+        return ret;
+
+    kvp_frame_delete(ret);
+
+    return NULL;
 }
 
 

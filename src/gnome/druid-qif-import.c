@@ -1142,7 +1142,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
       else {
         row_text[2] = 
           xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
-                          gnc_account_value_print_info
+                          gnc_account_print_info
                           (xaccSplitGetAccount(gnc_split), TRUE));
       }
 
@@ -1576,7 +1576,7 @@ refresh_old_transactions(QIFImportWindow * wind, int selection) {
       else {
         row_text[2] = 
           xaccPrintAmount(gnc_numeric_abs(xaccSplitGetValue(gnc_split)),
-                          gnc_account_value_print_info
+                          gnc_account_print_info
                           (xaccSplitGetAccount(gnc_split), TRUE));
       }
       

@@ -237,7 +237,7 @@ update_account_balance (GtkCTree *ctree, GtkCTreeNode *node)
 
     balance = gnc_amount_edit_get_amount (balance_edit);
 
-    print_info = gnc_account_value_print_info (account, FALSE);
+    print_info = gnc_account_print_info (account, FALSE);
     string = xaccPrintAmount (balance, print_info);
 
     if (gnc_numeric_zero_p (balance))
@@ -484,7 +484,7 @@ generate_account_titles (Account *act)
     {
       GNCPrintAmountInfo print_info;
 
-      print_info = gnc_account_value_print_info (act, FALSE);
+      print_info = gnc_account_print_info (act, FALSE);
       string = xaccPrintAmount (balance, print_info);
     }
 
@@ -563,7 +563,7 @@ clone_account (const Account* from, gnc_commodity *com)
 
   ret = xaccCloneAccountSimple (from);
 
-  xaccAccountSetCurrency (ret, com);
+  xaccAccountSetCommodity (ret, com);
 
   return ret;
 }
@@ -718,10 +718,10 @@ on_final_account_tree_select_row (GtkCTree        *ctree,
   if (gnc_reverse_balance (account))
     balance = gnc_numeric_neg (balance);
 
-  print_info = gnc_account_value_print_info (account, FALSE);
+  print_info = gnc_account_print_info (account, FALSE);
   gnc_amount_edit_set_print_info (balance_edit, print_info);
   gnc_amount_edit_set_fraction (balance_edit,
-                                xaccAccountGetCurrencySCU (account));
+                                xaccAccountGetCommoditySCU (account));
 
   block_amount_changed ();
 

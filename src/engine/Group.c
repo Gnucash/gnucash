@@ -59,8 +59,6 @@ xaccInitializeAccountGroup (AccountGroup *grp)
   grp->parent      = NULL;
   grp->accounts    = NULL;
 
-  grp->balance     = gnc_numeric_zero();
-
   grp->backend     = NULL;
 }
 
@@ -212,7 +210,7 @@ xaccFreeAccountGroup (AccountGroup *grp)
   if (grp->parent) grp->parent->children = NULL;
 
   grp->parent   = NULL;
-  grp->balance  = gnc_numeric_zero();
+
   g_free (grp);
 }
 
@@ -654,51 +652,6 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
 }
 
 /********************************************************************\
- * FIXME : this code needs to work differently. 
-\********************************************************************/
-
-void
-xaccRecomputeGroupBalance (AccountGroup *grp)
-{
-  const gnc_commodity * default_currency;
-  Account *account;
-  GList *node;
-
-  if (!grp) return;
-  if (!grp->accounts) return;
-
-  account = grp->accounts->data;
-
-  default_currency = xaccAccountGetCurrency (account);
-
-  grp->balance = gnc_numeric_zero();
-
-  for (node = grp->accounts; node; node = node->next)
-  {
-    Account *account = node->data;
-
-    /* first, get subtotals recursively */
-    if (account->children)
-    {
-      xaccRecomputeGroupBalance (account->children);
-      
-      if (gnc_commodity_equiv (default_currency, account->currency))
-        grp->balance = 
-          gnc_numeric_add (grp->balance, account->children->balance,
-                           GNC_DENOM_AUTO, GNC_DENOM_LCD | GNC_RND_NEVER);
-    }
-
-    /* then add up accounts in this group */
-    xaccAccountRecomputeBalance (account);
-
-    if (gnc_commodity_equiv (default_currency, account->currency))
-      grp->balance = 
-        gnc_numeric_add (grp->balance, account->balance,
-                         GNC_DENOM_AUTO, GNC_DENOM_LCD | GNC_RND_NEVER);
-  }
-}
-
-/********************************************************************\
 \********************************************************************/
 /* account codes will be assigned base-36, with three digits */
 
@@ -910,10 +863,8 @@ xaccGroupMergeAccounts (AccountGroup *grp)
                             xaccAccountGetCode(acc_b))) &&
           (0 == safe_strcmp(xaccAccountGetDescription(acc_a),
                             xaccAccountGetDescription(acc_b))) &&
-          (gnc_commodity_equiv(xaccAccountGetCurrency(acc_a),
-                               xaccAccountGetCurrency(acc_b))) &&
-          (gnc_commodity_equiv(xaccAccountGetSecurity(acc_a),
-                               xaccAccountGetSecurity(acc_b))) &&
+          (gnc_commodity_equiv(xaccAccountGetCommodity(acc_a),
+                               xaccAccountGetCommodity(acc_b))) &&
           (0 == safe_strcmp(xaccAccountGetNotes(acc_a),
                             xaccAccountGetNotes(acc_b))) &&
           (xaccAccountGetType(acc_a) == xaccAccountGetType(acc_b)))
@@ -1002,20 +953,6 @@ xaccGroupGetParentAccount (AccountGroup * grp)
   if (!grp) return NULL;
 
   return grp->parent;
-}
-
-double
-DxaccGroupGetBalance (AccountGroup * grp)
-{
-  return gnc_numeric_to_double (xaccGroupGetBalance (grp));
-}
-
-gnc_numeric
-xaccGroupGetBalance (AccountGroup * grp)
-{
-  if (!grp) return gnc_numeric_zero ();
-
-  return grp->balance;
 }
 
 /********************************************************************\

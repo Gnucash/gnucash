@@ -124,28 +124,17 @@
           (if value    (gnc:split-set-value split value)))
         (let ((account (gnc:account-lookup
                         (gnc:split-scm-get-account-guid split-scm))))
-          (if (and account (gnc:account-can-insert-split? account split))
+          (if account
               (begin
                 (gnc:account-begin-edit account)
                 (gnc:account-insert-split account split)
                 (gnc:account-commit-edit account)))))))
 
-;; Returns true if we can insert the C split into the given account.
-(define (gnc:account-can-insert-split? account split)
-  (let ((currency (gnc:account-get-currency account))
-        (security (gnc:account-get-security account))
-        (trans    (gnc:split-get-parent split)))
-
-    (or (< (gnc:transaction-get-split-count trans) 2)
-        (gnc:transaction-is-common-currency trans currency)
-        (gnc:transaction-is-common-currency trans security))))
-
-
 ;; Defines a scheme representation of a transaction.
 (define gnc:transaction-structure
   (make-record-type
    "gnc:transaction-structure"
-   '(transaction-guid date-entered date-posted
+   '(transaction-guid currency date-entered date-posted
                       num description notes split-scms)))
 
 ;; constructor
@@ -159,6 +148,9 @@
 ;; accessors
 (define gnc:transaction-scm-get-transaction-guid
   (record-accessor gnc:transaction-structure 'transaction-guid))
+
+(define gnc:transaction-scm-get-currency
+  (record-accessor gnc:transaction-structure 'currency))
 
 (define gnc:transaction-scm-get-date-entered
   (record-accessor gnc:transaction-structure 'date-entered))
@@ -195,6 +187,9 @@
 (define gnc:transaction-scm-set-transaction-guid
   (record-modifier gnc:transaction-structure 'transaction-guid))
 
+(define gnc:transaction-scm-set-currency
+  (record-modifier gnc:transaction-structure 'currency))
+
 (define gnc:transaction-scm-set-date-entered
   (record-modifier gnc:transaction-structure 'date-entered))
 
@@ -229,6 +224,7 @@
                 (trans-splits (+ i 1))))))
   (gnc:make-transaction-scm
    (gnc:transaction-get-guid trans)
+   (gnc:transaction-get-currency trans)
    (gnc:transaction-get-date-entered trans)
    (if use-cut-semantics?
        (gnc:transaction-get-date-posted trans)
@@ -253,10 +249,12 @@
             (gnc:transaction-begin-edit trans))
 
         ;; copy in the transaction values
-        (let ((description (gnc:transaction-scm-get-description trans-scm))
+        (let ((currency    (gnc:transaction-scm-get-currency trans-scm))
+              (description (gnc:transaction-scm-get-description trans-scm))
               (num         (gnc:transaction-scm-get-num trans-scm))
               (notes       (gnc:transaction-scm-get-notes trans-scm))
               (date-posted (gnc:transaction-scm-get-date-posted trans-scm)))
+          (if currency    (gnc:transaction-set-currency trans currency))
           (if description (gnc:transaction-set-description trans description))
           (if num         (gnc:transaction-set-xnum trans num))
           (if notes       (gnc:transaction-set-notes trans notes))

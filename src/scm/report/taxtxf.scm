@@ -272,11 +272,8 @@
             (make-sub-headers (- max-level 1)))))
 
 (define (render-txf-account account account-value d? date x? x-date)
-  (let* ((print-info (gnc:account-value-print-info account #f))
+  (let* ((print-info (gnc:account-print-info account #t))
          (value (gnc:amount->string account-value print-info))
-         (value (if (equal? "$" (substring value 0 1))
-                    value
-                    (string-append "$" value)))
          (txf? (gnc:account-get-txf account)))
     (if (and txf?
              (not (equal? value (gnc:amount->string 0 print-info))))
@@ -356,7 +353,7 @@
                                (gnc:account-get-full-name account)
                                (gnc:account-get-name account))))
          (blue? (gnc:account-get-txf account))
-         (print-info (gnc:account-value-print-info account #f))
+         (print-info (gnc:account-print-info account #f))
          (value (gnc:amount->string lx-value print-info))
          (value-formatted (if (= 1 level)
                               (gnc:html-markup-b value)

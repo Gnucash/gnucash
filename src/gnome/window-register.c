@@ -2245,23 +2245,23 @@ account_latest_price (Account *account)
 {
   GNCBook *book;
   GNCPriceDB *pdb;
-  gnc_commodity *security;
+  gnc_commodity *commodity;
   gnc_commodity *currency;
 
-  security = xaccAccountGetSecurity (account);
-  currency = xaccAccountGetCurrency (account);
+  commodity = xaccAccountGetCommodity (account);
+  currency = gnc_default_currency ();
 
   book = gncGetCurrentBook ();
   pdb = gnc_book_get_pricedb (book);
 
-  return gnc_pricedb_lookup_latest (pdb, security, currency);
+  return gnc_pricedb_lookup_latest (pdb, commodity, currency);
 }
 
 static void
 gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 {
   RegWindow *regData = data;
-  gnc_commodity * currency;
+  gnc_commodity * commodity;
   GNCPrintAmountInfo print_info;
   gnc_numeric amount;
   Account *leader;
@@ -2278,15 +2278,15 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
                                     "Enable EURO support",
                                     FALSE);
 
-  currency = xaccAccountGetCurrency (leader);
+  commodity = xaccAccountGetCommodity (leader);
 
   /* no EURO converson, if account is already EURO or no EURO currency */
-  if (currency != NULL)
-    euro = (euro && gnc_is_euro_currency(currency));
+  if (commodity != NULL)
+    euro = (euro && gnc_is_euro_currency(commodity));
   else
     euro = FALSE;
 
-  print_info = gnc_account_value_print_info (leader, TRUE);
+  print_info = gnc_account_print_info (leader, TRUE);
 
   reverse = gnc_reverse_balance(leader);
 
@@ -2301,7 +2301,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
       strcat (string, " / ");
       xaccSPrintAmount (string + strlen (string),
-                        gnc_convert_to_euro (currency, amount),
+                        gnc_convert_to_euro (commodity, amount),
                         gnc_commodity_print_info (gnc_get_euro (), TRUE));
     }
 
@@ -2320,7 +2320,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
       strcat (string, " / ");
       xaccSPrintAmount (string + strlen (string),
-                        gnc_convert_to_euro (currency, amount),
+                        gnc_convert_to_euro (commodity, amount),
                         gnc_commodity_print_info (gnc_get_euro (), TRUE));
     }
 
@@ -2339,7 +2339,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
       strcat(string, " / ");
       xaccSPrintAmount (string + strlen(string),
-                        gnc_convert_to_euro(currency, amount),
+                        gnc_convert_to_euro(commodity, amount),
                         gnc_commodity_print_info (gnc_get_euro (), TRUE));
     }
 
@@ -2358,7 +2358,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     {
       strcat (string, " / ");
       xaccSPrintAmount (string + strlen(string),
-                        gnc_convert_to_euro(currency, amount),
+                        gnc_convert_to_euro(commodity, amount),
                         gnc_commodity_print_info (gnc_get_euro (), TRUE));
     }
 
