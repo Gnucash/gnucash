@@ -522,7 +522,7 @@ msgstr ""
 
 #: messages-i18n.c:109
 msgid "Print a check using a standard format"
-msgstr ""
+msgstr "Print a cheque using a standard format"
 
 #: messages-i18n.c:110
 msgid "Reconcile the selected account"
@@ -775,7 +775,7 @@ msgstr ""
 
 #: messages-i18n.c:171
 msgid "_Print Check... (unfinished!)"
-msgstr ""
+msgstr "_Print Cheque... (unfinished!)"
 
 #: messages-i18n.c:172
 msgid "_Reconcile Information..."
@@ -1288,7 +1288,7 @@ msgstr "Cheque"
 
 #: messages-i18n.c:298
 msgid "Checking"
-msgstr "Chequeing"
+msgstr "Current"
 
 #: messages-i18n.c:299
 msgid "Cleared"
@@ -1644,7 +1644,7 @@ msgstr ""
 #: messages-i18n.c:384 po/guile_strings.txt:354
 #: src/gnome/glade-gnc-dialogs.c:643
 msgid "Stock"
-msgstr ""
+msgstr "Share"
 
 #: messages-i18n.c:385 po/guile_strings.txt:246
 msgid "Style"
@@ -1752,11 +1752,11 @@ msgstr ""
 
 #: po/guile_strings.txt:15
 msgid "Stock Portfolio Valuation"
-msgstr ""
+msgstr "Share Portfolio Valuation"
 
 #: po/guile_strings.txt:16
 msgid "Stock Portfolio"
-msgstr ""
+msgstr "Share Portfolio"
 
 #: po/guile_strings.txt:17
 msgid "The types of accounts for which balances are sign-reversed"
@@ -1887,7 +1887,7 @@ msgstr ""
 
 #: po/guile_strings.txt:52
 msgid "_Stock Portfolio"
-msgstr ""
+msgstr "_Share Portfolio"
 
 #: po/guile_strings.txt:53
 msgid "Testing"
@@ -2654,7 +2654,7 @@ msgstr ""
 
 #: po/guile_strings.txt:272
 msgid "Display the Stock Portfolio report."
-msgstr ""
+msgstr "Display the Share Portfolio report."
 
 #: po/guile_strings.txt:273
 msgid ""
@@ -3193,18 +3193,16 @@ msgid "Select Paper Size"
 msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1194
-#, fuzzy
 msgid "Print Check"
-msgstr "Cheque"
+msgstr "Print Cheque"
 
 #: src/gnome/glade-gnc-dialogs.c:1223
 msgid "Check format:"
-msgstr ""
+msgstr "Cheque format:"
 
 #: src/gnome/glade-gnc-dialogs.c:1231 src/gnome/glade-gnc-dialogs.c:1401
-#, fuzzy
 msgid "Check position:"
-msgstr "Chequeing"
+msgstr "Cheque position:"
 
 #: src/gnome/glade-gnc-dialogs.c:1261
 msgid "Quicken/QuickBooks (tm) US-Letter"
@@ -3261,7 +3259,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:1326
 msgid "Custom check parameters"
-msgstr ""
+msgstr "Custom cheque parameters"
 
 #: src/gnome/glade-gnc-dialogs.c:1361
 msgid "Payee:"
