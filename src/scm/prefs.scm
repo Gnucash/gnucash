@@ -323,15 +323,23 @@ not each row")
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
+  (N_ "Reconcile") (N_ "Automatic interest transfer")
+  "a" (N_ "Prior to reconciling an account which charges or pays interest, \
+prompt the user to enter a transaction for the interest charge or payment.
+Currently only enabled for Bank, Credit, Mutual, Asset, and Liability accounts.")
+  #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
   (N_ "Reconcile") (N_ "Automatic credit card payments")
-  "a" (N_ "After reconciling a credit card statement, prompt the user \
+  "b" (N_ "After reconciling a credit card statement, prompt the user \
 to enter a credit card payment")
   #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "Reconcile") (N_ "Check off cleared transactions")
-  "b" (N_ "Automatically check off cleared transactions when reconciling")
+  "c" (N_ "Automatically check off cleared transactions when reconciling")
   #t))
 
 

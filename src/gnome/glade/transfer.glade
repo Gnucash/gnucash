@@ -79,7 +79,7 @@
 
     <widget>
       <class>GtkVBox</class>
-      <name>vbox78</name>
+      <name>transfermain-vbox</name>
       <homogeneous>False</homogeneous>
       <spacing>0</spacing>
       <child>
@@ -90,7 +90,7 @@
 
       <widget>
 	<class>GtkFrame</class>
-	<name>frame33</name>
+	<name>transferinfo-frame</name>
 	<border_width>3</border_width>
 	<label>Transfer Information</label>
 	<label_xalign>0</label_xalign>
@@ -311,7 +311,7 @@
 
       <widget>
 	<class>GtkHBox</class>
-	<name>hbox66</name>
+	<name>transfertrees-hbox</name>
 	<homogeneous>False</homogeneous>
 	<spacing>0</spacing>
 	<child>
@@ -322,7 +322,7 @@
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>frame34</name>
+	  <name>transferfrom-frame</name>
 	  <border_width>3</border_width>
 	  <label>Transfer From</label>
 	  <label_xalign>0</label_xalign>
@@ -423,7 +423,7 @@
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>frame35</name>
+	  <name>transferto-frame</name>
 	  <border_width>3</border_width>
 	  <label>Transfer To</label>
 	  <label_xalign>0</label_xalign>

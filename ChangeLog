@@ -1,3 +1,21 @@
+2001-06-17  Kevin Finn  <kevinfinn@mediaone.net>
+
+	* src/gnome/window-reconcile.c: Implemented automatic interest
+	transfer as a stripped-down transfer dialog.  This allows the user
+	to automatically enter an interest charge or payment for bank or
+	credit accounts prior to starting reconciliation, subject to both
+	a global and per-account preference.
+
+	* src/gnome/dialog-transfer.c,h: Add interfaces to allow the
+	dialog-transfer to be manipulated as necessary to create the auto
+	interest transfer dialog.
+
+	* src/scm/prefs.scm: added new Reconcile boolean: Automatic
+	Interest Transfer * src/engine/Account.c,h: Add access functions
+	for per-account auto interest xfer kvp
+
+	* src/engine/kvp_doc.txt: Document new kvps.
+
 2001-06-17  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/gnc-commodity-xml-v2.c (set_commodity_value): strip

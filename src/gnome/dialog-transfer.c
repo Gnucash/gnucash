@@ -29,7 +29,6 @@
 #include "EuroUtils.h"
 #include "FileDialog.h"
 #include "MultiLedger.h"
-#include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -42,7 +41,6 @@
 #include "messages.h"
 #include "query-user.h"
 #include "window-reconcile.h"
-#include "QuickFill.h"
 
 
 #define DIALOG_TRANSFER_CM_CLASS "dialog-transfer"
@@ -981,6 +979,63 @@ gnc_xfer_dialog_select_to_account(XferDialog *xferData, Account *account)
 }
 
 
+static void
+gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
+                                  XferDirection direction)
+{
+  GNCAccountTree *tree;
+  GtkWidget *show_button;
+
+  if (xferData == NULL)
+    return;
+
+  switch (direction)
+  {
+    case XFER_DIALOG_FROM:
+      tree = xferData->from;
+      show_button = xferData->from_show_button;
+      break;
+    case XFER_DIALOG_TO:
+      tree = xferData->to;
+      show_button = xferData->to_show_button;
+      break;
+    default:
+      return;
+  }
+
+  gtk_widget_set_sensitive( GTK_WIDGET(tree), FALSE );
+  gtk_widget_set_sensitive( GTK_WIDGET(show_button), FALSE );
+}
+
+
+/********************************************************************\
+ * gnc_xfer_dialog_lock_from_account_tree                           *
+ *   prevent changes to the from account tree in an xfer dialog     *
+ *                                                                  *
+ * Args:   xferData - xfer dialog structure                         *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_lock_from_account_tree(XferDialog *xferData)
+{
+  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_FROM);
+}
+
+
+/********************************************************************\
+ * gnc_xfer_dialog_lock_to_account_tree                             *
+ *   prevent changes to the to account tree in an xfer dialog       *
+ *                                                                  *
+ * Args:   xferData - xfer dialog structure                         *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_lock_to_account_tree(XferDialog *xferData)
+{
+  gnc_xfer_dialog_lock_account_tree(xferData, XFER_DIALOG_TO);
+}
+
+
 /********************************************************************\
  * gnc_xfer_dialog_set_amount                                       *
  *   set the amount in the given xfer dialog                        *
@@ -1026,6 +1081,22 @@ gnc_xfer_dialog_set_description(XferDialog *xferData, const char *description)
   gnc_quickfill_insert( xferData->qf, description, QUICKFILL_LIFO );
 }
 
+/********************************************************************\
+ * gnc_xfer_dialog_set_date                                         *
+ *   set the date in the given xfer dialog                          *
+ *                                                                  *
+ * Args:   xferData    - xfer dialog structure                      *
+ *         set_date    - the date to set                            *
+ * Return: none                                                     *
+\********************************************************************/
+void
+gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_date)
+{
+   if (xferData == NULL)
+      return;
+
+   gnc_date_edit_set_time( GNC_DATE_EDIT(xferData->date_entry), set_date );
+}
 
 static void
 gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
@@ -1545,3 +1616,153 @@ gnc_xfer_dialog (GtkWidget * parent, Account * initial)
 
   return xferData;
 }
+
+void
+gnc_xfer_dialog_close( XferDialog *xferData )
+{
+  if( xferData )
+    gnc_close_gui_component_by_data (DIALOG_TRANSFER_CM_CLASS, xferData);
+}
+
+void
+gnc_xfer_dialog_set_title( XferDialog *xferData, const gchar *title )
+{
+  if( xferData && title )
+  {
+    gtk_window_set_title (GTK_WINDOW (xferData->dialog), title);
+  }
+}
+
+void
+gnc_xfer_dialog_set_information_frame_label( XferDialog *xferData, const gchar *label )
+{
+  if( xferData && label )
+  {
+    GtkWidget *frame = gnc_glade_lookup_widget (xferData->dialog, "transferinfo-frame" );
+    gtk_frame_set_label( GTK_FRAME(frame), label );
+  }
+}
+
+
+static void
+gnc_xfer_dialog_set_account_frame_label( XferDialog *xferData,
+                                         const gchar *label,
+                                         XferDirection direction)
+{
+  if( xferData && label )
+  {
+    /* "frame34" is the from frame, "frame35" is the to frame */
+    GtkWidget *frame = gnc_glade_lookup_widget (xferData->dialog,
+                                                ( direction == XFER_DIALOG_FROM ?
+                                                  "transferfrom-frame" : "transferto-frame" ));
+    gtk_frame_set_label( GTK_FRAME(frame), label );
+  }
+}
+
+void
+gnc_xfer_dialog_set_from_account_frame_label( XferDialog *xferData, const gchar *label )
+{
+  gnc_xfer_dialog_set_account_frame_label( xferData, label, XFER_DIALOG_FROM );
+}
+
+void
+gnc_xfer_dialog_set_to_account_frame_label( XferDialog *xferData, const gchar *label )
+{
+  gnc_xfer_dialog_set_account_frame_label( xferData, label, XFER_DIALOG_TO );
+}
+
+void
+gnc_xfer_dialog_set_from_show_button_active( XferDialog *xferData, gboolean set_value )
+{
+  if( xferData && xferData->from_show_button )
+  {
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(xferData->from_show_button), set_value );
+  }
+}
+
+void
+gnc_xfer_dialog_set_to_show_button_active( XferDialog *xferData, gboolean set_value )
+{
+  if( xferData && xferData->to_show_button )
+  {
+    gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(xferData->to_show_button), set_value );
+  }
+}
+
+/* Add a button with a user-specified label and "clicked" callback */
+void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
+                                                const gchar *label,
+                                                GtkSignalFunc callback,
+                                                gpointer user_data )
+{
+  if( xferData && label && callback )
+  {
+    GtkWidget *button = gtk_button_new_with_label( label );
+    GtkWidget *box    = gnc_glade_lookup_widget (xferData->dialog, "transfermain-vbox" );
+    gtk_box_pack_end( GTK_BOX(box), button, FALSE, FALSE, 0 );
+    gtk_signal_connect( GTK_OBJECT(button), "clicked",
+                        GTK_SIGNAL_FUNC( callback ), user_data );
+    gtk_widget_show( button );
+  }
+}
+
+void gnc_xfer_dialog_toggle_currency_frame( XferDialog *xferData, 
+                                            gboolean show_frame )
+{
+  if( xferData && xferData->curr_transfer_frame )
+  {
+    if( show_frame )
+      gtk_widget_show( xferData->curr_transfer_frame );
+    else
+      gtk_widget_hide( xferData->curr_transfer_frame );
+  }
+}
+
+
+/* helper function */
+static gboolean
+find_xfer (gpointer find_data, gpointer user_data)
+{
+  return( find_data == user_data );
+}
+
+/* Run the dialog until the user has either successfully completed the transaction
+ * (just clicking OK doesn't always count) or clicked Cancel.  Return TRUE if the
+ * transaction was a success, FALSE otherwise.
+ */
+gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
+{
+  if( xferData )
+  {
+    while( TRUE )
+    {
+      gint result = gnome_dialog_run( GNOME_DIALOG(xferData->dialog) );
+
+      if( result == 0 )
+      {
+        /* See if the dialog is still there.  For various reasons, the
+         * user could have hit OK but remained in the dialog.  We don't
+         * want to return processing back to anyone else until we clear
+         * off this dialog, so if the dialog is still there we'll just
+         * run it again.
+         */
+  
+        if( !gnc_find_first_gui_component( DIALOG_TRANSFER_CM_CLASS,
+                                           find_xfer, xferData ) )
+        {
+          /* no more dialog, and OK was clicked, so assume it's all good */
+          return( TRUE );
+        }
+        /* else run the dialog again */
+  
+      }
+      else   /* result was Cancel */
+      {
+        return( FALSE );
+      }
+    }
+  }
+    
+  return( FALSE );
+}
+

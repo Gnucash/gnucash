@@ -41,6 +41,7 @@
 #include "date.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "dialog-transfer.h"
 #include "global-options.h"
 #include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
@@ -113,6 +114,41 @@ struct _RecnWindow
   gboolean delete_refresh;  /* do a refresh upon a window deletion  */
 };
 
+/* This structure doesn't contain everything involved in the
+ * startRecnWindow, just pointers that have to be passed in to
+ * callbacks that need more than one piece of data to operate on.
+ * This is also used by the interest transfer dialog code.
+ */
+typedef struct _startRecnWindowData
+{
+  Account       *account;          /* the account being reconciled             */
+  GNCAccountType account_type;     /* the type of the account                  */
+  gboolean       use_shares;       /* whether to use shares for the account    */
+
+  GtkWidget     *startRecnWindow;  /* the startRecnWindow dialog               */
+  GtkWidget     *xfer_button;      /* the dialog's interest transfer button    */
+  GNCAmountEdit *end_value;        /* the dialog's ending balance amount edit  */
+
+  XferDialog    *xferData;         /* the interest xfer dialog (if it exists)  */
+
+  time_t         date;             /* the reconcile date for the interest xfer */
+} startRecnWindowData;
+
+
+/* Note: make sure to update the help text for this in prefs.scm if these change!
+ * These macros define the account types for which an auto interest xfer dialog
+ * could pop up, if the user's preferences allow it.
+ */
+#define account_type_has_auto_interest_charge( type )  ( ( (type) == CREDIT ) || \
+                                                         ( (type) == LIABILITY ) )
+
+#define account_type_has_auto_interest_payment( type )  ( ( (type) == BANK )   || \
+                                                          ( (type) == ASSET )  || \
+                                                          ( (type) == MUTUAL ) )
+
+#define account_type_has_auto_interest_xfer( type ) \
+  (  account_type_has_auto_interest_charge(type) || \
+    account_type_has_auto_interest_payment(type) )
 
 /** PROTOTYPES ******************************************************/
 static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
@@ -274,87 +310,220 @@ static gboolean
 gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
                          gpointer data)
 {
-  GNCAmountEdit *edit = data;
-
-  gnc_amount_edit_evaluate (edit);
+  gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data));
 
   return FALSE;
 }
 
-/* gnc_start_recn_date_changed needs to know the
- * account and the amount edit to update.  Use this private
- * structure to hand off that information.
- * Don't need to include the date edit object since it's
- * passed into gnc_start_recn_date_changed as the
- * widget.
- *
- * Not sure if this is 100% the best way to do this...
- */
-
-typedef struct start_recn_callback_data
-{
-   Account       *account;
-   GNCAmountEdit *gae;
-} start_recn_callback_data;
-
-/* After the user has modified the end_value field,
- * don't do any more auto updates for the remaining
- * life of the startRecnWindow.  Use this flag to keep track.
- */
-static gboolean allow_auto_end_value_updates = TRUE;
-
-/* Note user changes to the startRecnWindow end_value amount edit */
-static void
-gnc_start_recn_end_val_cb (GtkWidget *widget, gpointer data)
-{
-  allow_auto_end_value_updates = FALSE;
-}
-
-/* If the user changed the date edit widget, and automatic
- * ending balance updates are still allowed (i.e. the user
- * hasn't manually updated the ending balance), update the
+/* If the user changed the date edit widget, update the
  * ending balance to reflect the ending balance of the account
  * on the date that the date edit was changed to.
  */
 static void
-gnc_start_recn_date_changed (GtkWidget *widget, gpointer data)
+gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
 {
   GNCDateEdit *gde = GNC_DATE_EDIT (widget);
-  start_recn_callback_data *cb_data = data;
-  Account *acc = cb_data->account;
-  GNCAccountType type = xaccAccountGetType( acc );
-  gboolean use_shares = ((type == STOCK) || (type == MUTUAL) ||
-                         (type == CURRENCY));
   gnc_numeric new_balance;
   time_t new_date;
-  GNCAmountEdit *gae;
 
-  if (allow_auto_end_value_updates)
-  {
     new_date = gnc_date_edit_get_date_end (gde);
 
     /* get the balance for the account as of the new date */
-    new_balance = use_shares ?
-      xaccAccountGetShareBalanceAsOfDate (acc, new_date) :
-      xaccAccountGetBalanceAsOfDate (acc, new_date);
+    new_balance = data->use_shares ?
+      xaccAccountGetShareBalanceAsOfDate (data->account, new_date) :
+      xaccAccountGetBalanceAsOfDate (data->account, new_date);
 
-    gae = cb_data->gae;
+    /* update the amount edit with the amount */
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), new_balance);
+}
 
-    /* Update the balance display widget, first blocking the "changed"
-     * signal to the callback above because this isn't a user change of
-     * the field.  Otherwise the emitted "changed" signal would prevent
-     * future automatic updates of the end_value field.
-     */
-    gtk_signal_handler_block_by_func(
-          GTK_OBJECT(gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (gae))),
-          GTK_SIGNAL_FUNC( gnc_start_recn_end_val_cb ),
-          gae );
-    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (gae), new_balance);
-    gtk_signal_handler_unblock_by_func(
-          GTK_OBJECT(gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (gae))),
-          GTK_SIGNAL_FUNC( gnc_start_recn_end_val_cb ),
-          gae );
+/* For a given account, determine if an auto interest xfer dialog should be shown,
+ * based on both the per-account flag as well as the global reconcile option.
+ * The global option is the default that is used if there is no per-account option.
+ */
+static gboolean
+gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( Account *account )
+{
+  return( xaccAccountGetAutoInterestXfer( account,
+               gnc_lookup_boolean_option( "Reconcile",
+                                          "Automatic interest transfer",
+                                          FALSE ) ) );
+}
+
+/********************************************************************\
+ * recnInterestXferWindow                                           *
+ *   opens up a window to prompt the user to enter an interest      *
+ *   charge or payment for an account prior to reconciling it.      *
+ *   Only to be called for some types of accounts, as defined       *
+ *   in the macros at the top of this file.
+ *                                                                  *
+ * NOTE: This function does not return until the user presses "Ok"  *
+ *       or "Cancel", which means that the transaction must be      *
+ *       resolved before the startRecnWindow will work.             *
+ *                                                                  *
+ * Args:   data           - jumbo structure containing info         *
+ *                          about the start of the reconcile        *
+ *                          process needed by this function.        *
+ * Returns:  none.                                                  *
+\********************************************************************/
+
+/* helper function */
+static char *
+gnc_recn_make_interest_window_name(Account *account, char *text)
+{
+  char *fullname;
+  char *title;
+
+  fullname = xaccAccountGetFullName(account, gnc_get_account_separator());
+  title = g_strconcat(fullname, " - ", _(text), NULL);
+
+  g_free(fullname);
+
+  return title;
+}
+
+/* user clicked button in the interest xfer dialog entitled
+ * "No Auto Interest Payments for this Account".
+ */
+static void
+gnc_recn_interest_xfer_no_auto_clicked_cb(GtkButton *button,
+                                          startRecnWindowData *data)
+{
+  /* Indicate that the user doesn't want an auto interest xfer for this account.
+   */
+  xaccAccountSetAutoInterestXfer( data->account, FALSE );
+
+  /* shut down the interest xfer dialog */
+  gnc_xfer_dialog_close( data->xferData );
+
+  /* make the button clickable again */
+  if( data->xfer_button )
+    gtk_widget_set_sensitive(GTK_WIDGET(data->xfer_button), TRUE);
+}
+
+static void
+recnInterestXferWindow( startRecnWindowData *data)
+{
+  GtkWidget *frame;
+  GtkWidget *button;
+  gchar *title;
+  gint result;
+
+  if( !account_type_has_auto_interest_xfer( data->account_type ) ) return;
+
+  /* get a normal transfer dialog... */
+  data->xferData = gnc_xfer_dialog( GTK_WIDGET(data->startRecnWindow), data->account );
+
+  /* ...and start changing things: */
+
+  /* change title */
+  if( account_type_has_auto_interest_payment( data->account_type ) )
+    title = gnc_recn_make_interest_window_name( data->account, "Interest Payment" );
+  else
+    title = gnc_recn_make_interest_window_name( data->account, "Interest Charge" );
+
+  gnc_xfer_dialog_set_title( data->xferData, title );
+  g_free( title );
+
+
+  /* change frame labels */
+  gnc_xfer_dialog_set_information_frame_label( data->xferData, _("Payment Information") );
+
+  /* interest accrued is a transaction from an income account to a bank account.
+   * interest charged is a transaction from a credit account to an expense account.
+   * The user isn't allowed to change the account (bank or credit) being reconciled.
+   */
+  if( account_type_has_auto_interest_payment( data->account_type ) )
+  {
+    gnc_xfer_dialog_set_from_account_frame_label( data->xferData, _("Payment From") );
+    gnc_xfer_dialog_set_from_show_button_active( data->xferData, TRUE );
+
+    gnc_xfer_dialog_set_to_account_frame_label( data->xferData, _("Reconcile Account") );
+    gnc_xfer_dialog_select_to_account( data->xferData, data->account );
+    gnc_xfer_dialog_lock_to_account_tree( data->xferData );
   }
+  else  /* interest charged to account rather than paid to it */
+  {
+    gnc_xfer_dialog_set_from_account_frame_label( data->xferData, _("Reconcile Account") );
+    gnc_xfer_dialog_select_from_account( data->xferData, data->account );
+    gnc_xfer_dialog_lock_from_account_tree( data->xferData );
+
+    gnc_xfer_dialog_set_to_account_frame_label( data->xferData, _("Payment To") );
+    gnc_xfer_dialog_set_to_show_button_active( data->xferData, TRUE );
+  }
+
+
+  /* add a button to disable auto interest payments for this account */
+  gnc_xfer_dialog_add_user_specified_button( data->xferData,
+    ( account_type_has_auto_interest_payment( data->account_type ) ?
+        _("No Auto Interest Payments for this Account")
+       : _("No Auto Interest Charges for this Account") ),
+    GTK_SIGNAL_FUNC(gnc_recn_interest_xfer_no_auto_clicked_cb),
+    (gpointer) data );
+
+  /* no currency frame */
+  gnc_xfer_dialog_toggle_currency_frame( data->xferData, FALSE );
+
+  /* set the reconcile date for the transaction date */
+  gnc_xfer_dialog_set_date( data->xferData, data->date );
+
+  /* Now run the transfer dialog.  This blocks until done.
+   * If the user hit Cancel, make the button clickable so that
+   * the user can retry if they want.  We don't make the button
+   * clickable if they successfully entered a transaction, since
+   * the fact that the button was clickable again might make
+   * the user think that the transaction didn't actually go through.
+   */
+  if( ! gnc_xfer_dialog_run_until_done( data->xferData ) )
+    if( data->xfer_button )
+      gtk_widget_set_sensitive(GTK_WIDGET(data->xfer_button), TRUE);
+
+  /* done with the XferDialog */
+  data->xferData = NULL;
+}
+
+/* Set up for the interest xfer window, run the window, and update
+ * the startRecnWindow if the interest xfer changed anything that matters.
+ */
+static void
+gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
+{
+  GtkWidget *entry = gnc_amount_edit_gtk_entry( GNC_AMOUNT_EDIT(data->end_value) );
+  gnc_numeric before = gnc_amount_edit_get_amount( GNC_AMOUNT_EDIT(data->end_value) );
+  gnc_numeric after = gnc_numeric_zero();
+
+  recnInterestXferWindow( data );
+
+  /* recompute the ending balance */
+  if (data->use_shares)
+    after = xaccAccountGetShareBalanceAsOfDate(data->account, data->date);
+  else
+    after = xaccAccountGetBalanceAsOfDate(data->account, data->date);
+
+  /* update the ending balance in the startRecnWindow if it has changed. */
+  if( gnc_numeric_compare( before, after ) )
+  {
+    if (gnc_reverse_balance(data->account))
+      after = gnc_numeric_neg (after);
+
+    gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (data->end_value), after);
+    gtk_widget_grab_focus(GTK_WIDGET(entry));
+    gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+  }
+}
+
+static void
+gnc_start_recn_interest_clicked_cb(GtkButton *button, startRecnWindowData *data)
+{
+  /* indicate in account that user wants an auto interest xfer for this account */
+  xaccAccountSetAutoInterestXfer( data->account, TRUE );
+
+  /* make the button unclickable since we're popping up the window */
+  if( data->xfer_button )
+    gtk_widget_set_sensitive(GTK_WIDGET(data->xfer_button), FALSE);
+
+  /* run the account window */
+  gnc_reconcile_interest_xfer_run( data );
 }
 
 /********************************************************************\
@@ -376,21 +545,30 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 gnc_numeric *new_ending, time_t *statement_date)
 {
   GtkWidget *dialog, *end_value, *date_value;
-  GNCAccountType account_type;
+  startRecnWindowData data = { NULL };
   GNCPrintAmountInfo print_info;
   gnc_numeric ending;
   char *title;
   int result;
+  gboolean auto_interest_xfer_option;
 
-  /* This is a new startRecnWindow, so enable automatic
-   * updates of the ending balance amount edit widget.
+  /* Initialize the data structure that will be used for several callbacks
+   * throughout this file with the relevant info.  Some initialization is
+   * done below as well.  Note that local storage should be OK for this,
+   * since any callbacks using it will only work while the startRecnWindow
+   * is running.
    */
-  allow_auto_end_value_updates = TRUE;
+  data.account = account;
+  data.account_type = xaccAccountGetType(account);
+  data.use_shares = ((data.account_type == STOCK) ||
+                     (data.account_type == MUTUAL) ||
+                     (data.account_type == CURRENCY));
+  data.date = *statement_date;
 
-  account_type = xaccAccountGetType(account);
+  /* whether to have an automatic interest xfer dialog or not */
+  auto_interest_xfer_option = gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
 
-  if ((account_type == STOCK) || (account_type == MUTUAL) ||
-      (account_type == CURRENCY))
+  if( data.use_shares )
   {
     ending = xaccAccountGetShareReconciledBalance(account);
     print_info = gnc_account_quantity_print_info (account, TRUE);
@@ -416,6 +594,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
                              NULL);
   g_free (title);
 
+  data.startRecnWindow = GTK_WIDGET(dialog);
+
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
   gnome_dialog_set_close(GNOME_DIALOG(dialog), TRUE);
   gnome_dialog_close_hides(GNOME_DIALOG(dialog), TRUE);
@@ -433,26 +613,20 @@ startRecnWindow(GtkWidget *parent, Account *account,
       gtk_label_new(xaccPrintAmount (ending, print_info));
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     GtkWidget *entry;
-    start_recn_callback_data cb_data = { NULL };
+    GtkWidget *interest = NULL;
 
     date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
 
     end_value = gnc_amount_edit_new ();
-
-    /* Using local storage should be OK since this function doesn't return
-     * until the user is done with the dialog box.
-     */
-    cb_data.account = account;
-    cb_data.gae     = GNC_AMOUNT_EDIT (end_value);
+    data.end_value = GNC_AMOUNT_EDIT(end_value);
 
     /* need to get a callback on date changes to update the recn balance */
     gtk_signal_connect ( GTK_OBJECT (date_value), "date_changed",
-          GTK_SIGNAL_FUNC (gnc_start_recn_date_changed), (gpointer) &cb_data );
+          GTK_SIGNAL_FUNC (gnc_start_recn_date_changed), (gpointer) &data );
 
     print_info.use_symbol = 0;
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (end_value), print_info);
-    if ((account_type == STOCK) || (account_type == MUTUAL) ||
-        (account_type == CURRENCY))
+    if (data.use_shares)
       gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (end_value),
                                     xaccAccountGetCommoditySCU (account));
     else
@@ -466,9 +640,6 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     gtk_signal_connect(GTK_OBJECT(entry), "focus-out-event",
                        GTK_SIGNAL_FUNC(gnc_start_recn_update_cb), end_value);
-
-    gtk_signal_connect(GTK_OBJECT(entry), "changed",
-                       GTK_SIGNAL_FUNC(gnc_start_recn_end_val_cb), end_value);
 
     gnome_dialog_editable_enters(GNOME_DIALOG(dialog), GTK_EDITABLE(entry));
 
@@ -494,10 +665,39 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gtk_box_pack_start(GTK_BOX(right_column), start_value, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(right_column), end_value, TRUE, TRUE, 0);
 
+    /* if it's possible to enter an interest payment or charge for this
+     * account, add a button so that the user can pop up the appropriate
+     * dialog if it isn't automatically popping up.
+     */
+    if( account_type_has_auto_interest_payment( data.account_type ) )
+      interest = gtk_button_new_with_label( _("Enter Interest Payment...") );
+    else if( account_type_has_auto_interest_charge( data.account_type ) )
+      interest = gtk_button_new_with_label( _("Enter Interest Charge...") );
+
+    if( interest )
+    {
+      data.xfer_button = interest;
+
+      gtk_box_pack_end( GTK_BOX(vbox), interest, FALSE, FALSE, 0 );
+      gtk_signal_connect(GTK_OBJECT(interest), "clicked",
+                        GTK_SIGNAL_FUNC(gnc_start_recn_interest_clicked_cb),
+                        (gpointer) &data );
+
+      if( auto_interest_xfer_option )
+       gtk_widget_set_sensitive(GTK_WIDGET(interest), FALSE);
+    }
+
     gtk_widget_show_all(dialog);
 
     gtk_widget_grab_focus(gnc_amount_edit_gtk_entry
                           (GNC_AMOUNT_EDIT (end_value)));
+  }
+
+  /* Allow the user to enter an interest payment or charge prior to reconciling */
+  if( account_type_has_auto_interest_xfer( data.account_type ) 
+      && auto_interest_xfer_option )
+  {
+    gnc_reconcile_interest_xfer_run( &data );
   }
 
   while (TRUE)
@@ -1535,13 +1735,6 @@ recnWindow (GtkWidget *parent, Account *account)
 
   recnData->account = *xaccAccountGetGUID (account);
 
-  recnData->component_id =
-    gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
-                                refresh_handler, close_handler,
-                                recnData);
-
-  recn_set_watches (recnData);
-
   type = xaccAccountGetType(account);
   recnData->use_shares = ((type == STOCK) ||
                           (type == MUTUAL) ||
@@ -1564,10 +1757,16 @@ recnWindow (GtkWidget *parent, Account *account)
    * ending balance for his/her bank statement */
   if (!startRecnWindow (parent, account, &new_ending, &statement_date))
   {
-    gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
     g_free (recnData);
     return NULL;
   }
+
+  recnData->component_id =
+    gnc_register_gui_component (WINDOW_RECONCILE_CM_CLASS,
+                                refresh_handler, close_handler,
+                                recnData);
+
+  recn_set_watches (recnData);
 
   last_statement_date = statement_date;
 

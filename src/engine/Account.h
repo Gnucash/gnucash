@@ -329,6 +329,9 @@ void           xaccAccountSetReconcilePostponeBalance (Account *account,
 
 void           xaccAccountClearReconcilePostpone (Account *account);
 
+gboolean xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value);
+void     xaccAccountSetAutoInterestXfer (Account *account, gboolean option);
+
 /* Get and set the last num field of an Account */
 const char *   xaccAccountGetLastNum (Account *account);
 void           xaccAccountSetLastNum (Account *account, const char *num);

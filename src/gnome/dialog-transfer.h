@@ -25,18 +25,53 @@
 #define __DIALOG_TRANSFER_H__
 
 #include "Account.h"
+#include "account-tree.h"
+#include "QuickFill.h"
 
 typedef struct _xferDialog XferDialog;
 
 XferDialog * gnc_xfer_dialog(GtkWidget * parent, Account *initial);
+
+gboolean gnc_xfer_dialog_run_until_done( XferDialog * );
+
+void gnc_xfer_dialog_close( XferDialog * );
+
+/*********** Access routines ***********/
+void gnc_xfer_dialog_set_title( XferDialog *, const gchar * );
+
+/* set the label of the topmost frame */
+void gnc_xfer_dialog_set_information_frame_label( XferDialog *, const gchar * );
+
+/* Add a button with a user-specified label and "clicked" callback.
+ * For now this doesn't offer a lot of flexibility, but it doesn't have to.
+ */
+void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
+                                                const gchar *label,
+                                                GtkSignalFunc callback,
+                                                gpointer user_data );
+
+void gnc_xfer_dialog_toggle_currency_frame( XferDialog *xferData,
+                                            gboolean show_frame );
+
+void gnc_xfer_dialog_set_from_account_frame_label( XferDialog *, const gchar * );
+void gnc_xfer_dialog_set_to_account_frame_label( XferDialog *, const gchar * );
+
+/* set the buttons for "Show Income/Expense" */
+void gnc_xfer_dialog_set_from_show_button_active( XferDialog *, gboolean );
+void gnc_xfer_dialog_set_to_show_button_active( XferDialog *, gboolean );
 
 void gnc_xfer_dialog_select_from_account(XferDialog *xferData,
                                          Account *account);
 void gnc_xfer_dialog_select_to_account(XferDialog *xferData,
                                        Account *account);
 
+/* prevent the user from changing an account tree */
+void gnc_xfer_dialog_lock_from_account_tree(XferDialog *xferData );
+void gnc_xfer_dialog_lock_to_account_tree(XferDialog *xferData );
+
 void gnc_xfer_dialog_set_amount(XferDialog *xferData, gnc_numeric amount);
 void gnc_xfer_dialog_set_description(XferDialog *xferData,
                                      const char *description);
+void gnc_xfer_dialog_set_date(XferDialog *xferData, time_t set_time);
 
 #endif

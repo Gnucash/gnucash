@@ -100,7 +100,7 @@ Paul Fenwick <pjf@schools.net.au> ASX support, Finance::Quote
 Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
 Valek Filippov <frob@df.ru> messages Russian translation
 Jan-Uwe Finck <jufi@nerdnet.de> for messages German translation
-Kevin Finn <kevinfinn@mediaone.net> auto-decimal point patch, options patch
+Kevin Finn <kevinfinn@mediaone.net> auto-decimal point, options, auto interest xfer patches
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures

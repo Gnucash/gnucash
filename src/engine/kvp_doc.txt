@@ -93,6 +93,14 @@ Type: numeric
 Entities: Account
 Use: store the ending balance of a postponed reconciliation
 
+Name: reconcile-info/auto-interest-transfer
+Type: string
+Entities: Account
+Use: allows the user to override the global reconcile option
+     "Automatic interest transfer" on a per-account basis.
+     Acceptable values are "true" and "false".
+     (This really could use a KVP_TYPE_BOOLEAN.)
+
 Name: split-type
 Entities: Split
 Use: xaccSplitGetType, xaccSplitMakeStockSplit

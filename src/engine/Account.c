@@ -2099,6 +2099,61 @@ xaccAccountClearReconcilePostpone (Account *account)
 /********************************************************************\
 \********************************************************************/
 
+/* xaccAccountGetAutoInterestXfer: determine whether the auto interest
+ * xfer option is enabled for this account, and return that value.
+ * If it is not defined for the account, return the default value.
+ */
+gboolean
+xaccAccountGetAutoInterestXfer (Account *account, gboolean default_value)
+{
+  kvp_value *value = NULL;
+  char *setting = NULL;
+  gboolean result = default_value;
+
+  if ( ( account )                                      &&
+       ( value = kvp_frame_get_slot_path (account->kvp_data,
+                                          "reconcile-info",
+                                          "auto-interest-transfer",
+                                          NULL) )        &&
+       ( kvp_value_get_type (value) == KVP_TYPE_STRING ) && 
+       ( setting = kvp_value_get_string(value) ) )
+  {
+    if( !strcmp( setting, "true" ) )
+      result = TRUE;
+    else if( !strcmp( setting, "false" ) )
+      result = FALSE;
+  }
+
+  return (result);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccAccountSetAutoInterestXfer (Account *account, gboolean option)
+{
+  kvp_frame *frame;
+  if (!account)
+    return;
+
+  xaccAccountBeginEdit (account);
+  frame = kvp_frame_get_frame (account->kvp_data, 
+                         "reconcile-info", NULL);
+
+  /* FIXME: need KVP_TYPE_BOOLEAN for this someday */
+
+  kvp_frame_set_slot_nc (frame, "auto-interest-transfer", 
+                         kvp_value_new_string (option ? "true" : "false"));
+
+  mark_account (account);
+  account->core_dirty = TRUE;
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
+
 const char *
 xaccAccountGetLastNum (Account *account)
 {
