@@ -1,3 +1,8 @@
+2003-05-30  Christian Stimming  <stimming@tuhh.de>
+
+	* lib/guppi-legend.patch: Include patch for Guppi that fixes
+	reversed legend problem.
+
 2003-05-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome/glade/register.glade: add sort entries for Action and Notes

@@ -176,7 +176,12 @@ The following packages are required to be installed to run GnuCash:
    some advanced functionality.  This can be found at
    ftp://ftp.gnome.org/pub/GNOME/stable/sources/Guppi.  You may need
    to configure it with `--prefix=/usr' in order for gnucash's
-   `configure' to find the guppi library.
+   `configure' to find the guppi library. Note: Version 0.40.3
+   (released January 2002) has a problem with reversed legends in
+   stacked barcharts. Since Guppi development has halted since that
+   version, we can only provide a source code patch for Guppi 0.40.3
+   that fixes this problem. You find that patch in
+   lib/guppi-legend.patch.
 
   libgal: any recent version should work.  This is a GNOME related
    library used by several different programs.  You can find it at
