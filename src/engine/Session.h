@@ -4,10 +4,25 @@
  *
  * FUNCTION:
  * Provide wrappers for initiating/concluding a file-editing session.
+ * This class provides several important services:
+ *
+ * 1) Prevents multiple users from editing the same file at the same
+ *    time, thus avoiding lost data due to race conditions.  Thus
+ *    an open session implies that the associated file is locked.
+ *
+ * 2) Provides a search path for the file to be edited.  This should 
+ *    simplify install & maintenance problems for naive users who
+ *    may not have a good grasp on what a file ssytem is, or where
+ *    they want to keep thier data files.
+ *
+ * The current implementations assumes the use of files and file
+ * locks; however, the API was designed to be general enough to
+ * allow the use of generic URL's, and/or implementation on top
+ * of SQL or other database/persistant object technology.
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 1998, 1999 Linas Vepstas
  */
 
 /********************************************************************\
