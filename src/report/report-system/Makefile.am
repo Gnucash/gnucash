@@ -16,7 +16,8 @@ libgncmod_report_system_la_LIBADD = \
   ${GUILE_LIBS} 
 
 
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src/gnc-module \
   ${GLIB_CFLAGS} \
   ${GUILE_INCS}
