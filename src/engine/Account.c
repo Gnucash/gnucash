@@ -248,7 +248,7 @@ xaccAccountBeginEdit (Account *acc)
   if (0 >= acc->editlevel) 
   {
     PERR ("unbalanced call - resetting (was %d)", acc->editlevel);
-    acc->editlevel = 0;
+    acc->editlevel = 1;
   }
 
   acc->core_dirty = FALSE;

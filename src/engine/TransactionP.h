@@ -54,13 +54,6 @@
 #include "Transaction.h"   /* for typedefs */
 #include "GNCId.h"
 
-/* bit-field flags for controlling transaction commits */
-typedef enum
-{
-  BEGIN_EDIT      = 1 << 0,
-  BEING_DESTROYED = 1 << 1,
-} TransFlags;
-
 
 /** STRUCTS *********************************************************/
 /* 
@@ -184,9 +177,8 @@ struct _transaction
    * corresponding to the current traversal. */
   unsigned char  marker;      
 
-  /* the "open" flag indicates if the transaction has been 
-   * opened for editing. */
-  char open;
+  gint32 editlevel; /* nestcount of begin/end edit calls */
+  gboolean do_free; /* transaction in process of being destroyed */
 
   /* the orig pointer points at a copy of the original transaction,
    * before editing was started.  This orig copy is used to rollback 
