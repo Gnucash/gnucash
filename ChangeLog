@@ -1,3 +1,9 @@
+2002-10-13  Chris Lyttle  <chris@wilddev.net>
+
+	* accounts/fr_FR/Makefile.am: fix make dist breakage
+	* rpm/gnucash.spec.in: update for release
+	* configure.in: change to version 1.7.1
+	
 2002-10-13  David Hampton  <hampton@employees.org>
 
 	* src/scm/printing/print-check.scm: The check printing setup
