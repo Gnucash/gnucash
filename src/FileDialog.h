@@ -86,6 +86,10 @@
  *    The user WILL NOT BE PROMPTED to confirm this action, or do do
  *    any kind of saving beforehand.
  *
+ * The gncGetCurrentGroup() routine will return the account group associated
+ *    with the current session.  It will always return a non-null value
+ *    (barring system catastrophe such as out of memory).
+ *
  * HISTORY:
  * Derived from Rob Clark's original MainWindow.c code, Dec 1998
  */
@@ -126,6 +130,11 @@ void gncFileOpenFile (const char *);
 void gncFileQuerySave (void);
 void gncFileQuit (void);
 
-extern Session *current_session;
+AccountGroup *gncGetCurrentGroup (void);
+
+/* ??? why is this needed ??? */
+/*
+Session *gnc_main_window_get_session(gncUIWidget w);
+*/
 
 #endif /* __GNC_FILE_DIALOG_H__ */

@@ -38,8 +38,8 @@
 // static short module = MOD_GUI;
 
 /** GLOBALS *********************************************************/
-Session *current_session = NULL;
-AccountGroup *topgroup = NULL;    /* the current top of the heriarchy */
+static Session *current_session = NULL;
+static AccountGroup *topgroup = NULL;    /* the current top of the heriarchy */
 
 /********************************************************************\
  * fileMenubarCB -- handles file menubar choices                    * 
@@ -499,5 +499,35 @@ gncFileQuit (void)
   topgroup = NULL;
 
   }
+
+/* ======================================================== */
+
+AccountGroup *
+gncGetCurrentGroup (void)
+{
+  AccountGroup *grp;
+  grp = xaccSessionGetGroup (current_session); 
+  if (grp) return grp;
+
+  /* If we are here, then no session has yet been started ... */
+  grp = topgroup;
+  if (grp) return grp;
+
+  /* if we are here, then topgroup not yet initialized ... */
+  xaccLogEnable();
+  topgroup = xaccMallocAccountGroup();
+
+  return topgroup;
+}
   
+#if 0
+/* ======================================================== */
+/* whats this for ???? */
+
+gnc_main_window_get_session(gncUIWidget w) 
+{
+  return(current_session);
+}
+
+#endif
 /********************* END OF FILE **********************************/
