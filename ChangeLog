@@ -1,3 +1,8 @@
+2002-11-29  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c, gnc-hbci-*.c: Catch the
+	condition gracefully when OpenHBCI config file does not exist.
+
 2002-11-29  Derek Atkins  <derek@ihtfp.com>
 	* src/gnome-utils/dialog-exchange.h -- header for the exchange-rate dialog
 

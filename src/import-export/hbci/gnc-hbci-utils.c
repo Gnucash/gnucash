@@ -43,8 +43,17 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
   if (!filename)
       return NULL;
   if (!allowNewFile && 
-      (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK)))
+      (!g_file_test (filename, G_FILE_TEST_ISFILE | G_FILE_TEST_ISLINK))) {
+    gnc_warning_dialog_parented 
+      (parent,
+       /* Translators: Strings from this file are really only needed
+	* inside Germany (HBCI is not supported anywhere else). You
+	* may safely ignore strings from the import-export/hbci
+	* subdirectory in other countries. */
+       _("Error while loading OpenHBCI config file:\n  %s: No such file or directory.\n"), filename);
     return NULL;
+  }
+  
 
   api = HBCI_API_new (FALSE, TRUE);
   

@@ -63,11 +63,11 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
   g_assert(gnc_acc);
 
   api = gnc_hbci_api_new_currentbook (parent, &interactor);
-  g_assert (interactor);
   if (api == NULL) {
     printf("gnc_hbci_gettrans: Couldn't get HBCI API.\n");
     return;
   }
+  g_assert (interactor);
   
   h_acc = gnc_hbci_get_hbci_acc (api, gnc_acc);
   if (h_acc == NULL) {
