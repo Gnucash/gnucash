@@ -1,0 +1,9 @@
+.deps
+.libs
+.scm-links
+*.la
+*.lo
+Makefile
+Makefile.in
+test-link
+test-qif
