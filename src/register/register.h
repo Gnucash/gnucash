@@ -41,7 +41,7 @@
 #include "datecell.h"
 #include "quickfillcell.h"
 #include "pricecell.h"
-#include "table.h"
+#include "table-motif.h"
 #include "recncell.h"
 #include "textcell.h"
 

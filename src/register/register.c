@@ -29,6 +29,7 @@
 
 #include "messages.h"
 #include "register.h"
+#include "table-allgui.h"
 
 /* utility defines for cell configuration data */
 #define DATE_CELL      0
@@ -368,8 +369,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 
    /* -------------------------------- */   
    table = xaccMallocTable ();
-   table -> header = header;
-   xaccSetCursor (table, curs);
+   xaccSetCursor (table, header, 0, 0, 0, 0);
    reg->table = table;
 }
 
