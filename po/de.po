@@ -4635,25 +4635,23 @@ msgstr "GnuCash-Anleitung"
 
 #: src/scm/guile-strings.c:64
 msgid "Getting Started"
-msgstr ""
+msgstr "Erste Schritte"
 
 #: src/scm/guile-strings.c:65
-#, fuzzy
 msgid "Welcome"
-msgstr "Einnahme"
+msgstr "Willkommen"
 
 #: src/scm/guile-strings.c:66
 msgid "Remedial Accounting 101"
-msgstr ""
+msgstr "Rechnungswesen ABC"
 
 #: src/scm/guile-strings.c:67
-#, fuzzy
 msgid "Setting up Accounts"
-msgstr "Konto auswählen"
+msgstr "Konten erstellen"
 
 #: src/scm/guile-strings.c:68
 msgid "Importing Data"
-msgstr ""
+msgstr "Daten importieren"
 
 #: src/scm/guile-strings.c:69
 msgid "Basic Setup"
@@ -7805,16 +7803,3 @@ msgstr ""
 #: src/scm/report/guile-strings.c:721
 msgid "Welcome to GnuCash 1.6"
 msgstr "Willkommen zu GnuCash 1.6"
-
-#~ msgid "Introduction"
-#~ msgstr "Einleitung"
-
-#, fuzzy
-#~ msgid "Main Window"
-#~ msgstr "Nur ein Fenster"
-
-#~ msgid "Adjust Balance"
-#~ msgstr "Kontostand angleichen"
-
-#~ msgid "Stock Ticker"
-#~ msgstr "Aktien-Ticker"
