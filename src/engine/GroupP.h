@@ -37,10 +37,12 @@
 #define __XACC_ACCOUNT_GROUP_P_H__
 
 #include "config.h"
+
 #include "BackendP.h"
 #include "GNCId.h"
 #include "Transaction.h"
 #include "gnc-numeric.h"
+
 
 /** STRUCTS *********************************************************/
 struct _account_group
@@ -50,8 +52,7 @@ struct _account_group
 
   Account *parent;                 /* back-pointer to parent */
 
-  int      numAcc;                 /* number of accounts in array */
-  Account  **account;              /* array of account pointers   */
+  GList *accounts;                 /* list of account pointers */
 
   Backend *backend;                /* persistant storage backend */
 

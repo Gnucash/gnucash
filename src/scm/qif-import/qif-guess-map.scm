@@ -31,21 +31,8 @@
   (define (extract-all-account-info agroup root-name)
     (if (not agroup)
         '()
-        (let ((children (gnc:get-accounts agroup))
-              (children-list '())
+        (let ((children-list (gnc:group-get-account-list agroup))
               (names '()))
-          ;; convert an array object to a list 
-          ;; seems that equal? works as a predicate on pointer 
-          ;; equality.... that bugs me.  the test is to weed out 
-          ;; all but immediate children.
-          (let loop ((count (pointer-array-length children)))
-            (if (> count 0)
-                (let ((acct (pointer-array-ref children (- count 1))))    
-                  (if (equal? agroup (gnc:account-get-parent acct))
-                      (set! children-list 
-                            (cons acct
-                                  children-list)))
-                  (loop (- count 1)))))
           
           ;; now descend the tree of child accounts.
           (for-each 

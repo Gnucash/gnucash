@@ -318,7 +318,7 @@
           (else 
            (append 
             (or
-             (gnc:group-get-account-list
+             (gnc:group-get-subaccounts
               (gnc:account-get-children
                (car accounts)))
              '())

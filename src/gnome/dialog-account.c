@@ -234,7 +234,7 @@ gnc_ui_to_account(AccountWindow *aw)
   if (parent_account != NULL)
   {
     if (parent_account != xaccAccountGetParentAccount (aw->account))
-      xaccInsertSubAccount (parent_account, aw->account);
+      xaccAccountInsertSubAccount (parent_account, aw->account);
   }
   else
     xaccGroupInsertAccount (gncGetCurrentGroup(), aw->account);
@@ -309,7 +309,8 @@ gnc_edit_change_account_types(GHashTable *change_type, Account *account,
                               Account *except, GNCAccountType type)
 {
   AccountGroup *children;
-  int i, num_children;
+  GList *list;
+  GList *node;
 
   if ((change_type == NULL) || (account == NULL))
     return;
@@ -323,10 +324,11 @@ gnc_edit_change_account_types(GHashTable *change_type, Account *account,
   if (children == NULL)
     return;
 
-  num_children = xaccGetNumAccounts(children);
-  for (i = 0; i < num_children; i++)
+  list = xaccGroupGetAccountList (children);
+
+  for (node= list; node; node = node->next)
   {
-    account = xaccGroupGetAccount(children, i);
+    account = node->data;
     gnc_edit_change_account_types(change_type, account, except, type);
   }
 }
@@ -815,7 +817,7 @@ gnc_edit_account_ok(AccountWindow *aw)
   children = xaccAccountGetChildren(account);
   if (children == NULL)
     has_children = FALSE;
-  else if (xaccGetNumAccounts(children) == 0)
+  else if (xaccGroupGetNumAccounts(children) == 0)
     has_children = FALSE;
   else
     has_children = TRUE;

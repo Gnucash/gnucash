@@ -766,7 +766,7 @@ Split **
 xaccQueryGetSplits(Query * q) {
   GList     * matching_splits=NULL;
   GList     * or_ptr, * and_ptr, * mptr;  
-  Account   ** all_accts, ** ptr;
+  GList     * all_accts, * node;
   Account   * current;
   QueryTerm * qt;
 
@@ -797,9 +797,13 @@ xaccQueryGetSplits(Query * q) {
   }
 
   /* iterate over accounts */
-  all_accts = xaccGetAccounts(q->acct_group);
-  for(ptr = all_accts; ptr && *ptr; ptr++) {
-    current = *ptr;
+  all_accts = xaccGroupGetSubAccounts (q->acct_group);
+
+  for (node = all_accts; node; node = node->next) {
+    current = node->data;
+
+    if (!current)
+      continue;
 
     /* first, check this account to see if we need to look at it at
      * all.  If the query is "ANY" matching or "NONE" matching, you
@@ -842,8 +846,7 @@ xaccQueryGetSplits(Query * q) {
     }
   }
 
-  if (all_accts)
-    free (all_accts);
+  g_list_free (all_accts);
 
   /* There is no absolute need to reverse this list, since it's
    * being sorted below. However, in the common case, we will be

@@ -372,7 +372,6 @@
               ;; Ignore
               '()
               (let* ((children (gnc:account-get-children account))
-                     (num-children (gnc:group-get-num-accounts children))
 
                      (childrens-output (gnc:group-map-accounts
                                         (lambda (x)

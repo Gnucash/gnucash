@@ -4514,40 +4514,41 @@ LoadXferCell (ComboCell * cell,
               const gnc_commodity * base_security)
 {
   gboolean load_everything;
-  Account * acc;
-  char *name;
-  int n;
+  GList *list;
+  GList *node;
 
-  ENTER ("LoadXferCell()\n");
+  ENTER ("\n");
 
   if (!grp) return;
 
   load_everything = ((base_currency == NULL) && (base_security == NULL));
 
-  /* Build the xfer menu out of account names.
-   * Traverse sub-accounts recursively.
-   * Valid transfers can occur only between accounts
-   * with the same base currency.
-   */
-  n = 0;
-  acc = xaccGroupGetAccount (grp, n);
-  while (acc)
-  {
-    const gnc_commodity * curr, * secu;
+  /* Build the xfer menu out of account names. Traverse sub-accounts
+   * recursively. Valid transfers can occur only between accounts
+   * with the same base currency. */
 
-    curr = xaccAccountGetCurrency (acc);
-    secu = xaccAccountGetSecurity (acc);
+  list = xaccGroupGetAccountList (grp);
+
+  for (node = list; node; node = node->next)
+  {
+    Account *account = node->data;
+    const gnc_commodity * curr;
+    const gnc_commodity * secu;
+    char *name;
+
+    curr = xaccAccountGetCurrency (account);
+    secu = xaccAccountGetSecurity (account);
 
     DEBUG ("curr=%p secu=%p acct=%s\n", 
-           curr, secu, xaccAccountGetName (acc));
+           curr, secu, xaccAccountGetName (account));
 
     if (load_everything || 
-        (gnc_commodity_equiv(curr,base_currency)) ||
-        (gnc_commodity_equiv(curr,base_security)) ||
-        (secu && (gnc_commodity_equiv(secu,base_currency))) ||
-        (secu && (gnc_commodity_equiv(secu,base_security))))
+        (gnc_commodity_equiv (curr,base_currency)) ||
+        (gnc_commodity_equiv (curr,base_security)) ||
+        (secu && (gnc_commodity_equiv (secu,base_currency))) ||
+        (secu && (gnc_commodity_equiv (secu,base_security))))
     {
-      name = xaccAccountGetFullName (acc, account_separator);
+      name = xaccAccountGetFullName (account, account_separator);
       if (name != NULL)
       {
         xaccAddComboCellMenuItem (cell, name);
@@ -4555,13 +4556,11 @@ LoadXferCell (ComboCell * cell,
       }
     }
 
-    LoadXferCell (cell, xaccAccountGetChildren (acc), 
+    LoadXferCell (cell, xaccAccountGetChildren (account),
                   base_currency, base_security);
-    n++;
-    acc = xaccGroupGetAccount (grp, n);
   }
 
-  LEAVE ("LoadXferCell()\n");
+  LEAVE ("\n");
 }
 
 /* ======================================================== */

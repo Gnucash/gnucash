@@ -951,19 +951,18 @@ gnc_account_tree_fill(GNCAccountTree *tree,
 		      GtkCTreeNode   *parent,
                       AccountGroup   *accts)
 {
-  Account *account;
   AccountGroup *acc_children;
+  GNCAccountType type;
   GtkCTreeNode *node;
-  gint totalAccounts = xaccGroupGetNumAccounts(accts);
-  gint currentAccount;
-  gint type;
+  GList *list;
+  GList *n;
+
+  list = xaccGroupGetAccountList (accts);
 
   /* Add each account to the tree */  
-  for ( currentAccount = 0;
-        currentAccount < totalAccounts;
-        currentAccount++ )
+  for (n = list; n; n = n->next)
   {
-    account = xaccGroupGetAccount(accts, currentAccount);
+    Account *account = n->data;
 
     if (tree->filter != NULL)
       if (!tree->filter(account, tree->filter_data))

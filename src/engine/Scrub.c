@@ -55,14 +55,19 @@ static Account * GetOrMakeAccount (Account *, Transaction *, const char *);
 void
 xaccGroupScrubOrphans (AccountGroup *grp)
 {
-  int i;
+  GList *list;
+  GList *node;
 
   if (!grp) return;
 
-  assert ((0 == grp->numAcc) || (grp->account));
+  list = xaccGroupGetAccountList (grp);
 
-  for (i = 0; i < grp->numAcc; i++)
-    xaccAccountTreeScrubOrphans (grp->account[i]);
+  for (node = list; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    xaccAccountTreeScrubOrphans (account);
+  }
 }
 
 void
@@ -110,14 +115,19 @@ xaccAccountScrubOrphans (Account *acc)
 void
 xaccGroupScrubSplits (AccountGroup *group)
 {
-  int i;
+  GList *list;
+  GList *node;
 
   if (!group) return;
 
-  assert ((0 == group->numAcc) || (group->account));
+  list = xaccGroupGetAccountList (group);
 
-  for (i = 0; i < group->numAcc; i++)
-    xaccAccountTreeScrubSplits (group->account[i]);
+  for (node = list; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    xaccAccountTreeScrubSplits (account);
+  }
 }
 
 void
@@ -198,14 +208,19 @@ xaccSplitScrub (Split *split)
 void
 xaccGroupScrubImbalance (AccountGroup *grp)
 {
-  int i;
+  GList *list;
+  GList *node;
 
   if (!grp) return;
 
-  assert ((0 == grp->numAcc) || (grp->account));
+  list = xaccGroupGetAccountList (grp);
 
-  for (i = 0; i < grp->numAcc; i++)
-    xaccAccountTreeScrubImbalance (grp->account[i]);
+  for (node = list; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    xaccAccountTreeScrubImbalance (account);
+  }
 }
 
 void

@@ -381,31 +381,33 @@ finish_helper(gpointer key, gpointer value, gpointer data) {
   gnc_commodity  * comm = value; 
   gnc_commodity  * old_comm = g_hash_table_lookup(cd->old_map, 
                                                   key);
-  Account        ** accts;
-  Account        ** current;
+  GList          * accts;
+  GList          * node;
 
   /* key is the old mnemonic, value is a pointer to the gnc_commodity 
    * structure. */
   gnc_commodity_table_insert(gnc_engine_commodities(), comm);
 
   /* now replace all the accounts using old_comm with new_comm */
-  accts = xaccGetAccounts(gncGetCurrentGroup());
-  for(current = accts; *current; current++) {
-    xaccAccountBeginEdit(*current);
-    if(gnc_commodity_equiv(xaccAccountGetCurrency(*current),
+  accts = xaccGroupGetSubAccounts(gncGetCurrentGroup());
+
+  for(node = accts; node; node = node->next) {
+    Account *account = node->data;
+
+    xaccAccountBeginEdit(account);
+    if(gnc_commodity_equiv(xaccAccountGetCurrency(account),
                            old_comm)) {
-      xaccAccountSetCurrency(*current, comm);
+      xaccAccountSetCurrency(account, comm);
     }
 
-    if(gnc_commodity_equiv(xaccAccountGetSecurity(*current),
+    if(gnc_commodity_equiv(xaccAccountGetSecurity(account),
                            old_comm)) {
-      xaccAccountSetSecurity(*current, comm);
+      xaccAccountSetSecurity(account, comm);
     }
-    xaccAccountCommitEdit(*current);    
+    xaccAccountCommitEdit(account);    
   }
 
-  if (accts)
-    free (accts);
+  g_list_free (accts);
 }
 
 

@@ -373,45 +373,70 @@ xaccAccountSetMark (Account *acc, short m)
 void
 xaccClearMark (Account *acc, short val)
 {
-   AccountGroup *topgrp;
+  AccountGroup *topgrp;
 
-   if (!acc) return;
-   topgrp = xaccGetAccountRoot (acc);
-   if (topgrp) {
-      int i, nacc = topgrp->numAcc;
-      for (i=0; i<nacc; i++) {
-         xaccClearMarkDown (topgrp->account[i], val);
-      }
-   } else {
-      xaccClearMarkDown (acc, val);
-   }
+  if (!acc) return;
+  topgrp = xaccGetAccountRoot (acc);
+
+  if (topgrp)
+  {
+    GList *list;
+    GList *node;
+
+    list = xaccGroupGetAccountList (topgrp);
+
+    for (node = list; node; node = node->next)
+    {
+      Account *account = node->data;
+
+      xaccClearMarkDown (account, val);
+    }
+  }
+  else
+    xaccClearMarkDown (acc, val);
 }
 
 void
 xaccClearMarkDown (Account *acc, short val)
 {
-   AccountGroup *chillin;
-   if (!acc) return;
-   acc->mark = val;
+  AccountGroup *children;
 
-   chillin = acc->children;
-   if (chillin) {
-      int i, nacc = chillin->numAcc;
-      for (i=0; i<nacc; i++) {
-         xaccClearMarkDown (chillin->account[i], val);
-      }
-   }
+  if (!acc) return;
+  acc->mark = val;
+
+  children = acc->children;
+  if (children)
+  {
+    GList *list;
+    GList *node;
+
+    list = xaccGroupGetAccountList (children);
+
+    for (node = list; node; node = node->next)
+    {
+      Account *account = node->data;
+
+      xaccClearMarkDown (account, val);
+    }
+  }
 }
 
 void
 xaccClearMarkDownGr (AccountGroup *grp, short val)
 {
-   int i, nacc;
-   if (!grp) return;
-   nacc = grp->numAcc;
-   for (i=0; i<nacc; i++) {
-      xaccClearMarkDown (grp->account[i], val);
-   }
+  GList *list;
+  GList *node;
+
+  if (!grp) return;
+
+  list = xaccGroupGetAccountList (grp);
+
+  for (node = list; node; node = node->next)
+  {
+    Account *account = node->data;
+
+    xaccClearMarkDown (account, val);
+  }
 }
 
 /********************************************************************\

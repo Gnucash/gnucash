@@ -255,15 +255,14 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
 {
   gnc_numeric amount;
   AccountGroup *children;
-  Account *account;
-  int num_accounts;
   GNCAccountType account_type;  
   const gnc_commodity * account_currency;
   const gnc_commodity * default_currency;
   const gnc_commodity * euro_commodity;
   GNCCurrencyAcc *currency_accum;
   GNCCurrencyAcc *euro_accum = NULL;
-  int i;
+  GList *list;
+  GList *node;
 
   default_currency =
     gnc_lookup_currency_option("International",
@@ -279,10 +278,10 @@ gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
   else
     euro_commodity = NULL;
 
-  num_accounts = xaccGroupGetNumAccounts(group);
-  for (i = 0; i < num_accounts; i++)
+  list = xaccGroupGetAccountList (group);
+  for (node = list; node; node = node->next)
   {
-    account = xaccGroupGetAccount(group, i);
+    Account *account = node->data;
 
     account_type = xaccAccountGetType(account);
     account_currency = xaccAccountGetCurrency(account);

@@ -40,26 +40,26 @@
 
 static void
 build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {
-  Account      ** accts;
+  GList        * accts;
+  GList        * node;
   AccountGroup * children;
   GtkWidget    * tree_item;
   GtkWidget    * sub_tree;
-  int          num_accts;
-  int          i;
   
-  accts     = xaccGetAccounts(group);
-  num_accts = xaccGetNumAccounts(group);
+  accts = xaccGroupGetSubAccounts(group);
 
-  for(i = 0; i < num_accts; i++) {
-    if(group == xaccAccountGetParent(accts[i])) {
-      tree_item = gtk_tree_item_new_with_label(xaccAccountGetName(accts[i]));
+  for (node = accts; node; node = node->next) {
+    Account *account = node->data;
 
-      gtk_object_set_user_data(GTK_OBJECT(tree_item), accts[i]);
+    if(group == xaccAccountGetParent(account)) {
+      tree_item = gtk_tree_item_new_with_label(xaccAccountGetName(account));
+
+      gtk_object_set_user_data(GTK_OBJECT(tree_item), account);
 
       gtk_tree_append(GTK_TREE(tree), tree_item);
-      children = xaccAccountGetChildren(accts[i]);
+      children = xaccAccountGetChildren(account);
 
-      if(children && (xaccGetNumAccounts(children) > 0)) {
+      if(children && (xaccGroupGetNumAccounts(children) > 0)) {
         sub_tree = gtk_tree_new();
         gtk_signal_connect(GTK_OBJECT(sub_tree), "select_child",
                            GTK_SIGNAL_FUNC(gnc_ui_account_picker_select_cb),
@@ -72,8 +72,7 @@ build_acct_tree(AccountGroup * group, GtkWidget * tree, GtkWidget * picker) {
     }
   }
 
-  if (accts)
-    free (accts);
+  g_list_free (accts);
 }
 
 static gboolean

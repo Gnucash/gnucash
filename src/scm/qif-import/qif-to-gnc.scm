@@ -103,7 +103,7 @@
           
           (gnc:account-commit-edit new-acct)
           (if parent-acct
-              (gnc:insert-subaccount parent-acct new-acct)
+              (gnc:account-insert-subaccount parent-acct new-acct)
               (gnc:group-insert-account acct-group new-acct))
           
           (hash-set! gnc-acct-hash gnc-name new-acct)
@@ -282,7 +282,7 @@
     
     ;; now take the new account tree and merge it in with the 
     ;; existing gnucash account tree. 
-    (gnc:merge-accounts account-group)
+    (gnc:group-merge-accounts account-group)
     (gnc:refresh-main-window)))
 
 

@@ -2840,7 +2840,7 @@ GSList* data_from_children,
   if(!parent) return(FALSE);
 
   xaccRemoveAccount(acc); /* just to be anal */
-  xaccInsertSubAccount(parent, acc);
+  xaccAccountInsertSubAccount(parent, acc);
 
   return(TRUE);
 }

@@ -385,7 +385,7 @@ xaccReadAccountGroup(int fd)
   /* the number of unclaimed accounts should be zero if the 
    * read succeeded.  But just in case of a very unlikely 
    * error, try to continue anyway. */
-  num_unclaimed = xaccGetNumAccounts (holder);
+  num_unclaimed = xaccGroupGetNumSubAccounts (holder);
   if (num_unclaimed) {
     Account *acc;
     error_code = ERR_FILEIO_FILE_BAD_READ;
