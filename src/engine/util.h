@@ -29,6 +29,7 @@
 
 #include <stdlib.h>
 #include "config.h"
+#include "gnc-common.h"
 
 #define BUFSIZE   1024
 
@@ -138,6 +139,14 @@ int safe_strcmp (const char * da, const char * db);
 
 char * ultostr (unsigned long val, int base);
 
+
+/* The gnc_localeconv() subroutine returns an lconv structure
+ * containing locale information. If no locale is set, the
+ * structure is given default (en_US) values.
+ */
+struct lconv * gnc_localeconv();
+
+
 /** PROTOTYPES ******************************************************/
 
 /*
@@ -150,7 +159,7 @@ char * ultostr (unsigned long val, int base);
  *    of the following:
  *
  *    PRTSYM -- also print currency symbol.
- *    PRTSHR -- print three decimal places
+ *    PRTSHR -- print four decimal places
  *    PRTSYM | PRTSHR --  prints three decimal places followed by string "shrs" 
  *    PRTSEP -- print comma-separated K's
  *
@@ -168,13 +177,28 @@ char * ultostr (unsigned long val, int base);
 char * xaccPrintAmount (double val, short shrs);
 int xaccSPrintAmount (char *buf, double val, short shrs);
 
+/* Parse i18n amount strings */
+double xaccParseAmount (const char * instr, gncBoolean monetary);
+
+
 /********************************************************************\
- * xaccParseUSAmount                                                * 
- *   parses U.S. style monetary strings                             *
- *   (strings of the form DDD,DDD,DDD.CC                            *
- *                                                                  * 
+ * xaccParseQIFAmount                                               *
+ *   parses monetary strings in QIF files                           *
+ *   Note that these strings may be in the 'US' format of DDD,DDD,DDD.CC
+ *   or they may be in european format: DDD.DDD.DDD,CC
+ *   The routine tries to 'guess' which of these it is.
+ *   This sounds really dopey, but Intuit/Quicken managed to 'internationalize'
+ *   thier export format, causeing no end of pain.
+ *
+ * XXX hack alert: the right way to do this is to do the following:
+ *  -- have a global flag that indicates 'euro' or 'us style'
+ *  -- initial value of global flag depends on locale
+ *  -- if during parsing, a euro-format currency is found, then flag is set to euro.
+ *  -- if during parsing, a use-format amount is found, then flag set to us.
+ *  -- if both styles found during one run, then flag an error.
+ *                                                                  *
 \********************************************************************/
-double xaccParseUSAmount (const char * str);
+double xaccParseQIFAmount (const char * str);
 
 
 /** TEMPLATES ******************************************************/

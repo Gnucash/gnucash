@@ -62,7 +62,7 @@ static gboolean gnc_file_box_delete_cb(GtkWidget *widget, GdkEvent *event,
  *                                                                  * 
  * Args:   title - the title of the window                          *
  *         filter - the file filter to use                          * 
- * Return: none                                                     * 
+ * Return: char * containing the name of the file the user selected *
 \********************************************************************/
 char *
 fileBox(const char * title, const char * filter) 

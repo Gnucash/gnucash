@@ -168,20 +168,12 @@ gnc_ui_accWindow_list_fill(GtkCList *type_list)
 static GtkWidget *
 gnc_ui_accWindow_list_box_create(AccWindow * accData)
 {
-  GtkWidget *frame, *hbox;
+  GtkWidget *frame, *scroll_win;
 
   frame = gtk_frame_new(ACC_TYPE_STR);
-  gtk_widget_show(frame);
 
-  hbox = gtk_hbox_new(TRUE, 0);
-  gtk_widget_show(hbox);
-  gtk_container_border_width(GTK_CONTAINER(hbox), 5);
-
-  gtk_container_add(GTK_CONTAINER(frame), hbox);
-    
   accData->type_list = GTK_CLIST(gtk_clist_new(1));
   gtk_container_border_width(GTK_CONTAINER(accData->type_list), 3);
-  gtk_widget_show(GTK_WIDGET(accData->type_list));
 
   gnc_ui_accWindow_list_fill(accData->type_list);
 
@@ -198,8 +190,14 @@ gnc_ui_accWindow_list_box_create(AccWindow * accData)
   gtk_clist_select_row(accData->type_list,
 		       _accWindow_last_used_account_type, 0);
 
-  gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(accData->type_list),
-		     TRUE, TRUE, 0);
+  scroll_win = gtk_scrolled_window_new(NULL, NULL);
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
+                                 GTK_POLICY_NEVER, 
+                                 GTK_POLICY_AUTOMATIC);
+
+  gtk_container_add(GTK_CONTAINER(frame), scroll_win);
+  gtk_container_border_width(GTK_CONTAINER(scroll_win), 5);
+  gtk_container_add(GTK_CONTAINER(scroll_win), GTK_WIDGET(accData->type_list));
 
   return frame;
 }
@@ -284,6 +282,7 @@ gnc_ui_accWindow_tree_select(GNCAccountTree *tree,
     {
       accData->type = parentAccType;
       gtk_clist_select_row(accData->type_list, parentAccType, 0);
+      gtk_clist_moveto(accData->type_list, parentAccType, 0, 0.5, 0);
     }
   }
 }
@@ -469,6 +468,9 @@ gnc_accWindow_create(AccWindow *accData)
 AccWindow *
 accWindow (AccountGroup *this_is_not_used) 
 {
+  static gint last_width = 0;
+  static gint last_height = 0;
+
   AccWindow *accData = g_new0(AccWindow, 1);
   AccountFieldStrings strings;
   GtkWidget *dialog;
@@ -481,6 +483,9 @@ accWindow (AccountGroup *this_is_not_used)
   xaccAccountSetName(accData->newAccount, NEW_TOP_ACCT_STR);
 
   dialog = gnc_accWindow_create(accData);
+  if (last_width > 0)
+    gtk_window_set_default_size(GTK_WINDOW(dialog), last_width, last_height);
+
   gtk_widget_show_all(dialog);
 
   while (1)
@@ -524,8 +529,12 @@ accWindow (AccountGroup *this_is_not_used)
 
   DEBUG("destroying account add window\n");
 
+  gdk_window_get_geometry(dialog->window, NULL, NULL,
+                          &last_width, &last_height, NULL);
+
   gtk_widget_destroy(dialog);
   g_free(accData);
+
   return NULL;
 }
 

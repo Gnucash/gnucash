@@ -502,22 +502,20 @@ GNC_RUNTIME_PERLLIBPATH=`eval echo ${GNC_LIBDIR}`
 
 AC_SUBST(GNC_RUNTIME_PERLLIBPATH)
 
-# We have to handle these here because they are the *runtime* (not install
-# time) defaults, and they're substituted into bootstrap.scm and gnucash.h
-# directly, so:
+
+# The variables GNC_RUNTIME_SHAREDIR and GNC_RUNTIME_CONFIGDIR are used
+# to configure bootstrap.scm and gnucash.h. This configuration is performed
+# by Makefile.config.finish, invoked at the end of AC_OUTPUT. We have to
+# handle these separately, because they are the *runtime* (not install
+# time) defaults, and thus
 #  1) We don't want them to change if you do
 #     make prefix=foo install
-#  2) They are normally defined in terms of $prefix so we need to expand
-#     that before substituting into those source files.  I wish I knew how
-#     to force a recursive expansion...
+#     This allows you to build distributions in a separate directory.
+#  2) They are normally defined in terms of $prefix, and AC_OUPUT does
+#     not do recursive substitution, i.e., if we USED AC_OUTPUT to
+#     generate them, we would get ${prefix}/share/gnucash instead
+#     of the fully expanded directory name.
 
-GNC_RUNTIME_SHAREDIR=`eval echo ${GNC_SHAREDIR}`
-GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
-
-AC_SUBST(GNC_RUNTIME_SHAREDIR)
-AC_SUBST(GNC_RUNTIME_CONFIGDIR)
-
-#CFLAGS="${CFLAGS} -Werror -Wno-unused"
 
 ABSOLUTE_TOP_SRCDIR=`pwd`
 AC_SUBST(ABSOLUTE_TOP_SRCDIR)
@@ -560,10 +558,6 @@ AC_OUTPUT(Makefile
           lib/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
-          lib/ComboBox-1.33/Makefile)
-
-chmod +x gnucash
-
-${MAKE-make} -f Makefile.config.finish prefix=${prefix} \
-                           GNC_SHAREDIR=${GNC_SHAREDIR} \
-                          GNC_CONFIGDIR=${GNC_SHAREDIR}
+          lib/ComboBox-1.33/Makefile,
+          chmod +x gnucash
+          ${MAKE-make} -f Makefile.config.finish)

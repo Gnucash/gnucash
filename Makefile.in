@@ -241,5 +241,7 @@ install:
 #  done
 
 .PHONY: default install-private install
-.PHONY: motif motif-static motif.static gnome gnome-static gnome.static qt qt.static
+.PHONY: motif motif-static motif.static
+.PHONY: gnome gnome-static gnome.static
+.PHONY: qt qt-static qt.static
 .PHONY: depend dist clean distclean

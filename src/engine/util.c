@@ -27,9 +27,11 @@
 #include <malloc.h>
 #include <math.h>
 #include <string.h>
+#include <locale.h>
 
 #include "config.h"
 #include "messages.h"
+#include "gnc-common.h"
 #include "util.h"
 
 /* hack alert -- stpcpy prototype is missing, use -DGNU */
@@ -201,72 +203,106 @@ stpcpy (char *dest, const char *src)
 }
 #endif
 
+
 /********************************************************************\
  * currency & locale related stuff.
- * first attempt at internationalization i18n of currency amounts
- * In the long run, amounts should be printed with punctuation
- * returned from the localconv() subroutine
 \********************************************************************/
 
-
-/* THOU_SEP is a comma in U.S. but a period in some parts of Europe */
-/* CENT_SEP is a period in U.S. but a comma in some parts of Europe */
-#define THOU_SEP  ','
-#define CENT_SEP '.'
-
-static int
-PrintAmt(char *buf, double val, int prec, int use_commas)
+static void
+gnc_lconv_set(char **p_value, char *default_value)
 {
-  int  i, stringLength, numWholeDigits, commaCount;
+  char *value = *p_value;
+
+  if ((value == NULL) || (value[0] == 0))
+    *p_value = default_value;
+}
+
+struct lconv *
+gnc_localeconv()
+{
+  static struct lconv lc;
+  static gncBoolean lc_set = GNC_F;
+
+  if (lc_set)
+    return &lc;
+
+  lc = *localeconv();
+
+  gnc_lconv_set(&lc.decimal_point, ".");
+  gnc_lconv_set(&lc.thousands_sep, ",");
+  gnc_lconv_set(&lc.currency_symbol, CURRENCY_SYMBOL);
+  gnc_lconv_set(&lc.mon_decimal_point, ".");
+  gnc_lconv_set(&lc.mon_thousands_sep, ",");
+  gnc_lconv_set(&lc.negative_sign, "-");
+
+  lc_set = GNC_T;
+
+  return &lc;
+}
+
+/* Utility function for printing non-negative amounts */
+static int
+PrintAmt(char *buf, double val, int prec,
+         gncBoolean use_separators, gncBoolean monetary)
+{
+  int i, stringLength, numWholeDigits, sepCount;
+  struct lconv *lc = gnc_localeconv();
   char tempBuf[50];
   char *bufPtr = buf;
 
   /* check if we're printing infinity */
   if (!finite(val)) {
-     strcpy (buf, "inf");
-     return 3;
+    strcpy (buf, "inf");
+    return 3;
   }
 
-  util_fptostr(tempBuf, val, prec);
-  
-  if (!use_commas)
-    {
-      /* If we're not using commas, then the whole string is copied */
-      strcpy(buf, tempBuf);
-    }
-  else
-    {
-      /* Determine where the decimal place is, if there is one */
-      stringLength = strlen(tempBuf);
-      numWholeDigits = -1;
-      for (i = 0; i < stringLength; i++) {
-	if (tempBuf[i] == '.') {
-	  numWholeDigits = i;
-	  break;
-	}
-      }
-      
-      if (numWholeDigits < 0)
-	numWholeDigits = stringLength;  /* Can't find decimal place, it's
-					 * a whole number */
+  if (val < 0.0)
+    val = DABS(val);
 
-      /* We now know the number of whole digits, now insert commas while
-       * copying them from the temp buffer to the destination */
-      bufPtr = buf;
-      for (i = 0; i < numWholeDigits; i++, bufPtr++) {
-	*bufPtr = tempBuf[i];
-	commaCount = (numWholeDigits - i) - 1;
-	if ( (commaCount % 3 == 0) &&
-	     (commaCount != 0) &&
-	     (tempBuf[i] != '-'))
-	  {
-	    bufPtr++;
-	    *bufPtr = ',';
-	  }
+  util_fptostr(tempBuf, val, prec);
+
+  if (!use_separators)
+  {
+    /* If we're not using separators, then the whole string is copied */
+    strcpy(buf, tempBuf);
+  }
+  else
+  {
+    /* Determine where the decimal place is, if there is one */
+    stringLength = strlen(tempBuf);
+    numWholeDigits = -1;
+    for (i = stringLength - 1; i >= 0; i--) {
+      if (tempBuf[i] == lc->decimal_point[0]) {
+        numWholeDigits = i;
+        if (monetary)
+          tempBuf[i] = lc->mon_decimal_point[0];
+        break;
       }
-      
-      strcpy(bufPtr, &tempBuf[numWholeDigits]);
-    } /* endif */
+    }
+
+    if (numWholeDigits < 0)
+      numWholeDigits = stringLength;  /* Can't find decimal place, it's
+                                       * a whole number */
+
+    /* We now know the number of whole digits, now insert separators while
+     * copying them from the temp buffer to the destination */
+    bufPtr = buf;
+    for (i = 0; i < numWholeDigits; i++, bufPtr++) {
+      *bufPtr = tempBuf[i];
+      sepCount = (numWholeDigits - i) - 1;
+      if ((sepCount % 3 == 0) &&
+          (sepCount != 0))
+      {
+        bufPtr++;
+        if (monetary)
+          *bufPtr = lc->mon_thousands_sep[0];
+        else
+          *bufPtr = lc->thousands_sep[0];
+      }
+    }
+
+    strcpy(bufPtr, &tempBuf[numWholeDigits]);
+  } /* endif */
 
   return strlen(buf);
 }
@@ -274,29 +310,122 @@ PrintAmt(char *buf, double val, int prec, int use_commas)
 int
 xaccSPrintAmount (char * bufp, double val, short shrs) 
 {
-   char * orig_bufp = bufp;
+   struct lconv *lc;
+
+   char *orig_bufp = bufp;
+   char *currency_symbol;
+   char *sign;
+
+   char cs_precedes;
+   char sep_by_space;
+   char sign_posn;
+
+   int precision = 2;
+   gncBoolean print_sign = GNC_T;
 
    if (!bufp) return 0;
+
+   lc = gnc_localeconv();
 
    if (DEQ(val, 0.0))
      val = 0.0;
 
-   if (shrs & PRTSHR) {
-      bufp += PrintAmt(orig_bufp, val, 4, shrs & PRTSEP);
-      if (shrs & PRTSYM) {
-         /* stpcpy returns pointer to end of string, not like strcpy */
-         bufp = stpcpy (bufp, " shrs");
-      }
-   } else {
-      if (shrs & PRTSYM) {
-         bufp += sprintf( bufp, "%s ", CURRENCY_SYMBOL);
-      }
-
-      bufp += PrintAmt(orig_bufp, val, 2, shrs & PRTSEP);
+   if (shrs & PRTSHR)
+   {
+     currency_symbol = "shrs";
+     cs_precedes = 0;  /* currency symbol follows amount */
+     sep_by_space = 1; /* they are separated by a space  */
+     precision = 4;
+   }
+   else
+   {
+     currency_symbol = lc->currency_symbol;
+     if (val < 0.0)
+     {
+       cs_precedes  = lc->n_cs_precedes;
+       sep_by_space = lc->n_sep_by_space;
+     }
+     else
+     {
+       cs_precedes  = lc->p_cs_precedes;
+       sep_by_space = lc->p_sep_by_space;
+     }
    }
 
+   if (val < 0.0)
+   {
+     sign = lc->negative_sign;
+     sign_posn = lc->n_sign_posn;
+   }
+   else
+   {
+     sign = lc->positive_sign;
+     sign_posn = lc->p_sign_posn;
+   }
+
+   if ((val == 0.0) || (sign == NULL) || (sign[0] == 0))
+     print_sign = GNC_F;
+
+   /* See if we print sign now */
+   if (print_sign && (sign_posn == 1))
+     bufp = stpcpy(bufp, sign);
+
+   /* Now see if we print currency */
+   if (cs_precedes)
+   {
+     /* See if we print sign now */
+     if (print_sign && (sign_posn == 3))
+       bufp = stpcpy(bufp, sign);
+
+     if (shrs & PRTSYM)
+     {
+       bufp = stpcpy(bufp, currency_symbol);
+       if (sep_by_space)
+         bufp = stpcpy(bufp, " ");
+     }
+
+     /* See if we print sign now */
+     if (print_sign && (sign_posn == 4))
+       bufp = stpcpy(bufp, sign);
+   }
+
+   /* Now see if we print parentheses */
+   if (print_sign && (sign_posn == 0))
+     bufp = stpcpy(bufp, "(");
+
+   /* Now print the value */
+   bufp += PrintAmt(bufp, DABS(val), precision,
+                    shrs & PRTSEP, ~(shrs & PRTSHR));
+
+   /* Now see if we print parentheses */
+   if (print_sign && (sign_posn == 0))
+     bufp = stpcpy(bufp, ")");
+
+   /* Now see if we print currency */
+   if (!cs_precedes)
+   {
+     /* See if we print sign now */
+     if (print_sign && (sign_posn == 3))
+       bufp = stpcpy(bufp, sign);
+
+     if (shrs & PRTSYM)
+     {
+       if (sep_by_space)
+         bufp = stpcpy(bufp, " ");
+       bufp = stpcpy(bufp, currency_symbol);
+     }
+
+     /* See if we print sign now */
+     if (print_sign && (sign_posn == 4))
+       bufp = stpcpy(bufp, sign);
+   }
+
+   /* See if we print sign now */
+   if (print_sign && (sign_posn == 2))
+     bufp = stpcpy(bufp, sign);
+
    /* return length of printed string */
-   return (bufp-orig_bufp);
+   return (bufp - orig_bufp);
 }
 
 char * 
@@ -313,9 +442,115 @@ xaccPrintAmount (double val, short shrs)
 
 
 /********************************************************************\
- * xaccParseUSAmount                                                * 
- *   parses U.S. style monetary strings                             *
- *   (strings of the form DDD,DDD,DDD.CC                            *
+ * xaccParseAmount                                                  *
+ *   parses amount strings using locale data                        *
+ *                                                                  *
+ * Args: str      -- pointer to string rep of num                   *
+         monetary -- boolean indicating whether value is monetary   *
+ * Return: double -- the parsed amount                              *
+\********************************************************************/
+
+double xaccParseAmount (const char * instr, gncBoolean monetary)
+{
+   struct lconv *lc = gnc_localeconv();
+   char *mstr, *str, *tok;
+   double amount = 0.0;
+   char negative_sign;
+   char thousands_sep;
+   char decimal_point;
+   int len;
+   int isneg = 0;
+
+   if (!instr) return 0.0;
+   mstr = strdup (instr);
+   str = mstr;
+
+   negative_sign = lc->negative_sign[0];
+   if (monetary)
+   {
+     thousands_sep = lc->mon_thousands_sep[0];
+     decimal_point = lc->mon_decimal_point[0];
+   }
+   else
+   {
+     thousands_sep = lc->thousands_sep[0];
+     decimal_point = lc->decimal_point[0];
+   }
+
+   /* strip off garbage at end of the line */
+   tok = strchr (str, '\r');
+   if (tok) *tok = 0x0;
+   tok = strchr (str, '\n');
+   if (tok) *tok = 0x0;
+
+   /* search for a negative sign */
+   tok = strchr (str, negative_sign);
+   if (tok) {
+      isneg = 1;
+      str = tok + sizeof(char);
+   }
+
+   /* remove thousands separator */
+   tok = strchr (str, thousands_sep);
+   while (tok) {
+      *tok = 0x0;
+      amount *= 1000.0;
+      amount += ((double) (1000 * atoi (str)));
+      str = tok + sizeof(char);
+      tok = strchr (str, thousands_sep);
+   }
+
+   /* search for a decimal point */
+   tok = strchr (str, decimal_point);
+   if (tok) {
+      *tok = 0x0;
+      amount += ((double) (atoi (str)));
+      str = tok + sizeof(char);
+
+      /* if there is anything trailing the decimal 
+       * point, convert it  */
+      if (str[0]) {
+
+         /* strip off garbage at end of the line */
+         tok = strchr (str, ' ');
+         if (tok) *tok = 0x0;
+   
+         /* adjust for number of decimal places */
+         len = strlen(str);
+         if (6 == len) {
+            amount += 0.000001 * ((double) atoi (str));
+         } else
+         if (5 == len) {
+            amount += 0.00001 * ((double) atoi (str));
+         } else
+         if (4 == len) {
+            amount += 0.0001 * ((double) atoi (str));
+         } else
+         if (3 == len) {
+            amount += 0.001 * ((double) atoi (str));
+         } else
+         if (2 == len) {
+            amount += 0.01 * ((double) atoi (str));
+         } else 
+         if (1 == len) {
+            amount += 0.1 * ((double) atoi (str));
+         } 
+      }
+
+   } else {
+      amount += ((double) (atoi (str)));
+   }
+
+   if (isneg) amount = -amount;
+
+   free (mstr);
+   return amount;
+}
+
+
+/********************************************************************\
+ * xaccParseQIFAmount                                               * 
+ *   parses monetary strings in QIF files                           *
  *                                                                  * 
  * Args:   str -- pointer to string rep of sum                      * 
  * Return: double -- the parsed amount                              * 
@@ -333,12 +568,14 @@ xaccPrintAmount (double val, short shrs)
 #define K_SEP      ','      /* thousands separator */
 #define DEC_SEP    '.'      /* decimal point */
 
-double xaccParseUSAmount (const char * instr) 
+double xaccParseQIFAmount (const char * instr) 
 {
+   char decimal_point = DEC_SEP;
+   char thousands_sep = K_SEP;
    char *mstr, *str, *tok;
    double dollars = 0.0;
-   int len;
    int isneg = 0;
+   int len;
 
    if (!instr) return 0.0;
    mstr = strdup (instr);
@@ -357,18 +594,32 @@ double xaccParseUSAmount (const char * instr)
       str = tok+sizeof(char);
    }
 
+   /* figure out separators */
+   {
+     char *tok1, *tok2;
+
+     tok1 = strrchr(str, DEC_SEP);
+     tok2 = strrchr(str, K_SEP);
+
+     if (tok1 < tok2)
+     {
+       decimal_point = K_SEP;
+       thousands_sep = DEC_SEP;
+     }
+   }
+
    /* remove comma's */
-   tok = strchr (str, K_SEP);
+   tok = strchr (str, thousands_sep);
    while (tok) {
       *tok = 0x0;
       dollars *= 1000.0;
       dollars += ((double) (1000 * atoi (str)));
       str = tok+sizeof(char);
-      tok = strchr (str, K_SEP);
+      tok = strchr (str, thousands_sep);
    }
 
    /* search for a decimal point */
-   tok = strchr (str, DEC_SEP);
+   tok = strchr (str, decimal_point);
    if (tok) {
       *tok = 0x0;
       dollars += ((double) (atoi (str)));

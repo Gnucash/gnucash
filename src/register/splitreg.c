@@ -108,7 +108,6 @@ static short module = MOD_REGISTER;
  * Perhaps this should be changed to store precision selection
  * in a config file. */
 #define SHRS_CELL_FORMAT   "%0.4f"
-#define PRICE_CELL_FORMAT  "%0.4f"
 #define DEBIT_CELL_FORMAT  "%0.4f"
 #define CREDIT_CELL_FORMAT "%0.4f"
 
@@ -921,7 +920,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    /* The format for share-related info is a printf-style
     * format string for a double.  */
    xaccSetPriceCellFormat (reg->shrsCell, SHRS_CELL_FORMAT);
-   xaccSetPriceCellFormat (reg->priceCell, PRICE_CELL_FORMAT);
+   xaccSetPriceCellMonetary (reg->shrsCell, GNC_F);
 
    /* number format for share quantities in stock ledgers */
    switch (type & REG_TYPE_MASK) {
@@ -930,6 +929,8 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
       case CURRENCY_REGISTER:
          xaccSetPriceCellFormat (reg->debitCell, DEBIT_CELL_FORMAT);
          xaccSetPriceCellFormat (reg->creditCell, CREDIT_CELL_FORMAT);
+         xaccSetPriceCellMonetary (reg->debitCell, GNC_F);
+         xaccSetPriceCellMonetary (reg->creditCell, GNC_F);
          break;
       default:
          break;

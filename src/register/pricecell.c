@@ -27,15 +27,13 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <locale.h>
 
 #include "util.h"
 
 #include "basiccell.h"
 #include "pricecell.h"
 
-#define DECIMAL_PT  '.'
-
-#define VERY_SMALL (1.0e-20)
 
 static void PriceSetValue (BasicCell *, const char *);
 static char * xaccPriceCellPrintValue (PriceCell *cell);
@@ -71,14 +69,21 @@ PriceMV (BasicCell *_cell,
          int *cursor_position)
 {
    PriceCell *cell = (PriceCell *) _cell;
+   struct lconv *lc = gnc_localeconv();
+   char decimal_point;
+
+   if (cell->monetary)
+     decimal_point = lc->mon_decimal_point[0];
+   else
+     decimal_point = lc->decimal_point[0];
 
    /* accept the newval string if user action was delete, etc. */
    if (change) {
       /* if change is a decimal point, then count decimal points */
-      if (DECIMAL_PT == change[0]) {
+      if (decimal_point == change[0]) {
          int i, count=0;
          for (i=0; 0 != newval[i]; i++) {
-            if (DECIMAL_PT == newval[i]) count ++;
+            if (decimal_point == newval[i]) count ++;
          }
          if (1 < count) return NULL;
       } else {
@@ -88,7 +93,7 @@ PriceMV (BasicCell *_cell,
    }
 
    /* parse the float pt value  and store it */
-   cell->amount = xaccParseUSAmount (newval);
+   cell->amount = xaccParseAmount (newval, cell->monetary);
    SET ((&(cell->cell)), newval);
    return newval; 
 }
@@ -128,10 +133,11 @@ void
 xaccInitPriceCell (PriceCell *cell)
 {
    xaccInitBasicCell( &(cell->cell));
+
    cell->amount = 0.0;
    cell->blank_zero = 1;
-   // cell->prt_format = strdup ("%.2f");
    cell->prt_format = strdup ("%m");
+   cell->monetary = GNC_T;
 
    SET ( &(cell->cell), "");
 
@@ -161,11 +167,9 @@ xaccPriceCellPrintValue (PriceCell *cell)
   char tmpval[PRTBUF];
   char *monet;
 
-  if (cell->blank_zero &&
-      (VERY_SMALL > cell->amount) && ((-VERY_SMALL) < cell->amount)) {
-
-      strcpy(buff, "");
-      return buff;
+  if (cell->blank_zero && DEQ(cell->amount, 0.0)) {
+     strcpy(buff, "");
+     return buff;
   }
 
   /* check for monetary-style format not natively supported by printf */
@@ -214,6 +218,14 @@ void xaccSetPriceCellFormat (PriceCell * cell, char * fmt)
 
 /* ================================================ */
 
+void
+xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
+{
+  cell->monetary = monetary;
+}
+
+/* ================================================ */
+
 void xaccSetDebCredCellValue (PriceCell * deb, 
                               PriceCell * cred, double amt)
 {
@@ -241,7 +253,7 @@ static void
 PriceSetValue (BasicCell *_cell, const char *str)
 {
    PriceCell *cell = (PriceCell *) _cell;
-   double amt = xaccParseUSAmount (str);
+   double amt = xaccParseAmount (str, cell->monetary);
 
    xaccSetPriceCellValue (cell, amt);
 }

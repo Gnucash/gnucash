@@ -27,14 +27,18 @@
 #include "top-level.h"
 
 #include <gnome.h>
+#include <sys/stat.h>
+#include <stdio.h>
 
 #include "window-report.h"
 #include "window-html.h"
 #include "option-util.h"
 #include "guile-util.h"
 #include "dialog-options.h"
+#include "query-user.h"
 #include "messages.h"
 #include "util.h"
+#include "FileBox.h"
 
 static short module = MOD_HTML; 
 
@@ -281,6 +285,82 @@ gnc_report_properties_cb(GtkWidget *widget, gpointer data)
 }
 
 
+static void
+gnc_report_export(ReportData *report_data)
+{
+  GtkWindow *parent;
+  char *export_filename;
+  struct stat file_status;
+  FILE *export_dest;
+  char *message;
+  char *text;
+
+  if (report_data->text == NULL)
+    text = "";
+  else
+    text = report_data->text;
+
+  /* Get the filename */
+  export_filename = fileBox(EXPORT_TO_STR, NULL);
+  if (export_filename == NULL)
+    return;
+
+  parent = GTK_WINDOW(gnc_html_window_get_window(reportwindow));
+
+  /* See if the file exists */
+  if ((stat(export_filename, &file_status) == 0))
+  {
+    gncBoolean result;
+
+    message = g_strdup_printf(FMB_EEXIST_MSG, export_filename);
+    result = gnc_verify_dialog_parented(parent, message, GNC_F);
+    g_free(message);
+
+    if (!result)
+      return;
+  }
+
+  /* Open the file */
+  export_dest = fopen(export_filename, "w");
+  if (export_dest == NULL)
+  {
+    message = g_strdup_printf(FILE_EOPEN_MSG, export_filename);
+    gnc_error_dialog_parented(parent, message);
+    g_free(message);
+
+    return;
+  }
+
+  /* Write the data */
+  if (fputs(text, export_dest) == EOF)
+  {
+    message = g_strdup_printf(FILE_EWRITE_MSG, export_filename);
+    gnc_error_dialog_parented(parent, message);
+    g_free(message);
+
+    return;
+  }
+
+  /* Close the file */
+  if (fclose(export_dest) == EOF)
+  {
+    message = g_strdup_printf(FILE_ECLOSE_MSG, export_filename);
+    gnc_error_dialog_parented(parent, message);
+    g_free(message);
+
+    return;
+  }
+}
+
+static void 
+gnc_report_export_cb(GtkWidget *widget, gpointer data)
+{
+  ReportData *report_data = data;
+
+  gnc_report_export(report_data);
+}
+
+
 /********************************************************************\
  * reportWindow                                                     * 
  *   opens up a report window, and displays html                    * 
@@ -316,7 +396,6 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
     g_free(prop_title);
   }
 
-  if (report_data->option_dialog != NULL)
   {
     GnomeUIInfo user_buttons[] =
     {
@@ -328,18 +407,23 @@ reportWindow(const char *title, SCM rendering_thunk, SCM guile_options)
         GNOME_APP_PIXMAP_STOCK, 
         GNOME_STOCK_PIXMAP_PROPERTIES,
         0, 0, NULL
+      },
+      { GNOME_APP_UI_ITEM,
+        EXPORT_STR,
+        TOOLTIP_EXPORT_REPORT,
+        gnc_report_export_cb, report_data,
+        NULL,
+        GNOME_APP_PIXMAP_STOCK,
+        GNOME_STOCK_PIXMAP_CONVERT,
+        0,0, NULL
       }
     };
 
     gint num_buttons = sizeof(user_buttons) / sizeof(GnomeUIInfo);
 
-    html_data = gnc_html_data_new(title, report_data,
-                                  report_data_destroy,
+    html_data = gnc_html_data_new(title, report_data, report_data_destroy,
                                   user_buttons, num_buttons);
   }
-  else
-    html_data = gnc_html_data_new(title, report_data,
-                                  report_data_destroy, NULL, 0);
 
   htmlWindow(NULL, &reportwindow, html_data);
 }

@@ -1511,7 +1511,7 @@ xaccTransMatch (Transaction **tap, Transaction **tbp)
      while ((sb=tb->splits[nb])) { 
         if (-1 < sb->tickee) {nb++; continue;}
         retval = xaccSplitMatch (&sa, &sb);
-        if ((0 == retval) && (sa->acc = sb->acc)) {
+        if ((0 == retval) && (sa->acc == sb->acc)) {
            sb->tickee = na;
            sa->tickee = nb;
            break;

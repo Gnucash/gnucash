@@ -51,12 +51,14 @@
 #define __XACC_PRICE_CELL_C__
 
 #include "basiccell.h"
+#include "gnc-common.h"
 
 typedef struct _PriceCell {
    BasicCell cell;
-   double amount;      /* the amount associated with this cell */
-   short blank_zero;   /* controls printing of zero values */
-   char *prt_format;   /* controls display of value; printf format */  
+   double amount;       /* the amount associated with this cell */
+   short blank_zero;    /* controls printing of zero values */
+   char *prt_format;    /* controls display of value; printf format */
+   gncBoolean monetary; /* controls parsing of values */
 } PriceCell;
 
 /* installs a callback to handle price recording */
@@ -71,9 +73,16 @@ void         xaccSetPriceCellValue (PriceCell *, double amount);
  *    the cell contents are displayed.   It accepts as an argument
  *    a printf-style format.  The format must control the display
  *    of a double-precision float.  See the printf() command for 
- *    allowed syntax.  The default format is "%.2f".
+ *    allowed syntax.  The default format is "%m" for a monetary
+ *    style format.
  */
 void         xaccSetPriceCellFormat (PriceCell *, char * fmt);
+
+/* The xaccSetPriceCellMonetary() sets a flag which determines
+ *    how string amounts are parsed, either as monetary or
+ *    non-monetary amounts. The default is monetary.
+ */
+void         xaccSetPriceCellMonetary (PriceCell *, gncBoolean);
 
 /* updates two cells; the deb cell if amt is negative,
  * the credit cell if amount is positive, and makes the other cell

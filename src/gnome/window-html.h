@@ -43,9 +43,9 @@ typedef void (*HTMLJumpCB)(HTMLUserData user_data,
 
 
 HTMLUserData gnc_html_window_user_data(HTMLWindow *hw);
+GtkWidget *  gnc_html_window_get_window(HTMLWindow *hw);
 
 HTMLWindow * gnc_html_window_new(HTMLAnchorCB anchor_cb, HTMLJumpCB jump_cb);
-
 
 void         gnc_html_window_destroy(HTMLWindow *hw);
 

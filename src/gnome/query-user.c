@@ -307,7 +307,8 @@ gnc_verify_dialog_parented(GtkWindow *parent, const char *message,
 				     GNOME_STOCK_BUTTON_NO,
 				     NULL);
 
-  gnome_dialog_set_parent(GNOME_DIALOG(verify_box), parent);
+  if (parent != NULL)
+    gnome_dialog_set_parent(GNOME_DIALOG(verify_box), parent);
 
   gnome_dialog_set_default(GNOME_DIALOG(verify_box), yes_is_default ? 0 : 1);
 

@@ -23,8 +23,3 @@ all:
 
 	cd lib/g-wrap && \
     ./configure --prefix=${PWD}/lib/g-wrap-install
-
-
-# Local Variables:
-# tab-width: 2
-# End:

@@ -830,7 +830,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	break;
        case 'I':      /* I == share price */
 	 {
-	   double amt = xaccParseUSAmount (&qifline[1]); 
+	   double amt = xaccParseQIFAmount (&qifline[1]); 
 	   xaccSplitSetSharePrice (source_split, amt);
 	 }
 	 break;
@@ -896,7 +896,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	  * math errors ... */
 	 {
 	   double pute;
-	   adjust = xaccParseUSAmount (&qifline[1]);
+	   adjust = xaccParseQIFAmount (&qifline[1]);
 	   pute = xaccSplitGetValue (source_split);
 	   if (isneg) pute = -pute;
 
@@ -922,7 +922,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
        case 'Q':
 	 /* Q == number of shares */
 	 {
-	   double amt = xaccParseUSAmount (&qifline[1]);  
+	   double amt = xaccParseQIFAmount (&qifline[1]);  
 	   if (isneg) amt = -amt;
 	   xaccSplitSetShareAmount (source_split, amt);
 	   got_share_quantity = 1;
@@ -944,7 +944,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	 /* T == total */
 	 /* ignore T for stock transactions, since T is a dollar amount */
 	 if (0 == got_share_quantity) {
-	   double amt = xaccParseUSAmount (&qifline[1]);  
+	   double amt = xaccParseQIFAmount (&qifline[1]);  
 	   if (isneg) amt = -amt;
 	   xaccSplitSetValue (source_split, amt);
 	 }
@@ -964,7 +964,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	 /* $ == dollar amount */
 	 /* for splits, $ records the part of the total for each split */
 	 if (split) {
-	   double amt = xaccParseUSAmount (&qifline[1]);  
+	   double amt = xaccParseQIFAmount (&qifline[1]);  
 	   amt = -amt;
 	   xaccSplitSetValue (split, amt);
 	 } else {
@@ -977,7 +977,7 @@ xaccReadQIFTransaction (int fd, Account *acc, int guess_name,
 	    */
 	   double parse, pute;
 	   int got, wanted;
-	   parse = xaccParseUSAmount (&qifline[1]);
+	   parse = xaccParseQIFAmount (&qifline[1]);
 	   pute = xaccSplitGetValue (source_split);
 	   if (isneg) pute = -pute;
 	   

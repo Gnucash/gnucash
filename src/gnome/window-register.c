@@ -1216,7 +1216,8 @@ gnc_reg_refresh_toolbar(RegWindow *regData)
 static void
 regRefresh(xaccLedgerDisplay *ledger)
 {
-  RegWindow *regData = (RegWindow *) (ledger->gui_hook);         
+  RegWindow *regData = (RegWindow *) (ledger->gui_hook);
+  int print_flags = PRTSYM | PRTSEP;
 
   gnc_reg_refresh_toolbar(regData);
 
@@ -1225,10 +1226,10 @@ regRefresh(xaccLedgerDisplay *ledger)
   if (regData->window != NULL)
   {
     gtk_label_set_text(GTK_LABEL(regData->balance_label),
-		       xaccPrintAmount(ledger->balance, PRTSYM));
+		       xaccPrintAmount(ledger->balance, print_flags));
 
     gtk_label_set_text(GTK_LABEL(regData->cleared_label),
-                       xaccPrintAmount(ledger->clearedBalance, PRTSYM));
+                       xaccPrintAmount(ledger->clearedBalance, print_flags));
   }
 }
 

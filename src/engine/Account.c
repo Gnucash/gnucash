@@ -854,6 +854,13 @@ xaccConsolidateTransactions (Account * acc)
          sb = acc->splits[j];
          tb = sb->parent;
 
+         /* A single transaction can have multiple splits in the same
+          * account.  For instance, a split deposit in AccountA of two
+          * checks from AccountB creates two splits in AccountB with
+          * the same parent transaction.  Skip this case.
+          */
+         if (ta == tb) continue;
+
          /* if no match, then continue on in the loop.
           * we really must match everything to get a duplicate */
          retval = xaccTransMatch (&ta, &tb);

@@ -1,4 +1,87 @@
+2000-01-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/dialog-add.c (gnc_ui_accWindow_list_box_create): Put
+ 	the account types in a scrolled window.
+	(gnc_ui_accWindow_tree_select): scroll the list types when a new
+ 	type is selected.
+	(accWindow): remember window size and recreate it.
+
+	* src/engine/util.c (xaccParseQIFAmount): rename this from
+	xaccParseUSAmount to explictly reflect its only usage. Modify
+	the parsing to guess what symbol is used as a decimal point.
+
+2000-01-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/gnome/window-report.c (gnc_report_export): add error checking
+	and i18n messages.
+
+	* src/gnome/window-html.c (gnc_html_load): set toolbar button
+	states at end.
+
+2000-01-15  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/window-report.c (gnc_report_export): new function to
+ 	allow generated HTML reports to be exported to a file.
+	(reportWindow): added a button to the toolbar for exporting HTML
+
+2000-01-15  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* Makefile.config.finish: Get rid of xemacs mode comments.
+
+	* configure.in: Move the commands at the end of configure.in into
+ 	the EXTRA-CMDS section of AC_OUTPUT so that config.status will
+ 	redo them. Don't bother defining GNC_RUNTIME_* vars as they are
+	not substituted using AC_OUTPUT.
+
+2000-01-14  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Added initial balance
+	and summary displays.
+
+2000-01-12  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Added balance field,
+	running totals, patched for empty-second-split case, fixed
+	other bugs, added documentation.
+
+2000-01-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* Apply Jan Schrage's doc patch.
+
+	* src/gnome/window-reconcile.c (recnWindow): tighter arrangement
+	of the buttons.
+
+	* src/g-wrap/gnc.gwp: removed wrap of private engine function.
+
+	* src/engine/util.c (gnc_localeconv): new function to get a lconv
+	structure for locale info.
+	(PrintAmt): add argument which determines whether amounts are
+	monetary or not. Use locale information to get separators.
+	(xaccSPrintAmount): first cut at printing i18n'd amounts.
+	(xaccParseAmount): new function for parsing i18n'd amounts,
+	both monetary and non-monetary.
+
+	* src/register/splitreg.c (xaccInitSplitRegister): let the price
+ 	cell format be the default monetary format. Set the shares cell
+ 	and, for stock registers, the credit and debit cells to
+ 	non-monetary cells.
+
+	* src/register/pricecell.c (xaccSetPriceCellMonetary): new
+ 	function for setting 'monetary' member.
+
+	* src/register/pricecell.h: add a 'monetary' boolean member
+	of price cells which indicate whether the value should be
+	parsed as money or not.
+
 2000-01-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/splitreg.c: print price cells in a monetary format,
+ 	not 4 place decimal notation.
+
+	* src/gnome/window-register.c (regRefresh): print separators in
+ 	the amounts at the bottom of the register window.
+
+	* Applied Ken Yamaguchi's QIF import patch.
 
 	* src/scm/prefs.scm: modified the account list option so
 	that it returns the default-getter value until explicitly

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 <html>
   <head>
@@ -34,10 +34,11 @@
         of an asset towards zero. 
 
         <p> Depreciation tends to only get calculated on assets
-        that are used for business purposes, because governments
+        that are used for professional or business purposes, because 
+        governments
         don't generally allow you to claim depreciation deductions
         on personal assets, and it's pointless to bother with the
-        procedure if it's not deductible.</p>
+        procedure if it's not deductible. </p>
       </li>
 
       <li>
@@ -101,37 +102,43 @@
     does.)</p>
 
     <p> Properly tracking the continually-increasing value of the
-    Degas will require at least three accounts:</p>
+    Degas will require at least three, quite possibly the following
+    four accounts (plus a bank or cash account where the money for
+    the purchase comes from):</p>
 
     <ul>
-      <li>An <em>Asset Cost Account</em> to track the original cost
-      of the painting,</li>
+      <li>An <em>Asset Cost</em> asset account to track the
+      original cost of the painting,</li>
 
-      <li>An <em>Accrued Unrealized Gains on Asset Account</em> to
-      keep track of increases in value, and</li>
+      <li>An <em>Accrued Unrealized Gains on Asset</em> asset
+      account to keep track of increases in value, and</li>
 
-      <li>An <em>Gain On Asset Income Account</em> in which to
-      record the income side of the annual gains in your
-      riches.</li>
+      <li>An <em>Accrued Gain On Asset Income</em> income account
+      in which to record the income side of the annual gains in
+      your riches, and</li>
+
+      <li>A <em>Realized Gain On Asset Income</em> income account
+      in which to record the realized income when you sell the
+      asset.</li>
     </ul>
 
-    <p> This likely won't affect your taxable income for <em>
-    income</em> tax purposes, although it could have some effect on
-    <em> property</em> taxes.</p>
+    <p> The <em>accrued gains</em> likely won't affect your taxable
+    income for <em> income</em> tax purposes, although it could
+    have some effect on <em> property</em> taxes.</p>
 
     <h2>The handling of capital gains in GnuCash</h2>
 
     <h3> The Acquisition</h3>
 
-    <p>The first thing you have to do is to create an asset
-    account, then transfer the sum you paid for this painting from
-    your bank account to this asset account to record the
-    purchase.</p>
+    <p>The first thing you have to do is to create the <em>asset
+    cost account</em>, then transfer the sum you paid for this
+    painting from your bank account to this asset account to record
+    the purchase.</p>
 
     <p> A month later, you have reason to suspect that the value of
     your painting has increased by $1200. In order to record this
-    you transfer $1200 from your income account to your asset
-    account.</p>
+    you transfer $1200 from your <em>accrued gains on asset</em>
+    income account to your asset account.</p>
 
     <p>Your main window will resemble this:</p>
     <img src="appr-main1.gif" alt=
@@ -255,8 +262,7 @@
       </li>
 
       <li>
-        You were overoptimistic about the value about the painting.
-        
+        You were overoptimistic about the value of the painting. 
 
         <p> Instead of the $16055 you thought the painting was
         worth are only offered $15000. But you still decide to
@@ -360,7 +366,7 @@
 
     <p> In practice, it truly is important to keep the <em> Accrued
     Gain Income</em> separate from the <em> Realized Gain
-    Income,</em> as the former is likely to be ignored by you tax
+    Income,</em> as the former is likely to be ignored by your tax
     authorities, who will only care to charge you on the <em>
     Realized Gain.</em></p>
 
@@ -394,7 +400,7 @@
 
         <p> Until you have actually sold your asset and got the
         money, any numbers on paper (or magnetic patterns on your
-        hard disk) are merely numbers on a piece of paper.</p>
+        hard disk) are merely that.</p>
 
         <p> If you could realistically convince a banker to lend
         you money, using the assets as collateral, that is a pretty
@@ -422,7 +428,9 @@
     <p> North American home owners <em> usually</em> find that when
     they sell personal residences, capital gains that occur are
     exempt from taxation. It appears that other countries treat
-    sale of homes differently, taxing people on such gains.</p>
+    sale of homes differently, taxing people on such gains. German
+    authorities, for example, tax those gains only if you owned the
+    property for less than ten years.</p>
 
     <p> <a href="mailto:cbbrowne@hex.net"> I have</a> one story
     from my professional tax preparation days where a family sold a
@@ -480,11 +488,11 @@
 
     <table summary="Example 1">
       <tr>
-        <td>Year</td>
+        <th>Year</th>
 
-        <td>Depreciation</td>
+        <th>Depreciation</th>
 
-        <td>Remaining Value</td>
+        <th>Remaining Value</th>
       </tr>
 
       <tr>
@@ -545,18 +553,18 @@
     <p> The result of this approach is that asset value decreases
     more rapidly at the beginning than at the end which is <em>
     probably</em> more realistic for most assets than a linear
-    scheme. It is certainly true for automobiles.</p>
+    scheme. This is certainly true for automobiles.</p>
 
     <p><strong>Example:</strong> We take the same example as above,
-    with a yearly depreciation of 30%.</p>
+    with an annual depreciation of 30%.</p>
 
     <table summary="Example 2">
       <tr>
-        <td>Year</td>
+        <th>Year</th>
 
-        <td>Depreciation</td>
+        <th>Depreciation</th>
 
-        <td>Remaining Value</td>
+        <th>Remaining Value</th>
       </tr>
 
       <tr>
@@ -613,11 +621,11 @@
 
     <table summary="Example 3">
       <tr>
-        <td>Year</td>
+        <th>Year</th>
 
-        <td>Depreciation</td>
+        <th>Depreciation</th>
 
-        <td>Remaining Value</td>
+        <th>Remaining Value</th>
       </tr>
 
       <tr>
@@ -674,14 +682,15 @@
       which to collect the sum of all of the years' depreciation
       amounts;</li>
 
-      <li>An <em>Depreciation Expense</em> expense account in which
+      <li>A <em>Depreciation Expense</em> expense account in which
       to record periodic depreciation expenses.</li>
     </ul>
 
-    <p>This first step, again, is to record the purchase of your
-    computer by transferring the money from the bank account to the
-    asset account. Afterwards, in each accounting period you record
-    the depreciation as an expense in the appropriate account.</p>
+    <p>The first step, again, is to record the purchase of your
+    asset by transferring the money from bank bank account to the
+    <em>asset cost</em> account. Afterwards, in each accounting
+    period you record the depreciation as an expense in the
+    appropriate account.</p>
 
     <p>The two windows below show your asset account and the main
     window after the third year of depreciation using a "sum of

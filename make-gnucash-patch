@@ -127,3 +127,4 @@ stamp-cat-id
 po/extract-macros.perl
 include/messages_i18n.h
 lib/g-wrap/aclocal.m4
+src/guile/i18n.h

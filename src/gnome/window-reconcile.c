@@ -585,7 +585,7 @@ recnWindow(GtkWidget *parent, Account *account)
 
     gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(debcred_area), debits_frame, TRUE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(debcred_area), credits_frame, TRUE, FALSE, 0);
+    gtk_box_pack_end(GTK_BOX(debcred_area), credits_frame, TRUE, FALSE, 0);
 
     {
       GtkWidget *hbox, *title_vbox, *value_vbox, *button;
@@ -596,6 +596,9 @@ recnWindow(GtkWidget *parent, Account *account)
       gtk_box_pack_start(GTK_BOX(main_area), hbox, FALSE, FALSE, 0);
 
       bbox = gtk_hbutton_box_new();
+      gtk_button_box_set_spacing(GTK_BUTTON_BOX(bbox), 10);
+      gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
+
       gtk_box_pack_start(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label(NEW_STR);

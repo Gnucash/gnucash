@@ -362,6 +362,23 @@ gnc_html_window_user_data(HTMLWindow *hw)
 
 
 /********************************************************************\
+ * gnc_html_window_get_window                                       *
+ *   return the gtk window for the html window                      *
+ *                                                                  *
+ * Args: none                                                       *
+ * Return: gtk window for html window                               *
+\********************************************************************/
+GtkWidget *
+gnc_html_window_get_window(HTMLWindow *hw)
+{
+  if (hw == NULL)
+    return NULL;
+
+  return hw->window;
+}
+
+
+/********************************************************************\
  * gnc_html_window_new                                              *
  *   g_malloc and initialize HTMLWindow structure                   *
  *                                                                  *
@@ -839,6 +856,8 @@ gnc_html_load(HTMLWindow *hw)
     XmHTMLAnchorScrollToName(hw->htmlwidget, label);
   else
     XmHTMLTextScrollToLine(hw->htmlwidget, 0);
+
+  htmlSetButtonStates(hw);
 }
 
 
