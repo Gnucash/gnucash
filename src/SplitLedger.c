@@ -128,6 +128,7 @@ GetOtherAccName (Split *split)
 }
 
 /* ======================================================== */
+/* Copy from the register object to the engine */
 
 void 
 xaccSRSaveRegEntry (SplitRegister *reg)
@@ -145,13 +146,44 @@ xaccSRSaveRegEntry (SplitRegister *reg)
    
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
-   if (!split) return;
-   trans = xaccSplitGetParent (split);
+printf ("save split is %p \n", split);
+   if (!split) {
+      int vr, vc;
+      Split *s;
+      /* If we were asked to save data for a row for which there
+       * is no associated split, then assume that this was a row
+       * that was set aside for adding splits to an existing 
+       * transaction.  The pre-existing trransaction will be the 
+       * one in the row(s) iediately above.  Therefore, get  
+       * the cursor location; subtract one row, and get the 
+       * associated transaction.  We will then create a new
+       * split, copy the row contents to that split, and 
+       * append the split to the pre-existing transaction. 
+       */
+      vr = reg->table->current_cursor_virt_row;
+      vc = reg->table->current_cursor_virt_col;
+      vr --;
+      if ((0 > vr) || (0 > vc)) {
+         printf ("Internal Error: SaveRegEntry(): bad row \n");
+         return;
+      }
+      s = (Split *) reg->table->user_data[vr][vc];
+      if (!s) {
+         printf ("Internal Error: SaveRegEntry(): no parent \n");
+         return;
+      }
+      split = xaccMallocSplit ();
+      trans = xaccSplitGetParent (s);
+      xaccTransBeginEdit (trans);
+      xaccTransAppendSplit (trans, split);
+      acc = xaccSplitGetAccount (s);
+      xaccAccountInsertSplit (acc, split);
+   } else {
+      trans = xaccSplitGetParent (split);
+      xaccTransBeginEdit (trans);
+   }
 
    /* copy the contents from the cursor to the split */
-
-   xaccTransBeginEdit (trans);
-
    if (MOD_DATE & changed) 
       xaccTransSetDate (trans, reg->dateCell->date.tm_mday,
                                reg->dateCell->date.tm_mon+1,
@@ -222,43 +254,60 @@ xaccSRLoadRegEntry (SplitRegister *reg, Split *split)
    time_t secs;
    double baln;
 
-   if (!split) return;
-   trans = xaccSplitGetParent (split);
+   if (!split) {
+      /* we interpret a NULL split as a blank split */
+      xaccSetDateCellValueSecs (reg->dateCell, 0);
+      xaccSetBasicCellValue (reg->numCell, "");
+      xaccSetComboCellValue (reg->actionCell, "");
+      xaccSetQuickFillCellValue (reg->descCell, "");
+      xaccSetBasicCellValue (reg->memoCell, "");
+      xaccSetBasicCellValue (reg->recnCell, "");
+      xaccSetComboCellValue (reg->xfrmCell, "");
+      xaccSetDebCredCellValue (reg->debitCell, 
+                               reg->creditCell, 0.0);
+      xaccSetAmountCellValue (reg->balanceCell, 0.0);
+      xaccSetAmountCellValue (reg->priceCell, 0.0);
+      xaccSetPriceCellValue  (reg->shrsCell,  0.0);
+      xaccSetAmountCellValue (reg->valueCell, 0.0);
 
-   secs = xaccTransGetDate (trans);
-   xaccSetDateCellValueSecs (reg->dateCell, secs);
-
-   xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
-   xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
-   xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
-   xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
-
-   buff[0] = xaccSplitGetReconcile (split);
-   buff[1] = 0x0;
-   xaccSetBasicCellValue (reg->recnCell, buff);
-
-   /* the transfer account */
-   accname = GetOtherAccName (split);
-   xaccSetComboCellValue (reg->xfrmCell, accname);
-
-   xaccSetDebCredCellValue (reg->debitCell, 
-                            reg->creditCell, xaccSplitGetValue (split));
-
-   /* For income and expense acounts, we have to reverse
-    * the meaning of balance, since, in a dual entry
-    * system, income will show up as a credit to a
-    * bank account, and a debit to the income account.
-    * Thus, positive and negative are interchanged */
-   baln = xaccSplitGetBalance (split);
-   if ((INCOME_REGISTER == reg->type) ||
-       (EXPENSE_REGISTER == reg->type)) { 
-      baln = -baln;
+   } else {
+      trans = xaccSplitGetParent (split);
+   
+      secs = xaccTransGetDate (trans);
+      xaccSetDateCellValueSecs (reg->dateCell, secs);
+   
+      xaccSetBasicCellValue (reg->numCell, xaccTransGetNum (trans));
+      xaccSetComboCellValue (reg->actionCell, xaccSplitGetAction (split));
+      xaccSetQuickFillCellValue (reg->descCell, xaccTransGetDescription (trans));
+      xaccSetBasicCellValue (reg->memoCell, xaccSplitGetMemo (split));
+   
+      buff[0] = xaccSplitGetReconcile (split);
+      buff[1] = 0x0;
+      xaccSetBasicCellValue (reg->recnCell, buff);
+   
+      /* the transfer account */
+      accname = GetOtherAccName (split);
+      xaccSetComboCellValue (reg->xfrmCell, accname);
+   
+      xaccSetDebCredCellValue (reg->debitCell, 
+                               reg->creditCell, xaccSplitGetValue (split));
+   
+      /* For income and expense acounts, we have to reverse
+       * the meaning of balance, since, in a dual entry
+       * system, income will show up as a credit to a
+       * bank account, and a debit to the income account.
+       * Thus, positive and negative are interchanged */
+      baln = xaccSplitGetBalance (split);
+      if ((INCOME_REGISTER == reg->type) ||
+          (EXPENSE_REGISTER == reg->type)) { 
+         baln = -baln;
+      }
+      xaccSetAmountCellValue (reg->balanceCell, baln);
+   
+      xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
+      xaccSetPriceCellValue  (reg->shrsCell,  xaccSplitGetShareBalance (split));
+      xaccSetAmountCellValue (reg->valueCell, xaccSplitGetValue (split));
    }
-   xaccSetAmountCellValue (reg->balanceCell, baln);
-
-   xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
-   xaccSetPriceCellValue  (reg->shrsCell,  xaccSplitGetShareBalance (split));
-   xaccSetAmountCellValue (reg->valueCell, xaccSplitGetValue (split));
 
    reg->table->current_cursor->user_data = (void *) split;
 
@@ -295,9 +344,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
    xaccMoveCursorGUI (table, -1, -1);
 
    /* set table size to number of items in list */
-   i=0;
-   while (slist[i]) i++;
-
    /* compute the corresponding number of physical & virtual rows. */
    /* num_phys_cols is easy ... just the total number of columns 
     * in the header */
@@ -367,6 +413,7 @@ printf ("load reg of %d entries --------------------------- \n",i);
                 * of previous transaction.  */
                xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
                xaccMoveCursor (table, phys_row, 0);
+               xaccSRLoadRegEntry (reg, NULL);
 printf ("load blank split %d \n", phys_row);
                vrow ++;
                phys_row += reg->split_cursor->numRows; 
@@ -395,8 +442,10 @@ printf ("load split %d \n", phys_row);
 
    /* add a line for the blank split at tail
     * of previous transaction.  */
+printf ("load blank split %d \n", phys_row);
    xaccSetCursor (table, reg->split_cursor, phys_row, 0, vrow, 0);
    xaccMoveCursor (table, phys_row, 0);
+   xaccSRLoadRegEntry (reg, NULL);
    vrow ++;
    phys_row += reg->split_cursor->numRows; 
 
