@@ -27,6 +27,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
+#include "gnc-ui-util.h"
 
 HBCI_API *
 gnc_hbci_api_new (const char *filename)
@@ -53,14 +54,15 @@ gnc_hbci_api_new (const char *filename)
   }
   HBCI_Error_delete (err);
   return api;
-}
+};
 
-HBCI_API *
-gnc_hbci_api_new_currentbook () 
+
+HBCI_API * gnc_hbci_api_new_currentbook (void)
 {
   return gnc_hbci_api_new 
     (gnc_hbci_get_book_configfile (gnc_get_current_book ()));
-}
+};
+
 
 
 const HBCI_Account *
@@ -91,5 +93,28 @@ gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc)
     } /* bank */
   } /* bankcode */
   return NULL;
+}
+
+
+gpointer
+list_HBCI_Bank_foreach (const list_HBCI_Bank *banklist, 
+			BankCallback thunk,
+			gpointer user_data)
+{
+  list_HBCI_Bank_iter *iter, *iterend;
+  gpointer ret = NULL;
+  
+  iter = list_HBCI_Bank_begin (banklist);
+  iterend = list_HBCI_Bank_end (banklist);
+  for ( ; ! list_HBCI_Bank_iter_equal(iter, iterend) ; 
+	list_HBCI_Bank_iter_next (iter)) {
+    ret =(*thunk)(list_HBCI_Bank_iter_get (iter), user_data);
+    if (ret) 
+      break;
+  }
+  list_HBCI_Bank_iter_delete (iter);
+  list_HBCI_Bank_iter_delete (iterend);
+
+  return ret;
 }
 

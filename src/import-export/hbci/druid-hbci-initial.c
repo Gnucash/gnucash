@@ -58,30 +58,31 @@ struct _hbciinitialinfo
   GtkWidget *configfileentry;
   
   /* bank info page */
+  GtkWidget *bankpage;
   GtkWidget *bankcode;
   GtkWidget *countrycode;
   GtkWidget *ipaddr;
   //GtkWidget *port;
 
   /* user info page */
-  GtkWidget *userid;
   GtkWidget *userpage;
-    
-  /* medium page */
+  GtkWidget *userid;
+  GtkWidget *customerid;
   GtkWidget *mediumrdh;
   GtkWidget *mediumpath;
   GtkWidget *mediumddv;
-
-  /* iniletter server */
-  GtkWidget *server_text;
-
-  /* iniletter user */
-  GtkWidget *user_text;
 
   /* account match page */
   GtkWidget *accountpage;
   GtkWidget *accountlist;
     
+  /* iniletter server */
+  GtkWidget *serverpage;
+  GtkWidget *server_text;
+
+  /* iniletter user */
+  GtkWidget *user_text;
+
   /* OpenHBCI stuff */
   HBCI_API *api;
 
@@ -176,24 +177,20 @@ on_finish (GnomeDruidPage *gnomedruidpage,
   delete_initial_druid(info);
 }
 
+static gpointer 
+count_accounts_cb (const HBCI_Bank *bank,
+		   gpointer user_data)
+{
+  int *counter = user_data;
+  *counter += list_HBCI_Account_size (HBCI_Bank_accounts (bank));
+  return NULL;
+}
+
 static int
 count_accounts (const list_HBCI_Bank *banklist) 
 {
-  list_HBCI_Bank_iter *iter, *iterend;
   int accounts;
-  
-  iter = list_HBCI_Bank_begin (banklist);
-  iterend = list_HBCI_Bank_end (banklist);
-  accounts = 0;
-  for ( ; ! list_HBCI_Bank_iter_equal(iter, iterend) ; 
-	list_HBCI_Bank_iter_next (iter)) {
-    accounts += 
-      list_HBCI_Account_size
-      (HBCI_Bank_accounts (list_HBCI_Bank_iter_get (iter)));
-  }
-  list_HBCI_Bank_iter_delete (iter);
-  list_HBCI_Bank_iter_delete (iterend);
-  
+  list_HBCI_Bank_foreach (banklist, &count_accounts_cb, &accounts);
   return accounts;
 }
 
@@ -286,6 +283,8 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
   HBCI_API *api = info->api;
   HBCI_Bank *bank = NULL;
   const HBCI_User *user = NULL;
+  gboolean is_rdh;
+  const char *mediumpath;
     
   bankcode = gtk_entry_get_text (GTK_ENTRY (info->bankcode));
   countrycode = atoi (gtk_entry_get_text (GTK_ENTRY (info->countrycode)));
@@ -299,46 +298,55 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 
   bank = HBCI_API_findBank(api, countrycode, bankcode);
   if (bank == NULL) {
-    printf("No bank found.\n");
-    HBCI_API_delete(api);
-    info->api = NULL;
+    printf("No bank with code %s found.\n", bankcode);
+    /*HBCI_API_delete(api);
+      info->api = NULL;*/
     return FALSE;
-  }
+  } 
   printf("Found bank, name %s.\n", HBCI_Bank_name(bank));
-    
+  
   user = HBCI_Bank_findUser(bank, userid);
   if (user == NULL) {
-    printf("No user found.\n");
-    HBCI_API_delete(api);
-    info->api = NULL;
+    printf("No user with userid %s found.\n", userid);
+    /*HBCI_API_delete(api);
+      info->api = NULL; */
     return FALSE;
   }
   printf("Found user, name %s.\n", HBCI_User_userName(user));
-    
-  info->api = api;
-  return FALSE;
-}
-
-static gboolean
-on_medium_next (GnomeDruidPage *gnomedruidpage,
-		gpointer arg1,
-		gpointer user_data)
-{
-  HBCIInitialInfo *info = user_data;
-  gboolean is_rdh;
-  const char *mediumpath;
+  
+  /*info->api = api;*/
   
   is_rdh = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (info->mediumrdh));
   mediumpath = gnome_file_entry_get_full_path 
     (GNOME_FILE_ENTRY (info->mediumpath), FALSE);
 
+  if (is_rdh) {
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->serverpage));
+    /* create new medium here */
+    return TRUE;
+  }
+    
   return FALSE;
 }
 
+
 static gboolean
-on_iniletter_server_next (GnomeDruidPage  *gnomedruidpage,
+on_iniletter_server_back (GnomeDruidPage  *gnomedruidpage,
 			  gpointer arg1,
 			  gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  g_assert(info->druid);
+  g_assert(info->userpage);
+  gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			GNOME_DRUID_PAGE (info->userpage));
+  return TRUE;
+}
+static void
+on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
+			     gpointer arg1,
+			     gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
   GtkEditable *text = GTK_EDITABLE (info->server_text);
@@ -350,7 +358,13 @@ on_iniletter_server_next (GnomeDruidPage  *gnomedruidpage,
   gtk_editable_insert_text (text, mytext, strlen(mytext), pos);
   
   g_free(pos);
-    
+}
+static gboolean
+on_iniletter_server_next (GnomeDruidPage  *gnomedruidpage,
+			  gpointer arg1,
+			  gpointer user_data)
+{
+  //HBCIInitialInfo *info = user_data;
   return FALSE;
 }
 
@@ -541,6 +555,32 @@ on_accountlist_select_row (GtkCList *clist, gint row,
   } /* hbci_acc */
 }
 
+static void
+on_button_clicked (GtkButton *button,
+		   gpointer user_data)
+{
+  HBCIInitialInfo *info = user_data;
+  char *name;
+  g_assert(info->druid);
+  g_assert(info->userpage);
+  
+  name = gtk_widget_get_name (GTK_WIDGET (button));
+  if (strcmp(name, "addbank_button")) {
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->bankpage));
+  } else if (strcmp(name, "adduser_button")) {
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->userpage));
+  } else if (strcmp(name, "updatelist_button")) {
+    gnome_druid_set_page (GNOME_DRUID (info->druid), 
+			  GNOME_DRUID_PAGE (info->accountpage));
+  } else {
+    printf("on_button_clicked: Oops, unknown button: %s\n",
+	   name);
+  }
+}
+
+
 
 
 void gnc_hbci_initial_druid (void)
@@ -586,29 +626,53 @@ void gnc_hbci_initial_druid (void)
 			GTK_SIGNAL_FUNC (on_configfile_next), info);
   }
   {
+    page = glade_xml_get_widget(xml, "bank_page");
+    info->bankpage = page;
     info->bankcode = glade_xml_get_widget(xml, "bank_code_entry");
     info->countrycode = glade_xml_get_widget(xml, "country_code_entry");
     info->ipaddr = glade_xml_get_widget(xml, "ip_address_entry");
     //info->port = glade_xml_get_widget(xml, "port_nr_entry");
   }
   {
-    info->userid = glade_xml_get_widget(xml, "user_id_entry");
     page = glade_xml_get_widget(xml, "user_page");
     info->userpage = page;
+    info->userid = glade_xml_get_widget(xml, "user_id_entry");
+    info->customerid = glade_xml_get_widget(xml, "customer_id_entry");
+    info->mediumrdh = glade_xml_get_widget(xml, "rdh_radiobutton");
+    info->mediumpath = glade_xml_get_widget(xml, "keyfile_fileentry");
+    info->mediumddv = glade_xml_get_widget(xml, "ddv_radiobutton");
     gtk_signal_connect (GTK_OBJECT (page), "next", 
 			GTK_SIGNAL_FUNC (on_userid_next), info);
   }
   {
-    info->mediumrdh = glade_xml_get_widget(xml, "rdh_radiobutton");
-    info->mediumpath = glade_xml_get_widget(xml, "keyfile_fileentry");
-    info->mediumddv = glade_xml_get_widget(xml, "ddv_radiobutton");
-    page = glade_xml_get_widget(xml, "medium_page");
-    gtk_signal_connect (GTK_OBJECT (page), "next", 
-			GTK_SIGNAL_FUNC (on_medium_next), info);
+    page = glade_xml_get_widget(xml, "account_match_page");
+    info->accountpage = page;
+    info->accountlist = glade_xml_get_widget(xml, "account_page_list");
+    gtk_signal_connect (GTK_OBJECT (info->accountlist), "select_row",
+			GTK_SIGNAL_FUNC (on_accountlist_select_row), info);
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "addbank_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "adduser_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "updatelist_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
+    gtk_signal_connect (GTK_OBJECT (page), "prepare", 
+			GTK_SIGNAL_FUNC (on_accountlist_prepare), info);
   }
   {
     info->server_text = glade_xml_get_widget(xml, "iniletter_server_text");
     page = glade_xml_get_widget(xml, "iniletter_server_page");
+    info->serverpage = page;
+    gtk_signal_connect (GTK_OBJECT (page), "prepare", 
+			GTK_SIGNAL_FUNC (on_iniletter_server_prepare), info);
+    gtk_signal_connect (GTK_OBJECT (page), "back", 
+			GTK_SIGNAL_FUNC (on_iniletter_server_back), info);
     gtk_signal_connect (GTK_OBJECT (page), "next", 
 			GTK_SIGNAL_FUNC (on_iniletter_server_next), info);
   }
@@ -617,15 +681,6 @@ void gnc_hbci_initial_druid (void)
     page = glade_xml_get_widget(xml, "iniletter_user_page");
     gtk_signal_connect (GTK_OBJECT (page), "next", 
 			GTK_SIGNAL_FUNC (on_iniletter_user_next), info);
-  }
-  {
-    info->accountlist = glade_xml_get_widget(xml, "account_page_list");
-    gtk_signal_connect (GTK_OBJECT (info->accountlist), "select_row",
-			GTK_SIGNAL_FUNC (on_accountlist_select_row), info);
-    page = glade_xml_get_widget(xml, "account_match_page");
-    info->accountpage = page;
-    gtk_signal_connect (GTK_OBJECT (page), "prepare", 
-			GTK_SIGNAL_FUNC (on_accountlist_prepare), info);
   }
   
 

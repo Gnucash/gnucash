@@ -208,13 +208,13 @@ hbci_account_picker_dialog(HBCIInitialInfo *info, Account *initial_sel) {
 
   wind = g_new0(HBCIAccountPickerDialog, 1);
 
-  xml = gnc_glade_xml_new ("qif.glade", "QIF Import Account Picker");
+  xml = gnc_glade_xml_new ("hbci.glade", "HBCI Setup Account Picker");
 
   //glade_xml_signal_connect_data
   //  (xml, "gnc_ui_qif_account_picker_new_cb",
   //   GTK_SIGNAL_FUNC (gnc_ui_qif_account_picker_new_cb), wind);
 
-  wind->dialog     = glade_xml_get_widget (xml, "QIF Import Account Picker");
+  wind->dialog     = glade_xml_get_widget (xml, "HBCI Setup Account Picker");
   wind->treeview   = glade_xml_get_widget (xml, "account_tree");
   wind->hbci_info   = info;
 

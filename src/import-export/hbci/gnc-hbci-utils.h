@@ -38,7 +38,7 @@ HBCI_API * gnc_hbci_api_new (const char *filename);
 
 /* Same as above, but takes the filename already from the current
    book's kvp frame. */ 
-HBCI_API * gnc_hbci_api_new_currentbook ();
+HBCI_API * gnc_hbci_api_new_currentbook (void);
 
 
 /* Get the corresponding HBCI account to a gnucash account. Of course
@@ -48,6 +48,14 @@ HBCI_API * gnc_hbci_api_new_currentbook ();
 const HBCI_Account *
 gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 
+
+typedef gpointer (*BankCallback) (const HBCI_Bank *bank, 
+				  gpointer user_data);
+
+gpointer
+list_HBCI_Bank_foreach (const list_HBCI_Bank *banklist, 
+			BankCallback thunk,
+			gpointer user_data);
 
 
 #endif

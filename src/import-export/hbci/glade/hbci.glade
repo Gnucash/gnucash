@@ -154,7 +154,7 @@ HBCI connection now.</text>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
 	<name>vbox130</name>
 	<border_width>10</border_width>
-	<homogeneous>True</homogeneous>
+	<homogeneous>False</homogeneous>
 	<spacing>5</spacing>
 	<child>
 	  <padding>0</padding>
@@ -170,8 +170,8 @@ HBCI connection now.</text>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <expand>False</expand>
+	    <fill>False</fill>
 	  </child>
 
 	  <widget>
@@ -181,7 +181,7 @@ HBCI connection now.</text>
 	    <rows>2</rows>
 	    <columns>3</columns>
 	    <homogeneous>False</homogeneous>
-	    <row_spacing>0</row_spacing>
+	    <row_spacing>5</row_spacing>
 	    <column_spacing>0</column_spacing>
 
 	    <widget>
@@ -294,8 +294,8 @@ HBCI connection now.</text>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <expand>False</expand>
+	    <fill>False</fill>
 	  </child>
 
 	  <widget>
@@ -373,10 +373,10 @@ HBCI connection now.</text>
       <widget>
 	<class>GtkVBox</class>
 	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>vbox132</name>
+	<name>vbox141</name>
 	<border_width>10</border_width>
 	<homogeneous>False</homogeneous>
-	<spacing>5</spacing>
+	<spacing>10</spacing>
 	<child>
 	  <padding>0</padding>
 	  <expand>True</expand>
@@ -385,7 +385,7 @@ HBCI connection now.</text>
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>frame56</name>
+	  <name>frame59</name>
 	  <label>User Identification</label>
 	  <label_xalign>0</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -396,11 +396,14 @@ HBCI connection now.</text>
 	  </child>
 
 	  <widget>
-	    <class>GtkHBox</class>
-	    <name>hbox108</name>
+	    <class>GtkTable</class>
+	    <name>table3</name>
 	    <border_width>10</border_width>
+	    <rows>2</rows>
+	    <columns>3</columns>
 	    <homogeneous>False</homogeneous>
-	    <spacing>0</spacing>
+	    <row_spacing>5</row_spacing>
+	    <column_spacing>0</column_spacing>
 
 	    <widget>
 	      <class>GtkLabel</class>
@@ -408,14 +411,73 @@ HBCI connection now.</text>
 	      <label>User ID</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
+	      <xalign>0</xalign>
 	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
+	      <xpad>10</xpad>
 	      <ypad>0</ypad>
 	      <child>
-		<padding>0</padding>
-		<expand>False</expand>
-		<fill>False</fill>
+		<left_attach>0</left_attach>
+		<right_attach>1</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label8477410</name>
+	      <label>Customer ID</label>
+	      <justify>GTK_JUSTIFY_RIGHT</justify>
+	      <wrap>False</wrap>
+	      <xalign>0</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>10</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>1</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>customer_id_entry</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>0</text_max_length>
+	      <text></text>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>2</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>False</xfill>
+		<yfill>False</yfill>
 	      </child>
 	    </widget>
 
@@ -428,44 +490,26 @@ HBCI connection now.</text>
 	      <text_max_length>50</text_max_length>
 	      <text></text>
 	      <child>
-		<padding>0</padding>
-		<expand>True</expand>
-		<fill>False</fill>
+		<left_attach>1</left_attach>
+		<right_attach>2</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>False</xfill>
+		<yfill>False</yfill>
 	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>Placeholder</class>
 	    </widget>
 	  </widget>
 	</widget>
-      </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>medium_page</name>
-      <title>Enter Security Medium Information</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,153</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>vbox134</name>
-	<border_width>10</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>10</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
 
 	<widget>
 	  <class>GtkFrame</class>
-	  <name>frame57</name>
+	  <name>frame58</name>
 	  <label>Security Medium</label>
 	  <label_xalign>0</label_xalign>
 	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
@@ -477,7 +521,8 @@ HBCI connection now.</text>
 
 	  <widget>
 	    <class>GtkVBox</class>
-	    <name>vbox139</name>
+	    <name>vbox142</name>
+	    <border_width>10</border_width>
 	    <homogeneous>False</homogeneous>
 	    <spacing>0</spacing>
 
@@ -498,7 +543,7 @@ HBCI connection now.</text>
 
 	    <widget>
 	      <class>GtkVBox</class>
-	      <name>vbox140</name>
+	      <name>vbox143</name>
 	      <border_width>20</border_width>
 	      <homogeneous>False</homogeneous>
 	      <spacing>0</spacing>
@@ -510,7 +555,7 @@ HBCI connection now.</text>
 
 	      <widget>
 		<class>GtkHBox</class>
-		<name>hbox109</name>
+		<name>hbox110</name>
 		<homogeneous>False</homogeneous>
 		<spacing>0</spacing>
 		<child>
@@ -521,7 +566,7 @@ HBCI connection now.</text>
 
 		<widget>
 		  <class>GtkLabel</class>
-		  <name>label36251</name>
+		  <name>label8477408</name>
 		  <label>Path to Key File</label>
 		  <justify>GTK_JUSTIFY_CENTER</justify>
 		  <wrap>False</wrap>
@@ -553,7 +598,7 @@ HBCI connection now.</text>
 		  <widget>
 		    <class>GtkEntry</class>
 		    <child_name>GnomeEntry:entry</child_name>
-		    <name>combo-entry1</name>
+		    <name>entry1</name>
 		    <can_focus>True</can_focus>
 		    <editable>True</editable>
 		    <text_visible>True</text_visible>
@@ -565,7 +610,7 @@ HBCI connection now.</text>
 
 	      <widget>
 		<class>GtkLabel</class>
-		<name>label8477407</name>
+		<name>label8477409</name>
 		<label>If you already have a key file, please choose it here. 
 If you do not have one yet, choose a filename, and a key file will be created there.</label>
 		<justify>GTK_JUSTIFY_LEFT</justify>
@@ -596,13 +641,204 @@ If you do not have one yet, choose a filename, and a key file will be created th
 		<fill>False</fill>
 	      </child>
 	    </widget>
-
-	    <widget>
-	      <class>Placeholder</class>
-	    </widget>
 	  </widget>
 	</widget>
       </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageStandard</class>
+      <name>account_match_page</name>
+      <title>Match HBCI accounts with GnuCash accounts</title>
+      <title_color>255,255,255</title_color>
+      <background_color>153,191,153</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+
+      <widget>
+	<class>GtkVBox</class>
+	<child_name>GnomeDruidPageStandard:vbox</child_name>
+	<name>druid-vbox3</name>
+	<border_width>10</border_width>
+	<homogeneous>False</homogeneous>
+	<spacing>0</spacing>
+	<child>
+	  <padding>0</padding>
+	  <expand>True</expand>
+	  <fill>True</fill>
+	</child>
+
+	<widget>
+	  <class>GtkHBox</class>
+	  <name>hbox112</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
+	  <child>
+	    <padding>0</padding>
+	    <expand>True</expand>
+	    <fill>True</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkScrolledWindow</class>
+	    <name>scrolledwindow25</name>
+	    <hscrollbar_policy>GTK_POLICY_ALWAYS</hscrollbar_policy>
+	    <vscrollbar_policy>GTK_POLICY_ALWAYS</vscrollbar_policy>
+	    <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
+	    <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
+	    <child>
+	      <padding>0</padding>
+	      <expand>True</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkCList</class>
+	      <name>account_page_list</name>
+	      <can_focus>True</can_focus>
+	      <columns>3</columns>
+	      <column_widths>281,242,53</column_widths>
+	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
+	      <show_titles>True</show_titles>
+	      <shadow_type>GTK_SHADOW_IN</shadow_type>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label834</name>
+		<label>HBCI account name</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label835</name>
+		<label>GnuCash account name</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+
+	      <widget>
+		<class>GtkLabel</class>
+		<child_name>CList:title</child_name>
+		<name>label836</name>
+		<label>New?</label>
+		<justify>GTK_JUSTIFY_CENTER</justify>
+		<wrap>False</wrap>
+		<xalign>0.5</xalign>
+		<yalign>0.5</yalign>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+	      </widget>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkVBox</class>
+	    <name>vbox144</name>
+	    <border_width>5</border_width>
+	    <homogeneous>False</homogeneous>
+	    <spacing>5</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>True</fill>
+	    </child>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>addbank_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Add 
+Bank</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>adduser_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Add 
+User</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkButton</class>
+	      <name>updatelist_button</name>
+	      <can_focus>True</can_focus>
+	      <label>Update 
+account list</label>
+	      <relief>GTK_RELIEF_NORMAL</relief>
+	      <child>
+		<padding>0</padding>
+		<expand>False</expand>
+		<fill>False</fill>
+	      </child>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkLabel</class>
+	  <name>label828</name>
+	  <label>Click &quot;Next&quot; when all desired accounts are matching.</label>
+	  <justify>GTK_JUSTIFY_CENTER</justify>
+	  <wrap>False</wrap>
+	  <xalign>0.5</xalign>
+	  <yalign>0.5</yalign>
+	  <xpad>0</xpad>
+	  <ypad>0</ypad>
+	  <child>
+	    <padding>3</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+	</widget>
+      </widget>
+    </widget>
+
+    <widget>
+      <class>GnomeDruidPageFinish</class>
+      <name>initial_finish_page</name>
+      <signal>
+	<name>finish</name>
+	<handler>on_finish</handler>
+	<last_modification_time>Sat, 16 Jun 2001 23:41:40 GMT</last_modification_time>
+      </signal>
+      <title>HBCI Setup Finished</title>
+      <text>Now the setup for all HBCI accounts that are matching
+to a Gnucash account is finished. You can now invoke HBCI actions
+on those accounts.
+
+If you want to add another HBCI bank, user, or account, you can just 
+start this druid again anytime.
+
+Press 'Finish' now.</text>
+      <background_color>153,191,153</background_color>
+      <logo_background_color>255,255,255</logo_background_color>
+      <textbox_color>255,255,255</textbox_color>
+      <text_color>0,0,0</text_color>
+      <title_color>255,255,255</title_color>
     </widget>
 
     <widget>
@@ -753,110 +989,6 @@ Then press 'Next'.</label>
     </widget>
 
     <widget>
-      <class>GnomeDruidPageStandard</class>
-      <name>account_match_page</name>
-      <title>Match HBCI accounts with GnuCash accounts</title>
-      <title_color>255,255,255</title_color>
-      <background_color>153,191,153</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-
-      <widget>
-	<class>GtkVBox</class>
-	<child_name>GnomeDruidPageStandard:vbox</child_name>
-	<name>druid-vbox3</name>
-	<border_width>25</border_width>
-	<homogeneous>False</homogeneous>
-	<spacing>0</spacing>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkScrolledWindow</class>
-	  <name>scrolledwindow11</name>
-	  <hscrollbar_policy>GTK_POLICY_NEVER</hscrollbar_policy>
-	  <vscrollbar_policy>GTK_POLICY_AUTOMATIC</vscrollbar_policy>
-	  <hupdate_policy>GTK_UPDATE_CONTINUOUS</hupdate_policy>
-	  <vupdate_policy>GTK_UPDATE_CONTINUOUS</vupdate_policy>
-	  <child>
-	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
-	  </child>
-
-	  <widget>
-	    <class>GtkCList</class>
-	    <name>account_page_list</name>
-	    <can_focus>True</can_focus>
-	    <columns>3</columns>
-	    <column_widths>281,242,53</column_widths>
-	    <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
-	    <show_titles>True</show_titles>
-	    <shadow_type>GTK_SHADOW_IN</shadow_type>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label834</name>
-	      <label>HBCI account name</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label835</name>
-	      <label>GnuCash account name</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-
-	    <widget>
-	      <class>GtkLabel</class>
-	      <child_name>CList:title</child_name>
-	      <name>label836</name>
-	      <label>New?</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>0.5</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	    </widget>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label828</name>
-	  <label>Click &quot;Next&quot; when all desired accounts are matching.</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>0.5</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>0</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <padding>3</padding>
-	    <expand>False</expand>
-	    <fill>False</fill>
-	  </child>
-	</widget>
-      </widget>
-    </widget>
-
-    <widget>
       <class>GnomeDruidPageFinish</class>
       <name>initial_finish_page</name>
       <signal>
@@ -952,7 +1084,7 @@ Press 'Finish' now.</text>
 
 <widget>
   <class>GnomeDialog</class>
-  <name>QIF Import Account Picker</name>
+  <name>HBCI Setup Account Picker</name>
   <title>Select Account</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
@@ -1092,7 +1224,7 @@ Press 'Finish' now.</text>
 	<data>QIF_Import_Account_Picker</data>
 	<last_modification_time>Sat, 10 Feb 2001 21:26:10 GMT</last_modification_time>
       </signal>
-      <label>New Account (child of selected) ...</label>
+      <label>New Account (not implemented)</label>
       <relief>GTK_RELIEF_NORMAL</relief>
       <child>
 	<padding>0</padding>
