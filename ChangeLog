@@ -1,3 +1,8 @@
+2001-05-09  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/price-scatter.scm: use the configurable report
+	title.
+
 2001-05-09  Dave Peticolas  <dave@krondo.com>
 
 	* src/doc/design/user-preferences.texinfo: update docs

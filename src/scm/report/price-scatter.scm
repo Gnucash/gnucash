@@ -60,18 +60,6 @@
       (gnc:options-add-interval-choice! 
        options gnc:pagename-general optname-stepsize "b" 'MonthDelta)
 
-					;      (add-option
-					;       (gnc:make-account-list-option
-					;	gnc:pagename-accounts optname-accounts
-					;	"c"
-					;	(N_ "Report on these accounts, if chosen account level allows.")
-					;	(lambda ()
-					;	  (gnc:group-get-subaccounts (gnc:get-current-group)))
-					;	(lambda (accounts)
-					;	  (list #t
-					;		accounts))
-					;	#t))
-
       (gnc:options-add-currency! 
        options gnc:pagename-general optname-report-currency "d")
       
@@ -92,7 +80,7 @@
 		      (N_ "The weighted average all currency transactions of the past"))
 	      (vector 'actual-transactions
 		      (N_ "Actual Transactions")
-		      (N_ "The actual price of currency transactions in the past"))
+		      (N_ "The instantaneous price of actual currency transactions in the past"))
 	      ;;(vector 'pricedb-nearest
 	      ;;      (N_ "Pricedb: Nearest in time")
 	      ;;    (N_ "The price recorded nearest in time to the report date"))
@@ -143,7 +131,8 @@
                            (op-value gnc:pagename-general 
 				     optname-from-date))))
 	   (interval (op-value gnc:pagename-general optname-stepsize))
-	   ;; (accounts (op-value gnc:pagename-accounts optname-accounts))
+	   (report-title (op-value gnc:pagename-general 
+				   gnc:optname-reportname))
 
 	   (height (op-value gnc:pagename-display optname-plot-height))
 	   (width (op-value gnc:pagename-display optname-plot-width))
@@ -175,7 +164,7 @@
 		   (2.0 1.0) (2.1 1.2) (2.2 1.4) (2.3 1.6))))
       
       (gnc:html-scatter-set-title! 
-       chart (_ "Price Plot (Test)"))
+       chart report-title)
       (gnc:html-scatter-set-subtitle!
        chart (sprintf #f
                       (_ "%s to %s")
