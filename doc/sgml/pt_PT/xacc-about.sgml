@@ -431,6 +431,8 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <glossdef>
 <para>Tradução para Dinamarquês</para>
 </glossdef>
+</glossentry>
+
 <glossentry>
 <glossterm><email>jcollins@gnucash.org</email> Jeremey
       Collins</glossterm>
@@ -680,7 +682,6 @@ g-wrap</link> para guile, e as preferências de utilizador.
 <para>relatório de orçamento em guile</para>
 </glossdef>
 </glossentry>
-<glossentry>
 
 <glossentry>
 <glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
@@ -689,6 +690,7 @@ g-wrap</link> para guile, e as preferências de utilizador.
 </glossdef>
 </glossentry>
 
+<glossentry>
 <glossterm><email>mellon@andare.fugue.com</email> Ted
       Lemon</glossterm>
 <glossdef>
