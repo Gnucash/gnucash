@@ -69,11 +69,9 @@ Stock Split Dialog
 
 - Main Window
 
-  - New registers should open in new top-level windows.
-
-  - Summary bar select list doesn't have effect.
-
   - Startup progress bar not working; default "window" needs to be set.
+
+  - [low-priority] New registers should open in new top-level windows.
 
 - Register Core
 
@@ -86,22 +84,19 @@ Stock Split Dialog
     - Getting better; x-position -> pango-text-index-lookup works; some
       gtk_entry selection works.
 
-    - draging from right to left doesn't work.    
+    - draging from right to left doesn't work.
 
     - Offset for non-LEFT_ALIGN'ed fields not correct.
 
-    - Probably need to...                         
-      1. check if it's a RIGHT [or CENTER] align.  
-      2. determine pango-layout width of the cell, plus the "indent".                         
-      3. subtract the indent as well as the cell's x-offset from the x-coord.                 
+    - Probably need to...
+      1. check if it's a RIGHT [or CENTER] align.
+      2. determine pango-layout width of the cell, plus the "indent".
+      3. subtract the indent as well as the cell's x-offset from the x-coord.
 
     - finer points of gtk_entry selection+position setting not correct, yet.
 
   - The first time it is used, the account popup immediately selects the
     first account.  After that it functions normally.
-
-  - <STRIKE>The drop-down-arrow widgets for {date,action,account-sel} don't
-    seem to be showing.</STRIKE>
 
   - selection of the date for the datecell seems to also select the
     transaction underneath the calendar, leading to the "this transaction has
@@ -124,12 +119,13 @@ Stock Split Dialog
 
 - Find [somewhat functional]
 
-  - Can generate a query in the dialog.        
-                                             
+  - Can generate a query in the dialog; but it seems to not work or crash on
+    query-execution.
+
 - View Summary Bar
 
-  - Summarybar not ported yet. Where should it go? Wouldn't look good between
-    the toolbar and the notebook tabs.
+  - Summarybar restored into GncMainWindow UI; summary-select list does not
+    respond to button-pressing.
 
 - Business Functions
 
@@ -148,29 +144,28 @@ Stock Split Dialog
 
   - Save/restore in unknown state; believed to crash on re-start.
 
-  - First report sets report name text for tab but no other report can change it.        
+  - First report sets report name text for tab but no other report can change it.
 
 - Importing
 
-  - HBCI - Needs new HTTP support [gnet]          
+  - HBCI - Needs new HTTP support [gnet]
 
 - Budgeting
 
-  - Can create/modify budgets via the Budgeting
-    workbench. (Actions->Budgeting Workbench)
+  - Can create/modify budgets via the Budgeting workbench. (Actions->Budgeting Workbench)
 
   - Track budget tab still needs to be completed.  Should allow you to look
     at predicted vs. actual information.
 
   - No save to file functionality.  Therefore budgets must currently be
-    created fresh each time gnucash is started.  First thing what I want to fix.                       
+    created fresh each time gnucash is started.  First thing what I want to fix.
 
   - Should the budgeting workbench fit into the new windowing scheme better?
     Currently it is its own window but maybe each workbench should be a tab
     in the new layout.  How would this work with the sub-tabs?  Have to think
     about this some more.
 
-  - Probably more TODO but these are the main points.                                   
+  - Probably more TODO but these are the main points.
 
 
 ------------------------------------------------------------------------------
@@ -182,7 +177,7 @@ Stock Split Dialog
 
 - Hierarchy Merge [BROKEN]
 
-  - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.                       
+  - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
 
 ========================================
               ENHANCEMENTS
@@ -190,11 +185,11 @@ Stock Split Dialog
 
 - New icons
 
-  - Add account.                                
+  - Add account.
 
-  - Register                                    
+  - Register
 
-  - Report                                      
+  - Report
 
     - "Report options", especially, since it continuouly confuses users.
 
