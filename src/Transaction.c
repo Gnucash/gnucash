@@ -37,6 +37,79 @@
 \********************************************************************/
 
 /********************************************************************\
+ * initSplit
+ * Initialize a splitaction structure
+\********************************************************************/
+
+void
+xaccInitSplit( Split * split )
+  {
+  
+  /* fill in some sane defaults */
+  split->debit = 0x0;
+  
+  split->memo        = XtNewString("");
+  split->reconciled  = NREC;
+  split->damount     = 0.0;
+  split->share_price = 1.0;
+
+  split->write_flag  = 0;
+  }
+
+/********************************************************************\
+\********************************************************************/
+Split *
+xaccMallocSplit( void )
+  {
+  Split *split = (Split *)_malloc(sizeof(Split));
+  xaccInitSplit (split);
+  return split;
+  }
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccFreeSplit( Split *split )
+  {
+  if (!split) return;
+
+  /* free a split only if it is not claimed
+   * by any accounts. */
+  if (split->debit) return;
+
+  XtFree(split->memo);
+
+  /* just in case someone looks up freed memory ... */
+  split->memo        = 0x0;
+  split->reconciled  = NREC;
+  split->damount     = 0.0;
+  split->share_price = 1.0;
+
+  split->write_flag  = 0;
+  _free(split);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+int
+xaccCountSplits (Split **tarray)
+{
+   Split *split;
+   int nsplit = 0;
+
+   if (!tarray) return 0;
+
+   split = tarray[0];
+   while (split) {
+      nsplit ++;
+      split = tarray[nsplit];
+   }
+   return nsplit;
+}
+
+/********************************************************************\
  * initTransaction
  * Initialize a transaction structure
 \********************************************************************/
@@ -54,6 +127,10 @@ initTransaction( Transaction * trans )
   trans->memo        = XtNewString("");
   trans->action      = XtNewString("");
   trans->catagory    = 0;
+
+  trans->splits      = (Split **) _malloc (sizeof (Split *));
+  trans->splits[0]   = NULL;
+
   trans->reconciled  = NREC;
   trans->damount     = 0.0;
   trans->share_price = 1.0;
@@ -92,7 +169,13 @@ freeTransaction( Transaction *trans )
    * by any accounts. */
   if (trans->debit) return;
   if (trans->credit) return;
+/*
+hack alert -- don't do this until splits are fully
+implemented and tested.
+  if (NULL != trans->splits[0]) return;
+*/
 
+  _free (trans->splits);
   XtFree(trans->num);
   XtFree(trans->description);
   XtFree(trans->memo);
@@ -119,6 +202,27 @@ freeTransaction( Transaction *trans )
 
   trans->write_flag  = 0;
   _free(trans);
+}
+
+/********************************************************************\
+\********************************************************************/
+void
+xaccInsertSplit (Transaction *trans, Split *split) 
+{
+   int i, num;
+   Split **oldarray;
+   
+   num = xaccCountSplits (trans->splits);
+
+   oldarray = trans->splits;
+   trans->splits = (Split **) _malloc ((num+2)*sizeof(Split *));
+   for (i=0; i<num; i++) {
+      (trans->splits)[i] = oldarray[i];
+   }
+   trans->splits[num] = split;
+   trans->splits[num+1] = NULL;
+
+   _free (oldarray);
 }
 
 /********************************************************************\
@@ -228,6 +332,8 @@ xaccCountTransactions (Transaction **tarray)
 {
    Transaction *trans;
    int ntrans = 0;
+
+   if (!tarray) return 0;
 
    trans = tarray[0];
    while (trans) {
