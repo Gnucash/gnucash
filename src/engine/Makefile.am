@@ -60,7 +60,6 @@ gncinclude_HEADERS = \
   gnc-numeric.h \
   gnc-pricedb.h \
   gnc-session.h \
-  gnc-session-p.h \
   guid.h \
   kvp_frame.h \
   messages.h
@@ -77,6 +76,7 @@ noinst_HEADERS = \
   gnc-book-p.h \
   gnc-event-p.h \
   gnc-pricedb-p.h \
+  gnc-session-p.h \
   kvp-scm.h \
   md5.h
 
