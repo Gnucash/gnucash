@@ -1473,7 +1473,6 @@ pgend_session_end (Backend *bend)
  *    the poll & event style load, where only the accounts, 
  *    and never the transactions, need to be loaded. 
  */
-
 static void
 pgend_book_load_poll (Backend *bend, GNCBook *book)
 {
@@ -1493,12 +1492,20 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
    if (be->blist) 
    {
       /* XXX not clear what this means ... should we free old books ?? */
-      PWARN ("old book list not empty ");
+      /* The old book list is set by the session when the session is 
+       * created.  It is an empty book, and should be discarded in favor
+       * of the Book retrieved from the database.
+       * PWARN ("old book list not empty ");
+       */
       g_list_free (be->blist);
       be->blist = NULL;
    }
    pgend_set_book (be, book);
    pgendGetBook (be, book);
+   gnc_session_set_book(be->session, book);
+                        
+   PINFO("Book GUID = %s\n",
+           guid_to_string(gnc_book_get_guid(book)));
 
    pgendGetAllAccountsInBook (be, book);
 
@@ -2246,13 +2253,13 @@ pgend_session_begin (Backend *backend,
       {
          case MODE_SINGLE_FILE:
             pgendEnable(be);
-            be->be.load                 = pgend_do_load_single;
-            be->be.begin		= pgend_do_begin;
-            be->be.commit		= pgend_do_commit;
-            be->be.rollback		= pgend_do_rollback;
+            be->be.load         = pgend_do_load_single;
+            be->be.begin        = pgend_do_begin;
+            be->be.commit       = pgend_do_commit;
+            be->be.rollback     = pgend_do_rollback;
 
-	    be->be.compile_query	= NULL;
-	    be->be.free_query		= NULL;
+            be->be.compile_query        = NULL;
+            be->be.free_query           = NULL;
             be->be.run_query            = NULL;
             be->be.price_lookup         = NULL;
 
@@ -2268,15 +2275,14 @@ pgend_session_begin (Backend *backend,
 
          case MODE_SINGLE_UPDATE:
             pgendEnable(be);
-            be->be.load                 = pgend_do_load_single;
-            be->be.begin		= pgend_do_begin;
-            be->be.commit		= pgend_do_commit;
-            be->be.rollback		= pgend_do_rollback;
-
-	    be->be.compile_query	= NULL;
-	    be->be.free_query		= NULL;
-            be->be.run_query            = NULL;
-            be->be.price_lookup         = NULL;
+            be->be.load         = pgend_do_load_single;
+            be->be.begin        = pgend_do_begin;
+            be->be.commit       = pgend_do_commit;
+            be->be.rollback     = pgend_do_rollback;
+            be->be.compile_query    = NULL;
+            be->be.free_query	    = NULL;
+            be->be.run_query        = NULL;
+            be->be.price_lookup     = NULL;
 
             be->be.sync                 = pgendDoSync;
             be->be.export               = NULL;
@@ -2290,13 +2296,13 @@ pgend_session_begin (Backend *backend,
 
          case MODE_POLL:
             pgendEnable(be);
-            be->be.load                 = pgend_book_load_poll;
+            be->be.load         = pgend_book_load_poll;
             be->be.begin		= pgend_do_begin;
             be->be.commit		= pgend_do_commit;
             be->be.rollback		= pgend_do_rollback;
 
-	    be->be.compile_query	= pgendCompileQuery;
-	    be->be.free_query		= pgendFreeQuery;
+            be->be.compile_query	= pgendCompileQuery;
+            be->be.free_query		= pgendFreeQuery;
             be->be.run_query            = pgendRunQuery;
             be->be.price_lookup         = pgendPriceFind;
 
@@ -2317,21 +2323,21 @@ pgend_session_begin (Backend *backend,
             pgendSessionGetPid (be);
             pgendSessionSetupNotifies (be);
 
-            be->be.load                 = pgend_book_load_poll;
-            be->be.begin		= pgend_do_begin;
-            be->be.commit		= pgend_do_commit;
-            be->be.rollback		= pgend_do_rollback;
+            be->be.load             = pgend_book_load_poll;
+            be->be.begin            = pgend_do_begin;
+            be->be.commit           = pgend_do_commit;
+            be->be.rollback         = pgend_do_rollback;
 
-	    be->be.compile_query	= pgendCompileQuery;
-	    be->be.free_query		= pgendFreeQuery;
-            be->be.run_query            = pgendRunQuery;
-            be->be.price_lookup         = pgendPriceFind;
+            be->be.compile_query	= pgendCompileQuery;
+            be->be.free_query		= pgendFreeQuery;
+            be->be.run_query        = pgendRunQuery;
+            be->be.price_lookup     = pgendPriceFind;
 
-            be->be.sync                 = pgendDoSync;
-            be->be.export               = NULL;
-            be->be.percentage           = NULL;
-            be->be.events_pending       = pgendEventsPending;
-            be->be.process_events       = pgendProcessEvents;
+            be->be.sync             = pgendDoSync;
+            be->be.export           = NULL;
+            be->be.percentage       = NULL;
+            be->be.events_pending   = pgendEventsPending;
+            be->be.process_events   = pgendProcessEvents;
 
             PWARN ("mode=multi-user is beta -- \n"
                    "we've fixed all known bugs but that doesn't mean\n"

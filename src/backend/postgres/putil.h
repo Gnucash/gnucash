@@ -108,30 +108,30 @@ int finishQuery(PGBackend *be);
  * discarded (only error conditions are checked for).
  */
 
-#define FINISH_QUERY(conn) 					\
-{								\
-   int i=0;							\
-   PGresult *result; 						\
-   /* complete/commit the transaction, check the status */	\
-   do {								\
+#define FINISH_QUERY(conn)                                      \
+{                                                               \
+   int i=0;                                                     \
+   PGresult *result;                                            \
+   /* complete/commit the transaction, check the status */      \
+   do {                                                         \
       gchar *msg = NULL;                                        \
-      ExecStatusType status;					\
-      result = PQgetResult((conn));				\
-      if (!result) break;					\
-      PINFO ("clearing result %d", i);				\
-      status = PQresultStatus(result);  			\
-      if (PGRES_COMMAND_OK != status) {				\
-         PERR("finish query failed:\n"				\
-              "\t%s", PQerrorMessage((conn)));			\
-         PQclear(result);					\
-         xaccBackendSetMessage (&be->be, msg);			\
+      ExecStatusType status;                                    \
+      result = PQgetResult((conn));                             \
+      if (!result) break;                                       \
+      PINFO ("clearing result %d", i);                          \
+      status = PQresultStatus(result);                          \
+      if (PGRES_COMMAND_OK != status) {                         \
+         msg = PQresultErrorMessage(result);                    \
+         PERR("finish query failed:\n\t%s", msg);               \
+         PQclear(result);                                       \
+         xaccBackendSetMessage (&be->be, msg);                  \
          xaccBackendSetError (&be->be, ERR_BACKEND_SERVER_ERR); \
-	 break;							\
-      }								\
-      PQclear(result);						\
-      i++;							\
-   } while (result);						\
-}
+         break;                                                 \
+      }                                                         \
+      PQclear(result);                                          \
+      i++;                                                      \
+   } while (result);                                            \
+}                                                               \
 
 /* --------------------------------------------------------------- */
 /* The GET_RESULTS macro grabs the result of an pgSQL query off the

@@ -1,3 +1,60 @@
+2003-01-29  Matthew Vanecek <mevanecek@yahoo.com>
+	
+	* src/backend/postgres/Makefile.am: Changed the .sql.c target to
+	not echo the beginning and ending quotes.  This is part of the
+	gcc 3.x compatibility changes.
+
+	* src/backend/postgres/PostgresBackend.c: Made some whitespace changes
+	  for readability.
+	- (pgend_book_load_poll): Commented out a PWARN about the old book
+	  list not being empty. See added comments for why.
+	- (pgend_book_load_poll): added a gnc_session_set_book() call so that
+	  the session would have the correct book loaded (i.e., the book
+	  that's stored in the DB).
+	
+	* src/backend/postgres/*.sql: Enclosed each line in a set of
+	quotes "..".  The "multi-line literals" were causing compile errors
+	for gcc 3.x.
+
+	* src/backend/postgres/gncquery.c: ran indent on the file.
+	- (STRING_TERM): Changed the comparison on STRING_MATCH_NORMAL to
+	  STRING_MATCH_CASEINSENSITIVE for purposes of adding a '*' to the
+	  comparison operator "~".  The code was writing a "=*" which is
+	  invalid, but "~*" is valid for case-insensitive regex searches.
+	- (sqlQuery_build): Added a "more_and = 0" to the final if statement
+	  of the "for (il = qterms; il; il = il->next)" loop.  This will
+	  prevent a stray "AND" being appended to the end of the "WHERE" clause
+	  of a dynamic query.
+
+	* src/backend/postgres/kvp-sql (store_cb): In "case KVP_TYPE_TIMESPEC",
+	changed the 'cb_data->stype = "timespec"' to 'cb_data->stype = "time"'.
+	The destination field in the database is defined as 4 characters, and
+	the extra chars in stype were causing an insertion error.
+
+	* src/backend/postgres/putil.h (FINISH_QUERY): Changed the error to use
+	PQresultErrorMessage() instead of PQerrorMessage().
+
+	* src/backend/postgres/test/db-control.sh (our_pg_ctl): Changed the
+	script to return -1 if pg_ctl was not found in PATH.
+
+	* src/backend/postgres/test/run-tests.sh: If db-control.sh returns
+	failure, the attempt to connect to $PGHOST on $PGPORT.
+
+	* src/backend/postgres/test/test-db.c: Included QueryNew.h.  Added the
+	  _dbinfo struct to pass host, port, dbname, and mode information
+	  around. Everywhere that used db_name/mode is now using DbInfor->*.
+	- Ran indent on the file.
+	- Added a drop_database function to call dropdb on the database used
+	  for the tests.  This eventually needs to be changed so that every
+	  "return FALSE" first calls gnc_session_destroy(session), before this
+	  new function is called.
+	- (db_file_url): Changed the function to handle TCP connections as well
+	  as socket connections.
+	- (load_db_file): Added a PGBackend object from which to get a PGconn
+	  connection to store in DbInfo.
+	- (test_raw_query): Added a call to gncQueryPrint() if
+	  gnc_should_log(MOD_TEST, GNC_LOG_DETAIL)
+	
 2003-01-29  Herbert Thoma  <herbie@hthoma.de>
 
 	* src/report/standard-reports/cash-flow.scm: only asset accounts

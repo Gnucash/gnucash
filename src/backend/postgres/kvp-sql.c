@@ -286,7 +286,7 @@ store_cb (const char *key, kvp_value *val, gpointer p)
          case KVP_TYPE_TIMESPEC:
            {
              PINFO ("path=%s type=timespec", cb_data->path);
-             cb_data->stype = "timespec";
+             cb_data->stype = "time";
              cb_data->u.ts = kvp_value_get_timespec (val);
              pgendPutOneKVPtimespecOnly (be, cb_data);
            }

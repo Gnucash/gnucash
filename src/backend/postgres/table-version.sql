@@ -1,19 +1,19 @@
---
--- FILE:
--- table-version.sql
---
--- FUNCTION:
--- Insert the latest version information into the gncVersion table.
---
--- Inserting in the same query as creating the table does not
--- work under Postgres 7.0
---
--- HISTORY:
--- Copyright (C) 2001 Linux Developers Group
---
-
-INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,0,0,'Version Table');
-INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,1,1,'iGUID in Main Tables');
-INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,2,1,'Fix gncSubtotalReconedBalance');
-INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,3,1,'Add kvp_timespec tables');
-INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,4,1,'Add support for multiple books');
+"-- \n"
+"-- FILE: \n"
+"-- table-version.sql \n"
+"-- \n"
+"-- FUNCTION: \n"
+"-- Insert the latest version information into the gncVersion table. \n"
+"-- \n"
+"-- Inserting in the same query as creating the table does not \n"
+"-- work under Postgres 7.0 \n"
+"-- \n"
+"-- HISTORY: \n"
+"-- Copyright (C) 2001 Linux Developers Group \n"
+"-- \n"
+" \n"
+"INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,0,0,'Version Table'); \n"
+"INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,1,1,'iGUID in Main Tables'); \n"
+"INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,2,1,'Fix gncSubtotalReconedBalance'); \n"
+"INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,3,1,'Add kvp_timespec tables'); \n"
+"INSERT INTO gncVersion (major,minor,rev,name) VALUES (1,4,1,'Add support for multiple books');";

@@ -17,1069 +17,1121 @@
 #include "gnc-module.h"
 #include "gnc-session-p.h"
 #include "gncquery.h"
-
+#include "QueryNew.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 
-/* Prevent compiler warnings.  Uncomment if LEAVE/WARN/et al get used*/
-/* static short module = MOD_TEST;  */
+static short module = MOD_TEST;
+
+struct _dbinfo {
+    char *host;
+    char *port;
+    char *dbname;
+    char *mode;
+    PGconn *conn;
+};
+
+typedef struct _dbinfo DbInfo;
 
 static void
-save_xml_file (GNCSession *session, const char *filename_base)
+save_xml_file(GNCSession * session, const char *filename_base)
 {
-  GNCBackendError io_err;
-  char cwd[1024];
-  char *filename;
+    GNCBackendError io_err;
+    char cwd[1024];
+    char *filename;
 
-  g_return_if_fail (session && filename_base);
+    g_return_if_fail(session && filename_base);
 
-  getcwd (cwd, sizeof (cwd));
+    getcwd(cwd, sizeof(cwd));
 
-  filename = g_strdup_printf ("file:/%s/%s", cwd, filename_base);
+    filename = g_strdup_printf("file:/%s/%s", cwd, filename_base);
 
-  gnc_session_begin (session, filename, FALSE, TRUE);
+    gnc_session_begin(session, filename, FALSE, TRUE);
 
-  io_err = gnc_session_get_error (session);
-  g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
+    io_err = gnc_session_get_error(session);
+    g_return_if_fail(io_err == ERR_BACKEND_NO_ERR);
 
-  gnc_session_save (session, NULL);
-  io_err = gnc_session_get_error (session);
-  g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
+    gnc_session_save(session, NULL);
+    io_err = gnc_session_get_error(session);
+    g_return_if_fail(io_err == ERR_BACKEND_NO_ERR);
 
-  gnc_session_end (session);
-  io_err = gnc_session_get_error (session);
-  g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
+    gnc_session_end(session);
+    io_err = gnc_session_get_error(session);
+    g_return_if_fail(io_err == ERR_BACKEND_NO_ERR);
 
-  g_free (filename);
+    g_free(filename);
 }
 
 static void
-save_xml_files (GNCSession *session_1, GNCSession *session_2)
+save_xml_files(GNCSession * session_1, GNCSession * session_2)
 {
-  g_return_if_fail (session_1 && session_2);
+    g_return_if_fail(session_1 && session_2);
 
-  save_xml_file (session_1, "test_file_1");
-  save_xml_file (session_2, "test_file_2");
+    save_xml_file(session_1, "test_file_1");
+    save_xml_file(session_2, "test_file_2");
 }
 
 static char *
-db_file_url (const char *db_name, const char *mode)
+db_file_url(DbInfo *dbinfo)
 {
-  char *db_socket_dir;
+    char *db_socket_dir;
+    gchar *url;
 
-  g_return_val_if_fail (db_name && mode, NULL);
+    g_return_val_if_fail(dbinfo->dbname && dbinfo->mode, NULL);
 
-  /* TEST_DB_SOCKET_DIR must be an absolute path */
-  db_socket_dir = getenv("TEST_DB_SOCKET_DIR");
-  if(! db_socket_dir) g_warning("Couldn't getenv TEST_DB_SOCKET_DIR");
-  g_return_val_if_fail (db_socket_dir, NULL);  
-
-  return g_strdup_printf ("postgres://%s:7777/%s?mode=%s",
-                          db_socket_dir, db_name, mode);
+    if ((!g_strncasecmp(dbinfo->port, "7777", 4)) &&
+        (!g_strncasecmp(dbinfo->host, "localhost", 8))) {
+        /* TEST_DB_SOCKET_DIR must be an absolute path */
+        db_socket_dir = getenv("TEST_DB_SOCKET_DIR");
+        if (!db_socket_dir)
+            g_warning("Couldn't getenv TEST_DB_SOCKET_DIR");
+        g_return_val_if_fail(db_socket_dir, NULL);
+        url = g_strdup_printf("postgres://%s:7777/%s?mode=%s",
+                              db_socket_dir, dbinfo->dbname, dbinfo->mode);
+    } else {
+        url = g_strdup_printf("postgres://%s:%s/%s?mode=%s",
+                              dbinfo->host, dbinfo->port,
+                              dbinfo->dbname, dbinfo->mode);
+    }
+    return url;
 }
 
 static gboolean
-save_db_file (GNCSession *session, const char *db_name, const char *mode)
+save_db_file(GNCSession * session, DbInfo *dbinfo)
 {
-  GNCBackendError io_err;
-  char *filename;
+    GNCBackendError io_err;
+    char *filename;
 
-  g_return_val_if_fail (session && db_name && mode, FALSE);
+    g_return_val_if_fail(session && dbinfo->dbname && dbinfo->mode, FALSE);
 
-  filename = db_file_url (db_name, mode);
+    filename = db_file_url(dbinfo);
+    gnc_session_begin(session, filename, FALSE, TRUE);
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Beginning db session",
+                      __FILE__, __LINE__,
+                      "can't begin session for %s in mode %s", dbinfo->dbname, dbinfo->mode))
+        return FALSE;
 
-  gnc_session_begin (session, filename, FALSE, TRUE);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Beginning db session",
-                     __FILE__, __LINE__,
-                     "can't begin session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+    gnc_session_save(session, NULL);
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Saving db session",
+                      __FILE__, __LINE__,
+                      "can't save session for %s in mode %s", dbinfo->dbname, dbinfo->mode))
+        return FALSE;
 
-  gnc_session_save (session, NULL);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Saving db session",
-                     __FILE__, __LINE__,
-                     "can't save session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+    gnc_session_end(session);
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Ending db session",
+                      __FILE__, __LINE__,
+                      "can't end session for %s in mode %s", dbinfo->dbname, dbinfo->mode))
+        return FALSE;
 
-  gnc_session_end (session);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Ending db session",
-                     __FILE__, __LINE__,
-                     "can't end session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+    do_test(gnc_session_get_url(session) == NULL, "session url not NULL");
 
-  do_test (gnc_session_get_url (session) == NULL, "session url not NULL");
+    g_free(filename);
 
-  g_free (filename);
-
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
-load_db_file (GNCSession *session, const char *db_name, const char *mode,
-              gboolean end_session)
+load_db_file(GNCSession * session, DbInfo *dbinfo, gboolean end_session)
 {
-  GNCBackendError io_err;
-  char *filename;
+    GNCBackendError io_err;
+    PGBackend *be;
+    char *filename;
 
-  g_return_val_if_fail (session && db_name && mode, FALSE);
+    g_return_val_if_fail(session && dbinfo->dbname && dbinfo->mode, FALSE);
 
-  filename = db_file_url (db_name, mode);
+    filename = db_file_url(dbinfo);
 
-  gnc_session_begin (session, filename, FALSE, FALSE);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Beginning db session",
-                     __FILE__, __LINE__,
-                     "can't begin session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+    gnc_session_begin(session, filename, FALSE, FALSE);
+    
+    be = (PGBackend *)gnc_session_get_backend(session);
+    dbinfo->conn = be->connection;
 
-  gnc_session_load (session, NULL);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Loading db session",
-                     __FILE__, __LINE__,
-                     "can't load session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Beginning db session",
+                      __FILE__, __LINE__,
+                      "can't begin session for %s in mode %s",
+                      dbinfo->dbname, dbinfo->mode))
+        return FALSE;
 
-  if (end_session)
-  {
-    gnc_session_end (session);
-    io_err = gnc_session_get_error (session);
-    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                       "Ending db session",
-                       __FILE__, __LINE__,
-                       "can't end session for %s in mode %s",
-                       db_name, mode))
-      return FALSE;
+    gnc_session_load(session, NULL);
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Loading db session",
+                      __FILE__, __LINE__,
+                      "can't load session for %s in mode %s",
+                      dbinfo->dbname, dbinfo->mode))
+        return FALSE;
 
-    do_test (gnc_session_get_url (session) == NULL, "session url not NULL");
-  }
+    if (end_session) {
+        gnc_session_end(session);
+        io_err = gnc_session_get_error(session);
+        if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                          "Ending db session",
+                          __FILE__, __LINE__,
+                          "can't end session for %s in mode %s",
+                          dbinfo->dbname, dbinfo->mode))
+            return FALSE;
 
-  g_free (filename);
+        do_test(gnc_session_get_url(session) == NULL, "session url not NULL");
+    }
 
-  return TRUE;
+    g_free(filename);
+
+    return TRUE;
 }
 
 static gboolean
-test_access (const char *db_name, const char *mode, gboolean multi_user)
+test_access(DbInfo *dbinfo, gboolean multi_user)
 {
-  GNCBackendError io_err;
-  GNCSession *session_1;
-  GNCSession *session_2;
-  char *filename;
+    GNCBackendError io_err;
+    GNCSession *session_1;
+    GNCSession *session_2;
+    char *filename;
 
-  g_return_val_if_fail (db_name && mode, FALSE);
+    g_return_val_if_fail(dbinfo->dbname && dbinfo->mode, FALSE);
 
-  filename = db_file_url (db_name, mode);
+    filename = db_file_url(dbinfo);
 
-  session_1 = gnc_session_new ();
+    session_1 = gnc_session_new();
 
-  gnc_session_begin (session_1, filename, FALSE, FALSE);
-  io_err = gnc_session_get_error (session_1);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Beginning db session",
-                     __FILE__, __LINE__,
-                     "can't begin session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+    gnc_session_begin(session_1, filename, FALSE, FALSE);
+    io_err = gnc_session_get_error(session_1);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Beginning db session",
+                      __FILE__, __LINE__,
+                      "can't begin session for %s in mode %s",
+                      dbinfo->dbname, dbinfo->mode))
+        return FALSE;
 
-  session_2 = gnc_session_new ();
+    session_2 = gnc_session_new();
 
-  gnc_session_begin (session_2, filename, FALSE, FALSE);
-  io_err = gnc_session_get_error (session_2);
+    gnc_session_begin(session_2, filename, FALSE, FALSE);
+    io_err = gnc_session_get_error(session_2);
 
-  if (multi_user)
-  {
-    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                       "Beginning second multi-user db session",
-                       __FILE__, __LINE__,
-                       "can't begin second session for %s in mode %s",
-                       db_name, mode))
-      return FALSE;
-  }
-  else
-  {
-    if (!do_test_args (io_err != ERR_BACKEND_NO_ERR,
-                       "Beginning second single-user db session",
-                       __FILE__, __LINE__,
-                       "began second session for %s in mode %s",
-                       db_name, mode))
-      return FALSE;
-  }
+    if (multi_user) {
+        if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                          "Beginning second multi-user db session",
+                          __FILE__, __LINE__,
+                          "can't begin second session for %s in mode %s",
+                          dbinfo->dbname, dbinfo->mode))
+            return FALSE;
+    } else {
+        if (!do_test_args(io_err != ERR_BACKEND_NO_ERR,
+                          "Beginning second single-user db session",
+                          __FILE__, __LINE__,
+                          "began second session for %s in mode %s",
+                          dbinfo->dbname, dbinfo->mode))
+            return FALSE;
+    }
 
-  gnc_session_destroy (session_1);
-  gnc_session_destroy (session_2);
+    gnc_session_destroy(session_1);
+    gnc_session_destroy(session_2);
 
-  return TRUE;
+    return TRUE;
 }
 
 static gpointer
-mark_account_commodities (Account *a, gpointer data)
+mark_account_commodities(Account * a, gpointer data)
 {
-  GHashTable *hash = data;
+    GHashTable *hash = data;
 
-  g_hash_table_insert (hash, xaccAccountGetCommodity (a), hash);
+    g_hash_table_insert(hash, xaccAccountGetCommodity(a), hash);
 
-  return NULL;
+    return NULL;
 }
 
 static int
-mark_transaction_commodities (Transaction *t, void *data)
+mark_transaction_commodities(Transaction * t, void *data)
 {
-  GHashTable *hash = data;
+    GHashTable *hash = data;
 
-  g_hash_table_insert (hash, xaccTransGetCurrency (t), hash);
+    g_hash_table_insert(hash, xaccTransGetCurrency(t), hash);
 
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
-mark_price_commodities (GNCPrice *p, gpointer data)
+mark_price_commodities(GNCPrice * p, gpointer data)
 {
-  GHashTable *hash = data;
+    GHashTable *hash = data;
 
-  g_hash_table_insert (hash, gnc_price_get_commodity (p), hash);
-  g_hash_table_insert (hash, gnc_price_get_currency (p), hash);
+    g_hash_table_insert(hash, gnc_price_get_commodity(p), hash);
+    g_hash_table_insert(hash, gnc_price_get_currency(p), hash);
 
-  return TRUE;
+    return TRUE;
 }
 
-typedef struct
-{
-  GHashTable *hash;
-  GList *to_delete;
+typedef struct {
+    GHashTable *hash;
+    GList *to_delete;
 } CommodityDeleteInfo;
 
 static gboolean
-add_commodity_to_delete (gnc_commodity *com, gpointer data)
+add_commodity_to_delete(gnc_commodity * com, gpointer data)
 {
-  CommodityDeleteInfo *cdi = data;
+    CommodityDeleteInfo *cdi = data;
 
-  if (!g_hash_table_lookup (cdi->hash, com) &&
-      safe_strcmp (gnc_commodity_get_namespace (com),
-                   GNC_COMMODITY_NS_ISO) != 0)
-    cdi->to_delete = g_list_prepend (cdi->to_delete, com);
+    if (!g_hash_table_lookup(cdi->hash, com) &&
+        safe_strcmp(gnc_commodity_get_namespace(com),
+                    GNC_COMMODITY_NS_ISO) != 0)
+        cdi->to_delete = g_list_prepend(cdi->to_delete, com);
 
-  return TRUE;
+    return TRUE;
 }
 
 static void
-remove_unneeded_commodities (GNCSession *session)
+remove_unneeded_commodities(GNCSession * session)
 {
-  CommodityDeleteInfo cdi;
-  GNCBook *book;
-  GList *node;
+    CommodityDeleteInfo cdi;
+    GNCBook *book;
+    GList *node;
 
-  g_return_if_fail (session);
+    g_return_if_fail(session);
 
-  cdi.hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+    cdi.hash = g_hash_table_new(g_direct_hash, g_direct_equal);
 
-  book = gnc_session_get_book (session);
+    book = gnc_session_get_book(session);
 
-  xaccGroupForEachAccount (gnc_book_get_group (book),
-                           mark_account_commodities,
-                           cdi.hash, TRUE);
+    xaccGroupForEachAccount(gnc_book_get_group(book),
+                            mark_account_commodities, cdi.hash, TRUE);
 
-  xaccGroupForEachTransaction (gnc_book_get_group (book),
-                               mark_transaction_commodities,
-                               cdi.hash);
+    xaccGroupForEachTransaction(gnc_book_get_group(book),
+                                mark_transaction_commodities, cdi.hash);
 
-  gnc_pricedb_foreach_price (gnc_book_get_pricedb (book),
-                             mark_price_commodities,
-                             cdi.hash, FALSE);
+    gnc_pricedb_foreach_price(gnc_book_get_pricedb(book),
+                              mark_price_commodities, cdi.hash, FALSE);
 
-  cdi.to_delete = NULL;
+    cdi.to_delete = NULL;
 
-  gnc_commodity_table_foreach_commodity (gnc_book_get_commodity_table (book),
-                                         add_commodity_to_delete, &cdi);
+    gnc_commodity_table_foreach_commodity(gnc_book_get_commodity_table(book),
+                                          add_commodity_to_delete, &cdi);
 
-  for (node = cdi.to_delete; node; node = node->next)
-    gnc_commodity_table_remove (gnc_book_get_commodity_table (book),
-                                node->data);
+    for (node = cdi.to_delete; node; node = node->next)
+        gnc_commodity_table_remove(gnc_book_get_commodity_table(book),
+                                   node->data);
 
-  g_list_free (cdi.to_delete);
-  g_hash_table_destroy (cdi.hash);
+    g_list_free(cdi.to_delete);
+    g_hash_table_destroy(cdi.hash);
 }
 
 static Query *
-make_get_all_query (GNCSession * session)
+make_get_all_query(GNCSession * session)
 {
-  Query *q;
+    Query *q;
 
-  g_return_val_if_fail (session, NULL);
+    g_return_val_if_fail(session, NULL);
 
-  q = xaccMallocQuery ();
+    q = xaccMallocQuery();
 
-  xaccQuerySetBook (q, gnc_session_get_book (session));
+    xaccQuerySetBook(q, gnc_session_get_book(session));
 
-  xaccQueryAddClearedMatch (q,
-                            CLEARED_NO |
-                            CLEARED_CLEARED |
-                            CLEARED_RECONCILED |
-                            CLEARED_FROZEN |
-                            CLEARED_VOIDED,
-                            QUERY_AND);
+    xaccQueryAddClearedMatch(q,
+                             CLEARED_NO |
+                             CLEARED_CLEARED |
+                             CLEARED_RECONCILED |
+                             CLEARED_FROZEN | CLEARED_VOIDED, QUERY_AND);
 
-  return q;
+    return q;
 }
 
 static void
-multi_user_get_everything (GNCSession *session, GNCSession *base)
+multi_user_get_everything(GNCSession * session, GNCSession * base)
 {
-  Query *q;
+    Query *q;
 
-  g_return_if_fail (session);
+    g_return_if_fail(session);
 
-  q = make_get_all_query (session);
+    q = make_get_all_query(session);
 
-  xaccQueryGetSplits (q);
+    xaccQueryGetSplits(q);
 
-  xaccFreeQuery (q);
+    xaccFreeQuery(q);
 
-  /* load in prices from base */
-  if (base)
-    gnc_pricedb_equal (gnc_book_get_pricedb (gnc_session_get_book (base)),
-                       gnc_book_get_pricedb (gnc_session_get_book (session)));
+    /* load in prices from base */
+    if (base)
+        gnc_pricedb_equal(gnc_book_get_pricedb(gnc_session_get_book(base)),
+                          gnc_book_get_pricedb(gnc_session_get_book
+                                               (session)));
 }
 
 static gboolean
-test_updates (GNCSession *session, const char *db_name, const char *mode,
-              gboolean multi_user)
+test_updates(GNCSession * session, DbInfo *dbinfo, gboolean multi_user)
 {
-  GNCBackendError io_err;
-  GNCSession *session_2;
-  char *filename;
-  gboolean ok;
+    GNCBackendError io_err;
+    GNCSession *session_2;
+    char *filename;
+    gboolean ok;
 
-  g_return_val_if_fail (session && db_name && mode, FALSE);
+    g_return_val_if_fail(session && dbinfo->dbname && dbinfo->mode, FALSE);
 
-  filename = db_file_url (db_name, mode);
+    filename = db_file_url(dbinfo);
 
-  gnc_session_begin (session, filename, FALSE, FALSE);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Beginning db update session",
-                     __FILE__, __LINE__,
-                     "can't begin session for %s in mode %s",
-                     db_name, mode))
-    return FALSE;
+    gnc_session_begin(session, filename, FALSE, FALSE);
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Beginning db update session",
+                      __FILE__, __LINE__,
+                      "can't begin session for %s in mode %s", dbinfo->dbname, dbinfo->mode))
+        return FALSE;
 
-  make_random_changes_to_session (session);
+    make_random_changes_to_session(session);
 
-  if (!multi_user)
-  {
-    gnc_session_end (session);
-    io_err = gnc_session_get_error (session);
-    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                       "Ending db session",
-                       __FILE__, __LINE__,
-                       "can't end session for %s in mode %s",
-                       db_name, mode))
-      return FALSE;
-  }
+    if (!multi_user) {
+        gnc_session_end(session);
+        io_err = gnc_session_get_error(session);
+        if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                          "Ending db session",
+                          __FILE__, __LINE__,
+                          "can't end session for %s in mode %s",
+                          dbinfo->dbname, dbinfo->mode))
+            return FALSE;
+    }
 
-  session_2 = gnc_session_new ();
+    session_2 = gnc_session_new();
 
-  if (!load_db_file (session_2, db_name, mode, !multi_user))
-    return FALSE;
+    if (!load_db_file(session_2, dbinfo, !multi_user))
+        return FALSE;
 
-  if (multi_user)
-    multi_user_get_everything (session_2, session);
+    if (multi_user)
+        multi_user_get_everything(session_2, session);
 
-  remove_unneeded_commodities (session);
-  remove_unneeded_commodities (session_2);
+    remove_unneeded_commodities(session);
+    remove_unneeded_commodities(session_2);
 
-  ok = gnc_book_equal (gnc_session_get_book (session),
-                       gnc_session_get_book (session_2));
+    ok = gnc_book_equal(gnc_session_get_book(session),
+                        gnc_session_get_book(session_2));
 
-  do_test_args (ok, "Books equal after update", __FILE__, __LINE__,
-                "Books not equal for session %s in mode %s",
-                db_name, mode);
+    do_test_args(ok, "Books equal after update", __FILE__, __LINE__,
+                 "Books not equal for session %s in mode %si\n"
+                 "book 1: %s,\nbook 2: %s",
+                 dbinfo->dbname, dbinfo->mode,
+                 guid_to_string(gnc_book_get_guid(gnc_session_get_book(session))),
+                 guid_to_string(gnc_book_get_guid(gnc_session_get_book(session_2))));
 
-  if (multi_user)
-  {
-    gnc_session_end (session);
-    io_err = gnc_session_get_error (session);
-    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                       "Ending db session",
-                       __FILE__, __LINE__,
-                       "can't end session for %s in mode %s",
-                       db_name, mode))
-      return FALSE;
+    if (multi_user) {
+        gnc_session_end(session);
+        io_err = gnc_session_get_error(session);
+        if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                          "Ending db session",
+                          __FILE__, __LINE__,
+                          "can't end session for %s in mode %s",
+                          dbinfo->dbname, dbinfo->mode))
+            return FALSE;
 
-    gnc_session_end (session_2);
-    io_err = gnc_session_get_error (session_2);
-    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                       "Ending db session",
-                       __FILE__, __LINE__,
-                       "can't end session for %s in mode %s",
-                       db_name, mode))
-      return FALSE;
-  }
+        gnc_session_end(session_2);
+        io_err = gnc_session_get_error(session_2);
+        if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                          "Ending db session",
+                          __FILE__, __LINE__,
+                          "can't end session for %s in mode %s",
+                          dbinfo->dbname, dbinfo->mode))
+            return FALSE;
+    }
 
-  if (!ok)
-  {
-    save_xml_files (session, session_2);
-    return FALSE;
-  }
+    if (!ok) {
+        save_xml_files(session, session_2);
+        return FALSE;
+    }
 
-  gnc_session_destroy (session_2);
-  g_free (filename);
+    gnc_session_destroy(session_2);
+    g_free(filename);
 
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
-num_trans_helper (Transaction *trans, gpointer data)
+num_trans_helper(Transaction * trans, gpointer data)
 {
-  int *num = data;
+    int *num = data;
 
-  *num += 1;
+    *num += 1;
 
-  return TRUE;
+    return TRUE;
 }
 
 static int
-session_num_trans (GNCSession *session)
+session_num_trans(GNCSession * session)
 {
-  AccountGroup *group;
-  GNCBook *book;
-  int num = 0;
+    AccountGroup *group;
+    GNCBook *book;
+    int num = 0;
 
-  g_return_val_if_fail (session, 0);
+    g_return_val_if_fail(session, 0);
 
-  book = gnc_session_get_book (session);
-  group = gnc_book_get_group (book);
+    book = gnc_session_get_book(session);
+    group = gnc_book_get_group(book);
 
-  xaccGroupForEachTransaction (group, num_trans_helper, &num);
+    xaccGroupForEachTransaction(group, num_trans_helper, &num);
 
-  return num;
+    return num;
 }
 
-typedef struct
-{
-  GNCSession *session_base;
-  const char *db_name;
-  const char *mode;
-  gint loaded;
-  gint total;
+typedef struct {
+    GNCSession *session_base;
+    DbInfo *dbinfo;
+    gint loaded;
+    gint total;
 } QueryTestData;
 
 static gboolean
-test_raw_query (GNCSession *session, Query *q)
+test_raw_query(GNCSession * session, Query * q)
 {
-  const char *sql_query_string;
-  PGresult *result;
-  PGBackend *be;
-  sqlQuery *sq;
-  gboolean ok;
+    const char *sql_query_string;
+    PGresult *result;
+    PGBackend *be;
+    sqlQuery *sq;
+    gboolean ok;
+    QueryNew *qn = q;
 
-  g_return_val_if_fail (session && q, FALSE);
+    g_return_val_if_fail(session && q, FALSE);
 
-  be = (PGBackend *) gnc_session_get_backend(session);
+    be = (PGBackend *) gnc_session_get_backend(session);
 
-  sq = sqlQuery_new();
-  sql_query_string = sqlQuery_build (sq, q);
+    if (gnc_should_log(module, GNC_LOG_DETAIL))
+        gncQueryPrint(qn);
 
-  result = PQexec (be->connection, sql_query_string);
+    sq = sqlQuery_new();
+    sql_query_string = sqlQuery_build(sq, q);
 
-  ok = (result && PQresultStatus (result) == PGRES_TUPLES_OK);
-  if (!ok)
-  {
-    failure ("raw query failed");
-  }
-  else
-  {
-    ok = ok && (PQntuples (result) == 1);
-    if (!ok)
-      failure_args ("number returned test",
-                    __FILE__, __LINE__,
-                    "query returned %d tuples",
-                    PQntuples (result));
-  }
+    result = PQexec(be->connection, sql_query_string);
 
-  if (ok)
-  {
-    success ("raw query succeeded");
-  }
-
-  PQclear (result);
-  sql_Query_destroy (sq);
-
-  return ok;
-}
-
-static gboolean
-test_trans_query (Transaction *trans, gpointer data)
-{
-  QueryTestData *qtd = data;
-  GNCBackendError io_err;
-  GNCSession *session;
-  char *filename;
-  GNCBook *book;
-  GList *list;
-  Query *q;
-
-  filename = db_file_url (qtd->db_name, qtd->mode);
-
-  session = gnc_session_new ();
-
-  gnc_session_begin (session, filename, FALSE, FALSE);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Beginning db session",
+    ok = (result && PQresultStatus(result) == PGRES_TUPLES_OK);
+    if (!ok) {
+        failure_args("Raw query failed",
                      __FILE__, __LINE__,
-                     "can't begin session for %s",
-                     filename))
-    return FALSE;
+                     "Error: %s\nQuery: %s",
+                     PQresultErrorMessage(result),
+                     sql_query_string);
+        /* failure("raw query failed: %s", sql_query_string); */
+    } else {
+        ok = ok && (PQntuples(result) == 1);
+        if (!ok)
+            failure_args("number returned test",
+                         __FILE__, __LINE__,
+                         "query returned %d tuples", PQntuples(result));
+    }
 
-  gnc_session_load (session, NULL);
-  io_err = gnc_session_get_error (session);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "Loading db session",
-                     __FILE__, __LINE__,
-                     "can't load session for %s",
-                     filename))
-    return FALSE;
+    if (ok) {
+        success("raw query succeeded");
+    }
 
-  book = gnc_session_get_book (session);
+    PQclear(result);
+    sql_Query_destroy(sq);
 
-  q = make_trans_query (trans, get_random_query_type () | GUID_QT);
-  xaccQuerySetBook (q, book);
-
-  if (!test_raw_query (session, q))
-  {
-    failure ("raw query failed");
-    return FALSE;
-  }
-
-  list = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
-  if (g_list_length (list) != 1)
-  {
-    failure_args ("test num returned", __FILE__, __LINE__,
-                  "number of matching transactions %d not 1",
-                  g_list_length (list));
-    g_list_free (list);
-    return FALSE;
-  }
-
-  qtd->loaded += session_num_trans (session);
-  qtd->total += session_num_trans (qtd->session_base);
-
-  if (!xaccTransEqual (trans, list->data, TRUE, TRUE))
-  {
-    failure ("matching transaction is wrong");
-    g_list_free (list);
-    return FALSE;
-  }
-
-  success ("found right transaction");
-
-  xaccFreeQuery (q);
-  gnc_session_destroy (session);
-  g_free (filename);
-  g_list_free (list);
-
-  return TRUE;
+    return ok;
 }
 
 static gboolean
-compare_balances (GNCSession *session_1, GNCSession *session_2)
+test_trans_query(Transaction * trans, gpointer data)
 {
-  GNCBook * book_1 = gnc_session_get_book (session_1);
-  GNCBook * book_2 = gnc_session_get_book (session_2);
-  GList * list;
-  GList * node;
-  gboolean ok;
+    QueryTestData *qtd = data;
+    GNCBackendError io_err;
+    GNCSession *session;
+    char *filename;
+    GNCBook *book;
+    GList *list;
+    Query *q;
 
-  g_return_val_if_fail (session_1, FALSE);
-  g_return_val_if_fail (session_2, FALSE);
+    filename = db_file_url(qtd->dbinfo);
 
-  ok = TRUE;
+    session = gnc_session_new();
 
-  list = xaccGroupGetSubAccounts (gnc_book_get_group (book_1));
-  for (node = list; node; node = node->next)
-  {
-    Account * account_1 = node->data;
-    Account * account_2;
+    gnc_session_begin(session, filename, FALSE, FALSE);
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Beginning db session",
+                      __FILE__, __LINE__,
+                      "can't begin session for %s", filename))
+        return FALSE;
 
-    account_2 = xaccAccountLookup (xaccAccountGetGUID (account_1), book_2);
-    if (!account_2)
-    {
-      failure_args ("", __FILE__, __LINE__,
-                    "session_1 has account %s but not session_2",
-                    guid_to_string (xaccAccountGetGUID (account_1)));
-      return FALSE;
+    gnc_session_load(session, NULL);
+    io_err = gnc_session_get_error(session);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "Loading db session",
+                      __FILE__, __LINE__,
+                      "can't load session for %s", filename))
+        return FALSE;
+
+    book = gnc_session_get_book(session);
+
+    q = make_trans_query(trans, get_random_query_type() | GUID_QT);
+    xaccQuerySetBook(q, book);
+
+    if (!test_raw_query(session, q)) {
+        failure("raw query failed");
+        return FALSE;
     }
 
-    if (!gnc_numeric_equal (xaccAccountGetBalance (account_1),
-                            xaccAccountGetBalance (account_2)))
-    {
-      failure_args ("", __FILE__, __LINE__,
-                    "balances not equal for account %s",
-                    guid_to_string (xaccAccountGetGUID (account_1)));
-      ok = FALSE;
+    list = xaccQueryGetTransactions(q, QUERY_TXN_MATCH_ANY);
+    if (g_list_length(list) != 1) {
+        failure_args("test num returned", __FILE__, __LINE__,
+                     "number of matching transactions %d not 1",
+                     g_list_length(list));
+        g_list_free(list);
+        return FALSE;
     }
 
-    if (!gnc_numeric_equal (xaccAccountGetClearedBalance (account_1),
-                            xaccAccountGetClearedBalance (account_2)))
-    {
-      failure_args ("", __FILE__, __LINE__,
-                    "cleared balances not equal for account %s",
-                    guid_to_string (xaccAccountGetGUID (account_1)));
-      ok = FALSE;
+    qtd->loaded += session_num_trans(session);
+    qtd->total += session_num_trans(qtd->session_base);
+
+    if (!xaccTransEqual(trans, list->data, TRUE, TRUE)) {
+        failure("matching transaction is wrong");
+        g_list_free(list);
+        return FALSE;
     }
 
-    if (!gnc_numeric_equal (xaccAccountGetReconciledBalance (account_1),
-                            xaccAccountGetReconciledBalance (account_2)))
-    {
-      failure_args ("", __FILE__, __LINE__,
-                    "reconciled balances not equal for account %s",
-                    guid_to_string (xaccAccountGetGUID (account_1)));
-      ok = FALSE;
-    }
+    success("found right transaction");
 
-    if (!ok)
-      break;
+    xaccFreeQuery(q);
+    gnc_session_destroy(session);
+    g_free(filename);
+    g_list_free(list);
 
-    success ("balances equal");
-  }
-  g_list_free (list);
-
-  return ok;
+    return TRUE;
 }
 
 static gboolean
-test_queries (GNCSession *session_base, const char *db_name, const char *mode)
+compare_balances(GNCSession * session_1, GNCSession * session_2)
 {
-  QueryTestData qtd;
-  AccountGroup *group;
-  GNCBook *book;
-  gboolean ok;
+    GNCBook *book_1 = gnc_session_get_book(session_1);
+    GNCBook *book_2 = gnc_session_get_book(session_2);
+    GList *list;
+    GList *node;
+    gboolean ok;
 
-  g_return_val_if_fail (db_name && mode, FALSE);
+    g_return_val_if_fail(session_1, FALSE);
+    g_return_val_if_fail(session_2, FALSE);
 
-  book = gnc_session_get_book (session_base);
-  group = gnc_book_get_group (book);
+    ok = TRUE;
 
-  qtd.session_base = session_base;
-  qtd.db_name = db_name;
-  qtd.mode = mode;
-  qtd.loaded = 0;
-  qtd.total = 0;
+    list = xaccGroupGetSubAccounts(gnc_book_get_group(book_1));
+    for (node = list; node; node = node->next) {
+        Account *account_1 = node->data;
+        Account *account_2;
 
-  ok = xaccGroupForEachTransaction (group, test_trans_query, &qtd);
+        account_2 = xaccAccountLookup(xaccAccountGetGUID(account_1), book_2);
+        if (!account_2) {
+            failure_args("", __FILE__, __LINE__,
+                         "session_1 has account %s but not session_2",
+                         guid_to_string(xaccAccountGetGUID(account_1)));
+            return FALSE;
+        }
+
+        if (!gnc_numeric_equal(xaccAccountGetBalance(account_1),
+                               xaccAccountGetBalance(account_2))) {
+            failure_args("", __FILE__, __LINE__,
+                         "balances not equal for account %s",
+                         guid_to_string(xaccAccountGetGUID(account_1)));
+            ok = FALSE;
+        }
+
+        if (!gnc_numeric_equal(xaccAccountGetClearedBalance(account_1),
+                               xaccAccountGetClearedBalance(account_2))) {
+            failure_args("", __FILE__, __LINE__,
+                         "cleared balances not equal for account %s",
+                         guid_to_string(xaccAccountGetGUID(account_1)));
+            ok = FALSE;
+        }
+
+        if (!gnc_numeric_equal(xaccAccountGetReconciledBalance(account_1),
+                               xaccAccountGetReconciledBalance(account_2))) {
+            failure_args("", __FILE__, __LINE__,
+                         "reconciled balances not equal for account %s",
+                         guid_to_string(xaccAccountGetGUID(account_1)));
+            ok = FALSE;
+        }
+
+        if (!ok)
+            break;
+
+        success("balances equal");
+    }
+    g_list_free(list);
+
+    return ok;
+}
+
+static gboolean
+test_queries(GNCSession * session_base, DbInfo *dbinfo)
+{
+    QueryTestData qtd;
+    AccountGroup *group;
+    GNCBook *book;
+    gboolean ok;
+
+    g_return_val_if_fail(dbinfo->dbname && dbinfo->mode, FALSE);
+
+    book = gnc_session_get_book(session_base);
+    group = gnc_book_get_group(book);
+
+    qtd.session_base = session_base;
+    qtd.dbinfo = dbinfo;
+    qtd.loaded = 0;
+    qtd.total = 0;
+
+    ok = xaccGroupForEachTransaction(group, test_trans_query, &qtd);
 
 #if 0
-  g_warning ("average percentage loaded = %3.2f%%",
-             (qtd.loaded / (double) qtd.total) * 100.0);
+    g_warning("average percentage loaded = %3.2f%%",
+              (qtd.loaded / (double)qtd.total) * 100.0);
 #endif
 
-  return ok;
+    return ok;
 }
 
-typedef struct
-{
-  GNCSession * session_1;
-  GNCSession * session_2;
+typedef struct {
+    GNCSession *session_1;
+    GNCSession *session_2;
 
-  GNCBook * book_1;
-  GNCBook * book_2;
+    GNCBook *book_1;
+    GNCBook *book_2;
 
-  AccountGroup * group_1;
-  AccountGroup * group_2;
+    AccountGroup *group_1;
+    AccountGroup *group_2;
 
-  GList * accounts_1;
-  GList * accounts_2;
+    GList *accounts_1;
+    GList *accounts_2;
 } UpdateTestData;
 
 static gboolean
-test_trans_update (Transaction *trans, gpointer data)
+test_trans_update(Transaction * trans, gpointer data)
 {
-  UpdateTestData *td = data;
-  GNCBackendError io_err;
-  Transaction * trans_2;
-  GNCBook * book_1;
-  GNCBook * book_2;
-  GUID guid;
-  gboolean ok;
+    UpdateTestData *td = data;
+    GNCBackendError io_err;
+    Transaction *trans_2;
+    GNCBook *book_1;
+    GNCBook *book_2;
+    GUID guid;
+    gboolean ok;
 
-  /* FIXME remove */
-  return TRUE;
+    /* FIXME remove */
+    return TRUE;
 
-  book_1 = gnc_session_get_book (td->session_1);
-  book_2 = gnc_session_get_book (td->session_2);
+    book_1 = gnc_session_get_book(td->session_1);
+    book_2 = gnc_session_get_book(td->session_2);
 
-  guid = *xaccTransGetGUID (trans);
+    guid = *xaccTransGetGUID(trans);
 
-  xaccTransBeginEdit (trans);
-  make_random_changes_to_transaction_and_splits (book_1, trans,
-                                                 td->accounts_1);
-  xaccTransCommitEdit (trans);
+    xaccTransBeginEdit(trans);
+    make_random_changes_to_transaction_and_splits(book_1, trans,
+                                                  td->accounts_1);
+    xaccTransCommitEdit(trans);
 
-  io_err = gnc_session_get_error (td->session_1);
-  if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                     "changing transaction in session 1",
-                     __FILE__, __LINE__,
-                     "error changing transaction: %d", io_err))
-    return FALSE;
+    io_err = gnc_session_get_error(td->session_1);
+    if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                      "changing transaction in session 1",
+                      __FILE__, __LINE__,
+                      "error changing transaction: %d", io_err))
+        return FALSE;
 
-  trans = xaccTransLookup (&guid, book_1);
-  trans_2 = xaccTransLookup (&guid, book_2);
+    trans = xaccTransLookup(&guid, book_1);
+    trans_2 = xaccTransLookup(&guid, book_2);
 
-  /* This should get rolled back. */
-  if (trans_2)
-  {
-    xaccTransBeginEdit (trans_2);
-    make_random_changes_to_transaction_and_splits (book_2, trans_2,
-                                                   td->accounts_2);
-    xaccTransCommitEdit (trans_2);
-  }
+    /* This should get rolled back. */
+    if (trans_2) {
+        xaccTransBeginEdit(trans_2);
+        make_random_changes_to_transaction_and_splits(book_2, trans_2,
+                                                      td->accounts_2);
+        xaccTransCommitEdit(trans_2);
+    }
 
-  trans_2 = xaccTransLookup (&guid, book_2);
+    trans_2 = xaccTransLookup(&guid, book_2);
 
-  ok = xaccTransEqual (trans, trans_2, TRUE, TRUE);
-  if (trans && trans_2)
-    ok = ok && (trans->version == trans_2->version);
+    ok = xaccTransEqual(trans, trans_2, TRUE, TRUE);
+    if (trans && trans_2)
+        ok = ok && (trans->version == trans_2->version);
 
-  /*
-  ok = ok && (gnc_session_get_error (td->session_2) == ERR_BACKEND_MODIFIED);
-  */
+    /*
+       ok = ok && (gnc_session_get_error (td->session_2) == ERR_BACKEND_MODIFIED);
+     */
 
-  if (!do_test_args (ok,
-                     "test trans rollback",
-                     __FILE__, __LINE__,
-                     "transaction not rolled back properly"))
-    return FALSE;
+    if (!do_test_args(ok,
+                      "test trans rollback",
+                      __FILE__, __LINE__,
+                      "transaction not rolled back properly"))
+        return FALSE;
 
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
-add_trans_helper (Transaction *trans, gpointer data)
+add_trans_helper(Transaction * trans, gpointer data)
 {
-  GList **list = data;
+    GList **list = data;
 
-  *list = g_list_prepend (*list, trans);
+    *list = g_list_prepend(*list, trans);
 
-  return TRUE;
+    return TRUE;
 }
 
 static gboolean
-test_updates_2 (GNCSession *session_base,
-                const char *db_name, const char *mode)
+drop_database(DbInfo *dbinfo)
 {
-  UpdateTestData td;
-  char * filename;
-  GList * transes;
-  GList * node;
-  gboolean ok;
+    gchar *dropdb = NULL;
+    int rc;
 
-  g_return_val_if_fail (session_base && db_name && mode, FALSE);
+    if (!g_strncasecmp(dbinfo->port, "7777", 4)) {
+        dropdb = g_strdup_printf("dropdb -p %s %s",
+                                 dbinfo->port, dbinfo->dbname);
+    } else {
+        dropdb = g_strdup_printf("dropdb -p %s -h %s %s",
+                                 dbinfo->port, dbinfo->host,
+                                 dbinfo->dbname);
+    }
 
-  filename = db_file_url (db_name, mode);
+    /* Make sure everything is logged off */
+    sleep(5);
+    rc = system(dropdb);
+    printf("Executed %s,\nreturn code was %d\n", dropdb, rc);
+    if (rc) {
+        printf("Please run the command\n"
+               "\t%s\nwhen this process completes\n", dropdb);
+    }
+    g_free(dropdb);
+    dropdb = NULL;
+    return rc == 0 ? TRUE : FALSE;
+}
+    
+static gboolean
+test_updates_2(GNCSession * session_base, DbInfo *dbinfo) 
+{
+    UpdateTestData td;
+    char *filename;
+    GList *transes;
+    GList *node;
+    gboolean ok;
 
-  if (!load_db_file (session_base, db_name, mode, FALSE))
-    return FALSE;
+    g_return_val_if_fail(session_base && dbinfo->dbname && dbinfo->mode, FALSE);
 
-  multi_user_get_everything (session_base, NULL);
+    filename = db_file_url(dbinfo);
 
-  td.session_1 = session_base;
-  td.book_1 = gnc_session_get_book (session_base);
-  td.group_1 = gnc_book_get_group (td.book_1);
-  td.accounts_1 = xaccGroupGetSubAccounts (td.group_1);
+    if (!load_db_file(session_base, dbinfo, FALSE))
+        return FALSE;
 
-  td.session_2 = gnc_session_new ();
+    multi_user_get_everything(session_base, NULL);
 
-  if (!load_db_file (td.session_2, db_name, mode, FALSE))
-    return FALSE;
+    td.session_1 = session_base;
+    td.book_1 = gnc_session_get_book(session_base);
+    td.group_1 = gnc_book_get_group(td.book_1);
+    td.accounts_1 = xaccGroupGetSubAccounts(td.group_1);
 
-  multi_user_get_everything (td.session_2, NULL);
+    td.session_2 = gnc_session_new();
 
-  td.book_2 = gnc_session_get_book (td.session_2);
-  td.group_2 = gnc_book_get_group (td.book_2);
-  td.accounts_2 = xaccGroupGetSubAccounts (td.group_2);
+    if (!load_db_file(td.session_2, dbinfo, FALSE))
+        return FALSE;
 
-  ok = TRUE;
-  transes = NULL;
-  xaccGroupForEachTransaction (td.group_1, add_trans_helper, &transes);
-  for (node = transes; node; node = node->next)
-  {
-    ok = test_trans_update (node->data, &td);
-    if (!ok)
-      return FALSE;
-  }
-  g_list_free (transes);
+    multi_user_get_everything(td.session_2, NULL);
+
+    td.book_2 = gnc_session_get_book(td.session_2);
+    td.group_2 = gnc_book_get_group(td.book_2);
+    td.accounts_2 = xaccGroupGetSubAccounts(td.group_2);
+
+    ok = TRUE;
+    transes = NULL;
+    xaccGroupForEachTransaction(td.group_1, add_trans_helper, &transes);
+    for (node = transes; node; node = node->next) {
+        ok = test_trans_update(node->data, &td);
+        if (!ok)
+            return FALSE;
+    }
+    g_list_free(transes);
 
 #if 0
-  for (node = td.accounts_1; node; node = node->next)
-  {
-    Account * account_1 = node->data;
-    Account * account_2 =
-      xaccAccountLookup (xaccAccountGetGUID (account_1), td.book_2);
+    for (node = td.accounts_1; node; node = node->next) {
+        Account *account_1 = node->data;
+        Account *account_2 =
+            xaccAccountLookup(xaccAccountGetGUID(account_1), td.book_2);
 
-    make_random_changes_to_account (td.book_1, account_1);
-    make_random_changes_to_account (td.book_2, account_2);
+        make_random_changes_to_account(td.book_1, account_1);
+        make_random_changes_to_account(td.book_2, account_2);
 
-    ok = xaccAccountEqual (account_1, account_2, TRUE);
-    if (account_1 && account_2)
-      ok = ok && (account_1->version == account_2->version);
+        ok = xaccAccountEqual(account_1, account_2, TRUE);
+        if (account_1 && account_2)
+            ok = ok && (account_1->version == account_2->version);
 
-    ok = ok && (gnc_session_get_error (td.session_2) == ERR_BACKEND_MODIFIED);
+        ok = ok
+            && (gnc_session_get_error(td.session_2) == ERR_BACKEND_MODIFIED);
 
-    if (!do_test_args (ok,
-                       "test account rollback",
-                       __FILE__, __LINE__,
-                       "account not rolled back properly"))
-      return FALSE;
-  }
+        if (!do_test_args(ok,
+                          "test account rollback",
+                          __FILE__, __LINE__,
+                          "account not rolled back properly"))
+            return FALSE;
+    }
 #endif
 
-  {
-    Account * account = get_random_account (td.book_1);
-    Account * child = get_random_account (td.book_1);
-    Transaction * trans = get_random_transaction (td.book_1);
-    Query * q = xaccMallocQuery ();
-    int count = 0;
-
-    xaccAccountBeginEdit (account);
-    xaccAccountBeginEdit (child);
-    xaccGroupInsertAccount (td.group_1, account);
-    xaccAccountInsertSubAccount (account, child);
-    xaccAccountCommitEdit (child);
-    xaccAccountCommitEdit (account);
-
-    xaccTransBeginEdit (trans);
-    for (node = xaccTransGetSplitList (trans); node; node = node->next)
     {
-      Split * split = node->data;
+        Account *account = get_random_account(td.book_1);
+        Account *child = get_random_account(td.book_1);
+        Transaction *trans = get_random_transaction(td.book_1);
+        Query *q = xaccMallocQuery();
+        int count = 0;
 
-      xaccAccountInsertSplit (child, split);
-      count++;
+        xaccAccountBeginEdit(account);
+        xaccAccountBeginEdit(child);
+        xaccGroupInsertAccount(td.group_1, account);
+        xaccAccountInsertSubAccount(account, child);
+        xaccAccountCommitEdit(child);
+        xaccAccountCommitEdit(account);
+
+        xaccTransBeginEdit(trans);
+        for (node = xaccTransGetSplitList(trans); node; node = node->next) {
+            Split *split = node->data;
+
+            xaccAccountInsertSplit(child, split);
+            count++;
+        }
+        xaccTransCommitEdit(trans);
+
+        xaccQueryAddGUIDMatch(q, xaccAccountGetGUID(child),
+                              GNC_ID_ACCOUNT, QUERY_AND);
+
+        xaccQuerySetBook(q, td.book_2);
+
+        ok = (g_list_length(xaccQueryGetSplits(q)) == count);
+
+        xaccFreeQuery(q);
+
+        if (ok) {
+            Transaction *trans_2;
+            Account *account_2;
+            Account *child_2;
+
+            trans_2 = xaccTransLookup(xaccTransGetGUID(trans), td.book_2);
+            account_2 =
+                xaccAccountLookup(xaccAccountGetGUID(account), td.book_2);
+            child_2 = xaccAccountLookup(xaccAccountGetGUID(child), td.book_2);
+
+            ok = ok && xaccTransEqual(trans, trans_2, TRUE, TRUE);
+            ok = ok && xaccAccountEqual(account, account_2, TRUE);
+            ok = ok && xaccAccountEqual(child, child_2, TRUE);
+        }
+
+        if (!do_test_args(ok,
+                          "test new account",
+                          __FILE__, __LINE__,
+                          "new accounts not loaded properly"))
+            return FALSE;
     }
-    xaccTransCommitEdit (trans);
 
-    xaccQueryAddGUIDMatch (q, xaccAccountGetGUID (child),
-                           GNC_ID_ACCOUNT, QUERY_AND);
+    gnc_session_end(td.session_1);
+    gnc_session_end(td.session_2);
+    gnc_session_destroy(td.session_2);
 
-    xaccQuerySetBook (q, td.book_2);
+    g_list_free(td.accounts_1);
+    g_list_free(td.accounts_2);
 
-    ok = (g_list_length (xaccQueryGetSplits (q)) == count);
-
-    xaccFreeQuery (q);
-
-    if (ok)
-    {
-      Transaction * trans_2;
-      Account * account_2;
-      Account * child_2;
-
-      trans_2 = xaccTransLookup (xaccTransGetGUID (trans), td.book_2);
-      account_2 = xaccAccountLookup (xaccAccountGetGUID (account), td.book_2);
-      child_2 = xaccAccountLookup (xaccAccountGetGUID (child), td.book_2);
-
-      ok = ok && xaccTransEqual (trans, trans_2, TRUE, TRUE);
-      ok = ok && xaccAccountEqual (account, account_2, TRUE);
-      ok = ok && xaccAccountEqual (child, child_2, TRUE);
-    }
-
-    if (!do_test_args (ok,
-                       "test new account",
-                       __FILE__, __LINE__,
-                       "new accounts not loaded properly"))
-      return FALSE;
-  }
-
-  gnc_session_end (td.session_1);
-  gnc_session_end (td.session_2);
-  gnc_session_destroy (td.session_2);
-
-  g_list_free (td.accounts_1);
-  g_list_free (td.accounts_2);
-
-  return ok;
+    return ok;
 }
 
 static gboolean
-test_mode (const char *db_name, const char *mode,
-           gboolean updates, gboolean multi_user)
+test_mode(DbInfo *dbinfo, gboolean updates, gboolean multi_user)
 {
-  GNCSession *session;
-  GNCSession *session_db;
-  gboolean ok;
+    GNCSession *session;
+    GNCSession *session_db;
+    gboolean ok;
+    gchar *modesave = dbinfo->mode;
+    gchar *sumode = "single-update";
 
-  session = get_random_session ();
+    session = get_random_session();
 
-  add_random_transactions_to_book (gnc_session_get_book(session), 20);
+    add_random_transactions_to_book(gnc_session_get_book(session), 20);
 
-  if (!save_db_file (session, db_name, "single-update"))
-    return FALSE;
+    dbinfo->mode = sumode;
+    if (!save_db_file(session, dbinfo))
+        return FALSE;
+    dbinfo->mode = modesave;
 
-  session_db = gnc_session_new ();
+    session_db = gnc_session_new();
 
-  if (!load_db_file (session_db, db_name, mode, !multi_user))
-    return FALSE;
+    if (!load_db_file(session_db, dbinfo, !multi_user))
+        return FALSE;
 
-  if (multi_user)
-  {
-    if (!compare_balances (session, session_db))
-      return FALSE;
+    if (multi_user) {
+        if (!compare_balances(session, session_db))
+            return FALSE;
 
-    multi_user_get_everything (session_db, session);
-  }
+        multi_user_get_everything(session_db, session);
+    }
 
-  ok = gnc_book_equal (gnc_session_get_book (session),
-                       gnc_session_get_book (session_db));
+    ok = gnc_book_equal(gnc_session_get_book(session),
+                        gnc_session_get_book(session_db));
 
-  do_test_args (ok, "Books equal", __FILE__, __LINE__,
-                "Books not equal for session %s in mode %s",
-                db_name, mode);
+    do_test_args(ok, "Books equal", __FILE__, __LINE__,
+                 "Books not equal for session %s in mode %s",
+                 dbinfo->dbname, dbinfo->mode);
 
-  if (multi_user)
-  {
-    GNCBackendError io_err;
+    if (multi_user) {
+        GNCBackendError io_err;
 
-    gnc_session_end (session_db);
-    io_err = gnc_session_get_error (session_db);
-    if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
-                       "Ending db session",
-                       __FILE__, __LINE__,
-                       "can't end session for %s in mode %s",
-                       db_name, mode))
-      return FALSE;
-  }
+        gnc_session_end(session_db);
+        io_err = gnc_session_get_error(session_db);
+        if (!do_test_args(io_err == ERR_BACKEND_NO_ERR,
+                          "Ending db session",
+                          __FILE__, __LINE__,
+                          "can't end session for %s in mode %s",
+                          dbinfo->dbname, dbinfo->mode))
+            return FALSE;
+    }
 
-  if (!ok)
-  {
-    save_xml_files (session, session_db);
-    return FALSE;
-  }
+    if (!ok) {
+        save_xml_files(session, session_db);
+        return FALSE;
+    }
 
-  if (!test_access (db_name, mode, multi_user))
-    return FALSE;
+    if (!test_access(dbinfo, multi_user))
+        return FALSE;
 
-  if (updates && !test_updates (session_db, db_name, mode, multi_user))
-    return FALSE;
+    if (updates && !test_updates(session_db, dbinfo, multi_user))
+        return FALSE;
 
-  if (multi_user && !test_queries (session_db, db_name, mode))
-    return FALSE;
+    if (multi_user && !test_queries(session_db, dbinfo))
+        return FALSE;
 
-  if (updates && !test_updates_2 (session_db, db_name, mode))
-    return FALSE;
+    if (updates && !test_updates_2(session_db, dbinfo))
+        return FALSE;
 
-  gnc_session_destroy (session);
-  gnc_session_destroy (session_db);
+    gnc_session_destroy(session);
+    gnc_session_destroy(session_db);
 
-  return ok;
+    return ok;
 }
 
 static void
-run_test (void)
+run_test(DbInfo *dbinfo)
 {
+
 #if 0
-  if (!test_mode ("single_file", "single-file", FALSE, FALSE))
-    return;
+    if (!test_mode("single_file", "single-file", FALSE, FALSE))
+        return;
 #endif
 
 #if 0
-  if (!test_mode ("single_update", "single-update", TRUE, FALSE))
-    return;
+    if (!test_mode("single_update", "single-update", TRUE, FALSE))
+        return;
 #endif
 
 #if 0
-  if (!test_mode ("multi_user", "multi-user", TRUE, TRUE))
-    return;
+    if (!test_mode("multi_user", "multi-user", TRUE, TRUE))
+        return;
 #endif
 
 #if 1
-  if (!test_mode ("multi_user_poll", "multi-user-poll", TRUE, TRUE))
-    return;
+    dbinfo->dbname = "multi_user_poll";
+    dbinfo->mode = "multi-user-poll";
+    /** Account for previous failed checks */
+    drop_database(dbinfo);
+    test_mode(dbinfo, TRUE, TRUE);
 #endif
+    drop_database(dbinfo);
+
 }
 
 #if 0
 static void
-test_performance (const char *db_name, const char *mode)
+test_performance(DbInfo *dbinfo)
 {
-  GNCSession *session;
+    GNCSession *session;
+    gchar *modesave = dbinfo->mode;
+    gchar *sumode = "single-update";
 
-  session = get_random_session ();
+    session = get_random_session();
 
-  gnc_set_log_level (MOD_TEST, GNC_LOG_WARNING);
+    gnc_set_log_level(MOD_TEST, GNC_LOG_WARNING);
 
-  START_CLOCK (0, "Starting to save session");
-  if (!save_db_file (session, db_name, "single-update"))
-    return;
-  REPORT_CLOCK (0, "Finished saving session");
+    dbinfo->mode = sumode;
+    START_CLOCK(0, "Starting to save session");
+    if (!save_db_file(session, dbinfo))
+        return;
+    REPORT_CLOCK(0, "Finished saving session");
+    dbinfo->mode = modesave;
+    
+    gnc_session_destroy(session);
+    session = gnc_session_new();
 
-  gnc_session_destroy (session);
-  session = gnc_session_new ();
+    if (!load_db_file(session, dbinfo, FALSE))
+        return;
 
-  if (!load_db_file (session, db_name, mode, FALSE))
-    return;
+    gnc_set_log_level(MOD_TEST, GNC_LOG_INFO);
 
-  gnc_set_log_level (MOD_TEST, GNC_LOG_INFO);
+    START_CLOCK(0, "Starting to save transactions");
+    add_random_transactions_to_book(gnc_session_get_book(session), 100);
+    REPORT_CLOCK(0, "Finished saving transactions");
 
-  START_CLOCK (0, "Starting to save transactions");
-  add_random_transactions_to_book (gnc_session_get_book(session), 100);
-  REPORT_CLOCK (0, "Finished saving transactions");
+    REPORT_CLOCK_TOTAL(0, "total");
+    REPORT_CLOCK_TOTAL(1, "deleting kvp");
+    REPORT_CLOCK_TOTAL(2, "storing kvp");
 
-  REPORT_CLOCK_TOTAL (0, "total");
-  REPORT_CLOCK_TOTAL (1, "deleting kvp");
-  REPORT_CLOCK_TOTAL (2, "storing kvp");
-
-  gnc_session_end (session);
-  gnc_session_destroy (session);
+    gnc_session_end(session);
+    gnc_session_destroy(session);
 }
 #endif
 
 static void
-guile_main (int argc, char **argv)
+guile_main(int argc, char **argv)
 {
-  gnc_module_system_init ();
-  gnc_module_load ("gnucash/engine", 0);
+    DbInfo *dbinfo;
+    
+    GNCModule *mod;
+    gnc_module_system_init();
+    mod = gnc_module_load("gnucash/engine", 0);
 
-  /* g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING); */
+    dbinfo = g_new0(DbInfo, 1);
+    
+    if (argc >= 2)
+        dbinfo->host = argv[1];
+    else {
+        dbinfo->host = getenv("PGHOST");
+        if (!dbinfo->host)
+            dbinfo->host = "localhost";
+    }
 
-  kvp_exclude_type (KVP_TYPE_BINARY);
-  kvp_exclude_type (KVP_TYPE_GLIST);
+    if (argc >= 3)
+        dbinfo->port = argv[2];
+    else {
+        dbinfo->port = getenv("PGPORT");
+        if (!dbinfo->port)
+            dbinfo->port = "5432";
+    }
 
-  /* The random double generator is making values
-   * that postgres doesn't like. */
-  kvp_exclude_type (KVP_TYPE_DOUBLE);
+    /* g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING); */
 
-  set_max_kvp_depth (3);
-  set_max_kvp_frame_elements (3);
+    kvp_exclude_type(KVP_TYPE_BINARY);
+    kvp_exclude_type(KVP_TYPE_GLIST);
 
-  set_max_group_depth (3);
-  set_max_group_accounts (3);
+    /* The random double generator is making values
+     * that postgres doesn't like. */
+    kvp_exclude_type(KVP_TYPE_DOUBLE);
 
-  random_timespec_zero_nsec (TRUE);
+    set_max_kvp_depth(3);
+    set_max_kvp_frame_elements(3);
 
-  /* Querying on exact prices is problematic. */
-  trans_query_include_price (FALSE);
+    set_max_group_depth(3);
+    set_max_group_accounts(3);
 
-  xaccLogDisable ();
+    random_timespec_zero_nsec(TRUE);
 
-  run_test ();
+    /* Querying on exact prices is problematic. */
+    trans_query_include_price(FALSE);
 
-  print_test_results ();
-  exit (get_rv ());
+    xaccLogDisable();
+
+    run_test(dbinfo);
+
+    print_test_results();
+    exit(get_rv());
 }
 
 int
-main (int argc, char ** argv)
+main(int argc, char **argv)
 {
-  gh_enter (argc, argv, guile_main);
-  return 0;
+    gh_enter(argc, argv, guile_main);
+    return 0;
 }

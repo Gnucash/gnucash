@@ -1,69 +1,69 @@
---
--- FILE:
--- functions.sql
---
--- FUNCTION:
--- Define assorted utility functions.
---
--- HISTORY:
--- Copyright (C) 2001 Linas Vepstas
---
-
-
--- utility functions to compute checkpoint balance subtotals
-
-CREATE FUNCTION gncSubtotalBalance (CHAR(32), TIMESTAMP, TIMESTAMP)
-    RETURNS INT8
-    AS 'SELECT INT8(sum(gncEntry.amount))
-        FROM gncEntry, gncTransaction
-        WHERE
-        gncEntry.accountGuid = $1 AND
-        gncEntry.transGuid = gncTransaction.transGuid AND
-        gncTransaction.date_posted BETWEEN $2 AND $3'
-    LANGUAGE 'sql';
-
-CREATE FUNCTION gncSubtotalClearedBalance (CHAR(32), TIMESTAMP, TIMESTAMP)
-    RETURNS INT8
-    AS 'SELECT INT8(sum(gncEntry.amount))
-        FROM gncEntry, gncTransaction
-        WHERE
-        gncEntry.accountGuid = $1 AND
-        gncEntry.transGuid = gncTransaction.transGuid AND
-        gncTransaction.date_posted BETWEEN $2 AND $3 AND
-        gncEntry.reconciled <> \\'n\\''
-    LANGUAGE 'sql';
-
-CREATE FUNCTION gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP)
-    RETURNS INT8
-    AS 'SELECT INT8(sum(gncEntry.amount))
-        FROM gncEntry, gncTransaction
-        WHERE
-        gncEntry.accountGuid = $1 AND
-        gncEntry.transGuid = gncTransaction.transGuid AND
-        gncTransaction.date_posted BETWEEN $2 AND $3 AND
-        (gncEntry.reconciled = \\'y\\' OR
-         gncEntry.reconciled = \\'f\\')'
-    LANGUAGE 'sql';
-
--- helper functions.  These intentionally use the 'wrong' fraction. 
--- This is because value_frac * amount * price = value * amount_frac
-
-CREATE FUNCTION gncHelperPrVal (gncEntry)
-   RETURNS INT8
-   AS 'SELECT abs($1 . value * gncCommodity.fraction)
-       FROM gncEntry, gncAccount, gncCommodity
-       WHERE
-       $1 . accountGuid = gncAccount.accountGuid AND
-       gncAccount.commodity = gncCommodity.commodity'
-    LANGUAGE 'sql';
-       
-CREATE FUNCTION gncHelperPrAmt (gncEntry)
-   RETURNS INT8
-   AS 'SELECT abs($1 . amount * gncCommodity.fraction)
-       FROM gncEntry, gncTransaction, gncCommodity
-       WHERE
-       $1 . transGuid = gncTransaction.transGuid AND
-       gncTransaction.currency = gncCommodity.commodity'
-    LANGUAGE 'sql';
-       
--- end of file
+"-- \n"
+"-- FILE: \n"
+"-- functions.sql \n"
+"-- \n"
+"-- FUNCTION: \n"
+"-- Define assorted utility functions. \n"
+"-- \n"
+"-- HISTORY: \n"
+"-- Copyright (C) 2001 Linas Vepstas \n"
+"-- \n"
+" \n"
+" \n"
+"-- utility functions to compute checkpoint balance subtotals \n"
+" \n"
+"CREATE FUNCTION gncSubtotalBalance (CHAR(32), TIMESTAMP, TIMESTAMP) \n"
+"    RETURNS INT8 \n"
+"    AS 'SELECT INT8(sum(gncEntry.amount)) \n"
+"        FROM gncEntry, gncTransaction \n"
+"        WHERE \n"
+"        gncEntry.accountGuid = $1 AND \n"
+"        gncEntry.transGuid = gncTransaction.transGuid AND \n"
+"        gncTransaction.date_posted BETWEEN $2 AND $3' \n"
+"    LANGUAGE 'sql'; \n"
+" \n"
+"CREATE FUNCTION gncSubtotalClearedBalance (CHAR(32), TIMESTAMP, TIMESTAMP) \n"
+"    RETURNS INT8 \n"
+"    AS 'SELECT INT8(sum(gncEntry.amount)) \n"
+"        FROM gncEntry, gncTransaction \n"
+"        WHERE \n"
+"        gncEntry.accountGuid = $1 AND \n"
+"        gncEntry.transGuid = gncTransaction.transGuid AND \n"
+"        gncTransaction.date_posted BETWEEN $2 AND $3 AND \n"
+"        gncEntry.reconciled <> \\'n\\'' \n"
+"    LANGUAGE 'sql'; \n"
+" \n"
+"CREATE FUNCTION gncSubtotalReconedBalance (CHAR(32), TIMESTAMP, TIMESTAMP) \n"
+"    RETURNS INT8 \n"
+"    AS 'SELECT INT8(sum(gncEntry.amount)) \n"
+"        FROM gncEntry, gncTransaction \n"
+"        WHERE \n"
+"        gncEntry.accountGuid = $1 AND \n"
+"        gncEntry.transGuid = gncTransaction.transGuid AND \n"
+"        gncTransaction.date_posted BETWEEN $2 AND $3 AND \n"
+"        (gncEntry.reconciled = \\'y\\' OR \n"
+"         gncEntry.reconciled = \\'f\\')' \n"
+"    LANGUAGE 'sql'; \n"
+" \n"
+"-- helper functions.  These intentionally use the 'wrong' fraction.  \n"
+"-- This is because value_frac * amount * price = value * amount_frac \n"
+" \n"
+"CREATE FUNCTION gncHelperPrVal (gncEntry) \n"
+"   RETURNS INT8 \n"
+"   AS 'SELECT abs($1 . value * gncCommodity.fraction) \n"
+"       FROM gncEntry, gncAccount, gncCommodity \n"
+"       WHERE \n"
+"       $1 . accountGuid = gncAccount.accountGuid AND \n"
+"       gncAccount.commodity = gncCommodity.commodity' \n"
+"    LANGUAGE 'sql'; \n"
+"        \n"
+"CREATE FUNCTION gncHelperPrAmt (gncEntry) \n"
+"   RETURNS INT8 \n"
+"   AS 'SELECT abs($1 . amount * gncCommodity.fraction) \n"
+"       FROM gncEntry, gncTransaction, gncCommodity \n"
+"       WHERE \n"
+"       $1 . transGuid = gncTransaction.transGuid AND \n"
+"       gncTransaction.currency = gncCommodity.commodity' \n"
+"    LANGUAGE 'sql'; \n"
+"        \n"
+"-- end of file";

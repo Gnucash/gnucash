@@ -1,246 +1,246 @@
---
--- FILE:
--- table-create.sql
---
--- FUNCTION:
--- Define the tables needed to initialize a new GnuCash database
---
--- These tables roughly mirror the c structs in 
--- TransactionP.h,  AccountP.h, gnc-commodity.c
--- Please refer to the C files to get the right level of documentation.
---
--- If these tables are changed or added to, a correspionding
--- audit-trail table (in table-audit.sql) must be updated as well.
---
--- These tables are specifically designed for the 
--- postgres database server, but are hopefull relatively portable.
---
--- These tables are hand-built, but maybe they should be 
--- auto-built with the m4 macros ...
---
--- HISTORY:
--- Copyright (C) 2000, 2001 Linas Vepstas
---
-
-CREATE TABLE gncVersion (
-	major	INT NOT NULL,
-	minor	INT NOT NULL,
-	rev	INT DEFAULT '0',
-	name	TEXT UNIQUE NOT NULL CHECK (name <> ''),
-	date	TIMESTAMP DEFAULT 'NOW'
-);
-
--- Commodity structure
--- Store currency, security types.  Namespace includes
--- ISO4217 for currencies, NASDAQ, AMEX, NYSE, EUREX for 
--- stocks.   See the C documentation for details.
-
-CREATE TABLE gncCommodity (
-        commodity	TEXT PRIMARY KEY,
-	fullname	TEXT,
-	namespace	TEXT NOT NULL,
-	mnemonic	TEXT NOT NULL,
-	code		TEXT,
-	fraction	INT DEFAULT '100'
-);
-
-CREATE TABLE gncBook (
-	bookGuid	CHAR(32) PRIMARY KEY,
-	book_open	CHAR DEFAULT 'n',
-	version		INT4 NOT NULL,
-	iguid		INT4 DEFAULT 0
-);
-
--- Account structure -- parentGUID points to parent account
--- guid. There is no supports for Groups in this schema.
--- (there seems to be no strong need to have groups in the DB.)
-
-CREATE TABLE gncAccount (
-	accountGuid	CHAR(32) PRIMARY KEY,
-	parentGuid	CHAR(32) NOT NULL,
-	bookGuid	CHAR(32) NOT NULL,
-	accountName 	TEXT NOT NULL CHECK (accountName <> ''),
-	accountCode 	TEXT,
-	description 	TEXT,
-	type		TEXT NOT NULL,
-	commodity	TEXT NOT NULL CHECK (commodity <>''),
-	version		INT4 NOT NULL,
-	iguid		INT4 DEFAULT 0
-);
-
--- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
-
-CREATE TABLE gncTransaction (
-	transGuid	CHAR(32) PRIMARY KEY,
-	last_modified 	TIMESTAMP DEFAULT 'NOW',
-	date_entered 	TIMESTAMP,
-	date_posted 	TIMESTAMP,
-	num		TEXT,
-	description	TEXT,
-        currency	TEXT NOT NULL CHECK (currency <> ''),
-	version		INT4 NOT NULL,
-	iguid		INT4 DEFAULT 0
-);
-
-CREATE INDEX gncTransaction_posted_idx ON gncTransaction (date_posted);
-
--- a gncEntry is what we call 'Split' elsewhere in the engine
--- Here, we call it a 'journal entry'
-
-CREATE TABLE gncEntry (
-	entryGuid		CHAR(32) PRIMARY KEY,
-	accountGuid		CHAR(32) NOT NULL,
-	transGuid		CHAR(32) NOT NULL,
-	memo			TEXT,
-	action			TEXT,
-	reconciled		CHAR DEFAULT 'n',
-	date_reconciled 	TIMESTAMP,
-	amount			INT8 DEFAULT '0',
-	value			INT8 DEFAULT '0',
-	iguid			INT4 DEFAULT 0
-);
-
-CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid);
-CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
-
--- The checkpoint table provides balance information
--- The balance is provided in the indicated currency; 
--- this allows the potential of maintaining balance information
--- in multiple currencies.  
--- (e.g. report stock account balances in shares of stock, 
--- and in dollars)
--- the 'type' field indicates what type of balance this is
--- (simple, FIFO, LIFO, or other accounting method)
-
-CREATE TABLE gncCheckpoint (
-	accountGuid		CHAR(32) NOT NULL,
-	date_start	 	TIMESTAMP NOT NULL,
- 	date_end	 	TIMESTAMP NOT NULL,
-	commodity		TEXT NOT NULL CHECK (commodity <>''),
-	type			TEXT DEFAULT 'simple',
-	balance			INT8 DEFAULT '0',
-	cleared_balance		INT8 DEFAULT '0',
-	reconciled_balance	INT8 DEFAULT '0',
-
-        PRIMARY KEY (accountGuid, date_start, commodity)
-);
-
--- The price table stores the price of 'commodity' valued
--- in units of 'currency'
-CREATE TABLE gncPrice (
-	priceGuid	CHAR(32) PRIMARY KEY,
-	commodity	TEXT NOT NULL CHECK (commodity <>''),
-	currency	TEXT NOT NULL CHECK (commodity <>''),
-	time		TIMESTAMP,
-	source		TEXT,
-	type		TEXT,
-	valueNum	INT8 DEFAULT '0',
-	valueDenom	INT4 DEFAULT '100',
-	version		INT4 NOT NULL,
-	bookGuid	CHAR(32) NOT NULL
-);
-
-
--- The session directory serves several purposes.  First and formost,
--- it notes the database access type.  There are three modes:
---  o 'Single User' -- Only one user can have access to the database
---                     at a time. 
---  o 'Multi-User Polled' -- multiple users
---  o 'Muilti-User Event Driven'
---  See Design.txt for more info.
--- Note that a client can lie about its identity, sign-on time, etc.
--- so these records aren't really sufficient for a true audit.
-
-CREATE TABLE gncSession (
-	sessionGuid		CHAR(32) PRIMARY KEY,
-	session_mode		CHAR(16) NOT NULL,
-	hostname		TEXT,
-	login_name		TEXT,
-	gecos			TEXT,
-	time_on			TIMESTAMP NOT NULL,
-	time_off		TIMESTAMP NOT NULL DEFAULT 'INFINITY'
-);
-
-
--- The kvp path-cache replaces a long path name with a single unique
--- number.  The guid-cache replaces a 32-byte guid with a shorter 
--- 4-byte identifier.  The KVP Value table stores the actual values.
-
-CREATE TABLE gncPathCache (
-	ipath		SERIAL PRIMARY KEY,
-	path		TEXT
-);
-
-CREATE SEQUENCE gnc_iguid_seq START 1;
-
-CREATE TABLE gncKVPvalue (
-	iguid		INT4,
-	ipath		INT4,
-	type		char(4),
-
-        PRIMARY KEY (iguid, ipath)
-);
-
---  CREATE INDEX gncKVPvalue_iguid_idx ON gncKVPvalue (iguid);
-
--- Add primary keys to each kvp table ... because key inheritance 
--- is ambiguously defined and thus not implemented in postgres.
--- Note, however, adding these keys degrades performance by 20%
--- (even after a vacuum analyze), and adding indexes degrades
--- an additional 15% !!  I find this result surprising, so I
--- simply leave these commented out ... (as of postgres 7.1.2)
--- Note, indexex on the main, non-inherited tables *are* important
--- for ensuring good performance, so this effect seems to be related
--- to inheritance
-
-CREATE TABLE gncKVPvalue_int64 (
-	data		INT8
---        PRIMARY KEY (iguid, ipath)
-) INHERITS (gncKVPvalue);
-
--- CREATE INDEX gncKVPvalue_int64_iguid_idx ON gncKVPvalue_int64 (iguid);
-
-CREATE TABLE gncKVPvalue_dbl (
-	data		FLOAT8
---        PRIMARY KEY (iguid, ipath)
-) INHERITS (gncKVPvalue);
-
--- CREATE INDEX gncKVPvalue_dbl_iguid_idx ON gncKVPvalue_dbl (iguid);
-
-CREATE TABLE gncKVPvalue_numeric (
-	num		INT8,
-	denom		INT8
---        PRIMARY KEY (iguid, ipath)
-) INHERITS (gncKVPvalue);
-
--- CREATE INDEX gncKVPvalue_numeric_iguid_idx ON gncKVPvalue_numeric (iguid);
-
-CREATE TABLE gncKVPvalue_str (
-	data		TEXT
---        PRIMARY KEY (iguid, ipath)
-) INHERITS (gncKVPvalue);
-
--- CREATE INDEX gncKVPvalue_str_iguid_idx ON gncKVPvalue_str (iguid);
-
-CREATE TABLE gncKVPvalue_guid (
-	data		CHAR(32)
---        PRIMARY KEY (iguid, ipath)
-) INHERITS (gncKVPvalue);
-
--- CREATE INDEX gncKVPvalue_guid_iguid_idx ON gncKVPvalue_guid (iguid);
-
-CREATE TABLE gncKVPvalue_timespec (
-	data		TIMESTAMP
---        PRIMARY KEY (iguid, ipath)
-) INHERITS (gncKVPvalue);
-
--- CREATE INDEX gncKVPvalue_timespec_iguid_idx ON gncKVPvalue_timespec (iguid);
-
-CREATE TABLE gncKVPvalue_list (
-	data		TEXT[]
---        PRIMARY KEY (iguid, ipath)
-) INHERITS (gncKVPvalue);
-
--- CREATE INDEX gncKVPvalue_list_iguid_idx ON gncKVPvalue_list (iguid);
-
--- end of file
+"-- \n"
+"-- FILE: \n"
+"-- table-create.sql \n"
+"-- \n"
+"-- FUNCTION: \n"
+"-- Define the tables needed to initialize a new GnuCash database \n"
+"-- \n"
+"-- These tables roughly mirror the c structs in  \n"
+"-- TransactionP.h,  AccountP.h, gnc-commodity.c \n"
+"-- Please refer to the C files to get the right level of documentation. \n"
+"-- \n"
+"-- If these tables are changed or added to, a correspionding \n"
+"-- audit-trail table (in table-audit.sql) must be updated as well. \n"
+"-- \n"
+"-- These tables are specifically designed for the  \n"
+"-- postgres database server, but are hopefull relatively portable. \n"
+"-- \n"
+"-- These tables are hand-built, but maybe they should be  \n"
+"-- auto-built with the m4 macros ... \n"
+"-- \n"
+"-- HISTORY: \n"
+"-- Copyright (C) 2000, 2001 Linas Vepstas \n"
+"-- \n"
+" \n"
+"CREATE TABLE gncVersion ( \n"
+"	major	INT NOT NULL, \n"
+"	minor	INT NOT NULL, \n"
+"	rev	INT DEFAULT '0', \n"
+"	name	TEXT UNIQUE NOT NULL CHECK (name <> ''), \n"
+"	date	TIMESTAMP DEFAULT 'NOW' \n"
+"); \n"
+" \n"
+"-- Commodity structure \n"
+"-- Store currency, security types.  Namespace includes \n"
+"-- ISO4217 for currencies, NASDAQ, AMEX, NYSE, EUREX for  \n"
+"-- stocks.   See the C documentation for details. \n"
+" \n"
+"CREATE TABLE gncCommodity ( \n"
+"        commodity	TEXT PRIMARY KEY, \n"
+"	fullname	TEXT, \n"
+"	namespace	TEXT NOT NULL, \n"
+"	mnemonic	TEXT NOT NULL, \n"
+"	code		TEXT, \n"
+"	fraction	INT DEFAULT '100' \n"
+"); \n"
+" \n"
+"CREATE TABLE gncBook ( \n"
+"	bookGuid	CHAR(32) PRIMARY KEY, \n"
+"	book_open	CHAR DEFAULT 'n', \n"
+"	version		INT4 NOT NULL, \n"
+"	iguid		INT4 DEFAULT 0 \n"
+"); \n"
+" \n"
+"-- Account structure -- parentGUID points to parent account \n"
+"-- guid. There is no supports for Groups in this schema. \n"
+"-- (there seems to be no strong need to have groups in the DB.) \n"
+" \n"
+"CREATE TABLE gncAccount ( \n"
+"	accountGuid	CHAR(32) PRIMARY KEY, \n"
+"	parentGuid	CHAR(32) NOT NULL, \n"
+"	bookGuid	CHAR(32) NOT NULL, \n"
+"	accountName 	TEXT NOT NULL CHECK (accountName <> ''), \n"
+"	accountCode 	TEXT, \n"
+"	description 	TEXT, \n"
+"	type		TEXT NOT NULL, \n"
+"	commodity	TEXT NOT NULL CHECK (commodity <>''), \n"
+"	version		INT4 NOT NULL, \n"
+"	iguid		INT4 DEFAULT 0 \n"
+"); \n"
+" \n"
+"-- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid); \n"
+" \n"
+"CREATE TABLE gncTransaction ( \n"
+"	transGuid	CHAR(32) PRIMARY KEY, \n"
+"	last_modified 	TIMESTAMP DEFAULT 'NOW', \n"
+"	date_entered 	TIMESTAMP, \n"
+"	date_posted 	TIMESTAMP, \n"
+"	num		TEXT, \n"
+"	description	TEXT, \n"
+"        currency	TEXT NOT NULL CHECK (currency <> ''), \n"
+"	version		INT4 NOT NULL, \n"
+"	iguid		INT4 DEFAULT 0 \n"
+"); \n"
+" \n"
+"CREATE INDEX gncTransaction_posted_idx ON gncTransaction (date_posted); \n"
+" \n"
+"-- a gncEntry is what we call 'Split' elsewhere in the engine \n"
+"-- Here, we call it a 'journal entry' \n"
+" \n"
+"CREATE TABLE gncEntry ( \n"
+"	entryGuid		CHAR(32) PRIMARY KEY, \n"
+"	accountGuid		CHAR(32) NOT NULL, \n"
+"	transGuid		CHAR(32) NOT NULL, \n"
+"	memo			TEXT, \n"
+"	action			TEXT, \n"
+"	reconciled		CHAR DEFAULT 'n', \n"
+"	date_reconciled 	TIMESTAMP, \n"
+"	amount			INT8 DEFAULT '0', \n"
+"	value			INT8 DEFAULT '0', \n"
+"	iguid			INT4 DEFAULT 0 \n"
+"); \n"
+" \n"
+"CREATE INDEX gncEntry_acc_idx ON gncEntry (accountGuid); \n"
+"CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid); \n"
+" \n"
+"-- The checkpoint table provides balance information \n"
+"-- The balance is provided in the indicated currency;  \n"
+"-- this allows the potential of maintaining balance information \n"
+"-- in multiple currencies.   \n"
+"-- (e.g. report stock account balances in shares of stock,  \n"
+"-- and in dollars) \n"
+"-- the 'type' field indicates what type of balance this is \n"
+"-- (simple, FIFO, LIFO, or other accounting method) \n"
+" \n"
+"CREATE TABLE gncCheckpoint ( \n"
+"	accountGuid		CHAR(32) NOT NULL, \n"
+"	date_start	 	TIMESTAMP NOT NULL, \n"
+" 	date_end	 	TIMESTAMP NOT NULL, \n"
+"	commodity		TEXT NOT NULL CHECK (commodity <>''), \n"
+"	type			TEXT DEFAULT 'simple', \n"
+"	balance			INT8 DEFAULT '0', \n"
+"	cleared_balance		INT8 DEFAULT '0', \n"
+"	reconciled_balance	INT8 DEFAULT '0', \n"
+" \n"
+"        PRIMARY KEY (accountGuid, date_start, commodity) \n"
+"); \n"
+" \n"
+"-- The price table stores the price of 'commodity' valued \n"
+"-- in units of 'currency' \n"
+"CREATE TABLE gncPrice ( \n"
+"	priceGuid	CHAR(32) PRIMARY KEY, \n"
+"	commodity	TEXT NOT NULL CHECK (commodity <>''), \n"
+"	currency	TEXT NOT NULL CHECK (commodity <>''), \n"
+"	time		TIMESTAMP, \n"
+"	source		TEXT, \n"
+"	type		TEXT, \n"
+"	valueNum	INT8 DEFAULT '0', \n"
+"	valueDenom	INT4 DEFAULT '100', \n"
+"	version		INT4 NOT NULL, \n"
+"	bookGuid	CHAR(32) NOT NULL \n"
+"); \n"
+" \n"
+" \n"
+"-- The session directory serves several purposes.  First and formost, \n"
+"-- it notes the database access type.  There are three modes: \n"
+"--  o 'Single User' -- Only one user can have access to the database \n"
+"--                     at a time.  \n"
+"--  o 'Multi-User Polled' -- multiple users \n"
+"--  o 'Muilti-User Event Driven' \n"
+"--  See Design.txt for more info. \n"
+"-- Note that a client can lie about its identity, sign-on time, etc. \n"
+"-- so these records aren't really sufficient for a true audit. \n"
+" \n"
+"CREATE TABLE gncSession ( \n"
+"	sessionGuid		CHAR(32) PRIMARY KEY, \n"
+"	session_mode		CHAR(16) NOT NULL, \n"
+"	hostname		TEXT, \n"
+"	login_name		TEXT, \n"
+"	gecos			TEXT, \n"
+"	time_on			TIMESTAMP NOT NULL, \n"
+"	time_off		TIMESTAMP NOT NULL DEFAULT 'INFINITY' \n"
+"); \n"
+" \n"
+" \n"
+"-- The kvp path-cache replaces a long path name with a single unique \n"
+"-- number.  The guid-cache replaces a 32-byte guid with a shorter  \n"
+"-- 4-byte identifier.  The KVP Value table stores the actual values. \n"
+" \n"
+"CREATE TABLE gncPathCache ( \n"
+"	ipath		SERIAL PRIMARY KEY, \n"
+"	path		TEXT \n"
+"); \n"
+" \n"
+"CREATE SEQUENCE gnc_iguid_seq START 1; \n"
+" \n"
+"CREATE TABLE gncKVPvalue ( \n"
+"	iguid		INT4, \n"
+"	ipath		INT4, \n"
+"	type		char(4), \n"
+" \n"
+"        PRIMARY KEY (iguid, ipath) \n"
+"); \n"
+" \n"
+"--  CREATE INDEX gncKVPvalue_iguid_idx ON gncKVPvalue (iguid); \n"
+" \n"
+"-- Add primary keys to each kvp table ... because key inheritance  \n"
+"-- is ambiguously defined and thus not implemented in postgres. \n"
+"-- Note, however, adding these keys degrades performance by 20% \n"
+"-- (even after a vacuum analyze), and adding indexes degrades \n"
+"-- an additional 15% !!  I find this result surprising, so I \n"
+"-- simply leave these commented out ... (as of postgres 7.1.2) \n"
+"-- Note, indexex on the main, non-inherited tables *are* important \n"
+"-- for ensuring good performance, so this effect seems to be related \n"
+"-- to inheritance \n"
+" \n"
+"CREATE TABLE gncKVPvalue_int64 ( \n"
+"	data		INT8 \n"
+"--        PRIMARY KEY (iguid, ipath) \n"
+") INHERITS (gncKVPvalue); \n"
+" \n"
+"-- CREATE INDEX gncKVPvalue_int64_iguid_idx ON gncKVPvalue_int64 (iguid); \n"
+" \n"
+"CREATE TABLE gncKVPvalue_dbl ( \n"
+"	data		FLOAT8 \n"
+"--        PRIMARY KEY (iguid, ipath) \n"
+") INHERITS (gncKVPvalue); \n"
+" \n"
+"-- CREATE INDEX gncKVPvalue_dbl_iguid_idx ON gncKVPvalue_dbl (iguid); \n"
+" \n"
+"CREATE TABLE gncKVPvalue_numeric ( \n"
+"	num		INT8, \n"
+"	denom		INT8 \n"
+"--        PRIMARY KEY (iguid, ipath) \n"
+") INHERITS (gncKVPvalue); \n"
+" \n"
+"-- CREATE INDEX gncKVPvalue_numeric_iguid_idx ON gncKVPvalue_numeric (iguid); \n"
+" \n"
+"CREATE TABLE gncKVPvalue_str ( \n"
+"	data		TEXT \n"
+"--        PRIMARY KEY (iguid, ipath) \n"
+") INHERITS (gncKVPvalue); \n"
+" \n"
+"-- CREATE INDEX gncKVPvalue_str_iguid_idx ON gncKVPvalue_str (iguid); \n"
+" \n"
+"CREATE TABLE gncKVPvalue_guid ( \n"
+"	data		CHAR(32) \n"
+"--        PRIMARY KEY (iguid, ipath) \n"
+") INHERITS (gncKVPvalue); \n"
+" \n"
+"-- CREATE INDEX gncKVPvalue_guid_iguid_idx ON gncKVPvalue_guid (iguid); \n"
+" \n"
+"CREATE TABLE gncKVPvalue_timespec ( \n"
+"	data		TIMESTAMP \n"
+"--        PRIMARY KEY (iguid, ipath) \n"
+") INHERITS (gncKVPvalue); \n"
+" \n"
+"-- CREATE INDEX gncKVPvalue_timespec_iguid_idx ON gncKVPvalue_timespec (iguid); \n"
+" \n"
+"CREATE TABLE gncKVPvalue_list ( \n"
+"	data		TEXT[] \n"
+"--        PRIMARY KEY (iguid, ipath) \n"
+") INHERITS (gncKVPvalue); \n"
+" \n"
+"-- CREATE INDEX gncKVPvalue_list_iguid_idx ON gncKVPvalue_list (iguid); \n"
+" \n"
+"-- end of file";
