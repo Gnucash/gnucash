@@ -265,7 +265,8 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   //char *x_axis_label, *y_axis_label;
   //gboolean rotate_row_labels;
   gboolean stacked = FALSE;
-  char *barType;
+  char *barType = "normal";
+  int barOverlap = 0 /*percent*/; // seperate bars; no overlap.
 
   // First, parse data from the text-ized params.
   {
@@ -310,16 +311,16 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
     printf( "plugin not loaded" );
     return FALSE;
   }
-  barType = "normal";
   if ( stacked )
   {
-    // this is still behaving very strangely, but we'll deal with that later.
     barType = "stacked";
+    barOverlap = 100 /*percent*/;
+    // when stacked, we want the bars on _top_ of eachother.
   }
-  PINFO( "barType=[%s]", barType );
   g_object_set (G_OBJECT (plot),
                 "vary_style_by_element",	TRUE,
                 "type",                         barType,
+                "overlap_percentage",           barOverlap, 
 		NULL);
   gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
 
