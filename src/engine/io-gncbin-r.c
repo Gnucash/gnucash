@@ -425,6 +425,7 @@ gnc_load_financials_from_fd(GNCBook *book, int fd)
     return FALSE;
     }
   XACC_FLIP_INT (token);
+  PINFO ("reading file version %d", token);
   
   /* If this is an old file, ask the user if the file
    * should be updated */
@@ -571,7 +572,7 @@ readGroup (int fd, Account *aparent, int token)
   int  i;
   AccountGroup *grp = xaccMallocAccountGroup();
   
-  ENTER ("\n");
+  ENTER (" ");
 
   if (NULL == aparent) {
     maingrp = grp;
@@ -586,7 +587,7 @@ readGroup (int fd, Account *aparent, int token)
     }
   XACC_FLIP_INT (numAcc);
   
-  DEBUG ("expecting %d accounts \n", numAcc);
+  DEBUG ("expecting %d accounts", numAcc);
 
   /* read in the accounts */
   for( i=0; i<numAcc; i++ )
@@ -628,7 +629,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   gnc_commodity * security;
   char * tmp;
 
-  ENTER ("\n");
+  ENTER (" ");
   
   /* version 1 does not store the account number */
   if (1 < token) {
@@ -679,7 +680,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   
   tmp = readString( fd, token );
   if( NULL == tmp) return NULL;
-  DEBUG ("reading acct %s \n", tmp);
+  DEBUG ("reading acct %s", tmp);
   xaccAccountSetName (acc, tmp);
   free (tmp);
 
@@ -708,6 +709,7 @@ readAccount( int fd, AccountGroup *grp, int token )
      tmp = readString( fd, token );
      if( NULL == tmp ) return NULL;
      
+     PINFO ("currency is %s", tmp);
      currency = gnc_commodity_import_legacy(tmp);
      xaccAccountSetCurrency (acc, currency);
      
@@ -732,6 +734,7 @@ readAccount( int fd, AccountGroup *grp, int token )
         }
      }
 
+     PINFO ("security is %s", tmp);
      security = gnc_commodity_import_legacy(tmp);
      xaccAccountSetSecurity (acc, security);
 
@@ -754,7 +757,7 @@ readAccount( int fd, AccountGroup *grp, int token )
   if( err != sizeof(int) ) { return NULL; }
   XACC_FLIP_INT (numTrans);
   
-  DEBUG ("expecting %d transactions \n", numTrans);
+  DEBUG ("expecting %d transactions", numTrans);
   /* read the transactions */
   for( i=0; i<numTrans; i++ ) {
     Transaction *trans;
@@ -925,7 +928,7 @@ readTransaction( int fd, Account *acc, int revision)
   double num_shares = 0.0;
   double share_price = 0.0;
 
-  ENTER ("\n");
+  ENTER (" ");
 
   /* create a transaction structure */
   trans = xaccMallocTransaction();
@@ -989,6 +992,7 @@ readTransaction( int fd, Account *acc, int revision)
     xaccTransCommitEdit (trans);
     return NULL;
     }
+  PINFO ("description=%s", tmp);
   xaccTransSetDescription (trans, tmp);
   free (tmp);
   
@@ -1257,10 +1261,10 @@ readSplit ( int fd, int token )
   char recn;
   double num_shares, share_price;
 
+  ENTER (" ");
+
   /* create a split structure */
   split = xaccMallocSplit();
-  
-  ENTER ("\n");
 
   tmp = readString( fd, token );
   if( NULL == tmp )
@@ -1269,6 +1273,7 @@ readSplit ( int fd, int token )
     xaccSplitDestroy(split);
     return NULL;
     }
+  PINFO ("memo=%s", tmp);
   xaccSplitSetMemo (split, tmp);
   free (tmp);
   
@@ -1365,7 +1370,7 @@ readSplit ( int fd, int token )
 
   DxaccSplitSetSharePriceAndAmount (split, share_price, num_shares);
 
-  DEBUG ("num_shares %f \n", num_shares);
+  DEBUG ("num_shares %f", num_shares);
 
   /* Read the account number */
 
@@ -1377,7 +1382,7 @@ readSplit ( int fd, int token )
     return NULL;
   }
   XACC_FLIP_INT (acc_id);
-  DEBUG ("account id %d\n", acc_id);
+  DEBUG ("account id %d", acc_id);
   peer_acc = locateAccount (acc_id);
   xaccAccountInsertSplit (peer_acc, split);
 

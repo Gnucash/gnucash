@@ -364,9 +364,15 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
 
   if(!db || !p) return FALSE;
   commodity = gnc_price_get_commodity(p);
-  if(!commodity) return FALSE;
+  if(!commodity) {
+    PWARN("no commodity");
+    return FALSE;
+  }
   currency = gnc_price_get_currency(p);
-  if(!currency) return FALSE;
+  if(!currency) {
+    PWARN("no currency");
+    return FALSE;
+  }
   if(!db->commodity_hash) return FALSE;
 
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
