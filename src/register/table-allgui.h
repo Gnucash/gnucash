@@ -219,11 +219,6 @@ struct _Table
   GTable *virt_cells;
   GTable *phys_cells;
 
-  /* This class implements tab-key and arrow key traversal through the
-   * cells of the table. To perform this traversal, the location of
-   * the "previous" cell having input focus is required. */
-  PhysicalLocation prev_phys_traverse_loc;
-
   void * ui_data;
 
   TableDestroyFunc destroy;

@@ -168,14 +168,6 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
   ct_info = g_table_index (cellblock->traverse_info, 0, 0);
   ct_info->left_traverse_row = rows - 1;
   ct_info->left_traverse_col = cols - 1;
-
-  /* last is last ... */
-  cellblock->last_reenter_traverse_row = rows - 1;
-  cellblock->last_reenter_traverse_col = cols - 1;
-
-  /* first is last ... */
-  cellblock->last_left_reenter_traverse_row = 0;
-  cellblock->last_left_reenter_traverse_col = 0;
 }
 
 /* =================================================== */
@@ -242,13 +234,6 @@ gnc_cellblock_next_right (CellBlock *cellblock,
 
   ct_info->right_traverse_row = next_row;
   ct_info->right_traverse_col = next_col;
-
-  /* if traversing out (neg values) record this as the last ... */
-  if ((0 > next_row) || (0 > next_col))
-  {
-    cellblock->last_reenter_traverse_row = row;
-    cellblock->last_reenter_traverse_col = col;
-  }
 }
 
 void        
@@ -275,13 +260,6 @@ gnc_cellblock_next_left (CellBlock *cellblock,
 
   ct_info->left_traverse_row = next_row;
   ct_info->left_traverse_col = next_col;
-
-  /* if traversing out (neg values) record this as the last ... */
-  if ((0 > next_row) || (0 > next_col))
-  {
-    cellblock->last_left_reenter_traverse_row = row;
-    cellblock->last_left_reenter_traverse_col = col;
-  }
 }
 
 /* --------------- end of file ----------------- */

@@ -124,10 +124,6 @@ gnc_table_init (Table * table)
    table->virt_cells = NULL;
    table->phys_cells = NULL;
 
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_loc.phys_row = -1;
-   table->prev_phys_traverse_loc.phys_col = -1;
-
    table->ui_data = NULL;
    table->destroy = NULL;
 }
@@ -235,10 +231,6 @@ gnc_table_set_size (Table * table,
    }
 
    gnc_table_resize (table, phys_rows, phys_cols, virt_rows, virt_cols);
-
-   /* invalidate the "previous" traversed cell */
-   table->prev_phys_traverse_loc.phys_row = -1;
-   table->prev_phys_traverse_loc.phys_col = -1;
 }
 
 /* ==================================================== */
@@ -540,11 +532,11 @@ gnc_table_move_cursor_internal (Table *table,
   table->current_cursor_phys_loc.phys_col = -1;
   table->current_cursor_virt_loc.virt_row = -1;
   table->current_cursor_virt_loc.virt_col = -1;
-  table->prev_phys_traverse_loc.phys_row = -1;
-  table->prev_phys_traverse_loc.phys_col = -1;
+
   curs = table->current_cursor;
   if (curs)
     curs->user_data = NULL;
+
   table->current_cursor = NULL;
 
   /* check for out-of-bounds conditions (which may be deliberate) */
@@ -597,14 +589,6 @@ gnc_table_move_cursor_internal (Table *table,
 
   phys_origin.phys_row -= pcell->virt_loc.phys_row_offset;
   phys_origin.phys_col -= pcell->virt_loc.phys_col_offset;
-
-  /* setting the previous traversal value to the last of a traversal chain
-   * will guarantee that the first entry into a register will occur at the
-   * first cell */
-  table->prev_phys_traverse_loc = phys_origin;
-
-  table->prev_phys_traverse_loc.phys_row += curs->last_reenter_traverse_row;
-  table->prev_phys_traverse_loc.phys_col += curs->last_reenter_traverse_col;
 
   /* update the cell values to reflect the new position */
   for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
@@ -1086,10 +1070,6 @@ gnc_table_enter_update(Table *table,
     g_free(help_str);
   }
 
-  /* record this position as the cell that will be
-   * traversed out of if a traverse even happens */
-  table->prev_phys_traverse_loc = phys_loc;
-
   LEAVE("return %s\n", retval);
 
   return retval;
@@ -1417,7 +1397,6 @@ gnc_table_traverse_update(Table *table,
 	  phys_loc.phys_row, phys_loc.phys_col,
           table->num_phys_rows, table->num_phys_cols);
 
-    table->prev_phys_traverse_loc = *dest_loc;
     dir = GNC_TABLE_TRAVERSE_POINTER;
   }
 
@@ -1518,8 +1497,6 @@ gnc_table_traverse_update(Table *table,
   /* Call the table traverse callback for any modifications. */
   if (table->traverse)
     (table->traverse) (table, dest_loc, dir);
-
-  table->prev_phys_traverse_loc = *dest_loc;
 
   LEAVE("dest_row = %d, dest_col = %d\n",
         dest_loc->phys_row, dest_loc->phys_col);

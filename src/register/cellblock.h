@@ -115,22 +115,11 @@ typedef struct
 
   /* The traverse and exit information is automatically created and
    * managed by the routines below. They control the tab-traversal
-   * order through this cell block. If the cell (i,j) has
-   * input-focus, then hitting the tab key on the keyboard will take
-   * input-focus to cell (inext,jnext), where inext =
-   * right_traverse_r[i][j] and jnext = right_traverse_c[i][j].
-   *
-   *  (*_exit_r, *_exit_c) is the last cell of this tab group. */
+   * order through this cell block. If the cell (i,j) has input-focus,
+   * then hitting the tab key on the keyboard will take input-focus to
+   * cell (inext,jnext), where inext = right_traverse_r[i][j] and
+   * jnext = right_traverse_c[i][j]. */
   GTable *traverse_info;
-
-  /* the last-reenter row and column should contain the very last cell
-   * when the cursor was traversed out of.  They determine the first
-   * cell that will be entered (since the first follows the last).  */
-  short last_reenter_traverse_row;
-  short last_reenter_traverse_col;
-
-  short last_left_reenter_traverse_row;
-  short last_left_reenter_traverse_col;
 
   void * user_data; /* for user code use */
 } CellBlock;
