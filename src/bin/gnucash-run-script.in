@@ -1,0 +1,32 @@
+#!/bin/sh
+
+export GNC_MODULE_PATH="${GNC_MODULE_PATH}:@-GNC_PKGLIB_INSTALLDIR-@"
+export GUILE_LOAD_PATH="${GUILE_LOAD_PATH}:@-G_WRAP_MODULE_DIR-@:@-GNC_GUILE_MODULE_DIR-@:@-GNC_SCM_INSTALL_DIR-@"
+export LTDL_LIBRARY_PATH="${LTDL_LIBRARY_PATH}:${GNC_MODULE_PATH}:@-GNC_LIB_INSTALLDIR-@"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GNC_MODULE_PATH}:@-GNC_LIB_INSTALLDIR-@"
+
+GUILE="@-GUILE-@"
+if test "${GNC_SCRIPT}"x != x; then
+  GUILE="${GNC_GUILE}"
+fi
+export GUILE
+
+if test "${GNC_SCRIPT}"x != x; then
+  exec ${GNC_SCRIPT} "$@"
+fi
+
+exec ${GUILE} -s "$0" "$@"
+!#
+
+(if (null? (cdr (program-arguments)))
+    (error (string-append "Usage: "
+                          (car (program-arguments))
+                          " script [arg ...]")))
+
+(define guile (getenv "GUILE"))
+
+(apply execlp guile guile "-s" (cdr (program-arguments)))
+
+;; Local Variables:
+;; mode: scheme
+;; End:
