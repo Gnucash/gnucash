@@ -23,22 +23,15 @@
 
 #include "config.h"
 
-#include <glib.h>
-
-#ifndef _GNU_SOURCE
-#  define __USE_XOPEN
-#  define _GNU_SOURCE
-#  include <time.h>
-#else
-#  include <time.h>
-#endif
-
+#define _GNU_SOURCE
 #define __EXTENSIONS__
 
-#include <string.h>
 #include <ctype.h>
+#include <glib.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 #include "sixtp.h"
 #include "sixtp-utils.h"
