@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.7\n"
 "POT-Creation-Date: 2002-10-19 02:19+0200\n"
-"PO-Revision-Date: 2002-10-19 02:20+0200\n"
+"PO-Revision-Date: 2002-10-20 00:53+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -1174,9 +1174,8 @@ msgstr ""
 "anzuzeigen."
 
 #: src/gnome/glade/newuser.glade.h:7
-#, fuzzy
 msgid "Welcome to GnuCash!"
-msgstr "Willkommen zu GnuCash 1.6"
+msgstr "Willkommen zu GnuCash!"
 
 #: src/business/business-gnome/glade/invoice.glade.h:6
 #: src/gnome/glade/register.glade.h:1
@@ -1199,24 +1198,23 @@ msgstr "Aktuellen Geschäftsvorgang abbrechen"
 
 #: src/gnome/glade/register.glade.h:4
 msgid "Chec_k & Repair"
-msgstr ""
+msgstr "Überprüfen"
 
 #: src/gnome/glade/register.glade.h:5
-#, fuzzy
 msgid "Check Register"
-msgstr "Kassenbericht"
+msgstr "Kassenbericht überprüfen"
 
 #: src/gnome/glade/register.glade.h:6
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "transactions of this account"
-msgstr ""
+msgstr "Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in allen Buchungen dieses Kontos"
 
 #: src/gnome/glade/register.glade.h:7
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "transaction"
-msgstr ""
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungen in diesem Geschäftsvorfall"
 
 #: src/business/business-gnome/glade/invoice.glade.h:9
 #: src/gnome-utils/window-help.c:651 src/gnome/glade/register.glade.h:8
@@ -1455,9 +1453,8 @@ msgid "Report"
 msgstr "Bericht"
 
 #: src/gnome/glade/register.glade.h:57
-#, fuzzy
 msgid "S_plit Transaction"
-msgstr "-- Mehrteiliger Vorgang --"
+msgstr "Mehrteiliger Vorgang"
 
 #: src/gnome/glade/register.glade.h:58 src/gnome/window-main.c:837
 msgid "S_ummary Bar"
@@ -1470,9 +1467,8 @@ msgstr "Zeitplan"
 #: src/gnome/glade/register.glade.h:60
 #: src/register/ledger-core/gnc-regwidget.c:502
 #: src/register/ledger-core/gnc-regwidget.c:878
-#, fuzzy
 msgid "Schedule..."
-msgstr "Zeitplan"
+msgstr "Zeitplan..."
 
 #: src/gnome/glade/register.glade.h:61
 msgid "Set Date Range"
@@ -2772,11 +2768,11 @@ msgstr "Neuen Preis hinzufügen."
 
 #: src/gnome/glade/price.glade.h:3
 msgid "Ask"
-msgstr ""
+msgstr "Briefkurs"
 
 #: src/gnome/glade/price.glade.h:4
 msgid "Bid"
-msgstr ""
+msgstr "Geldkurs"
 
 #: intl-scm/guile-strings.c:104 intl-scm/guile-strings.c:177
 #: src/app-utils/gnc-ui-util.c:246 src/gnome/dialog-price-edit-db.c:489
@@ -2873,7 +2869,7 @@ msgstr "Sie müssen einen gültigen Preis angeben."
 #: src/gnome/top-level.c:253
 #, c-format
 msgid "Bad URL: %s"
-msgstr ""
+msgstr "Fehlerhafte URL: %s"
 
 #: src/business/business-gnome/business-urls.c:48
 #: src/business/business-gnome/business-urls.c:98
@@ -2881,7 +2877,7 @@ msgstr ""
 #: src/gnome/top-level.c:265
 #, c-format
 msgid "No such entity: %s"
-msgstr ""
+msgstr "Keine Entity gefunden: %s"
 
 #: src/gnome/top-level.c:197
 #, fuzzy, c-format
@@ -2891,12 +2887,12 @@ msgstr "Suche Geschäftsvorgänge, deren Aktionsfeld folgendes enthält:"
 #: src/gnome/top-level.c:208
 #, c-format
 msgid "No such split: %s"
-msgstr ""
+msgstr "Kein Split gefunden: %s"
 
 #: src/gnome/top-level.c:218 src/gnome/top-level.c:261
 #, c-format
 msgid "Unsupported entity type: %s"
-msgstr ""
+msgstr "Unbekannter Entity Typ: %s"
 
 #: src/business/business-gnome/business-urls.c:67
 #: src/business/business-gnome/business-urls.c:117
@@ -3163,7 +3159,7 @@ msgstr ""
 #: src/gnome/window-register.c:1556
 #, c-format
 msgid "%s [Read-Only]"
-msgstr ""
+msgstr "%s [Nur-Lesen]"
 
 #: src/gnome/window-register.c:1996
 msgid "<No information>"
@@ -3580,12 +3576,12 @@ msgstr "GnuCash Persönlicher Finanzmanager"
 #: src/gnome/gnc-splash.c:74
 #, c-format
 msgid "Version: Gnucash-cvs (built %s)"
-msgstr ""
+msgstr "Version: Gnucash-cvs (Build %s)"
 
 #: src/gnome/gnc-splash.c:77
 #, c-format
 msgid "Version: Gnucash-%s"
-msgstr ""
+msgstr "Version: Gnucash-%s"
 
 #: src/gnome/gnc-splash.c:81
 #, fuzzy
@@ -3708,36 +3704,30 @@ msgid ""
 msgstr ""
 
 #: src/gnome/window-acct-tree.c:883
-#, fuzzy
 msgid "Check & Repair Su_baccounts"
-msgstr "_Unterkonten ausbuchen"
+msgstr "_Unterkonten überprüfen"
 
 #: src/gnome/window-acct-tree.c:884
-#, fuzzy
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
-msgstr ""
-"Identifizieren und Beseitigen von Problemen in diesem Konto und in den "
-"Unterkonten"
+msgstr "Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in diesem Konto und seinen Unterkonten"
 
 #: src/gnome/window-acct-tree.c:892
 msgid "Check & Repair A_ll"
-msgstr ""
+msgstr "Alle überprüfen"
 
 #: src/gnome/window-acct-tree.c:893
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
-msgstr ""
+msgstr "Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in allen Konten"
 
 #: src/gnome/window-acct-tree.c:927
-#, fuzzy
 msgid "Open Account"
-msgstr "_Konto öffnen"
+msgstr "Konto öffnen"
 
 #: src/gnome/window-acct-tree.c:935
-#, fuzzy
 msgid "Open _Subaccounts"
 msgstr "_Unterkonten öffnen"
 
@@ -3764,7 +3754,7 @@ msgstr "_Konto löschen"
 #: src/gnome/window-acct-tree.c:992 src/gnome/window-acct-tree.c:1319
 #: src/gnome/window-reconcile.c:1257
 msgid "_Check & Repair"
-msgstr ""
+msgstr "Überprüfen"
 
 #: src/gnome/window-acct-tree.c:999 src/gnome/window-reconcile.c:1308
 msgid "_Account"
@@ -4036,7 +4026,7 @@ msgstr "frozen:e"
 
 #: src/app-utils/gnc-ui-util.c:680
 msgid "void:v"
-msgstr ""
+msgstr "void:s"
 
 #: src/app-utils/gnc-ui-util.c:722
 msgid "(none)"
@@ -4085,7 +4075,7 @@ msgstr "Keine Variable"
 
 #: src/app-utils/gnc-exp-parser.c:664
 msgid "Not a defined function"
-msgstr ""
+msgstr "Undefinierte Funktion"
 
 #: src/app-utils/gnc-exp-parser.c:666
 msgid "Out of memory"
@@ -4593,21 +4583,19 @@ msgstr ""
 "Änderungen jetzt speichern?"
 
 #: src/app-file/gnc-file.c:376
-#, fuzzy
 msgid "Quit"
-msgstr "Eigenkapital"
+msgstr "Beenden"
 
 #: src/app-file/gnc-file.c:376
 msgid "Open Anyway"
-msgstr ""
+msgstr "Trotzdem öffnen"
 
 #: src/app-file/gnc-file.c:377
-#, fuzzy
 msgid "Create New File"
-msgstr "Eine neue Datei anlegen"
+msgstr "Neue Datei anlegen"
 
 #: src/app-file/gnc-file.c:378
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not obtain the lock for\n"
 "   %s.\n"
@@ -4622,7 +4610,7 @@ msgstr ""
 "Datei ist wahrscheinlich von jemand anderem in Benutzung. In diesem\n"
 "Fall sollten Sie die Datei nicht öffnen.\n"
 "\n"
-"Möchten Sie trotzdem mit dem Öffnen der Datei fortfahren?"
+"Was möchten Sie tun?"
 
 #: src/app-file/gnc-file.c:443
 #, fuzzy
@@ -5009,18 +4997,18 @@ msgstr ""
 msgid ""
 "<html><body><h3>Report error</h3><p>An error occurred while running the "
 "report.</p></body></html>"
-msgstr ""
+msgstr "<html><body><h3>Berichtsfehler</h3><p>Während des Erstellens des Berichtes ist ein Fehler aufgetreten.</p></body></html>"
 
 #: src/report/report-gnome/window-report.c:1124
 #: src/report/report-gnome/window-report.c:1146
-#, fuzzy, c-format
+#, c-format
 msgid "Badly formed options URL: %s"
-msgstr "Fehlerhafte URL der Sorte \"gnc-options:\"."
+msgstr "Fehlerhafte Optionen-URL: %s"
 
 #: src/report/report-gnome/window-report.c:1134
 #, c-format
 msgid "Badly report id: %s"
-msgstr ""
+msgstr "Fehlerhafte Berichts ID: %s"
 
 #: src/backend/file/io-gncbin-r.c:488
 msgid "Lost Accounts"
@@ -5163,41 +5151,43 @@ msgstr "Geben Sie Ihr Passwort ein"
 
 #: src/import-export/hbci/glade/hbci.glade.h:3
 msgid "(filled in automatically)"
-msgstr ""
+msgstr "(wird automatisch ausgefüllt)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:4
 msgid "10010010"
-msgstr ""
+msgstr "10010010"
 
 #: src/import-export/hbci/glade/hbci.glade.h:5
 msgid "280"
-msgstr ""
+msgstr "280"
 
 #: src/import-export/hbci/glade/hbci.glade.h:7
-#, fuzzy
 msgid "Account list will be updated"
-msgstr "Verschachtelungstiefe der Konten"
+msgstr "Kontenliste wird aktualisiert"
 
 #: src/import-export/hbci/glade/hbci.glade.h:8
-#, fuzzy
 msgid ""
 "Add \n"
 "Bank"
-msgstr "Bank"
+msgstr ""
+"Bank\n"
+"hinzufügen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:10
 msgid ""
 "Add \n"
 "User"
 msgstr ""
+"Benutzer\n"
+"hinzufügen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:14
 msgid "Bank Code"
-msgstr "BLZ"
+msgstr "Bankleitzahl"
 
 #: src/import-export/hbci/glade/hbci.glade.h:15
 msgid "Bank Code:"
-msgstr "BLZ:"
+msgstr "Bankleitzahl:"
 
 #: src/import-export/hbci/glade/hbci.glade.h:16
 msgid "Bank Identification"
@@ -5205,39 +5195,36 @@ msgstr "Bank-Informationen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:17
 msgid "Choose OpenHBCI Configuration File"
-msgstr ""
+msgstr "OpenHBCI Konfigurations-Datei auswählen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:18
 msgid "Choose file for secret key"
-msgstr ""
+msgstr "Datei für geheimen Schlüssel auswählen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:19
 msgid "Click \"Next\" when all desired accounts are matching."
-msgstr ""
+msgstr "Klicken Sie 'Weiter', wenn alle Konten zugeordnet sind."
 
 #: src/import-export/hbci/glade/hbci.glade.h:20
-#, fuzzy
 msgid "Configuration File"
-msgstr "Verzeichnis für Einstellungen."
+msgstr "Konfigurations-Datei"
 
 #: src/import-export/hbci/glade/hbci.glade.h:21
 msgid "Country Code (Germany: 280)"
 msgstr "Landeskennung (Deutschland: 280)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:22
-#, fuzzy
 msgid "Current Action"
-msgstr "Aktuelles Konto"
+msgstr "Momentane Aktion"
 
 #: src/import-export/hbci/glade/hbci.glade.h:23
-#, fuzzy
 msgid "Current Job"
-msgstr "Aktuelles Konto"
+msgstr "Momentaner Auftrag"
 
 #: src/business/business-gnome/dialog-customer.c:790
 #: src/import-export/hbci/glade/hbci.glade.h:24
 msgid "Customer ID"
-msgstr "Kundennummer (ID)"
+msgstr "Kundennummer"
 
 #: src/import-export/hbci/glade/hbci.glade.h:25
 msgid "DDV Medium (Chip Card)"
@@ -5248,27 +5235,24 @@ msgid "Do these values match the values on your paper Ini-Letter?"
 msgstr "Stimmen diese Werte mit dem Ini-Brief überein?"
 
 #: src/import-export/hbci/glade/hbci.glade.h:27
-#, fuzzy
 msgid "Enter Bank Information"
-msgstr "Allgemeines"
+msgstr "Bankinformationen eingeben"
 
 #: src/import-export/hbci/glade/hbci.glade.h:28
 msgid "Enter OpenHBCI Configuration File"
-msgstr ""
+msgstr "OpenHBCI Konfigurations-Datei eingeben"
 
 #: src/import-export/hbci/glade/hbci.glade.h:29
-#, fuzzy
 msgid "Enter User Information"
-msgstr "Buchungsinformation"
+msgstr "Benutzerinformationen eingeben"
 
 #: src/import-export/hbci/glade/hbci.glade.h:30
-#, fuzzy
 msgid "Enter an Online Transaction"
-msgstr "Geschäftsvorgang neu kalkulieren"
+msgstr "Online-Überweisung eingeben"
 
 #: src/import-export/hbci/glade/hbci.glade.h:31
 msgid "Execute Later (unimpl.)"
-msgstr ""
+msgstr "Später ausführen (unfertig)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:32
 msgid "Execute Now"
@@ -5281,11 +5265,11 @@ msgstr "GnuCash Kontobezeichnung"
 
 #: src/import-export/hbci/glade/hbci.glade.h:34
 msgid "HBCI Connection Window"
-msgstr ""
+msgstr "HBCI Verbindungsfenster"
 
 #: src/import-export/hbci/glade/hbci.glade.h:35
 msgid "HBCI Setup Finished"
-msgstr ""
+msgstr "HBCI Einrichtung beendet"
 
 #: src/import-export/hbci/glade/hbci.glade.h:36
 msgid "HBCI account name"
@@ -5297,6 +5281,10 @@ msgid ""
 "If you do not have one yet, choose a filename, and a key file will be "
 "created there."
 msgstr ""
+"Wenn Sie bereits eine Schlüssel-Datei haben, wählen Sie diese bitte\n"
+"hier. \n"
+"Wenn Sie noch keine solche Datei haben, wählen Sie bitte einen\n"
+"Dateinamen, und eine Schlüsseldatei wird dort erzeugt. "
 
 #: src/import-export/hbci/glade/hbci.glade.h:39
 msgid ""
@@ -5313,6 +5301,17 @@ msgid ""
 "connection window. Please do not close the HBCI connection window\n"
 "before this whole druid has finished."
 msgstr ""
+"Um die HBCI Kommunikation einzurichten, muß OpenHBCI zunächst den\n"
+"öffentlichen kryptographischen Schlüssel der Bank abrufen. Dafür\n"
+"müssen Sie Ihre PIN gleich eingeben. Nachdem dies erfolgreich\n"
+"durchgeführt wurde, müssen Sie den abgerufenen Schlüssel mit dem\n"
+"Ini-Brief, den Sie von Ihrer Bank erhalten haben, vergleichen.\n"
+"\n"
+"Klicken Sie jetzt 'Weiter', um die Schlüssel von der Bank\n"
+"abzurufen. Wenn Sie eben erst eine Schlüsseldatei erstellt haben,\n"
+"müssen Sie die PIN leider erneut eingeben.\n"
+"\n"
+"Sie können dann den Verlauf der HBCI Verbindung im HBCI Verbindungs-Fenster beobachten. "
 
 #: src/import-export/hbci/glade/hbci.glade.h:51
 msgid ""
@@ -5323,43 +5322,49 @@ msgid ""
 "Press 'Next' now to contact the bank server. You can then see the \n"
 "progress of the HBCI connection in the HBCI connection window."
 msgstr ""
+"Um Ihre Liste von HBCI-Konten zu aktualisieren, wird der Bank-Server\n"
+"kontaktiert und eine aktualisierte Liste von HBCI-Konten wird\n"
+"abgerufen.\n"
+"\n"
+"Klicken Sie jetzt 'Weiter', um den Bank-Server zu kontaktieren. Sie\n"
+"können dann den Verlauf der HBCI Verbindung im HBCI\n"
+"Verbindungs-Fenster beobachten."
 
 #: src/import-export/hbci/glade/hbci.glade.h:57
 msgid "Ini-Letter Server"
-msgstr ""
+msgstr "Ini-Brief Server"
 
 #: src/import-export/hbci/glade/hbci.glade.h:58
 msgid "Ini-Letter User"
-msgstr ""
+msgstr "Ini-Brief Benutzer"
 
 #: src/import-export/hbci/glade/hbci.glade.h:59
 msgid "Initial HBCI Setup"
-msgstr ""
+msgstr "Grundlegende HBCI Einrichtung"
 
 #: src/import-export/hbci/glade/hbci.glade.h:60
 msgid "Initial HBCI Setup Finished"
-msgstr ""
+msgstr "Grundlegende HBCI Einrichtung beendet"
 
 #: src/import-export/hbci/glade/hbci.glade.h:61
 msgid "Internet Address"
-msgstr ""
+msgstr "Internetadresse"
 
 #: src/import-export/hbci/glade/hbci.glade.h:62
 msgid "Log Messages"
-msgstr ""
+msgstr "Protokoll"
 
 #: src/import-export/hbci/glade/hbci.glade.h:63
 msgid "Match HBCI accounts with GnuCash accounts"
-msgstr ""
+msgstr "HBCI Konten mit GnuCash Konten zuordnen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:64
 msgid "Name (optional)"
-msgstr ""
+msgstr "Name (optional)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:66
-#, fuzzy
 msgid "New Account (not implemented)"
-msgstr "Neues Konto (Unterkonto) ..."
+msgstr "Neues Konto (unfertig)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:67
 #: src/import-export/qif-import/qif.glade.h:88
@@ -5412,63 +5417,63 @@ msgstr ""
 
 #: src/import-export/hbci/glade/hbci.glade.h:99
 msgid "Online Transaction"
-msgstr ""
+msgstr "Online-Auftrag Einzelüberweisung"
 
 #: src/import-export/hbci/glade/hbci.glade.h:100
 msgid "OpenHBCI Configuration File"
-msgstr ""
+msgstr "OpenHBCI Konfigurations-Datei"
 
 #: src/import-export/hbci/glade/hbci.glade.h:101
 msgid "Originator Account Number"
-msgstr ""
+msgstr "Konto-Nr. des Auftraggebers"
 
 #: src/import-export/hbci/glade/hbci.glade.h:102
 msgid "Originator Name"
-msgstr ""
+msgstr "Auftraggeber: Name, Vorname"
 
 #: src/import-export/hbci/glade/hbci.glade.h:103
 msgid "Path to Key File"
-msgstr ""
+msgstr "Pfad zur Schlüssel-Datei"
 
 #: src/import-export/hbci/glade/hbci.glade.h:104
 msgid "Payment Purpose (only for recipient)"
-msgstr "Verwendungszweck (nur für Empfänger)"
+msgstr "Verwendungszweck - z.B. Kunden-Referenznummer - (nur für Empfänger)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:105
 msgid "Payment Purpose continued"
-msgstr "noch Verwendungszweck"
+msgstr "noch Verwendungszweck (ggf. noch Anschrift des Auftraggebers)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:107
 msgid "Print Ini-Letter of User"
-msgstr ""
+msgstr "Ini-Brief des Benutzers drucken"
 
 #: src/import-export/hbci/glade/hbci.glade.h:108
 msgid "Progress"
-msgstr ""
+msgstr "Verlauf"
 
 #: src/import-export/hbci/glade/hbci.glade.h:109
 msgid "Public Keys will be retrieved"
-msgstr ""
+msgstr "Öffentliche Schlüssel werden abgerufen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:110
 msgid "RDH Medium (Key File)"
-msgstr ""
+msgstr "RDH Medium (Schlüssel-Datei)"
 
 #: src/import-export/hbci/glade/hbci.glade.h:111
 msgid "Recipient Account Number"
-msgstr "Kontonummer des Empfängers"
+msgstr "Konto-Nr. des Empfängers"
 
 #: src/import-export/hbci/glade/hbci.glade.h:112
 msgid "Recipient Bank Code"
-msgstr "BLZ des Empfängers"
+msgstr "Bankleitzahl"
 
 #: src/import-export/hbci/glade/hbci.glade.h:113
 msgid "Recipient Name"
-msgstr "Name des Empfängers"
+msgstr "Empfänger: Name, Vorname / Firma"
 
 #: src/import-export/hbci/glade/hbci.glade.h:114
 msgid "Security Medium"
-msgstr ""
+msgstr "Sicherheits-Medium"
 
 #: src/import-export/generic-import.glade.h:15
 #: src/import-export/hbci/glade/hbci.glade.h:115
@@ -5482,9 +5487,8 @@ msgid "Select or add a GnuCash account"
 msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 
 #: src/import-export/hbci/glade/hbci.glade.h:117
-#, fuzzy
 msgid "Server Address"
-msgstr "Adresse"
+msgstr "Server-Adresse"
 
 #: src/import-export/hbci/glade/hbci.glade.h:118
 msgid ""
@@ -5507,18 +5511,44 @@ msgid ""
 "Press 'Cancel' if you do not wish to setup any \n"
 "HBCI connection now."
 msgstr ""
+"Dieser Druide hilft Ihnen, die HBCI Verbindung mit Ihrer Bank\n"
+"einzurichten.\n"
+"\n"
+"Zunächst müssen Sie bei Ihrer Bank die Freischaltung des HBCI Zugangs\n"
+"beantragt haben. Ihre Bank müsste Ihnen dann einen Brief zugesandt\n"
+"haben, der u.a. folgende Angaben enthält:\n"
+"\n"
+"* Die Bankleitzahl Ihrer Bank\n"
+"* Die Benutzerkennung, die Sie gegenüber Ihrer Bank identifiziert\n"
+"* Die Internetadresse des Bank-Servers \n"
+"* Informationen über die öffentlichen kryptographischen Schlüssel Ihrer\n"
+"  Bank (\"Ini-Brief\")\n"
+"\n"
+"Diese Informationen werden im folgenden benötigt. Klicken Sie jetzt\n"
+"'Weiter'.\n"
+"\n"
+"ACHTUNG: Dies ist immer noch im EXPERIMENTELLEM Stadium. Die\n"
+"Programmierer geben keine Garantie auf korrekte Funktion.\n"
+"\n"
+"Klicken Sie 'Abbruch', wenn Sie jetzt keine HBCI Verbindung einrichten\n"
+"möchten."
 
 #: src/import-export/hbci/glade/hbci.glade.h:135
 msgid ""
 "This is the Ini-Letter of you, the user. Please print out a paper copy \n"
 "by pressing 'Print'. Then press 'Next'."
 msgstr ""
+"Dies ist der Ini-Brief des Benutzers, d.h. von Ihnen. Bitte drucken\n"
+"Sie ein Exemplar aus, indem Sie 'Drucken' klicken. Klicken Sie dann\n"
+"'Weiter'."
 
 #: src/import-export/hbci/glade/hbci.glade.h:137
 msgid ""
 "Update \n"
 "account list"
 msgstr ""
+"Kontoliste\n"
+"aktualisieren"
 
 #: src/import-export/hbci/glade/hbci.glade.h:139
 msgid "User ID"
@@ -5530,27 +5560,27 @@ msgstr "Benutzerinformationen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:141
 msgid "User Keys will be sent"
-msgstr ""
+msgstr "Schlüssel des Benutzers werden gesendet"
 
 #: src/import-export/hbci/glade/hbci.glade.h:142
 msgid "Verify Ini-Letter from Server"
-msgstr ""
+msgstr "Ini-Brief des Servers prüfen"
 
 #: src/import-export/hbci/glade/hbci.glade.h:143
 msgid "at Bank"
-msgstr ""
+msgstr "der Bank"
 
 #: src/import-export/hbci/glade/hbci.glade.h:144
 msgid "my-bank"
-msgstr ""
+msgstr "meine bank"
 
 #: src/import-export/hbci/glade/hbci.glade.h:145
 msgid "something"
-msgstr ""
+msgstr "irgendwas"
 
 #: src/import-export/hbci/glade/hbci.glade.h:146
 msgid "www.hbci-kernel.de"
-msgstr ""
+msgstr "www.hbci-kernel.de"
 
 #: src/import-export/hbci/gnc-hbci-utils.c:56
 #, c-format
@@ -5558,10 +5588,12 @@ msgid ""
 "Error while loading OpenHBCI config file:\n"
 "  %s\n"
 msgstr ""
+"Fehler beim Laden der OpenHBCI Konfigurations-Datei:\n"
+"  %s\n"
 
 #: src/import-export/hbci/druid-hbci-initial.c:839
 msgid "Default Customer"
-msgstr ""
+msgstr "Standard-Kunde"
 
 #: src/import-export/hbci/druid-hbci-initial.c:1370
 msgid ""
@@ -5572,6 +5604,12 @@ msgid ""
 "and show it to your bank. Please abort the HBCI setup\n"
 "druid now."
 msgstr ""
+"Da die kryptographischen Schlüssel der Bank nicht ordnungsgemäß\n"
+"überprüft werden konnten, sollten Sie aufhören, jene Internet-Adresse\n"
+"(Bank-Server) zu kontaktieren. Stattdessen sollten Sie den Vorfall\n"
+"Ihrer Bank melden. Um die Fehlersuche zu erleichtern, sollten Sie\n"
+"diesen fehlerhaften Ini-Brief ausdrucken und Ihrer Bank\n"
+"einreichen. Bitte beenden Sie den HBCI Einrichtungs-Druiden nun."
 
 #: src/import-export/hbci/hbci-interaction.c:113
 #, c-format
@@ -5580,6 +5618,9 @@ msgid ""
 "user '%s' at bank '%s',\n"
 "with at least %d characters."
 msgstr ""
+"Bitte eine neue PIN für \n"
+"Benutzer '%s' der Bank '%s' eingeben\n"
+"und bestätigen. (Mindestens %d Zeichen)"
 
 #: src/import-export/hbci/hbci-interaction.c:119
 #, c-format
@@ -5588,6 +5629,9 @@ msgid ""
 "user '%s' at unknown bank,\n"
 "with at least %d characters."
 msgstr ""
+"Bitte eine neue PIN für \n"
+"Benutzer '%s' einer unbekannten Bank eingeben\n"
+"und bestätigen. (Mindestens %d Zeichen)"
 
 #: src/import-export/hbci/hbci-interaction.c:124
 #, c-format
@@ -5595,6 +5639,8 @@ msgid ""
 "Please enter and confirm a new PIN\n"
 "with at least %d characters."
 msgstr ""
+"Bitte eine neue PIN eingeben und \n"
+"bestätigen. (Mindestens %d Zeichen)"
 
 #: src/import-export/hbci/hbci-interaction.c:143
 #, c-format
@@ -5602,6 +5648,8 @@ msgid ""
 "Please enter PIN for \n"
 "user '%s' at bank '%s'."
 msgstr ""
+"Bitte die PIN für \n"
+"Benutzer '%s' der Bank '%s' eingeben."
 
 #: src/import-export/hbci/hbci-interaction.c:146
 #, c-format
@@ -5609,12 +5657,16 @@ msgid ""
 "Please enter PIN for \n"
 "user '%s' at unknown bank."
 msgstr ""
+"Bitte die PIN für \n"
+"Benutzer '%s' einer unbekannten Bank eingeben."
 
 #: src/import-export/hbci/hbci-interaction.c:150
 msgid ""
 "Please enter PIN for \n"
 "unknown user at unknown bank."
 msgstr ""
+"Bitte die PIN für unbekannten Benutzer\n"
+"einer unbekannten Bank eingeben."
 
 #: src/import-export/hbci/hbci-interaction.c:167
 #, c-format
@@ -5622,6 +5674,8 @@ msgid ""
 "The PIN needs to be at least %d characters long.\n"
 "Please try again."
 msgstr ""
+"Die PIN muß mindestens %d Zeichen lang sein.\n"
+"Bitte erneut eingeben."
 
 #: src/import-export/hbci/hbci-interaction.c:208
 #, c-format
@@ -5629,6 +5683,8 @@ msgid ""
 "Please insert chip card for \n"
 "user '%s' at bank '%s'."
 msgstr ""
+"Bitte die Chipkarte für \n"
+"Benutzer '%s' der Bank '%s' einlegen."
 
 #: src/import-export/hbci/hbci-interaction.c:211
 #, c-format
@@ -5636,12 +5692,16 @@ msgid ""
 "Please insert chip card for \n"
 "user '%s' at unknown bank."
 msgstr ""
+"Bitte die Chipkarte für \n"
+"Benutzer '%s' einer unbekannten Bank einlegen."
 
 #: src/import-export/hbci/hbci-interaction.c:215
 msgid ""
 "Please insert chip card for \n"
 "unknown user at unknown bank."
 msgstr ""
+"Bitte die Chipkarte für unbekannten Benutzer \n"
+"einer unbekannten Bank einlegen."
 
 #: src/import-export/hbci/hbci-interaction.c:244
 #, c-format
@@ -5649,6 +5709,8 @@ msgid ""
 "Please insert the correct chip card for \n"
 "user '%s' at bank '%s'."
 msgstr ""
+"Bitte die korrekte Chipkarte für \n"
+"Benutzer '%s' der Bank '%s' einlegen."
 
 #: src/import-export/hbci/hbci-interaction.c:247
 #, c-format
@@ -5656,12 +5718,16 @@ msgid ""
 "Please insert the correct chip card for \n"
 "user '%s' at unknown bank."
 msgstr ""
+"Bitte die korrekte Chipkarte für \n"
+"Benutzer '%s' einer unbekannten Bank einlegen."
 
 #: src/import-export/hbci/hbci-interaction.c:251
 msgid ""
 "Please insert the correct chip card for \n"
 "unknown user at unknown bank."
 msgstr ""
+"Bitte die korrekte Chipkarte für unbekannten \n"
+"Benutzer einer unbekannten Bank einlegen."
 
 #: src/import-export/hbci/dialog-hbcitrans.c:120
 msgid "(unknown)"
@@ -5672,6 +5738,8 @@ msgid ""
 "The two passwords didn't match. \n"
 "Please try again."
 msgstr ""
+"Die beiden PINs haben nicht übereingestimmt.\n"
+"Bitte erneut eingeben."
 
 #: src/import-export/hbci/hbci-progressmon.c:92
 #: src/import-export/hbci/hbci-progressmon.c:93
@@ -5689,7 +5757,7 @@ msgstr "HBCI Saldenabfrage"
 
 #: src/import-export/hbci/gncmod-hbci.c:94
 msgid "Get the account balance online through HBCI"
-msgstr ""
+msgstr "Kontosaldo online abfragen via HBCI"
 
 #: src/import-export/hbci/gncmod-hbci.c:97
 msgid "HBCI Get Transactions"
@@ -5697,7 +5765,7 @@ msgstr "HBCI Abfrage Kontoumsätze"
 
 #: src/import-export/hbci/gncmod-hbci.c:98
 msgid "Get the transactions online through HBCI"
-msgstr ""
+msgstr "Kontoumsätze online abfragen via HBCI"
 
 #: src/import-export/hbci/gncmod-hbci.c:101
 msgid "HBCI Make Transaction"
@@ -5705,7 +5773,7 @@ msgstr "HBCI Einzelüberweisung"
 
 #: src/import-export/hbci/gncmod-hbci.c:102
 msgid "Invoke a new transaction online through HBCI"
-msgstr ""
+msgstr "Neue Einzelüberweisung online absenden via HBCI"
 
 #: src/import-export/hbci/gncmod-hbci.c:110
 msgid "Online Actions"
@@ -5728,6 +5796,10 @@ msgid ""
 "does not exist. \n"
 "Please choose another place for this file."
 msgstr ""
+"Das Verzeichnis für Datei\n"
+"%s\n"
+"existiert nicht.\n"
+"Bitte wählen Sie einen anderen Ort für diese Datei."
 
 #: src/import-export/Account-matcher.c:248
 msgid "(Full account ID: "
@@ -6871,9 +6943,9 @@ msgstr ""
 
 #: src/business/business-gnome/dialog-billterms.c:614
 #: src/business/dialog-tax-table/dialog-tax-table.c:515
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "Sind Sie sicher, dass Sie das Konto %s löschen möchten?"
+msgstr "Sind Sie sicher, dass Sie  \"%s\" löschen möchten?"
 
 #: src/business/dialog-tax-table/dialog-tax-table.c:552
 msgid ""
