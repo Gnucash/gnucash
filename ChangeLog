@@ -1,3 +1,38 @@
+2001-12-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/gw-engine-spec.scm: g-wrap event types enum
+
+	* src/engine/gnc-session.c: set book backend to NULL before
+	destroying old book in gnc_session_load
+
+	* src/engine/Transaction.c: do checks & events when setting
+	slots for transactions and splits.
+
+	* src/engine/GNCId.h: add a const typedef for GNCIdType
+
+	* src/backend/postgres/test/test-db.c: add a test for backend
+	transaction rollback due to stale data in the engine
+
+	* src/backend/postgres/txn.c: fix bugs restoring one transaction
+	from database.
+
+	* src/backend/postgres/putil.h: add EXEC_QUERY
+
+	* src/backend/postgres/price.h: add pgendGetCommodity
+
+	* src/backend/postgres/price.c: add pgendGetCommodity
+
+	* src/app-utils/test/test-component-manager: test g-wrapped
+	component manager
+
+	* src/app-utils/test/Makefile.am: add test-component-manager
+
+	* src/app-utils/gw-app-utils-spec.scm: g-wrap component manager
+
+	* src/app-utils/gnc-component-manager.h: add some SCM api
+
+	* src/app-utils/gnc-component-manager.c : add some SCM api
+
 2001-12-17  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome-utils/gw-gnome-utils-spec.scm: add wrapping for widgets
