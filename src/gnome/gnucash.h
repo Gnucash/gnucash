@@ -24,28 +24,7 @@
 #ifndef GNUCASH_H
 #define GNUCASH_H
 
-/* There must be no non-(gnucash or guile) args in argc or argv by the
-   time you call this.  This means, for example that you need to have
-   called gnome_init before calling this function. */
-
 int  gnc_main (int argc, char *argv[]);
-
-void gnc_sh_setup(void);
-
-void gnc_gw_init(void);
-
-int  gnucash_ui_init(void);
-int  gnc_ui_start_event_loop(void);
-
-int  gnucash_ui_is_running(void);
-int  gnucash_ui_is_terminating(void);
-
-void gnc_ui_shutdown(void);
-void gnc_ui_destroy(void);
-
-void gnc_shutdown(int exit_status);
-
-int     gnc_get_global_argc(void);
-char ** gnc_get_global_argv(void);
+void gnc_setup_gettext(void);
 
 #endif
