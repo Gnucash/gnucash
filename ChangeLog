@@ -1,3 +1,8 @@
+2001-12-06  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/window-main-summarybar.c (gnc_ui_accounts_recurse):
+	fix bug summing EURO currencies
+
 2001-11-16  Christian Stimming  <stimming@tuhh.de>
 
 	* {src,src/test,src/gnome}/Makefile.am: Moved ${GUPPI_LIBS} to
