@@ -570,8 +570,9 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
   if( gnc_numeric_zero_p(
            gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(xferData->amount_edit))))
   {
+    gnc_numeric amt;
     DEBUG("updating amount");
-    gnc_numeric amt = xaccSplitGetValue( split );
+    amt = xaccSplitGetValue( split );
 
     /* If we've matched a previous transfer, it will appear
      * to be negative in the from account.

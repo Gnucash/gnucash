@@ -114,13 +114,14 @@ gnc_ui_new_user_cancel_dialog (void)
   GtkWidget *dialog;
   GladeXML  *xml;
   gint result;
+  gboolean keepshowing;
 
   xml = gnc_glade_xml_new ("newuser.glade", "New User Cancel Dialog");
 
   dialog = glade_xml_get_widget (xml, "New User Cancel Dialog");
 
   result = gtk_dialog_run (GTK_DIALOG (dialog));
-  gboolean keepshowing = (result == GTK_RESPONSE_YES);
+  keepshowing = (result == GTK_RESPONSE_YES);
 
   gnc_set_first_startup (keepshowing);
   gncp_new_user_finish ();

@@ -166,8 +166,9 @@ gnc_embedded_window_get_page (GncEmbeddedWindow *window)
 static void
 gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
 {
+  GObjectClass *object_class;
   ENTER("klass %p", klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  object_class = G_OBJECT_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
 

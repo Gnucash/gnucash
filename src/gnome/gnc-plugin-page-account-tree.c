@@ -799,8 +799,6 @@ gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPag
 {
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
-	g_return_if_fail (account != NULL);
-
 	const char *no_splits_no_children = _("Are you sure you want to delete the %s account?");
 	const char *no_splits = _("Are you sure you want to delete the %s\n"
 				  "account and all its children?");
