@@ -6,6 +6,13 @@
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
  *
+ * This header includes prototypes for "dangerous" functions.
+ * Invoking any of these functions potentially leave the account
+ * in an inconsistent state.  If they are not used in the proper
+ * setting, they can leave the account structures in an inconsistent
+ * state.  Thus, these methods should never be used outside of
+ * the engine, which is why they are "hidden" here. 
+ *
  */
 
 /********************************************************************\
@@ -73,5 +80,21 @@ struct _account {
   short open;
 };
 
+
+/* The xaccAccountRemoveSplit() routine will remove the indicated split
+ *    from the indicated account.  Note that this will leave the split
+ *    "dangling", i.e. unassigned to any account, and therefore will put
+ *    the engine into an inconsistent state.  After removing a split, 
+ *    it should be immediately destroyed, or it should be inserted into  
+ *    an account.
+ */
+
+void         xaccAccountRemoveSplit (Account *, Split *);
+
+/* the following recompute the partial balances (stored with the
+ * transaction)
+ * and the total balance, for this account */
+void         xaccAccountRecomputeBalance (Account *);
+void         xaccAccountRecomputeBalances (Account **);
 
 #endif /* __XACC_ACCOUNT_P_H__ */

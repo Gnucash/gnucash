@@ -103,9 +103,8 @@ xaccMallocAccount( void )
 void
 xaccFreeAccount( Account *acc )
 {
-  int i=0, j=0;
-  Split *s, *debit_s;
-  int dont_free_transaction = 0;
+  int i=0;
+  Split *s;
 
   if (NULL == acc) return;
     
@@ -129,20 +128,7 @@ xaccFreeAccount( Account *acc )
   i=0;
   s = acc->splits[0];
   while (s) {
-    Transaction *trans =  (Transaction *) s->parent;
-
-    j=0;
-    debit_s = trans->splits[0];
-    while (debit_s) {
-      if (debit_s->acc) { dont_free_transaction = 1; break; }
-      j++;
-      debit_s = trans->splits[j];
-    }
-
-    if (!dont_free_transaction) {
-      xaccFreeTransaction( trans );
-    }
-
+    xaccSplitDestroy (s);
     i++;
     s = acc->splits[i];
   }
@@ -233,6 +219,11 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
   acc -> changed = TRUE;
   if( acc->parent != NULL ) acc->parent->saved = FALSE;
 
+  /* if this split belongs to another acount, remove it from 
+   * there first.  We don't want to ever leave the system
+   * in an inconsistent state.
+   */
+  if (split->acc) xaccAccountRemoveSplit (split->acc, split);
   split->acc = acc;
     
   oldsplits = acc->splits;
@@ -273,6 +264,8 @@ xaccAccountInsertSplit ( Account *acc, Split *split )
   acc->splits[acc->numSplits] = NULL;
 
   _free(oldsplits);
+
+  xaccAccountRecomputeBalance (acc);
 }
 
 
@@ -309,7 +302,7 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
 
 
 /********************************************************************\
- * xaccRecomputeBalance                                             *
+ * xaccAccountRecomputeBalance                                      *
  *   recomputes the partial balances and the current balance for    *
  *   this account.                                                  *
  * 
@@ -337,7 +330,7 @@ xaccAccountRemoveSplit ( Account *acc, Split *split )
 \********************************************************************/
 
 void
-xaccRecomputeBalance( Account * acc )
+xaccAccountRecomputeBalance( Account * acc )
 {
   int  i = 0; 
   double  dbalance    = 0.0;
@@ -528,7 +521,7 @@ xaccIsAccountInList (Account * acc, Account **list)
 \********************************************************************/
 
 void
-xaccRecomputeBalances( Account **list )
+xaccAccountRecomputeBalances( Account **list )
 {
    Account * acc;
    int nacc = 0;
@@ -536,7 +529,7 @@ xaccRecomputeBalances( Account **list )
 
    acc = list[0];
    while (acc) {
-      xaccRecomputeBalance (acc);
+      xaccAccountRecomputeBalance (acc);
       nacc++;
       acc = list[nacc];
    }

@@ -49,13 +49,13 @@ void         xaccAccountCommitEdit (Account *);
 
 int          xaccGetAccountID (Account *);
 
+/*
+ * The xaccAccountInsertSplit() method will insert the indicated
+ *    split into the indicated account.  If the split already 
+ *    belongs to anothe account, it will be removed from that
+ *    account first. 
+ */
 void         xaccAccountInsertSplit (Account *, Split *);
-void         xaccAccountRemoveSplit (Account *, Split *);
-
-/* the following recompute the partial balances (stored with the transaction)
- * and the total balance, for this account */
-void         xaccRecomputeBalance (Account *);
-void         xaccRecomputeBalances (Account **);
 
 /* The xaccCheckDateOrder() surboutine checks to see if 
  *    a split is in proper sorted date order with respect 
