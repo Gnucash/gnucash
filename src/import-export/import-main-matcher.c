@@ -546,34 +546,40 @@ refresh_clist_row (GNCImportMainMatcher *gui,
      be freed by the widget*/
   
   /*Account:*/
-  text[DOWNLOADED_CLIST_ACCOUNT] = g_strdup(xaccAccountGetName(xaccSplitGetAccount(gnc_import_TransInfo_get_fsplit (info))));
+  text[DOWNLOADED_CLIST_ACCOUNT] = 
+    g_strdup(xaccAccountGetName(xaccSplitGetAccount(gnc_import_TransInfo_get_fsplit (info))));
   gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
 		      DOWNLOADED_CLIST_ACCOUNT, 
 		      text[DOWNLOADED_CLIST_ACCOUNT]);
 
   /*Date*/
 
-  text[DOWNLOADED_CLIST_DATE] = g_strdup( xaccPrintDateSecs ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) ));
+  text[DOWNLOADED_CLIST_DATE] = 
+    g_strdup( xaccPrintDateSecs ( xaccTransGetDate( gnc_import_TransInfo_get_trans(info) ) ));
   gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
 		      DOWNLOADED_CLIST_DATE, 
 		      text[DOWNLOADED_CLIST_DATE]);
   
   /*Amount*/
-  text[DOWNLOADED_CLIST_AMOUNT] = g_strdup(xaccPrintAmount (xaccSplitGetAmount (gnc_import_TransInfo_get_fsplit(info) ), 
-							     gnc_split_amount_print_info(gnc_import_TransInfo_get_fsplit(info), TRUE) 
-							    ) );
+  text[DOWNLOADED_CLIST_AMOUNT] = 
+    g_strdup(xaccPrintAmount 
+	     (xaccSplitGetAmount (gnc_import_TransInfo_get_fsplit(info) ), 
+	      gnc_split_amount_print_info(gnc_import_TransInfo_get_fsplit(info), TRUE) 
+	      ) );
   gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
 		      DOWNLOADED_CLIST_AMOUNT, 
 		      text[DOWNLOADED_CLIST_AMOUNT]);
   
   /*Description*/
-  text[DOWNLOADED_CLIST_DESCRIPTION] = g_strdup(xaccTransGetDescription(gnc_import_TransInfo_get_trans(info) ) );
+  text[DOWNLOADED_CLIST_DESCRIPTION] = 
+    g_strdup(xaccTransGetDescription(gnc_import_TransInfo_get_trans(info) ) );
   gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
 		      DOWNLOADED_CLIST_DESCRIPTION, 
 		      text[DOWNLOADED_CLIST_DESCRIPTION]);
 
   /*Memo*/
-  text[DOWNLOADED_CLIST_MEMO] = g_strdup(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit(info) ) );
+  text[DOWNLOADED_CLIST_MEMO] = 
+    g_strdup(xaccSplitGetMemo(gnc_import_TransInfo_get_fsplit(info) ) );
   gtk_clist_set_text (GTK_CLIST (gui->clist), row_number, 
 		      DOWNLOADED_CLIST_MEMO, 
 		      text[DOWNLOADED_CLIST_MEMO]);
@@ -591,14 +597,21 @@ refresh_clist_row (GNCImportMainMatcher *gui,
     case GNCImport_ADD:
       if(gnc_import_TransInfo_is_balanced(info)==TRUE)
 	{
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("New, already balanced"));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = 
+	    g_strdup(_("New, already balanced"));
 	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				    &(gui->color_back_green));
 	}
       else
 	{
-	  imbalance=g_strdup(xaccPrintAmount (gnc_numeric_neg(xaccTransGetImbalance(gnc_import_TransInfo_get_trans(info) )), 
-					      gnc_commodity_print_info (xaccTransGetCurrency(gnc_import_TransInfo_get_trans (info)),TRUE) ));
+	  imbalance = 
+	    g_strdup 
+	    (xaccPrintAmount
+	     (gnc_numeric_neg(xaccTransGetImbalance
+			      (gnc_import_TransInfo_get_trans(info) )), 
+	      gnc_commodity_print_info 
+	      (xaccTransGetCurrency(gnc_import_TransInfo_get_trans (info)),
+	       TRUE) ));
 	  if (gnc_import_TransInfo_get_destacc (info) != NULL)
 	    {
 	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
@@ -606,13 +619,22 @@ refresh_clist_row (GNCImportMainMatcher *gui,
 	      tmp = xaccAccountGetFullName 
 		(gnc_import_TransInfo_get_destacc (info),
 		 gnc_get_account_separator ());
-	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)==TRUE)
+	      if(gnc_import_TransInfo_get_destacc_selected_manually(info)
+		 == TRUE)
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("New, transfer %s to (manual) \"%s\""),imbalance,tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = 
+		    /* Translators: %1$s is the amount to be 
+		       transferred. %2$s is the destination account. */
+		    g_strdup_printf(_("New, transfer %s to (manual) \"%s\""),
+				    imbalance, tmp);
 		}
 	      else
 		{
-		  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("New, transfer %s to (auto) \"%s\""),imbalance,tmp);
+		  text[DOWNLOADED_CLIST_ACTION_INFO] = 
+		    /* Translators: %1$s is the amount to be 
+		       transferred. %2$s is the destination account. */
+		    g_strdup_printf(_("New, transfer %s to (auto) \"%s\""),
+				    imbalance,tmp);
 		}
 	      g_free (tmp);
 
@@ -621,7 +643,10 @@ refresh_clist_row (GNCImportMainMatcher *gui,
 	    {
 	      gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 					&(gui->color_back_yellow));
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("New, UNBALANCED (need acct to transfer %s)!"),imbalance);
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = 
+		/* Translators: %s is the amount to be transferred. */
+		g_strdup_printf(_("New, UNBALANCED (need acct to transfer %s)!"),
+				imbalance);
 	    }
 	      g_free (imbalance);
 	}
@@ -633,29 +658,35 @@ refresh_clist_row (GNCImportMainMatcher *gui,
 				    &(gui->color_back_green));
 	  if(gnc_import_TransInfo_get_match_selected_manually(info)==TRUE)
 	    {
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (manual) match"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = 
+		g_strdup(_("Reconcile (manual) match"));
 	    }
 	  else
 	    {
-	      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Reconcile (auto) match"));
+	      text[DOWNLOADED_CLIST_ACTION_INFO] = 
+		g_strdup(_("Reconcile (auto) match"));
 	    }
 	}
       else
 	{
 	  gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				    &(gui->color_back_red));
-	  text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup_printf(_("Match missing!"));
+	  text[DOWNLOADED_CLIST_ACTION_INFO] = 
+	    g_strdup_printf(_("Match missing!"));
 	}
       break;
-    case GNCImport_EDIT: text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("NOT SUPPORTED YET!");
+    case GNCImport_EDIT: 
+      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("NOT SUPPORTED YET!");
       break;
     case GNCImport_SKIP: 
-      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup(_("Do not import (no action selected)"));
+      text[DOWNLOADED_CLIST_ACTION_INFO] = 
+	g_strdup(_("Do not import (no action selected)"));
       gtk_clist_set_background (GTK_CLIST (gui->clist), row_number, 
 				&(gui->color_back_red));
       break;
     default:
-      text[DOWNLOADED_CLIST_ACTION_INFO] = g_strdup("WRITEME, this is an unknown action");
+      text[DOWNLOADED_CLIST_ACTION_INFO] = 
+	g_strdup("WRITEME, this is an unknown action");
     }
 
   /* Set the pixmaps */
