@@ -485,6 +485,38 @@ gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
   gnc_reconcile_list_unselect_all(other_list);
 }
 
+static gboolean
+gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+                            gpointer data)
+{
+  RecnWindow *recnData = data;
+  GtkWidget *this_list, *other_list;
+  GtkWidget *debit, *credit;
+
+  switch (event->keyval)
+  {
+    case GDK_Tab:
+    case GDK_ISO_Left_Tab:
+      break;
+
+    default:
+      return FALSE;
+  }
+
+  gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "key_press_event");
+
+  this_list = widget;
+
+  debit  = recnData->debit;
+  credit = recnData->credit;
+
+  other_list = (this_list == debit ? credit : debit);
+
+  gtk_widget_grab_focus (other_list);
+
+  return TRUE;
+}
+
 static void
 gnc_reconcile_window_set_titles(RecnWindow *recnData)
 {
@@ -565,6 +597,9 @@ gnc_reconcile_window_create_list_box(Account *account,
                      recnData);
   gtk_signal_connect(GTK_OBJECT(list), "focus_in_event",
                      GTK_SIGNAL_FUNC(gnc_reconcile_window_focus_cb),
+                     recnData);
+  gtk_signal_connect(GTK_OBJECT(list), "key_press_event",
+                     GTK_SIGNAL_FUNC(gnc_reconcile_key_press_cb),
                      recnData);
 
   scrollWin = gtk_scrolled_window_new (NULL, NULL);
@@ -1525,6 +1560,8 @@ recnWindow (GtkWidget *parent, Account *account)
   gnc_recn_refresh_toolbar(recnData);
 
   gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
+
+  gtk_widget_grab_focus (recnData->debit);
 
   return recnData;
 }
