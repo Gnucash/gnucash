@@ -236,9 +236,9 @@ DateMV (struct _BasicCell *_cell,
       xaccValidateDate (date, 0);
    }
 
-   sprintf (buff, "%d/%d/%d", date->tm_mday, 
-                              date->tm_mon+1, 
-                              date->tm_year+1900);
+   sprintf (buff, "%2d/%2d/%4d", date->tm_mday, 
+                                 date->tm_mon+1, 
+                                 date->tm_year+1900);
 
    xaccSetBasicCellValue (&(cell->cell), buff);
    datestr = strdup (buff);
@@ -259,10 +259,11 @@ DateLeave (struct _BasicCell *_cell, const char * curr)
     * what date that cell thinks it has.   */
    xaccParseDate (&(cell->date), curr);
 
-   sprintf (buff, "%d/%d/%d", cell->date.tm_mday, 
-                              cell->date.tm_mon+1, 
-                              cell->date.tm_year+1900);
+   sprintf (buff, "%2d/%2d/%4d", cell->date.tm_mday, 
+                                 cell->date.tm_mon+1, 
+                                 cell->date.tm_year+1900);
 
+   xaccSetBasicCellValue (&(cell->cell), buff);
    retval = strdup (buff);
    return retval;
 }
@@ -283,24 +284,41 @@ xaccMallocDateCell (void)
 void
 xaccInitDateCell (DateCell *cell)
 {
-  time_t secs;
-  struct tm *now;
-  char buff[30];
+   time_t secs;
+   struct tm *now;
+   char buff[30];
 
-  xaccInitBasicCell (&(cell->cell));
+   xaccInitBasicCell (&(cell->cell));
 
-  /* default value is today's date */
-  time (&secs);
-  now = localtime (&secs);
-  cell->date = *now;
-  sprintf (buff, "%d/%d/%d", now->tm_mday, now->tm_mon+1, now->tm_year+1900);
-
-  if (cell->cell.value) free (cell->cell.value);
-  cell->cell.value = strdup (buff);
-
-  cell->cell.enter_cell = DateEnter;
-  cell->cell.modify_verify = DateMV;
-  cell->cell.leave_cell = DateLeave;
+   /* default value is today's date */
+   time (&secs);
+   now = localtime (&secs);
+   cell->date = *now;
+   sprintf (buff, "%2d/%2d/%4d", now->tm_mday, now->tm_mon+1, now->tm_year+1900);
+ 
+   xaccSetBasicCellValue (&(cell->cell), buff);
+ 
+   cell->cell.enter_cell = DateEnter;
+   cell->cell.modify_verify = DateMV;
+   cell->cell.leave_cell = DateLeave;
 }
 
-/* --------------- end of file ---------------------- */
+/* ================================================ */
+
+void 
+xaccSetDateCellValue (DateCell *cell, int day, int mon, int year)
+{
+   struct tm dada;
+   char buff[30];
+
+   dada.tm_mday = day;
+   dada.tm_mon = mon-1;
+   dada.tm_year = year - 1900;
+
+   xaccValidateDate (&dada, 0);
+
+   sprintf (buff, "%2d/%2d/%4d", dada.tm_mday, dada.tm_mon+1, dada.tm_year+1900);
+   xaccSetBasicCellValue (&(cell->cell), buff);
+}
+
+/* ============== END OF FILE ===================== */
