@@ -2,7 +2,9 @@
 (define-module (gnucash app-utils))
 (use-modules (g-wrapped gw-app-utils))
 (use-modules (srfi srfi-1))
+(use-modules (gnucash gnc-module))
 
+(gnc:module-load "gnucash/engine" 0)
 
 ;; c-interface.scm
 (export gnc:error->string)
