@@ -146,10 +146,13 @@ void xaccAccountSetSlots_nc(Account *account, kvp_frame *frame);
  * The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account.
+ *    xaccAccountLookupDirect performs the same
+ *    function but takes a GUID struct directly.
  */
 const GUID * xaccAccountGetGUID (Account *account);
 GUID         xaccAccountReturnGUID (Account *account);
 Account    * xaccAccountLookup (const GUID *guid);
+Account    * xaccAccountLookupDirect (GUID guid);
 
 /*
  * The xaccAccountInsertSplit() method will insert the indicated

@@ -324,6 +324,13 @@ xaccSplitGetGUID (Split *split)
   return &split->guid;
 }
 
+GUID
+xaccSplitReturnGUID (Split *split)
+{
+  if (!split) return *xaccGUIDNULL();
+  return split->guid;
+}
+
 /********************************************************************\
 \********************************************************************/
 
@@ -829,6 +836,13 @@ xaccTransGetGUID (Transaction *trans)
 {
   if (!trans) return xaccGUIDNULL();
   return &trans->guid;
+}
+
+GUID
+xaccTransReturnGUID (Transaction *trans)
+{
+  if (!trans) return *xaccGUIDNULL();
+  return trans->guid;
 }
 
 /********************************************************************\

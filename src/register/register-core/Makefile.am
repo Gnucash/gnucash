@@ -1,5 +1,7 @@
 lib_LTLIBRARIES = libgncmod-register-core.la
 
+libgncmod_register_core_la_LDFLAGS = -module
+
 libgncmod_register_core_la_SOURCES = \
   gncmod-register-core.c \
   QuickFill.c \

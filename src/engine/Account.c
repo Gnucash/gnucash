@@ -537,7 +537,13 @@ Account *
 xaccAccountLookup (const GUID *guid)
 {
   if (!guid) return NULL;
-  return xaccLookupEntity(guid, GNC_ID_ACCOUNT);
+  return xaccLookupEntity (guid, GNC_ID_ACCOUNT);
+}
+
+Account *
+xaccAccountLookupDirect (GUID guid)
+{
+  return xaccLookupEntity (&guid, GNC_ID_ACCOUNT);
 }
 
 /********************************************************************\

@@ -104,7 +104,7 @@
       (cons (string-append gnc:_share-dir-default_ "/guile-modules")
             %load-path))
 
-(simple-format #t "load-path == ~S\n" %load-path)
+;(simple-format #t "load-path == ~S\n" %load-path)
 
 ;; These will be converted to config vars later (see prefs.scm)
 (define gnc:*load-path* #f)

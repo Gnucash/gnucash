@@ -1,5 +1,7 @@
 lib_LTLIBRARIES = libgncmod-register-gnome.la
 
+libgncmod_register_gnome_la_LDFLAGS = -module
+
 libgncmod_register_gnome_la_SOURCES = \
   gncmod-register-gnome.c \
   combocell-gnome.c \

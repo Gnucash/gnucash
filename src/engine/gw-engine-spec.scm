@@ -457,6 +457,14 @@
 
   (gw:wrap-function
    mod
+   'gnc:split-get-guid
+   '<gnc:guid-scm>
+   "xaccSplitReturnGUID"
+   '((<gnc:Split*> s))
+   "Return the GUID of Split s.")
+
+  (gw:wrap-function
+   mod
    'gnc:split-get-balance
    '<gnc:numeric>
    "xaccSplitGetBalance"
@@ -603,6 +611,13 @@ gnc:split-get-corr-account-full-name in src/scm/report-utilities.scm")
    "Find the split on the other side of the transaction, and return the 
 code of its account")
 
+  (gw:wrap-function
+   mod
+   'gnc:transaction-get-guid
+   '<gnc:guid-scm>
+   "xaccTransReturnGUID"
+   '((<gnc:Transaction*> t))
+   "Return the GUID of Transaction t.")
 
   (gw:wrap-function
    mod
@@ -854,6 +869,14 @@ description of the nature of a particular account.")
    "xaccAccountReturnGUID"
    '((<gnc:Account*> a))
    "Get the GUID of Account a.")
+
+  (gw:wrap-function
+   mod
+   'gnc:account-lookup
+   '<gnc:Account*>
+   "xaccAccountLookupDirect"
+   '((<gnc:guid-scm> guid))
+   "Lookup the account with GUID guid.")
 
   (gw:wrap-function
    mod
@@ -2305,6 +2328,3 @@ of having a parent transaction with which one is working...")
    "gnc_run_rpc_server"
    '()
    "Run the RPC Server"))
-
-
-

@@ -122,12 +122,15 @@ gboolean      xaccTransIsOpen (Transaction *trans);
 /*
  * The xaccTransGetGUID() subroutine will return the
  *    globally unique id associated with that transaction.
+ *    xaccTransReturnGUID() does the same thing but
+ *    returns a GUID struct.
  *
  * The xaccTransLookup() subroutine will return the
  *    transaction associated with the given id, or NULL
  *    if there is no such transaction.
  */
 const GUID  * xaccTransGetGUID (Transaction *trans);
+GUID          xaccTransReturnGUID (Transaction *trans);
 Transaction * xaccTransLookup (const GUID *guid);
 
 
@@ -257,12 +260,15 @@ void xaccSplitSetSlots_nc(Split *s, kvp_frame *frm);
 
 /* The xaccSplitGetGUID() subroutine will return the
  *    globally unique id associated with that split.
+ *    xaccSplitReturnGUID also returns the guid, but
+ *    in a GUID struct.
  *
  * The xaccSplitLookup() subroutine will return the
  *    split associated with the given id, or NULL
  *    if there is no such split.
  */
 const GUID * xaccSplitGetGUID (Split *split);
+GUID         xaccSplitReturnGUID (Split *split);
 Split      * xaccSplitLookup (const GUID *guid);
 
 /* The memo is an arbitrary string associated with a split.
