@@ -58,16 +58,12 @@ static short module = MOD_ENGINE;
 static void
 qof_book_init (QofBook *book)
 {
-  QofCollection *col;
   if (!book) return;
 
   book->hash_of_collections = g_hash_table_new (g_str_hash, g_str_equal);
 
-  col = qof_book_get_collection (book, QOF_ID_BOOK);
-  qof_entity_init (&book->entity, QOF_ID_BOOK, col);
+  qof_instance_init (&book->inst, QOF_ID_BOOK, book);
 
-  book->kvp_data = kvp_frame_new ();
-  
   book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
   book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
   
@@ -86,7 +82,7 @@ qof_book_new (void)
   qof_book_init(book);
   qof_object_book_begin (book);
 
-  gnc_engine_gen_event (&book->entity, GNC_EVENT_CREATE);
+  gnc_engine_gen_event (&book->inst.entity, GNC_EVENT_CREATE);
   LEAVE ("book=%p", book);
   return book;
 }
@@ -116,7 +112,7 @@ qof_book_destroy (QofBook *book)
   ENTER ("book=%p", book);
 
   book->shutting_down = TRUE;
-  gnc_engine_force_event (&book->entity, GNC_EVENT_DESTROY);
+  gnc_engine_force_event (&book->inst.entity, GNC_EVENT_DESTROY);
 
   /* Call the list of finalizers, let them do thier thing. 
    * Do this before tearing into the rest of the book.
@@ -125,12 +121,10 @@ qof_book_destroy (QofBook *book)
 
   qof_object_book_end (book);
 
-  kvp_frame_delete (book->kvp_data);
-
   g_hash_table_destroy (book->data_table_finalizers);
   g_hash_table_destroy (book->data_tables);
 
-  qof_entity_release (&book->entity);
+  qof_instance_release (&book->inst);
 
   g_hash_table_foreach_remove (book->hash_of_collections,
                                coll_destroy, NULL);
@@ -159,7 +153,7 @@ qof_book_not_saved(QofBook *book)
 {
   if (!book) return FALSE;
 
-  return(book->dirty || qof_object_is_dirty (book));
+  return(book->inst.dirty || qof_object_is_dirty (book));
 }
 
 void
@@ -167,19 +161,12 @@ qof_book_mark_saved(QofBook *book)
 {
   if (!book) return;
 
-  book->dirty = FALSE;
+  book->inst.dirty = FALSE;
   qof_object_mark_clean (book);
 }
 
 /* ====================================================================== */
 /* getters */
-
-KvpFrame *
-qof_book_get_slots (QofBook *book)
-{
-  if (!book) return NULL;
-  return book->kvp_data;
-}
 
 QofBackend * 
 qof_book_get_backend (QofBook *book)
@@ -209,7 +196,7 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 void qof_book_kvp_changed (QofBook *book)
 {
   if (!book) return;
-  book->dirty = TRUE;
+  book->inst.dirty = TRUE;
 }
 
 /* ====================================================================== */
@@ -352,8 +339,8 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
 gboolean qof_book_register (void)
 {
   static QofParam params[] = {
-    { QOF_BOOK_KVP, QOF_TYPE_KVP, (QofAccessFunc)qof_book_get_slots, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
+    { QOF_PARAM_KVP,  QOF_TYPE_KVP,  (QofAccessFunc)qof_instance_get_slots, NULL },
     { NULL },
   };
 

@@ -99,7 +99,7 @@ void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
  *  between multiple users).  To store application runtime data, use
  *  qof_book_set_data() isntead.
  */
-KvpFrame   * qof_book_get_slots (QofBook *book);
+#define qof_book_get_slots(book) qof_instance_get_slots(QOF_INSTANCE(book))
 
 /** The qof_book_set_data() allows arbitrary pointers to structs 
  *    to be stored in QofBook. This is the "prefered" method for 
@@ -154,13 +154,6 @@ gboolean qof_book_equal (QofBook *book_1, QofBook *book_2);
  */
 gint64 qof_book_get_counter (QofBook *book, const char *counter_name);
 
-/** Book parameter names */
-/**@{*/ 
-
-#define QOF_BOOK_KVP     "qof-kvp"
-
-/**@}*/
- 
 /** deprecated */
 #define qof_book_get_guid(X) qof_entity_get_guid (QOF_ENTITY(X))
 

@@ -73,7 +73,9 @@ struct QofInstance_s
    /** In process of being destroyed */
    gboolean  do_free;
 
-   /** This instance has not been saved yet */
+   /** dirty/clean flag. If dirty, then this instance has been modified,
+    * but has not yet been written out to storage (file/database)
+    */
    gboolean  dirty;
 };
 
