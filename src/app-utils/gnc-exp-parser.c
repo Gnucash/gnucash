@@ -44,9 +44,10 @@ typedef struct ParserNum
 
 
 /** Static Globals *************************************************/
-static GHashTable *variable_bindings = NULL;
-static ParseError  last_error = PARSER_NO_ERROR;
-static gboolean    parser_inited = FALSE;
+static GHashTable   *variable_bindings = NULL;
+static ParseError    last_error        = PARSER_NO_ERROR;
+static GNCParseError last_gncp_error   = NO_ERR;
+static gboolean      parser_inited     = FALSE;
 
 
 /** Implementations ************************************************/
@@ -169,6 +170,7 @@ gnc_exp_parser_shutdown (void)
   variable_bindings = NULL;
 
   last_error = PARSER_NO_ERROR;
+  last_gncp_error = NO_ERR;
 
   parser_inited = FALSE;
 }
@@ -470,12 +472,58 @@ negate_numeric(void *value)
   return result;
 }
 
+static
+void
+gnc_ep_tmpvarhash_check_vals( gpointer key, gpointer value, gpointer user_data )
+{
+  gboolean *allVarsHaveValues = (gboolean*)user_data;
+  gnc_numeric *num = (gnc_numeric*)value;
+  printf( "var %s with value %s\n",
+          (char*)key, num ? gnc_numeric_to_string( *num ) : "(null)" );
+  *allVarsHaveValues &= ( num && gnc_numeric_check( *num ) != GNC_ERROR_ARG );
+}
+
+static
+void
+gnc_ep_tmpvarhash_clean( gpointer key, gpointer value, gpointer user_data )
+{
+  if ( key ) {
+    g_free( (gchar*)key );
+  }
+  if ( value ) {
+    g_free( (gnc_numeric*)value );
+  }
+}
+
 gboolean
 gnc_exp_parser_parse( const char * expression, gnc_numeric *value_p,
                       char **error_loc_p )
 {
-  return gnc_exp_parser_parse_separate_vars( expression, value_p,
-                                             error_loc_p, NULL );
+  GHashTable *tmpVarHash;
+  gboolean ret, toRet = TRUE;
+  gboolean allVarsHaveValues = TRUE;
+
+  tmpVarHash = g_hash_table_new( g_str_hash, g_str_equal );
+  ret = gnc_exp_parser_parse_separate_vars( expression, value_p,
+                                            error_loc_p, tmpVarHash );
+  if ( !ret ) {
+    toRet = ret;
+    goto cleanup;
+  }
+
+  g_hash_table_foreach( tmpVarHash,
+                        gnc_ep_tmpvarhash_check_vals,
+                        &allVarsHaveValues );
+  if ( !allVarsHaveValues ) {
+    toRet = FALSE;
+    last_gncp_error = VARIABLE_IN_EXP;
+  }
+
+ cleanup:
+  g_hash_table_foreach( tmpVarHash, gnc_ep_tmpvarhash_clean, NULL );
+  g_hash_table_destroy( tmpVarHash );
+
+  return toRet;
 }
 
 gboolean
@@ -567,7 +615,8 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
         }
         numericValue = g_new0( gnc_numeric, 1 );
         *numericValue = ((ParserNum*)newVars->value)->value;
-        numericValue = NULL;
+        // WTF?
+        // numericValue = NULL;
         g_hash_table_insert( varHash,
                              g_strdup(newVars->variable_name),
                              numericValue );
@@ -586,6 +635,16 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
 const char *
 gnc_exp_parser_error_string (void)
 {
+  if ( last_error == PARSER_NO_ERROR ) {
+    switch ( last_gncp_error ) {
+    default:
+    case NO_ERR:
+      return NULL; break;
+    case VARIABLE_IN_EXP:
+      return _("Illegal variable in expression." ); break;
+    }
+  }
+
   switch (last_error)
   {
     default:

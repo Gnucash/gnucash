@@ -122,6 +122,8 @@ test_parser (void)
   add_fail_test ("whitespace", "  \t\n", 4);
   add_fail_test ("bad expression", "\\", 0);
   add_fail_test ("bad expression", "1 +", 3);
+  /* FIXME: This should be a failure test... */
+  //add_fail_test ("bad expression", "1 2", 2);
   add_fail_test ("bad expression", "  (5 + 23)/   ", 14);
   add_fail_test ("bad expression", "  ((((5 + 23)/   ", 17);
   add_fail_test ("divide by zero", "  4 / (1 - 1)", -1);
@@ -133,7 +135,15 @@ test_parser (void)
   add_pass_test ("5 * 6", NULL, gnc_numeric_create (30, 1));
   add_pass_test (" 34 / (22) ", NULL, gnc_numeric_create (34, 22));
   add_pass_test (" (4 + 5 * 2) - 7 / 3", NULL, gnc_numeric_create (35, 3));
-  add_pass_test ("1 + 2 * 3 + 4 + 5 * 6 * 7", NULL, gnc_numeric_create(221, 1) );
+  add_pass_test( "(a = 42) + (b = 12) - a", NULL, gnc_numeric_create( 12, 1 ) );
+  add_fail_test( "AUD $1.23", NULL, 0 );
+  add_fail_test( "AUD $0.0", NULL, 0 );
+  add_fail_test( "AUD 1.23", NULL, 0 );
+  add_fail_test( "AUD 0.0", NULL, 0 );
+  add_fail_test( "AUD 1.2 + CAN 2.3", NULL, 0 );
+  add_fail_test( "AUD $1.2 + CAN $2.3", NULL, 0 );
+  
+  add_pass_test( "1 + 2 * 3 + 4 + 5 * 6 * 7", NULL, gnc_numeric_create(221, 1) );
   add_pass_test( "1 - 2 * 3 + 4 - 5 * 6 * 7", NULL,
                  gnc_numeric_create(-211, 1) );
   add_pass_test( "Conrad's bug",

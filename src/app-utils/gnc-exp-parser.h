@@ -26,6 +26,15 @@
 
 #include "gnc-numeric.h"
 
+/**
+ * The errors which can be determined at the gnc-exp-parser level.
+ **/
+typedef enum {
+  NO_ERR,
+  VARIABLE_IN_EXP,
+  NUM_ERRORS
+} GNCParseError;
+
 /* Initialize the expression parser. If this function is not
  * called before one of the other parsing routines (other than
  * gnc_exp_parser_shutdown), it will be called if needed.
@@ -82,6 +91,7 @@ gboolean gnc_exp_parser_parse (const char * expression,
  * dealing with a non-shared variable list and state, local to the expression
  * being parsed.  This is a hashTable of variable names mapping to
  * gnc_numeric pointers.
+ *
  * @note It is the CALLER'S RESPONSIBILITY to g_free() both the keys and
  * values of varHash when done.
  **/

@@ -1,3 +1,10 @@
+2002-10-16  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/app-utils/gnc-exp-parser.c (gnc_exp_parser_parse): This
+	function now fails correctly if there are un-bound variables in
+	the expression.  This causes expressions like 'AUD 1.23' to fail.
+	This is related to, but not a fix for, Bug#95474.
+
 2002-10-16  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/hbci-account-picker.c,
