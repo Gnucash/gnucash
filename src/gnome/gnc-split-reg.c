@@ -489,7 +489,7 @@ static
 void
 gsr_foobar( GtkWidget *w, gpointer ud )
 {
-  DEBUG( "Happiness is being destroyed (widget)%.8x, (ud)%.8x",
+  DEBUG( "Happiness is being destroyed (widget)%p, (ud)%p",
          w, ud );
 }
 
@@ -808,7 +808,7 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
       gnc_table_save_state (reg->table);
 
     gtk_widget_hide_all( gsr->window );
-    DEBUG( "destroying (gsr)%.8x (->window)%.8x with ledger %.8x",
+    DEBUG( "destroying (gsr)%p (->window)%p with ledger %p",
            gsr, gsr->window, ledger );
     gtk_widget_destroy( gsr->window );
   }
@@ -2116,7 +2116,7 @@ gnc_split_reg_get_parent( GNCLedgerDisplay *ledger )
   if (gsr == NULL)
     return NULL;
 
-  DEBUG( "(ledger)%.8x parent: (gsr->window)%.8x",
+  DEBUG( "(ledger)%p parent: (gsr->window)%p",
          ledger, gsr->window );
 
   return gsr->window;

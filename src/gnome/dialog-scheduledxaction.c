@@ -955,7 +955,7 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         if (sxed == NULL)
                 return;
 
-        DEBUG( "(gsr)%.8x, (gsr->window)%.8x",
+        DEBUG( "(gsr)%p, (gsr->window)%p",
                sxed->gsr, sxed->gsr->window );
 
         gnc_unregister_gui_component_by_data
@@ -1296,7 +1296,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         gtk_widget_show_all(sxed->dialog);
 
         gnc_ledger_display_refresh( sxed->ledger );
-        DEBUG( "(sxed)%.8x, (->window)%.8x (->gsr)%.8x",
+        DEBUG( "(sxed)%p, (->window)%p (->gsr)%p",
                sxed, sxed->dialog, sxed->gsr );
 
         return sxed;

@@ -35,6 +35,7 @@ void gnc_shutdown(int);
 void gnc_main_window_about_cb (GtkWidget *widget, gpointer data);
 void gnc_main_window_file_save_cb(GtkWidget * widget, gpointer data);
 void gnc_main_window_file_save_as_cb(GtkWidget * widget, gpointer data);
+void gnc_main_window_tutorial_cb (GtkWidget *widget, gpointer data);
 void gnc_main_window_totd_cb (GtkWidget *widget, gpointer data);
 void gnc_main_window_help_cb (GtkWidget *widget, gpointer data);
 void gnc_main_window_exit_cb (GtkWidget *widget, gpointer data);
