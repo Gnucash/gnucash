@@ -802,6 +802,7 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 #define TRANS_DATE_DUE		"date-due"
 #define TRANS_IMBALANCE		"trans-imbalance"
 #define TRANS_IS_BALANCED	"trans-balanced?"
+#define TRANS_NOTES		"notes"
 #define TRANS_TYPE		"type"
 #define TRANS_VOID_STATUS	"void-p"
 #define TRANS_VOID_REASON	"void-reason"

@@ -3409,6 +3409,7 @@ gboolean xaccTransRegister (void)
     { TRANS_DATE_POSTED, QUERYCORE_DATE, (QueryAccess)xaccTransRetDatePostedTS },
     { TRANS_DATE_DUE, QUERYCORE_DATE, (QueryAccess)xaccTransRetDateDueTS },
     { TRANS_IMBALANCE, QUERYCORE_NUMERIC, (QueryAccess)xaccTransGetImbalance },
+    { TRANS_NOTES, QUERYCORE_STRING, (QueryAccess)xaccTransGetNotes },
     { TRANS_IS_BALANCED, QUERYCORE_BOOLEAN, (QueryAccess)trans_is_balanced_p },
     { TRANS_TYPE, QUERYCORE_CHAR, (QueryAccess)xaccTransGetTxnType },
     { TRANS_VOID_STATUS, QUERYCORE_BOOLEAN, (QueryAccess)xaccTransGetVoidStatus },

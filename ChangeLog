@@ -16,6 +16,9 @@
 	* fix the full and common accounts to remove the (wrong) "Accounts Payable"
 	  liability account.
 
+	* src/engine/Transaction.[ch]: add TRANS_NOTES and supporting routines
+	  to enable searching for notes.
+	
 2003-01-03  David Hampton  <hampton@employees.org>
 
 	* src/gnome/druid-hierarchy.c:
