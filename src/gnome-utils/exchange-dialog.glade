@@ -166,7 +166,7 @@
 	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label7</name>
-	      <label>From Amount:</label>
+	      <label>Amount:</label>
 	      <justify>GTK_JUSTIFY_RIGHT</justify>
 	      <wrap>False</wrap>
 	      <xalign>1</xalign>
