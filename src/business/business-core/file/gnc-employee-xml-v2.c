@@ -249,7 +249,7 @@ employee_commodity_handler (xmlNodePtr node, gpointer employee_pdata)
     struct employee_pdata *pdata = employee_pdata;
     gnc_commodity *com;
 
-    com = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
+    com = dom_tree_to_commodity_ref(node, pdata->book);
     g_return_val_if_fail (com, FALSE);
 
     gncEmployeeSetCommodity (pdata->employee, com);

@@ -2181,9 +2181,7 @@ regWindowLedger (GNCLedgerDisplay *ledger)
     gboolean use_double_line;
     GtkCheckMenuItem *check;
 
-    use_double_line = gnc_lookup_boolean_option ("Register",
-                                                 "Double Line Mode",
-                                                 FALSE);
+    use_double_line = gnc_ledger_display_default_double_line (reg);
 
     /* be sure to initialize the gui elements associated with the cursor */
     gnc_split_register_config (reg, reg->type, reg->style, use_double_line);

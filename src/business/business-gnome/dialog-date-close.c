@@ -24,10 +24,12 @@ typedef struct _dialog_date_close_window {
   GtkWidget *date;
   GtkWidget *post_date;
   GtkWidget *acct_combo;
+  GtkWidget *memo_entry;
   Timespec *ts, *ts2;
   GList * acct_types;
   GNCBook *book;
   Account *acct;
+  char **memo;
   gboolean retval;
 } DialogDateClose;
 
@@ -103,6 +105,10 @@ gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
 
   if (ddc->post_date)
     *(ddc->ts2) = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (ddc->post_date));
+
+  if (ddc->memo_entry && ddc->memo)
+    *(ddc->memo) = gtk_editable_get_chars (GTK_EDITABLE (ddc->memo_entry),
+					   0, -1);
 
   ddc->retval = TRUE;
   gnome_dialog_close (GNOME_DIALOG (ddc->dialog));
@@ -262,7 +268,8 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 				gboolean ok_is_default,
 				GList * acct_types, GNCBook *book,
 				/* Returned Data... */
-				Timespec *ddue, Timespec *post, Account **acct)
+				Timespec *ddue, Timespec *post,
+				char **memo, Account **acct)
 {
   DialogDateClose *ddc;
   GtkWidget *hbox;
@@ -280,11 +287,13 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
   ddc->ts2 = post;
   ddc->book = book;
   ddc->acct_types = acct_types;
+  ddc->memo = memo;
 
   xml = gnc_glade_xml_new ("date-close.glade", "Date Account Dialog");
   ddc->dialog = glade_xml_get_widget (xml, "Date Account Dialog");
   ddc->acct_combo = glade_xml_get_widget (xml, "acct_combo");
   hbox = glade_xml_get_widget (xml, "the_hbox");
+  ddc->memo_entry = glade_xml_get_widget (xml, "memo_entry");
 
   date_box = glade_xml_get_widget (xml, "date_box");
   ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
@@ -403,6 +412,8 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 
   gtk_widget_hide_all (glade_xml_get_widget (xml, "postdate_label"));
   gtk_widget_hide_all (glade_xml_get_widget (xml, "post_date"));
+  gtk_widget_hide_all (glade_xml_get_widget (xml, "memo_entry"));
+  gtk_widget_hide_all (glade_xml_get_widget (xml, "memo_label"));
 
   gtk_main ();
 

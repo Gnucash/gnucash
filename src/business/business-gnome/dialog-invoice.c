@@ -266,7 +266,7 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
   GncInvoice *invoice;
-  char *message, *ddue_label, *post_label, *acct_label;
+  char *message, *memo, *ddue_label, *post_label, *acct_label;
   Account *acc = NULL;
   GList * acct_types = NULL;
   Timespec ddue, postdate;
@@ -313,19 +313,26 @@ gnc_invoice_window_post_invoice_cb (GtkWidget *widget, gpointer data)
   timespecFromTime_t (&postdate, time(NULL));
   ddue = postdate;
   ddue.tv_sec += 3600*24*30;	/* XXX: due in 30 days */
+  memo = NULL;
+
   if (!gnc_dialog_dates_acct_parented (iw->dialog, message, ddue_label,
 				      post_label, acct_label, TRUE, acct_types,
-				      iw->book, &ddue, &postdate, &acc))
+				      iw->book, &ddue, &postdate, &memo, &acc))
     return;
 
   /* Yep, we're posting.  So, save the invoice... 
    * Note that we can safely ignore the return value; we checked
    * the verify_ok earlier, so we know it's ok.
    */
+  gnc_suspend_gui_refresh ();
   gnc_invoice_window_ok_save (iw);
 
   /* ... post it; post date is set to now ... */
-  gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, reverse);
+  gncInvoicePostToAccount (invoice, acc, &postdate, &ddue, memo, reverse);
+  gnc_resume_gui_refresh ();
+
+  if (memo)
+    g_free (memo);
 
   /* Reset the type; change to read-only! */
   iw->dialog_type = VIEW_INVOICE;

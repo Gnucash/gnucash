@@ -56,6 +56,7 @@ struct gnc_ledger_display
   SplitRegister *reg;
 
   gboolean loading;
+  gboolean use_double_line_default;
 
   GNCLedgerDisplayDestroy destroy;
   GNCLedgerDisplayGetParent get_parent;
@@ -76,6 +77,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              GNCLedgerDisplayType ld_type,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
+			     gboolean use_double_line,
                              gboolean is_template);
 static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay *ld,
                                                  GList *splits);
@@ -205,24 +207,34 @@ find_by_reg (gpointer find_data, gpointer user_data)
 }
 
 static SplitRegisterStyle
-gnc_get_default_register_style (void)
+gnc_get_default_register_style (GNCAccountType type)
 {
   SplitRegisterStyle new_style = REG_STYLE_LEDGER;
   char *style_string;
 
-  style_string = gnc_lookup_multichoice_option("Register", 
-                                               "Default Register Style",
-                                               "ledger");
-
-  if (safe_strcmp(style_string, "ledger") == 0)
+  switch (type) {
+  case PAYABLE:
+  case RECEIVABLE:
     new_style = REG_STYLE_LEDGER;
-  else if (safe_strcmp(style_string, "auto_ledger") == 0)
-    new_style = REG_STYLE_AUTO_LEDGER;
-  else if (safe_strcmp(style_string, "journal") == 0)
-    new_style = REG_STYLE_JOURNAL;
+    break;
 
-  if (style_string != NULL)
-    free(style_string);
+  default:
+    style_string = gnc_lookup_multichoice_option("Register", 
+						 "Default Register Style",
+						 "ledger");
+
+    if (safe_strcmp(style_string, "ledger") == 0)
+      new_style = REG_STYLE_LEDGER;
+    else if (safe_strcmp(style_string, "auto_ledger") == 0)
+      new_style = REG_STYLE_AUTO_LEDGER;
+    else if (safe_strcmp(style_string, "journal") == 0)
+      new_style = REG_STYLE_JOURNAL;
+    
+    if (style_string != NULL)
+      free(style_string);
+
+    break;
+  }
 
   return new_style;
 }
@@ -350,17 +362,38 @@ gnc_get_reg_type (Account *leader, GNCLedgerDisplayType ld_type)
   return reg_type;
 }
 
+/* Returns a boolean of whether this display should be single or double lined
+ * mode by default */
+gboolean
+gnc_ledger_display_default_double_line (GNCLedgerDisplay *gld)
+{
+  return (gld->use_double_line_default ||
+	  gnc_lookup_boolean_option ("Register", "Double Line Mode", FALSE));
+}
+
 /* Opens up a register window to display a single account */
 GNCLedgerDisplay *
 gnc_ledger_display_simple (Account *account)
 {
   SplitRegisterType reg_type;
+  GNCAccountType acc_type = xaccAccountGetType (account);
+  gboolean use_double_line;
+
+  switch (acc_type) {
+  case PAYABLE:
+  case RECEIVABLE:
+    use_double_line = TRUE;
+    break;
+  default:
+    use_double_line = FALSE;
+    break;
+  }
 
   reg_type = gnc_get_reg_type (account, LD_SINGLE);
 
   return gnc_ledger_display_internal (account, NULL, LD_SINGLE, reg_type,
-                                      gnc_get_default_register_style (),
-                                      FALSE);
+                                      gnc_get_default_register_style(acc_type),
+                                      use_double_line, FALSE);
 }
 
 /* Opens up a register window to display an account, and all of its
@@ -373,7 +406,8 @@ gnc_ledger_display_subaccounts (Account *account)
   reg_type = gnc_get_reg_type (account, LD_SUBACCOUNT);
 
   return gnc_ledger_display_internal (account, NULL, LD_SUBACCOUNT,
-                                      reg_type, REG_STYLE_JOURNAL, FALSE);
+                                      reg_type, REG_STYLE_JOURNAL, FALSE,
+				      FALSE);
 }
 
 
@@ -412,7 +446,7 @@ gnc_ledger_display_gl (void)
 
   return gnc_ledger_display_internal (NULL, query, LD_GL,
                                       GENERAL_LEDGER,
-                                      REG_STYLE_JOURNAL, FALSE);
+                                      REG_STYLE_JOURNAL, FALSE, FALSE);
 }
 
 /**
@@ -451,7 +485,7 @@ gnc_ledger_display_template_gl (char *id)
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
                                     GENERAL_LEDGER,
                                     REG_STYLE_JOURNAL,
-                                    TRUE); /* TRUE : template mode */
+                                    FALSE, TRUE); /* TRUE : template mode */
 
   sr = gnc_ledger_display_get_split_register (ld);
   gnc_split_register_set_template_account (sr, acct);
@@ -614,7 +648,8 @@ GNCLedgerDisplay *
 gnc_ledger_display_query (Query *query, SplitRegisterType type,
                           SplitRegisterStyle style)
 {
-  return gnc_ledger_display_internal (NULL, query, LD_GL, type, style, FALSE);
+  return gnc_ledger_display_internal (NULL, query, LD_GL, type, style,
+				      FALSE, FALSE);
 }
 
 static GNCLedgerDisplay *
@@ -622,6 +657,7 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
                              GNCLedgerDisplayType ld_type,
                              SplitRegisterType reg_type,
                              SplitRegisterStyle style,
+			     gboolean use_double_line,
                              gboolean is_template )
 {
   GNCLedgerDisplay *ld;
@@ -723,7 +759,9 @@ gnc_ledger_display_internal (Account *lead_account, Query *q,
    * The main register window itself                                *
   \******************************************************************/
 
-  ld->reg = gnc_split_register_new (reg_type, style, FALSE, is_template);
+  ld->use_double_line_default = use_double_line;
+  ld->reg = gnc_split_register_new (reg_type, style, use_double_line,
+				    is_template);
 
   gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 

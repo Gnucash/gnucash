@@ -185,7 +185,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
         copy_cursor_row (layout, curs, curs_last, 0);
 
         gnc_table_layout_set_cell (layout, curs, ACTN_CELL,  1, 3);
-        gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 4);
+        gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SINGLE_JOURNAL);
@@ -206,7 +206,7 @@ gnc_split_register_set_cells (SplitRegister *reg, TableLayout *layout)
 
         copy_cursor_row (layout, curs, curs_last, 0);
 
-        gnc_table_layout_set_cell (layout, curs, NOTES_CELL, 1, 4);
+        gnc_table_layout_set_cell (layout, curs, MEMO_CELL, 1, 4);
 
         curs = gnc_table_layout_get_cursor (layout,
                                             CURSOR_SPLIT);

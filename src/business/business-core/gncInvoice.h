@@ -64,7 +64,7 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice);
 Transaction *
 gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 Timespec *posted_date, Timespec *due_date,
-			 gboolean reverse);
+			 const char *description, gboolean reverse);
 
 
 /* Given a transaction, find and return the Invoice */

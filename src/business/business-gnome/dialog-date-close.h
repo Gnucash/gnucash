@@ -21,7 +21,8 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 
 /* 
  * Note that the dialog will "own" (and free) the acct_types list.
- * it should be a list of GNCAccountTypes
+ * it should be a list of GNCAccountTypes.  If memo is non-NULL,
+ * it will g_malloc() a string.  The caller should g_free() it.
  */
 
 gboolean
@@ -33,7 +34,7 @@ gnc_dialog_dates_acct_parented (GtkWidget *parent, const char *message,
 				GList * acct_types, GNCBook *book,
 				/* Returned Data... */
 				Timespec *ddue, Timespec *post,
-				Account **acct);
+				char **memo, Account **acct);
 
 gboolean
 gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,

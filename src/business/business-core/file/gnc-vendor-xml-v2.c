@@ -228,7 +228,7 @@ vendor_commodity_handler (xmlNodePtr node, gpointer vendor_pdata)
     struct vendor_pdata *pdata = vendor_pdata;
     gnc_commodity *com;
 
-    com = dom_tree_to_commodity_ref_no_engine(node, pdata->book);
+    com = dom_tree_to_commodity_ref(node, pdata->book);
     g_return_val_if_fail (com, FALSE);
 
     gncVendorSetCommodity (pdata->vendor, com);

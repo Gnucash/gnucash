@@ -322,9 +322,9 @@ more than one currency.  This report is not designed to cope with this possibili
       gnc:pagename-general
       optname-use-description
       "h"
-      (N_ "Use the description to identify individual companys.\
+      (N_ "Use the description to identify individual companies.\
   If false, use split memo")
-      #t))
+      #f))
 
      
        (add-option

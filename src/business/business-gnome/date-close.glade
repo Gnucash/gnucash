@@ -151,18 +151,19 @@
 	</widget>
 
 	<widget>
-	  <class>GnomeDateEdit</class>
-	  <name>date</name>
-	  <show_time>False</show_time>
-	  <use_24_format>True</use_24_format>
-	  <week_start_monday>False</week_start_monday>
-	  <lower_hour>7</lower_hour>
-	  <upper_hour>19</upper_hour>
+	  <class>GtkHBox</class>
+	  <name>date_box</name>
+	  <homogeneous>False</homogeneous>
+	  <spacing>0</spacing>
 	  <child>
 	    <padding>3</padding>
 	    <expand>False</expand>
 	    <fill>True</fill>
 	  </child>
+
+	  <widget>
+	    <class>Placeholder</class>
+	  </widget>
 	</widget>
 
 	<widget>
@@ -350,6 +351,23 @@
 
 	  <widget>
 	    <class>GtkLabel</class>
+	    <name>memo_label</name>
+	    <label>Description</label>
+	    <justify>GTK_JUSTIFY_RIGHT</justify>
+	    <wrap>False</wrap>
+	    <xalign>1</xalign>
+	    <yalign>0.5</yalign>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+	  </widget>
+
+	  <widget>
+	    <class>GtkLabel</class>
 	    <name>acct_label</name>
 	    <label>acct</label>
 	    <justify>GTK_JUSTIFY_RIGHT</justify>
@@ -378,28 +396,45 @@
 	  </child>
 
 	  <widget>
-	    <class>GnomeDateEdit</class>
-	    <name>post_date</name>
-	    <show_time>False</show_time>
-	    <use_24_format>False</use_24_format>
-	    <week_start_monday>False</week_start_monday>
-	    <lower_hour>7</lower_hour>
-	    <upper_hour>19</upper_hour>
+	    <class>GtkHBox</class>
+	    <name>post_date_box</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>
 	      <fill>False</fill>
 	    </child>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
 	  </widget>
 
 	  <widget>
-	    <class>GnomeDateEdit</class>
-	    <name>date</name>
-	    <show_time>False</show_time>
-	    <use_24_format>True</use_24_format>
-	    <week_start_monday>False</week_start_monday>
-	    <lower_hour>7</lower_hour>
-	    <upper_hour>19</upper_hour>
+	    <class>GtkHBox</class>
+	    <name>date_box</name>
+	    <homogeneous>False</homogeneous>
+	    <spacing>0</spacing>
+	    <child>
+	      <padding>0</padding>
+	      <expand>False</expand>
+	      <fill>False</fill>
+	    </child>
+
+	    <widget>
+	      <class>Placeholder</class>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkEntry</class>
+	    <name>memo_entry</name>
+	    <can_focus>True</can_focus>
+	    <editable>True</editable>
+	    <text_visible>True</text_visible>
+	    <text_max_length>0</text_max_length>
+	    <text></text>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>

@@ -390,7 +390,7 @@ gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 				       Timespec *post_date, Timespec *due_date,
-				       gboolean reverse)
+				       const char * desc, gboolean reverse)
 {
   Transaction *txn;
   GList *iter;
@@ -406,11 +406,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   txn = xaccMallocTransaction (invoice->book);
   xaccTransBeginEdit (txn);
 
-  /* Set Transaction Description (customer), Num (invoice ID), Currency */
-  xaccTransSetDescription
-    (txn,
-     gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice))));
-			   
+  /* Set Transaction Description, Num (invoice ID), Currency */
+  xaccTransSetDescription (txn, desc);
   xaccTransSetNum (txn, gncInvoiceGetID (invoice));
   xaccTransSetCurrency (txn, invoice->common_commodity);
 
@@ -444,8 +441,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
        */
       GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
 
-      acc_val->val = gnc_numeric_add_fixed (acc_val->val, value);
-      total = gnc_numeric_add_fixed (total, value);
+      if (gnc_numeric_check (value) == GNC_ERROR_OK) {
+	acc_val->val = gnc_numeric_add_fixed (acc_val->val, value);
+	total = gnc_numeric_add_fixed (total, value);
+      } else
+	g_warning ("bad value in our entry");
     }
 
     /* Repeat for the TaxValue */
@@ -453,8 +453,11 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     if (this_acc) {
 
       GET_OR_ADD_ACCVAL (splitinfo, this_acc, acc_val);
-      acc_val->val = gnc_numeric_add_fixed (acc_val->val, tax);
-      total = gnc_numeric_add_fixed (total, tax);
+      if (gnc_numeric_check (tax) == GNC_ERROR_OK) {
+	acc_val->val = gnc_numeric_add_fixed (acc_val->val, tax);
+	total = gnc_numeric_add_fixed (total, tax);
+      } else
+	g_warning ("bad tax in our entry");
     }
   } /* for */
 
@@ -479,6 +482,12 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   {
     Split *split = xaccMallocSplit (invoice->book);
     /* Set action/memo */
+
+    /* The memo is the customer name */
+    xaccSplitSetMemo
+      (split,
+       gncOwnerGetName (gncOwnerGetEndOwner (gncInvoiceGetOwner (invoice))));
+			   
     xaccSplitSetBaseValue (split, (reverse ? total : gnc_numeric_neg (total)),
 			   invoice->common_commodity);
     xaccAccountBeginEdit (acc);
