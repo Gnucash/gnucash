@@ -481,8 +481,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
       g_slist_prepend(parent_frame->data_from_children, child_result_data);
   }
 
-  /* grab it before it goes away - we shouldn't need to g_strdup
-     because this string is held by the parent parser's hash table. */
+  /* grab it before it goes away - we own the reference */
   end_tag = current_frame->tag;
 
   PINFO("Finished with end of <%s>", end_tag);
@@ -521,6 +520,8 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
                                          end_tag,
                                          child_result_data);
   }
+
+  g_free (end_tag);
 }
 
 xmlEntityPtr

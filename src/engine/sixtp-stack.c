@@ -12,11 +12,6 @@ sixtp_stack_frame_destroy(sixtp_stack_frame *sf) {
   g_slist_free(sf->data_from_children);
   sf->data_from_children = NULL;
 
-/*   if(sf->tag) */
-/*   { */
-/*       g_free(sf->tag); */
-/*   } */
-  
   g_free(sf);
 }
 
