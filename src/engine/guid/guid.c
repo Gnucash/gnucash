@@ -289,8 +289,11 @@ guid_init()
     char *s;
 
     s = getlogin();
-    md5_process_bytes(s, strlen(s), &guid_context);
-    bytes += strlen(s);
+    if (s != NULL)
+    {
+      md5_process_bytes(s, strlen(s), &guid_context);
+      bytes += strlen(s);
+    }
 
     uid = getuid();
     md5_process_bytes(&uid, sizeof(uid), &guid_context);

@@ -759,25 +759,22 @@ FindCommonCurrency (Split **slist, char * ra, char * rb)
 char *
 xaccTransFindCommonCurrency (Transaction *trans)
 {
-  char *ra, *rb, *com;
+  char *ra, *rb;
 
-  assert (trans->splits);
-  assert (trans->splits[0]);
-  assert (trans->splits[0]->acc);
+  if (trans->splits == NULL) return NULL;
+  if (trans->splits[0] == NULL) return NULL;
+  if (trans->splits[0]->acc == NULL) return NULL;
 
   ra = trans->splits[0]->acc->currency;
   rb = trans->splits[0]->acc->security;
 
-  com = FindCommonCurrency (trans->splits, ra, rb);
-  return com;
+  return FindCommonCurrency (trans->splits, ra, rb);
 }
 
 char *
 xaccTransIsCommonCurrency (Transaction *trans, char * ra)
 {
-  char *com;
-  com = FindCommonCurrency (trans->splits, ra, NULL);
-  return com;
+  return FindCommonCurrency (trans->splits, ra, NULL);
 }
 
 /********************************************************************\
