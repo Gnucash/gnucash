@@ -104,10 +104,9 @@ gnc_ok_cancel_dialog_parented(gncUIWidget parent, const char *message,
 GNCVerifyResult
 gnc_verify_cancel_dialog(const char * message, GNCVerifyResult default_res) 
 {
-  gnc_verify_cancel_dialog_parented(gnc_ui_get_toplevel(), message, 
-                                    default_res);
+  return gnc_verify_cancel_dialog_parented(gnc_ui_get_toplevel(), message, 
+                                           default_res);
 }
-                         
 
 
 GNCVerifyResult
@@ -202,11 +201,11 @@ gnc_verify_dialog_parented(gncUIWidget parent, const char *message,
 				     GNOME_STOCK_BUTTON_NO,
 				     NULL);
 
+  if (parent == NULL)
+    parent = gnc_ui_get_toplevel ();
+
   if (parent != NULL)
     gnome_dialog_set_parent(GNOME_DIALOG(verify_box), GTK_WINDOW(parent));
-  else
-    gnome_dialog_set_parent(GNOME_DIALOG(verify_box),
-                            GTK_WINDOW(gnc_ui_get_toplevel()));
   
   gnome_dialog_set_default(GNOME_DIALOG(verify_box), yes_is_default ? 0 : 1);
 
@@ -223,7 +222,12 @@ gnc_verify_dialog_parented(gncUIWidget parent, const char *message,
 void 
 gnc_info_dialog(const char *message)
 {
-  gnc_info_dialog_parented(GTK_WINDOW(gnc_ui_get_toplevel()), message);
+  GtkWidget *top = gnc_ui_get_toplevel ();
+
+  if (top)
+    gnc_info_dialog_parented (GTK_WINDOW(top), message);
+  else
+    gnc_info_dialog_parented (NULL, message);
 }
 
 /********************************************************************\
@@ -238,7 +242,7 @@ void
 gnc_info_dialog_parented(GtkWindow *parent, const char *message)
 {
   GtkWidget *info_box = NULL;
-  
+
   info_box = gnome_ok_dialog_parented(message, parent);
 
   gnome_dialog_run_and_close(GNOME_DIALOG(info_box));
@@ -269,7 +273,7 @@ void
 gnc_warning_dialog_parented(GtkWidget *parent, const char *message)
 {
   GtkWidget *warning_box = NULL;
-  
+
   warning_box = gnome_warning_dialog_parented(message, GTK_WINDOW(parent));
 
   gnome_dialog_run_and_close(GNOME_DIALOG(warning_box));
@@ -285,7 +289,12 @@ gnc_warning_dialog_parented(GtkWidget *parent, const char *message)
 void 
 gnc_error_dialog(const char *message)
 {
-  gnc_error_dialog_parented(GTK_WINDOW(gnc_ui_get_toplevel()), message);
+  GtkWidget *top = gnc_ui_get_toplevel ();
+
+  if (top)
+    gnc_error_dialog_parented(GTK_WINDOW(top), message);
+  else
+    gnc_error_dialog_parented(NULL, message);
 }
 
 /********************************************************************\

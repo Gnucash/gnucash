@@ -50,9 +50,10 @@
   (define (set-last-row-style! table tag . rest)
     (let ((arg-list 
 	   (cons table 
-		 (cons (- (gnc:html-table-num-rows table) 1) (cons tag rest)))))
+		 (cons (- (gnc:html-table-num-rows table) 1)
+                       (cons tag rest)))))
       (apply gnc:html-table-set-row-style! arg-list)))
-  
+
   (define (add-subheading-row data table width subheading-style)
     (let ((heading-cell (gnc:make-html-table-cell data)))
       (gnc:html-table-cell-set-colspan! heading-cell width)
@@ -95,7 +96,7 @@
 					(gnc:transaction-get-date-posted
 					 (gnc:split-get-parent split))))
 			table width subheading-style))
-  
+
   (let ()
      
     (define account-types-to-reverse-assoc-list
@@ -235,17 +236,21 @@
 	  (addto! heading-list (_ "Balance")))
       (reverse heading-list)))
 
-  (define (add-split-row table split column-vector row-style account-types-to-reverse transaction-row?)
+  (define (add-split-row table split column-vector
+                         row-style account-types-to-reverse transaction-row?)
     (let* ((row-contents '())
 	   (parent (gnc:split-get-parent split))
 	   (account (gnc:split-get-account split))
-	   (account-type (gw:enum-<gnc:AccountType>-val->sym (gnc:account-get-type account) #f))
+	   (account-type (gw:enum-<gnc:AccountType>-val->sym
+                          (gnc:account-get-type account) #f))
 	   (currency (gnc:account-get-commodity account))
 	   (damount (gnc:split-get-share-amount split))
 	   (dummy1 (begin
 		     (gnc:debug "account-type" account-type)
-		     (gnc:debug "account-types-to-reverse" account-types-to-reverse)
-		     (gnc:debug "member result" (member account-type account-types-to-reverse))
+		     (gnc:debug "account-types-to-reverse"
+                                account-types-to-reverse)
+		     (gnc:debug "member result"
+                                (member account-type account-types-to-reverse))
 		     #f))
 	   (split-value (gnc:make-gnc-monetary 
 			 currency 
@@ -452,7 +457,7 @@
        (vector 'descend
                (N_ "Descending")
                (N_ "largest to smallest, latest to earliest")))))
-     
+
     (gnc:register-trep-option
      (gnc:make-simple-boolean-option
       (N_ "Display") (N_ "Date")
@@ -675,7 +680,8 @@ and Income accounts")))))
             (gnc:lookup-option options (N_ "General") (N_ "Style")))
 	   'multi-line))
 
-    (define (add-other-split-rows split table used-columns row-style account-types-to-reverse)
+    (define (add-other-split-rows split table used-columns
+                                  row-style account-types-to-reverse)
       (define (other-rows-driver split parent table used-columns i)
 	(let ((current (gnc:transaction-get-split parent i)))
 	  (gnc:debug "i" i)
@@ -684,7 +690,8 @@ and Income accounts")))))
 		((equal? current split)
 		 (other-rows-driver split parent table used-columns (+ i 1)))
 		(else (begin
-			(add-split-row table current used-columns row-style account-types-to-reverse #f)
+			(add-split-row table current used-columns
+                                       row-style account-types-to-reverse #f)
 			(other-rows-driver split parent table used-columns
                                            (+ i 1)))))))
 
@@ -758,7 +765,8 @@ and Income accounts")))))
                                          secondary-subtotal-style)
 		       (secondary-subtotal-collector 'reset #f #f)
 		       (if next
-                           (secondary-subheading-renderer next table width secondary-subtotal-style))))
+                           (secondary-subheading-renderer
+                            next table width secondary-subtotal-style))))
 	    (if (and primary-subtotal-pred
                      (or (not next)
                          (and next
@@ -768,7 +776,8 @@ and Income accounts")))))
                                          primary-subtotal-style)
 		       (primary-subtotal-collector 'reset #f #f)
 		       (if next
-		       (primary-subheading-renderer next table width primary-subtotal-style))))
+		       (primary-subheading-renderer
+                        next table width primary-subtotal-style))))
 	    (do-rows-with-subtotals rest 
 				    table 
 				    used-columns
@@ -819,17 +828,19 @@ and Income accounts")))))
 ;     (gnc:warn "Splits:" splits)
      (if (not (null? splits))
       (if primary-subheading-renderer 
-        (primary-subheading-renderer (car splits) table width primary-subtotal-style))
+        (primary-subheading-renderer
+         (car splits) table width primary-subtotal-style))
       (if secondary-subheading-renderer
-        (secondary-subheading-renderer (car splits) table widthsecondary-subtotal-style)))
-     
+        (secondary-subheading-renderer
+         (car splits) table widthsecondary-subtotal-style)))
+
      (do-rows-with-subtotals splits table used-columns width
                              multi-rows? #t 
 			     account-types-to-reverse
 			     primary-subtotal-pred
                              secondary-subtotal-pred
 			     primary-subheading-renderer
-			     secondary-subheading-renderer                             
+			     secondary-subheading-renderer
                              odd-row-style
                              even-row-style
                              primary-subtotal-style

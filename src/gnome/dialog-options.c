@@ -271,27 +271,24 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
   }
   else if (safe_strcmp(type, "date") == 0)
   {
-    SCM symbol;
     int index;
     char *date_option_type;
     char *symbol_str;
 
     date_option_type = gnc_option_date_option_get_subtype(option);
 
-    if (gh_vector_p(value))
+    if (gh_pair_p(value))
     {
-      symbol = gh_vector_ref(value, gh_int2scm(0));
-      if(gh_symbol_p(symbol))
+      symbol_str = gnc_date_option_value_get_type (value);
+      if (symbol_str)
       {
-	symbol_str = gh_symbol2newstr(symbol, NULL);
 	if (safe_strcmp(symbol_str, "relative") == 0)
 	{
-	  index =
-            gnc_option_permissible_value_index(option,
-                                               gh_vector_ref(value,
-                                                             gh_int2scm(2)));
+          SCM relative = gnc_date_option_value_get_relative (value);
+
+	  index = gnc_option_permissible_value_index(option, relative);
 	  if (safe_strcmp(date_option_type, "relative") == 0)
-	  {      
+	  {
 	    gtk_object_set_data(GTK_OBJECT(option->widget),
                                 "gnc_multichoice_index",
 				GINT_TO_POINTER(index));
@@ -321,49 +318,45 @@ gnc_option_set_ui_value(GNCOption *option, gboolean use_default)
 	else if (safe_strcmp(symbol_str, "absolute") == 0)
 	{ 
 	  Timespec ts;
-	  SCM tp;
-	  tp = gh_vector_ref(value, gh_int2scm(1));
-	  if (gnc_timepair_p(tp))
-	  {
-	    ts = gnc_timepair2timespec(tp);
 
-	    if (safe_strcmp(date_option_type, "absolute") == 0)
-	    {
-	      gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
-	    }
-	    else if (safe_strcmp(date_option_type, "both") == 0)
-	    {
-	      GList *widget_list;
-	      GtkWidget *ab_widget;
-	      widget_list =
-                gtk_container_children(GTK_CONTAINER(option->widget));
-	      ab_widget = g_list_nth_data(widget_list,
-                                          GNC_RD_WID_AB_WIDGET_POS);
-	      gnc_date_option_set_select_method(option, TRUE, TRUE);
-	      gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
-	    }
-	    else
-	    {
-	      bad_value = TRUE;
-	    }
-	  }
-	  else
-	  {
-	    bad_value = TRUE;
-	  }
+          ts = gnc_date_option_value_get_absolute (value);
+
+          if (safe_strcmp(date_option_type, "absolute") == 0)
+          {
+            gnc_date_edit_set_time(GNC_DATE_EDIT(option->widget), ts.tv_sec);
+          }
+          else if (safe_strcmp(date_option_type, "both") == 0)
+          {
+            GList *widget_list;
+            GtkWidget *ab_widget;
+            widget_list =
+              gtk_container_children(GTK_CONTAINER(option->widget));
+            ab_widget = g_list_nth_data(widget_list,
+                                        GNC_RD_WID_AB_WIDGET_POS);
+            gnc_date_option_set_select_method(option, TRUE, TRUE);
+            gnc_date_edit_set_time(GNC_DATE_EDIT(ab_widget), ts.tv_sec);
+          }
+          else
+          {
+            bad_value = TRUE;
+          }
 	}
 	else
 	{
 	  bad_value = TRUE;
 	}
-	free(symbol_str);
+
+        if (symbol_str)
+          free(symbol_str);
       }
     }
     else
     {
       bad_value = TRUE;
     }
-    g_free(date_option_type);
+
+    if (date_option_type)
+      free(date_option_type);
   }
   else if (safe_strcmp(type, "account-list") == 0)
   {

@@ -145,15 +145,15 @@
 	(gnc:report-options report-obj) section name)))
     
     (let ((to-date-tp (gnc:timepair-end-day-time 
-		       (vector-ref (get-option pagename-general
-					       optname-to-date) 1)))
+		       (gnc:date-option-absolute-time
+                        (get-option pagename-general optname-to-date))))
 	  (from-date-tp (gnc:timepair-start-day-time 
-			 (vector-ref (get-option pagename-general
-						 optname-from-date) 1)))
+			 (gnc:date-option-absolute-time
+                          (get-option pagename-general optname-from-date))))
 	  (interval (get-option pagename-general optname-stepsize))
 	  (report-currency (get-option pagename-general
 				       optname-report-currency))
-	  
+
 	  (accounts (get-option pagename-accounts optname-accounts))
 	  (account-levels (get-option pagename-accounts optname-levels))
 	  

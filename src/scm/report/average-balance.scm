@@ -87,7 +87,8 @@
                (list 'GLPlot (N_ "Gain/Loss") (N_ "Gain And Loss"))))))
 
       (gnc:options-add-plot-size! 
-       options pagename-display (N_ "Plot Width") (N_ "Plot Height") "d" 400 400)
+       options pagename-display (N_ "Plot Width") (N_ "Plot Height")
+       "d" 400 400)
 
       ;; Set the general page as default option tab
       (gnc:options-set-default-section options pagename-general)      
@@ -202,8 +203,9 @@
              ;; output a row of info 
              (output-row)
              (set! interval-start (incdate interval-start interval))
-             (set! interval-end (decdate (incdate interval-start interval) SecDelta))
-             
+             (set! interval-end
+                   (decdate (incdate interval-start interval) SecDelta))
+
              ;; reset collectors 
              (minmax-accum 'reset #f)
              (gain-loss-accum 'reset #f)
@@ -260,8 +262,8 @@
 			     (gnc:timepair-previous-day begindate)))
 	   ;; startbal will be a commodity-collector
            (startbal  '()))
-      
-      (define (collector->double commodity-collector )
+
+      (define (collector->double commodity-collector)
 	(gnc:numeric-to-double
 	 (gnc:gnc-monetary-amount
 	  (gnc:sum-collector-commodity commodity-collector
@@ -294,8 +296,9 @@
 		  ;; Beware: delete-duplicates is an O(n^2)
 		  ;; algorithm. More efficient method: sort the list,
 		  ;; then use a linear algorithm.
-                  (set! accounts (delete-duplicates (append accounts subaccts)))))
-            
+                  (set! accounts
+                        (delete-duplicates (append accounts subaccts)))))
+
             (gnc:query-add-account-match 
              query (gnc:list->glist accounts) 
              'acct-match-any 'query-and)
@@ -405,7 +408,7 @@
                    '(2 3 4 5 6 7))
                   
                   (gnc:html-document-add-object! document table))))
-          
+
           ;; if there are no accounts selected...
           (let ((p (gnc:make-html-text)))
             (gnc:html-text-append! 

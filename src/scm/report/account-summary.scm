@@ -130,11 +130,12 @@
 	  (report-currency (get-option pagename-general 
 				       optname-report-currency))
           (date-tp (gnc:timepair-end-day-time 
-		    (vector-ref (get-option pagename-general 
-					    optname-date) 1)))
+		    (gnc:date-option-absolute-time
+                     (get-option pagename-general 
+                                 optname-date))))
           (doc (gnc:make-html-document))
 	  (txt (gnc:make-html-text)))
-      
+
       (gnc:html-document-set-title! doc (_ "Account Summary"))
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
@@ -178,7 +179,7 @@
               (_ "This report requires accounts to be selected.")))
             (gnc:html-document-add-object! doc p)))      
       doc))
-  
+
   (gnc:define-report 
    'version 1
    'name (N_ "Account Summary")

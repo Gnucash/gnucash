@@ -123,11 +123,11 @@
 	
 
     (let* ((to-date-tp (gnc:timepair-end-day-time 
-			(vector-ref (op-value pagename-general
-					      optname-to-date) 1)))
+			(gnc:date-option-absolute-time
+                         (op-value pagename-general optname-to-date))))
 	   (from-date-tp (gnc:timepair-start-day-time 
-			  (vector-ref (op-value pagename-general
-						optname-from-date) 1)))
+			  (gnc:date-option-absolute-time
+                           (op-value pagename-general optname-from-date))))
 	   (interval (op-value pagename-general optname-stepsize))
 	   (accounts (op-value pagename-accounts optname-accounts))
 	   (classified-accounts (gnc:decompose-accountlist accounts))
@@ -158,8 +158,11 @@
                         (eval interval)))
 	   (dummy134 (gnc:debug "dates-list" dates-list))
            (assets-collector-list (collector-fn asset-accounts dates-list))
-	   (expense-collector-list (collector-fn liability-equity-accounts dates-list))
-	   (net-collector-list (map collector-combine assets-collector-list expense-collector-list))
+	   (expense-collector-list
+            (collector-fn liability-equity-accounts dates-list))
+	   (net-collector-list
+            (map collector-combine assets-collector-list
+                 expense-collector-list))
 	   (assets-list
             (map (collector-to-double-fn report-currency exchange-fn-internal)
                  assets-collector-list))
@@ -190,7 +193,7 @@
       (gnc:html-barchart-set-row-labels-rotated?! 
        chart (< (/ (- width 200) 
 		   (length date-string-list)) 60))
-      
+
       (if show-sep?
           (begin
             (gnc:html-barchart-append-column! chart assets-list)

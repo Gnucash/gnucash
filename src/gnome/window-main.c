@@ -358,7 +358,12 @@ gnc_main_window_child_refresh(gpointer data) {
 
 GtkWidget * 
 gnc_main_window_get_toplevel(GNCMainInfo * wind) {
-  return GTK_WIDGET(gnome_mdi_get_active_window(GNOME_MDI(wind->mdi)));
+  GnomeApp *app = gnome_mdi_get_active_window(GNOME_MDI(wind->mdi));
+
+  if (app)
+    return GTK_WIDGET(app);
+
+  return NULL;
 }
 
 

@@ -152,13 +152,12 @@ balance at a given time"))
     
     ;; Get all options
     (let ((to-date-tp (gnc:timepair-end-day-time 
-		       (vector-ref (op-value pagename-general
-					     optname-to-date) 1)))
+		       (gnc:date-option-absolute-time
+                        (op-value pagename-general optname-to-date))))
 	  (from-date-tp (if do-intervals?
 			    (gnc:timepair-start-day-time 
-			     (vector-ref 
-			      (op-value pagename-general
-					optname-from-date) 1))
+			     (gnc:date-option-absolute-time 
+			      (op-value pagename-general optname-from-date)))
 			    '()))
 	  (accounts (op-value pagename-accounts optname-accounts))
 	  (account-levels (op-value pagename-accounts optname-levels))
@@ -195,7 +194,6 @@ balance at a given time"))
 	    (gnc:account-get-comm-balance-at-date
 	     account to-date-tp subaccts?)))
 
-      
       ;; Define more helper variables.
       (let* ((exchange-alist (gnc:make-exchange-alist
 			      report-currency to-date-tp))
@@ -351,7 +349,7 @@ balance at a given time"))
 			       (gnc:amount->string total print-info)))
 		    
 		    "")))
-	
+
 	(let ((urls
 	       (map 
 		(lambda (pair)

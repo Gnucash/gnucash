@@ -32,9 +32,8 @@
 ;; in *one* place.
 
 (let* ((pagename-general (N_ "General"))
-       (optname-from-date (N_ "From"))
        (optname-to-date (N_ "To"))
-       
+
        (pagename-accounts (N_ "Accounts"))
        (optname-display-depth (N_ "Account Display Depth"))
        (optname-show-subaccounts (N_ "Always show sub-accounts"))
@@ -142,8 +141,9 @@
 	   (report-currency (get-option pagename-currencies
 					optname-report-currency))
 	   (to-date-tp (gnc:timepair-end-day-time 
-		       (vector-ref (get-option pagename-general
-					       optname-to-date) 1)))
+		       (gnc:date-option-absolute-time
+                        (get-option pagename-general
+                                    optname-to-date))))
 
 	   ;; decompose the account list
 	   (split-up-accounts (gnc:decompose-accountlist accounts))
@@ -156,7 +156,6 @@
 	   (income-expense-accounts
 	    (append (assoc-ref split-up-accounts 'income)
 		    (assoc-ref split-up-accounts 'expense)))
-
 
 	   (doc (gnc:make-html-document))
 	   (txt (gnc:make-html-text))
@@ -255,7 +254,6 @@
 				   total-equity-balance
 				   #f)
 
-	    
 	    ;; Now concatenate the tables. This first prepend-row has
 	    ;; to be written out by hand -- we can't use the function
 	    ;; append-something because we have to prepend.
@@ -264,7 +262,7 @@
 	     (list (gnc:html-acct-table-cell (* (if show-fcur? 3 2) 
 						tree-depth) 
 					     (_ "Assets") #t)))
-	    
+
 	    (add-subtotal-line 
 	     asset-table (_ "Assets") asset-balance)	    
 	    

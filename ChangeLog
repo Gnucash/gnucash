@@ -1,3 +1,22 @@
+2001-04-13  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/*: update several reports to use
+	the new date option api.
+
+	* src/scm/options.scm: change date options to return
+	the same values as they accept.
+
+	* src/guile/option-util.c: update for new date option api.
+	wrap scheme api for C.
+
+	* src/gnome/dialog-options.c: update for new date option api.
+	fix bugs.
+
+	* src/gnome/query-user.c: fixes for no toplevel window
+
+	* src/gnome/window-main.c (gnc_main_window_get_toplevel): check
+	for NULL
+
 2001-04-13  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/balance-sheet.scm: Cleanup code. Use new funcs

@@ -117,11 +117,13 @@
                                        exchange-fn)))))
 
     (let* ((to-date-tp (gnc:timepair-end-day-time 
-			(vector-ref (op-value pagename-general
-					      optname-to-date) 1)))
-	   (from-date-tp (gnc:timepair-start-day-time 
-			  (vector-ref (op-value pagename-general
-						optname-from-date) 1)))
+			(gnc:date-option-absolute-time
+                         (op-value pagename-general
+                                   optname-to-date))))
+	   (from-date-tp (gnc:timepair-start-day-time
+			  (gnc:date-option-absolute-time
+                           (op-value pagename-general
+                                     optname-from-date))))
 	   (interval (op-value pagename-general optname-stepsize))
 	   (accounts (op-value pagename-accounts optname-accounts))
            (report-currency (op-value pagename-general

@@ -126,11 +126,13 @@
 	  (report-currency (get-option pagename-currencies
 				       optname-report-currency))
           (to-date-tp (gnc:timepair-end-day-time 
-		       (vector-ref (get-option pagename-general
-					       optname-to-date) 1)))
+		       (gnc:date-option-absolute-time
+                        (get-option pagename-general
+                                    optname-to-date))))
           (from-date-tp (gnc:timepair-start-day-time 
-			 (vector-ref (get-option pagename-general
-						 optname-from-date) 1)))
+			 (gnc:date-option-absolute-time
+                          (get-option pagename-general
+                                      optname-from-date))))
           (doc (gnc:make-html-document)))
       
       (gnc:html-document-set-title! 
@@ -176,7 +178,7 @@
               (_ "This report requires accounts to be selected.")))
             (gnc:html-document-add-object! doc p)))      
       doc))
-  
+
   (gnc:define-report 
    'version 1
    'name (N_ "Profit And Loss")

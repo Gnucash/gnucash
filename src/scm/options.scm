@@ -149,7 +149,7 @@
   (let* ((option-data-fns (gnc:option-data-fns option))
 	 (name-fn (vector-ref option-data-fns 4)))
     (name-fn value)))
-		  
+
 (define (gnc:option-number-of-indices option)
   (let* ((option-data-fns (gnc:option-data-fns option))
 	 (name-fn (vector-ref option-data-fns 0)))
@@ -410,11 +410,7 @@
                           (string-append "'" (gnc:value->string value)))))
     (gnc:make-option
      section name sort-tag 'date documentation-string
-     (lambda () 
-       (if (eq? (car value) 'relative)
-	   (vector 'relative (gnc:get-absolute-from-relative-date
-                              (cdr value)) (cdr value))
-	   (vector 'absolute (cdr value))))
+     (lambda () value)
      (lambda (date)
        (if (date-legal date)
            (set! value date)
@@ -455,12 +451,18 @@
       (gnc:get-rd-option-data-show-time (gnc:option-data option))
       (gnc:error "Not a date option")))
 
-(define (gnc:date-option-absolute-time option-value)
-  (vector-ref option-value 1))
 (define (gnc:date-option-value-type option-value)
-  (vector-ref option-value 0))
+  (car option-value))
+
+(define (gnc:date-option-absolute-time option-value)
+  (if (eq? (car option-value) 'absolute)
+      (cdr option-value)
+      (gnc:get-absolute-from-relative-date (cdr option-value))))
+
 (define (gnc:date-option-relative-time option-value)
-  (vector-ref option-value 2))
+  (if (eq? (car option-value) 'absolute)
+      #f
+      (cdr option-value)))
 
 ;; account-list options use the option-data as a boolean value. If
 ;; true, the gui should allow the user to select multiple accounts.
