@@ -2130,7 +2130,7 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
                                  Timespec *default_value)
 {
   GNCOption *option;
-  Timespec temp;
+  Timespec temp = {0,0};
   char *symbol;
   SCM getter;
   SCM value;
@@ -2138,7 +2138,9 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
   initialize_getters();
 
   if (set_ab_value == NULL)
+  {
     set_ab_value = &temp;
+  }
 
   if(set_rel_value != NULL)
   {
@@ -2147,7 +2149,7 @@ gnc_option_db_lookup_date_option(GNCOptionDB *odb,
  
   if (is_relative != NULL)
   {
-      *is_relative = FALSE;
+    *is_relative = FALSE;
   }
   
   option = gnc_option_db_get_option_by_name(odb, section, name);
