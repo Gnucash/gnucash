@@ -530,25 +530,44 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
       gnc_numeric ra = gnc_numeric_reduce (a);
       gnc_numeric rb = gnc_numeric_reduce (b);
 
-      gint64 gcf_nume = gcf64(ra.num, rb.denom);
-      qofint128 nume = mult128(ra.num, rb.denom/gcf_nume);
+      gint64 gcf_nume = gcf64(ra.num, rb.num);
+      gint64 gcf_deno = gcf64(rb.denom, ra.denom);
+      qofint128 rnume = mult128(ra.num/gcf_nume, rb.denom/gcf_deno);
+      qofint128 rdeno = mult128(rb.num/gcf_nume, ra.denom/gcf_deno);
 
-      gint64 gcf_deno = gcf64(rb.num, ra.denom);
-      qofint128 deno = mult128(rb.num, ra.denom/gcf_deno);
-
-      if ((0 == nume.isbig) && (0 == deno.isbig))
+      if ((0 == rnume.isbig) && (0 == rdeno.isbig))
       {
-        quotient.num = sgn * nume.lo;
-        quotient.denom = deno.lo;
+        quotient.num = sgn * rnume.lo;
+        quotient.denom = rdeno.lo;
       }
-      else if (0 == deno.isbig)
+      else if (0 == rdeno.isbig)
       {
-        quotient = reduce128 (nume, deno.lo);
+        quotient = reduce128 (rnume, rdeno.lo);
         quotient.num *= sgn;
       }
       else
       {
-        return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+        /* If not exact/fixed, and rounding allowed, then
+         * shift until there's no more overflow. The conversion
+         * at the end will fix things up the final value. */
+        if (((how & GNC_NUMERIC_RND_MASK) == GNC_HOW_RND_NEVER) ||
+            ((how & GNC_NUMERIC_DENOM_MASK) == GNC_HOW_DENOM_EXACT))
+        {
+          return gnc_numeric_error (GNC_ERROR_OVERFLOW);
+        }
+printf ("duude start shift nu=%llx %llx (%d) / %llx %llx %d\n", rnume.hi,
+rnume.lo, rnume.isbig, rdeno.hi, rdeno.lo, rdeno.isbig);
+        while (rnume.isbig || rdeno.isbig)
+        {
+           rnume = shift128 (rnume);
+           rdeno = shift128 (rdeno);
+printf ("duude shift nu=%llx %llx (%d) / %llx %llx %d\n", rnume.hi,
+rnume.lo, rnume.isbig, rdeno.hi, rdeno.lo, rdeno.isbig);
+        }
+double rat=((double)rnume.lo) / ((double) rdeno.lo);
+printf ("duude reduced raat=%g\n", rat);
+        quotient.num = sgn * rnume.lo;
+        quotient.denom = rdeno.lo;
       }
     }
   }
@@ -695,15 +714,27 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how)
   {
     /* Do all the modulo and int division on positive values to make
      * things a little clearer. Reduce the fraction denom/in.denom to
-     * help with range errors (FIXME : need bigger intermediate rep) */
+     * help with range errors */
     temp.num   = denom;
     temp.denom = in.denom;
     temp       = gnc_numeric_reduce(temp);
-  
-    out.num   = in.num * temp.num;
-    out.num   = (out.num < 0) ? -out.num : out.num;
-    remainder = out.num % temp.denom;
-    out.num   = out.num / temp.denom;
+
+    /* Symbolically, do the following:
+     * out.num   = in.num * temp.num;
+     * remainder = out.num % temp.denom;
+     * out.num   = out.num / temp.denom;
+     * out.denom = denom;
+     */
+    qofint128 nume = mult128 (in.num, temp.num);
+    qofint128 newm = div128 (nume, temp.denom);
+    remainder = rem128 (nume, temp.denom);
+
+    if (newm.isbig)
+    {
+       return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    }
+
+    out.num = newm.lo;
     out.denom = denom;
   }
 
@@ -899,10 +930,14 @@ double_to_gnc_numeric(double in, gint64 denom, gint how)
 double
 gnc_numeric_to_double(gnc_numeric in) 
 {
-  if(in.denom >= 0) {
+  if(in.denom >= 0) 
+  {
+printf ("duude to touble %g / %g = %g\n", (double)in.num, (double)in.denom ,
+(double)in.num/(double)in.denom);
     return (double)in.num/(double)in.denom;
   }
-  else {
+  else 
+  {
     return (double)(in.num * in.denom);
   }
 }
