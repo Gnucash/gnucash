@@ -284,7 +284,7 @@ destroyCombo (BasicCell *bcell)
 /* =============================================== */
 
 static void
-menustring_free(gpointer string, gpointer user_data)
+menustring_free (gpointer string, gpointer user_data)
 {
         g_free (string);
 }
@@ -830,7 +830,8 @@ xaccComboCellSetIgnoreString (ComboCell *cell, const char *ignore_string)
 
 	box = cell->cell.gui_private;
 
-        box->ignore_string = g_strdup(ignore_string);
+        g_free (box->ignore_string);
+        box->ignore_string = g_strdup (ignore_string);
 }
 
 /* =============================================== */
@@ -845,7 +846,8 @@ xaccComboCellSetIgnoreHelp (ComboCell *cell, const char *ignore_help)
 
 	box = cell->cell.gui_private;
 
-        box->ignore_help = g_strdup(ignore_help);
+        g_free (box->ignore_help);
+        box->ignore_help = g_strdup (ignore_help);
 }
 
 /* =============================================== */
