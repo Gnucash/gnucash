@@ -161,24 +161,33 @@ fill_account_list (EuroConvInfo *info)
 	gnc_commodity_equiv(currency, gnc_get_euro())) 
       continue;
 
-    /* check our settings */
-    if (!check_account_selection(account,info))
-      continue;
-
     if (account_type == CURRENCY &&
 	TRUE && /* some GUI query here */
 	gnc_commodity_equiv (xaccAccountGetSecurity (account),
-			     gnc_get_euro ()) &&
-	!g_hash_table_lookup (currencyhash, currency) )
+			     gnc_get_euro ()))
       {
-	/* take this as an exchange account */
-	currencyinfo = g_new0 (CurrencyAccount, 1);
-	currencyinfo->currency = currency;
-	currencyinfo->account = account;
-	g_hash_table_insert(currencyhash, currency, currencyinfo);
+	/* Has this currency already been recorded? */
+	currencyinfo = g_hash_table_lookup (currencyhash, currency);
+	if (!currencyinfo)
+          {
+	    /* take this as an exchange account, record this currency */
+	    currencyinfo = g_new0 (CurrencyAccount, 1);
+	    currencyinfo->currency = currency;
+	    currencyinfo->account = account;
+	    g_hash_table_insert(currencyhash, currency, currencyinfo);
+	  }
+	else
+	  {
+	    /* record this account as exchange account for this currency */
+	    currencyinfo->account = account;
+	  }
       }
     else
       {
+	/* check the user's preferences */
+	if (!check_account_selection(account,info))
+	  continue;
+
 	/* okay, this one needs conversion, so we store it. */
 	accounts = g_list_prepend(accounts, account);
 	

@@ -1,3 +1,8 @@
+2001-12-12  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/druid-euro-conv.c: Fixed support for using existing
+	exchange accounts.
+
 2001-12-11  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/druid-euro-conv.c: More sanity checks. Added support
