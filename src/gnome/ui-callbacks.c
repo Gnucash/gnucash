@@ -224,59 +224,120 @@ unsetBusyCursor(GtkWidget *w)
 
 struct verify_callback_data {
   gboolean finished;
-  gboolean value;
+  int value;
 };
 
 static void
 verify_cb_yes(GtkWidget *w, gpointer data) {
   struct verify_callback_data *result = (struct verify_callback_data *) data; 
-  result->value = TRUE;
+  result->value = 1;
   result->finished = TRUE;
 }
 
 static void
 verify_cb_no(GtkWidget *w, gpointer data) {
   struct verify_callback_data *result = (struct verify_callback_data *) data; 
-  result->value = FALSE;
+  result->value = 0;
   result->finished = TRUE;
 }
 
-/********************************************************************\
- * verifyBox                                                        *
- *   display a message, and asks the user to press "Ok" or "Cancel" *
- *                                                                  *
- * NOTE: This function does not return until the dialog is closed   *
- *                                                                  *
- * Args:   parent   - the parent widget                             *
- *         text     - the message to display                        *
- * Return: none                                                     *
-\********************************************************************/
-gncBoolean
-verifyBox(const char *text) {
+static void
+verify_cb_cancel(GtkWidget *w, gpointer data) {
+  struct verify_callback_data *result = (struct verify_callback_data *) data; 
+  result->value = -1;
+  result->finished = TRUE;
+}
+
+/********************************************************************
+ queryBox
+
+ display text, and wait for yes, no, or cancel, depending on the
+ arguments.  Each of the *_allowed arguments indicates whether or not
+ the dialog should contain a button of that type.  default_answer may
+ be set to 1 for "yes" (or OK), 2 for "no", and -1 for "cancel".  If
+ you allow both yes and OK buttons, and set 1 as the default answer,
+ which button is the default is undefined, but the result is the same
+ either way, and why would be doing that anyhow?
+
+ This function returns 1 for yes (or OK), 0 for no, and -1 for cancel.
+ 
+ NOTE: This function does not return until the dialog is closed.
+
+*/
+
+int
+queryBox(const char *text,
+         int default_answer,
+         gncBoolean yes_allowed,
+         gncBoolean ok_allowed,
+         gncBoolean no_allowed,
+         gncBoolean cancel_allowed) {
+
   GtkWidget *parent = gnc_get_ui_data();
   GtkWidget *verify_box = NULL;
   GtkWidget *verify_text = NULL;
   struct verify_callback_data result;
 
-  verify_box = gnome_dialog_new(text,
-                                GNOME_STOCK_BUTTON_YES,
-                                GNOME_STOCK_BUTTON_NO,
-                                NULL);
-  // gnome_dialog_set_modal(GNOME_DIALOG(verify_box));
-  gnome_dialog_set_default(GNOME_DIALOG(verify_box), 1);
-  gnome_dialog_set_close(GNOME_DIALOG(verify_box), TRUE);
-  gnome_dialog_button_connect(GNOME_DIALOG(verify_box), 0,
-                              GTK_SIGNAL_FUNC(verify_cb_yes),
-                              (gpointer) &result);
-  gnome_dialog_button_connect(GNOME_DIALOG(verify_box), 1,
-                              GTK_SIGNAL_FUNC(verify_cb_no),
-                              (gpointer) &result);
+  gchar *button_names[5] = {NULL, NULL, NULL, NULL, NULL};
+  int button_count = 0;
+  GtkSignalFunc button_func[5] = {NULL, NULL, NULL, NULL, NULL};
+  int default_button = 0;
 
+  /* FIXME: These should be nana checks, but nana seems broken right now... */
+#if 0
+  I(yes_allowed || ok_allowed || no_allowed || cancel_allowed);
+  I((default_answer == 1) && (yes_allowed || ok_allowed));
+  I((default_answer == 0) && no_allowed);
+  I((default_answer == -1) && cancel_allowed);
+#endif
+  
+  if(yes_allowed) {
+    button_names[button_count] = GNOME_STOCK_BUTTON_YES;
+    button_func[button_count] = GTK_SIGNAL_FUNC(verify_cb_yes);
+    if(1 == default_answer) default_button = button_count;
+    button_count++;
+  }  
+  if(ok_allowed) {
+    button_names[button_count] = GNOME_STOCK_BUTTON_OK;
+    button_func[button_count] = GTK_SIGNAL_FUNC(verify_cb_yes);
+    if(1 == default_answer) default_button = button_count;
+    button_count++;
+  }  
+  if(no_allowed) {
+    button_names[button_count] = GNOME_STOCK_BUTTON_NO;
+    button_func[button_count] = GTK_SIGNAL_FUNC(verify_cb_no);
+    if(0 == default_answer) default_button = button_count;
+    button_count++;
+  }  
+  if(cancel_allowed) {
+    button_names[button_count] = GNOME_STOCK_BUTTON_CANCEL;
+    button_func[button_count] = GTK_SIGNAL_FUNC(verify_cb_cancel);
+    if(-1 == default_answer) default_button = button_count;
+    button_count++;
+  }
+
+  /* FIXME: I have no idea why gcc needs this coercion right now... */
+  verify_box = gnome_dialog_newv(text, (const gchar **) button_names);
+    
+  // gnome_dialog_set_modal(GNOME_DIALOG(verify_box));
+
+  gnome_dialog_set_default(GNOME_DIALOG(verify_box), default_button);
+  gnome_dialog_set_close(GNOME_DIALOG(verify_box), TRUE);
+
+  {
+    int i;
+    for(i = 0; i < button_count; i++) {
+      gnome_dialog_button_connect(GNOME_DIALOG(verify_box), i,
+                                  GTK_SIGNAL_FUNC(button_func[i]),
+                                  (gpointer) &result);
+    }
+  }
+  
   verify_text = gtk_label_new(text);
   gtk_box_pack_start(GTK_BOX(GNOME_DIALOG(verify_box)->vbox),
                      verify_text, FALSE, FALSE, 0);
   gtk_widget_show(verify_text);
-
+  
   result.finished = FALSE;
   gtk_widget_show(verify_box);
   
@@ -289,9 +350,26 @@ verifyBox(const char *text) {
   unsetBusyCursor(parent);
   
   //gnome_dialog_close(GNOME_DIALOG(verify_box));
-
+  
   return result.value;
 }
+
+/********************************************************************\
+ * verifyBox                                                        *
+ *   display a message, and asks the user to press "Ok" or "Cancel" *
+ *                                                                  *
+ * NOTE: This function does not return until the dialog is closed   *
+ *                                                                  *
+ * Args:   parent   - the parent widget                             *
+ *         title    - the title of the window                       *
+ *         text     - the message to display                        *
+ * Return: none                                                     *
+\********************************************************************/
+gncBoolean
+verifyBox( const char *text ) {
+  return(queryBox(text, -1, FALSE, TRUE, FALSE, TRUE) == 1);
+}
+
 
 /********************************************************************\
 *********************************************************************
@@ -345,11 +423,3 @@ errorBox(const char *message) {
 
 /************************* END OF FILE ******************************\
 \********************************************************************/
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  eval: (c-set-style "gnu")
-  End:
-*/
