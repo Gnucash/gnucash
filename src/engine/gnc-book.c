@@ -722,6 +722,8 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       {
         dll_err = dlerror();
         PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
+        PWARN ("Maybe you don't have postgres installed?\n"
+               "The postgres backend can't be used until this config problem is fixed");
         g_free(book->fullpath);
         book->fullpath = NULL;
         g_free(book->book_id);
