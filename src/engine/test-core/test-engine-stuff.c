@@ -1258,6 +1258,9 @@ get_random_split(QofBook *book, Account *acct)
     num = get_random_gnc_numeric ();
     xaccSplitSetAmount(ret, num);
 
+    if (num.num == 0)
+      fprintf(stderr, "get_random_split: Created split with zero amount: %p\n", ret);
+
     xaccSplitSetSlots_nc(ret, get_random_kvp_frame());
 
     return ret;

@@ -1,3 +1,10 @@
+2004-12-17  Derek Atkins  <derek@ihtfp.com>
+
+	Rich Johnson's patch to include private structures in the doxygen docs
+	* src/doc/doxygen.cfg.in:
+	  extract local classes = yes
+	  don't exclude *P.h
+
 2004-12-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test/test-book-merge.c: targetEnt is always NULL
