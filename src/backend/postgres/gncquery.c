@@ -49,7 +49,7 @@
 #include "Transaction.h"
 #include "Account.h"
 
-#include "QueryNewP.h"
+#include "QofQueryP.h"
 #include "QueryCoreP.h"
 
 static short module = MOD_BACKEND;
@@ -167,16 +167,16 @@ sql_sort_get_type(char *p, GSList * path)
  * done by the Query C code. */
 
 static char *
-sql_sort_order(char *p, QueryNewSort_t sort)
+sql_sort_order(char *p, QofQuerySort_t sort)
 {
     GSList *path;
     gboolean increasing;
 
-    increasing = gncQuerySortGetIncreasing(sort);
+    increasing = gncQofSortFuncGetIncreasing(sort);
 
     ENTER("incr=%d", increasing);
 
-    path = gncQuerySortGetParamPath(sort);
+    path = gncQofSortFuncGetParamPath(sort);
 
     if (path == NULL) {
         /* Ok, we're not sorting on anything here. */
@@ -213,12 +213,12 @@ sql_sort_order(char *p, QueryNewSort_t sort)
 /* distinct clauses */
 
 static char *
-sql_sort_distinct(char *p, QueryNewSort_t sort)
+sql_sort_distinct(char *p, QofQuerySort_t sort)
 {
     GSList *path;
     ENTER(".");
 
-    path = gncQuerySortGetParamPath(sort);
+    path = gncQofSortFuncGetParamPath(sort);
 
     if (NULL != path) {
         p = stpcpy(p, ", ");
@@ -242,13 +242,13 @@ sql_sort_distinct(char *p, QueryNewSort_t sort)
 /* does sorting require a reference to this particular table? */
 
 static gboolean
-sql_sort_sort_need_account(QueryNewSort_t sort)
+sql_sort_sort_need_account(QofQuerySort_t sort)
 {
     gboolean need_account = FALSE;
     GSList *path;
     ENTER(".");
 
-    path = gncQuerySortGetParamPath(sort);
+    path = gncQofSortFuncGetParamPath(sort);
 
     if (path)
         if (!safe_strcmp(path->data, SPLIT_ACCT_FULLNAME) ||
@@ -264,9 +264,9 @@ static gboolean
 sql_sort_need_account(Query * q)
 {
     gboolean need_account = FALSE;
-    QueryNewSort_t s1, s2, s3;
+    QofQuerySort_t s1, s2, s3;
 
-    gncQueryGetSorts(q, &s1, &s2, &s3);
+    qof_query_get_sorts(q, &s1, &s2, &s3);
 
     need_account = sql_sort_sort_need_account(s1) ||
         sql_sort_sort_need_account(s2) || sql_sort_sort_need_account(s3);
@@ -278,13 +278,13 @@ sql_sort_need_account(Query * q)
 /* does sorting require a reference to this particular table? */
 
 static gboolean
-sql_sort_sort_need_entry(QueryNewSort_t sort)
+sql_sort_sort_need_entry(QofQuerySort_t sort)
 {
     gboolean need_entry = FALSE;
     GSList *path;
     ENTER(".");
 
-    path = gncQuerySortGetParamPath(sort);
+    path = gncQofSortFuncGetParamPath(sort);
 
     if (path)
         if (!safe_strcmp(path->data, SPLIT_VALUE) ||
@@ -300,9 +300,9 @@ static gboolean
 sql_sort_need_entry(Query * q)
 {
     gboolean need_entry = FALSE;
-    QueryNewSort_t s1, s2, s3;
+    QofQuerySort_t s1, s2, s3;
 
-    gncQueryGetSorts(q, &s1, &s2, &s3);
+    qof_query_get_sorts(q, &s1, &s2, &s3);
 
     need_entry = sql_sort_sort_need_entry(s1) ||
         sql_sort_sort_need_entry(s2) || sql_sort_sort_need_entry(s3);
@@ -311,7 +311,7 @@ sql_sort_need_entry(Query * q)
 }
 
 /* =========================================================== */
-/* Macro for QUERYCORE_STRING query types
+/* Macro for QOF_QUERYCORE_STRING query types
  * Note that postgres supports both case-sensitive and 
  * case-insensitve string searches, and it also supports 
  * regex!  yahooo! 
@@ -323,27 +323,27 @@ sql_sort_need_entry(Query * q)
                                                               \
    if (invert)                                                \
       sq->pq = stpcpy (sq->pq, "NOT (");                      \
-   if (pd->how == COMPARE_NEQ)                                \
+   if (pd->how == QOF_COMPARE_NEQ)                                \
       sq->pq = stpcpy (sq->pq, "NOT (");                      \
-   if (pdata->is_regex || pdata->options == STRING_MATCH_CASEINSENSITIVE) \
+   if (pdata->is_regex || pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE) \
      sq->pq = stpcpy(sq->pq, fieldname " ~");                 \
    else                                                       \
      sq->pq = stpcpy(sq->pq, fieldname " =");                 \
-   if (pdata->options == STRING_MATCH_CASEINSENSITIVE) {      \
+   if (pdata->options == QOF_STRING_MATCH_CASEINSENSITIVE) {      \
       sq->pq = stpcpy(sq->pq, "*");                           \
    }                                                          \
    sq->pq = stpcpy(sq->pq, " '");                             \
    tmp = sqlEscapeString (sq->escape, pdata->matchstring);    \
    sq->pq = stpcpy(sq->pq, tmp);                              \
    sq->pq = stpcpy(sq->pq, "'");                              \
-   if (pd->how == COMPARE_NEQ)                                \
+   if (pd->how == QOF_COMPARE_NEQ)                                \
       sq->pq = stpcpy (sq->pq, ") ");                         \
    if (invert)                                                \
       sq->pq = stpcpy (sq->pq, ") ");                         \
 }
 
 /* =========================================================== */
-/* Macro for QUERYCORE_NUMERIC type terms.  The logic used here in the
+/* Macro for QOF_QUERYCORE_NUMERIC type terms.  The logic used here in the
  * SQL exactly matches that used in the Query.c code.  If
  * that code is incorrect or has changed, then the code below is 
  * broken as well. 
@@ -358,10 +358,10 @@ sql_sort_need_entry(Query * q)
                                                                      \
    switch(pdata->options)                                            \
    {                                                                 \
-      case NUMERIC_MATCH_CREDIT:                                     \
+      case QOF_NUMERIC_MATCH_CREDIT:                                     \
          sq->pq = stpcpy(sq->pq, signcheck " <= 0 AND ");            \
          break;                                                      \
-      case NUMERIC_MATCH_DEBIT:                                      \
+      case QOF_NUMERIC_MATCH_DEBIT:                                      \
          sq->pq = stpcpy(sq->pq, signcheck " >= 0 AND ");            \
          break;                                                      \
       default:                                                       \
@@ -369,33 +369,33 @@ sql_sort_need_entry(Query * q)
    }                                                                 \
    switch(pd->how)                                                   \
    {                                                                 \
-      case COMPARE_GTE:                                              \
+      case QOF_COMPARE_GTE:                                              \
          sq->pq = stpcpy(sq->pq,                                     \
             fieldname " >= "comtable" * float8");                    \
          sq->pq += sprintf (sq->pq, "(%22.18g)", amt);                    \
          break;                                                      \
-      case COMPARE_GT:                                               \
+      case QOF_COMPARE_GT:                                               \
          sq->pq = stpcpy(sq->pq,                                     \
             fieldname " > "comtable" * float8");    \
          sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
          break;                                                      \
-      case COMPARE_LTE:                                              \
+      case QOF_COMPARE_LTE:                                              \
          sq->pq = stpcpy(sq->pq,                                     \
             fieldname " <= "comtable" * float8");   \
          sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
          break;                                                      \
-      case COMPARE_LT:                                               \
+      case QOF_COMPARE_LT:                                               \
          sq->pq = stpcpy(sq->pq,                                     \
             fieldname " < "comtable" * float8");    \
          sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
          break;                                                      \
-      case COMPARE_EQUAL:                                            \
+      case QOF_COMPARE_EQUAL:                                            \
          sq->pq = stpcpy(sq->pq,                                     \
             "abs(" fieldname " - abs("comtable" * float8"); \
          sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
          sq->pq = stpcpy(sq->pq, ")) < 1");                          \
          break;                                                      \
-      case COMPARE_NEQ:                                              \
+      case QOF_COMPARE_NEQ:                                              \
          sq->pq = stpcpy(sq->pq,                                     \
             "abs(" fieldname " - abs("comtable" * float8"); \
          sq->pq += sprintf (sq->pq, "(%22.18g)", amt);     \
@@ -423,7 +423,7 @@ sql_sort_need_entry(Query * q)
 
 /* =========================================================== */
 static const char *
-kvp_table_name(kvp_value_t value_t)
+kvp_table_name(KvpValueType value_t)
 {
     switch (value_t) {
         case KVP_TYPE_GINT64:
@@ -468,25 +468,25 @@ kvp_path_name(GSList * path)
 }
 
 static const char *
-compare_op_name(query_compare_t how)
+compare_op_name(QofQueryCompare how)
 {
     switch (how) {
-        case COMPARE_LT:
+        case QOF_COMPARE_LT:
             return " < ";
 
-        case COMPARE_LTE:
+        case QOF_COMPARE_LTE:
             return " <= ";
 
-        case COMPARE_EQUAL:
+        case QOF_COMPARE_EQUAL:
             return " = ";
 
-        case COMPARE_GTE:
+        case QOF_COMPARE_GTE:
             return " >= ";
 
-        case COMPARE_GT:
+        case QOF_COMPARE_GT:
             return " > ";
 
-        case COMPARE_NEQ:
+        case QOF_COMPARE_NEQ:
             return " != ";
 
         default:
@@ -495,9 +495,9 @@ compare_op_name(query_compare_t how)
 }
 
 static char *
-kvp_left_operand(kvp_value * value)
+kvp_left_operand(KvpValue * value)
 {
-    kvp_value_t value_t;
+    KvpValueType value_t;
     const char *kvptable;
 
     g_return_val_if_fail(value, NULL);
@@ -526,9 +526,9 @@ kvp_left_operand(kvp_value * value)
 }
 
 static char *
-kvp_right_operand(sqlQuery * sq, kvp_value * value)
+kvp_right_operand(sqlQuery * sq, KvpValue * value)
 {
-    kvp_value_t value_t;
+    KvpValueType value_t;
     const char *kvptable;
 
     g_return_val_if_fail(value, NULL);
@@ -603,10 +603,10 @@ add_kvp_clause(sqlQuery * sq, const char *kvptable, const char *entity_table,
 }
 
 static void
-sqlQuery_kvp_build(sqlQuery * sq, GSList * sort_path, query_compare_t how,
+sqlQuery_kvp_build(sqlQuery * sq, GSList * sort_path, QofQueryCompare how,
                    gboolean invert, query_kvp_t kpd)
 {
-    kvp_value_t value_t;
+    KvpValueType value_t;
     const char *kvptable;
     const char *op;
     GList *list;
@@ -625,7 +625,7 @@ sqlQuery_kvp_build(sqlQuery * sq, GSList * sort_path, query_compare_t how,
 
     value_t = kvp_value_get_type(kpd->value);
 
-    if (value_t == KVP_TYPE_GUID && how != COMPARE_EQUAL) {
+    if (value_t == KVP_TYPE_GUID && how != QOF_COMPARE_EQUAL) {
         PWARN("guid non-equality comparison not supported");
         return;
     }
@@ -708,9 +708,9 @@ sqlQuery_build(sqlQuery * sq, Query * q)
     GList *il, *jl, *qterms, *andterms;
     GList *tables = NULL;
     GSList *path;
-    QueryNewTerm_t qt;
+    QofQueryTerm_t qt;
     QueryPredData_t pd;
-    QueryNewSort_t s1, s2, s3;
+    QofQuerySort_t s1, s2, s3;
     int more_or = 0;
     int more_and = 0;
     int max_rows;
@@ -724,23 +724,23 @@ sqlQuery_build(sqlQuery * sq, Query * q)
         return NULL;
 
     /* Only Split searches are allowed */
-    if (safe_strcmp(gncQueryGetSearchFor(q), GNC_ID_SPLIT)) {
-        PERR("Only SPLITs are supported, not %s", gncQueryGetSearchFor(q));
+    if (safe_strcmp(qof_query_get_search_for(q), GNC_ID_SPLIT)) {
+        PERR("Only SPLITs are supported, not %s", qof_query_get_search_for(q));
         return NULL;
     }
 
     /* Determine whether the query will need to reference certain
      * tables. See note above for details. */
-    qterms = gncQueryGetTerms(q);
+    qterms = qof_query_get_terms(q);
 
     for (il = qterms; il; il = il->next) {
         /* andterms is GList of query terms that must be anded */
         andterms = il->data;
 
         for (jl = andterms; jl; jl = jl->next) {
-            qt = (QueryNewTerm_t) jl->data;
-            pd = gncQueryTermGetPredData(qt);
-            path = gncQueryTermGetParamPath(qt);
+            qt = (QofQueryTerm_t) jl->data;
+            pd = qof_query_term_get_pred_data(qt);
+            path = qof_query_term_get_param_path(qt);
 
             g_assert(path);
 
@@ -752,8 +752,8 @@ sqlQuery_build(sqlQuery * sq, Query * q)
             } else if (!safe_strcmp(path->data, SPLIT_VALUE)) {
                 need_entry = TRUE;
                 need_trans_commodity = TRUE;
-            } else if (!safe_strcmp(pd->type_name, QUERYCORE_GUID)) {
-                if (!safe_strcmp(path->data, QUERY_PARAM_GUID))
+            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_GUID)) {
+                if (!safe_strcmp(path->data, QOF_QUERY_PARAM_GUID))
                     need_entry = TRUE;
                 else if (!safe_strcmp(path->data, SPLIT_ACCOUNT)) {
                     need_account = TRUE;
@@ -779,7 +779,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
     sq->pq = sq->q_base;
     sq->pq = stpcpy(sq->pq, "SELECT DISTINCT gncTransaction.* ");
 
-    gncQueryGetSorts(q, &s1, &s2, &s3);
+    qof_query_get_sorts(q, &s1, &s2, &s3);
 
     /* For SELECT DISTINCT, ORDER BY expressions must appear in target list */
     sq->pq = sql_sort_distinct(sq->pq, s1);
@@ -847,44 +847,44 @@ sqlQuery_build(sqlQuery * sq, Query * q)
             }
             more_and = 1;
 
-            qt = (QueryNewTerm_t) jl->data;
-            pd = gncQueryTermGetPredData(qt);
-            path = gncQueryTermGetParamPath(qt);
-            invert = gncQueryTermIsInverted(qt);
+            qt = (QofQueryTerm_t) jl->data;
+            pd = qof_query_term_get_pred_data(qt);
+            path = qof_query_term_get_param_path(qt);
+            invert = qof_query_term_is_inverted(qt);
 
-            if (!safe_strcmp(pd->type_name, QUERYCORE_GUID)) {
+            if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_GUID)) {
                 query_guid_t pdata = (query_guid_t) pd;
                 GList *node;
                 char *field = NULL;
 
-                PINFO("term is QUERYCORE_GUID");
+                PINFO("term is QOF_QUERYCORE_GUID");
 
-                if (!safe_strcmp(path->data, QUERY_PARAM_GUID)) {
+                if (!safe_strcmp(path->data, QOF_QUERY_PARAM_GUID)) {
                     field = "gncEntry.entryGUID";
-                    g_assert(pdata->options != GUID_MATCH_ALL);
+                    g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_TRANS) &&
-                           !safe_strcmp(path->next->data, QUERY_PARAM_GUID)) {
+                           !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
                     field = "gncEntry.transGUID";
-                    g_assert(pdata->options != GUID_MATCH_ALL);
+                    g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_ACCOUNT) &&
-                           !safe_strcmp(path->next->data, QUERY_PARAM_GUID)) {
+                           !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
                     field = "gncEntry.accountGUID";
-                    g_assert(pdata->options != GUID_MATCH_ALL);
+                    g_assert(pdata->options != QOF_GUID_MATCH_ALL);
 
                 } else if (!safe_strcmp(path->data, SPLIT_TRANS) &&
                            !safe_strcmp(path->next->data, TRANS_SPLITLIST) &&
                            !safe_strcmp(path->next->next->data,
                                         SPLIT_ACCOUNT_GUID)) {
                     field = "gncEntry.accountGUID";
-                    g_assert(pdata->options == GUID_MATCH_ALL);
+                    g_assert(pdata->options == QOF_GUID_MATCH_ALL);
 
-                } else if (!safe_strcmp(path->data, QUERY_PARAM_BOOK) &&
-                           !safe_strcmp(path->next->data, QUERY_PARAM_GUID)) {
+                } else if (!safe_strcmp(path->data, QOF_QUERY_PARAM_BOOK) &&
+                           !safe_strcmp(path->next->data, QOF_QUERY_PARAM_GUID)) {
                     /* XXX: Need to support the Book GUID? (gncAccount.bookGUID) */
                     field = "gncAccount.bookGUID";
-                    g_assert(pdata->options != GUID_MATCH_ALL);
+                    g_assert(pdata->options != QOF_GUID_MATCH_ALL);
                 } else {
                     PINFO("Unknown GUID parameter, %s", (char *)path->data);
                 }
@@ -898,11 +898,11 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     for (node = pdata->guids; node; node = node->next) {
 
                         switch (pdata->options) {
-                            case GUID_MATCH_NONE:
+                            case QOF_GUID_MATCH_NONE:
                                 sq->pq = stpcpy(sq->pq, "NOT ");
                                 /* fall through */
 
-                            case GUID_MATCH_ANY:
+                            case QOF_GUID_MATCH_ANY:
                                 sq->pq = stpcpy(sq->pq, field);
                                 sq->pq = stpcpy(sq->pq, "='");
                                 sq->pq =
@@ -911,7 +911,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                                 sq->pq = stpcpy(sq->pq, "'");
                                 break;
 
-                            case GUID_MATCH_ALL:
+                            case QOF_GUID_MATCH_ALL:
                                 sq->pq = stpcpy(sq->pq,
                                                 " EXISTS ( SELECT true FROM gncEntry e"
                                                 "          WHERE "
@@ -932,12 +932,12 @@ sqlQuery_build(sqlQuery * sq, Query * q)
 
                         if (node->next) {
                             switch (pdata->options) {
-                                case GUID_MATCH_ANY:
+                                case QOF_GUID_MATCH_ANY:
                                     sq->pq = stpcpy(sq->pq, " OR ");
                                     break;
 
-                                case GUID_MATCH_ALL:
-                                case GUID_MATCH_NONE:
+                                case QOF_GUID_MATCH_ALL:
+                                case QOF_GUID_MATCH_NONE:
                                     sq->pq = stpcpy(sq->pq, " AND ");
                                     break;
 
@@ -956,7 +956,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     more_and = 0;
                 }
 
-            } else if (!safe_strcmp(pd->type_name, QUERYCORE_STRING)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_STRING)) {
                 query_string_t pdata = (query_string_t) pd;
 
                 if (!safe_strcmp(path->data, SPLIT_ACTION)) {
@@ -988,7 +988,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                           (char *)(path->data));
 
 
-            } else if (!safe_strcmp(pd->type_name, QUERYCORE_NUMERIC)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_NUMERIC)) {
                 query_numeric_t pdata = (query_numeric_t) pd;
 
 
@@ -1019,7 +1019,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     PINFO("Unknown NUMERIC: %s", (char *)(path->data));
                 }
 
-            } else if (!safe_strcmp(pd->type_name, QUERYCORE_DATE)) {
+            } else if (!safe_strcmp(pd->type_name, QOF_QUERYCORE_DATE)) {
                 query_date_t pdata = (query_date_t) pd;
                 char *field = NULL;
                 const char *op = NULL;
@@ -1057,7 +1057,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
                     if (invert)
                         sq->pq = stpcpy(sq->pq, "NOT (");
 
-                    if (pdata->options == CHAR_MATCH_NONE)
+                    if (pdata->options == QOF_CHAR_MATCH_NONE)
                         sq->pq = stpcpy(sq->pq, "NOT ");
 
                     sq->pq = stpcpy(sq->pq, "(");
@@ -1099,15 +1099,15 @@ sqlQuery_build(sqlQuery * sq, Query * q)
      * if the limit is set to a finite number of rows. 
      */
 
-    if (gncQuerySortGetParamPath(s1) != NULL) {
+    if (gncQofSortFuncGetParamPath(s1) != NULL) {
         sq->pq = stpcpy(sq->pq, "ORDER BY ");
         sq->pq = sql_sort_order(sq->pq, s1);
 
-        if (gncQuerySortGetParamPath(s2) != NULL) {
+        if (gncQofSortFuncGetParamPath(s2) != NULL) {
             sq->pq = stpcpy(sq->pq, ", ");
             sq->pq = sql_sort_order(sq->pq, s2);
 
-            if (gncQuerySortGetParamPath(s3) != NULL) {
+            if (gncQofSortFuncGetParamPath(s3) != NULL) {
                 sq->pq = stpcpy(sq->pq, ", ");
                 sq->pq = sql_sort_order(sq->pq, s3);
             }
@@ -1116,7 +1116,7 @@ sqlQuery_build(sqlQuery * sq, Query * q)
 
     /* ---------------------------------------------------- */
     /* limit the query result to a finite number of rows */
-    max_rows = gncQueryGetMaxResults(q);
+    max_rows = qof_query_get_max_results(q);
     if (0 <= max_rows) {
         sq->pq = stpcpy(sq->pq, " LIMIT ");
         sq->pq += snprintf(sq->pq, 30, "%d", max_rows);

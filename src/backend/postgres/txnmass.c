@@ -59,7 +59,7 @@ static short module = MOD_TXN;
 static gpointer
 get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = data;
+   QofBook *book = data;
    GList *xaction_list = be->tmp_return;
    Transaction *trans;
    gnc_commodity *currency = NULL;
@@ -123,7 +123,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 static gpointer
 get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = data;
+   QofBook *book = data;
    Transaction *trans=NULL;
    Account *acc;
    Split *s;
@@ -218,7 +218,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 /* ============================================================= */
 
 void
-pgendGetMassTransactions (PGBackend *be, GNCBook *book)
+pgendGetMassTransactions (PGBackend *be, QofBook *book)
 {
    char *p, buff[900];
    GList *node, *xaction_list = NULL;

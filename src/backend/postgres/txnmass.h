@@ -26,7 +26,7 @@
 #include "gnc-book.h"
 #include "PostgresBackend.h"
 
-void pgendGetMassTransactions (PGBackend *be, GNCBook*);
+void pgendGetMassTransactions (PGBackend *be, QofBook*);
 
 
 #endif /* POSTGRES_TXN_MASS_H */

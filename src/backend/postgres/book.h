@@ -32,11 +32,11 @@
 
 BookList * pgendGetAllBooks (PGBackend *be, BookList *);
 
-void pgendGetBook (PGBackend *be, GNCBook *book);
-void pgendStoreBookNoLock (PGBackend *be, GNCBook *book, int do_check_version);
-void pgendStoreBook (PGBackend *be, GNCBook *book);
+void pgendGetBook (PGBackend *be, QofBook *book);
+void pgendStoreBookNoLock (PGBackend *be, QofBook *book, int do_check_version);
+void pgendStoreBook (PGBackend *be, QofBook *book);
 
-void pgend_book_transfer_begin (Backend *, GNCBook*);
-void pgend_book_transfer_commit (Backend *, GNCBook*);
+void pgend_book_transfer_begin (QofBackend *, QofBook*);
+void pgend_book_transfer_commit (QofBackend *, QofBook*);
 
 #endif /* POSTGRES_BOOK_H */

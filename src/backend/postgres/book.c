@@ -73,7 +73,7 @@ static short module = MOD_BACKEND;
  */
 
 void
-pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
+pgendStoreBookNoLock (PGBackend *be, QofBook *book,
                          gboolean do_check_version)
 {
    if (!be || !book) return;
@@ -103,7 +103,7 @@ pgendStoreBookNoLock (PGBackend *be, GNCBook *book,
 }
 
 void
-pgendStoreBook (PGBackend *be, GNCBook *book)
+pgendStoreBook (PGBackend *be, QofBook *book)
 {
    char *p;
    ENTER ("be=%p, book=%p", be, book);
@@ -137,7 +137,7 @@ pgendStoreBook (PGBackend *be, GNCBook *book)
 static gpointer
 get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
-   GNCBook *book = (GNCBook *) data;
+   QofBook *book = (QofBook *) data;
    GUID guid;
 
    /* first, lets see if we've already got this one */
@@ -155,7 +155,7 @@ get_one_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 }
 
 void
-pgendGetBook (PGBackend *be, GNCBook *book)
+pgendGetBook (PGBackend *be, QofBook *book)
 {
    char * bufp;
 
@@ -188,7 +188,7 @@ get_book_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    BookList *blist = (BookList *) data;
    BookList *node;
-   GNCBook *book;
+   QofBook *book;
    GUID guid;
 
    PINFO ("book GUID=%s", DB_GET_VAL("bookGUID",j));
@@ -234,7 +234,7 @@ pgendGetAllBooks (PGBackend *be, BookList *blist)
    /* get the KVP data for each book too */
    for (node=blist; node; node=node->next)
    {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       if (0 != book->idata) 
       {
          book->kvp_data = pgendKVPFetch (be, book->idata, book->kvp_data);
@@ -248,7 +248,7 @@ pgendGetAllBooks (PGBackend *be, BookList *blist)
 /* ============================================================= */
 
 void 
-pgend_book_transfer_begin(Backend *bend, GNCBook *newbook)
+pgend_book_transfer_begin(QofBackend *bend, QofBook *newbook)
 {
    PGBackend *be = (PGBackend *) bend;
 
@@ -261,7 +261,7 @@ pgend_book_transfer_begin(Backend *bend, GNCBook *newbook)
 }
 
 void 
-pgend_book_transfer_commit(Backend *bend, GNCBook *newbook)
+pgend_book_transfer_commit(QofBackend *bend, QofBook *newbook)
 {
    /* PGBackend *be = (PGBackend *) bend; */
    ENTER (" ");

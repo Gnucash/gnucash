@@ -50,7 +50,7 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "guid.h"
-#include "GNCId.h"
+#include "qofid.h"
 
 #include "builder.h"
 #include "checkpoint.h"

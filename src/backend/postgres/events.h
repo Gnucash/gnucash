@@ -37,8 +37,8 @@
 #include "Backend.h"
 #include "PostgresBackend.h"
 
-gboolean pgendEventsPending (Backend *);
-gboolean pgendProcessEvents (Backend *);
+gboolean pgendEventsPending (QofBackend *);
+gboolean pgendProcessEvents (QofBackend *);
 
 void pgendSessionGetPid (PGBackend *);
 void pgendSessionSetupNotifies (PGBackend *);

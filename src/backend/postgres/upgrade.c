@@ -387,7 +387,7 @@ pgendDBVersionIsCurrent (PGBackend *be)
 
    if (1 > vers.major)
    {
-      xaccBackendSetError (&be->be, ERR_BACKEND_DATA_CORRUPT);
+      qof_backend_set_error (&be->be, ERR_BACKEND_DATA_CORRUPT);
       return -1;
    }
 
@@ -397,7 +397,7 @@ pgendDBVersionIsCurrent (PGBackend *be)
    /* check to see if this client can connect */
    if (PGEND_CURRENT_MAJOR_VERSION < vers.major)
    {
-      xaccBackendSetError (&be->be, ERR_BACKEND_TOO_NEW);
+      qof_backend_set_error (&be->be, ERR_BACKEND_TOO_NEW);
       return -1;
    }
 
