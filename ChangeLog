@@ -1,3 +1,34 @@
+2001-05-15  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-account.c (node_and_account_equal): add equals
+	tests for currency and security scu.
+
+	* src/test/gnc-test-stuff.c (equals_node_val_vs_int): new func.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_end_handler):
+	reorder some things: cleanup.
+
+	* src/test/test-xml-account.c (node_and_account_equal): return
+	strduped strings now.
+	(test_account): make sure to free string.
+	(test_real_account): free string.
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_dom_tree_create):
+	use new func.
+
+	* src/engine/gnc-commodity-xml-v2.c
+	(gnc_commodity_dom_tree_create): use new func.
+
+	* src/engine/sixtp-dom-generators.c (int_to_dom_tree):new func.
+
+2001-05-14  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/engine/gnc-account-xml-v2.c (gnc_account_dom_tree_create):
+	add currency and security scus.
+	(account_currency_scu_handler): new func.
+	(account_security_scu_handler): new func.
+	Add refs to new funcs to parsing structure.
+
 2001-05-15  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* doc/sgml/C/xacc-reports.sgml, xacc-about.sgml, xacc-dateinput.sgml, 
