@@ -1317,6 +1317,7 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
      * This is a cheesy and potentially error-prone algorithm;
      * but lets give it a spin and try our luck ...
      */
+    if (NULL == trans->splits) return;
     for (node = trans->splits; node; node = node->next)
     {
       const gnc_commodity *currency;
