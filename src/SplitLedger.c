@@ -62,11 +62,11 @@
  * This callback is centrally involved in the redraw sequence.
  * When the user moves from one cell to another, the following 
  * sequence of events get triggered and cascade down:
- *    traverseCB () {
+ *    enterCB () {
  *      VerifyCursorPosition() {
  *        MoveCursor() {  
- *         callback for move() which is this function (LedgerMoveCursor)
- *           SaveRegEntry() {}
+ *         callback for move() which is this function (LedgerMoveCursor) {
+ *           SaveRegEntry() {...}
  *           RedrawRegEntry() {
  *              SRLoadRegister() {
  *                SRLoadRegEntry() {
@@ -87,9 +87,13 @@ LedgerMoveCursor  (Table *table,
    SplitRegister *reg = (SplitRegister *) client_data;
    int style;
 
+printf ("LedgerMoveCursor start calback %d %d \n",
+new_phys_row, new_phys_col);
    /* commit the contents of the cursor into the database */
    xaccSRSaveRegEntry (reg);
    xaccSRRedrawRegEntry (reg); 
+printf ("LedgerMoveCursor after redraw %d %d \n",
+new_phys_row, new_phys_col);
 
    /* if auto-expansion is enabled, we need to redraw the register
     * to expand out the splits at the new location.  We do some
@@ -117,6 +121,61 @@ LedgerMoveCursor  (Table *table,
 
       /* indicate what row we *should* have gone to */
       *p_new_phys_row = table->current_cursor_phys_row;
+printf ("LedgerMoveCursor after dynamic %d %d stored val %d\n",
+*p_new_phys_row, new_phys_col,
+reg->cursor_phys_row
+);
+   }
+}
+
+/* ======================================================== */
+/* this callback gets called when the user clicks on the gui
+ * in such a way as to leave the current transaction, and to 
+ * go to a new one.  It is called to verify what the cordinates
+ * of the new cell will be.  It really applies only for auto-expansion,
+ * where we need to calculate the coords of the target cell.
+ */
+
+static void
+LedgerTraverse  (Table *table, 
+                   int *p_new_phys_row, 
+                   int *p_new_phys_col, 
+                   void * client_data)
+{
+   int new_phys_row = *p_new_phys_row;
+   int new_phys_col = *p_new_phys_col;
+   SplitRegister *reg = (SplitRegister *) client_data;
+   int style;
+
+   /* if auto-expansion is enabled, we need to redraw the register
+    * to expand out the splits at the new location.  We do some
+    * tomfoolery here to trick the code into expanding the new location.
+    * This little futz is sleazy, but it does suceed in getting the 
+    * LoadRegister code into expanding the appropriate split.
+    */   
+   style = ((reg->type) & REG_STYLE_MASK);
+   if ((REG_SINGLE_DYNAMIC == style) ||
+       (REG_DOUBLE_DYNAMIC == style)) 
+   {
+      Split *split, *oldsplit;
+printf ("enter LedgerTraverse with %d %d \n", new_phys_row , new_phys_col);
+      oldsplit = xaccSRGetCurrentSplit (reg);
+      split = xaccGetUserData (reg->table, new_phys_row, new_phys_col);
+      reg->table->current_cursor->user_data = (void *) split;
+
+      /* if a null split, provide a hint for where the cursor should go */
+      if (NULL == split) {
+         reg->cursor_phys_row = new_phys_row;
+         // reg->cursor_virt_row = reg->table->current_cursor_virt_row;
+         reg->user_hack = (void *) xaccSplitGetParent (oldsplit);
+      }
+
+      xaccRegisterCountHack (reg);
+      reg->table->current_cursor->user_data = (void *) oldsplit;
+
+printf ("leave LedgerTraverse with %d \n", reg->cursor_phys_row);
+      /* indicate what row we *should* go to */
+      *p_new_phys_row = reg->cursor_phys_row;
    }
 }
 
@@ -845,6 +904,7 @@ printf ("load split %d at phys row %d \n", j, phys_row);
 
    /* enable callback for cursor user-driven moves */
    table->move_cursor = LedgerMoveCursor;
+   table->traverse = LedgerTraverse;
    table->client_data = (void *) reg;
 }
 

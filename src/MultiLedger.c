@@ -423,6 +423,29 @@ xaccRegisterRefresh (SplitRegister *splitreg)
 }
 
 /********************************************************************\
+ * sort of a quick hack involving the layout of the register.
+\********************************************************************/
+
+void 
+xaccRegisterCountHack (SplitRegister *splitreg)
+{
+   xaccLedgerDisplay *regData;
+   int n;
+
+   /* find the ledger which contains this register */
+   n = 0; regData = fullList[n];
+   while (regData) {
+      if (splitreg == regData->ledger) {
+        xaccSRCountRows (splitreg, 
+                      xaccAccountGetSplitList (regData->leader),
+                      regData->leader);      
+        return;
+      }
+      n++; regData = fullList[n];
+   }
+}
+
+/********************************************************************\
  * mark dirty *all* register windows which contain this account      * 
 \********************************************************************/
 
