@@ -390,21 +390,27 @@ gnc_build_url (URLType type, const gchar * location, const gchar * label) {
 }
 
 static gboolean
-http_allowed() {
-  return gnc_lookup_boolean_option("Network", "Allow http network access", 
-                                   TRUE);
+http_allowed()
+{
+  return TRUE;
+//return gnc_lookup_boolean_option("Network", "Allow http network access", 
+//                                 TRUE);
 }
 
 static gboolean
-https_allowed() {
-  return gnc_lookup_boolean_option("Network", "Allow https network access", 
-                                   TRUE);
+https_allowed()
+{
+  return TRUE;
+//return gnc_lookup_boolean_option("Network", "Allow https network access using OpenSSL", 
+//                                 TRUE);
 }
 
 static gboolean
-gnc_network_allowed() {
-  return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
-                                   TRUE);
+gnc_network_allowed()
+{
+  return FALSE;
+//return gnc_lookup_boolean_option("Network", "Enable GnuCash Network", 
+//                                 TRUE);
 }
 
 
@@ -531,7 +537,8 @@ gnc_html_start_request(gnc_html * html, gchar * uri, GtkHTMLStream * handle) {
 static void
 gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
                         URLType type, const gchar * location, 
-                        const gchar * label) {
+                        const gchar * label)
+{
   char * fdata = NULL;
 
   if(!html) {
@@ -916,7 +923,8 @@ gnc_html_show_data(gnc_html * html, const char * data,
 void 
 gnc_html_show_url(gnc_html * html, URLType type, 
                   const gchar * location, const gchar * label,
-                  gboolean new_window_hint) {
+                  gboolean new_window_hint)
+{
   GncHTMLUrlCB url_handler;
   GtkHTMLStream * handle;
   gboolean new_window;

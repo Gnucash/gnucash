@@ -323,7 +323,7 @@ gnc_gui_init (SCM command_line)
     gnome_is_initialized = TRUE;
 
     /* load default HTML action handlers */ 
-    gnc_network_init();
+    // gnc_network_init();
 
     gnc_configure_date_format();
     date_callback_id =

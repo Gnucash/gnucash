@@ -43,7 +43,6 @@ libgncgnome_la_SOURCES = \
   druid-hierarchy.c \
   druid-loan.c \
   druid-stock-split.c \
-  gnc-network.c \
   gnc-splash.c \
   mainwindow-account-tree.c \
   reconcile-list.c \
@@ -97,6 +96,7 @@ EXTRA_DIST = \
   gnucash.desktop.in \
   gnucash.keys.in \
   gnucash.mime \
+  gnc-network.c \
   gw-gnc-spec.scm
 
 
