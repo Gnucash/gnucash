@@ -1,5 +1,8 @@
 2001-06-11  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/gnome/gnucash-date-picker.c
+	(gnc_date_picker_key_event): fix bug
+
 	* src/scm/Makefile.am: same as below
 
 	* src/scm/price-quotes.scm: same as below
