@@ -356,6 +356,8 @@ simple_chars_only_parser_new(sixtp_end_handler end_handler)
    the seconds and the <ns> block (if any) sets the nanoseconds.  If
    all goes well, returns the Timespec* as the result.
 
+   This code assumes that the TZ timezone environment variable is set
+   to UTC.
 */
 
 gboolean
