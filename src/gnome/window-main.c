@@ -160,8 +160,13 @@ gnc_childwin_set_title (GNCMainChildInfo *childwin)
   else if (strncmp ("file:", filename, 5) == 0)
     filename += 5;
 
-  title = g_strdup_printf("%s - GnuCash (%s)", childwin->title, filename);
+  if (!childwin->title)
+    title = g_strdup_printf("GnuCash (%s)", filename);
+  else
+    title = g_strdup_printf("%s - GnuCash (%s)", childwin->title, filename);
+
   gtk_window_set_title(GTK_WINDOW(childwin->app), title);
+
   g_free(title);
 }
 

@@ -2392,6 +2392,8 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
       gnc_set_label_color (regData->value_label, amount);
       gtk_label_set_text (GTK_LABEL (regData->value_label), string);
+
+      gnc_price_unref (price);
     }
   }
 
@@ -2903,11 +2905,19 @@ deleteCB(GtkWidget *widget, gpointer data)
   {
     const char *format = _("Are you sure you want to delete\n   %s\n"
                            "from the transaction\n   %s ?");
-    /* ask for user confirmation before performing permanent damage */
-    buf = g_strdup_printf(format, xaccSplitGetMemo(split),
-                          xaccTransGetDescription(trans));
+    const char *memo;
+    const char *desc;
 
-    result = gnc_verify_dialog_parented(regData->window, buf, FALSE);
+    memo = xaccSplitGetMemo (split);
+    memo = (memo && *memo) ? memo : _("(no memo)");
+
+    desc = xaccTransGetDescription (trans);
+    desc = (desc && *desc) ? desc : _("(no description)");
+
+    /* ask for user confirmation before performing permanent damage */
+    buf = g_strdup_printf (format, memo, desc);
+
+    result = gnc_verify_dialog_parented (regData->window, buf, FALSE);
 
     g_free(buf);
 

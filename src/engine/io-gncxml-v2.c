@@ -1,3 +1,22 @@
+/********************************************************************\
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+\********************************************************************/
+
 #include <glib.h>
 #include <stdio.h>
 #include <string.h>
@@ -48,9 +67,8 @@ clear_up_account_commodity(
                                       gnc_commodity_get_mnemonic(com));
     if(!gcom)
     {
-        g_warning("unable to find global commodity for %s:%s adding new",
-                  gnc_commodity_get_namespace(com),
-                  gnc_commodity_get_mnemonic(com));
+        g_warning("unable to find global commodity for %s adding new",
+                  gnc_commodity_get_unique_name(com));
         gnc_commodity_table_insert(tbl, com);
     }
     else
@@ -150,7 +168,8 @@ gnc_counter_end_handler(gpointer data_for_children,
     strval = dom_tree_to_text(tree);
     if(!string_to_integer(strval, &val))
     {
-        g_warning("string_to_integer failed with input: %s", strval);
+        g_warning("string_to_integer failed with input: %s",
+                  strval ? strval : "(null)");
         return FALSE;
     }
     
@@ -168,10 +187,11 @@ gnc_counter_end_handler(gpointer data_for_children,
     }
     else
     {
-        g_warning("Unknown type: %s", type);
+        g_warning("Unknown type: %s",
+                  type ? type : "(null)");
         return FALSE;
     }
-    
+
     return TRUE;
 }
 

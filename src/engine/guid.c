@@ -472,11 +472,11 @@ badstring:
 char *
 guid_to_string(const GUID * guid)
 {
-  char *string = g_malloc(GUID_ENCODING_LENGTH+1);
-
-  if (!string) return NULL;
+  char *string;
 
   if(!guid) return(NULL);
+
+  string = g_malloc(GUID_ENCODING_LENGTH+1);
 
   encode_md5_data(guid->data, string);
 

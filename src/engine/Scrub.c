@@ -86,11 +86,14 @@ void
 xaccAccountScrubOrphans (Account *acc)
 {
   GList *node;
+  const char *str;
 
   if (!acc)
     return;
 
-  PINFO ("Looking for orphans in account %s \n", xaccAccountGetName(acc));
+  str = xaccAccountGetName (acc);
+  str = str ? str : "(null)";
+  PINFO ("Looking for orphans in account %s \n", str);
 
   for (node = xaccAccountGetSplitList(acc); node; node = node->next)
   {
@@ -265,8 +268,11 @@ void
 xaccAccountScrubImbalance (Account *acc)
 {
   GList *node;
+  const char *str;
 
-  PINFO ("Looking for imbalance in account %s \n", xaccAccountGetName(acc));
+  str = xaccAccountGetName(acc);
+  str = str ? str : "(null)";
+  PINFO ("Looking for imbalance in account %s \n", str);
 
   for(node = xaccAccountGetSplitList(acc); node; node = node->next)
   {

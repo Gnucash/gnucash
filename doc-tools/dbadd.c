@@ -65,7 +65,8 @@ static DB *database;
 static void
 usage (const char *name)
 {
-  fprintf (stderr, "Usage: %s database key1 value1 key2 value2 ...\n", name);
+  fprintf (stderr, "Usage: %s database key1 value1 key2 value2 ...\n",
+           name ? name : "");
   exit(1);
 }
 
@@ -87,7 +88,8 @@ main (int argc, char *argv[])
   if (!database)
   {
     fprintf (stderr, "Error opening database %s: %s\n",
-             db_name, strerror (errno));
+             db_name ? db_name : "",
+             strerror (errno) ? strerror (errno) : "");
     exit (1);
   }
 

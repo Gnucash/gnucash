@@ -214,6 +214,9 @@ gnc_parse_error_dialog (StockSplitInfo *info, const char *error_string)
   char * error_phrase;
 
   parse_error_string = gnc_exp_parser_error_string ();
+  if (parse_error_string == NULL)
+    parse_error_string = "";
+
   if (error_string == NULL)
     error_string = "";
 

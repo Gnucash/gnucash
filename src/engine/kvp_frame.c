@@ -967,7 +967,7 @@ kvp_value_glist_to_string(const GList *list)
         gchar *tmp3;
 
         tmp3 = kvp_value_to_string((kvp_value*)cursor->data);
-        tmp2 = g_strdup_printf("%s %s,", tmp1, tmp3);
+        tmp2 = g_strdup_printf("%s %s,", tmp1, tmp3 ? tmp3 : "");
         g_free(tmp1);
         g_free(tmp3);
         tmp1 = tmp2;
@@ -1001,19 +1001,19 @@ kvp_value_to_string(const kvp_value *val)
 
     case KVP_TYPE_NUMERIC:
         tmp1 = gnc_numeric_to_string(kvp_value_get_numeric(val));
-        tmp2 = g_strdup_printf("KVP_VALUE_NUMERIC(%s)", tmp1);
+        tmp2 = g_strdup_printf("KVP_VALUE_NUMERIC(%s)", tmp1 ? tmp1 : "");
         g_free(tmp1);
         return tmp2;
         break;
 
     case KVP_TYPE_STRING:
-        return g_strdup_printf("KVP_VALUE_STRING(%s)",
-                               kvp_value_get_string(val));
+        tmp1 = kvp_value_get_string (val);
+        return g_strdup_printf("KVP_VALUE_STRING(%s)", tmp1 ? tmp1 : "");
         break;
 
     case KVP_TYPE_GUID:
         tmp1 = guid_to_string(kvp_value_get_guid(val));
-        tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", tmp1);
+        tmp2 = g_strdup_printf("KVP_VALUE_GUID(%s)", tmp1 ? tmp1 : "");
         g_free(tmp1);
         return tmp2;
         break;
@@ -1024,20 +1024,20 @@ kvp_value_to_string(const kvp_value *val)
         void *data;
         data = kvp_value_get_binary(val, &len);
         tmp1 = binary_to_string(data, len);
-        return g_strdup_printf("KVP_VALUE_BINARY(%s)", tmp1);
+        return g_strdup_printf("KVP_VALUE_BINARY(%s)", tmp1 ? tmp1 : "");
     }
         break;
  
     case KVP_TYPE_GLIST:
         tmp1 = kvp_value_glist_to_string(kvp_value_get_glist(val));
-        tmp2 = g_strdup_printf("KVP_VALUE_GLIST(%s)", tmp1);
+        tmp2 = g_strdup_printf("KVP_VALUE_GLIST(%s)", tmp1 ? tmp1 : "");
         g_free(tmp1);
         return tmp2;
         break;
 
     case KVP_TYPE_FRAME:
         tmp1 = kvp_frame_to_string(kvp_value_get_frame(val));
-        tmp2 = g_strdup_printf("KVP_VALUE_FRAME(%s)", tmp1);
+        tmp2 = g_strdup_printf("KVP_VALUE_FRAME(%s)", tmp1 ? tmp1 : "");
         g_free(tmp1);
         return tmp2;
         break;
@@ -1056,8 +1056,11 @@ kvp_frame_to_string_helper(gpointer key, gpointer value, gpointer data)
     gchar *old_data = *str;
 
     tmp_val = kvp_value_to_string((kvp_value*)value);
-    
-    *str = g_strdup_printf("%s    %s => %s,\n", *str, (gchar*)key, tmp_val);
+
+    *str = g_strdup_printf("%s    %s => %s,\n",
+                           *str ? *str : "",
+                           key ? (char *) key : "",
+                           tmp_val ? tmp_val : "");
 
     g_free(old_data);
     g_free(tmp_val);
@@ -1071,14 +1074,14 @@ kvp_frame_to_string(const kvp_frame *frame)
     tmp1 = g_strdup_printf("{\n");
 
     g_hash_table_foreach(frame->hash, kvp_frame_to_string_helper, &tmp1);
-    
+
     {
         gchar *tmp2;
         tmp2 = g_strdup_printf("%s}\n", tmp1);
         g_free(tmp1);
         tmp1 = tmp2;
     }
-    
+
     return tmp1;
 }
 

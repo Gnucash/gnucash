@@ -367,8 +367,6 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
   gtk_clist_clear(clist);
 
   root_account = xaccAccountLookup (&tree->root_account);
-  PINFO ("looked up %p for root account guid=%s\n", 
-        root_account, guid_to_string(&tree->root_account));
 
   gnc_account_tree_fill(tree, expanded_accounts,
 			gnc_account_tree_insert_row(tree, NULL, NULL,
@@ -1100,15 +1098,13 @@ gnc_account_tree_fill(GNCAccountTree *tree,
   GList *n;
 
   ENTER ("grp=%p", accts);
+
   list = xaccGroupGetAccountList (accts);
 
   /* Add each account to the tree */  
   for (n = list; n; n = n->next)
   {
     Account *account = n->data;
-
-    PINFO ("acct=%p guid=%s\n", 
-           account, guid_to_string(xaccAccountGetGUID(account)));
 
     if (tree->view_filter != NULL)
       if (!tree->view_filter(account, tree->view_filter_data))

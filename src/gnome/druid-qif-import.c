@@ -570,7 +570,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
        (gh_car(load_return) == SCM_BOOL_T)) {
       char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
       error_string = g_strdup_printf(_("QIF file load warning:\n%s"),
-                                     warn_str);
+                                     warn_str ? warn_str : "(null)");
       gnc_warning_dialog_parented(GTK_WIDGET(wind->window), error_string);
       g_free(error_string);
       free (warn_str);
@@ -588,7 +588,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
               (gh_car(load_return) != SCM_BOOL_T))) {
       char *warn_str = gh_scm2newstr(gh_cadr(load_return), NULL);
       error_string = g_strdup_printf(_("QIF file load failed:\n%s"),
-                                     warn_str);
+                                     warn_str ? warn_str : "(null)");
       gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
       g_free(error_string);
       free (warn_str);
@@ -643,7 +643,7 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
           (gh_car(parse_return) != SCM_BOOL_T))) {
         char *warn_str = gh_scm2newstr(gh_cadr(parse_return), NULL);
         error_string = g_strdup_printf(_("QIF file parse failed:\n%s"),
-                                       warn_str);
+                                       warn_str ? warn_str : "(null)");
         gnc_error_dialog_parented(GTK_WINDOW(wind->window), error_string);
         g_free(error_string);
         free(warn_str);
@@ -1568,6 +1568,7 @@ make_qif_druid_page(gnc_commodity * comm) {
   GtkWidget * next_label;
   GtkWidget * temp;
   char      * title = NULL;
+  const char * str;
   GnomeDruidPageStandard * page;
 
   /* make the page widget */
@@ -1576,12 +1577,13 @@ make_qif_druid_page(gnc_commodity * comm) {
   gtk_object_set_data(GTK_OBJECT(retval->page),
                       "page_struct", (gpointer)retval);
 
-  page   = GNOME_DRUID_PAGE_STANDARD(retval->page);
- 
+  page = GNOME_DRUID_PAGE_STANDARD(retval->page);
+
   /* save the old commodity name */
-  title = g_strdup_printf(_("Enter information about \"%s\""),
-                          gnc_commodity_get_mnemonic(comm));
-  
+  str = gnc_commodity_get_mnemonic(comm);
+  str = str ? str : "";
+  title = g_strdup_printf(_("Enter information about \"%s\""), str);
+
   gnome_druid_page_standard_set_bg_color(page, & std_bg_color);  
   gnome_druid_page_standard_set_logo_bg_color(page, & std_logo_bg_color);
   gnome_druid_page_standard_set_title_color(page, & std_title_color);

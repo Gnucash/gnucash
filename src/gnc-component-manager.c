@@ -94,7 +94,8 @@ dump_components (void)
     ComponentInfo *ci = node->data;
 
     fprintf (stderr, "  %s:\t%d\n",
-             ci->component_class, ci->component_id);
+             ci->component_class ? ci->component_class : "(null)",
+             ci->component_id);
   }
 
   fprintf (stderr, "\n");
@@ -380,7 +381,7 @@ gnc_register_gui_component (const char *component_class,
 
 #if CM_DEBUG
   fprintf (stderr, "Register component %d in class %s\n",
-           component_id, component_class);
+           component_id, component_class ? component_class : "(null)");
   dump_components ();
 #endif
 
@@ -469,7 +470,8 @@ gnc_unregister_gui_component (gint component_id)
 
 #if CM_DEBUG
   fprintf (stderr, "Unregister component %d in class %s\n",
-           ci->component_id, ci->component_class);
+           ci->component_id,
+           ci->component_class ? ci->component_class : "(null)");
 #endif
 
   gnc_gui_component_clear_watches (component_id);

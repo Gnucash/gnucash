@@ -49,7 +49,6 @@ sixtp_child_free_data(sixtp_child_result *result) {
   if(result->data) g_free(result->data);
 }
 
-
 void
 sixtp_child_result_destroy(sixtp_child_result *r) {
   if(r->should_cleanup && r->cleanup_handler) {
@@ -61,7 +60,9 @@ sixtp_child_result_destroy(sixtp_child_result *r) {
 
 void
 sixtp_child_result_print(sixtp_child_result *cr, FILE *f) {
-  fprintf(f, "((tag %s) (data %p))", cr->tag, cr->data);
+  fprintf(f, "((tag %s) (data %p))",
+          cr->tag ? cr->tag : "(null)",
+          cr->data);
 }
 
 /************************************************************************/
@@ -238,15 +239,18 @@ sixtp_destroy_child(gpointer key, gpointer value, gpointer user_data) {
   gpointer lookup_key;
   gpointer lookup_value;
 
-  PINFO ("Killing sixtp child under key <%s>", (char *) key); 
+  PINFO ("Killing sixtp child under key <%s>",
+         key ? (char *) key : "(null)");
   g_free(key);
 
   if(!corpses) {
-    PERR("no corpses in sixtp_destroy_child <%s>\n", (char *) key);
+    PERR("no corpses in sixtp_destroy_child <%s>\n",
+         key ? (char *) key : "(null)");
     return;
   }
   if(!child) {
-    PERR("no child in sixtp_destroy_child <%s>\n", (char *) key);
+    PERR("no child in sixtp_destroy_child <%s>\n",
+         key ? (char *) key : "");
     return;
   }
 
@@ -312,8 +316,9 @@ sixtp_add_some_sub_parsers(sixtp *tochange, int cleanup, ...)
         handler = va_arg(ap, sixtp*);
         if(!handler)
         {
-            g_warning("Handler for tag %s is null\n", tag);
-            
+            g_warning("Handler for tag %s is null\n",
+                      tag ? tag : "(null)");
+
             if(cleanup)
             {
                 sixtp_destroy(tochange);
@@ -379,7 +384,8 @@ sixtp_sax_start_handler(void *user_data,
           (gpointer) &next_parser_tag, (gpointer) &next_parser);
       if(!lookup_success) 
       {
-          PERR("Tag <%s> not allowed in current context.\n", name);
+          PERR("Tag <%s> not allowed in current context.\n",
+               name ? (char *) name : "(null)");
           pdata->parsing_ok = FALSE;
           return;
       }
@@ -525,7 +531,8 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name) {
   /* grab it before it goes away - we own the reference */
   end_tag = current_frame->tag;
 
-  PINFO("Finished with end of <%s>", end_tag);
+  PINFO("Finished with end of <%s>",
+        end_tag ? end_tag : "(null)");
 
   /*sixtp_print_frame_stack(pdata->stack, stderr);*/
 
@@ -754,7 +761,7 @@ gnc_is_our_xml_file(const char *filename, const char *first_tag)
     return FALSE;
 
   tag_compare = g_strdup_printf("<%s>", first_tag);
-  
+
   num_read = fread(first_chunk, sizeof(char), sizeof(first_chunk) - 1, f);
   fclose(f);
 

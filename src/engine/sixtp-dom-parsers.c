@@ -47,11 +47,12 @@ dom_tree_to_guid(xmlNodePtr node)
 
     if(strcmp(node->properties->name, "type") != 0)
     {
-        g_warning("Unknown attribute for id tag: %s\n",
-                  node->properties->name);
+        PERR("Unknown attribute for id tag: %s\n",
+             node->properties->name ?
+             (char *) node->properties->name : "(null)");
         return NULL;
     }
-    
+
     {
         char *type = node->properties->xmlAttrPropertyValue->content;
         /* handle new and guid the same for the moment */
@@ -63,8 +64,10 @@ dom_tree_to_guid(xmlNodePtr node)
         }
         else 
         {
-            g_warning("Unknown type %s for attribute type for tag %s",
-                      type, node->properties->name);
+            PERR("Unknown type %s for attribute type for tag %s",
+                 type ? type : "(null)",
+                 node->properties->name ?
+                 (char *) node->properties->name : "(null)");
             return NULL;
         }
     }
@@ -230,7 +233,7 @@ dom_tree_to_binary_kvp_value(xmlNodePtr node)
     }
     else
     {
-        g_warning("string_to_binary returned false");
+        PERR("string_to_binary returned false");
     }
     
     g_free(text);
@@ -425,7 +428,9 @@ dom_tree_to_text(xmlNodePtr tree)
     default:
       PERR("dom_tree_to_text: hit illegal node while extracting text.");
       PERR("  (name %s) (type %d) (content %s)", 
-           current->name, current->type, current->content);
+           current->name ? (char *) current->name : "(null)",
+           current->type,
+           current->content ? (char *) current->content : "(null)");
       current = NULL;
       ok = FALSE;
       break;
@@ -544,7 +549,7 @@ dom_tree_to_timespec(xmlNodePtr node)
       }
       break;
     default:
-      PERR("dom_tree_to_timespec: unexpected sub-node.");
+      PERR("unexpected sub-node.");
       return timespec_failure(ret);
       break;
     }
@@ -552,7 +557,7 @@ dom_tree_to_timespec(xmlNodePtr node)
 
   if(!seen_s)
   {
-      g_warning("dom_tree_to_timespec: no ts:date node found.");
+      PERR("no ts:date node found.");
       return timespec_failure(ret);
   }
   
@@ -665,7 +670,8 @@ dom_tree_handlers_all_gotten_p(struct dom_tree_handler *handlers)
     {
         if(handlers->required && ! handlers->gotten)
         {
-            g_warning("Not defined and it should be: %s", handlers->tag);
+            PERR("Not defined and it should be: %s",
+                 handlers->tag ? handlers->tag : "(null)");
             ret = FALSE;
         }
     }
@@ -675,7 +681,7 @@ dom_tree_handlers_all_gotten_p(struct dom_tree_handler *handlers)
         
 static gboolean
 gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gboolean *item,
-                      struct dom_tree_handler *handlers)
+                 struct dom_tree_handler *handlers)
 {
     for(;handlers->tag != NULL; handlers++)
     {
@@ -689,7 +695,8 @@ gnc_xml_set_data(const gchar* tag, xmlNodePtr node, gboolean *item,
     
     if(!handlers->tag) 
     {
-        g_warning("Unhandled tag: %s\n", tag);
+        PERR("Unhandled tag: %s\n",
+             tag ? tag : "(null)");
         return FALSE;
     }
 
@@ -709,7 +716,7 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
     {
         if(!gnc_xml_set_data(achild->name, achild, data, handlers))
         {
-            g_warning("gnc_xml_set_data failed");
+            PERR("gnc_xml_set_data failed");
             successful = FALSE;
             break;
         }
@@ -717,7 +724,7 @@ dom_tree_generic_parse(xmlNodePtr node, struct dom_tree_handler *handlers,
 
     if(!dom_tree_handlers_all_gotten_p(handlers))
     {
-        g_warning("missing tag in input");
+        PERR("missing tag in input");
         successful = FALSE;
     }
 

@@ -225,7 +225,7 @@ make_commodity_druid_page(gnc_commodity * comm) {
   /* save the old commodity name */
   retval->old_name = g_strdup(gnc_commodity_get_mnemonic(comm));
   title = g_strdup_printf("Enter information about \"%s\"",
-                          retval->old_name);
+                          retval->old_name ? retval->old_name : "");
 
   gnome_druid_page_standard_set_bg_color(page, & std_bg_color);  
   gnome_druid_page_standard_set_logo_bg_color(page, & std_logo_bg_color);

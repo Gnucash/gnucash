@@ -1034,8 +1034,10 @@ gnc_table_modify_update(Table *table,
   }
 
   LEAVE ("change %d %d (relrow=%d relcol=%d) val=%s\n", 
-         virt_loc.vcell_loc.virt_row, virt_loc.vcell_loc.virt_col,
-         cell_row, cell_col, cell->value);
+         virt_loc.vcell_loc.virt_row,
+         virt_loc.vcell_loc.virt_col,
+         cell_row, cell_col,
+         cell->value ? cell->value : "(null)");
 
   if (changed)
     return cell->value;

@@ -92,6 +92,9 @@ prettify (const char *name)
   static char bf[128];
   char *p;
 
+  if (!name)
+    return "";
+
   strncpy (bf, name, 29); bf[28] = 0;
   p = strchr (bf, '(');
 
@@ -130,7 +133,9 @@ gnc_log (gncModuleType module, gncLogLevel log_level, const char *prefix,
   if (!gnc_should_log (module, log_level))
     return;
 
-  fprintf (stderr, "%s: %s: ", prefix, prettify (function_name));
+  fprintf (stderr, "%s: %s: ",
+           prefix ? prefix : "(null)",
+           prettify (function_name));
 
   va_start (ap, format);
 

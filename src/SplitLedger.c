@@ -2813,6 +2813,8 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
    Transaction *trans;
    guint32 changed;
    Split *split;
+   const char *memo;
+   const char *desc;
 
    /* get the handle to the current split and transaction */
    split = xaccSRGetCurrentSplit (reg);
@@ -2909,8 +2911,12 @@ xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit)
 
    xaccSRSaveChangedCells (reg, trans, split);
 
-   PINFO ("finished saving split %s of trans %s \n", 
-          xaccSplitGetMemo (split), xaccTransGetDescription (trans));
+   memo = xaccSplitGetMemo (split);
+   memo = memo ? memo : "(null)";
+   desc = xaccTransGetDescription (trans);
+   desc = desc ? desc : "(null)";
+
+   PINFO ("finished saving split %s of trans %s \n", memo, desc);
 
    /* If the modified split is the "blank split", then it is now an
     * official part of the account. Set the blank split to NULL, so
@@ -3180,7 +3186,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     /* commit any pending changes */
     xaccCommitDateCell (reg->dateCell);
 
-    DEBUG ("MOD_DATE: %s", reg->dateCell->cell.value);
+    DEBUG ("MOD_DATE: %s",
+           reg->dateCell->cell.value ? reg->dateCell->cell.value : "(null)");
 
     xaccDateCellGetDate (reg->dateCell, &ts);
 
@@ -3189,7 +3196,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if (MOD_NUM & changed)
   {
-    DEBUG ("MOD_NUM: %s\n", reg->numCell->cell.value);
+    DEBUG ("MOD_NUM: %s\n",
+           reg->numCell->cell.value ? reg->numCell->cell.value : "(null)");
     xaccTransSetNum (trans, reg->numCell->cell.value);
     if (xaccSetNumCellLastNum (reg->numCell, reg->numCell->cell.value))
     {
@@ -3204,13 +3212,15 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if (MOD_DESC & changed)
   {
-    DEBUG ("MOD_DESC: %s", reg->descCell->cell.value);
+    DEBUG ("MOD_DESC: %s",
+           reg->descCell->cell.value ? reg->descCell->cell.value : "(null)");
     xaccTransSetDescription (trans, reg->descCell->cell.value);
   }
 
   if (MOD_NOTES & changed)
   {
-    DEBUG ("MOD_NOTES: %s", reg->notesCell->cell.value);
+    DEBUG ("MOD_NOTES: %s",
+           reg->notesCell->cell.value ? reg->notesCell->cell.value : "(null)");
     xaccTransSetNotes (trans, reg->notesCell->cell.value);
   }
 
@@ -3222,13 +3232,16 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if (MOD_ACTN & changed)
   {
-    DEBUG ("MOD_ACTN: %s", reg->actionCell->cell.value);
+    DEBUG ("MOD_ACTN: %s",
+           reg->actionCell->cell.value ?
+           reg->actionCell->cell.value : "(null)");
     xaccSplitSetAction (split, reg->actionCell->cell.value);
   }
 
   if (MOD_MEMO & changed)
   {
-    DEBUG ("MOD_MEMO: %s", reg->memoCell->cell.value);
+    DEBUG ("MOD_MEMO: %s",
+           reg->memoCell->cell.value ? reg->memoCell->cell.value : "(null)");
     xaccSplitSetMemo (split, reg->memoCell->cell.value);
   }
 
@@ -3245,7 +3258,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
     Account *new_acc;
     char *new_name;
 
-    DEBUG ("MOD_XFRM: %s", reg->xfrmCell->cell.value);
+    DEBUG ("MOD_XFRM: %s",
+           reg->xfrmCell->cell.value ? reg->xfrmCell->cell.value : "(null)");
 
     /* do some reparenting. Insertion into new account will automatically
      * delete this split from the old account */
@@ -3280,11 +3294,15 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
                                "accounts with different currencies\n"
                                "you need an intermediate currency account.\n"
                                "Please see the GnuCash online manual.");
+        const char *name;
         char *message;
 
-        message = g_strdup_printf(format, xaccAccountGetName(new_acc));
+        name = xaccAccountGetName(new_acc);
+        name = name ? name : _("(no name)");
 
-        gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
+        message = g_strdup_printf (format, name);
+
+        gnc_warning_dialog_parented (xaccSRGetParent(reg), message);
         g_free(message);
       }
     }
@@ -3295,7 +3313,8 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if (MOD_MXFRM & changed)
   {
-    DEBUG ("MOD_MXFRM: %s", reg->mxfrmCell->cell.value);
+    DEBUG ("MOD_MXFRM: %s",
+           reg->mxfrmCell->cell.value ? reg->mxfrmCell->cell.value : "(null)");
 
     other_split = xaccSplitGetOtherSplit (split);
 
@@ -3356,12 +3375,16 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
                                  "accounts with different currencies\n"
                                  "you need an intermediate currency account.\n"
                                  "Please see the GnuCash online manual.");
+          const char *name;
           char *message;
 
-          message = g_strdup_printf(format, xaccAccountGetName(new_acc));
+          name = xaccAccountGetName (new_acc);
+          name = name ? name : _("(no name)");
 
-          gnc_warning_dialog_parented(xaccSRGetParent(reg), message);
-          g_free(message);
+          message = g_strdup_printf (format, name);
+
+          gnc_warning_dialog_parented (xaccSRGetParent(reg), message);
+          g_free (message);
         }
       }
     }
@@ -4928,9 +4951,6 @@ LoadXferCell (ComboCell * cell,
 
     curr = xaccAccountGetCurrency (account);
     secu = xaccAccountGetSecurity (account);
-
-    DEBUG ("curr=%p secu=%p acct=%s\n", 
-           curr, secu, xaccAccountGetName (account));
 
     if (load_everything || 
         (gnc_commodity_equiv (curr,base_currency)) ||

@@ -203,19 +203,13 @@ xml_add_guid(xmlNodePtr p, const char *tag, const GUID *guid) {
   g_return_val_if_fail(guid, FALSE);
 
   {
-    const char *guidstr;
+    char guidstr[GUID_ENCODING_LENGTH + 1];
     xmlNodePtr child;
 
-    if(!guid) {
-      guidstr = NULL;
-    } else {
-      guidstr = guid_to_string(guid);
-      g_return_val_if_fail(guidstr, FALSE);
-    }
+    guid_to_string_buff(guid, guidstr);
 
     child = xmlNewTextChild(p, NULL, tag, guidstr);
     g_return_val_if_fail(child, FALSE);
-    if(guidstr) free((void *) guidstr);
   }
   return(TRUE);
 }
@@ -325,7 +319,8 @@ xml_add_binary(xmlNodePtr p,
     g_string_free(output, TRUE);
 
   } else {
-    PERR("unknown output format %s.\n", format);
+    PERR("unknown output format %s.\n",
+         format ? format : "(null)");
     return(FALSE);
   }
   return(TRUE);

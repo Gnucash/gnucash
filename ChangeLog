@@ -1,4 +1,11 @@
+2001-04-17  Dave Peticolas  <dave@krondo.com>
+
+	* lots of files: handle NULL pointer printf problems,
+	fix some mem leaks
+
 2001-04-16  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnc-ui-util.c (gnc_account_get_balance_in_currency): new func
 
 	* src/gnome/dialog-price-editor.c: button for online quotes
 

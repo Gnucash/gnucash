@@ -689,7 +689,8 @@ gnc_help_window_new (void) {
   help->index_db = dbopen(indexfile, O_RDONLY, 0644, DB_HASH, NULL);
   if (!help->index_db) {
     PERR("Failed to open help index DB '%s' : %s\n",
-         indexfile, strerror(errno));
+         indexfile ? indexfile : "(null)",
+         strerror(errno) ? strerror(errno) : "");
   }
   g_free(indexfile);
 

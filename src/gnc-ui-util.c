@@ -151,6 +151,52 @@ gnc_ui_get_account_field_name (AccountFieldCode field)
 }
 
 
+static gnc_numeric
+gnc_account_get_balance_in_currency (Account *account,
+                                     gnc_commodity *currency)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  GNCPrice *price;
+  gboolean has_shares;
+  gnc_numeric balance;
+  GNCAccountType atype;
+  gnc_commodity *balance_currency;
+
+  if (!account || !currency)
+    return gnc_numeric_zero ();
+
+  atype = xaccAccountGetType (account);
+  has_shares = (atype == STOCK || atype == MUTUAL || atype == CURRENCY);
+
+  if (has_shares)
+  {
+    balance = xaccAccountGetShareBalance (account);
+    balance_currency = xaccAccountGetSecurity (account);
+  }
+  else
+  {
+    balance = xaccAccountGetBalance (account);
+    balance_currency = xaccAccountGetCurrency (account);
+  }
+
+  if (gnc_numeric_zero_p (balance) ||
+      gnc_commodity_equiv (currency, balance_currency))
+    return balance;
+
+  book = gncGetCurrentBook ();
+  pdb = gnc_book_get_pricedb (book);
+
+  price = gnc_pricedb_lookup_latest (pdb, balance_currency, currency);
+  if (!price)
+    return gnc_numeric_zero ();
+
+  return gnc_numeric_mul (balance, gnc_price_get_value (price),
+                          gnc_commodity_get_fraction (currency),
+                          GNC_RND_ROUND);
+}
+
+
 gnc_numeric
 gnc_ui_account_get_balance (Account *account, gboolean include_children)
 {

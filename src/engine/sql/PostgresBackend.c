@@ -658,7 +658,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    }
    if (p != be->buff)
    {
-      PINFO ("%s", be->buff);
+      PINFO ("%s", be->buff ? be->buff : "(null)");
       SEND_QUERY (be,be->buff, );
       FINISH_QUERY(be->connection);
 
@@ -698,7 +698,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       p = stpcpy (p, "DELETE FROM gncTransaction WHERE transGuid='");
       p = guid_to_string_buff (xaccTransGetGUID(trans), p);
       p = stpcpy (p, "';");
-      PINFO ("%s\n", be->buff);
+      PINFO ("%s\n", be->buff ? be->buff : "(null)");
       SEND_QUERY (be,be->buff, );
       FINISH_QUERY(be->connection);
 
@@ -984,7 +984,8 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             /* hack alert - not all split fields handled */
             xaccSplitSetMemo(s, DB_GET_VAL("memo",j));
             xaccSplitSetAction(s, DB_GET_VAL("action",j));
-            ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_reconciled",j));
+            ts = gnc_iso8601_to_timespec_local
+              (DB_GET_VAL("date_reconciled",j));
             xaccSplitSetDateReconciledTS (s, &ts);
 
             num = atoll (DB_GET_VAL("amountNum", j));
@@ -998,7 +999,6 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
             xaccSplitSetValue (s, value);
 
             xaccSplitSetReconcile (s, (DB_GET_VAL("reconciled", j))[0]);
-
 
             /* --------------------------------------------- */
             /* next, find the account that this split goes into */
@@ -1201,7 +1201,7 @@ pgendRunQueryHelper (PGBackend *be, const char *qstring)
 {
    GList *node, *xact_list = NULL;
 
-   ENTER ("string=%s\n", qstring);
+   ENTER ("string=%s\n", qstring ? qstring : "(null)");
 
    SEND_QUERY (be, qstring, );
    xact_list = pgendGetResults (be, query_cb, xact_list);
@@ -1635,7 +1635,12 @@ get_session_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
       PWARN ("This database is already opened by \n"
              "\t%s@%s (%s) in mode %s on %s \n",
-             username, hostname, gecos, mode, datestr);
+             username ? username : "(null)",
+             hostname ? hostname : "(null)",
+             gecos ? gecos : "(null)",
+             mode ? mode : "(null)",
+             datestr ? datestr : "(null)");
+
       PWARN ("The above messages should be handled by the GUI\n");
 
       if (lock_holder) return lock_holder;
@@ -1665,7 +1670,8 @@ pgendSessionCanStart (PGBackend *be, int break_lock)
     * but that's what the GUI is set up to do ...
     */
    PINFO ("break_lock=%d nrows=%d lock_holder=%s\n", 
-           break_lock, be->nrows, lock_holder);
+           break_lock, be->nrows,
+          lock_holder ? lock_holder : "(null)");
    if (break_lock && (1==be->nrows) && lock_holder)
    {
       p = be->buff; *p=0;
@@ -1869,7 +1875,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    if (!sess) return;
    be = (PGBackend *) xaccGNCBookGetBackend (sess);
 
-   ENTER("be=%p, sessionid=%s", be, sessionid);
+   ENTER("be=%p, sessionid=%s", be,
+         sessionid ? sessionid : "(null)");
 
    /* close any dangling sessions from before; reinitialize */
    pgend_session_end ((Backend *) be);
@@ -1953,7 +1960,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          {
              PWARN ("the following message should be shown in a gui");
              PWARN ("unknown mode %s, will use single-update mode",
-                   start);
+                    start ? start : "(null)");
              be->session_mode = MODE_SINGLE_UPDATE;
          } 
          
@@ -1998,11 +2005,13 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
           (0 == strncasecmp (start, "authtype=", 9)))
       {
          PWARN ("the following message should be shown in a gui");
-         PWARN ("ignoring the postgres keyword %s", start);
+         PWARN ("ignoring the postgres keyword %s",
+                start ? start : "(null)");
       } else
       {
          PWARN ("the following message should be shown in a gui");
-         PWARN ("unknown keyword %s, ignoring", start);
+         PWARN ("unknown keyword %s, ignoring",
+                start ? start : "(null)");
       }
    }
 
@@ -2027,8 +2036,10 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    if (CONNECTION_BAD == PQstatus(be->connection))
    {
       PWARN("Connection to database '%s' failed:\n"
-           "\t%s", 
-           be->dbName, PQerrorMessage(be->connection));
+            "\t%s", 
+            be->dbName ? be->dbName : "(null)",
+            PQerrorMessage(be->connection));
+
       PQfinish (be->connection);
       be->connection = NULL;
 
@@ -2102,7 +2113,7 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       {
          PERR("Can't connect to the newly created database '%s':\n"
               "\t%s", 
-              be->dbName,
+              be->dbName ? be->dbName : "(null)",
               PQerrorMessage(be->connection));
          PQfinish (be->connection);
          be->connection = NULL;
@@ -2186,7 +2197,8 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
       }
    }
 
-   LEAVE("be=%p, sessionid=%s", be, sessionid);
+   LEAVE("be=%p, sessionid=%s", be,
+         sessionid ? sessionid : "(null)");
 }
 
 /* ============================================================= */

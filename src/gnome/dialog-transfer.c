@@ -399,6 +399,9 @@ gnc_parse_error_dialog (XferDialog *xferData, const char *error_string)
   char * error_phrase;
 
   parse_error_string = gnc_exp_parser_error_string ();
+  if (parse_error_string == NULL)
+    parse_error_string = "";
+
   if (error_string == NULL)
     error_string = "";
 
@@ -706,6 +709,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
     curr = gnc_xfer_dialog_get_selected_curr_acct(xferData);
     if (curr == NULL)
     {
+      const char *from_name = gnc_commodity_get_printname(from_currency);
+      const char *to_name   = gnc_commodity_get_printname(to_currency);
       char *message = 
 	g_strdup_printf(_("No matching currency account!\n"
 			  "Please create a currency account\n"
@@ -713,8 +718,8 @@ gnc_xfer_dialog_ok_cb(GtkWidget * widget, gpointer data)
 			  "and security %s\n"
 			  "(or vice versa) to transfer funds\n"
 			  "between the selected accounts."),
-			gnc_commodity_get_printname(from_currency),
-			gnc_commodity_get_printname(to_currency));
+                        from_name ? from_name : "(null)",
+                        to_name ? to_name : "(null)");
 
       gnc_error_dialog_parented(GTK_WINDOW(xferData->dialog), message);
 

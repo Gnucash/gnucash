@@ -59,7 +59,7 @@ gncrpc_book_begin_1_svc(gncrpc_book_begin_args *argp, int *result, struct svc_re
 	GncRpcSvc *cl;
 	int res = ERR_RPC_SERVER_STATE;
 
-	ENTER ("id=\"%s\"", argp->book_id);
+	ENTER ("id=\"%s\"", argp->book_id ? argp->book_id : "");
 
 	do {
 	  gboolean ret;

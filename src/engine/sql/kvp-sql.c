@@ -130,7 +130,7 @@ pgendGetPathCache (PGBackend *be, const char *path_str)
 {
    int ival;
    ival = pgendGetCache (be, "gncPathCache", "path", "ipath", path_str);
-   PINFO ("cached %d for %s", ival, path_str);
+   PINFO ("cached %d for %s", ival, path_str ? path_str : "(null)");
 
    if (0 >= ival) return ival;
    pgendPokePathCache (be, ival, path_str);
@@ -145,7 +145,7 @@ pgendGetGUIDCacheIDStr (PGBackend *be, const char *guid_str)
 {
    int ival;
    ival = pgendGetCache (be, "gncGUIDCache", "guid", "iguid", guid_str);
-   PINFO ("cached %d for %s", ival, guid_str);
+   PINFO ("cached %d for %s", ival, guid_str ? guid_str : "(null)");
    return ival;
 }
 
@@ -294,7 +294,7 @@ store_cb (const char *key, kvp_value *val, gpointer p)
 
          default:
             PERR("Unknown type %d for path=%s\n", 
-              kvp_value_get_type (val), cb_data->path);
+                 kvp_value_get_type (val), cb_data->path);
       }
    }
 

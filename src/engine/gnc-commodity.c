@@ -66,21 +66,21 @@ typedef struct _gnc_commodity_namespace gnc_commodity_namespace;
 static void
 reset_printname(gnc_commodity *com)
 {
-    if(com->printname) { g_free(com->printname); }
+    g_free(com->printname);
     com->printname = g_strdup_printf("%s (%s)",
-                                     com->mnemonic,
-                                     com->fullname);
+                                     com->mnemonic ? com->mnemonic : "",
+                                     com->fullname ? com->fullname : "");
 }
 
 static void
 reset_unique_name(gnc_commodity *com)
 {
-    if(com->unique_name) { g_free(com->unique_name); }
+    g_free(com->unique_name);
     com->unique_name = g_strdup_printf("%s::%s",
-                                       com->namespace,
-                                       com->mnemonic);
+                                       com->namespace ? com->namespace : "",
+                                       com->mnemonic ? com->mnemonic : "");
 }
-    
+
 gnc_commodity *
 gnc_commodity_new(const char * fullname, 
                   const char * namespace, const char * mnemonic, 
@@ -88,7 +88,7 @@ gnc_commodity_new(const char * fullname,
                   int fraction)
 {
   gnc_commodity * retval = g_new0(gnc_commodity, 1);
-  
+
   retval->fullname  = g_strdup(fullname);
   retval->namespace = g_strdup(namespace);
   retval->mnemonic  = g_strdup(mnemonic);
@@ -97,7 +97,7 @@ gnc_commodity_new(const char * fullname,
 
   reset_printname(retval);
   reset_unique_name(retval);
-  
+
   return retval;
 }
 

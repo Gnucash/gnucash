@@ -288,7 +288,8 @@ xaccAccountCommitEdit (Account *acc)
     xaccFreeAccountGroup (acc->children);
     acc->children = NULL;
 
-    PINFO ("freeing splits for account %p (%s)\n", acc, acc->accountName);
+    PINFO ("freeing splits for account %p (%s)\n",
+           acc, acc->accountName ? acc->accountName : "(null)");
 
     /* any split pointing at this account needs to be unmarked */
     for(lp = acc->splits; lp; lp = lp->next) 
@@ -1722,7 +1723,9 @@ xaccAccountStringToType(const char* str, int *type) {
   GNC_RETURN_ON_MATCH(MONEYMRKT);
   GNC_RETURN_ON_MATCH(CREDITLINE);
 
-  PERR("asked to translate unknown account type string %s.\n", str);
+  PERR("asked to translate unknown account type string %s.\n",
+       str ? str : "(null)");
+
   return(FALSE);
 }
 

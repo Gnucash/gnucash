@@ -451,7 +451,7 @@ gnc_book_backup_file(GNCBook *book)
             gnc_book_push_error(
                 book, ERR_BACKEND_MISC,
                 g_strdup_printf("unable to make bin file backup: %s",
-                                strerror(errno)));
+                                strerror(errno) ? strerror(errno) : ""));
             g_free(bin_bkup);
             return FALSE;
         }
@@ -470,7 +470,7 @@ gnc_book_backup_file(GNCBook *book)
         gnc_book_push_error(
             book, ERR_BACKEND_MISC,
             g_strdup_printf("unable to link backup file: %s",
-                            strerror(errno)));
+                            strerror(errno) ? strerror(errno) : ""));
         g_free(backup);
         return FALSE;
     }
@@ -490,6 +490,7 @@ gnc_book_write_to_file(GNCBook *book,
   tmp_name = g_new(char, strlen(datafile) + 12);
   strcpy(tmp_name, datafile);
   strcat(tmp_name, ".tmp-XXXXXX");
+
   if(!mktemp(tmp_name))
   {
       gnc_book_push_error(book, ERR_BACKEND_MISC,
@@ -512,7 +513,8 @@ gnc_book_write_to_file(GNCBook *book,
           gnc_book_push_error(
               book, ERR_BACKEND_MISC,
               g_strdup_printf("unable to unlink filename %s: %s",
-                              datafile, strerror(errno)));
+                              datafile ? datafile : "(null)",
+                              strerror(errno) ? strerror(errno) : ""));
           g_free(tmp_name);
           return FALSE;
       }
@@ -522,7 +524,9 @@ gnc_book_write_to_file(GNCBook *book,
               book, ERR_BACKEND_MISC,
               g_strdup_printf("unable to link from temp filename %s to "
                               "real filename %s: %s",
-                              tmp_name, datafile, strerror(errno)));
+                              tmp_name ? tmp_name : "(null)",
+                              datafile ? datafile : "(null)",
+                              strerror(errno) ? strerror(errno) : ""));
           g_free(tmp_name);
           return FALSE;
       }
@@ -531,7 +535,8 @@ gnc_book_write_to_file(GNCBook *book,
           gnc_book_push_error(
               book, ERR_BACKEND_MISC,
               g_strdup_printf("unable to unlink temp filename %s: %s",
-                              tmp_name, strerror(errno)));
+                              tmp_name ? tmp_name : "(null)",
+                              strerror(errno) ? strerror(errno) : ""));
           g_free(tmp_name);
           return FALSE;
       }
@@ -545,7 +550,8 @@ gnc_book_write_to_file(GNCBook *book,
           gnc_book_push_error(
               book, ERR_BACKEND_MISC,
               g_strdup_printf("unable to unlink temp_filename %s: %s",
-                              tmp_name, strerror(errno)));
+                              tmp_name ? tmp_name : "(null)",
+                              strerror(errno) ? strerror(errno) : ""));
           /* already in an error just flow on through */
       }
       g_free(tmp_name);
@@ -560,7 +566,7 @@ static gboolean
 gnc_book_begin_file (GNCBook *book, const char * filefrag,
                      gboolean ignore_lock)
 {
-  ENTER (" filefrag=%s", filefrag);
+  ENTER (" filefrag=%s", filefrag ? filefrag : "(null)");
 
   /* Try to find or build an absolute file path */
 
@@ -602,7 +608,8 @@ gnc_book_begin (GNCBook *book, const char * book_id,
   int rc;
 
   if (!book) return FALSE;
-  ENTER (" ignore_lock=%d, book-id=%s", ignore_lock, book_id);
+  ENTER (" ignore_lock=%d, book-id=%s", ignore_lock,
+         book_id ? book_id : "(null)");
 
   /* clear the error condition of previous errors */
   gnc_book_clear_error (book);
@@ -659,8 +666,8 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
       return FALSE;    /* ouch */
     }
-    PINFO ("filepath=%s\n", book->fullpath);
 
+    PINFO ("filepath=%s\n", book->fullpath ? book->fullpath : "(null)");
 
     /* load different backend based on URL.  We should probably
      * dynamically load these based on some config file ... */
@@ -682,7 +689,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       if (! dll_handle) 
       {
         dll_err = dlerror();
-        PWARN (" can't load library: %s\n", dll_err);
+        PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
         g_free(book->fullpath);
         book->fullpath = NULL;
         g_free(book->book_id);
@@ -698,7 +705,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       dll_err = dlerror();
       if (dll_err) 
       {
-        PWARN (" can't find symbol: %s\n", dll_err);
+        PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
         g_free(book->fullpath);
         book->fullpath = NULL;
         g_free(book->book_id);
@@ -721,7 +728,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       if (! dll_handle) 
       {
         dll_err = dlerror();
-        PWARN (" can't load library: %s\n", dll_err);
+        PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
         g_free(book->fullpath);
         book->fullpath = NULL;
         g_free(book->book_id);
@@ -737,7 +744,7 @@ gnc_book_begin (GNCBook *book, const char * book_id,
       dll_err = dlerror();
       if (dll_err) 
       {
-        PWARN (" can't find symbol: %s\n", dll_err);
+        PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
         g_free(book->fullpath);
         book->fullpath = NULL;
         g_free(book->book_id);
@@ -788,7 +795,7 @@ gnc_book_load (GNCBook *book)
   if (!book) return FALSE;
   if (!book->book_id) return FALSE;
 
-  ENTER ("book_id=%s", book->book_id);
+  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
 
   if (strncmp(book->book_id, "file:", 5) == 0)
   {
@@ -823,7 +830,7 @@ gnc_book_load (GNCBook *book)
 
     xaccGroupScrubSplits (book->topgroup);
 
-    LEAVE("book_id=%s", book->book_id);
+    LEAVE("book_id=%s", book->book_id ? book->book_id : "(null)");
     return TRUE;
   }
   else if ((strncmp(book->book_id, "http://", 7) == 0) ||
@@ -864,7 +871,7 @@ gnc_book_load (GNCBook *book)
        xaccLogEnable();
     }
 
-    LEAVE("book_id=%s", book->book_id);
+    LEAVE("book_id=%s", book->book_id ? book->book_id : "(null)");
     return TRUE;
   } 
   else
@@ -909,9 +916,11 @@ void
 gnc_book_save (GNCBook *book)
 {
   Backend *be;
+
   if (!book) return;
 
-  ENTER ("book_id=%s", book->book_id);
+  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
+
   /* if there is a backend, and the backend is reachablele
    * (i.e. we can communicate with it), then synchronize with 
    * the backend.  If we cannot contact the backend (e.g.
@@ -964,7 +973,8 @@ gnc_book_end (GNCBook *book)
 {
   if (!book) return;
 
-  ENTER ("book_id=%s", book->book_id);
+  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
+
   /* close down the backend first */
   if (book->backend && book->backend->book_end)
   {
@@ -1000,7 +1010,8 @@ void
 gnc_book_destroy (GNCBook *book) 
 {
   if (!book) return;
-  ENTER ("book_id=%s", book->book_id);
+
+  ENTER ("book_id=%s", book->book_id ? book->book_id : "(null)");
 
   xaccLogDisable();
   gnc_book_end (book);
@@ -1106,6 +1117,7 @@ xaccResolveFilePath (const char * filefrag)
 
   /* seriously invalid */
   if (!filefrag) return NULL;
+
   ENTER ("filefrag=%s", filefrag);
 
   /* ---------------------------------------------------- */
@@ -1264,7 +1276,7 @@ gnc_run_rpc_server (void)
   if (! dll_handle) 
   {
     dll_err = dlerror();
-    PWARN (" can't load library: %s\n", dll_err);
+    PWARN (" can't load library: %s\n", dll_err ? dll_err : "");
     return;
   }
   
@@ -1273,7 +1285,7 @@ gnc_run_rpc_server (void)
   if (dll_err) 
   {
     dll_err = dlerror();
-    PWARN (" can't find symbol: %s\n", dll_err);
+    PWARN (" can't find symbol: %s\n", dll_err ? dll_err : "");
     return;
   }
   

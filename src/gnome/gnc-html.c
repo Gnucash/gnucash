@@ -214,7 +214,7 @@ gnc_html_parse_url(gnc_html * html, const gchar * url,
       retval = URL_TYPE_HELP;
     }
     else {
-      PWARN("unhandled URL type for '%s'", url);
+      PWARN("unhandled URL type for '%s'", url ? url : "(null)");
       retval = URL_TYPE_OTHER;
     }
   }
@@ -365,7 +365,8 @@ static gchar  *
 rebuild_url(URLType type, const gchar * location, const gchar * label) {
   if(label) {
     return g_strdup_printf("%s%s#%s", url_type_names[type], 
-                           (location ? location : ""), label);
+                           (location ? location : ""),
+                           label ? label : "");
   }
   else {
     return g_strdup_printf("%s%s", url_type_names[type], 
@@ -605,7 +606,9 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
   case URL_TYPE_FTP:
   default:
     PWARN("load_to_stream for inappropriate type\n"
-          "\turl = '%s#%s'\n", location, label);
+          "\turl = '%s#%s'\n",
+          location ? location : "(null)",
+          label ? label : "(null)");
     gtk_html_write(GTK_HTML(html->html), handle, error_404, 
                    strlen(error_404));
     gtk_html_end(GTK_HTML(html->html), handle, GTK_HTML_STREAM_ERROR);
@@ -945,7 +948,8 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
             cb(gnchtml, method, action_parts[0], form_data);
           }
           else {
-            PWARN ("no handler for gnc-network action '%s'\n", action);
+            PWARN ("no handler for gnc-network action '%s'\n",
+                   action ? action : "(null)");
           }
         }
         else {
@@ -1149,7 +1153,7 @@ gnc_html_open_help(gnc_html * html, const gchar * location,
 static void
 gnc_html_open_scm(gnc_html * html, const gchar * location,
                   const gchar * label, int newwin) {
-  PINFO("location='%s'", location);
+  PINFO("location='%s'", location ? location : "(null)");
 }
 
 
@@ -1453,12 +1457,14 @@ gnc_html_export(gnc_html * html) {
   if (!filepath)
     return;
 
-  PINFO (" user selected file=%s\n", filepath);
+  PINFO (" user selected file=%s\n", filepath ? filepath : "(null)");
+
   fh = fopen (filepath, "w");
   if (NULL == fh) {
     const char *fmt = _("Could not open the file\n"
                         "     %s\n%s");
-    char *buf = g_strdup_printf (fmt, filepath, strerror (errno));
+    char *buf = g_strdup_printf (fmt, filepath ? filepath : "(null)",
+                                 strerror (errno) ? strerror (errno) : "");
     gnc_error_dialog (buf);
     if (buf) g_free (buf);
     return;

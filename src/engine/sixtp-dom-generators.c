@@ -52,24 +52,21 @@ text_to_dom_tree(const char *tag, const char *str)
 xmlNodePtr
 guid_to_dom_tree(const char *tag, const GUID* gid)
 {
-    char *guid_str;
+    char guid_str[GUID_ENCODING_LENGTH + 1];
     xmlNodePtr ret;
-    
+
     ret = xmlNewNode(NULL, tag);
 
     xmlSetProp(ret, "type", "guid");
 
-    guid_str = guid_to_string(gid);
-    if (!guid_str)
+    if (!guid_to_string_buff(gid, guid_str))
     {
         printf("FAILURE: guid_to_string failed\n");
         return NULL;
     }
-        
+
     xmlNodeAddContent(ret, guid_str);
 
-    g_free(guid_str);
-    
     return ret;
 }
 

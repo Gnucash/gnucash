@@ -326,7 +326,7 @@ gnc_gpg_export(const gchar * keyname) {
     NULL,
     NULL
   };
-  argv[6] = g_strdup_printf("(%s)", keyname);
+  argv[6] = g_strdup_printf("(%s)", keyname ? keyname : "");
   retval = gnc_gpg_transform(NULL, 0, NULL, argv);
   g_free(argv[6]);
   return retval;
@@ -345,7 +345,7 @@ gnc_gpg_export_async(const gchar * keyname, GncGPGCb cb, gpointer data) {
     NULL,
     NULL
   };
-  argv[6] = g_strdup_printf("(%s)", keyname);
+  argv[6] = g_strdup_printf("(%s)", keyname ? keyname : "");
   gnc_gpg_transform_async(NULL, 0, NULL, argv, cb, data);
   g_free(argv[6]);
 }
@@ -371,8 +371,11 @@ gnc_gpg_make_keypair(const gchar * username,
                     "Name-Email: %s\n"
                     "Passphrase: %s\n"
                     "%%commit\n",
-                    username, idstring, email, passphrase);
-  char * argv [] = 
+                    username ? username : "",
+                    idstring ? idstring : "",
+                    email ? email : "",
+                    passphrase ? passphrase : "");
+  char * argv [] =
   { "gpg",
     "--batch",
     "-q",
@@ -405,8 +408,11 @@ gnc_gpg_make_keypair_async(const gchar * username,
                     "Name-Email: %s\n"
                     "Passphrase: %s\n"
                     "%%commit\n",
-                    username, idstring, email, passphrase);
-  char * argv [] = 
+                    username ? username : "",
+                    idstring ? idstring : "",
+                    email ? email : "",
+                    passphrase ? passphrase : "");
+  char * argv [] =
   { "gpg",
     "--batch",
     "-q",

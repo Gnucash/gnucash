@@ -305,6 +305,9 @@ gnc_acct_tree_window_toolbar_delete_account_cb (GtkWidget *widget,
     char *name;
 
     name = xaccAccountGetFullName(account, gnc_get_account_separator ());
+    if (!name)
+      name = g_strdup ("");
+
     message = g_strdup_printf(format, name);
 
     if (gnc_verify_dialog(message, FALSE)) {
@@ -436,6 +439,9 @@ gnc_acct_tree_window_menu_delete_account_cb (GtkWidget *widget,
     char *name;
 
     name = xaccAccountGetFullName(account, gnc_get_account_separator ());
+    if (!name)
+      name = g_strdup ("");
+
     message = g_strdup_printf(format, name);
 
     if (gnc_verify_dialog(message, FALSE)) {

@@ -798,12 +798,14 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
   gnc_commodity *commodity;
   gnc_commodity *currency;
   gchar *istr = NULL;           /* indent string */
+  const char *str;
+
   if(!p) return;
   if(!f) return;
 
   commodity = gnc_price_get_commodity(p);
   currency = gnc_price_get_currency(p);
-  
+
   if(!commodity) return;
   if(!currency) return;
 
@@ -811,19 +813,27 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
 
   fprintf(f, "%s<pdb:price>\n", istr);
   fprintf(f, "%s  <pdb:commodity pointer=%p>\n", istr, commodity);
-  fprintf(f, "%s    <cmdty:ref-space> %s</gnc:cmdty:ref-space>\n", istr,
-          gnc_commodity_get_namespace(commodity));
-  fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr,
-          gnc_commodity_get_mnemonic(commodity));
+  str = gnc_commodity_get_namespace(commodity);
+  str = str ? str : "(null)";
+  fprintf(f, "%s    <cmdty:ref-space> %s</gnc:cmdty:ref-space>\n", istr, str);
+  str = gnc_commodity_get_mnemonic(commodity);
+  str = str ? str : "(null)";
+  fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr, str);
   fprintf(f, "%s  </pdb:commodity>\n", istr);
   fprintf(f, "%s  <pdb:currency pointer=%p>\n", istr, currency);
-  fprintf(f, "%s    <cmdty:ref-space>%s</gnc:cmdty:ref-space>\n", istr,
-          gnc_commodity_get_namespace(currency));
-  fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr,
-          gnc_commodity_get_mnemonic(currency));
+  str = gnc_commodity_get_namespace(currency);
+  str = str ? str : "(null)";
+  fprintf(f, "%s    <cmdty:ref-space>%s</gnc:cmdty:ref-space>\n", istr, str);
+  str = gnc_commodity_get_mnemonic(currency);
+  str = str ? str : "(null)";
+  fprintf(f, "%s    <cmdty:ref-id>%s</cmdty:ref-id>\n", istr, str);
   fprintf(f, "%s  </pdb:currency>\n", istr);
-  fprintf(f, "%s  %s\n", istr, gnc_price_get_source(p));
-  fprintf(f, "%s  %s\n", istr, gnc_price_get_type(p));
+  str = gnc_price_get_source(p);
+  str = str ? str : "(null)";
+  fprintf(f, "%s  %s\n", istr, str);
+  str = gnc_price_get_type(p);
+  str = str ? str : "(null)";
+  fprintf(f, "%s  %s\n", istr, str);
   fprintf(f, "%s  %g\n", istr, gnc_numeric_to_double(gnc_price_get_value(p)));
   fprintf(f, "%s</pdb:price>\n", istr);
 

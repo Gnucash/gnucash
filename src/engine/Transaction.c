@@ -1253,8 +1253,8 @@ xaccTransFindCommonCurrency (Transaction *trans)
   else if (!gnc_commodity_equiv (retval,trans->common_currency))
   {
     PWARN ("expected common currency %s but found %s\n",
-        gnc_commodity_get_unique_name (trans->common_currency),
-        gnc_commodity_get_unique_name (retval));
+           gnc_commodity_get_unique_name (trans->common_currency),
+           gnc_commodity_get_unique_name (retval));
   }
 
   if (NULL == retval)
@@ -1299,8 +1299,8 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
     {
       PWARN ("asked to change from common currency %s to %s\n"
              "doing so hasn't been tested and may orrupt the system\n",
-          gnc_commodity_get_unique_name (trans->common_currency),
-          gnc_commodity_get_unique_name (curr));
+             gnc_commodity_get_unique_name (trans->common_currency),
+             gnc_commodity_get_unique_name (curr));
     }
   }
   else
@@ -1335,8 +1335,8 @@ xaccTransSetCurrency (Transaction *trans, gnc_commodity *curr)
     {
       PWARN ("Transaction currency seems to be inconsistent.\n"
              "\tdefacto common=%s, asked to set %s",
-          gnc_commodity_get_unique_name (kimono),
-          gnc_commodity_get_unique_name (curr));
+             gnc_commodity_get_unique_name (kimono),
+             gnc_commodity_get_unique_name (curr));
     }
   }
 }
@@ -1378,6 +1378,7 @@ xaccTransCommitEdit (Transaction *trans)
 {
    Split *split;
    Backend *be;
+   const char *str;
 
    if (!trans) return;
    ENTER ("trans addr=%p", trans);
@@ -1440,7 +1441,10 @@ xaccTransCommitEdit (Transaction *trans)
     */
 
    /* See if there's a backend.  If there is, invoke it. */
-   PINFO ("descr is %s", xaccTransGetDescription(trans));
+   str = xaccTransGetDescription(trans);
+   str = str ? str : "(null)";
+   PINFO ("descr is %s", str);
+
    be = xaccTransactionGetBackend (trans);
    if (be && be->trans_commit_edit) 
    {

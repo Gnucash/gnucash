@@ -14,7 +14,8 @@ main ()
 
    if (CONNECTION_BAD == PQstatus(conn))
    {
-      printf("Fatal Error: Connection to database '%s' failed:\n", dbName);
+      printf("Fatal Error: Connection to database '%s' failed:\n",
+             dbName ? dbName : "(null)");
       printf("\t%s", PQerrorMessage(conn));
       PQfinish (conn);
       exit (1);
@@ -62,11 +63,10 @@ main ()
      printf ("accountName ===   description\n");
       for (row=0; row<nrows; row++) {
           printf ("%s ==== %s\n",
-              PQgetvalue(result, row, iacc),
-              PQgetvalue(result, row, idesc));
+                  PQgetvalue(result, row, iacc),
+                  PQgetvalue(result, row, idesc));
       }
 
-      
       i++;
    } while (result);
 

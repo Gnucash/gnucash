@@ -161,7 +161,9 @@ static void rpcendLogin (RPCBackend *be)
   CLIENT *client = NULL;
   int err;
 
-  ENTER ("be=%p, host=\"%s\", port=\"%s\"", be, be->hostname, be->portNum);
+  ENTER ("be=%p, host=\"%s\", port=\"%s\"", be,
+         be->hostname ? be->hostname : "",
+         be->portNum ? be->portNum : "");
 
   /* Figure out the port number */
   if (be->portNum)
@@ -790,7 +792,8 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   be = (RPCBackend *) xaccGNCBookGetBackend (book);
   VERIFY_BEV (be);
 
-  ENTER("be=%p, id=%s, ignore=%s, create=%s", be, book_id,
+  ENTER("be=%p, id=%s, ignore=%s, create=%s", be,
+        book_id ? book_id : "",
 	(ignore_lock == TRUE ? "true" : "false"),
 	(create == TRUE ? "true" : "false"));
 
@@ -886,7 +889,7 @@ static void rpcend_book_begin (GNCBook *book, const char *book_id,
   be->be.events_pending = rpcend_events_pending;
   be->be.process_events = rpcend_process_events;
 
-  LEAVE("be=%p, id=%s", be, book_id);
+  LEAVE("be=%p, id=%s", be, book_id ? book_id : "");
 }
 
 static void

@@ -444,7 +444,8 @@ void rpcend_build_gncacct (gncAccount *gncacct, Account *acc)
 #ifdef GNCACCT_COMMODITY
     c = xaccAccountGetCommodity (acc);
     if (!c)
-      PWARN ("Account (%s) had NULL commodity", gncacct->name);
+      PWARN ("Account (%s) had NULL commodity",
+             gncacct->name ? gncacct->name : "");
     gncacct->commodity.namespace = STRDUP (gnc_commodity_get_namespace (c));
     gncacct->commodity.mnemonic = STRDUP (gnc_commodity_get_mnemonic (c));
 #else
@@ -686,7 +687,7 @@ gnc_vers_list * rpcend_build_gncverslist_txn (GList *txnlist,
   gnc_vers_list *vlist = NULL;
   struct _listinfo listinfo;
 
-  ENTER ("list=%p, copy=%s", txnlist, copyguid?"true":"false");
+  ENTER ("list=%p, copy=%s", txnlist, copyguid ? "true" : "false");
   listinfo.end = &vlist;
   listinfo.copyguid = copyguid;
   listinfo.count = 0;
@@ -705,7 +706,7 @@ gnc_vers_list * rpcend_build_gnctxn_verslist (AccountGroup *ag,
   gnc_vers_list *vlist = NULL;
   struct _listinfo listinfo;
 
-  ENTER ("ag=%p, copy=%s", ag, copyguid?"true":"false");
+  ENTER ("ag=%p, copy=%s", ag, copyguid ? "true" : "false");
   listinfo.end = &vlist;
   listinfo.copyguid = copyguid;
   listinfo.count = 0;
@@ -733,7 +734,7 @@ gnc_vers_list * rpcend_build_gncacct_verslist (AccountGroup *ag,
   gnc_vers_list *vlist = NULL;
   struct _listinfo listinfo;
 
-  ENTER ("ag=%p, copy=%s", ag, copyguid?"true":"false");
+  ENTER ("ag=%p, copy=%s", ag, copyguid ? "true" : "false");
   listinfo.end = &vlist;
   listinfo.copyguid = copyguid;
   listinfo.count = 0;

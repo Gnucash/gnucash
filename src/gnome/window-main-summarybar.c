@@ -119,7 +119,8 @@ gnc_ui_build_currency_item(gnc_commodity * currency)
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label_str = g_strdup_printf ("%s (%s):", _("Net Assets"), mnemonic);
+  label_str = g_strdup_printf ("%s (%s):", _("Net Assets"),
+                               mnemonic ? mnemonic : "");
   label = gtk_label_new(label_str);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);
@@ -136,7 +137,8 @@ gnc_ui_build_currency_item(gnc_commodity * currency)
   gtk_widget_show(hbox);
   gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
 
-  label_str = g_strdup_printf ("%s (%s):", _("Profits"), mnemonic);
+  label_str = g_strdup_printf ("%s (%s):", _("Profits"),
+                               mnemonic ? mnemonic : "");
   label = gtk_label_new(label_str);
   gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
   gtk_widget_show(label);

@@ -661,7 +661,7 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         new_text_len = gnc_mbstowcs (&new_text_wc, new_text);
         if (new_text_len < 0)
         {
-                PERR ("bad text: %s", new_text);
+                PERR ("bad text: %s", new_text ? new_text : "(null)");
                 return NULL;
         }
 

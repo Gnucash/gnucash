@@ -59,8 +59,9 @@ sixtp_stack_frame_print(sixtp_stack_frame *sf, gint indent, FILE *f) {
 
   fprintf(f, "%s(stack-frame %p\n", is, sf);
   fprintf(f, "%s             (parser %p)\n", is, sf->parser);
-  fprintf(f, "%s             (tag %s)\n", is, sf->tag);
-  fprintf(f, "%s             (data-for-children %p)\n", is, sf->data_for_children);
+  fprintf(f, "%s             (tag %s)\n", is, sf->tag ? sf->tag : "(null)");
+  fprintf(f, "%s             (data-for-children %p)\n", is,
+          sf->data_for_children);
 
   {
     GSList *lp;
@@ -74,6 +75,7 @@ sixtp_stack_frame_print(sixtp_stack_frame *sf, gint indent, FILE *f) {
 
   fprintf(f, "%s             (frame-data %p))\n", is, sf->frame_data);
   fflush(f);
+  g_free(is);
 }
 
 GSList*

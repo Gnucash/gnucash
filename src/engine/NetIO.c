@@ -82,7 +82,7 @@ check_response (XMLBackend *be)
 
   /* get the content type out of the header */
   bufp = ghttp_get_header(request, "Content-Type");
-  PINFO ("Content-Type: %s", bufp);
+  PINFO ("Content-Type: %s", bufp ? bufp : "(null)");
 
   /* in principle, we should reject content that isn't 
    * labelled as text/gnc-xml.  But for now, we'll be soft ...
@@ -102,7 +102,9 @@ check_response (XMLBackend *be)
   {
     const char * errstr = ghttp_get_error (request);
     const char * reason = ghttp_reason_phrase (request);
-    PERR ("connection failed: %s %s\n", errstr, reason);
+    PERR ("connection failed: %s %s\n",
+          errstr ? errstr : "",
+          reason ? reason : "");
 
     be->be.last_err = ERR_NETIO_SHORT_READ;
     return len;
@@ -166,7 +168,9 @@ static void
 xmlbeBookBegin (GNCBook *book, const char *url) 
 {
   XMLBackend *be;
-  if (!book) return;
+
+  if (!book || !url) return;
+
   ENTER ("url is %s", url);
 
   be = (XMLBackend *) xaccGNCBookGetBackend (book); 

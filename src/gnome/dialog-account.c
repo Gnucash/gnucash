@@ -198,7 +198,7 @@ gnc_account_to_ui(AccountWindow *aw)
       if(pos == 0)
       {
         PWARN("Unknown price quote timezone (%s), resetting to default.",
-              quote_tz);
+              quote_tz ? quote_tz : "(null)");
         xaccAccountSetQuoteTZ (account, NULL);
       }
     }
