@@ -67,22 +67,35 @@ void          xaccInitTransaction (Transaction *);/* clears a trans struct */
 
 /* The xaccTransactionDestroy() method will remove all 
  *    of the splits from each of thier accounts, free the memory
- *    associated with them, and will then free the transaction
- *    itself.
+ *    associated with them.  This routine must be followed by either
+ *    an xaccTransCommitEdit(), in which case the transaction 
+ *    memory will be freed, or by xaccTransRollbackEdit(), in which 
+ *    case nothing at all is freed, and averything is put back into 
+ *    original order.
  */
 void          xaccTransDestroy (Transaction *);
 
-/* The xaccTransBeginEdit() ... 
- *    If the defer flag is set, then automated balancing
- *    is defered until the commit ...
+/* The xaccTransBeginEdit() method must be called before any changes
+ *    are made to a transaction or any of its componenet splits.  If 
+ *    this is not done, errors will result.  If the defer flag is set, 
+ *    then the automated re-balancing of all splits in this transaction
+ *    is defered until the xaccTransCommitEdit() call. This allows 
+ *    multiple splits to be edited, and prices fiddled with, and the whole
+ *    system sent temporarily out of balance, up until the Commit
+ *    call is made when double-entry is once again enforced.
  *
- * The xaccTransCommitEdit() routine may result in the deletion of the
- * transaction, if the transaction is "empty" (has no splits, or
- * has a single split in it whose value is non-zero.)
+ * The xaccTransCommitEdit() method should be used toindicate that 
+ *    all of the manipulations on teh transaction are complete, and
+ *    that these should be made permanent.  Note that this routine
+ *    may result in the deletion of the transaction, if the transaction 
+ *    is "empty" (has no splits, or * has a single split in it whose 
+ *    value is non-zero.)
  *
  * The xaccTransRollbackEdit() routine rejects all edits made, and 
- * sets the transaction back to where it was before the editing 
- * started. (Not yet implemented -- hack alert)
+ *    sets the transaction back to where it was before the editing 
+ *    started.  This includes restoring any deleted splits, removing
+ *    any added splits, and undoing the effects of xaccTransDestroy,
+ *    as well as restoring prices, memo's descriptions, etc.
  */
 void          xaccTransBeginEdit (Transaction *, int defer);
 void          xaccTransCommitEdit (Transaction *);
