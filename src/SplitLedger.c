@@ -3037,6 +3037,96 @@ xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
 
 /* ======================================================== */
 
+static SplitRegisterColors reg_colors =
+{
+  0xffffff, /* white */
+  0xffffff,
+  0xffffff,
+
+  0xffffff,
+  0xffffff,
+  0xffffff,
+  0xffffff,
+
+  FALSE /* double mode alternate by physical row */
+};
+
+void
+xaccSetSplitRegisterColors (SplitRegisterColors reg_colors_new)
+{
+  reg_colors = reg_colors_new;
+}
+
+guint32
+xaccSRGetBGColorHandler (VirtualLocation virt_loc, gpointer user_data)
+{
+  SplitRegister *reg = user_data;
+  VirtualCell *vcell;
+  guint32 bg_color;
+  gboolean is_current;
+
+  bg_color = 0xffffff; /* white */
+
+  if (!reg)
+    return bg_color;
+
+  vcell = gnc_table_get_virtual_cell (reg->table, virt_loc.vcell_loc);
+  if (!vcell || !vcell->cellblock)
+    return bg_color;
+
+  is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
+                                    virt_loc.vcell_loc);
+
+  switch ((CursorType) vcell->cellblock->cursor_type)
+  {
+    case CURSOR_TYPE_HEADER:
+      return reg_colors.header_bg_color;
+
+    case CURSOR_TYPE_SINGLE:
+      if (is_current)
+        return vcell->start_primary_color ?
+          reg_colors.primary_active_bg_color :
+          reg_colors.secondary_active_bg_color;
+
+      return vcell->start_primary_color ?
+        reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
+
+    case CURSOR_TYPE_DOUBLE:
+      if (is_current)
+      {
+        if (reg_colors.double_alternate_virt)
+          return vcell->start_primary_color ?
+            reg_colors.primary_active_bg_color :
+            reg_colors.secondary_active_bg_color;
+
+        return (virt_loc.phys_row_offset % 2 == 0) ?
+          reg_colors.primary_active_bg_color :
+          reg_colors.secondary_active_bg_color;
+      }
+
+      if (reg_colors.double_alternate_virt)
+        return vcell->start_primary_color ?
+          reg_colors.primary_bg_color :
+          reg_colors.secondary_bg_color;
+
+      return (virt_loc.phys_row_offset % 2 == 0) ?
+        reg_colors.primary_bg_color :
+        reg_colors.secondary_bg_color;
+
+    case CURSOR_TYPE_SPLIT:
+      if (is_current)
+        return reg_colors.split_active_bg_color;
+
+      return reg_colors.split_bg_color;
+
+    default:
+      PWARN("Unexpected cursor type: %d\n", vcell->cellblock->cursor_type);
+      return bg_color;
+  }
+}
+
+/* ======================================================== */
+
 G_INLINE_FUNC void
 sr_add_transaction (SplitRegister *reg,
                     Transaction *trans,
@@ -3125,8 +3215,6 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   int new_split_row = -1;
   time_t present;
   int i;
-
-  xaccSplitRegisterConfigColors (reg);
 
   /* make sure we have a blank split */
   if (blank_split == NULL)
@@ -3268,7 +3356,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
                         multi_line, start_primary_color,
                         find_split, &new_split_row, &vcell_loc);
 
-    start_primary_color = !start_primary_color;
+    if (!multi_line)
+      start_primary_color = !start_primary_color;
   }
 
   /* add the blank split at the end. */

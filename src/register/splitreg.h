@@ -164,68 +164,50 @@ typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
 
 struct _SplitRegister
 {
-   /* the table itself that implements the underlying GUI. */
-   Table         * table;
+  /* the table itself that implements the underlying GUI. */
+  Table         * table;
 
-   /* the cursors that define the currently edited row */
-   CellBlock     * single_cursor;
-   CellBlock     * double_cursor;
-   CellBlock     * trans_cursor;
-   CellBlock     * split_cursor;
-   CellBlock     * header;
+  /* the cursors that define the currently edited row */
+  CellBlock     * single_cursor;
+  CellBlock     * double_cursor;
+  CellBlock     * trans_cursor;
+  CellBlock     * split_cursor;
+  CellBlock     * header;
 
-   DateCell      * dateCell;
-   NumCell       * numCell;
-   QuickFillCell * descCell;
-   RecnCell      * recnCell;   /* main transaction line reconcile */
-   PriceCell     * shrbalnCell;
-   PriceCell     * balanceCell;
-   BasicCell     * nullCell;
+  DateCell      * dateCell;
+  NumCell       * numCell;
+  QuickFillCell * descCell;
+  RecnCell      * recnCell;   /* main transaction line reconcile */
+  PriceCell     * shrbalnCell;
+  PriceCell     * balanceCell;
+  BasicCell     * nullCell;
 
-   ComboCell     * actionCell;
-   ComboCell     * xfrmCell;
-   ComboCell     * mxfrmCell;
-   ComboCell     * xtoCell;
-   QuickFillCell * memoCell;
-   PriceCell     * creditCell;
-   PriceCell     * debitCell;
-   PriceCell     * priceCell;
-   PriceCell     * sharesCell;
+  ComboCell     * actionCell;
+  ComboCell     * xfrmCell;
+  ComboCell     * mxfrmCell;
+  ComboCell     * xtoCell;
+  QuickFillCell * memoCell;
+  PriceCell     * creditCell;
+  PriceCell     * debitCell;
+  PriceCell     * priceCell;
+  PriceCell     * sharesCell;
 
-   SplitRegisterType type;
-   SplitRegisterStyle style;
+  SplitRegisterType type;
+  SplitRegisterStyle style;
 
-   /* some private data; outsiders should not access this */
+  /* some private data; outsiders should not access this */
 
-   BasicCell *header_cells[CELL_TYPE_COUNT];
+  BasicCell *header_cells[CELL_TYPE_COUNT];
 
-   /* user_data allows users of this object to hang
-    * private data onto it */
-   void *user_data;
+  /* user_data allows users of this object to hang
+   * private data onto it */
+  void *user_data;
 
-   /* The destroy callback gives user's a chance 
-    * to free up any associated user_hook data */
-   SplitRegisterDestroyCB destroy;
+  /* The destroy callback gives user's a chance 
+   * to free up any associated user_hook data */
+  SplitRegisterDestroyCB destroy;
 };
 
-
-typedef struct _SplitRegisterColors SplitRegisterColors;
-
-struct _SplitRegisterColors
-{
-  guint32 header_bg_color;
-
-  guint32 primary_bg_color;
-  guint32 secondary_bg_color;
-
-  guint32 primary_active_bg_color;
-  guint32 secondary_active_bg_color;
-
-  guint32 split_bg_color;
-  guint32 split_active_bg_color;
-
-  gboolean double_alternate_virt;
-};
 
 typedef char* (*SRStringGetter) (SplitRegisterType);
 
@@ -237,6 +219,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          TableGetEntryHandler entry_handler,
                          TableGetFGColorHandler fg_color_handler,
+                         TableGetBGColorHandler bg_color_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy);
@@ -246,9 +229,6 @@ void            xaccConfigSplitRegister (SplitRegister *reg,
                                          SplitRegisterStyle style);
 
 void            xaccDestroySplitRegister (SplitRegister *reg);
-
-void            xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
-void            xaccSplitRegisterConfigColors (SplitRegister *reg);
 
 /* returns non-zero value if updates have been made to data */
 guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);

@@ -140,7 +140,8 @@ typedef guint32 (*TableGetFGColorHandler) (gpointer vcell_data,
                                            short cell_type,
                                            gpointer user_data);
 
-typedef guint32 (*TableGetBGColorHandler) (VirtualCell *vcell);
+typedef guint32 (*TableGetBGColorHandler) (VirtualLocation virt_loc,
+                                           gpointer user_data);
 
 typedef gpointer (*VirtCellDataAllocator)   (void);
 typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
@@ -189,7 +190,9 @@ struct _Table
 
   TableGetEntryHandler entry_handler;
   TableGetFGColorHandler fg_color_handler;
-  gpointer entry_handler_data;
+  TableGetBGColorHandler bg_color_handler;
+
+  gpointer handler_user_data;
 
   TableDestroyFunc destroy;
 
@@ -202,7 +205,8 @@ struct _Table
 /* Functions to create and destroy Tables.  */
 Table *     gnc_table_new (TableGetEntryHandler entry_handler,
                            TableGetFGColorHandler fg_color_handler,
-                           gpointer entry_handler_data,
+                           TableGetBGColorHandler bg_color_handler,
+                           gpointer handler_user_data,
                            VirtCellDataAllocator allocator,
                            VirtCellDataDeallocator deallocator,
                            VirtCellDataCopy copy);

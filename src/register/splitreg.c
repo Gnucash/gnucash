@@ -81,20 +81,6 @@ struct _SplitRegisterBuffer
   CellBuffer sharesCell;
 };
 
-static SplitRegisterColors reg_colors =
-{
-  0xffffff, /* white */
-  0xffffff,
-  0xffffff,
-
-  0xffffff,
-  0xffffff,
-  0xffffff,
-  0xffffff,
-
-  FALSE /* double mode alternate by physical row */
-};
-
 static char *cell_sample_strings[] =
 {
   N_("sample:12/12/2000"+7),                    /* date cell */
@@ -137,6 +123,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterStyle style,
                        TableGetEntryHandler entry_handler,
                        TableGetFGColorHandler fg_color_handler,
+                       TableGetBGColorHandler bg_color_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy);
@@ -615,6 +602,7 @@ xaccMallocSplitRegister (SplitRegisterType type,
                          SplitRegisterStyle style,
                          TableGetEntryHandler entry_handler,
                          TableGetFGColorHandler fg_color_handler,
+                         TableGetBGColorHandler bg_color_handler,
                          VirtCellDataAllocator allocator,
                          VirtCellDataDeallocator deallocator,
                          VirtCellDataCopy copy)
@@ -624,77 +612,10 @@ xaccMallocSplitRegister (SplitRegisterType type,
   reg = g_new0(SplitRegister, 1);
 
   xaccInitSplitRegister (reg, type, style,
-                         entry_handler, fg_color_handler,
+                         entry_handler, fg_color_handler, bg_color_handler,
                          allocator, deallocator, copy);
 
   return reg;
-}
-
-/* ============================================== */
-
-void
-xaccSetSplitRegisterColors (SplitRegisterColors reg_colors_new)
-{
-  reg_colors = reg_colors_new;
-}
-
-/* ============================================== */
-
-static void
-configTable(SplitRegister *reg)
-{
-  if ((reg == NULL) || (reg->table == NULL))
-    return;
-
-  switch (reg->style) {
-    case REG_SINGLE_LINE:
-    case REG_SINGLE_DYNAMIC:
-      reg->table->alternate_bg_colors = TRUE;
-      break;
-    case REG_DOUBLE_LINE:
-    case REG_DOUBLE_DYNAMIC:
-      reg->table->alternate_bg_colors = reg_colors.double_alternate_virt;
-      break;
-    default:
-      reg->table->alternate_bg_colors = FALSE;
-      break;
-  }
-}
-
-/* ============================================== */
-
-void
-xaccSplitRegisterConfigColors (SplitRegister *reg)
-{
-  reg->single_cursor->active_bg_color = reg_colors.primary_active_bg_color;
-  reg->single_cursor->passive_bg_color = reg_colors.primary_bg_color;
-  reg->single_cursor->passive_bg_color2 = reg_colors.secondary_bg_color;
-
-  reg->double_cursor->active_bg_color = reg_colors.primary_active_bg_color;
-  reg->double_cursor->passive_bg_color = reg_colors.primary_bg_color;
-  reg->double_cursor->passive_bg_color2 = reg_colors.secondary_bg_color;
-
-  reg->trans_cursor->active_bg_color = reg_colors.primary_active_bg_color;
-  reg->trans_cursor->passive_bg_color = reg_colors.primary_bg_color;
-  reg->trans_cursor->passive_bg_color2 = reg_colors.secondary_bg_color;
-
-  reg->split_cursor->active_bg_color = reg_colors.split_active_bg_color;
-  reg->split_cursor->passive_bg_color = reg_colors.split_bg_color;
-  reg->split_cursor->passive_bg_color2 = reg_colors.split_bg_color;
-
-  reg->header->active_bg_color = reg_colors.header_bg_color;
-  reg->header->passive_bg_color = reg_colors.header_bg_color;
-  reg->header->passive_bg_color2 = reg_colors.header_bg_color;
-
-  configTable(reg);
-}
-
-/* ============================================== */
-
-static void
-configCursors (SplitRegister *reg)
-{
-  xaccSplitRegisterConfigColors(reg);
 }
 
 /* ============================================== */
@@ -766,6 +687,7 @@ xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterStyle style,
                        TableGetEntryHandler entry_handler,
                        TableGetFGColorHandler fg_color_handler,
+                       TableGetBGColorHandler bg_color_handler,
                        VirtCellDataAllocator allocator,
                        VirtCellDataDeallocator deallocator,
                        VirtCellDataCopy copy)
@@ -829,20 +751,11 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* config the layout of the cells in the cursors */
   configLayout (reg);
 
-  /* --------------------------- */
-  /* do some misc cell config */
-  configCursors (reg);
-
-  /* 
-   * The Null Cell is used to make sure that "empty"
-   * cells stay empty.  This solves the problem of 
-   * having the table be reformatted, the result of
-   * which is that an empty cell has landed on a cell
-   * that was previously non-empty.  We want to make 
-   * sure that we erase those cell contents. The null
-   * cells handles this for us.
-   */
-
+  /* The Null Cell is used to make sure that "empty" cells stay empty.
+   * This solves the problem of having the table be reformatted, the
+   * result of which is that an empty cell has landed on a cell that
+   * was previously non-empty.  We want to make sure that we erase
+   * those cell contents. The null cells handles this for us. */
   reg->nullCell->input_output = XACC_CELL_ALLOW_NONE;
   xaccSetBasicCellValue (reg->nullCell, "");
 
@@ -931,8 +844,8 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* add menu items for the action cell */
   configAction (reg);
 
-  table = gnc_table_new (entry_handler, fg_color_handler, reg,
-                         allocator, deallocator, copy);
+  table = gnc_table_new (entry_handler, fg_color_handler, bg_color_handler,
+                         reg, allocator, deallocator, copy);
 
   /* Set up header */
   {
@@ -956,8 +869,6 @@ xaccInitSplitRegister (SplitRegister *reg,
   }
 
   reg->table = table;
-
-  configTable(reg);
 }
 
 /* ============================================== */
@@ -978,8 +889,6 @@ xaccConfigSplitRegister (SplitRegister *reg,
   gnc_table_create_cursor (reg->table, reg->double_cursor);
   gnc_table_create_cursor (reg->table, reg->trans_cursor);
   gnc_table_create_cursor (reg->table, reg->split_cursor);
-
-  configTable(reg);
 }
 
 /* ============================================== */

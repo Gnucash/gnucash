@@ -92,11 +92,6 @@ gnc_cellblock_cell_destroy (gpointer _cb_cell, gpointer user_data)
 static void        
 gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
 {
-  /* init colors */
-  cellblock->active_bg_color   = 0xffffff; /* white */
-  cellblock->passive_bg_color  = 0xffffff; /* white */
-  cellblock->passive_bg_color2 = 0xffffff; /* white */
-
   /* record new size */
   cellblock->num_rows = rows;
   cellblock->num_cols = cols;

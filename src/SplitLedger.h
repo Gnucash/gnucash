@@ -30,6 +30,26 @@
 #include "Transaction.h"
 
 
+/* Datatypes */
+typedef struct _SplitRegisterColors SplitRegisterColors;
+
+struct _SplitRegisterColors
+{
+  guint32 header_bg_color;
+
+  guint32 primary_bg_color;
+  guint32 secondary_bg_color;
+
+  guint32 primary_active_bg_color;
+  guint32 secondary_active_bg_color;
+
+  guint32 split_bg_color;
+  guint32 split_active_bg_color;
+
+  gboolean double_alternate_virt;
+};
+
+
 /* Callback function type */
 typedef gncUIWidget (*SRGetParentCallback) (void *user_data);
 typedef void (*SRSetHelpCallback) (void *user_data, const char *help_str);
@@ -176,10 +196,16 @@ gboolean xaccSRCheckReconciled (SplitRegister *reg);
  * the splits are ordered primarily by post date. */
 void     xaccSRShowPresentDivider (SplitRegister *reg, gboolean show_present);
 
+/* Set the colors used by SplitRegisters */
+void     xaccSetSplitRegisterColors (SplitRegisterColors reg_colors);
+
+
 /* Private function, for MultiLedger.c only */
 const char * xaccSRGetEntryHandler (gpointer vcell_data, short _cell_type,
                                     gpointer user_data);
 guint32      xaccSRGetFGColorHandler (gpointer vcell_data, short _cell_type,
+                                      gpointer user_data);
+guint32      xaccSRGetBGColorHandler (VirtualLocation virt_loc,
                                       gpointer user_data);
 
 #endif /* __XACC_SPLIT_LEDGER_H__ */

@@ -93,22 +93,7 @@ typedef struct
 
   short cursor_type;
 
-  GTable *cb_cells; /* Holds the CellBlockCell data */
-
-  /* The active_bg_color is the default color (in argb) for the cell
-   * backgrounds when this cell block needs to be "highlighted" in
-   * some way (typically, when this cellblock represents the the
-   * currently active cursor).
-   *
-   * The passive_bg_color is the default color for the cell background
-   * (in argb format) of the first row when the cell block is not highlighted.
-   *
-   * The passive_bg_color2 is the default color for cell backgrounds
-   * in other rows of the cellblock when it is not highlighted.  */
-  guint32 active_bg_color;
-  guint32 passive_bg_color;
-  guint32 passive_bg_color2;
-
+  GTable *cb_cells; /* Holds the CellBlockCell table */
 } CellBlock;
 
 

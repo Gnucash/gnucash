@@ -61,7 +61,8 @@ static void gnc_table_resize (Table * table, int virt_rows, int virt_cols);
 Table * 
 gnc_table_new (TableGetEntryHandler entry_handler,
                TableGetFGColorHandler fg_color_handler,
-               gpointer entry_handler_data,
+               TableGetBGColorHandler bg_color_handler,
+               gpointer handler_user_data,
                VirtCellDataAllocator allocator,
                VirtCellDataDeallocator deallocator,
                VirtCellDataCopy copy)
@@ -74,7 +75,8 @@ gnc_table_new (TableGetEntryHandler entry_handler,
 
    table->entry_handler = entry_handler;
    table->fg_color_handler = fg_color_handler;
-   table->entry_handler_data = entry_handler_data;
+   table->bg_color_handler = bg_color_handler;
+   table->handler_user_data = handler_user_data;
    table->vcell_data_allocator = allocator;
    table->vcell_data_deallocator = deallocator;
    table->vcell_data_copy = copy;
@@ -181,7 +183,7 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc)
     return "";
 
   return table->entry_handler (vcell->vcell_data, cb_cell->cell_type,
-                               table->entry_handler_data);
+                               table->handler_user_data);
 }
 
 const char *
@@ -213,7 +215,7 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
   }
 
   return table->entry_handler (vcell->vcell_data, cb_cell->cell_type,
-                               table->entry_handler_data);
+                               table->handler_user_data);
 }
 
 /* ==================================================== */
@@ -269,7 +271,7 @@ gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
   }
 
   return table->fg_color_handler (vcell->vcell_data, cb_cell->cell_type,
-                                  table->entry_handler_data);
+                                  table->handler_user_data);
 }
 
 /* ==================================================== */
@@ -277,36 +279,10 @@ gnc_table_get_fg_color (Table *table, VirtualLocation virt_loc)
 guint32
 gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc)
 {
-  VirtualCell *vcell;
-  guint32 bg_color;
+  if (!table->bg_color_handler)
+    return 0xffffff; /* white */
 
-  bg_color = 0xffffff; /* white */
-
-  vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
-  if (vcell == NULL)
-    return bg_color;
-
-  if (virt_cell_loc_equal (table->current_cursor_loc.vcell_loc,
-                           virt_loc.vcell_loc))
-    bg_color = vcell->cellblock->active_bg_color;
-  else
-  {
-    if (virt_loc.vcell_loc.virt_row == 0)
-      bg_color = vcell->cellblock->passive_bg_color;
-    else if (table->alternate_bg_colors)
-    {
-      if (vcell->start_primary_color)
-        bg_color = vcell->cellblock->passive_bg_color;
-      else
-        bg_color = vcell->cellblock->passive_bg_color2;
-    }
-    else if (virt_loc.phys_row_offset == 0)
-      bg_color = vcell->cellblock->passive_bg_color;
-    else
-      bg_color = vcell->cellblock->passive_bg_color2;
-  }
-
-  return bg_color;
+  return table->bg_color_handler (virt_loc, table->handler_user_data);
 }
 
 /* ==================================================== */

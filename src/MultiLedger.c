@@ -413,6 +413,7 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
   regData->ledger = xaccMallocSplitRegister (type, style,
                                              xaccSRGetEntryHandler,
                                              xaccSRGetFGColorHandler,
+                                             xaccSRGetBGColorHandler,
                                              xaccGUIDMalloc,
                                              xaccGUIDFree,
                                              xaccGUIDCopy);
