@@ -60,12 +60,16 @@
 (define (string-search? string sub-str start)
   (number? (string-search string sub-str start)))
 
-;; Just a private sc1pe.
+(define (make-level-collector num-levels)
+  (let ((level-collector (make-vector num-levels)))
+    (do ((i 0 (+ i 1)))
+        ((= i num-levels) i)
+      (vector-set! level-collector i (make-stats-collector)))
+    level-collector))
+
+;; Just a private scope.
 (let* ((MAX-LEVELS 16)			; Maximum Account Levels
-       (levelx-collector (make-vector MAX-LEVELS)))
-  (do ((i 0 (+ i 1)))
-      ((= i MAX-LEVELS) i)
-    (vector-set! levelx-collector i (make-stats-collector)))
+       (levelx-collector (make-level-collector MAX-LEVELS)))
 
   (define (lx-collector level action value)
     ((vector-ref levelx-collector (- level 1)) action value))
