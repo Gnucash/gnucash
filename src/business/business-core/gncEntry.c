@@ -42,6 +42,14 @@ struct _gncEntry {
   GncOrder *	order;
   GncInvoice *	invoice;
 
+  gnc_numeric	value;
+  gnc_numeric	value_rounded;
+  gnc_numeric	tax_value;
+  gnc_numeric	tax_value_rounded;
+  gnc_numeric	disc_value;
+  gnc_numeric	disc_value_rounded;
+  gboolean	values_dirty;
+
   gboolean	dirty;
 };
 
@@ -122,6 +130,7 @@ GncEntry *gncEntryCreate (GNCBook *book)
   entry->tax_type = GNC_ENTRY_INTERP_PERCENT;
   entry->disc_type = GNC_ENTRY_INTERP_PERCENT;
   entry->dirty = FALSE;
+  entry->values_dirty = TRUE;
 
   xaccGUIDNew (&entry->guid, book);
   addObj (entry);
@@ -188,6 +197,7 @@ void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity)
 {
   if (!entry) return;
   entry->quantity = quantity;
+  entry->values_dirty = TRUE;
   mark_entry (entry);
 }
 
@@ -195,6 +205,7 @@ void gncEntrySetPrice (GncEntry *entry, gnc_numeric price)
 {
   if (!entry) return;
   entry->price = price;
+  entry->values_dirty = TRUE;
   mark_entry (entry);
 }
 
@@ -202,6 +213,7 @@ void gncEntrySetTax (GncEntry *entry, gnc_numeric tax)
 {
   if (!entry) return;
   entry->tax = tax;
+  entry->values_dirty = TRUE;
   mark_entry (entry);
 }
 
@@ -209,6 +221,7 @@ void gncEntrySetDiscount (GncEntry *entry, gnc_numeric discount)
 {
   if (!entry) return;
   entry->discount = discount;
+  entry->values_dirty = TRUE;
   mark_entry (entry);
 }
 
@@ -252,6 +265,7 @@ void gncEntrySetTaxType (GncEntry *entry, gint type)
   if (type < 0 || type > 1) return;
 
   entry->tax_type = type;
+  entry->values_dirty = TRUE;
   mark_entry (entry);
 }
 
@@ -261,6 +275,7 @@ void gncEntrySetDiscountType (GncEntry *entry, gint type)
   if (type < 0 || type > 3) return;
 
   entry->disc_type = type;
+  entry->values_dirty = TRUE;
   mark_entry (entry);
 }
 
@@ -292,6 +307,8 @@ void gncEntryCopy (const GncEntry *src, GncEntry *dest)
 
   if (src->invoice)
     gncInvoiceAddEntry (src->invoice, dest);
+
+  dest->values_dirty = TRUE;
 }
 
 /* Get Functions */
@@ -413,14 +430,17 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 
   /* Compute the value */
 
-  subtotal = gnc_numeric_mul (qty, price, 100, /* XXX */ GNC_RND_ROUND);
+  subtotal = gnc_numeric_mul (qty, price, GNC_DENOM_AUTO, GNC_DENOM_LCD);
 
   if (GNC_ENTRY_INTERP_IS_PERCENT (discount_type)) {
-    discount = gnc_numeric_div (discount, percent, 10000 /* XXX */, GNC_RND_ROUND);
-    discount = gnc_numeric_mul (subtotal, discount, 10000 /* XXX */, GNC_RND_ROUND);
+    discount = gnc_numeric_div (discount, percent, GNC_DENOM_AUTO, 
+				GNC_DENOM_LCD);
+    discount = gnc_numeric_mul (subtotal, discount, GNC_DENOM_AUTO,
+				GNC_DENOM_LCD);
   }
 
-  this_value = gnc_numeric_sub (subtotal, discount, 10000 /* XXX */, GNC_RND_ROUND);
+  this_value = gnc_numeric_sub (subtotal, discount, GNC_DENOM_AUTO,
+				GNC_DENOM_LCD);
   if (discount_type & GNC_ENTRY_PRETAX_FLAG)
     subtotal = this_value;
 
@@ -436,8 +456,8 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
 
   if (tax_value != NULL) {
     if (GNC_ENTRY_INTERP_IS_PERCENT (tax_type)) {
-      tax = gnc_numeric_div (tax, percent, 10000 /* XXX */, GNC_RND_ROUND);
-      tax = gnc_numeric_mul (subtotal, tax, 10000 /* XXX */, GNC_RND_ROUND);
+      tax = gnc_numeric_div (tax, percent, GNC_DENOM_AUTO, GNC_DENOM_LCD);
+      tax = gnc_numeric_mul (subtotal, tax, GNC_DENOM_AUTO, GNC_DENOM_LCD);
     }
 
     *tax_value = tax;
@@ -446,42 +466,75 @@ void gncEntryComputeValue (gnc_numeric qty, gnc_numeric price,
   return;
 }
 
+static int
+get_commodity_denom (GncEntry *entry)
+{
+  if (!entry)
+    return 0;
+  if (entry->invoice) {
+    gnc_commodity *c = gncInvoiceGetCommonCommodity (entry->invoice);
+    if (c)
+      return (gnc_commodity_get_fraction (c));
+  }
+  return 100000;
+}
+
+static void
+gncEntryRecomputeValues (GncEntry *entry)
+{
+  int denom;
+
+  if (!entry->values_dirty)
+    return;
+
+  gncEntryComputeValue (entry->quantity, entry->price,
+			entry->tax, entry->tax_type,
+			entry->discount, entry->disc_type,
+			&(entry->value), &(entry->tax_value),
+			&(entry->disc_value));
+
+  denom = get_commodity_denom (entry);
+  entry->value_rounded = gnc_numeric_convert (entry->value, denom,
+					      GNC_RND_ROUND);
+  entry->tax_value_rounded = gnc_numeric_convert (entry->tax_value, denom,
+					      GNC_RND_ROUND);
+  entry->disc_value_rounded = gnc_numeric_convert (entry->disc_value, denom,
+					      GNC_RND_ROUND);
+  entry->values_dirty = FALSE;
+}
+
 void gncEntryGetValue (GncEntry *entry, gnc_numeric *value,
 		       gnc_numeric *tax_value, gnc_numeric *discount_value)
 {
   if (!entry) return;
-
-  return gncEntryComputeValue (gncEntryGetQuantity (entry),
-			       gncEntryGetPrice (entry),
-			       gncEntryGetTax (entry),
-			       gncEntryGetTaxType (entry),
-			       gncEntryGetDiscount (entry),
-			       gncEntryGetDiscountType (entry),
-			       value, tax_value, discount_value);
+  gncEntryRecomputeValues (entry);
+  if (value)
+    *value = entry->value;
+  if (tax_value)
+    *tax_value = entry->tax_value;
+  if (discount_value)
+    *discount_value = entry->disc_value;
 }
 
 gnc_numeric gncEntryReturnValue (GncEntry *entry)
 {
-  gnc_numeric val = gnc_numeric_zero ();
-  if (!entry) return val;
-  gncEntryGetValue (entry, &val, NULL, NULL);
-  return val;
+  if (!entry) return gnc_numeric_zero();
+  gncEntryRecomputeValues (entry);
+  return entry->value_rounded;
 }
 
 gnc_numeric gncEntryReturnTaxValue (GncEntry *entry)
 {
-  gnc_numeric val = gnc_numeric_zero ();
-  if (!entry) return val;
-  gncEntryGetValue (entry, NULL, &val, NULL);
-  return val;
+  if (!entry) return gnc_numeric_zero();
+  gncEntryRecomputeValues (entry);
+  return entry->tax_value_rounded;
 }
 
 gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry)
 {
-  gnc_numeric val = gnc_numeric_zero ();
-  if (!entry) return val;
-  gncEntryGetValue (entry, NULL, NULL, &val);
-  return val;
+  if (!entry) return gnc_numeric_zero();
+  gncEntryRecomputeValues (entry);
+  return entry->disc_value_rounded;
 }
 
 void gncEntryCommitEdit (GncEntry *entry)

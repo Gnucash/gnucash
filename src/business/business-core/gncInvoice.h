@@ -70,6 +70,9 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 /* Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
 
+GUID gncInvoiceRetGUID (GncInvoice *invoice);
+GncInvoice * gncInvoiceLookupDirect (GUID guid, GNCBook *book);
+
 GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid);
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);

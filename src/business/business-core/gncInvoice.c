@@ -576,6 +576,20 @@ gboolean gncInvoiceIsPosted (GncInvoice *invoice)
   return gncInvoiceDateExists (&(invoice->date_posted));
 }
 
+GUID gncInvoiceRetGUID (GncInvoice *invoice)
+{
+  if (!invoice)
+    return *xaccGUIDNULL();
+
+  return invoice->guid;
+}
+
+GncInvoice * gncInvoiceLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return gncInvoiceLookup (book, &guid);
+}
+
 GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;

@@ -65,6 +65,15 @@ libgncmod_business_gnome_la_LIBADD = \
 libgw_business_gnome_la_SOURCES = gw-business-gnome.c
 libgw_business_gnome_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
+# For Business Reports
+gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
+gncscmmod_DATA =
+
+# For regular scheme definitions
+gncscmdir = ${GNC_SHAREDIR}/scm
+gncscm_DATA = \
+  business-options.scm
+
 gncmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 gncmod_DATA = business-gnome.scm
 
@@ -88,7 +97,9 @@ EXTRA_DIST = \
   .cvsignore \
   ${glade_DATA} \
   ${gncmod_DATA} \
-  ${gwmod_DATA}
+  ${gwmod_DATA} \
+  ${gncscm_DATA} \
+  ${gncscmmod_DATA}
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different

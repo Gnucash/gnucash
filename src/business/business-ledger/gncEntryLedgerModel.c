@@ -337,7 +337,7 @@ static const char * get_value_entry (VirtualLocation virt_loc,
     if (entry == gnc_entry_ledger_get_blank_entry (ledger))
       return NULL;
 
-    gncEntryGetValue (entry, &value, NULL, NULL);
+    value = gncEntryReturnValue (entry);
   }
   return xaccPrintAmount (value, gnc_default_print_info (TRUE));
 }
@@ -360,7 +360,7 @@ static const char * get_taxval_entry (VirtualLocation virt_loc,
     if (entry == gnc_entry_ledger_get_blank_entry (ledger))
       return NULL;
 
-    gncEntryGetValue (entry, NULL, &value, NULL);
+    value = gncEntryReturnTaxValue (entry);
   }
 
   return xaccPrintAmount (value, gnc_default_print_info (TRUE));

@@ -50,6 +50,9 @@ gboolean gncVendorGetActive (GncVendor *vendor);
 
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
 
+GUID gncVendorRetGUID (GncVendor *vendor);
+GncVendor * gncVendorLookupDirect (GUID guid, GNCBook *book);
+
 GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
 int gncVendorCompare (GncVendor *a, GncVendor *b);

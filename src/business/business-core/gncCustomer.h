@@ -57,6 +57,9 @@ gnc_commodity * gncCustomerGetCommodity (GncCustomer *customer);
 
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 
+GUID gncCustomerRetGUID (GncCustomer *customer);
+GncCustomer * gncCustomerLookupDirect (GUID guid, GNCBook *book);
+
 GncCustomer * gncCustomerLookup (GNCBook *book, const GUID *guid);
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);

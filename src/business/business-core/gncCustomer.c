@@ -338,6 +338,20 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
   }
 }
 
+GUID gncCustomerRetGUID (GncCustomer *customer)
+{
+  if (!customer)
+    return *xaccGUIDNULL();
+
+  return customer->guid;
+}
+
+GncCustomer * gncCustomerLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return gncCustomerLookup (book, &guid);
+}
+
 GncCustomer * gncCustomerLookup (GNCBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;

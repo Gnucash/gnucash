@@ -306,6 +306,20 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
   }
 }
 
+GUID gncVendorRetGUID (GncVendor *vendor)
+{
+  if (!vendor)
+    return *xaccGUIDNULL();
+
+  return vendor->guid;
+}
+
+GncVendor * gncVendorLookupDirect (GUID guid, GNCBook *book)
+{
+  if (!book) return NULL;
+  return gncVendorLookup (book, &guid);
+}
+
 GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;

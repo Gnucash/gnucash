@@ -453,6 +453,13 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
 
   gncEntryComputeValue (qty, price, tax, tax_type, discount, disc_type,
 			  value, tax_value, NULL);
+
+  /* Now convert the values to the proper denomination */
+  if (value)
+    *value = gnc_numeric_convert (*value, 100 /* XXX */, GNC_RND_ROUND);
+
+  if (tax_value)
+    *tax_value = gnc_numeric_convert (*tax_value, 100 /* XXX */, GNC_RND_ROUND);
 }
 
 gboolean

@@ -225,6 +225,22 @@
 
   (gw:wrap-function
    ws
+   'gnc:customer-get-guid
+   '<gnc:guid-scm>
+   "gncCustomerRetGUID"
+   '((<gnc:GncCustomer*> customer))
+   "Return the GUID of the customer")
+
+  (gw:wrap-function
+   ws
+   'gnc:customer-lookup
+   '<gnc:GncCustomer*>
+   "gncCustomerLookupDirect"
+   '((<gnc:guid-scm> guid) (<gnc:Book*> book))
+   "Lookup the customer with GUID guid.")
+
+  (gw:wrap-function
+   ws
    'gnc:customer-get-id
    '(<gw:mchars> callee-owned const)
    "gncCustomerGetID"
@@ -412,6 +428,22 @@
   ;;
 
   ; Set Functions
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-get-guid
+   '<gnc:guid-scm>
+   "gncInvoiceRetGUID"
+   '((<gnc:GncInvoice*> invoice))
+   "Return the GUID of the invoice")
+
+  (gw:wrap-function
+   ws
+   'gnc:invoice-lookup
+   '<gnc:GncInvoice*>
+   "gncInvoiceLookupDirect"
+   '((<gnc:guid-scm> guid) (<gnc:Book*> book))
+   "Lookup the invoice with GUID guid.")
 
   (gw:wrap-function
    ws
@@ -822,6 +854,22 @@
   ;;
   ;; gncVendor.h
   ;;
+
+  (gw:wrap-function
+   ws
+   'gnc:vendor-get-guid
+   '<gnc:guid-scm>
+   "gncVendorRetGUID"
+   '((<gnc:GncVendor*> vendor))
+   "Return the GUID of the vendor")
+
+  (gw:wrap-function
+   ws
+   'gnc:vendor-lookup
+   '<gnc:GncVendor*>
+   "gncVendorLookupDirect"
+   '((<gnc:guid-scm> guid) (<gnc:Book*> book))
+   "Lookup the vendor with GUID guid.")
 
   (gw:wrap-function
    ws
