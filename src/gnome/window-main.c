@@ -42,6 +42,7 @@
 #include "dialog-totd.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
+#include "druid-loan.h"
 #include "gfec.h"
 #include "global-options.h"
 #include "gnc-engine.h"
@@ -723,6 +724,13 @@ gnc_main_window_sched_xaction_slr_cb (GtkWidget *widget, gpointer data) {
   }
 }
 
+static
+void
+gnc_main_window_sx_loan_druid_cb( GtkWidget *widget, gpointer data)
+{
+  gnc_ui_sx_loan_druid_create();
+}
+
 void
 gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
 {
@@ -918,6 +926,14 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
       N_("Since Last Run..."),
       N_("Create Scheduled Transactions since the last time run."),
       gnc_main_window_sched_xaction_slr_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    { GNOME_APP_UI_ITEM,
+      N_( "Mortgage/Loan Repayment Setup" ),
+      N_( "Setup scheduled transactions for repayment of a loan" ),
+      gnc_main_window_sx_loan_druid_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

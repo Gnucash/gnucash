@@ -4,12 +4,13 @@ SUBDIRS = gnumeric printing
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 
-gncscmmod_DATA = process.scm main.scm price-quotes.scm
+gncscmmod_DATA = process.scm main.scm price-quotes.scm fin.scm
 
 gnc_regular_scm_files = \
   build-config.scm \
   command-line.scm \
   doc.scm \
+  fin.scm \
   help-topics-index.scm \
   main-window.scm \
   path.scm \

@@ -1,3 +1,29 @@
+2002-07-10  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.[ch]: Added; Initial implementation of
+	Gnome Druid for setting up loan-repayment Scheduled Transactions.
+	
+	* src/doc/loans.txt: Added; notes about how loans will be dealt
+	with in GnuCash.
+	
+	* src/gnome/glade/sched-xact.glade: Added loan-druid.
+	
+	* src/gnome/window-main.c (gnc_main_window_create_menus): Added
+	'Mortgage/Loan Repayment Setup' Druid invocation menu item.
+
+	* src/scm/fin.scm: Added. Implementations of 'ipmt', 'ppmt', 'pmt'
+	and supporting code.
+	
+	* src/app-utils/test/test-exp-parser.c (test_parser): Added tests
+	for functions-in-expressions.  Added [passed] test for Conrad's
+	bug.
+
+	* src/app-utils/gnc-exp-parser.c (func_op): Added. gnc-side
+	callback for dealing with a function in an expression.
+
+	* src/calculation/expression_parser.c: Added initial, undocumented
+	support for functions in expressions.
+
 2002-07-10  Derek Atkins  <derek@ihtfp.com>
 
 	* add Billable flag and Bill-To (owner) to line-item entries.

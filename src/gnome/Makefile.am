@@ -41,6 +41,7 @@ libgncgnome_la_SOURCES = \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
   druid-hierarchy.c \
+  druid-loan.c \
   druid-stock-split.c \
   gnc-network.c \
   gnc-splash.c \
@@ -77,6 +78,7 @@ noinst_HEADERS = \
   dialog-transfer.h \
   dialog-scheduledxaction.h \
   druid-hierarchy.h \
+  druid-loan.h \
   gnc-network.h \
   gnc-splash.h \
   gw-gnc.h \

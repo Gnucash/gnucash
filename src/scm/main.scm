@@ -394,6 +394,8 @@ string and 'directories' must be a list of strings."
     (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
     (load-from-path "tip-of-the-day.scm") ;; depends on app-utils (config-var...)
     (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
+    ;; +jsled - 2002.07.08
+    (load-from-path "fin.scm")
 
     (gnc:initialize-tip-of-the-day)
 

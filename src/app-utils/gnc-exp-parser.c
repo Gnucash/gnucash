@@ -22,6 +22,8 @@
 
 #include <ctype.h>
 #include <locale.h>
+#include <string.h>
+
 #include <glib.h>
 #include <guile/gh.h>
 
@@ -341,6 +343,40 @@ update_variables (var_store_ptr vars)
   }
 }
 
+static
+void*
+func_op( const char *fname,
+         int argc, void **argv )
+{
+  SCM scmFn, scmArgs, scmTmp;
+  int i;
+  gnc_numeric n, *result;
+  GString *realFnName;
+
+  realFnName = g_string_sized_new( strlen(fname) + 5 );
+  g_string_sprintf( realFnName, "gnc:%s", fname );
+  scmFn = gh_eval_str_with_standard_handler( realFnName->str );
+  g_string_free( realFnName, TRUE );
+  if ( ! gh_procedure_p( scmFn ) ) {
+    /* FIXME: handle errors correctly. */
+    printf( "gnc:\"%s\" is not a scm procedure\n", fname );
+    return NULL;
+  }
+  scmArgs = gh_list( SCM_UNDEFINED );
+  for ( i=0; i<argc; i++ ) {
+    /* cons together back-to-front. */
+    n = *(gnc_numeric*)argv[argc - i - 1];
+    scmTmp = gh_double2scm( gnc_numeric_to_double( n ) );
+    scmArgs = gh_cons( scmTmp, scmArgs );
+  }
+  scmTmp = gh_apply( scmFn, scmArgs );
+  
+  result = g_new0( gnc_numeric, 1 );
+  *result = double_to_gnc_numeric( gh_scm2double(scmTmp), 1,
+                                   GNC_DENOM_SIGFIG | (6<<8) );
+  return (void*)result;
+}
+
 static void *
 trans_numeric(const char *digit_str,
               char        radix_point,
@@ -455,7 +491,8 @@ gnc_exp_parser_parse_separate_vars (const char * expression,
   lc = gnc_localeconv ();
 
   pe = init_parser (vars, *lc->mon_decimal_point, *lc->mon_thousands_sep,
-                    trans_numeric, numeric_ops, negate_numeric, g_free);
+                    trans_numeric, numeric_ops, negate_numeric, g_free,
+                    func_op);
 
   error_loc = parse_string (&result, expression, pe);
 
@@ -545,6 +582,8 @@ gnc_exp_parser_error_string (void)
       return _("Undefined character");
     case NOT_A_VARIABLE:
       return _("Not a variable");
+    case NOT_A_FUNC:
+      return _("Not a defined function");
     case PARSER_OUT_OF_MEMORY:
       return _("Out of memory");
     case NUMERIC_ERROR:

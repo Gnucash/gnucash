@@ -220,6 +220,10 @@ void           parse_error(unsigned error_code,
 		case NOT_A_VARIABLE:
 			err_str = "Need a Variable on Left side of assignment operator, '='\n";
 			break;
+                case NOT_A_FUNC:
+                  err_str = "Need a valid Function name.\n";
+                  break;
+          
 	} /* endswitch */
 	printf(err_str);
 	printf("%s\n",buf_start);
