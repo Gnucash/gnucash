@@ -31,12 +31,6 @@
 #include <string.h>
 
 #include "guid.h"
-#include "messages.h"
-#include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-#include "gnc-be-utils.h"
-
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -47,10 +41,17 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 
+#include "messages.h"
+#include "gnc-commodity.h"
+#include "gnc-engine-util.h"
+#include "gnc-event-p.h"
+#include "gnc-be-utils.h"
+
+#include "gncAddressP.h"
+#include "gncBillTermP.h"
 #include "gncBusiness.h"
 #include "gncVendor.h"
 #include "gncVendorP.h"
-#include "gncAddress.h"
 
 struct _gncVendor 
 {
@@ -141,7 +142,6 @@ static void gncVendorFree (GncVendor *vendor)
   g_free (vendor);
 }
 
-#if 0
 /** Create a copy of a vendor, placing the copy into a new book. */
 GncVendor *
 gncCloneVendor (GncVendor *from, QofBook *book)
@@ -157,20 +157,23 @@ gncCloneVendor (GncVendor *from, QofBook *book)
   vendor->id = CACHE_INSERT (from->id);
   vendor->name = CACHE_INSERT (from->name);
   vendor->notes = CACHE_INSERT (from->notes);
-  vendor->addr = gncCloneAddress (from->addr, book);
+  vendor->addr = gncCloneAddress (from->addr, &vendor->inst.entity, book);
   vendor->taxincluded = from->taxincluded;
   vendor->active = from->active;
 
+  vendor->terms = gncBillTermObtainTwin (from->terms, book);
+  gncBillTermIncRef (vendor->terms);
+
+  vendor->currency = gnc_commodity_obtain_twin (from->currency, book);
+
+#if 0
+XXX unfinished
   vendor->jobs = NULL; xxx
 
-  GncBillTerm *   terms;
-  GncAddress *    addr;
-  gnc_commodity * currency;
   GncTaxTable*    taxtable;
   gboolean        taxtable_override;
-  GncTaxIncluded  taxincluded;
-  gboolean        active;
   GList *         jobs;
+#endif
 
   gnc_engine_gen_event (&vendor->inst.entity, GNC_EVENT_CREATE);
 
@@ -186,12 +189,11 @@ gncVendorObtainTwin (GncVendor *from, QofBook *book)
   vendor = (GncVendor *) qof_instance_lookup_twin (QOF_INSTANCE(from), book);
   if (!vendor)
   {
-    employee = gncCloneEmployee (from, book);
+    vendor = gncCloneVendor (from, book);
   }
 
   return vendor;
 }
-#endif
 
 /* ============================================================== */
 /* Set Functions */
@@ -243,7 +245,7 @@ void gncVendorSetTerms (GncVendor *vendor, GncBillTerm *terms)
     gncBillTermDecRef (vendor->terms);
   vendor->terms = terms;
   if (vendor->terms)
-    gncBillTermDecRef (vendor->terms);
+    gncBillTermIncRef (vendor->terms);
   mark_vendor (vendor);
   gncVendorCommitEdit (vendor);
 }

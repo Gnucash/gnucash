@@ -37,9 +37,11 @@
 #include "qofquery.h"
 
 #include "gncCustomerP.h"
+#include "gncEmployeeP.h"
 #include "gncJobP.h"
 #include "gncOwner.h"
 #include "gncOwnerP.h"
+#include "gncVendorP.h"
 
 #define _GNC_MOD_NAME	GNC_ID_OWNER
 
@@ -162,13 +164,13 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
   memcpy (dest, src, sizeof (*dest));
 }
 
-GncOwner 
+GncOwner
 gncCloneOwner (const GncOwner *from, QofBook *book)
 {
-  GncOwner owner = {GNC_OWNER_NONE};
+  GncOwner owner = { GNC_OWNER_NONE };
   if (!from) return owner;
   owner.type = from->type;
-  switch (from->type) 
+  switch (from->type)
   {
     case GNC_OWNER_NONE:
       return owner;
@@ -182,10 +184,10 @@ gncCloneOwner (const GncOwner *from, QofBook *book)
       owner.owner.job = gncJobObtainTwin (from->owner.job, book);
       return owner;
     case GNC_OWNER_VENDOR:
-/* XXX unfinished */
+      owner.owner.vendor = gncVendorObtainTwin (from->owner.vendor, book);
       return owner;
     case GNC_OWNER_EMPLOYEE:
-/* XXX unfinished */
+      owner.owner.employee = gncEmployeeObtainTwin (from->owner.employee, book);
       return owner;
     default:
       return owner;

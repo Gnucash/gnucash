@@ -31,8 +31,6 @@
 typedef struct gnc_owner_s GncOwner;
 
 #define GNC_ID_OWNER   "gncOwner"
-#define GNC_IS_OWNER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_OWNER))
-#define GNC_OWNER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_OWNER, GncOwner))
 
 #include "gncCustomer.h"
 #include "gncJob.h"
@@ -101,16 +99,16 @@ void gncOwnerAttachToLot (GncOwner *owner, GNCLot *lot);
  */
 gboolean gncOwnerGetOwnerFromLot (GNCLot *lot, GncOwner *owner);
 
-#define OWNER_TYPE	"type"
-#define OWNER_CUSTOMER	"customer"
-#define OWNER_JOB	"job"
-#define OWNER_VENDOR	"vendor"
-#define OWNER_EMPLOYEE	"employee"
-#define OWNER_PARENT	"parent"
-#define OWNER_PARENTG	"parent-guid"
-#define OWNER_NAME	"name"
+#define OWNER_TYPE        "type"
+#define OWNER_CUSTOMER    "customer"
+#define OWNER_JOB         "job"
+#define OWNER_VENDOR      "vendor"
+#define OWNER_EMPLOYEE    "employee"
+#define OWNER_PARENT      "parent"
+#define OWNER_PARENTG     "parent-guid"
+#define OWNER_NAME        "name"
 
-#define OWNER_FROM_LOT	"owner-from-lot"
+#define OWNER_FROM_LOT    "owner-from-lot"
 
 /*
  * These two functions are mainly for the convenience of scheme code.

@@ -48,7 +48,7 @@
 #include "qofquerycore.h"
 #include "qofquery.h"
 
-#include "gncAddress.h"
+#include "gncAddressP.h"
 #include "gncBillTermP.h"
 #include "gncBusiness.h"
 #include "gncCustomer.h"
@@ -148,29 +148,16 @@ gncCloneCustomer (GncCustomer *from, QofBook *book)
   cust->active = from->active;
   cust->taxtable_override = from->taxtable_override;
 
-  cust->addr = gncCloneAddress (from->addr, book);
-  cust->shipaddr = gncCloneAddress (from->shipaddr, book);
+  cust->addr = gncCloneAddress (from->addr, &cust->inst.entity, book);
+  cust->shipaddr = gncCloneAddress (from->shipaddr, &cust->inst.entity, book);
 
   /* Find the matching currency in the new book, assumes
    * currency has already been copied into new book. */
-  if (from->currency)
-  {
-    const char * ucom;
-    const gnc_commodity_table * comtbl;
-    ucom = gnc_commodity_get_unique_name (from->currency);
-    comtbl = gnc_commodity_table_get_table (book);
-    cust->currency = gnc_commodity_table_lookup_unique (comtbl, ucom);
-  }
+  cust->currency = gnc_commodity_obtain_twin (from->currency, book);
 
   /* Find the matching bill term, tax table in the new book */
-  if (from->terms)
-  {
-    cust->terms = gncBillTermObtainTwin(from->terms, book);
-  }
-  if (from->taxtable)
-  {
-    cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
-  }
+  cust->terms = gncBillTermObtainTwin(from->terms, book);
+  cust->taxtable = gncTaxTableObtainTwin (from->taxtable, book);
 
   for (node=g_list_last(cust->jobs); node; node=node->next)
   {

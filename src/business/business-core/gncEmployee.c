@@ -32,12 +32,6 @@
 #include <string.h>
 
 #include "guid.h"
-#include "messages.h"
-#include "gnc-commodity.h"
-#include "gnc-engine-util.h"
-#include "gnc-event-p.h"
-#include "gnc-be-utils.h"
-
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofid.h"
@@ -48,10 +42,17 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 
+#include "Account.h"
+#include "messages.h"
+#include "gnc-commodity.h"
+#include "gnc-engine-util.h"
+#include "gnc-event-p.h"
+#include "gnc-be-utils.h"
+
+#include "gncAddressP.h"
 #include "gncBusiness.h"
 #include "gncEmployee.h"
 #include "gncEmployeeP.h"
-#include "gncAddress.h"
 
 struct _gncEmployee 
 {
@@ -149,11 +150,11 @@ gncCloneEmployee (GncEmployee *from, QofBook *book)
   employee->username = CACHE_INSERT (from->username);
   employee->language = CACHE_INSERT (from->language);
   employee->acl = CACHE_INSERT (from->acl);
-  employee->addr = gncCloneAddress (from->addr, book);
+  employee->addr = gncCloneAddress (from->addr, &employee->inst.entity, book);
   employee->workday = from->workday;
   employee->rate = from->rate;
   employee->active = from->active;
-  employee->currency = from->currency;
+  employee->currency = gnc_commodity_obtain_twin(from->currency, book);
   employee->ccard_acc = 
      GNC_ACCOUNT(qof_instance_lookup_twin(QOF_INSTANCE(from->ccard_acc), book));
   

@@ -51,6 +51,7 @@
 #include "gncBusiness.h"
 #include "gncJob.h"
 #include "gncJobP.h"
+#include "gncOwnerP.h"
 
 struct _gncJob 
 {
@@ -120,8 +121,7 @@ gncCloneJob (GncJob *from, QofBook *book)
   job->desc = CACHE_INSERT (from->desc);
   job->active = from->active;
 
-  /* XXX need to clone too */
-  job->owner = from->owner;
+  job->owner = gncCloneOwner(&from->owner, book);
 
   gnc_engine_gen_event (&job->inst.entity, GNC_EVENT_CREATE);
                                                                                 
@@ -219,7 +219,15 @@ void gncJobSetOwner (GncJob *job, GncOwner *owner)
   if (!job) return;
   if (!owner) return;
   if (gncOwnerEqual (owner, &(job->owner))) return;
-  /* XXX: Fail if we have ANY orders or invoices */
+
+  switch (gncOwnerGetType (&(job->owner))) {
+  case GNC_OWNER_CUSTOMER:
+  case GNC_OWNER_VENDOR:
+    break;
+  default:
+    PERR("Unsupported Owner type");
+    return;
+  }
 
   gncJobBeginEdit (job);
 
