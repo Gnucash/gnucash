@@ -282,6 +282,7 @@ AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
 
 GNOME_XML_CHECK
 GNOME_XML_CFLAGS=`$GNOME_CONFIG --cflags xml`
+AS_SCRUB_INCLUDE(GNOME_XML_CFLAGS)
 
 AC_SUBST(GNOME_XML_CFLAGS)
 
@@ -512,6 +513,7 @@ then
 
     LIBS="${save_LIBS}"
     CPPFLAGS="${save_CPPFLAGS}"
+    AS_SCRUB_INCLUDE(LIBOFX_CFLAGS)
     AC_SUBST(LIBOFX_CFLAGS)
     AC_SUBST(LIBOFX_LIBS)
 fi
@@ -528,6 +530,7 @@ then
     HBCI_LIBS="${OPENHBCI_LIBS}"
     HBCI_CFLAGS="${OPENHBCI_CXXFLAGS}"
 
+    AS_SCRUB_INCLUDE(HBCI_CFLAGS)
     AC_SUBST(HBCI_LIBS)
     AC_SUBST(HBCI_CFLAGS)
 fi
@@ -766,6 +769,7 @@ then
     GLADE_LIBS="$LIBGLADE_LIBS"
     GLADE_CFLAGS="$LIBGLADE_CFLAGS"
     
+    AS_SCRUB_INCLUDE(GLADE_CFLAGS)
     AC_SUBST(GLADE_LIBS)
     AC_SUBST(GLADE_CFLAGS)
     
@@ -786,7 +790,6 @@ then
 		     AC_DEFINE(HAVE_LIBGTKHTML),
 		     AC_MSG_ERROR([Cannot find gtkhtml. See the README and config.log for more info.]),
 		     $GTKHTML_LIBS)
-	AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     else
 	AC_PATH_PROG(PKG_CONFIG,pkg-config)
 	if test "x$PKG_CONFIG" = x; then
@@ -807,6 +810,7 @@ then
 		     AC_MSG_ERROR([Cannot find gtkhtml-1.1. See the README and config.log for more info.]),
 		     $GTKHTML_LIBS)
     fi
+    AS_SCRUB_INCLUDE(GTKHTML_CFLAGS)
     
     GHTTP_LIBS=`$GNOME_CONFIG --libs ghttp`
     GHTTP_CFLAGS=`$GNOME_CONFIG --cflags ghttp`
