@@ -85,6 +85,7 @@ static gnc_tree_view_account_default gnc_tree_view_account_defaults[] = {
   {GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT,      GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,      TRUE,  1.0, "total_report",      N_("Total (Report)")},
   {GNC_TREE_MODEL_ACCOUNT_COL_NOTES,             0, FALSE, 0.0, "notes",             N_("Notes")},
   {GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,          0, FALSE, 0.0, "tax-info",          N_("Tax Info")},
+  {GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,       0, FALSE, 0.0, "placeholder",       N_("Placeholder")},
 };
 
 
@@ -180,6 +181,30 @@ gnc_tree_view_account_destroy (GtkObject *object)
 }
 
 
+/************************************************************
+ *                        Callbacks                         *
+ ************************************************************/
+static void
+gnc_tree_view_account_placeholder_toggled (GtkCellRendererToggle *cell,
+					   gchar *path_str,
+					   GncTreeViewAccount *tree_view)
+{
+	GtkTreePath *path;
+	Account *account;
+	gboolean placeholder;
+
+	/* Change the requested account */
+	path = gtk_tree_path_new_from_string (path_str);
+	account = gnc_tree_view_account_get_account_from_path (tree_view, path);
+	if (account) {
+	  placeholder = !gtk_cell_renderer_toggle_get_active (cell); // hasn't changed yet.
+	  xaccAccountSetPlaceholder (account, placeholder);
+	}
+
+	/* Clean up */
+	gtk_tree_path_free (path);
+}
+
 /************************************************************/
 /*                    New View Creation                     */
 /************************************************************/
@@ -191,7 +216,7 @@ gnc_tree_view_account_destroy (GtkObject *object)
  * model.
  */
 GtkTreeView *
-gnc_tree_view_account_new (gboolean show_root)
+gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 {
   GncTreeViewAccount *account_view;
   GtkTreeView *tree_view;
@@ -207,7 +232,7 @@ gnc_tree_view_account_new (gboolean show_root)
   tree_view = GTK_TREE_VIEW (account_view);
 
   /* Create/get a pointer to the existing model for this set of books. */
-  model = gnc_tree_model_account_new (gnc_book_get_group (gnc_get_current_book ()));
+  model = gnc_tree_model_account_new (group);
 
   /* Set up the view private filter on the common model. */
   if (!show_root)
@@ -239,8 +264,9 @@ gnc_tree_view_account_new (gboolean show_root)
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_set_expander_column (tree_view, column);
 
+
   /* Set up all other columns */
-  for (i = 1; i < NUM_ACCOUNT_FIELDS; i++) {
+  for (i = 1; i < GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER; i++) {
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (gettext(gnc_tree_view_account_defaults[i].field_name),
 						       renderer,
@@ -264,10 +290,41 @@ gnc_tree_view_account_new (gboolean show_root)
     gtk_tree_view_column_set_resizable (column, TRUE);
   }
 
+
+  /* Setup Placeholder column */
+  renderer = gtk_cell_renderer_toggle_new ();
+  column = gtk_tree_view_column_new_with_attributes (_("Placeholder"),
+						     renderer,
+						     "active", GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
+						     NULL);
+  g_signal_connect (G_OBJECT (renderer), "toggled",
+		    G_CALLBACK (gnc_tree_view_account_placeholder_toggled),
+		    tree_view);
+  gtk_tree_view_append_column (tree_view, column);
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
+  gtk_tree_view_column_set_resizable (column, TRUE);
+  gtk_tree_view_column_set_visible (column, FALSE);
+  gtk_tree_view_column_set_min_width (column, 20 /* DRH - Should be based on title width */);
+
+
   LEAVE("%p", tree_view);
   return tree_view;
 }
 
+/*
+ * Create a new account tree view with (optional) top level root node.
+ * This view will be based on a model that is common to all view of
+ * the same set of books, but will have its own private filter on that
+ * model.
+ */
+GtkTreeView *
+gnc_tree_view_account_new (gboolean show_root)
+{
+  AccountGroup *group;
+
+  group = gnc_book_get_group (gnc_get_current_book ());
+  return gnc_tree_view_account_new_with_group (group, show_root);
+}
 
 /************************************************************/
 /*            Account Tree View Filter Functions            */
@@ -283,7 +340,7 @@ gnc_tree_view_account_pref_name_to_field (const char *pref_name)
   gint i;
   g_return_val_if_fail ((pref_name != NULL), GNC_TREE_MODEL_ACCOUNT_COL_NAME);
 
-  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
+  for (i = 0; i < GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM; i++)
     if (safe_strcmp(gnc_tree_view_account_defaults[i].pref_name, pref_name) == 0)
       return i;
   return(GNC_TREE_MODEL_ACCOUNT_COL_NAME);
@@ -306,7 +363,7 @@ gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view,
   for (node = column_names; node != NULL; node = node->next)
   {
     field = gnc_tree_view_account_pref_name_to_field(node->data);
-    if (field < NUM_ACCOUNT_FIELDS)
+    if (field < GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM)
       new_avi.show_field[field] = TRUE;
   }
 
@@ -324,7 +381,7 @@ gnc_tree_view_account_init_view_info(AccountViewInfo *avi)
 {
   int i;
 
-  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
+  for (i = 0; i < GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM; i++)
     avi->show_field[i] = FALSE;
 
   avi->show_field[ACCOUNT_NAME] = TRUE;
@@ -369,7 +426,7 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
 
   account_view->priv->avi = *avi;
   
-  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++) {
+  for (i = 0; i < GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM; i++) {
     column = gtk_tree_view_get_column (GTK_TREE_VIEW(account_view), i);
     gtk_tree_view_column_set_visible (column, avi->show_field[i]);
   }

@@ -1434,12 +1434,34 @@ void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	 case GNC_EVENT_REMOVE:
 	  /* Record the path of this account for later use in destruction */
 	  DEBUG("remove account %p (%s)", account, account_name);
+	  path = gnc_tree_model_account_get_path_from_account (model, account);
+	  if (path == NULL) {
+	    LEAVE("account not in model");
+	    return;
+	  }
+
 	  data = malloc(sizeof(*data));
 	  data->guid = *entity;
 	  data->model = model;
-	  data->path = gnc_tree_model_account_get_path_from_account (model,
-								     account);
+	  data->path = path;
 	  pending_removals = g_slist_append (pending_removals, data);
+	  LEAVE(" ");
+	  return;
+
+	 case GNC_EVENT_MODIFY:
+	  DEBUG("change account %p (%s)", account, account_name);
+	  path = gnc_tree_model_account_get_path_from_account (model, account);
+	  if (path == NULL) {
+	    LEAVE("account not in model");
+	    return;
+	  }
+	  if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &iter, path)) {
+	    gtk_tree_path_free(path);
+	    LEAVE("can't find iter for path");
+	    return;
+	  }
+	  gtk_tree_model_row_changed(GTK_TREE_MODEL(model), path, &iter);
+	  gtk_tree_path_free(path);
 	  LEAVE(" ");
 	  return;
 

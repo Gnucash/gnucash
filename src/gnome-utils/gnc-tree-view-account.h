@@ -83,6 +83,7 @@ GType         gnc_tree_view_account_get_type              (void);
  *
  *  @return A pointer to a new account tree view.
  */
+GtkTreeView * gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root);
 GtkTreeView  *gnc_tree_view_account_new                   (gboolean show_root);
 /** @} */
 

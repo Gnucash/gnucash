@@ -91,6 +91,7 @@ typedef enum
   ACCOUNT_TOTAL_REPORT,   /* ACCOUNT_TOTAL in default report currency */
   ACCOUNT_NOTES,
   ACCOUNT_TAX_INFO,
+  ACCOUNT_PLACEHOLDER,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;
 
