@@ -77,8 +77,7 @@ static short module = MOD_SX;
 #define REMIND_OPT "remind_opt"
 #define REMIND_DAYS_SPIN "remind_days"
 #define END_DATE_BOX "end_date_hbox"
-#define END_GNOME_NUMENTRY "end_gnome_nentry"
-#define REMAIN_GNOME_NUMENTRY "remain_gnome_nentry"
+#define END_ENTRY "end_nentry"
 #define REMAIN_ENTRY "remain_nentry"
 
 #define END_NEVER_OPTION 0
@@ -204,7 +203,7 @@ static void gnc_sxed_update_cal( SchedXactionEditorDialog *sxed );
 
 static void gnc_sxed_reg_check_close(SchedXactionEditorDialog *sxed);
 
-static gint sxed_close_event( GnomeDialog *dlg, gpointer ud );
+static gint sxed_close_event( GtkDialog *dlg, gpointer ud );
 
 static gboolean sxed_confirmed_cancel( SchedXactionEditorDialog *sxed );
 
@@ -220,7 +219,7 @@ sxd_close_handler ( gpointer user_data )
         SchedXactionDialog        *sxd = user_data;
         
         gnc_sxl_record_size( sxd );
-        gnome_dialog_close( GNOME_DIALOG( sxd->dialog ) );
+        gtk_widget_hide( sxd->dialog );
 }
 
 void
@@ -247,7 +246,7 @@ sxed_close_handler ( gpointer user_data )
         gnc_sxed_reg_check_close( sxed );
         gnc_sxed_record_size( sxed );
         /* Real dialog cleanup occurs in "destroy" callback. */
-        gnome_dialog_close( GNOME_DIALOG( sxed->dialog ) );
+        gtk_widget_hide( sxed->dialog );
 }
 
 static
@@ -429,21 +428,17 @@ gnc_sxed_check_changed( SchedXactionEditorDialog *sxed )
                 /* dialog says... num occur */
                 if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
                         gint sxNumOccur, sxNumRem, dlgNumOccur, dlgNumRem;
-			gchar *text;
+			const gchar *text;
 
                         if ( ! xaccSchedXactionGetNumOccur( sxed->sx ) ) {
                                 return TRUE;
                         }
 
-			text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endCountEntry),
-						       0, -1 );
+			text = gtk_entry_get_text (sxed->endCountEntry);
 			sscanf (text, "%d", &dlgNumOccur);
-			g_free (text);
 
-                        text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
-					       	       0, -1 );
+			text = gtk_entry_get_text (sxed->endRemainEntry);
 			sscanf (text, "%d", &dlgNumRem);
-			g_free (text);
 
                         sxNumOccur = xaccSchedXactionGetNumOccur( sxed->sx );
                         sxNumRem = xaccSchedXactionGetRemOccur( sxed->sx );
@@ -855,17 +850,13 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                 if ( gtk_toggle_button_get_active(sxed->optEndCount)) {
                         gint occur, rem;
-			gchar *text;
+			const gchar *text;
 
-			text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endCountEntry),
-						       0, -1 );
+			text = gtk_entry_get_text (sxed->endCountEntry);
 			sscanf (text, "%d", &occur);
-			g_free (text);
 
-                        text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
-				       		       0, -1 );
+			text = gtk_entry_get_text (sxed->endRemainEntry);
 			sscanf (text, "%d", &rem);
-			g_free (text);
 
                         if ( occur == 0 ) {
                                 const char *sx_occur_count_zero_msg =
@@ -955,19 +946,15 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
                         xaccSchedXactionSetNumOccur( sxed->sx, 0 );
                 } else if ( gtk_toggle_button_get_active(sxed->optEndCount) ) {
                         gint num;
-			gchar *text;
+			const gchar *text;
 
                         /* get the occurances data */
-			text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endCountEntry),
-				       		       0, -1 );
+			text = gtk_entry_get_text (sxed->endCountEntry);
 			sscanf (text, "%d", &num);
-			g_free (text);
                         xaccSchedXactionSetNumOccur( sxed->sx, num );
 
-                        text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
-				       		       0, -1 );
+			text = gtk_entry_get_text (sxed->endRemainEntry);
 			sscanf (text, "%d", &num);
-			g_free (text);
                         xaccSchedXactionSetRemOccur( sxed->sx, num );
 
                         g_date_clear( &gdate, 1 );
@@ -1247,7 +1234,7 @@ schedXact_populate( SchedXactionDialog *sxd )
 
 static
 gint
-sxed_close_event( GnomeDialog *dlg, gpointer ud )
+sxed_close_event( GtkDialog *dlg, gpointer ud )
 {
         SchedXactionEditorDialog *sxed = (SchedXactionEditorDialog*)ud;
 
@@ -1295,10 +1282,10 @@ gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
         w = glade_xml_get_widget( sxed->gxml, "rb_num_occur" );
         sxed->optEndCount = GTK_TOGGLE_BUTTON(w);
 
-        w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
+        w = glade_xml_get_widget( sxed->gxml, END_ENTRY );
         sxed->endCountEntry = GTK_ENTRY(w);
 
-        w = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );
+        w = glade_xml_get_widget( sxed->gxml, REMAIN_ENTRY );
         sxed->endRemainEntry = GTK_ENTRY(w);
 
 }
@@ -1357,7 +1344,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
         sxed->newsxP = newSX;
         /* Setup dense-cal local mark storage */
         {
-                int i;
                 sxed->cal_marks = g_new0( GDate*, EX_CAL_NUM_MONTHS * 31 );
                 for( i=0; i<(EX_CAL_NUM_MONTHS * 31); i++ ) {
                         sxed->cal_marks[i] = g_date_new();
@@ -1513,9 +1499,11 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 
         gnc_split_reg_use_extended_popup( sxed->gsr );
 
+#if 0
         gtk_box_pack_start( GTK_BOX(vbox),
                             gnc_split_reg_get_toolbar( sxed->gsr ),
                             FALSE, TRUE, 2 );
+#endif
         gtk_box_pack_start( GTK_BOX(vbox), GTK_WIDGET(sxed->gsr),
                             TRUE, TRUE, 2 );
 

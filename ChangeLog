@@ -1,5 +1,9 @@
 2003-09-20  David Hampton  <hampton@employees.org>
 
+	* src/gnome/dialog-scheduledxaction.c: Eliminate run time
+	errors. Still need to convert over to new ui to share code with
+	the register again.
+
 	* src/gnome/druid-loan.c:
 	* src/gnome/glade/sched-xact.glade: Fix up druid for changes in
 	GnomeDruid between gnome1 and gnome2.
