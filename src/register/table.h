@@ -67,8 +67,11 @@ void        xaccRefreshTable (Table *);
 /* Make the indicated cell block be the cursor for this table */
 void        xaccSetCursor (Table *, CellBlock *);
 
-/* move the cursor to the indicated location. */
+/* move the cursor (but not the GUI) to the indicated location. */
 void        xaccMoveCursor (Table *, int virt_row, int virt_col);
+
+/* move the cursor GUI to the indicated location. */
+void        xaccMoveCursorGUI (Table *, int virt_row, int virt_col);
 
 /* copy text in the cursor cells to the table */
 void        xaccCommitEdits (Table *);

@@ -17,7 +17,9 @@
 
 typedef struct _ActionCell {
    ComboCell cell;
-   void  (* chain_realize) (struct _BasicCell *, void *gui_handle);
+   void  (* chain_realize) (struct _BasicCell *, 
+                            void *gui_handle,
+                            int pixel_width);
    void  (* chain_destroy) (struct _BasicCell *);
 } ActionCell;
 

@@ -21,9 +21,12 @@ typedef struct _PopBox {
 
 static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 static void dropDownCB (Widget w, XtPointer cd, XtPointer cb );
-static void realizeCombo (struct _BasicCell *bcell, void *w);
+static void realizeCombo (struct _BasicCell *bcell, void *w, int width);
 static void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col);
 static void destroyCombo (struct _BasicCell *bcell);
+static const char * enterCombo (struct _BasicCell *bcell, const char *value);
+static const char * leaveCombo (struct _BasicCell *bcell, const char *value);
+
 
 /* =============================================== */
 
@@ -60,7 +63,7 @@ xaccAddComboCellMenuItem (ComboCell *cell, char * menustr)
 /* =============================================== */
 
 static
-void realizeCombo (struct _BasicCell *bcell, void *w)
+void realizeCombo (struct _BasicCell *bcell, void *w, int pixel_width)
 {
    ComboCell *cell;
    PopBox *box;
@@ -82,11 +85,18 @@ void realizeCombo (struct _BasicCell *bcell, void *w)
    /* to mark cell as realized, remove the realize method */
    cell->cell.realize = NULL;
    cell->cell.move = moveCombo;
+   cell->cell.enter_cell = enterCombo;
+   cell->cell.leave_cell = leaveCombo;
    cell->cell.destroy = destroyCombo;
 
-   /* heuristic to increase the size of the drop-down box */
-   width = cell->cell.width;
-   drop_width = (int) (1.2 * ((float) width));
+   /* the combobox wants width in pixels, not in chars.
+    * It would be nice if ComboBox supported the XmNunits 
+    * resource, but it doesn't.  Also, while we are at it,
+    * increase the size of the drop-down box as well. 
+    */
+   width = pixel_width;
+   drop_width =  (int) (1.3 * ((float) width));
+   if (15 > drop_width) drop_width = 15;
 
    /* create the pop GUI */
    combobox = XtVaCreateManagedWidget
@@ -101,13 +111,8 @@ void realizeCombo (struct _BasicCell *bcell, void *w)
                        XmNselectionPolicy, XmSINGLE_SELECT,
                        XmNvalue, "",
                        XmNwidth, width,
+                       XmNdropDownWidth, drop_width,
                        NULL);
-
-   box->combobox = combobox;
-
-   if (10 < drop_width) {
-      XtVaSetValues (combobox, XmNdropDownWidth, drop_width, NULL);
-   }
 
    box->combobox = combobox;
 
@@ -115,6 +120,8 @@ void realizeCombo (struct _BasicCell *bcell, void *w)
    XtAddCallback (combobox, XmNselectionCallback, selectCB, (XtPointer)cell);
    XtAddCallback (combobox, XmNunselectionCallback, selectCB, (XtPointer)cell);
    XtAddCallback (combobox, XmNdropDownCallback, dropDownCB, (XtPointer)box);
+
+   moveCombo (bcell, -1, -1);
 }
 
 /* =============================================== */
@@ -124,14 +131,18 @@ void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col)
 {
    ComboCell *cell;
    PopBox *box;
-   String choice;
-   XmString choosen;
 
    cell = (ComboCell *) bcell;
    box = (PopBox *) (cell->cell.gui_private);
 
    /* if the drop-down menu is showing, hide it now */
    XmComboBoxHideList (box->combobox);
+
+printf ("move from %d %d to %d %d \n", 
+   box->currow,
+   box->curcol,
+   phys_row,
+   phys_col);
 
    /* if there is an old widget, remove it */
    if ((0 <= box->currow) && (0 <= box->curcol)) {
@@ -140,12 +151,34 @@ void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col)
    box->currow = phys_row;
    box->curcol = phys_col;
 
+   XtUnmanageChild (box->combobox); 
+}
+
+/* =============================================== */
+
+static
+const char * enterCombo (struct _BasicCell *bcell, const char *value)
+{
+   int phys_row, phys_col;
+   String choice;
+   XmString choosen;
+   ComboCell *cell;
+   PopBox *box;
+
+   cell = (ComboCell *) bcell;
+   box = (PopBox *) (cell->cell.gui_private);
+
+   phys_row = box->currow;
+   phys_col = box->curcol;
+
    /* if the new position is valid, go to it, 
     * otherwise, unmanage the widget */
-   if ((0 <= box->currow) && (0 <= box->curcol)) {
+   if ((0 <= phys_row) && (0 <= phys_col)) {
 
       /* Get the current cell contents, and set the
-       * combobox menu selction to match the contents */
+       * combobox menu selection to match the contents. 
+       * We could use the value passed in, but things should
+       * be consitent, so we don't need it. */
       choice = cell->cell.value;
 
       /* do a menu selection only if the cell ain't empty. */
@@ -170,10 +203,37 @@ void moveCombo (struct _BasicCell *bcell, int phys_row, int phys_col)
       }
 
       /* drop down the menu so that its ready to go. */
-      XmComboBoxShowList (box->combobox);
+      XmComboBoxShowList (box->combobox); 
+printf ("show at %d %d \n", phys_row, phys_col);
    } else {
       XtUnmanageChild (box->combobox); 
    }
+
+   return NULL;
+}
+
+/* =============================================== */
+
+static
+const char * leaveCombo (struct _BasicCell *bcell, const char *value)
+{
+   ComboCell *cell;
+   PopBox *box;
+
+   cell = (ComboCell *) bcell;
+   box = (PopBox *) (cell->cell.gui_private);
+
+   /* if the drop-down menu is showing, hide it now */
+   XmComboBoxHideList (box->combobox);
+
+   /* if there is an old widget, remove it */
+   if ((0 <= box->currow) && (0 <= box->curcol)) {
+      XbaeMatrixSetCellWidget (box->parent, box->currow, box->curcol, NULL);
+   }
+
+   XtUnmanageChild (box->combobox); 
+
+   return NULL;
 }
 
 /* =============================================== */
@@ -196,6 +256,8 @@ void destroyCombo (struct _BasicCell *bcell)
    cell->cell.gui_private = NULL;
    cell->cell.realize = realizeCombo;
    cell->cell.move = NULL;
+   cell->cell.enter_cell = NULL;
+   cell->cell.leave_cell = NULL;
    cell->cell.destroy = NULL;
 }
 
@@ -222,6 +284,7 @@ static void selectCB (Widget w, XtPointer cd, XtPointer cb )
    }
    if (!choice) choice = XtNewString ("");
 
+printf ("select %s \n", choice);
    XbaeMatrixSetCell (box->parent, box->currow, box->curcol, choice); 
    xaccSetBasicCellValue (&(cell->cell), choice);
    XtFree (choice);

@@ -55,6 +55,12 @@
  * The realize callback will be called when GUI-specific 
  * initalization needs to be done.  For Xt/Motif, the second
  * argument will be cast to the parent widget.
+ *
+ * HACK ALERT NOTES:
+ * The realize method takes a width argument only as a hack
+ * to work around the fact that the combo-box requires a width
+ * in pixels, rather than in characters.  It would be nice if 
+ * ComboBox supported the XmNunits resource, but it doesn't.  
  */
 
 #ifndef __XACC_BASIC_CELL_H__
@@ -78,7 +84,9 @@ typedef struct _BasicCell {
                               const char * current);
 
   /* private, GUI-specific initializer */
-  void         (* realize) (struct _BasicCell *, void *gui_handle);
+  void         (* realize) (struct _BasicCell *, 
+                            void *gui_handle,
+                            int pixel_width);
 
   /* private, GUI-specific callback to move gui element */
   void         (* move) (struct _BasicCell *, int phys_row, int phys_col);

@@ -140,8 +140,38 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
          if (cell) {
             jphys = j + table->current_cursor_col * table->tile_width;
             xaccSetBasicCellValue (cell, table->entries[iphys][jphys]);
+         }
+      }
+   }
+}
 
-            /* be sure to allow the GUI to move too */
+/* ==================================================== */
+
+void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
+{
+   int i,j;
+   int iphys,jphys;
+   BasicCell *cell;
+
+   if ((0 > virt_row) || (0 > virt_col)) return;
+   if (virt_row >= table->num_rows) return;
+   if (virt_col >= table->num_cols) return;
+   table->current_cursor_row = virt_row;
+   table->current_cursor_col = virt_col;
+
+   /* update the cell values to reflect the new position */
+   /* also, move the cell GUI, if needed */
+   for (i=0; i<table->tile_height; i++) {
+      iphys = i + table->current_cursor_row * table->tile_height;
+      iphys += table->num_header_rows;
+      for (j=0; j<table->tile_width; j++) {
+         
+         cell = table->cursor->cells[i][j];
+         if (cell) {
+            jphys = j + table->current_cursor_col * table->tile_width;
+            xaccSetBasicCellValue (cell, table->entries[iphys][jphys]);
+
+            /* if a cell has a GUI, move that too */
             if (cell->move) {
                (cell->move) (cell, iphys, jphys);
             }
@@ -172,6 +202,36 @@ void xaccCommitEdits (Table *table)
             table->entries[iphys][jphys] = strdup (cell->value);
          }
       }
+   }
+}
+
+/* ==================================================== */
+/* verifyCursorPosition checks the location of the cursor 
+ * with respect to a row/column position, and repositions 
+ * the cursor if necessary.
+ */
+
+static void
+verifyCursorPosition (Table *table, int phys_row, int phys_col)
+{
+   int virt_row, virt_col;
+
+   /* compute the virtual position */
+   virt_row = phys_row;
+   virt_row -= table->num_header_rows;
+   virt_row /= table->tile_height;
+
+   virt_col = phys_col;
+   virt_col /= table->tile_width;
+
+   if ((virt_row != table->current_cursor_row) ||
+       (virt_col != table->current_cursor_col)) {
+
+      /* before leaving, the current virtual position,
+       * commit any aedits that have been accumulated 
+       * in the cursor */
+      xaccCommitEdits (table);
+      xaccMoveCursorGUI (table, virt_row, virt_col);
    }
 }
 
@@ -303,6 +363,7 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
     * this cell. Dispatch for processing. */
    switch (cbs->reason) {
       case XbaeEnterCellReason: {
+         verifyCursorPosition (table, row, col);
          enterCB (mw, cd, cb);
          break;
       }
@@ -315,6 +376,7 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
          break;
       }
       case XbaeTraverseCellReason: {
+         verifyCursorPosition (table, row, col);
          traverseCB (mw, cd, cb);
          break;
       }
@@ -358,14 +420,16 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb)
    /* OK, if there is a callback for this cell, call it */
    enter = arr->cells[rel_row][rel_col]->enter_cell;
    if (enter) {
-      const char *val, *retval;
+      const char *val;
+      char *retval;
 
       val = table->entries[row][col];
-      retval = enter (arr->cells[rel_row][rel_col], val);
+      retval = (char *) enter (arr->cells[rel_row][rel_col], val);
+      if (NULL == retval) retval = (char *) val;
       if (val != retval) {
          if (table->entries[row][col]) free (table->entries[row][col]);
-         table->entries[row][col] = (char *) retval;
-         XbaeMatrixSetCell (mw, row, col, (char *) retval);
+         table->entries[row][col] = retval;
+         XbaeMatrixSetCell (mw, row, col, retval);
          XbaeMatrixRefreshCell (mw, row, col);
 
          /* don't map a text widget */
@@ -505,8 +569,8 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
       retval = leave (arr->cells[rel_row][rel_col], val);
 
       newval = (char *) retval;
-      if (val == retval) newval = strdup (retval);
-      if (NULL == retval) newval = strdup ("");
+      if (val == retval) newval = strdup (val);
+      if (NULL == retval) newval = strdup (val);
 
       /* save whatever was returned */
       if (table->entries[row][col]) free (table->entries[row][col]);
@@ -648,10 +712,15 @@ xaccCreateTable (Table *table, Widget parent, char * name)
             BasicCell *cell;
             cell = curs->cells[i][j];
             if (cell) {
-               void (*xt_realize) (struct _BasicCell *, void *gui);
+               void (*xt_realize) (struct _BasicCell *, 
+                                   void *gui,
+                                   int pixel_width);
                xt_realize = cell->realize;
                if (xt_realize) {
-                  xt_realize (((struct _BasicCell *) cell), ((void *) reg));
+                  int pixel_width;
+                  pixel_width = XbaeMatrixGetColumnPixelWidth (reg, j);
+                  xt_realize (((struct _BasicCell *) cell), 
+                              ((void *) reg), pixel_width);
                }
             }
          }

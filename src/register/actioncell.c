@@ -1,7 +1,7 @@
 
 #include "actioncell.h"
 
-static void realizeAction (struct _BasicCell *bcell, void *w);
+static void realizeAction (struct _BasicCell *bcell, void *w, int width);
 static void destroyAction (struct _BasicCell *bcell);
 
 /* =============================================== */
@@ -24,14 +24,14 @@ void xaccInitActionCell (ActionCell *cell)
 /* =============================================== */
 
 static
-void realizeAction (struct _BasicCell *bcell, void *w)
+void realizeAction (struct _BasicCell *bcell, void *w, int width)
 {
    ActionCell *cell = (ActionCell *) bcell;
 
    /* first, call the combobox realize */
    cell->cell.cell.realize = cell->chain_realize;
    if (cell->chain_realize) {
-      (cell->chain_realize) (bcell, w);
+      (cell->chain_realize) (bcell, w, width);
    }
 
    /* now, install our destroy */
