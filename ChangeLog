@@ -1,3 +1,17 @@
+2003-06-11  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	Add Jimmac's icons (http://jimmac.musichall.cz/i.php3?ikony=69).
+	* src/pixmaps/Makefile.am:
+	* src/pixmaps/account-16.png
+	* src/pixmaps/account.png
+	* src/pixmaps/appicon.png
+	* src/pixmaps/delete-account-16.png
+	* src/pixmaps/delete-account.png
+	* src/pixmaps/edit-account-16.png
+	* src/pixmaps/edit-account.png
+	* src/pixmaps/open-account-16.png
+	* src/pixmaps/open-account.png
+
 2003-05-30  Jan Arne Petersen  <jpetersen@uni-bonn.de>
 
         Move egg to lib.
