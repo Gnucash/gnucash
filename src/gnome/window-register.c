@@ -682,8 +682,8 @@ gnc_register_scrub_all_cb (GtkWidget *widget, gpointer data)
     Split *split = node->data;
     Transaction *trans = xaccSplitGetParent (split);
 
-    xaccTransScrubOrphans (trans, root, gnc_get_current_book ());
-    xaccTransScrubImbalance (trans, root, NULL, gnc_get_current_book ());
+    xaccTransScrubOrphans (trans, root);
+    xaccTransScrubImbalance (trans, root, NULL);
   }
 
   gnc_resume_gui_refresh ();
@@ -705,8 +705,8 @@ gnc_register_scrub_current_cb (GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
   root = gnc_get_current_group ();
-  xaccTransScrubOrphans (trans, root, gnc_get_current_book ());
-  xaccTransScrubImbalance (trans, root, NULL, gnc_get_current_book ());
+  xaccTransScrubOrphans (trans, root);
+  xaccTransScrubImbalance (trans, root, NULL);
   gnc_resume_gui_refresh ();
 }
 

@@ -1190,8 +1190,8 @@ gnc_recn_scrub_cb(GtkWidget *widget, gpointer data)
 
   gnc_suspend_gui_refresh ();
 
-  xaccAccountTreeScrubOrphans (account, gnc_get_current_book ());
-  xaccAccountTreeScrubImbalance (account, gnc_get_current_book ());
+  xaccAccountTreeScrubOrphans (account);
+  xaccAccountTreeScrubImbalance (account);
 
   gnc_resume_gui_refresh ();
 }
