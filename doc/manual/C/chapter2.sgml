@@ -1,6 +1,3 @@
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
-]>
-
 <!--
       (Do not remove this comment block.)
   Version: 1.6.5
@@ -11,66 +8,6 @@
   Translators:
                (translators put your name and email here)
 -->
-
-<book id="index">
- <bookinfo>
-  <title>GnuCash User Guide</title>
-  <edition>v1.6.5</edition>
-  <authorgroup>
-
-    <author>
-     <firstname>Carol</firstname>
-     <surname>Champagne</surname>
-     <authorblurb>
-      <para>
-       <email>carol@io.com</email>
-      </para>
-     </authorblurb>
-    </author>
-
-    <author>
-     <firstname>Chris</firstname>
-     <surname>Lyttle</surname>
-     <authorblurb>
-      <para>
-       <email>chris@wilddev.net</email>
-      </para>
-     </authorblurb>
-    </author>
-
-  </authorgroup>
-
-  <copyright>
-   <year>2001</year>
-   <holder>Carol Champagne and Chris Lyttle</holder>
-  </copyright>
-
- <!-- translators: uncomment this:
-
-  <copyright>
-   <year>2000</year>
-   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
-  </copyright>
-
-   -->
-
-  <legalnotice id="legalnotice">
-   <para>
-    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
-   </para>
-   <para>
-    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
-   </para>
-  </legalnotice>
-
-
-  <!-- this is the version of manual, not application --> 
-  <releaseinfo>
-   This is version 1.6.5 of the GnuCash User Guide.
-  </releaseinfo>
-
-</bookinfo>
 
  <chapter id="chapter2">
   <title>Chapter 2  Basic Structure and Setup</title>
@@ -107,7 +44,22 @@ In GnuCash, these transfers are known as transactions, and each transaction requ
     </para>
     <para>
 Unlike traditional accounting packages, GnuCash makes it very easy to enter your double entry  transactions.   Chapter (?4) gives more detail on entering transactions, but for now let?s take a general look at how they work.  For a basic transaction like writing a check, you first create two accounts: a checking account and an account for the expense.   For example, if you write a check to pay for groceries, then you need both a checking account and a groceries account.  (See Chapter (?3) for more detail on creating accounts.)  To record the check, you simply enter a transaction to transfer money from the checking account to the groceries account.  In this example, if you write a check for $50 to pay for groceries, the GnuCash transaction looks like this when viewed from the checking account:
-(?insert basictxn.png)
+	<screenshot id="basictxn">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/basictxn.png" 
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>A Basic Transaction</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows entering the date, description and
+	       transfer account for a  payment of $50 to the Grocery Store.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
     <para>
 In this transaction, a check is written to ?ABC Grocery Store? for $50.    Since this is a double entry transaction, at least two accounts are affected and must be part of the transaction.  GnuCash automatically enters the current account name (?My Checking?) for you, though, so you only enter the other account name affected (?Groceries?).
@@ -117,7 +69,22 @@ What about your paycheck?  You can see that money goes into a bank account, but 
     </para>
     <para>
 Here's what a paycheck deposit looks like in GnuCash. 
-(insert basictxn2.png)
+    <screenshot id="basictxn2">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/basictxn2.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>A Paycheck Transaction</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows entering the date, description and
+	       transfer account for a $600 Salary payment from Employers R Us.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
     <para>
 In this example, $800 is transferred from a ?Salary? income account to the ?My Checking? account.  Because of the special nature of income accounts, discussed in (?Chapter 3), this transaction increases both the checking account balance and the income account balance by the amount transferred.
@@ -128,7 +95,24 @@ So what if you want to record your gross pay and all the deductions that come ou
     <para>
 For example, your gross pay might be $1000, but only $800 of that gets deposited in your checking account.  The remaining $200 is split between your deductions, such as federal taxes, FICA and health insurance.   How do you account for this in GnuCash?  First, you should have accounts set up for the gross income, checking, and each of the deductions. (See Chapter (?3).)  Then you enter a transaction to transfer $1000 from the gross income account to the other four accounts: checking, federal taxes, FICA and health insurance.  Because this  is a double entry transaction, the total amount transferred to these four accounts must equal the original $1000 total coming from the income account.    We cover this type of transaction in more detail in Chapter (?4), but for now here?s a peek at what it looks like:
 
-(?insert multitxn.png)
+    <screenshot id="multitxn">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/multitxn.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>A Split Paycheck Transaction</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows entering the date, description and
+	       transfer account for a $655 Salary payment from Employers R Us.
+	       This is then made into a split transaction to Federal Taxes,
+	       Medicare, Social Security and State Tax.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
     <para>
 The main principle to remember is that there are at least two parts to every transaction, and the total amount transferred from a set of accounts must equal the total amount transferred to another set of accounts.  When a transaction transfers an equal sum from accounts to other accounts, that transaction is said to be <emphasis>in balance</emphasis>.  In GnuCash, as in double-entry accounting, you want to have all of your transactions in balance.
@@ -168,7 +152,21 @@ When you first open GnuCash, you will see the New User dialog.  From there, GnuC
 	(?Describe this more when finished)
 The New User Setup wizard allows you to create several accounts at once.  When you open GnuCash the first time, you will get this dialog:
 
-(?insert newuser.png)
+    <screenshot id="newuser">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/newuser.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The New User Druid</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows The first screen of the New User Druid.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
      </para>
      <para>
 Click [Next] and follow the instructions provided in the dialog.   The dialog provides a default set of accounts with predefined account types, and you simply select the accounts you want.  For more information on account types, see (?section 3.2).
@@ -182,7 +180,21 @@ Click [Next] and follow the instructions provided in the dialog.   The dialog pr
      <para>
 GnuCash provides a Tip of the Day dialog to give helpful hints for using the program:
 
-(?Insert tipofday.png)
+    <screenshot id="tipofday">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/tipofday.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The Tip of the Day</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows The Tip of the Day.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
      </para>
      <para>
 These tips provide useful information for beginning users.  To view more of the tips, click [Next] to continue.  If you do not wish to see this dialog box on startup, deselect the box next to ?Display this dialog next time.?   When you have finished viewing the helpful tips, click [Close} to close the ?Tip? dialog. 
@@ -192,7 +204,21 @@ These tips provide useful information for beginning users.  To view more of the 
     <title>2.2.3 Main Window</title>
      <para>
 You should now see the main window, which looks like this:
-(?Insert mainwin.png)
+    <screenshot id="mainwin">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/mainwin.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The GnuCash Main Window</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows The GnuCash Main Window.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
      </para>
      <para>
 The main window provides an overview of the data contained in the current file.  It contains your list of account names and their current balances.  From this main window, you can open any of your account windows, which are called <emphasis>registers</emphasis>.  GnuCash allows you to have as many registers open as you wish.
@@ -212,7 +238,22 @@ The main window headings appear below the status bar.  Once you have started cre
      <para>
 Register windows are the account windows.   As the name suggests, they look similar to a checkbook register.  When you double-click an account name in the main window, the account?s register window will open.  
 
-(?insert registerwin.png)
+    <screenshot id="registerwin">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/registerwin.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The Checking Account Register</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows The Checking Account Register with
+	       several transactions.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
      </para>
      <para>
  (?Chapter 4) explains more about register windows and how to enter data into them.   For now, note that the parts of a register window are similar to the parts of the main window described earlier.  The title bar at the top contains the account name.  Below that, the menu bar contains menu options related to the register.  Tool bar buttons simplify common data entry functions.  The status bar appears below the tool bar, and it displays four types of account balances covered in (?Chapter 4).  At the bottom of the register window, information appears about the current location of the cursor.
@@ -270,7 +311,22 @@ In this section, we will discuss some of the tabs that relate to setting up your
      <para>
 In the General tab, you will see the default settings shown here:
 
-(?insert preference.png here)
+    <screenshot id="preference">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/preference.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The Preferences dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows The Preference dialog where the options
+	       of how GnuCash looks and acts are setup.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
      </para>
    <itemizedlist>
     <listitem>
@@ -324,7 +380,8 @@ Auto decimal places---If you select the ?automatic decimal point? option, this o
    </itemizedlist>
     <para>
 The Main Window tab affects which headings display in the main window.  Here are the default settings:
-(?insert prefmainwin.png)
+    (FIXME: This needs to be rewritten as this dialog has moved to the options
+    button on the toolbar)
     </para>
    <itemizedlist>
     <listitem>
@@ -351,7 +408,21 @@ Account fields to display---Select the headings to be shown for each account in 
     <para>
 The Network tab contains options for network access, and it allows you to turn off network access if you choose to do so.  GnuCash offers special services through this network, such as (?list these when completed).  
 
-(?insert prefnetwk.png)
+    <screenshot id="prefnetwk">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/prefnetwk.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The Network Preferences</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows The Network Preferences dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
     </para>
    <itemizedlist>
     <listitem>
@@ -428,8 +499,22 @@ If you are using GnuCash for the first time, it will automatically open a new fi
      <para>
 Choose File|Save As... from the menu bar or select the Save toolbar button.  GnuCash will bring up this window:
 
-(?insert filesave.png here)
-    </para>
+    <screenshot id="filesave">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/filesave.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The file Save dialog</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows The file Save dialog.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+     </para>
     </listitem>
     <listitem>
      <para>
@@ -481,9 +566,21 @@ To import QIF files:
 Load all of the QIF files containing data you wish to import.  
 To do this, click on the [Import] button from the toolbar or select File|Import QIF... from the menu.   When the QIF import dialog box appears, click [Next] and follow the instructions to guide you through the process of loading your files.  
 
-(?insert import.png)
-
-
+    <screenshot id="import">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/import.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The QIF Import Druid</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the start of the QIF Import Druid.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
 You will be prompted for a filename to load.  Use the Browse feature to select your QIF file and click [Next] to load it.  Once the file is loaded, select [Load Another File] if you have more files to load.    When you have loaded all your QIF files, click [Next] to continue with the import process.
    </para>
     </listitem>
@@ -539,14 +636,43 @@ First, let?s create a file to store your ?real? data.  Open GnuCash and go throu
     <listitem>
      <para>
 Next, create a file to store test data.  This is the file that will be used in the tutorials throughout this manual.   Click File|New to create a new file, and name it gcashdata.  Your main window should now look something like this:
-(?insert gcashdata.png here)
-    </para>
+    <screenshot id="gcashdata">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/gcashdata.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The Main windows showing the test file</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the main GnuCash window with a set of
+	       accounts loaded from the druid.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
+     </para>
     </listitem>
     <listitem>
      <para>
 Now, adjust some preferences in this main window.  Select Settings|Preferences and change the tool bar buttons so that they display only text, not icons.  Click [Apply] and look at the tool bar buttons in the main window.  Return to the Preferences dialog and change the tool bar buttons back to the default setting by clicking {Set to Default].    Next, on the Main Window tab, select all of the account fields to display in the main window.   
 From the menu, select Settings|Preferences and change the "Main Window" option that will add the " Type" account field.  The main window should now look like this:
-(?insert gcashdata2.png here)
+    <screenshot id="gcashdata2">
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="figures/gcashdata2.png"
+	      srccredit="Chris Lyttle <chris@wilddev.net>">
+            </imageobject>
+	    <textobject>
+	        <phrase>The effect of changing the preferences</phrase>
+	    </textobject>
+	    <caption>
+	       <para>This image shows the effect of changing the preferences.
+	       </para>
+	    </caption>
+          </mediaobject>
+        </screenshot>
 
 
 
@@ -565,4 +691,3 @@ Save your file.
    </orderedlist>
   </sect1>
  </chapter>
-</book>

@@ -1,0 +1,72 @@
+<!DOCTYPE BOOK PUBLIC "-//OASIS//DTD DocBook V3.1//EN" [
+<!entity chapter1 system "chapter1.sgml">
+<!entity chapter2 system "chapter2.sgml">
+<!entity chapter3 system "chapter3.sgml">
+<!entity chapter4 system "chapter4.sgml">
+<!entity chapter5 system "chapter5.sgml">
+<!entity chapter6 system "chapter6.sgml">
+]>
+<book id="index">
+ <bookinfo>
+  <title>GnuCash User Guide</title>
+  <edition>v1.6.5</edition>
+  <authorgroup>
+
+    <author>
+     <firstname>Carol</firstname>
+     <surname>Champagne</surname>
+     <authorblurb>
+      <para>
+       <email>carol@io.com</email>
+      </para>
+     </authorblurb>
+    </author>
+
+    <author>
+     <firstname>Chris</firstname>
+     <surname>Lyttle</surname>
+     <authorblurb>
+      <para>
+       <email>chris@wilddev.net</email>
+      </para>
+     </authorblurb>
+    </author>
+
+  </authorgroup>
+
+  <copyright>
+   <year>2001</year>
+   <holder>Carol Champagne and Chris Lyttle</holder>
+  </copyright>
+
+ <!-- translators: uncomment this:
+
+  <copyright>
+   <year>2000</year>
+   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
+  </copyright>
+
+   -->
+
+  <legalnotice id="legalnotice">
+   <para>
+    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
+   </para>
+   <para>
+    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
+   </para>
+  </legalnotice>
+
+
+  <!-- this is the version of manual, not application --> 
+  <releaseinfo>
+   This is version 1.6.5 of the GnuCash User Guide.
+  </releaseinfo>
+
+</bookinfo>
+
+&chapter1;
+&chapter2;
+
+</book>

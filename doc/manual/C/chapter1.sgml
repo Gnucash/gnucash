@@ -1,7 +1,4 @@
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V3.1//EN"[
-]>
-
-<!--
+ <!--
       (Do not remove this comment block.)
   Version: 1.6.5
   Last modified: October 11, 2001
@@ -11,67 +8,6 @@
   Translators:
                (translators put your name and email here)
 -->
-
-<book id="index">
-
- <bookinfo>
-  <title>GnuCash User Guide</title>
-  <edition>v1.6.5</edition>
-  <authorgroup>
-
-    <author>
-     <firstname>Carol</firstname>
-     <surname>Champagne</surname>
-     <authorblurb>
-      <para>
-       <email>carol@io.com</email>
-      </para>
-     </authorblurb>
-    </author>
-
-    <author>
-     <firstname>Chris</firstname>
-     <surname>Lyttle</surname>
-     <authorblurb>
-      <para>
-       <email>chris@wilddev.net</email>
-      </para>
-     </authorblurb>
-    </author>
-
-  </authorgroup>
-
-  <copyright>
-   <year>2001</year>
-   <holder>Carol Champagne and Chris Lyttle</holder>
-  </copyright>
-
- <!-- translators: uncomment this:
-
-  <copyright>
-   <year>2000</year>
-   <holder>ME-THE-TRANSLATOR (Latin translation)</holder>
-  </copyright>
-
-   -->
-
-  <legalnotice id="legalnotice">
-   <para>
-    Permission is granted to copy, distribute and/or modify this document under the terms of the <ulink type="help" url="gnome-help:fdl"><citetitle>GNU Free Documentation License</citetitle></ulink>, Version 1.1 or any later version published by the Free Software Foundation with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-A copy of this license was provided with this software in the file <filename>COPYING-DOCS</filename>.
-   </para>
-   <para>
-    Many of the names used by companies to distinguish their products and services are claimed as trademarks. Where those names appear in any GNOME documentation, and those trademarks are made aware to the members of the GNOME Documentation Project, the names have been printed in caps or initial caps.
-   </para>
-  </legalnotice>
-
-
-  <!-- this is the version of manual, not application --> 
-  <releaseinfo>
-   This is version 1.6.5 of the GnuCash User Guide.
-  </releaseinfo>
-
-</bookinfo>
 
  <chapter id="chapter1">
   <title>Chapter 1 Overview of GnuCash</title>
@@ -339,5 +275,3 @@ These are only a few of the advantages you'll discover when you start using GnuC
     </para>
   </sect1>
  </chapter>
-</book>
-
