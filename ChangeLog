@@ -1,3 +1,16 @@
+2003-06-25  David Hampton  <hampton@employees.org>
+
+	* src/report/report-system/html-document.scm: 
+	* src/report/report-system/html-text.scm: Correctly quote
+	attribute values. #115244
+
+	* src/gnome-utils/dialog-options.c: Display selected pixmap when
+	opening an options window.
+
+	* src/gnome-utils/dialog-commodity.c:
+	* src/gnome-utils/dialog-utils.[ch]: Consolidate a couple of
+	functions into the only file where they areused.
+
 2003-06-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/balance-sheet.scm: Add a "retained
