@@ -874,6 +874,9 @@ char * xaccReadQIFTransList (int fd, Account *acc)
  * Args:   datafile - the file to load the data from                * 
  * Return: the struct with the program data in it                   * 
 \********************************************************************/
+
+#define STRSTR(x,y) ((NSTRNCMP(x,y)) ||  (NSTRNCMP((&(x)[1]), y)))
+
 AccountGroup *
 xaccReadQIFData( char *datafile )
   {
@@ -904,7 +907,7 @@ xaccReadQIFData( char *datafile )
   grp = mallocAccountGroup();
   
   while (qifline) {
-     if (NSTRNCMP (qifline, "!Type:Bank")) {
+     if (STRSTR (qifline, "Type:Bank")) {
         Account *acc   = mallocAccount();
         DEBUG ("got bank\n");
 
@@ -918,19 +921,19 @@ xaccReadQIFData( char *datafile )
         continue;
      } else
 
-     if (NSTRNCMP (qifline, "!Type:Cat")) {
+     if (STRSTR (qifline, "Type:Cat")) {
         DEBUG ("got category\n");
         qifline = xaccReadQIFAccList (fd, grp, 1);
         continue;
      } else
 
-     if (NSTRNCMP (qifline, "!Type:Class")) {
+     if (STRSTR (qifline, "Type:Class")) {
         DEBUG ("got class\n");
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (NSTRNCMP (qifline, "!Type:Invst")) {
+     if (STRSTR (qifline, "Type:Invst")) {
         Account *acc   = mallocAccount();
         DEBUG ("got Invst\n");
 
@@ -944,27 +947,27 @@ xaccReadQIFData( char *datafile )
         continue;
      } else
 
-     if (NSTRNCMP (qifline, "!Type:Memorized")) {
+     if (STRSTR (qifline, "Type:Memorized")) {
         DEBUG ("got memorized\n");
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (NSTRNCMP (qifline, "!Option:AutoSwitch")) {
+     if (STRSTR (qifline, "Option:AutoSwitch")) {
         DEBUG ("got autoswitch on\n");
         skip = 1;
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (NSTRNCMP (qifline, "!Clear:AutoSwitch")) {
+     if (STRSTR (qifline, "Clear:AutoSwitch")) {
         DEBUG ("got autoswitch clear\n");
         skip = 0;
         qifline = xaccReadQIFDiscard (fd);
         continue;
      } else
 
-     if (NSTRNCMP (qifline, "!Account")) {
+     if (STRSTR (qifline, "Account")) {
         if (skip) {
            /* loop and read all of the account names and descriptions */
            /* no actual dollar data is expected to be read here ... */
