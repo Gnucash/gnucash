@@ -442,96 +442,113 @@ xaccAccountScrubDoubleBalance (Account *acc)
    ENTER ("acc=%s", acc->accountName);
    for (node = acc->lots; node; node=node->next)
    {
-      gnc_commodity *currency = NULL;
-      SplitList *snode;
-      gnc_numeric zero = gnc_numeric_zero();
-      gnc_numeric value = zero;
       GNCLot *lot = node->data;
 
       /* We examine only closed lots */
       if (FALSE == gnc_lot_is_closed (lot)) continue;
-
-      for (snode = lot->splits; snode; snode=snode->next)
-      {
-         Split *s = snode->data;
-         Transaction *trans = s->parent;
-
-         /* Check to make sure all splits in the lot have a common currency */
-         if (NULL == currency)
-         {
-            currency = trans->common_currency;
-         }
-         if (FALSE == gnc_commodity_equiv (currency, trans->common_currency))
-         {
-            /* Unhandled error condition.  We should do something 
-             * graceful here. Don't know what.  FIXME XXX */
-            PERR ("currencies in lot are not equivalent\n"
-                  "\ttrans=%s curr=%s\n", xaccTransGetDescription(trans), 
-                  gnc_commodity_get_fullname(trans->common_currency)); 
-         }
-
-         /* Now, total up the values */
-         value = gnc_numeric_add (value, xaccSplitGetValue (s),
-                              GNC_DENOM_AUTO, GNC_DENOM_LCD);
-         PINFO ("Split value=%s Accum Lot value=%s", 
-             gnc_numeric_to_string (xaccSplitGetValue(s)),
-             gnc_numeric_to_string (value));
-             
-      }
-
-      PINFO ("Lot value=%s", gnc_numeric_to_string (value));
-
-      /* Is the value of the lot zero?  If not, add a balancing transaction.
-       * As per design doc lots.txt: the transaction has two splits, 
-       * with equal & opposite values.  The amt of one iz zero (so as
-       * not to upset the lot balance), the amt of the other is the same 
-       * as its value (its the realized gain/loss).
-       */
-      if (FALSE == gnc_numeric_equal (value, zero))
-      {
-         Transaction *trans;
-         Account *lot_acc, *gain_acc;
-         Split *lot_split, *gain_split;
-         Timespec ts;
-
-         lot_split = xaccMallocSplit (acc->book);
-         gain_split = xaccMallocSplit (acc->book);
-
-         gain_acc = GetOrMakeGainAcct (acc, currency);
-         xaccAccountBeginEdit (gain_acc);
-         xaccAccountInsertSplit (gain_acc, gain_split);
-         xaccAccountCommitEdit (gain_acc);
-
-         lot_acc = acc;
-         xaccAccountBeginEdit (lot_acc);
-         xaccAccountInsertSplit (lot_acc, lot_split);
-         xaccAccountCommitEdit (lot_acc);
-
-         trans = xaccMallocTransaction (acc->book);
-
-         xaccTransBeginEdit (trans);
-         xaccTransSetCurrency (trans, currency);
-         xaccTransSetDescription (trans, _("Realized Gain/Loss"));
-         ts = gnc_lot_get_close_date (lot);
-         xaccTransSetDatePostedTS (trans, &ts);
-         xaccTransSetDateEnteredSecs (trans, time(0));
-
-         xaccTransAppendSplit (trans, lot_split);
-         xaccTransAppendSplit (trans, gain_split);
-
-         xaccSplitSetMemo (lot_split, _("Realized Gain/Loss"));
-         xaccSplitSetAmount (lot_split, zero);
-         xaccSplitSetValue (lot_split, gnc_numeric_neg (value));
-         gnc_lot_add_split (lot, lot_split);
-
-         xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
-         xaccSplitSetAmount (gain_split, value);
-         xaccSplitSetValue (gain_split, value);
-         xaccTransCommitEdit (trans);
-
-      }
+      xaccLotScrubDoubleBalance (lot);
    }
    LEAVE ("acc=%s", acc->accountName);
+}
+
+/* ============================================================== */
+
+void
+xaccLotScrubDoubleBalance (GNCLot *lot)
+{
+   gnc_commodity *currency = NULL;
+   SplitList *snode;
+   gnc_numeric zero = gnc_numeric_zero();
+   gnc_numeric value = zero;
+
+   if (!lot) return;
+
+   /* We examine only closed lots */
+   if (FALSE == gnc_lot_is_closed (lot)) return;
+
+   ENTER ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+
+   for (snode = lot->splits; snode; snode=snode->next)
+   {
+      Split *s = snode->data;
+      Transaction *trans = s->parent;
+
+      /* Check to make sure all splits in the lot have a common currency */
+      if (NULL == currency)
+      {
+         currency = trans->common_currency;
+      }
+      if (FALSE == gnc_commodity_equiv (currency, trans->common_currency))
+      {
+         /* Unhandled error condition.  We should do something 
+          * graceful here. Don't know what.  FIXME XXX */
+         PERR ("currencies in lot are not equivalent\n"
+               "\ttrans=%s curr=%s\n", xaccTransGetDescription(trans), 
+               gnc_commodity_get_fullname(trans->common_currency)); 
+      }
+
+      /* Now, total up the values */
+      value = gnc_numeric_add (value, xaccSplitGetValue (s),
+                           GNC_DENOM_AUTO, GNC_DENOM_LCD);
+      PINFO ("Split value=%s Accum Lot value=%s", 
+          gnc_numeric_to_string (xaccSplitGetValue(s)),
+          gnc_numeric_to_string (value));
+          
+   }
+
+   PINFO ("Lot value=%s", gnc_numeric_to_string (value));
+
+   /* Is the value of the lot zero?  If not, add a balancing transaction.
+    * As per design doc lots.txt: the transaction has two splits, 
+    * with equal & opposite values.  The amt of one iz zero (so as
+    * not to upset the lot balance), the amt of the other is the same 
+    * as its value (its the realized gain/loss).
+    */
+   if (FALSE == gnc_numeric_equal (value, zero))
+   {
+      Transaction *trans;
+      Account *lot_acc = lot->account;
+      QofBook *book = lot_acc->book;
+      Account *gain_acc;
+      Split *lot_split, *gain_split;
+      Timespec ts;
+
+      lot_split = xaccMallocSplit (book);
+      gain_split = xaccMallocSplit (book);
+
+      gain_acc = GetOrMakeGainAcct (lot_acc, currency);
+      xaccAccountBeginEdit (gain_acc);
+      xaccAccountInsertSplit (gain_acc, gain_split);
+      xaccAccountCommitEdit (gain_acc);
+
+      xaccAccountBeginEdit (lot_acc);
+      xaccAccountInsertSplit (lot_acc, lot_split);
+      xaccAccountCommitEdit (lot_acc);
+
+      trans = xaccMallocTransaction (book);
+
+      xaccTransBeginEdit (trans);
+      xaccTransSetCurrency (trans, currency);
+      xaccTransSetDescription (trans, _("Realized Gain/Loss"));
+      ts = gnc_lot_get_close_date (lot);
+      xaccTransSetDatePostedTS (trans, &ts);
+      xaccTransSetDateEnteredSecs (trans, time(0));
+
+      xaccTransAppendSplit (trans, lot_split);
+      xaccTransAppendSplit (trans, gain_split);
+
+      xaccSplitSetMemo (lot_split, _("Realized Gain/Loss"));
+      xaccSplitSetAmount (lot_split, zero);
+      xaccSplitSetValue (lot_split, gnc_numeric_neg (value));
+      gnc_lot_add_split (lot, lot_split);
+
+      xaccSplitSetMemo (gain_split, _("Realized Gain/Loss"));
+      xaccSplitSetAmount (gain_split, value);
+      xaccSplitSetValue (gain_split, value);
+      xaccTransCommitEdit (trans);
+
+   }
+   LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 }
 
 /* ============================================================== */

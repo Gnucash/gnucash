@@ -96,11 +96,27 @@ void xaccAccountScrubLots (Account *acc);
  *   found where the sum of the values is not zero, the lot
  *   is considered to have a 'realized gain or loss' that
  *   hadn't been correctly handled.  This routine then creates
- *   a balancing transaction to make not of the realized 
- *   gain/loss, adds it to the lot, and add it to a special
- *   orphaned gain/loss account.
+ *   a balancing transaction so as to record the realized 
+ *   gain/loss, adds it to the lot, and adds it to a gain/loss
+ *   account.  If there is no default gain/loss account, it 
+ *   creates one.
  */
 void xaccAccountScrubDoubleBalance (Account *acc);
+
+/** The xaccLotScrubDoubleBalance() routine examines the indicated
+ *   lot.  If it is open, it does nothing. If it is closed,
+ *   it then verifies that the lot is 'double balanced'.  
+ *   By 'double balance', we mean that both the sum of the 
+ *   split amounts is zero, and that the sum of the split 
+ *   values is zero.  If the lot is closed and the sum of the
+ *   values is not zero, the lot is considered to have a 
+ *   'realized gain or loss' that hadn't been correctly handled.  
+ *   This routine then creates a balancing transaction to so
+ *   as to record the realized gain/loss, adds it to the lot, 
+ *   and adds it to a gain/loss account.  If there is no default
+ *   gain/loss account, it creates one.
+ */
+void xaccLotScrubDoubleBalance (GNCLot *lot);
 
 /** The xaccGroupScrubLotsBalance() routine walks the
  *   account tree, and invokes xaccAccountScrubLots()
