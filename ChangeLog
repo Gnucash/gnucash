@@ -1,3 +1,9 @@
+2001-05-01  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c: fix bugs
+
+	* src/guile/gnucash.c.in: update last stable version
+
 2001-05-01  Conrad Canterford <conrad@mail.watersprite.com.au>
 
         * make-gnucash-patch.in: add --file option to allow single file
