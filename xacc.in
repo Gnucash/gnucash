@@ -1,0 +1,6 @@
+#! /bin/sh
+# @configure_input@
+
+XACC_HELP=${XACC_HELP:-@prefix@/share/xacc/Docs}
+export XACC_HELP
+exec xacc.bin $@
