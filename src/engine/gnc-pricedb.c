@@ -870,8 +870,11 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
 
-  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d",
-         db, p, p->not_saved, p->do_free);
+  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d commodity=%s/%s currency_hash=%p",
+         db, p, p->not_saved, p->do_free,
+	 gnc_commodity_get_namespace(p->commodity),
+	 gnc_commodity_get_mnemonic(p->commodity),
+	 currency_hash);
   return TRUE;
 }
 
@@ -1069,6 +1072,13 @@ gnc_pricedb_lookup_latest_any_currency(GNCPriceDB *db,
 }
 
 
+static void 
+hash_values_helper(gpointer key, gpointer value, gpointer data) 
+{
+  GList ** l = data;
+  *l = g_list_concat(*l, g_list_copy (value));
+}
+
 GList *
 gnc_pricedb_get_prices(GNCPriceDB *db,
                        gnc_commodity *commodity,
@@ -1080,7 +1090,7 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   GHashTable *currency_hash;
 
   ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
-  if(!db || !commodity || !currency) return NULL;
+  if(!db || !commodity) return NULL;
 
   if (db->book && db->book->backend && db->book->backend->price_lookup)
   {
@@ -1095,10 +1105,14 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
   currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
   if(!currency_hash) return NULL;
 
-  price_list = g_hash_table_lookup(currency_hash, currency);
-  if(!price_list) return NULL;
-
-  result = g_list_copy (price_list);
+  if (currency) {
+    price_list = g_hash_table_lookup(currency_hash, currency);
+    if(!price_list) return NULL;
+    result = g_list_copy (price_list);
+  } else {
+    result = NULL;
+    g_hash_table_foreach(currency_hash, hash_values_helper, (gpointer)&result);
+  }
   for (node = result; node; node = node->next)
     gnc_price_ref (node->data);
 

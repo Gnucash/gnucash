@@ -1,3 +1,17 @@
+2003-07-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome/dialog-price-edit-db.c: Add a couple of extra checks
+	to prevent crashing if the commodity attached to a price quote has
+	disappeared. #111643
+
+	* src/gnome/dialog-commodities.c: Provide a new warning message
+	before deletion if a commodity has any quice quotes.  If the user
+	deletes the commodity anyway, removed any quotes are based on the
+	commodity
+
+	* src/engine/gnc-pricedb.c: Enhance the get prices routine to
+	handle a request with a NULL currency.
+
 2003-07-03  David Hampton  <hampton@employees.org>
 
 	* src/scm/price-quotes.scm:
