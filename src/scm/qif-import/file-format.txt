@@ -3,11 +3,11 @@ QIF file format
 ---------------
 The QIF is an old and rather broken file format defined by Intuit
 for exporting Quicken data.  It is 'broken' because the format
-is ambigous in many places, non-standard between different releases
+is ambiguous in many places, non-standard between different releases
 and applications, and even varies subtly from country to country (in
-particular, the way dates and amounts are reprensted), and fails
+particular, the way dates and amounts are represented), and fails
 to define important data (such as the currency denomination, or the 
-exchange rates when transfering between accounts marked in different
+exchange rates when transferring between accounts marked in different
 currencies).  Importing a QIF file can require significant manual
 intervention by the user in order to get the data straight.
 
@@ -97,8 +97,8 @@ $      Dollar amount of split
 ^      End of entry
 
 Note that the K* entries must be the *last* entries in the transaction.
-All fileds are optional.  If this is an amortization record, then all
-zeven amortization fields muct be present.
+All fields are optional.  If this is an amortization record, then all
+seven amortization fields much be present.
 
 
 Investment transaction format
@@ -222,13 +222,13 @@ Dates:
 -----
 Dates in US QIF files are usually in the format MM/DD/YY, although
 four-digit years are not uncommon.  Dates sometimes occur without the 
-slash separaator, or using other separators in place of  the slash.
+slash separator, or using other separators in place of  the slash.
 
 European QIF files may have dates in the DD/MM/YY format.  
 
-Monetary Ammounts:
-------------------
+Monetary Amounts:
+-----------------
 These may occur in either US or Euro format:
-10,000.00  Ten thousand dollars
+10,000.00  Ten Thousand Dollars
 10.000,00  Ten Thousand Francs
 
