@@ -203,7 +203,7 @@ gncFileNew (void)
   group = gnc_book_get_group (book);
 
   /* close any ongoing file sessions, and free the accounts.
-   * disable logging and events so we don't get all that junk. */
+   * disable events so we don't get spammed by redraws. */
   gnc_engine_suspend_events ();
 
   gnc_book_destroy (book);
@@ -277,9 +277,9 @@ gncPostFileOpen (const char * filename)
      return;
   }
 
-  /* disable logging and events while moving over to the new set of
-   * accounts; the mass deletetion of accounts and transactions during
-   * switchover is not something we want to keep in a journal. */
+  /* disable events while moving over to the new set of accounts; 
+   * the mass deletetion of accounts and transactions during
+   * switchover would otherwise cause excessive redraws. */
   gnc_engine_suspend_events ();
 
   /* Change the mouse to a busy cursor */
@@ -512,9 +512,6 @@ gncFileSaveAs (void)
   /* -- this session code is NOT identical in FileOpen and FileSaveAs -- */
   group = gnc_book_get_group (book);
 
-  /* disable logging while we move over to the new set of accounts to
-   * edit; the mass deletetion of accounts and transactions during
-   * switchover is not something we want to keep in a journal. */
   new_book = gnc_book_new ();
   gnc_book_begin (new_book, newfile, FALSE, FALSE);
 
@@ -580,9 +577,7 @@ gncFileSaveAs (void)
       return;
     }
 
-    /* Whoa-ok. Blow away the previous file. Do not disable
-     * logging. We want to capture the old file in the log, just in
-     * case the user later decides it was all a big mistake. */
+    /* Whoa-ok. Blow away the previous file. */
   }
 
   /* OK, save the data to the file ... */
@@ -602,9 +597,8 @@ gncFileQuit (void)
 
   book = gncGetCurrentBook ();
 
-  /* disable logging and events; the mass deletetion of accounts and
-   * transactions during shutdown is not something we want to keep in
-   * a journal. */
+  /* disable events; otherwise the mass deletetion of accounts and
+   * transactions during shutdown would cause massive redraws */
   gnc_engine_suspend_events ();
 
   gnc_book_destroy (book);
