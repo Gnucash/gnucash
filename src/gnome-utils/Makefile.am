@@ -2,22 +2,19 @@ SUBDIRS = . test
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_PRINT_CFLAGS}
-
-#FIXME remove the following deps
-#  -I${top_srcdir}/src \
-#  -I${top_srcdir}/src/gnome \
-
-INCLUDES = \
+CFLAGS = \
+  @CFLAGS@ \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnome \
-  ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS} \
-  ${GUPPI_CFLAGS}
+  ${GUPPI_CFLAGS} \
+  ${GLIB_CFLAGS} \
+  ${GNOME_PRINT_CFLAGS} \
+  ${GNOME_INCLUDEDIR}
 
 libgncmod_gnome_utils_la_SOURCES = \
   cursors.c \
