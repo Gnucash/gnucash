@@ -84,11 +84,11 @@ Pixel   posPixel, negPixel;
 Boolean havePixels = False;
 #endif
 
-#define XACC_MAIN_NUM_COLS 4
 #define XACC_MAIN_ACC_ARRW 0
 #define XACC_MAIN_ACC_NAME 1
 #define XACC_MAIN_ACC_TYPE 2
 #define XACC_MAIN_ACC_BALN 3
+#define XACC_MAIN_NUM_COLS 4
 
 /********************************************************************\
  * xaccMainWindowAddAcct                                            *

@@ -1711,6 +1711,67 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   char *windowname;
   char buf [BUFSIZE];
 
+  /******************************************************************\
+   * Set up the menubar menu-items.                                 *
+   * Menu structures must be initialized before any code is         *
+   * executed.  Some compilers insist on this, although gcc is      *
+   * freindly about this.                                           *
+  \******************************************************************/
+  MenuItem reportMenu[] = {
+    { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
+      NULL, (XtPointer)0,  (MenuItem *)NULL },
+    NULL,
+  };
+  
+  MenuItem activityMenu[] = {
+    { "Transfer...",        &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
+      accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
+      NULL,         NULL,                    (MenuItem *)NULL },
+    { "Reconcile...",       &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
+      startRecnCB, NULL, (MenuItem *)NULL },
+    { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
+      startAdjBCB, NULL, (MenuItem *)NULL },
+    { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
+      NULL, (XtPointer)0,  (MenuItem *)&reportMenu },
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
+      NULL,         NULL,                    (MenuItem *)NULL },
+    { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
+      deleteCB,     NULL,      (MenuItem *)NULL },
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
+      NULL,         NULL,                    (MenuItem *)NULL },
+    { "Close Window",       &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
+      destroyShellCB, NULL, (MenuItem *)NULL },
+    NULL,
+  };
+
+  
+  MenuItem helpMenu[] = {
+    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
+      helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
+    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
+      helpMenubarCB, (XtPointer)HMB_REGWIN,(MenuItem *)NULL },
+    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
+      NULL,         NULL,                    (MenuItem *)NULL },
+    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
+      helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
+    NULL,
+  };
+  
+  /* some compilers don't like dynamic data in initializers; 
+   * so rather than inlining these, we initialize here ... :-( 
+   * Just be careful not to scramble the order of the rows.
+   * See also some additional activityMenu futzing about below 
+   */
+  activityMenu[2].callback_data=(XtPointer)regData;
+  activityMenu[3].callback_data=(XtPointer)regData;
+  activityMenu[6].callback_data=(XtPointer)regData;
+  activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
+
+  /******************************************************************\
+   * Set quarks, create regData, compute register display type      *
+  \******************************************************************/
+
   setBusyCursor( parent );
   
   /* If they haven't already been initialized, (ie. this is the first
@@ -1776,6 +1837,10 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
   }
   ledgerListAddList (regData->blackacc, regData);
 
+  /******************************************************************\
+   * Start creating the Motif Widgets ...                           *
+  \******************************************************************/
+
   regData->dialog =
     XtVaCreatePopupShell( "dialog", 
                           xmDialogShellWidgetClass, parent,
@@ -1812,59 +1877,9 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
                            XmNpaneMinimum,   800,
                            NULL );
   
-  /* Setup the menubar at the top of the window */
   /******************************************************************\
-   * Set up the menubar menu-items                                  *
+   * Setup the menubar at the top of the window                     *
   \******************************************************************/
-  {
-  MenuItem reportMenu[] = {
-    { "Simple...",          &xmPushButtonWidgetClass, 'S', NULL, NULL, True,
-      NULL, (XtPointer)0,  (MenuItem *)NULL },
-    NULL,
-  };
-
-  
-  MenuItem activityMenu[] = {
-    { "Transfer...",        &xmPushButtonWidgetClass, 'T', NULL, NULL, True,
-      accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
-    { "Reconcile...",       &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
-      startRecnCB, NULL, (MenuItem *)NULL },
-    { "Adjust Balance...",  &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
-      startAdjBCB, NULL, (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
-      NULL, (XtPointer)0,  (MenuItem *)&reportMenu },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
-    { "Delete Transaction", &xmPushButtonWidgetClass, 'D', NULL, NULL, True,
-      deleteCB,     NULL,      (MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
-    { "Close Window",       &xmPushButtonWidgetClass, 'Q', NULL, NULL, True,
-      destroyShellCB, NULL, (MenuItem *)NULL },
-    NULL,
-  };
-
-  
-  MenuItem helpMenu[] = {
-    { "About...",           &xmPushButtonWidgetClass, 'A', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_ABOUT, (MenuItem *)NULL },
-    { "Help...",            &xmPushButtonWidgetClass, 'H', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_REGWIN,(MenuItem *)NULL },
-    { "",                   &xmSeparatorWidgetClass,    0, NULL, NULL, True,
-      NULL,         NULL,                    (MenuItem *)NULL },
-    { "License...",         &xmPushButtonWidgetClass, 'L', NULL, NULL, True,
-      helpMenubarCB, (XtPointer)HMB_LIC,   (MenuItem *)NULL },
-    NULL,
-  };
-  
-  /* some compilers don't like dynamic data in initializers; 
-   * so rather than inlining these, we initialize here ... :-( */
-  activityMenu[2].callback_data=(XtPointer)regData;
-  activityMenu[3].callback_data=(XtPointer)regData;
-  activityMenu[6].callback_data=(XtPointer)regData;
-  activityMenu[8].callback_data=(XtPointer)(regData->dialog);  /* destroy callback */
 
   /* can't adjust the balance on a ledger window */
   if (1 != regData->numAcc) {
@@ -1880,7 +1895,6 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
              False, 0, helpMenu );
   
   XtManageChild( menubar );
-  }
   
   frame = XtVaCreateWidget( "reg", 
                             xmFrameWidgetClass, pane,
@@ -2223,6 +2237,10 @@ regWindowLedger( Widget parent, Account **acclist, int ledger_type )
     for (i=0; i<(NUM_HEADER_ROWS+NUM_ROWS_PER_TRANS); i++) {
       data[i] = &(regData -> columnLabels[i][0]);
     }
+
+  /******************************************************************\
+   * The main register window itself                                *
+  \******************************************************************/
 
     sprintf( buf, "reg" );
     reg = XtVaCreateWidget( strcat(buf,accRes[regData->type]),
