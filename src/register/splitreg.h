@@ -165,6 +165,8 @@ typedef enum
 typedef struct _SplitRegisterBuffer SplitRegisterBuffer;
 typedef struct _SplitRegister SplitRegister;
 
+typedef void (*SplitRegisterDestroyCB) (SplitRegister *reg);
+
 struct _SplitRegister {
    /* the table itself that implements the underlying GUI. */
    Table         * table;
@@ -221,7 +223,7 @@ struct _SplitRegister {
 
    /* The destroy callback gives user's a chance 
     * to free up any associated user_hook data */
-   void (* destroy) (SplitRegister *);
+   SplitRegisterDestroyCB destroy;
 };
 
 
@@ -253,11 +255,12 @@ typedef char* (*SRStringGetter) (SplitRegisterType);
 void            xaccSplitRegisterSetDebitStringGetter(SRStringGetter getter);
 void            xaccSplitRegisterSetCreditStringGetter(SRStringGetter getter);
 
-SplitRegister * xaccMallocSplitRegister (SplitRegisterType type,
-                                         SplitRegisterStyle style);
-void            xaccInitSplitRegister (SplitRegister *reg,
-                                       SplitRegisterType type,
-                                       SplitRegisterStyle style);
+SplitRegister *
+xaccMallocSplitRegister (SplitRegisterType type,
+                         SplitRegisterStyle style,
+                         VirtCellDataAllocator allocator,
+                         VirtCellDataDeallocator deallocator,
+                         VirtCellDataCopy copy);
 void            xaccConfigSplitRegister (SplitRegister *reg,
                                          SplitRegisterType type,
                                          SplitRegisterStyle style);

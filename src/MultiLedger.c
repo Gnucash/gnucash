@@ -272,6 +272,43 @@ xaccLedgerDisplaySetHelp(void *user_data, const char *help_str)
   (regData->set_help)(regData, help_str);
 }
 
+static gpointer
+xaccGUIDMalloc (void)
+{
+  GUID *guid;
+
+  guid = g_new(GUID, 1);
+
+  *guid = *xaccGUIDNULL();
+
+  return guid;
+}
+
+static void
+xaccGUIDFree (gpointer _guid)
+{
+  GUID *guid = _guid;
+
+  if (guid == NULL)
+    return;
+
+  *guid = *xaccGUIDNULL();
+
+  g_free(guid);
+}
+
+static void
+xaccGUIDCopy (gpointer _to, gpointer _from)
+{
+  GUID *to = _to;
+  GUID *from = _from;
+
+  g_return_if_fail(to != NULL);
+  g_return_if_fail(from != NULL);
+
+  *to = *from;
+}
+
 /********************************************************************\
  * xaccLedgerDisplayGeneral                                         *
  *   opens up a ledger window for a list of accounts                *
@@ -371,7 +408,10 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
 
   /* xaccMallocSplitRegister will malloc & initialize the register,
    * but will not do the gui init */
-  regData->ledger = xaccMallocSplitRegister (type, style);
+  regData->ledger = xaccMallocSplitRegister (type, style,
+                                             xaccGUIDMalloc,
+                                             xaccGUIDFree,
+                                             xaccGUIDCopy);
 
   xaccSRSetData(regData->ledger, regData,
                 xaccLedgerDisplayParent,

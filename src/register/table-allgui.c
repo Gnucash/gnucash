@@ -75,7 +75,9 @@ static void gnc_table_resize (Table * table,
 /** Implementation *****************************************************/
 
 Table * 
-gnc_table_new (void)
+gnc_table_new (VirtCellDataAllocator allocator,
+               VirtCellDataDeallocator deallocator,
+               VirtCellDataCopy copy)
 {
    Table *table;
 
@@ -88,10 +90,14 @@ gnc_table_new (void)
    gnc_table_init (table);
 
    table->virt_cells = g_table_new(gnc_virtual_cell_new,
-                                   gnc_virtual_cell_free, NULL);
+                                   gnc_virtual_cell_free, table);
 
    table->phys_cells = g_table_new(gnc_physical_cell_new,
-                                   gnc_physical_cell_free, NULL);
+                                   gnc_physical_cell_free, table);
+
+   table->vcell_data_allocator = allocator;
+   table->vcell_data_deallocator = deallocator;
+   table->vcell_data_copy = copy;
 
    return table;
 }
@@ -212,7 +218,7 @@ gnc_table_set_size (Table * table,
     * shrinking. This must be done since the table is probably
     * shrinking because some rows were deleted, and there's a pretty
     * good chance (100% with current design) that the cursor is
-    * located on the deleted rows.  */
+    * located on the deleted rows. */
    if ((virt_rows < table->num_virt_rows) ||
        (virt_cols < table->num_virt_cols) ||
        (phys_rows < table->num_phys_rows) ||
@@ -227,8 +233,7 @@ gnc_table_set_size (Table * table,
 
       curs = table->current_cursor;
 
-      if (curs)
-        curs->user_data = NULL;
+      gnc_cellblock_clear_vcell_data (curs);
 
       table->current_cursor = NULL;
    }
@@ -279,6 +284,7 @@ gnc_physical_location_init (PhysicalLocation *ploc)
 static gpointer
 gnc_virtual_cell_new (gpointer user_data)
 {
+  Table *table = user_data;
   TableCell *tcell;
   VirtualCell *vcell;
 
@@ -287,7 +293,11 @@ gnc_virtual_cell_new (gpointer user_data)
   vcell = &tcell->virt_cell;
 
   vcell->cellblock = NULL;
-  vcell->user_data = NULL;
+
+  if (table && table->vcell_data_allocator)
+    vcell->vcell_data = table->vcell_data_allocator();
+  else
+    vcell->vcell_data = NULL;
 
   gnc_physical_location_init(&vcell->phys_loc);
 
@@ -297,10 +307,21 @@ gnc_virtual_cell_new (gpointer user_data)
 /* ==================================================== */
 
 static void
-gnc_virtual_cell_free (gpointer tcell, gpointer user_data)
+gnc_virtual_cell_free (gpointer _tcell, gpointer user_data)
 {
+  Table *table = user_data;
+  TableCell *tcell = _tcell;
+  VirtualCell *vcell;
+
   if (tcell == NULL)
     return;
+
+  vcell = &tcell->virt_cell;
+
+  if (vcell->vcell_data && table && table->vcell_data_deallocator)
+    table->vcell_data_deallocator (vcell->vcell_data);
+
+  vcell->vcell_data = NULL;
 
   g_mem_chunk_free(cell_mem_chunk, tcell);
 }
@@ -537,9 +558,7 @@ gnc_table_move_cursor_internal (Table *table,
   table->current_cursor_virt_loc.virt_col = -1;
 
   curs = table->current_cursor;
-  if (curs)
-    curs->user_data = NULL;
-
+  gnc_cellblock_clear_vcell_data (curs);
   table->current_cursor = NULL;
 
   /* check for out-of-bounds conditions (which may be deliberate) */
@@ -633,7 +652,10 @@ gnc_table_move_cursor_internal (Table *table,
       }
     }
 
-  curs->user_data = vcell->user_data;
+  if (table->vcell_data_copy)
+    table->vcell_data_copy (curs->vcell_data, vcell->vcell_data);
+  else
+    curs->vcell_data = vcell->vcell_data;
 
   LEAVE("did move\n");
 }
@@ -715,7 +737,11 @@ gnc_table_commit_cursor (Table *table)
     }
 
   vcell = gnc_table_get_virtual_cell (table, vcell_loc);
-  vcell->user_data = curs->user_data;
+
+  if (table->vcell_data_copy)
+    table->vcell_data_copy (vcell->vcell_data, curs->vcell_data);
+  else
+    vcell->vcell_data = curs->vcell_data;
 }
 
 /* ==================================================== */
@@ -829,7 +855,7 @@ gnc_table_verify_cursor_position (Table *table, PhysicalLocation phys_loc)
 /* ==================================================== */
 
 void *
-gnc_table_get_user_data_physical (Table *table, PhysicalLocation phys_loc)
+gnc_table_get_vcell_data_physical (Table *table, PhysicalLocation phys_loc)
 {
   PhysicalCell *pcell;
   VirtualCell *vcell;
@@ -844,13 +870,13 @@ gnc_table_get_user_data_physical (Table *table, PhysicalLocation phys_loc)
   if (vcell == NULL)
     return NULL;
 
-  return vcell->user_data;
+  return vcell->vcell_data;
 }
 
 /* ==================================================== */
 
 void *
-gnc_table_get_user_data_virtual (Table *table, VirtualCellLocation vcell_loc)
+gnc_table_get_vcell_data_virtual (Table *table, VirtualCellLocation vcell_loc)
 {
   VirtualCell *vcell;
 
@@ -860,7 +886,7 @@ gnc_table_get_user_data_virtual (Table *table, VirtualCellLocation vcell_loc)
   if (vcell == NULL)
     return NULL;
 
-  return vcell->user_data;
+  return vcell->vcell_data;
 }
 
 /* ==================================================== */

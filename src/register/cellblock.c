@@ -39,11 +39,16 @@ static void gnc_cellblock_init (CellBlock *cellblock, int rows, int cols);
 /* =================================================== */
 
 CellBlock *
-gnc_cellblock_new (int rows, int cols)
+gnc_cellblock_new (int rows, int cols,
+                   VirtCellDataAllocator allocator,
+                   VirtCellDataDeallocator deallocator)
 {
   CellBlock *cellblock;
 
   cellblock = g_new0(CellBlock, 1);
+
+  cellblock->vcell_data_allocator = allocator;
+  cellblock->vcell_data_deallocator = deallocator;
 
   gnc_cellblock_init (cellblock, rows, cols);
 
@@ -169,6 +174,11 @@ gnc_cellblock_init (CellBlock *cellblock, int rows, int cols)
   ct_info = g_table_index (cellblock->traverse_info, 0, 0);
   ct_info->left_traverse_row = rows - 1;
   ct_info->left_traverse_col = cols - 1;
+
+  if (cellblock->vcell_data_allocator)
+    cellblock->vcell_data = cellblock->vcell_data_allocator ();
+  else
+    cellblock->vcell_data = NULL;
 }
 
 /* =================================================== */
@@ -183,6 +193,10 @@ gnc_cellblock_destroy (CellBlock *cellblock)
 
    g_table_destroy (cellblock->traverse_info);
    cellblock->traverse_info = NULL;
+
+   if (cellblock->vcell_data && cellblock->vcell_data_deallocator)
+     cellblock->vcell_data_deallocator (cellblock->vcell_data);
+   cellblock->vcell_data = NULL;
 
    g_free (cellblock);
 }
@@ -207,6 +221,26 @@ gnc_cellblock_get_traverse (CellBlock *cellblock, int row, int col)
     return NULL;
 
   return g_table_index (cellblock->traverse_info, row, col);
+}
+
+/* =================================================== */
+
+void
+gnc_cellblock_clear_vcell_data (CellBlock *cellblock)
+{
+  if (cellblock == NULL)
+    return;
+
+  if (cellblock->vcell_data == NULL)
+    return;
+
+  if (cellblock->vcell_data_deallocator)
+    cellblock->vcell_data_deallocator (cellblock->vcell_data);
+
+  cellblock->vcell_data = NULL;
+
+  if (cellblock->vcell_data_allocator)
+    cellblock->vcell_data = cellblock->vcell_data_allocator ();
 }
 
 /* =================================================== */

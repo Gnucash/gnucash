@@ -121,6 +121,16 @@ static SplitRegisterColors reg_colors = {
 #define SHRBALN_CELL_ALIGN CELL_ALIGN_RIGHT
 #define BALN_CELL_ALIGN    CELL_ALIGN_RIGHT
 
+
+static void
+xaccInitSplitRegister (SplitRegister *reg,
+                       SplitRegisterType type,
+                       SplitRegisterStyle style,
+                       VirtCellDataAllocator allocator,
+                       VirtCellDataDeallocator deallocator,
+                       VirtCellDataCopy copy);
+
+
 /* ============================================== */
 
 #define LABEL(NAME,label)					\
@@ -820,13 +830,17 @@ configTraverse (SplitRegister *reg)
 /* ============================================== */
 
 SplitRegister *
-xaccMallocSplitRegister (SplitRegisterType type, SplitRegisterStyle style)
+xaccMallocSplitRegister (SplitRegisterType type,
+                         SplitRegisterStyle style,
+                         VirtCellDataAllocator allocator,
+                         VirtCellDataDeallocator deallocator,
+                         VirtCellDataCopy copy)
 {
   SplitRegister * reg;
 
   reg = g_new(SplitRegister, 1);
 
-  xaccInitSplitRegister (reg, type, style);
+  xaccInitSplitRegister (reg, type, style, allocator, deallocator, copy);
 
   return reg;
 }
@@ -913,7 +927,9 @@ configCursors (SplitRegister *reg)
 /* ============================================== */
 
 static void
-mallocCursors (SplitRegister *reg)
+mallocCursors (SplitRegister *reg,
+               VirtCellDataAllocator allocator,
+               VirtCellDataDeallocator deallocator)
 {
   switch (reg->type) {
     case BANK_REGISTER:
@@ -947,15 +963,20 @@ mallocCursors (SplitRegister *reg)
   }
 
   reg->num_header_rows = 1;
-  reg->header = gnc_cellblock_new (reg->num_header_rows, reg->num_cols);
+  reg->header = gnc_cellblock_new (reg->num_header_rows, reg->num_cols,
+                                   allocator, deallocator);
 
   /* cursors used in the single & double line displays */
-  reg->single_cursor = gnc_cellblock_new (1, reg->num_cols);
-  reg->double_cursor = gnc_cellblock_new (2, reg->num_cols);
+  reg->single_cursor = gnc_cellblock_new (1, reg->num_cols,
+                                          allocator, deallocator);
+  reg->double_cursor = gnc_cellblock_new (2, reg->num_cols,
+                                          allocator, deallocator);
 
   /* the two cursors used for multi-line and dynamic displays */
-  reg->trans_cursor = gnc_cellblock_new (1, reg->num_cols);
-  reg->split_cursor = gnc_cellblock_new (1, reg->num_cols);
+  reg->trans_cursor = gnc_cellblock_new (1, reg->num_cols,
+                                         allocator, deallocator);
+  reg->split_cursor = gnc_cellblock_new (1, reg->num_cols,
+                                         allocator, deallocator);
 }
 
 /* ============================================== */
@@ -970,10 +991,13 @@ mallocCursors (SplitRegister *reg)
 #define NEW(CN,TYPE)				\
    reg->CN##Cell = xaccMalloc##TYPE##Cell();	\
 
-void 
+static void 
 xaccInitSplitRegister (SplitRegister *reg,
                        SplitRegisterType type,
-                       SplitRegisterStyle style)
+                       SplitRegisterStyle style,
+                       VirtCellDataAllocator allocator,
+                       VirtCellDataDeallocator deallocator,
+                       VirtCellDataCopy copy)
 {
   Table * table;
   CellBlock *header;
@@ -987,7 +1011,7 @@ xaccInitSplitRegister (SplitRegister *reg,
 
   /* --------------------------- */
   /* define the number of columns in the display, malloc the cursors */
-  mallocCursors (reg);
+  mallocCursors (reg, allocator, deallocator);
 
   /* --------------------------- */
   /* malloc the header (label) cells */
@@ -1152,7 +1176,7 @@ xaccInitSplitRegister (SplitRegister *reg,
   phys_c = header->num_cols;
   reg->num_cols = phys_c;
 
-  table = gnc_table_new ();
+  table = gnc_table_new (allocator, deallocator, copy);
   gnc_table_set_size (table, phys_r, phys_c, reg->num_virt_rows, 1);
   {
     PhysicalLocation ploc = { 0, 0 };

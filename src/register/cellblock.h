@@ -92,6 +92,11 @@ typedef struct
   short left_traverse_col;
 } CellTraverseInfo;
 
+
+typedef gpointer (*VirtCellDataAllocator)   (void);
+typedef void     (*VirtCellDataDeallocator) (gpointer user_data);
+typedef void     (*VirtCellDataCopy)        (gpointer to, gpointer from);
+
 typedef struct
 {
   short num_rows;
@@ -121,11 +126,17 @@ typedef struct
    * jnext = right_traverse_c[i][j]. */
   GTable *traverse_info;
 
-  void * user_data; /* for user code use */
+  gpointer vcell_data;
+
+  VirtCellDataAllocator vcell_data_allocator;
+  VirtCellDataDeallocator vcell_data_deallocator;
 } CellBlock;
 
 
-CellBlock * gnc_cellblock_new (int rows, int cols);
+CellBlock * gnc_cellblock_new (int rows, int cols,
+                               VirtCellDataAllocator allocator,
+                               VirtCellDataDeallocator deallocator);
+
 void        gnc_cellblock_destroy (CellBlock *cellblock);
 
 CellBlockCell * gnc_cellblock_get_cell (CellBlock *cellblock,
@@ -133,6 +144,8 @@ CellBlockCell * gnc_cellblock_get_cell (CellBlock *cellblock,
 
 CellTraverseInfo * gnc_cellblock_get_traverse (CellBlock *cellblock,
                                                int row, int col);
+
+void        gnc_cellblock_clear_vcell_data (CellBlock *cellblock);
 
 /* define next cell to traverse to */
 void gnc_cellblock_next_right (CellBlock *cellblock,

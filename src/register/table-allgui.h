@@ -126,7 +126,7 @@ struct _VirtualCell
 
   PhysicalLocation phys_loc;  /* Physical location of cell (0, 0) */
 
-  void *user_data;            /* Used by higher-level code */
+  gpointer vcell_data;        /* Used by higher-level code */
 };
 
 
@@ -156,7 +156,6 @@ typedef void (*TableSetHelpFunc) (Table *table,
                                   const char *help_str);
 
 typedef void (*TableDestroyFunc) (Table *table);
-
 
 /* The number of "physical" rows/cols is the number
  * of displayed one-line gui rows/cols in the table.
@@ -225,12 +224,19 @@ struct _Table
   void * ui_data;
 
   TableDestroyFunc destroy;
+
+  VirtCellDataAllocator   vcell_data_allocator;
+  VirtCellDataDeallocator vcell_data_deallocator;
+  VirtCellDataCopy        vcell_data_copy;
 };
 
 
 /* Functions to create and destroy Tables.  */
-Table     * gnc_table_new (void);
-void        gnc_table_destroy (Table *);
+Table *     gnc_table_new (VirtCellDataAllocator allocator,
+                           VirtCellDataDeallocator deallocator,
+                           VirtCellDataCopy copy);
+
+void        gnc_table_destroy (Table *table);
 
 /* These functions check the bounds of virtal and physical locations
  * in the table and return TRUE if they are out of bounds. If possible,
@@ -331,14 +337,14 @@ gboolean    gnc_table_verify_cursor_position (Table *table,
 /* The gnc_table_get_user_data_physical() method returns the user data
  *   associated with a cursor located at the given physical coords, or
  *   NULL if the coords are out of bounds. */
-void *      gnc_table_get_user_data_physical (Table *table,
-                                              PhysicalLocation phys_loc);
+gpointer    gnc_table_get_vcell_data_physical (Table *table,
+                                               PhysicalLocation phys_loc);
 
 /* The gnc_table_get_user_data_virtual() method returns the user data
  *   associated with a cursor located at the given virtual coords, or
  *   NULL if the coords are out of bounds. */
-void *      gnc_table_get_user_data_virtual (Table *table,
-                                             VirtualCellLocation vcell_loc);
+gpointer    gnc_table_get_vcell_data_virtual (Table *table,
+                                              VirtualCellLocation vcell_loc);
 
 /* Find the closest valid horizontal cell. If exact_cell is true,
  *   cells that must be explicitly selected by the user (as opposed
