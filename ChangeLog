@@ -1,3 +1,13 @@
+2003-05-28  Benoit Grégoire  <bock@step.polymtl.ca>
+
+	* src/import-export/import-settings.c: Fix pref being ignored bug.
+	* src/engine/TransLog.c,h: Change the log format to use GUID instead of
+	  C pointers, use ISO8601 instead of proprietary form and log the Notes field.
+	* configure.in
+	* src/scm/main.scm
+	* src/import-export/Makefile.am
+	* src/import-export/log-replay/*: Port new log replay module from HEAD.
+
 2003-05-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.[ch]: add APIs to get
