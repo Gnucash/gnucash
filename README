@@ -15,7 +15,7 @@ Table of Contents:
 ------------------
 
   - Overview
-  - Upgrading from 1.2.x
+  - Upgrading from 1.4.x
   - Dependencies
   - Invocation/running
   - Internationalization
@@ -90,15 +90,13 @@ Features include:
     portfolio of many stocks, by showing all transactions
     in that portfolio.
   - Written in C with embedded scheme support via Guile.
-  - Perl support is optionally available for stand-alone scripting via SWIG.
   - File access is locked in a network-safe fashion, preventing
     accidental damage if several users attempt to access the 
     same file, even if the file is NFS-mounted.
   - Provides a byte-stream format, which allows accounts and
     account groups to be transmitted to other processes
     via pipes or sockets.
-  - European date handling, French, German, Swedish,
-    and Great Britain translations.
+  - International date handling, many different translations.
 
 
 Home Page:
@@ -241,8 +239,8 @@ to run gnucash from a local directory:
 ####################
 Internationalization
 --------------------
-Message catalogues exist for French and German.  These are enabled with 
-environment variables.  For example, 
+Message catalogues exist for many different languages. These are
+enabled with environment variables. For example, 
 
 Francais, en bash:
     export LANG=fr_FR
@@ -252,14 +250,6 @@ Francais, en tcsh:
 
 German version:
     export LANG=de_DE
-
-
-Other locales that should mostly work, but are still in development:
-
-en_US
-en_GB
-fr_CH
-de_CH
 
 
 #####################
@@ -280,18 +270,13 @@ following packages:
   libtool: Available at ftp://ftp.gnu.org/gnu.
     RPM's and debs are widely available with most distributions.
 
-  SWIG: Used to autogenerate perl wrappers - available at www.swig.org
-    need 1.1p5 or later ...
-
   gnome development system: headers, libraries, etc.
 
   libxml: available from ftp.gnome.org
 
   g-wrap: RPM's, debs, and source available at 
           ftp://ftp.gnucash.org/pub/g-wrap.
-          If you are using guile version 1.4 or later, you need
-          g-wrap 0.9.5 or later. If you are using an earlier version
-          of guile, you should use g-wrap 0.9.4.
+          You should use g-wrap 1.1.9 or later.
 
   texinfo: If you are building from CVS, you need the GNU texinfo
            package, version 4.0 or later.
