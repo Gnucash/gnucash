@@ -1,3 +1,33 @@
+2001-02-28  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-account.c (delete_random_account): new func to
+	cleanup commodities not generally freed at xaccAccountDestroy.
+	(node_and_account_equal): complete func to compare account and the
+	dom tree created.  Looks good except for some warnings from
+	dom_tree_to_text.
+
+	* src/test/test-stuff.c (equals_node_val_vs_commodity): new func.
+	(equals_node_val_vs_guid): New func.
+	(equals_node_val_vs_string): new func.
+
+	* src/engine/gnc-account-xml-v2.c (account_code_handler): Add func.
+	(account_description_handler): Add func.  Oops forgot a couple.
+	(gnc_account_dom_tree_create): Move all string tags in file to
+	const gchar*s.
+	(account_slots_handler): Complete func.
+
+	* make-gnucash-patch.in: Test to see if makepatch exists.
+
+	* src/engine/sixtp-dom-parsers.c (dom_tree_to_text): same as
+	below.  Add NULL tests for arguments.  Affected many functions in
+	this file.
+
+	* src/engine/gnc-pricedb-xml-v1.c (price_parse_xml_sub_node): Same
+	as below.
+
+	* src/engine/gnc-commodity-xml-v2.c (set_commodity_value): Convert
+	dom_tree_to_text to act as rest looking at children on it's own.
+
 2001-02-27  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-scrolled-window.c: subclass of

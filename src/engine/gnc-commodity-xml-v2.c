@@ -103,7 +103,7 @@ set_commodity_value(xmlNodePtr node, gnc_commodity* com)
         {
             if(safe_strcmp(mark->tag, node->name))
             {
-                gchar* val = dom_tree_to_text(node->xmlChildrenNode);
+                gchar* val = dom_tree_to_text(node);
                 (mark->func)(com, val);
                 g_free(val);
                 break;

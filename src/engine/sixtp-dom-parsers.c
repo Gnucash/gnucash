@@ -58,7 +58,7 @@ dom_tree_to_integer_kvp_value(xmlNodePtr node)
     gint64 daint;
     kvp_value* ret = NULL;
     
-    text = dom_tree_to_text(node->xmlChildrenNode);
+    text = dom_tree_to_text(node);
 
     if(string_to_gint64(text, &daint))
     {
@@ -74,7 +74,7 @@ dom_tree_to_integer(xmlNodePtr node, gint64 *daint)
 {
     gchar *text;
     
-    text = dom_tree_to_text(node->xmlChildrenNode);
+    text = dom_tree_to_text(node);
 
     if(string_to_gint64(text, daint))
     {
@@ -93,7 +93,7 @@ dom_tree_to_double_kvp_value(xmlNodePtr node)
     double dadoub;
     kvp_value *ret = NULL;
 
-    text = dom_tree_to_text(node->xmlChildrenNode);
+    text = dom_tree_to_text(node);
 
     if(string_to_double(text, &dadoub))
     {
@@ -129,7 +129,7 @@ dom_tree_to_string_kvp_value(xmlNodePtr node)
     gchar *datext;
     kvp_value *ret = NULL;
 
-    datext = dom_tree_to_text(node->xmlChildrenNode);
+    datext = dom_tree_to_text(node);
     if(datext)
     {
         ret = kvp_value_new_string(datext);
@@ -203,7 +203,7 @@ dom_tree_to_binary_kvp_value(xmlNodePtr node)
     guint64 len;
     kvp_value *ret = NULL;
 
-    text = dom_tree_to_text(node->xmlChildrenNode);
+    text = dom_tree_to_text(node);
 
     if(string_to_binary(text, &val, &len))
     {
@@ -334,7 +334,7 @@ dom_tree_to_kvp_frame(xmlNodePtr node)
             {
                 if(safe_strcmp(mark2->name, "slot:key") == 0)
                 {
-                    key = dom_tree_to_text(mark2->xmlChildrenNode);
+                    key = dom_tree_to_text(mark2);
                 }
                 else if(safe_strcmp(mark2->name, "slot:value") == 0)
                 {
@@ -382,10 +382,15 @@ dom_tree_to_text(xmlNodePtr tree)
 
   gboolean ok = TRUE;
   xmlNodePtr current;
-  gchar *result = g_strdup("");
+  gchar *result;
   gchar *temp;
 
-  for(current = tree; current; current = current->next) {
+  g_return_val_if_fail(tree, NULL);
+  g_return_val_if_fail(tree->xmlChildrenNode, NULL);
+
+  result = g_strdup("");
+  
+  for(current = tree->xmlChildrenNode; current; current = current->next) {
     switch(current->type) {
     case XML_TEXT_NODE:
       temp = g_strconcat(result, (gchar *) current->content, NULL);
@@ -414,7 +419,7 @@ dom_tree_to_text(xmlNodePtr tree)
 gnc_numeric*
 dom_tree_to_gnc_numeric(xmlNodePtr node)
 {
-    gchar *content = dom_tree_to_text(node->xmlChildrenNode);
+    gchar *content = dom_tree_to_text(node);
     gnc_numeric *ret;
     if(!content)
         return NULL;
@@ -479,7 +484,7 @@ dom_tree_to_timespec(xmlNodePtr node)
         }
         else
         {
-          gchar *content = dom_tree_to_text(n->xmlChildrenNode);
+          gchar *content = dom_tree_to_text(n);
           if(!content)
           {
               return timespec_failure(ret);
@@ -500,7 +505,7 @@ dom_tree_to_timespec(xmlNodePtr node)
         }
         else
         {
-          gchar *content = dom_tree_to_text(n->xmlChildrenNode);
+          gchar *content = dom_tree_to_text(n);
           if(!content)
           {
               return timespec_failure(ret);
@@ -561,7 +566,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
         if(space_str) {
           return NULL;
         } else {
-          gchar *content = dom_tree_to_text(n->xmlChildrenNode);
+          gchar *content = dom_tree_to_text(n);
           if(!content) return NULL;
           space_str = content;
         }
@@ -569,7 +574,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node)
         if(id_str) {
           return NULL;
         } else {
-          gchar *content = dom_tree_to_text(n->xmlChildrenNode);
+          gchar *content = dom_tree_to_text(n);
           if(!content) return NULL;
           id_str = content;
         }

@@ -55,6 +55,28 @@ if($ENV{'GNC_MAKEPATCH_HOME_DIR'}) {
 }
 
 ###########################################################
+# Make sure makepatch exists before going on              #
+###########################################################
+
+open(OLDOUT, ">&STDOUT");
+open(OLDERR, ">&STDERR");
+open(STDOUT, "> /dev/null") || die "Can't redirect stdout";
+open(STDERR, "> /dev/null") || die "Can't redirect stderr";
+my $test = system('makepatch', "-help");
+close(STDOUT);
+close(STDERR);
+open(STDOUT, ">&OLDOUT");
+open(STDERR, ">&OLDERR");
+close(OLDOUT);
+close(OLDERR);
+
+if($test == -1) {
+  print "No makepatch installed.  Exiting\n";
+  exit(10);
+}
+
+
+###########################################################
 # Now, check if anything specified on command line        #
 ###########################################################
 
@@ -179,6 +201,7 @@ open(STDOUT, "> diffs/$outfilename") || die "Can't redirect stdout";
 system('makepatch', @args);
 close(STDOUT);
 open(STDOUT, ">&OLDOUT");
+close(OLDOUT);
 print "makepatch done\n";
 
 # Compress the patch if required

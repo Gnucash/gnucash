@@ -23,7 +23,6 @@ Makefile: Makefile.in configure
 		--sysconfdir=/etc \
 		--infodir=/usr/share/info \
 		--mandir=/usr/share/man \
-		--enable-efence \
 		--enable-error-on-warnings
 
 # --enable-profile \

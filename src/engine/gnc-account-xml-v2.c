@@ -21,51 +21,63 @@
 
 const gchar *account_version_string = "2.0.0";
 
+/* ids */
+const char *gnc_account_string = "gnc:account";
+const char *act_name_string = "act:name";
+const char *act_id_string = "act:id";
+const char *act_type_string = "act:type";
+const char *act_currency_string = "act:currency";
+const char *act_code_string = "act:code";
+const char *act_description_string = "act:description";
+const char *act_security_string = "act:security";
+const char *act_slots_string = "act:slots";
+const char *act_parent_string = "act:parent";
+
 xmlNodePtr
 gnc_account_dom_tree_create(Account *act)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, "gnc:account");
+    ret = xmlNewNode(NULL, gnc_account_string);
     xmlSetProp(ret, "version", account_version_string);
 
-    xmlNewChild(ret, NULL, "act:name", xaccAccountGetName(act));
+    xmlNewChild(ret, NULL, act_name_string, xaccAccountGetName(act));
     
-    xmlAddChild(ret, guid_to_dom_tree("act:id", xaccAccountGetGUID(act)));
+    xmlAddChild(ret, guid_to_dom_tree(act_id_string, xaccAccountGetGUID(act)));
     
-    xmlNewChild(ret, NULL, "act:type",
+    xmlNewChild(ret, NULL, act_type_string,
                 xaccAccountTypeEnumAsString(xaccAccountGetType(act)));
 
-    xmlAddChild(ret, commodity_ref_to_dom_tree("act:currency",
+    xmlAddChild(ret, commodity_ref_to_dom_tree(act_currency_string,
                                             xaccAccountGetCurrency(act)));
 
     if(xaccAccountGetCode(act))
     {
-        xmlNewChild(ret, NULL, "act:code", xaccAccountGetCode(act));
+        xmlNewChild(ret, NULL, act_code_string, xaccAccountGetCode(act));
     }
 
     if(xaccAccountGetDescription(act))
     {
-        xmlNewChild(ret, NULL, "act:description",
+        xmlNewChild(ret, NULL, act_description_string,
                     xaccAccountGetDescription(act));
     }
        
     if(xaccAccountGetSecurity(act))
     {
-        xmlAddChild(ret, commodity_ref_to_dom_tree("act:security",
+        xmlAddChild(ret, commodity_ref_to_dom_tree(act_security_string,
                                                 xaccAccountGetSecurity(act)));
     }
 
     if(xaccAccountGetSlots(act))
     {
-        xmlAddChild(ret, kvp_frame_to_dom_tree("act:slots",
+        xmlAddChild(ret, kvp_frame_to_dom_tree(act_slots_string,
                                             xaccAccountGetSlots(act)));
     }
 
     if(xaccAccountGetParentAccount(act))
     {
         xmlAddChild(ret, guid_to_dom_tree(
-                     "act:parent",
+                     act_parent_string,
                      xaccAccountGetGUID(xaccAccountGetParentAccount(act))));
     }
     
@@ -76,15 +88,16 @@ gnc_account_dom_tree_create(Account *act)
 static gboolean
 account_name_handler (xmlNodePtr node, Account* act)
 {
-    if(node->content != NULL)
-    {
-        xaccAccountSetName(act, node->xmlChildrenNode->content);
-        return TRUE;
-    }
-    else 
-    {
-        return FALSE;
-    }
+    gchar* txt;
+    
+    txt = dom_tree_to_text(node);
+    g_return_val_if_fail(txt, FALSE);
+    
+    xaccAccountSetName(act, txt);
+
+    g_free(txt);
+    
+    return TRUE;
 }
 
 static gboolean
@@ -130,7 +143,11 @@ account_security_handler (xmlNodePtr node, Account* act)
 static gboolean
 account_slots_handler (xmlNodePtr node, Account* act)
 {
-    /* return dom_tree_handle_kvp(act->kvp_data, node); */
+    kvp_frame *frm  = dom_tree_to_kvp_frame(node);
+    g_return_val_if_fail(frm, FALSE);
+    
+    xaccAccountSetSlots_nc(act, frm);
+    
     return TRUE;
 }
 
@@ -148,9 +165,41 @@ account_parent_handler (xmlNodePtr node, Account* act)
     return TRUE;
 }
 
+static gboolean
+account_code_handler(xmlNodePtr node, Account* act)
+{
+    gchar* txt;
+    
+    txt = dom_tree_to_text(node);
+    g_return_val_if_fail(txt, FALSE);
+    
+    xaccAccountSetCode(act, txt);
+
+    g_free(txt);
+    
+    return TRUE;
+    
+}
+
+static gboolean
+account_description_handler(xmlNodePtr node, Account *act)
+{
+    gchar* txt;
+    
+    txt = dom_tree_to_text(node);
+    g_return_val_if_fail(txt, FALSE);
+    
+    xaccAccountSetDescription(act, txt);
+
+    g_free(txt);
+    
+    return TRUE;
+    
+}
+
 struct dom_handlers
 {
-    char *tag;
+    const char *tag;
 
     gboolean (*handler) (xmlNodePtr, Account*);
 
@@ -163,6 +212,8 @@ static struct dom_handlers account_handlers_v2[] = {
     { "act:id", account_id_handler, 1, 0 },
     { "act:type", account_type_handler, 1, 0 },
     { "act:currency", account_currency_handler, 1, 0 },
+    { "act:code", account_code_handler, 1, 0 },
+    { "act:description", account_description_handler, 1, 0},
     { "act:security", account_security_handler, 0, 0 },
     { "act:slots", account_slots_handler, 0, 0 },
     { "act:parent", account_parent_handler, 0, 0 },

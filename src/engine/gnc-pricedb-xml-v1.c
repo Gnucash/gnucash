@@ -78,12 +78,12 @@ price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node)
     gnc_price_set_time(p, t);
     g_free(t);
   } else if(safe_strcmp("price:source", sub_node->name) == 0) {
-    char *text = dom_tree_to_text(sub_node->xmlChildrenNode);
+    char *text = dom_tree_to_text(sub_node);
     if(!text) return FALSE;
     gnc_price_set_source(p, text);
     g_free(text);
   } else if(safe_strcmp("price:type", sub_node->name) == 0) {
-    char *text = dom_tree_to_text(sub_node->xmlChildrenNode);
+    char *text = dom_tree_to_text(sub_node);
     if(!text) return FALSE;
     gnc_price_set_type(p, text);
     g_free(text);
