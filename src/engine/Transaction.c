@@ -42,7 +42,7 @@
 
 
 /* 
- * If the "force_double_entry" flag determines how 
+ * The "force_double_entry" flag determines how 
  * the splits in a transaction will be balanced. 
  *
  * The following values have significance:
@@ -180,6 +180,21 @@ xaccFreeSplit( Split *split )
   split->date_reconciled.tv_nsec = 0;
 
   _free(split);
+}
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccConfigSetForceDoubleEntry (int force) 
+{
+   force_double_entry = force;
+}
+
+int
+xaccConfigGetForceDoubleEntry (void) 
+{
+   return (force_double_entry);
 }
 
 /********************************************************************\
