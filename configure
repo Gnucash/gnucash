@@ -2289,24 +2289,15 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   MOTIF_LIBS="-lXmHTML $MOTIF_LIBS"
 else
   echo "$ac_t""no" 1>&6
-MOTIF_LIBS="-lXmHTML $MOTIF_LIBS"
-        XMHTML_TARGET=default 
-        XMHTML_INC=/lib/XmHTML-1.1.0/src 
-        LIBS="-L$srcdir/lib/XmHTML-1.1.0 $LIBS" 
 fi
  
 
 
 
 
-### Guile
-
-# Set GUILELIBS according to the set of libraries needed to link
-# with guile.
-
 # If readline exists, just assume that guile needs it.  It probably does.
 echo $ac_n "checking for readline in -lreadline""... $ac_c" 1>&6
-echo "configure:2310: checking for readline in -lreadline" >&5
+echo "configure:2301: checking for readline in -lreadline" >&5
 ac_lib_var=`echo readline'_'readline | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2314,7 +2305,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lreadline  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2318 "configure"
+#line 2309 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2325,7 +2316,7 @@ int main() {
 readline()
 ; return 0; }
 EOF
-if { (eval echo configure:2329: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2320: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2353,140 +2344,54 @@ else
 fi
 
 
+### Guile
+# Set GUILELIBS according to the set of libraries needed to link
+# with guile.
+
 # Have to use AC_TRY_LINK here because AC_CHECK_LIB caches the
 # results, so one failure makes all further attempts fail.
 
 echo $ac_n "checking for guile""... $ac_c" 1>&6
-echo "configure:2361: checking for guile" >&5
+echo "configure:2356: checking for guile" >&5
 
 GNC_LIBS_SAFE=${LIBS}
-
-GNC_TEST_LIBS="-lguile"
-LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-cat > conftest.$ac_ext <<EOF
-#line 2368 "configure"
+for GNC_TEST_LIBS in "-lguile" "-lguile -ldl" "-lguile -lqthreads" \
+  "-lguile -ltermcap" "-lguile -lqthreads -ltermcap"; do
+  if test x"${GUILELIBS}" != x; then
+    echo "$ac_t""found in ${GUILELIBS}" 1>&6
+    break
+  else
+    LIBS="${GNC_TEST_LIBS} ${GNC_LIBS_SAFE}"
+    cat > conftest.$ac_ext <<EOF
+#line 2367 "configure"
 #include "confdefs.h"
 #include<guile/gh.h>
 int main() {
 gh_eval_file;
 ; return 0; }
 EOF
-if { (eval echo configure:2375: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2374: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
-  GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}"
+  GUILELIBS="${GNC_TEST_LIBS}"
 else
   echo "configure: failed program was:" >&5
   cat conftest.$ac_ext >&5
 fi
 rm -f conftest*
-LIBS="${GNC_LIBS_SAFE}"
+  fi
+done
             
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -ldl"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  cat > conftest.$ac_ext <<EOF
-#line 2390 "configure"
-#include "confdefs.h"
-#include<guile/gh.h>
-int main() {
-gh_eval_file;
-; return 0; }
-EOF
-if { (eval echo configure:2397: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
-  rm -rf conftest*
-  GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-fi
-rm -f conftest*
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -lqthreads"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  cat > conftest.$ac_ext <<EOF
-#line 2413 "configure"
-#include "confdefs.h"
-#include<guile/gh.h>
-int main() {
-gh_eval_file;
-; return 0; }
-EOF
-if { (eval echo configure:2420: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
-  rm -rf conftest*
-  GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-fi
-rm -f conftest*
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -ltermcap"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  cat > conftest.$ac_ext <<EOF
-#line 2436 "configure"
-#include "confdefs.h"
-#include<guile/gh.h>
-int main() {
-gh_eval_file;
-; return 0; }
-EOF
-if { (eval echo configure:2443: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
-  rm -rf conftest*
-  GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-fi
-rm -f conftest*
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -lqthreads -ltermcap"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  cat > conftest.$ac_ext <<EOF
-#line 2459 "configure"
-#include "confdefs.h"
-#include<guile/gh.h>
-int main() {
-gh_eval_file;
-; return 0; }
-EOF
-if { (eval echo configure:2466: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
-  rm -rf conftest*
-  GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-fi
-rm -f conftest*
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
+if test x"${GUILELIBS}" = x; then
   { echo "configure: error: Cannot link with guile.  Do you have guile 1.3 installed?" 1>&2; exit 1; }
 fi
 
 
 
 
-echo "$ac_t""yes" 1>&6
-
 ### Plotutils
 
 echo $ac_n "checking for openpl in -lplot""... $ac_c" 1>&6
-echo "configure:2490: checking for openpl in -lplot" >&5
+echo "configure:2395: checking for openpl in -lplot" >&5
 ac_lib_var=`echo plot'_'openpl | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2494,7 +2399,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lplot $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2498 "configure"
+#line 2403 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2505,7 +2410,7 @@ int main() {
 openpl()
 ; return 0; }
 EOF
-if { (eval echo configure:2509: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:2414: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else

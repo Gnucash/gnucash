@@ -10,6 +10,27 @@ AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
 
+# Check for 'swig'
+AC_PATH_PROG(SWIG,swig,no)	# Sets @SWIG@
+if test x"$SWIG" = xno; then
+	AC_MSG_ERROR(Can't find swig.)
+fi
+
+## Check for Perl
+AC_CHECK_PROGS(PERL,perl5 perl)		# Sets @PERL@
+
+# Make sure Perl was found
+if test x"$PERL" = x; then
+	AC_MSG_ERROR(Can't find Perl.)
+fi
+
+# Make sure it's version 5 or later
+if "$PERL" -e 'exit 1 if $] < 5.0'; then
+	:
+else
+	AC_MSG_ERROR(You need Perl version 5 or later.)
+fi
+
 ### Set up all the initial variable values...
 
 CFLAGS="${CFLAGS} -O2 -Wall"
@@ -28,7 +49,15 @@ LIBS="$LIBS -lm"
 AC_PATH_X
 AC_PATH_XTRA
 
+# This is how to use the variables set by AC_PATH_XTRA:
+#	cc @X_CFLAGS@ -c -o foo.o foo.c
+#	cc @X_LIBS@ (-lfoo...) @X_PRE_LIBS@ -lX11 @X_EXTRA_LIBS@
+# (But see also the test for Motif libraries, below.)
+# (Perhaps X_LIBS should have been called X_LDFLAGS.)
+
+# XXX - Not all programs need all of these, surely.
 X_LIBS="$X_LIBS -lXext -lXmu -lXt -lX11"
+# XXX - Ask Motif what it wants
 MOTIF_LIBS="-lXm"
 
 # Let the user specify gnome paths:
@@ -43,13 +72,20 @@ AC_ARG_WITH( imlib,
        [  --with-imlib=PATH       specify where to look for imlib includes and libs],
        X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
 
-# Let the user specify guile paths:
-AC_ARG_WITH( guile, 
-       [  --with-guile=PATH       specify where to look for guile includes and libs],
-	GUILE_INC="-I$with_guile/include"
-	GUILELIBS="-L$with_guile/lib -lguile"
-       	LIBS="${LIBS} $GUILELIBS"
-	 )
+# Let the user specify a guile-config executable.
+# XXX My guile-1.3 doesn't have a guile-config, but maybe I'm
+# downlevel... are there guile 1.3 .rpms or .debs that have
+# guilec-config in them?  if so we need to publish them.
+# AC_ARG_WITH( guile-config, 
+#   [  --with-guile-config=executable
+#                           which guile-config to use to find guile ],
+#   GUILE_CONFIG="$with_guile_config")
+# AC_PATH_PROG(GUILE_CONFIG,guile-config,no)
+# if test x"$GUILE_CONFIG" = xno; then
+# 	AC_MSG_ERROR([Can't find guile-config.
+#   Install Guile 1.3, then specify the path to guile-config with
+#   --with-guile-config=...])
+# fi
 
 # *******************************************
 # * figure out the configure options:
@@ -139,6 +175,17 @@ AC_CHECK_LIB(jpeg, jpeg_read_scanlines,
 AC_CHECK_LIB(png, png_read_image,
         AC_DEFINE(HAVE_PNG,1) LIBS="-lpng $LIBS")
 
+## Nana
+# XXX - There should probably be a --without-nana option (e.g., for
+# someone who happens to have it installed on his local machine, but
+# is building GnuCash for people who might not have it).
+
+# See if the <nana.h> header file can be found.
+AC_CHECK_HEADERS(nana.h)
+AC_CHECK_LIB(nana,L_buffer_create,
+	LIBNANA="-lnana")
+AC_SUBST(LIBNANA)
+
 # This should be done in the OTHER_LIBRARIES argument to AC_CHECK_LIB
 # if it's actually needed and Makefile.in's should be using
 # X_PRE_LIBS, X_LIBS, and X_EXTRA_LIBS, rather than relying on LIBS.
@@ -152,22 +199,18 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
 # this is ugly, there must be a nicer way of setting this up ...
 AC_CHECK_LIB(XmHTML,  XmHTMLTextScrollToLine,
         MOTIF_LIBS="-lXmHTML $MOTIF_LIBS",
-        MOTIF_LIBS="-lXmHTML $MOTIF_LIBS"
-        XMHTML_TARGET=default 
-        XMHTML_INC=/lib/XmHTML-1.1.0/src 
-        LIBS="-L$srcdir/lib/XmHTML-1.1.0 $LIBS" , 
+        ,
         $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS $X_LIBS) 
 
 AC_SUBST(XMHTML_TARGET)
 AC_SUBST(XMHTML_INC)
 
-### Guile
-
-# Set GUILELIBS according to the set of libraries needed to link
-# with guile.
-
 # If readline exists, just assume that guile needs it.  It probably does.
 AC_CHECK_LIB(readline, readline)
+
+### Guile
+# Set GUILELIBS according to the set of libraries needed to link
+# with guile.
 
 # Have to use AC_TRY_LINK here because AC_CHECK_LIB caches the
 # results, so one failure makes all further attempts fail.
@@ -175,58 +218,24 @@ AC_CHECK_LIB(readline, readline)
 AC_MSG_CHECKING([for guile])
 
 GNC_LIBS_SAFE=${LIBS}
-
-GNC_TEST_LIBS="-lguile"
-LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
-  GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-LIBS="${GNC_LIBS_SAFE}"
+for GNC_TEST_LIBS in "-lguile" "-lguile -ldl" "-lguile -lqthreads" \
+  "-lguile -ltermcap" "-lguile -lqthreads -ltermcap"; do
+  if test x"${GUILELIBS}" != x; then
+    AC_MSG_RESULT([found in ${GUILELIBS}])
+    break
+  else
+    LIBS="${GNC_TEST_LIBS} ${GNC_LIBS_SAFE}"
+    AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
+      GUILELIBS="${GNC_TEST_LIBS}")
+  fi
+done
             
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -ldl"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
-    GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -lqthreads"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
-    GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -ltermcap"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
-    GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
-  GNC_TEST_LIBS="-lguile -lqthreads -ltermcap"
-  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
-  AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
-    GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${GNC_LIBS_SAFE}"
-fi
-
-if test x"${GUILELIBS}" = x;
-then
+if test x"${GUILELIBS}" = x; then
   AC_MSG_ERROR(Cannot link with guile.  Do you have guile 1.3 installed?)
 fi
 
 AC_SUBST(GUILE_INC)
 AC_SUBST(GUILELIBS)
-
-AC_MSG_RESULT([yes])
 
 ### Plotutils
 

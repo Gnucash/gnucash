@@ -35,6 +35,9 @@
 /* Enable debugging stuff */
 #define  USE_DEBUG           
 
+/* Turn on nana assertion checking */
+#undef  HAVE_NANA_H
+
 /* Enable quickfill in register window */
 #define  USE_QUICKFILL       
 

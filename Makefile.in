@@ -83,7 +83,7 @@ DIST_TRASH += gnucash.motif gnucash.motif.static
 DIST_TRASH += gnucash.gnome gnucash.gnome.static gnucash.qt gnucash-shell
 DIST_TRASH += config.cache config.log config.status config.h
 
-tagsfiles := $(find -name "*.[ch]")
+tagsfiles := $(shell find . -name "*.[ch]" -print)
 
 TAGS: ${tagsfiles}
 	etags ${tagsfiles}    
@@ -93,7 +93,7 @@ install-bin: gnucash.${FLAVOR}
 	(cd ${GNC_BINDIR} && ln -sf gnucash.${FLAVOR} gnucash)
 
 install:
-	@mkdir -p ${GNC_BINDIR}
+	$(INSTALL) -d ${GNC_BINDIR} ${GNC_LIBDIR} ${GNC_DOCDIR} ${GNC_SHAREDIR}
 
   # Put these in the opposite order of precedence.  Final bin/gnucash link will
   # point to the last one that exists...
@@ -115,12 +115,10 @@ install:
   ]
 	$(INSTALL) src/quotes/gnc-prices ${GNC_BINDIR}
 
-	@mkdir -p ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/swig/perl5/gnucash.pm ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/swig/perl5/gnucash.so ${GNC_LIBDIR}
 	$(INSTALL_DATA) src/quotes/Quote.pm ${GNC_LIBDIR}
 
-	@mkdir -p ${GNC_DOCDIR}
 	$(INSTALL_DATA) README* ${GNC_DOCDIR}
 	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
 	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
@@ -129,8 +127,6 @@ install:
 # 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
 
   # Share directory
-	@mkdir -p ${GNC_SHAREDIR}
-
   # Try to do this in a platform independent way...
   # Directories
 	for dir in `find share/scm/ -type d`; do \

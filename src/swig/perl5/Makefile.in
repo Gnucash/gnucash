@@ -19,6 +19,8 @@
 
 include @top_srcdir@/Makefile.init
 
+exec_prefix = @exec_prefix@
+
 INCLPATH = \
            -I. \
            -I@top_srcdir@/ \
@@ -26,12 +28,13 @@ INCLPATH = \
            -I@top_srcdir@/src/swig\
            -I@top_srcdir@/src/engine \
            -I@top_srcdir@/include \
-	   @PERLINCL@ \
+				   @PERLINCL@ \
            -I$(prefix)/include
 
 # set -Dbool=char because the perl headers need this
 # use -fpic so that we can create loadable module
 CFLAGS   = @CFLAGS@  ${INCLPATH} -Dbool=char -fpic -Wno-unused
+LDFLAGS  = @LDFLAGS@
 
 SWIG_FLAGS := -stat -perl5 \
               -I.. -I@top_srcdir@/src/engine 
@@ -50,7 +53,7 @@ include @top_srcdir@/Makefile.common
 default: gnucash.so 
 
 gnucash.so: ${OBJS} ../../engine/libengine.a
-	gcc -shared ${OBJS} ../../engine/libengine.a -lnana -o gnucash.so
+	gcc -shared ${OBJS} ../../engine/libengine.a -L@libdir@ -lnana -o gnucash.so
 
 SWIG_FILTER    := %P.h %/util.h
 SWIG_ENGINE_HDRS := \
@@ -89,13 +92,13 @@ TRASH += gnucash.engine.i gnucash.engine_wrap.doc
 # TRASH += gnucash.all.i gnucash.all_wrap.doc
 
 gnucash-engine-perl5_wrap.c: gnucash.engine.i
-	swig ${SWIG_FLAGS} -o $@ $< 
-#	perl -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
+	${SWIG} ${SWIG_FLAGS} -o $@ $< 
+#	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 TRASH += gnucash-engine-perl5_wrap.c
 
 # gnucash-all-guile_wrap.c: gnucash.all.i
-# 	swig ${SWIG_FLAGS} -o $@ $< 
-# 	perl -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
+# 	${SWIG} ${SWIG_FLAGS} -o $@ $< 
+# 	${PERL} -pi -e 's/^void gnucash\(\)/void gnucash_swig_init\(\)/' $@
 # TRASH += gnucash-all-guile_wrap.c
 
 # Local Variables:
