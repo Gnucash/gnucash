@@ -57,7 +57,51 @@
 
 /* --------------------------------------------------------- */
 
-#define EXPERIMENTAL_ARRAY_SUPPORT
+#define EXPERIMENTAL_PARRAY_SUPPORT
+#ifdef EXPERIMENTAL_PARRAY_SUPPORT
+
+// argh.  I've tried everything, including rtfm, and I still
+// can't make this work ....
+// everything seems be OK here, just the way the documentation says it
+// should be (see perlguts, perlap man pages),  but the actual perl 
+// test program gets an array that's the wrong length (and can't 
+// yank blessed scalars out of it), no matter what I try here.
+//
+// Curiously, the 'perlxstut' man page says example 7 deals with
+// arrays, but the example hasn't been written yet ... Hmmm.
+// That would be exaclty the example we can't make work here ... hmmmm.
+
+// Creates a new perl array and puts 
+%typemap(perl5,out) SplitList * {
+    AV *myav;
+    int i = 0,len = 0;
+    GList *node;
+
+    /* Figure out how many elements we have */
+    for (node=$source; node; node=node->next) { len++; }
+
+printf ("eh duude typemap got a split list !!! length=%d \n", len);
+
+    myav = newAV();
+    for (node=$source; node; node=node->next) 
+    { 
+        SV *sv = sv_newmortal();
+        sv_setref_pv (sv, "SplitPtr", node);
+printf ("duude sv is object ? %d\n", sv_isobject(sv));
+printf ("duude sv is blessed to class splitptr? %d\n", sv_isa(sv, "SplitPtr"));
+        av_push (myav, sv);
+    };
+printf (" the av len is %d\n", av_len(myav));
+    $target = newRV((SV*)myav);
+
+    // sv_2mortal($target);
+
+    argvi ++;
+}
+#endif
+
+/* --------------------------------------------------------- */
+
 #ifdef EXPERIMENTAL_ARRAY_SUPPORT
 
 // Creates a new perl array and puts 
@@ -70,17 +114,24 @@
     /* Figure out how many elements we have */
     for (node=$source; node; node=node->next) { len++; }
 
-printf ("eh duude got a split list !!! length=%d \n", len);
+printf ("eh duude typemap got a split list !!! length=%d \n", len);
 
     svs = (SV **) malloc(len*sizeof(SV *));
     for (i=0, node=$source; node; node=node->next, i++) 
     { 
         svs[i] = sv_newmortal();
         sv_setref_pv (svs[i], "SplitPtr", node);
+        // sv_setref_pvn (sv, "SplitPtr", node, sizeof (Split));
+        // printf ("typemap sv is object ? %d\n", sv_isobject(svs[i]));
+        // printf ("typemap sv is blessed to class splitptr? %d\n",
+        //        sv_isa(svs[i], "SplitPtr"));
     };
     myav = av_make(len,svs);
+printf (" the av len is %d\n", av_len(myav));
     free(svs);
-    $target = newRV((SV*)myav);
+    // $target = newRV((SV*)myav);
+    // $target = myav;
+    $target = newSVsv((SV*)myav);
     sv_2mortal($target);
 
     argvi ++;

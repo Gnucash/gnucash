@@ -37,14 +37,19 @@ for ($i=0; $i<$numacc; $i++) {
    $acctname = gnucash::xaccAccountGetName ($acct);
    $numeric_baln = gnucash::xaccAccountGetBalance ($acct);
    $baln = gnucash::gnc_numeric_to_double ($numeric_baln);
+print "the account perl-type is $acct\n";
    print "\tAccount: $acctname \tBalance: $baln\n";
 
-   @splits = gnucash::xaccAccountGetSplitList ($acct);
-   print "duude its $#splits \n";
-   foreach $s (@splits) {
-      print "doing up split $s \n";
-      $bal = gnucash::DxaccSplitGetBalance ($s);
-      print "its $bal\n";
+   @splats = gnucash::xaccAccountGetSplitList ($acct);
+   print "duude array is @splats \n";
+   print "duude array len is $#splats \n";
+
+   foreach $s (@splats) {
+# bless $s, "SplitPtr";
+print "the split perl-scalar is $s\n";
+      $val = gnucash::DxaccSplitGetValue ($s);
+      $pr = gnucash::DxaccSplitGetSharePrice ($s);
+      print "split value=$val price=$pr\n";
    }
 }
 
