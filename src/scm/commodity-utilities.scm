@@ -327,7 +327,8 @@
   (if (and (record? foreign) (gnc:gnc-monetary? foreign))
       (gnc:exchange-by-price-helper
        foreign domestic
-       (gnc:pricedb-lookup-latest 
+       (gnc:pricedb-lookup-latest
+        (gnc:book-get-pricedb (gnc:get-current-book))
 	(gnc:gnc-monetary-commodity foreign)
 	domestic))
       #f))
@@ -347,6 +348,7 @@
       (gnc:exchange-by-price-helper
        foreign domestic
        (gnc:pricedb-lookup-nearest-in-time
+        (gnc:book-get-pricedb (gnc:get-current-book))
 	(gnc:gnc-monetary-commodity foreign)
 	domestic date))
       #f))
