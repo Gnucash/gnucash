@@ -1,5 +1,9 @@
 Version history:
 ------- -------
+ 1.1.19 - 5 October 1998
+         o fixes to QIF import incl MS-Money import
+         o implement rollback in engine; can now commit or reject (undo) edits.
+
  1.1.17 - 13 Sept 1998 
          o working auto-expand register
          o sort by date, num, amount, memo, descr.
