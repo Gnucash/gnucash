@@ -23,7 +23,6 @@
 
 SHELL=/bin/bash
 export SHELL
-mkdir = /bin/mkdir
 
 srcdir  = @srcdir@
 VPATH   = @srcdir@
@@ -153,7 +152,7 @@ install:
 	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
 
 	@mkdir -p ${GNC_DOCDIR}/data
-	$(INSTALL_DATA) data/*.xac ${GNC_SHAREDIR}/data
+	$(INSTALL_DATA) data/*.xac ${GNC_DOCDIR}/data
 
 # 	@mkdir -p $(prefix)/toolbar
 # 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
