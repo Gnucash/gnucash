@@ -174,6 +174,88 @@ configLabels (SplitRegister *reg)
 }
 
 /* ============================================== */
+/* configAction strings into the action cell */
+/* hack alert -- this stuf really, really should be in a config file ... */
+
+static void
+configAction (SplitRegister *reg)
+{
+   BasicCell *hc;
+   int type = (reg->type) & REG_TYPE_MASK;
+
+   /* setup custom labels for the debit/credit columns */
+   switch (type) {
+      case BANK_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, DEPOSIT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, CHECK_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, ATM_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, TELLER_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, POS_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, ARU_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, ONLINE_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, ACH_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, WIRE_STR);
+         break;
+      case CASH_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         break;
+      case ASSET_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         break;
+      case CREDIT_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         break;
+      case LIABILITY_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, LOAN_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, PAYMENT_STR);
+         break;
+      case INCOME_LEDGER:  
+      case INCOME_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, PAYMENT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, REBATE_STR);
+         break;
+      case EXPENSE_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         break;
+      case GENERAL_LEDGER:  
+      case EQUITY_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, EQUITY_STR);
+         break;
+      case STOCK_REGISTER:
+      case PORTFOLIO:
+      case CURRENCY_REGISTER:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, PRICE_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, DIV_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, LTCG_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, STCG_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, DIST_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SPLIT_STR);
+         break;
+      default:
+         xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
+         xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
+         break;
+   }
+}
+
+/* ============================================== */
 
 #define SET(NAME,col,row,handler)				\
 {								\
@@ -688,28 +770,8 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
     */
    configTraverse (reg);
 
-   /* -------------------------------- */   
    /* add menu items for the action cell */
-
-   xaccAddComboCellMenuItem ( reg->actionCell, ATM_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, TELLER_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, CHECK_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, POS_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, ARU_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, ONLINE_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, ACH_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, WIRE_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, BUY_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, SELL_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, PRICE_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, DIV_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, INT_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, LTCG_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, STCG_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, DIST_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, SPLIT_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, DEPOSIT_STR);
-   xaccAddComboCellMenuItem ( reg->actionCell, WITHDRAW_STR);
+   configAction (reg);
 
    /* -------------------------------- */   
    phys_r = header->numRows;
