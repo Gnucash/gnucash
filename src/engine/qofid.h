@@ -102,6 +102,10 @@ typedef void (*QofEntityForeachCB) (QofEntity *, gpointer user_data);
 void qof_collection_foreach (QofCollection *, 
                        QofEntityForeachCB, gpointer user_data);
 
+/** store and retreive arbitrary object-defined data */
+gpointer qof_collection_get_data (QofCollection *col);
+void qof_collection_set_data (QofCollection *col, gpointer user_data);
+
 
 
 #endif /* QOF_ID_H */

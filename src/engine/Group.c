@@ -84,22 +84,42 @@ xaccMallocAccountGroup (QofBook *book)
 /********************************************************************\
 \********************************************************************/
 
-#define GNC_TOP_GROUP "gnc_top_group"
+AccountGroup * 
+xaccCollGetAccountGroup (QofCollection *col)
+{
+  if (!col) return NULL;
+  return qof_collection_get_data (col);
+}
+
+void
+xaccCollSetAccountGroup (QofCollection *col, AccountGroup *grp)
+{
+  AccountGroup *old_grp;
+  if (!col) return;
+
+  old_grp = xaccCollGetAccountGroup (col);
+  if (old_grp == grp) return;
+
+  qof_collection_set_data (col, grp);
+
+  xaccAccountGroupBeginEdit (old_grp);
+  xaccAccountGroupDestroy (old_grp);
+}
+
 AccountGroup * 
 xaccGetAccountGroup (QofBook *book)
 {
-   if (!book) return NULL;
-   return qof_book_get_data (book, GNC_TOP_GROUP);
+  QofCollection *col;
+  if (!book) return NULL;
+  col = qof_book_get_collection (book, GNC_ID_GROUP);
+  return xaccCollGetAccountGroup (col);
 }
 
 void
 xaccSetAccountGroup (QofBook *book, AccountGroup *grp)
 {
-  AccountGroup *old_grp;
+  QofCollection *col;
   if (!book) return;
-
-  old_grp = xaccGetAccountGroup (book);
-  if (old_grp == grp) return;
 
   if (grp && grp->book != book)
   {
@@ -107,10 +127,8 @@ xaccSetAccountGroup (QofBook *book, AccountGroup *grp)
      return;
   }
 
-  qof_book_set_data (book, GNC_TOP_GROUP, grp);
-
-  xaccAccountGroupBeginEdit (old_grp);
-  xaccAccountGroupDestroy (old_grp);
+  col = qof_book_get_collection (book, GNC_ID_GROUP);
+  xaccCollSetAccountGroup (col, grp);
 }
 
 /********************************************************************\
@@ -1229,15 +1247,15 @@ group_book_end (QofBook *book)
 }
 
 static gboolean
-group_is_dirty (QofBook *book)
+group_is_dirty (QofCollection *col)
 {
-  return xaccGroupNotSaved(xaccGetAccountGroup(book));
+  return xaccGroupNotSaved(xaccCollGetAccountGroup(col));
 }
 
 static void
-group_mark_clean(QofBook *book)
+group_mark_clean(QofCollection *col)
 {
-  xaccGroupMarkSaved(xaccGetAccountGroup(book));
+  xaccGroupMarkSaved(xaccCollGetAccountGroup(col));
 }
 
 static QofObject group_object_def = 

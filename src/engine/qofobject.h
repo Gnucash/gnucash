@@ -31,6 +31,7 @@
 #define QOF_OBJECT_H_
 
 #include "qofbook.h"
+#include "qofid.h"
 
 /* Defines the version of the core object object registration
  * interface.  Only object modules compiled against this version
@@ -62,15 +63,15 @@ struct _QofObject
   void                (*book_end)(QofBook *);
 
   /* Determine if there are any dirty items in this book */
-  gboolean            (*is_dirty)(QofBook *);
+  gboolean            (*is_dirty)(QofCollection *);
 
   /* Mark this object's book clean (for after a load) */
-  void                (*mark_clean)(QofBook *);
+  void                (*mark_clean)(QofCollection *);
 
   /* foreach() is used to execute a callback over each object
    * stored in the particular book
    */
-  void                (*foreach)(QofBook *, QofForeachCB, gpointer);
+  void                (*foreach)(QofCollection *, QofEntityForeachCB, gpointer);
 
   /* Given a particular object, return a printable string */
   /* Argument should really be QofInstance not gpointer.. */
@@ -87,7 +88,7 @@ void qof_object_shutdown (void);
 void qof_object_foreach_type (QofForeachTypeCB cb, gpointer user_data);
 
 void qof_object_foreach (QofIdTypeConst type_name, QofBook *book, 
-                         QofForeachCB cb, gpointer user_data);
+                         QofEntityForeachCB cb, gpointer user_data);
 
 const char * qof_object_printable (QofIdTypeConst type_name, gpointer obj);
 
