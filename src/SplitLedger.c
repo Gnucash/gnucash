@@ -979,11 +979,12 @@ LoadXferCell (ComboCell *cell,
 
       curr = xaccAccountGetCurrency (acc);
       secu = xaccAccountGetSecurity (acc);
+      if (secu && (0x0 == secu[0])) secu = 0x0;
 
       if ( (!safe_strcmp(curr,base_currency)) ||
-           (!safe_strcmp(secu,base_currency)) ||
            (!safe_strcmp(curr,base_security)) ||
-           (!safe_strcmp(secu,base_security)) )
+           (secu && (!safe_strcmp(secu,base_currency))) ||
+           (secu && (!safe_strcmp(secu,base_security))) )
       {
          xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
       }
@@ -1004,6 +1005,7 @@ void xaccLoadXferCell (ComboCell *cell,
 
    curr = xaccAccountGetCurrency (base_account);
    secu = xaccAccountGetSecurity (base_account);
+   if (secu && (0x0 == secu[0])) secu = 0x0;
 
    xaccAddComboCellMenuItem (cell, "");
    LoadXferCell (cell, grp, curr, secu);
