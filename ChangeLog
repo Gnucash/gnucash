@@ -1,3 +1,8 @@
+2003-07-03  Matthew Vanecek  <mevanecek@yahoo.com>
+
+    * po/POTFILES.in: ran make-gnucash-potfile, to pick up all the
+    changes for the Qof migration.
+
 2003-07-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-transfer.c,
