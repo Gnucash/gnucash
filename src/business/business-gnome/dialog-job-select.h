@@ -7,6 +7,7 @@
 
 #ifndef GNC_DIALOG_JOB_SELECT_H_
 #define GNC_DIALOG_JOB_SELECT_H_
+#if 0
 
 #include "gncJob.h"
 #include "gncOwner.h"
@@ -19,4 +20,5 @@ GncJob *
 gnc_job_choose (GtkWidget * parent, GncJob *start_job,
 		GncOwner *owner, GNCBook *book);
 
+#endif
 #endif /* GNC_DIALOG_JOB_SELECT_H_ */

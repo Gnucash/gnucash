@@ -12,27 +12,24 @@ typedef struct _job_window JobWindow;
 
 #include "gncJob.h"
 #include "gncOwner.h"
+#include "dialog-search.h"
 
-/* Edit a job */
-JobWindow * gnc_ui_job_window_create (GncJob *job);
+/* Create or Edit a job */
+GncJob * gnc_ui_job_new_return_handle (GncOwner *owner, GNCBook *book);
+JobWindow * gnc_ui_job_edit (GncJob *job);
+JobWindow * gnc_ui_job_new (GncOwner *owner, GNCBook *book);
 
-/* Functions to create and edit jobs */
-GncJob * gnc_job_new (GtkWidget *parent, GncOwner *owner, GNCBook *book);
+/* Search for Jobs */
+GNCSearchWindow * gnc_job_search (GncJob *start, GncOwner *owner,
+				  GNCBook *book);
 
-/* Callback to choose a job from a customer, for use with the
- * general-select widget.  Provides both "new" and "edit" buttons.
+/*
+ * These callbacks are for use with the gnc_general_search widget
+ *
+ * select() provides a Select Dialog and returns it.
+ * edit() opens the existing customer for editing and returns NULL.
  */
-gpointer        gnc_job_edit_new_select (gpointer start_job,
-					 GtkWidget *toplevel,
-					 GncCustomer *cust);
-
-/* Callback to view/edit a job, for use with a general_select */
-gpointer	gnc_job_edit_new_edit (gpointer bookp,
-				       gpointer this_job,
-				       GtkWidget *toplevel);
-gpointer	gnc_job_select_new_select (gpointer bookp,
-					   gpointer this_job,
-					   GtkWidget *parent);
-
+GNCSearchWindow * gnc_job_search_select (gpointer start, gpointer book);
+GNCSearchWindow * gnc_job_search_edit (gpointer start, gpointer book);
 
 #endif /* GNC_DIALOG_JOB_H_ */

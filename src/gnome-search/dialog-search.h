@@ -14,24 +14,37 @@ typedef struct _GNCSearchWindow GNCSearchWindow;
 
 /* The two types of callbacks.  
  *
- * Return TRUE if you want to keep the search dialog open, return
- * FALSE if you want the search dialog to close.
- *
- * In the first callback, the obj_p will be a pointer to the selected
- * item (if one is selected).  The callback may change the value if they
- * wish (note that the display will not adjust to the new selected item)
+ * In the first callback, (used in the callback button list) the obj_p
+ * argument will be a pointer to the selected item (if one is
+ * selected).  The callback may change the value if they wish (note
+ * that the display will not adjust to the new selected item)
  *
  * In the second callback, the query is the property of the search
- * dialog; the callback should copy it if they want to keep it.
- *
- * The third callback will create a new item, and if the item is created,
- * it will destroy the search dialog.
+ * dialog; the callback should copy it if they want to keep it.  The
+ * result will be a pointer to the selected item (if one is selected)
+ * and the callback may change the value.
  */
-typedef gboolean (*GNCSearchCallback) (gpointer *obj_p, gpointer user_data);
-typedef gboolean (*GNCSearchResultCB) (QueryNew *query, gpointer user_data,
-				       gpointer *result);
-typedef gboolean (*GNCSearchNewItemCB) (GtkWidget *parent, gpointer *obj_p,
-					gpointer user_data);
+typedef void (*GNCSearchCallback) (gpointer *obj_p, gpointer user_data);
+typedef void (*GNCSearchResultCB) (QueryNew *query, gpointer user_data,
+				   gpointer *result);
+
+/*
+ * This callback will create a new item and return a handle to the
+ * newly created item (even if it is not completely finished).  It
+ * will be added to the query, but not selected.  This means the GUID
+ * must be set.
+ */
+typedef gpointer (*GNCSearchNewItemCB) (gpointer user_data);
+
+/* Free the general user_data object */
+typedef void (*GNCSearchFree) (gpointer user_data);
+
+/* This callback is called when (if) the user clicks the 'select'
+ * button.  The search dialog will close when this callback function
+ * returns.
+ */
+typedef void (*GNCSearchSelectedCB) (gpointer selected_object,
+				     gpointer user_data);
 
 typedef struct {
   const char *		label;
@@ -44,18 +57,21 @@ typedef struct {
  * The param_list is the property of the dialog but will NOT be destroyed.
  * The start_query is the property of the caller and will only be copied.
  * The show_start_query, if it exists, will become the property of the
- * dialog and will be automatically destroyed.  
+ * dialog and will be automatically destroyed.
+ *
+ * The user_data becomes the property of the search dialog and will
+ * be freed via the callback when the dialog is closed.
  */
-GNCSearchWindow * gnc_search_dialog_create (GNCIdTypeConst obj_type,
-					    GList *param_list,
-					    QueryNew *start_query,
-					    QueryNew *show_start_query,
-					    GNCSearchCallbackButton *callbacks,
-					    GNCSearchResultCB result_callback,
-					    GNCSearchNewItemCB new_item_cb,
-					    gpointer user_data);
+GNCSearchWindow *
+gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
+			  QueryNew *start_query, QueryNew *show_start_query,
+			  GNCSearchCallbackButton *callbacks,
+			  GNCSearchResultCB result_callback,
+			  GNCSearchNewItemCB new_item_cb,
+			  gpointer user_data, GNCSearchFree free_user_data);
+
 void gnc_search_dialog_destroy (GNCSearchWindow *sw);
-void gnc_search_dialog_test (void);
+void gnc_search_dialog_raise (GNCSearchWindow *sw);
 
 /* Register an on-close signal with the Search Dialog */
 guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
@@ -65,24 +81,19 @@ guint gnc_search_dialog_connect_on_close (GNCSearchWindow *sw,
 /* Un-register the signal handlers with the Search Dialog */
 void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data);
 
-/* Clear all callbacks with this Search Window */
-void gnc_search_dialog_clear_callbacks (GNCSearchWindow *sw);
-
-/* Use this function to choose (and return) an object.
- *
- * The param_list is the property of the dialog but will NOT be destroyed.
- * the start_query is the property of the caller and will only be copied.
- * the show_start_query, if it exists, will become the property of the
- * dialog and will be automatically destroyed.
+/*
+ * Set the select callback with this Search Window; setting it to NULL
+ * will effectively clear it out.  If this is set, then a 'select'
+ * button will show up.  If allow_clear is TRUE, then also allow
+ * a 'clear' button which would allow the selected_cb to be called
+ * with "NULL".
  */
-gpointer gnc_search_dialog_choose_object (GtkWidget *parent,
-					  GNCIdTypeConst obj_type,
-					  GList *param_list,
-					  QueryNew *start_query,
-					  QueryNew *show_start_query,
-					  GNCSearchCallbackButton *callbacks,
-					  GNCSearchResultCB result_callback,
-					  GNCSearchNewItemCB new_item_cb,
-					  gpointer user_data);
+void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
+				      GNCSearchSelectedCB selected_cb,
+				      gpointer user_data,
+				      gboolean allow_clear);
+
+/* Test the dialog */
+void gnc_search_dialog_test (void);
 
 #endif

@@ -1,3 +1,13 @@
+2002-05-09  Derek Atkins   <derek@ihtfp.com>
+
+	Create a new general_search widget that hooks into the search
+	dialog and provides callbacks and signals for object selection.
+	This fixes a lot of the nested-gtk_main() problems in the business
+	code.  Still more separation to do, but MOST of the main modules
+	are changed to use the new interfaces.  This is an interim commit;
+	another commit will follow shortly.  The code works now, but
+	dialog-order (in particular) will give you compiler warnings.
+
 2002-05-07  David Hampton  <hampton@employees.org>
 
 	Pogma's Mac OS X patches committed.  Added a new directory

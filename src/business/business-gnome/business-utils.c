@@ -14,20 +14,34 @@
 #include "gncVendor.h"
 #include "gncOwner.h"
 
+#include "gnc-general-search.h"
 #include "gncObject.h"
 #include "business-utils.h"
 #include "dialog-customer.h"
 #include "dialog-job.h"
 #include "dialog-vendor.h"
 
+typedef enum {
+  GNCSEARCH_TYPE_SELECT,
+  GNCSEARCH_TYPE_EDIT
+} GNCSearchType;
+
 static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 				  GNCBook *book, GncOwner *owner,
-				  GNCGeneralSelectType type)
+				  GNCSearchType type)
 {
   GtkWidget *edit;
-  GNCGeneralSelectNewSelectCB do_select = NULL;
-  const GncObject_t *bus_obj;
+  GNCSearchCB search_cb = NULL;
   const char *type_name = NULL;
+  const char *text = NULL;
+
+  switch (type) {
+  case GNCSEARCH_TYPE_SELECT:
+    text = _("Select...");
+    break;
+  case GNCSEARCH_TYPE_EDIT:
+    text = _("Edit...");
+  };
 
   switch (owner->type) {
   case GNC_OWNER_NONE:
@@ -35,26 +49,26 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     return NULL;
 
   case GNC_OWNER_CUSTOMER:
-    if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
-      do_select = gnc_customer_edit_new_select;
+    if (type == GNCSEARCH_TYPE_SELECT)
+      search_cb = gnc_customer_search_select;
     else
-      do_select = gnc_customer_edit_new_edit;
+      search_cb = gnc_customer_search_edit;
     type_name = GNC_CUSTOMER_MODULE_NAME;
     break;
 
   case GNC_OWNER_JOB:
-    if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
-      do_select = gnc_job_select_new_select;
+    if (type == GNCSEARCH_TYPE_SELECT)
+      search_cb = gnc_job_search_select;
     else
-      do_select = gnc_job_edit_new_edit;
+      search_cb = gnc_job_search_edit;
     type_name = GNC_JOB_MODULE_NAME;
     break;
 
   case GNC_OWNER_VENDOR:
-    if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
-      do_select = gnc_vendor_edit_new_select;
+    if (type == GNCSEARCH_TYPE_SELECT)
+      search_cb = gnc_vendor_search_select;
     else
-      do_select = gnc_vendor_edit_new_edit;
+      search_cb = gnc_vendor_search_edit;
     type_name = GNC_VENDOR_MODULE_NAME;
     break;
 
@@ -63,17 +77,11 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     return NULL;
   }
 
-  bus_obj = gncObjectLookup (type_name);
-  if (!bus_obj) {
-    g_warning ("Cannot find business object for name and printable()\n");
-    return NULL;
-  }
-
-  edit = gnc_general_select_new (type, bus_obj->printable, do_select, book);
+  edit = gnc_general_search_new (type_name, text, search_cb, book);
   if (!edit)
     return NULL;
 
-  gnc_general_select_set_selected (GNC_GENERAL_SELECT (edit),
+  gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit),
 				   owner->owner.undefined);
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
   if (label)
@@ -82,7 +90,6 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
   return edit;
 }
 
-
 GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
 				     GNCBook *book, GncOwner *owner)
 {
@@ -90,8 +97,7 @@ GtkWidget * gnc_owner_select_create (GtkWidget *label, GtkWidget *hbox,
   g_return_val_if_fail (book != NULL, NULL);
   g_return_val_if_fail (owner != NULL, NULL);
 
-  return gnc_owner_new (label, hbox, book, owner,
-			GNC_GENERAL_SELECT_TYPE_SELECT);
+  return gnc_owner_new (label, hbox, book, owner, GNCSEARCH_TYPE_SELECT);
 }
 
 GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
@@ -101,8 +107,7 @@ GtkWidget * gnc_owner_edit_create (GtkWidget *label, GtkWidget *hbox,
   g_return_val_if_fail (book != NULL, NULL);
   g_return_val_if_fail (owner != NULL, NULL);
 
-  return gnc_owner_new (label, hbox, book, owner,
-			GNC_GENERAL_SELECT_TYPE_EDIT);
+  return gnc_owner_new (label, hbox, book, owner, GNCSEARCH_TYPE_EDIT);
 }
 
 void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner)
@@ -114,7 +119,7 @@ void gnc_owner_get_owner (GtkWidget *widget, GncOwner *owner)
    * can't change it here.  Hopefully the caller has it set properly
    */
   owner->owner.undefined =
-    gnc_general_select_get_selected (GNC_GENERAL_SELECT (widget));
+    gnc_general_search_get_selected (GNC_GENERAL_SEARCH (widget));
 }
 
 void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner)
@@ -126,6 +131,6 @@ void gnc_owner_set_owner (GtkWidget *widget, GncOwner *owner)
    * can't change it here.  Hopefully the caller has it set properly
    */
 
-  gnc_general_select_set_selected (GNC_GENERAL_SELECT (widget),
+  gnc_general_search_set_selected (GNC_GENERAL_SEARCH (widget),
 				   owner->owner.undefined);
 }

@@ -25,7 +25,7 @@
 #include "gncVendorP.h"
 
 #include "dialog-vendor.h"
-#include "dialog-job-select.h"
+#include "dialog-job.h"
 #include "dialog-order.h"
 #include "dialog-invoice.h"
 
@@ -40,8 +40,7 @@ typedef enum
 
 struct _vendor_select_window {
   GNCBook *	book;
-  GtkWidget *	parent;
-  gboolean	no_close;
+  QueryNew *	q;
 };
 
 struct _vendor_window {
@@ -141,11 +140,6 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   VendorWindow *vw = data;
 
-  /* Check for valid id */
-  if (check_entry_nonempty (vw->dialog, vw->id_entry,
-			    _("The Vendor must be given an ID.")))
-    return;
-
   /* Check for valid company name */
   if (check_entry_nonempty (vw->dialog, vw->company_entry,
 		   _("You must enter a company name.")))
@@ -167,6 +161,12 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
   //			 _("Terms must be a positive integer or "
   //			   "you must leave it blank.")))
   //    return;
+
+  /* Check for valid id and set one if necessary */
+  if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
+    gtk_entry_set_text (GTK_ENTRY (vw->id_entry),
+			g_strdup_printf ("%.6lld",
+					 gncVendorNextID(vw->book)));
 
   /* Now save it off */
   {
@@ -244,22 +244,6 @@ gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
   g_free (title);
 }
 
-static int
-gnc_vendor_on_close_cb (GnomeDialog *dialog, gpointer data)
-{
-  VendorWindow *vw;
-  GncVendor **created_vendor = data;
-
-  if (data) {
-    vw = gtk_object_get_data (GTK_OBJECT (dialog), "dialog_info");
-    *created_vendor = vw->created_vendor;
-  }
-
-  gtk_main_quit ();
-
-  return FALSE;
-}
-
 static void
 gnc_vendor_window_close_handler (gpointer user_data)
 {
@@ -301,8 +285,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static VendorWindow *
-gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
-			 GncVendor *vendor)
+gnc_vendor_new_window (GNCBook *bookp, GncVendor *vendor)
 {
   VendorWindow *vw;
   GladeXML *xml;
@@ -340,11 +323,6 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
 
   /* default to ok */
   gnome_dialog_set_default (vwd, 0);
-
-  if (parent) {
-    gnome_dialog_set_parent (vwd, GTK_WINDOW (parent));
-    gtk_window_set_modal (GTK_WINDOW (vw->dialog), TRUE);
-  }
 
   /* Get entry points */
   vw->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -449,8 +427,6 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
     vw->vendor_guid = *gncVendorGetGUID (vendor);
 
     vw->dialog_type = NEW_VENDOR;
-    gtk_entry_set_text (GTK_ENTRY (vw->id_entry),
-			g_strdup_printf ("%.6lld", gncVendorNextID(bookp)));
     vw->component_id =
       gnc_register_gui_component (DIALOG_NEW_VENDOR_CM_CLASS,
 				  gnc_vendor_window_refresh_handler,
@@ -472,150 +448,141 @@ gnc_vendor_new_window (GtkWidget *parent, GNCBook *bookp,
   return vw;
 }
 
-GncVendor *
-gnc_vendor_new (GtkWidget *parent, GNCBook *bookp)
+VendorWindow *
+gnc_ui_vendor_new (GNCBook *bookp)
 {
   VendorWindow *vw;
-  GncVendor *created_vendor = NULL;
 
   /* Make sure required options exist */
   if (!bookp) return NULL;
 
-  vw = gnc_vendor_new_window (parent, bookp, NULL);
-
-  gtk_signal_connect (GTK_OBJECT (vw->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_vendor_on_close_cb),
-		      &created_vendor);
-
-  gtk_main ();
-
-  return created_vendor;
+  vw = gnc_vendor_new_window (bookp, NULL);
+  return vw;
 }
 
 VendorWindow *
-gnc_ui_vendor_window_create (GncVendor *vendor)
+gnc_ui_vendor_edit (GncVendor *vendor)
 {
   VendorWindow *vw;
 
   if (!vendor) return NULL;
 
-  vw = gnc_vendor_new_window (NULL, gncVendorGetBook(vendor), vendor);
+  vw = gnc_vendor_new_window (gncVendorGetBook(vendor), vendor);
 
   return vw;
 }
 
 /* Functions for vendor selection widgets */
 
-static gboolean
+static void
 invoice_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
   struct _vendor_select_window *sw = user_data;
   GncOwner owner;
   GncVendor *vendor;
 
-  g_return_val_if_fail (vendor_p && user_data, TRUE);
+  g_return_if_fail (vendor_p && user_data);
 
   vendor = *vendor_p;
 
   if (!vendor)
-    return TRUE;
+    return;
 
   gncOwnerInitVendor (&owner, vendor);
-  gnc_invoice_find (NULL, &owner, sw->book);
-  return TRUE;
+  gnc_invoice_search (NULL, &owner, sw->book);
+  return;
 }
 
-static gboolean
+static void
 order_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
   struct _vendor_select_window *sw = user_data;
   GncOwner owner;
   GncVendor *vendor;
 
-  g_return_val_if_fail (vendor_p && user_data, TRUE);
+  g_return_if_fail (vendor_p && user_data);
 
   vendor = *vendor_p;
 
   if (!vendor)
-    return TRUE;
+    return;
 
   gncOwnerInitVendor (&owner, vendor);
   gnc_order_find (NULL, &owner, sw->book);
-  return TRUE;
+  return;
 }
 
-static gboolean
+static void
 jobs_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
   struct _vendor_select_window *sw = user_data;
   GncOwner owner;
   GncVendor *vendor;
 
-  g_return_val_if_fail (vendor_p && user_data, TRUE);
+  g_return_if_fail (vendor_p && user_data);
 
   vendor = *vendor_p;
 
   if (!vendor)
-    return TRUE;
+    return;
 
   gncOwnerInitVendor (&owner, vendor);
-  gnc_job_find (NULL, &owner, sw->book);
-  return TRUE;
+  gnc_job_search (NULL, &owner, sw->book);
+  return;
 }
 
-static gboolean
+static void
 edit_vendor_cb (gpointer *vendor_p, gpointer user_data)
 {
   GncVendor *vendor;
 
-  g_return_val_if_fail (vendor_p && user_data, TRUE);
+  g_return_if_fail (vendor_p && user_data);
 
   vendor = *vendor_p;
 
   if (!vendor)
-    return TRUE;
+    return;
 
-  gnc_ui_vendor_window_create (vendor);
-  return TRUE;
+  gnc_ui_vendor_edit (vendor);
+  return;
 }
 
-static gboolean
-select_vendor_cb (gpointer *vendor_p, gpointer user_data)
-{
-  g_return_val_if_fail (vendor_p && user_data, TRUE);
-  if (*vendor_p)
-    return FALSE;
-  return TRUE;
-}
-
-static gboolean
-new_vendor_cb (GtkWidget *parent, gpointer *vendor_p, gpointer user_data)
+static gpointer
+new_vendor_cb (gpointer user_data)
 {
   struct _vendor_select_window *sw = user_data;
+  VendorWindow *vw;
   
-  g_return_val_if_fail (vendor_p && user_data, TRUE);
+  g_return_val_if_fail (user_data, NULL);
 
-  *vendor_p = gnc_vendor_new (parent, sw->book);
-  return sw->no_close;
+  vw = gnc_ui_vendor_new (sw->book);
+  return vw_get_vendor (vw);
 }
 
-static GncVendor *
-gnc_vendor_select (GtkWidget *parent, GncVendor *start, GNCBook *book,
-		   gboolean provide_select)
+static void
+free_vendor_cb (gpointer user_data)
 {
-  static GList *params = NULL;
-  gpointer res;
+  struct _vendor_select_window *sw = user_data;
+  g_return_if_fail (sw);
+
+  gncQueryDestroy (sw->q);
+  g_free (sw);
+}
+
+GNCSearchWindow *
+gnc_vendor_search (GncVendor *start, GNCBook *book)
+{
+  GNCIdType type = GNC_VENDOR_MODULE_NAME;
+  struct _vendor_select_window *sw;
   QueryNew *q, *q2 = NULL;
-  GNCSearchCallbackButton buttons[] = { 
-    { N_("Select Vendor"), select_vendor_cb},
+  static GList *params = NULL;
+  static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Vendor"), edit_vendor_cb},
     { N_("Vendor Jobs"), jobs_vendor_cb},
     //    { N_("Vendor Orders"), order_vendor_cb},
     { N_("Vendor Invoices"), invoice_vendor_cb},
     { NULL },
   };
-  GNCIdType type = GNC_VENDOR_MODULE_NAME;
-  struct _vendor_select_window sw;
 
   g_return_val_if_fail (book, NULL);
 
@@ -640,43 +607,28 @@ gnc_vendor_select (GtkWidget *parent, GncVendor *start, GNCBook *book,
   }
 
   /* launch select dialog and return the result */
-  sw.book = book;
-  sw.parent = parent;
-  sw.no_close = !provide_select;
-  res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
-					 (provide_select ? buttons :
-					  &(buttons[1])), NULL,
-					 new_vendor_cb, &sw);
+  sw = g_new0 (struct _vendor_select_window, 1);
+  sw->book = book;
+  sw->q = q;
 
-  gncQueryDestroy (q);
-  return res;
+  return gnc_search_dialog_create (type, params, q, q2,
+				   buttons, NULL,
+				   new_vendor_cb, sw, free_vendor_cb);
 }
 
-void
-gnc_vendor_find (GncVendor *start, GNCBook *book)
+GNCSearchWindow *
+gnc_vendor_search_select (gpointer start, gpointer book)
 {
-  gnc_vendor_select (NULL, start, book, FALSE);
+  if (!book) return NULL;
+
+  return gnc_vendor_search (start, book);
 }
 
-GncVendor *
-gnc_vendor_choose (GtkWidget *parent, GncVendor *start, GNCBook *book)
+GNCSearchWindow *
+gnc_vendor_search_edit (gpointer start, gpointer book)
 {
-  return gnc_vendor_select (parent, start, book, TRUE);
-}
+  if (start)
+    gnc_ui_vendor_edit (start);
 
-gpointer gnc_vendor_edit_new_select (gpointer bookp, gpointer vendor,
-				       GtkWidget *toplevel)
-{
-  return gnc_vendor_choose (toplevel, vendor, bookp);
-}
-
-gpointer gnc_vendor_edit_new_edit (gpointer bookp, gpointer v,
-				     GtkWidget *toplevel)
-{
-  GncVendor *vendor = v;
-
-  g_return_val_if_fail (vendor != NULL, NULL);
-
-  gnc_ui_vendor_window_create (vendor);
-  return vendor;
+  return NULL;
 }

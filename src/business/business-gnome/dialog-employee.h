@@ -11,16 +11,14 @@
 typedef struct _employee_window EmployeeWindow;
 
 #include "gncEmployee.h"
+#include "dialog-search.h"
 
-/* Functions to edit and find employees */
-EmployeeWindow * gnc_ui_employee_window_create (GncEmployee *employee);
-void gnc_employee_find (GncEmployee *start, GNCBook *book);
+/* Functions to edit and create employees */
+EmployeeWindow * gnc_ui_employee_edit (GncEmployee *employee);
+EmployeeWindow * gnc_ui_employee_new (GNCBook *book);
 
-/* Functions to create and edit employees */
-GncEmployee * gnc_employee_new (GtkWidget *parent, GNCBook *book);
-
-GncEmployee *gnc_employee_choose (GtkWidget *parent, GncEmployee *start,
-				  GNCBook *book);
+/* Search for an employee */
+GNCSearchWindow * gnc_employee_search (GncEmployee *start, GNCBook *book);
 
 /* Callbacks to select a employee that match the necessary functions
  * for use with the gnc_general_select widget.

@@ -8,7 +8,6 @@
 #ifndef GNC_BUSINESS_UTILS_H_
 #define GNC_BUSINESS_UTILS_H_
 
-#include "gnc-general-select.h"
 #include "gnc-book.h"
 #include "gncOwner.h"
 

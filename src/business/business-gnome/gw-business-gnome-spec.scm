@@ -36,7 +36,6 @@
       "#include <dialog-employee.h>\n"
       "#include <dialog-invoice.h>\n"
       "#include <dialog-job.h>\n"
-      "#include <dialog-job-select.h>\n"
       "#include <dialog-order.h>\n"
       "#include <dialog-vendor.h>\n"
       )))
@@ -55,25 +54,24 @@
   (gw:wrap-function
    ws
    'gnc:customer-new
-   '<gnc:GncCustomer*>
-   "gnc_customer_new"
-   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
-   "Dialog: create a new GncCustomer.  Parent may be NULL.")
+   '<gw:void>
+   "gnc_ui_customer_new"
+   '((<gnc:Book*> book))
+   "Dialog: create a new GncCustomer.")
 
   (gw:wrap-function
    ws
    'gnc:customer-edit
    '<gw:void>
-   "gnc_ui_customer_window_create"
+   "gnc_ui_customer_edit"
    '((<gnc:GncCustomer*> customer))
    "Dialog: Edit a GncCustomer.")
 
-
   (gw:wrap-function
    ws
-   'gnc:customer-find
+   'gnc:customer-search
    '<gw:void>
-   "gnc_customer_find"
+   "gnc_customer_search"
    '((<gnc:GncCustomer*> start_selection) (<gnc:Book*> book) )
    "Dialog: Find a GncCustomer.  Start_selection may be NULL.")
 
@@ -84,25 +82,24 @@
   (gw:wrap-function
    ws
    'gnc:employee-new
-   '<gnc:GncEmployee*>
-   "gnc_employee_new"
-   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
-   "Dialog: create a new GncEmployee.  Parent may be NULL.")
+   '<gw:void>
+   "gnc_ui_employee_new"
+   '((<gnc:Book*> book))
+   "Dialog: create a new GncEmployee.")
 
   (gw:wrap-function
    ws
    'gnc:employee-edit
    '<gw:void>
-   "gnc_ui_employee_window_create"
+   "gnc_ui_employee_edit"
    '((<gnc:GncEmployee*> employee))
    "Dialog: Edit a GncEmployee.")
 
-
   (gw:wrap-function
    ws
-   'gnc:employee-find
+   'gnc:employee-search
    '<gw:void>
-   "gnc_employee_find"
+   "gnc_employee_search"
    '((<gnc:GncEmployee*> start_selection) (<gnc:Book*> book))
    "Dialog: Find a GncEmployee.  Start_selection may be NULL.")
 
@@ -113,24 +110,24 @@
   (gw:wrap-function
    ws
    'gnc:invoice-new
-   '<gnc:GncInvoice*>
-   "gnc_invoice_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncOwner*> owner) (<gnc:Book*> book))
-   "Dialog: create a new GncInvoice.  Parent may be NULL.")
+   '<gw:void>
+   "gnc_ui_invoice_new"
+   '((<gnc:GncOwner*> owner) (<gnc:Book*> book))
+   "Dialog: create a new GncInvoice.")
 
   (gw:wrap-function
    ws
    'gnc:invoice-edit
    '<gw:void>
-   "gnc_ui_invoice_window_create"
+   "gnc_ui_invoice_edit"
    '((<gnc:GncInvoice*> invoice))
    "Dialog: Edit a GncInvoice.")
 
   (gw:wrap-function
    ws
-   'gnc:invoice-find
+   'gnc:invoice-search
    '<gw:void>
-   "gnc_invoice_find"
+   "gnc_invoice_search"
    '((<gnc:GncInvoice*> start_selection) (<gnc:GncOwner*> owner)
      (<gnc:Book*> book))
    "Dialog: Select a GncInvoice.  Either start_selection or "
@@ -143,31 +140,26 @@
   (gw:wrap-function
    ws
    'gnc:job-new
-   '<gnc:GncJob*>
-   "gnc_job_new"
-   '((<gnc:UIWidget> parent) (<gnc:GncOwner*> default_owner)
-     (<gnc:Book*> book))
-   "Dialog: create a new GncJob.  Parent and Owner may be NULL.")
+   '<gw:void>
+   "gnc_ui_job_new"
+   '((<gnc:GncOwner*> default_owner) (<gnc:Book*> book))
+   "Dialog: create a new GncJob.  Owner may be NULL.")
 
   (gw:wrap-function
    ws
    'gnc:job-edit
    '<gw:void>
-   "gnc_ui_job_window_create"
+   "gnc_ui_job_edit"
    '((<gnc:GncJob*> job))
    "Dialog: Edit a GncJob.")
 
-  ;;
-  ;; dialog-job-select.h
-  ;;
-
   (gw:wrap-function
    ws
-   'gnc:job-find
+   'gnc:job-search
    '<gw:void>
-   "gnc_job_find"
+   "gnc_job_search"
    '((<gnc:GncJob*> job) (<gnc:GncOwner*> owner) (<gnc:Book*> book))
-   "Dialog: Find a new job.  Job and Owner may be NULL.")
+   "Dialog: Search for a job.  Job and Owner may be NULL.")
 
   ;;
   ;; dialog-order.h
@@ -207,25 +199,24 @@
   (gw:wrap-function
    ws
    'gnc:vendor-new
-   '<gnc:GncVendor*>
-   "gnc_vendor_new"
-   '((<gnc:UIWidget> parent) (<gnc:Book*> book))
-   "Dialog: create a new GncVendor.  Parent may be NULL.")
+   '<gw:void>
+   "gnc_ui_vendor_new"
+   '((<gnc:Book*> book))
+   "Dialog: create a new GncVendor.")
 
   (gw:wrap-function
    ws
    'gnc:vendor-edit
    '<gw:void>
-   "gnc_ui_vendor_window_create"
+   "gnc_ui_vendor_edit"
    '((<gnc:GncVendor*> vendor))
    "Dialog: Edit a GncVendor.")
 
-
   (gw:wrap-function
    ws
-   'gnc:vendor-find
+   'gnc:vendor-search
    '<gw:void>
-   "gnc_vendor_find"
+   "gnc_vendor_search"
    '((<gnc:GncVendor*> start_selection) (<gnc:Book*> book))
    "Dialog: Select a GncVendor.  Start_selection may be NULL.")
   

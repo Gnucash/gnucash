@@ -17,6 +17,7 @@ AM_CFLAGS = \
 
 libgncmod_gnome_search_la_SOURCES = \
   gncmod-gnome-search.c \
+  gnc-general-search.c \
   dialog-search.c \
   search-account.c \
   search-boolean.c \
@@ -30,7 +31,8 @@ libgncmod_gnome_search_la_SOURCES = \
 
 gncincludedir = ${GNC_INCLUDE_DIR}
 gncinclude_HEADERS = \
-  dialog-search.h
+  dialog-search.h \
+  gnc-general-search.h
 
 noinst_HEADERS = \
   search-account.h \

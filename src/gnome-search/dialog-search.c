@@ -13,6 +13,7 @@
 #include "window-help.h"
 #include "gnc-component-manager.h"
 #include "gnc-ui-util.h"
+#include "gnc-gui-query.h"
 #include "gncObject.h"
 #include "QueryNew.h"
 #include "QueryObject.h"
@@ -43,11 +44,19 @@ struct _GNCSearchWindow {
   GtkWidget *	add_rb;
   GtkWidget *	del_rb;
 
+  /* The Select button */
+  GtkWidget *	select_button;
+
   /* Callbacks */
   GNCSearchResultCB result_cb;
   GNCSearchNewItemCB new_item_cb;
   GNCSearchCallbackButton *buttons;
+  GNCSearchFree	free_cb;
   gpointer		user_data;
+
+  GNCSearchSelectedCB	selected_cb;
+  gpointer		select_arg;
+  gboolean		allow_clear;
 
   /* What we're searching for, and how */
   GNCIdTypeConst search_for;
@@ -82,22 +91,42 @@ static void
 gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 {
   GNCSearchCallbackButton *cb;
-  gboolean res = FALSE;
 
   cb = gtk_object_get_data (GTK_OBJECT (button), "data");
 
   if (cb->cb_fcn)
-    res = (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
+    (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
+}
 
-  /* Destroy the display if asked */
-  if (!res)
-    gnc_search_dialog_destroy (sw);
+static void
+gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
+{
+  g_return_if_fail (sw->selected_cb);
+
+  if (sw->selected_item == NULL && sw->allow_clear == FALSE) {
+    char *msg = _("You must select an item from the list");
+    gnc_error_dialog_parented (GTK_WINDOW (sw->dialog), msg);
+    return;
+  }
+
+  (sw->selected_cb)(sw->selected_item, sw->select_arg);
+  gnc_search_dialog_destroy (sw);
 }
 
 static void
 gnc_search_dialog_select_item (GtkListItem *item, GNCSearchWindow *sw)
 {
   sw->selected_item = gtk_object_get_data (GTK_OBJECT (item), "item");
+}
+
+static void
+gnc_search_dialog_unselect_item (GtkListItem *item, GNCSearchWindow *sw)
+{
+  gpointer data = gtk_object_get_data (GTK_OBJECT (item), "item");
+
+  /* Only reset if this was the item we thought we had selected */
+  if (sw->selected_item == data)
+    sw->selected_item = NULL;
 }
 
 static void
@@ -133,6 +162,13 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     /* ... and add all the buttons */
     if (sw->buttons) {
       int i;
+
+      button = gtk_button_new_with_label (_("Select"));
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  gnc_search_dialog_select_cb, sw);
+      gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 3);
+      sw->select_button = button;
+			  
       for (i = 0; sw->buttons[i].label; i++) {
 	button = gtk_button_new_with_label (sw->buttons[i].label);
 	gtk_object_set_data (GTK_OBJECT (button), "data", &(sw->buttons[i]));
@@ -148,6 +184,10 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
     /* And show the results */
     gtk_widget_show_all (sw->result_hbox);
+
+    /* But maybe hide the select button */
+    if (!sw->selected_cb)
+      gtk_widget_hide_all (sw->select_button);
 
   } else {
     /* Clear out all the items, to insert in a moment */
@@ -168,6 +208,8 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     gtk_object_set_data (GTK_OBJECT (item), "item", list->data);
     gtk_signal_connect (GTK_OBJECT (item), "select",
 			gnc_search_dialog_select_item, sw);
+    gtk_signal_connect (GTK_OBJECT (item), "deselect",
+			gnc_search_dialog_unselect_item, sw);
 
     itemlist = g_list_prepend (itemlist, item);
     if (list->data == sw->selected_item)
@@ -321,11 +363,9 @@ search_find_cb (GtkButton *button, GNCSearchWindow *sw)
 
   search_update_query (sw);
 
-  if (sw->result_cb) {
-    gboolean ret = (sw->result_cb)(sw->q, sw->user_data, &(sw->selected_item));
-    if (!ret)
-      return gnc_search_dialog_destroy (sw);
-  }
+  if (sw->result_cb)
+    (sw->result_cb)(sw->q, sw->user_data, &(sw->selected_item));
+
   search_clear_criteria (sw);
   gnc_search_dialog_reset_widgets (sw);
 
@@ -336,37 +376,30 @@ search_find_cb (GtkButton *button, GNCSearchWindow *sw)
 static void
 search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
 {
-  gpointer res = NULL;
-  gboolean retval = FALSE;
+  gpointer res;
 
   g_return_if_fail (sw->new_item_cb);
 
-  if (sw->new_item_cb)
-    retval = (sw->new_item_cb)(sw->dialog, &res, sw->user_data);
+  res = (sw->new_item_cb)(sw->user_data);
 
   if (res) {
-    sw->selected_item = res;
-    if (!retval)
-      gnc_search_dialog_destroy (sw);
+    const GUID *guid = (const GUID *) ((sw->get_guid)(res));
+    QueryOp op = QUERY_OR;
 
-    else {
-      const GUID *guid = (const GUID *) ((sw->get_guid)(res));
-      QueryOp op = QUERY_OR;
-
-      if (!sw->q) {
-	if (!sw->start_q) {
-	  sw->start_q = gncQueryCreate ();
-	  gncQuerySetBook (sw->start_q, gnc_get_current_book ());
-	}
-	sw->q = gncQueryCopy (sw->start_q);
-	op = QUERY_AND;
+    if (!sw->q) {
+      if (!sw->start_q) {
+	sw->start_q = gncQueryCreate ();
+	gncQuerySetBook (sw->start_q, gnc_get_current_book ());
       }
-
-      gncQueryAddGUIDMatch (sw->q, g_slist_prepend (NULL, QUERY_PARAM_GUID),
-			    guid, op);
-
-      gnc_search_dialog_display_results (sw);
+      sw->q = gncQueryCopy (sw->start_q);
+      op = QUERY_AND;
     }
+
+    gncQueryAddGUIDMatch (sw->q, g_slist_prepend (NULL, QUERY_PARAM_GUID),
+			  guid, op);
+
+    /* Watch this entity so we'll refresh once it's actually changed */
+    gnc_gui_component_watch_entity (sw->component_id, guid, GNC_EVENT_MODIFY);
   }
 }
 
@@ -563,6 +596,8 @@ add_criterion (GtkWidget *button, GNCSearchWindow *sw)
 static int
 gnc_search_dialog_close_cb (GnomeDialog *dialog, GNCSearchWindow *sw)
 {
+  g_return_val_if_fail (sw, TRUE);
+
   gnc_unregister_gui_component (sw->component_id);
 
   /* XXX: Clear the params_list? */
@@ -571,6 +606,10 @@ gnc_search_dialog_close_cb (GnomeDialog *dialog, GNCSearchWindow *sw)
   /* Destroy the queries */
   if (sw->q) gncQueryDestroy (sw->q);
   if (sw->start_q) gncQueryDestroy (sw->start_q);
+
+  /* Destroy the user_data */
+  if (sw->free_cb)
+    (sw->free_cb)(sw->user_data);
 
   /* Destroy and exit */
   g_free (sw);
@@ -582,6 +621,7 @@ refresh_handler (GHashTable *changes, gpointer data)
 {
   GNCSearchWindow * sw = data;
 
+  g_return_if_fail (sw);
   gnc_search_dialog_display_results (sw);
 }
 
@@ -590,6 +630,7 @@ close_handler (gpointer data)
 {
   GNCSearchWindow * sw = data;
 
+  g_return_if_fail (sw);
   gnome_dialog_close (GNOME_DIALOG (sw->dialog));
 }
 
@@ -688,7 +729,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_help_cb",
 				 GTK_SIGNAL_FUNC (search_help_cb), sw);
-  
+
   /* Register ourselves */
   sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,
 						 refresh_handler,
@@ -708,34 +749,11 @@ gnc_search_dialog_destroy (GNCSearchWindow *sw)
   gnc_close_gui_component (sw->component_id);
 }
 
-static GList *
-get_params_list (GNCIdTypeConst type)
+void
+gnc_search_dialog_raise (GNCSearchWindow *sw)
 {
-  GList *list = NULL;
-
-  list = gnc_search_param_prepend (list, "Txn: All Accounts",
-				   "account-match-all",
-				   type, SPLIT_TRANS, TRANS_SPLITLIST,
-				   SPLIT_ACCOUNT_GUID, NULL);
-  list = gnc_search_param_prepend (list, "Split Account", GNC_ID_ACCOUNT,
-				   type, SPLIT_ACCOUNT, QUERY_PARAM_GUID,
-				   NULL);
-  list = gnc_search_param_prepend (list, "Split->Txn->Void?", NULL, type,
-				   SPLIT_TRANS, TRANS_VOID_STATUS, NULL);
-  list = gnc_search_param_prepend (list, "Split Int64", NULL, type,
-				   "d-share-int64", NULL);
-  list = gnc_search_param_prepend (list, "Split Amount (double)", NULL, type,
-				   "d-share-amount", NULL);
-  list = gnc_search_param_prepend (list, "Split Value (debcred)", NULL, type,
-				   SPLIT_VALUE, NULL);
-  list = gnc_search_param_prepend (list, "Split Amount (numeric)", NULL, type,
-				   SPLIT_AMOUNT, NULL);
-  list = gnc_search_param_prepend (list, "Date Reconciled (date)", NULL, type,
-				   SPLIT_DATE_RECONCILED, NULL);
-  list = gnc_search_param_prepend (list, "Split Memo (string)", NULL, type,
-				   SPLIT_MEMO, NULL);
-
-  return list;
+  if (!sw) return;
+  gtk_window_present (GTK_WINDOW(sw->dialog));
 }
 
 GNCSearchWindow *
@@ -744,7 +762,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  GNCSearchCallbackButton *callbacks,
 			  GNCSearchResultCB result_callback,
 			  GNCSearchNewItemCB new_item_cb,
-			  gpointer user_data)
+			  gpointer user_data, GNCSearchFree free_cb)
 {
   GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
 
@@ -762,6 +780,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   sw->result_cb = result_callback;
   sw->new_item_cb = new_item_cb;
   sw->user_data = user_data;
+  sw->free_cb = free_cb;
 
   /* Grab the get_guid function */
   sw->get_guid = gncQueryObjectGetParameterGetter (sw->search_for,
@@ -805,41 +824,69 @@ void gnc_search_dialog_disconnect (GNCSearchWindow *sw, gpointer user_data)
 }
 
 /* Clear all callbacks with this Search Window */
-void gnc_search_dialog_clear_callbacks (GNCSearchWindow *sw)
+void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
+				      GNCSearchSelectedCB selected_cb,
+				      gpointer user_data,
+				      gboolean allow_clear)
 {
   g_return_if_fail (sw);
 
-  /* XXX */
-  sw->result_cb = NULL;
-  sw->new_item_cb = NULL;
-  sw->user_data = NULL;
-}
+  sw->selected_cb = selected_cb;
+  sw->select_arg = user_data;
+  sw->allow_clear = allow_clear;
 
-static int
-on_close_cb (GnomeDialog *dialog, gpointer *data)
-{
-  if (data) {
-    GNCSearchWindow *sw = gtk_object_get_data (GTK_OBJECT (dialog),
-					       "dialog-info");
-    *data = sw->selected_item;
+  /* Show or hide the select button */
+  if (sw->select_button) {
+    if (selected_cb)
+      gtk_widget_show_all (sw->select_button);
+    else
+      gtk_widget_hide_all (sw->select_button);
   }
-
-  gtk_main_quit ();
-  return FALSE;
 }
 
-static gboolean
+/* TEST CODE BELOW HERE */
+
+static GList *
+get_params_list (GNCIdTypeConst type)
+{
+  GList *list = NULL;
+
+  list = gnc_search_param_prepend (list, "Txn: All Accounts",
+				   "account-match-all",
+				   type, SPLIT_TRANS, TRANS_SPLITLIST,
+				   SPLIT_ACCOUNT_GUID, NULL);
+  list = gnc_search_param_prepend (list, "Split Account", GNC_ID_ACCOUNT,
+				   type, SPLIT_ACCOUNT, QUERY_PARAM_GUID,
+				   NULL);
+  list = gnc_search_param_prepend (list, "Split->Txn->Void?", NULL, type,
+				   SPLIT_TRANS, TRANS_VOID_STATUS, NULL);
+  list = gnc_search_param_prepend (list, "Split Int64", NULL, type,
+				   "d-share-int64", NULL);
+  list = gnc_search_param_prepend (list, "Split Amount (double)", NULL, type,
+				   "d-share-amount", NULL);
+  list = gnc_search_param_prepend (list, "Split Value (debcred)", NULL, type,
+				   SPLIT_VALUE, NULL);
+  list = gnc_search_param_prepend (list, "Split Amount (numeric)", NULL, type,
+				   SPLIT_AMOUNT, NULL);
+  list = gnc_search_param_prepend (list, "Date Reconciled (date)", NULL, type,
+				   SPLIT_DATE_RECONCILED, NULL);
+  list = gnc_search_param_prepend (list, "Split Memo (string)", NULL, type,
+				   SPLIT_MEMO, NULL);
+
+  return list;
+}
+
+static void
 do_nothing (gpointer *a, gpointer b)
 {
-  return TRUE;
+  return;
 }
 
 void
 gnc_search_dialog_test (void)
 {
-  gpointer result = NULL;
   GNCSearchWindow *sw;
-  GNCSearchCallbackButton buttons[] = {
+  static GNCSearchCallbackButton buttons[] = {
     { N_("View Split"), do_nothing },
     { N_("New Split"), do_nothing },
     { N_("Do Something"), do_nothing },
@@ -849,40 +896,5 @@ gnc_search_dialog_test (void)
   };
 
   sw = gnc_search_dialog_create (GNC_ID_SPLIT, get_params_list (GNC_ID_SPLIT),
-				 NULL, NULL, buttons, NULL, NULL, NULL);
-
-  gtk_signal_connect (GTK_OBJECT (sw->dialog), "close",
-		      GTK_SIGNAL_FUNC (on_close_cb), &result);
-
-  gtk_main ();
-}
-
-gpointer gnc_search_dialog_choose_object (GtkWidget *parent,
-					  GNCIdTypeConst obj_type,
-					  GList *param_list,
-					  QueryNew *start_query,
-					  QueryNew *show_start_query,
-					  GNCSearchCallbackButton *callbacks,
-					  GNCSearchResultCB result_callback,
-					  GNCSearchNewItemCB new_item_cb,
-					  gpointer user_data)
-{
-  gpointer result = NULL;
-  GNCSearchWindow *sw = gnc_search_dialog_create (obj_type, param_list,
-						  start_query,
-						  show_start_query,
-						  callbacks, result_callback,
-						  new_item_cb, user_data);
-
-  if (parent) {
-    gnome_dialog_set_parent (GNOME_DIALOG (sw->dialog), GTK_WINDOW (parent));
-    gtk_window_set_modal(GTK_WINDOW(sw->dialog), TRUE);
-  }
-
-  gtk_signal_connect (GTK_OBJECT (sw->dialog), "close",
-		      GTK_SIGNAL_FUNC (on_close_cb), &result);
-
-  gtk_main ();
-
-  return result;
+				 NULL, NULL, buttons, NULL, NULL, NULL, NULL);
 }

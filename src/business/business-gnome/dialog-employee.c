@@ -37,8 +37,7 @@ typedef enum
 
 struct _employee_select_window {
   GNCBook *	book;
-  GtkWidget *	parent;
-  gboolean	no_close;
+  QueryNew *	q;
 };
 
 struct _employee_window {
@@ -269,22 +268,6 @@ gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data)
   g_free (title);
 }
 
-static int
-gnc_employee_on_close_cb (GnomeDialog *dialog, gpointer data)
-{
-  EmployeeWindow *ew;
-  GncEmployee **created_employee = data;
-
-  if (data) {
-    ew = gtk_object_get_data (GTK_OBJECT (dialog), "dialog_info");
-    *created_employee = ew->created_employee;
-  }
-
-  gtk_main_quit ();
-
-  return FALSE;
-}
-
 static void
 gnc_employee_window_close_handler (gpointer user_data)
 {
@@ -326,7 +309,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static EmployeeWindow *
-gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
+gnc_employee_new_window (GNCBook *bookp,
 			 GncEmployee *employee)
 {
   EmployeeWindow *ew;
@@ -368,11 +351,6 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
 
   /* default to ok */
   gnome_dialog_set_default (ewd, 0);
-
-  if (parent) {
-    gnome_dialog_set_parent (ewd, GTK_WINDOW (parent));
-    gtk_window_set_modal (GTK_WINDOW (ew->dialog), TRUE);
-  }
 
   /* Get entry points */
   ew->id_entry = glade_xml_get_widget (xml, "id_entry");
@@ -523,90 +501,83 @@ gnc_employee_new_window (GtkWidget *parent, GNCBook *bookp,
   return ew;
 }
 
-GncEmployee *
-gnc_employee_new (GtkWidget *parent, GNCBook *bookp)
+EmployeeWindow *
+gnc_ui_employee_new (GNCBook *bookp)
 {
   EmployeeWindow *ew;
-  GncEmployee *created_employee = NULL;
 
   /* Make sure required options exist */
   if (!bookp) return NULL;
 
-  ew = gnc_employee_new_window (parent, bookp, NULL);
+  ew = gnc_employee_new_window (bookp, NULL);
 
-  gtk_signal_connect (GTK_OBJECT (ew->dialog), "close",
-		      GTK_SIGNAL_FUNC (gnc_employee_on_close_cb),
-		      &created_employee);
-
-  gtk_main ();
-
-  return created_employee;
+  return ew;
 }
 
 EmployeeWindow *
-gnc_ui_employee_window_create (GncEmployee *employee)
+gnc_ui_employee_edit (GncEmployee *employee)
 {
   EmployeeWindow *ew;
 
   if (!employee) return NULL;
 
-  ew = gnc_employee_new_window (NULL, gncEmployeeGetBook(employee), employee);
+  ew = gnc_employee_new_window (gncEmployeeGetBook(employee), employee);
 
   return ew;
 }
 
 /* Functions for employee selection widgets */
 
-static gboolean
+static void
 edit_employee_cb (gpointer *employee_p, gpointer user_data)
 {
   GncEmployee *employee;
 
-  g_return_val_if_fail (employee_p && user_data, TRUE);
+  g_return_if_fail (employee_p && user_data);
 
   employee = *employee_p;
 
   if (!employee)
-    return TRUE;
+    return;
 
-  gnc_ui_employee_window_create (employee);
-  return TRUE;
+  gnc_ui_employee_edit (employee);
+  return;
 }
 
-static gboolean
-select_employee_cb (gpointer *employee_p, gpointer user_data)
-{
-  g_return_val_if_fail (employee_p && user_data, TRUE);
-  if (*employee_p)
-    return FALSE;
-  return TRUE;
-}
-
-static gboolean
-new_employee_cb (GtkWidget *parent, gpointer *employee_p, gpointer user_data)
+static gpointer
+new_employee_cb (gpointer user_data)
 {
   struct _employee_select_window *sw = user_data;
+  EmployeeWindow *ew;
   
-  g_return_val_if_fail (employee_p && user_data, TRUE);
+  g_return_val_if_fail (user_data, NULL);
 
-  *employee_p = gnc_employee_new (parent, sw->book);
-  return sw->no_close;
+  ew = gnc_ui_employee_new (sw->book);
+  return ew_get_employee (ew);
 }
 
-static GncEmployee *
-gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
-		     gboolean provide_select)
+static void
+free_employee_cb (gpointer user_data)
 {
-  static GList *params = NULL;
-  gpointer res;
+  struct _employee_select_window *sw = user_data;
+
+  g_return_if_fail (sw);
+
+  gncQueryDestroy (sw->q);
+  g_free (sw);
+}
+
+GNCSearchWindow *
+gnc_employee_search (GncEmployee *start, GNCBook *book)
+{
+  GNCIdType type = GNC_EMPLOYEE_MODULE_NAME;
+  struct _employee_select_window *sw;
   QueryNew *q, *q2 = NULL;
-  GNCSearchCallbackButton buttons[] = { 
-    { N_("Select Employee"), select_employee_cb},
+  static GList *params = NULL;
+  static GNCSearchCallbackButton buttons[] = { 
     { N_("View/Edit Employee"), edit_employee_cb},
     { NULL },
   };
-  GNCIdType type = GNC_EMPLOYEE_MODULE_NAME;
-  struct _employee_select_window sw;
 
   g_return_val_if_fail (book, NULL);
 
@@ -631,34 +602,20 @@ gnc_employee_select (GtkWidget *parent, GncEmployee *start, GNCBook *book,
   }
 
   /* launch select dialog and return the result */
-  sw.book = book;
-  sw.parent = parent;
-  sw.no_close = !provide_select;
-  res = gnc_search_dialog_choose_object (parent, type, params, q, q2,
-					 (provide_select ? buttons :
-					  &(buttons[1])), NULL,
-					 new_employee_cb, &sw);
+  sw = g_new0 (struct _employee_select_window, 1);
+  sw->book = book;
+  sw->q = q;
 
-  gncQueryDestroy (q);
-  return res;
-}
-
-void
-gnc_employee_find (GncEmployee *start, GNCBook *book)
-{
-  gnc_employee_select (NULL, start, book, FALSE);
-}
-
-GncEmployee *
-gnc_employee_choose (GtkWidget *parent, GncEmployee *start, GNCBook *book)
-{
-  return gnc_employee_select (parent, start, book, TRUE);
+  return gnc_search_dialog_create (type, params, q, q2,
+				   buttons, NULL, new_employee_cb,
+				   sw, free_employee_cb);
 }
 
 gpointer gnc_employee_edit_new_select (gpointer bookp, gpointer employee,
 				       GtkWidget *toplevel)
 {
-  return gnc_employee_choose (toplevel, employee, bookp);
+  gnc_employee_search (employee, bookp); /* XXX */
+  return employee;
 }
 
 gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,
@@ -668,6 +625,6 @@ gpointer gnc_employee_edit_new_edit (gpointer bookp, gpointer v,
 
   g_return_val_if_fail (employee != NULL, NULL);
 
-  gnc_ui_employee_window_create (employee);
+  gnc_ui_employee_edit (employee);
   return employee;
 }

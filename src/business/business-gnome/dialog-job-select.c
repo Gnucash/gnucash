@@ -5,6 +5,7 @@
  * Copyright (C) 2001, 2002 Derek Atkins
  */
 
+#if 0
 #include "config.h"
 
 #include <gnome.h>
@@ -188,7 +189,7 @@ gnc_ui_select_job_invoice_cb(GtkButton * button, gpointer user_data)
     return;
 
   gncOwnerInitJob (&owner, w->job);
-  gnc_invoice_find (NULL, &owner, w->book);
+  gnc_invoice_search (NULL, &owner, w->book);
 }
 
 static void
@@ -203,7 +204,13 @@ static void
 gnc_ui_select_job_new_cb(GtkButton * button, gpointer user_data)
 {
   struct select_job_window * w = user_data;
-  GncJob * new_selection = gnc_job_new (w->dialog, &(w->owner), w->book);
+  GncJob * new_selection;
+
+  new_selection = gnc_ui_job_new_return_handle (&(w->owner), w->book);
+
+  /* XXX: we need to get the owner in case we don't already have one,
+   * but we need to wait until it's actually done!
+   */
 
   if (new_selection) {
     gncOwnerCopy (gncJobGetOwner (new_selection), &(w->owner));
@@ -221,7 +228,7 @@ gnc_ui_select_job_edit_cb(GtkButton * button, gpointer user_data)
   if (w->job == NULL)
     return;
 
-  gnc_ui_job_window_create (w->job);
+  gnc_ui_job_edit (w->job);
 }
 
 static void
@@ -394,3 +401,4 @@ gnc_job_choose (GtkWidget * parent, GncJob *start_job,
 {
   return gnc_job_select (parent, start_job, ownerp, book, TRUE);
 }
+#endif

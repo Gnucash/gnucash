@@ -40,6 +40,10 @@ libgncmod_gnome_search_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
 
+  if (!gnc_module_load("gnucash/gnome-utils", 0)) {
+    return FALSE;
+  }
+
   if(refcount == 0) 
   {
     /* initialize known types */
