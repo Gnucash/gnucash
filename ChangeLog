@@ -1,3 +1,49 @@
+2000-08-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): fix a
+	memory leak (xaccTransGetDateStr returns a malloc'd string).
+
+2000-08-07  Dave Peticolas  <dave@krondo.com>
+
+	* src/register/cellblock.c (FreeCellBlockMem): fix memory leaks
+
+2000-07-13  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm: Added checks
+	to reverse balances if global option set.
+
+	* src/guile/gnc.gwp: Added wrapping for gnc_reverse_balance
+
+2000-06-25  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/date-utilities.scm: cleanup.
+
+	* src/scm/report/transaction-report.scm: fix bug in use of
+	timepairs.
+
+2000-06-18  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/command-line.scm: take 'development version' out
+	of the --version string.
+
+	* src/guile/gnucash.c.in: take out the unstable message.
+
+	* rpm/gnucash.spec.in: Take out the japanese translation.
+
+	* src/scm/report/hello-world.scm: take out the testing option
+	to crash the report.
+
+	* src/gnome/window-register.c (gnc_register_create_menu_bar): take
+	out the check printing menu item.
+
+	* src/scm/report/report-list.scm: take out the budget report.
+
+	* src/scm/extensions.scm: Take out the extensions menu.
+
+	* configure.in: bump the version to 1.4.0 and remove the japanese
+	translation from the list of transations. It will be added back in
+	when the translation is finished. Take out the gnome-print check.
+
 2000-06-14  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-item-edit.c (item_edit_show_list):

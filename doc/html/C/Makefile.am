@@ -30,7 +30,6 @@ doc_DATA = \
   xacc-mainwin.html \
   xacc-pnl.html \
   xacc-portfolio_report.html \
-  xacc-print-check.html \
   xacc-print.html \
   xacc-qif-import.html \
   xacc-quicken.html \

@@ -684,7 +684,7 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
         g_return_if_fail (GNUCASH_IS_SHEET(sheet));
 
         gnome_canvas_request_redraw (
-                GNOME_CANVAS (sheet), 0, 0, INT_MAX, INT_MAX);
+                GNOME_CANVAS (sheet), 0, 0, INT_MAX/2 -1, INT_MAX/2 -1);
 }
 
 
