@@ -1079,11 +1079,11 @@
 	    <climb_rate>1</climb_rate>
 	    <digits>0</digits>
 	    <numeric>False</numeric>
-	    <update_policy>GTK_UPDATE_ALWAYS</update_policy>
+	    <update_policy>GTK_UPDATE_IF_VALID</update_policy>
 	    <snap>False</snap>
 	    <wrap>False</wrap>
 	    <value>0</value>
-	    <lower>0</lower>
+	    <lower>1</lower>
 	    <upper>100000</upper>
 	    <step>1</step>
 	    <page>10</page>

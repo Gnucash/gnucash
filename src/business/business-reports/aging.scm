@@ -79,6 +79,9 @@
 (define company-get-owner-obj
   (record-accessor company-info 'owner-obj))
 
+(define company-set-owner-obj!
+  (record-modifier company-info 'owner-obj))
+
 (define company-get-buckets
   (record-accessor company-info 'bucket-vector))
 
@@ -98,14 +101,16 @@
     (gnc:timepair-lt this-date current-bucket))
 
   (define (find-bucket current-bucket bucket-intervals date)  
+    (gnc:debug "looking for bucket for date: " date)
     (begin
-      (gnc:debug "current bucket" current-bucket)
-      (gnc:debug "bucket-intervals" bucket-intervals)
-      (gnc:debug "date" date)
+      (gnc:debug "current bucket: " current-bucket)
+      (gnc:debug "bucket-intervals: " bucket-intervals)
       (if (> current-bucket (vector-length bucket-intervals))
 	  (gnc:error "sanity check failed in find-bucket")
 	  (if (in-interval date (vector-ref bucket-intervals current-bucket))
-	      current-bucket
+	      (begin
+		(gnc:debug "found bucket")
+		current-bucket)
 	      (find-bucket (+ current-bucket 1) bucket-intervals date)))))
 
   (define (calculate-adjusted-values amount overpayment)
@@ -151,10 +156,14 @@
   
   (let ((overpayment (company-get-overpayment company)))
 	;; if there's already an overpayment, make it bigger
+    (gnc:debug "processing payment of " amount)
+    (gnc:debug "overpayment was " overpayment)
+
 	(if (gnc:numeric-positive-p overpayment)
 	    (company-set-overpayment company (gnc:numeric-add-fixed overpayment amount))
 	    
 	    (let ((result (process-payment-driver amount (company-get-buckets company) 0)))
+	      (gnc:debug "payment-driver processed.  new overpayment: " result)
 	      (company-set-overpayment company result)))))
 		  
 		    
@@ -179,8 +188,8 @@
 	    (company-info (hash-ref hash guid)))
 
        (gnc:debug "update-company-hash called")
-       (gnc:debug "guid" guid)
-       (gnc:debug "split-value" value)
+       (gnc:debug "owner: " owner ", guid: " guid)
+       (gnc:debug "split-value: " value)
        (if reverse? (set! value (gnc:numeric-neg value)))
        (if company-info
 	   ;; if it's an existing company, destroy the temp owner and
@@ -202,15 +211,13 @@ more than one currency.  This report is not designed to cope with this possibili
 	   ;; if it's a new company
 	   (begin
 	     (gnc:debug "value" value)
-	     (if (gnc:numeric-negative-p value) ;; if it's a new debt
-		 ;; if not ignore it
-	                                     ;;; XXX: is this right ?
-		 (let ((new-company (make-company this-currency owner)))
+	     (let ((new-company (make-company this-currency owner)))
+	       (if (gnc:numeric-negative-p value)
 		   (process-invoice new-company (gnc:numeric-neg value) bucket-intervals this-date)
-		   (hash-set! hash guid new-company))
-		 (gnc:owner-destroy temp-owner))
+		   (process-payment new-company value))
+	       (hash-set! hash guid new-company))
 	     (cons #t guid))))
-
+     
      ; else (no owner)
      (gnc:owner-destroy temp-owner))))
 
@@ -443,8 +450,8 @@ totals to report currency")
 	 column-totals)))
 
   ;; convert the buckets in the header data structure 
-  (define (convert-to-monetary-list bucket-list currency)
-    (let* ((running-total (gnc:numeric-zero))
+  (define (convert-to-monetary-list bucket-list currency overpayment)
+    (let* ((running-total (gnc:numeric-neg overpayment))
 	   (monetised-buckets
 	   (map (lambda (bucket-list-entry)
 		  (begin
@@ -562,6 +569,8 @@ totals to report currency")
 					       (company-get-buckets
 						(cdr company-list-entry))
 					       (company-get-currency
+						(cdr company-list-entry))
+					       (company-get-overpayment
 						(cdr company-list-entry))))
 			       (owner (company-get-owner-obj
 				       (cdr company-list-entry)))

@@ -1,3 +1,11 @@
+2003-05-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-reports/aging.scm:
+	  - Deal with the case where the first transaction found for a
+	    particular company is a payment (it used to just ignore it!
+	    Oops!  That throws off all the numbers...)
+	  - Also print out any overpayment in the total column.
+
 2003-05-24  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/dialog-options.c: back out previous change.
