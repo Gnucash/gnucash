@@ -175,10 +175,6 @@ gboolean xaccSRSaveRegEntry (SplitRegister *reg, gboolean do_commit);
  *    other split that belongs to this same tansaction. */
 void     xaccSRRedrawRegEntry (SplitRegister *reg);
 
-/* The xaccSRLoadXferCells() method loads (or reloads) the transfer
- *    cells with appropriate entries. */
-void     xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
-
 /* The xaccSRHasPendingChanges() method returns TRUE if the register
  *    has changed cells that have not been committed. */
 gboolean xaccSRHasPendingChanges (SplitRegister *reg);
@@ -204,6 +200,9 @@ void     xaccSetSplitRegisterColorizeNegative (gboolean use_red);
 
 /* Expand the current transaction if it is collapsed. */
 void     xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand);
+
+/* Return TRUE if current trans is expanded and style is REG_STYLE_LEDGER. */
+gboolean xaccSRCurrentTransExpanded (SplitRegister *reg);
 
 /* Private function, for MultiLedger.c only */
 const char * xaccSRGetEntryHandler (VirtualLocation virt_loc,

@@ -59,6 +59,7 @@ static void gnucash_sheet_stop_editing (GnucashSheet *sheet);
 enum
 {
         ACTIVATE_CURSOR,
+        REDRAW_ALL,
         LAST_SIGNAL
 };
 
@@ -554,6 +555,8 @@ gnucash_sheet_redraw_all (GnucashSheet *sheet)
 
         gnome_canvas_request_redraw (GNOME_CANVAS (sheet), 0, 0,
                                      sheet->width + 1, sheet->height + 1);
+
+        gtk_signal_emit_by_name (GTK_OBJECT (sheet->reg), "redraw_all");
 }
 
 
@@ -2127,8 +2130,20 @@ gnucash_register_class_init (GnucashRegisterClass *class)
                                gtk_marshal_NONE__NONE,
                                GTK_TYPE_NONE, 0);
 
+        register_signals[REDRAW_ALL] =
+                gtk_signal_new("redraw_all",
+                               GTK_RUN_LAST,
+                               object_class->type,
+                               GTK_SIGNAL_OFFSET(GnucashRegisterClass,
+                                                 redraw_all),
+                               gtk_marshal_NONE__NONE,
+                               GTK_TYPE_NONE, 0);
+
         gtk_object_class_add_signals(object_class, register_signals,
                                      LAST_SIGNAL);
+
+        class->activate_cursor = NULL;
+        class->redraw_all = NULL;
 }
 
 

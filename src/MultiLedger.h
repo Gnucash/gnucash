@@ -56,7 +56,6 @@ struct _xaccLedgerDisplay
   SplitRegister *ledger;         /* main ledger window                      */
   gpointer gui_hook;             /* GUI-specific state                      */
 
-  void (*redraw) (xaccLedgerDisplay *); /* redraw callback                  */
   void (*destroy) (xaccLedgerDisplay *); /* destroy callback                */
   gncUIWidget (*get_parent) (xaccLedgerDisplay *); /* get parent widget     */
   void (*set_help) (xaccLedgerDisplay *, const char *); /* help string      */
@@ -91,11 +90,6 @@ void        xaccTransDisplayRefresh (Transaction *trans);
  * thing, they differ only by the argument they take. */
 void        xaccLedgerDisplayRefresh (xaccLedgerDisplay * ledger_display);
 void        xaccRegisterRefresh (SplitRegister *reg);
-
-/* Call the user refresh callback for all registers. This does not
- * perform a full refresh, i.e., it does not reload transactions.
- * This is just for updating gui controls.  */
-void        xaccRegisterRefreshAllGUI (void);
 
 /* close the window */
 void        xaccLedgerDisplayClose (xaccLedgerDisplay * ledger_display);

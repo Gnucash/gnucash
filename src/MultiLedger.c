@@ -389,7 +389,6 @@ xaccLedgerDisplayGeneral (Account *lead_account, GList *accounts,
     regData = (xaccLedgerDisplay *) malloc (sizeof (xaccLedgerDisplay));
 
   regData->leader = lead_account;
-  regData->redraw = NULL;
   regData->destroy = NULL;
   regData->get_parent = NULL;
   regData->set_help = NULL;
@@ -473,31 +472,6 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
   xaccSRLoadRegister (regData->ledger, 
                       xaccQueryGetSplits (regData->query),
                       regData->leader);
-
-  /* hack alert -- this computation of totals is incorrect 
-   * for multi-account ledgers */
-
-  /* OK, now tell this specific GUI window to redraw itself ... */
-  if (regData->redraw)
-    (regData->redraw) (regData);
-}
-
-/********************************************************************\
- * refresh all the register windows, but only with the gui callback *
-\********************************************************************/
-
-void 
-xaccRegisterRefreshAllGUI (void)
-{
-  xaccLedgerDisplay *ledger_display;
-  GList *node;
-
-  for (node = fullList; node; node = g_list_next(node))
-  {
-    ledger_display = node->data;
-    if (ledger_display->redraw)
-      (ledger_display->redraw) (ledger_display);
-  }
 }
 
 /********************************************************************\

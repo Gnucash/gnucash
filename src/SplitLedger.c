@@ -248,6 +248,7 @@ static void xaccSRSetTransVisible (SplitRegister *reg,
                                    VirtualCellLocation vcell_loc,
                                    gboolean visible,
                                    gboolean only_blank_split);
+static void xaccSRLoadXferCells (SplitRegister *reg, Account *base_account);
 
 
 /** implementations *******************************************************/
@@ -787,12 +788,30 @@ xaccSRExpandCurrentTrans (SplitRegister *reg, gboolean expand)
     }
   }
 
+  info->trans_expanded = expand;
+
+  gnc_table_set_virt_cell_cursor (reg->table,
+                                  reg->table->current_cursor_loc.vcell_loc,
+                                  sr_get_active_cursor (reg));
   xaccSRSetTransVisible (reg, reg->table->current_cursor_loc.vcell_loc,
                          expand, FALSE);
 
   gnc_table_refresh_gui (reg->table);
+}
 
-  info->trans_expanded = expand;
+gboolean
+xaccSRCurrentTransExpanded (SplitRegister *reg)
+{
+  SRInfo *info = xaccSRGetInfo (reg);
+
+  if (!reg)
+    return FALSE;
+
+  if (reg->style == REG_STYLE_AUTO_LEDGER ||
+      reg->style == REG_STYLE_JOURNAL)
+    return FALSE;
+
+  return info->trans_expanded;
 }
 
 /* ======================================================== */
@@ -942,7 +961,8 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
   /* in the mult-line and dynamic modes, we need to hide the old
    * and show the new. */
   if (((REG_STYLE_AUTO_LEDGER == reg->style) ||
-       (REG_STYLE_JOURNAL     == reg->style)) &&
+       (REG_STYLE_JOURNAL     == reg->style) ||
+       info->trans_expanded) &&
       (old_trans_split != new_trans_split))
   {
     VirtualCellLocation vc_loc;
@@ -953,11 +973,17 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
     xaccSRSetTransVisible (reg, vc_loc, FALSE,
                            reg->style == REG_STYLE_JOURNAL);
 
-    xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, &vc_loc);
-    gnc_table_set_virt_cell_cursor (table, vc_loc,
-                                    sr_get_active_cursor (reg));
-    xaccSRSetTransVisible (reg, vc_loc, TRUE,
-                           reg->style == REG_STYLE_JOURNAL);
+    if ((REG_STYLE_AUTO_LEDGER == reg->style) ||
+        (REG_STYLE_JOURNAL     == reg->style))
+    {
+      xaccSRGetTransSplit (reg, new_virt_loc.vcell_loc, &vc_loc);
+      gnc_table_set_virt_cell_cursor (table, vc_loc,
+                                      sr_get_active_cursor (reg));
+      xaccSRSetTransVisible (reg, vc_loc, TRUE,
+                             reg->style == REG_STYLE_JOURNAL);
+    }
+
+    info->trans_expanded = FALSE;
 
     do_refresh = TRUE;
   }
@@ -4237,6 +4263,8 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
   table->user_data = reg;
 
   reg->destroy = LedgerDestroy;
+
+  xaccSRLoadXferCells (reg, default_source_acc);
 }
 
 /* ======================================================== */
@@ -4316,7 +4344,7 @@ xaccLoadXferCell (ComboCell *cell,
 
 /* ======================================================== */
 
-void
+static void
 xaccSRLoadXferCells (SplitRegister *reg, Account *base_account)
 {
   AccountGroup *group;

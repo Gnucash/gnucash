@@ -208,7 +208,7 @@ gnc_table_refresh_cursor_gui (Table * table,
         if (gnc_table_virtual_cell_out_of_bounds (table, vcell_loc))
                 return;
 
-        sheet = GNUCASH_SHEET(table->ui_data);
+        sheet = GNUCASH_SHEET (table->ui_data);
 
         gnucash_sheet_cursor_set_from_table (sheet, do_scroll);
         if (gnucash_sheet_block_set_from_table (sheet, vcell_loc))
@@ -216,7 +216,7 @@ gnc_table_refresh_cursor_gui (Table * table,
                 g_warning ("woops");
                 gnucash_sheet_recompute_block_offsets (sheet);
                 gnucash_sheet_set_scroll_region (sheet);
-                gnucash_sheet_compute_visible_range(sheet);
+                gnucash_sheet_compute_visible_range (sheet);
                 gnucash_sheet_redraw_all (sheet);
         }
         else

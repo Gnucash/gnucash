@@ -56,7 +56,8 @@ typedef struct
 } SheetBlock;
 
 
-typedef struct {
+typedef struct
+{
         GnomeCanvas canvas;
 
         GtkWidget *window;
@@ -190,15 +191,18 @@ void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
 
 
-typedef struct {
+typedef struct
+{
         GnomeCanvasClass parent_class;
 } GnucashSheetClass;
 
 
-typedef struct {
+typedef struct
+{
         GtkTableClass parent_class;
 
         void (*activate_cursor) (GnucashRegister *reg);
+        void (*redraw_all)      (GnucashRegister *reg);
 } GnucashRegisterClass;
 
 #endif
