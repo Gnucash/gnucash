@@ -83,8 +83,7 @@ const char *void_former_notes_str = "void-former-notes";
 
 #define PRICE_SIGFIGS 6
 
-#define ISO_DATELENGTH 30 /* length of an iso 8601 date string.
-                           * not sure, can't be bothered counting :) */
+#define ISO_DATELENGTH 32 /* length of an iso 8601 date string. */
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_ENGINE;

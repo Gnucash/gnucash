@@ -1,3 +1,9 @@
+2003-09-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/gnc-date.h: add a comment about minimum string length
+	* src/engine/Transaction.c: fix the ISO_DATELEN to be "long enough"
+	  Fixes #123558
+
 2003-09-18  Christian Stimming  <stimming@tuhh.de>
 
 	* configure.in: Add correct configure test for openhbci version
