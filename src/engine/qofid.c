@@ -227,7 +227,7 @@ qof_entity_lookup (QofEntityTable *entity_table,
   return e_node->entity;
 }
 
-static GHashTable *
+static inline GHashTable *
 entity_get_types_table (QofEntityTable *entity_table, QofIdType entity_type)
 {
   GHashTable *ht;
@@ -238,7 +238,11 @@ entity_get_types_table (QofEntityTable *entity_table, QofIdType entity_type)
 
   ht = g_hash_table_new (id_hash, id_compare);
   g_assert(ht);
-  g_hash_table_insert (entity_table->hash_of_types, (gpointer)entity_type, ht);
+  /* XXX should use string_cache instead of strdup */
+  /* Need strdup because values are sometimes freed */
+  /* this is a memory leak, since malloc'ed value is not freed */
+  g_hash_table_insert (entity_table->hash_of_types, 
+          (gpointer)g_strdup(entity_type), ht);
   return ht;
 }
 
