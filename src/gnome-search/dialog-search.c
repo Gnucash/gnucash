@@ -50,6 +50,10 @@ struct _GNCSearchWindow {
   /* The Select button */
   GtkWidget *	select_button;
 
+  /* The close/cancel buttons */
+  GtkWidget *	close_button;
+  GtkWidget *	cancel_button;
+
   /* Callbacks */
   GNCSearchResultCB result_cb;
   GNCSearchNewItemCB new_item_cb;
@@ -94,14 +98,20 @@ static void search_clear_criteria (GNCSearchWindow *sw);
 static void gnc_search_dialog_display_results (GNCSearchWindow *sw);
 
 static void
+gnc_search_callback_button_execute (GNCSearchCallbackButton *cb,
+				    GNCSearchWindow *sw)
+{
+  if (cb->cb_fcn)
+    (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
+}
+
+static void
 gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 {
   GNCSearchCallbackButton *cb;
 
   cb = gtk_object_get_data (GTK_OBJECT (button), "data");
-
-  if (cb->cb_fcn)
-    (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
+  gnc_search_callback_button_execute (cb, sw);
 }
 
 static void
@@ -126,7 +136,19 @@ gnc_search_dialog_select_row_cb (GtkCList *clist, gint row, gint column,
   GNCSearchWindow *sw = user_data;
   sw->selected_item = gtk_clist_get_row_data (clist, row);
 
-  /* XXX: Handle the Event */
+  /* If we double-click an item, then either "select" it, or run it
+   * through the first button (which should be view/edit
+   */
+  if (event && event->type == GDK_2BUTTON_PRESS) {
+    if (sw->selected_cb)
+      /* Select the time */
+      gnc_search_dialog_select_cb (NULL, sw);
+    else if (sw->buttons)
+      /* Call the first button (usually view/edit) */
+      gnc_search_callback_button_execute (sw->buttons, sw);
+
+    /* If we get here, then nothing to do for a double-click */
+  }
 }
 
 static void
@@ -431,6 +453,18 @@ search_update_query (GNCSearchWindow *sw)
 
   /* And save the new one */
   sw->q = new_q;
+}
+
+static void
+gnc_search_dialog_show_close_cancel (GNCSearchWindow *sw)
+{
+  if (sw->selected_cb) {
+    gtk_widget_show_all (sw->cancel_button);
+    gtk_widget_hide_all (sw->close_button);
+  } else {
+    gtk_widget_hide_all (sw->cancel_button);
+    gtk_widget_show_all (sw->close_button);
+  }
 }
 
 static void
@@ -813,6 +847,10 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   sw->add_rb = glade_xml_get_widget (xml, "add_search_radiobutton");
   sw->del_rb = glade_xml_get_widget (xml, "delete_search_radiobutton");
 
+  /* Deal with the cancel button */
+  sw->cancel_button = glade_xml_get_widget (xml, "cancel_button");
+  sw->close_button = glade_xml_get_widget (xml, "close_button");
+
   /* Deal with the new_item button */
   new_item_button = glade_xml_get_widget (xml, "new_item_button");
   {
@@ -844,6 +882,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_cancel_cb",
 				 GTK_SIGNAL_FUNC (search_cancel_cb), sw);
+
+  glade_xml_signal_connect_data (xml, "gnc_ui_search_close_cb",
+				 GTK_SIGNAL_FUNC (search_cancel_cb), sw);
   
   glade_xml_signal_connect_data (xml, "gnc_ui_search_help_cb",
 				 GTK_SIGNAL_FUNC (search_help_cb), sw);
@@ -858,6 +899,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 		      GTK_SIGNAL_FUNC (gnc_search_dialog_close_cb), sw);
 
   gnc_search_dialog_reset_widgets (sw);
+  gnc_search_dialog_show_close_cancel (sw);
 }
 
 void
@@ -965,6 +1007,9 @@ void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
     else
       gtk_widget_hide_all (sw->select_button);
   }
+
+  /* Show the proper close/cancel button */
+  gnc_search_dialog_show_close_cancel (sw);
 }
 
 /* TEST CODE BELOW HERE */

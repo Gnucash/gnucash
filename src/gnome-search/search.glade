@@ -77,7 +77,7 @@
 
       <widget>
 	<class>GtkButton</class>
-	<name>button34</name>
+	<name>cancel_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<signal>
@@ -87,6 +87,20 @@
 	  <last_modification_time>Thu, 07 Feb 2002 02:22:27 GMT</last_modification_time>
 	</signal>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>close_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<signal>
+	  <name>clicked</name>
+	  <handler>gnc_ui_search_cancel_cb</handler>
+	  <data>Search Dialog</data>
+	  <last_modification_time>Thu, 07 Feb 2002 02:22:27 GMT</last_modification_time>
+	</signal>
+	<stock_button>GNOME_STOCK_BUTTON_CLOSE</stock_button>
       </widget>
 
       <widget>
@@ -105,7 +119,7 @@
 
       <widget>
 	<class>GtkButton</class>
-	<name>button35</name>
+	<name>button36</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<signal>
