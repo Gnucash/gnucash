@@ -5,7 +5,7 @@
  * FUNCTION:
  * Implement accounting periods.
  *
- * CAUTION: this is currently a non-functioning, experimental implementation
+ * CAUTION: this is currently a semi-functional, untested implementation
  * of the design described in src/doc/book.txt
  *
  * HISTORY:
@@ -26,12 +26,12 @@
  *    book into two books, returning a newly created book with 
  *    the older transactions placed in it. 
  *
--- It will use the /book/blah-blah kvp value to denote xxx.
 -- Make an equity transfer so that we can carry forward the balances.
 -- hack alert -- should not allow closed books to have unreconciled
    transactions ???
+-- It will use the following kvp entries in /book/:
 
-Implemented:
+Implemented in book:
 /book/start-date        earliest date in this book.
 /book/end-date          latest date in this book. must not change ...
 /book/close-date        date on which book was closed.
@@ -43,6 +43,9 @@ Mot imlemented (yet):
 /book/name=some-user-supplied-name
 /book/notes=user-supplied-descriptive-comments
 /book/accounting-period=enum {none, week, month, quarter, trimester, year}
+
+To go into account:
+/book/balancing-trans  GUID of equity-balancing transaction.
 
 
  */

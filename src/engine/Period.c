@@ -5,7 +5,7 @@
  * FUNCTION:
  * Implement accounting periods.
  *
- * CAUTION: this is currently a non-functioning, experimental implementation
+ * CAUTION: this is currently a semi-functional, untested implementation
  * of the design described in src/doc/book.txt
 
 Open questions: how do we deal with the backends ???
@@ -28,7 +28,7 @@ Open questions: how do we deal with the backends ???
 static short module = MOD_ENGINE;
 
 /* ================================================================ */
-/* reparent transaction to new book, and do it so backends 
+/* Reparent transaction to new book, and do it so backends 
  * handle it correctly.
 */
 
@@ -132,6 +132,78 @@ gnc_book_partition (GNCBook *existing_book, Query *query)
 }
 
 /* ================================================================ */
+/* find nearest equity account */
+
+static Account *
+find_nearest_equity_acct (Account *acc)
+{
+   AccountList *acc_list, *node;
+   AccountGroup *parent;
+   Account *next_up, *candidate;
+
+   /* see if we can find an equity account that is peered to this account */
+   parent = xaccAccountGetParent (acc);
+   g_return_val_if_fail (parent, NULL);
+
+   acc_list = xaccGroupGetAccountList (parent);
+   for (node=acc_list; node; node=node->next)
+   {
+      candidate = (Account *) node->data;
+      if (EQUITY == xaccAccountGetType (candidate)) return candidate;
+   }
+
+   /* If we got to here, we did not find a peer equity account. 
+    * So go up one layer, and look there */
+   next_up = xaccGroupGetParentAccount (parent);
+   if (next_up) 
+   {
+      candidate = find_nearest_equity_acct (next_up);
+      if (candidate) return candidate;
+   }
+
+   /* If we got to here, then we are at the top group, and there is no 
+    * equity account to be found.  So we need to create one. */
+   
+   candidate = xaccMallocAccount (xaccGroupGetBook(parent));
+   xaccAccountBeginEdit (candidate);
+   xaccGroupInsertAccount (parent, candidate);
+   xaccAccountSetType (candidate, EQUITY);
+   xaccAccountSetName (candidate, xaccAccountGetTypeStr(EQUITY));
+   xaccAccountCommitEdit (candidate);
+   
+   return candidate;
+}
+
+/* ================================================================ */
+/* traverse all accounts, get account balances */
+
+static void
+add_closing_balances (AccountGroup *closed_grp, GNCBook *open_book)
+{
+   AccountList *acc_list, *node;
+
+   /* walk accounts in closed book */
+   acc_list = xaccGroupGetAccountList (closed_grp);
+   for (node=acc_list; node; node=node->next)
+   {
+      Account * candidate = (Account *) node->data;
+      GNCAccountType tip = xaccAccountGetType (candidate);
+
+      if (EQUITY == tip)
+      {
+      }
+   }
+
+#if 0
+   for each
+
+   
+
+#endif
+}
+
+/* ================================================================ */
+/* split a book into two by date */
 
 GNCBook * 
 gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date)
@@ -157,16 +229,18 @@ gnc_book_calve_period (GNCBook *existing_book, Timespec calve_date)
    exist_cwd = kvp_frame_get_frame_slash (existing_book->kvp_data, "/book/");
    partn_cwd = kvp_frame_get_frame_slash (partition_book->kvp_data, "/book/");
    
+   /* Mark the boundary date between the books */
    vvv = kvp_value_new_timespec (calve_date);
    kvp_frame_set_slot_nc (exist_cwd, "start-date", vvv);
    kvp_frame_set_slot_nc (partn_cwd, "end-date", vvv);
 
-   /* mark partition as being closed */
+   /* Mark partition as being closed */
    ts.tv_sec = time(0);
    ts.tv_nsec = 0;
    vvv = kvp_value_new_timespec (ts);
    kvp_frame_set_slot_nc (partn_cwd, "close-date", vvv);
 
+   /* Set up pointers to each book from the other. */
    vvv = kvp_value_new_guid (&existing_book->guid);
    kvp_frame_set_slot_nc (partn_cwd, "next-book", vvv);
 
