@@ -548,14 +548,15 @@ readTransaction( int fd, Account *acc, int token )
     return NULL;
     }
   
-  /* What used to be reconciled, is now cleared... transactions
-   * aren't reconciled until you get your bank statement, and
-   * use the reconcile window to mark the transaction reconciled */
-  /* hack alert -- ?????????? I don't get it ???????????? */
-  if( 0 <= token )
-    if( trans->reconciled == YREC )
-      trans->reconciled = CREC;
-  
+  if( 1 >= token ) {
+    /* Note: this is for version 0 of file format only.
+     * What used to be reconciled, is now cleared... transactions
+     * aren't reconciled until you get your bank statement, and
+     * use the reconcile window to mark the transaction reconciled
+     */
+    if( trans->reconciled == YREC ) trans->reconciled = CREC;
+  }
+
   /* make sure the value of trans->reconciled is valid...
    * I have to do this mainly for if I change what NREC and
    * YREC are defined to be... this way it might loose all
