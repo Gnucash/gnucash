@@ -1,0 +1,20 @@
+
+This directory contains very broken, very experimental code
+for sql support.  It doesn't work.  The instructions bwlow are for
+developers who want to hack this code.
+
+1) Install postgresl server, client and devel packages.
+2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
+   will setup and initialize all first-time setup & config.
+3) as root, su - postgres then run 'createuser' to add your user id
+
+4) run the script gnc-init.sh
+
+
+
+Development Notes
+-----------------
+Just about everything done in this demo is wrong.
+-- primary keeys need to be built
+-- 
+
