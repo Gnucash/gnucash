@@ -24,6 +24,7 @@ TESTS = \
   test-commodities \
   test-date \
   test-group-vs-book \
+  test-lots \
   test-object \
   test-period \
   test-querynew \
@@ -54,6 +55,7 @@ noinst_PROGRAMS = \
   test-freq-spec \
   test-group-vs-book \
   test-load-engine \
+  test-lots \
   test-object \
   test-period \
   test-query \
