@@ -1,3 +1,6 @@
+ABOUT-NLS
+COPYING
+INSTALL
 Makefile
 Makefile.in
 aclocal.m4
@@ -9,14 +12,16 @@ config.log
 config.status
 config.h
 config.h.in
+install-sh
+libtool
 ltconfig
 ltmain.sh
+make-gnucash-patch
+stamp-h
+stamp-h.in
 *.tar.gz
 *.log
 *.patch
 *.diff
 *.diffs
 *.xac.*.xac
-make-gnucash-patch
-stamp-h
-libtool
