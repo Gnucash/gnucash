@@ -343,9 +343,7 @@
                 (set! accounts
                       (delete-duplicates (append accounts subaccts)))))
 
-          (gnc:query-add-account-match 
-           query (gnc:list->glist accounts) 
-           'acct-match-any 'query-and)
+          (gnc:query-add-account-match query accounts 'acct-match-any 'query-and)
           
           ;; match splits between start and end dates 
           (gnc:query-add-date-match-timepair
@@ -354,8 +352,7 @@
            query 'by-date 'by-standard 'by-none)
           
           ;; get the query results 
-          (set! splits (gnc:glist->list (gnc:query-get-splits query)
-                                        <gnc:Split*>))
+          (set! splits (gnc:query-get-splits query))
           
           ;; find the net starting balance for the set of accounts 
           (set! startbal 
