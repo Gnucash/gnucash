@@ -1775,7 +1775,7 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                 for ( insts = tct->instanceList;
                       insts;
                       insts = insts->next ) {
-                        gboolean allVarsBound;
+                        gboolean allVarsBound = FALSE;
 
                         tci = (toCreateInstance*)insts->data;
                 
@@ -1794,16 +1794,16 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
 
                         switch ( tci->state ) {
                         case TO_CREATE:
-                                allVarsBound = TRUE;
-                                g_hash_table_foreach( tci->varBindings,
-                                                      andequal_numerics_set,
-                                                      &allVarsBound );
-                                rowText[1] = ( allVarsBound
-                                               ? _( "Ready to create" )
-                                               /* READY_TEXT */ 
-                                               : _( "Needs values for variables" )
-                                               /* NEEDS_BINDINGS_TEXT */ );
-                                break;
+                            allVarsBound = TRUE;
+                            g_hash_table_foreach( tci->varBindings,
+                                                  andequal_numerics_set,
+                                                  &allVarsBound );
+                            rowText[1] = ( allVarsBound
+                                           ? _( "Ready to create" )
+                                           /* READY_TEXT */ 
+                                           : _( "Needs values for variables" )
+                                           /* NEEDS_BINDINGS_TEXT */ );
+                            break;
                         case IGNORE:
                             rowText[1] = _( "Ignored" ) /* IGNORE_TEXT */ ;
                             break;
@@ -1811,7 +1811,7 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                             rowText[1] = _( "Postponed" ) /* POSTPONE_TEXT */ ;
                             break;
                         default:
-                                g_assert( FALSE );
+                            g_assert( FALSE );
                         }
                                 
                         tci->node = gtk_ctree_insert_node( ct, sxNode, NULL,
