@@ -1,11 +1,43 @@
 
-This directory contains code for SQL/Postgres support.  The
-SQL backend allows multiple users to view/edit the same data
-at the same time, as well as allowing a single user to 
-keep data in an SQL database.  This code is 'beta': it seems
-to work, but really has not been heavily tested by lots
-of users, and may still contain bugs.  See also the 
-'to be done' list at the bottom.
+         GnuCash SQL/Postgres Support/HOWTO
+         ----------------------------------
+
+This directory contains code for SQL/Postgres support.  
+
+The SQL backend allows multiple users to view/edit the same data
+at the same time, as well as allowing a single user to keep data 
+in an SQL database.  
+
+
+Status
+------
+The SQL code has been "finished" for many years, and hasn't been 
+in recent active development.  This means that the current SQL 
+backend does not support some of the newer GnuCash features; 
+in particular, it doesn't support the business objects needed for
+the business accounting. It also doesn't currently support 
+scheduled/recurring transactions.  Although the development is
+currently dormant, we beleive that it may heat up real soon, 
+since there is a core group of developers who are interested 
+in making SQL the default for all future versions of GnuCash.
+
+As long as development is dormant, note that you may not get
+prompt support on the mailing list, and, if you find bugs, they
+might not be fixed quickly.
+
+Currently, only postgres is supported, but other databases are 
+planned.  See also the 'to be done' list at the bottom for more 
+detail.
+
+Table of Contents
+-----------------
+-- Postgres Install Instructions
+-- GnuCash Build Instructions
+-- How To Use GnuCash with Postgres
+-- Remote Access
+-- Access Modes
+-- Performance
+-- ToDo List
 
 
 Postgres Install Instructions
@@ -13,9 +45,9 @@ Postgres Install Instructions
 1) Install PostgresSQL server, client and devel packages.
    (Both the 6.x and the 7.x versions of Postgres should work).
 
-2) if installed from redhat, then running /etc/rc.d/init.d/postgresql 
+2) If installed from RedHat, then running /etc/rc.d/init.d/postgresql 
    will setup and initialize basic Postgres first-time setup & config.
-3) as root, 'su - postgres' then run 'createuser' to add your user id
+3) As root, 'su - postgres' then run 'createuser' to add your user id
    (don't set a password on your postgres db name, yet, GnuCash doesn't 
    have a GUI to ask for your password yet)
    If you've forgotten what users are on the system, you can check
@@ -76,45 +108,49 @@ Same as usual, but you must specify the flag '--enable-sql' in order
 to build in Postgres support.  
 i.e. 
 ./configure --enable-sql
-and then 'make'.
+and then 'make' and then 'make install'
 
 
-How To Use This Thing
----------------------
+How To Use GnuCash with Postgres
+--------------------------------
 a) Open your favorite datafile in the usual fashion.
 b) Click on 'Save As'
-c) enter the following URL instead of a filename in the file picker:
+c) Enter the following URL instead of a filename in the file picker:
     postgres://localhost/some_dbname_you_pick
 
 The above steps will copy your data into that database.  You can 
 then restart gnucash (or keep working) and type in the same URL
 in the file open dialogs.  Or try it on the command line:
 
-/usr/local/bin/gnucash postgres://localhost/dbname_whatever
+home:~ $ gnucash postgres://localhost/dbname_whatever
 
 Note: GnuCash will automatically create the database if it does
 not already exist. Do *not* try to create the database by hand,
 or to specify a database that wasn't created by GnuCash.  
 
-Warning: the postgres backend is in active development, 
-and occasionally the database format changes in a way that is
-not backwards compatible.  If you have data that you want to 
-move from older to newer versions, you can do the following:
--- start up older version of gnucash, open your postgres://...
-   URL.
--- 'save as' to an ordinary gnucash file (its a flat XML file)
--- exit the program.
--- start the newer version of gnucash, open the XML file.
--- 'save as' a new postgres database. (be sure to pick a new name).
-   
+You can also "copy" from the SQL database to an XML file. 
+If you don't trust the SQL backend, this might be a good way to
+backup your data.  To do this:
+
+a) Open the SQL database in "single user mode":
+   postgres://localhost/dbname_whatever?mode=single-update
+   It is important to specify the single-user mode
+   (if you don't, not all of your data will be saved to the file)
+b) Click on 'Save As' and enter an ordinary file name.
+
+We promise that future versions of GnuCash will be backwards
+compatible with the current SQL database layout.  There is a 
+specific upgrade module designed into the system that handles
+version upgrades.  
+
 
 Remote Access
 -------------
 In principle, you can use URL's such as:
 postgres://some.where.com/dbname
 However, these URL's require that the host 'some.where.com' have
-TCPIP access enabled (by following instructions (6) above).
-This is true even if the hostname is your local machine.  Thus,
+TCPIP access enabled (by following the postgres install instruction (6) 
+above).  This is true even if the hostname is your local machine.  Thus,
 unless you've setup Postgres TCPIP connections, you *MUST* use
 URL's of the form postgres://localhost/dbname
 
@@ -209,7 +245,7 @@ probably fix any weird account balances you are seeing.
 a test case that can reliably recreate these, you should
 submit a bug report).
 
-(Note to developers: think of this as an fsck: balances
+(Note to developers: think of this as a safe fsck: balances
 shouldn't get wacky, but if you've been running a long time
 and something weird has happened, then a periodic cleanup 
 is good to have.  Maybe this should be automated ...)
@@ -261,9 +297,27 @@ To Be Done
 ----------
 Core bugs/features that still need work:
 
-(none in this list are truly critical at this point, except possibly
+High Priority:
+--------------
+Currently, the databasse backend is completely missing support for
+"lots", and thus cannot support capital gains computations.  It is 
+also missing support for business objects.
+
+-- remove the bogus 'price query' call in the backend, change it to 
+   use the qof query infrastructure.
+
+-- port to use SQLLite as a possible backend.  Will need to  abandon
+   balance checkpoints to do this.
+
+
+Medium/Low Priority Work:
+-------------------------
+Nothing in this list is truly critical at this point, except possibly
 the username/password dialog, and its effect with regards to initial db
-access).
+access.
+
+-- port to use libdbi bindings, instead of the postgres native
+   call interface.  This should be easy.
 
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).  
