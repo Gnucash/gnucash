@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.3.8\n"
-"POT-Creation-Date: 2000-09-11 00:21-0700\n"
-"PO-Revision-Date: 2000-06-01 09:03+02:00\n"
+"Project-Id-Version: 1.4.5\n"
+"POT-Creation-Date: 2000-06-18 18:39-0700\n"
+"PO-Revision-Date: 2000-09-17 09:18+02:00\n"
 "Last-Translator: Dennis Björklund <dennisb@cs.chalmers.se>\n"
 "Language-Team: Sv <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgid ""
 "from %s to %s.\n"
 "Are You Sure?\n"
 msgstr ""
-"Det är farligt att ändra säkertheten\n"
+"Det är farligt att ändra säkerheten\n"
 "på ett konto. Du ville ändra det\n"
 "från %s till %s.\n"
 "Är du säker?\n"
@@ -242,7 +242,7 @@ msgstr ""
 # messages-i18n.c:34
 # messages-i18n.c:35
 #: messages-i18n.c:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error writing the file\n"
 "     %s\n"
@@ -250,12 +250,14 @@ msgid ""
 "%s"
 msgstr ""
 "Det var ett fel vid skrivning till filen\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 
 # messages-i18n.c:35
 # messages-i18n.c:36
 #: messages-i18n.c:36
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error opening the file\n"
 "     %s\n"
@@ -263,12 +265,14 @@ msgid ""
 "%s"
 msgstr ""
 "Det var ett fel vid öppning av filen\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 
 # messages-i18n.c:36
 # messages-i18n.c:37
 #: messages-i18n.c:37
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error closing the file\n"
 "     %s\n"
@@ -276,7 +280,9 @@ msgid ""
 "%s"
 msgstr ""
 "Det var ett fel vid stängning av filen\n"
-"     %s."
+"     %s\n"
+"\n"
+"%s"
 
 # messages-i18n.c:37
 # messages-i18n.c:38
@@ -362,38 +368,46 @@ msgstr "Du behöver installera gnome-print."
 # messages-i18n.c:44
 # messages-i18n.c:45
 #: messages-i18n.c:45
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file load failed:\n"
 "%s"
-msgstr "QIF-fil kunde inte läsas in. %s"
+msgstr ""
+"Kunde inte läsa in QIF-fil:\n"
+"%s"
 
 # messages-i18n.c:44
 # messages-i18n.c:45
 #: messages-i18n.c:46
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file load warning:\n"
 "%s"
-msgstr "QIF-fil kunde inte läsas in. %s"
+msgstr ""
+"Varning vid inläsning av QIF-fil:\n"
+"%s"
 
 # messages-i18n.c:44
 # messages-i18n.c:45
 #: messages-i18n.c:47
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file parse failed:\n"
 "%s"
-msgstr "QIF-fil kunde inte läsas in. %s"
+msgstr ""
+"Misslyckades att tolka QIF-fil:\n"
+"%s"
 
 # messages-i18n.c:44
 # messages-i18n.c:45
 #: messages-i18n.c:48
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "QIF file parse warning:\n"
 "%s"
-msgstr "QIF-fil kunde inte läsas in. %s"
+msgstr ""
+"Varning vid tolkning av QIF-fil:\n"
+"%s"
 
 # messages-i18n.c:46
 # messages-i18n.c:47
@@ -1153,7 +1167,7 @@ msgstr "_Hoppa"
 # messages-i18n.c:163
 #: messages-i18n.c:165
 msgid "_Manual"
-msgstr "_Manuell"
+msgstr "_Manual"
 
 # messages-i18n.c:148
 # messages-i18n.c:164
@@ -1668,9 +1682,8 @@ msgstr "Visa allt"
 # messages-i18n.c:225
 # messages-i18n.c:249
 #: messages-i18n.c:251
-#, fuzzy
 msgid "Show Income/Expense"
-msgstr "Visa Ink/Utg"
+msgstr "Visa Inkomst/Utgift"
 
 # messages-i18n.c:227
 # messages-i18n.c:251
@@ -2103,13 +2116,9 @@ msgstr "Redigera"
 msgid "Equity"
 msgstr "Utjämning"
 
-#: messages-i18n.c:325
-msgid "EUR (total)"
-msgstr ""
-
 # messages-i18n.c:292
 # messages-i18n.c:324
-#: messages-i18n.c:326
+#: messages-i18n.c:325
 msgid "Exit"
 msgstr "Avsluta"
 
@@ -2117,80 +2126,80 @@ msgstr "Avsluta"
 # src/gnome/glade-gnc-dialogs.c:647
 # messages-i18n.c:325 po/guile_strings.txt:327
 # src/gnome/glade-gnc-dialogs.c:655
-#: messages-i18n.c:327 po/guile_strings.txt:327
+#: messages-i18n.c:326 po/guile_strings.txt:327
 #: src/gnome/glade-gnc-dialogs.c:588
 msgid "Expense"
 msgstr "Utgift"
 
 # messages-i18n.c:294
 # messages-i18n.c:326
-#: messages-i18n.c:328
+#: messages-i18n.c:327
 msgid "Export"
 msgstr "Export"
 
 # messages-i18n.c:295 po/guile_strings.txt:301
 # messages-i18n.c:327 po/guile_strings.txt:356
-#: messages-i18n.c:329 po/guile_strings.txt:355
+#: messages-i18n.c:328 po/guile_strings.txt:355
 msgid "Extensions"
 msgstr "Utvidgningar"
 
 # messages-i18n.c:296
 # messages-i18n.c:328
-#: messages-i18n.c:330
+#: messages-i18n.c:329
 msgid "Fee"
 msgstr "Avgift"
 
 # messages-i18n.c:297
 # messages-i18n.c:329
-#: messages-i18n.c:331
+#: messages-i18n.c:330
 msgid "Field"
 msgstr "Fält"
 
 # messages-i18n.c:297
 # messages-i18n.c:330
-#: messages-i18n.c:332
+#: messages-i18n.c:331
 msgid "File"
 msgstr "Arkiv"
 
 # messages-i18n.c:190
 # messages-i18n.c:331 src/gnome/glade-gnc-dialogs.c:2532
-#: messages-i18n.c:333 src/gnome/glade-gnc-dialogs.c:2523
+#: messages-i18n.c:332 src/gnome/glade-gnc-dialogs.c:2523
 msgid "Find"
 msgstr "Sök"
 
 # messages-i18n.c:298
 # messages-i18n.c:332
-#: messages-i18n.c:334
+#: messages-i18n.c:333
 msgid "Forward"
 msgstr "Framåt"
 
 # messages-i18n.c:299 po/guile_strings.txt:108
 # messages-i18n.c:333 po/guile_strings.txt:125
-#: messages-i18n.c:335 po/guile_strings.txt:126
+#: messages-i18n.c:334 po/guile_strings.txt:126
 msgid "From"
 msgstr "Från"
 
 # messages-i18n.c:300
 # messages-i18n.c:334
-#: messages-i18n.c:336
+#: messages-i18n.c:335
 msgid "GnuCash Preferences"
 msgstr "GnuCash inställningar"
 
 # messages-i18n.c:301
 # messages-i18n.c:335
-#: messages-i18n.c:337
+#: messages-i18n.c:336
 msgid "Help"
 msgstr "Hjälp"
 
 # messages-i18n.c:258 po/guile_strings.txt:12
 # messages-i18n.c:336
-#: messages-i18n.c:338
+#: messages-i18n.c:337
 msgid "Imbalance"
 msgstr "Obalans"
 
 # messages-i18n.c:302
 # messages-i18n.c:337
-#: messages-i18n.c:339
+#: messages-i18n.c:338
 msgid "Import"
 msgstr "Importera"
 
@@ -2198,26 +2207,26 @@ msgstr "Importera"
 # src/gnome/glade-gnc-dialogs.c:644
 # messages-i18n.c:338 po/guile_strings.txt:244
 # src/gnome/glade-gnc-dialogs.c:652
-#: messages-i18n.c:340 po/guile_strings.txt:244
+#: messages-i18n.c:339 po/guile_strings.txt:244
 #: src/gnome/glade-gnc-dialogs.c:585
 msgid "Income"
 msgstr "Inkomst"
 
 # messages-i18n.c:304
 # messages-i18n.c:339
-#: messages-i18n.c:341
+#: messages-i18n.c:340
 msgid "Increase"
 msgstr "Öka"
 
 # messages-i18n.c:305
 # messages-i18n.c:340
-#: messages-i18n.c:342
+#: messages-i18n.c:341
 msgid "Int"
 msgstr "Ränta"
 
 # messages-i18n.c:306
 # messages-i18n.c:341
-#: messages-i18n.c:343
+#: messages-i18n.c:342
 msgid "Jump"
 msgstr "Hoppa"
 
@@ -2225,52 +2234,52 @@ msgstr "Hoppa"
 # src/gnome/glade-gnc-dialogs.c:632
 # messages-i18n.c:342 po/guile_strings.txt:194
 # src/gnome/glade-gnc-dialogs.c:640
-#: messages-i18n.c:344 po/guile_strings.txt:194
+#: messages-i18n.c:343 po/guile_strings.txt:194
 #: src/gnome/glade-gnc-dialogs.c:573
 msgid "Liability"
 msgstr "Skuld"
 
 # messages-i18n.c:308
 # messages-i18n.c:343
-#: messages-i18n.c:345
+#: messages-i18n.c:344
 msgid "License"
 msgstr "Licens"
 
 # messages-i18n.c:309
 # messages-i18n.c:344
-#: messages-i18n.c:346
+#: messages-i18n.c:345
 msgid "Loan"
 msgstr "Lån"
 
 # messages-i18n.c:310
 # messages-i18n.c:345
-#: messages-i18n.c:347
+#: messages-i18n.c:346
 msgid "LTCG"
 msgstr ""
 
 # messages-i18n.c:311 po/guile_strings.txt:26
 # messages-i18n.c:346 po/guile_strings.txt:32
 # src/gnome/glade-gnc-dialogs.c:2256
-#: messages-i18n.c:348 po/guile_strings.txt:32
+#: messages-i18n.c:347 po/guile_strings.txt:32
 #: src/gnome/glade-gnc-dialogs.c:2196
 msgid "Memo"
 msgstr "Anteckning"
 
 # po/guile_strings.txt:187
 # messages-i18n.c:347
-#: messages-i18n.c:349
+#: messages-i18n.c:348
 msgid "Months"
 msgstr "Månader"
 
 # messages-i18n.c:312
 # messages-i18n.c:348
-#: messages-i18n.c:350
+#: messages-i18n.c:349
 msgid "New"
 msgstr "Nytt"
 
 # messages-i18n.c:313
 # messages-i18n.c:349
-#: messages-i18n.c:351
+#: messages-i18n.c:350
 msgid "No"
 msgstr "Nej"
 
@@ -2278,212 +2287,212 @@ msgstr "Nej"
 # src/gnome/print-session.c:197
 # messages-i18n.c:350 src/gnome/print-session.c:111
 # src/gnome/print-session.c:200
-#: messages-i18n.c:352 src/gnome/print-session.c:111
+#: messages-i18n.c:351 src/gnome/print-session.c:111
 #: src/gnome/print-session.c:200
 msgid "(none)"
 msgstr "(ingen)"
 
 # messages-i18n.c:315 po/guile_strings.txt:179
 # messages-i18n.c:351 po/guile_strings.txt:209
-#: messages-i18n.c:353 po/guile_strings.txt:209
+#: messages-i18n.c:352 po/guile_strings.txt:209
 msgid "Notes"
 msgstr "Anteckningar"
 
 # messages-i18n.c:316 po/guile_strings.txt:151
 # messages-i18n.c:352 po/guile_strings.txt:175
-#: messages-i18n.c:354 po/guile_strings.txt:176
+#: messages-i18n.c:353 po/guile_strings.txt:176
 msgid "Num"
 msgstr "Num"
 
 # messages-i18n.c:317
 # messages-i18n.c:353
-#: messages-i18n.c:355
+#: messages-i18n.c:354
 msgid "Ok"
 msgstr "Ok"
 
 # messages-i18n.c:318
 # messages-i18n.c:354
-#: messages-i18n.c:356
+#: messages-i18n.c:355
 msgid "Online"
 msgstr "Uppkopplad"
 
 # messages-i18n.c:319
 # messages-i18n.c:355
-#: messages-i18n.c:357
+#: messages-i18n.c:356
 msgid "Open"
 msgstr "Öppna"
 
 # messages-i18n.c:319
 # messages-i18n.c:356
-#: messages-i18n.c:358
+#: messages-i18n.c:357
 msgid "Orphan"
 msgstr "Föräldralös"
 
 # messages-i18n.c:320
 # messages-i18n.c:357
-#: messages-i18n.c:359
+#: messages-i18n.c:358
 msgid "Parameters"
 msgstr "Parametrar"
 
 # messages-i18n.c:321
 # messages-i18n.c:358 po/guile_strings.txt:113
-#: messages-i18n.c:360 po/guile_strings.txt:114
+#: messages-i18n.c:359 po/guile_strings.txt:114
 msgid "Payment"
 msgstr "Utgift"
 
 # messages-i18n.c:322
 # messages-i18n.c:359
-#: messages-i18n.c:361
+#: messages-i18n.c:360
 msgid "Portfolio"
 msgstr "Portfölj"
 
 # messages-i18n.c:323
 # messages-i18n.c:360
-#: messages-i18n.c:362
+#: messages-i18n.c:361
 msgid "POS"
 msgstr ""
 
 # messages-i18n.c:324
 # messages-i18n.c:361
-#: messages-i18n.c:363
+#: messages-i18n.c:362
 msgid "Preferences"
 msgstr "Inställningar"
 
 # messages-i18n.c:325
 # messages-i18n.c:362 src/gnome/glade-gnc-dialogs.c:2400
-#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:2340
+#: messages-i18n.c:363 src/gnome/glade-gnc-dialogs.c:2340
 msgid "Price"
 msgstr "Kurs"
 
 # messages-i18n.c:326 src/gnome/glade-gnc-dialogs.c:971
 # messages-i18n.c:363 src/gnome/glade-gnc-dialogs.c:1004
-#: messages-i18n.c:365 src/gnome/glade-gnc-dialogs.c:937
+#: messages-i18n.c:364 src/gnome/glade-gnc-dialogs.c:937
 msgid "Print"
 msgstr "Utskrift"
 
 # messages-i18n.c:327
 # messages-i18n.c:364
-#: messages-i18n.c:366
+#: messages-i18n.c:365
 msgid "Profits"
 msgstr "Vinster"
 
 # messages-i18n.c:328
 # messages-i18n.c:365
-#: messages-i18n.c:367
+#: messages-i18n.c:366
 msgid "Quit"
 msgstr "Avsluta"
 
 # messages-i18n.c:329
 # messages-i18n.c:366 po/guile_strings.txt:18
-#: messages-i18n.c:368 po/guile_strings.txt:18
+#: messages-i18n.c:367 po/guile_strings.txt:18
 msgid "Rebate"
 msgstr "Återbäring"
 
 # messages-i18n.c:330
 # messages-i18n.c:367 po/guile_strings.txt:191
-#: messages-i18n.c:369 po/guile_strings.txt:191
+#: messages-i18n.c:368 po/guile_strings.txt:191
 msgid "Receive"
 msgstr "Ta emot"
 
 # messages-i18n.c:331
 # messages-i18n.c:368
-#: messages-i18n.c:370
+#: messages-i18n.c:369
 msgid "Reconcile"
 msgstr "Avstämma"
 
 # messages-i18n.c:332
 # messages-i18n.c:369
-#: messages-i18n.c:371
+#: messages-i18n.c:370
 msgid "Record"
 msgstr "Spara"
 
 # messages-i18n.c:333 po/guile_strings.txt:184
 # messages-i18n.c:370 po/guile_strings.txt:215
-#: messages-i18n.c:372 po/guile_strings.txt:215
+#: messages-i18n.c:371 po/guile_strings.txt:215
 msgid "Register"
 msgstr "Kontoutdrag"
 
 # messages-i18n.c:334 po/guile_strings.txt:178
 # messages-i18n.c:371 po/guile_strings.txt:208
-#: messages-i18n.c:373 po/guile_strings.txt:208
+#: messages-i18n.c:372 po/guile_strings.txt:208
 msgid "Report"
 msgstr "Rapport"
 
 # messages-i18n.c:335
 # messages-i18n.c:372
-#: messages-i18n.c:374
+#: messages-i18n.c:373
 msgid "Reports"
 msgstr "Rapporter"
 
 # messages-i18n.c:336
 # messages-i18n.c:373
-#: messages-i18n.c:375
+#: messages-i18n.c:374
 msgid "Save"
 msgstr "Spara"
 
 # messages-i18n.c:337
 # messages-i18n.c:374
-#: messages-i18n.c:376
+#: messages-i18n.c:375
 msgid "Savings"
 msgstr "Besparingar"
 
 # messages-i18n.c:338
 # messages-i18n.c:375
-#: messages-i18n.c:377
+#: messages-i18n.c:376
 msgid "Scrub"
 msgstr "Städa upp"
 
 # messages-i18n.c:339
 # messages-i18n.c:376
-#: messages-i18n.c:378
+#: messages-i18n.c:377
 msgid "Search Results"
 msgstr "Sökresultat"
 
 # messages-i18n.c:340 po/guile_strings.txt:164
 # messages-i18n.c:377 po/guile_strings.txt:189
-#: messages-i18n.c:379 po/guile_strings.txt:189
+#: messages-i18n.c:378 po/guile_strings.txt:189
 msgid "Security"
 msgstr "Säkerhet"
 
 # messages-i18n.c:341
 # messages-i18n.c:378
-#: messages-i18n.c:380
+#: messages-i18n.c:379
 msgid "Sell"
 msgstr "Sälja"
 
 # messages-i18n.c:342
 # messages-i18n.c:379
-#: messages-i18n.c:381
+#: messages-i18n.c:380
 msgid "Settings"
 msgstr "Inställningar"
 
 # messages-i18n.c:343
 # messages-i18n.c:380
-#: messages-i18n.c:382
+#: messages-i18n.c:381
 msgid "Simple"
 msgstr "Enkel"
 
 # messages-i18n.c:344
 # messages-i18n.c:381 po/guile_strings.txt:313
-#: messages-i18n.c:383 po/guile_strings.txt:313
+#: messages-i18n.c:382 po/guile_strings.txt:313
 msgid "Sold"
 msgstr "Sålde"
 
 # messages-i18n.c:345
 # messages-i18n.c:382 po/guile_strings.txt:51
-#: messages-i18n.c:384 po/guile_strings.txt:51
+#: messages-i18n.c:383 po/guile_strings.txt:51
 msgid "Spend"
 msgstr "Spendera"
 
 # messages-i18n.c:346
 # messages-i18n.c:383
-#: messages-i18n.c:385
+#: messages-i18n.c:384
 msgid "Split"
 msgstr "Delning"
 
 # messages-i18n.c:347
 # messages-i18n.c:384
-#: messages-i18n.c:386
+#: messages-i18n.c:385
 msgid "STCG"
 msgstr ""
 
@@ -2491,44 +2500,44 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:635
 # messages-i18n.c:385 po/guile_strings.txt:354
 # src/gnome/glade-gnc-dialogs.c:643
-#: messages-i18n.c:387 po/guile_strings.txt:353
+#: messages-i18n.c:386 po/guile_strings.txt:353
 #: src/gnome/glade-gnc-dialogs.c:576
 msgid "Stock"
 msgstr "Aktie"
 
 # messages-i18n.c:349
 # messages-i18n.c:386 po/guile_strings.txt:246
-#: messages-i18n.c:388 po/guile_strings.txt:246
+#: messages-i18n.c:387 po/guile_strings.txt:246
 msgid "Style"
 msgstr "Stil"
 
 # messages-i18n.c:350
 # messages-i18n.c:387
-#: messages-i18n.c:389
+#: messages-i18n.c:388
 msgid "Surplus"
 msgstr "Överskott"
 
 # messages-i18n.c:351
 # messages-i18n.c:388
-#: messages-i18n.c:390
+#: messages-i18n.c:389
 msgid "Teller"
 msgstr "Kassör"
 
 # messages-i18n.c:352 po/guile_strings.txt:253
 # messages-i18n.c:389 po/guile_strings.txt:302
-#: messages-i18n.c:391 po/guile_strings.txt:302
+#: messages-i18n.c:390 po/guile_strings.txt:302
 msgid "To"
 msgstr "Till"
 
 # messages-i18n.c:353
 # messages-i18n.c:390 src/gnome/glade-gnc-dialogs.c:2624
-#: messages-i18n.c:392 src/gnome/glade-gnc-dialogs.c:2615
+#: messages-i18n.c:391 src/gnome/glade-gnc-dialogs.c:2615
 msgid "Today"
 msgstr "Idag"
 
 # messages-i18n.c:354
 # messages-i18n.c:391 messages-i18n.c:392 po/guile_strings.txt:207
-#: messages-i18n.c:393 messages-i18n.c:394 po/guile_strings.txt:207
+#: messages-i18n.c:392 messages-i18n.c:393 po/guile_strings.txt:207
 msgid "Total"
 msgstr "Totalt"
 
@@ -2536,73 +2545,68 @@ msgstr "Totalt"
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
 # messages-i18n.c:393 po/guile_strings.txt:304
 # src/gnome/glade-gnc-dialogs.c:362 src/gnome/glade-gnc-dialogs.c:416
-#: messages-i18n.c:395 po/guile_strings.txt:304
+#: messages-i18n.c:394 po/guile_strings.txt:304
 #: src/gnome/glade-gnc-dialogs.c:295 src/gnome/glade-gnc-dialogs.c:349
 msgid "Type"
 msgstr "Typ"
 
 # messages-i18n.c:356
 # messages-i18n.c:394
-#: messages-i18n.c:396
+#: messages-i18n.c:395
 msgid "Transaction"
 msgstr "Transaktion"
 
 # messages-i18n.c:357
 # messages-i18n.c:395
-#: messages-i18n.c:397
+#: messages-i18n.c:396
 msgid "Transfer"
 msgstr "Överföring"
 
-#: messages-i18n.c:398
-msgid "Untitled"
-msgstr ""
-
 # messages-i18n.c:358 po/guile_strings.txt:57
 # messages-i18n.c:396 po/guile_strings.txt:65
-#: messages-i18n.c:399 po/guile_strings.txt:66
+#: messages-i18n.c:397 po/guile_strings.txt:66
 msgid "Value"
 msgstr "Värde"
 
 # messages-i18n.c:359
 # messages-i18n.c:397
-#: messages-i18n.c:400
+#: messages-i18n.c:398
 msgid "WARNING"
 msgstr "VARNING"
 
 # po/guile_strings.txt:115
 # messages-i18n.c:398
-#: messages-i18n.c:401
+#: messages-i18n.c:399
 msgid "Weeks"
 msgstr "Veckor"
 
 # messages-i18n.c:360
 # messages-i18n.c:399
-#: messages-i18n.c:402
+#: messages-i18n.c:400
 msgid "Wire"
 msgstr "Överför elektroniskt"
 
 # messages-i18n.c:361
 # messages-i18n.c:400
-#: messages-i18n.c:403
+#: messages-i18n.c:401
 msgid "Withdraw"
 msgstr "Uttag"
 
 # messages-i18n.c:361
 # messages-i18n.c:400
-#: messages-i18n.c:404 po/guile_strings.txt:60
-#, fuzzy
+#: messages-i18n.c:402 po/guile_strings.txt:60
 msgid "Withdrawal"
-msgstr "Uttag"
+msgstr "Uttagning"
 
 # po/guile_strings.txt:185
 # messages-i18n.c:401
-#: messages-i18n.c:405
+#: messages-i18n.c:403
 msgid "Years"
 msgstr "År"
 
 # messages-i18n.c:362
 # messages-i18n.c:402
-#: messages-i18n.c:406
+#: messages-i18n.c:404
 msgid "Yes"
 msgstr "Ja"
 
@@ -3248,7 +3252,7 @@ msgstr "Sortera efter den exakta inmatningstiden"
 # po/guile_strings.txt:128
 #: po/guile_strings.txt:129
 msgid "Use accounting labels"
-msgstr ""
+msgstr "Använd bokföringstermer i rubriker"
 
 # po/guile_strings.txt:112
 # po/guile_strings.txt:129
@@ -3870,7 +3874,7 @@ msgstr "Visa vertikala kanter i celler som standard."
 # po/guile_strings.txt:255
 #: po/guile_strings.txt:255
 msgid "Actual"
-msgstr ""
+msgstr "Verklig"
 
 # po/guile_strings.txt:256
 #: po/guile_strings.txt:256
@@ -4942,7 +4946,7 @@ msgstr "Hitta transaktioner som skett mellan två datum:"
 #: src/gnome/glade-gnc-dialogs.c:1830 src/gnome/glade-gnc-dialogs.c:1846
 #: src/gnome/glade-gnc-dialogs.c:1883 src/gnome/glade-gnc-dialogs.c:1898
 msgid "/"
-msgstr ""
+msgstr "-"
 
 # messages-i18n.c:284 po/guile_strings.txt:131
 # src/gnome/glade-gnc-dialogs.c:1987 src/gnome/glade-gnc-dialogs.c:2045
@@ -5099,9 +5103,8 @@ msgstr "Töm allt"
 # messages-i18n.c:331
 # messages-i18n.c:368
 #: src/gnome/glade-gnc-dialogs.c:2442
-#, fuzzy
 msgid "Reconciled (y)"
-msgstr "Avstämma"
+msgstr "Avstämmd (y)"
 
 # src/gnome/glade-gnc-dialogs.c:2479
 #: src/gnome/glade-gnc-dialogs.c:2470
@@ -5234,7 +5237,7 @@ msgstr "Period:"
 # src/gnome/glade-gnc-dialogs.c:3054
 #: src/gnome/glade-gnc-dialogs.c:3045
 msgid "Mechanism:"
-msgstr ""
+msgstr "Mekanism:"
 
 # src/gnome/glade-gnc-dialogs.c:3063
 #: src/gnome/glade-gnc-dialogs.c:3054
