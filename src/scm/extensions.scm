@@ -15,8 +15,6 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
-(gnc:support "extensions.scm")
-
 (define (gnc:make-extension
 	 ;; The type of extension item, either 'menu, 'menu-item, or 'separator
          type
