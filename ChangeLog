@@ -1,5 +1,19 @@
 2001-06-26  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/gnc-commodity-xml-v2.c (set_commodity_value): strip
+	string before setting things. (James LewisMoss patch)
+
+	* src/engine/io-gncxml-v2.c (gnc_book_write_to_xml_file_v2): check
+	return of fclose. (James LewisMoss patch)
+
+	* src/register/gnome/gnucash-sheet.c
+	(gnucash_sheet_key_press_event): allow shift-pgup and shift-pgdn
+	to go to top & bottom of register respectively.
+
+	* src/register/gnome/datecell-gnome.c (DateDirect): allow '-'
+	hotkey to work if there is a full date there, or the cell is
+	blank.
+
 	* src/gnome/gnc-html.c: don't handle keypresses, let the gtkhtml
 	object do it.
 

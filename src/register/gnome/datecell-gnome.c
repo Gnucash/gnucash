@@ -590,8 +590,22 @@ DateDirect (BasicCell *bcell,
       break;
 
     case GDK_minus:
-      if (dateSeparator () == '-')
-        return FALSE;
+      if ((bcell->value_len != 0) && (dateSeparator () == '-'))
+      {
+        int i;
+        int count;
+
+        /* rough check for existing date */
+        for (i = count = 0; i < bcell->value_len; i++)
+        {
+          if (bcell->value_w[i] == '-')
+            count++;
+        }
+
+        if (count < 2)
+          return FALSE;
+      }
+
       /* fall through */
     case GDK_KP_Subtract:
     case GDK_underscore:
