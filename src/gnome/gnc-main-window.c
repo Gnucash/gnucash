@@ -537,7 +537,6 @@ gnc_main_window_actions_updated (GncMainWindow *window)
 	 * here.  Force a full update by adding and removing an empty
 	 * action group.
 	 */
-	printf("Calling ensure_update\n");
 	force = egg_action_group_new("force_update");
 	egg_menu_merge_insert_action_group (window->ui_merge, force, 0);
 	egg_menu_merge_ensure_update (window->ui_merge);

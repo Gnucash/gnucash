@@ -121,12 +121,9 @@ gnc_history_update_menus (GncPlugin *plugin)
 	  g_sprintf(action_name, "RecentFile%dAction", i % 10);
 	  action = egg_action_group_get_action (action_group, action_name);
 	  if (action == NULL) {
-	    printf("Creating new action for %s\n", action_name);
 	    new_actions.name = action_name;
 	    egg_action_group_add_actions (action_group, &new_actions, 1, plugin);
 	    action = egg_action_group_get_action (action_group, action_name);
-	  } else {
-	    printf("Found action for %s\n", action_name);
 	  }
 
 	  /* set the menu label (w/accelerator) */
