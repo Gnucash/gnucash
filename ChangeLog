@@ -1,5 +1,10 @@
 2003-01-02  Derek Atkins  <derek@ihtfp.com>
 
+	* README.patches:
+	* make-gnucash-patch.in:
+	  Patch by Geoff Kassel to work on OpenBSD (allow user to set diffcmd)
+	Fixes #122646
+
 	* src/business/business-core/gncInvoice.c: need a non-const string
 	* src/engine/test/Makefile.am: add test-link, make libgw-engine
 	  depend on libgncmod-engine
