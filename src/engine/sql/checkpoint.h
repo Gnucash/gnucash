@@ -77,6 +77,7 @@ typedef struct _checkpoint {
 #define CK_AFTER_LAST_DATE "2038-01-02 12:12:12.00"
 
 
+void pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans);
 void pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts);
 void pgendGroupRecomputeAllCheckpoints (PGBackend *, AccountGroup *);
 void pgendGroupGetAllBalances (PGBackend *, AccountGroup *, Timespec as_of_date);

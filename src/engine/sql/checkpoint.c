@@ -237,7 +237,7 @@ pgendGroupRecomputeAllCheckpoints (PGBackend *be, AccountGroup *grp)
 }
 
 /* ============================================================= */
-/* recompute *one* checkpoints for the account */
+/* recompute *one* checkpoint for the account */
 
 void
 pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts)
@@ -263,6 +263,32 @@ pgendAccountRecomputeOneCheckpoint (PGBackend *be, Account *acc, Timespec ts)
    p = stpcpy (p, "';\n");
 
    p = stpcpy (p, "COMMIT WORK;\n");
+   SEND_QUERY (be,be->buff, );
+   FINISH_QUERY(be->connection);
+}
+
+/* ============================================================= */
+/* recompute all checkpoints affected by this transaction */
+
+void
+pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans)
+{
+   char *p, dbuf[80];
+
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "BEGIN WORK;\n"
+                  "LOCK TABLE gncCheckpoint IN ACCESS EXCLUSIVE MODE;\n"
+                  "LOCK TABLE gncEntry, gncTransaction IN SHARE MODE;\n"
+                  "UPDATE gncCheckpoint SET "
+   "  balance            = (gncsubtotalbalance        (gncEntry.accountGuid, date_start, date_end )),"
+   "  cleared_balance    = (gncsubtotalclearedbalance (gncEntry.accountGuid, date_start, date_end )),"
+   "  reconciled_balance = (gncsubtotalreconedbalance (gncEntry.accountGuid, date_start, date_end )) "
+   " WHERE gncEntry.transGuid = '");
+   p = guid_to_string_buff (xaccTransGetGUID(trans), p);
+   p = stpcpy (p, "' AND gncTransaction.transGuid = gncEntry.transGuid "
+                  "  AND date_start <= gncTransaction.date_posted "
+                  "  AND date_end > gncTransaction.date_posted;\n"
+                  "COMMIT WORK;\n");
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 }

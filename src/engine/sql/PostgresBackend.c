@@ -769,6 +769,11 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    LEAVE(" ");
 }
 
+#if 0
+/* This routine isn't used anywhere, and probably shouldn't
+ * be, in part because its balance checkpointing algorithm
+ * is wrong. */
+
 static void
 pgendStoreTransaction (PGBackend *be, Transaction *trans)
 {
@@ -788,8 +793,23 @@ pgendStoreTransaction (PGBackend *be, Transaction *trans)
    bufp = "COMMIT;";
    SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
+
+   /* If this is the multi-user mode, we need to update the
+    * balances as well.  */
+   if ((MODE_POLL == be->session_mode) ||
+       (MODE_EVENT == be->session_mode))
+   {
+      /* hack alert --  we should also recompute
+       * the checkpoints for any accounts from which splits have
+       * been deleted ... but we don't have these handy here ...
+       * is this is actually kinda wrong ...
+       */
+      pgendTransactionRecomputeCheckpoints (be, trans);
+   }
+
    LEAVE(" ");
 }
+ #endif
 
 /* ============================================================= */
 /* The pgendStoreAllTransactions() routine traverses through *all*
@@ -828,6 +848,14 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
    p = "COMMIT;";
    SEND_QUERY (be,p, );
    FINISH_QUERY(be->connection);
+
+   /* If this is the multi-user mode, we need to update the
+    * balances as well.  */
+   if ((MODE_POLL == be->session_mode) ||
+       (MODE_EVENT == be->session_mode))
+   {
+      pgendGroupRecomputeAllCheckpoints(be, grp);
+   }
    LEAVE(" ");
 }
 
@@ -1168,7 +1196,15 @@ pgendCopyTransactionToEngine (PGBackend *be, GUID *trans_guid)
  * right metaphor.  Its OK to poke date into the engine, but writing
  * data out to the database should make use of versioning, and this
  * routine doesn't.
+ *
+ * THIS IS NOT USED ANYWHERE should probably go away.  Although
+ * this kind of a routine could be handy for resyncing after a lost
+ * contact to the backend.  Note, however, that it would
+ * mangle balance checkpoints, and these would need to be
+ * recomputed.
  */
+
+#if 0
 
 static void
 pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
@@ -1212,6 +1248,8 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 
    LEAVE (" ");
 }
+
+#endif
 
 /* ============================================================= */
 /*             QUERY STUFF                                       */
@@ -1915,6 +1953,25 @@ pgend_trans_commit_edit (Backend * bend,
    bufp = "COMMIT;";
    SEND_QUERY (be,bufp,334);
    FINISH_QUERY(be->connection);
+
+   /* If this is the multi-user mode, we need to update the
+    * balances as well.  */
+   if ((MODE_POLL == be->session_mode) || 
+       (MODE_EVENT == be->session_mode))
+   {
+      GList *node;
+
+      /* loop over the old accounts, as they used to be. */
+      for (node = xaccTransGetSplitList(trans->orig); node; node=node->next)
+      {
+         Split *s = (Split *) node->data;
+         Account *acc = xaccSplitGetAccount (s);
+         pgendAccountRecomputeOneCheckpoint (be, acc, trans->orig->date_posted);
+      }
+
+      /* set checkpoints for the new accounts */
+      pgendTransactionRecomputeCheckpoints (be, trans);
+   }
 
    /* hack alert -- the following code will get rid of that annoying
     * message from the GUI about saving one's data. However, it doesn't

@@ -232,16 +232,22 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- test checkpoint balances. There seem to be some bugs ...
+-- bug: if one user adds a transaction, the second user's starting 
+   balances will come out wrong.  Why??
 
 -- modify checkpoint computation to always occur on fixed dates.
    Failure to do so causes the fill-out algorithm to pull in all 
-   data.
+   data. Document this inn design.txt
 
--- if another user deletes a transaction, or an account, we
+-- bug: if another user deletes a transaction, or an account, we
    need to look at the audit trail to see if the thing has been deleted.
    Otherwise, any sort of sync will incorrectly
    add the deleted transaction back in.  
+
+-- we should use LISTEN/NOTIFY to let others know tht things have 
+   changed.  This is of limited utility, but still...
+   It could be used to update the balances in the main window 
+   dynamically.
 
 -- during sync, detect and report conflicting edits to accounts 
    and transactions.  See the notes for pgendSync() for details
@@ -284,10 +290,10 @@ multi-user mode is fundamentally broken unless they are fixed.
       report a rollback.
    -- pgTransactionSync() is broken, but its not used anywhere.
    -- pgend_account_commit checks version but doesn't rollback.
-      (nor does the GUI report a rollback.
+      (nor does the GUI report a rollback.)
    -- pgendSync does the right thing, except that it doesn't
       detect any version conflicts, nor does it notify the user
-      of such conflicts.
+      of such conflicts.  (actually, it also screws checkpoints).
 
    I'm not sure how critical this all is; with a small number of users
    it shouldn't be a problem.  With a huge number of users, each editing
