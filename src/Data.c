@@ -485,6 +485,7 @@ xaccGetRootGroupOfAcct (Account *acc)
 
    /* recursively walk up the tree of parents */
    grp = acc->parent;
+   if (!grp) return NULL;
    acc = grp->parent;
    while (acc) {
      grp = acc->parent;

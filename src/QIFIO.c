@@ -202,6 +202,7 @@ char * xaccReadQIFCatList (int fd, AccountGroup *grp)
 {
    char * qifline;
    Account *acc;
+   char *str, *tok;
 
    if (!grp) return 0x0;
    do { 
@@ -217,9 +218,35 @@ char * xaccReadQIFCatList (int fd, AccountGroup *grp)
          freeAccount(acc); 
          continue;
       }
-      insertAccount( grp, acc );
+
+      /* check to see if this is a sub-account.
+       * Sub-accounts will have a colon in the name */
+      str = acc->accountName;
+      tok = strchr (str, ':');
+      if (tok) {
+         Account *parent;
+
+         /* find the parent account, and parent to it */
+         *tok = 0x0;
+         parent = xaccGetAccountFromName (grp, str);
+         *tok = ':';
+
+         if (parent) {
+            xaccInsertSubAccount( parent, acc );
+            /* trim off the parent account name ... */
+            /* tok += sizeof(char);  leave behind the colon ... */
+            str = XtNewString (tok);
+            XtFree (acc->accountName);
+            acc->accountName = str;
+         } else {
+            insertAccount( grp, acc );
+         }
+      } else {
+         insertAccount( grp, acc );
+      }
 
    } while (qifline);
+
 
    return qifline;
 }
