@@ -66,7 +66,8 @@ CREATE TABLE gncCommodityTrail (
 	namespace	TEXT NOT NULL,
 	mnemonic	TEXT NOT NULL,
 	code		TEXT,
-	fraction	INT DEFAULT '100'
+	fraction	INT DEFAULT '100',
+	bookGuid	CHAR(32) NOT NULL
 ) INHERITS (gncAuditTrail);
 
 CREATE INDEX gncCommodityTrail_commodity_idx ON gncCommodityTrail (commodity);
@@ -95,7 +96,8 @@ CREATE TABLE gncPriceTrail (
 	type		TEXT,
 	valueNum	INT8 DEFAULT '0',
 	valueDenom	INT4 DEFAULT '100',
-	version		INT4 NOT NULL
+	version		INT4 NOT NULL,
+	bookGuid	CHAR(32) NOT NULL
 ) INHERITS (gncAuditTrail);
 
 CREATE INDEX gncPriceTrail_price_idx ON gncPriceTrail (priceGuid);
