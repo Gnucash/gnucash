@@ -1361,8 +1361,14 @@ writeAccountGroupToFile( const char *datafile, AccountGroup *grp )
     }
   
   err = xaccWriteAccountGroup (fd, grp);
+  if(0 != err)
+    {
+    /* Just close it and return the earlier error. */
+    close(fd);
+    return err;
+    }
 
-  close(fd);
+  err = close(fd);
 
   return err;
   }
