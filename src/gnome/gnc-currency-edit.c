@@ -112,13 +112,11 @@ add_item(GNCCurrencyEdit *gce, gnc_commodity *commodity)
 {
         GtkWidget *item;
         GtkWidget *label;
-        char *string;
+        const char *string;
 
         item = gtk_list_item_new();
 
-        string = g_strdup_printf ("%s - %s",
-                                  gnc_commodity_get_mnemonic (commodity),
-                                  gnc_commodity_get_fullname (commodity));
+        string = gnc_commodity_get_printname (commodity);
 
         label = gtk_label_new(string);
         gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
@@ -131,8 +129,6 @@ add_item(GNCCurrencyEdit *gce, gnc_commodity *commodity)
                                   gnc_commodity_get_mnemonic (commodity));
 
         gtk_container_add(GTK_CONTAINER(GTK_COMBO(gce)->list), item);
-
-        g_free (string);
 }
 
 static int

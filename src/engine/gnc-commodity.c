@@ -68,8 +68,7 @@ static void
 reset_printname(gnc_commodity *com)
 {
     if(com->printname) { g_free(com->printname); }
-    com->printname = g_strdup_printf("%s:%s (%s)",
-                                     com->namespace,
+    com->printname = g_strdup_printf("%s (%s)",
                                      com->mnemonic,
                                      com->fullname);
 }

@@ -51,6 +51,8 @@ char * gnc_ui_update_namespace_picker(GtkWidget * combobox,
                                       gboolean include_iso,
                                       gboolean include_all);
 
+const char * gnc_ui_namespace_picker_ns (GtkWidget *combobox);
+
 void gnc_ui_update_commodity_picker(GtkWidget * combobox, 
                                     const char * namespace,
                                     const char * sel);

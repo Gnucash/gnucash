@@ -1,5 +1,17 @@
 2001-04-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-commodity.c: add namespace picker getter.
+	Show "CURRENCY" instead of "ISO4217" when displaying.
+
+	* src/gnome/druid-commodity.c: use namespace picker getter
+
+	* src/gnome/druid-qif-import.c: use namespace picker getter
+
+	* src/scm/report/register.scm: more work
+
+	* src/engine/gnc-commodity.c (reset_printname): take the namespace
+	out of the printname
+
 	* src/gnome/dialog-account.c: add opening balance support
 
 	* src/gnc-ui-util.c (gnc_find_or_create_equity_account): new func.

@@ -96,7 +96,6 @@ struct _qifimportwindow {
 struct _qifdruidpage {
   GtkWidget * page;
   GtkWidget * new_type_combo;
-  GtkWidget * new_type_entry;
   GtkWidget * new_name_entry;
   GtkWidget * new_mnemonic_entry;
   gnc_commodity * commodity;
@@ -1183,7 +1182,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
   Split        * gnc_split;
 
   char * mnemonic = NULL; 
-  char * namespace = NULL;
+  const char * namespace = NULL;
   char * fullname = NULL;
   const gchar * row_text[4] = { NULL, NULL, NULL, NULL };
   int  rownum;
@@ -1201,7 +1200,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
     page      = gtk_object_get_data(GTK_OBJECT(gtkpage), "page_struct");
     
     mnemonic  = gtk_entry_get_text(GTK_ENTRY(page->new_mnemonic_entry));
-    namespace = gtk_entry_get_text(GTK_ENTRY(page->new_type_entry));
+    namespace = gnc_ui_namespace_picker_ns((page->new_type_combo));
     fullname  = gtk_entry_get_text(GTK_ENTRY(page->new_name_entry));
     
     gnc_commodity_set_namespace(page->commodity, namespace);
@@ -1430,7 +1429,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
   QIFDruidPage    * qpage = 
     gtk_object_get_data(GTK_OBJECT(page), "page_struct");
   
-  char * namespace = gtk_entry_get_text(GTK_ENTRY(qpage->new_type_entry));
+  const char * namespace = gnc_ui_namespace_picker_ns(qpage->new_type_combo);
   char * name      = gtk_entry_get_text(GTK_ENTRY(qpage->new_name_entry));
   char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(qpage->new_mnemonic_entry));
   int  show_matches;
@@ -1456,7 +1455,7 @@ gnc_ui_qif_import_comm_check_cb(GnomeDruidPage * page,
                                    namespace, mnemonic))
   {
     gnc_warning_dialog_parented(wind->window,
-                                _("You must enter an existing ISO4217 "
+                                _("You must enter an existing national "
                                   "currency or enter a different type."));
 
     return TRUE;
@@ -1611,8 +1610,6 @@ make_qif_druid_page(gnc_commodity * comm) {
 
   info_label = gtk_label_new("");
   gtk_box_pack_start(GTK_BOX(temp), info_label, TRUE, TRUE, 0);
-
-  retval->new_type_entry = (GTK_COMBO(retval->new_type_combo))->entry;
 
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
                                  gnc_commodity_get_namespace(comm),

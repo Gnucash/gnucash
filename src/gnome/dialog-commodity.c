@@ -24,21 +24,20 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <glib.h>
 #include <stdio.h>
 
-#include "dialog-commodity.h"
-#include "window-help.h"
 #include "FileDialog.h"
-#include "query-user.h"
+#include "dialog-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
+#include "messages.h"
+#include "query-user.h"
+#include "window-help.h"
 
 
 struct _selectcommoditywindow {
   GtkWidget * dialog;
   GtkWidget * namespace_combo;
-  GtkWidget * namespace_entry;
   GtkWidget * commodity_combo;
   GtkWidget * commodity_entry;
 
@@ -50,7 +49,6 @@ struct _newcommoditywindow {
   GtkWidget * dialog;
   GtkWidget * fullname_entry;
   GtkWidget * mnemonic_entry;
-  GtkWidget * namespace_entry;
   GtkWidget * namespace_combo;
   GtkWidget * code_entry;
   GtkWidget * fraction_spinbutton;
@@ -124,8 +122,6 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
   retval->dialog = create_Commodity_Selector_Dialog();
   retval->namespace_combo = 
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "namespace_combo");
-  retval->namespace_entry = 
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "namespace_entry");
   retval->commodity_combo = 
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "commodity_combo");
   retval->commodity_entry = 
@@ -223,11 +219,11 @@ gnc_ui_select_commodity_ok_cb(GtkButton * button,
   SelectCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
 
-  char          * namespace;  
+  const char    * namespace;  
   char          * fullname;
   gnc_commodity * retval = NULL;
 
-  namespace       = gtk_entry_get_text(GTK_ENTRY(w->namespace_entry));
+  namespace       = gnc_ui_namespace_picker_ns (w->namespace_combo);
   fullname        = gtk_entry_get_text(GTK_ENTRY(w->commodity_entry));
   
   retval = gnc_commodity_table_find_full(gnc_engine_commodities(), 
@@ -256,8 +252,7 @@ gnc_ui_select_commodity_new_cb(GtkButton * button,
   SelectCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
 
-  char * namespace = 
-    gtk_entry_get_text(GTK_ENTRY(w->namespace_entry));
+  const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
 
   const gnc_commodity * new_commodity = 
     gnc_ui_new_commodity_modal(namespace, dialog);
@@ -305,11 +300,9 @@ gnc_ui_select_commodity_namespace_changed_cb(GtkEditable * entry,
   GtkWidget             * dialog = GTK_WIDGET(user_data);
   SelectCommodityWindow * w = 
     gtk_object_get_data(GTK_OBJECT(dialog), "select_commodity_struct");
-  char * namespace = 
-    gtk_entry_get_text(GTK_ENTRY(w->namespace_entry));
+  const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
   
-  gnc_ui_update_commodity_picker(w->commodity_combo,
-                                 namespace, NULL);
+  gnc_ui_update_commodity_picker(w->commodity_combo, namespace, NULL);
 }
 
 
@@ -323,7 +316,7 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
                                gboolean include_iso,
                                gboolean include_all) {
   GList * namespaces;
-  char  * active;
+  const char * active;
 
   /* fetch a list of the namespaces */
   if (!include_all)
@@ -350,6 +343,8 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
       namespaces = g_list_remove_link (namespaces, node);
       g_list_free_1 (node);
     }
+    else
+      node->data = "CURRENCY";
 
     node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_LEGACY, g_strcmp);
     if (node)
@@ -360,28 +355,47 @@ gnc_ui_update_namespace_picker(GtkWidget * combobox,
   }
 
   /* stick them in the combobox */
-  gtk_combo_set_popdown_strings(GTK_COMBO(combobox), namespaces);
+  gtk_combo_set_popdown_strings (GTK_COMBO (combobox), namespaces);
 
   if (!include_iso &&
       safe_strcmp (init_string, GNC_COMMODITY_NS_ISO) == 0)
     init_string = NULL;
 
   /* set the entry text */
-  if(init_string) {
-    active = g_strdup(init_string);
-  }
-  else if (namespaces) {
-    active = g_strdup(namespaces->data);
-  }
+  if (init_string)
+    active = init_string;
+  else if (namespaces)
+    active = namespaces->data;
   else
-    active = g_strdup("");
+    active = "";
+
+  if (safe_strcmp (active, GNC_COMMODITY_NS_ISO) == 0)
+  {
+    active = "CURRENCY";
+    init_string = GNC_COMMODITY_NS_ISO;
+  }
 
   gtk_entry_set_text(GTK_ENTRY(GTK_COMBO(combobox)->entry), active);
   g_list_free(namespaces);
 
-  return active;
+  return g_strdup (init_string);
 }
 
+const char *
+gnc_ui_namespace_picker_ns (GtkWidget *combobox)
+{
+  const char *namespace;
+
+  g_return_val_if_fail (combobox != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_COMBO (combobox), NULL);
+
+  namespace = gtk_entry_get_text (GTK_ENTRY(GTK_COMBO (combobox)->entry));
+
+  if (safe_strcmp (namespace, "CURRENCY") == 0)
+    return GNC_COMMODITY_NS_ISO;
+  else
+    return namespace;
+}
 
 static gint
 new_commodity_close (GnomeDialog *dialog, gpointer data)
@@ -414,8 +428,6 @@ gnc_ui_new_commodity_create(const char * selected_namespace,
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "mnemonic_entry");
   retval->namespace_combo =
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "namespace_combo");
-  retval->namespace_entry = 
-    gtk_object_get_data(GTK_OBJECT(retval->dialog), "namespace_entry");
   retval->code_entry =
     gtk_object_get_data(GTK_OBJECT(retval->dialog), "code_entry");
   retval->fraction_spinbutton =
@@ -491,7 +503,7 @@ gnc_ui_new_commodity_ok_cb(GtkButton * button,
     gtk_object_get_data(GTK_OBJECT(dialog), "new_commodity_struct");
 
   char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
-  char * namespace = gtk_entry_get_text(GTK_ENTRY(w->namespace_entry));
+  const char * namespace = gnc_ui_namespace_picker_ns (w->namespace_combo);
   char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
 
   gnc_commodity * c;
@@ -499,8 +511,8 @@ gnc_ui_new_commodity_ok_cb(GtkButton * button,
   if (safe_strcmp (namespace, GNC_COMMODITY_NS_ISO) == 0)
   {
     gnc_warning_dialog_parented(dialog,
-                                _("You may not create a new ISO4217 "
-                                  "commodity."));
+                                _("You may not create a new national "
+                                  "currency."));
     return;
   }
 

@@ -653,7 +653,12 @@
          (title-op (gnc:lookup-option options "General" "Title"))
          (debit-op (gnc:lookup-option options "__reg" "debit-string"))
          (credit-op (gnc:lookup-option options "__reg" "credit-string"))
-         (amount-op (gnc:lookup-option options "Display" "Amount")))
+         (account-op (gnc:lookup-option options "Display" "Account")))
+
+    (if invoice?
+        (begin
+          (set! journal? #f)
+          (gnc:option-set-value account-op #f)))
 
     (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)

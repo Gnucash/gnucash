@@ -64,7 +64,6 @@ struct _commoditydruidpage {
   GtkWidget * page;
   char      * old_name;
   GtkWidget * new_type_combo;
-  GtkWidget * new_type_entry;
   GtkWidget * new_name_entry;
   GtkWidget * new_mnemonic_entry;
 };  
@@ -242,7 +241,7 @@ make_commodity_druid_page(gnc_commodity * comm) {
 
   info_label = 
     gtk_label_new(_("Pick the type of the currency or security. For "
-                    "national currencies, \nuse \"ISO4217\".  "
+                    "national currencies, \nuse \"CURRENCY\". "
                     "Enter a new type in the box if the ones in the\n"
                     "pick list are inappropriate."));
 
@@ -255,7 +254,6 @@ make_commodity_druid_page(gnc_commodity * comm) {
   retval->new_type_combo = gtk_combo_new(); 
   gtk_box_pack_start(GTK_BOX(temp), retval->new_type_combo, TRUE, TRUE, 0);
 
-  retval->new_type_entry = (GTK_COMBO(retval->new_type_combo))->entry;
   gnc_ui_update_namespace_picker(retval->new_type_combo, 
                                  gnc_commodity_get_namespace(comm),
                                  TRUE, TRUE);
@@ -284,7 +282,7 @@ make_commodity_druid_page(gnc_commodity * comm) {
 
   info_label = 
     gtk_label_new(_("Enter the ticker symbol (such as \"RHAT\"), "
-                    "ISO currency symbol \n(such as \"USD\"), or "
+                    "national currency symbol \n(such as \"USD\"), or "
                     "other unique abbreviation for the name."));
 
   gtk_label_set_justify (GTK_LABEL(info_label), GTK_JUSTIFY_LEFT);
@@ -373,12 +371,12 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
   CommodityDruidPage * dpage = 
     (CommodityDruidPage *)gtk_object_get_data(GTK_OBJECT(page),
                                               "page_struct");
-  char * new_type;
+  const char * new_type;
   char * new_name;
   char * new_mnemonic;
   gnc_commodity * new_comm;
 
-  new_type     = gtk_entry_get_text(GTK_ENTRY(dpage->new_type_entry));
+  new_type     = gnc_ui_namespace_picker_ns (dpage->new_type_combo);
   new_name     = gtk_entry_get_text(GTK_ENTRY(dpage->new_name_entry));
   new_mnemonic = gtk_entry_get_text(GTK_ENTRY(dpage->new_mnemonic_entry));
   if((strlen(new_type) == 0) ||
@@ -396,7 +394,7 @@ gnc_ui_commodity_druid_comm_check_cb(GnomeDruidPage * page, gpointer druid,
                                    new_type, new_mnemonic))
   {
     gnc_warning_dialog_parented(cd->window,
-                                _("You must enter an existing ISO4217 "
+                                _("You must enter an existing national "
                                   "currency or enter a different type."));
 
     return TRUE;
