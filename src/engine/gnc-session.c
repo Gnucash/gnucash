@@ -465,6 +465,7 @@ gnc_session_load (GNCSession *session,
   GNCBook *newbook;
   BookList *oldbooks, *node;
   Backend *be;
+  GNCBackendError err;
 
   if (!session) return;
   if (!gnc_session_get_url(session)) return;
@@ -541,7 +542,10 @@ gnc_session_load (GNCSession *session,
       return;
   }
 
-  if (gnc_session_get_error(session) != ERR_BACKEND_NO_ERR)
+  err = gnc_session_get_error(session);
+  if ((err != ERR_BACKEND_NO_ERR) &&
+      (err != ERR_FILEIO_FILE_TOO_OLD) &&
+      (err != ERR_SQL_DB_TOO_OLD))
   {
       /* Something broke, put back the old stuff */
       gnc_book_set_backend (newbook, NULL);
