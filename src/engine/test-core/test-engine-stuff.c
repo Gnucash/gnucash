@@ -118,9 +118,10 @@ get_random_timespec(void)
 {
   Timespec *ret;
 
-  ret = g_new(Timespec, 1);
+  ret = g_new0(Timespec, 1);
 
-  ret->tv_sec = rand();
+  while (ret->tv_sec <= 0)
+    ret->tv_sec = rand();
 
   if (zero_nsec)
     ret->tv_nsec = 0;
