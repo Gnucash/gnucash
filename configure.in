@@ -255,10 +255,13 @@ AC_SUBST(GNC_ADD_ON_SRFIS)
 if test "x${GNC_ADD_ON_SRFIS}" != "x"
 then
  GNC_SRFI_LOAD_PATH="\${top_srcdir}/lib/"
+ GNC_TEST_SRFI_LOAD_CMD="--guile-load-dir \${top_srcdir}/lib/"
 else
  GNC_SRFI_LOAD_PATH=""
+ GNC_TEST_SRFI_LOAD_CMD=""
 fi
 AC_SUBST(GNC_SRFI_LOAD_PATH)
+AC_SUBST(GNC_TEST_SRFI_LOAD_CMD)
 
 ### --------------------------------------------------------------------------
 ### See if we need guile-www

@@ -6,7 +6,7 @@ TESTS = \
   test-scm-query-string \
   test-print-parse-amount
 
-GNC_TEST_DEPS := \
+GNC_TEST_DEPS := @GNC_TEST_SRFI_LOAD_CMD@ \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/calculation \
@@ -14,7 +14,6 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_srcdir}/src/engine \
   --gnc-module-dir ${top_srcdir}/src/app-utils \
   --guile-load-dir ${G_WRAP_MODULE_DIR} \
-  --guile-load-dir ${top_srcdir}/lib \
   --guile-load-dir ${top_srcdir}/src/scm \
   --guile-load-dir ${top_builddir}/src/scm \
   --guile-load-dir ${top_builddir}/src/gnome-utils \
@@ -47,6 +46,7 @@ EXTRA_DIST = \
   test-component-manager
 
 AM_CFLAGS = \
+  -I${top_srcdir}/src \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/engine/test-core \

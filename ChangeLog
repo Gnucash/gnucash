@@ -1,3 +1,12 @@
+2003-02-18  David Hampton  <hampton@employees.org>
+
+	* configure.in: Add new variable for conditionally including the
+	SRFI directory when doing 'make check'.  Should be null when using
+	guile 1.6.
+
+	* Various Makefile.am files: Use new conditional include for the
+	SRFI directory when running 'make check'.
+
 2003-02-17  Derek Atkins  <derek@ihtfp.com>
 
 	Move some files around in preparation for re-factoring the
