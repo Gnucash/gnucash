@@ -38,15 +38,15 @@
    ((N_ "Reports") ""
     (((N_ "Overview") "gnc-help:xacc-reports.html" #f)
      ((N_ "Types") ""
-     (((N_ "Balance Sheet") "gnc-help:xacc-balancesheet.html" #f)
-      ((N_ "Profit & Loss") "gnc-help:xacc-pnl.html" #f)
-      ((N_ "Transaction") "gnc-help:xacc-trans-report.html" #f)
-      ((N_ "Stock Portfolio") "gnc-help:xacc-portfolio-report.html" #f)
-      ((N_ "Balance Tracking") "gnc-help:xacc-balancereport.html" #f)
-      ((N_ "Tax Report") "gnc-help:xacc-tax-report.html"
-       (((N_ "TXF Export") "gnc-help:xacc-txf-export-report.html"#f)
-        ((N_ "TXF Anomalies") "gnc-help:xacc-txf-export-anomalies.html" #f)))
-      ((N_ "Account Chart") "gnc-help:xacc-hierarchical-report.html" #f)))
+      (((N_ "Balance Sheet") "gnc-help:xacc-balancesheet.html" #f)
+       ((N_ "Profit & Loss") "gnc-help:xacc-pnl.html" #f)
+       ((N_ "Transaction") "gnc-help:xacc-trans-report.html" #f)
+       ((N_ "Stock Portfolio") "gnc-help:xacc-portfolio-report.html" #f)
+       ((N_ "Balance Tracking") "gnc-help:xacc-balancereport.html" #f)
+       ((N_ "Tax Report") "gnc-help:xacc-tax-report.html"
+	(((N_ "TXF Export") "gnc-help:xacc-txf-export.html"#f)
+	 ((N_ "TXF Categories") "gnc-help:xacc-txf-categories.html"#f)
+	 ((N_ "TXF Anomalies") "gnc-help:xacc-txf-export-anomalies.html" #f)))))
      ((N_ "Printing") "gnc-help:xacc-print.html" #f)))
    ((N_ "More on GnuCash") ""
     (((N_ "Hacking Documentation") "gnc-help:xacc-dochack.html" #f)

@@ -18,7 +18,12 @@
         correlated. The user will have to adjust for this after import.
         </PARA>
       </LISTITEM>
+    </ITEMIZEDLIST></PARA>
 
+<PARA><EMPHASIS>TaxCut 1999, 2000</EMPHASIS> </PARA>
+
+<PARA>
+    <ITEMIZEDLIST>
       <LISTITEM><PARA><EMPHASIS>Code: N521 "  F1040 \ Federal estimated
         tax, qrtrly"</EMPHASIS></PARA>
 
@@ -27,9 +32,21 @@
         individual payment amounts, only matter if you have to compute
         the penalty. (this may be a TurboTax enhancement)
         </PARA></LISTITEM>  
+
+      <LISTITEM><PARA><EMPHASIS>Code: N460 "  W-2 \ Salary or wages,
+        self"</EMPHASIS></PARA>
+
+	<PARA><EMPHASIS>Code: N506 "  W-2 \ Salary or wages, spouse"
+	</EMPHASIS></PARA>
+
+        <PARA>and other related codes.</PARA>
+
+	<PARA>Information from only one job may be imported.
+        </PARA></LISTITEM>
+
     </ITEMIZEDLIST></PARA>
 
-<PARA><EMPHASIS>TurboTax 1999</EMPHASIS> </PARA>
+<PARA><EMPHASIS>TurboTax 1999, 2000</EMPHASIS> </PARA>
 
 <PARA>
     <ITEMIZEDLIST>
@@ -48,18 +65,6 @@
 
 <PARA>
     <ITEMIZEDLIST>
-      <LISTITEM><PARA><EMPHASIS>Code: N460 "  W-2 \ Salary or wages,
-        self"</EMPHASIS></PARA>
-
-        <PARA><EMPHASIS>Code: N506 "  W-2 \ Salary or wages,
-        spouse"</EMPHASIS></PARA> 
-
-        <PARA>and other related codes.</PARA>
-
-        <PARA>Information from only one job may be imported. This is a
-	limitation in the TXF spec.</PARA>
-      </LISTITEM>  
-
       <LISTITEM><PARA><EMPHASIS>Duplicate Codes</EMPHASIS></PARA>
 
         <PARA>Most codes are not supposed to appear more than once.

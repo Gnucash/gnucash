@@ -25,16 +25,11 @@ ways.  </para> </listitem>
 </link> provides a quick summary of your stocks, their current value,
 and profits made.  </para></listitem>
 
-<listitem> <para><link linkend="xacc-tax-report">Tax Report:</link>
-shows tax related Income and Expenses.  </para> </listitem>
-
-<listitem><para><link linkend="xacc-txf-export-report">TXF Export
-Report: </link> exports a .TXF file that can be imported to TaxCut or
-TurboTax.  </para></listitem>
-
-<listitem> <para><link linkend="xacc-hierarchical-report">
-Hierarchical Report: </link> shows accounts in a Hierarchical fashion.
-</para> </listitem>
+<listitem> <para><link linkend="xacc-tax-report">Tax Report / TXF
+Export:</link> shows tax related Income and Expenses.  Can <link
+linkend="xacc-txf-export">export a .TXF file</link> that can be imported
+to TaxCut or TurboTax.  </para>
+</listitem>
 
 <listitem> <para><application>Balance Tracker</application> tracks the
 balance of one or more accounts over time, and supports graphical

@@ -1,7 +1,10 @@
 <ARTICLE ID="XACC-TAX-REPORT">
 
 <ARTHEADER>
-<TITLE>Relatório de Impostos</TITLE>
+
+<TITLE>Tax Report / <LINK LINKEND="XACC-TXF-EXPORT">TXF Export</LINK>
+</TITLE>
+
 </ARTHEADER>
 <PARA>
   <ULINK URL="xacc-tax-report-example.html">
@@ -13,58 +16,53 @@
   </ULINK>
 </PARA>
 
-<PARA>Este relatório permite-lhe ver todas as Receitas e Despesas relaccionadas com impostos. 
-      Visualisavel até à décima-quinta subconta. Sub-contas inferiores são ignoradas.
+<PARA>This report allows you to view all tax related Income and Expenses.
+      Up to fifteen sub-accounts are displayed. Lower sub-accounts are ignored.
 
-    </PARA>
+</PARA>
 
-<PARA><EMPHASIS>NOTE:</EMPHASIS> Para que isto funcione, o utilizador tem 
-      de separar rendimentos tributáveis dos não tributáveis para contas 
-      diferentes, tal como despesas dedutíveis e não dedutíveis. O utilizador 
-      tem também de Definir o Estado de tributação de cada conta tributável. 
-      O parâmetro "Definir Estado de Tributação:" permite-o. Existe um ficheiro 
-      taxreport.xac no directório dos exemplos, que mostra uma forma como isto 
-      pode ser configurado. 
-    </PARA>
+<PARA><EMPHASIS>NOTE:</EMPHASIS> For this to work, the user has to
+      segregate taxable and not taxable income to different accounts, as
+      well as deductible and non deductible expenses. The user also must
+      Set the Tax Status of each tax related account. The "Tax
+      Information" dialog on the "Account" menu does this.  There is a
+      taxreport.xac file in the examples directory, which shows one way
+      this can be set up.
+</PARA>
+
 <PARA>    <INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/report-tax-options.png">
-</IMAGEOBJECT>
-</INLINEMEDIAOBJECT> 
+  <IMAGEOBJECT>
+  <IMAGEDATA FILEREF="image/report-tax-options.png">
+  </IMAGEOBJECT>
+  </INLINEMEDIAOBJECT> 
+</PARA>
 
-    </PARA>
-
-<PARA>Opções definíveis para este relatório incluem:
+<PARA>Options specifiable for this report include:
     
     <ITEMIZEDLIST>
-      <LISTITEM><PARA>As datas de início e de fim - defeito: Desde o Início do Ano.
+      <LISTITEM><PARA>The start and end dates - default: Year-to-Date.
                 </PARA></LISTITEM>
-      <LISTITEM><PARA>Período Alternativo: (Ano é relativo desde:)
-  <ITEMIZEDLIST>
-    <LISTITEM><PARA>Utilizar Desde - Até (defeito)</PARA></LISTITEM>
-    <LISTITEM><PARA>1º, 2º, 3º e 4º Trimestres Fiscais Estimados 
-          (Desde: ano)</PARA></LISTITEM>
-    <LISTITEM><PARA>Ano anterior (ano anterior a Desde: ano)
+      <LISTITEM><PARA>Alternate Period: (Year is relative to From:)
+	<ITEMIZEDLIST>
+	  <LISTITEM><PARA>Use From - To (default if current date is
+          after April 16)</PARA></LISTITEM>
+	  <LISTITEM><PARA>1st, 2nd, 3rd, 4th Estimated Tax Quarters 
+          (From: year)</PARA></LISTITEM>
+	  <LISTITEM><PARA>Last Year (year before From: year) (default if
+          current date is before April 16)
                     </PARA></LISTITEM>
-    <LISTITEM><PARA>1º, 2º, 3º e 4º Trimestres Fiscais Estimados 
-           do ano anterior</PARA></LISTITEM>
-  </ITEMIZEDLIST></PARA></LISTITEM>
-      <LISTITEM><PARA>As contas sobre as quais o relatório será gerado. 
-        Se nenhuma conta for seleccionada, todas as contas tributáveis 
-        são apresentadas. Contas não tributáveis não são visíveis, mesmo 
-        que seleccionadas, mas as sub-contas tributáveis serão visualisáveis.</PARA></LISTITEM>
+	  <LISTITEM><PARA>1st, 2nd, 3rd, 4th Estimated Tax Quarters for
+           Last Year</PARA></LISTITEM>
+	</ITEMIZEDLIST></PARA></LISTITEM>
+      <LISTITEM><PARA>The accounts for which the report is to be
+        produced.  All tax related sub-accounts of the selected accounts
+        are automatically displayed.  If no account is selected, all tax
+        related accounts are displayed. Non-tax related accounts are not
+        displayed, even if selected, though tax related sub-accounts
+        will be displayed.</PARA></LISTITEM>
 
-      <LISTITEM><PARA>Suprimir valores 0.00</PARA></LISTITEM>
-      <LISTITEM><PARA>Mostrar nome completo da conta</PARA></LISTITEM>
-      <LISTITEM><PARA>Definir Estado Tributável das contas seleccionadas.
-       (Nenhuma opção sinifica nada seleccionado)
-  <ITEMIZEDLIST>
-    <LISTITEM><PARA>Nenhuma Alteração (defeito)</PARA></LISTITEM>
-    <LISTITEM><PARA>Definir como Tributável</PARA></LISTITEM>
-    <LISTITEM><PARA>Definir como Não tributável</PARA></LISTITEM>
-    <LISTITEM><PARA>Definir como Tributável & sub-contas</PARA></LISTITEM>
-    <LISTITEM><PARA>Definir como Não tributável & sub-contas</PARA></LISTITEM>
-  </ITEMIZEDLIST></PARA></LISTITEM>
+      <LISTITEM><PARA>Suppress $0.00 values</PARA></LISTITEM>
+      <LISTITEM><PARA>Display Full account names</PARA></LISTITEM>
     </ITEMIZEDLIST>
 
 </PARA>

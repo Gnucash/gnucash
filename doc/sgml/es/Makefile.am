@@ -21,7 +21,6 @@ GNUCASH_SGML_FILES = \
 	xacc-doubleentry.sgml \
 	xacc-euro.sgml \
 	xacc-gpl.sgml \
-	xacc-hierarchical-report.sgml \
 	xacc-incomeexpense.sgml \
 	xacc-locatingtxns.sgml \
 	xacc-mainwin.sgml \
@@ -41,7 +40,7 @@ GNUCASH_SGML_FILES = \
 	xacc-ticker.sgml \
 	xacc-trans-report.sgml \
 	xacc-txf-export-anomalies.sgml \
-	xacc-txf-export-report.sgml \
+	xacc-txf-export.sgml \
         xacc-userdocs.sgml \
         xacc-y2k.sgml
 
@@ -49,8 +48,7 @@ GNUCASH_SGML_FILES = \
 gnucash_html_dir = $(top_srcdir)/doc/html/C
 
 GNUCASH_HTML_FILES = \
-	$(gnucash_html_dir)/xacc-tax-report-example.html \
-	$(gnucash_html_dir)/xacc-txf-categories.html
+	$(gnucash_html_dir)/xacc-tax-report-example.html
 
 install-data-local: gnucash/index.html gnucash/help-search-index.db
 	$(mkinstalldirs) $(DESTDIR)$(gnucash_helpdir)

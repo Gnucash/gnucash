@@ -1,0 +1,77 @@
+<ARTICLE ID="XACC-TXF-EXPORT">
+
+<ARTHEADER>
+<TITLE>TXF Export of tax data</TITLE>
+</ARTHEADER>
+
+<PARA>The tax report allows you to export all tax related Income and Expenses
+      to a TXF (Tax eXchange Format) file in addition to the html format
+      that all reports allow. The TXF file can be imported into tax
+      filing programs such as TaxCut or TurboTax.
+</PARA>
+
+<PARA><EMPHASIS>NOTE:</EMPHASIS> For this to work, the user has to
+      segregate taxable and not taxable income to different accounts, as
+      well as deductible and non deductible expenses. The user also must
+      Set the TXF category of each tax related account.  The "Tax
+      Information" dialog on the "Accounts" menu is used for this.  It
+      is best to set this up before actually exporting, otherwise, you
+      will just get an empty file.  There is a taxreport.xac file in the
+      examples directory, which shows one way this can be set up.
+</PARA>
+
+<PARA>    <INLINEMEDIAOBJECT>
+<IMAGEOBJECT>
+<IMAGEDATA FILEREF="image/tax-info-dialog.png">
+</IMAGEOBJECT>
+</INLINEMEDIAOBJECT> 
+</PARA>
+
+<PARA><EMPHASIS>IMPORTANT:</EMPHASIS> Most TXF codes should only appear
+      on a single account!  The exceptions are codes for which the
+      "Payer Name Source" is not grayed, each of which can appear many
+      times. Of course, each duplicate should have a unique payer
+      name. These are typically interest accounts or stocks or mutual
+      funds that pay dividends.
+</PARA>
+
+<PARA>
+    <ITEMIZEDLIST>
+      <LISTITEM><PARA>Accounts: for which to set a TXF category.
+        If no account is selected nothing is changed.  If multiple
+        accounts are selected, all of the Income accounts will be set to
+        the selected item. </PARA></LISTITEM>
+
+      <LISTITEM><PARA>TXF categories: Select the desired one. A <LINK
+        LINKEND="XACC-TXF-CATEGORIES">detailed description</LINK>
+        appears just below.</PARA></LISTITEM>
+
+      <LISTITEM><PARA>Payer Name Source: A text description that is
+        exported along with the value of the account.  This is usually
+        the name of a bank, stock, or mutual fund that pays dividends or
+        interest.  Occasionally, it is a description of a
+        deduction.</PARA>
+
+        <PARA>In the Accounts list box above, "Money Market Fund One" is
+        an example of where the name of the current account is exported.
+        This is typically used when the fund pays only one type of
+        income, such as interest.  For "Mutual Fund Four" and "Mutual
+        Fund Five", the categories "Long Term Cap Gain" and "Dividend
+        Income" both will export the name of the parent account.  This
+        is typically used when the fund pays several different types of
+        distributions.  As shown in this example, these funds have three
+        types of distributions, but the "Income" and "Short Term Cap
+        Gain" categories are totaled and exported together as "Dividend
+        Income", as they are taxed the same.</PARA></LISTITEM>
+
+    </ITEMIZEDLIST>
+
+    <LINK LINKEND="XACC-TXF-EXPORT-ANOMALIES">Known anomalies and
+      limitations.</LINK>
+</PARA>
+
+</ARTICLE>
+
+<!-- Local variables: -->
+<!-- sgml-parent-document: "gnucash.sgml" -->
+<!-- End: -->
