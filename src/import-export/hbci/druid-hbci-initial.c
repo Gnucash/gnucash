@@ -1463,6 +1463,21 @@ on_button_clicked (GtkButton *button,
     /* Nothing else to do. */
     gnome_druid_set_page (GNOME_DRUID (info->druid), 
 			  GNOME_DRUID_PAGE (info->accountinfopage));
+  } else if (strcmp (name, "addaccount_button") == 0) {
+    /* manually adding HBCI account is not yet implemented (should be
+       rather easy, though) */
+    gnc_error_dialog_parented
+      (GTK_WINDOW (info->window),
+       _("Unfortunately the manual adding of HBCI accounts to your OpenHBCI\n"
+	 "configuration has not yet been implemented in GnuCash. Please use\n"
+	 "other programs such as 'aqmoney' to manually add the HBCI accounts to\n"
+	 "your OpenHBCI configuration (see aqmoney manual page).\n"
+	 "\n"
+	 "Note: Most banks automatically send the list of available HBCI\n"
+	 "accounts to you when you press the button 'Update Account List'. The\n"
+	 "manual adding of HBCI accounts is needed if and only if your bank does\n"
+	 "not support this automatic updating of the account list. If in doubt,\n"
+	 "contact your bank and/or the GnuCash and OpenHBCI developers."));
   } else if (strcmp (name, "serveryes_button") == 0) {
     druid_enable_next_button (info);
   } else if (strcmp (name, "serverno_button") == 0) {
@@ -1615,6 +1630,10 @@ void gnc_hbci_initial_druid (void)
 			GTK_SIGNAL_FUNC (on_button_clicked), info);
     gtk_signal_connect (GTK_OBJECT 
 			(glade_xml_get_widget (xml, "updatelist_button")), 
+			"clicked",
+			GTK_SIGNAL_FUNC (on_button_clicked), info);
+    gtk_signal_connect (GTK_OBJECT 
+			(glade_xml_get_widget (xml, "addaccount_button")), 
 			"clicked",
 			GTK_SIGNAL_FUNC (on_button_clicked), info);
     gtk_signal_connect (GTK_OBJECT (page), "prepare", 
