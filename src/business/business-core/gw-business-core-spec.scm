@@ -44,7 +44,10 @@
       "#include <gncAddress.h>\n"
       "#include <gncCustomer.h>\n"
       "#include <gncEmployee.h>\n"
+      "#include <gncEntry.h>\n"
+      "#include <gncInvoice.h>\n"
       "#include <gncJob.h>\n"
+      "#include <gncOrder.h>\n"
       "#include <gncVendor.h>\n"
       )))
 
@@ -69,8 +72,14 @@
 			   "const GncCustomer*")
   (gw:wrap-non-native-type mod '<gnc:GncEmployee*> "GncEmployee*"
 			   "const GncEmployee*")
+  (gw:wrap-non-native-type mod '<gnc:GncEntry*> "GncEntry*"
+			   "const GncEntry*")
+  (gw:wrap-non-native-type mod '<gnc:GncInvoice*> "GncInvoice*"
+			   "const GncInvoice*")
   (gw:wrap-non-native-type mod '<gnc:GncJob*> "GncJob*"
 			   "const GncJob*")
+  (gw:wrap-non-native-type mod '<gnc:GncOrder*> "GncOrder*"
+			   "const GncOrder*")
   (gw:wrap-non-native-type mod '<gnc:GncVendor*> "GncVendor*"
 			   "const GncVendor*")
 
@@ -100,7 +109,13 @@
 
   ;; gncEmployee.h
 
+  ;; gncEntry.h
+
+  ;; gncInvoice.h
+
   ;; gncJob.h
+
+  ;; gncOrder.h
 
   ;; gncVendor.h
 
