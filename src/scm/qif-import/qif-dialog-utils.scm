@@ -40,7 +40,7 @@
 ;; translation.  Sorted on # transactions, then alpha.
 
 (define (qif-dialog:make-account-display qif-files gnc-acct-info) 
-  (let ((acct-hash (make-hash-table 20))
+  (let ((acct-hash (cadr gnc-acct-info))
         (retval '()))
 
     ;; we want to make two passes here.  The first pass picks the
@@ -281,8 +281,6 @@
         bin))
      (vector->list acct-hash))
 
-    (list-set! gnc-acct-info 1 acct-hash)
-    
     ;; sort by number of transactions with that account so the 
     ;; most important are at the top
     (set! retval (sort retval 
@@ -299,7 +297,7 @@
 ;; QIF category name, xtn count, then GNUcash account. 
 
 (define (qif-dialog:make-category-display qif-files gnc-acct-info) 
-  (let ((cat-hash (make-hash-table 20))
+  (let ((cat-hash (caddr gnc-acct-info))
         (retval '()))
     ;; get the Cat entries from each file 
     (for-each 
@@ -362,8 +360,6 @@
               (set! retval (cons (cdr elt) retval))))
         bin))
      (vector->list cat-hash))
-    
-    (list-set! gnc-acct-info 2 cat-hash)
     
     ;; sort by number of transactions with that account so the 
     ;; most important are at the top

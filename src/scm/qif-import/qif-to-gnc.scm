@@ -306,7 +306,7 @@
         (gnc:split-set-memo gnc-near-split qif-memo))
     
     (if (or (eq? qif-cleared 'cleared)
-            (eq?  qif-cleared 'reconciled))
+            (eq? qif-cleared 'reconciled))
         (gnc:split-set-reconcile gnc-near-split #\c))
     
     (if (not qif-security)
@@ -549,46 +549,78 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:mark-matching-xtns xtn candidate-xtns)
-  (for-each 
-   (lambda (split)
-     (if (not (qif-split:mark split))
-         (if (qif-split:category-is-account? split)
-             (begin 
-               (qif-split:set-matching-cleared! 
-                split
-                (qif-import:mark-matching-split 
-                 split xtn candidate-xtns))))))
-   (qif-xtn:splits xtn)))
+  (let splitloop ((splits-left (qif-xtn:splits xtn)))
+    
+    ;; splits-left starts out as all the splits of this transaction.
+    ;; if multiple splits match up with a single split on the other 
+    ;; end, we may remove more than one split from splits-left with
+    ;; each call to mark-some-splits.  
+    (if (not (null? splits-left))
+        (if (not (qif-split:mark (car splits-left)))
+            (set! splits-left 
+                  (qif-import:mark-some-splits 
+                   splits-left xtn candidate-xtns))
+            (set! splits-left (cdr splits-left))))
+    
+    (if (not (null? splits-left))
+        (splitloop splits-left))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; qif-import:mark-matching-split
-;; find split(s) matching 'split' and mark them so they don't get
-;; imported.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; qif-import:mark-some-splits
+;; find split(s) matching elements of splits and mark them so they
+;; don't get imported.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-import:mark-matching-split split xtn candidate-xtns)
-  (let* ((near-acct-name #f)
-         (far-acct-name (qif-split:category split))
+(define (qif-import:mark-some-splits splits xtn candidate-xtns)
+  (let* ((split (car splits))
+         (near-acct-name #f)
+         (far-acct-name #f)
          (date (qif-xtn:date xtn))
          (amount (- (qif-split:amount split)))
+         (group-amount #f)
          (memo (qif-split:memo split))        
          (security-name (qif-xtn:security-name xtn))
          (action (qif-xtn:action xtn))
          (bank-xtn? (not security-name))
          (cleared? #f)
+         (different-acct-splits '())
+         (same-acct-splits '())
+         (how #f)
          (done #f))
-        
+    
     (if bank-xtn?
         (begin 
           (set! near-acct-name (qif-xtn:from-acct xtn))
-          (set! far-acct-name (qif-split:category split)))
-        
+          (set! far-acct-name (qif-split:category split))
+          (set! group-amount 0.0)
+          
+          ;; group-amount is the sum of all the splits in this xtn
+          ;; going to the same account as 'split'.  We might be able
+          ;; to match this whole group to a single matching opposite
+          ;; split.
+          (for-each 
+           (lambda (s)
+             (if (and (qif-split:category-is-account? s)
+                      (string=? far-acct-name (qif-split:category s)))
+                 (begin
+                   (set! same-acct-splits 
+                         (cons s same-acct-splits))
+                   (set! group-amount (- group-amount (qif-split:amount s))))
+                 (set! different-acct-splits 
+                       (cons s different-acct-splits))))
+           splits)
+          
+          (set! same-acct-splits (reverse same-acct-splits))
+          (set! different-acct-splits (reverse different-acct-splits)))
+          
+        ;; stock transactions.  they can't have splits as far as I can
+        ;; tell, so the 'different-acct-splits' is always '()
         (let ((qif-accts 
-               (qif-split:accounts-affected split xtn))
-              (commission (qif-xtn:commission xtn)))
+               (qif-split:accounts-affected split xtn)))
           (set! near-acct-name (car qif-accts))
           (set! far-acct-name (cadr qif-accts))
-          (if (not commission) (set! commission 0.0))
+          (set! same-acct-splits (list split))
           (if action
               ;; we need to do some special massaging to get
               ;; transactions to match up.  Quicken thinks the near
@@ -602,70 +634,109 @@
                  (set! near-acct-name (qif-xtn:from-acct xtn))
                  (set! far-acct-name (qif-split:category split)))
                 ((xout)
-                 (set! amount (- amount)))))
-          (set! amount (- amount commission))))
+                 (set! amount (- amount)))))))
     
-    ;; this is the grind loop.  Go over every unmarked split of every
-    ;; unmarked transaction in the candidate-xtns list.
+    ;; this is the grind loop.  Go over every unmarked transaction in
+    ;; the candidate-xtns list.
     (let xtn-loop ((xtns candidate-xtns))
       (if (not (qif-xtn:mark (car xtns)))
-          (let split-loop ((splits (qif-xtn:splits (car xtns))))
-            (if (qif-split:split-matches?
-                 (car splits) (car xtns) 
-                 near-acct-name date amount memo)
+          (begin 
+            (set! how
+                  (qif-import:xtn-has-matches? (car xtns) near-acct-name
+                                               date amount group-amount))
+            (if how
                 (begin
-                  (qif-xtn:merge-and-mark-xtns xtn split 
-                                               (car xtns) (car splits))
-                  (set! cleared? (qif-xtn:cleared (car xtns)))
-                  (set! done #t)))
-            ;; iterate with the next split
-            (if (and (not done)
-                       (not (null? (cdr splits))))
-                (split-loop (cdr splits)))))
-      
+                  (qif-import:merge-and-mark-xtns xtn same-acct-splits 
+                                                  (car xtns) how)
+                  (set! done #t)))))
       ;; iterate with the next transaction
       (if (and (not done)
                (not (null? (cdr xtns))))
           (xtn-loop (cdr xtns))))
-    cleared?))
-
+    
+    ;; return the rest of the splits to iterate on
+    (if (not how)
+        (cdr splits)
+        (case (car how)
+          ((one-to-one many-to-one)
+           (cdr splits))
+          ((one-to-many)
+           different-acct-splits)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;  qif-split:split-matches? 
-;;  check if a split matches date, amount, and other criteria
+;;  qif-import:xtn-has-matches?
+;;  check for one-to-one, many-to-one, one-to-many split matches.
+;;  returns either #f (no match) or a cons cell with the car being one
+;;  of 'one-to-one 'one-to-many 'many-to-one, the cdr being a list of
+;;  splits that were part of the matching group.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-split:split-matches? split xtn acct-name date amount memo)
-  (and 
-   ;; account name matches 
-   (string=? acct-name (qif-split:category split))
-   
-   ;; is the amount right?  flip the sign for sellx and xout
-   ;; transactions, since they are represented with positive values
-   ;; for outgoing funds.
-   (let ((this-amt (qif-split:amount split))
-         (stock-xtn (qif-xtn:security-name xtn))
-         (action (qif-xtn:action xtn)))
-     (if (and stock-xtn action)
-         (begin 
-           (case action 
-             ((xout sellx intincx divx cglongx cgshortx miscincx miscexpx)
-              (set! this-amt (- this-amt))))))
-     (= amount this-amt))
-   
-   ;; is the date the same?
-   (let ((self-date (qif-xtn:date xtn)))
-     (and (pair? self-date)
-          (pair? date)
-          (eq? (length self-date) 3)
-          (eq? (length date) 3)
-          (= (car self-date) (car date))
-          (= (cadr self-date) (cadr date))
-          (= (caddr self-date) (caddr date))))
-  
-   ;; is the memo the same? (is this true?)
-   ;; ignore it for now
-   ))
+(define (qif-import:xtn-has-matches? xtn acct-name date amount group-amt)
+  (let ((matching-splits '())
+        (same-acct-splits '())
+        (this-group-amt 0.0)
+        (how #f)
+        (date-matches 
+         (let ((self-date (qif-xtn:date xtn)))
+           (and (pair? self-date)
+                (pair? date)
+                (eq? (length self-date) 3)
+                (eq? (length date) 3)
+                (= (car self-date) (car date))
+                (= (cadr self-date) (cadr date))
+                (= (caddr self-date) (caddr date))))))
+    (if date-matches 
+        (begin 
+          ;; calculate a group total for splits going to acct-name    
+          (let split-loop ((splits-left (qif-xtn:splits xtn)))
+            (let ((split (car splits-left)))
+              ;; does the account match up?
+              (if (and (qif-split:category-is-account? split)
+                       (string=? (qif-split:category split) acct-name))
+                  ;; if so, get the amount 
+                  (let ((this-amt (qif-split:amount split))
+                        (stock-xtn (qif-xtn:security-name xtn))
+                        (action (qif-xtn:action xtn)))
+                    ;; need to change the sign of the amount for some
+                    ;; stock transactions (buy/sell both positive in
+                    ;; QIF)
+                    (if (and stock-xtn action)
+                        (case action 
+                          ((xout sellx intincx divx cglongx cgshortx 
+                                 miscincx miscexpx)
+                           (set! this-amt (- this-amt)))))
+                    
+                    ;; we might be done if this-amt is either equal 
+                    ;; to the split amount or the group amount.
+                    (cond 
+                     ((= this-amt amount)
+                      (set! how 
+                            (cons 'one-to-one (list split))))
+                     ((and group-amt (= this-amt group-amt))
+                      (set! how
+                            (cons 'one-to-many (list split))))
+                     (#t
+                      (set! same-acct-splits (cons split same-acct-splits))
+                      (set! this-group-amt 
+                            (+ this-group-amt this-amt))))))
+              
+              ;; if 'how' is non-#f, we are ready to return.
+              (if (and (not how) 
+                       (not (null? (cdr splits-left))))
+                  (split-loop (cdr splits-left)))))
+          
+          ;; now we're out of the loop.  if 'how' isn't set, 
+          ;; we can still have a many-to-one match.
+          (if (and (not how)
+                   (= this-group-amt amount))
+              (begin 
+                (set! how 
+                      (cons 'many-to-one same-acct-splits))))))
+    
+    ;; we're all done.  'how' either is #f or a 
+    ;; cons of the way-it-matched and a list of the matching 
+    ;; splits. 
+    how))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -740,43 +811,99 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; qif-xtn:merge-and-mark-xtns 
+;; qif-import:merge-and-mark-xtns 
 ;; we know that the splits match.  Pick one to mark and 
 ;; merge the information into the other one.  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (qif-xtn:merge-and-mark-xtns xtn split other-xtn other-split)
+(define (qif-import:merge-and-mark-xtns xtn splits other-xtn how)
   ;; merge transaction fields 
   (let ((action (qif-xtn:action xtn))
         (o-action (qif-xtn:action other-xtn))
-        (security (qif-xtn:security-name other-xtn)))
-    (cond 
-     ;; this is a transfer involving a security xtn.  Let the 
-     ;; security xtn dominate the way it's handled. 
-     ((and (not action) o-action security)
-      (qif-xtn:mark-split xtn split)
-      (qif-xtn:set-number! other-xtn 
-                           (qif-xtn:number xtn)))
-     ;; this is a security transaction from one brokerage to another
-     ;; or within a brokerage.  The "foox" xtn has the most
-     ;; information about what went on, so use it.
-     ((and action o-action security)
-      (case o-action
-        ((buyx sellx cgshortx cglongx intincx divx)
-         (qif-xtn:mark-split xtn split))
-        (else 
-         (qif-xtn:mark-split other-xtn other-split))))
-     
-     ;; otherwise, this is a normal no-frills split match.  if one
-     ;; transaction has more splits than the other one,
-     ;; (heuristically) mark the one with less splits.
-     (#t 
-      (if (< (length (qif-xtn:splits xtn))
-             (length (qif-xtn:splits other-xtn)))
-          (qif-xtn:mark-split xtn split)
-          (qif-xtn:mark-split other-xtn other-split))))))
-  
-    
+        (security (qif-xtn:security-name other-xtn))
+        (split (car splits))
+        (match-type (car how))
+        (match-splits (cdr how)))
+    (case match-type 
+      ;; many-to-one: the other-xtn has several splits that total
+      ;; in amount to 'split'.  We want to preserve the multi-split
+      ;; transaction.  
+      ((many-to-one)
+       (qif-xtn:mark-split xtn split)
+       (qif-import:merge-xtn-info xtn other-xtn)
+       (for-each 
+        (lambda (s)
+          (qif-split:set-matching-cleared! s (qif-xtn:cleared xtn)))
+        match-splits))
+      
+      ;; one-to-many: 'split' is just one of a set of splits in xtn
+      ;; that total up to the split in match-splits.
+      ((one-to-many)
+       (qif-xtn:mark-split other-xtn (car match-splits))
+       (qif-import:merge-xtn-info other-xtn xtn)
+       (for-each 
+        (lambda (s)
+          (qif-split:set-matching-cleared! 
+           s (qif-xtn:cleared other-xtn)))
+        splits))
+
+      ;; otherwise: one-to-one, a normal single split match.
+      (else 
+       (cond 
+        ;; this is a transfer involving a security xtn.  Let the 
+        ;; security xtn dominate the way it's handled. 
+        ((and (not action) o-action security)
+         (qif-xtn:mark-split xtn split)
+         (qif-import:merge-xtn-info xtn other-xtn)
+         (qif-split:set-matching-cleared! 
+          (car match-splits) (qif-xtn:cleared xtn)))
+        
+        ;; this is a security transaction from one brokerage to another
+        ;; or within a brokerage.  The "foox" xtn has the most
+        ;; information about what went on, so use it.
+        ((and action o-action security)
+         (case o-action
+           ((buyx sellx cgshortx cglongx intincx divx)
+            (qif-xtn:mark-split xtn split)
+            (qif-import:merge-xtn-info xtn other-xtn)
+            (qif-split:set-matching-cleared!
+             (car match-splits) (qif-xtn:cleared xtn)))
+           
+           (else 
+            (qif-xtn:mark-split other-xtn (car match-splits))
+            (qif-import:merge-xtn-info other-xtn xtn)
+            (qif-split:set-matching-cleared! 
+             split (qif-xtn:cleared other-xtn)))))        
+        
+        ;; otherwise, this is a normal no-frills split match.  if one
+        ;; transaction has more splits than the other one,
+        ;; (heuristically) mark the one with less splits.
+        (#t 
+         (if (< (length (qif-xtn:splits xtn))
+                (length (qif-xtn:splits other-xtn)))
+             (begin 
+               (qif-xtn:mark-split xtn split)
+               (qif-import:merge-xtn-info xtn other-xtn)
+               (qif-split:set-matching-cleared!
+                (car match-splits) (qif-xtn:cleared xtn)))
+             
+             (begin
+               (qif-xtn:mark-split other-xtn (car match-splits))
+               (qif-import:merge-xtn-info other-xtn xtn)
+               (qif-split:set-matching-cleared!
+                split (qif-xtn:cleared other-xtn))))))))))
+
+(define (qif-import:merge-xtn-info from-xtn to-xtn)
+  (if (and (qif-xtn:payee from-xtn)
+           (not (qif-xtn:payee to-xtn)))
+      (qif-xtn:set-payee! to-xtn (qif-xtn:payee from-xtn)))
+  (if (and (qif-xtn:address from-xtn)
+           (not (qif-xtn:address to-xtn)))
+      (qif-xtn:set-address! to-xtn (qif-xtn:address from-xtn)))
+  (if (and (qif-xtn:number from-xtn)
+           (not (qif-xtn:number to-xtn)))
+      (qif-xtn:set-number! to-xtn (qif-xtn:number from-xtn))))
+
 
 (define (qif-xtn:mark-split xtn split)
   (qif-split:set-mark! split #t)
