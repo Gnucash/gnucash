@@ -25,6 +25,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-options.c \
   dialog-utils.c \
   druid-utils.c \
+  gnc-account-sel.c \
   gnc-account-tree.c \
   gnc-amount-edit.c \
   gnc-commodity-edit.c \
@@ -52,6 +53,7 @@ gncinclude_HEADERS = \
   dialog-options.h \
   dialog-utils.h \
   druid-utils.h \
+  gnc-account-sel.h \
   gnc-account-tree.h \
   gnc-amount-edit.h \
   gnc-commodity-edit.h \

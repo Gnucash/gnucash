@@ -442,10 +442,6 @@ Frequency :
 [ same as Insurance ]
 --------------------------------------------------
 
-
-
-
-
 ===========================================================================
 ===========================================================================
 
@@ -473,3 +469,29 @@ Options in repayment:
   . sx grouping
 
 http://www.interest.com/hugh/calc/mort_links.html
+
+
+===========================================================================
+===========================================================================
+
+Druid Feedback:
+
+
+<Wilddev> jsled: <auspex> Wilddev: The labels need colons, mnemonics, and right-alignment. 
+<Wilddev> <auspex> Wilddev: It may be worthwhile for gnucash to create GtkSpinButton subclasses which show the percent symbol and others within the field.
+<Wilddev> <auspex> Wilddev: I don't know how complicated that will be.
+<Wilddev> <Wilddev> me either :P
+<Wilddev> <auspex> Wilddev: The strings need review, but there may be other changes to make first.
+<Wilddev> <auspex> Wilddev: "Interest Rate Change Frequency" should perhaps be on the next page?
+<Wilddev> jsled: I dont know if you did another page for this, but shouldn't there be a field for ballon amount too?
+<jsled> Excellent feedback; thanks.  I don't presently handle baloon payments; how do they work?
+<Wilddev> I think, from what I've read before, the are an amount you pay at the end of the loan to close it
+<jsled> gnc-account-sel == combo box account selection with pull-down account list [like the register] and auto-completion [hopefully]
+
+<Wilddev> <auspex> Is "Length" the length of a period, or the sum of the periods?
+<jsled> The sum of all periods; the length of the loan.
+<Wilddev> he's suggesting to think of a better label for that
+<Wilddev> ah I thought it was the period between loan transactions
+<jsled> Hmm.  Okay.  The between-transaction period is a frequency editor on the Repayment page.
+<Wilddev> <auspex> I'm wondering if "Original Principal" should be a vulgate
+such as "Loan Amount"
