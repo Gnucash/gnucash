@@ -9,12 +9,12 @@
 
 #include <gnome.h>
 
-#include "gncBusiness.h"
 #include "gncCustomer.h"
 #include "gncJob.h"
 #include "gncVendor.h"
 #include "gncOwner.h"
 
+#include "gncObject.h"
 #include "business-utils.h"
 #include "dialog-customer.h"
 #include "dialog-job.h"
@@ -26,7 +26,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 {
   GtkWidget *edit;
   GNCGeneralSelectNewSelectCB do_select = NULL;
-  const GncBusinessObject *bus_obj;
+  const GncObject_t *bus_obj;
   const char *type_name = NULL;
 
   switch (owner->type) {
@@ -63,7 +63,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
     return NULL;
   }
 
-  bus_obj = gncBusinessLookup (type_name);
+  bus_obj = gncObjectLookup (type_name);
   if (!bus_obj) {
     g_warning ("Cannot find business object for name and printable()\n");
     return NULL;
@@ -76,7 +76,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
   gnc_general_select_set_selected (GNC_GENERAL_SELECT (edit),
 				   owner->owner.undefined);
   gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
-  gtk_label_set_text (GTK_LABEL (label), gncBusinessGetTypeLabel (type_name));
+  gtk_label_set_text (GTK_LABEL (label), gncObjectGetTypeLabel (type_name));
 
   return edit;
 }

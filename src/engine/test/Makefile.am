@@ -23,6 +23,7 @@ TESTS = \
   test-commodities \
   test-date \
   test-group-vs-book \
+  test-object \
   test-period \
   test-query \
   test-resolve-file-path \
@@ -45,6 +46,7 @@ noinst_PROGRAMS = \
   test-freq-spec \
   test-group-vs-book \
   test-load-engine \
+  test-object \
   test-period \
   test-query \
   test-resolve-file-path \

@@ -59,6 +59,7 @@
 #include "gnc-event.h"
 #include "gnc-event-p.h"
 #include "gnc-module.h"
+#include "gncObjectP.h"
 
 static short module = MOD_IO;
 
@@ -105,6 +106,7 @@ gnc_book_new (void)
   ENTER (" ");
   book = g_new0(GNCBook, 1);
   gnc_book_init(book);
+  gncObjectBookBegin (book);
 
   gnc_engine_generate_event (&book->guid, GNC_EVENT_CREATE);
   LEAVE ("book=%p", book);
@@ -118,6 +120,8 @@ gnc_book_destroy (GNCBook *book)
 
   ENTER ("book=%p", book);
   gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
+
+  gncObjectBookEnd (book);
 
   xaccAccountGroupBeginEdit (book->topgroup);
   xaccAccountGroupDestroy (book->topgroup);

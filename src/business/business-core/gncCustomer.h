@@ -1,6 +1,6 @@
 /*
  * gncCustomer.h -- the Core Customer Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -58,5 +58,10 @@ GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 GncCustomer * gncCustomerLookup (GNCBook *book, const GUID *guid);
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);
+int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
+
+#define CUSTOMER_GUID	"guid"
+#define CUSTOMER_ID	"id"
+#define CUSTOMER_NAME	"name"
 
 #endif /* GNC_CUSTOMER_H_ */

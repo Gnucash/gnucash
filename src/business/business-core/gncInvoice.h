@@ -69,5 +69,8 @@ GncInvoice * gncInvoiceLookup (GNCBook *book, const GUID *guid);
 gboolean gncInvoiceIsDirty (GncInvoice *invoice);
 void gncInvoiceBeginEdit (GncInvoice *invoice);
 void gncInvoiceCommitEdit (GncInvoice *invoice);
+int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
+
+#define INVOICE_GUID	"guid"
 
 #endif /* GNC_INVOICE_H_ */

@@ -12,8 +12,9 @@
 #include "dialog-utils.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
+#include "gncObject.h"
+#include "QueryNew.h"
 
-#include "gncBusiness.h"
 #include "business-chooser.h"
 
 struct business_chooser_window {
@@ -22,8 +23,8 @@ struct business_chooser_window {
   GtkWidget * choice_entry;
   GtkWidget * showall_check;
 
-  GNCBook * 		book;
-  const GncBusinessObject * 	obj_type;
+  GNCIdTypeConst	obj_type;
+  QueryNew *		query;
   gnc_business_chooser_new_cb	new_cb;
   gnc_business_chooser_edit_cb	edit_cb;
   gpointer	cb_arg;
@@ -57,11 +58,12 @@ update_selection_picker (struct business_chooser_window *w)
   selected = w->selected;
 
   /* Get the list of objects */
-  obj_list = (*(w->obj_type->get_list))(w->book, show_all);
+  /* XXX: use show_all in the query */
+  obj_list = gncQueryRun (w->query, w->obj_type);
 
   /* Build a list of strings (objs is pre-sorted, so keep the order!) */
   for (iterator = obj_list; iterator; iterator = iterator->next) {
-    const gchar *label = (*(w->obj_type->printable))(iterator->data);
+    const gchar *label = gncObjectPrintable (w->obj_type, iterator->data);
 
     li = gtk_list_item_new_with_label (label);
     gtk_object_set_data (GTK_OBJECT (li), "list-item-pointer", iterator->data);
@@ -81,9 +83,7 @@ update_selection_picker (struct business_chooser_window *w)
   /* And set the current-selected item */
   gtk_entry_set_text (GTK_ENTRY (w->choice_entry),
 		      ((w->selected) ?
-		       (*(w->obj_type->printable))(w->selected) : ""));
-
-  g_list_free (obj_list);
+		       gncObjectPrintable (w->obj_type, w->selected) : ""));
 }
 
 static void
@@ -190,7 +190,7 @@ gnc_ui_business_chooser_new (GtkWidget * parent,
   /* Set the label */
   choice_name_label = glade_xml_get_widget (xml, "choice_name_label");
   gtk_label_set_text (GTK_LABEL (choice_name_label),
-		      gncBusinessGetTypeLabel (type_name));
+		      gncObjectGetTypeLabel (type_name));
 
   if(parent) {
     gnome_dialog_set_parent(GNOME_DIALOG(win->dialog), GTK_WINDOW(parent));
@@ -225,11 +225,13 @@ gnc_ui_business_chooser_new (GtkWidget * parent,
                       GTK_SIGNAL_FUNC(business_chooser_close), win);
 
   /* Save the callbacks */
-  win->book = book;
-  win->obj_type = gncBusinessLookup (type_name);
+  win->obj_type = type_name;
   win->new_cb = new_cb;
   win->edit_cb = edit_cb;
   win->cb_arg = cbarg;
+  win->query = gncQueryCreate ();
+
+  gncQuerySetBook (win->query, book);
 
   /* Setup the menu */
   win->selected = orig_sel;
@@ -242,6 +244,7 @@ gnc_ui_business_chooser_new (GtkWidget * parent,
 
   /* And exit */
   retval = win->selected;
+  gncQueryDestroy (win->query);
   g_free(win);
 
   return retval;

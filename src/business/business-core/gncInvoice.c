@@ -1,6 +1,6 @@
 /*
  * gncInvoice.c -- the Core Business Invoice
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -16,6 +16,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
+#include "QueryObject.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -45,7 +46,7 @@ struct _gncInvoice {
   gboolean	dirty;
 };
 
-#define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
+#define _GNC_MOD_NAME	GNC_INVOICE_MODULE_NAME
 
 #define GNC_INVOICE_ID		"gncInvoice"
 #define GNC_INVOICE_GUID	"invoice-guid"
@@ -488,6 +489,26 @@ void gncInvoiceCommitEdit (GncInvoice *invoice)
   if (!invoice) return;
 }
 
+int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
+{
+  int compare;
+
+  if (a == b) return 0;
+  if (!a && b) return -1;
+  if (a && !b) return 1;
+
+  compare = safe_strcmp (a->id, b->id);
+  if (!compare) return compare;
+
+  compare = timespec_cmp (&(a->date_opened), &(b->date_opened));
+  if (!compare) return compare;
+
+  compare = timespec_cmp (&(a->date_closed), &(b->date_closed));
+  if (!compare) return compare;
+
+  return guid_compare (&(a->guid), &(b->guid));
+}
+
 /* Package-Private functions */
 
 static void addObj (GncInvoice *invoice)
@@ -532,19 +553,40 @@ static void _gncInvoiceDestroy (GNCBook *book)
   g_hash_table_destroy (ht);
 }
 
-static GncBusinessObject gncInvoiceDesc = {
-  GNC_BUSINESS_VERSION,
+static void _gncInvoiceForeach (GNCBook *book, foreachObjectCB cb,
+				gpointer user_data)
+{
+  if (!book || !cb) return;
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
+}
+
+static GncObject_t gncInvoiceDesc = {
+  GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Purchase/Sales Invoice",
   _gncInvoiceCreate,
   _gncInvoiceDestroy,
-  NULL,				/* get list */
+  _gncInvoiceForeach,
   NULL				/* printable */
 };
 
 gboolean gncInvoiceRegister (void)
 {
-  return gncBusinessRegister (&gncInvoiceDesc);
+  static QueryObjectDef params[] = {
+    { INVOICE_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
+    { NULL },
+  };
+  static const QueryConvertDef converters[] = {
+    { GNC_ID_BOOK, (QueryConvert)gncInvoiceGetBook },
+    { GNC_ID_ACCOUNT, (QueryConvert)gncInvoiceGetPostedAcc },
+    { GNC_ID_TRANS, (QueryConvert)gncInvoiceGetPostedTxn },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncInvoiceCompare,
+			  params, converters);
+
+  return gncObjectRegister (&gncInvoiceDesc);
 }
 
 static gint lastId = 187;	/* XXX */

@@ -227,6 +227,7 @@ Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
 Timespec      xaccTransRetDatePostedTS (Transaction *trans);
 
 /* Dates and txn-type for A/R and A/P "invoice" postings */
+Timespec      xaccTransRetDateDueTS (Transaction *trans);
 void	      xaccTransGetDateDueTS (Transaction *trans, Timespec *ts);
 char	      xaccTransGetTxnType (Transaction *trans);
 
@@ -367,6 +368,7 @@ void         xaccSplitSetBaseValue (Split *split, gnc_numeric value,
  * of all transactions that have been marked as reconciled.
  */
 
+GNCBook *   xaccSplitGetBook (Split *split);
 gnc_numeric xaccSplitGetBalance (Split *split);
 gnc_numeric xaccSplitGetClearedBalance (Split *split);
 gnc_numeric xaccSplitGetReconciledBalance (Split *split);

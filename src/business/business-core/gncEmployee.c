@@ -1,6 +1,6 @@
 /*
  * gncEmployee.c -- the Core Employee Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -14,6 +14,8 @@
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
+#include "gncObject.h"
+#include "QueryObject.h"
 
 #include "gncBusiness.h"
 #include "gncEmployee.h"
@@ -243,10 +245,13 @@ void gncEmployeeCommitEdit (GncEmployee *employee)
 
 /* Other functions */
 
-static gint gncEmployeeSortFunc (gconstpointer a, gconstpointer b) {
-  GncEmployee *ea = (GncEmployee *) a;
-  GncEmployee *eb = (GncEmployee *) b;
-  return(strcmp(ea->username, eb->username));
+int gncEmployeeCompare (GncEmployee *a, GncEmployee *b)
+{
+  if (!a && !b) return 0;
+  if (!a && b) return 1;
+  if (a && !b) return -1;
+
+  return(strcmp(a->username, b->username));
 }
 
 /* Package-Private functions */
@@ -272,36 +277,11 @@ static void remObj (GncEmployee *employee)
   g_hash_table_remove (ht, &employee->guid);
 }
 
-struct _iterate {
-  GList *list;
-  gboolean show_all;
-};
-
-static void get_list (gpointer key, gpointer item, gpointer arg)
+static void _gncEmployeeForeach (GNCBook *book, foreachObjectCB cb,
+				 gpointer user_data)
 {
-  struct _iterate *iter = arg;
-  GncEmployee *employee = item;
-
-  if (iter->show_all || gncEmployeeGetActive (employee)) {
-    iter->list = g_list_insert_sorted (iter->list, employee, gncEmployeeSortFunc);
-  }
-}
-
-static GList * _gncEmployeeGetList (GNCBook *book, gboolean show_all)
-{
-  GHashTable *ht;
-  struct _iterate iter;
-
-  if (!book) return NULL;
-
-  iter.list = NULL;
-  iter.show_all = show_all;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-  if (ht)
-    g_hash_table_foreach (ht, get_list, &iter);
-
-  return iter.list;
+  if (!book || !cb) return;
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static const char * _gncEmployeePrintable (gpointer item)
@@ -336,19 +316,33 @@ static void _gncEmployeeDestroy (GNCBook *book)
   g_hash_table_destroy (ht);
 }
 
-static GncBusinessObject gncEmployeeDesc = {
-  GNC_BUSINESS_VERSION,
+static GncObject_t gncEmployeeDesc = {
+  GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Employee",
   _gncEmployeeCreate,
   _gncEmployeeDestroy,
-  _gncEmployeeGetList,
+  _gncEmployeeForeach,
   _gncEmployeePrintable
 };
 
 gboolean gncEmployeeRegister (void)
 {
-  return gncBusinessRegister (&gncEmployeeDesc);
+  static QueryObjectDef params[] = {
+    { EMPLOYEE_GUID, QUERYCORE_GUID, (QueryAccess)gncEmployeeGetGUID },
+    { EMPLOYEE_ID, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetID },
+    { EMPLOYEE_USERNAME, QUERYCORE_STRING, (QueryAccess)gncEmployeeGetUsername },
+    { NULL },
+  };
+  static const QueryConvertDef converters[] = {
+    { GNC_ID_BOOK, (QueryConvert)gncEmployeeGetBook },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEmployeeCompare,
+			  params, converters);
+
+  return gncObjectRegister (&gncEmployeeDesc);
 }
 
 static gint lastEmployee = 2;

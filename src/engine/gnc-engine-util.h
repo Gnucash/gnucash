@@ -199,9 +199,9 @@ void gnc_set_logfile (FILE *outfile);
 #define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
 #define DEQ(x,y) DEQEPS(x,y,EPS)
 
-#define SAFE_STRCMP(da,db) {		\
+#define SAFE_STRCMP_REAL(fcn,da,db) {	\
   if ((da) && (db)) {			\
-    int retval = strcmp ((da), (db));	\
+    int retval = fcn ((da), (db));	\
     /* if strings differ, return */	\
     if (retval) return retval;		\
   } else 				\
@@ -212,6 +212,9 @@ void gnc_set_logfile (FILE *outfile);
     return +1;				\
   }					\
 }
+
+#define SAFE_STRCMP(da,db) SAFE_STRCMP_REAL(strcmp,(da),(db))
+#define SAFE_STRCASECMP(da,db) SAFE_STRCMP_REAL(strcasecmp,(da),(db))
 
 /* Define the long long int conversion for scanf */
 #if HAVE_SCANF_LLD
@@ -228,6 +231,7 @@ void gnc_set_logfile (FILE *outfile);
  * a non-null string is always greater than a null string.
  */
 int safe_strcmp (const char * da, const char * db);
+int safe_strcasecmp (const char * da, const char * db);
 
 /* The null_strcmp compares strings a and b the same way that strcmp()
  * does, except that either may be null.  This routine assumes that

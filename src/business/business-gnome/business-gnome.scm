@@ -7,16 +7,6 @@
 
 (define (add-business-extensions)
 
-  (define gnc:extensions-temp-book #f)
-
-  (define (gnc:extensions-get-book)
-    (if gnc:extensions-temp-book
-        gnc:extensions-temp-book
-        (begin
-          (set! gnc:extensions-temp-book (gnc:get-current-book))
-          (gnc:business-create-book gnc:extensions-temp-book)
-          gnc:extensions-temp-book)))
-
   (define gnc:extensions-last-order #f)
   (define gnc:extensions-last-invoice #f)
   (define gnc:extensions-owner #f)
@@ -26,14 +16,14 @@
 			(N_ "Test New Job Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:job-new #f (gnc:extensions-get-book) #f))))
+			  (gnc:job-new #f (gnc:get-current-book) #f))))
 
   (define select-job-item
     (gnc:make-menu-item (N_ "Test Job Selection Dialog")
 			(N_ "Test Job Selection Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:job-select #f (gnc:extensions-get-book)
+			  (gnc:job-select #f (gnc:get-current-book)
                                           #f #f))))
 
   (define new-vendor-item
@@ -41,7 +31,7 @@
 			(N_ "Test New Vendor Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:vendor-new #f (gnc:extensions-get-book)))))
+			  (gnc:vendor-new #f (gnc:get-current-book)))))
 
 
   (define select-vendor-item
@@ -49,7 +39,7 @@
 			(N_ "Test Vendor Selection Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:vendor-select (gnc:extensions-get-book)
+			  (gnc:vendor-select (gnc:get-current-book)
                                              #f #f))))
 
   (define new-employee-item
@@ -57,7 +47,7 @@
 			(N_ "Test New Employee Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:employee-new #f (gnc:extensions-get-book)))))
+			  (gnc:employee-new #f (gnc:get-current-book)))))
 
 
   (define select-employee-item
@@ -65,7 +55,7 @@
 			(N_ "Test Employee Selection Dialog")
 			(list "Extensions" "")
 			(lambda ()
-			  (gnc:employee-select (gnc:extensions-get-book)
+			  (gnc:employee-select (gnc:get-current-book)
                                                #f #f))))
 
   (define new-order-item
@@ -75,7 +65,7 @@
 			(lambda ()
 			  (set! gnc:extensions-last-order
 				(gnc:order-new #f gnc:extensions-owner
-					       (gnc:extensions-get-book))))))
+					       (gnc:get-current-book))))))
 
   (define edit-order-item
     (gnc:make-menu-item (N_ "Test Edit/View Order Dialog")
@@ -91,7 +81,7 @@
 			(lambda ()
 			  (set! gnc:extensions-last-invoice
 				(gnc:invoice-new #f gnc:extensions-owner
-					       (gnc:extensions-get-book))))))
+					       (gnc:get-current-book))))))
 
   (define edit-invoice-item
     (gnc:make-menu-item (N_ "Test Edit/View Invoice Dialog")

@@ -19,7 +19,6 @@ test_address (void)
 {
   GncAddress *address;
   GNCBook *book = gnc_book_new ();
-  gncBusinessCreateBook (book);
 
   /* Test creation/destruction */
   {

@@ -13,6 +13,9 @@ libgncmod_engine_la_SOURCES = \
   Group.c \
   Period.c \
   Query.c \
+  QueryNew.c \
+  QueryCore.c \
+  QueryObject.c \
   SchedXaction.c \
   SX-ttinfo.c \
   Scrub.c \
@@ -30,6 +33,7 @@ libgncmod_engine_la_SOURCES = \
   gnc-session.c \
   gncmod-engine.c \
   guid.c \
+  gncObject.c \
   kvp_frame.c \
   kvp-util.c \
   md5.c \
@@ -47,6 +51,9 @@ gncinclude_HEADERS = \
   SchedXaction.h \
   SX-ttinfo.h \
   Query.h \
+  QueryNew.h \
+  QueryObject.h \
+  QueryCore.h \
   Scrub.h \
   TransLog.h \
   Transaction.h \
@@ -63,6 +70,7 @@ gncinclude_HEADERS = \
   gnc-pricedb.h \
   gnc-session.h \
   guid.h \
+  gncObject.h \
   kvp_frame.h \
   kvp-scm.h \
   messages.h
@@ -74,6 +82,9 @@ noinst_HEADERS = \
   GNCIdP.h \
   GroupP.h \
   QueryP.h \
+  QueryNewP.h \
+  QueryObjectP.h \
+  QueryCoreP.h \
   SchedXactionP.h \
   SX-ttinfo.h \
   TransactionP.h \
@@ -81,6 +92,7 @@ noinst_HEADERS = \
   gnc-event-p.h \
   gnc-pricedb-p.h \
   gnc-session-p.h \
+  gncObjectP.h \
   kvp-util-p.h \
   md5.h
 

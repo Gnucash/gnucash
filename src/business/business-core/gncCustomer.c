@@ -1,6 +1,6 @@
 /*
  * gncCustomer.c -- the Core Customer Interface
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -14,6 +14,8 @@
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
 #include "gnc-numeric.h"
+#include "gncObject.h"
+#include "QueryObject.h"
 
 #include "gncBusiness.h"
 #include "gncCustomer.h"
@@ -315,10 +317,13 @@ gboolean gncCustomerIsDirty (GncCustomer *cust)
 
 /* Other functions */
 
-static gint gncCustomerSortFunc (gconstpointer a, gconstpointer b) {
-  GncCustomer *ca = (GncCustomer *) a;
-  GncCustomer *cb = (GncCustomer *) b;
-  return(strcmp(ca->name, cb->name));
+int gncCustomerCompare (GncCustomer *a, GncCustomer *b)
+{
+  if (!a && !b) return 0;
+  if (!a && b) return 1;
+  if (a && !b) return -1;
+
+  return(strcmp(a->name, b->name));
 }
 
 /* Package-Private functions */
@@ -343,36 +348,11 @@ static void remObj (GncCustomer *cust)
   g_hash_table_remove (ht, &cust->guid);
 }
 
-struct _iterate {
-  GList *list;
-  gboolean show_all;
-};
-
-static void get_list (gpointer key, gpointer item, gpointer arg)
+static void _gncCustomerForeach (GNCBook *book, foreachObjectCB cb,
+				 gpointer user_data)
 {
-  struct _iterate *iter = arg;
-  GncCustomer *cust = item;
-
-  if (iter->show_all || gncCustomerGetActive (cust)) {
-    iter->list = g_list_insert_sorted (iter->list, cust, gncCustomerSortFunc);
-  }
-}
-
-static GList * _gncCustomerGetList (GNCBook *book, gboolean show_all)
-{
-  GHashTable *ht;
-  struct _iterate iter;
-
-  if (!book) return NULL;
-
-  iter.list = NULL;
-  iter.show_all = show_all;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-  if (ht)
-    g_hash_table_foreach (ht, get_list, &iter);
-
-  return iter.list;
+  if (!book || !cb) return;
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static const char * _gncCustomerPrintable (gpointer item)
@@ -407,19 +387,33 @@ static void _gncCustomerDestroy (GNCBook *book)
   g_hash_table_destroy (ht);
 }
 
-static GncBusinessObject gncCustomerDesc = {
-  GNC_BUSINESS_VERSION,
+static GncObject_t gncCustomerDesc = {
+  GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Customer",
   _gncCustomerCreate,
   _gncCustomerDestroy,
-  _gncCustomerGetList,
+  _gncCustomerForeach,
   _gncCustomerPrintable
 };
 
 gboolean gncCustomerRegister (void)
 {
-  return gncBusinessRegister (&gncCustomerDesc);
+  static QueryObjectDef params[] = {
+    { CUSTOMER_GUID, QUERYCORE_GUID, (QueryAccess)gncCustomerGetGUID },
+    { CUSTOMER_ID, QUERYCORE_STRING, (QueryAccess)gncCustomerGetID },
+    { CUSTOMER_NAME, QUERYCORE_STRING, (QueryAccess)gncCustomerGetName },
+    { NULL },
+  };
+  static const QueryConvertDef converters[] = {
+    { GNC_ID_BOOK, (QueryConvert)gncCustomerGetBook },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncCustomerCompare,
+			  params, converters);
+
+  return gncObjectRegister (&gncCustomerDesc);
 }
 
 static gint lastCustomer = 27;

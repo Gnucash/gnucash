@@ -46,5 +46,10 @@ GncEmployee * gncEmployeeLookup (GNCBook *book, const GUID *guid);
 gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
 void gncEmployeeCommitEdit (GncEmployee *employee);
+int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
+
+#define EMPLOYEE_GUID	"guid"
+#define EMPLOYEE_ID	"id"
+#define EMPLOYEE_USERNAME	"username"
 
 #endif /* GNC_EMPLOYEE_H_ */

@@ -14,6 +14,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
+#include "QueryObject.h"
 
 #include "gncBusiness.h"
 #include "gncVendor.h"
@@ -242,10 +243,13 @@ void gncVendorCommitEdit (GncVendor *vendor)
 
 /* Other functions */
 
-static gint gncVendorSortFunc (gconstpointer a, gconstpointer b) {
-  GncVendor *va = (GncVendor *) a;
-  GncVendor *vb = (GncVendor *) b;
-  return(strcmp(va->name, vb->name));
+int gncVendorCompare (GncVendor *a, GncVendor *b)
+{
+  if (!a && !b) return 0;
+  if (!a && b) return 1;
+  if (a && !b) return -1;
+
+  return(strcmp(a->name, b->name));
 }
 
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
@@ -300,36 +304,11 @@ static void remObj (GncVendor *vendor)
   g_hash_table_remove (ht, &vendor->guid);
 }
 
-struct _iterate {
-  GList *list;
-  gboolean show_all;
-};
-
-static void get_list (gpointer key, gpointer item, gpointer arg)
+static void _gncVendorForeach (GNCBook *book, foreachObjectCB cb,
+			       gpointer user_data)
 {
-  struct _iterate *iter = arg;
-  GncVendor *vendor = item;
-
-  if (iter->show_all || gncVendorGetActive (vendor)) {
-    iter->list = g_list_insert_sorted (iter->list, vendor, gncVendorSortFunc);
-  }
-}
-
-static GList * _gncVendorGetList (GNCBook *book, gboolean show_all)
-{
-  GHashTable *ht;
-  struct _iterate iter;
-
-  if (!book) return NULL;
-
-  iter.list = NULL;
-  iter.show_all = show_all;
-
-  ht = gnc_book_get_data (book, _GNC_MOD_NAME);
-  if (ht)
-    g_hash_table_foreach (ht, get_list, &iter);
-
-  return iter.list;
+  if (!book || !cb) return;
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
 }
 
 static const char * _gncVendorPrintable (gpointer item)
@@ -364,19 +343,33 @@ static void _gncVendorDestroy (GNCBook *book)
   g_hash_table_destroy (ht);
 }
 
-static GncBusinessObject gncVendorDesc = {
-  GNC_BUSINESS_VERSION,
+static GncObject_t gncVendorDesc = {
+  GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Vendor",
   _gncVendorCreate,
   _gncVendorDestroy,
-  _gncVendorGetList,
+  _gncVendorForeach,
   _gncVendorPrintable
 };
 
 gboolean gncVendorRegister (void)
 {
-  return gncBusinessRegister (&gncVendorDesc);
+  static QueryObjectDef params[] = {
+    { VENDOR_GUID, QUERYCORE_GUID, (QueryAccess)gncVendorGetGUID },
+    { VENDOR_ID, QUERYCORE_STRING, (QueryAccess)gncVendorGetID },
+    { VENDOR_NAME, QUERYCORE_STRING, (QueryAccess)gncVendorGetName },
+    { NULL },
+  };
+  static const QueryConvertDef converters[] = {
+    { GNC_ID_BOOK, (QueryConvert)gncVendorGetBook },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncVendorCompare,
+			  params, converters);
+
+  return gncObjectRegister (&gncVendorDesc);
 }
 
 static gint lastVendor = 17;

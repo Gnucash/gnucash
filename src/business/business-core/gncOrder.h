@@ -51,5 +51,8 @@ GncOrder * gncOrderLookup (GNCBook *book, const GUID *guid);
 gboolean gncOrderIsDirty (GncOrder *order);
 void gncOrderBeginEdit (GncOrder *order);
 void gncOrderCommitEdit (GncOrder *order);
+int gncOrderCompare (GncOrder *a, GncOrder *b);
+
+#define ORDER_GUID	"guid"
 
 #endif /* GNC_ORDER_H_ */

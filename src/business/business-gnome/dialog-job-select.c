@@ -12,8 +12,9 @@
 #include "dialog-utils.h"
 #include "gnc-ui.h"
 #include "gnc-gui-query.h"
+#include "gncObject.h"
+#include "QueryNew.h"
 
-#include "gncBusiness.h"
 #include "gncJob.h"
 #include "dialog-job-select.h"
 #include "dialog-job.h"
@@ -31,7 +32,8 @@ struct select_job_window {
   GncJob *	job;
   GncOwner	owner;
 
-  const GncBusinessObject *job_type, *owner_type;
+  QueryNew *	query;
+  GNCIdTypeConst owner_type;
 };
 
 
@@ -68,7 +70,8 @@ update_job_select_picker (struct select_job_window *w)
 
     /* Build a list of strings (objs is pre-sorted, so keep the order!) */
     for (iterator = objs; iterator; iterator = iterator->next) {
-      const gchar *label = (*(w->job_type->printable))(iterator->data);
+      const gchar *label = gncObjectPrintable (GNC_JOB_MODULE_NAME,
+					       iterator->data);
 
       li = gtk_list_item_new_with_label (label);
       gtk_object_set_data (GTK_OBJECT (li), "item-list-pointer", iterator->data);
@@ -93,7 +96,7 @@ update_job_select_picker (struct select_job_window *w)
   {
     const char * label;
     if (w->job)
-      label = (*(w->job_type->printable))(w->job);
+      label = gncObjectPrintable (GNC_JOB_MODULE_NAME, w->job);
     else
       label = "";
 
@@ -119,11 +122,12 @@ update_customer_select_picker (struct select_job_window *w)
   gncOwnerCopy (&(w->owner), &saved_owner);
 
   /* Get the list of objects */
-  custs = (*(w->owner_type->get_list))(w->book, show_all);
+  /* XXX: use show_all in the query */
+  custs = gncQueryRun (w->query, w->owner_type);
 
   /* Build a list of strings (objs is pre-sorted, so keep the order!) */
   for (iterator = custs; iterator; iterator = iterator->next) {
-    const gchar *label = (*(w->owner_type->printable))(iterator->data);
+    const gchar *label = gncObjectPrintable (w->owner_type, iterator->data);
 
     li = gtk_list_item_new_with_label (label);
     gtk_object_set_data (GTK_OBJECT (li), "item-list-pointer", iterator->data);
@@ -152,14 +156,12 @@ update_customer_select_picker (struct select_job_window *w)
     const char * label;
 
     if (w->owner.owner.undefined)
-      label = (*(w->owner_type->printable))(w->owner.owner.undefined);
+      label = gncObjectPrintable (w->owner_type, w->owner.owner.undefined);
     else
       label = "";
   
     gtk_entry_set_text (GTK_ENTRY (w->customer_entry), label);
   }
-
-  g_list_free (custs);
 }
 
 static void
@@ -297,15 +299,16 @@ gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
     g_warning ("Cannot handle this owner type");
     return NULL;
   }
-  win->owner_type = gncBusinessLookup (type_name);
-  win->job_type = gncBusinessLookup (GNC_JOB_MODULE_NAME);
+  win->owner_type = type_name;
+  win->query = gncQueryCreate ();
+  gncQuerySetBook (win->query, book);
   
   xml = gnc_glade_xml_new ("job.glade",
 			   "Job Selector Dialog");
 
   owner_label = glade_xml_get_widget (xml, "owner_label");
   gtk_label_set_text (GTK_LABEL (owner_label),
-		      gncBusinessGetTypeLabel (type_name));
+		      gncObjectGetTypeLabel (type_name));
 
   /* Grab the widgets */
 
@@ -369,6 +372,7 @@ gnc_ui_select_job_new (GtkWidget * parent, GNCBook *book,
 
   /* exit */
   retval = win->job;
+  gncQueryDestroy (win->query);
   g_free(win);
 
   return retval;

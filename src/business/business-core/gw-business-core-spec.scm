@@ -26,7 +26,6 @@
    ws
    (lambda (wrapset client-wrapset)
      (list
-      "#include <gncBusiness.h>\n"
       "#include <gncAddress.h>\n"
       "#include <gncCustomer.h>\n"
       "#include <gncEmployee.h>\n"
@@ -56,18 +55,6 @@
   (gw:wrap-as-wct ws '<gnc:GncOrder*> "GncOrder*" "const GncOrder*")
   (gw:wrap-as-wct ws '<gnc:GncOwner*> "GncOwner*" "const GncOwner*")
   (gw:wrap-as-wct ws '<gnc:GncVendor*> "GncVendor*" "const GncVendor*")
-
-  ;;
-  ;; gncBusiness.h
-  ;;
-
-  (gw:wrap-function
-   ws
-   'gnc:business-create-book
-   '<gw:void>
-   "gncBusinessCreateBook"
-   '((<gnc:Book*> book))
-   "Create the Business data tables in the book")
 
   ;; gncAddress.h
 

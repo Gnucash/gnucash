@@ -4,8 +4,8 @@
 #include "guid.h"
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
+#include "gncObject.h"
 
-#include "gncBusiness.h"
 #include "gncJob.h"
 #include "gncJobP.h"
 #include "test-stuff.h"
@@ -43,7 +43,6 @@ test_job (void)
   GncJob *job;
 
   book = gnc_book_new ();
-  gncBusinessCreateBook (book);
 
   /* Test creation/destruction */
   {
@@ -92,7 +91,7 @@ test_job (void)
     const char *res;
 
     gncJobSetName (job, str);
-    res = gncBusinessPrintable (GNC_JOB_MODULE_NAME, job);
+    res = gncObjectPrintable (GNC_JOB_MODULE_NAME, job);
     do_test (res != NULL, "Printable NULL?");
     do_test (safe_strcmp (str, res) == 0, "Printable equals");
   }    

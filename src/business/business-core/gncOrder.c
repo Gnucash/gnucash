@@ -1,6 +1,6 @@
 /*
  * gncOrder.c -- the Core Business Order
- * Copyright (C) 2001 Derek Atkins
+ * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -14,6 +14,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
+#include "QueryObject.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -256,6 +257,26 @@ void gncOrderCommitEdit (GncOrder *order)
   if (!order) return;
 }
 
+int gncOrderCompare (GncOrder *a, GncOrder *b)
+{
+  int compare;
+
+  if (a == b) return 0;
+  if (!a && b) return -1;
+  if (a && !b) return 1;
+
+  compare = safe_strcmp (a->id, b->id);
+  if (!compare) return compare;
+
+  compare = timespec_cmp (&(a->opened), &(b->opened));
+  if (!compare) return compare;
+
+  compare = timespec_cmp (&(a->closed), &(b->closed));
+  if (!compare) return compare;
+
+  return guid_compare (&(a->guid), &(b->guid));
+}
+
 /* Package-Private functions */
 
 static void addObj (GncOrder *order)
@@ -300,19 +321,38 @@ static void _gncOrderDestroy (GNCBook *book)
   g_hash_table_destroy (ht);
 }
 
-static GncBusinessObject gncOrderDesc = {
-  GNC_BUSINESS_VERSION,
+static void _gncOrderForeach (GNCBook *book, foreachObjectCB cb,
+			      gpointer user_data)
+{
+  if (!book || !cb) return;
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
+}
+
+static GncObject_t gncOrderDesc = {
+  GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Purchase/Sales Order",
   _gncOrderCreate,
   _gncOrderDestroy,
-  NULL,				/* get list */
+  _gncOrderForeach,
   NULL				/* printable */
 };
 
 gboolean gncOrderRegister (void)
 {
-  return gncBusinessRegister (&gncOrderDesc);
+  static QueryObjectDef params[] = {
+    { ORDER_GUID, QUERYCORE_GUID, (QueryAccess)gncOrderGetGUID },
+    { NULL },
+  };
+  static const QueryConvertDef converters[] = {
+    { GNC_ID_BOOK, (QueryConvert)gncOrderGetBook },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOrderCompare,
+			  params, converters);
+
+  return gncObjectRegister (&gncOrderDesc);
 }
 
 static gint lastId = 471;	/* XXX */

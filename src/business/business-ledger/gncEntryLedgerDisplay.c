@@ -23,13 +23,10 @@
 static GList *
 gnc_entry_ledger_get_entries (GncEntryLedger *ledger)
 {
-  if (ledger->order)
-    return (gncOrderGetEntries (ledger->order));
+  if (ledger->query)
+    return gncQueryRun (ledger->query, GNC_ENTRY_MODULE_NAME);
 
-  if (ledger->invoice)
-    return (gncInvoiceGetEntries (ledger->invoice));
-
-  // g_warning ("no invoice; no order.  Who am I?");
+  //  g_warning ("No query to run?");
   return NULL;
 }
 

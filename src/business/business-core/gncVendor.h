@@ -50,5 +50,10 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
 
 GncVendor * gncVendorLookup (GNCBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
+int gncVendorCompare (GncVendor *a, GncVendor *b);
+
+#define VENDOR_GUID	"guid"
+#define VENDOR_ID	"id"
+#define VENDOR_NAME	"name"
 
 #endif /* GNC_VENDOR_H_ */

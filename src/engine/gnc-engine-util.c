@@ -317,6 +317,13 @@ safe_strcmp (const char * da, const char * db)
 }
 
 int 
+safe_strcasecmp (const char * da, const char * db)
+{
+   SAFE_STRCASECMP (da, db);
+   return 0;
+}
+
+int 
 null_strcmp (const char * da, const char * db)
 {
    if (da && db) return strcmp (da, db);

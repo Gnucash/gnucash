@@ -13,7 +13,6 @@
 #include "gnc-module-api.h"
 #include "gw-business-core.h"
 
-#include "gncBusinessP.h"
 #include "gncCustomerP.h"
 #include "gncEmployeeP.h"
 #include "gncEntryP.h"
@@ -52,9 +51,6 @@ gnc_module_init(int refcount)
 
   if(refcount == 0) 
   {
-    /* initialize the business engine on the first load */
-    gncBusinessInitialize (0, NULL);
-
     /* initialize known types */
     gncCustomerRegister ();
     gncEmployeeRegister ();

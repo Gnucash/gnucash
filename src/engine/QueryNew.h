@@ -1,0 +1,187 @@
+/*
+ * QueryNew.h -- API for finding Gnucash objects
+ * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
+ *
+ */
+
+#ifndef GNC_QUERYNEW_H
+#define GNC_QUERYNEW_H
+
+#include "GNCId.h"
+
+/* A Query */
+typedef struct querynew_s QueryNew;
+
+/* Query Term Operators, for combining Query Terms */
+typedef enum {
+  QUERY_AND=1,
+  QUERY_OR,
+  QUERY_NAND,
+  QUERY_NOR,
+  QUERY_XOR
+} QueryOp;
+
+
+/* Standard Query Term comparitors, for how to process a query term.
+ * Note that not all core types implement all comparitors
+ */
+typedef enum {
+  COMPARE_LT = 1,
+  COMPARE_LTE,
+  COMPARE_EQUAL,
+  COMPARE_GT,
+  COMPARE_GTE
+} query_compare_t;
+
+#define QUERY_DEFAULT_SORT	"GnucashQueryDefaultSortObject"
+
+/* "Known" Object Parameters */
+#define SPLIT_KVP		"kvp"
+#define SPLIT_GUID		"guid"
+#define SPLIT_DATE_RECONCILED	"date-reconciled"
+#define SPLIT_BALANCE		"balance"
+#define SPLIT_CLEARED_BALANCE	"cleared-balance"
+#define SPLIT_RECONCILED_BALANCE	"reconciled-balance"
+#define SPLIT_MEMO		"memo"
+#define SPLIT_ACTION		"action"
+#define SPLIT_RECONCILE		"reconcile-flag"
+#define SPLIT_AMOUNT		"amount"
+#define SPLIT_SHARE_PRICE	"share-price"
+#define SPLIT_VALUE		"value"
+#define SPLIT_TYPE		"type"
+#define SPLIT_VOIDED_AMOUNT	"voided-amount"
+#define SPLIT_VOIDED_VALUE	"voided-value"
+
+#define TRANS_KVP		"kvp"
+#define TRANS_GUID		"guid"
+#define TRANS_NUM		"num"
+#define TRANS_DESCRIPTON	"desc"
+#define TRANS_DATE_ENTERED	"date-entered"
+#define TRANS_DATE_POSTED	"date-posted"
+#define TRANS_DATE_DUE		"date-due"
+#define TRANS_TYPE		"type"
+#define TRANS_VOID_STATUS	"void-p"
+#define TRANS_VOID_REASON	"void-reason"
+#define TRANS_VOID_TIME		"void-time"
+
+#define ACCOUNT_KVP		"kvp"
+#define ACCOUNT_GUID		"guid"
+#define ACCOUNT_NAME		"name"
+#define ACCOUNT_CODE		"code"
+#define ACCOUNT_DESCRIPTION	"desc"
+#define ACCOUNT_NOTES		"notes"
+#define ACCOUNT_BALANCE		"balance"
+#define ACCOUNT_CLEARED_BALANCE	"cleared-balance"
+#define ACCOUNT_RECONCILED_BALANCE	"reconciled-balance"
+#define ACCOUNT_TAX_RELATED	"tax-related-p"
+
+#define BOOK_KVP		"kvp"
+#define BOOK_GUID		"guid"
+
+/* Type of Query Core Objects (String, Date, Numeric, GUID, etc. */
+typedef const char * QueryCoreType;
+
+/*
+ * List of known core query types... 
+ * Each core query type defines it's set of optional "comparitor qualifiers".
+ */
+#define QUERYCORE_STRING	"string"
+typedef enum {
+  STRING_MATCH_NORMAL = 1,
+  STRING_MATCH_CASEINSENSITIVE
+} string_match_t;
+
+#define QUERYCORE_DATE		"date"
+typedef enum {
+  DATE_MATCH_NORMAL = 1,
+  DATE_MATCH_ROUNDED
+} date_match_t;
+
+#define QUERYCORE_NUMERIC	"numeric"
+typedef enum {
+  NUMERIC_MATCH_NEG_ONLY = 1,
+  NUMERIC_MATCH_POS_ONLY,
+  NUMERIC_MATCH_ANY
+} numeric_match_t;
+
+#define QUERYCORE_GUID		"guid"
+typedef enum {
+  GUID_MATCH_ANY = 1,
+  GUID_MATCH_NONE,
+  GUID_MATCH_NULL
+} guid_match_t;
+
+#define QUERYCORE_INT64		"gint64"
+#define QUERYCORE_DOUBLE	"double"
+#define QUERYCORE_BOOLEAN	"boolean"
+#define QUERYCORE_KVP		"kvp"
+
+/* A CHAR type is for a RECNCell */
+#define QUERYCORE_CHAR		"character"
+typedef enum {
+  CHAR_MATCH_ANY = 1,
+  CHAR_MATCH_NONE
+} char_match_t;
+
+/* Basic API Functions */
+
+/* This is the general function that adds a new Query Term to a query.
+ * It will find the 'obj_type' object of the search item and compare
+ * the 'param_name' parameter to the predicate data via the comparitor.
+ *
+ * For example:
+ *
+ * acct_name_pred_data = make_string_pred_data(STRING_MATCH_CASEINSENSITIVE,
+ *					       account_name);
+ * gncQueryAddTerm (query, GNC_ID_ACCOUNT, QUERY_ACCOUNT_NAME,
+ *		    COMPARE_EQUAL, acct_name_pred_data, QUERY_AND);
+ */
+
+typedef struct query_pred_data *QueryPredData_t;
+
+void gncQueryAddTerm (QueryNew *query,
+		      GNCIdTypeConst obj_type, const char *param_name,
+		      query_compare_t comparitor, QueryPredData_t pred_data,
+		      QueryOp op);
+
+void gncQuerySetBook (QueryNew *q, GNCBook *book);
+void gncQueryAddGUIDMatch (QueryNew *q, QueryOp op,
+			   GNCIdTypeConst obj_type, const char *param_name,
+			   const GUID *guid);
+
+/* Run the query:
+ *
+ * ex: gncQueryRun (query, GNC_ID_SPLIT);
+ */
+GList * gncQueryRun (QueryNew *query, GNCIdTypeConst obj_type);
+
+QueryNew * gncQueryCreate (void);
+void gncQueryDestroy (QueryNew *q);
+
+void gncQueryClear (QueryNew *query);
+void gncQueryPurgeTerms (QueryNew *q, GNCIdTypeConst obj_type,
+			 const char *param_name);
+int gncQueryHasTerms (QueryNew *q);
+int gncQueryNumTerms (QueryNew *q);
+GList * gncQueryGetTerms (QueryNew *q);
+
+QueryNew * gncQueryCopy (QueryNew *q);
+QueryNew * gncQueryInvert(QueryNew *q);
+QueryNew * gncQueryMerge(QueryNew *q1, QueryNew *q2, QueryOp op);
+
+void gncQuerySetSortOrder (QueryNew *q,
+			   GNCIdTypeConst prim_type, const char *prim_param,
+			   GNCIdTypeConst secy_type, const char *sec_param,
+			   GNCIdTypeConst tert_type, const char *tert_param);
+
+void gncQuerySetSortOptions (QueryNew *q, gint prim_op, gint sec_op,
+			     gint tert_op);
+
+void gncQuerySetSortIncreasing (QueryNew *q, gboolean prim_inc,
+				gboolean sec_inc, gboolean tert_inc);
+
+
+void gncQuerySetMaxResults (QueryNew *q, int n);
+int gncQueryGetMaxResults (QueryNew *q);
+
+#endif /* GNC_QUERYNEW_H */

@@ -12,6 +12,7 @@
 #define TEST_MODULE_NAME "business-test"
 #define TEST_MODULE_DESC "Test Business"
 
+#if 0
 static GList * get_list (GNCBook *, gboolean show_all);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
@@ -102,10 +103,11 @@ main_helper (int argc, char **argv)
   print_test_results();
   exit(get_rv());
 }
+#endif
 
 int
 main (int argc, char **argv)
 {
-  gh_enter (argc, argv, main_helper);
+  //  gh_enter (argc, argv, main_helper);
   return 0;
 }

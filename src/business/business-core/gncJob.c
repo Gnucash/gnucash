@@ -266,16 +266,6 @@ static void remObj (GncJob *job)
   g_hash_table_remove (ht, &job->guid);
 }
 
-#if 0
-static GList * _gncJobGetList (GNCBook *obj, gboolean show_all)
-{
-  if (!obj) return NULL;
-
-  /* XXX */
-  return NULL;
-}
-#endif
-
 static const char * _gncJobPrintable (gpointer item)
 {
   GncJob *c;
@@ -308,19 +298,26 @@ static void _gncJobDestroy (GNCBook *book)
   g_hash_table_destroy (ht);
 }
 
-static GncBusinessObject gncJobDesc = {
-  GNC_BUSINESS_VERSION,
-  GNC_JOB_MODULE_NAME,
+static void _gncJobForeach (GNCBook *book, foreachObjectCB cb,
+			    gpointer user_data)
+{
+  if (!book || !cb) return;
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
+}
+
+static GncObject_t gncJobDesc = {
+  GNC_OBJECT_VERSION,
+  _GNC_MOD_NAME,
   "Job",
   _gncJobCreate,
   _gncJobDestroy,
-  NULL,				/* get_list */
+  _gncJobForeach,
   _gncJobPrintable
 };
 
 gboolean gncJobRegister (void)
 {
-  return gncBusinessRegister (&gncJobDesc);
+  return gncObjectRegister (&gncJobDesc);
 }
 
 static gint lastJob = 57;

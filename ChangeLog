@@ -1,3 +1,20 @@
+2002-02-03  Derek Atkins <warlord@MIT.EDU>
+
+	* src/engine/gncObject.c: core object registration.
+
+	* src/engine/gnc-book.c: call into the object registration whenver
+	a book is created or destroyed.
+
+	* src/engine/gnc-engine.c: initialize the object registration and
+	QueryNew subsystems.
+	
+	* first revision of the "QueryNew" interface.  Note that the
+	interface is not complete -- in fact, the API will be changing
+	this afternoon, but I wanted a baseline (working) system checked
+	into the repository.  Right now only the business code is using
+	the new query -- the old query still exists, so you should see no
+	functional difference in anything except the business code.
+
 2002-01-29  Dave Peticolas  <dave@krondo.com>
 
 	* src/report/standard-reports/account-piecharts.scm: bump up default

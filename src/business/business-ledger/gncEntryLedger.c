@@ -241,6 +241,7 @@ void gnc_entry_ledger_destroy (GncEntryLedger *ledger)
   gnc_entry_ledger_clear_blank_entry (ledger);
   gnc_entry_ledger_display_fini (ledger);
   gnc_table_destroy (ledger->table);
+  gncQueryDestroy (ledger->query);
   g_free (ledger);
 }
 
@@ -255,14 +256,46 @@ void gnc_entry_ledger_set_default_order (GncEntryLedger *ledger,
 {
   if (!ledger) return;
   ledger->order = order;
+
+  if (!ledger->query && order) {
+    ledger->query = gncQueryCreate ();
+    gncQuerySetBook (ledger->query, gncOrderGetBook (order));
+    gncQueryAddGUIDMatch (ledger->query, QUERY_AND,
+			  GNC_ORDER_MODULE_NAME, ORDER_GUID,
+			  gncOrderGetGUID (order));
+  }
   gnc_entry_ledger_display_refresh (ledger);
 }
 
 void gnc_entry_ledger_set_default_invoice (GncEntryLedger *ledger,
-					 GncInvoice *invoice)
+					   GncInvoice *invoice)
 {
   if (!ledger) return;
   ledger->invoice = invoice;
+
+  if (!ledger->query && invoice) {
+    ledger->query = gncQueryCreate ();
+    gncQuerySetBook (ledger->query, gncInvoiceGetBook (invoice));
+
+    /* Match:
+     * Entry's Invoice == this invoice ||
+     * ( Entry's Invoice == NULL &&
+     *   Entry's Order's real-parent == Invoice's parent )
+     *
+     * Note that the "second" term is only for Editable invoices, and
+     * only when we've already got an 'owner'.
+     */
+    gncQueryAddGUIDMatch (ledger->query, QUERY_AND,
+			  GNC_INVOICE_MODULE_NAME, INVOICE_GUID,
+			  gncInvoiceGetGUID (invoice));
+
+    /* Note that this is a bogus search -- it will find all entries that
+     * exist (including "blank" entries)
+     */
+    gncQueryAddGUIDMatch (ledger->query, QUERY_OR,
+    			  GNC_INVOICE_MODULE_NAME, INVOICE_GUID, NULL);
+
+  }
   gnc_entry_ledger_display_refresh (ledger);
 }
 

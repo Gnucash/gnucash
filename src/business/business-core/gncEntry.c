@@ -13,6 +13,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
+#include "QueryObject.h"
 
 #include "gncBusiness.h"
 #include "gncEntry.h"
@@ -400,6 +401,26 @@ void gncEntryCommitEdit (GncEntry *entry)
   /* XXX */
 }
 
+int gncEntryCompare (GncEntry *a, GncEntry *b)
+{
+  int compare;
+
+  if (a == b) return 0;
+  if (!a && b) return -1;
+  if (a && !b) return 1;
+
+  compare = timespec_cmp (&(a->date), &(b->date));
+  if (!compare) return compare;
+
+  compare = safe_strcmp (a->desc, b->desc);
+  if (!compare) return compare;
+
+  compare = safe_strcmp (a->action, b->action);
+  if (!compare) return compare;
+
+  return guid_compare (&(a->guid), &(b->guid));
+}
+
 /* Package-Private functions */
 
 static void addObj (GncEntry *entry)
@@ -444,17 +465,43 @@ static void _gncEntryDestroy (GNCBook *book)
   g_hash_table_destroy (ht);
 }
 
-static GncBusinessObject gncEntryDesc = {
-  GNC_BUSINESS_VERSION,
+static void _gncEntryForeach (GNCBook *book, foreachObjectCB cb,
+			      gpointer user_data)
+{
+  if (!book || !cb) return;
+  gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
+}
+
+static GncObject_t gncEntryDesc = {
+  GNC_OBJECT_VERSION,
   _GNC_MOD_NAME,
   "Order/Invoice Entry",
   _gncEntryCreate,
   _gncEntryDestroy,
-  NULL,				/* get list */
+  _gncEntryForeach,
   NULL				/* printable */
 };
 
 gboolean gncEntryRegister (void)
 {
-  return gncBusinessRegister (&gncEntryDesc);
+  static QueryObjectDef params[] = {
+    { ENTRY_GUID, QUERYCORE_GUID, (QueryAccess)gncEntryGetGUID },
+    { ENTRY_DATE, QUERYCORE_DATE, (QueryAccess)gncEntryGetDate },
+    { ENTRY_DESC, QUERYCORE_STRING, (QueryAccess)gncEntryGetDescription },
+    { ENTRY_ACTION, QUERYCORE_STRING, (QueryAccess)gncEntryGetAction },
+    { ENTRY_QTY, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetQuantity },
+    { ENTRY_PRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetPrice },
+    { NULL },
+  };
+  static const QueryConvertDef converters[] = {
+    { GNC_ID_BOOK, (QueryConvert)gncEntryGetBook },
+    { GNC_INVOICE_MODULE_NAME, (QueryConvert)gncEntryGetInvoice },
+    { GNC_ORDER_MODULE_NAME, (QueryConvert)gncEntryGetOrder },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEntryCompare,
+			  params, converters);
+
+  return gncObjectRegister (&gncEntryDesc);
 }

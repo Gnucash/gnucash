@@ -2600,6 +2600,16 @@ xaccTransGetDateDueTS (Transaction *trans, Timespec *ts)
     xaccTransGetDatePostedTS (trans, ts);
 }
 
+Timespec
+xaccTransRetDateDueTS (Transaction *trans)
+{
+  Timespec ts;
+  ts.tv_sec = 0; ts.tv_nsec = 0;
+  if (!trans) return ts;
+  xaccTransGetDateDueTS (trans, &ts);
+  return ts;
+}
+
 char
 xaccTransGetTxnType (Transaction *trans)
 {
@@ -2792,6 +2802,13 @@ xaccSplitGetSharePrice (Split * split) {
 
 /********************************************************************\
 \********************************************************************/
+
+GNCBook *
+xaccSplitGetBook (Split *split)
+{
+  if (!split) return NULL;
+  return split->book;
+}
 
 const char *
 xaccSplitGetType(const Split *s)
