@@ -737,6 +737,7 @@ AC_OUTPUT(
           src/quotes/Makefile
           src/register/Makefile
           src/register/ledger-core/Makefile
+          src/register/ledger-core/test/Makefile
           src/register/register-core/Makefile
           src/register/register-core/test/Makefile
           src/register/register-gnome/Makefile
