@@ -48,6 +48,7 @@ libgncmod_business_core_la_LIBADD = \
   ${EFENCE_LIBS}
 
 # business-core-helpers.c
+
 libgw_business_core_la_SOURCES = gw-business-core.c 
 libgw_business_core_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
 
@@ -73,7 +74,7 @@ gw-business-core.scm gw-business-core.c gw-business-core.h: .scm-links gw-busine
 	 (set! %load-path (cons \"${PWD}\" %load-path)) \
 	 (set! %load-path (cons \"../../engine\" %load-path)) \
 	 (primitive-load \"./gw-business-core-spec.scm\") \
-	 (gw:generate-module \"gw-business-core\")"
+	 (gw:generate-wrapset \"gw-business-core\")"
 
 BUILT_SOURCES = gw-business-core.scm gw-business-core.c gw-business-core.h
 CLEANFILES = gw-business-core.scm gw-business-core.c gw-business-core.h gw-business-core.html
