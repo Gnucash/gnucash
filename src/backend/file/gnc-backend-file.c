@@ -5,7 +5,6 @@
  *********************************************************************/
 
 #define _GNU_SOURCE
-#define __EXTENSIONS__
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -547,9 +546,10 @@ gnc_file_be_select_files (const struct dirent *d)
 static void
 gnc_file_be_remove_old_files(FileBackend *be)
 {
-    struct dirent **dent;
+    struct dirent *dent;
+    DIR *dir;
     struct stat lockstatbuf, statbuf;
-    int pathlen, n;
+    int pathlen;
     time_t now;
 
     if (stat (be->lockfile, &lockstatbuf) != 0)
@@ -563,14 +563,31 @@ gnc_file_be_remove_old_files(FileBackend *be)
      * appropriate extensions.  Pity you can't pass user data into
      * scandir...
      */
-    n = scandir(be->dirname, &dent, gnc_file_be_select_files, alphasort);
-    if (n <= 0)
+
+    /*
+     * Unfortunately scandir() is not portable, so re-write this
+     * function without it.  Note that this version will be even a bit
+     * faster because it does not have to sort, malloc, or anything
+     * else that scandir did, and it only performs a single pass
+     * through the directory rather than one pass through the
+     * directory and then one pass over the 'matching' files. --
+     * warlord@MIT.EDU 2002-05-06
+     */
+    
+    dir = opendir (be->dirname);
+    if (!dir)
         return;
 
     now = time(NULL);
-    while(n--) {
-        char *name = g_strconcat(be->dirname, "/", dent[n]->d_name, NULL);
-        int len = strlen(name) - 4;
+    while((dent = readdir(dir)) != NULL) {
+        char *name;
+        int len;
+
+	if (gnc_file_be_select_files (dent) == 0)
+	    continue;
+
+	name = g_strconcat(be->dirname, "/", dent->d_name, NULL);
+	len = strlen(name) - 4;
 
         /* Is this file associated with the current data file */
         if (strncmp(name, be->fullpath, pathlen) == 0) {
@@ -598,9 +615,8 @@ gnc_file_be_remove_old_files(FileBackend *be)
             }
         }
         g_free(name);
-        free(dent[n]);
     }
-    free(dent);
+    closedir (dir);
 }
 
     

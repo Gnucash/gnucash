@@ -416,10 +416,13 @@ gnc_error_dialog_common(GtkWindow *parent, const gchar *format, va_list args)
 void 
 gnc_error_dialog(const gchar *format, ...)
 {
+  GtkWidget *parent;
   va_list args;
 
+  parent = gnc_ui_get_toplevel();
+
   va_start(args, format);
-  gnc_error_dialog_common(GTK_WINDOW(gnc_ui_get_toplevel()), format, args);
+  gnc_error_dialog_common(parent ? GTK_WINDOW(parent) : NULL, format, args);
   va_end(args);
 }
 
