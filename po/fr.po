@@ -2570,7 +2570,7 @@ msgstr "Faire un rapport de transaction sur ces comptes"
 msgid ""
 "Reverse Bank, Cash, Asset, Stock, Mutual Fund, Currency, and Expense Accounts"
 msgstr ""
-"Inverser les comptes Banque, Espèces, Avoir, Actions, Fonds de placement, Monnaie, et Dépenses
+"Inverser les comptes Banque, Espèces, Avoir, Actions, Fonds de placement, Monnaie, et Dépenses"
 
 # po/guile_strings.txt:233
 #: po/guile_strings.txt:117
