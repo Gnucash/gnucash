@@ -302,11 +302,19 @@ pgendTransactionRecomputeCheckpoints (PGBackend *be, Transaction *trans)
  * Then we fill in the balance fields for the returned query.
  */
 
+static gpointer 
+get_checkpoint_cb (PGBackend *be, PGresult *result, int j, gpointer data)
+{
+   Checkpoint *chk = (Checkpoint *) data;
+   chk->balance = atoll(DB_GET_VAL("baln", j));
+   chk->cleared_balance = atoll(DB_GET_VAL("cleared_baln", j));
+   chk->reconciled_balance = atoll(DB_GET_VAL("reconed_baln", j));
+   return data;
+}
+
 static void
 pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
 {
-   PGresult *result;
-   int i, nrows;
    char * p;
 
    if (!be || !chk) return;
@@ -327,34 +335,7 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    p = stpcpy (p, "';");
    SEND_QUERY (be,be->buff, );
 
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j=0, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         if (1 < nrows) 
-         {
-            PERR ("excess data");
-            PQclear (result);
-            return;
-         }
-         if (0 < nrows )
-         {
-            chk->balance = atoll(DB_GET_VAL("baln", j));
-            chk->cleared_balance = atoll(DB_GET_VAL("cleared_baln", j));
-            chk->reconciled_balance = atoll(DB_GET_VAL("reconed_baln", j));
-         }
-      }
-
-      PQclear (result);
-      i++;
-   } while (result);
+   pgendGetResults (be, get_checkpoint_cb, chk);
 
    LEAVE("be=%p", be);
 }
@@ -388,6 +369,10 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    /* get the checkpoint */
    pgendAccountGetCheckpoint (be, &chk);
 
+/* hack alert --- xxxxxxxxxx I think we need to tot up all entries
+since the end of the checkpoint too */
+
+
    /* set the account balances */
    deno = gnc_commodity_get_fraction (com);
    baln = gnc_numeric_create (chk.balance, deno);
@@ -396,8 +381,13 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
 
    xaccAccountSetStartingBalance (acc, baln,
                                      cleared_baln, reconciled_baln);
-   LEAVE("be=%p baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", be, 
+   {
+   char buf[80];
+   gnc_timespec_to_iso8601_buff (as_of_date, buf);
+   LEAVE("be=%p %s %s baln=%lld/%lld clr=%lld/%lld rcn=%lld/%lld", be, 
+     xaccAccountGetDescription (acc), buf,
      chk.balance, deno, chk.cleared_balance, deno, chk.reconciled_balance, deno);
+   }
 
    return chk.date_start;
 }

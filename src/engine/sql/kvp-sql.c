@@ -348,7 +348,6 @@ pgendKVPStore (PGBackend *be, const GUID *guid, kvp_frame *kf)
  * and poke them into our local cache.
  */
 
-
 static gpointer 
 path_loader (PGBackend *be, PGresult *result, int j, gpointer data)
 {
@@ -363,6 +362,16 @@ pgendKVPInit (PGBackend *be)
 {
    char *p;
 
+   /* don't re-init multiple times in single-user mode.
+    * Once is enough.  But in multi-user mode, we need to
+    * check constantly, since other users may have added
+    * more paths. 
+    */
+   if (((MODE_SINGLE_UPDATE == be->session_mode) || 
+        (MODE_SINGLE_FILE   == be->session_mode)) &&
+        (0 < be->ipath_max)) return;
+
+   /* get new paths out of the database */
    p = be->buff; *p=0;
    p = stpcpy (p, "SELECT * FROM gncPathCache WHERE ipath > ");
    p += sprintf (p, "%d", be->ipath_max);

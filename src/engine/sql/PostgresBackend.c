@@ -878,7 +878,7 @@ pgendStoreAllTransactions (PGBackend *be, AccountGroup *grp)
  *    If this routine finds a pre-existing transaction in the engine,
  *    and the version of last modification of this transaction is 
  *    equal to or *newer* then what the DB holds, then this routine
- *    returns 0 if equal, and +1 if newr, and does *not* perform any 
+ *    returns 0 if equal, and +1 if newer, and does *not* perform any 
  *    update.  (Note that 0 is returned for various error conditions.
  *    Thus, testing for 0 is a bad idea.  This is a hack, and should
  *    probably be fixed.
@@ -1322,6 +1322,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    {
       if (guid_equal ((GUID *)node->data, trans_guid)) 
       {
+         xaccGUIDFree (trans_guid);
          return xaction_list;
       }
    }
@@ -1366,13 +1367,13 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
          GList *split_list, *snode;
          Timespec ts;
          Transaction *trans;
-         int found = 0;
 
          trans = xaccTransLookup (trans_guid);
          ts = xaccTransRetDatePostedTS (trans);
          split_list = xaccTransGetSplitList (trans);
          for (snode=split_list; snode; snode=snode->next)
          {
+            int found = 0;
             Split *s = (Split *) snode->data;
             Account *acc = xaccSplitGetAccount (s);
 
