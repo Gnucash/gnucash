@@ -16,9 +16,11 @@ LDADD = \
   -L${top_srcdir}/src/app-utils -L${top_srcdir}/src/app-utils/.libs \
   -L${top_srcdir}/src/gnome-utils -L${top_srcdir}/src/gnome-utils/.libs \
   -L${top_srcdir}/src/app-file -L${top_srcdir}/src/app-file/.libs \
+  -L${top_srcdir}/src/app-file/gnome -L${top_srcdir}/src/app-file/gnome/.libs \
    ${top_srcdir}/src/gnc-module/libgncmodule.la \
    ${top_srcdir}/src/engine/libgncmod-engine.la \
    ${top_srcdir}/src/app-utils/libgncmod-app-utils.la \
+   ${top_srcdir}/src/app-file/gnome/libgncmod-app-file-gnome.la \
    ${top_srcdir}/src/gnome-utils/libgncmod-gnome-utils.la \
    ../libgncmod-binary-import.la \
    ${top_srcdir}/src/engine/libgw-engine.la \

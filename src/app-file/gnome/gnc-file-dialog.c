@@ -1,5 +1,5 @@
 /********************************************************************\
- * dialog-filebox.c -- the file dialog box                          *
+ * gnc-file-dialog.c -- the file dialog box                         *
  * Copyright (C) 1997 Robin D. Clark <rclark@cs.hmc.edu>            *
  * Copyright (C) 1998-99 Rob Browning <rlb@cs.utexas.edu>           *
  * Copyright (C) 2000 Linas Vepstas  <linas@linas.org>              *
@@ -32,12 +32,11 @@
 #include "gnc-ui.h"
 #include "messages.h"
 
-typedef struct _FileBoxInfo FileBoxInfo;
-struct _FileBoxInfo
+typedef struct
 {
   GtkFileSelection *file_box;
   char *file_name;
-};
+} FileBoxInfo;
 
 /* Global filebox information */
 static FileBoxInfo fb_info = {NULL, NULL};

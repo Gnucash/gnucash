@@ -8,7 +8,6 @@ libgncgnome_a_SOURCES = \
   dialog-column-view.c \
   dialog-commodities.c \
   dialog-dup-trans.c \
-  dialog-filebox.c \
   dialog-fincalc.c \
   dialog-find-transactions.c \
   dialog-new-user.c \
@@ -25,7 +24,6 @@ libgncgnome_a_SOURCES = \
   dialog-scheduledxaction.c \
   druid-hierarchy.c \
   druid-stock-split.c \
-  file-history.c \
   file-utils.c \
   gnc-network.c \
   gnc-splash.c \
@@ -106,6 +104,7 @@ INCLUDES = \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/app-file \
+  -I${top_srcdir}/src/app-file/gnome \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/gnome-utils \

@@ -1,4 +1,4 @@
-SUBDIRS = . #test
+SUBDIRS = . gnome
 
 pkglib_LTLIBRARIES = libgncmod-app-file.la
 

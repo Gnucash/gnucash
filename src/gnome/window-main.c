@@ -50,6 +50,7 @@
 #include "gnc-engine.h"
 #include "gnc-file-dialog.h"
 #include "gnc-file-history.h"
+#include "gnc-file-history-gnome.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-menu-extensions.h"
@@ -1137,13 +1138,14 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
     GNOMEUIINFO_SUBTREE(N_("_Tools"), gnc_tools_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Settings"), gnc_settings_menu_template),
     GNOMEUIINFO_SUBTREE(N_("_Windows"), gnc_windows_menu_template),    
-    // GNOEMUIINFO_SUBTREE(N_("_Developer Options"), gnc_developer_menu_template),
     GNOMEUIINFO_MENU_HELP_TREE(gnc_help_menu_template),
     GNOMEUIINFO_END
   };
 
   gnome_mdi_set_menubar_template(GNOME_MDI(maininfo->mdi),
                                  gnc_main_menu_template);
+
+  gnc_file_history_add_after ("New _Account Tree");
 }
 
 /********************************************************************

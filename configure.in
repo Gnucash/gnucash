@@ -709,6 +709,7 @@ AC_OUTPUT(
           rpm/Makefile
           src/Makefile
           src/app-file/Makefile
+          src/app-file/gnome/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile

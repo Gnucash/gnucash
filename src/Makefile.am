@@ -37,10 +37,12 @@ gnucash_LDADD = \
   -Lnetwork-utils -Lnetwork-utils/.libs \
   -Lapp-utils -Lapp-utils/.libs \
   -Lapp-file -Lapp-file/.libs \
+  -Lapp-file/gnome -Lapp-file/gnome/.libs \
   gnc-module/libgncmodule.la \
   gnome-utils/libgncmod-gnome-utils.la \
   app-utils/libgncmod-app-utils.la \
   app-file/libgncmod-app-file.la \
+  app-file/gnome/libgncmod-app-file-gnome.la \
   engine/libgncmod-engine.la \
   engine/libgw-engine.la \
   engine/libgw-glib.la \

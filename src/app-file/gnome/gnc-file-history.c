@@ -1,5 +1,5 @@
 /********************************************************************\
- * file-history.c -- functions to maintain file history menu        *
+ * gnc-file-history.c -- functions to maintain file history menu    *
  * Copyright (C) 2000 Robby Stephenson         	                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -24,11 +24,20 @@
 
 #include <gnome.h>
 
-#include "gnc-file-history.h"
+#include "gnc-file-history-gnome.h"
 #include "gnc-file.h"
 
 static GSList *history_list = NULL;
 static gint num_menu_entries = -1;
+static char *add_after_string = NULL;
+
+
+void
+gnc_file_history_add_after (const char *menu_string)
+{
+  g_free (add_after_string);
+  add_after_string = g_strdup (menu_string);
+}
 
 static void
 gnc_history_config_write (void)
@@ -37,26 +46,27 @@ gnc_history_config_write (void)
   char *key;
   GSList *tmp;
 
-  if(history_list == NULL)
+  if (history_list == NULL)
     return;
 
-  key = g_strdup_printf("/GnuCash/History/MaxFiles=%d", MAX_HISTORY);
-  max_files = gnome_config_get_int(key);
-  g_free(key);
+  key = g_strdup_printf ("/GnuCash/History/MaxFiles=%d", MAX_HISTORY);
+  max_files = gnome_config_get_int (key);
+  g_free (key);
 
-  gnome_config_clean_section("/GnuCash/History/");
-  gnome_config_push_prefix("/GnuCash/History/");
-  gnome_config_set_int("MaxFiles", max_files);
+  gnome_config_clean_section ("/GnuCash/History/");
+  gnome_config_push_prefix ("/GnuCash/History/");
+  gnome_config_set_int ("MaxFiles", max_files);
 
-  for(tmp = history_list; tmp != NULL; tmp = tmp->next) {
-    key = g_strdup_printf("File%d", i);
-    gnome_config_set_string(key, (char *)tmp->data);
+  for (tmp = history_list; tmp != NULL; tmp = tmp->next)
+  {
+    key = g_strdup_printf ("File%d", i);
+    gnome_config_set_string (key, tmp->data);
     g_free(key);
     i++;
   }
 
-  gnome_config_sync();
-  gnome_config_pop_prefix();
+  gnome_config_sync ();
+  gnome_config_pop_prefix ();
 }
 
 static void
@@ -65,27 +75,30 @@ gnc_history_get_list (void)
   int max_files, i;
   char *key, *filename;
 
-  key = g_strdup_printf("/GnuCash/History/MaxFiles=%d", MAX_HISTORY);
-  max_files = gnome_config_get_int(key);
-  g_free(key);
+  key = g_strdup_printf ("/GnuCash/History/MaxFiles=%d", MAX_HISTORY);
+  max_files = gnome_config_get_int (key);
+  g_free (key);
 
-  gnome_config_push_prefix("/GnuCash/History/");
+  gnome_config_push_prefix ("/GnuCash/History/");
 
-  for(i = 0; i < max_files; i++) {
-    key = g_strdup_printf("File%d", i);
-    filename = gnome_config_get_string(key);
+  for (i = 0; i < max_files; i++)
+  {
+    key = g_strdup_printf ("File%d", i);
+    filename = gnome_config_get_string (key);
 
-    if(filename == NULL) {
+    if(filename == NULL)
+    {
       g_free(key);
       break;
     }
-    history_list = g_slist_prepend(history_list, filename);
-    g_free(key);
+
+    history_list = g_slist_prepend (history_list, filename);
+    g_free (key);
   }
 
-  gnome_config_pop_prefix();
+  gnome_config_pop_prefix ();
 
-  history_list = g_slist_reverse(history_list);
+  history_list = g_slist_reverse (history_list);
 }
 
 static void
@@ -105,39 +118,40 @@ gnc_history_add_file (const char *newfile)
   if (newfile == NULL)
     return;
 
-  gnome_config_push_prefix("/GnuCash/History/");
-  key = g_strdup_printf("/GnuCash/History/MaxFiles=%d", MAX_HISTORY);
-  max_files = gnome_config_get_int_with_default(key, &used_default);
-  g_free(key);
+  gnome_config_push_prefix ("/GnuCash/History/");
+  key = g_strdup_printf ("/GnuCash/History/MaxFiles=%d", MAX_HISTORY);
+  max_files = gnome_config_get_int_with_default (key, &used_default);
+  g_free (key);
 
-  if(used_default)
-    gnome_config_set_int("MaxFiles", max_files);
+  if (used_default)
+    gnome_config_set_int ("MaxFiles", max_files);
 
-  if(history_list == NULL)
+  if (history_list == NULL)
     gnc_history_get_list ();
 
   i = 0;
   tmp = history_list;
-  while(tmp != NULL && i < max_files)
+  while (tmp != NULL && i < max_files)
   {
-    if(!matched &&                                     /* no match yet */
-       ((i == max_files - 1) ||                        /* last entry */
-	(strcmp(newfile, (char *)tmp->data) == 0)) ) { /* filename match */
-      g_free(tmp->data);
+    if (!matched &&                                     /* no match yet */
+        ((i == max_files - 1) ||                        /* last entry */
+         (strcmp(newfile, (char *)tmp->data) == 0)))    /* filename match */
+    {
+      g_free (tmp->data);
       matched = TRUE;
     }
     else
     {
-      new_list = g_slist_prepend(new_list, tmp->data);
+      new_list = g_slist_prepend (new_list, tmp->data);
     }
 
     i++;
     tmp = tmp->next;
   }
 
-  new_list = g_slist_reverse(new_list);
-  new_list = g_slist_prepend(new_list, g_strdup(newfile));
-  g_slist_free(history_list);
+  new_list = g_slist_reverse (new_list);
+  new_list = g_slist_prepend (new_list, g_strdup (newfile));
+  g_slist_free (history_list);
   history_list = new_list;
 
   gnc_history_config_write ();
@@ -161,10 +175,10 @@ gnc_history_add_file (const char *newfile)
 const char *
 gnc_history_get_last (void)
 {
-  if(history_list == NULL)
+  if (history_list == NULL)
     gnc_history_get_list ();
 
-  if(history_list == NULL)
+  if (history_list == NULL)
     return NULL;
 
   return history_list->data;
@@ -190,21 +204,22 @@ gnc_history_update_menu (GtkWidget * app_w)
     return;
 
   g_return_if_fail (GNOME_IS_APP (app_w));
+  g_return_if_fail (add_after_string != NULL);
 
   app = GNOME_APP (app_w);
 
-  di = gnome_app_get_dock_item_by_name(app, GNOME_APP_MENUBAR_NAME);
+  di = gnome_app_get_dock_item_by_name (app, GNOME_APP_MENUBAR_NAME);
   if (di == NULL)
     return;
 
-  menushell = gnome_dock_item_get_child(di);
+  menushell = gnome_dock_item_get_child (di);
   if (menushell == NULL)
     return;
 
   if (!gnome_app_find_menu_pos (menushell, GNOME_MENU_FILE_PATH, &pos))
     return;
 
-  path = g_strdup_printf("%s%s", GNOME_MENU_FILE_PATH, "New _Account Tree");
+  path = g_strdup_printf ("%s%s", GNOME_MENU_FILE_PATH, add_after_string);
 
   if (!gnome_app_find_menu_pos (menushell, path, &pos))
     return;
@@ -217,28 +232,28 @@ gnc_history_update_menu (GtkWidget * app_w)
     data = gtk_object_get_data (GTK_OBJECT (app), "gnc_num_history");
     num_entries = GPOINTER_TO_INT (data);
 
-    gnome_app_remove_menu_range(app, GNOME_MENU_FILE_PATH,
-                                pos, 1 + num_entries);
+    gnome_app_remove_menu_range (app, GNOME_MENU_FILE_PATH,
+                                 pos, 1 + num_entries);
   }
 
-  if(history_list == NULL)
-    gnc_history_get_list();
+  if (history_list == NULL)
+    gnc_history_get_list ();
 
   if (history_list == NULL)
     return;
 
-  n = g_slist_length(history_list);
+  n = g_slist_length (history_list);
   /* one separator, plus one for each filename entry, plus one for end */
-  menu = g_new(GnomeUIInfo, 2+n);
+  menu = g_new (GnomeUIInfo, 2 + n);
 
   menu->type = GNOME_APP_UI_SEPARATOR;
 
-  for(i = 1; i <= n; i++)
+  for (i = 1; i <= n; i++)
   {
     (menu+i)->type = GNOME_APP_UI_ITEM;
 
     /* get the file name */
-    file = g_slist_nth_data(history_list, i - 1);
+    file = g_slist_nth_data (history_list, i - 1);
     if (file == NULL)
       file = "";
 
@@ -249,17 +264,18 @@ gnc_history_update_menu (GtkWidget * app_w)
         count++;
 
     /* make the name, doubling the underscores to prevent underlining */
-    name = g_new(char, strlen(file) + count + 1);
-    for (p = file, q = name; *p != '\0'; p++) {
+    name = g_new (char, strlen(file) + count + 1);
+    for (p = file, q = name; *p != '\0'; p++)
+    {
       *q++ = *p;
       if (*p == '_')
         *q++ = '_';
     }
     *q = '\0';
 
-    (menu+i)->label = g_strdup_printf("_%d. %s", i, name);
+    (menu+i)->label = g_strdup_printf ("_%d. %s", i, name);
 
-    g_free(name);
+    g_free (name);
 
     (menu+i)->hint = NULL;
 
@@ -272,7 +288,7 @@ gnc_history_update_menu (GtkWidget * app_w)
   }
   (menu+i)->type = GNOME_APP_UI_ENDOFINFO;
 
-  gnome_app_insert_menus(GNOME_APP(app), path, menu);
+  gnome_app_insert_menus (GNOME_APP(app), path, menu);
   num_menu_entries = n;
 
   gtk_object_set_data (GTK_OBJECT (app), "gnc_set_history", app);
@@ -280,8 +296,8 @@ gnc_history_update_menu (GtkWidget * app_w)
                        GINT_TO_POINTER (num_menu_entries));
 
   for (i = 1; i <= n; i++)
-    g_free((menu+i)->label);
+    g_free ((menu+i)->label);
 
-  g_free(menu);
-  g_free(path);
+  g_free (menu);
+  g_free (path);
 }
