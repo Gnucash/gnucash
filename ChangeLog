@@ -1,3 +1,11 @@
+2001-08-19  Christian Stimming  <stimming@tuhh.de>
+
+	* po/gnc-glossary.txt, po/glossary/gnc-glossary.txt,
+	po/glossary/txt-to-pot.sh, po/glossary/de.po: Moved from the
+	concept of one big ascii table to the concept of one po file for
+	each translation of the glossary. Hence, created this
+	subdirectory.
+
 2001-08-18  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/engine/FreqSpec.c: i18n xaccFreqSpecGetFreqStr.
