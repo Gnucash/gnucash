@@ -1,3 +1,8 @@
+2003-04-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/report/report-system/options-utilities.scm: Fix missing i18n
+	markup on some option names.
+
 2003-03-31  David Hampton  <hampton@employees.org>
 
 	* src/engine/Account.c:
