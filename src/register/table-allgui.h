@@ -187,13 +187,26 @@ xaccSetCursor (Table *table, CellBlock *curs,
               int virt_row, int virt_col);
 
 
-/* move the cursor (but not the GUI) to the indicated location. */
+/* The xaccMoveCursor() method will move the cursor (but not the 
+ *    cursor GUI) to the indicated location.  This function is useful 
+ *    when loading the table from the cursor: data can be loaded into
+ *    the cursor, then committed to the table, all without the annoying
+ *    screen flashing associated with GUI redraw.
+ */
 void        xaccMoveCursor (Table *, int phys_row, int phys_col);
 
-/* move the cursor GUI to the indicated location. */
+/* The xaccMoveCursorGUI() method will move the cursor and its GUI 
+ *    to the indicated location.   Through a series of callbacks,
+ *    all GUI elements get repositioned.
+ */
 void        xaccMoveCursorGUI (Table *, int phys_row, int phys_col);
 
-/* copy text in the cursor cells to the table */
+/* The xaccCommitCursor() method will copy text in the cursor cells
+ *    into the table.  This function is useful during the initial 
+ *    load of the table with data: the cursor can be used as an
+ *    intermediary to format, fix up, and otherwise control the data,
+ *    and, when ready, it is commited from the cursor into the table.
+ */
 void        xaccCommitCursor (Table *);
 
 /* hack alert --
@@ -204,15 +217,24 @@ void        xaccCommitCursor (Table *);
 void        xaccRefreshHeader (Table *);
 
 
-/* xaccVerifyCursorPosition checks the location of the cursor 
- * with respect to a physical row/column position, and if the 
- * resulting virtual position has changed, commits the changes 
- * in the old position, and the repositions the cursor & gui 
- * to the new position.
+/* The xaccVerifyCursorPosition() method  checks the location of 
+ *    the cursor with respect to a physical row/column position, 
+ *    and if the resulting virtual position has changed, commits 
+ *    the changes in the old position, and the repositions the 
+ *    cursor & gui to the new position.
  */
 
 void
 xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col);
+
+/*
+ * The xaccGetUserData() method is a convenience function that 
+ *    simplifies the lookup of the any user data that is hooked 
+ *    to the indicated row and column.  It returns NULL if the 
+ *    row and column are out of bounds.
+ */
+
+void * xaccGetUserData (Table *table, int phys_row, int phys_col);
 
 /* ==================================================== */
 /* 

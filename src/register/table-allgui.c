@@ -617,4 +617,24 @@ xaccVerifyCursorPosition (Table *table, int phys_row, int phys_col)
    }
 }
 
+/* ==================================================== */
+
+void * 
+xaccGetUserData (Table *table, int phys_row, int phys_col)
+{
+   int virt_row, virt_col;
+
+   /* check for out-of-bounds conditions */
+   if ((0 > phys_row) || (0 > phys_col) ||
+      (phys_row >= table->num_phys_rows) ||
+      (phys_col >= table->num_phys_cols)) {
+      return NULL;
+   }
+
+   virt_row = table->locators[phys_row][phys_col]->virt_row;
+   virt_col = table->locators[phys_row][phys_col]->virt_col;
+
+   return (table->user_data[virt_row][virt_col]);
+}
+
 /* ================== end of file ======================= */
