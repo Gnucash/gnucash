@@ -147,6 +147,7 @@ as due dates for invoices, etc.  A lot has a GUID.
 
 Status
 ======
-Implementation not started.
+Implementation barely started.  See src/engine/gnc-lot.h for the public API.
+Neither XML nor Postgres backends support this so far.
 
 -------------------------- end of file ------------------------------
