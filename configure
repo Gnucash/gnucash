@@ -2409,7 +2409,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lXpm -L$x_libraries -lX11 $LIBS"
+LIBS="-lXpm $X_PRE_LIBS -lX11 $X_LIBS $X_EXTRA_LIBS $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2415 "configure"
 #include "confdefs.h"
@@ -2935,7 +2935,7 @@ GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
 
 
 
-CFLAGS="${CFLAGS} -Werror -Wno-unused"
+#CFLAGS="${CFLAGS} -Werror -Wno-unused"
 
 ABSOLUTE_TOP_SRCDIR=`pwd`
 
