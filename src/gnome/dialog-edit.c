@@ -73,7 +73,7 @@ struct _editaccwindow
 static int
 gnc_ui_EditAccWindow_close_cb(GnomeDialog *dialog, gpointer user_data)
 {
-  EditAccWindow * editAccData = (EditAccWindow *) user_data;
+  EditAccWindow * editAccData = user_data;
   Account *acc = editAccData->account;
 
   REMOVE_FROM_LIST (EditAccWindow,editAccList,acc,account); 
@@ -96,7 +96,7 @@ static void
 gnc_ui_EditAccWindow_cancel_cb(GtkWidget * widget,
 			       gpointer data)
 {
-  EditAccWindow *editAccData = (EditAccWindow *) data; 
+  EditAccWindow *editAccData = data; 
 
   gnome_dialog_close(GNOME_DIALOG(editAccData->dialog));
 }
@@ -402,6 +402,7 @@ extra_change_verify(EditAccWindow *editAccData,
   Account *account;
   GtkCList *list;
   gchar *titles[5];
+  gboolean result;
   guint size;
 
   if (editAccData == NULL)
@@ -446,6 +447,7 @@ extra_change_verify(EditAccWindow *editAccData,
                               NULL);
 
     gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
+    gnome_dialog_set_close(GNOME_DIALOG(dialog), FALSE);
     gnome_dialog_close_hides(GNOME_DIALOG(dialog), FALSE);
     gnome_dialog_set_parent(GNOME_DIALOG(dialog),
                             GTK_WINDOW(editAccData->dialog));
@@ -471,8 +473,12 @@ extra_change_verify(EditAccWindow *editAccData,
 
     gtk_widget_show_all(vbox);
 
-    return gnome_dialog_run_and_close(GNOME_DIALOG(dialog)) == 0;
+    result = (gnome_dialog_run(GNOME_DIALOG(dialog)) == 0);
+
+    gtk_widget_destroy(dialog);
   }
+
+  return result;
 }
 
 static void

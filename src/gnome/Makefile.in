@@ -131,7 +131,7 @@ noinst_HEADERS =    account-tree.h   account-treeP.h   cursors.h   dialog-accoun
 EXTRA_DIST =    .cvsignore   gnc-dialogs.glade   gnucash.desktop
 
 
-CFLAGS =  ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_COMPILE_ARGS}
+CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES =    -I${top_srcdir}/src   -I${top_srcdir}/src/engine   -I${top_srcdir}/src/g-wrap   -I${top_srcdir}/src/guile   -I${top_srcdir}/src/register   -I${top_srcdir}/src/register/gnome
 

@@ -86,6 +86,7 @@ gnc_currency_edit_class_init (GNCCurrencyEditClass *class)
 	object_class->destroy = gnc_currency_edit_destroy;
 }
 
+#if 0
 static void
 insert_text_cb(GtkEditable *editable, gchar *new_text, gint new_text_length,
                gint *position, gpointer user_data)
@@ -104,6 +105,7 @@ insert_text_cb(GtkEditable *editable, gchar *new_text, gint new_text_length,
                 new_text[i] = toupper(new_text[i]);
         }
 }
+#endif
 
 static void
 gnc_currency_edit_init (GNCCurrencyEdit *gce)
@@ -111,13 +113,15 @@ gnc_currency_edit_init (GNCCurrencyEdit *gce)
         GtkTooltips *tooltips;
 
         gtk_combo_set_use_arrows_always(GTK_COMBO(gce), TRUE);
-        gtk_combo_set_value_in_list(GTK_COMBO(gce), TRUE, TRUE);
+        gtk_combo_set_value_in_list(GTK_COMBO(gce), FALSE, TRUE);
         gtk_combo_disable_activate(GTK_COMBO(gce));
 
+#if 0
         gtk_entry_set_max_length(GTK_ENTRY(GTK_COMBO(gce)->entry), 3);
 
         gtk_signal_connect(GTK_OBJECT(GTK_COMBO(gce)->entry),
                            "insert_text", insert_text_cb, NULL);
+#endif
 
         tooltips = gtk_tooltips_new();
         gtk_tooltips_set_tip(GTK_TOOLTIPS(tooltips),
