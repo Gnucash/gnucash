@@ -43,7 +43,30 @@ typedef enum { URL_TYPE_FILE, URL_TYPE_JUMP,
 
 #include "gnc-html-history.h"
 
-typedef struct _gnc_html gnc_html;
+typedef struct gnc_html_struct gnc_html;
+
+/* The result structure of url handlers. Strings should be g_malloc'd
+ * by the handler and will be freed by gnc_html. */
+typedef struct
+{
+  /* The following members are used if the handler succeeds (returns TRUE). */
+
+  gboolean load_to_stream; /* If TRUE, the url should be loaded from
+                            * a stream using the rest of the data in
+                            * the struct into the original gnc_html
+                            * object. If FALSE, the handler will
+                            * perform all needed actions itself. */
+
+  URLType url_type;        /* Defaults to original */
+  char * location;         /* If NULL, use original (NULL is default) */
+  char * label;            /* If NULL, use original (NULL is default) */
+
+  URLType base_type;
+  char * base_location;
+
+  /* The following members are used if the handler fails (returns FALSE). */
+  char * error_message;
+} GNCURLResult;
 
 typedef int  (* GncHTMLUrltypeCB)(URLType ut);
 typedef void (* GncHTMLFlyoverCB)(gnc_html * html, const char * url,
@@ -58,18 +81,25 @@ typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
                                  const char * action, GHashTable * form_data);
 typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data);
+typedef gboolean (* GncHTMLUrlCB)(const char *location, const char *label,
+                                  gboolean new_window, GNCURLResult * result);
 
 gnc_html    * gnc_html_new(void);
 void          gnc_html_destroy(gnc_html * html);
 void          gnc_html_show_url(gnc_html * html, 
-                                URLType type, const char * location, 
-                                const char * label, int newwin_hint);
+                                URLType type,
+                                const char * location, 
+                                const char * label,
+                                gboolean new_window_hint);
 void          gnc_html_show_data(gnc_html * html, 
                                  const char * data, int datalen);
 void          gnc_html_reload(gnc_html * html);
 gboolean      gnc_html_export(gnc_html * html, const char *file);
 void          gnc_html_print(gnc_html * html);
 void          gnc_html_cancel(gnc_html * html);
+
+char  * gnc_build_url (URLType type, const gchar * location,
+                       const gchar * label);
 
 /* object handlers deal with <object classid="foo"> objects in HTML.
  * the handlers are looked up at object load time. */
@@ -88,6 +118,11 @@ void          gnc_html_unregister_action_handler(const char * action);
 void          gnc_html_register_stream_handler(URLType url_type,
                                                GncHTMLStreamCB hand);
 void          gnc_html_unregister_stream_handler(URLType url_type);
+
+/* handlers for particular URLTypes. */
+void          gnc_html_register_url_handler(URLType url_type,
+                                            GncHTMLUrlCB hand);
+void          gnc_html_unregister_url_handler(URLType url_type);
 
 /* default action handlers for GET and POST methods.  'generic_post'
  * is the trivial application/x-www-form-urlencoded submit,

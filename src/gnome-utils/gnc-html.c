@@ -46,7 +46,6 @@
 #include "Group.h"
 #include "FileDialog.h"
 #include "dialog-utils.h"
-#include "window-register.h"
 #include "print-session.h"
 #include "global-options.h"
 #include "gnc-engine-util.h"
@@ -60,11 +59,10 @@
 #include "gnc-ui-util.h"
 #include "window-help.h"
 #include "window-main.h"
-#include "window-report.h"
 #include "messages.h"
 
 
-struct _gnc_html {
+struct gnc_html_struct {
   GtkWidget   * container;         /* parent of the gtkhtml widget */
   GtkWidget   * html;              /* gtkhtml widget itself */
   gchar       * current_link;      /* link under mouse pointer */
@@ -85,7 +83,7 @@ struct _gnc_html {
   gpointer          load_cb_data;
   gpointer          button_cb_data;
   
-  struct _gnc_html_history * history; 
+  gnc_html_history * history; 
 };
 
 
@@ -102,6 +100,9 @@ static GHashTable * gnc_html_action_handlers = NULL;
 
 /* hashes handlers for loading different URLType data */
 static GHashTable * gnc_html_stream_handlers = NULL;
+
+/* hashes handlers for handling different URLType data */
+static GHashTable * gnc_html_url_handlers = NULL;
 
 static char error_404[] = 
 N_("<html><body><h3>Not found</h3><p>The specified URL could not be loaded.</body></html>");
@@ -360,8 +361,8 @@ static char * url_type_names[] = {
 };
 
 
-static gchar  *
-rebuild_url(URLType type, const gchar * location, const gchar * label) {
+char  *
+gnc_build_url (URLType type, const gchar * location, const gchar * label) {
   if(label) {
     return g_strdup_printf("%s%s#%s", url_type_names[type], 
                            (location ? location : ""),
@@ -516,12 +517,7 @@ static void
 gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
                         URLType type, const gchar * location, 
                         const gchar * label) {
-  int           fsize;
-  char          * fdata = NULL;
-  char          * fullurl;
-  int           id;
-  SCM           run_report;
-  SCM           scmtext;
+  char * fdata = NULL;
 
   if(!html) {
     return;
@@ -571,7 +567,9 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
                          "the Preferences dialog."));
     }
     else {
-      fullurl = rebuild_url(type, location, label);
+      char *fullurl;
+
+      fullurl = gnc_build_url(type, location, label);
       gnc_html_start_request(html, fullurl, handle);
     }
     break;
@@ -866,87 +864,6 @@ gnc_html_submit_cb(GtkHTML * html, const gchar * method,
 
 
 /********************************************************************
- * gnc_html_open_register
- * open a register window 
- ********************************************************************/
-
-static void
-gnc_html_open_register(gnc_html * html, const gchar * location) {
-  RegWindow   * reg = NULL;
-  Split       * split = NULL;
-  Account     * acct;
-  Transaction * trans;
-  GList       * node;
-
-  /* href="gnc-register:account=My Bank Account" */
-  if(!strncmp("account=", location, 8)) {
-    acct = xaccGetAccountFromFullName(gncGetCurrentGroup(),
-                                      location+8, 
-                                      gnc_get_account_separator());
-    reg = regWindowSimple(acct);
-    gnc_register_raise(reg);
-  }
-  /* href="gnc-register:guid=12345678901234567890123456789012" */
-  else if(!strncmp("guid=", location, 5)) {
-    GUID guid;
-
-    if (!string_to_guid(location + 5, &guid))
-    {
-      PWARN ("Bad guid: %s", location + 5);
-      return;
-    }
-
-    switch (xaccGUIDType (&guid))
-    {
-      case GNC_ID_NONE:
-      case GNC_ID_NULL:
-        PWARN ("No such entity: %s", location + 5);
-        return;
-
-      case GNC_ID_ACCOUNT:
-        acct = xaccAccountLookup (&guid);
-        reg = regWindowSimple(acct);
-        break;
-
-      case GNC_ID_TRANS:
-        trans = xaccTransLookup (&guid);
-        split = NULL;
-
-        for (node = xaccTransGetSplitList (trans); node; node = node->next)
-        {
-          split = node->data;
-          if (xaccSplitGetAccount (split))
-            break;
-        }
-
-        if (!split)
-          return;
-
-        reg = regWindowSimple (xaccSplitGetAccount (split));
-        break;
-
-      case GNC_ID_SPLIT:
-        split = xaccSplitLookup (&guid);
-        if (!split)
-          return;
-
-        reg = regWindowSimple (xaccSplitGetAccount (split));
-        break;
-
-      default:
-        return;
-    }
-
-    gnc_register_raise(reg);
-    if (split)
-      gnc_register_jump_to_split (reg, split);
-  }
-  else {
-    gnc_warning_dialog(_("Badly formed gnc-register: URL."));
-  }
-}
-
-/********************************************************************
  * gnc_html_open_options
  * open an editor for report parameters 
  ********************************************************************/
@@ -965,40 +882,7 @@ gnc_html_open_options(gnc_html * html, const gchar * location) {
     gh_call1(start_editor, report);
   }
   else {
-    gnc_warning_dialog(_("Badly formed gnc-options: URL."));
-  }
-}
-
-
-/********************************************************************
- * gnc_html_open_report
- * open a report window 
- ********************************************************************/
-
-static void
-gnc_html_open_report(gnc_html * html, const gchar * location,
-                     const gchar * label, int newwin) {
-  gnc_report_window * rwin;
-  GtkHTMLStream * handle;
-  char * rebuilt_url;
-
-  /* make a new window if necessary */ 
-  if(newwin) {
-    rebuilt_url = rebuild_url(URL_TYPE_REPORT, location, label);
-    gnc_main_window_open_report_url(rebuilt_url, FALSE);
-    g_free(rebuilt_url);
-  }
-  else {
-    gnc_html_history_append(html->history,
-                            gnc_html_history_node_new(URL_TYPE_REPORT, 
-                                                      location, label));
-    
-    g_free(html->base_location);
-    html->base_type     = URL_TYPE_FILE;
-    html->base_location = NULL;
-    
-    handle = gtk_html_begin(GTK_HTML(html->html));
-    gnc_html_load_to_stream(html, handle, URL_TYPE_REPORT, location, label);
+    gnc_warning_dialog(_("Badly formed options URL."));
   }
 }
 
@@ -1061,54 +945,110 @@ gnc_html_show_data(gnc_html * html, const char * data,
 void 
 gnc_html_show_url(gnc_html * html, URLType type, 
                   const gchar * location, const gchar * label,
-                  int newwin_hint) {
-
+                  gboolean new_window_hint) {
+  GncHTMLUrlCB url_handler;
   GtkHTMLStream * handle;
-  int           newwin;
+  gboolean new_window;
 
   if (!html) return;
   if (!location) return;
 
   /* make sure it's OK to show this URL type in this window */
-  if(newwin_hint == 0) {
+  if(new_window_hint == 0) {
     if (html->urltype_cb)
-      newwin = !((html->urltype_cb)(type));
+      new_window = !((html->urltype_cb)(type));
     else
-      newwin = 0;
+      new_window = FALSE;
   }
   else {
-    newwin = 1;
+    new_window = TRUE;
   }
 
-  if(!newwin) {
+  if(!new_window) {
     gnc_html_cancel(html);
   }
 
+  if (gnc_html_url_handlers)
+    url_handler = g_hash_table_lookup (gnc_html_url_handlers, &type);
+  else
+    url_handler = NULL;
+
+  if (url_handler)
+  {
+    GNCURLResult result;
+    gboolean ok;
+
+    result.load_to_stream = FALSE;
+    result.url_type = type;
+    result.location = NULL;
+    result.label = NULL;
+    result.base_type = URL_TYPE_FILE;
+    result.base_location = NULL;
+    result.error_message = NULL;
+
+    ok = url_handler (location, label, new_window, &result);
+    if (!ok)
+    {
+      char *error_message;
+
+      if (result.error_message)
+        error_message = g_strdup (result.error_message);
+      else
+        error_message = g_strdup_printf (_("There was an error accessing %s."),
+                                         location);
+
+      gnc_error_dialog (error_message);
+ 
+      g_free (error_message);
+    }
+    else if (result.load_to_stream)
+    {
+      gnc_html_history_node *hnode;
+      const char *new_location;
+      const char *new_label;
+      GtkHTMLStream * stream;
+
+      new_location = result.location ? result.location : location;
+      new_label = result.label ? result.label : label;
+      hnode = gnc_html_history_node_new (result.url_type,
+                                         new_location, new_label);
+
+      gnc_html_history_append (html->history, hnode);
+
+      g_free (html->base_location);
+      html->base_type = result.base_type;
+      html->base_location = g_strdup (result.base_location);
+    
+      stream = gtk_html_begin (GTK_HTML(html->html));
+      gnc_html_load_to_stream (html, stream, result.url_type,
+                               new_location, new_label);
+    }
+
+    g_free (result.location);
+    g_free (result.label);
+    g_free (result.base_location);
+    g_free (result.error_message);
+
+    return;
+  }
+
   switch(type) {
-  case URL_TYPE_REGISTER:
-    gnc_html_open_register(html, location);
-    break;
-
-  case URL_TYPE_REPORT:
-    gnc_html_open_report(html, location, label, newwin);
-    break;
-
   case URL_TYPE_OPTIONS:
     gnc_html_open_options(html, location);
     break;
 
   case URL_TYPE_HELP:
-    gnc_html_open_help(html, location, label, newwin);
+    gnc_html_open_help(html, location, label, new_window);
     break;
-    
+
   case URL_TYPE_SCHEME:
-    gnc_html_open_scm(html, location, label, newwin);
+    gnc_html_open_scm(html, location, label, new_window);
     break;
-    
+
   case URL_TYPE_JUMP:
     gtk_html_jump_to_anchor(GTK_HTML(html->html), label);
     break;
-    
+
   case URL_TYPE_SECURE:
     if(!https_allowed()) {
       gnc_error_dialog(_("Secure HTTP access is disabled.\n"
@@ -1116,6 +1056,7 @@ gnc_html_show_url(gnc_html * html, URLType type,
                          "the Preferences dialog."));
       break;
     }
+
   case URL_TYPE_HTTP:
     if(!http_allowed()) {
       gnc_error_dialog(_("Network HTTP access is disabled.\n"
@@ -1123,30 +1064,31 @@ gnc_html_show_url(gnc_html * html, URLType type,
                          "the Preferences dialog."));
       break;
     }
+
   case URL_TYPE_FILE:
     html->base_type     = type;
     
     if(html->base_location) g_free(html->base_location);
     html->base_location = extract_base_name(type, location);
 
-    /* FIXME : handle newwin = 1 */
+    /* FIXME : handle new_window = 1 */
     gnc_html_history_append(html->history,
                             gnc_html_history_node_new(type, location, label));
     handle = gtk_html_begin(GTK_HTML(html->html));
     gnc_html_load_to_stream(html, handle, type, location, label);
     break;
-    
+
   case URL_TYPE_ACTION:
     gnc_html_history_append(html->history,
                             gnc_html_history_node_new(type, 
                                                       location, label));
     gnc_html_submit_cb(GTK_HTML(html->html), "get", 
-                       rebuild_url(type, location, label), NULL,
+                       gnc_build_url(type, location, label), NULL,
                        (gpointer)html);
     break;
-    
-  URL_TYPE_ACCTTREE:
+
   default:
+    PERR ("URLType %d not supported.", type);
     break;
   }
 
@@ -1462,6 +1404,43 @@ gnc_html_unregister_stream_handler(URLType url_type)
     return;
 
   g_hash_table_remove (gnc_html_stream_handlers, &url_type);
+  g_free (keyptr);
+}
+
+void
+gnc_html_register_url_handler (URLType url_type, GncHTMLUrlCB hand)
+{
+  URLType *key;
+
+  g_return_if_fail (url_type >= 0);
+
+  if(!gnc_html_url_handlers) {
+    gnc_html_url_handlers = g_hash_table_new (g_int_hash, g_int_equal);
+  }
+
+  gnc_html_unregister_url_handler (url_type);
+  if (!hand)
+    return;
+
+  key = g_new (URLType, 1);
+  *key = url_type;
+
+  g_hash_table_insert (gnc_html_url_handlers, key, hand);
+}
+
+void
+gnc_html_unregister_url_handler (URLType url_type)
+{
+  gpointer keyptr;
+  gpointer valptr;
+
+  if (!g_hash_table_lookup_extended (gnc_html_url_handlers,
+                                     &url_type, 
+                                     &keyptr, 
+                                     &valptr))
+    return;
+
+  g_hash_table_remove (gnc_html_url_handlers, &url_type);
   g_free (keyptr);
 }
 

@@ -71,6 +71,7 @@
 #include "window-help.h"
 #include "window-main.h"
 #include "window-acct-tree.h"
+#include "window-register.h"
 #include "window-report.h"
 
 
@@ -173,13 +174,13 @@ gnc_set_remaining_argv(int len, const char **rest)
 
 
 static gboolean
-gnc_html_file_stream_handler (const char *location, char ** data)
+gnc_html_file_stream_cb (const char *location, char ** data)
 {
   return (gncReadFile (location, data) > 0);
 }
 
 static gboolean
-gnc_html_report_stream_handler (const char *location, char ** data)
+gnc_html_report_stream_cb (const char *location, char ** data)
 {
   gboolean ok;
 
@@ -191,6 +192,137 @@ gnc_html_report_stream_handler (const char *location, char ** data)
                         "</body></html>"));
 
   return ok;
+}
+
+static gboolean
+gnc_html_register_url_cb (const char *location, const char *label,
+                          gboolean new_window, GNCURLResult *result)
+{
+  RegWindow   * reg = NULL;
+  Split       * split = NULL;
+  Account     * account;
+  Transaction * trans;
+  GList       * node;
+
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  result->load_to_stream = FALSE;
+
+  /* href="gnc-register:account=My Bank Account" */
+  if (strncmp("account=", location, 8) == 0)
+  {
+    account = xaccGetAccountFromFullName (gncGetCurrentGroup (),
+                                          location + 8, 
+                                          gnc_get_account_separator ());
+    reg = regWindowSimple (account);
+    gnc_register_raise (reg);
+  }
+  /* href="gnc-register:guid=12345678901234567890123456789012" */
+  else if (strncmp ("guid=", location, 5) == 0)
+  {
+    GUID guid;
+
+    if (!string_to_guid (location + 5, &guid))
+    {
+      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
+      return FALSE;
+    }
+
+    switch (xaccGUIDType (&guid))
+    {
+      case GNC_ID_NONE:
+      case GNC_ID_NULL:
+        result->error_message = g_strdup_printf (_("No such entity: %s"),
+                                                 location);
+        return FALSE;
+
+      case GNC_ID_ACCOUNT:
+        account = xaccAccountLookup (&guid);
+        reg = regWindowSimple (account);
+        break;
+
+      case GNC_ID_TRANS:
+        trans = xaccTransLookup (&guid);
+        split = NULL;
+
+        for (node = xaccTransGetSplitList (trans); node; node = node->next)
+        {
+          split = node->data;
+          if (xaccSplitGetAccount (split))
+            break;
+        }
+
+        if (!split)
+        {
+          result->error_message =
+            g_strdup_printf (_("Transaction with no Accounts: %s"), location);
+          return FALSE;
+        }
+
+        reg = regWindowSimple (xaccSplitGetAccount (split));
+        break;
+
+      case GNC_ID_SPLIT:
+        split = xaccSplitLookup (&guid);
+        if (!split)
+        {
+          result->error_message = g_strdup_printf (_("No such split: %s"),
+                                                   location);
+          return FALSE;
+        }
+
+        reg = regWindowSimple (xaccSplitGetAccount (split));
+        break;
+
+      default:
+        result->error_message =
+          g_strdup_printf (_("Unsupported entity type: %s"), location);
+        return FALSE;
+    }
+
+    gnc_register_raise(reg);
+    if (split)
+      gnc_register_jump_to_split (reg, split);
+  }
+  else
+  {
+    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
+                                             location);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+static gboolean
+gnc_html_report_url_cb (const char *location, const char *label,
+                        gboolean new_window, GNCURLResult *result)
+{
+  gnc_report_window * rwin;
+  GtkHTMLStream * handle;
+  char * url;
+
+  g_return_val_if_fail (location != NULL, FALSE);
+  g_return_val_if_fail (result != NULL, FALSE);
+
+  /* make a new window if necessary */ 
+  if (new_window)
+  {
+    char *url;
+
+    url = gnc_build_url (URL_TYPE_REPORT, location, label);
+    gnc_main_window_open_report_url (url, FALSE);
+    g_free (url);
+
+    result->load_to_stream = FALSE;
+  }
+  else
+  {
+    result->load_to_stream = TRUE;
+  }
+
+  return TRUE;
 }
 
 /* ============================================================== */
@@ -334,12 +466,15 @@ gnucash_ui_init(void)
     gnucash_style_init();
     gnucash_color_init();
 
-    gnc_html_register_stream_handler (URL_TYPE_HELP,
-                                      gnc_html_file_stream_handler);
-    gnc_html_register_stream_handler (URL_TYPE_FILE,
-                                      gnc_html_file_stream_handler);
+    gnc_html_register_stream_handler (URL_TYPE_HELP, gnc_html_file_stream_cb);
+    gnc_html_register_stream_handler (URL_TYPE_FILE, gnc_html_file_stream_cb);
     gnc_html_register_stream_handler (URL_TYPE_REPORT,
-                                      gnc_html_report_stream_handler);
+                                      gnc_html_report_stream_cb);
+
+    gnc_html_register_url_handler (URL_TYPE_REGISTER,
+                                   gnc_html_register_url_cb);
+
+    gnc_html_register_url_handler (URL_TYPE_REPORT, gnc_html_report_url_cb);
 
     /* initialize gnome MDI and set up application window defaults  */
     app = gnc_main_window_new();
