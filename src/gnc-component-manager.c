@@ -107,7 +107,7 @@ destroy_helper (gpointer key, gpointer value, gpointer user_data)
   GUID *guid = key;
   EventInfo *ei = value;
 
-  g_free (guid);
+  xaccGUIDFree (guid);
   g_free (ei);
 
   return TRUE;
@@ -165,7 +165,7 @@ add_event (ComponentEventInfo *cei, const GUID *entity,
     if (g_hash_table_lookup_extended (hash, entity, &key, &value))
     {
       g_hash_table_remove (hash, entity);
-      g_free (key);
+      xaccGUIDFree (key);
       g_free (value);
     }
   }
@@ -178,7 +178,7 @@ add_event (ComponentEventInfo *cei, const GUID *entity,
     {
       GUID *key;
 
-      key = g_new (GUID, 1);
+      key = xaccGUIDMalloc ();
       *key = *entity;
 
       ei = g_new (EventInfo, 1);

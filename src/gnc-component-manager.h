@@ -58,8 +58,6 @@ typedef struct
  *                      entities used by the component may have
  *                      already been deleted. 'Refreshing' the
  *                      component may require closing the component.
- *                      The component must not create, modify, or
- *                      destroy engine entities during refresh.
  *
  * user_data: user_data supplied when component was registered.
  */
@@ -115,7 +113,7 @@ void gnc_component_manager_shutdown (void);
  *
  * component_class: a string defining a class of components
  *                  certain component functions can be performed
- *                  on all objects in a class. For that reason,
+ *                  on all components in a class. For that reason,
  *                  components in the same class should all use
  *                  the same type for user_data.
  *
@@ -133,7 +131,7 @@ void gnc_component_manager_shutdown (void);
  *
  *                  When a component is first registered, it
  *                  is not watching anything, and thus will
- *                  not receive refresh handlers.
+ *                  not receive refresh events.
  *
  * Return:          id of component, or NO_COMPONENT, if error
  */
