@@ -811,7 +811,7 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
     Split *split;
     Split *other_split;
     gboolean two_accounts;
-    
+
     split = xaccTransGetSplit (trans, 0);
     other_split = xaccGetOtherSplit (split);
   
@@ -4965,7 +4965,7 @@ trans_has_reconciled_splits (Transaction *trans)
 gboolean
 xaccSRCheckReconciled (SplitRegister *reg)
 {
-  Split *split;
+  Transaction *trans;
   guint32 changed;
   gboolean confirm;
   char *message = _("You are about to change a transaction with reconciled\n"
@@ -4978,11 +4978,11 @@ xaccSRCheckReconciled (SplitRegister *reg)
   if (!changed)
     return TRUE;
 
-  split = xaccSRGetCurrentSplit (reg);
-  if (split == NULL)
+  trans = xaccSRGetCurrentTrans (reg);
+  if (trans == NULL)
     return TRUE;
 
-  if (!trans_has_reconciled_splits (xaccSplitGetParent (split)))
+  if (!trans_has_reconciled_splits (trans))
     return TRUE;
 
   confirm = gnc_lookup_boolean_option ("Register",

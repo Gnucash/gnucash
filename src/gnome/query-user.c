@@ -372,6 +372,9 @@ gnc_choose_radio_option_dialog_parented(gncUIWidget parent,
 			    GNOME_STOCK_BUTTON_OK,
 			    NULL);
 
+  if (parent)
+    gnome_dialog_set_parent (GNOME_DIALOG (dialog), parent);
+
   /* default to ok */
   gnome_dialog_set_default(GNOME_DIALOG(dialog), 0);
 

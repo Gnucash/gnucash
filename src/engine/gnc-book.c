@@ -630,7 +630,7 @@ gnc_book_load (GNCBook *book)
            (strncmp(book->book_id, "https://", 8) == 0) ||
            (strncmp(book->book_id, "postgres://", 11) == 0))
   {
-    /* This code should be sufficient to initiliaze *any* backend,
+    /* This code should be sufficient to initialize *any* backend,
      * whether http, postgres, or anything else that might come along.
      * Basically, the idea is that by now, a backend has already been
      * created & set up.  At this point, we only need to get the

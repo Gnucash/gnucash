@@ -91,7 +91,7 @@ entity_node_destroy(gpointer key, gpointer value, gpointer not_used)
   e_node->entity_type = GNC_ID_NONE;
   e_node->entity = NULL;
 
-  g_free(guid);
+  xaccGUIDFree(guid);
   g_free(e_node);
 
   return TRUE;
@@ -279,7 +279,7 @@ xaccStoreEntity(void * entity, const GUID * guid, GNCIdType entity_type)
   e_node->entity_type = entity_type;
   e_node->entity = entity;
 
-  new_guid = g_new(GUID, 1);
+  new_guid = xaccGUIDMalloc();
   *new_guid = *guid;
 
   g_hash_table_insert(entity_table, new_guid, e_node);

@@ -182,6 +182,7 @@ xaccSplitScrub (Split *split)
 {
   Account *account;
   Transaction *trans;
+  gnc_numeric value;
   gboolean trans_was_open;
   int scu;
 
@@ -194,7 +195,18 @@ xaccSplitScrub (Split *split)
 
   account = xaccSplitGetAccount (split);
   if (!account)
+  {
+    value = xaccSplitGetValue (split);
+
+    if (gnc_numeric_same (xaccSplitGetShareAmount (split),
+                          xaccSplitGetValue (split),
+                          value.denom, GNC_RND_ROUND))
+      return;
+
+    xaccSplitSetShareAmount (split, value);
+
     return;
+  }
 
   if (!gnc_commodity_equiv (xaccAccountGetCurrency (account),
                             xaccAccountGetEffectiveSecurity (account)))
@@ -203,9 +215,10 @@ xaccSplitScrub (Split *split)
   scu = MIN (xaccAccountGetCurrencySCU (account),
              xaccAccountGetSecuritySCU (account));
 
+  value = xaccSplitGetValue (split);
+
   if (gnc_numeric_same (xaccSplitGetShareAmount (split),
-                        xaccSplitGetValue (split),
-                        scu, GNC_RND_ROUND))
+                        value, scu, GNC_RND_ROUND))
     return;
 
   PINFO ("split with mismatched values");
@@ -215,7 +228,7 @@ xaccSplitScrub (Split *split)
   if (!trans_was_open)
     xaccTransBeginEdit (trans);
 
-  xaccSplitSetShareAmount (split, xaccSplitGetValue (split));
+  xaccSplitSetShareAmount (split, value);
 
   if (!trans_was_open)
     xaccTransCommitEdit (trans);
@@ -332,7 +345,8 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     {
       gnc_numeric new_value = xaccSplitGetValue (balance_split);
 
-      new_value = gnc_numeric_sub_fixed (new_value, imbalance);
+      new_value = gnc_numeric_sub (new_value, imbalance,
+                                   new_value.denom, GNC_RND_ROUND);
 
       xaccSplitSetValue (balance_split, new_value);
 
@@ -348,7 +362,9 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
     {
       gnc_numeric new_share_amount = xaccSplitGetShareAmount (balance_split);
 
-      new_share_amount = gnc_numeric_sub_fixed (new_share_amount, imbalance);
+      new_share_amount = gnc_numeric_sub (new_share_amount, imbalance,
+                                          new_share_amount.denom,
+                                          GNC_RND_ROUND);
 
       xaccSplitSetShareAmount (balance_split, new_share_amount);
 

@@ -968,14 +968,14 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
         assert (s->acc);
       } 
       else { 
-        value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
-                                GNC_DENOM_REDUCE);
+        value = gnc_numeric_add(value, s->value,
+                                GNC_DENOM_AUTO, GNC_DENOM_LCD);
       }
-    } 
+    }
     else if ((NULL == base_currency) && (0 == force_double_entry)) {
-      value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
-                              GNC_DENOM_REDUCE);
-    } 
+      value = gnc_numeric_add(value, s->value,
+                              GNC_DENOM_AUTO, GNC_DENOM_LCD);
+    }
     else {
       const gnc_commodity *currency;
       const gnc_commodity *security;
@@ -985,13 +985,18 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
 
       /* OK, we've got a parent account, we've got currency, lets
        * behave like professionals now, instead of the shenanigans
-       * above. */
-      if (gnc_commodity_equiv(currency, base_currency)) {
-        value = gnc_numeric_add_fixed(value, s->value);
-      } 
-      else if (gnc_commodity_equiv(security, base_currency)) {
-        value = gnc_numeric_add_fixed(value, s->damount);
-      } 
+       * above. Note that just because the currencies are equivalent
+       * doesn't mean the denominators are the same! */
+      if (base_currency &&
+          gnc_commodity_equiv(currency, base_currency)) {
+        value = gnc_numeric_add(value, s->value,
+                                GNC_DENOM_AUTO, GNC_DENOM_LCD);
+      }
+      else if (base_currency && 
+               gnc_commodity_equiv(security, base_currency)) {
+        value = gnc_numeric_add(value, s->damount,
+                                GNC_DENOM_AUTO, GNC_DENOM_LCD);
+      }
       else {
         PERR ("inconsistent currencies\n"   
               "\tbase = '%s', curr='%s', sec='%s'\n",
@@ -1003,7 +1008,7 @@ xaccSplitsComputeValue (GList *splits, Split * skip_me,
     }
   }
 
-  return value;
+  return gnc_numeric_convert (value, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
 }
 
 gnc_numeric

@@ -1,3 +1,21 @@
+2001-02-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/Transaction.c (xaccSplitsComputeValue): fix a bug
+
+	* src/engine/gnc-book.c (gnc_book_load): fix spelling
+
+	* src/engine/Scrub.c (xaccTransScrubImbalance): don't use sub_fixed
+	since the value may not have the right denominator
+	(xaccSplitScrub): handle splits without accounts
+
+	* src/gnome/query-user.c
+	(gnc_choose_radio_option_dialog_parented): actually set the parent
+
+	* src/SplitLedger.c (xaccSRCheckReconciled): check current
+	transaction, not current split.
+
+	* src/engine/GNCId.c: use GUID allocator for hash keys.
+
 2001-02-28  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/gnc-commodity-xml-v2.c (gnc_commodity_end_handler):
