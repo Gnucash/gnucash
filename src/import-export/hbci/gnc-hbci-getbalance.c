@@ -112,6 +112,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       const HBCI_Value *noted_val, *booked_val;
       time_t noted_tt, booked_tt;
       char *noted_str, *booked_str;
+      gboolean noted_debit, booked_debit;
       gboolean dialogres;
 	    
       acc_bal = HBCI_OutboxJobGetBalance_getBalance (balance_job);
@@ -120,19 +121,23 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       noted_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (noted_bal), 
 					  HBCI_Balance_time (noted_bal));
       noted_val = HBCI_Balance_value (noted_bal);
+      noted_debit = HBCI_Balance_isDebit (noted_bal);
       noted_str = HBCI_Value_toReadableString (noted_val);
 
       booked_bal = HBCI_AccountBalance_bookedBalance (acc_bal);
       booked_tt = HBCI_DateTime_to_time_t (HBCI_Balance_date (booked_bal), 
 					   HBCI_Balance_time (booked_bal));
       booked_val = HBCI_Balance_value (booked_bal);
+      booked_debit = HBCI_Balance_isDebit (booked_bal);
       booked_str = HBCI_Value_toReadableString (booked_val);
 
-      printf("Noted balance: %s for account no. %s at date %s",
+      printf("Noted balance: %s%s for account no. %s at date %s",
+	     (noted_debit ? "-" : ""),
 	     noted_str, 
 	     HBCI_Account_accountId (h_acc),
 	     ctime(&noted_tt));
-      printf("Booked balance: %s for account no. %s at date %s",
+      printf("Booked balance: %s%s for account no. %s at date %s",
+	     (booked_debit ? "-" : ""),
 	     booked_str,
 	     HBCI_Account_accountId (h_acc),
 	     ctime(&booked_tt));
@@ -161,8 +166,9 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
 	   TRUE,
 	   /* Translators: %s is the amount. */
 	   _("Result of HBCI job: \n"
-	     "Account booked balance is %s\n"
+	     "Account booked balance is %s%s\n"
 	     "Reconcile account now?"),
+	   (booked_debit ? "-" : ""),
 	   booked_str);
       }
 
@@ -171,15 +177,20 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       
       GNCInteractor_hide (interactor);
       if (dialogres) 
-	recnWindowWithBalance (parent, 
-			       gnc_acc, 
-			       double_to_gnc_numeric 
-			       (HBCI_Value_getValue (booked_val),
-				xaccAccountGetCommoditySCU(gnc_acc),
-				GNC_RND_ROUND),
-			       booked_tt);
-      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
+	{
+	  gnc_numeric abs_value =
+	    double_to_gnc_numeric (HBCI_Value_getValue (booked_val),
+				   xaccAccountGetCommoditySCU(gnc_acc),
+				   GNC_RND_ROUND);
+	  recnWindowWithBalance (parent, 
+				 gnc_acc, 
+				 (booked_debit 
+				  ? gnc_numeric_neg (abs_value)
+				  : abs_value),
+				 booked_tt);
+	}
       
+      HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
     }
   }
 }

@@ -1,5 +1,8 @@
 2003-01-25  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix HBCI problem
+	with negative account balances.
+
 	* src/engine/Scrub.c (xaccTransScrubImbalance): Fix rounding of
 	the imbalance amount, #104343.
 
