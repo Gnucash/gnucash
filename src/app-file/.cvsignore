@@ -1,9 +1,9 @@
 Makefile
 Makefile.in
 .scm-links
-gw-app-utils.c
-gw-app-utils.h
-gw-app-utils.html
+gw-app-file.c
+gw-app-file.h
+gw-app-file.html
 *.lo
 *.la
 .deps
