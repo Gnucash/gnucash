@@ -16,9 +16,10 @@
   (primitive-load boot-file))
 
 ;; Automatically generated defaults...
-(define gnc:_config-dir-default_ "/usr/etc/gnucash")
-(define gnc:_share-dir-default_ "/usr/share/gnucash")
-(define gnc:_doc-dir-default_ "/usr/doc/gnucash")
+(define gnc:_config-dir-default_ "/usr/local/etc/gnucash")
+(define gnc:_share-dir-default_ "/usr/local/share/gnucash")
+(define gnc:_doc-dir-default_ "/usr/local/share/gnucash/Docs 
+                               /usr/local/share/gnucash/Reports")
 
 (define gnc:*command-line-files* #f)
 
@@ -353,7 +354,7 @@ variable is modified.  The symbol element default will expand to the default dir
 
 (define gnc:*doc-path*
   (gnc:make-config-var
-   "A list of strings indicating where to look for documentation files
+   "A list of strings indicating where to look for html and parsed-html files
 Any path element enclosed in parentheses will automatically be
 expanded to that directory and all its subdirectories whenever this
 variable is modified.  The symbol element default will expand to the

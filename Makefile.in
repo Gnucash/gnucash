@@ -143,9 +143,6 @@ install:
 	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
 	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
 
-	@mkdir -p ${GNC_DOCDIR}/data
-	$(INSTALL_DATA) data/*.xac ${GNC_DOCDIR}/data
-
 # 	@mkdir -p $(prefix)/toolbar
 # 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
 
@@ -164,6 +161,9 @@ install:
     dest=`echo $$file | cut -c 11-` \
 		${INSTALL_DATA} $$file ${GNC_SHAREDIR}/scm/$$dest; \
   done
+
+	@mkdir -p ${GNC_SHAREDIR}/data
+	$(INSTALL_DATA) data/*.xac ${GNC_SHAREDIR}/data
 
 	@mkdir -p ${GNC_SHAREDIR}/Docs
 	$(INSTALL_DATA) Docs/*.html ${GNC_SHAREDIR}/Docs

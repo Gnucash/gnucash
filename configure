@@ -2469,6 +2469,11 @@ fi
 #############################################################
 ### Set up the install style and all the default paths... ###
 
+# some confusion due to FSSTND stuff --
+# the readme's and miscellaneous docs are in /usr/doc (or equivalent)
+# the online help system is in /usr/share/gnucash/Doc and various subdirs
+# the parsed-html report supsystem is in /usr/share/gnucash/Reports
+
 if test ${OPT_STYLE_INSTALL} = 1
 then
   GNC_DOCDIR=${prefix}/doc
@@ -2499,6 +2504,8 @@ fi
 #
 GNC_STARTUP_FILE=`eval echo ${GNC_SHAREDIR}/scm/startup.scm`
 GNC_DOC_DIR_DEFAULT=`eval echo ${GNC_DOCDIR}`
+GNC_HTML_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}/Docs`
+GNC_REPORT_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}/Reports`
 GNC_SHARE_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}`
 GNC_CONFIG_DIR_DEFAULT=`eval echo ${GNC_CONFIGDIR}`
 

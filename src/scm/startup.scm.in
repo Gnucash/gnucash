@@ -18,7 +18,8 @@
 ;; Automatically generated defaults...
 (define gnc:_config-dir-default_ "@GNC_CONFIG_DIR_DEFAULT@")
 (define gnc:_share-dir-default_ "@GNC_SHARE_DIR_DEFAULT@")
-(define gnc:_doc-dir-default_ "@GNC_DOC_DIR_DEFAULT@")
+(define gnc:_doc-dir-default_ "@GNC_SHARE_DIR_DEFAULT@/Docs 
+                               @GNC_SHARE_DIR_DEFAULT@/Reports")
 
 (define gnc:*command-line-files* #f)
 
@@ -353,7 +354,7 @@ variable is modified.  The symbol element default will expand to the default dir
 
 (define gnc:*doc-path*
   (gnc:make-config-var
-   "A list of strings indicating where to look for documentation files
+   "A list of strings indicating where to look for html and parsed-html files
 Any path element enclosed in parentheses will automatically be
 expanded to that directory and all its subdirectories whenever this
 variable is modified.  The symbol element default will expand to the

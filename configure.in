@@ -185,19 +185,26 @@ AC_SUBST(MOTIF_LIBS)
 #############################################################
 ### Set up the install style and all the default paths... ###
 
+# some confusion due to FSSTND stuff --
+# the readme's and miscellaneous docs are in /usr/doc (or equivalent)
+# the online help system is in /usr/share/gnucash/Doc and various subdirs
+# the parsed-html report supsystem is in /usr/share/gnucash/Reports
+
 if test ${OPT_STYLE_INSTALL} = 1
 then
   GNC_DOCDIR=${prefix}/doc
   GNC_BINDIR=${prefix}/bin
   GNC_CONFIGDIR=${sysconfdir}
   GNC_SHAREDIR=${datadir}
+  GNC_STARTUP_FILE=`eval echo ${datadir}/startup.scm`
 else
   GNC_DOCDIR=${prefix}/doc/gnucash
   GNC_BINDIR=${prefix}/bin
   GNC_CONFIGDIR=${sysconfdir}/gnucash
   GNC_SHAREDIR=${datadir}/gnucash
-  GNC_STARTUP_FILE=`eval echo ${datadir}/startup.scm`
+  GNC_STARTUP_FILE=`eval echo ${datadir}/scm/startup.scm`
 fi
+
 
 AC_SUBST(GNC_DOCDIR)
 AC_SUBST(GNC_BINDIR)
@@ -213,8 +220,10 @@ AC_SUBST(GNC_SHAREDIR)
 #     that before substituting into those source files.  I wish I knew how
 #     to force a recursive expansion...
 #
-GNC_STARTUP_FILE=`eval echo ${GNC_SHAREDIR}/scm/startup.scm`
+# GNC_STARTUP_FILE=`eval echo ${GNC_SHAREDIR}/scm/startup.scm`
 GNC_DOC_DIR_DEFAULT=`eval echo ${GNC_DOCDIR}`
+GNC_HTML_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}/Docs`
+GNC_REPORT_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}/Reports`
 GNC_SHARE_DIR_DEFAULT=`eval echo ${GNC_SHAREDIR}`
 GNC_CONFIG_DIR_DEFAULT=`eval echo ${GNC_CONFIGDIR}`
 
