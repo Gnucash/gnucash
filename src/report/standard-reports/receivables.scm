@@ -33,7 +33,7 @@
 (use-modules (gnucash report aging))
 (use-modules (gnucash report standard-reports))
 
-(define this-acc "this-account")
+(define this-acc "Receivables Account")
 
 (define (options-generator)    
   (let* ((options (gnc:new-options)) 
@@ -45,12 +45,13 @@
 ;     (gnc:make-internal-option "__reg" this-acc #f))
 
     (add-option
-     (gnc:make-account-list-option
-      "__reg" this-acc
+     (gnc:make-account-list-limited-option
+      "Account" this-acc
       "" ""
       (lambda () '())
       #f
-      #f))
+      #f
+      '(receivable)))
 
     (aging-options-generator options)))
 
@@ -80,7 +81,7 @@
   (define (op-value section name)
     (gnc:option-value (get-op section name)))
 
-  (let* ((receivables-account (op-value "__reg" this-acc)))
+  (let* ((receivables-account (op-value "Account" this-acc)))
     (gnc:debug "receivables-account" receivables-account)
 
     (if (null? receivables-account)
@@ -95,11 +96,11 @@
  'name (N_ "Receivable Aging")
  'options-generator options-generator
  'renderer receivables-renderer
- 'in-menu? #f)
+ 'in-menu? #t)
 
 (define (receivables-report-create-internal acct)
   (let* ((options (gnc:make-report-options "Receivable Aging"))
-	 (acct-op (gnc:lookup-option options "__reg" this-acc)))
+	 (acct-op (gnc:lookup-option options "Account" this-acc)))
 
     (gnc:option-set-value acct-op (list acct))
     (gnc:make-report "Receivable Aging" options)))

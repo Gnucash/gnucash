@@ -466,11 +466,9 @@
       #f
       (cdr option-value)))
 
-;; account-list options use the option-data as a boolean value. If
-;; true, the gui should allow the user to select multiple accounts.
-;; Internally, values are always a list of guids. Externally, both
-;; guids and account pointers may be used to set the value of the
-;; option. The option always returns a list of account pointers.
+;; Just like gnc:make-account-list-limited-option except it
+;; does not limit the types of accounts that are available
+;; to the user.
 (define (gnc:make-account-list-option
          section
          name
@@ -479,6 +477,27 @@
          default-getter
          value-validator
          multiple-selection)
+
+  (gnc:make-account-list-limited-option
+   section name sort-tag documentation-string
+   default-getter value-validator multiple-selection '()))
+
+;; account-list options use the option-data as a pair; the car is
+;; a boolean value, the cdr is a list of account-types. If the boolean is
+;; true, the gui should allow the user to select multiple accounts.
+;; If the cdr is an empty list, then all account types are shown.
+;; Internally, values are always a list of guids. Externally, both
+;; guids and account pointers may be used to set the value of the
+;; option. The option always returns a list of account pointers.
+(define (gnc:make-account-list-limited-option
+         section
+         name
+         sort-tag
+         documentation-string
+         default-getter
+         value-validator
+         multiple-selection
+	 acct-type-list)
 
   (define (convert-to-guid item)
     (if (string? item)
@@ -524,7 +543,7 @@
      (lambda () (map convert-to-account (default-getter)))
      (gnc:restore-form-generator value->string)
      validator
-     multiple-selection #f #f #f)))
+     (cons multiple-selection acct-type-list) #f #f #f)))
 
 (define (gnc:multichoice-list-lookup list item )
   (cond

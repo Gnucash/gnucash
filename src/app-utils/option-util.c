@@ -908,13 +908,62 @@ gnc_option_show_time(GNCOption *option)
 gboolean
 gnc_option_multiple_selection(GNCOption *option)
 {
-  SCM value;
+  SCM pair;
 
   initialize_getters();
 
-  value = gh_call1(getters.option_data, option->guile_option);
+  pair = gh_call1(getters.option_data, option->guile_option);
 
-  return !gh_scm2bool(gh_not(value));
+  return !gh_scm2bool(gh_not(gh_car(pair)));
+}
+
+/********************************************************************\
+ * gnc_option_get_account_type_list                                 *
+ *   returns the list of account_types in the option (or NULL if    *
+ *   no special list is provided).  Only use this for account       *
+ *   options.                                                       *
+ *                                                                  *
+ * Args: option - the GNCOption                                     *
+ * Returns: GList of account types (must be freed by caller)        *
+\********************************************************************/
+GList *
+gnc_option_get_account_type_list(GNCOption *option)
+{
+  SCM pair;
+  SCM lst;
+  SCM conv_func;
+  GList *type_list = NULL;
+
+  initialize_getters();
+
+  pair = gh_call1(getters.option_data, option->guile_option);
+  lst = gh_cdr(pair);
+
+  conv_func = gh_eval_str ("gw:enum-<gnc:AccountType>-val->int");
+  if (!gh_procedure_p (conv_func)) {
+    PERR ("Cannot obtain conv_func");
+    return NULL;
+  }
+
+  while (!gh_null_p (lst)) {
+    GNCAccountType type;
+    SCM item;
+
+    /* Compute this item and the rest of the list */
+    item = gh_car (lst);
+    lst = gh_cdr (lst);
+
+    item = gh_call1(conv_func, item);
+
+    if (SCM_FALSEP (scm_integer_p (item))) {
+      PERR ("Invalid type");
+    } else {
+      type = gh_scm2long (item);
+      type_list = g_list_prepend (type_list, GINT_TO_POINTER (type));
+    }
+  }
+
+  return g_list_reverse (type_list);
 }
 
 

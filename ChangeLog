@@ -18,6 +18,17 @@
 
 	* add a hook in the entry ledger to obtain the current Query (to
 	set the sort order).
+
+	* options.scm: Create gnc:make-account-list-limited-option
+	function that adds a list of valid account-types; this limits the
+	account-tree dialog to only "reasonable" accounts.
+
+	* option-util.[ch]: add function to obtain GList* of valid
+	account-types.  NULL means "all".
+
+	* dialog-options: Limit account-list by types.
+
+	* Update payables and receivables reports to limit account types.
 	
 2002-07-01  Derek Atkins  <derek@ihtfp.com>
 

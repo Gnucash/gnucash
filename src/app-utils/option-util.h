@@ -94,6 +94,7 @@ char * gnc_option_permissible_value_description(GNCOption *option, int index);
 gboolean gnc_option_show_time(GNCOption *option);
 
 gboolean gnc_option_multiple_selection(GNCOption *option);
+GList * gnc_option_get_account_type_list(GNCOption *option);
 
 gboolean gnc_option_get_range_info(GNCOption *option,
                                    double *lower_bound,

@@ -773,8 +773,10 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
   GtkWidget *tree;
   GtkWidget *vbox;
   GtkWidget *bbox;
+  GList *acct_type_list;
 
   multiple_selection = gnc_option_multiple_selection(option);
+  acct_type_list = gnc_option_get_account_type_list(option);
 
   frame = gtk_frame_new(name);
 
@@ -789,6 +791,25 @@ gnc_option_create_account_widget(GNCOption *option, char *name)
     gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_MULTIPLE);
   else 
     gtk_clist_set_selection_mode(GTK_CLIST(tree), GTK_SELECTION_BROWSE);
+
+  if (acct_type_list) {
+    GList *node;
+    AccountViewInfo avi;
+    int i;
+
+    gnc_account_tree_get_view_info (GNC_ACCOUNT_TREE (tree), &avi);
+
+    for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
+      avi.include_type[i] = FALSE;
+
+    for (node = acct_type_list; node; node = node->next) {
+      GNCAccountType type = GPOINTER_TO_INT (node->data);
+      avi.include_type[type] = TRUE;
+    }
+
+    gnc_account_tree_set_view_info (GNC_ACCOUNT_TREE (tree), &avi);
+    g_list_free (acct_type_list);    
+  }
 
   scroll_win = gtk_scrolled_window_new(NULL, NULL);
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
