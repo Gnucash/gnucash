@@ -3227,10 +3227,8 @@ msgstr "\"Split\" de Acções"
 
 # src/gnome/glade-gnc-dialogs.c:6201
 #: src/gnome/glade-gnc-dialogs.c:6494
-#, fuzzy
 msgid "This druid will help you record a stock split or stock merger."
-msgstr ""
-"Esta ajuda apoia-lo-á no registo de um \"split\" ou \"merge\" de acções."
+msgstr "Este druida ajuda-lo-á no registo de um \"split\" ou \"merge\" de acções."
 
 # src/gnome/glade-gnc-dialogs.c:6212
 #: src/gnome/glade-gnc-dialogs.c:6505
@@ -3663,9 +3661,8 @@ msgstr "Chaves não coincidem."
 
 # src/gnome/new-user-interface.c:305
 #: src/gnome/new-user-interface.c:86 src/gnome/new-user-interface.c:110
-#, fuzzy
 msgid "New Account Hierarchy Setup"
-msgstr "Configuração de Nova Lista de Contas"
+msgstr "Configuração de Nova Hierarquia de Contas"
 
 #: src/gnome/new-user-interface.c:111
 msgid ""
@@ -3678,6 +3675,14 @@ msgid ""
 "Click 'Cancel'  if you do not wish to create any \n"
 "new accounts now."
 msgstr ""
+"Este druida ajuda-lo-á a criar um conjunto de contas \n"
+"GnuCash para os seus activos (tais como investimentos \n"
+"e contas à ordem ou a prazo), passivos (tais como \n"
+"empréstimos) e diferentes tipos de receitas e \n"
+"despesas que você possa ter. \n"
+"\n"
+"Prima 'Cancelar'  caso não deseje criar agora novas \n"
+"contas."
 
 # src/gnome/new-user-interface.c:99
 #: src/gnome/new-user-interface.c:123
@@ -3691,9 +3696,8 @@ msgstr "Por favor seleccione a moeda a utilizar para as novas contas."
 
 # src/gnome/new-user-interface.c:135
 #: src/gnome/new-user-interface.c:159
-#, fuzzy
 msgid "Choose accounts to create"
-msgstr "Escolha os Tipos de Conta"
+msgstr "Escolha contas a criar"
 
 #: src/gnome/new-user-interface.c:169
 msgid ""
@@ -3702,12 +3706,15 @@ msgid ""
 "Select the categories that are relevant to you.  You can always create \n"
 "additional accounts by hand later."
 msgstr ""
+"Seleccione categorias que correspondam à forma como vai utilizar o GnuCash.  \n"
+"Cada categoria que seleccionar fará com que várias contas sejam criadas.  \n"
+"Seleccione as categorias que são relevantes para si.  Poderá sempre criar \n"
+"manualmente novas contas mais tarde."
 
 # src/gnome/glade-gnc-dialogs.c:3549 src/gnome/new-user-interface.c:181
 #: src/gnome/new-user-interface.c:214
-#, fuzzy
 msgid "Account Types"
-msgstr "Tipo de Conta"
+msgstr "Tipos de Conta"
 
 # src/SplitLedger.c:3928 src/gnc-ui-util.c:120
 # src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4575
@@ -3722,13 +3729,11 @@ msgstr "Descrição Detalhada"
 
 # src/scm/report/guile-strings.c:414
 #: src/gnome/new-user-interface.c:341
-#, fuzzy
 msgid "Enter opening balances"
-msgstr "Saldos Iniciais"
+msgstr "Introduza saldos iniciais"
 
 # src/gnome/new-user-interface.c:315
 #: src/gnome/new-user-interface.c:351
-#, fuzzy
 msgid ""
 "If you would like an account to have an opening balance, click on the "
 "account\n"
@@ -3736,9 +3741,9 @@ msgid ""
 "Equity\n"
 "accounts may have an opening balance."
 msgstr ""
-"Se desejar que as novas contas tenham um saldo inicial clique na linha de "
-"conta e introduza o saldo inicial na caixa de texto à direita. Todas as "
-"contas excepto as de Capital podem ter um valor definido."
+"Se desejar que uma conta tenha um saldo inicial, clique na conta\n "
+"e introduza o saldo inicial na caixa de texto à direita. Todas as contas\n"
+"excepto as de Resultados podem ter um saldo inicial."
 
 # src/gnome/new-user-interface.c:261
 #: src/gnome/new-user-interface.c:450
@@ -3753,6 +3758,11 @@ msgid ""
 "\n"
 "Press `Cancel' to close this dialog without creating any new accounts."
 msgstr ""
+"Prima `Terminar' para criar as suas novas contas.\n"
+"\n"
+"Prima `Retroceder' para rever as suas selecções.\n"
+"\n"
+"Prima `Cancelar' para fechar esta janela sem criar quaisquer novas contas."
 
 # src/gnome/window-register.c:831
 #: src/gnome/new-user-interface.c:513
@@ -5981,14 +5991,12 @@ msgstr "Mês"
 # src/gnome/glade-gnc-dialogs.c:2648 src/gnome/glade-gnc-dialogs.c:2690
 # src/gnome/glade-gnc-dialogs.c:2931 src/gnome/glade-gnc-dialogs.c:2973
 #: src/scm/guile-strings.c:176 src/scm/guile-strings.c:177
-#, fuzzy
 msgid "Quarter"
-msgstr "Trimestral"
+msgstr "Trimestre"
 
 #: src/scm/guile-strings.c:178 src/scm/guile-strings.c:179
-#, fuzzy
 msgid "Half Year"
-msgstr "Ano Anterior"
+msgstr "Semestre"
 
 # src/gnome/gnc-datedelta.c:211
 #: src/scm/guile-strings.c:180 src/scm/guile-strings.c:181
@@ -6797,12 +6805,11 @@ msgid "No account list setup on new file"
 msgstr "Sem configuração de lista de contas em ficheiro novo"
 
 #: src/scm/guile-strings.c:388
-#, fuzzy
 msgid ""
 "Don't popup the new account list dialog when you choose \"New File\" from "
 "the \"File\" menu"
 msgstr ""
-"Apresentar a janela de lista de novas contas quando selecciona \"Novo "
+"Não mostrar a janela de nova lista de contas quando se selecciona \"Novo "
 "Ficheiro\" no menu \"Ficheiro\""
 
 # src/gnome/druid-qif-import.c:204 src/scm/guile-strings.c:244
