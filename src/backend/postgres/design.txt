@@ -11,13 +11,13 @@ gnucash process acts only as a 'cache' of (some of) the
 'true' data in a remote SQL database.  The motivation of 
 this design is to allow the local process to quickly access
 and manipulate data (because it is local), without loosing
-the benefits of a remote, shared, persisitant storage 
+the benefits of a remote, shared, persistent storage 
 server (the sql database).  If the code seems complex,
 that is because it is expending a considerable amount of
 effort in trying to maintain the local cache consistent
 with the remote store.  In the following text (and in the 
 notes in the source code), "the engine" is used as a 
-sysnonym for "the cache", and always refers to the 
+synonym for "the cache", and always refers to the 
 local data running in the local process.
 
 
@@ -64,7 +64,7 @@ indicates which mode the database is functioning.
 
    This mode is more robust in that there is minimal/no data loss in 
    the event of a crash.  If the database needs to be accessed in
-   single-user mode, this is teh preffered mode to use.
+   single-user mode, this is the preferred mode to use.
 
 -- "Multi-User Polled" -- 
    mode=multi-user-poll
@@ -89,11 +89,11 @@ indicates which mode the database is functioning.
    database on an as-needed basis:  for example, if the local
    user tries to edit the same transaction that some remote user
    has modified, then the local copy of transaction will be updated, 
-   and the user warned that a remote change has occured. 
+   and the user warned that a remote change has occurred. 
 
 -- "Multi-User Events" (Default Mode) --
    mode=multi-user
-   Multiple sers are assumed.  This mode works essentially the
+   Multiple users are assumed.  This mode works essentially the
    same way as the multi-user-poll mode, except that (asynchronous) 
    events are delivered to the local process when remote users 
    make changes.  This will cause the local GUI display to automatically
@@ -115,7 +115,7 @@ second user at the same time.  Similarly, a database that
 is currently open in multi-user mode cannot be opened in
 single-user mode.
 
-Note, however, that swithcing modes after all users have
+Note, however, that switching modes after all users have
 logged off is perfectly safe:  If all the multi-users
 log off, then the database can be opened in single-user mode
 (and vice-versa).  Logoff happens 'automatically' when 
@@ -217,7 +217,7 @@ an hour newer/older than the others, leading to bad updates).
 /* The pgendAccountCompareVersion() routine compares the version
  * number of the account in the engine and the sql database. It
  * returns a negative number if the sql version is older (or the
- * acount is not present in the sql db). It returns a positive
+ * account is not present in the sql db). It returns a positive
  * number if the sql version is newer.  It returns zero if the
  * two are equal.
  */
@@ -229,7 +229,7 @@ Version Timestamp
 The engine is structured so that whenever the GUI issues a query, that 
 query is passed to the backend. (The engine assumes the worst: that
 the engine data cache is out of date and needs to be upgraded.)  
-Unforunately, the GUI frequently queries for the same data several 
+Unfortunately, the GUI frequently queries for the same data several 
 times in rapid succession.  If this is taken at face value, then 
 multiple redundant queries to the SQL server occur in quick succession.
 
