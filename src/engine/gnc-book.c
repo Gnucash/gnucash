@@ -56,6 +56,8 @@
 #include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-event.h"
+#include "gnc-event-p.h"
 #include "gnc-module.h"
 
 static short module = MOD_IO;
@@ -70,6 +72,10 @@ gnc_book_init (GNCBook *book)
   if (!book) return;
 
   book->entity_table = xaccEntityTableNew ();
+
+  xaccGUIDNew(&book->guid, book);
+  xaccStoreEntity(book->entity_table, book, &book->guid, GNC_ID_BOOK);
+
   book->kvp_data = kvp_frame_new ();
   book->topgroup = xaccMallocAccountGroup(book);
   book->pricedb = gnc_pricedb_create();
@@ -96,10 +102,50 @@ gnc_book_new (void)
   book = g_new0(GNCBook, 1);
   gnc_book_init(book);
 
+  gnc_engine_generate_event (&book->guid, GNC_EVENT_CREATE);
   return book;
 }
 
+void
+gnc_book_destroy (GNCBook *book) 
+{
+  if (!book) return;
+
+  gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
+  xaccRemoveEntity (book->entity_table, &book->guid);
+
+  /* mark the accounts as being freed
+   * to avoid tons of balance recomputations. */
+  xaccGroupMarkDoFree (book->topgroup);
+
+  xaccFreeAccountGroup (book->topgroup);
+  book->topgroup = NULL;
+
+  gnc_pricedb_destroy (book->pricedb);
+  book->pricedb = NULL;
+
+  gnc_commodity_table_destroy (book->commodity_table);
+  book->commodity_table = NULL;
+
+  /* FIXME: destroy SX data members here, too */
+
+  xaccEntityTableDestroy (book->entity_table);
+  book->entity_table = NULL;
+
+  xaccLogEnable();
+
+  g_free (book);
+  LEAVE(" ");
+}
+
 /* ---------------------------------------------------------------------- */
+
+const GUID *
+gnc_book_get_guid (GNCBook *book)
+{
+  if (!book) return NULL;
+  return &book->guid;
+}
 
 kvp_frame *
 gnc_book_get_slots (GNCBook *book)
@@ -307,34 +353,7 @@ gnc_book_not_saved(GNCBook *book)
 	 book_sxlist_notsaved(book));
 }
 
-void
-gnc_book_destroy (GNCBook *book) 
-{
-  if (!book) return;
-
-  /* mark the accounts as being freed
-   * to avoid tons of balance recomputations. */
-  xaccGroupMarkDoFree (book->topgroup);
-
-  xaccFreeAccountGroup (book->topgroup);
-  book->topgroup = NULL;
-
-  gnc_pricedb_destroy (book->pricedb);
-  book->pricedb = NULL;
-
-  gnc_commodity_table_destroy (book->commodity_table);
-  book->commodity_table = NULL;
-
-  /* FIXME: destroy SX data members here, too */
-
-  xaccEntityTableDestroy (book->entity_table);
-  book->entity_table = NULL;
-
-  xaccLogEnable();
-
-  g_free (book);
-  LEAVE(" ");
-}
+/* ---------------------------------------------------------------------- */
 
 gboolean
 gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
@@ -368,3 +387,5 @@ gnc_book_equal (GNCBook *book_1, GNCBook *book_2)
 
   return TRUE;
 }
+
+/* ---------------------------------------------------------------------- */

@@ -45,6 +45,8 @@
 GNCBook * gnc_book_new (void);
 void      gnc_book_destroy (GNCBook *book);
 
+const GUID * gnc_book_get_guid (GNCBook *book);
+
 /* The gnc_book_get_slots() method will return the kvp data 
  * for the book */
 kvp_frame * gnc_book_get_slots (GNCBook *book);

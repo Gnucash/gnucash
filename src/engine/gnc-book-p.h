@@ -38,6 +38,11 @@
 
 struct gnc_book_struct
 {
+  /* Unique guid for this book */
+  GUID guid;
+
+  /* The kvp_frame providea a place for top-level data associated 
+   * with this book. */
   kvp_frame *kvp_data;
   
   /* The entity table associates the GUIDs of all the objects
