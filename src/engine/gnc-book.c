@@ -50,6 +50,7 @@
 #include "Scrub.h"
 #include "TransLog.h"
 #include "gnc-book.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 
 static short module = MOD_IO;
