@@ -418,7 +418,7 @@ sql_sort_need_entry (Query *q)
  * broken as well. 
  */
 
-#define AMOUNT_TERM(fieldname)					\
+#define AMOUNT_TERM(fieldname,comtable)				\
 {								\
    if (0 == pd->amount.sense)					\
    {								\
@@ -439,17 +439,17 @@ sql_sort_need_entry (Query *q)
    {								\
       case AMT_MATCH_ATLEAST:					\
          sq->pq = stpcpy(sq->pq, 				\
-            "abs(" fieldname ") >= gncCommodity.fraction * float8"); \
+            "abs(" fieldname ") >= "comtable".fraction * float8"); \
          sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
          break;							\
       case AMT_MATCH_ATMOST:					\
          sq->pq = stpcpy(sq->pq, 				\
-            "abs(" fieldname ") <= gncCommodity.fraction * float8"); \
+            "abs(" fieldname ") <= "comtable".fraction * float8"); \
          sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
          break;							\
       case AMT_MATCH_EXACTLY:					\
          sq->pq = stpcpy(sq->pq, 				\
-            "abs(abs(" fieldname ") - abs(gncCommodity.fraction * float8"); \
+            "abs(abs(" fieldname ") - abs("comtable".fraction * float8"); \
          sq->pq += sprintf (sq->pq, "(%22.18g)", pd->amount.amount); \
          sq->pq = stpcpy(sq->pq, ")) < 1");			\
          break;							\
@@ -490,7 +490,8 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    int more_and = 0;
    int max_rows;
    gboolean need_account = FALSE;
-   gboolean need_commodity = FALSE;
+   gboolean need_account_commodity = FALSE;
+   gboolean need_trans_commodity = FALSE;
    gboolean need_entry = FALSE;
    sort_type_t sorter;
 
@@ -529,7 +530,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
                break;
             case PR_AMOUNT:
                need_entry = TRUE;
-               need_commodity = TRUE;
+               need_trans_commodity = TRUE;
                break;
             case PR_GUID:
                switch (xaccGUIDType (&pd->guid.guid, session))
@@ -549,7 +550,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
                break;
             case PR_SHRS: 
                need_entry = TRUE;
-               need_commodity = TRUE;
+               need_account_commodity = TRUE;
                need_account = TRUE;
                break;
             default:
@@ -564,7 +565,7 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
 
    /* reset the buffer pointers */
    sq->pq = sq->q_base;
-   sq->pq = stpcpy(sq->pq, 
+   sq->pq = stpcpy(sq->pq,
                    "SELECT DISTINCT gncTransaction.* ");
 
    /* For SELECT DISTINCT, ORDER BY expressions must appear in target list */
@@ -579,9 +580,13 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
    {
       sq->pq = stpcpy(sq->pq, ", gncAccount");
    }
-   if (need_commodity)
+   if (need_account_commodity)
    {
-      sq->pq = stpcpy(sq->pq, ", gncCommodity");
+      sq->pq = stpcpy(sq->pq, ", gncCommodity account_com");
+   }
+   if (need_trans_commodity)
+   {
+      sq->pq = stpcpy(sq->pq, ", gncCommodity trans_com");
    }
    if (need_entry)
    {
@@ -659,8 +664,8 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
             {
                PINFO("term is PR_AMOUNT");
                sq->pq = stpcpy(sq->pq, 
-                     "gncTransaction.currency = gncCommodity.commodity AND ");
-               AMOUNT_TERM ("gncEntry.value");
+                     "gncTransaction.currency = trans_com.commodity AND ");
+               AMOUNT_TERM ("gncEntry.value","trans_com");
                break;
             }
 
@@ -850,8 +855,8 @@ sqlQuery_build (sqlQuery *sq, Query *q, GNCSession *session)
                PINFO("term is PR_SHRS");
                sq->pq = stpcpy(sq->pq, 
                      "gncEntry.accountGuid = gncAccount.accountGuid AND "
-                     "gncAccount.commodity = gncCommodity.commodity AND ");
-               AMOUNT_TERM ("gncEntry.amount");
+                     "gncAccount.commodity = account_com.commodity AND ");
+               AMOUNT_TERM ("gncEntry.amount","account_com");
                break;
             }
 
