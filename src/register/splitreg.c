@@ -95,6 +95,7 @@
 static void
 configLabels (SplitRegister *reg)
 {
+   BasicCell *hc;
    int type = (reg->type) & REG_TYPE_MASK;
 
    LABEL (DATE,  DATE_STR);
@@ -158,6 +159,12 @@ configLabels (SplitRegister *reg)
       default:
          break;
    }
+
+   /* copy debit, dredit strings to ndebit, ncredit cells */
+   hc = reg->header_label_cells[DEBT_CELL];
+   LABEL (NDEBT,  hc->value);
+   hc = reg->header_label_cells[CRED_CELL];
+   LABEL (NCRED,  hc->value);
 }
 
 /* ============================================== */
@@ -542,6 +549,9 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
    HDR (SHRS);
    HDR (BALN);
    
+   HDR (NCRED);
+   HDR (NDEBT);
+
    /* --------------------------- */
    /* malloc the workhorse cells */
 
