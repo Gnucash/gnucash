@@ -1,5 +1,15 @@
 2002-10-14  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/dialog-sxsincelast.c (process_auto_create_list): Use
+	the appropriate function for creating toCreateInstances to fix
+	Bug#95637.
+	(sxsld_get_future_created_txn_count): Added to assist in
+	next-page-determination.
+	(sxsld_disposition_changed): Correctly predicts
+	post-processing/future txn count; fixes Bug#95734.
+
+2002-10-14  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/app-utils/gnc-exp-parser.c (func_op): Remove
 	seemed-like-a-bad-idea explicit negation of calculated values;
 	fixes Bug#95781.

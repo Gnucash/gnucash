@@ -270,7 +270,8 @@ typedef struct _sxSinceLastData {
         /* The count of selected reminders. */
         gint remindSelCount;
 
-        gboolean autoCreatedSomething;
+        /* The count of auto-created transactions. */
+        gint autoCreatedCount;
 
         GNCLedgerDisplay *ac_ledger;
         GNCRegWidget *ac_regWidget;
@@ -365,12 +366,13 @@ static void gnc_sxsld_free_sxState( gpointer key,
                                     gpointer userdata );
 static void gnc_sxsld_free_entry_numeric( GtkObject *o, gpointer ud );
 
-static void sxsld_process_to_create_instance( sxSinceLastData *sxsld,
+static gint sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                                               toCreateInstance *tci );
 static void sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
                                          toCreateInstance *tci );
-static void sxsld_create_to_create_txns( sxSinceLastData *sxsld,
+static gint sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                                          toCreateInstance *tci );
+static gint sxsld_get_future_created_txn_count( sxSinceLastData *sxsld );
 
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
@@ -608,14 +610,15 @@ static
 gboolean
 gnc_sxsld_autocreate_appr( sxSinceLastData *sxsld )
 {
-        return sxsld->autoCreatedSomething;
+        return (sxsld->autoCreatedCount > 0);
 }
 
 static
 gboolean
 gnc_sxsld_created_appr( sxSinceLastData *sxsld )
 {
-        return sxsld->createdTxnGUIDList != NULL;
+        return ((g_list_length(sxsld->createdTxnGUIDList)
+                 - sxsld->autoCreatedCount) > 0);
 }
 
 static
@@ -954,8 +957,12 @@ to_create_prep( GnomeDruidPage *druid_page,
                                                   BACK )
                   != NULL ),
                 TRUE, TRUE );
-        /* FIXME: we should add next/finish determination based on the number
-         * of ready-to-go to-create transactions? */
+        /* Setup next/finish button based on the number of ready-to-go
+         * to-create transactions */
+        gnome_druid_set_show_finish(
+                sxsld->sincelast_druid,
+                ( (sxsld_get_future_created_txn_count(sxsld)
+                   - sxsld->autoCreatedCount) == 0 ) );
 }
 
 static
@@ -986,11 +993,15 @@ sxsld_revert_to_create_txns( sxSinceLastData *sxsld,
         tci->createdTxnGUIDs = NULL;
 }
 
+/**
+ * @return The count of created transactions.
+ **/
 static
-void
+gint
 sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                              toCreateInstance *tci )
 {
+        gint toRet = 0;
         GList *l = NULL;
         GList *created = NULL;
 
@@ -1000,7 +1011,7 @@ sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                 /* If we've created it and the variables
                  * haven't changed, skip it. */
                 if ( ! tci->dirty ) {
-                        return;
+                        return toRet;
                 }
                 /* Otherwise, destroy the transactions and
                  * re-create them below. */
@@ -1022,9 +1033,11 @@ sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                 tci->createdTxnGUIDs =
                         g_list_append( tci->createdTxnGUIDs,
                                        (GUID*)l->data );
+                toRet++;
         }
         sxsld->createdTxnGUIDList =
                 g_list_concat( sxsld->createdTxnGUIDList, created );
+        return toRet;
 }
 
 /**
@@ -1034,12 +1047,15 @@ sxsld_create_to_create_txns( sxSinceLastData *sxsld,
  * it, we should remove the previously-created transactions and now add the
  * instance to the postponed list.  See the code for full details on the
  * policy here.
+ *
+ * @return The count of created transactions.
  **/
 static
-void
+gint
 sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                                   toCreateInstance *tci )
 {
+        gint toRet = 0;
 
         /* Undo the previous work. */
         switch ( tci->prevState ) {
@@ -1103,7 +1119,7 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                 break;
         case TO_CREATE:
                 /* Go ahead and create... */
-                sxsld_create_to_create_txns( sxsld, tci );
+                toRet = sxsld_create_to_create_txns( sxsld, tci );
                 break;
         default:
                 g_assert( FALSE );
@@ -1132,7 +1148,7 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                 /* If we don't have anything to do, then just return. */
                 if ( g_date_valid( last_occur )
                      && g_date_compare( last_occur, tci->date ) > 0 ) {
-                        return;
+                        return toRet;
                 }
                 xaccSchedXactionSetLastOccurDate( sx, tci->date );
 
@@ -1149,23 +1165,21 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                         }
                 }
         }
+
+        return toRet;
 }
 
 static
 gboolean
-to_create_next( GnomeDruidPage *druid_page,
-                gpointer arg1, gpointer ud )
+sxsld_process_to_create_page( sxSinceLastData *sxsld )
 {
-        sxSinceLastData *sxsld;
         GtkCTree *ct;
         GList *tcList, *tcInstList;
         gboolean allVarsBound;
         toCreateTuple *tct;
         toCreateInstance *tci;
 
-        sxsld = (sxSinceLastData*)ud;
-
-        ct = GTK_CTREE(glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ));
+        ct = GTK_CTREE( glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ) );
 
         /* First: check to make sure all TCTs are 'ready' [and return if not].
          * Second: create the entries based on the variable bindings. */
@@ -1223,8 +1237,35 @@ to_create_next( GnomeDruidPage *druid_page,
                 }
         }
         gnc_resume_gui_refresh();
-
         return FALSE;
+}
+
+static
+gboolean
+to_create_next( GnomeDruidPage *druid_page,
+                gpointer arg1, gpointer ud )
+{
+        sxSinceLastData *sxsld;
+        GnomeDruidPage *nextPg;
+
+        sxsld = (sxSinceLastData*)ud;
+
+        /* Do the actual work processing the page. */
+        if ( sxsld_process_to_create_page( sxsld ) ) {
+                return TRUE;
+        }
+
+        /* Figure out the next page, now, given the changes we've made above.
+         * This will get us a fix for Bug#95734. */
+        nextPg = gnc_sxsld_get_appropriate_page( sxsld,
+                                                 GNOME_DRUID_PAGE( druid_page ),
+                                                 FORWARD );
+        /* We've made the "adjust buttons on disposition-change" fix
+         * which will make this assertion true. */
+        g_assert( nextPg != NULL );
+        gnome_druid_set_page( sxsld->sincelast_druid, nextPg );
+
+        return TRUE;
 }
 
 static void
@@ -1240,6 +1281,14 @@ gnc_sxsld_finish( GnomeDruidPage *druid_page,
         gtk_widget_hide( sxsld->sincelast_window );
 
         gnc_sxsld_commit_ledgers( sxsld );
+
+        /* If we're finishing from the to-create page, then process the page contents. */
+        if ( druid_page ==
+             GNOME_DRUID_PAGE( glade_xml_get_widget( sxsld->gxml,
+                                                     TO_CREATE_PG ) ) ) {
+                DEBUG( "Stopped on to-create-pg" );
+                sxsld_process_to_create_page( sxsld );
+        }
 
         /* Deal with the selected obsolete list elts. */
         cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
@@ -1637,11 +1686,8 @@ static void
 process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
 {
         GList *l;
-        GList *createdGUIDs = NULL;
-        GList *thisGUID;
         toCreateTuple *tct;
         toCreateInstance *tci;
-        gboolean autoCreateState, notifyState;
         GList *instances;
         int count, total;
 
@@ -1654,41 +1700,16 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
         }
         gtk_progress_configure( GTK_PROGRESS(sxsld->prog), 0, 0, total );
         gnc_suspend_gui_refresh();
+
         for ( ; autoCreateList ; autoCreateList = autoCreateList->next ) {
                 tct = (toCreateTuple*)autoCreateList->data;
                 
-                xaccSchedXactionGetAutoCreate( tct->sx,
-                                               &autoCreateState,
-                                               &notifyState );
-
                 for ( instances = tct->instanceList;
                       instances;
                       instances = instances->next ) {
                         tci = (toCreateInstance*)instances->data;
-                        thisGUID = createdGUIDs = NULL;
-                        create_transactions_on( tct->sx,
-                                                tci->date,
-                                                tci,
-                                                &createdGUIDs );
-
-                        count++;
-                        gtk_progress_set_value( GTK_PROGRESS(sxsld->prog), count );
-                        while (g_main_iteration(FALSE));
-
-                        sxsld->autoCreatedSomething = TRUE;
-
-                        for ( thisGUID = createdGUIDs;
-                              thisGUID;
-                              (thisGUID = thisGUID->next) ) {
-                                tci->createdTxnGUIDs =
-                                        g_list_append( tci->createdTxnGUIDs,
-                                                       (GUID*)thisGUID->data );
-                        }
-                        /* Save these GUIDs in case we need to 'cancel' this
-                         * operation [and thus delete these transactions]. */
-                        sxsld->createdTxnGUIDList =
-                                g_list_concat( sxsld->createdTxnGUIDList,
-                                               createdGUIDs );
+                        sxsld->autoCreatedCount +=
+                                sxsld_process_to_create_instance( sxsld, tci );
                 }
         }
         gnc_resume_gui_refresh();
@@ -3163,6 +3184,75 @@ sxsld_obsolete_row_toggle( GtkCList *cl, gint row, gint col,
         tdt->isSelected = !tdt->isSelected;
 }
 
+/**
+ * @return the count of created transactions which would be true after
+ * processing the currently-selected state of to-create transactions.  Note
+ * that this includes auto-created transactions, which aren't shown in the
+ * post-to-create review page.
+ **/
+static
+gint
+sxsld_get_future_created_txn_count( sxSinceLastData *sxsld )
+{
+        GList *tctList, *tciList;
+        /* Get a reasonable initial count to modify below. */
+        gint toRet = g_list_length( sxsld->createdTxnGUIDList );
+
+        for ( tctList = sxsld->toCreateList;
+              tctList; tctList = tctList->next ) {
+
+                toCreateTuple *tct = (toCreateTuple*)tctList->data;
+
+                for ( tciList = tct->instanceList;
+                      tciList;
+                      tciList = tciList->next ) {
+
+                        GList *txnSet, *splitList;
+                        toCreateInstance *tci = (toCreateInstance*)tciList->data;
+
+                        if ( tci->state == tci->prevState ) {
+                                continue;
+                        }
+                        
+                        switch ( tci->state ) {
+                        case TO_CREATE:
+                                /* We were postpone or ignore, before ... so
+                                 * add the new txns in. */
+
+                                /* Calculate the size of the transaction-list to be created. */
+                                txnSet = NULL;
+                                splitList = xaccSchedXactionGetSplits( tci->parentTCT->sx );
+                                for ( ; splitList; splitList = splitList->next ) {
+                                        Split *s = (Split*)splitList->data;
+                                        if ( g_list_find( txnSet, xaccSplitGetParent(s) ) == NULL ) {
+                                                txnSet = g_list_append( txnSet, (gpointer)s );
+                                        }
+                                }
+                                toRet += g_list_length( txnSet );
+                                g_list_free( txnSet );
+                                txnSet = NULL;
+                                break;
+                        case IGNORE:
+                        case POSTPONE:
+                                /* We were {postpone,ignore} or to-create,
+                                 * before, so either continue to ignore or
+                                 * subtract out the txns. */
+                                if ( tci->prevState != TO_CREATE ) {
+                                        continue;
+                                }
+                                toRet -= g_list_length( tci->createdTxnGUIDs );
+                                break;
+                        case UNDEF:
+                        case MAX_STATE:
+                                g_assert( "We shouldn't see any of these." );
+                                break;
+                        }
+                }
+        }
+        g_assert( toRet >= 0 );
+        return toRet;
+}
+
 static
 void
 sxsld_disposition_changed( GtkMenuShell *b, gpointer d )
@@ -3217,6 +3307,12 @@ sxsld_disposition_changed( GtkMenuShell *b, gpointer d )
                                   newSensitivity );
         ct = GTK_CTREE(glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST ));
         gtk_ctree_node_set_text( ct, sxsld->curSelTCI->node, 1, newCtreeText );
+
+        /* set the 'next/finish' button appropraitely based on the new
+         * selection. */
+        gnome_druid_set_show_finish( sxsld->sincelast_druid,
+                                     ( ( sxsld_get_future_created_txn_count(sxsld)
+                                         - sxsld->autoCreatedCount )== 0 ) );
 }
 
 /**
@@ -3580,3 +3676,4 @@ gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld )
                 gnc_ledger_display_get_split_register(sxsld->ac_ledger),
                 TRUE );
 }
+
