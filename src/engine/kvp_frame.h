@@ -25,7 +25,7 @@
  * possible types enumerated in the KvpValueType enum, and includes, 
  * among other things, ints, doubles, strings, guid's, lists, time
  * and numeric values.  KvpValues may also be other frames, so
- * KVP is inherently heirarchical.
+ * KVP is inherently hierarchical.
  * 
  * Values are stored in a 'slot' associated with a key.
  * Pointers passed as arguments into set_slot and get_slot are the
@@ -72,6 +72,9 @@ typedef struct _KvpFrame KvpFrame;
 /** A KvpValue is a union with possible types enumerated in the
  * KvpValueType enum. */
 typedef struct _KvpValue KvpValue;
+
+/* FIXME: fix annoying asymmetries: gnc_numeric vs numeric; str vs string */
+
  
 /** Enum to enumerate possible types in the union KvpValue 
  *  XXX FIXME TODO: People have asked for boolean values, 
@@ -141,6 +144,7 @@ gboolean     kvp_frame_is_empty(KvpFrame * frame);
 void kvp_frame_set_gint64(KvpFrame * frame, const char * path, gint64 ival);
 void kvp_frame_set_double(KvpFrame * frame, const char * path, double dval);
 void kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval);
+#define kvp_frame_set_numeric kvp_frame_set_gnc_numeric
 void kvp_frame_set_timespec(KvpFrame * frame, const char * path, Timespec ts);
 
 /** The kvp_frame_set_str() routine will store a copy of the string 
@@ -155,6 +159,7 @@ void kvp_frame_set_timespec(KvpFrame * frame, const char * path, Timespec ts);
  *    *NOT* copy the frame. 
  */
 void kvp_frame_set_str(KvpFrame * frame, const char * path, const char* str);
+#define kvp_frame_set_string kvp_frame_set_str
 void kvp_frame_set_guid(KvpFrame * frame, const char * path, const GUID *guid);
 
 void kvp_frame_set_frame(KvpFrame *frame, const char *path, KvpFrame *chld);
@@ -204,17 +209,18 @@ KvpValue * kvp_frame_replace_value_nc (KvpFrame * frame, const char * slot,
 
 /** @name KvpFrame URL handling */
 /*@{*/
-/** The kvp_frame_add_url_encoding() routine will parse the
- *  value string, assuming it to be URL-encoded in the standard way,
- *  turning it into a set of key-value pairs, and adding those to the
- *  indicated frame.  URL-encoded strings are the things that are
- *  returned by web browsers when a form is filled out.  For example,
- *  'start-date=June&end-date=November' consists of two keys, 
- *  'start-date' and 'end-date', which have the values 'June' and 
- *  'November', respectively.  This routine also handles % encoding.
+/** The kvp_frame_add_url_encoding() routine will parse the value
+ *    string, assuming it to be URL-encoded in the standard way, *
+ *    turning it into a set of key-value pairs, and adding those to
+ *    the * indicated frame.  URL-encoded strings are the things that
+ *    are * returned by web browsers when a form is filled out.  For
+ *    example, * 'start-date=June&end-date=November' consists of two
+ *    keys, * 'start-date' and 'end-date', which have the values
+ *    'June' and * 'November', respectively.  This routine also
+ *    handles % encoding.
  *
  *  This routine treats all values as strings; it does *not* attempt
- *  to perform any type-conversion.
+ *    to perform any type-conversion.
  * */
 void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
 /*@}*/
@@ -222,20 +228,20 @@ void     kvp_frame_add_url_encoding (KvpFrame *frame, const char *enc);
 /** @name KvpFrame Glist Bag Storing */
 /*@{*/
 
-/** The kvp_frame_add_gint64() routine will add the value of the 
- *     gint64 to the glist bag of values at the indicated path. 
- *     If not all frame components of the path exist, they are 
- *     created.  If the value previously stored at this path was 
- *     not a glist bag, then a bag will be formed there, the old 
- *     value placed in the bag, and the new value added to the bag.
+/** The kvp_frame_add_gint64() routine will add (as in append, not as
+ *  in sum) the value of the gint64 to the glist bag of values at the
+ *  indicated path.  If not all frame components of the path exist,
+ *  they are created.  If the value previously stored at this path was
+ *  not a glist bag, then a bag will be formed there, the old value
+ *  placed in the bag, and the new value added to the bag.
  *
- *     Similarly, the add_double, add_numeric, and add_timespec 
- *     routines perform the same function, for each of the respective 
- *     types.
+ *  Similarly, the add_double, add_numeric, and add_timespec routines
+ *  perform the same function, for each of the respective types.
  */
 void kvp_frame_add_gint64(KvpFrame * frame, const char * path, gint64 ival);
 void kvp_frame_add_double(KvpFrame * frame, const char * path, double dval);
 void kvp_frame_add_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval);
+#define kvp_frame_add_numeric kvp_frame_add_gnc_numeric
 void kvp_frame_add_timespec(KvpFrame * frame, const char * path, Timespec ts);
 
 /** The kvp_frame_add_str() routine will add a copy of the string 
@@ -252,6 +258,7 @@ void kvp_frame_add_timespec(KvpFrame * frame, const char * path, Timespec ts);
  *    *NOT* copy the frame. 
  */
 void kvp_frame_add_str(KvpFrame * frame, const char * path, const char* str);
+#define kvp_frame_add_string kvp_frame_add_str
 void kvp_frame_add_guid(KvpFrame * frame, const char * path, const GUID *guid);
 
 void kvp_frame_add_frame(KvpFrame *frame, const char *path, KvpFrame *chld);
@@ -351,14 +358,14 @@ KvpFrame    * kvp_frame_get_frame_path (KvpFrame *frame, const char *,...);
 
 /** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
- *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
+ *  Note that this is *VERY DIFFERENT FROM* kvp_frame_get_frame()
  */
 KvpFrame    * kvp_frame_get_frame_gslist (KvpFrame *frame,
                                            GSList *key_path);
 
 /** This routine returns the last frame of the path.
  *  If the frame path doesn't exist, it is created.  
- *  Note that this is *VERY DIFFERENT FROM* like kvp_frame_get_frame()
+ *  Note that this is *VERY DIFFERENT FROM* kvp_frame_get_frame()
  *
  * The kvp_frame_get_frame_slash() routine takes a single string
  *    where the keys are separated by slashes; thus, for example:
@@ -511,6 +518,7 @@ void        kvp_glist_delete(GList * list);
 KvpValue   * kvp_value_new_gint64(gint64 value);
 KvpValue   * kvp_value_new_double(double value);
 KvpValue   * kvp_value_new_gnc_numeric(gnc_numeric value);
+#define kvp_value_new_numeric kvp_value_new_gnc_numeric
 KvpValue   * kvp_value_new_string(const char * value);
 KvpValue   * kvp_value_new_guid(const GUID * guid);
 KvpValue   * kvp_value_new_timespec(Timespec timespec);
@@ -586,9 +594,26 @@ GUID        * kvp_value_get_guid(const KvpValue * value);
 void        * kvp_value_get_binary(const KvpValue * value,
                                    guint64 * size_return); 
 
-/** Returns the GList of kvp_frame's (not to be confused with GList's
+/** Returns the GList of kvp_frames (not to be confused with GList's
  * of something else!) from the given kvp_frame.  This one is
- * non-copying -- the caller can modify the value directly. */
+ * non-copying -- the caller can modify the value directly.  
+ *
+ * CAS: Maybe I'm confused (because this case really is too
+ * confusing), but I think this comment is wrong.  I think the
+ * returned GList is a list of whatever values were added by
+ * kvp_frame_add_*().  So, if you called kvp_frame_add_frame, then,
+ * yes, it's a list frames, but if you called
+ * kvp_frame_add_{something_else}(), then it's a list of
+ * something_elses.
+ *
+ * IMO, this glist case SHOULD NOT BE USED.  Why would you make a
+ * KvpValue a glist of frames when a frame is already inherently a
+ * list of subframes?  And why would you make a KvpValue a glist of
+ * any other type when, apparently, the interface that requires you to
+ * specify value types doesn't enforce type consistency in the list,
+ * and provides no record of the type anyway?  Talk about asking for
+ * headaches.  (I'm too chicken to search for callers. :)
+*/
 GList       * kvp_value_get_glist(const KvpValue * value);
 
 /** Value accessor. This one is non-copying -- the caller can modify

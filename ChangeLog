@@ -14,7 +14,14 @@
 	* add comment warning about dangerous macro SAFE_STRCMP_REAL
 	* fix qofbook's leaking of strings in ghashtable by using new
           gnc_string_cache_* functions
-	
+
+	Chris Shoemaker's patch: Tweaks to kvp_frame.h.
+	* Tweaks to kvp_frame.h
+	  - fix typos
+	  - make #define aliases for asymetric getters/setters
+	  - tweak comments
+	  - comment on and discourage use of kvp_value_get_glist
+
 2005-02-02  Derek Atkins  <derek@ihtfp.com>
 
 	Neil Williams' patch to clean up the test-book-merge:
