@@ -1,3 +1,11 @@
+2003-10-24  David Hampton  <hampton@employees.org>
+
+	* src/import-export/hbci/druid-hbci-initial.c: Use the generic
+	import account picker.
+
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/dialog-account-pick.[ch]: Remove unused files.
+
 2003-10-23  David Hampton  <hampton@employees.org>
 
 	* src/AccWindow.h:
