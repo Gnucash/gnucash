@@ -38,6 +38,7 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
+#include "gnc-lot.h"
 #include "kvp_frame.h"
 #include "kvp-util-p.h"
 #include "messages.h"
@@ -992,6 +993,10 @@ xaccAccountRemoveSplit (Account *acc, Split *split)
 
       xaccTransBeginEdit (trans);
       xaccSplitSetAccount(split, NULL);
+		if (split->lot)
+		{
+		  gnc_lot_remove_split (split->lot, split);
+		}
       xaccTransCommitEdit (trans);
 
       mark_account (acc);

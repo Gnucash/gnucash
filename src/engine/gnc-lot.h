@@ -38,6 +38,7 @@
 #define GNC_LOT_H
 
 #include "gnc-engine.h"
+#include "gnc-numeric.h"
 
 GNCLot * gnc_lot_new (GNCBook *);
 void gnc_lot_destroy (GNCLot *);
@@ -57,5 +58,6 @@ gnc_numeric gnc_lot_get_balance (GNCLot *);
 /* flag: is this lot closed? */
 gboolean gnc_lot_is_closed (GNCLot *);
 
+kvp_frame * gnc_lot_get_slots (GNCLot *);
 
 #endif /* GNC_LOT_H */

@@ -2009,6 +2009,7 @@ xaccSplitDestroy (Split *split)
        xaccTransRemoveSplit (trans, split);
    }
 
+	/* Note: split is removed from lot when its removed from accoount */
    xaccAccountRemoveSplit (xaccSplitGetAccount(split), split);
    xaccAccountRecomputeBalance (xaccSplitGetAccount(split));
 

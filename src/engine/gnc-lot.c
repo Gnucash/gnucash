@@ -33,9 +33,18 @@
  * Copyright (c) 2002 Linas Vepstas <linas@linas.org>
  */
 
+#include "Account.h"
 #include "gnc-book-p.h"
+#include "gnc-engine-util.h"
+#include "gnc-event.h"
+#include "gnc-event-p.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "Transaction.h"
+#include "TransactionP.h"
+
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_ENGINE;
 
 /* ============================================================= */
 
@@ -45,7 +54,7 @@ gnc_lot_init (GNCLot *lot, GNCBook *book)
    lot->kvp_data = NULL;
    lot->account = NULL;
    lot->splits = NULL;
-	lot->is_closed = FALSE;
+   lot->is_closed = FALSE;
   
    lot->book = book;
    xaccGUIDNew (&lot->guid, book);
@@ -61,6 +70,136 @@ gnc_lot_new (GNCBook *book)
    lot = g_new (GNCLot, 1);
    gnc_lot_init (lot, book);
    return lot;
+}
+
+void 
+gnc_lot_destroy (GNCLot *lot)
+{
+   GList *node;
+   if (!lot) return;
+   
+   gnc_engine_generate_event (&lot->guid, GNC_EVENT_DESTROY);
+
+   xaccRemoveEntity (lot->book->entity_table, &lot->guid);
+   
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      s->lot = NULL;
+   }
+   g_list_free (lot->splits);
+   
+   kvp_frame_delete (lot->kvp_data);
+   lot->kvp_data = NULL;
+   
+   lot->account = NULL;
+   lot->is_closed = TRUE;
+
+   g_free (lot);
+}
+
+/* ============================================================= */
+
+gboolean 
+gnc_lot_is_closed (GNCLot *lot)
+{
+   if (!lot) return TRUE;
+   return lot->is_closed;
+}
+
+Account *
+gnc_lot_get_account (GNCLot *lot)
+{
+   if (!lot) return NULL;
+   return lot->account;
+}
+
+kvp_frame *
+gnc_lot_get_slots (GNCLot *lot)
+{
+	if (!lot) return NULL;
+	return lot->kvp_data;
+}
+
+/* ============================================================= */
+
+gnc_numeric
+gnc_lot_get_balance (GNCLot *lot)
+{
+   GList *node;
+   gnc_numeric zero = gnc_numeric_zero();
+   gnc_numeric baln = zero;
+   if (!lot) return zero;
+
+   if (!lot->splits) return zero;
+
+   /* Sum over splits; because they all belong to same account
+    * they will have same denominator. 
+    */
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      gnc_numeric amt = xaccSplitGetAmount (s);
+      baln = gnc_numeric_add (baln, amt, GNC_DENOM_AUTO, GNC_DENOM_FIXED);
+   }
+
+   /* cache a zero balance as a closed lot */
+   if (gnc_numeric_equal (baln, zero))
+   {
+      lot->is_closed = TRUE;
+   }
+   else
+   {
+      lot->is_closed = FALSE;
+   }
+   
+   return baln;
+}
+
+/* ============================================================= */
+
+void
+gnc_lot_add_split (GNCLot *lot, Split *split)
+{
+   Account * acc;
+   if (!lot || !split) return;
+
+   acc = xaccSplitGetAccount (split);
+   if (NULL == lot->account)
+   {
+      lot->account = acc;
+   }
+   else if (lot->account != acc)
+   {
+      PERR ("splits from different accounts cannot "
+            "be added to this lot!\n"
+            "\tlot account=\'%s\', split account=\'%s\'\n",
+            xaccAccountGetName(lot->account), xaccAccountGetName (acc));
+      return;
+   }
+
+	if (split->lot)
+	{
+		gnc_lot_remove_split (split->lot, split);
+	}
+	split->lot = lot;
+
+   lot->splits = g_list_append (lot->splits, split);
+}
+
+void
+gnc_lot_remove_split (GNCLot *lot, Split *split)
+{
+   if (!lot || !split) return;
+
+   lot->splits = g_list_remove (lot->splits, split);
+	split->lot = NULL;
+
+   if (NULL == lot->splits)
+   {
+      lot->account = NULL;
+      lot->is_closed = FALSE;
+   }
 }
 
 /* ========================== END OF FILE ========================= */
