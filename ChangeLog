@@ -1,5 +1,8 @@
 2000-09-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/dialog-transfer.c (gnc_xfer_dialog_close_cb):
+	disconnect amount edit entry signals to avoid gtk warnings.
+
 	* src/engine/Transaction.h: make xaccInitTransaction a private
 	function.
 

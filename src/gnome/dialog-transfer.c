@@ -401,6 +401,11 @@ static int
 gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data)
 {
   XferDialog * xferData = data;
+  GtkWidget *entry;
+
+  entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (xferData->amount_edit));
+
+  gtk_signal_disconnect_by_data(GTK_OBJECT(entry), xferData);
 
   xfer_dialogs = g_list_remove(xfer_dialogs, dialog);
 
