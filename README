@@ -154,6 +154,9 @@ libpng  -- portable network graphics library
 libjpeg -- JPEG image handling library
 libz    -- comopression library
 xpm     -- X Pixmap extension
+eperl   -- embeddedPerl needed for reports
+           version eperl-2.2.14 works well with perl 5.00404
+           http://www.engelschall.com/sw/eperl/
 
 Normally, to build and install GnuCash, all you have to do is:
 
