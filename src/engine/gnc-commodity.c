@@ -32,11 +32,11 @@
 #include <glib.h>
 
 #include "gncObject.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-trace.h"
 #include "guid.h"
+#include "qofbook.h"
 
 static short module = MOD_ENGINE; 
 

@@ -644,7 +644,11 @@ gnc_session_save (GNCSession *session,
         (be->sync)(be, abook);
         if (save_error_handler(be, session)) return;
       }
+		
+	 	/* XXX The backend should really be calling this, not us. */
+		qof_book_mark_saved (abook);
     }
+
     
     /* If we got to here, then the backend saved everything 
      * just fine, and we are done. So return. */

@@ -72,7 +72,7 @@ gnc_book_get_schedxactions( QofBook *book )
 }
 
 void
-qof_book_set_schedxactions( QofBook *book, GList *newList )
+gnc_book_set_schedxactions( QofBook *book, GList *newList )
 {
   SchedXactions *old_list, *new_list;
   if ( book == NULL ) return;

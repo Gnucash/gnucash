@@ -6,16 +6,16 @@
 #include "GroupP.h"
 #include "GNCIdP.h"
 #include "TransLog.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-module.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 
 static gboolean
-group_has_book (AccountGroup *group, GNCBook *book)
+group_has_book (AccountGroup *group, QofBook *book)
 {
   GList *node;
 
@@ -47,9 +47,9 @@ run_test (void)
   AccountGroup *group2;
   Account *account1;
   Account *account2;
-  GNCBook *book;
+  QofBook *book;
 
-  book = gnc_book_new ();
+  book = qof_book_new ();
   if (!book)
   {
     failure("book not created");
