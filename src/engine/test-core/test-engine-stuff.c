@@ -33,6 +33,7 @@ static kvp_value* get_random_kvp_value_depth (int type, gint depth);
 static gpointer get_random_list_element (GList *list);
 static void add_random_splits(QofBook *book, Transaction *trn);
 
+gboolean gnc_engine_debug_random = FALSE;
 
 /***********************************************************************/
 
@@ -1235,7 +1236,9 @@ free_random_guids(GList *guids)
 static QofQueryOp
 get_random_queryop(void)
 {
-  return get_random_int_in_range (1, QOF_QUERY_XOR);
+  QofQueryOp op = get_random_int_in_range (1, QOF_QUERY_XOR);
+  if (gnc_engine_debug_random) printf ("op = %d, ", op);
+  return op;
 }
 
 static GSList *
@@ -1354,6 +1357,7 @@ get_random_query(void)
   int num_terms;
 
   num_terms = get_random_int_in_range (1, 4);
+  if (gnc_engine_debug_random) printf("num_terms = %d", num_terms);
 
   q = xaccMallocQuery ();
 
@@ -1369,6 +1373,7 @@ get_random_query(void)
     GUID *guid;
 
     pr_type = get_random_int_in_range (1, 20);
+    if (gnc_engine_debug_random) printf("\n pr_type = %d ", pr_type);
 
     switch (pr_type)
     {
@@ -1505,11 +1510,13 @@ get_random_query(void)
         break;
 
       default:
+	if (gnc_engine_debug_random) printf("ignored..");
         num_terms++;
         break;
     }
   }
 
+  if (gnc_engine_debug_random) printf ("\n");
   set_query_sort (q, get_random_int_in_range (1, BY_NONE));
 
   xaccQuerySetSortIncreasing (q,

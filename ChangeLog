@@ -6,6 +6,16 @@
 	  it.
 	Fixes bug #121677
 
+	* src/engine/engine-helpers.c:  turn off scheme garbage collection
+	  during query->scm and scm->query conversion.  It shaves about 50%
+	  off the test-scm-query-string tests.
+	* src/engine/test-core/test-engine-stuff.c:  add some code to help
+	  track down what the get_random_query() is doing.  Turned off by
+	  default.
+	* src/app-utils/test/test-scm-query-string.c: make the test
+	  deterministic by seeding the RNG with a known value.  There is a
+	  known "delay" at #245 with a seed of 1 on Linux systems.
+
 2003-09-04  Derek Atkins  <derek@ihtfp.com>
 
 	Apply Nigel Titley's patch to fix #103174:
