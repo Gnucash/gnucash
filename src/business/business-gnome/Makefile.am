@@ -9,6 +9,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/business/business-core \
   ${GUILE_INCS} \
+  ${GNOME_PRINT_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GLADE_CFLAGS} \
   ${GTKHTML_CFLAGS} \
