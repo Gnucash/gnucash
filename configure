@@ -5962,6 +5962,7 @@ trap 'rm -fr `echo "          Makefile
           src/Makefile
           src/calculation/Makefile 
           src/doc/Makefile
+          src/doc/design/Makefile
           src/engine/Makefile
           src/engine/sql/Makefile
           src/experimental/Makefile
@@ -6152,6 +6153,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
           src/Makefile
           src/calculation/Makefile 
           src/doc/Makefile
+          src/doc/design/Makefile
           src/engine/Makefile
           src/engine/sql/Makefile
           src/experimental/Makefile

@@ -420,6 +420,7 @@ AC_OUTPUT(
           src/Makefile
           src/calculation/Makefile 
           src/doc/Makefile
+          src/doc/design/Makefile
           src/engine/Makefile
           src/engine/sql/Makefile
           src/experimental/Makefile

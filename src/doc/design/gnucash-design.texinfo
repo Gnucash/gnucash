@@ -1,0 +1,112 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename gnucash-design.info
+@settitle GnuCash Design Document
+@c %**end of header
+
+@comment 'version.texi' is a magic filename that, when included,
+@comment will be auto-generated courtesy of automake.
+@include version.texi
+
+@ifinfo
+This file documents the design of the GnuCash program.
+
+Copyright 2000 Linas Vepstas
+
+This is Edition @value{EDITION}, last updated @value{UPDATED},
+of the @cite{GnuCash Design Document}, version @value{VERSION}.
+
+Permission is granted to make and distribute verbatim
+copies of this manual provided the copyright notice and
+this permission notice are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX
+and print the results, provided the printed document
+carries a copying permission notice identical to this
+one except for the removal of this paragraph (this
+paragraph not being relevant to the printed manual).
+@end ignore
+
+Permission is granted to copy and distribute modified
+versions of this manual under the conditions for
+verbatim copying, provided also that the sections
+entitled ``Copying'' and ``GNU General Public License''
+are included exactly as in the original, and provided
+that the entire resulting derived work is distributed
+under the terms of a permission notice identical to this
+one.
+
+Permission is granted to copy and distribute
+translations of this manual into another language,
+under the above conditions for modified versions,
+except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+@end ifinfo
+
+@titlepage
+@title GnuCash Design Document
+@subtitle Edition @value{EDITION} for Version @value{VERSION}
+@author Rob Browning
+@author Bill Gribble
+@author Dave Peticolas
+@author Linas Vepstas
+@page
+@vskip 0pt plus 1filll
+@copyright{} 2000 Linas Vepstas
+
+Permission is granted to make and distribute verbatim
+copies of this manual provided the copyright notice and
+this permission notice are preserved on all copies.
+
+Permission is granted to copy and distribute modified
+versions of this manual under the conditions for
+verbatim copying, provided also that the sections
+entitled ``Copying'' and ``GNU General Public License''
+are included exactly as in the original, and provided
+that the entire resulting derived work is distributed
+under the terms of a permission notice identical to this
+one.
+
+Permission is granted to copy and distribute
+translations of this manual into another language,
+under the above conditions for modified versions,
+except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+@end titlepage
+
+@ifinfo
+@node Top, Introduction, (dir), (dir)
+@top GnuCash Design Document
+This is Edition @value{EDITION}, last updated @value{UPDATED},
+of the @cite{GnuCash Design Document}, version @value{VERSION}.
+@end ifinfo
+
+@menu
+* Introduction::                
+* Top Level::                   
+* Engine::                      
+* Register::                    
+* Reports::                     
+* Concept Index::               
+
+@detailmenu --- The Detailed Node Listing ---
+
+Register
+
+* Cells::                       
+
+@end detailmenu
+@end menu
+
+@include intro.texinfo
+@include top-level.texinfo
+@include engine.texinfo
+@include register.texinfo
+@include reports.texinfo
+@include concept-index.texinfo
+
+@summarycontents
+@contents
+
+@bye

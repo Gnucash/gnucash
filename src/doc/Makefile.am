@@ -1,4 +1,7 @@
 
+SUBDIRS = \
+  design
+
 EXTRA_DIST = \
   architecture.txt \
   backup.txt \

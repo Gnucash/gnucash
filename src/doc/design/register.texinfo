@@ -1,0 +1,41 @@
+@node Register, Reports, Engine, Top
+@chapter Register
+
+The register is an infrastructure for building a modular matrix of cells
+in which each cell may be specialized to perform a particular function,
+e.g., to read dates, numerical amounts, or text.  The register has been
+designed to be easy to extend, modular, easy to maintain, and memory
+efficient. It is intended to be used for building financial apps and
+spread-sheets.
+
+The register object should not have any 'knowledge' of the accounting
+model of GnuCash or of the workings of the main application. The
+register should not be specific to a particular GUI (such as Gnome/GTK).
+It should be possible to use the register in a stand-alone fashion.
+
+The register is built from severl types of components: Cells,
+Cellblocks, Cursors, the Table, and the Split Register.
+
+@menu
+* Cells::                       
+@end menu
+
+@node Cells,  , Register, Register
+@section Cells
+
+A @dfn{Cell} is an active object which is designed to read a specific
+kind of user input. A Cell object has callbacks that are called when
+the user enters the cell (e.g. by mouse-clicking on a cell in a table,
+or tabbing into it), when the user attempts to modify text in the cell
+(e.g. by typing in it), and when the user leaves the cell (e.g. by
+mouse-clicking elsewhere, or tabbing away).
+
+Special-purpose cells can be created by "inheriting" from the basic cell
+object. Thus, there are special-purpose cells for handling dates,
+pull-down menus, text fields, monetary amounts, etc.
+
+Cells implementations may or may not contain GUI code. Cells which
+require only that text be displayed are completely "GUI-independent",
+that is, they depend on the underlying table to display the text. Cells
+which require additional GUI elements (such as pull-down menus) must
+implement the proper GUI handling on their own (using, e.g., GTK).
