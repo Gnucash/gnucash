@@ -2097,9 +2097,10 @@ Account Groups do not have key-value frames or GUIDs.
 
 @menu
 * General Account Group API::   
+* Account Group Account API::   
 @end menu
 
-@node General Account Group API,  , Account Groups, Account Groups
+@node General Account Group API, Account Group Account API, Account Groups, Account Groups
 @subsection General Account Group API
 
 @deftypefun {AccountGroup *} xaccMallocAccountGroup (void)
@@ -2114,6 +2115,80 @@ Free the given Group and all its resources, including the Accounts.
 @deftypefun void xaccAccountGroupCommitEdit (AccountGroup * @var{grp})
 Recursively call @code{xaccAccountCommitEdit} on all child accounts
 and their children.
+@end deftypefun
+
+@deftypefun void xaccGroupConcatGroup (AccountGroup * @var{to}, AccountGroup * @var{from})
+Move all accounts in @var{from} to @var{to}. After this function
+returns, @var{from} will have been destroyed.
+@end deftypefun
+
+@deftypefun void xaccGroupMergeAccounts (AccountGroup * @var{grp})
+Merge all accounts in @var{grp} that have the same name and description.
+The semantics of this function are rather complex. Consult the
+implementation before use!
+@end deftypefun
+
+@deftypefun gboolean xaccGroupNotSaved (AccountGroup * @var{grp})
+Return true if @var{grp} has changes which have not been saved.
+@end deftypefun
+
+@deftypefun void xaccGroupMarkSaved (AccountGroup * @var{grp})
+Mark @var{grp} and all its children as saved.
+@end deftypefun
+
+@deftypefun void xaccGroupMarkNotSaved (AccountGroup * @var{grp})
+Mark @var{grp} as not saved.
+@end deftypefun
+
+@deftypefun void xaccGroupMarkDoFree (AccountGroup * @var{grp})
+Mark all accounts in @var{grp} as slated for destruction. This will
+improve the efficiency of destroying a large account hierarchy.
+@end deftypefun
+
+
+@node Account Group Account API,  , General Account Group API, Account Groups
+@subsection Account Group Account API
+
+@deftypefun void xaccGroupRemoveAccount (AccountGroup * @var{grp}, Account * @var{account})
+Remove @var{account} from @var{grp}. If @var{account} is not in
+@var{grp}, the function will return without performing any action.
+In no case will @var{account} be destroyed or modified.
+@end deftypefun
+
+@deftypefun void xaccAccountRemoveGroup (Account * @var{acc})
+Remove @var{acc}'s child group. The child group is not otherwise
+modified or destroyed.
+@end deftypefun
+
+@deftypefun void xaccGroupInsertAccount (AccountGroup * @var{grp}, Account * @var{acc})
+Add @var{acc} to @var{grp}. If @var{acc} is in another Group, it will be
+removed first.
+@end deftypefun
+
+@deftypefun void xaccAccountInsertSubAccount (Account * @var{parent}, Account * @var{child})
+Like @code{xaccGroupInsertAccount}, but uses a parent Account instead
+of a parent group. If @var{parent} does not have a child Group, one
+will be created.
+@end deftypefun
+
+@deftypefun int xaccGroupGetNumSubAccounts (AccountGroup * @var{grp})
+Return the total number of Accounts in the hierarchy rooted at @var{grp}.
+@end deftypefun
+
+@deftypefun int xaccGroupGetNumAccounts (AccountGroup * @var{grp})
+Return the number of accounts in @var{grp}. This count does not
+include Accounts lower in the hierarchy.
+@end deftypefun
+
+@deftypefun int xaccGroupGetDepth (AccountGroup * @var{grp})
+Returns the length of the longest tree branch in the hierarchy
+rooted at @var{grp}. Each link between an Account and its
+(non-null) children counts as one unit of length.
+@end deftypefun
+
+@deftypefun {Account *} xaccGroupGetAccount (AccountGroup * @var{group}, int @var{index})
+Return the @var{index}th Account in @var{group}, starting at zero.
+If @var{index} is out of range, @code{NULL} is returned.
 @end deftypefun
 
 

@@ -143,6 +143,11 @@ Accounts
 * Account Type API::            
 * Account Getters::             
 
+Account Groups
+
+* General Account Group API::   
+* Account Group Account API::   
+
 GNCBooks
 
 * GNCBook API::                 

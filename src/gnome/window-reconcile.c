@@ -496,7 +496,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     gtk_widget_show_all(dialog);
 
-    gtk_widget_grab_focus(end_value);
+    gtk_widget_grab_focus(gnc_amount_edit_gtk_entry
+                          (GNC_AMOUNT_EDIT (end_value)));
   }
 
   while (TRUE)
