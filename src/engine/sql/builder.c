@@ -108,8 +108,6 @@ sqlBuilder_escape (sqlBuilder *b, const char *str)
    }
    *dst_tail = 0;
 
-   g_warning (b->escape);
-
    return b->escape;
 }
 
