@@ -478,7 +478,7 @@ gnc_module_load(char * module_name, gint interface)
     {
       printf("Failed to open module %s", module_name);
       if(modinfo) printf(": %s\n", lt_dlerror());
-      else printf(": could not locate %s interface v.%d",
+      else printf(": could not locate %s interface v.%d\n",
 		  module_name, interface);
       return NULL;
     }      

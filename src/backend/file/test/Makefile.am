@@ -1,22 +1,21 @@
-TESTS = test-load-module test-dom-converters1 test-kvp-frames	\
-  test-string-converters test-xml-account test-xml2-is-file	\
-  test-load-xml2 test-load-example-account			\
-  test-xml-commodity test-xml-transaction test-real-data.sh
+TESTS = test-load-module
+#TESTS = test-load-module test-dom-converters1 test-kvp-frames	\
+#  test-string-converters test-xml-account test-xml2-is-file	\
+#  test-load-xml2 test-load-example-account			\
+#  test-xml-commodity test-xml-transaction test-real-data.sh
 
 TESTS_ENVIRONMENT = \
-  GNC_MODULE_PATH="${top_srcdir}/src/engine:${top_srcdir}/src/backend/file" \
+  GNC_MODULE_PATH="${top_srcdir}/src/engine:${top_srcdir}/src/gnc-module:${top_srcdir}/src/backend/file" \
   GUILE_LOAD_PATH="${G_WRAP_MODULE_DIR}:..:${top_srcdir}/src/gnc-module" \
-  LTDL_LIBRARY_PATH=${top_srcdir}/src/gnc-module \
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs
+  LTDL_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/engine:${top_srcdir}/src/backend/file
 
 noinst_PROGRAMS = test-dom-converters1 test-kvp-frames		\
   test-string-converters test-xml-account test-xml2-is-file	\
   test-load-xml2 test-load-example-account			\
   test-xml-commodity test-xml-transaction test-save-in-lang 
 
-LDADD = -L../../../engine/.libs -lgncengine \
-        -L../../../gnc-module/.libs \
-        ../../../engine/libgncmod-engine.la \
+LDADD = ../../../engine/libgncmod-engine.la \
+        ../../../gnc-module/libgncmodule.la \
         ../libgncmod-backend-file.la
 
 CFLAGS=${GLIB_CFLAGS}

@@ -6,6 +6,8 @@ exec guile -s "$0"
 (use-modules (gnucash gnc-module))
 (gnc:module-system-init)
 
+(gnc:module-load "gnucash/engine" 0)
+
 (if (gnc:module-load "gnucash/backend/file" 0)
     (begin 
       (display "ok\n")
@@ -13,6 +15,3 @@ exec guile -s "$0"
     (begin 
       (display "failed\n")
       (exit -1)))
-
-	
-

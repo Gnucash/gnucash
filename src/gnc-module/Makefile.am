@@ -36,7 +36,3 @@ gw-gnc-module.c gw-gnc-module.h: gw-gnc-module-spec.scm
 BUILT_SOURCES += gw-gnc-module.h gw-gnc-module.c
 CLEANFILES += gw-gnc-module.h gw-gnc-module.c gw-gnc-module.html g-wrapped \
 gnucash .scm-links
-
-
-
-

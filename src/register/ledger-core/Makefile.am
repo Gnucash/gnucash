@@ -5,8 +5,7 @@ libgncmod_ledger_core_la_SOURCES=\
   SplitLedger.c \
   MultiLedger.c
 
-libgncmod_ledger_core_la_LDFLAGS=-module -L${top_srcdir}/src/engine \
-  -L${top_srcdir}/src/engine/.libs -lgncmod-engine
+libgncmod_ledger_core_la_LDFLAGS=-module
 
 CFLAGS=@CFLAGS@
 

@@ -1,8 +1,12 @@
 SUBDIRS = . test 
 
-lib_LTLIBRARIES = libgncengine.la libgncmod-engine.la
+lib_LTLIBRARIES = libgncmod-engine.la
 
-libgncengine_la_SOURCES = \
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
+
+INCLUDES = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} -I../
+
+libgncmod_engine_la_SOURCES = \
   Account.c \
   Backend.c \
   DateUtils.c \
@@ -23,13 +27,12 @@ libgncengine_la_SOURCES = \
   gnc-event.c \
   gnc-numeric.c \
   gnc-pricedb.c \
+  gncmod-engine.c \
   guid.c \
   kvp_frame.c \
-  md5.c 
+  md5.c
 
-#  NetIO.c 
-
-libgncengine_la_LDFLAGS = -version-info 2:3:1
+# NetIO.c
 
 noinst_HEADERS = \
   Account.h \
@@ -67,27 +70,8 @@ noinst_HEADERS = \
 
 #  NetIO.h 
 
-EXTRA_DIST = \
-  .cvsignore \
-  README.query-api \
-  design.txt \
-  extensions.txt \
-  kvp_doc.txt
-
-libgncengine_la_CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GHTTP_CFLAGS}
-libgncengine_la_LIBADD = ${GLIB_LIBS}
-
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${G_WRAP_COMPILE_ARGS}
-
-INCLUDES = -I${top_srcdir}/src/gnc-module ${GUILE_INCS} -I../
-
-libgncmod_engine_la_SOURCES=gncmod-engine.c
-libgncmod_engine_la_LDFLAGS=-module -L. -L.libs -L${top_srcdir}/src/gnc-module/.libs
-libgncmod_engine_la_LIBADD = \
-  -lgncengine \
-  -lgncmodule \
-  ${GUILE_LIBS}
-
+libgncmod_engine_la_LDFLAGS = -module
+libgncmod_engine_la_LIBADD = ${GUILE_LIBS}
 
 libgw_glib_la_SOURCES=gw-glib.c glib-helpers.c
 libgw_glib_la_LDFLAGS=-module
@@ -105,6 +89,13 @@ engine-utilities.scm gnc-numeric.scm iso-4217-currencies.scm
 gwmoddir=${GNC_SHAREDIR}/guile-modules/g-wrapped
 gwmod_LTLIBRARIES=libgw-glib.la libgw-engine.la 
 gwmod_DATA=gw-engine-spec.scm gw-glib-spec.scm
+
+EXTRA_DIST = \
+  .cvsignore \
+  README.query-api \
+  design.txt \
+  extensions.txt \
+  kvp_doc.txt
 
 .scm-links: 
 	rm -f gnucash g-wrapped

@@ -48,5 +48,3 @@ INCLUDES = \
   ${GLIB_CFLAGS} \
   ${GNOME_INCLUDEDIR} \
   ${GUILE_INCS}
-
-

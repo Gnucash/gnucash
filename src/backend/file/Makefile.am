@@ -12,7 +12,5 @@ io-gncxml-gen.c io-gncxml-v1.c io-gncxml-v2.c io-utils.c		\
 sixtp-dom-generators.c sixtp-dom-parsers.c sixtp-stack.c		\
 sixtp-to-dom-parser.c sixtp-utils.c sixtp.c
 
-libgncmod_backend_file_la_LDFLAGS=-module ${GLIB_LIBS} ${GNOME_XML_LIB} 
-#libgncmod_backend_file_la_LIBADD = \
-#../../engine/libgncmod-engine.la \
-#../../gnc-module/libgncmodule.la
+libgncmod_backend_file_la_LDFLAGS = -module
+libgncmod_backend_file_la_LIBADD = ${GLIB_LIBS} ${GNOME_XML_LIB} 
