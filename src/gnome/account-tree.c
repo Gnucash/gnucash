@@ -55,6 +55,9 @@ enum
 static GtkCTreeClass *parent_class = NULL;
 static guint account_tree_signals[LAST_SIGNAL];
 
+/* This static indicates the debugging module that this .o belongs to.  */
+static short module = MOD_GUI;
+
 
 /** Static function declarations **************************************/
 static void gnc_account_tree_init(GNCAccountTree *tree);
@@ -347,6 +350,8 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
   gfloat         save_value = 0.0;
   Account       *root_account;
 
+  ENTER(" ");
+
   adjustment = gtk_clist_get_vadjustment(GTK_CLIST(tree));
   if (adjustment != NULL)
     save_value = adjustment->value;
@@ -360,6 +365,8 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
   gtk_clist_clear(clist);
 
   root_account = xaccAccountLookup (&tree->root_account);
+  PINFO ("looked up %p for root account guid=%s\n", 
+        root_account, guid_to_string(&tree->root_account));
 
   gnc_account_tree_fill(tree, expanded_accounts,
 			gnc_account_tree_insert_row(tree, NULL, NULL,
@@ -383,6 +390,7 @@ gnc_account_tree_refresh(GNCAccountTree * tree)
 
   g_hash_table_destroy(expanded_accounts);
   g_list_free(current_accounts);
+  LEAVE(" ");
 }
 
 
@@ -1068,12 +1076,16 @@ gnc_account_tree_fill(GNCAccountTree *tree,
   GList *list;
   GList *n;
 
+  ENTER ("grp=%p", accts);
   list = xaccGroupGetAccountList (accts);
 
   /* Add each account to the tree */  
   for (n = list; n; n = n->next)
   {
     Account *account = n->data;
+
+    PINFO ("acct=%p guid=%s\n", 
+        account, guid_to_string(xaccAccountGetGUID(account)));
 
     if (tree->filter != NULL)
       if (!tree->filter(account, tree->filter_data))
@@ -1096,6 +1108,7 @@ gnc_account_tree_fill(GNCAccountTree *tree,
     if (xaccAccountGetChildren(account) != NULL)
       gnc_account_tree_fill(tree, expanded_accounts, node, acc_children);
   }
+  LEAVE(" ");
 }
 
 static GtkCTreeNode *

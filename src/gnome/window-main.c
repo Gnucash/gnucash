@@ -412,11 +412,13 @@ gnc_ui_refresh_statusbar (void)
 					     main_info->totals_combo);
     currency_item->touched = 1;
 
+    *asset_string= '\0';
     xaccSPrintAmount(asset_string, currency_accum->assets,
                      gnc_commodity_print_info(currency_accum->currency, TRUE));
     gtk_label_set_text(GTK_LABEL(currency_item->assets_label), asset_string);
     gnc_set_label_color(currency_item->assets_label, currency_accum->assets);
 
+    *profit_string= '\0';
     xaccSPrintAmount(profit_string, currency_accum->profits,
                      gnc_commodity_print_info(currency_accum->currency, TRUE));
     gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
