@@ -833,20 +833,16 @@ gnc_acct_tree_window_configure (GNCAcctTreeWin * info)
       new_avi.show_field[ACCOUNT_TAX_INFO] = TRUE;
 
     else if (safe_strcmp(node->data, "balance") == 0)
-    {
       new_avi.show_field[ACCOUNT_BALANCE] = TRUE;
-      if(gnc_lookup_boolean_option("International",
-                                   "Enable EURO support", FALSE))
-	new_avi.show_field[ACCOUNT_BALANCE_EURO] = TRUE;
-    }
+
+    else if (safe_strcmp(node->data, "balance_report") == 0)
+      new_avi.show_field[ACCOUNT_BALANCE_REPORT] = TRUE;
 
     else if (safe_strcmp(node->data, "total") == 0)
-    {
       new_avi.show_field[ACCOUNT_TOTAL] = TRUE;
-      if(gnc_lookup_boolean_option("International",
-                                   "Enable EURO support", FALSE))
-	new_avi.show_field[ACCOUNT_TOTAL_EURO] = TRUE;
-    }
+
+    else if (safe_strcmp(node->data, "total_report") == 0)
+      new_avi.show_field[ACCOUNT_TOTAL_REPORT] = TRUE;
   }
 
   gnc_free_list_option_value (list);

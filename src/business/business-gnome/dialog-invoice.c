@@ -949,6 +949,7 @@ gnc_invoice_get_width_prefix (InvoiceWindow *iw)
   case GNC_OWNER_CUSTOMER:
     return INV_WIDTH_PREFIX;
   case GNC_OWNER_VENDOR:
+  case GNC_OWNER_EMPLOYEE:
     return  BILL_WIDTH_PREFIX;
   default:
     g_warning ("invalid owner");
@@ -963,6 +964,7 @@ gnc_invoice_get_width_integer (InvoiceWindow *iw)
   case GNC_OWNER_CUSTOMER:
     return &inv_last_width;
   case GNC_OWNER_VENDOR:
+  case GNC_OWNER_EMPLOYEE:
     return  &bill_last_width;
   default:
     g_warning ("invalid owner");
@@ -1202,6 +1204,9 @@ gnc_invoice_owner_changed_cb (GtkWidget *widget, gpointer data)
     break;
   case GNC_OWNER_VENDOR:
     term = gncVendorGetTerms (gncOwnerGetVendor (&(iw->owner)));
+    break;
+  case GNC_OWNER_EMPLOYEE:
+    term = NULL;
     break;
   default:
     g_warning ("Unknown owner type: %d\n", gncOwnerGetType (&(iw->owner)));
@@ -1625,6 +1630,21 @@ gnc_invoice_id_changed_cb (GtkWidget *widget, gpointer data)
 	  break;
 	}
       break;
+    case GNC_OWNER_EMPLOYEE:
+      switch (iw->dialog_type) 
+	{
+	case NEW_INVOICE:
+	  wintitle = /* XXX:FIXME: _() */ ("New Expense Voucher");
+	  break;
+	case MOD_INVOICE:
+	case EDIT_INVOICE:
+	  wintitle = /* XXX:FIXME: _() */ ("Edit Expense Voucher");
+	  break;
+	case VIEW_INVOICE:
+	  wintitle = /* XXX:FIXME: _() */ ("View Expense Voucher");
+	  break;
+	}
+      break;
     default:
       break;
     }  
@@ -1777,6 +1797,11 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     case GNC_OWNER_VENDOR:
       ledger_type = GNCENTRY_BILL_ENTRY;
       break;
+#if 0
+    case GNC_OWNER_EMPLOYEE:
+      ledger_type = GNCENTRY_VOUCHER_ENTRY;
+      break;
+#endif
     default:
       g_warning ("Invalid owner type");
     }
@@ -1790,6 +1815,11 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
     case GNC_OWNER_VENDOR:
       ledger_type = GNCENTRY_BILL_VIEWER;
       break;
+#if 0
+    case GNC_OWNER_EMPLOYEE:
+      ledger_type = GNCENTRY_VOUCHER_VIEWER;
+      break;
+#endif
     default:
       g_warning ("Invalid owner type");
     }

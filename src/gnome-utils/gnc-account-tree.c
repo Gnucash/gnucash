@@ -189,6 +189,14 @@ gnc_account_tree_init (GNCAccountTree *tree)
   gtk_clist_set_column_auto_resize(GTK_CLIST(tree), 0, TRUE);
   gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
                                    tree->description_column, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->balance_column, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->balance_column + 1, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->total_column, TRUE );
+  gtk_clist_set_column_auto_resize(GTK_CLIST(tree),
+                                   tree->total_column + 1, TRUE );
 
   gtk_clist_set_column_justification(GTK_CLIST(tree),
 				     tree->balance_column,
@@ -951,11 +959,11 @@ gnc_account_tree_set_view_info_real(GNCAccountTree *tree)
 
   tree->balance_column = i;
   tree->column_fields[i++] = ACCOUNT_BALANCE;
-  tree->column_fields[i++] = ACCOUNT_BALANCE_EURO;
+  tree->column_fields[i++] = ACCOUNT_BALANCE_REPORT;
 
   tree->total_column = i;
   tree->column_fields[i++] = ACCOUNT_TOTAL;
-  tree->column_fields[i++] = ACCOUNT_TOTAL_EURO;
+  tree->column_fields[i++] = ACCOUNT_TOTAL_REPORT;
 
   tree->column_fields[i++] = ACCOUNT_NOTES;
   tree->column_fields[i++] = ACCOUNT_TAX_INFO;

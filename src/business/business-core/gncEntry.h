@@ -32,8 +32,16 @@ typedef enum {
   GNC_DISC_POSTTAX
 } GncDiscountHow;
 
+typedef enum {
+  GNC_PAYMENT_CASH = 1,
+  GNC_PAYMENT_CARD
+} GncEntryPaymentType;
+
 const char * gncEntryDiscountHowToString (GncDiscountHow how);
 gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how);
+
+const char * gncEntryPaymentTypeToString (GncEntryPaymentType type);
+gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type);
 
 /* Create/Destroy Functions */
 
@@ -69,6 +77,9 @@ void gncEntrySetBillTaxTable (GncEntry *entry, GncTaxTable *table);
 void gncEntrySetBillable (GncEntry *entry, gboolean billable);
 void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto);
 
+/* employee-stuff */
+void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
+
 /* GET FUNCTIONS */
 /* Generic (shared) data */
 GNCBook * gncEntryGetBook (GncEntry *entry);
@@ -99,6 +110,7 @@ GncTaxTable * gncEntryGetBillTaxTable (GncEntry *entry);
 gboolean gncEntryGetBillable (GncEntry *entry);
 GncOwner *gncEntryGetBillTo (GncEntry *entry);
 
+GncEntryPaymentType gncEntryGetBillPayment (GncEntry* entry);
 
 void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 

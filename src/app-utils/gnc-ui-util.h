@@ -65,10 +65,10 @@ typedef enum
   ACCOUNT_DESCRIPTION,
   ACCOUNT_NOTES,
   ACCOUNT_COMMODITY,
-  ACCOUNT_BALANCE, /* with sign reversal */
-  ACCOUNT_BALANCE_EURO,
-  ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
-  ACCOUNT_TOTAL_EURO,
+  ACCOUNT_BALANCE,        /* with sign reversal */
+  ACCOUNT_BALANCE_REPORT, /* ACCOUNT_BALANCE in default report currency */
+  ACCOUNT_TOTAL,          /* balance + children's balance with sign reversal */
+  ACCOUNT_TOTAL_REPORT,   /* ACCOUNT_TOTAL in default report currency */
   ACCOUNT_TAX_INFO,
   NUM_ACCOUNT_FIELDS
 } AccountFieldCode;

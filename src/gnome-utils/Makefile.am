@@ -48,6 +48,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gncmod-gnome-utils.c \
   gtkselect.c \
   print-session.c \
+  search-param.c \
   window-help.c
 
 gncincludedir = ${GNC_INCLUDE_DIR}
@@ -84,7 +85,8 @@ gncinclude_HEADERS = \
 noinst_HEADERS = \
   argv-list-converters.h \
   gnc-dir.h \
-  gw-gnome-utils.h
+  gw-gnome-utils.h \
+  search-param.h
 
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
