@@ -63,6 +63,7 @@ static gncLogLevel loglevel[MOD_LAST + 1] =
   GNC_LOG_WARNING,      /* SQL TXN */
   GNC_LOG_WARNING,      /* KVP */
   GNC_LOG_DEBUG,        /* SX */
+  GNC_LOG_WARNING,      /* BOOK */
 };
 
 static FILE *fout = NULL;

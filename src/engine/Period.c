@@ -26,7 +26,7 @@ Open questions: how do we deal with the backends ???
 #include "TransactionP.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static short module = MOD_BOOK;
 
 /* ================================================================ */
 /* Reparent transaction to new book.  This routine does this by 
