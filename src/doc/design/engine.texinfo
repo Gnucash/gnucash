@@ -881,6 +881,28 @@ in @var{frame} or return @code{NULL} if there is no association
 for @var{key}. The value returned is not a copy.
 @end deftypefun
 
+@deftypefun void kvp_frame_set_slot_path (kvp_frame * @var{frame}, const kvp_value * @var{value}, const char * @var{first_key}, ...)
+Associate @var{value} with the ``key path'' specified by the variable
+argument list. Each key in the path except the last denotes a sub-frame
+which is associated with the given key. The variable list must be
+terminated with NULL.
+@end deftypefun
+
+@deftypefun void kvp_frame_set_slot_path_gslist (kvp_frame * @var{frame}, const kvp_value * @var{value}, GSList * @var{key_path})
+The same as @code{kvp_frame_set_slot_path}, except that the key path is
+specified using a GSList. All the keys in the list should be non-NULL.
+@end deftypefun
+
+@deftypefun {kvp_value *} kvp_frame_get_slot_path (kvp_frame * @var{frame}, const char * @var{first_key}, ...)
+Return the value associated with the key path, or @code{NULL} if none.
+The path is specified as in @code{kvp_frame_set_slot_path}.
+@end deftypefun
+
+@deftypefun {kvp_value *} kvp_frame_get_slot_path_gslist (kvp_frame * @var{frame}, GSList * @var{key_path})
+Return the value associated with the key path, or @code{NULL} if none.
+The path is specified as in @code{kvp_frame_set_slot_path_gslist}.
+@end deftypefun
+
 
 @node kvp_value, kvp_list, kvp_frame, Key-Value Pair Frames
 @subsection kvp_value
@@ -1068,17 +1090,6 @@ reconciliation states for a Split are:
   @item Frozen
   The Split has been frozen into the accounting period.
 
-  @end table
-
-@item A set of slots
-This is a kvp_frame specific to a given split.  Reserved key names
-include:
-
-  @table @code
-  @item "gnc:stock-split"
-  This slot stores a string indicating the type of the split if the
-  split is not a ``normal'' split.  See @code{xaccSplitGetType}
-  for more details.
   @end table
 
 @end table

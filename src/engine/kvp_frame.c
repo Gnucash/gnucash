@@ -177,15 +177,174 @@ kvp_frame_set_slot(kvp_frame * frame, const char * slot,
   /* FIXME: no way to indicate errors... */
 
   kvp_value *new_value = NULL;
-  
+
+  if (!frame)
+    return;
+
   if(value) new_value = kvp_value_copy(value);
   kvp_frame_set_slot_destructively(frame, slot, new_value);
 }
 
 kvp_value * 
 kvp_frame_get_slot(kvp_frame * frame, const char * slot) {
+  if (!frame)
+    return NULL;
   if(!frame->hash) return(NULL);
   return (kvp_value *)g_hash_table_lookup(frame->hash, slot);
+}
+
+void
+kvp_frame_set_slot_path (kvp_frame *frame,
+                         const kvp_value *new_value,
+                         const char *first_key, ...) {
+  va_list ap;
+  const char *key;
+
+  if (!frame || !first_key)
+    return;
+
+  va_start (ap, first_key);
+
+  key = first_key;
+
+  while (TRUE) {
+    kvp_value *value;
+    const char *next_key;
+
+    next_key = va_arg (ap, const char *);
+    if (!next_key) {
+      kvp_frame_set_slot (frame, key, new_value);
+      break;
+    }
+
+    value = kvp_frame_get_slot (frame, key);
+    if (!value) {
+      kvp_frame *new_frame = kvp_frame_new ();
+      kvp_value *frame_value = kvp_value_new_frame (new_frame);
+
+      kvp_frame_set_slot (frame, key, frame_value);
+
+      kvp_value_delete (frame_value);
+      kvp_frame_delete (new_frame);
+
+      value = kvp_frame_get_slot (frame, key);
+      if (!value)
+        break;
+    }
+
+    frame = kvp_value_get_frame (value);
+    if (!frame)
+      break;
+
+    key = next_key;
+  }
+
+  va_end (ap);
+}
+
+void
+kvp_frame_set_slot_path_gslist (kvp_frame *frame,
+                                const kvp_value *new_value,
+                                GSList *key_path) {
+  if (!frame || !key_path)
+    return;
+
+  while (TRUE) {
+    const char *key = key_path->data;
+    kvp_value *value;
+
+    if (!key)
+      return;
+
+    key_path = key_path->next;
+    if (!key_path) {
+      kvp_frame_set_slot (frame, key, new_value);
+      return;
+    }
+
+    value = kvp_frame_get_slot (frame, key);
+    if (!value) {
+      kvp_frame *new_frame = kvp_frame_new ();
+      kvp_value *frame_value = kvp_value_new_frame (new_frame);
+
+      kvp_frame_set_slot (frame, key, frame_value);
+
+      kvp_value_delete (frame_value);
+      kvp_frame_delete (new_frame);
+
+      value = kvp_frame_get_slot (frame, key);
+      if (!value)
+        return;
+    }
+
+    frame = kvp_value_get_frame (value);
+    if (!frame)
+      return;
+  }
+}
+
+kvp_value *
+kvp_frame_get_slot_path (kvp_frame *frame,
+                         const char *first_key, ...) {
+  va_list ap;
+  kvp_value *value;
+  const char *key;
+
+  if (!frame || !first_key)
+    return NULL;
+
+  va_start (ap, first_key);
+
+  key = first_key;
+  value = NULL;
+
+  while (TRUE) {
+    value = kvp_frame_get_slot (frame, key);
+    if (!value)
+      break;
+
+    key = va_arg (ap, const char *);
+    if (!key)
+      break;
+
+    frame = kvp_value_get_frame (value);
+    if (!frame)
+    {
+      value = NULL;
+      break;
+    }
+  }
+
+  va_end (ap);
+
+  return value;
+}
+
+kvp_value *
+kvp_frame_get_slot_path_gslist (kvp_frame *frame,
+                                GSList *key_path) {
+  if (!frame || !key_path)
+    return NULL;
+
+  while (TRUE) {
+    const char *key = key_path->data;
+    kvp_value *value;
+
+    if (!key)
+      return NULL;
+
+    value = kvp_frame_get_slot (frame, key);
+    if (!value)
+      return NULL;
+
+    key_path = key_path->next;
+    if (!key_path)
+      return value;
+
+    frame = kvp_value_get_frame (value);
+    if (!frame)
+      return NULL;
+  }
 }
 
 /********************************************************************

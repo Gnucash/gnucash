@@ -2067,7 +2067,7 @@ xaccSplitGetType(const Split *s)
   if(!s) return NULL;
   frame = xaccSplitGetSlots((Split *) s);
   if(!frame) return NULL;
-  split_type = kvp_frame_get_slot(frame, "gnc:split-type");
+  split_type = kvp_frame_get_slot(frame, "split-type");
   if(!split_type) return "normal";
   if(kvp_value_get_type(split_type) != KVP_TYPE_STRING) return NULL;
   return(kvp_value_get_string(split_type));
@@ -2082,7 +2082,7 @@ xaccSplitMakeStockSplit(Split *s)
 
   xaccSplitSetValue(s, gnc_numeric_zero());
   kvp_frame_set_slot(frame,
-                     "gnc:split-type",
+                     "split-type",
                      kvp_value_new_string("stock-split"));
   mark_split(s);
 }

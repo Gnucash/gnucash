@@ -69,6 +69,20 @@ void          kvp_frame_set_slot(kvp_frame * frame,
 kvp_value   * kvp_frame_get_slot(kvp_frame * frame, 
                                  const char * key);
 
+void          kvp_frame_set_slot_path (kvp_frame *frame,
+                                       const kvp_value *value,
+                                       const char *first_key, ...);
+
+void          kvp_frame_set_slot_path_gslist (kvp_frame *frame,
+                                              const kvp_value *value,
+                                              GSList *key_path);
+
+kvp_value   * kvp_frame_get_slot_path (kvp_frame *frame,
+                                       const char *first_key, ...);
+
+kvp_value   * kvp_frame_get_slot_path_gslist (kvp_frame *frame,
+                                              GSList *key_path);
+
 gint          kvp_frame_compare(const kvp_frame *fa, const kvp_frame *fb);
 
 void          kvp_value_delete(kvp_value * value);
