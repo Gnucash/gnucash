@@ -72,6 +72,7 @@
 (use-modules (gnucash report average-balance))
 (use-modules (gnucash report balance-sheet))
 (use-modules (gnucash report equity-statement))
+(use-modules (gnucash report general-ledger))
 (use-modules (gnucash report cash-flow))
 (use-modules (gnucash report category-barchart))
 (use-modules (gnucash report daily-reports))

@@ -1,5 +1,25 @@
 2004-07-13  David Montenegro  <sunrise2000@comcast.net>
 
+        * src/report/standard-reports/general-ledger.scm:
+	  src/report/standard-reports/standard-reports.scm:
+          src/report/standard-reports/Makefile.am:
+          Added General Ledger report, a Transaction Report
+          with a pre-set set of options.
+
+	* src/report/standard-reports/transaction.scm:
+          FIXME - All accounts now selected by default, avoids
+          confusing error message. Error message also clarified.
+          Fixed "Totals" option so that it works.
+
+        * src/report/standard-reports/balance-sheet.scm:
+        * src/report/standard-reports/equity-statement.scm:
+        * src/report/standard-reports/trial-balance.scm:
+        Updated comments
+
+	* Fixes #144268
+
+2004-07-13  David Montenegro  <sunrise2000@comcast.net>
+
         * src/report/standard-reports/trial-balance.scm:
         * src/report/standard-reports/standard-reports.scm:
         * src/report/standard-reports/Makefile.am

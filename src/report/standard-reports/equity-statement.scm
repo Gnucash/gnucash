@@ -203,7 +203,7 @@
       gnc:pagename-display optname-use-rules
       "f" opthelp-use-rules #f))
     
-    ;; adjusting/closing entry match criteria
+    ;; closing entry match criteria
     ;; 
     ;; N.B.: transactions really should have a field where we can put
     ;; transaction types like "Adjusting/Closing/Correcting Entries"

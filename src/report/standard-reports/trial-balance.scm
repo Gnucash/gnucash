@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; trial-balance.scm: trial balance and work sheet
-;; By David Montenegro
+;; By David Montenegro <sunrise2000@comcast.net>
 ;; 
 ;; Prepares a trial balance of your books.
 ;; Optionally prepares a complete work sheet.

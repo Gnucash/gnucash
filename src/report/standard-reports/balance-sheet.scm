@@ -18,12 +18,8 @@
 ;;    default) accounts representative of current & fixed assets &
 ;;    liabilities.
 ;;    
-;;    There are some gnc:html-acct-table options which remain unused,
-;;    mostly because I don't know how to make drop-down option
-;;    controls.
-;;    
-;;    This code makes the assumption that you want your equity
-;;    statement to no more than daily resolution.
+;;    This code makes the assumption that you want your balance
+;;    sheet to no more than daily resolution.
 ;;    
 ;;    The Company Name field does not currently default to the name
 ;;    in (gnc:get-current-book).
@@ -347,7 +343,7 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; balance-sheet-renderer
 ;; set up the document and add the table
-;; then then return the document or, if
+;; then return the document or, if
 ;; requested, export it to a file
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

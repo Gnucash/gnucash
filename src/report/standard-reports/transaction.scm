@@ -508,18 +508,13 @@
    (gnc:make-account-list-option
         gnc:pagename-accounts (N_ "Report Accounts")
         "a" (N_ "Report on these accounts")
-    (lambda ()
-      ;; FIXME : gnc:get-current-accounts disappeared.
-      (let ((current-accounts '())
-            (num-accounts (gnc:group-get-num-accounts
-                           (gnc:get-current-group)))
-            (first-account (gnc:group-get-account
-                            (gnc:get-current-group) 0)))
-        (cond ((not (null? current-accounts))
-               (list (car current-accounts)))
-              ((> num-accounts 0) (list first-account))
-              (else ()))))
-    #f #t))
+     ;; select, by default, all accounts...
+     (lambda ()
+       (gnc:filter-accountlist-type 
+	'(bank cash credit asset liability stock mutual-fund currency
+	       payable receivable equity income expense)
+	(gnc:group-get-subaccounts (gnc:get-current-group))))
+     #f #t))
   
       (gnc:register-trep-option
        (gnc:make-account-list-option
@@ -908,9 +903,9 @@ Credit Card, and Income accounts")))))
            (list
             (gnc:make-html-table-cell/size
              1 width (gnc:make-html-text (gnc:html-markup-hr)))))
-
-          (render-grand-total table width total-collector export?))
-
+	  (if (gnc:option-value (gnc:lookup-option options "Display" "Totals"))
+	      (render-grand-total table width total-collector export?)))
+	
         (let* ((current (car splits))
                (current-row-style (if multi-rows? def:normal-row-style
                                       (if odd-row? def:normal-row-style 
@@ -1315,7 +1310,8 @@ Credit Card, and Income accounts")))))
                   (_ "No matching transactions found"))
                  (gnc:html-markup-p
                   (_ "No transactions were found that \
-match the given time interval and account selection.")))
+match the time interval and account selection specified \
+in the Options panel.")))
                 (gnc:html-document-add-object! document p))))
 
         ;; error condition: no accounts specified
