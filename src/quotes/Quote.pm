@@ -189,7 +189,7 @@ sub fidelity_nav {
            }
         }
         $sym = $q[2];
-        if ($sym) {
+        if ($q[7]) {
             $sym =~ s/^ +//;
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
             ($aa {$sym, "name"}   = $q[0]) =~ s/^ +//;
@@ -224,7 +224,7 @@ sub fidelity_mm {
            }
         }
         $sym = $q[2];
-        if ($sym) {
+        if ($q[3]) {
             $sym =~ s/^ +//;
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
             ($aa {$sym, "name"} = $q[0]) =~ s/^ +//;
