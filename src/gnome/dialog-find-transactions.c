@@ -38,6 +38,7 @@
 #include "dialog-find-transactions.h"
 #include "dialog-utils.h"
 #include "glade-cb-gnc-dialogs.h"
+#include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
 #include "gnc-ui.h"
@@ -45,6 +46,8 @@
 #include "splitreg.h"
 #include "window-help.h"
 #include "window-register.h"
+
+#define DIALOG_FIND_TRANS_CM_CLASS "dialog-find-trans"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -62,9 +65,19 @@ gnc_find_dialog_close_cb(GnomeDialog *dialog, gpointer data) {
   g_free (ftd->ymd_format);
   ftd->ymd_format = NULL;
 
+  gnc_unregister_gui_component_by_data (DIALOG_FIND_TRANS_CM_CLASS, ftd);
+
   g_free (ftd);
 
   return FALSE;
+}
+
+static void
+close_handler (gpointer user_data)
+{
+  FindTransactionsDialog * ftd = user_data;
+
+  gnome_dialog_close (GNOME_DIALOG (ftd->dialog));
 }
 
 FindTransactionsDialog * 
@@ -231,6 +244,9 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
                                  1);
   }
 
+  gnc_register_gui_component (DIALOG_FIND_TRANS_CM_CLASS,
+                              NULL, close_handler, ftd);
+
   gtk_signal_connect(GTK_OBJECT(ftd->dialog), "close",
                      GTK_SIGNAL_FUNC(gnc_find_dialog_close_cb), ftd);
 
@@ -249,7 +265,7 @@ gnc_ui_find_transactions_dialog_destroy(FindTransactionsDialog * ftd) {
   if (!ftd)
     return;
 
-  gnome_dialog_close(GNOME_DIALOG(ftd->dialog));
+  gnc_close_gui_component_by_data (DIALOG_FIND_TRANS_CM_CLASS, ftd);
 }
 
 
