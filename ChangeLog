@@ -1,4 +1,13 @@
+2003-03-12 TomF changes for Gnome-2 branch, 6th batch
+
+	* src/network-utils/test/Makefile.am:
+	  Add libgncmod-engine.la to fix undefined ref to `gnc_should_log'
+ 	* src/backend/net/NetIO.c: Remove include ghttp.h
+ 	  to bypass missing ghttp.  The functions were already disabled.
+
 2003-03-12  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/Makefile.am: remove GHTTP_CFLAGS
 
 	* configure.in: can't use AM_PATH_GDK_PIXBUF; that's a gnome-1
 	  feature and doesn't work for gnome2
@@ -10,8 +19,14 @@
 
 2003-03-11 TomF changes for Gnome-2 branch, 5th batch
 
-	* src/network-utils/Makefile.am: add src/engine
-	* src/network-utils/gnc-http.c: comment out ghttp usage
+	* src/network-utils/Makefile.am: add src/engine to allow 
+	  including gnc-engine-util.h 
+	* src/network-utils/gnc-http.c: Disable all functions to bypass 
+	  missing ghttp.
+	  Include "gnc-engine-util.h" to allow PERR warnings.
+	  Use long if 0 to make it easy to go back to the original to
+	  start developing a ghttp replacement.
+          Declare variable "module" to make the PERR warnings work.
 
 	Added by warlord:
 	* src/network-utils/Makefile.am: remove GHTTP references
