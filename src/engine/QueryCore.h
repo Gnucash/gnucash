@@ -86,10 +86,16 @@ typedef enum {
 
 #define QUERYCORE_GUID		"guid"
 typedef enum {
+  /* These expect a single object and expect the QueryAccess returns GUID* */
   GUID_MATCH_ANY = 1,
-  GUID_MATCH_ALL,		/* You _must_ pass a GList of objects! */
   GUID_MATCH_NONE,
   GUID_MATCH_NULL,
+  /* These expect a GList* of objects and calls the QueryAccess routine
+   * on each item in the list to obtain a GUID* for each object */
+  GUID_MATCH_ALL,
+  /* These expect a single object and expect the QueryAccess function
+   * to return a GList* of GUID* (the list is the property of the caller) */
+  GUID_MATCH_LIST_ANY,
 } guid_match_t;
 
 #define QUERYCORE_INT64		"gint64"

@@ -165,6 +165,7 @@
   (gw:enum-add-value! wt "GUID_MATCH_ANY" 'guid-match-any)
   (gw:enum-add-value! wt "GUID_MATCH_NULL" 'guid-match-null)
   (gw:enum-add-value! wt "GUID_MATCH_NONE" 'guid-match-none)
+  (gw:enum-add-value! wt "GUID_MATCH_LIST_ANY" 'guid-match-list-any)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:char-match-how> "char_match_t")))

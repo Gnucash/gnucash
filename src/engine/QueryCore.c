@@ -80,6 +80,7 @@ static const char * query_date_type = QUERYCORE_DATE;
 typedef gnc_numeric (*query_numeric_getter) (gpointer);
 static const char * query_numeric_type = QUERYCORE_NUMERIC;
 
+typedef GList * (*query_glist_getter) (gpointer);
 typedef const GUID * (*query_guid_getter) (gpointer);
 static const char * query_guid_type = QUERYCORE_GUID;
 
@@ -495,18 +496,20 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
 				 QueryPredData_t pd)
 {
   query_guid_t pdata = (query_guid_t)pd;
-  GList *node;
+  GList *node, *o_list;
   const GUID *guid = NULL;
 
   VERIFY_PREDICATE (query_guid_type);
 
-  /* object is a GList of objects; get_gcn must be called on each one.
-   * See if every guid in the predicate is accounted-for in the
-   * object list
-   */
-  if (pdata->options == GUID_MATCH_ALL) {
+  switch (pdata->options) {
+
+  case GUID_MATCH_ALL:
+    /* object is a GList of objects; get_fcn must be called on each one.
+     * See if every guid in the predicate is accounted-for in the
+     * object list
+     */
+
     for (node = pdata->guids; node; node = node->next) {
-      GList *o_list;
 
       /* See if this GUID matches the object's guid */
       for (o_list = object; o_list; o_list = o_list->next) {
@@ -529,9 +532,45 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
      * appropriately below.
      */
 
-  } else {			/* ! MATCH_ALL */
+    break;
 
-    /* See if the guid is in the list */
+  case GUID_MATCH_LIST_ANY:
+    /* object is a single object, getter returns a GList* of GUID*
+     *
+     * see if any GUID* in the returned list matches any guid in the
+     * predicate match list
+     */
+
+    o_list = ((query_glist_getter)get_fcn) (object);
+
+    for (node = o_list; node; node = node->next) {
+      GList *node2;
+
+      /* Search the predicate data for a match */
+      for (node2 = pdata->guids; node2; node2 = node2->next) {
+	if (guid_equal (node->data, node2->data))
+	  break;
+      }
+
+      /* Check to see if we found a match.  If so, break now */
+      if (node2 != NULL)
+	break;
+    }
+
+    g_list_free(o_list);
+
+    /* yea, node may point to an invalid location, but that's ok.
+     * we're not _USING_ the value, just checking that it's non-NULL
+     */
+
+    break;
+
+  default:
+    /* object is a single object, getter returns a GUID* 
+     *
+     * See if the guid is in the list
+     */
+
     guid = ((query_guid_getter)get_fcn) (object);
     for (node = pdata->guids; node; node = node->next) {
       if (guid_equal (node->data, guid))
@@ -541,16 +580,15 @@ static int guid_match_predicate (gpointer object, QueryAccess get_fcn,
 
   switch (pdata->options) {
   case GUID_MATCH_ANY:
+  case GUID_MATCH_LIST_ANY:
     return (node != NULL);
     break;
   case GUID_MATCH_NONE:
+  case GUID_MATCH_ALL:
     return (node == NULL);
     break;
   case GUID_MATCH_NULL:
     return (guid == NULL);
-    break;
-  case GUID_MATCH_ALL:
-    return (node == NULL);
     break;
   default:
     PWARN ("bad match type");

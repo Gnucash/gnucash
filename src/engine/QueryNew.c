@@ -1705,6 +1705,8 @@ gncQueryPrintGuidMatch (guid_match_t g)
       return "GUID_MATCH_NONE";
     case GUID_MATCH_NULL:
       return "GUID_MATCH_NULL";
+    case GUID_MATCH_LIST_ANY:
+      return "GUID_MATCH_LIST_ANY";
   }
 
   return "UNKNOWN MATCH TYPE";
