@@ -1,3 +1,12 @@
+2002-12-06  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c -- Fix the
+	  amount display so that the exchange dialog always shows the
+	  "amount" in the the local (register) currency.  It will convert
+	  the amount to the txn currency if necessary in cases where all
+	  accounts involved in a split are different (strange edge case).
+	  Fixes #100277
+	
 2002-12-06  David Hampton  <hampton@employees.org>
 
 	* src/quotes/finance-quote-helper.in: Add an additional module to

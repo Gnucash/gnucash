@@ -1021,12 +1021,14 @@ gboolean
 gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
 {
   Transaction *txn;
-  Account *xfer_acc;
-  gnc_commodity *txn_cur, *xfer_com;
+  Split *osplit;
+  Account *xfer_acc, *reg_acc;
+  gnc_commodity *txn_cur, *xfer_com, *reg_com;
   gnc_numeric amount, exch_rate;
   XferDialog *xfer;
   gboolean used_mxfrm = FALSE;
   gboolean swap_amounts = FALSE;
+  gboolean expanded = FALSE;
   PriceCell *rate_cell;
   
   /* Make sure we NEED this for this type of register */
@@ -1039,26 +1041,34 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (! gnc_numeric_zero_p (exch_rate) && !force_dialog)
     return FALSE;
 
+  /* Are we expanded? */
+  expanded = gnc_split_register_current_trans_expanded (reg);
+
   /* Grab the xfer account */
   xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL, FALSE);
   if (!xfer_acc) {
     used_mxfrm = TRUE;
-    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL, TRUE);
+    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL, !expanded);
   }
 
   if (!xfer_acc)
     return FALSE;
 
-  /* Grab the txn currency */
+  /* Grab the txn currency and xfer commodity */
   txn = gnc_split_register_get_current_trans (reg);
-
-  /* Check if the commodities are the same */
   txn_cur = xaccTransGetCurrency (txn);
   xfer_com = xaccAccountGetCommodity (xfer_acc);
 
-  if (gnc_commodity_equal (txn_cur, xfer_com)) {
-    Split *split;
+  /* Grab the register account and commodity (may be used later) */
+  reg_acc = gnc_split_register_get_default_account (reg);
+  reg_com = xaccAccountGetCommodity (reg_acc);
 
+  /* Is this a two-split txn? */
+  osplit = gnc_split_register_get_current_split (reg);
+  osplit = xaccSplitGetOtherSplit (osplit);
+
+  /* Check if the txn- and xfer- commodities are the same */
+  if (gnc_commodity_equal (txn_cur, xfer_com)) {
     /* If we're not forcing the dialog, then there is no reason to
      * go on.  We're using the correct accounts.
      */
@@ -1066,16 +1076,14 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
       return FALSE;
 
     /* Only proceed with two-split, basic, non-expanded registers */
-    split = gnc_split_register_get_current_split (reg);
-    if (gnc_split_register_current_trans_expanded (reg) ||
-	xaccSplitGetOtherSplit (split) == NULL)
+    if (expanded || osplit == NULL)
       return FALSE;
 
     /* If we're forcing, then compare the current account
      * commodity to the transaction commodity.
      */
-    xfer_acc = gnc_split_register_get_default_account (reg);
-    xfer_com = xaccAccountGetCommodity (xfer_acc);
+    xfer_acc = reg_acc;
+    xfer_com = reg_com;
     if (gnc_commodity_equal (txn_cur, xfer_com))
       return FALSE;
   }
@@ -1083,12 +1091,46 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   /* Ok, we need to grab the exchange rate */
   amount = gnc_split_register_debcred_cell_value (reg);
 
-  /* We know that "amount" is in the currency of the local account.
+  /* We know that "amount" is always in the reg_com currency.
    * Unfortunately it is possible that neither xfer_com or txn_cur are
-   * in the "local" currency, in which case we need to convert to the
-   * txn currency...  Or, if the local currency is the xfer_com, then
-   * we need to flip-flop the commodities and the exchange rates.
+   * the same as reg_com, in which case we need to convert to the txn
+   * currency...  Or, if the local currency is the xfer_com, then we
+   * need to flip-flop the commodities and the exchange rates.
    */
+
+  if (gnc_commodity_equal (reg_com, txn_cur)) {
+    /* we're working in the txn currency.  Great.  Nothing to do! */
+    swap_amounts = FALSE;
+
+  } else if (gnc_commodity_equal (reg_com, xfer_com)) {
+    /* We're working in the xfer commodity.  Great.  Just swap the amounts. */
+    swap_amounts = TRUE;
+
+    /* XXX: Do we need to check for expanded v. non-expanded accounts here? */
+
+  } else {
+    /* UGGH -- we're not in either.  That means we need to convert 'amount'
+     * from the register commodity to the txn currency.
+     */
+    gnc_numeric rate = gnc_split_register_get_conv_rate (txn, reg_acc);
+
+    /* XXX: should we tell the user we've done the conversion? */
+    amount = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
+			      GNC_DENOM_REDUCE);
+
+    /* Strangely, if we're in a two-split, non-expanded txn, we need
+     * to do something really special with the exchange rate!  In
+     * particular, we have to pick it up from the _other_ split --
+     * right?
+     * XXX: perhaps I should pop up an error here?  Or maybe require the
+     * user to go into expanded-mode?
+     */
+    if (osplit && !expanded) {
+      gnc_numeric amt = xaccSplitGetAmount (osplit);
+      gnc_numeric val = xaccSplitGetValue (osplit);
+      exch_rate = gnc_numeric_div (amt, val, GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+    }
+  }
 
   /* create the exchange-rate dialog */
   xfer = gnc_xfer_dialog (NULL, NULL); /* XXX */
@@ -1099,11 +1141,12 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     gnc_xfer_dialog_select_to_currency (xfer, txn_cur);
     gnc_xfer_dialog_select_from_currency (xfer, xfer_com);
     gnc_xfer_dialog_set_swapped_currencies (xfer, TRUE);
-    exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
-				 GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
   } else {
     gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
     gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
+    if (!gnc_numeric_zero_p (exch_rate))
+      exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
+				   GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
   }
   gnc_xfer_dialog_hide_to_account_tree (xfer);
   gnc_xfer_dialog_hide_from_account_tree (xfer);
