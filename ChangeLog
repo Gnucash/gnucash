@@ -1,3 +1,10 @@
+2001-07-04  Dave Peticolas  <dave@krondo.com>
+
+	* Makefile.am: add gnc-glossary.txt to the dist
+
+	* src/engine/sixtp.c (sixtp_handle_catastrophe): fix bug -- don't
+	destroy last stack frame
+
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/report/register.scm: add exported functions and needed modules
