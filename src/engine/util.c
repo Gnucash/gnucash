@@ -43,14 +43,14 @@ char * stpcpy (char *dest, const char *src);
  */
 int loglevel[MODULE_MAX] =
 {0,      /* DUMMY */
- 2,      /* ENGINE */
- 2,      /* IO */
- 4,      /* REGISTER */
- 2,      /* LEDGER */
- 4,      /* HTML */
- 2,      /* GUI */
- 4,      /* SCRUB */
- 4,      /* GTK_REG */
+ 1,      /* ENGINE */
+ 1,      /* IO */
+ 1,      /* REGISTER */
+ 1,      /* LEDGER */
+ 1,      /* HTML */
+ 1,      /* GUI */
+ 1,      /* SCRUB */
+ 1,      /* GTK_REG */
 };
 
 /********************************************************************\
