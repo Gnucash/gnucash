@@ -41,6 +41,7 @@
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofobject.h"
@@ -269,7 +270,7 @@ void gncJobSetActive (GncJob *job, gboolean active)
 
 void gncJobBeginEdit (GncJob *job)
 {
-  GNC_BEGIN_EDIT (&job->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&job->inst);
 }
 
 static void gncJobOnError (QofInstance *inst, QofBackendError errcode)
@@ -288,7 +289,7 @@ static inline void gncJobOnDone (QofInstance *qof) { }
 void gncJobCommitEdit (GncJob *job)
 {
   GNC_COMMIT_EDIT_PART1 (&job->inst);
-  GNC_COMMIT_EDIT_PART2 (&job->inst, _GNC_MOD_NAME, gncJobOnError,
+  GNC_COMMIT_EDIT_PART2 (&job->inst, gncJobOnError,
                          gncJobOnDone, job_free);
 }
 
@@ -319,14 +320,6 @@ GncOwner * gncJobGetOwner (GncJob *job)
   return &(job->owner);
 }
 
-GUID gncJobRetGUID (GncJob *job)
-{
-  const GUID *guid = qof_instance_get_guid (&job->inst);
-  if (guid)
-    return *guid;
-  return *guid_null ();
-}
-
 gboolean gncJobGetActive (GncJob *job)
 {
   if (!job) return FALSE;
@@ -335,15 +328,7 @@ gboolean gncJobGetActive (GncJob *job)
 
 GncJob * gncJobLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-                           guid, _GNC_MOD_NAME);
-}
-
-GncJob * gncJobLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncJobLookup (book, &guid);
+  ELOOKUP(GncJob);
 }
 
 /* Other functions */
@@ -379,7 +364,7 @@ static void _gncJobMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncJobForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncJobForeach (QofBook *book, QofForeachCB cb,
                             gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);

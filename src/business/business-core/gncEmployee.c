@@ -21,6 +21,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
@@ -283,23 +284,7 @@ Account * gncEmployeeGetCCard (GncEmployee *employee)
 
 GncEmployee * gncEmployeeLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-                           guid, _GNC_MOD_NAME);
-}
-
-GUID gncEmployeeRetGUID (GncEmployee *employee)
-{
-  if (!employee)
-    return *guid_null();
-
-  return employee->inst.entity.guid;
-}
-
-GncEmployee * gncEmployeeLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncEmployeeLookup (book, &guid);
+  ELOOKUP(GncEmployee);
 }
 
 gboolean gncEmployeeIsDirty (GncEmployee *employee)
@@ -310,7 +295,7 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee)
 
 void gncEmployeeBeginEdit (GncEmployee *employee)
 {
-  GNC_BEGIN_EDIT (&employee->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&employee->inst);
 }
 
 static inline void gncEmployeeOnError (QofInstance *employee, QofBackendError errcode)
@@ -334,7 +319,7 @@ static inline void emp_free (QofInstance *inst)
 void gncEmployeeCommitEdit (GncEmployee *employee)
 {
   GNC_COMMIT_EDIT_PART1 (&employee->inst);
-  GNC_COMMIT_EDIT_PART2 (&employee->inst, _GNC_MOD_NAME, gncEmployeeOnError,
+  GNC_COMMIT_EDIT_PART2 (&employee->inst, gncEmployeeOnError,
                          gncEmployeeOnDone, emp_free);
 }
 
@@ -370,7 +355,7 @@ static void _gncEmployeeMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncEmployeeForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncEmployeeForeach (QofBook *book, QofForeachCB cb,
                                  gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);

@@ -60,9 +60,6 @@ GncTaxTable* gncVendorGetTaxTable (GncVendor *vendor);
  */
 GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all);
 
-GUID gncVendorRetGUID (GncVendor *vendor);
-GncVendor * gncVendorLookupDirect (GUID guid, QofBook *book);
-
 GncVendor * gncVendorLookup (QofBook *book, const GUID *guid);
 gboolean gncVendorIsDirty (GncVendor *vendor);
 int gncVendorCompare (GncVendor *a, GncVendor *b);
@@ -74,5 +71,7 @@ int gncVendorCompare (GncVendor *a, GncVendor *b);
 /** deprecated functions */
 #define gncVendorGetBook(X) qof_instance_get_book (QOF_INSTANCE(X))
 #define gncVendorGetGUID(X) qof_instance_get_guid (QOF_INSTANCE(X))
+#define gncVendorRetGUID(X) (*(qof_instance_get_guid (QOF_INSTANCE(X))))
+#define gncVendorLookupDirect(G,B) gncVendorLookup((B),&(G))
 
 #endif /* GNC_VENDOR_H_ */

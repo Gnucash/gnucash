@@ -21,8 +21,17 @@ typedef struct _gncBookInfo {
 } GncBookInfo;
 
 
-#define gncBusinessForeach(book,mod_name,cb,user_data) \
-  qof_entity_foreach(qof_book_get_entity_table(book), mod_name, cb, user_data)
+#define gncBusinessForeach(book,mod_name,cb,userdata) \
+  qof_collection_foreach(qof_book_get_collection((book), (mod_name)), ((QofEntityForeachCB)(cb)), (userdata))
+
+/** another temporary hack for entity lookup */
+
+#define ELOOKUP(c_type) { \
+  QofCollection *col; \
+  if (!guid || !book) return NULL; \
+  col = qof_book_get_collection (book, _GNC_MOD_NAME); \
+  return (c_type *) qof_collection_lookup_entity (col, guid); \
+}
 
 
 void gncBusinessCreate (QofBook *book, QofIdType mod_name);

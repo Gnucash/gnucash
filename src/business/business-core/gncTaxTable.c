@@ -41,6 +41,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
@@ -539,20 +540,17 @@ void gncTaxTableChanged (GncTaxTable *table)
 
 void gncTaxTableBeginEdit (GncTaxTable *table)
 {
-  GNC_BEGIN_EDIT (&table->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&table->inst);
 }
 
-static void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
+static inline void gncTaxTableOnError (QofInstance *inst, QofBackendError errcode)
 {
   PERR("TaxTable QofBackend Failure: %d", errcode);
 }
 
-static void gncTaxTableOnDone (QofInstance *inst)
-{
-  inst->dirty = FALSE;
-}
+static inline void gncTaxTableOnDone (QofInstance *inst) {}
 
-static void table_free (QofInstance *inst)
+static inline void table_free (QofInstance *inst)
 {
   GncTaxTable *table = (GncTaxTable *) inst;
   gncTaxTableFree (table);
@@ -561,7 +559,7 @@ static void table_free (QofInstance *inst)
 void gncTaxTableCommitEdit (GncTaxTable *table)
 {
   GNC_COMMIT_EDIT_PART1 (&table->inst);
-  GNC_COMMIT_EDIT_PART2 (&table->inst, _GNC_MOD_NAME, gncTaxTableOnError,
+  GNC_COMMIT_EDIT_PART2 (&table->inst, gncTaxTableOnError,
                          gncTaxTableOnDone, table_free);
 }
 
@@ -570,9 +568,7 @@ void gncTaxTableCommitEdit (GncTaxTable *table)
 /* Get Functions */
 GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (qof_book_get_entity_table (book),
-                           guid, _GNC_MOD_NAME);
+  ELOOKUP(GncTaxTable);
 }
 
 GncTaxTable *gncTaxTableLookupByName (QofBook *book, const char *name)
@@ -791,20 +787,6 @@ void gncAccountValueDestroy (GList *list)
   g_list_free (list);
 }
 
-GUID gncTaxTableRetGUID (GncTaxTable *table)
-{
-  if (!table)
-    return *guid_null();
-
-  return table->inst.entity.guid;
-}
-
-GncTaxTable *gncTaxTableLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncTaxTableLookup (book, &guid);
-}
-
 /* Package-Private functions */
 
 static void _gncTaxTableCreate (QofBook *book)
@@ -839,7 +821,7 @@ static void _gncTaxTableMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncTaxTableForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncTaxTableForeach (QofBook *book, QofForeachCB cb,
                                  gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -848,7 +830,7 @@ static void _gncTaxTableForeach (QofBook *book, QofEntityForeachCB cb,
 static QofObject gncTaxTableDesc = 
 {
   interface_version:   QOF_OBJECT_VERSION,
-  name:                _GNC_MOD_NAME,
+  e_type:              _GNC_MOD_NAME,
   type_label:          "Tax Table",
   book_begin:          _gncTaxTableCreate,
   book_end:            _gncTaxTableDestroy,

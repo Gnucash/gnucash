@@ -42,6 +42,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
@@ -354,7 +355,7 @@ void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
 
 void gncVendorBeginEdit (GncVendor *vendor)
 {
-  GNC_BEGIN_EDIT (&vendor->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&vendor->inst);
 }
 
 static inline void gncVendorOnError (QofInstance *vendor, QofBackendError errcode)
@@ -377,7 +378,7 @@ static inline void vendor_free (QofInstance *inst)
 void gncVendorCommitEdit (GncVendor *vendor)
 {
   GNC_COMMIT_EDIT_PART1 (&vendor->inst);
-  GNC_COMMIT_EDIT_PART2 (&vendor->inst, _GNC_MOD_NAME, gncVendorOnError,
+  GNC_COMMIT_EDIT_PART2 (&vendor->inst, gncVendorOnError,
                          gncVendorOnDone, vendor_free);
 }
 
@@ -410,25 +411,9 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
   }
 }
 
-GUID gncVendorRetGUID (GncVendor *vendor)
-{
-  if (!vendor)
-    return *guid_null();
-
-  return vendor->inst.entity.guid;
-}
-
-GncVendor * gncVendorLookupDirect (GUID guid, QofBook *book)
-{
-  if (!book) return NULL;
-  return gncVendorLookup (book, &guid);
-}
-
 GncVendor * gncVendorLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-                           guid, _GNC_MOD_NAME);
+  ELOOKUP (GncVendor);
 }
 
 gboolean gncVendorIsDirty (GncVendor *vendor)
@@ -460,7 +445,7 @@ static void _gncVendorMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncVendorForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncVendorForeach (QofBook *book, QofForeachCB cb,
                                gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);

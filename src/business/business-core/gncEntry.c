@@ -20,6 +20,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
@@ -734,9 +735,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
 
 GncEntry * gncEntryLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
+  ELOOKUP(GncEntry);
 }
 
 /*
@@ -1080,7 +1079,7 @@ gboolean gncEntryIsOpen (GncEntry *entry)
 
 void gncEntryBeginEdit (GncEntry *entry)
 {
-  GNC_BEGIN_EDIT (&entry->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&entry->inst);
 }
 
 static inline void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
@@ -1088,9 +1087,8 @@ static inline void gncEntryOnError (QofInstance *entry, QofBackendError errcode)
   PERR("Entry QofBackend Failure: %d", errcode);
 }
 
-static inline void gncEntryOnDone (QofInstance *inst)
-{
-}
+static inline void gncEntryOnDone (QofInstance *inst) {}
+
 static inline void entry_free (QofInstance *inst)
 {
   GncEntry *entry = (GncEntry *)inst;
@@ -1100,7 +1098,7 @@ static inline void entry_free (QofInstance *inst)
 void gncEntryCommitEdit (GncEntry *entry)
 {
   GNC_COMMIT_EDIT_PART1 (&entry->inst);
-  GNC_COMMIT_EDIT_PART2 (&entry->inst, _GNC_MOD_NAME, gncEntryOnError,
+  GNC_COMMIT_EDIT_PART2 (&entry->inst, gncEntryOnError,
 			 gncEntryOnDone, entry_free);
 }
 
@@ -1148,7 +1146,7 @@ static void _gncEntryMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncEntryForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncEntryForeach (QofBook *book, QofForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);

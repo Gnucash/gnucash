@@ -1,5 +1,26 @@
+/********************************************************************\
+ * gncOrder.c -- the Core Business Order                            *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
+ * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
+ *                                                                  *
+\********************************************************************/
+
 /*
- * gncOrder.c -- the Core Business Order
  * Copyright (C) 2001,2002 Derek Atkins
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
@@ -18,6 +39,7 @@
 #include "qofid.h"
 #include "qofid-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 #include "qofquery.h"
 #include "qofquerycore.h"
@@ -122,13 +144,6 @@ static void gncOrderFree (GncOrder *order)
 }
 
 /* Set Functions */
-
-void gncOrderSetGUID (GncOrder *order, const GUID *guid)
-{
-  if (!order || !guid) return;
-
-  qof_entity_set_guid(&order->inst.entity, guid);
-}
 
 void gncOrderSetID (GncOrder *order, const char *id)
 {
@@ -285,9 +300,7 @@ GList * gncOrderGetEntries (GncOrder *order)
 
 GncOrder * gncOrderLookup (QofBook *book, const GUID *guid)
 {
-  if (!book || !guid) return NULL;
-  return qof_entity_lookup (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
+  ELOOKUP(GncOrder);
 }
 
 gboolean gncOrderIsClosed (GncOrder *order)
@@ -299,7 +312,7 @@ gboolean gncOrderIsClosed (GncOrder *order)
 
 void gncOrderBeginEdit (GncOrder *order)
 {
-  GNC_BEGIN_EDIT (&order->inst, _GNC_MOD_NAME);
+  GNC_BEGIN_EDIT (&order->inst);
 }
 
 static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)
@@ -307,9 +320,7 @@ static inline void gncOrderOnError (QofInstance *order, QofBackendError errcode)
   PERR("Order QofBackend Failure: %d", errcode);
 }
 
-static inline void gncOrderOnDone (QofInstance *order)
-{
-}
+static inline void gncOrderOnDone (QofInstance *order) {}
 
 static inline void order_free (QofInstance *inst)
 {
@@ -320,7 +331,7 @@ static inline void order_free (QofInstance *inst)
 void gncOrderCommitEdit (GncOrder *order)
 {
   GNC_COMMIT_EDIT_PART1 (&order->inst);
-  GNC_COMMIT_EDIT_PART2 (&order->inst, _GNC_MOD_NAME, gncOrderOnError,
+  GNC_COMMIT_EDIT_PART2 (&order->inst, gncOrderOnError,
 			 gncOrderOnDone, order_free);
 }
 
@@ -366,7 +377,7 @@ static void _gncOrderMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncOrderForeach (QofBook *book, QofEntityForeachCB cb,
+static void _gncOrderForeach (QofBook *book, QofForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
