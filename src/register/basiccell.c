@@ -68,8 +68,9 @@ BasicCellHelpValue(BasicCell *cell)
 
 void xaccInitBasicCell (BasicCell *cell)
 {
-   cell->input_output = XACC_CELL_ALLOW_ALL;
    cell->changed = 0;
+   cell->conditionally_changed = 0;
+   cell->input_output = XACC_CELL_ALLOW_ALL;
 
    cell->value = g_strdup("");
    cell->blank_help = NULL;

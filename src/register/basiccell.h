@@ -217,11 +217,12 @@ typedef char * (*CellGetHelpFunc) (BasicCell *cell);
 
 struct _BasicCell
 {
-  char * value;          /* current value */
-  char * blank_help;     /* help when value is blank */
+  char * value;                  /* current value */
+  char * blank_help;             /* help when value is blank */
 
-  guint32 changed;       /* 2^32-1 if value modified */
-  guint8  input_output;  /* allowed behavior flags */
+  guint32 changed;               /* 2^32-1 if value modified */
+  guint32 conditionally_changed; /* value if modified conditionally */
+  guint8  input_output;          /* allowed behavior flags */
 
   /* "virtual", overloaded set-value method */
   CellSetValueFunc set_value;

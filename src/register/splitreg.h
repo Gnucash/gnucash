@@ -239,6 +239,7 @@ void            xaccDestroySplitRegister (SplitRegister *reg);
 
 /* returns non-zero value if updates have been made to data */
 guint32         xaccSplitRegisterGetChangeFlag (SplitRegister *reg);
+guint32         xaccSplitRegisterGetConditionalChangeFlag (SplitRegister *reg);
 
 /* Clears all change flags in the register. Does not alter values */
 void            xaccSplitRegisterClearChangeFlag (SplitRegister *reg);

@@ -168,7 +168,7 @@ gnc_table_get_header_cell (Table *table)
 
 static const char *
 gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
-                              gboolean *changed)
+                              gboolean *conditionally_changed)
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
@@ -185,7 +185,8 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
   if (cb_cell->cell_type < 0)
     return "";
 
-  return table->entry_handler (virt_loc, cb_cell->cell_type, changed,
+  return table->entry_handler (virt_loc, cb_cell->cell_type,
+                               conditionally_changed,
                                table->handler_user_data);
 }
 
@@ -540,6 +541,8 @@ gnc_table_move_cursor_internal (Table *table,
             BasicCell *cell = cb_cell->cell;
 
             cell->changed = 0;
+            cell->conditionally_changed = 0;
+
             if (cell->move)
             {
               VirtualLocation vloc;
@@ -549,7 +552,7 @@ gnc_table_move_cursor_internal (Table *table,
               vloc.phys_row_offset = -1;
               vloc.phys_col_offset = -1;
 
-              (cell->move) (cell, vloc);
+              cell->move (cell, vloc);
             }
           }
         }
@@ -596,20 +599,23 @@ gnc_table_move_cursor_internal (Table *table,
          * new values in the old cell locations, and that would 
          * lead to confusion of all sorts. */
         if (do_move_gui && cell->move)
-          (cell->move) (cell, virt_loc);
+          cell->move (cell, virt_loc);
 
         /* OK, now copy the string value from the table at large 
          * into the cell handler. */
         if (XACC_CELL_ALLOW_SHADOW & (cell->input_output))
         {
           const char *entry;
-          gboolean changed = FALSE;
+          gboolean conditionally_changed = FALSE;
 
-          entry = gnc_table_get_entry_internal (table, virt_loc, &changed);
+          entry = gnc_table_get_entry_internal (table, virt_loc,
+                                                &conditionally_changed);
 
           xaccSetBasicCellValue (cell, entry);
 
-          cell->changed = changed ? GNC_CELL_CHANGED : 0;
+          cell->changed = 0;
+          cell->conditionally_changed =
+            conditionally_changed ? GNC_CELL_CHANGED : 0;
         }
       }
     }

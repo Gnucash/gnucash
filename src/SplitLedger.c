@@ -922,9 +922,10 @@ LedgerAutoCompletion(SplitRegister *reg, gncTableTraversalDir dir,
   if (trans == NULL)
     return FALSE;
 
-  cursor_class = xaccSplitRegisterGetCurrentCursorClass(reg);
-  cell_type = xaccSplitRegisterGetCurrentCellType(reg);
-  changed = xaccSplitRegisterGetChangeFlag(reg);
+  cursor_class = xaccSplitRegisterGetCurrentCursorClass (reg);
+  cell_type = xaccSplitRegisterGetCurrentCellType (reg);
+  changed = xaccSplitRegisterGetChangeFlag (reg);
+  changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
 
   switch (cursor_class)
   {
@@ -1154,7 +1155,7 @@ LedgerTraverse (Table *table,
     return;
 
   /* no changes, make sure we aren't going off the end */
-  changed = xaccSplitRegisterGetChangeFlag(reg);
+  changed = xaccSplitRegisterGetChangeFlag (reg);
   if (!changed && (pending_trans != trans))
   {
     gnc_table_find_close_valid_cell (table, &virt_loc, info->exact_traversal);
@@ -2281,6 +2282,7 @@ static gboolean
 xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
                          gboolean use_cut_semantics)
 {
+  SCM other_split_scm = SCM_UNDEFINED;
   Transaction *trans;
   guint32 changed;
 
@@ -2290,6 +2292,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   changed = xaccSplitRegisterGetChangeFlag (reg);
   if (!changed)
     return FALSE;
+
+  changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
 
   /* get the handle to the current split and transaction */
   trans = xaccSRGetCurrentTrans (reg);
@@ -2336,15 +2340,12 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   }
 
   if (MOD_MXFRM & changed) {
-    SCM other_split_scm;
-
     other_split_scm = gnc_trans_scm_get_other_split_scm(trans_scm, split_scm);
 
     if (other_split_scm == SCM_UNDEFINED) {
       if (gnc_trans_scm_get_num_splits(trans_scm) == 1) {
         Split *temp_split;
         char *temp_string;
-        gnc_numeric num;
 
         temp_split = xaccMallocSplit ();
         other_split_scm = gnc_copy_split(temp_split, use_cut_semantics);
@@ -2361,12 +2362,6 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
           gnc_split_scm_set_action(other_split_scm, temp_string);
           free(temp_string);
         }
-
-        num = gnc_split_scm_get_quantity (split_scm);
-        gnc_split_scm_set_quantity (other_split_scm, gnc_numeric_neg (num));
-
-        num = gnc_split_scm_get_value (split_scm);
-        gnc_split_scm_set_value (other_split_scm, gnc_numeric_neg (num));
 
         gnc_trans_scm_append_split_scm(trans_scm, other_split_scm);
       }
@@ -2388,8 +2383,8 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     gnc_numeric credit;
     gnc_numeric debit;
 
-    credit = xaccGetPriceCellValue(reg->creditCell);
-    debit  = xaccGetPriceCellValue(reg->debitCell);
+    credit = xaccGetPriceCellValue (reg->creditCell);
+    debit  = xaccGetPriceCellValue (reg->debitCell);
     new_value = gnc_numeric_sub_fixed (debit, credit);
 
     gnc_split_scm_set_value (split_scm, new_value);
@@ -2403,6 +2398,20 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     gnc_numeric shares = xaccGetPriceCellValue(reg->sharesCell);
 
     gnc_split_scm_set_quantity (split_scm, shares);
+  }
+
+  if ((MOD_AMNT | MOD_PRIC | MOD_SHRS) & changed)
+  {
+    if (other_split_scm != SCM_UNDEFINED)
+    {
+      gnc_numeric num;
+
+      num = gnc_split_scm_get_quantity (split_scm);
+      gnc_split_scm_set_quantity (other_split_scm, gnc_numeric_neg (num));
+
+      num = gnc_split_scm_get_value (split_scm);
+      gnc_split_scm_set_value (other_split_scm, gnc_numeric_neg (num));
+    }
   }
 
   return TRUE;
@@ -2569,6 +2578,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   guint32 changed;
 
   changed = xaccSplitRegisterGetChangeFlag (reg);
+  changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
 
   /* copy the contents from the cursor to the split */
   if (MOD_DATE & changed) {
@@ -3034,7 +3044,7 @@ get_trans_total_balance (SplitRegister *reg, Transaction *trans)
 
 const char *
 xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
-                       gboolean *changed, gpointer user_data)
+                       gboolean *conditionally_changed, gpointer user_data)
 {
   CellType cell_type = _cell_type;
   SplitRegister *reg = user_data;
@@ -3042,8 +3052,8 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
   Transaction *trans;
   Split *split;
 
-  if (changed)
-    *changed = FALSE;
+  if (conditionally_changed)
+    *conditionally_changed = FALSE;
 
   split = sr_get_split (reg, virt_loc.vcell_loc);
   if (split == NULL)
@@ -3068,8 +3078,8 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
         if (gnc_numeric_positive_p (imbalance) && (cell_type == CRED_CELL))
           return "";
 
-        if (changed)
-          *changed = TRUE;
+        if (conditionally_changed)
+          *conditionally_changed = TRUE;
 
         imbalance = gnc_numeric_abs (imbalance);
 
@@ -3612,11 +3622,12 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
   /* If the current cursor has changed we save the values for later
    * possible restoration. */
-  changed = xaccSplitRegisterGetChangeFlag(reg);
-  if (changed && find_split && (find_split == xaccSRGetCurrentSplit(reg)))
+  changed = xaccSplitRegisterGetChangeFlag (reg);
+  changed |= xaccSplitRegisterGetConditionalChangeFlag (reg);
+  if (changed && find_split && (find_split == xaccSRGetCurrentSplit (reg)))
   {
-    reg_buffer = xaccMallocSplitRegisterBuffer();
-    xaccSplitRegisterSaveCursor(reg, reg_buffer);
+    reg_buffer = xaccMallocSplitRegisterBuffer ();
+    xaccSplitRegisterSaveCursor (reg, reg_buffer);
   }
   else
     reg_buffer = NULL;
@@ -3772,6 +3783,7 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
 
     if (reg_buffer != NULL)
       xaccDestroySplitRegisterBuffer(reg_buffer);
+
     reg_buffer = NULL;
   }
 

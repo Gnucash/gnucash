@@ -59,7 +59,8 @@ typedef struct _CellBuffer CellBuffer;
 struct _CellBuffer
 {
   char * value;
-  unsigned int changed;
+  guint32 changed;
+  guint32 conditionally_changed;
 };
 
 struct _SplitRegisterBuffer
@@ -1071,6 +1072,30 @@ xaccSplitRegisterGetChangeFlag (SplitRegister *reg)
   return changed;
 }
 
+guint32
+xaccSplitRegisterGetConditionalChangeFlag (SplitRegister *reg)
+{
+  guint32 changed = 0;
+
+  /* be careful to use bitwise ands and ors to assemble bit flag */
+  changed |= MOD_DATE  & reg->dateCell->cell.conditionally_changed;
+  changed |= MOD_NUM   & reg->numCell->cell.conditionally_changed;
+  changed |= MOD_DESC  & reg->descCell->cell.conditionally_changed;
+  changed |= MOD_RECN  & reg->recnCell->cell.conditionally_changed;
+
+  changed |= MOD_ACTN  & reg->actionCell->cell.conditionally_changed;
+  changed |= MOD_XFRM  & reg->xfrmCell->cell.conditionally_changed;
+  changed |= MOD_MXFRM & reg->mxfrmCell->cell.conditionally_changed;
+  changed |= MOD_XTO   & reg->xtoCell->cell.conditionally_changed; 
+  changed |= MOD_MEMO  & reg->memoCell->cell.conditionally_changed;
+  changed |= MOD_AMNT  & reg->creditCell->cell.conditionally_changed;
+  changed |= MOD_AMNT  & reg->debitCell->cell.conditionally_changed;
+  changed |= MOD_PRIC  & reg->priceCell->cell.conditionally_changed;
+  changed |= MOD_SHRS  & reg->sharesCell->cell.conditionally_changed; 
+
+  return changed;
+}
+
 /* ============================================== */
 
 void
@@ -1400,6 +1425,7 @@ saveCell(BasicCell *bcell, CellBuffer *cb)
   cb->value = g_strdup(bcell->value);
 
   cb->changed = bcell->changed;
+  cb->conditionally_changed = bcell->conditionally_changed;
 }
 
 void
@@ -1435,7 +1461,7 @@ restoreCellChanged(BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
   if ((bcell == NULL) || (cb == NULL))
     return;
 
-  if (!cb->changed)
+  if (!cb->changed && !cb->conditionally_changed)
     return;
 
   /* only restore if it's in the current cursor */
@@ -1452,6 +1478,7 @@ restoreCellChanged(BasicCell *bcell, CellBuffer *cb, CellBlock *cursor)
       {
         xaccSetBasicCellValue(bcell, cb->value);
         bcell->changed = cb->changed;
+        bcell->conditionally_changed = cb->conditionally_changed;
         return;
       }
     }

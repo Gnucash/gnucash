@@ -152,7 +152,7 @@ typedef void (*TableDestroyFunc) (Table *table);
 
 typedef const char * (*TableGetEntryHandler) (VirtualLocation virt_loc,
                                               short cell_type,
-                                              gboolean *changed,
+                                              gboolean *conditionally_changed,
                                               gpointer user_data);
 
 typedef guint32 (*TableGetFGColorHandler) (VirtualLocation virt_loc,
