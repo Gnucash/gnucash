@@ -44,11 +44,12 @@
 
 #include "config.h"
 
-#include "gnc-numeric.h"
-#include "gnc-commodity.h"
-#include "kvp_frame.h"
+#include "Account.h"
 #include "GNCId.h"
 #include "Transaction.h"
+#include "gnc-commodity.h"
+#include "gnc-numeric.h"
+#include "kvp_frame.h"
 
 
 /** STRUCTS *********************************************************/
@@ -88,7 +89,7 @@ struct _account {
    * intended use is to be a hint to the GUI as to how to display   
    * and format the transaction data.
    */
-  short     type;
+  GNCAccountType type;
 
   /* The currency field denotes the default currency in which all
    * splits in this account are denominated.  The gnc_commodity type

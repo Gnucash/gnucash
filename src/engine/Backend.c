@@ -64,7 +64,6 @@ xaccAccountGetBackend (Account * acc)
 Backend *
 xaccTransactionGetBackend (Transaction *trans)
 {
-  GList *node;
   Split *s;
 
   if (!trans) return NULL;
