@@ -129,6 +129,28 @@
              (else (list #f "string-option: not a string"))))
      #f #f )))
 
+;; currency options use a specialized widget for entering currencies
+;; in the GUI implementation. Currencies must be 3-letter ISO codes
+;; represented as strings.
+(define (gnc:make-currency-option
+	 section
+	 name
+	 sort-tag
+         documentation-string
+	 default-value)
+  (let* ((value default-value)
+         (value->string (lambda () (gnc:value->string value))))
+    (gnc:make-option
+     section name sort-tag 'currency documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (cond ((string? x)(list #t x))
+             (else (list #f "currency-option: not a currency code"))))
+     #f #f )))
+
 (define (gnc:make-simple-boolean-option
 	 section
 	 name

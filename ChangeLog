@@ -1,3 +1,19 @@
+2000-05-23  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/scm/options.scm: add a currency option type.
+
+	* src/gnome/dialog-options.c: add support for currency options.
+
+	* src/gnome/dialog-utils.c (gnc_ui_account_field_box_create): used
+	the new currency editor widget.
+
+	* src/gnome/gnc-currency-edit.c: new widget for picking currencies.
+
+2000-05-22  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/guile/guile-util.c (gnc_depend): new function to access the
+	gnc:depend guile function.
+
 2000-05-21  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/gnome/window-reconcile.c: use share balances when

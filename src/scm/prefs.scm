@@ -179,7 +179,7 @@ the account instead of opening a register." #f))
 ;	#(locale "Locale" "Take from system locale"))))
 
 (gnc:register-configuration-option
- (gnc:make-string-option
+ (gnc:make-currency-option
   "International" "Default Currency"
   "b" "Default Currency For New Accounts"
   (gnc:locale-default-currency)))

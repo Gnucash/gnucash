@@ -195,6 +195,8 @@
 #define TOOLTIP_CLOSE_REG       _(TOOLTIP_CLOSE_REG_N)
 #define TOOLTIP_COPY_TRANS_N   N_("Copy the selected transaction")
 #define TOOLTIP_COPY_TRANS      _(TOOLTIP_COPY_TRANS_N)
+#define TOOLTIP_CURRENCY        _("Enter a 3-letter ISO currency code such " \
+                                  "as USD (US Dollars)")
 #define TOOLTIP_CUT_TRANS_N    N_("Cut the selected transaction")
 #define TOOLTIP_CUT_TRANS       _(TOOLTIP_CUT_TRANS_N)
 #define TOOLTIP_DATE_RANGE_N   N_("Set the date range of this register")

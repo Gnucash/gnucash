@@ -28,9 +28,10 @@
 #include "account-tree.h"
 #include "dialog-utils.h"
 #include "global-options.h"
+#include "gnc-currency-edit.h"
 #include "messages.h"
-#include "util.h"
 #include "EuroUtils.h"
+#include "util.h"
 
 
 /* This static indicates the debugging module that this .o belongs to. */
@@ -166,8 +167,8 @@ gnc_ui_account_field_box_create(AccountEditInfo * info,
   gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
   gtk_widget_show(widget);
 
-  widget = gtk_entry_new();
-  info->currency_entry = GTK_EDITABLE(widget);
+  widget = gnc_currency_edit_new();
+  info->currency_entry = GTK_EDITABLE(GTK_COMBO(widget)->entry);
   gtk_box_pack_start(GTK_BOX(vbox), widget, TRUE, TRUE, 0);
   gtk_widget_show(widget);
     

@@ -43,6 +43,7 @@ struct _AccountEditInfo
   GtkEditable * notes_entry;
 
   GtkOptionMenu * source_menu;
+
   gint source;
 };
 
