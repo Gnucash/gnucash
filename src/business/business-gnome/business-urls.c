@@ -31,6 +31,7 @@
 #include "gnc-engine-util.h"
 
 #include "gncCustomer.h"
+#include "gncJob.h"
 #include "gncVendor.h"
 #include "gncEmployee.h"
 #include "gncInvoice.h"
@@ -41,215 +42,134 @@
 #include "dialog-vendor.h"
 #include "dialog-invoice.h"
 
+#define HANDLE_TYPE(URL_TYPE_STR,OBJ_TYPE) {                                 \
+  QofBook *book;                                                             \
+  GUID guid;                                                                 \
+  QofCollection *coll;                                                       \
+                                                                             \
+  g_return_val_if_fail (location != NULL, FALSE);                            \
+  g_return_val_if_fail (result != NULL, FALSE);                              \
+  result->load_to_stream = FALSE;                                            \
+                                                                             \
+  if (strncmp (URL_TYPE_STR, location, strlen(URL_TYPE_STR)))                \
+  {                                                                          \
+    result->error_message =                                                  \
+                    g_strdup_printf (_("Badly formed URL %s"), location);    \
+    return FALSE;                                                            \
+  }                                                                          \
+  if (!string_to_guid (location + strlen(URL_TYPE_STR), &guid))              \
+  {                                                                          \
+    result->error_message = g_strdup_printf (_("Bad URL: %s"), location);    \
+    return FALSE;                                                            \
+  }                                                                          \
+                                                                             \
+  book = gnc_get_current_book();                                             \
+  coll = qof_book_get_collection (book, OBJ_TYPE);                           \
+  entity = qof_collection_lookup_entity (coll, &guid);                       \
+  if (NULL == entity)                                                        \
+  {                                                                          \
+    result->error_message = g_strdup_printf (_("No such entity: %s"),        \
+                location);                                                   \
+    return FALSE;                                                            \
+  }                                                                          \
+}
+
 static gboolean
 customerCB (const char *location, const char *label,
-	   gboolean new_window, GNCURLResult * result)
+           gboolean new_window, GNCURLResult * result)
 {
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
+  QofEntity *entity;
+  GncCustomer *customer;
 
-  result->load_to_stream = FALSE;
-
-  /* href="...:guid=<guid>" */
-  if (strncmp ("guid=", location, 5) == 0) {
-    GUID guid;
-    GNCIdType id_type;
-    GncCustomer *customer;
-
-    if (!string_to_guid (location + 5, &guid)) {
-      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-      return FALSE;
-    }
-
-    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
-    {
-      result->error_message = g_strdup_printf (_("No such entity: %s"),
-					       location);
-      return FALSE;
-    }
-    else if (!safe_strcmp (id_type, GNC_CUSTOMER_MODULE_NAME))
-    {
-      customer = gncCustomerLookup (gnc_get_current_book (), &guid);
-      gnc_ui_customer_edit (customer);
-    }
-    else
-    {
-      result->error_message =
-	g_strdup_printf (_("Entity type does not match Customer: %s"),
-			 location);
-      return FALSE;
-    }
-  }
-  else
-  {
-    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                             location);
-    return FALSE;
-  }
+  /* href="...:customer=<guid>" */
+  HANDLE_TYPE ("customer=", GNC_ID_CUSTOMER);
+  customer = (GncCustomer *) entity;
+  gnc_ui_customer_edit (customer);
 
   return TRUE;
 }
 
 static gboolean
 vendorCB (const char *location, const char *label,
-	   gboolean new_window, GNCURLResult * result)
+           gboolean new_window, GNCURLResult * result)
 {
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
+  QofEntity *entity;
+  GncVendor *vendor;
 
-  result->load_to_stream = FALSE;
-
-  /* href="...:guid=<guid>" */
-  if (strncmp ("guid=", location, 5) == 0) {
-    GUID guid;
-    GNCIdType id_type;
-    GncVendor *vendor;
-
-    if (!string_to_guid (location + 5, &guid)) {
-      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-      return FALSE;
-    }
-
-    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
-    {
-      result->error_message = g_strdup_printf (_("No such entity: %s"),
-					       location);
-      return FALSE;
-    }
-    else if (!safe_strcmp (id_type, GNC_VENDOR_MODULE_NAME))
-    {
-      vendor = gncVendorLookup (gnc_get_current_book (), &guid);
-      gnc_ui_vendor_edit (vendor);
-    }
-    else
-    {
-      result->error_message =
-	g_strdup_printf (_("Entity type does not match Vendor: %s"),
-			 location);
-      return FALSE;
-    }
-  }
-  else
-  {
-    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                             location);
-    return FALSE;
-  }
+  /* href="...:vendor=<guid>" */
+  HANDLE_TYPE ("vendor=", GNC_ID_VENDOR);
+  vendor = (GncVendor *) entity;
+  gnc_ui_vendor_edit (vendor);
 
   return TRUE;
 }
 
 static gboolean
 employeeCB (const char *location, const char *label,
-	   gboolean new_window, GNCURLResult * result)
+           gboolean new_window, GNCURLResult * result)
 {
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
+  QofEntity *entity;
+  GncEmployee *employee;
 
-  result->load_to_stream = FALSE;
+  /* href="...:employee=<guid>" */
+  HANDLE_TYPE ("employee=", GNC_ID_EMPLOYEE);
 
-  /* href="...:guid=<guid>" */
-  if (strncmp ("guid=", location, 5) == 0) {
-    GUID guid;
-    GNCIdType id_type;
-    GncEmployee *employee;
-
-    if (!string_to_guid (location + 5, &guid)) {
-      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-      return FALSE;
-    }
-
-    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
-    {
-      result->error_message = g_strdup_printf (_("No such entity: %s"),
-					       location);
-      return FALSE;
-    }
-    else if (!safe_strcmp (id_type, GNC_EMPLOYEE_MODULE_NAME))
-    {
-      employee = gncEmployeeLookup (gnc_get_current_book (), &guid);
-      gnc_ui_employee_edit (employee);
-    }
-    else
-    {
-      result->error_message =
-	g_strdup_printf (_("Entity type does not match Employee: %s"),
-			 location);
-      return FALSE;
-    }
-  }
-  else
-  {
-    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                             location);
-    return FALSE;
-  }
+  employee = (GncEmployee *) entity;
+  gnc_ui_employee_edit (employee);
 
   return TRUE;
 }
 
 static gboolean
 invoiceCB (const char *location, const char *label,
-	   gboolean new_window, GNCURLResult * result)
+           gboolean new_window, GNCURLResult * result)
 {
-  g_return_val_if_fail (location != NULL, FALSE);
-  g_return_val_if_fail (result != NULL, FALSE);
+  QofEntity *entity;
+  GncInvoice *invoice;
 
-  result->load_to_stream = FALSE;
-
-  /* href="...:guid=<guid>" */
-  if (strncmp ("guid=", location, 5) == 0) {
-    GUID guid;
-    GNCIdType id_type;
-    GncInvoice *invoice;
-
-    if (!string_to_guid (location + 5, &guid)) {
-      result->error_message = g_strdup_printf (_("Bad URL: %s"), location);
-      return FALSE;
-    }
-
-    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
-    {
-      result->error_message = g_strdup_printf (_("No such entity: %s"),
-					       location);
-      return FALSE;
-    }
-    else if (!safe_strcmp (id_type, GNC_INVOICE_MODULE_NAME))
-    {
-      invoice = gncInvoiceLookup (gnc_get_current_book (), &guid);
-      gnc_ui_invoice_edit (invoice);
-    }
-    else
-    {
-      result->error_message =
-	g_strdup_printf (_("Entity type does not match Invoice: %s"),
-			 location);
-      return FALSE;
-    }
-  }
-  else
-  {
-    result->error_message = g_strdup_printf (_("Badly formed URL %s"),
-                                             location);
-    return FALSE;
-  }
+  /* href="...:invoice=<guid>" */
+  HANDLE_TYPE ("invoice=", GNC_ID_INVOICE);
+  invoice = (GncInvoice *) entity;
+  gnc_ui_invoice_edit (invoice);
 
   return TRUE;
 }
 
+#if 0   // whats up w/ that ?
+static gboolean
+jobCB (const char *location, const char *label,
+           gboolean new_window, GNCURLResult * result)
+{
+  QofEntity *entity;
+  GncJob *job;
+
+  /* href="...:job=<guid>" */
+  HANDLE_TYPE ("job=", GNC_ID_INVOICE);
+  job = (GncJob *) entity;
+  gnc_ui_job_edit (job);
+
+  return TRUE;
+}
+#endif
+
+/* ================================================================= */
+
+#define RETURN_IF_NULL(inst)                                            \
+  if (NULL == inst)                                                     \
+  {                                                                     \
+    result->error_message =                                             \
+      g_strdup_printf (_("No such owner entity: %s"), location);        \
+    return FALSE;                                                       \
+  }
+
 static gboolean
 ownerreportCB (const char *location, const char *label,
-	       gboolean new_window, GNCURLResult * result)
+               gboolean new_window, GNCURLResult * result)
 {
   const char *ownerptr;
   const char *acctptr;
   GUID guid;
   GncOwner owner;
-  GNCIdType id_type;
   GncOwnerType type;
   char *etype = NULL;
   Account *acc = NULL;
@@ -294,45 +214,44 @@ ownerreportCB (const char *location, const char *label,
     return FALSE;
   }
 
-  id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-  if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
-  {
-    result->error_message = g_strdup_printf (_("No such owner entity: %s"),
-					     location);
-    return FALSE;
-  }
 
   switch (type) {
-  case GNC_OWNER_CUSTOMER:
-    if (!safe_strcmp (id_type, GNC_CUSTOMER_MODULE_NAME))
-      gncOwnerInitCustomer (&owner,
-			    gncCustomerLookup (gnc_get_current_book (),
-					       &guid));
-    etype = "Customer";
-    break;
-  case GNC_OWNER_VENDOR:
-    if (!safe_strcmp (id_type, GNC_VENDOR_MODULE_NAME))
-      gncOwnerInitVendor (&owner,
-			  gncVendorLookup (gnc_get_current_book (),
-					   &guid));
-    etype = "Vendor";
-    break;
-  case GNC_OWNER_EMPLOYEE:
-    if (!safe_strcmp (id_type, GNC_EMPLOYEE_MODULE_NAME))
-      gncOwnerInitEmployee (&owner,
-			  gncEmployeeLookup (gnc_get_current_book (),
-					     &guid));
-    etype = "Employee";
-    break;
-  default:
-    etype = "OTHER";
+    case GNC_OWNER_CUSTOMER:
+    {
+      GncCustomer *customer = 
+                      gncCustomerLookup (gnc_get_current_book (), &guid);
+      RETURN_IF_NULL (customer);
+      gncOwnerInitCustomer (&owner, customer);
+      etype = "Customer";
+      break;
+    }
+    case GNC_OWNER_VENDOR:
+    {
+      GncVendor *vendor =
+                            gncVendorLookup (gnc_get_current_book (), &guid);
+      RETURN_IF_NULL (vendor);
+        gncOwnerInitVendor (&owner, vendor);
+      etype = "Vendor";
+      break;
+    }
+    case GNC_OWNER_EMPLOYEE:
+    {
+      GncEmployee *employee = 
+           gncEmployeeLookup (gnc_get_current_book (), &guid);
+      RETURN_IF_NULL(employee);
+      gncOwnerInitEmployee (&owner, employee);
+      etype = "Employee";
+      break;
+    }
+    default:
+      etype = "OTHER";
   }
 
   if (owner.owner.undefined == NULL)
   {
     result->error_message =
       g_strdup_printf (_("Entity type does not match %s: %s"),
-		       etype, location);
+                       etype, location);
     return FALSE;
   }
 
@@ -350,22 +269,13 @@ ownerreportCB (const char *location, const char *label,
       return FALSE;
     }
 
-    id_type = xaccGUIDType (&guid, gnc_get_current_book ());
-    if (id_type == GNC_ID_NONE || !safe_strcmp (id_type, GNC_ID_NULL))
+    acc = xaccAccountLookup (&guid, gnc_get_current_book ());
+    if (NULL == acc)
     {
       result->error_message = g_strdup_printf (_("No such Account entity: %s"),
-					       location);
+                                               location);
       return FALSE;
     }
-
-    if (safe_strcmp (id_type, GNC_ID_ACCOUNT) != 0)
-    {
-      result->error_message =
-	g_strdup_printf (_("Entity is not Account entity: %s"), location);
-      return FALSE;
-    }
-
-    acc = xaccAccountLookup (&guid, gnc_get_current_book ());
   }
 
   /* Ok, let's run this report */
@@ -379,14 +289,14 @@ gnc_business_urls_initialize (void)
 {
   int i;
   static struct {
-    URLType	urltype;
-    char *	protocol;
+    URLType urltype;
+    char *  protocol;
     GncHTMLUrlCB handler;
   } types[] = {
-    { GNC_CUSTOMER_MODULE_NAME, GNC_CUSTOMER_MODULE_NAME, customerCB },
-    { GNC_VENDOR_MODULE_NAME, GNC_VENDOR_MODULE_NAME, vendorCB },
-    { GNC_EMPLOYEE_MODULE_NAME, GNC_EMPLOYEE_MODULE_NAME, employeeCB },
-    { GNC_INVOICE_MODULE_NAME, GNC_INVOICE_MODULE_NAME, invoiceCB },
+    { GNC_ID_CUSTOMER, GNC_ID_CUSTOMER, customerCB },
+    { GNC_ID_VENDOR, GNC_ID_VENDOR, vendorCB },
+    { GNC_ID_EMPLOYEE, GNC_ID_EMPLOYEE, employeeCB },
+    { GNC_ID_INVOICE, GNC_ID_INVOICE, invoiceCB },
     { URL_TYPE_OWNERREPORT, "gnc-ownerreport", ownerreportCB },
     { NULL, NULL }
   };
@@ -399,3 +309,5 @@ gnc_business_urls_initialize (void)
       gnc_html_register_url_handler (types[i].urltype, types[i].handler);
 
 }
+
+/* =========================== END OF FILE ========================= */
