@@ -2376,8 +2376,10 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   XbaeMatrixCommitEdit( regData->reg, False );
   regSaveTransaction( regData, regData->currEntry );
   
-  /* hack alert -- free the ComboBox popup boxes data structures too */
-
+  /* free combo-box data too */
+  freePopBox (regData->actbox);
+  freePopBox (regData->xfrmbox);
+  freePopBox (regData->xtobox);
 
   if (1 == regData ->numAcc) {
      regData->blackacc[0]->regData = NULL;

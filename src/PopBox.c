@@ -33,7 +33,7 @@ typedef struct _PopBox {
 
 /** PROTOTYPES ******************************************************/
 
-void selectCB (Widget w, XtPointer cd, XtPointer cb );
+static void selectCB (Widget w, XtPointer cd, XtPointer cb );
 
 /********************************************************************\
  * popBox                                                           *
@@ -163,6 +163,17 @@ void SetPopBox (PopBox *ab, int row, int col)
 }
 
 /********************************************************************\
+\********************************************************************/
+
+void freePopBox (PopBox *ab)
+{
+  if (!ab) return;
+  SetPopBox (ab, -1, -1);
+  XtDestroyWidget (ab->combobox);
+  _free (ab);
+}
+
+/********************************************************************\
  * selectCB -- get the user's selection, put the string into the    *
  *             cell.                                                *
  *                                                                  *
@@ -172,7 +183,7 @@ void SetPopBox (PopBox *ab, int row, int col)
  * Return: none                                                     *
 \********************************************************************/
 
-void selectCB (Widget w, XtPointer cd, XtPointer cb )
+static void selectCB (Widget w, XtPointer cd, XtPointer cb )
 
 {
     PopBox *ab = (PopBox *) cd;
@@ -188,4 +199,5 @@ void selectCB (Widget w, XtPointer cd, XtPointer cb )
     /* a diffeent way of getting the user's selection ... */
     /* text = XmComboBoxGetString (ab->combobox); */
 }
+
 /************************* END OF FILE ******************************/
