@@ -196,16 +196,14 @@ void          xaccTransSetMemo (Transaction *, const char *);
 void          xaccTransSetAction (Transaction *, const char *);
 void          xaccTransSetDocref (Transaction *, const char *);
 
-/*
- * The xaccTransAppendSplit() method will append the indicated 
+/* The xaccTransAppendSplit() method will append the indicated 
  *    split to the collection of splits in this transaction.
  *    If the split is already a part of another transaction,
  *    it will be removed from that transaction first.
  */
 void          xaccTransAppendSplit (Transaction *, Split *);
 
-/* 
- * The xaccSplitDestroy() method will update its parent account and 
+/* The xaccSplitDestroy() method will update its parent account and 
  *    transaction in a consistent manner, resulting in the complete 
  *    unlinking of the split, and the freeing of its associated memory.
  *    The goal of this routine is to perform the removal and destruction
@@ -321,8 +319,7 @@ kvp_value * xaccSplitGetSlot(Split * split, const char * key);
 void        xaccSplitSetSlot(Split * split, const char * key, 
                              const kvp_value * value);
 
-/*
- * The xaccSplitGetGUID() subroutine will return the
+/* The xaccSplitGetGUID() subroutine will return the
  *    globally unique id associated with that split.
  *
  * The xaccSplitLookup() subroutine will return the
@@ -335,14 +332,14 @@ Split      * xaccSplitLookup (const GUID *guid);
 /* The memo is an arbitrary string associated with a split.
  *    Users typically type in free form text from the GUI.
  */
-void          xaccSplitSetMemo (Split *, const char *);
+void          xaccSplitSetMemo (Split *split, const char *memo);
 
 /* The Action is essentially an arbitrary string, but is 
  * meant to be conveniently limited to a menu of selections 
  * such as  "Buy", "Sell", "Interest", etc.  However,
  * as far as the engine is concerned, its an arbitrary string.
  */
-void          xaccSplitSetAction (Split *, const char *);
+void          xaccSplitSetAction (Split *split, const char *action);
 
 /* docref ==  hook for additional data, etc */
 void          xaccSplitSetDocref (Split *, const char *);
@@ -350,10 +347,10 @@ void          xaccSplitSetDocref (Split *, const char *);
 /* The Reconcile is a single byte, whose values are typically
  * are "N", "C" and "R"
  */
-void          xaccSplitSetReconcile (Split *, char);
-void          xaccSplitSetDateReconciledSecs (Split *, time_t);
-void          xaccSplitSetDateReconciledTS (Split *, Timespec *);
-void          xaccSplitGetDateReconciledTS (Split *, Timespec *);
+void          xaccSplitSetReconcile (Split *split, char reconciled_flag);
+void          xaccSplitSetDateReconciledSecs (Split *split, time_t);
+void          xaccSplitSetDateReconciledTS (Split *split, Timespec *ts);
+void          xaccSplitGetDateReconciledTS (Split *split, Timespec *ts);
 
 
 /* 
@@ -378,12 +375,12 @@ void          xaccSplitGetDateReconciledTS (Split *, Timespec *);
  *     processing overhead of balancing only once, instead of twice.
  */
 
-void         xaccSplitSetSharePriceAndAmount (Split *, double price,
+void         xaccSplitSetSharePriceAndAmount (Split *split, double price,
                                               double amount);
-void         xaccSplitSetShareAmount (Split *, double);
-void         xaccSplitSetSharePrice (Split *, double);
-void         xaccSplitSetValue (Split *, double);
-void         xaccSplitSetBaseValue (Split *s, double value,
+void         xaccSplitSetShareAmount (Split *split, double);
+void         xaccSplitSetSharePrice (Split *split, double);
+void         xaccSplitSetValue (Split *split, double);
+void         xaccSplitSetBaseValue (Split *split, double value,
                                     const char * base_currency);
 
 
@@ -405,18 +402,18 @@ void         xaccSplitSetBaseValue (Split *s, double value,
  * of all transactions that have been marked as reconciled.
  */
 
-double xaccSplitGetBalance (Split *);
-double xaccSplitGetClearedBalance (Split *);
-double xaccSplitGetReconciledBalance (Split *);
-double xaccSplitGetShareBalance (Split *);
-double xaccSplitGetShareClearedBalance (Split *);
-double xaccSplitGetShareReconciledBalance (Split *);
-double xaccSplitGetCostBasis (Split *);
-double xaccSplitGetBaseValue (Split *s, const char *base_currency);
+double xaccSplitGetBalance (Split *split);
+double xaccSplitGetClearedBalance (Split *split);
+double xaccSplitGetReconciledBalance (Split *split);
+double xaccSplitGetShareBalance (Split *split);
+double xaccSplitGetShareClearedBalance (Split *split);
+double xaccSplitGetShareReconciledBalance (Split *split);
+double xaccSplitGetCostBasis (Split *split);
+double xaccSplitGetBaseValue (Split *split, const char *base_currency);
 
 
 /* return the parent transaction of the split */
-Transaction * xaccSplitGetParent (Split *);
+Transaction * xaccSplitGetParent (Split *split);
 
 /* return the memo, action strings */
 const char *  xaccSplitGetMemo (Split *split);
@@ -429,7 +426,7 @@ double        xaccSplitGetShareAmount (Split * split);
 double        xaccSplitGetSharePrice (Split * split);
 double        xaccSplitGetValue (Split * split);
 
-Account *     xaccSplitGetAccount (Split *);
+Account *     xaccSplitGetAccount (Split *split);
 
 /********************************************************************\
  * sorting comparison function
@@ -510,13 +507,13 @@ Account * xaccGetAccountByFullName (Transaction *trans,
  *    the other of a pair of splits.  If there are more than two 
  *    splits, it returns NULL.
  */
-Split * xaccGetOtherSplit (Split *);
+Split * xaccGetOtherSplit (Split *split);
 
 /* The xaccIsPeerSplit() is a convenience routine that returns
  *    a non-zero value if the two splits share a common 
  *    parent transaction, else it returns zero.
  */
-int xaccIsPeerSplit (Split *, Split *);
+int xaccIsPeerSplit (Split *split_1, Split *split_2);
 
 /* The IthSplit() and IthTransaction() routines merely dereference
  *    the lists supplied as arguments; i.e. they return list[i].
