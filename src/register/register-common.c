@@ -1,6 +1,6 @@
 /********************************************************************\
- * register-common.h -- Common declarations for the register        *
- * Copyright (c) 2000 Dave Peticolas                                *
+ * register-common.c -- Common functions for the register           *
+ * Copyright (c) 2001 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -21,45 +21,20 @@
  *                                                                  *
 \********************************************************************/
 
-#ifndef __REGISTER_COMMON_H__
-#define __REGISTER_COMMON_H__
-
-#include <glib.h>
+#include "register-common.h"
 
 
-/* The VirtualCellLocation structure contains the virtual
- * location of a virtual cell.
- */
-typedef struct _VirtualCellLocation VirtualCellLocation;
-struct _VirtualCellLocation {
-  short virt_row;
-  short virt_col;
-};
+gboolean
+virt_cell_loc_equal (VirtualCellLocation vcl1, VirtualCellLocation vcl2)
+{
+  return ((vcl1.virt_row == vcl2.virt_row) &&
+          (vcl1.virt_col == vcl2.virt_col));
+}
 
-
-gboolean virt_cell_loc_equal (VirtualCellLocation vcl1,
-                              VirtualCellLocation vcl2);
-
-
-/* The VirtualLocation structure contains the virtual
- * location of a physical cell.
- *
- * There is one instance of Locator for each physical cell.
- * The virt_row and virt_col members identify the corresponding
- * cellblock/virtual cell that this physical cell is a member of.
- * The two phys_offsets provide the location of the physical cell
- * as an offset from the cell block origin.  That is, the offsets
- * should never be less than zero, or greater than the size of
- * the cell block.
- */
-typedef struct _VirtualLocation VirtualLocation;
-struct _VirtualLocation {
-  VirtualCellLocation vcell_loc;
-  short phys_row_offset;
-  short phys_col_offset;
-};
-
-
-gboolean virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2);
-
-#endif
+gboolean
+virt_loc_equal (VirtualLocation vl1, VirtualLocation vl2)
+{
+  return (virt_cell_loc_equal (vl1.vcell_loc, vl2.vcell_loc) &&
+          (vl1.phys_row_offset == vl2.phys_row_offset) &&
+          (vl1.phys_col_offset == vl2.phys_col_offset));
+}

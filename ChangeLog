@@ -1,5 +1,10 @@
 2001-06-12  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/register-common.h: move function defs to
+	register-common.c
+
+	* src/register/register-common.c: new file
+
 	* src/gnome/glade/Makefile.am: new file
 
 	* src/gnome/glade/commodity.glade: new file. glade file for
