@@ -33,6 +33,7 @@ GUID* get_random_guid(void);
 GList* get_random_glist(void);
 
 GNCPrice * get_random_price(void);
+GNCPriceDB * get_random_pricedb(void);
 AccountGroup * get_random_group(void);
 Account* get_random_account(void);
 Split* get_random_split(gnc_numeric num);

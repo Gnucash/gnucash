@@ -197,6 +197,7 @@ gboolean gnc_price_list_remove(GList **prices, GNCPrice *p);
      gnc_price_unref on all the prices included in the list. */
 void     gnc_price_list_destroy(GList *prices);
 
+gboolean gnc_price_list_equal(GList *prices1, GList *prices2);
 
 /**********************************************************************
   GNCPriceDB
@@ -281,6 +282,8 @@ gboolean gnc_pricedb_dirty(GNCPriceDB *db);
 /* gnc_pricedb_get_num_prices - return the number of prices
    in the database. */
 guint gnc_pricedb_get_num_prices(GNCPriceDB *db);
+
+gboolean gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2);
 
 /* semi-lame debugging code */
 void gnc_price_print(GNCPrice *db, FILE *f, int indent);

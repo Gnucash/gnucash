@@ -11,6 +11,7 @@ TESTS = \
   test-string-converters \
   test-xml-account \
   test-xml-commodity \
+  test-xml-pricedb \
   test-xml-transaction \
   test-xml2-is-file
 
@@ -34,6 +35,7 @@ noinst_PROGRAMS = \
   test-string-converters \
   test-xml-account \
   test-xml-commodity \
+  test-xml-pricedb \
   test-xml-transaction \
   test-xml2-is-file
 

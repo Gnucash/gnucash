@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 #include "date.h"
+#include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "test-engine-stuff.h"
 #include "test-stuff.h"
@@ -80,11 +81,17 @@ get_random_price(void)
   GNCPrice *p;
   Timespec *ts;
   char *string;
+  gnc_commodity *c;
 
   p = gnc_price_create ();
 
-  gnc_price_set_commodity (p, get_random_gnc_commodity_ref ());
-  gnc_price_set_currency (p, get_random_gnc_commodity_ref ());
+  c = get_random_gnc_commodity_ref ();
+  c = gnc_commodity_table_insert (gnc_engine_commodities (), c);
+  gnc_price_set_commodity (p, c);
+
+  c = get_random_gnc_commodity_ref ();
+  c = gnc_commodity_table_insert (gnc_engine_commodities (), c);
+  gnc_price_set_currency (p, c);
 
   ts = get_random_timespec ();
   gnc_price_set_time (p, *ts);
@@ -101,6 +108,30 @@ get_random_price(void)
   gnc_price_set_value (p, get_random_gnc_numeric ());
 
   return p;
+}
+
+GNCPriceDB *
+get_random_pricedb(void)
+{
+  GNCPriceDB *db;
+  int num_prices;
+
+  db = gnc_pricedb_create ();
+
+  num_prices = get_random_int_in_range (0, 40);
+
+  while (num_prices-- > 0)
+  {
+    GNCPrice *p;
+
+    p = get_random_price ();
+
+    gnc_pricedb_add_price (db, p);
+
+    gnc_price_unref (p);
+  }
+
+  return db;
 }
 
 GUID*

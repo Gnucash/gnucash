@@ -451,12 +451,12 @@ gnc_price_equal (GNCPrice *p1, GNCPrice *p2)
   if (!timespec_equal (&ts1, &ts2))
     return FALSE;
 
-  if (!safe_strcmp (gnc_price_get_source (p1),
-                    gnc_price_get_source (p2)))
+  if (safe_strcmp (gnc_price_get_source (p1),
+                   gnc_price_get_source (p2)) != 0)
     return FALSE;
 
-  if (!safe_strcmp (gnc_price_get_type (p1),
-                    gnc_price_get_type (p2)))
+  if (safe_strcmp (gnc_price_get_type (p1),
+                   gnc_price_get_type (p2)) != 0)
     return FALSE;
 
   if (!gnc_numeric_eq (gnc_price_get_value (p1),
@@ -534,6 +534,21 @@ gnc_price_list_destroy(GList *prices)
 {
   g_list_foreach(prices, price_list_destroy_helper, NULL);
   g_list_free(prices);
+}
+
+gboolean
+gnc_price_list_equal(GList *prices1, GList *prices2)
+{
+  GList *n1, *n2;
+
+  if (prices1 == prices2) return TRUE;
+  if (g_list_length (prices1) != g_list_length (prices2)) return FALSE;
+
+  for (n1 = prices1, n2 = prices2; n1 ; n1 = n1->next, n2 = n2->next)
+    if (!gnc_price_equal (n1->data, n2->data))
+      return FALSE;
+
+  return TRUE;
 }
 
 /* ==================================================================== */
@@ -645,6 +660,65 @@ gnc_pricedb_get_num_prices(GNCPriceDB *db)
 }
 
 /* ==================================================================== */
+
+typedef struct
+{
+  gboolean equal;
+  GNCPriceDB *db2;
+  gnc_commodity *commodity;
+} GNCPriceDBEqualData;
+
+static void
+pricedb_equal_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
+{
+  GNCPriceDBEqualData *equal_data = user_data;
+  gnc_commodity *currency = key;
+  GList *price_list1 = val;
+  GList *price_list2;
+
+  price_list2 = gnc_pricedb_get_prices (equal_data->db2,
+                                        equal_data->commodity,
+                                        currency);
+
+  if (!gnc_price_list_equal (price_list1, price_list2))
+    equal_data->equal = FALSE;
+
+  gnc_price_list_destroy (price_list2);
+}
+
+static void
+pricedb_equal_foreach_currencies_hash (gpointer key, gpointer val,
+                                       gpointer user_data)
+{
+  GHashTable *currencies_hash = val;
+  GNCPriceDBEqualData *equal_data = user_data;
+
+  equal_data->commodity = key;
+
+  g_hash_table_foreach (currencies_hash,
+                        pricedb_equal_foreach_pricelist,
+                        equal_data);
+}
+
+gboolean
+gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2)
+{
+  GNCPriceDBEqualData equal_data;
+
+  if (db1 == db2) return TRUE;
+  if (!db1 || !db2) return FALSE;
+
+  equal_data.equal = TRUE;
+  equal_data.db2 = db2;
+
+  g_hash_table_foreach (db1->commodity_hash,
+                        pricedb_equal_foreach_currencies_hash,
+                        &equal_data);
+
+  return equal_data.equal;
+}
+
+/* ==================================================================== */
 /* The add_price() function is a utility that only manages the 
  * dual hash table instertion */
 
@@ -659,7 +733,9 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
+         db, p, p->not_saved, p->do_free);
+
   commodity = gnc_price_get_commodity(p);
   if(!commodity) {
     PWARN("no commodity");
@@ -684,18 +760,20 @@ add_price(GNCPriceDB *db, GNCPrice *p)
   g_hash_table_insert(currency_hash, currency, price_list);
   p->db = db;
 
-  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d",
+         db, p, p->not_saved, p->do_free);
   return TRUE;
 }
 
-/* the gnc_pricedb_add_price() function will use p, adding a ref, so treat p as read-only
-   if this function succeeds. (Huh ???) */
+/* the gnc_pricedb_add_price() function will use p, adding a ref, so
+   treat p as read-only if this function succeeds. (Huh ???) */
 gboolean
 gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
 {
-
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
+         db, p, p->not_saved, p->do_free);
 
   if (FALSE == add_price(db, p)) return FALSE;
 
@@ -705,7 +783,10 @@ gnc_pricedb_add_price(GNCPriceDB *db, GNCPrice *p)
     db->dirty = TRUE;
     gnc_price_commit_edit(p);
   }
-  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+
+  LEAVE ("db=%p, pr=%p not-saved=%d do-free=%d",
+         db, p, p->not_saved, p->do_free);
+
   return TRUE;
 }
 
@@ -722,7 +803,9 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
   GHashTable *currency_hash;
 
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
+         db, p, p->not_saved, p->do_free);
+
   commodity = gnc_price_get_commodity(p);
   if(!commodity) return FALSE;
   currency = gnc_price_get_currency(p);
@@ -739,15 +822,17 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
     return FALSE;
   }
 
-  /* if the price list is empty, then remove this currency from the commodity hash */
+  /* if the price list is empty, then remove this currency from the
+     commodity hash */
   if(price_list) {
     g_hash_table_insert(currency_hash, currency, price_list);
   } else {
     g_hash_table_remove(currency_hash, currency);
 
     if (cleanup) {
-      /* chances are good that this commodity had only one currency ... 
-       * if there are no currencies, we may as well destroy the commodity  too. */
+      /* chances are good that this commodity had only one currency.
+       * If there are no currencies, we may as well destroy the
+       * commodity too. */
       guint num_currencies = g_hash_table_size (currency_hash);
       if (0 == num_currencies) {
         g_hash_table_remove (db->commodity_hash, commodity);
@@ -766,7 +851,8 @@ gnc_pricedb_remove_price(GNCPriceDB *db, GNCPrice *p)
 {
   gboolean rc;
   if(!db || !p) return FALSE;
-  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d", db, p, p->not_saved, p->do_free);
+  ENTER ("db=%p, pr=%p not-saved=%d do-free=%d",
+         db, p, p->not_saved, p->do_free);
 
   gnc_price_ref(p);
   rc = remove_price (db, p, TRUE);
@@ -814,8 +900,9 @@ gnc_pricedb_lookup_latest(GNCPriceDB *db,
   price_list = g_hash_table_lookup(currency_hash, currency);
   if(!price_list) return NULL;
 
-  /* This works magically because prices are inserted in date-sorted order,
-   * and the latest date always comes first. So return the first in the list.  */
+  /* This works magically because prices are inserted in date-sorted
+   * order, and the latest date always comes first. So return the
+   * first in the list.  */
   result = price_list->data;
   gnc_price_ref(result);
   LEAVE(" ");
