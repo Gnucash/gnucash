@@ -43,13 +43,16 @@ static short module = MOD_ENGINE;
 void 
 qof_instance_init (QofInstance *inst, QofIdType type, QofBook *book)
 {
+   QofCollection *col;
+
    inst->book = book;
 	inst->kvp_data = kvp_frame_new();
 	inst->editlevel = 0;
 	inst->do_free = FALSE;
 	inst->dirty = FALSE;
 
-	qof_entity_init (&inst->entity, type, book->entity_table);
+   col = qof_book_get_collection (book, type);
+	qof_entity_init (&inst->entity, type, col);
 }
 
 void 
@@ -88,6 +91,13 @@ qof_instance_is_dirty (QofInstance *inst)
 {
   if (!inst) return FALSE;
   return inst->dirty;
+}
+
+void
+qof_instance_mark_clean (QofInstance *inst)
+{
+  if(!inst) return;
+  inst->dirty = FALSE;
 }
 
 /* ========================================================== */

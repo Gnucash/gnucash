@@ -65,21 +65,6 @@ typedef struct gncp_SchedXaction SchedXaction;
 SchedXaction *xaccSchedXactionMalloc(QofBook *book);
 
 /**
- * @return True if the scheduled transaction is dirty and needs to
- * be saved.
- **/
-gboolean xaccSchedXactionIsDirty(SchedXaction *sx);
-
-/**
- * Set dirtyness state.  Only save/load code should modify this outside
- * SX engine CODE . . . 
- * (set it to FALSE after backend completes reading in data 
- *
- * FIXME: put this into a private header . . . .
- **/
-void xaccSchedXactionSetDirtyness(SchedXaction *sx, gboolean dirty_p);
-
-/**
  * Cleans up and frees a SchedXaction and it's associated data.
  **/
 void xaccSchedXactionFree( SchedXaction *sx );
@@ -156,37 +141,6 @@ void xaccSchedXactionSetAdvanceCreation( SchedXaction *sx, gint createDays );
 gint xaccSchedXactionGetAdvanceReminder( SchedXaction *sx );
 void xaccSchedXactionSetAdvanceReminder( SchedXaction *sx, gint reminderDays );
 
-/*
- * The following function is slightly risky.  If you change
- * the retrieved KvpFrame you must mark the SchedXaction
- * dirty with xaccSchedXactionSetDirtyness
- */
-KvpFrame *xaccSchedXactionGetSlots( SchedXaction *sx );
-/**
- * Sets the SX kvp data to the given kvp_frame.
- * NOTE: This is not copied, but set directly.
- **/
-void xaccSchedXactionSetSlots( SchedXaction *sx,
-                               KvpFrame *frm );
-
-/**
- * Use the following two functions in preference to 
- * the above two . . .
- */
-KvpValue *xaccSchedXactionGetSlot( SchedXaction *sx, 
-				    const char *slot );
-
-/*
- * This function copies value, so you don't have to
- */
-
-void xaccSchedXactionSetSlot( SchedXaction *sx, 
-			      const char *slot,
-			      const KvpValue *value );
-
-const GUID *xaccSchedXactionGetGUID( SchedXaction *sx );
-void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
-
 ///@{
 /**
  * Temporal state data.
@@ -252,6 +206,19 @@ void gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData );
  * gnc_sx_{add,remove}_defer_instance() functions to modifiy the list.
  **/
 GList *gnc_sx_get_defer_instances( SchedXaction *sx );
+
+
+/** deprecated routines */
+#define xaccSchedXactionIsDirty(X) qof_instance_is_dirty (QOF_INSTANCE(X))
+#define xaccSchedXactionGetGUID(X) qof_entity_get_guid(QOF_ENTITY(X))
+#define xaccSchedXactionGetSlots(X) qof_instance_get_slots(QOF_INSTANCE(X))
+
+/** Deprecated, to be replaced with 'dirty' kvp's */
+KvpValue *xaccSchedXactionGetSlot( SchedXaction *sx, 
+				    const char *slot );
+void xaccSchedXactionSetSlot( SchedXaction *sx, 
+			      const char *slot,
+			      const KvpValue *value );
 
 
 #endif /* XACC_SCHEDXACTION_H */

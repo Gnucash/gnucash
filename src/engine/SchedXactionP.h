@@ -26,6 +26,7 @@
 
 #include "SchedXaction.h"
 #include "qofid.h"
+#include "qofinstance.h"
 
 /**
  * A single scheduled transaction.
@@ -50,6 +51,7 @@
  **/
 struct gncp_SchedXaction
 {
+  QofInstance     inst;
   gchar           *name;
 
   FreqSpec        *freq;
@@ -74,17 +76,10 @@ struct gncp_SchedXaction
   gint            advanceRemindDays;
  
   Account        *template_acct;
-  GUID            guid;
-  QofEntityTable *entity_table;
   
   /** The list of deferred SX instances.  This list is of temporalStateData
    * instances.  */
   GList /* <temporalStateData*> */ *deferredList;
-
-  /* Changed since last save? */
-  gboolean       dirty;
-
-  KvpFrame        *kvp_data;
 };
 
 /** Just the variable temporal bits from the SX structure. */
@@ -94,4 +89,6 @@ typedef struct _temporalStateData {
   gint num_inst;
 } temporalStateData;
 
-#endif
+#define xaccSchedXactionSetGUID(X) qof_entity_set_guid(QOF_ENTITY(X))
+
+#endif /* XACC_SCHEDXACTION_P_H */

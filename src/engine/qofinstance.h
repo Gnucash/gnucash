@@ -112,4 +112,9 @@ void qof_instance_gemini (QofInstance *to, QofInstance *from);
  */
 QofInstance * qof_instance_lookup_twin (QofInstance *src, QofBook *book);
 
+/* ------------------------------------------------------------- */
+/* private routines, should be moved to qofinstance-p.h */
+
+void qof_instance_mark_clean (QofInstance *);
+
 #endif /* QOF_INSTANCE_H */

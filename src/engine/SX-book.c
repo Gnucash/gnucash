@@ -45,8 +45,10 @@
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
+
 #include "qofbook.h"
 #include "qofbook-p.h"
+#include "qofinstance.h"
 #include "qofobject.h"
 
 static short module = MOD_SX;
@@ -158,7 +160,7 @@ static void
 mark_sx_clean(gpointer data, gpointer user_data)
 {
   SchedXaction *sx = (SchedXaction *) data;
-  xaccSchedXactionSetDirtyness(sx, FALSE);
+  qof_instance_mark_clean (QOF_INSTANCE(sx));
 }
 
 static void
