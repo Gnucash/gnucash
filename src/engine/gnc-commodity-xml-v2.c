@@ -14,6 +14,7 @@
 
 #include "gnc-xml.h"
 #include "gnc-engine-util.h"
+#include "io-gncxml-v2.h"
 
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
@@ -127,6 +128,7 @@ gnc_commodity_end_handler(gpointer data_for_children,
     gnc_commodity *com;
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    sixtp_gdv2 *globaldata = (sixtp_gdv2*)global_data;
 
     if(parent_data)
     {
@@ -142,9 +144,13 @@ gnc_commodity_end_handler(gpointer data_for_children,
 
     if(!valid_commodity(com))
     {
+        gnc_commodity_destroy(com);
         return FALSE;
     }
-    
+
+    globaldata->addCommodityFunc(globaldata, com);
+
+    gnc_commodity_destroy(com);
     return TRUE;
 }
 

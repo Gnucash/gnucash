@@ -42,6 +42,7 @@ libgncengine_la_SOURCES = \
   io-gncbin-r.c \
   io-gncxml-r.c \
   io-gncxml-w.c \
+  io-gncxml-v2.c \
   kvp_frame.c \
   md5.c \
   sixtp-dom-generators.c \
@@ -90,6 +91,7 @@ noinst_HEADERS = \
   io-gncbin.h \
   io-gncxml.h \
   io-gncxml-p.h \
+  io-gncxml-v2.h \
   kvp_frame.h \
   md5.h \
   sixtp-dom-generators.h \

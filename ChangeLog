@@ -1,3 +1,29 @@
+2001-02-28  James LewisMoss  <jimdres@mindspring.com>
+
+	* src/test/test-xml-account.c (node_and_account_equal): fix mem
+	leak. 
+	(test_add_account): new func.
+	(test_generation): Actually test the node created and the
+	parser. Everything looks good other than some sixtp oddness I
+	don't understand yet.
+
+	* src/engine/gnc-transaction-xml-v2.c
+	(gnc_transaction_end_handler): same as below.
+
+	* src/engine/gnc-commodity-xml-v2.c (gnc_commodity_end_handler):
+	Use data struct from io-gncxml-v2.h
+
+	* src/engine/gnc-account-xml-v2.c (account_currency_handler): Make
+	not use engine commodity funcs to make this testable.  Will have
+	to have something to clean this up in production code.
+	(account_security_handler): Same.
+	(gnc_xml_set_account_data): Oops.  Actually set that we have
+	gotten this so the got all test succeeds.
+	(gnc_account_end_handler): Start the main parsing setup by relying
+	on data struct from io-gncxml-v2.h
+	(gnc_account_end_handler): fix free to free the correct thing.
+	Add some g_warning calls to make errors more apparent.
+
 2001-02-28  Dave Peticolas  <dave@krondo.com>
 
 	* src/FileDialog.c: store the original (not comma-fied) version

@@ -13,6 +13,7 @@
 #include "sixtp-dom-generators.h"
 
 #include "gnc-xml.h"
+#include "io-gncxml-v2.h"
 
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
@@ -122,10 +123,9 @@ account_currency_handler (xmlNodePtr node, Account* act)
 {
     gnc_commodity *ref;
 
-    ref = dom_tree_to_commodity_ref(node);
-    xaccAccountSetCurrency(
-        act, associate_commodity_ref_with_engine_commodity(ref));
-    gnc_commodity_destroy(ref);
+    ref = dom_tree_to_commodity_ref_no_engine(node);
+    xaccAccountSetCurrency(act, ref);
+
     return TRUE;
 }
 
@@ -133,10 +133,9 @@ static gboolean
 account_security_handler (xmlNodePtr node, Account* act)
 {
     gnc_commodity *ref;
-    ref = dom_tree_to_commodity_ref(node);
-    xaccAccountSetSecurity(
-        act, associate_commodity_ref_with_engine_commodity(ref));
-    gnc_commodity_destroy(ref);
+    ref = dom_tree_to_commodity_ref_no_engine(node);
+    xaccAccountSetSecurity(act, ref);
+
     return TRUE;
 }
 
@@ -238,6 +237,7 @@ all_required_gotten_p(struct dom_handlers *handler_ptr)
     {
         if(handler_ptr->required && ! handler_ptr->gotten)
         {
+            g_warning("Not defined and it should be: %s", handler_ptr->tag);
             return FALSE;
         }
         handler_ptr++;
@@ -254,6 +254,7 @@ gnc_xml_set_account_data(const gchar* tag, xmlNodePtr node, Account *acc,
         if(strcmp(tag, handler_ptr->tag) == 0)
         {
             (handler_ptr->handler)(node, acc);
+            handler_ptr->gotten = TRUE;
             break;
         }
 
@@ -279,13 +280,23 @@ gnc_account_end_handler(gpointer data_for_children,
     Account *acc;
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
-
+    sixtp_gdv2 *gdata = (sixtp_gdv2*)global_data;
+    
     successful = TRUE;
 
     if(parent_data)
     {
-        return successful;
+        return TRUE;
     }
+
+    /* OK.  For some messed up reason this is getting called again with a
+       NULL tag.  So we ignore those cases */
+    if(!tag)
+    {
+        return TRUE;
+    }
+    
+    g_return_val_if_fail(tree, FALSE);
     
     acc = xaccMallocAccount();
     g_return_val_if_fail(acc, FALSE);
@@ -298,6 +309,7 @@ gnc_account_end_handler(gpointer data_for_children,
         if(!gnc_xml_set_account_data(achild->name, achild, acc,
                                      account_handlers_v2))
         {
+            g_warning("gnc_xml_set_account_data failed");
             successful = FALSE;
             break;
         }
@@ -307,6 +319,7 @@ gnc_account_end_handler(gpointer data_for_children,
     
     if(!all_required_gotten_p(account_handlers_v2))
     {
+        g_warning("all_required_gotten_p failed");
         successful = FALSE;
     }
 
@@ -316,14 +329,10 @@ gnc_account_end_handler(gpointer data_for_children,
     }
     else
     {
-        if(!xaccAccountGetParent(acc))
-        {
-            /* FIXME: something like this */
-            /* xaccGroupInsertAccount(global_data, acc); */
-        }
+        gdata->addAccountFunc(global_data, acc);
     }
     
-    xmlFreeNode((xmlNodePtr) result);
+    xmlFreeNode(tree);
 
     return successful;
 }

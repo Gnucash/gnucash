@@ -49,9 +49,10 @@ gnc_transaction_end_handler(gpointer data_for_children,
                             gpointer parent_data, gpointer global_data,
                             gpointer *result, const gchar *tag)
 {
-    Transaction *com;
+    Transaction *tran;
     xmlNodePtr achild;
     xmlNodePtr tree = (xmlNodePtr)data_for_children;
+    sixtp_gdv2 *globaldata = (sixtp_gdv2*)global_data;
 
     if(parent_data)
     {
@@ -63,6 +64,8 @@ gnc_transaction_end_handler(gpointer data_for_children,
     {
         return FALSE;
     }
+
+    globaldata->accTransactionFunc(globaldata, tran);
     
     return TRUE
 }
