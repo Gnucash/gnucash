@@ -54,13 +54,19 @@ static gint max_group_accounts = 10;
 static gint max_total_accounts = 1000;
 static gint total_num_accounts = 0;
 
-static kvp_value* get_random_kvp_value_depth (int type, gint depth);
-static gpointer get_random_list_element (GList *list);
-static void add_random_splits(QofBook *book, Transaction *trn, GList *account_list);
+
+/* The inverse fraction of split/transaction data that should 
+ * contain invalid/inconsistent fields/values.  Thus, 
+ * if borked==1000, then one in 1000 fields will have bad data.
+ * This is used to test the data integrity scrubbers, which are 
+ * supposed to clean up any crud they find.
+ */
+// static gint borked = 1000;
 
 gboolean gnc_engine_debug_random = FALSE;
 
-/***********************************************************************/
+/* ========================================================== */
+/* Set control parameters governing the run. */
 
 void
 set_max_group_depth (gint max_group_depth_in)
@@ -136,6 +142,59 @@ random_timespec_usec_resolution (gboolean usec_resolution_in)
   usec_resolution = usec_resolution_in;
 }
 
+/* ========================================================== */
+/* GList stuff */
+
+static gpointer
+get_random_list_element (GList *list)
+{
+  g_return_val_if_fail (list, NULL);
+
+  return g_list_nth_data (list,
+                          get_random_int_in_range (0,
+                                                   g_list_length (list) - 1));
+}
+
+static kvp_value* get_random_kvp_value_depth (int type, gint depth);
+
+static GList*
+get_random_glist_depth (gint depth)
+{
+    GList *ret = NULL;
+    int count = get_random_int_in_range(1, 5);
+    int i;
+
+    if (depth >= kvp_max_depth)
+      return NULL;
+
+    for (i = 0; i < count; i++)
+    {
+        KvpValueType kvpt;
+        kvp_value *value;
+
+        kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
+
+        do
+        {
+          value = get_random_kvp_value_depth (kvpt, depth + 1);
+        }
+        while (!value);
+
+        ret = g_list_prepend(ret, value);
+    }
+
+    return ret;
+}
+
+GList*
+get_random_glist(void)
+{
+  return get_random_glist_depth (0);
+}
+
+/* ========================================================== */
+/* Time/Date, GUID, binary data stuff */
+
 Timespec*
 get_random_timespec(void)
 {
@@ -162,6 +221,204 @@ get_random_timespec(void)
 
   return ret;
 }
+
+GUID*
+get_random_guid(void)
+{
+    GUID *ret;
+
+    ret = g_new(GUID, 1);
+    guid_new(ret);
+
+    return ret;
+}
+
+bin_data*
+get_random_binary_data(void)
+{
+    int len;
+    bin_data *ret;
+
+    len = get_random_int_in_range(20,100);
+    ret = g_new(bin_data, 1);
+    ret->data = g_new(char, len);
+    ret->len = len;
+
+    for(len--; len >= 0; len--)
+    {
+        ret->data[len] = (char)get_random_int_in_range(0,255);
+    }
+
+    return ret;
+}
+
+/* ========================================================== */
+/* KVP stuff */
+
+static kvp_frame* get_random_kvp_frame_depth (gint depth);
+
+static kvp_value*
+get_random_kvp_value_depth (int type, gint depth)
+{
+    int datype = type;
+
+    if (datype == -1)
+    {
+        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME);
+    }
+
+    if (datype == -2)
+    {
+        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME - 1);
+    }
+
+    if (datype == KVP_TYPE_FRAME && depth >= kvp_max_depth)
+      return NULL;
+
+    if (datype == KVP_TYPE_GLIST && depth >= kvp_max_depth)
+      return NULL;
+
+    if (kvp_type_excluded (datype))
+      return NULL;
+
+    switch(datype)
+    {
+    case KVP_TYPE_GINT64:
+        return kvp_value_new_gint64(get_random_gint64());
+        break;
+
+    case KVP_TYPE_DOUBLE:
+	return NULL;
+        break;
+
+    case KVP_TYPE_NUMERIC:
+        return kvp_value_new_gnc_numeric(get_random_gnc_numeric());
+        break;
+
+    case KVP_TYPE_STRING:
+    {
+        gchar *tmp_str;
+        kvp_value *ret;
+        tmp_str = get_random_string();
+        if(!tmp_str)
+        {
+            return NULL;
+        }
+        
+        ret = kvp_value_new_string(tmp_str);
+        g_free(tmp_str);
+        return ret;
+    }
+        break;
+
+    case KVP_TYPE_GUID:
+    {
+        GUID *tmp_guid;
+        kvp_value *ret;
+        tmp_guid = get_random_guid();
+        ret = kvp_value_new_guid(tmp_guid);
+        g_free(tmp_guid);
+        return ret;
+    }
+        break;
+
+    case KVP_TYPE_TIMESPEC:
+    {
+        Timespec *ts = get_random_timespec();
+        return kvp_value_new_timespec (*ts);
+    }
+	break;
+    
+    case KVP_TYPE_BINARY:
+    {
+        bin_data *tmp_data;
+        kvp_value *ret;
+        tmp_data = get_random_binary_data();
+        ret = kvp_value_new_binary(tmp_data->data, tmp_data->len);
+        g_free(tmp_data->data);
+        g_free(tmp_data);
+        return ret;
+    }
+        break;
+ 
+    case KVP_TYPE_GLIST:
+        return kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
+        break;
+
+    case KVP_TYPE_FRAME:
+    {
+        kvp_frame *tmp_frame;
+        kvp_value *ret;
+        tmp_frame = get_random_kvp_frame_depth(depth + 1);
+        ret = kvp_value_new_frame(tmp_frame);
+        kvp_frame_delete(tmp_frame);
+        return ret;
+    }
+        break;
+
+    default:
+        return NULL;
+        break;
+    }
+}
+
+static kvp_frame*
+get_random_kvp_frame_depth (gint depth)
+{
+    kvp_frame *ret;
+    int vals_to_add;
+    gboolean val_added;
+
+    if (depth >= kvp_max_depth)
+      return NULL;
+
+    ret = kvp_frame_new();
+
+    vals_to_add = get_random_int_in_range(1,kvp_frame_max_elements);
+    val_added = FALSE;
+
+    for (;vals_to_add > 0; vals_to_add--)
+    {
+        gchar *key;
+        kvp_value *val;
+
+        do
+        {
+          key = get_random_string_without("/");
+        } while (!key || *key == '\0');
+
+        val = get_random_kvp_value_depth (-1, depth + 1);
+        if (!val)
+        {
+          if (!val_added)
+            vals_to_add++;
+          continue;
+        }
+
+        val_added = TRUE;
+
+        kvp_frame_set_slot_nc(ret, key, val);
+
+        g_free(key);
+    }
+
+    return ret;
+}
+
+kvp_frame*
+get_random_kvp_frame (void)
+{
+  return get_random_kvp_frame_depth (0);
+}
+
+kvp_value *
+get_random_kvp_value(int type)
+{
+  return get_random_kvp_value_depth (type, 0);
+}
+
+/* ================================================================= */
+/* Numeric stuff */
 
 #define RAND_IN_RANGE(X) (((X)*((gint64) (rand()+1)))/RAND_MAX)
 
@@ -197,6 +454,9 @@ get_random_gnc_numeric(void)
     return gnc_numeric_create(numer, deno);
 }
 
+/* ================================================================= */
+/* Commodity stuff */
+
 const char *types[] =
 {
     "NASDAQ",
@@ -212,6 +472,156 @@ get_random_commodity_namespace(void)
 {
     return get_random_string_in_array(types);
 }
+
+static gnc_commodity *
+get_random_commodity_from_table (gnc_commodity_table *table)
+{
+  GList *namespaces;
+  gnc_commodity *com = NULL;
+
+  g_return_val_if_fail (table, NULL);
+
+  namespaces = gnc_commodity_table_get_namespaces (table);
+
+  do
+  {
+    GList *commodities;
+    char *namespace;
+
+    namespace = get_random_list_element (namespaces);
+
+    commodities = gnc_commodity_table_get_commodities (table, namespace);
+    if (!commodities)
+      continue;
+
+    com = get_random_list_element (commodities);
+
+    g_list_free (commodities);
+
+  } while (!com);
+
+
+  g_list_free (namespaces);
+
+  return com;
+}
+
+gnc_commodity*
+get_random_commodity (QofBook *book)
+{
+    gnc_commodity *ret;
+    gchar *name;
+    const gchar *space;
+    gchar *mn;
+    gchar *xcode;
+    int ran_int;
+    gnc_commodity_table *table;
+
+    table = gnc_book_get_commodity_table (book);
+
+#if 0
+    if (table &&
+        (gnc_commodity_table_get_size (table) > 0) &&
+        get_random_int_in_range (1, 5) < 5)
+      return get_random_commodity_from_table (table);
+#endif
+
+    mn = get_random_string();
+    space = get_random_commodity_namespace();
+
+    if (table)
+    {
+      ret = gnc_commodity_table_lookup (table, space, mn);
+
+      if (ret)
+      {
+        g_free (mn);
+        return ret;
+      }
+    }
+
+    name = get_random_string();
+    xcode = get_random_string();
+
+    /* SCU == smallest currency unit -- the value of the denominator */
+#define MAX_SCU 6000
+    ran_int = get_random_int_in_range(1, MAX_SCU);
+
+    ret = gnc_commodity_new (name, space, mn, xcode, ran_int);
+
+    g_free(mn);
+    g_free(name);
+    g_free(xcode);
+
+    if (table)
+      ret = gnc_commodity_table_insert (table, ret);
+
+    return ret;
+}
+
+void
+make_random_changes_to_commodity (gnc_commodity *com)
+{
+  char *str;
+
+  g_return_if_fail (com);
+
+  str = get_random_string ();
+  gnc_commodity_set_namespace (com, str);
+  g_free (str);
+
+  str = get_random_string ();
+  gnc_commodity_set_mnemonic (com, str);
+  g_free (str);
+
+  str = get_random_string ();
+  gnc_commodity_set_fullname (com, str);
+  g_free (str);
+
+  str = get_random_string ();
+  gnc_commodity_set_exchange_code (com, str);
+  g_free (str);
+
+  gnc_commodity_set_fraction (com, get_random_int_in_range (1, 100000));
+}
+
+void
+make_random_changes_to_commodity_table (gnc_commodity_table *table)
+{
+  GList *namespaces;
+  GList *node;
+
+  g_return_if_fail (table);
+
+  namespaces = gnc_commodity_table_get_namespaces (table);
+
+  for (node = namespaces; node; node = node->next)
+  {
+    const char *ns = node->data;
+    GList *commodities;
+    GList *com_node;
+
+    if (gnc_commodity_namespace_is_iso (ns))
+      continue;
+
+    commodities = gnc_commodity_table_get_commodities (table, ns);
+
+    for (com_node = commodities; com_node; com_node = com_node->next)
+    {
+      gnc_commodity *com = com_node->data;
+
+      gnc_commodity_table_remove (table, com);
+      make_random_changes_to_commodity (com);
+      gnc_commodity_table_insert (table, com);
+    }
+
+    g_list_free (commodities);
+  }
+
+  g_list_free (namespaces);
+}
+/* ================================================================= */
+/* Price stuff */
 
 void
 make_random_changes_to_price (QofBook *book, GNCPrice *p)
@@ -346,230 +756,8 @@ make_random_changes_to_pricedb (QofBook *book, GNCPriceDB *pdb)
   }
 }
 
-GUID*
-get_random_guid(void)
-{
-    GUID *ret;
-
-    ret = g_new(GUID, 1);
-    guid_new(ret);
-
-    return ret;
-}
-
-static GList*
-get_random_glist_depth (gint depth)
-{
-    GList *ret = NULL;
-    int count = get_random_int_in_range(1, 5);
-    int i;
-
-    if (depth >= kvp_max_depth)
-      return NULL;
-
-    for (i = 0; i < count; i++)
-    {
-        KvpValueType kvpt;
-        kvp_value *value;
-
-        kvpt = glist_strings_only ? KVP_TYPE_STRING : -2;
-
-        do
-        {
-          value = get_random_kvp_value_depth (kvpt, depth + 1);
-        }
-        while (!value);
-
-        ret = g_list_prepend(ret, value);
-    }
-
-    return ret;
-}
-
-GList*
-get_random_glist(void)
-{
-  return get_random_glist_depth (0);
-}
-
-bin_data*
-get_random_binary_data(void)
-{
-    int len;
-    bin_data *ret;
-
-    len = get_random_int_in_range(20,100);
-    ret = g_new(bin_data, 1);
-    ret->data = g_new(char, len);
-    ret->len = len;
-
-    for(len--; len >= 0; len--)
-    {
-        ret->data[len] = (char)get_random_int_in_range(0,255);
-    }
-
-    return ret;
-}
-
-static kvp_frame*
-get_random_kvp_frame_depth (gint depth)
-{
-    kvp_frame *ret;
-    int vals_to_add;
-    gboolean val_added;
-
-    if (depth >= kvp_max_depth)
-      return NULL;
-
-    ret = kvp_frame_new();
-
-    vals_to_add = get_random_int_in_range(1,kvp_frame_max_elements);
-    val_added = FALSE;
-
-    for (;vals_to_add > 0; vals_to_add--)
-    {
-        gchar *key;
-        kvp_value *val;
-
-        do
-        {
-          key = get_random_string_without("/");
-        } while (!key || *key == '\0');
-
-        val = get_random_kvp_value_depth (-1, depth + 1);
-        if (!val)
-        {
-          if (!val_added)
-            vals_to_add++;
-          continue;
-        }
-
-        val_added = TRUE;
-
-        kvp_frame_set_slot_nc(ret, key, val);
-
-        g_free(key);
-    }
-
-    return ret;
-}
-
-kvp_frame*
-get_random_kvp_frame (void)
-{
-  return get_random_kvp_frame_depth (0);
-}
-
-static kvp_value*
-get_random_kvp_value_depth (int type, gint depth)
-{
-    int datype = type;
-
-    if (datype == -1)
-    {
-        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME);
-    }
-
-    if (datype == -2)
-    {
-        datype = get_random_int_in_range(KVP_TYPE_GINT64, KVP_TYPE_FRAME - 1);
-    }
-
-    if (datype == KVP_TYPE_FRAME && depth >= kvp_max_depth)
-      return NULL;
-
-    if (datype == KVP_TYPE_GLIST && depth >= kvp_max_depth)
-      return NULL;
-
-    if (kvp_type_excluded (datype))
-      return NULL;
-
-    switch(datype)
-    {
-    case KVP_TYPE_GINT64:
-        return kvp_value_new_gint64(get_random_gint64());
-        break;
-
-    case KVP_TYPE_DOUBLE:
-	return NULL;
-        break;
-
-    case KVP_TYPE_NUMERIC:
-        return kvp_value_new_gnc_numeric(get_random_gnc_numeric());
-        break;
-
-    case KVP_TYPE_STRING:
-    {
-        gchar *tmp_str;
-        kvp_value *ret;
-        tmp_str = get_random_string();
-        if(!tmp_str)
-        {
-            return NULL;
-        }
-        
-        ret = kvp_value_new_string(tmp_str);
-        g_free(tmp_str);
-        return ret;
-    }
-        break;
-
-    case KVP_TYPE_GUID:
-    {
-        GUID *tmp_guid;
-        kvp_value *ret;
-        tmp_guid = get_random_guid();
-        ret = kvp_value_new_guid(tmp_guid);
-        g_free(tmp_guid);
-        return ret;
-    }
-        break;
-
-    case KVP_TYPE_TIMESPEC:
-    {
-        Timespec *ts = get_random_timespec();
-        return kvp_value_new_timespec (*ts);
-    }
-	break;
-    
-    case KVP_TYPE_BINARY:
-    {
-        bin_data *tmp_data;
-        kvp_value *ret;
-        tmp_data = get_random_binary_data();
-        ret = kvp_value_new_binary(tmp_data->data, tmp_data->len);
-        g_free(tmp_data->data);
-        g_free(tmp_data);
-        return ret;
-    }
-        break;
- 
-    case KVP_TYPE_GLIST:
-        return kvp_value_new_glist_nc(get_random_glist_depth (depth + 1));
-        break;
-
-    case KVP_TYPE_FRAME:
-    {
-        kvp_frame *tmp_frame;
-        kvp_value *ret;
-        tmp_frame = get_random_kvp_frame_depth(depth + 1);
-        ret = kvp_value_new_frame(tmp_frame);
-        kvp_frame_delete(tmp_frame);
-        return ret;
-    }
-        break;
-
-    default:
-        return NULL;
-        break;
-    }
-}
-
-kvp_value *
-get_random_kvp_value(int type)
-{
-  return get_random_kvp_value_depth (type, 0);
-}
+/* ================================================================= */
+/* Account stuff */
 
 static void
 set_account_random_string(Account* act,
@@ -654,6 +842,60 @@ get_random_group (QofBook *book)
   make_random_group (book, group);
 
   return group;
+}
+
+/* ================================================================= */
+/* transaction stuff */
+
+/* XXX this routine creates a random, but otherwise self-consistent,
+ * 'legal' transaction.  It should really be suplemented with another
+ * routine that creates cruddy, inconsistent transactions, so that the
+ * engine 'scrub' routines get tested.
+ */
+static void
+add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
+{
+    Account *acc, *bcc;
+    Split *s;
+
+    /* Gotta have at least two different accounts */
+    if (1 >= g_list_length (account_list)) return;
+
+    /* Set up two splits whose values really are opposites. */
+    gnc_commodity *com = xaccTransGetCurrency (trn);
+    int scu = gnc_commodity_get_fraction(com);
+    gnc_numeric num = get_random_gnc_numeric();
+    num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
+
+    acc = get_random_list_element (account_list);
+    s = get_random_split(book, acc);
+    xaccTransAppendSplit(trn, s);
+    xaccSplitSetValue(s, num);
+
+    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
+                             xaccAccountGetCommodity(acc)))
+    {
+      xaccSplitSetAmount(s, num);
+    }
+
+    /* Make sure that each side of the transaction is in 
+     * a different account; otherwise get weirdness in lot
+     * calculcations.  ... Hmm maybe should fix lots in 
+     * this case? */
+    do {
+       bcc = get_random_list_element (account_list);
+    } while (bcc == acc);
+
+    s = get_random_split(book, bcc);
+    xaccTransAppendSplit(trn, s);
+    xaccSplitSetValue(s, gnc_numeric_neg(num));
+
+    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
+                             xaccAccountGetCommodity(bcc)))
+    {
+      xaccSplitSetAmount(s, num);
+    }
+
 }
 
 typedef struct
@@ -1014,57 +1256,6 @@ set_tran_random_string(Transaction* trn,
     }
 }
 
-/* XXX this routine creates a random, but otherwise self-consistent,
- * 'legal' transaction.  It should really be suplemented with another
- * routine that creates cruddy, inconsistent transactions, so that the
- * engine 'scrub' routines get tested.
- */
-static void
-add_random_splits(QofBook *book, Transaction *trn, GList *account_list)
-{
-    Account *acc, *bcc;
-    Split *s;
-
-    /* Gotta have at least two different accounts */
-    if (1 >= g_list_length (account_list)) return;
-
-    /* Set up two splits whose values really are opposites. */
-    gnc_commodity *com = xaccTransGetCurrency (trn);
-    int scu = gnc_commodity_get_fraction(com);
-    gnc_numeric num = get_random_gnc_numeric();
-    num = gnc_numeric_convert (num, scu, GNC_HOW_RND_ROUND);
-
-    acc = get_random_list_element (account_list);
-    s = get_random_split(book, acc);
-    xaccTransAppendSplit(trn, s);
-    xaccSplitSetValue(s, num);
-
-    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
-                             xaccAccountGetCommodity(acc)))
-    {
-      xaccSplitSetAmount(s, num);
-    }
-
-    /* Make sure that each side of the transaction is in 
-     * a different account; otherwise get weirdness in lot
-     * calculcations.  ... Hmm maybe should fix lots in 
-     * this case? */
-    do {
-       bcc = get_random_list_element (account_list);
-    } while (bcc == acc);
-
-    s = get_random_split(book, bcc);
-    xaccTransAppendSplit(trn, s);
-    xaccSplitSetValue(s, gnc_numeric_neg(num));
-
-    if (gnc_commodity_equal (xaccTransGetCurrency(trn), 
-                             xaccAccountGetCommodity(bcc)))
-    {
-      xaccSplitSetAmount(s, num);
-    }
-
-}
-
 static void
 trn_add_ran_timespec(Transaction *trn, void (*func)(Transaction*,
                                                     const Timespec*))
@@ -1151,163 +1342,6 @@ make_random_changes_to_transaction (QofBook *book, Transaction *trans)
   xaccTransCommitEdit (trans);
 }
 
-static gpointer
-get_random_list_element (GList *list)
-{
-  g_return_val_if_fail (list, NULL);
-
-  return g_list_nth_data (list,
-                          get_random_int_in_range (0,
-                                                   g_list_length (list) - 1));
-}
-
-static gnc_commodity *
-get_random_commodity_from_table (gnc_commodity_table *table)
-{
-  GList *namespaces;
-  gnc_commodity *com = NULL;
-
-  g_return_val_if_fail (table, NULL);
-
-  namespaces = gnc_commodity_table_get_namespaces (table);
-
-  do
-  {
-    GList *commodities;
-    char *namespace;
-
-    namespace = get_random_list_element (namespaces);
-
-    commodities = gnc_commodity_table_get_commodities (table, namespace);
-    if (!commodities)
-      continue;
-
-    com = get_random_list_element (commodities);
-
-    g_list_free (commodities);
-
-  } while (!com);
-
-
-  g_list_free (namespaces);
-
-  return com;
-}
-
-gnc_commodity*
-get_random_commodity (QofBook *book)
-{
-    gnc_commodity *ret;
-    gchar *name;
-    const gchar *space;
-    gchar *mn;
-    gchar *xcode;
-    int ran_int;
-    gnc_commodity_table *table;
-
-    table = gnc_book_get_commodity_table (book);
-
-#if 0
-    if (table &&
-        (gnc_commodity_table_get_size (table) > 0) &&
-        get_random_int_in_range (1, 5) < 5)
-      return get_random_commodity_from_table (table);
-#endif
-
-    mn = get_random_string();
-    space = get_random_commodity_namespace();
-
-    if (table)
-    {
-      ret = gnc_commodity_table_lookup (table, space, mn);
-
-      if (ret)
-      {
-        g_free (mn);
-        return ret;
-      }
-    }
-
-    name = get_random_string();
-    xcode = get_random_string();
-
-    /* SCU == smallest currency unit -- the value of the denominator */
-#define MAX_SCU 6000
-    ran_int = get_random_int_in_range(1, MAX_SCU);
-
-    ret = gnc_commodity_new (name, space, mn, xcode, ran_int);
-
-    g_free(mn);
-    g_free(name);
-    g_free(xcode);
-
-    if (table)
-      ret = gnc_commodity_table_insert (table, ret);
-
-    return ret;
-}
-
-void
-make_random_changes_to_commodity (gnc_commodity *com)
-{
-  char *str;
-
-  g_return_if_fail (com);
-
-  str = get_random_string ();
-  gnc_commodity_set_namespace (com, str);
-  g_free (str);
-
-  str = get_random_string ();
-  gnc_commodity_set_mnemonic (com, str);
-  g_free (str);
-
-  str = get_random_string ();
-  gnc_commodity_set_fullname (com, str);
-  g_free (str);
-
-  str = get_random_string ();
-  gnc_commodity_set_exchange_code (com, str);
-  g_free (str);
-
-  gnc_commodity_set_fraction (com, get_random_int_in_range (1, 100000));
-}
-
-void
-make_random_changes_to_commodity_table (gnc_commodity_table *table)
-{
-  GList *namespaces;
-  GList *node;
-
-  g_return_if_fail (table);
-
-  namespaces = gnc_commodity_table_get_namespaces (table);
-
-  for (node = namespaces; node; node = node->next)
-  {
-    const char *ns = node->data;
-    GList *commodities;
-    GList *com_node;
-
-    if (gnc_commodity_namespace_is_iso (ns))
-      continue;
-
-    commodities = gnc_commodity_table_get_commodities (table, ns);
-
-    for (com_node = commodities; com_node; com_node = com_node->next)
-    {
-      gnc_commodity *com = com_node->data;
-
-      gnc_commodity_table_remove (table, com);
-      make_random_changes_to_commodity (com);
-      gnc_commodity_table_insert (table, com);
-    }
-
-    g_list_free (commodities);
-  }
-
-  g_list_free (namespaces);
-}
 
 static GList *
 get_random_guids(int max)
