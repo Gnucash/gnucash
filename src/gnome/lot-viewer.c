@@ -31,6 +31,8 @@
  * XXX todo: The button "view lot in register" is not implemented.
  *   it needs to open register window showing only the splits in the 
  *     given lot ... 
+ *
+ * XXX clist should be probably be removed and replaced by the gnc_query_list
  */
 
 #define _GNU_SOURCE
@@ -325,6 +327,7 @@ lv_scrub_lot_cb (GtkButton *but, gpointer user_data)
    if (NULL == lv->selected_lot) return; 
    xaccLotScrubDoubleBalance (lv->selected_lot);
    gnc_lot_viewer_fill (lv);
+   lv_show_splits (lv);
 }
 
 /* ======================================================================== */
@@ -334,10 +337,9 @@ static void
 lv_scrub_acc_cb (GtkButton *but, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
-   if (NULL == lv->selected_lot) return; 
-   xaccAccountScrubLotsBalance (gnc_lot_get_account(lv->selected_lot));
-   lv_unset_lot (lv);
+   xaccAccountScrubLotsBalance (lv->account);
    gnc_lot_viewer_fill (lv);
+   lv_show_splits (lv);
 }
 
 /* ======================================================================== */
@@ -489,7 +491,6 @@ static void
 lv_refresh_handler (GHashTable *changes, gpointer user_data)
 {
    GNCLotViewer *lv = user_data;
-printf ("duuude refresh !!\n");
    gnc_lot_viewer_fill (lv);
    lv_show_splits (lv);
 }
