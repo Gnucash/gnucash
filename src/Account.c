@@ -61,10 +61,10 @@ mallocAccount( void )
   acc->description = NULL;
   acc->notes       = NULL;
   
+  /* transction array should be null-terminated */
   acc->numTrans    = 0;
-  acc->transaction = NULL;         /* Initially there are no transactions
-                                    * in this account's transaction
-                                    * array */
+  acc->transaction = (Transaction **) _malloc (sizeof (Transaction *));
+  acc->transaction[0] = NULL;
   
   /* private data */
   acc->arrowb        = NULL;
@@ -198,27 +198,22 @@ removeTransaction( Account *acc, int num )
     
   acc->numTrans--;
 
-  if (0 < acc->numTrans) {
-    acc->transaction = (Transaction **)_malloc((acc->numTrans)*
+  acc->transaction = (Transaction **)_malloc(((acc->numTrans)+1)*
                                                sizeof(Transaction *));
-    
-    trans = oldTrans[acc->numTrans];/* In case we are deleting last in
+     
+  trans = oldTrans[acc->numTrans];/* In case we are deleting last in
                                      * old array */
-    for( i=0,j=0; i<acc->numTrans; i++,j++ ) {
-      if( j != num ) {
-        acc->transaction[i] = oldTrans[j];
-      } else {
-        trans = oldTrans[j];
-        i--;
-      }
+  for( i=0,j=0; i<acc->numTrans; i++,j++ ) {
+    if( j != num ) {
+      acc->transaction[i] = oldTrans[j];
+    } else {
+      trans = oldTrans[j];
+      i--;
     }
-  } else {
-    if (0 != num) {
-       PERR ("removeTransaction(): num should be zero !");
-    }
-    trans = oldTrans[0];
-    acc->transaction = NULL;
-  }    
+  }
+
+  /* make sure the array is NULL terminated */
+  acc->transaction[acc->numTrans] = NULL;
 
   _free (oldTrans);
 
@@ -290,47 +285,45 @@ insertTransaction( Account *acc, Transaction *trans )
   
   acc->numTrans++;
   oldTrans = acc->transaction;
-  acc->transaction = (Transaction **)_malloc((acc->numTrans)*
+  acc->transaction = (Transaction **)_malloc(((acc->numTrans) + 1) *
                                              sizeof(Transaction *));
   
-  if (oldTrans) {
-    /* dt is the date of the transaction we are inserting, and dj
-     * is the date of the "cursor" transaction... we want to insert
-     * the new transaction before the first transaction of the same
-     * or later date.  The !inserted bit is a bit of a kludge to 
-     * make sure we only insert the new transaction once! */
-    dt = &(trans->date);
-    for( i=0,j=0; i<acc->numTrans; i++,j++ )
+  /* dt is the date of the transaction we are inserting, and dj
+   * is the date of the "cursor" transaction... we want to insert
+   * the new transaction before the first transaction of the same
+   * or later date.  The !inserted bit is a bit of a kludge to 
+   * make sure we only insert the new transaction once! */
+  dt = &(trans->date);
+  for( i=0,j=0; i<acc->numTrans; i++,j++ )
+    {
+    /* if we didn't do this, and we needed to insert into the
+     * last spot in the array, we would walk off the end of the
+     * old array, which is no good! */
+    if( j>=(acc->numTrans-1) )
       {
-      /* if we didn't do this, and we needed to insert into the
-       * last spot in the array, we would walk off the end of the
-       * old array, which is no good! */
-      if( j>=(acc->numTrans-1) )
+      position = i;
+      acc->transaction[i] = trans;
+      break;
+      }
+    else
+      {
+      dj = &(oldTrans[j]->date);
+      if( (datecmp(dj,dt) > 0) & !inserted )
         {
         position = i;
         acc->transaction[i] = trans;
-        break;
+        j--;
+        inserted = True;
         }
       else
-        {
-        dj = &(oldTrans[j]->date);
-        if( (datecmp(dj,dt) > 0) & !inserted )
-          {
-          position = i;
-          acc->transaction[i] = trans;
-          j--;
-          inserted = True;
-          }
-        else
-          acc->transaction[i] = oldTrans[j];
-        }
+        acc->transaction[i] = oldTrans[j];
       }
-    
-    _free(oldTrans);
-  } else {
-    acc->transaction[0] = trans;
-    position = 0;
-  }
+    }
+  
+  /* make sure the array is NULL terminated */
+  acc->transaction[acc->numTrans] = NULL;
+
+  _free(oldTrans);
 
   if( position != -1 )
     qfInsertTransaction( acc->qfRoot, trans );
