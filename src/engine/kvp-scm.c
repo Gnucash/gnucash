@@ -44,7 +44,7 @@ gnc_scm_to_kvp_value_ptr(SCM val)
         kvp_value *ret;
         newstr = gh_scm2newstr(val, NULL);
         ret = kvp_value_new_string(newstr);
-        g_free(newstr);
+        free(newstr);
         return ret;
     }
     /* FIXME: add binary handler here when it's figured out */
