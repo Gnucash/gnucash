@@ -189,6 +189,7 @@ Matthew Vanecek <mevanecek@yahoo.com> for pg_config configure.in patch
 Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> messages  British translations
+Simos Xenitellis <simos@hellug.gr> Greek translation
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation
 Alex Zepeda <jazepeda@pacbell.net> postgres configure patch
