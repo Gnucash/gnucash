@@ -645,7 +645,7 @@ listen_for_account_events (GUID *guid, QofIdType type,
   goto done;
 
 add_string:
-  PINFO ("insert new account %s\n", name);
+  PINFO ("insert new account %s into qf=%p\n", name, qf);
   gnc_quickfill_insert (qf, name, QUICKFILL_ALPHA);
 done:
   g_free(wc_text);  
@@ -681,6 +681,7 @@ build_shared_quickfill (QofBook *book, AccountGroup *group)
   }
   g_list_free (list);
 
+  PINFO ("Built shared qf=%p", qf);
 
   qfb = g_new0(QFB, 1);
   qfb->qf = qf;
@@ -701,6 +702,7 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
   AccountGroup *group;
   QuickFill *qf;
   ComboCell *cell;
+  QFB *qfb;
 
   group = xaccAccountGetRoot(base_account);
   if (group == NULL)
@@ -710,10 +712,14 @@ gnc_split_register_load_xfer_cells (SplitRegister *reg, Account *base_account)
     return;
 
   book = xaccGroupGetBook (group);
-  qf = qof_book_get_data (book, QKEY);
-  if (!qf)
+  qfb = qof_book_get_data (book, QKEY);
+  if (!qfb)
   {
     qf = build_shared_quickfill (book, group);
+  }
+  else
+  {
+    qf = qfb->qf;
   }
 
   cell = (ComboCell *)
