@@ -1918,7 +1918,7 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
                                               SX_OBSOLETE_CLIST ));
 
         tmp_str = g_string_new(NULL);
-        //rowtext[2] = g_new0(gchar, MAX_DATE_LENGTH+1 ); 
+        rowtext[2] = g_strdup( _("Obsolete") );
 
         gtk_clist_freeze( cl );
         gtk_clist_clear( cl );
@@ -1934,9 +1934,9 @@ add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
 
                 fs = xaccSchedXactionGetFreqSpec( tdt->sx );
                 xaccFreqSpecGetFreqStr( fs, tmp_str );
+                /* XXX are we leaking memory here, by not 
+                 * freeing previous rrowtext[1] ?? */
                 rowtext[1] = tmp_str->str;
-
-                rowtext[2] = g_strdup( _("Obsolete") );
 
                 gtk_clist_insert( cl, row, rowtext );
                 gtk_clist_set_row_data( cl, row, tdt );
