@@ -1,3 +1,11 @@
+2000-09-11  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/dialog-transfer.c: incorporate amount editing widget
+	into the transfer dialog.
+
+	* src/gnome/gnc-amount-edit.c: new widget to allow amount editing
+	with expression parsing.
+
 2000-09-05  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/date-utilities.scm ((gnc:reldate-initialize)): New function - initialise
