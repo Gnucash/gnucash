@@ -485,9 +485,13 @@ gnc_schedXaction_end_handler(gpointer data_for_children,
 
     successful = dom_tree_generic_parse( tree, sx_dom_handlers, &sx_pdata );
 
-    if ( successful ) {
+    if ( successful ) 
+    {
             gdata->cb( tag, gdata->parsedata, sx );
-    } else {
+    } 
+    else 
+    {
+            PERR ("failed to parse scheduled xaction");
             xmlElemDump( stdout, NULL, tree );
             xaccSchedXactionFree( sx );
     }
@@ -652,9 +656,13 @@ gnc_template_transaction_end_handler(gpointer data_for_children,
         
         successful = dom_tree_generic_parse( tree, tt_dom_handlers, &txd );
 
-        if ( successful ) {
+        if ( successful ) 
+        {
                 gdata->cb( tag, gdata->parsedata, &txd );
-        } else {
+        } 
+        else 
+        {
+                PERR ("failed to parse template transaction");
                 xmlElemDump( stdout, NULL, tree );
         }
 

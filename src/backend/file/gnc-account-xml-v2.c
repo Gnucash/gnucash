@@ -44,7 +44,10 @@
 #include "sixtp-dom-parsers.h"
 #include "AccountP.h"
 #include "Account.h"
+#include "gnc-engine-util.h"
 #include "Group.h"
+
+static short module = MOD_IO;
 
 const gchar *account_version_string = "2.0.0";
 
@@ -388,6 +391,7 @@ dom_tree_to_account (xmlNodePtr node, GNCBook *book)
 
     if (!successful)
     {
+        PERR ("failed to parse account tree");
         xaccAccountDestroy (accToRet);
         accToRet = NULL;
     }

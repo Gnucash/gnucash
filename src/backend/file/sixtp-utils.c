@@ -1,6 +1,6 @@
 /********************************************************************
  * sixtp-utils.c                                                    *
- * Copyright 2001 Gnumatic, Inc.                                    *
+ * Copyright (c) 2001 Gnumatic, Inc.                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -108,13 +108,18 @@ concatenate_child_result_chars(GSList *data_from_children)
   /* child data lists are in reverse chron order */
   data_from_children = g_slist_reverse(g_slist_copy(data_from_children));
 
-  for(lp = data_from_children; lp; lp = lp->next) {
+  for(lp = data_from_children; lp; lp = lp->next) 
+  {
     sixtp_child_result *cr = (sixtp_child_result *) lp->data;
-    if(cr->type != SIXTP_CHILD_RESULT_CHARS) {
+    if(cr->type != SIXTP_CHILD_RESULT_CHARS) 
+    {
+      PERR ("result type is not chars");
       g_slist_free (data_from_children);
       g_free(name);
       return(NULL);
-    } else {
+    } 
+    else 
+    {
       char *temp;
       temp = g_strconcat(name, (gchar *) cr->data, NULL);
       g_free (name);
@@ -727,7 +732,8 @@ generic_guid_end_handler(gpointer data_for_children,
   g_return_val_if_fail(txt, FALSE);
   
   gid = g_new(GUID, 1);
-  if(!gid) {
+  if(!gid) 
+  {
     g_free(txt);
     return(FALSE);
   }
@@ -735,7 +741,9 @@ generic_guid_end_handler(gpointer data_for_children,
   ok = string_to_guid(txt, gid);
   g_free(txt);
 
-  if(!ok) {
+  if(!ok) 
+  {
+    PERR ("couldn't parse GUID");
     g_free(gid);
     return(FALSE);
   }
@@ -791,10 +799,13 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
 
   txt = concatenate_child_result_chars(data_from_children);
 
-  if(txt) {
+  if(txt) 
+  {
     num = g_new(gnc_numeric, 1);
-    if(num) {
-      if(string_to_gnc_numeric(txt, num)) {
+    if(num) 
+    {
+      if(string_to_gnc_numeric(txt, num)) 
+      {
         ok = TRUE;
         *result = num;
       }
@@ -802,7 +813,11 @@ generic_gnc_numeric_end_handler(gpointer data_for_children,
   }
 
   g_free(txt);
-  if(!ok) g_free(num);
+  if(!ok) 
+  {
+    PERR ("couldn't parse numeric quantity");
+    g_free(num);
+  }
 
   return(ok);
 }
@@ -834,3 +849,5 @@ restore_char_generator(sixtp_end_handler ender)
         SIXTP_CHARS_FAIL_ID, sixtp_child_free_data,
         SIXTP_NO_MORE_HANDLERS);
 }
+
+/***************************** END OF FILE *********************************/

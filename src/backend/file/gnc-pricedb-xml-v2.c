@@ -39,7 +39,7 @@
 #include "gnc-pricedb-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_ENGINE;
+static short module = MOD_IO;
 
 /* Read and Write the pricedb as XML -- something like this:
 
@@ -257,7 +257,8 @@ pricedb_after_child_handler(gpointer data_for_children,
   if(!child_result) return(FALSE);
   if(child_result->type != SIXTP_CHILD_RESULT_NODE) return(FALSE);
 
-  if(strcmp(child_result->tag, "price") == 0) {
+  if(strcmp(child_result->tag, "price") == 0) 
+  {
     GNCPrice *p = (GNCPrice *) child_result->data;
 
     g_return_val_if_fail(p, FALSE);
@@ -266,7 +267,10 @@ pricedb_after_child_handler(gpointer data_for_children,
        structure as global data */
     /* ((sixtp_gdv2*)global_data)->counter.prices_loaded++; */
     return TRUE;
-  } else {
+  } 
+  else 
+  {
+    PERR ("unexpected tag %s\n", child_result->tag);
     return FALSE;
   }
   return FALSE;
