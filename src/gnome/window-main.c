@@ -69,7 +69,7 @@ static void gnc_main_window_create_menus(GNCMainInfo * maininfo);
 
 static void
 gnc_main_window_destroy_cb(GtkObject * w) {
-  gnc_ui_destroy();
+  gnc_shutdown (0);
 }
 
 
@@ -136,7 +136,8 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
 
   /* add a signal to preserve the toolbar on destroy */ 
   gtk_signal_connect(GTK_OBJECT(app), "destroy", 
-                     gnc_main_window_app_destroyed_cb, mainwin);
+                     GTK_SIGNAL_FUNC (gnc_main_window_app_destroyed_cb),
+                     mainwin);
 
   /* set up extensions menu and hints */
   gnc_extensions_menu_setup(app);  
@@ -205,6 +206,23 @@ gnc_refresh_main_window_titles (void)
 
     containers = containers->next;
   }
+}
+
+/********************************************************************
+ * gnc_main_window_child_remove_cb()
+ * called when a child is removed
+ ********************************************************************/
+
+static gboolean
+gnc_main_window_child_remove_cb(GnomeMDI * mdi, GnomeMDIChild * child,
+                                gpointer data) {
+  GNCMainInfo * mainwin = data;
+
+  if(mainwin->last_active == child) {
+    mainwin->last_active = NULL;
+  }
+
+  return TRUE;
 }
 
 /********************************************************************
@@ -411,6 +429,9 @@ gnc_main_window_new(void) {
                      retval);
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "app_created",
                      GTK_SIGNAL_FUNC(gnc_main_window_app_created_cb),
+                     retval);
+  gtk_signal_connect(GTK_OBJECT(retval->mdi), "remove_child",
+                     GTK_SIGNAL_FUNC(gnc_main_window_child_remove_cb),
                      retval);
   gtk_signal_connect(GTK_OBJECT(retval->mdi), "child_changed",
                      GTK_SIGNAL_FUNC(gnc_main_window_child_changed_cb),
@@ -795,7 +816,7 @@ gnc_main_window_create_menus(GNCMainInfo * maininfo) {
     },
     
     GNOMEUIINFO_MENU_ABOUT_ITEM(gnc_main_window_about_cb, NULL),
-  
+
     GNOMEUIINFO_END
   };
 
@@ -885,4 +906,3 @@ gnc_main_window_create_child_toolbar(GNCMainInfo * mi,
   gnome_app_fill_toolbar(tb, tbinfo, NULL);
 
 }
-

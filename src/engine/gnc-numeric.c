@@ -1042,9 +1042,11 @@ gnc_numeric_check(gnc_numeric in) {
 gchar *
 gnc_numeric_to_string(gnc_numeric n) {
   gchar *result;
-  long long tmpnum = n.num;
-  long long tmpdenom = n.denom;
+  long long int tmpnum = n.num;
+  long long int tmpdenom = n.denom;
+
   result = g_strdup_printf("%lld/%lld", tmpnum, tmpdenom);
+
   return result;
 }
 
@@ -1054,8 +1056,8 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n) {
      returning a pointer to just past the last byte read.  Return NULL
      on error. */
   int num_read;
-  long long tmpnum;
-  long long tmpdenom;
+  long long int tmpnum;
+  long long int tmpdenom;
     
   if(!str) return NULL;
 
@@ -1074,10 +1076,14 @@ static char *
 gnc_numeric_print(gnc_numeric in) {
   char * retval;
   if(gnc_numeric_check(in)) {
-    retval = g_strdup_printf("<ERROR> [%lld / %lld]", in.num, in.denom); 
+    retval = g_strdup_printf("<ERROR> [%lld / %lld]",
+                             (long long int) in.num,
+                             (long long int) in.denom); 
   }
   else {
-    retval = g_strdup_printf("[%lld / %lld]", in.num, in.denom); 
+    retval = g_strdup_printf("[%lld / %lld]",
+                             (long long int) in.num,
+                             (long long int) in.denom); 
   }
   return retval;
 }

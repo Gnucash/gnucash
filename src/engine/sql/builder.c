@@ -299,7 +299,7 @@ sqlBuild_Set_Int64 (sqlBuilder *b, const char *tag, gint64 nval)
    char val[100];
    if (!b || !tag) return;
 
-   snprintf (val, 100, "%lld", nval);
+   snprintf (val, 100, "%lld", (long long int) nval);
    if (b->tag_need_comma) b->ptag = stpcpy(b->ptag, ", ");
    b->tag_need_comma = 1;
 

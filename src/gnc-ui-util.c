@@ -922,7 +922,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
   }
 
   /* print the integer part without separators */
-  sprintf(temp_buf, "%lld", (long long) whole.num);
+  sprintf(temp_buf, "%lld", (long long int) whole.num);
   num_whole_digits = strlen (temp_buf);
 
   if (!info->use_separators)
@@ -997,8 +997,8 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
       val = gnc_numeric_reduce (val);
 
       sprintf (temp_buf, " + %lld / %lld",
-               (long long) val.num,
-               (long long) val.denom);
+               (long long int) val.num,
+               (long long int) val.denom);
 
       strcat (buf, temp_buf);
     }
@@ -1252,9 +1252,9 @@ typedef enum
 
 #define done_state(state) (((state) == DONE_ST) || ((state) == NO_NUM_ST))
 
-G_INLINE_FUNC long long multiplier (int num_decimals);
+G_INLINE_FUNC long long int multiplier (int num_decimals);
 
-G_INLINE_FUNC long long
+G_INLINE_FUNC long long int
 multiplier (int num_decimals)
 {
   switch (num_decimals)
@@ -1308,8 +1308,8 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   gboolean got_decimal;
   gboolean need_paren;
   GList * group_data;
-  long long numer;
-  long long denom;
+  long long int numer;
+  long long int denom;
   int group_count;
 
   ParseState state;
@@ -1669,7 +1669,7 @@ xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
   if (got_decimal && (*out_str != '\0'))
   {
     size_t len;
-    long long fraction;
+    long long int fraction;
 
     len = strlen(out_str);
 

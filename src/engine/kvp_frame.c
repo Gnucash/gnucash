@@ -991,7 +991,7 @@ kvp_value_to_string(const kvp_value *val)
     {
     case KVP_TYPE_GINT64:
         return g_strdup_printf("KVP_VALUE_GINT64(%lld)",
-                               kvp_value_get_gint64(val));
+                               (long long int) kvp_value_get_gint64(val));
         break;
 
     case KVP_TYPE_DOUBLE:

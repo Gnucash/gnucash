@@ -193,16 +193,20 @@ string_to_double(const char *str, double *result)
 /*********/
 /* gint64
  */
-   
+
 gboolean
 string_to_gint64(const gchar *str, gint64 *v) {
-  /* convert a string to a gint64.  only whitespace allowed before and after. */
+  /* convert a string to a gint64. only whitespace allowed before and after. */
+  long long int v_in;
   int num_read;
 
   /* must use "<" here because %n's effects aren't well defined */
-  if(sscanf(str, " %lld %n", v, &num_read) < 1) {
+  if(sscanf(str, " %lld %n", &v_in, &num_read) < 1) {
     return(FALSE);
   }
+
+  if (v)
+    *v = v_in;
 
   if(!isspace_str(str + num_read, -1)) return(FALSE);
   return(TRUE);
@@ -211,7 +215,7 @@ string_to_gint64(const gchar *str, gint64 *v) {
 /*********/
 /* gint32
  */
-   
+
 gboolean
 string_to_gint32(const gchar *str, gint32 *v) {
   /* convert a string to a gint32.  only whitespace allowed before and after. */

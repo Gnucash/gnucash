@@ -1,5 +1,30 @@
 2001-04-15  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/window-main.c: Kevin Finn's patch to shutdown gnucash
+	when the main window is deleted. Handle remove_child events to
+	prevent accessing deleted windows.
+
+	* src/engine/sixtp-dom-parsers.c (string_to_integer): same as
+	below
+
+	* src/engine/sixtp-dom-generators.c (add_kvp_value_node): same as
+	below
+
+	* src/engine/sixtp-xml-write-utils.c: same as below
+
+	* src/engine/sixtp-utils.c: same as below
+
+	* src/engine/gnc-numeric.c: same as below
+
+	* src/engine/TransLog.c: same as below
+
+	* src/engine/kvp_frame.c: same as below
+
+	* src/engine/sql/kvp-sql.c: same as below
+
+	* src/engine/sql/builder.c (sqlBuild_Set_Int64): don't assume
+	long long int == gint64
+
 	* src/gnome/window-main.c: take out devel menu
 
 	* src/gnome/dialog-price-editor.c (price_ok_clicked): fix bug

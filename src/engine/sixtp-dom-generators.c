@@ -237,14 +237,16 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
 {
     xmlNodePtr val_node;
     gchar *tmp_str1;
-    
+
     val_node = xmlNewChild(node, NULL, tag, NULL);
-    
+
     switch(kvp_value_get_type(val))
     {
     case KVP_TYPE_GINT64:
         add_text_to_node(val_node, "integer",
-                         g_strdup_printf("%lld", kvp_value_get_gint64(val)));
+                         g_strdup_printf("%lld",
+                                         (long long int)
+                                         kvp_value_get_gint64(val)));
         break;
     case KVP_TYPE_DOUBLE:
         add_text_to_node(val_node,"double",

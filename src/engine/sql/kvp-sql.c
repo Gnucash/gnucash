@@ -208,7 +208,9 @@ store_cb (const char *key, kvp_value *val, gpointer p)
          case KVP_TYPE_GINT64:
             {
                gint64 ival = kvp_value_get_gint64 (val);
-               PINFO ("path=%s type=gint64 val=%lld", cb_data->path, ival);
+               PINFO ("path=%s type=gint64 val=%lld",
+                      cb_data->path,
+                      (long long int) ival);
 
                cb_data->stype = "int8";
                cb_data->u.ival = ival;
@@ -230,8 +232,10 @@ store_cb (const char *key, kvp_value *val, gpointer p)
          case KVP_TYPE_NUMERIC:
             {
                gnc_numeric ival = kvp_value_get_numeric (val);
-               PINFO ("path=%s type=numeric val=%lld/%lld", cb_data->path,
-                         ival.num, ival.denom);
+               PINFO ("path=%s type=numeric val=%lld/%lld",
+                      cb_data->path,
+                      (long long int) ival.num,
+                      (long long int) ival.denom);
 
                cb_data->stype = "frac";
                cb_data->u.numeric = ival;

@@ -84,11 +84,10 @@
 
   (cond ((gnc:ui-is-running?)
 	 (if (not (gnc:ui-is-terminating?))
-	     (begin
-               (if (gnc:file-query-save)
-                   (begin
-                     (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
-                     (gnc:ui-shutdown))))))
+             (if (gnc:file-query-save)
+                 (begin
+                   (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
+                   (gnc:ui-shutdown)))))
         (else
 	 (gnc:ui-destroy)
 	 (gnc:hook-run-danglers gnc:*shutdown-hook*)

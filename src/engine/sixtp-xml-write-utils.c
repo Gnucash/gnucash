@@ -78,7 +78,7 @@ xml_add_gint64(xmlNodePtr p, const char *tag, const gint64 value) {
   g_return_val_if_fail(p, FALSE);
   g_return_val_if_fail(tag, FALSE);
 
-  g_snprintf(num_string, sizeof (num_string), "%lld", value);
+  g_snprintf(num_string, sizeof (num_string), "%lld", (long long int) value);
 
   val_xml = xmlNewTextChild(p, NULL, tag, num_string);
   g_return_val_if_fail(val_xml, FALSE);
@@ -183,12 +183,8 @@ xml_add_gnc_numeric(xmlNodePtr p, const char *tag, const gnc_numeric n) {
   g_return_val_if_fail(p, FALSE);
   g_return_val_if_fail(tag, FALSE);
 
-  /* fprintf(stderr, "WRITE GNUM S: %lld/%lld -> ", n.num, n.denom); */
-
   numstr = gnc_numeric_to_string(n);
   g_return_val_if_fail(numstr, FALSE);
-
-  /* fprintf(stderr, "%s\n", numstr); */
 
   child = xmlNewTextChild(p, NULL, tag, numstr);
   g_free(numstr); numstr = FALSE;
