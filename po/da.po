@@ -4,12 +4,13 @@
 # Keld Simonsen <keld@dkuug.dk>, 2000.
 # Johnny Ernst Nielsen <j.e.nielsen@iname.com>, 2001.
 # Claus Hindsgaul <claus_h@image.dk>, 2001.
+# Ole Laursen <olau@hardworking.dk>, 2001.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 0.1\n"
 "POT-Creation-Date: 2001-05-27 23:32-0700\n"
-"PO-Revision-Date: 2001-06-10 20:37GMT\n"
+"PO-Revision-Date: 2001-06-16 01:01GMT\n"
 "Last-Translator: Claus Hindsgaul <claus_h@image.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +39,7 @@ msgid ""
 "Can't parse the URL\n"
 "   %s\n"
 msgstr ""
-"Det opstod en fejl ved åbning af filen\n"
+"Kunne ikke tolke URL'en\n"
 "     %s\n"
 
 #: src/FileDialog.c:83
@@ -61,7 +62,7 @@ msgid ""
 msgstr ""
 "Kunne ikke forbinde til\n"
 "   %s\n"
-"Forbindelsen blev tabt. Kunne ikke afsende data."
+"Forbindelsen blev afbrudt. Kunne ikke afsende data."
 
 #: src/FileDialog.c:97
 #, c-format
@@ -83,7 +84,7 @@ msgid ""
 msgstr ""
 "URL'en \n"
 "    %s\n"
-"indeholder ikke gyldige GnuCash-data eller dataene er i stykker."
+"indeholder ikke gyldige GnuCash-data eller dataene er ødelagt."
 
 #: src/FileDialog.c:111
 #, c-format
@@ -92,7 +93,7 @@ msgid ""
 "    %s\n"
 "experienced an error or encountered bad or corrupt data."
 msgstr ""
-"Værten på URL \n"
+"Værten på adressen \n"
 "    %s\n"
 "løb ind i en fejl, eller fandt ugyldige data."
 
@@ -171,7 +172,7 @@ msgid ""
 "\n"
 "Do you want to proceed with opening the database?"
 msgstr ""
-"GnuCash kunne ikke opnå en lås for\n"
+"GnuCash kunne ikke opnå en lås til\n"
 "   %s.\n"
 "Denne database kan være i brug af en anden bruger.\n"
 "I så fald bør du ikke åbne databasen.\n"
@@ -191,7 +192,7 @@ msgstr ""
 
 #: src/FileDialog.c:293
 msgid "Changes have been made since the last Save. Save the data to file?"
-msgstr "Der er lavet ændringer siden sidste Gem. Gem dataene i en fil?"
+msgstr "Der er lavet ændringer siden sidste gemning. Gem dataene i en fil?"
 
 #: src/FileDialog.c:473 src/gnome/dialog-filebox.c:76
 #: src/gnome/window-acct-tree.c:723 src/gnome/window-help.c:603
@@ -220,7 +221,7 @@ msgstr ""
 #: src/engine/Transaction.c:2021 src/register/splitreg.c:739
 #: src/scm/report/guile-strings.c:344
 msgid "-- Split Transaction --"
-msgstr "-- Opdel transaktion --"
+msgstr "-- Opdelt transaktion --"
 
 #: src/SplitLedger.c:126 src/register/splitreg.c:747
 msgid "-- Stock Split --"
@@ -232,7 +233,7 @@ msgstr "Genbalancér transaktion"
 
 #: src/SplitLedger.c:823
 msgid "The current transaction is not balanced."
-msgstr "Den nuværende transaktion er balancerer ikke."
+msgstr "Den nuværende transaktion balancerer ikke."
 
 #: src/SplitLedger.c:859
 msgid "Balance it manually"
@@ -244,7 +245,7 @@ msgstr "Lad GnuCash tilføje en justerende opdeling"
 
 #: src/SplitLedger.c:866
 msgid "Adjust current account split total"
-msgstr "Justér aktuelle konto-opdelingstotal"
+msgstr "Justér aktuel konto-opdelingstotal"
 
 #: src/SplitLedger.c:870
 msgid "Adjust other account split total"
@@ -286,7 +287,7 @@ msgstr ""
 
 #: src/SplitLedger.c:3088
 msgid "Recalculate Transaction"
-msgstr "Genberegn Transaktion"
+msgstr "Genberegn transaktion"
 
 #: src/SplitLedger.c:3089
 msgid ""
@@ -336,7 +337,7 @@ msgstr ""
 "Den har ikke den samme valuta.\n"
 "Beløb, der skal overføres mellem konti med forskellige valutaer,\n"
 "skal gå gennem en mellemliggende valutakonto.\n"
-"Se venligst GnuCash's online manual."
+"Se venligst GnuCash's brugervejledning."
 
 #: src/SplitLedger.c:3325 src/SplitLedger.c:3406
 msgid "(no name)"
@@ -371,7 +372,7 @@ msgstr "Dato"
 #: src/scm/report/guile-strings.c:577 src/scm/report/guile-strings.c:597
 #: src/scm/report/guile-strings.c:662
 msgid "Num"
-msgstr "Num"
+msgstr "Nr."
 
 #: src/SplitLedger.c:4018 src/gnc-ui-util.c:123
 #: src/gnome/glade-gnc-dialogs.c:1018 src/gnome/glade-gnc-dialogs.c:4801
@@ -463,7 +464,7 @@ msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
 msgstr ""
-"Vil du virkelig markere denne transaktion som ikke afstemt?\n"
+"Vil du virkelig markere denne transaktion som ikke er afstemt?\n"
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
 #: src/engine/Account.c:1858 src/scm/guile-strings.c:142
@@ -494,7 +495,7 @@ msgstr "Aktie"
 
 #: src/engine/Account.c:1864 src/scm/guile-strings.c:148
 msgid "Mutual Fund"
-msgstr "Aktiefond"
+msgstr "Investeringsbevis"
 
 #: src/engine/Account.c:1865 src/gnc-ui-util.c:129
 #: src/gnome/dialog-price-editor.c:734 src/gnome/glade-gnc-dialogs.c:7393
@@ -518,8 +519,11 @@ msgstr "Udgift"
 
 #: src/engine/Account.c:1868 src/gnc-ui-util.c:528 src/register/splitreg.c:222
 #: src/scm/guile-strings.c:152 src/scm/report/guile-strings.c:107
+# Jeg kender ikke det korrekte regnskabsord for equity.
+# Dette er mit bedste bud
+#   (optræder flere steder) CH
 msgid "Equity"
-msgstr "Udjævnings"
+msgstr "Udjævning"
 
 #: src/engine/Scrub.c:127
 msgid "Orphan"
@@ -611,7 +615,7 @@ msgstr "reconciled:a"
 
 #: src/gnc-ui-util.c:367
 msgid "frozen:f"
-msgstr "frozen:f"
+msgstr "frosset:f"
 
 #: src/gnc-ui-util.c:382
 msgid "(none)"
@@ -745,6 +749,7 @@ msgstr ""
 
 #: src/gnome/dialog-commodities.c:340 src/gnome/glade-gnc-dialogs.c:6555
 #: src/gnome/glade-gnc-dialogs.c:7823 src/scm/report/guile-strings.c:287
+# Dette står både for valutakoder (DKK) og børskoder (RHAD). CH
 msgid "Symbol"
 msgstr "Kode"
 
@@ -758,8 +763,9 @@ msgid "Code"
 msgstr "Kode"
 
 #: src/gnome/dialog-commodities.c:343 src/gnome/glade-gnc-dialogs.c:7844
+# Jeg *tror*, der er tale om "handlet andel af aktier". CH
 msgid "Fraction"
-msgstr "Fraktion"
+msgstr "Andel"
 
 #: src/gnome/dialog-commodity.c:240
 msgid ""
@@ -782,7 +788,7 @@ msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\",\n"
 "and \"Type\" for the commodity."
 msgstr ""
-"Du skal vælge en udfyldt \"Fuldt navn\", \"Kode/forkortelse\",\n"
+"Du skal vælge en udfyldt \"Fulde navn\", \"Kode/forkortelse\",\n"
 "og \"Type\" for varen."
 
 #. GtkWidget             * dialog = GTK_WIDGET(user_data);
@@ -1008,7 +1014,7 @@ msgstr "Vælg QIF-fil"
 
 #: src/gnome/druid-qif-import.c:537
 msgid "Please select a file to load.\n"
-msgstr "Angiv en fil at indlæse.\n"
+msgstr "Angiv den fil, der skal indlæses.\n"
 
 #: src/gnome/druid-qif-import.c:543
 msgid ""
@@ -1037,7 +1043,7 @@ msgstr ""
 
 #: src/gnome/druid-qif-import.c:591
 msgid "An error occurred while loading the QIF file."
-msgstr "Der opstod en fejl ved indlæsning af QIF-fil."
+msgstr "Der opstod en fejl ved indlæsning af QIF-filen."
 
 #: src/gnome/druid-qif-import.c:599
 #, c-format
@@ -1045,7 +1051,7 @@ msgid ""
 "QIF file load failed:\n"
 "%s"
 msgstr ""
-"Indlæsning af QIF-fil fejlede:\n"
+"Indlæsning af QIF-fil mislykkedes:\n"
 "%s"
 
 #: src/gnome/druid-qif-import.c:644
@@ -1058,7 +1064,7 @@ msgid ""
 "QIF file parse failed:\n"
 "%s"
 msgstr ""
-"Fortolkning af QIF-fil fejlede:\n"
+"Fortolkning af QIF-fil mislykkedes:\n"
 "%s"
 
 #: src/gnome/druid-qif-import.c:902
@@ -1079,7 +1085,7 @@ msgstr "(Opdel)"
 
 #: src/gnome/druid-qif-import.c:1451
 msgid "You must enter a Type for the commodity."
-msgstr "Du skal angive varens type."
+msgstr "Du skal angive varetype."
 
 #: src/gnome/druid-qif-import.c:1456
 msgid "You must enter a name for the commodity."
@@ -1092,7 +1098,7 @@ msgstr "Du skal angive varens forkortelse."
 #: src/gnome/druid-qif-import.c:1597
 #, c-format
 msgid "Enter information about \"%s\""
-msgstr "Indtast information om \"%s\""
+msgstr "Indtast oplysninger om \"%s\""
 
 #: src/gnome/druid-qif-import.c:1609
 msgid "Pick the commodity's exchange or listing (NASDAQ, NYSE, etc)."
@@ -1100,7 +1106,7 @@ msgstr "Vælg varens kurs eller liste (NASDAQ, NYSE o.lign.)."
 
 #: src/gnome/druid-qif-import.c:1633
 msgid "Enter the full name of the commodity, such as \"Red Hat Stock\""
-msgstr "Angiv fuldt navn for varen, såsom \"Red Hat Aktie\""
+msgstr "Angiv fulde navn for varen, såsom \"Red Hat-aktie\""
 
 #: src/gnome/druid-qif-import.c:1655
 msgid ""
@@ -1112,7 +1118,7 @@ msgstr ""
 
 #: src/gnome/druid-qif-import.c:1676
 msgid "Click \"Next\" to accept the information and move on."
-msgstr "Tryk \"Næste\" for at acceptere informationen og gå videre."
+msgstr "Tryk \"Næste\" for at acceptere oplysningerne og gå videre."
 
 #: src/gnome/druid-stock-split.c:243
 msgid "You must enter a valid distribution amount."
@@ -1230,7 +1236,7 @@ msgstr "December  31, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:313
 msgid "31 December, 2000"
-msgstr "31 December, 2000"
+msgstr "31 december, 2000"
 
 #: src/gnome/glade-gnc-dialogs.c:316
 msgid "Dec 31, 2000"
@@ -1263,7 +1269,7 @@ msgstr "Tilvalg"
 
 #: src/gnome/glade-gnc-dialogs.c:346
 msgid "Custom check format"
-msgstr "Brugerdefineret checkformat"
+msgstr "Eget checkformat"
 
 #: src/gnome/glade-gnc-dialogs.c:381
 msgid "Payee:"
@@ -1302,11 +1308,11 @@ msgstr "Tommer"
 
 #: src/gnome/glade-gnc-dialogs.c:532
 msgid "Centimeters"
-msgstr "Centimetre"
+msgstr "Centimeter"
 
 #: src/gnome/glade-gnc-dialogs.c:535
 msgid "Millimeters"
-msgstr "Millimetre"
+msgstr "Millimeter"
 
 #: src/gnome/glade-gnc-dialogs.c:538
 msgid "Points"
@@ -1326,7 +1332,7 @@ msgstr "                    "
 
 #: src/gnome/glade-gnc-dialogs.c:624
 msgid "Custom format"
-msgstr "Brugerformat"
+msgstr "Egetformat"
 
 #: src/gnome/glade-gnc-dialogs.c:799
 msgid "Find Transactions"
@@ -1491,15 +1497,15 @@ msgstr "Find transaktioner, hvis Kontrol-status er:"
 
 #: src/gnome/glade-gnc-dialogs.c:1462
 msgid "Not cleared (n)"
-msgstr "Ikke kontrolleret (n)"
+msgstr "Ikke kontrolleret (i)"
 
 #: src/gnome/glade-gnc-dialogs.c:1469
 msgid "Cleared (c)"
-msgstr "Kontrolleret (c)"
+msgstr "Kontrolleret (k)"
 
 #: src/gnome/glade-gnc-dialogs.c:1476
 msgid "Reconciled (y)"
-msgstr "Afstemt (y)"
+msgstr "Afstemt (a)"
 
 #: src/gnome/glade-gnc-dialogs.c:1483
 msgid "Cleared"
@@ -1606,7 +1612,7 @@ msgstr "Flyt det valgte element ned"
 
 #: src/gnome/glade-gnc-dialogs.c:1968
 msgid "Entry"
-msgstr "Indgang"
+msgstr "Punkt"
 
 #: src/gnome/glade-gnc-dialogs.c:1992 src/gnome/glade-gnc-dialogs.c:2079
 #: src/gnome/glade-gnc-dialogs.c:3500 src/gnome/glade-gnc-dialogs.c:5133
@@ -1633,7 +1639,7 @@ msgstr "Afstemmer transaktioner..."
 
 #: src/gnome/glade-gnc-dialogs.c:2055
 msgid "Subentry"
-msgstr "Underindgang"
+msgstr "Underpunkt"
 
 #: src/gnome/glade-gnc-dialogs.c:2088 src/gnome/glade-gnc-dialogs.c:5117
 msgid "Amount:"
@@ -1689,7 +1695,7 @@ msgstr "Slet"
 #: src/gnome/glade-gnc-dialogs.c:2471 src/gnome/glade-gnc-dialogs.c:2516
 #: src/gnome/glade-gnc-dialogs.c:2561
 msgid "Clear the entry"
-msgstr "Slet indgangen"
+msgstr "Slet punktet"
 
 #: src/gnome/glade-gnc-dialogs.c:2383 src/gnome/glade-gnc-dialogs.c:2428
 #: src/gnome/glade-gnc-dialogs.c:2473 src/gnome/glade-gnc-dialogs.c:2518
@@ -1715,7 +1721,7 @@ msgstr "Fremtidig værdi"
 
 #: src/gnome/glade-gnc-dialogs.c:2607 src/gnome/glade-gnc-dialogs.c:2876
 msgid "Compounding:"
-msgstr ""
+msgstr "Renters rente:"
 
 #: src/gnome/glade-gnc-dialogs.c:2616 src/gnome/glade-gnc-dialogs.c:2885
 msgid "Payments:"
@@ -1787,11 +1793,11 @@ msgstr "Betalinger ved periodestart"
 
 #: src/gnome/glade-gnc-dialogs.c:2747
 msgid "Discrete Compounding"
-msgstr ""
+msgstr "Diskrete renters rente"
 
 #: src/gnome/glade-gnc-dialogs.c:2756
 msgid "Continuous Compounding"
-msgstr ""
+msgstr "Løbende renters rente"
 
 #: src/gnome/glade-gnc-dialogs.c:2771
 msgid "Payment Total:"
@@ -1807,7 +1813,7 @@ msgstr "Planlæg"
 
 #: src/gnome/glade-gnc-dialogs.c:2836 src/gnome/glade-gnc-dialogs.c:3468
 msgid "Account Information"
-msgstr "Kontoinformation"
+msgstr "Kontooplysninger"
 
 #: src/gnome/glade-gnc-dialogs.c:2858
 msgid "Effective Date:"
@@ -1847,11 +1853,11 @@ msgstr "CUSIP eller anden kode:"
 
 #: src/gnome/glade-gnc-dialogs.c:3257
 msgid "Fraction traded:"
-msgstr "Handlet fraktion:"
+msgstr "Handlet andel:"
 
 #: src/gnome/glade-gnc-dialogs.c:3278
 msgid "Enter the full name of the commodity. Example: US Dollars"
-msgstr "Angiv fuldt navn for varen. Eksempel: DK Kroner"
+msgstr "Angiv fulde navn for varen. Eksempel: DK Kroner"
 
 #: src/gnome/glade-gnc-dialogs.c:3286
 msgid "Enter the ticker symbol or currency code for the commodity. Example: USD"
@@ -1863,7 +1869,7 @@ msgid ""
 "the stock is traded. You can choose an existing type from the list or enter "
 "a new type with the keyboard."
 msgstr ""
-"Angiv varens type. For aktier er dette ofte den børs, hvor aktien handles. "
+"Angiv varetype. For aktier er dette ofte den børs, hvor aktien handles. "
 "Du kan vælge en eksisterende type fra listen eller angive en ny type fra "
 "tastaturet."
 
@@ -1943,7 +1949,7 @@ msgstr "Generel information"
 
 #: src/gnome/glade-gnc-dialogs.c:3758
 msgid "Balance Information"
-msgstr "Saldoinformation"
+msgstr "Saldooplysninger"
 
 #: src/gnome/glade-gnc-dialogs.c:3781
 msgid "Balance:"
@@ -1979,11 +1985,11 @@ msgstr "Overførselskonto"
 
 #: src/gnome/glade-gnc-dialogs.c:3932
 msgid "Import currency and stock information"
-msgstr "Indlæs valuta- og aktieinformation"
+msgstr "Indlæs valuta- og aktieoplysninger"
 
 #: src/gnome/glade-gnc-dialogs.c:3953
 msgid "Import currency and stock information "
-msgstr "Indlæs valuta- og aktieinformation "
+msgstr "Indlæs valuta- og aktieoplysninger "
 
 #: src/gnome/glade-gnc-dialogs.c:3954
 msgid ""
@@ -1998,13 +2004,13 @@ msgid ""
 "\n"
 "Hit \"Cancel\" now to stop loading the file. "
 msgstr ""
-"Filen, du indlæse er fra en ældre version af GnuCash. \n"
-"Information om valutaer, aktier og \"mutual funds\" skal\n"
+"Filen, du vil indlæse er fra en ældre version af GnuCash. \n"
+"Oplysninger om valutaer, aktier og investeringsbeviser skal\n"
 "opdateres i den nye version. \n"
 "\n"
-"Denne dialog vil spørge dig for yderligere information om \n"
-"hver valuta, aktie og \"mutual fund\", der optræder i dine\n"
-"konti. Efter, du har indtastet denne information, kan du\n"
+"Dette vindue vil spørge dig om yderligere oplysninger om \n"
+"hver valuta, aktie og investeringsbevis, der optræder i dine\n"
+"konti. Efter du har indtastet disse oplysninger, kan du\n"
 "opdatere dine konti til den nye version af GnuCash.\n"
 "\n"
 "Tryk \"Annullér\" for at stoppe indlæsningen af filen. "
@@ -2022,8 +2028,8 @@ msgid ""
 "\n"
 "Click \"Back\" to review your currency selections."
 msgstr ""
-"Tryk \"Afslut\" for at opdatere dine konti med den nye \n"
-"information, du har indtastet.\n"
+"Tryk \"Afslut\" for at opdatere dine konti med de nye \n"
+"oplysninger, du har indtastet.\n"
 "\n"
 "Tryk \"Annullér\" for at fortryde filindlæsningsprocessen.  \n"
 "\n"
@@ -2064,7 +2070,7 @@ msgstr ""
 
 #: src/gnome/glade-gnc-dialogs.c:4164
 msgid "Select a QIF file to load"
-msgstr "Vælg QIF-fil at læse"
+msgstr "Vælg QIF-fil, der skal indlæses"
 
 #: src/gnome/glade-gnc-dialogs.c:4173
 msgid ""
@@ -2203,7 +2209,7 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"På næste side vil konti i dine QIF-filer og de aktier og \"mutual funds\",\n"
+"På næste side vil konti i dine QIF-filer og de aktier og investeringsbeviser,\n"
 "du ejer blive parret med de tilsvarende GnuCash-konti. Hvis der allerede\n"
 "eksisterer en GnuCash-konto med samme navn eller kompatibel type, vil denne\n"
 "konto blive brugt; i modsat fald vil GnuCash oprette en ny konto med det\n"
@@ -2278,7 +2284,7 @@ msgid ""
 "Click \"Next\" to enter information about the currency used in your QIF "
 "files."
 msgstr ""
-"Tryk \"Næste\" for at indtaste information om den benyttede valuta i "
+"Tryk \"Næste\" for at indtaste oplysninger om den benyttede valuta i "
 "dine QIF-filer."
 
 #: src/gnome/glade-gnc-dialogs.c:4569
@@ -2298,9 +2304,9 @@ msgid ""
 "If you select a different account, it will be remembered for future QIF \n"
 "files. "
 msgstr ""
-"QIF-filer hentet fra banker eller andre finansinstitutioner har muligvis ikke\n"
-"informationer om konti og kategorier, som ellers ville tillade dem at blive\n"
-"forbundet korrekt med GnuCash-konti.  \n"
+"QIF-filer hentet fra banker eller andre finansielle institutioner har muligvis\n"
+"ikke oplysninger om konti og kategorier, som ellers ville tillade dem at\n"
+"blive forbundet korrekt med GnuCash-konti.  \n"
 "\n"
 "På den følgende side kan du se den tekst, der optræder i modtager- og notat-\n"
 "felterne i transaktioner uden QIF-konti eller -kategorier. Som standard\n"
@@ -2338,8 +2344,8 @@ msgid ""
 "Click \"Next\" to enter information about stocks and\n"
 "mutual funds in the imported data."
 msgstr ""
-"Tryk \"Næste\" for at indtaste information om aktier og\n"
-"\"mutual funds\" i de indlæste data."
+"Tryk \"Næste\" for at indtaste oplysninger om aktier og\n"
+"investeringsbeviser i de indlæste data."
 
 #: src/gnome/glade-gnc-dialogs.c:4700
 msgid "Tradable commodities"
@@ -2362,13 +2368,13 @@ msgid ""
 "you enter matches the ticker symbol used for the commodity on the exchange\n"
 "or listing for its type."
 msgstr ""
-"På de næste sider vil du blive spurgt om information om de aktier,\n"
-"\"mutual funds\" og andre omsættelige varer, der optræder i de QIF-filer\n"
+"På de næste sider vil du blive spurgt om oplysninger om de aktier,\n"
+"investeringsbeviser og andre omsættelige varer, der optræder i de QIF-filer\n"
 "du er ved at indlæse. GnuCash behøver mere information om omsættelige varer,\n"
 "end QIF-formatet kan indeholde.\n"
 "\n"
-"Hver aktie, \"mutual fund\" eller anden vare skal have en type, som er den\n"
-"børs eller liste, hvorpå den findes (NASDAQ, NYSE o.s.v.), et fuldt navn samt\n"
+"Hver aktie, investeringsbevis eller anden vare skal have en type, som er den\n"
+"børs eller liste, hvorpå den findes (NASDAQ, NYSE o.s.v.), det fulde navn samt\n"
 "en kode eller forkortelse.\n"
 "\n"
 "Kontrollér, om der er en passende eksisterende type. Hvis ikke, kan du manuelt\n"
@@ -2403,17 +2409,17 @@ msgid ""
 msgstr ""
 "Hvis du indlæse en QIF-fil fra en bank eller anden finansiel institution\n"
 "kan noget af informationen i QIF-filen allerede være til stede i dine GnuCash-\n"
-"konti. GnuCash vil forsøge at finde duplikater af eksisterende transaktioner.  \n"
+"konti. GnuCash vil forsøge at finde dupletter af eksisterende transaktioner.  \n"
 "\n"
 "På næste side vil du blive bedt om at bekræfte at en eksisterende transaktion\n"
 "er den samme som en indlæst. Indlæste transaktioner er vist i venstre side af\n"
-"siden, mens mulige duplikater for disse vises til højre. Der kan være flere\n"
+"siden, mens mulige dupletter for disse vises til højre. Der kan være flere\n"
 "gamle transaktioner, der kan svare til en indlæst transaktion. Du vil kunne\n"
 "vælge den rigtige ved at klikke på \"Dup?\"-søjlen for den korrekte\n"
 "transaktion.\n"
 "\n"
 "Du kan styre de regler, GnuCash bruger til at finde duplikerede transaktioner\n"
-"i \"QIF-indlæsning\"-afsnittet i GnuCash's Indstillinger-dialog.\n"
+"i \"QIF-indlæsning\"-afsnittet i GnuCash's Indstillinger-vindue.\n"
 "\n"
 "Tryk \"Næste\" for at finde duplikerede transaktioner. "
 
@@ -2451,7 +2457,7 @@ msgid ""
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
 "Tryk \"Afslut\" for endeligt at indlæse data og opdatere dine GnuCash-\n"
-"konti. Informationerne om konti og kategorier, som du har angivet, vil\n"
+"konti. De oplysninger om konti og kategorier, som du har angivet, vil\n"
 "blive gemt og brugt som standard, næste gang, du benytter QIF-indlæsning.\n"
 "\n"
 "Tryk \"Tilbage\" for at gense parringerne af konti og kategorier, ændre\n"
@@ -2466,7 +2472,7 @@ msgstr "Overfør kapital"
 
 #: src/gnome/glade-gnc-dialogs.c:5094
 msgid "Transfer Information"
-msgstr "Overfør information"
+msgstr "Overfør oplysninger"
 
 #: src/gnome/glade-gnc-dialogs.c:5125 src/gnome/glade-gnc-dialogs.c:6250
 msgid "Num:"
@@ -2503,7 +2509,7 @@ msgstr "Vekselkurs:"
 
 #: src/gnome/glade-gnc-dialogs.c:5364
 msgid "To Amount:"
-msgstr "Til beløb:"
+msgstr "Til-beløb:"
 
 #: src/gnome/glade-gnc-dialogs.c:5446
 msgid "Working..."
@@ -2556,7 +2562,7 @@ msgstr "Nyt stilark"
 
 #: src/gnome/glade-gnc-dialogs.c:5810
 msgid "New style sheet info"
-msgstr "Nyt stilarks-info"
+msgstr "Ny stilarks-info"
 
 #: src/gnome/glade-gnc-dialogs.c:5841
 msgid "Style sheet template:"
@@ -2565,7 +2571,7 @@ msgstr "Stilarksskabelon:"
 #: src/gnome/glade-gnc-dialogs.c:5940 src/gnome/glade-gnc-dialogs.c:6034
 #: src/gnome/window-acct-tree.c:889
 msgid "Tax Information"
-msgstr "Skatteinformation"
+msgstr "Skatteoplysninger"
 
 #: src/gnome/glade-gnc-dialogs.c:5955 src/gnome/new-user-interface.c:254
 #: src/gnome/window-acct-tree.c:113 src/gnome/window-acct-tree.c:119
@@ -2612,7 +2618,7 @@ msgstr "Transaktionsduplet"
 
 #: src/gnome/glade-gnc-dialogs.c:6220
 msgid "Transaction Information"
-msgstr "Transaktionsinformation"
+msgstr "Transaktionsoplysninger"
 
 #: src/gnome/glade-gnc-dialogs.c:6322
 msgid "HTML Style Sheets"
@@ -2637,8 +2643,8 @@ msgstr "Aktieopdeling"
 #: src/gnome/glade-gnc-dialogs.c:6494
 msgid "This wizard will help you record a stock split or stock merger."
 msgstr ""
-"Denne druide vil hjælpe dig med at registrere en aktieopsplitning "
-"eller -fusion."
+"Denne hjælper vil hjælpe dig med at registrere en aktieopsplitning "
+"eller -sammenlægning."
 
 #: src/gnome/glade-gnc-dialogs.c:6505
 msgid "Stock Account"
@@ -2646,7 +2652,7 @@ msgstr "Aktiekonto"
 
 #: src/gnome/glade-gnc-dialogs.c:6514
 msgid "Select the account for which you want to record a stock split or merger."
-msgstr "Vælg den konto, du ønsker at registrere en aktieopsplitning eller -fusion."
+msgstr "Vælg den konto, du ønsker at registrere en aktieopsplitning eller -sammenlægning."
 
 #: src/gnome/glade-gnc-dialogs.c:6578
 msgid "Stock Split Details"
@@ -2661,6 +2667,12 @@ msgid ""
 "You can also enter a description of the transaction, or accept the default "
 "one."
 msgstr ""
+"Angiv datoen og antallet af aktier, du har vundet eller tabt ved en "
+"aktieopsplitning eller -sammenlægning.\n"
+"Brug en negativ værdi for aktiefordelingen for aktiesammenlægninger "
+"(negative opsplitninger).\n"
+"Du kan også skrive en beskrivelse for transaktionen eller bruge "
+"standardbeskrivelsen."
 
 #: src/gnome/glade-gnc-dialogs.c:6618
 msgid "Share Distribution:"
@@ -2680,13 +2692,15 @@ msgstr "Ny pris:"
 
 #: src/gnome/glade-gnc-dialogs.c:6738 src/gnome/glade-gnc-dialogs.c:6813
 msgid "Cash In Lieu"
-msgstr ""
+msgstr "Afrundingsbeløb"
 
 #: src/gnome/glade-gnc-dialogs.c:6747
 msgid ""
 "If you received a cash disbursement as a result of the stock split,\n"
 "enter the details of that payment here. Otherwise, just click `Next'."
 msgstr ""
+"Hvis du modtog en kontant udbetaling som følge af aktieopsplitningen,\n"
+"kan du indtaste detaljer om denne betaling her. Hvis ikke, klik 'Næste'."
 
 #: src/gnome/glade-gnc-dialogs.c:6777
 msgid "Cash Amount:"
@@ -2885,12 +2899,12 @@ msgstr "Vis nationalvalutaer"
 #: src/gnome/glade-support.c:100 src/gnome/glade-support.c:138
 #, c-format
 msgid "Couldn't find pixmap file: %s"
-msgstr "Kunne ikke finde pikselbilledfil: %s"
+msgstr "Kunne ikke finde billedfil: %s"
 
 #: src/gnome/glade-support.c:116
 #, c-format
 msgid "Couldn't create pixmap from file: %s"
-msgstr "Kunne ikke oprette et pikselbillede fra filen: %s"
+msgstr "Kunne ikke oprette et billede fra filen: %s"
 
 #: src/gnome/gnc-datedelta.c:208 src/scm/report/guile-strings.c:319
 msgid "Days"
@@ -2929,7 +2943,7 @@ msgid ""
 msgstr ""
 "GnuCash Netværk er deaktiveret, men kræves af den henvisning, du har\n"
 "trykket på. Du kan aktivere den i netværksdelen af\n"
-"Indstillinger-dialogen."
+"Indstillinger-vinduet."
 
 #: src/gnome/gnc-html.c:1040
 msgid "Badly formed gnc-register: URL."
@@ -2947,7 +2961,7 @@ msgid ""
 msgstr ""
 "Sikker HTTP-adgang er deaktiveret.\n"
 "Du kan aktivere den i netværksdelen af\n"
-"Indstillinger-dialogen."
+"Indstillinger-vinduet."
 
 #: src/gnome/gnc-html.c:1216
 msgid ""
@@ -2957,11 +2971,11 @@ msgid ""
 msgstr ""
 "HTTP-adgang er deaktiveret.\n"
 "Du kan aktivere den i netværksdelen af\n"
-"Indstillinger-dialogen."
+"Indstillinger-vinduet."
 
 #: src/gnome/gnc-html.c:1429
 msgid "Save HTML To File"
-msgstr "Gem HTML til fil"
+msgstr "Gem HTML i fil"
 
 #: src/gnome/gnc-html.c:1437
 #, c-format
@@ -2980,11 +2994,11 @@ msgstr "tjekker SSL-certifikat..."
 
 #: src/gnome/gnc-http.c:180
 msgid " ... done\n"
-msgstr " ... gjort\n"
+msgstr " ... færdig\n"
 
 #: src/gnome/gnc-network.c:169
 msgid "Enter GnuCash Network passphrase:"
-msgstr "Angiv GnuCash Netværk adgangskode:"
+msgstr "Angiv GnuCash Netværk-adgangskode:"
 
 #: src/gnome/gnc-network.c:224
 msgid "GnuCash Network authorization failed."
@@ -3019,9 +3033,9 @@ msgid ""
 "will appear If you choose New File in the File menu unless you have set the\n"
 "\"No account list setup on new file\" option in the Preferences window."
 msgstr ""
-"Denne druide vil hjælpe dig med at sætte en standard-kontoplan op. "
-"Denne druide\n"
-"Vil optræde, hvis du vælger \"Ny fil\" i filmenuen, undtagen hvis du har "
+"Denne hjælper vil hjælpe dig med at sætte en standard-kontoplan op. "
+"Denne hjælper\n"
+"Vil fremkomme, hvis du vælger \"Ny fil\" i filmenuen, undtagen hvis du har "
 "afkrydset \"Ingen kontolisteopsætning ved ny fil\" i Indstillinger-vinduet."
 
 #: src/gnome/new-user-interface.c:121
@@ -3070,7 +3084,7 @@ msgstr "Afslut kontoopsætning:"
 
 #: src/gnome/new-user-interface.c:433
 msgid "Press `Finish' if everything is OK."
-msgstr "Tryk 'Afslut', hvis alt er o.k."
+msgstr "Tryk 'Afslut', hvis alt er i orden."
 
 #: src/gnome/new-user-interface.c:495
 msgid "Canceling"
@@ -3078,11 +3092,11 @@ msgstr "Annullerer"
 
 #: src/gnome/new-user-interface.c:516
 msgid "Uncheck if you do not want this dialog to run if you start GnuCash up again. "
-msgstr "Deaktivér, hvis du ikke ønsker at se denne dialog næste gang, du starter GnuCash. "
+msgstr "Deaktivér, hvis du ikke ønsker at se dette vindue næste gang, du starter GnuCash. "
 
 #: src/gnome/new-user-interface.c:525
 msgid "Run dialog for new user again?"
-msgstr "Kør dialogen for ny bruger igen?"
+msgstr "Vis vinduet for ny bruger igen?"
 
 #: src/gnome/new-user-interface.c:571 src/scm/report/guile-strings.c:719
 msgid "Welcome to GnuCash 1.6!"
@@ -3098,7 +3112,7 @@ msgstr "Indlæs mine QIF-filer"
 
 #: src/gnome/new-user-interface.c:616
 msgid "Open the new user tutorial"
-msgstr "Åbn rundvisningen for nye brugere"
+msgstr "Start rundvisningen for nye brugere"
 
 #: src/gnome/print-session.c:86
 msgid "Print GnuCash Document"
@@ -3191,7 +3205,7 @@ msgstr "Ryd _konto op"
 
 #: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1177
 msgid "Identify and fix problems in the account"
-msgstr "Identificér og klar problemer i kontoen"
+msgstr "Identificér og ret problemer i kontoen"
 
 #: src/gnome/window-acct-tree.c:797
 msgid "Scrub Su_baccounts"
@@ -3199,7 +3213,7 @@ msgstr "Ryd u_nderkonti op"
 
 #: src/gnome/window-acct-tree.c:798
 msgid "Identify and fix problems in the account and its subaccounts"
-msgstr "Identificér og klar problemer i kontoen og dens underkonti"
+msgstr "Identificér og ret problemer i kontoen og dens underkonti"
 
 #: src/gnome/window-acct-tree.c:806
 msgid "Scrub A_ll"
@@ -3207,7 +3221,7 @@ msgstr "Ryd a_lt op"
 
 #: src/gnome/window-acct-tree.c:807
 msgid "Identify and fix problems in all the accounts"
-msgstr "Identificér og klar problemer i alle konti"
+msgstr "Identificér og ret problemer i alle konti"
 
 #: src/gnome/window-acct-tree.c:820 src/gnome/window-reconcile.c:1154
 msgid "_Open Account"
@@ -3250,7 +3264,7 @@ msgstr "Aktieo_psplitning..."
 
 #: src/gnome/window-acct-tree.c:862 src/gnome/window-register.c:1442
 msgid "Record a stock split or a stock merger"
-msgstr "Registrér en aktieopsplitning eller -fusion"
+msgstr "Registrér en aktieopsplitning eller -sammenlægning"
 
 #: src/gnome/window-acct-tree.c:870 src/gnome/window-register.c:1450
 msgid "_New Account..."
@@ -3266,7 +3280,7 @@ msgstr "_Ryd op"
 
 #: src/gnome/window-acct-tree.c:890
 msgid "Setup tax information for all income and expense accounts"
-msgstr "Angiv skatteinformation for alle indtægts- og udgiftskonti"
+msgstr "Angiv skatteoplysninger for alle indtægts- og udgiftskonti"
 
 #: src/gnome/window-acct-tree.c:901 src/gnome/window-reconcile.c:1227
 #: src/gnome/window-register.c:1577
@@ -3341,11 +3355,11 @@ msgstr "Eksportér"
 
 #: src/gnome/window-main.c:716
 msgid "You cannot save to that filename."
-msgstr "Du kan ikke gemme til det filnavn."
+msgstr "Du kan ikke gemme med det filnavn."
 
 #: src/gnome/window-main.c:729 src/gnome/window-main.c:755
 msgid "You cannot save to that file."
-msgstr "Du kan ikke gemme til den fil."
+msgstr "Du kan ikke gemme i den fil."
 
 #: src/gnome/window-main.c:795
 msgid "There was an error saving the file."
@@ -3361,7 +3375,7 @@ msgid ""
 "The GNU way to manage your money!"
 msgstr ""
 "GnuCash personlige økonomiværktøj.\n"
-"GNU-måden at håndtere dine penge på!"
+"En GNU måde at håndtere dine penge på!"
 
 #: src/gnome/window-main.c:922
 msgid "New _File"
@@ -3417,7 +3431,7 @@ msgstr "_Indstillinger..."
 
 #: src/gnome/window-main.c:977
 msgid "Open the global preferences dialog"
-msgstr "Åbn den globale indstillingsdialog"
+msgstr "Åbn det globale indstillingsvindue"
 
 #: src/gnome/window-main.c:989
 msgid "_General Ledger"
@@ -3433,7 +3447,7 @@ msgstr "Varer_edigering"
 
 #: src/gnome/window-main.c:998
 msgid "View and edit the commodities for stocks and mutual funds"
-msgstr "Vis og ændr varerne for aktier og \"mutual funds\""
+msgstr "Vis og ændr varerne for aktier og investeringsbeviser"
 
 #: src/gnome/window-main.c:1005
 msgid "_Price Editor"
@@ -3441,7 +3455,7 @@ msgstr "_Prisredigering"
 
 #: src/gnome/window-main.c:1006
 msgid "View and edit the prices for stocks and mutual funds"
-msgstr "Vis og ændr priserne for aktier og \"mutual funds\""
+msgstr "Vis og ændr priserne på aktier og investeringsbeviser"
 
 #: src/gnome/window-main.c:1013
 msgid "Financial _Calculator"
@@ -3552,7 +3566,7 @@ msgstr "_Afstemningsinformation..."
 
 #: src/gnome/window-reconcile.c:1061
 msgid "Change the reconcile information including statement date and ending balance."
-msgstr "Ændr opgørelsesinformationen, inklusiv udskriftsdato og slutsaldo."
+msgstr "Ændr afstemningsoplysninger, inklusiv udskriftsdato og slutsaldo."
 
 #: src/gnome/window-reconcile.c:1070
 msgid "_Finish"
@@ -3746,7 +3760,7 @@ msgstr "Afbryd den nuværende transaktion"
 
 #: src/gnome/window-register.c:856
 msgid "Duplicate"
-msgstr "Dupliker"
+msgstr "Duplet"
 
 #: src/gnome/window-register.c:857 src/gnome/window-register.c:1489
 #: src/gnome/window-register.c:1678
@@ -3790,11 +3804,11 @@ msgstr "Luk dette kassekladdevindue"
 
 #: src/gnome/window-register.c:1027
 msgid "Present:"
-msgstr "Nutid:"
+msgstr "Nutidig:"
 
 #: src/gnome/window-register.c:1028
 msgid "Future:"
-msgstr "Fremtid:"
+msgstr "Fremtidig:"
 
 #: src/gnome/window-register.c:1029
 msgid "Cleared:"
@@ -3842,7 +3856,7 @@ msgstr "_Dobbelt linje"
 
 #: src/gnome/window-register.c:1272 src/scm/guile-strings.c:261
 msgid "Show two lines of information for each transaction"
-msgstr "Vis to linier med information for hver transaktion"
+msgstr "Vis to linier med oplysninger for hver transaktion"
 
 #: src/gnome/window-register.c:1286
 msgid "Sort by date of entry"
@@ -3921,7 +3935,7 @@ msgstr "Indsæt transaktion"
 
 #: src/gnome/window-register.c:1404
 msgid "Paste the transaction clipboard"
-msgstr "Indsæt transaktionsklippebordet"
+msgstr "Indsæt fra transaktionsklippebordet"
 
 #: src/gnome/window-register.c:1426
 msgid "Reconcile the main account for this register"
@@ -4269,12 +4283,12 @@ msgstr "Diverse"
 #. Action: Long Term Capital Gains
 #: src/register/splitreg.c:235
 msgid "LTCG"
-msgstr ""
+msgstr "Langsigtet gevinst"
 
 #. Action: Short Term Capital Gains
 #: src/register/splitreg.c:237
 msgid "STCG"
-msgstr ""
+msgstr "Kortsigtet gevinst"
 
 #. Action: Distribution
 #: src/register/splitreg.c:240
@@ -4283,7 +4297,7 @@ msgstr "Udlod"
 
 #: src/register/splitreg.c:723
 msgid "Enter the transaction number, such as the check number"
-msgstr "Indtast transaktionsnummeret (f.eks. checknumret)"
+msgstr "Indtast transaktionsnummeret (f.eks. checknummeret)"
 
 #: src/register/splitreg.c:728
 msgid "Enter the account to transfer from, or choose one from the list"
@@ -4292,7 +4306,7 @@ msgstr "Vælg kontoen at overføre fra, eller vælg en fra listen"
 #: src/register/splitreg.c:735
 msgid "This transaction has multiple splits; press the Split button to see them all"
 msgstr ""
-"Denne transaktion har flere opdelinger; Tryk på opdelingsknappen for at "
+"Denne transaktion har flere opdelinger. Tryk på opdelingsknappen for at "
 "se dem alle"
 
 #: src/register/splitreg.c:743
@@ -4338,7 +4352,7 @@ msgstr "Vis denne hjælpetekst"
 
 #: src/scm/guile-strings.c:4
 msgid "Enable debugging mode"
-msgstr "Aktivér aflusningsmodus"
+msgstr "Aktivér aflusningstilstand"
 
 #: src/scm/guile-strings.c:5
 msgid "Set the logging level from 0 (least) to 6 (most)"
@@ -4366,7 +4380,7 @@ msgstr "Sæt søgestien for dokumentationsfiler"
 
 #: src/scm/guile-strings.c:11
 msgid "Evaluate the guile command"
-msgstr "Fortolk en guile-kommando"
+msgstr "Fortolk en Guile-kommando"
 
 #: src/scm/guile-strings.c:12
 msgid "Load the given .scm file"
@@ -4566,7 +4580,7 @@ msgstr "Hovedvindue"
 
 #: src/scm/guile-strings.c:69
 msgid "Double Entry"
-msgstr ""
+msgstr "Dobbelt bogføring"
 
 #: src/scm/guile-strings.c:71
 msgid "Quicken"
@@ -4574,7 +4588,7 @@ msgstr "Quicken"
 
 #: src/scm/guile-strings.c:72
 msgid "MYM"
-msgstr ""
+msgstr "MYM"
 
 #: src/scm/guile-strings.c:73
 msgid "Preferences"
@@ -4634,7 +4648,7 @@ msgstr "Justér balance"
 
 #: src/scm/guile-strings.c:90
 msgid "Record Keeping"
-msgstr ""
+msgstr "Bogføring"
 
 #: src/scm/guile-strings.c:91
 msgid "Check Printing"
@@ -4731,7 +4745,7 @@ msgstr "GnuCash netværkshjem"
 
 #: src/scm/guile-strings.c:119
 msgid "URL Tests"
-msgstr "URL-tests"
+msgstr "URL-test"
 
 #: src/scm/guile-strings.c:120
 msgid "gnucash.org"
@@ -4836,11 +4850,11 @@ msgstr "Uge"
 
 #: src/scm/guile-strings.c:172
 msgid "2Week"
-msgstr "2Uge"
+msgstr "14dage"
 
 #: src/scm/guile-strings.c:173
 msgid "Two Week"
-msgstr "To Uge"
+msgstr "14 dage"
 
 #: src/scm/guile-strings.c:174 src/scm/guile-strings.c:175
 msgid "Month"
@@ -4864,7 +4878,7 @@ msgstr "Andet niveau"
 
 #: src/scm/guile-strings.c:182
 msgid "Third-level"
-msgstr "Tredie niveau"
+msgstr "Tredje niveau"
 
 #: src/scm/guile-strings.c:183 src/scm/guile-strings.c:184
 msgid "Fourth-level"
@@ -4933,11 +4947,11 @@ msgstr "Den pris, der blev registreret tættest på rapportdatoen."
 
 #: src/scm/guile-strings.c:200
 msgid "Width of plot in pixels."
-msgstr "Bredden af diagrammet i piksler."
+msgstr "Bredden af diagrammet i skærmpunkter."
 
 #: src/scm/guile-strings.c:201
 msgid "Height of plot in pixels."
-msgstr "Højden af diagrammet i piksler."
+msgstr "Højden af diagrammet i skærmpunkter."
 
 #: src/scm/guile-strings.c:202
 msgid "Choose the marker for each data point."
@@ -4972,7 +4986,7 @@ msgstr "Afgift"
 
 #: src/scm/guile-strings.c:216
 msgid "Funds Out"
-msgstr "Beløb Ud"
+msgstr "Beløb ud"
 
 #: src/scm/guile-strings.c:217
 msgid "Withdrawal"
@@ -5001,7 +5015,7 @@ msgstr "US"
 
 #: src/scm/guile-strings.c:232
 msgid "US-style: mm/dd/yyyy"
-msgstr "Amerikansk stil: mm/dd/yyyy"
+msgstr "Amerikansk stil: mm/dd/åååå"
 
 #: src/scm/guile-strings.c:233
 msgid "UK"
@@ -5009,7 +5023,7 @@ msgstr "UK"
 
 #: src/scm/guile-strings.c:234
 msgid "UK-style dd/mm/yyyy"
-msgstr "Britisk stil dd/mm/yyyy"
+msgstr "Britisk stil dd/mm/åååå"
 
 #: src/scm/guile-strings.c:235
 msgid "Europe"
@@ -5017,7 +5031,7 @@ msgstr "Europa"
 
 #: src/scm/guile-strings.c:236
 msgid "Continental Europe: dd.mm.yyyy"
-msgstr "Europa: dd.mm.yyyy"
+msgstr "Europa: dd.mm.åååå"
 
 #: src/scm/guile-strings.c:237
 msgid "ISO"
@@ -5029,15 +5043,15 @@ msgstr "ISO-standard: åååå-mm-dd"
 
 #: src/scm/guile-strings.c:239
 msgid "Locale"
-msgstr "Internationalt"
+msgstr "Regionsdata"
 
 #: src/scm/guile-strings.c:240
 msgid "Default system locale format"
-msgstr "Standard sprogformat for systemet"
+msgstr "Standard regionsdata for systemet"
 
 #: src/scm/guile-strings.c:242
 msgid "Default Currency"
-msgstr "Standard valuta"
+msgstr "Standardvaluta"
 
 #: src/scm/guile-strings.c:243
 msgid "Default currency for new accounts"
@@ -5045,7 +5059,7 @@ msgstr "Standardvaluta for nye konti"
 
 #: src/scm/guile-strings.c:245
 msgid "Use 24-hour time format"
-msgstr "Brug 24-timer tidsformat"
+msgstr "Brug 24-timers tidsformat"
 
 #: src/scm/guile-strings.c:246
 msgid "Use a 24 hour (instead of a 12 hour) time format."
@@ -5057,7 +5071,7 @@ msgstr "Anvend EURO-understøttelse"
 
 #: src/scm/guile-strings.c:249
 msgid "Enables support for the European Union EURO currency"
-msgstr "Slår understøttelse af den Europæiske Unions EURO valuta til"
+msgstr "Aktiverer understøttelse af den Europæiske Unions EURO-valuta"
 
 #: src/scm/guile-strings.c:251
 msgid "Default Register Style"
@@ -5081,21 +5095,21 @@ msgstr "Journal"
 
 #: src/scm/guile-strings.c:260
 msgid "Double Line Mode"
-msgstr "Dobbelt linje tilstand"
+msgstr "Dobbelt linje-tilstand"
 
 #: src/scm/guile-strings.c:263
 msgid "Auto-Raise Lists"
-msgstr "Autohæv lister"
+msgstr "Hæv automatisk lister"
 
 #: src/scm/guile-strings.c:264
 msgid "Automatically raise the list of accounts or actions during input."
 msgstr ""
-"Bring automatisk listen af konti eller handlinger til front under indlæsning "
-"af data."
+"Sæt automatisk listen af konti eller handlinger i forgrunden under "
+"indlæsning af data."
 
 #: src/scm/guile-strings.c:266
 msgid "Show All Transactions"
-msgstr "Vis Alle Transaktioner"
+msgstr "Vis alle transaktioner"
 
 #: src/scm/guile-strings.c:267
 msgid "By default, show every transaction in an account."
@@ -5147,19 +5161,19 @@ msgstr "Brug en dialogboks for at bekræfte ændringer i en afstemt transaktion."
 
 #: src/scm/guile-strings.c:284
 msgid "Register font"
-msgstr "Kassekladde-skriftsnit"
+msgstr "Kassekladde-skrift"
 
 #: src/scm/guile-strings.c:285
 msgid "The font to use in the register"
-msgstr "Skriftsnittet, der benyttes i kassekladden"
+msgstr "Skrifttypen, der benyttes i kassekladden"
 
 #: src/scm/guile-strings.c:287
 msgid "Register hint font"
-msgstr "Skriftsnit for kassekladdetip"
+msgstr "Skrift for kassekladdetip"
 
 #: src/scm/guile-strings.c:288
 msgid "The font used to show hints in the register"
-msgstr "Skriftsnittet, der bruges til at vise tip i kassekladden"
+msgstr "Skrifttypen, der bruges til at vise tip i kassekladden"
 
 #: src/scm/guile-strings.c:289 src/scm/guile-strings.c:292
 #: src/scm/guile-strings.c:295 src/scm/guile-strings.c:298
@@ -5174,7 +5188,7 @@ msgstr "Overskriftsfarve"
 
 #: src/scm/guile-strings.c:291
 msgid "The header background color"
-msgstr "Farven på overskriftbaggrunden"
+msgstr "Farven på overskriftsbaggrunden"
 
 #: src/scm/guile-strings.c:293
 msgid "Primary color"
@@ -5226,7 +5240,7 @@ msgstr "Baggrundsfarven for den aktive opdelte række i registret"
 
 #: src/scm/guile-strings.c:311
 msgid "Double mode colors alternate with transactions"
-msgstr "Alternér farver for transaktioner i dobbeltrækketilstand"
+msgstr "Skift mellem farver for transaktioner i dobbeltrækketilstand"
 
 #: src/scm/guile-strings.c:312
 msgid ""
@@ -5250,7 +5264,7 @@ msgstr ""
 
 #: src/scm/guile-strings.c:316 src/scm/guile-strings.c:319
 msgid "User Info"
-msgstr "Brugerinformation"
+msgstr "Brugeroplysninger"
 
 #: src/scm/guile-strings.c:317
 msgid "User Name"
@@ -5299,7 +5313,7 @@ msgstr "Værktøjslinjeknapper"
 
 #: src/scm/guile-strings.c:327
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
-msgstr "Vælg mellem at vise ikoner, tekst, eller begge dele i værktøjslinjeknapper"
+msgstr "Vælg mellem at vise ikoner, tekst eller begge dele i værktøjslinjeknapper"
 
 #: src/scm/guile-strings.c:328
 msgid "Icons and Text"
@@ -5327,7 +5341,7 @@ msgstr "Vis kun tekst"
 
 #: src/scm/guile-strings.c:335
 msgid "Application MDI mode"
-msgstr ""
+msgstr "Multidokumenttilstand"
 
 #: src/scm/guile-strings.c:336
 msgid "Choose how new windows are created for reports and account trees."
@@ -5355,11 +5369,11 @@ msgstr "Det bruges ét vindue til alle visninger (vælg indhold gennem Vindue-menu
 
 #: src/scm/guile-strings.c:343
 msgid "Use GNOME default"
-msgstr "Benyt GNOME-standard"
+msgstr "Benyt Gnome-standard"
 
 #: src/scm/guile-strings.c:344
 msgid "Default MDI mode can be set in the GNOME Control Center"
-msgstr "Standard MDI-modus kan sættes i GNOME Kontrolcenter"
+msgstr "Den automatisk valgte multidokumentstilstand kan vælges i Gnomes kontrolcenter"
 
 #: src/scm/guile-strings.c:346
 msgid "Account Separator"
@@ -5367,11 +5381,11 @@ msgstr "Kontoseparator"
 
 #: src/scm/guile-strings.c:347
 msgid "The character used to separate fully-qualified account names"
-msgstr "Tegnet brugt til at adskille fuldt kvalificerede kontonavne"
+msgstr "Tegnet bruges til at adskille fuldt kvalificerede kontonavne"
 
 #: src/scm/guile-strings.c:348
 msgid ": (Colon)"
-msgstr ": (Kolon)"
+msgstr ": (kolon)"
 
 #: src/scm/guile-strings.c:349
 msgid "Income:Salary:Taxable"
@@ -5379,7 +5393,7 @@ msgstr "Indtægt:løn:skattepligtig"
 
 #: src/scm/guile-strings.c:350
 msgid "/ (Slash)"
-msgstr "/ (Skråstreg)"
+msgstr "/ (skråstreg)"
 
 #: src/scm/guile-strings.c:351
 msgid "Income/Salary/Taxable"
@@ -5387,7 +5401,7 @@ msgstr "Indtægt/løn/skattepligtig"
 
 #: src/scm/guile-strings.c:352
 msgid "\\ (Backslash)"
-msgstr "\\ (Baglæns skråstreg)"
+msgstr "\\ (baglæns skråstreg)"
 
 #: src/scm/guile-strings.c:353
 msgid "Income\\Salary\\Taxable"
@@ -5395,7 +5409,7 @@ msgstr "Indtægt\\løn\\Skattepligtig"
 
 #: src/scm/guile-strings.c:354
 msgid "- (Dash)"
-msgstr "- (Bindestreg)"
+msgstr "- (bindestreg)"
 
 #: src/scm/guile-strings.c:355
 msgid "Income-Salary-Taxable"
@@ -5403,7 +5417,7 @@ msgstr "Indtægt-løn-skattepligtig"
 
 #: src/scm/guile-strings.c:356
 msgid ". (Period)"
-msgstr ". (Punktum)"
+msgstr ". (punktum)"
 
 #: src/scm/guile-strings.c:357
 msgid "Income.Salary.Taxable"
@@ -5423,7 +5437,7 @@ msgstr "Indtægt & udgift"
 
 #: src/scm/guile-strings.c:362
 msgid "Reverse Income and Expense Accounts"
-msgstr "Skift fortegn for Indtægts- og udgiftskonti"
+msgstr "Skift fortegn for indtægts- og udgiftskonti"
 
 #: src/scm/guile-strings.c:363 src/scm/report/guile-strings.c:694
 msgid "Credit Accounts"
@@ -5459,7 +5473,7 @@ msgstr "Vis negative beløb med rød"
 
 #: src/scm/guile-strings.c:377
 msgid "Automatic Decimal Point"
-msgstr "Automatisk decimalkomma"
+msgstr "Automatiske decimalpladser"
 
 #: src/scm/guile-strings.c:378
 msgid ""
@@ -5469,11 +5483,11 @@ msgstr "Indsæt automatisk et decimalkomma i værdier, der indtastes uden et sådan
 
 #: src/scm/guile-strings.c:380
 msgid "Auto Decimal Places"
-msgstr "Automatisk decimalkomma"
+msgstr "Automatiske decimaler"
 
 #: src/scm/guile-strings.c:381
 msgid "How many automatic decimal places will be filled in."
-msgstr "Hvor mange decimaler skal udfyldes."
+msgstr "Hvor mange pladser efter kommaet skal udfyldes."
 
 #: src/scm/guile-strings.c:383
 msgid "No account list setup on new file"
@@ -5483,7 +5497,7 @@ msgstr "Ingen kontolisteopsætning ved ny fil"
 msgid ""
 "Popup the new account list dialog when you choose \"New File\" from the "
 "\"File\" menu"
-msgstr "Vis dialog for ny kontoliste, når du vælge \"Ny Fil\" fra \"Fil\"-menuen"
+msgstr "Vis vinduet for ny kontoliste, når du vælger \"Ny Fil\" fra \"Fil\"-menuen"
 
 #: src/scm/guile-strings.c:386
 msgid "Verbose documentation"
@@ -5491,7 +5505,7 @@ msgstr "Detaljeret dokumentation"
 
 #: src/scm/guile-strings.c:387
 msgid "Show some documentation-only pages in QIF Import druid"
-msgstr "Vis nogle dokumentationssider i QIF-indlæsningsdruiden"
+msgstr "Vis nogle dokumentationssider i QIF-indlæsningshjælperen"
 
 #: src/scm/guile-strings.c:388 src/scm/guile-strings.c:391
 #: src/scm/guile-strings.c:394 src/scm/guile-strings.c:397
@@ -5536,7 +5550,7 @@ msgstr "Vis version."
 
 #: src/scm/guile-strings.c:401 src/scm/guile-strings.c:402
 msgid "Generate an argument summary."
-msgstr ""
+msgstr "Vis parameterbeskrivelse."
 
 #: src/scm/guile-strings.c:403
 msgid "Don't load any file, including autoloading the last file."
@@ -5597,7 +5611,7 @@ msgstr "Kunne hverken hente kurser eller finde problemet."
 #: src/scm/guile-strings.c:419 src/scm/guile-strings.c:421
 #: src/scm/guile-strings.c:422
 msgid "Unable to retrieve quotes for these items:"
-msgstr "Kunne ikke hente kurser for disse emner:"
+msgstr "Kunne ikke hente kurser for disse elementer:"
 
 #: src/scm/guile-strings.c:420
 msgid "Continue using only the good quotes?"
@@ -5609,7 +5623,7 @@ msgstr "Fortsætter med varekurser."
 
 #: src/scm/guile-strings.c:424 src/scm/guile-strings.c:426
 msgid "Unable to create prices for these items:"
-msgstr "Kunne ikke oprette priser for disse emner:"
+msgstr "Kunne ikke oprette priser for disse elementer:"
 
 #: src/scm/guile-strings.c:425
 msgid "Add remaining good quotes?"
@@ -5672,7 +5686,7 @@ msgstr "Redigér rapport-stilark."
 
 #: src/scm/guile-strings.c:441
 msgid "Welcome Extravaganza"
-msgstr ""
+msgstr "Rigtig hjertelig velkommen"
 
 #: src/scm/guile-strings.c:442
 msgid "Welcome-to-GnuCash screen"
@@ -5680,7 +5694,7 @@ msgstr "Velkommen-til-GnuCash-skærm"
 
 #: src/scm/guile-strings.c:443
 msgid "Enter a descriptive name for this report"
-msgstr "Indtast et beskrivende navn på denne rapport"
+msgstr "Indtast et beskrivende navn for denne rapport"
 
 #: src/scm/guile-strings.c:444 src/scm/guile-strings.c:448
 #: src/scm/guile-strings.c:449
@@ -5713,7 +5727,7 @@ msgstr "Aktier"
 
 #: src/scm/guile-strings.c:456
 msgid "Mutual Funds"
-msgstr "Aktiefonde"
+msgstr "Investeringsbeviser"
 
 #: src/scm/guile-strings.c:457
 msgid "Currencies"
@@ -5762,7 +5776,7 @@ msgid ""
 "GnuCash 1.6\" is particularly interesting. You can access the manual\n"
 "under the Help menu."
 msgstr ""
-"GnuCash's onlinemanual har megen behjælpelig information.  \n"
+"GnuCash's brugervejledning har megen behjælpelig information.  \n"
 "Hvis du opgraderer fra GnuCash 1.4, er afsnittet \"What's new in\n"
 "GnuCash 1.6\" specielt interessant. Du kan komme til manualen fra\n"
 "\"Hjælp\"-menuen."
@@ -5776,7 +5790,7 @@ msgid ""
 msgstr ""
 "Du kan let importere dine eksisterende økonomidata fra Quicken,\n"
 "MS Money eller andre programmer, der kan eksportere QIF-filer\n"
-"(Quicken Interchange Format). Tryk Import-knappen i hovedvinduets\n"
+"(Quicken Interchange Format). Tryk på Import-knappen i hovedvinduets\n"
 "værktøjslinie og følg instruktionerne."
 
 #: src/scm/guile-strings.c:477
@@ -5789,7 +5803,7 @@ msgstr ""
 "Hvis du kender til andre økonomiprogrammer såsom Quicken, skal du\n"
 "lægge mærke til, at GnuCash benytter konti i stedet for kategorier\n"
 "for at følge indtægter og udgifter. Læs mere om indtægts- og udgift-\n"
-"konti i GnuCash's onlinemanual."
+"konti i GnuCash's brugervejledning."
 
 #: src/scm/guile-strings.c:481
 msgid ""
@@ -5802,7 +5816,7 @@ msgstr ""
 "Opret nye konti ved at trykke på \"Ny\"-knappen i hovedvinduets\n"
 "værktøjslinie. Dette vil frembringe en dialogboks, hvor du kan\n"
 "angive kontodetaljer. Læs mere om opsætning af kontoplaner\n"
-"i GnuCash's onlinemanual."
+"i GnuCash's brugervejledning."
 
 #: src/scm/guile-strings.c:486
 msgid ""
@@ -5884,8 +5898,8 @@ msgid ""
 msgstr ""
 "Du kan trykke mellemrum i afstemningsvinduet for at\n"
 "markere transaktioner som afstemte.\n"
-"Du kan også trykke Tabulator og Skift-Tabulator for\n"
-"at bevæge dig mellem ind- og udbetalinger."
+"Du kan også trykke <tabulator> og <Skift>-<Tabulator>\n"
+"for at bevæge dig mellem ind- og udbetalinger."
 
 #: src/scm/guile-strings.c:513
 msgid ""
@@ -5917,7 +5931,7 @@ msgstr ""
 "er du nødt til at bruge en mellemliggende valutahandelskonto.\n"
 "Tryk \"Overførsel\"-knappen i kassekladdens værktøjslinie for at\n"
 "lade GnuCash oprette den mellemliggende transaktion.\n"
-"Se GnuCash's online manual for detaljer."
+"Se GnuCash's brugervejledning for detaljer."
 
 #: src/scm/guile-strings.c:523
 msgid ""
@@ -5926,7 +5940,7 @@ msgid ""
 "To do so, use the \"Multicolumn View\" report."
 msgstr ""
 "Du kan samle flere rapporter i et enkelt vindue, så du kan se\n"
-"al den økonomiske information, du ønsker med et enkelt øjekast.\n"
+"alle de økonomiske oplysninger, du ønsker med et enkelt øjekast.\n"
 "Brug rapporten \"Flerkolonnevisning\" for at opnå dette."
 
 #: src/scm/guile-strings.c:526
@@ -5955,7 +5969,7 @@ msgid ""
 "Join them on #gnucash at irc.gnome.org"
 msgstr ""
 "GnuCash's udviklere er nemme at komme i kontakt med. Udover\n"
-"flere postlister, kan du sludre med dem direkte på IRC!\n"
+"flere postlister kan du sludre med dem direkte på IRC!\n"
 "Du finder dem på #gnucash på irc.gnome.org."
 
 #: src/scm/guile-strings.c:534
@@ -5984,19 +5998,19 @@ msgstr "Renter"
 
 #: src/scm/qif-import/guile-strings.c:3
 msgid "Cap Return"
-msgstr ""
+msgstr "Kapitalgevinst"
 
 #: src/scm/qif-import/guile-strings.c:4
 msgid "Cap. gain (long)"
-msgstr "Kapitalgev. (lang)"
+msgstr "Kapitalgevinst (lang sigt)"
 
 #: src/scm/qif-import/guile-strings.c:5
 msgid "Cap. gain (mid)"
-msgstr "Kapitalgev. (mellem)"
+msgstr "Kapitalgevinst (mellemlang sigt)"
 
 #: src/scm/qif-import/guile-strings.c:6
 msgid "Cap. gain (short)"
-msgstr "Kapitalgev. (kort)"
+msgstr "Kapitalgevinst (kort sigt)"
 
 #: src/scm/qif-import/guile-strings.c:9
 msgid "Commissions"
@@ -6155,7 +6169,7 @@ msgstr "Kontovisningsdybde"
 
 #: src/scm/report/guile-strings.c:34
 msgid "Show Foreign Currencies/Shares of Stock"
-msgstr ""
+msgstr "Vis fremmed valuta for aktie"
 
 #: src/scm/report/guile-strings.c:37 src/scm/report/guile-strings.c:90
 #: src/scm/report/guile-strings.c:265
@@ -6231,11 +6245,11 @@ msgstr "Vis et diagram med de viste data."
 
 #: src/scm/report/guile-strings.c:62 src/scm/report/guile-strings.c:81
 msgid "Plot Type"
-msgstr "Plottetype"
+msgstr "Graftype"
 
 #: src/scm/report/guile-strings.c:63
 msgid "The type of graph to generate"
-msgstr "Graftypen der skal genereres"
+msgstr "Den type graf, der skal genereres"
 
 #: src/scm/report/guile-strings.c:64 src/scm/report/guile-strings.c:74
 msgid "Average"
@@ -6550,7 +6564,7 @@ msgstr "Afprøver"
 
 #: src/scm/report/guile-strings.c:197
 msgid "Crash the report"
-msgstr "Krash rapporten"
+msgstr "Ødelæg rapporten"
 
 #: src/scm/report/guile-strings.c:198
 msgid ""
@@ -6566,7 +6580,7 @@ msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
-"Dette er en prøve-GnuCash-rapport. Se guile (scheme) kildekoden i %s for "
+"Dette er en GnuCash prøve-rapport. Se Guile (scheme-kode) kildekoden i %s for "
 "detaljer om at skrive dine egne rapporter, eller om at udvide eksisterende "
 "rapporter."
 
@@ -6587,7 +6601,7 @@ msgstr "Se %s for detaljer om at abonnere på denne liste."
 #: src/scm/report/guile-strings.c:203
 #, c-format
 msgid "You can learn more about writing scheme using this %s."
-msgstr "Du kan lære mere om at skrive 'scheme' med denne %s"
+msgstr "Du kan lære mere om at skrive scheme-kode med denne %s"
 
 #: src/scm/report/guile-strings.c:204
 msgid "online book"
@@ -6629,7 +6643,7 @@ msgstr "Datovalgmuligheden er %s."
 #: src/scm/report/guile-strings.c:212
 #, c-format
 msgid "The date and time option is %s."
-msgstr "Dato og tid valgmuligheden er %s."
+msgstr "Dato og tid-valgmuligheden er %s."
 
 #: src/scm/report/guile-strings.c:213
 #, c-format
@@ -6649,7 +6663,7 @@ msgstr "Nummervalget er %s."
 #: src/scm/report/guile-strings.c:216
 #, c-format
 msgid "The number option formatted as currency is %s."
-msgstr "Nummervalget formateret som valuta er %s."
+msgstr "Talvalget formateret som valuta er %s."
 
 #: src/scm/report/guile-strings.c:217
 msgid "Items you selected:"
@@ -6857,7 +6871,7 @@ msgid ""
 "There is no price information available for the selected commodities in the "
 "selected time period."
 msgstr ""
-"Der er ingen tilgængelig prisinformation for de valgte varer i den valgte "
+"Der er ingen tilgængelige prisoplysninger for de valgte varer i den valgte "
 "tidsperiode."
 
 #: src/scm/report/guile-strings.c:332
@@ -7178,7 +7192,7 @@ msgstr "Almindelig"
 
 #: src/scm/report/guile-strings.c:516
 msgid "Alternate Period"
-msgstr ""
+msgstr "Alternativ periode"
 
 #: src/scm/report/guile-strings.c:517
 msgid "Override or modify From: & To:"
@@ -7198,7 +7212,7 @@ msgstr "1. est. skattekvartal"
 
 #: src/scm/report/guile-strings.c:521
 msgid "Jan 1 - Mar 31"
-msgstr "1.jan - 31. mar"
+msgstr "1. jan - 31. mar"
 
 #: src/scm/report/guile-strings.c:522
 msgid "2nd Est Tax Quarter"
@@ -7332,15 +7346,15 @@ msgstr "Periode fra %s til %s"
 
 #: src/scm/report/guile-strings.c:557
 msgid "Blue items are exportable to a .TXF file."
-msgstr "Blå emner kan eksporteres til en .TXF-fil."
+msgstr "Blå elementer kan eksporteres til en .TXF-fil."
 
 #: src/scm/report/guile-strings.c:558
 msgid ""
 "No Tax Related accounts were found.  Go to the Accounts->Tax Information "
 "dialog to set up tax-related accounts."
 msgstr ""
-"Ingen skatterelaterede konti blev fundet. Gå til dialogen "
-"Konti->Skatteinformation for at oprette skatterelaterede konti."
+"Ingen skatterelaterede konti blev fundet. Gå til vinduet "
+"Konti->Skatteoplysninger for at oprette skatterelaterede konti."
 
 #: src/scm/report/guile-strings.c:559
 msgid "Tax Report / TXF Export"
