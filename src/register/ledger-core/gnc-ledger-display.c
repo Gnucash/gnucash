@@ -34,6 +34,7 @@
 #include "Transaction.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
+#include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-ledger-display.h"
