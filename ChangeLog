@@ -1,3 +1,9 @@
+2003-01-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/register/ledger-core/split-register-control.c: invert the
+	  exchange rate when we're swapping currencies, since the logic
+	  of the transfer dialog was reversed.  Fixes bug #102157
+
 2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/druid-hbci-initial.c
 	* src/import-export/hbci/gnc-hbci-utils.c:

@@ -1157,12 +1157,12 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (swap_amounts) {
     gnc_xfer_dialog_select_to_currency (xfer, txn_cur);
     gnc_xfer_dialog_select_from_currency (xfer, xfer_com);
-  } else {
-    gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
-    gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
     if (!gnc_numeric_zero_p (exch_rate))
       exch_rate = gnc_numeric_div (gnc_numeric_create (1, 1), exch_rate,
 				   GNC_DENOM_AUTO, GNC_DENOM_REDUCE);
+  } else {
+    gnc_xfer_dialog_select_to_currency (xfer, xfer_com);
+    gnc_xfer_dialog_select_from_currency (xfer, txn_cur);
   }
   gnc_xfer_dialog_hide_to_account_tree (xfer);
   gnc_xfer_dialog_hide_from_account_tree (xfer);
