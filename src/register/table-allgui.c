@@ -197,8 +197,13 @@ xaccTableResize (Table * table,
                  int new_phys_rows, int new_phys_cols,
                  int new_virt_rows, int new_virt_cols)
 {
-   /* hack alert -- should check to make sure that no null pointers
-    * or bad values were passed in ... */
+   if (!table) return;
+   if ((new_phys_rows < new_virt_rows) ||
+       (new_phys_cols < new_virt_cols)) {
+      printf ("Internal Error: xaccTableResize(): the number of "
+         "physical rows must equal or exceed the number of virtual rows \n");
+      exit (1);
+   }
 
    /* resize the string data array */
    RESIZE_ARR ((table->num_phys_rows),
