@@ -850,7 +850,7 @@ gnc_register_create_menus(GNCRegWidget *rw, GtkWidget *statusbar)
     {
       GNOME_APP_UI_ITEM,
       N_("_Delete"),
-      N_("Delete the current transaction"),
+      N_("Delete the selected transaction"),
       emit_delete_ent_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL

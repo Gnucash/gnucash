@@ -1056,7 +1056,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
     return;
 
   {
-    const char *message = _("Are you sure you want to delete the current "
+    const char *message = _("Are you sure you want to delete the selected "
                             "transaction?");
     gboolean result;
 
@@ -1279,7 +1279,7 @@ gnc_recn_create_menu_bar(RecnWindow *recnData, GtkWidget *statusbar)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Delete"), N_("Delete the current transaction"),
+      N_("_Delete"), N_("Delete the selected transaction"),
       gnc_ui_reconcile_window_delete_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       'd', GDK_CONTROL_MASK, NULL
@@ -1351,7 +1351,7 @@ gnc_recn_create_popup_menu(RecnWindow *recnData)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("_Delete"), N_("Delete the current transaction"),
+      N_("_Delete"), N_("Delete the selected transaction"),
       gnc_ui_reconcile_window_delete_cb, recnData, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
       'd', GDK_CONTROL_MASK, NULL
@@ -1411,7 +1411,7 @@ gnc_recn_create_tool_bar(RecnWindow *recnData)
     },
     {
       GNOME_APP_UI_ITEM,
-      N_("Delete"), N_("Delete the current transaction"),
+      N_("Delete"), N_("Delete the selected transaction"),
       gnc_ui_reconcile_window_delete_cb, NULL, NULL,
       GNOME_APP_PIXMAP_STOCK, GNOME_STOCK_PIXMAP_TRASH,
       0, 0, NULL

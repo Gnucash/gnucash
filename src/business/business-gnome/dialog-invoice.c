@@ -404,7 +404,7 @@ gnc_invoice_window_deleteCB (GtkWidget *widget, gpointer data)
   /* Verify that the user really wants to delete this entry */
   {
     const char *message = _("Are you sure you want to delete the "
-			    "current entry?");
+			    "selected entry?");
     const char *order_warn = _("This entry is attached to an order and "
 			       "will be deleted from that as well!");
     char *msg;

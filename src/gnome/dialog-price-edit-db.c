@@ -303,7 +303,7 @@ remove_clicked (GtkWidget *widget, gpointer data)
 {
   PricesDialog *pdb_dialog = data;
   const char *message = _("Are you sure you want to delete the\n"
-                          "current price?");
+                          "selected price?");
 
   if (!pdb_dialog->price)
     return;

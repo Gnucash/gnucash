@@ -1,3 +1,12 @@
+2002-08-02  Christian Stimming  <stimming@tuhh.de>
+
+	* src/business/business-gnome/dialog-invoice.c,
+	src/gnome/dialog-commodities.c, src/gnome/dialog-price-edit-db.c,
+	src/gnome/window-reconcile.c,
+	src/register/ledger-core/gnc-regwidget.c: Changed wording of
+	confirmation questions by s/current/selected/ as proposed by David
+	Roundy <droundy@civet.berkeley.edu>.
+
 2002-08-01  Christian Stimming  <stimming@tuhh.de>
 
 	* src/AccWindow.h, dialog-account/dialog-account.c,
