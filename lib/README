@@ -1,0 +1,28 @@
+
+The various peices of code needed to build X-Accountant are contained
+here.  Some of these have been modified from thier original
+distribution.  In general, its a *really bad idea* to try to fix
+bugs here, you should probably start afresh with the real, original
+sources.
+
+Some of the stuff here may be down-level, different, or patched to work
+with Xbae.  In all cases, examples and non-essential files have been
+deleted to keep the overall distribution small.  
+
+The stuff here will be slowly removed when patched/standard versions
+that work with Xbae become available, and become easy to build & use.
+
+XbaeMatrix:  
+  -- modified to support cell widgets
+  -- modified to support cursor position
+  -- modified by deleting examples, other non-essential stuff.
+
+libhtmlw:
+  -- modified by deleting examples, other non-essential stuff.
+
+ComboBox:
+  -- assorted bug fixes
+  -- modified by deleting examples, other non-essential stuff.
+
+XmHTML:
+  -- modified by deleting examples, other non-essential stuff.
