@@ -1,0 +1,52 @@
+
+Ideas for engine enhancements:
+-----------------------------
+  1) Have (by default) xacc immediately re-read a file after every
+     write, and compare the two resulting AccountGroups for equality.
+
+     During development, this is a good idea, as it will help uncover
+     thinko's more quickly, instead of letting them hid for weeks or months
+     (as the last one did).  Its not a bad self-consistency check when
+     monkeying with the internals, damn the performance.
+     
+     It can be removed/disabled for product versions.
+
+  2) Have (by default) xacc create a backup file
+     filename-timestamp.xac on every save.  This will eat up some disk
+     space until you go back and kill the older versions, but it's
+     better than not realizing that the data's subtly corrupt a week
+     later. 
+
+     A lot of small-office/home systems do this. primarily useful as a
+     historical record, in case you accidentally wipe out something, and
+     don't spot it until later.  Limited usefulness, but very nice in case
+     you accidentally delete an entire account.  
+     
+     To a limited degree, it provides atomicity/consistency/etc at the
+     course-grained accountr-group level.
+
+  3) Introduce begin() and end() subroutines that should wrap updates 
+     to individual splits/transactions.  These should be useful for 
+     an sql back-end, where end() would be a synonym for "commit".
+
+  4) Transaction logs.  The idea was that every time a transaction 
+     was called that would cause a data update, the information that 
+     was updated would be dumped out into an "append only" log file.
+
+     This somewhat parallels what better database systems do to ensure
+     integrity; Oracle, for instance, has what is called an "archive log." 
+     You have a copy of the database "synced up" as at some point in time, 
+     and can apply "archive logs" to bring that old copy of the database 
+     up to date should something go wrong to trash today's copy.
+
+     In effect, you'd have things like
+
+     === 97/01/01 04:32:00 === Add Transaction ==== [whatever was added] ====
+     === 97/01/01 04:32:02 === Delete Transaction ==== [whatever was deleted] ====
+
+     It also is a useful debugging tool, as if you make sure that the 
+     "log_transaction()" call starts by opening the log file, writes, and
+     then closes and syncs, you know what is going on with the data even if
+     horrible things happen to the "master" database file.
+
+
