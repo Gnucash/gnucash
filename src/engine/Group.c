@@ -146,8 +146,8 @@ xaccAccountGroupCommitEdit (AccountGroup *grp)
   {
     Account *account = node->data;
 
-    xaccAccountCommitEdit (account);
     xaccAccountGroupCommitEdit (account->children);
+    xaccAccountCommitEdit (account);
   }
 }
 
