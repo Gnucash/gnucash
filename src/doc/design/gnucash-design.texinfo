@@ -9,6 +9,19 @@
 @include version.texi
 
 @ifinfo
+@format
+
+@dircategory Personal Finance
+@dircategory Programming
+
+@direntry
+* gnucash: (gnucash-design).       Design of the GnuCash program
+@end direntry
+
+@end format
+@end ifinfo
+
+@ifinfo
 This file documents the design of the GnuCash program.
 
 Copyright 2000 Gnumatic Incorporated
