@@ -59,7 +59,10 @@ AccountGroup *xaccMallocAccountGroup (QofBook *book);
  */
 AccountGroup * xaccGetAccountGroup (QofBook *book);
 
-/** huh  ?? */
+/** 
+ * The xaccCollAccountGroup() routine will return the top-most
+ * account group associated with the indicated collection.
+ */
 AccountGroup * xaccCollGetAccountGroup (QofCollection *col);
 
 /** The xaccAccountDestroy() routine will destroy and free all 
