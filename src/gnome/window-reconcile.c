@@ -782,25 +782,19 @@ startRecnWindow(GtkWidget *parent, Account *account,
     gnc_reconcile_interest_xfer_run( &data );
   }
 
-  while (TRUE)
+  result = gnome_dialog_run(GNOME_DIALOG(dialog));
+
+  if (result == 0) /* ok button */
   {
-    result = gnome_dialog_run(GNOME_DIALOG(dialog));
+    *new_ending = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (end_value));
+    *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
 
-    if (result == 0) /* ok button */
-    {
-      *new_ending = gnc_amount_edit_get_amount (GNC_AMOUNT_EDIT (end_value));
-      *statement_date = gnc_date_edit_get_date(GNC_DATE_EDIT(date_value));
+    if (gnc_reverse_balance(account))
+      *new_ending = gnc_numeric_neg (*new_ending);
 
-      if (gnc_reverse_balance(account))
-        *new_ending = gnc_numeric_neg (*new_ending);
+    xaccAccountSetReconcileChildrenStatus(account, data.include_children);
 
-      xaccAccountSetReconcileChildrenStatus(account, data.include_children);
-
-      gnc_save_reconcile_interval(account, *statement_date);
-    }
-
-    /* cancel or delete */
-    break;
+    gnc_save_reconcile_interval(account, *statement_date);
   }
 
   gtk_widget_destroy (dialog);
