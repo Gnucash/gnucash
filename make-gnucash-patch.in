@@ -103,6 +103,7 @@ __DATA__
 .#*
 .deps
 .libs
+ABOUT-NLS
 INSTALL
 COPYING
 Makefile
@@ -132,10 +133,8 @@ gnucash-engine-perl5_wrap.c
 gnucash-engine-perl5_wrap_int.c
 gnucash.engine.i
 gnucash.pm
-gnucash.pot
 install-sh
-intl/libintl.h
-intl/po2tbl.sed
+intl
 lib/finance-quote/blib
 lib/finance-quote/pm_to_blib
 libgncengine.la
@@ -145,9 +144,9 @@ libtool
 ltconfig
 ltmain.sh
 make-gnucash-patch
+po/gnucash.pot
+po/Makefile.in.in
 stamp-h.in
-po/extract-macros.perl
-po/pseudo-source.c
 rpm/gnucash.spec
 src/doc/design/gnucash-design.info
 src/doc/design/gnucash-design.info-1
