@@ -762,10 +762,12 @@ xaccCreateTable (Table *table, GtkWidget * parent)
     }
   }
   
-  /* ??? What does xt_realize do? */
-
   /* if any of the cells have GUI specific components that need 
-   * initialization, initialize them now. */
+   * initialization, initialize them now. 
+   * The cell realize method, if present on a cell,
+   * is how that cell can find out that now is the time to 
+   * initialize that GUI.
+   */
   
   curs = table->current_cursor;
   if (curs) {
