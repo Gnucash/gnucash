@@ -84,6 +84,7 @@ install-data-local: gnucash/index.html gnucash/help-search-index.db
 
 EXTRA_DIST = \
 	$(GNUCASH_SGML_FILES) \
+	$(GNUCASH_HTML_FILES) \
 	topic.dat
 
 manual-html: gnucash/index.html
