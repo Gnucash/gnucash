@@ -4,6 +4,11 @@
 	  to the various columns displayed in the report currency.
 	  Partial fix for #118695.
 
+	* src/business/business-core/gncInvoice.c: set the date-entered on
+	  invoice transactions to "now" instead of the post date.  This
+	  lets us know when an invoice was actually posted, or a payment
+	  was actually made.
+
 2003-07-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	
 	* src/scm/help-topics-index.scm: Commit Jon Lapham's doc changes.
