@@ -108,7 +108,7 @@ pgendGetCache (PGBackend *be,
 
    if (!be || !val_str) return 0;
 
-   /* first, lets see if we can find the guid. 
+   /* first, lets see if we can find the guid or path. 
     * If we can then  just return it */
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT ");
@@ -513,7 +513,7 @@ pgendKVPFetch (PGBackend *be, const GUID *guid, kvp_frame *kf)
    snprintf (iguid_str, 40, "%d;", iguid);
 
    /* save on some sql queries by avoiding kvp data fetches when 
-    * tehre is no data */
+    * there is no data */
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT count(*) FROM gncKVPValue WHERE iguid="); 
    p = stpcpy (p, iguid_str);
