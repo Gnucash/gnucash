@@ -1832,6 +1832,8 @@ gsr_setup_menu_widgets(GNCSplitReg *gsr, GladeXML *xml)
     gtk_widget_set_sensitive(widget, FALSE);
     widget = glade_xml_get_widget (xml, "menu_reinitialize");
     gtk_widget_set_sensitive(widget, FALSE);
+    widget = glade_xml_get_widget (xml, "menu_exchange");
+    gtk_widget_set_sensitive(widget, FALSE);
   }
 
   reg = gnc_ledger_display_get_split_register( gsr->ledger );
@@ -1912,6 +1914,8 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
     menuitem = glade_xml_get_widget( xml, "sr_popup_duplicate" );
     gtk_widget_set_sensitive( menuitem, FALSE );
     menuitem = glade_xml_get_widget( xml, "sr_popup_reinitialize" );
+    gtk_widget_set_sensitive( menuitem, FALSE );
+    menuitem = glade_xml_get_widget( xml, "sr_popup_exchange" );
     gtk_widget_set_sensitive( menuitem, FALSE );
   }
 

@@ -4,6 +4,14 @@
 	  it is pulled in by gtkhtml, which is pulled in from window-help.	  
 
 	* revert patch -- not needed.  Oops.
+
+	* src/gnome/glade/register.glade -- add "Edit Exchange Rate" menu
+	  items to the Actions menu and the context menu
+	* src/gnome/gnc-split-reg.c -- turn off Exchange Rate editing on
+	  "read-only" registers
+	* src/register/ledger-core/split-register-control.c -- fix the logic
+	  for when we pop-up the exchange-rate dialog, in particular when the
+	  user requests it.
 	
 2002-12-04  David Hampton  <hampton@employees.org>
 

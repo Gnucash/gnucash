@@ -1996,6 +1996,18 @@
 
 	<widget>
 	  <class>GtkMenuItem</class>
+	  <name>menu_exchange</name>
+	  <signal>
+	    <name>activate</name>
+	    <handler>gnc_split_reg_handle_exchange_cb</handler>
+	    <last_modification_time>Thu, 05 Dec 2002 23:25:35 GMT</last_modification_time>
+	  </signal>
+	  <label>Edit Exchange Rate</label>
+	  <right_justify>False</right_justify>
+	</widget>
+
+	<widget>
+	  <class>GtkMenuItem</class>
 	  <name>menu_schedule</name>
 	  <signal>
 	    <name>activate</name>
@@ -2222,6 +2234,19 @@
     <label>S_plit Transaction</label>
     <active>False</active>
     <always_show_toggle>True</always_show_toggle>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>sr_popup_exchange</name>
+    <tooltip>Edit the exchange rate for the current split</tooltip>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_split_reg_handle_exchange_cb</handler>
+      <last_modification_time>Thu, 05 Dec 2002 23:25:34 GMT</last_modification_time>
+    </signal>
+    <label>Edit Exchange Rate</label>
+    <right_justify>False</right_justify>
   </widget>
 
   <widget>

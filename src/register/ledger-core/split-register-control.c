@@ -961,7 +961,8 @@ gnc_split_register_traverse_check_stock_shares (SplitRegister *reg, const char *
 }
 
 static Account *
-gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_name)
+gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_name,
+				       gboolean force)
 {
   BasicCell *cell;
   const char *name;
@@ -971,6 +972,15 @@ gnc_split_register_get_account_always (SplitRegister *reg, const char * cell_nam
   if (!cell)
     return NULL;
   name = gnc_basic_cell_get_value (cell);
+
+  /* If 'name' is "-- Split Transaction --" then return NULL or the register acct */
+  if (!safe_strcmp (name, _("-- Split Transaction --"))) {
+    if (force)
+      return gnc_split_register_get_default_account (reg);
+    else
+      return NULL;
+  }
+
   return gnc_split_register_get_account_by_name (reg, cell, name, &dummy);
 }
 
@@ -1016,6 +1026,7 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   gnc_numeric amount, exch_rate;
   XferDialog *xfer;
   gboolean used_mxfrm = FALSE;
+  gboolean swap_amounts = FALSE;
   PriceCell *rate_cell;
   
   /* Make sure we NEED this for this type of register */
@@ -1029,14 +1040,14 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
     return FALSE;
 
   /* Grab the xfer account */
-  xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL);
+  xfer_acc = gnc_split_register_get_account_always (reg, XFRM_CELL, FALSE);
   if (!xfer_acc) {
     used_mxfrm = TRUE;
-    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL);
+    xfer_acc = gnc_split_register_get_account_always (reg, MXFRM_CELL, TRUE);
   }
 
   if (!xfer_acc)
-    goto done;
+    return FALSE;
 
   /* Grab the txn currency */
   txn = gnc_split_register_get_current_trans (reg);
@@ -1045,8 +1056,24 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   txn_cur = xaccTransGetCurrency (txn);
   xfer_com = xaccAccountGetCommodity (xfer_acc);
 
-  if (gnc_commodity_equal (txn_cur, xfer_com))
-    goto done;
+  if (gnc_commodity_equal (txn_cur, xfer_com)) {
+    /* If we're not forcing the dialog, then there is no reason to
+     * go on.  We're using the correct accounts.
+     */
+    if (!force_dialog)
+      return FALSE;
+
+    /* If we're forcing, then compare the current account
+     * commodity to the transaction commodity.
+     */
+
+    xfer_acc = gnc_split_register_get_default_account (reg);
+    xfer_com = xaccAccountGetCommodity (xfer_acc);
+    if (gnc_commodity_equal (txn_cur, xfer_com))
+      return FALSE;
+
+    swap_amounts = TRUE;
+  }
 
   /* Ok, we need to grab the exchange rate */
   amount = gnc_split_register_debcred_cell_value (reg);
@@ -1077,9 +1104,9 @@ gnc_split_register_handle_exchange (SplitRegister *reg, gboolean force_dialog)
   if (gnc_xfer_dialog_run_until_done (xfer) == FALSE)
     return TRUE;
 
-  /* Set the RATE_CELL on this cursor */
- done:
+  /* Set the RATE_CELL on this cursor and mark it changed */
   gnc_price_cell_set_value (rate_cell, exch_rate);
+  gnc_basic_cell_set_changed (&rate_cell->cell, TRUE);
   return FALSE;
 }
 
