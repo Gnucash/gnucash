@@ -105,6 +105,9 @@ AC_CHECK_FUNCS(dlerror,,)
 LIBS="$oLIBS"
 AC_SUBST(DL_LIB)
 
+# Some systems (MacOS) require -lintl
+AC_SEARCH_LIBS(gettext, intl, ,[
+	AC_MSG_ERROR([Cannot find gettext -- do you need to build -lintl?])], )
 
 ### --------------------------------------------------------------------------
 ### Guile and g-wrap version checks (should this be something other than

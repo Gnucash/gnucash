@@ -8,6 +8,8 @@
 	* lib/libc/Makefile.am -- Use LIBOBJS and GnuMake's $(shell) syntax
 	  to create the list of libobjects to be linked into "libc-missing"
 
+	* Check for gettext in -lintl for MacOS
+	
 2002-10-03  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-gettrans.[hc]: Separate the
