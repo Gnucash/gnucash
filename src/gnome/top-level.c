@@ -39,7 +39,6 @@
 #include "argv-list-converters.h"
 #include "combocell.h"
 #include "date.h"
-#include "dialog-account.h"
 #include "dialog-commodity.h"
 #include "dialog-options.h"
 #include "dialog-transfer.h"
