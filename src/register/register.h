@@ -107,6 +107,10 @@ struct _BasicRegister {
    ComboCell     * xtoCell;
    PriceCell     * balanceCell;
 
+   /* the type of the register, must be one of the enumerated types
+    * above *_REGISTER, *_LEDGER, above */
+   int type;
+
    /* some private data; outsiders should not access this */
    short num_cols;
    short num_header_rows;

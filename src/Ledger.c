@@ -203,6 +203,7 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    char *accname;
    char buff[2];
    time_t secs;
+   double baln;
 
    if (!split) return;
    trans = xaccSplitGetParent (split);
@@ -226,7 +227,17 @@ xaccLoadRegEntry (BasicRegister *reg, Split *split)
    xaccSetDebCredCellValue (reg->debitCell, 
                             reg->creditCell, xaccSplitGetValue (split));
 
-   xaccSetAmountCellValue (reg->balanceCell, xaccSplitGetBalance (split));
+   /* For income and expense acounts, we have to reverse
+    * the meaning of balance, since, in a dual entry
+    * system, income will show up as a credit to a
+    * bank account, and a debit to the income account.
+    * Thus, positive and negative are interchanged */
+   baln = xaccSplitGetBalance (split);
+   if ((INCOME_REGISTER == reg->type) ||
+       (EXPENSE_REGISTER == reg->type)) { 
+      baln = -baln;
+   }
+   xaccSetAmountCellValue (reg->balanceCell, baln);
 
    xaccSetAmountCellValue (reg->priceCell, xaccSplitGetSharePrice (split));
    xaccSetPriceCellValue  (reg->shrsCell,  xaccSplitGetShareBalance (split));

@@ -123,8 +123,10 @@
 /* ============================================== */
 
 static void
-configLayout (BasicRegister *reg, int type)
+configLayout (BasicRegister *reg)
 {
+   int type = reg->type;
+
    /* perform a bsic layout that's valid for most
     * of the ledgers; then customize with case 
     * statements. */
@@ -224,8 +226,9 @@ configLayout (BasicRegister *reg, int type)
 /* negative cells mean "traverse out of table" */
 
 static void
-configTraverse (BasicRegister *reg, int type)
+configTraverse (BasicRegister *reg)
 {
+   int type = reg->type;
    CellBlock *curs = reg->cursor;
 
    switch (type) {
@@ -315,9 +318,10 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 
    reg->user_hook = NULL;
    reg->destroy = NULL;
+   reg->type = type;
 
    /* --------------------------- */
-   configLayout (reg, type);
+   configLayout (reg);
 
    /* --------------------------- */
    /* define the header */
@@ -360,7 +364,7 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
 
    /* -------------------------------- */   
    /* define how traversal works */
-   configTraverse (reg, type);
+   configTraverse (reg);
 
    /* -------------------------------- */   
    /* add menu items for the action cell */
