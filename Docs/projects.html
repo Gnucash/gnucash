@@ -278,8 +278,15 @@ immediately, independent of the major goals.
     many unix tools for manipulating ASCII.  An ASCII equivalent of the
     current file format should be easy to develop ... just substitute
     the writes with printf's.
+    <p>
 
-
+<dt><b>Splits</b>
+<dd>When performing a transfer, it is well-useful to allow the transfer
+    to be "split" between several accounts.  To implement a split,
+    the best direction might be to have each transaction be a pointer
+    to a set of splits, with each split having it's own distinct
+    debited/credited account, memo field and currency value.
+    <p>
 
 </dl>
 </p>
