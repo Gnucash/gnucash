@@ -1,3 +1,5 @@
+
+#if 0
 #include "helperfuncs.h"
 
 FILE *
@@ -14,3 +16,4 @@ FILE *
 get_fileptr_stderr() {
   return stderr;
 }
+#endif

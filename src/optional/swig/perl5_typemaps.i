@@ -16,13 +16,16 @@
 /* --------------------------------------------------------- */
 /* first, some basic typemaps */
 
+/* According to the docs, this kind of apply should work ... but it seems
+ * to work only for pointer types, not for scalars, and I can't tell why ... */
 #ifdef DOESNT_WORK_DONT_KNOW_WHY
-%apply int {time_t }
+%apply int BOTH {time_t x};
 #endif /* DOESNT_WORK_DONT_KNOW_WHY */
 
 /* Convert the return values from the function to perl values */
-/* specifically, create a new perl scalar and store the int value there */
-%typemap(perl5, out) time_t {
+/* Specifically, create a new perl scalar and store the int value there */
+/* We can handle multiple types at the same time here */
+%typemap(perl5, out) gboolean,time_t,GNCBackendError {
 
   $target = newSViv ((IV) *($source));
   /* 
@@ -31,49 +34,25 @@
    *    sv_setiv ($target, (IV) $source);
    */
   argvi ++;
-  // printf ("Info: converted return time_t secs to %d \n", (int) SvIV($target)); 
+  // printf ("Info: converted return %d \n", (int) SvIV($target)); 
 }
 
-%typemap(perl5, in) time_t   *(time_t temp)  {
+/* Another problem is that $type expands to a poiner, so we have to 
+ * specify each type by hand ... */
+%typemap(perl5, in) time_t *(time_t temp) {
   /* Convert function arguments from perl to the C representation */
-  /* in particular, convert perl scalar into integer, then cast to time_t */
+  /* in particular, convert perl scalar into integer, then cast to type */
   temp = (time_t) SvIV($source);
   $target = &temp;
   // printf ("Info: time_t input arg is %ld \n", * ($target));
 }
 
-/* cut and paste of above, do exactly the same thing for gboolean */
-%typemap(perl5, out) gboolean {
-
-  $target = newSViv ((IV) *($source));
-  /* 
-   * An alternate way of writing this code would have been ...
-   *    $target = sv_newmortal ();
-   *    sv_setiv ($target, (IV) $source);
-   */
-  argvi ++;
-  // printf ("Info: converted return gboolean secs to %d \n", (int) SvIV($target));
-}
-
-%typemap(perl5, in) gboolean   *(gboolean temp)  {
+%typemap(perl5, in) gboolean *(gboolean temp) {
   /* Convert function arguments from perl to the C representation */
-  /* in particular, convert perl scalar into integer, then cast to gboolean */
-  temp = (time_t) SvIV($source);
+  /* in particular, convert perl scalar into integer, then cast to type */
+  temp = (gboolean) SvIV($source);
   $target = &temp;
   // printf ("Info: gboolean input arg is %ld \n", * ($target));
-}
-
-/* cut and paste of above, do exactly the same thing for GNCBackendError */
-%typemap(perl5, out) GNCBackendError {
-
-  $target = newSViv ((IV) *($source));
-  /* 
-   * An alternate way of writing this code would have been ...
-   *    $target = sv_newmortal ();
-   *    sv_setiv ($target, (IV) $source);
-   */
-  argvi ++;
-  // printf ("Info: converted return GNCBackendError to %d \n", (int) SvIV($target));
 }
 
 /* --------------------------------------------------------- */
