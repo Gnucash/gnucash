@@ -5,9 +5,9 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 1.8.3\n"
+"Project-Id-Version: GnuCash 1.8.4\n"
 "POT-Creation-Date: 2003-08-08 10:39-0300\n"
-"PO-Revision-Date: 2003-06-02 12:00-0300\n"
+"PO-Revision-Date: 2003-08-12 12:00-0300\n"
 "Last-Translator: Jon Lapham <lapham@extracta.com.br>\n"
 "Language-Team: NONE \n"
 "MIME-Version: 1.0\n"
