@@ -21,13 +21,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; Returns true if the commodity comm represents a currency, false if
-;; it represents a stock or mutual-fund.
-(define (gnc:commodity-is-currency? comm)
-  (equal? GNC_COMMODITY_NS_ISO
-	  (gnc:commodity-get-namespace comm)))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 

@@ -1,3 +1,18 @@
+2003-01-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/commodity-table.scm: move gnc:commodity-is-currency? here
+	* src/engine/engine.scm: export gnc:commodity-is-currency?
+	* src/report/report-system/report-system.scm: remove ref to same.
+	* src/report/report-system/report-system.scm: remove function above
+	* src/import-export/qifiimport/qif-to-gnc.scm: fix the algorithm
+	  to find/create new accounts.  All "parent" accounts are of
+	  commodity "default-currency" (but don't really care about that).
+	  When creating a leaf account, use the security if it's a
+	  stock/mmf account, but the default-currency otherwise.
+	  Fixes #103633.
+
+	  NOTE:  Might need similar fixed in qif-io-core?
+
 2003-01-15  David Hampton  <hampton@employees.org>
 
 	* configure.in: Remove restriction on guile versions > 1.4.

@@ -24,7 +24,6 @@
 (gnc:module-load "gnucash/gnome-utils" 0) ; for the html routines
 
 ;; commodity-utilities.scm
-(export gnc:commodity-is-currency?)
 (export gnc:get-match-commodity-splits)
 (export gnc:get-match-commodity-splits-sorted)
 (export gnc:get-all-commodity-splits )

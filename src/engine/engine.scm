@@ -42,6 +42,7 @@
 (export GNC_COMMODITY_NS_AMEX)
 (export GNC_COMMODITY_NS_EUREX)
 (export GNC_COMMODITY_NS_MUTUAL)
+(export gnc:commodity-is-currency?)
 
 (export gnc:url->loaded-session)
 (export gnc:transaction-map-splits)
