@@ -88,6 +88,9 @@
    Need to also split up the price db too.  Also need to make copies of SX,
    and the like ... 
 
+-- hack alert -- feature request: 
+   have some way of remembering the quickfill text from older books...
+
 -- hack alert -- 
   Not imlemented (yet), these should go into book:
   /book/name=some-user-supplied-name
