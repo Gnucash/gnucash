@@ -212,6 +212,9 @@ configLayout (SplitRegister *reg)
       case INCOME_REGISTER:
       case EXPENSE_REGISTER:
       case EQUITY_REGISTER:
+
+      case INCOME_LEDGER:    /* hack alert do xto cell too */
+      case GENERAL_LEDGER:    /* hack alert do xto cell too */
          reg->num_cols = 8;
          reg->num_header_rows = 1;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
@@ -230,6 +233,7 @@ configLayout (SplitRegister *reg)
          break;
 
       case STOCK_REGISTER:
+      case PORTFOLIO:
          reg->num_cols = 11;
          SET (XTO_CELL,  -1, -1, 14,  XFTO_STR);
          if (show_samount) {
@@ -272,6 +276,7 @@ configLayout (SplitRegister *reg)
          reg->labels [DEBT_CELL] = INCREASE_STR;
          reg->labels [CRED_CELL] = DECREASE_STR;
          break;
+      case INCOME_LEDGER:  
       case INCOME_REGISTER:
          reg->labels [DEBT_CELL] = INCOME_STR;
          reg->labels [CRED_CELL] = CHARGE_STR;
@@ -280,11 +285,13 @@ configLayout (SplitRegister *reg)
          reg->labels [DEBT_CELL] = REBATE_STR;
          reg->labels [CRED_CELL] = EXPENSE_STR;
          break;
+      case GENERAL_LEDGER:  
       case EQUITY_REGISTER:
          reg->labels [DEBT_CELL] = SURPLUS_STR;
          reg->labels [CRED_CELL] = DEFICIT_STR;
          break;
       case STOCK_REGISTER:
+      case PORTFOLIO:
          reg->labels [DEBT_CELL] = SOLD_STR;
          reg->labels [CRED_CELL] = BOUGHT_STR;
          break;
@@ -316,6 +323,8 @@ configTraverse (SplitRegister *reg)
       case INCOME_REGISTER:
       case EXPENSE_REGISTER:
       case EQUITY_REGISTER:
+      case INCOME_LEDGER:    /* hack alert do xto cell too */
+      case GENERAL_LEDGER:    /* hack alert do xto cell too */
          curs = reg->trans_cursor;
          xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
          xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, DESC_CELL_R, DESC_CELL_C);
@@ -330,6 +339,7 @@ configTraverse (SplitRegister *reg)
          break;
 
       case STOCK_REGISTER:
+      case PORTFOLIO:
          curs = reg->trans_cursor;
          xaccNextRight (curs, DATE_CELL_R, DATE_CELL_C,  NUM_CELL_R,  NUM_CELL_C);
          xaccNextRight (curs,  NUM_CELL_R,  NUM_CELL_C, DESC_CELL_R, DESC_CELL_C);
