@@ -401,12 +401,14 @@
       qif-cat:tax-class qif-cat:set-tax-class! 
       qif-parse:check-number-format '(decimal comma)
       qif-parse:parse-number/format (qif-file:cats self)
+      qif-parse:print-number
       set-error)
      
      (check-and-parse-field 
       qif-cat:budget-amt qif-cat:set-budget-amt! 
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:cats self)
+      qif-parse:print-number
       set-error)
      
      ;; fields of accounts 
@@ -414,12 +416,14 @@
       qif-acct:limit qif-acct:set-limit! 
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:accounts self)
+      qif-parse:print-number
       set-error)
      
      (check-and-parse-field 
       qif-acct:budget qif-acct:set-budget! 
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:accounts self)
+      qif-parse:print-number
       set-error)
     
      (parse-field 
@@ -433,6 +437,7 @@
       qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m) 
       qif-parse:parse-date/format 
       (qif-file:xtns self)
+      qif-parse:print-date
       set-error)
      
      (parse-field 
@@ -447,18 +452,21 @@
       qif-xtn:share-price qif-xtn:set-share-price!
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
+      qif-parse:print-number
       set-error)
      
      (check-and-parse-field 
       qif-xtn:num-shares qif-xtn:set-num-shares!
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
+      qif-parse:print-number
       set-error)
      
      (check-and-parse-field 
       qif-xtn:commission qif-xtn:set-commission!
       qif-parse:check-number-format '(decimal comma) 
       qif-parse:parse-number/format (qif-file:xtns self)
+      qif-parse:print-number
       set-error)
      
      ;; this one's a little tricky... it checks and sets all the 
@@ -467,6 +475,7 @@
       qif-xtn:split-amounts qif-xtn:set-split-amounts!
       qif-parse:check-number-formats '(decimal comma) 
       qif-parse:parse-numbers/format (qif-file:xtns self)
+      qif-parse:print-numbers
       set-error)
      
      (begin 
@@ -508,7 +517,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (check-and-parse-field getter setter checker 
-                               formats parser objects errormsg)
+                               formats parser objects printer errormsg)
   ;; first find the right format for the field
   (let ((do-parsing #f)
         (retval #t)
@@ -544,7 +553,8 @@
       ;; just ignore the format ambiguity.  Otherwise, it's really an
       ;; error.  ATM since there's no way to correct the error let's 
       ;; just leave it be.
-      (all-formats-equivalent? getter parser formats objects errormsg)      
+      (all-formats-equivalent? getter parser formats objects printer 
+                               errormsg)      
       (set! format (car formats)))
      (#t 
       (set! format (car formats))))
@@ -569,7 +579,8 @@
          objects))
     retval))
 
-(define (all-formats-equivalent? getter parser formats objects errormsg)
+(define (all-formats-equivalent? getter parser formats objects 
+                                 printer errormsg)
   (let ((all-ok #t))
     (let obj-loop ((objlist objects))
       (let* ((unparsed (getter (car objlist)))
@@ -586,9 +597,10 @@
                          (errormsg 
                           (list "Parse ambiguity : between formats "
                                 formats "\nValue " unparsed " could be "
-                                parsed " or " this-parsed 
+                                (printer parsed) " or " 
+                                (printer this-parsed)
                                 "\nand no evidence exists to distinguish." 
-                                "\nUsing " parsed ". "
+                                "\nUsing " (printer parsed) ". "
                                 "\nSee help for more info."))))))
                (cdr formats))))
         (if (and all-ok (not (null? (cdr objlist))))

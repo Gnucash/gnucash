@@ -29,6 +29,10 @@
 
 (define (default-equity-account) "Retained Earnings")  
 
+(define (default-commission-acct brokerage) 
+  (string-append "Commissions:" brokerage))
+
+
 ;; the account-display is a 3-columned list of accounts in the QIF
 ;; import dialog (the "Account" page of the notebook).  Column 1 is
 ;; the account name in the QIF file, column 2 is the number of QIF
@@ -202,6 +206,25 @@
                             (hash-set! acct-hash qif-account
                                        (append (qif-import:guess-acct
                                                 qif-account qif-account-types
+                                                gnc-acct-info)
+                                               (list 1 xtn))))))
+
+                  ;; if there's a commission, reference the 
+                  ;; commission account
+                  (if (qif-xtn:commission xtn)                      
+                      (begin 
+                        (set! qif-account 
+                              (default-commission-acct from-acct))
+                        (set! entry 
+                              (hash-ref acct-hash qif-account))
+                        (if entry
+                            (list-set! entry 4
+                                       (+ 1 (list-ref entry 4)))
+                            (hash-set! acct-hash 
+                                       qif-account
+                                       (append (qif-import:guess-acct
+                                                qif-account 
+                                                (list GNC-EXPENSE-TYPE)
                                                 gnc-acct-info)
                                                (list 1 xtn)))))))
                 

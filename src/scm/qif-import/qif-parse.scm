@@ -504,3 +504,22 @@
            amt-strings)))
     (if all-ok parsed #f)))
 
+(define (qif-parse:print-date date-list)
+  (let ((tm (localtime (current-time))))
+    (set-tm:mday tm (car date-list))
+    (set-tm:mon tm (- (cadr date-list) 1))
+    (set-tm:year tm (- (caddr date-list) 1900))
+    (strftime "%a %B %d %Y" tm)))
+
+(define (qif-parse:print-number num)
+  (with-output-to-string 
+    (lambda ()
+      (write num))))
+
+(define (qif-parse:print-numbers num)
+  (with-output-to-string 
+    (lambda ()
+      (write num))))
+
+(define (qif-parse:print-acct-type t)
+  (symbol->string (gnc:account-type->symbol t)))
