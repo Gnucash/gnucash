@@ -100,6 +100,7 @@ xaccInitAccount (Account * acc)
 
   acc->changed     = 0;
   acc->open        = 0;
+  acc->mark        = 0;
 }
 
 /********************************************************************\
@@ -193,6 +194,7 @@ xaccFreeAccount( Account *acc )
 
   acc->changed     = 0;
   acc->open        = 0;
+  acc->mark        = 0;
 
   _free(acc);
 }
@@ -268,6 +270,68 @@ xaccGetAccountFlags (Account *acc)
   if (!acc) return -1;
   return acc->flags;
 }
+
+/********************************************************************\
+\********************************************************************/
+
+short
+xaccAccountGetMark (Account *acc)
+{
+  if (!acc) return 0;
+  return acc->mark;
+}
+
+void
+xaccAccountSetMark (Account *acc, short m)
+{
+  if (!acc) return;
+  acc->mark = m;
+}
+
+void
+xaccClearMark (Account *acc, short val)
+{
+   AccountGroup *topgrp;
+
+   if (!acc) return;
+   topgrp = xaccGetAccountRoot (acc);
+   if (topgrp) {
+      int i, nacc = topgrp->numAcc;
+      for (i=0; i<nacc; i++) {
+         xaccClearMarkDown (topgrp->account[i], val);
+      }
+   } else {
+      xaccClearMarkDown (acc, val);
+   }
+}
+
+void
+xaccClearMarkDown (Account *acc, short val)
+{
+   AccountGroup *chillin;
+   if (!acc) return;
+   acc->mark = val;
+
+   chillin = acc->children;
+   if (chillin) {
+      int i, nacc = chillin->numAcc;
+      for (i=0; i<nacc; i++) {
+         xaccClearMarkDown (chillin->account[i], val);
+      }
+   }
+}
+
+void
+xaccClearMarkDownGr (AccountGroup *grp, short val)
+{
+   int i, nacc;
+   if (!grp) return;
+   nacc = grp->numAcc;
+   for (i=0; i<nacc; i++) {
+      xaccClearMarkDown (grp->account[i], val);
+   }
+}
+
 
 /********************************************************************\
 \********************************************************************/

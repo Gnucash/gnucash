@@ -59,20 +59,20 @@ void    xaccConcatGroups (AccountGroup *to, AccountGroup *from);
 void    xaccMergeAccounts (AccountGroup *grp);
 
 /*
- * The xaccAccountGroupNotSaved() subroutine will return 
+ * The xaccGroupNotSaved() subroutine will return 
  *    a non-zero value if any account in the group or in
  *    any subgroup hasn't been saved.
  *
- * The xaccAccountGroupMarkSaved() subroutine will mark
+ * The xaccGroupMarkSaved() subroutine will mark
  *    the entire group as having been saved, including 
  *    all of the child accounts.
  *
- * The xaccAccountGroupMarkNotSaved() subroutine will mark
+ * The xaccGroupMarkNotSaved() subroutine will mark
  *    the given group as not having been saved.
  */
-int     xaccAccountGroupNotSaved  (AccountGroup *grp);
-void    xaccAccountGroupMarkSaved (AccountGroup *grp);
-void    xaccAccountGroupMarkNotSaved (AccountGroup *grp);
+int     xaccGroupNotSaved  (AccountGroup *grp);
+void    xaccGroupMarkSaved (AccountGroup *grp);
+void    xaccGroupMarkNotSaved (AccountGroup *grp);
 
 /*
  * The xaccRemoveAccount() subroutine will remove the indicated

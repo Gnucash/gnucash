@@ -117,6 +117,10 @@ struct _account {
    * various housekeeping operations by the engine.
    */
   int       id;            /* unique account id, internally assigned */
+
+  /* the 'flags' field is currently unused.  If you need some
+   * persistant flags, this is it.  It *is* stored in the flat-file DB.
+   */
   char      flags;
 
   /* protected data, cached parameters */
@@ -132,13 +136,18 @@ struct _account {
   Split **splits;               /* ptr to array of ptrs to splits */
 
   /* The "changed" flag is used to invalidate cached values in this structure.
-   * currently, the balances and the cost basis are cached.
+   * Currently, the balances and the cost basis are cached.
    */
   short changed;
 
-  /* the "open" flag indicates if the account has been 
+  /* The "open" flag indicates if the account has been 
    * opened for editing. */
   short open;
+
+  /* The "mark" flag can be used by the user to mark this account
+   * in any way desired.  Handy for specialty traversals of the 
+   * account tree. */
+  short mark;
 };
 
 /* bitfields for the changed flag */

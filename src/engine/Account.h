@@ -64,6 +64,11 @@ const GUID * xaccAccountGetGUID (Account *account);
 Account    * xaccAccountLookup (const GUID *guid);
 
 int          xaccGetAccountID (Account *);
+
+/* AccountFlags is currently not used for anything.
+ * If you need to add a bitflag, this may not be a bad 
+ * way to go.  This flag *is* stored in the file-file DB.
+ */
 char         xaccGetAccountFlags (Account *);
 
 /*
@@ -181,5 +186,22 @@ gncBoolean xaccAccountsHaveCommonCurrency(Account *account_1,
 /* Returns true if the account has 'ancestor' as an ancestor.
  * Returns false if either is NULL. */
 gncBoolean     xaccAccountHasAncestor (Account *, Account * ancestor);
+
+/* Get and Set a mark on the account.  The meaning of this mark is
+ * completely undefined. Its presented here as a utility for the
+ * programmer, to use as desired.  Handy for performing customer traversals
+ * over the account tree.  The mark is *not* stored in the database/file
+ * format.  When accounts are newly created, the mark is set to zero.
+ *
+ * The xaccClearMark will find the topmost group, and clear the mark in
+ * the entire group tree.  
+ * The xaccClearMarkDown will clear the mark inly in this and in
+ * sub-accounts.
+ */
+short          xaccAccountGetMark (Account *acc); 
+void           xaccAccountSetMark (Account *acc, short mark); 
+void           xaccClearMark (Account *, short val);
+void           xaccClearMarkDown (Account *, short val);
+void           xaccClearMarkDownGr (AccountGroup *, short val);
 
 #endif /* __XACC_ACCOUNT_H__ */

@@ -112,7 +112,7 @@ xaccFreeAccountGroup( AccountGroup *grp )
 \********************************************************************/
 
 void
-xaccAccountGroupMarkSaved (AccountGroup *grp)
+xaccGroupMarkSaved (AccountGroup *grp)
 {
    int i;
 
@@ -120,7 +120,7 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
    grp->saved = GNC_T;
 
    for (i=0; i<grp->numAcc; i++) {
-      xaccAccountGroupMarkSaved (grp->account[i]->children); 
+      xaccGroupMarkSaved (grp->account[i]->children); 
    }
 }
 
@@ -128,7 +128,7 @@ xaccAccountGroupMarkSaved (AccountGroup *grp)
 \********************************************************************/
 
 void
-xaccAccountGroupMarkNotSaved (AccountGroup *grp)
+xaccGroupMarkNotSaved (AccountGroup *grp)
 {
    if (!grp) return;
    grp->saved = GNC_F;
@@ -136,8 +136,9 @@ xaccAccountGroupMarkNotSaved (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
+
 int
-xaccAccountGroupNotSaved (AccountGroup *grp)
+xaccGroupNotSaved (AccountGroup *grp)
 {
    int not_saved;
    int i;
@@ -146,7 +147,7 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
    if (GNC_F == grp->saved) return 1;
 
    for (i=0; i<grp->numAcc; i++) {
-      not_saved = xaccAccountGroupNotSaved (grp->account[i]->children); 
+      not_saved = xaccGroupNotSaved (grp->account[i]->children); 
       if (not_saved) return 1;
    }
    return 0;
@@ -154,6 +155,7 @@ xaccAccountGroupNotSaved (AccountGroup *grp)
 
 /********************************************************************\
 \********************************************************************/
+
 const GUID *
 xaccGroupGetGUID (AccountGroup *group)
 {
@@ -165,7 +167,9 @@ xaccGroupGetGUID (AccountGroup *group)
 
 /********************************************************************\
 \********************************************************************/
-void xaccGroupSetGUID (AccountGroup *group, GUID *guid)
+
+void 
+xaccGroupSetGUID (AccountGroup *group, GUID *guid)
 {
   if (!group || !guid) return;
 

@@ -350,7 +350,7 @@ xaccReadAccountGroup( int fd )
   /* mark the newly read group as saved, since the act of putting 
    * it together will have caused it to be marked up as not-saved. 
    */
-  xaccAccountGroupMarkSaved (grp);
+  xaccGroupMarkSaved (grp);
 
   /* auto-number the accounts, if they are not already numbered */
   xaccGroupDepthAutoCode (grp);

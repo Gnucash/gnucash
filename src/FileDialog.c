@@ -171,7 +171,7 @@ gncFileQuerySave (void)
    * up the file-selection dialog, we don't blow em out of the water;
    * instead, give them another chance to say "no" to the verify box.
    */
-  while ( xaccAccountGroupNotSaved (grp) ) 
+  while ( xaccGroupNotSaved (grp) ) 
   {
     GNCVerifyResult result;
 
@@ -383,7 +383,7 @@ gncFileSave (void)
   /* going down -- abandon ship */
   if (uh_oh) return;
 
-  xaccAccountGroupMarkSaved (topgroup);
+  xaccGroupMarkSaved (topgroup);
 }
 
 /* ======================================================== */

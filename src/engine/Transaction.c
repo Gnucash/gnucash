@@ -243,10 +243,10 @@ xaccConfigGetForceDoubleEntry (void)
 /********************************************************************\
 \********************************************************************/
 
-#define MARK_SPLIT(split) {			       \
-   Account *acc = (Account *) ((split)->acc);	       \
-   if (acc) acc->changed |= ACC_INVALIDATE_ALL;	       \
-   if (acc) xaccAccountGroupMarkNotSaved(acc->parent); \
+#define MARK_SPLIT(split) {				\
+   Account *acc = (Account *) ((split)->acc);		\
+   if (acc) acc->changed |= ACC_INVALIDATE_ALL;		\
+   if (acc) xaccGroupMarkNotSaved(acc->parent);		\
 }
 
 static void
