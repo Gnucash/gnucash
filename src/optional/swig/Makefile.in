@@ -478,7 +478,7 @@ gnucash.engine.i: ${SWIG_INPUT_HDRS}  perl5_swig_annotations.i
 	done
 
 gnucash-engine-perl5_wrap.c: gnucash.engine.i
-	${SWIG} -stat -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
+	${SWIG} -perl5 -I.. -I${top_srcdir}/src/engine -o $@ $< 
 
 # We have to do this because otherwise automake insists on putting
 # these files into the dist tarfile.  If there's a a better way,
