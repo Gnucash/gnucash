@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-08 08:54+0100\n"
-"PO-Revision-Date: 2004-03-08 08:57+0100\n"
+"PO-Revision-Date: 2004-03-10 22:04+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -624,7 +624,7 @@ msgstr "Dieses Fenster schließen"
 #: src/business/business-gnome/glade/date-close.glade:139
 #: src/business/dialog-tax-table/tax-tables.glade:129
 msgid "label1"
-msgstr ""
+msgstr "label1"
 
 #: src/business/business-gnome/glade/billterms.glade:156
 msgid "Create a new Billing Term"
@@ -745,7 +745,7 @@ msgstr "Im nächsten Monat"
 
 #: src/business/business-gnome/glade/billterms.glade:684
 msgid "window1"
-msgstr ""
+msgstr "window1"
 
 #: src/business/business-gnome/glade/billterms.glade:734
 msgid "Due Days: "
@@ -2602,11 +2602,11 @@ msgstr "Einträge Steuertabelle"
 
 #: src/business/dialog-tax-table/tax-tables.glade:227
 msgid "label8"
-msgstr ""
+msgstr "label8"
 
 #: src/business/dialog-tax-table/tax-tables.glade:240
 msgid "label9"
-msgstr ""
+msgstr "label9"
 
 #: src/business/dialog-tax-table/tax-tables.glade:434
 msgid "Tax Table Entry"
@@ -3358,7 +3358,7 @@ msgstr "Kontoart"
 
 #: src/gnome/glade/account.glade:371
 msgid "label812"
-msgstr ""
+msgstr "label812"
 
 #: src/gnome/glade/account.glade:386 src/gnome/glade/tax.glade:417
 msgid "Parent Account"
@@ -5301,7 +5301,7 @@ msgstr "Summe Reinvermögen"
 
 #: src/gnome/window-main-summarybar.c:163
 msgid "Net Assets non currency commodities total"
-msgstr ""
+msgstr "Reinvermögen in Aktien/Edelmetallen"
 
 #: src/gnome/window-main-summarybar.c:167
 msgid "Net Assets grand total"
@@ -5317,7 +5317,7 @@ msgstr "Summe Gewinn"
 
 #: src/gnome/window-main-summarybar.c:199
 msgid "Profits non currency commodities total"
-msgstr ""
+msgstr "Gewinn in Aktien/Edelmetallen"
 
 #: src/gnome/window-main-summarybar.c:203
 msgid "Profits grand total"
@@ -6655,19 +6655,16 @@ msgid "You must enter a valid `to' amount."
 msgstr "Sie müssen einen gültigen Betrag eingeben."
 
 #: src/gnome-utils/dialog-transfer.c:1769
-#, fuzzy
 msgid "Credit Account"
-msgstr "Gutschriftskonto:"
+msgstr "Habenkonto"
 
 #: src/gnome-utils/dialog-transfer.c:1771
-#, fuzzy
 msgid "Debit Account"
-msgstr "Konto bearbeiten"
+msgstr "Sollkonto"
 
 #: src/gnome-utils/dialog-transfer.c:1851
-#, fuzzy
 msgid "Debit Amount:"
-msgstr "Gutschriftskonto:"
+msgstr "Soll Betrag:"
 
 #: src/import-export/binary-import/binary-import.glade:22
 msgid "Import currency and stock information"
@@ -8416,7 +8413,7 @@ msgstr "OFX Dateien"
 #: src/import-export/ofx/ofx.glade:269
 #: src/import-export/qif-import/qif.glade:648
 msgid "label827"
-msgstr ""
+msgstr "label827"
 
 #: src/import-export/ofx/ofx.glade:284
 msgid ""
@@ -9406,7 +9403,7 @@ msgstr "Stilvorlage"
 
 #: src/report/report-gnome/report.glade:265
 msgid "label847668"
-msgstr ""
+msgstr "label837767"
 
 #: src/report/report-gnome/report.glade:319
 msgid "Style sheet options"
@@ -11281,21 +11278,17 @@ msgid "Summarybar"
 msgstr "Zusammenfassungs-Leiste"
 
 #: intl-scm/guile-strings.c:1137
-#, fuzzy
 msgid "Show grand total"
-msgstr "Farbe für Gesamtsummen"
+msgstr "Gesamtsumme anzeigen"
 
 #: intl-scm/guile-strings.c:1139
-#, fuzzy
 msgid ""
 "Show a grand total of all accounts converted to the default report currency"
-msgstr ""
-"Summen in mehreren Währungen anzeigen. Falls nicht aktiviert, werden alle "
-"Summen in die Berichtswährung umgerechnet"
+msgstr "Gesamtsumme für alle Konten anzeigen, umgerechnet in die voreingestellte Währung für Berichte"
 
 #: intl-scm/guile-strings.c:1143 intl-scm/guile-strings.c:1145
 msgid "Show non currency commodities"
-msgstr ""
+msgstr "Aktien/Edelmetalle (ohne Währungen) anzeigen"
 
 #: intl-scm/guile-strings.c:1149
 msgid "Start date"
@@ -11303,16 +11296,15 @@ msgstr "Anfangsdatum"
 
 #: intl-scm/guile-strings.c:1151
 msgid "Start date for profit/loss calculation"
-msgstr ""
+msgstr "Anfangsdatum für Gewinn/Verlustrechnung"
 
 #: intl-scm/guile-strings.c:1153
-#, fuzzy
 msgid "End date"
-msgstr "Enddatum:"
+msgstr "Enddatum"
 
 #: intl-scm/guile-strings.c:1155
 msgid "End date for profit/loss and date for net assets calculation"
-msgstr ""
+msgstr "Enddatum für Gewinn/Verlustrechnung und Datum für Bilanz"
 
 #: intl-scm/guile-strings.c:1159
 msgid "Automatic interest transfer"
@@ -14688,44 +14680,11 @@ msgstr "Folgendes Forderungen-Konto wollen Sie untersuchen"
 msgid "Receivable Aging"
 msgstr "Entwicklung Forderungen"
 
-#~ msgid "Type Menu"
-#~ msgstr "Typ-Menü"
-
-#~ msgid "(taxincluded)"
-#~ msgstr "(Steuerwirksam)"
-
-#~ msgid "(taxtables)"
-#~ msgstr "(Steuertabellen)"
-
-#~ msgid "(terms)"
-#~ msgstr "(Bedingungen)"
-
 #~ msgid "Percent (%)"
 #~ msgstr "Prozent (%)"
 
 #~ msgid "Value ($)"
 #~ msgstr "Wert (Betrag)"
-
-#~ msgid "1"
-#~ msgstr "1"
-
-#~ msgid "1/10"
-#~ msgstr "1/10"
-
-#~ msgid "1/100"
-#~ msgstr "1/100"
-
-#~ msgid "1/1000"
-#~ msgstr "1/1000"
-
-#~ msgid "1/10000"
-#~ msgstr "1/10000"
-
-#~ msgid "1/100000"
-#~ msgstr "1/100000"
-
-#~ msgid "1/1000000"
-#~ msgstr "1/1000000"
 
 #~ msgid "Use Commodity Value"
 #~ msgstr "Wert der Währung/Aktie benutzen"
@@ -14786,207 +14745,3 @@ msgstr "Entwicklung Forderungen"
 
 #~ msgid "Points"
 #~ msgstr "Punkte"
-
-#~ msgid "Quicken/QuickBooks (tm) US-Letter"
-#~ msgstr "Quicken/QuickBooks (tm) US-Letter"
-
-#~ msgid "Top"
-#~ msgstr "Oben"
-
-#~ msgid "10th"
-#~ msgstr "10."
-
-#~ msgid "11th"
-#~ msgstr "11."
-
-#~ msgid "12th"
-#~ msgstr "12."
-
-#~ msgid "13th"
-#~ msgstr "13."
-
-#~ msgid "14th"
-#~ msgstr "14."
-
-#~ msgid "15th"
-#~ msgstr "15."
-
-#~ msgid "16th"
-#~ msgstr "16."
-
-#~ msgid "17th"
-#~ msgstr "17."
-
-#~ msgid "18th"
-#~ msgstr "18."
-
-#~ msgid "19th"
-#~ msgstr "19."
-
-#~ msgid "1st"
-#~ msgstr "1."
-
-#~ msgid "20th"
-#~ msgstr "20."
-
-#~ msgid "21st"
-#~ msgstr "21."
-
-#~ msgid "22nd"
-#~ msgstr "22."
-
-#~ msgid "23rd"
-#~ msgstr "23."
-
-#~ msgid "24th"
-#~ msgstr "24."
-
-#~ msgid "25th"
-#~ msgstr "25."
-
-#~ msgid "26th"
-#~ msgstr "26."
-
-#~ msgid "27th"
-#~ msgstr "27."
-
-#~ msgid "28th"
-#~ msgstr "28."
-
-#~ msgid "2nd"
-#~ msgstr "2."
-
-#~ msgid "3rd"
-#~ msgstr "3."
-
-#~ msgid "4th"
-#~ msgstr "4."
-
-#~ msgid "5th"
-#~ msgstr "5."
-
-#~ msgid "6th"
-#~ msgstr "6."
-
-#~ msgid "7th"
-#~ msgstr "7."
-
-#~ msgid "8th"
-#~ msgstr "8."
-
-#~ msgid "9th"
-#~ msgstr "9."
-
-#~ msgid "Apr, Jul, Dec"
-#~ msgstr "Apr, Jul, Dez"
-
-#~ msgid "Apr, Oct"
-#~ msgstr "Apr, Okt"
-
-#~ msgid "April"
-#~ msgstr "April"
-
-#~ msgid "August"
-#~ msgstr "August"
-
-#~ msgid "Create as scheduled"
-#~ msgstr "Erstellen wie vorgemerkt"
-
-#~ msgid "Current Year"
-#~ msgstr "Dieses Jahr"
-
-#~ msgid "December"
-#~ msgstr "Dezember"
-
-#~ msgid "Feb, Apr, Oct"
-#~ msgstr "Feb, Apr, Okt"
-
-#~ msgid "Feb, Aug"
-#~ msgstr "Feb, Aug"
-
-#~ msgid "Feb, May, Aug, Nov"
-#~ msgstr "Feb, Mai, Aug, Nov"
-
-#~ msgid "February"
-#~ msgstr "Februar"
-
-#~ msgid "Jan, Apr, Jul, Oct"
-#~ msgstr "Jan, Apr, Jul, Okt"
-
-#~ msgid "Jan, Jul"
-#~ msgstr "Jan, Jul"
-
-#~ msgid "Jan, May, Sep"
-#~ msgstr "Jan, Mai, Sep"
-
-#~ msgid "January"
-#~ msgstr "Januar"
-
-#~ msgid "July"
-#~ msgstr "Juli"
-
-#~ msgid "Jun, Dec"
-#~ msgstr "Jun, Dez"
-
-#~ msgid "June"
-#~ msgstr "Juni"
-
-#~ msgid "Mar, Jun, Nov"
-#~ msgstr "Mär, Jun, Nov"
-
-#~ msgid "Mar, Jun, Sep, Dec"
-#~ msgstr "Mär, Jun, Sep, Dez"
-
-#~ msgid "Mar, Sep"
-#~ msgstr "Mär, Sep"
-
-#~ msgid "March"
-#~ msgstr "März"
-
-#~ msgid "May"
-#~ msgstr "Mai"
-
-#~ msgid "May, Nov"
-#~ msgstr "Mai, Nov"
-
-#~ msgid "November"
-#~ msgstr "November"
-
-#~ msgid "Now + 1 Year"
-#~ msgstr "Jetzt + 1 Jahr"
-
-#~ msgid "October"
-#~ msgstr "Oktober"
-
-#~ msgid "September"
-#~ msgstr "September"
-
-#~ msgid "Whole Loan"
-#~ msgstr "Ganzes Darlehen"
-
-#~ msgid "[29th/last]"
-#~ msgstr "[29./letzter Tag]"
-
-#~ msgid "[30th/last]"
-#~ msgstr "[30./letzter Tag]"
-
-#~ msgid "[31st/last]"
-#~ msgstr "[31./letzter Tag]"
-
-#~ msgid "months"
-#~ msgstr "Monate"
-
-#~ msgid "years"
-#~ msgstr "Jahre"
-
-#~ msgid "GnuCash"
-#~ msgstr "GnuCash"
-
-#~ msgid "GnuCash Personal Finance"
-#~ msgstr "GnuCash Persönlicher Finanzmanager"
-
-#~ msgid "-- No Template --"
-#~ msgstr "-- Keine Vorlage --"
-
-#~ msgid "Auto-Balance split"
-#~ msgstr "Automatische Ausgleichsbuchung"

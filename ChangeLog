@@ -1,3 +1,7 @@
+2004-03-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation
+
 2004-03-07  Joshua Sled  <jsled@asynchronous.org>
 
 	* HACKING: Added instructions about running under valgrind.
