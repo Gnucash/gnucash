@@ -268,10 +268,10 @@ gnc_get_reconcile_str (char reconciled_flag)
 {
   switch (reconciled_flag)
   {
-    case NREC: return _("not cleared:n"+12);
-    case CREC: return _("cleared:c"+8);
-    case YREC: return _("reconciled:y"+11);
-    case FREC: return _("frozen:f"+7);
+    case NREC: return _("not cleared:n") + 12;
+    case CREC: return _("cleared:c") + 8;
+    case YREC: return _("reconciled:y") + 11;
+    case FREC: return _("frozen:f") + 7;
     default:
       PERR("Bad reconciled flag\n");
       return NULL;

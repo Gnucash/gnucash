@@ -81,28 +81,34 @@ struct _SplitRegisterBuffer
   CellBuffer notesCell;
 };
 
-static char *cell_sample_strings[] =
+typedef struct
 {
-  N_("sample: 12/12/2000"+7),                    /* date cell */
-  N_("sample:99999"+7),                          /* num cell */
-  N_("sample:Description of a transaction"+7),   /* desc cell */
-  N_("Reconciled:R"+11),                         /* recn cell */
-  N_("sample:999,999.000"+7),                    /* share balance cell */
-  N_("sample:999,999.000"+7),                    /* balance cell */
-  N_("Transfer"),                                /* action cell */
-  N_("sample:Expenses:Automobile:Gasoline"+7),   /* xfrm cell */
-  N_("sample:Memo field sample text string"+7),  /* memo cell */
-  N_("sample:999,999.000"+7),                    /* credit cell */
-  N_("sample:999,999.000"+7),                    /* debit cell */
-  N_("sample:999,999.000"+7),                    /* price cell */
-  N_("sample:999,999.000"+7),                    /* shares cell */
-  N_("sample:Expenses:Automobile:Gasoline"+7),   /* mxfrm cell */
-  N_("sample:999,999.000"+7),                    /* tcredit cell */
-  N_("sample:999,999.000"+7),                    /* tdebit cell */
-  N_("sample:999,999.000"+7),                    /* tshares cell */
-  N_("sample:999,999.000"+7),                    /* tshrbaln cell */
-  N_("sample:999,999.000"+7),                    /* tbalance cell */
-  N_("sample:Notes field sample text string"+7), /* notes cell */
+  const char *string;
+  int offset;
+} sample_string;
+
+static sample_string cell_sample_strings[] =
+{
+  { N_("sample: 12/12/2000"), 7},                    /* date cell */
+  { N_("sample:99999"), 7},                          /* num cell */
+  { N_("sample:Description of a transaction"), 7},   /* desc cell */
+  { N_("Reconciled:R"), 11},                         /* recn cell */
+  { N_("sample:999,999.000"), 7},                    /* share balance cell */
+  { N_("sample:999,999.000"), 7},                    /* balance cell */
+  { N_("Transfer"), 0},                              /* action cell */
+  { N_("sample:Expenses:Automobile:Gasoline"), 7},   /* xfrm cell */
+  { N_("sample:Memo field sample text string"), 7},  /* memo cell */
+  { N_("sample:999,999.000"), 7},                    /* credit cell */
+  { N_("sample:999,999.000"), 7},                    /* debit cell */
+  { N_("sample:999,999.000"), 7},                    /* price cell */
+  { N_("sample:999,999.000"), 7},                    /* shares cell */
+  { N_("sample:Expenses:Automobile:Gasoline"), 7},   /* mxfrm cell */
+  { N_("sample:999,999.000"), 7},                    /* tcredit cell */
+  { N_("sample:999,999.000"), 7},                    /* tdebit cell */
+  { N_("sample:999,999.000"), 7},                    /* tshares cell */
+  { N_("sample:999,999.000"), 7},                    /* tshrbaln cell */
+  { N_("sample:999,999.000"), 7},                    /* tbalance cell */
+  { N_("sample:Notes field sample text string"), 7}, /* notes cell */
 };
 
 static CellAlignment cell_alignments[] =
@@ -248,6 +254,9 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
 {
   CellBlockCell *cb_cell;
   BasicCell *hcell;
+  sample_string *ss;
+
+  ss = &cell_sample_strings[cell_type];
 
   cursor->start_col = MIN (cursor->start_col, col);
   cursor->stop_col  = MAX (cursor->stop_col,  col);
@@ -262,7 +271,7 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   cb_cell->cell = reg->cells[cell_type];
   cb_cell->cell_type = cell_type;
   cb_cell->label = g_strdup (hcell->value);
-  cb_cell->sample_text = g_strdup (_(cell_sample_strings[cell_type]));
+  cb_cell->sample_text = g_strdup (_(ss->string + ss->offset));
   cb_cell->alignment = cell_alignments[cell_type];
   cb_cell->expandable = reg->cells[cell_type] == (BasicCell *) reg->descCell;
   cb_cell->span = reg->cells[cell_type] == (BasicCell *) reg->memoCell;
@@ -274,7 +283,7 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
     cb_cell->cell = reg->cells[cell_type];
     cb_cell->cell_type = cell_type;
     cb_cell->label = g_strdup (hcell->value);
-    cb_cell->sample_text = g_strdup (_(cell_sample_strings[cell_type]));
+    cb_cell->sample_text = g_strdup (_(ss->string + ss->offset));
     cb_cell->alignment = cell_alignments[cell_type];
     cb_cell->expandable =
       reg->cells[cell_type] == (BasicCell *) reg->descCell;

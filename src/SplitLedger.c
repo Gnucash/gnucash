@@ -3670,7 +3670,7 @@ xaccSRGetLabelHandler (VirtualLocation virt_loc, gpointer user_data)
       return _("Description");
 
     case RECN_CELL:
-      return _("Reconciled:R"+11);
+      return _("Reconciled:R") + 11;
 
     case SHRBALN_CELL:
       return _("Share Balance");

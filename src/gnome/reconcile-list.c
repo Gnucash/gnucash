@@ -135,7 +135,7 @@ gnc_reconcile_list_init(GNCReconcileList *list)
       _("Num"),
       _("Description"),
       _("Amount"),
-      _("Reconciled:R"+11),
+      _("Reconciled:R") + 11,
       NULL
     };
 
