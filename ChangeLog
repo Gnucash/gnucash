@@ -1,3 +1,18 @@
+2001-07-12  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/druid-stock-split.c: remove share api
+
+	* src/engine/Account.[ch]: remove 'share' api and other
+	unused api.
+
+	* src/scm/qif-import/qif-to-gnc.scm: remove share api
+
+	* src/guile/gnc.gwp: remove share api
+
+	* src/gnome/window-reconcile.c: remove share api
+
+	* src/gnome/window-register.c: remove share api
+
 2001-07-11  Dave Peticolas  <dave@krondo.com>
 
 	* src/engine/io-gncxml-v2.c: same as below

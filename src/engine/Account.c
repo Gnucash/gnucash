@@ -1314,42 +1314,6 @@ DxaccAccountGetSecurity (Account *acc)
   return gnc_commodity_table_lookup_unique (gnc_engine_commodities (), s);
 }
 
-double
-DxaccAccountGetBalance (Account *acc)
-{
-  return gnc_numeric_to_double(xaccAccountGetBalance(acc));
-}
-
-double
-DxaccAccountGetClearedBalance (Account *acc)
-{
-  return gnc_numeric_to_double(xaccAccountGetClearedBalance(acc));
-}
-
-double
-DxaccAccountGetReconciledBalance (Account *acc)
-{
-  return gnc_numeric_to_double(xaccAccountGetReconciledBalance(acc));
-}
-
-double
-DxaccAccountGetShareBalance (Account *acc)
-{
-  return gnc_numeric_to_double(xaccAccountGetShareBalance(acc));
-}
-
-double
-DxaccAccountGetShareClearedBalance (Account *acc)
-{
-  return gnc_numeric_to_double(xaccAccountGetShareClearedBalance(acc));
-}
-
-double
-DxaccAccountGetShareReconciledBalance (Account *acc)
-{
-  return gnc_numeric_to_double(xaccAccountGetShareReconciledBalance(acc));
-}
-
 gnc_numeric
 xaccAccountGetBalance (Account *acc) {
   if (!acc) return gnc_numeric_zero();
@@ -1370,52 +1334,24 @@ xaccAccountGetReconciledBalance (Account *acc)
    return acc->reconciled_balance;
 }
 
-gnc_numeric
-xaccAccountGetShareBalance (Account *acc)
-{
-   if (!acc) return gnc_numeric_zero();
-   return acc->balance;
-}
-
-gnc_numeric
-xaccAccountGetShareClearedBalance (Account *acc)
-{
-   if (!acc) return gnc_numeric_zero();
-   return acc->cleared_balance;
-}
-
-gnc_numeric
-xaccAccountGetShareReconciledBalance (Account *acc)
-{
-  if (!acc) return gnc_numeric_zero();
-  return acc->reconciled_balance;
-}
-
 /********************************************************************\
 \********************************************************************/
 
-static gnc_numeric
-get_balance_as_of_date (Account *acc, time_t date, gboolean use_shares)
+gnc_numeric
+xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
 {
-  /* This is common code to handle both xaccAccountGetBalanceAsOfDate
-   * and xaccAccountGetShareBalanceAsOfDate.  use_shares is TRUE if the
-   * share balance is being requested.
-   */
-
   /* Ideally this could use xaccAccountForEachSplit, but
    * it doesn't exist yet and I'm uncertain of exactly how
    * it would work at this time, since it differs from
    * xaccAccountForEachTransaction by using gpointer return
    * values rather than gbooleans.
    */
-
   GList   *lp;
   Timespec ts, trans_ts;
   gboolean found = FALSE;
   gnc_numeric balance;
-  
-  balance = use_shares ?
-    xaccAccountGetShareBalance( acc ) : xaccAccountGetBalance( acc );
+
+  balance = xaccAccountGetBalance( acc );
 
   xaccAccountSortSplits( acc );   /* just in case, normally a nop */
 
@@ -1454,9 +1390,7 @@ get_balance_as_of_date (Account *acc, time_t date, gboolean use_shares)
     /* Since lp is now pointing to a split which was past the reconcile
      * date, get the running balance of the previous split.
      */
-    balance = use_shares ?
-      xaccSplitGetShareBalance( (Split *)lp->prev->data ) :
-      xaccSplitGetBalance( (Split *)lp->prev->data );
+    balance = xaccSplitGetBalance( (Split *)lp->prev->data );
   }
 
   /* Otherwise there were no splits posted after the given date,
@@ -1466,41 +1400,13 @@ get_balance_as_of_date (Account *acc, time_t date, gboolean use_shares)
   return( balance );
 }
 
-gnc_numeric
-xaccAccountGetBalanceAsOfDate (Account *acc, time_t date)
-{
-   return( get_balance_as_of_date( acc, date, FALSE ) );
-}
-
-gnc_numeric
-xaccAccountGetShareBalanceAsOfDate (Account *acc, time_t date)
-{
-   return( get_balance_as_of_date( acc, date, TRUE ) );
-}
-
 /********************************************************************\
 \********************************************************************/
-
-Split *
-xaccAccountGetSplit(Account *acc, int i) {
-  GList *result;
-
-  if (!acc) return(NULL);
-  result = g_list_nth(acc->splits, i);
-  if(!result) return(NULL);
-  return((Split *) result->data);
-}
 
 GList *
 xaccAccountGetSplitList (Account *acc) {
   if (!acc) return NULL;
   return (acc->splits);
-}
-
-int
-xaccAccountGetNumSplits (Account *acc) {
-  if (!acc) return 0;
-  return g_list_length(acc->splits);
 }
 
 /********************************************************************\

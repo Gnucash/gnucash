@@ -122,7 +122,6 @@ typedef struct _startRecnWindowData
 {
   Account       *account;         /* the account being reconciled            */
   GNCAccountType account_type;    /* the type of the account                 */
-  gboolean       use_shares;      /* whether to use shares for the account   */
 
   GtkWidget     *startRecnWindow; /* the startRecnWindow dialog              */
   GtkWidget     *xfer_button;     /* the dialog's interest transfer button   */
@@ -320,7 +319,7 @@ gnc_start_recn_date_changed (GtkWidget *widget, startRecnWindowData *data)
   new_date = gnc_date_edit_get_date_end (gde);
 
   /* get the balance for the account as of the new date */
-  xaccAccountGetBalanceAsOfDate (data->account, new_date);
+  new_balance = xaccAccountGetBalanceAsOfDate (data->account, new_date);
 
   /* use the correct sign */
   if (gnc_reverse_balance (data->account))
@@ -508,10 +507,7 @@ gnc_reconcile_interest_xfer_run(startRecnWindowData *data)
   recnInterestXferWindow( data );
 
   /* recompute the ending balance */
-  if (data->use_shares)
-    after = xaccAccountGetShareBalanceAsOfDate(data->account, data->date);
-  else
-    after = xaccAccountGetBalanceAsOfDate(data->account, data->date);
+  after = xaccAccountGetBalanceAsOfDate(data->account, data->date);
 
   /* update the ending balance in the startRecnWindow if it has changed. */
   if( gnc_numeric_compare( before, after ) )
@@ -580,7 +576,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
   auto_interest_xfer_option =
      gnc_recn_interest_xfer_get_auto_interest_xfer_allowed( account );
 
-  ending = xaccAccountGetShareReconciledBalance(account);
+  ending = xaccAccountGetReconciledBalance(account);
   print_info = gnc_account_print_info (account, TRUE);
 
   if (gnc_reverse_balance(account))
@@ -2056,7 +2052,7 @@ find_payment_account(Account *account)
       continue;
 
     /* ignore 'purchases' */
-    if (!gnc_numeric_positive_p (xaccSplitGetShareAmount(split)))
+    if (!gnc_numeric_positive_p (xaccSplitGetAmount(split)))
       continue;
 
     trans = xaccSplitGetParent(split);

@@ -110,7 +110,7 @@ fill_account_list (StockSplitInfo *info, Account *account)
         account_type != MUTUAL)
       continue;
 
-    balance = xaccAccountGetShareBalance (account);
+    balance = xaccAccountGetBalance (account);
     if (gnc_numeric_zero_p (balance))
       continue;
 

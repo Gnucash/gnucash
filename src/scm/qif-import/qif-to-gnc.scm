@@ -595,7 +595,7 @@
             ((stksplit)
              (let* ((splitratio (n/ num-shares (gnc:numeric-create 10 1)))
                     (in-shares 
-                     (gnc:account-get-share-balance near-acct))
+                     (gnc:account-get-balance near-acct))
                     (out-shares (n* in-shares splitratio)))
                (gnc:split-set-share-amount gnc-near-split out-shares)
                (gnc:split-set-share-amount gnc-far-split (n- in-shares))

@@ -226,27 +226,11 @@ AccountGroup * xaccAccountGetChildren (Account *account);
 AccountGroup * xaccAccountGetParent (Account *account);
 Account *      xaccAccountGetParentAccount (Account *account);
 
-/* deprecated old double API : this will go away! */
-double          DxaccAccountGetBalance (Account *account);
-double          DxaccAccountGetClearedBalance (Account *account);
-double          DxaccAccountGetReconciledBalance (Account *account);
-double          DxaccAccountGetShareBalance (Account *account);
-double          DxaccAccountGetShareClearedBalance (Account *account);
-double          DxaccAccountGetShareReconciledBalance (Account *account);
-
 gnc_numeric     xaccAccountGetBalance (Account *account);
 gnc_numeric     xaccAccountGetClearedBalance (Account *account);
 gnc_numeric     xaccAccountGetReconciledBalance (Account *account);
-gnc_numeric     xaccAccountGetShareBalance (Account *account);
-gnc_numeric     xaccAccountGetShareClearedBalance (Account *account);
-gnc_numeric     xaccAccountGetShareReconciledBalance (Account *account);
 
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
-gnc_numeric     xaccAccountGetShareBalanceAsOfDate (Account *account,
-                                                    time_t date);
-
-Split *         xaccAccountGetSplit (Account *account, int i);
-int             xaccAccountGetNumSplits (Account *account);
 
 GList*          xaccAccountGetSplitList (Account *account);
 
@@ -274,13 +258,6 @@ void            xaccAccountSetTaxUSPayerNameSource (Account *account,
  * routine should not be in this library, but some utility library?
  */
 char *         xaccAccountGetFullName (Account *account, const char separator);
-
-/* xaccAccountsHaveCommonCurrency returns true if the two given accounts
- * have a currency in common, i.e., if they can have common transactions.
- * Useful for UI sanity checks.
- */
-gboolean       xaccAccountsHaveCommonCurrency(Account *account_1,
-                                              Account *account_2);
 
 /* Returns true if the account has 'ancestor' as an ancestor.
  * Returns false if either is NULL. */

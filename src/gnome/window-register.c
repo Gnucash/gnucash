@@ -2370,7 +2370,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
   {
     print_info = gnc_account_print_info (leader, TRUE);
 
-    amount = xaccAccountGetShareBalance (leader);
+    amount = xaccAccountGetBalance (leader);
     if (reverse)
       amount = gnc_numeric_neg (amount);
 
@@ -2397,7 +2397,7 @@ gnc_register_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
       print_info = gnc_commodity_print_info (currency, TRUE);
 
-      amount = xaccAccountGetShareBalance (leader);
+      amount = xaccAccountGetBalance (leader);
       if (reverse)
         amount = gnc_numeric_neg (amount);
 
