@@ -24,9 +24,7 @@
 
 #include "config.h"
 
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkvbox.h>
+#include <gtk/gtk.h>
 #include "egg-action-group.h"
 
 #include "gnc-plugin-page-account-tree.h"
@@ -317,6 +315,9 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	parent->tab_name    = g_strdup(_("Accounts"));
 	parent->uri         = g_strdup("default:");
 
+	/* change me when the system supports multiple books */
+	gnc_plugin_page_add_book(parent, gnc_get_current_book());
+
 	/* Create menu and toolbar information */
 	action_group = egg_action_group_new ("GncPluginPageAccountTreeActions");
 	priv->action_group = action_group;
@@ -403,7 +404,7 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
 	  gnc_options_dialog_destroy(priv->editor_dialog);
 	  priv->editor_dialog = NULL;
 	}
-  
+
 	gnc_option_db_destroy(priv->odb);
 
 	free_tree = scm_c_eval_string("gnc:free-acct-tree-window");

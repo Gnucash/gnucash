@@ -38,11 +38,13 @@
 #include "egg-action-group.h"
 #include "egg-radio-action.h"
 #include "global-options.h"
+#include "gnc-book.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-split-reg.h"
+#include "gnc-ui-util.h"
 #include "lot-viewer.h"
 #include "QueryNew.h"
 #include "window-reconcile.h"
@@ -336,7 +338,8 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GncPluginPageRegister *register_page;
 	GncPluginPage *plugin_page;
 	GNCSplitReg *gsr;
-	GList *item;
+	GList *item, *book_list;
+	QofQuery *q;
 
 	/* Is there an existing page? */
 	gsr = gnc_ledger_display_get_user_data (ledger);
@@ -355,6 +358,12 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	plugin_page->title = gnc_plugin_page_register_get_tab_name(plugin_page);
 	plugin_page->tab_name = gnc_plugin_page_register_get_tab_name(plugin_page);
 
+	q = gnc_ledger_display_get_query (ledger);
+	book_list = qof_query_get_books (q);
+	for (item = book_list; item; item = g_list_next(item))
+	  gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
+	// Do not free the list. It is owned by the query.
+	
 	active_pages = g_list_append (active_pages, plugin_page);
 
 	return plugin_page;
@@ -1440,6 +1449,10 @@ gnc_plugin_page_register_cmd_schedule (EggAction *action,
   gsr_default_schedule_handler(priv->gsr, NULL);
   LEAVE(" ");
 }
+
+/************************************************************/
+/*                    Auxiliary functions                   */
+/************************************************************/
 
 void
 gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,

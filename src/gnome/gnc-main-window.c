@@ -26,10 +26,7 @@
 #include "config.h"
 
 #include <gdk/gdkpixbuf.h>
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkstatusbar.h>
+#include <gtk/gtk.h>
 
 #include "eggtoolbar.h"
 #include "egg-action-group.h"
@@ -44,32 +41,24 @@
 #include "dialog-scheduledxaction.h"
 #include "dialog-sxsincelast.h"
 #include "dialog-transfer.h"
-#include "dialog-utils.h"
 #include "druid-loan.h"
-#include "gnc-engine.h"
+#include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-dir.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
-#include "gnc-split-reg.h"
 #include "gnc-session.h"
 #include "gnc-totd-dialog.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
-#include "mainwindow-account-tree.h"
-#include "window-acct-tree.h"
 #include "window-main.h"
-#include "window-reconcile.h"
-#include "window-register.h"
-#include "window-report.h"
 #include "messages.h"
 
 /** Static Globals *******************************************************/
+static short module = MOD_GUI;
 static GList *active_windows = NULL;
-static GList *installed_pages = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
@@ -124,10 +113,13 @@ struct GncMainWindowPrivate
 	GtkWidget *toolbar_dock;
 	GtkWidget *notebook;
 	GtkWidget *statusbar;
+	GtkWidget *progressbar;
 
 	EggActionGroup *action_group;
 
 	GncPluginPage *current_page;
+	GList *installed_pages;
+	gint event_handler_id;
 
 	GHashTable *merged_actions_table;
 };
@@ -261,6 +253,85 @@ static GObjectClass *parent_class = NULL;
 
 static GQuark window_type = 0;
 
+/************************************************************
+ *                                                          *
+ ************************************************************/
+
+/** Look through the list of pages installed in this window and see if
+ *  the specified page is there.
+ *
+ *  @param page The page to search for.
+ *
+ *  @return TRUE if the page is present in the window, FALSE otherwise.
+ */
+static gboolean
+gnc_main_window_page_exists (GncPluginPage *page)
+{
+	GncMainWindow *window;
+	GList *walker;
+
+	for (walker = active_windows; walker; walker = g_list_next(walker)) {
+	  window = walker->data;
+	  if (g_list_find(window->priv->installed_pages, page)) {
+	    return TRUE;
+	  }
+	}
+	return FALSE;
+}
+
+/** This function handles any event notifications from the engine.
+ *  The only event it currently cares about is the deletion of a book.
+ *  When a book is deleted, it runs through all installed pages
+ *  looking for pages that reference the just (about to be?) deleted
+ *  book.  It closes any page it finds so there are no dangling
+ *  references to the book.
+ *
+ *  @param entity     The guid the item being added, deleted, etc.
+ *
+ * @param type        The type of the item being added, deleted, etc. This
+ *                    function only cares about a type of GNC_ID_BOOK.
+ *
+ * @param event_type  The type of the event.  This function only cares
+ *                    about an event type of GNC_EVENT_DESTROY.
+ *
+ * @param user_data   A pointer to the window data structure.
+ */
+static void
+gnc_main_window_event_handler (GUID *entity, QofIdType type,
+			       GNCEngineEventType event_type,
+			       gpointer user_data)
+{
+	GncMainWindow *window;
+	GncPluginPage *page;
+	GList *item, *next;
+
+	/* hard failures */
+	g_return_if_fail(GNC_IS_MAIN_WINDOW(user_data));
+
+	/* soft failures */
+	if (safe_strcmp(type, GNC_ID_BOOK) != 0)
+	  return;
+	if (event_type !=  GNC_EVENT_DESTROY)
+	  return;
+
+	ENTER("entity %p of type %s, event %d, window %p",
+	      entity, type, event_type, user_data);
+	window = GNC_MAIN_WINDOW(user_data);
+
+	for (item = window->priv->installed_pages; item; item = next) {
+	  next = g_list_next(item);
+	  page = GNC_PLUGIN_PAGE(item->data);
+	  if (!gnc_plugin_page_has_book (page, entity))
+	    continue;
+	  gnc_main_window_close_page (window, page);
+	}
+	LEAVE(" ");
+}
+
+/************************************************************
+ *                                                          *
+ ************************************************************/
+
 GType
 gnc_main_window_get_type (void)
 {
@@ -306,15 +377,14 @@ gnc_main_window_open_page (GncMainWindow *window,
 	const gchar *icon;
 	GtkWidget *image;
 	GtkNotebook *notebook;
-	GList *item;
 	gint page_num;
 
 	if (window)
 	  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+	g_return_if_fail (gnc_plugin_page_has_books(page));
 
-	item = g_list_find (installed_pages, page);
-	if (item) {
+	if (gnc_main_window_page_exists(page)) {
 	  window = GNC_MAIN_WINDOW (page->window);
 	  notebook = GTK_NOTEBOOK (window->priv->notebook);
 	  page_num = gtk_notebook_page_num(notebook, page->notebook_page);
@@ -351,7 +421,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
 
-	installed_pages = g_list_append (installed_pages, page);
+	window->priv->installed_pages =
+	  g_list_append (window->priv->installed_pages, page);
 }
 
 void
@@ -360,8 +431,6 @@ gnc_main_window_close_page (GncMainWindow *window,
 {
 	GtkNotebook *notebook;
 	gint page_num;
-
-	installed_pages = g_list_remove (installed_pages, page);
 
 	if (!page->notebook_page)
 		return;
@@ -376,7 +445,8 @@ gnc_main_window_close_page (GncMainWindow *window,
 	notebook = GTK_NOTEBOOK (window->priv->notebook);
 	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
 	gtk_notebook_remove_page (notebook, page_num);
-	installed_pages = g_list_remove (installed_pages, page);
+	window->priv->installed_pages =
+	  g_list_remove (window->priv->installed_pages, page);
 
 	gnc_plugin_page_removed (page);
 
@@ -497,6 +567,10 @@ gnc_main_window_init (GncMainWindow *window)
 	window->priv->merged_actions_table =
 	  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
+	window->priv->event_handler_id =
+	  gnc_engine_register_event_handler(gnc_main_window_event_handler,
+					    window);
+
 	gnc_main_window_setup_window (window);
 }
 
@@ -513,6 +587,7 @@ gnc_main_window_finalize (GObject *object)
 
 	g_return_if_fail (window->priv != NULL);
 
+	gnc_engine_unregister_event_handler(window->priv->event_handler_id);
 	g_hash_table_destroy (window->priv->merged_actions_table);
 	g_free (window->priv);
 

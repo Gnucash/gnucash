@@ -42,6 +42,11 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+struct GncPluginPagePrivate
+{
+	GList *books;
+};
+
 GType
 gnc_plugin_page_get_type (void)
 {
@@ -220,6 +225,10 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 static void
 gnc_plugin_page_init (GncPluginPage *plugin_page)
 {
+	GncPluginPagePrivate *priv;
+
+	priv = plugin_page->priv = g_new0 (GncPluginPagePrivate, 1);
+
 	plugin_page->title       = NULL;
 	plugin_page->tab_name    = NULL;
 	plugin_page->uri         = NULL;
@@ -230,8 +239,11 @@ gnc_plugin_page_init (GncPluginPage *plugin_page)
 static void
 gnc_plugin_page_finalize (GObject *object)
 {
-  GncPluginPage *page = GNC_PLUGIN_PAGE (object);
+  GncPluginPagePrivate *priv;
+  GncPluginPage *page;
+  GList *item;
 
+  page = GNC_PLUGIN_PAGE (object);
   if (page->title)
 	g_free(page->title);
   if (page->tab_name)
@@ -239,7 +251,60 @@ gnc_plugin_page_finalize (GObject *object)
   if (page->uri)
 	g_free(page->uri);
 
+  priv = page->priv;
+  if (priv->books) {
+    for (item = priv->books; item; item = g_list_next(item)) {
+      guid_free (item->data);
+    }
+    g_list_free(priv->books);
+    priv->books = NULL;
+  }
+  g_free (priv);
+  page->priv = NULL;
+
   page->window = NULL; // Don't need to free it.
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+void
+gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book)
+{
+  GncPluginPagePrivate *priv;
+  GUID *guid;
+
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+  g_return_if_fail (book != NULL);
+
+  priv = page->priv;
+
+  guid = guid_malloc();
+  *guid = *qof_book_get_guid(book);
+  priv->books = g_list_append(priv->books, guid);
+}
+
+gboolean
+gnc_plugin_page_has_book (GncPluginPage *page, GUID *entity)
+{
+  GncPluginPagePrivate *priv;
+  GList *item;
+
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
+  g_return_val_if_fail (entity != NULL, FALSE);
+
+  priv = page->priv;
+  for (item = priv->books; item; item = g_list_next(item)) {
+    if (guid_equal((GUID*)item->data, entity)) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+gboolean
+gnc_plugin_page_has_books (GncPluginPage *page)
+{
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
+
+  return (page->priv->books != NULL);
 }

@@ -26,8 +26,9 @@
 #ifndef __GNC_PLUGIN_PAGE_H
 #define __GNC_PLUGIN_PAGE_H
 
-#include <gdk/gdkpixbuf.h>
 #include "egg-menu-merge.h"
+#include "guid.h"
+#include "qofbook.h"
 
 G_BEGIN_DECLS
 
@@ -40,8 +41,11 @@ G_BEGIN_DECLS
 #define GNC_PLUGIN_PAGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN_PAGE, GncPluginPageClass))
 
 /* typedefs & structures */
+typedef struct GncPluginPagePrivate GncPluginPagePrivate;
+
 typedef struct GncPluginPage {
 	GObject parent;
+	GncPluginPagePrivate *priv;
 
 	GtkWidget *window;
 	GtkWidget *notebook_page;
@@ -81,6 +85,36 @@ void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_pag
                                                        EggMenuMerge *merge);
 void                  gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
                                                        EggMenuMerge *merge);
+
+/** Add a book reference to the specified page.
+ *
+ *  @param page The page to be modified.
+ *
+ *  @param book The book referenced by this page.
+ */
+void gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book);
+
+/** Query a page to see if it has a reference to a given book.  This
+ *  function takes a guid instead of a QofBook because that's what the
+ *  engine event mechanism provides.
+ *
+ *  @param page The page to query.
+ *
+ *  @param book The guid of the book in question.
+ *
+ *  @return TRUE if the page refers to the specified book. FALSE
+ *  otherwise.
+ */
+gboolean              gnc_plugin_page_has_book        (GncPluginPage *page, GUID *book);
+
+/** Query a page to see if it has a reference to any book.
+ *
+ *  @param page The page to query.
+ *
+ *  @return TRUE if the page references any books. FALSE otherwise.
+ */
+gboolean              gnc_plugin_page_has_books       (GncPluginPage *page);
+
 
 /* Signals */
 void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);
