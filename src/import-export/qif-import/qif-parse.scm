@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;  qif-parse.scm
 ;;;  routines to parse values and dates in QIF files. 
 ;;;
@@ -236,6 +236,10 @@
            'reinvsh)
           ((reminder erinnerg)
            'reminder)
+	  ((rtrncap)
+	   'rtrncap)
+	  ((rtrncapx)
+	   'rtrncapx)
           ((sell verkauf)  ;; verkaufen
            'sell)
           ((sellx verkaufx)

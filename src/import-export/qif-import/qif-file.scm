@@ -216,13 +216,7 @@
                         ;;(write current-xtn) (newline)
                         (set! current-xtn (make-qif-xtn))
                         (set! current-split #f)
-                        (set! default-split (make-qif-split))
-                        (if progress-dialog 
-                            (begin 
-                              (gnc:progress-dialog-set-value 
-                               progress-dialog
-                               (* 100 (/ bytes-read file-size)))
-                              (gnc:progress-dialog-update progress-dialog)))))) 
+                        (set! default-split (make-qif-split))))) 
                     
                    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                     ;; Class transactions 
@@ -361,6 +355,14 @@
                             return-val 
                             (list #f "File does not appear to be a QIF file."))
                            (set! heinous-error #t))))))
+
+		 ;; update the progress bar for each line read
+		 (if progress-dialog 
+		     (begin 
+		       (gnc:progress-dialog-set-value 
+			progress-dialog
+			(* 100 (/ bytes-read file-size)))
+		       (gnc:progress-dialog-update progress-dialog)))
                  
                  ;; this is if we read a normal (non-null, non-eof) line...
                  (if (not heinous-error)

@@ -922,7 +922,7 @@
                    (default-margin-interest-acct from-acct)))
             ((rtrncap rtrncapx)
              (set! far-acct-name
-                   (default-return-capital-acct from-acct)))
+                   (default-capital-return-acct from-acct security)))
             ((div divx reinvdiv)
              (set! far-acct-name
                    (default-dividend-acct from-acct security)))            

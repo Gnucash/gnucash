@@ -127,7 +127,7 @@
              (cons (default-margin-interest-acct from-acct) 'brokerage)))
       ((rtrncap rtrncapx)
        (set! far-acct
-             (cons (default-return-capital-acct from-acct) 'brokerage)))
+             (cons (default-capital-return-acct from-acct) 'brokerage)))
       ((div divx reinvdiv)
        (set! far-acct
              (cons (default-dividend-acct from-acct security) 'brokerage)))

@@ -1273,6 +1273,22 @@ children to this account.")
 
   (gw:wrap-function
    mod
+   'gnc:account-group-begin-edit
+   '<gw:void>
+   "xaccAccountGroupBeginEdit"
+   '((<gnc:AccountGroup*> g))
+   "Open an account group for editing.")
+
+  (gw:wrap-function
+   mod
+   'gnc:account-group-commit-edit
+   '<gw:void>
+   "xaccAccountGroupCommitEdit"
+   '((<gnc:AccountGroup*> g))
+   "Commit all changes to an account group.")
+
+  (gw:wrap-function
+   mod
    'gnc:account-group-destroy
    '<gw:void>
    "xaccAccountGroupDestroy"

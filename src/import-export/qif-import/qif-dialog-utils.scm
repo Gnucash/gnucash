@@ -248,7 +248,7 @@
                       
                     ((rtrncap rtrncapx)
                      (set! qif-account
-                           (default-capital-return-acct from-acct))
+                           (default-capital-return-acct from-acct stock-acct))
                      (set! qif-account-types (list GNC-INCOME-TYPE)))
 
                     ((shrsin shrsout)

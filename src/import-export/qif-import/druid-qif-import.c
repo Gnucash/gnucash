@@ -995,7 +995,9 @@ gnc_ui_qif_import_accounts_prepare_cb(GnomeDruidPage * page,
                                       gpointer user_data) {
   QIFImportWindow * wind = user_data;
 
+  gnc_set_busy_cursor(NULL, TRUE);
   update_accounts_page(wind);
+  gnc_unset_busy_cursor(NULL);
 }
 
 
@@ -1009,7 +1011,9 @@ gnc_ui_qif_import_categories_prepare_cb(GnomeDruidPage * page,
                                         gpointer user_data) {
   QIFImportWindow * wind = user_data;
 
+  gnc_set_busy_cursor(NULL, TRUE);
   update_categories_page(wind);
+  gnc_unset_busy_cursor(NULL);
 }
 
 /********************************************************************
@@ -1022,7 +1026,9 @@ gnc_ui_qif_import_memo_prepare_cb(GnomeDruidPage * page,
                                         gpointer user_data) {
   QIFImportWindow * wind = user_data;
 
+  gnc_set_busy_cursor(NULL, TRUE);
   update_memo_page(wind);
+  gnc_unset_busy_cursor(NULL);
 }
 
 
@@ -1045,6 +1051,7 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
   GList        * pageptr;
   Transaction  * gnc_xtn;
   Split        * gnc_split;
+  gnc_commodity * old_commodity;
 
   char * mnemonic = NULL; 
   const char * namespace = NULL;
@@ -1072,8 +1079,12 @@ gnc_ui_qif_import_convert(QIFImportWindow * wind) {
     gnc_commodity_set_fullname(page->commodity, fullname);
     gnc_commodity_set_mnemonic(page->commodity, mnemonic);
 
+    old_commodity = page->commodity;
     page->commodity = gnc_commodity_table_insert(gnc_get_current_commodities(),
                                                  page->commodity);
+    if (old_commodity != page->commodity) {
+	scm_hash_remove_x(wind->stock_hash, gh_str02scm(fullname));
+    }
   }
 
   /* call a scheme function to do the work.  The return value is an
@@ -1241,6 +1252,7 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
   SCM update_stock = gh_eval_str("qif-import:update-stock-hash");
   int show_matches;
 
+  gnc_set_busy_cursor(NULL, TRUE);
   scm_unprotect_object(wind->new_stocks);
   wind->new_stocks =  gh_call3(update_stock, wind->stock_hash, 
 			       wind->ticker_map, wind->acct_map_info);
@@ -1256,7 +1268,6 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            GNOME_DRUID_PAGE(wind->commodity_pages->data));
     }
-    return TRUE;
   }
   else {
     /* it's time to import the accounts. */
@@ -1277,8 +1288,10 @@ gnc_ui_qif_import_currency_next_cb(GnomeDruidPage * page,
       gnome_druid_set_page(GNOME_DRUID(wind->druid),
                            get_named_page(wind, "end_page"));
     }
-    return TRUE;
   }
+
+  gnc_unset_busy_cursor(NULL);
+  return TRUE;
 }
 
 
@@ -1395,6 +1408,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
   }
 
   /* insert new pages, one for each stock */
+  gnc_set_busy_cursor(NULL, TRUE);
   stocks = wind->new_stocks;
   while(!gh_null_p(stocks) && (stocks != SCM_BOOL_F)) {
     comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stocks));
@@ -1417,6 +1431,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
     stocks = gh_cdr(stocks);
     gtk_widget_show_all(new_page->page);
   }
+  gnc_unset_busy_cursor(NULL);
 
   gnc_druid_set_colors (GNOME_DRUID (wind->druid));
 }
