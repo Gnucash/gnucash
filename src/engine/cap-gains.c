@@ -36,21 +36,21 @@
  *  This code does not currently handle tax distinctions, e.g
  *  the different tax treatment that short-term and long-term 
  *  cap gains have. 
-
-ToDo List:
- o Need to use a 'gains dirty' flag: A 'dirty' flag on the source 
-   split indicates that the gains transaction needs to be recomputed.
-   Another flag, the gains transaction flag, marks the split as
-   being a gains split, and that the source transaction should be 
-   checked for dirtiness before returning the date, the amount, the
-   value, etc.  Finally, these flags make amount and value read-only
-   for the gains splits. (the memo is user-modifieable).
-
- o If the amount in a split is changed, then the lot has to be recomputed.
-   This has a potential trickle-through effect on all later lots. 
-   Ideally, later lots are dissolved, and recomputed.  However, some 
-   lots may have been user-hand-built. These should be left alone.
-
+ *
+ * This code uses a 'gains dirty' flag: A 'dirty' flag on the source 
+ * split indicates that the gains transaction needs to be recomputed.
+ * Another flag, the gains transaction flag, marks the split as
+ * being a gains split, and that the source transaction should be 
+ * checked for dirtiness before returning the date, the amount, the
+ * value, etc.  Finally, these flags make amount and value read-only
+ * for the gains splits. (the memo is user-modifieable).
+ *  
+ * If the amount in a split is changed, then the lot has to be recomputed.
+ * This has a potential trickle-through effect on all later lots. 
+ * Ideally, later lots are dissolved, and recomputed.  However, some 
+ * lots may have been user-hand-built. These should be left alone.
+ *
+ToDo:
  o XXX Need to create a data-integrity scrubber, tht makes sure that
    the various flags, and pointers & etc. match. See sections marked
    with XXX below for things that might go wrong.
@@ -554,6 +554,7 @@ xaccSplitGetCapGainsSplit (Split *split)
 void
 xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 {
+   SplitList *node;
    GNCLot *lot;
    gnc_commodity *currency = NULL;
    gnc_numeric zero = gnc_numeric_zero();
@@ -572,6 +573,29 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
    /* Make sure the status flags and pointers are initialized */
    if (GAINS_STATUS_UNKNOWN == split->gains) xaccSplitDetermineGainStatus(split);
+   if (FIFOPolicyIsOpeningSplit (lot, split, NULL))
+   {
+#if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
+      /* Check to make sure that this opening split doesn't 
+       * have a cap-gain transaction associated with it.  
+       * If it does, that's wrong, and we ruthlessly destroy it.
+       * XXX Don't do this, it leads to infinite loops.
+       * We need to scrub out errors like this elsewhere!
+       */
+      if (xaccSplitGetCapGainsSplit (split))
+      {
+         Split *gains_split = xaccSplitGetCapGainsSplit(split);
+         Transaction *trans = gains_split->parent;
+         PERR ("Opening Split must not have cap gains!!\n");
+         
+         xaccTransBeginEdit (trans);
+         xaccTransDestroy (trans);
+         xaccTransCommitEdit (trans);
+      }
+#endif
+      return;
+   }
+
    if (GAINS_STATUS_GAINS & split->gains)
    {
       /* If this is the split that records the gains, then work with 
@@ -597,6 +621,26 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       }
    }
 
+   /* Note: if the value of the 'opening' split(s) has changed,
+    * then the cap gains are changed. So we need to check not
+    * only if this split is dirty, but also the lot-opening splits. */
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (FIFOPolicyIsOpeningSplit(lot,s,NULL))
+      {
+         if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus (s);
+         if (s->gains & GAINS_STATUS_VDIRTY) 
+         { 
+            /* Force a recompute to occur */
+            split->gains |= GAINS_STATUS_VDIRTY;
+            break;
+         }
+      }
+   }
+
+   /* If it doesn't look like this split is 'dirty', then there's
+    * nothing to do. Just return. */
    if ((FALSE == (split->gains & GAINS_STATUS_A_VDIRTY))  &&
        (split->gains_split) &&
        (FALSE == (split->gains_split->gains & GAINS_STATUS_A_VDIRTY))) return;
@@ -605,32 +649,13 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
     * may exist if users attempted to manually record gains. */
    if (gnc_numeric_zero_p (split->amount)) return;
 
+   /* If we got to here, then the split or something related is
+    * 'dirty' and the gains really do need to be recomputed. 
+    * So start working things. */
+
    FIFOPolicyGetLotOpening (lot, &opening_amount, &opening_value,
        &opening_currency, NULL);
 
-   if (FIFOPolicyIsOpeningSplit (lot, split, NULL))
-   {
-#if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
-      /* Check to make sure that this opening split doesn't 
-       * have a cap-gain transaction associated with it.  
-       * If it does, that's wrong, and we ruthlessly destroy it.
-       * XXX Don't do this, it leads to infinite loops.
-       * We need to scrub out errors like this elsewhere!
-       */
-      if (xaccSplitGetCapGainsSplit (split))
-      {
-         Split *gains_split = xaccSplitGetCapGainsSplit(split);
-         Transaction *trans = gains_split->parent;
-         PERR ("Opening Split must not have cap gains!!\n");
-         
-         xaccTransBeginEdit (trans);
-         xaccTransDestroy (trans);
-         xaccTransCommitEdit (trans);
-      }
-#endif
-      return;
-   }
-   
    /* Check to make sure the lot-opening currency and this split
     * use the same currency */
    if (FALSE == gnc_commodity_equiv (currency, opening_currency))
@@ -644,7 +669,8 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
    /* Opening amount should be larger (or equal) to current split,
     * and it should be of the opposite sign.
-XXX this should be a part of a scrub routine !
+    * XXX This should really be a part of a scrub routine that
+    * cleans up the lot, before we get at it!
     */
    if (0 > gnc_numeric_compare (gnc_numeric_abs(opening_amount),
                                 gnc_numeric_abs(split->amount)))
@@ -821,6 +847,34 @@ void
 xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
 {
    SplitList *node;
+   gboolean is_dirty = FALSE;
+
+   /* Note: if the value of the 'opening' split(s) has changed,
+    * then the cap gains are changed. To capture this, we need 
+    * to mark all splits dirty if the opening splits are dirty. */
+
+   for (node=lot->splits; node; node=node->next)
+   {
+      Split *s = node->data;
+      if (FIFOPolicyIsOpeningSplit(lot,s,NULL))
+      {
+         if (GAINS_STATUS_UNKNOWN == s->gains) xaccSplitDetermineGainStatus (s);
+         if (s->gains & GAINS_STATUS_VDIRTY) 
+         { 
+            is_dirty = TRUE; 
+            s->gains &= ~GAINS_STATUS_VDIRTY;
+         }
+      }
+   }
+
+   if (is_dirty)
+   {
+      for (node=lot->splits; node; node=node->next)
+      {
+         Split *s = node->data;
+         s->gains |= GAINS_STATUS_VDIRTY;
+      }
+   }
 
    for (node=lot->splits; node; node=node->next)
    {
