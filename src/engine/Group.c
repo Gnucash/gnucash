@@ -644,17 +644,21 @@ void
 xaccConcatGroups (AccountGroup *togrp, AccountGroup *fromgrp)
 {
    Account * acc;
+   int numAcc;
 
    if (!togrp) return;
    if (!fromgrp) return;
    
-   /* the act of inserting the account into togrp also causes
-    * it to automatically be deleted from fromgrp. So just loop 
-    * until they're all gone.
+   /* The act of inserting the account into togrp also causes
+    * it to automatically be deleted from fromgrp. But use a
+    * saved copy of fromgrp's numAcc member since, after the
+    * last insertion, fromgrp will be pointing to freed memory.
     */
-   while (fromgrp->numAcc) {
+   numAcc = fromgrp->numAcc;
+   while (numAcc) {
       acc = fromgrp->account[0];
       xaccGroupInsertAccount (togrp, acc);
+      numAcc--;
    }
 }
 
@@ -665,7 +669,7 @@ void
 xaccMergeAccounts (AccountGroup *grp)
 {
    Account *acc_a, *acc_b;
-   int i,j, k;
+   int i, j, k;
 
    if (!grp) return;
    
@@ -694,7 +698,8 @@ xaccMergeAccounts (AccountGroup *grp)
                } else {
                   xaccConcatGroups (ga, gb);
                   acc_b->children = NULL;
-                  xaccFreeAccountGroup (gb);
+                  /* XXX why is the below commented out ??? */
+                  /* xaccFreeAccountGroup (gb);  XXX  ??? */
                }
             }
 

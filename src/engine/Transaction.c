@@ -1339,7 +1339,7 @@ xaccSplitOrder (Split **sa, Split **sb)
   SAFE_STRCMP (da, db);
 
   /* the reconciled flag ... */
-  diff = ((*sa)->reconciled) - ((*sb)->reconciled) ;
+  diff = ((*sa)->reconciled) - ((*sb)->reconciled);
   if (diff) return diff;
 
   /* if dates differ, return */
@@ -1353,6 +1353,53 @@ xaccSplitOrder (Split **sa, Split **sb)
   return 0;
 }
 
+int
+xaccSplitMatch (Split **sa, Split **sb)
+{
+  char *da, *db;
+  char diff;
+
+  if ( (*sa) && !(*sb) ) return -1;
+  if ( !(*sa) && (*sb) ) return +1;
+  if ( !(*sa) && !(*sb) ) return 0;
+
+  /* compare amounts use parenthesis paranoia for multiplication, pointers etc. */
+  if ( ((((*sa)->damount)*((*sa)->share_price))+EPS) < 
+        (((*sb)->damount)*((*sb)->share_price))) return -1;
+
+  if ( ((((*sa)->damount)*((*sa)->share_price))-EPS) > 
+        (((*sb)->damount)*((*sb)->share_price))) return +1;
+
+  if ((((*sa)->share_price)+EPS) < ((*sb)->share_price)) return -1;
+  if ((((*sa)->share_price)-EPS) > ((*sb)->share_price)) return +1;
+
+  /* otherwise, sort on memo strings */
+  da = (*sa)->memo;
+  db = (*sb)->memo;
+  SAFE_STRCMP (da, db);
+
+  /* otherwise, sort on action strings */
+  da = (*sa)->action;
+  db = (*sb)->action;
+  SAFE_STRCMP (da, db);
+
+  /* If the reconciled flags are different, don't compare the
+   * dates, since we want to match splits with different reconciled
+   * values. But if they do match, the dates must match as well. 
+   * Note that 
+   */
+  diff = ((*sa)->reconciled) - ((*sb)->reconciled);
+  if (!diff) {
+    DATE_CMP(sa,sb,date_reconciled);
+  }
+
+  /* otherwise, sort on docref string */
+  da = (*sa)->docref;
+  db = (*sb)->docref;
+  SAFE_STRCMP (da, db);
+
+  return 0;
+}
 
 int
 xaccTransOrder (Transaction **ta, Transaction **tb)
@@ -1420,7 +1467,7 @@ xaccTransMatch (Transaction **tap, Transaction **tbp)
      nb=0; 
      while ((sb=tb->splits[nb])) { 
         if (-1 < sb->tickee) {nb++; continue;}
-        retval = xaccSplitOrder (&sa, &sb);
+        retval = xaccSplitMatch (&sa, &sb);
         if ((0 == retval) && (sa->acc = sb->acc)) {
            sb->tickee = na;
            sa->tickee = nb;

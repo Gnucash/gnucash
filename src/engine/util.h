@@ -88,7 +88,7 @@ extern int loglevel[MODULE_MAX];
 #define ERROR()     fprintf(stderr,"%s: Line %d, error = %s\n", \
 			    __FILE__, __LINE__, strerror(errno));
 
-#ifdef DEBUGMEMORY
+#if DEBUG_MEMORY
 void   *dmalloc( size_t size );
 void   dfree( void *ptr );
 size_t dcoresize();
