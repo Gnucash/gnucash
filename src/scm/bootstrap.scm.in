@@ -37,7 +37,7 @@
         (newline))
 
 ;; Test for slib.
-(let* ((try-slib (lambda () (use-modules (ice-9 slib))))
+(let* ((try-slib (lambda () (use-modules (ice-9 slib)) (require 'format)))
        (handler (lambda args #f))
        (result (catch #t try-slib handler)))
   (if (not result)
