@@ -373,7 +373,7 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
   /* Put split into account before setting split value */
   if (!balance_split)
   {
-    balance_split = xaccMallocSplit (trans->book);
+    balance_split = xaccMallocSplit (trans->inst.book);
 
     xaccAccountBeginEdit (account);
     xaccAccountInsertSplit (account, balance_split);
@@ -544,7 +544,7 @@ xaccTransScrubCurrency (Transaction *trans)
   currency = xaccTransGetCurrency (trans);
   if (currency) return;
   
-  currency = xaccTransFindOldCommonCurrency (trans, trans->book);
+  currency = xaccTransFindOldCommonCurrency (trans, trans->inst.book);
   if (currency)
   {
     xaccTransBeginEdit (trans);

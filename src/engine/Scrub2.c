@@ -295,7 +295,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Find and remove the matching guid's */
    ksub = gnc_kvp_bag_find_by_guid (sa->kvp_data, "lot-split",
-                    "peer_guid", &sb->guid);
+                    "peer_guid", &sb->entity.guid);
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sa->kvp_data, "lot-split", ksub);
@@ -304,7 +304,7 @@ remove_guids (Split *sa, Split *sb)
 
    /* Now do it in the other direction */
    ksub = gnc_kvp_bag_find_by_guid (sb->kvp_data, "lot-split",
-                    "peer_guid", &sa->guid);
+                    "peer_guid", &sa->entity.guid);
    if (ksub) 
    {
       gnc_kvp_bag_remove_frame (sb->kvp_data, "lot-split", ksub);

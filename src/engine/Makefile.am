@@ -130,6 +130,7 @@ noinst_HEADERS = \
   qofbook-p.h \
   qofclass-p.h \
   qofid-p.h \
+  qofinstance-p.h \
   qofobject-p.h \
   qofquery-p.h \
   qofquerycore-p.h \

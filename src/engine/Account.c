@@ -52,6 +52,7 @@
 #include "qofbook-p.h"
 #include "qofclass.h"
 #include "qofid-p.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 
 static short module = MOD_ACCOUNT; 

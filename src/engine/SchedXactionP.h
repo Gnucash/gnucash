@@ -26,7 +26,7 @@
 
 #include "SchedXaction.h"
 #include "qofid.h"
-#include "qofinstance.h"
+#include "qofinstance-p.h"
 
 /**
  * A single scheduled transaction.

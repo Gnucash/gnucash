@@ -52,6 +52,7 @@
 #include "qofbook.h"
 #include "qofid.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 
 
 /** STRUCTS *********************************************************/

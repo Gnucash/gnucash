@@ -49,6 +49,7 @@
 #include "qofbook.h"
 #include "qofbook-p.h"
 #include "qofinstance.h"
+#include "qofinstance-p.h"
 #include "qofobject.h"
 
 static short module = MOD_SX;
