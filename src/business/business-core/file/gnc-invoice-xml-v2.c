@@ -67,6 +67,7 @@ const gchar *invoice_version_string = "2.0.0";
 #define invoice_notes_string "invoice:notes"
 #define invoice_active_string "invoice:active"
 #define invoice_posttxn_string "invoice:posttxn"
+#define invoice_postlot_string "invoice:postlot"
 #define invoice_postacc_string "invoice:postacc"
 #define invoice_commodity_string "invoice:commodity"
 
@@ -90,6 +91,7 @@ invoice_dom_tree_create (GncInvoice *invoice)
     xmlNodePtr ret;
     Timespec ts;
     Transaction *txn;
+    GNCLot *lot;
     Account *acc;
     GncBillTerm *term;
 
@@ -127,6 +129,11 @@ invoice_dom_tree_create (GncInvoice *invoice)
     if (txn)
       xmlAddChild (ret, guid_to_dom_tree (invoice_posttxn_string,
 					  xaccTransGetGUID (txn)));
+
+    lot = gncInvoiceGetPostedlot (invoice);
+    if (lot)
+      xmlAddChild (ret, guid_to_dom_tree (invoice_postlot_string,
+					  gnc_lot_get_guid (lot)));
 
     acc = gncInvoiceGetPostedAcc (invoice);
     if (acc)
@@ -305,6 +312,23 @@ invoice_posttxn_handler (xmlNodePtr node, gpointer invoice_pdata)
 }
 
 static gboolean
+invoice_postlot_handler (xmlNodePtr node, gpointer invoice_pdata)
+{
+    struct invoice_pdata *pdata = invoice_pdata;
+    GUID *guid;
+    GNCLot *lot;
+
+    guid = dom_tree_to_guid(node);
+    g_return_val_if_fail (guid, FALSE);
+    lot = gnc_lot_lookup (guid, pdata->book);
+    g_free (guid);
+    g_return_val_if_fail (lot, FALSE);
+
+    gncInvoiceSetPostedLot (pdata->invoice, lot);
+    return TRUE;
+}
+
+static gboolean
 invoice_postacc_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata *pdata = invoice_pdata;
@@ -346,6 +370,7 @@ static struct dom_tree_handler invoice_handlers_v2[] = {
     { invoice_active_string, invoice_active_handler, 1, 0 },
     { invoice_terms_string, invoice_terms_handler, 0, 0 },
     { invoice_posttxn_string, invoice_posttxn_handler, 0, 0 },
+    { invoice_postlot_string, invoice_postlot_handler, 0, 0 },
     { invoice_postacc_string, invoice_postacc_handler, 0, 0 },
     { invoice_commodity_string, invoice_commodity_handler, 1, 0 },
     { NULL, 0, 0, 0 }

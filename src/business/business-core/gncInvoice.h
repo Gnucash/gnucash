@@ -13,6 +13,7 @@ typedef struct _gncInvoice GncInvoice;
 #include "gncBillTerm.h"
 #include "gncEntry.h"
 #include "gncOwner.h"
+#include "gnc-lot.h"
 
 #define GNC_INVOICE_MODULE_NAME "gncInvoice"
 
@@ -52,6 +53,7 @@ const char * gncInvoiceGetType (GncInvoice *invoice);
 gnc_commodity * gncInvoiceGetCommonCommodity (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
+GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);
 Account * gncInvoiceGetPostedAcc (GncInvoice *invoice);
 
@@ -70,6 +72,9 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 
 /* Given a transaction, find and return the Invoice */
 GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn);
+
+/* Given a LOT, find and return the Invoice attached to the lot */
+GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot);
 
 GUID gncInvoiceRetGUID (GncInvoice *invoice);
 GncInvoice * gncInvoiceLookupDirect (GUID guid, GNCBook *book);

@@ -10,6 +10,7 @@
 #include "gncInvoice.h"
 #include "Account.h"
 #include "Transaction.h"
+#include "gnc-lot.h"
 
 gboolean gncInvoiceRegister (void);
 gint64 gncInvoiceNextID (GNCBook *book);
@@ -17,6 +18,7 @@ void gncInvoiceSetGUID (GncInvoice *invoice, const GUID *guid);
 void gncInvoiceSetDirty (GncInvoice *invoice, gboolean dirty);
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc);
 void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn);
+void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot);
 void gncInvoiceSetPaidTxn (GncInvoice *invoice, Transaction *txn);
 
 #endif /* GNC_INVOICEP_H_ */

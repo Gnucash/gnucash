@@ -46,6 +46,7 @@ struct _gncInvoice {
 
   Account * 	posted_acc;
   Transaction * posted_txn;
+  GNCLot *	posted_lot;
 
   gboolean 	active;
 
@@ -225,6 +226,15 @@ void gncInvoiceSetPostedTxn (GncInvoice *invoice, Transaction *txn)
   mark_invoice (invoice);
 }
 
+void gncInvoiceSetPostedLot (GncInvoice *invoice, GNCLot *lot)
+{
+  if (!invoice) return;
+  g_return_if_fail (invoice->posted_lot == NULL);
+
+  invoice->posted_lot = lot;
+  mark_invoice (invoice);
+}
+
 void gncInvoiceSetPostedAcc (GncInvoice *invoice, Account *acc)
 {
   if (!invoice) return;
@@ -387,6 +397,44 @@ gboolean gncInvoiceIsDirty (GncInvoice *invoice)
 }
 
 static void
+gncInvoiceAttachInvoiceToLot (GncInvoice *invoice, GNCLot *lot)
+{
+  kvp_frame *kvp;
+  kvp_value *value;
+  
+  if (!invoice || !lot)
+    return;
+
+  if (invoice->posted_lot) return;	/* Cannot reset invoice's lot */
+
+  kvp = gnc_lot_get_slots (lot);
+  value = kvp_value_new_guid (gncInvoiceGetGUID (invoice));
+  kvp_frame_set_slot_path (kvp, value, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
+  kvp_value_delete (value);
+  gncInvoiceSetPostedLot (invoice, lot);
+}
+
+GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
+{
+  kvp_frame *kvp;
+  kvp_value *value;
+  GUID *guid;
+  GNCBook *book;
+
+  if (!lot) return NULL;
+
+  book = gnc_lot_get_book (lot);
+  kvp = gnc_lot_get_slots (lot);
+  value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
+  if (!value) return NULL;
+
+  guid = kvp_value_get_guid (value);
+
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
+}
+
+static void
 gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
 {
   kvp_frame *kvp;
@@ -405,6 +453,26 @@ gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
   xaccTransSetTxnType (txn, TXN_TYPE_INVOICE);
   xaccTransCommitEdit (txn);
   gncInvoiceSetPostedTxn (invoice, txn);
+}
+
+GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
+{
+  kvp_frame *kvp;
+  kvp_value *value;
+  GUID *guid;
+  GNCBook *book;
+
+  if (!txn) return NULL;
+
+  book = xaccTransGetBook (txn);
+  kvp = xaccTransGetSlots (txn);
+  value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
+  if (!value) return NULL;
+
+  guid = kvp_value_get_guid (value);
+
+  return xaccLookupEntity (gnc_book_get_entity_table (book),
+			   guid, _GNC_MOD_NAME);
 }
 
 Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
@@ -530,7 +598,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
     xaccTransAppendSplit (txn, split);
   }
 
-  /* Now attach this invoice to the txn and account */
+  /* Now attach this invoice to the txn, lot, and account */
+  gncInvoiceAttachInvoiceToLot (invoice, lot);
   gncInvoiceAttachInvoiceToTxn (invoice, txn);
   gncInvoiceSetPostedAcc (invoice, acc);
 
@@ -539,26 +608,6 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   gncAccountValueDestroy (splitinfo);
 
   return txn;
-}
-
-GncInvoice * gncInvoiceGetInvoiceFromTxn (Transaction *txn)
-{
-  kvp_frame *kvp;
-  kvp_value *value;
-  GUID *guid;
-  GNCBook *book;
-
-  if (!txn) return NULL;
-
-  book = xaccTransGetBook (txn);
-  kvp = xaccTransGetSlots (txn);
-  value = kvp_frame_get_slot_path (kvp, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
-  if (!value) return NULL;
-
-  guid = kvp_value_get_guid (value);
-
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
-			   guid, _GNC_MOD_NAME);
 }
 
 static gboolean gncInvoiceDateExists (Timespec *date)
