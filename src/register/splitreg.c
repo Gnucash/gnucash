@@ -571,6 +571,7 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    reg->user_hook = NULL;
    reg->user_hack = NULL;
+   reg->user_huck = NULL;
    reg->destroy = NULL;
    reg->type = type;
 
@@ -771,6 +772,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
    reg->destroy = NULL;
    reg->user_hook = NULL;
    reg->user_hack = NULL;
+   reg->user_huck = NULL;
 
    xaccDestroyTable (reg->table);
    reg->table = NULL;

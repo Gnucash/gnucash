@@ -208,10 +208,11 @@ printf ("leave LedgerTraverse with %d \n", reg->cursor_phys_row);
 static void
 LedgerDestroy (SplitRegister *reg)
 {
+   Transaction *trans;
+
    /* be sure to destroy the "blank split" */
    if (reg->user_hook) {
       Split *split;
-      Transaction *trans;
 
       split = (Split *) (reg->user_hook);
 
@@ -222,6 +223,19 @@ LedgerDestroy (SplitRegister *reg)
       xaccTransDestroy (trans);
       xaccTransCommitEdit (trans);
       reg->user_hook = NULL;
+   }
+
+   /* be sure to take care of any open transactions */
+   if (reg->user_huck) {
+      trans = (Transaction *) (reg->user_huck);   
+  
+      /* I suppose we could also rollback here ... its not clear what
+       * the desirable behaviour should be from the user's point of view 
+       * when they close a window with an uncommitted edit in it ...
+       * Maybe we should prompt them ??
+       */
+      xaccTransCommitEdit (trans);
+      reg->user_huck = NULL;
    }
 }
 
@@ -284,7 +298,7 @@ void
 xaccSRSaveRegEntry (SplitRegister *reg)
 {
    Split *split;
-   Transaction *trans;
+   Transaction *trans, *oldtrans;
    Account * acc;
    unsigned int changed;
    int style;
@@ -327,8 +341,15 @@ printf ("save split is %p \n", split);
       }
       trans = xaccSplitGetParent (s);
 
+      /* determine whether we should commit the previous edit */
+      oldtrans = (Transaction *) (reg->user_huck);
+      if (oldtrans != trans) {
+         xaccTransCommitEdit (oldtrans);
+         xaccTransBeginEdit (trans, 0);   
+         reg->user_huck =  (void *) trans;
+      }
+      
       split = xaccMallocSplit ();
-      xaccTransBeginEdit (trans, 0);   
       xaccTransAppendSplit (trans, split);
 
       if (force_double_entry_awareness) {
@@ -341,7 +362,14 @@ printf ("save split is %p \n", split);
 
    } else {
       trans = xaccSplitGetParent (split);
-      xaccTransBeginEdit (trans, 0);
+
+      /* determine whether we should commit the previous edit */
+      oldtrans = (Transaction *) (reg->user_huck);
+      if (oldtrans != trans) {
+         xaccTransCommitEdit (oldtrans);
+         xaccTransBeginEdit (trans, 0);   
+         reg->user_huck =  (void *) trans;
+      }
    }
 
    /* copy the contents from the cursor to the split */
@@ -458,8 +486,6 @@ printf ("save split is %p \n", split);
    if (MOD_VALU & changed) {
       xaccSplitSetValue (split, (reg->valueCell->amount));
    }
-
-   xaccTransCommitEdit (trans);
 
 printf ("finished saving split %s of trans %s \n", 
 xaccSplitGetMemo(split),

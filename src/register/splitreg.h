@@ -158,13 +158,14 @@ struct _SplitRegister {
    short num_virt_rows;
    short cursor_phys_row;
    short cursor_virt_row;
-   void * user_hack;
 
    BasicCell *header_label_cells[NUM_CELLS];
 
    /* user_hook allows users of this object to hang
     * private data onto it */
    void *user_hook;
+   void *user_hack;
+   void *user_huck;
 
    /* The destroy callback gives user's a chance 
     * to free up any associated user_hook data */
