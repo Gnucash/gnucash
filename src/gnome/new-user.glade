@@ -54,8 +54,11 @@
 	<handler>on_newUserStartPage_next</handler>
 	<last_modification_time>Tue, 09 Jan 2001 18:04:50 GMT</last_modification_time>
       </signal>
-      <title>New User Account Setup</title>
-      <text>This wizard will help you to set up a default set of accounts to use.</text>
+      <title>New Account List Setup</title>
+      <text>This wizard will help you to set up a default set of accounts to use.  If this is the first
+time you have run GnuCash this dialog will appear.  If you choose New File in the
+File menu this dialog will also appear unless you have set the &quot;No account list setup
+on new file&quot; option.</text>
       <title_color>255,255,255</title_color>
       <text_color>0,0,0</text_color>
       <background_color>25,25,112</background_color>
@@ -399,7 +402,7 @@
 	<widget>
 	  <class>GtkLabel</class>
 	  <name>finalAccountLabel</name>
-	  <label>If you would like the accounts to have an opening balance click on the account line and enter the starting balance in the box on the right.</label>
+	  <label>If you would like the accounts to have an opening balance click on the account line and enter the starting balance in the box on the right.  All accounts but Equity may have a value set.</label>
 	  <justify>GTK_JUSTIFY_FILL</justify>
 	  <wrap>True</wrap>
 	  <xalign>0.0200003</xalign>
@@ -631,8 +634,8 @@
       <widget>
 	<class>GtkLabel</class>
 	<name>newAccountCancelDialog_ShouldRunAgainLable</name>
-	<label>Uncheck if you do not want this new user dialog to run again.</label>
-	<justify>GTK_JUSTIFY_FILL</justify>
+	<label>Uncheck if you do not want this dialog to run if you start GnuCash up again. </label>
+	<justify>GTK_JUSTIFY_CENTER</justify>
 	<wrap>True</wrap>
 	<xalign>0.5</xalign>
 	<yalign>0.5</yalign>
@@ -649,7 +652,7 @@
 	<class>GtkCheckButton</class>
 	<name>newAccountCancelDialog_RunAgainToggle</name>
 	<can_focus>True</can_focus>
-	<label>Run New User Account Setup again?</label>
+	<label>Run dialog for new user again?</label>
 	<active>True</active>
 	<draw_indicator>True</draw_indicator>
 	<child>

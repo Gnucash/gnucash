@@ -104,8 +104,8 @@ create_newUserDialog (void)
   gnome_druid_page_start_set_textbox_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_textbox_color);
   gnome_druid_page_start_set_logo_bg_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_logo_bg_color);
   gnome_druid_page_start_set_title_color (GNOME_DRUID_PAGE_START (newUserStartPage), &newUserStartPage_title_color);
-  gnome_druid_page_start_set_title (GNOME_DRUID_PAGE_START (newUserStartPage), _("New User Account Setup"));
-  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (newUserStartPage), _("This wizard will help you to set up a default set of accounts to use."));
+  gnome_druid_page_start_set_title (GNOME_DRUID_PAGE_START (newUserStartPage), _("New Account List Setup"));
+  gnome_druid_page_start_set_text (GNOME_DRUID_PAGE_START (newUserStartPage), _("This wizard will help you to set up a default set of accounts to use.  If this is the first\ntime you have run GnuCash this dialog will appear.  If you choose New File in the\nFile menu this dialog will also appear unless you have set the \"No account list setup\non new file\" option."));
 
   newAccountCurrencyChoosePage = gnome_druid_page_standard_new_with_vals ("", NULL);
   gtk_widget_set_name (newAccountCurrencyChoosePage, "newAccountCurrencyChoosePage");
@@ -318,7 +318,7 @@ create_newUserDialog (void)
   gtk_widget_show (druid_vbox3);
   gtk_container_set_border_width (GTK_CONTAINER (druid_vbox3), 5);
 
-  finalAccountLabel = gtk_label_new (_("If you would like the accounts to have an opening balance click on the account line and enter the starting balance in the box on the right."));
+  finalAccountLabel = gtk_label_new (_("If you would like the accounts to have an opening balance click on the account line and enter the starting balance in the box on the right.  All accounts but Equity may have a value set."));
   gtk_widget_set_name (finalAccountLabel, "finalAccountLabel");
   gtk_widget_ref (finalAccountLabel);
   gtk_object_set_data_full (GTK_OBJECT (newUserDialog), "finalAccountLabel", finalAccountLabel,
@@ -503,17 +503,16 @@ create_addAccountCancelDialog (void)
   gtk_widget_show (vbox1);
   gtk_box_pack_start (GTK_BOX (newAccountCancelDialog), vbox1, TRUE, TRUE, 0);
 
-  newAccountCancelDialog_ShouldRunAgainLable = gtk_label_new (_("Uncheck if you do not want this new user dialog to run again."));
+  newAccountCancelDialog_ShouldRunAgainLable = gtk_label_new (_("Uncheck if you do not want this dialog to run if you start GnuCash up again. "));
   gtk_widget_set_name (newAccountCancelDialog_ShouldRunAgainLable, "newAccountCancelDialog_ShouldRunAgainLable");
   gtk_widget_ref (newAccountCancelDialog_ShouldRunAgainLable);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog_ShouldRunAgainLable", newAccountCancelDialog_ShouldRunAgainLable,
                             (GtkDestroyNotify) gtk_widget_unref);
   gtk_widget_show (newAccountCancelDialog_ShouldRunAgainLable);
   gtk_box_pack_start (GTK_BOX (vbox1), newAccountCancelDialog_ShouldRunAgainLable, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (newAccountCancelDialog_ShouldRunAgainLable), GTK_JUSTIFY_FILL);
   gtk_label_set_line_wrap (GTK_LABEL (newAccountCancelDialog_ShouldRunAgainLable), TRUE);
 
-  newAccountCancelDialog_RunAgainToggle = gtk_check_button_new_with_label (_("Run New User Account Setup again?"));
+  newAccountCancelDialog_RunAgainToggle = gtk_check_button_new_with_label (_("Run dialog for new user again?"));
   gtk_widget_set_name (newAccountCancelDialog_RunAgainToggle, "newAccountCancelDialog_RunAgainToggle");
   gtk_widget_ref (newAccountCancelDialog_RunAgainToggle);
   gtk_object_set_data_full (GTK_OBJECT (addAccountCancelDialog), "newAccountCancelDialog_RunAgainToggle", newAccountCancelDialog_RunAgainToggle,
