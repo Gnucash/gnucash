@@ -29,8 +29,9 @@
 (define-module (gnucash report account-summary))
 
 (use-modules (srfi srfi-1))
-
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (gnucash gnc-module))
+
 (gnc:module-load "gnucash/report/report-system" 0)
 
 ;; account summary report
