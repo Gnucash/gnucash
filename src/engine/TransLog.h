@@ -28,6 +28,8 @@
 
 void    xaccOpenLog (void);
 void    xaccTransWriteLog (Transaction *, char);
+void    xaccLogEnable (void);
+void    xaccLogDisable (void);
 
 /* returned strings will have been allocated with malloc, free with free() */
 char *xaccSplitAsString(Split *s, const char prefix[]);
