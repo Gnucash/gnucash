@@ -277,7 +277,7 @@ gnc_order_window_close_order_cb (GtkWidget *widget, gpointer data)
 
   /* Reset the type; change to read-only */
   ow->dialog_type = VIEW_ORDER;
-  gnc_entry_ledger_set_readonly (ow->ledger);
+  gnc_entry_ledger_set_readonly (ow->ledger, TRUE);
 
   /* And redisplay the window */
   gnc_order_update_window (ow);

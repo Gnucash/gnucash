@@ -203,6 +203,7 @@ gboolean xaccAccountEqual(Account *a, Account* b, gboolean check_guids);
  *    the lot, and all of the splits in it, will be moved from that
  *    account to this account. */
 void xaccAccountInsertLot (Account *, GNCLot *);
+void xaccAccountRemoveLot (Account *, GNCLot *);
 
 /** The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 

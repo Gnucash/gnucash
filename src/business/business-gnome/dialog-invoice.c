@@ -572,11 +572,11 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
 
   /* Reset the type; change to read-only! */
   iw->dialog_type = VIEW_INVOICE;
-  gnc_entry_ledger_set_readonly (iw->ledger);
+  gnc_entry_ledger_set_readonly (iw->ledger, TRUE);
 
   /* ... and redisplay here. */
   gnc_invoice_update_window (iw);
-  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), TRUE);
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), FALSE);
 }
 
 void
@@ -598,7 +598,17 @@ gnc_invoice_window_unpostCB (GtkWidget *widget, gpointer data)
 
   if (!result) return;
 
-  
+  /* Attempt to unpost the invoice */
+  gnc_suspend_gui_refresh ();
+  result = gncInvoiceUnpost (invoice);
+  gnc_resume_gui_refresh ();
+  if (!result) return;
+
+  /* if we get here, we succeeded in unposting -- reset the ledger and redisplay */
+  iw->dialog_type = EDIT_INVOICE;
+  gnc_entry_ledger_set_readonly (iw->ledger, FALSE);
+  gnc_invoice_update_window (iw);
+  gnc_table_refresh_gui (gnc_entry_ledger_get_table (iw->ledger), FALSE);
 }
 
 void gnc_invoice_window_cut_cb (GtkWidget *widget, gpointer data)
@@ -1469,7 +1479,7 @@ gnc_invoice_update_window (InvoiceWindow *iw)
      * XXX: right now we always can, but there
      * may be times in the future when we cannot.
      */
-    //can_unpost = TRUE;
+    can_unpost = TRUE;
     
     ts = gncInvoiceGetDatePosted (invoice);
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);

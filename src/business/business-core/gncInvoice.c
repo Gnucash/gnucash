@@ -514,7 +514,18 @@ gboolean gncInvoiceIsDirty (GncInvoice *invoice)
 }
 
 static void
-gncInvoiceAttachInvoiceToLot (GncInvoice *invoice, GNCLot *lot)
+gncInvoiceDetachFromLot (GNCLot *lot)
+{
+  kvp_frame *kvp;
+
+  if (!lot) return;
+
+  kvp = gnc_lot_get_slots (lot);
+  kvp_frame_set_slot_path (kvp, NULL, GNC_INVOICE_ID, GNC_INVOICE_GUID, NULL);
+}
+
+static void
+gncInvoiceAttachToLot (GncInvoice *invoice, GNCLot *lot)
 {
   kvp_frame *kvp;
   kvp_value *value;
@@ -552,7 +563,7 @@ GncInvoice * gncInvoiceGetInvoiceFromLot (GNCLot *lot)
 }
 
 static void
-gncInvoiceAttachInvoiceToTxn (GncInvoice *invoice, Transaction *txn)
+gncInvoiceAttachToTxn (GncInvoice *invoice, Transaction *txn)
 {
   kvp_frame *kvp;
   kvp_value *value;
@@ -775,8 +786,8 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   }
 
   /* Now attach this invoice to the txn, lot, and account */
-  gncInvoiceAttachInvoiceToLot (invoice, lot);
-  gncInvoiceAttachInvoiceToTxn (invoice, txn);
+  gncInvoiceAttachToLot (invoice, lot);
+  gncInvoiceAttachToTxn (invoice, txn);
   gncInvoiceSetPostedAcc (invoice, acc);
 
   xaccTransSetReadOnly (txn, _("Generated from an invoice.  Try unposting the invoice."));
@@ -841,6 +852,49 @@ Transaction * gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
   gncInvoiceCommitEdit (invoice);
 
   return txn;
+}
+
+gboolean
+gncInvoiceUnpost (GncInvoice *invoice)
+{
+  Transaction *txn;
+  GNCLot *lot;
+
+  if (!invoice) return FALSE;
+  if (!gncInvoiceIsPosted (invoice)) return FALSE;
+
+  txn = gncInvoiceGetPostedTxn (invoice);
+  g_return_val_if_fail (txn, FALSE);
+
+  lot = gncInvoiceGetPostedLot (invoice);
+  g_return_val_if_fail (lot, FALSE);
+
+  /* Destroy the Posted Transaction */
+  xaccTransClearReadOnly (txn);
+  xaccTransBeginEdit (txn);
+  xaccTransDestroy (txn);
+  xaccTransCommitEdit (txn);
+
+  /* Disconnect the lot from the invoice; re-attach to the invoice owner */
+  gncInvoiceDetachFromLot (lot);
+  gncOwnerAttachToLot (&invoice->owner, lot);
+
+  /* If the lot has no splits, then destroy it */
+  if (!gnc_lot_count_splits (lot))
+    gnc_lot_destroy (lot);
+
+  /* Clear out the invoice posted information */
+  gncInvoiceBeginEdit (invoice);
+
+  invoice->posted_acc = NULL;
+  invoice->posted_txn = NULL;
+  invoice->posted_lot = NULL;
+  invoice->date_posted.tv_sec = invoice->date_posted.tv_nsec = 0;
+
+  mark_invoice (invoice);
+  gncInvoiceCommitEdit (invoice);
+
+  return TRUE;
 }
 
 static gboolean

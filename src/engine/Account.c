@@ -964,6 +964,18 @@ xaccClearMarkDownGr (AccountGroup *grp, short val)
 \********************************************************************/
 
 void
+xaccAccountRemoveLot (Account *acc, GNCLot *lot)
+{
+  if (!acc || !lot) return;
+   ENTER ("(acc=%p, lot=%p)", acc, lot);
+
+   xaccAccountBeginEdit (acc);
+   acc->lots = g_list_remove (acc->lots, lot);
+   xaccAccountCommitEdit (acc);
+   LEAVE ("(acc=%p, lot=%p)", acc, lot);
+}
+
+void
 xaccAccountInsertLot (Account *acc, GNCLot *lot)
 {
    GList *sl;
@@ -990,7 +1002,7 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
       lot->account = acc;
    }
 
-   /* Move all slots over to the new account.  At worst,
+   /* Move all splits over to the new account.  At worst,
     * this is a no-op. */
    if (lot->splits)
    {

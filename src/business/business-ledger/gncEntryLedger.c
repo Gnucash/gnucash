@@ -511,32 +511,51 @@ gboolean gnc_entry_ledger_find_entry (GncEntryLedger *ledger, GncEntry *entry,
   return FALSE;
 }
 
-void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger)
+void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly)
 {
   if (!ledger) return;
 
-  /* reset the ledger type to a viewer */
-  switch (ledger->type) {
-  case GNCENTRY_ORDER_ENTRY:
-    ledger->type = GNCENTRY_ORDER_VIEWER;
-    break;
-  case GNCENTRY_INVOICE_ENTRY:
-    ledger->type = GNCENTRY_INVOICE_VIEWER;
-    create_invoice_query (ledger);
-    break;
-  case GNCENTRY_BILL_ENTRY:
-    ledger->type = GNCENTRY_BILL_VIEWER;
-    create_invoice_query (ledger);
-    break;
-  default:
-    return;			/* Nothing to do */
+  /* reset the ledger type appropriately */
+  if (readonly) {
+    switch (ledger->type) {
+    case GNCENTRY_ORDER_ENTRY:
+      ledger->type = GNCENTRY_ORDER_VIEWER;
+      break;
+    case GNCENTRY_INVOICE_ENTRY:
+      ledger->type = GNCENTRY_INVOICE_VIEWER;
+      create_invoice_query (ledger);
+      break;
+    case GNCENTRY_BILL_ENTRY:
+      ledger->type = GNCENTRY_BILL_VIEWER;
+      create_invoice_query (ledger);
+      break;
+    default:
+      return;			/* Nothing to do */
+    }
+  } else {
+    switch (ledger->type) {
+    case GNCENTRY_ORDER_VIEWER:
+      ledger->type = GNCENTRY_ORDER_ENTRY;
+      break;
+    case GNCENTRY_INVOICE_VIEWER:
+      ledger->type = GNCENTRY_INVOICE_ENTRY;
+      create_invoice_query (ledger);
+      break;
+    case GNCENTRY_BILL_VIEWER:
+      ledger->type = GNCENTRY_BILL_ENTRY;
+      create_invoice_query (ledger);
+      break;
+    default:
+      return;			/* Nothing to do */
+    }
   }
 
   /* reset the model */
-  gnc_table_model_set_read_only (ledger->table->model, TRUE);
+  gnc_table_model_set_read_only (ledger->table->model, readonly);
 
-  /* get rid of the blank entry, if it exists */
-  gnc_entry_ledger_clear_blank_entry (ledger);
+  /* if readonly is TRUE, get rid of the blank entry. */
+  if (readonly)
+    gnc_entry_ledger_clear_blank_entry (ledger);
 
   /* and refresh the display */
   gnc_entry_ledger_display_refresh (ledger);

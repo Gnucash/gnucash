@@ -2578,6 +2578,13 @@ xaccTransSetTxnType (Transaction *trans, char type)
   kvp_value_delete (value);
 }
 
+void xaccTransClearReadOnly (Transaction *trans)
+{
+  if (!trans) return;
+
+  kvp_frame_set_slot_path (trans->kvp_data, NULL, TRANS_READ_ONLY_REASON, NULL);
+}
+
 void
 xaccTransSetReadOnly (Transaction *trans, const char *reason)
 {

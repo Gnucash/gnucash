@@ -79,6 +79,16 @@ gncInvoicePostToAccount (GncInvoice *invoice, Account *acc,
 			 const char *memo);
 
 /*
+ * UNpost this invoice.  This will destroy the posted transaction
+ * and return the invoice to its unposted state.  It may leave empty
+ * lots out there.
+ *
+ * Returns TRUE if successful, FALSE if there is a problem.
+ */
+gboolean
+gncInvoiceUnpost (GncInvoice *invoice);
+
+/*
  * Apply a payment of "amount" for the owner, between the xfer_account
  * (bank or other asset) and the posted_account (A/R or A/P).
  *

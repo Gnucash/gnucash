@@ -232,6 +232,7 @@ SplitList *   xaccTransGetSplitList (const Transaction *trans);
 
 /** Set the transaction to be ReadOnly */
 void          xaccTransSetReadOnly (Transaction *trans, const char *reason);
+void	      xaccTransClearReadOnly (Transaction *trans);
 /** FIXME: document me */
 const char *  xaccTransGetReadOnly (const Transaction *trans);
 /** FIXME: document me */

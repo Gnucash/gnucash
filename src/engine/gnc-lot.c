@@ -258,6 +258,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
 
    if (NULL == lot->splits)
    {
+      xaccAccountRemoveLot (lot->account, lot);
       lot->account = NULL;
    }
 }

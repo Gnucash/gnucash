@@ -86,7 +86,7 @@ void gnc_entry_ledger_set_colors (GncEntryLedgerColors reg_colors_new);
 
 void gnc_entry_ledger_set_parent (GncEntryLedger *ledger, gncUIWidget parent);
 
-void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger);
+void gnc_entry_ledger_set_readonly (GncEntryLedger *ledger, gboolean readonly);
 
 gboolean gnc_entry_ledger_changed (GncEntryLedger *ledger);
 

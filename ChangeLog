@@ -27,7 +27,24 @@
 	  for logic to apply a payment.  Moved logic from dialog-payment.
 	* src/business/business-gnome/dialog-payment.c: move logic to
 	  apply payment to business-core.
-	
+
+	* src/engine/Account.[ch]: add an xaccAccountRemoveLot() function to allow
+	  the LOT code to clear memory when you destroy a lot.  Fixes a crash
+	  when you destroy a lot.
+	* src/engine/Transaction.[ch]: add an xaccTransClearReadOnly() function
+	  to let you clear the flag so you can then remove an transaction.  Only
+	  for internal uses only!  This is used by the Invoice UnPost code.
+	* src/engine/gnc-lot.c: remove the lot from the account's list of lots
+	  when the last split is gone.
+
+	* src/business/business-core/gncInvoice.[ch]: implement Unpost function
+	* src/business/business-ledger/gncEntryLedger.[ch]: change the
+	  set_readonly() function to let you toggle back and forth between
+	  readonly and readwrite ledgers.
+	* src/business/business-gnome/dialog-invoice.c: implement unpost; set back
+	  to readwrite if the unpost succeeds
+	* src/business/business-gnome/dialog-order.c: use new set_readonly() API
+	FIXES BUG #101452
 	
 2002-12-30  Benoit Grégoire  <bock@step.polymtl.ca>
 	* src/import-export/hbci/druid-hbci-initial.c
