@@ -889,10 +889,37 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     return FALSE;
 
   {
-    /* Execute a GetAccounts job. */
+    /* Execute a Synchronize job, then a GetAccounts job. */
     HBCI_OutboxJob *job;
     HBCI_Error *err;
-    
+
+    job = HBCI_OutboxJobGetSystemId_OutboxJob 
+      (HBCI_OutboxJobGetSystemId_new (info->api,
+				      (HBCI_Customer *)info->newcustomer));
+    HBCI_API_addJob (info->api, job);
+
+    if (info->interactor)
+      GNCInteractor_show (info->interactor);
+
+    HBCI_Hbci_setDebugLevel(2);
+    err = HBCI_API_executeQueue (info->api, TRUE);
+    g_assert (err);
+    if (!HBCI_Error_isOk(err)) {
+      char *errstr = g_strdup_printf("on_accountinfo_next: Error at executeQueue: %s",
+				     HBCI_Error_message (err));
+      printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
+	     HBCI_OutboxJob_result(job));
+      HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor 
+					(HBCI_API_Hbci (info->api)), errstr);
+      g_free (errstr);
+      HBCI_Error_delete (err);
+      gnc_hbci_debug_outboxjob (job);
+      return FALSE;
+    }
+    HBCI_API_clearQueueByStatus (info->api, HBCI_JOB_STATUS_DONE);
+    HBCI_Error_delete (err);
+
+    /* Now the GetAccounts job. */
     job = HBCI_OutboxJobGetAccounts_OutboxJob 
       (HBCI_OutboxJobGetAccounts_new ((HBCI_Customer *)info->newcustomer));
     HBCI_API_addJob (info->api, job);

@@ -41,6 +41,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
   g_assert(gnc_acc);
 
   api = gnc_hbci_api_new_currentbook (parent, &interactor);
+  g_assert (interactor);
   if (api == NULL) {
     printf("gnc_hbci_getbalance: Couldn't get HBCI API.\n");
     return;
@@ -51,6 +52,8 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     printf("gnc_hbci_getbalance: No HBCI account found.\n");
     return;
   }
+  printf("gnc_hbci_getbalance: HBCI account no. %s found.\n",
+	 HBCI_Account_accountId (h_acc));
   
   {
     /* Get one customer. */
@@ -75,6 +78,8 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     list_HBCI_Customer_iter_delete (iter);
   }
   g_assert (customer);
+  printf("gnc_hbci_getbalance: Customer id %s found.\n",
+	 HBCI_Customer_custId ((HBCI_Customer *)customer));
 
   {
     /* Execute a GetBalance job. */
@@ -85,12 +90,13 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
     balance_job = 
       HBCI_OutboxJobGetBalance_new (customer, (HBCI_Account *)h_acc);
     job = HBCI_OutboxJobGetBalance_OutboxJob (balance_job);
+    g_assert (job);
     HBCI_API_addJob (api, job);
 
     if (interactor)
       GNCInteractor_show (interactor);
 
-    HBCI_Hbci_setDebugLevel(2);
+    HBCI_Hbci_setDebugLevel(0);
     err = HBCI_API_executeQueue (api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {
@@ -105,7 +111,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       gnc_hbci_debug_outboxjob (job);
       return;
     }
-    HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);
+    /*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
     HBCI_Error_delete (err);
     
     {
@@ -118,7 +124,7 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       val = HBCI_Balance_value (bal);
       
       gnc_verify_dialog(TRUE,
-			"Account balance is %f.",
+			"Result of HBCI job: \nAccount balance is %f.",
 			HBCI_Value_getValue (val));
     }
   }

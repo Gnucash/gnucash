@@ -1,3 +1,14 @@
+2002-09-18  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gncmod-hbci.c: Add menu-extension code
+	for register menu items.
+
+	* src/import-export/hbci/gnc-hbci-cb.h: add callback for register
+	window's menu.
+
+	* src/import-export/hbci/gnc-hbci-actions.c: Fix/improve first
+	real HBCI task so that it might actually run.
+
 2002-09-17  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/window-register.c (regWindowLedger): Uses the

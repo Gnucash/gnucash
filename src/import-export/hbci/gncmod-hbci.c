@@ -11,9 +11,11 @@
 
 #include "gnc-module.h"
 #include "gnc-module-api.h"
+#include "gnc-menu-extensions.h"
 
+#include "gnc-hbci-cb.h"
 #include "druid-hbci-initial.h"
-#include "druid-hbci-final.h"
+//#include "druid-hbci-final.h"
 
 /* version of the gnc module system interface we require */
 int gnc_module_system_interface = 0;
@@ -44,7 +46,6 @@ gnc_module_description(void) {
 int
 gnc_module_init(int refcount) 
 {
-  //printf("Started gncmod-hbci.c.\n");
   /* load the engine (we depend on it) */
   if(!gnc_module_load("gnucash/engine", 0)) {
     return FALSE;
@@ -65,13 +66,33 @@ gnc_module_init(int refcount)
   /* load the HBCI Scheme code */
   gh_eval_str("(load-from-path \"hbci/hbci.scm\")");
 
-  //printf("Load the HBCI initial druid\n");
   gh_new_procedure("gnc:hbci-initial-setup", 
 		   scm_hbci_initial_druid, 0, 0, 0);
+
+  /* Add menu items with C callbacks */
+  {
+    static GnomeUIInfo reg_online_submenu[] =    
+      {
+	GNOMEUIINFO_ITEM ( N_("HBCI Get Balance"),
+			   N_("Get the account balance online through HBCI"),
+			   gnc_hbci_register_menu_getbalance_cb, 
+			   GNOME_APP_PIXMAP_NONE),
+	GNOMEUIINFO_END
+      };
+    
+    static GnomeUIInfo reg_online_menu[] =
+      {
+	GNOMEUIINFO_SUBTREE( N_("Online Actions"),
+			     reg_online_submenu ),
+	GNOMEUIINFO_END
+      };
+    
+    
+    gnc_add_c_extension (reg_online_menu, WINDOW_NAME_REGISTER "/Actions/");
+  }
+  
   //gh_new_procedure("gnc:hbci-finish-setup", 
   //scm_hbci_final_druid, 0, 0, 0);
-  
-  //printf("Been in gncmod-hbci.c.\n");
   
   return TRUE;
 }

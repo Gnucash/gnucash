@@ -30,6 +30,11 @@ void
 gnc_hbci_acct_tree_menu_getbalance_cb (GtkWidget * widget, 
                                        GnomeMDIChild * child);
 
+/* Callback from register window to invoke Get Balance. */
+void
+gnc_hbci_register_menu_getbalance_cb (GtkWidget * widget, 
+				      gpointer data);
+
 /* Callback from account tree window to invoke Get Transactions (not
  * yet implemented). */
 void
