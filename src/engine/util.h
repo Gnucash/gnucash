@@ -263,6 +263,9 @@ char * xaccPrintAmountArgs (double val,
 /* Parse i18n amount strings */
 double xaccParseAmount (const char * instr, gncBoolean monetary);
 
+/* Affects parsing of numerical amounts in xaccParseAmount */
+extern gncBoolean auto_decimal_enabled;
+
 
 /** TEMPLATES ******************************************************/
 /* 

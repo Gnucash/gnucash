@@ -59,6 +59,9 @@ gncLogLevel loglevel[MOD_NUM] =
   GNC_LOG_WARNING,      /* QUERY */
 };
 
+/* xaccParseAmount configuration */
+gncBoolean auto_decimal_enabled;
+
 /* Set the logging level of the given module. */
 void
 gnc_set_log_level(gncModuleType module, gncLogLevel level)
@@ -925,6 +928,17 @@ double xaccParseAmount (const char * instr, gncBoolean monetary)
             amount += 0.1 * ((double) atoi (str));
          } 
       }
+
+   } else if( auto_decimal_enabled ) {
+      /* no decimal point and auto decimal point enabled, so assume that
+       * the value is an integer number of cents.
+       */
+      amount += ((double) (atoi (str)));
+      amount *= 0.01;    /* temporarily assume two decimal points */
+
+      /* Note: further additions to amount after this point will
+       * generate incorrect results.
+       */
 
    } else {
       amount += ((double) (atoi (str)));

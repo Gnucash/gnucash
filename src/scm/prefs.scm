@@ -388,6 +388,11 @@ the account instead of opening a register." #f))
   "General" "Display \"Tip of the Day\""
   "f" "Display hints for using GnuCash at startup" #t))
 
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  "General" "Automatic Decimal Point"
+  "g" "Automatically insert a decimal point into values that are entered without one.  Example:  '2000' is changed to '20.00'." #f))
+
 ;(gnc:register-configuration-option
 ; (gnc:make-number-range-option
 ;  "General" "Default precision"

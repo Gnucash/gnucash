@@ -1,3 +1,9 @@
+2000-06-28  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/gnome/dialog-totd.c: If somebody tries to open a second
+	tip of the day window, just raise the original.  Fixes a crash
+	when somebody tried to do this before.
+
 2000-06-27  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/gnome/dialog-totd.c: Added code to make "Tip of the day"

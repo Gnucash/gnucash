@@ -73,6 +73,8 @@ static void gnc_configure_reverse_balance(void);
 static void gnc_configure_sr_label_callbacks();
 static void gnc_configure_auto_raise_cb(void *);
 static void gnc_configure_auto_raise(void);
+static void gnc_configure_auto_decimal_cb(void *);
+static void gnc_configure_auto_decimal(void);
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -91,6 +93,8 @@ static SCM register_colors_callback_id = SCM_UNDEFINED;
 static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static SCM auto_raise_callback_id = SCM_UNDEFINED;
+static SCM auto_decimal_callback_id = SCM_UNDEFINED;
+
 
 /* ============================================================== */
 
@@ -180,6 +184,12 @@ gnucash_ui_init()
       gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
                                           NULL, "Register",
                                           "Auto-Raise Lists");
+
+    gnc_configure_auto_decimal();
+    auto_decimal_callback_id =
+      gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
+                                          NULL, "General",
+                                         "Automatic Decimal Point");
 
     gnc_configure_sr_label_callbacks();
 
@@ -721,5 +731,37 @@ gnc_configure_reverse_balance(void)
   if (choice != NULL)
     free(choice);
 }
+
+/* gnc_configure_auto_decimal_cb
+ *     Callback called when options change -
+ *     sets auto decimal option and refreshes the UI
+ * 
+ *  Args: Nothing
+ *  Returns: Nothing
+ */
+
+static void
+gnc_configure_auto_decimal_cb(void *not_used)
+{
+  gnc_configure_auto_decimal();
+  gnc_group_ui_refresh(gncGetCurrentGroup());
+}
+
+/* gnc_configure_auto_decimal
+ *     Setup the global value of the auto decimal field.
+ * 
+ * Args: Nothing
+ * Returns: Nothing
+ */
+static void
+gnc_configure_auto_decimal(void)
+{
+  auto_decimal_enabled =
+     (gncBoolean) gnc_lookup_boolean_option("General",
+                                            "Automatic Decimal Point",
+                                            GNC_F);
+}
+
+
 
 /****************** END OF FILE **********************/

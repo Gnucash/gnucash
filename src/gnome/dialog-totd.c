@@ -68,8 +68,15 @@ static void totd_close_cb(GtkWidget *widget, gpointer data);
 
 void gnc_ui_totd_dialog_create_and_run(void)
 {
-  gnc_ui_totd_dialog_create();
-  gtk_widget_show_all(win);
+  if(win == NULL)
+  {
+    gnc_ui_totd_dialog_create();
+    gtk_widget_show_all(win);
+  }
+  else
+  {
+    gdk_window_raise(win->window);
+  }
   return;
 }
 
@@ -158,6 +165,7 @@ totd_close_cb(GtkWidget *widget, gpointer data)
 {
   gboolean new_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(disable_cb));
   gtk_widget_destroy(GTK_WIDGET(win));
+  win = NULL;
   if(new_enabled != old_enabled)
   {
     gnc_set_boolean_option("General", 

@@ -141,7 +141,7 @@
                             "Do you want do continue?")
 
 #define REENABLE_TIPS_MSG _("You have disabled \"Tip of the Day\"\n" \
-                            "You can re-enable them from the General\n" \
+                            "You can re-enable tips from the General\n" \
                             "section of the Preferences menu")
 #define REG_CURR_MSG      _("You cannot transfer funds from the %s " \
                             "account.\nIt does not have a matching " \

@@ -58,6 +58,7 @@ Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Paul Fenwick <pjf@schools.net.au> ASX support
 Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
 Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation
+Kevin Finn <kevinfinn@mediaone.net> auto-decimal point patch
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
