@@ -31,7 +31,7 @@
 #include <guile/gh.h>
 #include <sys/stat.h>
 
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 
 #include "dialog-options.h"
 #include "dialog-utils.h"
