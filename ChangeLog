@@ -1,3 +1,9 @@
+2003-11-14  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/advanced-portfolio.scm:
+	Applied Frank Pavageau's patch regarding capital gains to
+	handle split transactions.
+
 2003-10-26  David Hampton  <hampton@employees.org>
 
 	* src/engine/qofid.[ch]: Fix another crash caused by qof changes.
