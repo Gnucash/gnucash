@@ -122,8 +122,11 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
   VirtualLocation virt_loc;
   gboolean changed;
   char const *cell_name;
+  gboolean exact_traversal;
 
   if (!ledger) return FALSE;
+
+  exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);
 
   ledger->traverse_to_new = FALSE;
 
@@ -282,7 +285,7 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
   } while (FALSE);
 
   /* Check for going off the end */
-  gnc_table_find_close_valid_cell (ledger->table, &virt_loc, FALSE);
+  gnc_table_find_close_valid_cell (ledger->table, &virt_loc, exact_traversal);
 
   /* Same transaction, no problem */
   new_entry = gnc_entry_ledger_get_entry (ledger, virt_loc.vcell_loc);
@@ -362,7 +365,8 @@ dontask:
 	if (gnc_entry_ledger_find_entry (ledger, new_entry, &vcell_loc))
 	  virt_loc.vcell_loc = vcell_loc;
 
-        gnc_table_find_close_valid_cell (ledger->table, &virt_loc, FALSE);
+        gnc_table_find_close_valid_cell (ledger->table, &virt_loc,
+                                         exact_traversal);
 
         *p_new_virt_loc = virt_loc;
       }
