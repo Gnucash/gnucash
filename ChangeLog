@@ -1,3 +1,8 @@
+2000-04-10  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* doc/README: only the environment variable LANG needs to
+	be set to change the locale.
+
 2000-04-09  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/srfi/srfi-1.r5rs.scm: renamed 'list-index' to
@@ -26,7 +31,7 @@
 2000-04-08  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
 	* src/scm/report/balance-and-pnl.scm: remove the report description.
-	It just looked wierd!
+	It just looked weird!
 
 	* src/scm/command-line.scm (gnc:prefs-show-version): use the
 	configured version instead of hard-coding it.

@@ -95,9 +95,10 @@ Running:
 --------
 Only the Motif version of GnuCash is currently stable. The Gnome
 version is a development version, but will soon be stable enough for
-regular use. Development of the Motif version has ceased. The qt/kde
-version doesn't compile, most functions are missing. See below for
-OS's other than GNU/Linux/*BSD support.
+regular use. Development of the Motif version has ceased and does not
+compile in current CVS. The qt/kde version doesn't compile, most
+functions are missing. See below for OS's other than GNU/Linux/*BSD
+support.
 
 The following packages are required to be installed to run the gnucash 
 Motif binary:
@@ -224,18 +225,12 @@ environment variables.  For example,
 
 Francais, en bash:
     export LANG=fr_FR
-    export LC_ALL=fr_FR
-    export LINGUAS=fr_FR
 
 Francais, en tcsh:
     setenv LANG fr_FR
-    setenv LC_ALL fr_FR
-    setenv LINGUAS fr_FR
 
 German version:
     export LANG=de_DE
-    export LC_ALL=de_DE
-    export LINGUAS=de_DE
 
 
 Other locales that should mostly work, but are still in development:
