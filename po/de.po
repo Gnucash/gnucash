@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-13 15:19+0100\n"
-"PO-Revision-Date: 2004-11-13 15:20+0100\n"
+"POT-Creation-Date: 2004-12-23 17:42+0100\n"
+"PO-Revision-Date: 2004-12-23 17:45+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -500,8 +500,8 @@ msgstr "Automatische Zahlungsweiterleitung"
 msgid "Auto Split"
 msgstr "Automatische Buchung"
 
-#: src/business/business-core/gncInvoice.c:1116
-#: src/business/business-core/gncInvoice.c:1178
+#: src/business/business-core/gncInvoice.c:1117
+#: src/business/business-core/gncInvoice.c:1179
 #: src/business/business-ledger/gncEntryLedgerModel.c:125
 #: src/gnome/druid-loan.c:1784 src/gnome/druid-loan.c:2260
 #: src/gnome/druid-loan.c:2323 src/gnome/druid-loan.c:2337
@@ -513,11 +513,11 @@ msgstr "Automatische Buchung"
 msgid "Payment"
 msgstr "Zahlung"
 
-#: src/business/business-core/gncInvoice.c:1200
+#: src/business/business-core/gncInvoice.c:1206
 msgid "Pre-Payment"
 msgstr "Vorauszahlung"
 
-#: src/business/business-core/gncInvoice.c:1348
+#: src/business/business-core/gncInvoice.c:1354
 msgid " (posted)"
 msgstr " (gebucht)"
 
@@ -7278,15 +7278,47 @@ msgstr ""
 "Die beiden PINs haben nicht übereingestimmt.\n"
 "Bitte erneut eingeben."
 
-#: src/import-export/hbci/druid-hbci-initial.c:137
+#: src/import-export/hbci/druid-hbci-initial.c:138
 #, c-format
 msgid "%s at %s (code %s)"
 msgstr "%s bei %s (BLZ %s)"
 
-#: src/import-export/hbci/druid-hbci-initial.c:142
+#: src/import-export/hbci/druid-hbci-initial.c:143
 #, c-format
 msgid "%s at bank code %s"
 msgstr "%s bei %s"
+
+#: src/import-export/hbci/druid-hbci-initial.c:545
+msgid ""
+"The external program \"AqHBCI Setup Wizard\" returned a nonzero \n"
+"exit code which means it has not been finished successfully. \n"
+"The further HBCI setup can only be finished if the AqHBCI \n"
+"Setup Wizard is run successfully. Please try to start and \n"
+"successfully finish the AqHBCI Setup Wizard program again."
+msgstr ""
+"Das externe Programm \"AqHBCI Einrichtungs-Assistent\" hat einen \n"
+"Fehlercode zurückgegeben, was bedeutet, daß die Einrichtung nicht\n"
+"erfolgreich abgeschlossen worden ist. Die weitere HBCI Einrichtung\n"
+"in GnuCash kann nur fortgesetzt werden, wenn der AqHBCI Assistent \n"
+"erfolgreich aufgerufen worden ist. Bitte versuchen Sie erneut, \n"
+"den AqHBCI Einrichtungs-Assistent korrekt auszuführen."
+
+#: src/import-export/hbci/druid-hbci-initial.c:556
+msgid ""
+"The external program \"AqHBCI Setup Wizard\" has not been found. \n"
+"\n"
+"Did you install the package \"kde_wizard\" of AqHBCI? \n"
+"If not, please install it now. (The name of that package \n"
+"is misleading, as it does not require the KDE desktop \n"
+"environment but only the Qt toolkit libraries.)"
+msgstr ""
+"Das externe Programm \"AqHBCI Einrichtungs-Assistent\" konnte nicht\n"
+"gefunden werden. \n"
+"\n"
+"Haben Sie das Paket \"kde_wizard\" der Bibliothek AqHBCI installiert? \n"
+"Falls nicht, dann installieren Sie es jetzt bitte. (Der Name des\n"
+"Pakets ist irreführend -- das Paket benötigt nicht die KDE-Umgebung,\n"
+"sondern lediglich die Qt-Bibliothek.)"
 
 #: src/import-export/hbci/druid-hbci-utils.c:171
 #, c-format
@@ -7465,39 +7497,39 @@ msgstr ""
 "Für die gewünschte Operation stehen mehr als eine HBCI Benutzerkennung\n"
 "zur Verfügung. Bitte wählen Sie, welche benutzt werden soll."
 
-#: src/import-export/hbci/gncmod-hbci.c:91
+#: src/import-export/hbci/gncmod-hbci.c:99
 msgid "HBCI Get Balance"
 msgstr "HBCI Saldenabfrage"
 
-#: src/import-export/hbci/gncmod-hbci.c:92
+#: src/import-export/hbci/gncmod-hbci.c:100
 msgid "Get the account balance online through HBCI"
 msgstr "Kontosaldo online abfragen via HBCI"
 
-#: src/import-export/hbci/gncmod-hbci.c:95
+#: src/import-export/hbci/gncmod-hbci.c:103
 msgid "HBCI Get Transactions"
 msgstr "HBCI Abfrage Kontoumsätze"
 
-#: src/import-export/hbci/gncmod-hbci.c:96
+#: src/import-export/hbci/gncmod-hbci.c:104
 msgid "Get the transactions online through HBCI"
 msgstr "Kontoumsätze online abfragen via HBCI"
 
-#: src/import-export/hbci/gncmod-hbci.c:99
+#: src/import-export/hbci/gncmod-hbci.c:107
 msgid "HBCI Issue Transaction"
 msgstr "HBCI Einzelüberweisung"
 
-#: src/import-export/hbci/gncmod-hbci.c:100
+#: src/import-export/hbci/gncmod-hbci.c:108
 msgid "Issue a new transaction online through HBCI"
 msgstr "Neue Einzelüberweisung mit HBCI online absenden"
 
-#: src/import-export/hbci/gncmod-hbci.c:103
+#: src/import-export/hbci/gncmod-hbci.c:111
 msgid "HBCI Issue Direct Debit"
 msgstr "HBCI Einzellastschrift"
 
-#: src/import-export/hbci/gncmod-hbci.c:104
+#: src/import-export/hbci/gncmod-hbci.c:112
 msgid "Issue a new direct debit note online through HBCI"
 msgstr "Neue Einzellastschrift online mit HBCI absenden"
 
-#: src/import-export/hbci/gncmod-hbci.c:112
+#: src/import-export/hbci/gncmod-hbci.c:120
 msgid "Online Actions"
 msgstr "Online Aktionen"
 
