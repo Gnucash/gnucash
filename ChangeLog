@@ -1,3 +1,8 @@
+2002-08-13  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*: more work on HBCI support. Added a
+	progress window.
+
 2002-08-11  David Hampton  <hampton@employees.org>
 
 	* acinclude.m4: 

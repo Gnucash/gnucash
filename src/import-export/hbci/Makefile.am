@@ -9,6 +9,7 @@ libgncmod_hbci_la_SOURCES = \
   gnc-hbci-kvp.c \
   gnc-hbci-utils.c \
   hbci-interaction.c \
+  hbci-progressmon.c \
   hbci-account-picker.c \
   druid-hbci-initial.c 
 

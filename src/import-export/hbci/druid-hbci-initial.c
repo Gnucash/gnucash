@@ -83,7 +83,9 @@ struct _hbciinitialinfo
   GtkWidget *user_bankcode;
   GtkWidget *user_bankname;
   GtkWidget *userid;
+  GtkWidget *username;
   GtkWidget *customerid;
+  GtkWidget *customername;
   GtkWidget *mediumrdh;
   GtkWidget *mediumpath;
   GtkWidget *mediumddv;
@@ -297,8 +299,9 @@ on_finish (GnomeDruidPage *gnomedruidpage,
     /* Name of configfile has changed */
     gnc_hbci_set_book_configfile (gnc_get_current_book (), info->configfile);
   }
-      
-  accounts_save_kvp (info->gnc_hash);
+  
+  if (info->gnc_hash)
+    accounts_save_kvp (info->gnc_hash);
   
   delete_initial_druid(info);
 }
@@ -335,11 +338,11 @@ on_configfile_next (GnomeDruidPage *gnomedruidpage,
       reset_initial_info (info);
       info->configfile = g_strdup (filename);
       /* Create new HBCI_API object, loading its data from filename */
-      info->api = gnc_hbci_api_new (filename, TRUE);
+      info->api = gnc_hbci_api_new (filename, TRUE, GTK_WIDGET (info->window));
     }
     else if (info->api == NULL)
       /* Create new HBCI_API object, loading its data from filename */
-      info->api = gnc_hbci_api_new (filename, TRUE);
+      info->api = gnc_hbci_api_new (filename, TRUE, GTK_WIDGET (info->window));
 
     api = info->api;
     g_free (filename);
@@ -427,7 +430,7 @@ on_bankpage_next (GnomeDruidPage  *gnomedruidpage,
   
   bank = HBCI_API_findBank(info->api, countrycode, bankcode);
   if (bank == NULL) {
-    printf("on_bankpage_next: Creating bank with code %s.\n", bankcode);
+    //printf("on_bankpage_next: Creating bank with code %s.\n", bankcode);
     bank = HBCI_API_bankFactory (info->api, countrycode, bankcode, ipaddr);
     {
       HBCI_Error *err;
@@ -440,9 +443,9 @@ on_bankpage_next (GnomeDruidPage  *gnomedruidpage,
       }
     }
   } 
-  else {
+  /*else {
     printf("on_bankpage_next: Found bank, name %s.\n", HBCI_Bank_name(bank));
-  };
+    };*/
   info->newbank = bank;
 
   gnome_druid_set_page (GNOME_DRUID (info->druid), 
@@ -535,8 +538,8 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 		gpointer         user_data)
 {
   HBCIInitialInfo *info = user_data;
-  const char *userid = NULL;
-  const char *customerid = NULL;
+  const char *userid = NULL, *username = NULL;
+  const char *customerid = NULL, *customername = NULL;
   HBCI_API *api = NULL;
   HBCI_Bank *bank = NULL;
   const HBCI_User *user = NULL;
@@ -548,7 +551,9 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
   g_assert (bank);
     
   userid = gtk_entry_get_text (GTK_ENTRY (info->userid));
+  username = gtk_entry_get_text (GTK_ENTRY (info->username));
   customerid = gtk_entry_get_text (GTK_ENTRY (info->customerid));
+  customername = gtk_entry_get_text (GTK_ENTRY (info->customername));
 
   user = HBCI_Bank_findUser(bank, userid);
   if (user == NULL) {
@@ -559,7 +564,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
     char *mediumname;
     int secmode;
 
-    printf("on_userid_next: Didn't find user with userid %s.\n", userid);
+    //printf("on_userid_next: Didn't find user with userid %s.\n", userid);
     is_rdh = gtk_toggle_button_get_active 
       (GTK_TOGGLE_BUTTON (info->mediumrdh));
 
@@ -602,8 +607,8 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
     }
     
     newuser = HBCI_API_userFactory (bank, medium, TRUE, userid);
-    printf("on_userid_next: Created user with userid %s.\n", 
-	   userid);
+    HBCI_User_setUserName (newuser, username);
+    //printf("on_userid_next: Created user with userid %s.\n", userid);
     g_assert(newuser);
     err = HBCI_Bank_addUser (bank, newuser, TRUE);
     if (err != NULL) {
@@ -615,7 +620,7 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
       
     /* Test mounting only for DDV cards. RDH files should work... */
     if (secmode == HBCI_SECURITY_DDV) {
-      err = HBCI_Medium_mountMedium (medium, newuser);
+      err = HBCI_Medium_mountMedium (medium, newuser, NULL);
       if (err != NULL) {
 	printf("on_userid_next: Mounting medium failed: %s.\n",
 	       HBCI_Error_message (err));
@@ -623,13 +628,14 @@ on_userid_next (GnomeDruidPage  *gnomedruidpage,
 	return TRUE;
       } 
       printf("on_userid_next: Mounting medium was successful.\n");
-      HBCI_Medium_unmountMedium (medium);
+      HBCI_Medium_unmountMedium (medium, NULL);
     }
       
 
     {
       HBCI_Customer *cust;
       cust = HBCI_API_customerFactory (newuser, customerid, 
+				       customername ? customername : 
 				       _("Default Customer"));
       g_assert (cust);
       HBCI_User_addCustomer (newuser, cust, TRUE);
@@ -679,7 +685,7 @@ to_hexstring (const char *str)
       res[3*i+2] = '\n';
   }
   res [3*i+2] = '\0';
-  printf ("Converted -%s- to -%s-.\n", str, res);
+  //printf ("Converted -%s- to -%s-.\n", str, res);
   return res;
 }
 static char *
@@ -694,7 +700,7 @@ to_hexstring_hash (const char *str)
       res[3*i+2] = '\n';
   }
   res [3*i+2] = '\0';
-  printf ("Converted -%s- to -%s-.\n", str, res);
+  //printf ("Converted -%s- to -%s-.\n", str, res);
   return res;
 }
 
@@ -705,7 +711,7 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
 			     gpointer user_data)
 {
   HBCIInitialInfo *info = user_data;
-  HBCI_OutboxJobGetKeys *job;
+  HBCI_OutboxJob *job;
   HBCI_Error *err;
   g_assert(info);
 
@@ -736,20 +742,25 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
   /* Let the widgets be redrawn */
   while (g_main_iteration (FALSE));
     
-  job = HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer);
-  HBCI_API_addJob (info->api, HBCI_OutboxJobGetKeys_OutboxJob (job));
+  job = HBCI_OutboxJobGetKeys_OutboxJob 
+    (HBCI_OutboxJobGetKeys_new (info->api, info->newcustomer));
+  HBCI_API_addJob (info->api, job);
 
   err = HBCI_API_executeQueue (info->api, TRUE);
   if (!HBCI_Error_isOk(err)) {
-    printf("on_iniletter_server_prepare: Error at executeQueue: %s\n",
-	   HBCI_Error_message (err));
+    char *errstr = g_strdup_printf("on_iniletter_server_prepare: Error at executeQueue: %s",
+				  HBCI_Error_message (err));
+    printf("%s; status %d, result %d\n", errstr, HBCI_OutboxJob_status(job),
+	   HBCI_OutboxJob_result(job));
+    HBCI_Interactor_msgStateResponse (HBCI_Hbci_interactor (HBCI_API_Hbci (info->api)), errstr);
+    g_free (errstr);
     HBCI_Error_delete (err);
     return;
   }
   HBCI_Error_delete (err);
   
   {
-    gint *pos;
+    gint pos;
     const HBCI_Medium *med;
     const HBCI_MediumRDH *medr;
     gboolean has_signkey;
@@ -770,21 +781,18 @@ on_iniletter_server_prepare (GnomeDruidPage *gnomedruidpage,
     modulus = to_hexstring (tmp);
     free (tmp);
 
-    pos = g_new0(gint,1);
-    
-    *pos = 0;
+    pos = 0;
     gtk_editable_insert_text (GTK_EDITABLE (info->server_exp), 
-			      exponent, strlen(exponent), pos);
-    *pos = 0;
+			      exponent, strlen(exponent), &pos);
+    pos = 0;
     gtk_editable_insert_text (GTK_EDITABLE (info->server_mod), 
-			      modulus, strlen(modulus), pos);
-    *pos = 0;
+			      modulus, strlen(modulus), &pos);
+    pos = 0;
     gtk_editable_insert_text (GTK_EDITABLE (info->server_hash), 
-			      hash, strlen(hash), pos);
+			      hash, strlen(hash), &pos);
     g_free (exponent);
     g_free (modulus);
     g_free (hash);
-    g_free(pos);
   }
   
 }
@@ -950,13 +958,14 @@ void gnc_hbci_initial_druid (void)
 		    (GNOME_FILE_ENTRY (info->configfileentry))), 
 	 info->configfile);
     else {
-      char *homedir = g_get_home_dir();
-      char *file = g_strconcat(homedir, "/.openhbci");
+      const char *homedir = g_get_home_dir();
+      char *file = NULL;
+      g_assert(homedir);
+      file = g_strdup_printf("%s/.openhbci", homedir);
       gtk_entry_set_text 
 	(GTK_ENTRY (gnome_file_entry_gtk_entry
 		    (GNOME_FILE_ENTRY (info->configfileentry))), 
 	 file);
-      g_free (homedir);
       g_free (file);
     }
       
@@ -982,9 +991,11 @@ void gnc_hbci_initial_druid (void)
     info->user_bankcode = glade_xml_get_widget(xml, "user_bankcode_label");
     info->user_bankname = glade_xml_get_widget(xml, "user_bankname_label");
     info->userid = glade_xml_get_widget(xml, "user_id_entry");
+    info->username = glade_xml_get_widget(xml, "user_name_entry");
     gtk_signal_connect (GTK_OBJECT (info->userid), "focus-out-event", 
 			GTK_SIGNAL_FUNC (on_userid_focus_out), info);
     info->customerid = glade_xml_get_widget(xml, "customer_id_entry");
+    info->customername = glade_xml_get_widget(xml, "customer_name_entry");
     info->mediumrdh = glade_xml_get_widget(xml, "rdh_radiobutton");
     info->mediumpath = glade_xml_get_widget(xml, "keyfile_fileentry");
     info->mediumddv = glade_xml_get_widget(xml, "ddv_radiobutton");

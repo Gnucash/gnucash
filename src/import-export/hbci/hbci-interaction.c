@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "hbci-interaction.h"
+#include "hbci-interactionP.h"
 
 #include <openhbci/interactorcb.h>
 #include <openhbci/progressmonitorcb.h>
@@ -33,58 +34,96 @@
 
 #include "dialog-pass.h"
 
+
+
+/** Adds the interactor and progressmonitor classes to the api. */
+void gnc_hbci_api_interactors (HBCI_API *api, GtkWidget *parent)
+{
+  Inter_data *data;
+  
+  data = g_new0 (Inter_data, 1);
+  data->parent = parent;
+    
+  // set HBCI_Interactor
+  HBCI_Hbci_setInteractor(HBCI_API_Hbci(api), 
+			  gnc_hbci_new_interactor(data), TRUE);
+  // Set HBCI_Progressmonitor
+  HBCI_API_setMonitor(api, gnc_hbci_new_pmonitor(data), TRUE);
+}
+
 static int msgInputPin(const HBCI_User *user,
 		       char **pinbuf,
 		       int minsize,
 		       int newPin,
 		       void *user_data)
 {
-  const HBCI_Bank * b;
-  char *msgstr, *passwd;
-  int retval;
+  Inter_data *data = user_data;
+  const HBCI_Bank *bank = NULL;
+  char *msgstr = NULL, *passwd = NULL;
+  int retval = 0;
+  g_assert(data);
 
   while (TRUE) {
     const char *username;
-    if (user != NULL) 
-      username =
-	(HBCI_User_userName (user) ? HBCI_User_userName (user) :
-	 (HBCI_User_userId (user) ? HBCI_User_userId (user) :
-	  _("Unknown")));
+    username =
+      (user ?
+       (strlen (HBCI_User_userName (user)) > 0 ? HBCI_User_userName (user) :
+	(HBCI_User_userId (user) ? HBCI_User_userId (user) :
+	 _("Unknown"))) : 
+       _("Unknown"));
+    g_assert (username);
+    
     if (newPin) {
       if (user != NULL) {
-	if (b != NULL) 
+	bank = HBCI_User_bank (user);
+	if (bank != NULL) 
 	  msgstr = g_strdup_printf ( _("Please enter and confirm new PIN  for 
-user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
+user '%s' at bank '%s',
+with at least %d characters."), username, 
+				     HBCI_Bank_bankCode(bank),
+				     minsize);
 	else 
 	  msgstr = g_strdup_printf ( _("Please enter and confirm a new PIN for 
-user '%s' at unknown bank."), username);
+user '%s' at unknown bank,
+with at least %d characters."), username, minsize);
       }
       else 
-	msgstr = g_strdup ( _("Please enter and confirm a new PIN."));
+	msgstr = g_strdup_printf ( _("Please enter and confirm a new PIN
+with at least %d characters."), minsize);
 
-      retval = gnc_hbci_get_initial_password (NULL,
+      retval = gnc_hbci_get_initial_password (data->parent,
 					      msgstr,
 					      &passwd);
+      g_free (msgstr);
     }
     else {
-      if (user != NULL) {
-	if (b != NULL) 
-	  msgstr = g_strdup_printf ( _("Please enter PIN  for 
-user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(b));
-	else 
-	  msgstr = g_strdup_printf ( _("Please enter PIN for 
-user '%s' at unknown bank."), username);
+      if (user && (user == data->user)) {
+	/* Cached user matches, so use cached PIN. */
+	printf("Got the cached PIN for user %s.\n", HBCI_User_userId (user));
+	*pinbuf = g_strdup (data->pw);
+	return 1;
       }
-      else 
-	msgstr = g_strdup ( _("Please enter PIN for 
+      else {
+	if (user != NULL) {
+	  bank = HBCI_User_bank (user);
+	  if (bank != NULL) 
+	    msgstr = g_strdup_printf ( _("Please enter PIN  for 
+user '%s' at bank '%s'."), username, HBCI_Bank_bankCode(bank));
+	  else 
+	    msgstr = g_strdup_printf ( _("Please enter PIN for 
+user '%s' at unknown bank."), username);
+	}
+	else 
+	  msgstr = g_strdup ( _("Please enter PIN for 
 unknown user at unknown bank."));
-
-      retval = gnc_hbci_get_password (NULL,
-				      msgstr,
-				      NULL,
-				      &passwd);
-    }
-    g_free (msgstr);
+	
+	retval = gnc_hbci_get_password (data->parent,
+					msgstr,
+					NULL,
+					&passwd);
+	g_free (msgstr);
+      } /* user == data->user */
+    } /* newPin */
     
     if (!retval)
       break;
@@ -97,7 +136,16 @@ Please try again."), minsize) == GNC_VERIFY_CANCEL)
 	break;
     }
     else {
-      *pinbuf = passwd;
+      *pinbuf = g_strdup (passwd);
+      if (user) {
+	printf("Cached the PIN for user %s.\n", HBCI_User_userId (user));
+	data->user = user;
+	if (data->pw)
+	  g_free (memset (data->pw, 0, strlen (data->pw)));
+	data->pw = passwd;
+      }
+      else 
+	g_free (memset (passwd, 0, strlen (passwd)));
       return 1;
     }
   }
@@ -109,9 +157,11 @@ Please try again."), minsize) == GNC_VERIFY_CANCEL)
 
 static int msgInsertCardOrAbort(const HBCI_User *user, void *user_data)
 {
-  const HBCI_Bank * b;
-  char *msgstr;
+  Inter_data *data = user_data;
+  const HBCI_Bank * b = NULL;
+  char *msgstr = NULL;
   GNCVerifyResult retval;
+  g_assert(data);
 
   if (user != NULL) {
     const char *username = 
@@ -130,7 +180,9 @@ user '%s' at unknown bank."), username);
     msgstr = g_strdup ( _("Please insert chip card for 
 unknown user at unknown bank."));
       
-  retval = gnc_ok_cancel_dialog (GNC_VERIFY_OK, msgstr);
+  retval = gnc_ok_cancel_dialog_parented (data->parent,
+					  GNC_VERIFY_OK, 
+					  msgstr);
   g_free (msgstr);
   
   return (retval == GNC_VERIFY_OK);
@@ -140,9 +192,11 @@ unknown user at unknown bank."));
 static int msgInsertCorrectCardOrAbort(const HBCI_User *user, 
 				       void *user_data)
 {
-  const HBCI_Bank * b;
-  char *msgstr;
+  Inter_data *data = user_data;
+  const HBCI_Bank * b = NULL;
+  char *msgstr = NULL;
   GNCVerifyResult retval;
+  g_assert(data);
 
   if (user != NULL) {
     const char *username = 
@@ -161,7 +215,9 @@ user '%s' at unknown bank."), username);
     msgstr = g_strdup ( _("Please insert the correct chip card for 
 unknown user at unknown bank."));
       
-  retval = gnc_ok_cancel_dialog (GNC_VERIFY_OK, msgstr);
+  retval = gnc_ok_cancel_dialog_parented (data->parent,
+					  GNC_VERIFY_OK,
+					  msgstr);
   g_free (msgstr);
   
   return (retval == GNC_VERIFY_OK);
@@ -170,112 +226,55 @@ unknown user at unknown bank."));
 
 static void msgStateResponse(const char *msg, void *user_data)
 {
-  fprintf(stdout,"hbci-initial-druid-msgStateResponse: %s\n",msg);
+  Inter_data *data = user_data;
+  g_assert(data);
+
+  add_log_text (data, msg);
+  //fprintf(stdout,"hbci-initial-druid-msgStateResponse: %s\n",msg);
+  /* Let the widgets be redrawn */
+  while (g_main_iteration (FALSE));
 }
 
 static int keepAlive(void *user_data)
 {
+  Inter_data *data = user_data;
+  g_assert(data);
   //fprintf(stdout, "my-keepAlive: returning 1\n");
-  return 1;
+
+  /* Let the widgets be redrawn */
+  while (g_main_iteration (FALSE));
+
+  return data->keepAlive;
+}
+
+static void destr(void *user_data) 
+{
+  Inter_data *data = user_data;
+  if (data == NULL)
+    return;
+
+  if (data->pw) {
+    memset (data->pw, 0, strlen(data->pw));
+    g_free (data->pw);
+  }
 }
 
 
 HBCI_Interactor *
-gnc_hbci_new_interactor()
+gnc_hbci_new_interactor(Inter_data *data)
 {
-    HBCI_InteractorCB *inter;
-    inter = HBCI_InteractorCB_new(NULL,
-				  &msgInputPin,
-				  &msgInsertCardOrAbort,
-				  &msgInsertCorrectCardOrAbort,
-				  &msgStateResponse,
-				  &keepAlive,
-				  NULL);
+  HBCI_InteractorCB *inter;
 
-    return HBCI_InteractorCB_Interactor(inter);
+  inter = HBCI_InteractorCB_new(&destr,
+				&msgInputPin,
+				&msgInsertCardOrAbort,
+				&msgInsertCorrectCardOrAbort,
+				&msgStateResponse,
+				&keepAlive,
+				data);
+
+  return HBCI_InteractorCB_Interactor(inter);
 }
 
 
 
-/* ---------------------------------------------------------- */
-
-
-static void jobStarted(JobProgressType type, int actions, void *user_data)
-{
-    const char *msg;
-    switch(type){
-    case JOB_OPENINGDIALOG:
-	msg = "Eröffne Dialog";
-	break;
-    case JOB_CLOSINGDIALOG:
-	msg = "Schließe Dialog";
-	break;
-	/** Opening network connection. */
-    case    JOB_OPENINGNETWORK:
-	msg = "Beginne Netzwerkverbindung";
-	break;
-	/** Closing network connection. */
-    case    JOB_CLOSINGNETWORK:
-	msg = "Schließe Netzwerkverbindung";
-	break;
-	/** Get balance */
-    case    JOB_GET_BALANCE:
-	msg = "Job: Saldo abholen";
-	break;
-	/** Get transaction statement */
-    case    JOB_GET_TRANS:
-	msg = "Job: Umsätze abholen";
-	break;
-	/** Transfer money */
-    case    JOB_NEW_TRANSFER:
-	msg = "Job: Neue Überweisung";
-	break;
-	/** Debit note */
-    case    JOB_DEBIT_NOTE:
-	msg = "";
-	break;
-	/** Get standing orders */
-    case    JOB_GET_STO:
-	msg = "";
-	break;
-	/** Create a new standing order */
-    case    JOB_NEW_STO:
-	msg = "";
-	break;
-	/** Delete a standing order */
-    case    JOB_DELETE_STO:
-	msg = "";
-	break;
-	/** Get account list */
-    case    JOB_GET_ACCOUNTS:
-	msg = "Job: Kontenliste abholen";
-	break;
-	/** Get SystemId */
-    case    JOB_GET_SYSTEMID:
-	msg = "Job: System-Kennung abgleichen";
-	break;
-	/** Get keys */
-    case    JOB_GET_KEYS:
-	msg = "Job: Schlüssel holen";
-	break;
-	/** Send keys */
-    case    JOB_SEND_KEYS:
-	msg = "Job: Schlüssel senden";
-	break;
-    }
-    
-    fprintf(stdout,"Jobstart (w/ %d actions): %s\n",actions, msg);
-}
-HBCI_ProgressMonitor *
-gnc_hbci_new_pmonitor()
-{
-    HBCI_ProgressMonitorCB *pmon;
-    pmon = HBCI_ProgressMonitorCB_new(NULL,
-				      NULL, NULL,
-				      &jobStarted, NULL, 
-				      NULL, NULL, 
-				      NULL,
-				      NULL);
-    
-    return HBCI_ProgressMonitorCB_ProgressMonitor(pmon);
-}

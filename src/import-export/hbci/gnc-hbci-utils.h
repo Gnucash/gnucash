@@ -24,30 +24,43 @@
 #define GNC_HBCI_UTILS_H
 
 #include <glib.h>
+#include <gnome.h>
 #include <openhbci/account.h>
 #include <openhbci/api.h>
 #include "Account.h"
 #include "gnc-book.h"
 
-/* Create a new HBCI_API and let it load its environment from the
+/** Create a new HBCI_API and let it load its environment from the
  * configuration file filename. If the file doesn't exist and
  * allowNewFile is set to FALSE, this function returns NULL. If the
  * file exists, but OpenHBCI encountered an error upon opening, then
- * an error will be displayed, and NULL will be returned.*/
+ * an error will be displayed, and NULL will be returned. 
+ * 
+ * @param filename The name of the OpenHBCI configuration file to use.
+ * @param allowNewFile If true, non-existent filename is accepted as well.
+ * @param parent When displaying dialogs, use this GtkWidget as parent.
+ */
 HBCI_API * gnc_hbci_api_new (const char *filename, 
-			     gboolean allowNewFile);
+			     gboolean allowNewFile, 
+			     GtkWidget *parent);
 
-/* Same as above, but takes the filename already from the current
-   book's kvp frame. Returns NULL if the file from the book's kvp
-   frame doesn't exist. Returns NULL also when there was an error upon
-   opening that file. */ 
-HBCI_API * gnc_hbci_api_new_currentbook (void);
+/** Same as above, but takes the filename already from the current
+ * book's kvp frame. Returns NULL if the file from the book's kvp
+ * frame doesn't exist. Returns NULL also when there was an error upon
+ * opening that file. 
+ *
+ * @param parent When displaying dialogs, use this GtkWidget as parent.
+ */ 
+HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent);
 
 
 /* Get the corresponding HBCI account to a gnucash account. Of course
  * this only works after the gnucash account has been set up for HBCI
  * use, i.e. the kvp_frame "hbci/..." have been filled with
- * information. Returns NULL if no HBCI_Account was found. */
+ * information. Returns NULL if no HBCI_Account was found.
+ *
+ * @param api The HBCI_API to get the HBCI_Account from.
+ * @param gnc_acc The gnucash account to query for HBCI_Account reference data. */
 const HBCI_Account *
 gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 

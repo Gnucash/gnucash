@@ -32,7 +32,8 @@
 #include "hbci-interaction.h"
 
 HBCI_API *
-gnc_hbci_api_new (const char *filename, gboolean allowNewFile)
+gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
+		  GtkWidget *parent)
 {
   HBCI_API *api = NULL;
   HBCI_Error *err = NULL;
@@ -50,28 +51,25 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile)
   if (!HBCI_Error_isOk (err) && !allowNewFile) {
     errstring = HBCI_Error_errorString (err);
     HBCI_Error_delete (err);
-    gnc_error_dialog
-      (_("Error while loading OpenHBCI config file:\n  %s\n"), errstring);
+    gnc_warning_dialog_parented 
+	(parent,
+	 _("Error while loading OpenHBCI config file:\n  %s\n"), errstring);
     free (errstring);
     HBCI_API_delete (api);
     return NULL;
   }
   HBCI_Error_delete (err);
 
-  // set HBCI_Interactor
-  HBCI_Hbci_setInteractor(HBCI_API_Hbci(api), 
-			  gnc_hbci_new_interactor(), TRUE);
-  // Set HBCI_Progressmonitor
-  HBCI_API_setMonitor(api, gnc_hbci_new_pmonitor(), TRUE);
+  gnc_hbci_api_interactors (api, parent);
   
   return api;
 };
 
 
-HBCI_API * gnc_hbci_api_new_currentbook (void)
+HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent)
 {
   return gnc_hbci_api_new 
-    (gnc_hbci_get_book_configfile (gnc_get_current_book ()), FALSE);
+    (gnc_hbci_get_book_configfile (gnc_get_current_book ()), FALSE, parent);
 };
 
 
