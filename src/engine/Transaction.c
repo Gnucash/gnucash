@@ -1807,6 +1807,78 @@ xaccTransBeginEdit (Transaction *trans)
    trans->orig = xaccDupeTransaction (trans);
 }
 
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccTransDestroy (Transaction *trans)
+{
+  if (!trans) return;
+  check_open (trans);
+
+  if (xaccTransWarnReadOnly (trans)) return;
+
+  trans->do_free = TRUE;
+}
+
+static void
+destroy_gains (Transaction *trans)
+{
+  SplitList *node;
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *s = node->data;
+    if (GAINS_STATUS_UNKNOWN == s->gains) DetermineGainStatus(s);
+    if (s->gains_split && (GAINS_STATUS_GAINS & s->gains_split->gains))
+    {
+      Transaction *t = s->gains_split->parent;
+      xaccTransBeginEdit (t);
+      xaccTransDestroy (t);
+      xaccTransCommitEdit (t);
+      s->gains_split = NULL;
+    }
+  }
+}
+
+static void
+do_destroy (Transaction *trans)
+{
+  SplitList *node;
+
+  /* If there are capital-gains transactions associated with this, 
+   * they need to be destroyed too.  */
+  destroy_gains (trans);
+
+  /* Make a log in the journal before destruction.  */
+  xaccTransWriteLog (trans, 'D');
+
+  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_DESTROY);
+
+  for (node = trans->splits; node; node = node->next)
+  {
+    Split *split = node->data;
+
+    mark_split (split);
+    xaccAccountRemoveSplit (split->acc, split);
+    xaccAccountRecomputeBalance (split->acc);
+    gen_event (split);
+    qof_entity_remove(split->book->entity_table, &split->guid);
+    xaccFreeSplit (split);
+
+    node->data = NULL;
+  }
+
+  g_list_free (trans->splits);
+  trans->splits = NULL;
+
+  qof_entity_remove(trans->book->entity_table, &trans->guid);
+
+  /* The actual free is done with the commit call, else its rolled back */
+}
+
+/********************************************************************\
+\********************************************************************/
+
 void
 xaccTransCommitEdit (Transaction *trans)
 {
@@ -1922,12 +1994,10 @@ xaccTransCommitEdit (Transaction *trans)
    }
 
    /* ------------------------------------------------- */
-   if (!trans->splits || trans->do_free)
+   if (trans->do_free || !trans->splits)
    {
       PINFO ("delete trans at addr=%p", trans);
-      /* Make a log in the journal before destruction.  */
-      xaccTransWriteLog (trans, 'D');
-      qof_entity_remove(trans->book->entity_table, &trans->guid);
+      do_destroy (trans);
       xaccFreeTransaction (trans);
       return;
    }
@@ -2156,6 +2226,7 @@ xaccTransRollbackEdit (Transaction *trans)
           * out about it until this user tried to edit it.
           */
          xaccTransDestroy (trans);
+         do_destroy (trans);
          xaccFreeTransaction (trans);
 
          /* push error back onto the stack */
@@ -2223,48 +2294,6 @@ xaccTransWarnReadOnly (const Transaction *trans)
     return TRUE;
   }
   return FALSE;
-}
-
-/********************************************************************\
-\********************************************************************/
-
-void
-xaccTransDestroy (Transaction *trans)
-{
-  GList *node;
-
-  if (!trans) return;
-  check_open (trans);
-
-  if (xaccTransWarnReadOnly (trans))
-    return;
-
-  trans->do_free = TRUE;
-  xaccTransWriteLog (trans, 'D');
-
-  gnc_engine_generate_event (&trans->guid, GNC_ID_TRANS, GNC_EVENT_DESTROY);
-
-  for (node = trans->splits; node; node = node->next)
-  {
-    Split *split = node->data;
-
-    mark_split (split);
-    xaccAccountRemoveSplit (split->acc, split);
-    xaccAccountRecomputeBalance (split->acc);
-    gen_event (split);
-    qof_entity_remove(split->book->entity_table, &split->guid);
-    xaccFreeSplit (split);
-
-    node->data = NULL;
-  }
-
-  g_list_free (trans->splits);
-  trans->splits = NULL;
-
-  qof_entity_remove(trans->book->entity_table, &trans->guid);
-
-  /* the actual free is done with the commit call, else its rolled back */
-  /* xaccFreeTransaction (trans);  don't do this here ... */
 }
 
 /********************************************************************\
