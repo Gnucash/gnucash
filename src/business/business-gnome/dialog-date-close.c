@@ -13,7 +13,6 @@
 #include "gnc-gui-query.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "AccWindow.h"
 #include "gnc-date-edit.h"
 #include "gnc-account-sel.h"
 
@@ -34,25 +33,6 @@ typedef struct _dialog_date_close_window {
   char **memo;
   gboolean retval;
 } DialogDateClose;
-
-static Account *
-ask_make_acct (DialogDateClose *ddc, const char *name, gboolean new_acc)
-{
-  GList *types = NULL;
-  Account *acc;
-
-  if (new_acc) {
-    const gchar *format  = _("The account \"%s\" does not exist.\n"
-			     "Would you like to create it?");
-    if (!gnc_verify_dialog_parented (ddc->dialog, TRUE, format, name))
-      return NULL;
-  }
-
-  acc = gnc_ui_new_accounts_from_name_window_with_types (name,
-							 ddc->acct_types);
-  g_list_free (types);
-  return acc;
-}
 
 static void
 gnc_dialog_date_close_ok_cb (GtkWidget *widget, gpointer user_data)
