@@ -393,6 +393,8 @@ gchar *s = N_("Name");
 gchar *s = N_("Next Date");
 gchar *s = N_("Days");
 gchar *s = N_("Obsolete Scheduled Transactions");
+gchar *s = N_("Select All");
+gchar *s = N_("Unselect All");
 gchar *s = N_("The following scheduled transactions have expired.\n"
               "Select those you wish to delete.");
 gchar *s = N_("Name");

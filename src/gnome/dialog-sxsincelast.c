@@ -42,6 +42,10 @@
 
 #include "dialog-sxsincelast.h"
 
+#ifdef HAVE_LANGINFO_D_FMT
+#include <langinfo.h>
+#endif
+
 #define DIALOG_SXSINCELAST_CM_CLASS "dialog-sxsincelast"
 #define DIALOG_SXSINCELAST_REMIND_CM_CLASS "dialog-sxsincelast-remind"
 #define DIALOG_SXSINCELAST_OBSOLETE_CM_CLASS "dialog-sxsincelast-obsolete"
@@ -51,8 +55,30 @@
 #define DIALOG_SXSINCELAST_OBSOLETE_GLADE_NAME "Obsolete-SXs"
 
 #define SX_OBSOLETE_CLIST "sx_obsolete_clist"
-
+#define TO_CREATE_CLIST "to_create_clist"
+#define REMINDER_CLIST  "reminder_clist"
 #define SX_GLADE_FILE "sched-xact.glade"
+
+#define SELECT_ALL_BUTTON "select_all_button"
+#define UNSELECT_ALL_BUTTON "unselect_all_button"
+#define OK_BUTTON "ok_button"
+#define CANCEL_BUTTON "cancel_button"
+
+
+#define TO_CREATE_CLIST_WIDTH 3
+#define REMINDER_CLIST_WIDTH  3
+#define SX_OBSOLETE_CLIST_WIDTH 3
+
+
+#ifdef HAVE_LANGINFO_D_FMT
+#  define GNC_D_FMT (nl_langinfo (D_FMT))
+#else
+#  define GNC_D_FMT "%Y-%m-%d"
+#endif
+
+#define GNC_D_WIDTH 25
+#define GNC_D_BUF_WIDTH 26
+
 static short module = MOD_SX;
 
 /**
@@ -183,6 +209,8 @@ static void sx_obsolete_row_unsel(GtkCList *clist,
 
 static void  sx_obsolete_close_handler(gpointer user_data);
 
+static void sx_obsolete_select_all_clicked(GtkButton *butt, gpointer user_data);
+static void sx_obsolete_unselect_all_clicked(GtkButton *button, gpointer user_data);
 static void sx_obsolete_row_sel(GtkCList *clist,
 				gint row,
 				gint column,
@@ -227,20 +255,6 @@ gnc_ui_sxsincelast_dialog_create(void)
         sxsincelast_init( sxsld );
 }
 
-
-static guint
-clist_get_n_cols(GtkCList *cl)
-{
-  GtkArgInfo info;
-  GtkArg arg;
-  
-  
-  arg.name = g_strdup("n-columns");
-  gtk_object_arg_get( GTK_OBJECT( cl ), &arg, &info);
-
-  g_free(arg.name);
-  return GTK_VALUE_UINT(arg);
-}
 
 
 static void 
@@ -290,22 +304,24 @@ sxsincelast_init( sxSinceLastData *sxsld )
         GtkWidget *w;
         int i;
         widgetSignalHandlerTuple widgets[] = {
-                { "ok_button",       "clicked",      sxsincelast_ok_clicked },
-                { "cancel_button",   "clicked",      sxsincelast_cancel_clicked },
-                { "to_create_clist", "select-row",   sxsincelast_tc_row_sel },
-                { "to_create_clist", "unselect-row", sxsincelast_tc_row_unsel },
+                { OK_BUTTON,       "clicked",      sxsincelast_ok_clicked },
+                { CANCEL_BUTTON,   "clicked",      sxsincelast_cancel_clicked },
+                { TO_CREATE_CLIST, "select-row",   sxsincelast_tc_row_sel },
+                { TO_CREATE_CLIST, "unselect-row", sxsincelast_tc_row_unsel },
                 { NULL,              NULL,           NULL }
         };
 	widgetSignalHandlerTuple widgets_remind[] = {
-	  { "ok_button",      "clicked",      sxsld_remind_ok_clicked },
-	  { "reminder_clist", "select-row",   sxsld_remind_row_toggle },
-	  { "reminder_clist", "unselect-row", sxsld_remind_row_toggle },
+	  { OK_BUTTON,      "clicked",      sxsld_remind_ok_clicked },
+	  { REMINDER_CLIST, "select-row",   sxsld_remind_row_toggle },
+	  { REMINDER_CLIST, "unselect-row", sxsld_remind_row_toggle },
 	  { NULL,             NULL,           NULL }
 	};
         
 	widgetSignalHandlerTuple widgets_obsolete[] = {
-	  { "ok_button",      "clicked",   sx_obsolete_ok_clicked },
-	  { "cancel_button",  "clicked",    sx_obsolete_cancel_clicked },
+	  { OK_BUTTON,      "clicked",   sx_obsolete_ok_clicked },
+	  { CANCEL_BUTTON,  "clicked",    sx_obsolete_cancel_clicked },
+	  { SELECT_ALL_BUTTON, "clicked", sx_obsolete_select_all_clicked },
+	  { UNSELECT_ALL_BUTTON, "clicked", sx_obsolete_unselect_all_clicked },
 	  { SX_OBSOLETE_CLIST, "select-row", sx_obsolete_row_sel},
 	  { SX_OBSOLETE_CLIST, "unselect-row", sx_obsolete_row_unsel},
 	  { NULL, NULL, NULL}
@@ -340,15 +356,15 @@ sxsincelast_init( sxSinceLastData *sxsld )
 	/* FIXME: Magic Numbers to be replaced */
        
         /* set all to-create clist columns to auto-resize. */
-        w = glade_xml_get_widget( sxsld->gxml, "to_create_clist" );
-        clist_set_all_cols_autoresize(GTK_CLIST(w), 3);
-        w = glade_xml_get_widget( sxsld->gxml_remind, "reminder_clist" );
-	clist_set_all_cols_autoresize(GTK_CLIST(w), 3);
+        w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_CLIST );
+        clist_set_all_cols_autoresize(GTK_CLIST(w), TO_CREATE_CLIST_WIDTH);
+        w = glade_xml_get_widget( sxsld->gxml_remind, REMINDER_CLIST );
+	clist_set_all_cols_autoresize(GTK_CLIST(w), REMINDER_CLIST_WIDTH);
 
 
 	w = glade_xml_get_widget( sxsld->gxml_obsolete, 
 				  SX_OBSOLETE_CLIST);
-	clist_set_all_cols_autoresize(GTK_CLIST(w), 3);
+	clist_set_all_cols_autoresize(GTK_CLIST(w), SX_OBSOLETE_CLIST_WIDTH);
 
         rl_row = tcl_row = acl_row = 0;
 
@@ -368,13 +384,13 @@ _generate_instances( SchedXaction *sx,
                      GList **instanceList )
 {
         GDate gd, *gdToReturn;
-        char tmpBuf[26];
+        char tmpBuf[GNC_D_BUF_WIDTH];
 
         gd = xaccSchedXactionGetNextInstance( sx );
         while ( g_date_valid(&gd)
                 && g_date_compare( &gd, end ) <= 0 ) {
 
-                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", &gd );
+                g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, &gd );
                 DEBUG( "Adding instance %s", tmpBuf );
 
                 gdToReturn = g_date_new();
@@ -437,8 +453,8 @@ processAutoCreateList( GList *autoCreateList, sxSinceLastData *sxsld, SchedXacti
                 _create_transactions_on( sx, (GDate*)autoCreateList->data, NULL );
                 if ( notifyState ) {
                         rowText[0] = xaccSchedXactionGetName( sx );
-                        rowText[1] = g_new0( gchar, 26 );
-                        g_date_strftime( rowText[1], 25, "%a, %b %e, %Y",
+                        rowText[1] = g_new0( gchar, GNC_D_BUF_WIDTH );
+                        g_date_strftime( rowText[1], GNC_D_WIDTH, "%a, %b %e, %Y",
                                          (GDate*)autoCreateList->data );
                         gtk_clist_insert( cl, acl_row++, rowText );
                         g_free( rowText[1] );
@@ -460,7 +476,7 @@ processToCreateList( GList *toCreateList, sxSinceLastData *sxsld, SchedXaction *
         if ( toCreateList == NULL )
                 return;
 
-        clist = GTK_CLIST( glade_xml_get_widget( sxsld->gxml, "to_create_clist" ) );
+        clist = GTK_CLIST( glade_xml_get_widget( sxsld->gxml, TO_CREATE_CLIST ) );
         do {
                 tct = g_new0( toCreateTuple, 1 );
                 tct->sx = sx;
@@ -470,8 +486,8 @@ processToCreateList( GList *toCreateList, sxSinceLastData *sxsld, SchedXaction *
 
                 /* add to clist [ahem... register... ahem] */
                 rowText[0] = xaccSchedXactionGetName( sx );
-                rowText[1] = g_new0( char, 25 );
-                g_date_strftime( rowText[1], 25, "%a, %b %e, %Y", tct->date );
+                rowText[1] = g_new0( char, GNC_D_WIDTH );
+                g_date_strftime( rowText[1], GNC_D_WIDTH, GNC_D_FMT, tct->date );
                 _sxsl_get_sx_vars( sx, tct->varBindings );
 
                 if ( g_hash_table_size( tct->varBindings ) == 0 ) {
@@ -507,14 +523,14 @@ processReminderList( GList *reminderList, sxSinceLastData *sxsld, SchedXaction *
         if ( reminderList == NULL )
                 return;
 
-        clist = GTK_CLIST( glade_xml_get_widget( sxsld->gxml_remind, "reminder_clist" ) );
+        clist = GTK_CLIST( glade_xml_get_widget( sxsld->gxml_remind, REMINDER_CLIST ) );
 
         do {
                 rt = (reminderTuple*)reminderList->data;
                 /* add to clist [ahem... register... ahem] */
                 rowText[0] = xaccSchedXactionGetName( sx );
-                rowText[1] = g_new0( gchar, 25 ); /* FIXME: appropriate size */
-                g_date_strftime( rowText[1], 25, "%a, %b %e, %Y", rt->occurDate );
+                rowText[1] = g_new0( gchar, GNC_D_WIDTH ); 
+                g_date_strftime( rowText[1], GNC_D_WIDTH, GNC_D_FMT, rt->occurDate );
                 rowText[2] = g_new0( gchar, 5 ); /* FIXME: appropriate size */
                 sprintf( rowText[2], "%d",
                          (g_date_julian(rt->occurDate) - g_date_julian(rt->endDate)) );
@@ -535,35 +551,6 @@ processReminderList( GList *reminderList, sxSinceLastData *sxsld, SchedXaction *
         }
 }
 
-
-static gchar *
-freq_type_to_string(UIFreqType type)
-{
-  static gchar *strings[] = 
-  {
-    "Unspecified",
-    "Once",
-    "Daily",
-    "Daily Monday->Friday",
-    "Weekly",
-    "Biweekly",
-    "Semi-Monthly",
-    "Monthly",
-    "Quarterly",
-    "Tri-annually", /* FIXME: WRONG TERM */
-    "Semi-yearly",
-    "Yearly"
-  };
-
-  if (type < UIFREQ_NUM_UI_FREQSPECS)
-  {
-    return strings[type];
-  }
-  else
-  {
-    return NULL;
-  }
-}
 static void
 processRemoveList(GList *removeList, sxSinceLastData *sxsld)
 {
@@ -571,12 +558,15 @@ processRemoveList(GList *removeList, sxSinceLastData *sxsld)
   char *rowtext[3];
   int row;
   GList *sx_listentry;
+  GString *tmp_str;
   SchedXaction *sx;
   FreqSpec *fs;
-  rowtext[1] = g_new0(gchar, 26 ); /* FIXME - MAGIC NUMBERS */
+  rowtext[1] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
 
   cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml_obsolete, SX_OBSOLETE_CLIST ));
 
+
+  tmp_str = g_string_new(NULL);
 
   gtk_clist_freeze(cl);
   for(row = 0; removeList != NULL; row++, removeList = removeList->next)
@@ -585,22 +575,23 @@ processRemoveList(GList *removeList, sxSinceLastData *sxsld)
     sx = (SchedXaction *) sx_listentry->data;
 
     rowtext[0] = xaccSchedXactionGetName( sx );
-   
-    /* FIXME: I18N */
+  
 
-    g_date_strftime(rowtext[1], 25, "%a, %b %e, %Y",
+    g_date_strftime(rowtext[1], GNC_D_WIDTH, GNC_D_FMT,
 		    xaccSchedXactionGetEndDate( sx ));
 
     fs = xaccSchedXactionGetFreqSpec( sx );
 
     
-    rowtext[2] = freq_type_to_string( xaccFreqSpecGetUIType( fs ) );
+    xaccFreqSpecGetFreqStr(fs, tmp_str );
+    rowtext[2] = tmp_str->str;
 
     gtk_clist_insert( cl, row, rowtext );
     gtk_clist_set_row_data(cl, row, sx_listentry );
     sxsld->n_obsolete++;
   }
-  
+
+  g_string_free(tmp_str, TRUE);
   g_free(rowtext[1]);
 
   /* FIXME: THIS IS UGLY!!! */
@@ -721,9 +712,9 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 #if 0
 /* NOT USED */
                 {
-                        char tmpBuf[26];
+                        char tmpBuf[GNC_D_BUF_WIDTH];
 
-                        g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", &end );
+                        g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, &end );
                         DEBUG( "We'll generate the appropriate instances now for "
                                "SX \"%s\" with end time %s...",
                                xaccSchedXactionGetName(sx),
@@ -751,8 +742,8 @@ sxsincelast_populate( sxSinceLastData *sxsld )
 #if 0
 /* NOT USED */
 		    {
-		      char tmpBuf[26];
-		      g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", instDate );
+		      char tmpBuf[GNC_D_BUF_WIDTH];
+		      g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, instDate );
 		      DEBUG( "SX \"%s\" instance on %s",
 			     xaccSchedXactionGetName(sx), tmpBuf );
 		    }
@@ -822,7 +813,7 @@ _clean_sincelast_dlg( sxSinceLastData *sxsld )
         gtk_clist_clear( GTK_CLIST(w) );
         acl_row = 0;
 
-        w = glade_xml_get_widget( sxsld->gxml, "to_create_clist" );
+        w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_CLIST );
         gtk_clist_clear( GTK_CLIST(w) );
         g_list_foreach( sxsld->toCreateData, _free_toCreate_list_elts, sxsld );
         g_list_free( sxsld->toCreateData );
@@ -921,7 +912,6 @@ sxsincelast_ok_clicked( GtkButton *b, gpointer ud )
         GNCBook *book;
         SchedXaction *sx;
         GDate gd, *endDate;
-        gchar buf[1024];
         gint row;
         char *rowText[2];
         toCreateTuple *tct;
@@ -931,7 +921,7 @@ sxsincelast_ok_clicked( GtkButton *b, gpointer ud )
 
         sxsld = (sxSinceLastData*)ud;
 
-        cl = GTK_CLIST(glade_xml_get_widget( sxsld->gxml, "to_create_clist" ));
+        cl = GTK_CLIST(glade_xml_get_widget( sxsld->gxml, TO_CREATE_CLIST ));
 
         /* First: check to make sure all TCTs are 'ready' [and return if not].
          * Second: create the entries based on the variable bindings. */
@@ -949,8 +939,8 @@ sxsincelast_ok_clicked( GtkButton *b, gpointer ud )
                                       _andequal_numerics_set,
                                       &allVarsBound );
                 if ( !allVarsBound ) {
-                        char tmpBuf[26];
-                        g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", tct->date );
+                        char tmpBuf[GNC_D_BUF_WIDTH];
+                        g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, tct->date );
                         /* FIXME: this should be better-presented to the user. */
                         DEBUG( "SX %s on date %s still has unbound variables.",
                                xaccSchedXactionGetName(tct->sx), tmpBuf );
@@ -1044,7 +1034,7 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
                 /* If there are no un-bound variables, then set the 'ready-to-go'
                    flag to 'y'. */
                 g_hash_table_foreach( tct->varBindings, _andequal_numerics_set, &allVarsBound );
-                clist = GTK_CLIST(glade_xml_get_widget( sxsld->gxml, "to_create_clist" ));
+                clist = GTK_CLIST(glade_xml_get_widget( sxsld->gxml, TO_CREATE_CLIST ));
                 gtk_clist_set_text( clist, tct->clistRow, 2, ( allVarsBound ? "y" : "n" ) );
         }
 }
@@ -1245,10 +1235,10 @@ _create_transactions_on( SchedXaction *sx, GDate *gd, toCreateTuple *tct )
         AccountGroup *ag;
         Account *acct;
         char *id;
-        char tmpBuf[26];
+        char tmpBuf[GNC_D_BUF_WIDTH];
 
         {
-                g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", gd );
+                g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, gd );
                 DEBUG( "Creating transactions on %s for %s",
                        tmpBuf, xaccSchedXactionGetName( sx ) );
         }
@@ -1269,14 +1259,22 @@ _create_transactions_on( SchedXaction *sx, GDate *gd, toCreateTuple *tct )
 
         ag = gnc_book_get_template_group( gncGetCurrentBook() );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
-        acct = xaccGetAccountFromName( ag, id );
-        /* FIXME: handle not being able to get any of the above. */
-        g_free( id );
-
-        xaccAccountForEachTransaction( acct,
-                                       _create_each_transaction_helper,
-                                       tct );
-        xaccSchedXactionSetLastOccurDate( sx, tct->date );
+	if(ag && id)
+	{
+	  acct = xaccGetAccountFromName( ag, id );        
+	  if(acct)
+	  {
+	    xaccAccountForEachTransaction( acct,
+					   _create_each_transaction_helper,
+					   tct );
+	  }
+	}
+	if (id)
+	{
+	  g_free( id );
+	}
+       
+	xaccSchedXactionSetLastOccurDate( sx, tct->date ); 
 }
 
 static void
@@ -1391,7 +1389,8 @@ sxsincelast_tc_row_sel( GtkCList *clist,
 
         tableIdx = 1;
         do {
-                GString *gstr, *numValueStr;
+                GString *gstr;
+		const gchar *numValueStr;
                 gnc_numeric *numValue;
 
                 gstr = g_string_sized_new(16);
@@ -1406,11 +1405,9 @@ sxsincelast_tc_row_sel( GtkCList *clist,
                 gtk_widget_set_usize( entry, 64, 0 );
                 numValue = (gnc_numeric*)g_hash_table_lookup( tct->varBindings, varList->data );
                 if ( numValue != NULL ) {
-                        numValueStr = g_string_sized_new( 32 );
-                        /* FIXME: Should use xaccPrintAmount(...) */
-                        g_string_sprintf( numValueStr, "%.2f", gnc_numeric_to_double( *numValue ) );
-                        gtk_entry_set_text( GTK_ENTRY(entry), numValueStr->str );
-                        g_string_free( numValueStr, TRUE );
+                        
+                        numValueStr = xaccPrintAmount( *numValue, gnc_default_print_info( FALSE ) );
+                        gtk_entry_set_text( GTK_ENTRY(entry), numValueStr );
                 }
 
                 gtk_signal_connect( GTK_OBJECT(entry), "changed",
@@ -1664,11 +1661,11 @@ _create_bad_reminders_msg( gpointer data, gpointer ud )
 {
         GString *msg;
         reminderTuple *rt;
-        static char tmpBuf[26];
+        static char tmpBuf[GNC_D_BUF_WIDTH];
 
         rt = (reminderTuple*)data;
         msg = (GString*)ud;
-        g_date_strftime( tmpBuf, 25, "%a, %b %e, %Y", rt->occurDate );
+        g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, rt->occurDate );
         g_string_sprintfa( msg, tmpBuf );
         g_string_sprintfa( msg, "\n" );
 }
@@ -1732,10 +1729,7 @@ sx_obsolete_row_sel(GtkCList *clist,
   {
     sxsld->actual_to_remove = g_list_append(sxsld->actual_to_remove, row_sxlentry_data);
   }
-  else
-  {
-    PWARN("Something screwy with obsolete SX selection . . . ");
-  }
+
   return;
 }
 
@@ -1757,10 +1751,7 @@ sx_obsolete_row_unsel(GtkCList *clist,
     g_list_free_1(position);
       
   }
-  else
-  {
-    PWARN("Tried to remove non-selected obsolete SX");
-  }
+
   return;
 }
   
@@ -1815,3 +1806,39 @@ sx_obsolete_cancel_clicked(GtkButton *button, gpointer user_data)
   sx_obsolete_close_handler(user_data);
 }
     
+
+
+static void
+sx_obsolete_select_all_clicked(GtkButton *button, gpointer user_data)
+{
+  sxSinceLastData* sxsld = user_data;
+  
+  GtkCList *ob_clist = GTK_CLIST(glade_xml_get_widget(sxsld->gxml_obsolete, 
+						      SX_OBSOLETE_CLIST));
+  int i;
+
+  for(i = 0; i < sxsld->n_obsolete; i++)
+  {
+    gtk_clist_select_row(ob_clist, i, 0);
+  }
+  
+  return;
+}
+			       
+static void
+sx_obsolete_unselect_all_clicked(GtkButton *button, gpointer user_data)
+{
+  
+  sxSinceLastData* sxsld = user_data;
+  
+  GtkCList *ob_clist = GTK_CLIST(glade_xml_get_widget(sxsld->gxml_obsolete, 
+						      SX_OBSOLETE_CLIST));
+  int i;
+
+  for(i = 0; i < sxsld->n_obsolete; i++)
+  {
+    gtk_clist_unselect_row(ob_clist, i, 0);
+  }
+  
+  return;
+}

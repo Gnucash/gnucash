@@ -77,8 +77,14 @@
 
 /* #include <time.h> // should be config'd */
 
+#include <time.h>
+
 #include <glib.h>
 #include <string.h>
+
+#ifdef HAVE_LANGINFO_D_FMT
+#include <langinfo.h>
+#endif
 
 #include "FreqSpecP.h"
 #include "GNCIdP.h"
@@ -99,7 +105,22 @@
 #define CONST_HACK (GDate*)
 
 static short module = MOD_SX;
+/* 
+ *  FIXME: should be in a header file
+ */
 
+#ifdef HAVE_LANGINFO_D_FMT
+#  define GNC_D_FMT (nl_langinfo (D_FMT))
+#else
+#  define GNC_D_FMT "%Y-%m-%d"
+#endif
+ 
+#define GDATE_STRING_SIZE 25
+#define GDATE_STRING_BUF_SIZE (GDATE_STRING_SIZE + 1)
+ 
+#define WDAY_NAME_WIDTH 100
+#define WDAY_BUF_WIDTH  (WDAY_NAME_WIDTH + 1)
+ 
 /** PROTOTYPES ******************************************************/
 
 /**
@@ -112,62 +133,39 @@ void subSpecsListMapDelete( gpointer data, gpointer user_data );
 
 /** Local data defs *****/
 
-/**
- * The number of days in each month.
- **/
-struct monthDesc {
-        char         *dshort;
-        char         *dlong;
-        gint        numDays;
-};
-
-/* This stuff is going to need i18n.
- * wouldn't it be simpler to use the system
- * date conversion functions?
- * glib already knows about this.
- * *libc* already knows about this
- * and the month names below. Both
- * of these should go away! */
-static char *weekDayNames[] = {
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-};
-
-/* hmmm... glib already knows all about this. */
-struct monthDesc monthInfo[] = {
-#define M_JAN 0
-        { "Jan", "January",   31 },
-#define M_FEB 1
-        { "Feb", "February",  28 },
-#define M_MAR 2
-        { "Mar", "March",     31 },
-#define M_APR 3
-        { "Apr", "April",     30 },
-#define M_MAY 4
-        { "May", "May",       31 },
-#define M_JUN 5
-        { "Jun", "June",      30 },
-#define M_JUL 6
-        { "Jul", "July",      31 },
-#define M_AUG 7
-        { "Aug", "August",    31 },
-#define M_SEP 8
-        { "Sep", "September", 30 },
-#define M_OCT 9
-        { "Oct", "October",   31 },
-#define M_NOV 10
-        { "Nov", "November",  30 },
-#define M_DEC 11
-        { "Dec", "December",  31 }
-};
 
 /** Local Prototypes *****/
 static void xaccFreqSpecInit( FreqSpec *fs );
+
+static const char *
+get_wday_name(guint day)
+{
+  static gchar wday_name[WDAY_BUF_WIDTH];
+  struct tm t;
+  t.tm_wday = day;
+  strftime(wday_name, WDAY_NAME_WIDTH, "%A", &t);
+  return wday_name;
+}
+ 
+static const char *
+get_full_month_name(guint month)
+{
+  static gchar month_name[WDAY_BUF_WIDTH];
+  struct tm t;
+  t.tm_mon = month;
+  strftime(month_name, WDAY_NAME_WIDTH, "%B", &t);
+  return month_name;
+}
+
+static const char *
+get_abbrev_month_name(guint month)
+{
+  static gchar month_name[WDAY_BUF_WIDTH];
+  struct tm t;
+  t.tm_mon = month;
+  strftime(month_name, WDAY_NAME_WIDTH, "%b", &t);
+  return month_name;
+}
 
 /**
  * Initializes a FreqSpec by setting it's to type INVALID.
@@ -714,9 +712,9 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         /* FIXME: fill in. */
         switch( xaccFreqSpecGetUIType( fs ) ) {
         case UIFREQ_ONCE:
-                tmpStr = g_new0( char, 25 );
+                tmpStr = g_new0( char, GDATE_STRING_BUF_SIZE );
                 /* this is now a GDate. */
-                g_date_strftime( tmpStr, 25,
+                g_date_strftime( tmpStr, GDATE_STRING_SIZE,
                                  "%a, %b %e, %Y",
                                  &fs->s.once.date );
                 g_string_sprintf( str, "Once: %s", tmpStr );
@@ -774,7 +772,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                         /* put the first letter of the weekday name in
                            the appropriate position. */
                         dowIdx = tmpFS->s.weekly.offset_from_epoch;
-                        tmpStr[dowIdx] = weekDayNames[dowIdx][0];
+                        tmpStr[dowIdx] = *(get_wday_name(dowIdx));
                 } while ( (list = g_list_next(list)) );
 
                 if ( tmpInt > 1 ) {
@@ -785,7 +783,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 break;
 
         case UIFREQ_BI_WEEKLY:
-                g_string_sprintf( str, "Bi-Weekly, %ss", weekDayNames[fs->s.weekly.offset_from_epoch % 7] );
+                g_string_sprintf( str, "Bi-Weekly, %ss", get_wday_name(fs->s.weekly.offset_from_epoch % 7) );
                 break;
 
         case UIFREQ_SEMI_MONTHLY:
@@ -867,7 +865,7 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                                            fs->s.monthly.interval_months/12 );
                 }
                 g_string_sprintfa( str, ": %s/%u",
-                                   monthInfo[fs->s.monthly.offset_from_epoch].dshort,
+                                   get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
                                    fs->s.monthly.day_of_month );
                 break;
 

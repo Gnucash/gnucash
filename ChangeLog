@@ -1,3 +1,17 @@
+2001-08-16  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/engine/FreqSpec.c: Take out day and month name arrays - use 
+	strftime instead.  i18n Date formatting.  Replace magic numbers.
+
+	* src/gnome/glade/sched-xact.glade: Add "select all" and "unselect all"
+	buttons to obsolete-sx dialog.
+	
+	* src/gnome/dialog-sxsincelast.c: Remove string literals and magic
+	numbers.  (freq_type_to_string) remove.  (_create_transactions_on):
+	catch errors a bit better. (sx_obsolete_row_{un}sel): remove unnecessary
+	warnings.  (sx_obsolete_{un}select_all_clicked): add callbacks for
+	"select all" and "unselect all" buttons.
+
 2001-08-15  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/window-acct-tree.c, window-register.c,

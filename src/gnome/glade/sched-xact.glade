@@ -4139,6 +4139,22 @@ like to create now, and click
 
       <widget>
 	<class>GtkButton</class>
+	<name>select_all_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<label>Select All</label>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
+	<name>unselect_all_button</name>
+	<can_default>True</can_default>
+	<can_focus>True</can_focus>
+	<label>Unselect All</label>
+      </widget>
+
+      <widget>
+	<class>GtkButton</class>
 	<name>cancel_button</name>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
