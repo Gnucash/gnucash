@@ -693,26 +693,26 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
   if( NULL == tmp) return NULL;
   DEBUG ("reading acct %s", tmp);
   xaccAccountSetName (acc, tmp);
-  free (tmp);
+  g_free (tmp);
 
   if (8 <= token) {
      tmp = readString( fd, token );
      if( NULL == tmp) return NULL;
      xaccAccountSetCode (acc, tmp);
-     free (tmp);
+     g_free (tmp);
   }
   
   tmp = readString( fd, token );
   if( NULL == tmp ) return NULL;
   xaccAccountSetDescription (acc, tmp);
-  free (tmp);
+  g_free (tmp);
   
   tmp = readString( fd, token );
   if( NULL == tmp ) return NULL;
   if(strlen(tmp) > 0) {
     xaccAccountSetNotes (acc, tmp);
   }
-  free (tmp);
+  g_free (tmp);
   
   /* currency and security strings first introduced 
    * in version 7 of the file format */
@@ -724,7 +724,7 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
      currency = gnc_commodity_import_legacy(book, tmp);
      DxaccAccountSetCurrency (acc, currency);
      
-     if(tmp) free (tmp);
+     if(tmp) g_free (tmp);
 
      tmp = readString( fd, token );
 
@@ -738,7 +738,7 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
             account_type == MUTUAL ||
             account_type == CURRENCY)
         {
-          if (tmp) free (tmp);
+          if (tmp) g_free (tmp);
 
           tmp = strdup (xaccAccountGetName (acc));
           if (tmp == NULL) return NULL;
@@ -749,7 +749,7 @@ readAccount( GNCBook *book, int fd, AccountGroup *grp, int token )
      security = gnc_commodity_import_legacy(book, tmp);
      DxaccAccountSetSecurity (acc, security);
 
-     if(tmp) free (tmp);
+     if(tmp) g_free (tmp);
   } 
   else {
     /* set the default currency when importing old files */
@@ -877,7 +877,7 @@ readAccInfo(int fd, Account *acc, int token) {
     const char *tmp = readString( fd, token );
     if(NULL == tmp) return(FALSE);
     if(strlen(tmp) > 0) dxaccAccountSetPriceSrc(acc, tmp);
-    free((char *) tmp);
+    g_free((char *) tmp);
   }
   return(TRUE);
 }
@@ -954,7 +954,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
     return NULL;
     }
   xaccTransSetNum (trans, tmp);
-  free (tmp);
+  g_free (tmp);
   
   if (revision <= 7) {
      time_t secs;
@@ -1005,7 +1005,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
     }
   PINFO ("description=%s", tmp);
   xaccTransSetDescription (trans, tmp);
-  free (tmp);
+  g_free (tmp);
   
   /* docref first makes an appearance in version 8.  They're now
      deprecated, and we don't think anyone ever used them anyway, but
@@ -1023,12 +1023,12 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
        kvp_value *new_value = kvp_value_new_string(tmp);
        if(!new_value) {
          PERR ("Failed to allocate kvp_value for transaction docref.");
-         free(tmp);
+         g_free(tmp);
          return(NULL);
        }
        kvp_frame_set_slot_nc(xaccTransGetSlots(trans), "old-docref", new_value);
      }
-     free (tmp);
+     g_free (tmp);
   }
 
   /* At version 5, most of the transaction stuff was 
@@ -1050,7 +1050,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
     if(strlen(tmp) > 0) {
       xaccTransSetMemo (trans, tmp);
     }
-    free (tmp);
+    g_free (tmp);
     
     /* action first introduced in version 3 of the file format */
     if (revision >= 3) 
@@ -1064,7 +1064,7 @@ readTransaction(GNCBook *book, int fd, Account *acc, int revision)
          return NULL;
          }
        xaccTransSetAction (trans, tmp);
-       free (tmp);
+       g_free (tmp);
       }
     
     /* category is now obsolete */
@@ -1286,7 +1286,7 @@ readSplit ( GNCBook *book, int fd, int token )
     }
   PINFO ("memo=%s", tmp);
   xaccSplitSetMemo (split, tmp);
-  free (tmp);
+  g_free (tmp);
   
   tmp = readString( fd, token );
   if( tmp == NULL )
@@ -1296,7 +1296,7 @@ readSplit ( GNCBook *book, int fd, int token )
     return NULL;
     }
   xaccSplitSetAction (split, tmp);
-  free (tmp);
+  g_free (tmp);
   
   err = read( fd, &recn, sizeof(char) );
   if( err != sizeof(char) )
@@ -1351,12 +1351,12 @@ readSplit ( GNCBook *book, int fd, int token )
        kvp_value *new_value = kvp_value_new_string(tmp);
        if(!new_value) {
          PERR ("Failed to allocate kvp_value for split docref.");
-         free(tmp);
+         g_free(tmp);
          return(NULL);
        }
        kvp_frame_set_slot_nc(xaccSplitGetSlots(split), "old-docref", new_value);
      }
-     free (tmp);
+     g_free (tmp);
   }
 
   /* first, read number of shares ... */
@@ -1421,7 +1421,7 @@ readString( int fd, int token )
     return NULL;
   XACC_FLIP_INT (size);
   
-  str = (char *) malloc (size);
+  str = (char *) g_malloc (size);
   if (!str) {
     PERR("malloc failed on size %d bytes at position %ld\n", size,
          (long int) lseek(fd, 0, SEEK_CUR));
@@ -1431,7 +1431,7 @@ readString( int fd, int token )
   if( err != size )
     {
     PERR("size = %d err = %d str = %s\n", size, err, str );
-    free(str);
+    g_free(str);
     return NULL;
     }
   
