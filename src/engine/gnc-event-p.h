@@ -42,4 +42,7 @@
  */
 void gnc_engine_generate_event (const GUID *entity, GNCEngineEventType event_type);
 
+/* generates an event even when events are suspended! */
+void gnc_engine_force_event (const GUID *entity, GNCEngineEventType event_type);
+
 #endif
