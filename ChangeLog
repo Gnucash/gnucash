@@ -1,4 +1,8 @@
-2001-08-10  Christian Stimming  <chs@holstenstr>
+2001-08-10  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Update German translation.
+	
+	* src/FileDialog.c (show_book_error): fix message.
 
 	* po/gnc-glossary.txt: Updated explanation for "to scrub" to clear
 	up some big misunderstandings here.
