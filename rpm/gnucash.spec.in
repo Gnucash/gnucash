@@ -79,3 +79,4 @@ export LIBRARY_PATH
 %files devel
 %dir %{_includedir}/gnucash
 %{_includedir}/gnucash
+%{_datadir}/aclocal/gnucash.m4
