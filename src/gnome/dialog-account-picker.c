@@ -129,6 +129,8 @@ build_acct_tree(QIFAccountPickerDialog * picker, QIFImportWindow * import) {
                                         &test_str_cmp);
     
     gtk_ctree_select(GTK_CTREE(picker->treeview), new_sel);
+    gtk_ctree_node_moveto(GTK_CTREE(picker->treeview), new_sel, 0,
+                          0.5, 0.0);
   }
 }
 

@@ -86,7 +86,6 @@
                        (set! ignore-accounts #f)
                        (set! current-xtn (make-qif-xtn))
                        (set! default-split (make-qif-split))
-                       (qif-split:set-category! default-split "")
                        (set! first-xtn #t))
                       ((type:class)
                        (set! current-xtn (make-qif-class)))
@@ -226,7 +225,6 @@
                         (set! current-xtn (make-qif-xtn))
                         (set! current-split #f)
                         (set! default-split (make-qif-split))
-                        
                         (if progress-dialog 
                             (begin 
                               (gnc:progress-dialog-set-value 

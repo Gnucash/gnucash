@@ -201,6 +201,13 @@ gnc_style_sheet_delete_cb(GtkWidget * w, gpointer user_data) {
 }
 
 
+static int
+gnc_style_sheet_dialog_close_cb(GtkWidget * w, GdkEventAny * ev,
+                                gpointer user_data) {
+  StyleSheetDialog * ss = user_data;
+  gtk_widget_hide(GTK_WIDGET(ss->toplevel));
+}
+
 static StyleSheetDialog *
 gnc_style_sheet_dialog_create() {
   StyleSheetDialog  * ss = g_new0(StyleSheetDialog, 1);
@@ -222,6 +229,8 @@ gnc_style_sheet_dialog_create() {
                      gnc_style_sheet_new_cb, ss);
   gtk_signal_connect(GTK_OBJECT(delete_button), "clicked",
                      gnc_style_sheet_delete_cb, ss); 
+  gtk_signal_connect(GTK_OBJECT(ss->toplevel), "delete_event",
+                     gnc_style_sheet_dialog_close_cb, ss); 
   
   gnc_style_sheet_dialog_fill(ss, SCM_BOOL_F);
   gtk_window_set_policy(GTK_WINDOW(ss->toplevel), FALSE, TRUE, FALSE);

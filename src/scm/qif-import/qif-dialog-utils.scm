@@ -488,12 +488,12 @@
                      (key-string #f))
                  ;; for each split: if there's a category, do nothing.
                  ;; if there's a payee, use that as the
-                 ;; key. otherwise, use the split memo.
+                 ;; key otherwise, use the split memo.
                  (cond ((and cat 
                              (or (not (string? cat))
                                  (not (string=? cat ""))))
                         (set! key-string #f))
-                       (payee 
+                       ((and payee (= (length splits) 1))
                         (set! key-string payee))
                        (memo
                         (set! key-string memo)))
@@ -649,9 +649,9 @@
 ;; accounts the importer thinks it's going to make.  Passed to the
 ;; account picker.
 ;; 
-;; returned is a tree-structured list of all the old and new 
-;; accounts like so :
-;;  (name new? children)
+;; returned is a tree-structured list of all the old and new accounts
+;; like so : (name new? children).  trees are sorted alphabetically.
+;; This should probably change but it's beeter than no sort at all.
 
 (define (qif-import:get-all-accts extra-maps) 
   (define (cvt-to-tree path new?)
@@ -683,7 +683,8 @@
                           (loop (car tree-left) (cdr tree-left))
                           (set! newtree (cons (cvt-to-tree path new?)
                                               newtree))))))
-              newtree))))
+              (sort newtree (lambda (a b) (string<? (car a) (car b))))))))
+                             
 
   (let ((accts '())
         (acct-tree '())

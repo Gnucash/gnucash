@@ -503,10 +503,15 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
       break;
       
     case GNC_DENOM_SIGFIG:
-      ratio    = gnc_numeric_to_double(in);
-      logratio = log10(ratio);
-      logratio = ((logratio > 0.0) ? 
-                  (floor(logratio)+1.0) : (ceil(logratio)));
+      ratio    = fabs(gnc_numeric_to_double(in));
+      if(ratio < 10e-20) {
+        logratio = 0;
+      }
+      else {
+        logratio = log10(ratio);
+        logratio = ((logratio > 0.0) ? 
+                    (floor(logratio)+1.0) : (ceil(logratio)));
+      }
       sigfigs  = GNC_NUMERIC_GET_SIGFIGS(how);
 
       if(sigfigs-logratio >= 0) {
@@ -803,9 +808,14 @@ double_to_gnc_numeric(double in, gint64 denom, gint how) {
   double sigfigs;
 
   if((denom == GNC_DENOM_AUTO) && (how & GNC_DENOM_SIGFIG)) {
-    logval   = log10(in);
-    logval   = ((logval > 0.0) ? 
-                (floor(logval)+1.0) : (ceil(logval)));
+    if(fabs(in) < 10e-20) {
+      logval = 0;
+    }
+    else {
+      logval   = log10(fabs(in));
+      logval   = ((logval > 0.0) ? 
+                  (floor(logval)+1.0) : (ceil(logval)));
+    }
     sigfigs  = GNC_NUMERIC_GET_SIGFIGS(how);
     if(sigfigs-logval >= 0) {
       denom    = (gint64)(pow(10, sigfigs-logval));

@@ -248,49 +248,49 @@
      #f)))
 
 (define (gnc:report-run id)
-  (gnc:backtrace-if-exception gnc:report-run-unsafe id))
-
-(define (gnc:report-run-unsafe id)
-  (let ((report (gnc:find-report id))
-        (start-time (gettimeofday)))
-    (if report
-        (if (and (not (gnc:report-dirty? report))
+  (gnc:backtrace-if-exception 
+   (lambda ()
+     (let ((report (gnc:find-report id))
+           (start-time (gettimeofday)))
+       (if report
+           (if (and (not (gnc:report-dirty? report))
+                    (gnc:report-ctext report))
+               ;; if there's clean cached text, return it 
+               (begin 
                  (gnc:report-ctext report))
-            ;; if there's clean cached text, return it 
-            (begin 
-              (gnc:report-ctext report))
-            
-            ;; otherwise, rerun the report 
-            (let ((template (hash-ref *gnc:_report-templates_* 
-                                      (gnc:report-type report))))
-              (if template
-                  (let* ((renderer (gnc:report-template-renderer template))
-                         (stylesheet-name
-                          (symbol->string (gnc:option-value
-                                           (gnc:lookup-option 
-                                            (gnc:report-options report)
-                                            (N_ "General") 
-                                            (N_ "Stylesheet")))))
-                         (stylesheet 
-                          (gnc:html-style-sheet-find stylesheet-name))
-                         (doc (renderer report))
-                         (html #f)
-                         (formlist #f)
-                         (collapsed-list #f))
-                    
-                    (gnc:html-document-set-style-sheet! doc stylesheet)
-                    (set! formlist (gnc:html-document-render doc))
-                    (set! collapsed-list (gnc:report-tree-collapse formlist))
-                    (set! html (apply string-append collapsed-list))
-                    (gnc:report-set-ctext! report html)
-                    (gnc:report-set-dirty?! report #f)
-                    
-                    (display "total time to run report: ")
-                    (display (gnc:time-elapsed start-time (gettimeofday)))
-                    (newline)
+               
+               ;; otherwise, rerun the report 
+               (let ((template (hash-ref *gnc:_report-templates_* 
+                                         (gnc:report-type report))))
+                 (if template
+                     (let* ((renderer (gnc:report-template-renderer template))
+                            (stylesheet-name
+                             (symbol->string (gnc:option-value
+                                              (gnc:lookup-option 
+                                               (gnc:report-options report)
+                                               (N_ "General") 
+                                               (N_ "Stylesheet")))))
+                            (stylesheet 
+                             (gnc:html-style-sheet-find stylesheet-name))
+                            (doc (renderer report))
+                            (html #f)
+                            (formlist #f)
+                            (collapsed-list #f))
+                       
+                       (gnc:html-document-set-style-sheet! doc stylesheet)
+                       (set! formlist (gnc:html-document-render doc))
+                       (set! collapsed-list 
+                             (gnc:report-tree-collapse formlist))
+                       (set! html (apply string-append collapsed-list))
+                       (gnc:report-set-ctext! report html)
+                       (gnc:report-set-dirty?! report #f)
+                       
+                       (display "total time to run report: ")
+                       (display (gnc:time-elapsed start-time (gettimeofday)))
+                       (newline)
 
-                    html)
-                  #f)))
-        #f)))
+                       html)
+                     #f)))
+           #f)))))
 
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)

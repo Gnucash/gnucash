@@ -18,6 +18,17 @@
 ;; 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 
+(if (not (defined? 'hash-fold))
+    (define (hash-fold proc init table)
+      (for-each 
+       (lambda (bin)
+         (for-each 
+          (lambda (elt)
+            (set! init (proc (car elt) (cdr elt) init)))
+          bin))
+       (vector->list table))))
+
+
 (define (directory? path)
   ;; This follows symlinks normally.
   (let* ((status (false-if-exception (stat path)))

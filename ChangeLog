@@ -1,3 +1,20 @@
+2001-02-13  Bill Gribble  <grib@billgribble.com>
+
+	* src/engine/gnc-numeric.c: fix stupid. stupid. stupid. stupid 
+	log10 error
+
+	* src/guile/gnc-helpers.c: start to fix scm_to_gint64 for
+	guile-1.3.. this is sort of a duct-tape fix.  We need to port some
+	stuff from the guile-1.4 source tree.  Should work fine unless you
+	are Bill Gates and you do your accounting in lira.
+
+	* src/gnome/dialog-style-sheet.c: handle WM delete event 
+
+	* src/scm/qif-import/qif-to-gnc.scm: fix backtrace-if-exception 
+	usage; add preliminary memo/payee-to-account mapping.
+
+	* src/scm/utilities.scm: define hash-fold if it's not builtin
+
 2001-02-12  Bill Gribble  <grib@billgribble.com>
 
 	* src/scm/html-style-info.scm: minor fixes to html style

@@ -543,8 +543,9 @@ gnc_ui_qif_import_load_file_next_cb(GnomeDruidPage * page,
     /* create the <qif-file> object */
     scm_qiffile          = gh_call0(make_qif_file);    
     imported_files       = gh_cons(scm_qiffile, imported_files);    
-    wind->selected_file  = scm_qiffile;
-    
+
+    scm_unprotect_object(wind->selected_file);      
+    wind->selected_file  = scm_qiffile;    
     scm_protect_object(wind->selected_file);      
     
     /* load the file */
