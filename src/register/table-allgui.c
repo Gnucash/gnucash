@@ -68,6 +68,8 @@ xaccInitTable (Table * table)
    table->client_data = NULL;
 
    table->entries = NULL;
+   table->bg_colors = NULL;
+   table->fg_colors = NULL;
    table->locators = NULL;
    table->user_data = NULL;
    table->handlers = NULL;
@@ -124,7 +126,7 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
  * template.  This one will resize a 2D array.
  */
 
-#define RESIZE_ARR(table_rows,table_cols,new_rows,new_cols,arr,type,null_val,do_free_cell_contents) \
+#define RESIZE_ARR(table_rows,table_cols,new_rows,new_cols,arr,type,null_val,free_cell_op) \
 {									\
    int old_rows, old_cols;						\
    int i,j;								\
@@ -144,8 +146,8 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
          /* simply truncate columns */					\
          for (i=0; i<new_rows; i++) {					\
             for (j=new_cols; j<old_cols; j++) {				\
-               if (do_free_cell_contents) free (arr[i][j]);		\
-               arr[i][j] = NULL;					\
+               free_cell_op (arr[i][j]);				\
+               arr[i][j] = 0x0; /* plain null, not null_val */		\
             }								\
          }								\
       } else {								\
@@ -153,10 +155,10 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
          /* if we are here, the new table has more */			\
          /* columns. Realloc the columns.  */				\
          for (i=0; i<new_rows; i++) {					\
-            type **old_row;						\
+            type *old_row;						\
 									\
             old_row = arr[i];						\
-            arr[i] = (type **) malloc (new_cols * sizeof (type *));	\
+            arr[i] = (type *) malloc (new_cols * sizeof (type));	\
             for (j=0; j<old_cols; j++) {				\
                arr[i][j] = old_row[j];					\
             }								\
@@ -170,14 +172,14 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
       /* new table has fewer rows.  Simply truncate the rows */		\
       for (i=new_rows; i<old_rows; i++) {				\
          for (j=0; j<old_cols; j++) {					\
-            if (do_free_cell_contents) free (arr[i][j]);		\
+            free_cell_op (arr[i][j]);					\
          }								\
          free (arr[i]);							\
          arr[i] = NULL;							\
       }									\
 									\
    } else {								\
-      type ***old_entries;						\
+      type **old_entries;						\
 									\
       /* if we are here, there are more new than old rows */		\
       if (old_cols >= new_cols) {					\
@@ -186,8 +188,8 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
          /* Simply truncate the columns  */				\
          for (i=0; i<old_rows; i++) {					\
             for (j=new_cols; j<old_cols; j++) {				\
-               if (do_free_cell_contents) free (arr[i][j]);		\
-               arr[i][j] = NULL;					\
+               free_cell_op (arr[i][j]);				\
+               arr[i][j] = 0x0; /* plain null, not null_val */		\
             }								\
          }								\
       } else {								\
@@ -195,10 +197,10 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
          /* if we are here, the new table has more */			\
          /* columns. Realloc the columns.  */				\
          for (i=0; i<old_rows; i++) {					\
-            type **old_row;						\
+            type *old_row;						\
 									\
             old_row = arr[i];						\
-            arr[i] = (type **) malloc (new_cols * sizeof (type *));	\
+            arr[i] = (type *) malloc (new_cols * sizeof (type));	\
             for (j=0; j<old_cols; j++) {				\
                arr[i][j] = old_row[j];					\
             }								\
@@ -211,14 +213,14 @@ xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
 									\
       /* now, add all new rows */					\
       old_entries = arr;						\
-      arr = (type ***) malloc (new_rows * sizeof (type **));		\
+      arr = (type **) malloc (new_rows * sizeof (type *));		\
       for (i=0; i<old_rows; i++) {					\
          arr[i] = old_entries[i];					\
       }									\
       if (old_entries) free (old_entries);				\
 									\
       for (i=old_rows; i<new_rows; i++) {				\
-         arr[i] = (type **) malloc (new_cols * sizeof (type *));	\
+         arr[i] = (type *) malloc (new_cols * sizeof (type));		\
          for (j=0; j<new_cols; j++) {					\
             arr[i][j] = null_val;					\
          }								\
@@ -232,27 +234,40 @@ static void
 xaccFreeTableEntries (Table * table)
 {
    int i,j;
-   /* free the entries and locators */
-   for (i=0; i<table->num_phys_rows; i++) {
-      for (j=0; j<table->num_phys_cols; j++) {
-         free (table->entries[i][j]);
-         table->entries[i][j] = NULL;
 
-         free (table->locators[i][j]);
-         table->locators[i][j] = NULL;
+   /* free the entries */
+   if (table->entries) {
+      for (i=0; i<table->num_phys_rows; i++) {
+         if (table->entries[i]) {
+            for (j=0; j<table->num_phys_cols; j++) {
+               if (table->entries[i][j]) free (table->entries[i][j]);
+               table->entries[i][j] = NULL;
+            }
+            free (table->entries[i]);
+         }
+         table->entries[i] = NULL;
       }
-      free (table->entries[i]);
-      table->entries[i] = NULL;
-
-      free (table->locators[i]);
-      table->locators[i] = NULL;
+      free (table->entries);
    }
-   free (table->entries);
    table->entries = NULL;
 
-   free (table->locators);
+   /* free the locators */
+   if (table->locators) {
+      for (i=0; i<table->num_phys_rows; i++) {
+         if (table->locators[i]) {
+            for (j=0; j<table->num_phys_cols; j++) {
+               if (table->locators[i][j]) free (table->locators[i][j]);
+               table->locators[i][j] = NULL;
+            }
+            free (table->locators[i]);
+         }
+         table->locators[i] = NULL;
+      }
+      free (table->locators);
+   }
    table->locators = NULL;
 
+   /* hack alert -- incomplete -- also do colors */
    /* null out user data and handlers */
    for (i=0; i<table->num_virt_rows; i++) {
       for (j=0; j<table->num_virt_cols; j++) {
@@ -298,9 +313,9 @@ xaccTableResize (Table * table,
                new_phys_rows,
                new_phys_cols,
                (table->entries),
-               char,
+               char *,
                (strdup ("")),
-               1);
+               free);
 
    /* resize the locator array */
    RESIZE_ARR ((table->num_phys_rows),
@@ -308,9 +323,29 @@ xaccTableResize (Table * table,
                new_phys_rows,
                new_phys_cols,
                (table->locators),
-               Locator,
+               Locator *,
                (xaccMallocLocator ()),
-               1);
+               free);
+
+   /* resize the bg color array (white background)  */
+   RESIZE_ARR ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->bg_colors),
+               int,
+               (0xffffff),  
+               (int));    /* no-op */
+
+   /* resize the foreground color array (black text) */
+   RESIZE_ARR ((table->num_phys_rows),
+               (table->num_phys_cols),
+               new_phys_rows,
+               new_phys_cols,
+               (table->fg_colors),
+               int,
+               (0x0),
+               (int));  /* no-op */
 
    /* we are done with the physical dimensions. 
     * record them for posterity. */
@@ -324,9 +359,9 @@ xaccTableResize (Table * table,
                new_virt_rows,
                new_virt_cols,
                (table->user_data),
-               void,
+               void *,
                (NULL),
-               0);
+               (void *));  /* no-op */
 
    /* resize the handler array */
    RESIZE_ARR ((table->num_virt_rows),
@@ -334,9 +369,9 @@ xaccTableResize (Table * table,
                new_virt_rows,
                new_virt_cols,
                (table->handlers),
-               CellBlock,
+               CellBlock *,
                (NULL),
-               0);
+               (CellBlock *)); /* no-op */
 
    /* we are done with the virtual dimensions. 
     * record them for posterity. */
@@ -582,6 +617,8 @@ void xaccCommitCursor (Table *table)
                free (table->entries[iphys][jphys]);
             }
             table->entries[iphys][jphys] = strdup (cell->value);
+            table->bg_colors[iphys][jphys] = cell->bg_color;
+            table->fg_colors[iphys][jphys] = cell->fg_color;
          }
       }
    }

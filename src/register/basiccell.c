@@ -48,6 +48,8 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->input_output = 1;
    cell->width = 0;
    cell->alignment = 0;
+   cell->bg_color = 0xffffff;  /* white */
+   cell->fg_color = 0x0;       /* black */
    cell->value = 0x0;
    cell->changed = 0;
    cell->set_value = NULL;

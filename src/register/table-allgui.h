@@ -125,6 +125,12 @@ struct _Table {
    * of dimension num_phys_rows * num_phys_cols */
   char ***entries;
 
+  /* background colors for each cell, format ARGB, 
+   * and foreground (text) colors, format ARGB,
+   * of dimension num_phys_rows * num_phys_cols */
+  int **bg_colors;
+  int **fg_colors;
+
   /* handler locators for each cell, 
    * of dimension num_phys_rows * num_phys_cols */
   Locator ***locators;

@@ -578,6 +578,7 @@ table->entries[i][3]);
   XtVaSetValues (table->table_widget, XmNrows,    table->num_phys_rows,
                                       XmNcolumns, table->num_phys_cols,
                                       XmNcells,   table->entries, 
+                                      /* XmNcellBackgrounds, table->?? */ 
                                       NULL);
 }
 

@@ -138,6 +138,8 @@ struct _BasicCell {
   short width;           /* column width, in chars, not pixels */
   short alignment;       /* column text alignment */
   char  input_output;    /* zero if output-only */
+  int   bg_color;        /* background color, ARGB format */
+  int   fg_color;        /* forground (text) color ARGB format */
 
   char * value;          /* current value */
   unsigned int changed;  /* 2^32-1 if value modified */
