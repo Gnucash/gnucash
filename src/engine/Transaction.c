@@ -133,6 +133,53 @@ MarkChanged (Transaction *trans)
 /********************************************************************\
 \********************************************************************/
 
+void
+xaccSplitDestroy (Split *split)
+{
+   Transaction *trans;
+   int numsplits = 0;
+   int ismember = 0;
+   Split *s;
+
+   trans = split->parent;
+   assert (trans);
+   assert (trans->splits);
+
+   numsplits = 0;
+   s = trans->splits[0];
+   while (s) {
+      if (s == split) ismember = 1;
+      numsplits ++;
+      s = trans->splits[numsplits];
+   }
+   assert (ismember);
+
+   /* if the accoount has three or more splits, 
+    * merely unlink & free the split. 
+    */
+   if (2 < numsplits) {
+      xaccTransRemoveSplit (trans, split);
+      xaccAccountRemoveSplit (split->acc, split);
+      xaccFreeSplit (split);
+      xaccSplitRebalance (trans->splits[1]);
+   } else {
+      /* if the transaction has only two splits,
+       * remove both of them, and them destroy the 
+       * transaction. 
+       */
+      s = trans->splits[0];
+      xaccAccountRemoveSplit (split->acc, s);
+      xaccFreeSplit (s);
+      s = trans->splits[1];
+      xaccAccountRemoveSplit (split->acc, s);
+      xaccFreeSplit (s);
+      xaccFreeTransaction (trans);
+   }
+}
+
+/********************************************************************\
+\********************************************************************/
+
 int
 xaccCountSplits (Split **tarray)
 {
@@ -491,12 +538,6 @@ xaccTransRemoveSplit (Transaction *trans, Split *split)
      s = trans->splits[n];
    }
    trans->splits[i] = NULL;
-
-   /* force double entry to always be consistent */
-   xaccTransRebalance (trans);
-
-   /* hack alert -- this leaves open the possibility of a danglig split!
-    * */
 }
 
 /********************************************************************\

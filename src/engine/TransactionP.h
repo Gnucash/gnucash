@@ -107,9 +107,15 @@ struct _transaction
 
 /* freeTransaction only does so if the transaction is not part of an
  * account. (i.e. if none of the member splits are in an account). */
-void          xaccFreeTransaction (Transaction *);
+void  xaccFreeTransaction (Transaction *);
 
-void          xaccFreeSplit   (Split *);    /* frees memory */
+void  xaccFreeSplit   (Split *);    /* frees memory */
+
+/* The xaccTransRemoveSplit() routine will remove the indicated
+ *    split from the transaction.  It will *NOT* otherwise 
+ *    readjust balances, modify accounts, etc.
+ */
+void  xaccTransRemoveSplit (Transaction*, Split *);
 
 
 /*

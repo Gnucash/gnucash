@@ -75,6 +75,14 @@ void          xaccTransSetDateToday (Transaction *);
 
 void          xaccTransSetNum (Transaction *, const char *);
 void          xaccTransSetDescription (Transaction *, const char *);
+
+/* The xaccTransSetMemo() and xaccTransSetAction() methods are
+ * convenience routines to keep the memo and action fields
+ * of two-split trasnactions in sync.  If the transaction has
+ * precisely two splits, then these routines will set the memo 
+ * and action of both splits.   Otherwise, they will set the
+ * memo and action of the first split (source split) only.
+ */
 void          xaccTransSetMemo (Transaction *, const char *);
 void          xaccTransSetAction (Transaction *, const char *);
 
