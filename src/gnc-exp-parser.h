@@ -72,7 +72,7 @@ gboolean gnc_exp_parser_parse (const char * expression,
  * dealing with a non-shared variable list and state, local to the expression
  * being parsed.  This is a hashTable of variable names mapping to
  * gnc_numeric pointers. */
-gboolean gnc_exp_parser_parse_seperate_vars (const char * expression,
+gboolean gnc_exp_parser_parse_separate_vars (const char * expression,
                                              gnc_numeric *value_p,
                                              char **error_loc_p,
                                              GHashTable *varHash );

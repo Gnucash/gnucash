@@ -410,13 +410,15 @@ gboolean
 gnc_exp_parser_parse( const char * expression, gnc_numeric *value_p,
                       char **error_loc_p )
 {
-  return gnc_exp_parser_parse_seperate_vars( expression, value_p,
+  return gnc_exp_parser_parse_separate_vars( expression, value_p,
                                              error_loc_p, NULL );
 }
 
 gboolean
-gnc_exp_parser_parse_seperate_vars (const char * expression, gnc_numeric *value_p,
-                                    char **error_loc_p, GHashTable *varHash )
+gnc_exp_parser_parse_separate_vars (const char * expression,
+                                    gnc_numeric *value_p,
+                                    char **error_loc_p,
+                                    GHashTable *varHash )
 {
   parser_env_ptr pe;
   var_store_ptr vars;

@@ -763,8 +763,8 @@ sxsincelast_entry_changed( GtkEditable *e, gpointer ud )
         *num = gnc_numeric_create( 0, 1 );
         dummyVarHash = g_hash_table_new( NULL, NULL );
         /* FIXME: these debugs probably want to go into a staus bar... */
-        /* FIXME: Should be using xaccParseAmount instead of parser_parse_seperate_vars? */
-        if ( !gnc_exp_parser_parse_seperate_vars( entryText, num, NULL, dummyVarHash ) ) {
+        /* FIXME: Should be using xaccParseAmount instead of parser_parse_separate_vars? */
+        if ( !gnc_exp_parser_parse_separate_vars( entryText, num, NULL, dummyVarHash ) ) {
                 DEBUG( "error parsing entry \"%s\"", entryText  );
                 g_free( num );
                 num = NULL;
@@ -904,7 +904,7 @@ _create_each_transaction_helper( Transaction *t, void *d )
                         credit_num = gnc_numeric_create( 0, 1 );
                         if ( str != NULL
                              && strlen(str) != 0 ) {
-                                if ( ! gnc_exp_parser_parse_seperate_vars( str, &credit_num,
+                                if ( ! gnc_exp_parser_parse_separate_vars( str, &credit_num,
                                                                            &parseErrorLoc, tct->varBindings ) ) {
                                         PERR( "Error parsing credit formula \"%s\" at \"%s\": %s",
                                               str, parseErrorLoc, gnc_exp_parser_error_string() );
@@ -923,7 +923,7 @@ _create_each_transaction_helper( Transaction *t, void *d )
                         debit_num = gnc_numeric_create( 0, 1 );
                         if ( str != NULL
                              && strlen(str) != 0 ) {
-                                if ( ! gnc_exp_parser_parse_seperate_vars( str, &debit_num,
+                                if ( ! gnc_exp_parser_parse_separate_vars( str, &debit_num,
                                                                            &parseErrorLoc, tct->varBindings ) ) {
                                         PERR( "Error parsing debit_formula \"%s\" at \"%s\": %s",
                                               str, parseErrorLoc, gnc_exp_parser_error_string() );
@@ -1246,7 +1246,7 @@ parse_vars_from_formula( const char *formula, GHashTable *varHash )
         gnc_numeric numeric;
         char *foo;
         
-        if ( ! gnc_exp_parser_parse_seperate_vars( formula, &numeric, &foo, varHash ) ) {
+        if ( ! gnc_exp_parser_parse_separate_vars( formula, &numeric, &foo, varHash ) ) {
                 PERR( "Error parsing at \"%s\": %s",
                         foo, gnc_exp_parser_error_string() );
                 return -1;
