@@ -30,6 +30,8 @@
 (gnc:depend  "report-html.scm")
 (gnc:depend  "date-utilities.scm")
 
+(use-modules (ice-9 syncase))
+
 ;; Define the strings here to avoid typos and make changes easier.
 
 (let-syntax ((addto!
