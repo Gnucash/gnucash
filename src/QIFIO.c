@@ -497,6 +497,59 @@ double xaccParseQIFAmount (char * str)
 \********************************************************************/
 
 Account *
+GetSubQIFAccount (AccountGroup *rootgrp, char *qifline)
+{
+   Account *xfer_acc;
+   char * sub_ptr;
+   int i;
+
+   /* search for colons in name -- this indicates a sub-account */
+   sub_ptr = strchr (qifline, ':');
+   if (sub_ptr) {
+      *sub_ptr = 0;
+   }
+
+   /* see if the account exists; but search only one level down,
+    * not the full account tree */
+   xfer_acc = NULL;
+   for (i=0; i<rootgrp->numAcc; i++) {
+      Account *acc = rootgrp->account[i];
+      if (!strcmp(acc->accountName, qifline)) {
+         xfer_acc = acc;
+         break;
+      }
+   }
+
+   /* if not, create it */
+   if (!xfer_acc) {
+      xfer_acc = mallocAccount ();
+      xfer_acc->accountName = XtNewString (qifline);
+      xfer_acc->description = XtNewString ("");
+      xfer_acc->notes = XtNewString ("");
+
+      /* by default, assume its an expense-type category */
+      xfer_acc->type = EXPENSE;
+      insertAccount (rootgrp, xfer_acc);
+   }
+
+   /* if this account name had sub-accounts, get those */
+   if (sub_ptr) {
+      sub_ptr ++;
+      rootgrp = xfer_acc->children;
+      if (!rootgrp) {
+         rootgrp = mallocAccountGroup();
+         xfer_acc->children = rootgrp;
+         rootgrp->parent = xfer_acc;
+      }
+      xfer_acc = GetSubQIFAccount (rootgrp, sub_ptr);
+   }
+   return xfer_acc;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+Account *
 xaccGetXferQIFAccount (Account *acc, char *qifline)
 {
    Account *xfer_acc;
@@ -517,19 +570,7 @@ xaccGetXferQIFAccount (Account *acc, char *qifline)
 
    /* see if the account exists */
    rootgrp = xaccGetRootGroupOfAcct (acc);
-   xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
-
-   /* if not, create it */
-   if (!xfer_acc) {
-      xfer_acc = mallocAccount ();
-      xfer_acc->accountName = XtNewString (qifline);
-      xfer_acc->description = XtNewString ("");
-      xfer_acc->notes = XtNewString ("");
-
-      /* by default, assume its an expense-type category */
-      xfer_acc->type = EXPENSE;
-      insertAccount (rootgrp, xfer_acc);
-   }
+   xfer_acc = GetSubQIFAccount (rootgrp, qifline);
 
    return xfer_acc;
 }
@@ -556,6 +597,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
    tmp = strchr (qifline, '\n');
    if(tmp) *tmp = 0x0;
 
+   /* hack alert -- search for colons in name */
    /* see if the account exists */
    rootgrp = xaccGetRootGroupOfAcct (acc);
    xfer_acc = xaccGetAccountFromName (rootgrp, qifline);
