@@ -10,10 +10,10 @@
                   (case item
                     ((default)
                      (list
-                      (string-append (getenv "HOME") "/.gnucash/doc")    
-                      (string-append gnc:_share-dir-default_ "/Docs/En")
-                      (string-append gnc:_share-dir-default_ "/Docs")
-                      (string-append gnc:_share-dir-default_ "/Reports")))
+                      (build-path (getenv "HOME") ".gnucash" "doc")    
+                      (build-path gnc:_share-dir-default_ "Docs" "En")
+                      (build-path gnc:_share-dir-default_ "Docs")
+                      (build-path gnc:_share-dir-default_ "Reports")))
                     ((current)
                      (gnc:config-var-value-get gnc:*doc-path*))
                     (else
@@ -32,9 +32,9 @@
             (gnc:debug "loading user configuration")
             
             (let ((user-file
-                   (string-append (getenv "HOME") "/.gnucash/config.user"))
+                   (build-path (getenv "HOME") ".gnucash" "config.user"))
                   (auto-file
-                   (string-append (getenv "HOME") "/.gnucash/config.auto")))
+                   (build-path (getenv "HOME") ".gnucash" "config.auto")))
               
               (if (access? user-file F_OK)
                   (if (false-if-exception (primitive-load user-file))
@@ -60,9 +60,9 @@
           (begin
             (gnc:debug "loading system configuration")
             
-            (let ((system-config (string-append
+            (let ((system-config (build-path
                                   (gnc:config-var-value-get gnc:*config-dir*)
-                                  "/config")))
+                                  "config")))
               
               (if (false-if-exception (primitive-load system-config))
                   (set! system-config-loaded? #t)        

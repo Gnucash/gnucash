@@ -7,6 +7,37 @@
 
 ;; (use-modules (gnc))
 
+(define (build-path firstelement . restofpath)
+  (define separator "/")
+  (define (bp first rest)
+    (if (null? rest)
+	first
+	(bp 	
+	 (string-append first separator (car rest))
+	 (cdr rest))))
+  (if (null? restofpath)
+      firstelement
+      (bp 
+       (string-append firstelement separator
+		      (car restofpath))
+       (cdr restofpath))))
+
+;;; This is a for-each function for use with Guile hash tables.
+;;; It is equally usable with all three forms (hash, hashv, hashq)
+;;; and is reasonably efficient, effectively being a loop that does
+;;; an iteration for each element in the base vector plus an iteration
+;;; for each hashed item found.  There should not exist an algorithm
+;;; with lower time complexity.
+(define (hash-for-each fun hashtable)
+  (array-for-each
+   (lambda (x)
+     (if (null? x)
+	 #f
+	 (for-each (lambda (y)
+		     (fun y))
+		   x)))
+   hashtable))
+
 ;; In pre 1.3 guile's you have to do this manually, unless you call
 ;; scm_shell, which we can't.
 (if (or (string=? (version) "1.2")

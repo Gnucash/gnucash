@@ -192,70 +192,34 @@
 	  first)
       first))))
 
-(define (shorten-to-best keep-top-n picklist)
+(define (shorten-to-best! keep-top-n picklist)
   (let ((shortened '()))
     (let loop ((count keep-top-n))
-      (if (> count 0)
-	  (let
-	      ((bestitem (find-min-cdr picklist)))
+      (if (= count 0)  ;;; No room left...
+	  shortened    ;;; Return the present short list
+	  (let ((bestitem (find-min-cdr picklist)))
 	    (if bestitem
-		(begin
-		  (if (> 99 (cdr bestitem))
+		(begin 
+		  (if (> 9999 (cdr bestitem))
 		      (set! shortened (cons (car bestitem) shortened)))
-		  (set-cdr! bestitem 999)   ;;;; Force off list...
-		  (loop (- count 1)))))))
-    shortened))
+		  (set-cdr! bestitem 999999)
+		  (loop (- count 1)))))))))
 
 ;;;; Test shorten-to-best:
 
 (if testing? 
     (let  
 	((alist '((a . 10)  (b . 15) (c . 20) (d . 12) (e . 7))))
-      (testing "shorten-to-best 3"
+      (testing "shorten-to-best! 3"
 	       alist
-	       '(b c d)
-	       (shorten-to-best 3 alist))))
+	       '(d a e)
+	       (shorten-to-best! 3 alist))))
 
 ;;;; Simple lookup scheme; can be turned into a hash table If Need Be.
 ;;; Initialize lookup table
-(define (initialize-lookup)
-  '())
-
-(define (lookup key list)   ;;; Returns (key . value)
-  (assoc key list))
-
-(define (lookup-set! lookuptable key value)
-  (let 
-      ((oldval (assoc key lookuptable)))
-    (if oldval
-	(set-cdr! oldval value)
-	(set! lookuptable (cons (cons key value) lookuptable))))
-  lookuptable)
-
-(define (lookup-map lfunction ltable)
-  (map lfunction ltable))
-
-(define (lookup-keys ltable)
-  (map car ltable))
-
-(if testing?
-    (begin
-      (write "Testing lookup tables.") (newline)
-      (let 
-	  ((ltbl (initialize-lookup))
-	   (sfun (lambda (x) 
-		   (display "(car.cdr) = (") 
-		   (display (car x)) (display ".") 
-		   (display (cdr x)) (display ")") (newline))))
-	(set! ltbl (lookup-set! ltbl "1" "one"))
-	(set! ltbl (lookup-set! ltbl "2" "twoo"))
-	(set! ltbl (lookup-set! ltbl "3" "three"))
-	(set! ltbl (lookup-set! ltbl "2" "two"))
-	(display "After 4 inserts, ltbl looks like:")
-	(display ltbl) (newline)
-	(display "Now, look up 1, 3, 2") (newline)
-	(display (list (lookup "1" ltbl) (lookup "2" ltbl) (lookup "3" ltbl))) 
-	(newline)
-	(display "Try mapping using lookup-map:")(newline)
-	(lookup-map sfun ltbl)
-	(newline))))
+(define (initialize-hashtable . size)
+  (make-vector
+   (if (null? size)
+       313
+       (car size))
+   '()))

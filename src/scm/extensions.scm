@@ -18,43 +18,52 @@
                                   (gnc:error-dialog
                                    "Some error didn't occur.")))
 
-  (gnc:extensions-menu-add-item "QIF Import"
-                                "Import QIF hint"
+  (gnc:extensions-menu-add-item "QIF File Import"
+                                "Import QIF File - Scripted in Guile"
                                 (lambda () 
 				  (gnc:extensions-qif-import win)))
 
-  (gnc:extensions-menu-add-item
-   "Test choose item from list dialog"
-   "Test choose item from list dialog"
-   (lambda ()
-     (let ((result (gnc:choose-item-from-list-dialog
-                    "Choose item from list test dialog"
-                    (list
-                     (cons "Item 1"
-                           (lambda ()
-                             (display "Item 1 selected") (newline)
-                             #f))
-                     (cons "Item 2"
-                           (lambda ()
-                             (display "Item 2 selected") (newline)
-                             #f))
-                     (cons "Item 3 (and close dialog)"
-                           (lambda ()
-                             (display "Item 3 selected -- close") (newline)
-                             'some-interesting-result))))))
-                           
-       (cond
-        ((eq? result #f)
-         (gnc:error-dialog
-          "Fatal error in choose item from list dialog."))
-        ((eq? result 'cancel)
-         (gnc:error-dialog "Choose item from list dialog canceled."))
-        (else
-         (gnc:error-dialog
-          (call-with-output-string (lambda (string-port)
-                                     (display "Choose item result: "
-					      string-port)
-                                     (write result string-port)))))))))
+  (gnc:extensions-menu-add-item "Test Adding Transactions"
+                                "Test Bed"
+                                (lambda () 
+				  (gnc:extensions-test-add-txns win)))
+
+  (gnc:extensions-menu-add-item "Test Adding Accounts"
+                                "Test Bed"
+                                (lambda () 
+				  (gnc:extensions-test-add-accs win)))
+
+  (gnc:extensions-menu-add-item "Test choose item from list dialog"
+				"Test choose item from list dialog"
+				(lambda ()
+				  (let ((result (gnc:choose-item-from-list-dialog
+						 "Choose item from list test dialog"
+						 (list
+						  (cons "Item 1"
+							(lambda ()
+							  (display "Item 1 selected") (newline)
+							  #f))
+						  (cons "Item 2"
+							(lambda ()
+							  (display "Item 2 selected") (newline)
+							  #f))
+						  (cons "Item 3 (and close dialog)"
+							(lambda ()
+							  (display "Item 3 selected -- close") (newline)
+							  'some-interesting-result))))))
+				    
+				    (cond
+				     ((eq? result #f)
+				      (gnc:error-dialog
+				       "Fatal error in choose item from list dialog."))
+				     ((eq? result 'cancel)
+				      (gnc:error-dialog "Choose item from list dialog canceled."))
+				     (else
+				      (gnc:error-dialog
+				       (call-with-output-string (lambda (string-port)
+								  (display "Choose item result: "
+									   string-port)
+								  (write result string-port)))))))))
   
   (gnc:extensions-menu-add-item
    "Test verify dialog"

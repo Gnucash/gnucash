@@ -13,7 +13,7 @@
 (define (guess-gnucash-category 
 	 inputcat gc-income-categories gc-account-categories)
   (let*
-      ((picklist (initialize-lookup))
+      ((picklist (initialize-hashtable))
        (qifname (inputcat 'get 'name))
        (catlength (string-length (qifname)))
        (is-acct? (and
@@ -32,7 +32,7 @@
 		  inputcat))
        (add-to-picklist 
 	(lambda (string value)
-	  (set! picklist (lookup-set! picklist string value))))
+	   (hashv-set! picklist string value)))
        (match-against-list 
 	(lambda (itemstring)
 	  (if (string=? itemstring incat)      ;;; Exact match

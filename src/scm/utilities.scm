@@ -18,7 +18,7 @@
 
           (if (not (or (string=? item ".")
                        (string=? item "..")))
-              (let* ((full-path (string-append dir-name "/" item)))
+              (let* ((full-path (build-path dir-name item)))
                 ;; ignore symlinks, etc.
                 (if (access? full-path F_OK)
                     (let* ((status (lstat full-path))
@@ -41,7 +41,7 @@ string and 'directories' must be a list of strings."
        (result #f))
       ((or (null? rest) finished?) result)
     
-    (let ((file-name (string-append (car rest) "/" file)))
+    (let ((file-name (build-path (car rest) file)))
       (gnc:debug "  checking for " file-name)
       (if (access? file-name F_OK)
           (begin

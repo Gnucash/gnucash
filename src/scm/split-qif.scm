@@ -6,9 +6,16 @@
 (define splits? #f)
 (define splitlist '())
 (define qif-split-structure 
-  (define-mystruct '(category memo amount percent)))
+  (make-record-type "qif-split-structure" 
+		    '(category memo amount percent)))
 
-(define thesplit (build-mystruct-instance qif-split-structure))
+(define (qif-split-update split field value)
+	((record-modifier qif-split-structure field) split value))
+
+(define (create-qif-split-structure) 
+  ((record-constructor qif-split-structure) #f #f #f #f))
+
+(define thesplit (create-qif-split-structure))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; And functions to nuke out the splits ;;;;
@@ -17,15 +24,18 @@
 (define (resetsplits)   ;;; Do this at end of whole txn
   (set! splits? #f)
   (set! splitlist '())
-  (set! thesplit (build-mystruct-instance qif-split-structure)))
+  (set! thesplit (create-qif-split-structure)))
 
 ;;;;  This function *should* validate that a split adds up to 
 ;;;;  the same value as the transaction, and gripe if it's not.
 ;;;;  I'm not sure how to usefully gripe, so I leave this as a stub.
 (define (ensure-split-adds-up)
   (let*
-      ((txnamount (thetxn 'get 'amount))
-       (find-amount (lambda (splitstructure) (splitstructure 'get 'amount)))
+      ((txnamount (txnget thetxn 'amount))
+       (find-amount (lambda (splitstructure) 
+		      ((record-accessor qif-split-structure  
+					'amount) splitstructure)))
+       (null (begin (display "splitlist") (display splitlist) (display (map find-amount splitlist))))
        (total-of-split
 	(apply + (map find-amount splitlist))))
     (if
@@ -44,12 +54,12 @@
 
 (define (transsplitamt line)
   (set! splits? #T)
-  (thesplit 'put 'amount (numerizeamount (strip-qif-header line)))
+  (qif-split-update thesplit 'amount (numerizeamount (strip-qif-header line)))
   ;;; And now, add amount and memo to splitlist
-  (display (thesplit 'what 'what)) (newline)
+;  (display (thesplit 'what 'what)) (newline)
   (set! splitlist (cons thesplit splitlist))
-  (set! thesplit (build-mystruct-instance qif-split-structure)))
-
+  (set! thesplit (create-qif-split-structure)))
+  
 ;;;; percentages only occur as parts of memorized transactions
 (define (transsplitpercent line)
   (set! splits? #T)
@@ -57,8 +67,8 @@
 
 (define (transsplitmemo line)
   (set! splits? #T)
-  (thesplit 'put 'memo (strip-qif-header line)))
+  (qif-split-update thesplit 'memo (strip-qif-header line)))
 
 (define (transsplitcategory line)
   (set! splits? #T)
-  (thesplit 'put 'category (strip-qif-header line)))
+  (qif-split-update thesplit 'category (strip-qif-header line)))

@@ -6,71 +6,94 @@
 ;;; address of the object.  This way the object can be maintained
 ;;; on both sides of the Lisp<==>C boundary
 ;;; For instance:
-; (define (initialize-split)   ;;; Returns a gnc-split-structure
-;    (let ((ptr (gnc:split-create))
-;  	(splitstruct (build-mystruct-instance gnc-split-structure)))
-;      (splitstruct 'put 'gncpointer ptr)
-;      splitstruct))
 
 (define gnc-account-structure 
-  (define-mystruct '(id name flags type code description
-			notes currency security splitlist
-			parentaccountgroup
-			childrenaccountgroup)))
+  (make-record-type "gnucash-account-structure" 
+		    '(id name flags type code description
+			 notes currency security splitlist
+			 parentaccountgroup
+			 childrenaccountgroup)))
+
+(define (gnc-account-update acc field value)
+  ((record-modifier gnc-account-structure field) acc value))
+
+(define (gnc-account-get acc field)
+  ((record-accessor gnc-account-structure field) acc))
 
 (define gnc-account-group-structure 
-  (define-mystruct '(parentaccount peercount
-				   peerlist)))
+  (make-record-type "gnucash-account-group-structure" 
+		    '(parentaccount peercount
+				    peerlist)))
 
 (define gnc-txn-structure 
-  (define-mystruct '(num date-posted date-entered description
-			 docref splitlist)))
+  (make-record-type "gnucash-txn-structure"
+		    '(num date-posted date-entered description
+			  docref splitlist)))
+
+(define (gnc-txn-update txn field value)
+  ((record-modifier gnc-txn-structure field) txn value))
+
+(define (gnc-txn-get txn field)
+  ((record-accessor gnc-txn-structure field) txn))
 
 (define gnc-split-structure 
-  (define-mystruct '(memo action reconcile-state
-			  reconciled-date docref share-amount
-			  share-price account parenttransaction)))
+  (make-record-type "gnucash-split-structure" 
+		    '(memo action reconcile-state
+			   reconciled-date docref share-amount
+			   share-price account parenttransaction)))
 
-(define gnc-txn-list (initialize-lookup))
-(define gnc-acc-list (initialize-lookup))
-(define gnc-split-list (initialize-lookup))
+(define (gnc-split-update split field value)
+  ((record-modifier gnc-split-structure field) split value))
+
+(define (gnc-split-get split field)
+  ((record-accessor gnc-split-structure field) split))
+
+(define gnc-txn-list (initialize-hashtable))
+(define gnc-acc-list (initialize-hashtable))
+(define gnc-split-list (initialize-hashtable))
 
 (define (add-qif-transaction-to-gnc-lists txn curtxn cursplitlist accountname)
   (define txnref (gensym))
-  (set! gnc-txn-list (lookup-set! gnc-txn-list txnref curtxn))
+  (hashv-set! gnc-txn-list txnref curtxn)
     ;;; Fill in gnc-txn-list, gnc-acc-list, gnc-split-list
     ;;; First, let's fill in curtxn with some values from txn
-  (curtxn 'put 'num (txn 'get 'id))
-  (curtxn 'put 'date-posted (txn 'get 'date))
-  (curtxn 'put 'date-entered '(1999 0903)) ;;; Which should get replaced!
-  (curtxn 'put 'description (txn 'get 'memo))
-  (curtxn 'put 'docref (txn 'get 'id))
+  (gnc-txn-update curtxn 'num (txn 'get 'id))
+  (gnc-txn-update curtxn 'date-posted (txn 'get 'date))
+  (gnc-txn-update curtxn 'date-entered '(1999 0903)) ;;; Which should get replaced!
+  (gnc-txn-update curtxn 'description (txn 'get 'memo))
+  (gnc-txn-update curtxn 'docref (txn 'get 'id))
     ;;; Now, set up the list of splits...
   (let ((mainref (gensym))
-	(mainsplit (build-mystruct-instance gnc-split-structure)))
-    (mainsplit 'put 'memo (txn 'get 'memo))
-    (mainsplit 'put 'share-amount (txn 'get 'amount))
-    (mainsplit 'put 'reconcile-state (txn 'get 'status))
-    (mainsplit 'put 'reconciled-date
- 	       (if  (string=? (txn 'get 'date) "*")
- 		    '(1999 09 03) #f))
-    (mainsplit 'put 'docref (txn 'get 'id))
-    (mainsplit 'put 'parenttransaction txnref)
-    (mainsplit 'put 'account accountname)
-    (set! gnc-split-list (lookup-set! gnc-split-list mainref mainsplit)))
-    
+	(mainsplit ((record-constructor gnc-split-structure) 
+		    #f #f #f #f #f #f #f #f #f))) 
+    (gnc-split-update mainsplit 'memo (txnget txn 'memo))
+    (gnc-split-update mainsplit 'share-amount (txnget txn 'amount))
+    (gnc-split-update mainsplit 'reconcile-state (txnget txn 'status))
+    (gnc-split-update mainsplit 'reconciled-date
+		      (if  (string=? (txnget txn 'date) "*")
+			   '(1999 09 03) #f))
+    (gnc-split-update mainsplit 'docref (txnget txn 'id))
+    (gnc-split-update mainsplit 'parenttransaction txnref)
+    (gnc-split-update mainsplit 'account accountname)
+    (hashv-set! gnc-split-list mainref mainsplit))
+  
     ;;;; Chunk of missing code:
-    ;;;; ---> Take a look at the split list in (txn 'get 'splitlist)
+    ;;;; ---> Take a look at the split list in (txnget txn 'splitlist)
     ;;;;      Add a split for each one of these
-    ;;;;      Alternatively, add a split for (txn 'get 'category)
+    ;;;;      Alternatively, add a split for (txnget txn 'category)
     ;;;; ---> Attach all the accounts to the corresponding splits
-  (curtxn 'put 'splitlist lookup-keys cursplitlist))
+  (display "Now, update txn with set of split...")
+  (gnc-txn-update curtxn 'splitlist lookup-keys cursplitlist)
+  (display "done.") (newline)
+  )
 
 (define (qif-to-gnucash txnlist accountname)
   (letrec 
-      ((curtxn (build-mystruct-instance gnc-txn-structure))
-       (cursplitlist (initialize-lookup))
-       (process-txn (lambda (x) (add-qif-transaction-to-gnc-lists x curtxn cursplitlist accountname))))
+      ((curtxn ((record-constructor gnc-txn-structure) #f #f #f #f #f #f))
+       (cursplitlist (initialize-hashtable 19))  ;;; Doesn't need to be large
+       (process-txn (lambda (x) 
+		      (add-qif-transaction-to-gnc-lists 
+		       x curtxn cursplitlist accountname))))
     (for-each process-txn txnlist)))
 
 ; QIF essentially provides a structure that sort of looks like
@@ -132,9 +155,10 @@
 ;      - Add each split to the account-to-splits list for the account
 
 (define (initialize-split)   ;;; Returns a gnc-split-structure
-   (let ((ptr (gnc:split-create))
- 	(splitstruct (build-mystruct-instance gnc-split-structure)))
-     (splitstruct 'put 'gncpointer ptr)
+  (let ((ptr (gnc:split-create))
+ 	(splitstruct ((record-constructor gnc-split-structure) 
+		      #f #f #f #f #f #f #f #f #f)))
+     (gnc-split-structure splitstruct 'gncpointer ptr)
      splitstruct))
 
 (define (gnc:set-split-values q-txn q-split)
@@ -154,31 +178,32 @@
 
 (define (initialize-account)   ;;; Returns a gnc-split-structure
    (let ((ptr (gnc:malloc-account))
- 	(accstruct (build-mystruct-instance gnc-account-structure)))
-     (accstruct 'put 'gncpointer ptr)
+	 (accstruct ((record-constructor gnc-account-structure)
+		     #f  #f #f #f #f #f #f #f #f #f #f #f)))
+     (gnc-account-update accstruct 'gncpointer ptr)
      accstruct))
 
 (define (initialize-txn)   ;;; Returns a gnc-split-structure
    (let ((ptr (gnc:transaction-create))
- 	(txnstruct (build-mystruct-instance gnc-transaction-structure)))
-     (txnstruct 'put 'gncpointer ptr)
+	 (txnstruct ((record-constructor gnc-transaction-structure) 
+		      #f #f #f #f #f #f)))
+     (gnc-account-update txnstruct 'gncpointer ptr)
      txnstruct))
 
 (if testing?
     (begin
       (display "need test scripts in qif2gc.scm")))
 
-(define best-guesses (initialize-lookup))
+(define best-guesses (initialize-hashtable 19))  ;; Need not be a big list
 
 (define (add-best-guess qif gnc)
-  (set! best-guesses (lookup-set! best-guesses qif gnc)))
+ (hashv-set! best-guesses qif gnc))
 
 (define (find-best-guess qif)
-  (lookup qif best-guesses))
+  (hashv-ref qif best-guesses))
 
-(define qif-to-gnc-acct-xlation-table (initialize-lookup))
+(define qif-to-gnc-acct-xlation-table (initialize-hashtable))
 
 (define (improve-qif-to-gnc-translation qif gnc)
-  (set! qif-to-gnc-acct-xlation-table 
-	(lookup-set! qif-to-gnc-acct-xlation-table 
-		     qif gnc)))
+  (hashv-set! qif-to-gnc-acct-xlation-table 
+	      qif gnc))
