@@ -62,6 +62,7 @@ noinst_HEADERS = \
 libgncmod_business_gnome_la_LDFLAGS = -module
 
 libgncmod_business_gnome_la_LIBADD = \
+  ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
