@@ -1,5 +1,4 @@
 /* gnc-plugin-page-report.c
- *
  * Copyright (C) 2004 Joshua Sled <jsled@asynchronous.org>
  *
  * Originally from window-report.c:
@@ -39,6 +38,7 @@
 #include "messages.h"
 #include "gnc-html.h"
 #include "gnc-html-history.h"
+#include "gnc-report.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h"
@@ -51,11 +51,18 @@ static short module = MOD_TEST; // MOD_GUI; // MOD_REPORT;?
 static GObjectClass *parent_class = NULL;
 static GList *active_pages = NULL;
 
+// Property-id values.
+enum {
+    PROP_0,
+    PROP_REPORT_ID,
+  };
+
 static void gnc_plugin_page_report_class_init( GncPluginPageReportClass *klass );
 static void gnc_plugin_page_report_init( GncPluginPageReport *plugin_page );
 static void gnc_plugin_page_report_finalize (GObject *object);
+static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
 
-static void gnc_plugin_page_report_set_report_id( GncPluginPageReport *page, int reportId );
+//static void gnc_plugin_page_report_set_report_id( GncPluginPageReport *page, int reportId );
 
 static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
@@ -137,6 +144,56 @@ gnc_plugin_page_report_get_type (void)
 }
 
 static void
+gnc_plugin_page_report_get_property( GObject *obj,
+                                     guint prop_id,
+                                     GValue *value,
+                                     GParamSpec *pspec )
+{
+        GncPluginPageReport *rep;
+        GncPluginPageReportPrivate * priv;
+
+        rep = GNC_PLUGIN_PAGE_REPORT( obj );
+        priv = (GncPluginPageReportPrivate*)rep->priv;
+        
+        switch ( prop_id )
+        {
+        case PROP_REPORT_ID:
+                g_value_set_int( value, priv->reportId );
+                break;
+        default:
+                PERR( "Unknown property id %d", prop_id );
+                break;
+        }
+}
+
+static void
+gnc_plugin_page_report_set_property( GObject *obj,
+                                     guint prop_id,
+                                     const GValue *value,
+                                     GParamSpec *pspec )
+{
+        GncPluginPageReport *rep;
+        GncPluginPageReportPrivate *priv;
+
+        rep = GNC_PLUGIN_PAGE_REPORT( obj );
+        priv = (GncPluginPageReportPrivate*)rep->priv;
+
+        DEBUG( "setting property with id %d / %p to value %d",
+               prop_id, rep->priv, g_value_get_int( value ) );
+
+        switch ( prop_id )
+        {
+        case PROP_REPORT_ID:
+                priv->reportId = g_value_get_int( value );
+                break;
+        default:
+                PERR( "unknown property id %d", prop_id );
+                break;
+        }
+               
+}
+
+static void
 gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -146,6 +203,9 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 
 	object_class->finalize = gnc_plugin_page_report_finalize;
 
+        object_class->set_property = gnc_plugin_page_report_set_property;
+        object_class->get_property = gnc_plugin_page_report_get_property;
+
         // FIXME: stock reporting icon?
 	//gnc_plugin_page_class->tab_icon        = GNC_STOCK_ACCOUNT;
 	gnc_plugin_page_class->plugin_name     = GNC_PLUGIN_PAGE_REPORT_NAME;
@@ -154,6 +214,14 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
 	gnc_plugin_page_class->destroy_widget  = gnc_plugin_page_report_destroy_widget;
 	gnc_plugin_page_class->merge_actions   = gnc_plugin_page_report_merge_actions;
 	gnc_plugin_page_class->unmerge_actions = gnc_plugin_page_report_unmerge_actions;
+
+        // create the "reportId" property
+        g_object_class_install_property( object_class,
+                                         PROP_REPORT_ID,
+                                         g_param_spec_int( "report_id",
+                                                           _("The numeric ID of the report."),
+                                                           _("The numeric ID of the report."),
+                                                           -1, G_MAXINT, -1, G_PARAM_READWRITE ) );
 
 /* JSLED: report-selected?
 	plugin_page_signals[ACCOUNT_SELECTED] =
@@ -190,29 +258,20 @@ static
 GtkWidget*
 gnc_plugin_page_report_create_widget( GncPluginPage *page )
 {
+        GncPluginPageReport *gppReport;
         GncPluginPageReportPrivate *report;
-        URLType            type;
+        GtkWindow *topLvl;
+        URLType type;
         char * id_name;
         char * child_name;
-        char               * url_location = NULL;
-        char               * url_label = NULL;
+        char * url_location = NULL;
+        char * url_label = NULL;
 
-        g_assert( GNC_PLUGIN_PAGE_REPORT( page ) );
-        g_assert( page->priv != NULL );
+        gppReport = GNC_PLUGIN_PAGE_REPORT(page);
 
-        report = (GncPluginPageReportPrivate*)page->priv;
-
-        DEBUG( "creating widget for %p / %d", page, report->reportId  );
-        
-        report->html              = gnc_html_new( GTK_WINDOW(gnc_ui_get_toplevel()) );
-        report->cur_report        = SCM_BOOL_F;
-        report->initial_report    = SCM_BOOL_F;
-        report->edited_reports    = SCM_EOL;
-        report->name_change_cb_id = SCM_BOOL_F;
-
-        scm_protect_object(report->cur_report);
-        scm_protect_object(report->initial_report);
-        scm_protect_object(report->edited_reports);
+        report = (GncPluginPageReportPrivate*)gppReport->priv;
+        topLvl = GTK_WINDOW(gnc_ui_get_toplevel());
+        report->html              = gnc_html_new( topLvl );
 
         gnc_html_history_set_node_destroy_cb(gnc_html_get_history(report->html),
                                              gnc_plugin_page_report_history_destroy_cb,
@@ -261,6 +320,43 @@ gnc_plugin_page_report_check_urltype(URLType t)
   }
 }
 
+/**
+ * Simply get the initial report given the id, so we can do initialization
+ * things like setup the tab name based on the report's name.
+ **/
+static void
+gnc_plugin_page_report_setup( GncPluginPage *ppage )
+{
+        GncPluginPageReport *page = GNC_PLUGIN_PAGE_REPORT(ppage);
+        GncPluginPageReportPrivate *report = (GncPluginPageReportPrivate*)page->priv;
+        SCM  find_report = scm_c_eval_string("gnc:find-report");
+        SCM  inst_report;
+        int  report_id;
+
+        report->cur_report        = SCM_BOOL_F;
+        report->initial_report    = SCM_BOOL_F;
+        report->edited_reports    = SCM_EOL;
+        report->name_change_cb_id = SCM_BOOL_F;
+
+        scm_protect_object(report->cur_report);
+        scm_protect_object(report->initial_report);
+        scm_protect_object(report->edited_reports);
+
+        g_object_get( ppage, "report_id", &report_id, NULL );
+        
+        /* get the inst-report from the Scheme-side hash, and get its
+         * options and editor thunk */
+        if ((inst_report = scm_call_1(find_report, scm_int2num(report_id)))
+            == SCM_BOOL_F) {
+                return;
+        }
+        
+        if (report->initial_report == SCM_BOOL_F) {
+                scm_unprotect_object(report->initial_report);
+                report->initial_report = inst_report;
+                scm_protect_object(report->initial_report);
+        }
+}
 
 /********************************************************************
  * gnc_plugin_page_report_load_cb
@@ -271,7 +367,8 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                                const gchar * location, const gchar * label, 
                                gpointer data)
 {
-        GncPluginPageReportPrivate *win = data;
+        //GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT();
+        GncPluginPageReportPrivate *win = (GncPluginPageReportPrivate*)data;
         int  report_id;
         SCM  find_report    = scm_c_eval_string("gnc:find-report");
         SCM  get_options    = scm_c_eval_string("gnc:report-options");
@@ -280,7 +377,7 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
 
         ENTER( "load_cb: type=[%s], location=[%s], label=[%s]",
                type, location, label );
-        
+
         /* we get this callback if a new report is requested to be loaded OR
          * if any URL is clicked.  If an options URL is clicked, we want to
          * know about it */
@@ -300,7 +397,6 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 if (inst_report != SCM_BOOL_F) {
                         gnc_plugin_page_report_add_edited_report(win, inst_report);
                 }
-                LEAVE( "a" );
                 return;
         } else {
                 LEAVE( " unknown URL type [%s] location [%s]", type, location );
@@ -326,7 +422,6 @@ gnc_plugin_page_report_load_cb(gnc_html * html, URLType type,
                 win->name_change_cb_id = 
                         gnc_option_db_register_change_callback(win->initial_odb,
                                                                gnc_plugin_page_report_refresh,
-                                                               //win->mc,
                                                                win,
                                                                "General", "Report name");
         }
@@ -531,6 +626,7 @@ gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page,
         // FIXME: ui-unmerge
 }
 
+#if 0
 static void
 gnc_plugin_page_report_set_report_id( GncPluginPageReport *page, int reportId )
 {
@@ -540,6 +636,7 @@ gnc_plugin_page_report_set_report_id( GncPluginPageReport *page, int reportId )
         DEBUG( "setting reportid = %d / %d",
                reportId, priv->reportId );
 }
+#endif /* 0 */
 
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
@@ -548,15 +645,27 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 	//EggActionGroup *action_group;
 	GncPluginPageReportPrivate *priv;
 	GncPluginPage *parent;
+        GString *tmpStr;
+        gint reportId;
 
-	priv = plugin_page->priv = g_new0 (GncPluginPageReportPrivate, 1);
+	priv = plugin_page->priv = g_new0( GncPluginPageReportPrivate, 1 );
+
+        reportId = -42;
+        g_object_get( plugin_page, "report_id", &reportId, NULL );
+        DEBUG( "property reportId=%d", reportId );
+
+        gnc_plugin_page_report_setup( GNC_PLUGIN_PAGE(plugin_page) );
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
+        // FIXME: + _(Report:) + priv->ext->name;
+        tmpStr = g_string_sized_new( 32 );
+        g_string_sprintf( tmpStr, "%s: %s", _("Report"),
+                          gnc_report_name( priv->initial_report ) );
+	parent->title       = g_strdup(tmpStr->str);
         // FIXME: + _(Report:) + priv->ext->name; 
-	parent->title       = g_strdup(_("Report"));
-        // FIXME: + _(Report:) + priv->ext->name; 
-	parent->tab_name    = g_strdup(_("Report"));
+	//parent->tab_name    = g_strdup(_("Report"));
+        parent->tab_name = g_strdup( tmpStr->str );
         // FIXME: URI? gnc_report://classs/type ?
 	parent->uri         = g_strdup("default:");
 
@@ -585,8 +694,11 @@ gnc_plugin_page_report_new( int reportId )
 {
 	GncPluginPageReport *plugin_page;
 
-	plugin_page = g_object_new( GNC_TYPE_PLUGIN_PAGE_REPORT, NULL );
-        gnc_plugin_page_report_set_report_id( plugin_page, reportId );
+	plugin_page = g_object_new( GNC_TYPE_PLUGIN_PAGE_REPORT,
+                                    "report_id", reportId, NULL );
+        DEBUG( "plugin_page: %p", plugin_page );
+        //gnc_plugin_page_report_set_report_id( plugin_page, reportId );
+        //gnc_plugin_page_report_setup( plugin_page );
         DEBUG( "set %d on page %p", reportId, plugin_page );
 	return GNC_PLUGIN_PAGE( plugin_page );
 }

@@ -71,3 +71,19 @@ gnc_run_report_id_string (const char * id_string, char **data)
 
   return gnc_run_report (report_id, data);
 }
+
+gchar*
+gnc_report_name( SCM report )
+{
+  SCM    get_name = scm_c_eval_string("gnc:report-name");
+  char   * name = NULL; 
+  
+  if (report != SCM_BOOL_F)
+  {
+    name = gh_scm2newstr(scm_call_1(get_name, report),
+                         NULL);
+  }
+
+  return name;
+}
+

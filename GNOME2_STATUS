@@ -35,6 +35,11 @@ MT940 Import (need test data file)
 Export Accounts
 Stock Split Dialog
 
+        +-----
+        | Can someone who comes across this note and wants to help please go
+        | through 1.8.9 and create a list of stuff missing from 2.0?
+        +------------
+
 ========================================
           MISSING MENU ITEMS
 ========================================
@@ -42,7 +47,8 @@ Stock Split Dialog
 Main Window
   File
     Print <- remove ?
-  Reports (all)
+  Reports
+    Business reports
 
 Register Window
   Edit
@@ -55,7 +61,8 @@ Register Window
     Reverse Transaction
   Actions
     Check and Repair (all)
-  Reports (all)
+  Reports
+    Business
   Business <- remove ?
 
 Register Toolbar
@@ -66,6 +73,10 @@ Register Toolbar
 ========================================
             General Notes
 ========================================
+
+Main Window
+        - New registers should open in new top-level windows.
+
 
 Register Core - MINIMALLY FUNCTIONAL
 
@@ -92,9 +103,26 @@ Business functions - Somewhat Functional
           menu-merging so that it can call
           gnc_extensions_menu_setup( GtkWindow, char*, EggMenuMerge )
 
+Reporting - Somewhat functional
+
+        - Graphing still unsupported; [jsled] in periodic contact with Jody
+          Goldberg of Gnumeric regarding Gnome Office Graphing [GOG] to be
+          factored out of gnumeric into libgoffice.
+
+        - Menu / toolbar merging needs to be added; see
+          src/report/report-gnome/gnc-plugin-page-report.c:gnc_plugin_page_report_{,un}merge_actions(...)
+
+        - Business reports menu
+          a/ one-level deeper than it should be
+          b/ empty
+          - Probably both are simply changing the paths in
+            src/business/.../bus-reports.scm [whatever].
+
+        - Save/restore in unknown state; believed to crash on re-start.
+
 IMPORTING
 
-  HBCI - Needs new http support.
+  HBCI - Needs new http support. [gnet]
 
 ========================================
               ENHANCEMENTS
@@ -105,9 +133,14 @@ IMPORTING
 	a) Add account
 	b) Register
 	c) Report
+           * Report options, especially.
 
 2)	Support a preference on whether new plugin pages appear in the
 	same or a new window.
+        * We definitely want register windows to appear in new top-levels.
+        * Reporting windows should probably appear in the top-level they were
+          created from.
+
 
 3)      Provide in-place editing where feasable.  E.G. Editing the
 	account code or the account name, but not being able to

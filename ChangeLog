@@ -1,3 +1,25 @@
+2004-05-15  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report.c
+	(gnc_plugin_page_report_class_init): Add 'report_id'
+	object-property for page-c'tor.
+	(gnc_plugin_page_report_setup): Setup the page's report at creation time so
+	we can get the correct tab labels.
+
+	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_show_progress): Weaken
+	assertion while code isn't fully changed over, yet.
+	(gnc_ui_get_toplevel): Comment out b0rken MDI-related code.
+
+2004-05-05  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/report-gnome/window-report.h: Comment interface with
+	recon about usage in the source tree.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c: Copy
+	window-report.c implementation over to here, rename, and get
+	somewhat working again. At this point, report-menu invocations
+	result in a tab being created, and displaying the error message.
+
 2004-05-05  David Hampton  <hampton@employees.org>
 
 	Fixes from Christian Neumair <chris@gnome-de.org>.

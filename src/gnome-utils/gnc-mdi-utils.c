@@ -65,6 +65,7 @@ dispatch_menu_paths[GNC_DISP_LAST] = {
 gncUIWidget
 gnc_ui_get_toplevel (void)
 {
+#if 0
   GList *containers = gtk_window_list_toplevels ();
   GList *containerstop = containers;
 
@@ -92,6 +93,8 @@ gnc_ui_get_toplevel (void)
 
   if (app)
     return GTK_WIDGET (app);
+
+#endif // 0
 
   return NULL;
 }
@@ -135,7 +138,7 @@ gnc_mdi_set_summarybar_visibility (gboolean visible)
 void
 gnc_mdi_show_progress (const char *message, double percentage)
 {
-  g_assert_not_reached();
+  PERR( "FIXME: show progress." );
 }
 
 typedef struct {

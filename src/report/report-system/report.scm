@@ -325,7 +325,7 @@
      (gnc:report-children r))
     (hash-remove! *gnc:_reports_* id)))
 
-(define (gnc:find-report id) 
+(define (gnc:find-report id)
   (hash-ref *gnc:_reports_* id))
 
 (define (gnc:find-report-template report-type) 
