@@ -74,7 +74,12 @@
         "user:misc", "user:foo", etc.  If the quote came from a user,
         as a matter of policy, you *must* prefix the string you give
         with "user:".  For now, the only other reserved values are
-        "Finance::Quote" and "old-file-import".
+        "Finance::Quote" and "old-file-import".  Any string used must
+        be added to the source_list array in dialog-price-edit-db.c so
+        that it can be properly translated. (There are unfortunately
+        many strings in users databased, so this string must be
+        translated on output instead of always being used intranslated
+        form.)
 
       type: the type of quote - types possible right now are bid, ask,
         last, nav, and unknown.

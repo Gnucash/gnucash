@@ -1,22 +1,44 @@
+2003-01-03  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-pricedb.h:
+	* src/gnome/dialog-price-edit-db.c: Add support for i18n of price
+	source strings. Needs to be done at display time because the
+	strings are embedded into the data file. #102156
+
+	* src/import-export/qif-import/druid-qif-import.c:
+	* src/import-export/qif-import/qif.glade: Add a smart function for
+	going "back" from the "load a file" page.  If there are any files
+	loaded it returns to the "loaded files" page instead of the
+	initial druid page. #101818
+
+	* src/backend/file/gnc-backend-file.c
+	(gnc_file_be_load_from_file): Don't free the lockfile name any
+	time there is an error.  Wait for the session to be destroyed so
+	the lockfile will be cleaned up properly. #101004
+
+	* src/app-file/gnc-file.c (gnc_file_query_save): Grab the current
+	session each time around the while loop so as not to have a
+	dangling pointer. #101004
+
 2003-01-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-gnome/glade/invoice.glade: fix a string
 	  to make the meaning more clear (per user request)
 
 2003-01-03  Matthew Vanecek <mevanecek@yahoo.com>
-    * src/backend/postgres/Postgresbackend.c: Fixed some compiler
-    warning messages about MODE_NONE and a some GUIDs used as
-    string pointers in informational messages.
+	* src/backend/postgres/Postgresbackend.c: Fixed some compiler
+	warning messages about MODE_NONE and a some GUIDs used as
+	string pointers in informational messages.
 
-    * src/backend/postgres/test/test-db.c: Commented out the
-    "short module" declaration.  It was not used and was causing a
-    compiler warning.
+	* src/backend/postgres/test/test-db.c: Commented out the
+	"short module" declaration.  It was not used and was causing a
+	compiler warning.
 
-    * src/backend/postgres/upgrade.c: Changed the "ALTER TABLE table
-    ADD COLUMN..." statements to conform to the current Postgres
-    implementation (and SQL 92) standard by putting the DEFAULT 
-    modifier in a separate ALTER statement.  This was reported by
-    Christopher B. Browne.
+	* src/backend/postgres/upgrade.c: Changed the "ALTER TABLE table
+	ADD COLUMN..." statements to conform to the current Postgres
+	implementation (and SQL 92) standard by putting the DEFAULT 
+	modifier in a separate ALTER statement.	 This was reported by
+	Christopher B. Browne.
 
 2003-01-02  David Hampton  <hampton@employees.org>
 
@@ -952,7 +974,7 @@
 
 	* src/register/ledger-core/split-register-model.c:
 	  put the "proper" exchange rate in the RATE_CELL
-	  fix the print_info
+v	  fix the print_info
 	  use ALLOW_SHADOW so the rate-cell gets copied into the cursor
 
 	* src/register/ledger-core/split-register.c:

@@ -70,7 +70,13 @@ typedef struct
   GList     * prices;		/* All prices */
 } PricesDialog;
 
-
+const char *price_sources[] = {
+  N_("old-file-import"),
+  N_("user:price-editor"),
+  N_("user:stock-split"),
+  N_("user:xfer-dialog")
+};
+  
 static gint last_width = 0;
 static gint last_height = 0;
 
@@ -213,7 +219,7 @@ gnc_prices_load_prices (PricesDialog *pdb_dialog)
     text[0] = gnc_commodity_get_printname (gnc_price_get_commodity (price));
     text[1] = gnc_commodity_get_printname (gnc_price_get_currency (price));
     text[2] = gnc_print_date (gnc_price_get_time (price));
-    text[3] = gnc_price_get_source (price);
+    text[3] = gettext(gnc_price_get_source (price));
     text[4] = gnc_price_get_type (price);
     text[5] = xaccPrintAmount (gnc_price_get_value (price), print_info);
 
