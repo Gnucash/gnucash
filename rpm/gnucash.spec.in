@@ -138,7 +138,7 @@ fi
 %attr(555,root,root) %{_datadir}/gnucash/finance-quote-helper
 %attr(555,root,root) %{_datadir}/gnucash/finance-quote-check
 %{_mandir}/man*/*
-%{_infodir}/*.gz
+%{_infodir}/gnucash*info*
 %{_libdir}/*
 %{_datadir}/gnucash
 %{_datadir}/gnome/apps/Applications/*

@@ -1,6 +1,17 @@
 Version history:
 ------- -------
 
+ 1.8.1  - 09 February 2003
+	 o Release of new stable version 1.8.1
+	 o Fixes for qif import crashes
+	 o Update translation po/it.po by Lorenzo Cappelletti
+	 o Remove the tip that says that this is a development version.
+	 o Remove the "development version" string when running "gnucash
+	   --version"
+	 o Add heuristic for duplicate matching by check number.
+	 o Various bug fixes, remove Finance::Quote requirement for rpms
+	   built on RH 8.0
+	 
  1.8.0  - 02 February 2003
  	 o Release of new stable version 1.8.0
 	 o Fix problem getting quotes from trustnet.

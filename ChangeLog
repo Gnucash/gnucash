@@ -1,3 +1,11 @@
+2003-02-09  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.8.1
+	* rpm/gnucash.spec.in: fix info files prob
+	* NEWS: update for release
+	* src/quotes/Makefile.am: remove dump-finance-quote from build
+	  to fix problems with rpm wanting Finance::Quote
+
 2003-02-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-control.c

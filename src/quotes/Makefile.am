@@ -1,7 +1,7 @@
 
 gncsharedir = ${GNC_SHAREDIR}
 
-bin_SCRIPTS = dump-finance-quote gnc-prices update-finance-quote
+bin_SCRIPTS = gnc-prices update-finance-quote
 gncshare_SCRIPTS = finance-quote-helper finance-quote-check
 
 EXTRA_DIST = \
@@ -11,8 +11,7 @@ EXTRA_DIST = \
   finance-quote-helper.in \
   gnc-prices \
   update-finance-quote.in \
-  value_portfolio \
-  dump-finance-quote
+  value_portfolio 
 
 ## We borrow guile's convention and use @-...-@ as the substitution
 ## brackets here, instead of the usual @...@.  This prevents autoconf
