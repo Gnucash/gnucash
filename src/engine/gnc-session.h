@@ -122,6 +122,8 @@ GNCBackendError gnc_session_pop_error (GNCSession *session);
 GNCBook * gnc_session_get_book (GNCSession *session);
 void gnc_session_set_book (GNCSession *session, GNCBook *book);
 
+/* Return the kvp data for the session */
+kvp_frame * gnc_session_get_slots (GNCSession *session);
 
 /* The gnc_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename

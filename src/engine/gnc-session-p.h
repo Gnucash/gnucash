@@ -63,6 +63,9 @@ struct gnc_session_struct
   char *fullpath;
   char *logpath;
 
+  /* kvp database for per-session data for user code */
+  kvp_frame * kvp_data;
+
   /* ---------------------------------------------------- */
   /* This struct member applies for network, rpc and SQL i/o */
   /* It is not currently used for file i/o, but it should be. */
