@@ -1,3 +1,18 @@
+2002-10-28  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-html.c: 
+	* src/gnome/Makefile.am: 
+	* src/gnome/top-level.c (gnc_gui_init): Disable the gnucash
+	network code.
+
+	* src/app-utils/prefs.scm: Add option for enabling advanced
+	pages. Move some existing prefs to an "Advanced" page.  Disable
+	the gnucash network code.
+
+	* src/gnome-utils/dialog-options.c: OK button should always be
+	sensitive.  Add support for "Advanced" option pages. These option
+	pages begin with the characters "_+".
+
 2002-10-27  Derek Atkins  <derek@ihtfp.com>
 	* gncInvoice.[ch]: create gncInvoiceGetTotal(), which currently does
 	  nothing but will eventually return the actual invoice total.

@@ -204,19 +204,19 @@ and expand the current transaction")))
 
 (gnc:register-configuration-option     
  (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Auto-Raise Lists")
-  "b" (N_ "Automatically raise the list of accounts or actions during input.")
+  (N_ "_+Advanced") (N_ "Auto-Raise Lists")
+  "e" (N_ "Automatically raise the list of accounts or actions during input.")
   #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Show All Transactions")
-  "c" (N_ "By default, show every transaction in an account.") #t))
+  (N_ "_+Advanced") (N_ "Show All Transactions")
+  "f" (N_ "By default, show every transaction in an account.") #t))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option
-  (N_ "Register") (N_ "Number of Rows")
-  "d" (N_ "Default number of register rows to display.")
+  (N_ "_+Advanced") (N_ "Number of Rows")
+  "g" (N_ "Default number of register rows to display.")
    20.0 ;; default
     1.0 ;; lower bound
   200.0 ;; upper bound
@@ -226,13 +226,13 @@ and expand the current transaction")))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Show Vertical Borders")
-  "e" (N_ "By default, show vertical borders on the cells.") #f))
+  (N_ "_+Advanced") (N_ "Show Vertical Borders")
+  "c" (N_ "By default, show vertical borders on the cells.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Show Horizontal Borders")
-  "f" (N_ "By default, show horizontal borders on the cells.") #f))
+  (N_ "_+Advanced") (N_ "Show Horizontal Borders")
+  "d" (N_ "By default, show horizontal borders on the cells.") #f))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
@@ -369,7 +369,12 @@ to enter a credit card payment")
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Save Window Geometry")
+  (N_ "General") (N_ "Show Advanced Settings")
+  "a" (N_ "Allow modification of less commonly used settings.") #f))
+
+(gnc:register-configuration-option
+ (gnc:make-simple-boolean-option
+  (N_ "_+Advanced") (N_ "Save Window Geometry")
   "a" (N_ "Save window sizes and positions.") #t))
 
 (gnc:register-configuration-option
@@ -392,7 +397,7 @@ to enter a credit card payment")
 
 (gnc:register-configuration-option
  (gnc:make-multichoice-option
-  (N_ "General") (N_ "Application MDI mode")
+  (N_ "_+Advanced") (N_ "Application MDI mode")
   "ba" (N_ "Choose how new windows are created for reports and account trees.")
   'mdi-notebook
   (list (list->vector
@@ -527,29 +532,29 @@ without one.")
 
 
 ;; Network/security options 
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Network") (N_ "Allow http network access")
-  "a" (N_ "Enable GnuCash's HTTP client support.")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Network") (N_ "Allow https connections using OpenSSL")
-  "b" (N_ "Enable secure HTTP connections using OpenSSL")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Network") (N_ "Enable GnuCash Network")
-  "c" (N_ "The GnuCash Network server provides support and other services")
-  #t))
-
-(gnc:register-configuration-option 
- (gnc:make-string-option
-  (N_ "Network") (N_ "GnuCash Network server") 
-  "d" (N_ "Host to connect to for user registration and support services")
-  "www.gnucash.org"))
+;;(gnc:register-configuration-option
+;; (gnc:make-simple-boolean-option
+;;  (N_ "Network") (N_ "Allow http network access")
+;;  "a" (N_ "Enable GnuCash's HTTP client support.")
+;;  #t))
+;;
+;;(gnc:register-configuration-option
+;; (gnc:make-simple-boolean-option
+;;  (N_ "Network") (N_ "Allow https connections using OpenSSL")
+;;  "b" (N_ "Enable secure HTTP connections using OpenSSL")
+;;  #t))
+;;
+;;(gnc:register-configuration-option
+;; (gnc:make-simple-boolean-option
+;;  (N_ "Network") (N_ "Enable GnuCash Network")
+;;  "c" (N_ "The GnuCash Network server provides support and other services")
+;;  #t))
+;;
+;;(gnc:register-configuration-option 
+;; (gnc:make-string-option
+;;  (N_ "Network") (N_ "GnuCash Network server") 
+;;  "d" (N_ "Host to connect to for user registration and support services")
+;;  "www.gnucash.org"))
 
 
 ;; Scheduled|Recurring Transactions

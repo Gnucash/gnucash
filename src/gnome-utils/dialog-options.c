@@ -109,44 +109,14 @@ gnc_options_dialog_get_apply_button (GtkWidget *widget)
   return NULL;
 }
 
-static GtkWidget *
-gnc_options_dialog_get_ok_button (GtkWidget *widget)
-{
-  while (widget)
-  {
-    GtkWidget *button;
-
-    button = gtk_object_get_data (GTK_OBJECT (widget),
-                                  "gnc_option_ok_button");
-    if (button)
-      return button;
-
-    widget = widget->parent;
-  }
-
-  return NULL;
-}
-
 void
 gnc_options_dialog_changed_internal (GtkWidget *widget)
 {
   GtkWidget *button;
 
-  do {
-    button = gnc_options_dialog_get_apply_button (widget);
-    if (!button)
-      break;
-
+  button = gnc_options_dialog_get_apply_button (widget);
+  if (button)
     gtk_widget_set_sensitive (button, TRUE);
-  } while (FALSE);
-
-  do {
-    button = gnc_options_dialog_get_ok_button (widget);
-    if (!button)
-      break;
-
-    gtk_widget_set_sensitive (button, TRUE);
-  } while (FALSE);
 }
 
 static void
@@ -154,21 +124,9 @@ gnc_options_dialog_clear_changed (GtkWidget *widget)
 {
   GtkWidget *button;
 
-  do {
-    button = gnc_options_dialog_get_apply_button (widget);
-    if (!button)
-      break;;
-
+  button = gnc_options_dialog_get_apply_button (widget);
+  if (button)
     gtk_widget_set_sensitive (button, FALSE);
-  } while (FALSE);
-
-  do {
-    button = gnc_options_dialog_get_ok_button (widget);
-    if (!button)
-      break;;
-
-    gtk_widget_set_sensitive (button, FALSE);
-  } while (FALSE);
 }
 
 void
@@ -1098,12 +1056,14 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
   GtkWidget *page_label;
   GtkWidget *options_box;
   GtkWidget *page_content_box;
+  GtkWidget* notebook_page;
   GtkWidget *reset_button;
   GtkWidget *listitem;
   GtkWidget *buttonbox;
   gint num_options;
   const char *name;
-  gint i, page_count;
+  gint i, page_count, name_offset;
+  gboolean advanced, show_advanced;
 
   name = gnc_option_section_name(section);
   if (!name)
@@ -1111,36 +1071,24 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
 
   if (strncmp(name, "__", 2) == 0)
     return -1;
-
-  page_label = gtk_label_new(_(name));
+  advanced = (strncmp(name, "_+", 2) == 0);
+  show_advanced = gnc_lookup_boolean_option("General",
+					    "Show Advanced Settings", FALSE);
+  name_offset = (advanced) ? 2 : 0;
+  page_label = gtk_label_new(_(name) + name_offset);
   gtk_widget_show(page_label);
 
+  /* Build this options page */
   page_content_box = gtk_vbox_new(FALSE, 2);
+  gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook), 
+                           page_content_box, page_label);
+
+  /* Build space for the content - the options box */
   options_box = gtk_vbox_new(FALSE, 5);
   gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
   gtk_box_pack_start(GTK_BOX(page_content_box), options_box, TRUE, TRUE, 0);
 
-  buttonbox = gtk_hbutton_box_new();
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
-			     GTK_BUTTONBOX_EDGE);
-  gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
-  gtk_box_pack_end(GTK_BOX(page_content_box), buttonbox, FALSE, FALSE, 0);
-
-  reset_button = gtk_button_new_with_label (_("Defaults"));
-  gtk_signal_connect(GTK_OBJECT(reset_button), "clicked",
-                     GTK_SIGNAL_FUNC(gnc_options_dialog_reset_cb),
-                     propertybox);
-  gtk_object_set_data(GTK_OBJECT(reset_button), "section", section);
-  gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
-  gtk_widget_show_all(page_content_box);
-
-  gtk_notebook_append_page(GTK_NOTEBOOK(propertybox->notebook), 
-                           page_content_box, page_label);
-
-  listitem = gtk_list_item_new_with_label(_(name));
-  gtk_widget_show(listitem);
-  gtk_container_add(GTK_CONTAINER(propertybox->page_list), listitem);
-
+  /* Create all the options */
   num_options = gnc_option_section_num_options(section);
   for (i = 0; i < num_options; i++)
   {
@@ -1149,13 +1097,49 @@ gnc_options_dialog_append_page(GNCOptionWin * propertybox,
                                   propertybox->tips);
   }
 
+  /* Add a button box at the bottom of the page */
+  buttonbox = gtk_hbutton_box_new();
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
+			     GTK_BUTTONBOX_EDGE);
+  gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
+  gtk_box_pack_end(GTK_BOX(page_content_box), buttonbox, FALSE, FALSE, 0);
+
+  /* Install the lone reset button */
+  reset_button = gtk_button_new_with_label (_("Defaults"));
+  gtk_signal_connect(GTK_OBJECT(reset_button), "clicked",
+                     GTK_SIGNAL_FUNC(gnc_options_dialog_reset_cb),
+                     propertybox);
+  gtk_object_set_data(GTK_OBJECT(reset_button), "section", section);
+  gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
+  gtk_widget_show_all(page_content_box);
+
+  /* Build the matching list item for selecting from large page sets */
+  listitem = gtk_list_item_new_with_label(_(name) + name_offset);
+  gtk_widget_show(listitem);
+  gtk_container_add(GTK_CONTAINER(propertybox->page_list), listitem);
+
+  /* Switch to selection from a list if the page count threshhold is reached */
   page_count = gtk_notebook_page_num(GTK_NOTEBOOK(propertybox->notebook),
 				     page_content_box);
-
   if (page_count > MAX_TAB_COUNT - 1) { /* Convert 1-based -> 0-based */
     gtk_widget_show(propertybox->page_list);
     gtk_notebook_set_show_tabs(GTK_NOTEBOOK(propertybox->notebook), FALSE);
     gtk_notebook_set_show_border(GTK_NOTEBOOK(propertybox->notebook), FALSE);
+  }
+
+  /* Tweak "advanced" pages for later handling. */
+  if (advanced) {
+    notebook_page =
+      gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook),
+				page_count);
+    gtk_object_set_data(GTK_OBJECT(notebook_page), "listitem", listitem);
+    gtk_object_set_data(GTK_OBJECT(notebook_page), "advanced",
+			GINT_TO_POINTER(advanced));
+
+    if (!show_advanced) {
+      gtk_widget_hide(notebook_page);
+      gtk_widget_hide(listitem);
+    }
   }
 
   return(page_count);
@@ -1240,12 +1224,14 @@ gnc_build_options_dialog_contents(GNCOptionWin *propertybox,
 
 
 GtkWidget *
-gnc_options_dialog_widget(GNCOptionWin * win) {
+gnc_options_dialog_widget(GNCOptionWin * win)
+{
   return win->container;
 }
 
 GtkWidget *
-gnc_options_dialog_notebook(GNCOptionWin * win) {
+gnc_options_dialog_notebook(GNCOptionWin * win)
+{
   return win->notebook;
 }
 
@@ -1261,7 +1247,8 @@ gnc_options_dialog_apply_stub_cb(GtkWidget * w, gpointer data)
 }
 
 static void
-gnc_options_dialog_help_stub_cb(GtkWidget * w, gpointer data) {
+gnc_options_dialog_help_stub_cb(GtkWidget * w, gpointer data)
+{
   GNCOptionWin * window = data;
 
   if(window->help_cb)
@@ -1269,7 +1256,8 @@ gnc_options_dialog_help_stub_cb(GtkWidget * w, gpointer data) {
 }
 
 static void
-gnc_options_dialog_destroy_stub_cb(GtkObject * obj, gpointer data) {
+gnc_options_dialog_destroy_stub_cb(GtkObject * obj, gpointer data)
+{
   GNCOptionWin * window = data;
 
   if (window->close_cb)
@@ -1277,7 +1265,8 @@ gnc_options_dialog_destroy_stub_cb(GtkObject * obj, gpointer data) {
 }
 
 static void
-gnc_options_dialog_cancel_stub_cb(GtkWidget * w, gpointer data) {
+gnc_options_dialog_cancel_stub_cb(GtkWidget * w, gpointer data)
+{
   GNCOptionWin * window = data;
   GtkWidget *container;
 
@@ -1306,7 +1295,8 @@ gnc_options_dialog_cancel_stub_cb(GtkWidget * w, gpointer data) {
 }
 
 static void
-gnc_options_dialog_ok_cb(GtkWidget * w, gpointer data) {
+gnc_options_dialog_ok_cb(GtkWidget * w, gpointer data)
+{
   gnc_options_dialog_apply_stub_cb(w, data);
   gnc_options_dialog_cancel_stub_cb(w, data);
 }
@@ -1390,13 +1380,9 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
   separator = gtk_hseparator_new();
 
   gtk_widget_set_sensitive (apply_button, FALSE);
-  gtk_widget_set_sensitive (ok_button, FALSE);
 
   gtk_object_set_data (GTK_OBJECT (retval->container),
                        "gnc_option_apply_button", apply_button);
-
-  gtk_object_set_data (GTK_OBJECT (retval->container),
-                       "gnc_option_ok_button", ok_button);
 
   gtk_signal_connect(GTK_OBJECT(apply_button), "clicked",
                      GTK_SIGNAL_FUNC(gnc_options_dialog_apply_stub_cb),
@@ -1453,21 +1439,24 @@ gnc_options_dialog_new(gboolean make_toplevel, gchar *title)
 
 void 
 gnc_options_dialog_set_apply_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
-                                gpointer data) {
+                                gpointer data)
+{
   win->apply_cb = cb;
   win->apply_cb_data = data;
 }
 
 void 
 gnc_options_dialog_set_help_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
-                               gpointer data) {
+                               gpointer data)
+{
   win->help_cb = cb;
   win->help_cb_data = data;
 }
 
 void 
 gnc_options_dialog_set_close_cb(GNCOptionWin * win, GNCOptionWinCallback cb,
-                                gpointer data) {
+                                gpointer data)
+{
   win->close_cb = cb;
   win->close_cb_data = data;
 }
@@ -1481,8 +1470,8 @@ gnc_options_dialog_set_global_help_cb(GNCOptionWinCallback thunk,
 }
 
 void
-gnc_options_dialog_destroy(GNCOptionWin * win) {
-
+gnc_options_dialog_destroy(GNCOptionWin * win)
+{
   if (!win) return;
 
   gtk_signal_disconnect_by_func(GTK_OBJECT(win->container), 
@@ -1515,22 +1504,55 @@ gnc_options_dialog_destroy(GNCOptionWin * win) {
  * necessary */
 
 static void
+gnc_option_show_advanced_pages(GNCOptionWin * propertybox)
+{
+  GtkWidget *page, *listitem;
+  gboolean advanced, show_advanced;
+  gint i;
+
+  show_advanced = gnc_lookup_boolean_option("General",
+					    "Show Advanced Settings", FALSE);
+  i = 0;
+  while (TRUE) {
+    page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(propertybox->notebook), i++);
+    if (page == NULL)
+      break;
+    advanced =
+      GPOINTER_TO_INT(gtk_object_get_data(GTK_OBJECT(page), "advanced"));
+    if (advanced) {
+      listitem = gtk_object_get_data(GTK_OBJECT(page), "listitem");
+      if (show_advanced) {
+	gtk_widget_show(page);
+	gtk_widget_show(listitem);
+      } else {
+	gtk_widget_hide(page);
+	gtk_widget_hide(listitem);
+      }
+    }
+  };
+}
+
+static void
 gnc_options_dialog_apply_cb(GNCOptionWin *propertybox,
-                            gpointer user_data) {
+                            gpointer user_data)
+{
   GNCOptionDB *global_options = user_data;
   gnc_option_db_commit(global_options);
+  gnc_option_show_advanced_pages(propertybox);
 }
 
 static void
 gnc_options_dialog_help_cb(GNCOptionWin *propertybox,
-			   gpointer user_data) {
+			   gpointer user_data)
+{
   if (global_help_cb)
     global_help_cb (propertybox, global_help_cb_data);
 }
 
 static void
 gnc_options_dialog_close_cb(GNCOptionWin *propertybox,
-                            gpointer user_data) {
+                            gpointer user_data)
+{
   GNCOptionWin **options_dialog = user_data;
 
   if (!GTK_OBJECT_DESTROYED (GTK_OBJECT (propertybox->container)))
