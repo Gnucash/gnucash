@@ -4,6 +4,13 @@
 	documentation comments, improved doxygen output. At least the most
 	important header files will now show up in doxygen.
 
+2003-03-14  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-reconcile.c (gnc_start_recn_date_changed):
+	Don't reverse the account balance here. The routine called to
+	retrieve the account balance has already taken care of reversing
+	the sign where necessary.
+
 2003-03-13  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/option-util.c (gnc_option_get_range_info): Reapply
