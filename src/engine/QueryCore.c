@@ -343,11 +343,11 @@ static int numeric_match_predicate (gpointer object, QueryAccess get_fcn,
   obj_val = ((query_numeric_getter)get_fcn) (object);
 
   switch (pdata->options) {
-  case NUMERIC_MATCH_NEG_ONLY:
-    if (!gnc_numeric_negative_p (obj_val)) return 0;
+  case NUMERIC_MATCH_CREDIT:
+    if (gnc_numeric_positive_p (obj_val)) return 0;
     break;
-  case NUMERIC_MATCH_POS_ONLY:
-    if (!gnc_numeric_positive_p (obj_val)) return 0;
+  case NUMERIC_MATCH_DEBIT:
+    if (gnc_numeric_negative_p (obj_val)) return 0;
     break;
   default:
     break;
@@ -879,6 +879,8 @@ static void init_tables (void)
       string_copy_predicate, string_free_pdata },
     { QUERYCORE_DATE, date_match_predicate, date_compare_func,
       date_copy_predicate, date_free_pdata },
+    { QUERYCORE_DEBCRED, numeric_match_predicate, numeric_compare_func,
+      numeric_copy_predicate, numeric_free_pdata },
     { QUERYCORE_NUMERIC, numeric_match_predicate, numeric_compare_func,
       numeric_copy_predicate, numeric_free_pdata },
     { QUERYCORE_GUID, guid_match_predicate, NULL,

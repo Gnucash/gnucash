@@ -105,9 +105,10 @@ typedef enum {
 } date_match_t;
 
 #define QUERYCORE_NUMERIC	"numeric"
+#define QUERYCORE_DEBCRED	"debcred"
 typedef enum {
-  NUMERIC_MATCH_NEG_ONLY = 1,
-  NUMERIC_MATCH_POS_ONLY,
+  NUMERIC_MATCH_DEBIT = 1,
+  NUMERIC_MATCH_CREDIT,
   NUMERIC_MATCH_ANY
 } numeric_match_t;
 

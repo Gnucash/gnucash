@@ -574,9 +574,15 @@ gboolean gncInvoiceRegister (void)
 {
   static QueryObjectDef params[] = {
     { INVOICE_GUID, QUERYCORE_GUID, (QueryAccess)gncInvoiceGetGUID },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
+    { INVOICE_ID, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetID },
+    { INVOICE_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncInvoiceGetOwner },
+    { INVOICE_OPENED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateOpened },
+    { INVOICE_DUE, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateDue },
+    { INVOICE_CLOSED, QUERYCORE_DATE, (QueryAccess)gncInvoiceGetDateClosed },
+    { INVOICE_NOTES, QUERYCORE_STRING, (QueryAccess)gncInvoiceGetNotes },
     { INVOICE_ACC, GNC_ID_ACCOUNT, (QueryAccess)gncInvoiceGetPostedAcc },
     { INVOICE_TXN, GNC_ID_TRANS, (QueryAccess)gncInvoiceGetPostedTxn },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncInvoiceGetBook },
     { NULL },
   };
 

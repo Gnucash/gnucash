@@ -72,6 +72,12 @@ void gncInvoiceCommitEdit (GncInvoice *invoice);
 int gncInvoiceCompare (GncInvoice *a, GncInvoice *b);
 
 #define INVOICE_GUID	"guid"
+#define INVOICE_ID	"id"
+#define INVOICE_OWNER	"owner"
+#define INVOICE_OPENED	"date_opened"
+#define INVOICE_DUE	"date_due"
+#define INVOICE_CLOSED	"date_closed"
+#define INVOICE_NOTES	"notes"
 #define INVOICE_ACC	"account"
 #define INVOICE_TXN	"txn"
 
