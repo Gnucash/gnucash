@@ -107,6 +107,13 @@
   (gnc:monetary->string
    (gnc:make-gnc-monetary commodity numeric)))
 
+;; Helper for exchange below
+(define (gnc:exchange-by-euro-numeric
+	 foreign-commodity foreign-numeric domestic date)
+  (gnc:exchange-by-euro
+   (gnc:make-gnc-monetary foreign-commodity foreign-numeric)
+   domestic date))
+
 ;; Create a list of all prices of 'price-commodity' measured in the
 ;; currency 'report-currency'. The prices are taken from all splits in
 ;; 'currency-accounts' up until the date 'end-date-tp'. Returns a list
@@ -136,12 +143,24 @@
 		   (list transaction-comm
 			 value-amount share-amount))))
 	 
-	 ;;	 (warn "gnc:get-commodity-totalavg-prices: value " 
-	 ;;	       (gnc:commodity-numeric->string
-	 ;;		(first foreignlist) (second foreignlist))
-	 ;;	       " bought shares "
-	 ;;	       (gnc:commodity-numeric->string
-	 ;;		price-commodity (third foreignlist)))
+	 ;;(warn "gnc:get-commodity-totalavg-prices: value " 
+	 ;;      (gnc:commodity-numeric->string
+	 ;;	(first foreignlist) (second foreignlist))
+	 ;;     " bought shares "
+	 ;;   (gnc:commodity-numeric->string
+	 ;;price-commodity (third foreignlist)))
+
+	 ;; Try EURO exchange if necessary
+	 (if (not (gnc:commodity-equiv? (first foreignlist) 
+					report-currency))
+	     (let ((exchanged (gnc:exchange-by-euro-numeric
+			       (first foreignlist) (second foreignlist)
+			       report-currency transaction-date)))
+	       (if exchanged
+		   (set! foreignlist
+			 (list report-currency
+			       (gnc:gnc-monetary-amount exchanged)
+			       (third foreignlist))))))
 	 
 	 (list
 	  transaction-date
@@ -226,6 +245,18 @@
        ;; " bought shares "
        ;;(gnc:commodity-numeric->string
        ;; price-commodity (third foreignlist)))
+       
+       ;; Try EURO exchange if necessary
+       (if (not (gnc:commodity-equiv? (first foreignlist) 
+				      report-currency))
+	   (let ((exchanged (gnc:exchange-by-euro-numeric
+			     (first foreignlist) (second foreignlist)
+			     report-currency transaction-date)))
+	     (if exchanged
+		 (set! foreignlist
+		       (list report-currency
+			     (gnc:gnc-monetary-amount exchanged)
+			     (third foreignlist))))))
        
        (list
 	transaction-date
@@ -541,24 +572,43 @@
 ;; Actual functions for exchanging amounts.
 
 
+;; Exchange EURO currencies to each other, or returns #f if one of
+;; them is not an EURO currency at the given time. The function takes
+;; the <gnc-monetary> 'foreign' amount, the <gnc:commodity*>
+;; 'domestic' commodity, and a <gnc:time-pair> 'date'. It exchanges
+;; the amount into the domestic currency. If the 'date' is #f, it
+;; doesn't check for it. Returns a <gnc-monetary>, or #f if at least
+;; one of the currencies is not in the EURO.
+(define (gnc:exchange-by-euro foreign domestic date)
+  (and (gnc:is-euro-currency domestic)
+       (gnc:is-euro-currency (gnc:gnc-monetary-commodity foreign))
+       ;; FIXME: implement the date check.
+       (gnc:make-gnc-monetary
+	domestic
+	(gnc:convert-from-euro 
+	 domestic
+	 (gnc:convert-to-euro (gnc:gnc-monetary-commodity foreign)
+			      (gnc:gnc-monetary-amount foreign))))))
+
 ;; This one returns the ready-to-use function for calculation of the
 ;; exchange rates. The returned function takes a <gnc-monetary> and
-;; the domestic-commodity, exchanges the amount into the domestic
-;; currency and returns a <gnc-monetary>.
+;; the <gnc:commodity*> domestic-commodity, exchanges the amount into
+;; the domestic currency and returns a <gnc-monetary>.
 (define (gnc:make-exchange-function exchange-alist)
   (let ((exchangelist exchange-alist))
     (lambda (foreign domestic)
       (if foreign
-	  (gnc:make-gnc-monetary 
-	   domestic
-	   (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
-			      exchangelist)))
-	     (if (not pair)
-		 (gnc:numeric-zero)
-		 (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
-				  (cadr pair)
-                                  (gnc:commodity-get-fraction domestic)
-				  GNC-RND-ROUND))))
+	  (or (gnc:exchange-by-euro foreign domestic #f)
+	      (gnc:make-gnc-monetary 
+	       domestic
+	       (let ((pair (assoc (gnc:gnc-monetary-commodity foreign) 
+				  exchangelist)))
+		 (if (not pair)
+		     (gnc:numeric-zero)
+		     (gnc:numeric-mul (gnc:gnc-monetary-amount foreign) 
+				      (cadr pair)
+				      (gnc:commodity-get-fraction domestic)
+				      GNC-RND-ROUND)))))
 	  #f))))
 
 ;; Helper for the gnc:exchange-by-pricalist* below. Exchange the
@@ -617,12 +667,13 @@
 (define (gnc:exchange-by-pricedb-latest 
 	 foreign domestic)
   (if (and (record? foreign) (gnc:gnc-monetary? foreign))
-      (gnc:exchange-by-pricedb-helper
-       foreign domestic
-       (gnc:pricedb-lookup-latest
-        (gnc:book-get-pricedb (gnc:get-current-book))
-	(gnc:gnc-monetary-commodity foreign)
-	domestic))
+      (or (gnc:exchange-by-euro foreign domestic #f)
+	   (gnc:exchange-by-pricedb-helper
+	    foreign domestic
+	    (gnc:pricedb-lookup-latest
+	     (gnc:book-get-pricedb (gnc:get-current-book))
+	     (gnc:gnc-monetary-commodity foreign)
+	     domestic)))
       #f))
 
 ;; Yet another ready-to-use function for calculation of exchange
@@ -637,12 +688,13 @@
 	 foreign domestic date)
   (if (and (record? foreign) (gnc:gnc-monetary? foreign)
 	   date)
-      (gnc:exchange-by-pricedb-helper
-       foreign domestic
-       (gnc:pricedb-lookup-nearest-in-time
-        (gnc:book-get-pricedb (gnc:get-current-book))
-	(gnc:gnc-monetary-commodity foreign)
-	domestic date))
+      (or (gnc:exchange-by-euro foreign domestic date)
+	   (gnc:exchange-by-pricedb-helper
+	    foreign domestic
+	    (gnc:pricedb-lookup-nearest-in-time
+	     (gnc:book-get-pricedb (gnc:get-current-book))
+	     (gnc:gnc-monetary-commodity foreign)
+	     domestic date)))
       #f))
 
 ;; Exchange by the nearest price from pricelist. This function takes
@@ -655,12 +707,14 @@
 	 pricealist foreign domestic date)
   (if (and (record? foreign) (gnc:gnc-monetary? foreign)
 	   date (not (null? pricealist)))
-      (gnc:exchange-by-pricevalue-helper
-       foreign domestic
-       (gnc:pricealist-lookup-nearest-in-time
-        pricealist (gnc:gnc-monetary-commodity foreign)	date))
+      (or (gnc:exchange-by-euro foreign domestic date)
+	  (gnc:exchange-by-pricevalue-helper
+	   foreign domestic
+	   (gnc:pricealist-lookup-nearest-in-time
+	    pricealist (gnc:gnc-monetary-commodity foreign) date)))
       #f))
 
+       
 
 
 

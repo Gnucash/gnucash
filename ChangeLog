@@ -1,7 +1,11 @@
 2001-05-15  Christian Stimming  <stimming@tuhh.de>
 
-	* src/scm/commodity-utilities.scm: added another case to 
-	gnc:case-exchange-time-fn. Needs more work. 
+	* src/scm/commodity-utilities.scm: added another case to
+	gnc:case-exchange-time-fn. Needs more work.
+	(gnc:exchange-by-euro): new function. Added this function to all
+	other exchange function so that exchange of EURO currencies works
+	automagically in some more places. Doesn't work often enough,
+	though. Darn.
 
 	* src/scm/report/price-scatter.scm: Catch all cases that would
 	cause Guppi's scatterplot to barf.
