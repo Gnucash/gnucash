@@ -391,7 +391,7 @@ xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
   /* provide some convenience data for the ture GUI window.
    * If the GUI wants to display yet other stuff, its on its own.
    */
-  xaccAccountRecomputeBalance(regData->leader);
+  /* xaccAccountRecomputeBalance(regData->leader); */
   regData->balance = xaccAccountGetBalance (regData->leader);
   regData->clearedBalance = xaccAccountGetClearedBalance (regData->leader);
   regData->reconciledBalance = xaccAccountGetReconciledBalance (regData->leader);

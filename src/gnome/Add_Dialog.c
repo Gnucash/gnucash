@@ -19,24 +19,25 @@
 \********************************************************************/
 
 #include <string.h>
-
 #include <gnome.h>
+
+#include "config.h"
 
 #include "AccInfo.h"
 #include "Account.h"
-#include "Add_Dialog.h"
 #include "MenuBar.h"
 #include "messages.h"
 #include "top-level.h"
 #include "Transaction.h"
+#include "MainWindowP.h"
+#include "Add_Dialog.h"
 
 /** Globals *********************************************************/
 
 
 add_account_dialog 
-*add_account_dialog_init (  )
-{
-  return ( g_malloc ( sizeof ( add_account_dialog ) ) );
+*add_account_dialog_init() {
+  return(g_malloc ( sizeof ( add_account_dialog )));
 }
 
 
@@ -54,6 +55,8 @@ add_account_toggle_callback (GtkWidget *widget, gpointer data)
   }
 }
 
+#if 0
+
 static void
 add_account_omenu_update ( GtkWidget *widget, gpointer data )
 {
@@ -65,6 +68,8 @@ add_account_omenu_update ( GtkWidget *widget, gpointer data )
   }
    
 }
+
+#endif
 
 static void 
 add_account_dialog_okclicked_cb(GtkWidget * dialog, gpointer data)
@@ -115,7 +120,7 @@ add_account_dialog_okclicked_cb(GtkWidget * dialog, gpointer data)
   if (info->parent_account) {
     xaccInsertSubAccount (info->parent_account, account);
   } else {
-    xaccGroupInsertAccount( topgroup, account );
+    xaccGroupInsertAccount(xaccSessionGetGroup(current_session), account );
   }
   xaccAccountCommitEdit (account);
 
@@ -139,6 +144,8 @@ add_account_dialog_destroy ( GtkWidget *ignore, GnomeDialog *dialog )
   //gtk_widget_destroy ( GTK_WIDGET(dialog) );
 }
 
+#if 0
+
 static void
 build_omenu ( GtkMenu *menu, add_account_dialog *accWindow, Account *acct,
               int is_submenu )
@@ -156,8 +163,8 @@ build_omenu ( GtkMenu *menu, add_account_dialog *accWindow, Account *acct,
  
   if ( is_submenu == -1 )
   {
-    omenu = gtk_option_menu_new ();
-    menu = gtk_menu_new ();
+    omenu = gtk_option_menu_new();
+    menu = GTK_MENU(gtk_menu_new());
   }
   
   menuitem = gtk_radio_menu_item_new_with_label (omenu_group, "New TopLevel Account" );
@@ -188,8 +195,10 @@ build_omenu ( GtkMenu *menu, add_account_dialog *accWindow, Account *acct,
   gtk_widget_show ( omenu );
 }
 
+#endif
+
 void
-create_add_account_dialog (AccountGroup *acct)
+create_add_account_dialog (Account *acct)
 {
   GtkWidget *button;
   add_account_dialog *accWindow;

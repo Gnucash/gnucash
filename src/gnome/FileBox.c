@@ -30,14 +30,13 @@
 #include "FileBox.h"
 #include "messages.h"
 #include "util.h"
-#include "xtutil.h"
 
 /** GLOBALS *********************************************************/
 //extern XtAppContext app;
 //Boolean done=True;
 
-static GtkWidget *filebox = NULL;
-static gint       filebox_quit;
+/*static GtkWidget *filebox = NULL;*/
+/*static gint       filebox_quit;*/
 
 /* This static indicates the debugging module that this .o belongs to.   */
 static short module = MOD_GUI;
@@ -63,32 +62,32 @@ void closeBoxCB( GtkWidget mw, gpointer *data );
  *         done    - whether fileBox should return                  * 
 \********************************************************************/
 char *
-fileBox( GtkWidget parent, char * title, char * filter)
-  {
-  GtkWidget   *dialog;
+fileBox(const char * title, const char * filter) {
+
+  L("STUB: FileBox not implemented for GNOME yet...\n");
+  return NULL;
+  
+#if 0
+  GtkWidget   *dialog = gtk_file_selection_new(title);
   char*    fileName = NULL;
 
-//  if( !done )
-//    return NULL;                   /* Don't open if there already is
-//				    * an instance of fileBox */
-
-//  done = False;
-  
   ENTER("fileBox");
 
   fileName = gtk_file_selection_get_filename (GTK_FILE_SELECTION (dialog));
 
-  gtk_widget_show(GTK_FILE_SELECTION(dialog));
+  gtk_widget_show(GTK_WIDGET(dialog));
 
   /* Check to see if this is a valid datafile */
   if ( fileName == NULL )
-    return;
+    return NULL;
 
 //  done = True;
  
   LEAVE("fileBox");
   return fileName;
-  }
+#endif
+
+}
 
 /********************************************************************\
  * fileBoxCB                                                        * 
@@ -104,7 +103,7 @@ fileBox( GtkWidget parent, char * title, char * filter)
 void
 fileBoxCB( GtkWidget mw, gpointer *data )
   {
-  char **fileName = (char **)data;
+    /*char **fileName = (char **)data;*/
   ENTER("fileBoxCB");
 
   /* NEED CALLBACK CODE DARNIT */

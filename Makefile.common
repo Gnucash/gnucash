@@ -23,7 +23,10 @@ MOTIF_OBJS += $(addprefix obj/motif/,${MOTIF_SRCS:.c=.o})
 QT_OBJS    := $(addprefix obj/qt/,${COMMON_SRCS:.c=.o})
 QT_OBJS    += $(addprefix obj/qt/,${QT_SRCS:.cpp=.o})
 
-GTK_CFLAGS := $(shell gtk-config --cflags)
+ifdef GNOME_CONFIG_BIN
+  GNOME_CFLAGS += $(shell ${GNOME_CONFIG_BIN} --cflags gnomeui)
+endif
+
 QT_FLAGS   := 
 
 %.c : %.h
@@ -51,12 +54,12 @@ obj/%.o: %.c
 
 obj/motif/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
-	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) -DMOTIF -o $@ $< 
+	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${MOTIF_CFLAGS} -DMOTIF -o $@ $< 
 	${cleanupdeps}
 
 obj/gnome/%.o: %.c
 	@if [ ! -e $(dir $@) ]; then mkdir -p $(dir $@); fi
-	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${GTK_CFLAGS} -DGNOME -o $@ $< 
+	$(CC) -Wp,-MD,$(basename $@).d.tmp -c $(CFLAGS) ${GNOME_CFLAGS} -DGNOME -o $@ $< 
 	${cleanupdeps}
 
 obj/qt/%.o: %.cpp

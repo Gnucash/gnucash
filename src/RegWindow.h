@@ -1,6 +1,5 @@
 /********************************************************************\
- * MainWindow.h -- the main window, and associated helper functions * 
- *                 and callback functions for xacc (X-Accountant    *
+ * RegWindow.h -- the register window for xacc (X-Accountant)       *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -23,48 +22,22 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ADD_DIALOG_H__
-#define __ADD_DIALOG_H__
+#ifndef __REGWINDOW_H__
+#define __REGWINDOW_H__
 
-#include "Group.h"
-#include "MainWindow.h"
+#include "config.h"
 
-struct _add_account_dialog 
-{
-  GnomeDialog 	*dialog;
-  GtkWidget 	*main_vbox;
-  GtkWidget 	*box2;
-  GtkWidget	*box3;
-  GtkWidget	*box4;
-  GtkWidget 	*frame;
-  
-  GSList 	*group;
+#include "Account.h"
 
-  GtkWidget 	*label;
-  GtkWidget 	*textbox_name;
-  GtkWidget	*textbox_description;
+/** GLOBALS *********************************************************/
 
-  GtkWidget	*separator;
+/** STRUCTS *********************************************************/
+typedef struct _RegWindow RegWindow;
 
-  Account	*parent_account;
-  gint		type;
-
-};
-
-typedef struct _add_account_dialog add_account_dialog;
-
-void 			create_add_account_dialog ( Account * );
-add_account_dialog 	*add_account_dialog_init ( void );
-void	 		add_account_dialog_destroy ( GtkWidget *, GnomeDialog * );
+/** PROTOTYPES ******************************************************/
+void       accRefresh (Account *);
+RegWindow *regWindowSimple(Account *account);
+RegWindow *regWindowAccGroup(Account *account_group);
+// RegWindow *regWindowLedger (Widget parent, xaccLedgerDisplay *);
 
 #endif
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/

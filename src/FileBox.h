@@ -1,5 +1,5 @@
 /********************************************************************\
- * RegWindow.h -- the register window for xacc (X-Accountant)       *
+ * FileBox.c -- the file dialog box                                 *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -22,32 +22,12 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __REGWINDOW_H__
-#define __REGWINDOW_H__
-
-#include <gtk/gtk.h>
+#ifndef __FILEBOX_H__
+#define __FILEBOX_H__
 
 #include "config.h"
 
-#include "Account.h"
-#include "MultiLedger.h"
-
-/** GLOBALS *********************************************************/
-
-/** STRUCTS *********************************************************/
-typedef struct _RegWindow RegWindow;
-
 /** PROTOTYPES ******************************************************/
-void       accRefresh (Account *);
-RegWindow *regWindowSimple( Account *account );
-RegWindow *regWindowAccGroup( Account *account_group );
-RegWindow *regWindowLedger( xaccLedgerDisplay *ledger);
-
-/*
- * The xaccDestroyRegWindow() subroutine can be called from 
- * anywhere to shut down the Register window.  Used primarily when
- * destroying the underlying account.
- */
-void       xaccDestroyRegWindow (Account *);
+char *fileBox( const char * title, const char * filter );
 
 #endif

@@ -1,6 +1,5 @@
 /********************************************************************\
- * MainWindow.h -- the main window, and associated helper functions * 
- *                 and callback functions for xacc (X-Accountant    *
+ * top-level.h -- main for gnucash (X-Accountant)                   *
  * Copyright (C) 1997 Robin D. Clark                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -23,15 +22,15 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __MAINWINDOW_H__
-#define __MAINWINDOW_H__
+#ifndef __TOP_LEVEL_H__
+#define __TOP_LEVEL_H__
 
-#include <gtk/gtk.h>
-#include "Group.h"
 #include "config.h"
+#include "Group.h"
+#include "Session.h"
+#include "gnc-common.h"
 
 /** HELP STUFF: *****************************************************/
-#define HELP_VAR     "XACC_HELP"
 #define HH_ABOUT     "xacc-about.html"
 #define HH_ACC       "xacc-accwin.html"
 #define HH_REGWIN    "xacc-regwin.html"
@@ -40,61 +39,19 @@
 #define HH_MAIN      "xacc-main.html"
 #define HH_GPL       "xacc-gpl.html"
 
-
-/** STRUCTURES ******************************************************/
-struct _main_window 
-{
-  GtkWidget 	*maintree;
-  GtkWidget     *root_item;
-};
-
-typedef struct _main_window main_window;
+/** STRUCTS *********************************************************/
 
 /** PROTOTYPES ******************************************************/
-void gnc_ui_refreshMainWindow( void );
-void gnc_ui_mainWindow(AccountGroup *);
-void xaccMainWindowAddAccount ( GtkWidget * );
-void gnc_ui_refresh_tree ( void );
-void gnc_ui_acct_tree_fill ( GtkWidget *, AccountGroup *, int );
 
 /** GLOBALS *********************************************************/
-enum {
-  FMB_NEW,
-  FMB_OPEN,
-  FMB_IMPORT,
-  FMB_SAVE,
-  FMB_SAVEAS,
-  FMB_QUIT,
-};
-enum {
-  AMB_NEW,
-  AMB_OPEN,
-  AMB_LEDGER,
-  AMB_EDIT,
-  AMB_DEL,
-  AMB_TRNS,
-  AMB_RPRT,
-  AMB_SHOW,
-  AMB_CAT,
-};
-enum {
-  HMB_ABOUT,
-  HMB_ACC,
-  HMB_REGWIN,
-  HMB_RECNWIN,
-  HMB_ADJBWIN,
-  HMB_MAIN,
-  HMB_LIC,
-};
+extern Session *current_session;
 
+#if defined(MOTIF)
+  extern gncUIWidget gnc_get_ui_data();
+#elif defined(GNOME)
+  extern gncUIWidget gnc_get_ui_data();
 #endif
 
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
+extern void gnc_ui_shutdown();
+
+#endif

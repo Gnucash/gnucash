@@ -70,6 +70,7 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include "ui-callbacks.h"
 #include "SplitLedger.h"
 #include "messages.h"
 #include "MultiLedger.h"

@@ -48,15 +48,17 @@
  * routines in the file table-allgui.c, where they are called, 
  * respectively, last, and first, just as "real" constructors &
  * destructors would be
- */
 
+ TODO:
+
+ - Still need prev_entry_text?
+
+ */
 
 #define TABLE_PRIVATE_DATA						\
   /* Gtk-only private table members  */					\
-  GtkWidget *table_widget;          /* the CList */			\
-  GtkWidget *entry_frame;           /* the editing widget frame */	\
-  GtkWidget *entry_widget;          /* the current cell editing widget */\
-									\
+  GtkWidget *table_widget;          /* the Sheet */			\
+                                                                        \
   /* Current editing cell */						\
   int current_col;							\
   int current_row;							\
@@ -66,12 +68,8 @@
 									\
   GtkWidget *next_tab_group;        /* where to traverse in the end */	\
 
-
-
 #define TABLE_PRIVATE_DATA_INIT(table) {				\
    table->table_widget = NULL;						\
-   table->entry_frame = NULL;						\
-   table->entry_widget = NULL;						\
 									\
    table->current_col = -1;  /* coords ignoring header lines */		\
    table->current_row = -1;						\
@@ -86,13 +84,10 @@
 									\
    /* Let GTK know we're finished with this */				\
    if(table->table_widget) gtk_widget_unref(table->table_widget);	\
-   if(table->entry_frame) gtk_widget_unref(table->entry_frame);		\
-   if(table->entry_widget) gtk_widget_unref(table->entry_widget);	\
    table->table_widget = NULL;						\
-   table->entry_frame = NULL;						\
-   table->entry_widget = NULL;						\
 									\
-   g_free(table->prev_entry_text); table->prev_entry_text = NULL;	\
+   g_free(table->prev_entry_text);                                      \
+   table->prev_entry_text = NULL;                                       \
 }
 
 /* nothing to resize */

@@ -122,6 +122,12 @@ GNOME_CONFIG_BIN="gnome-config"
 AC_ARG_WITH( gnome-config, 
   [  --with-gnome-config=executable  which gnome-config to use to find gnome ],
   GNOME_CONFIG_BIN="$with_gnome_config")
+
+# If the user hasn't specified the binary, then try to find it.
+if test x"${GNOME_CONFIG_BIN}" = x
+then
+  AC_PATH_PROG(GNOME_CONFIG_BIN, gnome-config, GNOME_CONFIG_NOT_FOUND)
+fi
 AC_SUBST(GNOME_CONFIG_BIN)
 
 # Let the user specify a guile-config executable.
@@ -181,6 +187,10 @@ AC_ARG_WITH( motif-libraries,
 ### Gnome libs -- these are needed for the gnome builds only
 # Let the user specify gnome paths:
 # -I...libgnomesupport is to fix bug in gnome-1.3 release
+#
+# I believe all the gnome configuration can and should be superceded by
+# --with-gnome-config.
+
 AC_ARG_WITH( gnome, 
        [  --with-gnome=PATH       specify where to look for gnome includes and libs],
        X_LIBS="${X_LIBS} -L$with_gnome/lib" X_CFLAGS="$X_CFLAGS -I$with_gnome/include -I$with_gnome/lib/gnome-libs/include" )
@@ -291,14 +301,13 @@ AC_SUBST(GUILELIBS)
 
 AC_CHECK_LIB(plot, openpl,
   AC_DEFINE(HAVE_PLOTUTILS,1)
-  HAVE_PLOTUTILS=1
-  LIBS="-lplot $LIBS"
-  X_LIBS="-lXaw $X_LIBS",
+  AC_DEFINE(PLOTUTILS_LIBS,"-lXaw -lXt -lplot"),
   ,
   $X_PRE_LIBS $MOTIF_LIBS $X_EXTRA_LIBS -lXaw $X_LIBS) 
 
 # We need this in at least one of the Makefile.in's
 AC_SUBST(HAVE_PLOTUTILS)
+AC_SUBST(PLOTUTILS_LIBS) 
 
 AC_SUBST(MOTIF_LIBS)
 
@@ -347,7 +356,14 @@ GNC_RUNTIME_CONFIGDIR=`eval echo ${GNC_CONFIGDIR}`
 AC_SUBST(GNC_RUNTIME_SHAREDIR)
 AC_SUBST(GNC_RUNTIME_CONFIGDIR)
 
-# *******************************************
+# UGLY HACK
+
+GTKSHEET_DIR="gtksheet-5.7"
+AC_SUBST(GTKSHEET_DIR)
+
+CFLAGS="${CFLAGS} -Werror"
+
+ *******************************************
 AC_CONFIG_HEADER(config.h)
 
 AC_OUTPUT(Makefile
@@ -366,6 +382,7 @@ AC_OUTPUT(Makefile
           src/swig/guile/Makefile
           src/swig/perl5/Makefile
           lib/Makefile
+          lib/${GTKSHEET_DIR}/Makefile
           lib/Xbae-4.6.2-linas/Makefile
           lib/Xbae-4.6.2-linas/src/Makefile
           lib/ComboBox-1.33/Makefile)

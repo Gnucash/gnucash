@@ -32,12 +32,11 @@
 #include "date.h"
 #include "Group.h"
 #include "MultiLedger.h"
-#include "RecnWindow.h"
 #include "RegWindow.h"
 #include "MainWindow.h"
 #include "messages.h"
 #include "util.h"
-#include "xtutil.h"
+#include "RecnWindow.h"
 
 /** STRUCTS *********************************************************/
 struct _RecnWindow
@@ -379,7 +378,7 @@ startRecnWindow(GtkWidget *parent, Account *acc, double *diff)
           if(sscanf(str, "%lf", &val ) == 1) {
             *diff = dendBalance - val;
           } else {
-            errorBox(dialog, "Ending balance must be a number.");
+            errorBox("Ending balance must be a number.");
             result = -1;
           }
         }
@@ -562,7 +561,7 @@ recn_ok_cb_set_reconciled_helper(gpointer item, gpointer data) {
   GtkListItem *li = GTK_LIST_ITEM(item);
   GtkCheckButton *checkbutton = GTK_CHECK_BUTTON(li->item.bin.child);
   Split *split = gtk_object_get_user_data(GTK_OBJECT(checkbutton));
-  const char recn = xaccSplitGetReconcile(split);
+  /*const char recn = xaccSplitGetReconcile(split);*/
   
   if(GTK_TOGGLE_BUTTON(checkbutton)->active) {
     xaccSplitSetReconcile (split, YREC);

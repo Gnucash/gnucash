@@ -23,48 +23,26 @@
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
 
-#ifndef __ADD_DIALOG_H__
-#define __ADD_DIALOG_H__
+#ifndef __MAINWINDOW_H__
+#define __MAINWINDOW_H__
 
-#include "Group.h"
-#include "MainWindow.h"
+#include "config.h"
+#include "ui-callbacks.h"
 
-struct _add_account_dialog 
-{
-  GnomeDialog 	*dialog;
-  GtkWidget 	*main_vbox;
-  GtkWidget 	*box2;
-  GtkWidget	*box3;
-  GtkWidget	*box4;
-  GtkWidget 	*frame;
-  
-  GSList 	*group;
+/** GLOBALS *********************************************************/
+typedef enum {
+  HMB_ABOUT,
+  HMB_ACC,
+  HMB_REGWIN,
+  HMB_RECNWIN,
+  HMB_ADJBWIN,
+  HMB_MAIN,
+  HMB_LIC,
+} gncHelpTypes;
 
-  GtkWidget 	*label;
-  GtkWidget 	*textbox_name;
-  GtkWidget	*textbox_description;
+/** PROTOTYPES ******************************************************/
 
-  GtkWidget	*separator;
-
-  Account	*parent_account;
-  gint		type;
-
-};
-
-typedef struct _add_account_dialog add_account_dialog;
-
-void 			create_add_account_dialog ( Account * );
-add_account_dialog 	*add_account_dialog_init ( void );
-void	 		add_account_dialog_destroy ( GtkWidget *, GnomeDialog * );
+void mainWindow();
+void gnc_show_help(const gncHelpTypes t);
 
 #endif
-
-/*
-  Local Variables:
-  tab-width: 2
-  indent-tabs-mode: nil
-  mode: c-mode
-  c-indentation-style: gnu
-  eval: (c-set-offset 'block-open '-)
-  End:
-*/
