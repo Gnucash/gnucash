@@ -551,6 +551,20 @@ xaccTransLookup (const GUID *guid)
 /********************************************************************\
 \********************************************************************/
 
+/* compute a=b/c unless c is zero ... */
+#define DEVIDE(a,b,c) {			\
+   if (DEQEPS (0.0, (c), 1.0e-15)) {	\
+      if (DEQEPS (0.0, (b), 1.0e-6)) {	\
+         (a) = 0.0;			\
+      } else {				\
+         PERR ("zero share price but non-zero value\n"); \
+         (a) = (b)/(c);			\
+      }					\
+   } else {				\
+      (a) = (b)/(c);			\
+   }					\
+}
+
 void
 xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
 {
@@ -563,29 +577,30 @@ xaccSplitSetBaseValue (Split *s, double value, const char * base_currency)
     */
    if (!(s->acc)) {
       if (force_double_entry) {
+         PERR ("split must have a parent\n");
          assert (s->acc);
       } else { 
-         s -> damount = (value / (s->share_price));   
+         DEVIDE (s -> damount, value, s->share_price);
          return;
       }
    }
 
-   /* be more precise -- the value depends on the currency 
-    * we want it expressed in.
+   /* The value of a split depends on the currency we express the
+    * value in.  This may or may not require a divide.
     */
    if (!safe_strcmp(s->acc->currency, base_currency)) {
-      s -> damount = (value / (s->share_price));   
+      DEVIDE (s -> damount, value, s->share_price);
    } else 
    if (!safe_strcmp(s->acc->security, base_currency)) {
       s -> damount = value;   
    } else 
    if ((0x0==base_currency) && (0 == force_double_entry)) {
-      s -> damount = (value / (s->share_price));   
+      DEVIDE (s -> damount, value, s->share_price);
    } else 
    {
-      PERR (" inappropriate base currency %s "
-            " given split currency=%s and security=%s\n",
-              base_currency, s->acc->currency, s->acc->security);
+      PERR ("inappropriate base currency %s "
+            "given split currency=%s and security=%s\n",
+             base_currency, s->acc->currency, s->acc->security);
       return;
    }
 }
@@ -624,9 +639,9 @@ xaccSplitGetBaseValue (Split *s, const char * base_currency)
       value = s->damount * s->share_price;   
    } else 
    {
-      PERR (" inappropriate base currency %s "
-            " given split currency=%s and security=%s\n",
-              base_currency, s->acc->currency, s->acc->security);
+      PERR ("inappropriate base currency %s "
+            "given split currency=%s and security=%s\n",
+             base_currency, s->acc->currency, s->acc->security);
       return 0.0;
    }
    return value;
@@ -671,8 +686,7 @@ ComputeValue (Split **sarray, Split * skip_me, const char * base_currency)
             if (!safe_strcmp(s->acc->security, base_currency)) {
                value += s->damount;
             } else {
-               PERR ("Internal Error: "
-                     " inconsistent currencies \n");
+               PERR ("inconsistent currencies\n");
                assert (0);
             }
          }
@@ -857,7 +871,7 @@ xaccSplitRebalance (Split *split)
     base_currency = FindCommonCurrency (trans->splits, ra, rb);
 
     if (!base_currency) {
-      PERR ("Internal Error: no common split currencies \n");
+      PERR ("no common split currencies\n");
       s = trans->splits[0];
       while (s) {
         if (s->acc) {

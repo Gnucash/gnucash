@@ -124,7 +124,8 @@ size_t dcoresize();
 #define isNum(x) (((x)-0x30) < 0) ? 0 : (((x)-0x30) > 9) ? 0 : 1
 
 #define EPS  (1.0e-6)
-#define DEQ(x,y) (((((x)+EPS)>(y)) ? 1 : 0) && ((((x)-EPS)<(y)) ? 1 : 0))
+#define DEQEPS(x,y,eps) (((((x)+(eps))>(y)) ? 1 : 0) && ((((x)-(eps))<(y)) ? 1 : 0))
+#define DEQ(x,y) DEQEPS(x,y,EPS)
 
 
 #define SAFE_STRCMP(da,db) {		\
