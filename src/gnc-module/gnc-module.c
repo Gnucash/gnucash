@@ -13,6 +13,7 @@
 #include <dirent.h>
 #include <sys/types.h>
 
+#include "core-utils.h"
 #include "gnc-module.h"
 #include "gw-gnc-module.h"
 
@@ -110,7 +111,6 @@ gnc_module_system_setup_load_path(void)
   GList * dirs = gnc_module_system_search_dirs();
   GList * lp;
   char *envt = getenv("LD_LIBRARY_PATH");
-  char *put_str;
 
   if(envt)
   {
@@ -130,8 +130,7 @@ gnc_module_system_setup_load_path(void)
   }
   g_list_free(dirs);
 
-  put_str = g_strdup_printf ("LD_LIBRARY_PATH=%s", envt);
-  if (putenv(put_str) != 0)
+  if(gnc_setenv("LD_LIBRARY_PATH", envt, 1) != 0)
   {
     g_warning ("gnc-module failed to set LD_LIBRARY_PATH");
   }
