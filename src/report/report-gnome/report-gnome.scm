@@ -42,12 +42,12 @@
 
 (define (gnc:add-report-template-menu-items)
   (define menu-namer (gnc:new-menu-namer))
+  (define *template-items* '())
 
   (define (add-template-menu-item name template)
     (if (gnc:report-template-in-menu? template)
         (let ((title (string-append (_ "Report") ": " (_ name)))
               (menu-path (gnc:report-template-menu-path template))
-              (menu-name (gnc:report-template-menu-name template))
               (menu-tip (gnc:report-template-menu-tip template))
               (item #f))
 
@@ -57,8 +57,6 @@
                     (append menu-path '(""))))
 
           (set! menu-path (append (list gnc:window-name-main gnc:menuname-reports) menu-path))
-
-          (if menu-name (set! name menu-name))
 
           (if (not menu-tip)
               (set! menu-tip
@@ -75,7 +73,20 @@
                      (gnc:main-window-open-report report #f)))))
           (gnc:add-extension item))))
 
-  (gnc:report-templates-for-each add-template-menu-item))
+  (define (add-template name template)
+    (let ((menu-name (gnc:report-template-menu-name template)))
+      (if menu-name (set! name menu-name))
+      (set! *template-items* (cons (cons name template) *template-items*))))
+
+  (define (sort-templates a b)
+    (string>? (car a) (car b)))
+
+  (gnc:report-templates-for-each add-template)
+  (for-each
+   (lambda (item)
+     (add-template-menu-item (car item) (cdr item)))
+   (sort *template-items* sort-templates)))
+
 
 (define (gnc:report-menu-setup)
   ;; since this menu gets added to every child window, we say it 
