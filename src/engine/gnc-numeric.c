@@ -259,7 +259,7 @@ lcm128 (guint64 a, guint64 b)
   return mult128 (a,b);
 }
 
-/** Add a pair of 128-bit numbers, returning a 128bit number */
+/** Add a pair of 128-bit numbers, returning a 128-bit number */
 static inline gncint128
 add128 (gncint128 a, gncint128 b)
 {
@@ -276,7 +276,25 @@ add128 (gncint128 a, gncint128 b)
     sum.isbig = sum.hi || (sum.lo >> 63);
     return sum;
   }
-/* XXXXXXXXXXXXXXXXXXXXXXXXXXX not done */
+  if ((b.hi > a.hi) ||
+     ((b.hi == a.hi) && (b.lo > a.lo)))
+  {
+    gncint128 tmp = a;
+    a = b;
+    b = tmp;
+  }
+
+  sum.isneg = a.isneg;
+  sum.hi = a.hi - b.hi;
+  sum.lo = a.lo - b.lo;
+
+  if (sum.lo > a.lo)
+  {
+    sum.hi --;
+  }
+
+  sum.isbig = sum.hi || (sum.lo >> 63);
+  return sum;
 }
 
 #ifdef TEST_128_BIT_MULT
@@ -568,12 +586,14 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
 {
   gnc_numeric sum;
   
-  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
+  if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
+  {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
   if((denom == GNC_DENOM_AUTO) && 
-     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) 
+  {
     if(a.denom == b.denom) {
       denom = a.denom;
     }
@@ -588,30 +608,33 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     }
   }
   
-  if(a.denom < 0) {
+  if(a.denom < 0) 
+  {
     a.num *= a.denom;
     a.denom = 1;
   }
 
-  if(b.denom < 0) {
+  if(b.denom < 0) 
+  {
     b.num *= b.denom;
     b.denom = 1;
   }
 
-  /* get an exact answer.. same denominator is the common case. */ 
-  if(a.denom == b.denom) {
+  /* Get an exact answer.. same denominator is the common case. */ 
+  if(a.denom == b.denom) 
+  {
     sum.num = a.num + b.num;
     sum.denom = a.denom;
   }
   else 
   {
-    gint64 lcd;
     /* We want to do this:
      *    sum.num = a.num*b.denom + b.num*a.denom;
      *    sum.denom = a.denom*b.denom;
-     * but the multiply could overflow.
+     * but the multiply could overflow.  
      * Computing the LCD minimizes likelyhood of overflow
      */
+    gint64 lcd;
     lcd = gnc_numeric_lcd(a,b);
     if (GNC_ERROR_ARG == lcd)
     {
@@ -623,9 +646,10 @@ gnc_numeric_add(gnc_numeric a, gnc_numeric b,
     gncint128 cb = mult128 (b.num, lcd/b.denom);
     if (cb.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
 
-    /* XXX although we should check for overflow ... */
-// xxxxxxxxxx not done, use add128 for this 
-    sum.num   = ca.lo + cb.lo;
+    gncint128 cab = add128 (ca, cb);
+    if (cab.isbig) return gnc_numeric_error(GNC_ERROR_OVERFLOW);
+    
+    sum.num   = cab.lo;
     sum.denom = lcd;
   }
   
@@ -660,59 +684,14 @@ gnc_numeric
 gnc_numeric_sub(gnc_numeric a, gnc_numeric b, 
                 gint64 denom, gint how) 
 {
-  gnc_numeric diff;
-  gint64 lcd;
-
-  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
+  if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
+  {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
-  if((denom == GNC_DENOM_AUTO) && 
-     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
-    if(a.denom == b.denom) {
-      denom = a.denom;
-    }
-    else if(b.num == 0) {
-      denom = a.denom;
-    }
-    else if(a.num == 0) {
-      denom = b.denom;
-    }
-    else {
-      return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
-    }
-  }
-
-  if(a.denom < 0) {
-    a.num *= a.denom;
-    a.denom = 1;
-  }
-
-  if(b.denom < 0) {
-    b.num *= b.denom;
-    b.denom = 1;
-  }
-
-  /* get an exact answer.. same denominator is the common case. */ 
-  if(a.denom == b.denom) {
-    diff.num = a.num - b.num;
-    diff.denom = a.denom;
-  }
-  else {
-    /* ok, convert to the lcd and compute from there... */
-    lcd = gnc_numeric_lcd(a,b);
-    diff.num   = a.num*(lcd/a.denom) - b.num*(lcd/b.denom);
-    diff.denom = lcd;
-    //    diff.num   = a.num*b.denom - b.num*a.denom;
-    //    diff.denom = a.denom*b.denom;
-  }
-  
-  if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
-    denom = gnc_numeric_lcd(a, b);
-    how   = how & GNC_NUMERIC_RND_MASK;
-  }
-  return gnc_numeric_convert(diff, denom, how);                             
+  gnc_numeric nb = b;
+  nb.num = -nb.num;
+  return gnc_numeric_add (a, nb, denom, how);
 }
 
 
@@ -812,63 +791,92 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
 {
   gnc_numeric quotient;
 
-  if(gnc_numeric_check(a) || gnc_numeric_check(b)) {
+  if(gnc_numeric_check(a) || gnc_numeric_check(b)) 
+  {
     return gnc_numeric_error(GNC_ERROR_ARG);
   }
 
   if((denom == GNC_DENOM_AUTO) && 
-     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) {
-    if(a.denom == b.denom) {
+     (how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_FIXED) 
+  {
+    if(a.denom == b.denom) 
+    {
       denom = a.denom;
     }
-    else if(a.denom == 0) {
+    else if(a.denom == 0) 
+    {
       denom = b.denom;
     }
-    else {
+    else 
+    {
       return gnc_numeric_error(GNC_ERROR_DENOM_DIFF);
     }
   }
   
 
-  if(a.denom < 0) {
+  if(a.denom < 0) 
+  {
     a.num *= a.denom;
     a.denom = 1;
   }
 
-  if(b.denom < 0) {
+  if(b.denom < 0) 
+  {
     b.num *= b.denom;
     b.denom = 1;
   }
 
-  if(a.denom == b.denom) {
+  if(a.denom == b.denom) 
+  {
     quotient.num = a.num;
     quotient.denom = b.num;
   }
   else 
   {
+    gint64 sgn = 1;
+    if (0 > a.num)
+    {
+      sgn = -sgn;
+      a.num = -a.num;
+    }
+    if (0 > b.num)
+    {
+      sgn = -sgn;
+      b.num = -b.num;
+    }
     gncint128 nume = mult128(a.num, b.denom);
     gncint128 deno = mult128(b.num, a.denom);
     if ((0 == nume.isbig) && (0 == deno.isbig))
     {
-      quotient.num = nume.lo;
-      if (nume.isneg) quotient.num = -quotient.num;
+      quotient.num = sgn * nume.lo;
       quotient.denom = deno.lo;
     }
     else if (0 == deno.isbig)
     {
-       quotient = reduce128 (nume, deno.lo);
+      quotient = reduce128 (nume, deno.lo);
+      quotient.num *= sgn;
     }
     else
     {
-      /* Try to avoid overflow by working with the LCD */
-      gint64 lcd = gnc_numeric_lcd(a,b);
-      nume = mult128 (a.num, (lcd/a.denom));
-      deno = mult128 (b.num, (lcd/b.denom));
+      /* Try to avoid overflow by removing common factors */
+      gnc_numeric ra = gnc_numeric_reduce (a);
+      gnc_numeric rb = gnc_numeric_reduce (b);
+
+      gint64 gcf_nume = gcf64(ra.num, rb.denom);
+      gncint128 nume = mult128(ra.num, rb.denom/gcf_nume);
+
+      gint64 gcf_deno = gcf64(rb.num, ra.denom);
+      gncint128 deno = mult128(rb.num, ra.denom/gcf_deno);
+
       if ((0 == nume.isbig) && (0 == deno.isbig))
       {
-        quotient.num = nume.lo;
-        if (nume.isneg) quotient.num = -quotient.num;
+        quotient.num = sgn * nume.lo;
         quotient.denom = deno.lo;
+      }
+      else if (0 == deno.isbig)
+      {
+        quotient = reduce128 (nume, deno.lo);
+        quotient.num *= sgn;
       }
       else
       {
@@ -877,13 +885,15 @@ gnc_numeric_div(gnc_numeric a, gnc_numeric b,
     }
   }
   
-  if(quotient.denom < 0) {
+  if(quotient.denom < 0) 
+  {
     quotient.num   = -quotient.num;
     quotient.denom = -quotient.denom;
   }
   
   if((denom == GNC_DENOM_AUTO) &&
-     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) {
+     ((how & GNC_NUMERIC_DENOM_MASK) == GNC_DENOM_LCD)) 
+  {
     denom = gnc_numeric_lcd(a, b);
     how   = how & GNC_NUMERIC_RND_MASK;
   }
