@@ -1,0 +1,23 @@
+
+Some notes about taxes
+----------------------
+
+From: Jon Kaare Hellan <Jon.K.Hellan@item.ntnu.no>
+
+Norwegian rules are more or less as follows:
+
+You pay income tax on 
+(sale price - commission) - (adjusted purchase price + commission)
+
+Adjusted purchase price?? That's what makes us different.
+
+Each Jan. 1., the cost base of stocks you hold is adjusted by some
+amount. How it is computed does not matter here, but the idea is that
+once the company has paid tax on a profit, a corresponding amount of
+capital gains becomes tax free to the stockholders. Theoretically
+attractive, difficult in practice.
+
+So I need a way to keep track of these adjustments register for each
+stock in a portfolio.
+
+
