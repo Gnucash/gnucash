@@ -36,8 +36,10 @@ src/gnome/gnc-network.c
 src/gnome/new-user-interface.c
 src/gnome/print-session.c
 src/gnome/reconcile-list.c
+src/gnome/window-acct-tree.c
 src/gnome/window-help.c
 src/gnome/window-main.c
+src/gnome/window-main-summarybar.c
 src/gnome/window-reconcile.c
 src/gnome/window-register.c
 src/gnome/window-report.c
