@@ -1107,6 +1107,7 @@ readTransaction( int fd, Account *acc, int token )
   } else { /* else, read version 5 and above files */
     Split *split;
     int offset = 0;
+    const char *notes = NULL;
 
     if (5 == token) 
     {
@@ -1144,6 +1145,12 @@ readTransaction( int fd, Account *acc, int token )
            split->parent = trans;
         } else {
            xaccTransAppendSplit(trans, split);
+        }
+
+        if (!notes) {
+          notes = xaccSplitGetMemo (split);
+          if (notes)
+            xaccTransSetNotes (trans, notes);
         }
      }
   }

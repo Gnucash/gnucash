@@ -145,7 +145,8 @@
 (define gnc:transaction-structure
   (make-record-type
    "gnc:transaction-structure"
-   '(transaction-guid date-entered date-posted num description split-scms)))
+   '(transaction-guid date-entered date-posted
+                      num description notes split-scms)))
 
 ;; constructor
 (define gnc:make-transaction-scm
@@ -170,6 +171,9 @@
 
 (define gnc:transaction-scm-get-description
   (record-accessor gnc:transaction-structure 'description))
+
+(define gnc:transaction-scm-get-notes
+  (record-accessor gnc:transaction-structure 'notes))
 
 (define gnc:transaction-scm-get-split-scms
   (record-accessor gnc:transaction-structure 'split-scms))
@@ -203,6 +207,9 @@
 (define gnc:transaction-scm-set-description
   (record-modifier gnc:transaction-structure 'description))
 
+(define gnc:transaction-scm-set-notes
+  (record-modifier gnc:transaction-structure 'notes))
+
 (define gnc:transaction-scm-set-split-scms
   (record-modifier gnc:transaction-structure 'split-scms))
 
@@ -230,6 +237,7 @@
        (gnc:transaction-get-num trans)
        #f)
    (gnc:transaction-get-description trans)
+   (gnc:transaction-get-notes trans)
    (trans-splits 0)))
 
 ;; Copy a scheme representation of a transaction onto a C transaction.
@@ -240,7 +248,6 @@
   (if (pointer-token-null? trans)
       #f
       (begin
-
         ;; open the transaction for editing
         (if (not (gnc:transaction-is-open trans))
             (gnc:transaction-begin-edit trans #t))
@@ -248,9 +255,11 @@
         ;; copy in the transaction values
         (let ((description (gnc:transaction-scm-get-description trans-scm))
               (num         (gnc:transaction-scm-get-num trans-scm))
+              (notes       (gnc:transaction-scm-get-notes trans-scm))
               (date-posted (gnc:transaction-scm-get-date-posted trans-scm)))
           (if description (gnc:transaction-set-description trans description))
           (if num         (gnc:transaction-set-xnum trans num))
+          (if notes       (gnc:transaction-set-notes trans notes))
           (if date-posted (gnc:transaction-set-date-time-pair
                            trans date-posted)))
 

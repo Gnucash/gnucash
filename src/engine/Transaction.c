@@ -1933,9 +1933,10 @@ xaccTransSetNotes (Transaction *trans, const char *notes)
   kvp_value *new_value;
   
   if (!trans || !notes) return;
+
   CHECK_OPEN (trans);
 
-  new_value = kvp_value_new_string(notes);
+  new_value = kvp_value_new_string (notes);
 
   if (new_value)
   {

@@ -98,6 +98,7 @@ typedef enum
   TDEBT_CELL,
   TSHRBALN_CELL,
   TBALN_CELL,
+  NOTES_CELL,
   CELL_TYPE_COUNT
 } CellType;
 
@@ -119,20 +120,24 @@ typedef enum
 } SplitRegisterStyle;
 
 /* modified flags -- indicate which cell values have been modified by user */
-#define MOD_NONE   0x0000
-#define MOD_DATE   0x0001
-#define MOD_NUM    0x0002
-#define MOD_DESC   0x0004
-#define MOD_RECN   0x0008
-#define MOD_ACTN   0x0010
-#define MOD_XFRM   0x0020
-#define MOD_MXFRM  0x0040
-#define MOD_XTO    0x0080
-#define MOD_MEMO   0x0100
-#define MOD_AMNT   0x0200
-#define MOD_PRIC   0x0400
-#define MOD_SHRS   0x0800
-#define MOD_ALL    0xffff
+typedef enum
+{
+  MOD_NONE   = 0,
+  MOD_DATE   = 1 <<  0,
+  MOD_NUM    = 1 <<  1,
+  MOD_DESC   = 1 <<  2,
+  MOD_RECN   = 1 <<  3,
+  MOD_ACTN   = 1 <<  4,
+  MOD_XFRM   = 1 <<  5,
+  MOD_MXFRM  = 1 <<  6,
+  MOD_XTO    = 1 <<  7,
+  MOD_MEMO   = 1 <<  8,
+  MOD_AMNT   = 1 <<  9,
+  MOD_PRIC   = 1 << 10,
+  MOD_SHRS   = 1 << 11,
+  MOD_NOTES  = 1 << 12,
+  MOD_ALL    = 0xffff
+} CellModifiedFlags;
 
 /* Types of cursors */
 typedef enum
@@ -194,6 +199,7 @@ struct _SplitRegister
   PriceCell     * tdebitCell;
   PriceCell     * tshrbalnCell;
   PriceCell     * tbalanceCell;
+  QuickFillCell * notesCell;
 
   SplitRegisterType type;
   SplitRegisterStyle style;

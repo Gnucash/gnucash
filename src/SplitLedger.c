@@ -2307,6 +2307,9 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
   if (MOD_DESC & changed)
     gnc_trans_scm_set_description(trans_scm, reg->descCell->cell.value);
 
+  if (MOD_NOTES & changed)
+    gnc_trans_scm_set_notes(trans_scm, reg->notesCell->cell.value);
+
   if (MOD_RECN & changed)
     gnc_split_scm_set_reconcile_state(split_scm,
                                       xaccRecnCellGetFlag(reg->recnCell));
@@ -2338,23 +2341,10 @@ xaccSRSaveRegEntryToSCM (SplitRegister *reg, SCM trans_scm, SCM split_scm,
     if (other_split_scm == SCM_UNDEFINED) {
       if (gnc_trans_scm_get_num_splits(trans_scm) == 1) {
         Split *temp_split;
-        char *temp_string;
 
         temp_split = xaccMallocSplit ();
         other_split_scm = gnc_copy_split(temp_split, use_cut_semantics);
         xaccSplitDestroy(temp_split);
-
-        temp_string = gnc_split_scm_get_memo(split_scm);
-        if (temp_string != NULL) {
-          gnc_split_scm_set_memo(other_split_scm, temp_string);
-          free(temp_string);
-        }
-
-        temp_string = gnc_split_scm_get_action(split_scm);
-        if (temp_string != NULL) {
-          gnc_split_scm_set_action(other_split_scm, temp_string);
-          free(temp_string);
-        }
 
         gnc_trans_scm_append_split_scm(trans_scm, other_split_scm);
       }
@@ -2595,25 +2585,27 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
   }
 
   if (MOD_DESC & changed) {
-    DEBUG ("MOD_DESC: %s\n",
-           reg->descCell->cell.value);
+    DEBUG ("MOD_DESC: %s", reg->descCell->cell.value);
     xaccTransSetDescription (trans, reg->descCell->cell.value);
   }
 
+  if (MOD_NOTES & changed) {
+    DEBUG ("MOD_NOTES: %s", reg->notesCell->cell.value);
+    xaccTransSetNotes (trans, reg->notesCell->cell.value);
+  }
+
   if (MOD_RECN & changed) {
-    DEBUG ("MOD_RECN: %c\n", xaccRecnCellGetFlag(reg->recnCell));
+    DEBUG ("MOD_RECN: %c", xaccRecnCellGetFlag(reg->recnCell));
     xaccSplitSetReconcile (split, xaccRecnCellGetFlag(reg->recnCell));
   }
 
   if (MOD_ACTN & changed) {
-    DEBUG ("MOD_ACTN: %s\n",
-           reg->actionCell->cell.value);
+    DEBUG ("MOD_ACTN: %s", reg->actionCell->cell.value);
     xaccSplitSetAction (split, reg->actionCell->cell.value);
   }
 
   if (MOD_MEMO & changed) {
-    DEBUG ("MOD_MEMO: %s\n",
-           reg->memoCell->cell.value);
+    DEBUG ("MOD_MEMO: %s", reg->memoCell->cell.value);
     xaccSplitSetMemo (split, reg->memoCell->cell.value);
   }
 
@@ -2627,18 +2619,17 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
    * XFRM or XTO should be in a given cursor. */
   if ((MOD_XFRM | MOD_XTO) & changed)
   {
-    Account *old_acc=NULL, *new_acc=NULL;
+    Account *old_acc;
+    Account *new_acc;
     char *new_name;
 
     if (MOD_XFRM & changed)
     {
-      DEBUG ("MOD_XFRM: %s\n",
-             reg->xfrmCell->cell.value);
+      DEBUG ("MOD_XFRM: %s", reg->xfrmCell->cell.value);
     }
     else
     {
-      DEBUG ("MOD_XTO: %s\n",
-             reg->xtoCell->cell.value);
+      DEBUG ("MOD_XTO: %s", reg->xtoCell->cell.value);
     }
 
     /* do some reparenting. Insertion into new account will automatically
@@ -2693,8 +2684,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if (MOD_MXFRM & changed)
   {
-    DEBUG ("MOD_MXFRM: %s\n",
-           reg->mxfrmCell->cell.value);
+    DEBUG ("MOD_MXFRM: %s", reg->mxfrmCell->cell.value);
 
     other_split = xaccGetOtherSplit(split);
 
@@ -3104,6 +3094,10 @@ xaccSRGetEntryHandler (VirtualLocation virt_loc, short _cell_type,
 
     case DESC_CELL:
       return xaccTransGetDescription (trans);
+      break;
+
+    case NOTES_CELL:
+      return xaccTransGetNotes (trans);
       break;
 
     case RECN_CELL:
@@ -3733,16 +3727,17 @@ xaccSRLoadRegister (SplitRegister *reg, Split **slist,
      * fill up the quickfill cells. */
     if (info->first_pass)
     {
-      int j, num_splits;
-      Split *s;
+      GList *node;
 
       xaccQuickFillAddCompletion (reg->descCell,
                                   xaccTransGetDescription (trans));
 
-      num_splits = xaccTransCountSplits (trans);
-      for (j = 0; j < num_splits; j++)
+      xaccQuickFillAddCompletion (reg->notesCell,
+                                  xaccTransGetNotes (trans));
+
+      for (node = xaccTransGetSplitList (trans); node; node = node->next)
       {
-        s = xaccTransGetSplit (trans, j);
+        Split *s = node->data;
         xaccQuickFillAddCompletion (reg->memoCell, xaccSplitGetMemo (s));
       }
     }

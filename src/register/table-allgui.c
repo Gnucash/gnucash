@@ -172,6 +172,7 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
+  const char *entry;
 
   vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
   if (vcell == NULL)
@@ -185,9 +186,13 @@ gnc_table_get_entry_internal (Table *table, VirtualLocation virt_loc,
   if (cb_cell->cell_type < 0)
     return "";
 
-  return table->entry_handler (virt_loc, cb_cell->cell_type,
-                               conditionally_changed,
-                               table->handler_user_data);
+  entry = table->entry_handler (virt_loc, cb_cell->cell_type,
+                                conditionally_changed,
+                                table->handler_user_data);
+  if (!entry)
+    entry = "";
+
+  return entry;
 }
 
 const char *
@@ -195,6 +200,7 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
 {
   VirtualCell *vcell;
   CellBlockCell *cb_cell;
+  const char *entry;
 
   vcell = gnc_table_get_virtual_cell (table, virt_loc.vcell_loc);
   if (vcell == NULL)
@@ -218,8 +224,12 @@ gnc_table_get_entry (Table *table, VirtualLocation virt_loc)
       return cb_cell->cell->value;
   }
 
-  return table->entry_handler (virt_loc, cb_cell->cell_type, NULL,
-                               table->handler_user_data);
+  entry = table->entry_handler (virt_loc, cb_cell->cell_type, NULL,
+                                table->handler_user_data);
+  if (!entry)
+    entry = "";
+
+  return entry;
 }
 
 /* ==================================================== */
