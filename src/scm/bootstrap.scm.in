@@ -87,6 +87,12 @@
       gnc:*debugging?*
       (gnc:config-var-value-get gnc:*debugging?*)))
 
+(define (gnc:setup-debugging)
+  (if (gnc:debugging?)
+      (debug-enable 'backtrace)))
+
+(gnc:setup-debugging)
+
 
 ;;;; Status output functions.
 

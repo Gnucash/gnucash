@@ -36,8 +36,7 @@
                 (display "\n\n" port)))))
     (false-if-exception
      (apply display-error #f port args))
-    ;; Here we should write the stack trace.
-    )
+    (display-backtrace (fluid-ref the-last-stack) port))
 
   (false-if-exception
    (call-with-output-string write-error)))

@@ -3,6 +3,8 @@
   (if (not (gnc:handle-command-line-args))
       (gnc:shutdown 1))
 
+  (gnc:setup-debugging)
+
   ;; Load the srfis
   (gnc:load "srfi/srfi-8.guile.scm")
   (gnc:load "srfi/srfi-1.unclear.scm")

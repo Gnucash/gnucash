@@ -19,13 +19,14 @@
 
 ;; Options
 (define (runavg-options-generator)
-  (let 
+  (let*
       ((gnc:*runavg-track-options* (gnc:new-options))
        ;; register a configuration option for the report
        (gnc:register-runavg-option 
 	(lambda (new-option)
 	  (gnc:register-option gnc:*runavg-track-options* 
 			       new-option))))
+
     ;; from date  
     (gnc:register-runavg-option
      (gnc:make-date-option
@@ -168,7 +169,7 @@
 ; Datelist entry operators
 (define (dl:begin dl) (car dl))
 (define (dl:end dl) (car (cdr dl)))
-	
+
 (define (reduce-split-list dl tl pt av)
   (let ((stat-accumulator (make-stats-collector))
 	;;; (avgaccum 0) ;;   'add, 'total, 'average, 'getmax, 'getmin, reset
@@ -177,15 +178,14 @@
 	(gl-accumulator (makedrcr-collector))
 	(bals av) 
 	(prevdate 0))
-;;; procvals goes away
-;;; accbal runs the accumulator
+
+    ;; accbal runs the accumulator
     (define (accbal beg end)
       (let ((curbal (vector-sum (car (cdr (av 'x 0))))))
 	(stat-accumulator 'add (gnc:timepair-delta beg end))))
 
     (define (calc-in-interval d tl)
       (cond ((not (null? tl))
-
 	     (let* ((bd (dl:begin d))	; begin date
 		    (ed (dl:end d))	; end date
 		    (cs (car tl))	; current split
@@ -193,57 +193,52 @@
 		    (an (gnc:split-get-account-name cs)) ; account name
 		    (prevbal (vector-sum (car (cdr (av 'x 0))))))
 
-	       (cond ((gnc:timepair-later cd bd) ;split before interval
+               (cond ((gnc:timepair-later cd bd) ;split before interval
 		      (bals 'put an (gnc:split-get-balance cs))
-		      (calc-in-interval d (cdr tl))
-		      )
+		      (calc-in-interval d (cdr tl)))
 
 		     ((gnc:timepair-later cd ed) ;split is in the interval
 		      (accbal prevdate cd)
-		      (procvals)
 		      (bals 'put an (gnc:split-get-balance cs))
 
 		      (let ((val (gnc:split-get-value cs)))
 			(gl-accumulator 'add val))
-		      (procvals)	; catch all cases
 		      (set! prevdate cd)
 		      (calc-in-interval d (cdr tl)))
 
 		     (else		; Past interval, nothing to do?
 		      (accbal prevdate ed)
-		      (procvals)
 		      tl))))
 	    (else			; Out of data !
 	     (accbal prevdate (dl:end d))
-	     (procvals)
 	     tl)))
-       
+
     ;; Actual routine
     (cond ((null? dl) '());; End of recursion
 	  (else 
-	   (let* ((bd (dl:begin (car dl))) 
-		  (ed (dl:end (car dl))) )
-		
+	   (let ((bd (dl:begin (car dl))) 
+                 (ed (dl:end (car dl))))
+
 	     ;; Reset valaccumulator values
 	     (set! prevdate bd)
 	     (stat-accumulator 'reset #f)
 	     (gl-accumulator 'reset #f)
 
-	     (let* ((rest (calc-in-interval (car dl) tl)))
+	     (let ((rest (calc-in-interval (car dl) tl)))
 	       ;; list of values for report
-	       (cons
-		(list
-		 (gnc:timepair-to-ldatestring bd)
-		 (gnc:timepair-to-ldatestring ed)
-		 (/ (stat-accumulator 'total #f)
-		    (gnc:timepair-delta bd ed))
-		 (stat-accumulator 'getmin #f)
-		 (stat-accumulator 'getmax #f)
-		 (- (gl-accumulator 'debits #f) 
-		    (gl-accumulator 'credits #f))
-		 (gl-accumulator 'debits #f) 
-		 (gl-accumulator 'credits #f)
-		(reduce-split-list (cdr dl) rest pt av)))))))))
+               (cons
+                (list
+                 (gnc:timepair-to-ldatestring bd)
+                 (gnc:timepair-to-ldatestring ed)
+                 (/ (stat-accumulator 'total #f)
+                    (gnc:timepair-delta bd ed))
+                 (stat-accumulator 'getmin #f)
+                 (stat-accumulator 'getmax #f)
+                 (- (gl-accumulator 'debits #f) 
+                    (gl-accumulator 'credits #f))
+                 (gl-accumulator 'debits #f) 
+                 (gl-accumulator 'credits #f))
+		(reduce-split-list (cdr dl) rest pt av))))))))
 
 ;; Pull a scheme list of splits from a C array
 (define (gnc:convert-split-list slist)
@@ -255,7 +250,7 @@
        (cond 
 	((pointer-token-null? asplit ) #f)
 	(else 
-	 (set! schsl (append! schsl (list asplit)) )
+	 (set! schsl (append! schsl (list asplit)))
 	 (set! numsplit (+ numsplit 1))
 	 #t))) ())
     schsl))
@@ -272,7 +267,7 @@
 	      (cond 
 	       ((pointer-token-null? anact ) #f)
 	       (else 
-		(set! schal (append! schal (list anact)) )
+		(set! schal (append! schal (list anact)))
 		(set! numacct (+ numacct 1))
 		#t))) ())
 	   schal))))
@@ -287,15 +282,15 @@
 ;; Add x to list lst if it is not already in there
 (define (addunique lst x)
   (cond 
-   ((null? lst)  (list x))		; all checked add it
+   ((null? lst)  (list x))           ; all checked add it
    (else (cond 
-	  ((equal? x (car lst)) lst)	; found, quit search and don't add again
+	  ((equal? x (car lst)) lst) ; found, quit search and don't add again
 	  (else (cons (car lst) (addunique (cdr lst) x))) ; keep searching
 	  ))))
 
 ;; Calculate averages of each column
-(define (get-averages  indata)
-  (let* ((avglst '()))
+(define (get-averages indata)
+  (let ((avglst '()))
     (map (lambda (x) (set! avglst (append avglst (list 0.0)))) (car indata))
     (map (lambda (x) 
 	   (set! avglst (accumvects x avglst)))
@@ -333,8 +328,8 @@
 				      value)))))
     (let ((begindate (gov-fun "From"))
 	  (enddate (gov-fun "To"))
-	  (stepsize (gov-fun "Step Size"))
-	  (plotstr (gov-fun "Plot Type"))
+	  (stepsize (eval (gov-fun "Step Size")))
+	  (plotstr (eval (gov-fun "Plot Type")))
 	  (accounts (gov-fun "Account"))
 	  (dosubs (gov-fun "Sub-Accounts"))
 	  (prefix  (list "<HTML>" "<BODY>"))
@@ -357,7 +352,7 @@
 	  (begin
 					; Grab account names
 	    (set! acctname (string-join 
-			    (map gnc-account-getname accounts) 
+			    (map gnc:account-get-name accounts) 
 			    " , "))
 	    (cond ((equal? dosubs #t)
 		   (map (lambda (a)
@@ -383,7 +378,7 @@
 	    (display (length report-lines))
 	    (display " Splits\n")
 
-					; Set initial balances to zero
+            ; Set initial balances to zero
 	    (map (lambda(an) (tempstruct 'put an 0)) 
 		 (gnc:acctnames-from-list accounts))
 
@@ -392,7 +387,7 @@
 	    (set! rept-data 
 		  (reduce-split-list
 		   (dateloop begindate enddate stepsize)
-		   report-lines zdate tempstruct))
+		   report-lines (make-zdate) tempstruct))
 
 	    (set! sum-data (get-averages rept-data))
 
@@ -404,18 +399,18 @@
 			   (list "<TR cellspacing=0><TD><TD><TD colspan=3><HR size=2 noshade><TD colspan=3><HR size=2 noshade></TR>" sum-data))))
 
 	    ;; Do a plot
-	    (if (not (string=? NoPlot  plotstr))
+	    (if (not (string=? NoPlot plotstr))
 		(let 
 		    ((fn "/tmp/gncplot.dat")
 		     (preplot (string-append
-			       "set xdata time\n"
-			       "set timefmt '%m/%d/%Y'\n"
-			       "set pointsize 2\n"
-			       "set title '" acctname "'\n"
-			       "set ylabel '" acctcurrency "'\n"
-			       "set xlabel 'Period Ending'\n")))
+                               "set xdata time\n"
+                               "set timefmt '%m/%d/%Y'\n"
+                               "set pointsize 2\n"
+                               "set title '" acctname "'\n"
+                               "set ylabel '" acctcurrency "'\n"
+                               "set xlabel 'Period Ending'\n")))
 
-		  (data-to-gpfile collist  rept-data fn plotstr)
+		  (data-to-gpfile collist rept-data fn plotstr)
 		  (system 
 		   (string-append "echo \"" preplot "plot '"
 				  fn "'" plotstr

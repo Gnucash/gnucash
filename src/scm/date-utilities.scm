@@ -1,5 +1,5 @@
 ;; -*-scheme-*-
-;; $ID$
+;; $Id$
 ;; dateutils.scm
 ;; date utility functions.  mainly used by budget
 ;; Bryan Larsen (blarsen@ada-works.com)
