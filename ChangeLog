@@ -1,3 +1,9 @@
+2004-03-13  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Bug#133709 fix: when we have a problem parsing a credit/debit
+	cell, indicate to the user what occurred.
+
 2004-03-08  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c, dialog-hbcitrans.h,
@@ -45,7 +51,7 @@
 
 	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
 	Better handling of various error cases in
-        transaction-creation. Bug#120311; Bug#130330.
+        transaction-creation. Bug#102311; Bug#130330.
 
 2004-03-03  Derek Atkins  <derek@ihtfp.com>
 

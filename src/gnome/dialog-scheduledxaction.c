@@ -743,9 +743,17 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                      && (str = kvp_value_get_string(v))
                                      && strlen( str ) != 0 ) {
                                         if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
-                                                PERR( "Couldn't parse credit formula for "
-                                                      "\"%s\" on second pass",
-                                                      xaccSchedXactionGetName( sxed->sx ) );
+                                                GString *errStr;
+
+                                                errStr = g_string_sized_new( 32 );
+                                                g_string_sprintf( errStr,
+                                                                  _( "Couldn't parse credit formula for "
+                                                                     "split \"%s\"." ),
+                                                                  xaccSplitGetMemo( s ) );
+                                                gnc_error_dialog( GTK_WIDGET(sxed->dialog),
+                                                                  errStr->str );
+                                                g_string_free( errStr, TRUE );
+
                                                 return FALSE;
                                         }
                                         tcds->creditSum =
@@ -761,9 +769,17 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
                                      && (str = kvp_value_get_string(v))
                                      && strlen(str) != 0 ) {
                                         if ( parse_vars_from_formula( str, vars, &tmp ) < 0 ) {
-                                                PERR( "Couldn't parse debit formula for "
-                                                      "\"%s\" on second pass",
-                                                      xaccSchedXactionGetName( sxed->sx ) );
+                                                GString *errStr;
+
+                                                errStr = g_string_sized_new( 32 );
+                                                g_string_sprintf( errStr,
+                                                                  _( "Couldn't parse debit formula for "
+                                                                     "split \"%s\"." ),
+                                                                  xaccSplitGetMemo( s ) );
+                                                gnc_error_dialog( GTK_WIDGET(sxed->dialog),
+                                                                  (gchar*)errStr->str );
+                                                g_string_free( errStr, TRUE );
+
                                                 return FALSE;
                                         }
                                         tcds->debitSum = gnc_numeric_add( tcds->debitSum, tmp, 100,
