@@ -38,6 +38,8 @@
 #include "dialog-find-transactions.h"
 #include "dialog-utils.h"
 #include "glade-cb-gnc-dialogs.h"
+#include "glade-gnc-dialogs.h"
+#include "gnc-amount-edit.h"
 #include "gnc-component-manager.h"
 #include "gnc-dateedit.h"
 #include "gnc-engine-util.h"
@@ -51,6 +53,79 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+
+struct _SelectDateDialog {
+  GtkWidget * dialog;
+  GtkWidget * cal;
+  GtkWidget * entry_1;
+  GtkWidget * entry_2;
+  GtkWidget * entry_3;
+  char      * ymd_format;
+};
+
+struct _FindTransactionsDialog {
+  GtkWidget  * dialog;
+  Query      * q;
+  Query      * ledger_q;
+
+  char       * ymd_format;
+
+  int        search_type;
+
+  GtkWidget  * new_search_radiobutton;
+  GtkWidget  * narrow_search_radiobutton;
+  GtkWidget  * add_search_radiobutton;
+  GtkWidget  * delete_search_radiobutton;
+
+  GtkWidget  * match_accounts_picker;
+  GtkWidget  * match_accounts_scroller;
+  GtkWidget  * account_tree;
+
+  GtkWidget  * date_start_toggle;
+  GtkWidget  * date_start_frame;
+  GtkWidget  * date_start_entry;
+
+  GtkWidget  * date_end_toggle;
+  GtkWidget  * date_end_frame;
+  GtkWidget  * date_end_entry;
+
+  GtkWidget  * description_entry;
+  GtkWidget  * description_case_toggle;
+  GtkWidget  * description_regexp_toggle;
+
+  GtkWidget  * number_entry;
+  GtkWidget  * number_case_toggle;
+  GtkWidget  * number_regexp_toggle;
+
+  GtkWidget  * credit_debit_picker;
+  GtkWidget  * amount_comp_picker;
+  GtkWidget  * amount_edit;
+
+  GtkWidget  * memo_entry;
+  GtkWidget  * memo_case_toggle;
+  GtkWidget  * memo_regexp_toggle;
+
+  GtkWidget  * shares_comp_picker;
+  GtkWidget  * shares_edit;
+
+  GtkWidget  * price_comp_picker;
+  GtkWidget  * price_edit;
+  
+  GtkWidget  * action_entry;
+  GtkWidget  * action_case_toggle;
+  GtkWidget  * action_regexp_toggle;
+
+  GtkWidget  * cleared_not_cleared_toggle;
+  GtkWidget  * cleared_cleared_toggle;
+  GtkWidget  * cleared_reconciled_toggle;
+
+  GtkWidget  * balance_balanced_toggle;
+  GtkWidget  * balance_not_balanced_toggle;
+
+  GtkWidget  * tag_entry;
+  GtkWidget  * tag_case_toggle;
+  GtkWidget  * tag_regexp_toggle;
+};
 
 
 static int
@@ -82,7 +157,9 @@ close_handler (gpointer user_data)
 
 FindTransactionsDialog * 
 gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
-  FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);  
+  FindTransactionsDialog * ftd = g_new0(FindTransactionsDialog, 1);
+  GtkWidget *box;
+  GtkWidget *edit;
 
   /* call the glade-defined creator */
   ftd->dialog = create_Find_Transactions();
@@ -152,8 +229,12 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "credit_debit_picker");
   ftd->amount_comp_picker =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "amount_comp_picker");
-  ftd->amount_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "amount_entry");
+
+  box = gtk_object_get_data(GTK_OBJECT(ftd->dialog), "amount_box");
+  edit = gnc_amount_edit_new ();
+  gtk_widget_show (edit);
+  gtk_box_pack_start (GTK_BOX (box), edit, TRUE, TRUE, 0);
+  ftd->amount_edit = edit;
 
   ftd->memo_entry =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "memo_entry");
@@ -164,13 +245,21 @@ gnc_ui_find_transactions_dialog_create(xaccLedgerDisplay * orig_ledg) {
 
   ftd->shares_comp_picker =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "shares_comp_picker");
-  ftd->shares_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "shares_entry");
+
+  box = gtk_object_get_data(GTK_OBJECT(ftd->dialog), "shares_box");
+  edit = gnc_amount_edit_new ();
+  gtk_widget_show (edit);
+  gtk_box_pack_start (GTK_BOX (box), edit, TRUE, TRUE, 0);
+  ftd->shares_edit = edit;
 
   ftd->price_comp_picker =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "price_comp_picker");
-  ftd->price_entry =
-    gtk_object_get_data(GTK_OBJECT(ftd->dialog), "price_entry");
+
+  box = gtk_object_get_data(GTK_OBJECT(ftd->dialog), "price_box");
+  edit = gnc_amount_edit_new ();
+  gtk_widget_show (edit);
+  gtk_box_pack_start (GTK_BOX (box), edit, TRUE, TRUE, 0);
+  ftd->price_edit = edit;
 
   ftd->action_entry =
     gtk_object_get_data(GTK_OBJECT(ftd->dialog), "action_entry");
@@ -451,10 +540,7 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                             QUERY_AND);
   }
 
-  amt_temp = 
-    (double)gtk_spin_button_get_value_as_float
-    (GTK_SPIN_BUTTON(ftd->amount_entry));
-
+  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->amount_edit));
   amt_type = gnc_option_menu_get_active(ftd->credit_debit_picker) + 1;
 
   if((amt_temp > 0.00001) || (amt_type != AMT_SGN_MATCH_EITHER)) {
@@ -490,11 +576,8 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                           QUERY_AND);    
   }
 
-  amt_temp = 
-    (double)gtk_spin_button_get_value_as_float
-    (GTK_SPIN_BUTTON(ftd->price_entry));
-  amt_type = 
-    gnc_option_menu_get_active(ftd->price_comp_picker) + 1;
+  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->price_edit));
+  amt_type = gnc_option_menu_get_active(ftd->price_comp_picker) + 1;
 
   if((amt_temp > 0.00001) || (amt_type != AMT_MATCH_ATLEAST)) {
     DxaccQueryAddSharePriceMatch(q, 
@@ -503,12 +586,9 @@ gnc_ui_find_transactions_dialog_ok_cb(GtkButton * button,
                                 QUERY_AND);
   }
 
-  amt_temp = 
-    (double)gtk_spin_button_get_value_as_float
-    (GTK_SPIN_BUTTON(ftd->shares_entry));
-  amt_type = 
-    gnc_option_menu_get_active(ftd->shares_comp_picker) + 1;
-  
+  amt_temp = gnc_amount_edit_get_damount (GNC_AMOUNT_EDIT (ftd->shares_edit));
+  amt_type = gnc_option_menu_get_active(ftd->shares_comp_picker) + 1;
+
   if((amt_temp > 0.00001) || (amt_type != AMT_MATCH_ATLEAST)) {
     DxaccQueryAddSharesMatch(q, 
                             amt_temp,
