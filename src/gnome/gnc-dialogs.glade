@@ -166,7 +166,6 @@
 	<last_modification_time>Sat, 10 Feb 2001 21:26:10 GMT</last_modification_time>
       </signal>
       <label>New Account (child of selected) ...</label>
-      <relief>GTK_RELIEF_NORMAL</relief>
       <child>
 	<padding>0</padding>
 	<expand>False</expand>
@@ -2851,7 +2850,6 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Add</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 
 	      <widget>
@@ -2861,7 +2859,6 @@ Exactly
 		<can_default>True</can_default>
 		<can_focus>True</can_focus>
 		<label>Delete</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 	      </widget>
 	    </widget>
 
@@ -2882,7 +2879,6 @@ Exactly
 		<tooltip>Move the selected item up</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -2896,7 +2892,6 @@ Exactly
 		<tooltip>Move the selected item down</tooltip>
 		<can_focus>True</can_focus>
 		<label></label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3050,7 +3045,6 @@ No Total
 		<name>match_button</name>
 		<can_focus>True</can_focus>
 		<label>Matching Transactions...</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -3472,7 +3466,6 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3486,7 +3479,6 @@ Contingency
 		<name>payment_periods_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3558,7 +3550,6 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3572,7 +3563,6 @@ Contingency
 		<name>interest_rate_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3644,7 +3634,6 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3658,7 +3647,6 @@ Contingency
 		<name>present_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3730,7 +3718,6 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3744,7 +3731,6 @@ Contingency
 		<name>periodic_payment_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3816,7 +3802,6 @@ Contingency
 		<tooltip>Clear the entry</tooltip>
 		<can_focus>True</can_focus>
 		<label>Clear</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -3830,7 +3815,6 @@ Contingency
 		<name>future_value_calc_button</name>
 		<can_focus>True</can_focus>
 		<label>Calculate</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>False</expand>
@@ -5666,7 +5650,6 @@ Daily (365)
 	    <widget>
 	      <class>GtkRadioButton</class>
 	      <name>opening_equity_radio</name>
-	      <tooltip>Use an Equity account to transfer the opening balance. The Equity account will be created if it doesn't exist already.</tooltip>
 	      <can_focus>True</can_focus>
 	      <label>Use Opening Balances Equity account</label>
 	      <active>False</active>
@@ -5681,7 +5664,6 @@ Daily (365)
 	    <widget>
 	      <class>GtkRadioButton</class>
 	      <name>radiobutton8</name>
-	      <tooltip>Use the account select below to transfer the opening balance.</tooltip>
 	      <can_focus>True</can_focus>
 	      <label>Select Transfer Account</label>
 	      <active>False</active>
@@ -5974,7 +5956,6 @@ worry if your data is in multiple files.
 	      <last_modification_time>Wed, 30 Aug 2000 17:33:50 GMT</last_modification_time>
 	    </signal>
 	    <label>Select...</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>3</padding>
 	      <expand>False</expand>
@@ -6309,7 +6290,6 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:32:12 GMT</last_modification_time>
 	    </signal>
 	    <label>Load another file</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -6328,7 +6308,6 @@ of the QIF import process. </label>
 	      <last_modification_time>Wed, 30 Aug 2000 15:34:33 GMT</last_modification_time>
 	    </signal>
 	    <label>Unload selected file</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -8121,7 +8100,6 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
-	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
 
       <widget>
@@ -8131,7 +8109,6 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	<can_default>True</can_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_CANCEL</stock_button>
-	<relief>GTK_RELIEF_NORMAL</relief>
       </widget>
     </widget>
   </widget>
@@ -8340,7 +8317,6 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 		  <last_modification_time>Fri, 15 Dec 2000 18:13:53 GMT</last_modification_time>
 		</signal>
 		<label>Search</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -8359,7 +8335,6 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 		  <last_modification_time>Fri, 15 Dec 2000 18:14:21 GMT</last_modification_time>
 		</signal>
 		<label>Help</label>
-		<relief>GTK_RELIEF_NORMAL</relief>
 		<child>
 		  <padding>0</padding>
 		  <expand>True</expand>
@@ -8926,7 +8901,6 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	    <border_width>3</border_width>
 	    <can_focus>True</can_focus>
 	    <label>Select Subaccounts</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>False</expand>
@@ -9400,7 +9374,6 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	    <name>new_button</name>
 	    <can_focus>True</can_focus>
 	    <label>New...</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -9413,7 +9386,6 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
 	    <name>delete_button</name>
 	    <can_focus>True</can_focus>
 	    <label>Delete</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	    <child>
 	      <padding>0</padding>
 	      <expand>True</expand>
@@ -9462,7 +9434,7 @@ Click &quot;Cancel&quot; to abort the QIF import process.</text>
       <class>GnomeDruidPageStart</class>
       <name>start_page</name>
       <title></title>
-      <text>This wizard will help you record a stock split or stock merger.</text>
+      <text>This druid will help you record a stock split or stock merger.</text>
       <title_color>255,255,255</title_color>
       <text_color>0,0,0</text_color>
       <background_color>102,102,153</background_color>
@@ -10411,7 +10383,6 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:37:59 GMT</last_modification_time>
 	</signal>
 	<label>Add  &gt;&gt;</label>
-	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10430,7 +10401,6 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:38:06 GMT</last_modification_time>
 	</signal>
 	<label>&lt;&lt; Remove</label>
-	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10466,7 +10436,6 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:38:13 GMT</last_modification_time>
 	</signal>
 	<label>Move up</label>
-	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10485,7 +10454,6 @@ quit without making any changes.</text>
 	  <last_modification_time>Fri, 23 Mar 2001 21:38:19 GMT</last_modification_time>
 	</signal>
 	<label>Move down</label>
-	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -10521,7 +10489,6 @@ quit without making any changes.</text>
 	  <last_modification_time>Sat, 24 Mar 2001 17:51:58 GMT</last_modification_time>
 	</signal>
 	<label>Size...</label>
-	<relief>GTK_RELIEF_NORMAL</relief>
 	<child>
 	  <padding>0</padding>
 	  <expand>False</expand>
@@ -11070,7 +11037,6 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Add</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11080,7 +11046,6 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Remove</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11090,7 +11055,6 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Remove Old...</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11100,7 +11064,6 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Edit</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 
 	  <widget>
@@ -11110,7 +11073,6 @@ quit without making any changes.</text>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <label>Get Quotes</label>
-	    <relief>GTK_RELIEF_NORMAL</relief>
 	  </widget>
 	</widget>
       </widget>
@@ -11648,7 +11610,6 @@ Unknown
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Add</label>
-	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 
 	    <widget>
@@ -11658,7 +11619,6 @@ Unknown
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Remove</label>
-	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 
 	    <widget>
@@ -11667,7 +11627,6 @@ Unknown
 	      <can_default>True</can_default>
 	      <can_focus>True</can_focus>
 	      <label>Edit</label>
-	      <relief>GTK_RELIEF_NORMAL</relief>
 	    </widget>
 	  </widget>
 	</widget>

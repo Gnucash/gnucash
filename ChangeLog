@@ -1,5 +1,7 @@
 2001-06-06  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/gnc-dialogs.glade: fix string
+
 	* src/scm/report.scm: fix i18n bug
 
 2001-06-06  James LewisMoss  <jimdres@mindspring.com>
