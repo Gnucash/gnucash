@@ -62,8 +62,6 @@ image_DATA = \
   report-tax-options.png \
   reportwin.png \
   tax-info-dialog.png \
-  ticker-a.png \
-  ticker-b.png \
   transactionjrnl.png
 
 EXTRA_DIST = \

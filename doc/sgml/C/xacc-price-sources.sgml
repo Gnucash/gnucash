@@ -4,30 +4,33 @@
 <TITLE>Stock Ticker</TITLE>
 </ARTHEADER>
 <sect1>
-<TITLE>Price Sources </TITLE>
+<TITLE>Price Sources for Automatic Price Updates</TITLE>
 
-<para><emphasis>THIS MATERIAL NEEDS TO BE REWRITTEN FOR 1.6!!!</emphasis
-</para>
-<PARA>GnuCash provides a somewhat rudimentary automated stock quote
-gathering system.
-If a GnuCash <LINK LINKEND="STOCKACCT">stock account</LINK> is
-suitably configured, and the host computer is connected to the
-Internet, the program <APPLICATION>gnc-prices</APPLICATION> may be
-used to load stock and mutual fund price quotes from various web sites
-directly into GnuCash.
+<PARA>To get automatic price updates from the Internet for for 
+<LINK LINKEND="STOCKACCT">stock accounts</LINK>, you need to set
+the price source appropriately.  This can be done in the new
+account dialog box, when the account is created, or changed at
+any time by selecting the account in an account window, and chosing
+"edit account" from the main menu.  Both dialog boxes have a
+section called "Price Quote Source".
 </PARA>
 
-<PARA>This is what you do:
+<para>To enable automatic price updates, do the following:
 
 <ITEMIZEDLIST>
   <LISTITEM>
-    <PARA>Create an account and mark it as being of type "Mutual
-      Fund" or "Stock".
-    </PARA>
-  </LISTITEM>
+	    <para>
+	      Make sure the "get online quotes" check box is checked.
+	      
+	    </PARA>
+	  </LISTITEM>
   <LISTITEM>
-    <PARA>Enter a valid ticker symbol in the box marked "Security:"
-     </PARA>
+    <PARA>Enter a valid ticker symbol in the text box marked "Security:"
+	  A ticker symbol is the code that identifies the stock or fund - 
+	  to take a familiar example, International Business Machines'
+	  ticker symbol is IBM, listed on the New York Stock Exchange.
+	  To take another example, McDonald's Corpororation is MCD.
+	</para>
   </LISTITEM>
   <LISTITEM>
     <PARA>Select a quote source from the pull-down menu. Currently
@@ -44,7 +47,7 @@ directly into GnuCash.
     wrong information!). If you choose Yahoo Europe, you should append
     the market code for the security, such as PA for Paris, BE for
     Berlin, etc. Example: 12150.PA (a Peugeot security in the Paris
-    market).
+    market).  The table below lists the codes for the various markets.
     </PARA>
   </LISTITEM>
   <LISTITEM>
@@ -71,11 +74,20 @@ directly into GnuCash.
       Group</EMPHASIS> should be in US Dollars (USD).
         </PARA>
 </LISTITEM>
-</ITEMIZEDLIST>
-      
-    </PARA>
-</LISTITEM>
-</ITEMIZEDLIST>
+	  </itemizedlist>
+	</para>
+      </listitem>
+
+<listitem>      
+<para>Select the correct timezone setting (FIXME: WHAT IS THE CORRECT
+TIMEZONE SETTING???)
+	      </para></listitem>
+	</ITEMIZEDLIST>
+
+<para>Instructions for updating prices are found in the documentation
+on the <link linkend="xacc-price-editor">price editor</link>.
+</para>
+
 
     <TABLE>
 <TITLE>Code List for European Markets</TITLE>
@@ -229,62 +241,6 @@ directly into GnuCash.
 </TGROUP>
 </TABLE>
 
-</PARA>
-
-<PARA>A sample image is shown below:
-<INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/ticker-a.png">
-</IMAGEOBJECT>
-<TEXTOBJECT>
-<PHRASE>Sample Diagram</PHRASE>
-</TEXTOBJECT>
-</INLINEMEDIAOBJECT>
-
-    </PARA>
-<PARA>To update the prices stored in a gnucash account file, run
-    the command line command <APPLICATION>gnc-price</APPLICATION>, specifying the
-    filename; for example:
-<COMMAND>    gnc-prices myaccts.xac</COMMAND>
-
-    </PARA>
-<PARA>Running this command will print various diagnostic messages
-    to the screen while it loads data. It will work only when the
-    host computer is attached to the Internet. It can function in
-    conjunction with masquerading-style firewalls and proxy
-    servers.
-
-    </PARA>
-<PARA>The command can be run many times in one day; however, it
-    will update the accounts at most once with the most recent
-    trading days price data.
-
-    Thus, if <APPLICATION>gnc-prices</APPLICATION> is run on Friday, Saturday,
-    Sunday and Monday, only two price entries will be made: one
-    containing Friday's data, and one containing Monday's data,
-    since the Saturday and Sunday runs will only retrieve the
-    Friday closing price.
-
-    </PARA>
-<PARA>To keep <APPLICATION>gnc-prices</APPLICATION> from updating one account, while
-    allowing it to update another account, merely mark the data
-    source for that account as <SCREEN>(none)</SCREEN>. You can do this
-    from the <GUIMENU>Edit Account</GUIMENU> window.
-
-    </PARA>
-<PARA>After running <APPLICATION>gnc-prices</APPLICATION> for a few days, your
-    accounts will begin to resemble the following:
-     <INLINEMEDIAOBJECT>
-<IMAGEOBJECT>
-<IMAGEDATA FILEREF="image/ticker-b.png">
-</IMAGEOBJECT>
-<TEXTOBJECT>
-<PHRASE>Later Ticker Listing</PHRASE>
-</TEXTOBJECT>
-</INLINEMEDIAOBJECT>
-
-
-</PARA>
 </SECT1>
 </ARTICLE>
 

@@ -11,6 +11,12 @@
 
 2001-07-05  Robert Graham Merkel  <rgmerk@mira.net>
 
+	* doc/sgml/C/xacc-depreciation.sgml: Minor updates.
+	
+	* doc/sgml/C/xacc-price-sources.sgml: Updated for 1.6
+
+	* doc/sgml/C/image/ticker-{a,b}.png: Removed.
+	
 	* src/gnome/druid-qif-import.c: fix syntax bug.
 
 	* doc/sgml/C/image/<lots.png>: new and updated screenshots.

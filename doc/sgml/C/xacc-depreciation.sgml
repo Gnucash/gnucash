@@ -190,15 +190,16 @@ case, you must recognize -- for tax purposes -- what are called
       <EMPHASIS>not</EMPHASIS> cash in hand.
     The people that got "rich" in 1999 from IPOs of
     Linux-related companies like Red Hat Software and VA Linux
-    Systems could verify this. They hold options or stock that are
+    Systems could verify this. They held options or stock that were
     <EMPHASIS>theoretically</EMPHASIS> valued at millions of dollars USD.
-    They aren't actually millionaires; the
-    principal participants have to hold their stock for at least
+    They weren't actually millionaires; the
+    principal participants had to hold their stock for at least
     six months before selling <EMPHASIS>any</EMPHASIS> of it. The fact that
     they <EMPHASIS>can't</EMPHASIS> sell it means that while it may in theory
     be worth millions of dollars on paper, there is
     no way for them to legally <EMPHASIS>get</EMPHASIS> those
-    millions.
+    millions.  As history showed, those paper fortunes have gotten
+    considerably smaller.
 
     </PARA>
 </SECT3>
@@ -410,7 +411,7 @@ case, you must recognize -- for tax purposes -- what are called
 <IMAGEDATA FILEREF="image/appr-asset2.png">
 </IMAGEOBJECT>
 <TEXTOBJECT>
-<PHRASE>Asset account after sale</PHRASE>
+<PHRASE>General Ledger after sale</PHRASE>
 </TEXTOBJECT>
 </INLINEMEDIAOBJECT> 
 
