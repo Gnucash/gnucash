@@ -58,9 +58,6 @@ struct gnc_session_struct
   char *fullpath;
   char *logpath;
 
-  /* kvp database for per-session data for user code */
-  kvp_frame * kvp_data;
-
   /* ---------------------------------------------------- */
   /* Pointer to the backend that is actually used to move data
    * between the persistant store and the local engine.  */

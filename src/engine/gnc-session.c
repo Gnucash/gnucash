@@ -125,8 +125,6 @@ gnc_session_init (GNCSession *session)
   session->logpath = NULL;
   session->backend = NULL;
 
-  session->kvp_data = kvp_frame_new ();
-
   gnc_session_clear_error (session);
 }
 
@@ -159,13 +157,6 @@ gnc_session_set_book (GNCSession *session, GNCBook *book)
   session->book = book;
 
   gnc_book_set_backend (book, session->backend);
-}
-
-kvp_frame *
-gnc_session_get_slots (GNCSession *session)
-{
-  if (!session) return NULL;
-  return session->kvp_data;
 }
 
 Backend * 
@@ -596,9 +587,6 @@ gnc_session_destroy (GNCSession *session)
   gnc_book_destroy (session->book);
   session->book = NULL;
 
-  kvp_frame_delete (session->kvp_data);
-  session->kvp_data = NULL;
-
   xaccLogEnable();
 
   g_free (session);
@@ -610,22 +598,15 @@ void
 gnc_session_swap_data (GNCSession *session_1, GNCSession *session_2)
 {
   GNCBook *book_1, *book_2;
-  kvp_frame *kvp_1, *kvp_2;
 
   if (session_1 == session_2) return;
   if (!session_1 || !session_2) return;
 
   book_1 = session_1->book;
-  kvp_1 = session_1->kvp_data;
-
   book_2 = session_2->book;
-  kvp_2 = session_2->kvp_data;
 
   session_1->book = book_2;
-  session_1->kvp_data = kvp_2;
-
   session_2->book = book_1;
-  session_2->kvp_data = kvp_1;
 
   gnc_book_set_backend (book_1, session_2->backend);
   gnc_book_set_backend (book_2, session_1->backend);

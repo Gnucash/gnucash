@@ -1230,6 +1230,8 @@ pgend_book_load_poll (Backend *bend)
 
    if (!be) return;
 
+   be->book = gnc_session_get_book (be->session);
+
    grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
@@ -1262,6 +1264,8 @@ pgend_book_load_single (Backend *bend)
 
    if (!be) return;
 
+   be->book = gnc_session_get_book (be->session);
+
    grp = pgendGetTopGroup (be);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
@@ -1290,6 +1294,8 @@ pgend_price_load_single (Backend *bend)
    GNCPriceDB *db;
 
    if (!be) return;
+
+   be->book = gnc_session_get_book (be->session);
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
@@ -1352,6 +1358,7 @@ pgend_session_begin (Backend *backend,
    pgend_session_end ((Backend *) be);
    pgendInit (be);
 
+   be->session = session;
    be->book = gnc_session_get_book(session);
 
    /* Parse the sessionid for the hostname, port number and db name.

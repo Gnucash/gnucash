@@ -108,6 +108,7 @@ struct _pgend {
    int ipath_max;
 
    /* engine data caches */
+   GNCSession *session;
    GNCBook *book;
 };
 
