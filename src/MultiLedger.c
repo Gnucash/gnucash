@@ -431,6 +431,8 @@ xaccRegisterRefresh (SplitRegister *splitreg)
    xaccLedgerDisplay *regData;
    int n;
 
+   if (!fullList) return;
+
    /* find the ledger which contains this register */
    n = 0; regData = fullList[n];
    while (regData) {
@@ -452,6 +454,8 @@ xaccRegisterCountHack (SplitRegister *splitreg)
 {
    xaccLedgerDisplay *regData;
    int n;
+
+   if (!fullList) return;
 
    /* find the ledger which contains this register */
    n = 0; regData = fullList[n];
@@ -476,7 +480,7 @@ MarkDirtyAllRegs (Account *acc)
    xaccLedgerDisplay *regData;
    int n;
 
-   if (!acc) return;
+   if (!acc || !fullList) return;   
 
    /* find all registers which contain this account */
    n = 0; regData = fullList[n];
@@ -498,7 +502,7 @@ RefreshAllRegs (Account *acc)
    xaccLedgerDisplay *regData;
    int n;
 
-   if (!acc) return;
+   if (!acc || !fullList) return;   
 
    /* find all registers which contain this account */
    n = 0; regData = fullList[n];
