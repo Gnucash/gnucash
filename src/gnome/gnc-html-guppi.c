@@ -384,18 +384,19 @@ convert_string_array(char ** strings, int nstrings) {
 }
 
 static gboolean
-gnc_has_guppi_0_35_4 (void)
+gnc_has_guppi_version(int major, int minor, int micro)
 {
-  if (guppi_version_major () > 0)
+  if (guppi_version_major () > major)
     return TRUE;
-
-  if (guppi_version_minor () > 35)
-    return TRUE;
-
-  if (guppi_version_minor () < 35)
+  if (guppi_version_major () < major)
     return FALSE;
 
-  return (guppi_version_micro () > 3);
+  if (guppi_version_minor () > minor)
+    return TRUE;
+  if (guppi_version_minor () < minor)
+    return FALSE;
+
+  return (guppi_version_micro () >= micro);
 }
 
 /********************************************************************
@@ -621,15 +622,17 @@ gnc_html_embedded_barchart(gnc_html * parent,
     argind++;    
   }
 
-  /* Those are not yet implemented in libguppitank :( */
 #if 0
-  if((param = g_hash_table_lookup(params, "x_axis_label")) != NULL) {
+  /* These still give segfault, regardless of what you do. Shit. */
+  if(gnc_has_guppi_version(0,35,6) &&
+     (param = g_hash_table_lookup(params, "x_axis_label")) != NULL) {
     arglist[argind].name   = "x_axis_label";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = param;
     argind++;    
   }
-  if((param = g_hash_table_lookup(params, "y_axis_label")) != NULL) {
+  if(gnc_has_guppi_version(0,35,6) &&
+     (param = g_hash_table_lookup(params, "y_axis_label")) != NULL) {
     arglist[argind].name   = "y_axis_label";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = param;
@@ -755,7 +758,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
                                                      datarows*datacols);
     g_free(callbacks);
   }
-  if(gnc_has_guppi_0_35_4 () &&
+  if(gnc_has_guppi_version(0,35,4) &&
      (param = g_hash_table_lookup(params, "legend_reversed")) != NULL) {
     sscanf(param, "%d", &rotate);
     arglist[argind].name   = "legend_reversed";
@@ -763,7 +766,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
     GTK_VALUE_BOOL(arglist[argind]) = rotate;
     argind++;
   }
-  if(gnc_has_guppi_0_35_4 () &&
+  if(gnc_has_guppi_version(0,35,4) &&
      (param = g_hash_table_lookup(params, "stacked")) != NULL) {
     sscanf(param, "%d", &stacked);
     arglist[argind].name   = "stacked";
@@ -771,7 +774,7 @@ gnc_html_embedded_barchart(gnc_html * parent,
     GTK_VALUE_BOOL(arglist[argind]) = stacked;
     argind++;
   }
-  if(gnc_has_guppi_0_35_4 () &&
+  if(gnc_has_guppi_version(0,35,4) &&
      (param = g_hash_table_lookup(params, "normalize_stacks")) != NULL) {
     sscanf(param, "%d", &normalize_stacks);
     arglist[argind].name   = "normalize_stacks";
