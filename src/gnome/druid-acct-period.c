@@ -192,17 +192,7 @@ ap_finish (GnomeDruidPageFinish *druidpage,
                     GtkWidget *druid,
                     gpointer user_data)
 {
-  const char *msg;
-  char *str;
   AcctPeriodInfo *info = user_data;
-  ENTER ("info=%p", info);
-
-  msg = _("%s\nCongradulations! You are done closing books!");
-
-  str = g_strdup_printf (msg, get_close_status_str (info));
-  gnome_druid_page_finish_set_text (druidpage, str);
-  g_free (str);
-
   gnc_close_gui_component_by_data (DRUID_ACCT_PERIOD_CM_CLASS, info);
 }
 
@@ -461,6 +451,25 @@ printf ("duuude tit=%s no=%s\n", btitle, bnotes);
 /* =============================================================== */
 
 static void
+ap_show_done (GnomeDruidPageFinish *druidpage,
+                    GtkWidget *druid,
+                    gpointer user_data)
+{
+  const char *msg;
+  char *str;
+  AcctPeriodInfo *info = user_data;
+  ENTER ("info=%p", info);
+
+  msg = _("%s\nCongradulations! You are done closing books!");
+
+  str = g_strdup_printf (msg, get_close_status_str (info));
+  gnome_druid_page_finish_set_text (druidpage, str);
+  g_free (str);
+}
+
+/* =============================================================== */
+
+static void
 ap_druid_create (AcctPeriodInfo *info)
 {
   GladeXML *xml;
@@ -548,6 +557,9 @@ ap_druid_create (AcctPeriodInfo *info)
 
   gtk_signal_connect (GTK_OBJECT (info->book_page), "next",
                       GTK_SIGNAL_FUNC (ap_close_period), info);
+
+  gtk_signal_connect (GTK_OBJECT (info->finish_page), "prepare",
+                      GTK_SIGNAL_FUNC (ap_show_done), info);
 
   gtk_signal_connect (GTK_OBJECT (info->finish_page), "finish",
                       GTK_SIGNAL_FUNC (ap_finish), info);
