@@ -125,12 +125,14 @@ ival_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
 
 static int
-pgendGetCache (PGBackend *be, const char *val_str)
+pgendGetCache (PGBackend *be, const char *val_str, sqlEscape *escape)
 {
    char *p;
    int ival =0;
 
-   if (!be || !val_str) return 0;
+   if (!be || !val_str || !escape) return 0;
+
+   val_str = sqlEscapeString (escape, val_str);
 
    /* first, lets see if we can find the guid or path. 
     * If we can then  just return it */
@@ -155,7 +157,7 @@ pgendGetCache (PGBackend *be, const char *val_str)
    FINISH_QUERY(be->connection);
 
    /* and requery to get the serial number ... */
-   ival = pgendGetCache (be, val_str);
+   ival = pgendGetCache (be, val_str, escape);
    return ival;
 }
 
@@ -163,10 +165,10 @@ pgendGetCache (PGBackend *be, const char *val_str)
 /* given a string, return the corresponding int from the sql db. */
 
 static int
-pgendGetPathCache (PGBackend *be, const char *path_str)
+pgendGetPathCache (PGBackend *be, const char *path_str, sqlEscape *escape)
 {
    int ival;
-   ival = pgendGetCache (be, path_str);
+   ival = pgendGetCache (be, path_str, escape);
    PINFO ("cached %d for %s", ival, path_str ? path_str : "(null)");
 
    if (0 >= ival) return ival;
@@ -209,8 +211,7 @@ store_cb (const char *key, kvp_value *val, gpointer p)
    path_save = cb_data->path;
    cb_data->path = g_strjoin ("/", path_save, key, 0);
 
-   ipath = pgendGetPathCache (be, sqlEscapeString (cb_data->escape,
-                                                   cb_data->path));
+   ipath = pgendGetPathCache (be, cb_data->path, cb_data->escape);
    cb_data->ipath = ipath;
 
    if (ipath)
