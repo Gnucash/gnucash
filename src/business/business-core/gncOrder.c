@@ -175,7 +175,8 @@ void gncOrderAddEntry (GncOrder *order, GncEntry *entry)
   if (old) gncOrderRemoveEntry (old, entry);
 
   gncEntrySetOrder (entry, order);
-  order->entries = g_list_append (order->entries, entry);
+  order->entries = g_list_insert_sorted (order->entries, entry,
+					 (GCompareFunc)gncEntryCompare);
   order->dirty = TRUE;
 }
 
@@ -292,13 +293,13 @@ int gncOrderCompare (GncOrder *a, GncOrder *b)
   if (a && !b) return 1;
 
   compare = safe_strcmp (a->id, b->id);
-  if (!compare) return compare;
+  if (compare) return compare;
 
   compare = timespec_cmp (&(a->opened), &(b->opened));
-  if (!compare) return compare;
+  if (compare) return compare;
 
   compare = timespec_cmp (&(a->closed), &(b->closed));
-  if (!compare) return compare;
+  if (compare) return compare;
 
   return guid_compare (&(a->guid), &(b->guid));
 }

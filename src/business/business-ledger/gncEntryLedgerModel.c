@@ -704,7 +704,7 @@ static void gnc_entry_ledger_save_cells (gpointer save_data,
     gnc_date_cell_commit ((DateCell *) cell);
 
     gnc_date_cell_get_date ((DateCell *) cell, &ts);
-    gncEntrySetDate (entry, &ts);
+    gncEntrySetDate (entry, ts);
   }
 
   if (gnc_table_layout_get_cell_changed (ledger->table->layout,

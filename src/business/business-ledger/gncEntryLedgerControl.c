@@ -56,7 +56,12 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
 
   gnc_suspend_gui_refresh ();
 
-  if (entry == blank_entry)
+  if (entry == blank_entry) {
+    Timespec ts;
+    ts.tv_sec = time(NULL);
+    ts.tv_nsec = 0;
+    gncEntrySetDateEntered (blank_entry, ts);
+    
     switch (ledger->type) {
     case GNCENTRY_ORDER_ENTRY:
       gncOrderAddEntry (ledger->order, blank_entry);
@@ -67,8 +72,10 @@ gnc_entry_ledger_save (GncEntryLedger *ledger, gboolean do_commit)
       break;
     default:
       /* Nothing to do for viewers */
+      g_warning ("blank entry traversed in a viewer");
       break;
     }
+  }
 
   gnc_table_save_cells (ledger->table, entry);
 

@@ -69,15 +69,15 @@
   
   (let* ((col-vector (make-vector columns-used-size #f))
          (set-col (make-set-col col-vector)))
-    (set-col (opt-val "Display" "Date") 0)
-    (set-col (opt-val "Display" "Description") 1)
-    (set-col (opt-val "Display" "Action") 2)
-    (set-col (opt-val "Display" "Quantity") 3)
-    (set-col (opt-val "Display" "Price") 4)
-    (set-col (opt-val "Display" "Discount") 5)
-    (set-col (opt-val "Display" "Tax") 6)
-    (set-col (opt-val "Display" "Tax Value") 7)
-    (set-col (opt-val "Display" "Value") 8)
+    (set-col (opt-val "Display Columns" "Date") 0)
+    (set-col (opt-val "Display Columns" "Description") 1)
+    (set-col (opt-val "Display Columns" "Action") 2)
+    (set-col (opt-val "Display Columns" "Quantity") 3)
+    (set-col (opt-val "Display Columns" "Price") 4)
+    (set-col (opt-val "Display Columns" "Discount") 5)
+    (set-col (opt-val "Display Columns" "Tax") 6)
+    (set-col (opt-val "Display Columns" "Tax Value") 7)
+    (set-col (opt-val "Display Columns" "Total") 8)
     col-vector))
 
 (define (make-heading-list column-vector)
@@ -100,7 +100,7 @@
     (if (taxvalue-col column-vector)
 	(addto! heading-list (_ "Tax Amount")))
     (if (value-col column-vector)
-	(addto! heading-list (_ "Value")))
+	(addto! heading-list (_ "Total")))
     (reverse heading-list)))
 
 (define (monetary-or-percent numeric currency entry-type)
@@ -200,47 +200,47 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Date")
+    (N_ "Display Columns") (N_ "Date")
     "b" (N_ "Display the date?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Description")
+    (N_ "Display Columns") (N_ "Description")
     "d" (N_ "Display the description?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Action")
+    (N_ "Display Columns") (N_ "Action")
     "g" (N_ "Display the action?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Quantity")
+    (N_ "Display Columns") (N_ "Quantity")
     "ha" (N_ "Display the quantity of items?") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Price")
+    (N_ "Display Columns") (N_ "Price")
     "hb" "Display the price per item?" #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Discount")
+    (N_ "Display Columns") (N_ "Discount")
     "k" (N_ "Display the entry's discount") #t))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Tax")
+    (N_ "Display Columns") (N_ "Tax")
     "l" (N_ "Display the entry's tax") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Tax Value")
+    (N_ "Display Columns") (N_ "Tax Value")
     "m" (N_ "Display the entry's monetary tax") #f))
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Value")
+    (N_ "Display Columns") (N_ "Total")
     "n" (N_ "Display the entry's value") #t))
 
   (gnc:register-inv-option
@@ -255,8 +255,25 @@
 
   (gnc:register-inv-option
    (gnc:make-simple-boolean-option
-    (N_ "Display") (N_ "Terms")
+    (N_ "Display") (N_ "Invoice Terms")
     "t" (N_ "Display the invoice terms?") #t))
+
+  (gnc:register-inv-option
+   (gnc:make-simple-boolean-option
+    (N_ "Display") (N_ "Invoice Notes")
+    "t" (N_ "Display the invoice notes?") #f))
+
+  (gnc:register-inv-option
+   (gnc:make-text-option
+    (N_ "Display") (N_ "Extra Notes")
+     "u" (N_ "Extra notes to put on the invoice")
+     "Thank you for your patronage"))
+
+  (gnc:register-inv-option
+   (gnc:make-string-option
+    (N_ "Display") (N_ "Today Date Format")
+    "v" (N_ "The format for the date->string conversion for today's date.")
+    "~B ~e, ~Y"))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
 
@@ -316,7 +333,7 @@
 			     "grand-total" (cdr this)))
 	 (list (cons value-collector (_ "Subtotal"))
 	       (cons tax-collector (_ "Tax"))
-	       (cons total-collector (_"Total"))))
+	       (cons total-collector (_"Amount Due"))))
 
         (let* ((current (car entries))
                (current-row-style (if odd-row? "normal-row" "alternate-row"))
@@ -441,7 +458,7 @@
      'attribute (list "valign" "top"))
     table))
 
-(define (make-myname-table)
+(define (make-myname-table date-format)
   (let ((table (gnc:make-html-table)))
     (gnc:html-table-set-style!
      table "table"
@@ -462,10 +479,7 @@
        (gnc:lookup-global-option "User Info" "User Address"))))
     (gnc:html-table-append-row!
      table
-     (list
-      "Day, Month day, year"
-      ;;(date->string (current-date) "~A, ~B ~e, ~Y")
-      ))
+     (list (date->string (current-date) date-format)))
     table))
 
 (define (make-break! document)
@@ -506,7 +520,7 @@
 
     (gnc:html-document-add-object!
      document
-     (make-myname-table))
+     (make-myname-table (opt-val "Display" "Today Date Format")))
 
     (let ((date-table (make-date-table)))
       (make-date-row!
@@ -529,7 +543,7 @@
     (make-break! document)
     (make-break! document)
 
-    (if (opt-val "Display" "Terms")
+    (if (opt-val "Display" "Invoice Terms")
 	(let ((terms (gnc:invoice-get-terms invoice)))
 	  (if (and terms (> (string-length terms) 0))
 	      (gnc:html-document-add-object!
@@ -542,6 +556,25 @@
     (make-break! document)
 
     (gnc:html-document-add-object! document table)
+
+    (make-break! document)
+    (make-break! document)
+
+    (if (opt-val "Display" "Invoice Notes")
+	(let ((notes (gnc:invoice-get-notes invoice)))
+	  (gnc:html-document-add-object!
+	   document
+	   (gnc:make-html-text
+	    (string-expand notes #\newline "<br>")))))
+
+    (make-break! document)
+
+    (gnc:html-document-add-object!
+     document
+     (gnc:make-html-text
+      (gnc:html-markup-br)
+      (string-expand (opt-val "Display" "Extra Notes") #\newline "<br>")
+      (gnc:html-markup-br)))
 
     document))
 

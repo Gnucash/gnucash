@@ -34,7 +34,8 @@ void gncEntryDestroy (GncEntry *entry);
 
 /* Set Functions */
 
-void gncEntrySetDate (GncEntry *entry, Timespec *date);
+void gncEntrySetDate (GncEntry *entry, Timespec date);
+void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
 void gncEntrySetAction (GncEntry *entry, const char *action);
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
@@ -52,6 +53,7 @@ void gncEntrySetTaxAccount (GncEntry *entry, Account *acc);
 GNCBook * gncEntryGetBook (GncEntry *entry);
 const GUID * gncEntryGetGUID (GncEntry *entry);
 Timespec gncEntryGetDate (GncEntry *entry);
+Timespec gncEntryGetDateEntered (GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
 const char * gncEntryGetAction (GncEntry *entry);
 gnc_numeric gncEntryGetQuantity (GncEntry *entry);

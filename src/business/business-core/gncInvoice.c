@@ -222,7 +222,8 @@ void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry)
   if (old) gncInvoiceRemoveEntry (old, entry);
 
   gncEntrySetInvoice (entry, invoice);
-  invoice->entries = g_list_append (invoice->entries, entry);
+  invoice->entries = g_list_insert_sorted (invoice->entries, entry,
+					   (GCompareFunc)gncEntryCompare);
   invoice->dirty = TRUE;
 }
 
@@ -647,16 +648,16 @@ int gncInvoiceCompare (GncInvoice *a, GncInvoice *b)
   if (a && !b) return 1;
 
   compare = safe_strcmp (a->id, b->id);
-  if (!compare) return compare;
+  if (compare) return compare;
 
   compare = timespec_cmp (&(a->date_opened), &(b->date_opened));
-  if (!compare) return compare;
+  if (compare) return compare;
 
   compare = timespec_cmp (&(a->date_posted), &(b->date_posted));
-  if (!compare) return compare;
+  if (compare) return compare;
 
   compare = timespec_cmp (&(a->date_paid), &(b->date_paid));
-  if (!compare) return compare;
+  if (compare) return compare;
 
   return guid_compare (&(a->guid), &(b->guid));
 }

@@ -26,6 +26,7 @@ struct _gncEntry {
 
   GUID		guid;
   Timespec	date;
+  Timespec	date_entered;
   char *	desc;
   char *	action;
   gnc_numeric 	quantity;
@@ -141,10 +142,17 @@ void gncEntrySetGUID (GncEntry *entry, const GUID *guid)
   addObj (entry);
 }
 
-void gncEntrySetDate (GncEntry *entry, Timespec *date)
+void gncEntrySetDate (GncEntry *entry, Timespec date)
 {
-  if (!entry || !date) return;
-  entry->date = *date;
+  if (!entry) return;
+  entry->date = date;
+  entry->dirty = TRUE;
+}
+
+void gncEntrySetDateEntered (GncEntry *entry, Timespec date)
+{
+  if (!entry) return;
+  entry->date_entered = date;
   entry->dirty = TRUE;
 }
 
@@ -263,6 +271,13 @@ Timespec gncEntryGetDate (GncEntry *entry)
   Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
   if (!entry) return ts;
   return entry->date;
+}
+
+Timespec gncEntryGetDateEntered (GncEntry *entry)
+{
+  Timespec ts; ts.tv_sec = 0; ts.tv_nsec = 0;
+  if (!entry) return ts;
+  return entry->date_entered;
 }
 
 const char * gncEntryGetDescription (GncEntry *entry)
@@ -428,13 +443,16 @@ int gncEntryCompare (GncEntry *a, GncEntry *b)
   if (a && !b) return 1;
 
   compare = timespec_cmp (&(a->date), &(b->date));
-  if (!compare) return compare;
+  if (compare) return compare;
+
+  compare = timespec_cmp (&(a->date_entered), &(b->date_entered));
+  if (compare) return compare;
 
   compare = safe_strcmp (a->desc, b->desc);
-  if (!compare) return compare;
+  if (compare) return compare;
 
   compare = safe_strcmp (a->action, b->action);
-  if (!compare) return compare;
+  if (compare) return compare;
 
   return guid_compare (&(a->guid), &(b->guid));
 }
