@@ -33,6 +33,7 @@
 //#include <gtk/gtk.h>
 #include <glade/glade.h>
 
+#include <stdlib.h>
 #include "gnc-generic-import.h"
 #include "Account.h"
 #include "Transaction.h"
@@ -180,17 +181,37 @@ gnc_ui_generic_account_picker_unselect_cb(GtkCTree   * tree,
 }
 
 static int
+gnc_ui_generic_account_picker_map_cb(GtkWidget * w, gpointer user_data)
+{
+  /* update the tree display */
+  build_acct_tree((struct _accountpickerdialog *)user_data);
+  return 0;
+}
+
+#if 0 /* 0 -- With the printf here, as below, this causes a
+       *      compilation problem with GCC 3.1:
+       *
+       * gnc-generic-import.c:414: output_operand: invalid expression as operand
+       * Please submit a full bug report,
+       * with preprocessed source if appropriate.
+       * See <URL:http://bugzilla.redhat.com/bugzilla/> for instructions.
+       * make[1]: *** [gnc-generic-import.lo] Error 1
+       */
+static int
 gnc_ui_generic_account_picker_map_cb(GtkWidget * w, gpointer user_data) {
   printf("gnc_ui_generic_account_picker_map_cb()\n");
   /* update the tree display */
   build_acct_tree(user_data);
   return FALSE;
 }
+#endif /* 0 */
 
 static gpointer test_acct_online_id_match(Account *acct, gpointer param_online_id)
 {
   gchar * current_online_id = gnc_import_get_acc_online_id(acct);
-  if((current_online_id!=NULL&&param_online_id!=NULL)&&strcmp(current_online_id, param_online_id)==0)
+  if( (current_online_id != NULL
+       && param_online_id != NULL )
+      && strcmp( current_online_id, param_online_id ) == 0 )
     {
       return (gpointer *) acct;
     }
@@ -205,7 +226,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
 				    gnc_commodity * new_account_default_commodity,
 				    GNCAccountType new_account_default_type)
 {
-  struct _accountpickerdialog * picker = g_new0(struct _accountpickerdialog, 1);
+  struct _accountpickerdialog * picker;
   const int ACCOUNT_DESCRIPTION_MAX_SIZE = 255;
   gint ui_retval;
   Account * retval = NULL;
@@ -213,6 +234,7 @@ Account * gnc_import_select_account(char * account_online_id_value,
   GtkWidget * online_id_label;
   gchar account_description_text[ACCOUNT_DESCRIPTION_MAX_SIZE];
 
+  picker = g_new0(struct _accountpickerdialog, 1);
   picker->acct_group = gnc_get_current_group();
   if(picker->acct_group == NULL)
     {
@@ -394,3 +416,4 @@ void gnc_import_add_trans(Transaction *trans)
   }
   return;
 }
+

@@ -3781,7 +3781,7 @@ Select any which you would like to create now, and click
 	    <name>reminders_list</name>
 	    <can_focus>True</can_focus>
 	    <columns>3</columns>
-	    <column_widths>80,80,80</column_widths>
+	    <column_widths>153,121,80</column_widths>
 	    <selection_mode>GTK_SELECTION_EXTENDED</selection_mode>
 	    <show_titles>True</show_titles>
 	    <shadow_type>GTK_SHADOW_IN</shadow_type>
@@ -3908,7 +3908,7 @@ Select any which you would like to create now, and click
 	      <name>to_create_list</name>
 	      <can_focus>True</can_focus>
 	      <columns>2</columns>
-	      <column_widths>80,80</column_widths>
+	      <column_widths>177,80</column_widths>
 	      <selection_mode>GTK_SELECTION_SINGLE</selection_mode>
 	      <show_titles>True</show_titles>
 	      <shadow_type>GTK_SHADOW_IN</shadow_type>
@@ -4202,18 +4202,6 @@ Select those you wish to delete.</label>
 	  </widget>
 	</widget>
       </widget>
-    </widget>
-
-    <widget>
-      <class>GnomeDruidPageFinish</class>
-      <name>finish_page</name>
-      <title>All Done</title>
-      <text>Thanks for playing our game...</text>
-      <background_color>25,25,112</background_color>
-      <logo_background_color>255,255,255</logo_background_color>
-      <textbox_color>255,255,255</textbox_color>
-      <text_color>0,0,0</text_color>
-      <title_color>255,255,255</title_color>
     </widget>
   </widget>
 </widget>

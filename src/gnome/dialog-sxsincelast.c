@@ -24,18 +24,28 @@
  * . Page 1: reminders list
  *   . backed by: sxsld->reminderList
  * . Page 2: auto-create notify ledger
- *   . backed by: sxsld->autoCreateList [?]
+ *   . backed by: sxsld->autoCreateList
  * . Page 3: to-create variable bindings
  *   . backed by: sxsld->toCreateData [s/Data/List/]
  * . Page 4: created ledger
- *   . backed by: sxsld->createdList [?]
+ *   . backed by: sxsld->createdList
  * . Page 5: obsolete list
  *   . backed by: sxsld->toRemoveList
- * . Page 6: finish
- *   . allow user last chance to revert/cancel changes.  If we need to do
- *   this, we'll go through our created lists and destroy a bunch of
- *   things. In the future, we'd rather use this page to implement changes
- *   after approval.
+ *
+ * Detail regarding 'back' processing support.
+ * . reminders
+ *   . selected
+ *     . <standard policy>
+ *   . unselected
+ *     . QUESTION: how do we detect unselected?
+ *     . if auto-created   : delete
+ *     . if to-create      : remove
+ * . auto-create           : display
+ * . to-create variable bindings
+ *   . if bindings changed : reeval/fill credit/debit cells
+ *   . if made incomplete  : delete transaction
+ * . created               : display
+ * . obsolete              : select status [easy]
  **/
 
 #include "config.h"
@@ -84,7 +94,6 @@
 #define TO_CREATE_PG "to_create_page"
 #define CREATED_PG "created_page"
 #define OBSOLETE_PG "obsolete_page"
-#define FINISH_PG "finish_page"
 
 #define SX_OBSOLETE_CLIST "sx_obsolete_clist"
 #define TO_CREATE_LIST "to_create_list"
@@ -119,6 +128,14 @@
 static short module = MOD_SX;
 
 /**
+ * Directions for {forward,back}-page determining.
+ * @see gnc_sxsld_get_appropriate_page
+ **/
+typedef enum {
+        FORWARD, BACK
+} Direction;
+
+/**
  * The since-last-run dialog is a Gnome Druid which steps through the various
  * parts of scheduled transaction since-last-run processing; these parts are:
  *
@@ -151,8 +168,11 @@ typedef struct _sxSinceLastData {
         GHashTable /* <SchedXaction*,void*> */ *sxInitStates;
         /** The list of removed SXes, in case we need to revert/cancel. */
         GList /* <toDeleteTuple*> */   *removedList;
-        /** The list of GUIDs of Txns we've created... */
+        /** The list of the GUIDs of _all_ transactions we've created. */
         GList /* <GUID*> */            *createdTxnGUIDList;
+
+        /* The count of selected reminders. */
+        gint remindSelCount;
 
         gboolean autoCreatedSomething;
         gboolean createdSomething;
@@ -176,6 +196,10 @@ typedef struct toCreateInstance_ {
         gint instanceNum;
         GtkCTreeNode *node;
         toCreateTuple *parentTCT;
+        /* A list of the GUIDs of transactions generated from this TCI [if
+         * any]; this will always be a subset of the
+         * sxsld->createdTxnGUIDList. */
+        GList /* <GUID*> */ *createdTxnGUIDs;
 } toCreateInstance;
 
 /**
@@ -195,6 +219,7 @@ typedef struct reminderInstanceTuple_ {
         gint     instanceNum;
         gboolean isSelected;
         reminderTuple *parentRT;
+        toCreateInstance *resultantTCI;
 } reminderInstanceTuple;
 
 typedef struct toDeleteTuple_ {
@@ -221,6 +246,16 @@ static gboolean sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
 static void sxsincelast_close_handler( gpointer ud );
 
+static GnomeDruidPage* gnc_sxsld_get_appropriate_page( sxSinceLastData *sxsdl,
+                                                       GnomeDruidPage *from,
+                                                       Direction dir );
+static gboolean gnc_sxsld_wtd_appr( sxSinceLastData *sxsld );
+static gboolean gnc_sxsld_remind_appr( sxSinceLastData *sxsld );
+static gboolean gnc_sxsld_tocreate_appr( sxSinceLastData *sxsld );
+static gboolean gnc_sxsld_autocreate_appr( sxSinceLastData *sxsld );
+static gboolean gnc_sxsld_created_appr( sxSinceLastData *sxsld );
+static gboolean gnc_sxsld_obsolete_appr( sxSinceLastData *sxsld );
+
 static void sxsincelast_entry_changed( GtkEditable *e, gpointer ud );
 static void sxsincelast_destroy( GtkObject *o, gpointer ud );
 static void sxsincelast_save_size( sxSinceLastData *sxsld );
@@ -229,11 +264,13 @@ static void create_transactions_on( SchedXaction *sx,
                                     toCreateInstance *tci,
                                     GList **createdGUIDs );
 static gboolean create_each_transaction_helper( Transaction *t, void *d );
+/* External for what reason ... ? */
 void sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash );
 static void hash_to_sorted_list( GHashTable *hashTable, GList **gl );
 static void andequal_numerics_set( gpointer key,
                                    gpointer value,
                                    gpointer data );
+/* External for bad reasons, I think...? */
 void print_vars_helper( gpointer key,
                         gpointer value,
                         gpointer user_data );
@@ -243,9 +280,8 @@ static void clean_variable_table( sxSinceLastData *sxsld );
 static void process_auto_create_list( GList *, sxSinceLastData *sxsld );
 static void add_to_create_list_to_gui( GList *, sxSinceLastData *sxsld );
 static void add_reminders_to_gui( GList *, sxSinceLastData *sxsld );
-static void processRemoveList( GList *, sxSinceLastData *sxsld );
+static void add_dead_list_to_gui( GList *, sxSinceLastData *sxsld );
 static void processSelectedReminderList( GList *, sxSinceLastData * );
-
 
 static void sxsincelast_tc_row_sel( GtkCTree *ct,
                                     GList *nodelist,
@@ -259,16 +295,23 @@ static void sxsincelast_tc_row_unsel( GtkCTree *ct,
 
 static void sxsld_remind_row_toggle( GtkCTree *ct, GList *node,
                                      gint column, gpointer user_data );
+static void sxsld_obsolete_row_toggle( GtkCList *cl, gint row, gint col,
+                                       GdkEventButton *event, gpointer ud );
 
+static void gnc_sxsld_revert_reminders( sxSinceLastData *sxsld,
+                                        GList *toRevertList );
 static gboolean processed_valid_reminders_listP( sxSinceLastData *sxsld );
 static void create_bad_reminders_msg( gpointer data, gpointer ud );
 static gboolean inform_or_add( reminderTuple *rt, gboolean okFlag,
                                GList *badList, GList **goodList );
 
-static void sx_obsolete_select_all_clicked(GtkButton *button,
-                                           gpointer user_data);
-static void sx_obsolete_unselect_all_clicked(GtkButton *button,
-                                             gpointer user_data);
+static void sx_obsolete_select_all_clicked( GtkButton *button,
+                                            gpointer user_data );
+static void sx_obsolete_unselect_all_clicked( GtkButton *button,
+                                              gpointer user_data );
+
+static void gnc_sxsld_free_tci( toCreateInstance *tci );
+
 
 /**
  * Used to wrap for the book-open hook, where the book filename is given.
@@ -283,12 +326,12 @@ static gboolean
 show_handler (const char *class, gint component_id,
 	      gpointer user_data, gpointer iter_data)
 {
-  GtkWidget *window = user_data;
+        GtkWidget *window = user_data;
 
-  if (!window)
-    return(FALSE);
-  gtk_window_present (GTK_WINDOW(window));
-  return(TRUE);
+        if (!window)
+                return(FALSE);
+        gtk_window_present (GTK_WINDOW(window));
+        return(TRUE);
 }
 
 /**
@@ -422,16 +465,136 @@ sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud )
 {
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
-        DEBUG( "druid cancelled" );
         gtk_widget_hide( sxsld->sincelast_window );
         sxsincelast_close_handler( sxsld );
 }
 
-static gboolean
-theres_no_turning_back_bang( GnomeDruidPage *druid_page,
-                             gpointer arg1, gpointer ud )
+/**
+ * Using the specified direction, gets the next appropriate page.  Returns
+ * NULL if there is no approrpiate page to go to.
+ **/
+static
+GnomeDruidPage*
+gnc_sxsld_get_appropriate_page( sxSinceLastData *sxsld,
+                                GnomeDruidPage *from,
+                                Direction dir )
 {
-        DEBUG( "there's no turning back!!! MuHahahahhaha" );
+        static struct _anon {
+                gchar *pageName;
+                gboolean (*pageAppropriate)( sxSinceLastData *sxsld );
+        } pages[] = {
+                { WHAT_TO_DO_PG,         gnc_sxsld_wtd_appr },
+                { REMINDERS_PG,          gnc_sxsld_remind_appr },
+                { AUTO_CREATE_NOTIFY_PG, gnc_sxsld_autocreate_appr },
+                { TO_CREATE_PG,          gnc_sxsld_tocreate_appr },
+                { CREATED_PG,            gnc_sxsld_created_appr },
+                { OBSOLETE_PG,           gnc_sxsld_obsolete_appr },
+                { NULL,                  NULL }
+        };
+        int modifier;
+        int cur;
+        GtkWidget *pg;
+
+        pg = NULL;
+        /* get the current page index via lame linear search. */
+        for ( cur = 0; pages[cur].pageName != NULL; cur++ ) {
+                pg = glade_xml_get_widget( sxsld->gxml, pages[cur].pageName );
+                if ( GTK_WIDGET(from) == pg ) {
+                        break;
+                }
+        }
+        g_assert( pages[cur].pageName != NULL );
+
+        modifier = ( dir == FORWARD ? 1 : -1 );
+        /* Find the approrpriate "next" page; start trying the first possible
+         * "next" page. */
+        cur += modifier;
+        while ( cur >= 0
+                && pages[cur].pageName != NULL
+                && !(*pages[cur].pageAppropriate)( sxsld ) ) {
+                cur += modifier;
+        }
+
+        if ( cur < 0
+             || pages[cur].pageName == NULL ) {
+                return NULL;
+        }
+        return GNOME_DRUID_PAGE( glade_xml_get_widget( sxsld->gxml,
+                                                       pages[cur].pageName ) );
+}
+
+static
+gboolean
+gnc_sxsld_wtd_appr( sxSinceLastData *sxsld )
+{
+        /* It's never appropriate to return here. */
+        return FALSE;
+}
+
+static
+gboolean
+gnc_sxsld_remind_appr( sxSinceLastData *sxsld )
+{
+        return (g_list_length( sxsld->reminderList ) != 0);
+}
+
+static
+gboolean
+gnc_sxsld_tocreate_appr( sxSinceLastData *sxsld )
+{
+        return (g_list_length( sxsld->toCreateList ) != 0);
+}
+
+static
+gboolean
+gnc_sxsld_autocreate_appr( sxSinceLastData *sxsld )
+{
+        return sxsld->autoCreatedSomething;
+}
+
+static
+gboolean
+gnc_sxsld_created_appr( sxSinceLastData *sxsld )
+{
+        return sxsld->createdSomething;
+}
+
+static
+gboolean
+gnc_sxsld_obsolete_appr( sxSinceLastData *sxsld )
+{
+        return (g_list_length( sxsld->toRemoveList ) != 0);
+}
+
+static
+gboolean
+gen_back( GnomeDruidPage *druid_page,
+          gpointer arg1, gpointer ud )
+{
+        GnomeDruidPage *gdp;
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+
+        if ( !(gdp = gnc_sxsld_get_appropriate_page( sxsld, druid_page, BACK )) ) {
+                DEBUG( "No appropriate page to go to." );
+                return TRUE;
+        }
+        gnome_druid_set_page( sxsld->sincelast_druid, gdp );
+        return TRUE;
+}
+
+static
+gboolean
+gen_next( GnomeDruidPage *druid_page,
+          gpointer arg1, gpointer ud )
+{
+        GnomeDruidPage *gdp;
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+
+        if ( !(gdp = gnc_sxsld_get_appropriate_page( sxsld, druid_page, FORWARD )) ) {
+                DEBUG( "No appropriate page to go to." );
+                return TRUE;
+        }
+        gnome_druid_set_page( sxsld->sincelast_druid, gdp );
         return TRUE;
 }
 
@@ -439,91 +602,130 @@ static void
 whattodo_prep( GnomeDruidPage *druid_page,
                gpointer arg1, gpointer ud )
 {
-        DEBUG( "whattodo_prep" );
 }
 
-static void
-reminders_page_prep( sxSinceLastData *sxsld )
+static
+void 
+reminders_prep( GnomeDruidPage *druid_page,
+                gpointer arg1, gpointer ud )
 {
         GtkWidget *w;
-        if ( g_list_length( sxsld->reminderList ) == 0 ) {
-                w = glade_xml_get_widget( sxsld->gxml,
-                                          AUTO_CREATE_NOTIFY_PG );
-                gnome_druid_set_page( sxsld->sincelast_druid,
-                                      GNOME_DRUID_PAGE(w) );
-                return;
-        }
+        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
         w = glade_xml_get_widget( sxsld->gxml, REMINDER_LIST );
         gtk_clist_freeze( GTK_CLIST(w) );
         gtk_clist_clear( GTK_CLIST(w) );
         add_reminders_to_gui( sxsld->reminderList, sxsld );
         gtk_clist_thaw( GTK_CLIST(w) );
+        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
+                                           gnc_sxsld_get_appropriate_page( sxsld,
+                                                                           druid_page,
+                                                                           BACK ),
+                                           TRUE, TRUE );
+        /* FIXME: this isn't quite right; see the comment in
+         * sxsld_remind_row_toggle */
+        gnome_druid_set_show_finish( sxsld->sincelast_druid,
+                                     !gnc_sxsld_get_appropriate_page( sxsld,
+                                                                      druid_page,
+                                                                      FORWARD ) );
 }
 
-static void 
-reminders_prep( GnomeDruidPage *druid_page,
-                gpointer arg1, gpointer ud )
-{
-        sxSinceLastData *sxsld = (sxSinceLastData*)ud;
-        reminders_page_prep( sxsld );
-}
-
-static gboolean 
+static
+gboolean 
 reminders_next( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
 {
+        GnomeDruidPage *gdp;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+
         if ( !processed_valid_reminders_listP( sxsld ) ) {
                 return TRUE;
         }
-        return FALSE;
+        if ( !(gdp = gnc_sxsld_get_appropriate_page( sxsld,
+                                                     druid_page,
+                                                     FORWARD )) ) {
+                DEBUG( "no valid page to switch to" );
+                return TRUE;
+        }
+        gnome_druid_set_page( sxsld->sincelast_druid, gdp );
+        return TRUE;
 }
 
-#if 0
-static gboolean 
+static
+gboolean 
 reminders_back( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
 {
-        DEBUG( "reminders_back" );
-        return FALSE;
-}
-#endif
-
-static void
-reminders_finish( GnomeDruidPage *druid_page,
-                  gpointer arg1, gpointer ud )
-{
-        DEBUG( "reminders_finish" );
-}
-
-static void
-auto_create_prep( GnomeDruidPage *druid_page,
-                  gpointer arg1, gpointer ud )
-{
-        GtkWidget *w;
+        GnomeDruidPage *gdp;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
-        if ( ! sxsld->autoCreatedSomething ) {
-                w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_PG );
-                gnome_druid_set_page( sxsld->sincelast_druid,
-                                      GNOME_DRUID_PAGE(w) );
-                return;
+        if ( !processed_valid_reminders_listP( sxsld ) ) {
+                return TRUE;
         }
+        if ( !(gdp = gnc_sxsld_get_appropriate_page( sxsld, 
+                                                     druid_page,
+                                                     BACK )) ) {
+                DEBUG( "no valid page to switch to" );
+                return TRUE;
+        }
+        gnome_druid_set_page( sxsld->sincelast_druid, gdp );
+        return TRUE;
 }
 
-static void
+static
+void
 created_prep( GnomeDruidPage *druid_page,
-              gpointer arg1, gpointer ud )
+               gpointer arg1, gpointer ud )
 {
-        GtkWidget *w;
+        GList *tctList, *tciList, *guidList;
+        toCreateTuple *tct;
+        toCreateInstance *tci;
+        Query *bookQuery, *guidQuery, *q;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
-        if ( !sxsld->createdSomething ) {
-                w = glade_xml_get_widget( sxsld->gxml, OBSOLETE_PG );
-                gnome_druid_set_page( sxsld->sincelast_druid,
-                                      GNOME_DRUID_PAGE(w) );
-                return;
+        bookQuery = xaccMallocQuery();
+        guidQuery = xaccMallocQuery();
+        xaccQuerySetBook( bookQuery, gnc_get_current_book() );
+        /* Create the appropriate query for the Created ledger; go through
+         * the to-create list's instnaces and add all the created Txn
+         * GUIDs. */
+        for ( tctList = sxsld->toCreateList;
+              tctList;
+              tctList = tctList->next ) {
+                tct = (toCreateTuple*)tctList->data;
+                for ( tciList = tct->instanceList;
+                      tciList;
+                      tciList = tciList->next ) {
+                        tci = (toCreateInstance*)tciList->data;
+                        for ( guidList = tci->createdTxnGUIDs;
+                              guidList;
+                              guidList = guidList->next ) {
+                                xaccQueryAddGUIDMatch( guidQuery,
+                                                       (GUID*)guidList->data,
+                                                       GNC_ID_TRANS,
+                                                       QUERY_OR );
+                        }
+                }
+        }
+        q = xaccQueryMerge( bookQuery, guidQuery, QUERY_AND );
+        gnc_suspend_gui_refresh();
+        gnc_ledger_display_set_query( sxsld->created_ledger, q );
+        gnc_ledger_display_refresh( sxsld->created_ledger );
+        gnc_resume_gui_refresh();
+        xaccFreeQuery( q );
+        xaccFreeQuery( bookQuery );
+        xaccFreeQuery( guidQuery );
+
+        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
+                                           gnc_sxsld_get_appropriate_page( sxsld,
+                                                                           druid_page,
+                                                                           BACK ),
+                                           TRUE, TRUE );
+
+        if ( !gnc_sxsld_get_appropriate_page( sxsld,
+                                              druid_page,
+                                              FORWARD ) ) {
+                gnome_druid_set_show_finish( sxsld->sincelast_druid, TRUE );
         }
 }
 
@@ -531,82 +733,107 @@ static void
 obsolete_prep( GnomeDruidPage *druid_page,
                gpointer arg1, gpointer ud )
 {
-        GtkWidget *w;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
-        if ( g_list_length( sxsld->toRemoveList ) == 0 ) {
-                w = glade_xml_get_widget( sxsld->gxml, FINISH_PG );
-                gnome_druid_set_page( sxsld->sincelast_druid,
-                                      GNOME_DRUID_PAGE(w) );
-                return;
-        }
-        processRemoveList( sxsld->toRemoveList, sxsld );
+        add_dead_list_to_gui( sxsld->toRemoveList, sxsld );
+
+        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
+                                           gnc_sxsld_get_appropriate_page( sxsld,
+                                                                           druid_page,
+                                                                           BACK ),
+                                           TRUE, TRUE );
+
+        /* This is always the last/finish page. */
+        gnome_druid_set_show_finish( sxsld->sincelast_druid, TRUE );
 }
 
-static gboolean
-obsolete_next( GnomeDruidPage *druid_page,
-               gpointer arg1, gpointer ud )
+static
+void
+auto_create_prep( GnomeDruidPage *druid_page,
+                  gpointer arg1, gpointer ud )
 {
-        GList *sxList, *toDelPtr, *elt;
-        GtkCList *cl;
-        gint row;
-        toDeleteTuple *tdt;
+        GList *tctList, *tciList, *guidList;
+        toCreateTuple *tct;
+        toCreateInstance *tci;
+        Query *bookQuery, *guidQuery, *q;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
 
-        sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
-        cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
-                                              SX_OBSOLETE_CLIST ) );
+        bookQuery = xaccMallocQuery();
+        guidQuery = xaccMallocQuery();
+        xaccQuerySetBook( bookQuery, gnc_get_current_book() );
+        /* Create the appropriate query for the auto-create-notify ledger; go
+         * through the auto-create list's instances and add all the created
+         * Txn GUIDs. */
+        for ( tctList = sxsld->autoCreateList;
+              tctList;
+              tctList = tctList->next ) {
+                gboolean unused, notifyState;
 
-        for ( toDelPtr = cl->selection;
-              toDelPtr;
-              toDelPtr = toDelPtr->next ) {
-                row = (gint)toDelPtr->data;
-                tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
-                {
-                        elt = g_list_find( sxList, tdt->sx );
-                        sxList = g_list_remove_link( sxList, elt );
-                        
-                        sxsld->removedList = g_list_concat( sxsld->removedList, elt );
+                tct = (toCreateTuple*)tctList->data;
+                xaccSchedXactionGetAutoCreate( tct->sx, &unused, &notifyState );
+                if ( !notifyState ) {
+                        continue;
                 }
-                {
-                        elt = g_list_find( sxsld->toRemoveList, tdt );
-                        sxsld->toRemoveList =
-                                g_list_remove_link( sxsld->toRemoveList, elt );
-                        g_list_free_1(elt);
+
+                for ( tciList = tct->instanceList;
+                      tciList;
+                      tciList = tciList->next ) {
+                        tci = (toCreateInstance*)tciList->data;
+                        for ( guidList = tci->createdTxnGUIDs;
+                              guidList;
+                              guidList = guidList->next ) {
+                                xaccQueryAddGUIDMatch( guidQuery,
+                                                       (GUID*)guidList->data,
+                                                       GNC_ID_TRANS,
+                                                       QUERY_OR );
+                        }
                 }
-                g_date_free( tdt->endDate );
-                g_free( tdt );
         }
+        q = xaccQueryMerge( bookQuery, guidQuery, QUERY_AND );
+        gnc_suspend_gui_refresh();
+        gnc_ledger_display_set_query( sxsld->ac_ledger, q );
+        gnc_ledger_display_refresh( sxsld->ac_ledger );
+        gnc_resume_gui_refresh();
+        xaccFreeQuery( q );
+        xaccFreeQuery( bookQuery );
+        xaccFreeQuery( guidQuery );
 
-        gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
+                                           gnc_sxsld_get_appropriate_page( sxsld,
+                                                                           druid_page,
+                                                                           BACK ),
+                                           TRUE, TRUE );
 
-        gtk_clist_freeze( cl );
-        gtk_clist_clear( cl );
-        gtk_clist_thaw( cl );
-
-        return FALSE;
+        if ( !gnc_sxsld_get_appropriate_page( sxsld,
+                                              druid_page,
+                                              FORWARD ) ) {
+                gnome_druid_set_show_finish( sxsld->sincelast_druid, TRUE );
+        }
 }
 
-static void
+static
+void
 to_create_prep( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
 {
         GtkWidget *w;
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
-        if ( g_list_length( sxsld->toCreateList ) == 0 ) {
-                w = glade_xml_get_widget( sxsld->gxml, CREATED_PG );
-                gnome_druid_set_page( sxsld->sincelast_druid,
-                                      GNOME_DRUID_PAGE(w) );
-                return;
-        }
 
         w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST );
         gtk_clist_freeze( GTK_CLIST(w) );
         gtk_clist_clear( GTK_CLIST(w) );
         add_to_create_list_to_gui( sxsld->toCreateList, sxsld );
         gtk_clist_thaw( GTK_CLIST(w) );
+        gnome_druid_set_buttons_sensitive( sxsld->sincelast_druid,
+                                           gnc_sxsld_get_appropriate_page( sxsld,
+                                                                           druid_page,
+                                                                           BACK ),
+                                           TRUE, TRUE );
+        /* FIXME: we should add next/finish determination based on the number
+         * of ready-to-go to-create transactions? */
 }
 
-static gboolean
+static
+gboolean
 to_create_next( GnomeDruidPage *druid_page,
                 gpointer arg1, gpointer ud )
 {
@@ -616,7 +843,6 @@ to_create_next( GnomeDruidPage *druid_page,
         gboolean allVarsBound;
         toCreateTuple *tct;
         toCreateInstance *tci;
-        Query *q, *oldQuery, *newQuery;
 
         sxsld = (sxSinceLastData*)ud;
 
@@ -653,11 +879,13 @@ to_create_next( GnomeDruidPage *druid_page,
         }
 
         /* At this point we can assume there are to-create transactions and
-           all variables are bound. */
+         * all variables are bound. */
+
+        /* FIXME: we should probably factor this out into a seperate
+         * routine. */
         tcList = sxsld->toCreateList;
         g_assert( tcList != NULL );
 
-        q = xaccMallocQuery();
         gnc_suspend_gui_refresh();
         for ( ; tcList ; tcList = tcList->next ) {
                 tct = (toCreateTuple*)tcList->data;
@@ -670,28 +898,30 @@ to_create_next( GnomeDruidPage *druid_page,
 
                         tci = (toCreateInstance*)tcInstList->data;
 
+                        /* Skip over instances we've already created
+                         * transactions for. */
+
+                        /* FIXME: Really, we want to re-create transactions
+                         * for which the variables have changed. */
+
+                        if ( g_list_length( tci->createdTxnGUIDs ) != 0 ) {
+                                continue;
+                        }
+
                         create_transactions_on( tci->parentTCT->sx,
                                                 tci->date,
                                                 tci,
                                                 &created );
                         /* Add to the Query for that register. */
                         for ( l = created; l; l = l->next ) {
-                                xaccQueryAddGUIDMatch( q,
-                                                       (GUID*)l->data,
-                                                       GNC_ID_TRANS,
-                                                       QUERY_OR );
+                                tci->createdTxnGUIDs =
+                                        g_list_append( tci->createdTxnGUIDs,
+                                                       (GUID*)l->data );
                         }
                         sxsld->createdTxnGUIDList =
                                 g_list_concat( sxsld->createdTxnGUIDList, created );
                 }
         }
-
-        oldQuery = gnc_ledger_display_get_query( sxsld->created_ledger );
-        newQuery = xaccQueryMerge( oldQuery, q, QUERY_AND );
-        gnc_ledger_display_set_query( sxsld->created_ledger, newQuery );
-        gnc_ledger_display_refresh( sxsld->created_ledger );
-        xaccFreeQuery( q );
-
         gnc_resume_gui_refresh();
 
         sxsld->createdSomething = TRUE;
@@ -700,10 +930,49 @@ to_create_next( GnomeDruidPage *druid_page,
 }
 
 static void
-finish_finish( GnomeDruidPage *druid_page,
-               gpointer arg1, gpointer ud )
+gnc_sxsld_finish( GnomeDruidPage *druid_page,
+                  gpointer arg1, gpointer ud )
 {
         sxSinceLastData *sxsld = (sxSinceLastData*)ud;
+        GList *sxList, *toDelPtr, *elt;
+        GtkCList *cl;
+        gint row;
+        toDeleteTuple *tdt;
+
+        gtk_widget_hide( sxsld->sincelast_window );
+
+        /* Deal with the selected obsolete list elts. */
+        cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
+                                              SX_OBSOLETE_CLIST ) );
+
+        if ( g_list_length( cl->selection ) > 0 ) {
+                sxList = gnc_book_get_schedxactions( gnc_get_current_book() );
+
+                for ( toDelPtr = cl->selection;
+                      toDelPtr;
+                      toDelPtr = toDelPtr->next ) {
+
+                        row = (gint)toDelPtr->data;
+                        tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
+                        {
+                                elt = g_list_find( sxList, tdt->sx );
+                                sxList = g_list_remove_link( sxList, elt );
+                        
+                                sxsld->removedList = g_list_concat( sxsld->removedList, elt );
+                        }
+                        {
+                                elt = g_list_find( sxsld->toRemoveList, tdt );
+                                sxsld->toRemoveList =
+                                        g_list_remove_link( sxsld->toRemoveList, elt );
+                                g_list_free_1(elt);
+                        }
+                        g_date_free( tdt->endDate );
+                        g_free( tdt );
+                }
+
+                gnc_book_set_schedxactions( gnc_get_current_book(), sxList );
+        }
+
         sxsincelast_close_handler( sxsld );
 }
 
@@ -826,6 +1095,7 @@ static void
 sxsincelast_init( sxSinceLastData *sxsld )
 {
         GtkWidget *w;
+        GnomeDruidPage *nextPage;
         static widgetSignalHandlerTuple widgets[] = {
                 { SINCELAST_DRUID, "cancel",  sxsincelast_druid_cancelled },
 
@@ -834,6 +1104,9 @@ sxsincelast_init( sxSinceLastData *sxsld )
                 
                 { TO_CREATE_LIST, "tree-select-row",   sxsincelast_tc_row_sel },
                 { TO_CREATE_LIST, "tree-unselect-row", sxsincelast_tc_row_unsel },
+
+                { SX_OBSOLETE_CLIST, "select-row",   sxsld_obsolete_row_toggle },
+                { SX_OBSOLETE_CLIST, "unselect-row", sxsld_obsolete_row_toggle },
 
                 { SELECT_ALL_BUTTON,   "clicked",
                   sx_obsolete_select_all_clicked },
@@ -849,28 +1122,24 @@ sxsincelast_init( sxSinceLastData *sxsld )
                   NULL, cancel_check },
 
                 { REMINDERS_PG,
-                  reminders_prep, theres_no_turning_back_bang, reminders_next,
-                  reminders_finish, cancel_check },
-
-                { TO_CREATE_PG,
-                  to_create_prep, theres_no_turning_back_bang, to_create_next,
-                  NULL, cancel_check },
+                  reminders_prep, reminders_back, reminders_next,
+                  gnc_sxsld_finish, cancel_check },
 
                 { AUTO_CREATE_NOTIFY_PG,
-                  auto_create_prep, theres_no_turning_back_bang, NULL,
-                  NULL, cancel_check },
+                  auto_create_prep, gen_back, gen_next,
+                  gnc_sxsld_finish, cancel_check },
+
+                { TO_CREATE_PG,
+                  to_create_prep, gen_back, to_create_next,
+                  gnc_sxsld_finish, cancel_check },
 
                 { CREATED_PG,
-                  created_prep, theres_no_turning_back_bang, NULL,
-                  NULL, cancel_check },
+                  created_prep, gen_back, gen_next,
+                  gnc_sxsld_finish, cancel_check },
 
                 { OBSOLETE_PG,
-                  obsolete_prep, theres_no_turning_back_bang, obsolete_next,
-                  NULL, cancel_check },
-
-                { FINISH_PG,
-                  NULL, NULL, NULL,
-                  finish_finish, cancel_check },
+                  obsolete_prep, gen_back, gen_next,
+                  gnc_sxsld_finish, cancel_check },
 
                 { NULL, NULL, NULL, NULL, NULL, NULL }
         };
@@ -910,13 +1179,18 @@ sxsincelast_init( sxSinceLastData *sxsld )
                 }
         }
 
-        /*reminders_page_prep( sxsld );*/
         gtk_widget_show_all( sxsld->sincelast_window );
 
         process_auto_create_list( sxsld->autoCreateList, sxsld );
 
-        w = glade_xml_get_widget( sxsld->gxml, REMINDERS_PG );
-        gnome_druid_set_page( sxsld->sincelast_druid, GNOME_DRUID_PAGE(w) );
+        w = glade_xml_get_widget( sxsld->gxml, WHAT_TO_DO_PG );
+        nextPage = gnc_sxsld_get_appropriate_page( sxsld,
+                                                   GNOME_DRUID_PAGE(w),
+                                                   FORWARD );
+        /* If there's nowhere to go, then we shouldn't have been started at
+         * all [ie., ..._populate should have returned FALSE]. */
+        g_assert( nextPage );
+        gnome_druid_set_page( sxsld->sincelast_druid, nextPage );
 }
 
 static
@@ -944,6 +1218,9 @@ generate_instances( SchedXaction *sx,
         void *seqStateData;
         char tmpBuf[GNC_D_BUF_WIDTH];
 
+        g_assert( g_date_valid(end) );
+        g_assert( g_date_valid(reminderEnd) );
+
         /* Process valid next instances. */
         seqStateData = xaccSchedXactionCreateSequenceState( sx );
         gd = xaccSchedXactionGetNextInstance( sx, seqStateData );
@@ -964,17 +1241,8 @@ generate_instances( SchedXaction *sx,
                 gd = xaccSchedXactionGetInstanceAfter( sx, &gd, seqStateData );
         }
 
-        /* Add to dead list, or process reminder instances. */
-        if ( !g_date_valid( &gd )
-             && deadList ) {
-                toDeleteTuple *tdt;
-
-                tdt = g_new0( toDeleteTuple, 1 );
-                tdt->sx = sx;
-                tdt->endDate = g_date_new();
-                *tdt->endDate = gd;
-                *deadList = g_list_append( *deadList, tdt );
-        } else {
+        /* Process reminder instances or add to dead list [if we have one] */
+        if ( g_date_valid( &gd ) ) {
                 rt = g_new0( reminderTuple, 1 );
                 rt->sx = sx;
                 rt->instanceList = NULL;
@@ -1003,7 +1271,17 @@ generate_instances( SchedXaction *sx,
                         g_free( rt );
                 }
                 rt = NULL;
-        }
+        } else if ( deadList ) {
+                toDeleteTuple *tdt;
+
+                tdt = g_new0( toDeleteTuple, 1 );
+                tdt->sx = sx;
+                tdt->endDate = g_date_new();
+                *tdt->endDate = gd;
+                *deadList = g_list_append( *deadList, tdt );
+        } /* else { this else intentionally left blank: drop the SX on the
+           * floor at this point. } */
+
         xaccSchedXactionDestroySequenceState( seqStateData );
         seqStateData = NULL;
 }
@@ -1029,15 +1307,20 @@ _free_reminderTuple_list_elts( gpointer data, gpointer user_data )
 static void
 _free_varBindings_hash_elts( gpointer key, gpointer value, gpointer data )
 {
-        g_free( key );
-        g_free( value );
+        if ( key ) 
+                g_free( key );
+        if ( value ) 
+                g_free( value );
 }
 
 static void
 _free_toCreateInst_list_elts( gpointer data, gpointer user_data )
 {
         toCreateInstance *tci = (toCreateInstance*)data;
-        g_date_free( tci->date );
+        g_assert( tci->date );
+        if ( tci->date ) {
+                g_date_free( tci->date );
+        }
         if ( tci->varBindings ) {
                 g_hash_table_foreach( tci->varBindings,
                                       _free_varBindings_hash_elts,
@@ -1063,20 +1346,24 @@ _free_toCreate_list_elts( gpointer data, gpointer user_data )
 static void
 process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
 {
+        GList *l;
         GList *createdGUIDs = NULL;
         GList *thisGUID;
         toCreateTuple *tct;
         toCreateInstance *tci;
         gboolean autoCreateState, notifyState;
-        Query *q, *dlQuery, *newQuery;
         GList *instances;
-        int count;
+        int count, total;
 
-        q = xaccMallocQuery();
-        gnc_suspend_gui_refresh();
         count = 0;
-        gtk_progress_configure( GTK_PROGRESS(sxsld->prog), 0, 0,
-                                g_list_length( autoCreateList ) );
+        total = 0;
+        /* get an accurate count of how many SX instances we're going to
+         * create. */
+        for ( l = autoCreateList; l; l = l->next ) {
+                total += g_list_length( ((toCreateTuple*)l->data)->instanceList );
+        }
+        gtk_progress_configure( GTK_PROGRESS(sxsld->prog), 0, 0, total );
+        gnc_suspend_gui_refresh();
         for ( ; autoCreateList ; autoCreateList = autoCreateList->next ) {
                 tct = (toCreateTuple*)autoCreateList->data;
                 
@@ -1093,20 +1380,18 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                                                 (GDate*)tci->date,
                                                 NULL, &createdGUIDs );
 
-                        count += g_list_length( createdGUIDs );
+                        count++;
                         gtk_progress_set_value( GTK_PROGRESS(sxsld->prog), count );
                         while (g_main_iteration(FALSE));
 
                         sxsld->autoCreatedSomething = TRUE;
-                        if ( notifyState ) {
-                                for ( thisGUID = createdGUIDs;
-                                      thisGUID;
-                                      (thisGUID = thisGUID->next) ) {
-                                        xaccQueryAddGUIDMatch( q,
-                                                               (GUID*)thisGUID->data,
-                                                               GNC_ID_TRANS,
-                                                               QUERY_OR );
-                                }
+
+                        for ( thisGUID = createdGUIDs;
+                              thisGUID;
+                              (thisGUID = thisGUID->next) ) {
+                                tci->createdTxnGUIDs =
+                                        g_list_append( tci->createdTxnGUIDs,
+                                                       (GUID*)thisGUID->data );
                         }
                         /* Save these GUIDs in case we need to 'cancel' this
                          * operation [and thus delete these transactions]. */
@@ -1115,19 +1400,11 @@ process_auto_create_list( GList *autoCreateList, sxSinceLastData *sxsld )
                                                createdGUIDs );
                 }
         }
-
-        /*DEBUG( "Finished creating transactions; updating ledger" );*/
-
-        dlQuery = gnc_ledger_display_get_query( sxsld->ac_ledger );
-        newQuery = xaccQueryMerge( dlQuery, q, QUERY_AND );
-        gnc_ledger_display_set_query( sxsld->ac_ledger, newQuery );
-        xaccFreeQuery( q );
-
         gnc_resume_gui_refresh();
-        gnc_ledger_display_refresh( sxsld->ac_ledger );
 }
 
-static void
+static
+void
 add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
 {
         toCreateTuple *tct;
@@ -1191,7 +1468,8 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
          * thing" hilighted */
 }
 
-static void
+static
+void
 add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
 {
         GtkCTree *ctree;
@@ -1202,7 +1480,7 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
         reminderInstanceTuple *rit;
         FreqSpec *fs;
         GString *freqSpecStr;
-        /* Major FIXME */
+        /* Major FIXME [????] */
 
         ctree = GTK_CTREE( glade_xml_get_widget( sxsld->gxml,
                                                  REMINDER_LIST ) );
@@ -1215,7 +1493,7 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                 freqSpecStr = g_string_sized_new( 16 );
                 xaccFreqSpecGetFreqStr( fs, freqSpecStr );
                 rowText[1] = freqSpecStr->str;
-                rowText[2] = ""; // Days Away
+                rowText[2] = ""; /* Days Away */
                 sxNode = gtk_ctree_insert_node( ctree, NULL, NULL, rowText,
                                                 0, /* spacing */
                                                 NULL, NULL, NULL, NULL, /* pixmaps */
@@ -1242,6 +1520,15 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                         gtk_ctree_node_set_row_data( ctree,
                                                      instNode,
                                                      (gpointer)rit );
+                        gtk_signal_handler_block_by_func( GTK_OBJECT(ctree),
+                                                          sxsld_remind_row_toggle,
+                                                          sxsld ); 
+                        if ( rit->isSelected ) {
+                                gtk_ctree_select( ctree, instNode );
+                        }
+                        gtk_signal_handler_unblock_by_func( GTK_OBJECT(ctree),
+                                                            sxsld_remind_row_toggle,
+                                                            sxsld );
                         g_free( rowText[0] );
                         g_free( rowText[2] );
                 }
@@ -1250,47 +1537,56 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
 }
 
 static void
-processRemoveList(GList *removeList, sxSinceLastData *sxsld)
+add_dead_list_to_gui(GList *removeList, sxSinceLastData *sxsld)
 {
-  GtkCList *cl;
-  char *rowtext[3];
-  int row;
-  GString *tmp_str;
-  toDeleteTuple *tdt;
-  FreqSpec *fs;
-  rowtext[2] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
+        GtkCList *cl;
+        char *rowtext[3];
+        int row;
+        GString *tmp_str;
+        toDeleteTuple *tdt;
+        FreqSpec *fs;
+        rowtext[2] = g_new0(gchar, GNC_D_BUF_WIDTH ); 
 
-  cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
-                                        SX_OBSOLETE_CLIST ));
+        cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml,
+                                              SX_OBSOLETE_CLIST ));
 
-  tmp_str = g_string_new(NULL);
+        tmp_str = g_string_new(NULL);
 
-  gtk_clist_freeze( cl );
-  gtk_clist_clear( cl );
-  for ( row = 0; removeList;
-        row++, removeList = removeList->next ) {
-          tdt = (toDeleteTuple*)removeList->data;
+        gtk_clist_freeze( cl );
+        gtk_clist_clear( cl );
+        gtk_signal_handler_block_by_func( GTK_OBJECT(cl),
+                                          sxsld_obsolete_row_toggle,
+                                          sxsld );
+        for ( row = 0; removeList;
+              row++, removeList = removeList->next ) {
+                tdt = (toDeleteTuple*)removeList->data;
 
-          rowtext[0] = xaccSchedXactionGetName( tdt->sx );
+                rowtext[0] = xaccSchedXactionGetName( tdt->sx );
 
-          fs = xaccSchedXactionGetFreqSpec( tdt->sx );
+                fs = xaccSchedXactionGetFreqSpec( tdt->sx );
 
-          xaccFreqSpecGetFreqStr( fs, tmp_str );
-          rowtext[1] = tmp_str->str;
+                xaccFreqSpecGetFreqStr( fs, tmp_str );
+                rowtext[1] = tmp_str->str;
 
-          /* FIXME: This date is the first invalid one, as opposed to the
-           * last valid one. :(   Or, even better, the reason for
-           * obsolesence. */
-          /*g_date_strftime( rowtext[2], GNC_D_WIDTH, GNC_D_FMT, tdt->endDate ); */
-          strcpy( rowtext[2], "obsolete" );
+                /* FIXME: This date is the first invalid one, as opposed to the
+                 * last valid one. :(   Or, even better, the reason for
+                 * obsolesence. */
+                /*g_date_strftime( rowtext[2], GNC_D_WIDTH, GNC_D_FMT, tdt->endDate ); */
+                strcpy( rowtext[2], "obsolete" );
 
-          gtk_clist_insert( cl, row, rowtext );
-          gtk_clist_set_row_data(cl, row, tdt );
-  }
-  gtk_clist_thaw( cl );
+                gtk_clist_insert( cl, row, rowtext );
+                gtk_clist_set_row_data( cl, row, tdt );
+                if ( tdt->isSelected ) {
+                        gtk_clist_select_row( cl, row, 0 );
+                }
+        }
+        gtk_signal_handler_unblock_by_func( GTK_OBJECT(cl),
+                                            sxsld_obsolete_row_toggle,
+                                            sxsld );
+        gtk_clist_thaw( cl );
 
-  g_string_free(tmp_str, TRUE);
-  g_free(rowtext[2]);
+        g_string_free(tmp_str, TRUE);
+        g_free(rowtext[2]);
 }
 
 /**
@@ -1309,6 +1605,11 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
         tct = NULL;
         for ( ; goodList ; goodList = goodList->next ) {
                 rit = (reminderInstanceTuple*)goodList->data;
+
+                /* skip over reminders we've already created [in the
+                 * past]. */
+                if ( rit->resultantTCI )
+                        continue;
 
                 xaccSchedXactionGetAutoCreate( rit->parentRT->sx,
                                                &autoCreateOpt, &notifyOpt );
@@ -1370,6 +1671,10 @@ processSelectedReminderList( GList *goodList, sxSinceLastData *sxsld )
                                 g_list_append( tct->instanceList, tci );
 
                 }
+
+                /* save the resultant just-created TCI in the RIT in case
+                 * things change later. */
+                rit->resultantTCI = tci;
         }
 }
 
@@ -1487,24 +1792,6 @@ clean_sincelast_dlg( sxSinceLastData *sxsld )
 
         w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_LIST );
         gtk_clist_clear( GTK_CLIST(w) );
-        g_list_foreach( sxsld->toCreateList, _free_toCreate_list_elts, sxsld );
-        g_list_free( sxsld->toCreateList );
-
-#if 0
-                g_list_foreach( autoCreateList, free_gdate_list_elts, NULL );
-                g_list_free( autoCreateList );
-                autoCreateList = NULL;
-
-		  /* We have moved the GDates over to the toCreateList in
-                   * sxsld, so we don't free them here. */
-                g_list_free( toCreateList );
-                toCreateList = NULL;
-
-                g_list_free( instanceList );
-                instanceList = NULL;
-#endif /* 0 */
-
-        sxsld->toCreateList = NULL;
 }
 
 static void
@@ -1647,8 +1934,11 @@ gnc_sxsl_del_vars_table_ea( gpointer key,
                             gpointer value,
                             gpointer user_data )
 {
-        g_free( (gchar*)key );
-        g_free( (gnc_numeric*)value );
+        if ( key ) 
+                g_free( (gchar*)key );
+
+        if ( value )
+                g_free( (gnc_numeric*)value );
 }
 
 static gboolean
@@ -1705,6 +1995,7 @@ create_each_transaction_helper( Transaction *t, void *d )
         sList = xaccTransGetSplitList( newT );
         if ( (osList == NULL) || (sList == NULL) ) {
                 PERR( "\tseen transaction w/o splits. :(" );
+                /* FIXME: we've allocated things we need to cleanup... */
                 return FALSE;
         }
         for ( ; sList && osList ;
@@ -1925,6 +2216,7 @@ create_transactions_on( SchedXaction *sx,
                 /* Create a faux tct for the creation-helper. */
                 tct = g_new0( toCreateTuple, 1 );
                 tci = g_new0( toCreateInstance, 1 );
+                /* FIXME: add instance num */
                 tct->sx = sx;
                 tct->instanceList =
                         g_list_append( tct->instanceList, tci );
@@ -2317,6 +2609,9 @@ parse_vars_from_formula( const char *formula,
  * . Else, for each selected reminder, add to to-create list.
  * . Dismiss dialog.
  *
+ * While we're doing this, we handle any previously-selected, now-unselected
+ * reminders.
+ *
  * Returns TRUE if there are processed, valid reminders... FALSE otherwise.
  **/
 static gboolean
@@ -2331,6 +2626,7 @@ processed_valid_reminders_listP( sxSinceLastData *sxsld )
         GList *badList;
         GList *badRecentRun;
         GList *goodList;
+        GList *toRevertList;
 
         rtName = NULL;
         goodList = NULL;
@@ -2339,6 +2635,7 @@ processed_valid_reminders_listP( sxSinceLastData *sxsld )
         okFlag = prevState = TRUE;
         badList = badRecentRun = NULL;
         rt = NULL;
+        toRevertList = NULL;
 
         for ( reminderList = sxsld->reminderList;
               reminderList;
@@ -2353,6 +2650,14 @@ processed_valid_reminders_listP( sxSinceLastData *sxsld )
                       reminderInstList;
                       reminderInstList = reminderInstList->next ) {
                         rit = (reminderInstanceTuple*)reminderInstList->data;
+
+                        /* If we've previously created this RIT and now it's
+                         * not selected, then prepare to revert it
+                         * [later]. */
+                        if ( !rit->isSelected
+                             && rit->resultantTCI ) {
+                                toRevertList = g_list_append( toRevertList, rit );
+                        }
 
                         if ( prevState ) {
                                 prevState = rit->isSelected;
@@ -2388,15 +2693,99 @@ processed_valid_reminders_listP( sxSinceLastData *sxsld )
         /* Handle implications of above logic. */
         if ( !overallOkFlag ) {
                 g_list_free( goodList );
+                goodList = NULL;
+
+                g_list_free( toRevertList );
+                toRevertList = NULL;
+
                 return FALSE;
         }
+
         if ( g_list_length( goodList ) > 0 ) {
                 processSelectedReminderList( goodList, sxsld );
                 g_list_free( goodList );
+                goodList = NULL;
         }
+
+        /* Revert the previously-created and now-unselected RITs. */
+        gnc_sxsld_revert_reminders( sxsld, toRevertList );
+        g_list_free( toRevertList );
+        toRevertList = NULL;
 
         return TRUE;
 }
+
+
+/**
+ * Remove the TCI from it's parent TCT, deleting any created transactions as
+ * appropriate. Note: if after removing a TCIs from it's TCT and there are no
+ * more instances in the TCT, then the TCT wouldn't have been created except
+ * for us, and should be removed itself; we handle this as well.
+ **/
+static
+void
+gnc_sxsld_revert_reminders( sxSinceLastData *sxsld,
+                            GList *toRevertList )
+{
+        reminderInstanceTuple *rit;
+        toCreateInstance *tci;
+        toCreateTuple *tct;
+        gboolean autoCreateState, notifyState;
+        GList *l, *m;
+
+        if ( !toRevertList ) {
+                return;
+        }
+
+        for ( l = toRevertList; l; l = l->next ) {
+                /* Navigate to the relevant objects. */
+                rit = (reminderInstanceTuple*)l->data;
+                g_assert( rit );
+                tci = rit->resultantTCI;
+                g_assert( tci );
+                tct = tci->parentTCT;
+                g_assert( tct );
+
+                tct->instanceList = g_list_remove( tct->instanceList, tci );
+
+                if ( g_list_length(tct->instanceList) == 0 ) {
+                        GList **correctList;
+                        /* if there are no instances, remove the TCT as
+                         * well. */
+                        xaccSchedXactionGetAutoCreate( rit->parentRT->sx,
+                                                       &autoCreateState,
+                                                       &notifyState );
+                
+                        if ( autoCreateState ) {
+                                correctList = &sxsld->autoCreateList;
+                        } else {
+                                correctList = &sxsld->toCreateList;
+                        }
+
+                        *correctList = g_list_remove( *correctList, tct );
+                }
+
+                /* destroy any created transactions. */
+                gnc_suspend_gui_refresh();
+                for ( m = tci->createdTxnGUIDs; m; m = m->next ) {
+                        Transaction *t;
+
+                        t = xaccTransLookup( (GUID*)m->data,
+                                             gnc_get_current_book() );
+                        g_assert( t );
+                        xaccTransBeginEdit(t);
+                        xaccTransDestroy(t);
+                        xaccTransCommitEdit(t);
+                }
+                gnc_resume_gui_refresh();
+
+                /* FIXME: Free the now-dead TCI; this is buggy and causing
+                 * problems... */
+                //gnc_sxsld_free_tci( tci );
+                rit->resultantTCI = NULL;
+        }
+}
+
 
 static void
 sxsld_remind_row_toggle( GtkCTree *ct, GList *node,
@@ -2404,6 +2793,8 @@ sxsld_remind_row_toggle( GtkCTree *ct, GList *node,
 {
         GtkCTreeNode *ctn;
         reminderInstanceTuple *rit;
+        sxSinceLastData *sxsld = (sxSinceLastData*)user_data;
+        GnomeDruidPage *thisPage, *nextPage;
 
         ctn = GTK_CTREE_NODE( node );
         rit = (reminderInstanceTuple*)gtk_ctree_node_get_row_data( ct, ctn );
@@ -2413,6 +2804,38 @@ sxsld_remind_row_toggle( GtkCTree *ct, GList *node,
                 return;
         }
         rit->isSelected = !rit->isSelected;
+
+        /* Deal with setting up a correct next/finish button for this
+         * page. */
+        sxsld->remindSelCount += ( rit->isSelected ? 1 : -1 );
+        thisPage = GNOME_DRUID_PAGE(glade_xml_get_widget( sxsld->gxml, REMINDERS_PG ));
+        nextPage = gnc_sxsld_get_appropriate_page( sxsld, thisPage, FORWARD );
+        if ( sxsld->remindSelCount == 0
+             || sxsld->remindSelCount == 1 ) {
+                /* If we don't have anywhere to go [read: there's only
+                 * reminders as of yet], and we've selected no reminders. */
+
+                /* FIXME: damnit, this won't work correctly as we really want
+                 * to incorporate the effect of changing the reminder
+                 * selections into this, too. */
+
+                gnome_druid_set_show_finish( sxsld->sincelast_druid,
+                                             ( !nextPage
+                                               && (sxsld->remindSelCount == 0) ) );
+
+        } /* else { This else intentionally left blank; if it's >1, then we
+           * handled the 'next/finish' button on the 0 -> 1 transition. } */
+}
+
+static
+void
+sxsld_obsolete_row_toggle( GtkCList *cl, gint row, gint col,
+                           GdkEventButton *event, gpointer ud )
+{
+        toDeleteTuple *tdt;
+
+        tdt = (toDeleteTuple*)gtk_clist_get_row_data( cl, row );
+        tdt->isSelected = !tdt->isSelected;
 }
 
 static void
@@ -2600,4 +3023,43 @@ clean_sincelast_data( sxSinceLastData *sxsld )
                 g_list_free( sxsld->toCreateList );
                 sxsld->toCreateList = NULL;
         }
+#if 0
+                g_list_foreach( autoCreateList, free_gdate_list_elts, NULL );
+                g_list_free( autoCreateList );
+                autoCreateList = NULL;
+
+		  /* We have moved the GDates over to the toCreateList in
+                   * sxsld, so we don't free them here. */
+                g_list_free( toCreateList );
+                toCreateList = NULL;
+
+                g_list_free( instanceList );
+                instanceList = NULL;
+#endif /* 0 */
+
+}
+
+static
+void
+gnc_sxsld_free_tci( toCreateInstance *tci )
+{
+        if ( tci->date ) {
+                g_date_free(tci->date);
+                tci->date = NULL;
+        }
+
+        if ( tci->varBindings ) {
+                /* FIXME: free keys/values, too. */
+                g_hash_table_destroy( tci->varBindings );
+                tci->varBindings = NULL;
+        }
+
+        tci->parentTCT = NULL;
+
+        if ( tci->createdTxnGUIDs ) {
+                g_list_free( tci->createdTxnGUIDs );
+                tci->createdTxnGUIDs = NULL;
+        }
+
+        g_free( tci );
 }

@@ -1,3 +1,15 @@
+2002-08-05  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/import-export/gnc-generic-import.c: #if-def'd out the
+	original version, and replaced with a version sans the printf.
+	For some reason, with the printf, GCC 3.1 can't compile this file.
+
+	* src/gnome/dialog-sxsincelast.c: Added support for the Back [and
+	Next] button to behave correctly in the Druid.  Closes Bug#84688.
+	Fixed a double-freeing bug [Bug#89475].  Correct use of
+	gnc_{suspend,resume}_gui_refresh makes Transaction processing much
+	faster, closing Bug#84686.
+
 2002-08-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/business/business-gnome/dialog-invoice.c,
