@@ -116,9 +116,6 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
 
    if (!lot) return;
 
-   /* We examine only closed lots */
-   if (FALSE == gnc_lot_is_closed (lot)) return;
-
    ENTER ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
 
    for (snode = lot->splits; snode; snode=snode->next)
@@ -126,6 +123,9 @@ xaccLotScrubDoubleBalance (GNCLot *lot)
       Split *s = snode->data;
 		xaccSplitComputeCapGains (s, NULL);
    }
+
+   /* We double-check only closed lots */
+   if (FALSE == gnc_lot_is_closed (lot)) return;
 
    for (snode = lot->splits; snode; snode=snode->next)
    {

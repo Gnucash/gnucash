@@ -45,6 +45,19 @@
 
 #include "gnc-engine.h"
 
+/** The xaccSplitGetCapGains() method returns the value of 
+ *    capital gains (if any) associated with the indicated 
+ *    split. In order for there to be any capital gains, 
+ *    several things must hold true about this split:
+ *    (1) It must have been involved in trading (for aexample,
+ *        by belonging to a stock or trading account)
+ *    (2) It must have been assigned to a lot.
+ *    (3) It cannot be the opening split of a lot; that
+ *        is, it must be a matching sale of an earlier purchase
+ *        (or vice versa).
+ */
+gnc_numeric xaccSplitGetCapGains(Split *);
+
 /** The xaccAccountHasTrades() method checks to see if the 
  *    indicated account is used in the trading of commodities.
  *    A 'trading' account will contain transactions whose 

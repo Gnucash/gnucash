@@ -500,7 +500,11 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    if (!lot) return;
    currency = split->parent->common_currency;
 
-   ENTER ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+   ENTER ("split=%p lot=%s", split,
+       kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+
+   /* Make sure this isn't a cap-gains split itself; ignore these. */
+   if (gnc_numeric_zero_p (split->amount)) return;
 
    opening_split = gnc_lot_get_earliest_split(lot);
    if (split == opening_split)
@@ -508,7 +512,10 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
       /* Check to make sure this split doesn't have a cap-gain 
        * transaction associated with it.  If it does, that's
        * wrong, and we ruthlessly destroy it.
+       * XXX Don't do this, it leads to infinite loops.
+       * We need to scrub out errors like this elsewhere!
        */
+#if MOVE_THIS_ELSEWHERE
       if (xaccSplitGetCapGainsSplit (split))
       {
          Split *gains_split = xaccSplitGetCapGainsSplit(split);
@@ -519,6 +526,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
          xaccTransDestroy (trans);
          xaccTransCommitEdit (trans);
       }
+#endif
       return;
    }
    
@@ -564,7 +572,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    value = gnc_numeric_div (value, opening_split->amount, 
                    gnc_numeric_denom(opening_split->value), GNC_DENOM_EXACT);
    
-   value = gnc_numeric_add (value, split->value,
+   value = gnc_numeric_sub (value, split->value,
                            GNC_DENOM_AUTO, GNC_DENOM_LCD);
    PINFO ("Open amt=%s val=%s;  split amt=%s val=%s; gains=%s\n",
           gnc_numeric_to_string (opening_split->amount),
@@ -670,6 +678,20 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
 
    }
    LEAVE ("lot=%s", kvp_frame_get_string (gnc_lot_get_slots (lot), "/title"));
+}
+
+/* ============================================================== */
+
+gnc_numeric 
+xaccSplitGetCapGains(Split * split)
+{
+   if (!split) return gnc_numeric_zero();
+   split = xaccSplitGetCapGainsSplit (split);
+   if (!split) return gnc_numeric_zero();
+
+   /* XXX Do *not! recomp gains every time; use a 'dirty' flag instead */
+   xaccSplitComputeCapGains (split, NULL);
+   return split->value;
 }
 
 /* =========================== END OF FILE ======================= */
