@@ -40,6 +40,7 @@
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
+#include "gnc-session.h"
 #include "SchedXaction.h"
 
 #include "sixtp.h"
