@@ -353,7 +353,7 @@ gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b)
 
   if (safe_strcmp(a->mnemonic, b->mnemonic) != 0)
   {
-    PWARN ("mnemonics differ: %s vs %s", a->mnemonic, b->mnemonic);
+    /* PWARN ("mnemonics differ: %s vs %s", a->mnemonic, b->mnemonic); */
     return FALSE;
   }
 
