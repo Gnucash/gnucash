@@ -487,7 +487,8 @@ gnc_ui_account_get_tax_info_string (Account *account)
                           "txf-income-categories" :
                           "txf-expense-categories");
 
-  code_scm = gh_symbol2scm (code);
+  /* FIXME: when we drop support older guiles, drop the (char *) coercion. */ 
+  code_scm = gh_symbol2scm ((char *) code);
 
   scm = gh_call2 (get_form, category, code_scm);
   if (!gh_string_p (scm))
