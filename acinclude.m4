@@ -3950,7 +3950,6 @@ dnl
 AC_ARG_WITH(g-wrap-prefix,[ --with-g-wrap-prefix=PFX  Prefix where g-wrap is installed (optional)], 
     gwrap_prefix="$withval", g_wrap_prefix="")
 
-version_ok=
 min_gwrap_version=ifelse([$1], , 1.3.2,$1)
 max_gwrap_version=ifelse([$2], , 99.99.99,$2)
 
@@ -3971,6 +3970,7 @@ else
   fi
 fi
 
+version_ok=
 if test x$CHECK_VERSION != xno ; then
 AC_MSG_CHECKING(for g-wrap - ${min_gwrap_version} <= version < ${max_gwrap_version})
 
