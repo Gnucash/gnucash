@@ -1,3 +1,13 @@
+2002-12-28  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-gnome/formulacell-gnome.c: Changed
+	FormulaCell from MOD_SX to MOD_REGISTER.
+
+	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr):
+	s/g_string_sprintf/snprintf/, as the former can't handle the
+	re-ordered format parameters which the po-files use; fixes
+	Bug#101650.
+
 2002-12-28  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-transfer.c: Revert pricedb lookup at

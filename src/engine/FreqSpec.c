@@ -706,6 +706,10 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
         int tmpInt;
         char *tmpStr;
         int i;
+#define MAX_FREQ_STR_SIZE 127
+        char freqStrBuf[ MAX_FREQ_STR_SIZE + 1];
+
+        memset( freqStrBuf, 0, MAX_FREQ_STR_SIZE + 1 );
 
         switch( xaccFreqSpecGetUIType( fs ) ) {
         case UIFREQ_ONCE:
@@ -715,21 +719,22 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                                  GNC_D_FMT,
                                  &fs->s.once.date );
 		/* %s is the strftime-string of the one-time date. */
-                g_string_sprintf( str, _("Once: %s"), tmpStr );
+                snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Once: %s"), tmpStr );
                 g_free( tmpStr );
                 break;
 
         case UIFREQ_DAILY:
                 if ( fs->s.daily.interval_days > 1 ) 
-		  {
-		    /* %u is the number of intervals */
- 		    g_string_sprintf( str, _("Daily (x%u)"),
-				      fs->s.daily.interval_days );
-		  }
+                {
+                        /* %u is the number of intervals */
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                                  _("Daily (x%u)"),
+                                  fs->s.daily.interval_days );
+                }
 		else 
-		  {
-		    g_string_sprintf( str, _("Daily") );
-		  }
+                {
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Daily") );
+                }
                 break;
 
         case UIFREQ_DAILY_MF:
@@ -737,7 +742,8 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 FreqSpec *subFS;
                 if ( g_list_length( fs->s.composites.subSpecs ) != 5 ) {
                         PERR( "Invalid Daily[M-F] structure." );
-                        g_string_sprintf( str, "Daily[M-F]: error" );
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                                  "Daily[M-F]: error" );
                         return;
                 }
                 /* We assume that all of the weekly FreqSpecs that make up
@@ -746,12 +752,13 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 	       
                 if ( subFS->s.weekly.interval_weeks > 1 ) {
 		  /* %u is the number of intervals */
-		  g_string_sprintf( str, _("Weekdays: (x%u)"),
-				    subFS->s.weekly.interval_weeks );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Weekdays: (x%u)"),
+                            subFS->s.weekly.interval_weeks );
                 }
 		else
 		{
-		  g_string_sprintf(str, _("Weekdays"));
+		  snprintf(freqStrBuf, MAX_FREQ_STR_SIZE, _("Weekdays"));
 		}
 	  
         }
@@ -772,8 +779,8 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 
                         tmpFS = (FreqSpec*)list->data;
                         if ( xaccFreqSpecGetType(tmpFS) != WEEKLY ) {
-                                g_string_sprintf( str,
-                                                  "error: UIFREQ_WEEKLY doesn't contain weekly children" );
+                                snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                                          "error: UIFREQ_WEEKLY doesn't contain weekly children" );
                                 return;
                         }
                         if ( tmpInt == -1 ) {
@@ -788,20 +795,22 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 if ( tmpInt > 1 ) {
 		  /* %d are the number of intervals; %s is the name of
 		     the weekday */
-		  g_string_sprintf( str, _( "Weekly (x%d): %s"), tmpInt, tmpStr );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _( "Weekly (x%d): %s"), tmpInt, tmpStr );
                 }
 		else
 		{
 		  /* %s is the name of the weekday */
-		  g_string_sprintf( str, _( "Weekly: %s"), tmpStr );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _( "Weekly: %s"), tmpStr );
 		}
                 g_free( tmpStr );
                 break;
 
         case UIFREQ_BI_WEEKLY:
 	  /* %s is the name of the weekday */
-	  g_string_sprintf( str, _("Bi-Weekly, %ss"), 
-			    get_wday_name(fs->s.weekly.offset_from_epoch % 7) );
+	  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Bi-Weekly, %ss"), 
+                    get_wday_name(fs->s.weekly.offset_from_epoch % 7) );
 	  break;
 
         case UIFREQ_SEMI_MONTHLY:
@@ -821,18 +830,20 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 	    /* %u is the number of intervals; %s is the day of month
 	       of the starting month; %s is the day of month of the
 	       ending month  */
-	    g_string_sprintf( str, _("Semi-monthly (x%u): %s, %s"), 
-			      tmpFS->s.monthly.interval_months,
-			      first_dom->str, 
-			      second_dom->str);
+	    snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                      _("Semi-monthly (x%u): %s, %s"), 
+                      tmpFS->s.monthly.interval_months,
+                      first_dom->str, 
+                      second_dom->str);
 	  }
 	  else
 	  {
 	    /* %s is the day of month of the starting month; %s is the
 	       day of month of the ending month  */
-	    g_string_sprintf( str, _("Semi-monthly: %s, %s"), 
-			      first_dom->str,
-			      second_dom->str);
+	    snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                      _("Semi-monthly: %s, %s"), 
+                      first_dom->str,
+                      second_dom->str);
 	  }
 	  g_string_free(first_dom, TRUE);
 	  g_string_free(second_dom, TRUE);
@@ -845,15 +856,17 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 if ( fs->s.monthly.interval_months > 1 ) {
 		  /* %u is the number of intervals; %u is the day of
 		     month  */
-		  g_string_sprintf( str, _("Monthly (x%u): %u"),
-				    fs->s.monthly.interval_months,
-				    fs->s.monthly.day_of_month);
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Monthly (x%u): %u"),
+                            fs->s.monthly.interval_months,
+                            fs->s.monthly.day_of_month);
                 }
 		else
 		{
 		  /* %u is the day of month  */
-		  g_string_sprintf( str, _("Monthly: %u"),
-				    fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Monthly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
@@ -861,15 +874,17 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 if ( fs->s.monthly.interval_months != 3 ) {
 		  /* %u is the number of intervals; %u is the day of
 		     month  */
-		  g_string_sprintf( str, _("Quarterly (x%u): %u"),
-				    fs->s.monthly.interval_months/3,
-				    fs->s.monthly.day_of_month);
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Quarterly (x%u): %u"),
+                            fs->s.monthly.interval_months/3,
+                            fs->s.monthly.day_of_month);
                 }
 		else
 		{
 		  /* %u is the day of month  */
-		  g_string_sprintf( str, _("Quarterly: %u"),
-                                   fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Quarterly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
@@ -878,21 +893,21 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                 if ( fs->s.monthly.interval_months != 4 ) {
 		  /* %u is the number of intervals; %u is the day of
 		     month  */
-		  g_string_sprintf( str, _("Tri-Yearly (x%u): %u"),
-				    fs->s.monthly.interval_months/4,
-				    fs->s.monthly.day_of_month);
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Tri-Yearly (x%u): %u"),
+                            fs->s.monthly.interval_months/4,
+                            fs->s.monthly.day_of_month);
                 }
 		else
 		{
 		  /* %u is the day of month  */
-		  g_string_sprintf( str, _("Tri-Yearly: %u"),
-				    fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Tri-Yearly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         case UIFREQ_SEMI_YEARLY:
-	        /* FIXME: why is this here?
-		   g_string_sprintf( str, "Semi-Yearly" ); */
                 if ( fs->s.monthly.interval_months != 6 ) {
                         if ( (fs->s.monthly.interval_months % 6) != 0 ) {
                                 PERR( "ERROR: FreqSpec Semi-Yearly month-interval "
@@ -901,20 +916,21 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
                         }
 			/* %u is the number of intervals; %u is the day of
 			   month  */
-                        g_string_sprintf( str, _("Semi-Yearly (x%u): %u"),
-                                           fs->s.monthly.interval_months/6,
-					  fs->s.monthly.day_of_month);
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                                  _("Semi-Yearly (x%u): %u"),
+                                  fs->s.monthly.interval_months/6,
+                                  fs->s.monthly.day_of_month);
                 }
 		else
 		{
 		  /* %u is the day of month  */
-		  g_string_sprintf( str, _("Semi-Yearly: %u"),
-				     fs->s.monthly.day_of_month );
+                  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Semi-Yearly: %u"),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         case UIFREQ_YEARLY:
-	        /* g_string_sprintf( str, "Yearly" ); */
                 if ( fs->s.monthly.interval_months != 12 ) {
                         if ( (fs->s.monthly.interval_months % 12) != 0 ) {
                                 PERR( "ERROR: \"Yearly\" FreqSpec month-interval "
@@ -931,25 +947,28 @@ xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 			   %u is the number of intervals; %s is the
 			   abbreviated name of the month; %u is the
 			   day of month. */
-                        g_string_sprintf( str, _("Yearly (x%u): %s/%u"),
-                                           fs->s.monthly.interval_months/12,
-					   get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
-					   fs->s.monthly.day_of_month);
+                        snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                                  _("Yearly (x%u): %s/%u"),
+                                  fs->s.monthly.interval_months/12,
+                                  get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
+                                  fs->s.monthly.day_of_month);
                 }
 		else
 		{
 		  /* %s is the abbreviated name of the month; %u is
 		     the day of month  */
-		  g_string_sprintf( str, _("Yearly: %s/%u"),
-				     get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
-				     fs->s.monthly.day_of_month );
+		  snprintf( freqStrBuf, MAX_FREQ_STR_SIZE,
+                            _("Yearly: %s/%u"),
+                            get_abbrev_month_name(fs->s.monthly.offset_from_epoch),
+                            fs->s.monthly.day_of_month );
 		}
                 break;
 
         default:
-                g_string_sprintf( str, _("Unknown") );
+                snprintf( freqStrBuf, MAX_FREQ_STR_SIZE, _("Unknown") );
                 break;
         }
+        g_string_sprintf( str, "%s", freqStrBuf );
 }
 
 static

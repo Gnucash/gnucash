@@ -554,7 +554,7 @@ sxftd_ok_clicked(GtkWidget *w, gpointer user_data)
             gnc_find_first_gui_component(
                     DIALOG_SCHEDXACTION_CM_CLASS, NULL, NULL );
     if ( sxd ) {
-            gnc_sxd_list_refresh( sxd );
+      gnc_sxd_list_refresh( sxd );
     }
   }
 

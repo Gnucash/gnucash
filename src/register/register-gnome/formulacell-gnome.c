@@ -39,7 +39,7 @@
 #include "formulacell.h"
 #include "formulacell-gnome.h"
 
-static short module = MOD_SX;
+static short module = MOD_REGISTER;
 
 static
 gboolean
