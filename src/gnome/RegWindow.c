@@ -582,11 +582,6 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
 
 #if 0
 
-  XtManageChild (reg);
-  XtManageChild (frame);
-  XtManageChild (pane);
-
-
   /******************************************************************\
    * The button area... also contains balance fields                *
   \******************************************************************/
@@ -704,22 +699,12 @@ regWindowLedger(Account *lead_acc, Account **acclist, int ledger_type)
                                     XmNnavigationType,     XmNONE,  /* don't tab here! */
 				    NULL );
   regData->balance = widget;
-  
-  XtManageChild(buttonform);
-  
-  /******************************************************************/
-  XtManageChild(pane);
-
 #endif
   
   regRefresh (regData);
   
 #if 0
-
-  XtPopup( regData->dialog, XtGrabNone );
-  
   unsetBusyCursor( parent );
-
 #endif
   
   {
@@ -1079,7 +1064,7 @@ deleteCB(GtkWidget *widget, gpointer data)
   /* ask for user confirmation before performing 
    * permanent damage */
   trans = xaccSplitGetParent (split);
-  sprintf (buf, TRANS_DEL_MSG, xaccTransGetDescription (trans));
+  sprintf (buf, TRANS_DEL_MSG, xaccSplitGetMemo (split), xaccTransGetDescription (trans));
   if (!verifyBox(toplevel, buf)) return;
 
   /* make a copy of all of the accounts that will be  
