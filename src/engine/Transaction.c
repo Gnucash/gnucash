@@ -1386,7 +1386,7 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
 {
    if (!trans) return;
    CHECK_OPEN (trans);
-   PINFO ("xaccTransSetDateSecs(): addr=%p set date to %u %s \n",
+   PINFO ("xaccTransSetDateSecs(): addr=%p set date to %lu %s \n",
          trans, secs, ctime (&secs));
 
    trans->date_posted.tv_sec = secs;
@@ -1417,7 +1417,7 @@ xaccTransSetDateTS (Transaction *trans, struct timespec *ts)
 {
    if (!trans) return;
    CHECK_OPEN (trans);
-   PINFO ("xaccTransSetDateTS(): addr=%p set date to %u %s \n",
+   PINFO ("xaccTransSetDateTS(): addr=%p set date to %lu %s \n",
          trans, ts->tv_sec, ctime (&ts->tv_sec));
 
    trans->date_posted.tv_sec = ts->tv_sec;
@@ -1465,7 +1465,7 @@ xaccTransSetDateToday (Transaction *trans)
    trans->date_posted.tv_sec = tv.tv_sec;
    trans->date_posted.tv_nsec = 1000 * tv.tv_usec;
 
-   PINFO ("xaccTransSetDateToday(): addr=%p set date to %u %s \n",
+   PINFO ("xaccTransSetDateToday(): addr=%p set date to %lu %s \n",
          trans, tv.tv_sec, ctime (&tv.tv_sec));
 
 }
