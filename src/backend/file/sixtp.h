@@ -29,6 +29,8 @@
 
 #include <stdarg.h>
 
+#include "libxml/SAX.h"
+
 #include "gnc-xml-helper.h"
 
 typedef struct _sixtp_child_result sixtp_child_result;
@@ -150,6 +152,7 @@ typedef struct sixtp_sax_data {
   gboolean parsing_ok;
   GSList *stack;
   gpointer global_data;
+  xmlParserCtxtPtr saxParserCtxt;
 } sixtp_sax_data;
 
 

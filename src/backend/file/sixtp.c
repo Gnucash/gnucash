@@ -29,6 +29,9 @@
 #include <stdarg.h>
 #include <sys/types.h>
 
+#include "libxml/SAX.h"
+#include "libxml/parser.h"
+
 #include "sixtp.h"
 #include "sixtp-stack.h"
 
@@ -444,6 +447,9 @@ sixtp_sax_start_handler(void *user_data,
 
   /* now allocate the new stack frame and shift to it */
   new_frame = sixtp_stack_frame_new(next_parser, g_strdup(name));
+
+  new_frame->line = getLineNumber( pdata->saxParserCtxt );
+  new_frame->col  = getColumnNumber( pdata->saxParserCtxt );
   
   pdata->stack = g_slist_prepend(pdata->stack, (gpointer) new_frame);
   
@@ -700,7 +706,11 @@ sixtp_parse_file(sixtp *sixtp,
         return FALSE;
     }
 
-    xmlSAXUserParseFile(&ctxt->handler, &ctxt->data, filename);
+    ctxt->data.saxParserCtxt = xmlCreateFileParserCtxt( filename );
+    ctxt->data.saxParserCtxt->sax = &ctxt->handler;
+    ctxt->data.saxParserCtxt->userData = &ctxt->data;
+    xmlParseDocument( ctxt->data.saxParserCtxt );
+    //xmlSAXUserParseFile(&ctxt->handler, &ctxt->data, filename);
 
     if(ctxt->data.parsing_ok)
     {
@@ -736,7 +746,10 @@ sixtp_parse_buffer(sixtp *sixtp,
         return FALSE;
     }
 
-    xmlSAXUserParseMemory(&ctxt->handler, &ctxt->data, bufp, bufsz);
+    ctxt->data.saxParserCtxt = xmlCreateMemoryParserCtxt( bufp, bufsz );
+    ctxt->data.saxParserCtxt->sax = &ctxt->handler;
+    ctxt->data.saxParserCtxt->userData = &ctxt->data;
+    xmlParseDocument( ctxt->data.saxParserCtxt );
 
     sixtp_context_run_end_handler(ctxt);
 

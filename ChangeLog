@@ -1,3 +1,15 @@
+2002-04-21  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/backend/file/sixtp.c (sixtp_parse_file): Explicitly create
+	an xmlParserCtxt and keep it in the sixtp_sax_data, so we can...
+	(sixtp_sax_start_handler): retain line/column numbers for stack
+	frames, which pays off in...
+	* src/backend/file/sixtp-stack.c (sixtp_stack_frame_print):
+	printing the line/column numbers of parsing errors when they
+	occur.
+	* src/backend/file/sixtp.c (sixtp_parse_buffer): Analagous change
+	for in-memory-buffer parsing.
+
 2002-04-20  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c (process_auto_create_list): Added

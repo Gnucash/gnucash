@@ -53,6 +53,7 @@ sixtp_stack_frame_new(sixtp* next_parser, char *tag)
     new_frame->data_for_children = NULL;
     new_frame->data_from_children = NULL;
     new_frame->frame_data = NULL;
+    new_frame->line = new_frame->col = -1;
 
     return new_frame;
 }
@@ -63,6 +64,7 @@ sixtp_stack_frame_print(sixtp_stack_frame *sf, gint indent, FILE *f)
   gchar *is = g_strnfill(indent, ' ');
 
   fprintf(f, "%s(stack-frame %p\n", is, sf);
+  fprintf(f, "%s             (line %d) (col %d)\n", is, sf->line, sf->col );
   fprintf(f, "%s             (parser %p)\n", is, sf->parser);
   fprintf(f, "%s             (tag %s)\n", is, sf->tag ? sf->tag : "(null)");
   fprintf(f, "%s             (data-for-children %p)\n", is,
