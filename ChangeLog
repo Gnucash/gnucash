@@ -1,3 +1,48 @@
+2003-08-23  David Hampton  <hampton@employees.org>
+
+	* src/scm/main.scm: Set next version number to 2.0.
+
+	* src/app-util/gnc-ui-util.[ch]: Make a couple of functions public.
+
+	* src/business/business-gnome/business-options-gnome.c:
+	* src/gnome/window-acct-tree.c:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome-utils/dialog-options.h:
+	* src/gnome-utils/gnome-utils.scm:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/report/report-gnome/dialog-column-view.c:
+	* src/report/report-gnome/dialog-style-sheet.c:
+	* src/report/report-gnome/window-report.c: Collapse common option
+	dialog handling. Tweak args to option dialog creation. Use
+	g_signal_connect to set up signal handlers.
+
+	* src/gnome-utils/preferences.glade: New file to create structure of
+	an options dialog.
+
+	* src/report/report-gnome/report.glade: Make the stylesheets
+	dialog look like a standard gnome2 dialog.
+
+	* src/gnome/druid-stock-split.c:
+	* src/gnome/glade/account.glade:
+	* src/gnome/glade/stocks.glade:
+	* src/gnome-utils/dialog-account.c: Use the new account tree view
+	widget.
+
+	* src/gnome-utils/druid-utils.[ch]: Correct the druid colors and
+	watermarks for gnome2.
+
+	* src/gnome/gnc-plugin-page-account-tree.c: Make the options
+	dialog work. Add more features back.
+
+	* src/gnome-utils/Makefile.am: New gnc-tree-view-account.[ch] files.
+
+	* src/gnome-utils/gnc-tree-model-account.[ch]: Flesh out the model
+	to include all the necessary columns.  Make it look like the
+	original account tree.
+
+	* src/gnome-utils/gnc-tree-view-account.[ch]: Common view code for
+	all users of the gnc-tree-model-account.c file.
+
 2003-08-18  David Hampton  <hampton@employees.org>
 
 	* macros/compiler-flags.m4: Add back detailed compile time checks.
