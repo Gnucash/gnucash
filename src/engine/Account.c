@@ -1241,6 +1241,50 @@ xaccAccountGetNumSplits (Account *acc) {
 /********************************************************************\
 \********************************************************************/
 
+gboolean
+xaccAccountGetTaxRelated (Account *account)
+{
+  kvp_value *kvp;
+
+  if (!account)
+    return FALSE;
+
+  kvp = kvp_frame_get_slot (xaccAccountGetSlots (account), "tax-related");
+  if (!kvp)
+    return FALSE;
+
+  return kvp_value_get_gint64 (kvp);
+}
+
+void
+xaccAccountSetTaxRelated (Account *account, gboolean tax_related)
+{
+  kvp_value *new_value;
+
+  if (!account)
+    return;
+
+  if (tax_related)
+    new_value = kvp_value_new_gint64 (tax_related);
+  else
+    new_value = NULL;
+
+  xaccAccountBeginEdit (account);
+  {
+    CHECK (account);
+
+    kvp_frame_set_slot(xaccAccountGetSlots (account),
+                       "tax-related", new_value);
+
+    if (new_value)
+      kvp_value_delete(new_value);
+  }
+  xaccAccountCommitEdit (account);
+}
+
+/********************************************************************\
+\********************************************************************/
+
 Account * 
 IthAccount (Account **list, int i)
 {

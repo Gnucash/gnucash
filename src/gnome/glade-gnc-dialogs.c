@@ -3867,6 +3867,7 @@ create_Account_Dialog (void)
   GtkWidget *frame32;
   GtkWidget *scrolledwindow9;
   GtkWidget *notes_text;
+  GtkWidget *tax_related_button;
   GtkWidget *dialog_action_area12;
   GtkWidget *button63;
   GtkWidget *cancel_button;
@@ -4102,6 +4103,14 @@ create_Account_Dialog (void)
   gtk_widget_show (notes_text);
   gtk_container_add (GTK_CONTAINER (scrolledwindow9), notes_text);
   gtk_text_set_editable (GTK_TEXT (notes_text), TRUE);
+
+  tax_related_button = gtk_check_button_new_with_label (_("Tax Related"));
+  gtk_widget_ref (tax_related_button);
+  gtk_object_set_data_full (GTK_OBJECT (Account_Dialog), "tax_related_button", tax_related_button,
+                            (GtkDestroyNotify) gtk_widget_unref);
+  gtk_widget_show (tax_related_button);
+  gtk_box_pack_start (GTK_BOX (vbox75), tax_related_button, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (tax_related_button), 3);
 
   dialog_action_area12 = GNOME_DIALOG (Account_Dialog)->action_area;
   gtk_object_set_data (GTK_OBJECT (Account_Dialog), "dialog_action_area12", dialog_action_area12);

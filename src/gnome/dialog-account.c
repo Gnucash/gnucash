@@ -77,6 +77,8 @@ struct _AccountWindow
   GtkWidget * parent_tree;
   GtkWidget * source_menu;
 
+  GtkWidget * tax_related_button;
+
   gint source;
 };
 
@@ -101,6 +103,7 @@ gnc_account_to_ui(AccountWindow *aw)
 {
   const gnc_commodity * commodity=NULL;
   const char *string;
+  gboolean tax_related;
   gint pos = 0;
 
   string = xaccAccountGetName (aw->account);
@@ -127,6 +130,10 @@ gnc_account_to_ui(AccountWindow *aw)
   gtk_editable_insert_text (GTK_EDITABLE (aw->notes_text), string,
                             strlen(string), &pos);
 
+  tax_related = xaccAccountGetTaxRelated (aw->account);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (aw->tax_related_button),
+                                tax_related);
+
   if ((STOCK != aw->type) && (MUTUAL != aw->type) && (CURRENCY != aw->type))
     return;
 
@@ -149,6 +156,7 @@ gnc_ui_to_account(AccountWindow *aw)
   Account *parent_account;
   const char *old_string;
   const char *string;
+  gboolean tax_related;
 
   xaccAccountBeginEdit (aw->account);
 
@@ -200,6 +208,10 @@ gnc_ui_to_account(AccountWindow *aw)
   old_string = xaccAccountGetNotes (aw->account);
   if (safe_strcmp (string, old_string) != 0)
     xaccAccountSetNotes (aw->account, string);
+
+  tax_related =
+    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (aw->tax_related_button));
+  xaccAccountSetTaxRelated (aw->account, tax_related);
 
   parent_account =
     gnc_account_tree_get_current_account (GNC_ACCOUNT_TREE(aw->parent_tree));
@@ -1189,6 +1201,8 @@ gnc_account_window_create(AccountWindow *aw)
 		     GTK_SIGNAL_FUNC(gnc_parent_tree_select), aw);
   gtk_signal_connect(GTK_OBJECT (aw->parent_tree), "unselect_account",
 		     GTK_SIGNAL_FUNC(gnc_parent_tree_select), aw);
+
+  aw->tax_related_button = gtk_object_get_data (awo, "tax_related_button");
 
   if (last_width == 0)
     gnc_get_window_size("account_win", &last_width, &last_height);

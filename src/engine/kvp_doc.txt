@@ -72,6 +72,11 @@ Use: This string holds the old Price Source code used by earlier versions
      is fully supported. The new version of Finance::Quote uses a different
      scheme to identify sources for price quotes.
 
+Name: tax-related
+Type: gint64
+Entities: Account
+Use: A boolean flag indicated whether the Account is tax-related.
+
 Name: user-keys
 Type: frame
 Entities: All

@@ -244,10 +244,14 @@ gnc_numeric     xaccAccountGetShareBalance (Account *);
 gnc_numeric     xaccAccountGetShareClearedBalance (Account *);
 gnc_numeric     xaccAccountGetShareReconciledBalance (Account *);
 
-Split *        xaccAccountGetSplit (Account *acc, int i);
-int            xaccAccountGetNumSplits (Account *acc);
+Split *         xaccAccountGetSplit (Account *acc, int i);
+int             xaccAccountGetNumSplits (Account *acc);
 
-GList*         xaccAccountGetSplitList (Account *acc);
+GList*          xaccAccountGetSplitList (Account *acc);
+
+gboolean        xaccAccountGetTaxRelated (Account *account);
+void            xaccAccountSetTaxRelated (Account *account,
+                                          gboolean tax_related);
 
 /* The xaccAccountGetFullName routine returns the fully qualified name
  * of the account using the given separator char. The name must be freed

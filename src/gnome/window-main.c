@@ -458,8 +458,8 @@ gnc_refresh_main_window_title()
 {
   GtkWidget *main_window;
   GNCBook *book;
-  gchar *filename;
-  gchar *title;
+  const char *filename;
+  char *title;
 
   main_window = gnc_get_ui_data();
   if (main_window == NULL)
