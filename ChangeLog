@@ -1,5 +1,15 @@
 2003-01-03  David Hampton  <hampton@employees.org>
 
+	* src/gnome/druid-hierarchy.c:
+	* src/gnome/druid-loan.c:
+	* src/gnome/druid-stock-split.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome-utils/window-help.c:
+	* src/import-export/qif-import/druid-qif-import.c: Add icons to
+	gtk only windows. This can probably be reverted in the port to
+	gnome2 when the icon functionality moves from gnome_xxx to
+	gtk_xxx.
+
 	* src/engine/gnc-pricedb.h:
 	* src/gnome/dialog-price-edit-db.c: Add support for i18n of price
 	source strings. Needs to be done at display time because the

@@ -35,6 +35,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <libgnomeui/gnome-window-icon.h>
 
 /* needed for db.h with 'gcc -ansi -pedantic' */
 #ifndef _BSD_SOURCE
@@ -686,6 +687,7 @@ gnc_help_window_new (void)
   xml = gnc_glade_xml_new ("help.glade", "Help Window");
 
   help->toplevel = glade_xml_get_widget (xml, "Help Window");
+  gnome_window_icon_set_from_default (GTK_WINDOW (help->toplevel));
 
   gnc_register_gui_component (WINDOW_HELP_CM_CLASS, NULL, close_handler, help);
 
