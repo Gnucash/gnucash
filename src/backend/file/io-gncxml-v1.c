@@ -2869,6 +2869,7 @@ txn_restore_guid_end_handler(gpointer data_for_children,
                              gpointer parent_data, gpointer global_data,
                              gpointer *result, const gchar *tag)
 {
+  GNCParseStatus *pstatus = (GNCParseStatus *) global_data;
   Transaction *t = (Transaction *) parent_data;
   gchar *txt = NULL;
   GUID gid;
@@ -2884,7 +2885,7 @@ txn_restore_guid_end_handler(gpointer data_for_children,
 
   g_return_val_if_fail(ok, FALSE);
 
-  if(xaccTransLookup(&gid)) {
+  if(xaccTransLookup(&gid, pstatus->session)) {
     return(FALSE);
   }
 

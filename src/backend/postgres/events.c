@@ -321,7 +321,8 @@ pgendProcessEvents (Backend *bend)
                   pgendCopyTransactionToEngine (be, &(ev->guid));
                   break;
                case GNC_EVENT_DESTROY: {
-                  Transaction *trans = xaccTransLookup (&(ev->guid));
+                  Transaction *trans = xaccTransLookup (&(ev->guid),
+                                                        be->session);
                   xaccTransBeginEdit (trans);
                   xaccTransDestroy (trans);
                   xaccTransCommitEdit (trans);

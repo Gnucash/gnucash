@@ -136,7 +136,7 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
 {
   SRInfo *info = gnc_split_register_get_info (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
-  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  Transaction *pending_trans;
   CursorBuffer *cursor_buffer;
   GHashTable *trans_table = NULL;
   CellBlock *cursor_header;
@@ -166,6 +166,9 @@ gnc_split_register_load (SplitRegister *reg, GList * slist,
   int new_trans_row = -1;
   int new_split_row = -1;
   time_t present;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   /* make sure we have a blank split */
   if (blank_split == NULL)

@@ -880,10 +880,13 @@ gnc_split_register_delete_current_split (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
-  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  Transaction *pending_trans;
   Transaction *trans;
   Account *account;
   Split *split;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
@@ -929,10 +932,13 @@ gnc_split_register_delete_current_trans (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
-  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  Transaction *pending_trans;
   Transaction *trans;
   Account *account;
   Split *split;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
@@ -996,12 +1002,15 @@ gnc_split_register_emtpy_current_trans (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
-  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  Transaction *pending_trans;
   Transaction *trans;
   Account *account;
   GList *splits;
   GList *node;
   Split *split;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   /* get the current split based on cursor position */
   split = gnc_split_register_get_current_split (reg);
@@ -1086,13 +1095,16 @@ gnc_split_register_cancel_cursor_split_changes (SplitRegister *reg)
 void
 gnc_split_register_cancel_cursor_trans_changes (SplitRegister *reg)
 {
-  SRInfo *info = gnc_split_register_get_info(reg);
-  Transaction *pending_trans = xaccTransLookup(&info->pending_trans_guid);
+  SRInfo *info = gnc_split_register_get_info (reg);
+  Transaction *pending_trans;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   /* Get the currently open transaction, rollback the edits on it, and
    * then repaint everything. To repaint everything, make a note of
    * all of the accounts that will be affected by this rollback. */
-  if (!xaccTransIsOpen(pending_trans))
+  if (!xaccTransIsOpen (pending_trans))
   {
     gnc_split_register_cancel_cursor_split_changes (reg);
     return;
@@ -1309,12 +1321,17 @@ gnc_split_register_save (SplitRegister *reg, gboolean do_commit)
 {
    SRInfo *info = gnc_split_register_get_info (reg);
    Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
-   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
-   Transaction *blank_trans = xaccSplitGetParent (blank_split);
+   Transaction *pending_trans;
+   Transaction *blank_trans;
    Transaction *trans;
    const char *memo;
    const char *desc;
    Split *split;
+
+   pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                    gnc_get_current_session ());
+
+   blank_trans = xaccSplitGetParent (blank_split);
 
    /* get the handle to the current split and transaction */
    split = gnc_split_register_get_current_split (reg);
@@ -1847,7 +1864,10 @@ gboolean
 gnc_split_register_changed (SplitRegister *reg)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  Transaction *pending_trans;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   if (reg == NULL)
     return FALSE;
@@ -2187,8 +2207,11 @@ gnc_split_register_cleanup (SplitRegister *reg)
 {
    SRInfo *info = gnc_split_register_get_info (reg);
    Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
-   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+   Transaction *pending_trans;
    Transaction *trans;
+
+   pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                    gnc_get_current_session ());
 
    gnc_suspend_gui_refresh ();
 

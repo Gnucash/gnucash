@@ -2378,7 +2378,8 @@ xaccGUIDMatchPredicate(Split * s, PredicateData * pd)
               xaccAccountLookupEntityTable (guid, s->entity_table));
 
     case GNC_ID_TRANS:
-      return xaccSplitGetParent (s) == xaccTransLookup (guid);
+      return (xaccSplitGetParent (s) ==
+              xaccTransLookupEntityTable (guid, s->entity_table));
 
     case GNC_ID_SPLIT:
       return s == xaccSplitLookup (guid);

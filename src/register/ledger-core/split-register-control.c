@@ -196,7 +196,8 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     return;
 
   info = gnc_split_register_get_info (reg);
-  pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   PINFO ("start callback %d %d \n",
          new_virt_loc.vcell_loc.virt_row,
@@ -545,7 +546,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
                                     VirtualLocation *p_new_virt_loc)
 {
   SRInfo *info = gnc_split_register_get_info (reg);
-  Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  Transaction *pending_trans;
   Split *blank_split = xaccSplitLookup (&info->blank_split_guid);
   Transaction *blank_trans = xaccSplitGetParent (blank_split);
   VirtualLocation new_virt_loc;
@@ -555,6 +556,9 @@ gnc_split_register_auto_completion (SplitRegister *reg,
   gnc_numeric amount;
   BasicCell *cell;
   Split *split;
+
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
 
   /* auto-completion is only triggered by a tab out */
   if (dir != GNC_TABLE_TRAVERSE_RIGHT)
@@ -844,7 +848,8 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
   if (info->first_pass)
     return FALSE;
 
-  pending_trans = xaccTransLookup (&info->pending_trans_guid);
+  pending_trans = xaccTransLookup (&info->pending_trans_guid,
+                                   gnc_get_current_session ());
   virt_loc = *p_new_virt_loc;
 
   info->exact_traversal = (dir == GNC_TABLE_TRAVERSE_POINTER);

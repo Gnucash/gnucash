@@ -307,7 +307,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* use markers to avoid redundant traversals of transactions we've
     * already checked recently. */
-   trans = xaccTransLookup (&trans_guid);
+   trans = xaccTransLookup (&trans_guid, be->session);
    if (NULL != trans)
    {
       if (0 != trans->marker)

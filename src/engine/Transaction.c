@@ -886,10 +886,20 @@ xaccTransSetGUID (Transaction *trans, const GUID *guid)
 \********************************************************************/
 
 Transaction *
-xaccTransLookup (const GUID *guid)
+xaccTransLookupEntityTable (const GUID *guid,
+                            GNCEntityTable *entity_table)
+{
+  /* FIXME: uncomment when entity tables are in sessions */
+  /* g_return_val_if_fail (entity_table, NULL); */
+  return xaccLookupEntity (guid, GNC_ID_TRANS);
+}
+
+Transaction *
+xaccTransLookup (const GUID *guid, GNCSession *session)
 {
   if (!guid) return NULL;
-  return xaccLookupEntity(guid, GNC_ID_TRANS);
+  g_return_val_if_fail (session, NULL);
+  return xaccLookupEntity (guid, GNC_ID_TRANS);
 }
 
 /********************************************************************\

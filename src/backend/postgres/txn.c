@@ -527,7 +527,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
    pgendDisable(be);
 
    /* first, see if we already have such a transaction */
-   trans = xaccTransLookup (trans_guid);
+   trans = xaccTransLookup (trans_guid, be->session);
    if (!trans)
    {
       trans = xaccMallocTransaction(be->session);

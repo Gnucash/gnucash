@@ -230,7 +230,7 @@ gnc_html_register_url_cb (const char *location, const char *label,
         break;
 
       case GNC_ID_TRANS:
-        trans = xaccTransLookup (&guid);
+        trans = xaccTransLookup (&guid, gnc_get_current_session ());
         split = NULL;
 
         for (node = xaccTransGetSplitList (trans); node; node = node->next)

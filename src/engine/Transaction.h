@@ -130,7 +130,7 @@ gboolean      xaccTransIsOpen (Transaction *trans);
  */
 const GUID  * xaccTransGetGUID (Transaction *trans);
 GUID          xaccTransReturnGUID (Transaction *trans);
-Transaction * xaccTransLookup (const GUID *guid);
+Transaction * xaccTransLookup (const GUID *guid, GNCSession *session);
 
 
 /* Transaction slots are used to store arbitrary strings, numbers, and

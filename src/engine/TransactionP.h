@@ -201,6 +201,10 @@ struct transaction_s
   guint32  idata;     /* used by the sql backend for kvp management */
 };
 
+/* Lookup the transaction with the guid, using the given table. */
+Transaction * xaccTransLookupEntityTable (const GUID *guid,
+                                          GNCEntityTable *entity_table);
+
 /* Set the transaction's GUID. This should only be done when reading
  * a transaction from a datafile, or some other external source. Never
  * call this on an existing transaction! */

@@ -67,7 +67,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    /* first, see if we already have such a transaction */
    string_to_guid (DB_GET_VAL("transGUID",j), &trans_guid);
-   trans = xaccTransLookup (&trans_guid);
+   trans = xaccTransLookup (&trans_guid, be->session);
    if (trans)
    {
       /* If transaction already exists, determine whose data is 
@@ -157,7 +157,7 @@ get_mass_entry_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    guid = nullguid;  /* just in case the read fails ... */
    string_to_guid (DB_GET_VAL("transGUID",j), &guid);
-   trans = xaccTransLookup (&guid);
+   trans = xaccTransLookup (&guid, be->session);
    if (!trans)
    {
       PERR ("trans not found, will delete this split\n"
