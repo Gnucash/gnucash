@@ -122,14 +122,18 @@ pthread_getspecific() to define a per-thread global and/or ring/queue.
 
 Engine Isolation
 ----------------
+Goals of engine isolation:
+  o Hide the engine behind and API so that multiple, plaggable engines
+    could be created, e.g. SQL or CORBA.
+  o Engine users are blocked from being able to put engine ineternal
+    structures in an inconsistent state.  Updates are "atomic".
+
 Some half-finished thoughts about the engine API:
 
--- The engine structures should not be accessible to any code outside of the engine.
-   Thus, the engine structures have been moved to AccountP.h, TransactionP.h, etc.
+-- The engine structures should not be accessible to any code outside 
+   of the engine.  Thus, the engine structures have been moved to 
+   AccountP.h, TransactionP.h, etc.
    The *P.h files should not be included by code outside of the engine.
-
--- The goal of hiding the engine internals behind an API is to allow the engine 
-   to be replaced by a variety of back ends, e.g. an SQL and/or CORBA back-end.
 
 -- The down-side of hiding is that it can hurt performance.  Even trivial data 
    accesses require a subroutine call.  Maybe a smarter idea would be to leave
@@ -137,10 +141,11 @@ Some half-finished thoughts about the engine API:
    "copy-out" the structures into parallel structures when a hidden back end
    needs to be invoked.
 
--- the upside of hiding behind an API is that the engine can be instrumented
-   with extension language (perl, scheme, tcl, python) hooks for pre/post processing
-   of the data.  To further enable such hooks, we should probably surround all
-   operations on structures with "begin-edit" and "end-edit" calls.
+-- the upside of hiding behind an API is that the engine can be 
+   instrumented with extension language (perl, scheme, tcl, python) hooks 
+   for pre/post processing of the data.  To further enable such hooks, we 
+   should probably surround all operations on structures with "begin-edit" 
+   and "end-edit" calls.
 
 -- begin/end braces could potentially be useful for two-phase commit schemes.
    where "end-edit" is replaced by "commeit-edit" or "reject-edit".
