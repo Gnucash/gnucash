@@ -58,6 +58,12 @@ struct account_s
   /* public data, describes account */
   GUID      guid;          /* globally unique account id */
 
+  /* XXX FIXME ... this pointer shadows a more 'technically correct
+   * pointer', the one in book.  The correct way to find the entity 
+   * table should be to find the accounts parent group, then find 
+   * the parent book, then find the entity table.  So this shadow 
+   * copy here is redundant... does it provide a performance boost
+   * by being here ???  Do we ahve another reason ??? */
   GNCEntityTable *entity_table; /* Entity table this account is
                                  * stored in. */
 
