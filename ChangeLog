@@ -29,7 +29,13 @@
 	  through the list and 'select' those that are marked as "start selected"
 	* accounts/C/acctchrt_common.gnucash-xea: mark this account tree as
 	  "start selected"
-	
+
+	* src/register/ledger-core/split-register-model-save.c: when
+	  editing an exchange rate, always change the _VALUE_ of the
+	  split, not the amount.  This has the affect of keeping the
+	  visible number the same and changing the "other" account.  This
+	  should fix #102161
+
 2003-01-04  David Hampton  <hampton@employees.org>
 
 	* src/backend/file/gnc-account-xml-v2.c: 

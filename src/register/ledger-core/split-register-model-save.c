@@ -380,20 +380,10 @@ gnc_split_register_split_needs_amount (SplitRegister *reg, Split *split)
 }
 
 static void
-gnc_split_register_save_debcred_cell (BasicCell * bcell,
-                                      gpointer save_data,
-                                      gpointer user_data)
+gnc_split_register_save_amount_values (SRSaveData *sd, SplitRegister *reg)
 {
-  SRSaveData *sd = save_data;
-  SplitRegister *reg = user_data;
   Account *acc;
   gnc_numeric new_amount, convrate, amtconv, value;
-
-  g_return_if_fail (gnc_basic_cell_has_name (bcell, DEBT_CELL) ||
-                    gnc_basic_cell_has_name (bcell, CRED_CELL));
-
-  if (sd->handled_dc)
-    return;
 
   new_amount = gnc_split_register_debcred_cell_value (reg);
 
@@ -406,12 +396,9 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
    */
 
   /* First, compute the conversion rate to convert the value to the
-   * amount.  Use the RATE_CELL (if it exists) -- if not, then assume
-   * it is 1.
+   * amount.
    */
   convrate = gnc_split_register_get_rate_cell (reg, RATE_CELL);
-  if (gnc_numeric_zero_p (convrate))
-    convrate = gnc_numeric_create (100,100);
 
   /* Now compute/set the split value.  Amount is in the register
    * currency but we need to convert to the txn currency.
@@ -456,6 +443,23 @@ gnc_split_register_save_debcred_cell (BasicCell * bcell,
 				  GNC_RND_ROUND);
     xaccSplitSetAmount (sd->split, new_amount);
   }
+}
+
+static void
+gnc_split_register_save_debcred_cell (BasicCell * bcell,
+                                      gpointer save_data,
+                                      gpointer user_data)
+{
+  SRSaveData *sd = save_data;
+  SplitRegister *reg = user_data;
+
+  g_return_if_fail (gnc_basic_cell_has_name (bcell, DEBT_CELL) ||
+                    gnc_basic_cell_has_name (bcell, CRED_CELL));
+
+  if (sd->handled_dc)
+    return;
+
+  gnc_split_register_save_amount_values (sd, reg);
 
   sd->handled_dc = TRUE;
   sd->do_scrub = TRUE;
@@ -554,12 +558,15 @@ gnc_split_register_save_cells (gpointer save_data,
      */
     if (!sd->handled_dc)
     {
+      gnc_split_register_save_amount_values (sd, reg);
+#if 0
       gnc_numeric value, amount;
 
       amount = xaccSplitGetAmount (sd->split);
       value = gnc_numeric_div (amount, rate, gnc_commodity_get_fraction (txn_cur),
 			       GNC_RND_ROUND);
       xaccSplitSetValue (sd->split, value);
+#endif
     }
   }
 }
