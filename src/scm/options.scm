@@ -194,6 +194,42 @@
            (list #f "boolean-option: not a boolean")))
      #f #f )))
 
+
+;; Complex boolean options are the same as simple boolean options,
+;; with the addition of a function argument.  The function should
+;; expect one boolean argument.  When the option's value is changed,
+;; the function will be called with the new value of the option as
+;; the function's argument.  For example:
+;;
+;; (gnc:make-complex-boolean-option
+;;  "General" "complex boolean test"
+;;  "a" "test the complex boolean option" #f
+;;  (lambda (x) (gnc:warn "complex boolean option selected")))
+
+(define (gnc:make-complex-boolean-option
+	 section
+	 name
+	 sort-tag
+	 documentation-string
+	 default-value
+    function)
+  (let* ((value default-value)
+         (value->string (lambda () (gnc:value->string value))))
+    (gnc:make-option
+     section name sort-tag 'boolean documentation-string
+     (lambda () value)
+     (lambda (x) (set! value x)
+                 (function x))
+     (lambda () default-value)
+     (gnc:restore-form-generator value->string)
+     (lambda (x)
+       (if (boolean? x)
+           (list #t x)
+           (list #f "boolean-option: not a boolean")))
+     #f #f )))
+
+
+
 ;; date options use the option-data as a boolean value. If true,
 ;; the gui should allow the time to be entered as well.
 (define (gnc:make-date-option
