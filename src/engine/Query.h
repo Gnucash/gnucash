@@ -76,6 +76,9 @@ void xaccQuerySetDateRangeL (Query *, long long earliest, long long latest);
 void xaccQuerySetEarliest (Query *, time_t earliest);
 void xaccQuerySetLatest   (Query *, time_t latest);
 
+time_t xaccQueryGetEarliest (Query *);
+time_t xaccQueryGetLatest   (Query *);
+
 /* The xaccQueryShowEarliestDateFound function and its partner tell
  * the Query to use the earliest (resp. latest) splits found. */
 void xaccQueryShowEarliestDateFound (Query *);

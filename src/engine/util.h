@@ -159,6 +159,12 @@ struct lconv * gnc_localeconv();
  *
  * The xaccSPrintAmount() routine accepts a pointer to the buffer to be
  *    printed to.  It returns the length of the printed string.
+ *
+ * The xaccSPrintAmountGeneral() routine is a generalization of
+ *    xaccSPrintAmount that allows the precision and minimum
+ *    number of trailing zeros to be set. You can also set
+ *    whether the amount should be printed as monetary or
+ *    non-monetary, which affects fomatting in locales.
  */
 
 #define PRTSYM 0x1
@@ -167,6 +173,9 @@ struct lconv * gnc_localeconv();
 
 char * xaccPrintAmount (double val, short shrs);
 int xaccSPrintAmount (char *buf, double val, short shrs);
+int xaccSPrintAmountGeneral (char * bufp, double val, short shrs,
+                             int precision, gncBoolean monetary,
+                             int min_trailing_zeros);
 
 /* Parse i18n amount strings */
 double xaccParseAmount (const char * instr, gncBoolean monetary);

@@ -578,10 +578,10 @@ xaccCheckDateOrder (Account * acc, Split *split )
 
   /* figure out if the transactions are out of order */
   if (NULL != prevSplit) {
-    if( xaccTransOrder (&(prevSplit->parent), &(split->parent)) >0 ) outOfOrder = TRUE;
+    if( xaccSplitDateOrder (&prevSplit, &split) > 0 ) outOfOrder = TRUE;
   }
   if (NULL != nextSplit) {
-    if( xaccTransOrder (&(split->parent), &(nextSplit->parent)) >0 ) outOfOrder = TRUE;
+    if( xaccSplitDateOrder (&split, &nextSplit) > 0 ) outOfOrder = TRUE;
   }
 
   /* take care of re-ordering, if necessary */
@@ -1092,6 +1092,67 @@ xaccAccountGetName (Account *acc)
 {
    if (!acc) return NULL;
    return (acc->accountName);
+}
+
+char *
+xaccAccountGetFullName(Account *account, const char separator)
+{
+  Account *a;
+  char *fullname;
+  char *name;
+  char *p;
+  int length;
+
+  if (account == NULL)
+  {
+    fullname = strdup("");
+    assert(fullname != NULL);
+    return fullname;
+  }
+
+  /* Figure out how much space is needed */
+  length = 0;
+  a = account;
+  while (a != NULL)
+  {
+    name = xaccAccountGetName(a);
+
+    length += strlen(name) + 1; /* plus one for the separator */
+
+    a = xaccAccountGetParentAccount(a);
+  }
+
+  /* length has one extra separator in it, that's ok, because it will
+   * hold the null character at the end. */
+
+  /* allocate the memory */
+  fullname = malloc(length * sizeof(char));
+  assert(fullname != 0);
+
+  /* go to end of string */
+  p = fullname + length - 1;
+
+  /* put in the null character and move to the previous char */
+  *p-- = 0;
+
+  a = account;
+  while (a != NULL)
+  {
+    name = xaccAccountGetName(a);
+    length = strlen(name);
+
+    /* copy the characters going backwards */
+    while (length > 0)
+      *p-- = name[--length];
+
+    a = xaccAccountGetParentAccount(a);
+
+    /* if we're not at the root, add another separator */
+    if (a != NULL)
+      *p-- = separator;
+  }
+
+  return fullname;
 }
 
 char *

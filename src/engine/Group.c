@@ -24,6 +24,7 @@
 \********************************************************************/
 
 #include <assert.h>
+#include <string.h>
 
 #include "config.h"
 
@@ -305,6 +306,83 @@ xaccGetAccountFromName ( AccountGroup *root, const char * name )
 }
 
 /********************************************************************\
+ * Fetch an account, given its full name                            *
+\********************************************************************/
+
+Account *
+xaccGetAccountFromFullName (AccountGroup *root,
+                            const char *name,
+                            const char separator)
+{
+  Account *account;
+  Account *found;
+  char *p;
+  int i;
+
+  if (NULL == root) return NULL;
+  if (NULL == name) return NULL;
+
+  p = (char *) name;
+  found = NULL;
+
+  while (1)
+  {
+    /* Look for the first separator. */
+    p = strchr(p, separator);
+
+    /* If found, switch it to the null char. */
+    if (p != NULL)
+      *p = 0;
+
+    /* Now look for that name in the children. */
+    for (i = 0; i < root->numAcc; i++) {
+      account = root->account[i];
+      if (safe_strcmp(account->accountName, name) == 0)
+      {
+        /* We found an account.
+         * If p == NULL, there is nothing left
+         * in the name, so just return the account.
+         * We don't need to put back the separator,
+         * because it was never erased (p == NULL). */
+        if (p == NULL)
+          return account;
+
+        /* There's stuff left to search for.
+         * Search recursively after the separator. */
+        found = xaccGetAccountFromFullName(account->children,
+                                           p + 1, separator);
+
+        /* If we found the account, break out. */
+        if (found != NULL)
+          break;
+      }
+    }
+
+    /* If found != NULL, an account was found. */
+    /* If p == NULL, there are no more separators left. */
+
+    /* Put back the separator. */
+    if (p != NULL)
+      *p = separator;
+
+    /* If we found the account, return it. */
+    if (found != NULL)
+      return found;
+
+    /* We didn't find the account. If there
+     * are no more separators, return NULL. */
+    if (p == NULL)
+      return NULL;
+
+    /* If we are here, we didn't find anything and there
+     * must be more separators. So, continue looking with
+     * a longer name, in case there is a name with the
+     * separator character in it. */
+    p++;
+  }
+}
+
+/********************************************************************\
  * Fetch an account, given its name                                *
 \********************************************************************/
 
@@ -322,6 +400,29 @@ xaccGetPeerAccountFromName ( Account *acc, const char * name )
 
   /* now search all acounts hanging off the root */
   peer_acc = xaccGetAccountFromName (root, name);
+
+  return peer_acc;
+}
+
+/********************************************************************\
+ * Fetch an account, given its full name                            *
+\********************************************************************/
+
+Account *
+xaccGetPeerAccountFromFullName ( Account *acc, const char * name,
+                                 const char separator )
+{
+  AccountGroup * root;
+  Account *peer_acc;
+
+  if (NULL == acc) return NULL;
+  if (NULL == name) return NULL;
+
+  /* first, find the root of the account group structure */
+  root = xaccGetAccountRoot (acc);
+
+  /* now search all acounts hanging off the root */
+  peer_acc = xaccGetAccountFromFullName (root, name, separator);
 
   return peer_acc;
 }

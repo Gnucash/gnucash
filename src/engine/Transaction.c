@@ -947,37 +947,22 @@ xaccTransCommitEdit (Transaction *trans)
    trans->open &= ~DEFER_REBALANCE;
    xaccTransRebalance (trans);
 
-   /* check to see if the date has changed.  We use the date as the sort key. */
-   if ((trans->orig->date_entered.tv_sec != trans->date_entered.tv_sec) ||
-       (trans->orig->date_posted.tv_sec  != trans->date_posted.tv_sec))
-   {
-
-      DEBUGCMD ({
-             time_t sicko = trans->date_posted.tv_sec;
-             DEBUG ("xaccTransCommitEdit(): date changed to %Lu %s\n",
-             trans->date_posted.tv_sec, ctime (&sicko));
-      })
-      /* since the date has changed, we need to be careful to 
-       * make sure all associated splits are in proper order
-       * in thier accounts.  The easiest way of ensuring this
-       * is to remove and reinsert every split. The reinsertion
-       * process will place the split in the correct date-sorted
-       * order.
-       */
-      i=0;
-      split = trans->splits[i];
-      while (split) {
-         acc = split ->acc;
-         xaccCheckDateOrder(acc, trans->splits[i]);
-         i++;
-         split = trans->splits[i];
-      }
-   }
-
+   /* Make sure all associated splits are in proper order
+    * in their accounts. */
    i=0;
    split = trans->splits[i];
    while (split) {
       acc = split ->acc;
+      xaccCheckDateOrder(acc, trans->splits[i]);
+      i++;
+      split = trans->splits[i];
+   }
+
+   /* Recompute the account balances. */
+   i=0;
+   split = trans->splits[i];
+   while (split) {
+      acc = split->acc;
       xaccAccountRecomputeBalance (acc); 
       i++;
       split = trans->splits[i];
@@ -2018,6 +2003,36 @@ xaccGetAccountByName (Transaction *trans, const char * name)
    if (!acc) return 0x0;
 
    acc = xaccGetPeerAccountFromName (acc, name);
+   return acc;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+Account *
+xaccGetAccountByFullName (Transaction *trans, const char * name,
+                          const char separator)
+{
+   Split *s;
+   Account *acc = NULL;
+   int i;
+
+   if (!trans) return NULL;
+   if (!name) return NULL;
+
+   /* walk through the splits, looking for one, any one, that has a parent account */
+   i = 0;
+   s = trans->splits[0];
+   while (s) {
+      acc = s->acc;
+      if (acc) break;
+      i++;
+      s = trans->splits[i];
+   }
+   
+   if (!acc) return 0x0;
+
+   acc = xaccGetPeerAccountFromFullName (acc, name, separator);
    return acc;
 }
 

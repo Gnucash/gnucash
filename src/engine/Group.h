@@ -126,16 +126,30 @@ int        xaccFillInAccounts ( AccountGroup *root, Account **arr );
  *    in the indicated AccountGroup group.  It returns NULL if the
  *    account was not found.
  *
+ * The xaccGetAccountFromFullName() subroutine works like
+ *    xaccGetAccountFromName, but uses fully-qualified names
+ *    using the given separator.
+ *
  * The xaccGetPeerAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
  *    in the same AccountGroup anchor group. It returns NULL if the
  *    account was not found.
+ *
+ * The xaccGetPeerAccountFromFullName() subroute works like
+ *     xaccGetPeerAccountFromName, but uses fully-qualified
+ *     names using the given separator.
  */
 
 Account *xaccGetAccountFromID       (AccountGroup *, int);
 Account *xaccGetPeerAccountFromID   (Account *, int);
 Account *xaccGetAccountFromName     (AccountGroup *, const char *);
+Account *xaccGetAccountFromFullName (AccountGroup *,
+                                     const char *name,
+                                     const char separator);
 Account *xaccGetPeerAccountFromName (Account *, const char *);
+Account * xaccGetPeerAccountFromFullName (Account *acc,
+                                          const char * name,
+                                          const char separator);
 
 /*
  * The xaccRecomputeGroupBalance() subroutine recursively totals

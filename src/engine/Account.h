@@ -133,6 +133,7 @@ void xaccAccountSetSecurity (Account *, char *);
 
 int            xaccAccountGetType (Account *);
 char *         xaccAccountGetName (Account *);
+char *         xaccAccountGetFullName (Account *, const char separator);
 char *         xaccAccountGetCode (Account *);
 char *         xaccAccountGetDescription (Account *);
 char *         xaccAccountGetNotes (Account *);

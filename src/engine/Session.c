@@ -229,7 +229,7 @@ xaccSessionBeginFile (Session *sess, const char * filefrag)
       free (sess->lockfile);  sess->lockfile = NULL;
       return NULL;    
    }
-   
+
    /* OK, now work around some NFS atomic lock race condition 
     * mumbo-jumbo.  We do this by linking a unique file, and 
     * then examing the link count.  At least that's what the 
@@ -368,9 +368,12 @@ MakeHomeDir (void)
        * Go ahead and make it. Don't bother much with checking mkdir 
        * for errors; seems pointless ...  */
       mkdir (path, S_IRWXU);   /* perms = S_IRWXU = 0700 */
-      strcat (path, "/data");
-      mkdir (path, S_IRWXU);
    }
+
+   strcat (path, "/data");
+   rc = stat (path, &statbuf);
+   if (rc)
+      mkdir (path, S_IRWXU);
 }
 
 /* ============================================================== */

@@ -49,12 +49,12 @@ int loglevel[MODULE_MAX] =
 {0,      /* DUMMY */
  2,      /* ENGINE */
  2,      /* IO */
- 4,      /* REGISTER */
+ 2,      /* REGISTER */
  2,      /* LEDGER */
  2,      /* HTML */
  2,      /* GUI */
- 4,      /* SCRUB */
- 4,      /* GTK_REG */
+ 2,      /* SCRUB */
+ 2,      /* GTK_REG */
 };
 
 /********************************************************************\
@@ -217,6 +217,13 @@ gnc_lconv_set(char **p_value, char *default_value)
     *p_value = default_value;
 }
 
+static void
+gnc_lconv_set_char(char *p_value, char default_value)
+{
+  if ((p_value != NULL) && (*p_value == 127))
+    *p_value = default_value;
+}
+
 struct lconv *
 gnc_localeconv()
 {
@@ -235,6 +242,13 @@ gnc_localeconv()
   gnc_lconv_set(&lc.mon_thousands_sep, ",");
   gnc_lconv_set(&lc.negative_sign, "-");
 
+  gnc_lconv_set_char(&lc.p_cs_precedes, 1);
+  gnc_lconv_set_char(&lc.p_sep_by_space, 0);
+  gnc_lconv_set_char(&lc.n_cs_precedes, 1);
+  gnc_lconv_set_char(&lc.n_sep_by_space, 0);
+  gnc_lconv_set_char(&lc.p_sign_posn, 1);
+  gnc_lconv_set_char(&lc.n_sign_posn, 1);
+
   lc_set = GNC_T;
 
   return &lc;
@@ -243,7 +257,9 @@ gnc_localeconv()
 /* Utility function for printing non-negative amounts */
 static int
 PrintAmt(char *buf, double val, int prec,
-         gncBoolean use_separators, gncBoolean monetary)
+         gncBoolean use_separators,
+         gncBoolean monetary,
+         int min_trailing_zeros)
 {
   int i, stringLength, numWholeDigits, sepCount;
   struct lconv *lc = gnc_localeconv();
@@ -260,6 +276,26 @@ PrintAmt(char *buf, double val, int prec,
     val = DABS(val);
 
   util_fptostr(tempBuf, val, prec);
+
+  /* Here we strip off trailing decimal zeros per the argument. */
+  if (prec > 0)
+  {
+    int max_delete;
+    char *p;
+
+    max_delete = prec - min_trailing_zeros;
+
+    p = tempBuf + strlen(tempBuf) - 1;
+
+    while ((*p == '0') && (max_delete > 0))
+    {
+      *p-- = 0;
+      max_delete--;
+    }
+
+    if (*p == lc->decimal_point[0])
+      *p = 0;
+  }
 
   if (!use_separators)
   {
@@ -308,7 +344,8 @@ PrintAmt(char *buf, double val, int prec,
 }
 
 int
-xaccSPrintAmount (char * bufp, double val, short shrs) 
+xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
+                         gncBoolean monetary, int min_trailing_zeros)
 {
    struct lconv *lc;
 
@@ -320,7 +357,6 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
    char sep_by_space;
    char sign_posn;
 
-   int precision = 2;
    gncBoolean print_sign = GNC_T;
 
    if (!bufp) return 0;
@@ -335,7 +371,6 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
      currency_symbol = "shrs";
      cs_precedes = 0;  /* currency symbol follows amount */
      sep_by_space = 1; /* they are separated by a space  */
-     precision = 4;
    }
    else
    {
@@ -390,15 +425,15 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
    }
 
    /* Now see if we print parentheses */
-   if (print_sign && (sign_posn == 0) && (val < 0.0))
+   if (print_sign && (sign_posn == 0))
      bufp = stpcpy(bufp, "(");
 
    /* Now print the value */
    bufp += PrintAmt(bufp, DABS(val), precision,
-                    shrs & PRTSEP, ~(shrs & PRTSHR));
+                    shrs & PRTSEP, monetary, min_trailing_zeros);
 
    /* Now see if we print parentheses */
-   if (print_sign && (sign_posn == 0) && (val < 0.0))
+   if (print_sign && (sign_posn == 0))
      bufp = stpcpy(bufp, ")");
 
    /* Now see if we print currency */
@@ -426,6 +461,22 @@ xaccSPrintAmount (char * bufp, double val, short shrs)
 
    /* return length of printed string */
    return (bufp - orig_bufp);
+}
+
+int
+xaccSPrintAmount (char * bufp, double val, short shrs) 
+{
+   int precision = 2;
+   int min_trailing_zeros = 2;
+
+   if (shrs & PRTSHR)
+   {
+     precision = 4;
+     min_trailing_zeros = 0;
+   }
+
+   return xaccSPrintAmountGeneral(bufp, val, shrs, precision,
+                                  GNC_T, min_trailing_zeros);
 }
 
 char * 

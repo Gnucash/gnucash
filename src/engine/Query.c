@@ -243,6 +243,22 @@ xaccQuerySetLatest (Query *q, time_t latest)
    q->latest.tv_sec = latest;
 }
 
+time_t
+xaccQueryGetEarliest (Query *q)
+{
+  assert(q != NULL);
+
+  return q->earliest.tv_sec;
+}
+
+time_t
+xaccQueryGetLatest (Query *q)
+{
+  assert(q != NULL);
+
+  return q->latest.tv_sec;
+}
+
 /* ================================================== */
 
 void

@@ -459,8 +459,14 @@ int xaccCountSplits (Split **sarray);
  * The xaccGetAccountByName() is a convenience routine that 
  *    is essentially identical to xaccGetPeerAccountFromName(),
  *    except that it accepts the handy transaction as root.
+ *
+ * The xaccGetAccountByFullName routine is similar, but uses
+ *    full names using the given separator.
  */
 Account * xaccGetAccountByName (Transaction *, const char *);
+Account * xaccGetAccountByFullName (Transaction *trans,
+                                    const char *name,
+                                    const char separator);
 
 /* 
  * The xaccGetOtherSplit() is a convenience routine that returns
