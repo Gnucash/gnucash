@@ -144,8 +144,4 @@ void xaccConsolidateGrpTransactions (AccountGroup *);
 Account * xaccGroupGetAccount (AccountGroup *, int);
 double    xaccGroupGetBalance (AccountGroup *);
 
-
-/** GLOBALS *********************************************************/
-extern AccountGroup *topgroup;
-
 #endif /* __XACC_ACCOUNT_GROUP_H__ */

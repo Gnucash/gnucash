@@ -47,8 +47,6 @@
  * knowledge of the internals of the AccountGroup in one file.      *
 \********************************************************************/
 
-AccountGroup *topgroup = 0x0;
-
 /********************************************************************\
 \********************************************************************/
 void
@@ -83,8 +81,6 @@ xaccFreeAccountGroup( AccountGroup *grp )
 {
   int i;
   if (NULL == grp) return;
-
-  if (grp == topgroup) topgroup = NULL;  /* safety device */
 
   for( i=0; i<grp->numAcc; i++ ) {
     xaccFreeAccount( grp->account[i] );
