@@ -290,10 +290,15 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
   if ((old_class == CURSOR_CLASS_SPLIT) &&
       old_split &&
       (old_split != new_split) &&
-      gnc_split_register_old_split_empty_p(reg, old_split)) {
+      gnc_split_register_old_split_empty_p(reg, old_split)) 
+ {
     int current_row;
+    Transaction *t;
 
+    t = xaccSplitGetParent(old_split);
+    xaccTransBeginEdit (t);
     xaccSplitDestroy(old_split);
+    xaccTransCommitEdit (t);
     old_split = NULL;
 
     /*
@@ -321,7 +326,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     {
       /* Trans was balanced. Let it go. */
       if (xaccTransIsOpen (old_trans))
-	xaccTransCommitEdit (old_trans);
+        xaccTransCommitEdit (old_trans);
 
       info->pending_trans_guid = *xaccGUIDNULL ();
       pending_trans = NULL;
