@@ -37,9 +37,9 @@
  * Note that the current support for journalling is at best 
  * embryonic, at worst, sets the wrong expectations.
  */
-int gen_logs = 0;
-FILE * trans_log;
-FILE * split_log;
+int gen_logs = 1;
+FILE * trans_log = 0x0;
+FILE * split_log = 0x0;
 
 
 /********************************************************************\
@@ -95,7 +95,8 @@ xaccTransWriteLog (Transaction *trans)
    Split *split;
    int i = 0;
 
-   xaccOpenLog ();
+   if (!gen_logs) return;
+   if (!trans_log || !split_log) return;
 
    /* use tab-separated fields, to be /rdb compatible */
    fprintf (trans_log, "%s	%s\n", trans->num, trans->description);
