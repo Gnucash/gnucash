@@ -238,7 +238,7 @@
     
 	  (gnc:register-tax-option
 	   (gnc:make-account-list-option
-	    "Txf Export Init" "Select Account"
+	    "Txf Export Init - Income" "Select Account"
 	    "a" "Select Account"
 	    (lambda () (gnc:get-current-accounts))
 	    #f
@@ -246,32 +246,54 @@
 	  
 	  (gnc:register-tax-option
 	   (gnc:make-simple-boolean-option
-	    "Txf Export Init" "Print extended TXF HELP messages"
+	    "Txf Export Init - Income" "Print extended TXF HELP messages"
 	    "b" "Print TXF HELP" #f))
 	  
 	  (gnc:register-tax-option
 	   ;;(gnc:make-multichoice-option
 	   (gnc:make-list-option
-	    "Txf Export Init" "For INCOME accounts, select here.   < ^ #\
- see help"
+	    "Txf Export Init - Income" "For INCOME accounts, select here.\
+   < ^ # see help"
 	    "c" "Select a TXF Income catagory"
 	    '()
 	    txf-income-catagories
 	    ))
 	  
 	  (gnc:register-tax-option
+	   (gnc:make-multichoice-option
+	    "Txf Export Init - Income" "< ^   Payer Name source"
+	    "e" "Select the source of the Payer Name" 'default
+	    (list #(default "Default" "Use Indicated Default")
+		  #(current "< Current Account" "Use Current Account Name")
+		  #(parent "^ Parent Account" "Use Parent Account Name")
+		  )))
+	  
+	  (gnc:register-tax-option
+	   (gnc:make-account-list-option
+	    "Txf Export Init - Expense" "Select Account"
+	    "a" "Select Account"
+	    (lambda () (gnc:get-current-accounts))
+	    #f
+	    #t))
+	  
+	  (gnc:register-tax-option
+	   (gnc:make-simple-boolean-option
+	    "Txf Export Init - Expense" "Print extended TXF HELP messages"
+	    "b" "Print TXF HELP" #f))
+	  
+	  (gnc:register-tax-option
 	   ;;(gnc:make-multichoice-option
 	   (gnc:make-list-option
-	    "Txf Export Init" "For EXPENSE accounts, select here.   < ^ #\
- see help"
+	    "Txf Export Init - Expense" "For EXPENSE accounts, select here.\
+   < ^ # see help"
 	    "d" "Select a TXF Expense catagory"
 	    '()
 	    txf-expense-catagories
 	    ))
-    
+	  
 	  (gnc:register-tax-option
 	   (gnc:make-multichoice-option
-	    "Txf Export Init" "< ^   Payer Name source"
+	    "Txf Export Init - Expense" "< ^   Payer Name source"
 	    "e" "Select the source of the Payer Name" 'default
 	    (list #(default "Default" "Use Indicated Default")
 		  #(current "< Current Account" "Use Current Account Name")
@@ -869,8 +891,10 @@
 			(cons (car (mktime bdtm)) 0))))
 
 	   (txf-help (if hierarchical? #f
-			 (op-value "Txf Export Init" "Print extended TXF HELP\
- messages")))
+			 (or (op-value "Txf Export Init - Income" "Print\
+ extended TXF HELP messages")
+			     (op-value "Txf Export Init - Expense" "Print\
+ extended TXF HELP messages"))))
 	   (txf-feedback-str-lst '()))
       
       ;; for quarterly estimated tax payments, we need a different period
@@ -1016,21 +1040,36 @@
       
       (if (not hierarchical?)
 	  (let* ((tax-stat (op-value tab-title "Set/Reset Tax Status"))
-		 (txf-acc-lst (op-value "Txf Export Init" "Select Account"))
-		 (txf-account (if (null? txf-acc-lst)
-				  (begin (set! txf-acc-lst '(#f))
-					 #f)
-				  (car txf-acc-lst)))
-		 (txf-income (op-value "Txf Export Init" "For INCOME accounts,\
- select here.   < ^ # see help"))
-		 (txf-expense (op-value "Txf Export Init" "For EXPENSE\
- accounts, select here.   < ^ # see help"))
-		 (txf-payer-source (op-value "Txf Export Init"
-					     "< ^   Payer Name source"))
-		 (txf-full-name-lst (if txf-account
-					(map gnc:account-get-full-name
-					     txf-acc-lst)
-					'(#f)))
+		 (txf-acc-lst-inc (op-value "Txf Export Init - Income"
+					    "Select Account"))
+		 (txf-account-inc (if (null? txf-acc-lst-inc)
+				      (begin (set! txf-acc-lst-inc '(#f))
+					     #f)
+				      (car txf-acc-lst-inc)))
+		 (txf-acc-lst-exp (op-value "Txf Export Init - Expense"
+					    "Select Account"))
+		 (txf-account-exp (if (null? txf-acc-lst-exp)
+				      (begin (set! txf-acc-lst-exp '(#f))
+					     #f)
+				      (car txf-acc-lst-exp)))
+		 (txf-income (op-value "Txf Export Init - Income" 
+				       "For INCOME accounts, select here.\
+   < ^ # see help"))
+		 (txf-expense (op-value "Txf Export Init - Expense"
+					"For EXPENSE accounts, select here.\
+   < ^ # see help"))
+		 (txf-payer-source-inc (op-value "Txf Export Init - Income"
+						 "< ^   Payer Name source"))
+		 (txf-full-name-lst-inc (if txf-account-inc
+					    (map gnc:account-get-full-name
+						 txf-acc-lst-inc)
+					    '(#f)))
+		 (txf-payer-source-exp (op-value "Txf Export Init - Expense"
+						 "< ^   Payer Name source"))
+		 (txf-full-name-lst-exp (if txf-account-exp
+					    (map gnc:account-get-full-name
+						 txf-acc-lst-exp)
+					    '(#f)))
 		 (not-used 
 		  (case tax-stat
 		    ((tax-set)
@@ -1046,10 +1085,18 @@
 		     (key-status user-sel-accnts #f tax-key tax-end-key #t)
 		     (gnc:refresh-main-window))))
 		 
-		 (txf-fun-str-lst (map (lambda (a) (txf-function 
-						    a txf-income txf-expense
-						    txf-payer-source))
-				       txf-acc-lst)))
+		 (txf-fun-str-lst-inc (map (lambda (a) (txf-function 
+							a txf-income '()
+							txf-payer-source-inc))
+					   txf-acc-lst-inc))
+		 (txf-fun-str-lst-exp (map (lambda (a) (txf-function 
+							a '() txf-expense
+							txf-payer-source-exp))
+					   txf-acc-lst-exp))
+		 (txf-fun-str-lst (append txf-fun-str-lst-inc 
+					  txf-fun-str-lst-exp))
+		 (txf-full-name-lst (append txf-full-name-lst-inc 
+					    txf-full-name-lst-exp)))
 	    (set! txf-feedback-str-lst (map txf-feedback-str txf-fun-str-lst
 					    txf-full-name-lst))))
       
