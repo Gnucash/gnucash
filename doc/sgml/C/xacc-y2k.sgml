@@ -3,7 +3,8 @@
 <ARTHEADER>
 <TITLE>GnuCash Y2K Readiness</TITLE>
 </ARTHEADER>
-
+    <sect1>
+      <title></title>
 <PARA>GnuCash versions 1.1.25 and later store all dates as seconds and
 nanoseconds, where the seconds are stored in a 64-bit signed
 integer. This should suffice to store dates into both the distant past
@@ -37,7 +38,7 @@ consider that takes place in 2000 or in 2001...  </PARA>
 <PARA>Y2K issues are described in more detail at <ULINK URL=
 "http://www.ntlug.org/~cbbrowne/linuxy2k.html">Linux and Year
 2000.</ULINK> </PARA>
-
+</sect1>
 </ARTICLE>
 
 <!-- Local variables: -->
