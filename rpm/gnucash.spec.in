@@ -43,6 +43,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/lib/libgncengine.*
 /usr/lib/gnucash
 /usr/share/gnucash
+/usr/share/gnome/help/gnucash
 /usr/share/gnome/apps/Applications/gnucash.desktop
 /usr/share/locale/de/LC_MESSAGES/gnucash.*mo
 /usr/share/locale/en_GB/LC_MESSAGES/gnucash.*mo
