@@ -160,9 +160,11 @@ static void category_to_ui(BudgetCategoryDlg* dlg)
     /* Set the name and description. */
     gtk_entry_set_text(dlg->name_entry, 
             gnc_budget_category_get_name(dlg->category));
-    gtk_entry_set_text(dlg->description_entry, 
-            gnc_budget_category_get_description(dlg->category));
-
+    
+    if (gnc_budget_category_get_description(dlg->category)) {
+      gtk_entry_set_text(dlg->description_entry, 
+			 gnc_budget_category_get_description(dlg->category));
+    }
     /* Set the value. */
     value = gnc_numeric_to_double(
                 gnc_budget_category_get_value(dlg->category));
@@ -218,7 +220,6 @@ static void category_dialog_create(BudgetCategoryDlg* dlg)
     GtkWidget *box;
     GtkWidget* ok_button;
     GtkWidget* cancel_button;
-    GtkTreeModel *model;
     GtkTreeSelection* selection;
     
     /* Load the glade xml file and create the widget. */
@@ -250,12 +251,9 @@ static void category_dialog_create(BudgetCategoryDlg* dlg)
 
 
     /* Set up the related accounts view. */
-    model = gnc_tree_model_account_new (gnc_book_get_group (gnc_get_current_book ()));
-    
     box = glade_xml_get_widget (xml, "related_accounts_scroll");
     dlg->relatedView = gnc_tree_view_account_new(FALSE);
     gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(dlg->relatedView));
-    gtk_tree_view_set_model (dlg->relatedView, model);
     
     gnc_tree_view_account_configure_columns(GNC_TREE_VIEW_ACCOUNT(dlg->relatedView), NULL);
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dlg->relatedView));

@@ -1,3 +1,13 @@
+2004-12-23  Derek Atkins  <derek@ihtfp.com>
+
+	Chris Shoemaker's patch to silence gtk errors in dialog-budget-category.c:
+	* we don't need to get our own account TreeModel and set it to our
+	  new account TreeView, because gnc_tree_view_account_new gives us
+	  a TreeView with the global account TreeModel already set.  Plus,
+	  it already has the right TreeModelSort interface, which we are
+	  counting on.
+	* check for NULL before trying to gtk_entry_set_text().
+
 2004-12-20  Derek Atkins  <derek@ihtfp.com>
 
 	Stephen Evanchik's Double free bug in GncDenseCal:
