@@ -129,6 +129,10 @@
 	(topl-accounts (gnc:group-get-account-list 
 			(gnc:get-current-group))))
 
+    ;; The following functions are defined inside build-acct-table
+    ;; to avoid passing tons of arguments which are constant anyway
+    ;; inside this function.
+
     ;; If start-date == #f then balance-at-date will be used (for
     ;; balance reports), otherwise balance-interval (for profit and
     ;; loss reports). Returns a commodity-collector.
@@ -161,9 +165,25 @@
     (define (identity a)
       a)
 
-    ;; The following functions are defined inside build-acct-table
-    ;; to avoid passing tons of arguments which are constant anyway
-    ;; inside this function.
+    ;; Creates the table cell with given colspan (and rowspan=1), with
+    ;; the content content and in boldface if boldface? is
+    ;; true. content may be #f, or a string, or a html-text
+    ;; object. Returns a html-table-cell object.
+    (define (my-table-cell colspan content boldface?)
+      (gnc:make-html-table-cell/size 
+       1 colspan 
+       (and content ;; if content == #f, just use #f
+	    (if boldface? 
+		;; Further improvement: use some other table cell
+		;; style here ("grand-total") instead of the direct
+		;; markup-b.
+		(gnc:make-html-text
+		 (if (gnc:html-text? content)
+		     (apply gnc:html-markup-b 
+			    (gnc:html-text-body content))
+		     (gnc:html-markup-b content)))
+		content))))
+
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; function for table without foreign commodities 
@@ -179,13 +199,8 @@
        table
        (append
 	(gnc:html-make-empty-cells (- current-depth 1))
-	(list (gnc:make-html-table-cell/size 
-	       1 (+ 1 (- tree-depth current-depth)) 
-	       ;; FIXME: grib has to fix html-text
-	       ;;(if boldface? 
-	       ;;  (and my-name ;; if my-name == #f, just use #f
-	       ;;(gnc:make-html-text (gnc:html-markup-b my-name)))
-	       my-name));;)
+	(list (my-table-cell (+ 1 (- tree-depth current-depth))
+			     my-name boldface?))
 	(gnc:html-make-empty-cells (- tree-depth current-depth))
 	;; the account balance
 	(list (and my-balance
@@ -221,13 +236,8 @@
 	 table
 	 (append
 	  (gnc:html-make-empty-cells (- current-depth 1))
-	  (list (gnc:make-html-table-cell/size 
-		 1 (+ 1 (- tree-depth current-depth)) 
-		 ;; FIXME: grib has to fix html-text
-		 ;;(if boldface? 
-		 ;;(and my-name
-		 ;;  (gnc:make-html-text (gnc:html-markup-b my-name)))
-		 my-name));;)
+	  (list (my-table-cell (+ 1 (- tree-depth current-depth))
+			       my-name boldface?))
 	  (gnc:html-make-empty-cells (* 2 (- tree-depth current-depth)))
 	  (if boldface?
 	      (list 
@@ -308,7 +318,8 @@
 	   (gnc:account-reverse-balance? acct)
 	   #f)))
   
-    ;; Generalization for a subtotal or the total balance.
+    ;; Generalization of add-account-rows! for a subtotal or for the
+    ;; total balance.
     (define (add-subtotal-row! 
 	     current-depth subtotal-name balance boldface?)
       (if show-other-curr?
@@ -326,22 +337,33 @@
 
     ;; This prints *all* the rows that belong to one group: the title
     ;; row, the subaccount tree, and the Total row with the balance of
-    ;; the subaccounts.
+    ;; the subaccounts. groupname may be a string or a html-text
+    ;; object. subaccounts is a list of accounts. thisbalance is the
+    ;; balance of this group, or it may be #f, in which case the
+    ;; balance is calculated from the subaccounts list.
     (define (add-group! current-depth groupname subaccounts thisbalance)
       (begin
 	;; first the group name
 	(add-subtotal-row! current-depth groupname #f #f)
+	;; then all the subaccounts
 	(traverse-accounts! subaccounts (+ 1 current-depth))
+	;; and now the "total" row
 	(add-subtotal-row! 
 	 current-depth 
-	 (if (gnc:html-text? groupname)
-	     groupname ;; FIXME: let grib fix html-text handling
-	     (gnc:make-html-text (_ "Total") " " groupname))
-	 (let ((subbalance (gnc:accounts-get-balance-helper 
-			    subaccounts my-get-balance 
-			    gnc:account-reverse-balance?)))
-	   (if thisbalance (subbalance 'merge thisbalance #f))
-	   subbalance)
+	 (let ((total-text (gnc:make-html-text (_ "Total") " ")))
+	   (if (gnc:html-text? groupname)
+	       (apply gnc:html-text-append! 
+		      total-text
+		      (gnc:html-text-body groupname))
+	       (gnc:html-text-append! total-text groupname))
+	   total-text)
+	 ;; A subbalance is only calculated if no thisbalance was
+	 ;; given. (Because any "thisbalance" calculation already
+	 ;; includes the appropriate subaccounts.)
+	 (if thisbalance 
+	     thisbalance
+	     (gnc:accounts-get-balance-helper 
+	      subaccounts my-get-balance gnc:account-reverse-balance?))
 	 #t)
 	;; and an empty line
 	(add-subtotal-row! current-depth #f #f #f)))

@@ -128,10 +128,10 @@
       (if (not (null? accounts))
 	  ;; if no max. tree depth is given we have to find the
 	  ;; maximum existing depth
-	  (let* ((tree-depth (if (equal? display-depth 'all)
-				 (+ (gnc:get-current-group-depth) 
-				    (if do-grouping? 1 0))
-				 display-depth))
+	  (let* ((tree-depth (+ (if (equal? display-depth 'all)
+				    (gnc:get-current-group-depth) 
+				    display-depth)
+				(if do-grouping? 1 0)))
 		 ;; calculate the exchange rates
 		 (exchange-alist (gnc:make-exchange-alist 
 				  report-currency to-date-tp))
