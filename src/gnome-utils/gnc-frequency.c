@@ -1206,7 +1206,7 @@ start_date_changed( GnomeDateEdit *gde, gpointer d )
 
   case UIFREQ_SEMI_MONTHLY:
     {
-      gint sm_first_day;
+      gint first_day;
       o = glade_xml_get_widget( gf->gxml, "semimonthly_first" );
       first_day = gnc_option_menu_get_active( GTK_WIDGET(o) )+1;
       o = glade_xml_get_widget( gf->gxml, "semimonthly_second" );
