@@ -19,6 +19,12 @@
  *
  ***************************************************************************/
 
+#ifndef __FINPROTO_H__
+#define __FINPROTO_H__
+
+#include <stdio.h>
+
+#include "finvar.h"
 
 /*==================================================*/
 /* fin.c
@@ -112,7 +118,7 @@ void                     Amortization_free(
 /* Line Number: 377 */
 void                     exit_parser(parser_env_ptr pe);
 /* Line Number: 400 */
-unsigned                 get_parse_error(parser_env_ptr pe);
+ParseError               get_parse_error(parser_env_ptr pe);
 /* Line Number: 408 */
 var_store_ptr            get_vars(parser_env_ptr pe);
 /* Line Number: 417 */
@@ -159,3 +165,5 @@ amort_sched_ptr          amort_opt(
 void                     prt_amortization_schedule(
                                                    amort_sched_ptr amortsched, /* amortization schedule to print */
                                                    FILE *ofile); /* output file */
+
+#endif

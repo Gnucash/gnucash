@@ -19,6 +19,9 @@
  *
  ***************************************************************************/
 
+#ifndef __FINVAR_H__
+#define __FINVAR_H__
+
 #if !defined( EOS )
 #define EOS '\x000'
 #endif
@@ -34,12 +37,16 @@
 #define INT_TYPE    '\x001'
 #define DBL_TYPE    '\x002'
 
-#define PARSER_NO_ERROR     0
-#define UNBALANCED_PARENS   1
-#define STACK_OVERFLOW      2
-#define STACK_UNDERFLOW     3
-#define UNDEFINED_CHARACTER 4
-#define NOT_A_VARIABLE      5
+typedef enum
+{
+  PARSER_NO_ERROR = 0,
+  UNBALANCED_PARENS,
+  STACK_OVERFLOW,
+  STACK_UNDERFLOW,
+  UNDEFINED_CHARACTER,
+  NOT_A_VARIABLE,
+  PARSER_NUM_ERRORS
+} ParseError;
 
 #define UNUSED_VAR  '\x000'
 #define USED_VAR    '\x001'
@@ -51,16 +58,15 @@
 #define MUL_OP  '*'
 #define ASN_OP  '='
 
-/* The following structure is used by the expression parser to store named and temporary
- * variables.
- */
+/* The following structure is used by the expression parser to store
+ * named and temporary variables.  */
 
 /* structure used for storing variables - used by expression parser/evaluator
  */
 typedef struct var_store *var_store_ptr;
 
 typedef struct var_store {
-    unsigned char *variable_name;   /* vairable name if variable, NULL otherwise        */
+    unsigned char *variable_name;   /* variable name if variable, NULL otherwise        */
     unsigned char  use_flag;        /* flag if variable has been assigned to            */
     unsigned char  assign_flag;     /* flag if variable is used                         */
     void          *value;           /* pointer to imp[lementation defined numeric value */
@@ -75,7 +81,7 @@ typedef struct var_store {
  * evaluate arithmetic operators '+', '-', '/', '*' */
 typedef struct numeric *numeric_ptr;
 typedef struct numeric {
-    unsigned char  type;            /* designates type of value                  */
+    unsigned char  type;            /* designates type of value */
     union {
         long int  int_value;        /* long integer value   */
         double    dbl_value;        /* double value         */
@@ -215,3 +221,5 @@ typedef struct financial_info {
 } financial_info;
 
 typedef struct parser_env *parser_env_ptr;
+
+#endif

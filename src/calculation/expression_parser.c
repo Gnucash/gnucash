@@ -389,7 +389,7 @@ typedef struct parser_env {
 
     unsigned char  Token;
     unsigned char  asn_op;
-    unsigned       error_code;
+    ParseError     error_code;
 
     void          *numeric_value;
     void         *(*trans_numeric)(unsigned char  *digit_str,
@@ -477,7 +477,7 @@ void  exit_parser(parser_env_ptr pe)
 } /* exit_parser */
 
 /* return parser error code */
-unsigned get_parse_error(parser_env_ptr pe)
+ParseError get_parse_error(parser_env_ptr pe)
 {
   if (pe == NULL)
     return PARSER_NO_ERROR;
