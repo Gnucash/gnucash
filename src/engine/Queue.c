@@ -12,7 +12,7 @@
  *
  * HISTORY:
  * created by Linas Vepstas January 1999
- * Copyright (c) 1999 Linas Vepstas
+ * Copyright (c) 1999, 2000 Linas Vepstas
  */
 /********************************************************************\
  * This program is free software; you can redistribute it and/or    *

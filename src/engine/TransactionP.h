@@ -1,26 +1,7 @@
-/*
- * FILE:
- * TransactionP.h
- *
- * FUNCTION:
- * The is the *private* transaction header file.  Code outside of 
- * engine should *not* include this file.  This is because code
- * outside of the engine should *never* access any of the structure
- * members directly.
- *
- * Note that this header file also defines prototypes for various
- * routines that perform sub-atomic updates of the accounting
- * structures.  If these routines are not used properly, they
- * can result in inconsistent, unbalanced accounting structures.
- * In other words, thier use is dangerous, and thier use outside
- * of the scope of the engine is forbidden.
- *
- */
-
 /********************************************************************\
  * TransactionP.h -- defines transaction for xacc (X-Accountant)    *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -41,6 +22,25 @@
  *  Address: 609 8th Street                                         *
  *           Huntington Beach, CA 92648-4632                        *
 \********************************************************************/
+
+/*
+ * FILE:
+ * TransactionP.h
+ *
+ * FUNCTION:
+ * The is the *private* transaction header file.  Code outside of 
+ * engine should *not* include this file.  This is because code
+ * outside of the engine should *never* access any of the structure
+ * members directly.
+ *
+ * Note that this header file also defines prototypes for various
+ * routines that perform sub-atomic updates of the accounting
+ * structures.  If these routines are not used properly, they
+ * can result in inconsistent, unbalanced accounting structures.
+ * In other words, thier use is dangerous, and thier use outside
+ * of the scope of the engine is forbidden.
+ *
+ */
 
 #ifndef __XACC_TRANSACTION_P_H__
 #define __XACC_TRANSACTION_P_H__

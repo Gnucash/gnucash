@@ -1,7 +1,7 @@
 /********************************************************************\
  * Transaction.c -- the transaction data structure                  *
  * Copyright (C) 1997 Robin D. Clark                                *
- * Copyright (C) 1997, 1998 Linas Vepstas                           *
+ * Copyright (C) 1997, 1998, 1999, 2000 Linas Vepstas               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -319,7 +319,7 @@ double xaccSplitGetCostBasis (Split *s)
 
 void
 xaccInitTransaction( Transaction * trans )
-  {
+{
   Split *split;
   
   /* fill in some sane defaults */
@@ -346,18 +346,18 @@ xaccInitTransaction( Transaction * trans )
   trans->marker = 0;
   trans->open = 0;
   trans->orig = NULL;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
 
 Transaction *
 xaccMallocTransaction( void )
-  {
+{
   Transaction *trans = (Transaction *)_malloc(sizeof(Transaction));
   xaccInitTransaction (trans);
   return trans;
-  }
+}
 
 /********************************************************************\
 \********************************************************************/
@@ -407,7 +407,7 @@ xaccCloneTransaction (Transaction *t)
 
 void
 xaccFreeTransaction( Transaction *trans )
-  {
+{
   int i;
   Split *s;
 

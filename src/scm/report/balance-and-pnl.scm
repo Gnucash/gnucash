@@ -7,43 +7,6 @@
 (gnc:depend "report-utilities.scm")
 (gnc:depend "options.scm")
 
-(define (gnc:account-get-balance-until account to-tp include-children?)
-  (let ((query (gnc:malloc-query))
-	(balance (if include-children?
-                     (gnc:group-get-balance-until
-                      (gnc:account-get-children account) to-tp)
-                     0)))
-    (gnc:query-add-account query account)
-    (gnc:query-show-earliest query)
-    (gnc:query-set-latest query to-tp)
-    (set! balance
-          (+ balance (gnc:split-list-balance (gnc:query-get-splits query))))
-    (gnc:free-query query)
-    balance))
-
-(define (gnc:account-get-balance-interval account from-tp to-tp
-                                          include-children?)
-  (let ((query (gnc:malloc-query))
-	(balance (if include-children?
-                     (gnc:group-get-balance-interval
-                      (gnc:account-get-children account) from-tp to-tp)
-                     0)))
-    (gnc:query-add-account query account)
-    (gnc:query-set-earliest query from-tp)
-    (gnc:query-set-latest query to-tp)
-    (set! balance 
-          (+ balance (gnc:split-list-total (gnc:query-get-splits query))))
-    (gnc:free-query query)
-    balance))
-
-(define (gnc:group-get-balance-until group to-tp)
-  (apply + (gnc:group-map-accounts
-            (lambda (x) (gnc:account-get-balance-until x to-tp #t)) group)))
-
-(define (gnc:group-get-balance-interval group from-tp to-tp)
-  (apply + (gnc:group-map-accounts
-            (lambda (x) (gnc:account-get-balance-interval x from-tp to-tp #t))
-            group)))
 
 ;; Just a private scope.
 (let 
@@ -156,7 +119,7 @@
                                       (gnc:account-get-children account)))
 
                    (account-balance (if balance-sheet?
-                                        (gnc:account-get-balance-until
+                                        (gnc:account-get-balance-at-date
                                          account
                                          to-value #f)
                                         (gnc:account-get-balance-interval
@@ -183,7 +146,7 @@
 	   (balance (make-stats-collector))
 	   (rawbal
 	    (if balance-sheet?
-		(gnc:account-get-balance-until account to-value #f)
+		(gnc:account-get-balance-at-date account to-value #f)
 		(gnc:account-get-balance-interval 
 		 account 
 		 from-value
@@ -202,8 +165,8 @@
 			   ((if balance-sheet? + -) 
 			    0
 			    (if balance-sheet? 
-				(gnc:group-get-balance-until grandchildren 
-							     to-value)
+				(gnc:group-get-balance-at-date grandchildren 
+                                                               to-value)
 				(gnc:group-get-balance-interval grandchildren
 								from-value
 								to-value)))))

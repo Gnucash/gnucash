@@ -216,3 +216,57 @@
         (+ (gnc:split-list-total splits)
            (gnc:split-get-balance first-split)
            (- (gnc:split-get-value first-split))))))
+
+;; get transaction date from split - needs to be done indirectly
+;; as it's stored in the parent transaction
+(define (gnc:split-get-transaction-date split)
+  (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
+
+;; ditto descriptions
+(define (gnc:split-get-description-from-parent split)
+  (gnc:transaction-get-description (gnc:split-get-parent split)))
+
+;; get the account name of a split
+(define (gnc:split-get-account-name split)  
+  (gnc:account-get-name (gnc:split-get-account split)))
+
+;; get the account balance at the specified date. if include-children?
+;; is true, the balances of all children (not just direct children)
+;; are included in the calculation.
+(define (gnc:account-get-balance-at-date account date include-children?)
+  (let ((children-balance
+         (if include-children?
+             (gnc:group-get-balance-at-date
+              (gnc:account-get-children account) date)
+             0)))
+    (let loop ((index 0)
+               (balance 0)
+               (split (gnc:account-get-split account 0)))
+      (if (pointer-token-null? split)
+          (+ children-balance balance)
+          (if (gnc:timepair-lt date (gnc:split-get-transaction-date split))
+              (+ children-balance balance)
+              (loop (+ index 1)
+                    (gnc:split-get-balance split)
+                    (gnc:account-get-split account (+ index 1))))))))
+
+;; get the balance of a group of accounts at the specified date.
+;; all children are included in the calculation
+(define (gnc:group-get-balance-at-date group date)
+  (apply +
+         (gnc:group-map-accounts
+          (lambda (account)
+            (gnc:account-get-balance-at-date account date #t)) group)))
+
+;; get the change in balance from the 'from' date to the 'to' date.
+;; this isn't quite as efficient as it could be, but it's a whole lot
+;; simpler :)
+(define (gnc:account-get-balance-interval account from to include-children?)
+  (- (gnc:account-get-balance-at-date account to include-children?)
+     (gnc:account-get-balance-at-date account from include-children?)))
+
+(define (gnc:group-get-balance-interval group from to)
+  (apply +
+         (gnc:group-map-accounts
+          (lambda (account)
+            (gnc:account-get-balance-interval account from to #t)) group)))

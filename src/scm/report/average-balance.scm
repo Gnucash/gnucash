@@ -115,21 +115,6 @@
               #(GLPlot "Gain/Loss" "Gain And Loss"))))
       gnc:*runavg-track-options*))
 
-  ;; get transactions date from split - needs to be done indirectly
-  ;; as it's stored in the parent transaction
-
-  (define (gnc:split-get-transaction-date split)
-    (gnc:transaction-get-date-posted (gnc:split-get-parent split)))
-
-  ;; ditto descriptions
-  (define (gnc:split-get-description-from-parent split)
-    (gnc:transaction-get-description (gnc:split-get-parent split)))
-
-  ;; get the account name of a split
-  (define (gnc:split-get-account-name split)  
-    (gnc:account-get-name (gnc:split-get-account split)))
-
-
   ;; Text table 
 
   ; Create an text table row from a list of entries
