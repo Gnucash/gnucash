@@ -1,3 +1,8 @@
+2000-08-22  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/reconcile-list.c (gnc_reconcile_list_fill): fix a
+	memory leak (xaccTransGetDateStr returns a malloc'd string).
+
 2000-08-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/cellblock.c (FreeCellBlockMem): fix memory leaks
