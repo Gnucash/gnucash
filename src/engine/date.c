@@ -65,8 +65,8 @@ timespec_normalize(Timespec *t)
 
   if(t->tv_nsec < - NANOS_PER_SECOND)
   {
-    t->tv_sec+= t->tv_nsec / NANOS_PER_SECOND;
-    t->tv_nsec = - ( -t->tv_nsec / NANOS_PER_SECOND);
+    t->tv_sec+= - (-t->tv_nsec / NANOS_PER_SECOND);
+    t->tv_nsec = - (-t->tv_nsec % NANOS_PER_SECOND);
   }
 
   if (t->tv_sec > 0 && t->tv_nsec < 0)

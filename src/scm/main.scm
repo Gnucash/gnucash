@@ -162,6 +162,9 @@
                       (gnc:lookup-global-option "__new_user" "first_startup")))
                     1))
             (begin
+              (gnc:default-ui-start)
+              (gnc:show-main-window)
+              (gnc:hook-run-danglers gnc:*book-opened-hook* #f)
               (gnc:show-new-user-window)
               (gnc:start-ui-event-loop))
             (begin

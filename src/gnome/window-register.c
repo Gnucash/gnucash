@@ -2862,7 +2862,7 @@ gnc_transaction_delete_query (GtkWindow *parent, Transaction *trans)
 
   gtk_signal_connect(GTK_OBJECT(trans_button), "toggled",
                      GTK_SIGNAL_FUNC(gnc_transaction_delete_toggle_cb),
-                     (gpointer) reconciled ? usual_recn : usual);
+                     (gpointer) (reconciled ? usual_recn : usual));
 
   group = gtk_radio_button_group(GTK_RADIO_BUTTON(trans_button));
   splits_button =

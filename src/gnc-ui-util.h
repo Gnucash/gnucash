@@ -152,7 +152,7 @@ void gnc_pop_locale (void);
 
 typedef struct _GNCPrintAmountInfo
 {
-  gnc_commodity *commodity;  /* may be NULL */
+  const gnc_commodity *commodity;  /* may be NULL */
 
   guint8 max_decimal_places;
   guint8 min_decimal_places;

@@ -56,10 +56,11 @@ Bill Gribble <grib@billgribble.com> is not shy, or softly spoken. So don't
    integration and report printing, pgp support, guppi integration, and the 
    new main window layout. 
 
-Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
+Robert Graham Merkel <rgmerk@mira.net> extensive work on reports and
+   reporting infrastructure, gnome GUI work, and user preferences.
 
 James LewisMoss <dres@debian.org> design doc patches, XML refactoring, 
-   automated test suite.
+   automated test suite, new file hierarchy import.
 
 Christian Stimming <stimming@uclink.berkeley.edu> is a report-generating 
    monster. He's been on of the largest contributors to the current report

@@ -1,3 +1,21 @@
+2001-05-04  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/main.scm: run the book-opened hook before showing
+	the new-user window.
+
+	* src/guile/Makefile.am: remove references to gnc-autogen.h.
+	Clean gnc.c and gnc.h.
+
+2001-05-03  Dave Peticolas  <dave@krondo.com>
+
+	* src/engine/date.c (timespec_normalize): fix bug
+
+	* doc/sgml/C/xacc-about.sgml: update credits
+
+	* src/gnc-ui-util.h (_GNCPrintAmountInfo): make commodity const
+
+	* src/gnome/window-register.c: fix compiler warning
+
 2001-05-04  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/scm/report/transaction-report.scm : Add labels

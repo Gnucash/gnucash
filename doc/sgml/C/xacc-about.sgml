@@ -185,6 +185,7 @@ provide an accurate Profit & Loss statement.
 </para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>linas@linas.org</email> Linas Vepstas</glossterm>
 <glossdef>
@@ -206,6 +207,7 @@ provide an accurate Profit & Loss statement.
 
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>jcollins@gnucash.org</email> Jeremy
       Collins</glossterm>
@@ -218,11 +220,13 @@ provide an accurate Profit & Loss statement.
       a good way to pick names.)
       Jeremy registered the domain name, and created and maintained
       the gnucash.org web site for years,
-      and got the initial GTK/gnome code working.
+      and got the initial GTK/gnome code working. The newest 
+      website design is Jeremy's as well. 
       </para>
 
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>rlb@cs.utexas.edu</email> Rob Browning</glossterm>
 <glossdef>
@@ -238,6 +242,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>dave@krondo.com</email> Dave Peticolas</glossterm>
 <glossdef>
@@ -248,6 +253,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
       </para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>grib@billgribble.com</email> Bill
       Gribble</glossterm>
@@ -259,9 +265,43 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
     </para>
 </glossdef>
 </glossentry>
+
+<glossentry>
+<glossterm><email>rgmerk@mira.net</email> Robert Graham
+    Merkel</glossterm>
+<glossdef>
+<para>
+   extensive work on reports and reporting infrastructure,
+   gnome GUI work, and user preferences.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>dres@debian.org</email>James LewisMoss</glossterm>
+<glossdef>
+<para>
+   design doc patches, XML refactoring, 
+   automated test suite, new file hierarchy import.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>stimming@uclink.berkeley.edu</email>Christian
+   Stimming</glossterm>
+<glossdef>
+<para>
+   is a report-generating monster. He's been on of the largest
+   contributors to the current report infrastructure, creating
+   many of the important reports.
+   </para>
+</glossdef>
+</glossentry>
+
 </glosslist>
 
- </para>
+</para>
 </sect1>
 
 <sect1 id="xacc-contributors">
@@ -269,7 +309,8 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 
 <para>The <emphasis>cast of thousands</emphasis> includes:
 
-    <glosslist>
+<glosslist>
+
 <glossentry>
 <glossterm><email>arensb@cfar.umd.edu</email> Andrew
       Arensburger</glossterm>
@@ -277,6 +318,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 <para>for FreeBSD and other patches</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>matt_armstrong@bigfoot.com</email> Matt
       Armstrong</glossterm>
@@ -299,6 +341,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 <para>for attempted Java port/MoneyDance</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>dennisb@cs.chalmers.se</email> Dennis
       Bj&ouml;rklund</glossterm>
@@ -361,7 +404,7 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 <glossterm><email>carol@gnumatic.com</email> Carol
       Champagne</glossterm>
 <glossdef>
-<para>documentation</para>
+<para>documentation & a patient GUI usability critic</para>
 </glossdef>
 </glossentry>
 
@@ -403,6 +446,7 @@ Christiansen</glossterm>
 <para>for GnoMoney and GTK port</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>mcondell@bbn.com</email> Matthew
       Condell</glossterm>
@@ -449,18 +493,21 @@ Christiansen</glossterm>
 <para>for config/make patches and debian maintenance</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>ripley@xs4all.nl</email> Koen D'Hondt</glossterm>
 <glossdef>
 <para>for Solaris patches to XmHTML</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>bob@mostly.com</email> Bob Drzyzgula</glossterm>
 <glossdef>
 <para>for budgeting design notes</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>pjf@schools.net.au</email> Paul
       Fenwick</glossterm>
@@ -492,6 +539,7 @@ Christiansen</glossterm>
 <para>for German message translation</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>kevinfinn@mediaone.net</email> Kevin
       Finn</glossterm>
@@ -499,6 +547,7 @@ Christiansen</glossterm>
 <para>auto-decimal point patch, options patch</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>rjf@aracnet.com</email> Ron
       Forrester</glossterm>
@@ -506,6 +555,7 @@ Christiansen</glossterm>
 <para>for gnome patches</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>DFreese@osc.uscg.mil</email> Dave
       Freese</glossterm>
@@ -568,6 +618,7 @@ Christiansen</glossterm>
 <para>updated currency documentation</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>haral@codec.ro</email> Alexandru
       Harsanyi</glossterm>
@@ -623,17 +674,26 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>ben.kelly@ieee.org</email>Ben Kelly</glossterm>
+<glossdef>
+<para>for Motif menu bug fix, core dump fixes</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>tkludy@csd.sgi.com</email> Tom Kludy</glossterm>
 <glossdef>
 <para>for SGI Irix port</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>sk@xgm.de</email> Sven Kuenzler</glossterm>
 <glossdef>
 <para>for SuSE README file</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>blarsen@ada-works.com</email> Bryan
       Larsen</glossterm>
@@ -641,6 +701,14 @@ Christiansen</glossterm>
 <para>guile budget report</para>
 </glossdef>
 </glossentry>
+
+<glossentry>
+<glossterm><email>minfrin@sharp.fm</email>Graham Leggett</glossterm>
+<glossdef>
+<para>for fixing a hang</para>
+</glossdef>
+</glossentry>
+
 <glossentry>
 <glossterm><email>mellon@andare.fugue.com</email> Ted
       Lemon</glossterm>
@@ -693,7 +761,8 @@ Christiansen</glossterm>
 <glossterm><email>rgmerk@mira.net</email> Robert Graham
       Merkel</glossterm>
 <glossdef>
-<para>reporting, gnome, and configuration patches.</para>
+<para>extensive work on reports and reporting infrastructure, gnome
+      GUI work, and user preferences.</para>
 </glossdef>
 </glossentry>
 
@@ -800,6 +869,7 @@ Nielsen</glossterm>
 <para>for misc patches</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>laurent.pelecq@wanadoo.fr</email> Laurent
       P&eacute;lecq</glossterm>
@@ -807,6 +877,7 @@ Nielsen</glossterm>
 <para>i18n patches with gettext</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>Alain.Peyrat@nmu.alcatel.fr</email> Alain
       Peyrat</glossterm>
@@ -814,6 +885,7 @@ Nielsen</glossterm>
 <para>for <filename>configure.in</filename> patches</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>peter@wuzel.m.isar.de</email> Peter
       Pointner</glossterm>
@@ -821,6 +893,7 @@ Nielsen</glossterm>
 <para>motif and configuration patches</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>maufk@csv.warwick.ac.uk</email> Gavin
       Porter</glossterm>
@@ -828,18 +901,21 @@ Nielsen</glossterm>
 <para>for euro style dates</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>tpo@spin.ch</email> Tomas Pospisek</glossterm>
 <glossdef>
 <para>debian patches</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>rr@sco.com</email> Ron Record</glossterm>
 <glossdef>
 <para>for SCO Unixware and OpenServer binaries</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>Keith.Refson@earth.ox.ac.uk</email> Keith
       Refson</glossterm>
@@ -847,6 +923,7 @@ Nielsen</glossterm>
 <para>Solaris fixes</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>schoenberger@signsoft.com</email> Dirk
       Schoenberger</glossterm>
@@ -854,6 +931,7 @@ Nielsen</glossterm>
 <para>began the Qt/KDE port</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>jan.schrage@urz.uni-heidelberg.de</email> Jan
       Schrage</glossterm>
@@ -970,12 +1048,14 @@ Nielsen</glossterm>
 <para>patch to <application>gnc-prices</application>, qif import fixes</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>rob@valinux.com</email> Rob Walker</glossterm>
 <glossdef>
 <para>guile and register patches</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>dwmw2@infradead.org</email> David
       Woodhouse</glossterm>
@@ -983,6 +1063,7 @@ Nielsen</glossterm>
 <para>Great Britain translations</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>gooch@ic.EECS.Berkeley.EDU</email> Ken
       Yamaguchi</glossterm>
@@ -990,6 +1071,7 @@ Nielsen</glossterm>
 <para>QIF import fixes; MYM import</para>
 </glossdef>
 </glossentry>
+
 <glossentry>
 <glossterm><email>shimpei@gol.com</email> Shimpei
       Yamashita</glossterm>
@@ -999,7 +1081,7 @@ Nielsen</glossterm>
 </glossentry>
 </glosslist>
 
- </para>
+</para>
 </sect1>
 
 <sect1 id="xacc-oses">
