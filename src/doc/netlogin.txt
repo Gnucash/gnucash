@@ -1,0 +1,26 @@
+
+GnuCash Network Login
+---------------------
+A quick sketch of how network login works when using the xml-web backend
+for communicating with a gnucash server.
+
+
+1) User enters in a URL Location via GUI dialogue. Location is assumed
+   to be plain html, and is displayed with gnc_html_show_url()
+   in its own window.
+
+2) The displayed page is presumably some kind of login page.  It is not
+   gnucash specific, and is entirely up to the webmaster or sysadmin
+   to provide, modify, etc. the login & authentication information.
+   The user types in name, passord, whatever.
+
+3) The authentication mechanism issues a guid which will be used
+   to identify the session. The guid is placed in a cookie labelled
+   "gnc-server-sesion-guid=xxxxxxxxxxxxxxxxxxxxx"
+
+   Because a cookie can be snoopedand then used to steal a session, 
+   the only secure way of doing this is to use SSL.
+
+4) The cookie is used to identify the session to the gnc-server.
+
+
