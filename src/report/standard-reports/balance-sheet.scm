@@ -98,7 +98,7 @@
      (lambda ()
        (gnc:filter-accountlist-type 
         '(bank cash credit asset liability stock mutual-fund currency
-               equity income expense)
+               payable receivable equity income expense)
         (gnc:group-get-subaccounts (gnc:get-current-group)))))
     
     ;; what to show about non-leaf accounts
@@ -170,9 +170,9 @@
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
-          (assoc-ref split-up-accounts 'asset))
+	   (assoc-ref split-up-accounts 'asset))
          (liability-accounts
-          (assoc-ref split-up-accounts 'liability))
+	   (assoc-ref split-up-accounts 'liability))
          (equity-accounts
           (assoc-ref split-up-accounts 'equity))
          (income-expense-accounts

@@ -11,6 +11,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 slib))
 
+(use-modules (gnucash bootstrap))
 (use-modules (gnucash gnc-module))
 (gnc:module-load "gnucash/report/report-system" 0)
 
@@ -68,7 +69,7 @@
                  ;; otherwise get some accounts -- here as an
                  ;; example we get the asset and liability stuff
                  (gnc:filter-accountlist-type
-                  '(bank cash credit asset liability) 
+                  '(bank cash credit asset liability payable receivable) 
                   ;; or: '(bank cash checking savings stock
                   ;; mutual-fund money-market)
                   (gnc:group-get-account-list (gnc:get-current-group)))))))

@@ -228,7 +228,7 @@
 (define account-types-to-reverse-assoc-list
   (list (cons 'none '())
         (cons 'income-expense '(income expense))
-        (cons 'credit-accounts '(liability equity credit income))))
+        (cons 'credit-accounts '(liability payable equity credit income))))
 
 (define (used-date columns-used)
   (vector-ref columns-used 0))
@@ -703,8 +703,8 @@
      (vector 'income-expense (N_ "Income and Expense")
              (N_ "Reverse amount display for Income and Expense Accounts"))
      (vector 'credit-accounts (N_ "Credit Accounts")
-             (N_ "Reverse amount display for Liability, Equity, Credit Card,\
-and Income accounts")))))
+             (N_ "Reverse amount display for Liability, Payable, Equity, \
+Credit Card, and Income accounts")))))
 
 
   (gnc:options-set-default-section gnc:*transaction-report-options*

@@ -431,9 +431,9 @@ balance at a given time"))
   (list reportname-income '(income) #t menuname-income menutip-income)
   (list reportname-expense '(expense) #t menuname-expense menutip-expense)
   (list reportname-assets 
-        '(asset bank cash checking savings money-market 
+        '(asset bank cash checking savings money-market receivable
                 stock mutual-fund currency)
         #f menuname-assets menutip-assets)
   (list reportname-liabilities 
-        '(liability credit credit-line)
+        '(liability payable credit credit-line)
         #f menuname-liabilities menutip-liabilities)))

@@ -94,9 +94,9 @@
 		    (gnc:filter-accountlist-type (cdr x) accounts)))
        (list
 	(cons 'asset
-	      '(asset bank cash checking savings money-market 
+	      '(asset bank cash checking savings money-market receivable
 		      stock mutual-fund currency))
-	(cons 'liability '(liability credit credit-line))
+	(cons 'liability '(liability payable credit credit-line))
 	(cons 'equity '(equity))
 	(cons 'income '(income))
 	(cons 'expense '(expense)))))
@@ -121,6 +121,8 @@
     (cons 'checking (_ "Checking"))
     (cons 'savings (_ "Savings"))
     (cons 'money-market (_ "Money Market"))
+    (cons 'receivable (_ "Accounts Receivable"))
+    (cons 'payable (_ "Accounts Payable"))
     (cons 'credit-line (_ "Credit Lines")))
    type))
 

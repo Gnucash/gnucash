@@ -60,7 +60,7 @@
 					 bucket-vector
 					 overpayment)))
 
-(define num-buckets 3)
+(define num-buckets 4)
 (define (new-bucket-vector)
   (make-vector num-buckets (gnc:numeric-zero)))
 
@@ -253,13 +253,18 @@ more than one currency.  This report is not designed to cope with this possibili
   
     
 ;; set up the query to get the splits in the payables account
-
+;; XXX: Need a better method to actually sort through the 'active'
+;; transactions.  Currently go back a year, but obviously we need
+;; a way to tell that a transaction is 'paid'
 (define (setup-query query account date)
   (define (date-copy date)
     (cons (car date) (cdr date)))
   (let ((begindate (date-copy date)))
 ;    (gnc:debug "Account: " account)
     (set! begindate (decdate begindate NinetyDayDelta))
+    (set! begindate (decdate begindate NinetyDayDelta))
+    (set! begindate (decdate begindate NinetyDayDelta))
+    (set! begindate (decdate begindate NinetyDayDelta))	;XXX - 360 days!?!
     (gnc:debug "begindate" begindate)
     (gnc:debug "date" date)
     (gnc:query-set-group query (gnc:get-current-group))
@@ -296,7 +301,7 @@ more than one currency.  This report is not designed to cope with this possibili
       ;; FIXME: Have a global preference for the payables account??
       ;; default-getter
       (lambda ()
-	(define (find-first-liability current-group num-accounts this-account-ind)
+	(define (find-first-payable current-group num-accounts this-account-ind)
 	  (if
 	   (>= this-account-ind num-accounts) 
 	   #f
@@ -308,24 +313,24 @@ more than one currency.  This report is not designed to cope with this possibili
 	     (begin 
 	       (gnc:debug "this-account" this-account)
 	       (gnc:debug "account-type" account-type)
-	       (if (eq? account-type 'liability)
+	       (if (eq? account-type 'payable)
 		   (begin 
 		     (gnc:debug "this-account selected" this-account)
 		      this-account)
-		   (find-first-liability 
+		   (find-first-payable 
 		    current-group num-accounts (+ this-account-ind 1)))))))
 
 	(let* ((current-group (gnc:get-current-group))
 	      (num-accounts (gnc:group-get-num-accounts
 			     current-group)))
 	  (if (> num-accounts 0)
-	      (let ((first-liability (find-first-liability
+	      (let ((first-payable (find-first-payable
 				      current-group
 				      num-accounts
 				      0)))
-		(gnc:debug "first-liability" first-liability)
-		(if first-liability
-		    (list first-liability)
+		(gnc:debug "first-payable" first-payable)
+		(if first-payable
+		    (list first-payable)
 		    (list (gnc:group-get-account current-group 0))))
 	      '())))
      ;; value-validator
@@ -335,10 +340,10 @@ more than one currency.  This report is not designed to cope with this possibili
 	  (if first-account
 	    (let ((account-type (gw:enum-<gnc:AccountType>-val->sym 
 				 (gnc:account-get-type first-account))))
-	      (if (eq? 'liability account-type) 
+	      (if (eq? 'payable account-type) 
 	  
 		  (cons #t  (list first-account))
-		  (cons #f  (_ "The payables account must be a liability account"))))
+		  (cons #f  (_ "The payables account must be a payable account"))))
 	    ;; FIXME: until we can select a default account I need 
 	    ;; to catch this at the report-writing stage
 	    (#t '()))))
@@ -390,6 +395,7 @@ totals to report currency")
 
 (define (make-interval-list to-date)
   (let ((begindate to-date))
+    (set! begindate (decdate begindate ThirtyDayDelta))
     (set! begindate (decdate begindate ThirtyDayDelta))
     (set! begindate (decdate begindate ThirtyDayDelta))
     (gnc:make-date-list begindate to-date ThirtyDayDelta)))
@@ -446,6 +452,7 @@ totals to report currency")
      (N_ "0-30 days")
      (N_ "31-60 days")
      (N_ "61-90 days")
+     (N_ "91+ days")
      (N_ "Total")))
 
 
@@ -459,7 +466,7 @@ totals to report currency")
 	   (gnc:make-commodity-collector)
 	   (make-collector-driver (+ done 1) total))
 	  '()))
-    (make-collector-driver 0 4))
+    (make-collector-driver 0 5))
 	  
 
   ;; update the column totals 
