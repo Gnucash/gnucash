@@ -4,11 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.5.X\n"
-"POT-Creation-Date: 2001-09-23 23:16-0700\n"
+"Project-Id-Version: gnucash 1.6\n"
+"POT-Creation-Date: 2001-10-02 08:50+0200\n"
 "PO-Revision-Date: 2001-07-06 23:02GMT\n"
 "Last-Translator: Paul POULAIN <paul.poulain@free.fr>\n"
-"Language-Team: francais <de@li.org>\n"
+"Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3620,11 +3620,11 @@ msgstr "Créer un nouveau compte."
 msgid "Delete selected account"
 msgstr "Supprimer le compte sélectionné."
 
-# messages-i18n.c:186
+# messages-i18n.c:194
 #: src/gnome/window-acct-tree.c:789
 #, fuzzy
 msgid "Check & Repair A_ccount"
-msgstr "Exporter les comptes..."
+msgstr "Autre compte"
 
 #: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1182
 msgid ""
@@ -8967,6 +8967,15 @@ msgstr ""
 msgid "Transaction Report"
 msgstr "Rapport de transaction"
 
+#~ msgid ""
+#~ "The URL \n"
+#~ "    %s\n"
+#~ "is in use by another user."
+#~ msgstr ""
+#~ "l'URL \n"
+#~ "    %s\n"
+#~ "est utilisée par un autre utilisateur"
+
 # messages-i18n.c:155
 #~ msgid "Scrub A_ccount"
 #~ msgstr "Nettoyer le _compte"
@@ -9004,15 +9013,6 @@ msgstr "Rapport de transaction"
 # messages-i18n.c:108
 #~ msgid "Identify and fix problems in the current transaction"
 #~ msgstr "Identifier et corriger les problèmes dans la transaction courante"
-
-#~ msgid ""
-#~ "The URL \n"
-#~ "    %s\n"
-#~ "is in use by another user."
-#~ msgstr ""
-#~ "l'URL \n"
-#~ "    %s\n"
-#~ "est utilisée par un autre utilisateur"
 
 #~ msgid ""
 #~ "Use an Equity account to transfer the opening balance. The Equity account "
