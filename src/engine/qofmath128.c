@@ -24,25 +24,20 @@
 #define _GNU_SOURCE
 
 #include "config.h"
+#include "qofmath128.h"
 
 #include <glib.h>
 
 /* =============================================================== */
-/* Quick-n-dirty 128-bit math lib. The mult128 routine should work 
- * great; I think that div128 works, but its not really tested.
+/*
+ *  Quick-n-dirty 128-bit integer math lib.   Things seem to mostly
+ *  work, and have been tested, but not comprehensively tested.
  */
-
-typedef struct {
-  guint64 hi;
-  guint64 lo;
-  short isneg;    /* sign-bit -- T if number is negative */
-  short isbig;    /* sizeflag -- T if number won't fit in signed 64-bit */
-} qofint128;
 
 /** Multiply a pair of signed 64-bit numbers, 
  *  returning a signed 128-bit number.
  */
-static inline qofint128
+inline qofint128
 mult128 (gint64 a, gint64 b)
 {
   qofint128 prod;
@@ -106,7 +101,7 @@ mult128 (gint64 a, gint64 b)
 /** Divide a signed 128-bit number by a signed 64-bit,
  *  returning a signed 128-bit number.
  */
-static inline qofint128
+inline qofint128
 div128 (qofint128 n, gint64 d)
 {
   qofint128 quotient;
@@ -160,7 +155,7 @@ div128 (qofint128 n, gint64 d)
  *  I beleive that ths algo is overflow-free, but should be 
  *  audited some more ... 
  */
-static inline gint64
+inline gint64
 rem128 (qofint128 n, gint64 d)
 {
   qofint128 quotient = div128 (n,d);
@@ -173,7 +168,7 @@ rem128 (qofint128 n, gint64 d)
 }
 
 /** Return the ratio n/d reduced so that there are no common factors. */
-static inline gnc_numeric
+inline gnc_numeric
 reduce128(qofint128 n, gint64 d)
 {
   gint64   t;
@@ -206,7 +201,7 @@ reduce128(qofint128 n, gint64 d)
 }
 
 /** Return true of two numbers are equal */
-static inline gboolean
+inline gboolean
 equal128 (qofint128 a, qofint128 b)
 {
 	if (a.lo != b.lo) return 0;
@@ -216,7 +211,7 @@ equal128 (qofint128 a, qofint128 b)
 }
 
 /** Return the greatest common factor of two 64-bit numbers */
-static inline guint64
+inline guint64
 gcf64(guint64 num, guint64 denom)
 {
   guint64   t;
@@ -237,7 +232,7 @@ gcf64(guint64 num, guint64 denom)
 }
 
 /** Return the least common multiple of two 64-bit numbers. */
-static inline qofint128
+inline qofint128
 lcm128 (guint64 a, guint64 b)
 {
   guint64 gcf = gcf64 (a,b);
@@ -246,7 +241,7 @@ lcm128 (guint64 a, guint64 b)
 }
 
 /** Add a pair of 128-bit numbers, returning a 128-bit number */
-static inline qofint128
+inline qofint128
 add128 (qofint128 a, qofint128 b)
 {
   qofint128 sum;

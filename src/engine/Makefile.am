@@ -105,6 +105,7 @@ gncinclude_HEADERS = \
   qofid.h \
   qofinstance.h \
   qofmath128.c \
+  qofmath128.h \
   qofobject.h \
   qofquery.h \
   qofquerycore.h \
