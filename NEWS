@@ -1,6 +1,22 @@
 Version history:
 ------- -------
 
+ 1.8.2  - 09 March 2003
+ 	 o Updated translations: German, Slovak, Spanish
+	 o Updated HBCI requirement to 0.9.6
+	 o Postgres fix for PG-7.3.x
+	 o More fixes for guile-1.6 support
+	 o Fix QIF Import for split transactions (#105139)
+	 o Remove "display balance in Euro" columns from the main window
+	 o Add "display balance in Report Currency" columns to the main window
+	 o Fix the transfer dialog / exchange-rate dialog so it doesn't round
+	   the values input by the user. (#106332)
+	 o Fix configure so tests wont fail on GCC 3.2.2
+	 o HBCI: avoid sending online transfers twice
+	 o Dont override the user's toolbar style (#102041)
+	 o Import: don't punish transactions with an online ID
+	 o Add engine support for employee expense vouchers
+
  1.8.1  - 09 February 2003
 	 o Release of new stable version 1.8.1
 	 o Fixes for qif import crashes

@@ -1,3 +1,8 @@
+2003-03-09  Chris Lyttle  <chris@wilddev.net>
+
+	* configure.in: release 1.8.2
+	* NEWS: release 1.8.2
+
 2003-03-09  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncEmployee.[ch]: added APIs to
