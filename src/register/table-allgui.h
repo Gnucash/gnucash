@@ -3,13 +3,33 @@
  * table-allgui.h
  *
  * FUNCTION:
- * The table is the complete, displayed table. 
- * It consists of a header, followed by a simple 
- * list of repeated entries.
+ * The Table object defines the structure and the GUI required
+ * to display a two-dimensional grid.  It provides several 
+ * important functions:
+ * -- an array of strings, one for each cell of the displayed table.
+ *    These strings are kept in sync with what the user sees in 
+ *    the GUI (although they may be out of sync in  currently 
+ *    edited row(s)).
+ * -- an array of cell-block handlers.  The handlers provide
+ *    the actual GUI editing infrastructure: the handlers 
+ *    ake sure that only allowed edits are made to a block
+ *    of cells.
+ * -- The "cursor", which defines the region of cells that 
+ *    are currently being edited.
+ * -- A lookup table that maps physical row/column addresses
+ *    to the cellblock handlers that know how to handle edits
+ *    to the physical, display cells.
+ * -- A table of user-defined data hooks that can be associated 
+ *    with each cell block.  By "user" we ean the prograer who
+ *    makes use of this object.
+ * -- Tab-traversing mechanism so that operator can tab in a
+ *    predefined order between cells.
  *
- * It provides the mechanism to handle tab-trversing.
+ * Please see the file "design.txt" for additional information.
  *
- * Implements the gui-independent parts of the table infrastructure.
+ * This implements the gui-independent parts of the table 
+ * infrastructure.  Additional, GUI-dependent parts are implemented
+ * in table-gtk.c and table-motif.c
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
@@ -143,19 +163,10 @@ void        xaccDestroyTable (Table *);
 
 
 /* The xaccSetTableSize() method will resize the table to the 
- * indicated dimensions.  This method calls the gui-independent 
- * xaccTableResize() routine, and then does some motif-specific 
- * cleanup.
+ * indicated dimensions. 
  */
 void        xaccSetTableSize (Table * table, int phys_rows, int phys_cols,
                                              int virt_rows, int virt_cols);
-/* free the gui-independent parts of the table structure. */
-void  xaccFreeTableEntries (Table *);
-
-/* resize the various arrays that compose the table */
-void 
-xaccTableResize (Table * table, int num_phys_rows, int num_phys_cols,
-                                int new_virt_rows, int new_virt_cols);
 
 /* indicate what handler should be used for a given virtual block */
 void 
@@ -183,8 +194,9 @@ void        xaccRefreshHeader (Table *);
 
 /* xaccVerifyCursorPosition checks the location of the cursor 
  * with respect to a physical row/column position, and if the 
- * resulting virtual position has changed, commits the changes in the
- * old position, and the repositions the cursor & gui to the new position.
+ * resulting virtual position has changed, commits the changes 
+ * in the old position, and the repositions the cursor & gui 
+ * to the new position.
  */
 
 void

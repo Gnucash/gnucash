@@ -3,11 +3,8 @@
  * table-motif.h
  *
  * FUNCTION:
- * The table is the complete, displayed table. 
- * It consists of a header, followed by a simple 
- * list of repeated entries.
- *
- * It provides the mechanism to handle tab-trversing.
+ * This header defines the Motif-GUI specific functions
+ * associated with the Table GUI.  
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
