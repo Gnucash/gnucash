@@ -132,7 +132,7 @@ if test x${gnc_opt_style_install} = xtrue
 then
   GNC_CONFIGDIR='${sysconfdir}'
   GNC_DOC_INSTALL_DIR='${datadir}/doc'
-  GNC_INCLUDE_DIR=${includedir}/gnucash
+  GNC_INCLUDE_DIR=${includedir}
   GNC_LIBDIR='${libdir}'
   GNC_SCM_INSTALL_DIR='${datadir}/scm'
   GNC_SHAREDIR='${datadir}'
