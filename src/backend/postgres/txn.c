@@ -214,7 +214,9 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
    start = xaccTransGetSplitList(trans);
 
    if ((start) && !(trans->do_free))
-   { 
+   {
+      gnc_commodity *com;
+
       for (node=start; node; node=node->next) 
       {
          Split * s = node->data;
@@ -224,15 +226,31 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
             s->idata = pgendNewGUIDidx(be);
          }
          pgendPutOneSplitOnly (be, s);
-         if (s->idata) { pgendKVPStore (be, s->idata, s->kvp_data); }
+         if (s->idata)
+         {
+           pgendKVPDelete (be, s->idata, 'e');
+           pgendKVPStore (be, s->idata, s->kvp_data);
+         }
       }
+
       if ((0 == trans->idata) &&
           (FALSE == kvp_frame_is_empty (xaccTransGetSlots(trans))))
       {
          trans->idata = pgendNewGUIDidx(be);
       }
+
+      /* Make sure the commodity is in the table.
+       * See account.c for why this might be bad. */
+      com = xaccTransGetCurrency (trans);
+      pgendPutOneCommodityOnly (be, com);
+
       pgendPutOneTransactionOnly (be, trans);
-      if (trans->idata) { pgendKVPStore (be, trans->idata, trans->kvp_data); }
+
+      if (trans->idata)
+      {
+        pgendKVPDelete (be, trans->idata, 't');
+        pgendKVPStore (be, trans->idata, trans->kvp_data);
+      }
    }
    else
    {
