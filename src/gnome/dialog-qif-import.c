@@ -185,7 +185,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   QIFImportWindow * wind = 
     gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
   
-  char * new_file_name;
+  const char * new_file_name;
 
   new_file_name = fileBox(_("Select QIF File"), "*.qif");
 

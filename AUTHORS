@@ -51,12 +51,14 @@ Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
 Jeremey Collins <jcollins@gnucash.org> for GnoMoney & GTK port
 Matthew Condell <mcondell@bbn.com> FreeBSD patch
 Patrick Condron <pcondon@rackspace.com> for webserver and T1 connection.
+Raphael Dechenaux <raphael.dechenaux@worldonline.fr> register patch
 Ciaran Deignan <Ciaran.Deignan@bull.net> for AIX binary version
 Tyson Dowd <tyson@tyse.net> for config/make patches & debian maint
 Koen D'Hondt <ripley@xs4all.nl> for Solaris patches to XmHTML
 Bob Drzyzgula <bob@mostly.com> for budgeting design notes
 Paul Fenwick <pjf@schools.net.au> ASX support
 Hubert Figuiere <hfiguiere@teaser.fr> patch to gnc-prices
+Valek Filippov <frob@df.ru> Russian translation
 Jan-Uwe Finck <ju_finck@mail.netwave.de> for German message translation
 Ron Forrester <rjf@aracnet.com> for gnome patches
 Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
@@ -68,6 +70,7 @@ Alexandru Harsanyi <haral@codec.ro> for core dumps, lockups, gtk work
 John Hasler <john@dhh.gt.org> engine patch
 Jon Kåre Hellan <hellan@acm.org> misc core dump fixes
 Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
+Alexey Kakunin <small@arcadia.spb.ru> quickfill patch for cyrillic
 Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Sven Kuenzler <sk@xgm.de> for SuSE README file
@@ -79,8 +82,11 @@ Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
 Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
 Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches
+Juan Manuel García Molina <juanmagm@mail.com> spanish translation
+Christopher Molnar <molnarc@mandrakesoft.com> build system patch
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
 G. Allen Morris III <gam3@ann.softgams.com> for QIF core dump 
+Steven Murdoch <sjmurdoch@linuxfan.com> gnc-prices fix for London exchange
 Brent Neal <brent@baton.phys.lsu.edu> TIAA-CREF support.
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
@@ -96,13 +102,14 @@ Keith Refson <Keith.Refson@earth.ox.ac.uk> Solaris fixes
 Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
 Jan Schrage <jan.schrage@urz.uni-heidelberg.de> documentation patches
 Christopher Seawood <cls@seawood.org> for XbaeMatrix core dump
+Alessandro Seveso <aleseveso@tiscalinet.it> Italian translations
 Mike Simons <msimons@fsimons01.erols.com> misc configure.in patches
 Richard Skelton <rich@brake.demon.co.uk> for Solaris cleanup
 Henning Spruth <spruth@bigfoot.com> for German text & euro date rework
 Robby Stephenson <robby.stephenson@usa.net> register & file history patches
 Herbert Thoma <tma@iis.fhg.de> gnome register & euro support patches
 Diane Trout <detrout@earthlink.net> scheme qif import patch
-Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices
+Richard Wackerbarth <rkw@dataplex.net> patch to gnc-prices, qif import fixes
 Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> Great Britain translations
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import

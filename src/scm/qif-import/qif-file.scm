@@ -23,6 +23,7 @@
         (current-xtn #f)
         (current-split #f)
         (current-account-name #f)
+        (last-seen-account-name #f)
         (default-split #f)
         (first-xtn #f)
         (ignore-accounts #f)
@@ -60,6 +61,8 @@
                    (case qstate-type 
                      ((type:bank type:cash type:ccard type:invst
                                  #{type:oth\ a}#  #{type:oth\ l}#)
+                      (if ignore-accounts (set! current-account-name last-seen-account-name))
+                      (set! ignore-accounts #f)
                       (set! current-xtn (make-qif-xtn))
                       (set! default-split (make-qif-split))
                       (qif-split:set-category! default-split "")
@@ -97,7 +100,8 @@
                       
                       ;; T : total amount 
                       ((#\T)
-                       (qif-split:set-amount! default-split value))
+                       (if default-split 
+                           (qif-split:set-amount! default-split value)))
                       
                       ;; P : payee
                       ((#\P)
@@ -129,13 +133,14 @@
                       
                       ;; M : memo 
                       ((#\M)
-                       (qif-split:set-memo! default-split value))
+                       (if default-split 
+                           (qif-split:set-memo! default-split value)))
                       
                       ;; I : share price (stock transactions)
                       ((#\I)
                        (qif-xtn:set-share-price! current-xtn value))
                       
-                      ;; Q : share price (stock transactions)
+                      ;; Q : number of shares (stock transactions)
                       ((#\Q)
                        (qif-xtn:set-num-shares! current-xtn value))
                       
@@ -149,7 +154,8 @@
                       
                       ;; L : category 
                       ((#\L)
-                       (qif-split:set-category! default-split value))
+                       (if default-split 
+                           (qif-split:set-category! default-split value)))
                       
                       ;; S : split category 
                       ((#\S)
@@ -231,7 +237,8 @@
                    ((account)
                     (case tag
                       ((#\N)
-                       (qif-acct:set-name! current-xtn value))
+                       (qif-acct:set-name! current-xtn value)
+                       (set! last-seen-account-name value))
                       ((#\D)
                        (qif-acct:set-description! current-xtn value))
                       ((#\T)
@@ -261,7 +268,7 @@
                       ((#\D)
                        (qif-cat:set-description! current-xtn value))
                       
-                      ;; E : is this a taxable category?
+                      ;; T : is this a taxable category?
                       ((#\T)
                        (qif-cat:set-taxable! current-xtn #t))
                       
@@ -273,8 +280,7 @@
                       ((#\I)
                        (qif-cat:set-income-cat! current-xtn #t))
                       
-                      ;; R : what is the tax rate (from some table?
-                      ;; seems to be an integer)
+                      ;; R : tax form/line designator 
                       ((#\R)
                        (qif-cat:set-tax-class! current-xtn value))
                       

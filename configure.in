@@ -24,13 +24,13 @@ dnl Process this file with autoconf to produce a configure script.
 ### commands depend on them):
 
 AC_INIT(src/guile/gnucash.h)
-AM_INIT_AUTOMAKE(gnucash,1.3.100)
+AM_INIT_AUTOMAKE(gnucash,1.4.6)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
 
 dnl Set of available languages.
-ALL_LINGUAS="fr de en_GB sv ja"
+ALL_LINGUAS="de en_GB es fr it ru sv"
 
 AM_PROG_LIBTOOL
 
@@ -105,19 +105,13 @@ AC_ARG_ENABLE( profile,
        CFLAGS="${CFLAGS} -pg"
        LDFLAGS="${LDFLAGS} -pg")
 
-AC_ARG_ENABLE( warnings,
-       [  --enable-warnings         compile with lots of warnings generated],
-       CFLAGS="${CFLAGS} -g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects"
-       LDFLAGS="${LDFLAGS} -g -Wall"
-       AC_DEFINE(DEBUG_MEMORY,1) AC_DEFINE(USE_DEBUG,1) )
-
 
 ### --------------------------------------------------------------------------
 ### i18n
 AC_ARG_WITH( locale-dir, 
   [  --with-locale-dir=PATH       specify where to look for locale-specific information],
   LOCALE_DIR="$with_locale_dir",
-  LOCALE_DIR="\${localedatadir}/locale")
+  LOCALE_DIR="\${prefix}/share/locale")
 
 AC_SUBST(LOCALE_DIR)
 
@@ -348,15 +342,15 @@ AC_CHECK_LIB(xml, xmlDefaultSAXHandlerInit,
   $EXTRALIBS)
 
 ### --------------------------------------------------------------------------
-EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
+#EXTRALIBS=`$GNOME_CONFIG_BIN --libs print`
 
 # check for gnome-print and enable it via HAVE_LIBGNOMEPRINT
 # if found
-AC_CHECK_LIB(gnomeprint, gnome_print_context_new,
-             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} print"
-             AC_DEFINE(HAVE_LIBGNOMEPRINT),
-             ,
-             $EXTRALIBS)
+#AC_CHECK_LIB(gnomeprint, gnome_print_context_new,
+#             GNOMEBUILDLIBS="${GNOMEBUILDLIBS} print"
+#             AC_DEFINE(HAVE_LIBGNOMEPRINT),
+#             ,
+#             $EXTRALIBS)
 
 AC_SUBST(GNOME_TARGET)
 AC_SUBST(GNOME_STATIC_TARGET)

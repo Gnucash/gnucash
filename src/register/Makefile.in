@@ -118,13 +118,13 @@ l = @l@
 
 noinst_LIBRARIES = libgncregister.a
 
-libgncregister_a_SOURCES =    QuickFill.c   basiccell.c   cellblock.c   datecell.c   numcell.c   pricecell.c   quickfillcell.c   recncell.c   splitreg.c   table-allgui.c   table-gnome.c   table-html.c   textcell.c
+libgncregister_a_SOURCES =    QuickFill.c   basiccell.c   cellblock.c   datecell.c   numcell.c   pricecell.c   quickfillcell.c   recncell.c   splitreg.c   table-allgui.c   table-gnome.c   textcell.c
 
 
-noinst_HEADERS =    QuickFill.h   basiccell.h   cellblock.h   combocell.h   datecell.h   numcell.h   pricecell.h   quickfillcell.h   recncell.h   splitreg.h   table-allgui.h   table-gnome.h   table-html.h   textcell.h
+noinst_HEADERS =    QuickFill.h   basiccell.h   cellblock.h   combocell.h   datecell.h   numcell.h   pricecell.h   quickfillcell.h   recncell.h   splitreg.h   table-allgui.h   table-gnome.h   textcell.h
 
 
-EXTRA_DIST =    .cvsignore   design.txt
+EXTRA_DIST =    .cvsignore   design.txt   table-html.c   table-html.h
 
 
 CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
@@ -150,7 +150,7 @@ X_PRE_LIBS = @X_PRE_LIBS@
 libgncregister_a_LIBADD = 
 libgncregister_a_OBJECTS =  QuickFill.o basiccell.o cellblock.o \
 datecell.o numcell.o pricecell.o quickfillcell.o recncell.o splitreg.o \
-table-allgui.o table-gnome.o table-html.o textcell.o
+table-allgui.o table-gnome.o textcell.o
 AR = ar
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -168,8 +168,7 @@ GZIP_ENV = --best
 DEP_FILES =  .deps/QuickFill.P .deps/basiccell.P .deps/cellblock.P \
 .deps/datecell.P .deps/numcell.P .deps/pricecell.P \
 .deps/quickfillcell.P .deps/recncell.P .deps/splitreg.P \
-.deps/table-allgui.P .deps/table-gnome.P .deps/table-html.P \
-.deps/textcell.P
+.deps/table-allgui.P .deps/table-gnome.P .deps/textcell.P
 SOURCES = $(libgncregister_a_SOURCES)
 OBJECTS = $(libgncregister_a_OBJECTS)
 

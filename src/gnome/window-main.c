@@ -58,6 +58,8 @@
 #include "util.h"
 #include "gnc.h"
 
+#include "gtkselect.h"
+
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -72,56 +74,187 @@ enum {
   FMB_QUIT,
 };
 
-/* The gnc_ui_refresh_statusbar() subroutine redraws 
- *    the statusbar at the bottom of the main window. The statusbar
- *    includes two fields, titled 'profits' and 'assets'.  The total
- *    assets equal the sum of all of the non-equity, non-income
- *    accounts.  In theory, assets also equals the grand total
- *    value of the equity accounts, but that assumes that folks are
- *    using the equity account type correctly (which is not likely).
- *    Thus we show the sum of assets, rather than the sum of equities.
+/*
+ * An accumulator for a given currency.
  *
- * hack alert XXX this routine rather incorrectly sums together 
- * account types even if they are of different currencies.  In fact,
- * it should check the currency types, and keep separate, distinct
- * balances for each currency, and report each of those indivudually.
- * Or something like that. 
- *
- * Note the 'convert-to-euro' is a kind of a hack to work around this
- * bug: basically, any/all currencies are converted to the euro, and 
- * that is the sum that is reported.  It should probably be replaced by
- * a generic 'convert-to-common-currency' routine.
+ * This is used during the update to the status bar to contain the
+ * accumulation for a single currency. These are placed in a GList and
+ * kept around for the duration of the calculation. There may, in fact
+ * be better ways to do this, but none occurred.
  */
+struct _GNCCurrencyAcc {
+  const char *currency;
+  double assets;
+  double profits;
+};
+typedef struct _GNCCurrencyAcc GNCCurrencyAcc;
+
+/*
+ * An item to appear in the selector box in the status bar.
+ *
+ * This is maintained for the duration, where there is one per currency,
+ * plus (eventually) one for the default currency accumulation (like the
+ * EURO).
+ */
+struct _GNCCurrencyItem {
+  const char *currency;
+  GtkWidget *listitem;
+  GtkWidget *assets_label;
+  GtkWidget *profits_label;
+  gint touched:1;
+};
+typedef struct _GNCCurrencyItem GNCCurrencyItem;
+
+/*
+ * Build a single currency item.
+ *
+ * This function handles the building of a single currency item for the
+ * selector. It looks like the old code in the update function, but now
+ * only handles a single currency.
+ */
+static GNCCurrencyItem *
+gnc_ui_build_currency_item(const char *currency)
+{
+  GtkWidget *label;
+  GtkWidget *topbox;
+  GtkWidget *hbox;
+  GtkWidget *listitem;
+  GNCCurrencyItem *item = g_new0(GNCCurrencyItem, 1);
+
+  item->currency = currency;
+
+  listitem = gtk_list_item_new();
+  item->listitem = listitem;
+
+  topbox = gtk_hbox_new(FALSE, 2);
+  gtk_widget_show(topbox);
+  gtk_container_add(GTK_CONTAINER(listitem), topbox);
+
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_widget_show(hbox);
+  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
+
+  label = gtk_label_new(currency);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  gtk_widget_show(label);
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_widget_show(hbox);
+  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
+
+  label = gtk_label_new(ASSETS_C_STR);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  gtk_widget_show(label);
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new("");
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  gtk_widget_show(label);
+  item->assets_label = label;
+
+  hbox = gtk_hbox_new(FALSE, 2);
+  gtk_widget_show(hbox);
+  gtk_box_pack_start(GTK_BOX(topbox), hbox, FALSE, FALSE, 5);
+
+  label = gtk_label_new(PROFITS_C_STR);
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  gtk_widget_show(label);
+  gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+
+  label = gtk_label_new("");
+  gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+  gtk_widget_show(label);
+  gtk_box_pack_end(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+  item->profits_label = label;
+
+  gtk_widget_show(item->listitem);
+
+  return item;
+}
+
+
+/*
+ * Get a currency accumulator.
+ *
+ * This will search the given list, and if no accumulator is found, wil
+ * allocate a fresh one. This may cause problems with currencies that have
+ * the same name... let the buyer beware.
+ */
+static GNCCurrencyAcc *
+gnc_ui_get_currency_accumulator(GList **list, const char *currency)
+{
+  GList *current;
+  GNCCurrencyAcc *found;
+
+  for (current = g_list_first(*list); current;
+       current = g_list_next(current))
+  {
+    found = current->data;
+    if (safe_strcmp(found->currency, currency) == 0)
+      return found;
+  }
+
+  found = g_new0(GNCCurrencyAcc, 1);
+  found->currency = currency;
+  found->assets = 0.0;
+  found->profits = 0.0;
+  *list = g_list_append(*list, found);
+
+  return found;
+}
+
+/*
+ * Get a currency item.
+ *
+ * This will search the given list, and if no accumulator is found, will
+ * create a fresh one.
+ *
+ * It looks just like the function above, with some extra stuff to get the
+ * item into the list.
+ */
+static GNCCurrencyItem *
+gnc_ui_get_currency_item(GList **list, const char *currency, GtkWidget *holder)
+{
+  GList *current;
+  GNCCurrencyItem *found;
+
+  for (current = g_list_first(*list); current;
+       current = g_list_next(current))
+  {
+    found = current->data;
+    if (safe_strcmp(found->currency, currency) == 0)
+      return found;
+  }
+
+  found = gnc_ui_build_currency_item(currency);
+  *list = g_list_append(*list, found);
+
+  current = g_list_append(NULL, found->listitem);
+  gtk_select_append_items(GTK_SELECT(holder), current);
+
+  return found;
+}
 
 static void
-gnc_ui_refresh_statusbar (void)
+gnc_ui_accounts_recurse (AccountGroup *group, GList **currency_list,
+                         gboolean euro)
 {
-  GNCMainInfo *main_info;
-  double assets  = 0.0;
-  double profits = 0.0;
-  double euro_assets  = 0.0;
-  double euro_profits = 0.0;
   double amount;
-  AccountGroup *group;
   AccountGroup *children;
   Account *account;
-  char asset_string[256];
-  char profit_string[256];
   int num_accounts;
   int account_type;
   const char *account_currency;
-  gboolean euro;
+  GNCCurrencyAcc *currency_accum;
+  GNCCurrencyAcc *euro_accum = NULL;
   int i;
 
-  euro = gnc_lookup_boolean_option("International",
-				   "Enable EURO support",
-				   FALSE);
+  if (euro)
+    euro_accum = gnc_ui_get_currency_accumulator(currency_list,
+						 EURO_TOTAL_STR);
 
-  main_info = gnc_get_main_info();
-  if (main_info == NULL)
-    return;
-
-  group = gncGetCurrentGroup ();
   num_accounts = xaccGroupGetNumAccounts(group);
   for (i = 0; i < num_accounts; i++)
   {
@@ -130,6 +263,8 @@ gnc_ui_refresh_statusbar (void)
     account_type = xaccAccountGetType(account);
     account_currency = xaccAccountGetCurrency(account);
     children = xaccAccountGetChildren(account);
+    currency_accum = gnc_ui_get_currency_accumulator(currency_list,
+						     account_currency);
 
     switch (account_type)
     {
@@ -141,26 +276,22 @@ gnc_ui_refresh_statusbar (void)
       case CREDIT:
       case LIABILITY:
 	amount = xaccAccountGetBalance(account);
-	if (children != NULL)
-	  amount += xaccGroupGetBalance(children);
-
-        assets += amount;
+        currency_accum->assets += amount;
 	if(euro)
-	{
-	  euro_assets += gnc_convert_to_euro(account_currency, amount);
-	}
+	  euro_accum->assets += gnc_convert_to_euro(account_currency, amount);
+
+	if (children != NULL)
+	  gnc_ui_accounts_recurse(children, currency_list, euro);
 	break;
       case INCOME:
       case EXPENSE:
 	amount = xaccAccountGetBalance(account);
-	if (children != NULL)
-	  amount += xaccGroupGetBalance(children);
-
-        profits -= amount;
+        currency_accum->profits -= amount;
 	if(euro)
-	{
-	  euro_profits -= gnc_convert_to_euro(account_currency, amount);
-	}
+	  euro_accum->profits -= gnc_convert_to_euro(account_currency, amount);
+
+	if (children != NULL)
+	  gnc_ui_accounts_recurse(children, currency_list, euro);
 	break;
       case EQUITY:
         /* no-op, see comments at top about summing assets */
@@ -170,26 +301,143 @@ gnc_ui_refresh_statusbar (void)
 	break;
     }
   }
+}
 
-  xaccSPrintAmount(asset_string, assets, PRTSYM | PRTSEP, NULL);
-  if(euro)
-  {
-    strcat(asset_string, " / ");
-    xaccSPrintAmount(asset_string + strlen(asset_string), euro_assets,
-		     PRTSYM | PRTSEP | PRTEUR, NULL);
-  }
-  gtk_label_set_text(GTK_LABEL(main_info->assets_label), asset_string);
-  gnc_set_label_color(main_info->assets_label, assets);
+/* The gnc_ui_refresh_statusbar() subroutine redraws 
+ *    the statusbar at the bottom of the main window. The statusbar
+ *    includes two fields, titled 'profits' and 'assets'.  The total
+ *    assets equal the sum of all of the non-equity, non-income
+ *    accounts.  In theory, assets also equals the grand total
+ *    value of the equity accounts, but that assumes that folks are
+ *    using the equity account type correctly (which is not likely).
+ *    Thus we show the sum of assets, rather than the sum of equities.
+ *
+ * The EURO gets special treatment. There can be one line with
+ * EUR amounts and a EUR (total) line which summs up all EURO
+ * member currencies.
+ *
+ * There should be a 'grand total', too, which sums up all accounts
+ * converted to one common currency.
+ */
+static void
+gnc_ui_refresh_statusbar (void)
+{
+  GNCMainInfo *main_info;
+  AccountGroup *group;
+  char asset_string[256];
+  char profit_string[256];
+  const char *default_currency;
+  GNCCurrencyAcc *currency_accum;
+  GNCCurrencyItem *currency_item;
+  GList *currency_list;
+  GList *current;
+  gboolean euro;
 
-  xaccSPrintAmount(profit_string, profits, PRTSYM | PRTSEP, NULL);
-  if(euro)
+  default_currency = gnc_lookup_string_option("International",
+					      "Default Currency",
+					      "USD");
+
+  euro = gnc_lookup_boolean_option("International",
+				   "Enable EURO support",
+				   FALSE);
+
+  main_info = gnc_get_main_info();
+  if (main_info == NULL)
+    return;
+
+  currency_list = NULL;
+
+  group = gncGetCurrentGroup ();
+  gnc_ui_accounts_recurse(group, &currency_list, euro);
+
+  for (current = g_list_first(main_info->totals_list); current;
+       current = g_list_next(current))
   {
-    strcat(profit_string, " / ");
-    xaccSPrintAmount(profit_string + strlen(profit_string), euro_profits,
-		     PRTSYM | PRTSEP | PRTEUR, NULL);
+    currency_item = current->data;
+    currency_item->touched = 0;
   }
-  gtk_label_set_text(GTK_LABEL(main_info->profits_label), profit_string);
-  gnc_set_label_color(main_info->profits_label, profits);
+
+  for (current = g_list_first(currency_list); current;
+       current = g_list_next(current))
+  {
+    currency_accum = current->data;
+    currency_item = gnc_ui_get_currency_item(&main_info->totals_list,
+       					     currency_accum->currency,
+					     main_info->totals_combo);
+    currency_item->touched = 1;
+
+    xaccSPrintAmount(asset_string, currency_accum->assets,
+		     PRTSYM | PRTSEP, currency_accum->currency);
+    gtk_label_set_text(GTK_LABEL(currency_item->assets_label), asset_string);
+    gnc_set_label_color(currency_item->assets_label, currency_accum->assets);
+
+    xaccSPrintAmount(profit_string, currency_accum->profits,
+		     PRTSYM | PRTSEP, currency_accum->currency);
+    gtk_label_set_text(GTK_LABEL(currency_item->profits_label), profit_string);
+    gnc_set_label_color(currency_item->profits_label, currency_accum->profits);
+
+    g_free(currency_accum);
+    current->data = NULL;
+  }
+
+  g_list_free(currency_list);
+  currency_list = NULL;
+
+  current = g_list_first(main_info->totals_list);
+  while (current)
+  {
+    GList *next = current->next;
+
+    currency_item = current->data;
+    if (currency_item->touched == 0
+        && strcmp(currency_item->currency, default_currency) != 0)
+    {
+      currency_list = g_list_append(currency_list, currency_item->listitem);
+      main_info->totals_list = g_list_remove_link(main_info->totals_list,
+						  current);
+      g_free(currency_item);
+      current->data = NULL;
+      g_list_free_1(current);
+    }
+
+    current = next;
+  }
+
+  if (currency_list)
+  {
+    gtk_select_remove_items(GTK_SELECT(main_info->totals_combo),
+                            currency_list);
+    g_list_free(currency_list);
+  }
+}
+
+static void
+gnc_refresh_main_window_title()
+{
+  GtkWidget *main_window;
+  Session *session;
+  gchar *filename;
+  gchar *title;
+
+  main_window = gnc_get_ui_data();
+  if (main_window == NULL)
+    return;
+
+  session = gncGetCurrentSession();
+
+  if (session == NULL)
+    filename = UNTITLED_STR;
+  else
+    filename = xaccSessionGetFilePath(session);
+
+  if ((filename == NULL) || (*filename == '\0'))
+    filename = UNTITLED_STR;
+
+  title = g_strconcat("GnuCash - ", filename, NULL);
+
+  gtk_window_set_title(GTK_WINDOW(main_window), title);
+
+  g_free(title);
 }
 
 void
@@ -199,6 +447,7 @@ gnc_refresh_main_window()
   gnc_ui_refresh_statusbar();
   gnc_history_update_menu(GNOME_APP(gnc_get_ui_data()));
   gnc_account_tree_refresh_all();
+  gnc_refresh_main_window_title();
 }
 
 static void
@@ -1077,32 +1326,21 @@ mainWindow()
 
   /* create the label containing the account balances */
   {
-    GtkWidget *label;
-    GtkWidget *hbox;
+    GtkWidget *combo_box;
+    const char *default_currency;
+    GNCCurrencyItem *def_item;
 
-    hbox = gtk_hbox_new(FALSE, 2);
-    gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
-
-    label = gtk_label_new(ASSETS_C_STR);
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-    label = gtk_label_new("");
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-    main_info->assets_label = label;
-
-    hbox = gtk_hbox_new(FALSE, 2);
-    gtk_box_pack_end(GTK_BOX(statusbar), hbox, FALSE, FALSE, 5);
-
-    label = gtk_label_new(PROFITS_C_STR);
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-
-    label = gtk_label_new("");
-    gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
-    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
-    main_info->profits_label = label;
+    default_currency = gnc_lookup_string_option("International",
+						"Default Currency",
+						"USD");
+    combo_box = gtk_select_new();
+    main_info->totals_combo = combo_box;
+    main_info->totals_list = NULL;
+    def_item = gnc_ui_get_currency_item(&main_info->totals_list,
+					default_currency,
+				        main_info->totals_combo);
+    gtk_select_select_child(GTK_SELECT(combo_box), def_item->listitem);
+    gtk_box_pack_end(GTK_BOX(statusbar), combo_box, FALSE, FALSE, 5);
   }
 
   /* create scrolled window */

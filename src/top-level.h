@@ -49,8 +49,11 @@
 
 /** PROTOTYPES ******************************************************/
 
-extern gncUIWidget gnc_get_ui_data();
+gncUIWidget gnc_get_ui_data();
 
-extern void gnc_ui_shutdown();
+void gnc_ui_shutdown();
+
+gncBoolean gnc_reverse_balance(Account *account);
+gncBoolean gnc_reverse_balance_type(GNCAccountType type);
 
 #endif
