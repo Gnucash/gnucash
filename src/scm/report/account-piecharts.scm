@@ -303,8 +303,8 @@ balance at a given time"))
 			   ;; immediate subaccounts of this account
 			   ;; (and including this account).
 			   (gnc:make-report-anchor
-			    reportname
-			    (gnc:report-options report-obj) 
+			    reportname 
+			    report-obj
 			    (list
 			     (list gnc:pagename-accounts optname-accounts
 				   (cons acct subaccts))

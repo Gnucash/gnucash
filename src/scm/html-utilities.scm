@@ -57,9 +57,10 @@
 ;; 'src-options', and additionally this function sets all options
 ;; according to 'optionlist'. Each element of optionlist is a list of
 ;; section, name, and value of the function.
-(define (gnc:make-report-anchor reportname 
-				src-options optionlist)
-  (let ((options (gnc:make-report-options reportname)))
+(define (gnc:make-report-anchor reportname src-report
+				optionlist)
+  (let ((src-options (gnc:report-options src-report))
+	(options (gnc:make-report-options reportname)))
     (if options
 	(begin
 	  (gnc:options-copy-values src-options options)
@@ -71,8 +72,10 @@
 		   (warn "gnc:make-report-anchor:" reportname
 			 " No such option: " (car l) (cadr l)))))
 	   optionlist)
-	  (gnc:report-anchor-text 
-	   (gnc:make-report reportname options)))
+	  (let ((id (gnc:make-report reportname options)))
+	    (gnc:report-add-child-by-id! src-report id)
+	    (gnc:report-set-parent! (gnc:find-report id) src-report)
+	    (gnc:report-anchor-text id)))
 	(warn "gnc:make-report-anchor: No such report: " reportname))))
 
 

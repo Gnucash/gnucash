@@ -402,7 +402,7 @@ developing over time"))
 			    ;; (and including this account).
 			    (gnc:make-report-anchor
 			     reportname
-			     (gnc:report-options report-obj) 
+			     report-obj
 			     (list
 			      (list gnc:pagename-accounts optname-accounts
 				    (cons acct subaccts))

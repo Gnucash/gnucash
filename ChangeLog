@@ -1,3 +1,10 @@
+2001-04-26  Christian Stimming  <stimming@tuhh.de>
+
+	* src/scm/report/*.scm: adapt to changed gnc:make-report-anchor.
+	
+	* src/scm/html-utilities.scm (gnc:make-report-anchor):
+	gnc:report-add-child-by-id! is now used inside here. API changed.
+
 2001-04-25  Dave Peticolas  <dave@krondo.com>
 
 	* src/scm/commodity-utilities.scm: fix fixme

@@ -215,7 +215,7 @@
 		 (list
 		  (gnc:make-report-anchor
 		   "Assets Over Time"
-		   (gnc:report-options report-obj)
+		   report-obj
 		   (list 
 		    (list gnc:pagename-display
 			  "Use Stacked Bars" #t)
@@ -224,7 +224,7 @@
 			  (_ "Asset Chart"))))
 		  (gnc:make-report-anchor
 		   "Liabilities/Equity Over Time"
-		   (gnc:report-options report-obj)
+		   report-obj
 		   (list 
 		    (list gnc:pagename-display
 			  "Use Stacked Bars" #t)

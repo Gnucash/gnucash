@@ -198,7 +198,7 @@
 		 (list
 		  (gnc:make-report-anchor
 		   "Income Over Time"
-		   (gnc:report-options report-obj)
+		   report-obj
 		   (list 
 		    (list gnc:pagename-display
 			  "Use Stacked Bars" #t)
@@ -207,7 +207,7 @@
 			  (_ "Income Chart"))))
 		  (gnc:make-report-anchor
 		   "Expense Over Time"
-		   (gnc:report-options report-obj)
+		   report-obj
 		   (list 
 		    (list gnc:pagename-display
 			  "Use Stacked Bars" #t)
