@@ -1,5 +1,7 @@
 2001-07-03  Dave Peticolas  <dave@krondo.com>
 
+	* src/engine/sql/putil.h: Alex Zepeda's patch converting atol->strtoll.
+
 	* src/scm/commodity-utilities.scm: fix bug -- use srfi-1 to
 	make sure we get the right 'last'
 
