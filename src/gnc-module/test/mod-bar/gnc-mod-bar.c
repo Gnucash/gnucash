@@ -27,7 +27,7 @@ gnc_module_description(void) {
 int
 gnc_module_init(int refcount) {
   /* publish the g-wrapped Scheme bindings for libbar */
-  gw_init_module_bar_gwrap();
+  gw_init_wrapset_bar_gwrap();
   
   /* use the (bar) module */ 
   gh_eval_str("(use-modules (gnucash bar))");
