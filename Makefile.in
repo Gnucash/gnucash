@@ -48,7 +48,7 @@ default:
 	@echo "motif           dynamically linked motif version"
 	@echo "motif-static    statically linked motif version"
 	@echo "gnome           gnome/gtk version"
-	@echo "qt	       kde/qt version"
+	@echo "qt              kde/qt version"
 	@echo " "
 
 motif:
