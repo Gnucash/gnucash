@@ -186,6 +186,37 @@ gint gnc_lot_count_splits (GNCLot *lot)
    return g_list_length (lot->splits);
 }
 
+/* ============================================================== */
+/* Hmm, we should probably inline these. */
+
+const char * 
+gnc_lot_get_title (GNCLot *lot)
+{
+   if (!lot) return NULL;
+   return kvp_frame_get_string (lot->kvp_data, "/title");
+}
+
+const char * 
+gnc_lot_get_notes (GNCLot *lot)
+{
+   if (!lot) return NULL;
+   return kvp_frame_get_string (lot->kvp_data, "/notes");
+}
+
+void
+gnc_lot_set_title (GNCLot *lot, const char *str)
+{
+   if (!lot) return;
+   return kvp_frame_set_str (lot->kvp_data, "/title", str);
+}
+
+void
+gnc_lot_set_notes (GNCLot *lot, const char *str)
+{
+   if (!lot) return;
+   return kvp_frame_set_str (lot->kvp_data, "/notes", str);
+}
+
 /* ============================================================= */
 
 gnc_numeric

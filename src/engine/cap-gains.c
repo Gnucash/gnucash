@@ -145,6 +145,7 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
 {
    struct early_lot_s es;
 
+   ENTER (" sign=%lld/%lld", sign.num, sign.denom);
    es.lot = NULL;
    es.ts.tv_sec = 10000000LL * ((long long) LONG_MAX);
    es.ts.tv_nsec = 0;
@@ -153,6 +154,7 @@ xaccAccountFindEarliestOpenLot (Account *acc, gnc_numeric sign)
    else es.numeric_pred = gnc_numeric_positive_p;
       
    xaccAccountForEachLot (acc, earliest_helper, &es);
+   LEAVE ("found lot=%p %s", es.lot, gnc_lot_get_title (es.lot));
    return es.lot;
 }
 

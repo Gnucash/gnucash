@@ -103,8 +103,14 @@ Split * gnc_lot_get_earliest_split (GNCLot *lot);
  */
 Split * gnc_lot_get_latest_split (GNCLot *lot);
 
+/** Get and set the account title, or the account notes. */
+const char * gnc_lot_get_title (GNCLot *);
+const char * gnc_lot_get_notes (GNCLot *);
+void gnc_lot_set_title (GNCLot *, const char *);
+void gnc_lot_set_notes (GNCLot *, const char *);
+
 /** Every lot has a place to hang kvp data.  This routine returns that
- * place. 
+ *     place. 
  * */
 KvpFrame * gnc_lot_get_slots (GNCLot *);
 
