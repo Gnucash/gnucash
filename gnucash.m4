@@ -12,7 +12,7 @@ dnl Get the cflags and libraries from the gnucash-config script
 dnl
 AC_ARG_WITH(gnucash-prefix,[  --with-gnucash-prefix=PFX   Prefix where GnuCash is installed (optional)],
             gnucash_config_prefix="$withval", gnucash_config_prefix="")
-AC_ARG_WITH(gnucash-exec-prefix,[  --with-gnucash-exec-prefix=PFX Exec prefix where GgnuCash is installed (optional)],
+AC_ARG_WITH(gnucash-exec-prefix,[  --with-gnucash-exec-prefix=PFX Exec prefix where GnuCash is installed (optional)],
             gnucash_config_exec_prefix="$withval", gnucash_config_exec_prefix="")
 AC_ARG_ENABLE(gnucashtest, [  --disable-gnucashtest       Do not try to compile and run a test GnuCash program],
 		    , enable_gnucashtest=yes)
@@ -22,11 +22,17 @@ AC_ARG_ENABLE(gnucashtest, [  --disable-gnucashtest       Do not try to compile 
      if test x${GNUCASH_CONFIG+set} != xset ; then
         GNUCASH_CONFIG=$gnucash_config_exec_prefix/bin/gnucash-config
      fi
+     if test x${GNUCASH_RUN_SCRIPT+set} != xset ; then
+        GNUCASH_RUN_SCRIPT=$gnucash_config_exec_prefix/bin/gnucash-run-script
+     fi
   fi
   if test x$gnucash_config_prefix != x ; then
      gnucash_config_args="$gnucash_config_args --prefix=$gnucash_config_prefix"
      if test x${GNUCASH_CONFIG+set} != xset ; then
         GNUCASH_CONFIG=$gnucash_config_prefix/bin/gnucash-config
+     fi
+     if test x${GNUCASH_RUN_SCRIPT+set} != xset ; then
+        GNUCASH_RUN_SCRIPT=$gnucash_config_prefix/bin/gnucash-run-script
      fi
   fi
 
@@ -187,4 +193,6 @@ main ()
   AC_SUBST(GNUCASH_CFLAGS)
   AC_SUBST(GNUCASH_LIBS)
   rm -f conf.gnucashtest
+  AC_PATH_PROG(GNUCASH_RUN_SCRIPT, gnucash-run-script, gnucash-run-script)
+  AC_SUBST(GNUCASH_RUN_SCRIPT)
 ])
