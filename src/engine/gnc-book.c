@@ -686,6 +686,15 @@ gnc_book_end (GNCBook *book)
 
   gnc_book_clear_error (book);
 
+  g_free (book->fullpath);
+  book->fullpath = NULL;
+
+  g_free (book->logpath);
+  book->logpath = NULL;
+
+  g_free (book->book_id);
+  book->book_id = NULL;
+
   LEAVE(" ");
 }
 

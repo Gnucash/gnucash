@@ -37,6 +37,9 @@ test_book (GNCBook *book)
   if (!do_test (io_err == ERR_BACKEND_NO_ERR, "Ending test-file-1"))
     return;
 
+  if (!do_test (gnc_book_get_url (book) == NULL, "book url not NULL"))
+    return;
+
   filename = g_strdup ("postgres://localhost:7777/gnc_test?mode=single-file");
   gnc_book_begin (book, filename, FALSE, TRUE);
   g_free (filename);
@@ -77,7 +80,7 @@ guile_main (int argc, char **argv)
 int
 main (int argc, char ** argv)
 {
-  /*  getchar (); */
+  getchar ();
 
   gh_enter (argc, argv, guile_main);
 
