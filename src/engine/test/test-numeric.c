@@ -15,6 +15,7 @@
 #include "test-engine-stuff.h"
 #include "gnc-numeric.h"
 
+#define NREPS 3000
 
 
 static char *
@@ -34,17 +35,36 @@ gnc_numeric_print(gnc_numeric in) {
 }
 
 static void
+check_unary_op (gnc_numeric expected, 
+                gnc_numeric actual, 
+                gnc_numeric input, 
+                const char * errmsg)
+{
+	char *e = gnc_numeric_print (expected);
+	char *r = gnc_numeric_print (actual);
+	char *a = gnc_numeric_print (input);
+	char *str = g_strdup_printf (errmsg, e,r, a);
+	
+	do_test (gnc_numeric_eq(expected, actual), str);
+	
+	g_free (a);
+	g_free (r);
+	g_free (e);
+	g_free (str);
+}
+
+static void
 check_binary_op (gnc_numeric expected, 
                  gnc_numeric actual, 
-					  gnc_numeric input_a, 
-					  gnc_numeric input_b, 
-					  const char * errmsg)
+                 gnc_numeric input_a, 
+                 gnc_numeric input_b, 
+                 const char * errmsg)
 {
 	char *e = gnc_numeric_print (expected);
 	char *r = gnc_numeric_print (actual);
 	char *a = gnc_numeric_print (input_a);
 	char *b = gnc_numeric_print (input_b);
-	char * str = g_strdup_printf (errmsg, e,r,a,b);
+	char *str = g_strdup_printf (errmsg, e,r,a,b);
 	
 	do_test (gnc_numeric_eq(expected, actual), str);
 	
@@ -208,9 +228,45 @@ check_equality_operator (void)
 	gnc_numeric b = gnc_numeric_create (42, 58);
 	gnc_numeric c = gnc_numeric_create (40, 58);
 	
+	/* Check strict equivalence and non-equivalence */
 	do_test (gnc_numeric_eq(a, a), "expected self-equivalence");
 	do_test (gnc_numeric_eq(a, b), "expected equivalence");
 	do_test (0 == gnc_numeric_eq(a, c), "expected inequivalence");
+
+
+	/* Check common factor elimination (needed for equality checks) */
+	gnc_numeric one = gnc_numeric_create (1,1);
+	gnc_numeric rone = gnc_numeric_create (1000000,1000000);
+	rone = gnc_numeric_reduce (rone);
+	do_test (gnc_numeric_eq(one, rone), "reduce to one");
+
+	gnc_numeric four = gnc_numeric_create (4,1);
+	gnc_numeric rfour = gnc_numeric_create (480,120);
+	rfour = gnc_numeric_reduce (rfour);
+	do_test (gnc_numeric_eq(four, rfour), "reduce to four");
+
+	
+	int i;
+	/* lim keeps denominotor in the range of 2^30 */
+	gint64 lim = RAND_MAX / (1<<15);
+	for (i=0; i<NREPS; i++) 
+	{
+		gint64 deno = rand() / lim;
+		gint64 mult = rand() / lim;
+		gint64 numer = get_random_gint64() / (1<<16);
+
+		gnc_numeric val = gnc_numeric_create (numer, deno);
+		gnc_numeric mval = gnc_numeric_create (numer*mult, deno*mult);
+		
+		/* The reduced version should be equivalent */
+		gnc_numeric bval = gnc_numeric_reduce (val);
+		gnc_numeric rval = gnc_numeric_reduce (mval);
+		check_unary_op (bval, rval, mval, "expected %s = %s = reduce(%s)");
+		
+		/* The unreduced versions should be equal */
+		do_test (gnc_numeric_equal(val, mval), "equal");
+	}
+	
 }
 	
 static void
@@ -257,7 +313,7 @@ check_add_subtract (void)
 
 	/* Add and subtract some random numbers */
 	int i;
-	for (i=0; i<1000; i++)
+	for (i=0; i<NREPS; i++)
 	{
 		gnc_numeric e;
 		gint64 deno = rand() +1;
