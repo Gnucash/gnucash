@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.X\n"
-"POT-Creation-Date: 2000-09-23 01:34-0700\n"
+"POT-Creation-Date: 2000-10-02 00:16-0700\n"
 "PO-Revision-Date: 2000-07-05 15:17+0100\n"
 "Last-Translator: Alessandro Seveso <aleseveso@tiscalinet.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1936,8 +1936,8 @@ msgstr "No"
 
 # messages-i18n.c:305 src/gnome/print-session.c:108
 # src/gnome/print-session.c:197
-#: messages-i18n.c:352 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:352 src/gnome/print-session.c:112
+#: src/gnome/print-session.c:207
 msgid "(none)"
 msgstr "(nessuno)"
 
@@ -4424,12 +4424,12 @@ msgid "window1"
 msgstr "finestra1"
 
 # src/gnome/print-session.c:230
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:241
 msgid "You must select a printer first."
 msgstr "Devi selezionare una stampante."
 
 # messages-i18n.c:47
-#: src/SplitLedger.c:1810
+#: src/SplitLedger.c:1816
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
@@ -4439,7 +4439,7 @@ msgstr ""
 "Sei sicuro di voler terminare?"
 
 # messages-i18n.c:48
-#: src/SplitLedger.c:1840
+#: src/SplitLedger.c:1846
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction.\n"

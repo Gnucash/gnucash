@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.5.0\n"
-"POT-Creation-Date: 2000-09-23 01:34-0700\n"
+"POT-Creation-Date: 2000-10-02 00:16-0700\n"
 "PO-Revision-Date: 2000-08-06 20:43+00:00\n"
 "Last-Translator: Valek Filippov <frob@df.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -1564,8 +1564,8 @@ msgstr "Новый"
 msgid "No"
 msgstr "Нет"
 
-#: messages-i18n.c:352 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:352 src/gnome/print-session.c:112
+#: src/gnome/print-session.c:207
 msgid "(none)"
 msgstr "(нет)"
 
@@ -3595,11 +3595,11 @@ msgstr ""
 msgid "window1"
 msgstr "окно1"
 
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:241
 msgid "You must select a printer first."
 msgstr "Сначала вы должны выбрать принтер."
 
-#: src/SplitLedger.c:1810
+#: src/SplitLedger.c:1816
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
@@ -3610,7 +3610,7 @@ msgstr ""
 "уже существует.\n"
 "Вы уверены, в том что хотите перезаписать его?"
 
-#: src/SplitLedger.c:1840
+#: src/SplitLedger.c:1846
 msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.4.5\n"
-"POT-Creation-Date: 2000-09-23 01:34-0700\n"
+"POT-Creation-Date: 2000-10-02 00:16-0700\n"
 "PO-Revision-Date: 2000-06-01 20:20+0100\n"
 "Last-Translator: Jan-Uwe Finck <Jan-Uwe.Finck@bigfoot.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -525,7 +525,8 @@ msgstr "Gewählte Buchung kopieren"
 
 #: messages-i18n.c:82
 msgid "Enter a 3-letter ISO currency code such as USD (US Dollars)"
-msgstr "Geben sie einen 3-buchstabigen ISO-Währungscode (z.B. EUR für Euro) ein"
+msgstr ""
+"Geben sie einen 3-buchstabigen ISO-Währungscode (z.B. EUR für Euro) ein"
 
 #: messages-i18n.c:83
 msgid "Cut the selected transaction"
@@ -1603,8 +1604,8 @@ msgstr "Neu"
 msgid "No"
 msgstr "Nein"
 
-#: messages-i18n.c:352 src/gnome/print-session.c:111
-#: src/gnome/print-session.c:200
+#: messages-i18n.c:352 src/gnome/print-session.c:112
+#: src/gnome/print-session.c:207
 msgid "(none)"
 msgstr "(kein(e))"
 
@@ -3655,11 +3656,11 @@ msgstr "Zufall"
 msgid "window1"
 msgstr ""
 
-#: src/gnome/print-session.c:233
+#: src/gnome/print-session.c:241
 msgid "You must select a printer first."
 msgstr "Sie müssen erst einen Drucker auswählen"
 
-#: src/SplitLedger.c:1810
+#: src/SplitLedger.c:1816
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing split.\n"
@@ -3668,7 +3669,7 @@ msgstr ""
 "Das Konto ist nicht ausgeglichen.\n"
 "Sind sie sicher, daß sie beenden wollen ?"
 
-#: src/SplitLedger.c:1840
+#: src/SplitLedger.c:1846
 #, fuzzy
 msgid ""
 "You are about to overwrite an existing transaction.\n"
