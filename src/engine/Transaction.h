@@ -245,6 +245,10 @@ char	      xaccTransGetTxnType (Transaction *trans);
  */
 int           xaccTransCountSplits (Transaction *trans);
 
+gboolean      xaccTransHasReconciledSplits (Transaction *trans);
+gboolean      xaccTransHasReconciledSplitsByAccount (Transaction *trans,
+						     Account *account);
+
 /* --------------------------------------------------------------- */
 /* Commmodity routines. Each transaction's 'currency' is by definition
  * the balancing common currency for the splits in that transaction.

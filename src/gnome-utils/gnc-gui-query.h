@@ -49,8 +49,16 @@ gnc_generic_question_dialog(const char **buttons,
 			    const char *format, ...) G_GNUC_PRINTF (2, 3);
 
 extern int
+gnc_generic_question_dialog_parented(GtkWidget *parent, const char **buttons,
+			    const char *format, ...) G_GNUC_PRINTF (3, 4);
+
+extern int
 gnc_generic_warning_dialog(const char **buttons,
 			   const char *format, ...) G_GNUC_PRINTF (2, 3);
+
+extern int
+gnc_generic_warning_dialog_parented(GtkWidget *parent, const char **buttons,
+				    const char *format, ...) G_GNUC_PRINTF (3, 4);
 
 extern int
 gnc_generic_error_dialog(const char **buttons,

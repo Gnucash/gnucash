@@ -743,6 +743,19 @@
 	    </widget>
 
 	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>reinitialize_transaction</name>
+	      <tooltip>Erase all splits except the one for this account.</tooltip>
+	      <signal>
+		<name>activate</name>
+		<handler>gnc_register_reinitialize_trans_cb</handler>
+		<last_modification_time>Wed, 16 Oct 2002 06:27:58 GMT</last_modification_time>
+	      </signal>
+	      <label>Re_initialize Transaction</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
 	      <class>GtkCheckMenuItem</class>
 	      <name>menu_splits</name>
 	      <tooltip>Show all splits in the current transaction</tooltip>
@@ -1372,6 +1385,18 @@
       <last_modification_time>Sat, 15 Jun 2002 07:55:17 GMT</last_modification_time>
     </signal>
     <label>Dup_licate Transaction...</label>
+    <right_justify>False</right_justify>
+  </widget>
+
+  <widget>
+    <class>GtkMenuItem</class>
+    <name>popup_reinitialize</name>
+    <signal>
+      <name>activate</name>
+      <handler>gnc_register_reinitialize_trans_cb</handler>
+      <last_modification_time>Wed, 16 Oct 2002 06:27:31 GMT</last_modification_time>
+    </signal>
+    <label>ReInitialize Transaction</label>
     <right_justify>False</right_justify>
   </widget>
 

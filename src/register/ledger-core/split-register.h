@@ -203,6 +203,13 @@ gboolean
 gnc_split_register_get_split_amount_virt_loc (SplitRegister *reg, Split *split,
                                               VirtualLocation *virt_loc);
 
+/* Given the current virtual location, find the split that anchors
+ * this transaction to the current register. Otherwise, returns NULL.
+ */
+Split *
+gnc_split_register_get_current_trans_split (SplitRegister *reg,
+                                            VirtualCellLocation *vcell_loc);
+
 /* Duplicates either the current transaction or the current split
  *    depending on the register mode and cursor position. Returns the
  *    split just created, or the 'main' split of the transaction just
@@ -231,6 +238,7 @@ void gnc_split_register_delete_current_trans (SplitRegister *reg);
 
 /* Deletes the non-transaction splits associated wih the current
  *    cursor, if both are non-NULL. */
+void gnc_split_register_emtpy_current_trans_except_split  (SplitRegister *reg, Split *split);
 void gnc_split_register_emtpy_current_trans  (SplitRegister *reg);
 
 /* Cancels any changes made to the current cursor, reloads the cursor

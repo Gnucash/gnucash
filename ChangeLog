@@ -1,3 +1,30 @@
+2002-10-25  David Hampton  <hampton@employees.org>
+
+	* src/gnome/window-register.c: Split the transaction delete
+	functionality into two functions. The first deletes a split or
+	transaction, as expected. The second handles what was an odd
+	corner case of the delete command, and removes all splits except
+	for the one attached to the current register. This is now called
+	the "reinitialize" function. (Fixes 85904).
+
+	* src/register/ledger-core/split-register.h: 
+	* src/register/ledger-core/split-register-p.h: Make
+	gnc_split_register_get_current_trans_split() a public function.
+
+	* src/register/ledger-core/split-register.c
+	(gnc_split_register_emtpy_current_trans_except_split): New
+	function that lets you specify which split to keep when
+	reinitializing a transaction.
+
+	* src/gnome-utils/gnc-gui-query.c: Add a couple more variant ways
+	to create a dialog box.  At some point these should all be cleaned
+	up and maybe made a subclass of a gnome dialog.
+
+	* src/register/ledger-core/gnc-regwidget.c:
+	* src/engine/Transaction.c: Move trans_has_reconciled_splits()
+	function from one file to another and rename it
+	xaccTransHasReconciledSplits().
+
 2002-10-24  Christian Stimming  <stimming@tuhh.de>
 
 	* src/gnome/window-acct-tree.c,

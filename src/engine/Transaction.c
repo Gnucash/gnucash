@@ -2675,6 +2675,39 @@ xaccTransCountSplits (Transaction *trans)
    return g_list_length (trans->splits);
 }
 
+gboolean
+xaccTransHasReconciledSplitsByAccount (Transaction *trans, Account *account)
+{
+  GList *node;
+
+  for (node = xaccTransGetSplitList (trans); node; node = node->next)
+  {
+    Split *split = node->data;
+
+    if (account && (xaccSplitGetAccount(split) != account))
+      continue;
+
+    switch (xaccSplitGetReconcile (split))
+    {
+      case YREC:
+      case FREC:
+        return TRUE;
+
+      default:
+        break;
+    }
+  }
+
+  return FALSE;
+}
+
+gboolean
+xaccTransHasReconciledSplits (Transaction *trans)
+{
+  return xaccTransHasReconciledSplitsByAccount (trans, NULL);
+}
+
+
 /********************************************************************\
 \********************************************************************/
 

@@ -1626,32 +1626,6 @@ gnc_transaction_delete_toggle_cb(GtkToggleButton *button, gpointer data)
   gtk_editable_insert_text(GTK_EDITABLE(text), s, strlen(s), &pos);
 }
 
-/* jsled: seems generic enough... should probably be moved to a
- * better/more-generic place. */
-
-static gboolean
-trans_has_reconciled_splits (Transaction *trans)
-{
-  GList *node;
-
-  for (node = xaccTransGetSplitList (trans); node; node = node->next)
-  {
-    Split *split = node->data;
-
-    switch (xaccSplitGetReconcile (split))
-    {
-      case YREC:
-      case FREC:
-        return TRUE;
-
-      default:
-        break;
-    }
-  }
-
-  return FALSE;
-}
-
 typedef enum
 {
   DELETE_TRANS,
@@ -1700,7 +1674,7 @@ gnc_transaction_delete_query (GtkWindow *parent, Transaction *trans)
 
   DeleteType return_value;
 
-  reconciled = trans_has_reconciled_splits (trans);
+  reconciled = xaccTransHasReconciledSplits (trans);
 
   dialog = gnome_dialog_new(_("Delete Transaction"),
                             GNOME_STOCK_BUTTON_OK,
@@ -1876,7 +1850,7 @@ deleteCB(GNCRegWidget *rw, gpointer data)
                               "with reconciled splits!");
     char *buf;
 
-    if (trans_has_reconciled_splits (trans))
+    if (xaccTransHasReconciledSplits (trans))
       buf = g_strconcat (message, "\n\n", recn_warn, NULL);
     else
       buf = g_strdup (message);

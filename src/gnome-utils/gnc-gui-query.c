@@ -513,13 +513,43 @@ gnc_generic_question_dialog(const char **buttons, const gchar *format, ...)
 }
 
 int
-gnc_generic_warning_dialog(const char **buttons, const gchar *format, ...)
+gnc_generic_question_dialog_parented(GtkWidget *parent, const char **buttons,
+				     const gchar *format, ...)
+{
+  int result;
+  va_list args;
+
+  va_start(args, format);
+  result = gnc_generic_dialog_common(parent,
+				     GNOME_MESSAGE_BOX_QUESTION,
+				     buttons, format, args);
+  va_end(args);
+  return(result);
+}
+
+int
+gnc_generic_warning_dialog(const char **buttons, const char *format, ...)
 {
   int result;
   va_list args;
 
   va_start(args, format);
   result = gnc_generic_dialog_common(gnc_ui_get_toplevel(),
+				     GNOME_MESSAGE_BOX_WARNING,
+				     buttons, format, args);
+  va_end(args);
+  return(result);
+}
+
+int
+gnc_generic_warning_dialog_parented(GtkWidget *parent, const char **buttons,
+				    const char *format, ...)
+{
+  int result;
+  va_list args;
+
+  va_start(args, format);
+  result = gnc_generic_dialog_common(parent,
 				     GNOME_MESSAGE_BOX_WARNING,
 				     buttons, format, args);
   va_end(args);

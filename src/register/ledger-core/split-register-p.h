@@ -127,10 +127,6 @@ gnc_split_register_get_trans_split (SplitRegister *reg,
                                     VirtualCellLocation vcell_loc,
                                     VirtualCellLocation *trans_split_loc);
 
-Split *
-gnc_split_register_get_current_trans_split (SplitRegister *reg,
-                                            VirtualCellLocation *vcell_loc);
-
 gboolean gnc_split_register_find_split (SplitRegister *reg,
                                         Transaction *trans, Split *trans_split,
                                         Split *split, CursorClass cursor_class,
