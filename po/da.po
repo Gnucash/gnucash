@@ -1,7 +1,7 @@
 # Danish translation of Gnucash.
 # Copyright (C) 2000 Free Software Foundation, Inc.
 # Kenneth Christiansen <kenneth@gnome.org>, 2000.
-# Keld Simonsen <keld@dkuug.dk>, 2000-2001.
+# Keld Simonsen <keld@dkuug.dk>, 2000-2002.
 # Johnny Ernst Nielsen <j.e.nielsen@iname.com>, 2001.
 # Claus Hindsgaul <claus_h@image.dk>, 2001.
 # Ole Laursen <olau@hardworking.dk>, 2001.
@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.6\n"
-"POT-Creation-Date: 2001-12-16 21:58-0800\n"
-"PO-Revision-Date: 2001-10-24 18:38+0200\n"
+"POT-Creation-Date: 2001-12-08 22:22+0100\n"
+"PO-Revision-Date: 2002-01-16 17:38+0200\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -66,12 +66,12 @@ msgstr ""
 #: src/FileDialog.c:98
 msgid ""
 "This file/URL appears to be from a newer version\n"
-"of GnuCash. You must upgrade your version of GnuCash\n"
+"of GnuCash. You must upgrede your version of GnuCash\n"
 "to work with this data."
 msgstr ""
 "Denne fil/URL ser ud til at være fra en nyere version\n"
 "af GnuCash. Du er nødt til at opgradere GnuCash\n"
-"for at læse denne fil."
+"for at arbejde med disse data."
 
 #: src/FileDialog.c:105
 #, c-format
@@ -186,14 +186,14 @@ msgstr "Ukendt filtype"
 #: src/FileDialog.c:179
 msgid ""
 "This database is from an older version of GnuCash.\n"
-"Do you want to upgrade the database to the current version?"
+"Do you want to upgrede the database to the current version?"
 msgstr ""
 "Denne database er fra en ældre version af GnuCash.\n"
 "Vil du opgradere databasen til den nuværende version?"
 
 #: src/FileDialog.c:186
 msgid ""
-"The SQL database is in use by other users, and the upgrade cannot be "
+"The SQL database is in use by other users, and the upgrede cannot be "
 "performed until they logoff.\n"
 "If there are currently no other users, consult the \n"
 "documentation to learn how to clear out dangling login\n"
@@ -213,12 +213,12 @@ msgid "Changes have been made since the last Save. Save the data to file?"
 msgstr "Der er lavet ændringer siden sidste gemning. Gem dataene i en fil?"
 
 #: src/FileDialog.c:483 src/gnome/dialog-filebox.c:76
-#: src/gnome/window-acct-tree.c:723 src/gnome/window-help.c:627
+#: src/gnome/window-acct-tree.c:733 src/gnome/window-help.c:627
 #: src/gnome/window-reconcile.c:1361
 msgid "Open"
 msgstr "Åbn"
 
-#: src/FileDialog.c:574 src/gnome/window-main.c:1143
+#: src/FileDialog.c:574 src/gnome/window-main.c:1129
 msgid "Save"
 msgstr "Gem"
 
@@ -1027,24 +1027,18 @@ msgstr ""
 "Du skal enten angive en eksisterende national valuta eller angive en anden "
 "type."
 
-#. Base name for the Euro exchange account. The currency
-#. mnemonics get appended, e.g. 'Exchange DEM - EUR'.
-#: src/gnome/druid-euro-conv.c:245
-#, fuzzy
+#: src/gnome/druid-euro-conv.c:205
 msgid "Exchange"
 msgstr "Vekselkurs"
 
-#. Account description for the Euro-related currency exchange accounts.
-#: src/gnome/druid-euro-conv.c:254 src/gnome/druid-euro-conv.c:323
-#: src/gnome/druid-euro-conv.c:344
-#, fuzzy
+#: src/gnome/druid-euro-conv.c:213 src/gnome/druid-euro-conv.c:267
+#: src/gnome/druid-euro-conv.c:286
 msgid "Euro conversion"
-msgstr "Vis version."
+msgstr "Euro-konvertering"
 
-#: src/gnome/druid-euro-conv.c:456
-#, fuzzy
+#: src/gnome/druid-euro-conv.c:391
 msgid "You don't have any accounts of Euroland currencies."
-msgstr "Du har ingen aktiekonti med balancer!"
+msgstr "Du har ingen konti med Euroland-valutaer."
 
 #: src/gnome/druid-qif-import.c:490
 msgid "Select QIF File"
@@ -1299,7 +1293,7 @@ msgstr "31/12/2000"
 msgid "31/12/00"
 msgstr "31/12/00"
 
-#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:744
+#: src/gnome/glade-gnc-dialogs.c:339 src/gnome/window-acct-tree.c:754
 #: src/gnome/window-report.c:677
 msgid "Options"
 msgstr "Indstillinger"
@@ -1630,7 +1624,7 @@ msgid "Add a new entry or subentry"
 msgstr "Tilføj ny række eller delrække"
 
 #: src/gnome/glade-gnc-dialogs.c:1929 src/gnome/glade-gnc-dialogs.c:6393
-#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1353
+#: src/gnome/window-acct-tree.c:775 src/gnome/window-reconcile.c:1353
 #: src/gnome/window-register.c:862
 msgid "Delete"
 msgstr "Slet"
@@ -2236,12 +2230,12 @@ msgid ""
 "\n"
 "Note that GnuCash will be creating many accounts that did not exist on your\n"
 "other personal finance program, including a separate account for each stock\n"
-"you own, separate accounts for the brokerage commissions, special \"Equity"
-"\"\n"
+"you own, separate accounts for the brokerage commissions, special "
+"\"Equity\"\n"
 "accounts (subaccounts of Retained Earnings, by default) which are the "
 "source\n"
-"of your opening balances, etc. All of these accounts will appear on the "
-"next \n"
+"of your opening balances, etc. All of these accounts will appear on the next "
+"\n"
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
@@ -2300,8 +2294,8 @@ msgid ""
 "within GnuCash."
 msgstr ""
 "GnuCash benytter separate indtægts- og udgiftskonti i stedet for kategorier\n"
-"til at klassificere dine transaktioner. Hver af disse kategorier i din QIF-"
-"fil\n"
+"til at klassificere dine transaktioner. Hver af disse kategorier i din "
+"QIF-fil\n"
 "vil blive omsat til en GnuCash-konto. \n"
 "\n"
 "På den næste side vil du få mulighed for at se de foreslåede parringer "
@@ -2355,8 +2349,8 @@ msgstr ""
 "notat-\n"
 "felterne i transaktioner uden QIF-konti eller -kategorier. Som standard\n"
 "bliver disse transaktioner bundet til kontoen 'Uspecificeret' i GnuCash.\n"
-"Hvis du vælger en anden konto, vil dette blive husket for fremtidige QIF-"
-"filer. "
+"Hvis du vælger en anden konto, vil dette blive husket for fremtidige "
+"QIF-filer. "
 
 #: src/gnome/glade-gnc-dialogs.c:4604
 msgid "Match payees/memos to GnuCash accounts"
@@ -2383,8 +2377,8 @@ msgstr ""
 "valuta.\n"
 "Denne begrænsning vil snart blive fjernet fra GnuCash.\n"
 "\n"
-"Vælg den valuta, der skal bruges for transaktioner indlæst fra dine QIF-"
-"filer:\n"
+"Vælg den valuta, der skal bruges for transaktioner indlæst fra dine "
+"QIF-filer:\n"
 
 #: src/gnome/glade-gnc-dialogs.c:4693
 msgid ""
@@ -2449,8 +2443,8 @@ msgid ""
 "On the next page, you will be asked to confirm that an existing transaction\n"
 "matches an imported transaction.  Imported transactions are shown on the\n"
 "left side of the page, and possible  matches for the selected left-hand\n"
-"transaction are shown  to the right.  There may be several old "
-"transactions \n"
+"transaction are shown  to the right.  There may be several old transactions "
+"\n"
 "that could match an imported transaction; you will be able to select the \n"
 "correct one by clicking in the \"Dup?\" column of the correct transaction.\n"
 "\n"
@@ -2462,8 +2456,8 @@ msgstr ""
 "Hvis du indlæser en QIF-fil fra en bank eller anden finansiel institution\n"
 "kan noget af informationen i QIF-filen allerede være til stede i dine "
 "GnuCash-\n"
-"konti. GnuCash vil forsøge at finde dubletter af eksisterende "
-"transaktioner.  \n"
+"konti. GnuCash vil forsøge at finde dubletter af eksisterende transaktioner. "
+" \n"
 "\n"
 "På næste side vil du blive bedt om at bekræfte at en eksisterende "
 "transaktion\n"
@@ -2626,7 +2620,7 @@ msgid "Style sheet template:"
 msgstr "Stilarksskabelon:"
 
 #: src/gnome/glade-gnc-dialogs.c:5949 src/gnome/glade-gnc-dialogs.c:6043
-#: src/gnome/window-acct-tree.c:891
+#: src/gnome/window-acct-tree.c:909
 msgid "Tax Information"
 msgstr "Skatteoplysninger"
 
@@ -2700,8 +2694,8 @@ msgstr "Aktieopdeling"
 #: src/gnome/glade-gnc-dialogs.c:6503
 msgid "This druid will help you record a stock split or stock merger."
 msgstr ""
-"Denne hjælper vil hjælpe dig med at registrere en aktieopsplitning eller -"
-"sammenlægning."
+"Denne hjælper vil hjælpe dig med at registrere en aktieopsplitning eller "
+"-sammenlægning."
 
 #: src/gnome/glade-gnc-dialogs.c:6514
 msgid "Stock Account"
@@ -2711,8 +2705,8 @@ msgstr "Aktiekonto"
 msgid ""
 "Select the account for which you want to record a stock split or merger."
 msgstr ""
-"Vælg den konto, du ønsker at registrere en aktieopsplitning eller -"
-"sammenlægning."
+"Vælg den konto, du ønsker at registrere en aktieopsplitning eller "
+"-sammenlægning."
 
 #: src/gnome/glade-gnc-dialogs.c:6587
 msgid "Stock Split Details"
@@ -2781,8 +2775,8 @@ msgid ""
 "quit without making any changes."
 msgstr ""
 "Tryk \"Afslut\", hvis du har afsluttet oprettelsen af aktieopdeling eller \n"
-"-sammenlægning. Du kan også trykke \"Tilbage\" for at tjekke dine valg "
-"eller \n"
+"-sammenlægning. Du kan også trykke \"Tilbage\" for at tjekke dine valg eller "
+"\n"
 "\"Annullér\" for at afslutte uden at udføre nogen ændringer."
 
 #: src/gnome/glade-gnc-dialogs.c:6896
@@ -2897,7 +2891,7 @@ msgid "Remove prices older than a user-entered date"
 msgstr "Fjern priser, der er ældre end en brugerangivet dato"
 
 #: src/gnome/glade-gnc-dialogs.c:7498 src/gnome/glade-gnc-dialogs.c:7887
-#: src/gnome/window-acct-tree.c:733 src/gnome/window-reconcile.c:1346
+#: src/gnome/window-acct-tree.c:743 src/gnome/window-reconcile.c:1346
 msgid "Edit"
 msgstr "Redigér"
 
@@ -2959,7 +2953,7 @@ msgstr "Vis nationale valutaer"
 
 #: src/gnome/glade-gnc-dialogs.c:7975
 msgid "Euro Conversion Druid"
-msgstr ""
+msgstr "Hjælper for konvertering af euro"
 
 #: src/gnome/glade-gnc-dialogs.c:7976
 msgid ""
@@ -2972,51 +2966,68 @@ msgid ""
 "No changes will be made until you press 'Finish' on the last page\n"
 "of this druid."
 msgstr ""
+"Denne guide vil hjælpe dig med at konvertere dine eksisterende\n"
+"konti til euro-valutaen (EUR).\n"
+"\n"
+"I det følgende vil \"Euroland-valuta\" at betegne\n"
+"de valutaer som erstates med euroen.\n"
+"\n"
+"Ingen ændringer bliver gjort før du trykker \"Færdig\" på den\n"
+"sidste side af denne guide."
 
 #: src/gnome/glade-gnc-dialogs.c:7987
-#, fuzzy
 msgid "Where to create the Euro accounts?"
-msgstr "Opret et nyt kontosæt"
+msgstr "Hvor skal Euro-kontiene oprettes?"
 
 #: src/gnome/glade-gnc-dialogs.c:8003
 msgid ""
-"For each of your Euroland accounts, the druid will create a new EUR "
-"account. \n"
+"For each of your Euroland accounts, the druid will create a new EUR account. "
+"\n"
 "\n"
 "Please choose the place in your account hierarchy where you would\n"
 "like the EUR accounts to be created."
 msgstr ""
+"Guiden vil oprette en ny EUR-konto for enhver af dine konti med "
+"Euroland-valuta.\n"
+"\n"
+"\n"
+"Vælg hvor i kontohierarkiet du ønsker at dine EUR-konti skal oprettes."
 
 #: src/gnome/glade-gnc-dialogs.c:8019
 msgid "Create a new toplevel account hierarchy as a copy of the existing one"
-msgstr ""
+msgstr "Opret et nyt øverste kontohierarki som en kopi af den eksisterende"
 
 #: src/gnome/glade-gnc-dialogs.c:8028
 msgid "Use same toplevel accounts. Create a copy of the rest of the accounts"
-msgstr ""
+msgstr "Brug samme øverste konti. Opret en kopi af de resterende konti"
 
 #: src/gnome/glade-gnc-dialogs.c:8036
 msgid ""
 "Use existing account hierarchy. Create only a copy of those \n"
 "accounts that have no subaccounts"
 msgstr ""
+"Brug eksisterende kontohierarki. Opret kun en kopi af de\n"
+"konti som ikke har nogen underkonti"
 
 #: src/gnome/glade-gnc-dialogs.c:8053
-#, fuzzy
 msgid "How to name the new accounts?"
-msgstr "Lav rapport over disse konti"
+msgstr "Hvilke navne skal de nye konti have?"
 
 #: src/gnome/glade-gnc-dialogs.c:8068
 msgid ""
 "Please choose a naming scheme for the new Euro accounts \n"
 "and the old Euroland accounts."
 msgstr ""
+"Vælg et navngivningsskema for de nye eurokonti\n"
+"og de gamle Euroland-konti."
 
 #: src/gnome/glade-gnc-dialogs.c:8085
 msgid ""
 "The name of each newly created Euro account is copied from\n"
 "the old Euroland account, plus an appended 'EUR'"
 msgstr ""
+"Navnet på hver nyoprettet eurokonto kopieres fra den gamle\n"
+"konto med valuta fra et euroland, med et \"EUR\" i enden"
 
 #: src/gnome/glade-gnc-dialogs.c:8094
 msgid ""
@@ -3025,10 +3036,14 @@ msgid ""
 "The name of the newly created Euro account is copied from the\n"
 "old Euroland account."
 msgstr ""
+"Navnet på hver gammel konto med valuta fra et euroland ændres\n"
+"ved at det respektive valutasymbol for eurolandsvalutaen tilføjes.\n"
+"Navnet på den nyoprettede eurokonto kopieres fra den gamle\n"
+"konto med valuta fra eurolandet."
 
 #: src/gnome/glade-gnc-dialogs.c:8112
 msgid "Finish Euro Conversion"
-msgstr ""
+msgstr "Færdiggør eurokonvertering"
 
 #: src/gnome/glade-gnc-dialogs.c:8113
 msgid ""
@@ -3045,6 +3060,18 @@ msgid ""
 "You may also press 'Back' to review your settings, or 'Cancel'\n"
 "to quit without making any changes."
 msgstr ""
+"Hvis du har gjort dine eurokonverteringsindstillinger færdig\n"
+"trykker du på \"Færdiggør\".\n"
+"\n"
+"Guiden vil derefter gå igennem følgende trin:\n"
+"\n"
+"1. Oprette nye konti ifølge dine indstillinger.\n"
+"2. Oprette nye valutavekslingskonti.\n"
+"3. Veksle alle beløb fra konti med valutaer fra eurolande\n"
+"til deres respektive eurokonto.\n"
+"\n"
+"Du kan også vælga \"Tilbage\" for at undersøge dine indstillinger,\n"
+"eller \"Afbryd\" for at afslutte uden at lave nogen ændringer."
 
 #: src/gnome/glade-support.c:100 src/gnome/glade-support.c:138
 #, c-format
@@ -3308,7 +3335,7 @@ msgid "Name of account view"
 msgstr "Navn på kontovisning"
 
 #: src/gnome/window-acct-tree.c:262 src/gnome/window-acct-tree.c:352
-#: src/gnome/window-acct-tree.c:550
+#: src/gnome/window-acct-tree.c:560
 msgid ""
 "To open an account, you must first\n"
 "choose an account to open."
@@ -3324,12 +3351,12 @@ msgstr ""
 "For at redigere en konto må du først\n"
 "vælge hvilken konto, der skal redigeres.\n"
 
-#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:447
+#: src/gnome/window-acct-tree.c:313 src/gnome/window-acct-tree.c:457
 #, c-format
 msgid "Are you sure you want to delete the %s account?"
 msgstr "Er du sikker på at du ønsker at slette kontoen %s?"
 
-#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:469
+#: src/gnome/window-acct-tree.c:336 src/gnome/window-acct-tree.c:479
 msgid ""
 "To delete an account, you must first\n"
 "choose an account to delete.\n"
@@ -3345,40 +3372,40 @@ msgstr ""
 "Før at afstemme en konto skal du først\n"
 "vælge hvilken konto du vil afstemme."
 
-#: src/gnome/window-acct-tree.c:493 src/gnome/window-acct-tree.c:515
+#: src/gnome/window-acct-tree.c:503 src/gnome/window-acct-tree.c:525
 msgid "You must select an account to check and repair."
 msgstr "Du skal vælge en konto at tjekke og reparere."
 
-#: src/gnome/window-acct-tree.c:724 src/gnome/window-acct-tree.c:823
+#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:833
 msgid "Open the selected account"
 msgstr "Åbn den valgte konto"
 
-#: src/gnome/window-acct-tree.c:734 src/gnome/window-acct-tree.c:839
+#: src/gnome/window-acct-tree.c:744 src/gnome/window-acct-tree.c:849
 msgid "Edit the selected account"
 msgstr "Redigér den valgte konto"
 
-#: src/gnome/window-acct-tree.c:745
+#: src/gnome/window-acct-tree.c:755
 msgid "Edit the account view options"
 msgstr "Redigér kontovisningsvalgene"
 
-#: src/gnome/window-acct-tree.c:755 src/gnome/window-reconcile.c:1339
+#: src/gnome/window-acct-tree.c:765 src/gnome/window-reconcile.c:1339
 msgid "New"
 msgstr "Ny"
 
-#: src/gnome/window-acct-tree.c:756 src/gnome/window-acct-tree.c:873
+#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:891
 #: src/gnome/window-register.c:1457
 msgid "Create a new account"
 msgstr "Opret en ny konto"
 
-#: src/gnome/window-acct-tree.c:766 src/gnome/window-acct-tree.c:881
+#: src/gnome/window-acct-tree.c:776 src/gnome/window-acct-tree.c:899
 msgid "Delete selected account"
 msgstr "Slet den valgte konto"
 
-#: src/gnome/window-acct-tree.c:789
+#: src/gnome/window-acct-tree.c:799
 msgid "Check & Repair A_ccount"
 msgstr "Tjek og reparér konto"
 
-#: src/gnome/window-acct-tree.c:790 src/gnome/window-reconcile.c:1182
+#: src/gnome/window-acct-tree.c:800 src/gnome/window-reconcile.c:1182
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
@@ -3386,11 +3413,11 @@ msgstr ""
 "Tjek og reparér ubalancerede transaktioner og opdelinger uden ejer i denne "
 "konto"
 
-#: src/gnome/window-acct-tree.c:798
+#: src/gnome/window-acct-tree.c:808
 msgid "Check & Repair Su_baccounts"
 msgstr "Tjek og reparér u_nderkonti"
 
-#: src/gnome/window-acct-tree.c:799
+#: src/gnome/window-acct-tree.c:809
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
@@ -3398,11 +3425,11 @@ msgstr ""
 "Tjek og reparér ubalancerede transaktioner og opdelinger uden ejer i denne "
 "konto og dens underkonti"
 
-#: src/gnome/window-acct-tree.c:807
+#: src/gnome/window-acct-tree.c:817
 msgid "Check & Repair A_ll"
 msgstr "Tjek og reparér a_lt"
 
-#: src/gnome/window-acct-tree.c:808
+#: src/gnome/window-acct-tree.c:818
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
@@ -3410,66 +3437,74 @@ msgstr ""
 "Tjek og reparér ubalancerede transaktioner og opdelinger uden ejer i alle "
 "konti"
 
-#: src/gnome/window-acct-tree.c:822 src/gnome/window-reconcile.c:1158
+#: src/gnome/window-acct-tree.c:832 src/gnome/window-reconcile.c:1158
 msgid "_Open Account"
 msgstr "_Åbn konto"
 
-#: src/gnome/window-acct-tree.c:830
+#: src/gnome/window-acct-tree.c:840
 msgid "Open S_ubaccounts"
 msgstr "Åbn _underkonti"
 
-#: src/gnome/window-acct-tree.c:831
+#: src/gnome/window-acct-tree.c:841
 msgid "Open the selected account and all its subaccounts"
 msgstr "Åbn den valgte konto og alle dens underkonti"
 
-#: src/gnome/window-acct-tree.c:838 src/gnome/window-reconcile.c:1165
+#: src/gnome/window-acct-tree.c:848 src/gnome/window-reconcile.c:1165
 #: src/gnome/window-register.c:1422
 msgid "_Edit Account"
 msgstr "_Redigér konto"
 
-#: src/gnome/window-acct-tree.c:847 src/gnome/window-register.c:1431
+#: src/gnome/window-acct-tree.c:857 src/gnome/window-register.c:1431
 msgid "_Reconcile..."
 msgstr "_Afstem..."
 
-#: src/gnome/window-acct-tree.c:848
+#: src/gnome/window-acct-tree.c:858
 msgid "Reconcile the selected account"
 msgstr "Afstem den valgte konto"
 
-#: src/gnome/window-acct-tree.c:855 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:865 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:1439
 msgid "_Transfer..."
 msgstr "_Overfør..."
 
-#: src/gnome/window-acct-tree.c:856 src/gnome/window-reconcile.c:1173
+#: src/gnome/window-acct-tree.c:866 src/gnome/window-reconcile.c:1173
 #: src/gnome/window-register.c:908 src/gnome/window-register.c:1440
 msgid "Transfer funds from one account to another"
 msgstr "Overfør beløb fra en konto til en anden"
 
-#: src/gnome/window-acct-tree.c:863 src/gnome/window-register.c:1447
+#: src/gnome/window-acct-tree.c:873 src/gnome/window-register.c:1447
 msgid "Stock S_plit..."
 msgstr "Aktieo_psplitning..."
 
-#: src/gnome/window-acct-tree.c:864 src/gnome/window-register.c:1448
+#: src/gnome/window-acct-tree.c:874 src/gnome/window-register.c:1448
 msgid "Record a stock split or a stock merger"
 msgstr "Registrér en aktieopsplitning eller -sammenlægning"
 
-#: src/gnome/window-acct-tree.c:872 src/gnome/window-register.c:1456
+#: src/gnome/window-acct-tree.c:881
+msgid "_Euro Conversion..."
+msgstr "_Eurokonvertering..."
+
+#: src/gnome/window-acct-tree.c:882
+msgid "Do the Euro conversion of the account hierarchy"
+msgstr "Konvertér kontohierarkiet til euro"
+
+#: src/gnome/window-acct-tree.c:890 src/gnome/window-register.c:1456
 msgid "_New Account..."
 msgstr "_Ny konto..."
 
-#: src/gnome/window-acct-tree.c:880
+#: src/gnome/window-acct-tree.c:898
 msgid "_Delete Account"
 msgstr "_Slet konto"
 
-#: src/gnome/window-acct-tree.c:887 src/gnome/window-reconcile.c:1181
+#: src/gnome/window-acct-tree.c:905 src/gnome/window-reconcile.c:1181
 msgid "_Check & Repair"
 msgstr "_Tjek og reparér"
 
-#: src/gnome/window-acct-tree.c:892
+#: src/gnome/window-acct-tree.c:910
 msgid "Setup tax information for all income and expense accounts"
 msgstr "Angiv skatteoplysninger for alle indtægts- og udgiftskonti"
 
-#: src/gnome/window-acct-tree.c:903 src/gnome/window-reconcile.c:1233
+#: src/gnome/window-acct-tree.c:921 src/gnome/window-reconcile.c:1233
 #: src/gnome/window-register.c:1583
 msgid "_Account"
 msgstr "_Konto"
@@ -3523,7 +3558,7 @@ msgstr "Udskriv"
 msgid "Print Help window"
 msgstr "Vis hjælpevindue"
 
-#: src/gnome/window-help.c:656 src/gnome/window-main.c:1153
+#: src/gnome/window-help.c:656 src/gnome/window-main.c:1139
 #: src/gnome/window-register.c:837 src/gnome/window-register.c:1376
 msgid "Close"
 msgstr "Luk"
@@ -3556,7 +3591,7 @@ msgstr "Der opstod en fejl under gemning af filen."
 msgid "Select \"Exit\" to exit GnuCash."
 msgstr "Vælg \"Exit\" for at afslutte GnuCash."
 
-#: src/gnome/window-main.c:916
+#: src/gnome/window-main.c:910
 msgid ""
 "The GnuCash personal finance manager.\n"
 "The GNU way to manage your money!"
@@ -3564,149 +3599,139 @@ msgstr ""
 "GnuCash personlige økonomiværktøj.\n"
 "En GNU måde at håndtere dine penge på!"
 
-#: src/gnome/window-main.c:973
+#: src/gnome/window-main.c:967
 msgid "New _File"
 msgstr "Ny _fil"
 
-#: src/gnome/window-main.c:974
+#: src/gnome/window-main.c:968
 msgid "Create a new file"
 msgstr "Opret en ny fil"
 
-#: src/gnome/window-main.c:981
+#: src/gnome/window-main.c:975
 msgid "Export Accounts..."
 msgstr "Eksportér konti..."
 
-#: src/gnome/window-main.c:982
+#: src/gnome/window-main.c:976
 msgid "Export the account hierarchy to a new file"
 msgstr "Eksportér kontohierakiet til en ny fil"
 
-#: src/gnome/window-main.c:990
+#: src/gnome/window-main.c:984
 msgid "Import QIF..."
 msgstr "Indlæs QIF..."
 
-#: src/gnome/window-main.c:991
+#: src/gnome/window-main.c:985
 msgid "Import a Quicken QIF file"
 msgstr "Indlæs en Quicken QIF-fil"
 
-#: src/gnome/window-main.c:999
+#: src/gnome/window-main.c:993
 msgid "New _Account Tree"
 msgstr "Nyt _kontotræ"
 
-#: src/gnome/window-main.c:1000
+#: src/gnome/window-main.c:994
 msgid "Open a new account tree view"
 msgstr "Åbn en ny kontotræs-visning"
 
-#: src/gnome/window-main.c:1007
+#: src/gnome/window-main.c:1001
 msgid "Move to New Window"
 msgstr "Flyt til nyt vindue"
 
-#: src/gnome/window-main.c:1008
+#: src/gnome/window-main.c:1002
 msgid "Open a new top-level GnuCash window for the current view"
 msgstr "Åbn et nyt topniveau GnuCash-vindue med den aktuelle visning"
 
-#: src/gnome/window-main.c:1014
+#: src/gnome/window-main.c:1008
 msgid "Close _Window"
 msgstr "Luk _vindue"
 
-#: src/gnome/window-main.c:1015 src/gnome/window-main.c:1154
+#: src/gnome/window-main.c:1009 src/gnome/window-main.c:1140
 msgid "Close the current notebook page"
 msgstr "Gem den aktuelle notesbogsside"
 
-#: src/gnome/window-main.c:1027
+#: src/gnome/window-main.c:1021
 msgid "_Preferences..."
 msgstr "_Indstillinger..."
 
-#: src/gnome/window-main.c:1028
+#: src/gnome/window-main.c:1022
 msgid "Open the global preferences dialog"
 msgstr "Åbn det globale indstillingsvindue"
 
-#: src/gnome/window-main.c:1040
+#: src/gnome/window-main.c:1034
 msgid "_General Ledger"
 msgstr "_Hovedbog"
 
-#: src/gnome/window-main.c:1041
+#: src/gnome/window-main.c:1035
 msgid "Open a general ledger window"
 msgstr "Åbn et hovedbogsvindue"
 
-#: src/gnome/window-main.c:1048
+#: src/gnome/window-main.c:1042
 msgid "Commodity _Editor"
 msgstr "Varer_edigering"
 
-#: src/gnome/window-main.c:1049
+#: src/gnome/window-main.c:1043
 msgid "View and edit the commodities for stocks and mutual funds"
 msgstr "Vis og ændr varerne for aktier og investeringsbeviser"
 
-#: src/gnome/window-main.c:1056
+#: src/gnome/window-main.c:1050
 msgid "_Price Editor"
 msgstr "_Prisredigering"
 
-#: src/gnome/window-main.c:1057
+#: src/gnome/window-main.c:1051
 msgid "View and edit the prices for stocks and mutual funds"
 msgstr "Vis og ændr priserne på aktier og investeringsbeviser"
 
-#: src/gnome/window-main.c:1064
+#: src/gnome/window-main.c:1058
 msgid "Financial _Calculator"
 msgstr "Finans_lommeregner"
 
-#: src/gnome/window-main.c:1065
+#: src/gnome/window-main.c:1059
 msgid "Use the financial calculator"
 msgstr "Brug finanslommeregneren"
 
-#: src/gnome/window-main.c:1071
+#: src/gnome/window-main.c:1065
 msgid "_Find Transactions"
 msgstr "_Find transaktioner"
 
-#: src/gnome/window-main.c:1072 src/gnome/window-register.c:917
+#: src/gnome/window-main.c:1066 src/gnome/window-register.c:917
 msgid "Find transactions with a search"
 msgstr "Find transaktioner med en søgning"
 
-#: src/gnome/window-main.c:1079
-#, fuzzy
-msgid "_Euro Conversion..."
-msgstr "Vis version."
-
-#: src/gnome/window-main.c:1080
-#, fuzzy
-msgid "Do the Euro conversion of the account hierarchy"
-msgstr "Udsæt afstemningen af denne konto"
-
-#: src/gnome/window-main.c:1092
+#: src/gnome/window-main.c:1078
 msgid "_Manual"
 msgstr "_Manual"
 
-#: src/gnome/window-main.c:1093
+#: src/gnome/window-main.c:1079
 msgid "Open the GnuCash Manual"
 msgstr "Åbn GnuCash Manualen"
 
-#: src/gnome/window-main.c:1100
+#: src/gnome/window-main.c:1086
 msgid "_Tips Of The Day"
 msgstr "Dagens _tips"
 
-#: src/gnome/window-main.c:1101
+#: src/gnome/window-main.c:1087
 msgid "View the Tips of the Day"
 msgstr "Vis dagens Tip"
 
-#: src/gnome/window-main.c:1120
+#: src/gnome/window-main.c:1106
 msgid "_Tools"
 msgstr "_Værktøj"
 
-#: src/gnome/window-main.c:1121
+#: src/gnome/window-main.c:1107
 msgid "_Settings"
 msgstr "_Indstillinger"
 
-#: src/gnome/window-main.c:1122
+#: src/gnome/window-main.c:1108
 msgid "_Windows"
 msgstr "_Vinduer"
 
-#: src/gnome/window-main.c:1144
+#: src/gnome/window-main.c:1130
 msgid "Save the file to disk"
 msgstr "Gem filen på disk"
 
-#: src/gnome/window-main.c:1169
+#: src/gnome/window-main.c:1155
 msgid "Exit"
 msgstr "Afslut"
 
-#: src/gnome/window-main.c:1170
+#: src/gnome/window-main.c:1156
 msgid "Exit GnuCash"
 msgstr "Afslut GnuCash"
 
@@ -5758,8 +5783,8 @@ msgid ""
 "Don't popup the new account list dialog when you choose \"New File\" from "
 "the \"File\" menu"
 msgstr ""
-"Vis ikke vinduet for ny kontoliste, når du vælger \"Ny Fil\" fra \"Fil\"-"
-"menuen"
+"Vis ikke vinduet for ny kontoliste, når du vælger \"Ny Fil\" fra "
+"\"Fil\"-menuen"
 
 #: src/scm/guile-strings.c:394
 msgid "Verbose documentation"
@@ -7580,8 +7605,8 @@ msgid ""
 "WARNING: There are duplicate TXF codes assigned to some accounts. Only TXF "
 "codes with payer sources may be repeated."
 msgstr ""
-"ADVARSEL: Identiske TXF-koder er angivet for forskellige konti. Kun TXF-"
-"koder med betaler-kilder kan gentages."
+"ADVARSEL: Identiske TXF-koder er angivet for forskellige konti. Kun "
+"TXF-koder med betaler-kilder kan gentages."
 
 #: src/scm/report/guile-strings.c:559
 msgid "Sub-"
@@ -7630,8 +7655,8 @@ msgid ""
 "No Tax Related accounts were found.  Go to the Accounts->Tax Information "
 "dialog to set up tax-related accounts."
 msgstr ""
-"Ingen skatterelaterede konti blev fundet. Gå til vinduet Konti-"
-">Skatteoplysninger for at oprette skatterelaterede konti."
+"Ingen skatterelaterede konti blev fundet. Gå til vinduet "
+"Konti->Skatteoplysninger for at oprette skatterelaterede konti."
 
 #: src/scm/report/guile-strings.c:571
 msgid "Tax Report / TXF Export"
