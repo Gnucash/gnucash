@@ -533,13 +533,18 @@ gnc_ui_refresh_tree()
 {
   GtkCTree     *ctree;
   GtkCTreeNode *parent;
+  AccountGroup *accts;
   
   parent = gtk_object_get_data(GTK_OBJECT(app), "ctree_parent");
   ctree  = gtk_object_get_data(GTK_OBJECT(app), "ctree");
 
+  accts = gncGetCurrentGroup();
+
   gtk_clist_freeze(GTK_CLIST(ctree));
    
   gtk_ctree_pre_recursive(ctree, parent, (GtkCTreeFunc)tree_set_row_text, NULL);
+
+  gnc_ui_acct_ctree_fill(ctree, parent, accts);
 
   gtk_clist_thaw(GTK_CLIST(ctree));
   gtk_clist_columns_autosize(GTK_CLIST(ctree));  
