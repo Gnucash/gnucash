@@ -33,6 +33,7 @@
 #include <string.h>  
 #include <sys/types.h>  
 #include <unistd.h>  
+#include <langinfo.h>
 
 #include <libpq-fe.h>  
 
@@ -1929,7 +1930,9 @@ pgend_session_begin (Backend *backend,
          p = be->buff; *p =0;
          p = stpcpy (p, "CREATE DATABASE ");
          p = stpcpy (p, be->dbName);
-         p = stpcpy (p, ";");
+         p = stpcpy (p, " WITH ENCODING = '");
+	 p = stpcpy (p, nl_langinfo(CODESET));
+         p = stpcpy (p, "';");
          SEND_QUERY (be,be->buff, );
          FINISH_QUERY(be->connection);
          PQfinish (be->connection);

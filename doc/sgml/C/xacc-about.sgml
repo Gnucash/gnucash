@@ -234,6 +234,14 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
 </glossentry>
 
 <glossentry>
+<glossterm><email>andreas@andreas.org</email> Andreas
+      Bogk</glossterm>
+<glossdef>
+<para>Postgres backend patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>bojsen@worldnet.att.net</email> Per
       Bojsen</glossterm>
 <glossdef>
