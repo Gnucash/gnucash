@@ -37,6 +37,8 @@ of the features of GnuCash are:
     supported, as well as currency trading accounts.
     Note this is still broken in many ways...
   - Quicken File Import. Import Quicken QIF files.
+  - Reports. Display Balance, Profit&Loss reports,
+    or print them in HTML form.
 
 Advanced Features
 -----------------
