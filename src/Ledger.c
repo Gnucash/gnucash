@@ -56,12 +56,11 @@ LedgerDestroy (BasicRegister *reg)
    /* be sure to destroy the "blank split" */
    if (reg->user_hook) {
       Split *split;
-      Account * acc;
 
       split = (Split *) (reg->user_hook);
 
-      acc = xaccSplitGetAccount (split);
-      xaccAccountRemoveSplit (acc, split);
+      /* split destroy will automatically remove it
+       * from its parent account */
       xaccSplitDestroy (split);
       reg->user_hook = NULL;
    }
