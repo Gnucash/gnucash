@@ -29,7 +29,7 @@
 
 #include "top-level.h"
 #include "window-help.h"
-#include "messages_i18n.h"
+#include "messages.h"
 #include "print-session.h"
 #include "ui-callbacks.h"
 #include "glade-cb-gnc-dialogs.h"
@@ -45,13 +45,13 @@ gnc_ui_print_preview_create(PrintSession * ps) {
   ppd->pc = 
     gnome_print_preview_new (GNOME_CANVAS(ppd->canvas), 
                              ps->paper);
-  
+
   gtk_object_set_data(GTK_OBJECT(ppd->toplevel), "print_preview_struct",
                       ppd);
 
   gnome_print_meta_render_from_object(GNOME_PRINT_CONTEXT(ppd->pc),
                                       GNOME_PRINT_META(ppd->session->meta)); 
-  
+
   gnome_print_context_close(GNOME_PRINT_CONTEXT(ppd->pc));
   gtk_widget_show_all(ppd->toplevel);
 
@@ -88,16 +88,16 @@ gnc_ui_print_dialog_create(PrintSession * ps) {
 
   pcd->toplevel = create_Print_Dialog();
   pcd->session  = ps;
-  
+
   pcd->paper_entry = gtk_object_get_data(GTK_OBJECT(pcd->toplevel),
                                          "paper_entry");
 
   pcd->printer_entry = gtk_object_get_data(GTK_OBJECT(pcd->toplevel),
                                            "printer_entry");
-  
+
   gtk_object_set_data(GTK_OBJECT(pcd->toplevel), "print_struct",
                       pcd);
-  
+
   if(ps->printer->driver) {
     if(ps->printer->filename) {
       printer_string = g_strdup_printf("(%s) %s",
