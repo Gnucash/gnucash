@@ -448,13 +448,16 @@ SplitRegister * xaccMallocSplitRegister (int type)
 {								\
    BasicCell *hcell;						\
    hcell = xaccMallocTextCell();				\
-   header->widths[NAME##_CELL_C] = NAME##_CELL_W;		\
-   if (1 == reg->num_header_rows) {				\
-      header->cells[0][NAME##_CELL_C] = hcell;			\
-   } else {							\
-      header->cells[NAME##_CELL_R][NAME##_CELL_C] = hcell;	\
-   }								\
    xaccSetBasicCellValue (hcell, reg->labels[NAME##_CELL]);	\
+								\
+   if ((0<=NAME##_CELL_R) && (0<=NAME##_CELL_C)) {		\
+      header->widths[NAME##_CELL_C] = NAME##_CELL_W;		\
+      if (1 == reg->num_header_rows) {				\
+         header->cells[0][NAME##_CELL_C] = hcell;		\
+      } else {							\
+         header->cells[NAME##_CELL_R][NAME##_CELL_C] = hcell;	\
+      }								\
+   }								\
 }
    
 /* BASIC & FANCY macros initialize cells in the register */
@@ -465,15 +468,17 @@ SplitRegister * xaccMallocSplitRegister (int type)
 
 
 #define FANCY(CN,CT,CL) {					\
-   /* reg->CN##Cell = xaccMalloc##CT##Cell(); */		\
-   curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
-   curs->cells [CL##_CELL_R][CL##_CELL_C] = &(reg->CN##Cell->cell);\
+   if ((0<=CL##_CELL_R) && (0<=CL##_CELL_C)) {			\
+      curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
+      curs->cells [CL##_CELL_R][CL##_CELL_C] = &(reg->CN##Cell->cell);\
+   }								\
 }
 
 #define BASIC(CN,CT,CL) {					\
-   /* reg->CN##Cell = xaccMalloc##CT##Cell(); */	 	\
-   curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
-   curs->cells [CL##_CELL_R][CL##_CELL_C] = reg->CN##Cell;	\
+   if ((0<=CL##_CELL_R) && (0<=CL##_CELL_C)) {			\
+      curs->widths[CL##_CELL_C] = CL##_CELL_W;			\
+      curs->cells [CL##_CELL_R][CL##_CELL_C] = reg->CN##Cell;	\
+   }								\
 }
    
 /* ============================================== */
