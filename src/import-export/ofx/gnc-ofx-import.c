@@ -91,8 +91,8 @@ void gnc_file_ofx_import (void)
   ofx_INFO_msg = true;
   ofx_STATUS_msg = false;
 
-  gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE);
-  DEBUG("gnc_file_ofx_import(): Begin...\n");
+  gnc_set_log_level(MOD_IMPORT, GNC_LOG_TRACE);
+  ENTER(" ");
 
   default_dir = gnc_lookup_string_option("__paths", "Import OFX", NULL);
   if (default_dir == NULL)
