@@ -1,3 +1,8 @@
+2004-11-01  Christian Stimming  <stimming@tuhh.de>
+
+	* src/gnome/dialog-find-transactions.c: Mark search criteria for
+	translation -- somehow this had been missed all the time.
+
 2004-10-31  Derek Atkins  <derek@ihtfp.com>
 
 	* Neil Williams' QOF Book Merge Patch #2.
