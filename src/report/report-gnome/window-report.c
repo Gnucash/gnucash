@@ -43,11 +43,15 @@
 #include "gnc-gui-query.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
+#include "gnc-plugin-page.h"
 #include "gnc-report.h"
+#include "gnc-main-window.h"
 #include "gnc-ui.h"
 #include "option-util.h"
 #include "window-report.h"
 #include "guile-mappings.h"
+
+#include "gnc-plugin-page-report.h"
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
@@ -235,18 +239,37 @@ gnc_report_window_create_child(const gchar * configstring)
 void
 gnc_main_window_open_report(int report_id, gint toplevel)
 {
+
+  GncMainWindow *mainWin;
+  GncPluginPage *reportPage;
+
+  mainWin = GNC_MAIN_WINDOW( gnc_ui_get_toplevel() );
+  reportPage = gnc_plugin_page_report_new( report_id );
+  gnc_main_window_open_page( mainWin, reportPage );
+
+#if 0
   // [+JSLED] id_name=[id=1]
   // [+JSLED] url: gnc-report:id=1
   char * id_name = g_strdup_printf("id=%d", report_id);  
   char * child_name = gnc_build_url (URL_TYPE_REPORT, id_name, NULL);
   g_free (id_name);
   gnc_main_window_open_report_url(child_name, toplevel);
+#endif /* 0 */
 }
-
 
 void
 gnc_main_window_open_report_url(const char * url, gint toplevel)
 {
+  GncMainWindow *mainWin;
+  GncPluginPage *reportPage;
+
+  printf( "report url: [%s]\n", url );
+
+  mainWin = GNC_MAIN_WINDOW( gnc_ui_get_toplevel() );
+  reportPage = gnc_plugin_page_report_new( 42 /* url? */ );
+  gnc_main_window_open_page( mainWin, reportPage );
+
+#if 0 
   GnomeMDIChild * reportchild = gnc_report_window_create_child(url);
   GNCMDIInfo   * maininfo = gnc_mdi_get_current();
   
@@ -266,6 +289,7 @@ gnc_main_window_open_report_url(const char * url, gint toplevel)
     if (childwin && childwin->app && GTK_WIDGET (childwin->app)->window)
       gdk_window_raise (GTK_WIDGET (childwin->app)->window);
   }
+#endif /* 0 */
 }
 
 
@@ -620,16 +644,16 @@ gnc_report_window_option_change_cb(gpointer data)
   }
 }
 
-/********************************************************************
- * gnc_report_window_load_cb
- * called after a report is loaded into the gnc_html widget 
- ********************************************************************/
-
 static void
 gnc_report_window_refresh (gpointer data)
 {
   gnc_mdi_child_refresh (data);
 }
+
+/********************************************************************
+ * gnc_report_window_load_cb
+ * called after a report is loaded into the gnc_html widget 
+ ********************************************************************/
 
 static void 
 gnc_report_window_load_cb(gnc_html * html, URLType type, 
