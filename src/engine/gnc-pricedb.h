@@ -54,7 +54,6 @@
 
 */
 
-
 /* *********************************************************************/ 
 
 /** GNCPrice:
@@ -358,5 +357,18 @@ gboolean gnc_pricedb_equal (GNCPriceDB *db1, GNCPriceDB *db2);
 void gnc_price_print(GNCPrice *db, FILE *f, int indent);
 void gnc_pricedb_print_contents(GNCPriceDB *db, FILE *f);
 
-#endif
+
+/** @name Price Parameter Names
+ *  For use with QofQuery
+ */
+/**@{*/
+#define PRICE_COMMODITY  "price-commodity"
+#define PRICE_CURRENCY   "price-currency"
+#define PRICE_DATE       "price-date"
+#define PRICE_SOURCE     "price-source"
+#define PRICE_TYPE       "price-type"
+#define PRICE_VALUE      "price-value"
+/**@}*/
+
+#endif /* GNC_PRICEDB_H */
 /** @} */

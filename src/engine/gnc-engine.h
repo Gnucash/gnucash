@@ -58,6 +58,7 @@
 #define GNC_ID_NULL           QOF_ID_NULL
 
 #define GNC_ID_ACCOUNT        "Account"
+#define GNC_ID_COMMODITY      "Commodity"
 #define GNC_ID_COMMODITY_TABLE "CommodityTable"
 #define GNC_ID_FREQSPEC       "FreqSpec"
 #define GNC_ID_GROUP          "AccountGroup"
@@ -70,12 +71,6 @@
 #define GNC_ID_SXTT           "SXTT"
 #define GNC_ID_TRANS          "Trans"
                                                                                 
-
-                                                                                
-
-
-
-
 /* TYPES **********************************************************/
 
 /** @brief Account in Gnucash. 
