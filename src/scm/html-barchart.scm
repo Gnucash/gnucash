@@ -316,7 +316,7 @@
 	  (if (gnc:html-barchart-stacked? barchart)
             (push "  <param name=\"stacked\" value=\"1\">\n"))
           (push "Unable to push bar chart\n")
-          (push "</object>"))
+          (push "</object> &nbsp;\n"))
         " ")
     retval))
 

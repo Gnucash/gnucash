@@ -1,3 +1,31 @@
+2001-03-28  Bill Gribble  <grib@billgribble.com>
+
+	* src/gnome/dialog-column-view.c: set the view dirty on edit
+
+	* src/gnome/dialog-style-sheet.c: dirty every report using a
+	stylesheet when it's edited.
+
+	* src/gnome/window-report.c: Add display register/unregister for
+	reports so the reports know which report-windows they are being
+	displayed in.
+	
+	* src/scm/html-{bar,pie}chart.scm: Add a little space to work
+	around a gtkhtml-0.8.3 bug in table display
+
+	* src/scm/html-document.scm: move tree collapse and
+	stringification to the html document rather than the report.  Add
+	functions to render just the body elements of a document.
+
+	* src/scm/html-table.scm: fix broken html-table-set-cell! 
+
+	* src/scm/report.scm: add parents list to report struct.  Mark
+	parents dirty when report is marked dirty.  reload windows showing
+	a report on dirty.  Clean up rendering functions a little
+
+	* src/scm/report/view-column.scm: Add a link to open each report
+	in a window by itself.  Change rendering to allow children to be
+	cached.
+	
 2001-03-28  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-tax-info.c: more work

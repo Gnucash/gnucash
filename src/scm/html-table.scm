@@ -376,14 +376,13 @@
     ;; ensure the row-data is there 
     (if (>= row l)
 	(begin
-	  (do 
-	      (i l (+ i 1)) 
-	      ((< i row) #f)
-	    (gnc:html-document-append-row! table '()))
-	  (set! rowdata (make-list (+ col 1) #f))
-	  (gnc:html-document-append-row! table rowdata)
-	  (set! l (gnc:html-table-num-rows))
-	  (set! row-loc (- (- l 1) row)))
+          (let loop ((i l))
+	    (gnc:html-table-append-row! table (list))
+            (if (< i row)
+                (loop (+ i 1))))
+          (set! l (gnc:html-table-num-rows table))
+	  (set! row-loc (- (- l 1) row))
+          (set! rowdata (list)))
 	(begin
 	  (set! row-loc (- (- l 1) row))
 	  (set! rowdata (list-ref (gnc:html-table-data table) row-loc))))
@@ -391,12 +390,13 @@
     ;; make a table-cell and set the data 
     (let ((tc (gnc:make-html-table-cell)))
       (apply gnc:html-table-cell-append-objects! tc objects)
-      (set! rowdata (list-set-safe! rowdata col tc)))
-    
-    ;; add the row-data back to the table 
-    (gnc:html-table-set-data! 
-     table
-     (list-set-safe! (gnc:html-table-data table) row-loc rowdata))))
+      (set! rowdata (list-set-safe! rowdata col tc))
+      
+      ;; add the row-data back to the table 
+      (gnc:html-table-set-data! 
+       table (list-set-safe! 
+              (gnc:html-table-data table) 
+              row-loc rowdata)))))
 
 (define (gnc:html-table-append-column! table newcol)
   (define (maxwidth table-data)

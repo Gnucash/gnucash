@@ -116,9 +116,13 @@ gnc_column_view_select_contents_cb(GtkCList * clist, gint row, gint col,
 }
 
 static void
-gnc_column_view_edit_apply_cb(GNCOptionWin * win, gpointer user_data) {
-  gnc_column_view_edit * r = user_data;
-  gnc_option_db_commit(r->odb);
+gnc_column_view_edit_apply_cb(GNCOptionWin * w, gpointer user_data) {
+  SCM  dirty_report = gh_eval_str("gnc:report-set-dirty?!");
+  gnc_column_view_edit * win = user_data;
+  
+  if(!win) return;
+  gnc_option_db_commit(win->odb);
+  gh_call2(dirty_report, win->view, SCM_BOOL_T);
 }
 
 static void
@@ -201,6 +205,7 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
   gnc_column_view_edit * r = 
     gtk_object_get_data(GTK_OBJECT(user_data), "view_edit_struct");
   SCM make_report = gh_eval_str("gnc:make-report");
+  SCM add_child = gh_eval_str("gnc:report-add-child-by-id!");
   SCM template_name;
   SCM set_value = gh_eval_str("gnc:option-set-value");
   SCM new_report;
@@ -214,6 +219,8 @@ gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {
     template_name = gh_list_ref(r->available_list, 
                                 gh_int2scm(r->available_selected));
     new_report = gh_call1(make_report, template_name);
+    gh_call2(add_child, r->view, new_report);
+    
     oldlength = gh_length(r->contents_list);
     
     if(oldlength > r->contents_selected) {

@@ -45,9 +45,11 @@ struct ss_info {
 
 static void
 gnc_style_sheet_options_apply_cb(GNCOptionWin * propertybox,
-                                        gpointer user_data) {
+                                 gpointer user_data) {
   struct ss_info * ssi = (struct ss_info *)user_data;
+  SCM    apply_changes = gh_eval_str("gnc:html-style-sheet-apply-changes");
   gnc_option_db_commit(ssi->odb);
+  gh_call1(apply_changes, ssi->stylesheet);
 }
 
 

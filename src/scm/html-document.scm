@@ -92,13 +92,29 @@
               (apply gnc:make-html-markup-style-info rest)))
     (gnc:html-style-table-set! (gnc:html-document-style doc) tag newstyle)))
 
+(define (gnc:html-document-tree-collapse tree)
+  (let ((retval '()))
+    (define (do-list list)
+      (for-each
+       (lambda (elt)
+         (if (string? elt)
+             (set! retval (cons elt retval))
+             (if (not (list? elt))
+                 (set! retval
+                       (cons (with-output-to-string 
+                               (lambda () (display elt)))
+                             retval))
+                 (do-list elt))))
+       list))
+    (do-list tree)
+    retval))
 
 (define (gnc:html-document-render doc) 
   (let ((stylesheet (gnc:html-document-style-sheet doc)))
     (if stylesheet 
         ;; if there's a style sheet, let it do the rendering 
         (gnc:html-style-sheet-render stylesheet doc)
-     
+        
         ;; otherwise, do the trivial render. 
         (let* ((retval '())
                (push (lambda (l) (set! retval (cons l retval)))))
@@ -128,7 +144,33 @@
           (push "</html>\n")
           (gnc:html-document-pop-style doc)
           (gnc:html-style-table-uncompile (gnc:html-document-style doc))
-          retval))))
+          
+          (apply string-append 
+                 (gnc:html-document-tree-collapse retval))))))
+
+(define (gnc:html-document-render-body doc) 
+  ;; this is a q&d render with no HTML, HEAD, or BODY tags, ignoring
+  ;; the style sheet.  things *can* be pushed though.
+  (let* ((retval '())
+         (push (lambda (l) (set! retval (cons l retval)))))
+    ;; compile the doc style 
+    (gnc:html-style-table-compile (gnc:html-document-style doc)
+                                  (gnc:html-document-style-stack doc))
+    ;; push it 
+    (gnc:html-document-push-style doc (gnc:html-document-style doc))
+    
+    ;; now render the children
+    (for-each-in-order 
+     (lambda (child) 
+       (push (gnc:html-object-render child doc)))
+     (gnc:html-document-objects doc))
+    
+    (gnc:html-document-pop-style doc)
+    (gnc:html-style-table-uncompile (gnc:html-document-style doc))
+    
+    (apply string-append 
+           (gnc:html-document-tree-collapse retval))))
+
 
 (define (gnc:html-document-push-style doc style)
   (gnc:html-document-set-style-stack! 

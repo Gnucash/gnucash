@@ -79,20 +79,22 @@
          ;; hash is an attempt to compute how many columnc are
          ;; actually used in a row; items with non-1 rowspans will take
          ;; up cells in the row without actually being in the row.
-         (let* ((report (gnc:find-report (car report-info)))
+         (let* ((subreport (gnc:find-report (car report-info)))
                 (colspan (cadr report-info))
                 (rowspan (caddr report-info))
-                (template (hash-ref *gnc:_report-templates_*
-                                    (gnc:report-type report)))
-                (renderer (gnc:report-template-renderer template))
-                (report-doc (renderer report))
-                (report-style (gnc:html-document-style report-doc))
-                (report-objects (gnc:html-document-objects report-doc))
+                (toplevel-cell (gnc:make-html-table-cell/size rowspan colspan))
                 (report-table (gnc:make-html-table))
-                (contents-cell
-                 (apply gnc:make-html-table-cell report-objects))
-                (toplevel-cell 
-                 (gnc:make-html-table-cell/size rowspan colspan)))
+                (contents-cell (gnc:make-html-table-cell)))
+
+           ;; set the report's style properly ... this way it will
+           ;; also get marked as dirty when the stylesheet is edited.
+           (gnc:report-set-stylesheet! 
+            subreport (gnc:report-stylesheet report))
+           
+           ;; render the report body ... hopefully this will DTRT
+           ;; and cache when it's ok to cache.
+           (gnc:html-table-cell-append-objects! 
+            contents-cell (gnc:report-render-body subreport))
            
            ;; increment the alloc number for each occupied row
            (let loop ((row current-row-num))
@@ -103,26 +105,27 @@
                (if (< (- row current-row-num) rowspan)
                    (loop (+ 1 row)))))
            
-           (gnc:html-table-cell-set-style-internal! 
-            contents-cell report-style)
-           
            (gnc:html-table-cell-set-style!
             toplevel-cell "td"
             'attribute (list "valign" "top")
             'inheritable? #f)
            
            ;; put the report in the contents-cell 
-           (gnc:html-table-append-row! 
-            report-table (list contents-cell))
+           (gnc:html-table-append-row! report-table (list contents-cell))
            
-           ;; and a parameter editor 
+           ;; and a parameter editor link
            (gnc:html-table-append-row!
             report-table 
             (list (gnc:make-html-text 
                    (gnc:html-markup-anchor
                     (sprintf #f "gnc-options:report-id=%a" (car report-info))
-                    "Edit Options"))))
-
+                    "Edit Options")
+                   "&nbsp;"
+                   (gnc:html-markup-anchor
+                    (sprintf #f "gnc-report:id=%a" (car report-info))
+                    "Single Report"))))
+           
+           
            ;; add the report-table to the toplevel-cell
            (gnc:html-table-cell-append-objects!
             toplevel-cell report-table)

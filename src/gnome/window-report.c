@@ -188,6 +188,11 @@ gnc_report_window_set_fwd_button(gnc_report_window * win, int enabled) {
   gtk_widget_set_sensitive(win->fwd_widg, enabled);
 }
 
+void
+gnc_report_window_reload(gnc_report_window * win) {
+  gnc_html_reload(win->html);
+}
+
 
 /********************************************************************
  * gnc_report_window_load_cb
@@ -203,6 +208,9 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   SCM  find_report = gh_eval_str("gnc:find-report");
   SCM  get_options = gh_eval_str("gnc:report-options");
   SCM  get_editor  = gh_eval_str("gnc:report-options-editor");
+  SCM  show_report = gh_eval_str("gnc:report-register-display");
+  SCM  unshow_report = gh_eval_str("gnc:report-unregister-display");
+  SCM  scm_wintype = gh_eval_str("<gnc:report-window*>");
   SCM  inst_report;
   SCM  inst_options;
   SCM  inst_options_ed;
@@ -220,6 +228,13 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
      SCM_BOOL_F) {
     return;
   }
+
+  /* unregister ourselves as a "displayer" of the current report */
+  if(win->scm_report != SCM_BOOL_F) {
+    gh_call2(unshow_report, win->scm_report, 
+             gw_wcp_assimilate_ptr(win, scm_wintype));
+  }
+
   inst_options    = gh_call1(get_options, inst_report); 
   inst_options_ed = gh_call1(get_editor, inst_report);
   
@@ -234,6 +249,11 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   scm_unprotect_object(win->scm_report);
   win->scm_report = inst_report;
   scm_protect_object(win->scm_report);
+
+  if(win->scm_report != SCM_BOOL_F) {
+    gh_call2(show_report, win->scm_report, 
+             gw_wcp_assimilate_ptr(win, scm_wintype));
+  }
 
   if(gnc_html_history_forward_p(gnc_html_get_history(win->html))) {
     gnc_report_window_set_fwd_button(win, TRUE); 
@@ -258,7 +278,13 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
 static void
 gnc_report_window_destroy_cb(GtkWidget * w, gpointer data) {
   gnc_report_window * win = data;
-  SCM scm_wintype = gh_eval_str("<gnc:report-window*>");
+  SCM  scm_wintype = gh_eval_str("<gnc:report-window*>");
+  SCM  unshow_report = gh_eval_str("gnc:report-unregister-display");
+
+  if(win->scm_report != SCM_BOOL_F) {
+    gh_call2(unshow_report, win->scm_report, 
+             gw_wcp_assimilate_ptr(win, scm_wintype));
+  }
 
   /* make sure we don't get a double dose -o- destruction */ 
   gtk_signal_disconnect_by_data(GTK_OBJECT(win->container), 

@@ -36,6 +36,7 @@ typedef struct _gnc_report_window gnc_report_window;
 gnc_report_window * gnc_report_window_new(GtkWidget * container);
 void       gnc_report_window_destroy(gnc_report_window * rep);
 void       gnc_report_window_show_report(gnc_report_window * rw, int id);
+void       gnc_report_window_reload(gnc_report_window * rw);
 gnc_html   * gnc_report_window_get_html(gnc_report_window * rw);
 
 void       gnc_report_window_default_params_editor(SCM options, SCM report);

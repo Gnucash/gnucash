@@ -258,7 +258,7 @@
                 (push legend-3)
                 (push "\">\n")))
           (push "Unable to display pie chart\n")
-          (push "</object>"))
+          (push "</object> &nbsp;\n"))
         " ")
     retval))
 

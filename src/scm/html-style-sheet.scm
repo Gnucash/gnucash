@@ -163,6 +163,19 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  html-style-sheet-apply-changes 
+;;  when options have been changed, rerun relevant reports 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (gnc:html-style-sheet-apply-changes ss)
+  (hash-fold 
+   (lambda (report-name report prior)
+     (if (eq? (gnc:report-stylesheet report) ss)
+         (gnc:report-set-dirty?! report #t))
+     #t) #t *gnc:_reports_*))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  html-style-sheet-render 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -189,10 +202,9 @@
      newdoc (gnc:html-document-style doc))
     
     ;; render the ssdocument (using the trivial stylesheet).  since
-    ;; the objects from 'doc' are now in ssdoc, this renders the whole
+    ;; the objects from 'doc' are now in newdoc, this renders the whole
     ;; package.
     (gnc:html-document-render newdoc)))
-
 
 (define (gnc:get-html-style-sheets)
   (let* ((ss '()))

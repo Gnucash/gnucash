@@ -53,11 +53,13 @@
                  (sprintf #f (_ "Display the %s report") name)
                  (list "_Reports" "")
                  (lambda ()
-                   (let ((rept (gnc:make-report
-                                (gnc:report-template-name report))))
-                     (gnc:report-in-main-window rept)))))
+                   (gnc:backtrace-if-exception 
+                    (lambda ()
+                      (let ((rept (gnc:make-report
+                                   (gnc:report-template-name report))))
+                        (gnc:report-in-main-window rept)))))))
           (gnc:add-extension item))))
-
+  
   ;; add the menu option to edit style sheets 
   (gnc:add-extension menu)
   (gnc:add-extension
@@ -156,7 +158,9 @@
           options))))
 
 (define <report> 
-  (make-record-type "<report>" '(type id options children dirty? ctext)))
+  (make-record-type "<report>" 
+                    '(type id options parents children 
+                           dirty? display-list ctext)))
 
 (define gnc:report-type 
   (record-accessor <report> 'type))
@@ -179,18 +183,59 @@
 (define gnc:report-children 
   (record-accessor <report> 'children))
 
+(define gnc:report-set-parents!
+  (record-modifier <report> 'parents))
+
+(define gnc:report-parents 
+  (record-accessor <report> 'parents))
+
 (define gnc:report-set-children!
   (record-modifier <report> 'children))
 
 (define (gnc:report-add-child! report child)
-  (gnc:report-set-children! report 
-                            (cons child (gnc:report-children report))))
+  (gnc:report-add-parent! child report)
+  (gnc:report-set-children! 
+   report (cons child (gnc:report-children report))))
+
+(define (gnc:report-add-child-by-id! report child)
+  (let ((childrep (gnc:find-report child)))
+    (if childrep
+        (begin 
+          (gnc:report-add-parent! childrep report)
+          (gnc:report-set-children! 
+           report (cons childrep (gnc:report-children report)))))))
+
+(define (gnc:report-add-parent! report parent)
+  (gnc:report-set-parents! 
+   report (cons parent (gnc:report-parents report))))
 
 (define gnc:report-dirty? 
   (record-accessor <report> 'dirty?))
 
-(define gnc:report-set-dirty?!
+(define gnc:report-set-dirty?-internal!
   (record-modifier <report> 'dirty?))
+
+(define (gnc:report-set-dirty?! report val)
+  (gnc:report-set-dirty?-internal! report val)
+  (if val 
+      (begin 
+        ;; mark the parents as dirty 
+        (for-each 
+         (lambda (parent)
+           (gnc:report-set-dirty?! parent val))
+         (gnc:report-parents report))
+
+        ;; reload the window 
+        (for-each 
+         (lambda (win)
+           (gnc:report-window-reload win))
+         (gnc:report-display-list report)))))
+
+(define gnc:report-display-list 
+  (record-accessor <report> 'display-list))
+
+(define gnc:report-set-display-list!
+  (record-modifier <report> 'display-list))
 
 (define gnc:report-ctext 
   (record-accessor <report> 'ctext))
@@ -198,8 +243,24 @@
 (define gnc:report-set-ctext!
   (record-modifier <report> 'ctext))
 
+(define (gnc:report-register-display report window)
+  (if (and window report)
+      (if (not (member window (gnc:report-display-list report)))
+          (gnc:report-set-display-list! 
+           report 
+           (cons window (gnc:report-display-list report))))))
+  
+(define (gnc:report-unregister-display report window)
+  (if (and window report)
+      (if (member window (gnc:report-display-list report))
+          (gnc:report-set-display-list! 
+           report 
+           (delete window (gnc:report-display-list report))))))
+  
+
 (define (gnc:make-report template-name . rest)
-  (let ((r ((record-constructor <report>) template-name #f #f '() #t #f))
+  (let ((r ((record-constructor <report>) 
+            template-name #f #f '() '() #t '() #f))
         (template (hash-ref *gnc:_report-templates_* template-name))
         (id *gnc:_report-next-serial_*))
     (gnc:report-set-id! r id)
@@ -231,8 +292,24 @@
   (gnc:option-value
    (gnc:lookup-option (gnc:report-options report)
                       (N_ "General") (N_ "Report name"))))
-   
 
+(define (gnc:report-stylesheet report)
+  (gnc:html-style-sheet-find 
+   (symbol->string (gnc:option-value
+                    (gnc:lookup-option 
+                     (gnc:report-options report)
+                     (N_ "General") 
+                     (N_ "Stylesheet"))))))
+
+(define (gnc:report-set-stylesheet! report stylesheet)
+  (gnc:option-set-value
+   (gnc:lookup-option 
+    (gnc:report-options report)
+    (N_ "General") 
+    (N_ "Stylesheet"))
+   (string->symbol 
+    (gnc:html-style-sheet-name stylesheet))))
+  
 ;;; (define (gnc:report-default-options-editor)
 ;;;   (let* ((option-db #f)
 ;;;          (option-dlg #f))
@@ -274,23 +351,6 @@
 (define (gnc:find-report id) 
   (hash-ref *gnc:_reports_* id))
 
-(define (gnc:report-tree-collapse tree)
-  (let ((retval '()))
-    (define (do-list list)
-      (for-each
-       (lambda (elt)
-         (if (string? elt)
-             (set! retval (cons elt retval))
-             (if (not (list? elt))
-                 (set! retval
-                       (cons (with-output-to-string 
-                               (lambda () (display elt)))
-                             retval))
-                 (do-list elt))))
-       list))
-    (do-list tree)
-    retval))
-
 (define (gnc:backtrace-if-exception proc . args)
   (define (dumper key . args)
     (let ((stack (make-stack #t dumper)))
@@ -307,50 +367,70 @@
    (lambda (key . args)
      #f)))
 
+
+(define (gnc:report-render-html report)
+  (if (and (not (gnc:report-dirty? report))
+           (gnc:report-ctext report))
+      ;; if there's clean cached text, return it 
+      (begin 
+        (gnc:report-ctext report))
+      
+      ;; otherwise, rerun the report 
+      (let ((template (hash-ref *gnc:_report-templates_* 
+                                (gnc:report-type report))))
+        (if template
+            (let* ((renderer (gnc:report-template-renderer template))
+                   (stylesheet (gnc:report-stylesheet report))
+                   (doc (renderer report))
+                   (html #f))
+              (gnc:html-document-set-style-sheet! doc stylesheet)
+              (set! html (gnc:html-document-render doc))
+              (gnc:report-set-ctext! report html)
+              (gnc:report-set-dirty?! report #f)              
+              html)
+            #f))))
+
+;; render the body of the report document (ignoring style sheet)
+(define (gnc:report-render-body report)
+  (if (and (not (gnc:report-dirty? report))
+           (gnc:report-ctext report))
+      ;; if there's clean cached text, return it 
+      (begin 
+        (gnc:report-ctext report))
+      
+      ;; otherwise, rerun the report 
+      (let ((template (hash-ref *gnc:_report-templates_* 
+                                (gnc:report-type report))))
+        (if template
+            (let* ((renderer (gnc:report-template-renderer template))
+                   (stylesheet (gnc:report-stylesheet report))
+                   (doc (renderer report))
+                   (html #f))
+              
+              (gnc:html-document-push-style 
+               doc (gnc:html-style-sheet-style stylesheet))
+              (set! html (gnc:html-document-render-body doc))
+              (gnc:report-set-ctext! report html)
+              (gnc:report-set-dirty?! report #f)              
+              html)
+            #f))))
+
+
 (define (gnc:report-run id)
   (gnc:backtrace-if-exception 
    (lambda ()
      (let ((report (gnc:find-report id))
-           (start-time (gettimeofday)))
+           (start-time (gettimeofday))
+           (html #f))
        (if report
-           (if (and (not (gnc:report-dirty? report))
-                    (gnc:report-ctext report))
-               ;; if there's clean cached text, return it 
-               (begin 
-                 (gnc:report-ctext report))
-               
-               ;; otherwise, rerun the report 
-               (let ((template (hash-ref *gnc:_report-templates_* 
-                                         (gnc:report-type report))))
-                 (if template
-                     (let* ((renderer (gnc:report-template-renderer template))
-                            (stylesheet-name
-                             (symbol->string (gnc:option-value
-                                              (gnc:lookup-option 
-                                               (gnc:report-options report)
-                                               (N_ "General") 
-                                               (N_ "Stylesheet")))))
-                            (stylesheet 
-                             (gnc:html-style-sheet-find stylesheet-name))
-                            (doc (renderer report))
-                            (html #f)
-                            (formlist #f)
-                            (collapsed-list #f))
-                       
-                       (gnc:html-document-set-style-sheet! doc stylesheet)
-                       (set! formlist (gnc:html-document-render doc))
-                       (set! collapsed-list 
-                             (gnc:report-tree-collapse formlist))
-                       (set! html (apply string-append collapsed-list))
-                       (gnc:report-set-ctext! report html)
-                       (gnc:report-set-dirty?! report #f)
-                       
-                       (display "total time to run report: ")
-                       (display (gnc:time-elapsed start-time (gettimeofday)))
-                       (newline)
-
-                       html)
-                     #f)))
+           (begin 
+             (set! html (gnc:report-render-html report))
+             (display "total time to run report: ")
+             (display (gnc:time-elapsed start-time (gettimeofday)))
+             (newline)
+             html)
            #f)))))
-
+              
 (gnc:hook-add-dangler gnc:*main-window-opened-hook* gnc:report-menu-setup)
+
+
