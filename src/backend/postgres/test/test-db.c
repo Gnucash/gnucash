@@ -223,30 +223,21 @@ test_updates (GNCSession *session, const char *db_name, const char *mode,
                      db_name, mode))
     return FALSE;
 
-  /*  make_random_changes_to_session (session); */
+  /* make_random_changes_to_session (session); */
   {
     Account *account;
+    Account *new_account;
+    AccountGroup *group;
+    GList *list;
 
-    account = xaccGroupGetAccount (gnc_book_get_group (gnc_session_get_book (session)), 0);
+    group = gnc_book_get_group (gnc_session_get_book (session));
+    list = xaccGroupGetSubAccounts (group);
 
-    if (account)
-    {
-      xaccAccountBeginEdit (account);
+    account = g_list_last (list)->data;
 
-      switch (xaccAccountGetType (account))
-      {
-        case BANK:
-          xaccAccountSetType (account, CHECKING);
-          break;
-        default:
-          xaccAccountSetType (account, BANK);
-          break;
-      }
+    new_account = get_random_account (session);
 
-      xaccAccountCommitEdit (account);
-    }
-    else
-      failure ("no account");
+    xaccAccountInsertSubAccount (account, new_account);
   }
 
   if (!multi_user)
@@ -343,8 +334,10 @@ test_mode (const char *db_name, const char *mode,
 static void
 run_test (void)
 {
+#if 1
   if (!test_mode ("single_file", "single-file", FALSE, FALSE))
     return;
+#endif
 
   if (!test_mode ("single_update", "single-update", TRUE, FALSE))
     return;
@@ -356,7 +349,7 @@ guile_main (int argc, char **argv)
   gnc_module_system_init ();
   gnc_module_load ("gnucash/engine", 0);
 
-  /*  g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING); */
+  /* g_log_set_always_fatal (G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING); */
 
   glist_exclude_type (KVP_TYPE_BINARY);
   glist_exclude_type (KVP_TYPE_GLIST);
@@ -385,6 +378,5 @@ int
 main (int argc, char ** argv)
 {
   gh_enter (argc, argv, guile_main);
-
   return 0;
 }
