@@ -16,6 +16,7 @@
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
 #include "gncObject.h"
+#include "QueryCore.h"
 #include "QueryObject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"

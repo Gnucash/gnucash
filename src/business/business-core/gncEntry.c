@@ -15,6 +15,7 @@
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
 #include "GNCIdP.h"
+#include "QueryCore.h"
 #include "QueryObject.h"
 #include "gnc-be-utils.h"
 
