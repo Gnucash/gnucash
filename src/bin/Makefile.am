@@ -1,17 +1,30 @@
 
 bin_SCRIPTS = gnucash-env gnucash gnucash-run-script gnucash-make-guids
 
+gncoverridedir = ${GNC_LIBEXECDIR}/script-override
+gncoverride_SCRIPTS = guile
+
 EXTRA_DIST = \
   .cvsignore \
   gnucash-env \
   gnucash.in \
+  guile.in \
   gnucash-make-guids.in \
   gnucash-run-script.in
 
 ## We borrow guile's convention and use @-...-@ as the substitution
-## brackets here, instead of the usual @...@.  This prevents autoconf
+## brackets below, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
+
+guile: guile.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+	    -e 's:@-GUILE-@:${GUILE}:'
+	mv $@.tmp $@
+BUILT_SOURCES = guile
+CLEANFILES = guile
+
 gnucash-run-script: gnucash-run-script.in
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
@@ -43,7 +56,8 @@ gnucash-env: gnucash-env.in
 	    -e 's:@-GNC_SCM_INSTALL_DIR-@:${GNC_SCM_INSTALL_DIR}:g' \
 	    -e 's:@-GNC_LIBDIR-@:${GNC_LIBDIR}:g' \
 	    -e 's:@-GNC_MODULE_DIR-@:${GNC_MODULE_DIR}:g' \
-            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g'
+            -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:g' \
+            -e 's:@-GNC_SCRIPT_OVERRIDE_DIR-@:${gncoverridedir}:g'
 	mv $@.tmp $@
 	chmod u+x $@
 BUILT_SOURCES += gnucash-env
