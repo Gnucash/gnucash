@@ -14,6 +14,8 @@ typedef struct _payment_window PaymentWindow;
 
 /* Create a payment window */
 PaymentWindow * gnc_ui_payment_new (GncOwner *owner, GNCBook *book);
+PaymentWindow * gnc_ui_payment_new_with_value (GncOwner *owner, GNCBook *book,
+					       gnc_numeric initial_payment);
 
 /* Destroy a payment window */
 void gnc_ui_payment_window_destroy (PaymentWindow *pw);

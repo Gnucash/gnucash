@@ -556,8 +556,19 @@ gnc_entry_ledger_compute_value (GncEntryLedger *ledger,
   disc_type = gnc_entry_ledger_get_type (ledger, ENTRY_DISTYPE_CELL);
   disc_how = gnc_entry_ledger_get_type (ledger, ENTRY_DISHOW_CELL);
 
+  /* Bills dont have discounts */
+  if (ledger->type == GNCENTRY_BILL_ENTRY ||
+      ledger->type == GNCENTRY_BILL_VIEWER)
+  {
+    g_assert (gnc_numeric_zero_p (discount));
+    disc_type = GNC_AMT_TYPE_VALUE;
+    disc_how = GNC_DISC_PRETAX;
+  }
+
+
   /* If we're so early in the process that we don't have info, stop now */
-  if (disc_type < 0 || disc_how < 0) {
+  if (disc_type < 0 || disc_how < 0)
+  {
     if (value)
       *value = gnc_numeric_zero ();
     if (tax_value)

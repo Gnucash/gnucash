@@ -4,6 +4,16 @@
 	* src/business/dialog-tax-table/tax-tables.glade
 		make resizable; increase default account-tree size
 
+	* fix bug #93333
+	* business-gnome/dialog-payment.[ch] --add API to create the payment
+	  dialog with an initial value
+	* business-gnome/dialog-invoice.c -- call the new payment API when
+	  you try to pay an invoice from the invoice window or the invoice
+	  search results.
+
+	* business-ledger/gncEntryLedger.c -- fix vendor bills to print
+	  subtotals properly on the current-line.
+	
 2002-09-15  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_mark): Fix

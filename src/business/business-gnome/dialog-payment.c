@@ -355,7 +355,7 @@ find_handler (gpointer find_data, gpointer user_data)
 }
 
 static PaymentWindow *
-new_payment_window (GncOwner *owner, GNCBook *book)
+new_payment_window (GncOwner *owner, GNCBook *book, gnc_numeric initial_payment)
 {
   PaymentWindow *pw;
   GladeXML *xml;
@@ -406,6 +406,7 @@ new_payment_window (GncOwner *owner, GNCBook *book)
   gtk_box_pack_start (GTK_BOX (box), pw->amount_edit, TRUE, TRUE, 0);
   gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_edit),
 					 TRUE);
+  gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_edit), initial_payment);
 
   box = glade_xml_get_widget (xml, "date_box");
   pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
@@ -461,7 +462,8 @@ gnc_ui_payment_window_destroy (PaymentWindow *pw)
 }
 
 PaymentWindow *
-gnc_ui_payment_new (GncOwner *owner, GNCBook *book)
+gnc_ui_payment_new_with_value (GncOwner *owner, GNCBook *book,
+			       gnc_numeric initial_payment)
 {
   GncOwner owner_def;
 
@@ -474,6 +476,12 @@ gnc_ui_payment_new (GncOwner *owner, GNCBook *book)
     owner = &owner_def;
   }
 
-  return new_payment_window (owner, book);
+  return new_payment_window (owner, book, initial_payment);
+}
+
+PaymentWindow *
+gnc_ui_payment_new (GncOwner *owner, GNCBook *book)
+{
+  return gnc_ui_payment_new_with_value (owner, book, gnc_numeric_zero());
 }
 

@@ -658,10 +658,14 @@ void gnc_invoice_window_billterm_cb (GtkWidget *widget, gpointer data)
 void gnc_invoice_window_payment_cb (GtkWidget *widget, gpointer data)
 {
   InvoiceWindow *iw = data;
+  GncInvoice *invoice = iw_get_invoice(iw);
+  GNCLot *lot = gncInvoiceGetPostedLot (invoice);
+  gnc_numeric val = gnc_numeric_abs (gnc_lot_get_balance (lot));
+
   if (gncOwnerGetJob (&iw->job))
-    gnc_ui_payment_new (&iw->job, iw->book);
+    gnc_ui_payment_new_with_value (&iw->job, iw->book, val);
   else
-    gnc_ui_payment_new (&iw->owner, iw->book);
+    gnc_ui_payment_new_with_value (&iw->owner, iw->book, val);
 }
 
 /* Sorting callbacks */
@@ -1872,6 +1876,8 @@ pay_invoice_cb (gpointer *invoice_p, gpointer user_data)
 {
   struct _invoice_select_window *sw = user_data;
   GncInvoice *invoice;
+  GNCLot *lot;
+  gnc_numeric val;
 
   g_return_if_fail (invoice_p && user_data);
 
@@ -1880,7 +1886,9 @@ pay_invoice_cb (gpointer *invoice_p, gpointer user_data)
   if (!invoice)
     return;
 
-  gnc_ui_payment_new (gncInvoiceGetOwner (invoice), sw->book);
+  lot = gncInvoiceGetPostedLot (invoice);
+  val = gnc_numeric_abs (gnc_lot_get_balance (lot));
+  gnc_ui_payment_new_with_value (gncInvoiceGetOwner (invoice), sw->book, val);
 }
 
 static gpointer
