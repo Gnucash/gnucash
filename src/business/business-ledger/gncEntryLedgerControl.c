@@ -461,33 +461,14 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
    */
 
   /* Ok, we are changing lines and the current entry has
-   * changed. See what the user wants to do. */
+   * changed. We only ask them what they want to do in
+   * limited cases -- usually just let the change go through.
+   */
   {
     const char *message;
 
     switch (ledger->type) {
     case GNCENTRY_INVOICE_ENTRY:
-      {
-	gboolean inv_value;
-	gboolean only_inv_changed = FALSE;
-
-	if (changed == 1 &&
-	    gnc_table_layout_get_cell_changed (ledger->table->layout,
-					       ENTRY_INV_CELL, TRUE))
-	  only_inv_changed = TRUE;
-
-	inv_value = gnc_entry_ledger_get_checkmark (ledger, ENTRY_INV_CELL);
-
-	if (inv_value && only_inv_changed) {
-	  /* If the only change is that the 'inv' entry was clicked
-	   * "on", then just accept the change it without question.
-	   */
-	  result = GNC_VERIFY_YES;
-	  goto dontask;
-	}
-      }
-      /* Ok, something else has changed -- we should ask the user */
-
       if (gncEntryGetOrder (entry) != NULL) {
 	message = _("The current entry has been changed.\n"
 		    "However, this entry is part of an existing order.\n"
@@ -495,11 +476,11 @@ static gboolean gnc_entry_ledger_traverse (VirtualLocation *p_new_virt_loc,
 		    "effectively change your order?");
 	break;
       }
+
       /* FALLTHROUGH */
     default:
-      message = _("The current entry has been changed.\n"
-		  "Would you like to record the change?");
-      break;
+      result = GNC_VERIFY_YES;
+      goto dontask;
     }
 
     result = gnc_verify_cancel_dialog_parented (ledger->parent,

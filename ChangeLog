@@ -18,6 +18,11 @@
 	* src/business/business-gnome/dialog-invoice.c: fix an assertion
 	  failure -- don't try to set the to_charge_amount value unless
 	  we're in a VIEW/EDIT invoice.
+
+	* src/business/business-ledger/gncEntryLedgerControl.c:
+	  Don't ask the user in the general case when making changes
+	  to entries.  Generally the user should be allowed to make
+	  whatever changes they want without being pestered.
 	
 2003-04-01  Christian Stimming  <stimming@tuhh.de>
 
