@@ -67,6 +67,8 @@ struct _GNCReconcileList
 
   Account *account;
   Query *query;
+
+  GNCReconcileList *sibling;
 };
 
 struct _GNCReconcileListClass

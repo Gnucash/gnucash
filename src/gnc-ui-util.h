@@ -73,8 +73,15 @@ char * gnc_ui_account_get_field_value_string (Account *account,
 /* Must g_free string when done */
 char * gnc_ui_account_get_tax_info_string (Account *account);
 
+gnc_numeric gnc_ui_convert_balance_to_currency(gnc_numeric balance,
+                                               gnc_commodity *balance_currency,
+                                               gnc_commodity *currency);
+
 gnc_numeric gnc_ui_account_get_balance (Account *account,
                                         gboolean include_children);
+
+gnc_numeric gnc_ui_account_get_reconciled_balance(Account *account, gboolean include_children);
+gnc_numeric gnc_ui_account_get_balance_as_of_date (Account *account, time_t date, gboolean use_shares, gboolean include_children);
 
 const char * gnc_get_reconcile_str (char reconciled_flag);
 

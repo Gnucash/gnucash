@@ -203,6 +203,64 @@ gnc_account_get_balance_in_currency (Account *account,
   return balance;
 }
 
+gnc_numeric
+gnc_ui_convert_balance_to_currency(gnc_numeric balance, gnc_commodity *balance_currency, gnc_commodity *currency)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  GNCPrice *price;
+
+  if (gnc_numeric_zero_p (balance) ||
+      gnc_commodity_equiv (currency, balance_currency))
+    return balance;
+
+  book = gncGetCurrentBook ();
+  pdb = gnc_book_get_pricedb (book);
+
+  price = gnc_pricedb_lookup_latest (pdb, balance_currency, currency);
+  if (!price)
+    return gnc_numeric_zero ();
+
+  balance = gnc_numeric_mul (balance, gnc_price_get_value (price),
+                             gnc_commodity_get_fraction (currency),
+                             GNC_RND_ROUND);
+
+  gnc_price_unref (price);
+
+  return balance;
+}
+
+static gnc_numeric
+gnc_account_get_reconciled_balance_in_currency (Account *account,
+                                     gnc_commodity *currency)
+{
+  GNCBook *book;
+  GNCPriceDB *pdb;
+  GNCPrice *price;
+  gboolean has_shares;
+  gnc_numeric balance;
+  GNCAccountType atype;
+  gnc_commodity *balance_currency;
+
+  if (!account || !currency)
+    return gnc_numeric_zero ();
+
+  atype = xaccAccountGetType (account);
+  has_shares = (atype == STOCK || atype == MUTUAL || atype == CURRENCY);
+
+  if (has_shares)
+  {
+    balance = xaccAccountGetShareReconciledBalance (account);
+    balance_currency = xaccAccountGetSecurity (account);
+  }
+  else
+  {
+    balance = xaccAccountGetReconciledBalance (account);
+    balance_currency = xaccAccountGetCurrency (account);
+  }
+
+  return gnc_ui_convert_balance_to_currency (balance, balance_currency, currency);
+}
 
 typedef struct
 {
@@ -218,6 +276,21 @@ balance_helper (Account *account, gpointer data)
   gnc_numeric balance;
 
   balance = gnc_account_get_balance_in_currency (account, cb->currency);
+
+  cb->balance = gnc_numeric_add (cb->balance, balance,
+                                 gnc_commodity_get_fraction (cb->currency),
+                                 GNC_RND_ROUND);
+
+  return NULL;
+}
+
+static gpointer
+reconciled_balance_helper (Account *account, gpointer data)
+{
+  CurrencyBalance *cb = data;
+  gnc_numeric balance;
+
+  balance = gnc_account_get_reconciled_balance_in_currency (account, cb->currency);
 
   cb->balance = gnc_numeric_add (cb->balance, balance,
                                  gnc_commodity_get_fraction (cb->currency),
@@ -258,6 +331,86 @@ gnc_ui_account_get_balance (Account *account, gboolean include_children)
   return balance;
 }
 
+gnc_numeric
+gnc_ui_account_get_reconciled_balance (Account *account,
+                                       gboolean include_children)
+{
+  gnc_numeric balance;
+  gnc_commodity *currency;
+
+  if (account == NULL)
+    return gnc_numeric_zero ();
+
+  currency = xaccAccountGetCurrency (account);
+
+  balance = gnc_account_get_reconciled_balance_in_currency (account, currency);
+
+  if (include_children)
+  {
+    AccountGroup *children;
+    CurrencyBalance cb = { currency, balance };
+
+    children = xaccAccountGetChildren (account);
+
+    xaccGroupForEachAccount (children, reconciled_balance_helper, &cb, TRUE);
+
+    balance = cb.balance;
+  }
+
+  /* reverse sign if needed */
+  if (gnc_reverse_balance (account))
+    balance = gnc_numeric_neg (balance);
+
+  return balance;
+}
+
+gnc_numeric
+gnc_ui_account_get_balance_as_of_date (Account *account, time_t date,
+                                       gboolean use_shares,
+                                       gboolean include_children)
+{
+  gnc_numeric balance;
+  gnc_commodity *currency;
+
+  if (account == NULL)
+    return gnc_numeric_zero ();
+
+  currency = xaccAccountGetCurrency (account);
+  balance = use_shares ?
+                         xaccAccountGetBalanceAsOfDate (account, date)
+                       : xaccAccountGetShareBalanceAsOfDate (account, date);
+
+  if (include_children)
+  {
+    AccountGroup *children_group;
+    GList *children, *node;
+
+    children_group = xaccAccountGetChildren (account);
+    children = xaccGroupGetSubAccounts (children_group);
+
+    for( node = children; node; node = node->next )
+    {
+      Account *child;
+      gnc_commodity *child_currency;
+      gnc_numeric child_balance;
+
+    	child = (Account *)node->data;
+      child_currency = xaccAccountGetCurrency (child);
+      child_balance = use_shares ?
+                         xaccAccountGetShareBalanceAsOfDate (child, date)
+                       : xaccAccountGetBalanceAsOfDate (child, date);
+      child_balance = gnc_ui_convert_balance_to_currency
+        (child_balance, child_currency, currency);
+      balance = gnc_numeric_add_fixed (balance, child_balance);
+    }
+  }
+
+  /* reverse sign if needed */
+  if (gnc_reverse_balance (account))
+    balance = gnc_numeric_neg (balance);
+
+  return balance;
+}
 
 char *
 gnc_ui_account_get_field_value_string (Account *account,
