@@ -31,6 +31,29 @@
 
 /* static short module = MOD_ENGINE; */
 
+/********************************************************************\
+ * error handling                                                   *
+\********************************************************************/
+
+void 
+xaccBackendSetError (Backend *be, GNCBackendError err)
+{
+   if (!be) return;
+   be->last_err = err;
+}
+
+GNCBackendError 
+xaccBackendGetError (Backend *be)
+{
+   GNCBackendError err;
+   if (!be) return ERR_BACKEND_NO_BACKEND;
+
+   /* use 'stack-pop' semantics */
+   err = be->last_err;
+   be->last_err = ERR_BACKEND_NO_ERR;
+   return err;
+}
+
 
 /********************************************************************\
  * Fetch the backend                                                *

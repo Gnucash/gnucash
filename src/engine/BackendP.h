@@ -27,7 +27,8 @@
 
 typedef enum {
   ERR_BACKEND_NO_ERR = 0,
-  ERR_BACKEND_MISC,
+  ERR_BACKEND_NO_BACKEND,   /* Backend * pointer was null the err routine */
+  ERR_BACKEND_MISC,         /* undetermined error */
 
   /* fileio errors */
   ERR_BFILEIO_FILE_BAD_READ,
@@ -38,10 +39,19 @@ typedef enum {
   ERR_BFILEIO_ALLOC,
 
   /* network errors */
-  ERR_NETIO_NO_CONNECTION,
-  ERR_NETIO_SHORT_READ,
-  ERR_NETIO_WRONG_CONTENT_TYPE,
-  ERR_NETIO_NOT_GNCXML
+  ERR_NETIO_NO_CONNECTION,      /* network failure */
+  ERR_NETIO_SHORT_READ,         /* not enough bytes received */
+  ERR_NETIO_WRONG_CONTENT_TYPE, /* wrong kind of server, wrong data served */
+  ERR_NETIO_NOT_GNCXML,
+
+  /* database errors */
+  ERR_SQL_BUSY,              /* single-mode access doesn't allow other users */
+  ERR_SQL_CANT_CONNECT,      /* network failure */
+  ERR_SQL_SEND_QUERY_FAILED,
+  ERR_SQL_FINISH_QUERY_FAILED,
+  ERR_SQL_GET_RESULT_FAILED,
+  ERR_SQL_CORRUPT_DB,
+  ERR_SQL_MISSING_DATA,     /* database doesn't contain expected data */
 } GNCBackendError;
 
 
@@ -127,6 +137,17 @@ struct _backend
 
   GNCBackendError last_err;
 };
+
+/*
+ * The xaccBackendSetError() routine pushes an error code onto the error
+ *   stack. (FIXME: the stack is 1 deep in current implementation).
+ *
+ * The xaccBackendGetError() routine pops an error code off the error
+ *   stack.
+ */
+
+void xaccBackendSetError (Backend *, GNCBackendError err);
+GNCBackendError xaccBackendGetError (Backend *);
 
 /*
  * The xaccGetAccountBackend() subroutine will find the
