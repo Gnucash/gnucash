@@ -733,7 +733,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   gnc_tree_view_account_configure_columns (data->final_account_tree, list);
   g_slist_free(list);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(data->final_account_tree));
+  selection = gtk_tree_view_get_selection (tree_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
   g_signal_connect (G_OBJECT (selection), "changed",
 		    G_CALLBACK (on_final_account_tree_selection_changed),

@@ -355,7 +355,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   gtk_tree_view_column_set_visible (column, FALSE);
   gtk_tree_view_column_set_min_width (column, 20 /* DRH - Should be based on title width */);
 
-
+  gtk_widget_show(GTK_WIDGET(tree_view));
   LEAVE("%p", tree_view);
   return tree_view;
 }
@@ -622,6 +622,9 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
   /* Clear any existing selection. */
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
   gtk_tree_selection_unselect_all (selection);
+
+  if (account == NULL)
+    return;
 
   filter_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (filter_model));
