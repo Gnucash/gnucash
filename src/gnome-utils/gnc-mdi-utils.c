@@ -96,6 +96,24 @@ gnc_mdi_child_set_title (GNCMDIChildInfo *childwin)
   g_free (title);
 }
 
+/**
+ * gnc_mdi_app_destroyed_cb
+ *
+ * @par1: A pointer to the GnomeApp data structure being destroyed.
+ *
+ * @par2: A pointer to a GNCMDIInfo data structure associated with
+ * this GnomeMDI data structure.  This value comes from the callback
+ * registration.
+ *
+ * This function is called during destruction of the gnome app data
+ * structure.  Its purpose is to save the toolbar settings and
+ * disconnect the toolbar from any open views.
+ *
+ * (I'm not sure this routine is ever really called. I tried to find a
+ * set of actions that would trigger it and couldn't.)
+ *
+ * Returns: void
+ */
 static void 
 gnc_mdi_app_destroyed_cb (GnomeApp * app, gpointer user_data)
 {
@@ -145,6 +163,22 @@ gnc_mdi_app_created_cb (GnomeMDI * mdi, GnomeApp * app, gpointer data)
                       mainwin);
 }
 
+/**
+ * gnc_mdi_destroy_cb
+ *
+ * @par1: A pointer to the GnomeMDI data structure being destroyed.
+ *
+ * @par2: A pointer to a GNCMDIInfo data structure associated with
+ * this GnomeMDI data structure.  This value comes from the callback
+ * registration.
+ *
+ * This function is called during destruction of the gnome MDI object,
+ * which occurs in the gnc_mdi_destroy function.  This function is
+ * basically a subroutine of that function, with a couple of layers of
+ * gtk code between them.
+ *
+ * Returns: void
+ */
 static void
 gnc_mdi_destroy_cb (GtkObject * w, gpointer data)
 {
@@ -524,12 +558,46 @@ gnc_app_set_title (GnomeApp *app)
   gnc_mdi_child_set_title (childwin);
 }
 
+/**
+ * gnc_mdi_destroy
+ *
+ * @par1: A pointer to a GNCMDIInfo data structure to destroy. 
+ *
+ * This function is called during the destruction of the gnucash gui.
+ * It is called from gnc_gui_destroy() in top-level.c
+ *
+ * Returns: void 
+ */
 void
 gnc_mdi_destroy (GNCMDIInfo * gnc_mdi)
 {
+  GList *ptr, *next;
+  GNCMDIChildInfo *gnc_child;
+  GnomeMDIChild *active;
+
   if (!gnc_mdi) return;
 
   gnc_mdi->shutdown = NULL;
+
+  /*
+   * Work around a bug in the gnome mdi code.  When mdi closes the
+   * visible window, it will try and put up the next window, even
+   * though some of the necessary data structures have already been
+   * destroyed.  Manually delete all but the front window here before
+   * destroying the MDI object. (Walk the list by hand because the
+   * list entries will be getting deleted as we go, and glib doesn't
+   * protect against this.)
+   */
+  active = gnc_mdi->mdi->active_child;
+  for (ptr = gnc_mdi->children; ptr != NULL; ptr = next) {
+    next = ptr->next;
+    gnc_child = ptr->data;
+    if (active == gnc_child->child)
+      continue;
+
+    gnome_mdi_remove_child(gnc_mdi->mdi, gnc_child->child, TRUE);
+    /* gnc_child and ptr are now invalid */
+  }
 
   if (gnc_mdi->mdi)
     gtk_object_destroy (GTK_OBJECT (gnc_mdi->mdi));

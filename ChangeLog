@@ -1,3 +1,9 @@
+2002-06-04  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-mdi-utils.c (gnc_mdi_destroy): Work around a
+	bug in the Gnome MDI code that is causing Gnucash to crash if the
+	last window isn't the topmost window when the application is quit.
+
 2002-06-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/*: Add directory and initial files for
