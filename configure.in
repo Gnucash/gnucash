@@ -590,6 +590,7 @@ AC_OUTPUT(
           intl/Makefile
           lib/Makefile
           lib/guile-www/Makefile
+          lib/srfi/Makefile
           macros/Makefile
 	  po/Makefile.in
           po/Makefile
