@@ -371,6 +371,8 @@ gnc_get_source_name (PriceSourceCode source)
       return "ASX";
     case SOURCE_TIAA_CREF :
       return "TIAA-CREF";
+    case SOURCE_TRUSTNET :
+      return "Trustnet";
     default:
       break;
   }
@@ -401,6 +403,8 @@ gnc_get_source_code_name (PriceSourceCode source)
       return "ASX";
     case SOURCE_TIAA_CREF :
       return "TIAACREF";
+    case SOURCE_TRUSTNET :
+      return "TRUSTNET";
     default:
       break;
   }

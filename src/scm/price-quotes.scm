@@ -344,6 +344,7 @@
      ((string=? "VANGUARD" src) 'vanguard)
      ((string=? "ASX" src) 'asx)
      ((string=? "TIAACREF" src) 'tiaacref)
+     ((string=? "TRUSTNET" src) 'trustnet)
      ((string=? "CURRENCY" src) 'currency)
      (else #f)))
 
@@ -357,6 +358,7 @@
      ((vanguard) "vanguard")
      ((asx) "asx")
      ((tiaacref) "tiaacref")
+     ((trustnet) "trustnet")
      ((currency) "currency")
      (else #f)))
 

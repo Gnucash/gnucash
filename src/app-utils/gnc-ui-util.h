@@ -106,6 +106,7 @@ typedef enum
   SOURCE_VANGUARD,
   SOURCE_ASX,
   SOURCE_TIAA_CREF,
+  SOURCE_TRUSTNET,
   NUM_SOURCES
 } PriceSourceCode;
 /* NOTE: If you modify PriceSourceCode, please update price-quotes.scm
