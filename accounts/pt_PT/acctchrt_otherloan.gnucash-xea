@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Outros Empréstimos       
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Contas para controlar outros empréstimos e juros associados
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+    Desejará seleccionar este conjunto de contas se tiver outro empréstimo para além do crédito à habitação (outro empréstimo, juros do outro empréstimo).
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Passivo</act:name>
+  <act:id type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Passivo</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Empréstimos</act:name>
+  <act:id type="new">b5624a9d1a1b797b87b815774faccfe4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Empréstimos</act:description>
+  <act:parent type="new">8ec79e80d9abf58d78ce3129d3fe3365</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Outros Empréstimo</act:name>
+  <act:id type="new">eb79670a4c9b0faab87485b7b2a4abe4</act:id>
+  <act:type>LIABILITY</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Outros Empréstimo</act:description>
+  <act:parent type="new">b5624a9d1a1b797b87b815774faccfe4</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Despesas</act:name>
+  <act:id type="new">565e52a122e8acc9a67a36e61357e2ae</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Despesas</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Juro</act:name>
+  <act:id type="new">4a02c14e992ea79076837c164aa6fc8d</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Juro</act:description>
+  <act:parent type="new">565e52a122e8acc9a67a36e61357e2ae</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Outro Juro</act:name>
+  <act:id type="new">f01de45e290ecc29b64d9cb8a733af68</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>PTE</cmdty:id>
+  </act:currency>
+  <act:description>Outro Juro</act:description>
+  <act:parent type="new">4a02c14e992ea79076837c164aa6fc8d</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->
