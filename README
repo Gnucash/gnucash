@@ -277,8 +277,8 @@ Building & Installing
 
 GnuCash uses GNU Automake to handle the build process, so for most of
 the details, see the generic instructions in INSTALL.  (Note that, in
-order to get a working ./configure, you should run
-./macros/autogen.sh.)  Below we detail the GnuCash specific bits.
+order to get a working ./configure, you should run ./autogen.sh.)
+Below we detail the GnuCash specific bits.
 
 Prior to building GnuCash, you will have to obtain and install the
 following packages:
