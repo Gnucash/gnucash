@@ -404,7 +404,7 @@ xaccGroupInsertAccount( AccountGroup *grp, Account *acc )
 
   /* insert account in proper sort order */
   for (i=nacc; i>=0; i--) {
-    if ((0<i) && (0 < xaccAccountOrder (&(arr[i]), &acc))) {
+    if ((0<i) && (0 < xaccAccountOrder (&(arr[i-1]), &acc))) {
        arr[i] = arr[i-1];
     } else {
        arr[i] = acc;
