@@ -151,6 +151,7 @@ gnc_tree_view_account_finalize (GObject *object)
 {
   GncTreeViewAccount *account_view;
 
+  ENTER("view %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (object));
 
@@ -159,6 +160,7 @@ gnc_tree_view_account_finalize (GObject *object)
 
   if (G_OBJECT_CLASS (parent_class)->finalize)
     (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+  LEAVE(" ");
 }
 
 static void
@@ -166,6 +168,7 @@ gnc_tree_view_account_destroy (GtkObject *object)
 {
   GncTreeViewAccount *account_view;
 
+  ENTER("view %p", object);
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (object));
 
@@ -173,6 +176,7 @@ gnc_tree_view_account_destroy (GtkObject *object)
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  LEAVE(" ");
 }
 
 
@@ -209,8 +213,9 @@ gnc_tree_view_account_new (gboolean show_root)
   if (!show_root)
     virtual_root_path = gtk_tree_path_new_first ();
   filter_model = egg_tree_model_filter_new (model, virtual_root_path);
-  gtk_tree_view_set_model (tree_view, filter_model);
   gtk_object_sink(GTK_OBJECT(model));
+  gtk_tree_view_set_model (tree_view, filter_model);
+  g_object_unref(G_OBJECT(filter_model));
   if (virtual_root_path)
     gtk_tree_path_free(virtual_root_path);
 
