@@ -2389,9 +2389,12 @@ Password:
       <dt><a name="arap"><b>Accounts Payable, Receivable</b></a></dt>
 
       <dd>Add features to track sales receipts and other pending
-          sources of income, as well as owed sums.  It must be possible
-          to match invoices to payments.  It must be possible to 
-          track the average age of an amount-due/amount-owed.
+          sources of income, as well as owed sums.  
+          <ul>
+          <li>Automatic matchin of invoices to payments.
+          <li>Account aging: show (average) age of ammount-due/amount-owed.
+          <li>Prepare sales statics report by customer.
+          </ul>
           <p></p>
       </dd>
 
@@ -2410,15 +2413,16 @@ Password:
 
       <dt><a name="invoice"><b>Invoicing</b></a></dt>
 
-      <dd>Invoicing. Several components:
+      <dd>Invoicing.  Note that invoicing and order entry are 
+          closely related.
+          Several components:
         <ul>
         <li>Record an invoice. Assign it a serial number.  Be able
             to reprint/report based on invoice serial number.
         <li>Invoice associates customer name to set of transactions.
             Need to deal with PIM issue.  I.e. need to integrate
             with high-function PIM or CRM interface.
-        <li>Issuing an invoice should impact inventory, and 
-            an A/R account.
+        <li>Allow historical browsing of invoices customer by customer.
         <li>To visually design an invoice, need to have a
             mini-word-processor/simple drawing plug-in. Is
             Abisource/Abiword a candidate? Probably needs bonobo...
@@ -2429,12 +2433,27 @@ Password:
 
       <dd>
         Mini-GUI allowing users to type in orders.
+        <ul>
+        <li>Should interface to parts/inventory database to confirm 
+            item availability, (maybe recommend additional production)?
+            inventory should be updated after order placement.
+        <li>Automatically update accounts receivable.
+        <li>Allow order revision/update (esp. as partial orders are shipped).
+        <li>Orders can be invoiced when entered (simple invoicing), or
+            placed on account (double invoicing).
+        <li>Allow back-orders to be printed customer-by-customer, or by 
+            product/item.
+        <li>Allow printing of packing slip.
+        </ul>
         <p></p>
       </dd>
 
       <dt><a name="estimate"><b>Job Costing</b></a></dt>
 
       <dd>Ability to prepare and track estimates.
+          <ul>
+          <li>Allow estimate/bid to be converted to a firm order & get invoiced.
+          </ul>
           <p></p>
       </dd>
 
