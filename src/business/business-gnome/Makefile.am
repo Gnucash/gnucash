@@ -28,6 +28,7 @@ AM_CFLAGS = \
 
 libgncmod_business_gnome_la_SOURCES = \
   businessmod-gnome.c \
+  business-options.c \
   business-urls.c \
   business-utils.c \
   dialog-billterms.c \
@@ -43,6 +44,7 @@ libgncmod_business_gnome_la_SOURCES = \
   gnc-business-utils.c
 
 noinst_HEADERS = \
+  business-options.h \
   business-urls.h \
   business-utils.h \
   dialog-billterms.h \

@@ -20,6 +20,7 @@
 
 (define acct-string (N_ "Account"))
 (define owner-string (N_ "Company"))
+(define owner-page gnc:pagename-general)
 
 (define-macro (addto! alist element)
   `(set! ,alist (cons ,element ,alist)))
@@ -257,8 +258,9 @@
     (gnc:register-option gnc:*report-options* new-option))
 
   (gnc:register-inv-option
-   (gnc:make-owner-option "__reg" owner-string "" ""
-			    (lambda () #f) #f owner-type))
+   (gnc:make-owner-option owner-page owner-string "v"
+			  (N_ "The company for this report")
+			  (lambda () #f) #f owner-type))
 
   (gnc:register-inv-option
    (gnc:make-account-list-limited-option acct-string acct-string "" ""
@@ -295,8 +297,8 @@
 
   (gnc:register-inv-option
    (gnc:make-string-option
-    (N_ "Display") (N_ "Today Date Format")
-    "v" (N_ "The format for the date->string conversion for today's date.")
+    gnc:pagename-general (N_ "Today Date Format")
+    "p" (N_ "The format for the date->string conversion for today's date.")
     "~B ~e, ~Y"))
 
   (gnc:options-set-default-section gnc:*report-options* "General")
@@ -429,7 +431,7 @@
 	 (query (gnc:malloc-query))
 	 (account-list (opt-val acct-string acct-string))
 	 (account #f)
-	 (owner (opt-val "__reg" owner-string))
+	 (owner (opt-val owner-page owner-string))
 	 (report-date (gnc:timepair-end-day-time 
 		       (gnc:date-option-absolute-time
 			(opt-val gnc:pagename-general (N_ "To")))))
@@ -477,7 +479,7 @@
 
 	  (gnc:html-document-add-object!
 	   document
-	   (make-myname-table (opt-val "Display" "Today Date Format")))
+	   (make-myname-table (opt-val gnc:pagename-general (N_ "Today Date Format"))))
 
 	  (gnc:html-document-add-object!
 	   document
@@ -534,20 +536,22 @@
 (gnc:define-report
  'version 1
  'name (N_ "Customer Report")
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator customer-options-generator
  'renderer reg-renderer
- 'in-menu? #f)
+ 'in-menu? #t)
 
 (gnc:define-report
  'version 1
  'name (N_ "Vendor Report")
+ 'menu-path (list gnc:menuname-business-reports)
  'options-generator vendor-options-generator
  'renderer reg-renderer
- 'in-menu? #f)
+ 'in-menu? #t)
 
 (define (owner-report-create-internal report-name owner account)
   (let* ((options (gnc:make-report-options report-name))
-	 (owner-op (gnc:lookup-option options "__reg" owner-string))
+	 (owner-op (gnc:lookup-option options owner-page owner-string))
 	 (account-op (gnc:lookup-option options acct-string acct-string)))
 
     (gnc:option-set-value owner-op owner)

@@ -89,7 +89,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 
   gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit),
 				   owner->owner.undefined);
-  gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), edit, FALSE, FALSE, 0);
   if (label)
     gtk_label_set_text (GTK_LABEL (label), gncObjectGetTypeLabel (type_name));
 

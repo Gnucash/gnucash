@@ -16,6 +16,7 @@
 #include "search-core-type.h"
 #include "search-owner.h"
 #include "gncOwner.h"
+#include "business-options.h"
 #include "business-urls.h"
 
 /* version of the gnc module system interface we require */
@@ -78,6 +79,7 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
     gnc_search_core_register_type (GNC_OWNER_MODULE_NAME,
 				   (GNCSearchCoreNew) gnc_search_owner_new);
     gnc_business_urls_initialize ();
+    gnc_business_options_initialize ();
   }
 
   return TRUE;
