@@ -1,6 +1,7 @@
 /********************************************************************\
  * option-util.h -- GNOME<->guile option interface                  *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

@@ -1148,9 +1148,11 @@ xaccInitSplitRegister (SplitRegister *reg, int type)
 
    /* number format for share quantities in stock ledgers */
    switch (type & REG_TYPE_MASK) {
+      case CURRENCY_REGISTER:
+        xaccSetPriceCellIsCurrency (reg->priceCell, GNC_T);
+
       case STOCK_REGISTER:
       case PORTFOLIO_LEDGER:
-      case CURRENCY_REGISTER:
          xaccSetPriceCellSharesValue (reg->debitCell, GNC_T);
          xaccSetPriceCellSharesValue (reg->creditCell, GNC_T);
          xaccSetPriceCellSharesValue (reg->ndebitCell, GNC_T);

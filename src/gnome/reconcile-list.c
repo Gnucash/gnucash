@@ -521,6 +521,7 @@ static void
 gnc_reconcile_list_fill(GNCReconcileList *list)
 {
   gchar *strings[list->num_columns + 1];
+  GNCPrintAmountFlags flags = PRTSEP;
   Transaction *trans;
   Split *split;
   gboolean reconciled;
@@ -529,7 +530,6 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
   int account_type;
   double amount;
   char recn_str[2];
-  short shares = PRTSEP;
   char recn;
   int row;
   int i;
@@ -542,7 +542,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
 
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
       (account_type == CURRENCY))
-    shares |= PRTSHR;
+    flags |= PRTSHR;
 
   for (i = 0; i < num_splits; i++)
   {
@@ -567,7 +567,7 @@ gnc_reconcile_list_fill(GNCReconcileList *list)
     strings[0] = xaccTransGetDateStr(trans);
     strings[1] = xaccTransGetNum(trans);
     strings[2] = xaccTransGetDescription(trans);
-    strings[3] = xaccPrintAmount(DABS(amount), shares, currency);
+    strings[3] = xaccPrintAmount(DABS(amount), flags, currency);
 
     reconciled = g_hash_table_lookup(list->reconciled, split) != NULL;
 

@@ -44,9 +44,10 @@
  * to update xaccAccountTypeEnumAsString --- used for text file exports
  */
 
-enum 
+typedef enum 
 {
   BAD_TYPE = -1,
+  NO_TYPE = -1,
   /* Not a type */
 
   BANK = 0,
@@ -101,7 +102,7 @@ enum
   SAVINGS = 12,
   MONEYMRKT = 13,
   CREDITLINE = 14,     /* line of credit */
-};
+} GNCAccountType;
 
 char * xaccAccountGetTypeStr (int type); /* GUI names */
 

@@ -1,5 +1,22 @@
 2000-05-16  Dave Peticolas  <peticola@cs.ucdavis.edu>
 
+	* src/engine/guid/guid.h: change the GUID struct to a union with
+	an integer to force 32-bit alignment on systems that need it.
+
+	* src/register/splitreg.c (xaccInitSplitRegister): in a currency
+	register, set the is_currency flag on the price cell.
+
+	* src/register/pricecell.c (xaccSetPriceCellIsCurrency): function
+	to set printing of currency prices in price cells.
+
+	* src/engine/util.c (xaccSPrintAmount): added a PRTCUR flag for
+	printing currency prices. Changed flags type from short to unsigned
+	int with a typedef of GNCPrintAmountFlags. Changed other files to
+	reflect this.
+
+	* src/scm/report/balance-and-pnl.scm: fix html error (fix from
+	Martin Schwenke).
+
 	* src/guile/guile-util.c: many bug fixes.
 
 	* src/scm/engine-interface.scm: fix list-ref arg order bug.

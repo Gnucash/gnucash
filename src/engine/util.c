@@ -451,8 +451,11 @@ PrintAmt(char *buf, double val, int prec,
 }
 
 int
-xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
-                         int min_trailing_zeros, const char *curr_sym)
+xaccSPrintAmountGeneral (char * bufp, double val,
+                         GNCPrintAmountFlags flags,
+                         int precision,
+                         int min_trailing_zeros,
+                         const char *curr_sym)
 {
    struct lconv *lc;
 
@@ -473,13 +476,13 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
    if (DEQ(val, 0.0))
      val = 0.0;
 
-   if (shrs & PRTSHR)
+   if (flags & PRTSHR)
    {
      currency_symbol = "shrs";
      cs_precedes = 0;  /* currency symbol follows amount */
      sep_by_space = 1; /* they are separated by a space  */
    }
-   else if (shrs & PRTEUR)
+   else if (flags & PRTEUR)
    {
      currency_symbol = "EUR";
      cs_precedes = 1;  /* currency symbol precedes amount */
@@ -533,7 +536,7 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
      if (print_sign && (sign_posn == 3))
        bufp = stpcpy(bufp, sign);
 
-     if (shrs & PRTSYM)
+     if (flags & PRTSYM)
      {
        bufp = stpcpy(bufp, currency_symbol);
        if (sep_by_space)
@@ -550,8 +553,8 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
      bufp = stpcpy(bufp, "(");
 
    /* Now print the value */
-   bufp += PrintAmt(bufp, DABS(val), precision, shrs & PRTSEP,
-                    !(shrs & PRTNMN), min_trailing_zeros);
+   bufp += PrintAmt(bufp, DABS(val), precision, flags & PRTSEP,
+                    !(flags & PRTNMN), min_trailing_zeros);
 
    /* Now see if we print parentheses */
    if (print_sign && (sign_posn == 0))
@@ -564,7 +567,7 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
      if (print_sign && (sign_posn == 3))
        bufp = stpcpy(bufp, sign);
 
-     if (shrs & PRTSYM)
+     if (flags & PRTSYM)
      {
        if (sep_by_space)
          bufp = stpcpy(bufp, " ");
@@ -585,7 +588,8 @@ xaccSPrintAmountGeneral (char * bufp, double val, short shrs, int precision,
 }
 
 int
-xaccSPrintAmount (char * bufp, double val, short shrs, const char *curr_code) 
+xaccSPrintAmount (char * bufp, double val, GNCPrintAmountFlags flags,
+                  const char *curr_code) 
 {
    struct lconv *lc;
    int precision;
@@ -605,14 +609,19 @@ xaccSPrintAmount (char * bufp, double val, short shrs, const char *curr_code)
    }
 
    if (curr_code && (strncmp(curr_code, "EUR", 3) == 0))
-     shrs |= PRTEUR;
+     flags |= PRTEUR;
 
-   if (shrs & PRTSHR)
+   if (flags & PRTCUR)
+   {
+     precision = 5;
+     min_trailing_zeros = 0;
+   }
+   else if (flags & PRTSHR)
    {
      precision = 4;
      min_trailing_zeros = 0;
    }
-   else if (shrs & PRTEUR)
+   else if (flags & PRTEUR)
    {
      precision = 2;
      min_trailing_zeros = 2;
@@ -623,17 +632,17 @@ xaccSPrintAmount (char * bufp, double val, short shrs, const char *curr_code)
      min_trailing_zeros = lc->frac_digits;
    }
 
-   return xaccSPrintAmountGeneral(bufp, val, shrs, precision,
+   return xaccSPrintAmountGeneral(bufp, val, flags, precision,
                                   min_trailing_zeros, curr_code);
 }
 
 char *
-xaccPrintAmount (double val, short shrs, const char *curr_code) 
+xaccPrintAmount (double val, GNCPrintAmountFlags flags, const char *curr_code) 
 {
    /* hack alert -- this is not thread safe ... */
    static char buf[BUFSIZE];
 
-   xaccSPrintAmount (buf, val, shrs, curr_code);
+   xaccSPrintAmount (buf, val, flags, curr_code);
 
    /* its OK to return buf, since we declared it static */
    return buf;
@@ -644,13 +653,13 @@ xaccPrintAmountArgs (double val, gncBoolean print_currency_symbol,
                      gncBoolean print_separators, gncBoolean is_shares_value,
                      const char *curr_code)
 {
-  short shrs = 0;
+  GNCPrintAmountFlags flags = 0;
 
-  if (print_currency_symbol) shrs |= PRTSYM;
-  if (print_separators)      shrs |= PRTSEP;
-  if (is_shares_value)       shrs |= PRTSHR;
+  if (print_currency_symbol) flags |= PRTSYM;
+  if (print_separators)      flags |= PRTSEP;
+  if (is_shares_value)       flags |= PRTSHR;
 
-  return xaccPrintAmount(val, shrs, curr_code);
+  return xaccPrintAmount(val, flags, curr_code);
 }
 
 

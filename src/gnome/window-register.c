@@ -1701,7 +1701,7 @@ static void
 regRefresh(xaccLedgerDisplay *ledger)
 {
   RegWindow *regData = (RegWindow *) (ledger->gui_hook);
-  int print_flags = PRTSYM | PRTSEP;
+  GNCPrintAmountFlags print_flags = PRTSYM | PRTSEP;
   gboolean euro = gnc_lookup_boolean_option("International",
 					    "Enable EURO support",
 					    FALSE);

@@ -158,16 +158,18 @@ recnRecalculateBalance(RecnWindow *recnData)
   double ending;
   double reconciled;
   double diff;
-  short shares = PRTSYM | PRTSEP;
+  GNCPrintAmountFlags flags;
   gboolean reverse_balance;
   int account_type;
+
+  flags = PRTSYM | PRTSEP;
 
   reverse_balance = gnc_reverse_balance(recnData->account);
 
   account_type = xaccAccountGetType(recnData->account);
   if ((account_type == STOCK ) || (account_type == MUTUAL) ||
       (account_type == CURRENCY))
-    shares |= PRTSHR;
+    flags |= PRTSHR;
 
   currency = xaccAccountGetCurrency(recnData->account);
 
@@ -175,7 +177,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   starting = xaccAccountGetReconciledBalance(recnData->account);
   if (reverse_balance)
     starting = -starting;
-  amount = xaccPrintAmount(starting, shares, currency);
+  amount = xaccPrintAmount(starting, flags, currency);
   gnc_set_label_color(recnData->starting, starting);
   gtk_label_set_text(GTK_LABEL(recnData->starting), amount);
   if (reverse_balance)
@@ -185,7 +187,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   ending = recnData->new_ending;
   if (reverse_balance)
     ending = -ending;
-  amount = xaccPrintAmount(ending, shares, currency);
+  amount = xaccPrintAmount(ending, flags, currency);
   gnc_set_label_color(recnData->ending, ending);
   gtk_label_set_text(GTK_LABEL(recnData->ending), amount);
   if (reverse_balance)
@@ -198,17 +200,17 @@ recnRecalculateBalance(RecnWindow *recnData)
     (GNC_RECONCILE_LIST(recnData->credit));
 
   /* Update the total debit and credit fields */
-  amount = xaccPrintAmount(DABS(debit), shares, currency);
+  amount = xaccPrintAmount(DABS(debit), flags, currency);
   gtk_label_set_text(GTK_LABEL(recnData->total_debit), amount);
 
-  amount = xaccPrintAmount(credit, shares, currency);
+  amount = xaccPrintAmount(credit, flags, currency);
   gtk_label_set_text(GTK_LABEL(recnData->total_credit), amount);
 
   /* update the reconciled balance */
   reconciled = starting + debit - credit;
   if (reverse_balance)
     reconciled = -reconciled;
-  amount = xaccPrintAmount(reconciled, shares, currency);
+  amount = xaccPrintAmount(reconciled, flags, currency);
   gnc_set_label_color(recnData->reconciled, reconciled);
   gtk_label_set_text(GTK_LABEL(recnData->reconciled), amount);
   if (reverse_balance)
@@ -218,7 +220,7 @@ recnRecalculateBalance(RecnWindow *recnData)
   diff = ending - reconciled;
   if (reverse_balance)
     diff = -diff;
-  amount = xaccPrintAmount(diff, shares, currency);
+  amount = xaccPrintAmount(diff, flags, currency);
   gnc_set_label_color(recnData->difference, diff);
   gtk_label_set_text(GTK_LABEL(recnData->difference), amount);
   if (reverse_balance)
@@ -232,13 +234,15 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
                          gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY(widget);
-  short shares = PRTSYM | PRTSEP;
+  GNCPrintAmountFlags flags;
   Account *account = data;
   int account_type;
   char  *currency;
   gchar *new_string;
   gchar *string;
   double value;
+
+  flags = PRTSYM | PRTSEP;
 
   string = gtk_entry_get_text(entry);
 
@@ -247,11 +251,11 @@ gnc_start_recn_update_cb(GtkWidget *widget, GdkEventFocus *event,
   account_type = xaccAccountGetType(account);
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
       (account_type == CURRENCY))
-    shares |= PRTSHR;
+    flags |= PRTSHR;
 
   currency = xaccAccountGetCurrency(account);
 
-  new_string = xaccPrintAmount(value, shares & ~PRTSYM, currency);
+  new_string = xaccPrintAmount(value, flags & ~PRTSYM, currency);
 
   if (safe_strcmp(string, new_string) == 0)
     return FALSE;
@@ -279,10 +283,12 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
 {
   GtkWidget *dialog, *end_value;
   char *amount, *title, *currency;
-  short shares = PRTSYM | PRTSEP;
+  GNCPrintAmountFlags flags;
   double dendBalance;
   int account_type;
   int result;
+
+  flags = PRTSYM | PRTSEP;
 
   /* Get the previous ending balance.  Use the published
    * account interface for this, since the ending balance
@@ -298,11 +304,11 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
   account_type = xaccAccountGetType(account);
   if ((account_type == STOCK) || (account_type == MUTUAL) ||
       (account_type == CURRENCY))
-    shares |= PRTSHR;
+    flags |= PRTSHR;
 
   currency = xaccAccountGetCurrency(account);
 
-  amount = xaccPrintAmount(dendBalance, shares, currency);
+  amount = xaccPrintAmount(dendBalance, flags, currency);
 
   /* Create the dialog box... */
   title = gnc_recn_make_window_name(account);
@@ -329,7 +335,7 @@ startRecnWindow(GtkWidget *parent, Account *account, double *new_ending)
     GtkWidget *vbox = GNOME_DIALOG(dialog)->vbox;
     end_value = gtk_entry_new();
 
-    amount = xaccPrintAmount(*new_ending, shares & ~PRTSYM, currency);
+    amount = xaccPrintAmount(*new_ending, flags & ~PRTSYM, currency);
     gtk_entry_set_text(GTK_ENTRY(end_value), amount);
     gtk_editable_select_region(GTK_EDITABLE(end_value), 0, -1);
 

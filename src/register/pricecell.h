@@ -60,13 +60,14 @@
 
 typedef struct _PriceCell
 {
-   BasicCell cell;
+  BasicCell cell;
 
-   double amount;           /* the amount associated with this cell */
+  double amount;           /* the amount associated with this cell */
 
-   gncBoolean blank_zero;   /* controls printing of zero values */
-   gncBoolean monetary;     /* controls parsing of values */
-   gncBoolean shares_value; /* true if a shares values */
+  gncBoolean blank_zero;   /* controls printing of zero values */
+  gncBoolean monetary;     /* controls parsing of values */
+  gncBoolean is_currency;  /* controls printint of values */
+  gncBoolean shares_value; /* true if a shares values */
 } PriceCell;
 
 /* installs a callback to handle price recording */
@@ -89,9 +90,12 @@ void         xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean);
 
 /* The xaccSetPriceCellMonetary() sets a flag which determines
  *    how string amounts are parsed, either as monetary or
- *    non-monetary amounts. The default is monetary.
- */
+ *    non-monetary amounts. The default is monetary. */
 void         xaccSetPriceCellMonetary (PriceCell *, gncBoolean);
+
+/* The xaccSetPriceCellCurrency() sets a flag which causes
+ *    the amount to be printed as a currency price. */
+void         xaccSetPriceCellIsCurrency (PriceCell *, gncBoolean);
 
 /* The xaccSetPriceCellSharesValue() sets a flag which determines
  * whether the quantity is printed as a shares value or not. */

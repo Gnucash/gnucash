@@ -168,6 +168,7 @@ char * gnc_locale_default_currency();
  *    PRTNMN -- print as non-monetary value
  *    PRTEUR -- print as EURO value (2 decimal places, EUR as currency
  *              symbol if PRTSYM is specified, mutually exclisive with PRTSHR)
+ *    PRTCUR -- print as a currency price, with 5 decimals, overides PRTSHR
  *
  *    If non-NULL, the curr_code argument overrides the default currency
  *    code.
@@ -192,12 +193,18 @@ char * gnc_locale_default_currency();
 #define PRTSEP 0x4
 #define PRTNMN 0x8
 #define PRTEUR 0x10
+#define PRTCUR 0x20
 
-char * xaccPrintAmount (double val, short shrs, const char *curr_code);
-int xaccSPrintAmount (char *buf, double val, short shrs,
+typedef unsigned int GNCPrintAmountFlags;
+
+char * xaccPrintAmount (double val, GNCPrintAmountFlags flags,
+                        const char *curr_code);
+int xaccSPrintAmount (char *buf, double val, GNCPrintAmountFlags flags,
                       const char *curr_code);
-int xaccSPrintAmountGeneral (char * bufp, double val, short shrs,
-                             int precision, int min_trailing_zeros,
+int xaccSPrintAmountGeneral (char * bufp, double val,
+                             GNCPrintAmountFlags flags,
+                             int precision,
+                             int min_trailing_zeros,
                              const char *curr_sym);
 char * xaccPrintAmountArgs (double val,
                             gncBoolean print_currency_symbol,

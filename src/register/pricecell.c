@@ -198,6 +198,7 @@ xaccInitPriceCell (PriceCell *cell)
    cell->amount = 0.0;
    cell->blank_zero = GNC_T;
    cell->monetary = GNC_T;
+   cell->is_currency = GNC_F;
    cell->shares_value = GNC_F;
 
    SET (&(cell->cell), "");
@@ -226,7 +227,7 @@ static char *
 xaccPriceCellPrintValue (PriceCell *cell)
 {
   static char buff[PRTBUF];
-  short flags = PRTSEP;
+  GNCPrintAmountFlags flags = PRTSEP;
 
   if (cell->blank_zero && DEQ(cell->amount, 0.0)) {
      strcpy(buff, "");
@@ -235,6 +236,9 @@ xaccPriceCellPrintValue (PriceCell *cell)
 
   if (cell->shares_value)
     flags |= PRTSHR;
+
+  if (cell->is_currency)
+    flags |= PRTCUR;
 
   xaccSPrintAmount(buff, cell->amount, flags, NULL);
 
@@ -287,7 +291,8 @@ xaccSetPriceCellBlank (PriceCell *cell)
 void
 xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
 {
-  assert(cell != NULL);
+  if (cell == NULL)
+    return;
 
   cell->shares_value = shares_value;
 }
@@ -297,7 +302,8 @@ xaccSetPriceCellSharesValue (PriceCell * cell, gncBoolean shares_value)
 void
 xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
 {
-  assert(cell != NULL);
+  if (cell == NULL)
+    return;
 
   cell->monetary = monetary;
 }
@@ -305,9 +311,21 @@ xaccSetPriceCellMonetary (PriceCell * cell, gncBoolean monetary)
 /* ================================================ */
 
 void
+xaccSetPriceCellIsCurrency (PriceCell *cell, gncBoolean is_currency)
+{
+  if (cell == NULL)
+    return;
+
+  cell->is_currency = is_currency;
+}
+
+/* ================================================ */
+
+void
 xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean blank_zero)
 {
-  assert(cell != NULL);
+  if (cell == NULL)
+    return;
 
   cell->blank_zero = blank_zero;
 }
