@@ -48,19 +48,21 @@ static short module = MOD_BACKEND;
 static void
 pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
 {
-   Timespec this_ts, prev_ts;
+   Timespec this_ts, next_ts;
    GMemChunk *chunk;
    GList *node, *checkpoints = NULL;
    PGresult *result;
    Checkpoint *bp;
    char *p;
    int i, nrows, nsplits;
+   int nck;
    Account *acc;
-   const char *commodity_name;
+   const char *commodity_name, *guid_string;
 
    if (!be) return;
    ENTER("be=%p", be);
 
+   guid_string = guid_to_string (acct_guid);
    acc = xaccLookupEntity (acct_guid, GNC_ID_ACCOUNT);
    commodity_name = gnc_commodity_get_unique_name (xaccAccountGetCommodity(acc));
 
@@ -85,100 +87,88 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 
-   /* and now, fetch *all* of the splits in this account */
-   p = be->buff; *p = 0;
-   p = stpcpy (p, "SELECT gncEntry.amount AS amount, "
-                  "       gncEntry.reconciled AS reconciled,"
-                  "       gncTransaction.date_posted AS date_posted "
-                  "FROM gncEntry, gncTransaction "
-                  "WHERE gncEntry.transGuid = gncTransaction.transGuid "
-                  "AND accountGuid='");
-   p = guid_to_string_buff (acct_guid, p);
-   p = stpcpy (p, "' ORDER BY gncTransaction.date_posted ASC;");
-   SEND_QUERY (be,be->buff, );
-
-   /* malloc a new checkpoint, set it to the dawn of AD time ... */
+   /* malloc a new checkpoint, set it to the dawn of unix time ... */
    bp = g_chunk_new0 (Checkpoint, chunk);
    checkpoints = g_list_prepend (checkpoints, bp);
-   this_ts = gnc_iso8601_to_timespec_local ("1970-04-15 08:35:46.00");
-   bp->datetime = this_ts;
+   this_ts = gnc_iso8601_to_timespec_local ("1903-01-02 08:35:46.00");
+   bp->date_start = this_ts;
    bp->account_guid = acct_guid;
    bp->commodity = commodity_name;
 
-   /* malloc a new checkpoint ... */
-   nsplits = 0;
-   bp = g_chunk_new0 (Checkpoint, chunk);
-   checkpoints = g_list_prepend (checkpoints, bp);
-   bp->account_guid = acct_guid;
-   bp->commodity = commodity_name;
+   /* loop over entries, creating a set of evenly-spaced checkpoints */
+   nck = MIN_CHECKPOINT_COUNT;
+   while (1)
+   {
+      p = be->buff; *p = 0;
+      p = stpcpy (p, "SELECT gncTransaction.date_posted"
+                     "    FROM gncTransaction, gncEntry"
+                     "    WHERE"
+                     "        gncEntry.transguid = gncTransaction.transguid AND"
+                     "        gncEntry.accountguid='");
+      p = stpcpy (p, guid_string);
+      p = stpcpy (p, "'"
+                     "    ORDER BY gncTransaction.date_posted ASC"
+                     "    LIMIT 2 OFFSET ");
+      p += sprintf (p, "%d", nck);
+      p = stpcpy (p, ";");
+      SEND_QUERY (be,be->buff, );
 
-   /* start adding up balances */
-   i=0; nrows=0;
-   do {
-      GET_RESULTS (be->connection, result);
-      {
-         int j, jrows;
-         int ncols = PQnfields (result);
-         jrows = PQntuples (result);
-         nrows += jrows;
-         PINFO ("query result %d has %d rows and %d cols",
-            i, nrows, ncols);
-
-         for (j=0; j<jrows; j++)
+      i=0; 
+      do {
+         GET_RESULTS (be->connection, result);
          {
-            gint64 amt;
-            char recn;
-            
-            /* lets see if its time to start a new checkpoint */
-            /* look for splits that occur at least ten seconds apart */
-            prev_ts = this_ts;
-            prev_ts.tv_sec += 10;
-            this_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
-            if ((MIN_CHECKPOINT_COUNT < nsplits) &&
-                (timespec_cmp (&prev_ts, &this_ts) < 0))
-            {
-               Checkpoint *next_bp;
+            int j, jrows;
+            int ncols = PQnfields (result);
+            jrows = PQntuples (result);
+            PINFO ("query result %d has %d rows and %d cols",
+               i, jrows, ncols);
 
-               /* Set checkpoint five seconds back. This is safe,
-                * because we looked for a 10 second gap above */
-               this_ts.tv_sec -= 5;
-               bp->datetime = this_ts;
-
-               /* and now, build a new checkpoint */
-               nsplits = 0;
-               next_bp = g_chunk_new0 (Checkpoint, chunk);
-               checkpoints = g_list_prepend (checkpoints, next_bp);
-               *next_bp = *bp;
-               bp = next_bp;
-               bp->account_guid = acct_guid;
-               bp->commodity = commodity_name;
-            }
-            nsplits ++;
-
-            /* accumulate balances */
-            amt = atoll (DB_GET_VAL("amount",j));
-            recn = (DB_GET_VAL("reconciled",j))[0];
-            bp->balance += amt;
-            if (NREC != recn)
-            {
-               bp->cleared_balance += amt;
-            }
-            if (YREC == recn)
-            {
-               bp->reconciled_balance += amt;
+            if (0 == jrows) {
+                FINISH_QUERY(be->connection);
+                goto done; 
             }
 
+            if (0 == i) this_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",0));
+            if (2 == jrows) {
+               next_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",1));
+            } else if (1 == i) {
+               next_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",0));
+            } 
+            PQclear (result);
+            i++;
          }
-      }
+      } while (result);
 
-      PQclear (result);
-      i++;
-   } while (result);
-   
-   /* set the timestamp on the final checkpoint,
-    *  8 seconds past the very last split */
-   this_ts.tv_sec += 8;
-   bp->datetime = this_ts;
+      /* lets see if its time to start a new checkpoint */
+      /* look for splits that occur at least ten seconds apart */
+      this_ts.tv_sec += 10;
+      if (timespec_cmp (&this_ts, &next_ts) < 0)
+      {
+         /* Set checkpoint five seconds back. This is safe,
+          * because we looked for a 10 second gap above */
+         this_ts.tv_sec -= 5;
+         bp->date_end = this_ts;
+
+         /* and build a new checkpoint */
+         bp = g_chunk_new0 (Checkpoint, chunk);
+         checkpoints = g_list_prepend (checkpoints, bp);
+         bp->date_start = this_ts;
+         bp->account_guid = acct_guid;
+         bp->commodity = commodity_name;
+         nck += MIN_CHECKPOINT_COUNT;
+      }
+      else 
+      {
+         /* step one at a time until we find at least a ten-second gap */
+         nck += 1;
+      }
+   }
+
+done:
+
+   /* set the timestamp on the final checkpoint into the distant future */
+   this_ts = gnc_iso8601_to_timespec_local ("2038-01-02 08:35:46.00");
+   bp->date_end = this_ts;
 
    /* now store the checkpoints */
    for (node = checkpoints; node; node = node->next)
@@ -190,10 +180,21 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    g_list_free (checkpoints);
    g_mem_chunk_destroy (chunk);
 
-   p = "COMMIT WORK;";
-   SEND_QUERY (be,p, );
+   /* finally, let the sql server do the heavy lifting of computing the 
+    * subtotal balances */
+   p = be->buff; *p = 0;
+   p = stpcpy (p, "UPDATE gncCheckpoint SET "
+                  "  balance            = (gncsubtotalbalance        (accountGuid, date_start, date_end )),"
+                  "  cleared_balance    = (gncsubtotalclearedbalance (accountGuid, date_start, date_end )),"
+                  "  reconciled_balance = (gncsubtotalreconedbalance (accountGuid, date_start, date_end )) "
+                  "WHERE accountGuid='");
+   p = stpcpy (p, guid_string);
+   p = stpcpy (p, "'; ");
+   p = stpcpy (p, "COMMIT WORK;");
+   SEND_QUERY (be,be->buff, );
    FINISH_QUERY(be->connection);
 
+   g_free ((gpointer) guid_string);
 }
 
 /* ============================================================= */
@@ -230,6 +231,7 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    if (!be || !chk) return;
    ENTER("be=%p", be);
 
+/* XXX this is totally wrong */
    /* create the query we need */
    p = be->buff; *p = 0;
    p = stpcpy (p, "SELECT balance, cleared_balance, reconciled_balance "
@@ -239,7 +241,7 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    p = stpcpy (p, "' AND commodity='");
    p = stpcpy (p, chk->commodity);
    p = stpcpy (p, "' AND date_start <'");
-   p = gnc_timespec_to_iso8601_buff (chk->datetime, p);
+   p = gnc_timespec_to_iso8601_buff (chk->date_start, p);
    p = stpcpy (p, "' ORDER BY date_start DESC LIMIT 1;");
    SEND_QUERY (be,be->buff, );
 
@@ -287,8 +289,9 @@ pgendGroupGetAllCheckpoints (PGBackend *be, AccountGroup*grp)
    if (!be || !grp) return;
    ENTER("be=%p", be);
 
-   chk.datetime.tv_sec = time(0);
-   chk.datetime.tv_nsec = 0;
+/* XXX hack alert this is all wrong */
+   chk.date_start.tv_sec = time(0);
+   chk.date_start.tv_nsec = 0;
 
    acclist = xaccGroupGetSubAccounts (grp);
 

@@ -92,7 +92,8 @@ Backend * pgendNew (void);
 typedef struct _checkpoint {
    const GUID *account_guid;
    const char * commodity;
-   Timespec datetime;
+   Timespec date_start;
+   Timespec date_end;
    gint64 balance;
    gint64 cleared_balance;
    gint64 reconciled_balance;

@@ -86,14 +86,17 @@ m4 macros
 ---------
 Some of the code is auto-gen'ed from m4 macros.  This mostly just
 simplifies some rather repetitive, cut-n-paste code that's identical
-from function to function.  If you can think of a better way ...
+from function to function.  If you can think of a better way, let me 
+know.
 
 
 String escapes
 --------------
-Any string is valid; the builder.c routine sqlBuilder_escape() converts
+The GUI and the engine support all any characters within a string; however,
+in SQL some characters are reserved.  These reserved characters are escaped
+in builder.c routine sqlBuilder_escape() before storage.  These convert
 single-quotes and backslashes to escaped quotes & backslashes to prevent
-sql corruption.
+SQL corruption.
 
 
 KVP frames
@@ -135,8 +138,26 @@ are not using NTP for time synchronization; or, e.g. if one machine failed
 to have daylight-savings time set correctly: its transactions would be 
 an hour newer/older than the others, leading to bad updates).
 
+Prices need to have version numbers added.
+
 Balances
 --------
+The GUI displays a running balance in the register display.  When the
+engine has a copy of all data, this is easy to compute.  However, if
+the dataset is large, then we don't want the engine to have a copy of 
+all of the data; we want to leave the bulk of it in the database.
+However, that presents a problem for computing the running balances.
+We could store a running balance with each journal entry.  However,
+this has the potential of making balance updates slow: potentially
+a lot of entries would need to be updated.
+
+As an alternate technique, we store running balances in a set of
+'checkpoints', each showing a subtotal balance for a date interval.
+Unfortunately, there is quite a bit of machinery that needs to be 
+implemented in order to make this effective.
+
+
+In order 
 Account balances can be computed using advanced SQL statements.
 The basic idea looks like this:
 
@@ -149,7 +170,7 @@ works.  Note that this statement updates *all* checkpoints for the
 indicated accountguid.
 
     UPDATE gnccheckpoint 
-        SET balance = (SELECT sum(gncentry.valuenum) 
+        SET balance = (SELECT sum(gncentry.amount) 
             FROM gncentry, gnctransaction
             WHERE
             gncentry.accountguid = gnccheckpoint.accountguid AND 
@@ -162,7 +183,7 @@ Its a better to create a function that does the computation:
 
     CREATE FUNCTION gncsubtotal (char(32), datetime, datetime)
         RETURNS numeric
-        AS 'SELECT sum(gncentry.valuenum) 
+        AS 'SELECT sum(gncentry.amount) 
             FROM gncentry, gnctransaction
             WHERE
             gncentry.accountguid = $1 AND
@@ -173,24 +194,40 @@ Its a better to create a function that does the computation:
 and use it like this:
 
     UPDATE gnccheckpoint
-        SET balance = (gncsubtotal ('4c9cad7be044559705988c63ea7affc5', 
-                       date_xpoint, date_xpoint + 360 ))
-        WHERE accountguid='111';
+        SET balance = (gncsubtotal (accountGuid, date_start, date_end ))
+        WHERE accountguid='4c9cad7be044559705988c63ea7affc5';
 
+We can find dates for creating checkpoints like so:
 
+SELECT gnctransaction.date_posted 
+   FROM gnctransaction, gncentry
+   WHERE
+       gncentry.transguid = gnctransaction.transguid AND
+       gncentry.accountguid='4c9cad7be044559705988c63ea7affc5'
+   ORDER BY gnctransaction.date_posted ASC
+   LIMIT 2 OFFSET 10;
+   
 ----------------------------
 nothing but junk below/test demo
 
-CREATE FUNCTION gncsubtotal (char(32), datetime, datetime, int8)
-    RETURNS numeric
-    AS 'SELECT $4 * sum(gncentry.valuenum numeric/ gncentry.valuedenom
-numeric )
-        FROM gncentry, gnctransaction
-        WHERE
-        gncentry.accountguid = $1 AND
-        gncentry.transguid = gnctransaction.transguid AND
-        gnctransaction.date_posted BETWEEN $2 AND $3'
-    LANGUAGE 'sql';
+    UPDATE gnccheckpoint
+        SET balance = (gncsubtotalbalance (accountGuid, 
+                       date_start, date_start+360)),
+            cleared_balance = (gncsubtotalclearedbalance (accountguid, 
+                       date_start, date_start+360)),
+            reconciled_balance = (gncsubtotalreconedbalance (accountguid, 
+                       date_start, date_start+360))
+        WHERE accountguid='4c9cad7be044559705988c63ea7affc5';
+
+    UPDATE gnccheckpoint
+        SET cleared_balance = (gncsubtotalclearedbalance (accountguid, 
+                       date_start, date_start+360));
+
+    UPDATE gnccheckpoint
+        SET reconciled_balance = (gncsubtotalreconedbalance (accountguid, 
+                       date_start, date_start+360));
+
+
 
 
 UPDATE gnccheckpoint
@@ -207,4 +244,5 @@ WHERE accountguid='111';
 
 INSERT INTO gnccheckpoint (accountguid, date_xpoint, commodity, balance)
 VALUES (111, '1997-01-01 12:00:00-05', 'FLOOP::GLOP', 0);
+
 

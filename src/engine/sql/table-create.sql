@@ -36,8 +36,6 @@ CREATE TABLE gncCommodity (
 -- Account structure -- parentGUID points to parent account
 -- guid. There is no supports for Groups in this schema.
 -- (there seems to be no strong need to have groups in the DB.)
---
--- hack alert -- add kvp frames, 
 
 CREATE TABLE gncAccount (
 	accountGuid	CHAR(32) PRIMARY KEY,
@@ -53,8 +51,6 @@ CREATE TABLE gncAccount (
 
 -- CREATE INDEX gncAccount_pg_idx ON gncAccount (parentGuid);
 -- CREATE INDEX gncAccount_ch_idx ON gncAccount (childrenGuid);
-
--- hack alert -- add kvp frames ??
 
 CREATE TABLE gncTransaction (
 	transGuid	CHAR(32) PRIMARY KEY,
@@ -93,12 +89,15 @@ CREATE INDEX gncEntry_trn_idx ON gncEntry (transGuid);
 -- in multiple currencies.  
 -- (e.g. report stock account balances in shares of stock, 
 -- and in dollars)
+-- the 'type' field indicates what type of balance this is
+-- (simple, FIFO, LIFO, or other accounting method)
 
 CREATE TABLE gncCheckpoint (
 	accountGuid		CHAR(32) NOT NULL,
 	date_start	 	DATETIME NOT NULL,
--- 	date_end	 	DATETIME NOT NULL,
+ 	date_end	 	DATETIME NOT NULL,
 	commodity		TEXT NOT NULL CHECK (commodity <>''),
+	type			TEXT DEFAULT 'simple',
 	balance			INT8 DEFAULT '0',
 	cleared_balance		INT8 DEFAULT '0',
 	reconciled_balance	INT8 DEFAULT '0',
@@ -187,4 +186,38 @@ CREATE TABLE gncKVPvalue_guid (
 CREATE TABLE gncKVPvalue_list (
 	data		TEXT[]
 ) INHERITS (gncKVPvalue);
+
+-- utility functions to compute chackpoint balance subtotals
+
+CREATE FUNCTION gncSubtotalBalance (CHAR(32), DATETIME, DATETIME)
+    RETURNS NUMERIC
+    AS 'SELECT sum(gncentry.value)
+        FROM gncentry, gnctransaction
+        WHERE
+        gncentry.accountguid = $1 AND
+        gncentry.transguid = gnctransaction.transguid AND
+        gnctransaction.date_posted BETWEEN $2 AND $3'
+    LANGUAGE 'sql';
+
+CREATE FUNCTION gncSubtotalClearedBalance (char(32), DATETIME, DATETIME)
+    RETURNS NUMERIC
+    AS 'SELECT sum(gncentry.value)
+        FROM gncentry, gnctransaction
+        WHERE
+        gncentry.accountguid = $1 AND
+        gncentry.transguid = gnctransaction.transguid AND
+        gnctransaction.date_posted BETWEEN $2 AND $3 AND
+        gncentry.reconciled <> \\'n\\''
+    LANGUAGE 'sql';
+
+CREATE FUNCTION gncSubtotalReconedBalance (CHAR(32), DATETIME, DATETIME)
+    RETURNS NUMERIC
+    AS 'SELECT sum(gncentry.value)
+        FROM gncentry, gnctransaction
+        WHERE
+        gncentry.accountguid = $1 AND
+        gncentry.transguid = gnctransaction.transguid AND
+        gnctransaction.date_posted BETWEEN $2 AND $3 AND
+        gncentry.reconciled = \\'y\\''
+    LANGUAGE 'sql';
 
