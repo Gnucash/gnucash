@@ -473,6 +473,24 @@ gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
   /* If it looks to be overflowing, try to reduce the fraction ... */
   if (bignume.isbig || bigdeno.isbig)
   {
+    gint64 tmp;
+    a = gnc_numeric_reduce (a);
+    b = gnc_numeric_reduce (b);
+    tmp = a.num;
+    a.num = b.num;
+    b.num = tmp;
+    a = gnc_numeric_reduce (a);
+    b = gnc_numeric_reduce (b);
+
+    bignume = mult128 (a.num, b.num);
+    bigdeno = mult128 (a.denom, b.denom);
+    product.num   = a.num*b.num;
+    product.denom = a.denom*b.denom;
+  }
+
+  /* If it its still overflowing, and rounding is allowed then round */
+  if (bignume.isbig || bigdeno.isbig)
+  {
     /* If rounding allowed, then shift until there's no 
      * more overflow. The conversion at the end will fix 
      * things up for the final value. Else overflow. */
