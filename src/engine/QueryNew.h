@@ -12,6 +12,8 @@
 /* A Query */
 typedef struct querynew_s QueryNew;
 
+/* in case Query.h is included first... */
+#ifndef GNUCASH_QUERY_H
 /* Query Term Operators, for combining Query Terms */
 typedef enum {
   QUERY_AND=1,
@@ -20,7 +22,7 @@ typedef enum {
   QUERY_NOR,
   QUERY_XOR
 } QueryOp;
-
+#endif
 
 /* Standard Query Term comparitors, for how to process a query term.
  * Note that not all core types implement all comparitors

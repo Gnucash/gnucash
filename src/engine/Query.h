@@ -36,6 +36,8 @@
 
 typedef struct query_s Query;
 
+/* Protect us if QueryNew.h is included first */
+#ifndef GNC_QUERYNEW_H
 typedef enum {
   QUERY_AND=1,
   QUERY_OR,
@@ -43,6 +45,7 @@ typedef enum {
   QUERY_NOR,
   QUERY_XOR
 } QueryOp;
+#endif
 
 typedef enum {
   BY_STANDARD=1,

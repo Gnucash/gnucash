@@ -22,6 +22,11 @@
 
 #define DIALOG_SEARCH_CM_CLASS "dialog-search"
 
+typedef enum {
+  GNC_SEARCH_MATCH_ALL = 0,
+  GNC_SEARCH_MATCH_ANY = 1
+} GNCSearchType;
+
 struct _GNCSearchWindow {
   GtkWidget *	dialog;
   GtkWidget *	criteria_table;
@@ -38,6 +43,7 @@ struct _GNCSearchWindow {
   GtkWidget *	del_rb;
 
   /* Callbacks */
+  GNCSearchResultCB result_cb;
   GNCSearchCallbackButton *buttons;
   gpointer		user_data;
 
@@ -70,12 +76,14 @@ static void
 gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 {
   GNCSearchCallbackButton *cb;
+  gboolean res;
 
   cb = gtk_object_get_data (GTK_OBJECT (button), "data");
 
-  sw->selected_item = (cb->cb_fcn)(sw->selected_item, sw->user_data);
+  res = (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
 
-  /* XXX: Close this, now? */
+  if (!res)
+    gnc_search_dialog_destroy (sw);
 }
 
 static void
@@ -293,15 +301,24 @@ search_find_cb (GtkButton *button, GNCSearchWindow *sw)
     return;
 
   search_update_query (sw);
+
+  if (sw->result_cb) {
+    gboolean ret = (sw->result_cb)(sw->q, sw->user_data, &(sw->selected_item));
+    if (!ret)
+      return gnc_search_dialog_destroy (sw);
+  }
   search_clear_criteria (sw);
   gnc_search_dialog_reset_widgets (sw);
-  gnc_search_dialog_display_results (sw);
-  /* XXX */
+
+  if (!sw->result_cb)
+    gnc_search_dialog_display_results (sw);
 }
 
 static void
 search_cancel_cb (GtkButton *button, GNCSearchWindow *sw)
 {
+  /* Don't select anything */
+  sw->selected_item = NULL;
   gnc_search_dialog_destroy (sw);
 }
 
@@ -494,6 +511,12 @@ gnc_search_dialog_close_cb (GnomeDialog *dialog, GNCSearchWindow *sw)
 
   /* XXX: Clear the params_list? */
   g_list_free (sw->crit_list);
+
+  /* Destroy the queries */
+  if (sw->q) gncQueryDestroy (sw->q);
+  if (sw->start_q) gncQueryDestroy (sw->start_q);
+
+  /* Destroy and exit */
   g_free (sw);
   return FALSE;
 }
@@ -515,8 +538,9 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
 
   xml = gnc_glade_xml_new ("search.glade", "Search Dialog");
 
-  /* Grab the dialog; compute the box */
+  /* Grab the dialog, save the dialog info */
   sw->dialog = glade_xml_get_widget (xml, "Search Dialog");
+  gtk_object_set_data (GTK_OBJECT (sw->dialog), "dialog-info", sw);
 
   /* grab the result hbox */
   sw->result_hbox = glade_xml_get_widget (xml, "result_hbox");
@@ -656,8 +680,10 @@ get_params_list (GNCIdTypeConst type)
 }
 
 GNCSearchWindow *
-gnc_search_dialog_create (GNCIdTypeConst obj_type,
+gnc_search_dialog_create (GNCIdTypeConst obj_type, QueryNew *start_query,
+			  gboolean show_start_results,
 			  GNCSearchCallbackButton *callbacks,
+			  GNCSearchResultCB result_callback,
 			  gpointer user_data)
 {
   GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
@@ -665,12 +691,27 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type,
   g_return_val_if_fail (obj_type, NULL);
   g_return_val_if_fail (*obj_type != '\0', NULL);
 
+  /* Make sure the caller supplies callbacks xor result_callback */
+  g_return_val_if_fail ((callbacks && !result_callback) ||
+			(!callbacks && result_callback), NULL);
+
   sw->search_for = obj_type;
   sw->params_list = get_params_list (obj_type);
   sw->buttons = callbacks;
+  sw->result_cb = result_callback;
   sw->user_data = user_data;
 
+  if (start_query)
+    sw->start_q = gncQueryCopy (start_query);
+
   gnc_search_dialog_init_widgets (sw);
+
+  /* Maybe display the original query results? */
+  if (callbacks && start_query && show_start_results) {
+    sw->q = gncQueryCopy (start_query);
+    gnc_search_dialog_reset_widgets (sw);
+    gnc_search_dialog_display_results (sw);
+  }
 
   return sw;
 }
@@ -679,17 +720,19 @@ static int
 on_close_cb (GnomeDialog *dialog, gpointer *data)
 {
   if (data) {
-    *data = "FOO";
+    GNCSearchWindow *sw = gtk_object_get_data (GTK_OBJECT (dialog),
+					       "dialog-info");
+    *data = sw->selected_item;
   }
 
   gtk_main_quit ();
   return FALSE;
 }
 
-static gpointer
-do_nothing (gpointer a, gpointer b)
+static gboolean
+do_nothing (gpointer *a, gpointer b)
 {
-  return a;
+  return TRUE;
 }
 
 void
@@ -705,10 +748,32 @@ gnc_search_dialog_test (void)
     { NULL }
   };
 
-  GNCSearchWindow *sw = gnc_search_dialog_create (GNC_ID_SPLIT, buttons, NULL);
+  GNCSearchWindow *sw = gnc_search_dialog_create (GNC_ID_SPLIT, NULL, FALSE,
+						  buttons, NULL, NULL);
 
   gtk_signal_connect (GTK_OBJECT (sw->dialog), "close",
 		      GTK_SIGNAL_FUNC (on_close_cb), &result);
 
   gtk_main ();
+}
+
+gpointer gnc_search_dialog_choose_object (GNCIdTypeConst obj_type,
+					  QueryNew *start_query,
+					  gboolean show_start_results,
+					  GNCSearchCallbackButton *callbacks,
+					  GNCSearchResultCB result_callback,
+					  gpointer user_data)
+{
+  gpointer result = NULL;
+  GNCSearchWindow *sw = gnc_search_dialog_create (obj_type, start_query,
+						  show_start_results,
+						  callbacks, result_callback,
+						  user_data);
+
+  gtk_signal_connect (GTK_OBJECT (sw->dialog), "close",
+		      GTK_SIGNAL_FUNC (on_close_cb), &result);
+
+  gtk_main ();
+
+  return result;
 }
