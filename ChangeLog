@@ -1,3 +1,9 @@
+2003-07-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-account-tree.c: add "(Report)" strings
+	  to the various columns displayed in the report currency.
+	  Partial fix for #118695.
+
 2003-07-29  Derek Atkins  <derek@ihtfp.com>
 
 	* src/import-export/qif/ -- add functionality to merge multiple
