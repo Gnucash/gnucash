@@ -723,7 +723,7 @@ de extractos em scheme, o wrapper g-wrap para guile, e as preferências de utiliz
 </glossentry>
 
 <glossentry>
-<glossterm><email>sjmurdoch@linuxfan.com</email> Steven
+<glossterm><email>sjmurdoch@bigfoot.com</email> Steven
       Murdoch</glossterm>
 <glossdef>
 <para>correcção ao gnc-prices para a bolsa de Londres</para>
