@@ -39,8 +39,8 @@ RANLIB = ranlib
 # DEBUGMEMORY  - does some accounting whenever malloc/free
 #                is called.
 # USEDEBUG     - causes debugging info to be displayed
-CFLAGS = $(LFLAGS) -I../include -I../libhtmlw -I../Xbae-4.6.2-linas \
-         -I ../ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
+CFLAGS = $(LFLAGS) -I../include -I../lib/libhtmlw -I../lib/Xbae-4.6.2-linas \
+         -I ../lib/ComboBox-1.33 -I/usr/local/include  -DMOTIF1_2 \
 
 
 	 # -DDEBUGMEMORY -DUSEDEBUG
@@ -59,9 +59,9 @@ OPTIONS = "CC = $(CC)"           "LFLAGS = $(LFLAGS)" \
           "RANLIB = $(RANLIB)"   "AR = $(AR)"
 
 default :
-	@cd ComboBox-1.33 ; $(MAKE) 
-	@cd Xbae-4.6.2-linas ; $(MAKE) 
-	@cd libhtmlw ; $(MAKE) $(OPTIONS)
+	@cd lib/ComboBox-1.33 ; $(MAKE) 
+	@cd lib/Xbae-4.6.2-linas ; $(MAKE) 
+	@cd lib/libhtmlw ; $(MAKE) $(OPTIONS)
 	@cd src ; $(MAKE) $(OPTIONS)
 
 clean :
