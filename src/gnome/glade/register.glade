@@ -455,7 +455,7 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="resizable">True</property>
+  <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
   <property name="has_separator">True</property>
 
@@ -478,75 +478,21 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
+	      <property name="response_id">-6</property>
 	    </widget>
 	  </child>
 
 	  <child>
-	    <widget class="GtkButton" id="set_range">
+	    <widget class="GtkButton" id="apply_button">
 	      <property name="visible">True</property>
+	      <property name="sensitive">False</property>
 	      <property name="can_default">True</property>
 	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
+	      <property name="label">gtk-apply</property>
+	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="response_id">0</property>
-	      <signal name="clicked" handler="gnc_register_date_cb"/>
-
-	      <child>
-		<widget class="GtkAlignment" id="alignment1">
-		  <property name="visible">True</property>
-		  <property name="xalign">0.5</property>
-		  <property name="yalign">0.5</property>
-		  <property name="xscale">0</property>
-		  <property name="yscale">0</property>
-
-		  <child>
-		    <widget class="GtkHBox" id="hbox87">
-		      <property name="visible">True</property>
-		      <property name="homogeneous">False</property>
-		      <property name="spacing">2</property>
-
-		      <child>
-			<widget class="GtkImage" id="image1">
-			  <property name="visible">True</property>
-			  <property name="stock">gtk-ok</property>
-			  <property name="icon_size">4</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-
-		      <child>
-			<widget class="GtkLabel" id="label847672">
-			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Set Date Range</property>
-			  <property name="use_underline">True</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_LEFT</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-			<packing>
-			  <property name="padding">0</property>
-			  <property name="expand">False</property>
-			  <property name="fill">False</property>
-			</packing>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
+	      <property name="response_id">-10</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -582,10 +528,10 @@
 		  <property name="label" translatable="yes">Show Earliest</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="active">False</property>
+		  <property name="active">True</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
+		  <signal name="toggled" handler="gnc_plugin_page_register_start_toggle_cb" last_modification_time="Wed, 24 Sep 2003 06:47:28 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
@@ -598,7 +544,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkRadioButton" id="start_date">
+		<widget class="GtkRadioButton" id="start_date_radio">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Start date:</property>
@@ -608,7 +554,7 @@
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
 		  <property name="group">start_earliest</property>
-		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
+		  <signal name="toggled" handler="gnc_plugin_page_register_start_toggle_cb" last_modification_time="Wed, 24 Sep 2003 06:47:36 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
@@ -646,10 +592,10 @@
 		  <property name="label" translatable="yes">Show Latest</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="active">False</property>
+		  <property name="active">True</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
-		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
+		  <signal name="toggled" handler="gnc_plugin_page_register_end_toggle_cb" last_modification_time="Wed, 24 Sep 2003 06:47:48 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
@@ -662,7 +608,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkRadioButton" id="end_date">
+		<widget class="GtkRadioButton" id="end_date_radio">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">End date:</property>
@@ -672,7 +618,7 @@
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
 		  <property name="group">end_latest</property>
-		  <signal name="toggled" handler="gnc_register_date_toggle_cb"/>
+		  <signal name="toggled" handler="gnc_plugin_page_register_end_toggle_cb" last_modification_time="Wed, 24 Sep 2003 06:47:56 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">0</property>
@@ -687,12 +633,11 @@
 	      <child>
 		<widget class="GtkButton" id="today">
 		  <property name="visible">True</property>
-		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Today</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <signal name="clicked" handler="gnc_register_today_cb"/>
+		  <signal name="clicked" handler="gnc_plugin_page_register_today_cb" last_modification_time="Wed, 24 Sep 2003 06:48:30 GMT"/>
 		</widget>
 		<packing>
 		  <property name="left_attach">3</property>

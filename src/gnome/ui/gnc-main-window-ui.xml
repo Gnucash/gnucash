@@ -22,6 +22,7 @@
       </menu>
       <separator name="FileSep4"/>
       <menuitem name="FilePrint" action="FilePrintAction"/>
+      <placeholder name="FilePrintPlaceholder"/>
       <separator name="FileSep5"/>
       <menuitem name="FileClose" action="FileCloseAction"/>
       <menuitem name="FileQuit" action="FileQuitAction"/>
@@ -44,6 +45,8 @@
       <menuitem name="ViewToolbar" action="ViewToolbarAction"/>
       <menuitem name="ViewSummary" action="ViewSummaryAction"/>
       <menuitem name="ViewStatusbar" action="ViewStatusbarAction"/>
+      <separator name="ViewSep2"/>
+      <placeholder name="ViewPlaceholder"/>
     </menu>
   
     <menu name="Actions" action="ActionsAction">

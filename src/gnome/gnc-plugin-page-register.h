@@ -30,6 +30,7 @@
 #include "Account.h"
 #include "gnc-ledger-display.h"
 #include "gnc-plugin-page.h"
+#include "gnc-split-reg.h"
 
 G_BEGIN_DECLS
 
@@ -62,6 +63,18 @@ GType          gnc_plugin_page_register_get_type (void);
 GncPluginPage *gnc_plugin_page_register_new        (Account *account, gboolean subaccounts);
 GncPluginPage *gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger);
 GncPluginPage *gnc_plugin_page_register_new_gl     (void);
+
+void
+gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
+				      const char *lines_opt_page,
+				      const char *lines_opt_name,
+				      gint lines_default,
+				      gint disallowCaps);
+void
+gnc_plugin_page_register_set_ui_description (GncPluginPage *plugin_page,
+					     const char *ui_filename);
+
+GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
 
 G_END_DECLS
 
