@@ -49,7 +49,8 @@
 #include "gnc-engine-util.h"
 #include "Group.h"
 
-static const gchar *book_version_string = "2.0.0";
+/* non-static because it's used in io-gncxml-v2.c */
+const gchar *gnc_v2_book_version_string = "2.0.0";
 
 /* ids */
 #define gnc_book_string "gnc:book"
@@ -108,7 +109,7 @@ gnc_book_dom_tree_create(GNCBook *book)
     xmlNodePtr ret;
 
     ret = xmlNewNode(NULL, gnc_book_string);
-    xmlSetProp(ret, "version", book_version_string);
+    xmlSetProp(ret, "version", gnc_v2_book_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(book_id_string, gnc_book_get_guid(book)));
 

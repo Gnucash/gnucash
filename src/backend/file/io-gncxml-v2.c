@@ -65,7 +65,7 @@ struct file_backend {
 };
 
 #define GNC_V2_STRING "gnc-v2"
-static const gchar *book_version_string;
+extern const gchar *gnc_v2_book_version_string;	/* see gnc-book-xml-v2 */
 
 void
 run_callback(sixtp_gdv2 *data, const char *type)
@@ -872,7 +872,7 @@ write_book(FILE *out, GNCBook *book, sixtp_gdv2 *gd)
     be_data.out = out;
     be_data.book = book;
 
-    fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, book_version_string );
+    fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string );
     write_book_parts (out, book);
 
     write_counts(out,
