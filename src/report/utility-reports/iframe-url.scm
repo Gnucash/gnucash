@@ -1,5 +1,6 @@
 
 (define-module (gnucash report iframe-url))
+(use-modules (gnucash bootstrap) (g-wrapped gw-gnc)) ;; FIXME: delete after we finish modularizing.
 (use-modules (ice-9 slib))
 (use-modules (gnucash gnc-module))
 
