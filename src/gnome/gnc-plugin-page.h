@@ -2,8 +2,8 @@
  * gnc-plugin-page.h -- A page, which can be added to the
  *	GnuCash main window.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -32,16 +32,28 @@
 G_BEGIN_DECLS
 
 /* type macros */
-#define GNC_TYPE_PLUGIN_PAGE          (gnc_plugin_page_get_type ())
-#define GNC_PLUGIN_PAGE(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPage))
-#define GNC_IS_PLUGIN_PAGE(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PLUGIN_PAGE))
-#define GNC_PLUGIN_PAGE_GET_IFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPageIface))
+#define GNC_TYPE_PLUGIN_PAGE            (gnc_plugin_page_get_type ())
+#define GNC_PLUGIN_PAGE(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PLUGIN_PAGE, GncPluginPage))
+#define GNC_PLUGIN_PAGE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_PAGE, GncPluginPageClass))
+#define GNC_IS_PLUGIN_PAGE(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PLUGIN_PAGE))
+#define GNC_IS_PLUGIN_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE))
+#define GNC_PLUGIN_PAGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN_PAGE, GncPluginPageClass))
 
 /* typedefs & structures */
-typedef struct GncPluginPage GncPluginPage; /* dummy typedef */
+typedef struct GncPluginPage {
+	GObject parent;
+
+	gchar *title;
+	gchar *tab_name;
+	gchar *uri;
+	GtkWidget *window;
+} GncPluginPage;
 
 typedef struct {
-	GTypeInterface parent;
+	GObjectClass parent;
+
+	const gchar *tab_icon;
+	const gchar *plugin_name;
 
 	/* Signals */
 	void (* inserted) (GncPluginPage *plugin_page);
@@ -55,17 +67,7 @@ typedef struct {
 
 	void (* merge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
 	void (* unmerge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
-
-	gchar *(* get_title) (GncPluginPage *plugin_page);
-	gchar *(* get_tab_name) (GncPluginPage *plugin_page);
-	G_CONST_RETURN gchar *(* get_tab_icon) (GncPluginPage *plugin_page);
-
-	G_CONST_RETURN gchar *(* get_plugin_name) (GncPluginPage *plugin_page);
-	G_CONST_RETURN gchar *(* get_uri) (GncPluginPage *plugin_page);
-
-	/* Variables */
-	GtkWidget *window;
-} GncPluginPageIface;
+} GncPluginPageClass;
 
 /* function prototypes */
 GType                 gnc_plugin_page_get_type        (void);
@@ -77,13 +79,6 @@ void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_pag
                                                        EggMenuMerge *merge);
 void                  gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
                                                        EggMenuMerge *merge);
-
-gchar                *gnc_plugin_page_get_title       (GncPluginPage *plugin_page);
-gchar                *gnc_plugin_page_get_tab_name    (GncPluginPage *plugin_page);
-G_CONST_RETURN gchar *gnc_plugin_page_get_tab_icon    (GncPluginPage *plugin_page);
-
-G_CONST_RETURN gchar *gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page);
-G_CONST_RETURN gchar *gnc_plugin_page_get_uri         (GncPluginPage *plugin_page);
 
 /* Signals */
 void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);

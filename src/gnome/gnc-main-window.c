@@ -2,8 +2,8 @@
  * gnc-main-window.c -- GtkWindow which represents the
  *	GnuCash main window.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -304,7 +304,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *label_box;
 	GtkWidget *label;
 	const gchar *icon;
-	gchar *tab_name;
 	GtkWidget *image;
 	GtkNotebook *notebook;
 
@@ -313,15 +312,13 @@ gnc_main_window_open_page (GncMainWindow *window,
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
 
-	gnc_plugin_page_set_window (page, GTK_WIDGET(window));
+	page->window = GTK_WIDGET(window);
 	child = gnc_plugin_page_create_widget (page);
 	g_object_set_data (G_OBJECT (child), "page-plugin", page);
 
-	icon = gnc_plugin_page_get_tab_icon (page);
-	tab_name = gnc_plugin_page_get_tab_name (page);
-	label = gtk_label_new (tab_name);
+	icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
+	label = gtk_label_new (page->tab_name);
 	gtk_widget_show (label);
-	g_free(tab_name);
 
 	if (icon != NULL) {
 		/* FIXME */
@@ -715,8 +712,8 @@ gnc_main_window_cmd_file_open_new_window (EggAction *action, GncMainWindow *wind
 	new_window = gnc_main_window_new ();
 
 	if (window->priv->current_page != NULL) {
-		name = gnc_plugin_page_get_plugin_name (window->priv->current_page);
-		uri = gnc_plugin_page_get_uri (window->priv->current_page);
+		name = GNC_PLUGIN_PAGE_GET_CLASS (window->priv->current_page)->plugin_name;
+		uri = window->priv->current_page->uri;
 		plugin = gnc_plugin_manager_get_plugin (gnc_plugin_manager_get (), name);
 		page = gnc_plugin_create_page (plugin, uri);
 

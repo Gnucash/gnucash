@@ -1,8 +1,8 @@
 /* 
  * gnc-plugin-page-register.h -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -47,13 +47,13 @@ G_BEGIN_DECLS
 typedef struct GncPluginPageRegisterPrivate GncPluginPageRegisterPrivate;
 
 typedef struct {
-	GObject parent;
+	GncPluginPage parent;
 
 	GncPluginPageRegisterPrivate *priv;
 } GncPluginPageRegister;
 
 typedef struct {
-	GObjectClass parent;
+	GncPluginPageClass parent;
 } GncPluginPageRegisterClass;
 
 /* function prototypes */

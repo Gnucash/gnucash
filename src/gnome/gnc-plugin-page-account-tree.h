@@ -1,8 +1,8 @@
 /* 
  * gnc-plugin_page-account-tree.h -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -45,13 +45,13 @@ G_BEGIN_DECLS
 typedef struct GncPluginPageAccountTreePrivate GncPluginPageAccountTreePrivate;
 
 typedef struct {
-	GObject parent;
+	GncPluginPage parent;
 
 	GncPluginPageAccountTreePrivate *priv;
 } GncPluginPageAccountTree;
 
 typedef struct {
-	GObjectClass parent;
+	GncPluginPageClass parent;
 } GncPluginPageAccountTreeClass;
 
 /* function prototypes */

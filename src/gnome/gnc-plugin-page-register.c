@@ -1,8 +1,8 @@
 /* 
  * gnc-plugin-page-register.c -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -43,17 +43,12 @@ static void gnc_plugin_page_register_finalize (GObject *object);
 
 /* static Account *gnc_plugin_page_register_get_current_account (GncPluginPageRegister *page); */
 
-static void gnc_plugin_page_register_plugin_page_init (GncPluginPageIface *iface);
-
 static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static void gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
-static gchar *gnc_plugin_page_register_get_title (GncPluginPage *plugin_page);
+
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_register_get_tab_icon (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_register_get_plugin_name (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_register_get_uri (GncPluginPage *plugin_page);
 
 /* Callbacks */
 #if 0
@@ -133,76 +128,74 @@ gnc_plugin_page_register_get_type (void)
 			(GInstanceInitFunc) gnc_plugin_page_register_init
 		};
 		
-		static const GInterfaceInfo plugin_page_info = {
-			(GInterfaceInitFunc) gnc_plugin_page_register_plugin_page_init,
-			NULL,
-			NULL
-		};
-
-		gnc_plugin_page_register_type = g_type_register_static (G_TYPE_OBJECT,
-								            "GncPluginPageRegister",
-								            &our_info, 0);
-
-		g_type_add_interface_static (gnc_plugin_page_register_type,
-					     GNC_TYPE_PLUGIN_PAGE,
-					     &plugin_page_info);
+		gnc_plugin_page_register_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
+									"GncPluginPageRegister",
+									&our_info, 0);
 	}
 
 	return gnc_plugin_page_register_type;
 }
 
+static GncPluginPage *
+gnc_plugin_page_register_new_common (GNCLedgerDisplay *ld)
+{
+	GncPluginPageRegister *register_page;
+	GncPluginPage *plugin_page;
+
+	register_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER, NULL);
+	register_page->priv->ld = ld;
+
+	plugin_page = GNC_PLUGIN_PAGE(register_page);
+	plugin_page->title = gnc_plugin_page_register_get_tab_name(plugin_page);
+	plugin_page->tab_name = gnc_plugin_page_register_get_tab_name(plugin_page);
+
+	return plugin_page;
+}
+
 GncPluginPage *
 gnc_plugin_page_register_new (Account *account, gboolean subaccounts)
 {
-	GncPluginPageRegister *plugin_page;
 	GNCLedgerDisplay *ld;
-
-	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER,
-			      NULL);
 
 	if (subaccounts)
 	  ld = gnc_ledger_display_subaccounts (account);
 	else
 	  ld = gnc_ledger_display_simple (account);
-	plugin_page->priv->ld = ld;
-	
-	return GNC_PLUGIN_PAGE (plugin_page);
+
+	return gnc_plugin_page_register_new_common(ld);
 }
 
 GncPluginPage *
 gnc_plugin_page_register_new_gl (void)
 {
-	GncPluginPageRegister *plugin_page;
 	GNCLedgerDisplay *ld;
 
-	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER,
-			      NULL);
-
 	ld = gnc_ledger_display_gl ();
-	plugin_page->priv->ld = ld;
-	
-	return GNC_PLUGIN_PAGE (plugin_page);
+	return gnc_plugin_page_register_new_common(ld);
 }
 
 GncPluginPage *
 gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger)
 {
-	GncPluginPageRegister *plugin_page;
-
-	plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER, NULL);
-	plugin_page->priv->ld = ledger;
-	
-	return GNC_PLUGIN_PAGE (plugin_page);
+	return gnc_plugin_page_register_new_common(ledger);
 }
 
 static void
 gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GncPluginPageClass *gnc_plugin_class = GNC_PLUGIN_PAGE_CLASS(klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = gnc_plugin_page_register_finalize;
+
+	gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+	gnc_plugin_class->plugin_name     = GNC_PLUGIN_REGISTER_NAME;
+	gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
+	gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
+	gnc_plugin_class->merge_actions   = gnc_plugin_page_register_merge_actions;
+	gnc_plugin_class->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
 }
 
 /* DRH - Suggest this be added to libegg */
@@ -236,10 +229,17 @@ static void
 gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 {
 	GncPluginPageRegisterPrivate *priv;
+	GncPluginPage *parent;
 	EggActionGroup *action_group;
 
 	priv = g_new0 (GncPluginPageRegisterPrivate, 1);
 	plugin_page->priv = priv;
+
+	/* Init parent declared variables */
+	parent = GNC_PLUGIN_PAGE(plugin_page);
+	parent->title       = g_strdup(_("General Ledger"));
+	parent->tab_name    = g_strdup(_("General Ledger"));
+	parent->uri         = g_strdup("default:");
 
 	/* Create menu and toolbar information */
 	action_group = egg_action_group_new ("GncPluginPageRegisterActions");
@@ -281,20 +281,7 @@ gnc_plugin_page_register_get_current_account (GncPluginPageRegister *page)
 }
 */
 
-/* Virtual table */
-static void
-gnc_plugin_page_register_plugin_page_init (GncPluginPageIface *iface)
-{
-	iface->create_widget   = gnc_plugin_page_register_create_widget;
-	iface->destroy_widget  = gnc_plugin_page_register_destroy_widget;
-	iface->merge_actions   = gnc_plugin_page_register_merge_actions;
-	iface->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
-	iface->get_title       = gnc_plugin_page_register_get_title;
-	iface->get_tab_name    = gnc_plugin_page_register_get_tab_name;
-	iface->get_tab_icon    = gnc_plugin_page_register_get_tab_icon;
-	iface->get_plugin_name = gnc_plugin_page_register_get_plugin_name;
-	iface->get_uri         = gnc_plugin_page_register_get_uri;
-}
+/* Virtual Functions */
 
 static GtkWidget *
 gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
@@ -386,14 +373,6 @@ gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page,
 	plugin_page_register->priv->ui_merge = NULL;
 }
 
-
-static gchar *
-gnc_plugin_page_register_get_title (GncPluginPage *plugin_page)
-{
-	return g_strdup(_("General Ledger"));
-}
-
-
 static gchar *
 gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 {
@@ -434,24 +413,6 @@ gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page)
 	}
 
 	return g_strdup(_("unknown"));
-}
-
-static G_CONST_RETURN gchar *
-gnc_plugin_page_register_get_tab_icon (GncPluginPage *plugin_page)
-{
-	return GNC_STOCK_ACCOUNT;
-}
-
-static G_CONST_RETURN gchar *
-gnc_plugin_page_register_get_plugin_name (GncPluginPage *plugin_page)
-{
-	return GNC_PLUGIN_REGISTER_NAME;
-}
-
-static G_CONST_RETURN gchar *
-gnc_plugin_page_register_get_uri (GncPluginPage *plugin_page)
-{
-	return "default:";
 }
 
 /* Callbacks */

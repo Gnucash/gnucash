@@ -1,8 +1,8 @@
 /* 
  * gnc-plugin-page-account-tree.c -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -69,17 +69,10 @@ static void gnc_plugin_page_account_tree_finalize (GObject *object);
 
 static Account *gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page);
 
-static void gnc_plugin_page_account_tree_plugin_page_init (GncPluginPageIface *iface);
-
 static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
 static void gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
-static gchar *gnc_plugin_page_account_tree_get_title (GncPluginPage *plugin_page);
-static gchar *gnc_plugin_page_account_tree_get_tab_name (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_tab_icon (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_plugin_name (GncPluginPage *plugin_page);
-static G_CONST_RETURN gchar *gnc_plugin_page_account_tree_get_uri (GncPluginPage *plugin_page);
 
 /* Callbacks */
 static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
@@ -212,19 +205,9 @@ gnc_plugin_page_account_tree_get_type (void)
 			(GInstanceInitFunc) gnc_plugin_page_account_tree_init
 		};
 		
-		static const GInterfaceInfo plugin_page_info = {
-			(GInterfaceInitFunc) gnc_plugin_page_account_tree_plugin_page_init,
-			NULL,
-			NULL
-		};
-
-		gnc_plugin_page_account_tree_type = g_type_register_static (G_TYPE_OBJECT,
+		gnc_plugin_page_account_tree_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
 								            "GncPluginPageAccountTree",
 								            &our_info, 0);
-
-		g_type_add_interface_static (gnc_plugin_page_account_tree_type,
-					     GNC_TYPE_PLUGIN_PAGE,
-					     &plugin_page_info);
 	}
 
 	return gnc_plugin_page_account_tree_type;
@@ -247,10 +230,18 @@ static void
 gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GncPluginPageClass *gnc_plugin_class = GNC_PLUGIN_PAGE_CLASS(klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	object_class->finalize = gnc_plugin_page_account_tree_finalize;
+
+	gnc_plugin_class->tab_icon        = GNC_STOCK_ACCOUNT;
+	gnc_plugin_class->plugin_name     = GNC_PLUGIN_ACCOUNT_TREE_NAME;
+	gnc_plugin_class->create_widget   = gnc_plugin_page_account_tree_create_widget;
+	gnc_plugin_class->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
+	gnc_plugin_class->merge_actions   = gnc_plugin_page_account_tree_merge_actions;
+	gnc_plugin_class->unmerge_actions = gnc_plugin_page_account_tree_unmerge_actions;
 }
 
 /* DRH - Suggest this be added to libegg */
@@ -302,6 +293,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 {
 	EggActionGroup *action_group;
 	GncPluginPageAccountTreePrivate *priv;
+	GncPluginPage *parent;
 	const gchar *url = NULL;
 	int options_id;
 	SCM find_options;
@@ -310,6 +302,12 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	ENTER("page %p", plugin_page);
 	priv = plugin_page->priv = g_new0 (GncPluginPageAccountTreePrivate, 1);
+
+	/* Init parent declared variables */
+	parent = GNC_PLUGIN_PAGE(plugin_page);
+	parent->title       = g_strdup(_("Accounts"));
+	parent->tab_name    = g_strdup(_("Accounts"));
+	parent->uri         = g_strdup("default:");
 
 	/* Create menu and toolbar information */
 	action_group = egg_action_group_new ("GncPluginPageAccountTreeActions");
@@ -429,32 +427,15 @@ gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page
 }
 
 
-/* Virtual table */
-static void
-gnc_plugin_page_account_tree_plugin_page_init (GncPluginPageIface *iface)
-{
-	ENTER(" ");
-	iface->create_widget   = gnc_plugin_page_account_tree_create_widget;
-	iface->destroy_widget  = gnc_plugin_page_account_tree_destroy_widget;
-	iface->merge_actions   = gnc_plugin_page_account_tree_merge_actions;
-	iface->unmerge_actions = gnc_plugin_page_account_tree_unmerge_actions;
-	iface->get_title       = gnc_plugin_page_account_tree_get_title;
-	iface->get_tab_name    = gnc_plugin_page_account_tree_get_tab_name;
-	iface->get_tab_icon    = gnc_plugin_page_account_tree_get_tab_icon;
-	iface->get_plugin_name = gnc_plugin_page_account_tree_get_plugin_name;
-	iface->get_uri         = gnc_plugin_page_account_tree_get_uri;
-	LEAVE(" ");
-}
+/* Virtual Functions */
 
 static void
 gnc_plugin_page_account_tree_close_cb (gpointer user_data)
 {
-  GncPluginPageAccountTree *page;
-  GtkWidget *window;
+  GncPluginPage *page;
 
-  page = GNC_PLUGIN_PAGE_ACCOUNT_TREE(user_data);
-  window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (page));
-  gnc_main_window_close_page (GNC_MAIN_WINDOW(window), GNC_PLUGIN_PAGE(page));
+  page = GNC_PLUGIN_PAGE(user_data);
+  gnc_main_window_close_page (GNC_MAIN_WINDOW(page->window), page);
 }
 
 static GtkWidget *
@@ -581,36 +562,6 @@ gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page,
 	LEAVE(" ");
 }
 
-static gchar *
-gnc_plugin_page_account_tree_get_title (GncPluginPage *plugin_page)
-{
-	return g_strdup(_("Accounts"));
-}
-
-static gchar *
-gnc_plugin_page_account_tree_get_tab_name (GncPluginPage *plugin_page)
-{
-	return g_strdup(_("Accounts"));
-}
-
-static G_CONST_RETURN gchar *
-gnc_plugin_page_account_tree_get_tab_icon (GncPluginPage *plugin_page)
-{
-	return GNC_STOCK_ACCOUNT;
-}
-
-static G_CONST_RETURN gchar *
-gnc_plugin_page_account_tree_get_plugin_name (GncPluginPage *plugin_page)
-{
-	return GNC_PLUGIN_ACCOUNT_TREE_NAME;
-}
-
-static G_CONST_RETURN gchar *
-gnc_plugin_page_account_tree_get_uri (GncPluginPage *plugin_page)
-{
-	return "default:";
-}
-
 /* Callbacks */
 static gboolean
 gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
@@ -677,7 +628,8 @@ gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAc
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_open_account (EggAction *action,
+					       GncPluginPageAccountTree *page)
 {
 	GtkWidget *window;
 	GncPluginPage *new_page;
@@ -688,13 +640,14 @@ gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageA
 	if (account == NULL)
 	  return;
 
-	window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (page));
+	window = GNC_PLUGIN_PAGE (page)->window;
 	new_page = gnc_plugin_page_register_new (account, FALSE);
 	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action,
+						   GncPluginPageAccountTree *page)
 {
 	GtkWidget *window;
 	GncPluginPage *new_page;
@@ -705,7 +658,7 @@ gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginP
 	if (account == NULL)
 	  return;
 
-	window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE (page));
+	window = GNC_PLUGIN_PAGE (page)->window;
 	new_page = gnc_plugin_page_register_new (account, TRUE);
 	gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
 }

@@ -26,7 +26,11 @@
 
 #include "gnc-plugin-page.h"
 
-static void gnc_plugin_page_base_init (gpointer klass);
+static gpointer         parent_class = NULL;
+
+static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
+static void gnc_plugin_page_init       (GncPluginPage *plugin_page);
+static void gnc_plugin_page_finalize   (GObject *object);
 
 enum {
 	INSERTED,
@@ -45,21 +49,21 @@ gnc_plugin_page_get_type (void)
 
 	if (gnc_plugin_page_type == 0) {
 		static const GTypeInfo our_info = {
-			sizeof (GncPluginPageIface),
-			gnc_plugin_page_base_init,
-			NULL,
-			NULL,
-			NULL,
-			NULL,
-			0,
-			0,
-			NULL
+
+			sizeof (GncPluginPageClass),
+			NULL,		/* base_init */
+			NULL,		/* base_finalize */
+			(GClassInitFunc) gnc_plugin_page_class_init,
+			NULL,		/* class_finalize */
+			NULL,		/* class_data */
+			sizeof (GncPluginPage),
+			0,		/* n_preallocs */
+			(GInstanceInitFunc) gnc_plugin_page_init,
 		};
 
-		gnc_plugin_page_type = g_type_register_static (G_TYPE_INTERFACE,
+		gnc_plugin_page_type = g_type_register_static (G_TYPE_OBJECT,
 							       "GncPluginPage",
     							       &our_info, 0);
-		g_type_interface_add_prerequisite (gnc_plugin_page_type, G_TYPE_OBJECT);
 	}
 
 	return gnc_plugin_page_type;
@@ -68,12 +72,16 @@ gnc_plugin_page_get_type (void)
 GtkWidget *
 gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
 {
+	GncPluginPageClass *klass;
 	GtkWidget *widget;
 
 	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->create_widget != NULL, NULL);
 
-	widget = GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->create_widget (plugin_page);
+	klass = GNC_PLUGIN_PAGE_GET_CLASS (plugin_page);
+	g_return_val_if_fail (klass != NULL, NULL);
+	g_return_val_if_fail (klass->create_widget != NULL, NULL);
+
+	widget = klass->create_widget (plugin_page);
 
 	/*
 	 * If there is a destroy function, add a ref so that the
@@ -81,7 +89,7 @@ gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
 	 * Otherwise it will be destroyed when it is removed from the
 	 * main notebook for the window.
 	 */
-	if (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->destroy_widget)
+	if (klass->destroy_widget)
 		g_object_ref(widget);
 
 	return widget;
@@ -90,75 +98,45 @@ gnc_plugin_page_create_widget (GncPluginPage *plugin_page)
 void
 gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
 {
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
-	g_return_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->destroy_widget != NULL);
+	GncPluginPageClass *klass;
 
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->destroy_widget (plugin_page);
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+
+	klass = GNC_PLUGIN_PAGE_GET_CLASS (plugin_page);
+	g_return_if_fail (klass != NULL);
+	g_return_if_fail (klass->destroy_widget != NULL);
+
+	return klass->destroy_widget (plugin_page);
 }
 
 void
 gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
 			       EggMenuMerge *ui_merge)
 {
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
-	g_return_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->merge_actions != NULL);
+	GncPluginPageClass *klass;
 
-	GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->merge_actions (plugin_page, ui_merge);
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+
+	klass = GNC_PLUGIN_PAGE_GET_CLASS (plugin_page);
+	g_return_if_fail (klass != NULL);
+	g_return_if_fail (klass->merge_actions != NULL);
+
+	klass->merge_actions (plugin_page, ui_merge);
 }
 
 void
 gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
 				 EggMenuMerge *ui_merge)
 {
+	GncPluginPageClass *klass;
+
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
-	g_return_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->unmerge_actions != NULL);
 
-	GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->unmerge_actions (plugin_page, ui_merge);
-}
+	klass = GNC_PLUGIN_PAGE_GET_CLASS (plugin_page);
+	g_return_if_fail (klass != NULL);
+	g_return_if_fail (klass->unmerge_actions != NULL);
 
-gchar *
-gnc_plugin_page_get_title  (GncPluginPage *plugin_page)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_title != NULL, NULL);
-
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_title (plugin_page);
-}
-
-gchar *
-gnc_plugin_page_get_tab_name  (GncPluginPage *plugin_page)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_name != NULL, NULL);
-
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_name (plugin_page);
-}
-
-G_CONST_RETURN gchar *
-gnc_plugin_page_get_tab_icon (GncPluginPage *plugin_page)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_icon != NULL, NULL);
-
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_tab_icon (plugin_page);
-}
-
-G_CONST_RETURN gchar *
-gnc_plugin_page_get_plugin_name (GncPluginPage *plugin_page)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_plugin_name != NULL, NULL);
-
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_plugin_name (plugin_page);
-}
-
-G_CONST_RETURN gchar *
-gnc_plugin_page_get_uri (GncPluginPage *plugin_page)
-{
-	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
-	g_return_val_if_fail (GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_uri != NULL, NULL);
-
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->get_uri (plugin_page);
+	klass->unmerge_actions (plugin_page, ui_merge);
 }
 
 /* Signals */
@@ -194,61 +172,74 @@ gnc_plugin_page_unselected (GncPluginPage *plugin_page)
 	g_signal_emit (G_OBJECT (plugin_page), signals[UNSELECTED], 0);
 }
 
-GtkWidget *
-gnc_plugin_page_get_window  (GncPluginPage *plugin_page)
+static void
+gnc_plugin_page_class_init (GncPluginPageClass *klass)
 {
-	g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page), NULL);
+	GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-	return GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->window;
-}
+	parent_class = g_type_class_peek_parent (klass);
+	gobject_class->finalize = gnc_plugin_page_finalize;
 
-void
-gnc_plugin_page_set_window  (GncPluginPage *plugin_page, GtkWidget *window)
-{
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE (plugin_page));
+	klass->tab_icon    = NULL;
+	klass->plugin_name = NULL;
 
-	GNC_PLUGIN_PAGE_GET_IFACE (plugin_page)->window = window;
+ 	signals[INSERTED] = g_signal_new ("inserted",
+					  G_OBJECT_CLASS_TYPE (klass),
+					  G_SIGNAL_RUN_FIRST,
+					  G_STRUCT_OFFSET (GncPluginPageClass, inserted),
+					  NULL, NULL,
+					  g_cclosure_marshal_VOID__VOID,
+					  G_TYPE_NONE,
+					  0);
+	signals[REMOVED] = g_signal_new ("removed",
+					 G_OBJECT_CLASS_TYPE (klass),
+					 G_SIGNAL_RUN_FIRST,
+					 G_STRUCT_OFFSET (GncPluginPageClass, removed),
+					 NULL, NULL,
+					 g_cclosure_marshal_VOID__VOID,
+					 G_TYPE_NONE,
+					 0);
+	signals[SELECTED] = g_signal_new ("selected",
+					  G_OBJECT_CLASS_TYPE (klass),
+					  G_SIGNAL_RUN_FIRST,
+					  G_STRUCT_OFFSET (GncPluginPageClass, inserted),
+					  NULL, NULL,
+					  g_cclosure_marshal_VOID__VOID,
+					  G_TYPE_NONE,
+					  0);
+	signals[UNSELECTED] = g_signal_new ("unselected",
+					    G_OBJECT_CLASS_TYPE (klass),
+					    G_SIGNAL_RUN_FIRST,
+					    G_STRUCT_OFFSET (GncPluginPageClass, removed),
+					    NULL, NULL,
+					    g_cclosure_marshal_VOID__VOID,
+					    G_TYPE_NONE,
+					    0);
 }
 
 static void
-gnc_plugin_page_base_init (gpointer klass)
+gnc_plugin_page_init (GncPluginPage *plugin_page)
 {
-	static gboolean initialized = FALSE;
+	plugin_page->title       = NULL;
+	plugin_page->tab_name    = NULL;
+	plugin_page->uri         = NULL;
 
-	if (!initialized) {
-		initialized = TRUE;
+	plugin_page->window      = NULL;
+}
 
-		signals[INSERTED] = g_signal_new ("inserted",
-						  G_OBJECT_CLASS_TYPE (klass),
-						  G_SIGNAL_RUN_FIRST,
-						  G_STRUCT_OFFSET (GncPluginPageIface, inserted),
-						  NULL, NULL,
-						  g_cclosure_marshal_VOID__VOID,
-						  G_TYPE_NONE,
-						  0);
-		signals[REMOVED] = g_signal_new ("removed",
-						 G_OBJECT_CLASS_TYPE (klass),
-						 G_SIGNAL_RUN_FIRST,
-						 G_STRUCT_OFFSET (GncPluginPageIface, removed),
-						 NULL, NULL,
-						 g_cclosure_marshal_VOID__VOID,
-						 G_TYPE_NONE,
-						 0);
-		signals[SELECTED] = g_signal_new ("selected",
-						  G_OBJECT_CLASS_TYPE (klass),
-						  G_SIGNAL_RUN_FIRST,
-						  G_STRUCT_OFFSET (GncPluginPageIface, inserted),
-						  NULL, NULL,
-						  g_cclosure_marshal_VOID__VOID,
-						  G_TYPE_NONE,
-						  0);
-		signals[UNSELECTED] = g_signal_new ("unselected",
-						    G_OBJECT_CLASS_TYPE (klass),
-   						    G_SIGNAL_RUN_FIRST,
-   						    G_STRUCT_OFFSET (GncPluginPageIface, removed),
-   						    NULL, NULL,
-   						    g_cclosure_marshal_VOID__VOID,
-   						    G_TYPE_NONE,
-   						    0);
-	}
+static void
+gnc_plugin_page_finalize (GObject *object)
+{
+  GncPluginPage *page = GNC_PLUGIN_PAGE (object);
+
+  if (page->title)
+	g_free(page->title);
+  if (page->tab_name)
+	g_free(page->tab_name);
+  if (page->uri)
+	g_free(page->uri);
+
+  page->window = NULL; // Don't need to free it.
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
