@@ -60,7 +60,7 @@ int loglevel[MODULE_MAX] =
 
 // #if defined (__NetBSD__) || defined(__FreeBSD__)
 
-#if !HAVE_MALLOC_USABLE_SIZE
+#ifndef HAVE_MALLOC_USABLE_SIZE
 #define malloc_usable_size(ptr) 0
 #endif
 
