@@ -102,22 +102,20 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    row = cbs->row;
    col = cbs->column;
 
-   /* If we are entering this cell, make sure that we've
-    * moved the cursor, and that any subsidiary GUI elements
-    * properly positioned.  Do this *before* we examine the 
-    * value of the "current cursor".  Note that this check
-    * could suck up massive cpu, as potentially it may trigger
-    * a redraw of the entire register.
+   /* If we are entering this cell, make sure that we've moved the
+    * cursor, and that any subsidiary GUI elements are properly
+    * positioned.  Do this *before* we examine the value of the
+    * "current cursor".  Note that this check could suck up massive
+    * cpu, as potentially it may trigger a redraw of the entire
+    * register.
     *
-    * Hmmm ... actually, theoretically, this is not neeeded.
-    * Before we get to here, we *should* have gone through
-    * a traverse callback the determine which cell to enter,
-    * and then, after the leavecell, the cursor should
-    * have been automagically repositioned.  This, the
-    * call below should always no-op out.  However, if/when
-    * things go berzerk, the call below does at least a partial
-    * butt-save for us, so lets leave it in for now.
-    */
+    * Hmmm ... actually, theoretically, this is not neeeded.  Before
+    * we get to here, we *should* have gone through a traverse
+    * callback the determine which cell to enter, and then, after the
+    * leavecell, the cursor should have been automagically
+    * repositioned.  Thus, the call below should always no-op out.
+    * However, if/when things go berzerk, the call below does at least
+    * a partial butt-save for us, so lets leave it in for now.  */
    if (XbaeEnterCellReason == cbs->reason) 
    {
       wrapVerifyCursorPosition (table, row, col);
