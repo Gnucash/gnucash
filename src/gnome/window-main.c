@@ -705,6 +705,12 @@ gnc_main_window_commodities_cb(GtkWidget *widget, gpointer data)
 
 
 void
+gnc_main_window_tutorial_cb (GtkWidget *widget, gpointer data)
+{
+  helpWindow(NULL, NULL, HH_MAIN);
+}
+
+void
 gnc_main_window_totd_cb (GtkWidget *widget, gpointer data)
 
 {
@@ -715,7 +721,7 @@ gnc_main_window_totd_cb (GtkWidget *widget, gpointer data)
 void
 gnc_main_window_help_cb (GtkWidget *widget, gpointer data)
 {
-  helpWindow(NULL, NULL, HH_MAIN);
+  helpWindow(NULL, NULL, HH_HELP);
 }
 
 void
@@ -931,9 +937,9 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   {
     {
       GNOME_APP_UI_ITEM,
-      N_("_Gnucash Users Guide"),
-      N_("Open the GnuCash Manual"),
-      gnc_main_window_help_cb, NULL, NULL,
+      N_("_Tutorial and Concepts Guide"),
+      N_("Open the GnuCash Tutorial"),
+      gnc_main_window_tutorial_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },
@@ -942,6 +948,14 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
       N_("_Tips Of The Day"),
       N_("View the Tips of the Day"),
       gnc_main_window_totd_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Help"),
+      N_("Open the GnuCash Help"),
+      gnc_main_window_help_cb, NULL, NULL,
       GNOME_APP_PIXMAP_NONE, NULL,
       0, 0, NULL
     },

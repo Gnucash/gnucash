@@ -37,6 +37,7 @@
 #define HH_GLOBPREFS         "xacc-preferences.html"
 #define HH_GPL               "xacc-gpl.html"
 #define HH_MAIN              "index.html"
+#define HH_HELP              "help.html"
 #define HH_PRINT             "xacc-print.html"
 #define HH_PRINTCHECK        "xacc-print-check.html"
 #define HH_QIFIMPORT         "xacc-qif-import.html"
