@@ -71,7 +71,12 @@ QofBook * qof_book_new (void);
     associated with it. */
 void      qof_book_destroy (QofBook *book);
 
-/** \return The table of entities of the given type. */
+/** \return The table of entities of the given type. 
+ *  If the collection doesn't yet exist for the indicated type,
+ *  it is created.  Thus, this routine is gaurenteed to return
+ *  a non-NULL value.  (Unless the system malloc failed (out of 
+ *  memory) in which case what happens??).
+ */
 QofCollection  * qof_book_get_collection (QofBook *, QofIdType);
 
 /** Invoke the indicated callback on each collection in the book. */
@@ -81,10 +86,13 @@ void qof_book_foreach_collection (QofBook *, QofCollectionForeachCB, gpointer);
 /** \return The kvp data for the book */
 KvpFrame   * qof_book_get_slots (QofBook *book);
 
-/** The qof_book_set_data() allows
- *    arbitrary pointers to structs to be stored in QofBook.
- *    This is the "prefered" method for extending QofBook to hold
- *    new data types.
+/** The qof_book_set_data() allows arbitrary pointers to structs 
+ *    to be stored in QofBook. This is the "prefered" method for 
+ *    extending QofBook to hold new data types.
+ *
+ * XXX FIXME: we need to add a destroy callback, so that when the
+ * book gets destroyed, the user gets notified and thus has a chance
+ * to clean up.
  */
 void qof_book_set_data (QofBook *book, const char *key, gpointer data);
 

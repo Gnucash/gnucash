@@ -3095,7 +3095,7 @@ xaccTransGetVoidTime(const Transaction *tr)
   val = kvp_frame_get_string(tr->inst.kvp_data, void_time_str);
   if(val)
   {
-    void_time = gnc_iso8601_to_timespec_local(val);
+    void_time = gnc_iso8601_to_timespec_gmt(val);
   }
 
   return void_time;
@@ -3196,7 +3196,7 @@ static QofObject split_object_def = {
 };
 
 static gpointer 
-split_account_guid_getter (gpointer obj)
+split_account_guid_getter (gpointer obj, const QofParam *p)
 {
   Split *s = obj;
   Account *acc;
@@ -3214,7 +3214,8 @@ DxaccSplitGetShareAmount (const Split * split)
   return gnc_numeric_to_double(xaccSplitGetAmount(split));
 }
 
-static gpointer no_op (gpointer obj)
+static gpointer 
+no_op (gpointer obj, const QofParam *p)
 {
   return obj;
 }
@@ -3251,7 +3252,8 @@ gboolean xaccSplitRegister (void)
     { SPLIT_TRANS, GNC_ID_TRANS, (QofAccessFunc)xaccSplitGetParent, NULL },
     { SPLIT_ACCOUNT, GNC_ID_ACCOUNT, (QofAccessFunc)xaccSplitGetAccount, NULL },
     { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter, NULL },
-/* XXX why are these no-ops ?? ahh, to register sort func only ?? */
+/*  these are no-ops to register the parameter names (for sorting) but
+    they return an allocated object which getters cannot do.  */
     { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
     { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
     { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },

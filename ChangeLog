@@ -1,12 +1,15 @@
 2004-05-02  David Hampton  <hampton@employees.org>
 
+	* various files: Merge in changes to HEAD from 2004-03-03
+	  (gnome2-merge-7) through today (gnome2-merge-8).
+
 	* src/business/business-core/Makefile.am:
 	* src/business/business-gnome/Makefile.am:
 	* src/import-export/binary-import/Makefile.am: Work around
 	  problems with libltdl3.
 
 	* src/import-export/hbci/druid-hbci-initial.c: Eliminate a couiple
-	of compiler warning messages.
+	  of compiler warning messages.
 
 2004-05-02  Joshua Sled  <jsled@asynchronous.org>
 
@@ -2561,6 +2564,164 @@
 -=-=-=- cvs HEAD ChangeLog is below this line -=-=-=-
 
 
+2004-05-02  David Hampton  <hampton@employees.org>
+
+	* src/business/business-core/Makefile.am:
+	* src/business/business-gnome/Makefile.am:
+	* src/import-export/binary-import/Makefile.am: Work around
+	problems with libltdl3.
+
+2004-04-26  Derek Atkins  <derek@ihtfp.com>
+
+	* src/scm/Makefile.am: look in ${srcdir} for build-config.scm.in
+	  Fixes #141129
+
+2004-04-20  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/report-system/html-utilities.scm:
+	  Fix a broken recursion problem.  Don't call show-acct? from
+	  use-acct? so we don't recurse ad flictum.  This recursive
+	  call isn't necessary, just have use-acct? recurse unto itself.
+
+2004-04-19  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/standard-reports/balance-sheet.scm:
+	* src/report/standard-reports/pnl.scm:
+	  Fabien COELHO's zero-balance patch to remove accounts of
+	  zero balance from the report.
+
+2004-04-18  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/Transaction.c: fix a comment to better explain why
+	  we have no-op functions for some parameters.
+	* src/engine/qof*:  Revert Linas' patch from last night which
+	  is broken is way too many ways to count.  First, the code didn't
+	  compile.  Second it was calling functions that took one argument
+	  with two due to broken casting.  Third, it had repurcusions in
+	  other sections of the code that Linas needs to take into account.
+
+2004-05-16  Derek Atkins  <derek@ihtfp.com>
+
+	* src/macros/autogen.sh: Add MORE warnings around gettext because
+	  some users STILL don't "get it".
+
+2004-05-15  Derek Atkins  <derek@ihtfp.com>
+
+	* src/import-export/hbci/dialog-hbcitrans.c:  Don't use C++/C99
+	  declarations.  Declare variables at the top of the function.
+	  Fixes #140070
+
+2004-04-12  Chris Lyttle  <chris@wilddev.net>
+
+	* src/scm/main.scm: Update for 1.8.9 release
+
+2004-04-05  Derek Atkins  <derek@ihtfp.com>
+
+	* macros/autogen.sh: make sure we always have intl and po Makefiles
+	  in the configure script.  Sometimes it was ripped out without being
+	  replaced.  Reported by twunder.
+
+	* src/engine/test/.cvsignore: ignore test-link in CVS.
+
+2004-04-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/dialog-scheduledxaction.c: Move variable declaration
+	  to the top of the block.
+
+2004-03-31  Derek Atkins  <derek@ihtfp.com>
+
+	* configure.in: move m4/Makefile to its own line
+	* macros/autogen.sh: add code to remove "intl/Makefile po/Makefile"
+	  from AC_OUTPUT in configure.in prior to calling gettextize
+	  to make sure that you can build from CVS with recent versions
+	  of gettextize.  Tested with both RH9 and RH7.3 to make sure
+	  it works with both old and new.  Fixes #120206.
+
+	* accounts/hu_HU/Makefile.am: don't include files in the DIST that
+	  we don't have in CVS.
+
+2004-03-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/report-system/report-system.scm:
+	* src/report/utility-reports/iframe-url.scm:
+	  don't need to require format; main.scm handles it, and
+	  the default "format" (simple-format) is sufficient to
+	  handle everything we need.  This allows gnucash to work
+	  with slib3.
+
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.c (ld_get_loan_range): Fix precedence bug
+	screwing up loan review page.
+
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/register-core/formulacell.c
+	(gnc_formula_cell_modify_verify): Add ':' to the token list of
+	allowable characters in the formula cell. Fixes Bug#106260.
+
+2004-03-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/druid-loan.c (gnc_ui_sx_loan_druid_create): Use the
+	account-list filtering capability of the GncAccountSel to only
+	show/allow-creation-of valid account-types in the
+	loan-druid. Fixes Bug#124595.
+
+2004-03-13  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Bug#133709 fix: when we have a problem parsing a credit/debit
+	cell, indicate to the user what occurred.
+
+2004-03-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c, dialog-hbcitrans.h,
+	glade/hbci.glade, gnc-hbci-transfer.c: Transfer template management
+	GUI added by Bernd Wagner <F.J.Bernd.Wagner@t-online.de>
+
+2004-03-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* HACKING: Added instructions about running under valgrind.
+
+	* lib/gnucash_valgrind.supp: Added a large set of valgrind
+	suppressions for both guile and gnucash.
+
+	* src/register/ledger-core/gnc-ledger-display.c
+	(gnc_ledger_display_template_gl): Change the reg_type to
+	SEARCH_LEDGER so all the 'action' types appear. Bug#108833.
+
+	* src/gnome/glade/sched-xact.glade: Remove unused 'ledger_status'
+	widget. Bug#102269.
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_draw_to_buffer):
+	At least be consistent about the background coloring of the month
+	labels, even if we're still not using GTK themeage correctly.
+
+	* src/gnome-utils/gnc-dense-cal.c (gnc_dense_cal_destroy): Destroy
+	the transient window when the widget is destroyed. Bug#103910.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(gnc_ui_scheduled_xaction_editor_dialog_create): Make the advance
+	and remind spin-buttons editable [Bug#94963].
+
+	* src/gnome/glade/sched-xact.glade: Change the upper bound on the
+	advance and remind spins to 365 [days], with a page-size of 30
+	[days].
+
+	* src/gnome/dialog-sx-from-trans.c (gnc_sx_create_from_trans):
+	Disallow the Scheduling of being-editing transactions in the
+	Register, preventing a class of unbalacned SX template
+	transactions from being entered and propogated through the
+	system. See Bug#130330.
+
+	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr): Fix nasty
+	memory-corruption issue; insufficent bounds checking on array
+	index. Bug#125600.
+
+	* src/gnome/dialog-sxsincelast.c (create_each_transaction_helper):
+	Better handling of various error cases in
+        transaction-creation. Bug#102311; Bug#130330.
+
 2004-03-03  Derek Atkins  <derek@ihtfp.com>
 
 	* src/register/ledger-core/split-register-load.c: make the code a
@@ -2568,6 +2729,20 @@
 	  variable name inside a block of code and "over-riding" an
 	  existing variable.  Unlikely to actually fix anything, but
 	  you never know what a compiler might do.
+
+2004-03-01  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (gnc_sxed_check_consistent):
+	Fix for part of Bug#121740 -- only allow auto-create SXes which
+	have splits to be created.
+
+2004-02-07  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-scheduledxaction.c (editor_ok_button_clicked): 
+	* src/gnome-utils/gnc-frequency.c (gnc_frequency_save_state): 
+	* src/backend/file/gnc-freqspec-xml-v2.c (fs_none_handler): 
+	* src/engine/FreqSpec.c (xaccFreqSpecGetFreqStr):
+	Adding "NONE" as an allowable FreqSpec [Bug#103968].
 
 2004-02-14  Christian Stimming  <stimming@tuhh.de>
 

@@ -115,7 +115,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
    /* malloc a new checkpoint, set it to the dawn of unix time ... */
    bp = g_chunk_new0 (Checkpoint, chunk);
    checkpoints = g_list_prepend (checkpoints, bp);
-   this_ts = gnc_iso8601_to_timespec_local (CK_EARLIEST_DATE);
+   this_ts = gnc_iso8601_to_timespec_gmt (CK_EARLIEST_DATE);
    bp->date_start = this_ts;
    bp->account_guid = acct_guid;
    bp->commodity = commodity_name;
@@ -153,11 +153,11 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
                 goto done; 
             }
 
-            if (0 == i) this_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",0));
+            if (0 == i) this_ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_posted",0));
             if (2 == jrows) {
-               next_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",1));
+               next_ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_posted",1));
             } else if (1 == i) {
-               next_ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",0));
+               next_ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_posted",0));
             } 
             PQclear (result);
             i++;
@@ -192,7 +192,7 @@ pgendAccountRecomputeAllCheckpoints (PGBackend *be, const GUID *acct_guid)
 done:
 
    /* set the timestamp on the final checkpoint into the distant future */
-   this_ts = gnc_iso8601_to_timespec_local (CK_LAST_DATE);
+   this_ts = gnc_iso8601_to_timespec_gmt (CK_LAST_DATE);
    bp->date_end = this_ts;
 
    /* now store the checkpoints */
@@ -320,7 +320,7 @@ static gpointer
 get_checkpoint_date_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    Checkpoint *chk = (Checkpoint *) data;
-   chk->date_start = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_start", j));
+   chk->date_start = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_start", j));
    return data;
 }
 
@@ -371,7 +371,7 @@ pgendAccountGetCheckpoint (PGBackend *be, Checkpoint *chk)
    SEND_QUERY (be,be->buff, );
 
    /* provide default value, in case there are no checkpoints */
-   chk->date_start = gnc_iso8601_to_timespec_local (CK_EARLIEST_DATE);
+   chk->date_start = gnc_iso8601_to_timespec_gmt (CK_EARLIEST_DATE);
    pgendGetResults (be, get_checkpoint_date_cb, chk);
 
    LEAVE("be=%p", be);

@@ -476,9 +476,9 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 
    xaccTransSetNum (trans, DB_GET_VAL("num",j));
    xaccTransSetDescription (trans, DB_GET_VAL("description",j));
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_posted",j));
+   ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_posted",j));
    xaccTransSetDatePostedTS (trans, &ts);
-   ts = gnc_iso8601_to_timespec_local (DB_GET_VAL("date_entered",j));
+   ts = gnc_iso8601_to_timespec_gmt (DB_GET_VAL("date_entered",j));
    xaccTransSetDateEnteredTS (trans, &ts);
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi(DB_GET_VAL("iguid",j));
@@ -919,7 +919,7 @@ pgendSync (QofBackend *bend, QofBook *book)
    if ((MODE_SINGLE_FILE != be->session_mode) &&
        (MODE_SINGLE_UPDATE != be->session_mode))
    {
-      Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
+      Timespec ts = gnc_iso8601_to_timespec_gmt (CK_BEFORE_LAST_DATE);
       pgendGroupGetAllBalances (be, grp, ts);
    } 
    else
@@ -1493,7 +1493,7 @@ pgend_session_end (QofBackend *bend)
 static void
 pgend_book_load_poll (QofBackend *bend, QofBook *book)
 {
-   Timespec ts = gnc_iso8601_to_timespec_local (CK_BEFORE_LAST_DATE);
+   Timespec ts = gnc_iso8601_to_timespec_gmt (CK_BEFORE_LAST_DATE);
    AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
 

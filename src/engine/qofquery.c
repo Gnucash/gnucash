@@ -1,5 +1,5 @@
 /********************************************************************\
- * QofQuery.c -- API for finding Gnucash objects                    *
+ * qof_query.c -- Implement predicate API for searching for objects *
  * Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -72,9 +72,9 @@ struct _QofQuerySort
    * convert types.
    */
   gboolean            use_default;
-  GSList *            param_fcns;
+  GSList *            param_fcns;     /* Chain of paramters to walk */
   QofSortFunc         obj_cmp;        /* In case you are comparing objects */
-  QofCompareFunc      comp_fcn;        /* When you are comparing core types */
+  QofCompareFunc      comp_fcn;       /* When you are comparing core types */
 };
 
 /* The QUERY structure */
@@ -280,9 +280,9 @@ static void free_members (QofQuery *q)
 static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
                      gconstpointer a, gconstpointer b)
 {
+  QofParam *param = NULL;
   GSList *node;
   gpointer conva, convb;
-  QofAccessFunc get_fcn = NULL;        /* to appease the compiler */
 
   g_return_val_if_fail (sort, 0);
 
@@ -304,7 +304,7 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
   convb = (gpointer)b;
   for (node = sort->param_fcns; node; node = node->next) 
   {
-    get_fcn = node->data;
+    param = node->data;
 
     /* The last term is really the "parameter getter",
      * unless we're comparing objects ;) */
@@ -312,13 +312,14 @@ static int cmp_func (QofQuerySort *sort, QofSortFunc default_sort,
       break;
 
     /* Do the converstions */
-    conva = get_fcn (conva);
-    convb = get_fcn (convb);
+    conva = (param->param_getfcn) (conva, param);
+    convb = (param->param_getfcn) (convb, param);
   }
+
   /* And now return the (appropriate) compare */
   if (sort->comp_fcn)
   {
-    int rc = sort->comp_fcn (conva, convb, sort->options, get_fcn);
+    int rc = sort->comp_fcn (conva, convb, sort->options, param);
     return rc;
   }
 
@@ -381,21 +382,21 @@ check_object (QofQuery *q, gpointer object)
       if (qt->param_fcns && qt->pred_fcn) 
       {
         GSList *node;
-        QofAccessFunc get_fcn;
+        QofParam *param = NULL;
         gpointer conv_obj = object;
 
         /* iterate through the conversions */
-        for (node = qt->param_fcns; node; node = node->next) {
-          get_fcn = node->data;
+        for (node = qt->param_fcns; node; node = node->next) 
+        {
+          param = node->data;
 
           /* The last term is the actual parameter getter */
-          if (!node->next)
-            break;
+          if (!node->next) break;
 
-          conv_obj = get_fcn (conv_obj);
+          conv_obj = param->param_getfcn (conv_obj, param);
         }
 
-        if (((qt->pred_fcn)(conv_obj, get_fcn, qt->pdata)) == qt->invert) 
+        if (((qt->pred_fcn)(conv_obj, param, qt->pdata)) == qt->invert) 
         {
           and_terms_ok = 0;
           break;
@@ -428,8 +429,9 @@ check_object (QofQuery *q, gpointer object)
  *
  * returns NULL if the first parameter is bad (and final is unchanged).
  */
-static GSList * compile_params (GSList *param_list, QofIdType start_obj,
-                                QofParam const **final)
+static GSList * 
+compile_params (GSList *param_list, QofIdType start_obj, 
+                QofParam const **final)
 {
   const QofParam *objDef = NULL;
   GSList *fcns = NULL;
@@ -447,8 +449,8 @@ static GSList * compile_params (GSList *param_list, QofIdType start_obj,
     /* If it doesn't exist, then we've reached the end */
     if (!objDef) break;
 
-    /* Save off this function */
-    fcns = g_slist_prepend (fcns, objDef->param_getfcn);
+    /* Save off this parameter */
+    fcns = g_slist_prepend (fcns, (gpointer) objDef);
 
     /* Save this off, just in case */
     *final = objDef;
@@ -742,7 +744,7 @@ GList * qof_query_run (QofQuery *q)
         }
       }
 
-      /* and then iterate over all the objects */
+      /* And then iterate over all the objects */
       qof_object_foreach (q->search_for, book, (QofEntityForeachCB) check_item_cb, &qcb);
     }
 
@@ -976,7 +978,7 @@ QofQuery * qof_query_invert (QofQuery *q)
     retval->max_results = q->max_results;
     break;
 
-    /* this is demorgan expansion for a single AND expression. */
+    /* This is the DeMorgan expansion for a single AND expression. */
     /* !(abc) = !a + !b + !c */
   case 1:
     retval = qof_query_create();
@@ -993,7 +995,7 @@ QofQuery * qof_query_invert (QofQuery *q)
       new_oterm = g_list_append(NULL, qt);
 
       /* g_list_append() can take forever, so let's do this for speed
-       * in "large" queries
+       * in "large" queries.
        */
       retval->terms = g_list_reverse(retval->terms);
       retval->terms = g_list_prepend(retval->terms, new_oterm);
@@ -1001,7 +1003,7 @@ QofQuery * qof_query_invert (QofQuery *q)
     }
     break;
 
-    /* if there are multiple OR-terms, we just recurse by 
+    /* If there are multiple OR-terms, we just recurse by 
      * breaking it down to !(a + b + c) = 
      * !a * !(b + c) = !a * !b * !c.  */
   default:
@@ -1018,7 +1020,7 @@ QofQuery * qof_query_invert (QofQuery *q)
     retval = qof_query_merge(iright, ileft, QOF_QUERY_AND);
     retval->books          = g_list_copy (q->books);
     retval->max_results    = q->max_results;
-    retval->search_for           = q->search_for;
+    retval->search_for     = q->search_for;
     retval->changed        = 1;
 
     qof_query_destroy(iright);
@@ -1036,7 +1038,8 @@ QofQuery * qof_query_invert (QofQuery *q)
  * combine 2 Query objects by the logical operation in "op".
  ********************************************************************/
 
-QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
+QofQuery * 
+qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
 {
   
   QofQuery * retval = NULL;
@@ -1045,12 +1048,28 @@ QofQuery * qof_query_merge(QofQuery *q1, QofQuery *q2, QofQueryOp op)
   GList * i, * j;
   QofIdType search_for;
 
-  if(!q1 || !q2 ) return NULL;
+  if(!q1) return q2;
+  if(!q2) return q1;
+
   if (q1->search_for && q2->search_for)
     g_return_val_if_fail (safe_strcmp (q1->search_for, q2->search_for) == 0,
                           NULL);
 
   search_for = (q1->search_for ? q1->search_for : q2->search_for);
+
+  /* Avoid merge surprises if op==QOF_QUERY_AND but q1 is empty.
+   * The goal of this tweak is to all the user to start with
+   * an empty q1 and then append to it recursively
+   * (and q1 (and q2 (and q3 (and q4 ....))))
+   * without bombing out because the append started with an 
+   * empty list.
+   * We do essentially the same check in qof_query_add_term()
+   * so that the first term added to an empty query doesn't screw up.
+   */
+  if ((QOF_QUERY_AND == op) && (0 == qof_query_has_terms (q1)))
+  {
+    op = QOF_QUERY_OR;
+  }
 
   switch(op) 
   {
@@ -1229,6 +1248,12 @@ void qof_query_set_book (QofQuery *q, QofBook *book)
                         qof_book_get_guid(book), QOF_QUERY_AND);
 }
 
+GList * qof_query_get_books (QofQuery *q)
+{
+  if (!q) return NULL;
+  return q->books;
+}
+
 void qof_query_add_boolean_match (QofQuery *q, GSList *param_list, gboolean value,
                               QofQueryOp op)
 {
@@ -1389,6 +1414,7 @@ gboolean qof_query_equal (QofQuery *q1, QofQuery *q2)
 }
 
 /***************************************************************************/
+/***************************************************************************/
 /* Query Print functions.  qof_query_print is public; everthing else supports
  * that.
  * Just call qof_query_print(QofQuery *q), and it will print out the query 
@@ -1480,7 +1506,7 @@ qof_query_printSearchFor (QofQuery * query, GList * output)
 
   searchFor = qof_query_get_search_for (query);
   gs = g_string_new ("Query Object Type: ");
-  g_string_append (gs, searchFor);
+  g_string_append (gs, (NULL == searchFor)? "(null)" : searchFor);
   output = g_list_append (output, gs);
 
   return output;
@@ -1525,7 +1551,7 @@ qof_query_printTerms (QofQuery * query, GList * output)
 static GList *
 qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
 {
-  GSList *gsl = NULL;
+  GSList *gsl, *n = NULL;
   gint curSort;
   GString *gs = g_string_new ("  Sort Parameters:\n");
 
@@ -1538,14 +1564,19 @@ qof_query_printSorts (QofQuerySort *s[], const gint numSorts, GList * output)
     }
     increasing = qof_query_sort_get_increasing (s[curSort]);
 
-    for (gsl = qof_query_sort_get_param_path (s[curSort]); gsl; gsl = gsl->next)
+    gsl = qof_query_sort_get_param_path (s[curSort]); 
+    if (gsl) g_string_sprintfa (gs, "    Param: ");
+    for (n=gsl; n; n = n->next)
     {
-      GString *sortParm = g_string_new (gsl->data);
-      g_string_sprintfa (gs, "    Param: %s %s\n", sortParm->str,
-                         increasing ? "DESC" : "ASC");
-      g_string_free (sortParm, TRUE);
+      QofIdType param_name = n->data;
+      if (gsl != n)g_string_sprintfa (gs, "\n           ");
+      g_string_sprintfa (gs, "%s", param_name);
     }
-    /* TODO: finish this for loop */
+    if (gsl) 
+    {
+      g_string_sprintfa (gs, " %s\n", increasing ? "DESC" : "ASC");
+      g_string_sprintfa (gs, "    Options: 0x%x\n", s[curSort]->options);
+    }
   }
 
   output = g_list_append (output, gs);
@@ -1575,6 +1606,8 @@ qof_query_printAndTerms (GList * terms, GList * output)
     path = qof_query_term_get_param_path (qt);
     invert = qof_query_term_is_inverted (qt);
 
+    if (invert) output = g_list_append (output, 
+                                     g_string_new("    INVERT SENSE "));
     output = g_list_append (output, qof_query_printParamPath (path));
     output = g_list_append (output, qof_query_printPredData (pd));
     output = g_list_append (output, g_string_new("\n"));
@@ -1612,8 +1645,14 @@ qof_query_printPredData (QofQueryPredData *pd)
 
   gs = g_string_new ("    Pred Data:\n      ");
   g_string_append (gs, (gchar *) pd->type_name);
-  g_string_sprintfa (gs, "\n      how: %s",
-                     qof_query_printStringForHow (pd->how));
+
+  /* Char Predicate and GUID predicate dosn't use the 'how' field. */
+  if (safe_strcmp (pd->type_name, QOF_TYPE_CHAR) &&
+      safe_strcmp (pd->type_name, QOF_TYPE_GUID))
+  {
+    g_string_sprintfa (gs, "\n      how: %s",
+                       qof_query_printStringForHow (pd->how));
+  }
 
   qof_query_printValueForParam (pd, gs);
 
@@ -1688,11 +1727,15 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
   {
     GSList *node;
     query_kvp_t pdata = (query_kvp_t) pd;
+    g_string_sprintfa (gs, "\n      kvp path: ");
     for (node = pdata->path; node; node = node->next)
     {
-      g_string_sprintfa (gs, "\n      kvp path: %s", (gchar *) node->data);
-      return;
+      g_string_sprintfa (gs, "/%s", (gchar *) node->data);
     }
+    g_string_sprintfa (gs, "\n");
+    g_string_sprintfa (gs, "      kvp value: %s\n", 
+                         kvp_value_to_string (pdata->value));
+    return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_INT64))
   {
@@ -1709,7 +1752,7 @@ qof_query_printValueForParam (QofQueryPredData *pd, GString * gs)
   if (!safe_strcmp (pd->type_name, QOF_TYPE_DOUBLE))
   {
     query_double_t pdata = (query_double_t) pd;
-    g_string_sprintfa (gs, " double: %20.16g", pdata->val);
+    g_string_sprintfa (gs, " double: %.18g", pdata->val);
     return;
   }
   if (!safe_strcmp (pd->type_name, QOF_TYPE_DATE))
@@ -1831,8 +1874,4 @@ qof_query_printCharMatch (QofCharMatch c)
   return "UNKNOWN MATCH TYPE";
 }                               /* qof_query_printGuidMatch */
 
-GList * qof_query_get_books (QofQuery *q)
-{
-  if (!q) return NULL;
-  return q->books;
-}
+/* ======================== END OF FILE =================== */

@@ -82,6 +82,7 @@ guid_memchunk_shutdown (void)
 GUID *
 guid_malloc (void)
 {
+  if (!guid_memchunk) guid_memchunk_init();
   return g_chunk_new (GUID, guid_memchunk);
 }
 

@@ -1140,6 +1140,7 @@ xaccResolveURL (const char * pathfrag)
 void
 gnc_run_rpc_server (void)
 {
+#ifdef GNUCASH
   const char * dll_err;
   void * dll_handle;
   int (*rpc_run)(short);
@@ -1172,6 +1173,7 @@ gnc_run_rpc_server (void)
   ret = (*rpc_run)(0);
 
   /* XXX How do we force an exit? */
+#endif /* GNUCASH */
 }
 
 /* =================== END OF FILE ====================================== */

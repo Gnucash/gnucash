@@ -1,6 +1,8 @@
 /********************************************************************\
  * gnc-hbci-transfer.c -- hbci transfer functions                   *
  * Copyright (C) 2002 Christian Stimming                            *
+ * Copyright (C) 2004 Bernd Wagner (minor changes for                     *
+ *                     online transaction templates)                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -84,7 +86,6 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       gnc_trans_templ_glist_from_kvp_glist
       ( gnc_hbci_get_book_template_list
 	( xaccAccountGetBook(gnc_acc)));
-    unsigned nr_templates;
     int result;
     gboolean successful;
     HBCITransDialog *td;
@@ -99,16 +100,14 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
     /* Repeat until HBCI action was successful or user pressed cancel */
     do {
 
-      nr_templates = g_list_length(template_list);
-
       /* Let the user enter the values. If cancel is pressed, -1 is returned.  */
       result = gnc_hbci_dialog_run_until_ok(td, h_acc);
 
       /* Set the template list in case it got modified. */
       template_list = gnc_hbci_dialog_get_templ(td);
-      /* New templates? If yes, store them */
-      if (nr_templates < g_list_length(template_list)) 
-	maketrans_save_templates(parent, gnc_acc, template_list, (result >= 0));
+      /* templates changed? If yes, store them */
+      if (gnc_hbci_dialog_get_templ_changed(td) )
+	       maketrans_save_templates(parent, gnc_acc, template_list, (result >= 0));
 
       if (result < 0) {
 	break;
@@ -184,9 +183,9 @@ void maketrans_save_templates(GtkWidget *parent, Account *gnc_acc,
       (parent, 
        FALSE,
        "%s",
-       _("You have created a new online transfer template, but \n"
-	 "you cancelled the transfer dialog. Do you nevertheless \n"
-	 "want to store the new online transfer template?"))) {
+       _("You have changed the list of online transfer templates,\n"
+	 "but you cancelled the transfer dialog.\n"
+	 "Do you nevertheless want to store the changes?"))) {
     GList *kvp_list = gnc_trans_templ_kvp_glist_from_glist (template_list);
     /*printf ("Now having %d templates. List: '%s'\n", 
       g_list_length(template_list),

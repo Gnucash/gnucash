@@ -488,7 +488,7 @@ gnc_ledger_display_template_gl (char *id)
   }
 
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
-                                    GENERAL_LEDGER,
+                                    SEARCH_LEDGER,
                                     REG_STYLE_JOURNAL,
                                     FALSE, TRUE); /* TRUE : template mode */
 

@@ -134,6 +134,9 @@ void   guid_free (GUID *guid);
  *  'a' through 'f'. The encoding will always be GUID_ENCODING_LENGTH 
  *  characters long. 
  *
+ *  XXX This routine is not thread safe and is deprecated. Please
+ *  use the routine guid_to_string_buff() instead.
+ *
  *  @param guid The guid to print.
  *
  *  @return A pointer to the starting character of the string.  The

@@ -52,6 +52,7 @@
 (define optname-price-source (N_ "Price Source"))
 (define optname-show-foreign (N_ "Show Foreign Currencies"))
 (define optname-show-rates (N_ "Show Exchange Rates"))
+(define optname-show-zeros (N_ "Show accounts with zero balance"))
 
 ;; Moderatly ugly hack here, i.e. this depends on the internal
 ;; structure of html-table -- if that is changed, this might break.
@@ -153,6 +154,12 @@
       gnc:pagename-display optname-show-rates
       "f" (N_ "Show the exchange rates used") #f))
 
+    (gnc:register-option 
+     options
+     (gnc:make-simple-boolean-option
+      gnc:pagename-display optname-show-zeros
+      "g" (N_ "Show accounts with a 0.0 total") #t))
+
     ;; Set the general page as default option tab
     (gnc:options-set-default-section options gnc:pagename-general)      
 
@@ -190,6 +197,8 @@
                                    optname-price-source))
          (show-rates? (get-option gnc:pagename-display 
                                   optname-show-rates))
+	 (show-zeros? (get-option gnc:pagename-display 
+                                  optname-show-zeros))
 	 (from-date-printable (gnc:date-option-absolute-time
 			       (get-option gnc:pagename-general
 					   optname-from-date)))
@@ -315,7 +324,7 @@
 		 30 20
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn #t))
+                 show-fcur? report-currency exchange-fn show-zeros?))
 	  (set! liability-table 
                 (gnc:html-build-acct-table
                  #f to-date-tp
@@ -324,7 +333,7 @@
 		 50 20
                  #f #f #f #f #f
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn #t))
+                 show-fcur? report-currency exchange-fn show-zeros?))
 	  (set! equity-table
                 (gnc:html-build-acct-table
                  #f to-date-tp
@@ -333,7 +342,7 @@
 		 70 10
                  #f #f #f #f #f 
                  show-parent-balance? show-parent-total?
-                 show-fcur? report-currency exchange-fn #t))
+                 show-fcur? report-currency exchange-fn show-zeros?))
 
           (net-profit-balance 'minusmerge
                                    neg-net-profit-balance
