@@ -52,6 +52,14 @@ xaccSetCursor (Table *table, CellBlock *curs,
               int phys_row_origin, int phys_col_origin,
               int virt_row, int virt_col);
 
+
+/* move the cursor (but not the GUI) to the indicated location. */
+void        xaccMoveCursor (Table *, int phys_row, int phys_col);
+
+/* move the cursor GUI to the indicated location. */
+void        xaccMoveCursorGUI (Table *, int phys_row, int phys_col);
+
+
 #endif /* __XACC_TABLE_ALLGUI_H__ */
 
 /* ================== end of file ======================= */

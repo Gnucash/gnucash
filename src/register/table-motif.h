@@ -139,15 +139,6 @@ void        xaccDestroyTable (Table *);
 /* redraw the table GUI */
 void        xaccRefreshTableGUI (Table *);
 
-/* Make the indicated cell block be the cursor for this table */
-void        xaccAddCursor (Table *, CellBlock *);
-
-/* move the cursor (but not the GUI) to the indicated location. */
-void        xaccMoveCursor (Table *, CellBlock *, int virt_row, int virt_col);
-
-/* move the cursor GUI to the indicated location. */
-void        xaccMoveCursorGUI (Table *, CellBlock *, int virt_row, int virt_col);
-
 /* copy text in the cursor cells to the table */
 void        xaccCommitCursor (Table *);
 
