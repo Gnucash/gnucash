@@ -7,9 +7,12 @@
 #include "config.h"
 
 #include <glib.h>
-#include <string.h>		/* for strcmp */
+
+#include "gnc-engine-util.h"	/* safe_strcmp */
+#include "QueryObject.h"
 
 #include "gncAddress.h"
+#include "gncAddressP.h"
 
 struct _gncAddress {
   GNCBook *	book;
@@ -24,6 +27,8 @@ struct _gncAddress {
   char *	email;
 
 };
+
+#define _GNC_MOD_NAME	GNC_ADDRESS_MODULE_NAME
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));
 #define CACHE_REMOVE(str) g_cache_remove(gnc_engine_get_string_cache(), (str));
@@ -72,7 +77,7 @@ void gncAddressDestroy (GncAddress *addr){
 #define SET_STR(member, str) { \
 	char * tmp; \
 	\
-	if (!strcmp (member, str)) return; \
+	if (!safe_strcmp (member, str)) return; \
 	tmp = CACHE_INSERT (str); \
 	CACHE_REMOVE (member); \
 	member = tmp; \
@@ -202,4 +207,29 @@ void gncAddressClearDirty (GncAddress *addr)
 {
   if (!addr) return;
   addr->dirty = FALSE;
+}
+
+int gncAddressCompare (const GncAddress *a, const GncAddress *b)
+{
+  if (!a && !b) return 0;
+  if (!a && b) return 1;
+  if (a && !b) return -1;
+
+  return safe_strcmp (a->name, b->name);
+}
+
+gboolean gncAddressRegister (void)
+{
+  static QueryObjectDef params[] = {
+
+    { ADDRESS_NAME, QUERYCORE_STRING, (QueryAccess)gncAddressGetName },
+    { ADDRESS_PHONE, QUERYCORE_STRING, (QueryAccess)gncAddressGetPhone },
+    { ADDRESS_FAX, QUERYCORE_STRING, (QueryAccess)gncAddressGetFax },
+    { ADDRESS_EMAIL, QUERYCORE_STRING, (QueryAccess)gncAddressGetEmail },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncAddressCompare, params);
+
+  return TRUE;
 }

@@ -44,6 +44,12 @@ gboolean gncJobIsDirty (GncJob *job);
 
 /* Other functions */
 
-gint gncJobSortFunc (gconstpointer a, gconstpointer b);
+int gncJobCompare (const GncJob *a, const GncJob *b);
+
+#define JOB_GUID	"guid"
+#define JOB_ID		"id"
+#define JOB_NAME	"name"
+#define JOB_REFERENCE	"reference"
+#define JOB_OWNER	"owner"
 
 #endif /* GNC_JOB_H_ */

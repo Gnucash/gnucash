@@ -15,6 +15,7 @@
 #include "gnc-numeric.h"
 #include "gnc-book-p.h"
 #include "GNCIdP.h"
+#include "QueryObject.h"
 
 #include "gncBusiness.h"
 #include "gncJob.h"
@@ -234,13 +235,12 @@ gboolean gncJobIsDirty (GncJob *job)
 
 /* Other functions */
 
-gint gncJobSortFunc (gconstpointer a, gconstpointer b) {
-  GncJob *ja = (GncJob *) a;
-  GncJob *jb = (GncJob *) b;
+int gncJobCompare (const GncJob * a, const GncJob *b) {
+  if (!a && !b) return 0;
+  if (!a && b) return 1;
+  if (a && !b) return -1;
 
-  if (!a || !b) return 0;
-
-  return (safe_strcmp(ja->id, jb->id));
+  return (safe_strcmp(a->id, b->id));
 }
 
 
@@ -317,6 +317,18 @@ static GncObject_t gncJobDesc = {
 
 gboolean gncJobRegister (void)
 {
+  static QueryObjectDef params[] = {
+    { JOB_GUID, QUERYCORE_GUID, (QueryAccess)gncJobGetGUID },
+    { JOB_ID, QUERYCORE_STRING, (QueryAccess)gncJobGetID },
+    { JOB_NAME, QUERYCORE_STRING, (QueryAccess)gncJobGetName },
+    { JOB_REFERENCE, QUERYCORE_STRING, (QueryAccess)gncJobGetReference },
+    { JOB_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncJobGetOwner },
+    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncJobGetBook },
+    { NULL },
+  };
+
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncJobCompare, params);
+
   return gncObjectRegister (&gncJobDesc);
 }
 

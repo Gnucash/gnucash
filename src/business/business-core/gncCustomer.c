@@ -184,7 +184,8 @@ void gncCustomerAddJob (GncCustomer *cust, GncJob *job)
   if (!job) return;
 
   if (g_list_index(cust->jobs, job) == -1)
-    cust->jobs = g_list_insert_sorted (cust->jobs, job, gncJobSortFunc);
+    cust->jobs = g_list_insert_sorted (cust->jobs, job,
+				       (GCompareFunc)gncJobCompare);
 }
 
 void gncCustomerRemoveJob (GncCustomer *cust, GncJob *job)
@@ -404,6 +405,8 @@ gboolean gncCustomerRegister (void)
     { CUSTOMER_ID, QUERYCORE_STRING, (QueryAccess)gncCustomerGetID },
     { CUSTOMER_NAME, QUERYCORE_STRING, (QueryAccess)gncCustomerGetName },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncCustomerGetBook },
+    { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncCustomerGetAddr },
+    { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncCustomerGetShipAddr },
     { NULL },
   };
 

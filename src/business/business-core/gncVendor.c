@@ -215,7 +215,8 @@ void gncVendorAddJob (GncVendor *vendor, GncJob *job)
   if (!job) return;
 
   if (g_list_index(vendor->jobs, job) == -1)
-    vendor->jobs = g_list_insert_sorted (vendor->jobs, job, gncJobSortFunc);
+    vendor->jobs = g_list_insert_sorted (vendor->jobs, job,
+					 (GCompareFunc)gncJobCompare);
 }
 
 void gncVendorRemoveJob (GncVendor *vendor, GncJob *job)
@@ -360,6 +361,7 @@ gboolean gncVendorRegister (void)
     { VENDOR_ID, QUERYCORE_STRING, (QueryAccess)gncVendorGetID },
     { VENDOR_NAME, QUERYCORE_STRING, (QueryAccess)gncVendorGetName },
     { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncVendorGetBook },
+    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncVendorGetAddr },
     { NULL },
   };
 

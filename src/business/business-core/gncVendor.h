@@ -55,5 +55,6 @@ int gncVendorCompare (GncVendor *a, GncVendor *b);
 #define VENDOR_GUID	"guid"
 #define VENDOR_ID	"id"
 #define VENDOR_NAME	"name"
+#define VENDOR_ADDR	"addr"
 
 #endif /* GNC_VENDOR_H_ */

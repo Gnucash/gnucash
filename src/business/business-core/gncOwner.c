@@ -143,6 +143,29 @@ GncOwner * gncOwnerGetEndOwner (GncOwner *owner)
   }
 }
 
+int gncOwnerCompare (const GncOwner *a, const GncOwner *b)
+{
+  if (!a && !b) return 0;
+  if (!a && b) return 1;
+  if (a && !b) return -1;
+
+  if (a->type != b->type)
+    return (a->type - b->type);
+
+  switch (a->type) {
+  case GNC_OWNER_NONE:
+  case GNC_OWNER_UNDEFINED:
+  default:
+    return 0;
+  case GNC_OWNER_CUSTOMER:
+    return gncCustomerCompare (a->owner.customer, b->owner.customer);
+  case GNC_OWNER_VENDOR:
+    return gncVendorCompare (a->owner.vendor, b->owner.vendor);
+  case GNC_OWNER_JOB:
+    return gncJobCompare (a->owner.job, b->owner.job);
+  }
+}
+
 const GUID * gncOwnerGetEndGUID (GncOwner *owner)
 {
   if (!owner) return NULL;
@@ -165,7 +188,7 @@ gboolean gncOwnerRegister (void)
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncCustomerCompare,params);
+  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOwnerCompare, params);
 
   return TRUE;
 }

@@ -63,5 +63,7 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 #define CUSTOMER_GUID	"guid"
 #define CUSTOMER_ID	"id"
 #define CUSTOMER_NAME	"name"
+#define CUSTOMER_ADDR	"addr"
+#define CUSTOMER_SHIPADDR	"shipaddr"
 
 #endif /* GNC_CUSTOMER_H_ */

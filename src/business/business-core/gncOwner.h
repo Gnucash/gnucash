@@ -46,6 +46,7 @@ GncVendor * gncOwnerGetVendor (const GncOwner *owner);
 
 void gncOwnerCopy (const GncOwner *src, GncOwner *dest);
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b);
+int gncOwnerCompare (const GncOwner *a, const GncOwner *b);
 
 const char * gncOwnerGetName (GncOwner *owner);
 
