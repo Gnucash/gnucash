@@ -1,2 +1,5 @@
 Makefile
 *.so.*
+bar-gwrap.c
+bar-gwrap.h
+bar-gwrap.html

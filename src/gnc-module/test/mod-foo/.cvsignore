@@ -1,2 +1,5 @@
 Makefile
 *.so.*
+foo-gwrap.c
+foo-gwrap.h
+foo-gwrap.html

@@ -1,2 +1,5 @@
 Makefile
 *.so.*
+baz-gwrap.c
+baz-gwrap.h
+baz-gwrap.html
