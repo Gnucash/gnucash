@@ -1,3 +1,9 @@
+2003-11-14  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po, po/glossary/de.po: Insert German word changes as
+	discussed on linuxwiki.de/GnuCash/WeiterEntwicklung in order to be
+	more in accordance with German financial wordings.
+
 2003-11-14  Derek Atkins  <derek@ihtfp.com>
 
 	* src/report/standard-reports/advanced-portfolio.scm:

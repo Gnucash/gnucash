@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnucash 1.8\n"
 "POT-Creation-Date: 2003-10-21 20:00+0200\n"
-"PO-Revision-Date: 2003-11-12 22:22+0100\n"
+"PO-Revision-Date: 2003-11-14 23:12+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: DE\n"
 "MIME-Version: 1.0\n"
@@ -1225,7 +1225,7 @@ msgstr "Zur freien Zeile am Ende dieser Rechnung gehen"
 #: src/gnome/glade/register.glade.h:39 src/gnome/glade/account.glade.h:33
 #: src/gnome-utils/dialog-account.c:1717
 msgid "New Account"
-msgstr "Neues Konto"
+msgstr "_Neues Konto"
 
 #. src/business/business-gnome/business-gnome.scm
 #: src/business/business-gnome/glade/invoice.glade.h:43
@@ -1241,7 +1241,7 @@ msgstr "Einen Firmenbericht für den Mandant dieser Rechnung öffnen"
 #: src/business/business-gnome/glade/invoice.glade.h:46
 #: src/gnome/glade/register.glade.h:41 src/gnome/window-main.c:871
 msgid "Open a general ledger window"
-msgstr "Hauptbuch-Fenster öffnen"
+msgstr "Journal-Fenster öffnen (d.h. alle Buchungssätze aller Konten in einem einzigen Journal)"
 
 #. src/scm/help-topics-index.scm
 #: src/business/business-gnome/glade/invoice.glade.h:47
@@ -1410,7 +1410,7 @@ msgstr "Finanzrechner"
 #: src/business/business-gnome/glade/invoice.glade.h:81
 #: src/gnome/glade/register.glade.h:117 src/gnome/window-main.c:870
 msgid "_General Ledger"
-msgstr "_Hauptbuch"
+msgstr "_Journal"
 
 #: src/business/business-gnome/glade/invoice.glade.h:82
 msgid "_Gnucash Users Manual"
@@ -2899,9 +2899,9 @@ msgid ""
 "\tjust a moment ago. Please look at their changes,\n"
 "\tand try again, if needed.\n"
 msgstr ""
-"Ein anderer Benutzer hat diesen Geschäftsvorgang soeben\n"
-"geändert. Bitte prüfen Sie die Änderungen und versuchen Sie es\n"
-"ggf. nochmal.\n"
+"Ein anderer Benutzer hat diesen Buchungssatz \n"
+"soeben geändert. Bitte prüfen Sie die Änderungen und \n"
+"versuchen Sie es gegenebenfalls nochmal.\n"
 
 #. If 'name' is "-- Split Transaction --" then return NULL or the register acct
 #: src/engine/Transaction.c:2357 src/engine/Transaction.c:2378
@@ -2909,7 +2909,7 @@ msgstr ""
 #: src/register/ledger-core/split-register.c:2089
 #: intl-scm/guile-strings.c:2912 intl-scm/guile-strings.c:2934
 msgid "-- Split Transaction --"
-msgstr "-- Mehrteiliger Vorgang --"
+msgstr "-- Mehrteilige Buchung --"
 
 #. src/report/standard-reports/transaction.scm
 #: src/engine/Transaction.c:2399 src/gnome/glade/register.glade.h:81
@@ -2917,7 +2917,7 @@ msgstr "-- Mehrteiliger Vorgang --"
 #: src/register/ledger-core/split-register.c:2073
 #: intl-scm/guile-strings.c:2538
 msgid "Split"
-msgstr "Mehrteilig"
+msgstr "Vollständig"
 
 #: src/gnome/glade/register.glade.h:1
 msgid "A_ction"
@@ -2925,7 +2925,7 @@ msgstr "Aktion"
 
 #: src/gnome/glade/register.glade.h:4
 msgid "Cancel the current transaction"
-msgstr "Aktuellen Geschäftsvorgang abbrechen"
+msgstr "Aktuelle Buchung abbrechen"
 
 #: src/gnome/glade/register.glade.h:5
 msgid "Chec_k & Repair"
@@ -2937,17 +2937,16 @@ msgstr "Kontobuch überprüfen"
 
 #: src/gnome/glade/register.glade.h:8
 msgid "Copy Transaction"
-msgstr "Geschäftsvorgang kopieren"
+msgstr "Buchungssatz kopieren"
 
 #: src/gnome/glade/register.glade.h:9
 msgid "Copy the selected transaction"
-msgstr "Ausgewählten Geschäftsvorgang kopieren"
+msgstr "Ausgewählten Buchungssatz kopieren"
 
 #: src/gnome/glade/register.glade.h:10
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
-msgstr ""
-"Terminierte Buchung erstellen mit aktuellem Geschäftsvorgang als Vorlage"
+msgstr "Terminierte Buchung erstellen mit aktuellem Buchungssatz als Vorlage"
 
 #: src/gnome/glade/register.glade.h:11 src/gnome/window-acct-tree.c:879
 #: src/gnome/window-acct-tree.c:1015 src/gnome/window-acct-tree.c:1276
@@ -2956,11 +2955,11 @@ msgstr "Ein neues Konto eröffnen"
 
 #: src/gnome/glade/register.glade.h:12
 msgid "Cut Transaction"
-msgstr "Geschäftsvorgang ausschneiden"
+msgstr "Buchungssatz ausschneiden"
 
 #: src/gnome/glade/register.glade.h:13
 msgid "Cut the selected transaction"
-msgstr "Ausgewählten Geschäftsvorgang ausschneiden"
+msgstr "Ausgewählten Buchungssatz ausschneiden"
 
 #: src/gnome/glade/register.glade.h:14
 msgid "Date _Range"
@@ -2975,7 +2974,7 @@ msgstr "Datum:"
 
 #: src/gnome/glade/register.glade.h:18
 msgid "Delete Transaction"
-msgstr "Geschäftsvorgang löschen"
+msgstr "Buchungssatz löschen"
 
 #: src/gnome/glade/register.glade.h:19
 msgid "Delete all the other splits"
@@ -2983,11 +2982,11 @@ msgstr "Alle Gegen-Buchungen löschen"
 
 #: src/gnome/glade/register.glade.h:20
 msgid "Delete the current transaction"
-msgstr "Aktuellen Geschäftsvorgang löschen"
+msgstr "Aktuellen Buchungssatz löschen"
 
 #: src/gnome/glade/register.glade.h:21
 msgid "Delete the whole transaction"
-msgstr "Den gesamten Geschäftsvorgang löschen"
+msgstr "Den gesamten Buchungssatz löschen"
 
 #: src/gnome/glade/register.glade.h:22
 msgid "Descri_ption"
@@ -2995,11 +2994,11 @@ msgstr "Beschreibung"
 
 #: src/gnome/glade/register.glade.h:23
 msgid "Dup_licate Transaction..."
-msgstr "Buchung duplizieren..."
+msgstr "Buchungssatz duplizieren..."
 
 #: src/gnome/glade/register.glade.h:25
 msgid "Duplicate this Transaction"
-msgstr "Buchung duplizieren"
+msgstr "Diesen Buchungssatz duplizieren"
 
 #: src/gnome/glade/register.glade.h:26
 msgid "Edit Exchange Rate"
@@ -3038,11 +3037,11 @@ msgstr "Beibehalten der normalen Kontoreihenfolge"
 
 #: src/gnome/glade/register.glade.h:35
 msgid "Make a copy of the current transaction"
-msgstr "Aktuellen Geschäftsvorgang kopieren"
+msgstr "Aktuellen Buchungssatz kopieren"
 
 #: src/gnome/glade/register.glade.h:36
 msgid "Move to the blank transaction at the bottom of the register"
-msgstr "Zur freien Zeile am Ende dieses Kontobuchs gehen"
+msgstr "Zur freien Buchungszeile am Ende dieses Kontobuchs gehen"
 
 #: src/gnome/glade/register.glade.h:37
 msgid "NOTUSED: Defined in src/gnome/window-register.c"
@@ -3058,7 +3057,7 @@ msgstr "Nummer:"
 
 #: src/gnome/glade/register.glade.h:42
 msgid "Open a register report window for this transaction"
-msgstr "Kontobuch als Bericht für diesen Geschäftsvorgang öffnen"
+msgstr "Kontobuch als Bericht für diesen Buchungssatz öffnen"
 
 #: src/gnome/glade/register.glade.h:43 src/gnome/window-main.c:931
 msgid "Open the GnuCash Help"
@@ -3070,11 +3069,11 @@ msgstr "Den GnuCash-Online-Kurs öffnen"
 
 #: src/gnome/glade/register.glade.h:45
 msgid "Paste Transaction"
-msgstr "Geschäftsvorgang einfügen"
+msgstr "Buchungssatz einfügen"
 
 #: src/gnome/glade/register.glade.h:46
 msgid "Paste the transaction from the clipboard"
-msgstr "Den Geschäftsvorgangs von der Zwischenablage einfügen"
+msgstr "Den Buchungssatz von der Zwischenablage einfügen"
 
 #: src/gnome/glade/register.glade.h:48
 msgid "Print _Check"
@@ -3095,7 +3094,7 @@ msgstr "Buchen einer Aktienteilung oder eines Aktienzusammenschlusses"
 
 #: src/gnome/glade/register.glade.h:52
 msgid "Record the current transaction"
-msgstr "Änderungen des aktuellen Geschäftsvorgangs übernehmen"
+msgstr "Änderungen des aktuellen Buchungssatzes übernehmen"
 
 #: src/gnome/glade/register.glade.h:53
 msgid "Register date ranges"
@@ -3103,7 +3102,7 @@ msgstr "Datumbereich des Kontobuchs"
 
 #: src/gnome/glade/register.glade.h:54 src/gnome/gnc-split-reg.c:1042
 msgid "Remove Transaction Splits"
-msgstr "Gegenbuchungen entfernen"
+msgstr "Buchungsteile entfernen"
 
 #. src/scm/help-topics-index.scm
 #: src/gnome/glade/register.glade.h:55
@@ -3119,7 +3118,7 @@ msgstr "Buchungen aus_wählen"
 
 #: src/gnome/glade/register.glade.h:57
 msgid "S_plit Transaction"
-msgstr "Mehrteiliger Vorgang"
+msgstr "Mehrteilige Buchung"
 
 #: src/gnome/glade/register.glade.h:59 src/gnome/glade/fincalc.glade.h:27
 msgid "Schedule"
@@ -3151,29 +3150,28 @@ msgstr "_Alle anzeigen"
 
 #: src/gnome/glade/register.glade.h:66
 msgid "Show all splits in the current transaction"
-msgstr "Alle Buchungen im aktuellen Geschäftsvorgang anzeigen"
+msgstr "Alle Buchungen im aktuellen Buchungssatz anzeigen"
 
 #. src/app-utils/prefs.scm
 #: src/gnome/glade/register.glade.h:67 intl-scm/guile-strings.c:1017
 msgid "Show expanded transactions with all splits"
-msgstr "Zeige Geschäftsvorgänge ausführlich mit allen Buchungen"
+msgstr "Alle Buchungssätze vollständig mit allen Teilen anzeigen"
 
 #. src/app-utils/prefs.scm
 #: src/gnome/glade/register.glade.h:68 intl-scm/guile-strings.c:1009
 msgid "Show transactions on one or two lines"
-msgstr "Anzeigen der Geschäftsvorgänge auf einer oder zwei Zeilen"
+msgstr "Alle Buchungssätze einzeilig anzeigen"
 
 #. src/app-utils/prefs.scm
 #: src/gnome/glade/register.glade.h:69 intl-scm/guile-strings.c:1013
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
-msgstr ""
-"Geschäftsvorgänge auf einer oder zwei Zeilen mit mehr Informationen anzeigen"
+msgstr "Alle Buchungssätze außer dem aktuellen einzeilig anzeigen. Den aktuellen Buchungssatz vollständig anzeigen."
 
 #. src/app-utils/prefs.scm
 #: src/gnome/glade/register.glade.h:70 intl-scm/guile-strings.c:1023
 msgid "Show two lines of information for each transaction"
-msgstr "Zwei Zeilen pro Geschäftsvorgang anzeigen"
+msgstr "Alle Buchungssätze mit Bemerkung anzeigen"
 
 #: src/gnome/glade/register.glade.h:72
 msgid "Sort by Action"
@@ -3211,7 +3209,7 @@ msgstr ""
 
 #: src/gnome/glade/register.glade.h:82
 msgid "St_yle"
-msgstr "Stil"
+msgstr "_Buchung"
 
 #: src/gnome/glade/register.glade.h:83
 msgid "Start date:"
@@ -3228,7 +3226,7 @@ msgstr "Heute"
 
 #: src/gnome/glade/register.glade.h:86
 msgid "Transaction Information"
-msgstr "Geschäftsvorgangsinformation"
+msgstr "Buchungsinformation"
 
 #. src/report/standard-reports/register.scm
 #: src/gnome/glade/register.glade.h:87
@@ -3274,7 +3272,7 @@ msgstr "_Alle"
 
 #: src/gnome/glade/register.glade.h:100
 msgid "_All transactions"
-msgstr "Alle Geschäftsvorgänge"
+msgstr "Alle Buchungssätze"
 
 #: src/gnome/glade/register.glade.h:101
 msgid "_Amount"
@@ -3282,11 +3280,11 @@ msgstr "Betrag"
 
 #: src/gnome/glade/register.glade.h:102
 msgid "_Auto-Split Ledger"
-msgstr "Auto-Mehrteiliges Hauptbuch"
+msgstr "_Aktive vollständig"
 
 #: src/gnome/glade/register.glade.h:103
 msgid "_Basic Ledger"
-msgstr "Vereinfachtes Hauptbuch"
+msgstr "_Einzeilig"
 
 #: src/gnome/glade/register.glade.h:106
 msgid "_Cleared"
@@ -3294,7 +3292,7 @@ msgstr "_Bestätigt"
 
 #: src/gnome/glade/register.glade.h:110
 msgid "_Double Line"
-msgstr "_Zwei Zeilen"
+msgstr "_Bemerkung anzeigen"
 
 #: src/gnome/glade/register.glade.h:111 src/gnome/window-reconcile.c:1313
 #: src/gnome/window-reconcile.c:1385
@@ -3350,11 +3348,11 @@ msgstr "Aktienteilung..."
 
 #: src/gnome/glade/register.glade.h:130
 msgid "_This transaction"
-msgstr "_Dieser Geschäftsvorgang"
+msgstr "_Dieser Buchungssatz"
 
 #: src/gnome/glade/register.glade.h:134
 msgid "_Transaction Journal"
-msgstr "Amerikanisches Journal"
+msgstr "_Vollständig"
 
 #: src/gnome/glade/register.glade.h:135
 msgid "_Transaction Report"
@@ -3371,7 +3369,7 @@ msgstr "_Nicht abgeglichen"
 
 #: src/gnome/glade/register.glade.h:138
 msgid "_View"
-msgstr "Ansicht"
+msgstr "_Ansicht"
 
 #: src/gnome/glade/register.glade.h:139
 msgid "_Voided"
@@ -4949,7 +4947,7 @@ msgstr ""
 "Geben Sie die Anzahl der Aktien ein, die sie durch die Aktienteilung\n"
 "oder Zusammenschluß gewonnen oder verloren haben.  Für einen\n"
 "Zusammenschluß geben Sie eine negative Zahl ein.  Sie können auch eine\n"
-"Beschreibung des Geschäftsvorgangs eingeben."
+"Beschreibung des Buchungssatzes eingeben."
 
 #: src/gnome/glade/stocks.glade.h:11
 msgid ""
@@ -5232,7 +5230,7 @@ msgid ""
 "The following transactions are presently being edited;\n"
 "are you sure you want to delete them?"
 msgstr ""
-"Die folgenden Geschäftsvorgänge werden zur Zeit bearbeitet; wollen Sie\n"
+"Die folgenden Buchungssätze werden zur Zeit bearbeitet; wollen Sie\n"
 "diese wirklich löschen?"
 
 #: src/gnome/dialog-scheduledxaction.c:1723
@@ -5532,12 +5530,12 @@ msgstr "Reconciled:J"
 #: src/gnome/top-level.c:201
 #, c-format
 msgid "Transaction with no Accounts: %s"
-msgstr "Geschäftsvorgang ohne Konto: %s"
+msgstr "Buchungssatz ohne Konto: %s"
 
 #: src/gnome/top-level.c:212
 #, c-format
 msgid "No such split: %s"
-msgstr "Kein Split gefunden: %s"
+msgstr "Kein Buchungsteil gefunden: %s"
 
 #: src/gnome/top-level.c:222 src/gnome/top-level.c:265
 #, c-format
@@ -5670,9 +5668,7 @@ msgstr "Konto überprüfen"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
-msgstr ""
-"Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in diesem "
-"Konto"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungssätzen in diesem Konto"
 
 #: src/gnome/window-acct-tree.c:920
 msgid "Check & Repair Su_baccounts"
@@ -5682,9 +5678,7 @@ msgstr "_Unterkonten überprüfen"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
-msgstr ""
-"Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in diesem "
-"Konto und seinen Unterkonten"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungssätzen in diesem Konto und seinen Unterkonten"
 
 #: src/gnome/window-acct-tree.c:929
 msgid "Check & Repair A_ll"
@@ -5694,9 +5688,7 @@ msgstr "Alle überprüfen"
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
-msgstr ""
-"Überprüfen und Reparieren von unvollständigen Geschäftsvorfällen in allen "
-"Konten"
+msgstr "Überprüfen und Reparieren von unvollständigen Buchungssätzen in allen Konten"
 
 #: src/gnome/window-acct-tree.c:964
 msgid "Open Account"
@@ -5881,11 +5873,11 @@ msgstr "Finanzrechner"
 
 #: src/gnome/window-main.c:901
 msgid "_Find Transactions"
-msgstr "Geschäftsvorgänge _suchen"
+msgstr "Buchungssätze _suchen"
 
 #: src/gnome/window-main.c:902
 msgid "Find transactions with a search"
-msgstr "Finde Geschäftsvorgänge"
+msgstr "Finde Buchungssätze"
 
 #: src/gnome/window-main.c:922
 msgid "_Tips Of The Day"
@@ -5981,8 +5973,7 @@ msgstr "Haben"
 
 #: src/gnome/window-reconcile.c:1105
 msgid "Are you sure you want to delete the selected transaction?"
-msgstr ""
-"Sind Sie sicher, dass Sie den ausgewählten Geschäftsvorgang löschen wollen?"
+msgstr "Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
 
 #. src/scm/help-topics-index.scm
 #: src/gnome/window-reconcile.c:1152 intl-scm/guile-strings.c:375
@@ -6037,17 +6028,17 @@ msgstr "_Neu"
 #: src/gnome/window-reconcile.c:1306 src/gnome/window-reconcile.c:1378
 #: src/gnome/window-reconcile.c:1438
 msgid "Add a new transaction to the account"
-msgstr "Dem Konto einen neuen Geschäftsvorgang hinzufügen"
+msgstr "Dem Konto einen neuen Buchungssatz hinzufügen"
 
 #: src/gnome/window-reconcile.c:1313 src/gnome/window-reconcile.c:1385
 #: src/gnome/window-reconcile.c:1445
 msgid "Edit the current transaction"
-msgstr "Aktuellen Geschäftsvorgang bearbeiten"
+msgstr "Aktuellen Buchungssatz bearbeiten"
 
 #: src/gnome/window-reconcile.c:1320 src/gnome/window-reconcile.c:1392
 #: src/gnome/window-reconcile.c:1452
 msgid "Delete the selected transaction"
-msgstr "Ausgewählten Geschäftsvorgang löschen"
+msgstr "Ausgewählten Buchungssatz löschen"
 
 #: src/gnome/window-reconcile.c:1332
 msgid "Open the GnuCash help window"
@@ -6059,7 +6050,7 @@ msgstr "_Abgleichen"
 
 #: src/gnome/window-reconcile.c:1344
 msgid "_Transaction"
-msgstr "_Geschäftsvorgang"
+msgstr "_Buchungssatz"
 
 #: src/gnome/window-reconcile.c:1468
 msgid "Finish"
@@ -6099,11 +6090,11 @@ msgstr ""
 #. src/scm/help-topics-index.scm
 #: src/gnome/window-register.c:807 intl-scm/guile-strings.c:735
 msgid "General Ledger"
-msgstr "Hauptbuch"
+msgstr "Journal"
 
 #: src/gnome/window-register.c:809
 msgid "General Ledger Report"
-msgstr "Hauptbuch Bericht"
+msgstr "Journal Bericht"
 
 #: src/gnome/window-register.c:813
 msgid "Portfolio"
@@ -6160,16 +6151,14 @@ msgstr ""
 
 #: src/gnome/gnc-split-reg.c:1044
 msgid "Are you sure you want to remove the Splits of this transaction?"
-msgstr ""
-"Sind Sie sicher, dass Sie die Gegenbuchungen dieses Geschäftsvorgangs "
-"entfernen wollen?"
+msgstr "Sind Sie sicher, dass Sie die Buchungsteile dieses Buchungssatzes entfernen wollen?"
 
 #: src/gnome/gnc-split-reg.c:1047
 msgid ""
 "You would be modifying a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Sie würden einen Geschäftsvorgang mit abgeglichenen Buchungen\n"
+"Sie würden einen Buchungssatz mit abgeglichenen Buchungen\n"
 "ändern. Ihr abgeglichener Saldo könnte dadurch fehlerhaft werden."
 
 #: src/gnome/gnc-split-reg.c:1140
@@ -6180,9 +6169,9 @@ msgid ""
 "from the transaction\n"
 "   %s ?"
 msgstr ""
-"Sind Sie sicher daß Sie \n"
+"Sind Sie sicher, daß Sie den Buchungsteil\n"
 "   %s \n"
-"aus dem Geschäftsvorgang \n"
+"aus dem Buchungssatz \n"
 "   %s \n"
 "löschen wollen?"
 
@@ -6191,20 +6180,18 @@ msgid ""
 "You would be deleting a reconciled split!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Sie würden eine abgeglichene Buchung löschen! Das würde bewirken, daß\n"
-"Ihr Saldo nicht mehr abgeglichen ist."
+"Sie würden eine abgeglichene Buchung löschen! Das würde \n"
+"bewirken, daß Ihr Saldo nicht mehr abgeglichen ist."
 
 #: src/gnome/gnc-split-reg.c:1145
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
 "delete it from this register window."
-msgstr ""
-"Diese Buchung verankert diesen Geschäftsvorgang im Kontobuch. Sie können sie "
-"nicht in diesem Kontobuch löschen."
+msgstr "Diese Buchung verankert diesen Buchungssatz im Kontobuch. Sie können sie nicht in diesem Kontobuch löschen."
 
 #: src/gnome/gnc-split-reg.c:1158
 msgid "(no memo)"
-msgstr "(kein Buchungstext)"
+msgstr "(Kein Buchungstext)"
 
 #: src/gnome/gnc-split-reg.c:1161
 msgid "(no description)"
@@ -6212,17 +6199,16 @@ msgstr "(Keine Beschreibung)"
 
 #: src/gnome/gnc-split-reg.c:1194
 msgid "Are you sure you want to delete the current transaction?"
-msgstr ""
-"Sind Sie sicher, dass Sie den aktuellen Geschäftsvorgang löschen wollen?"
+msgstr "Sind Sie sicher, dass Sie den aktuellen Buchungssatz löschen wollen?"
 
 #: src/gnome/gnc-split-reg.c:1196
 msgid ""
 "You would be deleting a transaction with reconciled splits!\n"
 "This is not a good idea as it will cause your reconciled balance to be off."
 msgstr ""
-"Beachten Sie, daß Sie einen Geschäftsvorgang mit abgeglichenen\n"
-"Buchungen löschen würden. Dies bedeutet, daß ihr abgeglichener Saldo\n"
-"verändert wird."
+"Beachten Sie, daß Sie einen Buchungssatz mit abgeglichenen Buchungen\n"
+"löschen würden. Dies bedeutet, daß ihr abgeglichener Saldo verändert\n"
+"wird."
 
 #: src/gnome/gnc-split-reg.c:1904
 msgid "Present:"
@@ -7085,7 +7071,7 @@ msgid ""
 "Otherwise, it will not be recorded."
 msgstr ""
 "Sie müssen ein Konto angeben, zu dem oder von dem umgebucht werden\n"
-"soll. Andernfalls wird kein Geschäftsvorgang aufgezeichnet."
+"soll. Andernfalls wird kein Buchungssatz gespeichert."
 
 #: src/gnome-utils/dialog-transfer.c:1346
 msgid "You can't transfer from and to the same account!"
@@ -7323,7 +7309,7 @@ msgstr "Auswählen oder Hinzufügen des passenden GnuCash Kontos:"
 
 #: src/import-export/generic-import.glade.h:34
 msgid "Potential splits matching the selected transaction: "
-msgstr "Mögliche Buchungen, die zum aktuellen Geschäftsvorgang passen: "
+msgstr "Mögliche Buchungen, die zum aktuellen Buchungssatz passen: "
 
 #: src/import-export/generic-import.glade.h:35
 msgid "R"
@@ -9174,7 +9160,7 @@ msgid ""
 "within GnuCash."
 msgstr ""
 "Für Aufwendungen und Erträge (Ausgaben und Einnahmen) benutzt Gnucash\n"
-"seperate Konten anstelle von \"Kategorien\", um Geschäftsvorgänge zu\n"
+"seperate Konten anstelle von \"Kategorien\", um Buchungssätze zu\n"
 "klassifizieren. Jede Kategorie in der QIF-Datei wird also in ein\n"
 "Gnucash Konto umgewandelt.\n"
 "\n"
@@ -9278,7 +9264,7 @@ msgstr "Vereine QIF-Kategorien mit Gnucash Konten"
 
 #: src/import-export/qif-import/qif.glade.h:85
 msgid "Match duplicate transactions"
-msgstr "Doppelte Geschäftsvorgänge suchen"
+msgstr "Doppelte Buchungssätze suchen"
 
 #: src/import-export/qif-import/qif.glade.h:86
 msgid "Match payees/memos to GnuCash accounts"
@@ -9369,11 +9355,11 @@ msgstr ""
 "richtigen GnuCash-Konten zuzuordenen.\n"
 "\n"
 "Auf der folgenden Seite werden der Zahlungsempfänger und Buchungstext\n"
-"von Geschäftsvorgängen ohne Konten oder Kategorien aus der QIF Datei\n"
-"angezeigt. Als Voreinstellung werden solchen Geschäftsvorgängen dem\n"
-"Konto \"Nicht spezifiziert\" zugeordnet. Wenn Sie nun die\n"
-"Geschäftsvorgänge einem anderen Konto zuweisen, wird diese Auswahl für\n"
-"zukünftige Importvorgänge gespeichert."
+"von Buchungssätzen ohne Konten oder Kategorien aus der QIF Datei\n"
+"angezeigt. Als Voreinstellung werden solchen Buchungssätze dem Konto\n"
+"\"Nicht spezifiziert\" zugeordnet. Wenn Sie nun die Buchungssätze einem\n"
+"anderen Konto zuweisen, wird diese Auswahl für zukünftige\n"
+"Importvorgänge gespeichert."
 
 #: src/import-export/qif-import/qif.glade.h:126
 msgid "QIF files you have loaded"
@@ -9431,8 +9417,8 @@ msgid ""
 "accounting program, you should use the same account name that was used \n"
 "in that program.\n"
 msgstr ""
-"Die QIF-Datei, die Sie laden möchten, enthält Geschäftsvorgänge für\n"
-"ein einzelnes Konto, aber es ist kein Name für dieses Konto angegeben.\n"
+"Die QIF-Datei, die Sie laden möchten, enthält Buchungssätze für ein\n"
+"einzelnes Konto, aber es ist kein Name für dieses Konto angegeben.\n"
 "\n"
 "Bitte geben Sie einen Namen für das Konto an. Wenn die Datei aus einem\n"
 "anderen Finanzprogramm exportiert wurde, sollten Sie den gleichen\n"
@@ -9448,11 +9434,11 @@ msgid ""
 msgstr ""
 "Der QIF-Importierer kann bisher noch keine QIF-Dateien mit\n"
 "verschiedenen Währungen verarbeiten. Daher müssen alle Konten in der\n"
-"QIF-Datei die gleiche Währung haben. Diese Einschränkung sollte\n"
-"demnächst wegfallen.\n"
+"QIF-Datei die gleiche Währung haben. (Es ist geplant, daß diese\n"
+"Einschränkung demnächst wegfällt.)\n"
 "\n"
-"Bitte wählen Sie die Währung für die Geschäftsvorgänge aus der Datei/den\n"
-"Dateien:\n"
+"Bitte wählen Sie die Währung für die Buchungssätze aus der Datei/den\n"
+"Dateien: \n"
 
 #: src/import-export/qif-import/qif.glade.h:158
 msgid "Tradable commodities"
@@ -9526,11 +9512,11 @@ msgstr "Nicht importieren (keine Import-Aktion gewählt)"
 
 #: src/register/ledger-core/split-register-control.c:61
 msgid "Rebalance Transaction"
-msgstr "Geschäftsvorgang neu kalkulieren"
+msgstr "Buchungssatz neu kalkulieren"
 
 #: src/register/ledger-core/split-register-control.c:62
 msgid "The current transaction is not balanced."
-msgstr "Der aktuelle Geschäftsvorgang ist nicht ausgeglichen."
+msgstr "Der aktuelle Buchungssatz ist nicht ausgeglichen."
 
 #: src/register/ledger-core/split-register-control.c:98
 msgid "Balance it manually"
@@ -9551,18 +9537,15 @@ msgstr "Buchungsbetrag im anderen Konto anpassen"
 #: src/register/ledger-core/split-register-control.c:1065
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
-msgstr ""
-"Sie müssen den Geschäftsvorgang in den \"Mehrteilig\"-Stil aufklappen, um "
-"die Wechselkurse zu bearbeiten."
+msgstr "Sie müssen den Buchungssatz in die \"Vollständig\"-Ansicht aufklappen, um die Wechselkurse zu bearbeiten."
 
 #: src/register/ledger-core/split-register-control.c:1538
 msgid ""
 "Do you really want to mark this transaction not reconciled?\n"
 "Doing so might make future reconciliation difficult!"
 msgstr ""
-"Wollen Sie diesen Geschäftsvorgang wirklich als nicht abgeglichen\n"
-"markieren?  Das kann zu Problemen bei zukünftigen Geschäftsvorgängen\n"
-"führen."
+"Wollen Sie diesen Buchungssatz wirklich als nicht abgeglichen\n"
+"markieren?  Dies kann das nächste Abgleichen erschweren."
 
 #. Translators: The 'sample:' items are
 #. strings which are not displayed, but only
@@ -9649,8 +9632,7 @@ msgstr ""
 
 #: src/register/ledger-core/split-register-model.c:824
 msgid "Enter the transaction number, such as the check number"
-msgstr ""
-"Geben Sie die Nummer des Geschäftsvorgangs ein, z.B. die Scheck-Nummer."
+msgstr "Geben Sie die Nummer des Buchungssatzes ein, z.B. die Scheck-Nummer."
 
 #: src/register/ledger-core/split-register-model.c:858
 msgid "Enter the name of the Customer"
@@ -9662,16 +9644,15 @@ msgstr "Geben Sie den Namen des Zulieferers ein"
 
 #: src/register/ledger-core/split-register-model.c:864
 msgid "Enter a description of the transaction"
-msgstr "Geben Sie eine Beschreibung des Geschäftsvorgangs ein"
+msgstr "Geben Sie eine Beschreibung des Buchungssatzes ein"
 
 #: src/register/ledger-core/split-register-model.c:894
 msgid "Enter notes for the transaction"
-msgstr "Geben Sie Bemerkungen zum Geschäftsvorgang ein"
+msgstr "Geben Sie Bemerkungen zum Buchungssatz ein"
 
 #: src/register/ledger-core/split-register-model.c:987
 msgid "Enter the type of transaction, or choose one from the list"
-msgstr ""
-"Geben Sie den Geschäftsvorgangstyp ein, oder wählen Sie einen aus der Liste"
+msgstr "Geben Sie den Buchungstyp ein, oder wählen Sie einen aus der Liste"
 
 # FIXME: DON'T use the noun 'description' here.
 #: src/register/ledger-core/split-register-model.c:1015
@@ -9694,16 +9675,12 @@ msgstr "Wählen Sie das Konto aus, von dem Sie buchen wollen"
 #: src/register/ledger-core/split-register-model.c:1255
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
-msgstr ""
-"Dieser Geschäftsvorgang hat mehrere Buchungen. Klicken Sie \"Mehrteilig\", "
-"um alle sehen zu können."
+msgstr "Dieser Buchungssatz hat mehrere Buchungsteile. Klicken Sie \"Vollständig\", um alle sehen zu können."
 
 #: src/register/ledger-core/split-register-model.c:1258
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
-msgstr ""
-"Dieser Geschäftsvorgang ist eine Aktienteilung; klicken Sie 'Mehrteilig', um "
-"Einzelheiten sehen zu können"
+msgstr "Dieser Buchungssatz ist eine Aktienteilung. Klicken Sie \"Vollständig\", um Einzelheiten sehen zu können."
 
 #: src/register/ledger-core/split-register-model.c:1697
 msgid ""
@@ -9727,7 +9704,7 @@ msgid ""
 "You are about to overwrite an existing split.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Sie sind dabei, eine bestehende Teilbuchung zu überschreiben.\n"
+"Sie sind dabei, einen bestehenden Buchungsteil zu überschreiben.\n"
 "Sind Sie sicher, daß Sie das möchten?"
 
 #: src/register/ledger-core/split-register.c:825
@@ -9735,12 +9712,12 @@ msgid ""
 "You are about to overwrite an existing transaction.\n"
 "Are you sure you want to do that?"
 msgstr ""
-"Sie sind dabei, eine bestehende Buchung zu überschreiben. \n"
+"Sie sind dabei, einen bestehenden Buchungssatz zu überschreiben. \n"
 "Sind Sie sicher, daß Sie das möchten?"
 
 #: src/register/ledger-core/split-register.c:1698
 msgid "Recalculate Transaction"
-msgstr "Buchung neu kalkulieren"
+msgstr "Buchungssatz neu kalkulieren"
 
 #: src/register/ledger-core/split-register.c:1699
 msgid ""
@@ -10132,7 +10109,7 @@ msgid ""
 msgstr ""
 "Ein Klick mit der rechten Maustaste im Hauptfenster öffnet die \"Konto\"\n"
 "Menüpunkte. Ein Klick mit der rechten Maustaste im Kontobuch\n"
-"öffnet die Menüpunkte zum \"Geschäftsvorgang\"."
+"öffnet die Menüpunkte zum \"Buchungssatz\"."
 
 #. src/scm/tip-list.scm
 #: intl-scm/guile-strings.c:27
@@ -10142,11 +10119,11 @@ msgid ""
 "Alternatively, in the View -> Style menu, you can choose the register\n"
 "style Auto-Split Ledger or Transaction Journal."
 msgstr ""
-"Um Geschäftsvorgänge mit mehr als zwei Buchungen einzugeben (z.B. eine\n"
-"Gehaltszahlung mit mehreren Abzügen), drücken Sie den\n"
-"\"Mehrteilig\"-Knopf in der Werkzeugleiste. Alternativ können Sie auch\n"
-"im Menü Ansicht -> Stil den Anzeigestil \"Auto-Mehrteilig Hauptbuch\"\n"
-"oder \"Amerikanisches Journal\" wählen."
+"Um Buchungssätze mit mehr als zwei Buchungsteilen einzugeben\n"
+"(z.B. eine Gehaltszahlung mit mehreren Abzügen), drücken Sie den\n"
+"\"Vollständig\"-Knopf in der Werkzeugleiste. Alternativ können Sie auch\n"
+"im Menü Ansicht -> Buchung die Buchungsansicht \"Aktive vollständig\"\n"
+"oder \"Vollständig\" wählen."
 
 #. src/scm/tip-list.scm
 #: intl-scm/guile-strings.c:32
@@ -10172,9 +10149,9 @@ msgid ""
 "transaction as it was last entered."
 msgstr ""
 "GnuCash spart Ihnen Tipparbeit durch die Quick-Fill Funktion. Wenn Sie\n"
-"die ersten Buchstaben der Beschreibung eines früheren\n"
-"Geschäftsvorgangs eingeben, kann GnuCash den Rest mit dem bekannten\n"
-"Text vervollständigen."
+"die ersten Buchstaben der Beschreibung einer früheren Buchung\n"
+"eingeben, kann GnuCash den Rest mit dem bekannten Text\n"
+"vervollständigen."
 
 #. src/scm/tip-list.scm
 #: intl-scm/guile-strings.c:42
@@ -10198,7 +10175,7 @@ msgid ""
 "From the main menu, highlight the parent account and select\n"
 "Accounts -> Open Subaccounts from the menu."
 msgstr ""
-"Sie können alle Geschäftsvorgänge von mehreren Unterkonten in einem\n"
+"Sie können alle Buchungssätze von mehreren Unterkonten in einem\n"
 "Kontobuch ansehen: Wählen Sie im Kontenhierarchie-Fenster das\n"
 "Hauptkonto und klicken Sie auf den Menüpunkt Konten -> Unterkonten\n"
 "öffnen."
@@ -10223,8 +10200,8 @@ msgid ""
 "transactions as reconciled.  You can also press Tab and Shift-Tab to\n"
 "move between deposits and withdrawals."
 msgstr ""
-"Im Fenster \"Abgleichen\" können Sie mit der Leertaste Geschäftsvorgänge\n"
-"als \"Abgeglichen\" markieren. Um zwischen Haben und Soll zu wechseln,\n"
+"Im Fenster \"Abgleichen\" können Sie mit der Leertaste Buchungen als\n"
+"\"Abgeglichen\" markieren. Um zwischen Haben und Soll zu wechseln,\n"
 "können Sie die Tab (die Tabulatortaste) und Umschalt-Tab drücken."
 
 #. src/scm/tip-list.scm
@@ -10998,7 +10975,7 @@ msgstr "Unterkonten erstellen"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:431
 msgid "Transactions"
-msgstr "Geschäftsvorgänge/Buchungen"
+msgstr "Buchungssätze/Buchungen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:433 intl-scm/guile-strings.c:479
@@ -11017,12 +10994,12 @@ msgstr "Kontobuch-Fenster"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:437
 msgid "Simple Two Account Transaction"
-msgstr "Einfacher Zwei-Konto-Geschäftsvorgang"
+msgstr "Einfache Zwei-Konto-Buchung"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:439
 msgid "Multi Account Transaction"
-msgstr "Mehrteiliger Geschäftsvorgang"
+msgstr "Mehrteiliger Buchungssatz"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:441
@@ -11042,7 +11019,7 @@ msgstr "Tastenkürzel bei der Eingabe"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:451
 msgid "Additional Transaction Examples"
-msgstr "Weitere Beispiele für Geschäftsvorgänge"
+msgstr "Weitere Beispiele für Buchungssätze"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:453
@@ -11474,7 +11451,7 @@ msgstr "Statusleiste"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:731
 msgid "List of Transactions"
-msgstr "Liste der Geschäftsvorgänge"
+msgstr "Liste der Buchungssätze"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:737
@@ -11504,7 +11481,7 @@ msgstr "Währungs-/Aktien-Editor"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:755
 msgid "Find Transactions"
-msgstr "Geschäftsvorgänge suchen"
+msgstr "Buchungssätze suchen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:757
@@ -11569,7 +11546,7 @@ msgstr "Aktienteilungs-Druide"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:789
 msgid "Using the Register to Record Transactions"
-msgstr "Geschäftsvorgänge im Kontobuch eingeben"
+msgstr "Buchungssätze im Kontobuch eingeben"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:791
@@ -11579,7 +11556,7 @@ msgstr "Ansicht des Kontobuchs ändern"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:793
 msgid "To Enter a Transaction"
-msgstr "Geschäftsvorgang eingeben"
+msgstr "Buchungssatz eingeben"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:795
@@ -11594,22 +11571,22 @@ msgstr "Im Buchen-Fenster eingeben"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:799
 msgid "To Enter Multiple Split Transactions"
-msgstr "Mehrteiliger Geschäftsvorgang eingeben"
+msgstr "Mehrteiliger Buchungssatz eingeben"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:801
 msgid "To Enter Multiple Currency Transactions"
-msgstr "Geschäftsvorgang mit mehreren Währungen eingeben"
+msgstr "Buchungssatz mit mehreren Währungen eingeben"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:803
 msgid "To Edit a Transaction"
-msgstr "Geschäftsvorgang bearbeiten"
+msgstr "Buchungssatz bearbeiten"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:805
 msgid "To Delete a Transaction"
-msgstr "Geschäftsvorgang löschen"
+msgstr "Buchungssatz löschen"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:807
@@ -11619,7 +11596,7 @@ msgstr "Gegenbuchungen entfernen"
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:809
 msgid "To Copy a Transaction"
-msgstr "Geschäftsvorgang kopieren"
+msgstr "Buchungssatz kopieren"
 
 #. src/scm/help-topics-index.scm
 #: intl-scm/guile-strings.c:811
@@ -11930,46 +11907,44 @@ msgstr "Aktiviert die Unterstützung der Währung EURO"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1003
 msgid "Default Register Style"
-msgstr "Standardstil Kontobuch"
+msgstr "Voreinstellung Buchungsansicht"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1005
 msgid "Default style for register windows"
-msgstr "Wählen Sie den Standardmodus für die Kontobuchfenster"
+msgstr "Wählen Sie die Voreinstellung für die Buchungsansicht im Kontobuchfenster"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1007
 msgid "Basic Ledger"
-msgstr "Vereinfachtes Hauptbuch"
+msgstr "Einzeilig"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1011
 msgid "Auto-Split Ledger"
-msgstr "Auto-Mehrteiliges Hauptbuch"
+msgstr "Aktive vollständig"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1015
 msgid "Transaction Journal"
-msgstr "Amerikanisches Journal"
+msgstr "Vollständig"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1021
 msgid "Double Line Mode"
-msgstr "Zweizeilen-Modus"
+msgstr "Bemerkung anzeigen"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1027
 msgid "'Enter' moves to blank transaction"
-msgstr "Mit 'Eingabe' gehen Sie zum nächsten leeren Geschäftsvorgang"
+msgstr "Mit 'Eingabe' gehen Sie zum leeren Buchungssatz"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1029
 msgid ""
 "If selected, move to the blank transaction after the user presses 'Enter'. "
 "Otherwise, move down one row."
-msgstr ""
-"Nach Drücken von 'Eingabe' zum neuen leeren Geschäftsvorgang gehen. "
-"Ansonsten nur eine Zeile nach unten gehen."
+msgstr "Wenn aktiviert, nach Drücken von 'Eingabe' zum leeren Buchungssatz gehen. Ansonsten nur eine Zeile nach unten gehen."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1033
@@ -11980,9 +11955,7 @@ msgstr "Rückfrage vor Änderung an abgeglichenen Einträgen"
 #: intl-scm/guile-strings.c:1035
 msgid ""
 "If selected, use a dialog to confirm a change to a reconciled transaction."
-msgstr ""
-"Vor Änderungen an abgeglichenen Geschäftsvorgängen wird um Bestätigung "
-"gefragt."
+msgstr "Vor Änderungen an abgeglichenen Buchungen wird um Bestätigung gefragt."
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1039
@@ -12077,16 +12050,14 @@ msgstr "Hintergrundfarbe der aktiven Buchung im Kontobuch"
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1097
 msgid "Double mode colors alternate with transactions"
-msgstr "Zweizeilenstil: Farben abwechselnd pro Geschäftsvorgang"
+msgstr "Zweizeilenstil: Farben abwechselnd pro Buchungssatz"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1099
 msgid ""
 "Alternate the primary and secondary colors with each transaction, not each "
 "row"
-msgstr ""
-"Im Zweizeilenstil Farben nur mit jedem Geschäftsvorgang abwechseln, anstatt "
-"mit jeder Zeile"
+msgstr "Im Zweizeilenstil Farben nur mit jedem Buchungssatz abwechseln, anstatt mit jeder Zeile"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1103
@@ -12545,12 +12516,12 @@ msgstr ""
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1326
 msgid "Show All Transactions"
-msgstr "Alle Geschäftsvorgänge anzeigen"
+msgstr "Alle Buchungssätze anzeigen"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1328
 msgid "By default, show every transaction in an account."
-msgstr "Standardeinstellung: Zeige jeden Geschäftsvorgang im Konto"
+msgstr "Standardeinstellung: Zeige jeden Buchungssatz im Konto"
 
 #. src/app-utils/prefs.scm
 #: intl-scm/guile-strings.c:1332 intl-scm/guile-strings.c:3602
@@ -13404,9 +13375,7 @@ msgstr "Keine Daten gefunden"
 msgid ""
 "The selected accounts contain no data/transactions (or only zeroes) for the "
 "selected time period"
-msgstr ""
-"Die gewählten Konten enthalten keine Daten/Geschäftsvorgänge (oder nur "
-"solche mit Nullen) für die gewählte Zeitspanne."
+msgstr "Die gewählten Konten enthalten keine Daten/Buchungen (oder nur solche mit Nullen) für die gewählte Zeitspanne."
 
 #. src/report/report-system/html-style-sheet.scm
 #: intl-scm/guile-strings.c:1876
@@ -13927,14 +13896,12 @@ msgstr "Den Preis dieser Währung/Aktie berechnen"
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2128
 msgid "Actual Transactions"
-msgstr "Tatsächliche Geschäftsvorgänge"
+msgstr "Tatsächliche Buchungen"
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2130
 msgid "The instantaneous price of actual currency transactions in the past"
-msgstr ""
-"Der aufgezeichnete Preis von tatsächlichen Geschäftsvorgängen in der "
-"Vergangenheit"
+msgstr "Der aufgezeichnete Preis von tatsächlichen Buchungen in der Vergangenheit"
 
 #. src/report/standard-reports/price-scatter.scm
 #: intl-scm/guile-strings.c:2132
@@ -14477,7 +14444,7 @@ msgstr "Sekundäre Zwischensumme für Datumsschlüssel"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2536
 msgid "Void Transactions?"
-msgstr "Stornierte Geschäftsvorgänge?"
+msgstr "Stornierte Buchungssätze?"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2540
@@ -14541,7 +14508,7 @@ msgstr "Umbuchen von/nach"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2642 intl-scm/guile-strings.c:2910
 msgid "Style"
-msgstr "Stil"
+msgstr "Buchung"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2644
@@ -14627,7 +14594,7 @@ msgstr "Buchungen von/nach allen Filter-Konten ausschließen"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2678
 msgid "How to handle void transactions"
-msgstr "Behandlung von stornierten Geschäftsvorgängen"
+msgstr "Behandlung von stornierten Buchungssätzen"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2680
@@ -14637,7 +14604,7 @@ msgstr "Nur nicht-stornierte"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2682
 msgid "Show only non-voided transactions"
-msgstr "Nur nicht-stornierte Geschäftsvorgänge anzeigen"
+msgstr "Nur nicht-stornierte Buchungssätze anzeigen"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2684
@@ -14647,7 +14614,7 @@ msgstr "Nur stornierte"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2686
 msgid "Show only voided transactions"
-msgstr "Nur stornierte Geschäftsvorgänge anzeigen"
+msgstr "Nur stornierte Buchungssätze anzeigen"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2688
@@ -14657,8 +14624,7 @@ msgstr "Beides"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2690
 msgid "Show both (and include void transactions in totals)"
-msgstr ""
-"Beides anzeigen (und stornierte Geschäftsvorgänge im Saldo miteinbeziehen)"
+msgstr "Beides anzeigen (und stornierte Buchungssätze im Saldo miteinbeziehen)"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2694
@@ -14852,9 +14818,7 @@ msgstr "Kontonummer anzeigen"
 msgid ""
 "Display the other account name? (if this is a split transaction, this "
 "parameter is guessed)."
-msgstr ""
-"Kontobezeichnung des Gegenkontos anzeigen? (Wenn dies eine mehrteiliger "
-"Geschäftsvorgang ist, wird dieser Parameter geraten.)"
+msgstr "Kontobezeichnung des Gegenkontos anzeigen? (Wenn dies eine mehrteiliger Buchungssatz ist, wird dieser Parameter geraten.)"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2834
@@ -14976,16 +14940,14 @@ msgstr "Gerade Buchung"
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2914
 msgid "No matching transactions found"
-msgstr "Keine passenden Geschäftsvorgänge gefunden"
+msgstr "Keine passenden Buchungssätze gefunden"
 
 #. src/report/standard-reports/transaction.scm
 #: intl-scm/guile-strings.c:2916
 msgid ""
 "No transactions were found that match the given time interval and account "
 "selection."
-msgstr ""
-"Keine Geschäftsvorgänge gefunden, die in den gewählten Zeitraum fallen und "
-"die gewählten Konten betreffen."
+msgstr "Keine Buchungssätze gefunden, die in den gewählten Zeitraum fallen und die gewählten Konten betreffen."
 
 #. src/report/standard-reports/register.scm
 #: intl-scm/guile-strings.c:2942
@@ -15539,7 +15501,7 @@ msgstr "Diese Datei enthält eine unbekannte Aktion '%s'."
 #. src/import-export/qif-import/qif-parse.scm
 #: intl-scm/guile-strings.c:3440
 msgid "Some transactions may be discarded."
-msgstr "Einige Buchungsn könnten verworfen werden."
+msgstr "Einige Buchungen sind eventuell verworfen worden."
 
 #. src/import-export/qif-import/qif-merge-groups.scm
 #: intl-scm/guile-strings.c:3444
@@ -16124,9 +16086,7 @@ msgstr "Multi-Währung Gesamt anzeigen?"
 msgid ""
 "Transactions relating to company  %d contain more than one currency.  This "
 "report is not designed to cope with this possibility."
-msgstr ""
-"Der Geschäftsvorfall mit Firma %d enthält mehr als eine Währung. Dieser "
-"Bericht ist für diese Möglichkeit nicht ausgelegt."
+msgstr "Die Buchungen mit Firma %d enthält mehr als eine Währung. Dieser Bericht ist für diese Möglichkeit nicht ausgelegt."
 
 #. src/business/business-reports/aging.scm
 #: intl-scm/guile-strings.c:3926
