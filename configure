@@ -2346,7 +2346,7 @@ echo "configure:2345: checking for guile" >&5
 GNC_LIBS_SAFE=${LIBS}
 
 GNC_TEST_LIBS="-lguile"
-LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
 cat > conftest.$ac_ext <<EOF
 #line 2352 "configure"
 #include "confdefs.h"
@@ -2363,12 +2363,12 @@ else
   cat conftest.$ac_ext >&5
 fi
 rm -f conftest*
-LIBS="${LIBS_SAFE}"
+LIBS="${GNC_LIBS_SAFE}"
             
 if test x"${GUILELIBS}" = x;
 then
-  GNC_TEST_LIBS="-lguile -lreadline -ldl -lm"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  GNC_TEST_LIBS="-lguile -ldl"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   cat > conftest.$ac_ext <<EOF
 #line 2374 "configure"
 #include "confdefs.h"
@@ -2385,13 +2385,13 @@ else
   cat conftest.$ac_ext >&5
 fi
 rm -f conftest*
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;
 then
   GNC_TEST_LIBS="-lguile -lqthreads"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   cat > conftest.$ac_ext <<EOF
 #line 2397 "configure"
 #include "confdefs.h"
@@ -2408,13 +2408,13 @@ else
   cat conftest.$ac_ext >&5
 fi
 rm -f conftest*
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;
 then
   GNC_TEST_LIBS="-lguile -ltermcap"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   cat > conftest.$ac_ext <<EOF
 #line 2420 "configure"
 #include "confdefs.h"
@@ -2431,13 +2431,13 @@ else
   cat conftest.$ac_ext >&5
 fi
 rm -f conftest*
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;
 then
   GNC_TEST_LIBS="-lguile -lqthreads -ltermcap"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   cat > conftest.$ac_ext <<EOF
 #line 2443 "configure"
 #include "confdefs.h"
@@ -2454,7 +2454,7 @@ else
   cat conftest.$ac_ext >&5
 fi
 rm -f conftest*
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;

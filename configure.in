@@ -166,45 +166,45 @@ AC_MSG_CHECKING([for guile])
 GNC_LIBS_SAFE=${LIBS}
 
 GNC_TEST_LIBS="-lguile"
-LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
 AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
   GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-LIBS="${LIBS_SAFE}"
+LIBS="${GNC_LIBS_SAFE}"
             
 if test x"${GUILELIBS}" = x;
 then
-  GNC_TEST_LIBS="-lguile -lreadline -ldl -lm"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  GNC_TEST_LIBS="-lguile -ldl"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
     GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;
 then
   GNC_TEST_LIBS="-lguile -lqthreads"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
     GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;
 then
   GNC_TEST_LIBS="-lguile -ltermcap"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
     GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;
 then
   GNC_TEST_LIBS="-lguile -lqthreads -ltermcap"
-  LIBS="${LIBS} ${GNC_LIBS_HELPER} ${GNC_TEST_LIBS}"
+  LIBS="${GNC_LIBS_HELPER} ${GNC_TEST_LIBS} ${LIBS}"
   AC_TRY_LINK([#include<guile/gh.h>], [gh_eval_file;],
     GUILELIBS="$GUILELIBS ${GNC_TEST_LIBS}")
-  LIBS="${LIBS_SAFE}"
+  LIBS="${GNC_LIBS_SAFE}"
 fi
 
 if test x"${GUILELIBS}" = x;
