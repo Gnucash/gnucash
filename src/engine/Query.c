@@ -316,6 +316,7 @@ xaccInitQuery(Query * q, QueryTerm * initial_term)
 
   q->terms      = or;
   q->split_list = NULL;
+  q->xtn_list   = NULL;
   q->changed    = 1;
 
   q->max_splits = -1;
@@ -606,6 +607,9 @@ xaccFreeQueryMembers(Query *q)
 
   g_list_free(q->split_list);
   q->split_list = NULL;
+
+  g_list_free(q->xtn_list);
+  q->xtn_list = NULL;
 }
 
 void    
@@ -641,6 +645,7 @@ xaccQueryCopy(Query *q)
 
   copy->changed = q->changed;
   copy->split_list = g_list_copy (q->split_list);
+  copy->xtn_list = g_list_copy (q->xtn_list);
 
   return copy;
 }
@@ -739,14 +744,16 @@ xaccQueryMerge(Query * q1, Query * q2, QueryOp op)
     retval->terms = 
       g_list_concat(copy_or_terms(q1->terms), copy_or_terms(q2->terms));
     retval->max_splits     = q1->max_splits;
-    retval->split_list     = NULL; /* fixme */
+    retval->split_list     = NULL;
+    retval->xtn_list       = NULL;
     retval->changed        = 1;
     break;
 
   case QUERY_AND:
     retval = xaccMallocQuery();
     retval->max_splits     = q1->max_splits;
-    retval->split_list     = NULL; /* fixme */
+    retval->split_list     = NULL;
+    retval->xtn_list       = NULL;
     retval->changed        = 1;
 
     for(i=q1->terms; i; i=i->next) 
@@ -1488,7 +1495,7 @@ xaccQueryGetTransactions (Query * q, query_run_t runtype)
   Transaction * trans = NULL;
   gpointer    val = NULL;
   int         count = 0;
-  
+
   /* iterate over matching splits, incrementing a match-count in
    * the hash table */
   for(current = splits; current; current=current->next) {
@@ -1516,8 +1523,10 @@ xaccQueryGetTransactions (Query * q, query_run_t runtype)
   /* ATM we rerun the xtn filter every time.  Need to add checks and 
    * updates for using cached results. */
   q->last_run_type = runtype;
+
+  g_list_free (q->xtn_list);
   q->xtn_list = retval;
-  
+
   g_hash_table_destroy(trans_hash);
 
   return retval;
