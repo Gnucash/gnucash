@@ -144,7 +144,7 @@ void            xaccInitBasicRegister (BasicRegister *, int type);
 void            xaccDestroyBasicRegister (BasicRegister *);
 
 /* returns non-zero value if updates have been made to data */
-unsigned int    xaccGetChangeFlag (BasicRegister *);
+unsigned int    xaccBasicRegisterGetChangeFlag (BasicRegister *);
 
 #endif /* __XACC_REGISTER_H__ */
 
