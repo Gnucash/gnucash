@@ -1,5 +1,7 @@
 2001-05-21  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/window-main.c: remove cruft
+
 	* src/gnome/new-user-callbacks.c: use gncp_new_user_finish
 
 	* src/gnome/new-user-funs.c: finish new user choices dialog.

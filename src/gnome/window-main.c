@@ -910,11 +910,6 @@ gnc_main_window_file_new_account_tree_cb(GtkWidget * w, GnomeMDI * mdi) {
 
 static void
 gnc_main_window_create_menus(GNCMainInfo * maininfo) {
-  static  GnomeUIInfo gnc_report_new_template[] = 
-  { 
-    GNOMEUIINFO_END 
-  };
-  
   static  GnomeUIInfo gnc_file_menu_template[] = 
   {
     GNOMEUIINFO_MENU_NEW_ITEM(N_("New _File"),
