@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-30 19:02+0200\n"
-"PO-Revision-Date: 2004-10-30 19:05+0200\n"
+"POT-Creation-Date: 2004-11-01 21:49+0100\n"
+"PO-Revision-Date: 2004-11-01 21:52+0100\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -592,6 +592,7 @@ msgid "Num"
 msgstr "Nr"
 
 #: src/business/business-gnome/glade/payment.glade:188
+#: src/gnome/dialog-find-transactions.c:118
 #: src/import-export/generic-import.glade:428
 #: src/import-export/generic-import.glade:951
 #: src/import-export/generic-import.glade:1081
@@ -896,7 +897,8 @@ msgstr "E-Mail: "
 #: src/business/business-gnome/glade/order.glade:842
 #: src/business/business-gnome/glade/order.glade:1312
 #: src/business/business-gnome/glade/vendor.glade:562
-#: src/gnome/glade/account.glade:571 src/gnome-utils/gnc-account-tree.c:105
+#: src/gnome/glade/account.glade:571 src/gnome/dialog-find-transactions.c:112
+#: src/gnome-utils/gnc-account-tree.c:105
 #: src/register/ledger-core/split-register-model.c:324
 #: intl-scm/guile-strings.c:143
 msgid "Notes"
@@ -980,7 +982,8 @@ msgstr "Fällig"
 #: src/business/business-gnome/glade/date-close.glade:355
 #: src/business/business-ledger/gncEntryLedgerModel.c:60
 #: src/gnome/glade/account.glade:1093 src/gnome/glade/tax.glade:344
-#: src/gnome/reconcile-list.c:213 src/gnome-utils/gnc-account-tree.c:92
+#: src/gnome/dialog-find-transactions.c:120 src/gnome/reconcile-list.c:213
+#: src/gnome-utils/gnc-account-tree.c:92
 #: src/import-export/generic-import.glade:187
 #: src/import-export/generic-import.glade:415
 #: src/import-export/generic-import.glade:673
@@ -1475,6 +1478,7 @@ msgstr "Buchung löschen"
 
 #: src/business/business-gnome/glade/invoice.glade:1496
 #: src/business/business-gnome/dialog-invoice.c:2305
+#: src/gnome/dialog-find-transactions.c:109
 msgid "Date Posted"
 msgstr "Buchungsdatum"
 
@@ -2427,6 +2431,7 @@ msgid "Expense Account"
 msgstr "Aufwandskonten"
 
 #: src/business/business-ledger/gncEntryLedgerModel.c:50
+#: src/gnome/dialog-find-transactions.c:114
 #: src/register/ledger-core/split-register-model.c:184
 #: intl-scm/guile-strings.c:3758 intl-scm/guile-strings.c:4082
 msgid "Action"
@@ -3559,6 +3564,7 @@ msgid "Select or add a GnuCash account"
 msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 
 #: src/gnome/glade/account.glade:1573 src/gnome/glade/stocks.glade:120
+#: src/gnome/dialog-find-transactions.c:95
 #: src/gnome-utils/dialog-account.c:731
 #: src/import-export/generic-import.glade:161
 #: src/import-export/generic-import.glade:389
@@ -4302,6 +4308,7 @@ msgid "Variables"
 msgstr "Variablen"
 
 #: src/gnome/glade/sched-xact.glade:3983
+#: src/gnome/dialog-find-transactions.c:107
 #: src/register/ledger-core/split-register.c:1720
 #: src/register/ledger-core/split-register.c:1722
 #: intl-scm/guile-strings.c:2434 intl-scm/guile-strings.c:2574
@@ -4518,7 +4525,7 @@ msgid ""
 "Select the account for which you want to record a stock split or merger."
 msgstr "Wählen Sie das Konto, für das Sie eine Aktienteilung eingeben möchten."
 
-#: src/gnome/glade/stocks.glade:146
+#: src/gnome/glade/stocks.glade:146 src/gnome/dialog-find-transactions.c:105
 #: src/register/ledger-core/split-register-model.c:254
 #: src/register/ledger-core/split-register.c:1706
 #: src/register/ledger-core/split-register.c:1708
@@ -4690,6 +4697,29 @@ msgstr "Die Anzahl der Zahlungen kann nicht Null sein"
 #: src/gnome/dialog-fincalc.c:403
 msgid "The number of payments cannot be negative."
 msgstr "Die Anzahl der Zahlungen kann nicht negativ sein"
+
+#: src/gnome/dialog-find-transactions.c:91
+msgid "All Accounts"
+msgstr "Alle Konten"
+
+#: src/gnome/dialog-find-transactions.c:98
+msgid "Balanced"
+msgstr "Ausgeglichene Buchungen"
+
+#: src/gnome/dialog-find-transactions.c:101 src/gnome/window-reconcile.c:1152
+#: intl-scm/guile-strings.c:375 intl-scm/guile-strings.c:889
+#: intl-scm/guile-strings.c:1157 intl-scm/guile-strings.c:1164
+#: intl-scm/guile-strings.c:1170
+msgid "Reconcile"
+msgstr "Abgleichen"
+
+#: src/gnome/dialog-find-transactions.c:103
+msgid "Share Price"
+msgstr "Aktien-/Anteilspreis"
+
+#: src/gnome/dialog-find-transactions.c:116 intl-scm/guile-strings.c:2806
+msgid "Number"
+msgstr "Nummer"
 
 #: src/gnome/dialog-price-edit-db.c:74
 msgid "old-file-import"
@@ -5593,12 +5623,6 @@ msgstr "Haben"
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr ""
 "Sind Sie sicher, dass Sie den ausgewählten Buchungssatz löschen wollen?"
-
-#: src/gnome/window-reconcile.c:1152 intl-scm/guile-strings.c:375
-#: intl-scm/guile-strings.c:889 intl-scm/guile-strings.c:1157
-#: intl-scm/guile-strings.c:1164 intl-scm/guile-strings.c:1170
-msgid "Reconcile"
-msgstr "Abgleichen"
 
 #: src/gnome/window-reconcile.c:1230
 msgid "_Reconcile Information..."
@@ -12852,10 +12876,6 @@ msgstr "Sortiere nach Nummer des Kontos, zu dem gebucht wurde"
 #: intl-scm/guile-strings.c:2800
 msgid "Sort by amount"
 msgstr "Sortieren nach Summe"
-
-#: intl-scm/guile-strings.c:2806
-msgid "Number"
-msgstr "Nummer"
 
 #: intl-scm/guile-strings.c:2808
 msgid "Sort by check/transaction number"
