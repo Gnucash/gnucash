@@ -1,3 +1,9 @@
+2003-03-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Include a latest
+	change in OpenHBCI: Use bank code from HBCI account instead of
+	HBCI bank, if the available openhbci version supports it.
+
 2003-03-03  Chris Lyttle  <chris@wilddev.net>
 
 	* configure.in: change to 1.8.1.5 version
