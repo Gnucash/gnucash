@@ -110,7 +110,9 @@ gnc_book_new (void)
   gnc_book_init(book);
   gncObjectBookBegin (book);
 
+#if 0
   gnc_engine_generate_event (&book->guid, GNC_EVENT_CREATE);
+#endif
   LEAVE ("book=%p", book);
   return book;
 }
@@ -121,7 +123,9 @@ gnc_book_destroy (GNCBook *book)
   if (!book) return;
 
   ENTER ("book=%p", book);
+#if 0
   gnc_engine_generate_event (&book->guid, GNC_EVENT_DESTROY);
+#endif
 
   gncObjectBookEnd (book);
 
