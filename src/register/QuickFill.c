@@ -27,7 +27,10 @@
 
 #include <ctype.h>
 #include <string.h>
+
+#ifdef HAVE_WCTYPE_H
 #include <wctype.h>
+#endif
 
 #include "QuickFill.h"
 #include "basiccell.h"

@@ -1,3 +1,21 @@
+2001-07-09  Dave Peticolas  <dave@krondo.com>
+
+	* configure.in: check for ghttp_ssl.h
+
+	* src/gnome/gnc-http.c: conditionally include ghttp_ssl.h
+
+	* doc/sgml/C/xacc-whats-new.sgml: fix spelling
+
+	* doc/sgml/C/xacc-about.sgml: fix version
+
+	* src/Makefile.am: link intl libs with gnucash-make-guids
+
+	* src/register/QuickFill.c: same as below
+
+	* src/register/quickfillcell.c: conditionally include wctype.h
+
+	* configure.in: check for wctype.h
+
 2001-07-07  Dave Peticolas  <dave@krondo.com>
 
 	* src/test/gnc-test-stuff.c (get_random_query): not so many terms

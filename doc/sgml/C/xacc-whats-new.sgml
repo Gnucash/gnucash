@@ -230,7 +230,7 @@
         that the entire contents of the database be loaded into  
         GnucCash.  This should make it possible to work with much 
         larger datasets.  The Postgres backend is currently 'beta',
-        meaning tht it works, but hasn't been well-tested, and
+        meaning that it works, but hasn't been well-tested, and
         may contain bugs.
       </para>
 
