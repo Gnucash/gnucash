@@ -245,7 +245,7 @@ gnc_ui_account_get_balance (Account *account, gboolean include_children)
 
     children = xaccAccountGetChildren (account);
 
-    xaccGroupForEachAccountDeeply (children, balance_helper, &cb);
+    xaccGroupForEachAccount (children, balance_helper, &cb, TRUE);
 
     balance = cb.balance;
   }
