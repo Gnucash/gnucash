@@ -33,6 +33,18 @@ Features
    Qt, GTK easy.
 
 
+Philosphy
+---------
+The register object, indeed, all code in this directory, does not
+depend on (should not depend on) any code in the accounting engine,
+or on any code in the main application.  It should be possible to use 
+the register in a stand-alone fashion.   I beleive that this
+independance is almost true, there may still be some warts.  As a result
+of this "independence" philosophy, ther is a very small amount of
+duplicated code for date handling (i.e. there are similar functions
+in src/register/datecell.c and src/engine/date.c).  As cleanup
+continues, this duplication will disappear.
+
 
 Design Overview
 ---------------
