@@ -177,9 +177,9 @@ datecmp( Date *date1, Date *date2 )
     return 0;
   else
     {
-    /* to sort properly, must have 32 > days in month, and 400 > 12*31 */
-    unsigned int d1 = date1->day + (32 * date1->month) + (400 * date1->year);
-    unsigned int d2 = date2->day + (32 * date2->month) + (400 * date2->year);
+    /* to sort properly, must have 32 > days in month, and 500 > 12*32 */
+    unsigned int d1 = date1->day + (32 * date1->month) + (500 * date1->year);
+    unsigned int d2 = date2->day + (32 * date2->month) + (500 * date2->year);
     
     if( d1 < d2 )
       return -1;
