@@ -652,6 +652,17 @@ gnc_split_register_get_date_help (VirtualLocation virt_loc,
 }
 
 static const char *
+gnc_split_register_get_inactive_date_entry (VirtualLocation virt_loc,
+                                           gboolean translate,
+                                           gboolean *conditionally_changed,
+                                           gpointer user_data)
+{
+  /* This seems to be the one that initially gets used, the InactiveDateCell
+     is set to, and subsequently displayed. */
+  return "Scheduled";
+}
+
+static const char *
 gnc_split_register_get_num_entry (VirtualLocation virt_loc,
                                   gboolean translate,
                                   gboolean *conditionally_changed,
@@ -1174,6 +1185,13 @@ gnc_split_register_get_debcred_entry (VirtualLocation virt_loc,
 
     return xaccPrintAmount (amount, gnc_split_value_print_info (split, FALSE));
   }
+}
+
+static CellIOFlags
+gnc_split_register_get_inactive_io_flags (VirtualLocation virt_loc,
+                                          gpointer user_data)
+{
+  return XACC_CELL_ALLOW_NONE;
 }
 
 static CellIOFlags
@@ -1827,6 +1845,14 @@ gnc_template_register_model_new (void)
   TableModel *model;
 
   model = gnc_split_register_model_new ();
+
+  gnc_table_model_set_entry_handler( model,
+                                     gnc_split_register_get_inactive_date_entry,
+                                     DATE_CELL );
+
+  gnc_table_model_set_io_flags_handler( model,
+                                        gnc_split_register_get_inactive_io_flags,
+                                        DATE_CELL );
 
   gnc_table_model_set_entry_handler (model,
                                      gnc_template_register_get_xfrm_entry,

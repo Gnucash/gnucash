@@ -26,6 +26,7 @@
 #include <glib.h>
 
 #include "Group.h"
+#include "Query.h"
 #include "SchedXaction.h"
 #include "Transaction.h"
 #include "dialog-utils.h"
@@ -38,6 +39,8 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "split-register.h"
+#include "gnc-ledger-display.h"
+#include "gnucash-sheet.h"
 
 #include "dialog-sxsincelast.h"
 
@@ -106,6 +109,9 @@ typedef struct _sxSinceLastData {
 
   GList *actual_to_remove;
 
+  GNCLedgerDisplay *ac_ledger;
+  GnucashRegister *reg;
+
 } sxSinceLastData;
 
 typedef struct _toCreateTuple {
@@ -129,16 +135,23 @@ typedef struct {
   gboolean isSelected;
 } toDeleteTuple;
 
+typedef struct _creation_helper_userdata {
+        /* the to-create tuple */
+        toCreateTuple *tct;
+        /* a [pointer to a] GList to append the GUIDs of newly-created
+           transactions to, or NULL */
+        GList **createdGUIDs;
+} createData;
 
 /* Next reminder clist row index to create. */
 static int rl_row = 0;
 /* Next to-create clist row index to create. */
 static int tcl_row = 0;
-/* Next auto-create clist row index to create. */
-static int acl_row = 0;
 
 
 static void sxsincelast_init( sxSinceLastData *sxsld );
+static void _create_autoCreate_gen_ledger( sxSinceLastData *sxsld );
+static gncUIWidget _sxsld_ledger_get_parent( GNCLedgerDisplay *ld );
 
 static gboolean sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_close_handler( gpointer ud );
@@ -152,7 +165,8 @@ static void sxsincelast_destroy( GtkObject *o, gpointer ud );
 
 static void _create_transactions_on( SchedXaction *sx,
                                      GDate *gd,
-                                     toCreateTuple *tct );
+                                     toCreateTuple *tct,
+                                     GList **createdGUIDs );
 static gboolean _create_each_transaction_helper( Transaction *t, void *d );
 static void _sxsl_get_sx_vars( SchedXaction *sx, GHashTable *varHash );
 static void _hash_to_sorted_list( GHashTable *hashTable, GList **gl );
@@ -351,7 +365,6 @@ sxsincelast_init( sxSinceLastData *sxsld )
 	dialog_widgets_attach_handlers(sxsld->gxml_remind, widgets_remind, sxsld);
 	dialog_widgets_attach_handlers(sxsld->gxml_obsolete, widgets_obsolete, sxsld);
      
-
 	/* FIXME: Magic Numbers to be replaced */
        
         /* set all to-create clist columns to auto-resize. */
@@ -363,18 +376,22 @@ sxsincelast_init( sxSinceLastData *sxsld )
 
 	w = glade_xml_get_widget( sxsld->gxml_obsolete, 
 				  SX_OBSOLETE_CLIST);
+
 	clist_set_all_cols_autoresize(GTK_CLIST(w), SX_OBSOLETE_CLIST_WIDTH);
 
-        rl_row = tcl_row = acl_row = 0;
+        rl_row = tcl_row = 0;
 
 	sxsld->n_obsolete = 0;
 
+        _create_autoCreate_gen_ledger( sxsld );
+
         /* FIXME: deal with neither dialog being displayed [read:
            nothing-to-do.] */
-        if ( sxsincelast_populate( sxsld ) ) {
-                gtk_widget_show_all( sxsld->sxsincelastDlg );
-                sxsld->sincelast_displayed = TRUE;
+        if ( ! sxsincelast_populate( sxsld ) ) {
+                sxsincelast_close_handler( sxsld );
         }
+        gtk_widget_show_all( sxsld->sxsincelastDlg );
+        sxsld->sincelast_displayed = TRUE;
 }
 
 static void
@@ -438,31 +455,45 @@ _free_toCreate_list_elts( gpointer data, gpointer user_data )
 static void
 processAutoCreateList( GList *autoCreateList, sxSinceLastData *sxsld, SchedXaction *sx )
 {
-        GtkCList *cl;
+        Query *autoCreateQuery;
+        GList *createdGUIDs = NULL;
+        GList *thisGUID;
+        GtkFrame *f;
         gboolean autoCreateState, notifyState;
         char *rowText[2];
 
         /* get the "automagically created and notification requested"
-         * register, and create the entries in it. For now, this is a clist,
-         * but it _should_ be a GL...  */
-        cl = GTK_CLIST( glade_xml_get_widget( sxsld->gxml, "auto_create_clist" ) );
-        gtk_clist_freeze( cl );
-        while ( autoCreateList ) {
-                xaccSchedXactionGetAutoCreate( sx, &autoCreateState, &notifyState );
-                _create_transactions_on( sx, (GDate*)autoCreateList->data, NULL );
-                if ( notifyState ) {
-                        rowText[0] = xaccSchedXactionGetName( sx );
-                        rowText[1] = g_new0( gchar, GNC_D_BUF_WIDTH );
-                        g_date_strftime( rowText[1], GNC_D_WIDTH, "%a, %b %e, %Y",
-                                         (GDate*)autoCreateList->data );
-                        gtk_clist_insert( cl, acl_row++, rowText );
-                        g_free( rowText[1] );
-                }
+         * register, and create the entries in it. */
+        f = GTK_FRAME( glade_xml_get_widget( sxsld->gxml, "auto_create_frame" ) );
 
+        autoCreateQuery = xaccMallocQuery();
+        xaccQuerySetGroup( autoCreateQuery,
+                           gnc_book_get_group( gnc_get_current_book() ) );
+        while ( autoCreateList ) {
+                xaccSchedXactionGetAutoCreate( sx,
+                                               &autoCreateState,
+                                               &notifyState );
+                _create_transactions_on( sx, (GDate*)autoCreateList->data,
+                                         NULL, &createdGUIDs );
+                if ( notifyState ) {
+                        thisGUID = createdGUIDs;
+                        for ( ; thisGUID ; (thisGUID = thisGUID->next) ) {
+                                xaccQueryAddGUIDMatch( autoCreateQuery,
+                                                       (GUID*)thisGUID->data,
+                                                       QUERY_OR );
+                        }
+                        thisGUID = createdGUIDs = NULL;
+                }
                 autoCreateList = autoCreateList->next;
         }
-        gtk_clist_thaw( cl );
 
+        gnc_ledger_display_set_query( sxsld->ac_ledger, autoCreateQuery );
+        gnc_ledger_display_refresh( sxsld->ac_ledger );
+
+        xaccFreeQuery( autoCreateQuery );
+
+        g_list_free( createdGUIDs );
+        createdGUIDs = NULL;
 }
 
 static void
@@ -808,9 +839,11 @@ _clean_sincelast_dlg( sxSinceLastData *sxsld )
          */
         _clean_variable_table( sxsld );
 
+/* FIXME: this probably wants to clean up a autoCreate Query object, now */
+#if 0
         w = glade_xml_get_widget( sxsld->gxml, "auto_create_clist" );
         gtk_clist_clear( GTK_CLIST(w) );
-        acl_row = 0;
+#endif /* 0 */
 
         w = glade_xml_get_widget( sxsld->gxml, TO_CREATE_CLIST );
         gtk_clist_clear( GTK_CLIST(w) );
@@ -864,9 +897,13 @@ sxsincelast_close_handler( gpointer ud )
 	}
 	else
 	{
+                gnc_ledger_display_close( sxsld->ac_ledger );
+                sxsld->ac_ledger = NULL;
+
                 gnome_dialog_close( GNOME_DIALOG( sxsld->sxsincelastDlg ) );
                 sxsld->sxsincelastDlg = NULL;
                 sxsld->sincelast_displayed = FALSE;
+                sxsld->reg = NULL;
         }
 	
         /* FIXME -- cleanup:
@@ -956,7 +993,7 @@ sxsincelast_ok_clicked( GtkButton *b, gpointer ud )
         g_return_if_fail( tcList );
         do {
                 tct = (toCreateTuple*)tcList->data;
-                _create_transactions_on( tct->sx, tct->date, tct );
+                _create_transactions_on( tct->sx, tct->date, tct, NULL );
         } while ( (tcList = tcList->next) );
 
         /* FIXME: cleanup appropriately. */
@@ -1059,6 +1096,7 @@ _create_each_transaction_helper( Transaction *t, void *d )
         kvp_frame *split_kvpf;
         kvp_value *kvp_val;
         gboolean errFlag;
+        createData *createUD;
         toCreateTuple *tct;
         gnc_commodity *commonCommodity = NULL;
 
@@ -1073,7 +1111,8 @@ _create_each_transaction_helper( Transaction *t, void *d )
 
         DEBUG( "I'm seeing Transaction \"%s\"", xaccTransGetDescription( t ) );
 
-        tct = (toCreateTuple*)d;
+        createUD = (createData*)d;
+        tct = createUD->tct;
 
         newT = xaccMallocTransaction();
         xaccTransBeginEdit( newT );
@@ -1235,8 +1274,17 @@ _create_each_transaction_helper( Transaction *t, void *d )
         if ( errFlag ) {
                 PERR( "Some error in new transaction creation..." );
                 xaccTransRollbackEdit( newT );
-        } else {
+                xaccTransDestroy( newT );
                 xaccTransCommitEdit( newT );
+                return FALSE;
+        }
+
+        xaccTransCommitEdit( newT );
+
+        if ( createUD->createdGUIDs != NULL ) {
+                *createUD->createdGUIDs =
+                        g_list_append( *(createUD->createdGUIDs),
+                                       (gpointer)xaccTransGetGUID(newT) );
         }
 
         return TRUE;
@@ -1247,12 +1295,17 @@ _create_each_transaction_helper( Transaction *t, void *d )
  * will set the last occur date incorrectly.
  **/
 static void
-_create_transactions_on( SchedXaction *sx, GDate *gd, toCreateTuple *tct )
+_create_transactions_on( SchedXaction *sx, GDate *gd,
+                         toCreateTuple *tct,
+                         GList **createdGUIDs )
 {
+        createData createUD;
         AccountGroup *ag;
         Account *acct;
         char *id;
         char tmpBuf[GNC_D_BUF_WIDTH];
+        gboolean createdTCT;
+
 
         {
                 g_date_strftime( tmpBuf, GNC_D_WIDTH, GNC_D_FMT, gd );
@@ -1262,36 +1315,47 @@ _create_transactions_on( SchedXaction *sx, GDate *gd, toCreateTuple *tct )
 
         if ( tct != NULL
              && g_date_compare( gd, tct->date ) != 0 ) {
-                PERR( "GDate and TCT date aren't equal, which isn't a Good Thing." );
+                PERR( "GDate and TCT date aren't equal, "
+                      "which isn't a Good Thing." );
                 return;
         }
 
+        createdTCT = FALSE;
         if ( tct == NULL ) {
                 /* Create a faux tct for the creation-helper. */
                 tct = g_new0( toCreateTuple, 1 );
                 tct->sx = sx;
                 tct->date = gd;
                 tct->clistRow = -1;
+
+                createdTCT = TRUE;
         }
 
         ag = gnc_book_get_template_group( gnc_get_current_book () );
         id = guid_to_string( xaccSchedXactionGetGUID(sx) );
 	if(ag && id)
 	{
-	  acct = xaccGetAccountFromName( ag, id );        
+	  acct = xaccGetAccountFromName( ag, id );
 	  if(acct)
 	  {
+            createUD.tct = tct;
+            createUD.createdGUIDs = createdGUIDs;
 	    xaccAccountForEachTransaction( acct,
 					   _create_each_transaction_helper,
-					   tct );
+					   /*tct*/ &createUD );
 	  }
 	}
 	if (id)
 	{
 	  g_free( id );
 	}
-       
-	xaccSchedXactionSetLastOccurDate( sx, tct->date ); 
+
+	xaccSchedXactionSetLastOccurDate( sx, tct->date );
+
+        if ( createdTCT ) {
+                g_free( tct );
+                tct = NULL;
+        }
 }
 
 static void
@@ -1864,4 +1928,74 @@ sx_obsolete_unselect_all_clicked(GtkButton *button, gpointer user_data)
   }
   
   return;
+}
+
+static void
+_create_autoCreate_gen_ledger( sxSinceLastData *sxsld )
+{
+        GtkFrame         *autoCreate_frame;
+        SplitRegister         *splitreg;
+        GtkWidget         *regWidget;
+        GtkWidget         *popup;
+
+        autoCreate_frame =
+                GTK_FRAME( glade_xml_get_widget( sxsld->gxml,
+                                                 "auto_create_frame" ) );
+        sxsld->ac_ledger = gnc_ledger_display_gl();
+
+        gnc_ledger_display_set_handlers( sxsld->ac_ledger,
+                                         NULL,
+                                         _sxsld_ledger_get_parent );
+        gnc_ledger_display_set_user_data( sxsld->ac_ledger, (gpointer)sxsld );
+
+        splitreg = gnc_ledger_display_get_split_register( sxsld->ac_ledger );
+        /* FIXME: make configurable */
+        gnucash_register_set_initial_rows( 6 );
+
+        regWidget = gnucash_register_new( splitreg->table );
+        gnc_table_init_gui( regWidget, splitreg );
+        
+        gtk_container_add( GTK_CONTAINER(glade_xml_get_widget( sxsld->gxml,
+                                                               "ac_vbox" )),
+                           regWidget );
+        sxsld->reg = GNUCASH_REGISTER(regWidget);
+        GNUCASH_SHEET(sxsld->reg->sheet)->window = GTK_WIDGET(sxsld->sxsincelastDlg);
+
+#if 0
+        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "activate_cursor",
+                            GTK_SIGNAL_FUNC(sxe_register_record_cb), sxed );
+        gtk_signal_connect( GTK_OBJECT(sxed->dialog), "redraw_all",
+                            GTK_SIGNAL_FUNC(sxe_register_redraw_all_cb), sxed );
+
+#endif /* 0 */
+
+#if 0
+        /* FIXME: we should do all the happy-fun register stuff... button bar
+           controls ... popups ... */
+        popup = schedXaction_editor_create_reg_popup( sxsld );
+        gnucash_register_attach_popup( sxsld->reg, popup, sxsld );
+#endif /* 0 */
+
+        /* configure... */
+        /* don't use double-line */
+        gnc_split_register_config(splitreg,
+                                  splitreg->type, splitreg->style,
+                                  FALSE);
+
+        /* don't show present/future divider [by definition, not necessary] */
+        gnc_split_register_show_present_divider( splitreg, FALSE );
+
+        /* force a refresh */
+        gnc_ledger_display_refresh( sxsld->ac_ledger );
+
+}
+
+static
+gncUIWidget
+_sxsld_ledger_get_parent( GNCLedgerDisplay *ld )
+{
+        sxSinceLastData *sxsld;
+
+        sxsld = (sxSinceLastData*)gnc_ledger_display_get_user_data( ld );
+        return sxsld->sxsincelastDlg;
 }

@@ -48,9 +48,9 @@ X create a template register
       X need variable fill-in UI...
         X re-use gnome-sheet code for a variable-binding table? -- ended up
           using GtkTable [for now?]
-  . need way to expire/purge scheduled transactions which have no chance of
+  X need way to expire/purge scheduled transactions which have no chance of
     being created [outside their end date; once-scheduled and past].
-    . infrequent enough that a dialog should suffice.
+    X infrequent enough that a dialog should suffice.
   X need 'reminders' of upcoming scheduled transactions during since-last-run
     X Is it sufficient to look at the next instance of ea. transaction only?
       I think not... we probably want to look out until the transaction is
@@ -73,10 +73,13 @@ X create a template register
   . to note which are "recurring"
     . the mozilla "reload" glyph is kinda neat...
   . Differently-colored "not-yet-created" entries for a configurable
-    window.
+    time window.
   . Context menus/sensitive toolbar button/menu item for creation of
     not-yet-created transactions.
   . The ability to turn a non-recurring transaction into a recurring one...
+  . inactive cells
+    . date
+    . recn
 
 . deal better with formulas in template transactions [real FormulaCell]
   . recognize purely numeric template transactions and balance at
@@ -155,15 +158,17 @@ X create a template register
 . Scheduled Transaction Editor
   . Can't click-out of the register
   . auto-shrink on window create [the register is too wide, leading to too
-    much whitespace on the two top panels]
+    much whitespace on the two top panels -- sometimes].
   . Size/space issues.
   . Un-selecting "End Date" leaves calendar widget sensitive
   . 'ESC' while editing template register causes window to go away [badly].
+  . why does the accounts tab go crazy when we change the FreqSpec parameters?
 
 . Scheduled Transaction List
 
 . Since-last-run
-  . always goes one date past the instantiation date.
+  . any [horizontal] window size change height-grows the top/auto-create GL.
+  X always goes one date past the instantiation date.
   . tab-order on variable-entry window isn't always correct.
   X credit and debit seem reversed at instantiation time...
     . this is fixed, but is the fix correct?

@@ -1,3 +1,21 @@
+2001-09-30  Josh Sled  <jsled@asynchronous.org>
+
+	* src/gnome/dialog-sxsincelast.c: Displays
+	auto-created-and-notification-requested scheduled transactions in
+	a GL rather than a clist.
+
+	* src/register/ledger-core/split-register-model.c
+	(gnc_template_register_model_new): Added date-cell entry/io-flags
+	handler for template register, making date cell inactive, and
+	stating "Scheduled" instead of a date.
+
+	* src/gnome/dialog-sxsincelast.c (_create_transactions_on): Now
+	does appropriate cleanup in the case it needs to create a
+	temporary toCreateTuple for transaction-creation.
+	(_create_each_transaction_helper): Cleanup failed
+	transaction-creation appropriately.  Support for returning a list
+	of the GUIDs of created transactions.
+
 2001-09-28  Robert Graham Merkel  <rgmerk@mira.net>
 
 	* src/app-utils/date-utilities.scm ((gnc:deltasym-to-delta)): new function
