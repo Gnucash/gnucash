@@ -957,27 +957,6 @@ printf ("load split %d at phys row %d addr=%p \n", j, phys_row, secondary);
 /* ======================================================== */
 /* walk account tree recursively, pulling out all the names */
 
-#define SAFE_STRCMP(da,db) {            \
-  if ((da) && (db)) {                   \
-    int retval = strcmp ((da), (db));   \
-    /* if strings differ, return */     \
-    if (retval) return retval;          \
-  } else                                \
-  if ((!(da)) && (db)) {                \
-    return -1;                          \
-  } else                                \
-  if ((da) && (!(db))) {                \
-    return +1;                          \
-  }                                     \
-}
-
-static int
-safestrcmp (char * da, char * db) {
-   SAFE_STRCMP (da, db);
-   return 0;
-}
-
-
 static void 
 LoadXferCell (ComboCell *cell,  
               AccountGroup *grp,
@@ -1001,10 +980,10 @@ LoadXferCell (ComboCell *cell,
       curr = xaccAccountGetCurrency (acc);
       secu = xaccAccountGetSecurity (acc);
 
-      if ( (!safestrcmp(curr,base_currency)) ||
-           (!safestrcmp(secu,base_currency)) ||
-           (!safestrcmp(curr,base_security)) ||
-           (!safestrcmp(secu,base_security)) )
+      if ( (!safe_strcmp(curr,base_currency)) ||
+           (!safe_strcmp(secu,base_currency)) ||
+           (!safe_strcmp(curr,base_security)) ||
+           (!safe_strcmp(secu,base_security)) )
       {
          xaccAddComboCellMenuItem (cell, xaccAccountGetName (acc));
       }
