@@ -135,47 +135,6 @@ QSF is in three sections:
 #include "qofsession-p.h"
 #include "qofbook-p.h"
 
-/* KVP XML
- *
- * <kvp type="ACCOUNT_KVP", path="/book/accounting-period" value="string">week</kvp>
- * (ACCOUNT_KVP only for clarity here, actual is "kvp"
- *
- * <kvp type="kvp" path="/from-sched-xaction" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
- *
- * The relevance of kvp type won't be evident in GnuCash, they all use "kvp".
- *
- * need switch statement on kvp_value_get_type(val) val = kvp_value* val,
- * itself used by g_hash_table_foreach(kvp_frame_get_hash(frame), add_kvp_slot, ret);
- * xmlNodePtr ret;
- *
- * Then retrieve the kvp_frame as the parameter from the entity. Use that frame to
- * copy the key and value - become slots for this entity.
- *
- * kvp:key == path
- * kvp:value == content converted according to the type of value.
- * kvp:type == QofParam->name
- * 
- * Elsewhere:
- * string:type == QofParam->name
- * i.e. <string type="to_do_note"/> == a to_do_note type string
- * 
- *
- * Consider wholesale change from type="" to name="" for object parameters?
- * (but name has special meaning in the KVP documentation).
- * 
- *  
- * <kvp type="kvp" path="/from-sched-xaction" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
- * A kvp type KVP parameter located at $path containing a $value.
- *
- * A non-GnuCash example helps:
- * <kvp type="pilot_addr_kvp" path="/user/name" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
- * A pilot_addr_kvp type KVP parameter located at /user/name containing a guid value.
- *
- * 
- *
- * */
-
-
 typedef enum  {
 	QSF_UNDEF = 0, /**< Initial undefined value. */
 	IS_QSF_MAP,   /**< A QSF map */
@@ -184,7 +143,7 @@ typedef enum  {
 	OUR_QSF_OBJ,  /**< A QSF object that can be loaded without a map. */
 }qsf_type;
 	
-/** \internal Holds a description of the QofObject.
+/** \brief Holds a description of the QofObject.
 
 Used when converting QOF objects from another application. The incoming,
 \b unknown, objects need to be stored prior to conversion. This allows 
@@ -214,8 +173,23 @@ The map namespace is not included as maps are not currently written out by QOF.
 #define QSF_BOOK_COUNT	"count" /**< Sequential counter of each book in this file */
 #define QSF_OBJECT_TAG	"object" /**< Second level child: object tag */
 #define QSF_OBJECT_TYPE	"type" /**< QSF parameter name for object type specifiers */
+
+/** @name Representing KVP as XML
+
+<kvp type="kvp" path="/from-sched-xaction" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
+A kvp type KVP parameter located at $path containing a GUID $value.
+
+The relevance of type="kvp" won't be evident in GnuCash, they all use "kvp".
+
+A non-GnuCash example helps:
+<kvp type="pilot_addr_kvp" path="/user/name" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
+A pilot_addr_kvp type KVP parameter located at /user/name containing a guid value.
+@{ */
+
 #define QSF_OBJECT_KVP  "path" /**< The path to this KVP value in the entity frame. */
 #define QSF_OBJECT_VALUE "value" /**< The KVP Value. */
+/** @} */
+
 #define QSF_OBJECT_COUNT	"count" /**< Sequential counter for each QSF object in this file */
 #define QSF_XML_VERSION	"1.0"  /**< The current XML version. */
 #define MAP_ROOT_TAG	"qsf-map" /**< Top level root tag for QSF Maps */
@@ -437,7 +411,7 @@ typedef struct qsf_metadata
 	int count; /**< sequential counter for each object in the book */
 	GList *qsf_object_list; /**< list of qsf_objects */
 	GSList *qsf_sequence; /**< Parameter list sorted into QSF order */
-	GHashTable *referenceTable;  /**< Table of references, ::QofEntityReference. */
+	GList *referenceList;        /**< Table of references, ::QofEntityReference. */
 	GHashTable *qsf_parameter_hash; /**< Hashtable of parameters for each object */
 	GHashTable *qsf_calculate_hash, *qsf_default_hash, *qsf_define_hash;
 	GSList *supported_types; /**< The partial list of QOF types currently supported, in QSF order. */

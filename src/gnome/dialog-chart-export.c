@@ -32,22 +32,20 @@
 #include "dialog-utils.h"
 #include "gnc-engine-util.h"
 #include "global-options.h"
-#include "gnc-trace.h"
-static short int module = MOD_GUI;
+#include "gnc-event.h"
 
 #define EQUITY_ACCOUNT_NAME  _("Opening Balances")
 #define OPENING_BALANCE_DESC _("Opening Balance")
 
 static GtkWidget *chart_export;
-static GtkWidget *chart_filechooserdialog;
 void on_dateok_clicked (GtkButton *button, gpointer user_data);
-void on_exportok_clicked (GtkButton *button, gpointer user_data);
 
 typedef struct chart_data_s
 {
 	time_t chart_time_t;
 	QofSession *chart_session;
 	Account *equity_account;
+	GList      *param_ref_list;
 }chart_data;
 
 static void
@@ -77,6 +75,23 @@ chart_collection_cb(QofEntity *ent, gpointer user_data)
 }
 
 static void
+chart_reference_cb(QofEntity *ent, gpointer user_data)
+{
+	QofEntityReference *reference;
+	QofParam     *ref_param;
+	chart_data   *data;
+
+	g_return_if_fail(user_data != NULL);
+	data = (chart_data*)user_data;
+	while(data->param_ref_list != NULL) {
+		ref_param = data->param_ref_list->data;
+		reference = qof_entity_get_reference_from(ent, ref_param);
+		qof_session_update_reference_list(data->chart_session, reference);
+		data->param_ref_list = data->param_ref_list->next;
+	}
+}
+
+static void
 chart_entity_cb(QofEntity *ent, gpointer user_data)
 {
 	chart_data *data;
@@ -87,21 +102,18 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	QofBook *book;
 	QofCollection *coll;
 	const GUID *guid;
-	gboolean success;
+	time_t trans_time;
 	
-	success = FALSE;
 	g_return_if_fail(user_data != NULL);
 	data = (chart_data*)user_data;
+	trans_time = data->chart_time_t;
+	data->param_ref_list = NULL;
 	guid = qof_entity_get_guid(ent);
 	acc_ent = (Account*)ent;
 	equity_account = data->equity_account;
 	g_return_if_fail(equity_account != NULL);
-	ENTER (" Acc=%p\tEquity=%p ", acc_ent, equity_account);
 	balance = xaccAccountGetBalanceAsOfDate(acc_ent, data->chart_time_t);
-	success = qof_entity_copy_to_session(data->chart_session, ent);
-	if(!success) {
-		PWARN("%s - %s",  "ERR_BACKEND_MISC" , "entity already exists");
-	}
+	qof_entity_copy_to_session(data->chart_session, ent);
 	book = qof_session_get_book(data->chart_session);
 	coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
 	acc_ent = (Account*)qof_collection_lookup_entity(coll, guid);
@@ -116,7 +128,8 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 	trans = xaccMallocTransaction (book);
 	xaccTransBeginEdit (trans);
 	xaccTransSetCurrency (trans, xaccAccountGetCommodity (acc_ent));
-	xaccTransSetDateSecs (trans, data->chart_time_t);
+	xaccTransSetDateSecs (trans, trans_time);
+	xaccTransSetDateEnteredSecs (trans, trans_time);
 	xaccTransSetDescription (trans, OPENING_BALANCE_DESC);
 	split = xaccMallocSplit (book);
 	xaccTransAppendSplit (trans, split);
@@ -135,29 +148,16 @@ chart_entity_cb(QofEntity *ent, gpointer user_data)
 }
 
 static GtkWidget *
-create_chartfilechooserdialog ( void )
-{
-	GtkWidget *dialog;
-	GladeXML *xml;
-	
-	xml = gnc_glade_xml_new ("chart-export.glade", "chartfilechooserdialog");
-	glade_xml_signal_connect(xml, "on_exportok_clicked",
-		GTK_SIGNAL_FUNC (on_exportok_clicked));
-	dialog = glade_xml_get_widget (xml, "chartfilechooserdialog");
-	return dialog;
-}
-
-
-static GtkWidget *
 create_chart_export ( void )
 {
   GtkWidget *dialog;
   GladeXML *xml;
+	chart_data *data;
 
 	xml = gnc_glade_xml_new ("chart-export.glade", "chart-export");
-
-	glade_xml_signal_connect(xml, "on_dateok_clicked",
-		GTK_SIGNAL_FUNC	(on_dateok_clicked));
+	data = g_new0(chart_data, 1);
+	glade_xml_signal_connect_data(xml, "on_dateok_clicked",
+		GTK_SIGNAL_FUNC (on_dateok_clicked), data);
 	dialog = glade_xml_get_widget (xml, "chart-export");
 	return dialog;	
 }
@@ -173,57 +173,74 @@ void
 on_dateok_clicked (GtkButton *button, gpointer user_data)
 {
 	guint year, month, day;
-	chart_data data;
+	chart_data  *data;
 	GtkCalendar *calendar;
 	struct tm *chart_tm;
-
-	calendar = (GtkCalendar*)gnc_glade_lookup_widget(chart_export, "chart-calendar");
-	data.chart_time_t = time(NULL);
-	chart_tm = gmtime(&data.chart_time_t);
-	/* set today - calendar will omit any zero/NULL values */
-	year = chart_tm->tm_year + 1900;
-	month = chart_tm->tm_mon + 1;
-	day = chart_tm->tm_yday + 1;
-	gtk_calendar_get_date(calendar, &year, &month, &day);
-	chart_tm->tm_year = year - 1900;
-	chart_tm->tm_mon = month;
-	chart_tm->tm_yday = day - 1;
-	data.chart_time_t = mktime(chart_tm);
-	gtk_widget_destroy(chart_export);
-	chart_filechooserdialog = create_chartfilechooserdialog ();
-	gtk_widget_show (chart_filechooserdialog);
-}
-
-void
-on_exportok_clicked (GtkButton *button, gpointer user_data)
-{
+	GtkWidget   *qsffilechooser;
+	GtkWindow   *parent;
+	gchar *filename;
 	QofSession *current_session, *chart_session;
 	QofBook *book;
 	QofCollection *coll;
-	const char *filename;
-	chart_data data;
 
+	calendar = (GtkCalendar*)gnc_glade_lookup_widget(chart_export, "chart-calendar");
+	parent = (GtkWindow*)gtk_widget_get_parent ((GtkWidget*)chart_export);
+	data = (chart_data*)user_data;
+	data->chart_time_t = time(NULL);
+	chart_tm = gmtime(&data->chart_time_t);
+	/* set today - calendar will omit any zero/NULL values */
+	year = chart_tm->tm_year + 1900;
+	month = chart_tm->tm_mon + 1;
+	day = chart_tm->tm_mday;
+	gtk_calendar_get_date(calendar, &year, &month, &day);
+	if((year + 1900) != chart_tm->tm_year) { 
+	chart_tm->tm_year = year - 1900;
+	}
+	if(month != chart_tm->tm_mon) { 
+	chart_tm->tm_mon = month;
+	}
+	if(day != chart_tm->tm_yday) { 
+		chart_tm->tm_mday = day; 
+	}
+	data->chart_time_t = mktime(chart_tm);
+	gtk_widget_destroy(chart_export);
 	current_session = qof_session_get_current_session();
 	book = qof_session_get_book(current_session);
+	filename = g_strdup("/tmp/qsf-chartofaccounts.xml");
 	chart_session = qof_session_new();
-	filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (chart_filechooserdialog));
-	qof_session_begin(chart_session, filename, TRUE, TRUE);
-	data.chart_session = chart_session;
-	data.equity_account = NULL;
-
-	coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
-	qof_collection_foreach(coll, chart_collection_cb, &data);
-	if(data.equity_account == NULL)
+	qsffilechooser = gtk_file_chooser_dialog_new("Export Chart of Accounts to QSF XML", 
+		parent, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, 
+		GTK_RESPONSE_CANCEL, GTK_STOCK_CONVERT, GTK_RESPONSE_ACCEPT, NULL);
+	if (gtk_dialog_run (GTK_DIALOG (qsffilechooser)) == GTK_RESPONSE_ACCEPT)
 	{
-		data.equity_account = xaccMallocAccount (qof_session_get_book(chart_session));
-		xaccAccountBeginEdit (data.equity_account);
-		xaccAccountSetName (data.equity_account, EQUITY_ACCOUNT_NAME);
-		xaccAccountSetType (data.equity_account, EQUITY);
-		xaccAccountSetCommodity (data.equity_account, gnc_default_currency());
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (qsffilechooser));
+		gnc_engine_suspend_events();
+	qof_session_begin(chart_session, filename, TRUE, TRUE);
+		data->chart_session = chart_session;
+		data->equity_account = NULL;
+	coll = qof_book_get_collection(book, GNC_ID_ACCOUNT);
+		qof_collection_foreach(coll, chart_collection_cb, data);
+		if(data->equity_account == NULL)
+	{
+			data->equity_account = xaccMallocAccount (qof_session_get_book(chart_session));
+			xaccAccountBeginEdit (data->equity_account);
+			xaccAccountSetName (data->equity_account, EQUITY_ACCOUNT_NAME);
+			xaccAccountSetDescription(data->equity_account, EQUITY_ACCOUNT_NAME);
+			xaccAccountSetType (data->equity_account, EQUITY);
+			xaccAccountSetCommodity (data->equity_account, gnc_default_currency());
 	}
-	qof_object_foreach(GNC_ID_ACCOUNT, book, chart_entity_cb, &data);
+		qof_object_foreach(GNC_ID_ACCOUNT, book, chart_entity_cb, data);
+		data->param_ref_list = qof_class_get_referenceList(GNC_ID_TRANS);
+		qof_object_foreach(GNC_ID_TRANS, book, chart_reference_cb, data);
+		g_list_free(data->param_ref_list);
+		data->param_ref_list = qof_class_get_referenceList(GNC_ID_SPLIT);
+		qof_object_foreach(GNC_ID_SPLIT, book, chart_reference_cb, data);
+		g_list_free(data->param_ref_list);
 	qof_session_save(chart_session, NULL);
+		gnc_engine_resume_events();
+	}
 	qof_session_end(chart_session);
-	gtk_widget_destroy(chart_filechooserdialog);
+	gtk_widget_destroy(qsffilechooser);
+	g_free(data);
 	qof_session_set_current_session(current_session);
 }

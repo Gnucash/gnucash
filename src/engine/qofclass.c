@@ -250,4 +250,33 @@ qof_class_param_foreach (QofIdTypeConst obj_name,
   g_hash_table_foreach (param_ht, param_foreach_cb, &iter);
 }
 
+static void
+find_reference_param(QofParam *param, gpointer user_data)
+{
+	GList *ref_list;
+
+	ref_list = (GList*)user_data;
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_STRING))   { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_NUMERIC))  { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DATE))     { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_CHAR))     { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DEBCRED))  { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_GUID))     { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_INT32))    { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_INT64))    { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_DOUBLE))   { return; }
+	if(0 == safe_strcmp(param->param_type, QOF_TYPE_KVP))      { return; }
+	ref_list = g_list_append(ref_list, param);
+}
+
+GList*
+qof_class_get_referenceList(QofIdTypeConst type)
+{
+	GList *ref_list;
+
+	ref_list = NULL;
+	qof_class_param_foreach(type, find_reference_param, ref_list);
+	return ref_list;
+}
+
 /* ============================= END OF FILE ======================== */

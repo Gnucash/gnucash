@@ -1,3 +1,21 @@
+2005-03-21  Neil Williams <linux@codehelp.co.uk>
+	* src/backend/qsf/qsf-backend.c: 
+	* src/backend/qsf/qsf-xml.c:
+	* src/backend/qsf/qsf-xml.h: Reference handling improvements.		
+	* src/business/business-gnome/gnc-plugin-business.c:
+	* src/business/business-gnome/ui/gnc-plugin-business-ui.xml:
+	  Adding export routines for business objects.
+	* src/engine/qofclass.c:
+	* src/engine/qofclass.h:
+	Reference handling: qof_class_get_referenceList
+	* src/engine/qofsession.c:
+	* src/engine/qofsession.h: Reference handling improvements
+	and improved error handling. Also suspending engine events
+	during copy to improve speed.
+	* src/gnome/dialog-chart-export.c:
+	* src/gnome/glade/chart-export.glade: Removing unnecessary
+	file chooser dialog, using a standard box instead.	
+
 2005-03-13  Joshua Sled  <jsled@asynchronous.org>
 
 	* GNOME2_STATUS: Updates; removed some incorrectness, updated for

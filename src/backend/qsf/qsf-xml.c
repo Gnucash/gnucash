@@ -34,8 +34,8 @@ void qsf_free_params(qsf_param *params)
 {
 	g_hash_table_destroy(params->qsf_calculate_hash);
 	g_hash_table_destroy(params->qsf_default_hash);
-	if(params->referenceTable) {
-		g_hash_table_destroy(params->referenceTable);
+	if(params->referenceList) {
+		g_list_free(params->referenceList);
 	}
 	g_slist_free(params->supported_types);
 	xmlFreeDoc(params->output_doc);

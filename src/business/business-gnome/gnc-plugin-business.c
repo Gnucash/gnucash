@@ -95,6 +95,20 @@ static void gnc_plugin_business_cmd_billing_terms      (EggAction *action,
 static void gnc_plugin_business_cmd_bills_due_reminder (EggAction *action,
 							GncMainWindowActionData *data);
 
+static void gnc_plugin_business_cmd_export_invoice  (EggAction *action,
+						     GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_export_customer (EggAction *action,
+						     GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_export_vendor   (EggAction *action,
+						     GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_export_employee (EggAction *action,
+						     GncMainWindowActionData *data);
+
+/*static void gnc_plugin_business_cmd_export_report   (EggAction *action,
+						      GncMainWindowActionData *data);*/
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
@@ -180,6 +194,19 @@ static EggActionEntry gnc_plugin_actions [] =
 	{ "BillsDueReminderOpenAction", N_("Bills Due Reminder"), NULL, NULL,
 	  N_("Open the Bills Due Reminder dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_bills_due_reminder) },
+	{ "ExportMenuAction", N_("E_xport"), NULL, NULL, NULL, NULL },
+	{ "QSFInvoiceAction", N_("QSF _Invoice"), NULL, NULL,
+	  N_("Export one or more invoices to QSF"),
+	  G_CALLBACK (gnc_plugin_business_cmd_export_invoice) },
+	{ "QSFCustomerAction", N_("QSF _Customer"), NULL, NULL,
+	  N_("Export one or more customers to QSF"),
+	  G_CALLBACK (gnc_plugin_business_cmd_export_customer) },
+	{ "QSFVendorAction", N_("QSF _Vendor"), NULL, NULL,
+	  N_("Export one or more vendors to QSF"),
+	  G_CALLBACK (gnc_plugin_business_cmd_export_vendor) },
+	{ "QSFEmployeeAction", N_("QSF _Employee"), NULL, NULL,
+	  N_("Export one or more employees to QSF"),
+	  G_CALLBACK (gnc_plugin_business_cmd_export_employee) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -577,4 +604,148 @@ gnc_plugin_business_cmd_bills_due_reminder (EggAction *action,
 	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
 	gnc_remind_bills_due gnc_ui_payment_new (priv->last_employee, gnc_get_current_book());
 #endif
+}
+
+/**************************************************************
+ * QSF export routines
+ **************************************************************/
+
+static void
+gnc_plugin_business_cmd_export_invoice (EggAction *action, GncMainWindowActionData *mw)
+{
+	QofSession *current_session, *chart_session;
+	QofBook *book;
+	QofCollection *coll;
+	gchar *filename;
+	gboolean success;
+	GtkWidget *qsffilechooser;
+
+	current_session = qof_session_get_current_session();
+	book = qof_session_get_book(current_session);
+	chart_session = qof_session_new();
+	success = FALSE;
+	filename = g_strdup("/tmp/qsf-invoices.xml");
+	qsffilechooser = gtk_file_chooser_dialog_new("Export Invoices to XML", 
+		(GtkWindow*)mw->window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, 
+		GTK_RESPONSE_CANCEL, GTK_STOCK_CONVERT, GTK_RESPONSE_ACCEPT, NULL);
+	if (gtk_dialog_run (GTK_DIALOG (qsffilechooser)) == GTK_RESPONSE_ACCEPT)
+	{
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (qsffilechooser));
+		qof_session_begin(chart_session, filename, TRUE, TRUE);
+		coll = qof_book_get_collection(book, GNC_ID_INVOICE);
+		success = qof_entity_copy_coll(chart_session, coll);
+		if(success) 
+		{ 
+			qof_session_save(chart_session, NULL);
+		}
+	}
+	g_free(filename);
+	qof_session_end(chart_session);
+	gtk_widget_destroy(qsffilechooser);
+	qof_session_set_current_session(current_session);
+}
+
+static void
+gnc_plugin_business_cmd_export_customer (EggAction *action, GncMainWindowActionData *mw)
+{
+	QofSession *current_session, *chart_session;
+	QofBook *book;
+	QofCollection *coll;
+	gchar *filename;
+	gboolean success;
+	GtkWidget *qsffilechooser;
+
+	current_session = qof_session_get_current_session();
+	book = qof_session_get_book(current_session);
+	chart_session = qof_session_new();
+	success = FALSE;
+	filename = g_strdup("/tmp/qsf-customers.xml");
+	qsffilechooser = gtk_file_chooser_dialog_new("Export Customers to XML", 
+		(GtkWindow*)mw->window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, 
+		GTK_RESPONSE_CANCEL, GTK_STOCK_CONVERT, GTK_RESPONSE_ACCEPT, NULL);
+	if (gtk_dialog_run (GTK_DIALOG (qsffilechooser)) == GTK_RESPONSE_ACCEPT)
+	{
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (qsffilechooser));
+		qof_session_begin(chart_session, filename, TRUE, TRUE);
+		coll = qof_book_get_collection(book, GNC_ID_CUSTOMER);
+		success = qof_entity_copy_coll(chart_session, coll);
+		if(success) 
+		{ 
+			qof_session_save(chart_session, NULL);
+		}
+	}
+	qof_session_end(chart_session);
+	g_free(filename);
+	gtk_widget_destroy(qsffilechooser);
+	qof_session_set_current_session(current_session);
+}
+
+static void
+gnc_plugin_business_cmd_export_vendor (EggAction *action, GncMainWindowActionData *mw)
+{
+	QofSession *current_session, *chart_session;
+	QofBook *book;
+	QofCollection *coll;
+	gchar *filename;
+	gboolean success;
+	GtkWidget *qsffilechooser;
+
+	current_session = qof_session_get_current_session();
+	book = qof_session_get_book(current_session);
+	chart_session = qof_session_new();
+	success = FALSE;
+	filename = g_strdup("/tmp/qsf-vendors.xml");
+	qsffilechooser = gtk_file_chooser_dialog_new("Export Vendors to XML", 
+		(GtkWindow*)mw->window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, 
+		GTK_RESPONSE_CANCEL, GTK_STOCK_CONVERT, GTK_RESPONSE_ACCEPT, NULL);
+	if (gtk_dialog_run (GTK_DIALOG (qsffilechooser)) == GTK_RESPONSE_ACCEPT)
+	{
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (qsffilechooser));
+		qof_session_begin(chart_session, filename, TRUE, TRUE);
+		coll = qof_book_get_collection(book, GNC_ID_VENDOR);
+		success = qof_entity_copy_coll(chart_session, coll);
+		if(success) 
+		{ 
+			qof_session_save(chart_session, NULL);
+		}
+	}
+	qof_session_end(chart_session);
+	g_free(filename);
+	qof_session_set_current_session(current_session);
+	gtk_widget_destroy(qsffilechooser);
+}
+
+static void
+gnc_plugin_business_cmd_export_employee (EggAction *action, GncMainWindowActionData *mw)
+{
+	QofSession *current_session, *chart_session;
+	QofBook *book;
+	QofCollection *coll;
+	gchar *filename;
+	gboolean success;
+	GtkWidget *qsffilechooser;
+
+	current_session = qof_session_get_current_session();
+	book = qof_session_get_book(current_session);
+	chart_session = qof_session_new();
+	success = FALSE;
+	filename = g_strdup("/tmp/qsf-employee.xml");
+	qsffilechooser = gtk_file_chooser_dialog_new("Export Employees to XML", 
+		(GtkWindow*)mw->window, GTK_FILE_CHOOSER_ACTION_SAVE, GTK_STOCK_CANCEL, 
+		GTK_RESPONSE_CANCEL, GTK_STOCK_CONVERT, GTK_RESPONSE_ACCEPT, NULL);
+	if (gtk_dialog_run (GTK_DIALOG (qsffilechooser)) == GTK_RESPONSE_ACCEPT)
+	{
+		filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (qsffilechooser));
+		qof_session_begin(chart_session, filename, TRUE, TRUE);
+		coll = qof_book_get_collection(book, GNC_ID_INVOICE);
+		success = qof_entity_copy_coll(chart_session, coll);
+		if(success) 
+		{ 
+			qof_session_save(chart_session, NULL);
+		}
+	}
+	qof_session_end(chart_session);
+	g_free(filename);
+	gtk_widget_destroy(qsffilechooser);
+	qof_session_set_current_session(current_session);
 }

@@ -33,6 +33,13 @@
 	<menuitem name="TaxTablesOpen" action="TaxTablesOpenAction"/>
 	<menuitem name="BillingTermsOpen" action="BillingTermsOpenAction"/>
 	<menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
+
+	<menu name="ExportMenu" action="ExportMenuAction">
+	  <menuitem name="QSFInvoice" action="QSFInvoiceAction"/>
+	  <menuitem name="QSFCustomer" action="QSFCustomerAction"/>
+	  <menuitem name="QSFVendor" action="QSFVendorAction"/>
+	  <menuitem name="QSFEmployee" action="QSFEmployeeAction"/>
+	</menu>
       </menu>
     </placeholder>
   </menubar>
