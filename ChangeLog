@@ -13,6 +13,8 @@
 
 	* business-ledger/gncEntryLedger.c -- fix vendor bills to print
 	  subtotals properly on the current-line.
+
+	* configure.in -- die during configure if g-wrap version is wrong
 	
 2002-09-15  Joshua Sled  <jsled@asynchronous.org>
 
