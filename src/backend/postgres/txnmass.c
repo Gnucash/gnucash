@@ -70,7 +70,7 @@ get_mass_trans_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    {
       /* If transaction already exists, determine whose data is 
        * newer: the engine cache, or the database.  If the
-       * engine has newer stuff, ignore the databae contents.
+       * engine has newer stuff, ignore the database contents.
        */
 
       gint32 db_version, cache_version;
