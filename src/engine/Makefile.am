@@ -149,7 +149,6 @@ gncmod_DATA = engine.scm
 gncscmdir = ${GNC_SHAREDIR}/scm
 gncscm_DATA = \
   commodity-table.scm \
-  engine-init.scm \
   engine-interface.scm \
   engine-utilities.scm \
   gnc-numeric.scm
