@@ -258,11 +258,23 @@ item_edit_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
                             info.bg_rect.width, info.bg_rect.height);
 
         if (info.hatching)
+        {
+                GdkRectangle clip = info.hatch_rect;
+
+                /* sync with gnucash-cursor.c */
+                clip.x += 3;
+                clip.y += 3;
+                clip.width -= 5;
+                clip.height -= 5;
+
+                gdk_gc_set_clip_rectangle (item_edit->gc, &clip);
+
                 gnucash_draw_hatching (drawable, item_edit->gc,
                                        info.hatch_rect.x,
                                        info.hatch_rect.y,
                                        info.hatch_rect.width,
                                        info.hatch_rect.height);
+        }
 
         /* Draw the foreground text and cursor */
         gdk_gc_set_clip_rectangle (item_edit->gc, &info.text_rect);
