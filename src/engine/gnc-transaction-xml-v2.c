@@ -502,6 +502,7 @@ gnc_transaction_end_handler(gpointer data_for_children,
         xmlElemDump(stdout, NULL, tree);
         xaccTransBeginEdit(trn);
         xaccTransDestroy(trn);
+        xaccTransCommitEdit(trn);
     }
 
     xmlFreeNode(tree);
