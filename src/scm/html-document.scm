@@ -293,7 +293,7 @@
       ;; "" tags mean "show no tag"; #f tags means use default.
       (cond ((not tag)
              (set! tag markup))
-            ((string=? tag "")
+            ((and (string? tag) (string=? tag ""))
              (set! tag #f)))
       (let* ((retval '())
              (push (lambda (l) (set! retval (cons l retval)))))

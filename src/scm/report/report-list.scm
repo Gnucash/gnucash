@@ -21,7 +21,6 @@
           (equal? locale "en_US"))
       (gnc:depend "report/taxtxf.scm")))
 (gnc:depend "report/transaction-report.scm")
-(gnc:depend "report/table-test.scm")
 
 ;; style sheets 
 (gnc:depend "report/stylesheet-plain.scm")

@@ -799,7 +799,7 @@ gnc_commoditylist * rpcend_build_gnccommoditylist (gnc_commodity_table *ct,
     GList *cl, *this_cl;
 
     /* Ignore all the ISO4217 commodities */
-    if (!strcmp (namespace, "ISO4217"))
+    if (!strcmp (namespace, GNC_COMMODITY_NS_ISO))
       continue;
 
     cl = gnc_commodity_table_get_commodities (ct, namespace);
@@ -1229,7 +1229,7 @@ static void rpcend_do_build_gncquery (gncQuery *gq, gncQuery *from_q,
   LEAVE ("done");
 }
 
-void rpcend_do_free_gncquery (gncQuery *gq, gboolean isRpc)
+static void rpcend_do_free_gncquery (gncQuery *gq, gboolean isRpc)
 {
   gncQTOrlist *orlist, *nextor;
 

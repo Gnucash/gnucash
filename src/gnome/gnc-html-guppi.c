@@ -516,6 +516,8 @@ gnc_html_embedded_barchart(gnc_html * parent,
   char        ** callbacks=NULL;
   char        * gtitle = NULL;
 
+  chart->parent = parent;
+
   if((param = g_hash_table_lookup(params, "data_rows")) != NULL) {
     sscanf(param, "%d", &datarows);
     arglist[argind].name   = "data_rows";
@@ -611,11 +613,11 @@ gnc_html_embedded_barchart(gnc_html * parent,
     g_free(callbacks);
   }
   if((param = g_hash_table_lookup(params, "bar_urls_2")) != NULL) {
-    arglist[argind].name   = "bar_callback1";
+    arglist[argind].name   = "bar_callback2";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = &guppi_bar_2_callback;
     argind++;
-    arglist[argind].name   = "bar_callback1_data";
+    arglist[argind].name   = "bar_callback2_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = chart;
     argind++;
@@ -626,11 +628,11 @@ gnc_html_embedded_barchart(gnc_html * parent,
     g_free(callbacks);
   }
   if((param = g_hash_table_lookup(params, "bar_urls_3")) != NULL) {
-    arglist[argind].name   = "bar_callback1";
+    arglist[argind].name   = "bar_callback3";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = &guppi_bar_3_callback;
     argind++;
-    arglist[argind].name   = "bar_callback1_data";
+    arglist[argind].name   = "bar_callback3_data";
     arglist[argind].type   = GTK_TYPE_POINTER;
     GTK_VALUE_POINTER(arglist[argind]) = chart;
     argind++;
@@ -743,6 +745,8 @@ gnc_html_embedded_scatter(gnc_html * parent,
   double      * x_data=NULL;
   double      * y_data=NULL;
   char        * gtitle = NULL;
+
+  chart->parent = parent;
 
   if((param = g_hash_table_lookup(params, "datasize")) != NULL) {
     sscanf(param, "%d", &datasize);

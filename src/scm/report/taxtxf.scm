@@ -76,40 +76,10 @@
     (cond
      ((string? item) (display item port))
      ((null? item) #t)
-     ((list? item) (map (lambda (item) (gnc:display-report-list-item item port
-                                                                     warn-msg))
+     ((list? item) (map (lambda (item)
+                          (gnc:display-report-list-item item port warn-msg))
                         item))
      (else (gnc:warn warn-msg item " is the wrong type."))))
-
-  ;; a few string functions I couldn't find elsewhere
-  (define (string-search string sub-str start)
-    (do ((sub-len (string-length sub-str))
-         ;; must recompute sub-len because order is unknown
-         (limit (- (string-length string) (string-length sub-str)))
-         (char0 (string-ref sub-str 0))
-         ;; find first char of sub-str ; must recompute char0
-         (match0 (string-index string (string-ref sub-str 0) start) ; init
-                 (string-index string char0 (+ 1 match0))) ; step
-         (match #f #f))
-        ((or (not match0) (> match0 limit)
-             ;; does entire sub-str match?
-             (let ()
-               (set! match (string=? sub-str (substring string match0 
-                                                        (+ match0 sub-len))))
-               (if match (set! match match0))
-               match))
-         match)))
-
-  (define (string-search? string sub-str start)
-    (number? (string-search string sub-str start)))
-
-  (define (string-substitute string search-str sub-str start)
-    (let ((pos (string-search string search-str start)))
-      (if pos
-          (let ((search-len (string-length search-str)))
-            (string-append (substring string 0 pos) sub-str
-                           (substring string (+ pos search-len))))
-          string)))
 
   (define (lx-collector level action value)
     ((vector-ref levelx-collector (- level 1)) action value))
@@ -196,109 +166,34 @@
       tab-title (N_ "Print Full account names")
       "g" (N_ "Print all Parent account names") #f))
 
-    (gnc:register-tax-option
-     (gnc:make-account-list-option
-      (N_ "TXF Export Init") (N_ "Select Account")
-      "a" (N_ "Select Account")
-      (lambda () (gnc:get-current-accounts))
-      #f #t))
-
-    (gnc:register-tax-option
-     (gnc:make-simple-boolean-option
-      (N_ "TXF Export Init") (N_ "Print extended TXF HELP messages")
-      "b" (N_ "Print TXF HELP") #f))
-
-    (gnc:register-tax-option
-     ;;(gnc:make-multichoice-option
-     (gnc:make-list-option
-      (N_ "TXF Export Init")
-      (N_ "For INCOME accounts, select here.   < ^ # see help")
-      "c" (N_ "Select a TXF Income category")
-      '()
-      txf-income-categories))
-
-    (gnc:register-tax-option
-     ;;(gnc:make-multichoice-option
-     (gnc:make-list-option
-      (N_ "TXF Export Init")
-      (N_ "For EXPENSE accounts, select here.   < ^ # see help")
-      "d" (N_ "Select a TXF Expense category")
-      '()
-      txf-expense-categories))
-
-    (gnc:register-tax-option
-     (gnc:make-multichoice-option
-      (N_ "TXF Export Init") (N_ "< ^   Payer Name source")
-      "e" (N_ "Select the source of the Payer Name") 'default
-      (list (list->vector
-             (list 'default (N_ "Default")
-                   (N_ "Use Indicated Default")))
-            (list->vector
-             (list 'current (N_ "< Current Account")
-                   (N_ "Use Current Account Name")))
-            (list->vector
-             (list 'parent (N_ "^ Parent Account")
-                   (N_ "Use Parent Account Name"))))))
-
     gnc:*tax-report-options*)
 
-  (define tax-key "{tax}")
-
-  (define tax-end-key "{/tax}")
-
   ;; Render txf information
-  (define txf-last-payer "")		; if same as current, inc txf-l-coount
+  (define txf-last-payer #f)		; if same as current, inc txf-l-count
 					; this only works if different
 					; codes from the same payer are
 					; grouped in the accounts list
   (define txf-l-count 0)		; count repeated N codes
-  (define txf-notes "")			; tmp storage for account notes
-  (define txf-pos 0)			; tmp storage for tax-end-key in notes
-  (define tax-pos 0)			; tmp storage for tax-key in notes
+
   ;; stores assigned txf codes so we can check for duplicates
   (define txf-dups-alist '())
 
-  (define (txf-payer? str)
-    (member str '("<" "^")))
+  (define (txf-payer? payer)
+    (member str '('current 'parent)))
 
-  ;; These gnc:account-get-xxx functions will be relpaced when the tax
-  ;; and txf information gets its own account fields, and is no longer
-  ;; in the notes field.
-
-  ;; This is a bit of a fudge, matching against strings in account notes.
-  ;; It'd be better if these were unique account fields.
-  (define (gnc:account-get-tax account)
-    (let* ((notes (gnc:account-get-notes account)))
-      (string-search? (if notes notes "") tax-key 0)))
-
-  (define (gnc:account-get-txf account)
-    (let* ((notes (gnc:account-get-notes account)))
-      (set! txf-notes (if notes notes ""))
-      (set! txf-pos (string-search txf-notes tax-end-key 0))
-      (if txf-pos
-	  (begin (set! tax-pos (+ (string-search txf-notes tax-key 0) 
-				  (string-length tax-key)))
-		 #t)
-	  #f)))
-
-  ;; NOTE: You must call gnc:account-get-txf FIRST, or the txf-notes, tax-pos,
-  ;;       and txf-pos variables will not be valid!!
   (define (gnc:account-get-txf-code account)
-    (if txf-pos
-	(substring txf-notes (- txf-pos 4) txf-pos)
-	"000"))
-  (define (gnc:account-get-txf-format account)
-    (if txf-pos
-	(string->number (substring txf-notes (- txf-pos 8) (- txf-pos 7)))
-	0))
+    (let ((code (gnc:account-get-tax-US-code account)))
+      (string->symbol (if code code "N000"))))
+
+  (define (gnc:get-txf-format code income?)
+    (gnc:txf-get-format (if income?
+                            txf-income-categories
+                            txf-expense-categories)
+                        code))
+
   (define (gnc:account-get-txf-payer-source account)
-    (if txf-pos
-	(substring txf-notes tax-pos (+ 1 tax-pos))
-	" "))
-  (define (gnc:account-get-txf-string account)
-    (if txf-pos
-	(substring txf-notes tax-pos txf-pos)
-	" "))
+    (let ((pns (gnc:account-get-tax-US-payer-name-source account)))
+      (string->symbol (if pns pns "none"))))
 
   ;; because we use the list-option input structure, we have to build our own
   ;; search function
@@ -309,179 +204,6 @@
 	 (if (>= i len)
 	     (list-ref txf-list 0)
 	     (list-ref txf-list i)))))
-
-  ;; return a string to insert in account-notes, or an error symbol
-  ;; We only want one, but list-option returns a list.
-  (define (txf-string code-lst categories-lst)
-    (cond ((or (null? code-lst)
-	       (not (symbol? (car code-lst))))
-	   'none)
-	  ((> (length code-lst) 1)	; only allow ONE selection at a time
-	   'mult)			; The GUI should exclude this
-	  ((eq? 'N000 (car code-lst))
-	   #f)
-	  (else
-	   (let ((txf-vec (txfq-ref (car code-lst) categories-lst)))
-	     (if txf-vec
-		 (let ((str (vector-ref txf-vec 1)))
-		   (if (equal? "#" (substring str 0 1))
-		       'notyet		; not implimented yet
-		       (string-append str " \\ "
-				      (number->string (vector-ref txf-vec 3))
-				      " \\ " (symbol->string 
-					      (car code-lst))))))))))
-
-  ;; print txf help strings
-  (define (txf-print-help table vect inc)
-    (let* ((markup (if inc "income" "expense"))
-           (form-desc (vector-ref vect 1))
-	   (code (symbol->string (vector-ref vect 0)))
-	   (desc-len (string-length form-desc))
-	   (bslash (string-search form-desc "\\" 0))
-	   (form (substring form-desc 0 (+ bslash 2)))
-	   (desc (substring form-desc (+ bslash 2) desc-len))
-	   (help (vector-ref vect 2)))
-      (gnc:html-table-append-row!
-       table
-       (list
-        (gnc:make-html-table-cell
-         (gnc:make-html-text
-          (gnc:html-markup markup
-                           (gnc:html-markup-b form)
-                           code
-                           (gnc:html-markup-br)
-                           desc)))
-         (gnc:make-html-table-cell
-          (gnc:make-html-text
-           (gnc:html-markup markup help)))))))
-
-  ;; Set or Reset txf string in account notes. str == #f resets.
-  ;; Returns a code that indicates the function executed.
-  (define (txf-status account key end-key str)
-    (let ((key-len (string-length key))
-	  (end-len (string-length end-key)))
-      (let* ((notes (gnc:account-get-notes account))
-	     (notes (if notes notes ""))
-	     (key-start (string-search notes key 0))
-	     (end-start (string-search notes end-key 0))
-	     (notes-len (string-length notes)))
-
-	;; 8 conditions: (key-start, end-start, str) function
-	;;                   #f         #f      #f    nothing
-	;;                   num        #f      #f    nothing
-	;;                   #f         num     #f    nothing (illegal)
-	;;                   #f         num     str   nothing (illegal)
-	;;                   num        num     #f    reset
-	;;                   num        num     str   replace
-	;;                   #f         #f      str   set, tax too
-	;;                   num        #f      str   set
-
-	(if key-start
-	    (let ((key-end (+ key-start key-len)))
-	      (cond ((and end-start (not str))
-		     ;; reset txf status
-		     (let ((ret-val 'remove))
-		       (gnc:account-set-notes 
-			account (string-append (substring notes 0 key-end)
-					       (substring 
-						notes (+ end-start end-len)
-						notes-len)))
-		       ret-val))
-		    ((and end-start str)
-		     ;; replace txf status with str
-		     (let ((ret-val 'replace))
-		       (gnc:account-set-notes
-			account (string-append (substring notes 0 key-end)
-					       str
-					       (substring notes end-start
-							  notes-len)))
-		       ret-val))
-		    ((and (not end-start) str)
-		     ;; set str and end-key
-		     (let ((ret-val 'add))
-		       (gnc:account-set-notes
-			account (string-append (substring notes 0 key-end)
-					       str end-key
-					       (substring notes key-end
-							  notes-len)))
-		       ret-val))
-		    (else
-		     'none1)))
-	    (if (and (not end-start) str)
-		;; insert key, str and end-key
-		(let ((ret-val 'both))
-		  (gnc:account-set-notes account (string-append
-						  key str end-key notes))
-		  ret-val)
-		'none2)))))
-
-  ;; execute the selected function on the account.  Return a list
-  ;; containing the function code executed and the txf-string or error message
-  (define (txf-function acc txf-inc txf-exp txf-payer)
-    (if acc
-	(let ((txf-type (gw:enum-<gnc:AccountType>-val->sym
-                         (gnc:account-get-type acc) #f)))
-	  (if (gnc:account-is-inc-exp? acc)
-	      (let* ((str (if (eq? txf-type 'income)
-			      (txf-string txf-inc 
-					  txf-income-categories)
-			      (txf-string txf-exp 
-					  txf-expense-categories)))
-		     (fun (case str
-			    ((mult)
-			     (set! str
-				   "multiple TXF codes were selected,")
-			     'none)
-			    ((none)
-			     (set! str "no TXF code was selected,")
-			     'none)
-			    ((notyet)
-			     (set! str
-				   "selected TXF code is not implimented yet,")
-			     'none)
-			    (else 
-			     (begin 
-			       (if (and str (not (eq? txf-payer 'default))
-					(txf-payer? (substring str 0 1)))
-				   (let ((payer (case txf-payer
-						  ((current) "<")
-						  ((parent) "^")))
-					 (len (string-length str)))
-				     (set! str (string-append 
-						payer 
-						(substring str 1 len)))))
-			       (txf-status acc tax-key tax-end-key str))))))
-		;; make "<" char html compatable
-		(if str
-		    (set! str (string-substitute str "<" "&lt;" 0)))
-		(list fun str))
-	      (list 'notIE "txf-account not of type income or expense")))
-	(list 'noAcc "no txf-account")))
-
-  ;; generate a feedback string for the txf function executed
-  (define (txf-feedback-str fun-str full-name)
-    (case (car fun-str)
-      ((none none1 none2 notIE)
-       (string-append "No TXF init function"
-		      (if (cadr fun-str)
-			  (string-append " because, " (cadr fun-str))
-			  "")
-		      " for account: \"" full-name "\""))
-      ((noAcc)
-       (string-append "No TXF init function because, " (cadr fun-str)))
-      ((remove)
-       (string-append "The TXF code was removed from account: \""
-		      full-name "\""))
-      ((replace)
-       (string-append "The TXF code: \"" (cadr fun-str) "\", replaced the "
-		      "existing code from account: \"" full-name "\""))
-      ((add)
-       (string-append "The TXF code: \"" (cadr fun-str)
-		      "\", was added to account: \"" full-name "\""))
-      ((both)
-       (string-append "TAX status was set and the TXF code: \""
-		      (cadr fun-str) "\", was added to account: \"" 
-		      full-name "\""))))
 
   ;; check for duplicate txf codes
   (define (txf-check-dups account) 
@@ -496,21 +218,22 @@
 
   ;; Print error message for duplicate txf codes and accounts
   (define (txf-print-dups doc)
-    (let ((dups (apply append
-		       (map (lambda (x)
-			      (let ((cnt (length (cdr x))))
-				(if (> cnt 1)
-				    (let* ((acc (cadr x))
-					   (txf (gnc:account-get-txf acc)))
-				      (cons (string-append 
-					     "Code \"" 
-					     (gnc:account-get-txf-string acc)
-					     "\" has duplicates in "
-					     (number->string cnt) " accounts:")
-					    (map gnc:account-get-full-name 
-						 (cdr x))))
-				    '())))
-			    txf-dups-alist)))
+    (let ((dups
+           (apply append
+                  (map (lambda (x)
+                         (let ((cnt (length (cdr x))))
+                           (if (> cnt 1)
+                               (let* ((acc (cadr x))
+                                      (txf (gnc:account-get-txf acc)))
+                                 (cons (string-append 
+                                        "Code \"" 
+                                        (gnc:account-get-txf-code acc)
+                                        "\" has duplicates in "
+                                        (number->string cnt) " accounts:")
+                                       (map gnc:account-get-full-name 
+                                            (cdr x))))
+                               '())))
+                       txf-dups-alist)))
           (text (gnc:make-html-text)))
       (if (not (null? dups))
 	  (begin
@@ -548,9 +271,9 @@
 			       (strftime "%m/%d/%Y" (localtime (car date)))
 			       #f))
 		 ;; Only formats 1,3 implimented now! Others are treated as 1.
-		 (format (gnc:account-get-txf-format account))
+		 (format (gnc:get-txf-format code (eq? type 'income)))
 		 (payer-src (gnc:account-get-txf-payer-source account))
-		 (account-name (if (equal? payer-src "^")
+		 (account-name (if (eq? payer-src 'parent)
 				   (gnc:account-get-name
 				    (gnc:group-get-parent
 				     (gnc:account-get-parent account)))
@@ -626,7 +349,7 @@
   ;; Returns the Parent if a child or grandchild is valid.
   (define (validate accounts)
     (apply append (map (lambda (a)
-                         (if (gnc:account-get-tax a)
+                         (if (gnc:account-get-tax-related a)
                              (list a)
                              ;; check children
                              (if (null? (validate
@@ -828,7 +551,7 @@
 
 	  (if (gnc:account-is-inc-exp? account)
 	      (let ((children (gnc:account-get-children account))
-                    (account-balance (if (gnc:account-get-tax account)
+                    (account-balance (if (gnc:account-get-tax-related account)
                                          (gnc:account-get-balance-interval
                                           account from-value to-value #f)
                                          0))) ; don't add non tax related

@@ -347,11 +347,9 @@
 			       other-anchor
 			       (gnc:account-anchor-text (car pair))))
 			 all-data)))
-	  ;; FIXME: The url stuff works here, but it not yet
-	  ;; implemented in html-barchart.scm -- fix that there.
 	  (gnc:html-barchart-set-button-1-bar-urls! chart urls)
 	  (gnc:html-barchart-set-button-1-legend-urls! chart urls))
-	
+
 	(gnc:html-document-add-object! document chart) 
 	document)))
 

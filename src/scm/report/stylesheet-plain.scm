@@ -110,6 +110,15 @@
        'tag "th"
        'attribute (list "align" "right"))
 
+      (gnc:html-document-set-style!
+       ssdoc "total-number-cell"
+       'tag '("td" "b")
+       'attribute (list "align" "right"))
+
+      (gnc:html-document-set-style!
+       ssdoc "total-label-cell"
+       'tag '("td" "b"))
+
       ;; don't surround marked-up links with <a> </a>
       (if (not links?)
           (gnc:html-document-set-style!

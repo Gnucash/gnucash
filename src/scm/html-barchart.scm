@@ -272,12 +272,29 @@
                  (display escaped)
                  (display " ")))
              nlist)))))
-  
-  
+
   (let* ((retval '())
          (push (lambda (l) (set! retval (cons l retval))))
          (title (gnc:html-barchart-title barchart))
          (subtitle (gnc:html-barchart-subtitle barchart))
+         (url-1
+          (catenate-escaped-strings 
+           (gnc:html-barchart-button-1-bar-urls barchart)))
+         (url-2
+          (catenate-escaped-strings 
+           (gnc:html-barchart-button-2-bar-urls barchart)))
+         (url-3
+          (catenate-escaped-strings 
+           (gnc:html-barchart-button-3-bar-urls barchart)))
+         (legend-1
+          (catenate-escaped-strings 
+           (gnc:html-barchart-button-1-legend-urls barchart)))
+         (legend-2
+          (catenate-escaped-strings 
+           (gnc:html-barchart-button-2-legend-urls barchart)))
+         (legend-3
+          (catenate-escaped-strings 
+           (gnc:html-barchart-button-3-legend-urls barchart)))
          (x-label (gnc:html-barchart-x-axis-label barchart))
          (y-label (gnc:html-barchart-y-axis-label barchart))
          (data (gnc:html-barchart-data barchart))
@@ -303,6 +320,36 @@
               (begin 
                 (push "  <param name=\"subtitle\" value=\"")
                 (push subtitle) (push "\">\n")))
+          (if url-1
+              (begin 
+                (push "  <param name=\"bar_urls_1\" value=\"")
+                (push url-1)
+                (push "\">\n")))
+          (if url-2
+              (begin 
+                (push "  <param name=\"bar_urls_2\" value=\"")
+                (push url-1)
+                (push "\">\n")))
+          (if url-3
+              (begin 
+                (push "  <param name=\"bar_urls_3\" value=\"")
+                (push url-1)
+                (push "\">\n")))
+          (if legend-1 
+              (begin 
+                (push "  <param name=\"legend_urls_1\" value=\"")
+                (push legend-1)
+                (push "\">\n")))
+          (if legend-2
+              (begin 
+                (push "  <param name=\"legend_urls_2\" value=\"")
+                (push legend-2)
+                (push "\">\n")))
+          (if legend-3 
+              (begin 
+                (push "  <param name=\"legend_urls_3\" value=\"")
+                (push legend-3)
+                (push "\">\n")))
           (if (and data (list? data))
               (let ((rows (length data))
                     (cols 0))
@@ -360,4 +407,3 @@
           (push "</object> &nbsp;\n"))
         " ")
     retval))
-

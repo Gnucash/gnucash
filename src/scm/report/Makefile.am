@@ -14,7 +14,6 @@ gncscm_DATA = \
   report-list.scm \
   stylesheet-fancy.scm \
   stylesheet-plain.scm \
-  table-test.scm \
   taxtxf.scm \
   transaction-report.scm \
   txf-export-help.scm \

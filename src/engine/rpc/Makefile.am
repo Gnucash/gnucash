@@ -41,9 +41,10 @@ EXTRA_DIST = \
   README \
   $(RPCGEN_SRCS)
 
-INCLUDES = -I.. -I/usr/lib/glib/include
+INCLUDES = -I..
 
-LDFLAGS = -lpthread
+LDADD = -lpthread
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
 
 #RPCGEN=rpcgen -M
 RPCGEN=rpcgen

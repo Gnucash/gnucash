@@ -881,7 +881,7 @@ sr_balance_trans (SplitRegister *reg, Transaction *trans)
         xaccTransScrubImbalance (trans, gncGetCurrentGroup (),
                                  default_account);
         break;
-        
+
       case 3:
         xaccTransScrubImbalance (trans, gncGetCurrentGroup (),
                                  other_account);
@@ -986,7 +986,14 @@ LedgerMoveCursor (Table *table, VirtualLocation *p_new_virt_loc)
       (pending_trans == old_trans) &&
       (old_trans != new_trans))
   {
-    sr_balance_trans (reg, old_trans);
+    if (sr_balance_trans (reg, old_trans))
+    {
+      new_trans = old_trans;
+      new_split = old_split;
+      new_trans_split = old_trans_split;
+      new_class = old_class;
+      new_virt_loc = table->current_cursor_loc;
+    }
 
     if (xaccTransIsOpen (old_trans))
       xaccTransCommitEdit (old_trans);

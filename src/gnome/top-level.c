@@ -28,6 +28,9 @@
 #include <guile/gh.h>
 #include <popt.h>
 #include <stdlib.h>
+#ifdef GTKHTML_HAVE_GCONF
+#include <gconf/gconf.h>
+#endif
 
 #include "AccWindow.h"
 #include "FileBox.h"
@@ -179,6 +182,10 @@ gnucash_ui_init(void)
   char **restargv2;
   poptContext returnedPoptContext;
 
+#ifdef GTKHTML_HAVE_GCONF
+  GError *gerror;
+#endif
+
   ENTER ("\n");
 
   /* We're going to have to have other ways to handle X and GUI
@@ -201,6 +208,12 @@ gnucash_ui_init(void)
 
     restargv2 = (char**)poptGetArgs(returnedPoptContext);
     gnc_set_remaining_argv(argv_length(restargv2), (const char**)restargv2);
+
+#ifdef GTKHTML_HAVE_GCONF
+    if( !gconf_init(restargc, restargv, &gerror) )
+        g_error_free(gerror);
+    gerror = NULL;
+#endif
 
     /* this must come after using the poptGetArgs return value */
     poptFreeContext (returnedPoptContext);

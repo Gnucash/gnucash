@@ -1,3 +1,38 @@
+2001-03-29  Dave Peticolas  <dave@krondo.com>
+
+	* src/scm/report/category-barchart.scm: remove url FIXME
+
+	* src/scm/html-barchart.scm: add bar & legend urls to render
+
+	* src/gnome/top-level.c: Robert Stephenson's patch for
+	gtkhtml & gconf
+
+	* src/gnome/gnc-html-guppi.c: fix bugs
+
+	* src/scm/html-text.scm: fix bug
+
+	* src/scm/report/portfolio.scm: work on display
+
+	* src/scm/report/stylesheet-plain.scm: add styles for totals
+
+	* src/scm/html-document.scm: bug fix
+
+	* src/scm/report/taxtxf.scm: more work
+
+	* src/engine/gnc-commodity.c (count_coms): use
+	GNC_COMMODITY_NS_ISO instead of the string const.
+
+	* src/engine/rpc/Makefile.am: use GLIB_CFLAGS instead of
+	hard-coded include dir.
+
+	* src/engine/rpc/RpcUtils.c (rpcend_build_gnccommoditylist): use
+	GNC_COMMODITY_NS_ISO instead of the string const. Fix compiler
+	warning.
+
+2001-03-28  Dave Peticolas  <dave@krondo.com>
+
+	* src/SplitLedger.c: fix bug
+
 2001-03-29  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/report-list.scm, Makefile.am: Added new file.
@@ -31,7 +66,6 @@
 
 	* src/engine/gnc-pricedb.[ch]: added
 	gnc_pricedb_lookup_nearest_in_time, courtesy Rob B.
-
 
 2001-03-28  James LewisMoss  <jimdres@mindspring.com>
 
