@@ -34,6 +34,10 @@
 #define DIALOG_EDIT_ORDER_CM_CLASS "dialog-edit-order"
 #define DIALOG_VIEW_ORDER_CM_CLASS "dialog-view-order"
 
+void gnc_order_window_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_order_window_help_cb (GtkWidget *widget, gpointer data);
+
 typedef enum
 {
   NEW_ORDER,

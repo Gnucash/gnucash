@@ -134,6 +134,7 @@ gnc_search_dialog_select_cb (GtkButton *button, GNCSearchWindow *sw)
   gnc_search_dialog_destroy (sw);
 }
 
+#if 0
 static void
 gnc_search_dialog_line_toggled (GNCQueryList *list, gpointer item,
 				gpointer user_data)
@@ -164,6 +165,7 @@ gnc_search_dialog_double_click_entry (GNCQueryList *list, gpointer item,
     /* Call the first button (usually view/edit) */
     gnc_search_callback_button_execute (sw->buttons, sw);
 }
+#endif
 
 static void
 gnc_search_dialog_select_row_cb (GtkCList *clist, gint row, gint column,

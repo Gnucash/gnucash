@@ -1513,10 +1513,10 @@ commodity_table_is_dirty (QofBook *book)
   gnc_commodity_table *ct;
 
   if (!book)
-    return;
+    return FALSE;
   ct = gnc_commodity_table_get_table (book);
   if (!ct)
-    return;
+    return FALSE;
   return(ct->dirty);
 }
 

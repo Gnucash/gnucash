@@ -52,6 +52,10 @@
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
+void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
+
 typedef enum
 {
   NEW_INVOICE,

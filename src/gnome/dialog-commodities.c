@@ -41,7 +41,7 @@
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+/* static short module = MOD_GUI; */
 
 typedef struct
 {
@@ -307,7 +307,6 @@ gnc_commodities_dialog_create_tree_view (GtkWidget *tree_view)
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-  int i;
 
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (_("Type"),
@@ -395,7 +394,6 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 {
   GtkWidget *dialog;
   GtkWidget *button;
-  GtkWidget *vbox;
   GtkWidget *list;
   GladeXML *xml;
   gnc_commodity_table *ct;
@@ -480,7 +478,7 @@ static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
   CommoditiesDialog *cd = user_data;
-  GtkTreeModel *sort_model, *filter_model, *model;
+  GtkTreeModel *sort_model, *filter_model;
 
   g_return_if_fail(cd != NULL);
 

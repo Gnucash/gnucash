@@ -31,7 +31,7 @@
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
-static short module = MOD_GUI;
+/* static short module = MOD_GUI; */
 
 
 /********************************************************************\
@@ -55,7 +55,6 @@ gnc_ok_cancel_dialog(gncUIWidget parent,
 		     const gchar *format,...)
 {
   GtkWidget *dialog = NULL;
-  gint default_button;
   gint result;
   gchar *buffer;
   va_list args;
@@ -384,21 +383,6 @@ gnc_generic_warning_dialog(GtkWidget *parent, const char **buttons,
   va_start(args, format);
   result = gnc_generic_dialog_common(parent,
 				     GNOME_MESSAGE_BOX_WARNING,
-				     buttons, format, args);
-  va_end(args);
-  return(result);
-}
-
-int
-gnc_generic_error_dialog(GtkWidget *parent, const char **buttons,
-			 const gchar *format, ...)
-{
-  int result;
-  va_list args;
-
-  va_start(args, format);
-  result = gnc_generic_dialog_common(parent,
-				     GNOME_MESSAGE_BOX_ERROR,
 				     buttons, format, args);
   va_end(args);
   return(result);

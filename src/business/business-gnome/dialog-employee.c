@@ -34,6 +34,13 @@
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
 
+void gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_employee_window_help_cb (GtkWidget *widget, gpointer data);
+void gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data);
+void gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data);
+void gnc_employee_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data);
+
 typedef enum
 {
   NEW_EMPLOYEE,
@@ -239,7 +246,7 @@ gnc_employee_window_help_cb (GtkWidget *widget, gpointer data)
   helpWindow(NULL, NULL, HH_EMPLOYEE);
 }
 
-static void
+void
 gnc_employee_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   EmployeeWindow *ew = data;
@@ -288,7 +295,7 @@ gnc_employee_name_changed_cb (GtkWidget *widget, gpointer data)
   g_free (title);
 }
 
-static void
+void
 gnc_employee_ccard_acct_toggled_cb (GtkToggleButton *button, gpointer data)
 {
   EmployeeWindow *ew = data;

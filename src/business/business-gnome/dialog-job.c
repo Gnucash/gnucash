@@ -29,6 +29,11 @@
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
 #define DIALOG_EDIT_JOB_CM_CLASS "dialog-edit-job"
 
+void gnc_job_window_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_job_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_job_window_help_cb (GtkWidget *widget, gpointer data);
+void gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data);
+
 typedef enum
 {
   NEW_JOB,
@@ -167,7 +172,7 @@ gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
 }
 
 
-static void
+void
 gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   JobWindow *jw = data;

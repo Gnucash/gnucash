@@ -558,6 +558,7 @@ key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
 	return TRUE;
 }
 
+#if 0
 static int
 date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
@@ -576,6 +577,7 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 
         return TRUE;
 }
+#endif
 
 static void
 create_children (GNCDateEdit *gde)

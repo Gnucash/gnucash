@@ -79,7 +79,6 @@ static void gnc_account_tree_fill (GNCAccountTree *tree,
                                    GHashTable *expanded_accounts,
 				   GtkCTreeNode *parent,
 				   AccountGroup *accts);
-static void gnc_account_tree_set_view_info_real (GNCAccountTree *tree);
 static void gnc_account_tree_update_column_visibility (GNCAccountTree *tree);
 
 struct _acct_tree_defaults {
@@ -199,9 +198,6 @@ gnc_account_tree_new_with_root (Account * root)
 static void
 gnc_account_tree_init (GNCAccountTree *tree)
 {
-  GtkStyle *style;
-  GdkFont *font;
-  gint width;
   int i;
 
   tree->root_account     = *xaccGUIDNULL ();

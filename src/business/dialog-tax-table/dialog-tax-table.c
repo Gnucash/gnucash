@@ -24,6 +24,10 @@
 
 #define DIALOG_TAX_TABLE_CM_CLASS "tax-table-dialog"
 
+void new_tax_table_ok_cb (GtkWidget *widget, gpointer data);
+void new_tax_table_cancel_cb (GtkWidget *widget, gpointer data);
+void new_tax_table_dialog_destroy_cb (GtkWidget *widget, gpointer data);
+
 struct _taxtable_window {
   GtkWidget *	dialog;
   GtkWidget *	names_clist;
@@ -49,7 +53,7 @@ typedef struct _new_taxtable {
 } NewTaxTable;
 
 
-static void
+void
 new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
 {
   NewTaxTable *ntt = data;
@@ -146,7 +150,7 @@ new_tax_table_ok_cb (GtkWidget *widget, gpointer data)
   gnome_dialog_close (GNOME_DIALOG (ntt->dialog));
 }
 
-static void
+void
 new_tax_table_cancel_cb (GtkWidget *widget, gpointer data)
 {
   NewTaxTable *ntt = data;
@@ -154,7 +158,7 @@ new_tax_table_cancel_cb (GtkWidget *widget, gpointer data)
   gnome_dialog_close (GNOME_DIALOG (ntt->dialog));
 }
 
-static void
+void
 new_tax_table_dialog_destroy_cb (GtkWidget *widget, gpointer data)
 {
   NewTaxTable *ntt = data;

@@ -20,6 +20,7 @@
 #include "eggmarshalers.h"
 
 #include <string.h>
+#include <unistd.h>
 #include <libxml/tree.h>
 #include <gdk/gdkproperty.h>
 
@@ -134,7 +135,7 @@ egg_toolbars_model_to_xml (EggToolbarsModel *t)
   return doc;
 }
 
-gboolean
+static gboolean
 safe_save_xml (const char *xml_file, xmlDocPtr doc)
 {
 	char *tmp_file;
@@ -313,7 +314,7 @@ egg_toolbars_model_add_separator (EggToolbarsModel *t,
 		 toolbar_position, real_position);
 }
 
-gboolean
+static gboolean
 impl_add_item (EggToolbarsModel    *t,
 	       int		    toolbar_position,
 	       int		    position,
@@ -325,9 +326,9 @@ impl_add_item (EggToolbarsModel    *t,
   EggToolbarsItem *item;
   int real_position;
 
-  g_return_if_fail (IS_EGG_TOOLBARS_MODEL (t));
-  g_return_if_fail (id != NULL);
-  g_return_if_fail (type != NULL);
+  g_return_val_if_fail (IS_EGG_TOOLBARS_MODEL (t), FALSE);
+  g_return_val_if_fail (id != NULL, FALSE);
+  g_return_val_if_fail (type != NULL, FALSE);
 
   parent_node = g_node_nth_child (t->priv->toolbars, toolbar_position);
   item = toolbars_item_new (id, type, FALSE);
@@ -440,7 +441,7 @@ egg_toolbars_model_load (EggToolbarsModel *t,
   xmlFreeDoc (doc);
 }
 
-char *
+static char *
 impl_get_item_id (EggToolbarsModel *t,
 		  const char       *type,
 		  const char       *name)
@@ -453,7 +454,7 @@ impl_get_item_id (EggToolbarsModel *t,
   return NULL;
 }
 
-char *
+static char *
 impl_get_item_name (EggToolbarsModel *t,
 		    const char       *type,
 		    const char       *id)
@@ -466,7 +467,7 @@ impl_get_item_name (EggToolbarsModel *t,
   return NULL;
 }
 
-char *
+static char *
 impl_get_item_type (EggToolbarsModel *t,
 		    GdkAtom type)
 {

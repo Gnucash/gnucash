@@ -10,7 +10,7 @@
 #include <gtk/gtktreeview.h>
 #include <gtk/gtkvbox.h>
 #include "egg-action-group.h"
-
+#include "global-options.h"
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-register.h"
 #include "gnc-split-reg.h"

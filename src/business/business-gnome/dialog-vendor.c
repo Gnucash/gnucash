@@ -34,6 +34,13 @@
 #define DIALOG_NEW_VENDOR_CM_CLASS "dialog-new-vendor"
 #define DIALOG_EDIT_VENDOR_CM_CLASS "dialog-edit-vendor"
 
+void gnc_vendor_taxtable_check_cb (GtkToggleButton *togglebutton, gpointer user_data);
+void gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_window_help_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_window_destroy_cb (GtkWidget *widget, gpointer data);
+void gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data);
+
 typedef enum
 {
   NEW_VENDOR,

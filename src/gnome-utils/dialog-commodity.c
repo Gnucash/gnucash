@@ -104,7 +104,9 @@ void gnc_ui_commodity_quote_info_cb(GtkWidget *w, gpointer data);
 gboolean gnc_ui_commodity_dialog_to_object(CommodityWindow * w);
 
 #define GNC_RESPONSE_NEW 0
+#if 0
 static void gnc_ui_select_commodity_response_cb (GtkDialog * dialog, gint response, gpointer data);
+#endif
 
 
 /********************************************************************
@@ -435,6 +437,7 @@ gnc_ui_update_commodity_picker(GtkWidget * combobox,
  * gnc_ui_update_namespace_picker
  ********************************************************************/
 
+#if 0
 void
 gnc_ui_select_commodity_destroy(SelectCommodityWindow * w) {
   g_return_if_fail (w != NULL);
@@ -442,7 +445,6 @@ gnc_ui_select_commodity_destroy(SelectCommodityWindow * w) {
   gtk_widget_destroy (GTK_WIDGET (w->dialog));
 }
 
-#if 0
 /********************************************************************
  * gnc_ui_select_commodity_ok_cb()
  ********************************************************************/

@@ -137,6 +137,8 @@ static Account *gnc_transfer_dialog_get_selected_account (XferDialog *dialog,
 static void gnc_transfer_dialog_set_selected_account (XferDialog *dialog,
 						      Account *account,
 						      XferDirection direction);
+void gnc_xfer_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data);
+void gnc_xfer_dialog_close_cb(GnomeDialog *dialog, gpointer data);
 
 /** Implementations **********************************************/
 

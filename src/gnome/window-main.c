@@ -71,8 +71,9 @@
 #include "messages.h"
 #include "guile-mappings.h"
 
-static short module = MOD_GUI;
+/* static short module = MOD_GUI; */
 
+#if INCLUDE_GNOME1_BASED_ROUTINES
 static void gnc_main_window_create_menus(GNCMDIInfo * maininfo);
 static GnomeUIInfo * gnc_main_window_toolbar_prefix (void);
 static GnomeUIInfo * gnc_main_window_toolbar_suffix (void);
@@ -139,6 +140,7 @@ gnc_main_window_get_mdi_child (void)
   LEAVE("oops. No valid no child or app");
   return(NULL);
 }
+#endif
 
 /********************************************************************
  * gnc_shutdown

@@ -59,6 +59,9 @@ GtkTreeModel  *gnc_tree_model_commodity_new             (GList *commodities);
 void           gnc_tree_model_commodity_add_commodity (GncTreeModelCommodity *model,
 						       gpointer commodity);
 
+void           gnc_tree_model_commodity_remove_commodity (GncTreeModelCommodity *model,
+							  gpointer commodity);
+
 void           gnc_tree_model_commodity_set_commodities (GncTreeModelCommodity *model,
                                                          GList *commodities);
 

@@ -100,6 +100,7 @@ load_price_helper (GNCPrice *price, gpointer data)
   return TRUE;
 }
 
+#if 0
 static int
 price_compare (gconstpointer a, gconstpointer b)
 {
@@ -168,17 +169,13 @@ price_date_compare (gconstpointer a, gconstpointer b)
 
   return price_compare (a, b);
 }
+#endif
 
 static int
 gnc_prices_load_prices (PricesDialog *pdb_dialog)
 {
   gnc_commodity *current_commodity;
   GNCPrintAmountInfo print_info;
-  gboolean sort_commodity;
-  GtkArrowType arrow_dir;
-  GtkWidget *show, *hide;
-  GCompareFunc sort_fn;
-  gboolean sort_ascending;
   GNCPrice *old_price;
   GNCBook *book;
   GList *prices;
@@ -440,6 +437,7 @@ get_quotes_clicked (GtkWidget *widget, gpointer data)
   gnc_gui_refresh_all ();
 }
 
+#if 0
 /**
  * gnc_prices_click_column_cb
  *
@@ -514,29 +512,30 @@ gnc_prices_unselect_price_cb (GtkCTree *ctre, gint row, gint col,
 static void
 prices_set_min_widths (PricesDialog *pdb_dialog)
 {
-//  const char *titles[] = { _("Commodity"),
-//                           _("Currency"),
-//                           _("Date"),
-//                           _("Source"),
-//                           _("Type"),
-//                           _("Price") };
-//
-//  GtkStyle *style = gtk_widget_get_style (pdb_dialog->price_list);
-//  GdkFont *font = NULL;
-//  gint width;
-//  gint i;
-//
-//  if (style != NULL)
-//    font = gdk_font_from_description (style->font_desc);
-//
-//  if (font != NULL)
-//    for (i = 0; i < 6; i++)
-//    {
-//      width = gdk_string_width (font, titles[i]);
-//      gtk_clist_set_column_min_width (GTK_CLIST (pdb_dialog->price_list),
-//                                      i, width + 5);
-//    }
+  const char *titles[] = { _("Commodity"),
+                           _("Currency"),
+                           _("Date"),
+                           _("Source"),
+                           _("Type"),
+                           _("Price") };
+
+  GtkStyle *style = gtk_widget_get_style (pdb_dialog->price_list);
+  GdkFont *font = NULL;
+  gint width;
+  gint i;
+
+  if (style != NULL)
+    font = gdk_font_from_description (style->font_desc);
+
+  if (font != NULL)
+    for (i = 0; i < 6; i++)
+    {
+      width = gdk_string_width (font, titles[i]);
+      gtk_clist_set_column_min_width (GTK_CLIST (pdb_dialog->price_list),
+                                      i, width + 5);
+    }
 }
+#endif
 
 static void
 gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)

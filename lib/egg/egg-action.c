@@ -5,11 +5,13 @@
 
 /* some code for making arbitrary GtkButtons that act like toolbar
  * buttons */
+#if 0
 static GtkWidget *tool_button_new       (GType        button_type,
 					 const gchar *text,
 					 GtkWidget   *icon);
 static GtkWidget *tool_button_get_label (GtkWidget   *button);
 static GtkWidget *tool_button_get_icon  (GtkWidget   *button);
+#endif
 
 enum {
   ACTIVATE,
@@ -509,8 +511,10 @@ connect_proxy (EggAction *action, GtkWidget *proxy)
     }
   else if (EGG_IS_TOOL_BUTTON (proxy))
     {
+#if 0
       GtkWidget *label;
       GtkWidget *icon;
+#endif
       /* toolbar button specific synchronisers ... */
 
       /* synchronise the label */
@@ -703,7 +707,9 @@ void
 egg_action_disconnect_proxy (EggAction *action,
 			     GtkWidget *proxy)
 {
+#if 0
   EggAction *prev_action;
+#endif
 
   g_return_if_fail (EGG_IS_ACTION (action));
   g_return_if_fail (GTK_IS_WIDGET (proxy));
@@ -770,6 +776,7 @@ egg_action_set_accel_path (EggAction *action, const gchar *accel_path)
 
 /* ---- code to create sort-of-toolbar-buttons ---- */
 
+#if 0
 static GtkWidget *
 tool_button_get_label (GtkWidget *button)
 {
@@ -966,3 +973,4 @@ tool_button_new (GType button_type, const gchar *text, GtkWidget *icon)
 
   return button;
 }
+#endif

@@ -36,6 +36,12 @@
 #define DIALOG_NEW_CUSTOMER_CM_CLASS "dialog-new-customer"
 #define DIALOG_EDIT_CUSTOMER_CM_CLASS "dialog-edit-customer"
 
+void gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data);
+void gnc_customer_window_cancel_cb (GtkWidget *widget, gpointer data);
+void gnc_customer_window_help_cb (GtkWidget *widget, gpointer data);
+void gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data);
+void gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data);
+
 typedef enum
 {
   NEW_CUSTOMER,
@@ -295,7 +301,7 @@ gnc_customer_window_help_cb (GtkWidget *widget, gpointer data)
   helpWindow(NULL, NULL, HH_CUSTOMER);
 }
 
-static void
+void
 gnc_customer_window_destroy_cb (GtkWidget *widget, gpointer data)
 {
   CustomerWindow *cw = data;

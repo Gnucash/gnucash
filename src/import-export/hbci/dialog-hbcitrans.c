@@ -187,7 +187,6 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   GladeXML *xml;
   const HBCI_Bank *bank;
   HBCITransDialog *td;
-  gboolean successful;
 
   td = g_new0(HBCITransDialog, 1);
   

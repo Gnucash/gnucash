@@ -929,7 +929,9 @@ update_node (EggMenuMerge *self, GNode *node)
   EggMenuMergeNode *info;
   GNode *child;
   EggAction *action;
+#if 0
   GList *tmp;
+#endif
 
   g_return_if_fail (node != NULL);
   g_return_if_fail (NODE_INFO(node) != NULL);
