@@ -33,9 +33,9 @@
 #include "sixtp-dom-generators.h"
 #include "sixtp-utils.h"
 
-#include "GNCId.h"
 #include "gnc-engine-util.h"
 #include "kvp_frame.h"
+#include "qofid.h"
 
 static short module = MOD_IO;
 

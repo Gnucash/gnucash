@@ -30,10 +30,10 @@
 #include "gnc-engine-util.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "qofid.h"
 
 #include "sixtp-utils.h"
 #include "sixtp-dom-parsers.h"
-#include "GNCId.h"
 
 static short module = MOD_IO;
 
