@@ -50,7 +50,7 @@
  *      whose value is zero (e.g. a stock price) can exist
  *      by itself. Otherwise, all splits must come in at 
  *      least pairs.
- * 2 -- splits without oparents will be forced into a
+ * 2 -- splits without parents will be forced into a
  *      lost & found account.  (Not implemented)
  */
 int force_double_entry = 0;
@@ -340,13 +340,26 @@ xaccSplitSetBaseValue (Split *s, double value, char * base_currency)
 {
    if (!s) return;
 
-   assert (s->acc);
+   /* ahh -- stupid users may not want or use the double entry 
+    * features of this engine.  So, in particular, there
+    * may be the occasional split without a parent account. 
+    * Well, that's ok,  we'll just go with the flow. 
+    */
+   if (force_double_entry) {
+      assert (s->acc);
+   } else {
+      s -> damount = (value / (s->share_price));   
+      return;
+   }
 
+   /* be more precise -- the value depends on the curency 
+    * we want it expressed in.
+    */
    if (!safe_strcmp(s->acc->currency, base_currency)) {
-      s -> damount = - (value / (s->share_price));   
+      s -> damount = (value / (s->share_price));   
    } else 
    if (!safe_strcmp(s->acc->security, base_currency)) {
-      s -> damount = -value;   
+      s -> damount = value;   
    } else {
       printf ("Error: xaccSplitSetBaseValue(): "
               " inappropriate base currency %s "
@@ -363,8 +376,21 @@ xaccSplitGetBaseValue (Split *s, char * base_currency)
    double value;
    if (!s) return 0.0;
 
-   assert (s->acc);
+   /* ahh -- stupid users may not want or use the double entry 
+    * features of this engine.  So, in particular, there
+    * may be the occasional split without a parent account. 
+    * Well, that's ok,  we'll just go with the flow. 
+    */
+   if (force_double_entry) {
+      assert (s->acc);
+   } else {
+      value = s->damount * s->share_price;   
+      return;
+   }
 
+   /* be more precise -- the value depends on the curency 
+    * we want it expressed in.
+    */
    if (!safe_strcmp(s->acc->currency, base_currency)) {
       value = s->damount * s->share_price;   
    } else 
@@ -457,7 +483,18 @@ xaccSplitRebalance (Split *split)
   i=0; s = trans->splits[0];
   while (s) {
     char *sa, *sb;
-    assert (s->acc);
+
+    /* ahh -- stupid users may not want or use the double entry 
+     * features of this engine.  So, in particular, there
+     * may be the occasional split without a parent account. 
+     * Well, that's ok,  we'll just go with the flow. 
+     */
+    if (force_double_entry) {
+       assert (s->acc);
+    } else {
+       i++; s=trans->splits[i]; continue;
+    }
+
     sa = s->acc->currency;
     sb = s->acc->security;
     if (sb && (0x0==sb[0])) sb = 0x0;
@@ -512,7 +549,7 @@ xaccSplitRebalance (Split *split)
     if (s) {
       /* the new value of the destination split will be the result.  */
       value = ComputeValue (trans->splits, s, base_currency);
-      xaccSplitSetBaseValue (s, value, base_currency);
+      xaccSplitSetBaseValue (s, -value, base_currency);
       MARK_SPLIT (s);
       xaccAccountRecomputeBalance (s->acc); 
 
@@ -557,7 +594,7 @@ xaccSplitRebalance (Split *split)
      */
     s = trans->splits[0];
     value = ComputeValue (trans->splits, s, base_currency);
-    xaccSplitSetBaseValue (s, value, base_currency);
+    xaccSplitSetBaseValue (s, -value, base_currency);
     MARK_SPLIT (s);
     xaccAccountRecomputeBalance (s->acc); 
   }
