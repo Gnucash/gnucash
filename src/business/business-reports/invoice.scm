@@ -186,8 +186,10 @@
     (if (tax-col column-vector)
 	(addto! row-contents
 		(if (if invoice?
-			(gnc:entry-get-inv-taxable entry)
-			(gnc:entry-get-bill-taxable entry))
+			(and (gnc:entry-get-inv-taxable entry)
+			     (gnc:entry-get-inv-tax-table entry))
+			(and (gnc:entry-get-bill-taxable entry)
+			     (gnc:entry-get-bill-tax-table entry)))
 		    (_ "T") "")))
 
     (if (taxvalue-col column-vector)

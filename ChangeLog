@@ -11,6 +11,12 @@
 	  columns.  Enable viewing the "taxable" entry.  Enable viewing
 	  all the tax accounts individually (fixes bug #102892)
 
+	* src/business/business-core/gw-business-core-spec.scm:
+	  wrap gncEntryGetInvTaxTable()
+	  wrap gncEntryGetBillTaxTable()
+	* src/business/business-reports/invoice.scm: only set the "taxable"
+	  value to 'T' if the value is true AND we've got an actual tax table.
+	
 2003-01-11  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-ui-util.c: The "reverse balance" preference

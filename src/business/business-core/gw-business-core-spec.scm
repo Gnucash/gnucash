@@ -429,11 +429,27 @@
 
   (gw:wrap-function
    ws
+   'gnc:entry-get-inv-tax-table
+   '<gnc:GncTaxTable*>
+   "gncEntryGetInvTaxTable"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Invoice Tax Table")
+
+  (gw:wrap-function
+   ws
    'gnc:entry-get-bill-taxable
    '<gw:bool>
    "gncEntryGetBillTaxable"
    '((<gnc:GncEntry*> entry))
    "Return the Entry's Taxable value")
+
+  (gw:wrap-function
+   ws
+   'gnc:entry-get-bill-tax-table
+   '<gnc:GncTaxTable*>
+   "gncEntryGetBillTaxTable"
+   '((<gnc:GncEntry*> entry))
+   "Return the Entry's Bill Tax Table")
 
   (gw:wrap-function
    ws
