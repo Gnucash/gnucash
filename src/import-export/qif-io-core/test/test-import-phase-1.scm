@@ -63,7 +63,7 @@
           (simple-format #t "using book name='~A'\n" name)
           (gnc:book-set-group book group)
           (gnc:session-begin session name #t #t)
-          (gnc:session-save book #f)
+          (gnc:session-save book)
           (gnc:session-end book)))))
   0)
 
