@@ -5,10 +5,12 @@
     <meta name="generator" content="HTML Tidy, see www.w3.org">
 
     <title>GnuCash Project Goals</title>
-    <meta name="description" content=
-    "The Linux GnuCash project aims at creating a world-class personal finance package. Goals include ease-of use, double entry, OFX support, charts, and reports, and multi-user support.">
-    <meta name="keywords" content=
-    "linux, OFX, accounting, finance, financial, ledger, double entry, GPL, gnu">
+    <meta name="description" content= "The Linux GnuCash project 
+                aims at creating a world-class personal finance package. 
+                Goals include ease-of use, double entry, OFX support, 
+                charts, and reports, and multi-user support.">
+    <meta name="keywords" content= "linux, OFX, accounting, finance, 
+                financial, ledger, double entry, GPL, gnu">
   </head>
 
   <body bgcolor="#eeeeee" fgcolor="#000000">
@@ -65,10 +67,10 @@
       <li><a href="#feats">Features</a></li>
     </ol>
     <hr>
-    <!--===================================================--><a
-    name="arch"></a> 
-
+    <!--===================================================-->
+    <a name="arch">
     <h1>Architectural Goals</h1>
+    </a> 
     There are some over-reaching design principles and philosophies
     that we intend to maintain. Some of these concepts and terms
     are introduced in this section. 
@@ -190,7 +192,9 @@
     <hr>
     <!--===================================================-->
 
+    <a name="reqs">
     <h1>Requirements</h1>
+    </a>
     Implicit in this desire for extensibility is the need to build
     financial applications supporting two major classes of users: 
 
@@ -252,17 +256,16 @@
         sophistication in such areas as: 
 
         <ul>
-          <li>Payroll</li>
+          <li>Payroll (Batch processed and individual)</li>
 
-          <li>Inventory Control</li>
+          <li>Inventory Control &amp; Asset Management</li>
+          <li>Amortization Schedules, Depreciation</li>
 
           <li>Shipping and Receiving</li>
 
-          <li>Accounts Receivable</li>
+          <li>Accounts Receivable, Accounts Payable (A/R, A/P)</li>
+          <li>Credit Card Processing</li>
 
-          <li>Accounts Payable</li>
-
-          <li>Asset Management</li>
         </ul>
       </li>
 
@@ -330,7 +333,9 @@
     <hr>
     <!--===================================================-->
 
+    <a name="size">
     <h1>Sizings</h1>
+    </a>
     This section attempts to guesss how hard it would be to
     implement certain features. 
 
@@ -352,8 +357,7 @@
       <li><b>Large</b> More than 12 pm</li>
     </ul>
 
-    <table border="1" summary=
-    "Personal Finance Functionality Requirements">
+    <table border="1" summary= "Personal Finance Functionality Requirements">
       <tr>
         <th>Feature</th>
         <th>Sizing</th>
@@ -656,16 +660,17 @@
     <hr>
     <!--===================================================-->
 
+    <a name="feats">
     <h1>Features and Functions</h1>
+    </a>
     This section reviews the current status of various features.
     Some of these are 'in process', some are 'almost done', some
     are 'completely done'. This section thus provides status on
     both where we've been, and where we're going. 
 
     <dl>
-      <dd><a name="i18n"></a></dd>
 
-      <dt><b>Internationalization</b></dt>
+      <dt><a name="i18n"><b>Internationalization</b></a></dt>
 
       <dd>
         All menus, markup and help-text should be
@@ -864,7 +869,9 @@
       href="http://www.htdig.org/">htdig</a>) better categorize the
       help. <a href="http://www.senga.org/mifluz/html/">Mifluz</a>
       might be more embeddable ... I am told that htdig-API is in
-      good solid condition for this, but undocumented.</dd>
+      good solid condition for this, but undocumented.
+      <p></p>
+      </dd>
 
 
       <dt><a name="glitz"><b>Themes, Icons, Glitz</b></a></dt>
@@ -1164,13 +1171,15 @@
       <dt><b>Check Printing</b></dt>
 
       <dd>
-        Create a check-printing ability. 
+        Create a check-printing ability. Includ MICR (Magnetic Ink,
+        Computer Readable) check printing abilities.
 
         <p><b>Status:</b></p>
 
         <ul>
           <li>Bill Gribble has built a prototype based on the
-          gnome-print. Waiting for gnome-print to mature ...</li>
+              gnome-print. Waiting for gnome-print to mature ...</li>
+          <li>MICR Fonts are available & brought to mailing list.
         </ul>
         <br>
         <br>
@@ -1409,16 +1418,14 @@
 
       <dd>
         Ability to export Quicken QIF files. 
-
-        <p>Several design alternatives are apparent:</p>
+        Several design alternatives are apparent:
 
         <ul>
           <li>
             A special 'report' that writes out qif could be
             created. 
-
-            <p>This would use the 'reports' infrastructure to
-            generate qif's.</p>
+            This would use the 'reports' infrastructure to
+            generate qif's.
           </li>
 
           <li>It is fairly easy to traverse the data in the engine
@@ -1500,6 +1507,7 @@
       <dd>
         Install on Redhat, Caldera, Corel, SuSE, FreeBSD, TurboLinux,
         etc.
+        <p></p>
       </dd>
 
       <dt><a name="currency"><b>Multiple Currencies</b></a></dt>
@@ -1591,10 +1599,10 @@
 
       <dd>
         Download, save, annotate investment news and research. 
-
-        <p>Provide a way of storing news stories with accounts, and
+        Provide a way of storing news stories with accounts, and
         possibly annotating individual transactions in the same
-        way.</p>
+        way.
+        <p></p>
       </dd>
 
       <dt><a name="loan"><b>Loan and Mortgage Calculators</b></a></dt>
@@ -1676,15 +1684,23 @@ next due date mm/dd/yy
       <dt><a name="tech"><b>Technical Stock Analysis</b></a></dt>
 
       <dd>Provide technical stock analysis graphs, <em>e.g.</em>
-      volume, 90 moving avg, beta, etc. See gstalker for example of
-      how to do it ...</dd>
+          volume, 90 moving avg, beta, etc. See gstalker for example of
+          how to do it ...
+          <p></p>
+      </dd>
 
-      <dt><a name="sink"><b>Depreciation, Sinking
-      Funds</b></a></dt>
+      <dt><a name="sink"><b>Asset Depreciation, Sinking Funds, 
+           Amortization Schedules</b></a></dt>
 
-      <dd>Hmm ... some variation on the concept of loans? Need to
-      support different deprciation schedules (see IRS books for
-      that).</dd>
+      <dd>Need to
+          support different deprciation schedules (see IRS books for
+          that).  Asset depreciation is complex; there are many
+          different deprciation schedules, and these vary from 
+          country to country, and change when new tax laws are
+          implemented. It might be hard for free software to provide
+          a no-cost subscription to updated depreciation modules.
+          <p></p>
+      </dd>
 
       <dt><a name="ofx"><b>OFX support</b></a></dt>
 
@@ -1728,9 +1744,6 @@ next due date mm/dd/yy
           <li>A compile-time parser was developed and
           abandoned.</li>
         </ul>
-        <br>
-        <br>
-         
 
         <p>Note that the organizations developing OFX are looking
         to use XML as their "formats of the future;" this may
@@ -1781,8 +1794,7 @@ next due date mm/dd/yy
 </pre>
       </dd>
 
-      <dt><a name="tab"><b>Tab-delimited ASCII file
-      format</b></a></dt>
+      <dt><a name="tab"><b>Tab-delimited ASCII file format</b></a></dt>
 
       <dd>
         People <em>like</em> to be able to read file contents in
@@ -1819,42 +1831,43 @@ etc ...
 
       <dd>
         Gotta prepare those taxes. 
+        W-2, W-3, 941, 940 Processing.
 
         <ul>
           <li>
-            TurboTax 
-
-            <p>categorize items according to different tax
-            schedules</p>
+            TurboTax --
+            categorize items according to different tax
+            schedules
           </li>
 
-          <li>VAT</li>
+          <li>VAT -- Value Added Tax. Varies from country to country.
+          </li>
 
-          <li>estimate income taxes</li>
-
-          <li>estimate itemized deductions, find potential
-          deductions, categorize them</li>
+          <li>Estimate income taxes.
+              Estimate itemized deductions, find potential
+              deductions, categorize them</li>
         </ul>
+        <p></p>
       </dd>
 
-      <dt><a name="palm"><b>Sync with Palm Pilot
-      organizers</b></a></dt>
+      <dt><a name="palm"><b>Sync with Palm Pilot organizers</b></a></dt>
 
       <dd>There are Quicken-workalikes that run on the
-      PalmComputing platform; it would be good to inter-operate
-      with this. See
-      <a href="ftp://ryeham.ee.ryerson.ca/pub/PalmOS/">PalmLink</a> 
-      and <a href="http://www.orbits.com/Palm/">Palm & Linux</a>.
+          PalmComputing platform; it would be good to inter-operate
+          with this. See
+          <a href="ftp://ryeham.ee.ryerson.ca/pub/PalmOS/">PalmLink</a> 
+          and <a href="http://www.orbits.com/Palm/">Palm & Linux</a>.
+          <p></p>
       </dd>
 
-      <dt><a name="emerg"><b>Emergency Records
-      Organizer</b></a></dt>
+      <dt><a name="emerg"><b>Emergency Records Organizer</b></a></dt>
 
       <dd>Put together a single-page report showing critical info
-      about accounts, etc.</dd>
+          about accounts, etc.
+          <p></p>
+      </dd>
 
-      <dt><a name="engine"><b>Enriched Engine, Financial
-      Objects</b></a></dt>
+      <dt><a name="engine"><b>Enriched Engine, Financial Objects</b></a></dt>
 
       <dd>
         The current system makes a distinction between the data
@@ -1902,12 +1915,11 @@ etc ...
             <b>Books</b> Ability to close a book at the end of the
             fiscal year, thus indicating that nobody is permitted
             to "mess around" with that old data. 
-
-            <p>In a business environment, the auditors may have
+            In a business environment, the auditors may have
             "signed off" on the validity of the data; at that
             point, the ability to modify audited data should be
             <em>very</em> tightly controlled, or even outright
-            forbidden.</p>
+            forbidden.
           </li>
         </ul>
 
@@ -1930,20 +1942,20 @@ etc ...
           <li>
             <tt>BeginEdit()/RollbackEdit()/CommitEdit()</tt>
             routines mostly in place, 
-
-            <p>These "Transaction processing constructs" should
+            These "Transaction processing constructs" should
             simplify creation of an SQL back end, or some other
-            more sophisticated database engine.</p>
+            more sophisticated database engine.
           </li>
 
           <li>Multiple currency support is present but still pretty
-          "raw."</li>
+              "raw."</li>
 
           <li>Query engine is minimal/sparse in capabilities.</li>
 
           <li>Linas &lt;linas@linas.org&gt; is maintaining the
-          engine code.</li>
+              engine code.</li>
         </ul>
+        <p></p>
       </dd>
 
       <dt><a name="sql"><b>SQL I/O</b></a></dt>
@@ -1951,23 +1963,57 @@ etc ...
       <dd>
         A module is necessary to allow data to be fetched from an
         SQL database, and for that database to be updated. 
+        There has been <em>much</em> discussion about this on
+        mailing lists both for GnuCash and 
+        <a href="http://www.menet.umn.edu/~curt/cbb/">CBB.</a> 
+        Major points have included:
 
-        <p>There has been <em>much</em> discussion about this on
-        mailing lists both for GnuCash and <a href=
-        "http://www.menet.umn.edu/~curt/cbb/">CBB.</a> Major points
-        have included:</p>
-
+        <br>
+        <br>
         <ul>
+          <li>The use of a database allows only that data which
+              is actually <em>in use</em> to be loaded into
+              memory.  This permits managing larger sets of
+              transactions more efficiently.
+          </li>
+          <br><br>
+
+          <li>It also allows data to be pushed out to the DBMS
+              <em>immediately after entry,</em> rather than waiting
+              for the user to "save the books."
+          </li>
+          <br><br>
+
+          <li>Using a client/server SQL database might make it easier
+              to turn GnuCash into a multi-user system.
+          </li>
+          <br><br>
+
+          <li>By using a well-known DBMS, outside programs are
+              provided a well-defined way of getting at, and
+              perhaps even modifying, GnuCash data. 
+              (Actually, this is not true: GnuCash already provides
+              a uniform, well-documented, prefered data access API.  
+              As long as this
+              API is used, there is some gaurantee that data is stored
+              in a self-consistent fashion.  Not using the GnuCash 
+              programming interfaces risks corrupting the data.
+              Direct access to the data is dangerous and discouraged.
+              Furthermore, The API is guarenteed to be backwards
+              compatible with a variety of data storage formats.
+              Due to enhancements, the actual form of the data stored in
+              a flat file, or in the SQL database, may change without 
+              warning.)
+          </li>
+          <br><br>
           <li>
             Those SQL databases available on Linux tend to involve
             considerable <em>administrative</em> overhead in terms
             of getting them set up. 
-
-            <p>This may be a minor cost to a business enterprise
-            that routinely hires DataBase Administrators.</p>
-
-            <p>It is <em>not</em> acceptable to require this of
-            naive users that may find "simple" things like</p>
+            This may be a minor cost to a business enterprise
+            that routinely hires DataBase Administrators.
+            It is <em>not</em> acceptable to require this of
+            naive users that may find "simple" things like
 <pre>
 % su -
 Password:
@@ -1977,82 +2023,58 @@ Password:
 </pre>
             to be challenging.
           </li>
+          <br><br>
 
           <li>
             It might be useful to use an embedded database engine
             like unto <a href="http://www.sleepycat.com/">Sleepycat
-            DB</a>, <a href=
-            "ftp://koobera.math/uic.edu/www.cdb.html">cdb,</a> or
-            something like <a href=
-            "http://www.opengroup.org/public/prods/dmm4.htm">
+            DB</a>, 
+            <a href="ftp://koobera.math/uic.edu/www.cdb.html">cdb</a>,
+            or something like 
+            <a href="http://www.opengroup.org/public/prods/dmm4.htm">
             ISAM</a> (Note CQL++ supports ISAM access methds), or
-            even an embedded SQL engine such as <a href=
-            "http://www.ispras.ru/~knizhnik/gigabase.html">
+            even an embedded SQL engine such as 
+            <a href="http://www.ispras.ru/~knizhnik/gigabase.html">
             GigaBASE</a>. 
-
-            <p>The reasons to do so include:</p>
-
-            <ul>
-              <li>
-                The use of a database allows only that data which
-                is actually <em>in use</em> to be loaded into
-                memory. 
-
-                <p>This permits managing larger sets of
-                transactions more efficiently.</p>
-              </li>
-
-              <li>It also allows data to be pushed out to the DBMS
-              <em>immediately after entry,</em> rather than waiting
-              for the user to "save the books."</li>
-
-              <li>
-                By using a well-known DBMS, outside programs are
-                provided a well-defined way of getting at, and
-                perhaps even modifying, GnuCash data. 
-
-                <p>Interoperability is generally considered a good
-                thing...</p>
-              </li>
-            </ul>
+            The reasons to do so include ... ???
           </li>
 
+          <br><br>
           <li>
             GnuCash presently uses a document-oriented model, where
             the <em>entire</em> set of books are loaded in, and
             dumped out, all at one fell swoop. 
-
-            <p>GnuCash needs to be modified to access the database
+            GnuCash needs to be modified to access the database
             in a transactional manner. This is at least partly
             implemented with the <tt>Begin()/End()</tt> constructs
-            in the engine.</p>
+            in the engine.
 
-            <p>Some transactional thoughts: entire SQL
+            <p>
+            Some transactional thoughts: entire SQL
             tables/databases do not need to be locked while the
-            user is editing a transaction via the GUI.</p>
-
-            <p>Instead, an optimistic approach, similar to that
+            user is editing a transaction via the GUI.
+            Instead, an optimistic approach, similar to that
             employed by CVS (concurrent version system, a mechanism
             for storing versions of source code) could be used: if
             the edits conflict with changes made by others, edits
             are be rejected en-masse, allowing the user to merge
-            and correct their changes.</p>
-
-            <p>Important note: updating SQL does <em>not</em>
+            and correct their changes.
+            Important note: updating SQL does <em>not</em>
             require locks to be held for extended periods of
-            time!</p>
+            time!
+            </p>
           </li>
 
           <li>
             The SQL engine chosen should be fully transactional,
             passing the 'ACID' test (Atomicity, Consistency,
             Isolation, Durability). 
-
-            <p>Note that <a href=
-            "http://openacs.org/why-not-mysql.html">MySQL does not
-            satisfy the 'ACID' criteria</a>.</p>
+            Note that 
+            <a href="http://openacs.org/why-not-mysql.html">MySQL 
+            does not satisfy the 'ACID' criteria</a>.
           </li>
         </ul>
+        <p></p>
       </dd>
 
       <dt><a name="multiuser"><b>Multi-user Support</b></a></dt>
@@ -2061,18 +2083,16 @@ Password:
         Multi-user support should be added with either an SQL
         backend to the engine, and/or through CORBA interfaces to
         the engine. 
-
-        <p>Project Kontor and also FreeMoney is working on SQL
+        Project Kontor and also FreeMoney is working on SQL
         schemas; Kontor is also working on Java RMI/CORBA
-        interfaces.</p>
-
-        <p>Another possibility is to create a web application
+        interfaces.
+        Another possibility is to create a web application
         server, and have users do much/most of I/O via a web
         interface, possibly using the register object as a browser
-        plugin.</p>
-
-        <p>The following industrial-strength features are
-        needed:</p>
+        plugin.
+        The following industrial-strength features are
+        needed:
+        <br><br>
 
         <ul>
           <li>transaction-oriented queuing of updates</li>
@@ -2087,13 +2107,17 @@ Password:
 
           <li>encryption of network connections</li>
         </ul>
+        <p></p>
       </dd>
 
-      <dt><a name="arap"><b>Accounts Payable,
-      Receivable</b></a></dt>
+      <dt><a name="arap"><b>Accounts Payable, Receivable</b></a></dt>
 
       <dd>Add features to track sales receipts and other pending
-      sources of income, as well as owed sums.</dd>
+          sources of income, as well as owed sums.  It must be possible
+          to match invoices to payments.  It must be possible to 
+          track the average age of an amount-due/amount-owed.
+          <p></p>
+      </dd>
 
       <dt><a name="payroll"><b>Payroll</b></a></dt>
 
@@ -2101,27 +2125,40 @@ Password:
         Payroll introduces a <em>sizable</em> amount of complexity
         in terms of the need to comply with constantly-changing
         government regulations in whatever country one is in. 
-
-        <p>While the GnuCash "engine" might remain free,
+        While the GnuCash "engine" might remain free,
         maintenance of payroll functionality would require
         "subscribing" to an update scheme; it might be troublesome
-        to try to provide such a "subscription" free of charge.</p>
+        to try to provide such a "subscription" free of charge.
+        <p></p>
       </dd>
 
       <dt><a name="invoice"><b>Invoicing</b></a></dt>
 
       <dd>Invoicing. To design an invoice, need to have a
-      mini-word-processor/simple drawing plug-in. Is
-      Abisource/Abiword a candidate? Probably needs bonobo...</dd>
+          mini-word-processor/simple drawing plug-in. Is
+          Abisource/Abiword a candidate? Probably needs bonobo...
+          <p></p>
+      </dd>
+
+      <dt><a name="order"><b>Order Entry</b></a></dt>
+
+      <dd>
+        Mini-GUI allowing users to type in orders.
+        <p></p>
+      </dd>
 
       <dt><a name="estimate"><b>Job Costing</b></a></dt>
 
-      <dd>Ability to prepare and track estimates.</dd>
+      <dd>Ability to prepare and track estimates.
+          <p></p>
+      </dd>
 
       <dt><a name="expense"><b>Expense Accounts</b></a></dt>
 
       <dd>Expense Account Automation, including air, car, hotel,
-      dining. Receipts, reservations, cancellations.</dd>
+          dining. Receipts, reservations, cancellations.
+          <p></p>
+      </dd>
     </dl>
 
     <h1>References</h1>
