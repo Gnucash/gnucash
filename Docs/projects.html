@@ -12,7 +12,8 @@
 
 <body>
 <h1>GnuCash (formerly X-Accountant) Project Goals</h1>
-GnuCash (previously known as X-Accountant) is a personal finance 
+<a href="http://gnucash.org">GnuCash</a> 
+(previously known as X-Accountant) is a personal finance 
 accounting application.  The project goals are to create a world-class
 GPL'ed Open Source personal financial application for GNU/Linux and other 
 Unix's.  The project is the result of a merger 
@@ -48,6 +49,10 @@ large ones shall turn into a multitude of small ones.
 
 <h2>News</h2>
 <dl>
+<dt><b>April 1998</b>
+<dd>The domain "gnucash.org" has been registered; web site is up.
+    <p>
+
 <dt><b>10 April 1998</b>
 <dd>Work on OFX support, and user-prefrences, has begun in earnest.
     <p>
@@ -141,8 +146,21 @@ architectural goals.
     windows much simpler and easier.
     <p>
     <b>Current Status:</b> the latest alpha-development releases (version 
-    1.1.x) contain such an object.  Its currently motif-based, but 
-    should be easily portable to Qt, GTK, curses.  
+    1.1.x) contain such an object.  
+    <ul>
+    <li>Currently Motif-based
+    <li>GTK port is read-only
+    <li>No Qt port yet
+    <li>the simple single-account ledgers (incl. stock ledgers) seem 
+        to be working correctly, but no heavy testing yet.
+    <li>The multiple-account ledger is ery broken.
+    <li>The multi-split ledger is still unimplemented.  Since I know
+         how this should work, I hope to work on it soon.
+    <li>read-only GTK version published, thanks to Rob Browning.
+        (other comments above are for motif version).
+    <li>query for date range completely missing.
+    <li>No curses version yet.
+    </ul>
     <p>
 
 <dt><b>Extension Language Support</b>
@@ -208,10 +226,21 @@ architectural goals.
     their own library, should be created.   Routines to help make the 
     engine more transaction-processing oriented should be added.
     <p>
-    <b>Current Status:</b> The basic engine has been detangled from 
-    the GUI elements, as of version 1.1.4.  Binary file i/o still
-    remains tangled.  Transaction processing constructs are present, but
-    do nothing and are not enforced.
+    <b>Current Status:</b> 
+    <ul>
+    <li>The basic engine has been detangled from 
+    the GUI elements, as of version 1.1.4.  
+    <li>Binary file i/o still remains tangled.  
+    <li>prototype for transaction logging in place
+    <li>backup files automatically created & timestamped.
+    <li>BeginEdit()/CommitEdit() routines mostly in place,
+        These "Transaction processing constructs" 
+        should simplify creation of an SQL back end.
+    <li>Engine seems to be working correctly, but no heavy testing yet.
+    <li>Support for alternate sort orders, or query for subset of
+        all transactions completely missing.
+    </ul>
+
     <p>
 
 <dt><b>OFX support</b>
@@ -222,8 +251,19 @@ architectural goals.
     The OFX DTD's are included in the 1.1 distributions. See 
     <a href="http://www.ofx.org">OFX HomePage</a> for details.
     <p>
-    <b>Status:</b>Work on an OFX DTD parser has begun.  
-    Simple scripts have been run past OFX servers.
+    <b>Status:</b>
+    <ul>
+    <li>Work on an OFX DTD parser has begun.  headers generated
+        correctly.  Constrcutors generated almost correctly.
+    <li>Simple scripts have been run against real-live OFX servers.
+    </ul>
+    <p>
+
+<dt><b>Budgeting</b>
+<dd>Ability to handle budgeted future transactions.
+    <p>
+    <b>Status:</b>
+    A design doc has been started.
     <p>
 
 </dl>
@@ -335,6 +375,10 @@ immediately, independent of the major goals.
     still be possible to specify the fees, the transfer, and other
     details from a single window.
     <p>
+    <b>Status</b>: Some basic reorganization of register was done to
+       support mixed multi-line split display.  However, the actual 
+       display of such things remaions unimplemented.
+    <p>
 
 <dt><b>User Preferences</b>
 <dd>Create menu system & file format for manipulating user
@@ -402,7 +446,8 @@ immediately, independent of the major goals.
     <p>
 
 <dt><b>Quicken(TM) Export</b>
-<dd>Ability to export Quicken QIF files.
+<dd>Ability to export Quicken QIF files.  Quicken import is implemented
+    and mostly works.
     <p>
 
 <dt><b>Tab-delimited ASCII file format</b>
@@ -593,7 +638,7 @@ cvs -d :pserver:anonymous@im2.lcs.mit.edu:/im/magnus/cvsroot get watermark
 </ul>
 
 <hr>
-Draft version 0.21 -- April 1998<br>
+Draft version 0.22 -- April 1998<br>
 Linas Vepstas <a href="mailto:linas@linas.org">linas@linas.org</a><br>
 Robin Clark <a href="mailto:rclark@hmc.edu">rclark@hmc.edu</a><br>
 </body>
