@@ -52,6 +52,7 @@ LDADD = ${top_srcdir}/src/test-core/libgncmod-test.la \
         ./libgnc-test-file-stuff.la 
 
 AM_CFLAGS = \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/test-core \
   -I${top_srcdir}/src/engine \
