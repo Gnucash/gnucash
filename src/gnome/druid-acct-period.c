@@ -171,7 +171,7 @@ show_book_details (AcctPeriodInfo *info)
       "Click on 'Back' to adjust the dates.\n");
 
   /* Display the results */
-  str = g_strdup_printf (remarks_text, 
+  str = g_strdup_printf (period_text, 
       "asdf", "asdf", 0, 0);
 
   gtk_label_set_text (info->book_details, str);
