@@ -133,11 +133,16 @@ char * xaccReadQIFDiscard( int fd )
 \********************************************************************/
 
 #define XACC_PREP_STRING(str) {			\
-        int len = strlen (&qifline[1]); 	\
-        len --;					\
-        (str) = (char *)XtMalloc (len);		\
+	char * tok;				\
+	int len;				\
+	tok = strchr (&qifline[1], '\n');	\
+	if (tok) *tok = 0x0;			\
+	tok = strchr (&qifline[1], '\r');	\
+	if (tok) *tok = 0x0;			\
+        len = strlen (&qifline[1]); 		\
+        (str) = (char *)XtMalloc (len+1);	\
         strncpy ((str), &qifline[1], len);	\
-        (str)[len-1] = 0x0;			\
+        (str)[len] = 0x0;			\
 }
 
 #define XACC_PREP_NULL_STRING(str) {							\
