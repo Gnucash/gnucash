@@ -60,8 +60,6 @@
 (export gnc:current-config-auto)
 
 ;; from command-line.scm
-(export gnc:*command-line-remaining*)
-
 (export gnc:*config-path*)
 (export gnc:*share-path*)
 (export gnc:*doc-path*)
@@ -455,14 +453,14 @@ string and 'directories' must be a list of strings."
              (if (gnc:file-query-save)
                  (begin
                    (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
-                   (gnc:ui-shutdown)))))
+                   (gnc:gui-shutdown)))))
         (else
-	 (gnc:ui-destroy)
+	 (gnc:gui-destroy)
 	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
          (gnc:engine-shutdown)
 	 (exit exit-status))))
 
-(define (gnc:ui-finish)
+(define (gnc:gui-finish)
   (gnc:debug "UI Shutdown hook.")
   (gnc:file-quit))
 
@@ -511,8 +509,9 @@ string and 'directories' must be a list of strings."
   (if (null? gnc:*batch-mode-things-to-do*)
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (begin
-        (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:ui-finish)
-        (gnc:ui-init)
+        (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
+        (set! gnc:*command-line-remaining*
+              (gnc:gui-init gnc:*command-line-remaining*))
         (if (and
              (not (gnc:account-file-to-load))
              (not (string? (gnc:history-get-last)))
@@ -521,12 +520,10 @@ string and 'directories' must be a list of strings."
             (gnc:new-user-dialog)
             (gnc:load-account-file))
         (gnc:start-ui-event-loop)
-        (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:ui-finish))
+        (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish))
 
       ;; else: we're in batch mode.  Just do what the user said on the
       ;; command line
       (map handle-batch-mode-item (reverse gnc:*batch-mode-things-to-do*)))
 
   (gnc:shutdown 0))
-
-
