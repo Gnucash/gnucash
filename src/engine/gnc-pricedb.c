@@ -2050,17 +2050,101 @@ pricedb_mark_clean(QofBook *book)
   gnc_pricedb_mark_clean(gnc_pricedb_get_db(book));
 }
 
+/* ==================================================================== */
+/* a non-boolean foreach. Ugh */
+
+typedef struct 
+{
+  void (*func)(GNCPrice *p, gpointer user_data);
+  gpointer user_data;
+} 
+VoidGNCPriceDBForeachData;
+
+static void
+void_pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
+{
+  GList *price_list = (GList *) val;
+  GList *node = price_list;
+  VoidGNCPriceDBForeachData *foreach_data = (VoidGNCPriceDBForeachData *) user_data;
+
+  while(node) 
+  {
+    GNCPrice *p = (GNCPrice *) node->data;
+    foreach_data->func(p, foreach_data->user_data);
+    node = node->next;
+  }
+}
+
+static void
+void_pricedb_foreach_currencies_hash(gpointer key, gpointer val, gpointer user_data)
+{
+  GHashTable *currencies_hash = (GHashTable *) val;
+  g_hash_table_foreach(currencies_hash, void_pricedb_foreach_pricelist, user_data);
+}
+
+static void
+void_unstable_price_traversal(GNCPriceDB *db,
+                       void (*f)(GNCPrice *p, gpointer user_data),
+                       gpointer user_data)
+{
+  VoidGNCPriceDBForeachData foreach_data;
+  
+  if(!db || !f) return;
+  foreach_data.func = f;
+  foreach_data.user_data = user_data;
+
+  g_hash_table_foreach(db->commodity_hash,
+                       void_pricedb_foreach_currencies_hash,
+                       &foreach_data);
+}
+
+static void 
+pricedb_foreach(QofBook *book, QofEntityForeachCB cb, gpointer data)
+{
+  GNCPriceDB *db = gnc_pricedb_get_db(book);
+  void_unstable_price_traversal(db, 
+                       (void (*)(GNCPrice *, gpointer)) cb,
+                       data);
+}
+
+/* ==================================================================== */
+static const char *
+pricedb_printable(gpointer obj)
+{
+  GNCPrice *pr = obj;
+  gnc_commodity *commodity;
+  gnc_commodity *currency;
+  static char buff[2048];  /* nasty static OK for printing */
+  char *val, *da;
+
+  if(!pr) return "";
+
+  val = gnc_numeric_to_string (pr->value);
+  da = qof_print_date (pr->tmspec.tv_sec);
+  
+  commodity = gnc_price_get_commodity(pr);
+  currency = gnc_price_get_currency(pr);
+
+  snprintf (buff, 2048, "%s %s / %s on %s", val,
+        gnc_commodity_get_unique_name(commodity),
+        gnc_commodity_get_unique_name(currency),
+        da);
+  g_free (val);
+  g_free (da);
+  return buff;
+}
+
 static QofObject pricedb_object_def = 
 {
   interface_version: QOF_OBJECT_VERSION,
-  name:              GNC_ID_PRICEDB,
-  type_label:        "PriceDB",
+  name:              GNC_ID_PRICE,
+  type_label:        "Price",
   book_begin:        pricedb_book_begin,
   book_end:          pricedb_book_end,
   is_dirty:          pricedb_is_dirty,
   mark_clean:        pricedb_mark_clean,
-  foreach:           NULL,
-  printable:         NULL,
+  foreach:           pricedb_foreach,
+  printable:         pricedb_printable,
 };
 
 gboolean 
