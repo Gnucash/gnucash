@@ -1,3 +1,10 @@
+2005-01-05  Derek Atkins  <derek@ihtfp.com>
+
+	* src/report/locale-specific/us/gncmod-locale-reports-us.c:
+	  guile-1.3.4 gh_eal_str() requires a char*, not a const char*
+	  So we're removing the const here for older systems with
+	  "ancient" guile.
+
 2005-01-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/Scrub.c:

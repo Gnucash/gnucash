@@ -56,13 +56,13 @@ libgncmod_locale_reports_us_LTX_gnc_module_init(int refcount) {
 #else
   gboolean is_de_DE = FALSE;
 #endif /* LOCALE_SPECIFIC_TAX */
-  const char *tax_module = is_de_DE ? 
+  char *tax_module = is_de_DE ? 
     "gnucash/tax/de_DE" : 
     "gnucash/tax/us";
-  const char *report_taxtxf = is_de_DE ? 
+  char *report_taxtxf = is_de_DE ? 
     "(use-modules (gnucash report taxtxf-de_DE))" :
     "(use-modules (gnucash report taxtxf))";
-  const char *report_locale = is_de_DE ?
+  char *report_locale = is_de_DE ?
     "(use-modules (gnucash report locale-specific de_DE))" :
     "(use-modules (gnucash report locale-specific us))";
 
