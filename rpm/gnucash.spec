@@ -1,12 +1,13 @@
 Name: gnucash
 Summary: GnuCash is an application to keep track of your finances.
-Version: 1.3.0
+Version: 1.3.1
 Release: 1
 Copyright: Free Software Foundation
 Group: Applications/Finance
 Source: http://www.gnucash.org/pub/gnucash/sources/stable/gnucash-%{PACKAGE_VERSION}.tar.gz
 Packager: Dave Peticolas <peticola@cs.ucdavis.edu>
 BuildRoot: /var/tmp/gnucash-%version
+Requires: gnome-libs >= 1.0.40
 
 
 %description
@@ -38,9 +39,11 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(444,root,root,755)
 %attr(555,-,-) /usr/bin/gnucash.gnome
+%attr(555,-,-) /usr/bin/gnc-prices
 /usr/bin/gnucash
-/usr/bin/gnc-prices
 /usr/lib/gnucash
 /usr/share/gnucash
 /usr/share/gnome/apps/Applications/gnucash.desktop
+/usr/share/locale/de/LC_MESSAGES/gnucash.mo
+/usr/share/locale/fr/LC_MESSAGES/gnucash.mo
 %doc /usr/doc/gnucash
