@@ -1,3 +1,14 @@
+2002-08-03  Christian Stimming  <stimming@tuhh.de>
+
+	* po/de.po: Updated German translation.
+
+	* po/glossary/gnc-glossary.txt, po/glossary/de.po: Discovered new
+	strings to be translated; the term "placeholder" was added to
+	glossary.
+
+	* src/gnc-ui-util.c (equity_base_name): Changed "Opening Balances"
+	to "Opening Balance" to unify the account name.
+
 2002-08-02  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/gnc-book.c: File permission fix by Matt Brubeck

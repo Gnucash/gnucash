@@ -624,7 +624,7 @@ equity_base_name (GNCEquityType equity_type)
   switch (equity_type)
   {
     case EQUITY_OPENING_BALANCE:
-      return N_("Opening Balances");
+      return N_("Opening Balance");
 
     case EQUITY_RETAINED_EARNINGS:
       return N_("Retained Earnings");

@@ -103,6 +103,7 @@
 "payee"	"A person to whom sth is paid"
 "payer"	"A person who pays or who has to pay for sth"
 "payment"	"1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
+"placeholder"	"An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 "portfolio"	"A set of investments owned by a person"
 "preferences"	"A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 "price (in a split)"	"An amount of money for which sth may be bought or sold"
