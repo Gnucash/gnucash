@@ -60,7 +60,6 @@ xaccNextTabGroup (Table *table, Widget w)
 
 /* ==================================================== */
 /* this routine calls the individual cell callbacks */
-/* hack alert -- assumes that header is first cell */
 
 static void
 cellCB (Widget mw, XtPointer cd, XtPointer cb)
@@ -89,11 +88,11 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
       int save_phys_row = table->current_cursor_phys_row;
       int save_phys_col = table->current_cursor_phys_col;
 
-      /* VerifyCursor will do all sorts of gui-indeopendent machinations */
+      /* VerifyCursor will do all sorts of gui-independent machinations */
       xaccVerifyCursorPosition (table, row, col);
 
-      /* make sure the old and the new cursor rows get redrawn */
-      xaccRefreshCursorGUI (table);
+      /* make sure *both* the old and the new cursor rows get redrawn */
+      xaccRefreshCursorGUI (table);  
       doRefreshCursorGUI (table, save_curs, save_phys_row, save_phys_col);
    }
 
@@ -103,6 +102,8 @@ cellCB (Widget mw, XtPointer cd, XtPointer cb)
    invalid = invalid || (col >= table->num_phys_cols);
 
    /* header rows cannot be modified */
+   /* hack alert -- assumes that header is first cell */
+   /* if 0,0 is not a headr  row, then trouble ... */
    header = table->handlers[0][0];
    invalid = invalid || (row < header->numRows);
 
