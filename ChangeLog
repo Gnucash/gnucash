@@ -1,3 +1,55 @@
+2001-07-04  Rob Browning  <rlb@defaultvalue.org>
+
+	* src/gnome/glade/.cvsignore: create and add Makefile and
+	Makefile.in.
+
+	* src/scm/report/report-list.scm: switch to use-modules for
+	some reports.
+
+	* po/.cvsignore: add ChangeLog.
+
+	* src/scm/report/transaction-report.scm: renamed to transaction.scm
+
+	* src/scm/report/transaction.scm: renamed from
+	transaction-report.scm and converted to guile module.
+
+	* src/scm/report/taxtxf.scm: convert to guile module.
+
+	* src/scm/report/register.scm: convert to guile module.
+
+	* src/scm/report/price-scatter.scm: convert to guile module.
+
+	* src/scm/report/portfolio.scm: convert to guile module.
+
+	* src/scm/report/pnl.scm: convert to guile module.
+
+	* src/scm/report/net-barchart.scm: convert to guile module.
+
+	* src/scm/report/iframe-url.scm: convert to guile module.
+
+	* src/scm/report/hello-world.scm: convert to guile module.
+
+	* src/scm/report/category-barchart.scm: convert to guile module.
+
+	* src/scm/report/balance-sheet.scm: convert to guile module.
+
+	* src/scm/report/average-balance.scm: convert to guile module.
+
+	* src/scm/report/account-summary.scm: convert to guile module.
+
+	* src/scm/report/account-piecharts.scm: convert to guile module.
+
+	* src/scm/report/Makefile.am (gncscmmoddir): dir for report modules.
+	(gncscmmod_DATA): add reports that have been modularized.
+	(gncscm_DATA): remove reports that have been modularized.
+
+	* src/scm/bootstrap.scm.in (gnc:load): don't silently succeed on
+	load errors -- fail.
+
+	* src/scm/report-html.scm: make (ice-9 slib) dependency explicit.
+
+	* src/scm/depend.scm (gnc:depend): add optional timing facility.
+
 2001-07-04  Dave Peticolas  <dave@krondo.com>
 
 	* Makefile.am: add gnc-glossary.txt to the dist
