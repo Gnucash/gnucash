@@ -26,6 +26,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <locale.h>
 
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
