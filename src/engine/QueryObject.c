@@ -88,6 +88,8 @@ const QueryObjectDef * gncQueryObjectGetParameter (GNCIdTypeConst obj_name,
   g_return_val_if_fail (parameter, NULL);
 
   ht = g_hash_table_lookup (paramTable, obj_name);
+  if (!ht)
+    PERR ("no object type %s", obj_name);
   g_return_val_if_fail (ht, NULL);
 
   return (g_hash_table_lookup (ht, parameter));
