@@ -143,6 +143,7 @@ void          xaccTransSetDescription (Transaction *, const char *);
  */
 void          xaccTransSetMemo (Transaction *, const char *);
 void          xaccTransSetAction (Transaction *, const char *);
+void          xaccTransSetDocref (Transaction *, const char *);
 
 /*
  * The xaccTransAppendSplit() method will append the indicated 
@@ -185,6 +186,7 @@ Split *       xaccTransGetSplit (Transaction *trans, int i);
  */
 char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
+char *        xaccTransGetDocref (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
 void          xaccTransGetDateTS (Transaction *, struct timespec *);
 void          xaccTransGetDateEnteredTS (Transaction *, struct timespec *);
@@ -207,6 +209,9 @@ void          xaccSplitSetMemo (Split *, const char *);
  * as far as the engine is concerned, its an arbitrary string.
  */
 void          xaccSplitSetAction (Split *, const char *);
+
+/* docref ==  hook for additional data, etc */
+void          xaccSplitSetDocref (Split *, const char *);
 
 /* The Reconcile is a single byte, whose values are typically
  * are "no", "cleared" and "reconciled"
@@ -278,6 +283,7 @@ Transaction * xaccSplitGetParent (Split *);
 /* return the memo, action strings */
 char *        xaccSplitGetMemo (Split *split);
 char *        xaccSplitGetAction (Split *split);
+char *        xaccSplitGetDocref (Split *split);
 
 /* return the value of the reconcile flag */
 char          xaccSplitGetReconcile (Split *split);

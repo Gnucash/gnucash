@@ -53,9 +53,9 @@
  *                    numTran (Transaction)^numTrans                * 
  *                    numGroups (Group)^numGroups                   *
  *   Transaction ::== num date_entered date_posted description      *
- *                    numSplits (Split)^numSplits                   *
+ *                    docref numSplits (Split)^numSplits            *
  *   Split       ::== memo action reconciled  date_recned           *
- *                    amount share_price account                    *
+ *                    docref amount share_price account             *
  *   token       ::== int  [the version of file format == VERSION]  * 
  *   numTrans    ::== int                                           * 
  *   numAccounts ::== int                                           * 
@@ -76,6 +76,7 @@
  *   description ::== String                                        * 
  *   memo        ::== String                                        * 
  *   action      ::== String                                        * 
+ *   docref      ::== String                                        * 
  *   reconciled  ::== char                                          * 
  *   amount      ::== double                                        * 
  *   share_price ::== double                                        * 
@@ -703,6 +704,20 @@ readTransaction( int fd, Account *acc, int token )
   xaccTransSetDescription (trans, tmp);
   free (tmp);
   
+  /* docref first makes an appearenece in version 8 */
+  if (8 <= token) {
+     tmp = readString( fd, token );
+     if( NULL == tmp )
+       {
+       PERR ("Premature end of Transaction at docref");
+       xaccTransDestroy(trans);
+       xaccTransCommitEdit (trans);
+       return NULL;
+       }
+     xaccTransSetDocref (trans, tmp);
+     free (tmp);
+  }
+
   /* At version 5, most of the transaction stuff was 
    * moved to splits. Thus, vast majority of stuff below 
    * is skipped 
@@ -1007,6 +1022,19 @@ readSplit ( int fd, int token )
      time_t now;
      now = time (0);
      xaccSplitSetDateReconciledSecs (split, now);
+  }
+
+  /* docref first makes an appearenece in version 8 */
+  if (8 <= token) {
+     tmp = readString( fd, token );
+     if( NULL == tmp )
+       {
+       PERR ("Premature end of Split at docref");
+       xaccSplitDestroy (split);
+       return NULL;
+       }
+     xaccSplitSetDocref (split, tmp);
+     free (tmp);
   }
 
   /* first, read number of shares ... */
@@ -1487,7 +1515,7 @@ writeTransaction( int fd, Transaction *trans )
   if (2 == trans->write_flag) return 4;
   trans->write_flag = 2;
   
-  err = writeString( fd, trans->num );
+  err = writeString( fd, xaccTransGetNum (trans) );
   if( -1 == err ) return err;
   
   xaccTransGetDateTS (trans, &ts);
@@ -1498,7 +1526,10 @@ writeTransaction( int fd, Transaction *trans )
   err = writeTSDate( fd, &ts);
   if( -1 == err ) return err;
   
-  err = writeString( fd, trans->description );
+  err = writeString( fd, xaccTransGetDescription (trans) );
+  if( -1 == err ) return err;
+  
+  err = writeString( fd, xaccTransGetDocref (trans) );
   if( -1 == err ) return err;
   
   /* count the number of splits */
@@ -1555,6 +1586,9 @@ writeSplit ( int fd, Split *split )
 
   xaccSplitGetDateReconciledTS (split, &ts);
   err = writeTSDate( fd, &ts);
+  if( -1 == err ) return err;
+  
+  err = writeString( fd, xaccSplitGetDocref (split) );
   if( -1 == err ) return err;
   
   damount = xaccSplitGetShareAmount (split);

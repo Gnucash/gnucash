@@ -1459,7 +1459,7 @@ void
 xaccTransSetNum (Transaction *trans, const char *xnum)
 {
    char * tmp;
-   if (!trans) return;
+   if (!trans || !xnum) return;
    CHECK_OPEN (trans);
 
    tmp = strdup (xnum);
@@ -1472,12 +1472,25 @@ void
 xaccTransSetDescription (Transaction *trans, const char *desc)
 {
    char * tmp;
-   if (!trans) return;
+   if (!trans || !desc) return;
    CHECK_OPEN (trans);
 
    tmp = strdup (desc);
    if (trans->description) free (trans->description);
    trans->description = tmp;
+   MarkChanged (trans);
+}
+
+void
+xaccTransSetDocref (Transaction *trans, const char *docs)
+{
+   char * tmp;
+   if (!trans || !docs) return;
+   CHECK_OPEN (trans);
+
+   tmp = strdup (docs);
+   if (trans->docref) free (trans->docref);
+   trans->docref = tmp;
    MarkChanged (trans);
 }
 
@@ -1554,6 +1567,13 @@ xaccTransGetDescription (Transaction *trans)
    return (trans->description);
 }
 
+char * 
+xaccTransGetDocref (Transaction *trans)
+{
+   if (!trans) return NULL;
+   return (trans->docref);
+}
+
 time_t
 xaccTransGetDate (Transaction *trans)
 {
@@ -1578,6 +1598,7 @@ xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts)
 int 
 xaccTransCountSplits (Transaction *trans)
 {
+   if (!trans) return 0;
    return (xaccCountSplits (trans->splits));
 }
 
@@ -1588,7 +1609,7 @@ void
 xaccSplitSetMemo (Split *split, const char *memo)
 {
    char * tmp;
-   if (!split) return;
+   if (!split || !memo) return;
    tmp = strdup (memo);
    if (split->memo) free (split->memo);
    split->memo = tmp;
@@ -1599,10 +1620,21 @@ void
 xaccSplitSetAction (Split *split, const char *actn)
 {
    char * tmp;
-   if (!split) return;
+   if (!split || !actn) return;
    tmp = strdup (actn);
    if (split->action) free (split->action);
    split->action = tmp;
+   MARK_SPLIT (split);
+}
+
+void
+xaccSplitSetDocref (Split *split, const char *docs)
+{
+   char * tmp;
+   if (!split || !docs) return;
+   tmp = strdup (docs);
+   if (split->docref) free (split->docref);
+   split->docref = tmp;
    MARK_SPLIT (split);
 }
 
@@ -1671,6 +1703,13 @@ xaccSplitGetAction (Split *split)
 {
    if (!split) return NULL;
    return (split->action);
+}
+
+char *
+xaccSplitGetDocref (Split *split)
+{
+   if (!split) return NULL;
+   return (split->docref);
 }
 
 char 
