@@ -9,8 +9,16 @@ libc_missing_la_SOURCES = libc-missing-noop.c
 
 # This will automatically be filled in with the necessary object file
 # names.  Configure does this based upon the AC_REPLACE_FUNCS macros.
-libc_missing_la_LIBADD = @LTLIBOBJS@
+LIBOBJS = @LIBOBJS@
+LTLIBOBJS = $(shell echo "$(LIBOBJS)" | sed '@LIBOBJS_SEDSCRIPT@' | \
+	sed 's,\.[^.]* ,.lo ,g;s,\.[^.]*$$,.lo,')
+
+libc_missing_la_LIBADD = $(LTLIBOBJS)
 
 # Not currently used.  If added to AC_REPLACE_FUNCS then this line
 # should be removed.
 EXTRA_DIST = scm_strptime.c
+
+print_libobjs:
+	@echo "LIBOBJS = $(LIBOBJS)"
+	@echo "LTLIBOBJS = $(LTLIBOBJS)"
