@@ -561,7 +561,7 @@ qof_print_hours_elapsed_buff (char * buff, size_t len, int secs, gboolean show_s
 /* ============================================================== */
 
 size_t
-qof_print_minutes_elapsed_buff (char * buff, size_tlen, int secs, gboolean show_secs)
+qof_print_minutes_elapsed_buff (char * buff, size_t len, int secs, gboolean show_secs)
 {
 	size_t flen;
 	if (0 <= secs)
@@ -603,7 +603,7 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
   int day, month, year, hour, min, sec;
   struct tm ltm;
   
-  if (!buff) return buff;
+  if (!buff) return 0;
 
   /* Note that when printing year, we use %-4d in format string;
    * this causes a one, two or three-digit year to be left-adjusted
@@ -647,12 +647,12 @@ qof_print_date_time_buff (char * buff, size_t len, time_t secs)
 }
 
 size_t 
-qof_print_time_buf (char * buff, size_t len, time_t secs)
+qof_print_time_buff (char * buff, size_t len, time_t secs)
 {
   int flen;
   struct tm ltm;
   
-  if (!buff) return buff;
+  if (!buff) return 0;
   ltm = *localtime (&secs);
   flen = strftime (buff, len, GNC_T_FMT, &ltm);
 
