@@ -3247,7 +3247,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
       Split *blank_split = xaccSplitLookup(&info->blank_split_guid);
       Transaction *blank_trans = xaccSplitGetParent (blank_split);
 
-      if (trans != blank_trans)
+      if (trans == blank_trans)
         sr_set_last_num (reg, reg->numCell->cell.value);
     }
   }
