@@ -59,8 +59,6 @@ AC_ARG_WITH( gnome-libraries,
        [  --with-gnome-libraries=DIR   specify where to look for gnome libs],
        X_LIBS="${X_LIBS} -L$with_gnome_libraries" )
 
-AC_ARG_WITH(package, help-string [, action-if-given [, action-if-not-given]])
-
 # *******************************************
 # check for various programs, and stuff:
 AC_PROG_INSTALL
@@ -94,12 +92,19 @@ AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) X_LIBS="-lXpm $X_LIBS",
         AC_DEFINE(HAVE_XPM,0), -L $x_libraries -lX11)
 
-AC_CHECK_LIB(guile, main,
-  AC_DEFINE(HAVE_GUILE,1) LIBS="-lguile ${LIBS}",
-  AC_CHECK_LIB(qthreads, main,
-    AC_DEFINE(HAVE_GUILE,1) LIBS="-lguile -lqthreads ${LIBS}",
-    echo "Guile currently required for build"; exit 1;,
-    -lguile))
+# Set GUILELIBS according to the set of libraries needed to link
+# with guile.
+AC_CHECK_LIB(guile, gh_enter,
+	GUILELIBS="-lguile",
+	AC_CHECK_LIB(guile, gh_define,
+		GUILELIBS="-lguile -ldl -lreadline",
+		AC_CHECK_LIB(guile, gh_eval_file,
+			GUILELIBS="-lguile -ldl -lreadline -lqthreads",
+			AC_MSG_WARN(cannot link with guile),
+			-ldl -lreadline -lqthreads),
+		-ldl -lreadline)
+	)
+AC_SUBST(GUILELIBS)
 
 # *******************************************
 AC_CONFIG_HEADER(config.h)
