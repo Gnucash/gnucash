@@ -1,6 +1,7 @@
 /********************************************************************\
  * dialog-transfer.h -- transfer dialog for GnuCash                 *
  * Copyright (C) 1999 Linas Vepstas                                 *
+ * Copyright (C) 2000 Dave Peticolas                                *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,6 +24,10 @@
 #ifndef __DIALOG_TRANSFER_H__
 #define __DIALOG_TRANSFER_H__
 
-void gnc_xfer_dialog(GtkWidget * parent, Account * initial);
+typedef struct _xferDialog XferDialog;
+
+XferDialog * gnc_xfer_dialog(GtkWidget * parent, Account *initial);
+
+void gnc_ui_destroy_xfer_windows();
 
 #endif

@@ -589,14 +589,14 @@ gnc_account_tree_insert_account(GNCAccountTree *tree, Account *account)
 
 
 /********************************************************************\
- * gnc_account_tree_show_categories                                 *
+ * gnc_account_tree_show_income_expense                             *
  *   shows the income/expense accounts in a tree                    *
  *                                                                  *
  * Args: tree - tree to show income/expense accounts                *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_account_tree_show_categories(GNCAccountTree *tree)
+gnc_account_tree_show_income_expense(GNCAccountTree *tree)
 {
   tree->avi.include_type[EXPENSE] = GNC_T;
   tree->avi.include_type[INCOME] = GNC_T;
@@ -606,14 +606,14 @@ gnc_account_tree_show_categories(GNCAccountTree *tree)
 
 
 /********************************************************************\
- * gnc_account_tree_hide_categories                                 *
+ * gnc_account_tree_hide_income_expense                             *
  *   hides the income/expense accounts in a tree                    *
  *                                                                  *
  * Args: tree - tree to hide income/expense accounts                *
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_account_tree_hide_categories(GNCAccountTree *tree)
+gnc_account_tree_hide_income_expense(GNCAccountTree *tree)
 {
   tree->avi.include_type[EXPENSE] = GNC_F;
   tree->avi.include_type[INCOME] = GNC_F;

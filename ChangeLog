@@ -1,3 +1,19 @@
+2000-07-20  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/top-level.c (gnc_ui_destroy_all_subwindows): destroy
+	open transfer windows.
+
+	* src/Destroy.c: remove notes window functions.
+
+	* src/AccWindow.h: remove notes window functions.
+
+	* src/gnome/dialog-transfer.c: Make transfer dialog modeless.
+
+2000-07-19  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome/account-tree.c: Use income_expense instead of
+	category for names.
+
 2000-07-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/SplitLedger.c (LedgerAutoCompletion): simplify, and fix a

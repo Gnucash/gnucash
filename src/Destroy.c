@@ -1,5 +1,5 @@
-/*******************************************************************\
- * Destroy.c -- utilities for the window destruction (X-Accountant) *
+/********************************************************************\
+ * Destroy.c -- utilities for the window destruction GnuCash        *
  * Copyright (C) 1997 Linas Vepstas                                 *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -40,7 +40,6 @@ xaccAccountWindowDestroySimple (Account *acc)
   xaccDestroyRecnWindow (acc);
   xaccDestroyAdjBWindow (acc);
   xaccDestroyEditAccWindow (acc);
-  xaccDestroyEditNotesWindow (acc);
 }
 
 /* ------------------------------------------------------ */

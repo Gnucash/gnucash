@@ -33,6 +33,7 @@
 #include "gnome-top-level.h"
 #include "window-main.h"
 #include "dialog-add.h"
+#include "dialog-transfer.h"
 #include "global-options.h"
 #include "gnucash-sheet.h"
 #include "gnucash-color.h"
@@ -253,6 +254,7 @@ gnc_ui_destroy_all_subwindows (void)
   gnc_ui_destroy_help_windows();
   gnc_ui_destroy_report_windows();
   gnc_ui_destroy_account_add_windows();
+  gnc_ui_destroy_xfer_windows();
 }
 
 /* ============================================================== */

@@ -639,13 +639,6 @@ accWindow (AccountGroup *this_is_not_used)
 }
 
 
-/*  This is a no-op for the gnome code */
-void
-xaccDestroyEditNotesWindow (Account *acc)
-{
-}
-
-
 /*********************************************************************\
  * xaccSetDefaultNewaccountCurrency                                  *
  *   Set the default currency for new accounts                       *
