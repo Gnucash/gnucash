@@ -1,5 +1,17 @@
 Version history:
 ------- -------
+ 1.6.6  - 10 March 2002
+ 	 o Updated or new translations for Dutch, Norwegian, Russian,
+	   Greek, French, German, Portuguese, Azerbaijani Turkic,
+	   and Slovak
+	 o Tweaked the exchange rate calculation so that it will work
+	   in even more complicated cases, involving different 
+	   Euroland and other currencies.
+	 o Added Edit Report Options hyperlink to warnings in reports.
+	 o Added workaround for Guppi barchart legend sorting
+	   (broken in Guppi 0.40.0 - 0.40.3).
+	 o Bug fixes
+
  1.6.5  - 16 December 2001
          o Euro conversion druid
          o Updated or new translations for Brazilian Portuguese,

@@ -24,7 +24,7 @@ dnl Process this file with autoconf to produce a configure script.
 ### commands depend on them):
 
 AC_INIT(src/guile/gnucash.h)
-AM_INIT_AUTOMAKE(gnucash,1.6.5)
+AM_INIT_AUTOMAKE(gnucash,1.6.6)
 AM_CONFIG_HEADER(config.h)
 
 AC_CANONICAL_HOST
