@@ -32,6 +32,7 @@
 #include "gnc-ui-util.h"
 #include "messages.h"
 #include "reconcile-list.h"
+#include "Transaction.h"
 
 
 /* Signal codes */
@@ -131,10 +132,10 @@ gnc_reconcile_list_new(Account *account, GNCReconcileListType type)
   }
 
   if (type == RECLIST_CREDIT)
-    DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
+    DxaccQueryAddValueMatch(list->query, 0.0, AMT_SGN_MATCH_CREDIT,
                              AMT_MATCH_ATLEAST, QUERY_AND);
   else
-    DxaccQueryAddAmountMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
+    DxaccQueryAddValueMatch(list->query, 0.0, AMT_SGN_MATCH_DEBIT,
                              AMT_MATCH_ATLEAST, QUERY_AND);
 
   return GTK_WIDGET(list);
