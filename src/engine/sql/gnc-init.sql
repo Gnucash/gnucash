@@ -17,13 +17,13 @@ CREATE TABLE gncAccount (
 	accountGuid	CHAR(32) PRIMARY KEY,
 	parentGuid	CHAR(32),
 	childrenGuid	CHAR(32),
-	accountName 	VARCHAR(40) DEFAULT 'xoxo',
-	accountCode 	VARCHAR(8),
-	description 	VARCHAR(120),
-	notes	 	VARCHAR(120),
+	accountName 	TEXT DEFAULT 'xoxo',
+	accountCode 	TEXT,
+	description 	TEXT,
+	notes	 	TEXT,
 	type		INT2,
-	currency	VARCHAR(8),
-	security	VARCHAR(8)
+	currency	TEXT,
+	security	TEXT
 );
 
 -- hack alert -- docref ??
@@ -33,8 +33,8 @@ CREATE TABLE gncTransaction (
 	transGuid		CHAR(32) PRIMARY KEY,
 	date_entered	 	DATETIME,
 	date_posted	 	DATETIME,
-	num			VARCHAR(8),
-	description		VARCHAR(32)
+	num			TEXT,
+	description		TEXT
 );
 
 -- a gncEntry is what we call 'Split' elsewhere in the engine
@@ -44,8 +44,8 @@ CREATE TABLE gncEntry (
 	entryGuid		CHAR(32) PRIMARY KEY,
 	accountGuid		CHAR(32),
 	transGuid		CHAR(32),
-	memo			VARCHAR(20),
-	action			VARCHAR(20),
+	memo			TEXT,
+	action			TEXT,
 	reconciled		CHAR,
 	date_reconciled 	DATETIME,
 	amount			FLOAT8 DEFAULT '0.0',

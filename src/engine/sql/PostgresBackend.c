@@ -2,8 +2,9 @@
  * PostgressBackend.c
  *
  * Implements the callbacks for the postgress backend.
- * this is some seriously broken, poorly designed code.
- * its meant to be a quiick hack just ot check things out.
+ * this is somewhat seriously broken, poorly designed code.
+ * its meant to be a quick hack just ot check things out.
+ * it needs extensive review and design checking
  * 
  */
 
@@ -64,19 +65,20 @@ static void
 pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
 {
    Account *parent;
-   const GUID *parent_guid, *grp_guid;
+   const char *parent_guid, *grp_guid;
    int i, nacc;
 
    ENTER ("be=%p, grp=%p\n", be, grp);
    if (!be || !grp) return;
 
-   grp_guid = xaccGroupGetGUID (grp);
+   grp_guid = guid_to_string(xaccGroupGetGUID (grp));
    parent = xaccGroupGetParentAccount(grp);
-   parent_guid = xaccAccountGetGUID (parent);
+   parent_guid = guid_to_string(xaccAccountGetGUID (parent));
    nacc = xaccGroupGetNumAccounts(grp);
 
    for (i=0; i<nacc; i++) {
       Account *acc = xaccGroupGetAccount(grp, i);
+      const char * acc_guid = guid_to_string(xaccAccountGetGUID (acc));
 
       /* hack alert -- values should be escaped so that no '' apear in them */
       snprintf (be->buff, be->bufflen, 
@@ -84,16 +86,19 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
                "(groupGuid, parentGuid, childGuid)"
                " values "
                "('%s', '%s', '%s');",
-               guid_to_string(grp_guid),
-               guid_to_string(parent_guid),
-               guid_to_string(xaccAccountGetGUID (acc))
+               grp_guid,
+               parent_guid,
+               acc_guid
                );
 
+      free ((char *) acc_guid);
       SEND_QUERY(be);
    
       /* complete/commit the transaction, check the status */
       FLUSH(be->connection);
    }
+   free ((char *) grp_guid);
+   free ((char *) parent_guid);
 
    LEAVE ("\n");
 }
@@ -107,9 +112,13 @@ pgendStoreOneGroupOnly (PGBackend *be, AccountGroup *grp)
 static void
 pgendStoreOneAccountOnly (PGBackend *be, Account *acct)
 {
-
+   const char *acct_guid, *parent_guid, *child_guid; 
    ENTER ("be=%p, acct=%p\n", be, acct);
    if (!be || !acct) return;
+
+   acct_guid = guid_to_string(xaccAccountGetGUID (acct));
+   parent_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetParent(acct)));
+   child_guid = guid_to_string(xaccGroupGetGUID (xaccAccountGetChildren(acct)));
 
    /* hack alert -- values should be escaped so that no '' apear in them */
    snprintf (be->buff, be->bufflen, 
@@ -120,9 +129,9 @@ pgendStoreOneAccountOnly (PGBackend *be, Account *acct)
             " values "
             "('%s', '%s', '%s', '%s', '%s', '%s', '%s', "
             "%d, '%s', '%s');",
-            guid_to_string(xaccAccountGetGUID (acct)),
-            guid_to_string(xaccGroupGetGUID (xaccAccountGetParent(acct))),
-            guid_to_string(xaccGroupGetGUID (xaccAccountGetChildren(acct))),
+            acct_guid,
+            parent_guid,
+            child_guid,
             xaccAccountGetName (acct),
             xaccAccountGetCode (acct),
             xaccAccountGetDescription (acct),
@@ -131,6 +140,9 @@ pgendStoreOneAccountOnly (PGBackend *be, Account *acct)
             xaccAccountGetCurrency (acct),
             xaccAccountGetSecurity (acct)
             );
+   free ((char *) acct_guid);
+   free ((char *) parent_guid);
+   free ((char *) child_guid);
 
    SEND_QUERY (be);
    
@@ -149,20 +161,24 @@ pgendStoreOneAccountOnly (PGBackend *be, Account *acct)
 static void
 pgendStoreOneTransactionOnly (PGBackend *be, Transaction *trans)
 {
+   const char * trans_guid;
 
    ENTER ("be=%p, trans=%p\n", be, trans);
    if (!be || !trans) return;
 
+   trans_guid = guid_to_string(xaccTransGetGUID (trans));
    /* hack alert -- values should be escaped so that no '' apear in them */
    snprintf (be->buff, be->bufflen, 
             "INSERT INTO gncTransaction "
             "(transGuid, num, description)"
             " values "
             "('%s', '%s', '%s');",
-            guid_to_string(xaccTransGetGUID (trans)),
+            trans_guid,
             xaccTransGetNum (trans),
             xaccTransGetDescription (trans)
             );
+
+   free ((char *) trans_guid);
 
    SEND_QUERY (be);
    
@@ -180,9 +196,14 @@ static void
 pgendStoreOneSplitOnly (PGBackend *be, Split *split)
 {
    Timespec ts;
+   const char *split_guid, *acct_guid, *trans_guid;
 
    ENTER ("be=%p, split=%p\n", be, split);
    if (!be || !split) return;
+
+   split_guid = guid_to_string(xaccSplitGetGUID (split));
+   acct_guid =  guid_to_string(xaccAccountGetGUID (xaccSplitGetAccount(split)));
+   trans_guid = guid_to_string(xaccTransGetGUID (xaccSplitGetParent(split)));
 
    /* hack alert date is not stored ... */
    xaccSplitGetDateReconciledTS (split, &ts);
@@ -194,15 +215,18 @@ pgendStoreOneSplitOnly (PGBackend *be, Split *split)
             "reconciled, amount, share_price)"
             " values "
             "('%s', '%s', '%s', '%s', '%s', '%c', %g, %g);",
-            guid_to_string(xaccSplitGetGUID (split)),
-            guid_to_string(xaccAccountGetGUID (xaccSplitGetAccount(split))),
-            guid_to_string(xaccTransGetGUID (xaccSplitGetParent(split))),
+            split_guid,
+            acct_guid,
+            trans_guid,
             xaccSplitGetMemo(split),
             xaccSplitGetAction(split),
             xaccSplitGetReconcile(split),
             xaccSplitGetShareAmount(split),
             xaccSplitGetSharePrice(split)
             );
+   free ((char *) split_guid);
+   free ((char *) acct_guid);
+   free ((char *) trans_guid);
 
    SEND_QUERY (be);
 
@@ -210,6 +234,106 @@ pgendStoreOneSplitOnly (PGBackend *be, Split *split)
    FLUSH(be->connection);
 
    LEAVE ("\n");
+}
+
+/* ============================================================= */
+/* this routine routine returns non-zero if the indicated split 
+ * differs fropm that in the SQL database.
+ * this routine grabs no locks.
+ */
+
+static int 
+pgendCompareOneSplitOnly (PGBackend *be, Split *split)
+{
+   const char *split_guid;
+   PGresult *result;
+   int i, nrows, ncols, ndiffs=0;
+
+   ENTER ("be=%p, split=%p\n", be, split);
+   if (!be || !split) return;
+
+   split_guid = guid_to_string(xaccSplitGetGUID (split));
+
+   /* try to find this split in the database */
+   /* hack alert -- values should be escaped so that no '' apear in them */
+   snprintf (be->buff, be->bufflen, 
+            "SELECT accountGuid, transGuid, memo, action, "
+            "reconciled, amount, share_price "
+            "FROM gncEntry "
+            "WHERE entryGuid = '%s';",
+            split_guid
+            );
+   free ((char *) split_guid);
+
+   SEND_QUERY (be);
+
+   i=0; nrows=0;
+   do {
+      ExecStatusType status;  
+ 
+      result = PQgetResult (be->connection);
+      if (!result) break;
+ 
+      status = PQresultStatus(result);
+ 
+      if ((PGRES_COMMAND_OK != status) &&
+          (PGRES_TUPLES_OK  != status))
+      {
+         PERR ("failed to get result to query\n");
+         PQclear (result);
+         /* hack alert need gentler, kinder error recovery */
+         PQfinish (be->connection);
+         break;
+      }
+ 
+      nrows += PQntuples (result);
+      ncols = PQnfields (result);
+ 
+      PINFO ("query result %d has %d rows and %d cols\n",
+               i, nrows, ncols);
+      if (1 < nrows) {
+         PERR ("unexpected duplicate records\n");
+         break;
+      } else if (1 == nrows) {
+ 
+#define GETV(str) (PQgetvalue (result, 0, PQfnumber (result, str)))
+#define COMP(sqlname,fun) if (strcmp (GETV(sqlname),fun)) { 	\
+	PINFO("%s sql='%s', split='%s'\n", sqlname, GETV(sqlname), fun); \
+        ndiffs++; }
+#define GCOMP(sqlname,fun) { \
+	const char *tmp = guid_to_string(fun); \
+        if (strcmp (GETV(sqlname),tmp)) { 	\
+	   PINFO("%s sql='%s', split='%s'\n", sqlname, GETV(sqlname), tmp); \
+           ndiffs++; } \
+        free ((char *) tmp); } 
+
+         /* compared queried values to input values */
+         COMP ("memo", xaccSplitGetMemo(split));
+         COMP ("action", xaccSplitGetAction(split));
+         GCOMP ("accountGuid", 
+            xaccAccountGetGUID (xaccSplitGetAccount(split)));
+         GCOMP ("transGuid", 
+            xaccTransGetGUID (xaccSplitGetParent(split)));
+
+PINFO ("recn=%s amt=%s price=%s\n", GETV("reconciled"), GETV("amount"),
+GETV("share_price"));
+      }
+
+      PQclear (result);
+      i++;
+   } while (result);
+
+   if (0 == nrows) ndiffs = -1;
+
+/*
+            xaccSplitGetReconcile(split),
+            xaccSplitGetShareAmount(split),
+            xaccSplitGetSharePrice(split)
+*/
+
+
+   LEAVE ("\n");
+   return ndiffs;
 }
 
 /* ============================================================= */
@@ -228,9 +352,11 @@ traverse_cb (Transaction *trans, void *cb_data)
    pgendStoreOneTransactionOnly (be, trans);
 
    /* walk over the list of splits */
-   nsplits = xaccTransGetNumSplits (trans);
+   nsplits = xaccTransCountSplits (trans);
    for (i=0; i<nsplits; i++) {
       Split * s = xaccTransGetSplit (trans, i);
+      int ndiffs = pgendCompareOneSplitOnly (be, s);
+      PINFO ("ndiffs = %d\n", ndiffs);
       pgendStoreOneSplitOnly (be, s);
    }
 
@@ -288,11 +414,12 @@ pgendStoreGroup (PGBackend *be, AccountGroup *grp)
 
 /* ============================================================= */
 /* this routine fills in the structure pointed at by split
- * with data sucked out of the database
+ * with data sucked out of the database.  It does only that 
+ * one split,
  */
 
 static void
-pgendGetSplit (PGBackend *be, Split *split, GUID *guid)
+pgendGetOneSplitOnly (PGBackend *be, Split *split, GUID *guid)
 {
    int rc;
 
@@ -325,7 +452,8 @@ pgend_session_begin (Session *sess, const char * sessionid)
 
    ENTER("sessionid=%s\n", sessionid);
    /* connect to a bogus database ... */
-   /* hack alert -- clean this up ... */
+   /* hack alert -- we should be parsing the sessionid for the
+    * hostname, port number, db name, etc... clean this up ... */
    be->dbName = strdup ("gnc_bogus");
    be->connection = PQsetdbLogin (NULL, NULL, NULL, NULL, be->dbName, NULL, NULL);
 
@@ -365,6 +493,8 @@ pgend_trans_commit_edit (Backend * bend, Transaction * trans)
    nsplits = xaccTransCountSplits (trans);
    for (i=0; i<nsplits; i++) {
       Split *s =  xaccTransGetSplit (trans, i);
+      int ndiffs = pgendCompareOneSplitOnly (be, s);
+      PINFO ("ndiffs = %d\n", ndiffs);
       pgendStoreOneSplitOnly (be, s);
    }
 
