@@ -64,7 +64,7 @@ FIFOPolicyGetSplit (GNCLot *lot, gpointer user_data)
 
    /* Make use of the fact that the splits in a lot are already
     * in date order; so we don't have to search for the earliest. */
-   for (node = lot->account->splits; node; node=node->next)
+   for (node = xaccAccountGetSplitList (lot->account); node; node=node->next)
    {
       gboolean is_positive;
       Split *split = node->data;

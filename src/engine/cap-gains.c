@@ -51,10 +51,6 @@ ToDo List:
    Ideally, later lots are dissolved, and recomputed.  However, some 
    lots may have been user-hand-built. These should be left alone.
 
- o XXX if the split has been split, and the lots need to be recomputed,
-   then the peers need to be reunified first!   And that implies that
-   gain transactions need to be 'reunified' too.
-
  o XXX Need to create a data-integrity scrubber, tht makes sure that
    the various flags, and pointers & etc. match. See sections marked
    with XXX below for things that might go wrong.
@@ -68,6 +64,7 @@ ToDo List:
 #include "AccountP.h"
 #include "Group.h"
 #include "GroupP.h"
+#include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"
 #include "TransactionP.h"
@@ -527,7 +524,7 @@ xaccSplitAssign (Split *split)
     * be using the policy as specified by the account. i.e.
     * we should be using split->acc->polcy as the function 
     */
-   return PolicyAssignSplit (split, FIFOPolicy, NULL);
+   return PolicyAssignSplit (split, FIFOPolicyGetLot, NULL);
 }
 
 /* ============================================================== */
@@ -609,7 +606,7 @@ xaccSplitComputeCapGains(Split *split, Account *gain_acc)
    FIFOPolicyGetLotOpening (lot, &opening_amount, &opening_value,
        &opening_currency, NULL);
 
-   if (FIFOPolicyIsOpeningSplit (lot, split))
+   if (FIFOPolicyIsOpeningSplit (lot, split, NULL))
    {
 #if MOVE_THIS_TO_A_DATA_INTEGRITY_SCRUBBER 
       /* Check to make sure that this opening split doesn't 
@@ -827,60 +824,6 @@ xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc)
       Split *s = node->data;
       xaccSplitComputeCapGains (s, gain_acc);
    }
-}
-
-/* ============================================================== */
-
-void 
-xaccScrubLot (GNCLot *lot)
-{
-  gnc_numeric lot_baln;
-  if (!lot) return;
-  ENTER (" ");
-
-  xaccAccountBeginEdit(lot->account);
-  xaccScrubMergeLotSubSplits (lot);
-
-  /* If the lot balance is zero, we don't need to rebalance */
-  lot_baln = gnc_lot_get_balance (lot);
-  if (! gnc_numeric_zero_p (lot_baln))
-  {
-    SplitList *node;
-    gnc_numeric opening_baln;
-
-    /* Get the opening balance for this lot */
-    FIFOPolicyGetLotOpening (lot, &opening_baln, NULL, NULL, NULL);
-
-    /* If the lot is fat, give the boot to all the non-opening 
-     * splits, and refill it */
-    if ( (gnc_numeric_negative_p(opening_baln) ||
-          gnc_numeric_negative_p(lot_baln)) &&
-         (gnc_numeric_positive_p(opening_baln) ||
-          gnc_numeric_positive_p(lot_baln)))
-    {
-rethin:
-      for (node=lot->splits; node; node=node->next)
-      {
-        Split *s = node->data;
-        if (FIFOPolicyIsOpeningSplit (lot, s)) continue;
-        gnc_lot_remove_split (lot, s);
-        goto rethin;
-      }
-    }
-
-    /* At this point the lot is thin, so try to fill it */
-    xaccLotFill (lot);
-
-    /* Make sure there are no subsplits. */
-    xaccScrubMergeLotSubSplits (lot);
-  }
-
-  /* Now re-compute cap gains, and then double-check that. */
-  xaccLotComputeCapGains (lot, NULL);
-  xaccLotScrubDoubleBalance (lot);
-  xaccAccountCommitEdit(lot->account);
-
-  LEAVE (" ");
 }
 
 /* =========================== END OF FILE ======================= */

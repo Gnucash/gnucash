@@ -71,5 +71,15 @@ gboolean xaccScrubMergeSubSplits (Split *split);
 gboolean xaccScrubMergeTransSubSplits (Transaction *txn);
 gboolean xaccScrubMergeLotSubSplits (GNCLot *lot);
 
+/** The xaccScrubLot() routine makes sure that the indicated lot is
+ *    self-consistent and properly balanced, and fixes it if its not.
+ *    This is an important routine to call if the amount of any split
+ *    in the lot is changed.  That's because (obviously) changing 
+ *    split values is gaurenteed to throw off lot balances.
+ *    This routine may end up closing the lot, or at least trying
+ *    to. It will also cause cap gains to be recomputed.
+ */
+void xaccScrubLot (GNCLot *lot);
+
 #endif /* XACC_SCRUB3_H */
 /** @} */

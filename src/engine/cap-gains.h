@@ -44,6 +44,7 @@
 #define XACC_CAP_GAINS_H
 
 #include "gnc-engine.h"
+#include "gnc-numeric.h"
 
 /** The xaccSplitGetCapGains() method returns the value of 
  *    capital gains (if any) associated with the indicated 
