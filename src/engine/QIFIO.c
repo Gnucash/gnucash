@@ -28,7 +28,6 @@
 \********************************************************************/
 
 /* hack alert -- stocks probably not handled correctly
- * this stuff still needs work 
  * also, check out a stock split tooo
  */
 
@@ -51,6 +50,11 @@
 #define RFLAGS  O_RDONLY
 
 /** GLOBALS *********************************************************/
+
+/* XXX hack alert -- this default currency should be made configurable
+ * somewhere, somehow, somewhen
+ */
+static char *gnc_qif_import_currency = "USD";
 
 static int          error_code=0; /* error code, if error occurred */
 
@@ -330,7 +334,7 @@ char * xaccReadQIFAccList (int fd, AccountGroup *grp, int cat)
    if (!grp) return 0x0;
    do { 
       acc = xaccMallocAccount();
-      xaccAccountSetCurrency (acc, "USD");
+      xaccAccountSetCurrency (acc, gnc_qif_import_currency);
       if (cat) { 
          qifline = xaccReadQIFCategory (fd, acc);
       } else {
@@ -502,7 +506,7 @@ GetSubQIFAccount (AccountGroup *rootgrp, char *qifline, int acc_type)
       xaccAccountSetName (xfer_acc, qifline);
       xaccAccountSetDescription (xfer_acc, "");
       xaccAccountSetNotes (xfer_acc, "");
-      xaccAccountSetCurrency (xfer_acc, "USD");
+      xaccAccountSetCurrency (xfer_acc, gnc_qif_import_currency);
 
       if (0 > acc_type) acc_type = GuessAccountType (qifline);
       xaccAccountSetType (xfer_acc, acc_type);
@@ -588,7 +592,7 @@ xaccGetSecurityQIFAccount (Account *acc, char *qifline)
       xaccAccountSetName (xfer_acc, qifline);
       xaccAccountSetDescription (xfer_acc, "");
       xaccAccountSetNotes (xfer_acc, "");
-      xaccAccountSetCurrency (xfer_acc, "USD");
+      xaccAccountSetCurrency (xfer_acc, gnc_qif_import_currency);
 
       xaccAccountSetType (xfer_acc, STOCK);
       xaccInsertSubAccount (acc, xfer_acc);
@@ -1019,7 +1023,7 @@ xaccReadQIFAccountGroup( char *datafile )
         Account * acc = xaccMallocAccount();
         xaccAccountSetType (acc, typo);
         xaccAccountSetName (acc, name);
-        xaccAccountSetCurrency (acc, "USD");
+        xaccAccountSetCurrency (acc, gnc_qif_import_currency);
 
         xaccGroupInsertAccount( grp, acc );
         qifline = xaccReadQIFTransList (fd, acc, &bogus_acc_name);
@@ -1076,7 +1080,7 @@ xaccReadQIFAccountGroup( char *datafile )
            int guess_acc_name = 0;
 
            DEBUG ("got account\n");
-           xaccAccountSetCurrency (acc, "USD");
+           xaccAccountSetCurrency (acc, gnc_qif_import_currency);
            qifline = xaccReadQIFAccount (fd, acc);
            if (!qifline) {  /* free up malloced data if the read bombed. */
               xaccFreeAccount(acc); 
