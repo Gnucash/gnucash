@@ -55,6 +55,8 @@ gnome: default ${GNOME_OBJS}
 
 motif: default
 
+qt: default
+
 SWIG_FILTER    := %P.h %/util.h
 
 SWIG_ENGINE_HDRS := \
