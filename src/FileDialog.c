@@ -358,9 +358,6 @@ gncPostFileOpen (const char * filename)
   /* close up the old file session (if any) */
   current_book = new_book;
 
-  gnc_engine_resume_events ();
-  gnc_gui_refresh_all ();
-
   /* --------------- END CORE SESSION CODE -------------- */
 
   /* clean up old stuff, and then we're outta here. */
@@ -376,6 +373,9 @@ gncPostFileOpen (const char * filename)
   }
 
   g_free (newfile);
+
+  gnc_engine_resume_events ();
+  gnc_gui_refresh_all ();
 }
 
 /* ======================================================== */
