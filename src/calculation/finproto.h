@@ -109,8 +109,6 @@ void                     Amortization_free(
 /*==================================================*/
 /* expression_parser.c */
 
-typedef struct parser_env *parser_env_ptr;
-
 /* Line Number: 377 */
 void                     exit_parser(parser_env_ptr pe);
 /* Line Number: 400 */

@@ -68,13 +68,11 @@ typedef struct var_store {
 } var_store;
 
 
-/* The following structure is used for the numeric operations involving double float
- * and integer arithmetic
- */
+/* The following structure is used for the numeric operations
+ * involving double float and integer arithmetic */
 
-/* structure used for storing numeric values - used by routines which evaluate
- * arithmetic operators '+', '-', '/', '*'
- */
+/* structure used for storing numeric values - used by routines which
+ * evaluate arithmetic operators '+', '-', '/', '*' */
 typedef struct numeric *numeric_ptr;
 typedef struct numeric {
     unsigned char  type;            /* designates type of value                  */
@@ -85,11 +83,10 @@ typedef struct numeric {
 } numeric;
 
 /* The following structures are used by the amortization functions for
- * storing amortization schedule information
- */
+ * storing amortization schedule information */
 
-/* structure used by amortization routines for storing annual summary information
- */
+/* structure used by amortization routines for storing annual summary
+ information */
 typedef struct yearly_summary *yearly_summary_ptr;
 typedef struct yearly_summary {
 	unsigned year;
@@ -97,8 +94,8 @@ typedef struct yearly_summary {
 	double   end_balance;
 }yearly_summary;
 
-/* structure used by amortization routines for storing information on a single payment
- */
+/* structure used by amortization routines for storing information on
+ a single payment */
 typedef struct sched_pmt *sched_pmt_ptr;
 typedef struct sched_pmt {
 	unsigned period_num;
@@ -109,9 +106,8 @@ typedef struct sched_pmt {
 	double	 balance;
 } sched_pmt;
 
-/* structure used by amortization routines for storing information on payments for a single
- * year
- */
+/* structure used by amortization routines for storing information on
+ * payments for a single year */
 typedef struct amort_sched_yr *amort_sched_yr_ptr;
 typedef struct amort_sched_yr {
 	unsigned           year;
@@ -125,13 +121,12 @@ typedef struct amort_sched_yr {
 	amort_sched_yr_ptr next_yr;
 } amort_sched_yr;
 
-/* structure used by amortization routines for passing and storing infomation on
- * a particular amortization transaction
- */
+/* structure used by amortization routines for passing and storing
+ * infomation on a particular amortization transaction */
 typedef struct amort_sched *amort_sched_ptr;
 typedef struct amort_sched {
-/* following information set by function calling amortization functions
-*/
+/* following information set by function calling amortization
+functions */
 	unsigned       n;           /* number of periods                        */
 	double         nint;        /* nominal interest rate                    */
 	double         pv;          /* present value                            */
@@ -188,12 +183,11 @@ typedef struct amort_sched {
 	} schedule;
 } amort_sched;
 
-/* The following structure is used to hold all of the financial variables
- * used by the financial calculator
- */
+/* The following structure is used to hold all of the financial
+ * variables used by the financial calculator */
 
-/* structure used by financial computation routines to store financial variables
- */
+/* structure used by financial computation routines to store financial
+ variables */
 typedef struct financial_info *fi_ptr;
 typedef struct financial_info {
     double ir;          /* interest rate            */
@@ -220,3 +214,4 @@ typedef struct financial_info {
     unsigned prec;
 } financial_info;
 
+typedef struct parser_env *parser_env_ptr;
