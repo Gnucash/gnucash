@@ -42,7 +42,6 @@ app-utils                   utils for the gnucash app framework (component
                             mgr, cmd line processing, gettext stuff, etc)
 
 app-file                    application-level file handling
-app-file-gnome              gnome-specific application-level file handling
 
 gnome-utils                 Extensions and utilities for using Gnome/Gtk
                             with GnuCash, including new widgets.

@@ -10,13 +10,13 @@ SUBDIRS = \
   tax \
   app-utils \
   gnome-utils \
+  guile \
   gnome \
   app-file \
   register \
   import-export \
   report \
   experimental \
-  guile \
   scm \
   quotes \
   pixmaps \
