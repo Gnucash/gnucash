@@ -1,3 +1,8 @@
+2001-06-02  Christian Stimming  <stimming@tuhh.de>
+
+	* po/gnc-glossary.txt: Updated glossary, 15 new terms, and lots of
+	explanations. Feedback welcome.
+
 2001-06-02  Dave Peticolas  <dave@krondo.com>
 
 	* src/register/gnome/gnucash-date-picker.c (gnc_date_picker_new):
