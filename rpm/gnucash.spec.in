@@ -23,7 +23,7 @@ double-entry accounting principles to ensure balanced books.
 
 
 %build
-./configure --prefix=/usr --sysconfdir=/etc
+./configure --prefix=/usr --sysconfdir=/etc --enable-sql
 make
 
 
