@@ -152,6 +152,8 @@ GUIDs can be efficiently encoded in a string representation.
 @menu
 * When to use GUIDs::           
 * GUID Types::                  
+* How to use GUIDs::            
+* GUIDs and GnuCash Entities::  
 * The GUID Generator::          
 @end menu
 
@@ -178,7 +180,7 @@ be deleted in between accesses to the saved reference.
 @end itemize
 
 
-@node GUID Types, The GUID Generator, When to use GUIDs, Globally Unique Identifiers
+@node GUID Types, How to use GUIDs, When to use GUIDs, Globally Unique Identifiers
 @subsection GUID Types
 @tindex GNCIdType
 
@@ -214,11 +216,90 @@ Return a GUID which is guaranteed to always have type @code{GNC_ID_NULL}.
 @end deftypefun
 
 
-@c @node Manipulating GUIDs
-@c @subsection Manipulating GUIDs
+@node How to use GUIDs, GUIDs and GnuCash Entities, GUID Types, Globally Unique Identifiers
+@subsection How to use GUIDs
+
+The Engine API functions which access the GUID for a specific entity
+return a pointer to the GUID. @strong{Note:} Do not store the pointer
+itself! Instead, store a copy of the GUID. Storing the pointer itself
+would present some of the same problems as using the account pointer
+directly. Example:
+
+@example
+@{
+  GUID saved_guid;
+  Account *account;
+
+  account = < something to get an Account pointer >
+
+  saved_guid = *xaccAccountGetGuid(account);
+
+  ...
+
+  account = xaccAccountLookup(&saved_guid);
+
+  ...
+@}
+@end example
+
+You can compare two GUIDs for equality with the following function.
+
+@deftypefun gboolean guid_equal(const GUID * @var{guid_1}, const GUID * @var{guid_2})
+Compare two guids and return TRUE if they are both non-NULL and equal.
+@end deftypefun
 
 
-@node The GUID Generator,  , GUID Types, Globally Unique Identifiers
+You can encode and decode GUIDs and their string representations using the
+next two functions.
+
+@deftypefun {char *} guid_to_string(const GUID * @var{guid})
+Return a null-terminated string encoding of @var{guid}. String encodings
+of identifiers are hex numbers printed only with the characters @code{0}
+through @code{9} and @code{a} through @code{f}.  The encoding will
+always be @code{GUID_ENCODING_LENGTH} characters long. The returned
+string should be freed when no longer needed.
+@end deftypefun
+
+@deftypefun gboolean string_to_guid(const char * @var{string}, GUID * @var{guid})
+Given a string, decode an id into @var{guid} if @var{guid} is
+non-NULL. The function returns TRUE if the string was a valid 32
+character hexadecimal number. This function accepts both upper and lower
+case hex digits. If the return value is FALSE, the effect on @var{guid}
+is undefined.
+@end deftypefun
+
+
+@node GUIDs and GnuCash Entities, The GUID Generator, How to use GUIDs, Globally Unique Identifiers
+@subsection GUIDs and GnuCash Entities
+
+This section documents a low-level API for associating entities with
+GUIDs. User code and general engine code should not use this API;
+instead use the API documented in the sections for the specific GnuCash
+entities such as Accounts and Transactions.
+
+@deftypefun void xaccGUIDNew(GUID * @var{guid})
+Generate a new guid. This function is guaranteed to return a guid that
+is unique within the scope of all GnuCash entities being managed by the
+the current invocation of GnuCash. GnuCash routines should always use
+this function and not @code{guid_new}!
+@end deftypefun
+
+@deftypefun {void *} xaccLookupEntity(const GUID * @var{guid}, GNCIdType @var{entity_type})
+Lookup an entity given an id and a type. If there is no entity
+associated with the id, or if it has a different type, NULL is returned.
+@end deftypefun
+
+@deftypefun void xaccStoreEntity(void * @var{entity}, const GUID * @var{guid}, GNCIdType entity_type)
+Store the given entity under the given id with the given type.
+@end deftypefun
+
+@deftypefun void xaccRemoveEntity(const GUID * @var{guid})
+Remove any existing association between an entity and the given id. The
+entity is not changed in any way.
+@end deftypefun
+
+
+@node The GUID Generator,  , GUIDs and GnuCash Entities, Globally Unique Identifiers
 @subsection The GUID Generator
 @cindex The GUID Generator
 

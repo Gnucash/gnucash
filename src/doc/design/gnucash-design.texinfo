@@ -90,6 +90,8 @@ Globally Unique Identifiers
 
 * When to use GUIDs::           
 * GUID Types::                  
+* How to use GUIDs::            
+* GUIDs and GnuCash Entities::  
 * The GUID Generator::          
 
 Key-Value Pair Frames
