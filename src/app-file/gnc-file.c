@@ -812,6 +812,10 @@ gnc_file_save_as (void)
   qof_session_destroy (session);
   session = NULL;
 
+  /* XXX At this point, we should really mark the data in the new session
+   * as being 'dirty', since we haven't saved it at all under the new
+   * session. But I'm lazy...
+   */
   qof_session_set_current_session(new_session);
 
   /* --------------- END CORE SESSION CODE -------------- */
