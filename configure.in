@@ -44,7 +44,7 @@ AC_SUBST(x_libraries)
 LIBS="-lXm -lXmu -lXt -lXext $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
 AC_CHECK_LIB(Xpm, XpmReadFileToXpmImage,
         AC_DEFINE(HAVE_XPM,1) LIBS="-lXpm $LIBS",
-        AC_DEFINE(HAVE_XPM,0) )
+        AC_DEFINE(HAVE_XPM,0), -L $x_libraries)
 AC_SUBST(LIBS)
 
 AC_CONFIG_HEADER(config.h)
