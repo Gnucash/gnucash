@@ -396,7 +396,6 @@ sxftd_delete(SXFromTransInfo *sxfti, gboolean delete_sx)
 {
 
   /* FIXME: do we need to clean up the GladeXML pointer ?*/
-
   gnome_dialog_close( GNOME_DIALOG(sxfti->dialog));
 
   if(sxfti->sx && delete_sx)
@@ -468,28 +467,28 @@ sxftd_cancel_clicked(GtkWidget *w, gpointer user_data)
 static void
 sxftd_advanced_clicked(GtkWidget *w, gpointer user_data)
 {
-   SXFromTransInfo *sxfti = user_data;
+  SXFromTransInfo *sxfti = user_data;
   guint sx_error = sxftd_compute_sx(sxfti);
   SchedXactionDialog *adv_dlg;
   SchedXactionEditorDialog *adv_edit_dlg;
 
-  if (sx_error == 0)
+  if (sx_error != 0)
   {
-    adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
-    adv_edit_dlg = gnc_ui_scheduled_xaction_editor_dialog_create(adv_dlg, 
-								 sxfti->sx, 1);
-    
+    PWARN( "something bad happened in sxftd_compute_sx" );
+    return;
   }
+  gtk_widget_hide( sxfti->dialog );
+  /* force a gui update. */
+  while (g_main_iteration(FALSE));
 
-  else
-  {
-    PWARN("something bad happened in sxftd_compute_sx");
-  }
-
-  return;
+  adv_dlg = gnc_ui_scheduled_xaction_dialog_create();
+  adv_edit_dlg = gnc_ui_scheduled_xaction_editor_dialog_create(adv_dlg, 
+                                                               sxfti->sx, 1);
+  /* close ourself, since advanced editing entails us, and there are sync
+   * issues otherwise. */
+  sxftd_delete(sxfti, FALSE);
 }
 
-  
 void
 gnc_sx_create_from_trans(Transaction *trans)
 {

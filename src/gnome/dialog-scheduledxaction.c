@@ -558,7 +558,6 @@ gnc_ui_scheduled_xaction_dialog_create(void)
 
         sxd = g_new0( SchedXactionDialog, 1 );
 
-        /* sxd->dialog = create_Scheduled_Transaction_List(); */
         sxd->gxml = gnc_glade_xml_new( "sched-xact.glade", SX_LIST_GLADE_NAME );
         sxd->dialog = glade_xml_get_widget( sxd->gxml, SX_LIST_GLADE_NAME );
 
@@ -729,7 +728,6 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         sxed = g_new0( SchedXactionEditorDialog, 1 );
 
-        /* sxed->dialog = create_Scheduled_Transaction_Editor(); */
         sxed->gxml = gnc_glade_xml_new( "sched-xact.glade",
                                         SX_EDITOR_GLADE_NAME );
         sxed->dialog = glade_xml_get_widget( sxed->gxml, SX_EDITOR_GLADE_NAME );
@@ -1129,21 +1127,21 @@ edit_button_clicked( GtkButton *b, gpointer d )
         }
 }
 
-static
-void
+static void
 delete_button_clicked( GtkButton *b, gpointer d )
 {
         GNCBook *book;
         GtkCList *cl;
-        GList *sel, *sxList;
+        GList *sel, *sxList, *beingEditedList, *l;
         SchedXactionDialog *sxd;
-        GnomeDialog *confirmDlg;
-        GtkLabel *dlgMsgLbl;
-        static char *confirmMessage =
-                "Delete the selected scheduled transactions?";
-        int confirmSel;
-        GString *realMsg;
+        char *beingEditedMessage =
+          _( "The following transactions are presently being edited;\n"
+             "are you sure you want to delete them?" );
+        char *confirmMessage =
+          _( "Delete the selected Scheduled Transactions?" );
+        GString  *realConfDelOpenMsg, *realConfDeleteMsg;
         SchedXaction *sx;
+        gboolean destroyOpenedResult = FALSE;
 
         sxd = (SchedXactionDialog*)d;
 
@@ -1154,29 +1152,59 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 return;
         }
 
-        realMsg = g_string_new( confirmMessage );
-        do {
+        realConfDeleteMsg = g_string_new( confirmMessage );
+        realConfDelOpenMsg = g_string_new( beingEditedMessage );
+        beingEditedList = NULL;
+        for ( ; sel ; sel = sel->next ) {
                 sx = gtk_clist_get_row_data( cl, (int)sel->data );
-                g_string_sprintfa( realMsg, "\n\"%s\"", xaccSchedXactionGetName( sx ) );
-        } while ( (sel = g_list_next(sel)) );
+                g_string_sprintfa( realConfDeleteMsg, "\n\"%s\"",
+                                   xaccSchedXactionGetName( sx ) );
+                if ( (l = gnc_find_gui_components( DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
+                                                   editor_component_sx_equality,
+                                                   sx )) ) {
+                        beingEditedList = g_list_append( beingEditedList, (gpointer)l );
+                        g_string_sprintfa( realConfDelOpenMsg, "\n\"%s\"",
+                                           xaccSchedXactionGetName( sx ) );
+                }
+        }
 
-        confirmDlg =
-                GNOME_DIALOG(gnome_dialog_new( "Confirm Delete",
-                                               GNOME_STOCK_BUTTON_YES,
-                                               GNOME_STOCK_BUTTON_NO,
-                                               NULL ));
-        dlgMsgLbl = GTK_LABEL(gtk_label_new( realMsg->str ));
-        gtk_box_pack_start( GTK_BOX( confirmDlg->vbox ),
-                            GTK_WIDGET(dlgMsgLbl), TRUE, TRUE, 0 );
-        gnome_dialog_set_parent( confirmDlg,
-                                 GTK_WINDOW(sxd->dialog) );
-        gtk_widget_show_all( GTK_WIDGET(confirmDlg) );
+        if ( g_list_length( beingEditedList ) > 0 ) {
+                /* Figure out the user's disposition [toward the opened
+                 * transactions], but if it's true, don't act on it until
+                 * they confirm they actually want to do the deletion
+                 * generically.  If it's false, cleanup and return. */
+                if ( ! (destroyOpenedResult =
+                        gnc_verify_dialog_parented( sxd->dialog,
+                                                    realConfDelOpenMsg->str,
+                                                    FALSE )) ) {
+                        for ( l = beingEditedList; l; l = l->next ) {
+                                g_list_free( (GList*)l->data );
+                        }
+                        g_list_free( beingEditedList );
+                        goto cleanupStrings;
+                        return; /* unreachable, but clearer. */
+                }
+        }
 
-        confirmSel = gnome_dialog_run_and_close( confirmDlg );
-        g_string_free( realMsg, TRUE );
+        if ( gnc_verify_dialog_parented( sxd->dialog,
+                                         realConfDeleteMsg->str,
+                                         FALSE ) ) {
+                /* Close the being-edited transactions. */
+                if ( destroyOpenedResult ) {
+                        GList *component;
+                        for ( l = beingEditedList; l; l = l->next ) {
+                                component = (GList*)l->data;
+                                /* FIXME: We'd like to force the cancellation
+                                 * of ledger/other changes, here. */
+                                editor_cancel_button_clicked( NULL,
+                                                              (SchedXactionEditorDialog*)component->
+                                                              data );
+                                g_list_free( component );
+                        }
+                        g_list_free( beingEditedList );
+                }
 
-        switch ( confirmSel ) {
-        case 0:
+                /* Now, actually do the deletions... */
                 sel = cl->selection;
                 book = gnc_get_current_book ();
                 sxList = gnc_book_get_schedxactions( book );
@@ -1192,12 +1220,11 @@ delete_button_clicked( GtkButton *b, gpointer d )
                 gtk_clist_clear( cl );
                 g_list_foreach( sxList, putSchedXactionInClist, sxd );
                 gtk_clist_thaw( cl );
-                break;
-        case 1:
-        default:
-                return;
-                break;
         }
+
+ cleanupStrings:
+        g_string_free( realConfDeleteMsg, TRUE );
+        g_string_free( realConfDelOpenMsg, TRUE );
 }
 
 static

@@ -1,5 +1,20 @@
 2002-04-21  Joshua Sled  <jsled@asynchronous.org>
 
+	* src/gnome/dialog-sx-from-trans.c (sxftd_advanced_clicked): Since
+	"Advanced..." editing completely entails the from-transaction
+	dialog, we close it if the user selects "Advanced..." to prevent
+	errors when the from-trans dialog is "Ok"'d.
+
+	* src/gnome/dialog-scheduledxaction.c (delete_button_clicked):
+	Better deletion confirmation checking; we now look for
+	being-edited scheduled transactions and confirm them specially
+	with the user to prevent inconsistencies from cropping up.
+
+	* src/doc/TODO-schedxactions: Updated; more 'X'-ed off items make
+	me happy.
+
+2002-04-21  Joshua Sled  <jsled@asynchronous.org>
+
 	* src/backend/file/sixtp.c (sixtp_parse_file): Explicitly create
 	an xmlParserCtxt and keep it in the sixtp_sax_data, so we can...
 	(sixtp_sax_start_handler): retain line/column numbers for stack

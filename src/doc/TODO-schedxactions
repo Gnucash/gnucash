@@ -101,7 +101,9 @@ X create a template register
 . SX list
   . add a big calendar [gnome-pim?  evo?] to SXaction List/overview
   . tab order
-  . "** CRITICAL **: file dialog-scheduledxaction.c: line 570 (row_select_handler): assertion `event' failed." when key-navigating sx list.
+  X "** CRITICAL **: file dialog-scheduledxaction.c: line 570
+    (row_select_handler): assertion `event' failed." when key-navigating sx
+    list.
 
 . SX editor
   . tab order
@@ -119,19 +121,21 @@ X create a template register
 
 . make-from-transaction
   . bugs
+    . number-of-instances in 'simple' results in "Warning:
+      sxftd_advanced_clicked: something bad happened in sxftd_compute_sx"
     . general: there's going to be all sorts of interaction issues like these
       between these things [SX-from-trans, SX list, SX editor] that should be
       handled.
-      . you can delete a freshly-from-trans'd SX from the list with the
-        from-trans dlg still open, then 'ok' the dlg to get a segfault.
-        . you can generally manipulate SXes into bad/weird states since both
-          dialogs are open.
       . creating a SX from trans with the SX list open does not update the SX
         list
-      . So since Advanced editing entails "Simple" editing, it should just
+      X you can delete a freshly-from-trans'd SX from the list with the
+        from-trans dlg still open, then 'ok' the dlg to get a segfault.
+        X you can generally manipulate SXes into bad/weird states since both
+          dialogs are open.
+      X So since Advanced editing entails "Simple" editing, it should just
         replace that window. Then, with some CM hookup between the List and
         the Editor, all is well.
-    . 20020419 - Wilddev manages to create two SXes from one; the first is
+    X 20020419 - Wilddev manages to create two SXes from one; the first is
       okay, but the second is h0rk3d [deleting it causes segfault, though it
       can be instantiated correctly].
   . tab-order
