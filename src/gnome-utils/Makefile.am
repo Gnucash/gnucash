@@ -50,6 +50,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-query-list.c \
   gncmod-gnome-utils.c \
   gtkselect.c \
+  misc-gnome-utils.c \
   print-session.c \
   search-param.c \
   window-help.c
@@ -85,6 +86,7 @@ gncinclude_HEADERS = \
   gnc-menu-extensions.h \
   gnc-query-list.h \
   gtkselect.h \
+  misc-gnome-utils.h \
   print-session.h \
   window-help.h
 
