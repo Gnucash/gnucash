@@ -45,13 +45,20 @@
 
 #include "Backend.h"
 #include "BackendP.h"
-#include "TransLog.h"
 #include "gnc-book-p.h"
 #include "gnc-event.h"
-#include "gnc-module.h"
 #include "gnc-session.h"
 #include "gnc-session-p.h"
 #include "gnc-trace.h"
+
+#ifdef GNUCASH
+#include "gnc-module.h"
+#include "TransLog.h"
+#else
+#define xaccLogSetBaseName(x)
+#define xaccLogEnable()
+#define xaccLogDisable()
+#endif /* GNUCASH */
 
 static GNCSession * current_session = NULL;
 static short module = MOD_IO;
@@ -270,7 +277,11 @@ gnc_session_int_backend_load_error(GNCSession *session,
 }
 
 
-/* FIXME : reinstate better error messages with gnc_module errors */
+#ifdef GNUCASH 
+
+/* Gnucash uses its module system to load a backend; other users
+ * use traditional dlopen calls.
+ */
 static void
 gnc_session_load_backend(GNCSession * session, char * backend_name)
 {
@@ -278,6 +289,7 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   Backend    *(* be_new_func)(void);
   char       * mod_name = g_strdup_printf("gnucash/backend/%s", backend_name);
 
+  /* FIXME : reinstate better error messages with gnc_module errors */
   ENTER (" ");
   /* FIXME: this needs to be smarter with version numbers. */
   /* FIXME: this should use dlopen(), instead of guile/scheme, 
@@ -316,6 +328,16 @@ gnc_session_load_backend(GNCSession * session, char * backend_name)
   g_free(mod_name);
   LEAVE (" ");
 }
+
+#else /* GNUCASH */
+
+static void
+gnc_session_load_backend(GNCSession * session, char * backend_name)
+{
+  ENTER (" ");
+  LEAVE (" ");
+}
+#endif /* GNUCASH */
 
 /* ====================================================================== */
 
