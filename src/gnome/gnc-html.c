@@ -333,12 +333,32 @@ gnc_html_load_to_stream(gnc_html * html, GtkHTMLStream * handle,
     fullurl = rebuild_url(type, location, label);
     
     ghttp_set_uri(html->request, fullurl);
-    ghttp_set_header(html->request, http_hdr_Connection, "close");
-    ghttp_clean(html->request);
+    // ghttp_set_header(html->request, http_hdr_Connection, "close");
+    ghttp_set_header(html->request, http_hdr_User_Agent, 
+           "gnucash/1.5 (Financial Browser for Linux; http://gnucash.org)");
+    // ghttp_clean(html->request);
     ghttp_prepare(html->request);
     ghttp_process(html->request);
 
     if(ghttp_get_body_len(html->request) > 0) {
+
+      {
+         /* hack alert  FIXME:
+          * This code tries to see if the returned body is
+          * in fact gnc xml code. If it seems to be, then we 
+          * load it as data, rather than loading it into the 
+          * gtkhtml widget.  My gut impression is that we should 
+          * probably be doing this somewhere else, not here ....
+          * But I can't think of another place for now. -- linas
+          */
+         const char * bufp = ghttp_get_body(html->request);
+         bufp += strspn (bufp, " /t/v/f/n/r");
+         if (!strncmp (bufp, "<?xml version", 13)) {
+            gncFileOpenFile ((char *) fullurl);
+            return;
+         } 
+      }
+
       gtk_html_write(GTK_HTML(html->html), handle, 
                      ghttp_get_body(html->request), 
                      ghttp_get_body_len(html->request));
