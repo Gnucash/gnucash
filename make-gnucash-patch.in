@@ -152,3 +152,4 @@ lib/g-wrap/*/Makefile.in
 src/guile/i18n.h
 make-gnucash-patch
 lib/g-wrap.configure
+rpm/gnucash.spec
