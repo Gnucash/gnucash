@@ -323,6 +323,8 @@ you'll need for the systems we know about:
   RedHat:
     ???
 
+  SuSE:
+    see doc/build-suse.txt
 
 GnuCash understands a few non-standard ./configure options.  You
 should run ./configure --help for the most up to date summary of the

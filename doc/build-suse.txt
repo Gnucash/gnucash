@@ -62,14 +62,16 @@ Let's go:
     su root -c "unzip -L /tmp/slib2c7"
 
 * Download g-wrap from
-    ftp://ftp.gnucash.org/pub/g-wrap/g-wrap-1.1.4..tar.gz
+    ftp://ftp.gnucash.org/pub/g-wrap/
+  For the 1.4.x version you need g-wrap-0.9.12.tar.gz,
+  for the 1.5.x version you need g-wrap-1.1.4.tar.gz or newer
   unpack and untar, then
   ./configure, make, su, make install
 
 * If you want to build the development version, download Guppi from
     ftp://ftp.gnome.org/pub/guppi/Guppi-0.35.2.tar.gz
   unpack and untar, then
-  ./configure, make, su, make install
+  ./configure --prefix=/opt/gnome, make, su, make install
   Guppi is not yet part of standard gnome distributions, but I expect it
   to become more common soon.
 
@@ -88,6 +90,10 @@ Let's go:
 * The lib directory contains packages that are needed to build GnuCash
   but are not widely available yet. Read the file lib/README for details.
 
+* Make symbolic link for every file in /opt/gnome/share/aclocal
+  to /usr/share/aclocal (or tell me how to modify the automake setup
+  so that it looks in /opt/gnome/share/aclocal for input ;-))
+
 * Configure, build and install gnucash. Installation must probably be
   done as root, the files go to various places in /usr/local.
 
@@ -99,6 +105,12 @@ Let's go:
 * You may need to run GnuCash once as root, because guile needs to set up
   some things for slib. Alternatively you can try as root:
     guile -c '(use-modules (ice-9 slib)) (require 'new-catalog)'
+
+* If want to send a patch, you need the makepatch perl module, which can
+  be found at:
+    ftp://ftp.cpan.org/pub/CPAN/authors/Johan_Vromans/makepatch-2.00a.tar.gz
+  unpack and untar, then
+  perl Makefile.PL, make, su, make install
 
 -------
 List of helix gnome packages:

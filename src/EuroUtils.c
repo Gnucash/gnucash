@@ -51,6 +51,7 @@ static gnc_euro_rate_struct _gnc_euro_rate_[] =
   { "FIM",  5.94573 },  /* finnmark */
   { "FMK",  5.94573 },  /* finnmark */
   { "FRF",  6.55957 },  /* french franc */
+  { "GRD",  340.750 },  /* greek drachma */
   { "HFL",  2.20371 },  /* netherland gulden */
   { "IEP",  .787564 },  /* irish pound */
   { "IRP",  .787564 },  /* irish pound */
