@@ -9,6 +9,7 @@
 (gnc:support "qif-objects.scm")
 (gnc:depend "simple-obj.scm")
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  qif-file class 
 ;;  radix-format : one of 'decimal 'comma or 'unspecified 
@@ -301,38 +302,51 @@
     self))
 
 (define (qif-xtn:reparse self qif-file)
-  ;; share price 
-  (if (string? (qif-xtn:share-price self))
-      (qif-xtn:set-share-price! 
-       self 
-       (qif-file:parse-value qif-file (qif-xtn:share-price self))))
+  (let ((reparse-ok #t))
+    ;; share price 
+    (if (string? (qif-xtn:share-price self))
+        (qif-xtn:set-share-price! 
+         self 
+         (qif-file:parse-value qif-file (qif-xtn:share-price self))))
+    
+    ;; number of shares 
+    (if (string? (qif-xtn:num-shares self))
+        (qif-xtn:set-num-shares! 
+         self 
+         (qif-file:parse-value qif-file (qif-xtn:num-shares self))))
+    
+    ;; adjustment 
+    (if (string? (qif-xtn:adjustment self))
+        (qif-xtn:set-adjustment! 
+         self 
+         (qif-file:parse-value qif-file (qif-xtn:adjustment self))))
+    
+    (if (or (string? (qif-xtn:share-price self))
+            (string? (qif-xtn:num-shares self))
+            (string? (qif-xtn:adjustment self)))
+        (set! reparse-ok #f))
 
-  ;; number of shares 
-  (if (string? (qif-xtn:num-shares self))
-      (qif-xtn:set-num-shares! 
-       self 
-       (qif-file:parse-value qif-file (qif-xtn:num-shares self))))
-  
-  ;; adjustment 
-  (if (string? (qif-xtn:adjustment self))
-      (qif-xtn:set-adjustment! 
-       self 
-       (qif-file:parse-value qif-file (qif-xtn:adjustment self))))
-  
-  ;; reparse the amount of each split 
-  (for-each 
-   (lambda (split)
-     (if (string? (qif-split:amount split))
-         (qif-split:set-amount! 
-          split 
-          (qif-file:parse-value qif-file (qif-split:amount split)))))
-   (qif-xtn:splits self))
-  
-  ;; reparse the date 
-  (if (string? (qif-xtn:date self))
-      (qif-xtn:set-date! self 
-                         (qif-file:parse-date qif-file 
-                                              (qif-xtn:date self)))))
+    ;; reparse the amount of each split 
+    (for-each 
+     (lambda (split)
+       (if (string? (qif-split:amount split))
+           (qif-split:set-amount! 
+            split 
+            (qif-file:parse-value qif-file (qif-split:amount split))))
+       (if (string? (qif-split:amount split))
+           (set! reparse-ok #f)))
+     
+     (qif-xtn:splits self))
+    
+    ;; reparse the date 
+    (if (string? (qif-xtn:date self))
+        (qif-xtn:set-date! self 
+                           (qif-file:parse-date qif-file 
+                                                (qif-xtn:date self))))
+    (if (string? (qif-xtn:date self))
+        (set! reparse-ok #f))
+
+    reparse-ok))
 
 (define (qif-xtn:print self)
   (simple-obj-print self <qif-xtn>))
@@ -386,7 +400,11 @@
 (define (qif-acct:reparse self file)
   (if (string? (qif-acct:limit self))
       (qif-acct:set-limit! 
-       self (qif-file:parse-value file (qif-acct:limit self)))))
+       self (qif-file:parse-value file (qif-acct:limit self))))
+  (if (or (string? (qif-acct:limit self))
+          (string? (qif-acct:type self)))
+      #f
+      #t))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -496,7 +514,11 @@
 
   (if (string? (qif-cat:budget-amt self))
       (qif-cat:set-budget-amt! 
-       self (qif-file:parse-value file (qif-cat:budget-amt self)))))
+       self (qif-file:parse-value file (qif-cat:budget-amt self))))
+
+  (if (or (string? (qif-cat:tax-rate self))
+          (string? (qif-cat:budget-amt self)))
+      #f #t))
 
 
 (define (qif-file:add-xtn! self xtn)

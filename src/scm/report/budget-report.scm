@@ -515,7 +515,3 @@
 	 budget-list)
 	(html-end-table)
 	(html-end-document))))))
-
-
-
-

@@ -207,7 +207,7 @@
                 (let ((gnc-xtn (gnc:transaction-create)))
                   (gnc:transaction-init gnc-xtn)
                   (gnc:transaction-begin-edit gnc-xtn 1) 
-
+                  
                   ;; destroy any automagic splits in the transaction
                   (let ((numsplits (gnc:transaction-get-split-count gnc-xtn)))
                     (if (not (eqv? 0 numsplits))
@@ -216,14 +216,14 @@
                            (gnc:transaction-get-split gnc-xtn ind))
                           (if (> ind 0)
                               (loop (- ind 1))))))
-
+                  
                   ;; build the transaction
                   (qif-import:qif-xtn-to-gnc-xtn 
                    xtn qif-file gnc-xtn gnc-acct-hash mapping-data)
                   
                   ;; rebalance and commit everything
                   (gnc:transaction-commit-edit gnc-xtn)))))
-
+        
         (qif-file:xtns qif-file)))
      sorted-qif-files-list)
     
@@ -241,6 +241,8 @@
 (define (qif-import:qif-xtn-to-gnc-xtn qif-xtn qif-file gnc-xtn 
                                        gnc-acct-hash mapping-data)
   (let ((splits (qif-xtn:splits qif-xtn))
+        (gnc-near-split (gnc:split-create))
+        (near-split-total 0)
         (qif-cat-map (caddr mapping-data))
         (qif-acct-map (cadr mapping-data))
         (near-acct-info #f)
@@ -257,19 +259,37 @@
 
     ;; find the GNC account for the near end of the transaction 
     ;; (all splits have the same near end)
-    (set! near-acct-info
-	  (hash-ref qif-acct-map 
-		    (if (qif-xtn:bank-xtn? qif-xtn)
-			(qif-file:account qif-file)
-			(qif-xtn:security-name qif-xtn))))
-    (set! near-acct-name (list-ref near-acct-info 1))
-    (set! near-acct (hash-ref gnc-acct-hash near-acct-name))
+    (if (qif-xtn:bank-xtn? qif-xtn)
+        (begin 
+          (set! near-acct-info
+                (hash-ref qif-acct-map 
+                          (qif-file:account qif-file)))
+          (set! near-acct-name 
+                (list-ref near-acct-info 1))
+          (set! near-acct (hash-ref gnc-acct-hash near-acct-name)))
+        (begin 
+          (set! near-acct-info 
+                (hash-ref qif-acct-map 
+                          (qif-xtn:security-name qif-xtn)))
+          (set! near-acct-name 
+                (list-ref near-acct-info 1))
+          (set! near-acct (hash-ref gnc-acct-hash near-acct-name))))
     
+    (if (qif-split:memo (car (qif-xtn:splits qif-xtn)))
+        (gnc:split-set-memo gnc-near-split 
+                            (qif-split:memo (car (qif-xtn:splits qif-xtn)))))
+    
+    (let ((cleared (qif-xtn:cleared qif-xtn)))
+      (cond ((eq? 'cleared cleared)
+             (gnc:split-set-reconcile gnc-near-split #\c))
+            ((eq? 'reconciled cleared)
+             (gnc:split-set-reconcile gnc-near-split #\r))))
+            
+        
     ;; iterate over QIF splits 
     (for-each 
      (lambda (qif-split)
-       (let ((gnc-near-split (gnc:split-create))
-             (gnc-far-split (gnc:split-create))
+       (let ((gnc-far-split (gnc:split-create))
              (far-acct-info #f)
              (far-acct-name #f)
              (far-acct-type #f)
@@ -281,19 +301,13 @@
          ;; fill the splits in (near first).  This handles files in
          ;; multiple currencies by pulling the currency value from the
          ;; file import.
-	 (if split-amt
-	     (begin
-	       (gnc:split-set-base-value gnc-near-split
-					 split-amt
-					 currency)
-	       (gnc:split-set-base-value gnc-far-split 
-					 (- split-amt)
-					 currency))
-	     (error "No amount in split!" qif-split "txn:" qif-xtn))
+         (set! near-split-total 
+               (+ near-split-total split-amt))
+         (gnc:split-set-base-value gnc-far-split 
+                                   (- split-amt) currency)
 
          (if memo
              (begin 
-               (gnc:split-set-memo gnc-near-split memo)
                (gnc:split-set-memo gnc-far-split memo)))
          
          ;; my guess is that you can't have Quicken splits 
@@ -304,15 +318,15 @@
                    (begin 
                      (display "qif-import:qif-xtn-to-gnc-xtn : ")
                      (display "splits in stock transaction!") (newline)))
-	       (let ((price          (qif-xtn:share-price qif-xtn)))
-               (gnc:split-set-share-price gnc-near-split price)
-               (gnc:split-set-share-price gnc-far-split price)))
+	       (let ((price (qif-xtn:share-price qif-xtn)))
+                 (gnc:split-set-share-price gnc-near-split price)
+                 (gnc:split-set-share-price gnc-far-split price)))
 	     (begin 
                (gnc:split-set-share-price gnc-near-split 1.0)
                (gnc:split-set-share-price gnc-far-split 1.0)))
          
          (if (qif-xtn:num-shares qif-xtn)
-             (let ((numshares              (qif-xtn:num-shares qif-xtn)))
+             (let ((numshares (qif-xtn:num-shares qif-xtn)))
                (if (> (length splits) 1) 
                    (begin 
                      (display "qif-import:qif-xtn-to-gnc-xtn : ")
@@ -355,13 +369,23 @@
                  (list-ref far-acct-info 1))
            (set! far-acct (hash-ref gnc-acct-hash far-acct-name))))
          
+         ;; set the reconcile status
+         (let ((cleared (qif-xtn:cleared qif-xtn)))
+           (cond ((eq? 'cleared cleared)
+                  (gnc:split-set-reconcile gnc-far-split #\c))
+                 ((eq? 'reconciled cleared)
+                  (gnc:split-set-reconcile gnc-far-split #\r))))
+         
          ;; finally, plug the splits into the accounts 
-         (gnc:transaction-append-split gnc-xtn gnc-near-split)
          (gnc:transaction-append-split gnc-xtn gnc-far-split)
-         (gnc:account-insert-split near-acct gnc-near-split)
-         (gnc:account-insert-split far-acct gnc-far-split)))
-     
+         (gnc:account-insert-split far-acct gnc-far-split)))     
      splits)
+    
+    (gnc:split-set-base-value gnc-near-split 
+                              near-split-total
+                              (qif-file:currency qif-file))
+    (gnc:transaction-append-split gnc-xtn gnc-near-split)
+    (gnc:account-insert-split near-acct gnc-near-split)
     
     ;; return the modified transaction (though it's ignored).
     gnc-xtn))

@@ -62,12 +62,12 @@
                         ((eq? qstate-type 'type:cat)
                          (set! current-xtn (make-qif-cat)))
                         ((eq? qstate-type 'account)
-                         (set! current-xtn (make-qif-acct)))
-                        (#t 
-                         (display "qif-file:read-file can't handle ")
-                         (write qstate-type)
-                         (display " transactions yet.")
-                         (newline))))
+                         (set! current-xtn (make-qif-acct)))))
+;                        (#t 
+;                         (display "qif-file:read-file can't handle ")
+;                         (write qstate-type)
+;                         (display " transactions yet.")
+;                         (newline))))
                  
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ;; account transactions 
@@ -140,7 +140,7 @@
                    ;; O : adjustment (stock transactions)
                    ((#\O)
                     (qif-xtn:set-adjustment! 
-                     current-xtn (qif-file:parse-value self value)))
+                     current-xtn (qif-file:parse-value/decimal self value)))
                    
                    ;; L : category 
                    ((#\L)
@@ -167,7 +167,9 @@
                     ;; what the $ signifies.  I'll do it later. 
                     (if (not (eq? qstate-type 'type:invst))
                         (qif-split:set-amount! 
-                         current-split (qif-file:parse-value self value))))
+                         current-split 
+                         (qif-file:parse-value/decimal self value))))
+                   
                    ;; ^ : end-of-record 
                    ((#\^)
                     (if (and (qif-xtn:date current-xtn)
@@ -181,7 +183,7 @@
                           (display "qif-file:read-file : discarding xtn")
                           (newline)
                           (qif-xtn:print current-xtn)))
-
+                    
                     (if (and first-xtn
                              (string? (qif-xtn:payee current-xtn))
                              (string=? (qif-xtn:payee current-xtn)
@@ -240,12 +242,8 @@
                     
                     (set! first-xtn #f)                    
                     (set! current-xtn (make-qif-xtn))
-                    (set! default-split (make-qif-split)))
-                   
-                   (else
-                    (display "qif-file:read-file : unknown Bank slot ")
-                    (display tag) 
-		    (newline))))
+                    (set! default-split (make-qif-split)))))
+                 
                  
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ;; Class transactions 
@@ -265,7 +263,6 @@
                    ;; end-of-record
                    ((#\^)
                     (qif-file:add-class! self current-xtn)
-;                    (qif-class:print current-xtn)
                     (set! current-xtn (make-qif-class)))
 
                    (else
@@ -290,7 +287,7 @@
                    
                    ((#\L)
                     (qif-acct:set-limit! 
-                     current-xtn (qif-file:parse-value self value)))
+                     current-xtn (qif-file:parse-value/decimal self value)))
 
                    ((#\^)
                     (qif-file:add-account! self current-xtn)
@@ -304,19 +301,20 @@
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                  ;; Category (Cat) transactions 
                  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                 
                  ((eq? qstate-type 'type:cat)
                   (case tag
                    ;; N : category name 
                    ((#\N)
                     (qif-cat:set-name! current-xtn 
                                        (qif-file:parse-string self value)))
-
+                   
                    ;; D : category description 
                    ((#\D)
                     (qif-cat:set-description! current-xtn 
-					      (qif-file:parse-string 
+                                              (qif-file:parse-string 
                                                self value)))
-
+                   
                    ;; E : is this a taxable category?
                    ((#\T)
                     (qif-cat:set-taxable! current-xtn #t))
@@ -333,12 +331,12 @@
                    ;; seems to be an integer)
                    ((#\R)
                     (qif-cat:set-tax-rate! 
-                     current-xtn (qif-file:parse-value self value)))
+                     current-xtn (qif-file:parse-value/decimal self value)))
                    
                    ;; B : budget amount.  not really supported. 
                    ((#\B)
                     (qif-cat:set-budget-amt! 
-                     current-xtn (qif-file:parse-value self value)))
+                     current-xtn (qif-file:parse-value/decimal self value)))
 
                    ;; end-of-record
                    ((#\^)
@@ -350,7 +348,7 @@
                     (display "qif-file:read-file : unknown Cat slot ")
                     (display tag) (newline))))
                  
-                 ;; trying to sneak on by, eh? 
+                 ;; trying to sneak one by, eh? 
                  (#t 
                   (if (not qstate-type)
                       (begin
@@ -368,7 +366,7 @@
               (if (and (not heinous-error)
                        (not (eof-object? line)))
                   (line-loop))))))
-  
+    
     (if (not heinous-error)
         (begin 
           ;; now that the file is read in, figure out if either 
@@ -394,23 +392,39 @@
           (if (eq? 'unknown (qif-file:account self))
               (qif-file:set-account! 
                self (qif-file:path-to-accountname self)))
-          
+
           ;; reparse values and dates if we figured out the format.
-          (for-each 
-           (lambda (xtn)
-             (qif-xtn:reparse xtn self))
-           (qif-file:xtns self))
-          
-          (for-each
-           (lambda (cat)
-             (qif-cat:reparse cat self))
-           (qif-file:cats self))
-          
-          (for-each
-           (lambda (acct)
-             (qif-acct:reparse acct self))
-           (qif-file:accounts self))
-          #t)
+          (let ((reparse-ok #t))
+            (for-each 
+             (lambda (xtn)
+               (set! reparse-ok 
+                     (and reparse-ok (qif-xtn:reparse xtn self))))
+             (qif-file:xtns self))
+            
+            (if (not reparse-ok)
+                (begin 
+                  (display "xtn reparse failed") (newline)))
+            
+            (for-each
+             (lambda (cat)
+               (set! reparse-ok 
+                     (and reparse-ok (qif-cat:reparse cat self))))
+             (qif-file:cats self))
+            
+            (if (not reparse-ok)
+                (begin 
+                  (display "cat reparse failed") (newline)))
+            
+            (for-each
+             (lambda (acct)
+               (set! reparse-ok 
+                     (and reparse-ok (qif-acct:reparse acct self))))
+             (qif-file:accounts self))
+            
+            (if (not reparse-ok)
+                (begin 
+                  (display "acct reparse failed") (newline)))            
+            reparse-ok))
         (begin 
           (display "There was a heinous error.  Failed to read file.")
           (newline)

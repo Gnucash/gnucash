@@ -126,7 +126,13 @@
       GNC-ASSET-TYPE)
      ((string=? mangled-string "oth l")
       GNC-LIABILITY-TYPE)
-     (#t read-value))))
+     ((string=? mangled-string "mutual")
+      GNC-MUTUAL-TYPE)
+     (#t
+      (display "qif-file:parse-acct-type : unhandled account type ")
+      (display read-value)
+      (display "... substituting Bank.")
+      GNC-BANK-TYPE))))
 
 (define (qif-file:state-to-account-type self qstate)
   (cond ((eq? qstate 'type:bank)
@@ -208,7 +214,7 @@
     (set! numeric-date-parts
           (map (lambda (elt)
                  (with-input-from-string elt
-					 (lambda () (read))))
+                   (lambda () (read))))
                date-parts))
     
     (cond 
@@ -349,29 +355,53 @@
 
   (string-remove-leading-space (string-remove-trailing-space str)))
 
+(define decimal-radix-regexp
+  (make-regexp 
+   "^-?[0-9]+$|^-?[0-9]?[0-9]?[0-9]?(,[0-9][0-9][0-9])*(\\.[0-9]*)?$"))
+
+(define comma-radix-regexp
+  (make-regexp 
+   "^-?[0-9]+$|^-?[0-9]?[0-9]?[0-9]?(\\.[0-9][0-9][0-9])*(,[0-9]*)?$"))
+
+(define (value-is-decimal-radix? value)
+  (if (regexp-exec decimal-radix-regexp value)
+      #t #f))
+
+(define (value-is-comma-radix? value)
+  (if (regexp-exec comma-radix-regexp value)
+      #t #f))
+
+
+(define (qif-file:parse-value/decimal self value-string)
+  (+ 0.0 
+     (with-input-from-string (string-remove-char value-string #\,)
+       (lambda () (read)))))
+
+
+(define (qif-file:parse-value/comma self value-string)
+  (+ 0.0 
+     (with-input-from-string 
+         (string-replace-char! (string-remove-char value-string #\.) 
+                               #\, #\.)
+       (lambda () (read)))))
+
 (define (qif-file:parse-value self value-string)
   (if (or (not (string? value-string))
           (not (> (string-length value-string) 0)))
-      (set! value-string "0"))
+      (set! value-string "0")
+      (set! value-string (string-remove-leading-space 
+                          (string-remove-trailing-space value-string))))
   
-  (let ((comma-index (string-rindex value-string #\,))
-        (decimal-index (string-rindex value-string #\.))
-        (comma-count (string-char-count value-string #\,))
-        (decimal-count (string-char-count value-string #\.)))
-
-    ;; if we don't know the radix format, it might be appropriate to
-    ;; guess.  guessed radix format doesn't affect parsing at all
-    ;; until you set the radix-format from the guessed-radix-format
-    ;; and call reparse-values on all the values.
-
+  (let ((possibly-comma-radix? (value-is-comma-radix? value-string))
+        (possibly-decimal-radix? (value-is-decimal-radix? value-string)))
+    
     (if (and (eq? (qif-file:radix-format self) 'unknown)
              (not (eq? (qif-file:guessed-radix-format self) 'inconsistent)))
         (cond 
          ;; already think it's decimal 
          ((eq? (qif-file:guessed-radix-format self) 'decimal)
-          (if (or (> decimal-count 1)
-                  (and decimal-index comma-index
-                       (> comma-index decimal-index)))
+          (if (and possibly-comma-radix? 
+                   (not possibly-decimal-radix?))
               (begin 
                 (qif-file:set-guessed-radix-format! self 'inconsistent)
                 (display "this QIF file has inconsistent radix notation!")
@@ -379,9 +409,8 @@
          
          ;; already think it's comma 
          ((eq? (qif-file:guessed-radix-format self) 'comma)
-          (if (or (> comma-count 1)
-                  (and decimal-index comma-index
-                       (> decimal-index comma-index)))
+          (if (and possibly-decimal-radix?
+                   (not possibly-comma-radix?))
               (begin 
                 (qif-file:set-guessed-radix-format! self 'inconsistent)
                 (display "this QIF file has inconsistent radix notation!")
@@ -389,86 +418,29 @@
          
          ;; don't know : look for numbers that are giveaways. 
          ((eq? (qif-file:guessed-radix-format self) 'unknown)
-          ;; case 1: there's a decimal and a comma, and the 
-          ;; decimal is to the right of the comma, and there's 
-          ;; only one decimal : it's a decimal number.
-          (if (and decimal-index comma-index 
-                   (> decimal-index comma-index)
-                   (eq? decimal-count 1))
-              (qif-file:set-guessed-radix-format! self 'decimal))
-
-          ;; case 2: the opposite. 
-          (if (and decimal-index comma-index 
-                   (> comma-index decimal-index)
-                   (eq? comma-count 1))
-              (qif-file:set-guessed-radix-format! self 'comma))
-
-          ;; case 3: there's no decimal and more than one comma:
-          ;; it's a decimal number.  I wish I had more transactions
-          ;; like this! 
-          (if (and (eq? decimal-count 0)
-                   (> comma-count 1))
-              (qif-file:set-guessed-radix-format! self 'decimal))
-          
-          ;; case 4: the opposite (no comma, multiple decimals)
-          (if (and (eq? comma-count 0)
-                   (> decimal-count 1))
-              (qif-file:set-guessed-radix-format! self 'comma))
-
-          ;; case 5: one decimal, no commas, and not-3 digits
-          ;; after it --> decimal.
-          (if (and (eq? comma-count 0)
-                   (eq? decimal-count 1)
-                   (not (eq? (- (string-length value-string)
-                                decimal-index)
-                             4)))
-              (qif-file:set-guessed-radix-format! self 'decimal))
-
-          ;; case 6: the opposite --> comma
-          (if (and (eq? comma-count 1)
-                   (eq? decimal-count 0)
-                   (not (eq? (- (string-length value-string)
-                                comma-index)
-                             4)))
-              (begin 
-                (display "hey!") (display comma-count) 
-                (display comma-index) (display (string-length value-string))
-                (newline)
-                (qif-file:set-guessed-radix-format! self 'comma))))))
-    
-    (cond
-     ;; decimal radix (US format)
-     ;; number can't have more than one ., and the rightmost 
-     ;; . must be to the right of the rightmost ,
-     ;; , are ignored otherwise
-     ((eq? 'decimal (qif-file:radix-format self))
-      (if (or (and decimal-count  
-                   (> decimal-count 1))
-              (and decimal-index comma-index
-                   (> comma-index decimal-index)))
-          (error "badly-formed decimal-radix number" value-string)
-          (+ 0.0 
-             (with-input-from-string (string-remove-char value-string #\,)
-               (lambda () (read))))))
-
-     ;; comma radix (German format)
-     ;; number can't have more than one , and the rightmost 
-     ;; , must be to the right of the rightmost .
-     ;; . are ignored otherwise.  Substitute . for , before 
-     ;; parsing. 
-     ((eq? 'comma (qif-file:radix-format self))
-      (if (or (and comma-count 
-                   (> comma-count 1))
-              (and decimal-index comma-index
-                   (> decimal-index comma-index)))
-          (error "badly formed comma-radix number" value-string)
-          (+ 0.0 
-             (with-input-from-string (string-replace-char!
-                                      (string-remove-char value-string #\.) 
-                                      #\, #\.)
-               (lambda () (read))))))
-     
-     ;; unknown radix - store the string and we can process it 
-     ;; later. 
-     (#t         
+          (cond ((and possibly-decimal-radix?
+                      (not possibly-comma-radix?))
+                 (qif-file:set-guessed-radix-format! self 'decimal))
+                ((and possibly-comma-radix? 
+                      (not possibly-decimal-radix?))
+                 (qif-file:set-guessed-radix-format! self 'comma))))))
+    (cond 
+     ((eq? (qif-file:radix-format self) 'decimal)
+      (if possibly-decimal-radix? 
+          (qif-file:parse-value/decimal self value-string)
+          (begin 
+            (display "Format is decimal-radix, but number is")
+            (write value-string)
+            (newline)
+            0.0)))
+     ((eq? (qif-file:radix-format self) 'comma)
+      (if possibly-comma-radix? 
+          (qif-file:parse-value/comma self value-string)
+          (begin 
+            (display "Format is comma-radix, but number is")
+            (write value-string)
+            (newline)
+            0.0)))
+     (#t 
       value-string))))
+        

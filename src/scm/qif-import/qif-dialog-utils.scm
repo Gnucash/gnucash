@@ -21,6 +21,7 @@
            (qif-acct:set-description! (list-ref old-map 5) new-descript))
           (#t 
            (list-set! old-map 5 new-descript)))))
+    
 
 ;; the account-display is a 3-columned list of accounts in the QIF
 ;; import dialog (the "Account" page of the notebook).  Column 1 is
@@ -31,7 +32,7 @@
 (define (qif-dialog:make-account-display qif-files gnc-acct-info) 
   (let ((acct-hash (make-hash-table 20))
         (retval '()))
-    
+
     ;; we want to make two passes here.  The first pass picks the
     ;; explicit Account descriptions and implicit "this" description
     ;; out of each file.  These are the best sources of info because
@@ -40,7 +41,7 @@
     ;; the transactions.  Hopefully we'll have most of the accounts
     ;; already located by that point.  Otherwise, we have to guess
     ;; them.
-    
+
     ;; guess-acct returns a list that's
     ;; (qif-name gnc-name gnc-type new-acct?)
     ;; acct-hash hashes QIF account name to a list that's composed of
@@ -60,7 +61,7 @@
                                        gnc-acct-info)
                 (list 0 acct)))))
         (qif-file:accounts file))
-       
+
        ;; then make an implicit account entry for the file
        (if (and (qif-file:account file)
                 (qif-file:account-type file))
@@ -84,7 +85,7 @@
                            (length (qif-file:xtns file)) 
                            #f)))))))
      qif-files)
-    
+
     ;; now make the second pass through the files, looking at the 
     ;; transactions.  Hopefully the accounts are all there already.
     ;; stock accounts can have both a category/account and another
@@ -151,14 +152,14 @@
 
     ;; sort by number of transactions with that account so the 
     ;; most important are at the top
-;    (set! retval (sort-list retval 
-;                            (lambda (a b)
-;                              (or 
-;                               (> (list-ref a 4) (list-ref b 4))
-;                               (and 
-;                                (eq? (list-ref a 4) (list-ref b 4))
-;                                (string<? (car a) (car b)))))))
-    retval))
+   (set! retval (sort retval 
+                      (lambda (a b)
+                        (or 
+                         (> (list-ref a 4) (list-ref b 4))
+                         (and 
+                          (eq? (list-ref a 4) (list-ref b 4))
+                          (string<? (car a) (car b)))))))
+   retval))
 
 
 ;; the category display is similar to the Account display.  
@@ -234,13 +235,13 @@
 
     ;; sort by number of transactions with that account so the 
     ;; most important are at the top
-;    (set! retval (sort-list retval 
-;                            (lambda (a b)
-;                              (or 
-;                               (> (list-ref a 4) (list-ref b 4))
-;                               (and 
-;                                (eq? (list-ref a 4) (list-ref b 4))
-;                                (string<? (car a) (car b)))))))
+    (set! retval (sort retval 
+                       (lambda (a b)
+                         (or 
+                          (> (list-ref a 4) (list-ref b 4))
+                          (and 
+                           (eq? (list-ref a 4) (list-ref b 4))
+                           (string<? (car a) (car b)))))))
     retval))
 
 
@@ -261,4 +262,3 @@
                #f
                file))
            list-of-files)))
-

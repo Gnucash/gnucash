@@ -38,7 +38,10 @@
         "")))
 
 (define (string-remove-char str char)
-  (let ((rexpstr (make-string 1 char)))
+  (let ((rexpstr 
+         (if (not (eq? char #\.))
+             (make-string 1 char)
+             "\\.")))
     (regexp-substitute/global #f rexpstr str 'pre 'post)))
 
 (define (string-char-count str char)
@@ -46,7 +49,10 @@
                          (string->list str))))
 
 (define (string-replace-char! str old new)
-  (let ((rexpstr (make-string 1 old))
+  (let ((rexpstr 
+         (if (not (eq? old #\.))
+             (make-string 1 old)
+             "\\."))
         (newstr (make-string 1 new)))
     (regexp-substitute/global #f rexpstr str 'pre newstr 'post)))
 
@@ -62,3 +68,4 @@
             (loop first-char))
           (set! parts (cons (substring str 0 last-char) parts))))    
     parts))
+

@@ -17,7 +17,6 @@
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")
-;  (gnc:depend "importqif.scm")
   (gnc:depend "report.scm")
   (gnc:depend "report/report-list.scm")
 

@@ -1,7 +1,7 @@
 How to install gnucash-1.3.0 on SuSE-6.3
 ========================================
 (written 2000-01-07 by Peter Pointner <peter@wuzel.m.isar.de>)
-(changed for gnucash-1.3.0 2000-03-01 by Herbert Thoma (tma@iis.fhg.de))
+(changed for gnucash-1.3.x 2000-03-01 by Herbert Thoma (tma@iis.fhg.de))
 
 Notes:
 
@@ -13,6 +13,8 @@ Notes:
 - This is definitely for SuSE 6.3 (Intel). Earlier SuSE distributions
   lack some required packages. Later SuSE distributions didn't exist
   at the time of writing.
+  NOTE: You can install new packages to older versions of SuSE from
+        CD or ftp.suse.de or ftp.suse.com
 
 Let's go:
 
@@ -22,7 +24,7 @@ Let's go:
 
 * Install the following packages:
   + from series d
-       eperl  guile  nana  swig  xmhtml  xmhtmld
+       eperl  guile  nana  swig  xmhtml  xmhtmld gettext
     and optionally
        autoconf  automake  libtool
     (You must install libtool if you have autoconf/automake
@@ -33,6 +35,8 @@ Let's go:
        lesstiff  lesstifd
   + from series gnm
        gnlibs gnlibsd
+  + from series gra
+       imlib imlibdev
 
 * Download slib from
     ftp://ftp.gnu.org/pub/gnu/jacal/slib2c7.zip
@@ -58,3 +62,6 @@ Let's go:
     make gnome    for gnome version (recommended)  or
     make qt       for qt/KDE version (pre alpha, may even not compile)
     su root -c "make install"
+
+* You may need to run GnuCash once as root, because guile needs to set up
+  some things for slib.
