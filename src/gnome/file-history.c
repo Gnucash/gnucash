@@ -138,6 +138,21 @@ gnc_history_add_file(const char *newfile)
   history_list = new_list;
 
   __gnc_history_config_write();
+
+  /* Update apps immediately */
+  {
+    GList *containers = gtk_container_get_toplevels ();
+  
+    while (containers)
+    {
+      GtkWidget *w = containers->data;
+
+      if (GNOME_IS_APP (w))
+        gnc_history_update_menu (GNOME_APP(w));
+
+      containers = containers->next;
+    }
+  }
 }
 
 const char *

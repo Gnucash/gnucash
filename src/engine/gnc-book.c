@@ -570,6 +570,9 @@ static gboolean
 gnc_book_begin_file (GNCBook *book, const char * filefrag,
                      gboolean ignore_lock)
 {
+  char *dirname;
+  char *p;
+
   ENTER (" filefrag=%s", filefrag ? filefrag : "(null)");
 
   /* Try to find or build an absolute file path */
@@ -580,6 +583,28 @@ gnc_book_begin_file (GNCBook *book, const char * filefrag,
     gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
     return FALSE;    /* ouch */
   }
+
+  /* Make sure the directory is there */
+
+  dirname = g_strdup (book->fullpath);
+  p = strrchr (dirname, '/');
+  if (p && p != dirname)
+  {
+    struct stat statbuf;
+    int rc;
+
+    *p = '\0';
+
+    rc = stat (dirname, &statbuf);
+    if (rc != 0 || !S_ISDIR(statbuf.st_mode))
+    {
+      gnc_book_push_error (book, ERR_FILEIO_FILE_NOT_FOUND, NULL);
+      g_free (book->fullpath); book->fullpath = NULL;
+      g_free (dirname);
+      return FALSE;
+    }
+  }
+  g_free (dirname);
 
   /* Store the sessionid URL also ... */
   book->book_id = g_strconcat ("file:", filefrag, NULL);
