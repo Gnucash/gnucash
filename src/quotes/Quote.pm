@@ -28,7 +28,7 @@ require 5.000;
 require Exporter;
 use strict;
 use vars qw($VERSION @EXPORT @ISA $YAHOO_URL $FIDELITY_GANDI_URL
-            $FIDELITY_GROWTH_URL);
+            $FIDELITY_GROWTH_URL $FIDELITY_CORPBOND_URL);
 
 use LWP::UserAgent;
 use HTTP::Request::Common;
@@ -39,6 +39,7 @@ $VERSION = '0.06';
 $YAHOO_URL = ("http://quote.yahoo.com/d?f=snl1d1t1c1p2va2bapomwerr1dyj1&s=");
 $FIDELITY_GANDI_URL = ("http://personal441.fidelity.com/gen/prices/gandi.csv");
 $FIDELITY_GROWTH_URL = ("http://personal441.fidelity.com/gen/prices/growth.csv");
+$FIDELITY_CORPBOND_URL = ("http://personal441.fidelity.com/gen/prices/corpbond.csv");
 
 # Don't export; let user invoke with Quote::getquote syntax.
 # @EXPORT = qw(&quote_yahoo);
@@ -91,9 +92,12 @@ sub fidelity {
                   "FEXPX", "FFTYX", "FLCSX", "FLPSX", "FMAGX", "FMCSX",
                   "FMILX", "FOCPX", "FSLCX", "FSLSX", "FTQGX", "FTRNX",
                   "FTXMX", );
-    my (%agandi, %agrowth);
+    my @corpbond = ("FAGIX", "SPHIX", "FTHRX", "FBNDX", "FSHBX", "FSIBX", 
+                    "FTBDX", "FSICX", "FTTAX", "FTTBX", "FTARX", );
+    my (%agandi, %agrowth, %acorpbond);
     my $dgandi=0;
     my $dgrowth=0;
+    my $dcorpbond=0;
 
     for (@gandi) { $agandi{$_} ++; }
     for (@growth) { $agrowth{$_} ++; }
@@ -111,6 +115,13 @@ sub fidelity {
           if (0 ==  $dgrowth ) {
              %cc = &fidelity_growth;
              $dgrowth = 1;
+             foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
+          }
+       }
+       if ($acorpbond {$_} ) {
+          if (0 ==  $dcorpbond ) {
+             %cc = &fidelity_corpbond;
+             $dcorpbond = 1;
              foreach $k (keys %cc) { $aa{$k} = $cc{$k}; }
           }
        }
@@ -142,6 +153,7 @@ sub fidelity_gandi {
         if ($sym) {
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
             $aa {$sym, "name"} = $q[0];
+            $aa {$sym, "number"} = $q[1];
             $aa {$sym, "nav"} = $q[3];
             $aa {$sym, "change"} = $q[4];
             $aa {$sym, "ask"} = $q[7];
@@ -175,6 +187,7 @@ sub fidelity_growth {
         if ($sym) {
             $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
             $aa {$sym, "name"} = $q[0];
+            $aa {$sym, "number"} = $q[1];
             $aa {$sym, "nav"} = $q[3];
             $aa {$sym, "change"} = $q[4];
             $aa {$sym, "ask"} = $q[7];
@@ -183,6 +196,42 @@ sub fidelity_growth {
     }
     return %aa;
 }
+
+# =======================================================================
+
+sub fidelity_corpbond {
+    my @symbols = @_;
+    my(@q,%aa,$ua,$url,$sym, $dayte);
+    my %days = ('Monday','Mon','Tuesday','Tue','Wednesday','Wed',
+                'Thursday','Thu','Friday','Fri','Saturday','Sat','Sunday','Sun');
+
+    # for Fidelity, we get them all. 
+    $url = $FIDELITY_CORPBOND_URL;
+    $ua = LWP::UserAgent->new;
+    foreach (split('\n',$ua->request(GET $url)->content)) {
+	@q = grep { s/^"?(.*?)\s*"?\s*$/$1/; } split(',');
+
+        # extract the date which is usually on the second line fo the file.
+        if (! defined ($dayte)) {
+           if ( $days {$q[0]} ) {          
+              $dayte = $q[1];
+           }
+        }
+        $sym = $q[2];
+        if ($sym) {
+            $aa {$sym, "exchange"} = "Fidelity";  # Fidelity
+            $aa {$sym, "name"} = $q[0];
+            $aa {$sym, "number"} = $q[1];
+            $aa {$sym, "nav"} = $q[3];
+            $aa {$sym, "change"} = $q[4];
+            $aa {$sym, "yield"} = $q[7];
+            $aa {$sym, "date"} = $dayte;
+        }
+    }
+    return %aa;
+}
+
+# =======================================================================
 
 __END__
 
