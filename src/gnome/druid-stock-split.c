@@ -183,7 +183,7 @@ refresh_details_page (StockSplitInfo *info)
   gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (info->distribution_edit),
                                   print_info);
   gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (info->distribution_edit),
-                                xaccAccountGetSecuritySCU (account));
+                                xaccAccountGetCommoditySCU (account));
 
   gnc_currency_edit_set_currency
     (GNC_CURRENCY_EDIT (info->price_currency_edit),

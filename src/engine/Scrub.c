@@ -212,11 +212,11 @@ xaccSplitScrub (Split *split)
   }
 
   if (!gnc_commodity_equiv (xaccAccountGetCurrency (account),
-                            xaccAccountGetEffectiveSecurity (account)))
+                            xaccAccountGetCommodity (account)))
     return;
 
   scu = MIN (xaccAccountGetCurrencySCU (account),
-             xaccAccountGetSecuritySCU (account));
+             xaccAccountGetCommoditySCU (account));
 
   value = xaccSplitGetValue (split);
 

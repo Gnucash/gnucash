@@ -213,8 +213,10 @@ const char *   xaccAccountGetNotes (Account *account);
  * split is a translation of the Split's 'damount' (which is the
  * amount of the Account's commodity involved) into the Transaction's
  * balancing currency.  */
-#define xaccAccountGetCommodity xaccAccountGetEffectiveSecurity
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
+gnc_commodity * xaccAccountGetCommodity (Account *account);
+int  xaccAccountGetCommoditySCU (Account *account);
+void xaccAccountSetCommoditySCU (Account *account, int frac);
 
 /* Soon-to-be-deprecated currency/security access routines.
  * The future API will associate only one thing with an account:
@@ -223,14 +225,10 @@ void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
 /* these two funcs take control of their gnc_commodity args. Don't free */
 void xaccAccountSetCurrency (Account *account, gnc_commodity *currency);
 void xaccAccountSetSecurity (Account *account, gnc_commodity *security);
-void xaccAccountSetCurrencySCU (Account *account, int frac);
-void xaccAccountSetSecuritySCU (Account *account, int frac);
-int  xaccAccountGetCurrencySCU (Account *account);
-int  xaccAccountGetSecuritySCU (Account *account);
-
 gnc_commodity * xaccAccountGetCurrency (Account *account);
 gnc_commodity * xaccAccountGetSecurity (Account *account);
-gnc_commodity * xaccAccountGetEffectiveSecurity (Account *account);
+void xaccAccountSetCurrencySCU (Account *account, int frac);
+int  xaccAccountGetCurrencySCU (Account *account);
 
 AccountGroup * xaccAccountGetChildren (Account *account);
 AccountGroup * xaccAccountGetParent (Account *account);

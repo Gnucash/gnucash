@@ -654,7 +654,7 @@ xaccAccountInsertSplit (Account *acc, Split *split)
   /* if the denominator can't be exactly converted, it's an error */
   /* FIXME : need to enforce ordering of insertion/value */
   split->damount = gnc_numeric_convert(split->damount, 
-                                       xaccAccountGetSecuritySCU(acc),
+                                       xaccAccountGetCommoditySCU(acc),
                                        GNC_RND_ROUND);
 
   split->value   = gnc_numeric_convert(split->value, 
@@ -1159,7 +1159,7 @@ update_split_currency(Account * acc)
                                    xaccAccountGetCurrencySCU(acc),
                                    GNC_RND_ROUND);
     s->damount = gnc_numeric_convert(s->damount,
-                                     xaccAccountGetSecuritySCU(acc),
+                                     xaccAccountGetCommoditySCU(acc),
 				     GNC_RND_ROUND);
   }
   xaccAccountCommitEdit(acc);
@@ -1260,7 +1260,7 @@ xaccAccountSetCurrencySCU (Account * acc, int scu) {
 }
 
 void
-xaccAccountSetSecuritySCU (Account *acc, int scu) {
+xaccAccountSetCommoditySCU (Account *acc, int scu) {
 
   if (!acc) return;
 
@@ -1280,7 +1280,7 @@ xaccAccountGetCurrencySCU (Account * acc) {
 }
 
 int
-xaccAccountGetSecuritySCU (Account * acc) {
+xaccAccountGetCommoditySCU (Account * acc) {
   if (!acc) return 0;
 
   if (acc->security == NULL)
@@ -1419,7 +1419,7 @@ xaccAccountGetCurrency (Account *acc)
 }
 
 gnc_commodity * 
-xaccAccountGetEffectiveSecurity (Account *acc)
+xaccAccountGetCommodity (Account *acc)
 {
   if (!acc) return NULL;
 

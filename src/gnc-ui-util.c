@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "Account.h"
 #include "EuroUtils.h"
 #include "FileDialog.h"
 #include "Group.h"
@@ -888,8 +889,8 @@ GNCPrintAmountInfo
 gnc_account_quantity_print_info (Account *account, gboolean use_symbol)
 {
     return gnc_account_print_info_helper(account, use_symbol,
-                                         xaccAccountGetEffectiveSecurity,
-                                         xaccAccountGetSecuritySCU);
+                                         xaccAccountGetCommodity,
+                                         xaccAccountGetCommoditySCU);
 }
 
 GNCPrintAmountInfo

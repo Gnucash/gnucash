@@ -442,7 +442,7 @@ get_currency_denom(Split * s)
 static int
 get_security_denom(Split * s) 
 {
-    return get_denom_internal(s, xaccAccountGetSecuritySCU);
+    return get_denom_internal(s, xaccAccountGetCommoditySCU);
 }
 
 /********************************************************************\
@@ -944,10 +944,10 @@ xaccSplitSetBaseValue (Split *s, gnc_numeric value,
   }
 
   currency = xaccAccountGetCurrency (xaccSplitGetAccount(s));
-  security = xaccAccountGetEffectiveSecurity (xaccSplitGetAccount(s));
+  security = xaccAccountGetCommodity (xaccSplitGetAccount(s));
 
   /* if the base_currency is the account currency, set the 
-   * value.  If it's the account security, set the damount. 
+   * value.  If it's the account commodity, set the damount. 
    * If both, set both. */
   if (gnc_commodity_equiv(currency, base_currency)) {
     if(gnc_commodity_equiv(security, base_currency)) {

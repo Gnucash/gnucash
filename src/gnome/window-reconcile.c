@@ -454,7 +454,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     if ((account_type == STOCK) || (account_type == MUTUAL) ||
         (account_type == CURRENCY))
       gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (end_value),
-                                    xaccAccountGetSecuritySCU (account));
+                                    xaccAccountGetCommoditySCU (account));
     else
       gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (end_value),
                                     xaccAccountGetCurrencySCU (account));

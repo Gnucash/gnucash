@@ -101,7 +101,7 @@ gnc_account_dom_tree_create(Account *act)
         xmlAddChild(ret, commodity_ref_to_dom_tree(act_security_string,
                                                 xaccAccountGetSecurity(act)));
         xmlAddChild(ret, int_to_dom_tree(act_security_scu_string,
-                                         xaccAccountGetSecuritySCU(act)));
+                                         xaccAccountGetCommoditySCU(act)));
     }
 
     if(xaccAccountGetSlots(act))
@@ -205,7 +205,7 @@ account_security_scu_handler (xmlNodePtr node, gpointer act)
 {
     gint64 val;
     dom_tree_to_integer(node, &val);
-    xaccAccountSetSecuritySCU((Account*)act, val);
+    xaccAccountSetCommoditySCU((Account*)act, val);
 
     return TRUE;
 }

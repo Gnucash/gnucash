@@ -604,7 +604,7 @@ gnc_split_get_quantity_denom (Split *split)
 {
   int denom;
 
-  denom = xaccAccountGetSecuritySCU (xaccSplitGetAccount (split));
+  denom = xaccAccountGetCommoditySCU (xaccSplitGetAccount (split));
   if (denom == 0)
   {
     gnc_commodity *commodity = gnc_locale_default_currency ();
@@ -629,7 +629,7 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
   if (account)
   {
     xaccSetPriceCellFraction (reg->sharesCell,
-                              xaccAccountGetSecuritySCU (account));
+                              xaccAccountGetCommoditySCU (account));
     xaccSetPriceCellFraction (reg->debitCell,
                               xaccAccountGetCurrencySCU (account));
     xaccSetPriceCellFraction (reg->creditCell,
@@ -3520,7 +3520,7 @@ get_trans_total_shares (SplitRegister *reg, Transaction *trans)
   if (!account)
     return total;
 
-  total = gnc_numeric_convert (total, xaccAccountGetSecuritySCU (account),
+  total = gnc_numeric_convert (total, xaccAccountGetCommoditySCU (account),
                                GNC_RND_ROUND);
 
   for (node = xaccTransGetSplitList (trans); node; node = node->next)
