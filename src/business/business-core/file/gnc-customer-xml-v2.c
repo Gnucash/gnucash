@@ -109,8 +109,9 @@ customer_dom_tree_create (GncCustomer *cust)
       xmlAddChild(ret, guid_to_dom_tree(cust_terms_string,
 					gncBillTermGetGUID (term)));
 
-    xmlAddChild(ret, int_to_dom_tree(cust_taxincluded_string,
-				     gncCustomerGetTaxIncluded (cust)));
+    xmlAddChild(ret, text_to_dom_tree(cust_taxincluded_string,
+				      gncTaxIncludedTypeToString (
+				     gncCustomerGetTaxIncluded (cust))));
 
     xmlAddChild(ret, int_to_dom_tree(cust_active_string,
 				     gncCustomerGetActive (cust)));
@@ -241,14 +242,18 @@ static gboolean
 customer_taxincluded_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata *pdata = cust_pdata;
-    gint64 val;
+    GncTaxIncluded type;
+    char *str;
     gboolean ret;
 
-    ret = dom_tree_to_integer(node, &val);
-    if (ret) {
-      if (!val) val = GNC_TAXINCLUDED_USEGLOBAL;
-      gncCustomerSetTaxIncluded(pdata->customer, (GncTaxIncluded)val);
-    }
+    str = dom_tree_to_text (node);
+    g_return_val_if_fail (str, FALSE);
+
+    ret = gncTaxIncludedStringToType (str, &type);
+    g_free (str);
+
+    if (ret)
+      gncCustomerSetTaxIncluded(pdata->customer, type);
 
     return ret;
 }

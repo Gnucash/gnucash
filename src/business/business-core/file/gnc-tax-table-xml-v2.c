@@ -92,8 +92,9 @@ ttentry_dom_tree_create (GncTaxTableEntry *entry)
   amount = gncTaxTableEntryGetAmount (entry);
   xmlAddChild (ret, gnc_numeric_to_dom_tree (ttentry_amount_string, &amount));
 
-  xmlAddChild(ret, int_to_dom_tree (ttentry_type_string,
-				    gncTaxTableEntryGetType (entry)));
+  xmlAddChild(ret, text_to_dom_tree (ttentry_type_string,
+				     gncAmountTypeToString (
+				    gncTaxTableEntryGetType (entry))));
 
   return ret;
 }
@@ -157,11 +158,20 @@ static gboolean
 ttentry_type_handler (xmlNodePtr node, gpointer taxtable_pdata)
 {
   struct ttentry_pdata *pdata = taxtable_pdata;
-  gint64 val;
+  GncAmountType type;
+  char *str;
+  gboolean ret;
 
-  dom_tree_to_integer(node, &val);
-  gncTaxTableEntrySetType (pdata->ttentry, val);
-  return TRUE;
+  str = dom_tree_to_text (node);
+  g_return_val_if_fail (str, FALSE);
+
+  ret = gncAmountStringToType (str, &type);
+  g_free (str);
+
+  if (ret)
+    gncTaxTableEntrySetType (pdata->ttentry, type);
+
+  return ret;
 }
 
 static gboolean

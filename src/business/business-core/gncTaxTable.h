@@ -34,6 +34,12 @@ typedef enum {
   GNC_TAXINCLUDED_USEGLOBAL,
 } GncTaxIncluded;
 
+const char * gncAmountTypeToString (GncAmountType type);
+gboolean gncAmountStringToType (const char *str, GncAmountType *type);
+
+const char * gncTaxIncludedTypeToString (GncTaxIncluded type);
+gboolean gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type);
+
 /* Create/Destroy Functions */
 GncTaxTable * gncTaxTableCreate (GNCBook *book);
 void gncTaxTableDestroy (GncTaxTable *table);

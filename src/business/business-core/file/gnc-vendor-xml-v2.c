@@ -102,8 +102,9 @@ vendor_dom_tree_create (GncVendor *vendor)
       xmlAddChild(ret, guid_to_dom_tree(vendor_terms_string,
 					gncBillTermGetGUID (term)));
 
-    xmlAddChild(ret, int_to_dom_tree(vendor_taxincluded_string,
-				     gncVendorGetTaxIncluded (vendor)));
+    xmlAddChild(ret, text_to_dom_tree(vendor_taxincluded_string,
+				      gncTaxIncludedTypeToString (
+				     gncVendorGetTaxIncluded (vendor))));
 
     xmlAddChild(ret, int_to_dom_tree(vendor_active_string,
 				     gncVendorGetActive (vendor)));
@@ -218,14 +219,18 @@ static gboolean
 vendor_taxincluded_handler (xmlNodePtr node, gpointer vendor_pdata)
 {
     struct vendor_pdata *pdata = vendor_pdata;
-    gint64 val;
+    GncTaxIncluded type;
+    char *str;
     gboolean ret;
 
-    ret = dom_tree_to_integer(node, &val);
-    if (ret) {
-      if (!val) val = GNC_TAXINCLUDED_USEGLOBAL;
-      gncVendorSetTaxIncluded(pdata->vendor, (GncTaxIncluded)val);
-    }
+    str = dom_tree_to_text (node);
+    g_return_val_if_fail (str, FALSE);
+
+    ret = gncTaxIncludedStringToType (str, &type);
+    g_free (str);
+
+    if (ret)
+      gncVendorSetTaxIncluded(pdata->vendor, type);
 
     return ret;
 }

@@ -58,6 +58,39 @@ struct _gncEntry {
   gboolean	dirty;
 };
 
+/* You must edit the functions in this block in tandem.  KEEP THEM IN
+   SYNC! */
+
+#define GNC_RETURN_ENUM_AS_STRING(x,s) case (x): return (s);
+const char *
+gncEntryDiscountHowToString (GncDiscountHow how)
+{
+  switch(how)
+  {
+    GNC_RETURN_ENUM_AS_STRING(GNC_DISC_PRETAX, "PRETAX");
+    GNC_RETURN_ENUM_AS_STRING(GNC_DISC_SAMETIME, "SAMETIME");
+    GNC_RETURN_ENUM_AS_STRING(GNC_DISC_POSTTAX, "POSTTAX");
+    default:
+      g_warning ("asked to translate unknown discount-how %d.\n", how);
+      break;
+  }
+  return(NULL);
+}
+#undef GNC_RETURN_ENUM_AS_STRING
+#define GNC_RETURN_ON_MATCH(s,x) \
+  if(safe_strcmp((s), (str)) == 0) { *how = x; return(TRUE); }
+gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how)
+{
+  GNC_RETURN_ON_MATCH ("PRETAX", GNC_DISC_PRETAX);
+  GNC_RETURN_ON_MATCH ("SAMETIME", GNC_DISC_SAMETIME);
+  GNC_RETURN_ON_MATCH ("POSTTAX", GNC_DISC_POSTTAX);
+  g_warning ("asked to translate unknown discount-how string %s.\n",
+       str ? str : "(null)");
+
+  return(FALSE);
+}
+#undef GNC_RETURN_ON_MATCH
+
 #define _GNC_MOD_NAME	GNC_ENTRY_MODULE_NAME
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));

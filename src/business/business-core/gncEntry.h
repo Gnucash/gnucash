@@ -32,6 +32,9 @@ typedef enum {
   GNC_DISC_POSTTAX
 } GncDiscountHow;
 
+const char * gncEntryDiscountHowToString (GncDiscountHow how);
+gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how);
+
 /* Create/Destroy Functions */
 
 GncEntry *gncEntryCreate (GNCBook *book);

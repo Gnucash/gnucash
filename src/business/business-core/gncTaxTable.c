@@ -46,6 +46,65 @@ struct _book_info {
   GList *	tables;		/* visible tables */
 };
 
+/* You must edit the functions in this block in tandem.  KEEP THEM IN
+   SYNC! */
+
+#define GNC_RETURN_ENUM_AS_STRING(x,s) case (x): return (s);
+const char *
+gncAmountTypeToString (GncAmountType type)
+{
+  switch(type) 
+  {
+    GNC_RETURN_ENUM_AS_STRING(GNC_AMT_TYPE_VALUE, "VALUE");
+    GNC_RETURN_ENUM_AS_STRING(GNC_AMT_TYPE_PERCENT, "PERCENT");
+    default:
+      g_warning ("asked to translate unknown amount type %d.\n", type);
+      break;
+  }
+  return(NULL);
+}
+
+const char *
+gncTaxIncludedTypeToString (GncTaxIncluded type)
+{
+  switch(type) 
+  {
+    GNC_RETURN_ENUM_AS_STRING(GNC_TAXINCLUDED_YES, "YES");
+    GNC_RETURN_ENUM_AS_STRING(GNC_TAXINCLUDED_NO, "NO");
+    GNC_RETURN_ENUM_AS_STRING(GNC_TAXINCLUDED_USEGLOBAL, "USEGLOBAL");
+    default:
+      g_warning ("asked to translate unknown taxincluded type %d.\n", type);
+      break;
+  }
+  return(NULL);
+}
+#undef GNC_RETURN_ENUM_AS_STRING
+#define GNC_RETURN_ON_MATCH(s,x) \
+  if(safe_strcmp((s), (str)) == 0) { *type = x; return(TRUE); }
+gboolean
+gncAmountStringToType (const char *str, GncAmountType *type)
+{
+  GNC_RETURN_ON_MATCH ("VALUE", GNC_AMT_TYPE_VALUE);
+  GNC_RETURN_ON_MATCH ("PERCENT", GNC_AMT_TYPE_PERCENT);
+  g_warning ("asked to translate unknown amount type string %s.\n",
+       str ? str : "(null)");
+
+  return(FALSE);
+}
+
+gboolean
+gncTaxIncludedStringToType (const char *str, GncTaxIncluded *type)
+{
+  GNC_RETURN_ON_MATCH ("YES", GNC_TAXINCLUDED_YES);
+  GNC_RETURN_ON_MATCH ("NO", GNC_TAXINCLUDED_NO);
+  GNC_RETURN_ON_MATCH ("USEGLOBAL", GNC_TAXINCLUDED_USEGLOBAL);
+  g_warning ("asked to translate unknown taxincluded type string %s.\n",
+       str ? str : "(null)");
+
+  return(FALSE);
+}
+#undef GNC_RETURN_ON_MATCH
+
 #define _GNC_MOD_NAME	GNC_TAXTABLE_MODULE_NAME
 
 #define CACHE_INSERT(str) g_cache_insert(gnc_engine_get_string_cache(), (gpointer)(str));

@@ -4,6 +4,10 @@
 	* gw-gnome-utils-spec: wrap URLType type, #defines, and gnc_build_url()
 	* get the rest of the C code to use URLTypes properly
 
+	* fix the business XML to use symbolic names for enums (instead of
+	their integer values).  This is an incompatible change -- old
+	business XML objects will not load properly.
+	
 2002-06-29  David Hampton  <hampton@employees.org>
 
 	* configure.in:

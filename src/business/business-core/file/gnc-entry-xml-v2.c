@@ -122,10 +122,12 @@ entry_dom_tree_create (GncEntry *entry)
     maybe_add_numeric (ret, entry_price_string, gncEntryGetPrice (entry));
 
     maybe_add_numeric (ret, entry_discount_string, gncEntryGetDiscount (entry));
-    xmlAddChild(ret, int_to_dom_tree(entry_disctype_string,
-				     gncEntryGetDiscountType (entry)));
-    xmlAddChild(ret, int_to_dom_tree(entry_dischow_string,
-				     gncEntryGetDiscountHow (entry)));
+    xmlAddChild(ret, text_to_dom_tree(entry_disctype_string,
+				      gncAmountTypeToString (
+				     gncEntryGetDiscountType (entry))));
+    xmlAddChild(ret, text_to_dom_tree(entry_dischow_string,
+				      gncEntryDiscountHowToString (
+				     gncEntryGetDiscountHow (entry))));
 
     acc = gncEntryGetAccount (entry);
     if (acc)
@@ -288,24 +290,40 @@ static gboolean
 entry_disctype_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    gint64 val;
+    GncAmountType type;
+    char *str;
+    gboolean ret;
 
-    dom_tree_to_integer(node, &val);
-    gncEntrySetDiscountType(pdata->entry, (gint)val);
+    str = dom_tree_to_text (node);
+    g_return_val_if_fail (str, FALSE);
 
-    return TRUE;
+    ret = gncAmountStringToType (str, &type);
+    g_free (str);
+
+    if (ret)
+      gncEntrySetDiscountType(pdata->entry, type);
+
+    return ret;
 }
 
 static gboolean
 entry_dischow_handler (xmlNodePtr node, gpointer entry_pdata)
 {
     struct entry_pdata *pdata = entry_pdata;
-    gint64 val;
+    GncDiscountHow how;
+    char *str;
+    gboolean ret;
 
-    dom_tree_to_integer(node, &val);
-    gncEntrySetDiscountHow(pdata->entry, (gint)val);
+    str = dom_tree_to_text (node);
+    g_return_val_if_fail (str, FALSE);
 
-    return TRUE;
+    ret = gncEntryDiscountStringToHow (str, &how);
+    g_free (str);
+
+    if (ret)
+      gncEntrySetDiscountHow(pdata->entry, how);
+
+    return ret;
 }
 
 static gboolean
