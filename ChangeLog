@@ -16,6 +16,10 @@
 	* src/gnc-ui.h: add new help file
 
 2001-05-25  Robert Graham Merkel  <rgmerk@mira.net>
+	
+	* src/scm/report/average-balance.scm: catch all-zero-data
+	case, display warning message rather than let the graphing
+	code catch it.
 
 	* src/scm/html-utilities.scm: display report title
 	string in gnc:html-no-account-warning and

@@ -293,9 +293,16 @@
 
 	   (beforebegindate (gnc:timepair-end-day-time 
 			     (gnc:timepair-previous-day begindate)))
+	   (all-zeros? #t)
 	   ;; startbal will be a commodity-collector
            (startbal  '()))
 
+      (define (list-all-zeros? alist)
+	(if (null? alist) #t
+	    (if (not (= 0.0 (car alist)))
+		#f
+		(list-all-zeros? (cdr alist)))))
+	    
       (define (monetary->double foreign-monetary date)
 	(gnc:numeric-to-double
 	 (gnc:gnc-monetary-amount
@@ -378,61 +385,87 @@
                       (col-labels '())
                       (col-colors '()))
                   (if (memq 'AvgBalPlot plot-type)
-                      (begin 
-                        (gnc:html-barchart-append-column! 
-                         barchart
-                         (map (lambda (row) (list-ref row 2)) data))
-                        (set! col-labels 
-                              (append col-labels 
-                                      (list (list-ref columns 2))))
-                        (set! col-colors
-                              (append col-colors (list "blue")))))
+                      (let
+			 ((number-data
+			    (map 
+			     (lambda (row) (list-ref row 2)) data)))
+			(if (not (list-all-zeros? number-data))
+			    (begin
+			      (gnc:html-barchart-append-column! 
+			       barchart
+			       (map (lambda (row) (list-ref row 2)) data))
+			      (set! col-labels 
+				    (append col-labels 
+					    (list (list-ref columns 2))))
+			      (set! col-colors
+				    (append col-colors (list "blue")))
+			      (set! all-zeros? #f)))))
+			    
                       
                   (if (memq 'GainPlot plot-type)
-                      (begin 
-                        (gnc:html-barchart-append-column! 
-                         barchart
-                         (map (lambda (row) (list-ref row 7)) data))
-                        (set! col-labels 
-                              (append col-labels 
-                                      (list (list-ref columns 7))))
-                        (set! col-colors
-                              (append col-colors (list "green")))))
-                  (if (memq 'GLPlot plot-type)
-                      (begin 
-                        ;; debit column 
-                        (gnc:html-barchart-append-column! 
-                         barchart
-                         (map (lambda (row) (list-ref row 5)) data))
-                        (set! col-labels 
-                              (append col-labels 
-                                      (list (list-ref columns 5))))
-                        (set! col-colors
-                              (append col-colors (list "black")))
+                      (let ((number-data 
+			    (map (lambda (row) (list-ref row 7)) data)))
+			(if (not (list-all-zeros? number-data))
+			    (begin
+			      (gnc:html-barchart-append-column! 
+			       barchart
+			       (map (lambda (row) (list-ref row 7)) data))
+			      (set! col-labels 
+				    (append col-labels 
+					    (list (list-ref columns 7))))
+			      (set! col-colors
+				    (append col-colors (list "green")))
+			      (set! all-zeros? #f)))))
 
-                        ;; credit
-                        (gnc:html-barchart-append-column! 
-                         barchart
-                         (map (lambda (row) (list-ref row 6)) data))
-                        (set! col-labels 
-                              (append col-labels 
-                                      (list (list-ref columns 6))))
-                        (set! col-colors
-                              (append col-colors (list "red")))))
-                  
-                  (gnc:html-barchart-set-col-labels! 
-                   barchart col-labels)
-                  (gnc:html-barchart-set-col-colors!
-                   barchart col-colors)
-                  (gnc:html-barchart-set-row-labels! 
-                   barchart (map car data))
-                  (gnc:html-barchart-set-row-labels-rotated?! barchart #t)
-                  
-                  (gnc:html-barchart-set-width! barchart width)
-                  (gnc:html-barchart-set-height! barchart height)
-                  (gnc:html-barchart-set-height! barchart height)
-                  (gnc:html-document-add-object! document barchart)))
-            
+                  (if (memq 'GLPlot plot-type)
+                      (let ((debit-data 
+			     (map (lambda (row) list-ref row 5) data))
+			    (credit-data
+			     (map (lambda (row) list-ref row 6) data)))
+                        ;; debit column 
+			(if (not (and
+				  (list-all-zeros? debit-data)
+				  (list-all-zeros? credit-data)))
+			    (begin
+			      (gnc:html-barchart-append-column! 
+			       barchart
+			       number-data)
+			      (set! col-labels 
+				    (append col-labels 
+					    (list (list-ref columns 5))))
+			      (set! col-colors
+				    (append col-colors (list "black")))
+			      
+			      ;; credit
+			      (gnc:html-barchart-append-column! 
+			       barchart
+			       (map (lambda (row) (list-ref row 6)) data))
+			      (set! col-labels 
+				    (append col-labels 
+					    (list (list-ref columns 6))))
+			      (set! col-colors
+				    (append col-colors (list "red")))
+			      (set all-zeros? #f)))))
+		  
+		  (if (not all-zeros?)
+		      (begin
+			(gnc:html-barchart-set-col-labels! 
+			 barchart col-labels)
+			(gnc:html-barchart-set-col-colors!
+			 barchart col-colors)
+			(gnc:html-barchart-set-row-labels! 
+			 barchart (map car data))
+			(gnc:html-barchart-set-row-labels-rotated?! barchart #t)
+			
+			(gnc:html-barchart-set-width! barchart width)
+			(gnc:html-barchart-set-height! barchart height)
+			(gnc:html-barchart-set-height! barchart height)
+			(gnc:html-document-add-object! document barchart))
+		      (gnc:html-document-add-object!
+		       document
+		       (gnc:html-make-empty-data-warning 
+			(_ "Average Balance"))))))
+		  
             ;; make a table (optionally)
             (if show-table? 
                 (let ((table (gnc:make-html-table)))
