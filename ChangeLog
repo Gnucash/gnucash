@@ -1,3 +1,11 @@
+2002-07-27  Christian Stimming  <stimming@tuhh.de>
+
+	* configure.in: Add --enable-hbci configure option.
+
+	* src/import-export/hbci/*: More HBCI GUI work. Some druid should
+	be visible by now. The code doesn't really do anything so far,
+	though.
+
 2002-07-24  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/register/ledger-core/gnc-ledger-display.c

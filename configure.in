@@ -423,6 +423,13 @@ AC_ARG_ENABLE( ofx,
 
 AC_SUBST(OFX_DIR)
 ### --------------------------------------------------------------------------
+### HBCI
+AC_ARG_ENABLE( hbci,
+  [  --enable-hbci                 compile with HBCI support],
+       HBCI_DIR=hbci)
+
+AC_SUBST(HBCI_DIR)
+### --------------------------------------------------------------------------
 ### i18n
 
 AC_ARG_WITH( locale-dir, 
@@ -941,6 +948,7 @@ AC_OUTPUT( m4/Makefile  intl/Makefile
           src/import-export/ofx/Makefile
           src/import-export/ofx/test/Makefile
           src/import-export/hbci/Makefile
+          src/import-export/hbci/glade/Makefile
           src/import-export/hbci/test/Makefile
           src/network-utils/Makefile
           src/network-utils/test/Makefile

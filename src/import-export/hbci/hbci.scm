@@ -7,7 +7,25 @@
 
 (define-module (gnucash import-export hbci))
 
-;;(export gnc:txf-get-payer-name-source)
-;;(export txf-expense-categories)
-
 (use-modules (gnucash main))
+
+(define (add-hbci-menu-items)
+  (gnc:add-extension 
+   (gnc:make-menu "HBCI" (list "_Tools" )))
+
+
+  (gnc:add-extension
+   (gnc:make-menu-item (N_ "Initial HBCI Setup")
+		       (N_ "Initial HBCI Setup")
+		       (list "_Tools" "HBCI" "")
+		       (lambda ()
+			 (gnc:hbci-initial-setup))))
+  ;;(gnc:add-extension
+  ;; (gnc:make-menu-item (N_ "Finish HBCI Setup")
+  ;;	       (N_ "Finish HBCI Setup")
+  ;;	       (list "_Tools" "HBCI" "")
+  ;;	       (lambda ()
+  ;;		 (gnc:hbci-finish-setup)))))
+
+(gnc:hook-add-dangler gnc:*ui-startup-hook* add-hbci-menu-items)
+
