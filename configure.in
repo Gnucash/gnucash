@@ -786,6 +786,7 @@ AC_OUTPUT(
           src/network-utils/test/Makefile
           src/optional/Makefile
           src/optional/swig/Makefile
+          src/optional/swig/examples/Makefile
           src/pixmaps/Makefile
           src/quotes/Makefile
           src/register/Makefile
