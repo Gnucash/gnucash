@@ -65,7 +65,8 @@ clean:
 	@cd src;    $(MAKE) clean
 
 distclean: clean
-	rm -f *~ *.o *.bak Makefile config.cache config.log config.status config.h
+	rm -f *~ *.o *.bak Makefile xacc
+	rm -f config.cache config.log config.status config.h
 	@cd lib;    $(MAKE) distclean
 	@cd src;    $(MAKE) distclean
 
