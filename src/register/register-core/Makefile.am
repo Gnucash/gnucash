@@ -21,6 +21,7 @@ libgncmod_register_core_la_SOURCES = \
   pricecell.c \
   quickfillcell.c \
   recncell.c \
+  checkboxcell.c \
   register-common.c \
   table-allgui.c \
   table-control.c \
@@ -41,6 +42,7 @@ gncinclude_HEADERS = \
   pricecell.h \
   quickfillcell.h \
   recncell.h \
+  checkboxcell.h \
   register-common.h \
   table-allgui.h \
   table-control.h \

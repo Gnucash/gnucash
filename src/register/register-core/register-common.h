@@ -35,6 +35,7 @@
 #define PRICE_CELL_TYPE_NAME     "price-cell"
 #define RECN_CELL_TYPE_NAME      "recn-cell"
 #define QUICKFILL_CELL_TYPE_NAME "quickfill-cell"
+#define CHECKBOX_CELL_TYPE_NAME	 "checkbox-cell"
 
 void gnc_register_init (void);
 void gnc_register_shutdown (void);

@@ -30,6 +30,7 @@
 #include "numcell.h"
 #include "pricecell.h"
 #include "recncell.h"
+#include "checkboxcell.h"
 #include "register-common.h"
 #include "quickfillcell.h"
 
@@ -57,6 +58,8 @@ gnc_register_init (void)
 
   gnc_register_add_cell_type (QUICKFILL_CELL_TYPE_NAME,
                               gnc_quickfill_cell_new);
+
+  gnc_register_add_cell_type (CHECKBOX_CELL_TYPE_NAME, gnc_checkbox_cell_new);
 }
 
 void

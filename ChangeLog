@@ -11,6 +11,9 @@
 	* Check for gettext in -lintl for MacOS
 
 	* Peter O'Gorman's patch for fixing libtool on darwin
+
+	* Implement a core CheckboxCell register type (note, still needs a
+	  pretty Gnome implementation)
 	
 2002-10-03  Christian Stimming  <stimming@tuhh.de>
 
