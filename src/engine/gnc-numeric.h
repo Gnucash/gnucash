@@ -82,41 +82,75 @@ enum {
 #define GNC_DENOM_SIGFIGS( a ) ( ((( a ) & 0xff) << 8) | GNC_DENOM_SIGFIG)
 #define GNC_NUMERIC_GET_SIGFIGS( a ) ( (( a ) & 0xff00 ) >> 8)
 
+/** @name Constructors */
+/*@{*/
 /** make a gnc_numeric from numerator and denominator */
 gnc_numeric gnc_numeric_create(gint64 num, gint64 denom);
 
 /** create a zero-value gnc_numeric */
 gnc_numeric gnc_numeric_zero(void);
 
+/** convert from floating-point values */
+gnc_numeric double_to_gnc_numeric(double in, gint64 denom,  
+                                  gint how);
+
+/** Read a gnc_numeric from str, skipping any leading whitespace, and
+   returning a pointer to just past the last byte read.  Return NULL
+   on error. */
+const gchar *string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
+
 /** make a special error-signalling gnc_numeric */
 gnc_numeric gnc_numeric_error(int error_code);
+/*@}*/
 
-/** check for error signal in value */ 
-int         gnc_numeric_check(gnc_numeric a);
-
-/** get parts */
+/** @name Value accessors */
+/*@{*/
+/** Get parts */
 gint64 gnc_numeric_num(gnc_numeric a);
+/** Get parts */
 gint64 gnc_numeric_denom(gnc_numeric a);
 
-/** tests */
-int gnc_numeric_zero_p(gnc_numeric a);                /* 1 if 0, 0 else */
+/** Convert to floating-point values */
+double      gnc_numeric_to_double(gnc_numeric in);
+
+/** Convert to string. The returned buffer is to be g_free'd by the
+ * caller (it was allocated through g_strdup) */
+gchar *gnc_numeric_to_string(gnc_numeric n);
+/*@}*/
+
+/** @name Tests */
+/*@{*/
+/** Check for error signal in value. Returns GNC_ERROR_OK (==0) if
+ * there is no error, or any error code if there is one
+ * (e.g. GNC_ERROR_OVERFLOW) */ 
+int         gnc_numeric_check(gnc_numeric a);
+
+/** Returns 1 if the given gnc_numeric is 0 (zeros), else returns 0. */
+int gnc_numeric_zero_p(gnc_numeric a);                
+/** Returns 1 if a>b, -1 if b>a, 0 if a == b  */
 int gnc_numeric_compare(gnc_numeric a, gnc_numeric b);
 int gnc_numeric_negative_p(gnc_numeric a);
 int gnc_numeric_positive_p(gnc_numeric a);
 
-/** equivalence predicates : 
- * eq    : a and b are exactly the same (same numerator and denominator)
- * equal : a and b represent exactly the same number (ratio of numerator
- *         to denominator is exactly equal)
- * same  : after both are converted to DENOM using method HOW, a and b 
- *         are equal().
+/** Equivalence predicate: Returns TRUE (1) if a and b are exactly the
+ * same (same numerator and denominator)
  */ 
 int gnc_numeric_eq(gnc_numeric a, gnc_numeric b);     
+/** Equivalence predicate: Returns TRUE (1) if a and b represent
+ *  exactly the same number (ratio of numerator to denominator is
+ *  exactly equal)
+ */ 
 int gnc_numeric_equal(gnc_numeric a, gnc_numeric b);  
+/** Equivalence predicate: Returns TRUE (1) if after both are
+ * converted to DENOM using method HOW, a and b are
+ * gnc_numeric_equal().
+ */ 
 int gnc_numeric_same(gnc_numeric a, gnc_numeric b,   
                      gint64 denom, gint how);
+/*@}*/
 
-/** arithmetic operations */
+/** @name Arithmetic operations */
+/*@{*/
 gnc_numeric gnc_numeric_add(gnc_numeric a, gnc_numeric b, 
                             gint64 denom, gint how);
 gnc_numeric gnc_numeric_sub(gnc_numeric a, gnc_numeric b, 
@@ -125,14 +159,19 @@ gnc_numeric gnc_numeric_mul(gnc_numeric a, gnc_numeric b,
                             gint64 denom, gint how);
 gnc_numeric gnc_numeric_div(gnc_numeric a, gnc_numeric b, 
                             gint64 denom, gint how);
+/** Negate the argument  */
 gnc_numeric gnc_numeric_neg(gnc_numeric a);
+/** Return the absolute value of the argument */
 gnc_numeric gnc_numeric_abs(gnc_numeric a);
 
-/** some shortcuts for common operations */
+/** Shortcut for common operations */
 gnc_numeric gnc_numeric_add_fixed(gnc_numeric a, gnc_numeric b);
+/** Shortcut for common operations */
 gnc_numeric gnc_numeric_sub_fixed(gnc_numeric a, gnc_numeric b);
+/*@}*/
 
-/** arithmetic functions with exact error returns */
+/** @name Arithmetic functions with exact error returns */
+/*@{*/
 gnc_numeric gnc_numeric_add_with_error(gnc_numeric a, gnc_numeric b,
                                        gint64 denom, gint how,
                                        gnc_numeric * error);
@@ -145,28 +184,22 @@ gnc_numeric gnc_numeric_mul_with_error(gnc_numeric a, gnc_numeric b,
 gnc_numeric gnc_numeric_div_with_error(gnc_numeric a, gnc_numeric b,
                                        gint64 denom, gint how,
                                        gnc_numeric * error);
+/*@}*/
 
+/** @name Change denominator */
+/*@{*/
 /** change the denominator of a gnc_numeric value */
 gnc_numeric gnc_numeric_convert(gnc_numeric in, gint64 denom, 
                                 gint how);
 
+/** change the denominator of a gnc_numeric value */
 gnc_numeric gnc_numeric_convert_with_error(gnc_numeric in, gint64 denom, 
                                            gint how,
                                            gnc_numeric * error);
 
 /** reduce by GCF elimination */
 gnc_numeric gnc_numeric_reduce(gnc_numeric in);
+/*@}*/
 
-/** convert to and from floating-point values */
-gnc_numeric double_to_gnc_numeric(double in, gint64 denom,  
-                                  gint how);
-double      gnc_numeric_to_double(gnc_numeric in);
-
-gchar *gnc_numeric_to_string(gnc_numeric n);
-
-/** Read a gnc_numeric from str, skipping any leading whitespace, and
-   returning a pointer to just past the last byte read.  Return NULL
-   on error. */
-const gchar *string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
 
 #endif
