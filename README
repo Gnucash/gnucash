@@ -1,0 +1,38 @@
+X-Accountant
+------------
+
+xacc is a program to keep track of your finances.  It is similar in
+concept to Quicken(TM).  Although xacc still lacks the advanced
+features of quicken, it does have the basic functionality.  Some
+of the features of xacc are:
+
+  - Multiple Accounts
+  - Each account keeps a running balance and
+    a reconciled balance, so you can keep track
+    of the checks that have clear your account.
+  - A simple interface.  If you can use the
+    register in the back of your checkbook,
+    you can use xacc.
+  - QuickFill... if you begin typing a description
+    in the description fields, and it matches an
+    previous transaction, hitting <TAB> will copy
+    the previous transaction.  Handy if you have
+    similar transactions on a regular basis.
+    (such as depositing your paycheck every week :)
+
+To install:
+-----------
+
+ First check the makefile to ensure that all the paths are ok.
+ Also, make sure that the Xbae-Matrix widget and Motif or
+ Lesstif are installed.  You can get Lesstif from 
+ http://www.lesstif.org.  You can get The Xbae widget from
+ ftp://ftp.x.org/contrib/widgets/motif/ or any mirror.  If
+ you are using a version of Xbae 4.6.1, you will need to
+ comment out "-DUSEQUICKFILL" in the Makefile.
+
+ # make depend
+ # make
+
+sorry, no "make install" yet.
+

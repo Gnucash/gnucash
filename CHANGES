@@ -1,0 +1,96 @@
+Version history:
+------- -------
+ 0.9 - 08 Sep 97
+         o  Lots of code-cleanup.
+         o  Adjust Balance window.
+         o  Reconcile window!  Makes it easy to reconcile your account
+            at the end of the month when you get your new bank statement.
+         o  Hypertext, context sensitive help.  A pretty nice add-on,
+            thanks to libhtmlw, from NCSA Mosaic.  (Now someone just
+            has to write some decent help pages!)
+         o  Fixed busy cursor.  Previously the code the switched cursors
+            caused the program to crash, so it wasn't enabled.  Now it
+            works, and is enabled.
+
+ 0.7 - 14 Jul 97
+         o  Started adding support for account types other than "BANK".
+            Still no support for Portfolio and Mutual accounts.  (They
+            are greyed out in the "New Account" window for now.)
+         o  Changed the balance field to use red/black text to denote
+            negative/positive balance (instead of using a sign... If you
+            define USE_NO_COLOR when compiling, it will revert to the
+            old method of displaying a '-' in front of negative balances)
+         o  Fixed bug in automatic transfers that cause the "From"
+            account to always be the first account, and the "To" account
+            to possibly be incorrect.  Also, added "[To: ]" "[From: ]"
+            (with to account name, and from account name) to the start
+            of the memo field, so you can keep track of where the money
+            comes from/goes to.
+
+ 0.6 - 28 Jun 97
+         o  Fixed balance/reconciled field (in bottom right corner
+            of register window.  (It sorta works now, with lesstif.
+            I don't know about motif... you have to leave the current
+            transaction for the balances to be recalculated.)
+         o  Rearranged directory structure... the source was growing
+            to too many files to have it all in one directory.
+
+ 0.5 - 6 Jun 97    Mostly, minor bug fixes
+         o  verifyDate  -- affects when accelerator keys in the
+            register window cause the date to cross a year boundary
+         o  Fixed handling of the date in the transfer window.  Before
+            if the user pressed the "transfer" button with an incomplete
+            date in the date field, the resulting date would be
+            undefined.
+         o  If the user doesn't enter data in the description field,
+            The number field, the memo field, or one of the amount
+            fields, the the new transaction isn't added when the
+            user leaves the new transaction, or presses "Record"
+         o  Now user is prevented from entering more than one '.'
+            in the amount fields in the register and transfer windows.
+            Also, the user is prevented from entering more than two
+            '/' in the date field in the transfer window.
+         o  Fixed a (very small) memory leak in the transfer window.
+         o  Fixed a bug in the transfer window that resulted in a
+            different amount subtracted from the "from" account as was
+            added to the "to" account.
+         o  Fixed bug that caused a segfault when deleting the last
+            transaction in the register window.
+         o  Now if the user is in the last transaction (the empty
+            transaction) in the register window, the "Delete" button
+            does not do anything.
+ 
+ 0.4 - 3 Jun 97
+         o  Added "Balance" and "Reconciled" balance to the bottom
+            right corner of the register window.  
+         o  The main window uses an Xbae-Matrix widget now, instead
+            of a list, in order to line up the account names, types,
+            and balances in nice columns.
+	
+ 0.2 - First (mostly) functional release.  Most of the buttons,
+       and menu bar choices actually do something now.
+
+ 0.1 - First demo release.  Lots of buttons, and menu bar choices
+       Don't do anything.  The register window is still pretty
+       buggy.
+
+
+
+
+
+Things to do/fix:    (in no particular order)
+------ -- ------
+
+  o  Reg window segfaults on close... (I think this might be a
+     lesstif problem, so try a newer version)
+ 
+  o  memorized transactions/quickfill (They work, but you need
+     a newer than v4.6.1 Xbae Widget)
+
+  o  Bug Fixes!  There are still a few bugs floating around.
+     (Let me know if you find any)
+
+  o  a README and/or man page!
+
+  o  use configure or Imake?  or at least a proper "make install"
+
