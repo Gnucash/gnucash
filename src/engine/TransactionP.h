@@ -72,6 +72,8 @@
 
 struct _split 
 {
+  GUID guid;  /* globally unique id */
+
   Account *acc;              /* back-pointer to debited/credited account  */
   Transaction *parent;       /* parent of split                           */
 
@@ -105,9 +107,12 @@ struct _split
   double  damount;           /* num-shares; if > 0.0, deposit, else paymt */
   double  share_price;       /* the share price, ==1.0 for bank account   */
 
+  /* -------------------------------------------------------------- */
+  /* Below follow some 'temporary' fields */
+
   /* The various "balances" are the sum of all of the values of 
    * all the splits in the account, up to and including this split.
-   * These belances apply to a sorting order by date posted
+   * These balances apply to a sorting order by date posted
    * (not by date entered). */
   double  balance;
   double  cleared_balance;
@@ -119,7 +124,6 @@ struct _split
 
   double cost_basis;
 
-  GUID guid;  /* globally unique id */
 
   int ticket; /* used for matching up splits for QIFIO.c */
 };
@@ -127,6 +131,11 @@ struct _split
 
 struct _transaction 
 {
+  /* guid is a globally unique identifier which can be used to
+   * reference the transaction.
+   */
+  GUID guid;
+
   Timespec date_entered;     /* date register entry was made              */
   Timespec date_posted;      /* date transaction was posted at bank       */
 
@@ -162,11 +171,6 @@ struct _transaction
   /* the "open" flag indicates if the transaction has been 
    * opened for editing. */
   char open;
-
-  /* guid is a globally unique identifier which can be used to
-   * reference the transaction.
-   */
-  GUID guid;
 
   /* the orig pointer points at a copy of the original transaction,
    * before editing was started.  This orig copy is used to rollback 
