@@ -35,7 +35,9 @@
 #include <Xm/Text.h>
 #include <Xbae/Matrix.h>
 
+#include "AdjBWindow.h"
 #include "Account.h"
+#include "AccWindow.h"
 #include "BuildMenu.h"
 #include "Data.h"
 #include "FileBox.h"
@@ -43,6 +45,7 @@
 #include "HelpWindow.h"
 #include "main.h"
 #include "MainWindow.h"
+#include "RecnWindow.h"
 #include "RegWindow.h"
 #include "util.h"
 #include "XferWindow.h"
@@ -963,10 +966,20 @@ accountMenubarCB( Widget mw, XtPointer cd, XtPointer cb )
           errorBox (toplevel, ACC_DEL_MSG);
         } else {
           char msg[1000];
-          sprintf (msg, 
-                   "Are you sure you want to delete the %s account?", 
-                   acc->accountName);
+          sprintf (msg, ACC_DEL_SURE_MSG, acc->accountName);
           if( verifyBox(toplevel,msg) ) {
+
+            /* before deleting the account, make 
+             * sure that we close any misc register 
+             * windows, if they are open */
+            /* hack alert -- this should be done for 
+             * any child accounts this account might have .. */
+            xaccDestroyRegWindow (selected_acc->regData);
+            xaccDestroyRecnWindow (selected_acc->recnData);
+            xaccDestroyAdjBWindow (selected_acc->adjBData);
+            xaccDestroyEditAccWindow (selected_acc->editAccData);
+            xaccDestroyEditNotesWindow (selected_acc->editNotesData);
+
             xaccRemoveAccount (selected_acc);
             freeAccount (selected_acc);
             selected_acc = NULL;

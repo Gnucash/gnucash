@@ -67,11 +67,13 @@ mallocAccount( void )
                                     * array */
   
   /* private data */
-  acc->arrowb   = NULL;
-  acc->expand   = 0;
-  acc->regData  = NULL;
-  acc->recnData = NULL;
-  acc->adjBData = NULL;
+  acc->arrowb        = NULL;
+  acc->expand        = 0;
+  acc->regData       = NULL;
+  acc->recnData      = NULL;
+  acc->adjBData      = NULL;
+  acc->editAccData   = NULL;
+  acc->editNotesData = NULL;
   acc->qfRoot   = mallocQuickFill();
   
   return acc;

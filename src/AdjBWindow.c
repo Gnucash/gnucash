@@ -50,9 +50,19 @@ typedef struct _AdjBWindow
 
 
 /** PROTOTYPES ******************************************************/
-void adjBOkCB( Widget mw, XtPointer cd, XtPointer cb );
-void adjBClose( Widget mw, XtPointer cd, XtPointer cb );
+static void adjBOkCB( Widget mw, XtPointer cd, XtPointer cb );
+static void adjBClose( Widget mw, XtPointer cd, XtPointer cb );
 
+
+/********************************************************************\
+\********************************************************************/
+
+void
+xaccDestroyAdjBWindow (AdjBWindow *adjBData)
+{
+   if (!adjBData) return;
+   XtDestroyWidget (adjBData->dialog);
+}
 
 /********************************************************************\
  * adjBWindow                                                       *
@@ -240,7 +250,7 @@ adjBWindow( Widget parent, Account *acc )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void 
+static void 
 adjBClose( Widget mw, XtPointer cd, XtPointer cb )
   {
   AdjBWindow *adjBData = (AdjBWindow *)cd;
@@ -262,7 +272,7 @@ adjBClose( Widget mw, XtPointer cd, XtPointer cb )
  *         cb -                                                     *
  * Return: none                                                     *
 \********************************************************************/
-void 
+static void 
 adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   {
   AdjBWindow  *adjBData = (AdjBWindow *)cd;
@@ -314,3 +324,6 @@ adjBOkCB( Widget mw, XtPointer cd, XtPointer cb )
   
   refreshMainWindow();
   }
+
+/******************** END OF FILE ***********************************\
+\********************************************************************/
