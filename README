@@ -120,18 +120,20 @@ source distributions.
 Prior to building GnuCash, you will have to obtain and install the following
 packages:
 
-nana    -- Used to provide a debuggin infrastructure.
+nana    -- Used to provide a debugging infrastructure.
            Any version should work.
            http://www.fsf.org/software/nana/nana.html
 	   http://www.cs.ntu.edu.au/homepages/pjm/nana-home/
 SWIG    -- Used to autogenerate perl, tcl, guile wrappers.
            available at www.swig.org need 1.1p5 or later ...
 guile   -- Provides main extension language infrastructure.
+           This is used extensively in gnucash for initialization & startup.
            need version 1.3 or later ( or build 1998.08.18 or 1998.09.10 or later) ...
            ftp://ftp.gnucash.org/pub/gnucash/extra_libs/TAR/guile-core-19980818.tar.gz 
            guile-core-19980818-1.i386.rpm works
            guile-1.3.1-1 from redhat.com/pub/rawhide works ...
-eperl   -- embeddedPerl needed for Reports
+eperl   -- embeddedPerl needed for Reports.  The menu item "Reports" will not
+           work witout this.
            version eperl-2.2.14 works well with perl 5.00404
            http://www.engelschall.com/sw/eperl/
            ftp://ftp.ultra.net/pub/eugene/RPMS/i386/eperl-2.2.14-1.i386.rpm
@@ -146,7 +148,7 @@ Motif or Lesstif  --
            Commercial Motif seems to work, but beware old libXm's 
            combined with new glibc's, 
 
-XmHTML  -- Used for Help Dialogues, Reports.
+XmHTML  -- Provides HTML display capabilities. Used for Help Dialogues, Reports.
            version 1.1.4 or later
            http://www.llp.fu-berlin.de/lsoft/F/5/XMHTML.html
            http://www.xs4all.nl/~ripley/XmHTML/XmHTML.html
@@ -155,7 +157,7 @@ XmHTML  -- Used for Help Dialogues, Reports.
 
 libpng  -- portable network graphics library
 libjpeg -- JPEG image handling library
-libz    -- comopression library
+libz    -- compression library
 xpm     -- X Pixmap extension
 
 perl-LWP/libwww-perl-5.36 
