@@ -1639,6 +1639,14 @@ gnc_account_window_create(AccountWindow *aw)
   aw->parent_tree = gnc_account_tree_new_with_root(aw->top_level_account);
   gtk_clist_column_titles_hide(GTK_CLIST(aw->parent_tree));
   gnc_account_tree_hide_all_but_name(GNC_ACCOUNT_TREE(aw->parent_tree));
+
+  /* hack alert -- why do we need to refresh just to put up an account 
+   * edit window?  This refresh triggers a massive retraversal
+   * of the price database (presumably to compute account balances)
+   * and can suck up a lot of cpu juice from the SQL backend as 
+   * a result.  We should only refresh the account names, not
+   * the balances here.
+   */
   gnc_account_tree_refresh(GNC_ACCOUNT_TREE(aw->parent_tree));
   gnc_account_tree_expand_account(GNC_ACCOUNT_TREE(aw->parent_tree),
                                   aw->top_level_account);
