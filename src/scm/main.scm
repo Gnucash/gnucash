@@ -60,6 +60,7 @@
   (gnc:module-load "gnucash/report/stylesheets" 0)
   (gnc:module-load "gnucash/report/standard-reports" 0)
   (gnc:module-load "gnucash/report/utility-reports" 0)
+  (gnc:module-load "gnucash/report/locale-specific/us" 0)
 
   ;; Now we can load a bunch of files.
   (gnc:depend "config-var.scm")
