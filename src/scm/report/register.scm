@@ -328,12 +328,6 @@
 
     gnc:*report-options*)
 
-  (define (display-date-interval begin end)
-    (let ((begin-string (strftime "%x" (localtime (car begin))))
-	  (end-string (strftime "%x" (localtime (car end)))))
-      (sprintf #f (_ "From %s To %s") begin-string end-string)))
-
- 
   (define (make-split-table splits options
                             debit-string credit-string amount-string)
     (define (opt-val section name)

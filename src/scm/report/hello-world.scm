@@ -243,14 +243,17 @@ option like this.")
 
       ;; Crash if asked to.
       (if crash-val (string-length #f)) ;; string-length needs a string
-      
+
+      ;; these are samples of different date options. for a simple
+      ;; date with day, month, and year but no time you should use
+      ;; gnc:print-date or gnc:timepair-to-datestring
       (let ((time-string (strftime "%X" (localtime (current-time))))
             (date-string (strftime "%x" (localtime (car date-val))))
             (date-string2 (strftime "%x %X" (localtime (car date2-val))))
 	    (rel-date-string (strftime "%x" (localtime (car rel-date-val))))
             (combo-date-string
              (strftime "%x" (localtime (car combo-date-val)))))
-        
+
         ;; Here's where we fill the report document with content.  We
         ;; do this by adding 'html objects' such as text, tables, and
         ;; graphs to the html document we already created.

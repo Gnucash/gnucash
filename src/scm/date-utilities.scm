@@ -302,9 +302,7 @@
 ;; and be implemented PROPERLY rather than hackily
 ;;; Added from transaction-report.scm
 
-(define (gnc:timepair-to-datestring tp)
-  (let ((bdtime (gnc:timepair->date tp)))
-    (strftime "%x" bdtime)))
+(define gnc:timepair-to-datestring gnc:print-date)
 
 ;; given a timepair contains any time on a certain day (local time)
 ;; converts it to be midday that day.

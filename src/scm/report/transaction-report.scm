@@ -637,8 +637,8 @@ and Income accounts")))))
 
 
     (define (display-date-interval begin end)
-      (let ((begin-string (strftime "%x" (localtime (car begin))))
-            (end-string (strftime "%x" (localtime (car end)))))
+      (let ((begin-string (gnc:print-date begin))
+            (end-string (gnc:print-date end)))
         (sprintf #f (_ "From %s To %s") begin-string end-string)))
 
     (define (get-primary-subtotal-style options)
