@@ -6,6 +6,8 @@
  * Copyright 2000 Gnumatic Incorporated                             *
  * Written by Robert Merkel <rgmerk@mira.net>                       *
  *                                                                  *
+ * WARNING WARNING WARNING: THIS STUFF IS TOTALLY UNTESTED AND      *
+ * IS ONLY IN CVS FOR SAFEKEEPING                                   *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -88,8 +90,12 @@ back_associate_expense_accounts(Account *stock_account,
     
     kvp_frame_set_slot(acc_frame, "associated-stock-account",
 		       stock_acc_guid_kvpval);
+    
+    kvp_value_delete(stock_acc_guid_kvpval);
+
     kvp_frame_set_slot(acc_frame, "associated-stock-account-category",
 		       stock_acc_category_kvpval);
+    kvp_value_delete(stock_acc_category_kvpval);
   }
 
   return;
@@ -120,8 +126,10 @@ back_associate_income_accounts(Account *stock_account,
     
     kvp_frame_set_slot(acc_frame, "associated-stock-account",
 		       stock_acc_guid_kvpval);
+    kvp_value_delete(stock_acc_guid_kvpval);
     kvp_frame_set_slot(acc_frame, "associated-stock-account-category",
 		       stock_acc_category_kvpval);
+    kvp_value_delete(stock_acc_category_kvpval);
   }
 
   return;
@@ -175,8 +183,24 @@ de_kvp_account_list(kvp_value *kvpd_list)
     return NULL;
   }
 }  
-      
-void 
+
+/*********************************************************************\
+ * gnc_tracking_associate_income_accounts                            *
+ *   associate a list of income accounts with a stock account        *
+ *                                                                   *
+ *  NOTE: Please disassociate all the accounts in account_list       *
+ *  using gnc_tracking_dissociate_accounts if necessary, BEFORE      *
+ *  calling this function                                            *
+ *                                                                   *
+ *  Args: stock_account - the stock account                          *
+ *        category - the type of association                         *
+ *        account_list - a GList of Account *'s of the accounts      *
+ *        to associate with the stock account                        *
+ *                                                                   *
+ * Returns : void                                                    *
+\*********************************************************************/
+
+void  
 gnc_tracking_associate_income_accounts(Account *stock_account, 
                                        GNCTrackingIncomeCategory category, 
                                        GList *account_list)
@@ -200,8 +224,26 @@ gnc_tracking_associate_income_accounts(Account *stock_account,
   kvp_frame_set_slot(inc_account_frame, 
 		     income_to_key[category],
 		     kvpd_on_account_list);
+
+  kvp_value_delete(kvpd_on_account_list);
   return;
 }
+
+/*********************************************************************\
+ * gnc_tracking_associate_expense_accounts                           *
+ *   associate a list of expense accounts with a stock account       *
+ *                                                                   *
+ *  NOTE: Please disassociate all the accounts in account_list       *
+ *  using gnc_tracking_dissociate_accounts if necessary, BEFORE      *
+ *  calling this function                                            *
+ *                                                                   *
+ *  Args: stock_account - the stock account                          *
+ *        category - the type of association                         *
+ *        account_list - a GList of Account *'s of the accounts      *
+ *        to associate with the stock account                        *
+ *                                                                   *
+ * Returns : void                                                    *
+\*********************************************************************/
 
 void gnc_tracking_asssociate_expense_account(Account *stock_account,
                                              GNCTrackingExpenseCategory category,
@@ -226,8 +268,21 @@ void gnc_tracking_asssociate_expense_account(Account *stock_account,
   kvp_frame_set_slot(expense_acc_frame, 
 		     expense_to_key[category],
 		     kvpd_on_account_list);
+  kvp_value_delete(kvpd_on_account_list);
   return;
 }
+
+/*********************************************************************\
+ * gnc_tracking_find_expense_accounts                                *
+ *   find out which accounts are associated with a particular        *
+ *   account in a particular way                                     *
+ *                                                                   *
+ *                                                                   *
+ *  Args: stock_account - the stock account                          *
+ *        category - the type of association                         *
+ *                                                                   *
+ * Returns : A GList of Account *'s listing the accounts             *
+\*********************************************************************/
 
 GList *gnc_tracking_find_expense_accounts(Account *stock_account, 
                                                     GNCTrackingExpenseCategory category)
@@ -251,6 +306,18 @@ GList *gnc_tracking_find_expense_accounts(Account *stock_account,
   
   return de_kvp_account_list(kvpd_on_account_list);
 }
+/*********************************************************************\
+ * gnc_tracking_find_income_accounts                                 *
+ *   find out which accounts are associated with a particular        *
+ *   account in a particular way                                     *
+ *                                                                   *
+ *                                                                   *
+ *  Args: stock_account - the stock account                          *
+ *        category - the type of association                         *
+ *                                                                   *
+ * Returns : A GList of Account *'s listing the accounts             *
+\*********************************************************************/
+
 GList *gnc_tracking_find_income_accounts(Account *stock_account, 
 					 GNCTrackingIncomeCategory category)
 {
@@ -274,6 +341,15 @@ GList *gnc_tracking_find_income_accounts(Account *stock_account,
   return de_kvp_account_list(kvpd_on_account_list);
 }
 
+/*********************************************************************\
+ * gnc_tracking_find_all_expense_accounts                            *
+ *   find all expense accounts associated with a stock account       *
+ *                                                                   *
+ *  Args: stock_account - the stock account                          *
+ *                                                                   *
+ * Returns : A GList of Account *'s listing the accounts             *
+\*********************************************************************/
+
 GList *gnc_tracking_find_all_expense_accounts(Account *stock_account)
 {
   GList *complete_list=NULL;
@@ -287,6 +363,14 @@ GList *gnc_tracking_find_all_expense_accounts(Account *stock_account)
   }
   return complete_list;
 }
+/*********************************************************************\
+ * gnc_tracking_find_all_income_accounts                             *
+ *   find all income accounts associated with a stock account        *
+ *                                                                   *
+ *  Args: stock_account - the stock account                          *
+ *                                                                   *
+ * Returns : A GList of Account *'s listing the accounts             *
+\*********************************************************************/
 
 GList *gnc_tracking_find_all_income_accounts(Account *stock_account)
 {
@@ -301,11 +385,32 @@ GList *gnc_tracking_find_all_income_accounts(Account *stock_account)
   }
   return complete_list;
 }
+/*********************************************************************\
+ * gnc_tracking_find_stock_account                                   *
+ *   find the stock account associated with this expense/income      *
+ *   account.  If there is no association, return NULL               *
+ *                                                                   *
+ *  Args: inc_or_expense_acc - the expense/income account            *
+ *                                                                   *
+ *                                                                   *
+ * Returns : The associated stock account                            *
+\*********************************************************************/
 
 Account *gnc_tracking_find_stock_account(Account *inc_or_expense_acc)
 {
   return NULL;
 }
+/*********************************************************************\
+ * gnc_tracking_dissociate_account                                   *
+ *   remove any association between this income/expense account      *
+ *   and any stock account it is presently associated with           *
+ *   account.                                                        *
+ *                                                                   *
+ *  Args: inc_or_expense_acc - the expense/income account            *
+ *                                                                   *
+ *                                                                   *
+ * Returns : void                                                    *
+\*********************************************************************/
 
 void 
 gnc_tracking_dissociate_account(Account *inc_or_expense_account)
@@ -360,6 +465,7 @@ gnc_tracking_dissociate_account(Account *inc_or_expense_account)
       kvp_frame_set_slot(assoc_acc_kvpframe,
 			 category_name,
 			 acc_list_kvpval);
+      kvp_value_delete(acc_list_kvpval);
       return;
     }
   }
