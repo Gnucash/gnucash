@@ -25,7 +25,20 @@
   (hash-set! gnc:*_supported-files_* name #t))
 
 (define (gnc:depend name)
-  (let ((supported? (hash-ref gnc:*_supported-files_* name)))
+  (let ((supported? (hash-ref gnc:*_supported-files_* name))
+        (time-load? #f))
     (if supported?
         #t
-        (gnc:load name))))
+        (if time-load? 
+            (let* ((start-time (gettimeofday))
+                   (result (gnc:load name))
+                   (end-time (gettimeofday)))
+              
+              (simple-format #t
+                             "~A elapsed load time for ~A\n"
+                             (+ (- (car end-time) (car start-time))
+                                (/ (- (cdr end-time) (cdr start-time))
+                                   1000000))
+                             name)
+              result)
+            (gnc:load name)))))

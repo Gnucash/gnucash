@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <stdio.h>  
+#include <stdlib.h>
 #include <string.h>  
 
 #include <libpq-fe.h>  
@@ -129,6 +130,7 @@ pgendStoreTransactionNoLock (PGBackend *be, Transaction *trans,
       if (0 < pgendTransactionCompareVersion (be, trans)) return;
    }
    trans->version ++;  /* be sure to update the version !! */
+   trans->version_check = be->version_check;
 
    /* first, we need to see which splits are in the database
     * since what is there may not match what we have cached in 
@@ -368,6 +370,17 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       do_set_guid=TRUE;
       engine_data_is_newer = -1;
    }
+   else 
+   {
+      /* save some performance, don't go to the backend if the data is recent. */
+      if (MAX_VERSION_AGE >= be->version_check - trans->version_check) 
+      {
+         PINFO ("fresh data, skip check");
+         pgendEnable(be);
+         gnc_engine_resume_events();
+         return 0;
+      }
+   }
 
    /* build the sql query to get the transaction */
    pbuff = be->buff;
@@ -470,6 +483,9 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
       i++;
    } while (result);
 
+   /* set timestamp as 'recent' for this data */
+   trans->version_check = be->version_check;
+
    /* if engine data was newer, we are done */
    if (0 <= engine_data_is_newer) 
    {
@@ -532,7 +548,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
               (DB_GET_VAL("date_reconciled",j));
             xaccSplitSetDateReconciledTS (s, &ts);
 
-            num = atoll (DB_GET_VAL("value", j));
+            num = strtoll (DB_GET_VAL("value", j), NULL, 0);
             value = gnc_numeric_create (num, trans_frac);
             xaccSplitSetValue (s, value);
 
@@ -557,7 +573,7 @@ pgendCopyTransactionToEngine (PGBackend *be, const GUID *trans_guid)
             {
                gnc_commodity *modity;
                gint64 acct_frac;
-               num = atoll (DB_GET_VAL("amount", j));
+               num = strtoll (DB_GET_VAL("amount", j), NULL, 0);
                modity = xaccAccountGetCommodity (acc);
                acct_frac = gnc_commodity_get_fraction (modity);
                amount = gnc_numeric_create (num, acct_frac);
@@ -716,7 +732,7 @@ pgendSyncTransaction (PGBackend *be, GUID *trans_guid)
 
 /* ============================================================= */
 
-int
+void
 pgend_trans_commit_edit (Backend * bend, 
                          Transaction * trans,
                          Transaction * oldtrans)
@@ -726,13 +742,13 @@ pgend_trans_commit_edit (Backend * bend,
    PGBackend *be = (PGBackend *)bend;
 
    ENTER ("be=%p, trans=%p", be, trans);
-   if (!be || !trans) return 1;  /* hack alert hardcode literal */
+   if (!be || !trans) return; 
 
    /* lock it up so that we query and store atomically */
    bufp = "BEGIN;\n"
           "LOCK TABLE gncTransaction IN EXCLUSIVE MODE;\n"
           "LOCK TABLE gncEntry IN EXCLUSIVE MODE;\n";
-   SEND_QUERY (be,bufp, 555);
+   SEND_QUERY (be,bufp, );
    FINISH_QUERY(be->connection);
 
    /* Check to see if this is a 'new' transaction, or not. 
@@ -806,7 +822,7 @@ pgend_trans_commit_edit (Backend * bend,
    
       if (rollback) {
          bufp = "ROLLBACK;";
-         SEND_QUERY (be,bufp,444);  /* hack alert hard coded literal */
+         SEND_QUERY (be,bufp,); 
          FINISH_QUERY(be->connection);
    
          PINFO ("old tranasction didn't match DB, edit rolled back)\n");
@@ -817,7 +833,8 @@ pgend_trans_commit_edit (Backend * bend,
           * routine.  Our rollback routine updates from the latest in 
           * the sql database, and voila! we are good to go. 
           */
-         return 666;   /* hack alert- hard coded literal */
+         xaccBackendSetError (&be->be, ERR_BACKEND_MODIFIED);
+         return;
       } 
    }
 
@@ -826,7 +843,7 @@ pgend_trans_commit_edit (Backend * bend,
 
    bufp = "COMMIT;\n"
           "NOTIFY gncTransaction;";
-   SEND_QUERY (be,bufp,334);
+   SEND_QUERY (be,bufp,);
    FINISH_QUERY(be->connection);
 
    /* If this is the multi-user mode, we need to update the
@@ -862,7 +879,7 @@ pgend_trans_commit_edit (Backend * bend,
    }
 
    LEAVE ("commited");
-   return 0;
+   return;
 }
 
 /* ============================================================= */
@@ -877,13 +894,13 @@ pgend_trans_commit_edit (Backend * bend,
  * to sync from the changes that other users had made.
  */
 
-int
+void
 pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
 {
    PGBackend *be = (PGBackend *)bend;
    const GUID * trans_guid;
 
-   if (!be || !trans) return 0;
+   if (!be || !trans) return;
    ENTER ("be=%p, trans=%p", be, trans);
 
    /* First, lets see if the other user had deleted this transaction.
@@ -892,14 +909,15 @@ pgend_trans_rollback_edit (Backend * bend, Transaction * trans)
    if (-1 < pgendTransactionGetDeletedVersion (be, trans))
    {
       LEAVE ("destroyed");
-      return BACKEND_ROLLBACK_DESTROY;
+      xaccBackendSetError (&be->be, ERR_BACKEND_MOD_DESTROY);
+      return;
    }
 
    trans_guid = xaccTransGetGUID (trans);
    pgendCopyTransactionToEngine (be, trans_guid);
 
    LEAVE ("rolled back");
-   return 0;
+   return;
 }
 
 /* ======================== END OF FILE ======================== */

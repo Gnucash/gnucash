@@ -159,9 +159,8 @@
         (if (and
              (not (gnc:account-file-to-load))
              (not (string? (gnc:history-get-last)))
-             (equal? ((gnc:option-getter
-                      (gnc:lookup-global-option "__new_user" "first_startup")))
-                    1))
+             (gnc:option-value
+              (gnc:lookup-global-option "__new_user" "first_startup")))
             (begin
               (gnc:show-new-user-choice-window)
               (gnc:start-ui-event-loop))

@@ -1,4 +1,4 @@
-<article id="XACC-REGWIN">
+<article id="xacc-regwin">
  <title>The Account Register</title>
   <sect1>
    <title>Introduction</title>
@@ -142,21 +142,25 @@
     Date Range</guimenuitem><guimenuitem>Show All</guimenuitem></menuchoice>.
    </para>
   </sect2>
-    <sect2 id=xacc-general-ledger>
+    <sect2 id="xacc-general-ledger">
 	<title>
 	The General Ledger
 	</title>
-	  <para>
-	  The general ledger is a special register which contains entries
-	  for more than one, account.  You can get a general ledger for
-	  an account and its subaccounts by using the <guimenu>Open subaccounts</guimenu>
-	  menu item on an account window, or a general ledger for <emphasis>
-	    every</emphasis> account by selecting <guimenu>General Ledger</guimenu>
-	  in the <guimenu>Tools</guimenu> main menu item.
-	  </para>
-	<para>
-	  <emphasis>FIXME: Picture probably needed</emphasis>
-	</para>
+      <para>
+	The general ledger is a special register which contains entries
+	for more than one, account.  You can get a general ledger for
+	an account and its subaccounts by using the <guimenu>Open subaccounts</guimenu>
+	menu item on an account window, or a general ledger for <emphasis>
+	  every</emphasis> account by selecting <guimenu>General Ledger</guimenu>
+	in the <guimenu>Tools</guimenu> main menu item.
+      </para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/general-ledger.png">
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
 	<para>
 	  General ledgers show the ledger entries in all the accounts
 	  a transaction appears in, which you can edit directly.  Note

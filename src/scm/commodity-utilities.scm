@@ -23,6 +23,8 @@
 (gnc:support "commodity-utilities.scm")
 (gnc:depend "report-utilities.scm")
 
+(use-modules (srfi srfi-1))
+
 ;; Returns true if the commodity comm represents a currency, false if
 ;; it represents a stock or mutual-fund.
 (define (gnc:commodity-is-currency? comm)

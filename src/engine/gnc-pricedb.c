@@ -58,6 +58,7 @@ gnc_price_create(void)
   p->not_saved = FALSE;
   p->do_free = FALSE;
   p->version = 0;
+  p->version_check = 0;
   xaccGUIDNew (&p->guid);
   xaccStoreEntity(p, &p->guid, GNC_ID_PRICE); 
   gnc_engine_generate_event (&p->guid, GNC_EVENT_CREATE);
@@ -186,7 +187,12 @@ gnc_price_commit_edit (GNCPrice *p)
     Backend *be;
     be = xaccPriceDBGetBackend (p->db);
     if (be && be->price_commit_edit) {
-      int rc;
+      GNCBackendError errcode;
+
+      /* clear errors */
+      do {
+        errcode = xaccBackendGetError (be);
+      } while (ERR_BACKEND_NO_ERR != errcode);
 
       /* if we haven't been able to call begin edit before, call it now */
       if (TRUE == p->not_saved) {
@@ -195,11 +201,16 @@ gnc_price_commit_edit (GNCPrice *p)
         }
       }
 
-      rc = (be->price_commit_edit) (be, p);
-      if (rc) {
+      (be->price_commit_edit) (be, p);
+      errcode = xaccBackendGetError (be);
+      if (ERR_BACKEND_NO_ERR != errcode) 
+      {
         /* XXX hack alert FIXME implement price rollback */
         PERR (" backend asked engine to rollback, but this isn't"
-              " handled yet. Return code=%d", rc);
+              " handled yet. Return code=%d", errcode);
+
+        /* push error back onto the stack */
+        xaccBackendSetError (be, errcode);
       }
     }
     p->not_saved = FALSE;

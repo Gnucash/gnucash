@@ -25,17 +25,17 @@ offers, have a look at the <link linkend="xacc-features">Features
     are intended to be stable, only seeing maintenance to fix bugs,
     and "odd" sub-versions indicate an "experimental" stream that
     seeks to add enhancement.
-    The latest stable release is 1.4.x; if you don't intend to
+    The latest stable release is 1.6.x; if you don't intend to
     do development work, you should be using either this version,
     or an older stable version. These versions are fairly stable,
     with all currently known bugs fixed.
-    The present "experimental" stream is gnucash-1.5.x, which is
+    The present "experimental" stream is gnucash-1.7.x, which is
     now almost at beta-test stage.  This is the version you are
     using right now, obviously!   If you are using this version
     with real data, PLEASE MAKE BACKUPS REGULARLY!
 
-    Once the 1.5.x series stabilizes, the next stable series
-    will be 1.6.x.
+    Once the 1.7.x series stabilizes, the next stable series
+    will be 1.8.x.
 
  </para>
 <para>If you wish to "hack" on the experimental version, you should
@@ -169,6 +169,15 @@ linkend="scheme"> Scheme </link>, the <link linkend="gwrap"> g-wrap
    is a report-generating monster. He's been on of the largest
    contributors to the current report infrastructure, creating
    many of the important reports.
+   </para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jsled@asynchronous.org</email>Joshua Sled</glossterm>
+<glossdef>
+<para>
+  works on scheduled transactions and budgeting.
    </para>
 </glossdef>
 </glossentry>
@@ -464,6 +473,13 @@ Christiansen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>hag@linnaean.org</email> Daniel Hagerty</glossterm>
+<glossdef>
+<para>patch to balance sheet report</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>mhamada@redhat.com</email> Mitsuo
       Hamada</glossterm>
 <glossdef>
@@ -581,6 +597,13 @@ Christiansen</glossterm>
       J (Oakton) Leach</glossterm>
 <glossdef>
 <para>autoconf patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>nj.lee@plumtree.co.nz</email> Nicholas Lee</glossterm>
+<glossdef>
+<para>scheme bug fix</para>
 </glossdef>
 </glossentry>
 
@@ -751,6 +774,13 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>notting@redhat.com</email> Bill Nottingham</glossterm>
+<glossdef>
+<para>guile configure patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>webmaster@obsidian.uia.net</email> OmNiBuS
       </glossterm>
 <glossdef>
@@ -818,6 +848,13 @@ Nielsen</glossterm>
 <glossterm><email>tpo@spin.ch</email> Tomas Pospisek</glossterm>
 <glossdef>
 <para>debian patches</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>famille.p.poulain@free.fr</email> Paul Poulain</glossterm>
+<glossdef>
+<para>French translations</para>
 </glossdef>
 </glossentry>
 
@@ -923,6 +960,14 @@ Nielsen</glossterm>
 </glossentry>
 
 <glossentry>
+<glossterm><email>garrisonstuber@bellsouth.net</email> Michael
+      T. Garrison Stuber</glossterm>
+<glossdef>
+<para>report patch</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
 <glossterm><email>bszx@bszxdomain.edu.eu.org</email> Bartek
       Szady</glossterm>
 <glossdef>
@@ -996,6 +1041,13 @@ Nielsen</glossterm>
       Yamashita</glossterm>
 <glossdef>
 <para>Japanese translation</para>
+</glossdef>
+</glossentry>
+
+<glossentry>
+<glossterm><email>jazepeda@pacbell.net</email> Alex Zepeda</glossterm>
+<glossdef>
+<para>postgres configure patch</para>
 </glossdef>
 </glossentry>
 </glosslist>
@@ -1263,6 +1315,28 @@ For now, this is what we have.
 <entry>341 files
          (114.2)</entry>
 <entry>8 (7.8)</entry>
+</row>
+<row>
+<entry>gnucash-1.6.0
+         June 2001</entry>
+<entry>139 files
+         (42.8+8.3)</entry>
+<entry>28 files
+         (5.7+2.0)</entry>
+<entry>23 files
+         (10.1+1.5)</entry>
+<entry>-</entry>
+<entry>132 files
+         (60.0+4.2)</entry>
+<entry>102 files
+         (6.2+0.8+27.3)</entry>
+<entry>64 files
+         (12.1)</entry>
+<entry>69 files
+         (12.9)</entry>
+<entry>455 files
+         (193.9)</entry>
+<entry>11 (18.7)</entry>
 </row>
 </tbody>
 </tgroup>

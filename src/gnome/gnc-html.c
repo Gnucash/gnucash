@@ -722,71 +722,6 @@ gnc_html_set_base_cb(GtkHTML * gtkhtml, const gchar * base,
 
 
 /********************************************************************
- * gnc_html_key_cb
- ********************************************************************/
-
-static gboolean
-gnc_html_key_cb(GtkWidget *widget, GdkEventKey *event, gpointer data) {
-  gnc_html * hw = (gnc_html *) data;
-  
-  GtkAdjustment * vadj = 
-    gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(hw->container));
-  GtkAdjustment * hadj = 
-    gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(hw->container));
-  
-  gfloat        v_value = vadj->value;
-  gfloat        h_value = hadj->value;
-
-  switch (event->keyval)
-  {
-    case GDK_KP_Left:
-    case GDK_Left:
-      h_value -= hadj->step_increment;
-      break;
-    case GDK_KP_Right:
-    case GDK_Right:
-      h_value += hadj->step_increment;
-      break;
-    case GDK_KP_Up:
-    case GDK_Up:
-      v_value -= vadj->step_increment;
-      break;
-    case GDK_KP_Down:
-    case GDK_Down:
-      v_value += vadj->step_increment;
-      break;
-    case GDK_KP_Page_Up:
-    case GDK_Page_Up:
-      v_value -= vadj->page_increment;
-      break;
-    case GDK_KP_Page_Down:
-    case GDK_Page_Down:
-    case GDK_space:
-      v_value += vadj->page_increment;
-      break;
-    case GDK_KP_Home:
-    case GDK_Home:
-      v_value = vadj->lower;
-      break;
-    case GDK_KP_End:
-    case GDK_End:
-      v_value = vadj->upper;
-      break;
-    default:
-      return FALSE;
-  }
-
-  v_value = CLAMP(v_value, vadj->lower, vadj->upper - vadj->page_size);
-  h_value = CLAMP(h_value, hadj->lower, hadj->upper - hadj->page_size);
-
-  gtk_adjustment_set_value(vadj, v_value);
-  gtk_adjustment_set_value(hadj, h_value);
-
-  return TRUE;
-}
-
-
-/********************************************************************
  * gnc_html_button_press_cb
  * mouse button callback (if any)
  ********************************************************************/
@@ -1315,10 +1250,7 @@ gnc_html_new(void) {
   gtk_signal_connect (GTK_OBJECT (retval->html), "button_press_event",
                       GTK_SIGNAL_FUNC (gnc_html_button_press_cb), 
                       (gpointer)retval);
-  
-  gtk_signal_connect (GTK_OBJECT(retval->html), "key_press_event", 
-                      GTK_SIGNAL_FUNC(gnc_html_key_cb), (gpointer)retval);
-  
+
   gtk_signal_connect (GTK_OBJECT(retval->html), "submit", 
                       GTK_SIGNAL_FUNC(gnc_html_submit_cb), (gpointer)retval);
   

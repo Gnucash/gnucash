@@ -338,6 +338,10 @@ gnc_start_recn_date_changed (GtkWidget *widget, gpointer data)
       xaccAccountGetShareBalanceAsOfDate (acc, new_date) :
       xaccAccountGetBalanceAsOfDate (acc, new_date);
 
+    /* make sure to display is non-negative */
+    if (gnc_reverse_balance (cb_data->account))
+      new_balance = gnc_numeric_neg (new_balance);
+
     gae = cb_data->gae;
 
     /* Update the balance display widget, first blocking the "changed"

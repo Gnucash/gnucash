@@ -35,6 +35,7 @@ EXTRA_DIST = \
   gnucash.lsm \
   make-gnucash-patch.in \
   po/.cvsignore \
+  po/gnc-glossary.txt \
   po/README
 
 ## We borrow guile's convention and use @-...-@ as the substitution

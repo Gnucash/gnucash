@@ -106,6 +106,7 @@ Dave Freese <DFreese@osc.uscg.mil> for leap-year fix
 John Goerzen <jgoerzen@complete.org> file i/o fix for 64-bit architectures
 Hans de Graaff <hans@degraaff.org> XML patches
 Bill Gribble <grib@billgribble.com> qif importation code, and much much more
+Daniel Hagerty <hag@linnaean.org> patch to balance sheet report
 Mitsuo Hamada <mhamada@redhat.com> messages Japanese translations
 Otto Hammersmith <otto@bug.redhat.com> for RedHat RPM version
 David Hampton <hampton@employees.org> qif import patch
@@ -122,6 +123,7 @@ Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Sven Kuenzler <sk@xgm.de> for SuSE README file
 Bryan Larsen <blarsen@ada-works.com> guile budget report
 Chris J (Oakton) Leach <LeachCJ@az1.bp.com> autoconf patch
+Nicholas Lee <nj.lee@plumtree.co.nz> scheme bug fix
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
@@ -142,6 +144,7 @@ Johnny Ernst Nielsen <j.e.nielsen@iname.com> messages Danish translation
 Stefan Nobis <stefan-ml@snobis.de> German translation patch
 Martin Norbäck <d95mback@dtek.chalmers.se> Swedish translation
 Peter Norton <spacey@inch.com> for a valiant attempt at a GTK port
+Bill Nottingham <notting@redhat.com> guile configure patch
 OmNiBuS <webmaster@obsidian.uia.net> web site graphics & content
 Gordon Oliver <gordo@pincoya.com> multiple currency status line patch
 Alan Orndorff <dwarf@solarisresources.com> Solaris packager
@@ -152,6 +155,7 @@ Alain Peyrat <Alain.Peyrat@nmu.alcatel.fr> for configure.in patches
 Peter Pointner <peter@wuzel.m.isar.de> QIF import fixes, Qt patches
 Gavin Porter <maufk@csv.warwick.ac.uk> for euro style dates
 Tomas Pospisek <tpo@spin.ch> Debian patches
+Paul Poulain <famille.p.poulain@free.fr> French translations
 Ron Record <rr@sco.com> for SCO Unixware & OpenServer binaries
 Keith Refson <Keith.Refson@earth.ox.ac.uk> Solaris fixes
 Dirk Schoenberger <schoenberger@signsoft.com> Qt/KDE work
@@ -175,5 +179,6 @@ Rob Walker <rob@valinux.com> guile and register patches
 David Woodhouse <dwmw2@infradead.org> messages  British translations
 Ken Yamaguchi <gooch@ic.EECS.Berkeley.EDU> QIF import fixes; MYM import
 Shimpei Yamashita <shimpei@gol.com> messages Japanese translation
+Alex Zepeda <jazepeda@pacbell.net> postgres configure patch
 
 ... and I am sure that I have missed many others ...

@@ -27,11 +27,13 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <wctype.h>
 
 #include "QuickFill.h"
 #include "basiccell.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
 
 
 struct _QuickFill
@@ -140,7 +142,7 @@ gnc_quickfill_string (QuickFill *qf)
 QuickFill *
 gnc_quickfill_get_char_match (QuickFill *qf, GdkWChar wc)
 {
-  guint key = islower (wc) ? toupper (wc) : wc;
+  guint key = iswlower (wc) ? towupper (wc) : wc;
 
   if (qf == NULL)
     return NULL;
@@ -282,7 +284,7 @@ quickfill_insert_recursive (QuickFill *qf, const GdkWChar *text, int depth,
   if ((text == NULL) || (text[depth] == 0))
     return;
 
-  key = islower (text[depth]) ? toupper (text[depth]) : text[depth];
+  key = iswlower (text[depth]) ? towupper (text[depth]) : text[depth];
 
   match_qf = g_hash_table_lookup (qf->matches, GUINT_TO_POINTER (key));
   if (match_qf == NULL)

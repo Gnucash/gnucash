@@ -28,11 +28,11 @@ define(`split', `gncEntry, Split, Split, e,
        entryGUID,    KEY, GUID *,   xaccSplitGetGUID(ptr),
        ')
 
-/* note that for the date_entered, we use the sql database      */
+/* note that for the last_modified, we use the sql database     */
 /* notion of 'current time'. This should help prevent clock     */
 /* skew problems between different simultaneous users           */
 /* Note also this means that the table entry is not             */
-/* date_entered,    , Timespec, xaccTransRetDateEnteredTS(ptr), */
+/* last_modified,    , Timespec, xaccTransRetDateModifiedTS(ptr), */
 /* as one might have guessed                                    */
 
 define(`transaction', `gncTransaction, Transaction, Transaction, t,

@@ -349,6 +349,8 @@ get_next_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
       default:
         printf("QIF import: something fishy.\n");
         next = NULL;
+        if (where > 3)
+          return NULL;
         break;
       }              
     }
@@ -397,11 +399,19 @@ get_prev_druid_page(QIFImportWindow * wind, GnomeDruidPage * page) {
         prev = g_list_last(wind->pre_comm_pages);
         break;
       case 2:
-        prev = g_list_last(wind->commodity_pages);
+        if(wind->new_stocks != SCM_BOOL_F) {
+          prev = g_list_last(wind->commodity_pages);
+        }
+        else {
+          prev = g_list_last(wind->pre_comm_pages);
+        }
         break;
       default:
-        printf("QIF import: something fishy.\n");
+        if (wind->show_doc_pages)
+          printf("QIF import: something fishy.\n");
         prev = NULL;
+        if (where < 1)
+          return NULL;
         break;
       }              
     }
@@ -934,10 +944,14 @@ gnc_ui_qif_import_default_acct_back_cb(GnomeDruidPage * page,
   scm_protect_object(wind->imported_files);
   
   scm_unprotect_object(wind->selected_file);
-  wind->imported_files = SCM_BOOL_F;
+  wind->selected_file = SCM_BOOL_F;
   scm_protect_object(wind->selected_file);
-  
-  return FALSE;
+
+  gnome_druid_set_page(GNOME_DRUID(wind->druid),
+                       get_named_page(wind, "load_file_page"));
+  gnome_druid_set_buttons_sensitive(GNOME_DRUID(wind->druid),
+                                    TRUE, TRUE, TRUE); 
+  return TRUE;  
 }
 
 
@@ -1551,7 +1565,7 @@ gnc_ui_qif_import_commodity_prepare_cb(GnomeDruidPage * page,
 
   /* insert new pages, one for each stock */
   stocks = wind->new_stocks;
-  while(!gh_null_p(stocks)) {
+  while(!gh_null_p(stocks) && (stocks != SCM_BOOL_F)) {
     comm_ptr_token = gh_call2(hash_ref, wind->stock_hash, gh_car(stocks));
     commodity      = gw_wcp_get_ptr(comm_ptr_token);
     

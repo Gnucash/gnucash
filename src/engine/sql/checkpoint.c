@@ -35,7 +35,8 @@
 
 #define _GNU_SOURCE
 #include <glib.h>
-#include <stdio.h>  
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>  
 #include <sys/types.h>  
 
@@ -309,9 +310,9 @@ static gpointer
 get_checkpoint_cb (PGBackend *be, PGresult *result, int j, gpointer data)
 {
    Checkpoint *chk = (Checkpoint *) data;
-   chk->balance = atoll(DB_GET_VAL("baln", j));
-   chk->cleared_balance = atoll(DB_GET_VAL("cleared_baln", j));
-   chk->reconciled_balance = atoll(DB_GET_VAL("reconed_baln", j));
+   chk->balance = strtoll(DB_GET_VAL("baln", j), NULL, 0);
+   chk->cleared_balance = strtoll(DB_GET_VAL("cleared_baln", j), NULL, 0);
+   chk->reconciled_balance = strtoll(DB_GET_VAL("reconed_baln", j), NULL, 0);
    return data;
 }
 

@@ -11,9 +11,6 @@
 
 (gnc:depend "utilities.scm")
 
-(define (gnc:qif-fuzzy= num-1 num-2)
-  (< (abs (- num-1 num-2)) .00000001))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  find-or-make-acct:
 ;;  given a colon-separated account path, return an Account* to
@@ -394,12 +391,6 @@
         (qif-memo (qif-split:memo (car (qif-xtn:splits qif-xtn))))
         (qif-from-acct (qif-xtn:from-acct qif-xtn))
         (qif-cleared (qif-xtn:cleared qif-xtn))
-        (amt-cvt (lambda (n)
-                   (if n
-                       (gnc:double-to-gnc-numeric 
-                        n GNC-DENOM-AUTO
-                        (logior (GNC-DENOM-SIGFIGS 6) GNC-RND-ROUND))
-                       (gnc:numeric-zero))))
         (n- (lambda (n) (gnc:numeric-neg n)))
         (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))
         (n+ (lambda (a b) (gnc:numeric-add a b 0 GNC-DENOM-LCD)))
@@ -409,6 +400,7 @@
     ;; set properties of the whole transaction     
     (apply gnc:transaction-set-date gnc-xtn (qif-xtn:date qif-xtn))
     
+    ;; fixme: bug #105 
     (if qif-payee
         (gnc:transaction-set-description gnc-xtn qif-payee))
     (if qif-number
@@ -441,7 +433,7 @@
                        (far-acct-name #f)
                        (far-acct-type #f)
                        (far-acct #f)
-                       (split-amt (amt-cvt (qif-split:amount qif-split)))
+                       (split-amt (qif-split:amount qif-split))
                        (memo (qif-split:memo qif-split))
                        (cat (qif-split:category qif-split)))
                    
@@ -480,7 +472,7 @@
                                  (= (length splits) 1)
                                  (hash-ref qif-memo-map qif-payee))
                             (and (string? memo)
-                                 (not (string=? qif-memo ""))
+                                 (not (string=? memo ""))
                                  (hash-ref qif-memo-map memo))))
                      (if (not far-acct-info)
                          (set! far-acct-info (hash-ref qif-cat-map cat)))))
@@ -510,11 +502,10 @@
         ;; "action" encoded in the Number field.  It's generally the
         ;; security account (for buys, sells, and reinvests) but can
         ;; also be an interest, dividend, or SG/LG account.
-        (let* ((share-price (amt-cvt (qif-xtn:share-price qif-xtn)))
-               (num-shares (amt-cvt (qif-xtn:num-shares qif-xtn)))
-               (split-amt (n* share-price num-shares)) 
-               (xtn-amt (amt-cvt 
-                         (qif-split:amount (car (qif-xtn:splits qif-xtn)))))
+        (let* ((share-price (qif-xtn:share-price qif-xtn))
+               (num-shares (qif-xtn:num-shares qif-xtn))
+               (split-amt #f)
+               (xtn-amt (qif-split:amount (car (qif-xtn:splits qif-xtn))))
                (qif-accts #f)
                (qif-near-acct #f)
                (qif-far-acct #f)
@@ -523,7 +514,7 @@
                (far-acct-name #f)
                (far-acct #f)
                (commission-acct #f)
-               (commission-amt (amt-cvt (qif-xtn:commission qif-xtn)))
+               (commission-amt (qif-xtn:commission qif-xtn))
                (commission-split #f)
                (defer-share-price #f)
                (gnc-far-split (gnc:split-create)))
@@ -694,11 +685,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-import:mark-some-splits splits xtn candidate-xtns)
-  (let* ((split (car splits))
+  (let* ((n- (lambda (n) (gnc:numeric-neg n)))
+         (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))
+         (n+ (lambda (a b) (gnc:numeric-add a b 0 GNC-DENOM-LCD)))
+         (n* (lambda (a b) (gnc:numeric-mul a b 0 GNC-DENOM-REDUCE)))
+         (n/ (lambda (a b) (gnc:numeric-div a b 0 GNC-DENOM-REDUCE)))    
+         (split (car splits))
          (near-acct-name #f)
          (far-acct-name #f)
          (date (qif-xtn:date xtn))
-         (amount (- (qif-split:amount split)))
+         (amount (n- (qif-split:amount split)))
          (group-amount #f)
          (memo (qif-split:memo split))        
          (security-name (qif-xtn:security-name xtn))
@@ -714,7 +710,7 @@
         (begin 
           (set! near-acct-name (qif-xtn:from-acct xtn))
           (set! far-acct-name (qif-split:category split))
-          (set! group-amount 0.0)
+          (set! group-amount (gnc:numeric-zero))
           
           ;; group-amount is the sum of all the splits in this xtn
           ;; going to the same account as 'split'.  We might be able
@@ -727,14 +723,14 @@
                  (begin
                    (set! same-acct-splits 
                          (cons s same-acct-splits))
-                   (set! group-amount (- group-amount (qif-split:amount s))))
+                   (set! group-amount (nsub group-amount (qif-split:amount s))))
                  (set! different-acct-splits 
                        (cons s different-acct-splits))))
            splits)
           
           (set! same-acct-splits (reverse same-acct-splits))
           (set! different-acct-splits (reverse different-acct-splits)))
-          
+        
         ;; stock transactions.  they can't have splits as far as I can
         ;; tell, so the 'different-acct-splits' is always '()
         (let ((qif-accts 
@@ -749,18 +745,18 @@
               (case action
                 ((intincx divx cglongx cgmidx cgshortx rtrncapx margintx 
                           sellx)
-                 (set! amount (- amount))
+                 (set! amount (n- amount))
                  (set! near-acct-name (qif-xtn:from-acct xtn))
                  (set! far-acct-name (qif-split:category split)))
                 ((miscincx miscexpx)
-                 (set! amount (- amount))
+                 (set! amount (n- amount))
                  (set! near-acct-name (qif-xtn:from-acct xtn))
                  (set! far-acct-name (qif-split:miscx-category split)))
                 ((buyx)
                  (set! near-acct-name (qif-xtn:from-acct xtn))
                  (set! far-acct-name (qif-split:category split)))
                 ((xout)
-                 (set! amount (- amount)))))))
+                 (set! amount (n- amount)))))))
     
     ;; this is the grind loop.  Go over every unmarked transaction in
     ;; the candidate-xtns list.
@@ -800,7 +796,7 @@
 (define (qif-import:xtn-has-matches? xtn acct-name date amount group-amt)
   (let ((matching-splits '())
         (same-acct-splits '())
-        (this-group-amt 0.0)
+        (this-group-amt (gnc:numeric-zero))
         (how #f)
         (date-matches 
          (let ((self-date (qif-xtn:date xtn)))
@@ -810,7 +806,13 @@
                 (eq? (length date) 3)
                 (= (car self-date) (car date))
                 (= (cadr self-date) (cadr date))
-                (= (caddr self-date) (caddr date))))))
+                (= (caddr self-date) (caddr date)))))
+        (n- (lambda (n) (gnc:numeric-neg n)))
+        (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))
+        (n+ (lambda (a b) (gnc:numeric-add a b 0 GNC-DENOM-LCD)))
+        (n* (lambda (a b) (gnc:numeric-mul a b 0 GNC-DENOM-REDUCE)))
+        (n/ (lambda (a b) (gnc:numeric-div a b 0 GNC-DENOM-REDUCE))))
+    
     (if date-matches 
         (begin 
           ;; calculate a group total for splits going to acct-name    
@@ -831,21 +833,21 @@
                         (case action 
                           ((xout sellx intincx divx cglongx cgshortx 
                                  miscincx miscexpx)
-                           (set! this-amt (- this-amt)))))
+                           (set! this-amt (n- this-amt)))))
                     
                     ;; we might be done if this-amt is either equal 
                     ;; to the split amount or the group amount.
                     (cond 
-                     ((gnc:qif-fuzzy= this-amt amount)
+                     ((gnc:numeric-equal this-amt amount)
                       (set! how 
                             (cons 'one-to-one (list split))))
-                     ((and group-amt (gnc:qif-fuzzy= this-amt group-amt))
+                     ((and group-amt (gnc:numeric-equal this-amt group-amt))
                       (set! how
                             (cons 'one-to-many (list split))))
                      (#t
                       (set! same-acct-splits (cons split same-acct-splits))
                       (set! this-group-amt 
-                            (+ this-group-amt this-amt))))))
+                            (n+ this-group-amt this-amt))))))
               
               ;; if 'how' is non-#f, we are ready to return.
               (if (and (not how) 
@@ -855,7 +857,7 @@
           ;; now we're out of the loop.  if 'how' isn't set, 
           ;; we can still have a many-to-one match.
           (if (and (not how)
-                   (gnc:qif-fuzzy= this-group-amt amount))
+                   (gnc:numeric-equal this-group-amt amount))
               (begin 
                 (set! how 
                       (cons 'many-to-one same-acct-splits))))))

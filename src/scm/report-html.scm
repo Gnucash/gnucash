@@ -21,6 +21,8 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-modules (ice-9 slib))
+
 (require 'hash-table)
 (require 'record)
 
@@ -64,6 +66,3 @@
                 (loop (+ 1 i)))))
         (set! l (append! l filler))))
   l)
-
-
-

@@ -519,7 +519,10 @@ gnc_book_write_to_xml_file_v2(GNCBook *book, const char *filename)
     fprintf(out, "</" GNC_V2_STRING ">\n\n");
     write_emacs_trailer(out);
 
-    fclose(out);
+    if(fclose(out) != 0)
+    {
+        return FALSE;
+    }
     
     return TRUE;
 }
