@@ -245,7 +245,7 @@ gnc_verify_exist_or_new_file (GtkWidget *parent, const char *filename)
     (parent, TRUE,
      _("The file %s does not exist. \n"
 "Would you like to create it now?"), 
-     filename ? filename : _("(null"));
+     filename ? filename : _("(null)"));
 }
 
 gboolean
@@ -261,7 +261,7 @@ gnc_test_dir_exist_error (GtkWindow *parent, const char *filename)
 "%s\n"
 "does not exist. \n"
 "Please choose another place for this file."), 
-       filename ? filename : _("(null"));
+       filename ? filename : _("(null)"));
     return FALSE;
   }
   return TRUE;
