@@ -230,8 +230,8 @@ sub schemify_quote {
   if (($$quotehash{$itemname, $field})) {
     $data = schemify_string($$quotehash{$itemname, $field});
   } else {
-    # VWD quotes don't set the symbol
-    $data = $itemname;
+    # VWD and a few others don't set the symbol field
+    $data = schemify_string($itemname);
   }
   $quotedata .= "($field . $data)";
 
