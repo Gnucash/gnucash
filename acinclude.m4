@@ -123,14 +123,14 @@ max_guile_version=ifelse([$2], , 99.99.99,$2)
 
 AC_MSG_CHECKING(for guile - ${min_guile_version} <= version < ${max_guile_version})
 
-guile_version=`guile-config --version 2>&1`
+guile_version=`guile --version | head -1`
 guile_version="$guile_version.0"
 guile_major_version=`echo $guile_version | \
-	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\1/'`
+	sed 's/.*Guile \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\1/'`
 guile_minor_version=`echo $guile_version | \
-	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\2/'`
+	sed 's/.*Guile \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\2/'`
 guile_micro_version=`echo $guile_version | \
-	sed 's/.*Guile version \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\3/'`
+	sed 's/.*Guile \([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\).*/\3/'`
 
 major_required=`echo ${min_guile_version} |\
         sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
