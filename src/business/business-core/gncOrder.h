@@ -19,11 +19,14 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-/** @addtogroup Business
+/* NOTE: Removed from doxygen by warlord on 2004-05-07 because
+ * this module is not fully implemented at this time.
+ */
+/* @addtogroup Business
     @{ */
-/** @addtogroup Order
+/* @addtogroup Order
     @{ */
-/** @file gncOrder.h
+/* @file gncOrder.h
     @brief Business Order Interface
     @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
 */
