@@ -1061,14 +1061,6 @@ gnc_invoice_update_window (InvoiceWindow *iw)
       hide = glade_xml_get_widget (iw->xml, "hide4");
       gtk_widget_hide_all (hide);
 
-      gtk_widget_hide_all (iw->edit_button);
-      gtk_widget_hide_all (iw->enter_button);
-      gtk_widget_hide_all (iw->cancel_button);
-      gtk_widget_hide_all (iw->delete_button);
-      gtk_widget_hide_all (iw->duplicate_button);
-      gtk_widget_hide_all (iw->blank_button);
-      gtk_widget_hide_all (iw->post_button);
-
     } else {			/* ! posted */
       hide = glade_xml_get_widget (iw->xml, "posted_label");
       gtk_widget_hide_all (hide);
@@ -1085,7 +1077,14 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     }
   }
 
+  gtk_widget_set_sensitive (iw->edit_button, !is_posted);
+  gtk_widget_set_sensitive (iw->enter_button, !is_posted);
+  gtk_widget_set_sensitive (iw->cancel_button, !is_posted);
+  gtk_widget_set_sensitive (iw->delete_button, !is_posted);
+  gtk_widget_set_sensitive (iw->duplicate_button, !is_posted);
+  gtk_widget_set_sensitive (iw->blank_button, !is_posted);
   gtk_widget_set_sensitive (iw->print_button, is_posted);
+  gtk_widget_set_sensitive (iw->post_button, !is_posted);
 
   if (is_posted) {
     //    GtkWidget *hide;
