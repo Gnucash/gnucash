@@ -204,9 +204,9 @@
   (add-customer-items)
 
   (gnc:add-extension
-    (gnc:make-menu-item (N_ "File Properties")
+    (gnc:make-menu-item (N_ "Properties")
 			(N_ "View and edit the properties of this file.")
-			(list "File" "Save As...")
+			(list "File" "Print")
 			(lambda ()
 			  (let* ((book (gnc:get-current-book))
 				 (slots (gnc:book-get-slots book)))
