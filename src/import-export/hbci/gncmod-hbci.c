@@ -74,8 +74,6 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
   gnc_hbci_addmenus();
   
   
-  //scm_c_define_gsubr("gnc:hbci-finish-setup", 
-  //                   0, 0, 0, scm_hbci_final_druid);
   
   return TRUE;
 }

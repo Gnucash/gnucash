@@ -307,7 +307,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       TRUE,
 				       _("The PIN you entered was wrong.\n"
 					 "Do you want to try again?"));
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_PIN_WRONG_0:
     GNCInteractor_erasePIN (inter);
     return gnc_verify_dialog_parented (parent,
@@ -329,7 +328,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       _("The PIN you entered was wrong.\n"
 					 "You have two further wrong retries left.\n"
 					 "Do you want to try again?"));
-#endif
   case HBCI_ERROR_CODE_PIN_ABORTED:
     /*     printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n"); */
     return FALSE;
@@ -339,7 +337,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
 				       TRUE,
 				       _("The PIN you entered was too short.\n"
 					 "Do you want to try again?"));
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_CARD_DESTROYED:
     GNCInteractor_hide (inter);
     gnc_error_dialog_parented
@@ -347,17 +344,14 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
        _("Unfortunately you entered a wrong PIN for too many times.\n"
 	 "Your chip card is therefore destroyed. Aborting."));
     return FALSE;
-#endif
   case HBCI_ERROR_CODE_FILE_NOT_FOUND:
     /*     printf("gnc_hbci_error_feedback: File not found error.\n"); */
     return FALSE;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_NO_CARD:
     return gnc_verify_dialog_parented (parent,
 				       TRUE,
 				       _("No chip card has been found in the chip card reader.\n"
 					 "Do you want to try again?"));
-#endif
   case HBCI_ERROR_CODE_JOB_NOT_SUPPORTED:
     GNCInteractor_hide (inter);
     gnc_error_dialog_parented 
@@ -365,7 +359,6 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
        _("Unfortunately this HBCI job is not supported \n"
 	 "by your bank or for your account. Aborting."));
     return FALSE;
-#if (OPENHBCI_VERSION_MAJOR>0) || (OPENHBCI_VERSION_MINOR>9) || (OPENHBCI_VERSION_PATCHLEVEL>5)
   case HBCI_ERROR_CODE_SOCKET_NO_CONNECT:
     GNCInteractor_hide (inter);
     gnc_error_dialog_parented 
@@ -373,7 +366,22 @@ gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error,
        _("The server of your bank refused the HBCI connection.\n"
 	 "Please try again later. Aborting."));
     return FALSE;
-#endif    
+  case HBCI_ERROR_CODE_MEDIUM:
+    gnc_error_dialog_parented 
+      (GTK_WINDOW (parent),
+       _("There was an error when loading the plugin for your security medium \n"
+	 "(see log window). Probably the versions of your currently installed \n"
+	 "OpenHBCI library and of the plugin do not match. In that case you need \n"
+	 "to recompile and reinstall the plugin again. Aborting now."));
+    GNCInteractor_hide (inter);
+    return FALSE;
+  case HBCI_ERROR_CODE_BAD_MEDIUM:
+    gnc_error_dialog_parented 
+      (GTK_WINDOW (parent),
+       _("Your security medium is not supported. No appropriate plugin \n"
+	 "has been found for that medium. Aborting."));
+    GNCInteractor_hide (inter);
+    return FALSE;
       
   default:
     return FALSE;

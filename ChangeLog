@@ -1,3 +1,12 @@
+2003-06-08  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/*.c: Remove old unused code.
+
+	* src/import-export/hbci/hbci-interaction.c: Add more user
+	feedback functions.
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Improve error handling.
+
 2003-06-01  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-date-format.*: Create a new "date format"
