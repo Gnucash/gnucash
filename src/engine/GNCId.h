@@ -1,20 +1,12 @@
 
 #include "qofid.h"
 
-/* Return the type of an identifier.
- * Equivalent function prototype:
- * QofIdType xaccGUIDType (const GUID * guid, QofBook *book); 
- */
-
-#define xaccGUIDType(obj,book)  (QOF_ENTITY(obj)->e_type)
-
 /* Equivalent function prototype:
  * void xaccGUIDNew (GUID *guid, QofBook *book)
  */
 #define xaccGUIDNew(guid,book)     \
       qof_entity_guid_new (qof_book_get_entity_table (book), (guid))
                                                                                 
-
 
 		#define xaccGUIDNULL guid_null
 		#define xaccGUIDMalloc guid_malloc
