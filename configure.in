@@ -73,16 +73,19 @@ AC_ARG_WITH( imlib,
        X_LIBS="${X_LIBS} -L$with_imlib/lib" X_CFLAGS="$X_CFLAGS -I$with_imlib/include" )
 
 # Let the user specify a guile-config executable.
-AC_ARG_WITH( guile-config, 
-  [  --with-guile-config=executable
-                          which guile-config to use to find guile ],
-  GUILE_CONFIG="$with_guile_config")
-AC_PATH_PROG(GUILE_CONFIG,guile-config,no)
-if test x"$GUILE_CONFIG" = xno; then
-	AC_MSG_ERROR([Can't find guile-config.
-  Install Guile 1.3, then specify the path to guile-config with
-  --with-guile-config=...])
-fi
+# XXX My guile-1.3 doesn't have a guile-config, but maybe I'm
+# downlevel... are there guile 1.3 .rpms or .debs that have
+# guilec-config in them?  if so we need to publish them.
+# AC_ARG_WITH( guile-config, 
+#   [  --with-guile-config=executable
+#                           which guile-config to use to find guile ],
+#   GUILE_CONFIG="$with_guile_config")
+# AC_PATH_PROG(GUILE_CONFIG,guile-config,no)
+# if test x"$GUILE_CONFIG" = xno; then
+# 	AC_MSG_ERROR([Can't find guile-config.
+#   Install Guile 1.3, then specify the path to guile-config with
+#   --with-guile-config=...])
+# fi
 
 # *******************************************
 # * figure out the configure options:
