@@ -2,6 +2,8 @@
 
 EXIT_VALUE=0
 
+PATH=/usr/lib/postgresql/bin:$PATH
+
 DB=$PWD/gnc_test_db
 SOCKDIR=$PWD/gnc_test_db_sock
 SOCKNUM=7777
