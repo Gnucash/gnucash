@@ -12,10 +12,22 @@ top_srcdir="@-GNC_SRCDIR-@"
 top_builddir="@-GNC_BUILDDIR-@"
 G_WRAP_MODULE_DIR="@-G_WRAP_MODULE_DIR-@"
 
-if test "${GNC_CONFIG}"x = x
+if test "${GNC_CONFIG_DIR}"x = x
 then
   GNC_CONFIG_DIR="${top_srcdir}/src/scm"
   export GNC_CONFIG_DIR
+fi
+
+if test "${GNC_SHARE_DIR}"x = x
+then
+  GNC_SHARE_DIR="${top_srcdir}/src/scm"
+  export GNC_SHARE_DIR
+fi
+
+if test "${GNC_DOC_PATH}"x = x
+then
+  GNC_DOC_PATH="(${top_srcdir}/src/scm)"
+  export GNC_DOC_PATH
 fi
 
 eval `@-GNC_SRCDIR-@/src/gnc-test-env \
