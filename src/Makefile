@@ -28,7 +28,7 @@ srcdir   = .
 
 CC       = gcc
 INCLPATH = -I.. -I./engine -I./register -I./../include -I/usr/local/include
-CFLAGS   =  -O2 -Wall  -I/usr/X11R6/include ${INCLPATH}
+CFLAGS   =  -O2 -Wall -g -Wall  -I/usr/X11R6/include ${INCLPATH}
 
 
 ######################################################################

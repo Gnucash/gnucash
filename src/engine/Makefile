@@ -30,7 +30,7 @@ srcdir   = .
 CC       = gcc
 RANLIB   = ranlib
 INCLPATH = -I./../../include -I./../..
-CFLAGS   =  -O2 -Wall ${INCLPATH}
+CFLAGS   =  -O2 -Wall -g -Wall ${INCLPATH}
 
 ######################################################################
 # See Makefile.common for information about these variables.

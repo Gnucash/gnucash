@@ -33,7 +33,7 @@ INCLPATH = -I./../.. \
            -I/usr/local/include
  
 
-CFLAGS :=  -O2 -Wall  -I/usr/X11R6/include -DCELL_WIDGETS=1 ${INCLPATH} 
+CFLAGS :=  -O2 -Wall -g -Wall  -I/usr/X11R6/include -DCELL_WIDGETS=1 ${INCLPATH} 
 
 ######################################################################
 # See Makefile.common for information about these variables.
