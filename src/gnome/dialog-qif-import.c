@@ -1,0 +1,919 @@
+/********************************************************************\
+ * dialog-qif-import.c -- window for importing QIF files            *
+ *                        (GnuCash)                                 *
+ * Copyright (C) 2000 Bill Gribble <grib@billgribble.com>           *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, write to the Free Software      *
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
+\********************************************************************/
+
+#define _GNU_SOURCE
+
+#include "top-level.h"
+
+#include <gnome.h>
+#include <stdio.h>
+
+#include <guile/gh.h>
+
+#include "dialog-qif-import.h"
+#include "dialog-account-picker.h"
+#include "window-help.h"
+#include "messages.h"
+#include "gnome-top-level.h"
+
+#include "Account.h"
+#include "AccInfo.h"
+#include "FileDialog.h"
+#include "FileBox.h"
+#include "dialog-utils.h"
+#include "query-user.h"
+#include "util.h"
+
+static void update_file_info(QIFImportWindow * win, SCM qiffile);
+static void update_file_page(QIFImportWindow * win);
+static void update_accounts_page(QIFImportWindow * win);
+static void update_categories_page(QIFImportWindow * win);
+
+
+/********************************************************************\
+ * gnc_ui_qif_import_dialog_make(GtkWidget * parent) * build the
+ * dialog.  For now, there can be only one (obhighlanderref)
+\********************************************************************/
+
+QIFImportWindow *
+gnc_ui_qif_import_dialog_make(GtkWidget * parent) 
+{
+  QIFImportWindow * retval;
+
+  GtkWidget * optionmenu;
+  GtkWidget * menu;
+  GtkWidget * active;
+  GtkWidget * currency_entry;
+ 
+  int i;
+  
+  SCM  load_map_prefs;
+  SCM  mapping_info;
+  SCM  lookup_option;
+  SCM  lookup_value;
+  SCM  default_currency;
+  int  scm_strlen;
+
+  retval = (QIFImportWindow *) malloc(sizeof(QIFImportWindow));
+  
+  retval->parent = parent;
+  retval->dialog = create_QIF_File_Import_Dialog();
+  retval->imported_files = 
+    SCM_EOL;
+  retval->selected_file = SCM_BOOL_F;
+
+  gtk_object_set_data(GTK_OBJECT(retval->dialog),
+                      "qif_window_struct", retval);
+
+  /* load the saved-state of the mappings from Quicken accounts and
+   * categories to gnucash accounts */
+  load_map_prefs = gh_eval_str("qif-import:load-map-prefs");
+  lookup_option = gh_eval_str("gnc:lookup-global-option");
+  lookup_value  = gh_eval_str("gnc:option-value");
+
+  mapping_info = gh_call0(load_map_prefs);
+  retval->mapping_info = mapping_info;
+  
+  default_currency = gh_call1(lookup_value,
+                              gh_call2(lookup_option,
+                                       gh_str02scm("International"),
+                                       gh_str02scm("Default Currency")));
+  
+  scm_protect_object(retval->imported_files);
+  scm_protect_object(retval->mapping_info);
+
+  /* set the currency entry to the GNC default currency */
+  currency_entry = gtk_object_get_data(GTK_OBJECT(retval->dialog),
+                                       "qif_currency_entry");
+  gtk_entry_set_text(GTK_ENTRY(currency_entry), 
+                     gh_scm2newstr(default_currency, &scm_strlen));
+
+  /* repair the option menus to associate "option_index" with the 
+   * index number for each menu item */
+  optionmenu = gtk_object_get_data(GTK_OBJECT(retval->dialog),
+                                   "qif_radix_picker");
+  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(optionmenu));
+
+  for(i = 0; i < 3; i++) {
+    gtk_option_menu_set_history(GTK_OPTION_MENU(optionmenu), i);
+    active = gtk_menu_get_active(GTK_MENU(menu));
+    gtk_object_set_data(GTK_OBJECT(active), 
+                        "option_index",
+                        (gpointer)(i));
+  }
+  gtk_option_menu_set_history(GTK_OPTION_MENU(optionmenu), 0);
+
+  optionmenu = gtk_object_get_data(GTK_OBJECT(retval->dialog),
+                                   "qif_date_picker");
+  menu = gtk_option_menu_get_menu(GTK_OPTION_MENU(optionmenu));
+
+  for(i = 0; i < 5; i++) {
+    gtk_option_menu_set_history(GTK_OPTION_MENU(optionmenu), i);
+    active = gtk_menu_get_active(GTK_MENU(menu));
+    gtk_object_set_data(GTK_OBJECT(active), 
+                        "option_index",
+                        (gpointer)(i));
+  }
+  gtk_option_menu_set_history(GTK_OPTION_MENU(optionmenu), 0);
+
+  gtk_widget_show(retval->dialog);
+
+  if (retval->dialog->window == NULL) {
+    free(retval);
+    return NULL;
+  }
+
+  gdk_window_raise(retval->dialog->window);
+
+  return retval;
+}
+
+
+/********************************************************************\
+ * gnc_ui_qif_import_dialog_destroy
+ * close the QIF Import dialog window
+\********************************************************************/
+
+void
+gnc_ui_qif_import_dialog_destroy (QIFImportWindow * window)
+{
+  if(window) {
+    gnome_dialog_close(GNOME_DIALOG(window->dialog));
+  }
+}
+
+
+/********************************************************************\
+ * gnc_ui_qif_import_select_file_cb
+ * invoked when the "select file" button is clicked
+ * this is just to pick a file name and reset-to-defaults all the 
+ * fields describing how to parse the file.
+\********************************************************************/
+
+void
+gnc_ui_qif_import_select_file_cb(GtkButton * button,
+                                 gpointer user_data) {
+  GtkWidget       * dialog = GTK_WIDGET(user_data);
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
+  
+  GtkWidget  * qif_filename_entry =
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), "qif_filename_entry");
+  GtkWidget  * acct_auto_button = 
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), 
+                        "qif_account_auto_check");
+  GtkWidget  * qif_acct_entry =   
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), 
+                        "qif_account_entry");
+  GtkWidget  * qif_radix_picker =   
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), 
+                        "qif_radix_picker");
+  GtkWidget  * qif_date_picker =   
+    gtk_object_get_data(GTK_OBJECT(wind->dialog), 
+                        "qif_date_picker");
+  
+  char       * new_file_name;
+
+  new_file_name = (char *)fileBox("Select QIF File", "*.qif");
+
+  if(new_file_name) {
+
+    /* set the filename entry for what was selected */
+    if(qif_filename_entry) {
+      gtk_entry_set_text(GTK_ENTRY(qif_filename_entry),
+                         new_file_name);
+    }
+
+    /* the account should be auto-determined by default 
+     * if the "opening balance" trick doesn't work "auto" will
+     * use the file name as a guess */
+    if(acct_auto_button) {
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(acct_auto_button),
+                                   TRUE);
+    }
+    if(qif_acct_entry) {
+      gtk_entry_set_text(GTK_ENTRY(qif_acct_entry),
+                         "");
+    }
+    
+    /* radix and date formats are auto-determined by default */
+    if(qif_date_picker) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(qif_date_picker),
+                                  0);
+    }
+    if(qif_radix_picker) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(qif_radix_picker),
+                                  0);
+    }
+  }
+}
+
+
+/********************************************************************\
+ * gnc_ui_qif_import_load_file_cb
+ * 
+ * Invoked when the "load file" button is clicked on the first page of
+ * the QIF Import notebook.  Filename, currency, radix format, and
+ * date format are read from the UI and passed to the Scheme side.
+\********************************************************************/
+
+void
+gnc_ui_qif_import_load_file_cb         (GtkButton       *button,
+                                        gpointer         user_data) {
+  GtkWidget       * dialog = GTK_WIDGET(user_data);
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
+  
+  char * path_to_load;
+  char * qif_account;
+  char * currency;
+  int  radix_format;
+  int  date_format;
+
+  GtkWidget * filename_box = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                 "qif_filename_entry");
+  GtkWidget * currency_box = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                 "qif_currency_entry");
+  GtkWidget * radix_picker = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                 "qif_radix_picker");
+  GtkWidget * date_picker  = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                 "qif_date_picker");
+  GtkWidget * account_entry = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                  "qif_account_entry");
+  GtkWidget * account_auto  = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                  "qif_account_auto_check");
+
+  GtkWidget * menuitem;
+  
+  SCM make_qif_file, qif_file_load, qif_file_loaded, unload_qif_file;
+  SCM scm_filename, scm_currency, scm_radix, scm_date, scm_qif_account;
+  SCM scm_qiffile;
+  SCM imported_files = SCM_EOL;
+
+  char * radix_symbols [] = { "unknown", "decimal", "comma" };  
+  char * date_symbols [] = { "unknown", "m-d-y", "d-m-y", 
+                             "y-m-d", "y-d-m" };
+  
+  /* get the UI elements */
+  path_to_load = gtk_entry_get_text(GTK_ENTRY(filename_box));
+  currency     = gtk_entry_get_text(GTK_ENTRY(currency_box));
+  qif_account  = gtk_entry_get_text(GTK_ENTRY(account_entry));
+
+  radix_picker = gtk_option_menu_get_menu(GTK_OPTION_MENU(radix_picker));
+  menuitem     = gtk_menu_get_active(GTK_MENU(radix_picker));
+  radix_format = (int)(gtk_object_get_data(GTK_OBJECT(menuitem),
+                                           "option_index"));
+  
+  date_picker = gtk_option_menu_get_menu(GTK_OPTION_MENU(date_picker));
+  menuitem     = gtk_menu_get_active(GTK_MENU(date_picker));
+  date_format  = (int)(gtk_object_get_data(GTK_OBJECT(menuitem),
+                                           "option_index"));
+
+  if(strlen(path_to_load) == 0) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), 
+                              "You must specify a file to load.");
+  }
+  else if(strlen(currency) == 0) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->dialog), 
+                              "You must specify a currency.");
+  }
+  else {
+    /* find the make and load functions. */
+    make_qif_file   = gh_eval_str("make-qif-file");
+    qif_file_load   = gh_eval_str("qif-file:read-file");
+    qif_file_loaded = gh_eval_str("qif-dialog:qif-file-loaded?");
+    unload_qif_file = gh_eval_str("qif-dialog:unload-qif-file");
+    
+    if((!gh_procedure_p(make_qif_file)) ||
+       (!gh_procedure_p(qif_file_load)) ||
+       (!gh_procedure_p(qif_file_loaded))) {
+      gnc_error_dialog_parented(GTK_WINDOW(wind->dialog),
+                                "QIF File scheme code not loaded properly.");
+    }
+    else {
+      /* convert args */
+      scm_filename = gh_str02scm(path_to_load);
+      scm_currency = gh_str02scm(currency);
+      scm_radix = gh_symbol2scm(radix_symbols[radix_format]);
+      scm_date = gh_symbol2scm(date_symbols[date_format]);
+      
+      if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(account_auto))) {
+        scm_qif_account = gh_symbol2scm("unknown");
+      }
+      else {
+        scm_qif_account = gh_str02scm(qif_account);
+      }
+
+      imported_files = wind->imported_files;
+
+      if(gh_call2(qif_file_loaded, scm_filename, wind->imported_files)
+         == SCM_BOOL_T) {
+        if(gnc_verify_dialog_parented(GTK_WINDOW(wind->dialog),
+                                      "QIF File already loaded.  Reload "
+                                      "with current settings?", TRUE)) {
+          imported_files = 
+            gh_call2(unload_qif_file, scm_filename, wind->imported_files);
+        }
+        else {
+          return;
+        }
+      }
+
+      /* create the <qif-file> object */
+      scm_qiffile = gh_apply(make_qif_file, 
+                             SCM_LIST4(scm_qif_account, scm_radix, 
+                                       scm_date, scm_currency));
+      
+      imported_files = 
+        gh_cons(scm_qiffile, imported_files);
+
+      wind->selected_file = scm_qiffile;
+
+      /* I think I have to do this since it's a global but not in 
+       * guile-space */
+      scm_protect_object(wind->selected_file);      
+      
+      /* import the file into it */
+      if(gh_call2(qif_file_load, 
+                  gh_car(imported_files),
+                  scm_filename) != SCM_BOOL_T) {
+        gnc_error_dialog_parented(GTK_WINDOW(wind->dialog),
+                                  "Failed to load QIF file. Are you "
+                                  "sure it's a QIF file?");
+        imported_files = 
+          gh_call2(unload_qif_file, scm_filename, imported_files);
+      }
+      wind->imported_files = imported_files;
+      scm_protect_object(wind->imported_files);
+
+      /* now update the Accounts and Categories pages in the notebook */
+      update_file_page(wind);
+      update_accounts_page(wind); 
+      update_categories_page(wind);
+      
+    }
+  }
+}
+
+
+void
+gnc_ui_qif_import_select_loaded_file_cb(GtkList   * list,
+                                        GtkWidget * widget,
+                                        gpointer  user_data) {
+  GtkWidget       * dialog = GTK_WIDGET(user_data);
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
+  
+  SCM scm_qiffile;
+  
+  scm_qiffile = (SCM)gtk_object_get_data(GTK_OBJECT(widget), "scm-object");
+
+  wind->selected_file = scm_qiffile;
+  scm_protect_object(wind->selected_file);
+  update_file_info(wind, scm_qiffile);
+
+}
+
+
+/****************************************************************\
+ * qif_import_ok_cb
+ * do the work of actually translating QIF xtns to GNC xtns.
+\****************************************************************/
+
+void
+gnc_ui_qif_import_ok_cb(GtkButton * button, gpointer user_data) {
+
+  SCM  save_map_prefs;
+  SCM  qif_to_gnc;
+  SCM  hash_set;
+  SCM  hash_data;
+  char * qif_acct_name;
+  char * qif_cat_name;
+  int row;
+
+  GtkWidget       * dialog = GTK_WIDGET(user_data);
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
+ 
+  GtkWidget * acc_list = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                             "account_page_list");
+  GtkWidget * cat_list = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                             "category_page_list");
+
+  save_map_prefs = gh_eval_str("qif-import:save-map-prefs");
+  qif_to_gnc     = gh_eval_str("qif-import:qif-to-gnc");
+  hash_set       = gh_eval_str("hash-set!");
+
+  /* transfer the info from the account / category pickers to 
+   * the mapping info hash tables */
+  for(row=0; row < GTK_CLIST(acc_list)->rows; row++) {
+    gtk_clist_get_text(GTK_CLIST(acc_list), row, 0, &qif_acct_name);
+
+    hash_data = (SCM)gtk_clist_get_row_data(GTK_CLIST(acc_list), row);
+    gh_call3(hash_set, gh_cadr(wind->mapping_info), 
+             gh_str02scm(qif_acct_name), 
+             hash_data);
+  }
+
+  for(row=0; row < GTK_CLIST(cat_list)->rows; row++) {
+    gtk_clist_get_text(GTK_CLIST(cat_list), row, 0, &qif_cat_name);
+
+    hash_data = (SCM)gtk_clist_get_row_data(GTK_CLIST(cat_list), row);
+    gh_call3(hash_set, gh_caddr(wind->mapping_info), 
+             gh_str02scm(qif_cat_name), 
+             hash_data);
+  }
+  
+  /* call a scheme function to do the work */
+  gh_call2(qif_to_gnc, wind->imported_files, 
+           wind->mapping_info);
+
+  /* write out mapping info before destroying the window */
+  gh_call1(save_map_prefs, wind->mapping_info);
+
+  gnc_ui_qif_import_dialog_destroy(wind);
+  wind = NULL;
+}
+
+
+void
+gnc_ui_qif_import_cancel_cb (GtkButton * button, gpointer user_data) {
+
+  GtkWidget       * dialog = GTK_WIDGET(user_data);
+  QIFImportWindow * wind = 
+    gtk_object_get_data(GTK_OBJECT(dialog), "qif_window_struct");
+ 
+  gnc_ui_qif_import_dialog_destroy(wind);
+}
+
+
+void
+gnc_ui_qif_import_help_cb (GtkButton * button, gpointer user_data) {
+  
+  helpWindow(NULL, HELP_STR, HH_QIFIMPORT);
+}
+
+void
+gnc_ui_qif_import_account_line_select_cb(GtkCList * clist, gint row,
+                                         gint column, GdkEvent * event,
+                                         gpointer user_data) {
+  char * initial_string;
+  int initial_type;
+
+  SCM  scm_acct;
+  SCM  old_info;
+  SCM  munge_func = gh_eval_str("qif-dialog:munge-account-mapping");
+
+  old_info = (SCM)gtk_clist_get_row_data(GTK_CLIST(clist), row);
+
+  gtk_clist_get_text(GTK_CLIST(clist), row, 2, &initial_string);
+
+  initial_type = gh_scm2int(gh_list_ref(old_info, gh_int2scm(2)));
+
+  scm_acct = accountPickerBox(initial_string, initial_type);
+
+  if(gh_list_p(scm_acct)) {
+    gh_call2(munge_func, old_info, scm_acct);
+
+    gtk_clist_set_text(GTK_CLIST(clist), row, 2, 
+                       gh_scm2newstr(gh_car(scm_acct), NULL));
+    gtk_clist_set_text(GTK_CLIST(clist), row, 3,
+                       xaccAccountTypeEnumAsString
+                       (gh_scm2int(gh_cadr(scm_acct))));
+  }
+}
+
+void
+gnc_ui_qif_import_category_line_select_cb(GtkCList * clist, gint row,
+                                          gint column, GdkEvent * event,
+                                          gpointer user_data) {
+  char * initial_string;
+  int initial_type;
+
+  SCM  scm_acct;
+  SCM  old_info;
+  SCM  munge_func = gh_eval_str("qif-dialog:munge-account-mapping");
+
+  old_info = (SCM)gtk_clist_get_row_data(GTK_CLIST(clist), row);
+
+  gtk_clist_get_text(GTK_CLIST(clist), row, 2, &initial_string);
+  initial_type = gh_scm2int(gh_list_ref(old_info, gh_int2scm(2)));
+
+  scm_acct = accountPickerBox(initial_string, initial_type);
+
+  if(gh_list_p(scm_acct)) {
+    gh_call2(munge_func, old_info, scm_acct);
+
+    gtk_clist_set_text(GTK_CLIST(clist), row, 2, 
+                       gh_scm2newstr(gh_car(scm_acct), NULL));
+    gtk_clist_set_text(GTK_CLIST(clist), row, 3,
+                       xaccAccountTypeEnumAsString
+                       (gh_scm2int(gh_cadr(scm_acct))));
+  }
+}
+
+
+
+/********************************************************************\
+ * update_file_page
+ * update the left-side list and the right-side info. 
+\********************************************************************/
+
+static void
+update_file_page(QIFImportWindow * wind) {
+  
+  GtkWidget * new_list_item;
+  GList     * new_loaded_file;
+  SCM       loaded_file_list = wind->imported_files;
+  SCM       scm_qiffile;
+  SCM       qif_file_path;
+  int       path_strlen;
+
+  /* find the list of loaded files */
+  GtkWidget * loaded_files = gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                 "selected_file_list");
+  /* clear the list */
+  gtk_list_remove_items(GTK_LIST(loaded_files),
+                        gtk_container_children(GTK_CONTAINER(loaded_files)));
+  qif_file_path = gh_eval_str("qif-file:path");
+  
+  /* iterate over all the imported files */
+  while(!gh_null_p(loaded_file_list)) {  
+    scm_qiffile = gh_car(loaded_file_list);
+
+    /* make a list item with the SCM object attached as data */
+    new_list_item = 
+      gtk_list_item_new_with_label(gh_scm2newstr(gh_call1(qif_file_path,
+                                                           scm_qiffile),
+                                                 &path_strlen));
+    gtk_object_set_data(GTK_OBJECT(new_list_item),
+                        "scm-object", (gpointer)scm_qiffile);
+    scm_protect_object(scm_qiffile);
+
+    /* tack it on to the displayed list */
+    new_loaded_file = g_list_alloc();
+    new_loaded_file->next = NULL;
+    new_loaded_file->prev = NULL;
+    gtk_widget_show(new_list_item);
+    new_loaded_file->data = new_list_item;
+    
+    /* now add the file to the loaded-files list */
+    gtk_list_append_items(GTK_LIST(loaded_files), new_loaded_file);      
+
+    /* select_child will update the file info */
+    if(scm_qiffile == wind->selected_file) {
+      gtk_list_select_child(GTK_LIST(loaded_files), new_list_item);
+    }
+
+    loaded_file_list = gh_cdr(loaded_file_list);
+  }
+}
+
+
+/********************************************************************\
+ * update_file_info
+ * 
+ * Invoked when a file is loaded or the name of a loaded file is
+ * clicked in the loaded files list.  This causes the pickers and text
+ * boxes on the right side to be updated to reflect the actual values
+ * used or detected in loading the files.
+\********************************************************************/
+
+static void
+update_file_info(QIFImportWindow * win, SCM qif_file) {
+
+  SCM   qif_file_radix_format;
+  SCM   qif_file_date_format;
+  SCM   qif_file_currency;
+  SCM   qif_file_path;
+  SCM   qif_file_account;
+  SCM   scm_radix_format;
+  SCM   scm_date_format;
+  SCM   scm_currency;
+  SCM   scm_qif_account;
+  SCM   scm_qif_path;
+
+  GtkWidget * path_entry;
+  GtkWidget * currency_entry;
+  GtkWidget * radix_optionmenu;
+  GtkWidget * date_optionmenu;
+  GtkWidget * account_entry;
+  GtkWidget * account_auto;
+
+  int scm_strlen;
+
+  /* look up the <qif-file> methods */
+  qif_file_radix_format = gh_eval_str("qif-file:radix-format");
+  qif_file_date_format  = gh_eval_str("qif-file:date-format");
+  qif_file_currency     = gh_eval_str("qif-file:currency");
+  qif_file_path         = gh_eval_str("qif-file:path");
+  qif_file_account      = gh_eval_str("qif-file:account");
+  
+  /* make sure the methods are loaded */
+  if((!gh_procedure_p(qif_file_radix_format)) ||
+     (!gh_procedure_p(qif_file_date_format)) ||
+     (!gh_procedure_p(qif_file_currency)) ||
+     (!gh_procedure_p(qif_file_account)) ||
+     (!gh_procedure_p(qif_file_path))) {
+    gnc_error_dialog_parented(GTK_WINDOW(win->dialog),
+                              "QIF File scheme code not loaded properly.");
+    return;
+  }
+  else {
+    /* find the relevant widgets */
+    path_entry = gtk_object_get_data(GTK_OBJECT(win->dialog),
+                                     "qif_filename_entry");
+    currency_entry = gtk_object_get_data(GTK_OBJECT(win->dialog),
+                                         "qif_currency_entry");
+    radix_optionmenu = gtk_object_get_data(GTK_OBJECT(win->dialog),
+                                           "qif_radix_picker");
+    date_optionmenu = gtk_object_get_data(GTK_OBJECT(win->dialog),
+                                          "qif_date_picker");
+    account_entry  = gtk_object_get_data(GTK_OBJECT(win->dialog),
+                                         "qif_account_entry");
+    account_auto  = gtk_object_get_data(GTK_OBJECT(win->dialog),
+                                        "qif_account_auto_check");
+
+    /* stick the currently-selected qiffile scm in the window data */
+    gtk_object_set_data(GTK_OBJECT(win->dialog), 
+                        "current_qif_file", (gpointer)qif_file);
+    
+    scm_protect_object(qif_file);
+
+    /* get the radix/date formats, currency etc from the Scheme side */
+    scm_radix_format  = gh_call1(qif_file_radix_format,
+                                 qif_file);
+    scm_date_format   = gh_call1(qif_file_date_format,
+                                 qif_file);
+    scm_currency      = gh_call1(qif_file_currency,
+                                 qif_file);
+    scm_qif_path      = gh_call1(qif_file_path,
+                                 qif_file);
+    scm_qif_account   = gh_call1(qif_file_account,
+                                 qif_file);
+    
+    /* put the data in the info fields */
+    gtk_entry_set_text(GTK_ENTRY(path_entry),
+                       gh_scm2newstr(scm_qif_path, &scm_strlen));
+    gtk_entry_set_text(GTK_ENTRY(currency_entry),
+                       gh_scm2newstr(scm_currency, &scm_strlen));
+    
+    /* account is weird. after loading, either we know it or we don't 
+     * but in either case the auto should be off. */
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(account_auto), FALSE);
+    gtk_entry_set_text(GTK_ENTRY(account_entry),
+                       gh_scm2newstr(scm_qif_account, &scm_strlen));
+    
+    /* set the option menu selections */
+    if(!strcmp(gh_symbol2newstr(scm_radix_format, &scm_strlen),
+               "unknown")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(radix_optionmenu), 0);
+    }
+    else if(!strcmp(gh_symbol2newstr(scm_radix_format, &scm_strlen),
+                    "decimal")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(radix_optionmenu), 1);
+    }
+    else if(!strcmp(gh_symbol2newstr(scm_radix_format, &scm_strlen),
+                    "comma")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(radix_optionmenu), 2);
+    }
+
+    if(!strcmp(gh_symbol2newstr(scm_date_format, &scm_strlen),
+               "unknown")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(date_optionmenu), 0);
+    }
+    else if(!strcmp(gh_symbol2newstr(scm_date_format, &scm_strlen),
+                    "m-d-y")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(date_optionmenu), 1);
+    }
+    else if(!strcmp(gh_symbol2newstr(scm_date_format, &scm_strlen),
+                    "d-m-y")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(date_optionmenu), 2);
+    }
+    else if(!strcmp(gh_symbol2newstr(scm_date_format, &scm_strlen),
+                    "y-m-d")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(date_optionmenu), 3);
+    }
+    else if(!strcmp(gh_symbol2newstr(scm_date_format, &scm_strlen),
+                    "y-d-m")) {
+      gtk_option_menu_set_history(GTK_OPTION_MENU(date_optionmenu), 4);
+    }
+  }
+}
+
+
+
+/****************************************************************\
+ * update_accounts_page 
+ * Ask the Scheme side to guess some account translations , then 
+ * show the filename, account name, and suggested translation in 
+ * the Accounts page clist. 
+\****************************************************************/
+
+static void
+update_accounts_page(QIFImportWindow * wind) {
+
+  SCM        make_account_display;
+  SCM        strings_left;
+  SCM        display_info;
+  SCM        hash_data;
+  SCM        hash_set;
+  int        xtn_count;
+  char       * xtn_count_string;
+  char       * qif_acct_name;
+  GtkWidget  * account_list;
+  int        row;
+  int        scheme_strlen;
+  char       * row_text[4];
+
+  make_account_display = gh_eval_str("qif-dialog:make-account-display");
+  hash_set             = gh_eval_str("hash-set!");
+  
+  /* make sure we found the procedure */
+  if(!gh_procedure_p(make_account_display)) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->dialog),
+                              "QIF File scheme code not loaded properly.");
+    return;
+  }
+
+  account_list = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                  "account_page_list");
+  
+  /* transfer the existing info from the account picker to 
+   * the mapping info hash table  */
+  for(row=0; row < GTK_CLIST(account_list)->rows; row++) {
+    gtk_clist_get_text(GTK_CLIST(account_list), row, 0, &qif_acct_name);
+    
+    hash_data = (SCM)gtk_clist_get_row_data(GTK_CLIST(account_list), row);
+    gh_call3(hash_set, gh_cadr(wind->mapping_info), 
+             gh_str02scm(qif_acct_name), 
+             hash_data);
+  }
+  
+  /* now get the list of strings to display in the clist widget */
+  /*  gnc_unprotect_object(wind->acct_display_info); */
+  display_info = gh_call2(make_account_display, 
+                          wind->imported_files,
+                          wind->mapping_info);
+  wind->acct_display_info = display_info;
+
+  scm_protect_object(wind->acct_display_info);
+
+  strings_left = wind->acct_display_info;
+  if(!gh_list_p(strings_left)) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->dialog),
+                              "Something is very wrong with QIF Importing.");
+    return;
+  }
+
+  /* clear the list */
+  gtk_clist_clear(GTK_CLIST(account_list));
+
+  /* update the text in the boxes */
+  gtk_clist_freeze(GTK_CLIST(account_list));
+
+  gtk_clist_set_column_justification(GTK_CLIST(account_list),
+                                     0,
+                                     GTK_JUSTIFY_RIGHT);
+  row = 0;
+  while(!gh_null_p(strings_left)) {
+    row_text[0] = gh_scm2newstr(gh_caar(strings_left), &scheme_strlen);
+    xtn_count   = gh_scm2int(gh_list_ref(gh_car(strings_left),
+                                         gh_int2scm(4)));
+    asprintf(&xtn_count_string, "%d", xtn_count);
+    row_text[1] = xtn_count_string;
+    row_text[2] = gh_scm2newstr(gh_cadr(gh_car(strings_left)), 
+                                &scheme_strlen);    
+    row_text[3] = 
+      xaccAccountTypeEnumAsString(gh_scm2int
+                                  (gh_caddr(gh_car(strings_left))));
+    
+    gtk_clist_append(GTK_CLIST(account_list), row_text);
+
+    gtk_clist_set_row_data(GTK_CLIST(account_list), row,
+                           (gpointer)(gh_car(strings_left)));
+    
+    scm_protect_object(gh_car(strings_left));
+    
+    strings_left = gh_cdr(strings_left);
+    row++;
+  }
+  
+
+  gtk_clist_thaw(GTK_CLIST(account_list));
+}
+
+
+/****************************************************************\
+ * update_categories_page 
+ * Ask the Scheme side to guess some account translations , then 
+ * show the filename, account name, and suggested translation in 
+ * the Accounts page clist. 
+\****************************************************************/
+
+static void
+update_categories_page(QIFImportWindow * wind) {
+
+  SCM        make_category_display;
+  SCM        strings_left;
+  SCM        display_info;
+  SCM        hash_data;
+  SCM        hash_set;
+  int        xtn_count;
+  char       * xtn_count_string;
+  char       * qif_cat_name;
+  GtkWidget  * category_list;
+  int        row;
+  int        scheme_strlen;
+  char       * row_text[4];
+
+  make_category_display = gh_eval_str("qif-dialog:make-category-display");
+  hash_set              = gh_eval_str("hash-set!");
+
+  /* make sure we found the procedure */
+  if(!gh_procedure_p(make_category_display)) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->dialog),
+                              "QIF File scheme code not loaded properly.");
+    return;
+  }
+
+  category_list = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(wind->dialog),
+                                                   "category_page_list");
+  
+  /* get the existing mappings from the display */
+  for(row=0; row < GTK_CLIST(category_list)->rows; row++) {
+    gtk_clist_get_text(GTK_CLIST(category_list), row, 0, &qif_cat_name);
+    
+    hash_data = (SCM)gtk_clist_get_row_data(GTK_CLIST(category_list), row);
+    gh_call3(hash_set, gh_caddr(wind->mapping_info), 
+             gh_str02scm(qif_cat_name), 
+             hash_data);
+  }
+  
+  
+  /* now get the list of strings to display in the clist widget */
+  /*   gnc_unprotect_object(wind->cat_display_info); */
+  display_info = gh_call2(make_category_display, 
+                          wind->imported_files,
+                          wind->mapping_info);
+  wind->cat_display_info = display_info;
+
+  scm_protect_object(wind->cat_display_info);
+
+  strings_left = wind->cat_display_info;
+  if(!gh_list_p(strings_left)) {
+    gnc_error_dialog_parented(GTK_WINDOW(wind->dialog),
+                              "Something is very wrong with QIF Importing.");
+    return;
+  }
+
+  /* clear the list */
+  gtk_clist_clear(GTK_CLIST(category_list));
+
+  /* update the text in the boxes */
+  gtk_clist_freeze(GTK_CLIST(category_list));
+
+  gtk_clist_set_column_justification(GTK_CLIST(category_list),
+                                     0,
+                                     GTK_JUSTIFY_RIGHT);
+  row = 0;
+  while(!gh_null_p(strings_left)) {
+    row_text[0] = gh_scm2newstr(gh_caar(strings_left), &scheme_strlen);
+    xtn_count   = gh_scm2int(gh_list_ref(gh_car(strings_left), 
+                                         gh_int2scm(4)));
+    asprintf(&xtn_count_string, "%d", xtn_count);
+    row_text[1] = xtn_count_string;
+    row_text[2] = gh_scm2newstr(gh_cadr(gh_car(strings_left)), 
+                                &scheme_strlen);
+    row_text[3] = xaccAccountTypeEnumAsString(gh_scm2int
+                                          (gh_caddr(gh_car(strings_left))));
+
+    gtk_clist_append(GTK_CLIST(category_list), row_text);
+    gtk_clist_set_row_data(GTK_CLIST(category_list), row,
+                           (gpointer)gh_car(strings_left));
+    scm_protect_object(gh_car(strings_left));
+    strings_left = gh_cdr(strings_left);
+    row++;
+  }
+  
+  gtk_clist_thaw(GTK_CLIST(category_list));
+}
+
+

@@ -34,7 +34,7 @@ INCLPATH := -I.. \
             -I@top_srcdir@/lib/g-wrap-install/include \
             -I@top_srcdir@/src/g-wrap \
             -I${includedir} \
-	    -I@top_srcdir@/src/register/gnome
+	    -I@top_srcdir@/src/register/gnome 
 
 # All the other GNOME CFLAGS are handled in Makefile.common now
 CFLAGS   = @CFLAGS@ ${INCLPATH}
@@ -69,7 +69,9 @@ GNOME_SRCS := top-level.c window-main.c window-register.c window-adjust.c \
               dialog-options.c dialog-filebox.c dialog-transfer.c \
               dialog-add.c dialog-edit.c dialog-utils.c \
               extensions.c query-user.c reconcile-list.c \
-	      window-report.c global-options.c
+	      window-report.c global-options.c \
+	      dialog-qif-import.c glade-qif-import.c \
+	      dialog-account-picker.c glade-account-picker.c
 ######################################################################
 
 all: gnome
@@ -85,3 +87,6 @@ gnome: @top_srcdir@/gnucash.gnome
 gnome.static: @top_srcdir@/gnucash.gnome.static
 @top_srcdir@/gnucash.gnome.static: ${GNOME_OBJS} ${OTHER_OBJS}
 	$(CC) -static $(LDFLAGS) -o $@ $^ $(LIBS)
+
+
+

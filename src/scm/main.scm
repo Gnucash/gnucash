@@ -17,9 +17,16 @@
   (gnc:depend "doc.scm")
   (gnc:depend "extensions.scm")
   (gnc:depend "text-export.scm")
-  (gnc:depend "importqif.scm")
+;  (gnc:depend "importqif.scm")
   (gnc:depend "report.scm")
   (gnc:depend "report/report-list.scm")
+
+  (gnc:config-var-value-set! gnc:*load-path* #f
+                             (cons (string-append gnc:_share-dir-default_ 
+                                                  "/scm/qif-import")
+                                   (gnc:config-var-value-get gnc:*load-path*)))
+
+  (gnc:depend "qif-import.scm")
 
   ;; Load the system configs
   (if (not (gnc:load-system-config-if-needed))

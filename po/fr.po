@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnucash 1.2.0\n"
+"Project-Id-Version: gnucash 1.3.0\n"
 "POT-Creation-Date: 2000-03-15 03:12-0800\n"
-"PO-Revision-Date: 2000-03-06 23:47+0200\n"
+"PO-Revision-Date: 2000-03-15 23:47+0200\n"
 "Last-Translator: Yannick LE NY <y-le-ny@ifrance.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Fonds communs(SICAV / FCP)"
 
 #: ../po/guile_strings.txt:4
 msgid "Status"
-msgstr ""
+msgstr "Etats"
 
 #: ../po/guile_strings.txt:5 messages-i18n.c:259
 msgid "Date"
@@ -35,7 +35,7 @@ msgstr "Date"
 
 #: ../po/guile_strings.txt:6 messages-i18n.c:274
 msgid "Equity"
-msgstr "Capitaux propres(Actif)"
+msgstr "Capitaux propres"
 
 #: ../po/guile_strings.txt:7
 msgid "Account Separator"
@@ -46,7 +46,7 @@ msgid ""
 "The default background color for splits in multi-line mode and the auto modes"
 msgstr ""
 "La couleur de l'arrière-plan par défaut pour les répartitions en mode lignes "
-"multiet les modes auto"
+"multi et les modes auto"
 
 #: ../po/guile_strings.txt:9
 msgid "Auto-Raise Lists"
@@ -71,7 +71,7 @@ msgstr "Le bon"
 #: ../po/guile_strings.txt:14
 #, c-format
 msgid "The current time is %s."
-msgstr ""
+msgstr "L'heure actuelle est %s."
 
 #: ../po/guile_strings.txt:15 messages-i18n.c:170
 msgid "Double Line"
@@ -88,14 +88,13 @@ msgstr "Revenus:Salaire:Imposable"
 
 #: ../po/guile_strings.txt:18
 msgid "Type of budget report"
-msgstr ""
+msgstr "Type de rapport de budget"
 
 #: ../po/guile_strings.txt:19
 msgid "reg_win_width"
 msgstr ""
 
 #: ../po/guile_strings.txt:20
-#, fuzzy
 msgid "Balancing"
 msgstr "Solde"
 
@@ -136,12 +135,11 @@ msgid "_Account Transactions"
 msgstr "Transactions du compte"
 
 #: ../po/guile_strings.txt:29
-#, fuzzy, c-format
+#, c-format
 msgid "The date option is %s."
-msgstr "C'est une option de date"
+msgstr "L'option de date est %s."
 
 #: ../po/guile_strings.txt:30
-#, fuzzy
 msgid "Account Transactions"
 msgstr "Transactions du compte"
 
@@ -199,7 +197,7 @@ msgstr "Ligne multiple"
 
 #: ../po/guile_strings.txt:44
 msgid "View"
-msgstr ""
+msgstr "Vue"
 
 #: ../po/guile_strings.txt:45
 msgid "The default background color for odd rows in double mode"
@@ -208,14 +206,12 @@ msgstr ""
 "double"
 
 #: ../po/guile_strings.txt:46
-#, fuzzy
 msgid "UK-style dd/mm/yyyy"
 msgstr "Style-UK: jj/mm/aaaa"
 
 #: ../po/guile_strings.txt:47
-#, fuzzy
 msgid "Show all columns"
-msgstr "Montre toutes les transactions"
+msgstr "Montre toutes les colonnes"
 
 #: ../po/guile_strings.txt:48 messages-i18n.c:229
 msgid "Account"
@@ -272,14 +268,12 @@ msgid "Income/Salary/Taxable"
 msgstr "Revenus/Salaire/Imposable"
 
 #: ../po/guile_strings.txt:61
-#, fuzzy
 msgid "There are no selected accounts in the account list option."
-msgstr "Ouvrir le compte sélectionné et tous ses sous-comptes."
+msgstr "Il n'y a aucun comptes selectionnés dans la liste d'options du compte."
 
 #: ../po/guile_strings.txt:62
-#, fuzzy
 msgid "_Budget"
-msgstr "Acheté"
+msgstr "Budget"
 
 #: ../po/guile_strings.txt:63
 msgid "Continental Europe: dd.mm.yyyy"
@@ -310,9 +304,9 @@ msgid "Register Colors"
 msgstr "Couleurs du registre"
 
 #: ../po/guile_strings.txt:70
-#, fuzzy, c-format
+#, c-format
 msgid "The boolean option is %s."
-msgstr "C'est une option booléenne"
+msgstr "L'option boléenne est %s."
 
 #: ../po/guile_strings.txt:71
 msgid "Multi mode default transaction background"
@@ -323,8 +317,8 @@ msgid ""
 "Double clicking on an account with children expands the account instead of "
 "opening a register."
 msgstr ""
-"Double cliquez sur un compte avec des enfants développe le compte à la "
-"placede l'ouverture d'un registre."
+"Double cliquer sur un compte avec des enfants développe le compte à la "
+"place de l'ouverture d'un registre."
 
 #: ../po/guile_strings.txt:73
 msgid "The background color for the active transaction in single mode"
@@ -383,9 +377,8 @@ msgid "Average"
 msgstr "Moyenne"
 
 #: ../po/guile_strings.txt:86
-#, fuzzy
 msgid "The items selected in the list option are:"
-msgstr "C'est une option de liste de compte"
+msgstr "Les éléments sélectionnés dans la liste d'options sont:"
 
 #: ../po/guile_strings.txt:87
 msgid "A_ccount Balance Tracker"
@@ -405,7 +398,7 @@ msgstr ""
 
 #: ../po/guile_strings.txt:91
 msgid "Full"
-msgstr ""
+msgstr "Plein"
 
 #: ../po/guile_strings.txt:92
 msgid "Multi mode default split background"
@@ -445,7 +438,7 @@ msgstr ""
 
 #: ../po/guile_strings.txt:101
 msgid "A report useful for balancing the budget"
-msgstr ""
+msgstr "Un rapport utile pour équilibrer le budget"
 
 #: ../po/guile_strings.txt:102
 msgid "Date Format Display"
@@ -464,7 +457,6 @@ msgid "Account fields to display"
 msgstr "Champs du compte à afficher"
 
 #: ../po/guile_strings.txt:106
-#, fuzzy
 msgid "Account Balance Tracker"
 msgstr "Suivi du solde du compte"
 
@@ -511,7 +503,7 @@ msgid ""
 "The default background color for transactions in multi-line mode and the "
 "auto modes"
 msgstr ""
-"La couleur de l'arrière-plan par défaut pour les transactionsen mode ligne "
+"La couleur de l'arrière-plan par défaut pour les transactions en mode ligne "
 "multi et les modes auto"
 
 #: ../po/guile_strings.txt:117
@@ -528,7 +520,7 @@ msgstr "Option laide"
 
 #: ../po/guile_strings.txt:120
 msgid "How are you doing on your budget?"
-msgstr ""
+msgstr "Comment aller vous faire votre budget?"
 
 #: ../po/guile_strings.txt:121
 msgid "Save Translatable Strings"
@@ -560,7 +552,7 @@ msgstr "Format de date"
 
 #: ../po/guile_strings.txt:128
 msgid "A list option"
-msgstr "Une option de liste"
+msgstr "Une liste d'option"
 
 #: ../po/guile_strings.txt:129
 msgid "ISO Standard: yyyy-mm-dd"
@@ -583,9 +575,9 @@ msgid "Double mode default even row background"
 msgstr "Arrière-plan des lignes paires en mode double par défaut"
 
 #: ../po/guile_strings.txt:134
-#, fuzzy, c-format
+#, c-format
 msgid "The multi-choice option is %s."
-msgstr "C'est une option à choix multiple"
+msgstr "L'option à choix multiple est %s."
 
 #: ../po/guile_strings.txt:135
 msgid "Double mode colors alternate with transactions"
@@ -610,7 +602,7 @@ msgstr "Sous-comptes"
 #: ../po/guile_strings.txt:140
 #, c-format
 msgid "The date and time option is %s."
-msgstr ""
+msgstr "L'option de date et d'heure est %s."
 
 #: ../po/guile_strings.txt:141 messages-i18n.c:290
 msgid "Liability"
@@ -658,9 +650,9 @@ msgid "Notes"
 msgstr "Notes"
 
 #: ../po/guile_strings.txt:152
-#, fuzzy, c-format
+#, c-format
 msgid "The string option is %s."
-msgstr "C'est une option de chaine"
+msgstr "L'option de chaine est %s."
 
 #: ../po/guile_strings.txt:153
 msgid "_Reports"
@@ -712,7 +704,7 @@ msgstr "Deux semaines"
 
 #: ../po/guile_strings.txt:165
 msgid "Save Window Geometry"
-msgstr "Sauvegarger la géométrie de la fenêtre"
+msgstr "Sauvegarder la géométrie de la fenêtre"
 
 #: ../po/guile_strings.txt:166
 msgid "Income\\Salary\\Taxable"
@@ -723,7 +715,6 @@ msgid "Code"
 msgstr "Code"
 
 #: ../po/guile_strings.txt:168
-#, fuzzy
 msgid "Balance sheet"
 msgstr "Feuille du solde/bilan"
 
@@ -749,7 +740,7 @@ msgstr "Trier par ce second critère"
 
 #: ../po/guile_strings.txt:174
 msgid "true"
-msgstr ""
+msgstr "vrai"
 
 #: ../po/guile_strings.txt:175
 msgid "Income.Salary.Taxable"
@@ -792,9 +783,8 @@ msgid "Just a Date Option"
 msgstr "Uniquement une option de date"
 
 #: ../po/guile_strings.txt:185
-#, fuzzy
 msgid "The accounts selected in the account list option are:"
-msgstr "C'est une option de liste de compte"
+msgstr "Les comptes sélectionnés dans la liste d'options du compte sont:"
 
 #: ../po/guile_strings.txt:186
 #, c-format
@@ -802,6 +792,8 @@ msgid ""
 "This is a sample GnuCash report. See the guile (scheme) source code in %s "
 "for details on writing your own reports, or extending existing reports."
 msgstr ""
+"C'est un exemple de rapport de Gnucash. Regardez le code source de Guile (scheme) dans %s"
+"pour les détails sur l'écriture de vos propres rapports, ou étendez les rapports existants."
 
 #: ../po/guile_strings.txt:187
 msgid "The default background color for even rows in single mode"
@@ -814,7 +806,6 @@ msgstr ""
 "La couleur de l'arrière-plan par défaut pour les lignes paires en mode double"
 
 #: ../po/guile_strings.txt:189
-#, fuzzy
 msgid "Display the Budget report."
 msgstr "Affiche le rapport de la feuille du solde/bilan"
 
@@ -851,9 +842,8 @@ msgid "Plot Type"
 msgstr "Type de graphique"
 
 #: ../po/guile_strings.txt:197
-#, fuzzy
 msgid "Budget"
-msgstr "Acheté"
+msgstr "Budget"
 
 #: ../po/guile_strings.txt:198
 msgid "Choose whether to display icons, text, or both for toolbar buttons"
@@ -911,9 +901,8 @@ msgid "Default number of register rows to display."
 msgstr "Nombre de lignes du registre par défaut à afficher"
 
 #: ../po/guile_strings.txt:211
-#, fuzzy
 msgid "Report end date"
-msgstr "Trier par date"
+msgstr "Date de fin du rapport"
 
 #: ../po/guile_strings.txt:212
 msgid "None"
@@ -948,9 +937,8 @@ msgid "__gui"
 msgstr ""
 
 #: ../po/guile_strings.txt:220
-#, fuzzy
 msgid "Report start date"
-msgstr "Eléments de rapports depuis cette date"
+msgstr "Date de départ du rapport"
 
 #: ../po/guile_strings.txt:221 messages-i18n.c:334
 msgid "To"
@@ -1022,12 +1010,11 @@ msgstr "Rien"
 
 #: ../po/guile_strings.txt:238
 msgid "You have selected no values in the list option."
-msgstr ""
+msgstr "Vous n'avez sélectionné aucune valeurs dans la liste d'option."
 
 #: ../po/guile_strings.txt:239
-#, fuzzy
 msgid "false"
-msgstr "Fermer"
+msgstr "faux"
 
 #: ../po/guile_strings.txt:240 messages-i18n.c:276
 msgid "Expense"
@@ -1067,7 +1054,7 @@ msgstr "Affiche le rapport des transactions du compte."
 
 #: ../po/guile_strings.txt:249
 msgid "Have a nice day!"
-msgstr ""
+msgstr "Ayez une bonne journée!"
 
 #: ../po/guile_strings.txt:250
 msgid "This is a list option"
@@ -1096,14 +1083,17 @@ msgid ""
 "report, consult the mailing list %s. For details on subscribing to that "
 "list, see %s."
 msgstr ""
+"Pour l'aide sur l'écriture de rapports,ou pour contribuer à notre flambant neuf,"
+"totallement cool rapport, consultez la liste de courriers %s. Pour les détails "
+"sur l'inscription à cette liste, regardez %s." 
 
 #: ../po/guile_strings.txt:256
 msgid ""
 "The background color for an active transaction in multi-line mode and the "
 "auto modes"
 msgstr ""
-"L'arrière-plan en couleur pour une répartition active en mode multiet modes "
-"auto"
+"L'arrière-plan en couleur pour une répartition active en mode multi lignes"
+"et en modes auto"
 
 #: ../po/guile_strings.txt:257
 msgid "This is a multi choice option."
@@ -1114,7 +1104,6 @@ msgid "Income & Expense"
 msgstr "Revenus et dépenses"
 
 #: ../po/guile_strings.txt:259
-#, fuzzy
 msgid "Hello, World"
 msgstr "Bonjour, tout le monde!"
 
@@ -1560,9 +1549,8 @@ msgid "Delete the current transaction"
 msgstr "Supprimer la transaction en cours"
 
 #: messages-i18n.c:74
-#, fuzzy
 msgid "Make a copy of the current transaction"
-msgstr "Enregistrer la transaction en cours"
+msgstr "Faire une copie de la transaction actuelle"
 
 #: messages-i18n.c:75
 msgid "Edit the selected account"
@@ -1795,9 +1783,8 @@ msgid "_Delete"
 msgstr "Supprimer"
 
 #: messages-i18n.c:132
-#, fuzzy
 msgid "D_uplicate"
-msgstr "Date"
+msgstr "Dupliquer"
 
 #: messages-i18n.c:133
 msgid "_Edit"
@@ -2281,7 +2268,7 @@ msgstr "Différence"
 
 #: messages-i18n.c:269
 msgid "Direct Debit"
-msgstr ""
+msgstr "Débit direct"
 
 #: messages-i18n.c:270
 msgid "Dist"
@@ -2292,9 +2279,8 @@ msgid "Div"
 msgstr "Div"
 
 #: messages-i18n.c:272
-#, fuzzy
 msgid "Duplicate"
-msgstr "Date"
+msgstr "Dupliquer"
 
 #: messages-i18n.c:273
 msgid "Edit"

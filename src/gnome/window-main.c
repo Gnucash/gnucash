@@ -45,6 +45,7 @@
 #include "account-tree.h"
 #include "dialog-transfer.h"
 #include "dialog-edit.h"
+#include "dialog-qif-import.h"
 #include "Scrub.h"
 #include "util.h"
 #include "gnc.h"

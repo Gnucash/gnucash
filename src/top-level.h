@@ -40,6 +40,7 @@
 #define HH_GPL       "xacc-gpl.html"
 #define HH_GLOBPREFS "xacc-globalprefs.html"
 #define HH_ACCEDIT   "xacc-accountedit.html"
+#define HH_QIFIMPORT "xacc-qif-import.html"
 
 /** STRUCTS *********************************************************/
 

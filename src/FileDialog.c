@@ -299,41 +299,8 @@ gncFileOpenFile (const char * newfile)
 void
 gncFileQIFImport (void)
 {
-  char * newfile;
-  char buf[BUFSIZE];
-  int io_error, uh_oh = 0;
-  AccountGroup *newgrp;
-
-  newfile = fileBox(IMPORT_QIF_STR, "*.qif");
-  if (!newfile) return;
-
-  gnc_set_busy_cursor(NULL);
-
-  /* load the accounts from the file the user specified */
-  newgrp = xaccReadQIFAccountGroup (newfile);
-
-  gnc_unset_busy_cursor(NULL);
-
-  /* check for i/o error, put up appropriate error message */
-  io_error = xaccGetQIFIOError();
-  SHOW_IO_ERR_MSG(io_error);
-
-  if (uh_oh) return;
-
-  if( NULL == topgroup ) {
-    /* no topgroup exists */
-    topgroup = xaccMallocAccountGroup();
-  }
-
-  gnc_set_busy_cursor(NULL);
-
-  /* since quicken will not export all accounts 
-   * into one file, we must merge them in one by one */
-  xaccConcatGroups (topgroup, newgrp);
-  xaccMergeAccounts (topgroup);
-  xaccConsolidateGrpTransactions (topgroup);
-
-  gnc_unset_busy_cursor(NULL);
+  /* pop up the QIF File Import dialog box */
+  gnc_ui_qif_import_dialog_make(NULL);
 }
 
 /* ======================================================== */

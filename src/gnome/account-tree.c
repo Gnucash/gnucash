@@ -4,6 +4,7 @@
  *                   GnuCash.                                       *
  * Copyright (C) 1998,1999 Jeremy Collins	                    *
  * Copyright (C) 1998,1999 Linas Vepstas                            *
+ * Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>      *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *

@@ -2,3 +2,4 @@ Makefile
 tmp
 obj
 *.diff
+backup.glade
