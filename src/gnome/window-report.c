@@ -56,6 +56,7 @@ struct _gnc_report_window {
   SCM          scm_options;
   SCM          scm_options_edit;
   SCM          name_change_callback_id;
+  GList        * open_editors;
 
   GNCOptionDB  * odb;     /* used to get callbacks from parameter edit */
 
@@ -122,7 +123,6 @@ gnc_report_window_view_destroy(GtkObject * obj, gpointer user_data) {
   GNCMainChildInfo  * mc = user_data;
   gnc_report_window * w = mc->user_data;
   gnc_main_window_remove_child(gnc_ui_get_data(), mc);
-
   g_free(mc->toolbar_info);
   g_free(mc->menu_info);
   g_free(mc->title);
@@ -303,8 +303,7 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data) {
 static int
 gnc_report_window_params_cb(GtkWidget * w, gpointer data) {
   gnc_report_window * report = data;
-  SCM scm_wintype = gh_eval_str("<gnc:report-window*>");
-
+  
   if((report->scm_report != SCM_BOOL_F) &&
      (report->scm_options != SCM_BOOL_F)) {
     
@@ -414,6 +413,8 @@ gnc_report_window_load_cb(gnc_html * html, URLType type,
   scm_protect_object(win->scm_options);
 
   if(win->odb) {
+    gnc_option_db_unregister_change_callback_id(win->odb, 
+                                                win->name_change_callback_id);
     gnc_option_db_destroy(win->odb);
   }
   win->odb = gnc_option_db_new(win->scm_options); 
@@ -664,6 +665,14 @@ gnc_report_window_destroy(gnc_report_window * win) {
   SCM  scm_wintype = gh_eval_str("<gnc:report-window*>");
   SCM  unshow_report = gh_eval_str("gnc:report-unregister-display");
 
+  if(win->odb) {
+    gnc_option_db_unregister_change_callback_id(win->odb, 
+                                                win->name_change_callback_id);
+    
+    gnc_option_db_destroy(win->odb);
+    win->odb = NULL;
+  }
+
   if(win->scm_report != SCM_BOOL_F) {
     gh_call2(unshow_report, win->scm_report, 
              gw_wcp_assimilate_ptr(win, scm_wintype));
@@ -763,6 +772,9 @@ static void
 gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
                             gpointer user_data) {
   struct report_default_params_data * win = user_data;
+  SCM    set_editor = gh_eval_str("gnc:report-set-editor-widget!");
+
+  gh_call2(set_editor, win->scm_report, SCM_BOOL_F);
   gnc_option_db_destroy(win->db);
   scm_unprotect_object(win->scm_options);
   gnc_options_dialog_destroy(win->win);
@@ -772,27 +784,40 @@ gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
 
 void
 gnc_report_window_default_params_editor(SCM options, SCM report) {
-  struct report_default_params_data * prm = 
-    g_new0(struct report_default_params_data, 1);
-
-  prm->scm_options = options;
-  prm->scm_report  = report;
-  prm->db          = gnc_option_db_new(prm->scm_options);
-  prm->win         = gnc_options_dialog_new(TRUE);
+  SCM get_editor = gh_eval_str("gnc:report-editor-widget");
+  SCM set_editor = gh_eval_str("gnc:report-set-editor-widget!");
+  SCM ptr_type   = gh_eval_str("<gnc:UIWidget>");
+  SCM ptr;
   
-  scm_protect_object(prm->scm_options);
-  scm_protect_object(prm->scm_report);
-
-  gnc_build_options_dialog_contents(prm->win, prm->db);
-  gnc_options_dialog_set_apply_cb(prm->win, 
-                                  gnc_options_dialog_apply_cb,
-                                  (gpointer)prm);
-  gnc_options_dialog_set_help_cb(prm->win, 
-                                  gnc_options_dialog_help_cb,
-                                  (gpointer)prm);
-  gnc_options_dialog_set_close_cb(prm->win, 
-                                  gnc_options_dialog_close_cb,
-                                  (gpointer)prm);
-
+  ptr = gh_call1(get_editor, report);
+  if(ptr != SCM_BOOL_F) {
+    GtkWidget * w = gw_wcp_get_ptr(ptr);
+    gdk_window_raise(GTK_WIDGET(w)->window);
+  }
+  else {
+    struct report_default_params_data * prm = 
+      g_new0(struct report_default_params_data, 1);
+    
+    prm->scm_options = options;
+    prm->scm_report  = report;
+    prm->db          = gnc_option_db_new(prm->scm_options);
+    prm->win         = gnc_options_dialog_new(TRUE);
+    
+    scm_protect_object(prm->scm_options);
+    scm_protect_object(prm->scm_report);
+    
+    gnc_build_options_dialog_contents(prm->win, prm->db);
+    gnc_options_dialog_set_apply_cb(prm->win, 
+                                    gnc_options_dialog_apply_cb,
+                                    (gpointer)prm);
+    gnc_options_dialog_set_help_cb(prm->win, 
+                                   gnc_options_dialog_help_cb,
+                                   (gpointer)prm);
+    gnc_options_dialog_set_close_cb(prm->win, 
+                                    gnc_options_dialog_close_cb,
+                                    (gpointer)prm);
+    gh_call2(set_editor, report, 
+             gw_wcp_assimilate_ptr(gnc_options_dialog_widget(prm->win), 
+                                   ptr_type));
+  }
 }
-

@@ -643,6 +643,7 @@
    'renderer reg-renderer
    'in-menu? #f))
 
+
 (define (gnc:apply-register-report func invoice? query journal? double?
                                    title debit-string credit-string)
   (let* ((options (gnc:make-report-options "Register"))
@@ -654,12 +655,12 @@
          (debit-op (gnc:lookup-option options "__reg" "debit-string"))
          (credit-op (gnc:lookup-option options "__reg" "credit-string"))
          (account-op (gnc:lookup-option options "Display" "Account")))
-
+    
     (if invoice?
         (begin
           (set! journal? #f)
           (gnc:option-set-value account-op #f)))
-
+    
     (gnc:option-set-value invoice-op invoice?)
     (gnc:option-set-value query-op query)
     (gnc:option-set-value journal-op journal?)
@@ -667,9 +668,9 @@
     (gnc:option-set-value title-op title)
     (gnc:option-set-value debit-op debit-string)
     (gnc:option-set-value credit-op credit-string)
-
     (func (gnc:make-report "Register" options))))
 
+  
 (define (gnc:show-register-report . rest)
   (apply gnc:apply-register-report
          (cons gnc:report-window (cons #f rest))))

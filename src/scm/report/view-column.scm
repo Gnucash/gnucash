@@ -49,7 +49,7 @@
       options))
   
   (define (edit-options option-obj report-obj)
-    (gnc:column-view-edit-new option-obj report-obj))
+    (gnc:column-view-edit-options option-obj report-obj))
   
   (define (render-view report)
     (let* ((view-doc (gnc:make-html-document))

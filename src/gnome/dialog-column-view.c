@@ -49,6 +49,15 @@ struct gncp_column_view_edit {
   int       contents_selected;
 };
 
+static void 
+gnc_column_view_edit_destroy(gnc_column_view_edit * view) {
+  gnc_options_dialog_destroy(view->optwin);
+  scm_unprotect_object(view->options);
+  scm_unprotect_object(view->view);
+  gnc_option_db_destroy(view->odb);
+  g_free(view);
+}
+
 static void
 update_display_lists(gnc_column_view_edit * view) {
   SCM   get_names = gh_eval_str("gnc:all-report-template-names");
@@ -134,12 +143,12 @@ gnc_column_view_edit_close_cb(GNCOptionWin * win, gpointer user_data) {
 
 
 /********************************************************************
- * gnc_column_view_edit_new
+ * gnc_column_view_edit_options
  * create the editor. 
  ********************************************************************/
 
-gnc_column_view_edit * 
-gnc_column_view_edit_new(SCM options, SCM view) {
+void
+gnc_column_view_edit_options(SCM options, SCM view) {
   gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
   GtkObject * tlo;
   GtkWidget * editor;
@@ -188,18 +197,8 @@ gnc_column_view_edit_new(SCM options, SCM view) {
                                   gnc_column_view_edit_close_cb, r);
 
   gtk_widget_show_all(gnc_options_dialog_widget(r->optwin));
-  return r;
 }
 
-
-void 
-gnc_column_view_edit_destroy(gnc_column_view_edit * view) {
-  gnc_options_dialog_destroy(view->optwin);
-  scm_unprotect_object(view->options);
-  scm_unprotect_object(view->view);
-  gnc_option_db_destroy(view->odb);
-  g_free(view);
-}
 
 void
 gnc_column_view_edit_add_cb(GtkButton * button, gpointer user_data) {

@@ -24,5 +24,4 @@
 
 typedef struct gncp_column_view_edit gnc_column_view_edit;
 
-gnc_column_view_edit * gnc_column_view_edit_new(SCM options, SCM view);
-void                   gnc_column_view_edit_destroy(gnc_column_view_edit * e);
+void gnc_column_view_edit_options(SCM options, SCM view);

@@ -8,6 +8,7 @@ gncscm_DATA = \
   balance-sheet.scm \
   category-barchart.scm \
   hello-world.scm \
+  iframe-url.scm \
   income-expense-graph.scm \
   net-worth-timeseries.scm \
   pnl.scm \

@@ -57,6 +57,7 @@
 #include "option-util.h"
 #include "global-options.h"
 #include "query-user.h"
+#include "file-history.h"
 
 #define WINDOW_MAIN_CM_CLASS "window-main"
 
@@ -141,6 +142,9 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
 
   /* set up extensions menu and hints */
   gnc_extensions_menu_setup(app);  
+
+  /* make sure the file history is shown */ 
+  gnc_history_update_menu(app);
 }
 
 static void
@@ -198,17 +202,18 @@ gnc_app_set_title (GnomeApp *app)
 }
 
 static void
-gnc_refresh_main_window_titles (void)
+gnc_refresh_main_window_info (void)
 {
   GList *containers = gtk_container_get_toplevels ();
-
-  while (containers)
-  {
+  
+  while (containers) {
     GtkWidget *w = containers->data;
-
-    if (GNOME_IS_APP (w))
+    
+    if (GNOME_IS_APP (w)) {
       gnc_app_set_title (GNOME_APP (w));
-
+      gnc_history_update_menu(GNOME_APP(w));
+    }
+      
     containers = containers->next;
   }
 }
@@ -551,7 +556,7 @@ gnc_main_window_options_cb(GtkWidget *widget, gpointer data) {
 static void
 gnc_main_window_file_new_file_cb(GtkWidget * widget) {
   gncFileNew();
-  gnc_refresh_main_window_titles();
+  gnc_refresh_main_window_info();
 }
 
 static void
@@ -569,19 +574,19 @@ gnc_main_window_file_new_window_cb(GtkWidget * widget, GnomeMDI * mdi) {
 static void
 gnc_main_window_file_open_cb(GtkWidget * widget) {
   gncFileOpen();
-  gnc_refresh_main_window_titles();
+  gnc_refresh_main_window_info();
 }
 
 static void
 gnc_main_window_file_save_cb(GtkWidget * widget) {
   gncFileSave();
-  gnc_refresh_main_window_titles();
+  gnc_refresh_main_window_info();
 }
 
 static void
 gnc_main_window_file_save_as_cb(GtkWidget * widget) {
   gncFileSaveAs();
-  gnc_refresh_main_window_titles();
+  gnc_refresh_main_window_info();
 }
 
 static void

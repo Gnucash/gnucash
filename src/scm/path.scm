@@ -72,7 +72,7 @@
                   (set! user-config-loaded? #t)
                   #t)
                 (begin
-                  (gnc:warn "failure loading " user-file)
+                  (gnc:warn "failure loading " file)
                   #f))
             #f)))
 

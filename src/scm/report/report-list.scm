@@ -17,6 +17,8 @@
 (gnc:depend "report/hello-world.scm")
 (gnc:depend "report/portfolio.scm")
 (gnc:depend "report/register.scm")
+(gnc:depend "report/iframe-url.scm") 
+
 (let ((locale (setlocale LC_MESSAGES)))
   (if (or (equal? locale "C")
           (equal? locale "en")

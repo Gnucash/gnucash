@@ -79,6 +79,7 @@ struct GNCAcctTreeWin_p
   GNCOptionDB * odb;
   SCM         options; 
   int         options_id;
+  GNCOptionWin * editor_dialog;
 
   GList       * account_sensitives;
 };
@@ -944,6 +945,11 @@ gnc_acct_tree_window_destroy(GNCAcctTreeWin * win) {
   gnc_unregister_option_change_callback_id
     (win->euro_change_callback_id);
   
+  if(win->editor_dialog) {
+    gnc_options_dialog_destroy(win->editor_dialog);
+    win->editor_dialog = NULL;
+  }
+  
   g_list_free(win->account_sensitives);
   win->account_sensitives = NULL;
   
@@ -973,6 +979,7 @@ gnc_acct_tree_window_new(const gchar * url)  {
   treewin->account_tree = gnc_mainwin_account_tree_new();
   treewin->options = SCM_BOOL_F;
   scm_protect_object(treewin->options);
+  treewin->editor_dialog = NULL;
 
   /* get the options and the window ID */ 
   if(!url) {
@@ -1043,13 +1050,6 @@ gnc_acct_tree_window_get_widget(GNCAcctTreeWin * win) {
  * parameter editor handling 
  ********************************************************************/
 
-struct acct_tree_params_data {
-  GNCOptionWin   * win;
-  GNCOptionDB    * db;
-  SCM          scm_options;
-};
-
-
 static void
 gnc_options_dialog_apply_cb(GNCOptionWin * propertybox,
                             gpointer user_data) {
@@ -1069,39 +1069,36 @@ gnc_options_dialog_help_cb(GNCOptionWin * propertybox,
 static void
 gnc_options_dialog_close_cb(GNCOptionWin * propertybox,
                             gpointer user_data) {
-  struct acct_tree_params_data * win = user_data;
-  scm_unprotect_object(win->scm_options);
-  gnc_options_dialog_destroy(win->win);
-  g_free(win);
+  GNCAcctTreeWin * win = user_data; 
+  gnc_options_dialog_destroy(win->editor_dialog);
+  win->editor_dialog = NULL;
 }
 
 
 void
 gnc_acct_tree_window_toolbar_options_cb(GtkWidget * widget, gpointer data) {
   GNCAcctTreeWin * win = data;
-  
-  struct acct_tree_params_data * prm = 
-    g_new0(struct acct_tree_params_data, 1);
+  struct acct_tree_params_data * prm = NULL;
 
-  prm->scm_options = win->options;
-  prm->db          = win->odb;
-
-  prm->win         = gnc_options_dialog_new(TRUE);
-  
-  scm_protect_object(prm->scm_options);
-
-  gnc_build_options_dialog_contents(prm->win, prm->db);
-  gnc_options_dialog_set_apply_cb(prm->win, 
-                                  gnc_options_dialog_apply_cb,
-                                  (gpointer)win);
-  gnc_options_dialog_set_help_cb(prm->win, 
-                                  gnc_options_dialog_help_cb,
-                                  (gpointer)prm);
-  gnc_options_dialog_set_close_cb(prm->win, 
-                                  gnc_options_dialog_close_cb,
-                                  (gpointer)prm);
-
+  if(win->editor_dialog) {
+    gdk_window_raise(GTK_WIDGET
+                     (gnc_options_dialog_widget(win->editor_dialog))->window);
+  }
+  else {
+    win->editor_dialog = gnc_options_dialog_new(TRUE);
+    gnc_build_options_dialog_contents(win->editor_dialog, 
+                                      win->odb);
+    
+    gnc_options_dialog_set_apply_cb(win->editor_dialog, 
+                                    gnc_options_dialog_apply_cb,
+                                    (gpointer)win);
+    gnc_options_dialog_set_help_cb(win->editor_dialog, 
+                                   gnc_options_dialog_help_cb,
+                                   (gpointer)win);
+    gnc_options_dialog_set_close_cb(win->editor_dialog, 
+                                    gnc_options_dialog_close_cb,
+                                    (gpointer)win);    
+  }
 }
-
 
 

@@ -224,7 +224,7 @@
 (define <report> 
   (make-record-type "<report>" 
                     '(type id options parents children 
-                           dirty? display-list ctext)))
+                           dirty? display-list editor-widget ctext)))
 
 (define gnc:report-type 
   (record-accessor <report> 'type))
@@ -296,6 +296,12 @@
 (define gnc:report-set-display-list!
   (record-modifier <report> 'display-list))
 
+(define gnc:report-editor-widget 
+  (record-accessor <report> 'editor-widget))
+
+(define gnc:report-set-editor-widget!
+  (record-modifier <report> 'editor-widget))
+
 (define gnc:report-ctext 
   (record-accessor <report> 'ctext))
 
@@ -303,32 +309,40 @@
   (record-modifier <report> 'ctext))
 
 (define (gnc:report-register-display report window)
-  (if (and window report)
+  (if (and window report
+           (not (member window (gnc:report-display-list report))))
       (begin 
-        (if (not (member window (gnc:report-display-list report)))
-            (gnc:report-set-display-list! 
-             report 
-             (cons window (gnc:report-display-list report))))
+        (gnc:report-set-display-list! 
+         report 
+         (cons window (gnc:report-display-list report)))
         (for-each 
          (lambda (rep)
            (gnc:report-register-display (gnc:find-report rep) window))
-         (gnc:report-children report)))))
-  
+         (gnc:report-children report))
+        (for-each 
+         (lambda (rep)
+           (gnc:report-register-display (gnc:find-report rep) window))
+         (gnc:report-parents report)))))
+
 (define (gnc:report-unregister-display report window)
-  (if (and window report)
-      (begin 
-        (if (member window (gnc:report-display-list report))
-            (gnc:report-set-display-list! 
-             report 
-             (delete window (gnc:report-display-list report))))
+  (if (and report window
+           (member window (gnc:report-display-list report)))
+      (begin
+        (gnc:report-set-display-list! 
+         report 
+         (delete window (gnc:report-display-list report)))
         (for-each 
          (lambda (rep)
            (gnc:report-unregister-display (gnc:find-report rep) window))
-         (gnc:report-children report)))))
-
+         (gnc:report-children report))
+        (for-each 
+         (lambda (rep)
+           (gnc:report-unregister-display (gnc:find-report rep) window))
+         (gnc:report-parents report)))))
+      
 (define (gnc:make-report template-name . rest)
   (let ((r ((record-constructor <report>) 
-            template-name #f #f '() '() #t '() #f))
+            template-name #f #f '() '() #t '() #f #f))
         (template (hash-ref *gnc:_report-templates_* template-name))
         (id *gnc:_report-next-serial_*))
     (gnc:report-set-id! r id)
@@ -344,7 +358,7 @@
 
 (define (gnc:restore-report id template-name parents children options)
   (let ((r ((record-constructor <report>)
-            template-name id options parents children #t '() #f)))
+            template-name id options parents children #t '() #f #f)))
     (if (>= id *gnc:_report-next-serial_*)
         (set! *gnc:_report-next-serial_* (+ id 1)))
     (hash-set! *gnc:_reports_* id r)))

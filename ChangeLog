@@ -1,3 +1,12 @@
+2001-04-17  Bill Gribble  <grib@billgribble.com>
+
+	* fixes to MDI bugs: only one param editor for accounts and 
+	reports, make sure reports reference and created children
+
+	* new report: 'Frame URL'.  Give it an URL and it will display the
+	contents in an <iframe>... handly for putting that stock ticker
+	graph from yahoo or wherever in a sidebar of a multicolumn view.
+
 2001-04-17  Dave Peticolas  <dave@krondo.com>
 
 	* lots of files: handle NULL pointer printf problems,

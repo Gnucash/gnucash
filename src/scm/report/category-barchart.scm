@@ -348,7 +348,8 @@ developing over time"))
 	      (set! all-data
 		    (append start
 			    (list (list (_ "Other") other-sum))))
-	      (let* ((options (gnc:make-report-options reportname)))
+	      (let* ((options (gnc:make-report-options reportname))
+                     (id #f))
 		;; now copy all the options
 		(gnc:options-copy-values 
 		 (gnc:report-options report-obj) options)
@@ -358,16 +359,19 @@ developing over time"))
 				    optname-accounts)
 		 (map car finish))
 		;; Set the URL to point to this report.
-		(set! other-anchor
-		      (gnc:report-anchor-text
-		       (gnc:make-report reportname options))))))
+                (set! id (gnc:make-report reportname options))
+                (gnc:report-add-child-by-id! report-obj id)
+                (gnc:report-add-parent! (gnc:find-report id) report-obj)
+		(set! other-anchor (gnc:report-anchor-text id)))))
+        
 	
 	;; This adds the data. Note the apply-zip stuff: This
 	;; transposes the data, i.e. swaps rows and columns. Pretty
 	;; cool, eh? Courtesy of dave_p.
-	(gnc:html-barchart-set-data! chart 
-				     (apply zip (map cadr all-data)))
-
+        (if (not (null? all-data))
+            (gnc:html-barchart-set-data! chart 
+                                         (apply zip (map cadr all-data))))
+        
 	;; Labels and colors
 	(gnc:html-barchart-set-col-labels!
 	 chart (map (lambda (pair)

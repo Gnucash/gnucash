@@ -269,7 +269,8 @@ balance at a given time"))
 	      (set! combined
 		    (append start
 			    (list (list sum (_ "Other")))))
-	      (let ((options (gnc:make-report-options reportname)))
+	      (let ((options (gnc:make-report-options reportname))
+                    (id #f))
 		;; now copy all the options
 		(gnc:options-copy-values (gnc:report-options report-obj)
 					 options)
@@ -278,10 +279,12 @@ balance at a given time"))
 		 (gnc:lookup-option options pagename-accounts 
 				    optname-accounts)
 		 (map cadr finish))
+                (set! id (gnc:make-report reportname options))
+                (gnc:report-add-child-by-id! report-obj id)
+                (gnc:report-add-parent! (gnc:find-report id) report-obj)
+                
 		;; set the URL.
-		(set! other-anchor
-		      (gnc:report-anchor-text
-		       (gnc:make-report reportname options))))))
+		(set! other-anchor (gnc:report-anchor-text id)))))
 
 	;; set the URLs; the slices are links to other reports
 	(gnc:html-piechart-set-button-1-slice-urls! 
