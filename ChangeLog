@@ -12,6 +12,10 @@
 	* src/gnome/window-register.c -- fix a compiler warning
 	* src/gnome/dialog-scheduledxaction.c -- fix a compiler warning
 
+	* src/gnome-utils/exchange-dialog.glade -- New dialog to deal with
+	  exchanges from "within the register", but here because it is
+	  relatively generic.
+	
 2002-11-24  David Hampton  <hampton@employees.org>
 
 	* src/app-file/gncmod-app-file.c: 

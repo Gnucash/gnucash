@@ -116,7 +116,8 @@ gncscm_DATA = gnc-menu-extensions.scm
 
 gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
-  commodity.glade
+  commodity.glade \
+  exchange-dialog.glade
 
 EXTRA_DIST = \
   .cvsignore \
