@@ -112,7 +112,7 @@ Quicken Import Format files that can be opened with the
 Building & Installing:
 ----------------------
 These steps does not apply to binary distributions; only to
-source distributions.
+source distributions.  
 
 Prior to building GnuCash, you will have to obtain and install the following
 packages:
@@ -151,10 +151,15 @@ eperl   -- embeddedPerl needed for reports
 Normally, to build and install GnuCash, all you have to do is:
 
   # ./configure
-  # make
+  # make 
   # make install
 
-You can build Motif, Gnome, and Qt versions.
+You can build Motif, Gnome, and Qt versions. Currently, the Motif version
+is the most stable, bug-free, correct, and feature rich.  The gtk/gnome
+version compiles and is being actively developed, but will take a while to
+reach the stibility level of the motif version. The Qt version may not 
+compile.
+
 Depending on your make target, you'll produce:
 
   gnucash.motif
