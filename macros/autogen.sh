@@ -138,9 +138,9 @@ do
 	echo "Making $dr/aclocal.m4 writable ..."
 	test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
       fi
-      if grep "^AM_PROG_XML_I18N_TOOLS" configure.in >/dev/null; then
-        echo "Running xml-i18n-toolize ..."
-        xml-i18n-toolize --copy --force --automake
+      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
+        echo "Running intltoolize ..."
+        intltoolize --copy --force --automake
       fi 
       if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
 	if test -z "$NO_LIBTOOLIZE" ; then 
