@@ -142,6 +142,9 @@ static void gncInvoiceFree (GncInvoice *invoice)
 
   if (invoice->printname) g_free (invoice->printname);
 
+  if (invoice->terms)
+    gncBillTermDecRef (invoice->terms);
+
   g_free (invoice);
 }
 
