@@ -1,6 +1,7 @@
 tmp
+Makefile
 obj
-*.i
+gnucash.engine.i
 *_wrap.c
 *_wrap.doc
 *.pm
