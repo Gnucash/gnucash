@@ -191,12 +191,12 @@ GNC_ADD_ON_SRFIS=""
 for srfi in `ls lib/srfi/srfi-*.scm | sed -e 's|lib/srfi/||; s/\.scm//'`
 do
   AC_MSG_CHECKING(if guile needs our copy of ${srfi})
-  if ! ${GUILE} -c "(use-modules (srfi ${srfi}))" > /dev/null 2>&1
+  if ${GUILE} -c "(use-modules (srfi ${srfi}))" > /dev/null 2>&1
   then
+    AC_MSG_RESULT(no)
+  else
     GNC_ADD_ON_SRFIS="${GNC_ADD_ON_SRFIS} ${srfi}.scm"
     AC_MSG_RESULT(yes)
-  else
-    AC_MSG_RESULT(no)
   fi
 done
 
@@ -208,13 +208,13 @@ AC_SUBST(GNC_ADD_ON_SRFIS)
 gnc_have_guile_www=no
 
 AC_MSG_CHECKING([if guile needs our copy of (guile www)])
-if ! ${GUILE} -c "(use-modules (www main))" > /dev/null 2>&1
+if ${GUILE} -c "(use-modules (www main))" > /dev/null 2>&1
 then
   gnc_have_guile_www=yes
-  AC_MSG_RESULT(yes)
+  AC_MSG_RESULT(no)
 else
   gnc_have_guile_www=no
-  AC_MSG_RESULT(no)
+  AC_MSG_RESULT(yes)
 fi
 
 AM_CONDITIONAL(GNC_HAVE_GUILE_WWW, test "${gnc_have_guile_www}" = yes)
