@@ -114,7 +114,10 @@
 					 balance-sheet?)
 
     (let* ((from-option (gnc:lookup-option options "Report Options" "From"))
-           (from-value (if from-option (gnc:option-value from-option) #f))
+           (from-value (if from-option
+                           (gnc:timepair-start-day-time
+                            (gnc:option-value from-option))
+                           #f))
            (to-value (gnc:timepair-end-day-time
                       (gnc:option-value
                        (gnc:lookup-option options "Report Options" "To")))))
