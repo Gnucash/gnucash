@@ -25,6 +25,9 @@
 
 #include <assert.h>
 #include <string.h>
+#include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "config.h"
 
@@ -788,6 +791,15 @@ xaccTransCommitEdit (Transaction *trans)
       return;
    }
 
+   /* try to get the sorting order lined up according to 
+    * when the user typed things in.  */
+   if (0 == trans->date_entered.tv_sec) {
+      struct timeval tv;
+      gettimeofday (&tv, NULL);
+      trans->date_entered.tv_sec = tv.tv_sec;
+      trans->date_entered.tv_nsec = 1000 * tv.tv_usec;
+   }
+
    /* Alternately the transaction may have only one split in 
     * it, in which case ... that's OK if and only if the split has no 
     * value (i.e. is only recording a price).  Otherwise, a single
@@ -1265,13 +1277,13 @@ xaccTransOrder (Transaction **ta, Transaction **tb)
   db = (*tb)->num;
   SAFE_STRCMP (da, db);
 
+  /* if dates differ, return */
+  DATE_CMP(ta,tb,date_entered);
+
   /* otherwise, sort on description string */
   da = (*ta)->description;
   db = (*tb)->description;
   SAFE_STRCMP (da, db);
-
-  /* if dates differ, return */
-  DATE_CMP(ta,tb,date_entered);
 
   /* otherwise, sort on docref string */
   da = (*ta)->docref;
@@ -1364,10 +1376,6 @@ xaccTransSetDateSecs (Transaction *trans, time_t secs)
    if (!trans) return;
    CHECK_OPEN (trans);
 
-   /* hack alert -- for right now, keep the posted and the entered
-    * dates in sync.  Later, we'll have to split these up. */
-
-   trans->date_entered.tv_sec = secs;
    trans->date_posted.tv_sec = secs;
 
    /* Because the date has changed, we need to make sure that each of the

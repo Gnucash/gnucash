@@ -107,6 +107,11 @@
 #define RFLAGS  O_RDONLY
 #define VERSION 7
 
+
+/* hack alert the current file format does not support most of the
+ * new/improved account & transaction structures
+ */
+
 /** GLOBALS *********************************************************/
 
 /* the default currency is used when importin old-style
