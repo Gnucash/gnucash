@@ -768,6 +768,7 @@ AC_OUTPUT(
           src/backend/rpc/Makefile
           src/calculation/Makefile 
           src/calculation/test/Makefile 
+          src/dialog-account/Makefile
           src/doc/Makefile
           src/doc/design/Makefile
           src/doc/xml/Makefile
