@@ -165,7 +165,7 @@
                report-title
                (sprintf #f " %s" (gnc:print-date to-date))))
 
-    (gnc:debug "accounts" accounts)
+    ;(gnc:debug "accounts" accounts)
     (if (not (null? accounts))
         (let* ((commodity-list (gnc:accounts-get-commodities 
                                 (append 
