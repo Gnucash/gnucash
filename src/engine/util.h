@@ -216,26 +216,6 @@ char * xaccPrintAmountArgs (double val,
 double xaccParseAmount (const char * instr, gncBoolean monetary);
 
 
-/********************************************************************\
- * xaccParseQIFAmount                                               *
- *   parses monetary strings in QIF files                           *
- *   Note that these strings may be in the 'US' format of DDD,DDD,DDD.CC
- *   or they may be in european format: DDD.DDD.DDD,CC
- *   The routine tries to 'guess' which of these it is.
- *   This sounds really dopey, but Intuit/Quicken managed to 'internationalize'
- *   their export format, causing no end of pain.
- *
- * XXX hack alert: the right way to do this is to do the following:
- *  -- have a global flag that indicates 'euro' or 'us style'
- *  -- initial value of global flag depends on locale
- *  -- if during parsing, a euro currency is found, then flag set to euro.
- *  -- if during parsing, a us-format amount is found, then flag set to us.
- *  -- if both styles found during one run, then flag an error.
- *                                                                  *
-\********************************************************************/
-double xaccParseQIFAmount (const char * str);
-
-
 /** TEMPLATES ******************************************************/
 /* 
  * There are several ideas going on in here.

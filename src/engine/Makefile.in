@@ -35,7 +35,7 @@ LIBS     = @LIBS@ ${GLIB_LIBS}
 ######################################################################
 # See Makefile.common for information about these variables.
 INDEP_SRCS := AccInfo.c Account.c Backend.c DateUtils.c FileIO.c Group.c \
-              LedgerUtils.c QIFIO.c Query.c Queue.c Scrub.c Session.c \
+              LedgerUtils.c Query.c Queue.c Scrub.c Session.c \
               Transaction.c TransLog.c date.c util.c GNCId.c \
               guid/md5.c guid/guid.c
 ######################################################################

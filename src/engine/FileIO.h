@@ -41,9 +41,6 @@
 
 /** PROTOTYPES ******************************************************/
 
-AccountGroup *xaccReadQIFAccountGroup (char *datafile);
-int           xaccGetQIFIOError (void);
-
 /*
  * The xaccReadAccountGroupFD() and xaccWriteAccountGroupFD()
  * routines read and write the GnuCash "xacc" byte stream (file) 

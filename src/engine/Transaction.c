@@ -1278,6 +1278,8 @@ xaccSplitDestroy (Split *split)
    int ismember = 0;
    Split *s;
 
+   if (!split) return;
+
    trans = split->parent;
    assert (trans);
    assert (trans->splits);
