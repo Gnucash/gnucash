@@ -121,7 +121,7 @@ lv_show_splits (GNCLotViewer *lv)
       gnc_commodity *currency;
       Transaction *trans = xaccSplitGetParent (split);
       time_t date = xaccTransGetDate (trans);
-      gnc_numeric gains;
+      gnc_numeric amnt, gains;
       const char *row_vals[MINI_NUM_COLS];
       int row;
 
@@ -136,7 +136,8 @@ lv_show_splits (GNCLotViewer *lv)
       row_vals[MINI_DESC_COL] = xaccTransGetDescription (trans);
 
       /* Amount */
-      xaccSPrintAmount (amtbuff, xaccSplitGetAmount (split),
+      amnt = xaccSplitGetAmount (split);
+      xaccSPrintAmount (amtbuff, amnt,
                  gnc_account_print_info (lv->account, TRUE));
       row_vals[MINI_AMNT_COL] = amtbuff;
 
@@ -147,7 +148,7 @@ lv_show_splits (GNCLotViewer *lv)
       row_vals[MINI_VALU_COL] = valbuff;
 
       /* Gains */
-      gains = gnc_numeric_neg (xaccSplitGetCapGains (split));
+      gains = xaccSplitGetCapGains (split);
       if (gnc_numeric_zero_p(gains))
       {
          gainbuff[0] = 0;
@@ -160,7 +161,7 @@ lv_show_splits (GNCLotViewer *lv)
       row_vals[MINI_GAIN_COL] = gainbuff;
 
       /* Balance of Gains */
-      gnc_numeric_add_fixed (baln, gains);
+      baln = gnc_numeric_add_fixed (baln, amnt);
       if (gnc_numeric_zero_p(baln))
       {
          balnbuff[0] = 0;
@@ -168,7 +169,7 @@ lv_show_splits (GNCLotViewer *lv)
       else
       {
          xaccSPrintAmount (balnbuff, baln,
-                 gnc_commodity_print_info (currency, TRUE));
+                 gnc_account_print_info (lv->account, TRUE));
       }
       row_vals[MINI_BALN_COL] = balnbuff;
 
@@ -205,7 +206,6 @@ lv_select_row_cb (GtkCList       *clist,
 
    str = kvp_frame_get_string (gnc_lot_get_slots (lot), "/title");
    if (!str) str = "";
-printf ("duuude row elect =%d %p the title=%s\n",row, lot, str);
    gtk_entry_set_text (lv->title_entry, str);
    gtk_entry_set_editable (lv->title_entry, TRUE);
    
@@ -259,7 +259,6 @@ lv_unselect_row_cb (GtkCList       *clist,
 
    /* Get the title, blank the title widget */
    str = gtk_entry_get_text (lv->title_entry);
-printf ("duuude row unselect =%d %p new tite=%s\n",row, lot, str);
    gtk_clist_set_text (lv->lot_clist, row, TITLE_COL, str);
    kvp_frame_set_str (gnc_lot_get_slots (lot), "/title", str);
 
