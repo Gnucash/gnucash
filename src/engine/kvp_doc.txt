@@ -36,6 +36,13 @@ Please put the keys in alphabetical order.
 
 --------------------------------------------------------------------------
 
+Name: balance-split
+Type: GUID
+Entities: Transaction
+Use: xaccTransGetBalanceSplit, xaccTransSetBalanceSplit
+     Store the GUID of the 'balance' split of a transaction.
+     This split, if present, ensures the transaction is balanced.
+
 Name: memo
 Type: string
 Entities: Split
