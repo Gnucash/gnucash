@@ -140,7 +140,11 @@
     ;; right now we have to statically load all these at startup time.
     ;; Hopefully we can gradually make them autoloading.
     (gnc:module-load "gnucash/engine" 0)
+
     (gnc:module-load "gnucash/app-utils" 0)
+    (gnc:setup-gettext)
+    (setlocale LC_ALL "")
+
     (gnc:module-load "gnucash/app-file" 0)
     (gnc:module-load "gnucash/register/ledger-core" 0)
     (gnc:module-load "gnucash/register/register-core" 0)
@@ -268,8 +272,6 @@
 
 ;;  (statprof-reset 0 50000) ;; 20 times/sec
 ;;  (statprof-start)
-
-  (setlocale LC_ALL "")
 
   ;; Now the fun begins.
   (gnc:startup)
