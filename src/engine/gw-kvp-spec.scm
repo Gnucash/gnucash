@@ -29,7 +29,7 @@
       "#include <kvp_frame.h>\n"
       "#include <kvp-scm.h>\n"
       "#include <Transaction.h>\n"
-      "#include <gnc-book.h>\n")))
+      "#include <qofbook.h>\n")))
 
   (gw:wrap-as-wct ws '<gnc:kvp-frame*> "kvp_frame*" "const kvp_frame*")
 
@@ -101,7 +101,7 @@
    ws
    'gnc:book-get-slots
    '<gnc:kvp-frame*>
-   "gnc_book_get_slots"
+   "qof_book_get_slots"
    '((<gnc:Book*> b))
    "Get the book's slots.")
 )

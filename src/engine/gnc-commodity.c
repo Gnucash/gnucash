@@ -32,11 +32,11 @@
 #include <glib.h>
 
 #include "gncObject.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-trace.h"
 #include "guid.h"
+#include "qofbook.h"
 
 static short module = MOD_ENGINE; 
 
@@ -520,21 +520,21 @@ gnc_commodity_table_new(void)
 
 #define GNC_COMMODITY_TABLE "gnc_commodity_table"
 gnc_commodity_table *
-gnc_commodity_table_get_table(GNCBook *book)
+gnc_commodity_table_get_table(QofBook *book)
 {
   if (!book) return NULL;
-  return gnc_book_get_data (book, GNC_COMMODITY_TABLE);
+  return qof_book_get_data (book, GNC_COMMODITY_TABLE);
 }
 
 void
-gnc_commodity_table_set_table(GNCBook *book, gnc_commodity_table *ct)
+gnc_commodity_table_set_table(QofBook *book, gnc_commodity_table *ct)
 {
   gnc_commodity_table *old_ct;
   if (!book) return;
 
   old_ct = gnc_commodity_table_get_table (book);
   if (old_ct == ct) return;
-  gnc_book_set_data (book, GNC_COMMODITY_TABLE, ct);
+  qof_book_set_data (book, GNC_COMMODITY_TABLE, ct);
   gnc_commodity_table_destroy (old_ct);
 }
 
@@ -1101,7 +1101,7 @@ gnc_commodity_table_add_default_data(gnc_commodity_table *table)
 /* gncObject function implementation and registration */
 
 static void 
-commodity_table_book_begin (GNCBook *book)
+commodity_table_book_begin (QofBook *book)
 {
   gnc_commodity_table *ct;
   
@@ -1115,7 +1115,7 @@ commodity_table_book_begin (GNCBook *book)
 }
 
 static void 
-commodity_table_book_end (GNCBook *book)
+commodity_table_book_end (QofBook *book)
 {
   gnc_commodity_table_set_table (book, NULL);
 }

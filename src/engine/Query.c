@@ -33,7 +33,6 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-#include "gnc-book.h"
 #include "gnc-engine-util.h"
 #include "gnc-numeric.h"
 #include "Account.h"

@@ -28,10 +28,10 @@
 #ifndef XACC_ACCOUNT_H
 #define XACC_ACCOUNT_H
 
-#include "gnc-book.h"
 #include "GNCId.h"
 #include "gnc-engine.h"
 #include "kvp_frame.h"
+#include "qofbook.h"
 
 
 typedef gnc_numeric (*xaccGetBalanceFn)( Account *account );
@@ -103,12 +103,12 @@ typedef enum
 /** @{ */
 
 /** Constructor */
-Account    * xaccMallocAccount (GNCBook *book);
+Account    * xaccMallocAccount (QofBook *book);
 
 /** The xaccCloneAccount() does the same as xaccCloneAccountSimple, except that it
  *    also uses the 'gemini' kvp value to mark the account from
  *    which it was copied. */
-Account    * xaccCloneAccount (const Account *from, GNCBook *book);
+Account    * xaccCloneAccount (const Account *from, QofBook *book);
 
 /** The xaccCloneAccountSimple() routine makes a simple copy of the
  *  indicated account, placing it in the indicated book.  It copies
@@ -116,7 +116,7 @@ Account    * xaccCloneAccount (const Account *from, GNCBook *book);
  *  it does not copy splits/transactions.  Note also that it 
  *  does NOT use the 'gemini' kvp value to indicate where it 
  *  was copied from.*/
-Account    * xaccCloneAccountSimple (const Account *from, GNCBook *book);
+Account    * xaccCloneAccountSimple (const Account *from, QofBook *book);
 
 /** The xaccAccountBeginEdit() subroutine is the first phase of
  *    a two-phase-commit wrapper for account updates. */ 
@@ -161,11 +161,11 @@ GUID         xaccAccountReturnGUID (Account *account);
 /** The xaccAccountLookup() subroutine will return the
  *    account associated with the given id, or NULL
  *    if there is no such account. */
-Account    * xaccAccountLookup (const GUID *guid, GNCBook *book);
+Account    * xaccAccountLookup (const GUID *guid, QofBook *book);
 
 /**    xaccAccountLookupDirect performs the same function as
  * xaccAccountLookup but takes a GUID struct directly. */
-Account    * xaccAccountLookupDirect (GUID guid, GNCBook *book);
+Account    * xaccAccountLookupDirect (GUID guid, QofBook *book);
 
 /** The xaccAccountLookupTwin() routine will find the "twin" of this
  *    account 'acc' in the given other 'book' (if the twin exists).
@@ -180,7 +180,7 @@ Account    * xaccAccountLookupDirect (GUID guid, GNCBook *book);
  *    account 'acc', it will find the sibling account of 'acc' that is
  *    in 'book', and return it.  If not found, it returns NULL.  This
  *    routine uses the 'gemini' kvp values to do its work. */
-Account * xaccAccountLookupTwin (Account *acc,  GNCBook *book);
+Account * xaccAccountLookupTwin (Account *acc,  QofBook *book);
 /** @} */
 
 /* ------------------ */
@@ -189,7 +189,7 @@ Account * xaccAccountLookupTwin (Account *acc,  GNCBook *book);
 /** @{ */
 
 /** @return The book where the account is stored */
-GNCBook * xaccAccountGetBook (Account *account);
+QofBook * xaccAccountGetBook (Account *account);
 
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);

@@ -44,8 +44,8 @@
 
 #include "Backend.h"
 #include "QueryNew.h"
-#include "gnc-book.h"
 #include "gnc-session.h"
+#include "qofbook.h"
 
 /*
  * The session_begin() routine gives the backend a second initialization
@@ -233,7 +233,7 @@ struct backend_s
   void (*session_end) (Backend *);
   void (*destroy_backend) (Backend *);
 
-  void (*load) (Backend *, GNCBook *);
+  void (*load) (Backend *, QofBook *);
 
   void (*begin) (Backend *, GNCIdTypeConst, gpointer);
   void (*commit) (Backend *, GNCIdTypeConst, gpointer);
@@ -243,7 +243,7 @@ struct backend_s
   void (*free_query) (Backend *, gpointer);
   void (*run_query) (Backend *, gpointer);
 
-  void (*sync) (Backend *, GNCBook *);
+  void (*sync) (Backend *, QofBook *);
 
   gint64 (*counter) (Backend *, const char *counter_name);
 
@@ -269,7 +269,7 @@ struct backend_s
    * I'm not sure where this should be going to. It should be
    * removed ASAP. 
    */
-  void (*export) (Backend *, GNCBook *);
+  void (*export) (Backend *, QofBook *);
 };
 
 /*
@@ -292,11 +292,11 @@ void xaccBackendSetMessage(Backend *be, const char *format, ...);
 char * xaccBackendGetMessage(Backend *be);
 
 /*
- * The xaccGNCBookGetBackend() subroutine will find the
+ * The xaccQofBookGetBackend() subroutine will find the
  *    persistent-data storage backend associated with 
  *    this book.
  */
-Backend * xaccGNCBookGetBackend (GNCBook *book);
+Backend * xaccQofBookGetBackend (QofBook *book);
 
 void xaccInitBackend(Backend *be);
 

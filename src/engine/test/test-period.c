@@ -14,13 +14,12 @@
 #include "Account.h"
 #include "Group.h"
 #include "Period.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-module.h"
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
 #include "Transaction.h"
+#include "qofbook.h"
 
 
 
@@ -28,7 +27,7 @@ static void
 run_test (void)
 {
   GNCSession *sess;
-  GNCBook *openbook, *closedbook;
+  QofBook *openbook, *closedbook;
   AccountGroup *grp;
   AccountList *acclist, *anode;
   Account * acc = NULL;

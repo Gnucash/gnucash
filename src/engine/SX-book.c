@@ -39,8 +39,6 @@
 #include <glib.h>
 
 #include "gncObject.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-engine.h"
 #include "gnc-trace.h"
 #include "Group.h"
@@ -48,6 +46,8 @@
 #include "SchedXaction.h"
 #include "SX-book.h"
 #include "SX-book-p.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 static short module = MOD_SX;
 
@@ -55,29 +55,29 @@ static short module = MOD_SX;
 
 #define GNC_SCHEDXACTIONS "gnc_schedxactions"
 SchedXactions *
-gnc_book_get_schedxaction_list( GNCBook *book )
+gnc_book_get_schedxaction_list( QofBook *book )
 {
   if ( book == NULL ) return NULL;
-  return gnc_book_get_data (book, GNC_SCHEDXACTIONS);
+  return qof_book_get_data (book, GNC_SCHEDXACTIONS);
 }
 
 GList *
-gnc_book_get_schedxactions( GNCBook *book )
+gnc_book_get_schedxactions( QofBook *book )
 {
   SchedXactions *list;
   if ( book == NULL ) return NULL;
-  list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
+  list = qof_book_get_data (book, GNC_SCHEDXACTIONS);
   if (list) return list->sx_list;
   return NULL;
 }
 
 void
-gnc_book_set_schedxactions( GNCBook *book, GList *newList )
+gnc_book_set_schedxactions( QofBook *book, GList *newList )
 {
   SchedXactions *old_list, *new_list;
   if ( book == NULL ) return;
 
-  old_list = gnc_book_get_data (book, GNC_SCHEDXACTIONS);
+  old_list = qof_book_get_data (book, GNC_SCHEDXACTIONS);
   if (old_list && old_list->sx_list == newList) 
   {
      /* Assume the worst, that any 'set' means the data has 
@@ -92,7 +92,7 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
   new_list->sx_notsaved = TRUE;
   if (NULL == newList) new_list->sx_notsaved = FALSE;
   
-  gnc_book_set_data (book, GNC_SCHEDXACTIONS, new_list);
+  qof_book_set_data (book, GNC_SCHEDXACTIONS, new_list);
 
   g_free (old_list);
 }
@@ -101,14 +101,14 @@ gnc_book_set_schedxactions( GNCBook *book, GList *newList )
 
 #define GNC_TEMPLATE_GROUP "gnc_template_group"
 AccountGroup *
-gnc_book_get_template_group( GNCBook *book )
+gnc_book_get_template_group( QofBook *book )
 {
   if (!book) return NULL;
-  return gnc_book_get_data (book, GNC_TEMPLATE_GROUP);
+  return qof_book_get_data (book, GNC_TEMPLATE_GROUP);
 }
 
 void
-gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
+gnc_book_set_template_group (QofBook *book, AccountGroup *templateGroup)
 {
   AccountGroup *old_grp;
   if (!book) return;
@@ -122,7 +122,7 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
   old_grp = gnc_book_get_template_group (book);
   if (old_grp == templateGroup) return;
 
-  gnc_book_set_data (book, GNC_TEMPLATE_GROUP, templateGroup);
+  qof_book_set_data (book, GNC_TEMPLATE_GROUP, templateGroup);
 
   xaccAccountGroupBeginEdit (old_grp);
   xaccAccountGroupDestroy (old_grp);
@@ -138,14 +138,14 @@ gnc_book_set_template_group (GNCBook *book, AccountGroup *templateGroup)
  */
 
 static void 
-sxtt_book_begin (GNCBook *book)
+sxtt_book_begin (QofBook *book)
 {
   gnc_book_set_schedxactions (book, NULL);
   gnc_book_set_template_group (book, xaccMallocAccountGroup(book));
 }
 
 static void 
-sxtt_book_end (GNCBook *book)
+sxtt_book_end (QofBook *book)
 {
   gnc_book_set_template_group (book, NULL);
   gnc_book_set_schedxactions (book, NULL);
@@ -162,7 +162,7 @@ mark_sx_clean(gpointer data, gpointer user_data)
 }
 
 static void
-book_sxns_mark_saved(GNCBook *book)
+book_sxns_mark_saved(QofBook *book)
 {
   SchedXactions *sxl;
 
@@ -174,7 +174,7 @@ book_sxns_mark_saved(GNCBook *book)
 }
 
 static gboolean
-book_sxlist_notsaved(GNCBook *book)
+book_sxlist_notsaved(QofBook *book)
 {
   GList *sxlist;
   SchedXaction *sx;
@@ -198,7 +198,7 @@ book_sxlist_notsaved(GNCBook *book)
 }
   
 static void
-sxtt_mark_clean(GNCBook *book)
+sxtt_mark_clean(QofBook *book)
 {
   xaccGroupMarkSaved(gnc_book_get_template_group(book));
   book_sxns_mark_saved(book);

@@ -27,7 +27,6 @@ libgncmod_engine_la_SOURCES = \
   TransLog.c \
   Transaction.c \
   gnc-associate-account.c \
-  gnc-book.c \
   gnc-commodity.c \
   gnc-date.c \
   gnc-engine-util.c \
@@ -45,7 +44,8 @@ libgncmod_engine_la_SOURCES = \
   kvp_frame.c \
   kvp-util.c \
   md5.c \
-  messages.c
+  messages.c \
+  qofbook.c
 
 EXTRA_libgncmod_engine_la_SOURCES = iso-4217-currencies.c
 
@@ -88,7 +88,8 @@ gncinclude_HEADERS = \
   kvp_frame.h \
   kvp-scm.h \
   kvp-util.h \
-  messages.h
+  messages.h \
+  qofbook.h
 
 noinst_HEADERS = \
   AccountP.h \
@@ -105,7 +106,6 @@ noinst_HEADERS = \
   SX-book.h \
   SX-ttinfo.h \
   TransactionP.h \
-  gnc-book-p.h \
   gnc-event-p.h \
   gnc-lot.h \
   gnc-lot-p.h \
@@ -115,7 +115,8 @@ noinst_HEADERS = \
   kvp-util-p.h \
   md5.h \
   gw-engine.h \
-  gw-kvp.h
+  gw-kvp.h \
+  qofbook-p.h
 
 noinst_SCRIPTS = iso-currencies-to-c
 

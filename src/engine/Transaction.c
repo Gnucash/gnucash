@@ -38,7 +38,6 @@
 #include "Group.h"
 #include "TransactionP.h"
 #include "TransLog.h"
-#include "gnc-book-p.h"
 #include "gnc-commodity.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
@@ -47,6 +46,8 @@
 #include "gnc-lot-p.h"
 #include "gnc-lot.h"
 #include "messages.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 #include "gncObject.h"
 #include "QueryObject.h"
@@ -106,7 +107,7 @@ check_open (Transaction *trans)
 \********************************************************************/
 
 static void
-xaccInitSplit(Split * split, GNCBook *book)
+xaccInitSplit(Split * split, QofBook *book)
 {
   /* fill in some sane defaults */
   split->acc         = NULL;
@@ -139,7 +140,7 @@ xaccInitSplit(Split * split, GNCBook *book)
 \********************************************************************/
 
 Split *
-xaccMallocSplit(GNCBook *book)
+xaccMallocSplit(QofBook *book)
 {
   Split *split;
   g_return_val_if_fail (book, NULL);
@@ -467,18 +468,18 @@ xaccSplitSetGUID (Split *split, const GUID *guid)
 \********************************************************************/
 
 Split *
-xaccSplitLookup (const GUID *guid, GNCBook *book)
+xaccSplitLookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity(gnc_book_get_entity_table (book),
+  return xaccLookupEntity(qof_book_get_entity_table (book),
                           guid, GNC_ID_SPLIT);
 }
 
 Split *
-xaccSplitLookupDirect (GUID guid, GNCBook *book)
+xaccSplitLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
-  return xaccLookupEntity(gnc_book_get_entity_table (book),
+  return xaccLookupEntity(qof_book_get_entity_table (book),
                           &guid, GNC_ID_SPLIT);
 }
 
@@ -811,7 +812,7 @@ xaccSplitGetReconciledBalance (const Split *s)
 \********************************************************************/
 
 static void
-xaccInitTransaction (Transaction * trans, GNCBook *book)
+xaccInitTransaction (Transaction * trans, QofBook *book)
 {
   /* Fill in some sane defaults */
   trans->num         = g_cache_insert(gnc_engine_get_string_cache(), "");
@@ -846,7 +847,7 @@ xaccInitTransaction (Transaction * trans, GNCBook *book)
 \********************************************************************/
 
 Transaction *
-xaccMallocTransaction (GNCBook *book)
+xaccMallocTransaction (QofBook *book)
 {
   Transaction *trans;
 
@@ -894,7 +895,7 @@ xaccTransDump (Transaction *trans, const char *tag)
 }
 #endif
 
-GNCBook *
+QofBook *
 xaccTransGetBook (const Transaction *trans)
 {
   if (!trans) return NULL;
@@ -1297,18 +1298,18 @@ xaccTransSetGUID (Transaction *trans, const GUID *guid)
 \********************************************************************/
 
 Transaction *
-xaccTransLookup (const GUID *guid, GNCBook *book)
+xaccTransLookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return xaccLookupEntity (qof_book_get_entity_table (book),
                            guid, GNC_ID_TRANS);
 }
 
 Transaction *
-xaccTransLookupDirect (GUID guid, GNCBook *book)
+xaccTransLookupDirect (GUID guid, QofBook *book)
 {
   if (!book) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return xaccLookupEntity (qof_book_get_entity_table (book),
                            &guid, GNC_ID_TRANS);
 }
 
@@ -1636,7 +1637,7 @@ FindCommonCurrency (GList *splits, gnc_commodity * ra, gnc_commodity * rb)
 }
 
 gnc_commodity *
-xaccTransFindOldCommonCurrency (Transaction *trans, GNCBook *book)
+xaccTransFindOldCommonCurrency (Transaction *trans, QofBook *book)
 {
   gnc_commodity *ra, *rb, *retval;
   Split *split;
@@ -3161,7 +3162,7 @@ xaccSplitGetSharePrice (const Split * split)
 /********************************************************************\
 \********************************************************************/
 
-GNCBook *
+QofBook *
 xaccSplitGetBook (const Split *split)
 {
   if (!split) return NULL;
@@ -3209,7 +3210,7 @@ counter_thunk(Transaction *t, void *data)
 }
 
 guint
-gnc_book_count_transactions(GNCBook *book)
+gnc_book_count_transactions(QofBook *book)
 {
     guint count = 0;
     xaccGroupForEachTransaction(xaccGetAccountGroup(book),
@@ -3541,19 +3542,19 @@ xaccTransactionGetBackend (Transaction *trans)
 \********************************************************************/
 /* gncObject function implementation */
 static void
-do_foreach (GNCBook *book, GNCIdType type, foreachObjectCB cb, gpointer ud)
+do_foreach (QofBook *book, GNCIdType type, foreachObjectCB cb, gpointer ud)
 {
   GNCEntityTable *et;
 
   g_return_if_fail (book);
   g_return_if_fail (cb);
 
-  et = gnc_book_get_entity_table (book);
+  et = qof_book_get_entity_table (book);
   xaccForeachEntity (et, type, cb, ud);
 }
 
 static void
-split_foreach (GNCBook *book, foreachObjectCB fcn, gpointer user_data)
+split_foreach (QofBook *book, foreachObjectCB fcn, gpointer user_data)
 {
   do_foreach (book, GNC_ID_SPLIT, fcn, user_data);
 }
@@ -3641,7 +3642,7 @@ gboolean xaccSplitRegister (void)
 }
 
 static void
-trans_foreach (GNCBook *book, foreachObjectCB fcn, gpointer user_data)
+trans_foreach (QofBook *book, foreachObjectCB fcn, gpointer user_data)
 {
   do_foreach (book, GNC_ID_TRANS, fcn, user_data);
 }

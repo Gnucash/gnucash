@@ -34,7 +34,6 @@
  */
 
 #include "Account.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event.h"
 #include "gnc-event-p.h"
@@ -43,6 +42,8 @@
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "QueryObject.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_LOT;
@@ -50,7 +51,7 @@ static short module = MOD_LOT;
 /* ============================================================= */
 
 static void
-gnc_lot_init (GNCLot *lot, GNCBook *book)
+gnc_lot_init (GNCLot *lot, QofBook *book)
 {
    ENTER ("(lot=%p, book=%p)", lot, book);
    lot->kvp_data = kvp_frame_new();;
@@ -65,7 +66,7 @@ gnc_lot_init (GNCLot *lot, GNCBook *book)
 }
 
 GNCLot *
-gnc_lot_new (GNCBook *book)
+gnc_lot_new (QofBook *book)
 {
    GNCLot *lot;
    g_return_val_if_fail (book, NULL);
@@ -124,14 +125,14 @@ gnc_lot_set_guid (GNCLot *lot, GUID uid)
 }
 
 GNCLot *
-gnc_lot_lookup (const GUID *guid, GNCBook *book)
+gnc_lot_lookup (const GUID *guid, QofBook *book)
 {
   if (!guid || !book) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return xaccLookupEntity (qof_book_get_entity_table (book),
                                           guid, GNC_ID_LOT);
 }
 
-GNCBook *
+QofBook *
 gnc_lot_get_book (GNCLot *lot)
 {
   if (!lot) return NULL;

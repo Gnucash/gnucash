@@ -87,7 +87,7 @@
 #define GNC_SESSION_H
 
 #include "Backend.h"
-#include "gnc-book.h"
+#include "qofbook.h"
 
 /* PROTOTYPES ******************************************************/
 
@@ -144,7 +144,7 @@ void gnc_session_begin (GNCSession *session, const char * book_id,
 
 
 /**
- * The gnc_session_load() method causes the GNCBook to be made ready to 
+ * The gnc_session_load() method causes the QofBook to be made ready to 
  *    to use with this URL/datastore.   When the URL points at a file, 
  *    then this routine would load the data from the file.  With remote
  *    backends, e.g. network or SQL, this would load only enough data
@@ -175,8 +175,8 @@ const char * gnc_session_get_error_message(GNCSession *session);
 GNCBackendError gnc_session_pop_error (GNCSession *session);
 
 
-GNCBook * gnc_session_get_book (GNCSession *session);
-void gnc_session_set_book (GNCSession *session, GNCBook *book);
+QofBook * gnc_session_get_book (GNCSession *session);
+void gnc_session_set_book (GNCSession *session, QofBook *book);
 
 /** The gnc_session_get_file_path() routine returns the fully-qualified file
  *    path for the session. That is, if a relative or partial filename

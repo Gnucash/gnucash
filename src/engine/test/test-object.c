@@ -5,6 +5,7 @@
 #include "gnc-module.h"
 #include "gnc-engine-util.h"
 #include "messages.h"
+#include "qofbook.h"
 
 #include "gncObject.h"
 #include "test-stuff.h"
@@ -12,10 +13,10 @@
 #define TEST_MODULE_NAME "object-test"
 #define TEST_MODULE_DESC "Test Object"
 
-static void foreach (GNCBook *, foreachObjectCB, gpointer);
+static void foreach (QofBook *, foreachObjectCB, gpointer);
 static const char * printable (gpointer obj);
 static void test_printable (const char *name, gpointer obj);
-static void test_foreach (GNCBook *, const char *);
+static void test_foreach (QofBook *, const char *);
 
 static GncObject_t bus_obj = {
   GNC_OBJECT_VERSION,
@@ -46,12 +47,12 @@ static void test_object (void)
 	     "test description return");
   }
 
-  test_foreach ((GNCBook*)1, TEST_MODULE_NAME);
+  test_foreach ((QofBook*)1, TEST_MODULE_NAME);
   test_printable (TEST_MODULE_NAME, (gpointer)1);
 }
 
 static void
-foreach (GNCBook *book, foreachObjectCB cb, gpointer u_d)
+foreach (QofBook *book, foreachObjectCB cb, gpointer u_d)
 {
   int *foo = u_d;
 
@@ -75,7 +76,7 @@ printable (gpointer obj)
 }
 
 static void
-test_foreach (GNCBook *book, const char *name)
+test_foreach (QofBook *book, const char *name)
 {
   int res = 0;
 

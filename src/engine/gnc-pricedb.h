@@ -31,6 +31,7 @@
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
 #include "guid.h"
+#include "qofbook.h"
 
 
 /** @addtogroup Engine
@@ -48,7 +49,7 @@
     now in the hope that we get a real DB implementation before
     they're really needed.
 
-    Every GNCBook contains a GNCPriceDB, accessable via
+    Every QofBook contains a GNCPriceDB, accessable via
     gnc_book_get_pricedb.
 
 */
@@ -125,12 +126,12 @@ typedef struct gnc_price_lookup_s GNCPriceLookup;
 
 /** gnc_price_create - returns a newly allocated and initialized price
    with a reference count of 1. */
-GNCPrice *gnc_price_create(GNCBook *book);
+GNCPrice *gnc_price_create(QofBook *book);
 
 /** gnc_price_clone - returns a newly allocated price that's a
    content-wise duplicate of the given price, p.  The returned clone
    will have a reference count of 1. */
-GNCPrice *gnc_price_clone(GNCPrice* p, GNCBook *book);
+GNCPrice *gnc_price_clone(GNCPrice* p, QofBook *book);
 
 /*********************/
 /* memory management */
@@ -172,10 +173,10 @@ void gnc_price_set_version(GNCPrice *p, gint32 versn);
 
 /** As mentioned above all of the getters return data that's internal
    to the GNCPrice, not copies, so don't free these values. */
-GNCPrice *      gnc_price_lookup (const GUID *guid, GNCBook *book);
+GNCPrice *      gnc_price_lookup (const GUID *guid, QofBook *book);
 const GUID *    gnc_price_get_guid (GNCPrice *p);
 const GUID      gnc_price_return_guid (GNCPrice *p);
-GNCBook *       gnc_price_get_book (GNCPrice *p);
+QofBook *       gnc_price_get_book (GNCPrice *p);
 gnc_commodity * gnc_price_get_commodity(GNCPrice *p);
 gnc_commodity * gnc_price_get_currency(GNCPrice *p);
 Timespec        gnc_price_get_time(GNCPrice *p);
@@ -229,13 +230,13 @@ typedef struct gnc_price_db_s GNCPriceDB;
 
 /** gnc_pricedb_create - create a new pricedb.  Normally you won't need
      this; you will get the pricedb via gnc_pricedb_get_db. */
-GNCPriceDB * gnc_pricedb_create(GNCBook *book);
+GNCPriceDB * gnc_pricedb_create(QofBook *book);
 
 /* XXX backwards-compat defines, remove these someday */
 #define gnc_book_get_pricedb  gnc_pricedb_get_db
 
 /** return the pricedb associated with the book */
-GNCPriceDB * gnc_pricedb_get_db(GNCBook *book);
+GNCPriceDB * gnc_pricedb_get_db(QofBook *book);
 
 /** gnc_pricedb_destroy - destroy the given pricedb and unref all of
      the prices it contains.  This may not deallocate all of those

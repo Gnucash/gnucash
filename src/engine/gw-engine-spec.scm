@@ -26,7 +26,7 @@
     "#include <Query.h>\n"
     "#include <Backend.h>\n"
     "#include <Group.h>\n"
-    "#include <gnc-book.h>\n"
+    "#include <qofbook.h>\n"
     "#include <gnc-session.h>\n"
     "#include <gnc-session-scm.h>\n"
     "#include <gnc-engine-util.h>\n"
@@ -99,7 +99,7 @@
 (gw:wrap-as-wct ws '<gnc:InvAcct*> "InvAcct*" "const InvAcct*")
 (gw:wrap-as-wct ws '<gnc:AccInfo*> "AccInfo*" "const AccInfo*")
 (gw:wrap-as-wct ws '<gnc:AccountGroup*> "AccountGroup*" "const AccountGroup*")
-(gw:wrap-as-wct ws '<gnc:Book*> "GNCBook*" "const GNCBook*")
+(gw:wrap-as-wct ws '<gnc:Book*> "QofBook*" "const QofBook*")
 (gw:wrap-as-wct ws '<gnc:Lot*> "GNCLot*" "const GNCLot*")
 (gw:wrap-as-wct ws '<gnc:Session*> "GNCSession*" "const GNCSession**")
 (gw:wrap-as-wct ws '<gnc:Split*> "Split*" "const Split*")
@@ -1016,7 +1016,7 @@ children to this account.")
  '<gnc:Book*>
  "xaccGroupGetBook"
  '((<gnc:AccountGroup*> g))
- "Return the GNCBook of group g.")
+ "Return the QofBook of group g.")
 
 (gw:wrap-function
  ws
@@ -1449,7 +1449,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-group
  '<gnc:AccountGroup*>
- "gnc_book_get_group"
+ "xaccGetAccountGroup"
  '((<gnc:Book*> book))
  "Get the book's account group.")
 
@@ -1457,7 +1457,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-commodity-table
  '<gnc:commodity-table*>
- "gnc_book_get_commodity_table"
+ "gnc_commodity_table_get_table"
  '((<gnc:Book*> book))
  "Get the book's commodity table.")
 
@@ -1465,7 +1465,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-get-pricedb
  '<gnc:PriceDB*>
- "gnc_book_get_pricedb"
+ "gnc_pricedb_get_db"
  '((<gnc:Book*> book))
  "Get the book's pricedb.")
 
@@ -1473,7 +1473,7 @@ argument between 0 and 100 (inclusive).")
  ws
  'gnc:book-kvp-changed
  '<gw:void>
- "gnc_book_kvp_changed"
+ "qof_book_kvp_changed"
  '((<gnc:Book*> book))
  "Set the flag that the Book's kvp changed.")
 

@@ -37,7 +37,6 @@ Open questions: how do we deal with the backends ???
 
 #include "AccountP.h"
 #include "BackendP.h"
-#include "gnc-book-p.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "Group.h"
@@ -45,6 +44,8 @@ Open questions: how do we deal with the backends ???
 #include "kvp-util-p.h"
 #include "Period.h"
 #include "TransactionP.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_BOOK;
@@ -57,7 +58,7 @@ static short module = MOD_BOOK;
  */
 
 void
-gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
+gnc_book_insert_trans_clobber (QofBook *book, Transaction *trans)
 {
    Transaction *newtrans;
    GList *node;
@@ -119,7 +120,7 @@ gnc_book_insert_trans_clobber (GNCBook *book, Transaction *trans)
  */
 
 void
-gnc_book_insert_trans (GNCBook *book, Transaction *trans)
+gnc_book_insert_trans (QofBook *book, Transaction *trans)
 {
    GList *node;
 
@@ -176,7 +177,7 @@ gnc_book_insert_trans (GNCBook *book, Transaction *trans)
 /* ================================================================ */
 
 void 
-gnc_book_partition (GNCBook *dest_book, GNCBook *src_book, Query *query)
+gnc_book_partition (QofBook *dest_book, QofBook *src_book, Query *query)
 {
    AccountGroup *src_grp, *dst_grp;
    Backend *be;
@@ -294,8 +295,8 @@ find_nearest_equity_acct (Account *acc)
 
 static void
 add_closing_balances (AccountGroup *closed_grp, 
-                      GNCBook *open_book,
-                      GNCBook *closed_book,
+                      QofBook *open_book,
+                      QofBook *closed_book,
                       Account *equity_account,
                       Timespec *post_date, Timespec *date_entered, 
                       const char *desc)
@@ -437,13 +438,13 @@ add_closing_balances (AccountGroup *closed_grp,
 /* ================================================================ */
 /* split a book into two by date */
 
-GNCBook * 
-gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
+QofBook * 
+gnc_book_close_period (QofBook *existing_book, Timespec calve_date,
                        Account *equity_account,
                        const char * memo)
 {
    Query *query;
-   GNCBook *closing_book;
+   QofBook *closing_book;
    kvp_frame *exist_cwd, *partn_cwd;
    kvp_value *vvv;
    Timespec ts;
@@ -457,8 +458,8 @@ gnc_book_close_period (GNCBook *existing_book, Timespec calve_date,
    xaccQueryAddDateMatchTS (query, FALSE, calve_date, 
                                    TRUE, calve_date,
                                    QUERY_AND);
-   closing_book = gnc_book_new();
-   gnc_book_set_backend (closing_book, existing_book->backend);
+   closing_book = qof_book_new();
+   qof_book_set_backend (closing_book, existing_book->backend);
    closing_book->book_open = 'n';
    gnc_book_partition (closing_book, existing_book, query);
 

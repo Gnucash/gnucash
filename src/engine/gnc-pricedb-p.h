@@ -29,15 +29,15 @@
 
 #include "Backend.h"
 #include "GNCIdP.h"
-#include "gnc-book.h"
 #include "gnc-engine.h"
 #include "gnc-pricedb.h"
+#include "qofbook.h"
 
 struct gnc_price_s
 {
   /* 'public' data fields */
   GUID    guid;                  /* globally unique price id */
-  GNCBook *book;                 /* book to which this price belongs to */
+  QofBook *book;                 /* book to which this price belongs to */
 
   GNCPriceDB *db;
   gnc_commodity *commodity;
@@ -62,7 +62,7 @@ struct gnc_price_s
 struct gnc_price_db_s
 {
   GHashTable *commodity_hash;
-  GNCBook *book;   /* book to which this database and all the prices belong to */
+  QofBook *book;   /* book to which this database and all the prices belong to */
   gboolean dirty;
 };
 
@@ -96,7 +96,7 @@ typedef struct gnc_price_lookup_helper_s
   Timespec time;
 } GNCPriceLookupHelper;
 
-void     gnc_pricedb_set_db(GNCBook *book, GNCPriceDB *db);
+void     gnc_pricedb_set_db(QofBook *book, GNCPriceDB *db);
 
 void     gnc_pricedb_mark_clean(GNCPriceDB *db);
 void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,

@@ -29,8 +29,8 @@
 
 #include "Account.h"
 #include "GNCId.h"
-#include "gnc-book.h"
 #include "gnc-engine.h"
+#include "qofbook.h"
 
 
 /** PROTOTYPES ******************************************************/
@@ -39,13 +39,13 @@
  *    This is an internal-use function, you almost certainly want to
  *    be using the xaccGetAccountGroup() routine instead.
  */
-AccountGroup *xaccMallocAccountGroup (GNCBook *book);
+AccountGroup *xaccMallocAccountGroup (QofBook *book);
 
 /*
  * The xaccGetAccountGroup() routine will return the top-most
  * account group associated with the indicated book.
  */
-AccountGroup * xaccGetAccountGroup (GNCBook *book);
+AccountGroup * xaccGetAccountGroup (QofBook *book);
 
 /*
  * The xaccAccountDestroy() routine will destroy and free all 
@@ -59,7 +59,7 @@ void          xaccAccountGroupDestroy (AccountGroup *grp);
 /* XXX backwards-compat define, remove at later convenience */
 #define gnc_book_get_group xaccGetAccountGroup
 
-GNCBook * xaccGroupGetBook (AccountGroup *group);
+QofBook * xaccGroupGetBook (AccountGroup *group);
 
 void          xaccAccountGroupBeginEdit (AccountGroup *grp);
 void          xaccAccountGroupCommitEdit (AccountGroup *grp);

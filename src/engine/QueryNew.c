@@ -30,13 +30,14 @@
 #include <string.h>
 
 #include "gnc-engine-util.h"
-#include "gnc-book-p.h"
 #include "gncObject.h"
 #include "BackendP.h"
 
 #include "QueryObjectP.h"
 #include "QueryCoreP.h"
 #include "QueryNewP.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 static short module = MOD_QUERY;
 
@@ -496,7 +497,7 @@ static void compile_terms (QueryNew *q)
 
   /* Now compile the backend instances */
   for (node = q->books; node; node = node->next) {
-    GNCBook *book = node->data;
+    QofBook *book = node->data;
     Backend *be = book->backend;
 
     if (be && be->compile_query) {
@@ -558,7 +559,7 @@ static GList * merge_books (GList *l1, GList *l2)
 static gboolean
 query_free_compiled (gpointer key, gpointer value, gpointer not_used)
 {
-  GNCBook* book = key;
+  QofBook* book = key;
   Backend* be = book->backend;
 
   if (be && be->free_query)
@@ -680,7 +681,7 @@ GList * gncQueryRun (QueryNew *q)
 
     /* For each book */
     for (node=q->books; node; node=node->next) {
-      GNCBook *book = node->data;
+      QofBook *book = node->data;
       Backend *be = book->backend;
 
       /* run the query in the backend */
@@ -1138,7 +1139,7 @@ void gncQueryAddGUIDMatch (QueryNew *q, GSList *param_list,
   g_list_free (g);
 }
 
-void gncQuerySetBook (QueryNew *q, GNCBook *book)
+void gncQuerySetBook (QueryNew *q, QofBook *book)
 {
   if (!q || !book) return;
 
@@ -1149,7 +1150,7 @@ void gncQuerySetBook (QueryNew *q, GNCBook *book)
   gncQueryAddGUIDMatch (q, g_slist_prepend (g_slist_prepend (NULL,
                                                              QUERY_PARAM_GUID),
                                             QUERY_PARAM_BOOK),
-                        gnc_book_get_guid(book), QUERY_AND);
+                        qof_book_get_guid(book), QUERY_AND);
 }
 
 void gncQueryAddBooleanMatch (QueryNew *q, GSList *param_list, gboolean value,

@@ -31,7 +31,7 @@
 
 #include "GNCId.h"
 #include "QueryCore.h"
-#include "gnc-book.h"
+#include "qofbook.h"
 
 /** A Query */
 typedef struct querynew_s QueryNew;
@@ -71,7 +71,7 @@ void gncQueryDestroy (QueryNew *q);
 void gncQuerySearchFor (QueryNew *query, GNCIdTypeConst obj_type);
 
 /** Set the book to be searched (you can search multiple books) */
-void gncQuerySetBook (QueryNew *q, GNCBook *book);
+void gncQuerySetBook (QueryNew *q, QofBook *book);
 
 
 /** This is the general function that adds a new Query Term to a query.

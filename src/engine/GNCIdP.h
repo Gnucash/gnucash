@@ -49,10 +49,10 @@ void xaccEntityTableDestroy (GNCEntityTable *table);
 void xaccGUIDNewEntityTable (GUID *guid, GNCEntityTable *entity_table);
 
 /* Equivalent function prototype:
- * void xaccGUIDNew (GUID *guid, GNCBook *book) 
+ * void xaccGUIDNew (GUID *guid, QofBook *book) 
  */
 #define xaccGUIDNew(guid,book)     \
-      xaccGUIDNewEntityTable ((guid), gnc_book_get_entity_table (book))
+      xaccGUIDNewEntityTable ((guid), qof_book_get_entity_table (book))
 
 
 /* Lookup an entity given an id and a type. If there is no entity

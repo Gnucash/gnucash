@@ -35,6 +35,7 @@
 #include "gnc-engine.h"
 #include "kvp_frame.h"
 #include "GNCId.h"
+#include "qofbook.h"
 
 /** @name Split Reconciled field values
     If you change these
@@ -99,7 +100,7 @@ int    xaccConfigGetForceDoubleEntry (void);
  The xaccMallocTransaction() will malloc memory and initialize it.
  Once created, it is usually unsafe to merely "free" this memory;
  the xaccTransDestroy() method should be called. */ 
-Transaction * xaccMallocTransaction (GNCBook *book); 
+Transaction * xaccMallocTransaction (QofBook *book); 
 
 /**
  The xaccTransDestroy() method will remove all 
@@ -173,18 +174,18 @@ gboolean      xaccTransIsOpen (const Transaction *trans);
 /** The xaccTransLookup() subroutine will return the
     transaction associated with the given id, or NULL
     if there is no such transaction. */
-Transaction * xaccTransLookup (const GUID *guid, GNCBook *book);
+Transaction * xaccTransLookup (const GUID *guid, QofBook *book);
 /** The xaccTransLookup() subroutine will return the
     transaction associated with the given id, or NULL
     if there is no such transaction. */
-Transaction * xaccTransLookupDirect (GUID guid, GNCBook *book);
+Transaction * xaccTransLookupDirect (GUID guid, QofBook *book);
 
 
 /** \warning XXX FIXME 
  * gnc_book_count_transactions is a utility function, 
  * probably needs to be moved to a utility file somewhere.
  */
-guint gnc_book_count_transactions(GNCBook *book);
+guint gnc_book_count_transactions(QofBook *book);
 
 /**@}*/
 
@@ -200,7 +201,7 @@ const GUID  * xaccTransGetGUID (const Transaction *trans);
 GUID          xaccTransReturnGUID (const Transaction *trans);
 
 /** Returns the book in which the transaction is stored */
-GNCBook *     xaccTransGetBook (const Transaction *trans);
+QofBook *     xaccTransGetBook (const Transaction *trans);
 
 /** Sorts the splits in a transaction, putting the debits first,
  *  followed by the credits.
@@ -426,7 +427,7 @@ void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
 /*@{*/
 
 /** Constructor. */
-Split       * xaccMallocSplit (GNCBook *book);
+Split       * xaccMallocSplit (QofBook *book);
 
 /** Destructor.
  *
@@ -449,7 +450,7 @@ gboolean      xaccSplitDestroy (Split *split);
 
 /** Returns the book of this split, i.e. the entity where this split
  * is stored. */
-GNCBook *   xaccSplitGetBook (const Split *split);
+QofBook *   xaccSplitGetBook (const Split *split);
 
 /** Returns the account of this split, which was set through
  * xaccAccountInsertSplit(). */
@@ -670,10 +671,10 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
 /** The xaccSplitLookup() subroutine will return the
  *    split associated with the given id, or NULL
  *    if there is no such split. */
-Split      * xaccSplitLookup (const GUID *guid, GNCBook *book);
+Split      * xaccSplitLookup (const GUID *guid, QofBook *book);
 /** Returns the split associated with the given id, or NULL if there
  * is no such split. */
-Split      * xaccSplitLookupDirect (GUID guid, GNCBook *book);
+Split      * xaccSplitLookupDirect (GUID guid, QofBook *book);
 
 
 /** 

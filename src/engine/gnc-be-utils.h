@@ -11,14 +11,14 @@
 #define GNC_BE_UTILS_H
 
 #include "BackendP.h"
-#include "gnc-book.h"
 #include "gnc-engine-util.h"
+#include "qofbook.h"
 
 /* begin_edit helper
  *
  * assumes:
  *	obj->editlevel	(int)
- *	obj->book	(GNCBook*)
+ *	obj->book	(QofBook*)
  *
  * @args:
  *	obj: the object to begin editing
@@ -57,7 +57,7 @@
  *
  * assumes:
  *	obj->editlevel	(int)
- *	obj->book	(GNCBook*)
+ *	obj->book	(QofBook*)
  *	obj->do_free	(gboolean)
  */
 
@@ -88,7 +88,7 @@
  * part2 -- deal with the backend
  * 
  * assumes:
- *	obj->book	(GNCBook*)
+ *	obj->book	(QofBook*)
  *	obj->do_free	(gboolean)
  *
  * @args:

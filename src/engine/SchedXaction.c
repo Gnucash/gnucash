@@ -34,14 +34,14 @@
 #include "SX-ttinfo.h"
 #include "SchedXactionP.h"
 #include "Transaction.h"
-#include "gnc-book.h"
-#include "gnc-book-p.h"
 #include "gnc-date.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "guid.h"
 #include "messages.h"
+#include "qofbook.h"
+#include "qofbook-p.h"
 
 static short module = MOD_SX;
 
@@ -50,12 +50,12 @@ static short module = MOD_SX;
 void sxprivtransactionListMapDelete( gpointer data, gpointer user_data );
 
 static void
-xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
+xaccSchedXactionInit( SchedXaction *sx, QofBook *book)
 {
    AccountGroup        *ag;
    char                *name;
 
-   sx->entity_table = gnc_book_get_entity_table (book);
+   sx->entity_table = qof_book_get_entity_table (book);
 
    sx->freq = xaccFreqSpecMalloc(book);
 
@@ -91,7 +91,7 @@ xaccSchedXactionInit( SchedXaction *sx, GNCBook *book)
 }
 
 SchedXaction*
-xaccSchedXactionMalloc(GNCBook *book)
+xaccSchedXactionMalloc(QofBook *book)
 {
    SchedXaction *sx;
 
@@ -584,7 +584,7 @@ xaccSchedXactionIsDirty(SchedXaction *sx)
 
 static Split *
 pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
-                 Transaction *parent_trans, GNCBook *book)
+                 Transaction *parent_trans, QofBook *book)
 {
   Split *split;
   kvp_frame *split_frame;
@@ -644,7 +644,7 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
 
 void
 xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                 GNCBook *book)
+                                 QofBook *book)
 {
   Transaction *new_trans;
   TTInfo *tti;

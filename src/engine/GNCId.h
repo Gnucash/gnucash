@@ -73,11 +73,11 @@ GNCIdType xaccGUIDTypeEntityTable (const GUID * guid,
 
 /* Return the type of an identifier.
  * Equivalent function prototype:
- * GNCIdType xaccGUIDType (const GUID * guid, GNCBook *book); 
+ * GNCIdType xaccGUIDType (const GUID * guid, QofBook *book); 
  */
 
 #define xaccGUIDType(guid,book)      \
-    xaccGUIDTypeEntityTable ((guid), gnc_book_get_entity_table (book))
+    xaccGUIDTypeEntityTable ((guid), qof_book_get_entity_table (book))
 
 
 /* Returns a GUID which is guaranteed to never reference any entity. */
