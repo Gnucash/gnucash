@@ -127,7 +127,7 @@ noinst_HEADERS =    QuickFill.h   basiccell.h   cellblock.h   combocell.h   date
 EXTRA_DIST =    .cvsignore   design.txt
 
 
-CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
+CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES =    -I${top_srcdir}/src   -I${top_srcdir}/src/engine   -I${top_srcdir}/src/guile   -I${top_srcdir}/src/register/gnome
 

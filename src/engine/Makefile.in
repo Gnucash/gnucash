@@ -135,7 +135,7 @@ noinst_HEADERS =    AccInfo.h   AccInfoP.h   Account.h   AccountP.h   BackendP.h
 EXTRA_DIST =    .cvsignore   README.query-api   design.txt   extensions.txt
 
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES = -I..
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

@@ -74,7 +74,7 @@ EXTRA_DIST = \
   gnc-dialogs.glade \
   gnucash.desktop
 
-CFLAGS += ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS}
+CFLAGS += ${GNOME_CFLAGS} ${G_WRAP_COMPILE_ARGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \

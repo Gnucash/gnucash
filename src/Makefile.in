@@ -139,7 +139,7 @@ noinst_HEADERS =    AccWindow.h   AdjBWindow.h   Destroy.h   EuroUtils.h   FileB
 EXTRA_DIST =    .cvsignore
 
 
-CFLAGS = @CFLAGS@ @GLIB_CFLAGS@ @GNOME_CFLAGS@
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES =    -I./engine   -I./guile   -I./register
 

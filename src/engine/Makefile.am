@@ -61,6 +61,6 @@ EXTRA_DIST = \
   design.txt \
   extensions.txt
 
-CFLAGS = @CFLAGS@ ${GLIB_CFLAGS}
+CFLAGS = @CFLAGS@ ${GLIB_CFLAGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES = -I..

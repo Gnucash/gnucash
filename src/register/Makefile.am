@@ -36,7 +36,7 @@ EXTRA_DIST = \
   .cvsignore \
   design.txt
 
-CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
+CFLAGS = @CFLAGS@ ${GNOME_CFLAGS} ${GUILE_COMPILE_ARGS}
 
 INCLUDES = \
   -I${top_srcdir}/src \

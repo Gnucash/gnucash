@@ -127,7 +127,7 @@ noinst_HEADERS =    gnucash-color.h   gnucash-cursor.h   gnucash-grid.h   gnucas
 EXTRA_DIST =    .cvsignore
 
 
-CFLAGS = @CFLAGS@ @GNOME_CFLAGS@
+CFLAGS = @CFLAGS@ ${GNOME_CFLAGS}
 
 INCLUDES =    -I${top_srcdir}/src   -I${top_srcdir}/src/engine   -I${top_srcdir}/src/guile   -I${top_srcdir}/src/register
 
