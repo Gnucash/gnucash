@@ -587,22 +587,27 @@ string and 'directories' must be a list of strings."
 (define (gnc:main)
 
   (define (handle-batch-mode-item item)
-    (cond
-     ((procedure? item) (item))
-     ((string? item)
-      (call-with-input-string
-       item
-       (lambda (port)
-         (let loop ((next-form (read port)))
-           (if (not (eof-object? next-form))
-               (begin
-                 ;; FIXME: is this where we want to eval these?
-                 ;; should we perhaps have a (gnucash user)?
-                 (eval next-form (resolve-module '(gnucash main)))
-                 (loop (read port))))))))
-     (else
-      (display "gnucash: unknown batch-mode item - ignoring.")
-      (newline))))
+    (let ((old-eval? (or (string=? "1.3" (version))
+			 (string=? "1.3.4" (version))
+			 (string=? "1.4" (substring (version) 0 3)))))
+      (cond
+       ((procedure? item) (item))
+       ((string? item)
+	(call-with-input-string
+	 item
+	 (lambda (port)
+	   (let loop ((next-form (read port)))
+	     (if (not (eof-object? next-form))
+		 (begin
+		   ;; FIXME: is this where we want to eval these?
+		   ;; should we perhaps have a (gnucash user)?
+		   (if old-eval?
+		       (eval next-form)
+		       (eval next-form (resolve-module '(gnucash main))))
+		   (loop (read port))))))))
+       (else
+	(display "gnucash: unknown batch-mode item - ignoring.")
+	(newline)))))
 
   ;;  (statprof-reset 0 50000) ;; 20 times/sec
   ;;  (statprof-start)
