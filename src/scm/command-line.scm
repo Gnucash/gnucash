@@ -52,16 +52,14 @@
    (N_ "Configuration directory - can be overridden with GNC_CONFIG_DIR environment variable.")
    (lambda (var value) (if (string? value) (list value) #f))
    string=?
-   (if (getenv "GNC_CONFIG_DIR")
-       (getenv "GNC_CONFIG_DIR")
-       gnc:_config-dir-default_)))
+   gnc:_install-config-dir_))
 
 (define gnc:*share-dir*
   (gnc:make-config-var
    (N_ "Shared files directory.")
    (lambda (var value) (if (string? value) (list value) #f))
    string=?
-   gnc:_share-dir-default_))
+   gnc:_install-share-dir_))
 
 ;; Convert the temporary startup value into a config var.
 (let ((current-value gnc:*debugging?*))
@@ -90,24 +88,6 @@
    (lambda (var value) (if (exact? value) (list value) #f))
    eq?
    #f))
-
-;; Convert the temporary startup value into a config var.
-(let ((current-load-path gnc:*load-path*))
-  (set!
-   gnc:*load-path*
-   (gnc:make-config-var
-    (N_ "A list of strings indicating the load path for (gnc:load name).
-Each element must be a string representing a directory or a symbol
-where 'default expands to the default path, and 'current expands to
-the current value of the path.")
-    (lambda (var value)
-      (let ((result (gnc:expand-load-path value)))
-        (if (list? result)
-            (list result)
-            #f)))
-    equal?
-    '(default)))
-  (gnc:config-var-value-set! gnc:*load-path* #f current-load-path))
 
 (define gnc:*doc-path*
 
@@ -189,19 +169,6 @@ the current value of the path.")
            (gnc:config-var-value-set! gnc:*share-dir* #f val))
          "SHAREDIR"
          (N_ "Set shared directory"))
-
-   (list "load-path"
-         'string
-         (lambda (val)
-           (let ((path-list
-                  (call-with-input-string val (lambda (port) (read port)))))
-             (if (list? path-list)
-                 (gnc:config-var-value-set! gnc:*load-path* #f path-list)
-                 (begin
-                   (gnc:error "non-list given for --load-path: " val)
-                   (gnc:shutdown 1)))))
-         "LOADPATH"
-         (N_ "Set the search path for .scm files."))
 
    (list "doc-path"
          'string
