@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <glib.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "gnc-xml-helper.h"
@@ -163,9 +164,14 @@ static gboolean
 account_type_handler (xmlNodePtr node, gpointer act)
 {
     int type;
+    char *string;
 
-    xaccAccountStringToType(node->xmlChildrenNode->content, &type);
+    string = xmlNodeGetContent (node->xmlChildrenNode);
+    xaccAccountStringToType(string, &type);
+    xmlFree (string);
+
     xaccAccountSetType((Account*)act, type);
+
     return TRUE;
 }
 

@@ -22,7 +22,13 @@
 	To use the financial calculator, find it on the "tools" menu.
 	</para>
 
-      <para><emphasis>PICTURE NEEDED</emphasis></para>
+      <screenshot>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="image/financial-calculator.png">
+	  </imageobject>
+	</mediaobject>
+      </screenshot>
 
       <para>To do a calculation, simply enter the figures that you <emphasis>do</emphasis>
 	have into the text boxes on the left, and select the appropriate compounding and

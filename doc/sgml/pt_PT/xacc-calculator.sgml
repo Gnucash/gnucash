@@ -22,7 +22,13 @@
   Para utilizar a calculadora financeira, procure-a no menu "ferramentas".
   </para>
 
-      <para><emphasis>NECESSÁRIA IMAGEM</emphasis></para>
+      <screenshot>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="image/financial-calculator.png">
+    </imageobject>
+  </mediaobject>
+      </screenshot>
 
       <para>Para efectuar um cálculo, simplesmente introduza os valores que você 
   <emphasis>tem</emphasis> nas caixas de texto à esquerda, e seleccione o tipo de 

@@ -11,7 +11,9 @@
       que você possua permissões.  São independentes e podem ser movidos, copiados, 
       e guardados em fita, disquettes, ou outro suporte de sua escolha.
       Podem ser gravados utilizando qualquer nome, e qualquer extensão de ficheiro que 
-      escolha, mas, tradicionalmente os programadores e utilizadores têm utilizado a extensão ".xac".
+      escolha, mas, tradicionalmente os programadores e utilizadores têm utilizado 
+      a extensão ".xac", ou "gml2" para distinguir o novo formato de ficheiro em XML 
+      do antigo formato binário da versão 1.4.
       </para>
 
       <para>
@@ -87,13 +89,17 @@
     </sect1>
     <sect1 id="xacc-export-accounts">
       <title>
-      Exportar Contas
+      Exportar a sua Hierarquia de Contas
       </title>
+     
       <para>
-  CORRIGIR: Necessita de Conteúdo!
+  Caso deseje, por alguma razão, criar um ficheiro vazio com a mesma 
+  estrutura de contas do ficheiro actual, poderá faze-lo seleccionando 
+  "Exportar contas" no menu Ficheiro.
   </para>
       <para>
-  Isto tem de descrever como utilizar as funcionalidades da exportação de contas.
+  Isto poderá ser utilizado como uma forma básica de fechar as suas  
+  contas, caso o deseje.
       </para>
     </sect1>
 

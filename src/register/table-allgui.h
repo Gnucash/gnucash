@@ -267,24 +267,10 @@ Table *     gnc_table_new (TableView *view,
 void        gnc_table_save_state (Table *table);
 void        gnc_table_destroy (Table *table);
 
-/* These functions check the bounds of virtal locations in the table
- * and return TRUE if they are out of bounds. If possible, they are
- * compiled inline. */
-G_INLINE_FUNC
+/* Thi function checks the bounds of virtal locations in the table
+ * and returns TRUE if they are out of bounds. */
 gboolean gnc_table_virtual_cell_out_of_bounds (Table *table,
                                                VirtualCellLocation vcell_loc);
-G_INLINE_FUNC gboolean
-gnc_table_virtual_cell_out_of_bounds (Table *table,
-                                      VirtualCellLocation vcell_loc)
-{
-  if (!table)
-    return TRUE;
-
-  return ((vcell_loc.virt_row < 0) ||
-          (vcell_loc.virt_row >= table->num_virt_rows) ||
-          (vcell_loc.virt_col < 0) ||
-          (vcell_loc.virt_col >= table->num_virt_cols));
-}
 
 /* This function returns the virtual cell associated with a particular
  *   virtual location. If the location is out of bounds, NULL is

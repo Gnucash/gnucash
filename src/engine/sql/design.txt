@@ -214,8 +214,6 @@ are not using NTP for time synchronization; or, e.g. if one machine failed
 to have daylight-savings time set correctly: its transactions would be 
 an hour newer/older than the others, leading to bad updates).
 
-Prices need to have version numbers added.
-
 /* The pgendAccountCompareVersion() routine compares the version
  * number of the account in the engine and the sql database. It
  * returns a negative number if the sql version is older (or the
@@ -223,6 +221,23 @@ Prices need to have version numbers added.
  * number if the sql version is newer.  It returns zero if the
  * two are equal.
  */
+
+Version numbers need to be written to XML file
+
+Version Timestamp
+-----------------
+The engine is structured so that whenever the GUI issues a query, that 
+query is passed to the backend. (The engine assumes the worst: that
+the engine data cache is out of date and needs to be upgraded.)  
+Unforunately, the GUI frequently queries for the same data several 
+times in rapid succession.  If this is taken at face value, then 
+multiple redundant queries to the SQL server occur in quick succession.
+
+The version_check field is used to minimize these redundant queries.
+It stores a timestamp; if the timestamp is less than 10 seconds old
+(MAX_VERSION_AGE), then the backend assumes that the engine data is
+sufficiently recent, and the sql query is skipped.  Under certain 
+situations, a considerable amount of querying can be avoided.
 
 
 Audit Trails

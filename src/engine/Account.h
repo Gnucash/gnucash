@@ -249,6 +249,9 @@ gnc_numeric     xaccAccountGetShareBalance (Account *account);
 gnc_numeric     xaccAccountGetShareClearedBalance (Account *account);
 gnc_numeric     xaccAccountGetShareReconciledBalance (Account *account);
 
+void            xaccAccountSetReconcileChildrenStatus(Account *account, gboolean status);
+gboolean        xaccAccountGetReconcileChildrenStatus(Account *account);
+
 gnc_numeric     xaccAccountGetBalanceAsOfDate (Account *account, time_t date);
 gnc_numeric     xaccAccountGetShareBalanceAsOfDate (Account *account,
                                                     time_t date);

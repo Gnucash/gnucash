@@ -418,12 +418,12 @@ static void rpcend_book_end (Backend *bend)
   LEAVE ("be=%p", be);
 }
 
-static int rpcend_account_begin_edit (Backend *bend, Account *acct)
+static void rpcend_account_begin_edit (Backend *bend, Account *acct)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_backend_guid args;
   int ret = 0;
-  VERIFY_BE (be, -1);
+  VERIFY_BEV (be);
 
   ENTER ("be=%p, acc=%p", be, acct);
 
@@ -432,21 +432,27 @@ static int rpcend_account_begin_edit (Backend *bend, Account *acct)
   memcpy (args.guid, acct->guid.data, sizeof (args.guid));
 
   gncrpc_account_begin_edit_1 (&args, &ret, be->client);
+  if (ret)
+  {
+     /* ah this is certainly wrong ... */
+     xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+  }
   LEAVE ("be=%p, acc=%p (%s)", be, acct, acct ? acct->accountName : "");
-  return ret;
 }
 
-static int rpcend_account_rollback_edit (Backend *bend, Account *acct)
+static void rpcend_account_rollback_edit (Backend *bend, Account *acct)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_backend_guid args;
   int ret = 0;
-  VERIFY_BE (be, -1);
+  VERIFY_BEV (be);
 
   ENTER ("be=%p, acc=%p (%s)", be, acct, acct ? acct->accountName : "");
 
-  if (acct == NULL)
-    return ERR_BACKEND_MISC;
+  if (acct == NULL) {
+    xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+    return;
+  }
 
   memset (&args, 0, sizeof (args));
   memcpy (args.backend, (char *)&be, sizeof(be));
@@ -454,22 +460,28 @@ static int rpcend_account_rollback_edit (Backend *bend, Account *acct)
 
   gncrpc_account_rollback_edit_1 (&args, &ret, be->client);
 
+  if (ret)
+  {
+     /* ah this is certainly wrong ... */
+     xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+  }
   LEAVE ("be=%p, acc=%p, ret=%d", be, acct, ret);
-  return ret;
 }
 
-static int rpcend_account_commit_edit (Backend *bend, Account *acct)
+static void rpcend_account_commit_edit (Backend *bend, Account *acct)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_commit_acct_args args;
   int ret = 0;
   AccountGroup *parent;
-  VERIFY_BE (be, -1);
+  VERIFY_BEV (be);
 
   ENTER ("be=%p, acc=%p (%s)", be, acct, acct ? acct->accountName : "");
 
-  if (acct == NULL)
-    return ERR_BACKEND_MISC;
+  if (acct == NULL) {
+    xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+    return;
+  }
 
   parent = xaccAccountGetParent(acct);
 
@@ -507,16 +519,20 @@ static int rpcend_account_commit_edit (Backend *bend, Account *acct)
     acct->version--;
   }
 
+  if (ret)
+  {
+     /* ah this is certainly wrong ... */
+     xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+  }
   LEAVE ("be=%p, acc=%p, ret=%d", be, acct, ret);
-  return ret;
 }
 
-static int rpcend_trans_begin_edit (Backend *bend, Transaction *txn)
+static void rpcend_trans_begin_edit (Backend *bend, Transaction *txn)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_backend_guid args;
   int ret = 0;
-  VERIFY_BE (be, -1);
+  VERIFY_BEV (be);
 
   ENTER ("be=%p, txn=%p", be, txn);
 
@@ -525,17 +541,21 @@ static int rpcend_trans_begin_edit (Backend *bend, Transaction *txn)
   memcpy (args.guid, txn->guid.data, sizeof (args.guid));
 
   gncrpc_txn_begin_edit_1 (&args, &ret, be->client);
+  if (ret)
+  {
+     /* ah this is certainly wrong ... */
+     xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+  }
   LEAVE ("be=%p, txn=%p", be, txn);
-  return ret;
 }
 
-static int rpcend_trans_commit_edit (Backend *bend, Transaction *new,
+static void rpcend_trans_commit_edit (Backend *bend, Transaction *new,
 				     Transaction *orig)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_commit_txn_args args;
   int ret = 0;
-  VERIFY_BE (be, -1);
+  VERIFY_BEV (be);
   ENTER ("be=%p, new=%p, vers=%d", be, new, new->version);
 
   new->version++;
@@ -553,16 +573,20 @@ static int rpcend_trans_commit_edit (Backend *bend, Transaction *new,
     new->version--;
   }
   
+  if (ret)
+  {
+     /* ah this is certainly wrong ... */
+     xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+  }
   LEAVE ("be=%p, new=%p, ret=%d, txn_vers=%d", be, new, ret, new->version);
-  return ret;
 }
 
-static int rpcend_trans_rollback_edit (Backend *bend, Transaction *txn)
+static void rpcend_trans_rollback_edit (Backend *bend, Transaction *txn)
 {
   RPCBackend *be = (RPCBackend *)bend;
   gncrpc_backend_guid args;
   int ret = 0;
-  VERIFY_BE (be, -1);
+  VERIFY_BEV (be);
   ENTER ("be=%p, txn=%p", be, txn);
   memset (&args, 0, sizeof (args));
   memcpy (args.backend, (char *)&be, sizeof(be));
@@ -570,20 +594,22 @@ static int rpcend_trans_rollback_edit (Backend *bend, Transaction *txn)
 
   gncrpc_txn_rollback_edit_1 (&args, &ret, be->client);
 
+  if (ret)
+  {
+     /* ah this is certainly wrong ... */
+     xaccBackendSetError (&be->be, ERR_BACKEND_MISC);
+  }
   LEAVE ("be=%p, txn=%p, ret=%d", be, txn, ret);
-  return ret;
 }
 
-static int rpcend_price_begin_edit (Backend *bend, GNCPrice *pr)
+static void rpcend_price_begin_edit (Backend *bend, GNCPrice *pr)
 {
   PERR ("not implemented");
-  return 0;
 }
 
-static int rpcend_price_commit_edit (Backend *bend, GNCPrice *pr)
+static void rpcend_price_commit_edit (Backend *bend, GNCPrice *pr)
 {
   PERR ("not implemented");
-  return 0;
 }
 
 static void rpcend_price_lookup (Backend *bend, GNCPriceLookup *q)

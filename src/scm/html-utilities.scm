@@ -359,21 +359,34 @@
 
     ;; If start-date == #f then balance-at-date will be used (for
     ;; balance reports), otherwise balance-interval (for profit and
-    ;; loss reports). Returns a commodity-collector.
-    (define (my-get-balance-internal account include-subaccounts?)
+    ;; loss reports). This function takes only the current account
+    ;; into consideration, i.e. none of the subaccounts are included
+    ;; in the balance. Returns a commodity-collector.
+    (define (my-get-balance-nosub account)
       (if start-date
 	  (gnc:account-get-comm-balance-interval
-	   account start-date end-date include-subaccounts?)
+	   account start-date end-date #f)
 	  (gnc:account-get-comm-balance-at-date 
-	   account end-date include-subaccounts?)))
+	   account end-date #f)))
 
-    ;; Wrappers for the two use cases -- first with, second without
-    ;; the subaccount balances included.
+    ;; Additional function that includes the subaccounts as
+    ;; well. Note: It is necessary to define this here (instead of
+    ;; changing an argument for account-get-balance) because the
+    ;; show-acct? query is needed.
     (define (my-get-balance account)
-      (my-get-balance-internal account #t))
-
-    (define (my-get-balance-nosub account)
-      (my-get-balance-internal account #f))
+      ;; this-collector for storing the result
+      (let ((this-collector (my-get-balance-nosub account)))
+	(for-each 
+	 (lambda (x) (if x 
+			 (this-collector 'merge x #f)))
+	 (gnc:group-map-all-accounts
+	  (lambda (a)
+	    ;; Important: Calculate the balance if and only of the
+	    ;; account a is shown, i.e. (show-acct? a) == #t.
+	    (and (show-acct? a)
+		 (my-get-balance-nosub a)))
+	  (gnc:account-get-children account)))
+	this-collector))
 
     ;; show this account? Check against the account selection and,
     ;; if not selected, show-subaccts?==#t and any parent was

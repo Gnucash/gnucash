@@ -37,6 +37,7 @@
 /** PROTOTYPES ******************************************************/
 AccountGroup *xaccMallocAccountGroup (void);
 void          xaccFreeAccountGroup (AccountGroup *account_group);
+void          xaccAccountGroupBeginEdit (AccountGroup *grp);
 void 	      xaccAccountGroupCommitEdit (AccountGroup *grp);
 
 /*

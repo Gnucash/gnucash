@@ -128,24 +128,28 @@
   (record-accessor <html-style-sheet> 'style))
 
 (define (gnc:save-style-sheet-options) 
-  (let ((port (open gnc:current-config-auto
-                    (logior O_WRONLY O_CREAT O_APPEND))))
-    (hash-fold
-     (lambda (id ss-obj p)
-       (let ((code 
-              (string-append 
-               (format #f "(let ((template (gnc:html-style-sheet-template-find ~S)))\n" 
-                       (gnc:html-style-sheet-type ss-obj))
-               "  (if template \n"
-               "    (let ((options ((gnc:html-style-sheet-template-options-generator template)))) \n"
-               (gnc:generate-restore-forms 
-                (gnc:html-style-sheet-options ss-obj) "options")
-               (format #f " (gnc:restore-html-style-sheet ~S ~S options))))\n"
-                       (gnc:html-style-sheet-name ss-obj)
-                       (gnc:html-style-sheet-type ss-obj)))))
-         (display code port))
-       #f) #f *gnc:_style-sheets_*)
-    (close port)))
+  (let ((port (false-if-exception
+               (open gnc:current-config-auto
+                     (logior O_WRONLY O_CREAT O_APPEND)))))
+    (if (not port)
+        (gnc:warn (_ "Can't save style sheet"))
+        (begin
+          (hash-fold
+           (lambda (id ss-obj p)
+             (let ((code 
+                    (string-append 
+                     (format #f "(let ((template (gnc:html-style-sheet-template-find ~S)))\n" 
+                             (gnc:html-style-sheet-type ss-obj))
+                     "  (if template \n"
+                     "    (let ((options ((gnc:html-style-sheet-template-options-generator template)))) \n"
+                     (gnc:generate-restore-forms 
+                      (gnc:html-style-sheet-options ss-obj) "options")
+                     (format #f " (gnc:restore-html-style-sheet ~S ~S options))))\n"
+                             (gnc:html-style-sheet-name ss-obj)
+                             (gnc:html-style-sheet-type ss-obj)))))
+               (display code port))
+             #f) #f *gnc:_style-sheets_*)
+          (close port)))))
 
 (define (gnc:html-style-sheet-set-style! sheet tag . rest)
   (let ((newstyle #f))
