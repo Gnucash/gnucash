@@ -11,17 +11,18 @@
 
 #include "messages.h"
 #include "gnc-engine-util.h"
-#include "GNCId.h"
-#include "gnc-book.h"
 #include "gnc-commodity.h"
 #include "gnc-numeric.h"
-#include "gncObject.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+
+#include "qofbook.h"
 #include "qofid-p.h"
+#include "qofid.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 
 #include "gncBusiness.h"
 #include "gncCustomer.h"
@@ -310,7 +311,7 @@ void gncCustomerBeginEdit (GncCustomer *cust)
 
 static void gncCustomerOnError (GncCustomer *cust, QofBackendError errcode)
 {
-  PERR("Customer Backend Failure: %d", errcode);
+  PERR("Customer QofBackend Failure: %d", errcode);
 }
 
 static void gncCustomerOnDone (GncCustomer *cust)
@@ -439,7 +440,7 @@ GList * gncCustomerGetJoblist (GncCustomer *cust, gboolean show_all)
 GUID gncCustomerRetGUID (GncCustomer *customer)
 {
   if (!customer)
-    return *xaccGUIDNULL();
+    return *guid_null();
 
   return customer->guid;
 }
@@ -453,7 +454,7 @@ GncCustomer * gncCustomerLookupDirect (GUID guid, QofBook *book)
 GncCustomer * gncCustomerLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
@@ -508,7 +509,7 @@ static void _gncCustomerMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncCustomerForeach (QofBook *book, foreachObjectCB cb,
+static void _gncCustomerForeach (QofBook *book, QofEntityForeachCB cb,
 				 gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -538,18 +539,18 @@ static QofObject gncCustomerDesc = {
 
 gboolean gncCustomerRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { CUSTOMER_ID, QUERYCORE_STRING, (QueryAccess)gncCustomerGetID },
-    { CUSTOMER_NAME, QUERYCORE_STRING, (QueryAccess)gncCustomerGetName },
-    { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncCustomerGetAddr },
-    { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncCustomerGetShipAddr },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncCustomerGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncCustomerGetGUID },
-    { QUERY_PARAM_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncCustomerGetActive },
+  static QofQueryObject params[] = {
+    { CUSTOMER_ID, QOF_QUERYCORE_STRING, (QofAccessFunc)gncCustomerGetID },
+    { CUSTOMER_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncCustomerGetName },
+    { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr },
+    { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncCustomerGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncCustomerGetGUID },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncCustomerCompare,params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare,params);
 
   return qof_object_register (&gncCustomerDesc);
 }

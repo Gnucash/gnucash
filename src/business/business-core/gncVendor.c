@@ -15,10 +15,10 @@
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
-#include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofid.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 #include "gnc-be-utils.h"
 #include "qofid-p.h"
 
@@ -357,7 +357,7 @@ void gncVendorBeginEdit (GncVendor *vendor)
 
 static void gncVendorOnError (GncVendor *vendor, QofBackendError errcode)
 {
-  PERR("Vendor Backend Failure: %d", errcode);
+  PERR("Vendor QofBackend Failure: %d", errcode);
 }
 
 static void gncVendorOnDone (GncVendor *vendor)
@@ -404,7 +404,7 @@ GList * gncVendorGetJoblist (GncVendor *vendor, gboolean show_all)
 GUID gncVendorRetGUID (GncVendor *vendor)
 {
   if (!vendor)
-    return *xaccGUIDNULL();
+    return *guid_null();
 
   return vendor->guid;
 }
@@ -418,7 +418,7 @@ GncVendor * gncVendorLookupDirect (GUID guid, QofBook *book)
 GncVendor * gncVendorLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
@@ -460,7 +460,7 @@ static void _gncVendorMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncVendorForeach (QofBook *book, foreachObjectCB cb,
+static void _gncVendorForeach (QofBook *book, QofEntityForeachCB cb,
 			       gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -490,17 +490,17 @@ static QofObject gncVendorDesc = {
 
 gboolean gncVendorRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { VENDOR_ID, QUERYCORE_STRING, (QueryAccess)gncVendorGetID },
-    { VENDOR_NAME, QUERYCORE_STRING, (QueryAccess)gncVendorGetName },
-    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QueryAccess)gncVendorGetAddr },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncVendorGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncVendorGetGUID },
-    { QUERY_PARAM_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncVendorGetActive },
+  static QofQueryObject params[] = {
+    { VENDOR_ID, QOF_QUERYCORE_STRING, (QofAccessFunc)gncVendorGetID },
+    { VENDOR_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncVendorGetName },
+    { VENDOR_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncVendorGetAddr },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncVendorGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncVendorGetGUID },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncVendorGetActive },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncVendorCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
 
   return qof_object_register (&gncVendorDesc);
 }

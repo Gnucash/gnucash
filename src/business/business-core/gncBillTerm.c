@@ -9,17 +9,17 @@
 #include <glib.h>
 
 #include "messages.h"
-#include "gnc-book.h"
 #include "gnc-numeric.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
-#include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofquerycore.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
+#include "qofbook.h"
+#include "qofid.h"
 #include "qofid-p.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 
 #include "gncBusiness.h"
 #include "gncBillTermP.h"
@@ -308,7 +308,7 @@ void gncBillTermBeginEdit (GncBillTerm *term)
 
 static void gncBillTermOnError (GncBillTerm *term, QofBackendError errcode)
 {
-  PERR("BillTerm Backend Failure: %d", errcode);
+  PERR("BillTerm QofBackend Failure: %d", errcode);
 }
 
 static void gncBillTermOnDone (GncBillTerm *term)
@@ -327,7 +327,7 @@ void gncBillTermCommitEdit (GncBillTerm *term)
 GncBillTerm * gncBillTermLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
@@ -633,7 +633,7 @@ static void _gncBillTermMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncBillTermForeach (QofBook *book, foreachObjectCB cb,
+static void _gncBillTermForeach (QofBook *book, QofEntityForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -653,13 +653,13 @@ static QofObject gncBillTermDesc = {
 
 gboolean gncBillTermRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncBillTermGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncBillTermGetGUID },
+  static QofQueryObject params[] = {
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncBillTermGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncBillTermGetGUID },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncBillTermCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncBillTermCompare, params);
 
   return qof_object_register (&gncBillTermDesc);
 }

@@ -9,9 +9,9 @@
 #include <glib.h>
 #include <string.h>		/* for memcpy() */
 
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 
 #include "gncOwner.h"
 #include "gncOwnerP.h"
@@ -329,31 +329,31 @@ owner_from_lot (GNCLot *lot)
 static void
 reg_lot (void)
 {
-  static QueryObjectDef params[] = {
-    { OWNER_FROM_LOT, _GNC_MOD_NAME, (QueryAccess)owner_from_lot },
+  static QofQueryObject params[] = {
+    { OWNER_FROM_LOT, _GNC_MOD_NAME, (QofAccessFunc)owner_from_lot },
     { NULL },
   };
 
-  gncQueryObjectRegister (GNC_ID_LOT, NULL, params);
+  qof_query_object_register (GNC_ID_LOT, NULL, params);
 }
 
 gboolean gncOwnerRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { OWNER_TYPE, QUERYCORE_INT64, (QueryAccess)gncOwnerGetType },
+  static QofQueryObject params[] = {
+    { OWNER_TYPE, QUERYCORE_INT64, (QofAccessFunc)gncOwnerGetType },
     { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
-      (QueryAccess)gncOwnerGetCustomer },
-    { OWNER_JOB, GNC_JOB_MODULE_NAME, (QueryAccess)gncOwnerGetJob },
-    { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QueryAccess)gncOwnerGetVendor },
-    { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QueryAccess)gncOwnerGetEmployee },
-    { OWNER_PARENT, _GNC_MOD_NAME, (QueryAccess)gncOwnerGetEndOwner },
-    { OWNER_PARENTG, QUERYCORE_GUID, (QueryAccess)gncOwnerGetEndGUID },
-    { OWNER_NAME, QUERYCORE_STRING, (QueryAccess)gncOwnerGetName },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncOwnerGetGUID },
+      (QofAccessFunc)gncOwnerGetCustomer },
+    { OWNER_JOB, GNC_JOB_MODULE_NAME, (QofAccessFunc)gncOwnerGetJob },
+    { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QofAccessFunc)gncOwnerGetVendor },
+    { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QofAccessFunc)gncOwnerGetEmployee },
+    { OWNER_PARENT, _GNC_MOD_NAME, (QofAccessFunc)gncOwnerGetEndOwner },
+    { OWNER_PARENTG, QOF_QUERYCORE_GUID, (QofAccessFunc)gncOwnerGetEndGUID },
+    { OWNER_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncOwnerGetName },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncOwnerGetGUID },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOwnerCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncOwnerCompare, params);
   reg_lot ();
 
   return TRUE;

@@ -7,7 +7,7 @@
 #ifndef GNC_ADDRESS_H_
 #define GNC_ADDRESS_H_
 
-#include "gnc-book.h"
+#include "qofbook.h"
 
 #define GNC_ADDRESS_MODULE_NAME	"gncAddress"
 

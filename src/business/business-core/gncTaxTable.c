@@ -12,10 +12,10 @@
 #include "gnc-numeric.h"
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
-#include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofid.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 #include "qofid-p.h"
@@ -396,7 +396,7 @@ void gncTaxTableBeginEdit (GncTaxTable *table)
 
 static void gncTaxTableOnError (GncTaxTable *table, QofBackendError errcode)
 {
-  PERR("TaxTable Backend Failure: %d", errcode);
+  PERR("TaxTable QofBackend Failure: %d", errcode);
 }
 
 static void gncTaxTableOnDone (GncTaxTable *table)
@@ -416,7 +416,7 @@ void gncTaxTableCommitEdit (GncTaxTable *table)
 GncTaxTable * gncTaxTableLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
@@ -652,7 +652,7 @@ void gncAccountValueDestroy (GList *list)
 GUID gncTaxTableRetGUID (GncTaxTable *table)
 {
   if (!table)
-    return *xaccGUIDNULL();
+    return *guid_null();
 
   return table->guid;
 }
@@ -735,7 +735,7 @@ static void _gncTaxTableMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncTaxTableForeach (QofBook *book, foreachObjectCB cb,
+static void _gncTaxTableForeach (QofBook *book, QofEntityForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -755,13 +755,13 @@ static QofObject gncTaxTableDesc = {
 
 gboolean gncTaxTableRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncTaxTableGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncTaxTableGetGUID },
+  static QofQueryObject params[] = {
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncTaxTableGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncTaxTableGetGUID },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncTaxTableCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncTaxTableCompare, params);
 
   return qof_object_register (&gncTaxTableDesc);
 }

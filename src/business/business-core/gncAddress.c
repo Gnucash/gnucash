@@ -9,8 +9,8 @@
 #include <glib.h>
 
 #include "gnc-engine-util.h"	/* safe_strcmp */
-#include "QueryCore.h"
-#include "QueryObject.h"
+#include "qofquerycore.h"
+#include "qofqueryobject.h"
 #include "guid.h"
 #include "gnc-event-p.h"
 
@@ -234,16 +234,16 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
 
 gboolean gncAddressRegister (void)
 {
-  static QueryObjectDef params[] = {
+  static QofQueryObject params[] = {
 
-    { ADDRESS_NAME, QUERYCORE_STRING, (QueryAccess)gncAddressGetName },
-    { ADDRESS_PHONE, QUERYCORE_STRING, (QueryAccess)gncAddressGetPhone },
-    { ADDRESS_FAX, QUERYCORE_STRING, (QueryAccess)gncAddressGetFax },
-    { ADDRESS_EMAIL, QUERYCORE_STRING, (QueryAccess)gncAddressGetEmail },
+    { ADDRESS_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetName },
+    { ADDRESS_PHONE, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetPhone },
+    { ADDRESS_FAX, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetFax },
+    { ADDRESS_EMAIL, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetEmail },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncAddressCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncAddressCompare, params);
 
   return TRUE;
 }

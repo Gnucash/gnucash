@@ -13,10 +13,10 @@
 #include "kvp_frame.h"
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
-#include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofid.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 #include "gnc-event-p.h"
 #include "gnc-be-utils.h"
 #include "qofid-p.h"
@@ -308,7 +308,7 @@ GList * gncOrderGetEntries (GncOrder *order)
 GncOrder * gncOrderLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
@@ -332,7 +332,7 @@ void gncOrderBeginEdit (GncOrder *order)
 
 static void gncOrderOnError (GncOrder *order, QofBackendError errcode)
 {
-  PERR("Order Backend Failure: %d", errcode);
+  PERR("Order QofBackend Failure: %d", errcode);
 }
 
 static void gncOrderOnDone (GncOrder *order)
@@ -399,7 +399,7 @@ static void _gncOrderMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncOrderForeach (QofBook *book, foreachObjectCB cb,
+static void _gncOrderForeach (QofBook *book, QofEntityForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -436,21 +436,21 @@ static QofObject gncOrderDesc = {
 
 gboolean gncOrderRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { ORDER_ID, QUERYCORE_STRING, (QueryAccess)gncOrderGetID },
-    { ORDER_REFERENCE, QUERYCORE_STRING, (QueryAccess)gncOrderGetReference },
-    { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QueryAccess)gncOrderGetOwner },
-    { ORDER_OPENED, QUERYCORE_DATE, (QueryAccess)gncOrderGetDateOpened },
-    { ORDER_IS_CLOSED, QUERYCORE_BOOLEAN, (QueryAccess)gncOrderIsClosed },
-    { ORDER_CLOSED, QUERYCORE_DATE, (QueryAccess)gncOrderGetDateClosed },
-    { ORDER_NOTES, QUERYCORE_STRING, (QueryAccess)gncOrderGetNotes },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncOrderGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncOrderGetGUID },
-    { QUERY_PARAM_ACTIVE, QUERYCORE_BOOLEAN, (QueryAccess)gncOrderGetActive },
+  static QofQueryObject params[] = {
+    { ORDER_ID, QOF_QUERYCORE_STRING, (QofAccessFunc)gncOrderGetID },
+    { ORDER_REFERENCE, QOF_QUERYCORE_STRING, (QofAccessFunc)gncOrderGetReference },
+    { ORDER_OWNER, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncOrderGetOwner },
+    { ORDER_OPENED, QOF_QUERYCORE_DATE, (QofAccessFunc)gncOrderGetDateOpened },
+    { ORDER_IS_CLOSED, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncOrderIsClosed },
+    { ORDER_CLOSED, QOF_QUERYCORE_DATE, (QofAccessFunc)gncOrderGetDateClosed },
+    { ORDER_NOTES, QOF_QUERYCORE_STRING, (QofAccessFunc)gncOrderGetNotes },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncOrderGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncOrderGetGUID },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncOrderGetActive },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncOrderCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncOrderCompare, params);
 
   return qof_object_register (&gncOrderDesc);
 }

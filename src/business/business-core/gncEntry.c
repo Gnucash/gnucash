@@ -14,10 +14,10 @@
 #include "gnc-engine-util.h"
 #include "gnc-event-p.h"
 #include "gnc-numeric.h"
-#include "GNCId.h"
-#include "QueryCore.h"
-#include "QueryNew.h"
-#include "QueryObject.h"
+#include "qofid.h"
+#include "qofquerycore.h"
+#include "qofquery.h"
+#include "qofqueryobject.h"
 #include "gnc-be-utils.h"
 #include "qofid-p.h"
 
@@ -763,7 +763,7 @@ GncOrder * gncEntryGetOrder (GncEntry *entry)
 GncEntry * gncEntryLookup (QofBook *book, const GUID *guid)
 {
   if (!book || !guid) return NULL;
-  return xaccLookupEntity (gnc_book_get_entity_table (book),
+  return qof_entity_lookup (gnc_book_get_entity_table (book),
 			   guid, _GNC_MOD_NAME);
 }
 
@@ -1112,7 +1112,7 @@ void gncEntryBeginEdit (GncEntry *entry)
 
 static void gncEntryOnError (GncEntry *entry, QofBackendError errcode)
 {
-  PERR("Entry Backend Failure: %d", errcode);
+  PERR("Entry QofBackend Failure: %d", errcode);
 }
 
 static void gncEntryOnDone (GncEntry *entry)
@@ -1182,7 +1182,7 @@ static void _gncEntryMarkClean (QofBook *book)
   gncBusinessSetDirtyFlag (book, _GNC_MOD_NAME, FALSE);
 }
 
-static void _gncEntryForeach (QofBook *book, foreachObjectCB cb,
+static void _gncEntryForeach (QofBook *book, QofEntityForeachCB cb,
 			      gpointer user_data)
 {
   gncBusinessForeach (book, _GNC_MOD_NAME, cb, user_data);
@@ -1202,26 +1202,26 @@ static QofObject gncEntryDesc = {
 
 gboolean gncEntryRegister (void)
 {
-  static QueryObjectDef params[] = {
-    { ENTRY_DATE, QUERYCORE_DATE, (QueryAccess)gncEntryGetDate },
-    { ENTRY_DATE_ENTERED, QUERYCORE_DATE, (QueryAccess)gncEntryGetDateEntered },
-    { ENTRY_DESC, QUERYCORE_STRING, (QueryAccess)gncEntryGetDescription },
-    { ENTRY_ACTION, QUERYCORE_STRING, (QueryAccess)gncEntryGetAction },
-    { ENTRY_NOTES, QUERYCORE_STRING, (QueryAccess)gncEntryGetNotes },
-    { ENTRY_QTY, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetQuantity },
-    { ENTRY_IPRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetInvPrice },
-    { ENTRY_BPRICE, QUERYCORE_NUMERIC, (QueryAccess)gncEntryGetBillPrice },
-    { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetInvoice },
-    { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QueryAccess)gncEntryGetBill },
-    { ENTRY_BILLABLE, QUERYCORE_BOOLEAN, (QueryAccess)gncEntryGetBillable },
-    { ENTRY_BILLTO, GNC_OWNER_MODULE_NAME, (QueryAccess)gncEntryGetBillTo },
-    { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QueryAccess)gncEntryGetOrder },
-    { QUERY_PARAM_BOOK, GNC_ID_BOOK, (QueryAccess)gncEntryGetBook },
-    { QUERY_PARAM_GUID, QUERYCORE_GUID, (QueryAccess)gncEntryGetGUID },
+  static QofQueryObject params[] = {
+    { ENTRY_DATE, QOF_QUERYCORE_DATE, (QofAccessFunc)gncEntryGetDate },
+    { ENTRY_DATE_ENTERED, QOF_QUERYCORE_DATE, (QofAccessFunc)gncEntryGetDateEntered },
+    { ENTRY_DESC, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetDescription },
+    { ENTRY_ACTION, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetAction },
+    { ENTRY_NOTES, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetNotes },
+    { ENTRY_QTY, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetQuantity },
+    { ENTRY_IPRICE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice },
+    { ENTRY_BPRICE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice },
+    { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetInvoice },
+    { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetBill },
+    { ENTRY_BILLABLE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable },
+    { ENTRY_BILLTO, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncEntryGetBillTo },
+    { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QofAccessFunc)gncEntryGetOrder },
+    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncEntryGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncEntryGetGUID },
     { NULL },
   };
 
-  gncQueryObjectRegister (_GNC_MOD_NAME, (QuerySort)gncEntryCompare, params);
+  qof_query_object_register (_GNC_MOD_NAME, (QofSortFunc)gncEntryCompare, params);
 
   return qof_object_register (&gncEntryDesc);
 }
