@@ -1,5 +1,8 @@
 2003-02-01  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/generic-import.scm: Move transaction matcher
+	preferences to "Online Banking & Import" preference page.
+
 	* src/import-export/hbci/gnc-hbci-cb.c: Add include config.h.
 
 2003-02-01  Matthew Vanecek  <mevanecek@yahoo.com>
