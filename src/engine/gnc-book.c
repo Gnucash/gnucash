@@ -857,6 +857,9 @@ gnc_book_load (GNCBook *book)
     xaccLogDisable();
     gnc_book_load_from_file(book);
     xaccGroupScrubSplits (book->topgroup);
+
+    /* we just got done loading, it can't possibly be dirty !! */
+    gnc_book_mark_saved(book);
     xaccLogEnable();
 
   }
@@ -890,6 +893,10 @@ gnc_book_load (GNCBook *book)
        if (be->price_load) 
        {
           book->pricedb = (be->price_load) (be);
+
+          /* we just got done loading, it can't possibly be dirty !! */
+          gnc_book_mark_saved(book);
+
           xaccPriceDBSetBackend (book->pricedb, be);
           gnc_book_push_error(book, xaccBackendGetError(be), NULL);
        }
