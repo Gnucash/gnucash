@@ -41,11 +41,13 @@
 #include <gwenhywfar/bio_buffer.h>
 #include <gwenhywfar/xml.h>
 
-#include <libxml/encoding.h>
+#include <iconv.h>
 
 #define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
 
 
+static iconv_t gnc_iconv_handler = 0;
+void gnc__utf8ToLatin1(const char *utf, int outputlength, char *latin1);
 
 /** Adds the interactor and progressmonitor classes to the api. */
 GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
@@ -63,9 +65,32 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   data->showbox_id = 1;
   data->showbox_hash = g_hash_table_new(NULL, NULL); 
 
+  if (!gnc_iconv_handler)
+    gnc_iconv_handler = iconv_open("ISO8859-1", "UTF-8");
+
   /* set HBCI_Interactor */
   gnc_hbci_add_callbacks(api, data);
   return data;
+}
+
+void GNCInteractor_delete(GNCInteractor *data)
+{
+  if (data == NULL)
+    return;
+  if (data->dialog != NULL) {
+    gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
+			    gtk_toggle_button_get_active 
+			    (GTK_TOGGLE_BUTTON (data->close_checkbutton)));
+    gtk_object_unref (GTK_OBJECT (data->dialog));
+    gtk_widget_destroy (data->dialog);
+  }
+  
+  data->dialog = NULL;
+
+  g_hash_table_destroy(data->showbox_hash);
+
+  iconv_close(gnc_iconv_handler);
+  gnc_iconv_handler = 0;
 }
 
 
@@ -150,23 +175,6 @@ void GNCInteractor_hide(GNCInteractor *i)
 			  (GTK_TOGGLE_BUTTON (i->close_checkbutton)));
 }
 
-void GNCInteractor_delete(GNCInteractor *data)
-{
-  if (data == NULL)
-    return;
-  if (data->dialog != NULL) {
-    gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
-			    gtk_toggle_button_get_active 
-			    (GTK_TOGGLE_BUTTON (data->close_checkbutton)));
-    gtk_object_unref (GTK_OBJECT (data->dialog));
-    gtk_widget_destroy (data->dialog);
-  }
-  
-  data->dialog = NULL;
-
-  g_hash_table_destroy(data->showbox_hash);
-}
-
 void GNCInteractor_set_cache_valid(GNCInteractor *i, gboolean value)
 {
   g_assert(i);
@@ -242,19 +250,17 @@ static int gnc__extractText(const char *text, GWEN_BUFFER *tbuf) {
   return 0;
 }
 
-void gnc__utf8ToLatin1(const char *utf, int outputlength, char *latin1);
 
 void gnc__utf8ToLatin1(const char *utf, int outputlength, char *latin1)
 {
-/*   xmlCharEncodingHandlerPtr utf8ptr =  */
-/*     xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8); */
-/*   xmlCharEncodingInputFunc fromutf8 = utf8ptr->output; */
-  xmlCharEncodingHandlerPtr latin1ptr = 
-    xmlGetCharEncodingHandler(XML_CHAR_ENCODING_8859_1);
-  xmlCharEncodingInputFunc intolatin1 = latin1ptr->input;
-  /* int i; */
+  int inbytes = strlen(utf), outbytes = outputlength;
+  char *inbuffer = (char*)utf;
+  char *outbuffer = latin1;
 
-  intolatin1(latin1, outputlength, (char*)utf, strlen(utf));
+  g_assert(gnc_iconv_handler);
+  g_assert(gnc_iconv_handler != (iconv_t)(-1));
+
+  iconv(gnc_iconv_handler, &inbuffer, &inbytes, &outbuffer, &outbytes);
 }
 
 /********************************************************
@@ -294,8 +300,9 @@ static int inputBoxCB(AB_BANKING *ab,
   /*   AB_ImExporter_Utf8ToDta (text, bufsize, buffer2); */
   latin1title = GWEN_Buffer_GetStart (buffer1);
 
-  latin1text = g_strdup(GWEN_Buffer_GetStart (buffer2));
-/*   gnc__utf8ToLatin1(GWEN_Buffer_GetStart (buffer2), strlen(utf8text), latin1text); */
+  bufsize = strlen(GWEN_Buffer_GetStart (buffer2));
+  latin1text = g_strnfill(bufsize, ' ');
+  gnc__utf8ToLatin1(GWEN_Buffer_GetStart (buffer2), bufsize, latin1text);
 
   newPin = (flags | AB_BANKING_INPUT_FLAGS_CONFIRM) == 0;
   /*   printf("inputBoxCB: Requesting newPind: %s\n", newPin ? "true" : "false"); */
@@ -423,20 +430,23 @@ static GWEN_TYPE_UINT32
 showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
 	  const char *utf8title, const char *utf8text)
 {
-  char *msgstr;
   GtkWidget *dialog;
   GNCInteractor *data;
   GWEN_TYPE_UINT32 result;
-  const char *title = utf8title, *text = utf8text;
+  const char *title = utf8title;
+  char *latin1text;
+  int bufsize = strlen(utf8text);
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
   
-  /* Create message string */
-  msgstr = g_strdup_printf ("%s\n%s", title, text);
+  latin1text = g_strnfill(bufsize, ' ');
+  gnc__utf8ToLatin1(utf8text, bufsize, latin1text);
 
   /* Create new dialog */
-  dialog = gnome_ok_dialog_parented (msgstr, GTK_WINDOW (data->parent));
+  dialog = gnome_ok_dialog_parented (latin1text, GTK_WINDOW (data->parent));
+  if (title)
+    gtk_window_set_title (GTK_WINDOW (dialog), title);
   gnome_dialog_close_hides (GNOME_DIALOG(dialog), TRUE);
   gtk_widget_show_all (dialog);
 
@@ -445,7 +455,7 @@ showBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
   data->showbox_id++;
   data->showbox_last = dialog;
 
-  g_free (msgstr);
+  g_free(latin1text);
   return result;
 }
 
@@ -488,14 +498,19 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
 					const char *utf8text, GWEN_TYPE_UINT32 total)
 {
   GNCInteractor *data;
-  const char *title = utf8title, *text = utf8text;
+  const char *title = utf8title;
+  char *latin1text;
   //GtkWidget *dialog;
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
   g_assert(data);
 
   gtk_entry_set_text (GTK_ENTRY (data->job_entry), title);
-  gtk_entry_set_text (GTK_ENTRY (data->action_entry), text);
+
+  latin1text = g_strnfill(strlen(utf8text), ' ');
+  gnc__utf8ToLatin1(utf8text, strlen(latin1text), latin1text);
+
+  gtk_entry_set_text (GTK_ENTRY (data->action_entry), latin1text);
 
 /*   printf("progressLogCB: Logging msg: %s\n", text); */
 /*   GNCInteractor_add_log_text (data, text); */
@@ -505,6 +520,7 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
   data->action_max = total;
   GNCInteractor_setRunning(data);
 
+  g_free(latin1text);
   GNCInteractor_show(data);
   return progress_id;
 }
@@ -540,7 +556,7 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   //GtkWidget *dialog;
   GWEN_BUFFER *buffer;
   int bufsize = 10+strlen(utf8text);
-  const char *latin1text;
+  char *latin1text;
 
   g_assert(ab);
   data = AB_Banking_GetUserData(ab);
@@ -549,7 +565,10 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   buffer = GWEN_Buffer_new(0, bufsize, 0, 0);
   gnc__extractText(utf8text, buffer);
   /*   AB_ImExporter_Utf8ToDta (text, bufsize, buffer); */
-  latin1text = GWEN_Buffer_GetStart (buffer);
+
+  bufsize = strlen(GWEN_Buffer_GetStart (buffer));
+  latin1text = g_strnfill(bufsize, ' ');
+  gnc__utf8ToLatin1(GWEN_Buffer_GetStart (buffer), bufsize, latin1text);
 
   if ((id != 0) && (id != progress_id)) {
     printf("progressLogCB: Oops, wrong progress id %d -- ignored.\n", id);
@@ -558,6 +577,7 @@ static int progressLogCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id,
   printf("progressLogCB: Logging msg: %s\n", latin1text);
   GNCInteractor_add_log_text (data, latin1text);
 
+  g_free(latin1text);
   GWEN_Buffer_free (buffer);
   keepAlive(data);
   return 0;

@@ -23,10 +23,12 @@ if test -z "$3"; then vpl="0"; else vpl="$3"; fi
 if test -z "$4"; then vbld="0"; else vbld="$4"; fi
 
 AC_MSG_CHECKING(if aqbanking support desired)
-AC_ARG_ENABLE(aqbanking,
-  [  --enable-aqbanking      enable aqbanking support (default=yes)],
-  enable_aqbanking="$enableval",
-  enable_aqbanking="yes")
+dnl Disabled this switch because it is confusing (as if there were an option)
+#AC_ARG_ENABLE(aqbanking,
+#  [  --enable-aqbanking      enable aqbanking support (default=yes)],
+#  enable_aqbanking="$enableval",
+enable_aqbanking="yes"
+#)
 AC_MSG_RESULT($enable_aqbanking)
 
 have_aqbanking="no"

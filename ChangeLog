@@ -1,3 +1,9 @@
+2004-09-22  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/hbci-interaction.c: Finally fix the HBCI
+	implementation based on aqbanking/aqhbci. This can now be tested
+	intensively.
+
 2004-09-22  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/test/test-transaction-reversal.c:

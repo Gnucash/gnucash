@@ -80,7 +80,7 @@
       <name>heading_label</name>
       <label>Enter your password</label>
       <justify>GTK_JUSTIFY_CENTER</justify>
-      <wrap>True</wrap>
+      <wrap>False</wrap>
       <xalign>0.5</xalign>
       <yalign>0.5</yalign>
       <xpad>0</xpad>
@@ -210,7 +210,7 @@
       <name>heading_label</name>
       <label>Enter and confirm your new password</label>
       <justify>GTK_JUSTIFY_CENTER</justify>
-      <wrap>True</wrap>
+      <wrap>False</wrap>
       <xalign>0.5</xalign>
       <yalign>0.5</yalign>
       <xpad>0</xpad>
