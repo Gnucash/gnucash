@@ -33,7 +33,7 @@
 #include "guile-util.h"
 #include "gnc-engine-util.h"
 
-#include <g-wrap-runtime-guile.h>
+#include <g-wrap-wct.h>
 
 /****** Structures *************************************************/
 
