@@ -22,10 +22,11 @@
     @{ */
 /** @addtogroup Policy Accounting Policy
  *  This file implements Accounting Policy.  The Accounting Policy 
- *  determines how splits are assigned to lots.  The default policy
+ *  determines how Splits are assigned to Lots.  The contents
+ *  of a Lot determines the Gains on that Lot.  The default policy
  *  is the FIFO policy: the first thing bought is also the first 
- *  thing sold. 
-    @{ */
+ *  thing sold.  
+ @{ */
 
 /** @file policy.h
  *  @brief Implement Accounting Policy.

@@ -18,10 +18,9 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652       *
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
-
-
-/** @file gnc-lot.h
- * 
+/** @addtogroup Engine
+    @{ */
+/** @addtogroup Lot Lot: Core Function for AR/AP, Inventory, Stock Lots, Cap Gains
  * One often needs to know that the item 'bought' in one transaction
  * is the same one as the item 'sold' in a different transaction.
  * Lots are used to make this association.  One Lot holds all of the
@@ -34,9 +33,12 @@
  * depreciation and stock market investment gains. See the file
  * src/doc/lots.txt for implmentation overview.
  *
- * HISTORY:
- * Created by Linas Vepstas May 2002
- * Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
+ @{ */
+
+/** @file gnc-lot.h
+ * 
+ * @author Created by Linas Vepstas May 2002
+ * @author Copyright (c) 2002,2003 Linas Vepstas <linas@linas.org>
  */
 
 #ifndef GNC_LOT_H
@@ -120,3 +122,5 @@ KvpFrame * gnc_lot_get_slots (GNCLot *);
 #define LOT_BALANCE	"balance"
 
 #endif /* GNC_LOT_H */
+/** @} */
+/** @} */
