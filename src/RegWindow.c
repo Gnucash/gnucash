@@ -606,8 +606,6 @@ regSaveTransaction( RegWindow *regData, int position )
     float val=0.0;  /* must be float for sscanf to work */
 
     DEBUG("MOD_PRIC");
-    /* ...the price flag ... */
-    trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C))[0];
 
     price = XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C);
     sscanf( price, "%f", &val );
