@@ -1,3 +1,53 @@
+2003-11-30  David Hampton  <hampton@employees.org>
+
+	* lib/egg/eggtreemodelfilter.c: Fixes from upstream.
+	
+	* src/engine/qofsession.[ch]:
+	* src/gnome/gnc-main-window.c:
+	* src/app-file/gnc-file.c: Add support for callback hooks when a
+	session is closed.
+
+	* src/app-utils/gnc-ui-util.[ch]: Expose a previously internal
+	function for getting account balances.
+
+	* configure.in:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/gnc-gconf-utils.[ch]:
+	* src/gnome-utils/gnc-gnome-utils.c:  Add some utility functions.
+
+	* src/gnome-utils/gnc-tree-model-account.[ch]:
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/gnome-utils/gnc-tree-view-common.[ch]:
+	* src/scm/main-window.scm: Extract basic view manipulation
+	functions into a separate file.  Clean up code and regularize
+	naming scheme.  Add a new column.
+
+	* src/engine/gnc-pricedb.[ch]: Add a couple of functions.
+
+	* configure.in:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/dialog-price-edit-db.c:
+	* src/gnome/glade/commodities.glade:
+	* src/gnome/glade/price.glade:
+	* src/gnome/schemas/*:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/gnc-tree-model-commodity.[ch]:
+	* src/gnome-utils/gnc-tree-model-price.[ch]: Convert the
+	commodities and prices dialog over to the gtk2 based MVC system.
+
+	* src/report/Makefile.am:
+	* src/report/report-gnome/dialog-style-sheet.c:
+	* src/report/report-gnome/gw-report-gnome-spec.scm:
+	* src/report/report-gnome/report.glade: Rework the stylesheets
+	dialog to make it easier to implement in gtk2.
+	
+	* src/report/stylesheets/Makefile.am:
+	* src/report/stylesheets/gnc-plugin-stylesheets-ui.xml:
+	* src/report/stylesheets/gnc-plugin-stylesheets.[ch]:
+	* src/report/stylesheets/gncmod-stylesheets.c:
+	* src/scm/main.scm: Install stylesheet menus using the new plugin
+	system.
+
 2003-11-28  David Hampton  <hampton@employees.org>
 
 	* src/engine/gnc-commodity.c: Clarify variable names in data

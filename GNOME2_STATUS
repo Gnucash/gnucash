@@ -13,7 +13,7 @@ someone wants to turn this into a columnar table with a field for
 names of active developers, that'd be great.
 
 ========================================
-   Last sync with HEAD on 2003-09-18
+   Last sync with HEAD on 2003-10-24
 ========================================
 
 ========================================
@@ -23,6 +23,7 @@ names of active developers, that'd be great.
 Help
 Financial Calculator
 Commodity Editor
+Price Editor
 Reconcile
 Transfer
 View Toolbar
@@ -41,8 +42,6 @@ Stock Split Dialog
 Main Window
   File
     Print <- remove ?
-  Edit
-    Style Sheets
   Reports (all)
 
 Register Window
@@ -59,7 +58,6 @@ Register Window
   Reports (all)
   Business <- remove ?
 
-
 Register Toolbar
   Find
   Report
@@ -68,14 +66,6 @@ Register Toolbar
 ========================================
             General Notes
 ========================================
-
-Account Tree: - FUNCTIONAL
-
-	- can open/close multiple account tree windows
-	- can navigate account tree
-	- select an account and run a command
-	- Some menu/toolbar items functional
-
 
 Register Core - MINIMALLY FUNCTIONAL
 
@@ -88,15 +78,6 @@ Register Core - MINIMALLY FUNCTIONAL
 	- The first time it is used, the account popup immediately
 	  selects the first account. After that it functions normally.
 
-
-Price Editor - MINIMALLY FUNCTIONAL
-
-	- Only loads one commodity
-	- Doesn't notice a new commodity, but adds another line from
-	  existing commodities.
-	- Remove/Edit doesn't work
-	- Get Quotes works.
-	- Close doesn't work.
 
 Find - MINIMALLY FUNCTIONAL
 	- Can generate a query in the dialog.
@@ -120,19 +101,16 @@ IMPORTING
               ENHANCEMENTS
 ========================================
 
-1) New icons desired:
+1)	New icons desired:
 
 	a) Add account
 	b) Register
 	c) Report
 
-2) Support a preference on whether new plugin pages appear in the same
-	or a new window.
+2)	Support a preference on whether new plugin pages appear in the
+	same or a new window.
 
-3) Enhance Commodity Editor by converting to a tree so types can be
-	expanded/collapsed to find data easier
-
-4) Make account tree columns clickable. Provide in-place editing where
-	feasable.  E.G. Editing the account code or the account name, but
-	not being able to reparent the account.  (Maybe add DND support for
-	this in the long term?)
+3)      Provide in-place editing where feasable.  E.G. Editing the
+	account code or the account name, but not being able to
+	reparent the account.  (Maybe add DND support for this in the
+	long term?)
