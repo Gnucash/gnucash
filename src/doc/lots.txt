@@ -250,7 +250,7 @@ I move to brazil, and take my RHAT stock (purchased in dollars)
 to my brazilian broker (who will sell them for cruzeiros).
 
 Is the correct answer to just 'punt' in these cases? 
-How is teh closing of books to be handled in such a case?
+How is the closing of books to be handled in such a case?
 
 GUI Elements:
 -- The user should be able to specify a default 'realized-gain'
@@ -258,6 +258,14 @@ GUI Elements:
 -- The user should be able to specify a default 'unrealized-gain'
    account that is associated witha a stock account.
 	
+
+FIFO's
+======
+What is a FIFO ?  A FIFO is a type of accounting policy where
+income from selling inventory is accounted by selling the oldest
+inventory first.  Thus, the profit/loss of the sale corresponds
+to the difference in price between when it was bought and sold.
+FIFO's are also used in depreciation schedules, and in other places.
 
 
 Implementation 
@@ -274,13 +282,49 @@ lots so that all lots belonging to an account can be quickly retreived.
 (In principle, the lots can be found by scanning every split in the
 account, but this is a painful process.)
 
-FIFO's
-======
-What is a FIFO ?  A FIFO is a type of accounting policy where
-income from selling inventory is accounted by selling the oldest
-inventory first.  Thus, the profit/loss of the sale corresponds
-to the difference in price between when it was bought and sold.
-FIFO's are also used in depreciation schedules, and in other places.
+Implementing Cap Gains (Is a Pain in the Neck)
+==============================================
+Although Lots provide a good conceptual framework for determing
+gains or losses when a lot is closed, cap-gains on half-open
+lots present additional complexities.   Consider the following
+stock purchase and subsequent sale of half the stock:
+
+Account A is a stock account
+Account B is a bank account
+Account C is an income account
+
+                Acct A       Txn    Acct B    Acct C
+Date     Action  Amt    Prc  Value    Amt      Amt
+1/1/01   buy     100s   $10  $1000   ($1000)   -
+2/2/02   sell    (50)s  $25  $1250    $1250    -
+2/2/02   gain     -      -    $750            $750
+
+The gain, shown in the third line, is computed as a straight
+sum of purchase price to sale price. 
+
+Should the above be reprsented as two transactions, or as three?
+One could, in principle, combine the second and third lines into
+one transaction.  However, this has some drawbacks:  computing
+the overall balance of such a transaction is tricky, because 
+it has so many different splits (including, possibly, splits
+for brokerage fees, tax, etc. not shown).   The alternative
+is to represent each line as a separate transaction.  This has
+other drawbacks:  If the date, amount, price or value is adjusted
+for the second transaction, the corresponding values must be 
+adjusted for the third, and vice-versa.
+
+Both schemes pose trouble for the register display: we want
+the stock register to show the gain as if it were a part of 
+the stock sale; but the third line is a pair of splits, and
+we want to show only one of these two splits.   Whichever method
+is chosen, the register has to filter out some of the splits 
+that it shows.
+
+The implementation that seems best is to represnet the sale
+with two separate transactions: one for the sale itself, and a
+separate one for the gains.  This makes computing the balance 
+easier, although it makes  the logic for setting the date
+more complex.  Ughh..
 
 
 Conversion
@@ -369,6 +413,10 @@ Status
 XXX need to add a lot id, have it auto-gened by the scrubber.
 
  o No GUI yet.
+
+XXX It is a good idea to generate a gain/loss split for ever sale, not
+just the lot closure.  Need to tweak the register to hide/show as appropriate.
+Need to add a tag to the gain spl;it to indicate its's 'special' nature.
 
 
 -------------------------- end of file ------------------------------
