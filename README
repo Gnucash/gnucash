@@ -158,6 +158,16 @@ libjpeg -- JPEG image handling library
 libz    -- comopression library
 xpm     -- X Pixmap extension
 
+perl-LWP/libwww-perl-5.36 
+perl-HTML/HTML-0.6
+perl-HTML/HTML-Parser-2.20
+        -- these perl modules are used to fetch stock & mutual fund quotes 
+           off the net.  You can pick up RPMS at 
+           http://rufus.w3.org/linux/RPM/PByName.html
+           http://linas.org/linux/xacc (last resort)
+           or sources at 
+           http://www.cpan.org/CPAN.html
+
 Normally, to build and install GnuCash, all you have to do is:
 
   # ./configure
