@@ -352,6 +352,9 @@ gnc_ui_refresh_statusbar (void)
 
   currency_list = NULL;
 
+  /* Make sure there's at least one accumulator in the list. */
+  gnc_ui_get_currency_accumulator (&currency_list, default_currency);
+
   group = gncGetCurrentGroup ();
   gnc_ui_accounts_recurse(group, &currency_list, euro);
 
