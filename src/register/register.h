@@ -77,7 +77,9 @@
 
 #define NUM_CELLS 20
 
-typedef struct _BasicRegister {
+typedef struct _BasicRegister BasicRegister;
+
+struct _BasicRegister {
    /* the table itself that implements the underlying GUI. */
    Table         * table;
 
@@ -110,10 +112,19 @@ typedef struct _BasicRegister {
    short rows[NUM_CELLS];
    short wids[NUM_CELLS];
 
-} BasicRegister;
+   /* user_hook allows users of this object to hang
+    * private data onto it */
+   void *user_hook;
+
+   /* The destroy callback gives user's a chance 
+    * to free up any associated user_hook data */
+   void (* destroy) (BasicRegister *);
+
+};
 
 BasicRegister * xaccMallocBasicRegister (int type);
 void            xaccInitBasicRegister (BasicRegister *, int type);
+void            xaccDestroyBasicRegister (BasicRegister *);
 
 /* returns non-zero value if updates have been made to data */
 unsigned int    xaccGetChangeFlag (BasicRegister *);

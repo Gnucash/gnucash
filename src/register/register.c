@@ -3,7 +3,8 @@
  * register.c
  *
  * FUNCTION:
- * implements the register object
+ * Implements the register object.
+ * See the header file for additional documentation.
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
@@ -300,11 +301,15 @@ BasicRegister * xaccMallocBasicRegister (int type)
    xaccAddCell (curs, reg->CN##Cell, CL##_CELL_R, CL##_CELL_C);	\
 }
    
+/* ============================================== */
 
 void xaccInitBasicRegister (BasicRegister *reg, int type)
 {
    Table * table;
    CellBlock *curs, *header;
+
+   reg->user_hook = NULL;
+   reg->destroy = NULL;
 
    /* --------------------------- */
    configLayout (reg, type);
@@ -372,6 +377,60 @@ void xaccInitBasicRegister (BasicRegister *reg, int type)
    xaccSetTableSize (table, header->numRows, header->numCols, 1, 1);
    xaccSetCursor (table, header, 0, 0, 0, 0);
    reg->table = table;
+}
+
+/* ============================================== */
+
+void 
+xaccDestroyBasicRegister (BasicRegister *reg)
+{
+   /* give the user a chance to clean up */
+   if (reg->destroy) {
+      (*(reg->destroy)) (reg);
+   }
+   reg->destroy = NULL;
+   reg->user_hook = NULL;
+
+   xaccDestroyTable (reg->table);
+   reg->table = NULL;
+
+   xaccDestroyCellBlock (reg->header);
+   xaccDestroyCellBlock (reg->cursor);
+   reg->header = NULL;
+   reg->cursor = NULL;
+
+   xaccDestroyDateCell      (reg->dateCell);
+   xaccDestroyBasicCell     (reg->numCell);
+   xaccDestroyQuickFillCell (reg->descCell);
+   xaccDestroyBasicCell     (reg->recnCell);
+   xaccDestroyPriceCell     (reg->creditCell);
+   xaccDestroyPriceCell     (reg->debitCell);
+   xaccDestroyPriceCell     (reg->shrsCell);
+   xaccDestroyPriceCell     (reg->priceCell);
+   xaccDestroyPriceCell     (reg->valueCell);
+   xaccDestroyBasicCell     (reg->memoCell);
+   xaccDestroyComboCell     (reg->actionCell);
+   xaccDestroyComboCell     (reg->xfrmCell);
+   xaccDestroyComboCell     (reg->xtoCell);
+   xaccDestroyPriceCell     (reg->balanceCell);
+
+   reg->dateCell    = NULL;
+   reg->numCell     = NULL;
+   reg->descCell    = NULL;
+   reg->recnCell    = NULL;
+   reg->creditCell  = NULL;
+   reg->debitCell   = NULL;
+   reg->shrsCell    = NULL;
+   reg->priceCell   = NULL;
+   reg->valueCell   = NULL;
+   reg->memoCell    = NULL;
+   reg->actionCell  = NULL;
+   reg->xfrmCell    = NULL;
+   reg->xtoCell     = NULL;
+   reg->balanceCell = NULL;
+
+   /* free the memory itself */
+   free (reg);
 }
 
 /* ============================================== */
