@@ -1871,7 +1871,6 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
    pgend_session_end ((Backend *) be);
    pgendInit (be);
 
-   /* connect to a bogus database ... */
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
     * postgres://some.host.com/db_name
@@ -1879,9 +1878,10 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
     * postgres://localhost/db_name
     * postgres://localhost:nnn/db_name
     * 
-    * In the future, we might parse urls of the form
+    * Also parse urls of the form
     * postgres://some.host.com/db_name?pgkey=pgval&pgkey=pgval
-    * 
+    * e.g.
+    * postgres://some.host.com/db_name?user=r00t&pass=3733t&mode=multi-user
     */
 
    if (strncmp (sessionid, "postgres://", 11)) 
@@ -2001,7 +2001,6 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          PWARN ("unknown keyword %s, ignoring", start);
       }
    }
-
 
 
    /* handle localhost as a special case */

@@ -12,7 +12,6 @@
  *
  * TBD hack alert XXX FIXME:
  * -- check for buffer overflow at end of each setter
- * -- write escape functions so that no char strings 
  */
 
 #define _GNU_SOURCE
