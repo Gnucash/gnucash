@@ -47,6 +47,7 @@
  * identifier. */
 
 typedef char * GNCIdType;
+typedef const char * GNCIdTypeConst;
 
 #define GNC_ID_NONE	NULL
 #define GNC_ID_NULL	"null"

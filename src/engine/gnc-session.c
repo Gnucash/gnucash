@@ -361,6 +361,7 @@ gnc_session_load (GNCSession *session)
 
   xaccLogDisable();
 
+  gnc_book_set_backend (session->book, NULL);
   gnc_book_destroy (session->book);
   session->book = gnc_book_new ();
 

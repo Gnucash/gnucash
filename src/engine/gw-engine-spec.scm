@@ -375,6 +375,7 @@
       "#include <gnc-book.h>\n"
       "#include <gnc-session.h>\n"
       "#include <gnc-engine-util.h>\n"
+      "#include <gnc-event.h>\n"
       "#include <date.h>\n"
       "#include <engine-helpers.h>\n"
       "#include <gnc-engine.h>\n"
@@ -387,7 +388,16 @@
      (if client-only? 
          '()
          (gw:inline-scheme '(use-modules (gnucash engine))))))
-  
+
+  (let ((wt (gw:wrap-enumeration mod '<gnc:event-type> 
+				 "GNCEngineEventType"
+                                 "const GNCEngineEventType")))
+    (gw:enum-add-value! wt "GNC_EVENT_NONE" 'gnc-event-none)
+    (gw:enum-add-value! wt "GNC_EVENT_CREATE" 'gnc-event-create)
+    (gw:enum-add-value! wt "GNC_EVENT_MODIFY" 'gnc-event-modify)
+    (gw:enum-add-value! wt "GNC_EVENT_DESTROY" 'gnc-event-destroy)
+    (gw:enum-add-value! wt "GNC_EVENT_ALL" 'gnc-event-all))
+
   (gw:wrap-non-native-type mod '<gnc:Account*> "Account*" "const Account*")
   (gw:wrap-non-native-type mod '<gnc:Account**> "Account**" "const Account**")
 

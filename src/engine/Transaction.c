@@ -368,30 +368,6 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 }
 
 /********************************************************************
- * xaccSplitGetSlots
- ********************************************************************/
-
-kvp_frame * 
-xaccSplitGetSlots(Split * s) {
-  if(!s) return NULL;
-  return(s->kvp_data);
-}
-
-void
-xaccSplitSetSlots_nc(Split *s, kvp_frame *frm)
-{
-    g_return_if_fail(s);
-    g_return_if_fail(frm);
-
-    if(s->kvp_data)
-    {
-        kvp_frame_delete(s->kvp_data);
-    }
-
-    s->kvp_data = frm;
-}
-
-/********************************************************************
  * Account funcs
  ********************************************************************/
 
@@ -437,7 +413,8 @@ xaccSplitSetGUID (Split *split, const GUID *guid)
   check_open (split->parent);
   xaccRemoveEntity(split->book->entity_table, &split->guid);
   split->guid = *guid;
-  xaccStoreEntity(split->book->entity_table, split, &split->guid, GNC_ID_SPLIT);
+  xaccStoreEntity(split->book->entity_table, split,
+                  &split->guid, GNC_ID_SPLIT);
 }
 
 /********************************************************************\
@@ -567,6 +544,34 @@ get_commodity_denom(Split * s)
     {
         return xaccAccountGetCommoditySCU(xaccSplitGetAccount(s));
     }
+}
+
+/********************************************************************
+ * xaccSplitGetSlots
+ ********************************************************************/
+
+kvp_frame * 
+xaccSplitGetSlots (Split * s)
+{
+  if(!s) return NULL;
+  return(s->kvp_data);
+}
+
+void
+xaccSplitSetSlots_nc(Split *s, kvp_frame *frm)
+{
+  g_return_if_fail(s);
+  g_return_if_fail(frm);
+  check_open (s->parent);
+
+  if (s->kvp_data && (s->kvp_data != frm))
+  {
+    kvp_frame_delete(s->kvp_data);
+  }
+
+  s->kvp_data = frm;
+
+  gen_event (s);
 }
 
 /********************************************************************\
@@ -1040,23 +1045,27 @@ xaccTransEqual(const Transaction *ta, const Transaction *tb,
  ********************************************************************/
 
 kvp_frame * 
-xaccTransGetSlots(Transaction *t) {
+xaccTransGetSlots (Transaction *t)
+{
   if(!t) return NULL;
   return(t->kvp_data);
 }
 
 void
-xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm)
+xaccTransSetSlots_nc (Transaction *t, kvp_frame *frm)
 {
-    g_return_if_fail(t);
-    g_return_if_fail(frm);
+  g_return_if_fail(t);
+  g_return_if_fail(frm);
+  check_open (t);
 
-    if(t->kvp_data)
-    {
-        kvp_frame_delete(t->kvp_data);
-    }
+  if (t->kvp_data && (t->kvp_data != frm))
+  {
+    kvp_frame_delete(t->kvp_data);
+  }
 
-    t->kvp_data = frm;
+  t->kvp_data = frm;
+
+  gen_event_trans (t);
 }
 
 /********************************************************************\
