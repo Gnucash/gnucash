@@ -1205,21 +1205,21 @@ static QofObject gncEntryDesc = {
 gboolean gncEntryRegister (void)
 {
   static QofQueryObject params[] = {
-    { ENTRY_DATE, QOF_QUERYCORE_DATE, (QofAccessFunc)gncEntryGetDate },
-    { ENTRY_DATE_ENTERED, QOF_QUERYCORE_DATE, (QofAccessFunc)gncEntryGetDateEntered },
-    { ENTRY_DESC, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetDescription },
-    { ENTRY_ACTION, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetAction },
-    { ENTRY_NOTES, QOF_QUERYCORE_STRING, (QofAccessFunc)gncEntryGetNotes },
-    { ENTRY_QTY, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetQuantity },
-    { ENTRY_IPRICE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice },
-    { ENTRY_BPRICE, QOF_QUERYCORE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice },
+    { ENTRY_DATE, QOF_TYPE_DATE, (QofAccessFunc)gncEntryGetDate },
+    { ENTRY_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)gncEntryGetDateEntered },
+    { ENTRY_DESC, QOF_TYPE_STRING, (QofAccessFunc)gncEntryGetDescription },
+    { ENTRY_ACTION, QOF_TYPE_STRING, (QofAccessFunc)gncEntryGetAction },
+    { ENTRY_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncEntryGetNotes },
+    { ENTRY_QTY, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetQuantity },
+    { ENTRY_IPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice },
+    { ENTRY_BPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice },
     { ENTRY_INVOICE, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetInvoice },
     { ENTRY_BILL, GNC_INVOICE_MODULE_NAME, (QofAccessFunc)gncEntryGetBill },
-    { ENTRY_BILLABLE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable },
+    { ENTRY_BILLABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable },
     { ENTRY_BILLTO, GNC_OWNER_MODULE_NAME, (QofAccessFunc)gncEntryGetBillTo },
     { ENTRY_ORDER, GNC_ORDER_MODULE_NAME, (QofAccessFunc)gncEntryGetOrder },
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncEntryGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncEntryGetGUID },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncEntryGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncEntryGetGUID },
     { NULL },
   };
 

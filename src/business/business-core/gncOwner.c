@@ -340,16 +340,16 @@ reg_lot (void)
 gboolean gncOwnerRegister (void)
 {
   static QofQueryObject params[] = {
-    { OWNER_TYPE, QOF_QUERYCORE_INT64, (QofAccessFunc)gncOwnerGetType },
+    { OWNER_TYPE, QOF_TYPE_INT64, (QofAccessFunc)gncOwnerGetType },
     { OWNER_CUSTOMER, GNC_CUSTOMER_MODULE_NAME,
       (QofAccessFunc)gncOwnerGetCustomer },
     { OWNER_JOB, GNC_JOB_MODULE_NAME, (QofAccessFunc)gncOwnerGetJob },
     { OWNER_VENDOR, GNC_VENDOR_MODULE_NAME, (QofAccessFunc)gncOwnerGetVendor },
     { OWNER_EMPLOYEE, GNC_EMPLOYEE_MODULE_NAME, (QofAccessFunc)gncOwnerGetEmployee },
     { OWNER_PARENT, _GNC_MOD_NAME, (QofAccessFunc)gncOwnerGetEndOwner },
-    { OWNER_PARENTG, QOF_QUERYCORE_GUID, (QofAccessFunc)gncOwnerGetEndGUID },
-    { OWNER_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncOwnerGetName },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncOwnerGetGUID },
+    { OWNER_PARENTG, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetEndGUID },
+    { OWNER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncOwnerGetName },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncOwnerGetGUID },
     { NULL },
   };
 

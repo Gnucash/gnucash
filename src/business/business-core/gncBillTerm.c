@@ -660,8 +660,8 @@ static QofObject gncBillTermDesc = {
 gboolean gncBillTermRegister (void)
 {
   static QofQueryObject params[] = {
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncBillTermGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncBillTermGetGUID },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncBillTermGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncBillTermGetGUID },
     { NULL },
   };
 

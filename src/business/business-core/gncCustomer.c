@@ -551,13 +551,13 @@ static QofObject gncCustomerDesc = {
 gboolean gncCustomerRegister (void)
 {
   static QofQueryObject params[] = {
-    { CUSTOMER_ID, QOF_QUERYCORE_STRING, (QofAccessFunc)gncCustomerGetID },
-    { CUSTOMER_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncCustomerGetName },
+    { CUSTOMER_ID, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetID },
+    { CUSTOMER_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncCustomerGetName },
     { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr },
     { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr },
-    { QOF_QUERY_PARAM_BOOK, GNC_ID_BOOK, (QofAccessFunc)gncCustomerGetBook },
-    { QOF_QUERY_PARAM_GUID, QOF_QUERYCORE_GUID, (QofAccessFunc)gncCustomerGetGUID },
-    { QOF_QUERY_PARAM_ACTIVE, QOF_QUERYCORE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive },
+    { QOF_QUERY_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)gncCustomerGetBook },
+    { QOF_QUERY_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)gncCustomerGetGUID },
+    { QOF_QUERY_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive },
     { NULL },
   };
 

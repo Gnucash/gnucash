@@ -238,10 +238,10 @@ gboolean gncAddressRegister (void)
 {
   static QofQueryObject params[] = {
 
-    { ADDRESS_NAME, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetName },
-    { ADDRESS_PHONE, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetPhone },
-    { ADDRESS_FAX, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetFax },
-    { ADDRESS_EMAIL, QOF_QUERYCORE_STRING, (QofAccessFunc)gncAddressGetEmail },
+    { ADDRESS_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName },
+    { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone },
+    { ADDRESS_FAX, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax },
+    { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail },
     { NULL },
   };
 
