@@ -30,11 +30,11 @@
     balance-temp))
 
 (define (gnc:group-get-balance-until group to-tp)
-  (sum (map (lambda (x) (gnc:account-get-balance-until x to-tp)) group)))
+  (apply + (map (lambda (x) (gnc:account-get-balance-until x to-tp)) group)))
 
 (define (gnc:group-get-balance-interval group from-tp to-tp)
-  (sum (map (lambda (x)
-              (gnc:account-get-balance-until x from-tp to-tp)) group)))
+  (apply + (map (lambda (x)
+                  (gnc:account-get-balance-until x from-tp to-tp)) group)))
 
 ;; Just a private scope.
 (let 
