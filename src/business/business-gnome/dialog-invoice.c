@@ -573,6 +573,66 @@ gnc_invoice_window_create_toolbar (InvoiceWindow *iw)
   return toolbar;
 }
 
+static GtkWidget *
+gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
+{
+  GtkWidget *popup;
+
+  GnomeUIInfo transaction_menu[] =
+  {
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Enter"),
+      N_("Record the current entry"),
+      recordCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Cancel"),
+      N_("Cancel the current entry"),
+      cancelCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Delete"),
+      N_("Delete the current entry"),
+      deleteCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("D_uplicate"),
+      N_("Make a copy of the current entry"),
+      duplicateCB, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_SEPARATOR,
+    {
+      GNOME_APP_UI_ITEM,
+      N_("_Blank"),
+      N_("Move to the blank entry at the "
+         "bottom of the register"),
+      blank_entry_cb, NULL, NULL,
+      GNOME_APP_PIXMAP_NONE, NULL,
+      0, 0, NULL
+    },
+    GNOMEUIINFO_END
+  };
+
+  gnc_fill_menu_with_data (transaction_menu, iw);
+
+  popup = gnome_popup_menu_new (transaction_menu);
+
+  return popup;
+}
+
 static int
 gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
 {
@@ -975,7 +1035,7 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 {
   InvoiceWindow *iw;
   GladeXML *xml;
-  GtkWidget *hbox, *vbox, *regWidget;
+  GtkWidget *hbox;
   GncEntryLedger *entry_ledger = NULL;
 
   g_assert (type != NEW_INVOICE && type != MOD_INVOICE);
@@ -1051,34 +1111,43 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
 
   /* Save the ledger... */
   iw->ledger = entry_ledger;
+  gnc_entry_ledger_set_parent (entry_ledger, iw->dialog);
 
   /* Set the entry_ledger's invoice */
   gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
 
-  //entries = gncInvoiceGetEntries (invoice);
-  /* Set watches on entries */
-  //gnc_entry_ledger_load (entry_ledger, entries);
+  /* Create the register */
+  {
+    GtkWidget *regWidget, *vbox;
+    GtkWidget *popup;
+    guint num_rows;
 
-  /* Watch the invoice of operations, here... */
-  gnucash_register_set_initial_rows( 10 );
-  regWidget = gnucash_register_new (gnc_entry_ledger_get_table (entry_ledger));
-  gnc_table_init_gui( regWidget, entry_ledger );
-  iw->reg = GNUCASH_REGISTER (regWidget);
-  GNUCASH_SHEET (iw->reg->sheet)->window = GTK_WIDGET(iw->dialog);
-  gnc_entry_ledger_set_parent (entry_ledger, iw->dialog);
+    num_rows = (guint) gnc_lookup_number_option ("Register",
+                                                 "Number of Rows", 20.0);
+    gnucash_register_set_initial_rows( num_rows );
 
-  vbox = glade_xml_get_widget (xml, "ledger_vbox");
-  gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
+    /* Watch the order of operations, here... */
+    regWidget = gnucash_register_new (gnc_entry_ledger_get_table
+				      (entry_ledger));
+    gnc_table_init_gui( regWidget, entry_ledger );
 
-  gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
-		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
+    vbox = glade_xml_get_widget (xml, "ledger_vbox");
+    gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
+    
+    iw->reg = GNUCASH_REGISTER (regWidget);
+    GNUCASH_SHEET (iw->reg->sheet)->window = GTK_WIDGET(iw->dialog);
 
-  //  gtk_signal_connect (GTK_OBJECT(regWidget), "activate_cursor",
-  //		      GTK_SIGNAL_FUNC(gnc_invoice_record_cb), iw);
-  gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_all",
-		      GTK_SIGNAL_FUNC(gnc_invoice_redraw_all_cb), iw);
-  gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_help",
-		      GTK_SIGNAL_FUNC(gnc_invoice_redraw_help_cb), iw);
+    gtk_signal_connect (GTK_OBJECT(regWidget), "activate_cursor",
+			GTK_SIGNAL_FUNC(recordCB), iw);
+    gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_all",
+			GTK_SIGNAL_FUNC(gnc_invoice_redraw_all_cb), iw);
+    gtk_signal_connect (GTK_OBJECT(regWidget), "redraw_help",
+			GTK_SIGNAL_FUNC(gnc_invoice_redraw_help_cb), iw);
+
+    popup = gnc_invoice_window_create_popup_menu (iw);
+    gnucash_register_attach_popup (GNUCASH_REGISTER (regWidget),
+				   popup, iw);
+  }
 
   /* load the menu bar */
   /*
@@ -1112,6 +1181,9 @@ gnc_invoice_new_window (GNCBook *bookp, InvoiceDialogType type,
   gnc_gui_component_watch_entity_type (iw->component_id,
 				       GNC_INVOICE_MODULE_NAME,
 				       GNC_EVENT_MODIFY | GNC_EVENT_DESTROY);
+
+  gtk_signal_connect (GTK_OBJECT (iw->dialog), "destroy",
+		      GTK_SIGNAL_FUNC(gnc_invoice_window_destroy_cb), iw);
 
   gnc_table_realize_gui (gnc_entry_ledger_get_table (entry_ledger));
 
