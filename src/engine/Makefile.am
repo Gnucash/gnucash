@@ -22,6 +22,7 @@ libgncmod_engine_la_SOURCES = \
   SchedXaction.c \
   SX-ttinfo.c \
   Scrub.c \
+  Scrub2.c \
   TransLog.c \
   Transaction.c \
   date.c \
@@ -61,6 +62,7 @@ gncinclude_HEADERS = \
   QueryObject.h \
   QueryCore.h \
   Scrub.h \
+  Scrub2.h \
   TransLog.h \
   Transaction.h \
   date.h \
@@ -94,6 +96,7 @@ noinst_HEADERS = \
   QueryObjectP.h \
   QueryCoreP.h \
   SchedXactionP.h \
+  ScrubP.h \
   SX-ttinfo.h \
   TransactionP.h \
   gnc-book-p.h \

@@ -30,14 +30,22 @@
  *
  */
 
+#include "config.h"
+
+#include <glib.h>
+
+#include "Account.h"
 #include "AccountP.h"
+#include "Group.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "Scrub2.h"
+#include "ScrubP.h"
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
+#include "messages.h"
 
 static short module = MOD_SCRUB;
 
@@ -283,6 +291,28 @@ xaccAccountScrubDoubleBalance (Account *acc)
       /* Is the value of the lot zero?  If not, add a balancing split */
       if (FALSE == gnc_numeric_equal (value, zero))
       {
+         AccountGroup * root;
+         Account * baln_acc;
+         Split * baln_split;
+
+         baln_split = xaccMallocSplit (acc->book);
+         root = xaccAccountGetRoot(acc);
+         baln_acc = xaccScrubUtilityGetOrMakeAccount (root, currency, _("Gain/Loss"));
+         xaccAccountBeginEdit (baln_acc);
+         xaccAccountInsertSplit (baln_acc, baln_split);
+         xaccAccountCommitEdit (baln_acc);
+
+#if 0
+need a second split too, as per 'lots.txt' docs
+         xaccTransBeginEdit (trans);
+         xaccSplitSetValue (baln_split)
+         SetDate to date of lot closure ... 
+         set trans currency
+         xaccTransSetDesc (split, _("Realized Gain/Loss"));
+         xaccSplitSetMemo (split, _("Realized Gain/Loss"));
+         xaccTransAppendSplit (trans, baln_split);
+         xaccTransCommitEdit (trans);
+#endif
       }
    }
 }

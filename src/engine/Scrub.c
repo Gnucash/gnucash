@@ -31,7 +31,8 @@
  *
  * HISTORY:
  * Created by Linas Vepstas December 1998
- * Copyright (c) 1998, 1999, 2000, 2003 Linas Vepstas
+ * Copyright (c) 1998-2000, 2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2002 Christian Stimming
  */
 
 #include "config.h"
@@ -45,6 +46,7 @@
 #include "Group.h"
 #include "GroupP.h"
 #include "Scrub.h"
+#include "ScrubP.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "gnc-engine-util.h"
@@ -52,8 +54,6 @@
 #include "gnc-commodity.h"
 
 static short module = MOD_SCRUB;
-static Account * GetOrMakeAccount (AccountGroup *root, Transaction *trans,
-                                   const char *name_root);
 
 /* ================================================================ */
 
@@ -124,7 +124,7 @@ xaccTransScrubOrphans (Transaction *trans, AccountGroup *root)
 
     DEBUG ("Found an orphan \n");
 
-    orph = GetOrMakeAccount (root, trans, _("Orphan"));
+    orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency, _("Orphan"));
     if (!orph)
       continue;
 
@@ -311,9 +311,14 @@ xaccTransScrubImbalance (Transaction *trans, AccountGroup *root,
       return;
 
     if (!parent)
-      account = GetOrMakeAccount (root, trans, _("Imbalance"));
+    {
+      account = xaccScrubUtilityGetOrMakeAccount (root, 
+          trans->common_currency, _("Imbalance"));
+    }
     else
+    {
       account = parent;
+    }
 
     if (!account)
       return;
@@ -416,44 +421,45 @@ xaccTransScrubCurrency (Transaction *trans)
     int i;
     for (i=0; (sp = xaccTransGetSplit (trans, i)); i++) {
       if (!gnc_numeric_equal(xaccSplitGetAmount (sp), 
-			     xaccSplitGetValue (sp))) {
-	Account *acc = xaccSplitGetAccount (sp);
-	gnc_commodity *acc_currency = xaccAccountGetCommodity (acc);
-	if (acc_currency == currency) {
-	  /* This Split needs fixing: The transaction-currency equals
-	     the account-currency/commodity, but the amount/values are
-	     inequal i.e. they still correspond to the security
-	     (amount) and the currency (value). In the new model, the
-	     value is the amount in the account-commodity -- so it
-	     needs to be set to equal the amount (since the
-	     account-currency doesn't exist anymore). 
-
-	  Note: Nevertheless we lose some information here. Namely,
-	  the information that the 'amount' in 'account-old-security'
-	  was worth 'value' in 'account-old-currency'. Maybe it would
-	  be better to store that information in the price database? 
-	  But then, for old currency transactions there is still the
-	  'other' transaction, which is going to keep that
-	  information. So I don't bother with that here. -- cstim,
-	  2002/11/20. */
-	  
-	  /*PWARN ("## Error likely: Split '%s' Amount %s %s, value %s",
-	    xaccSplitGetMemo (sp),
-	    gnc_numeric_to_string (amount),
-	    gnc_commodity_get_mnemonic (currency),
-	    gnc_numeric_to_string (value));*/
-	  xaccTransBeginEdit (trans);
-	  xaccSplitSetValue (sp, xaccSplitGetAmount (sp));
-	  xaccTransCommitEdit (trans);
-	}
-	/*else {
-	  PWARN ("Ok: Split '%s' Amount %s %s, value %s %s",
-	  xaccSplitGetMemo (sp),
-	  gnc_numeric_to_string (amount),
-	  gnc_commodity_get_mnemonic (currency),
-	  gnc_numeric_to_string (value),
-	  gnc_commodity_get_mnemonic (acc_currency));
-	  }*/
+			     xaccSplitGetValue (sp))) 
+      {
+        Account *acc = xaccSplitGetAccount (sp);
+        gnc_commodity *acc_currency = xaccAccountGetCommodity (acc);
+        if (acc_currency == currency) {
+          /* This Split needs fixing: The transaction-currency equals
+           * the account-currency/commodity, but the amount/values are
+           * inequal i.e. they still correspond to the security
+           * (amount) and the currency (value). In the new model, the
+           * value is the amount in the account-commodity -- so it
+           * needs to be set to equal the amount (since the
+           * account-currency doesn't exist anymore). 
+           *
+           * Note: Nevertheless we lose some information here. Namely,
+           * the information that the 'amount' in 'account-old-security'
+           * was worth 'value' in 'account-old-currency'. Maybe it would
+           * be better to store that information in the price database? 
+           * But then, for old currency transactions there is still the
+           * 'other' transaction, which is going to keep that
+           * information. So I don't bother with that here. -- cstim,
+           * 2002/11/20. */
+          
+          /*PWARN ("## Error likely: Split '%s' Amount %s %s, value %s",
+            xaccSplitGetMemo (sp),
+            gnc_numeric_to_string (amount),
+            gnc_commodity_get_mnemonic (currency),
+            gnc_numeric_to_string (value));*/
+          xaccTransBeginEdit (trans);
+          xaccSplitSetValue (sp, xaccSplitGetAmount (sp));
+          xaccTransCommitEdit (trans);
+        }
+        /*else {
+          PWARN ("Ok: Split '%s' Amount %s %s, value %s %s",
+          xaccSplitGetMemo (sp),
+          gnc_numeric_to_string (amount),
+          gnc_commodity_get_mnemonic (currency),
+          gnc_numeric_to_string (value),
+          gnc_commodity_get_mnemonic (acc_currency));
+          }*/
       }
     }
   }
@@ -524,40 +530,38 @@ xaccGroupScrubCommodities (AccountGroup *group)
 
 /* ================================================================ */
 
-static Account *
-GetOrMakeAccount (AccountGroup *root, Transaction *trans,
+Account *
+xaccScrubUtilityGetOrMakeAccount (AccountGroup *root, gnc_commodity * currency,
                   const char *name_root)
 {
-  gnc_commodity * currency;
   char * accname;
   Account * acc;
 
   g_return_val_if_fail (root, NULL);
 
   /* build the account name */
-  currency = xaccTransGetCurrency (trans);
   if (!currency)
   {
-    PERR ("Transaction with no currency");
+    PERR ("No currency specified!");
     return NULL;
   }
 
   accname = g_strconcat (name_root, "-",
                          gnc_commodity_get_mnemonic (currency), NULL);
 
-  /* see if we've got one of these going already ... */
+  /* See if we've got one of these going already ... */
   acc = xaccGetAccountFromName (root, accname);
 
   if (acc == NULL)
   {
-    /* guess not. We'll have to build one */
+    /* Guess not. We'll have to build one. */
     acc = xaccMallocAccount (root->book);
     xaccAccountBeginEdit (acc);
     xaccAccountSetName (acc, accname);
     xaccAccountSetCommodity (acc, currency);
     xaccAccountSetType (acc, BANK);
 
-    /* hang the account off the root */
+    /* Hang the account off the root. */
     xaccGroupInsertAccount (root, acc);
     xaccAccountCommitEdit (acc);
   }
