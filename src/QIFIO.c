@@ -23,10 +23,9 @@
  *                                                                  *
  * NOTE: This software is *very alpha*, and is likely to core       *
  * dump on unexpected file formats, or otheriwse mangle and         *
- * loose data.  It works for the one QIF file its been tested on .. *
- * The contents of this file are not well designed, its just a      *
- * quick hack ... in particular, pos and neg sums are not           *
- * marked correctly.                                                *
+ * loose data.  It sort-of works for the one QIF file its been      *
+ * tested on ... The contents of this file are not well designed,   *
+ * it is just a quick hack ...  a lot more qork is required.        *
  *                                                                  *
  * NOTE: the readxxxx/writexxxx functions changed the current       *
  *       position in the file, and so the order which these         *
@@ -154,7 +153,14 @@ char * xaccReadQIFAccount (int fd, Account * acc)
         XACC_PREP_STRING (acc->description);
      } else 
      if ('T' == qifline [0]) {
-        acc -> type = 0x0;            // hack alert --
+
+        if (!strcmp (&qifline[1], "Invst\r\n")) {
+           acc -> type = PORTFOLIO;
+        } else {
+           DEBUG ("Unsupported account type\n");
+           DEBUG (&qifline[1]);
+           acc -> type = 0x0;            // hack alert --
+        }
      } else 
 
      /* check for end-of-transaction marker */
@@ -302,11 +308,11 @@ char * xaccReadQIFTransaction (int fd, Transaction *trans)
          xaccParseQIFDate (&(trans->date), &qifline[1]);
      } else 
      if ('T' == qifline [0]) {   /* T == total */
-         trans -> damount = xaccParseQIFAmount (&qifline[1]);         /* amount is int */
+         trans -> damount = xaccParseQIFAmount (&qifline[1]);         /* amount is double */
          if (isneg) trans -> damount = - (trans->damount);
      } else 
      if ('I' == qifline [0]) {   /* I == share price */
-         /* hack alert */
+         trans -> share_price = xaccParseQIFAmount (&qifline[1]);      /* amount is double */
      } else 
      if ('Q' == qifline [0]) {   /* Q == number of shares */
          /* hack alert */

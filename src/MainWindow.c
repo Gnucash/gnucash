@@ -91,11 +91,14 @@ refreshMainWindow( void )
     String rows[3];
     Transaction *trans=NULL;
     Account *acc = getAccount( data, i );
-    double dbalance = 0;
+    double dbalance = 0.0;
+    double share_balance = 0.0;
     
     j=0;
-    while( (trans = getTransaction(acc,j++)) != NULL )
-      dbalance += trans->damount;
+    while( (trans = getTransaction(acc,j++)) != NULL ) {
+      share_balance += trans->damount;
+      dbalance = share_balance * trans->share_price;
+    }
     
     if( 0.0 > dbalance )
       sprintf( buf,"-$%.2f\0", DABS(dbalance) );

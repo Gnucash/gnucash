@@ -36,3 +36,21 @@ To install:
 
 sorry, no "make install" yet.
 
+
+Status:
+-------
+As of version 0.9c, Mutual fund and Stock Portfolio handling
+is implemented, but is very much in alpha state: many features
+are missing, and others are broken.  In particular, mutual funds 
+cannot be saved to disk.  Also, transfers to bank accounts are
+not properly supported.  Also, tabbing between fields for
+mutual funds does not work correctly.
+
+An alpha version of import from quicken files is also present,
+but it is very broken, and many/most quicken formats are not
+supported.
+
+Note: in general, transfers between accounts are not handled 
+properly as a double-entry system, and so deletion of a 
+transfer is not handled properly.
+

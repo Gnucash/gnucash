@@ -1,4 +1,4 @@
-/********************************************************************\
+/*******************************************************************\
  * RegWindow.c -- the register window for xacc (X-Accountant)       *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997 Linas Vepstas                                 *
@@ -52,7 +52,7 @@ typedef struct _RegWindow {
   Widget   dialog;
   Widget   reg;               /* The matrix widget...                    */
   Widget   balance;           /* The balance text field                  */
-  unsigned char  changed;     /* bitmask of fields that have changed in  *
+  unsigned short changed;     /* bitmask of fields that have changed in  *
                                * transaction lastTrans                   */
   unsigned short lastTrans;   /* to keep track of last edited transaction*/
   XmTextPosition insert;      /* used by quickfill for detecting deletes */
@@ -98,9 +98,11 @@ extern Pixel negPixel;
 #define MOD_DESC  0x04
 #define MOD_RECN  0x08
 #define MOD_AMNT  0x10
-#define MOD_MEMO  0x20
-#define MOD_NEW   0x40
-#define MOD_ALL   0xff
+#define MOD_SHRS  0x20
+#define MOD_PRIC  0x40
+#define MOD_MEMO  0x80
+#define MOD_NEW   0x100
+#define MOD_ALL   0x1ff
 
 /* ??? TODO: Use these #defines, instead of hard-coding cell
  * locations throughout the code */ 
@@ -116,8 +118,15 @@ extern Pixel negPixel;
 #define PAY_CELL_C   4
 #define DEP_CELL_R   0
 #define DEP_CELL_C   5
+
+#define PRIC_CELL_C   6
+#define SHRS_CELL_C   7
+
 #define BALN_CELL_R  0
-#define BALN_CELL_C  6
+/* #define BALN_CELL_C  6 */
+#define BALN_CELL_C  ((acc->numCols) -1)   /* the last column */
+
+
 #define MEMO_CELL_R  1
 #define MEMO_CELL_C  2
 
@@ -128,7 +137,9 @@ extern Pixel negPixel;
 #define IN_RECN_CELL(R,C) (((R-1)%2==0) && (C==3))  /* Reconciled cell  */
 #define IN_PAY_CELL(R,C)  (((R-1)%2==0) && (C==4))  /* Payment cell     */
 #define IN_DEP_CELL(R,C)  (((R-1)%2==0) && (C==5))  /* Deposit cell     */
-#define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==6))  /* Balance cell     */
+/* #define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==6))  /* Balance cell     */
+#define IN_BALN_CELL(R,C) (((R-1)%2==0) && (C==BALN_CELL_C))  /* Balance cell     */
+#define IN_PRIC_CELL(R,C) (((R-1)%2==0) && (C==PRIC_CELL_C))  /* Balance cell     */
 #define IN_YEAR_CELL(R,C) (((R-1)%2==1) && (C==0))  /* Year cell        */
 #define IN_MEMO_CELL(R,C) (((R-1)%2==1) && (C==2))  /* Memo cell        */
 #define IN_BAD_CELL(R,C)  (((R-1)%2==1) && (C==3))  /* cell after memo  */
@@ -155,6 +166,7 @@ regRefresh( RegWindow *regData )
     char   buf[BUFSIZE];
     String **data = NULL;
     String **newData;
+    Account *acc;
     
     XtVaGetValues( regData->reg, XmNrows, &nrows, NULL );
     XtVaGetValues( regData->reg, XmNcells, &data, NULL );
@@ -163,6 +175,7 @@ regRefresh( RegWindow *regData )
     nnrows = (regData->acc->numTrans)*2 + 3; 
     drows  = (nnrows-1) - (nrows-1);
     ncols  = regData->acc->numCols; 
+    acc = regData->acc;
 
     /* allocate a new matrix: */
     newData = (String **)_malloc(nnrows*sizeof(String *));
@@ -234,7 +247,7 @@ regRefresh( RegWindow *regData )
 
       /* ----------------------------------- */
       /* extra columns for mutual funds, etc. */
-      switch(regData->acc->type)
+      switch(acc->type)
         {
         case BANK:
         case CASH:
@@ -244,11 +257,11 @@ regRefresh( RegWindow *regData )
           break;
         case PORTFOLIO:
         case MUTUAL:
-          /* hackk alert -- this is probably incorrect */
-          newData[row][7]   = XtNewString("");
-          newData[row+1][7] = XtNewString("");
-          newData[row][8]   = XtNewString("");
-          newData[row+1][8] = XtNewString("");
+          sprintf( buf, "%.2f ", trans->share_price );
+          newData[row][PRIC_CELL_C] = XtNewString(buf);
+          newData[row+1][PRIC_CELL_C] = XtNewString("");
+          newData[row][SHRS_CELL_C]   = XtNewString("");
+          newData[row+1][SHRS_CELL_C] = XtNewString("");
           break;
         default:
           fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", regData->acc->type);
@@ -309,22 +322,31 @@ regRecalculateBalance( RegWindow *regData )
   int  i; 
   int  position   = 1;
   double  dbalance    = 0.0;
+  double  share_balance    = 0.0;
   double  dclearedBalance = 0.0;
+  double  share_clearedBalance = 0.0;
   char buf[BUFSIZE];
   Transaction *trans;
+  Account *acc;
   Widget reg;
   
-  if( regData != NULL )
+  if( regData != NULL ) {
     reg = regData->reg;
-  else
+    acc = regData->acc;
+  } else {
     reg = NULL;
+    acc = NULL;
+  }
   
   for( i=0; (trans=getTransaction(regData->acc,i)) != NULL; i++ )
     {
-    dbalance += trans->damount;
+    share_balance += trans->damount;
+    dbalance = trans -> share_price * share_balance;
     
-    if( trans->reconciled != NREC )
-      dclearedBalance += trans->damount;
+    if( trans->reconciled != NREC ) {
+      share_clearedBalance += trans->damount;
+      dclearedBalance = trans->share_price * share_clearedBalance;
+    }
     
     if( reg != NULL )
       {
@@ -336,13 +358,35 @@ regRecalculateBalance( RegWindow *regData )
       /* Set the color of the text, depending on whether the
        * balance is negative or positive */
       if( 0.0 > dbalance )
-        XbaeMatrixSetCellColor( reg, position, 6, negPixel );
+        XbaeMatrixSetCellColor( reg, position, BALN_CELL_C, negPixel );
       else
-        XbaeMatrixSetCellColor( reg, position, 6, posPixel );
+        XbaeMatrixSetCellColor( reg, position, BALN_CELL_C, posPixel );
 #endif
       
       /* Put the value in the cell */
-      XbaeMatrixSetCell( reg, position, 6, buf );
+      XbaeMatrixSetCell( reg, position, BALN_CELL_C, buf );
+
+      /* update share balances too ... */
+      if( (MUTUAL   == acc->type) ||
+          (PORTFOLIO == acc->type) ) 
+        {
+#ifdef USE_NO_COLOR
+        sprintf( buf, "%.2f ", share_balance );
+#else
+        sprintf( buf, "%.2f ", DABS(share_balance) );
+        
+        /* Set the color of the text, depending on whether the
+         * balance is negative or positive */
+        if( 0.0 > share_balance )
+          XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, negPixel );
+        else
+          XbaeMatrixSetCellColor( reg, position, SHRS_CELL_C, posPixel );
+        }
+#endif
+      
+      /* Put the value in the cell */
+      XbaeMatrixSetCell( reg, position, SHRS_CELL_C, buf );
+
       position+=2;            /* each transaction has two rows */
       }
     }
@@ -410,6 +454,7 @@ regSaveTransaction( RegWindow *regData, int position )
     trans->catagory    = 0;
     trans->reconciled  = NREC;
     trans->damount     = 0.0;
+    trans->share_price = 1.0;
     
     regData->changed = MOD_ALL;
     }
@@ -418,7 +463,7 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_NUM");	  
     /* ...the transaction number (String)... */
     XtFree( trans->num );
-    trans->num = XtNewString( XbaeMatrixGetCell(regData->reg,row,1) );    
+    trans->num = XtNewString( XbaeMatrixGetCell(regData->reg,row,NUM_CELL_C) );    
     }
   
   if( regData->changed & MOD_DESC )
@@ -427,7 +472,7 @@ regSaveTransaction( RegWindow *regData, int position )
     /* ... the description... */
     XtFree( trans->description );
     trans->description = 
-      XtNewString( XbaeMatrixGetCell(regData->reg,row,2) );
+      XtNewString( XbaeMatrixGetCell(regData->reg,row,DESC_CELL_C) );
     }
   
   if( regData->changed & MOD_MEMO )
@@ -435,14 +480,14 @@ regSaveTransaction( RegWindow *regData, int position )
     DEBUG("MOD_MEMO");
     /* ... the memo ... */
     XtFree( trans->memo );
-    trans->memo = XtNewString( XbaeMatrixGetCell(regData->reg,row+1,2) );
+    trans->memo = XtNewString( XbaeMatrixGetCell(regData->reg,row+1,MEMO_CELL_C) );
     }
   
   if( regData->changed & MOD_RECN )
     {
     DEBUG("MOD_RECN");
     /* ...the reconciled flag (char)... */
-    trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,3))[0];
+    trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,RECN_CELL_C))[0];
     
     /* Remember, we need to recalculate the reconciled balance now! */
     regRecalculateBalance(regData);
@@ -451,32 +496,54 @@ regSaveTransaction( RegWindow *regData, int position )
   if( regData->changed & MOD_AMNT )
     {
     String amount;
-    int    dollar=0,cent=0;
+    float val=0.0;  /* must be float for sscanf to work */
     DEBUG("MOD_AMNT");
     /* ...and the amounts */
-    amount = XbaeMatrixGetCell(regData->reg,row,5);
-    sscanf( amount, "%d.%2d", &dollar, &cent );
-    trans->damount = ((double) dollar) + 0.01 * ((double) cent);
+    amount = XbaeMatrixGetCell(regData->reg,row,DEP_CELL_C);
+    sscanf( amount, "%f", &val );
+    trans->damount = val;
     
-    dollar = 0; cent = 0;
-    amount = XbaeMatrixGetCell(regData->reg,row,4); 
-    sscanf( amount, "%d.%2d", &dollar, &cent );
-    trans->damount -= ((double) dollar) + 0.01 * ((double) cent);
+    val = 0.0;
+    amount = XbaeMatrixGetCell(regData->reg,row,PAY_CELL_C); 
+    sscanf( amount, "%f", &val );
+    trans->damount -= val;
     
     /* Reset so there is only one field filled */
     if( 0.0 > trans->damount )
       {
+/* hack alert -- keep 3 digits for share amounts */
       sprintf( buf, "%.2f ", (-1.0*(trans->damount)) );
-      XbaeMatrixSetCell( regData->reg, row, 4, buf );
-      XbaeMatrixSetCell( regData->reg, row, 5, "" );
+      XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, buf );
+      XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, "" );
       }
     else
       {
       sprintf( buf, "%.2f ", (trans->damount) );
-      XbaeMatrixSetCell( regData->reg, row, 4, "" );
-      XbaeMatrixSetCell( regData->reg, row, 5, buf );
+      XbaeMatrixSetCell( regData->reg, row, PAY_CELL_C, "" );
+      XbaeMatrixSetCell( regData->reg, row, DEP_CELL_C, buf );
       }
     
+    regRecalculateBalance(regData);
+    }
+
+  if( regData->changed & MOD_PRIC )
+    {
+    String price;
+    float val=0.0;  /* must be float for sscanf to work */
+
+    DEBUG("MOD_PRIC");
+    /* ...the price flag ... */
+    trans->reconciled = (XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C))[0];
+
+    price = XbaeMatrixGetCell(regData->reg,row,PRIC_CELL_C);
+    sscanf( price, "%f", &val );
+    trans->share_price = val;
+printf ("got share price %f \n", val);
+    
+    sprintf( buf, "%.2f ", trans->share_price );
+    XbaeMatrixSetCell( regData->reg, row, PRIC_CELL_C, buf );
+    
+    /* Remember, we need to recalculate the reconciled balance now! */
     regRecalculateBalance(regData);
     }
   
@@ -490,6 +557,7 @@ regSaveTransaction( RegWindow *regData, int position )
         (strcmp("",trans->description) == 0) &&
         (strcmp("",trans->memo) == 0)        &&
         (0 == trans->catagory)               &&
+        (1.0 == trans->share_price)          &&
         (0.0 == trans->damount) )
       {
       _free(trans);
@@ -512,7 +580,7 @@ regSaveTransaction( RegWindow *regData, int position )
 
     DEBUG("MOD_DATE");
     /* read in the date stuff... */
-    sscanf( XbaeMatrixGetCell(regData->reg,row,0),"%d/%d",
+    sscanf( XbaeMatrixGetCell(regData->reg,row,DATE_CELL_C),"%d/%d",
             &(trans->date.month),
             &(trans->date.day) );
     
@@ -743,9 +811,9 @@ regWindow( Widget parent, Account *acc )
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc -> colWidths[6] = 8;   /* price */
-        acc -> colWidths[7] = 8;   /* share balance */
-        acc -> colWidths[8] = 8;   /* $ balance */
+        acc -> colWidths[PRIC_CELL_C] = 8;   /* price */
+        acc -> colWidths[SHRS_CELL_C] = 8;   /* share balance */
+        acc -> colWidths[BALN_CELL_C] = 8;   /* $ balance */
         break;
       }
     
@@ -771,9 +839,9 @@ regWindow( Widget parent, Account *acc )
 
       case PORTFOLIO:
       case MUTUAL:
-        acc -> alignments[6] = XmALIGNMENT_END;  /* price */
-        acc -> alignments[7] = XmALIGNMENT_END;  /* share balance */
-        acc -> alignments[8] = XmALIGNMENT_END;  /* $balance */
+        acc -> alignments[PRIC_CELL_C] = XmALIGNMENT_END;  /* price */
+        acc -> alignments[SHRS_CELL_C] = XmALIGNMENT_END;  /* share balance */
+        acc -> alignments[BALN_CELL_C] = XmALIGNMENT_END;  /* $balance */
         break;
       }
     
@@ -799,9 +867,9 @@ regWindow( Widget parent, Account *acc )
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc -> rows[0][6] = "Price";
-        acc -> rows[0][7] = "Tot Shrs";
-        acc -> rows[0][8] = "Balance";
+        acc -> rows[0][PRIC_CELL_C] = "Price";
+        acc -> rows[0][SHRS_CELL_C] = "Tot Shrs";
+        acc -> rows[0][BALN_CELL_C] = "Balance";
         break;
       }
     
@@ -829,8 +897,8 @@ regWindow( Widget parent, Account *acc )
         break;
       case PORTFOLIO:
       case MUTUAL:
-        acc -> rows[0][PAY_CELL_C] = "Shares Bought";
-        acc -> rows[0][DEP_CELL_C] = "Shares Sold";
+        acc -> rows[0][PAY_CELL_C] = "Sold";
+        acc -> rows[0][DEP_CELL_C] = "Bought";
         break;
       }
     
@@ -1072,7 +1140,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
     if( verifyBox( toplevel, msg ) )
       {
       Transaction *trans;
-      int row = (2*acc->regData->lastTrans) + 1;
+      int row = (2*regData->lastTrans) + 1;
       /* remove the transaction */
       trans = removeTransaction( acc, regData->lastTrans );
       
@@ -1161,6 +1229,8 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( !IN_DATE_CELL(row,col) && !IN_NUM_CELL(row,col) &&
           !IN_DESC_CELL(row,col) && !IN_PAY_CELL(row,col) &&
           !IN_RECN_CELL(row,col) && !IN_DEP_CELL(row,col) &&
+          !((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) &&
+          !((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) &&
           !IN_MEMO_CELL(row,col) )
         {
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->doit = FALSE;
@@ -1173,19 +1243,19 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
         ((XbaeMatrixEnterCellCallbackStruct *)cbs)->map  = FALSE;
         
         XtVaGetValues( mw, XmNcells, &data, NULL );
-        DEBUGCMD(printf("data[%d][3] = %s\n", row, data[row][3]));
+        DEBUGCMD(printf("data[%d][RECN_CELL_C] = %s\n", row, data[row][RECN_CELL_C]));
         
-        if( data[row][3][0] == NREC )
-          data[row][3][0] = CREC;
+        if( data[row][RECN_CELL_C][0] == NREC )
+          data[row][RECN_CELL_C][0] = CREC;
         else
-          data[row][3][0] = NREC;
+          data[row][RECN_CELL_C][0] = NREC;
         
         /* this cell has been modified, so we need to save when we
          * leave!!! */
         regData->changed |= MOD_RECN;
         
         XtVaSetValues( mw, XmNcells, data, NULL );
-        XbaeMatrixRefreshCell( mw, row, 3 );
+        XbaeMatrixRefreshCell( mw, row, RECN_CELL_C);
         }
       break;
     case XbaeModifyVerifyReason:
@@ -1286,7 +1356,12 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       if( IN_DATE_CELL(row,col) )
         dateCellFormat( mw, mvcbs );       /* format according to date
                                             * cell rules */
-      if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) )
+
+      /* look to see if numeric format is OK.  Note that
+       * the share price cell exists only for certain account types */
+      if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) ||
+          ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
+          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
         {
         /* text pointer is NULL if non-alpha key hit */
         /* for example, the delete key */
@@ -1331,6 +1406,10 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
       
       if( IN_PAY_CELL(row,col) || IN_DEP_CELL(row,col) )
         regData->changed |= MOD_AMNT;
+      
+      if( ((PORTFOLIO == acc->type) && IN_PRIC_CELL(row,col)) ||
+          ((MUTUAL    == acc->type) && IN_PRIC_CELL(row,col)) )
+        regData->changed |= MOD_PRIC;
       
       if( IN_MEMO_CELL(row,col) )
         regData->changed |= MOD_MEMO;
@@ -1552,8 +1631,8 @@ dateCellFormat( Widget mw, XbaeMatrixModifyVerifyCallbackStruct *mvcbs )
         count++;
     if( count >= 1 )
       {
-      XbaeMatrixEditCell( mw, row+1, 0 );
-      XbaeMatrixSelectCell( mw, row+1, 0 );
+      XbaeMatrixEditCell( mw, row+1, DATE_CELL_C );
+      XbaeMatrixSelectCell( mw, row+1, DATE_CELL_C );
       }
     }
     break;
