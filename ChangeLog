@@ -1,3 +1,21 @@
+2003-02-16  Herbert Thoma  <herbie@hthoma.de>
+
+	Pull up from HEAD:
+	* src/gnome/gnc-split-reg.c:
+	  only display an euro amount in the status bar of a register window
+	  if the account currency is a euro currency but NOT euro itself
+
+	* src/gnome-utils/gnc-account-tree.c:
+	  auto resize balance and total columns
+
+	* src/app-utils/gnc-ui-util.c:
+	* src/app-utils/gnc-ui-util.h:
+	* src/gnome-utils/gnc-account-tree.c:
+	* src/gnome/window-acct-tree.c:
+	* src/scm/main-window.scm:
+	  recycle ACCOUNT_BALANCE_EURO and ACCOUNT_TOTAL_EURO account tree 
+	  columns to display balance resp. total in default report currency
+
 2003-02-16  Derek Atkins  <derek@ihtfp.com>
 
 	Pull up from HEAD:
