@@ -51,7 +51,7 @@ static void
 plot(GtkButton *button, gpointer data) {
   GtkWidget *list = GTK_WIDGET(data);
   GList *selection = GTK_LIST(list)->selection;
-  g_list_foreach(selection, mangle_account, NULL);
+  g_list_foreach(selection, graph_account_balance_per_transaction, NULL);
 }
 
 static GtkWidget *
