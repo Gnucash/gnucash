@@ -55,7 +55,7 @@
  *
  * HISTORY:
  * Copyright (c) 1988 Linas Vepstas
- * Copyright (c) 2000 Dave Peticolas
+ * Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
  */
 
 #ifndef XACC_CELL_BLOCK_H
@@ -94,13 +94,13 @@ typedef struct
   short start_col;
   short stop_col;
 
-  short cursor_type;
+  char *cursor_name;
 
   GTable *cb_cells; /* Holds the CellBlockCell table */
 } CellBlock;
 
 
-CellBlock * gnc_cellblock_new (int rows, int cols, int cursor_type);
+CellBlock * gnc_cellblock_new (int rows, int cols, const char *cursor_name);
 
 void        gnc_cellblock_destroy (CellBlock *cellblock);
 

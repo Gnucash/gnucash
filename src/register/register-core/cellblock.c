@@ -41,15 +41,17 @@ static void gnc_cellblock_init (CellBlock *cellblock, int rows, int cols);
 
 
 CellBlock *
-gnc_cellblock_new (int rows, int cols, int cursor_type)
+gnc_cellblock_new (int rows, int cols, const char *cursor_name)
 {
   CellBlock *cellblock;
+
+  g_return_val_if_fail (cursor_name != NULL, NULL);
 
   cellblock = g_new0(CellBlock, 1);
 
   gnc_cellblock_init (cellblock, rows, cols);
 
-  cellblock->cursor_type = cursor_type;
+  cellblock->cursor_name = g_strdup (cursor_name);
 
   return cellblock;
 }
@@ -107,6 +109,9 @@ gnc_cellblock_destroy (CellBlock *cellblock)
 
    g_table_destroy (cellblock->cb_cells);
    cellblock->cb_cells = NULL;
+
+   g_free (cellblock->cursor_name);
+   cellblock->cursor_name = NULL;
 
    g_free (cellblock);
 }

@@ -43,6 +43,7 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "gnc-engine-util.h"
 #include "messages.h"
@@ -285,16 +286,20 @@ static void
 set_cell (SplitRegister *reg, CellBlock *cursor,
           CellType cell_type, short row, short col)
 {
+  CellBlock *header;
+  CellBlock *cursor_sl;
   CellBlockCell *cb_cell;
   sample_string *ss;
+
+  header = gnc_table_layout_get_cursor (reg->table->layout, CURSOR_HEADER);
 
   ss = &cell_sample_strings[cell_type];
 
   cursor->start_col = MIN (cursor->start_col, col);
   cursor->stop_col  = MAX (cursor->stop_col,  col);
 
-  reg->cursor_header->start_col = MIN (reg->cursor_header->start_col, col);
-  reg->cursor_header->stop_col  = MAX (reg->cursor_header->stop_col,  col);
+  header->start_col = MIN (header->start_col, col);
+  header->stop_col  = MAX (header->stop_col,  col);
 
   cb_cell = gnc_cellblock_get_cell (cursor, row, col);
 
@@ -305,9 +310,12 @@ set_cell (SplitRegister *reg, CellBlock *cursor,
   cb_cell->expandable = cell_type == DESC_CELL;
   cb_cell->span = cell_type == MEMO_CELL || cell_type == NOTES_CELL;
 
-  cb_cell = gnc_cellblock_get_cell (reg->cursor_header, row, col);
+  cb_cell = gnc_cellblock_get_cell (header, row, col);
 
-  if (cb_cell && (cursor == reg->cursor_ledger_single))
+  cursor_sl = gnc_table_layout_get_cursor (reg->table->layout,
+                                           CURSOR_SINGLE_LEDGER);
+
+  if (cb_cell && (cursor == cursor_sl))
   {
     cb_cell->cell = gnc_register_get_cell (reg, cell_type);
     cb_cell->cell_type = cell_type;
@@ -341,6 +349,7 @@ static void
 configLayout (SplitRegister *reg)
 {
   CellBlock *curs;
+  CellBlock *curs_last;
 
   switch (reg->type)
   {
@@ -353,7 +362,9 @@ configLayout (SplitRegister *reg)
     case EXPENSE_REGISTER:
     case EQUITY_REGISTER:
       {
-        curs = reg->cursor_ledger_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_LEDGER);
+
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
@@ -368,13 +379,18 @@ configLayout (SplitRegister *reg)
         }
         set_cell (reg, curs, BALN_CELL,  0, 7);
 
-        curs = reg->cursor_ledger_double;
-        copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_LEDGER);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, ACTN_CELL,  1, 1);
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_journal_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_JOURNAL);
+
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
@@ -382,12 +398,17 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, TCRED_CELL, 0, 6);
         set_cell (reg, curs, TBALN_CELL, 0, 7);
 
-        curs = reg->cursor_journal_double;
-        copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_JOURNAL);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_split;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SPLIT);
+
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
@@ -408,7 +429,9 @@ configLayout (SplitRegister *reg)
     case GENERAL_LEDGER:
     case SEARCH_LEDGER:
       {
-        curs = reg->cursor_ledger_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_LEDGER);
+
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
@@ -422,25 +445,35 @@ configLayout (SplitRegister *reg)
                 set_cell (reg, curs, CRED_CELL,  0, 6);
         }
 
-        curs = reg->cursor_ledger_double;
-        copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_LEDGER);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, ACTN_CELL,  1, 1);
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_journal_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_JOURNAL);
+
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
         set_cell (reg, curs, TDEBT_CELL, 0, 5);
         set_cell (reg, curs, TCRED_CELL, 0, 6);
 
-        curs = reg->cursor_journal_double;
-        copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_JOURNAL);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_split;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SPLIT);
+
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
@@ -460,7 +493,9 @@ configLayout (SplitRegister *reg)
     case STOCK_REGISTER:
     case CURRENCY_REGISTER:
       {
-        curs = reg->cursor_ledger_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_LEDGER);
+
         set_cell (reg, curs, DATE_CELL,  0,  0);
         set_cell (reg, curs, NUM_CELL,   0,  1);
         set_cell (reg, curs, DESC_CELL,  0,  2);
@@ -472,13 +507,18 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, CRED_CELL,  0,  8);
         set_cell (reg, curs, BALN_CELL,  0,  9);
 
-        curs = reg->cursor_ledger_double;
-        copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_LEDGER);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, ACTN_CELL,  1, 1);
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_journal_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_JOURNAL);
+
         set_cell (reg, curs, DATE_CELL,  0,  0);
         set_cell (reg, curs, NUM_CELL,   0,  1);
         set_cell (reg, curs, DESC_CELL,  0,  2);
@@ -487,12 +527,17 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, TCRED_CELL, 0,  8);
         set_cell (reg, curs, TBALN_CELL, 0,  9);
 
-        curs = reg->cursor_journal_double;
-        copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_JOURNAL);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_split;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SPLIT);
+
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
@@ -508,7 +553,9 @@ configLayout (SplitRegister *reg)
       /* --------------------------------------------------------- */
     case PORTFOLIO_LEDGER:
       {
-        curs = reg->cursor_ledger_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_LEDGER);
+
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
@@ -519,13 +566,18 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, DEBT_CELL,  0, 7);
         set_cell (reg, curs, CRED_CELL,  0, 8);
 
-        curs = reg->cursor_ledger_double;
-        copy_cursor_row (reg, curs, reg->cursor_ledger_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_LEDGER);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, ACTN_CELL,  1, 1);
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_journal_single;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SINGLE_JOURNAL);
+
         set_cell (reg, curs, DATE_CELL,  0, 0);
         set_cell (reg, curs, NUM_CELL,   0, 1);
         set_cell (reg, curs, DESC_CELL,  0, 2);
@@ -533,12 +585,17 @@ configLayout (SplitRegister *reg)
         set_cell (reg, curs, TDEBT_CELL, 0, 7);
         set_cell (reg, curs, TCRED_CELL, 0, 8);
 
-        curs = reg->cursor_journal_double;
-        copy_cursor_row (reg, curs, reg->cursor_journal_single, 0);
+        curs_last = curs;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_DOUBLE_JOURNAL);
+
+        copy_cursor_row (reg, curs, curs_last, 0);
 
         set_cell (reg, curs, NOTES_CELL, 1, 2);
 
-        curs = reg->cursor_split;
+        curs = gnc_table_layout_get_cursor (reg->table->layout,
+                                            CURSOR_SPLIT);
+
         set_cell (reg, curs, ACTN_CELL, 0, 1);
         set_cell (reg, curs, MEMO_CELL, 0, 2);
         set_cell (reg, curs, XFRM_CELL, 0, 3);
@@ -592,6 +649,7 @@ gnc_register_new (SplitRegisterType type,
 static void
 mallocCursors (SplitRegister *reg)
 {
+  CellBlock *cursor;
   int num_cols;
 
   switch (reg->type)
@@ -628,22 +686,25 @@ mallocCursors (SplitRegister *reg)
       return;
   }
 
-  reg->cursor_header = gnc_cellblock_new (1, num_cols, CURSOR_TYPE_HEADER);
+  cursor = gnc_cellblock_new (1, num_cols, CURSOR_HEADER);
+  gnc_table_layout_add_cursor (reg->table->layout, cursor);
 
   /* cursors used in ledger mode */
-  reg->cursor_ledger_single =
-    gnc_cellblock_new (1, num_cols, CURSOR_TYPE_SINGLE_LEDGER);
-  reg->cursor_ledger_double =
-    gnc_cellblock_new (2, num_cols, CURSOR_TYPE_DOUBLE_LEDGER);
+  cursor = gnc_cellblock_new (1, num_cols, CURSOR_SINGLE_LEDGER);
+  gnc_table_layout_add_cursor (reg->table->layout, cursor);
+
+  cursor = gnc_cellblock_new (2, num_cols, CURSOR_DOUBLE_LEDGER);
+  gnc_table_layout_add_cursor (reg->table->layout, cursor);
 
   /* cursors used for journal mode */
-  reg->cursor_journal_single =
-    gnc_cellblock_new (1, num_cols, CURSOR_TYPE_SINGLE_JOURNAL);
-  reg->cursor_journal_double =
-    gnc_cellblock_new (2, num_cols, CURSOR_TYPE_DOUBLE_JOURNAL);
+  cursor = gnc_cellblock_new (1, num_cols, CURSOR_SINGLE_JOURNAL);
+  gnc_table_layout_add_cursor (reg->table->layout, cursor);
 
-  reg->cursor_split =
-    gnc_cellblock_new (1, num_cols, CURSOR_TYPE_SPLIT);
+  cursor = gnc_cellblock_new (2, num_cols, CURSOR_DOUBLE_JOURNAL);
+  gnc_table_layout_add_cursor (reg->table->layout, cursor);
+
+  cursor = gnc_cellblock_new (1, num_cols, CURSOR_SPLIT);
+  gnc_table_layout_add_cursor (reg->table->layout, cursor);
 }
 
 /* ============================================== */
@@ -796,9 +857,11 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* Set up header */
   {
     VirtualCellLocation vcell_loc = { 0, 0 };
+    CellBlock *header;
 
-    gnc_table_set_vcell (reg->table, reg->cursor_header,
-                         NULL, TRUE, TRUE, vcell_loc);
+    header = gnc_table_layout_get_cursor (reg->table->layout, CURSOR_HEADER);
+
+    gnc_table_set_vcell (reg->table, header, NULL, TRUE, TRUE, vcell_loc);
 
     reg->table->num_header_phys_rows = use_double_line ? 2 : 1;
   }
@@ -806,14 +869,17 @@ xaccInitSplitRegister (SplitRegister *reg,
   /* Set up first and only initial row */
   {
     VirtualLocation vloc;
+    CellBlock *cursor;
 
     vloc.vcell_loc.virt_row = 1;
     vloc.vcell_loc.virt_col = 0;
     vloc.phys_row_offset = 0;
     vloc.phys_col_offset = 0;
 
-    gnc_table_set_vcell (reg->table, reg->cursor_ledger_single,
-                         NULL, TRUE, TRUE, vloc.vcell_loc);
+    cursor = gnc_table_layout_get_cursor (reg->table->layout,
+                                          CURSOR_SINGLE_LEDGER);
+
+    gnc_table_set_vcell (reg->table, cursor, NULL, TRUE, TRUE, vloc.vcell_loc);
     gnc_table_move_cursor (reg->table, vloc);
   }
 }
@@ -838,13 +904,7 @@ xaccConfigSplitRegister (SplitRegister *reg,
 
   reg->table->num_header_phys_rows = use_double_line ? 2 : 1;
 
-  /* Make sure that any GUI elements associated with this reconfig 
-   * are properly initialized. */
-  gnc_table_create_cursor (reg->table, reg->cursor_ledger_single);
-  gnc_table_create_cursor (reg->table, reg->cursor_ledger_double);
-  gnc_table_create_cursor (reg->table, reg->cursor_journal_single);
-  gnc_table_create_cursor (reg->table, reg->cursor_journal_double);
-  gnc_table_create_cursor (reg->table, reg->cursor_split);
+  gnc_table_realize_gui (reg->table);
 }
 
 /* ============================================== */
@@ -864,20 +924,6 @@ xaccDestroySplitRegister (SplitRegister *reg)
   gnc_table_destroy (reg->table);
   reg->table = NULL;
 
-  gnc_cellblock_destroy (reg->cursor_header);
-  gnc_cellblock_destroy (reg->cursor_ledger_single);
-  gnc_cellblock_destroy (reg->cursor_ledger_double);
-  gnc_cellblock_destroy (reg->cursor_journal_single);
-  gnc_cellblock_destroy (reg->cursor_journal_double);
-  gnc_cellblock_destroy (reg->cursor_split);
-
-  reg->cursor_header = NULL;
-  reg->cursor_ledger_single = NULL;
-  reg->cursor_ledger_double = NULL;
-  reg->cursor_journal_single = NULL;
-  reg->cursor_journal_double = NULL;
-  reg->cursor_split = NULL;
-
   g_free (reg->debit_str);
   g_free (reg->tdebit_str);
   g_free (reg->credit_str);
@@ -895,21 +941,12 @@ xaccDestroySplitRegister (SplitRegister *reg)
 /* ============================================== */
 
 static CursorClass
-sr_cellblock_cursor_class(SplitRegister *reg, CellBlock *cursor)
+sr_cellblock_cursor_class (SplitRegister *reg, CellBlock *cursor)
 {
   if (cursor == NULL)
     return CURSOR_CLASS_NONE;
 
-  if ((cursor == reg->cursor_ledger_single)  ||
-      (cursor == reg->cursor_ledger_double)  ||
-      (cursor == reg->cursor_journal_single) ||
-      (cursor == reg->cursor_journal_double))
-    return CURSOR_CLASS_TRANS;
-
-  if (cursor == reg->cursor_split)
-    return CURSOR_CLASS_SPLIT;
-
-  return CURSOR_CLASS_NONE;
+  return xaccCursorNameToClass (cursor->cursor_name);
 }
 
 /* ============================================== */
@@ -926,7 +963,7 @@ xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg)
   if (table == NULL)
     return CURSOR_CLASS_NONE;
 
-  return sr_cellblock_cursor_class(reg, table->current_cursor);
+  return sr_cellblock_cursor_class (reg, table->current_cursor);
 }
 
 /* ============================================== */
@@ -949,28 +986,27 @@ xaccSplitRegisterGetCursorClass (SplitRegister *reg,
   if (vcell == NULL)
     return CURSOR_CLASS_NONE;
 
-  return sr_cellblock_cursor_class(reg, vcell->cellblock);
+  return sr_cellblock_cursor_class (reg, vcell->cellblock);
 }
 
 /* ============================================== */
 
 CursorClass
-xaccCursorTypeToClass (CursorType cursor_type)
+xaccCursorNameToClass (const char *cursor_name)
 {
-  switch (cursor_type)
-  {
-    case CURSOR_TYPE_SINGLE_LEDGER:
-    case CURSOR_TYPE_DOUBLE_LEDGER:
-    case CURSOR_TYPE_SINGLE_JOURNAL:
-    case CURSOR_TYPE_DOUBLE_JOURNAL:
-      return CURSOR_CLASS_TRANS;
+  if (cursor_name == NULL)
+    return CURSOR_CLASS_NONE;
 
-    case CURSOR_TYPE_SPLIT:
-      return CURSOR_CLASS_SPLIT;
+  if (strcmp (cursor_name, CURSOR_SINGLE_LEDGER) == 0  ||
+      strcmp (cursor_name, CURSOR_DOUBLE_LEDGER) == 0  ||
+      strcmp (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
+      strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0)
+    return CURSOR_CLASS_TRANS;
 
-    default:
-      return CURSOR_CLASS_NONE;
-  }
+  if (strcmp (cursor_name, CURSOR_SPLIT) == 0)
+    return CURSOR_CLASS_SPLIT;
+
+  return CURSOR_CLASS_NONE;
 }
 
 /* ============================================== */

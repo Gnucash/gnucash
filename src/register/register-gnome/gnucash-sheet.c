@@ -74,18 +74,6 @@ static guint register_signals[LAST_SIGNAL];
 
 
 void
-gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor)
-{
-        g_return_if_fail (sheet != NULL);
-        g_return_if_fail (GNUCASH_IS_SHEET (sheet));
-        g_return_if_fail (cursor != NULL);
-        g_return_if_fail (cursor->cursor_type >= 0);
-        g_return_if_fail (cursor->cursor_type < NUM_CURSOR_TYPES);
-
-        sheet->cursors[cursor->cursor_type] = cursor;
-}
-
-void
 gnucash_register_set_initial_rows (guint num_rows)
 {
         gnucash_register_initial_rows = num_rows;
@@ -241,7 +229,7 @@ gnucash_sheet_activate_cursor_cell (GnucashSheet *sheet,
         gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &virt_loc);
 
         style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
-        if (style->cursor_type == CURSOR_TYPE_HEADER ||
+        if (strcmp (style->cursor->cursor_name, CURSOR_HEADER) == 0 ||
             !gnc_table_virtual_loc_valid (table, virt_loc, TRUE))
                 return;
 
@@ -572,21 +560,19 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
         gnome_canvas_request_redraw (canvas, x, y, x+w+1, y+h+1);
 }
 
-
 static void
 gnucash_sheet_destroy (GtkObject *object)
 {
         GnucashSheet *sheet;
-        gint i;
 
         sheet = GNUCASH_SHEET (object);
 
         g_table_destroy (sheet->blocks);
         sheet->blocks = NULL;
 
-        for (i = 0; i < NUM_CURSOR_TYPES; i++)
-                gnucash_sheet_style_destroy(sheet, sheet->cursor_styles[i]);
+        gnucash_sheet_clear_styles (sheet);
 
+        g_hash_table_destroy (sheet->cursor_styles);
         g_hash_table_destroy (sheet->dimensions_hash_table);        
 
         if (GTK_OBJECT_CLASS (sheet_parent_class)->destroy)
@@ -638,16 +624,18 @@ compute_optimal_width (GnucashSheet *sheet)
 {
         SheetBlockStyle *style;
 
-        if ((sheet == NULL) ||
-            (sheet->cursor_styles[CURSOR_TYPE_HEADER] == NULL))
+        if (!sheet)
+                return DEFAULT_REGISTER_WIDTH;
+
+        style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
+
+        if (!style)
                 return DEFAULT_REGISTER_WIDTH;
 
         if (sheet->window_width >= 0)
                 return sheet->window_width;
 
-        style = sheet->cursor_styles[CURSOR_TYPE_HEADER];
-
-        if ((style == NULL) || (style->dimensions == NULL))
+        if (!style->dimensions)
                 return DEFAULT_REGISTER_WIDTH;
 
         return style->dimensions->width;
@@ -662,14 +650,15 @@ compute_optimal_height (GnucashSheet *sheet)
         CellDimensions *cd;
         gint row_height;
 
+        if (!sheet)
+                return DEFAULT_REGISTER_HEIGHT;
+
         if (sheet->window_height >= 0)
                 return sheet->window_height;
 
-        if ((sheet == NULL) ||
-            (sheet->cursor_styles[CURSOR_TYPE_HEADER] == NULL))
+        style = gnucash_sheet_get_style_from_cursor (sheet, CURSOR_HEADER);
+        if (!style)
                 return DEFAULT_REGISTER_HEIGHT;
-
-        style = sheet->cursor_styles[CURSOR_TYPE_HEADER];
 
         cd = gnucash_style_get_cell_dimensions (style, 0, 0);
         if (cd == NULL)
@@ -1853,10 +1842,11 @@ gnucash_register_goto_next_trans_row (GnucashRegister *reg)
                         return;
 
                 style = gnucash_sheet_get_style (sheet, virt_loc.vcell_loc);
-                if (!style)
+                if (!style || !style->cursor)
                         return;
 
-                cursor_class = xaccCursorTypeToClass (style->cursor_type);
+                cursor_class = xaccCursorNameToClass
+                        (style->cursor->cursor_name);
         } while (cursor_class == CURSOR_CLASS_SPLIT);
 
         if (cursor_class != CURSOR_CLASS_TRANS)
@@ -2231,6 +2221,8 @@ gnucash_sheet_init (GnucashSheet *sheet)
         sheet->window_height = -1;
         sheet->width = 0;
         sheet->height = 0;
+
+        sheet->cursor_styles = g_hash_table_new (g_str_hash, g_str_equal);
 
         sheet->blocks = g_table_new (sizeof (SheetBlock),
                                      gnucash_sheet_block_construct,

@@ -76,8 +76,7 @@ typedef struct
         GnomeCanvasItem *cursor;
         GnomeCanvasItem *grid;
 
-        CellBlock *cursors[NUM_CURSOR_TYPES];
-        SheetBlockStyle *cursor_styles[NUM_CURSOR_TYPES];
+        GHashTable *cursor_styles;
 
         /* some style information associated to a sheet */
         GHashTable *dimensions_hash_table;
@@ -177,8 +176,6 @@ void gnucash_sheet_make_cell_visible (GnucashSheet *sheet,
 void gnucash_sheet_show_range (GnucashSheet *sheet,
                                VirtualCellLocation start_loc,
                                VirtualCellLocation end_loc);
-
-void gnucash_sheet_set_cursor (GnucashSheet *sheet, CellBlock *cursor);
 
 void gnucash_sheet_update_adjustments (GnucashSheet *sheet);
 

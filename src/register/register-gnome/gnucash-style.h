@@ -59,8 +59,6 @@ struct _SheetBlockStyle
         gint nrows;
         gint ncols;
 
-        CursorType cursor_type;
-
         BlockDimensions *dimensions;
 
         gint refcount;
@@ -90,6 +88,7 @@ void gnucash_sheet_styles_set_dimensions (GnucashSheet *sheet, int width);
 
 void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style);
 
+void gnucash_sheet_clear_styles (GnucashSheet *sheet);
 void gnucash_sheet_create_styles (GnucashSheet *sheet);
 
 void gnucash_sheet_compile_styles (GnucashSheet *sheet);
@@ -102,6 +101,10 @@ SheetBlockStyle *gnucash_sheet_get_style (GnucashSheet *sheet,
 SheetBlockStyle *
 gnucash_sheet_get_style_from_table (GnucashSheet *sheet,
                                     VirtualCellLocation vcell_loc);
+
+SheetBlockStyle *
+gnucash_sheet_get_style_from_cursor (GnucashSheet *sheet,
+                                     const char *cursor_name);
 
 void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
                                                     gint cell_row,

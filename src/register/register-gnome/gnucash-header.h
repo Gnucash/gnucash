@@ -37,7 +37,8 @@ typedef struct {
         GnucashSheet *sheet;
         SheetBlockStyle *style;
 
-        int type;
+        char *cursor_name;
+
         int row;
         int in_resize;
         int resize_col_width;

@@ -649,45 +649,62 @@ sr_set_cell_fractions (SplitRegister *reg, Split *split)
 static CellBlock *
 sr_get_passive_cursor (SplitRegister *reg)
 {
+  const char *cursor_name = NULL;
+
   switch (reg->style)
   {
     case REG_STYLE_LEDGER:
     case REG_STYLE_AUTO_LEDGER:
-      return reg->use_double_line ?
-        reg->cursor_ledger_double : reg->cursor_ledger_single;
+      cursor_name = reg->use_double_line ?
+        CURSOR_DOUBLE_LEDGER : CURSOR_SINGLE_LEDGER;
+      break;
 
     case REG_STYLE_JOURNAL:
-      return reg->use_double_line ?
-        reg->cursor_journal_double : reg->cursor_journal_single;
+      cursor_name = reg->use_double_line ?
+        CURSOR_DOUBLE_JOURNAL : CURSOR_SINGLE_JOURNAL;
+      break;
   }
 
-  PWARN ("bad register style");
+  if (!cursor_name)
+  {
+    PWARN ("bad register style");
+    return NULL;
+  }
 
-  return NULL;
+  return gnc_table_layout_get_cursor (reg->table->layout, cursor_name);
 }
 
 static CellBlock *
 sr_get_active_cursor (SplitRegister *reg)
 {
   SRInfo *info = xaccSRGetInfo (reg);
+  const char *cursor_name = NULL;
 
   switch (reg->style)
   {
     case REG_STYLE_LEDGER:
       if (!info->trans_expanded)
-        return reg->use_double_line ?
-          reg->cursor_ledger_double : reg->cursor_ledger_single;
+      {
+        cursor_name = reg->use_double_line ?
+          CURSOR_DOUBLE_LEDGER : CURSOR_SINGLE_LEDGER;
+        break;
+      }
 
       /* fall through */
     case REG_STYLE_AUTO_LEDGER:
     case REG_STYLE_JOURNAL:
-      return reg->use_double_line ?
-        reg->cursor_journal_double : reg->cursor_journal_single;
+      cursor_name = reg->use_double_line ?
+        CURSOR_DOUBLE_JOURNAL : CURSOR_SINGLE_JOURNAL;
+      break;
   }
 
-  PWARN ("bad register style");
+  if (!cursor_name)
+  {
+    PWARN ("bad register style");
+    return NULL;
+  }
 
-  return NULL;
+  return gnc_table_layout_get_cursor (reg->table->layout, cursor_name);
 }
 
 static void
@@ -4596,7 +4613,7 @@ xaccSRGetCellBorderHandler (VirtualLocation virt_loc,
     return;
   }
 
-  cursor_class = xaccCursorTypeToClass (vcell->cellblock->cursor_type);
+  cursor_class = xaccCursorNameToClass (vcell->cellblock->cursor_name);
 
   if (cursor_class == CURSOR_CLASS_TRANS &&
       virt_loc.phys_col_offset == vcell->cellblock->start_col)
@@ -4648,6 +4665,7 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
                          gpointer user_data)
 {
   SplitRegister *reg = user_data;
+  const char *cursor_name;
   VirtualCell *vcell;
   guint32 bg_color;
   gboolean is_current;
@@ -4694,56 +4712,58 @@ xaccSRGetBGColorHandler (VirtualLocation virt_loc,
   is_current = virt_cell_loc_equal (reg->table->current_cursor_loc.vcell_loc,
                                     virt_loc.vcell_loc);
 
-  switch ((CursorType) vcell->cellblock->cursor_type)
+  cursor_name = vcell->cellblock->cursor_name;
+
+  if (safe_strcmp (cursor_name, CURSOR_HEADER) == 0)
+    return reg_colors.header_bg_color;
+
+  if (safe_strcmp (cursor_name, CURSOR_SINGLE_JOURNAL) == 0 ||
+      safe_strcmp (cursor_name, CURSOR_SINGLE_LEDGER) == 0)
   {
-    case CURSOR_TYPE_HEADER:
-      return reg_colors.header_bg_color;
-
-    case CURSOR_TYPE_SINGLE_JOURNAL:
-    case CURSOR_TYPE_SINGLE_LEDGER:
-      if (is_current)
-        return vcell->start_primary_color ?
-          reg_colors.primary_active_bg_color :
-          reg_colors.secondary_active_bg_color;
-
+    if (is_current)
       return vcell->start_primary_color ?
-        reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
+        reg_colors.primary_active_bg_color :
+        reg_colors.secondary_active_bg_color;
 
-    case CURSOR_TYPE_DOUBLE_LEDGER:
-    case CURSOR_TYPE_DOUBLE_JOURNAL:
-      if (is_current)
-      {
-        if (reg_colors.double_alternate_virt)
-          return vcell->start_primary_color ?
-            reg_colors.primary_active_bg_color :
-            reg_colors.secondary_active_bg_color;
+    return vcell->start_primary_color ?
+      reg_colors.primary_bg_color : reg_colors.secondary_bg_color;
+  }
 
-        return (virt_loc.phys_row_offset % 2 == 0) ?
-          reg_colors.primary_active_bg_color :
-          reg_colors.secondary_active_bg_color;
-      }
-
+  if (safe_strcmp (cursor_name, CURSOR_DOUBLE_JOURNAL) == 0 ||
+      safe_strcmp (cursor_name, CURSOR_DOUBLE_LEDGER) == 0)
+  {
+    if (is_current)
+    {
       if (reg_colors.double_alternate_virt)
         return vcell->start_primary_color ?
-          reg_colors.primary_bg_color :
-          reg_colors.secondary_bg_color;
+          reg_colors.primary_active_bg_color :
+          reg_colors.secondary_active_bg_color;
 
       return (virt_loc.phys_row_offset % 2 == 0) ?
+        reg_colors.primary_active_bg_color :
+        reg_colors.secondary_active_bg_color;
+    }
+
+    if (reg_colors.double_alternate_virt)
+      return vcell->start_primary_color ?
         reg_colors.primary_bg_color :
         reg_colors.secondary_bg_color;
 
-    case CURSOR_TYPE_SPLIT:
-      {
-        if (is_current)
-          return reg_colors.split_active_bg_color;
-
-        return reg_colors.split_bg_color;
-      }
-
-    default:
-      PWARN("Unexpected cursor type: %d\n", vcell->cellblock->cursor_type);
-      return bg_color;
+    return (virt_loc.phys_row_offset % 2 == 0) ?
+      reg_colors.primary_bg_color :
+      reg_colors.secondary_bg_color;
   }
+
+  if (safe_strcmp (cursor_name, CURSOR_SPLIT) == 0)
+  {
+    if (is_current)
+      return reg_colors.split_active_bg_color;
+
+    return reg_colors.split_bg_color;
+  }
+
+  PWARN("Unexpected cursor: %s\n", cursor_name);
+  return bg_color;
 }
 
 gboolean
@@ -4831,6 +4851,7 @@ sr_add_transaction (SplitRegister *reg,
                     Transaction *trans,
                     Split *split,
                     CellBlock *lead_cursor,
+                    CellBlock *split_cursor,
                     gboolean visible_splits,
                     gboolean start_primary_color,
                     gboolean sort_splits,
@@ -4846,6 +4867,7 @@ sr_add_transaction (SplitRegister *reg,
                     Transaction *trans,
                     Split *split,
                     CellBlock *lead_cursor,
+                    CellBlock *split_cursor,
                     gboolean visible_splits,
                     gboolean start_primary_color,
                     gboolean sort_splits,
@@ -4878,7 +4900,7 @@ sr_add_transaction (SplitRegister *reg,
       if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
         *new_split_row = vcell_loc->virt_row;
 
-      gnc_table_set_vcell (reg->table, reg->cursor_split,
+      gnc_table_set_vcell (reg->table, split_cursor,
                            xaccSplitGetGUID (secondary),
                            visible_splits, TRUE, *vcell_loc);
       vcell_loc->virt_row++;
@@ -4895,7 +4917,7 @@ sr_add_transaction (SplitRegister *reg,
       if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
         *new_split_row = vcell_loc->virt_row;
 
-      gnc_table_set_vcell (reg->table, reg->cursor_split,
+      gnc_table_set_vcell (reg->table, split_cursor,
                            xaccSplitGetGUID (secondary),
                            visible_splits, TRUE, *vcell_loc);
       vcell_loc->virt_row++;
@@ -4910,7 +4932,7 @@ sr_add_transaction (SplitRegister *reg,
       if (secondary == find_split && find_class == CURSOR_CLASS_SPLIT)
         *new_split_row = vcell_loc->virt_row;
 
-      gnc_table_set_vcell (reg->table, reg->cursor_split,
+      gnc_table_set_vcell (reg->table, split_cursor,
                            xaccSplitGetGUID (secondary),
                            visible_splits, TRUE, *vcell_loc);
       vcell_loc->virt_row++;
@@ -4925,7 +4947,7 @@ sr_add_transaction (SplitRegister *reg,
         *new_split_row = vcell_loc->virt_row;
 
   /* Add blank transaction split */
-  gnc_table_set_vcell (reg->table, reg->cursor_split,
+  gnc_table_set_vcell (reg->table, split_cursor,
                        xaccSplitGetGUID (NULL), FALSE, TRUE, *vcell_loc);
   vcell_loc->virt_row++;
 
@@ -4942,7 +4964,9 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   Transaction *pending_trans = xaccTransLookup (&info->pending_trans_guid);
   CursorBuffer *cursor_buffer;
   GHashTable *trans_table = NULL;
+  CellBlock *cursor_header;
   CellBlock *lead_cursor;
+  CellBlock *split_cursor;
   Transaction *blank_trans;
   Transaction *find_trans;
   Transaction *trans;
@@ -5002,6 +5026,7 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   dynamic    = (reg->style == REG_STYLE_AUTO_LEDGER);
 
   lead_cursor = sr_get_passive_cursor (reg);
+  split_cursor = gnc_table_layout_get_cursor (table->layout, CURSOR_SPLIT);
 
   /* figure out where we are going to. */
   if (info->traverse_to_new)
@@ -5051,7 +5076,8 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
   /* make sure that the header is loaded */
   vcell_loc.virt_row = 0;
   vcell_loc.virt_col = 0;
-  gnc_table_set_vcell (table, reg->cursor_header, NULL, TRUE, TRUE, vcell_loc);
+  cursor_header = gnc_table_layout_get_cursor (table->layout, CURSOR_HEADER);
+  gnc_table_set_vcell (table, cursor_header, NULL, TRUE, TRUE, vcell_loc);
   vcell_loc.virt_row++;
 
   /* get the current time and reset the dividing row */
@@ -5158,9 +5184,10 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     if (split == find_trans_split)
       new_trans_split_row = vcell_loc.virt_row;
 
-    sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
-                        start_primary_color, TRUE, TRUE, find_trans,
-                        find_split, find_class, &new_split_row, &vcell_loc);
+    sr_add_transaction (reg, trans, split, lead_cursor, split_cursor,
+                        multi_line, start_primary_color, TRUE, TRUE,
+                        find_trans, find_split, find_class,
+                        &new_split_row, &vcell_loc);
 
     if (!multi_line)
       start_primary_color = !start_primary_color;
@@ -5193,9 +5220,10 @@ xaccSRLoadRegister (SplitRegister *reg, GList * slist,
     save_loc.phys_col_offset = 0;
   }
 
-  sr_add_transaction (reg, trans, split, lead_cursor, multi_line,
-                      start_primary_color, FALSE, info->blank_split_edited,
-                      find_trans, find_split, find_class, &new_split_row,
+  sr_add_transaction (reg, trans, split, lead_cursor, split_cursor,
+                      multi_line, start_primary_color, FALSE,
+                      info->blank_split_edited, find_trans,
+                      find_split, find_class, &new_split_row,
                       &vcell_loc);
 
   /* resize the table to the sizes we just counted above */

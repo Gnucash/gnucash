@@ -144,13 +144,6 @@ gnc_table_init_gui (gncUIWidget widget, void *data)
 
         /* config the cell-block styles */
 
-        gnucash_sheet_set_cursor (sheet, sr->cursor_header);
-        gnucash_sheet_set_cursor (sheet, sr->cursor_ledger_single);
-        gnucash_sheet_set_cursor (sheet, sr->cursor_ledger_double);
-        gnucash_sheet_set_cursor (sheet, sr->cursor_journal_single);
-        gnucash_sheet_set_cursor (sheet, sr->cursor_journal_double);
-        gnucash_sheet_set_cursor (sheet, sr->cursor_split);
-
         for (i = 0; i < CELL_TYPE_COUNT; i++)
                 header_widths[i] = -1;
 

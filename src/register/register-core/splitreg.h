@@ -127,17 +127,11 @@ typedef enum
   NUM_CURSOR_CLASSES
 } CursorClass;
 
-typedef enum
-{
-  CURSOR_TYPE_NONE = -1,
-  CURSOR_TYPE_HEADER,
-  CURSOR_TYPE_SINGLE_LEDGER,
-  CURSOR_TYPE_DOUBLE_LEDGER,
-  CURSOR_TYPE_SINGLE_JOURNAL,
-  CURSOR_TYPE_DOUBLE_JOURNAL,
-  CURSOR_TYPE_SPLIT,
-  NUM_CURSOR_TYPES
-} CursorType;
+#define CURSOR_SINGLE_LEDGER  "cursor-single-ledger"
+#define CURSOR_DOUBLE_LEDGER  "cursor-double-ledger"
+#define CURSOR_SINGLE_JOURNAL "cursor-single-journal"
+#define CURSOR_DOUBLE_JOURNAL "cursor-double-journal"
+#define CURSOR_SPLIT          "cursor-split"
 
 typedef struct _SplitRegister SplitRegister;
 
@@ -147,14 +141,6 @@ struct _SplitRegister
 {
   /* the table itself that implements the underlying GUI. */
   Table         * table;
-
-  /* the cursors that define the register structure */
-  CellBlock     * cursor_header;
-  CellBlock     * cursor_ledger_single;
-  CellBlock     * cursor_ledger_double;
-  CellBlock     * cursor_journal_single;
-  CellBlock     * cursor_journal_double;
-  CellBlock     * cursor_split;
 
   SplitRegisterType type;
   SplitRegisterStyle style;
@@ -218,7 +204,7 @@ CursorClass     xaccSplitRegisterGetCurrentCursorClass (SplitRegister *reg);
 CursorClass    xaccSplitRegisterGetCursorClass (SplitRegister *reg,
                                                 VirtualCellLocation vcell_loc);
 
-CursorClass     xaccCursorTypeToClass (CursorType cursor_type);
+CursorClass     xaccCursorNameToClass (const char *cursor_name);
 
 /* Returns the type of the current cell */
 CellType        xaccSplitRegisterGetCurrentCellType (SplitRegister *reg);

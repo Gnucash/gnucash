@@ -234,10 +234,7 @@ VirtualCell *  gnc_table_get_header_cell (Table *table);
  *   indicated dimensions.  */
 void        gnc_table_set_size (Table * table, int virt_rows, int virt_cols);
 
-/* The gnc_table_create_cursor() method can be called whenever a
- *   reconfig of the cursor may require new gui elements to be
- *   initialized. */
-void        gnc_table_create_cursor (Table *table, CellBlock *cursor);
+void        gnc_table_realize_gui (Table *table);
 
 /* Indicate what handler should be used for a given virtual block */
 void        gnc_table_set_vcell (Table *table, CellBlock *cursor,

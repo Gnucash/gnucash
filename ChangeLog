@@ -1,3 +1,10 @@
+2001-08-13  Dave Peticolas  <dave@krondo.com>
+
+	* all other files: update for change below
+
+	* src/register/register-core/table-layout.[ch]: make cursors part
+	of the table. allow them to be added dynamically.
+
 2001-08-11  James LewisMoss  <jimdres@mindspring.com>
 
 	* src/engine/md5.c: include string.h to get bcopy def.

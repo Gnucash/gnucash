@@ -768,23 +768,23 @@ gnc_table_get_vcell_data (Table *table, VirtualCellLocation vcell_loc)
  * on the cursor cell is how we inform the cell handler that 
  * now is the time to initialize its GUI.  */
 void
-gnc_table_create_cursor (Table * table, CellBlock *curs)
+gnc_table_realize_gui (Table * table)
 {
-  int cell_row, cell_col;
+  GList *cells;
+  GList *node;
 
-  if (!curs || !table) return;  
+  if (!table) return;  
   if (!table->ui_data) return;
 
-  for (cell_row = 0; cell_row < curs->num_rows; cell_row++)
-    for (cell_col = 0; cell_col < curs->num_cols; cell_col++)
-    {
-      CellBlockCell *cb_cell;
+  cells = gnc_table_layout_get_cells (table->layout);
 
-      cb_cell = gnc_cellblock_get_cell (curs, cell_row, cell_col);
+  for (node = cells; node; node = node->next)
+  {
+    BasicCell *cell = node->data;
 
-      if (cb_cell && cb_cell->cell && cb_cell->cell->gui_realize)
-        cb_cell->cell->gui_realize (cb_cell->cell, table->ui_data);
-    }
+    if (cell->gui_realize)
+      cell->gui_realize (cell, table->ui_data);
+  }
 }
 
 /* ==================================================== */

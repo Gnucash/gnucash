@@ -28,10 +28,17 @@
 #include "basiccell.h"
 #include "cellblock.h"
 
+
+/** Standard Cursor Names ********************************************/
+#define CURSOR_HEADER "cursor-header"
+
+
+/** Type definitions *************************************************/
 typedef struct table_layout_struct TableLayout;
 typedef struct cursor_buffer_struct CursorBuffer;
 
 
+/** API Declarations *************************************************/
 TableLayout * gnc_table_layout_new (void);
 void gnc_table_layout_destroy (TableLayout *layout);
 
@@ -41,6 +48,16 @@ void gnc_table_layout_add_cell (TableLayout *layout,
 
 BasicCell * gnc_table_layout_get_cell (TableLayout *layout, int cell_type);
 int gnc_table_layout_get_cell_type (TableLayout *layout, BasicCell *cell);
+
+GList * gnc_table_layout_get_cells (TableLayout *layout);
+
+void gnc_table_layout_add_cursor (TableLayout *layout,
+                                  CellBlock *cursor);
+
+CellBlock * gnc_table_layout_get_cursor (TableLayout *layout,
+                                         const char *cursor_name);
+
+GList * gnc_table_layout_get_cursors (TableLayout *layout);
 
 CursorBuffer * gnc_cursor_buffer_new (void);
 void gnc_cursor_buffer_destroy (CursorBuffer *buffer);
