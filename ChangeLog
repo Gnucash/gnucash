@@ -36,6 +36,11 @@
 	  When building the "name + address" string, check if the
 	  company name and contact name are the same and, if so,
 	  only print one of them.  Fixes #109753.
+
+	* src/business/business-reports/owner-report.scm:
+	* src/business/business-reports/aging-report.scm:
+	  Fix a couple strings to improve comments when owners and accounts
+	  are missing.  Direct the user to select them in the report options.
 	
 2003-04-01  Christian Stimming  <stimming@tuhh.de>
 
