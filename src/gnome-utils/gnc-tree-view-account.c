@@ -44,6 +44,7 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+static GList *active_views = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass);
@@ -121,6 +122,21 @@ gnc_tree_view_account_get_type (void)
 	return gnc_tree_view_account_type;
 }
 
+#if DEBUG_REFERENCE_COUNTING
+static void
+dump_view (GncTreeViewAccount *view, gpointer dummy)
+{
+    g_warning("GncTreeViewAccount %p still exists.", view);
+}
+
+static gint
+gnc_tree_view_account_report_references (void)
+{
+  g_list_foreach(active_views, (GFunc)dump_view, NULL);
+  return 0;
+}
+#endif
+
 static void
 gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
 {
@@ -137,6 +153,12 @@ gnc_tree_view_account_class_init (GncTreeViewAccountClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_view_account_destroy;
+
+#if DEBUG_REFERENCE_COUNTING
+	gtk_quit_add (0,
+		      (GtkFunction)gnc_tree_view_account_report_references,
+		      NULL);
+#endif
 }
 
 /********************************************************************\
@@ -168,6 +190,8 @@ gnc_tree_view_account_init (GncTreeViewAccount *view)
   view->priv = g_new0 (GncTreeViewAccountPrivate, 1);
 
   gnc_init_account_view_info(&view->priv->avi);
+
+  active_views = g_list_append (active_views, view);
 }
 
 static void
@@ -180,6 +204,8 @@ gnc_tree_view_account_finalize (GObject *object)
   g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (object));
 
   account_view = GNC_TREE_VIEW_ACCOUNT (object);
+  active_views = g_list_remove (active_views, account_view);
+
   g_free (account_view->priv);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)

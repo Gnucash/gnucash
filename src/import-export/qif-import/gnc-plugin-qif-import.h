@@ -57,6 +57,8 @@ GType      gnc_plugin_qif_import_get_type (void);
 
 GncPlugin *gnc_plugin_qif_import_new      (void);
 
+void       gnc_plugin_qif_import_create_plugin (void);
+
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_QIF_IMPORT_H */

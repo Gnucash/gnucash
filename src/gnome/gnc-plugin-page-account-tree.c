@@ -59,6 +59,8 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+static GList *active_pages = NULL;
+
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
 
 enum {
@@ -253,6 +255,21 @@ gnc_plugin_page_account_tree_new (void)
 	return GNC_PLUGIN_PAGE (plugin_page);
 }
 
+#if DEBUG_REFERENCE_COUNTING
+static void
+dump_model (GncPluginPageAccountTree *page, gpointer dummy)
+{
+    g_warning("GncPluginPageAccountTree %p still exists.", page);
+}
+
+static gint
+gnc_plugin_page_account_tree_report_references (void)
+{
+  g_list_foreach(active_pages, (GFunc)dump_model, NULL);
+  return 0;
+}
+#endif
+
 static void
 gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 {
@@ -279,6 +296,12 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
 			g_cclosure_marshal_VOID__POINTER,
 			G_TYPE_NONE, 1,
 			G_TYPE_POINTER);
+
+#if DEBUG_REFERENCE_COUNTING
+	gtk_quit_add (0,
+		      (GtkFunction)gnc_plugin_page_account_tree_report_references,
+		      NULL);
+#endif
 }
 
 static void
@@ -380,6 +403,8 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 						 N_("Name of account view"));
 	scm_protect_object(priv->name_change_callback_id);
 
+	active_pages = g_list_append (active_pages, plugin_page);
+
 	LEAVE("page %p, priv %p, action group %p",
 	      plugin_page, plugin_page->priv, plugin_page->priv->action_group);
 }
@@ -387,15 +412,17 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 static void
 gnc_plugin_page_account_tree_finalize (GObject *object)
 {
-	GncPluginPageAccountTree *model;
+	GncPluginPageAccountTree *page;
 	GncPluginPageAccountTreePrivate *priv;
 	SCM  free_tree;
 
 	ENTER("object %p", object);
-	model = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
-	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (model));
-	priv = model->priv;
+	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (object);
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE (page));
+	priv = page->priv;
 	g_return_if_fail (priv != NULL);
+
+	active_pages = g_list_remove (active_pages, page);
 
 	/* Options stuff */
 	gnc_unregister_option_change_callback_id(priv->euro_change_callback_id);

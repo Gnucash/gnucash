@@ -63,7 +63,7 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
   scm_c_eval_string("(load-from-path \"hbci/hbci.scm\")");
 
   /* Add menu items with C callbacks */
-  gnc_ui_hbci_create_plugin();
+  gnc_plugin_hbci_create_plugin();
   
   return TRUE;
 }

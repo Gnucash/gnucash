@@ -363,8 +363,6 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	  gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
 	// Do not free the list. It is owned by the query.
 	
-	active_pages = g_list_append (active_pages, plugin_page);
-
 	return plugin_page;
 }
 
@@ -396,6 +394,21 @@ gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger)
 	return gnc_plugin_page_register_new_common(ledger);
 }
 
+#if DEBUG_REFERENCE_COUNTING
+static void
+dump_model (GncPluginPageRegister *page, gpointer dummy)
+{
+    g_warning("GncPluginPageRegister %p still exists.", page);
+}
+
+static gint
+gnc_plugin_page_register_report_references (void)
+{
+  g_list_foreach(active_pages, (GFunc)dump_model, NULL);
+  return 0;
+}
+#endif
+
 static void
 gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 {
@@ -412,6 +425,12 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
 	gnc_plugin_class->merge_actions   = gnc_plugin_page_register_merge_actions;
 	gnc_plugin_class->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
+
+#if DEBUG_REFERENCE_COUNTING
+	gtk_quit_add (0,
+		      (GtkFunction)gnc_plugin_page_register_report_references,
+		      NULL);
+#endif
 }
 
 static void
@@ -474,6 +493,8 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	priv->lines_default  = DEFAULT_LINES_AMOUNT;
 	priv->disallowCaps = 0;
 	priv->cleared_match = CLEARED_ALL;
+
+	active_pages = g_list_append (active_pages, plugin_page);
 }
 
 static void

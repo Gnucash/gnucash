@@ -33,7 +33,7 @@
 #include "gnc-window.h"
 #include "messages.h"
 
-static GList *active_pages = NULL;
+static GList *active_plugins = NULL;
 static GObjectClass *parent_class = NULL;
 
 #define FILENAME_STRING "filename"
@@ -153,7 +153,7 @@ gnc_plugin_file_history_update_helper (GncPlugin *plugin,
 static void
 gnc_plugin_file_history_update_all (void)
 {
-	g_list_foreach(active_pages,
+	g_list_foreach(active_plugins,
 		       (GFunc)gnc_plugin_file_history_update_helper,
 		       NULL);
 }
@@ -188,6 +188,21 @@ gnc_plugin_file_history_get_type (void)
 	return gnc_plugin_file_history_type;
 }
 
+#if DEBUG_REFERENCE_COUNTING
+static void
+dump_model (GncPluginFileHistory *plugin, gpointer dummy)
+{
+    g_warning("GncPluginFileHistory %p still exists.", plugin);
+}
+
+static gint
+gnc_plugin_file_history_report_references (void)
+{
+  g_list_foreach(active_plugins, (GFunc)dump_model, NULL);
+  return 0;
+}
+#endif
+
 static void
 gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 {
@@ -212,12 +227,20 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 
 	/* hook in callback functions */
 	gnc_history_set_callback (gnc_plugin_file_history_update_all);
+
+#if DEBUG_REFERENCE_COUNTING
+	gtk_quit_add (0,
+		      (GtkFunction)gnc_plugin_file_history_report_references,
+		      NULL);
+#endif
 }
 
 static void
 gnc_plugin_file_history_init (GncPluginFileHistory *plugin)
 {
 	plugin->priv = g_new0 (GncPluginFileHistoryPrivate, 1);
+
+	active_plugins = g_list_append (active_plugins, plugin);
 }
 
 static void
@@ -228,11 +251,13 @@ gnc_plugin_file_history_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_FILE_HISTORY (object));
 
 	plugin = GNC_PLUGIN_FILE_HISTORY (object);
+	active_plugins = g_list_remove (active_plugins, plugin);
+
 	g_return_if_fail (plugin->priv != NULL);
 
 	g_free (plugin->priv);
 
-	active_pages = g_list_remove (active_pages, plugin);
+	active_plugins = g_list_remove (active_plugins, plugin);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -243,7 +268,6 @@ gnc_plugin_file_history_new (void)
 	GncPlugin *plugin_page = NULL;
 
 	plugin_page = GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_FILE_HISTORY, NULL));
-	active_pages = g_list_append (active_pages, plugin_page);
 	return plugin_page;
 }
 

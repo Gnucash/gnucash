@@ -16,6 +16,17 @@
 	* src/import-export/hbci: Install menus using the new plugin
 	system.  Cleanup some gnome2 errors.
 
+	* configure.in:
+	* src/gnome/gnc-plugin-account-tree.c:
+	* src/gnome/gnc-plugin-file-history.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-register.c:
+	* src/gnome-utils/gnc-tree-model-account.c:
+	* src/gnome-utils/gnc-tree-view-account.c:
+	* src/import-export/hbci/gnc-plugin-hbci.c:
+	* src/import-export/qif-import/druid-qif-import.c: Configure time
+	option to dump reference counts when gnucash exits.
 
 2003-10-18  David Hampton  <hampton@employees.org>
 

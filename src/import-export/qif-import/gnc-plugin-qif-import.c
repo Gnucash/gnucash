@@ -24,9 +24,12 @@
 #include "config.h"
 
 #include "gnc-plugin-qif-import.h"
+#include "gnc-plugin-manager.h"
 
 #include "druid-qif-import.h"
 #include "messages.h"
+
+static GList *active_plugins = NULL;
 
 static void gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass);
 static void gnc_plugin_qif_import_init (GncPluginQifImport *plugin);
@@ -85,6 +88,21 @@ gnc_plugin_qif_import_new (void)
 	return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_QIF_IMPORT, NULL));
 }
 
+#if DEBUG_REFERENCE_COUNTING
+static void
+dump_model (GncPluginQifImport *plugin, gpointer dummy)
+{
+    g_warning("GncPluginQifImport %p still exists.", plugin);
+}
+
+static gint
+gnc_plugin_qif_import_report_references (void)
+{
+  g_list_foreach(active_plugins, (GFunc)dump_model, NULL);
+  return 0;
+}
+#endif
+
 static void
 gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass)
 {
@@ -103,12 +121,20 @@ gnc_plugin_qif_import_class_init (GncPluginQifImportClass *klass)
 	plugin_class->actions      = gnc_plugin_actions;
 	plugin_class->n_actions    = gnc_plugin_n_actions;
 	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+
+#if DEBUG_REFERENCE_COUNTING
+	gtk_quit_add (0,
+		      (GtkFunction)gnc_plugin_qif_import_report_references,
+		      NULL);
+#endif
 }
 
 static void
 gnc_plugin_qif_import_init (GncPluginQifImport *plugin)
 {
 	plugin->priv = g_new0 (GncPluginQifImportPrivate, 1);
+
+	active_plugins = g_list_append (active_plugins, plugin);
 }
 
 static void
@@ -119,6 +145,8 @@ gnc_plugin_qif_import_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_QIF_IMPORT (object));
 
 	plugin = GNC_PLUGIN_QIF_IMPORT (object);
+	active_plugins = g_list_remove (active_plugins, plugin);
+
 	g_return_if_fail (plugin->priv != NULL);
 
 	g_free (plugin->priv);
@@ -139,4 +167,17 @@ gnc_plugin_qif_import_cmd_new_qif_import (EggAction *action,
 					  GncMainWindowActionData *data)
 {
 	gnc_ui_qif_import_druid_make ();
+}
+
+
+/************************************************************
+ *                    Plugin Bootstrapping                   *
+ ************************************************************/
+
+void
+gnc_plugin_qif_import_create_plugin (void)
+{
+	GncPlugin *plugin = gnc_plugin_qif_import_new ();
+
+	gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
 }

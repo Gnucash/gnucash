@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include <string.h>
+#include <gtk/gtkmain.h>
 
 #include "gnc-tree-model-account.h"
 
@@ -137,6 +138,21 @@ gnc_tree_model_account_get_type (void)
 	return gnc_tree_model_account_type;
 }
 
+#if DEBUG_REFERENCE_COUNTING
+static void
+dump_model (GncTreeModelAccount *model, gpointer dummy)
+{
+    g_warning("GncTreeModelAccount %p still exists.", model);
+}
+
+static gint
+gnc_tree_model_account_report_references (void)
+{
+  g_list_foreach(active_models, (GFunc)dump_model, NULL);
+  return 0;
+}
+#endif
+
 static void
 gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 {
@@ -153,6 +169,12 @@ gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_model_account_destroy;
+
+#if DEBUG_REFERENCE_COUNTING
+	gtk_quit_add (0,
+		      (GtkFunction)gnc_tree_model_account_report_references,
+		      NULL);
+#endif
 }
 
 static void
@@ -166,6 +188,9 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
 	model->priv = g_new0 (GncTreeModelAccountPrivate, 1);
 	model->priv->root = NULL;
 	model->priv->toplevel = NULL;
+
+	active_models = g_list_append (active_models, model);
+
 	LEAVE(" ");
 }
 
@@ -179,6 +204,8 @@ gnc_tree_model_account_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
 
 	model = GNC_TREE_MODEL_ACCOUNT (object);
+	active_models = g_list_remove (active_models, model);
+
 	g_free (model->priv);
 
 	if (G_OBJECT_CLASS (parent_class)->finalize)
@@ -196,8 +223,6 @@ gnc_tree_model_account_destroy (GtkObject *object)
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
 
 	model = GNC_TREE_MODEL_ACCOUNT (object);
-
-	active_models = g_list_remove (active_models, model);
 
 	if (model->priv->event_handler_id) {
 	  gnc_engine_unregister_event_handler (model->priv->event_handler_id);
@@ -246,7 +271,6 @@ gnc_tree_model_account_new (AccountGroup *group)
 	priv->event_handler_id =
 	  gnc_engine_register_event_handler (gnc_tree_model_account_event_handler, model);
 
-	active_models = g_list_append (active_models, model);
 	LEAVE("model %p", model);
 	return GTK_TREE_MODEL (model);
 }

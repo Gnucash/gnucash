@@ -56,7 +56,7 @@ GType      gnc_plugin_hbci_get_type   (void);
 
 GncPlugin *gnc_plugin_hbci_new        (void);
 
-void       gnc_ui_hbci_create_plugin  (void);
+void       gnc_plugin_hbci_create_plugin  (void);
 
 G_END_DECLS
 

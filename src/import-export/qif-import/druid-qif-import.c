@@ -44,8 +44,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-file-dialog.h"
 #include "gnc-gui-query.h"
-#include "gnc-plugin-manager.h"
-#include "gnc-plugin-qif-import.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "messages.h"
@@ -1801,7 +1799,8 @@ gnc_file_qif_import (void)
  ********************************************************************/
 
 QIFImportWindow *
-gnc_ui_qif_import_druid_make(void)  {
+gnc_ui_qif_import_druid_make(void)
+{
   
   QIFImportWindow * retval;
   GladeXML        * xml;
@@ -2039,12 +2038,4 @@ gnc_ui_qif_import_druid_make(void)  {
   gtk_window_present (GTK_WINDOW(retval->window));
 
   return retval;
-}
-
-void
-gnc_ui_qif_import_create_plugin(void)
-{
-	GncPlugin *plugin = gnc_plugin_qif_import_new ();
-
-	gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), plugin);
 }
