@@ -37,4 +37,4 @@
       
       ;; catenate and merge the transactions
       ))))
-      diff -u 'tmp/gnucash/src/scm/qif-import/qif-to-gnc.scm' 'gnucash-1.5/src/scm/qif-import/qif-to-gnc.scm'
+

@@ -145,13 +145,3 @@
   (gnc:group-concat-group old-group new-group)
   (gnc:free-account-group new-group)
   (gnc:group-merge-accounts old-group))
-
-
-
-              
-        
-       
-       
-                       
-
-          diff -u /dev/null 'gnucash-1.5/src/scm/qif-import/qif-quick-import.scm'
