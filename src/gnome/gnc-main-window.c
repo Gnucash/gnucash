@@ -105,7 +105,6 @@ static void gnc_main_window_cmd_help_tutorial (EggAction *action, GncMainWindow 
 static void gnc_main_window_cmd_help_totd (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_contents (EggAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window);
-static void gnc_main_window_update_title (GncMainWindow *window);
 
 struct GncMainWindowPrivate
 {
@@ -149,7 +148,6 @@ static EggActionEntry gnc_menu_entries [] =
 	{ "FileOpenNewWindowAction", N_("Open in a New Window"), NULL, NULL,
 	  N_("Open a new top-level GnuCash window for the current view"),
 	  G_CALLBACK (gnc_main_window_cmd_file_open_new_window) },
-	{ "FileOpenRecentAction", N_("Open _Recent"), NULL, NULL, NULL, NULL },
 	{ "FileSaveAction", N_("_Save"), GTK_STOCK_SAVE, "<control>s",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_save) },
@@ -528,6 +526,25 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
 	g_hash_table_remove (window->priv->merged_actions_table, group_name);
 }
 
+void
+gnc_main_window_actions_updated (GncMainWindow *window)
+{
+	EggActionGroup *force;
+
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+
+	/* Unfortunately egg_menu_merge_ensure_update doesn't work
+	 * here.  Force a full update by adding and removing an empty
+	 * action group.
+	 */
+	printf("Calling ensure_update\n");
+	force = egg_action_group_new("force_update");
+	egg_menu_merge_insert_action_group (window->ui_merge, force, 0);
+	egg_menu_merge_ensure_update (window->ui_merge);
+	egg_menu_merge_remove_action_group (window->ui_merge, force);
+	g_object_unref(force);
+}
+
 EggActionGroup *
 gnc_main_window_get_action_group  (GncMainWindow *window,
 				   const gchar *group_name)
@@ -787,16 +804,9 @@ gnc_main_window_cmd_file_new (EggAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_open (EggAction *action, GncMainWindow *window)
 {
-	EggActionGroup *action_group;
-	EggAction *acct_tree_action;
-
 	gnc_file_open ();
 	gnc_main_window_update_title (window);
 	/* FIXME GNOME 2 Port (update the title etc.) */
-
-	action_group = gnc_main_window_get_action_group(window, "gnc-plugin-account-tree-default-actions");
-	acct_tree_action = egg_action_group_get_action(action_group, "FileNewAccountTreeAction");
-	egg_action_activate(acct_tree_action);
 }
 
 static void
@@ -1043,7 +1053,7 @@ gnc_main_window_cmd_help_about (EggAction *action, GncMainWindow *window)
 	gtk_dialog_run (GTK_DIALOG (about));
 }
 
-static void
+void
 gnc_main_window_update_title (GncMainWindow *window)
 {
   const gchar *filename;

@@ -7,7 +7,7 @@
       <menuitem name="FileOpen" action="FileOpenAction"/>
       <placeholder name="FileOpenPlaceholder"/>
       <menuitem name="FileOpenNewWindow" action="FileOpenNewWindowAction"/>
-      <menu name="FileOpenRecent" action="FileOpenRecentAction"/>
+      <placeholder name="FileOpenRecentPlaceholder"/>
       <separator name="FileSep2"/>
       <menuitem name="FileSave" action="FileSaveAction"/>
       <menuitem name="FileSaveAs" action="FileSaveAsAction"/>

@@ -9,6 +9,21 @@
 	the GncPlugin widget from a GObject instead of a GInterface.
 	Collapse common functions into the base GncPlugin class.
 
+	* src/gnome/Makefile.am:
+	* src/gnome/gnc-plugin-file-history.[ch]:
+	* src/gnome/ui/Makefile.am:
+	* src/gnome/ui/gnc-plugin-file-history-ui.xml: Implement file
+	history for new window plugin system.
+
+	* src/app-file/gnc-file-history.h:
+	* src/app-file/gnome/Makefile.am:
+	* src/app-file/gnome/gnc-file-history.c:
+	* src/gnome/top-level.c:
+	* src/gnome/window-main.c:
+	* src/gnome/gnc-main-window.[ch]:
+	* src/gnome/ui/gnc-main-window-ui.xml: Changes for new file history
+	plugin.
+
 2003-10-10  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page.[ch]: Support a list of books

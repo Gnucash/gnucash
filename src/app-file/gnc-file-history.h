@@ -23,12 +23,14 @@
 #ifndef GNC_FILE_HISTORY_H
 #define GNC_FILE_HISTORY_H
 
-#include "gnc-ui-common.h"
+#define MAX_HISTORY_FILES 4	/* May be any number up to 10 */
 
-#define MAX_HISTORY 4
+typedef void (*gnc_history_changed_cb) (void);
 
-void gnc_history_add_file (const char *filename);
-void gnc_history_update_menu (gncUIWidget app);
-const char * gnc_history_get_last (void);
+void gnc_history_set_callback           (gnc_history_changed_cb cb);
+void gnc_history_init_list 		(void);
+void gnc_history_add_file 		(const char *filename);
+const char * gnc_history_get_last       (void);
+const GList * gnc_history_get_file_list (void);
 
 #endif

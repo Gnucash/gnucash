@@ -49,8 +49,6 @@
 #include "gnc-engine.h"
 #include "gnc-engine-util.h"
 #include "gnc-file-dialog.h"
-#include "gnc-file-history.h"
-#include "gnc-file-history-gnome.h"
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-menu-extensions.h"
@@ -1038,8 +1036,6 @@ gnc_main_window_create_menus(GNCMDIInfo * maininfo)
   ENTER(" ");
   gnome_mdi_set_menubar_template(GNOME_MDI(maininfo->mdi),
                                  gnc_main_menu_template);
-
-  gnc_file_history_add_after ("Open _Recent/");
   LEAVE(" ");
 }
 

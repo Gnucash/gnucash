@@ -12,11 +12,7 @@ AM_CFLAGS = \
 
 libgnc_app_file_gnome_la_SOURCES = \
   gnc-file-dialog.c \
-  gnc-file-history.c 
-
-gncincludedir = ${GNC_INCLUDE_DIR}
-gncinclude_HEADERS = \
-  gnc-file-history-gnome.h
+  gnc-file-history.c
 
 libgnc_app_file_gnome_la_LIBADD = \
   ${GUILE_LIBS} \

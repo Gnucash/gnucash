@@ -83,8 +83,10 @@ void            gnc_main_window_merge_actions     (GncMainWindow *window,
 						   gpointer user_data);
 void            gnc_main_window_unmerge_actions   (GncMainWindow *window,
 						   const gchar *group_name);
+void            gnc_main_window_actions_updated   (GncMainWindow *window);
 EggActionGroup *gnc_main_window_get_action_group  (GncMainWindow *window,
                                                    const gchar *group_name);
+void            gnc_main_window_update_title      (GncMainWindow *window);
 
 G_END_DECLS
 
