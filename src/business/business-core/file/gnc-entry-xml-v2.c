@@ -825,6 +825,7 @@ gnc_entry_xml_initialize (void)
     NULL,			/* add_item */
     entry_get_count,
     entry_write,
+    NULL,			/* scrub */
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

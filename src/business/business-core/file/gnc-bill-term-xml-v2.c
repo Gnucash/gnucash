@@ -515,6 +515,12 @@ billterm_write (FILE *out, GNCBook *book)
   gncObjectForeach (_GNC_MOD_NAME, book, xml_add_billterm, (gpointer) out);
 }
 
+static void
+billterm_scrub (GNCBook *book)
+{
+
+}
+
 void
 gnc_billterm_xml_initialize (void)
 {
@@ -525,6 +531,7 @@ gnc_billterm_xml_initialize (void)
     NULL,			/* add_item */
     billterm_get_count,
     billterm_write,
+    billterm_scrub,
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

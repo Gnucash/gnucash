@@ -46,6 +46,7 @@
 #include "gnc-engine-util.h"
 
 #include "gncObject.h"
+#include "gncEntry.h"
 
 #define _GNC_MOD_NAME	GNC_TAXTABLE_MODULE_NAME
 
@@ -117,7 +118,10 @@ taxtable_dom_tree_create (GncTaxTable *table)
     xmlAddChild(ret, int_to_dom_tree (taxtable_invisible_string,
 				      gncTaxTableGetInvisible (table)));
 
-    maybe_add_guid(ret, taxtable_child_string, gncTaxTableGetChild (table));
+    /* We should not be our own child */
+    if (gncTaxTableGetChild(table) != table)
+      maybe_add_guid(ret, taxtable_child_string, gncTaxTableGetChild (table));
+
     maybe_add_guid(ret, taxtable_parent_string, gncTaxTableGetParent (table));
 
     entries = xmlNewChild (ret, NULL, taxtable_entries_string, NULL);
@@ -232,6 +236,13 @@ set_parent_child (xmlNodePtr node, struct taxtable_pdata *pdata,
   guid = dom_tree_to_guid(node);
   g_return_val_if_fail (guid, FALSE);
   table = gncTaxTableLookup (pdata->book, guid);
+
+  /* Ignore pointers to self */
+  if (table == pdata->table) {
+    PINFO ("found a self-referential parent/child; ignoring.\n");
+    return TRUE;
+  }
+
   if (!table) {
     table = gncTaxTableCreate (pdata->book);
     gncTaxTableBeginEdit (table);
@@ -461,6 +472,181 @@ taxtable_write (FILE *out, GNCBook *book)
   gncObjectForeach (_GNC_MOD_NAME, book, xml_add_taxtable, (gpointer) out);
 }
 
+
+static gboolean
+taxtable_is_grandchild (GncTaxTable *table)
+{
+  return (gncTaxTableGetParent(gncTaxTableGetParent(table)) != NULL);
+}
+
+static GncTaxTable *
+taxtable_find_senior (GncTaxTable *table)
+{
+  GncTaxTable *temp, *parent, *gp = NULL;
+
+  temp = table;
+  do {
+    /* See if "temp" is a grandchild */
+    parent = gncTaxTableGetParent(temp);
+    if (!parent)
+      break;
+    gp = gncTaxTableGetParent(parent);
+    if (!gp)
+      break;
+
+    /* Yep, this is a grandchild.  Move up one generation and try again */
+    temp = parent;
+  } while (TRUE);
+
+  /* Ok, at this point temp points to the most senior child and parent
+   * should point to the top taxtable (and gp should be NULL).  If
+   * parent is NULL then we are the most senior child (and have no
+   * children), so do nothing.  If temp == table then there is no
+   * grandparent, so do nothing.
+   *
+   * Do something if parent != NULL && temp != table
+   */
+  g_assert (gp == NULL);
+
+  /* return the most senior table */
+  return temp;
+}
+
+/* build a list of tax tables that are grandchildren or bogus (empty entry list). */
+static void
+taxtable_scrub_cb (gpointer table_p, gpointer list_p)
+{
+  GncTaxTable *table = table_p;
+  GList **list = list_p;
+
+  if (taxtable_is_grandchild(table) || gncTaxTableGetEntries(table) == NULL)
+    *list = g_list_prepend(*list, table);
+}
+
+/* for each entry, check the tax tables.  If the tax tables are
+ * grandchildren, then fix them to point to the most senior child
+ */
+static void
+taxtable_scrub_entries (gpointer entry_p, gpointer ht_p)
+{
+  GHashTable *ht = ht_p;
+  GncEntry *entry = entry_p;
+  GncTaxTable *table, *new_tt;
+  gint32 count;
+
+  table = gncEntryGetInvTaxTable(entry);
+  if (table) {
+    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+    count++;
+    g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+    if (taxtable_is_grandchild(table)) {
+      PINFO("Fixing i-taxtable on entry %s\n",
+	     guid_to_string(gncEntryGetGUID(entry)));
+      new_tt = taxtable_find_senior(table);
+      gncEntryBeginEdit(entry);
+      gncEntrySetInvTaxTable(entry, new_tt);
+      gncEntryCommitEdit(entry);
+    }
+  }
+
+  table = gncEntryGetBillTaxTable(entry);
+  if (table) {
+    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+    count++;
+    g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+    if (taxtable_is_grandchild(table)) {
+      PINFO("Fixing b-taxtable on entry %s\n",
+	     guid_to_string(gncEntryGetGUID(entry)));
+      new_tt = taxtable_find_senior(table);
+      gncEntryBeginEdit(entry);
+      gncEntrySetBillTaxTable(entry, new_tt);
+      gncEntryCommitEdit(entry);
+    }
+  }
+}
+
+static void
+taxtable_scrub_cust (gpointer cust_p, gpointer ht_p)
+{
+  GHashTable *ht = ht_p;
+  GncCustomer *cust = cust_p;
+  GncTaxTable *table;
+  gint32 count;
+  
+  table = gncCustomerGetTaxTable(cust);
+  if (table) {
+    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+    count++;
+    g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+  }
+}
+
+static void
+taxtable_scrub_vendor (gpointer vendor_p, gpointer ht_p)
+{
+  GHashTable *ht = ht_p;
+  GncVendor *vendor = vendor_p;
+  GncTaxTable *table;
+  gint32 count;
+
+  table = gncVendorGetTaxTable(vendor);
+  if (table) {
+    count = GPOINTER_TO_INT(g_hash_table_lookup(ht, table));
+    count++;
+    g_hash_table_insert(ht, table, GINT_TO_POINTER(count));
+  }
+}
+
+static void
+taxtable_reset_refcount (gpointer key, gpointer value, gpointer notused)
+{
+  GncTaxTable *table = key;
+  gint32 count = GPOINTER_TO_INT(value);
+
+  if (count != gncTaxTableGetRefcount(table) && !gncTaxTableGetInvisible(table)) {
+    PWARN("Fixing refcount on taxtable %s (%lld -> %d)\n",
+	  guid_to_string(gncTaxTableGetGUID(table)),
+	  gncTaxTableGetRefcount(table), count)
+      gncTaxTableSetRefcount(table, count);
+  }
+}
+
+static void
+taxtable_scrub (GNCBook *book)
+{
+  GList *list = NULL;
+  GList *node;
+  GncTaxTable *parent, *table;
+  GHashTable *ht = g_hash_table_new(g_direct_hash, g_direct_equal);
+
+  gncObjectForeach (GNC_ENTRY_MODULE_NAME, book, taxtable_scrub_entries, ht);
+  gncObjectForeach (GNC_CUSTOMER_MODULE_NAME, book, taxtable_scrub_cust, ht);
+  gncObjectForeach (GNC_VENDOR_MODULE_NAME, book, taxtable_scrub_vendor, ht);
+  gncObjectForeach (_GNC_MOD_NAME, book, taxtable_scrub_cb, &list);
+
+  /* destroy the list of "grandchildren" tax tables */
+  for (node = list; node; node = node->next) {
+    table = node->data;
+
+    PINFO ("deleting grandchild taxtable: %s\n",
+	   guid_to_string(gncTaxTableGetGUID(table)));
+
+    /* Make sure the parent has no children */
+    parent = gncTaxTableGetParent(table);
+    gncTaxTableSetChild(parent, NULL);
+
+    /* Destroy this tax table */
+    gncTaxTableBeginEdit(table);
+    gncTaxTableDestroy(table);
+  }
+
+  /* reset the refcounts as necessary */
+  g_hash_table_foreach(ht, taxtable_reset_refcount, NULL);
+
+  g_list_free(list);
+  g_hash_table_destroy(ht);
+}
+
 void
 gnc_taxtable_xml_initialize (void)
 {
@@ -471,6 +657,7 @@ gnc_taxtable_xml_initialize (void)
     NULL,			/* add_item */
     taxtable_get_count,
     taxtable_write,
+    taxtable_scrub,
   };
 
   gncObjectRegisterBackend (_GNC_MOD_NAME,

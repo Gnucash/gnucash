@@ -591,6 +591,19 @@ add_parser_cb (const char *type, gpointer data_p, gpointer be_data_p)
       be_data->ok = FALSE;
 }
 
+static void
+scrub_cb (const char *type, gpointer data_p, gpointer be_data_p)
+{
+  GncXmlDataType_t *data = data_p;
+  struct file_backend *be_data = be_data_p;
+
+  g_return_if_fail (type && data && be_data);
+  g_return_if_fail (data->version == GNC_FILE_BACKEND_VERS);
+
+  if (data->scrub)
+    (data->scrub)(be_data->book);
+}
+
 static sixtp_gdv2 *
 gnc_sixtp_gdv2_new (
     GNCBook *book,
@@ -703,6 +716,11 @@ gnc_session_load_from_xml_file_v2(GNCSession *session)
 
     /* Mark the book as saved */
     gnc_book_mark_saved (book);
+
+    /* Call individual scrub functions */
+    memset(&be_data, 0, sizeof(be_data));
+    be_data.book = book;
+    gncObjectForeachBackend (GNC_FILE_BACKEND, scrub_cb, &be_data);
 
 	 grp = gnc_book_get_group(book);
     /* fix price quote sources */

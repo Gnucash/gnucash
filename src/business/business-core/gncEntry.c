@@ -232,6 +232,10 @@ static void gncEntryFree (GncEntry *entry)
     gncAccountValueDestroy (entry->i_tax_values);
   if (entry->b_tax_values)
     gncAccountValueDestroy (entry->b_tax_values);
+  if (entry->i_tax_table)
+    gncTaxTableDecRef (entry->i_tax_table);
+  if (entry->b_tax_table)
+    gncTaxTableDecRef (entry->b_tax_table);
   remObj (entry);
 
   g_free (entry);
