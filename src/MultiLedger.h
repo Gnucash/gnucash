@@ -82,6 +82,11 @@ extern void        xaccAccountDisplayRefresh (Account *acc);
  */
 extern void        xaccTransDisplayRefresh (Transaction *trans);
 
+/* 
+ * redisplay/redraw only the indicated window.
+ */
+extern void        xaccLedgerDisplayRefresh (xaccLedgerDisplay *);
+
 #endif /* __MULTI_LEDGER_H__ */
 
 /************************** END OF FILE *************************/

@@ -41,9 +41,6 @@ static xaccLedgerDisplay **regList = NULL;     /* single-account registers */
 static xaccLedgerDisplay **ledgerList = NULL;  /* multiple-account registers */
 static xaccLedgerDisplay **fullList = NULL;    /* all registers */
 
-/** PROTOTYPES ******************************************************/
-
-static void        regRefresh (xaccLedgerDisplay *regData);
 
 /********************************************************************\
  * Ledger utilities                                                 *
@@ -305,6 +302,9 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   if (!regData) {
     regData = (xaccLedgerDisplay *) malloc (sizeof (xaccLedgerDisplay));
     regData->lead_acct = NULL;
+    regData->redraw = NULL;
+    regData->gui_hook = NULL;
+    regData->dirty = 0;
   }
 
   /* count the number of accounts we are supposed to display,
@@ -316,9 +316,17 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
   fullList = ledgerListAdd (fullList, regData);
 
   /* create GUI here */
+
+  /******************************************************************\
+   * The main register window itself                                *
+  \******************************************************************/
+
+  /* MallocBasicRegister will malloc & initialize the
+   * register but doesn't do the gui init */
+  regData->ledger = xaccMallocSplitRegister (ledger_type);
   
   regData->dirty = 1;
-  regRefresh (regData);
+  xaccLedgerDisplayRefresh (regData);
   
   return regData;
 }
@@ -327,8 +335,8 @@ xaccLedgerDisplayGeneral (Account *lead_acc, Account **acclist, int ledger_type)
  * refresh only the indicated register window                       *
 \********************************************************************/
 
-static void 
-regRefresh (xaccLedgerDisplay *regData)
+void 
+xaccLedgerDisplayRefresh (xaccLedgerDisplay *regData)
 {
    /* If we don't really need the redraw, don't do it. */
    if (!(regData->dirty)) return;
@@ -340,7 +348,7 @@ regRefresh (xaccLedgerDisplay *regData)
     * The "blank split" is what the user edits to create 
     * new splits and get them into the system.
     */
-   xaccBRLoadRegister (regData->ledger, 
+   xaccSRLoadRegister (regData->ledger, 
                      xaccAccountGetSplitList (regData->lead_acct),
                      regData->lead_acct);
 
@@ -404,7 +412,8 @@ MarkDirtyAllRegs (Account *acc)
  * refresh *all* register windows which contain this account        * 
 \********************************************************************/
 
-static void RefreshAllRegs (Account *acc)
+static void 
+RefreshAllRegs (Account *acc)
 {
    xaccLedgerDisplay *regData;
    int n;
@@ -415,19 +424,17 @@ static void RefreshAllRegs (Account *acc)
    n = 0; regData = fullList[n];
    while (regData) {
       if (ledgerIsMember (regData, acc)) {
-        regRefresh (regData);
+        xaccLedgerDisplayRefresh (regData);
       }
       n++; regData = fullList[n];
    }
-
-   /* hack alert -- refesh adjbwindow too */
-   recnRefresh (acc);
 }
 
 /********************************************************************\
 \********************************************************************/
 
-void xaccAccountDisplayRefresh (Account *acc)
+void 
+xaccAccountDisplayRefresh (Account *acc)
 {
    /* avoid excess screen flicker with a two-phase refresh */
    MarkDirtyAllRegs (acc);
@@ -485,7 +492,7 @@ closeLedgerDisplay( Widget mw, XtPointer cd, XtPointer cb )
   Account *acc = regData->lead_acct;
   
   /* Save any unsaved changes */
-  xaccBRSaveRegEntry (regData->ledger);
+  xaccSRSaveRegEntry (regData->ledger);
 
   xaccDestroyBasicRegister (regData->ledger);
   
