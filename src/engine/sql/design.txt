@@ -45,15 +45,21 @@ indicates which mode the database is functioning.
    the event of a crash.
 
 -- "Multi-User Polled" -- 
-   mode=multi-user-poll
+   mode=multi-user
    Multiple users are assumed, GnuCash polls the database to detect 
-   changes in the data.  Partially Implemented. 
+   changes in the data.  Mostly implemented. 
 
 
 -- "Multi-User Events" --
-   mode=multi-user
+   mode=multi-user-event
    GnuCash uses the SQL LISTEN/NOTIFY async message delivery routines.
-   Not implemented.
+   Not implemented.  Probably won't be.  These messages do not provide 
+   a sufficient level of detail needed for the kind of notification that 
+   would be useful to gnucash.  Ideally, we would like to have notification 
+   when some other process has modified a particular record.  But there
+   is no way to indicate which record was modified: the local process
+   would have to query all records its interested in, thus providing no
+   better performance than mere polling.
 
 
 Safety Lockout

@@ -26,9 +26,8 @@
  *
  * FUNCTION:
  * Implements the callbacks for the Postgres backend.
- * The SINGLE modes mostly work and are mostly feature complete.
- * The multi-user modes are mostly in disrepair, and marginally
- * functional.
+ * The SINGLE modes should work and are more-or-less feature complete.
+ * The multi-user modes are mostly implemented, and possibly useful.
  *
  * HISTORY:
  * Copyright (c) 2000, 2001 Linas Vepstas
@@ -2647,10 +2646,10 @@ pgend_session_begin (GNCBook *sess, const char * sessionid,
          if (0 == strcasecmp (start, "single-update")) {
              be->session_mode = MODE_SINGLE_UPDATE;
          } else
-         if (0 == strcasecmp (start, "multi-user-poll")) {
+         if (0 == strcasecmp (start, "multi-user")) {
              be->session_mode = MODE_POLL;
          } else
-         if (0 == strcasecmp (start, "multi-user")) {
+         if (0 == strcasecmp (start, "multi-user-event")) {
              be->session_mode = MODE_EVENT;
          } else
          {

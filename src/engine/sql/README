@@ -3,7 +3,8 @@ This directory contains code for SQL/Postgres support.  The
 SQL backend can be used in several modes. The single-user modes
 are beta: they work for me, but haven't had the benefit of lots 
 of testers whacking in it and bug-hunting.  The multi-user mode 
-is experimental: it still has a variety of deep problems.
+is nearing completion: it has a variety of problems, but may be 
+usable.
 
 
 
@@ -127,20 +128,19 @@ password, *NOT* your unix login name and password.
 
 Access Modes
 ------------
-There are four different ways or 'modes' in which to access your 
+There are three different ways or 'modes' in which to access your 
 database.  These are 
 
 mode=single-file
 mode=single-update
-mode=multi-user-poll
 mode=multi-user
 
 The first two are single-user access modes; single-update is the 
 default mode (and the preferred single-user mode).
 
-The multi-user modes are partly implemented and quite broken at the
-moment.  See the file 'design.txt' for an in-depth explanation of
-these modes.
+The multi-user mode is mostly implemented and might be usable.
+See the file 'design.txt' for an in-depth explanation of these 
+modes.
 
 You can specify a particular access mode by specifying the URL
 
@@ -224,7 +224,7 @@ This list only affects the multi-user and advanced/optional features.
 Most of the items on this list are 'critical' in the sense that
 multi-user mode is fundamentally broken unless they are fixed. 
 
--- test checkpoint balances. I think they work, but ...
+-- test checkpoint balances. There seem to be some bugs ...
 
 -- modify checkpoint computation to always occur on fixed dates.
    Failure to do so causes the fill-out algorithm to pull in all 
@@ -260,9 +260,6 @@ multi-user mode is fundamentally broken unless they are fixed.
    them out.  The pgendSync routine should more or less do the trick;
    note, however, that the file format needs to save the version number
    ...
-
--- let all attached clients receive update events via SQL LISTEN/NOTIFY 
-   events.
 
 -- Implement various advanced database features, such as checking the
    user's permission to view/edit account by account ... (hmmm this
