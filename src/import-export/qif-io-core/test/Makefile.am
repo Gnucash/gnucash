@@ -9,7 +9,9 @@ GNC_TEST_DEPS := \
   --gnc-module-dir ${top_builddir}/src/gnc-module \
   --gnc-module-dir ${top_builddir}/src/engine \
   --gnc-module-dir ${top_builddir}/src/app-utils \
+  --gnc-module-dir ${top_builddir}/src/app-file \
   --gnc-module-dir ${top_builddir}/src/calculation \
+  --gnc-module-dir ${top_builddir}/src/backend/file \
   --gnc-module-dir ${top_builddir}/src/import-export/qif-io-core \
   --guile-load-dir ${top_srcdir}/src/import-export/qif-io-core/test \
   --guile-load-dir ${top_srcdir}/lib \
@@ -25,8 +27,5 @@ TESTS_ENVIRONMENT := \
   SRCDIR=${srcdir} \
   $(shell ${top_srcdir}/src/gnc-test-env --no-exports ${GNC_TEST_DEPS})
 
-#TESTS_ENVIRONMENT = \
-#  GNC_MODULE_PATH="${top_srcdir}/src/modules/qif-io-core:${top_srcdir}/src/modules/engine" \
-#  GUILE_LOAD_PATH="../:../../engine/:../../../gnc-module/:${G_WRAP_MODULE_DIR}" \
-#  LD_LIBRARY_PATH=${top_srcdir}/src/gnc-module:${top_srcdir}/src/gnc-module/.libs:${top_srcdir}/src/engine:${top_srcdir}/src/engine/.libs:${top_srcdir}/src/app-utils:${top_srcdir}/src/app-utils/.libs
-
+print_test_env:
+	echo ${GNC_TEST_DEPS}

@@ -1052,7 +1052,7 @@ xaccResolveURL (const char * pathfrag)
   }
 
   if (!g_strncasecmp (pathfrag, "file:", 5)) {
-    return (xaccResolveFilePath (pathfrag+5));
+    return (xaccResolveFilePath (pathfrag));
   }
 
   return (xaccResolveFilePath (pathfrag));

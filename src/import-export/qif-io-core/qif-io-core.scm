@@ -11,6 +11,7 @@
 (use-modules (gnucash gnc-module))
 
 (gnc:module-load "gnucash/engine" 0)
+(gnc:module-load "gnucash/app-utils" 0)
 
 (load-from-path "qif-parse.scm")
 (load-from-path "qif-format-check.scm")
@@ -85,3 +86,6 @@
 (export qif-io:acct-table-lookup)
 (export qif-io:acct-table-insert!)
 (export qif-io:acct-table-make-gnc-group)
+
+;; from main
+(export simple-format)

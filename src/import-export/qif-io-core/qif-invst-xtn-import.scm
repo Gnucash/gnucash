@@ -186,7 +186,7 @@
          qif-xtn (qif-io:file-default-src-acct qif-file)))
     
     (gnc:transaction-begin-edit gnc-xtn)
-    (gnc:transaction-set-commodity gnc-xtn commodity)
+    (gnc:transaction-set-currency gnc-xtn commodity)
     
     ;; set the transaction date, number and description 
     (let ((date (qif-io:parse-date/format 

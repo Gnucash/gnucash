@@ -2,6 +2,15 @@
 	* get (alpha) qif-io-core to load again and "make check" to
 	  start working (sort-of).  Still needs more work.
 
+	* wrap gnc_commodity_table_add_default_data()
+	* src/engine/gnc-session.c -- don't try to modify a the path of a file: URL
+	* src/engine/Transaction.c -- fail in mallocTrans if book is NULL
+	* fix qif-io-core: use (gnc:transaction-set-currency) (not commodity)
+	* qif-io-core.scm: need app-utils and to re-export simple-format
+	* qif-io-core/test/Makefile.am: add app-file and backend/file dirs to tests
+	* fix test-import-phase-1.scm: load app-file for symbols, fix
+	  the commodity table; fix the "file save" portion
+	
 2002-09-29  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/backend/file/io-gncxml-v2.c

@@ -2133,6 +2133,14 @@ of having a parent transaction with which one is working...")
    ((<gw:mchars> caller-owned const) namespace))
  "Return a list of all the namespaces in the table.")
 
+(gw:wrap-function
+ ws
+ 'gnc:commodity-table-add-default-data
+ '<gw:bool>
+ "gnc_commodity_table_add_default_data"
+ '((<gnc:commodity-table*> table))
+ "Add default commodities to the commodity table.")
+
 ;;=========
 
 (gw:wrap-function

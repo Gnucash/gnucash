@@ -785,10 +785,12 @@ xaccInitTransaction (Transaction * trans, GNCBook *book)
 Transaction *
 xaccMallocTransaction (GNCBook *book)
 {
-  Transaction *trans = g_new(Transaction, 1);
+  Transaction *trans;
 
+  g_return_val_if_fail (book, NULL);
+
+  trans = g_new(Transaction, 1);
   xaccInitTransaction (trans, book);
-
   gnc_engine_generate_event (&trans->guid, GNC_EVENT_CREATE);
 
   return trans;
