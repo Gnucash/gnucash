@@ -4,14 +4,13 @@ SUBDIRS = gnumeric printing
 gncscmdir = ${GNC_SCM_INSTALL_DIR}
 gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash
 
-gncscmmod_DATA = process.scm bootstrap.scm price-quotes.scm
+gncscmmod_DATA = process.scm main.scm price-quotes.scm
 
 gnc_regular_scm_files = \
+  build-config.scm \
   command-line.scm \
-  depend.scm \
   doc.scm \
   help-topics-index.scm \
-  main.scm \
   main-window.scm \
   path.scm \
   substring-search.scm \
@@ -37,7 +36,7 @@ SCM_FILES = ${gncscm_DATA} ${gncscmmod_DATA}
 
 EXTRA_DIST = \
   .cvsignore \
-  bootstrap.scm.in \
+  build-config.scm.in \
   config \
   startup-design.txt \
   ${SCM_FILES}
@@ -46,14 +45,13 @@ EXTRA_DIST = \
 ## brackets here, instead of the usual @...@.  This prevents autoconf
 ## from substituting the values directly into the left-hand sides of
 ## the sed substitutions.  *sigh*
-bootstrap.scm: bootstrap.scm.in Makefile
+build-config.scm: build-config.scm.in Makefile
 	rm -f $@.tmp
 	sed < $@.in > $@.tmp \
             -e 's:@-VERSION-@:${VERSION}:' \
             -e 's:@-GNC_CONFIGDIR-@:${GNC_CONFIGDIR}:' \
             -e 's:@-GNC_SHAREDIR-@:${GNC_SHAREDIR}:' \
-            -e 's:@-GNC_LIB_INSTALLDIR-@:${libdir}:' \
             -e 's:@-GNC_PKGLIB_INSTALLDIR-@:${pkglibdir}:' \
             -e 's:@-GNC_HELPDIR-@:${GNC_HELPDIR}:'
 	mv $@.tmp $@
-CLEANFILES += bootstrap.scm
+CLEANFILES += build-config.scm
