@@ -174,6 +174,10 @@ get_event_cb (PGBackend *be, PGresult *result, int j, gpointer data)
       case 't': obj_type = GNC_ID_TRANS; break;
       case 'x': obj_type = GNC_ID_NONE; break;
       case ' ': obj_type = GNC_ID_NONE; break;
+      case 'k': /* we are not expecting kvp's in here */
+      default:
+         PERR ("unexpected class type %c for guid=%s", objtype, guid_str);
+         return data;
    }
 
    string_to_guid (guid_str, &guid);
