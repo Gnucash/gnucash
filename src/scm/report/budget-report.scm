@@ -76,7 +76,7 @@
 ;;; useful filter-pred's for a budget entry
 
 (define (budget-filter-pred-debit split budget-line)
-  (> (gnc:split-get-value split) 0))
+  (> (d-gnc:split-get-value split) 0))
 
 ;; make-budget-entry:  
 ;;  1: description, 
@@ -690,14 +690,14 @@
 		     ((not line)
 		      (gnc:debug (list 
 				  (gnc:account-get-full-name account)
-				  (gnc:split-get-value split)))))
+				  (d-gnc:split-get-value split)))))
 		    (cond 
 		     (filter-pred 
 		      (cond
 		       ((filter-pred split line2)
-			(set! acc (+ acc (gnc:split-get-value split))))))
+			(set! acc (+ acc (d-gnc:split-get-value split))))))
 		     (else
-		      (set! acc (+ acc (gnc:split-get-value split))))))))))
+		      (set! acc (+ acc (d-gnc:split-get-value split))))))))))
 	     (budget-report-accumulate-actual! acc line2)))
 	   (loop (gnc:account-get-children account))))
        group)))))

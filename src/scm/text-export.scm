@@ -33,7 +33,7 @@
 ;;
 ;; (define-data-contents "split"
 ;;   ("memo" 'string gnc:split-get-memo gnc:split-set-memo)
-;;   ("share-amount" 'number gnc:split-get-share-amount ...)
+;;   ("share-amount" 'number d-gnc:split-get-share-amount ...)
 ;;   ...)
 ;;
 ;; and then autogenerate the input and output forms or something...
@@ -106,8 +106,8 @@
      (list 'reconcile-state (gnc:split-get-reconcile-state split))
      (list 'reconciled-date 
            (engine-date->editable-date (gnc:split-get-reconciled-date split)))
-     (list 'share-amount (gnc:split-get-share-amount split))
-     (list 'share-price (gnc:split-get-share-price split))
+     (list 'share-amount (d-gnc:split-get-share-amount split))
+     (list 'share-price (d-gnc:split-get-share-price split))
      (list 'account
            (let ((xfer-account (gnc:split-get-account split))
                  (xfer-account-id #f))

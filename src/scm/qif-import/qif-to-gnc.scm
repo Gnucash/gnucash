@@ -9,6 +9,11 @@
 
 (gnc:support "qif-import/qif-to-gnc.scm")
 
+(define gnc:*default-denom* 100000)
+(define GNC-RND-ROUND 7)
+(define GNC-DENOM-REDUCE 32)
+(define GNC-DENOM-LCD 48)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  find-or-make-acct:
 ;;  given a colon-separated account path, return an Account* to
@@ -260,7 +265,7 @@
                                        gnc-acct-hash qif-acct-map qif-cat-map)
   (let ((splits (qif-xtn:splits qif-xtn))
         (gnc-near-split (gnc:split-create))
-        (near-split-total 0.0)
+        (near-split-total (gnc:numeric-zero))
         (near-acct-info #f)
         (near-acct-name #f)
         (near-acct #f)
@@ -270,7 +275,17 @@
         (qif-security (qif-xtn:security-name qif-xtn))
         (qif-memo (qif-split:memo (car (qif-xtn:splits qif-xtn))))
         (qif-from-acct (qif-xtn:from-acct qif-xtn))
-        (qif-cleared (qif-xtn:cleared qif-xtn)))
+        (qif-cleared (qif-xtn:cleared qif-xtn))
+        (amt-cvt (lambda (n)
+                   (if n
+                       (gnc:double-to-gnc-numeric n gnc:*default-denom* 
+                                                  GNC-RND-ROUND)
+                       (gnc:numeric-zero))))
+        (n- (lambda (n) (gnc:numeric-neg n)))
+        (nsub (lambda (a b) (gnc:numeric-sub a b 0 GNC-DENOM-LCD)))
+        (n+ (lambda (a b) (gnc:numeric-add a b 0 GNC-DENOM-LCD)))
+        (n* (lambda (a b) (gnc:numeric-mul a b 0 GNC-DENOM-REDUCE)))
+        (n/ (lambda (a b) (gnc:numeric-div a b 0 GNC-DENOM-REDUCE))))
     
     ;; set properties of the whole transaction     
     (apply gnc:transaction-set-date gnc-xtn (qif-xtn:date qif-xtn))
@@ -286,7 +301,7 @@
         (gnc:split-set-reconcile gnc-near-split #\c))
     (if (eq? qif-cleared 'reconciled)
         (gnc:split-set-reconcile gnc-near-split #\y))
-
+    
     (if (not qif-security)
         (begin 
           ;; NON-STOCK TRANSACTIONS: the near account is the current
@@ -307,7 +322,7 @@
                        (far-acct-name #f)
                        (far-acct-type #f)
                        (far-acct #f)
-                       (split-amt (qif-split:amount qif-split))
+                       (split-amt (amt-cvt (qif-split:amount qif-split)))
                        (memo (qif-split:memo qif-split)))
                    
                    (if (not split-amt) (set! split-amt 0.0))
@@ -315,9 +330,11 @@
                    ;; fill the splits in (near first).  This handles
                    ;; files in multiple currencies by pulling the
                    ;; currency value from the file import.
-                   (set! near-split-total (+ near-split-total split-amt))
-                   (gnc:split-set-value gnc-far-split (- split-amt))
-                   
+                   (set! near-split-total (n+ near-split-total split-amt))
+                   (gnc:split-set-value gnc-far-split (n- split-amt))
+                   (gnc:split-set-share-amount gnc-far-split 
+                                               (n- split-amt))
+
                    (if memo (gnc:split-set-memo gnc-far-split memo))
                    
                    (if (qif-split:category-is-account? qif-split)
@@ -338,12 +355,13 @@
                          (gnc:split-set-reconcile gnc-far-split #\y)))
                    
                    ;; finally, plug the split into the account 
-                   (gnc:transaction-append-split gnc-xtn gnc-far-split)
-                   (gnc:account-insert-split far-acct gnc-far-split))))
+                   (gnc:account-insert-split far-acct gnc-far-split)
+                   (gnc:transaction-append-split gnc-xtn gnc-far-split))))
            splits)
           
           ;; the value of the near split is the total of the far splits.
           (gnc:split-set-value gnc-near-split near-split-total)
+          (gnc:split-set-share-amount gnc-near-split near-split-total)
           (gnc:transaction-append-split gnc-xtn gnc-near-split)
           (gnc:account-insert-split near-acct gnc-near-split))
         
@@ -351,9 +369,10 @@
         ;; "action" encoded in the Number field.  It's generally the
         ;; security account (for buys, sells, and reinvests) but can
         ;; also be an interest, dividend, or SG/LG account.
-        (let ((share-price (qif-xtn:share-price qif-xtn))
-              (num-shares (qif-xtn:num-shares qif-xtn))
-              (split-amt (qif-split:amount (car (qif-xtn:splits qif-xtn))))
+        (let ((share-price (amt-cvt (qif-xtn:share-price qif-xtn)))
+              (num-shares (amt-cvt (qif-xtn:num-shares qif-xtn)))
+              (split-amt (amt-cvt 
+                          (qif-split:amount (car (qif-xtn:splits qif-xtn)))))
               (qif-accts #f)
               (qif-near-acct #f)
               (qif-far-acct #f)
@@ -362,15 +381,19 @@
               (far-acct-name #f)
               (far-acct #f)
               (commission-acct #f)
-              (commission-amt (qif-xtn:commission qif-xtn))
+              (commission-amt (amt-cvt (qif-xtn:commission qif-xtn)))
               (commission-split #f)
               (defer-share-price #f)
               (gnc-far-split (gnc:split-create)))
           
-          (if (not num-shares) (set! num-shares 0.0))
-          (if (not share-price) (set! share-price 0.0))
-          (if (not split-amt) (set! split-amt (* num-shares share-price)))
+          (if (not num-shares) (set! num-shares (gnc:numeric-zero)))
+          (if (not share-price) (set! share-price (gnc:numeric-zero)))
+          (if (not split-amt) (set! split-amt (n* num-shares share-price)))
           
+          ;; it appears that the QIF total line contains the commission. 
+          (if commission-amt
+              (set! split-amt (nsub split-amt commission-amt)))
+
           ;; I don't think this should ever happen, but I want 
           ;; to keep this check just in case. 
           (if (> (length splits) 1)
@@ -405,79 +428,69 @@
           ;; are amounts currency or shares? 
           (case qif-action
             ((buy buyx reinvint reinvdiv reinvsg reinvsh reinvlg)
-             (if (not share-price) (set! share-price 0.0))
-             (gnc:split-set-share-price gnc-near-split share-price)
-             (gnc:split-set-share-price gnc-far-split share-price)
+             (if (not share-price) (set! share-price (gnc:numeric-zero)))
              (gnc:split-set-share-amount gnc-near-split num-shares)
-             (gnc:split-set-share-amount gnc-far-split (- num-shares))
+             (gnc:split-set-share-amount gnc-far-split (n- num-shares))
              (gnc:split-set-value gnc-near-split split-amt)
-             (gnc:split-set-value gnc-far-split (- split-amt)))
+             (gnc:split-set-value gnc-far-split (n- split-amt)))
             
             ((sell sellx) 
-             (if (not share-price) (set! share-price 0.0))
-             (gnc:split-set-share-price gnc-near-split share-price)
-             (gnc:split-set-share-price gnc-far-split share-price)
-             (gnc:split-set-share-amount gnc-near-split (- num-shares))
+             (if (not share-price) (set! share-price (gnc:numeric-zero)))
+             (gnc:split-set-share-amount gnc-near-split (n- num-shares))
              (gnc:split-set-share-amount gnc-far-split num-shares)
-             (gnc:split-set-value gnc-near-split (- split-amt))
+             (gnc:split-set-value gnc-near-split (n- split-amt))
              (gnc:split-set-value gnc-far-split split-amt))
             
             ((cgshort cgshortx cglong cglongx intinc intincx div divx
                       miscinc miscincx xin)
              (gnc:split-set-value gnc-near-split split-amt)
-             (gnc:split-set-value gnc-far-split (- split-amt)))
+             (gnc:split-set-value gnc-far-split (n- split-amt))
+             (gnc:split-set-share-amount gnc-near-split split-amt)
+             (gnc:split-set-share-amount gnc-far-split (n- split-amt)))
             
-            ((xout miscexp miscexpx )
-             (gnc:split-set-value gnc-near-split (- split-amt))
-             (gnc:split-set-value gnc-far-split  split-amt))
+            ((xout miscexp miscexpx)
+             (gnc:split-set-value gnc-near-split (n- split-amt))
+             (gnc:split-set-value gnc-far-split  split-amt)
+             (gnc:split-set-share-amount gnc-near-split (n- split-amt))
+             (gnc:split-set-share-amount gnc-far-split  split-amt))
             
             ((shrsin)
              ;; for shrsin, the near account is the security account.
              ;; we'll need to set the share-price after a little 
              ;; trickery post-adding-to-account
-             (if (not share-price) 
-                 (set! defer-share-price #t)
-                 (gnc:split-set-share-price gnc-near-split share-price))
              (gnc:split-set-share-amount gnc-near-split num-shares)
              (gnc:split-set-value gnc-far-split num-shares))
-
+            
             ((shrsout)
              ;; shrsout is like shrsin             
-             (if (not share-price) 
-                 (set! defer-share-price #t)
-                 (gnc:split-set-share-price gnc-near-split share-price))
-             (gnc:split-set-share-amount gnc-near-split (- num-shares))
-             (gnc:split-set-value gnc-far-split (- num-shares)))
+             (gnc:split-set-share-amount gnc-near-split (n- num-shares))
+             (gnc:split-set-value gnc-far-split (n- num-shares)))
             
             ;; stock splits: QIF just specifies the split ratio, not
             ;; the number of shares in and out, so we have to fetch
             ;; the number of shares from the security account 
-
+            
             ;; FIXME : this could be wrong.  Make sure the
             ;; share-amount is at the correct time.
             ((stksplit)
-             (let* ((splitratio (/ num-shares 10))
+             (let* ((splitratio (n/ num-shares (gnc:numeric-create 10 1)))
                     (in-shares 
                      (gnc:account-get-share-balance near-acct))
-                    (out-shares (* in-shares splitratio)))
-               (if (not share-price) (set! share-price 0.0))
-               (gnc:split-set-share-price gnc-near-split 
-                                          (/ share-price splitratio))
-               (gnc:split-set-share-price gnc-far-split share-price) 
+                    (out-shares (n* in-shares splitratio)))
                (gnc:split-set-share-amount gnc-near-split out-shares)
-               (gnc:split-set-share-amount gnc-far-split (- in-shares))
-               (gnc:split-set-value gnc-near-split (- split-amt))
+               (gnc:split-set-share-amount gnc-far-split (n- in-shares))
+               (gnc:split-set-value gnc-near-split (n- split-amt))
                (gnc:split-set-value gnc-far-split split-amt)))
             (else 
              (display "symbol = " ) (write qif-action) (newline)))
-          
+    
           (let ((cleared (qif-split:matching-cleared 
                           (car (qif-xtn:splits qif-xtn)))))
             (if (eq? 'cleared cleared)
                 (gnc:split-set-reconcile gnc-far-split #\c))
             (if (eq? 'reconciled cleared)
                 (gnc:split-set-reconcile gnc-far-split #\y)))
-
+          
           (if qif-commission-acct
               (let* ((commission-acct-info 
                       (or (hash-ref qif-acct-map qif-commission-acct)
@@ -490,7 +503,8 @@
           (if (and commission-amt commission-acct)
               (begin 
                 (set! commission-split (gnc:split-create))
-                (gnc:split-set-value commission-split commission-amt)))
+                (gnc:split-set-value commission-split commission-amt)
+                (gnc:split-set-share-amount commission-split commission-amt)))
           
           (if (and qif-near-acct qif-far-acct)
               (begin 
@@ -504,12 +518,7 @@
                     (begin 
                       (gnc:transaction-append-split gnc-xtn commission-split)
                       (gnc:account-insert-split commission-acct 
-                                                commission-split)))
-                
-                ;; now find the share price if we need to 
-                ;; (shrsin and shrsout xtns)
-                (if defer-share-price
-                    (qif-import:set-share-price gnc-near-split))))))
+                                                commission-split)))))))
     ;; return the modified transaction (though it's ignored).
     gnc-xtn))
 
@@ -917,6 +926,6 @@
       (let ((ith-split (gnc:account-get-split account i)))        
         (if (pointer-token-eq? ith-split split)
             (if last-split
-                (gnc:split-set-share-price 
-                 split (gnc:split-get-share-price last-split)))
+                (d-gnc:split-set-share-price 
+                 split (d-gnc:split-get-share-price last-split)))
             (if (< i numsplits) (loop (+ 1 i) ith-split)))))))

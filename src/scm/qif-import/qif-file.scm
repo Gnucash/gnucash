@@ -181,11 +181,12 @@
                            (qif-xtn:set-splits! current-xtn
                                                 (list default-split)))
                        (if first-xtn 
-                           (begin
+                           (let ((opening-balance-payee 
+                                  (qif-file:process-opening-balance-xtn 
+                                   self current-xtn qstate-type)))
                              (if (not current-account-name)
                                  (set! current-account-name 
-                                       (qif-file:process-opening-balance-xtn 
-                                        self current-xtn qstate-type)))
+                                       opening-balance-payee))
                              (set! first-xtn #f)))
                        
                        (if (and (eq? qstate-type 'type:invst)

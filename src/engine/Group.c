@@ -843,13 +843,17 @@ xaccMergeAccounts (AccountGroup *grp)
             xaccMergeAccounts (ga);
 
             /* consolidate transactions */
+            lp = acc_b->splits;
+
             for(lp = acc_b->splits; lp; lp = lp->next) {
               Split *split = (Split *) lp->data;
-               lp->data = NULL;
-               split->acc = NULL;
-               xaccAccountInsertSplit (acc_a, split);
+              split->acc = NULL;
+              xaccAccountInsertSplit (acc_a, split);
             }
-
+            
+            g_list_free(acc_b->splits);
+            acc_b->splits = NULL;
+            
             /* free the account structure itself */
             xaccFreeAccount (acc_b);
             grp->account[j] = grp->account[grp->numAcc -1];

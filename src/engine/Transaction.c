@@ -356,20 +356,6 @@ get_security_denom(Split * s) {
 /********************************************************************\
 \********************************************************************/
 
-/* FIXME: this is probably wrong, but it'll have to wait until Bill
-   returns.   It's *ONLY* for file IO.  Don't use these elsewhere. */
-void
-xaccSplitSetValueDirectly(Split *s, gnc_numeric n) {
-  if(!s) return;
-  s->value = n;
-}
-
-void
-xaccSplitSetQuantityDirectly(Split *s, gnc_numeric n) {
-  if(!s) return;
-  s->damount = n;
-}
-
 void 
 DxaccSplitSetSharePriceAndAmount (Split *s, double price, double amt)
 {
@@ -414,46 +400,45 @@ xaccSplitSetSharePrice (Split *s, gnc_numeric price) {
 }
 
 void 
-DxaccSplitSetShareAmount (Split *s, double amt) {
-  xaccSplitSetShareAmount(s, 
-                         double_to_gnc_numeric(amt, get_security_denom(s), 
-                                               GNC_RND_ROUND)); 
-}
-
-void 
-xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
+DxaccSplitSetShareAmount (Split *s, double damt) {
   gnc_numeric old_price;
-
+  gnc_numeric amt = double_to_gnc_numeric(damt, get_security_denom(s), 
+                                          GNC_RND_ROUND); 
   if (!s) return;
-
+  
   MARK_SPLIT(s);
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
-                                GNC_DENOM_EXACT);
+                                GNC_DENOM_REDUCE);
   }
   else {
     old_price = gnc_numeric_create(PRICE_DENOM, PRICE_DENOM);
   }
-
+  
   s->damount = gnc_numeric_convert(amt, get_security_denom(s), 
                                    GNC_RND_NEVER);
   s->value   = gnc_numeric_mul(s->damount, old_price, 
                                get_currency_denom(s), GNC_RND_ROUND);
-
+  
   /* force double entry to always balance */
   xaccSplitRebalance (s);
 }
 
 void 
-DxaccSplitSetValue (Split *s, double amt) {
-  xaccSplitSetValue(s, 
-                    double_to_gnc_numeric(amt, 
-                                          get_currency_denom(s), 
-                                          GNC_RND_ROUND));
+xaccSplitSetShareAmount (Split *s, gnc_numeric amt) {
+  if(!s) return;
+  MARK_SPLIT(s);
+  
+  s->damount = amt;
+
+  xaccSplitRebalance (s);
 }
 
 void 
-xaccSplitSetValue (Split *s, gnc_numeric amt) {
+DxaccSplitSetValue (Split *s, double damt) {
+  gnc_numeric amt = double_to_gnc_numeric(damt, 
+                                          get_currency_denom(s), 
+                                          GNC_RND_ROUND);
   gnc_numeric old_price;
   if (!s) return;
 
@@ -461,7 +446,7 @@ xaccSplitSetValue (Split *s, gnc_numeric amt) {
 
   if(!gnc_numeric_zero_p(s->damount)) {
     old_price = gnc_numeric_div(s->value, s->damount, GNC_DENOM_AUTO,
-                                GNC_DENOM_EXACT);
+                                GNC_DENOM_REDUCE);
   }
   else {
     old_price = gnc_numeric_create(PRICE_DENOM, PRICE_DENOM);
@@ -476,6 +461,16 @@ xaccSplitSetValue (Split *s, gnc_numeric amt) {
   }
 
   /* force double entry to always balance */
+  xaccSplitRebalance (s);
+}
+
+void 
+xaccSplitSetValue (Split *s, gnc_numeric amt) {
+  if(!s) return;
+  MARK_SPLIT(s);
+  
+  s->value = amt;
+
   xaccSplitRebalance (s);
 }
 
@@ -927,12 +922,12 @@ ComputeValue (GList *splits, Split * skip_me,
       } 
       else { 
         value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
-                                GNC_DENOM_LCD);
+                                GNC_DENOM_REDUCE);
       }
     } 
     else if ((0x0 == base_currency) && (0 == force_double_entry)) {
       value = gnc_numeric_add(value, s->value, GNC_DENOM_AUTO, 
-                              GNC_DENOM_LCD);
+                              GNC_DENOM_REDUCE);
     } 
     else {         
       /* OK, we've got a parent account, we've got currency, 

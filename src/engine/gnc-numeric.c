@@ -466,6 +466,7 @@ gnc_numeric_abs(gnc_numeric a) {
 gnc_numeric
 gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
   gnc_numeric out;
+  gnc_numeric temp;
   gint64      temp_bc;
   gint64      temp_a;
   gint64      remainder;  
@@ -529,12 +530,21 @@ gnc_numeric_convert(gnc_numeric in, gint64 denom, gint how) {
   }
   else {
     /* do all the modulo and int division on positive values to make
-     * things a little clearer. */
-    out.num   = in.num * denom;
+     * things a little clearer. Reduce the fraction denom/in.denom to
+     * help with range errors (FIXME : need bigger intermediate rep) */
+    temp.num   = denom;
+    temp.denom = in.denom;
+    temp       = gnc_numeric_reduce(temp);
+  
+    /* out.num   = in.num * denom; */
+    out.num   = in.num * temp.num;
     out.num   = (out.num < 0) ? -out.num : out.num;
-    remainder = out.num % in.denom;
-    out.num   = out.num / in.denom;
+    remainder = out.num % temp.denom;
+    out.num   = out.num / temp.denom;
     out.denom = denom;
+    if(remainder) {
+      remainder = remainder * in.denom / temp.denom;
+    }
   }
 
   if(remainder > 0) {
@@ -768,34 +778,43 @@ gnc_numeric_reduce(gnc_numeric in) {
 gnc_numeric
 double_to_gnc_numeric(double in, gint64 denom, gint how) {
   gnc_numeric out;
+  gint64 int_part=0;
+  double frac_part;
+  gint64 frac_int=0;
 
-  in = in * (double)denom;
+  int_part  = (gint64)(floor(fabs(in)));
+  frac_part = in - (double)int_part;
+  
+  int_part = int_part * denom;
+  frac_part = frac_part * (double)denom;
 
   switch(how) {
   case GNC_RND_FLOOR:
-    out.num = (gint64)floor(in);
+    frac_int = (gint64)floor(frac_part);
     break;
 
   case GNC_RND_CEIL:
-    out.num = (gint64)ceil(in);
+    frac_int = (gint64)ceil(frac_part);
     break;
 
   case GNC_RND_TRUNC:
-    out.num = (gint64)in;
+    frac_int = (gint64)frac_part;
     break;
     
   case GNC_RND_ROUND:
   case GNC_RND_ROUND_HALF_UP:
-    out.num = (gint64)rint(in);
+    frac_int = (gint64)rint(frac_part);
     break;
 
   case GNC_RND_NEVER:
-    out.num = (gint64)floor(in);
-    if(in != (double) out.num) {
+    frac_int = (gint64)floor(frac_part);
+    if(frac_part != (double) frac_int) {
       /* signal an error */
     }
     break;
   }
+
+  out.num   = int_part + frac_int; 
   out.denom = denom;
   return out;
 }

@@ -137,7 +137,7 @@
         '()
         (let ((acct (car accts))
               (rest (non-zero-at-date-accounts (cdr accts) date)))
-          (if (< (gnc:account-get-balance-at-date acct date #t) 0.01)
+          (if (< (d-gnc:account-get-balance-at-date acct date #t) 0.01)
               rest
               (cons acct rest)))))
 
@@ -150,7 +150,7 @@
   ;; do not include accounts which have a zero balance
   (define (acc-sum-table-row account date do-children?)
     (let
-      ((acc-bal (gnc:account-get-balance-at-date account date #t))
+      ((acc-bal (d-gnc:account-get-balance-at-date account date #t))
        (children (gnc:account-get-children account)))
       (list
        (if (and do-children? (> (gnc:group-get-num-accounts children) 0))
@@ -176,7 +176,7 @@
 ;; all children are included in the calculation
   (define (account-total-at-date accnts date)
     (apply +
-         (map (lambda (account) (gnc:account-get-balance-at-date account date #t)) accnts))
+         (map (lambda (account) (d-gnc:account-get-balance-at-date account date #t)) accnts))
   )
 
 

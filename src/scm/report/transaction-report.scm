@@ -14,7 +14,7 @@
 
  (define (gnc:split-get-sign-adjusted-value split)
    (let ((acc (gnc:split-get-account split))
-	 (unsigned-value (gnc:split-get-value split)))
+	 (unsigned-value (d-gnc:split-get-value split)))
      (gnc:debug "Adjusting value" unsigned-value (gnc:account-reverse-balance? acc))     
      (if (gnc:account-reverse-balance? acc)
 	 (- unsigned-value)
@@ -26,7 +26,7 @@
 		(gnc:get-current-group)
 		acc-name
 		separator))
-          (unsigned-balance (gnc:account-get-balance-at-date
+          (unsigned-balance (d-gnc:account-get-balance-at-date
                              acc
 			     from-date
 			     #f))
@@ -162,7 +162,7 @@
        (make-report-spec 
 	(string-db 'lookup 'shares-string)
 	(lambda (split)
-	  (gnc:split-get-share-amount split))
+	  (d-gnc:split-get-share-amount split))
 	(lambda (num) (html-right-cell (html-string num)))
 	+ ; total-proc
 	#f ; subtotal-html-proc
@@ -178,7 +178,7 @@
        (make-report-spec 
 	(string-db 'lookup 'price-string)
 	(lambda (split)
-	  (gnc:split-get-share-price split))
+	  (d-gnc:split-get-share-price split))
 	(lambda (num) (html-right-cell (html-string num)))
 	#f ; total-proc
 	#f ; subtotal-html-proc

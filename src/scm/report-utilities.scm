@@ -330,7 +330,7 @@
          (index 0))
       (if (>= index num-splits)
           total
-          (loop (+ total (gnc:split-get-value (gnc:ith-split splits index)))
+          (loop (+ total (d-gnc:split-get-value (gnc:ith-split splits index)))
                 (+ index 1))))))
 
 (define (gnc:split-list-balance splits)
@@ -338,8 +338,8 @@
       0
       (let ((first-split (gnc:ith-split splits 0)))
         (+ (gnc:split-list-total splits)
-           (gnc:split-get-balance first-split)
-           (- (gnc:split-get-value first-split))))))
+           (d-gnc:split-get-balance first-split)
+           (- (d-gnc:split-get-value first-split))))))
 
 ;; get transaction date from split - needs to be done indirectly
 ;; as it's stored in the parent transaction
@@ -357,10 +357,10 @@
 ;; get the account balance at the specified date. if include-children?
 ;; is true, the balances of all children (not just direct children)
 ;; are included in the calculation.
-(define (gnc:account-get-balance-at-date account date include-children?)
+(define (d-gnc:account-get-balance-at-date account date include-children?)
   (let ((children-balance
          (if include-children?
-             (gnc:group-get-balance-at-date
+             (d-gnc:group-get-balance-at-date
               (gnc:account-get-children account) date)
              0)))
     (let loop ((index 0)
@@ -371,7 +371,7 @@
           (if (gnc:timepair-lt date (gnc:split-get-transaction-date split))
               (+ children-balance balance)
               (loop (+ index 1)
-                    (gnc:split-get-balance split)
+                    (d-gnc:split-get-balance split)
                     (gnc:account-get-split account (+ index 1))))))))
 
 ;; This works similar as above but returns a currency-collector, 
@@ -393,17 +393,17 @@
 	      (balance-collector 'add (gnc:account-get-currency account)
 				 balance)
 	      (loop (+ index 1)
-		    (gnc:split-get-balance split)
+		    (d-gnc:split-get-balance split)
 		    (gnc:account-get-split account (+ index 1))))))
     balance-collector))
 
 ;; get the balance of a group of accounts at the specified date.
 ;; all children are included in the calculation
-(define (gnc:group-get-balance-at-date group date)
+(define (d-gnc:group-get-balance-at-date group date)
   (apply +
          (gnc:group-map-accounts
           (lambda (account)
-            (gnc:account-get-balance-at-date account date #t)) group)))
+            (d-gnc:account-get-balance-at-date account date #t)) group)))
 
 ;; returns a currency-collector
 (define (gnc:group-get-curr-balance-at-date group date)
@@ -417,9 +417,9 @@
 ;; get the change in balance from the 'from' date to the 'to' date.
 ;; this isn't quite as efficient as it could be, but it's a whole lot
 ;; simpler :)
-(define (gnc:account-get-balance-interval account from to include-children?)
-  (- (gnc:account-get-balance-at-date account to include-children?)
-     (gnc:account-get-balance-at-date account from include-children?)))
+(define (d-gnc:account-get-balance-interval account from to include-children?)
+  (- (d-gnc:account-get-balance-at-date account to include-children?)
+     (d-gnc:account-get-balance-at-date account from include-children?)))
 
 ;; the version which returns a currency-collector
 (define (gnc:account-get-curr-balance-interval 
@@ -430,11 +430,11 @@
 				 account from include-children?) #f)
     this-collector))
 
-(define (gnc:group-get-balance-interval group from to)
+(define (d-gnc:group-get-balance-interval group from to)
   (apply +
          (gnc:group-map-accounts
           (lambda (account)
-            (gnc:account-get-balance-interval account from to #t)) group)))
+            (d-gnc:account-get-balance-interval account from to #t)) group)))
 
 ;; the version which returns a currency-collector
 (define (gnc:group-get-curr-balance-interval group from to)

@@ -378,10 +378,10 @@
                                         children))
 
                      (account-balance (if balance-sheet?
-                                          (gnc:account-get-balance-at-date
+                                          (d-gnc:account-get-balance-at-date
                                            account
                                            to-value #f)
-                                          (gnc:account-get-balance-interval
+                                          (d-gnc:account-get-balance-interval
                                            account
                                            from-value
                                            to-value #f))))
@@ -416,8 +416,8 @@
 	   (balance (make-currency-collector))
 	   (rawbal
 	    (if balance-sheet?
-		(gnc:account-get-balance-at-date account to-value #f)
-		(gnc:account-get-balance-interval 
+		(d-gnc:account-get-balance-at-date account to-value #f)
+		(d-gnc:account-get-balance-interval 
 		 account 
 		 from-value
 		 to-value #f))))

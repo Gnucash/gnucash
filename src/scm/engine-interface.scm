@@ -102,8 +102,8 @@
    (gnc:split-get-action split)
    (gnc:split-get-reconcile-state split)
    (gnc:split-get-reconciled-date split)
-   (gnc:split-get-share-amount split)
-   (gnc:split-get-share-price split)))
+   (d-gnc:split-get-share-amount split)
+   (d-gnc:split-get-share-price split)))
 
 ;; Copy a scheme representation of a split onto a C split.
 ;; If possible, insert the C split into the account of the
@@ -121,7 +121,7 @@
           (if memo   (gnc:split-set-memo split memo))
           (if action (gnc:split-set-action split action))
           (if (and price amount)
-              (gnc:split-set-share-price-and-amount split price amount)))
+              (d-gnc:split-set-share-price-and-amount split price amount)))
         (let ((account (gnc:account-lookup
                         (gnc:split-scm-get-account-guid split-scm))))
           (if (and account (gnc:account-can-insert-split? account split))

@@ -395,7 +395,7 @@
 
                      (account-balance (if (is-key-in-account-notes? tax-key
 								    account)
-					  (gnc:account-get-balance-interval
+					  (d-gnc:account-get-balance-interval
 					   account
 					   from-value
 					   to-value #f)

@@ -455,7 +455,7 @@
    (qif-file:xtns qif-file)))
 
 (define qif-import:account-name-regexp
-  (let* ((rstr ":([^:]*)$|^([^:]*)$")
+  (let* ((rstr ":([^:]+)$|^([^:]+)$")
          (newstr (regexp-substitute/global 
                   #f ":" rstr 'pre (gnc:account-separator-char) 'post)))
     (make-regexp newstr)))
@@ -463,9 +463,13 @@
 (define (qif-import:get-account-name fullname)
   (let ((match (regexp-exec qif-import:account-name-regexp fullname)))
     (if match
-        (match:substring match 1)
+        (begin 
+          (let ((substr (match:substring match 1)))
+            (if substr
+                substr
+                (match:substring match 2))))
         fullname)))
-       
+
 (define (qif-import:setup-stock-hash hash-table)
   (let ((newhash (make-hash-table 20))
         (names '()))
@@ -482,6 +486,11 @@
                       (qif-map-entry:allowed-types (cdr elt)))))
               (let* ((name (qif-map-entry:qif-name (cdr elt)))
                      (stock-name (qif-import:get-account-name name)))
+                (if (not stock-name)
+                    (begin
+                      (display "stock-name #f.. name ==")
+                      (display name)(newline)))
+                      
                 (if (not (hash-ref newhash stock-name))
                     (begin 
                       (set! names (cons stock-name names))
@@ -491,7 +500,7 @@
                                   GNC_COMMODITY_NS_NYSE
                                   stock-name
                                   ""
-                                  1000)))))))
+                                  100000)))))))
         bin))
      (vector->list hash-table))
     (list newhash (sort names string<?))))

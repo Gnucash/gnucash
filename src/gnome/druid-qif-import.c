@@ -672,7 +672,11 @@ update_accounts_page(QIFImportWindow * wind) {
   SCM  get_gnc_name         = gh_eval_str("qif-map-entry:gnc-name");
   SCM  get_new              = gh_eval_str("qif-map-entry:new-acct?");
   SCM  accts_left;
+  int  sel_row=0;
   char * row_text[3];
+
+  /* get the old selection row */
+  sel_row = (GTK_CLIST(wind->acct_list))->focus_row;
 
   /* now get the list of strings to display in the clist widget */
   accts_left = gh_call3(make_account_display,
@@ -714,7 +718,13 @@ update_accounts_page(QIFImportWindow * wind) {
     free(row_text[0]);
     free(row_text[1]);
   }
+
   gtk_clist_thaw(GTK_CLIST(wind->acct_list));
+  
+  /* move to the old selected row */
+  (GTK_CLIST(wind->acct_list))->focus_row = sel_row;
+  gtk_clist_moveto(GTK_CLIST(wind->acct_list), sel_row, 0, 0.0, 0.0);
+  
 }
 
 
@@ -732,7 +742,11 @@ update_categories_page(QIFImportWindow * wind) {
   SCM  get_gnc_name         = gh_eval_str("qif-map-entry:gnc-name");
   SCM  get_new              = gh_eval_str("qif-map-entry:new-acct?");
   SCM  cats_left;
+  int  sel_row=0;
   char * row_text[3];
+
+  /* get the old selection row */
+  sel_row = (GTK_CLIST(wind->cat_list))->focus_row;
 
   /* now get the list of strings to display in the clist widget */
   cats_left = gh_call3(make_category_display, 
@@ -774,7 +788,13 @@ update_categories_page(QIFImportWindow * wind) {
     free (row_text[0]);
     free (row_text[1]);
   }
+
   gtk_clist_thaw(GTK_CLIST(wind->cat_list));
+
+  /* move to the old selected row */
+  (GTK_CLIST(wind->cat_list))->focus_row = sel_row;
+  gtk_clist_moveto(GTK_CLIST(wind->cat_list), sel_row, 0, 0.0, 0.0);
+
 }
 
 

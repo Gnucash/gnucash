@@ -3718,19 +3718,15 @@ txn_restore_split_after_child_handler(gpointer data_for_children,
     child_result->should_cleanup = FALSE;
   }
   else if(strcmp(child_result->tag, "quantity") == 0) {
-    /* This is probably going to have to be changed to set quantity
-       and value together in the end handler, but for now, a hack. */
     gnc_numeric *n = (gnc_numeric *) child_result->data;
     if(!n) return(FALSE);
-    xaccSplitSetQuantityDirectly(s, *n);
+    xaccSplitSetShareAmount(s, *n);
     /* let the normal child_result handler clean up n */
   }
   else if(strcmp(child_result->tag, "value") == 0) {
-    /* This is probably going to have to be changed to set quantity
-       and value together in the end handler, but for now, a hack. */
     gnc_numeric *n = (gnc_numeric *) child_result->data;
     if(!n) return(FALSE);
-    xaccSplitSetValueDirectly(s, *n);
+    xaccSplitSetValue(s, *n);
     /* let the normal child_result handler clean up n */
   }
 

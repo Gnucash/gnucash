@@ -171,7 +171,7 @@
 
         (define (update-balance split)
           (let* ((account       (gnc:split-get-account split))
-                 (split-balance (gnc:split-get-balance split))
+                 (split-balance (d-gnc:split-get-balance split))
                  (last-balance  (hash-ref balances account)))
             (hash-set! balances account split-balance)
             (if last-balance

@@ -47,9 +47,9 @@
 
     (define (report-row account)
       (let ((last-split (gnc:account-get-last-split account)))
-        (let ((shares (gnc:split-get-share-balance last-split))
-              (price (gnc:split-get-share-price last-split))
-              (balance (gnc:split-get-balance last-split))
+        (let ((shares (d-gnc:split-get-share-balance last-split))
+              (price (d-gnc:split-get-share-price last-split))
+              (balance (d-gnc:split-get-balance last-split))
               (cost 0) ; fixme (gnc:split-get-cost-basis last-split)))
               (quantity-print-info
                (gnc:split-quantity-print-info last-split #f))

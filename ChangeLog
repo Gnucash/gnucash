@@ -1,3 +1,43 @@
+2000-11-08  Bill Gribble  <grib@billgribble.com>
+
+	* src/engine/SplitLedger.c: use new SetShareAmount/SetValue
+	semantics (need to make sure this is correct!)
+
+	* src/engine/Group.c: fix the "splits in GList with NULL data"
+	problem.
+
+	* src/engine/Transaction.c: get rid of Set***Directly functions,
+	and modify the gnc_numeric versions of SetValue and SetShareAmount
+	to use the direct semantics (i.e. SetValue doesn't affect the
+	ShareAmount any more unless you use the deprecated double API).
+
+	* src/engine/gnc-numeric.c: fix gnc_numeric_convert and
+	double_to_gnc_numeric to ameliorate overflow problems.  This
+	should fix the wrong balance problems people are seeing.
+
+	* src/gnome/druid-qif-import.c: make selection persistent in
+	account/cat pick lists
+
+	* g-wrap gnc-numeric datatype and API; shuffle the Scheme API in
+	the same way the C was done to add the new gnc-numeric API using
+	the "real" function names and deprecate the old double API by
+	prefixing the names with d-.  Now (for example)
+	gnc:split-set-value takes a gnc_numeric arg, and
+	d-gnc:split-set-value takes a double.  All calling scheme code was
+	sed'ed to make this change.
+
+	* src/scm/qif-import/qif-dialog-utils.scm: fix stock name regexp
+	parsing bug in QIF importer.  This should fix the crash that many
+	people have reported.
+
+	* src/scm/qif-import/qif-file.scm: fix an Opening Balance
+	processing bug that was causing some opening balance transactions
+	to be duplicated.
+
+	* src/scm/qif-import/qif-to-gnc.scm: fix double-counting of
+	Commissions.  Change to use gnc_numeric and new Set semantics;
+	this should (maybe) fix some reported off-by-a-penny problems.
+	
 2000-11-05  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/engine/io-gncxml-w.c: sort commodities by namespace and id

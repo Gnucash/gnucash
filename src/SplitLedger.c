@@ -2847,10 +2847,12 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
   if (MOD_SHRS & changed) {
     gnc_numeric amount = xaccGetPriceCellValue(reg->sharesCell);
-
+    gnc_numeric price  = xaccGetPriceCellValue(reg->priceCell);
+    
     DEBUG ("MOD_SHRS");
 
     xaccSplitSetShareAmount (split, amount);
+    xaccSplitSetSharePrice (split, price);
   }
 
   if (MOD_PRIC & changed) {
@@ -2878,6 +2880,7 @@ xaccSRSaveChangedCells (SplitRegister *reg, Transaction *trans, Split *split)
 
     DEBUG ("MOD_AMNT");
 
+    /* FIXME : make sure amount gets updated? -- bg */
     xaccSplitSetValue (split, new_amount);
   }
   
