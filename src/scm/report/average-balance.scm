@@ -273,28 +273,32 @@
               (gnuplot-reduced-list (cdr list)))))
 
   ;; Pull a scheme list of splits from a C array
-  (define (gnc:convert-split-list slist)
-    (let loop ((index 0)
-               (split (gnc:ith-split slist 0)))
-      (if (pointer-token-null? split)
-          '()
-          (cons split (loop (+ index 1)
-                            (gnc:ith-split slist (+ index 1)))))))
+  (define (gnc:convert-split-list split-array)
+    (let ((slist '()))
+      (let loop ((index 0)
+                 (split (gnc:ith-split split-array 0)))
+        (if (pointer-token-null? split)
+            (reverse slist)
+            (begin
+              (set! slist (cons split slist))
+              (loop (+ index 1) 
+                    (gnc:ith-split split-array (+ index 1))))))))
 
   ;; Pull a scheme list of accounts (including subaccounts) from group grp
   (define (gnc:group-get-account-list grp)
     (if (pointer-token-null? grp)
         '()
-        (let ((account-array (gnc:get-accounts grp)))
-          (let loop
-              ((index 0)
-               (account (gnc:account-nth-account account-array 0)))
+        (let ((account-list '())
+              (account-array (gnc:get-accounts grp)))
+          (let loop ((index 0)
+                     (account (gnc:account-nth-account account-array 0)))
             (if (pointer-token-null? account)
-                '()
-                (cons account
-                      (loop (+ index 1)
-                            (gnc:account-nth-account account-array
-                                                     (+ index 1)))))))))
+                (reverse account-list)
+                (begin
+                  (set! account-list (cons account account-list))
+                  (loop (+ index 1)
+                        (gnc:account-nth-account account-array
+                                                 (+ index 1)))))))))
 
   (define (accumvects x y)
     (cond 
