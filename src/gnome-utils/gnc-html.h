@@ -66,7 +66,7 @@ void          gnc_html_show_url(gnc_html * html,
 void          gnc_html_show_data(gnc_html * html, 
                                  const char * data, int datalen);
 void          gnc_html_reload(gnc_html * html);
-void          gnc_html_export(gnc_html * html);
+gboolean      gnc_html_export(gnc_html * html, const char *file);
 void          gnc_html_print(gnc_html * html);
 void          gnc_html_cancel(gnc_html * html);
 

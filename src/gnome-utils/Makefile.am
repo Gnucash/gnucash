@@ -1,4 +1,4 @@
-SUBDIRS = . test
+SUBDIRS = . #test
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la
 
@@ -40,7 +40,8 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-html.c \
   gnc-menu-extensions.c \
   gncmod-gnome-utils.c \
-  gtkselect.c
+  gtkselect.c \
+  print-session.c
 
 noinst_HEADERS = \
   dialog-commodity.h \
@@ -59,7 +60,8 @@ noinst_HEADERS = \
   gnc-html-guppi.h \
   gnc-html.h \
   gnc-menu-extensions.h \
-  gtkselect.h
+  gtkselect.h \
+  print-session.h
 
 libgncmod_gnome_utils_la_LDFLAGS = -module
 

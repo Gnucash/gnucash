@@ -45,7 +45,6 @@
 #include "Account.h"
 #include "Group.h"
 #include "file-utils.h"
-#include "FileBox.h"
 #include "FileDialog.h"
 #include "dialog-utils.h"
 #include "window-register.h"
@@ -1353,30 +1352,22 @@ raw_html_receiver (gpointer     engine,
   return TRUE;
 }
 
-void
-gnc_html_export(gnc_html * html) {
-  const char *filepath;
+gboolean
+gnc_html_export(gnc_html * html, const char *filepath) {
   FILE *fh;
 
-  filepath = fileBox (_("Save HTML To File"), NULL, NULL);
-  if (!filepath)
-    return;
-
-  PINFO (" user selected file=%s\n", filepath ? filepath : "(null)");
+  g_return_val_if_fail (html != NULL, FALSE);
+  g_return_val_if_fail (filepath != NULL, FALSE);
 
   fh = fopen (filepath, "w");
-  if (NULL == fh) {
-    const char *fmt = _("Could not open the file\n"
-                        "     %s\n%s");
-    char *buf = g_strdup_printf (fmt, filepath ? filepath : "(null)",
-                                 strerror (errno) ? strerror (errno) : "");
-    gnc_error_dialog (buf);
-    if (buf) g_free (buf);
-    return;
-  }
+  if (!fh)
+    return FALSE;
 
   gtk_html_save (GTK_HTML(html->html), raw_html_receiver, fh);
+
   fclose (fh);
+
+  return TRUE;
 }
 
 void

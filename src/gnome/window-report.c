@@ -32,6 +32,7 @@
 
 #include <g-wrap-runtime-guile.h>
 
+#include "FileBox.h"
 #include "dialog-options.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -335,7 +336,25 @@ gnc_report_window_export_button_cb(GtkWidget * w, gpointer data) {
     do_html = TRUE;
 
   if (do_html)
-    gnc_html_export (report->html);
+  {
+    const char *filepath;
+
+    filepath = fileBox (_("Save HTML To File"), NULL, NULL);
+    if (!filepath)
+      return TRUE;
+
+    if (!gnc_html_export (report->html, filepath))
+    {
+      const char *fmt = _("Could not open the file\n"
+                          "     %s\n%s");
+      char *buf = g_strdup_printf (fmt, filepath ? filepath : "(null)",
+                                   strerror (errno) ? strerror (errno) : "");
+
+      gnc_error_dialog (buf);
+
+      g_free (buf);
+    }
+  }
 
   return TRUE;
 }
@@ -350,7 +369,7 @@ gnc_report_window_params_cb(GtkWidget * w, gpointer data) {
 
   if(report->cur_report != SCM_BOOL_F) {
     if(gh_call1(start_editor, report->cur_report) == SCM_BOOL_F) {
-      gnc_warning_dialog("There are no options for this report.");
+      gnc_warning_dialog(_("There are no options for this report."));
     }
     else {
       gnc_report_window_add_edited_report(report, report->cur_report);

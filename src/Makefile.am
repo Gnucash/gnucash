@@ -32,6 +32,7 @@ gnucash_LDADD = \
   -Lengine -Lengine/.libs \
   -Lgnc-module -Lgnc-module/.libs \
   -Lcalculation -Lcalculation/.libs \
+  -Lapp-utils -Lapp-utils/.libs \
   gnc-module/libgncmodule.la \
   gnome-utils/libgncmod-gnome-utils.la \
   app-utils/libgncmod-app-utils.la \

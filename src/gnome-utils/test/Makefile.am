@@ -1,5 +1,5 @@
-TESTS = 
-#  test-link-module
+TESTS =  \
+  test-link-module
 #  test-load-module
 
 TESTS_ENVIRONMENT= \
@@ -23,8 +23,8 @@ LDADD = \
    ${top_srcdir}/src/engine/test-core/libgncmod-test-engine.la \
   -lltdl
 
-bin_PROGRAMS =
-#  test-link-module
+bin_PROGRAMS = \
+  test-link-module
 
 #EXTRA_DIST = test-load-module
 

@@ -33,7 +33,6 @@ libgncgnome_a_SOURCES = \
   gnc-network.c \
   gnc-splash.c \
   mainwindow-account-tree.c \
-  print-session.c \
   reconcile-list.c \
   top-level.c \
   window-acct-tree.c \
@@ -78,7 +77,6 @@ noinst_HEADERS = \
   gnc-network.h \
   gnc-splash.h \
   mainwindow-account-tree.h \
-  print-session.h \
   reconcile-list.h \
   top-level.h \
   window-acct-tree.h \
