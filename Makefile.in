@@ -146,32 +146,16 @@ install:
     -e ${GNC_BINDIR}/gnucash.qt \
   ]
 
+	@mkdir -p ${GNC_DOCDIR}
+	$(INSTALL_DATA) README* ${GNC_DOCDIR}
+	$(INSTALL_DATA) TODO ${GNC_DOCDIR}
+	$(INSTALL_DATA) CHANGES ${GNC_DOCDIR}
+
+	@mkdir -p ${GNC_DOCDIR}/data
+	$(INSTALL_DATA) data/*.xac ${GNC_SHAREDIR}/data
+
 # 	@mkdir -p $(prefix)/toolbar
 # 	$(INSTALL_DATA) toolbar/*.xpm $(prefix)/toolbar
-
-	@mkdir -p ${GNC_DOCDIR}
-	$(INSTALL_DATA) Docs/*.html ${GNC_DOCDIR}
-	$(INSTALL_DATA) Docs/*.gif ${GNC_DOCDIR}
-#	$(INSTALL_DATA) Docs/*.jpg ${GNC_DOCDIR}
-	$(INSTALL_DATA) Docs/*.xpm ${GNC_DOCDIR}
-	@mkdir -p ${GNC_DOCDIR}/logos
-	$(INSTALL_DATA) Docs/logos/*.* ${GNC_DOCDIR}/logos
-
-  # Config directory
-	@mkdir -p ${GNC_CONFIGDIR}
-
-  # Try to do this in a platform independent way...
-  # Directories
-	for dir in `find etc/ -type d`; do \
-    dest=`echo $$dir | cut -c 5-` \
-		mkdir -p ${GNC_CONFIGDIR}/$$dest; \
-  done
-
-  # Files
-	for file in `find etc/ -type f`; do \
-    dest=`echo $$file | cut -c 5-` \
-		${INSTALL_DATA} $$file ${GNC_CONFIGDIR}/$$dest; \
-  done
 
   # Share directory
 	@mkdir -p ${GNC_SHAREDIR}
@@ -187,6 +171,42 @@ install:
 	for file in `find share/scm/ -name "*.scm"`; do \
     dest=`echo $$file | cut -c 11-` \
 		${INSTALL_DATA} $$file ${GNC_SHAREDIR}/scm/$$dest; \
+  done
+
+	@mkdir -p ${GNC_SHAREDIR}/Docs
+	$(INSTALL_DATA) Docs/*.html ${GNC_SHAREDIR}/Docs
+  #	$(INSTALL_DATA) Docs/*.phtml ${GNC_SHAREDIR}/Docs
+	$(INSTALL_DATA) Docs/*.gif ${GNC_SHAREDIR}/Docs
+  #	$(INSTALL_DATA) Docs/*.jpg ${GNC_SHAREDIR}/Docs
+	$(INSTALL_DATA) Docs/*.xpm ${GNC_SHAREDIR}/Docs
+	@mkdir -p ${GNC_SHAREDIR}/Docs/images
+  # 	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/images
+	@mkdir -p ${GNC_SHAREDIR}/Docs/logos
+	$(INSTALL_DATA) Docs/logos/*.* ${GNC_SHAREDIR}/Docs/logos
+
+	@mkdir -p ${GNC_SHAREDIR}/Reports
+	$(INSTALL_DATA) Reports/*.html ${GNC_SHAREDIR}/Reports
+	$(INSTALL_DATA) Reports/*.phtml ${GNC_SHAREDIR}/Reports
+  #	$(INSTALL_DATA) Reports/*.gif ${GNC_SHAREDIR}/Reports
+  #	$(INSTALL_DATA) Reports/*.jpg ${GNC_SHAREDIR}/Reports
+  #	$(INSTALL_DATA) Reports/*.xpm ${GNC_SHAREDIR}/Reports
+	@mkdir -p ${GNC_SHAREDIR}/Reports/images
+  # 	$(INSTALL_DATA) Reports/logos/*.* ${GNC_SHAREDIR}/Reports/images
+
+  # Config directory
+	@mkdir -p ${GNC_CONFIGDIR}
+
+  # Try to do this in a platform independent way...
+  # Directories
+	for dir in `find etc/ -type d`; do \
+    dest=`echo $$dir | cut -c 5-` \
+		mkdir -p ${GNC_CONFIGDIR}/$$dest; \
+  done
+
+  # Files
+	for file in `find etc/ -type f`; do \
+    dest=`echo $$file | cut -c 5-` \
+		${INSTALL_DATA} $$file ${GNC_CONFIGDIR}/$$dest; \
   done
 
 .PHONY: default install-private install motif motif-static gnome gnome-static qt
