@@ -51,6 +51,8 @@ static void pgendInit (PGBackend *be);
 
 static const char * pgendSessionGetMode (PGBackend *be);
 
+GUID nullguid;
+
 /* hack alert -- this is the query buffer size, it can be overflowed.
  * Ideally, its dynamically resized.  On the other hand, Postgres
  * rejects queries longer than 8192 bytes,(according to the
