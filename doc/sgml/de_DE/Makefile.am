@@ -1,4 +1,3 @@
-SUBDIRS = 
 
 gnucash_helpdir = $(GNC_HELPDIR)/de_DE
 
@@ -22,10 +21,10 @@ install-data-local: gnucash/index.html gnucash/help-search-index.db
 			$(DESTDIR)$(gnucash_helpdir)/topic.dat
 	-$(INSTALL_DATA) gnucash/help-search-index.db \
 			 $(DESTDIR)$(gnucash_helpdir)/help-search-index.db
-	-(for file in gnucash/*.html; do \
+	-(for file in gnucash/*.html ; do \
 	    basefile=`basename $$file` \
 	    $(INSTALL_DATA) $(srcdir)/$$file \
-                            $(DESTDIR)$(gnucash_helpdir)/$$basefile; \
+                            $(DESTDIR)$(gnucash_helpdir)/$$basefile ; \
 	  done)
 	-(for file in gnucash/*.css; do \
 	    basefile=`basename $$file` \
