@@ -63,7 +63,8 @@ typedef struct _RegWindow {
   QuickFill      *qf;         /* keeps track of current quickfill node.  *
                                * Reset to Account->qfRoot when entering  *
                                * a new transaction                       */
-  PopBox         *actbox;
+  PopBox         *actbox;     /* ComboBox for actions                    */
+  PopBox         *xferbox;    /* ComboBox for transfers                  */
 } RegWindow;
 
 
@@ -1130,12 +1131,9 @@ regWindow( Widget parent, Account *acc )
   /* create action box for the first time */
   regData->actbox = actionBox (reg);
 
-/* xxxxxxxxxxxxxxxxxxxx */
   /* create the xfer account box for the first time */
-/*
-  regData->xferbox = actionBox (reg);
-*/
- 
+  regData->xferbox = xferBox (reg, data);
+
 
   /******************************************************************\
    * The button area... also contains balance fields                *
@@ -1253,8 +1251,9 @@ regWindow( Widget parent, Account *acc )
   
   XtPopup( regData->dialog, XtGrabNone );
   
-  /* unmanage the action box, until it is needed */
+  /* unmanage the ComboBoxes, until they are needed */
   SetPopBox (regData->actbox, -1, -1);
+  SetPopBox (regData->xferbox, -1, -1);
 
   unsetBusyCursor( parent );
   
@@ -1281,6 +1280,9 @@ closeRegWindow( Widget mw, XtPointer cd, XtPointer cb )
   XbaeMatrixCommitEdit( regData->reg, False );
   regSaveTransaction( regData, regData->lastTrans );
   
+  /* hack alert -- free the popup boxes too */
+  /* be sure to destroy the ComboBox widgets too */
+
   _free(regData);
   acc->regData = NULL;
   
@@ -1485,6 +1487,14 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
            SetPopBox (regData->actbox, row, col);
            regData->changed |= MOD_ACTN;
         }
+
+      /* otherwise, move the XFER widget */
+      else if( ((PORTFOLIO == acc->type) && IN_XFER_CELL(row,col)) ||
+               ((MUTUAL    == acc->type) && IN_XFER_CELL(row,col)) ) 
+        {
+           SetPopBox (regData->xferbox, row, col);
+           regData->changed |= MOD_XFER;
+        }
       break;
     }
 
@@ -1656,7 +1666,16 @@ regCB( Widget mw, XtPointer cd, XtPointer cb )
           ((MUTUAL    == acc->type) && IN_ACTN_CELL(row,col)) ) {
         regData->changed |= MOD_ACTN;
       }
+      /* Note: for cell widgets, this callback will never
+       * indicate a row,col with a cell widget in it.  
+       * Thus, the following if statment will never be true
+       */
+      if( ((PORTFOLIO == acc->type) && IN_XFER_CELL(row,col)) ||
+          ((MUTUAL    == acc->type) && IN_XFER_CELL(row,col)) ) {
+        regData->changed |= MOD_XFER;
+      }
       break;
+
     case XbaeTraverseCellReason:
       DEBUG("XbaeTraverseCellReason");
       /* This ensure that whenever the user hits TAB, they go to the
