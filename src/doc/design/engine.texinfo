@@ -22,6 +22,7 @@ be created as a shared library for use by other programs.
 * Engine Introduction::         
 * Using and Extending the Engine API::  
 * Globally Unique Identifiers::  
+* Numeric Library::             
 * Key-Value Pair Frames::       
 * Splits::                      
 * Transactions::                
@@ -120,7 +121,7 @@ gracefully handle @code{NULL} pointer arguments. User code should be
 able to handle @code{NULL} return values from Engine calls as well.
 
 
-@node Globally Unique Identifiers, Key-Value Pair Frames, Using and Extending the Engine API, Engine
+@node Globally Unique Identifiers, Numeric Library, Using and Extending the Engine API, Engine
 @section Globally Unique Identifiers
 @cindex Globally Unique Identifier
 @tindex GUID
@@ -355,7 +356,425 @@ GnuCash code should use @code{xaccGUIDNew}.
 @end deftypefun
 
 
-@node Key-Value Pair Frames, Splits, Globally Unique Identifiers, Engine
+@node Numeric Library, Key-Value Pair Frames, Globally Unique Identifiers, Engine
+@section Numeric Library
+@cindex Numeric Library
+@tindex gnc_numeric
+
+Financial quantities in GnuCash (Split quantities and values) are stored
+as exact quantities measured in the smallest denominational unit of the
+appropriate currency. For example, 100.50 US Dollars would be stored as
+(10050 / 100) US Dollars. GnuCash uses the @code{gnc_numeric} datatype
+to store financial quantities.
+
+The @code{gnc_numeric} API provides data types and functions for
+manipulating exact numeric quantities. While the @code{gnc_numeric}
+library was developed to represent and operate on exact financial
+quantities in GnuCash, the library is also (hopefully) suitable for use
+in any application where exact numeric representation for rational
+numbers is needed.
+
+A @code{gnc_numeric} value represents a number in rational form, with a
+64-bit @code{long long} integer as numerator and denominator. If more
+precision, a higher-precision representation of irrational numbers, or a
+wider dynamic range is needed, a floating point format may be
+appropriate. There are reasonable rational approximations to common
+irrational constants (@pxref{Numeric Example}), but the transcendental
+functions have not been implemented for @code{gnc_numeric} objects.
+
+@menu
+* Standard Numeric Arguments::  
+* Creating Numeric Objects::    
+* Basic Arithmetic Operations::  
+* Numeric Comparisons and Predicates::  
+* Numeric Denominator Conversion::  
+* Numeric Floating Point Conversion::  
+* Numeric String Conversion::   
+* Numeric Error Handling ::     
+* Numeric Example::             
+@end menu
+
+@node Standard Numeric Arguments, Creating Numeric Objects, Numeric Library, Numeric Library
+@subsection Standard Numeric Arguments
+@cindex Standard Numeric Arguments
+
+It is useful to specify a denominator in cases where it is known that
+the output value is of constrained precision. For example, monetary
+transactions must be executed in an integer number of the "smallest
+currency unit" of the transaction. In US Dollars, the smallest currency
+unit is the cent, and all monetary transactions must be done in units of
+cents. Therefore, any fractional cents in a computed price must be
+rounded away.
+
+Most of the @code{gnc_numeric} arithmetic functions take two arguments
+in addition to their numeric args: @var{denom}, which is the denominator
+to use in the output @code{gnc_numeric object}, and @var{how}, which
+describes how the arithmetic result is to be converted to that
+denominator. This combination of output denominator and rounding policy
+allows the results of financial and other exact computations to be
+properly rounded to the appropriate units.
+
+Valid values for @var{denom} are:
+
+@table @code
+
+@item n (positive int)
+Use the number @code{n} as the denominator of the output value.
+
+@item GNC_DENOM_RECIPROCAL (n)
+Use the value @code{1/n} as the denominator of the output value.
+
+@item GNC_DENOM_AUTO
+Compute an appropriate denominator automatically. Flags in the @var{how}
+argument will specify how to compute the denominator.
+
+@end table
+
+
+Valid values for @var{how} are bitwise combinations of zero or one
+"rounding instructions" with zero or one "denominator types". 
+
+Rounding instructions control how fractional parts in the specified
+denominator affect the result. For example, if a computed result is
+"3/4" but the specified denominator for the return value is 2, should
+the return value be "1/2" or "2/2"?  
+
+Possible rounding instructions are:
+
+@table @code
+
+@item GNC_RND_FLOOR
+Round toward -infinity
+
+@item GNC_RND_CEIL
+Round toward +infinity
+
+@item GNC_RND_TRUNC
+Truncate fractions (round toward zero)
+
+@item GNC_RND_PROMOTE
+Promote fractions (round away from zero)
+
+@item GNC_RND_ROUND
+Use unbiased ("banker's") rounding. This rounds to the nearest integer,
+and to the nearest even integer when there are two equidistant nearest
+integers. This is generally the one you should use for financial
+quantities.
+
+@item GNC_RND_ROUND_HALF_UP
+Round to the nearest integer, rounding away from zero when there are two
+equidistant nearest integers.
+
+@item GNC_RND_ROUND_HALF_DOWN
+Round to the nearest integer, rounding toward zero when there are two
+equidistant nearest integers.
+
+@item GNC_RND_NEVER
+Never round at all, and signal an error if there is a fractional result
+in a computation.
+
+@end table
+
+
+The denominator type specifies how to compute a denominator if
+@code{GNC_DENOM_AUTO} is specified as the @var{denom}. Valid denominator
+types are:
+
+@table @code
+
+@item GNC_DENOM_EXACT
+Use any denominator which gives an exactly correct ratio of numerator to
+denominator. Use EXACT when you do not wish to lose any information in
+the result but also do not want to spend any time finding the "best"
+denominator.
+
+@item GNC_DENOM_REDUCE
+Reduce the result value by common factor elimination, using the smallest
+possible value for the denominator that keeps the correct ratio. The
+numerator and denominator of the result are relatively prime. This can
+be computationally expensive for large fractions.
+
+@item GNC_DENOM_LCD
+Find the least common multiple of the arguments' denominators and use
+that as the denominator of the result.
+
+@item GNC_DENOM_FIXED
+All arguments are required to have the same denominator, that
+denominator is to be used in the output, and an error is to be signaled
+if any argument has a different denominator.
+
+@end table
+
+
+To use traditional rational-number operational semantics (all results
+are exact and are reduced to relatively-prime fractions) pass the
+argument @code{GNC_DENOM_AUTO} as @var{denom} and @code{GNC_DENOM_REDUCE
+| GNC_RND_NEVER} as @var{how}.
+
+To enforce strict financial semantics (such that all operands must have
+the same denominator as each other and as the result), use
+@var{GNC_DENOM_AUTO} as @var{denom} and @code{GNC_DENOM_FIXED |
+GNC_RND_NEVER} as @var{how}.
+
+
+@node Creating Numeric Objects, Basic Arithmetic Operations, Standard Numeric Arguments, Numeric Library
+@subsection Creating Numeric Objects
+@cindex Creating Numeric Objects
+
+@deftypefun gnc_numeric gnc_numeric_create (int @var{num}, int @var{denom})
+Create a @code{gnc_numeric} object with a value of "@var{num} / @var{denom}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_zero ()
+Create a @code{gnc_numeric} object with a value of 0. 
+@end deftypefun
+
+
+@node Basic Arithmetic Operations, Numeric Comparisons and Predicates, Creating Numeric Objects, Numeric Library
+@subsection Basic Arithmetic Operations
+@cindex Basic Arithmetic Operations
+
+See @ref{Standard Numeric Arguments} for a description of the @var{denom}
+and @var{how} arguments to each arithmetic function.
+
+@deftypefun gnc_numeric gnc_numeric_add (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return the sum of @var{a} and @var{b}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_sub (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return "@var{a} - @var{b}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_mul (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return the product of @var{a} and @var{b}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_div (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Return "@var{a} / @var{b}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_neg (gnc_numeric @var{a})
+Return "-@var{a}".
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_abs (gnc_numeric @var{a})
+Return the absolute value of @var{a}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_add_fixed (gnc_numeric @var{a}, gnc_numeric @var{b})
+Equivalent to @code{gnc_numeric_add} on @var{a} and @var{b} with
+@code{GNC_DENOM_AUTO} for @var{denom} and @code{GNC_DENOM_FIXED |
+GNC_RND_NEVER} for @var{how}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_sub_fixed (gnc_numeric @var{a}, gnc_numeric @var{b})
+Equivalent to @code{gnc_numeric_sub} on @var{a} and @var{b} with
+@code{GNC_DENOM_AUTO} for @var{denom} and @code{GNC_DENOM_FIXED |
+GNC_RND_NEVER} for @var{how}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_add_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_add}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_sub_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_sub}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_mul_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_mul}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_div_with_error (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+The same as @code{gnc_numeric_div}, but uses @var{error} for accumulating
+conversion roundoff error.
+@end deftypefun
+
+
+@node Numeric Comparisons and Predicates, Numeric Denominator Conversion, Basic Arithmetic Operations, Numeric Library
+@subsection Numeric Comparisons and Predicates
+@cindex Numeric Comparisons and Predicates
+
+@deftypefun int gnc_numeric_zero_p (gnc_numeric @var{a})
+Returns 1 if @code{@var{a} == 0}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_positive_p (gnc_numeric @var{a})
+Returns 1 if @code{@var{a} > 0}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_negative_p (gnc_numeric @var{a})
+Returns 1 if @code{@var{a} > 0}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_compare (gnc_numeric @var{a}, gnc_numeric @var{b})
+Returns +1 if @code{@var{a} > @var{b}}, -1 if @code{@var{b} > @var{a}}, 0 if @code{@var{a} == @var{b}}.
+@end deftypefun
+
+@deftypefun int gnc_numeric_eq (gnc_numeric @var{a}, gnc_numeric @var{b})
+Returns 1 if @code{numerator(@var{a}) == numerator(@var{b})} and
+@code{denominator(@var{a}) == denominator(@var{b})}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_equal (gnc_numeric @var{a}, gnc_numeric @var{b})
+Returns 1 if the fraction represented by @var{a} is equal to the fraction
+represented by @var{b}, otherwise returns 0.
+@end deftypefun
+
+@deftypefun int gnc_numeric_same (gnc_numeric @var{a}, gnc_numeric @var{b}, gint64 @var{denom}, gint @var{how})
+Convert both @var{a} and @var{b} to @var{denom} (@pxref{Standard Numeric
+Arguments} and compare numerators of the result.
+
+@example
+  For example, if @code{@var{a} == 7/16} and @code{@var{b} == 3/4},
+  @code{gnc_numeric_same(@var{a}, @var{b}, 2, GNC_RND_TRUNC) == 1}
+  because both 7/16 and 3/4 round to 1/2 under truncation. However,
+  @code{gnc_numeric_same(@var{a}, @var{b}, 2, GNC_RND_ROUND) == 0}
+  because 7/16 rounds to 1/2 under unbiased rounding but 3/4 rounds
+  to 2/2.
+@end example
+@end deftypefun
+
+
+@node Numeric Denominator Conversion, Numeric Floating Point Conversion, Numeric Comparisons and Predicates, Numeric Library
+@subsection Numeric Denominator Conversion
+@cindex Numeric Denominator Conversion
+
+@deftypefun gnc_numeric gnc_numeric_convert (gnc_numeric @var{in}, gint64 @var{denom}, gint @var{how})
+Convert @var{in} to the specified denominator under standard arguments
+@var{denom} and @var{how}. @xref{Standard Numeric Arguments}.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_convert_with_error (gnc_numeric @var{in}, gint64 @var{denom}, gint @var{how}, {gnc_numeric *} @var{error})
+Same as @code{gnc_numeric_convert}, but return a remainder value for
+accumulating conversion error.
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_reduce (gnc_numeric @var{in})
+Return @var{in} reduced by GCF reduction.
+@end deftypefun
+
+
+@node Numeric Floating Point Conversion, Numeric String Conversion, Numeric Denominator Conversion, Numeric Library
+@subsection Numeric Floating Point Conversion
+@cindex Numeric Floating Point Conversion
+
+@deftypefun gnc_numeric double_to_gnc_numeric (double @var{arg}, gint64 @var{denom}, gint @var{how})
+Convert a floating-point number to a @code{gnc_numeric}. Both @var{denom}
+and @var{how} are used as in arithmetic, but @code{GNC_DENOM_AUTO} is 
+not recognized.
+@end deftypefun
+
+@deftypefun double gnc_numeric_to_double (gnc_numeric @var{arg})
+Convert @var{arg} to a @code{double} value.
+@end deftypefun
+
+
+@node Numeric String Conversion, Numeric Error Handling , Numeric Floating Point Conversion, Numeric Library
+@subsection Numeric String Conversion
+@cindex Numeric String Conversion
+
+@deftypefun {gchar *} gnc_numeric_to_string (gnc_numeric @var{n})
+Return a string representation of @var{n}. The string must be
+freed with @code{g_free}.
+@end deftypefun
+
+@deftypefun {const gchar *} string_to_gnc_numeric (const {gchar *} @var{str}, {gnc_numeric *} @var{n})
+Read a @code{gnc_numeric} from @var{str}, skipping any leading
+whitespace, and returning a pointer to just past the last byte
+read. Return NULL on error.
+@end deftypefun
+
+
+@node Numeric Error Handling , Numeric Example, Numeric String Conversion, Numeric Library
+@subsection Numeric Error Handling 
+@cindex Numeric Error Handling 
+
+@deftypefun int gnc_numeric_check (gnc_numeric @var{num})
+Check @var{num} for the possibility that it is an error signal rather
+than a proper value. Possible return codes are:
+
+@table @code
+
+@item GNC_ERROR_OK
+No error condition
+     
+@item GNC_ERROR_ARG
+An improper argument was passed to a function
+
+@item GNC_ERROR_OVERFLOW
+An overflow occurred while calculating a result 
+
+@item GNC_ERROR_DENOM_DIFF
+@code{GNC_DENOM_FIXED} was specified, but argument denominators differed.
+
+@item GNC_ERROR_REMAINDER
+@code{GNC_RND_NEVER} was specified, but the result could not be
+converted to the desired denominator without a remainder.
+
+@end table
+
+@end deftypefun
+
+@deftypefun gnc_numeric gnc_numeric_error (int error_code)
+Create a @code{gnc_numeric} object that signals the error condition
+noted by @var{error_code} rather than a number.
+@end deftypefun
+
+
+@node Numeric Example,  , Numeric Error Handling , Numeric Library
+@subsection Numeric Example
+@cindex Numeric Example
+
+The following program finds the best @code{gnc_numeric} approximation to
+the @file{math.h} constant @code{M_PI} given a maximum denominator. For
+large denominators, the @code{gnc_numeric} approximation is accurate to
+more decimal places than will generally be needed, but in some cases
+this may not be good enough. For example,
+
+@example
+    M_PI                   = 3.14159265358979323846
+    245850922 / 78256779   = 3.14159265358979311599  (16 sig figs)
+    3126535 / 995207       = 3.14159265358865047446  (12 sig figs)
+    355 / 113              = 3.14159292035398252096  (7 sig figs)
+@end example
+
+@example
+#include <glib.h>
+#include "gnc-numeric.h"
+#include <math.h>
+
+int
+main(int argc, char ** argv)
+@{
+  gnc_numeric approx, best;
+  double err, best_err=1.0;
+  double m_pi = M_PI;
+  gint64 denom;
+  gint64 max;
+
+  sscanf(argv[1], "%Ld", &max);
+  
+  for (denom = 1; denom < max; denom++)
+  @{
+    approx = double_to_gnc_numeric (m_pi, denom, GNC_RND_ROUND);
+    err    = m_pi - gnc_numeric_to_double (approx);
+    if (fabs (err) < fabs (best_err))
+    @{
+      best = approx;
+      best_err = err;
+      printf ("%Ld / %Ld = %.30f\n", gnc_numeric_num (best),
+              gnc_numeric_denom (best), gnc_numeric_to_double (best));
+    @}
+  @}
+@}
+@end example
+
+
+@node Key-Value Pair Frames, Splits, Numeric Library, Engine
 @section Key-Value Pair Frames
 @cindex Key-Value Pairs
 
@@ -715,20 +1134,20 @@ Return the parent Account of @var{split}.
 Return the parent Transaction of @var{split}.
 @end deftypefun
 
-@deftypefun double xaccSplitGetShareAmount (Split * @var{split})
+@deftypefun gnc_numeric xaccSplitGetShareAmount (Split * @var{split})
 Return the 'share quantity' of @var{split}.
 @end deftypefun
 
-@deftypefun double xaccSplitGetSharePrice (Split * @var{split})
+@deftypefun gnc_numeric xaccSplitGetSharePrice (Split * @var{split})
 Return the 'share price' of @var{split}.
 @end deftypefun
 
-@deftypefun double xaccSplitGetValue (Split * @var{split})
+@deftypefun gnc_numeric xaccSplitGetValue (Split * @var{split})
 Return the value of @var{split}, which is equal to the share quantity
 multiplied by the share price.
 @end deftypefun
 
-@deftypefun double xaccSplitGetBaseValue (Split * @var{split}, const char * @var{base_currency})
+@deftypefun gnc_numeric xaccSplitGetBaseValue (Split * @var{split}, const char * @var{base_currency})
 Return either the share quantity or the value of @var{split}, depending
 upon whether @var{base_currency} matches the security or currency of the
 parent Account, respectively. No other value for @var{base_currency} is
@@ -769,32 +1188,32 @@ Return the Memo field of @var{split}.
 Return the Action field of @var{split}.
 @end deftypefun
 
-@deftypefun double xaccSplitGetBalance (Split * @var{split})
+@deftypefun gnc_numeric xaccSplitGetBalance (Split * @var{split})
 Return the balance of @var{split}'s parent Account up to and including
 @var{split}. See @ref{Accounts} for details.
 @end deftypefun
 
-@deftypefun double xaccSplitGetClearedBalance (Split * @code{split})
+@deftypefun gnc_numeric xaccSplitGetClearedBalance (Split * @code{split})
 Return the cleared balance of @var{split}'s parent Account up to and
 including @var{split}. See @ref{Accounts} for details.
 @end deftypefun
 
-@deftypefun double xaccSplitGetReconciledBalance (Split * @code{split})
+@deftypefun gnc_numeric xaccSplitGetReconciledBalance (Split * @code{split})
 Return the reconciled balance of @var{split}'s parent Account up to and
 including @var{split}. See @ref{Accounts} for details.
 @end deftypefun
 
-@deftypefun double xaccSplitGetShareBalance (Split * @var{split})
+@deftypefun gnc_numeric xaccSplitGetShareBalance (Split * @var{split})
 Return the share balance of @var{split}'s parent Account up to and
 including @var{split}. See @ref{Accounts} for details.
 @end deftypefun
 
-@deftypefun double xaccSplitGetShareClearedBalance (Split * @code{split})
+@deftypefun gnc_numeric xaccSplitGetShareClearedBalance (Split * @code{split})
 Return the share cleared balance of @var{split}'s parent Account up to
 and including @var{split}. See @ref{Accounts} for details.
 @end deftypefun
 
-@deftypefun double xaccSplitGetShareReconciledBalance (Split * @code{split})
+@deftypefun gnc_numeric xaccSplitGetShareReconciledBalance (Split * @code{split})
 Return the share reconciled balance of @var{split}'s parent Account up
 to and including @var{split}. See @ref{Accounts} for details.
 @end deftypefun
@@ -826,27 +1245,27 @@ Set the reconciliation date of @var{split} to @var{time}.
 Set the reconciliation date of @var{split} to @var{ts}.
 @end deftypefun
 
-@deftypefun void xaccSplitSetShareAmount (Split * @var{split}, double amount)
+@deftypefun void xaccSplitSetShareAmount (Split * @var{split}, gnc_numeric amount)
 Set the share quantity of @var{split} to @var{amount}.
 @end deftypefun
 
-@deftypefun void xaccSplitSetSharePrice (Split * @var{split}, double @var{price})
+@deftypefun void xaccSplitSetSharePrice (Split * @var{split}, gnc_numeric @var{price})
 Set the share price of @var{split} to @var{price}.
 @end deftypefun
 
-@deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, double @var{price}, double @var{amount})
+@deftypefun void xaccSplitSetSharePriceAndAmount (Split * @var{split}, gnc_numeric @var{price}, gnc_numeric @var{amount})
 Set both the share price and share quantity of @var{split}. This routine
 is more efficent than calling @code{xaccSplitSetShareAmount} and
 @code{xaccSplitSetSharePrice} in succesion, because the parent Transaction
 is only rebalanced once. @xref{Transactions}.
 @end deftypefun
 
-@deftypefun void xaccSplitSetValue (Split * @var{split}, double @var{value})
+@deftypefun void xaccSplitSetValue (Split * @var{split}, gnc_numeric @var{value})
 Adjust the share quantity of @var{split} so that @var{split}'s value is
 equal to @var{value}.
 @end deftypefun
 
-@deftypefun void xaccSplitSetBaseValue (Split * @var{split}, double @var{value}, const char * @var{base_currency})
+@deftypefun void xaccSplitSetBaseValue (Split * @var{split}, gnc_numeric @var{value}, const char * @var{base_currency})
 Set either the share quantity or value of @var{split} depending upon
 whether @var{base_currency} is the security or current of @var{split}'s
 parent Account. @xref{Accounts}.
@@ -1196,7 +1615,7 @@ unsupported URI type
 file path too long
 
 @item ENOLCK
-book not open when SessionSave() was called.
+book not open when @code{gnc_book_save()} was called.
 
 @end table
 @end deftypefun
