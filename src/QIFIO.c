@@ -107,6 +107,14 @@ char * xaccReadQIFDiscard( int fd )
         qifline = xaccReadQIFLine (fd);
         return qifline;
      } else
+     if (NSTRNCMP(qifline, "^\n")) {
+        qifline = xaccReadQIFLine (fd);
+        return qifline;
+     } else
+     if (NSTRNCMP(qifline, "^\r")) {
+        qifline = xaccReadQIFLine (fd);
+        return qifline;
+     } else
      if ('!' == qifline [0]) return qifline;
      qifline = xaccReadQIFLine (fd);
    }
@@ -187,6 +195,12 @@ char * xaccReadQIFCategory (int fd, Account * acc)
      if (NSTRNCMP(qifline, "^^")) {
         break;
      } else
+     if (NSTRNCMP(qifline, "^\n")) {
+        break;
+     } else
+     if (NSTRNCMP(qifline, "^\r")) {
+        break;
+     } else
      if ('!' == qifline [0]) break;
 
      qifline = xaccReadQIFLine (fd);
@@ -260,6 +274,12 @@ char * xaccReadQIFAccount (int fd, Account * acc)
 
      /* check for end-of-transaction marker */
      if (NSTRNCMP (qifline, "^^")) {
+        break;
+     } else
+     if (NSTRNCMP (qifline, "^\n")) {
+        break;
+     } else
+     if (NSTRNCMP (qifline, "^\r")) {
         break;
      } else
      if ('!' == qifline [0]) break;
@@ -740,6 +760,12 @@ char * xaccReadQIFTransaction (int fd, Account *acc)
      if (NSTRNCMP (qifline, "^^")) {
         break;
      } else
+     if (NSTRNCMP (qifline, "^\n")) {
+        break;
+     } else
+     if (NSTRNCMP (qifline, "^\r")) {
+        break;
+     } else
      if ('!' == qifline [0]) break;
      qifline = xaccReadQIFLine (fd);
 
@@ -829,11 +855,11 @@ char * xaccReadQIFTransList (int fd, Account *acc)
    char * qifline;
 
    if (!acc) return 0x0;
-   do { 
-      qifline = xaccReadQIFTransaction (fd, acc);
-
+   qifline = xaccReadQIFTransaction (fd, acc);
+   while (qifline) {
       if ('!' == qifline[0]) break;
-   } while (qifline);
+      qifline = xaccReadQIFTransaction (fd, acc);
+   } 
    return qifline;
 }
 
