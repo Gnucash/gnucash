@@ -7,11 +7,8 @@ value_portfolio is a stand-alone perl script for updating and printing
     purchase price.
     (from Christopher B. Browne, cbbrowne@hex.net)
 
-getquotes.pl is a set of perl routines to fetch stock quotes from various
-   services.  dervied from the above. Still under development.
- 
-
-Finance::YahooQuote
-    This is a perl 5 module that will pull one or more stock quotes from
-    Yahoo! Finance.  From  version 0.06 by Dj Padzensky <djpadz@padz.net>.
+Finance::Quote
+    This is a perl 5 module that will pull one or more stock and/or mutual
+    fund quotes from a variety of sources, including Yahoo! Finance.  
+    Derived from version 0.06 by Dj Padzensky <djpadz@padz.net>.
     Home site at http://www.padz.net/~djpadz/
