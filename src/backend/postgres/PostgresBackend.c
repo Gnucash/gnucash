@@ -233,6 +233,17 @@ pgendGUIDType (PGBackend *be, const GUID *guid)
 
 /* ============================================================= */
 
+GNCBook *
+pgendGetBook(PGBackend *pbe) {
+    GNCBook *book;
+    
+    ENTER(" ");
+    book = gnc_session_get_book(pbe->session);
+
+    LEAVE("book = %p", book);
+    return book;
+}
+
 static void 
 pgend_set_book (PGBackend *be, GNCBook *book)
 {
@@ -454,7 +465,7 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    }
    else
    {
-      trans = xaccMallocTransaction(be->book);
+      trans = xaccMallocTransaction(pgendGetBook(be));
       xaccTransBeginEdit (trans);
       xaccTransSetGUID (trans, &trans_guid);
    }
@@ -468,7 +479,8 @@ query_cb (PGBackend *be, PGresult *result, int j, gpointer data)
    xaccTransSetVersion (trans, atoi(DB_GET_VAL("version",j)));
    trans->idata = atoi(DB_GET_VAL("iguid",j));
 
-   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j), be->book);
+   currency = gnc_string_to_commodity (DB_GET_VAL("currency",j),
+                                       pgendGetBook(be));
    if (currency)
      xaccTransSetCurrency (trans, currency);
    else
@@ -528,7 +540,8 @@ pgendFillOutToCheckpoint (PGBackend *be, const char *query_string)
      gnc_commodity * commodity;
 
      pgendGetCommodity (be, ri->commodity_string);
-     commodity = gnc_string_to_commodity (ri->commodity_string, be->book);
+     commodity = gnc_string_to_commodity (ri->commodity_string,
+                                          pgendGetBook(be));
 
      if (commodity)
      {
@@ -713,7 +726,7 @@ pgendRunQuery (Backend *bend, gpointer q_p)
    sqlQuery *sq;
 
    ENTER ("be=%p, qry=%p", be, q);
-   if (!be || !q) return;
+   if (!be || !q) { LEAVE("(null) args"); return; }
    be->version_check = (guint32) time(0);
 
    gnc_engine_suspend_events();
@@ -724,7 +737,7 @@ pgendRunQuery (Backend *bend, gpointer q_p)
    sq = sqlQuery_new();
    sql_query_string = sqlQuery_build (sq, q);
 
-   topgroup = gnc_book_get_group (be->book);
+   topgroup = gnc_book_get_group (pgendGetBook(be));
 
    /* stage transactions, save some postgres overhead */
    xaccGroupBeginStagedTransactionTraversals (topgroup);
@@ -1480,7 +1493,9 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
    AccountGroup *grp;
    PGBackend *be = (PGBackend *)bend;
 
-   if (!be) return;
+   ENTER("be = %p", bend);
+   
+   if (!be || !book) { LEAVE("(null) args"); return; }
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
@@ -1500,9 +1515,8 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
       g_list_free (be->blist);
       be->blist = NULL;
    }
+   pgendBookRestore (be, book);
    pgend_set_book (be, book);
-   pgendGetBook (be, book);
-   gnc_session_set_book(be->session, book);
                         
    PINFO("Book GUID = %s\n",
            guid_to_string(gnc_book_get_guid(book)));
@@ -1517,6 +1531,7 @@ pgend_book_load_poll (Backend *bend, GNCBook *book)
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -1532,15 +1547,14 @@ pgend_book_load_single (Backend *bend, GNCBook *book)
 {
    PGBackend *be = (PGBackend *)bend;
 
-   if (!be) return;
-
+   ENTER("be = %p", bend);
+   
+   if (!be || !book) { LEAVE("(null) args"); return; }
 
    /* don't send events  to GUI, don't accept callbacks to backend */
    gnc_engine_suspend_events();
    pgendDisable(be);
    be->version_check = (guint32) time(0);
-
-   pgend_set_book (be, book);
 
    pgendKVPInit(be);
 
@@ -1550,9 +1564,8 @@ pgend_book_load_single (Backend *bend, GNCBook *book)
       PWARN ("old book list not empty ");
       g_list_free (be->blist);
    }
-   pgendGetBook (be, book);
-
-   be->blist = g_list_append (NULL, book);
+   pgendBookRestore (be, book);
+   pgend_set_book (be, book);
 
    pgendGetAllAccountsInBook (be, book);
 
@@ -1561,6 +1574,7 @@ pgend_book_load_single (Backend *bend, GNCBook *book)
    /* re-enable events */
    pgendEnable(be);
    gnc_engine_resume_events();
+   LEAVE(" ");
 }
 
 /* ============================================================= */
@@ -1784,7 +1798,6 @@ pgend_session_begin (Backend *backend,
       g_list_free (be->blist);
       be->blist = NULL;
    }
-   pgend_set_book (be, gnc_session_get_book(session));
 
    /* Parse the sessionid for the hostname, port number and db name.
     * The expected URL format is
@@ -2360,13 +2373,17 @@ pgend_session_begin (Backend *backend,
 void
 pgendDisable (PGBackend *be)
 {
+   ENTER("be = %p", be);
    if (0 > be->nest_count)
    {
       PERR ("too many nested enables");
    }
    be->nest_count ++;
    PINFO("nest count=%d", be->nest_count);
-   if (1 < be->nest_count) return;
+   if (1 < be->nest_count) {
+       LEAVE("be->nest_count > 1: %d", be->nest_count); 
+       return;
+   }
 
    /* save hooks */
    be->snr.load	                = be->be.load;
@@ -2398,6 +2415,8 @@ pgendDisable (PGBackend *be)
    be->be.percentage           = NULL;
    be->be.events_pending       = NULL;
    be->be.process_events       = NULL;
+
+   LEAVE(" ");
 }
 
 /* ============================================================= */
