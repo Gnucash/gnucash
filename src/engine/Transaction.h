@@ -119,25 +119,44 @@ void          xaccTransAppendSplit (Transaction *, Split *);
 void          xaccSplitDestroy (Split *);
 
 /* ------------- gets --------------- */
-/* return pointer to each of the splits */
+/* The xaccTransGetSplit() method returns a pointer to each of the 
+ *    splits in this transaction.  Valid values for i are zero to 
+ *    (number_of__splits-1).  An invalid value of i will cause NULL to
+ *    be returned.  A conenient way of cycling through all splits is
+ *    to start at zero, and kep incrementing until a null value is returned.
+ */
 Split *       xaccTransGetSplit (Transaction *trans, int i);
 
+/* These routines return the Num (or ID field), the description, 
+ * and the date field.
+ */
 char *        xaccTransGetNum (Transaction *);
 char *        xaccTransGetDescription (Transaction *);
 time_t        xaccTransGetDate (Transaction *);
 
-/* ------------- splits --------------- */
 /* return the number of splits */
 int           xaccTransCountSplits (Transaction *trans);
 
+/* ------------- splits --------------- */
 Split       * xaccMallocSplit (void);
 void          xaccInitSplit   (Split *);    /* clears a split struct */
-int           xaccCountSplits (Split **sarray);
 
+/* The memo is an arbitrary string associated with a split.
+ *    Users typically type in free form text from the GUI.
+ */
 void          xaccSplitSetMemo (Split *, const char *);
-void          xaccSplitSetAction (Split *, const char *);
-void          xaccSplitSetReconcile (Split *, char);
 
+/* The Action is essentially an arbitrary string, but is 
+ * meant to be conveniently limited to a menu of selections 
+ * such as  "Buy", "Sell", "Interest", etc.  However,
+ * as far as the engine is concerned, its an arbitrary string.
+ */
+void          xaccSplitSetAction (Split *, const char *);
+
+/* The Reconcile is a single byte, whose values are typically
+ * are "no", "cleared" and "reconciled"
+ */
+void          xaccSplitSetReconcile (Split *, char);
 
 /* 
  * The following four functions set the prices and amounts.
@@ -194,10 +213,11 @@ double xaccSplitGetShareBalance (Split *);
 /* return teh parent transaction of the split */
 Transaction * xaccSplitGetParent (Split *);
 
-/* return the value of the reconcile flag */
+/* return the memo, action strings */
 char *        xaccSplitGetMemo (Split *split);
 char *        xaccSplitGetAction (Split *split);
 
+/* return the value of the reconcile flag */
 char          xaccSplitGetReconcile (Split *split);
 double        xaccSplitGetShareAmount (Split * split);
 double        xaccSplitGetSharePrice (Split * split);
@@ -217,10 +237,16 @@ Account *     xaccSplitGetAccount (Split *);
 int  xaccTransOrder (Transaction **ta, Transaction **tb);
 int  xaccSplitOrder (Split **sa, Split **sb);
 
+/********************************************************************\
+ * Miscellaneous utility routines.
+\********************************************************************/
 /*
  * count the number of transactions in the null-terminated array
  */
 int xaccCountTransactions (Transaction **tarray);
+
+/* count the number of splits in the indicated array */
+int xaccCountSplits (Split **sarray);
 
 /* 
  * convenience routine that is essentially identical to 
@@ -228,5 +254,12 @@ int xaccCountTransactions (Transaction **tarray);
  * transaction as root.
  */
 Account * xaccGetAccountByName (Transaction *, const char *);
+
+/* 
+ * The GetOtherSplit() is a convenience routine that returns
+ * the other of a pair of splits.  If there are more than two 
+ * splits, it returns NULL.
+ */
+Split * xaccGetOtherSplit (Split *);
 
 #endif /* __XACC_TRANSACTION_H__ */

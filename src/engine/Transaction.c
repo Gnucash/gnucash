@@ -30,6 +30,7 @@
 
 #include "Account.h"
 #include "AccountP.h"
+#include "Group.h"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "TransLog.h"
@@ -1058,7 +1059,7 @@ Account *
 xaccGetAccountByName (Transaction *trans, const char * name)
 {
    Split *s;
-   Account *acc;
+   Account *acc = NULL;
    int i;
 
    if (!trans) return NULL;
@@ -1078,6 +1079,25 @@ xaccGetAccountByName (Transaction *trans, const char * name)
 
    acc = xaccGetPeerAccountFromName (acc, name);
    return acc;
+}
+
+/********************************************************************\
+\********************************************************************/
+
+Split *
+xaccGetOtherSplit (Split *split)
+{
+   Transaction *trans;
+
+   if (!split) return NULL;
+   trans = split->parent;
+
+   /* if more than two splits, return NULL */
+   if ((trans->splits[1]) && (trans->splits[2])) return NULL;
+
+   if (split == trans->splits[0]) return (trans->splits[1]);
+   if (split == trans->splits[1]) return (trans->splits[0]);
+   return NULL;  /* never reached, in theory */
 }
 
 /************************ END OF ************************************\
