@@ -84,39 +84,95 @@
     </ul>
 
     <h2>Version</h2>
-    This version is gnucash-1.1.20, a somewhat unstable, buggy version.
-    The latest stable release is 1.0.18, you should be using that.
+    This version is gnucash-1.3.x, a somewhat unstable, buggy version.
+    The latest stable release is 1.2.x, you should be using that.
     <p>
-    Versions 1.0.x are considered to be stable revisions with all
-    currently known bugs fixed.  Versions 1.1.x are considered to be
+    Versions 1.0.x and 1.2.x are considered to be stable revisions with all
+    currently known bugs fixed.  Versions 1.3.x are considered to be
     development versions, which may have many bugs.  The next stable 
-    series will be 1.2.x
+    series will be 1.4.x
 
-    <h2>Credits</h2>
-    <br>Fred Baube &lt;fred@moremagic.com&gt; for Java port
+    <p>
+
+    <h2>Lead Developers</h2>
+    <dl>
+    <dt>Robin Clark &lt;rclark@hmc.edu&gt;
+    <dd>wrote the original X-Accountant in Motif
+       as a school project, taking it to version 0.9 by October 1997.
+
+    <dt>Linas Vepstas &lt;linas@linas.org&gt;
+    <dd>liked what he saw: the GUI was slick,
+       the code was documented and well structured, and it was all GPL'ed.
+       And so he re-wrote it: adding cell-widgets to XbaeMatrix, so that
+       the combobox and arrows would make an even slicker GUI, rewrote the
+       X-Accountant internals to add double-entry, an account heirarchy,
+       split out a transaction mini-engine, add support for stocks, and spiff
+       up the help menus.  This was version 1.0 as of January 1998.  Since
+       then, for version 1.1, the engine was expanded &amp; refined, and the
+       register window code completely redesigned and made mostly
+       Motif-(and GUI-)independent.  Did some prototype OFX work.
+
+    <dt>Jeremy Collins &lt;jcollins@gnucash.org&gt;
+    <dd>publicized the GnoMoney project
+       widely and broadly, and then changed its name to GnuCash.  Jeremy
+       created the gnucash.org web site, registered the domain, got the
+       initial GTK/gnome code working.
+
+    <dt>Rob Browning &lt;rlb@cs.utexas.edu&gt;
+    <dd>abused everyone for not using perl,
+       and then added guile/scheme support. Rob maintains the build
+       infrastructure, is handling the whole guile/perl extension language
+       thing, and is dealing with configuration &amp; configurability.
+
+    <dt>Dirk Schoenberger &lt;schoenberger@signsoft.com&gt;
+    <dd>is working on the Qt/KDE port
+    </dl>
+    <p>
+
+
+    <h2>Fixes & Patches</h2>
+    <br>Andrew Arensburger &lt;arensb@cfar.umd.edu&gt; for FreeBSD &amp; other patches
+    <br>Matt Armstrong &lt;matt_armstrong@bigfoot.com&gt; for misc fixes
+    <br>Fred Baube &lt;fred@moremagic.com&gt; for attempted Java port/MoneyDance
     <br>Christopher B. Browne &lt;cbbrowne@hex.net&gt; for perl stock scripts
-    <br>Rob Browning &lt;rlb@cs.utexas.edu&gt; for perl, scheme &amp; GTK graphing
+    <br>Graham Chapman &lt;grahamc@zeta.org.au&gt; for the xacc-rpts addon package
     <br>George Chen &lt;georgec@sco.com&gt; for MS-Money QIF's &amp; fixes
-    <br>Robin Clark &lt;rclark@hmc.edu&gt; for original xacc
-    <br>Jeremey Collins &lt;linux@cyberramp.net&gt; for GnoMoney &amp; GTK port
-    <br>Bob Drzyzgula &lt;bob@mostly.com&gt; for budgeting design notes
-    <br>Koen D'Hondt &lt;ripley@xs4all.nl&gt; for Solaris patches to XmHTML
+    <br>Jeremey Collins &lt;jcollins@gnucash.org&gt; for GnoMoney &amp; GTK port
+    <br>Patrick Condron &lt;pcondon@rackspace.com&gt; for webserver and T1 connection.
     <br>Ciaran Deignan &lt;Ciaran.Deignan@bull.net&gt; for AIX binary version
+    <br>Tyson Dowd   &lt;tyson@tyse.net&gt; for config/make patches &amp; debian maint.
+    <br>Koen D'Hondt &lt;ripley@xs4all.nl&gt; for Solaris patches to XmHTML
+    <br>Bob Drzyzgula &lt;bob@mostly.com&gt; for budgeting design notes
+    <br>Jan-Uwe Finck &lt;ju_finck@mail.netwave.de&gt; for German message translation
+    <br>Ron Forrester &lt;rjf@aracnet.com&gt; for gnome patches
     <br>Dave Freese &lt;DFreese@osc.uscg.mil&gt; for leap-year fix
     <br>Otto Hammersmith &lt;otto@bug.redhat.com&gt; for RedHat RPM version
+    <br>Alexandru Harsanyi &lt;haral@codec.ro&gt; for misc core dumps &amp; lockups.
+    <br>Jon K}re Hellan &lt;jk@isdn-a33.itea.ntnu.no&gt; misc core dump fixes
+    <br>Prakash Kailasa &lt;PrakashK@bigfoot.com&gt; for gnome build fixes
     <br>Tom Kludy &lt;tkludy@csd.sgi.com&gt; for SGI Irix port
+    <br>Sven Kuenzler &lt;sk@xgm.de&gt; for SuSE README file
+    <br>Ted Lemon &lt;mellon@andare.fugue.com&gt; for NetBSD port
+    <br>Yannick Le Ny &lt;y-le-ny@ifrance.com&gt; pour la traduction en francais
+    <br>G. Allen Morris III  &lt;gam3@ann.softgams.com&gt; for QIF core dump
     <br>Peter Norton &lt;spacey@inch.com&gt; for a valiant attempt at a GTK port
+    <br>OmNiBuS &lt;webmaster@obsidian.uia.net&gt; web site graphics &amp; content
+    <br>Myroslav Opyr &lt;mopyr@IPM.Lviv.UA&gt; for misc patches
+    <br>Alain Peyrat &lt;Alain.Peyrat@nmu.alcatel.fr&gt; for configure.in patches
     <br>Gavin Porter &lt;maufk@csv.warwick.ac.uk&gt; for euro style dates
     <br>Ron Record &lt;rr@sco.com&gt; for SCO Unixware &amp; OpenServer binaries
+    <br>Christopher Seawood &lt;cls@seawood.org&gt; for XbaeMatrix core dump
+    <br>Mike Simons &lt;msimons@fsimons01.erols.com&gt; misc configure.in patches
     <br>Richard Skelton &lt;rich@brake.demon.co.uk&gt; for Solaris cleanup
-    <br>Henning Spruth &lt;spruth@bigfoot.com&gt; for German text &amp; euro date fixes
-    <br>Linas Vepstas &lt;linas@linas.org&gt; for leading the project
-    <br>... and I am sure that I have missed many others ...
+    <br>Henning Spruth &lt;spruth@bigfoot.com&gt; for German text &amp; euro date rework
+    <br>Ken Yamaguchi &lt;gooch@ic.EECS.Berkeley.EDU&gt; QIF import fixes; MYM import
     <br>
 
 
+
+
     <h2>Supported Operating Systems</h2>
-    xacc is known to work in the following configs:
+    gnucash-1.0.18 (xacc-1.0.18) is known to work in the following configs:
     <br>Linux 2.0.x           -- Intel  w/ RedHat Motif
     <br>Linux 2.0.x           -- Intel  w/ Lesstif v0.81
     <br>Linux Debian          -- Intel  w/ Lesstif v0.81
