@@ -1,3 +1,13 @@
+2004-10-08  Derek Atkins  <derek@ihtfp.com>
+
+	* engine/gw-engine-spec.scm:
+	* gnome-search/dialog-search.h:
+	* report/report-gnome/dialog-column-view.h:
+	  Andreas Rottmann's patch to support g-wrap 1.9.
+	  - don't wrap non-existent objects
+	  - protect headers from multiple inclusion
+	  - include gtk.h header when we use gtk objects.
+
 2004-10-08  Benoit Grégoire <bock@step.polymtl.ca>
        	* src/import-export/import-backend.c:  Duplicate match tweaks:
                -Change MATCH_DATE_NOT_THRESHOLD from 3 weeks to two weeks
@@ -8,7 +18,6 @@
        	* src/import-export/ofx/test/test-link.cL Update for new LibOfx.
        	* configure.in:  Partly update for new libofx.  It will crash if the right version isn't available, but there is no explicit version support (if someone wants to code it, you can use the output of "ofxdump --version".
 	* src/gnome-utils/gnc-query-list.c:  Fix gcc3.4 compile problem
-
 
 2004-09-30  Christian Stimming  <stimming@tuhh.de>
 
