@@ -482,6 +482,7 @@ gnc_default_print_info (gboolean use_symbol)
 
   struct lconv *lc;
 
+  info.use_symbol = use_symbol ? 1 : 0;
   if (got_it)
     return info;
 
@@ -493,7 +494,6 @@ gnc_default_print_info (gboolean use_symbol)
   info.min_decimal_places = lc->frac_digits;
 
   info.use_separators = 1;
-  info.use_symbol = use_symbol ? 1 : 0;
   info.use_locale = 1;
   info.monetary = 1;
 
