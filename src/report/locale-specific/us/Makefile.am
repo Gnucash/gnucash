@@ -37,14 +37,16 @@ endif
 
 noinst_DATA = .scm-links
 
-gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
-gncscmmod_DATA = us.scm 
+## This is unused and therefore no longer installed and/or loaded
+# gncscmmoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/locale-specific
+# gncscmmod_DATA = us.scm
 
 gncscmothermoddir = ${GNC_SHAREDIR}/guile-modules/gnucash/report/
-gncscmothermod_DATA = taxtxf.scm 
+gncscmothermod_DATA = taxtxf.scm taxtxf-de_DE.scm
 
 EXTRA_DIST = \
-  ${gncscmmod_DATA} \
   ${gncscmothermod_DATA}
+
+#  ${gncscmmod_DATA} 
 
 CLEANFILES = ${SCM_FILE_LINKS} gnucash report locale-specific us .scm-links
