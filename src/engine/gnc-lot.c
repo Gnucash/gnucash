@@ -243,6 +243,7 @@ gnc_lot_add_split (GNCLot *lot, Split *split)
       return;
    }
 
+   if (lot == split->lot) return; /* handle not-uncommon no-op */
    if (split->lot)
    {
       gnc_lot_remove_split (split->lot, split);
