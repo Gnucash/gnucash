@@ -34,7 +34,7 @@ CFLAGS   =  -O2 -Wall -g -Wall ${INCLPATH}
 
 ######################################################################
 # See Makefile.common for information about these variables.
-INDEP_SRCS := Account.c DateUtils.c FileIO.c Group.c LedgerUtils.c \
+INDEP_SRCS := AccInfo.c Account.c DateUtils.c FileIO.c Group.c LedgerUtils.c \
               QIFIO.c Transaction.c TransLog.c date.c util.c
 ######################################################################
 
