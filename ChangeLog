@@ -1,3 +1,8 @@
+2003-08-10  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome/reconcile-list.c: our parent is a gnc-query-list, not
+	  a clist.  Fix a bug so we properly call the parent destroy function.
+
 2003-08-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/help-topics-index.scm: Adapted to latest gnucash-docs
