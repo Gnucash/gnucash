@@ -28,6 +28,9 @@
 	* src/import-export/qif-import/druid-qif-import.c: Configure time
 	option to dump reference counts when gnucash exits.
 
+	* src/import-export/log-replay: Install menu item using the new
+	plugin system.
+
 2003-10-18  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/gnc-ui-util.h:
