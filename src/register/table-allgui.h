@@ -296,13 +296,12 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col);
 void        
 xaccRefreshCursorGUI (Table * table);
 
-void
-gnc_table_enter_update(Table *table, int row, int col, char **new_text);
+const char *
+gnc_table_enter_update(Table *table, int row, int col);
 
-void
+const char *
 gnc_table_leave_update(Table *table, int row, int col,
-                       const char* old_text,
-                       char **new_text);
+                       const char* old_text);
 
 const char *
 gnc_table_modify_update(Table *table, int row, int col,

@@ -163,12 +163,12 @@ enterCB (Widget mw, XtPointer cd, XtPointer cb) {
      (XbaeMatrixEnterCellCallbackStruct *) cb;
    const int row = cbs->row;
    const int col = cbs->column;
-   char *new_text = NULL;
+   const char *new_text;
 
-   gnc_table_enter_update(table, row, col, &new_text);
+   new_text = gnc_table_enter_update(table, row, col);
    
    if(new_text) {
-      XbaeMatrixSetCell (mw, row, col, new_text);
+      XbaeMatrixSetCell (mw, row, col, (char *)new_text);
       XbaeMatrixRefreshCell (mw, row, col);
       
       /* don't map a text widget */
@@ -241,12 +241,12 @@ leaveCB (Widget mw, XtPointer cd, XtPointer cb)
      (XbaeMatrixLeaveCellCallbackStruct *) cb;
    const int row = cbs->row;
    const int col = cbs->column;
-   char * new_text;
+   const char * new_text;
 
-   gnc_table_leave_update(table, row, col, cbs->value, &new_text);
+   new_text = gnc_table_leave_update(table, row, col, cbs->value);
 
    if(new_text) {
-     cbs->value = new_text;
+     cbs->value = strdup (new_text);
    }
 
    /* by default, accept whatever the final proposed edit is */
