@@ -59,4 +59,4 @@ CLEANFILES =
 CLEANFILES += generic-import import-export gnucash g-wrapped .scm-links
 
 # FIXME remove this when qif-io-core is finished
-DIST_SUBDIRS = binary-import qif-import qif-io-core ofx
+DIST_SUBDIRS = binary-import qif-import qif-io-core ofx test hbci
