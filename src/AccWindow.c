@@ -48,13 +48,8 @@ typedef struct _accwindow {
   String notes;          /* The text from the "Notes" window        */
                          /* The account type buttons:               */
   Widget dialog;
-  Widget bank;
-  Widget cash;
-  Widget asset;
-  Widget credit;
-  Widget liability;
-  Widget portfolio;
-  Widget mutual;
+
+  Widget type_widgets[NUM_ACCOUNT_TYPES];
 
                          /* The text fields:                        */
   Widget name;           /* The account name text field             */
@@ -95,6 +90,7 @@ void editCB( Widget mw, XtPointer cd, XtPointer cb );
 void 
 accWindow( Widget parent )
   {
+  int i;
   Widget    dialog, form, frame, rc, widget, 
             label, buttonform, group_menu, topwid;
   AccWindow *accData;
@@ -168,48 +164,18 @@ accWindow( Widget parent )
 				NULL );
   
   /* Create the buttons */
-  accData->bank = 
-    XtVaCreateManagedWidget( "Bank",
+  for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+    accData->type_widgets[i] = 
+    XtVaCreateManagedWidget( account_type_name[i],
 			     xmToggleButtonWidgetClass, rc,
 			     XmNindicatorType,   XmONE_OF_MANY,
-			     XmNset,             True,
+			     XmNset,             False,
 			     NULL);
-  
-  accData->cash = 
-    XtVaCreateManagedWidget( "Cash",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->asset =
-    XtVaCreateManagedWidget( "Asset",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->credit = 
-    XtVaCreateManagedWidget( "Credit Card",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->liability = 
-    XtVaCreateManagedWidget( "Liability",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->portfolio = 
-    XtVaCreateManagedWidget( "Portfolio",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
-  
-  accData->mutual =
-    XtVaCreateManagedWidget( "Mutual Fund",
-			     xmToggleButtonWidgetClass, rc,
-			     XmNindicatorType,   XmONE_OF_MANY,
-			     NULL);
+  }
+  XtVaSetValues (accData->type_widgets[BANK],
+                             XmNset,             True,
+                             NULL);
+
   
   /******************************************************************\
    * Text fields....                                                *
@@ -637,34 +603,10 @@ createCB( Widget mw, XtPointer cd, XtPointer cb )
   acc->notes       = accData->notes;
   
   /* figure out account type */
-    
-  XtVaGetValues( accData->bank, XmNset, &set, NULL );
-  if(set)
-    acc->type = BANK;
-  
-  XtVaGetValues( accData->cash, XmNset, &set, NULL );
-  if(set)
-    acc->type = CASH;
-  
-  XtVaGetValues( accData->asset, XmNset, &set, NULL );
-  if(set)
-    acc->type = ASSET;
-  
-  XtVaGetValues( accData->credit, XmNset, &set, NULL );
-  if(set)
-    acc->type = CREDIT;
-  
-  XtVaGetValues( accData->liability, XmNset, &set, NULL );
-  if(set)
-    acc->type = LIABILITY;
-  
-  XtVaGetValues( accData->portfolio, XmNset, &set, NULL );
-  if(set)
-    acc->type = PORTFOLIO;
-  
-  XtVaGetValues( accData->mutual, XmNset, &set, NULL );
-  if(set)
-    acc->type = MUTUAL;
+  for (i=0; i<NUM_ACCOUNT_TYPES; i++) {
+    XtVaGetValues( accData->type_widgets[i], XmNset, &set, NULL );
+    if(set) acc->type = i;
+  }
   
   /* Add an opening balance transaction (as the first transaction) */
   trans = mallocTransaction();

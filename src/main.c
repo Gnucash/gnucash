@@ -41,7 +41,7 @@ Boolean  realized=False;   /* Has the toplevel been realized? */
 XtAppContext app;
 
 /* The names of the different types of accounts.  For resource
- * specification */
+ * specification. Must match the enums in Account.h */
 String accRes[] ={
   "bank",
   "cash",
@@ -49,7 +49,10 @@ String accRes[] ={
   "credit",
   "liability",
   "portfolio",
-  "mutual"
+  "mutual",
+  "income",
+  "expense",
+  "equity"
 };
 
 /** FALLBACK RESOURCES **********************************************/
@@ -65,14 +68,18 @@ String fbRes[] = {
   /* MenuBar stuff: */
   "*menubar*marginHeight:     1",
   "*menubar*marginWidth:      1",
+
   /* Register window account type specific stuff: */ 
-  "*regbank.oddRowBackground:      #ffffaa",
+  "*regbank.oddRowBackground:      #aaccff",
   "*regcash.oddRowBackground:      #ccffcc",
-  "*regasset.oddRowBackground:     #ccffcc",
-  "*regcredit.oddRowBackground:    #ccccff",
+  "*regasset.oddRowBackground:     #aaffcc",
+  "*regcredit.oddRowBackground:    #ffffaa",
   "*regliability.oddRowBackground: #ffcccc",
   "*regportfolio.oddRowBackground: #ccffff",
   "*regmutual.oddRowBackground:    #ccffff",
+  "*regincome.oddRowBackground:    #aaccff",
+  "*regexpense.oddRowBackground:   #ffcccc",
+  "*regequity.oddRowBackground:    #ffffaa",
   "*regportfolio.evenRowBackground:grey",
   "*regmutual.evenRowBackground:   grey",
   /* Other register window account stuff: */

@@ -57,8 +57,14 @@ extern char   *datafile;
 extern Widget toplevel;
 static int    selected_row=-1;              /* The selected row of accountlist */
 Widget accountlist;
-char   *type[] = { "Bank","Cash","Asset","Credit Card",
-		   "Liability","Portfolio","Mutual Fund" };
+
+/* the english-language names here should match 
+ * the enumerated types in Account.h */
+char *account_type_name[] = 
+       { "Bank","Cash","Asset","Credit Card",
+         "Liability","Portfolio","Mutual Fund",
+         "Income", "Expense", "Equity" };
+
 /* Pixel values are used to color the balance field text 
  * when computing the balance */
 #ifndef USE_NO_COLOR
@@ -79,6 +85,7 @@ Boolean havePixels = False;
 void
 refreshMainWindow( void )
   {
+
   int   i,nrows;
   char  buf[BUFSIZE];
   AccountGroup *grp = topgroup;    /* hack -- should pass as arguyment ... */
@@ -103,7 +110,7 @@ refreshMainWindow( void )
       sprintf( buf,"$%.2f\0", DABS(dbalance) );
     
     rows[0] = acc->accountName;
-    rows[1] = type[acc->type];
+    rows[1] = account_type_name[acc->type];
     rows[2] = XtNewString(buf);
     XtVaGetValues( accountlist, XmNrows, &nrows, NULL );
     XbaeMatrixAddRows( accountlist, nrows, rows, NULL, NULL, 1 );

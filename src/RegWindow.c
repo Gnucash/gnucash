@@ -263,6 +263,9 @@ regRefresh( RegWindow *regData )
         case ASSET:
         case CREDIT:
         case LIABILITY:
+        case INCOME:
+        case EXPENSE:
+        case EQUITY:
           themount = xaccGetAmount (acc, trans);
           if( 0.0 > themount )
             {
@@ -294,7 +297,7 @@ regRefresh( RegWindow *regData )
             }
           break;
         default:
-          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
+          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
         }
       
       newData[row+1][PAY_CELL_C] = XtNewString("");
@@ -312,6 +315,9 @@ regRefresh( RegWindow *regData )
         case ASSET:
         case CREDIT:
         case LIABILITY:
+        case INCOME:
+        case EXPENSE:
+        case EQUITY:
           break;
         case PORTFOLIO:
         case MUTUAL:
@@ -330,7 +336,7 @@ regRefresh( RegWindow *regData )
       
           break;
         default:
-          fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
+          fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
         }
       }
 
@@ -953,6 +959,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         acc->columnLocation [DATE_COL_ID] = 0;
         acc->columnLocation [NUM_COL_ID]  = 1;
         acc->columnLocation [DESC_COL_ID] = 2;
@@ -978,7 +987,7 @@ regWindow( Widget parent, Account *acc )
         acc -> numCols = 10;
         break;
       default:
-        fprintf( stderr, "Ineternal Error: Account type: %d is unknown!\n", acc->type);
+        fprintf( stderr, "Internal Error: Account type: %d is unknown!\n", acc->type);
       }
 
     /* ----------------------------------- */
@@ -999,6 +1008,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         break;
       case PORTFOLIO:
       case MUTUAL:
@@ -1026,6 +1038,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         break;
 
       case PORTFOLIO:
@@ -1055,6 +1070,9 @@ regWindow( Widget parent, Account *acc )
       case ASSET:
       case CREDIT:
       case LIABILITY:
+      case INCOME:
+      case EXPENSE:
+      case EQUITY:
         break;
       case PORTFOLIO:
       case MUTUAL:
@@ -1085,6 +1103,18 @@ regWindow( Widget parent, Account *acc )
       case LIABILITY:
         acc -> rows[0][PAY_CELL_C] = "Increase";
         acc -> rows[0][DEP_CELL_C] = "Decrease";
+        break;
+      case INCOME:
+        acc -> rows[0][PAY_CELL_C] = "Income";
+        acc -> rows[0][DEP_CELL_C] = "Refund";
+        break;
+      case EXPENSE:
+        acc -> rows[0][PAY_CELL_C] = "Expense";
+        acc -> rows[0][DEP_CELL_C] = "Rebate";
+        break;
+      case EQUITY:
+        acc -> rows[0][PAY_CELL_C] = "Surplus";
+        acc -> rows[0][DEP_CELL_C] = "Deficit";
         break;
       case PORTFOLIO:
       case MUTUAL:
