@@ -1,3 +1,8 @@
+2001-05-27  Christian Stimming  <stimming@tuhh.de>
+
+	* po/sv.po: by Pablo Saratxaga <pablo@mandrakesoft.com>: changed
+	DOS end of lines to Unix end of lines.
+
 2001-05-26  Dave Peticolas  <dave@krondo.com>
 
 	* src/gnome/dialog-fincalc.c: Kevin Foss's bug fix
