@@ -26,7 +26,7 @@
 
 #include <gtk/gtkctree.h>
 
-#include "dialog-utils.h"
+#include "gnc-ui-util.h"
 
 #ifdef __cplusplus
 extern "C" {

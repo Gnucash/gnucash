@@ -703,7 +703,7 @@ gnc_configure_reverse_balance_cb(void *not_used)
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
 
 gboolean
-gnc_reverse_balance_type(int type)
+gnc_reverse_balance_type(GNCAccountType type)
 {
   if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
     return FALSE;

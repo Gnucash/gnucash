@@ -6,6 +6,7 @@ src/engine/Account.c
 src/engine/io-gncbin-r.c
 src/engine/Scrub.c
 src/gnc-exp-parser.c
+src/gnc-ui-util.c
 src/gnome/dialog-account.c
 src/gnome/dialog-account-picker.c
 src/gnome/dialog-budget.c

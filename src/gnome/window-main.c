@@ -43,6 +43,7 @@
 #include "dialog-options.h"
 #include "dialog-totd.h"
 #include "dialog-transfer.h"
+#include "dialog-utils.h"
 #include "file-history.h"
 #include "global-options.h"
 #include "gnc-commodity.h"

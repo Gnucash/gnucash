@@ -24,25 +24,26 @@
 
 #include "config.h"
 
-#include <stdio.h>
+#include <assert.h>
 #include <gnome.h>
 #include <guile/gh.h>
+#include <stdio.h>
 #include <time.h>
-#include <assert.h>
 
-#include "messages.h"
-#include "gnc-ui.h"
-#include "RegWindow.h"
-#include "window-register.h"
-#include "account-tree.h"
-#include "MultiLedger.h"
 #include "FileDialog.h"
-#include "splitreg.h"
-#include "glade-cb-gnc-dialogs.h"
-#include "dialog-find-transactions.h"
-#include "window-help.h"
+#include "MultiLedger.h"
 #include "Query.h"
+#include "RegWindow.h"
+#include "account-tree.h"
+#include "dialog-find-transactions.h"
+#include "dialog-utils.h"
+#include "glade-cb-gnc-dialogs.h"
 #include "gnc-dateedit.h"
+#include "gnc-ui.h"
+#include "messages.h"
+#include "splitreg.h"
+#include "window-help.h"
+#include "window-register.h"
 
 /********************************************************************\
  * gnc_ui_find_transactions_dialog_create

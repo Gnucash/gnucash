@@ -1255,6 +1255,10 @@ gnc_ui_new_account_window (AccountGroup *this_is_not_used)
   return aw;
 }
 
+AccountWindow *
+gnc_ui_new_accounts_from_name_window (const char *name)
+{
+}
 
 static void
 gnc_edit_window_set_name(AccountWindow *aw)

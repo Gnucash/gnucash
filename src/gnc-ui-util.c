@@ -32,6 +32,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "EuroUtils.h"
+#include "Group.h"
+#include "global-options.h"
 #include "gnc-ui-util.h"
 #include "gnc-common.h"
 #include "gnc-engine.h"
@@ -45,8 +48,320 @@ static gboolean auto_decimal_enabled = FALSE;
 static int auto_decimal_places = 2;    /* default, can be changed */
 
 
+/********************************************************************\
+ * gnc_color_deficits                                               *
+ *   return a boolean value indicating whether deficit quantities   *
+ *   should be displayed using the gnc_get_deficit_color().         *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: boolean deficit color indicator                         *
+ \*******************************************************************/
+gboolean
+gnc_color_deficits (void)
+{
+  return gnc_lookup_boolean_option ("General",
+                                    "Display negative amounts in red",
+                                    TRUE);
+}
+
+
+/********************************************************************\
+ * gnc_get_account_separator                                        *
+ *   returns the current account separator character                *
+ *                                                                  *
+ * Args: none                                                       *
+ * Returns: account separator character                             *
+ \*******************************************************************/
+char
+gnc_get_account_separator (void)
+{
+  char separator = ':';
+  char *string;
+
+  string = gnc_lookup_multichoice_option("General",
+                                         "Account Separator",
+                                         "colon");
+
+  if (safe_strcmp(string, "colon") == 0)
+    separator = ':';
+  else if (safe_strcmp(string, "slash") == 0)
+    separator = '/';
+  else if (safe_strcmp(string, "backslash") == 0)
+    separator = '\\';
+  else if (safe_strcmp(string, "dash") == 0)
+    separator = '-';
+  else if (safe_strcmp(string, "period") == 0)
+    separator = '.';
+
+  if (string != NULL)
+    free(string);
+
+  return separator;
+}
+
+
+const char *
+gnc_ui_get_account_field_name (AccountFieldCode field)
+{
+  g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
+
+  switch (field)
+  {
+    case ACCOUNT_TYPE :
+      return _("Type");
+      break;
+    case ACCOUNT_NAME :
+      return _("Account Name");
+      break;
+    case ACCOUNT_CODE :
+      return _("Account Code");
+      break;
+    case ACCOUNT_DESCRIPTION :
+      return _("Description");
+      break;
+    case ACCOUNT_NOTES :
+      return _("Notes");
+      break;
+    case ACCOUNT_CURRENCY :
+      return _("Currency");
+      break;
+    case ACCOUNT_SECURITY :
+      return _("Security");
+      break;
+    case ACCOUNT_BALANCE :
+      return _("Balance");
+      break;
+    case ACCOUNT_BALANCE_EURO :
+      return _("Balance");
+      break;
+    case ACCOUNT_TOTAL :
+      return _("Total");
+      break;
+    case ACCOUNT_TOTAL_EURO :
+      return _("Total");
+      break;
+    default:
+      break;
+  }
+
+  return NULL;
+}
+
+
+gnc_numeric
+gnc_ui_account_get_balance (Account *account, gboolean include_children)
+{
+  gnc_numeric balance;
+
+  if (account == NULL)
+    return gnc_numeric_zero ();
+
+  balance = xaccAccountGetBalance (account);
+
+  if (include_children)
+  {
+    AccountGroup *children;
+
+    children = xaccAccountGetChildren (account);
+    balance = gnc_numeric_add_fixed (balance, xaccGroupGetBalance (children));
+  }
+
+  /* reverse sign if needed */
+  if (gnc_reverse_balance (account))
+    balance = gnc_numeric_neg (balance);
+
+  return balance;
+}
+
+
+const char *
+gnc_ui_get_account_field_value_string (Account *account,
+                                       AccountFieldCode field)
+{
+  g_return_val_if_fail ((field >= 0) && (field < NUM_ACCOUNT_FIELDS), NULL);
+
+  if (account == NULL)
+    return NULL;
+
+  switch (field)
+  {
+    case ACCOUNT_TYPE :
+      return xaccAccountGetTypeStr(xaccAccountGetType(account));
+      break;
+    case ACCOUNT_NAME :
+      return xaccAccountGetName(account);
+      break;
+    case ACCOUNT_CODE :
+      return xaccAccountGetCode(account);
+      break;
+    case ACCOUNT_DESCRIPTION :
+      return xaccAccountGetDescription(account);
+      break;
+    case ACCOUNT_NOTES :
+      return xaccAccountGetNotes(account);
+      break;
+    case ACCOUNT_CURRENCY :
+      return gnc_commodity_get_printname(xaccAccountGetCurrency(account));
+      break;
+    case ACCOUNT_SECURITY :
+      return gnc_commodity_get_printname(xaccAccountGetSecurity(account));
+      break;
+    case ACCOUNT_BALANCE :
+      {
+        gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
+
+        return xaccPrintAmount(balance,
+                               gnc_account_value_print_info (account, TRUE));
+      }
+      break;
+    case ACCOUNT_BALANCE_EURO :
+      {
+	const gnc_commodity * account_currency = 
+          xaccAccountGetCurrency(account);
+        gnc_numeric balance = gnc_ui_account_get_balance(account, FALSE);
+	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
+                                                       balance);
+
+        return xaccPrintAmount(euro_balance,
+                               gnc_commodity_print_info (gnc_get_euro (),
+                                                         TRUE));
+      }
+      break;
+    case ACCOUNT_TOTAL :
+      {
+	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
+
+        return xaccPrintAmount(balance,
+                               gnc_account_value_print_info (account, TRUE));
+      }
+      break;
+    case ACCOUNT_TOTAL_EURO :
+      {
+	const gnc_commodity * account_currency =
+          xaccAccountGetCurrency(account);
+	gnc_numeric balance = gnc_ui_account_get_balance(account, TRUE);
+	gnc_numeric euro_balance = gnc_convert_to_euro(account_currency,
+                                                       balance);
+
+	return xaccPrintAmount(euro_balance,
+                               gnc_commodity_print_info (gnc_get_euro (),
+                                                         TRUE));
+      }
+      break;
+    default:
+      break;
+  }
+
+  return NULL;
+}
+
+
+/********************************************************************\
+ * gnc_get_reconcile_str                                            *
+ *   return the i18n'd string for the given reconciled flag         *
+ *                                                                  *
+ * Args: reconciled_flag - the flag to stringize                    *
+ * Returns: the i18n'd reconciled string                            *
+\********************************************************************/
+const char *
+gnc_get_reconcile_str (char reconciled_flag)
+{
+  switch (reconciled_flag)
+  {
+    case NREC: return _("not cleared:n"+12);
+    case CREC: return _("cleared:c"+8);
+    case YREC: return _("reconciled:y"+11);
+    case FREC: return _("frozen:f"+7);
+    default:
+      PERR("Bad reconciled flag\n");
+      return NULL;
+  }
+}
+
+
+/* Get the full name of a quote source */
+const char *
+gnc_get_source_name (PriceSourceCode source)
+{
+  switch (source)
+  {
+    case SOURCE_NONE :
+      return _("(none)");
+    case SOURCE_YAHOO :
+      return "Yahoo";
+    case SOURCE_YAHOO_EUROPE :
+      return "Yahoo Europe";
+    case SOURCE_FIDELITY :
+      return "Fidelity";
+    case SOURCE_TROWEPRICE :
+      return "T. Rowe Price";
+    case SOURCE_VANGUARD :
+      return "Vanguard";
+    case SOURCE_ASX :
+      return "ASX";
+    case SOURCE_TIAA_CREF :
+      return "TIAA-CREF";
+    default:
+      break;
+  }
+
+  PWARN("Unknown source");
+  return NULL;
+}
+
+/* Get the codename string of a quote source */
+const char *
+gnc_get_source_code_name (PriceSourceCode source)
+{
+  switch (source)
+  {
+    case SOURCE_NONE :
+      return NULL;
+    case SOURCE_YAHOO :
+      return "YAHOO";
+    case SOURCE_YAHOO_EUROPE :
+      return "YAHOO_EUROPE";
+    case SOURCE_FIDELITY :
+      return "FIDELITY";
+    case SOURCE_TROWEPRICE :
+      return "TRPRICE";
+    case SOURCE_VANGUARD :
+      return "VANGUARD";
+    case SOURCE_ASX :
+      return "ASX";
+    case SOURCE_TIAA_CREF :
+      return "TIAACREF";
+    default:
+      break;
+  }
+
+  PWARN("Unknown source");
+  return NULL;
+}
+
+/* Get the codename string of a source */
+PriceSourceCode
+gnc_get_source_code (const char * codename)
+{
+  gint i;
+
+  if (codename == NULL)
+    return SOURCE_NONE;
+
+  if (safe_strcmp(codename, "") == 0)
+    return SOURCE_NONE;
+
+  for (i = 1; i < NUM_SOURCES; i++)
+    if (safe_strcmp(codename, gnc_get_source_code_name(i)) == 0)
+      return i;
+
+  PWARN("Unknown source");
+  return SOURCE_NONE;
+}
+
+
 static void
-gnc_lconv_set(char **p_value, char *default_value)
+gnc_lconv_set (char **p_value, char *default_value)
 {
   char *value = *p_value;
 
@@ -55,14 +370,14 @@ gnc_lconv_set(char **p_value, char *default_value)
 }
 
 static void
-gnc_lconv_set_char(char *p_value, char default_value)
+gnc_lconv_set_char (char *p_value, char default_value)
 {
   if ((p_value != NULL) && (*p_value == CHAR_MAX))
     *p_value = default_value;
 }
 
 struct lconv *
-gnc_localeconv(void)
+gnc_localeconv (void)
 {
   static struct lconv lc;
   static gboolean lc_set = FALSE;
@@ -97,7 +412,7 @@ gnc_localeconv(void)
 }
 
 const gnc_commodity *
-gnc_locale_default_currency(void)
+gnc_locale_default_currency (void)
 {
   static gnc_commodity * currency;
   struct lconv         * lc;

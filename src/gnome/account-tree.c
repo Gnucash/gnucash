@@ -28,14 +28,15 @@
 
 #include <gnome.h>
 
-#include "gnucash.h"
-#include "messages.h"
 #include "AccWindow.h"
 #include "FileDialog.h"
-#include "window-main.h"
-#include "dialog-utils.h"
 #include "account-tree.h"
+#include "dialog-utils.h"
 #include "gnc-engine-util.h"
+#include "gnc-ui-util.h"
+#include "gnucash.h"
+#include "messages.h"
+#include "window-main.h"
 
 /* Signal codes */
 enum

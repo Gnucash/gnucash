@@ -112,15 +112,4 @@ QIFImportWindow * gnc_ui_qif_import_dialog_make(void);
 void              gnc_ui_qif_import_dialog_destroy(QIFImportWindow * window);
 
 
-/* Register font information ****************************************/
-
-const char * gnc_register_default_font(void);
-const char * gnc_register_default_hint_font(void);
-
-
-/* Reverse balance information **************************************/
-
-gboolean gnc_reverse_balance(Account *account);
-gboolean gnc_reverse_balance_type(GNCAccountType type);
-
 #endif

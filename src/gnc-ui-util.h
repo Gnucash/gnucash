@@ -33,18 +33,77 @@
 #include "Transaction.h"
 
 
+/* User Settings ****************************************************/
+gboolean gnc_color_deficits (void);
+
+char gnc_get_account_separator (void);
+
+gboolean gnc_reverse_balance(Account *account);
+gboolean gnc_reverse_balance_type(GNCAccountType type);
+
+const char * gnc_register_default_font(void);
+const char * gnc_register_default_hint_font(void);
+
+
+/* Engine enhancements & i18n ***************************************/
+typedef enum
+{
+  ACCOUNT_TYPE = 0,
+  ACCOUNT_NAME,
+  ACCOUNT_CODE,
+  ACCOUNT_DESCRIPTION,
+  ACCOUNT_NOTES,
+  ACCOUNT_CURRENCY,
+  ACCOUNT_SECURITY,
+  ACCOUNT_BALANCE, /* with sign reversal */
+  ACCOUNT_BALANCE_EURO,
+  ACCOUNT_TOTAL,   /* balance + children's balance with sign reversal */
+  ACCOUNT_TOTAL_EURO,
+  NUM_ACCOUNT_FIELDS
+} AccountFieldCode;
+
+const char * gnc_ui_get_account_field_name (AccountFieldCode field);
+
+const char * gnc_ui_get_account_field_value_string (Account *account,
+                                                    AccountFieldCode field);
+
+gnc_numeric gnc_ui_account_get_balance (Account *account,
+                                        gboolean include_children);
+
+const char * gnc_get_reconcile_str (char reconciled_flag);
+
+
+/* Price source functions *******************************************/
+typedef enum
+{
+  SOURCE_NONE = 0,
+  SOURCE_YAHOO,
+  SOURCE_YAHOO_EUROPE,
+  SOURCE_FIDELITY,
+  SOURCE_TROWEPRICE,
+  SOURCE_VANGUARD,
+  SOURCE_ASX,
+  SOURCE_TIAA_CREF,
+  NUM_SOURCES
+} PriceSourceCode;
+
+const char * gnc_get_source_name (PriceSourceCode source);
+const char * gnc_get_source_code_name (PriceSourceCode source);
+PriceSourceCode gnc_get_source_code (const char * codename);
+
+
 /* Locale functions *************************************************/
 
 /* The gnc_localeconv() subroutine returns an lconv structure
  * containing locale information. If no locale is set, the structure
  * is given default (en_US) values.  */
-struct lconv * gnc_localeconv(void);
+struct lconv * gnc_localeconv (void);
 
 /* Returns the default currency of the current locale. */
-const gnc_commodity * gnc_locale_default_currency(void);
+const gnc_commodity * gnc_locale_default_currency (void);
 
 /* Returns the number of decimal place to print in the current locale */
-int gnc_locale_decimal_places(void);
+int gnc_locale_decimal_places (void);
 
 
 /* Amount printing and parsing **************************************/

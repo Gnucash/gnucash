@@ -38,6 +38,8 @@ typedef struct _AccountWindow  AccountWindow;
 AccountWindow * gnc_ui_new_account_window (AccountGroup *group);
 AccountWindow * gnc_ui_edit_account_window (Account *account);
 
+AccountWindow * gnc_ui_new_accounts_from_name_window (const char *name);
+
 /* The xaccDestroyEditAccWindow() subroutine can be called from
  *   anywhere to shut down the Register window. Used primarily when
  *   destroying the underlying account.  */
