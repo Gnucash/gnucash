@@ -20,8 +20,6 @@
 ;; Boston, MA  02111-1307,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(gnc:support "gnc:main-window.scm")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; account tree options 
 ;; like reports, we have an integer tree id that is the index into a
