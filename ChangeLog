@@ -15,6 +15,12 @@
 	  (commented out) code to support a start date for computing the
 	  Net Income (aka Net Profit) in the Balance Sheet.  This is
 	  a commented-out partial fix for #113196.
+
+	* src/business/business-gnome/business-gnome.scm:
+	* src/scm/main-window.scm:
+	  Move the instantiation of File -> Properties into
+	  main-window.scm (out of business-gnome.scm) for future cases
+	  where we might decide to ship the business modules separately.
 	
 2003-05-22  Derek Atkins  <derek@ihtfp.com>
 

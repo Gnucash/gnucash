@@ -196,6 +196,23 @@ the account instead of opening a register.") #f))
         (try-load conf-file-name))
     (gnc:mdi-restore (gnc:mdi-get-current) book-url)))
 
+(define (gnc:main-window-ui-startup-handler)
+  (gnc:add-extension
+    (gnc:make-menu-item (N_ "Properties")
+			(N_ "View and edit the properties of this file.")
+			(list "Main" "_File" "_Print")
+			(lambda ()
+			  (let* ((book (gnc:get-current-book))
+				 (slots (gnc:book-get-slots book)))
+
+			    (define (changed_cb)
+			      (gnc:book-kvp-changed book))
+			    
+			    (gnc:kvp-option-dialog gnc:id-book
+						   slots "Book Options"
+						   changed_cb)))))
+  (gnc:add-extension (gnc:make-separator (list "Main" "_File" "_Print")))
+)
 
 (gnc:hook-remove-dangler gnc:*book-opened-hook* 
                          gnc:main-window-book-open-handler)
@@ -206,3 +223,8 @@ the account instead of opening a register.") #f))
                          gnc:main-window-book-close-handler)
 (gnc:hook-add-dangler gnc:*book-closed-hook* 
                       gnc:main-window-book-close-handler)
+
+(gnc:hook-remove-dangler gnc:*ui-startup-hook* 
+                         gnc:main-window-ui-startup-handler)
+(gnc:hook-add-dangler gnc:*ui-startup-hook* 
+                      gnc:main-window-ui-startup-handler)
