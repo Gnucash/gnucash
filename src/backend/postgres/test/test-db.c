@@ -83,8 +83,6 @@ save_db_file (GNCSession *session, const char *db_name, const char *mode)
 
   filename = db_file_url (db_name, mode);
 
-  printf("SAVING!!! %s\n", filename);
-
   gnc_session_begin (session, filename, FALSE, TRUE);
   io_err = gnc_session_get_error (session);
   if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
@@ -595,6 +593,60 @@ test_trans_query (Transaction *trans, gpointer data)
 }
 
 static gboolean
+compare_balances (GNCSession *session_1, GNCSession *session_2)
+{
+  GNCBook * book_1 = gnc_session_get_book (session_1);
+  GNCBook * book_2 = gnc_session_get_book (session_2);
+  GList * list;
+  GList * node;
+
+  g_return_val_if_fail (session_1, FALSE);
+  g_return_val_if_fail (session_2, FALSE);
+
+  list = xaccGroupGetSubAccounts (gnc_book_get_group (book_1));
+  for (node = list; node; node = node->next)
+  {
+    Account * account_1 = node->data;
+    Account * account_2;
+
+    account_2 = xaccAccountLookup (xaccAccountGetGUID (account_1), book_2);
+    if (!account_2)
+    {
+      g_warning ("session_1 has account %s but not session_2",
+                 guid_to_string (xaccAccountGetGUID (account_1)));
+      return FALSE;
+    }
+
+    if (!gnc_numeric_eq (xaccAccountGetBalance (account_1),
+                         xaccAccountGetBalance (account_2)))
+    {
+      g_warning ("balances not equal for account %s",
+                 guid_to_string (xaccAccountGetGUID (account_1)));
+      return FALSE;
+    }
+
+    if (!gnc_numeric_eq (xaccAccountGetClearedBalance (account_1),
+                         xaccAccountGetClearedBalance (account_2)))
+    {
+      g_warning ("cleared balances not equal for account %s",
+                 guid_to_string (xaccAccountGetGUID (account_1)));
+      return FALSE;
+    }
+
+    if (!gnc_numeric_eq (xaccAccountGetReconciledBalance (account_1),
+                         xaccAccountGetReconciledBalance (account_2)))
+    {
+      g_warning ("reconciled balances not equal for account %s",
+                 guid_to_string (xaccAccountGetGUID (account_1)));
+      return FALSE;
+    }
+  }
+  g_list_free (list);
+
+  return TRUE;
+}
+
+static gboolean
 test_queries (GNCSession *session_base, const char *db_name, const char *mode)
 {
   QueryTestData qtd;
@@ -644,7 +696,12 @@ test_mode (const char *db_name, const char *mode,
     return FALSE;
 
   if (multi_user)
+  {
+    if (!compare_balances (session, session_db))
+      return FALSE;
+
     multi_user_get_everything (session_db, session);
+  }
 
   ok = gnc_book_equal (gnc_session_get_book (session),
                        gnc_session_get_book (session_db));

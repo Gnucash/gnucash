@@ -1,3 +1,14 @@
+2001-12-17  Dave Peticolas  <dave@krondo.com>
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: add wrapping for widgets
+	and other api
+
+	* src/backend/postgres/test/test-db.c: add check for initial
+	account balances
+
+	* src/backend/postgres/PostgresBackend.c: fix bug. begin/commit
+	account group when loading intitial balances
+
 2001-12-12  Dave Peticolas  <dave@krondo.com>
 
 	* src/report/report-gnome/test/test-load-module: add

@@ -1245,7 +1245,10 @@ pgend_book_load_poll (Backend *bend)
 
    pgendKVPInit(be);
    pgendGetAllAccounts (be, grp);
+
+   xaccAccountGroupBeginEdit (grp);
    pgendGroupGetAllBalances (be, grp, ts);
+   xaccAccountGroupCommitEdit (grp);
 
    /* re-enable events */
    pgendEnable(be);

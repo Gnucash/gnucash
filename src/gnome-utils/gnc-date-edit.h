@@ -88,16 +88,21 @@ guint     gnc_date_edit_get_type        (void);
 
 GtkWidget *gnc_date_edit_new            (time_t the_time,
                                          int show_time, int use_24_format);
+GtkWidget *gnc_date_edit_new_ts         (Timespec the_time,
+                                         int show_time, int use_24_format);
 GtkWidget *gnc_date_edit_new_flags      (time_t the_time,
                                          GNCDateEditFlags flags);
 
 void      gnc_date_edit_set_time        (GNCDateEdit *gde, time_t the_time);
+void      gnc_date_edit_set_time_ts     (GNCDateEdit *gde, Timespec the_time);
 
 void      gnc_date_edit_set_popup_range (GNCDateEdit *gde,
                                          int low_hour, int up_hour);
 
 time_t    gnc_date_edit_get_date        (GNCDateEdit *gde);
+Timespec  gnc_date_edit_get_date_ts     (GNCDateEdit *gde);
 time_t    gnc_date_edit_get_date_end    (GNCDateEdit *gde);
+Timespec  gnc_date_edit_get_date_end_ts (GNCDateEdit *gde);
 
 void      gnc_date_edit_set_flags       (GNCDateEdit *gde,
                                          GNCDateEditFlags flags);

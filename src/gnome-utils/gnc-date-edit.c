@@ -483,7 +483,8 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	struct tm *mytm;
 	char buffer [40];
 
-	g_return_if_fail(gde != NULL);
+	g_return_if_fail (gde != NULL);
+        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
 	if (the_time == 0)
 		the_time = time (NULL);
@@ -506,6 +507,12 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 	gtk_entry_set_text (GTK_ENTRY (gde->time_entry), buffer);
 }
 
+void
+gnc_date_edit_set_time_ts (GNCDateEdit *gde, Timespec the_time)
+{
+        gnc_date_edit_set_time (gde, the_time.tv_sec);
+}
+
 /**
  * gnc_date_edit_set_popup_range:
  * @gde: The GNCDateEdit widget
@@ -518,7 +525,8 @@ gnc_date_edit_set_time (GNCDateEdit *gde, time_t the_time)
 void
 gnc_date_edit_set_popup_range (GNCDateEdit *gde, int low_hour, int up_hour)
 {
-        g_return_if_fail(gde != NULL);
+	g_return_if_fail (gde != NULL);
+        g_return_if_fail (GNC_IS_DATE_EDIT (gde));
 
 	gde->lower_hour = low_hour;
 	gde->upper_hour = up_hour;
@@ -677,6 +685,12 @@ gnc_date_edit_new (time_t the_time, int show_time, int use_24_format)
                   | (use_24_format ? GNC_DATE_EDIT_24_HR : 0)));
 }
 
+GtkWidget *
+gnc_date_edit_new_ts (Timespec the_time, int show_time, int use_24_format)
+{
+        return gnc_date_edit_new (the_time.tv_sec, show_time, use_24_format);
+}
+
 /**
  * gnc_date_edit_new_flags:
  * @the_time: The initial time for the date editor.
@@ -794,6 +808,16 @@ gnc_date_edit_get_date (GNCDateEdit *gde)
 	return mktime (&tm);
 }
 
+Timespec
+gnc_date_edit_get_date_ts (GNCDateEdit *gde)
+{
+        Timespec ts = { 0, 0 };
+
+        ts.tv_sec = gnc_date_edit_get_date (gde);
+
+        return ts;
+}
+
 /**
  * gnc_date_edit_get_date_end:
  * @gde: The GNCDateEdit widget
@@ -827,6 +851,16 @@ gnc_date_edit_get_date_end (GNCDateEdit *gde)
         }
 
 	return mktime (&tm);
+}
+
+Timespec
+gnc_date_edit_get_date_end_ts (GNCDateEdit *gde)
+{
+        Timespec ts = { 0, 0 };
+
+        ts.tv_sec = gnc_date_edit_get_date_end (gde);
+
+        return ts;
 }
 
 /**

@@ -480,8 +480,8 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
    cleared_baln = gnc_numeric_create (cl_b, deno);
    reconciled_baln = gnc_numeric_create (rec_b, deno);
 
-   xaccAccountSetStartingBalance (acc, baln,
-                                     cleared_baln, reconciled_baln);
+   xaccAccountSetStartingBalance (acc, baln, cleared_baln, reconciled_baln);
+
    DEBUGCMD ({
       char buf[80];
       gnc_timespec_to_iso8601_buff (as_of_date, buf);
@@ -489,8 +489,6 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
         xaccAccountGetDescription (acc), buf,
         b, deno, cl_b, deno, rec_b, deno);
       })
-
-   return;
 }
 
 /* ============================================================= */
@@ -498,7 +496,7 @@ pgendAccountGetBalance (PGBackend *be, Account *acc, Timespec as_of_date)
 
 void
 pgendGroupGetAllBalances (PGBackend *be, AccountGroup *grp, 
-                             Timespec as_of_date)
+                          Timespec as_of_date)
 {
    GList *acclist, *node;
 
