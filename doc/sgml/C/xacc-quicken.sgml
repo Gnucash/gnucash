@@ -191,7 +191,7 @@ accounts. </LINK> Thus, if
 
         </PARA>
 <PARA>Further details about the QIF Interchange Format may be
-        found <LINK LINKEND="QIF">        here.</LINK>
+        found <LINK LINKEND="XACC-QIF-IMPORT">        here.</LINK>
       
     </PARA>
 </LISTITEM>
