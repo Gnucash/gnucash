@@ -38,6 +38,7 @@ gncinclude_HEADERS = \
   gnc-ui-common.h \
   gnc-ui-util.h \
   guile-util.h \
+  i18n.h \
   option-util.h
 
 libgncmod_app_utils_la_LDFLAGS = -module
@@ -75,7 +76,22 @@ EXTRA_DIST = \
   .cvsignore \
   ${gncmod_DATA} \
   ${gncscm_DATA} \
-  ${gwmod_DATA}
+  ${gwmod_DATA} \
+  i18n.h.in 
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+i18n.h: i18n.h.in
+	rm -f $@.tmp
+	sed < $@.in > $@.tmp \
+            -e 's:@-PACKAGE-@:${PACKAGE}:g' \
+            -e 's:@-LOCALE_DIR-@:${LOCALE_DIR}:g'
+	mv $@.tmp $@
+# This has to be in BUILT_SOURCES because other files depend on it,
+# but it's never a target itself.
+BUILT_SOURCES += i18n.h
 
 .scm-links: 
 	rm -f gnucash g-wrapped
