@@ -38,6 +38,8 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 
+#include <libgnomeui/gnome-window-icon.h>
+#include <gnc-dir.h>
 
 static char**
 gnc_scm2argv (SCM scm, int prelen, const char **prependargv)
@@ -106,6 +108,9 @@ gnc_gnome_init (const char * arg0,
   gdk_rgb_init ();    
   gtk_widget_set_default_colormap (gdk_rgb_get_cmap ());
   gtk_widget_set_default_visual (gdk_rgb_get_visual ());
+
+  /* use custom icon */
+  gnome_window_icon_set_default_from_file (GNC_PIXMAP_DIR"/gnucash-icon.png");  
     
 #ifdef USE_GUPPI    
   /* initialize guppi handling in gnc-html */

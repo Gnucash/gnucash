@@ -3,6 +3,6 @@ _Name=GnuCash
 _Comment=GnuCash Personal Finance
 TryExec=gnucash
 Exec=gnucash
-Icon=gnome-money.png
+Icon=gnucash/gnucash-icon.png
 Terminal=0
 Type=Application

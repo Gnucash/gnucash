@@ -1,3 +1,11 @@
+2002-12-20  Chris Lyttle  <chris@wilddev.net>
+
+	* src/pixmaps/gnucash-icon.png: new gnucash icon
+	* rpm/gnucash.spec.in: remove help dirs, add finance-quote-check
+	* src/gnome/gnucash.desktop.in: new gnucash icon
+	* src/gnome-utils/gnc-gnome-utils.c: add custom icon function
+	* src/pixmaps/Makefile.am: new gnucash icon
+
 2002-12-20  Christian Stimming  <stimming@tuhh.de>
 
 	* po/el.po, accounts/el_GR: Updated Greek translation by Nikos

@@ -100,6 +100,7 @@ fi
 %attr(555,root,root) %{_bindir}/*
 %attr(555,root,root) %{_libexecdir}/gnucash
 %attr(555,root,root) %{_datadir}/gnucash/finance-quote-helper
+%attr(555,root,root) %{_datadir}/gnucash/finance-quote-check
 %{_mandir}/man1/*
 %{_infodir}/*.gz
 %{_libdir}/gnucash/libgnc-*
@@ -114,7 +115,6 @@ fi
 %{_datadir}/gnucash/glade
 %{_datadir}/gnucash/guile-modules
 %{_datadir}/gnucash/scm
-%{_datadir}/gnome/help/gnucash
 %{_datadir}/gnome/apps/Applications/*
 %{_datadir}/pixmaps/gnucash
 %{_datadir}/mime-info/gnucash.*
