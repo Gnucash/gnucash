@@ -31,7 +31,8 @@
 #ifndef __XACC_TABLE_QT_H__
 #define __XACC_TABLE_QT_H__
 
-#define TABLE_PRIVATE_DATA						 
+#define TABLE_PRIVATE_DATA						 \
+  void *table_widget;
 
 #define TABLE_PRIVATE_DATA_INIT(table)  {}
 

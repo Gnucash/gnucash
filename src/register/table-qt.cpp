@@ -53,11 +53,6 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
 {
 }
 
-void
-xaccCreateCursor (Table *table, CellBlock *curs) 
-{
-}
-
 void        
 xaccRefreshTableGUI (Table * table) {
 }
@@ -285,10 +280,15 @@ doRefreshCursorGUI (Table * table, CellBlock *curs, int from_row, int from_col)
   }
 }
 
-
 #endif
 
+/* ==================================================== */
+
+int gnc_table_column_width(Table *table, const int col)
+{
+  return 0;
 }
+
+}
+
 /* ================== end of file ======================= */
-
-
