@@ -864,6 +864,7 @@ gboolean gncEntryRegister (void)
 {
   static QueryObjectDef params[] = {
     { ENTRY_DATE, QUERYCORE_DATE, (QueryAccess)gncEntryGetDate },
+    { ENTRY_DATE_ENTERED, QUERYCORE_DATE, (QueryAccess)gncEntryGetDateEntered },
     { ENTRY_DESC, QUERYCORE_STRING, (QueryAccess)gncEntryGetDescription },
     { ENTRY_ACTION, QUERYCORE_STRING, (QueryAccess)gncEntryGetAction },
     { ENTRY_NOTES, QUERYCORE_STRING, (QueryAccess)gncEntryGetNotes },
