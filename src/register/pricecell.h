@@ -50,10 +50,11 @@
  *
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __XACC_PRICE_CELL_C__
-#define __XACC_PRICE_CELL_C__
+#ifndef __PRICE_CELL_C__
+#define __PRICE_CELL_C__
 
 #include "basiccell.h"
 #include "gnc-common.h"
@@ -62,12 +63,12 @@ typedef struct _PriceCell
 {
   BasicCell cell;
 
-  double amount;           /* the amount associated with this cell */
+  double amount;         /* the amount associated with this cell */
 
-  gncBoolean blank_zero;   /* controls printing of zero values */
-  gncBoolean monetary;     /* controls parsing of values */
-  gncBoolean is_currency;  /* controls printint of values */
-  gncBoolean shares_value; /* true if a shares values */
+  gboolean blank_zero;   /* controls printing of zero values */
+  gboolean monetary;     /* controls parsing of values */
+  gboolean is_currency;  /* controls printint of values */
+  gboolean shares_value; /* true if a shares values */
 } PriceCell;
 
 /* installs a callback to handle price recording */
@@ -86,20 +87,20 @@ void         xaccSetPriceCellBlank (PriceCell *cell);
 
 /* determines whether 0 values are left blank or printed.
  * defaults to true. */
-void         xaccSetPriceCellBlankZero (PriceCell *cell, gncBoolean);
+void         xaccSetPriceCellBlankZero (PriceCell *cell, gboolean);
 
 /* The xaccSetPriceCellMonetary() sets a flag which determines
  *    how string amounts are parsed, either as monetary or
  *    non-monetary amounts. The default is monetary. */
-void         xaccSetPriceCellMonetary (PriceCell *, gncBoolean);
+void         xaccSetPriceCellMonetary (PriceCell *, gboolean);
 
 /* The xaccSetPriceCellCurrency() sets a flag which causes
  *    the amount to be printed as a currency price. */
-void         xaccSetPriceCellIsCurrency (PriceCell *, gncBoolean);
+void         xaccSetPriceCellIsCurrency (PriceCell *, gboolean);
 
 /* The xaccSetPriceCellSharesValue() sets a flag which determines
  * whether the quantity is printed as a shares value or not. */
-void         xaccSetPriceCellSharesValue (PriceCell *, gncBoolean);
+void         xaccSetPriceCellSharesValue (PriceCell *, gboolean);
 
 /* updates two cells; the deb cell if amt is negative,
  * the credit cell if amount is positive, and makes the other cell
@@ -107,6 +108,6 @@ void         xaccSetPriceCellSharesValue (PriceCell *, gncBoolean);
 void         xaccSetDebCredCellValue (PriceCell *deb,
                                       PriceCell *cred, double amount);
 
-#endif /* __XACC_PRICE_CELL_C__ */
+#endif /* __PRICE_CELL_C__ */
 
 /* --------------- end of file ---------------------- */

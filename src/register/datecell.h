@@ -86,10 +86,11 @@
  *
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
  
-#ifndef __XACC_DATE_CELL_C__
-#define __XACC_DATE_CELL_C__
+#ifndef __DATE_CELL_C__
+#define __DATE_CELL_C__
 
 #include <time.h>
 
@@ -115,6 +116,6 @@ void       xaccCommitDateCell (DateCell *);
 
 void       xaccDateCellGetDate (DateCell *cell, Timespec *ts);
 
-#endif /* __XACC_DATE_CELL_C__ */
+#endif /* __DATE_CELL_C__ */
 
 /* --------------- end of file ---------------------- */

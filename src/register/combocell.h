@@ -39,17 +39,20 @@
  * HISTORY:
  * Created Jan 1998 Linas Vepstas 
  * Copyright (c) 1998 Linas Vepstas 
+ * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __XACC_COMBO_CELL_H__
-#define __XACC_COMBO_CELL_H__
+#ifndef __COMBO_CELL_H__
+#define __COMBO_CELL_H__
 
 #include "basiccell.h"
 #include "gnc-common.h"
 
+
 typedef struct _ComboCell {
    BasicCell  cell;
 } ComboCell;
+
 
 ComboCell *  xaccMallocComboCell (void);
 void         xaccInitComboCell (ComboCell *);
@@ -62,7 +65,7 @@ void         xaccAddComboCellMenuItem (ComboCell *, char * menustr);
 
 /* Determines whether the cell will accept strings not in the
  * menu. Defaults to strict, i.e., only menu items are accepted. */
-void         xaccComboCellSetStrict (ComboCell *, gncBoolean);
+void         xaccComboCellSetStrict (ComboCell *, gboolean);
 
 /* Sets a character used for special completion processing. */
 void         xaccComboCellSetCompleteChar (ComboCell *, char);
@@ -78,8 +81,8 @@ void         xaccComboCellSetIgnoreHelp (ComboCell *, const char *);
 
 /* Determines whether combocells are automatically raised upon typing.
  * Defaults to false. This is a 'class' method. */
-void         xaccComboCellSetAutoPop (gncBoolean auto_pop_combos);
+void         xaccComboCellSetAutoPop (gboolean auto_pop_combos);
 
-#endif /* __XACC_COMBO_CELL_H__ */
+#endif /* __COMBO_CELL_H__ */
 
 /* --------------- end of file ---------------------- */

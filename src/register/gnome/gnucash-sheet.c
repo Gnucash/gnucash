@@ -878,9 +878,8 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
         if (old_text == NULL)
                 old_text = "";
 
-	newval = strdup(new_text);
-	change = strdup(new_text);
-	assert((newval != NULL) && (change != NULL));
+	newval = g_strdup(new_text);
+	change = g_strdup(new_text);
 
         editable = GTK_EDITABLE(sheet->entry);
 
@@ -913,15 +912,15 @@ gnucash_sheet_modify_current_cell(GnucashSheet *sheet, const gchar *new_text)
 					    sheet->insert_signal);
 
 		if (retval != newval)
-			free (newval);
+			g_free (newval);
         }
         else
-                free(newval);
+                g_free(newval);
 
         gtk_editable_set_position (editable, cursor_position);
         gtk_entry_select_region(GTK_ENTRY(sheet->entry), start_sel, end_sel);
 
-	free(change);
+	g_free(change);
 
 	return retval;
 }
@@ -964,8 +963,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
 
         /* we set newval to what the entry contents would be if
            the insert was processed */
-        newval = calloc (strlen(old_text) + new_text_length + 1, sizeof(char));
-	assert (newval != NULL);
+        newval = g_new0(char, strlen(old_text) + new_text_length + 1);
 
         strncat (newval, old_text, *position);
         strncat (newval, new_text, new_text_length);
@@ -1013,7 +1011,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
                                               "insert_text");
 
-                free (newval);
+                g_free (newval);
         }
         else if (!retval) {
                 if (*position < 0)
@@ -1022,7 +1020,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget, const gchar *new_text,
                 /* the entry was disallowed, so we stop the insert signal */
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
                                               "insert_text");
-		free (newval);
+		g_free (newval);
         }
         else if (*position < 0)
                 *position = strlen(newval);
@@ -1068,9 +1066,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
         if (old_text == NULL)
                 old_text = "";
 
-        newval = calloc (strlen(old_text) - (end_pos - start_pos) + 1,
-                         sizeof(char));
-	assert (newval != NULL);
+        newval = g_new0 (char, strlen(old_text) - (end_pos - start_pos) + 1);
 
         strncat (newval, old_text, start_pos);
         strcat (newval, &old_text[end_pos]);
@@ -1095,7 +1091,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                    would be after the delete is processed.  So we synchronize
                    the entry contents, and stop the delete signal from
                    being processed further */
-                
+
                 gtk_signal_handler_block (GTK_OBJECT (sheet->entry),
                                           sheet->insert_signal);
 
@@ -1113,13 +1109,13 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
                                               "delete_text");
 
-                free (newval);
+                g_free (newval);
         }
         else if (!retval) {
                 /* the entry was disallowed, so we stop the delete signal */
                 gtk_signal_emit_stop_by_name (GTK_OBJECT(sheet->entry),
                                               "delete_text");
-		free (newval);
+		g_free (newval);
         }
 
         gtk_editable_set_position (editable, cursor_position);
@@ -1137,7 +1133,8 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
                 (*GTK_WIDGET_CLASS (sheet_parent_class)->size_allocate)
                         (widget, allocation);
 
-        if (allocation->height != sheet->window_height || allocation->width != sheet->window_width) {
+        if (allocation->height != sheet->window_height ||
+            allocation->width != sheet->window_width) {
                 sheet->window_height = allocation->height;
                 sheet->window_width = allocation->width;
                 
@@ -1552,8 +1549,8 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
         Table *table = sheet->table;
         int v_row, v_col, c_row, c_col;
         int p_row, p_col;
-        gncBoolean result;
         gboolean changed;
+        gboolean result;
 
         const char *old_text;
         char *new_text;

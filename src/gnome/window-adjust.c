@@ -49,11 +49,13 @@ struct _AdjBWindow
   GtkWidget * date_entry;    /* Date field, the date for the balance */
 };
 
+
 /** GLOBALS *********************************************************/
 static AdjBWindow **adjBList = NULL;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
+
 
 /** Prototypes ******************************************************/
 static void gnc_adjb_set_window_name(AdjBWindow *adjBData);

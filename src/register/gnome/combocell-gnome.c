@@ -88,15 +88,16 @@ static const char * leaveCombo (BasicCell *bcell, const char *value);
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GTK_REG;
-static gncBoolean auto_pop_combos = GNC_F;
+static gboolean auto_pop_combos = FALSE;
+
 
 /* =============================================== */
 
 ComboCell *xaccMallocComboCell (void)
 {
-	ComboCell * cell = (ComboCell *) malloc (sizeof (ComboCell));
+	ComboCell * cell;
 
-	assert(cell != NULL);
+        cell = g_new(ComboCell, 1);
 
 	xaccInitComboCell(cell);
 
@@ -375,7 +376,7 @@ xaccClearComboCellMenu (ComboCell * cell)
 static void
 gnc_append_string_to_list(gpointer _string, gpointer _item_list)
 {
-	char *string = (char *) _string;
+	char *string = _string;
 	GNCItemList *item_list = GNC_ITEM_LIST(_item_list);
 
 	gnc_item_list_append(item_list, string);
@@ -497,7 +498,7 @@ ComboMV (BasicCell *_cell,
                 return newval;
         }
 
-        retval = strdup(match->text);
+        retval = g_strdup(match->text);
 
         *start_selection = strlen(newval);
         *end_selection = -1;
@@ -546,7 +547,7 @@ ComboDirect (BasicCell *bcell,
         int length;
 
         if (event->type != GDK_KEY_PRESS)
-                return GNC_F;
+                return FALSE;
 
         length = strlen(oldval);
 
@@ -557,29 +558,30 @@ ComboDirect (BasicCell *bcell,
                                 if (event->keyval == box->complete_char)
                                         break;
 
-                                return GNC_F;
+                                return FALSE;
                         }
                         keep_on_going = TRUE;
+                        /* Fall through */
                 case GDK_Tab:
                 case GDK_ISO_Left_Tab:
                         if (!(event->state & GDK_CONTROL_MASK) &&
                             !keep_on_going)
-                                return GNC_F;
+                                return FALSE;
 
                         match = xaccGetQuickFillStrLen(box->qf, oldval,
                                                        *cursor_position);
                         if (match == NULL)
-                                return GNC_T;
+                                return TRUE;
 
                         match = xaccGetQuickFillUniqueLen(match, &prefix_len);
                         if (match == NULL)
-                                return GNC_T;
+                                return TRUE;
 
                         if ((match->text != NULL) &&
                             (strncmp(match->text, oldval, length) == 0) && 
                             (strcmp(match->text, oldval) != 0))
                         {
-                                *newval_ptr = strdup(match->text);
+                                *newval_ptr = g_strdup(match->text);
                                 assert(*newval_ptr != NULL);
 
                                 xaccSetBasicCellValue(bcell, *newval_ptr);
@@ -595,27 +597,27 @@ ComboDirect (BasicCell *bcell,
                         *start_selection = *cursor_position;
                         *end_selection = -1;
 
-                        return GNC_T;
+                        return TRUE;
         }
 
         if (box->complete_char == 0)
-                return GNC_F;
+                return FALSE;
 
         if (event->keyval != box->complete_char)
-                return GNC_F;
+                return FALSE;
 
         if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
-                return GNC_F;
+                return FALSE;
 
         if ((*cursor_position < length) &&
             ((*end_selection < length) ||
              (*cursor_position < *start_selection)))
-                return GNC_F;
+                return FALSE;
 
         if ((*cursor_position == length) &&
             (*start_selection != *end_selection) &&
             (*end_selection < length))
-                return GNC_F;
+                return FALSE;
 
         search = NULL;
         if (*cursor_position < length)
@@ -637,13 +639,13 @@ ComboDirect (BasicCell *bcell,
 
         match = xaccGetQuickFillStrLen(box->qf, oldval, new_pos);
         if (match == NULL)
-                return GNC_F;
+                return FALSE;
 
         if (extra_colon)
         {
                 match = xaccGetQuickFill(match, box->complete_char);
                 if (match == NULL)
-                        return GNC_F;
+                        return FALSE;
 
                 new_pos++;
         }
@@ -652,7 +654,7 @@ ComboDirect (BasicCell *bcell,
             (strncmp(match->text, oldval, length) == 0) && 
             (strcmp(match->text, oldval) != 0))
         {
-                *newval_ptr = strdup(match->text);
+                *newval_ptr = g_strdup(match->text);
                 assert(*newval_ptr != NULL);
 
                 xaccSetBasicCellValue(bcell, *newval_ptr);
@@ -666,7 +668,7 @@ ComboDirect (BasicCell *bcell,
         *start_selection = new_pos;
         *end_selection = -1;
 
-        return GNC_T;
+        return TRUE;
 }
 
 /* =============================================== */
@@ -682,13 +684,13 @@ ComboHelpValue(BasicCell *bcell)
                 if ((box->ignore_string != NULL) &&
                     (box->ignore_help != NULL) &&
                     (safe_strcmp(bcell->value, box->ignore_string) == 0))
-                        return strdup(box->ignore_help);
+                        return g_strdup(box->ignore_help);
 
-                return strdup(bcell->value);
+                return g_strdup(bcell->value);
         }
 
         if (bcell->blank_help != NULL)
-                return strdup(bcell->blank_help);
+                return g_strdup(bcell->blank_help);
 
         return NULL;
 }
@@ -753,7 +755,7 @@ enterCombo (BasicCell *bcell,
 
         if ((box->ignore_string != NULL) &&
             (safe_strcmp(value, box->ignore_string) == 0))
-                return strdup(value);
+                return g_strdup(value);
 
 	gnc_combo_sync_edit_list(box);
         gnc_combo_sort_edit_list(box);
@@ -806,7 +808,7 @@ leaveCombo (BasicCell *bcell, const char *value)
                     (safe_strcmp(value, box->ignore_string) != 0)))
                 {
                         xaccSetBasicCellValue(bcell, "");
-                        return strdup("");
+                        return g_strdup("");
                 }
         }
 
@@ -868,7 +870,7 @@ xaccComboCellSetIgnoreHelp (ComboCell *cell, const char *ignore_help)
 	if (cell == NULL)
 		return;
 
-	box = (PopBox *) cell->cell.gui_private;
+	box = cell->cell.gui_private;
 
         box->ignore_help = g_strdup(ignore_help);
 }

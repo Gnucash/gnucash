@@ -180,10 +180,11 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
-#ifndef __XACC_BASIC_CELL_H__
-#define __XACC_BASIC_CELL_H__
+#ifndef __BASIC_CELL_H__
+#define __BASIC_CELL_H__
 
 #include <glib.h>
 
@@ -287,5 +288,5 @@ char *       xaccBasicCellGetHelp (BasicCell *);
 
 void         xaccBasicCellSetChanged (BasicCell *, gncBoolean);
 
-#endif /* __XACC_BASIC_CELL_H__ */
+#endif /* __BASIC_CELL_H__ */
 /* ------------------ end of file ---------------------- */

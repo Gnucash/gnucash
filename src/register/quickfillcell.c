@@ -28,6 +28,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998-2000 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
 #include <stdlib.h>
@@ -38,9 +39,9 @@
 #include "basiccell.h"
 #include "quickfillcell.h"
 
-#define SET(cell,str) { 			\
-   if ((cell)->value) free ((cell)->value);	\
-   (cell)->value = strdup (str);		\
+#define SET(cell,str) { 	   \
+   g_free ((cell)->value);	   \
+   (cell)->value = g_strdup (str); \
 }
 
 /* ================================================ */
@@ -137,7 +138,7 @@ quick_modify (BasicCell *_cell,
    if ((match == NULL) || (match->text == NULL))
    {
      if (cell->original != NULL)
-       retval = strdup(cell->original);
+       retval = g_strdup(cell->original);
      else
        retval = newval;
 
@@ -147,7 +148,7 @@ quick_modify (BasicCell *_cell,
      return retval;
    }
 
-   retval = strdup(match->text);
+   retval = g_strdup(match->text);
 
    *start_selection = strlen(newval);
    *end_selection = -1;
@@ -176,9 +177,11 @@ QuickFillCell *
 xaccMallocQuickFillCell (void)
 {
    QuickFillCell *cell;
-   cell = ( QuickFillCell *) malloc (sizeof (QuickFillCell));
+
+   cell = g_new(QuickFillCell, 1);
 
    xaccInitQuickFillCell (cell);
+
    return cell;
 }
 

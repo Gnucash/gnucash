@@ -1454,7 +1454,7 @@ gnc_register_record_cb(GnucashRegister *reg, gpointer data)
 static void
 gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
 {
-  RegWindow *regData = (RegWindow *) data;
+  RegWindow *regData = data;
 
   closeRegWindow(widget, regData);
 }
@@ -1554,9 +1554,9 @@ regWindowLedger(xaccLedgerDisplay *ledger)
   if (regData != NULL)
     return regData;
 
-  regData = (RegWindow *) malloc(sizeof (RegWindow));
+  regData = g_new(RegWindow, 1);
 
-  ledger->gui_hook = (void *) regData;
+  ledger->gui_hook = regData;
   ledger->redraw = regRefresh;
   ledger->destroy = regDestroy;
   ledger->set_help = regSetHelp;
@@ -1882,7 +1882,7 @@ closeRegWindow(GtkWidget * widget, RegWindow *regData)
     regData->date_window = NULL;
   }
 
-  free(regData);
+  g_free(regData);
 
   DEBUG("closed RegWindow\n");
 }

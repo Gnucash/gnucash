@@ -32,10 +32,11 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __XACC_RECN_CELL_C__
-#define __XACC_RECN_CELL_C__
+#ifndef __RECN_CELL_C__
+#define __RECN_CELL_C__
 
 #include "basiccell.h"
 
@@ -58,6 +59,6 @@ char       xaccRecnCellGetFlag (RecnCell *);
 void       xaccRecnCellSetStringGetter (RecnCellStringGetter getter);
 
 
-#endif /* __XACC_RECN_CELL_C__ */
+#endif /* __RECN_CELL_C__ */
 
 /* --------------- end of file ---------------------- */

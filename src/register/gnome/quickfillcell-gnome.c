@@ -33,7 +33,7 @@
 #include "util.h"
 
 
-static gncBoolean
+static gboolean
 QuickFillDirect (BasicCell *bcell,
                  const char *oldval,
                  char **newval_ptr,
@@ -48,20 +48,20 @@ QuickFillDirect (BasicCell *bcell,
         int prefix_len;
 
         if (event->type != GDK_KEY_PRESS)
-                return GNC_F;
+                return FALSE;
 
         switch (event->keyval) {
                 case GDK_slash:
                         if (!(event->state & GDK_MOD1_MASK))
-                                return GNC_F;
+                                return FALSE;
                         break;
                 case GDK_Tab:
                 case GDK_ISO_Left_Tab:
                         if (!(event->state & GDK_CONTROL_MASK))
-                                return GNC_F;
+                                return FALSE;
                         break;
                 default:
-                        return GNC_F;
+                        return FALSE;
         }
 
         if ((*start_selection <= *cursor_position) &&
@@ -73,17 +73,17 @@ QuickFillDirect (BasicCell *bcell,
 
         match = xaccGetQuickFillStrLen(cell->qfRoot, oldval, *cursor_position);
         if (match == NULL)
-                return GNC_T;
+                return TRUE;
 
         match = xaccGetQuickFillUniqueLen(match, &prefix_len);
         if (match == NULL)
-                return GNC_T;
+                return TRUE;
 
         if ((match->text != NULL) &&
             (strncmp(match->text, oldval, strlen(oldval)) == 0) && 
             (strcmp(match->text, oldval) != 0))
         {
-                *newval_ptr = strdup(match->text);
+                *newval_ptr = g_strdup(match->text);
                 assert(*newval_ptr != NULL);
                 xaccSetBasicCellValue(bcell, *newval_ptr);
         }
@@ -92,7 +92,7 @@ QuickFillDirect (BasicCell *bcell,
         *start_selection = *cursor_position;
         *end_selection = -1;
 
-        return GNC_T;
+        return TRUE;
 }
 
 

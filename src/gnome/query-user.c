@@ -65,34 +65,39 @@ typedef struct {
 } FoundationCBData;
 
 static void
-foundation_query_yes_cb(GtkWidget *w, gpointer data) {
+foundation_query_yes_cb(GtkWidget *w, gpointer data)
+{
   int *result = (int *) data; 
   *result = GNC_QUERY_YES;
 }
 
 static void
-foundation_query_no_cb(GtkWidget *w, gpointer data) {
+foundation_query_no_cb(GtkWidget *w, gpointer data)
+{
   int *result = (int *) data; 
   *result = GNC_QUERY_NO;
 }
 
 static void
-foundation_query_cancel_cb(GtkWidget *w, gpointer data) {
+foundation_query_cancel_cb(GtkWidget *w, gpointer data)
+{
   int *result = (int *) data; 
   *result = GNC_QUERY_CANCEL;
 }
 
 static gboolean
-foundation_query_delete_cb(GtkWidget *w, GdkEvent *event, gpointer data) {
+foundation_query_delete_cb(GtkWidget *w, GdkEvent *event, gpointer data)
+{
   FoundationCBData * cb_data = (FoundationCBData *) data;
   *(cb_data->dialog_result) = cb_data->delete_result;
   return(FALSE);
 }
 
 static gint
-foundation_query_close_cb(GtkWidget *w, gpointer data) {
-  free(data);
-  return(FALSE);
+foundation_query_close_cb(GtkWidget *w, gpointer data)
+{
+  g_free(data);
+  return FALSE;
 }
 
 GtkWidget *
@@ -157,14 +162,12 @@ gnc_foundation_query_dialog(gncUIWidget parent,
   }
 
   /* Allocate our resources */
-  cb_data = malloc(sizeof(FoundationCBData));
-  if (cb_data == NULL)
-    return NULL;
+  cb_data = g_new(FoundationCBData, 1);
 
   query_dialog = gnome_dialog_newv(title, button_names);
 
   if (query_dialog == NULL) {
-    free(cb_data);
+    g_free(cb_data);
     return NULL;
   }
 
@@ -185,12 +188,12 @@ gnc_foundation_query_dialog(gncUIWidget parent,
   gtk_signal_connect(GTK_OBJECT(query_dialog),
 		     "delete_event",
 		     GTK_SIGNAL_FUNC(foundation_query_delete_cb),
-		     (gpointer) cb_data);
+		     cb_data);
 
   gtk_signal_connect(GTK_OBJECT(query_dialog),
 		     "close",
 		     GTK_SIGNAL_FUNC(foundation_query_close_cb),
-		     (gpointer) cb_data);
+		     cb_data);
 
   /* Setup window settings */
   gtk_window_set_modal(GTK_WINDOW(query_dialog), GNC_T);
@@ -209,6 +212,7 @@ gnc_foundation_query_dialog(gncUIWidget parent,
 
   return query_dialog;
 }
+
 
 /********************************************************************\
  * gnc_ok_cancel_dialog_parented                                    *
@@ -533,10 +537,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
 
   num_items = gh_length(list_items);
   
-  cb_data = (ChooseItemCBData *) malloc(sizeof(ChooseItemCBData) * num_items);
-
-  if(cb_data == NULL)
-    return SCM_BOOL_F;
+  cb_data = g_new(ChooseItemCBData, num_items);
 
   /* Convert the scm data to C callback structs */
   i = 0;
@@ -574,7 +575,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
 
   if(!status_ok) {
     fprintf(stderr, "Dying after copy.\n");
-    free(cb_data);
+    g_free(cb_data);
     return SCM_BOOL_F;
   }
 
@@ -597,7 +598,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
   if(!status_ok) {
     fprintf(stderr, "Dying after buttons.\n");
     gtk_widget_unref(vbox);
-    free(cb_data);
+    g_free(cb_data);
     return SCM_BOOL_F;
   }
 
@@ -614,7 +615,7 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
 					  &dialog_result);
 
   if(query_box == NULL) {
-    free(cb_data);
+    g_free(cb_data);
     return SCM_BOOL_F;
   }
 
@@ -639,9 +640,9 @@ gnc_choose_item_from_list_dialog(const char *title, SCM list_items)
       break;
   }
 
-  free(cb_data);
+  g_free(cb_data);
 
-  return(result);
+  return result;
 }
 
 

@@ -232,9 +232,7 @@ xaccSRInitRegisterData(SplitRegister *reg)
   if (reg == NULL)
     return;
 
-  /* calloc initializes to 0 */
-  info = calloc(1, sizeof(SRInfo));
-  assert(info != NULL);
+  info = g_new0(SRInfo, 1);
 
   info->last_date_entered = time(NULL);
 
@@ -247,8 +245,7 @@ xaccSRDestroyRegisterData(SplitRegister *reg)
   if (reg == NULL)
     return;
 
-  if (reg->user_data != NULL)
-    free(reg->user_data);
+  g_free(reg->user_data);
 
   reg->user_data = NULL;
 }
@@ -261,7 +258,7 @@ xaccSRGetInfo(SplitRegister *reg)
   if (reg->user_data == NULL)
     xaccSRInitRegisterData(reg);
 
-  return (SRInfo *) reg->user_data;
+  return reg->user_data;
 }
 
 static gncUIWidget

@@ -357,7 +357,7 @@ gnc_physical_cell_new (void)
 
   pcell = &tcell->phys_cell;
 
-  pcell->entry = strdup("");
+  pcell->entry = g_strdup("");
   assert(pcell->entry != NULL);
 
   pcell->fg_color = 0x000000; /* black */
@@ -376,9 +376,7 @@ gnc_physical_cell_free (TableCell *tcell)
   if (tcell == NULL)
     return;
 
-  if (tcell->phys_cell.entry != NULL)
-    free(tcell->phys_cell.entry);
-
+  g_free(tcell->phys_cell.entry);
   tcell->phys_cell.entry = NULL;
 
   g_mem_chunk_free(cell_mem_chunk, tcell);
@@ -810,9 +808,8 @@ gnc_table_commit_cursor (Table *table)
                                              phys_row_origin + cell_row,
                                              phys_col_origin + cell_col);
 
-        if (pcell->entry)
-          free (pcell->entry);
-        pcell->entry = strdup (cell->value);
+        g_free (pcell->entry);
+        pcell->entry = g_strdup (cell->value);
         if (cell->use_bg_color)
           pcell->bg_color = cell->bg_color;
         if (cell->use_fg_color)
@@ -850,15 +847,14 @@ gnc_table_refresh_header (Table *table)
       /* Assumes header starts at physical (0, 0) */
       pcell = gnc_table_get_physical_cell (table, cell_row, cell_col);
 
-      if (pcell->entry)
-        free(pcell->entry);
+      g_free(pcell->entry);
 
       cell = cb->cells[cell_row][cell_col];
 
       if (cell && cell->value)
-        pcell->entry = strdup (cell->value);
+        pcell->entry = g_strdup (cell->value);
       else
-        pcell->entry = strdup ("");
+        pcell->entry = g_strdup ("");
     }
 }
 
@@ -1165,8 +1161,7 @@ gnc_table_enter_update(Table *table,
     {
       if (safe_strcmp(retval, val) != 0)
         (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
-      if (pcell->entry)
-        free (pcell->entry);
+      g_free (pcell->entry);
       pcell->entry = (char *) retval;
     }
     else
@@ -1183,8 +1178,7 @@ gnc_table_enter_update(Table *table,
 
     table->set_help(table, help_str);
 
-    if (help_str != NULL)
-      free(help_str);
+    g_free(help_str);
   }
 
   /* record this position as the cell that will be
@@ -1243,7 +1237,7 @@ gnc_table_leave_update(Table *table,
   }
 
   if (!retval)
-    retval = strdup (callback_text);
+    retval = g_strdup (callback_text);
 
   /* save whatever was returned; but lets check for  
    * changes to avoid roiling the cells too much. */
@@ -1251,14 +1245,14 @@ gnc_table_leave_update(Table *table,
   {
     if (safe_strcmp (pcell->entry, retval))
     {
-      free (pcell->entry);
+      g_free (pcell->entry);
       pcell->entry = (char *) retval;
       (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
     }
     else
     {
       /* leave() allocated memory, which we will not be using */
-      free ((char *) retval);
+      g_free ((char *) retval);
       retval = NULL;
     }
   }
@@ -1326,8 +1320,7 @@ gnc_table_modify_update(Table *table,
     if (retval)
     {
       /* update data. bounds check done earlier */
-      if (pcell->entry)
-        free (pcell->entry);
+      g_free (pcell->entry);
       pcell->entry = (char *) retval;
       (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
     }
@@ -1335,8 +1328,7 @@ gnc_table_modify_update(Table *table,
   else
   {
     /* update data. bounds check done earlier */
-    if (pcell->entry)
-      free (pcell->entry);
+    g_free (pcell->entry);
     pcell->entry = newval;
     retval = newval;
     (cb->cells[cell_row][cell_col])->changed = GNC_CELL_CHANGED;
@@ -1352,8 +1344,7 @@ gnc_table_modify_update(Table *table,
 
     table->set_help(table, help_str);
 
-    if (help_str != NULL)
-      free(help_str);
+    g_free(help_str);
   }
 
   LEAVE ("change %d %d (relrow=%d relcol=%d) cell=%p val=%s\n", 
@@ -1405,8 +1396,7 @@ gnc_table_direct_update(Table *table,
                                start_selection, end_selection, gui_data);
 
   if ((*newval_ptr != oldval) && (*newval_ptr != NULL)) {
-    if (pcell->entry)
-      free (pcell->entry);
+    g_free (pcell->entry);
     pcell->entry = *newval_ptr;
     cell->changed = GNC_CELL_CHANGED;
   }
@@ -1419,8 +1409,7 @@ gnc_table_direct_update(Table *table,
 
     table->set_help(table, help_str);
 
-    if (help_str != NULL)
-      free(help_str);
+    g_free(help_str);
   }
 
   return result;

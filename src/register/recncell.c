@@ -28,6 +28,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
 #include <stdlib.h>
@@ -48,6 +49,7 @@
 #include "Transaction.h"
 
 static RecnCellStringGetter string_getter = NULL;
+
 
 /* ================================================ */
 
@@ -85,14 +87,14 @@ ToggleRecn (BasicCell *_cell,
     if (!gnc_verify_dialog(CHANGE_RECN_MSG, GNC_T))
       return NULL;
 
-  if (cell->reconciled_flag == NREC) {
+  if (cell->reconciled_flag == NREC)
     cell->reconciled_flag = CREC;
-  } else {
+  else
     cell->reconciled_flag = NREC;
-  }
 
   xaccRecnCellSetFlag (cell, cell->reconciled_flag);
-  return strdup (_cell->value);
+
+  return g_strdup (_cell->value);
 }
 
 /* ================================================ */
@@ -100,9 +102,10 @@ ToggleRecn (BasicCell *_cell,
 RecnCell *
 xaccMallocRecnCell (void)
 {
-  RecnCell * cell = malloc(sizeof(RecnCell));
+  RecnCell * cell;
 
-  assert(cell != NULL);
+  cell = g_new(RecnCell, 1);
+
   xaccInitRecnCell (cell);
 
   return cell;

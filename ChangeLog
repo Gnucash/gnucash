@@ -1,5 +1,10 @@
 2000-08-07  Dave Peticolas  <dave@krondo.com>
 
+	* src/register/*.c: Use glib memory allocation routines.
+
+	* src/register/cellblock.c: fix memory leaks and use glib memory
+	allocation routines.
+
 	* src/register/table-allgui.c: reimplement the Table code using
 	glib's dynamic arrays. Clean up the code and homogenize the
 	function naming convention.

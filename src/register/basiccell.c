@@ -28,6 +28,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas <dave@krondo.com>
  */
 
 #include <stdlib.h>
@@ -35,13 +36,17 @@
 
 #include "basiccell.h"
 
+
 /* ===================================================== */
 
 BasicCell * xaccMallocBasicCell (void)
 {
    BasicCell * cell;
-   cell = (BasicCell *) malloc (sizeof (BasicCell));
+
+   cell = g_new(BasicCell, 1);
+
    xaccInitBasicCell (cell);
+
    return cell;
 }
 
@@ -51,10 +56,10 @@ static char *
 BasicCellHelpValue(BasicCell *cell)
 {
   if ((cell->value != NULL) && (cell->value[0] != 0))
-    return strdup(cell->value);
+    return g_strdup(cell->value);
 
   if (cell->blank_help != NULL)
-    return strdup(cell->blank_help);
+    return g_strdup(cell->blank_help);
 
   return NULL;
 }
@@ -64,13 +69,15 @@ BasicCellHelpValue(BasicCell *cell)
 void xaccInitBasicCell (BasicCell *cell)
 {
    cell->input_output = XACC_CELL_ALLOW_ALL;
+   cell->changed = 0;
+
    cell->bg_color = 0xffffff;  /* white */
    cell->fg_color = 0x0;       /* black */
    cell->use_bg_color = 0;     /* ignore the color */
    cell->use_fg_color = 0;     /* ignore the color */
+
    cell->value = NULL;
    cell->blank_help = NULL;
-   cell->changed = 0;
    cell->set_value = NULL;
    cell->enter_cell = NULL;
    cell->modify_verify = NULL;
@@ -80,6 +87,7 @@ void xaccInitBasicCell (BasicCell *cell)
    cell->move = NULL;
    cell->destroy = NULL;
    cell->get_help_value = BasicCellHelpValue;
+
    cell->gui_private = NULL;
 }
 
@@ -88,46 +96,43 @@ void xaccInitBasicCell (BasicCell *cell)
 void xaccDestroyBasicCell (BasicCell *cell)
 {
    /* give any gui elements a chance to clean up */
-   if (cell->destroy) {
-      (*(cell->destroy)) (cell);
-   }
+   if (cell->destroy)
+     (*(cell->destroy)) (cell);
 
    /* free up data strings */
-   if (cell->value) {
-      free (cell->value);
-   }
+   g_free (cell->value);
+   cell->value = NULL;
 
-   if (cell->blank_help) {
-     free (cell->blank_help);
-   }
+   g_free (cell->blank_help);
+   cell->blank_help = NULL;
 
    /* help prevent access to freed memory */
    xaccInitBasicCell (cell);
 
    /* free the object itself */
-   free (cell);
+   g_free (cell);
 }
 
 /* ===================================================== */
 
 void xaccSetBasicCellValue (BasicCell *cell, const char *val)
 {
-   void (*cb) (BasicCell *, const char *);
+   CellSetValueFunc cb;
 
    cb = cell->set_value;
    if (cb) {
       /* avoid recursion by disabling the  
        * callback while it's being called. */
       cell->set_value = NULL;
-      (*cb) (cell, val);
+      cb (cell, val);
       cell->set_value = cb;
-   } else {
-      if (cell->value) free (cell->value);
-      if (val) {
-        cell->value = strdup (val);
-      } else {
-        cell->value = strdup("");
-      }
+   }
+   else {
+     g_free (cell->value);
+      if (val)
+        cell->value = g_strdup (val);
+      else
+        cell->value = g_strdup ("");
    }
 }
 
@@ -140,12 +145,12 @@ xaccSetBasicCellBlankHelp (BasicCell *cell, const char *blank_help)
     return;
 
   if (cell->blank_help != NULL)
-    free(cell->blank_help);
+    g_free(cell->blank_help);
 
   if (blank_help == NULL)
     cell->blank_help = NULL;
   else
-    cell->blank_help = strdup(blank_help);
+    cell->blank_help = g_strdup(blank_help);
 }
 
 /* ===================================================== */

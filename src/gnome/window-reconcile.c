@@ -677,9 +677,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
    * their register windows after the deletion. */
   trans = xaccSplitGetParent(split);
   num_splits = xaccTransCountSplits(trans);
-  affected_accounts = (Account **) malloc((num_splits + 1) *
-                                          sizeof(Account *));
-  assert(affected_accounts != NULL);
+  affected_accounts = g_new(Account *, num_splits + 1);
 
   for (i = 0; i < num_splits; i++) 
   {
@@ -694,7 +692,7 @@ gnc_ui_reconcile_window_delete_cb(GtkButton *button, gpointer data)
 
   gnc_account_list_ui_refresh(affected_accounts);
 
-  free(affected_accounts);
+  g_free(affected_accounts);
 
   gnc_refresh_main_window ();
 }

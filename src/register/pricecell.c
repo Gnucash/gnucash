@@ -27,6 +27,7 @@
  *
  * HISTORY:
  * Copyright (c) 1998, 1999, 2000 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
 #include <ctype.h>
@@ -56,8 +57,8 @@ static char * xaccPriceCellPrintValue (PriceCell *cell);
 }
 
 #define SET(cell,str) { 			\
-   if ((cell)->value) free ((cell)->value);	\
-   (cell)->value = strdup (str);		\
+   g_free ((cell)->value);	                \
+   (cell)->value = g_strdup (str);		\
 }
 
 #define PRTBUF 40
@@ -109,7 +110,7 @@ PriceMV (BasicCell *_cell,
    /* accept the newval string if user action was delete, etc. */
    if (change != NULL)
    {
-      int i, count=0;
+      int i, count = 0;
 
       for (i = 0; 0 != change[i]; i++)
       {
@@ -152,13 +153,14 @@ PriceLeave (BasicCell *_cell, const char *val)
 
    /* Otherwise, return the new one. */
    SET ((&(cell->cell)), newval);
-   return strdup(newval);
+
+   return g_strdup(newval);
 }
 
 /* ================================================ */
 
 static char *
-PriceHelp(BasicCell *bcell)
+PriceHelp (BasicCell *bcell)
 {
   PriceCell *cell = (PriceCell *) bcell;
 
@@ -168,11 +170,11 @@ PriceHelp(BasicCell *bcell)
 
     help_str = xaccPriceCellPrintValue(cell);
 
-    return strdup(help_str);
+    return g_strdup(help_str);
   }
 
   if (bcell->blank_help != NULL)
-    return strdup(bcell->blank_help);
+    return g_strdup(bcell->blank_help);
 
   return NULL;
 }
@@ -183,8 +185,11 @@ PriceCell *
 xaccMallocPriceCell (void)
 {
    PriceCell *cell;
-   cell = (PriceCell *) malloc (sizeof (PriceCell));
+
+   cell = g_new(PriceCell, 1);
+
    xaccInitPriceCell (cell);
+
    return cell;
 }
 
@@ -193,7 +198,7 @@ xaccMallocPriceCell (void)
 void
 xaccInitPriceCell (PriceCell *cell)
 {
-   xaccInitBasicCell( &(cell->cell));
+   xaccInitBasicCell (&(cell->cell));
 
    cell->amount = 0.0;
    cell->blank_zero = GNC_T;
@@ -267,7 +272,7 @@ xaccSetPriceCellValue (PriceCell * cell, double amount)
    cell->amount = amount;
    buff = xaccPriceCellPrintValue (cell);
 
-   SET ( &(cell->cell), buff);
+   SET (&(cell->cell), buff);
 
    /* set the cell color to red if the value is negative */
    COLORIZE (cell, amount);
@@ -281,7 +286,7 @@ xaccSetPriceCellBlank (PriceCell *cell)
 
   cell->amount = 0.0;
 
-  SET ( &(cell->cell), "");
+  SET (&(cell->cell), "");
 
   COLORIZE (cell, 0.0);
 }

@@ -48,6 +48,7 @@
 #include "messages.h"
 #include "util.h"
 
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_REGISTER;
 
@@ -817,7 +818,8 @@ xaccMallocSplitRegister (SplitRegisterType type, SplitRegisterStyle style)
 {
    SplitRegister * reg;
 
-   reg = malloc (sizeof (SplitRegister));
+   reg = g_new(SplitRegister, 1);
+
    xaccInitSplitRegister (reg, type, style);
 
    return reg;
@@ -1257,7 +1259,7 @@ xaccDestroySplitRegister (SplitRegister *reg)
    reg->ndebitCell   = NULL;
 
    /* free the memory itself */
-   free (reg);
+   g_free (reg);
 }
 
 /* ============================================== */

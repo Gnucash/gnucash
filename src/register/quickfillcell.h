@@ -39,10 +39,11 @@
  *
  * HISTORY:
  * Copyright (c) 1997, 1998 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
-#ifndef __XACC_FILL_CELL_C__
-#define __XACC_FILL_CELL_C__
+#ifndef __QUICK_FILL_CELL_C__
+#define __QUICK_FILL_CELL_C__
 
 #include "basiccell.h"
 #include "QuickFill.h"
@@ -71,6 +72,6 @@ void             xaccSetQuickFillOriginal (QuickFillCell *, const char *);
 /* GUI-dependent */
 void             xaccQuickFillGUIInit (QuickFillCell *);
 
-#endif /* __XACC_FILL_CELL_C__ */
+#endif /* __QUICK_FILL_CELL_C__ */
 
 /* --------------- end of file ---------------------- */

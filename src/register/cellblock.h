@@ -53,6 +53,7 @@
  *
  * HISTORY:
  * Copyright (c) 1988 Linas Vepstas
+ * Copyright (c) 2000 Dave Peticolas
  */
 
 #ifndef __XACC_CELL_BLOCK_H__

@@ -97,14 +97,10 @@ gnc_html_data_new(const char *title, HTMLUserData user_data,
 {
   HTMLData *data;
 
-  data = malloc(sizeof(HTMLData));
-  assert(data != NULL);
+  data = g_new(HTMLData, 1);
 
   if (title != NULL)
-  {
-    data->title = strdup(title);
-    assert(title != NULL);
-  }
+    data->title = g_strdup(title);
   else
     data->title = NULL;
 
@@ -114,8 +110,7 @@ gnc_html_data_new(const char *title, HTMLUserData user_data,
   {
     int i;
 
-    data->user_buttons = calloc(num_user_buttons, sizeof(GnomeUIInfo));
-    assert(data->user_buttons != NULL);
+    data->user_buttons = g_new0(GnomeUIInfo, num_user_buttons);
 
     for (i = 0; i < num_user_buttons; i++)
       data->user_buttons[i] = user_buttons[i];
@@ -135,12 +130,10 @@ html_data_destroy(HTMLData *data)
   if (data == NULL)
     return;
 
-  if (data->title != NULL)
-    free(data->title);
+  g_free(data->title);
   data->title = NULL;
 
-  if (data->user_buttons != NULL)
-    free(data->user_buttons);
+  g_free(data->user_buttons);
   data->user_buttons = NULL;
   data->num_user_buttons = 0;
 
@@ -150,7 +143,7 @@ html_data_destroy(HTMLData *data)
 
   data->destroy = NULL;
 
-  free(data);
+  g_free(data);
 }
 
 static HTMLHistoryNode *
@@ -158,8 +151,7 @@ history_node_new(HTMLData *data)
 {
   HTMLHistoryNode *new;
 
-  new = malloc(sizeof(HTMLHistoryNode));
-  assert(new != NULL);
+  new = g_new(HTMLHistoryNode, 1);
 
   new->data = data;
   new->last = NULL;
@@ -171,7 +163,7 @@ history_node_new(HTMLData *data)
 /* Insert a history element into history. Return TRUE if this
  * is the first element in the history. If not last element
  * in history, all next pages are deleted */
-static gncBoolean
+static gboolean
 historyInsert(HTMLHistory *history, HTMLData *data)
 {
   HTMLHistoryNode *new;
@@ -194,7 +186,7 @@ historyInsert(HTMLHistory *history, HTMLData *data)
     history->current_node->next = temp->next;
     html_data_destroy(temp->data);
     temp->data = NULL;
-    free(temp);
+    g_free(temp);
 
     temp = history->current_node->next;
   }
@@ -257,13 +249,13 @@ historyClear(HTMLHistory *history)
     history->current_node->next = temp->next;
     html_data_destroy(temp->data);
     temp->data = NULL;
-    free(temp);
+    g_free(temp);
   }
 
   /* delete current page: */
   html_data_destroy(history->current_node->data);
   history->current_node->data = NULL;
-  free(history->current_node);
+  g_free(history->current_node);
   history->current_node = NULL;
 }
 
@@ -295,8 +287,7 @@ historyNew()
 {
   HTMLHistory *history;
 
-  history = malloc(sizeof(HTMLHistory));
-  assert(history != NULL);
+  history = g_new(HTMLHistory, 1);
 
   history->current_node = NULL;
 
@@ -310,7 +301,7 @@ historyDestroy(HTMLHistory *history)
     return;
 
   historyClear(history);
-  free(history);
+  g_free(history);
 }
 
 
@@ -343,7 +334,7 @@ struct _HTMLWindow
 
 /** PROTOTYPES ******************************************************/
 
-static void htmlBackCB(GtkWidget *widget,  gpointer data);
+static void htmlBackCB(GtkWidget *widget, gpointer data);
 static void htmlFwdCB(GtkWidget *widget, gpointer data);
 static void htmlPrintCB(GtkWidget * widget, gpointer data);
 

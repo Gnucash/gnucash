@@ -43,26 +43,26 @@
 /* ================================================ */
 /* Parses the string value and returns true if it is a
  * number. In that case, *num is set to the value parsed. */
-static gncBoolean
+static gboolean
 parse_num(const char *string, long int *num)
 {
   long int number;
 
   if (string == NULL)
-    return GNC_F;
+    return FALSE;
 
   if (!gnc_strisnum(string))
-    return GNC_F;
+    return FALSE;
 
   number = strtol(string, NULL, 10);
 
   if ((number == LONG_MIN) || (number == LONG_MAX))
-    return GNC_F;
+    return FALSE;
 
   if (num != NULL)
     *num = number;
 
-  return GNC_T;
+  return TRUE;
 }
 
 /* ================================================ */
@@ -97,7 +97,7 @@ NumMV (BasicCell *_cell,
        int *end_selection)
 {
   NumCell *cell = (NumCell *) _cell;
-  gncBoolean accel = GNC_F;
+  gncBoolean accel = FALSE;
   gncBoolean is_num;
   long int number = 0;
 
@@ -105,8 +105,8 @@ NumMV (BasicCell *_cell,
       (strlen(change) > 1))                   /* or entering > 1 char     */
     /* then just accept the proposed change */
   {
-    if (cell->cell.value) free (cell->cell.value);
-    cell->cell.value = strdup (newval);
+    g_free (cell->cell.value);
+    cell->cell.value = g_strdup (newval);
     return newval;
   }
 
@@ -115,32 +115,32 @@ NumMV (BasicCell *_cell,
   is_num = parse_num(oldval, &number);
 
   if (is_num && (number < 0))
-    is_num = GNC_F;
+    is_num = FALSE;
 
   switch (change[0])
   {
     case '+':
     case '=':
       number++;
-      accel = GNC_T;
+      accel = TRUE;
       break;
 
     case '_':
     case '-':
       number--;
-      accel = GNC_T;
+      accel = TRUE;
       break;
 
     case '}':
     case ']':
       number += 10;
-      accel = GNC_T;
+      accel = TRUE;
       break;
 
     case '{':
     case '[':
       number -= 10;
-      accel = GNC_T;
+      accel = TRUE;
       break;
   }
 
@@ -149,7 +149,7 @@ NumMV (BasicCell *_cell,
 
   /* If there is already a non-number there, don't accelerate. */
   if (accel && !is_num && (safe_strcmp(oldval, "") != 0))
-    accel = GNC_F;
+    accel = FALSE;
 
   if (accel)
   {
@@ -164,16 +164,16 @@ NumMV (BasicCell *_cell,
     if (safe_strcmp(buff, "") == 0)
       return NULL;
 
-    if (cell->cell.value) free (cell->cell.value);
-    cell->cell.value = strdup (buff);
+    g_free (cell->cell.value);
+    cell->cell.value = g_strdup (buff);
 
     *cursor_position = -1;
 
-    return strdup(buff);
+    return g_strdup(buff);
   }
 
-  if (cell->cell.value) free (cell->cell.value);
-  cell->cell.value = strdup (newval);
+  g_free (cell->cell.value);
+  cell->cell.value = g_strdup (newval);
 
   return newval;
 }
@@ -201,7 +201,8 @@ xaccMallocNumCell (void)
 {
   NumCell *cell;
 
-  cell = (NumCell *) malloc(sizeof(NumCell));
+  cell = g_new(NumCell, 1);
+
   xaccInitNumCell (cell);
 
   return cell;
@@ -228,8 +229,8 @@ setNumCellValue (BasicCell *_cell, const char *str)
       cell->next_num = number + 1;
   }
 
-  if (cell->cell.value) free (cell->cell.value);
-  cell->cell.value = strdup (str);
+  g_free (cell->cell.value);
+  cell->cell.value = g_strdup (str);
 }
 
 /* ================================================ */
@@ -248,7 +249,7 @@ xaccSetNumCellLastNum (NumCell *cell, const char *str)
   if (parse_num(str, &number))
   {
     cell->next_num = number + 1;
-    cell->next_num_set = GNC_T;
+    cell->next_num_set = TRUE;
   }
 }
 
@@ -259,7 +260,7 @@ xaccInitNumCell (NumCell *cell)
   xaccInitBasicCell (&(cell->cell));
 
   cell->next_num = 0;
-  cell->next_num_set = GNC_F;
+  cell->next_num_set = FALSE;
  
   cell->cell.enter_cell = NumEnter;
   cell->cell.modify_verify = NumMV;
