@@ -344,53 +344,6 @@
 	  <draw_indicator>True</draw_indicator>
 	</widget>
       </widget>
-
-      <widget>
-	<class>GtkHButtonBox</class>
-	<name>hbuttonbox1</name>
-	<border_width>3</border_width>
-	<layout_style>GTK_BUTTONBOX_SPREAD</layout_style>
-	<spacing>30</spacing>
-	<child_min_width>85</child_min_width>
-	<child_min_height>27</child_min_height>
-	<child_ipad_x>7</child_ipad_x>
-	<child_ipad_y>0</child_ipad_y>
-	<child>
-	  <padding>0</padding>
-	  <expand>True</expand>
-	  <fill>True</fill>
-	</child>
-
-	<widget>
-	  <class>GtkButton</class>
-	  <name>button27</name>
-	  <can_default>True</can_default>
-	  <can_focus>True</can_focus>
-	  <signal>
-	    <name>clicked</name>
-	    <handler>gnc_job_order_cb</handler>
-	    <data>Job Dialog</data>
-	    <last_modification_time>Thu, 21 Feb 2002 23:04:01 GMT</last_modification_time>
-	  </signal>
-	  <label>View Orders</label>
-	  <relief>GTK_RELIEF_NORMAL</relief>
-	</widget>
-
-	<widget>
-	  <class>GtkButton</class>
-	  <name>button28</name>
-	  <can_default>True</can_default>
-	  <can_focus>True</can_focus>
-	  <signal>
-	    <name>clicked</name>
-	    <handler>gnc_job_invoice_cb</handler>
-	    <data>Job Dialog</data>
-	    <last_modification_time>Thu, 21 Feb 2002 23:04:39 GMT</last_modification_time>
-	  </signal>
-	  <label>View Invoices</label>
-	  <relief>GTK_RELIEF_NORMAL</relief>
-	</widget>
-      </widget>
     </widget>
   </widget>
 </widget>
@@ -651,7 +604,7 @@
 
 	  <widget>
 	    <class>GtkButton</class>
-	    <name>button14</name>
+	    <name>select_button</name>
 	    <can_default>True</can_default>
 	    <can_focus>True</can_focus>
 	    <signal>

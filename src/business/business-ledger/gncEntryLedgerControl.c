@@ -157,10 +157,7 @@ static void gnc_entry_ledger_move_cursor (VirtualLocation *p_new_virt_loc,
   old_entry = gnc_entry_ledger_get_current_entry (ledger);
   new_entry = gnc_entry_ledger_get_entry (ledger, new_virt_loc.vcell_loc);
 
-  gnc_suspend_gui_refresh ();
   saved = gnc_entry_ledger_save (ledger, old_entry != new_entry);
-
-  gnc_resume_gui_refresh();
 
   /* redrawing can muck everything up */
   if (saved) {
@@ -540,6 +537,26 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
     VirtualLocation virt_loc;
     const char *message = _("The current entry has been changed.\n"
 			    "Would you like to save it?");
+    gboolean dontask = FALSE;
+
+    if (ledger->type ==  GNCENTRY_INVOICE_ENTRY) {
+      char inv_value;
+      gboolean only_inv_changed = FALSE;
+
+      if (gnc_table_current_cursor_changed (ledger->table, FALSE) == 1 &&
+	  gnc_table_layout_get_cell_changed (ledger->table->layout,
+					     ENTRY_INV_CELL, TRUE))
+	only_inv_changed = TRUE;
+
+      inv_value = gnc_entry_ledger_get_inv (ledger, ENTRY_INV_CELL);
+      
+      if (inv_value == 'X' && only_inv_changed) {
+	/* If the only change is that the 'inv' entry was clicked
+	 * "on", then just accept the change it without question.
+	 */
+	dontask = TRUE;
+      }
+    }
 
     virt_loc = ledger->table->current_cursor_loc;
 
@@ -550,7 +567,7 @@ gnc_entry_ledger_check_close (GtkWidget *parent, GncEntryLedger *ledger)
     if (!gnc_entry_ledger_verify_can_save (ledger))
       return FALSE;
 
-    if (gnc_verify_dialog_parented (parent, message, TRUE))
+    if (dontask || gnc_verify_dialog_parented (parent, message, TRUE))
       gnc_entry_ledger_save (ledger, TRUE);
     else
       gnc_entry_ledger_cancel_cursor_changes (ledger);

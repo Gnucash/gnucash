@@ -62,6 +62,7 @@
 	<class>GtkButton</class>
 	<name>button1</name>
 	<can_default>True</can_default>
+	<has_default>True</has_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
       </widget>
@@ -231,6 +232,7 @@
 	<class>GtkButton</class>
 	<name>button4</name>
 	<can_default>True</can_default>
+	<has_default>True</has_default>
 	<can_focus>True</can_focus>
 	<stock_button>GNOME_STOCK_BUTTON_OK</stock_button>
       </widget>
@@ -425,6 +427,7 @@
 	      <child_name>GtkCombo:entry</child_name>
 	      <name>acct_combo_entry</name>
 	      <can_focus>True</can_focus>
+	      <has_focus>True</has_focus>
 	      <editable>True</editable>
 	      <text_visible>True</text_visible>
 	      <text_max_length>0</text_max_length>

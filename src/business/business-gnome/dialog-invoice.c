@@ -122,6 +122,10 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
 {
   const char *res;
 
+  /* save the current entry in the ledger? */
+  if (!gnc_entry_ledger_check_close (iw->dialog, iw->ledger))
+    return FALSE;
+
   /* Check the ID */
   res = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
   if (safe_strcmp (res, "") == 0) {
@@ -145,10 +149,6 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
 static gboolean
 gnc_invoice_window_ok_save (InvoiceWindow *iw)
 {
-  /* save the current entry in the ledger? */
-  if (!gnc_entry_ledger_check_close (iw->dialog, iw->ledger))
-    return FALSE;
-
   if (!gnc_invoice_window_verify_ok (iw))
     return FALSE;
 

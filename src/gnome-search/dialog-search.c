@@ -72,6 +72,7 @@ struct _crit_data {
 };
 
 static void search_clear_criteria (GNCSearchWindow *sw);
+static void gnc_search_dialog_display_results (GNCSearchWindow *sw);
 
 static void
 gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
@@ -83,11 +84,12 @@ gnc_search_dialog_result_clicked (GtkButton *button, GNCSearchWindow *sw)
 
   res = (cb->cb_fcn)(&(sw->selected_item), sw->user_data);
 
-  if (!res)
+  if (res)
+    /* Update the display */
+    gnc_search_dialog_display_results (sw);
+  else
+    /* Destroy the display */
     gnc_search_dialog_destroy (sw);
-
-  /* Update the display */
-  gnc_search_dialog_display_results (sw);
 }
 
 static void
@@ -337,7 +339,7 @@ search_new_item_cb (GtkButton *button, GNCSearchWindow *sw)
     else {
       if (!sw->q) {
 	if (!sw->start_q) {
-	  sw->start_q = gncQueryNew ();
+	  sw->start_q = gncQueryCreate ();
 	  gncQuerySetBook (sw->start_q, gnc_get_current_book ());
 	}
 	sw->q = gncQueryCopy (sw->start_q);

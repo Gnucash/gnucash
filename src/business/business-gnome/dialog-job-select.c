@@ -30,6 +30,8 @@ struct select_job_window {
   GtkWidget * job_list;
   GtkWidget * showjobs_check;
 
+  GtkWidget * parent;
+
   GNCBook *	book;
   GncJob *	job;
   GncOwner	owner;
@@ -156,7 +158,7 @@ gnc_ui_select_job_order_cb(GtkButton * button, gpointer user_data)
     return;
 
   gncOwnerInitJob (&owner, w->job);
-  gnc_order_find (w->dialog, NULL, &owner, w->book);
+  gnc_order_find (w->parent, NULL, &owner, w->book);
 }
 
 static void
@@ -169,7 +171,7 @@ gnc_ui_select_job_invoice_cb(GtkButton * button, gpointer user_data)
     return;
 
   gncOwnerInitJob (&owner, w->job);
-  gnc_invoice_find (w->dialog, NULL, &owner, w->book);
+  gnc_invoice_find (w->parent, NULL, &owner, w->book);
 }
 
 static void
@@ -234,9 +236,9 @@ select_job_close (GnomeDialog *dialog, gpointer data)
   return FALSE;
 }
 
-GncJob *
-gnc_job_choose (GtkWidget * parent, GncJob *start_job,
-		GncOwner *ownerp, GNCBook *book)
+static GncJob *
+gnc_job_select (GtkWidget * parent, GncJob *start_job,
+		GncOwner *ownerp, GNCBook *book, gboolean provide_select)
 {
   struct select_job_window * win;
   GladeXML *xml;
@@ -267,6 +269,7 @@ gnc_job_choose (GtkWidget * parent, GncJob *start_job,
   if(parent) {
     gnome_dialog_set_parent(GNOME_DIALOG(win->dialog), GTK_WINDOW(parent));
     gtk_window_set_modal(GTK_WINDOW(win->dialog), TRUE);
+    win->parent = parent;
   }
 
   /* Connect the glade signals */
@@ -320,6 +323,12 @@ gnc_job_choose (GtkWidget * parent, GncJob *start_job,
 
   /* Run the widget */
   gtk_widget_show_all (win->dialog);
+
+  if (!provide_select) {
+    GtkWidget *wid = glade_xml_get_widget (xml, "select_button");
+    gtk_widget_hide_all (wid);
+  }
+
   gtk_main();
 
   /* exit */
@@ -333,5 +342,12 @@ void
 gnc_job_find (GtkWidget * parent, GncJob *start_job, 
 	      GncOwner *ownerp, GNCBook *book)
 {
-  gnc_job_choose (parent, start_job, ownerp, book);
+  gnc_job_select (parent, start_job, ownerp, book, FALSE);
+}
+
+GncJob *
+gnc_job_choose (GtkWidget * parent, GncJob *start_job,
+		GncOwner *ownerp, GNCBook *book)
+{
+  return gnc_job_select (parent, start_job, ownerp, book, TRUE);
 }

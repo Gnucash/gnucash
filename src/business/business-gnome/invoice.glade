@@ -252,7 +252,7 @@
 		<class>GtkEntry</class>
 		<name>id_entry</name>
 		<can_focus>True</can_focus>
-		<editable>True</editable>
+		<editable>False</editable>
 		<text_visible>True</text_visible>
 		<text_max_length>0</text_max_length>
 		<text></text>
@@ -266,6 +266,7 @@
 	      <widget>
 		<class>GnomeDateEdit</class>
 		<name>opened_date</name>
+		<sensitive>False</sensitive>
 		<show_time>False</show_time>
 		<use_24_format>False</use_24_format>
 		<week_start_monday>False</week_start_monday>

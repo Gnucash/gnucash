@@ -721,7 +721,7 @@ static const char * _gncInvoicePrintable (GncInvoice *invoice)
 
     invoice->printname =
       g_strdup_printf ("%s%s%s", invoice->id,
-		       gncInvoiceIsPosted (invoice) ? _(" (closed)") : "",
+		       gncInvoiceIsPosted (invoice) ? _(" (posted)") : "",
 		       gncInvoiceIsPaid (invoice) ? _(" (paid)") : "");
   }
 

@@ -22,8 +22,6 @@
 #include "business-utils.h"
 #include "dialog-job-select.h"
 #include "dialog-job.h"
-#include "dialog-order.h"
-#include "dialog-invoice.h"
 
 #define DIALOG_NEW_JOB_CM_CLASS "dialog-new-job"
 #define DIALOG_EDIT_JOB_CM_CLASS "dialog-edit-job"
@@ -161,31 +159,6 @@ gnc_job_window_help_cb (GtkWidget *widget, gpointer data)
   helpWindow(NULL, NULL, help_file);
 }
 
-static void
-gnc_job_order_cb(GtkButton * button, gpointer user_data)
-{
-  JobWindow *jw = user_data;
-  GncOwner owner;
-
-  if (!gnc_job_verify_ok (jw))
-    return;
-
-  gncOwnerInitJob (&owner, jw_get_job (jw));
-  gnc_order_find (jw->dialog, NULL, &owner, jw->book);
-}
-
-static void
-gnc_job_invoice_cb(GtkButton * button, gpointer user_data)
-{
-  JobWindow *jw = user_data;
-  GncOwner owner;
-
-  if (!gnc_job_verify_ok (jw))
-    return;
-
-  gncOwnerInitJob (&owner, jw_get_job (jw));
-  gnc_invoice_find (jw->dialog, NULL, &owner, jw->book);
-}
 
 static void
 gnc_job_window_destroy_cb (GtkWidget *widget, gpointer data)
@@ -330,13 +303,7 @@ gnc_job_new_window (GtkWidget *parent, GNCBook *bookp, GncOwner *owner,
   gnome_dialog_button_connect (jwd, 2,
 			       GTK_SIGNAL_FUNC(gnc_job_window_help_cb), jw);
 
-  glade_xml_signal_connect_data
-    (xml, "gnc_job_order_cb", GTK_SIGNAL_FUNC (gnc_job_order_cb), jw);
-
-  glade_xml_signal_connect_data
-    (xml, "gnc_job_invoice_cb", GTK_SIGNAL_FUNC (gnc_job_invoice_cb), jw);
-
-  /* Setup signals (XXX) */
+  /* Setup signals */
   gtk_signal_connect (jwo, "destroy",
 		      GTK_SIGNAL_FUNC(gnc_job_window_destroy_cb), jw);
 
