@@ -38,7 +38,7 @@
 xmlNodePtr gnc_account_dom_tree_create(Account *act, gboolean exporting);
 sixtp* gnc_account_sixtp_parser_create(void);
 
-xmlNodePtr gnc_book_dom_tree_create(GNCBook *book);
+xmlNodePtr gnc_book_dom_tree_create(QofBook *book);
 sixtp* gnc_book_sixtp_parser_create(void);
 sixtp* gnc_book_id_sixtp_parser_create(void);
 sixtp* gnc_book_slots_sixtp_parser_create(void);
@@ -59,7 +59,7 @@ xmlNodePtr gnc_schedXaction_dom_tree_create( SchedXaction *sx );
 sixtp* gnc_schedXaction_sixtp_parser_create(void);
 
 xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
-Split* dom_tree_to_split(xmlNodePtr node, GNCBook *book);
+Split* dom_tree_to_split(xmlNodePtr node, QofBook *book);
 
 xmlNodePtr gnc_transaction_dom_tree_create(Transaction *txn);
 sixtp* gnc_transaction_sixtp_parser_create(void);

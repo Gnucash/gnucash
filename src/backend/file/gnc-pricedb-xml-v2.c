@@ -87,7 +87,7 @@ static short module = MOD_IO;
 */
 
 static gboolean
-price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, GNCBook *book)
+price_parse_xml_sub_node(GNCPrice *p, xmlNodePtr sub_node, QofBook *book)
 {
   if(!p || !sub_node) return FALSE;
 
@@ -144,7 +144,7 @@ price_parse_xml_end_handler(gpointer data_for_children,
   xmlNodePtr child;
   GNCPrice *p = NULL;
   gxpf_data *gdata = global_data;
-  GNCBook *book = gdata->bookdata;
+  QofBook *book = gdata->bookdata;
 
   /* we haven't been handed the *top* level node yet... */
   if(parent_data) return TRUE;
@@ -231,7 +231,7 @@ pricedb_start_handler(GSList* sibling_data,
                       gchar **attrs)
 {
   gxpf_data *gdata = global_data;
-  GNCBook *book = gdata->bookdata;
+  QofBook *book = gdata->bookdata;
   GNCPriceDB *db = gnc_pricedb_create(book);
   g_return_val_if_fail(db, FALSE);
   *result = db;

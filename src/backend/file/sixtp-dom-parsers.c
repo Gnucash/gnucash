@@ -659,7 +659,7 @@ failure:
 
 
 gnc_commodity *
-dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *book)
+dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, QofBook *book)
 {
   /* Turn something like this
      
@@ -724,7 +724,7 @@ dom_tree_to_commodity_ref_no_engine(xmlNodePtr node, GNCBook *book)
 }
 
 gnc_commodity*
-dom_tree_to_commodity_ref(xmlNodePtr node, GNCBook *book)
+dom_tree_to_commodity_ref(xmlNodePtr node, QofBook *book)
 {
     gnc_commodity *daref;
     gnc_commodity *ret;

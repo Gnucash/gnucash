@@ -24,9 +24,9 @@
 #ifndef GNC_BACKEND_API_H
 #define GNC_BACKEND_API_H
 
-#include "Backend.h"
+#include "qofbackend.h"
 
-Backend * gnc_backend_new (void);
+QofBackend * gnc_backend_new (void);
 void gnc_file_be_set_retention_days (int days);
 void gnc_file_be_set_compression (gboolean compress);
 

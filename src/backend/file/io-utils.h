@@ -32,9 +32,9 @@
 #include "io-gncxml-v2.h"
 
 void write_account_group(FILE *out, AccountGroup *grp, sixtp_gdv2 *gd);
-void write_accounts(FILE *out, GNCBook *book, sixtp_gdv2 *gd);
-void write_book_parts(FILE *out, GNCBook *book);
-void write_commodities(FILE *out, GNCBook *book, sixtp_gdv2 *gd);
+void write_accounts(FILE *out, QofBook *book, sixtp_gdv2 *gd);
+void write_book_parts(FILE *out, QofBook *book);
+void write_commodities(FILE *out, QofBook *book, sixtp_gdv2 *gd);
 
 void write_emacs_trailer(FILE *out);
 

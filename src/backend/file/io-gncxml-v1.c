@@ -359,7 +359,7 @@ gncxml_setup_for_read (GNCParseStatus *global_parse_status)
 /* ================================================================== */
 
 gboolean
-gnc_session_load_from_xml_file(GNCSession *session)
+qof_session_load_from_xml_file(QofSession *session)
 {
   gboolean parse_ok;
   gpointer parse_result = NULL;
@@ -370,12 +370,12 @@ gnc_session_load_from_xml_file(GNCSession *session)
 
   g_return_val_if_fail(session, FALSE);
 
-  book = gnc_session_get_book (session);
+  book = qof_session_get_book (session);
   global_parse_status.book = book;
 
   g_return_val_if_fail(book, FALSE);
 
-  filename = gnc_session_get_file_path(session);
+  filename = qof_session_get_file_path(session);
   g_return_val_if_fail(filename, FALSE);
 
   top_level_pr = gncxml_setup_for_read (&global_parse_status);
