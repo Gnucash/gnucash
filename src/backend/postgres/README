@@ -265,6 +265,11 @@ access).
 -- Wire in the GUI to ask user for username/password to log onto the
    server.  (GUI already implemented, just not yet used).  
 
+-- The correct url format for username-password should be:
+   postgres://username:passwd@host:port/dbname?key=value&key2=val2
+   However, the username-password part of teh URI is not correctly 
+   parsed at the moment.
+
 -- distinguish between 'save' and 'save-as' in gnc-book & backend.
    If user hits 'save' in the single-user or multi-user mode, it 
    should be a no-op (since the saves have already occured).  Only 
