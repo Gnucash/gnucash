@@ -1341,7 +1341,7 @@ gnc_acct_tree_tweak_menu (GNCMDIChildInfo * mc)
   gnome_app_insert_menus (mc->app, "File/New File", fileitems1);
   gnome_app_insert_menus (mc->app, "File/Open...", fileitems2);
   gnome_app_insert_menus (mc->app, "Edit/Paste", edititems);
-  gnome_app_insert_menus (mc->app, "Actions/Scheduled Transactions",
+  gnome_app_insert_menus (mc->app, "_Actions/Scheduled Transactions",
 			  actionitems);
 
   win = (GNCAcctTreeWin *)mc->user_data;

@@ -1,6 +1,10 @@
 2002-10-23  Derek Atkins  <derek@ihtfp.com>
 	* de.po: fix a string for Christian so it compiles.
 
+	* new translations require leading underscores for menu names
+	  or the lookups fail when adding new menus.  In particular,
+	  "_Actions", "_Toolbar", and "_Status Bar".
+
 2002-10-22  Derek Atkins  <derek@ihtfp.com>
    Fix a bunch of compiler warnings:
 	* Transaction-matcher.c: use "=" not "==" to set a variable

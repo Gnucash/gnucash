@@ -268,10 +268,10 @@ gnc_main_window_tweak_menus(GNCMDIChildInfo * mc)
 {
   GtkWidget *widget;
 
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Toolbar");
+  widget = gnc_mdi_child_find_menu_item(mc, "View/_Toolbar");
   gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
 
-  widget = gnc_mdi_child_find_menu_item(mc, "View/Status Bar");
+  widget = gnc_mdi_child_find_menu_item(mc, "View/_Status Bar");
   gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), TRUE);
 
   widget = gnc_mdi_child_find_menu_item(mc, "View/Summary Bar");
