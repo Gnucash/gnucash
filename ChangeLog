@@ -19,6 +19,14 @@
 	  and hbci which should allow running with ofx and hbci in the
 	  build tree.
 
+2004-01-19  Herbert Thoma  <herbie@hthoma.de>
+
+	* src/gnome-utils/transfer.glade: rename from_xxx and to_xxx account
+	  tree widgets to left_xxx and right_xxx
+	* src/gnome-utils/dialog-transfer.c: if in "accountant mode" call
+	  "transfer from" "credit account" and "transfer to" "debit account"
+	  and interchange account trees
+
 2004-01-16  Derek Atkins  <derek@ihtfp.com>
 
 	* configure.in: fix a typo in the help (was --diable-gui).  Fixes #131414
