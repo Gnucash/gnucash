@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Aktienhandel
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Konten zum Handel mit Aktien und Fonds
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Mit dieser Auswahl werden Konten zum Handel mit Aktien und Aktienfonds erstellt.
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Aktiva</act:name>
+  <act:id type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktiva</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Geldanlagen</act:name>
+  <act:id type="new">ccb5a03f67534cb0a2e71658684cc963</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Geldanlagen</act:description>
+  <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktiendepot</act:name>
+  <act:id type="new">d6b0c9d2b6f67e852f627793cd4a8c45</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktiendepot</act:description>
+  <act:parent type="new">ccb5a03f67534cb0a2e71658684cc963</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktie</act:name>
+  <act:id type="new">51fdb50b70636a48cdcacb6a77c8d2ae</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktie</act:description>
+  <act:parent type="new">d6b0c9d2b6f67e852f627793cd4a8c45</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Aktienfond</act:name>
+  <act:id type="new">b4b50d00e97548f9762c82e85dfd718f</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktienfond</act:description>
+  <act:parent type="new">d6b0c9d2b6f67e852f627793cd4a8c45</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Bond</act:name>
+  <act:id type="new">efdcaac33cd34afeb052f13670e153ad</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Bond</act:description>
+  <act:parent type="new">d6b0c9d2b6f67e852f627793cd4a8c45</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Einkommen</act:name>
+  <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Einkommen</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Dividenden</act:name>
+  <act:id type="new">0990b548bfd960a70220ce7fcdb0fe14</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Dividenden</act:description>
+  <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ausgaben</act:name>
+  <act:id type="new">bc39f4d37eb75353f4f971e80b9d2818</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Ausgaben</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sonstiges</act:name>
+  <act:id type="new">18ca785b6fcd2895427459c233a47c57</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Sonstiges</act:description>
+  <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Komissionen</act:name>
+  <act:id type="new">10f88ec0a5b985aea619a103ce1f68ba</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Komissionen im Aktienhandel</act:description>
+  <act:parent type="new">18ca785b6fcd2895427459c233a47c57</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Kinder
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Konten im Zusammenhang mit Kindern
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Kindergeld, Kindergarten
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Einkommen</act:name>
+  <act:id type="new">724c2a1128e49b0b28304d372b19f5a1</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Einkommen</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Gehalt</act:name>
+  <act:id type="new">e49717ff2ec00bf21e657e2d950ac8a9</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Gehalt und Zulagen</act:description>
+  <act:parent type="new">724c2a1128e49b0b28304d372b19f5a1</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kindergeld</act:name>
+  <act:id type="new">ff445bf61420de7b5df2637060837151</act:id>
+  <act:type>INCOME</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Kindergeld</act:description>
+  <act:parent type="new">e49717ff2ec00bf21e657e2d950ac8a9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Ausgaben</act:name>
+  <act:id type="new">bc39f4d37eb75353f4f971e80b9d2818</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Ausgaben</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Kindergarten</act:name>
+  <act:id type="new">e9b6215bdeb5cc092ca0059a7c9d97a7</act:id>
+  <act:type>EXPENSE</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Kindergarten</act:description>
+  <act:parent type="new">bc39f4d37eb75353f4f971e80b9d2818</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<gnc-account-example>
+    <gnc-act:title>
+      Sonstige Sachanlage
+    </gnc-act:title>
+    <gnc-act:short-description>
+      Sonstige Sachanlagen
+    </gnc-act:short-description>
+    <gnc-act:long-description>
+      Sonstige Sachanlagen
+  </gnc-act:long-description>    
+<gnc:account version="2.0.0">
+  <act:name>Aktiva</act:name>
+  <act:id type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Aktiva</act:description>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sachanlagen</act:name>
+  <act:id type="new">f7b3424631deed453984e6f5c5569669</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Sachanlagen</act:description>
+  <act:parent type="new">8f1b9e7e37e9a76c2289ef4fe9adcdd9</act:parent>
+</gnc:account>
+<gnc:account version="2.0.0">
+  <act:name>Sonstige</act:name>
+  <act:id type="new">70392cff351e73cf577c008ad7733ee6</act:id>
+  <act:type>ASSET</act:type>
+  <act:currency>
+    <cmdty:space>ISO4217</cmdty:space>
+    <cmdty:id>USD</cmdty:id>
+  </act:currency>
+  <act:description>Sonstige Sachanlagen</act:description>
+  <act:parent type="new">f7b3424631deed453984e6f5c5569669</act:parent>
+</gnc:account>
+</gnc-account-example>
+
+<!-- Local variables: -->
+<!-- mode: xml        -->
+<!-- End:             -->

@@ -1,3 +1,10 @@
+2001-06-08 Christian Stimming <stimming@tuhh.de>
+
+	* configure.in, accounts/Makefile.am, accounts/de_DE/*: add
+	account template files for German locale.
+
+	* src/gnome/gnucash.desktop, po/de.po: updated German translation.
+
 2001-06-08  Dave Peticolas  <dave@krondo.com>
 
 	* src/doc/design/engine.texinfo: update docs
