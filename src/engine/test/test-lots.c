@@ -45,7 +45,7 @@ run_test (void)
 
   add_random_transactions_to_book (book, 720);
 
-  grp = gnc_book_get_group (book);
+  grp = xaccGetAccountGroup (book);
   xaccGroupScrubLotsBalance (grp);
 
   /* --------------------------------------------------------- */

@@ -54,7 +54,7 @@ run_test (void)
 
   session = get_random_session ();
   book = gnc_session_get_book (session);
-  group = gnc_book_get_group (book);
+  group = xaccGetAccountGroup (book);
 
   add_random_transactions_to_book (book, 20);
 

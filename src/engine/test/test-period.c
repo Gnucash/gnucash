@@ -55,7 +55,7 @@ run_test (void)
 
   add_random_transactions_to_book (openbook, 120);
 
-  grp = gnc_book_get_group (openbook);
+  grp = xaccGetAccountGroup (openbook);
 
   acclist = xaccGroupGetSubAccounts (grp);
   for (anode=acclist; anode; anode=anode->next)
