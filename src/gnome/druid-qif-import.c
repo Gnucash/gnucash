@@ -710,6 +710,16 @@ gnc_ui_qif_import_date_format_next_cb(GnomeDruidPage * page,
   gh_call2(reparse_dates, wind->selected_file, format_sym);
   
   if(gh_call1(check_from_acct, wind->selected_file) != SCM_BOOL_T) {
+    SCM default_acct    = gh_eval_str("qif-file:path-to-accountname");
+    char * default_acctname;
+
+    default_acctname = gh_scm2newstr(gh_call1(default_acct,
+					      wind->selected_file),
+				     NULL);
+    gtk_entry_set_text(GTK_ENTRY(wind->acct_entry), default_acctname);
+
+    if(default_acctname) free(default_acctname);
+
     return FALSE;
   }
   else {
