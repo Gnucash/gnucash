@@ -1,5 +1,5 @@
 /********************************************************************\
- * version.c -- handle back-ward compatible database table upgrades *
+ * upgrade.c -- handle back-ward compatible database table upgrades *
  * Copyright (c) 2001 Linas Vepstas <linas@linas.org>               *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
@@ -20,10 +20,6 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
 \********************************************************************/
 		  
-
-/*
-handle versions
-*/
 
 #define _GNU_SOURCE
 
