@@ -1,5 +1,11 @@
 2004-01-19  Benoit Grégoire <bock@step.polymtl.ca>
 
+	* po/fr.po:  Updated translation.  Partially applied patch from Luc
+	Maisonobe, see http://bugzilla.gnome.org/show_bug.cgi?id=117335 for
+	details.
+
+2004-01-19  Benoit Grégoire <bock@step.polymtl.ca>
+
 	* src/bin/Makefile.am:  Fix a problem with opt style installs.  Thanks Derek.
 
 2004-01-16  Derek Atkins  <derek@ihtfp.com>
