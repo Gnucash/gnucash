@@ -1,5 +1,9 @@
 2001-05-26  Dave Peticolas  <dave@krondo.com>
 
+	* src/gnome/window-acct-tree.c: fix label alignment
+
+	* src/gnome/window-report.c: fix label alignment
+
 	* src/gnome/window-main.c: put child menu after tools menu
 
 2001-05-25  Dave Peticolas  <dave@krondo.com>

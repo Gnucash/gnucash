@@ -121,7 +121,7 @@ gnc_report_window_view_labeler(GnomeMDIChild * child, GtkWidget * current,
     gtk_label_set_text(GTK_LABEL(current), name);
     free(name);
   }
-  gtk_label_set_justify(GTK_LABEL(current), GTK_JUSTIFY_LEFT);
+  gtk_misc_set_alignment (GTK_MISC(current), 0.0, 0.5);
   return current;
 }
 

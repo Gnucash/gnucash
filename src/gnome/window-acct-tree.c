@@ -125,7 +125,8 @@ gnc_acct_tree_view_labeler(GnomeMDIChild * child, GtkWidget * current,
   else {
     gtk_label_set_text(GTK_LABEL(current), name);
   }
-  gtk_label_set_justify(GTK_LABEL(current), GTK_JUSTIFY_LEFT);
+
+  gtk_misc_set_alignment (GTK_MISC(current), 0.0, 0.5);
 
   if (name) free (name);
 
