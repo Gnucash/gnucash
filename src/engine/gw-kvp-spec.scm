@@ -42,6 +42,15 @@
   
   (gw:wrap-function
    ws
+   'gnc:kvp-frame-delete-at-path
+   '<gw:void>
+   "gnc_kvp_frame_delete_at_path"
+   '((<gnc:kvp-frame*> f)
+     ((gw:glist-of (<gw:mchars> caller-owned const) caller-owned) key-path))
+   "Deletes the kvp_frame at the key-path in frame f")
+   
+  (gw:wrap-function
+   ws
    'gnc:kvp-frame-set-slot
    '<gw:void>
    "kvp_frame_set_slot"

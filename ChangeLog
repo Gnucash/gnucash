@@ -3,6 +3,9 @@
 	* gw-kvp-spec.scm: wrap kvp_slot_set_slot_path_gslist(),
 	  kvp_slot_get_slot_path_gslist(), and gnc_book_get_slots()
 
+	* kvp-scm: create gnc_kvp_frame_delete_at_path() and wrap it.
+	  This function will clear a sub-tree out of a kvp_frame.	  
+	
 2002-07-05  Derek Atkins  <derek@ihtfp.com>
 
 	* gw-engine-spec.scm: wrap gnc_lot_get_split_list
