@@ -183,8 +183,8 @@ gnc_report_window_view_new(GnomeMDIChild * child, gpointer user_data)
   /* make sure menu entry and label get refreshed */
   gnome_mdi_child_set_name(child, child->name);
 
-  gtk_signal_connect(GTK_OBJECT(child), "destroy", 
-                     gnc_report_window_view_destroy, mc);
+  g_signal_connect(G_OBJECT(child), "destroy", 
+                   G_CALLBACK (gnc_report_window_view_destroy), mc);
   
   gnc_report_window_create_menu(win, mc); 
   gnc_report_window_create_toolbar(win, mc);

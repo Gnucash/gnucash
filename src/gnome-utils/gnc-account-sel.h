@@ -33,9 +33,10 @@
 #include <gnome.h>
 #include "Account.h"
 
-#define GNC_ACCOUNT_SEL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_account_sel_get_type(), GNCAccountSel)
-#define GNC_ACCOUNT_SEL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_account_sel_get_type(), GNCAccountSelClass)
-#define GNC_IS_ACCOUNT_SEL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_account_sel_get_type ())
+#define GNC_TYPE_ACCOUNT_SEL          (gnc_account_sel_get_type())	
+#define GNC_ACCOUNT_SEL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_ACCOUNT_SEL, GNCAccountSel)
+#define GNC_ACCOUNT_SEL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_ACCOUNT_SEL, GNCAccountSelClass)
+#define GNC_IS_ACCOUNT_SEL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_ACCOUNT_SEL)
 
 typedef struct
 {
@@ -62,9 +63,9 @@ typedef struct
         void (*account_sel_changed) (GNCAccountSel *gas);
 } GNCAccountSelClass;
 
-guint      gnc_account_sel_get_type(void);
-GtkWidget* gnc_account_sel_new(void);
-GtkWidget* gnc_account_sel_gtk_entry(GNCAccountSel *gas);
+GType      gnc_account_sel_get_type (void);
+GtkWidget* gnc_account_sel_new (void);
+GtkWidget* gnc_account_sel_gtk_entry (GNCAccountSel *gas);
 /**
  * Sets the GAS to the given account.  If the account doesn't exist in the
  * list, then it doesn't change the state of the GAS.  If the account is

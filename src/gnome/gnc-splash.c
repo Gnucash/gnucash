@@ -51,7 +51,7 @@ gnc_show_splash_screen (void)
 
   if (splash) return;
 
-  splash = gtk_window_new (GTK_WINDOW_DIALOG);
+  splash = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   gtk_signal_connect (GTK_OBJECT (splash), "destroy",
                       GTK_SIGNAL_FUNC (splash_destroy_cb), NULL);

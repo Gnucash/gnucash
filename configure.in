@@ -77,7 +77,7 @@ AC_PROG_MAKE_SET
 AC_HEADER_STDC
 
 AC_CHECK_HEADERS(limits.h)
-AC_CHECK_FUNCS(stpcpy memcpy timegm towupper)
+AC_CHECK_FUNCS(stpcpy memcpy timegm towupper setenv putenv)
 
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
@@ -791,7 +791,7 @@ then
 
     # Gnome-Print -- some people already have/need libgnomeprint-2.2
     #PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.2)
-    PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.0)
+    PKG_CHECK_MODULES(GNOME_PRINT, libgnomeprint-2.0 libgnomeprintui-2.0)
     AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
     AC_SUBST(GNOME_PRINT_CFLAGS)
     AC_SUBST(GNOME_PRINT_LIBS)
@@ -819,9 +819,13 @@ then
    
     ### ----------------------------------------------------------------------
 
-    AC_CHECK_LIB(gal, main, true,
-      [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
-      `$PKG_CONFIG --libs gal`)
+PKG_CHECK_MODULES(GAL, gal)
+AC_SUBST(GAL_CFLAGS)
+AC_SUBST(GAL_LIBS)
+
+#    AC_CHECK_LIB(gal, main, true,
+#      [AC_MSG_ERROR([gal library not found. See the README and config.log for more info.])],
+#      `$PKG_CONFIG --libs gal`)
 
 # 3/9/03  Disable gtkhtml check
 

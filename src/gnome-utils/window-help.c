@@ -555,13 +555,15 @@ gnc_help_window_search_button_cb(GtkButton * button, gpointer data)
   memset(&key, 0, sizeof(DBT));
   memset(&value, 0, sizeof(DBT));
 
-  key.data    = search_string;
+  key.data    = g_strdup (search_string);
   key.size    = strlen(search_string);
 
   /* do the search */
   if(help->index_db) {
     err = help->index_db->get(help->index_db, &key, &value, 0);
   }
+
+  g_free (key.data);
 
   if(err == 0) {
     /* the data in the DB is a newline-separated list of filenames */

@@ -28,7 +28,6 @@ gnucash-gnome2-dev	Gnome2 port
 	  Delete typedef of GncHTMLObjectCB			(FIXME)
 
 	Replace deprecated functions 
-		In batch 15, replace deprecated druid functions
 		Make a table mapping deprecated functions in gdkfont.h to their 
 		Pango replacements.
 		Replace all deprecated functions in gdkfont.h

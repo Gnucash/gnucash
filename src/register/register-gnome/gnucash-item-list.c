@@ -292,7 +292,7 @@ gnc_item_list_class_init(GNCItemListClass *item_list_class)
 						  key_press_event),
 				gtk_marshal_NONE__POINTER,
 				GTK_TYPE_NONE, 1,
-				GTK_TYPE_GDK_EVENT);
+				GDK_TYPE_EVENT);
 
 #if 0
 	gtk_object_class_add_signals(object_class,

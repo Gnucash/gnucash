@@ -47,48 +47,44 @@
 
 static void gnc_currency_edit_init         (GNCCurrencyEdit      *gce);
 static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *class);
-static void gnc_currency_edit_destroy      (GtkObject            *object);
 
 static GtkComboClass *parent_class;
 
 /**
  * gnc_currency_edit_get_type:
  *
- * Returns the GtkType for the GNCCurrencyEdit widget
+ * Returns the GType for the GNCCurrencyEdit widget
  */
-guint
+GType
 gnc_currency_edit_get_type (void)
 {
-	static guint currency_edit_type = 0;
+	static GType currency_edit_type = 0;
 
-	if (!currency_edit_type){
-		GtkTypeInfo currency_edit_info = {
-			"GNCCurrencyEdit",
-			sizeof (GNCCurrencyEdit),
+	if (currency_edit_type == 0) {
+		static GTypeInfo currency_edit_info = {
 			sizeof (GNCCurrencyEditClass),
-			(GtkClassInitFunc) gnc_currency_edit_class_init,
-			(GtkObjectInitFunc) gnc_currency_edit_init,
 			NULL,
 			NULL,
+			(GClassInitFunc) gnc_currency_edit_class_init,
+			NULL,
+			NULL,
+			sizeof (GNCCurrencyEdit),
+			0,
+			(GInstanceInitFunc) gnc_currency_edit_init
 		};
 
-		currency_edit_type = gtk_type_unique (gtk_combo_get_type (),
-                                                      &currency_edit_info);
+		currency_edit_type = g_type_register_static (GTK_TYPE_COMBO, 
+							     "GNCCurrencyEdit",
+							     &currency_edit_info, 0);
 	}
 
 	return currency_edit_type;
 }
 
 static void
-gnc_currency_edit_class_init (GNCCurrencyEditClass *class)
+gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 {
-	GtkObjectClass *object_class = (GtkObjectClass *) class;
-
-	object_class = (GtkObjectClass*) class;
-
-	parent_class = gtk_type_class (gtk_combo_get_type ());
-
-	object_class->destroy = gnc_currency_edit_destroy;
+	parent_class = g_type_class_peek_parent (klass);
 }
 
 static void
@@ -97,16 +93,6 @@ gnc_currency_edit_init (GNCCurrencyEdit *gce)
         gtk_combo_set_use_arrows_always(GTK_COMBO(gce), TRUE);
         gtk_combo_set_value_in_list(GTK_COMBO(gce), FALSE, TRUE);
         gtk_combo_disable_activate(GTK_COMBO(gce));
-}
-
-static void
-gnc_currency_edit_destroy (GtkObject *object)
-{
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GNC_IS_CURRENCY_EDIT (object));
-
-	if (GTK_OBJECT_CLASS (parent_class)->destroy)
-		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void

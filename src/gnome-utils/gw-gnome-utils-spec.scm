@@ -402,34 +402,7 @@ be left empty")
   ;; druid-utils.h
   (gw:wrap-as-wct ws '<gnc:GnomeDruid> "GnomeDruid*" "const GnomeDruid*")
 
-  (gw:wrap-function
-   ws
-   'gnc:druid-set-title-image
-   '<gw:void>
-   "gnc_druid_set_title_image"
-   '((<gnc:GnomeDruid> druid)
-     ((<gw:mchars> caller-owned) image-path))
-   "Set the title image of a druid.")
-
-  (gw:wrap-function
-   ws
-   'gnc:druid-set-logo-image
-   '<gw:void>
-   "gnc_druid_set_logo_image"
-   '((<gnc:GnomeDruid> druid)
-     ((<gw:mchars> caller-owned) logo-path))
-   "Set the logo image of a druid.")
-
-  (gw:wrap-function
-   ws
-   'gnc:druid-set-watermark-image
-   '<gw:void>
-   "gnc_druid_set_watermark_image"
-   '((<gnc:GnomeDruid> druid)
-     ((<gw:mchars> caller-owned) watermark-path))
-   "Set the watermark image of a druid.")
-
-  (gw:wrap-function
+ (gw:wrap-function
    ws
    'gnc:druid-set-colors
    '<gw:void>

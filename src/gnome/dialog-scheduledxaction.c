@@ -145,8 +145,8 @@ struct _SchedXactionEditorDialog
         GtkToggleButton *optEndDate;
         GtkToggleButton *optEndNone;
         GtkToggleButton *optEndCount;
-        GnomeNumberEntry *endCountEntry;
-        GnomeNumberEntry *endRemainEntry;
+        GtkEntry *endCountEntry;
+        GtkEntry *endRemainEntry;
         GNCDateEdit *endDateEntry;
 
         char *sxGUIDstr;
@@ -432,15 +432,21 @@ gnc_sxed_check_changed( SchedXactionEditorDialog *sxed )
                 /* dialog says... num occur */
                 if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
                         gint sxNumOccur, sxNumRem, dlgNumOccur, dlgNumRem;
+			gchar *text;
 
                         if ( ! xaccSchedXactionGetNumOccur( sxed->sx ) ) {
                                 return TRUE;
                         }
 
-                        dlgNumOccur = (gint)gnome_number_entry_get_number( sxed->
-                                                                           endCountEntry );
-                        dlgNumRem = (gint)gnome_number_entry_get_number( sxed->
-                                                                         endRemainEntry );
+			text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endCountEntry),
+						       0, -1 );
+			sscanf (text, "%d", &dlgNumOccur);
+			g_free (text);
+
+                        text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
+					       	       0, -1 );
+			sscanf (text, "%d", &dlgNumRem);
+			g_free (text);
 
                         sxNumOccur = xaccSchedXactionGetNumOccur( sxed->sx );
                         sxNumRem = xaccSchedXactionGetRemOccur( sxed->sx );
@@ -853,12 +859,17 @@ gnc_sxed_check_consistent( SchedXactionEditorDialog *sxed )
 
                 if ( gtk_toggle_button_get_active(sxed->optEndCount)) {
                         gint occur, rem;
+			gchar *text;
 
-                        occur = (gint)gnome_number_entry_get_number( sxed->endCountEntry );
-                        xaccSchedXactionSetNumOccur( sxed->sx, occur );
+			text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endCountEntry),
+						       0, -1 );
+			sscanf (text, "%d", &occur);
+			g_free (text);
 
-                        rem = (gint)gnome_number_entry_get_number( sxed->endRemainEntry );
-                        xaccSchedXactionSetRemOccur( sxed->sx, rem );
+                        text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
+				       		       0, -1 );
+			sscanf (text, "%d", &rem);
+			g_free (text);
 
                         if ( occur == 0 ) {
                                 const char *sx_occur_count_zero_msg =
@@ -948,10 +959,19 @@ gnc_sxed_save_sx( SchedXactionEditorDialog *sxed )
                         xaccSchedXactionSetNumOccur( sxed->sx, 0 );
                 } else if ( gtk_toggle_button_get_active(sxed->optEndCount) ) {
                         gint num;
+			gchar *text;
+
                         /* get the occurances data */
-                        num = (gint)gnome_number_entry_get_number( sxed->endCountEntry );
+			text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endCountEntry),
+				       		       0, -1 );
+			sscanf (text, "%d", &num);
+			g_free (text);
                         xaccSchedXactionSetNumOccur( sxed->sx, num );
-                        num = (gint)gnome_number_entry_get_number( sxed->endRemainEntry );
+
+                        text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
+				       		       0, -1 );
+			sscanf (text, "%d", &num);
+			g_free (text);
                         xaccSchedXactionSetRemOccur( sxed->sx, num );
 
                         g_date_clear( &gdate, 1 );
@@ -1280,10 +1300,10 @@ gnc_sxed_get_widgets( SchedXactionEditorDialog *sxed )
         sxed->optEndCount = GTK_TOGGLE_BUTTON(w);
 
         w = glade_xml_get_widget( sxed->gxml, END_GNOME_NUMENTRY );
-        sxed->endCountEntry = GNOME_NUMBER_ENTRY(w);
+        sxed->endCountEntry = GTK_ENTRY(w);
 
         w = glade_xml_get_widget( sxed->gxml, REMAIN_GNOME_NUMENTRY );
-        sxed->endRemainEntry = GNOME_NUMBER_ENTRY(w);
+        sxed->endRemainEntry = GTK_ENTRY(w);
 
 }
 
@@ -1521,7 +1541,6 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
         char *name;
         time_t tmpDate;
         SplitRegister *splitReg;
-        GtkWidget *w;
         GString *tmpgStr;
         struct tm *tmpTm;
         GDate *gd;
@@ -1561,16 +1580,14 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
 
                 gtk_toggle_button_set_active( sxed->optEndCount, TRUE );
 
-                w = gnome_number_entry_gtk_entry( sxed->endCountEntry );
                 tmpgStr = g_string_sized_new(5);
                 g_string_sprintf( tmpgStr, "%d", numOccur );
-                gtk_entry_set_text( GTK_ENTRY(w), tmpgStr->str );
+                gtk_entry_set_text( sxed->endCountEntry, tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
 
-                w = gnome_number_entry_gtk_entry( sxed->endRemainEntry );
                 tmpgStr = g_string_sized_new(5);
                 g_string_sprintf( tmpgStr, "%d", numRemain );
-                gtk_entry_set_text( GTK_ENTRY(w), tmpgStr->str );
+                gtk_entry_set_text( sxed->endRemainEntry, tmpgStr->str );
                 g_string_free( tmpgStr, TRUE );
 
                 set_endgroup_toggle_states( sxed, END_OCCUR );
@@ -2214,6 +2231,7 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
         END_TYPE endType;
         GDate endDate;
         int numRemain;
+	gchar *text;
 
         endType = NO_END;
         numRemain = -1;
@@ -2233,9 +2251,10 @@ gnc_sxed_update_cal( SchedXactionEditorDialog *sxed )
                 endType = NO_END;
         } else if ( gtk_toggle_button_get_active( sxed->optEndCount ) ) {
                 endType = COUNT_END;
-                numRemain =
-                        (gint)gnome_number_entry_get_number(
-                                sxed->endRemainEntry );
+		text = gtk_editable_get_chars( GTK_EDITABLE (sxed->endRemainEntry),
+					       0, -1 );
+		sscanf (text, "%d", &numRemain);
+		g_free (text);
         } else {
                 g_assert( FALSE );
         }

@@ -47,15 +47,10 @@ typedef enum {
   GNC_DATE_DELTA_NUM_POLARITY
 } GNCDateDeltaPolarity;
 
-#define GNC_AMOUNT_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_amount_edit_get_type(), GNCAmountEdit)
-#define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_amount_edit_get_type(), GNCAmountEditClass)
-#define GNC_IS_AMOUNT_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_amount_edit_get_type ())
-
-
-
-#define GNC_DATE_DELTA(obj)           G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_delta_get_type(), GNCDateDelta)
-#define GNC_DATE_DELTA_CLASS(klass)   G_TYPE_CHECK_CLASS_CAST (klass, gnc_date_delta_get_type(), GNCDateDeltaClass)
-#define GNC_IS_DATE_DELTA(obj)        G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_date_delta_get_type ())
+#define GNC_TYPE_DATE_DELTA           (gnc_date_delta_get_type())
+#define GNC_DATE_DELTA(obj)           G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_DATE_DELTA , GNCDateDelta)
+#define GNC_DATE_DELTA_CLASS(klass)   G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_DATE_DELTA, GNCDateDeltaClass)
+#define GNC_IS_DATE_DELTA(obj)        G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_DATE_DELTA)
 
 typedef struct {
   GtkHBox hbox;
@@ -78,7 +73,7 @@ typedef struct {
   void (*delta_changed) (GNCDateDelta *gdd);
 } GNCDateDeltaClass;
 
-guint gnc_date_delta_get_type (void);
+GType gnc_date_delta_get_type (void);
 
 GtkWidget *gnc_date_delta_new (gboolean show_polarity);
 

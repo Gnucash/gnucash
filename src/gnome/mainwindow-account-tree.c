@@ -123,17 +123,8 @@ gnc_mainwin_account_tree_class_init (GNCMainWinAccountTreeClass *klass)
 		   gtk_marshal_NONE__POINTER,
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
-#if 0
-  gtk_object_class_add_signals(object_class,
-#endif
-
-			       mainwinaccounttree_signals,
-			       LAST_SIGNAL);
-
-  klass->select_account   = NULL;
-  klass->unselect_account = NULL;
-  klass->activate_account = NULL;
 }
+
 static void
 gnc_mainwin_account_tree_init(GNCMainWinAccountTree *mwac_tree)
 {
@@ -174,8 +165,8 @@ gnc_mainwin_account_tree_get_type ()
 	sizeof (GNCMainWinAccountTreeClass),
 	(GtkClassInitFunc) gnc_mainwin_account_tree_class_init,
 	(GtkObjectInitFunc) gnc_mainwin_account_tree_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	NULL,
+	NULL,
 	(GtkClassInitFunc) NULL
       };
       

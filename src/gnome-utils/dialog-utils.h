@@ -116,7 +116,7 @@ void gnc_fill_menu_with_data (GnomeUIInfo *info, gpointer data);
 
 void gnc_option_menu_init (GtkWidget * option_menu);
 void gnc_option_menu_init_w_signal(GtkWidget * w,
-				   GtkSignalFunc f,
+				   GCallback f,
 				   gpointer cb_data);
 int  gnc_option_menu_get_active (GtkWidget * option_menu);
 
@@ -155,10 +155,10 @@ void gnc_clist_columns_autosize (GtkCList *list);
 GladeXML * gnc_glade_xml_new (const char *filename, const char *root);
 GtkWidget * gnc_glade_lookup_widget (GtkWidget *widget, const char *name);
 void gnc_glade_autoconnect_full_func(const gchar *handler_name,
-				     GtkObject *signal_object,
+				     GObject *signal_object,
 				     const gchar *signal_name,
 				     const gchar *signal_data,
-				     GtkObject *connect_object,
+				     GObject *connect_object,
 				     gboolean after,
 				     gpointer user_data);
 

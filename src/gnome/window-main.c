@@ -26,6 +26,7 @@
 
 #include <errno.h>
 #include <gnome.h>
+#include <gconf/gconf-client.h>
 #include <guile/gh.h>
 #include <stdio.h>
 #include <string.h>
@@ -138,12 +139,13 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
                                gpointer data) {
   GtkWidget * summarybar;
   GtkWidget * statusbar;
+  GConfClient * client;
 
   /* add the summarybar */
   summarybar = gnc_main_window_summary_new();
 
   {
-    GnomeDockItemBehavior behavior;
+    BonoboDockItemBehavior behavior;
     GtkWidget *item;
 
     /* This is essentially gnome_app_add_docked, but without using
@@ -152,24 +154,25 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
      * layout config before we've had a chance to read it.
      */
 
-    behavior = (GNOME_DOCK_ITEM_BEH_EXCLUSIVE |
-                GNOME_DOCK_ITEM_BEH_NEVER_VERTICAL);
-    if (!gnome_preferences_get_toolbar_detachable ())
-      behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+    behavior = (BONOBO_DOCK_ITEM_BEH_EXCLUSIVE |
+                BONOBO_DOCK_ITEM_BEH_NEVER_VERTICAL);
+    client = gconf_client_get_default ();
+    if (!gconf_client_get_bool (client, "/desktop/gnome/interface/toolbar_detachable", NULL))
+      behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
 
-    item = gnome_dock_item_new("Summary Bar", behavior);
+    item = bonobo_dock_item_new("Summary Bar", behavior);
     gtk_container_add( GTK_CONTAINER (item), summarybar );
 
     if (app->layout) {
-      gnome_dock_layout_add_item( app->layout,
-                                  GNOME_DOCK_ITEM(item),
-                                  GNOME_DOCK_TOP,
+      bonobo_dock_layout_add_item( app->layout,
+                                  BONOBO_DOCK_ITEM(item),
+                                  BONOBO_DOCK_TOP,
                                   2, 0, 0 );
     }
     else {
-      gnome_dock_add_item( GNOME_DOCK(app->dock),
-                           GNOME_DOCK_ITEM(item),
-                           GNOME_DOCK_TOP,
+      bonobo_dock_add_item( BONOBO_DOCK(app->dock),
+                           BONOBO_DOCK_ITEM(item),
+                           BONOBO_DOCK_TOP,
                            2, 0, 0, FALSE );
     }
   }
@@ -380,7 +383,7 @@ static void
 gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
 {
   GNCMDIChildInfo * mc;
-  GnomeDockItem *summarybar;
+  BonoboDockItem *summarybar;
   guint dc1, dc2, dc3, dc4;
   static gboolean in_sync = FALSE;
 
@@ -399,7 +402,7 @@ gnc_main_window_flip_summary_bar_cb(GtkWidget * widget, gpointer data)
   if (!mc || !mc->app)
     return;
 
-  summarybar = gnome_dock_get_item_by_name(GNOME_DOCK(mc->app->dock),
+  summarybar = bonobo_dock_get_item_by_name(BONOBO_DOCK(mc->app->dock),
 					   "Summary Bar",
 					   &dc1, &dc2, &dc3, &dc4);
   if (!summarybar) return;
@@ -722,8 +725,9 @@ gnc_main_window_about_cb (GtkWidget *widget, gpointer data)
   } else {
     ver_string = strdup(VERSION);
   }
-  about = gnome_about_new ("GnuCash", ver_string, copyright,
-                           authors, message, NULL);
+  /* GNOME 2 Port (Add Documenters and Translators) */
+  about = gnome_about_new ("GnuCash", ver_string, copyright, message,
+                           authors, NULL, NULL, NULL);
   g_free(ver_string);
 
   gnome_dialog_set_parent (GNOME_DIALOG(about),

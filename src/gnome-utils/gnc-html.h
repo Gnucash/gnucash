@@ -24,9 +24,10 @@
 #define GNC_HTML_H
 
 #include <glib.h>
-#include <libgtkhtml/gtkhtml.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
+
+#include <libgtkhtml/gtkhtml.h>
 
 typedef char * URLType;
 
@@ -81,10 +82,8 @@ typedef void (* GncHTMLLoadCB)(gnc_html * html, URLType type,
                                gpointer data);
 typedef int  (* GncHTMLButtonCB)(gnc_html * html, GdkEventButton * event,
                                  gpointer data);
-#if 0
-typedef int  (* GncHTMLObjectCB)(gnc_html * html, GtkHTMLEmbedded * eb,
+typedef int  (* GncHTMLObjectCB)(gnc_html * html, HtmlEmbedded * widget,
                                  gpointer data); 
-#endif
 typedef int  (* GncHTMLActionCB)(gnc_html * html, const char * method,
                                  const char * action, GHashTable * form_data);
 typedef gboolean (* GncHTMLStreamCB)(const char *location, char **data, int *datalen);
@@ -118,10 +117,9 @@ gboolean      gnc_html_register_urltype (URLType type, const char *protocol);
 
 /* object handlers deal with <object classid="foo"> objects in HTML.
  * the handlers are looked up at object load time. */
-#if 0
+
 void          gnc_html_register_object_handler(const char * classid, 
                                                GncHTMLObjectCB hand);
-#endif
 void          gnc_html_unregister_object_handler(const char * classid);
 
 /* action handlers deal with submitting forms of the type 

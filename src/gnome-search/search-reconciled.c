@@ -38,7 +38,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_reconciled_class_init	(GNCSearchReconciledClass *class);
 static void gnc_search_reconciled_init	(GNCSearchReconciled *gspaper);
-static void gnc_search_reconciled_finalise	(GtkObject *obj);
+static void gnc_search_reconciled_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchReconciled *)(x))->priv)
 
@@ -46,14 +46,6 @@ struct _GNCSearchReconciledPrivate {
 };
 
 static GNCSearchCoreTypeClass *parent_class;
-
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
 
 guint
 gnc_search_reconciled_get_type (void)
@@ -67,8 +59,8 @@ gnc_search_reconciled_get_type (void)
       sizeof(GNCSearchReconciledClass),
       (GtkClassInitFunc)gnc_search_reconciled_class_init,
       (GtkObjectInitFunc)gnc_search_reconciled_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+      NULL,
+      NULL
     };
 		
     type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
@@ -80,13 +72,13 @@ gnc_search_reconciled_get_type (void)
 static void
 gnc_search_reconciled_class_init (GNCSearchReconciledClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = (GtkObjectClass *)class;
+  object_class = G_OBJECT_CLASS (class);
   parent_class = gtk_type_class(gnc_search_core_type_get_type ());
 
-  object_class->finalize = gnc_search_reconciled_finalise;
+  object_class->finalize = gnc_search_reconciled_finalize;
 
   /* override methods */
   gnc_search_core_type->validate = gncs_validate;
@@ -109,14 +101,14 @@ gnc_search_reconciled_init (GNCSearchReconciled *o)
 }
 
 static void
-gnc_search_reconciled_finalise (GtkObject *obj)
+gnc_search_reconciled_finalize (GObject *obj)
 {
   GNCSearchReconciled *o = (GNCSearchReconciled *)obj;
   g_assert (IS_GNCSEARCH_RECONCILED (o));
 
   g_free(o->priv);
 	
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -168,7 +160,7 @@ static void
 option_changed (GtkWidget *widget, GNCSearchReconciled *fe)
 {
   fe->how = (char_match_t)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 }
 
 static void
@@ -176,7 +168,7 @@ toggle_changed (GtkToggleButton *button, GNCSearchReconciled *fe)
 {
   gboolean is_on = gtk_toggle_button_get_active (button);
   cleared_match_t value =
-    (cleared_match_t) gtk_object_get_data (GTK_OBJECT (button), "button-value");
+    (cleared_match_t) g_object_get_data (G_OBJECT (button), "button-value");
 
   if (is_on)
     fe->value |= value;
@@ -189,8 +181,8 @@ add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
 	       char_match_t option)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", option_changed, user_data);
+  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
+  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_changed), user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -218,7 +210,7 @@ make_menu (GNCSearchCoreType *fe)
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;
@@ -231,8 +223,8 @@ make_toggle (GNCSearchReconciled *fi, char *label, char_match_t option)
 
   toggle = gtk_toggle_button_new_with_label (label);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), (fi->value & option));
-  gtk_object_set_data (GTK_OBJECT (toggle), "button-value", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (toggle), "toggled", toggle_changed, fi);
+  g_object_set_data (G_OBJECT (toggle), "button-value", (gpointer) option);
+  g_signal_connect (G_OBJECT (toggle), "toggled", G_CALLBACK (toggle_changed), fi);
 
   return toggle;
 }

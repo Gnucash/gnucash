@@ -35,9 +35,10 @@
 
 #include "gnc-commodity.h"
 
-#define GNC_CURRENCY_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_currency_edit_get_type(), GNCCurrencyEdit)
-#define GNC_CURRENCY_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_currency_edit_get_type(), GNCCurrencyEditClass)
-#define GNC_IS_CURRENCY_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_currency_edit_get_type ())
+#define GNC_TYPE_CURRENCY_EDIT	    (gnc_currency_edit_get_type())
+#define GNC_CURRENCY_EDIT(o)	    (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEdit))
+#define GNC_CURRENCY_EDIT_CLASS(k)  (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_CURRENCY_EDIT, GNCCurrencyEditClass))
+#define GNC_IS_CURRENCY_EDIT(o)	    (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_CURRENCY_EDIT))
 
 typedef struct {
         GtkCombo combo;
@@ -47,14 +48,14 @@ typedef struct {
         GtkComboClass parent_class;
 } GNCCurrencyEditClass;
 
-guint      gnc_currency_edit_get_type       (void);
+GType		gnc_currency_edit_get_type	(void);
 
-GtkWidget *gnc_currency_edit_new            (void);
+GtkWidget      *gnc_currency_edit_new		(void);
 
-void       gnc_currency_edit_set_currency   (GNCCurrencyEdit *gce,
-                                             const gnc_commodity *currency);
+void		gnc_currency_edit_set_currency	(GNCCurrencyEdit *gce,
+						 const gnc_commodity *currency);
 
-gnc_commodity * gnc_currency_edit_get_currency (GNCCurrencyEdit *gce);
+gnc_commodity  *gnc_currency_edit_get_currency	(GNCCurrencyEdit *gce);
 
 #endif
 

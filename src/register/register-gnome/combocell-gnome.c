@@ -199,9 +199,6 @@ combo_disconnect_signals (ComboCell *cell)
 	if (!box->signals_connected)
 		return;
 
-        if (GTK_OBJECT_DESTROYED (GTK_OBJECT(box->item_list)))
-                return;
-
 	gtk_signal_disconnect_by_data (GTK_OBJECT(box->item_list), cell);
 
 	box->signals_connected = FALSE;
@@ -214,9 +211,6 @@ combo_connect_signals (ComboCell *cell)
 
 	if (box->signals_connected)
 		return;
-
-        if (GTK_OBJECT_DESTROYED(GTK_OBJECT(box->item_list)))
-                return;
 
         gtk_signal_connect (GTK_OBJECT(box->item_list), "select_item",
                             GTK_SIGNAL_FUNC(select_item_cb), cell);

@@ -250,9 +250,6 @@ date_picker_disconnect_signals (DateCell *cell)
   if (!box->signals_connected)
     return;
 
-  if (GTK_OBJECT_DESTROYED (GTK_OBJECT (box->date_picker)))
-    return;
-
   gtk_signal_disconnect_by_data (GTK_OBJECT (box->date_picker), cell);
 
   box->signals_connected = FALSE;
@@ -264,9 +261,6 @@ date_picker_connect_signals (DateCell *cell)
   PopBox *box = cell->cell.gui_private;
 
   if (box->signals_connected)
-    return;
-
-  if (GTK_OBJECT_DESTROYED (GTK_OBJECT (box->date_picker)))
     return;
 
   gtk_signal_connect (GTK_OBJECT(box->date_picker), "date_selected",

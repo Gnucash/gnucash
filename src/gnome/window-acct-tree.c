@@ -253,8 +253,8 @@ gnc_acct_tree_view_new(GnomeMDIChild * child, gpointer user_data)
   g_free (name_id);
   g_free (name);
 
-  gtk_signal_connect(GTK_OBJECT(child), "destroy", 
-                     gnc_acct_tree_view_destroy, mc);
+  g_signal_connect(G_OBJECT(child), "destroy", 
+                   G_CALLBACK (gnc_acct_tree_view_destroy), mc);
 
   gnc_mdi_add_child (maininfo, mc);
 

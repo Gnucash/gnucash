@@ -40,7 +40,7 @@ static QueryPredData_t gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_int64_class_init	(GNCSearchInt64Class *class);
 static void gnc_search_int64_init	(GNCSearchInt64 *gspaper);
-static void gnc_search_int64_finalise	(GtkObject *obj);
+static void gnc_search_int64_finalize	(GObject *obj);
 
 #define _PRIVATE(x) (((GNCSearchInt64 *)(x))->priv)
 
@@ -50,14 +50,6 @@ struct _GNCSearchInt64Private {
 };
 
 static GNCSearchCoreTypeClass *parent_class;
-
-enum {
-  LAST_SIGNAL
-};
-
-#if LAST_SIGNAL > 0
-static guint signals[LAST_SIGNAL] = { 0 };
-#endif
 
 guint
 gnc_search_int64_get_type (void)
@@ -71,8 +63,8 @@ gnc_search_int64_get_type (void)
       sizeof(GNCSearchInt64Class),
       (GtkClassInitFunc)gnc_search_int64_class_init,
       (GtkObjectInitFunc)gnc_search_int64_init,
-      (GtkArgSetFunc)NULL,
-      (GtkArgGetFunc)NULL
+      NULL,
+      NULL
     };
 		
     type = gtk_type_unique(gnc_search_core_type_get_type (), &type_info);
@@ -84,13 +76,13 @@ gnc_search_int64_get_type (void)
 static void
 gnc_search_int64_class_init (GNCSearchInt64Class *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)class;
 
-  object_class = (GtkObjectClass *)class;
+  object_class = G_OBJECT_CLASS (class);
   parent_class = gtk_type_class(gnc_search_core_type_get_type ());
 
-  object_class->finalize = gnc_search_int64_finalise;
+  object_class->finalize = gnc_search_int64_finalize;
 
   /* override methods */
   gnc_search_core_type->editable_enters = editable_enters;
@@ -116,14 +108,14 @@ gnc_search_int64_init (GNCSearchInt64 *o)
 }
 
 static void
-gnc_search_int64_finalise (GtkObject *obj)
+gnc_search_int64_finalize (GObject *obj)
 {
   GNCSearchInt64 *o = (GNCSearchInt64 *)obj;
   g_assert (IS_GNCSEARCH_INT64 (o));
 
   g_free(o->priv);
 	
-  ((GtkObjectClass *)(parent_class))->finalize(obj);
+  G_OBJECT_CLASS (parent_class)->finalize(obj);
 }
 
 /**
@@ -175,7 +167,7 @@ static void
 option_changed (GtkWidget *widget, GNCSearchInt64 *fe)
 {
   fe->how = (query_compare_t)
-    gtk_object_get_data (GTK_OBJECT (widget), "option");
+    g_object_get_data (G_OBJECT (widget), "option");
 }
 
 static void
@@ -191,8 +183,8 @@ add_menu_item (GtkWidget *menu, gpointer user_data, char *label,
 	       query_compare_t option)
 {
   GtkWidget *item = gtk_menu_item_new_with_label (label);
-  gtk_object_set_data (GTK_OBJECT (item), "option", (gpointer) option);
-  gtk_signal_connect (GTK_OBJECT (item), "activate", option_changed, user_data);
+  g_object_set_data (G_OBJECT (item), "option", (gpointer) option);
+  g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (option_changed), user_data);
   gtk_menu_append (GTK_MENU (menu), item);
   gtk_widget_show (item);
   return item;
@@ -224,7 +216,7 @@ make_menu (GNCSearchCoreType *fe)
   opmenu = gtk_option_menu_new ();
   gtk_option_menu_set_menu (GTK_OPTION_MENU (opmenu), menu);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (first), "activate", fe);
+  g_signal_emit_by_name (G_OBJECT (first), "activate", fe);
   gtk_option_menu_set_history (GTK_OPTION_MENU (opmenu), current);
 
   return opmenu;
@@ -278,7 +270,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     gnc_numeric value = gnc_numeric_create (fi->value, 1);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (entry), value);
   }
-  gtk_signal_connect (GTK_OBJECT (entry), "amount_changed", entry_changed, fe);
+  g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
   gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
   fi->priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
   fi->priv->gae = GNC_AMOUNT_EDIT (entry);

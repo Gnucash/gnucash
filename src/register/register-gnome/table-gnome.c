@@ -69,8 +69,7 @@ gnc_table_save_state (Table *table)
 
         widths = gnc_header_widths_new ();
 
-        if (!GTK_OBJECT_DESTROYED(GTK_OBJECT(sheet)))
-                gnucash_sheet_get_header_widths (sheet, widths);
+        gnucash_sheet_get_header_widths (sheet, widths);
 
         alist = SCM_EOL;
         if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))

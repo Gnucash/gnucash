@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+/* GNOME 2 Port (Replace GtkTree) */
+#define GTK_ENABLE_BROKEN
+
 #include <gnome.h>
 #include <sys/stat.h>
 #include <sys/types.h>

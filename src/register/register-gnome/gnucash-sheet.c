@@ -720,11 +720,8 @@ gnucash_sheet_modify_current_cell (GnucashSheet *sheet, const gchar *new_text)
 
         editable = GTK_EDITABLE(sheet->entry);
 
-        cursor_position = editable->current_pos;
-        start_sel = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_sel = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
+        cursor_position = gtk_editable_get_position (editable);
+	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
         new_text_len = gnc_mbstowcs (&new_text_wc, new_text);
         if (new_text_len < 0)
@@ -868,10 +865,7 @@ gnucash_sheet_insert_cb (GtkWidget *widget,
 
         editable = GTK_EDITABLE (sheet->entry);
 
-        start_sel = MIN (editable->selection_start_pos,
-                         editable->selection_end_pos);
-        end_sel = MAX (editable->selection_start_pos,
-                       editable->selection_end_pos);
+	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
         retval = gnc_table_modify_update (table, virt_loc,
                                           change_text_w, change_text_len,
@@ -979,10 +973,7 @@ gnucash_sheet_delete_cb (GtkWidget *widget,
 
         editable = GTK_EDITABLE (sheet->entry);
 
-        start_sel = MIN (editable->selection_start_pos,
-                         editable->selection_end_pos);
-        end_sel = MAX (editable->selection_start_pos,
-                       editable->selection_end_pos);
+	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
         retval = gnc_table_modify_update (table, virt_loc,
                                           NULL, 0,
@@ -1219,13 +1210,15 @@ static void
 gnucash_sheet_check_grab (GnucashSheet *sheet)
 {
         GdkModifierType mods;
+	GdkDevice *device;
 
         if (!sheet->grabbed)
                 return;
 
-        gdk_input_window_get_pointer(GTK_WIDGET(sheet)->window,
-                                     GDK_CORE_POINTER, NULL, NULL,
-                                     NULL, NULL, NULL, &mods);
+	device = gdk_device_get_core_pointer ();
+
+	gdk_device_get_state (device, GTK_WIDGET(sheet)->window,
+			      0, &mods);
 
         if (!(mods & GDK_BUTTON1_MASK))
         {
@@ -1346,7 +1339,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
                 if (do_popup)
                         gnome_popup_menu_do_popup_modal
                                 (sheet->popup, NULL, NULL, event,
-                                 sheet->popup_data);
+                                 sheet->popup_data, widget);
 
                 return TRUE;
         }
@@ -1375,7 +1368,7 @@ gnucash_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
         if (do_popup)
                 gnome_popup_menu_do_popup_modal
-                        (sheet->popup, NULL, NULL, event, sheet->popup_data);
+                        (sheet->popup, NULL, NULL, event, sheet->popup_data, widget);
 
         return TRUE;
 }
@@ -1501,11 +1494,8 @@ gnucash_sheet_direct_event(GnucashSheet *sheet, GdkEvent *event)
 
         editable = GTK_EDITABLE(sheet->entry);
 
-        cursor_position = editable->current_pos;
-        start_sel = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_sel = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
+        cursor_position = gtk_editable_get_position (editable);
+	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
         new_position = cursor_position;
         new_start = start_sel;
@@ -1705,15 +1695,12 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
                 editable = GTK_EDITABLE(sheet->entry);
 
-                current_pos = editable->current_pos;
+                current_pos = gtk_editable_get_position (editable);
 
                 extend_selection = event->state & GDK_SHIFT_MASK;
                 if (extend_selection && set_selection)
                 {
-                        start_sel = MIN(editable->selection_start_pos,
-                                        editable->selection_end_pos);
-                        end_sel = MAX(editable->selection_start_pos,
-                                      editable->selection_end_pos);
+			gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
                 }
                 else
                 {
@@ -1727,7 +1714,7 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
                 sheet->input_cancelled = FALSE;
 
-                new_pos = editable->current_pos;
+                new_pos = gtk_editable_get_position (editable);
 
                 if (extend_selection && set_selection)
                 {

@@ -511,23 +511,23 @@ gnc_option_menu_init(GtkWidget * w)
 
 typedef struct {
   int i;
-  GtkSignalFunc f;
+  GCallback f;
   gpointer cb_data;
 } menu_init_data;
 
 static void
 gnc_option_menu_set_one_item (gpointer loop_data, gpointer user_data)
 {
-  GtkObject *item = GTK_OBJECT(loop_data);
+  GObject *item = G_OBJECT(loop_data);
   menu_init_data *args = (menu_init_data *) user_data;
   
-  gtk_object_set_data(item, "option_index", GINT_TO_POINTER(args->i++));
-  gtk_signal_connect(item, "activate", args->f, args->cb_data);
+  g_object_set_data(item, "option_index", GINT_TO_POINTER(args->i++));
+  g_signal_connect(item, "activate", args->f, args->cb_data);
 }
 
 
 void
-gnc_option_menu_init_w_signal(GtkWidget * w, GtkSignalFunc f, gpointer cb_data)
+gnc_option_menu_init_w_signal(GtkWidget * w, GCallback f, gpointer cb_data)
 {
   GtkWidget * menu;
   menu_init_data foo;
@@ -1084,14 +1084,14 @@ GModule *allsymbols = NULL;
 
 void
 gnc_glade_autoconnect_full_func(const gchar *handler_name,
-				GtkObject *signal_object,
+				GObject *signal_object,
 				const gchar *signal_name,
 				const gchar *signal_data,
-				GtkObject *other_object,
+				GObject *other_object,
 				gboolean signal_after,
 				gpointer user_data)
 {
-  GtkSignalFunc func;
+  GCallback func;
 
   if (allsymbols == NULL) {
     /* get a handle on the main executable -- use this to find symbols */
@@ -1105,16 +1105,16 @@ gnc_glade_autoconnect_full_func(const gchar *handler_name,
 
   if (other_object) {
     if (signal_after)
-      gtk_signal_connect_object_after(signal_object, signal_name, func,
-				      other_object);
+      g_signal_connect_object (signal_object, signal_name, func,
+				      other_object, G_CONNECT_AFTER);
     else
-      gtk_signal_connect_object(signal_object, signal_name, func,
-				other_object);
+      g_signal_connect_object(signal_object, signal_name, func,
+				other_object, 0);
   } else {
     if (signal_after)
-      gtk_signal_connect_after(signal_object, signal_name, func, user_data);
+      g_signal_connect_after(signal_object, signal_name, func, user_data);
     else
-      gtk_signal_connect(signal_object, signal_name, func, user_data);
+      g_signal_connect(signal_object, signal_name, func, user_data);
   }
 }
 

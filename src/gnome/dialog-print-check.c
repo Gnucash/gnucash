@@ -255,7 +255,8 @@ gnc_ui_print_check_dialog_create(RegWindow     *reg_data,
   gnc_option_menu_init(pcd->format_picker);
   gnc_option_menu_init(pcd->position_picker);
   gnc_option_menu_init_w_signal(pcd->dformat_picker,
-				gnc_ui_print_check_format_changed_cb, pcd);
+				G_CALLBACK(gnc_ui_print_check_format_changed_cb),
+			       	pcd);
   gnc_option_menu_init(pcd->units_picker);
 
   /* Set initial format to gnucash default */

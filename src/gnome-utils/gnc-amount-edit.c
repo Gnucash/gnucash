@@ -66,60 +66,60 @@ static GtkEntryClass *parent_class;
  *
  * Returns the GtkType for the GNCAmountEdit widget
  */
-guint
+GType
 gnc_amount_edit_get_type (void)
 {
-  static guint amount_edit_type = 0;
+	static GType amount_edit_type = 0;
 
-  if (!amount_edit_type){
-    GtkTypeInfo amount_edit_info = {
-      "GNCAmountEdit",
-      sizeof (GNCAmountEdit),
-      sizeof (GNCAmountEditClass),
-      (GtkClassInitFunc) gnc_amount_edit_class_init,
-      (GtkObjectInitFunc) gnc_amount_edit_init,
-      NULL,
-      NULL,
-      (GtkClassInitFunc) NULL,
-    };
+	if (amount_edit_type == 0) {
+		GTypeInfo amount_edit_info = {
+			sizeof (GNCAmountEditClass),
+			NULL,
+			NULL,
+			(GClassInitFunc) gnc_amount_edit_class_init,
+			NULL,
+			NULL,
+			sizeof (GNCAmountEdit),
+			0,
+			(GInstanceInitFunc) gnc_amount_edit_init
+		};
+		
+		amount_edit_type = g_type_register_static (GTK_TYPE_ENTRY,
+							   "GNCAmountEdit",
+							   &amount_edit_info,
+							   0);
+	}
 
-    amount_edit_type = gtk_type_unique (GTK_TYPE_ENTRY, &amount_edit_info);
-  }
-
-  return amount_edit_type;
+	return amount_edit_type;
 }
 
 static void
-gnc_amount_edit_class_init (GNCAmountEditClass *class)
+gnc_amount_edit_class_init (GNCAmountEditClass *klass)
 {
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkEditableClass *editable_class;
+	GObjectClass *object_class;
+	GtkWidgetClass *widget_class;
+	GtkEditableClass *editable_class;
 
-  object_class = (GtkObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  editable_class = (GtkEditableClass*) class;
+	object_class = G_OBJECT_CLASS (klass);
+	widget_class = GTK_WIDGET_CLASS (klass);
+	editable_class = GTK_EDITABLE_CLASS (klass);
 
-  parent_class = gtk_type_class (gtk_entry_get_type ());
+	parent_class = g_type_class_peek_parent (klass);
 
-  amount_edit_signals [AMOUNT_CHANGED] =
-    gtk_signal_new ("amount_changed",
-                    GTK_RUN_FIRST, object_class->type, 
-                    GTK_SIGNAL_OFFSET (GNCAmountEditClass,
-                                       amount_changed),
-                    gtk_signal_default_marshaller,
-                    GTK_TYPE_NONE, 0);
+	amount_edit_signals [AMOUNT_CHANGED] =
+		g_signal_new ("amount_changed",
+			      G_OBJECT_CLASS_TYPE (object_class),
+      			      G_SIGNAL_RUN_FIRST,
+      			      G_STRUCT_OFFSET (GNCAmountEditClass, amount_changed),
+			      NULL,
+			      NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
 
-#if 0	
-  gtk_object_class_add_signals (object_class, amount_edit_signals,
-                                LAST_SIGNAL);
-#endif
+	widget_class->key_press_event = gnc_amount_edit_key_press;
 
-  widget_class->key_press_event = gnc_amount_edit_key_press;
-
-  editable_class->changed = gnc_amount_edit_changed;
-
-  class->amount_changed = NULL;
+	editable_class->changed = gnc_amount_edit_changed;
 }
 
 static void

@@ -191,8 +191,8 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
 	  gsl->button = gtk_button_new_with_label (_("View..."));
 
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
-        gtk_signal_connect (GTK_OBJECT (gsl->button), "clicked",
-                            select_cb, gsl);
+	g_signal_connect (G_OBJECT (gsl->button), "clicked",
+			  G_CALLBACK (select_cb), gsl);
         gtk_widget_show (gsl->button);
 }
 

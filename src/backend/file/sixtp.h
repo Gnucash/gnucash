@@ -171,7 +171,7 @@ sixtp* sixtp_new(void);
 void sixtp_destroy(sixtp *sp);
 
 void sixtp_handle_catastrophe(sixtp_sax_data *sax_data);
-xmlEntityPtr sixtp_sax_get_entity_handler(void *user_data, const CHAR *name);
+xmlEntityPtr sixtp_sax_get_entity_handler(void *user_data, const xmlChar *name);
 
 gboolean sixtp_parse_file(sixtp *sixtp, const char *filename,
                           gpointer data_for_top_level, gpointer global_data,

@@ -138,12 +138,6 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 			       gtk_marshal_NONE__NONE,
 			       GTK_TYPE_NONE, 0);
 
-#if 0
-	gtk_object_class_add_signals(object_class,
-#endif
-				     general_search_signals,
-				     LAST_SIGNAL);
-
 	container_class->forall = gnc_general_search_forall;
 
 	object_class->destroy = gnc_general_search_destroy;
@@ -278,8 +272,8 @@ create_children (GNCGeneralSearch *gsl, const char *label)
 
 	gsl->button = gtk_button_new_with_label (label);
 	gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
-	gtk_signal_connect (GTK_OBJECT (gsl->button), "clicked",
-			    search_cb, gsl);
+	g_signal_connect (G_OBJECT (gsl->button), "clicked",
+			  G_CALLBACK (search_cb), gsl);
 	gtk_widget_show (gsl->button);
 }
 
@@ -337,7 +331,7 @@ gnc_general_search_set_selected (GNCGeneralSearch *gsl, gpointer selection)
 		gsl->selected_item = selection;
 		reset_selection_text (gsl);
 		gtk_signal_emit(GTK_OBJECT(gsl),
-				general_search_signals[SELECTION_CHANGED]);
+			      general_search_signals[SELECTION_CHANGED]);
 	}
 
 	gnc_gui_component_clear_watches (gsl->priv->component_id);

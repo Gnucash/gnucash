@@ -153,7 +153,7 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         int start_pos, end_pos;
         int toggle_space, cursor_pos;
         int xoffset;
-        char *text;
+        const gchar *text;
 
         style = item_edit->style;
         table = item_edit->sheet->table;
@@ -173,11 +173,8 @@ item_edit_draw_info (ItemEdit *item_edit, int x, int y, TextDrawInfo *info)
         info->fg_color2 = &gn_white;
 
         editable = GTK_EDITABLE (item_edit->editor);
-        cursor_pos = editable->current_pos;
-        start_pos = MIN (editable->selection_start_pos,
-                         editable->selection_end_pos);
-        end_pos = MAX (editable->selection_start_pos,
-                       editable->selection_end_pos);
+        cursor_pos = gtk_editable_get_position (editable);
+	gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
 
         text = gtk_entry_get_text (GTK_ENTRY (item_edit->editor));
         text_len = strlen (text);
@@ -735,8 +732,7 @@ item_edit_destroy (GtkObject *object)
                 g_free(item_edit->clipboard);
         item_edit->clipboard = NULL;
 
-        if (!GTK_OBJECT_DESTROYED(edit_obj))
-                gtk_signal_disconnect_by_data (edit_obj, item_edit);
+	gtk_signal_disconnect_by_data (edit_obj, item_edit);
 
         gdk_gc_destroy (item_edit->gc);
 
@@ -828,11 +824,8 @@ item_edit_set_cursor_pos (ItemEdit *item_edit,
         {
                 gint current_pos, start_sel, end_sel;
 
-                current_pos = editable->current_pos;
-                start_sel = MIN(editable->selection_start_pos,
-                                editable->selection_end_pos);
-                end_sel = MAX(editable->selection_start_pos,
-                              editable->selection_end_pos);
+                current_pos = gtk_editable_get_position (editable);
+		gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
                 if (start_sel == end_sel)
                 {
@@ -968,10 +961,7 @@ item_edit_claim_selection (ItemEdit *item_edit, guint32 time)
 
         editable = GTK_EDITABLE (item_edit->editor);
 
-        start_sel = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_sel = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
+	gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel);
 
         if (start_sel != end_sel)
         {
@@ -1004,13 +994,8 @@ item_edit_cut_copy_clipboard (ItemEdit *item_edit, guint32 time, gboolean cut)
 
         editable = GTK_EDITABLE (item_edit->editor);
 
-        start_sel = MIN(editable->selection_start_pos,
-                        editable->selection_end_pos);
-        end_sel = MAX(editable->selection_start_pos,
-                      editable->selection_end_pos);
-
-        if (start_sel == end_sel)
-                return;
+	if (!gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel))
+		return;
 
         g_free(item_edit->clipboard);
 
@@ -1631,10 +1616,7 @@ item_edit_selection_get (ItemEdit         *item_edit,
 
         if (selection_data->selection == GDK_SELECTION_PRIMARY)
         {
-                start_pos = MIN(editable->selection_start_pos,
-                                editable->selection_end_pos);
-                end_pos = MAX(editable->selection_start_pos,
-                              editable->selection_end_pos);
+		gtk_editable_get_selection_bounds (editable, &start_pos, &end_pos);
 
                 str = gtk_editable_get_chars(editable, start_pos, end_pos);
         }
@@ -1689,6 +1671,7 @@ item_edit_selection_received (ItemEdit          *item_edit,
         gboolean reselect;
         gint old_pos;
         gint tmp_pos;
+	gint start_sel, end_sel;
         enum {INVALID, STRING, CTEXT} type;
 
         g_return_if_fail(item_edit != NULL);
@@ -1717,20 +1700,16 @@ item_edit_selection_received (ItemEdit          *item_edit,
 
         reselect = FALSE;
 
-        if ((editable->selection_start_pos != editable->selection_end_pos) && 
+        if (gtk_editable_get_selection_bounds (editable, &start_sel, &end_sel) && 
             (!item_edit->has_selection || 
              (selection_data->selection == clipboard_atom)))
         {
                 reselect = TRUE;
 
-                gtk_editable_delete_text(editable,
-                                         MIN(editable->selection_start_pos,
-                                             editable->selection_end_pos),
-                                         MAX(editable->selection_start_pos,
-                                             editable->selection_end_pos));
+                gtk_editable_delete_text(editable, start_sel, end_sel);
         }
 
-        tmp_pos = old_pos = editable->current_pos;
+        tmp_pos = old_pos = gtk_editable_get_position (editable);
 
         switch (type)
         {
@@ -1775,7 +1754,7 @@ item_edit_selection_received (ItemEdit          *item_edit,
         if (!reselect)
                 return;
 
-        gtk_editable_select_region(editable, old_pos, editable->current_pos);
+        gtk_editable_select_region(editable, old_pos, gtk_editable_get_position (editable));
 }
 
 

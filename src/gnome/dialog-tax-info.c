@@ -23,6 +23,9 @@
 
 #include "config.h"
 
+/* GNOME 2 Port (Replace GtkText) */
+#define GTK_ENABLE_BROKEN
+
 #include <gnome.h>
 #include <guile/gh.h>
 

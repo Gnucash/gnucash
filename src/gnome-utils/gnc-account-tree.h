@@ -29,77 +29,71 @@
 #include "Group.h"
 #include "gnc-ui-util.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif				/* __cplusplus */
+G_BEGIN_DECLS
 
-#define GTK_TYPE_GNC_ACCOUNT_TREE (gnc_account_tree_get_type ())
-#define GNC_ACCOUNT_TREE(obj)     (GTK_CHECK_CAST ((obj), GTK_TYPE_GNC_ACCOUNT_TREE, GNCAccountTree))
-#define GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GNC_ACCOUNT_TREE, GNCAccountTreeClass))
-#define IS_GNC_ACCOUNT_TREE(obj)  (GTK_CHECK_TYPE ((obj), GTK_TYPE_GNC_ACCOUNT_TREE))
-#define IS_GNC_ACCOUNT_TREE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GNC_ACCOUNT_TREE))
-
-typedef struct GNCAccountTree_s      GNCAccountTree;
-typedef struct GNCAccountTreeClass_s GNCAccountTreeClass;
-typedef struct AccountViewInfo_s     AccountViewInfo;
+#define GNC_TYPE_ACCOUNT_TREE		(gnc_account_tree_get_type ())
+#define GNC_ACCOUNT_TREE(o)		(G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_ACCOUNT_TREE, GNCAccountTree))
+#define GNC_ACCOUNT_TREE_CLASS(k)	(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_ACCOUNT_TREE, GNCAccountTreeClass))
+#define GNC_IS_ACCOUNT_TREE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_ACCOUNT_TREE))
+#define GNC_IS_ACCOUNT_TREE_CLASS(k)	(G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_ACCOUNT_TREE))
 
 typedef gboolean (*AccountFilter) (Account *account, gpointer user_data);
 
-struct AccountViewInfo_s
+typedef struct
 {
-  gboolean include_type[NUM_ACCOUNT_TYPES];
+	gboolean include_type[NUM_ACCOUNT_TYPES];
 
-  gboolean show_field[NUM_ACCOUNT_FIELDS];
-};
+	gboolean show_field[NUM_ACCOUNT_FIELDS];
+} AccountViewInfo;
 
-struct GNCAccountTree_s
+typedef struct GNCAccountTree_s
 {
-  GtkCTree ctree;
+	GtkCTree ctree;
 
-  AccountFilter view_filter;
-  gpointer view_filter_data;
+	AccountFilter view_filter;
+	gpointer view_filter_data;
 
-  AccountFilter selectable_filter;
-  gpointer selectable_filter_data;
+	AccountFilter selectable_filter;
+	gpointer selectable_filter_data;
 
-  AccountViewInfo avi;
+	AccountViewInfo avi;
 
-  gint num_columns;
-  gint description_column;
-  gint balance_column;
-  gint total_column;
-  AccountFieldCode column_fields[NUM_ACCOUNT_FIELDS];
+	gint num_columns;
+	gint description_column;
+	gint balance_column;
+	gint total_column;
+	AccountFieldCode column_fields[NUM_ACCOUNT_FIELDS];
 
-  const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
+	const gchar * column_headings[NUM_ACCOUNT_FIELDS + 1];
 
-  GtkStyle *deficit_style;
+	GtkStyle *deficit_style;
 
-  GUID root_account;
+	GUID root_account;
 
-  GList * current_accounts;
+	GList *current_accounts;
 
-  gboolean ignore_unselect;
-};
+	gboolean ignore_unselect;
+} GNCAccountTree;
 
-struct GNCAccountTreeClass_s
+typedef struct
 {
-  GtkCTreeClass parent_class;
+	GtkCTreeClass parent_class;
 
-  void (*select_account)   (GNCAccountTree *tree,
-                            Account        *account);
+	void (*select_account)   (GNCAccountTree *tree,
+			          Account        *account);
 
-  void (*unselect_account) (GNCAccountTree *tree,
-                            Account        *account);
+	void (*unselect_account) (GNCAccountTree *tree,
+				  Account        *account);
 
-  void (*activate_account) (GNCAccountTree *tree,
-                            Account        *account);
-};
+	void (*activate_account) (GNCAccountTree *tree,
+				  Account        *account);
+} GNCAccountTreeClass;
 
 /***********************************************************
  *                public functions                         *
  ***********************************************************/
 
-GtkType gnc_account_tree_get_type (void);
+GType gnc_account_tree_get_type (void);
 
 GtkWidget * gnc_account_tree_new (void);
 
@@ -165,8 +159,6 @@ void gnc_account_tree_set_selectable_filter (GNCAccountTree *tree,
                                              AccountFilter filter,
                                              gpointer user_data);
 
-#ifdef __cplusplus
-}
-#endif				/* __cplusplus */
+G_END_DECLS
 
 #endif				/* GNC_ACCOUNT_TREE_H */

@@ -278,7 +278,7 @@ typedef struct LoanDruidData_ {
 
         /* pay = payment[s] */
         GtkEntry         *payTxnName;
-        GnomeNumberEntry *payAmtGNE;
+        GtkEntry         *payAmtGNE;
         GtkEntry         *payAmtEntry;
         GNCAccountSel    *payAcctFromGAS;
         GNCAccountSel    *payAcctEscToGAS;
@@ -859,7 +859,7 @@ gnc_loan_druid_get_widgets( LoanDruidData *ldd )
         ldd->payTxnName =
                 GET_CASTED_WIDGET( GTK_ENTRY,          PAY_TXN_TITLE );
         ldd->payAmtGNE =
-                GET_CASTED_WIDGET( GNOME_NUMBER_ENTRY, PAY_AMT_GNE );
+                GET_CASTED_WIDGET( GTK_ENTRY,          PAY_AMT_GNE );
         ldd->payAmtEntry =
                 GET_CASTED_WIDGET( GTK_ENTRY,          PAY_AMT_ENTRY );
         ldd->payTable =

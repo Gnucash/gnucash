@@ -31,6 +31,7 @@
 
 #include <gnome.h>
 #include <time.h>
+#include <gconf/gconf-client.h>
 
 #include "gnc-split-reg.h"
 
@@ -941,10 +942,6 @@ gnc_split_reg_paste_trans_cb (GtkWidget *w, gpointer data)
   GNCSplitReg *gsr = data;
   gsr_emit_simple_signal( gsr, "paste_txn" );
 }
-
-/* Remove when porting to gtk2.0 */
-#define GTK_STOCK_CANCEL           GNOME_STOCK_BUTTON_CANCEL
-#define GTK_STOCK_DELETE           "Delete"
 
 void
 gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
@@ -1890,6 +1887,7 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
 {
   GtkWidget *popup, *menuitem;
   GladeXML *xml;
+  GConfClient *client;
 
   xml = gnc_glade_xml_new( "register.glade", "register_popup" );
   popup = glade_xml_get_widget( xml, "register_popup" );
@@ -1897,8 +1895,9 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
                                      gnc_glade_autoconnect_full_func,
 				     gsr );
 
+  client = gconf_client_get_default ();
   /* Glade insists on making this a tearoff menu. */
-  if (gnome_preferences_get_menus_have_tearoff()) {
+  if (gconf_client_get_string (client, "/desktop/gnome/interface/menus_have_tearoff", NULL)) {
     GtkMenuShell *ms = GTK_MENU_SHELL(popup);
     GtkWidget *tearoff;
 

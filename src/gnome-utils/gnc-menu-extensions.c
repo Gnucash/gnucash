@@ -243,12 +243,12 @@ gnc_create_extension_info(SCM extension)
       ext_info->info[0].moreinfo = gnc_extension_cb;
 
       string = gnc_extension_documentation(ext_info);
-      ext_info->info[0].hint = g_strdup(string);
+      ext_info->info[0].hint = string;
       if (string != NULL)
         free(string);
 
       string = gnc_extension_name(ext_info);
-      ext_info->info[0].label = g_strdup(string);
+      ext_info->info[0].label = string;
       if (string != NULL)
         free(string);
 
@@ -261,7 +261,7 @@ gnc_create_extension_info(SCM extension)
       ext_info->extra_info = info;
 
       string = gnc_extension_name(ext_info);
-      ext_info->info[0].label = g_strdup(string);
+      ext_info->info[0].label = string;
       if (string != NULL)
         free(string);
 
@@ -298,8 +298,6 @@ cleanup_extension_info(gpointer extension_info, gpointer not_used)
   if (ext_info->extension)
     scm_unprotect_object(ext_info->extension);
 
-  g_free(ext_info->info[0].label);
-  g_free(ext_info->info[0].hint);
   g_free(ext_info->extra_info);
   g_free(ext_info->path);
   g_free(ext_info);
@@ -335,8 +333,8 @@ gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
   }
 
   ext_info->info[0] = *info;
-  ext_info->info[0].label = g_strdup(info->label);
-  ext_info->info[0].hint  = g_strdup(info->hint);
+  ext_info->info[0].label = info->label;
+  ext_info->info[0].hint  = info->hint;
   ext_info->info[1].type  = GNOME_APP_UI_ENDOFINFO;
 
   /* need to append so we can run them in order */

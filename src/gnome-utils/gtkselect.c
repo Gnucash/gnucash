@@ -178,6 +178,7 @@ gtk_select_get_pos (GtkSelect * select, gint * x, gint * y, gint * height, gint 
   gint work_height;
   gint old_height;
   gint old_width;
+  gint scrollbar_spacing;
   
   widget = GTK_WIDGET(select);
   popup  = GTK_SCROLLED_WINDOW (select->popup);
@@ -196,17 +197,17 @@ gtk_select_get_pos (GtkSelect * select, gint * x, gint * y, gint * height, gint 
     list_requisition.height += EMPTY_LIST_HEIGHT;
   
   alloc_width = (widget->allocation.width -
-		 2 * popwin->child->style->klass->xthickness -
+		 2 * popwin->child->style->xthickness -
 		 2 * GTK_CONTAINER (popwin->child)->border_width -
 		 2 * GTK_CONTAINER (select->popup)->border_width -
 		 2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width - 
-		 2 * GTK_BIN (popup)->child->style->klass->xthickness);
+		 2 * GTK_BIN (popup)->child->style->xthickness);
   
-  work_height = (2 * popwin->child->style->klass->ythickness +
+  work_height = (2 * popwin->child->style->ythickness +
 		 2 * GTK_CONTAINER (popwin->child)->border_width +
 		 2 * GTK_CONTAINER (select->popup)->border_width +
 		 2 * GTK_CONTAINER (GTK_BIN (popup)->child)->border_width +
-		 2 * GTK_BIN (popup)->child->style->klass->xthickness);
+		 2 * GTK_BIN (popup)->child->style->xthickness);
   
   do 
     {
@@ -216,9 +217,10 @@ gtk_select_get_pos (GtkSelect * select, gint * x, gint * y, gint * height, gint 
       if (!show_hscroll &&
 	  alloc_width < list_requisition.width)
 	{
-	  work_height += popup->hscrollbar->requisition.height +
-	    GTK_SCROLLED_WINDOW_CLASS 
-	    (GTK_OBJECT (select->popup)->klass)->scrollbar_spacing;
+	  g_object_get (G_OBJECT (select->popup),
+			"scrollbar_spacing", &scrollbar_spacing,
+		       	NULL);
+	  work_height += popup->hscrollbar->requisition.height + scrollbar_spacing;
 	  show_hscroll = TRUE;
 	}
       if (!show_vscroll && 
@@ -230,10 +232,11 @@ gtk_select_get_pos (GtkSelect * select, gint * x, gint * y, gint * height, gint 
 	      *y -= (work_height + list_requisition.height + real_height);
 	      break;
 	    }
+	  g_object_get (G_OBJECT (select->popup),
+			"scrollbar_spacing", &scrollbar_spacing,
+		       	NULL);
 	  alloc_width -= 
-	    popup->vscrollbar->requisition.width +
-	    GTK_SCROLLED_WINDOW_CLASS 
-	    (GTK_OBJECT (select->popup)->klass)->scrollbar_spacing;
+	    popup->vscrollbar->requisition.width + scrollbar_spacing;
 	  show_vscroll = TRUE;
 	}
     } while (old_width != alloc_width || old_height != work_height);

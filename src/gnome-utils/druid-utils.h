@@ -24,7 +24,7 @@
 #ifndef DRUID_UTILS_H
 #define DRUID_UTILS_H
 
-#include <gnome.h>
+#include <libgnomeui/gnome-druid.h>
 
 void gnc_druid_set_colors (GnomeDruid *druid);
 

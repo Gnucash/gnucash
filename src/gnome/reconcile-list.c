@@ -215,10 +215,11 @@ gnc_reconcile_list_init (GNCReconcileList *list)
   list->first_fill = TRUE;
   list->query = NULL;
 
-  while (titles[list->num_columns] != NULL)
+  /* GNOME 2 Port (move that to clist creation and use GtkTreeView */
+  /* while (titles[list->num_columns] != NULL)
     list->num_columns++;
 
-  gtk_clist_construct (clist, list->num_columns, titles);
+  gtk_clist_construct (clist, list->num_columns, titles); */
   gtk_clist_set_shadow_type (clist, GTK_SHADOW_IN);
 
   gnc_reconcile_list_column_title(list, 0, titles[0]);
@@ -299,12 +300,6 @@ gnc_reconcile_list_class_init (GNCReconcileListClass *klass)
 		   gtk_marshal_NONE__POINTER,
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_POINTER);
-
-#if 0
-  gtk_object_class_add_signals(object_class,
-#endif
-			       reconcile_list_signals,
-			       LAST_SIGNAL);
 
   object_class->destroy = gnc_reconcile_list_destroy;
 
@@ -518,7 +513,7 @@ gnc_reconcile_list_get_needed_height (GNCReconcileList *list, gint num_rows)
 
   /* sync with gtkclist.c */
   title_height = (clist->column_title_area.height +
-                  (GTK_WIDGET(list)->style->klass->ythickness +
+                  (GTK_WIDGET(list)->style->ythickness +
                    GTK_CONTAINER(list)->border_width) * 2);
   list_height = (clist->row_height * num_rows) + (num_rows + 1);
 

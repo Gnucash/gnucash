@@ -1,3 +1,206 @@
+2003-05-15  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	* TODO: Remove 15 th batch task
+	* configure.in: Add pkgconfig checks for libgnomeprintui, gal and setenv, putenv checks
+	* src/app-file/gnome/gnc-file-history.c: (gnc_history_update_menu):
+	* src/backend/file/sixtp.c: (sixtp_sax_get_entity_handler): replace CHAR with xmlChar
+	* src/backend/file/sixtp.h: replace CHAR with xmlChar
+	* src/gnome-search/Makefile.am: add GNOME_PRINT_CFLAGS and GNOME_PRINT_LIBS
+
+	In the following:
+	- Fix wrong gtk_signal_new, gtk_signal_connect method-calls
+	- Replace GNOME_DOCK with BONOBO_DOCK
+	- Fix wrong gtk_toolbar_new calls
+	- Replace gtkhtml-1.0 with gtk-html 2.0
+	- Replace some GTK_OBJECTs with G_OBJECTs
+	- Remove useless GOBJECT_DESTROYED calls
+	- Fix some GType declarations.
+	- Convert some *.glade files to glade 2.0.
+	* src/gnome-search/dialog-search.c:
+	(gnc_search_dialog_result_clicked),
+	(gnc_search_dialog_init_result_list),
+	(gnc_search_dialog_display_results), (remove_element),
+	(attach_element), (option_activate), (search_clear_criteria),
+	(get_element_widget), (gnc_search_dialog_add_criterion),
+	(gnc_search_dialog_init_widgets),
+	(gnc_search_dialog_connect_on_close): 
+	* src/gnome-search/gnc-general-search.c:
+	(gnc_general_search_class_init), (create_children),
+	(gnc_general_search_set_selected):
+	* src/gnome-search/search-account.c: (gnc_search_account_get_type),
+	(gnc_search_account_class_init), (gnc_search_account_finalize),
+	(option_changed), (add_menu_item), (make_menu), (gncs_get_widget):
+	* src/gnome-search/search-boolean.c: (gnc_search_boolean_get_type),
+	(gnc_search_boolean_class_init), (gnc_search_boolean_finalize),
+	(option_changed), (add_menu_item), (make_menu), (gncs_get_widget):
+	* src/gnome-search/search-core-type.c:
+	(gnc_search_core_type_get_type), (gnc_search_core_type_class_init),
+	(gnc_search_core_type_init), (gnc_search_core_type_finalize),
+	(gnc_search_core_type_new), (gnc_search_core_type_editable_enters),
+	(gnc_search_core_type_grab_focus), (gnc_search_core_type_validate),
+	(gnc_search_core_type_clone), (gnc_search_core_type_get_widget),
+	(gnc_search_core_type_get_predicate),
+	(gnc_search_core_type_new_type_name), (validate), (grab_focus),
+	(editable_enters), (gnc_search_core_register_type), (init_table),
+	(gnc_search_core_initialize), (gnc_search_core_finalize):
+	* src/gnome-search/search-core-type.h:
+	* src/gnome-search/search-date.c: (gnc_search_date_get_type),
+	(gnc_search_date_class_init), (gnc_search_date_finalize),
+	(option_changed), (add_menu_item), (make_menu), (gncs_get_widget):
+	* src/gnome-search/search-double.c: (gnc_search_double_get_type),
+	(gnc_search_double_class_init), (gnc_search_double_finalize),
+	(option_changed), (add_menu_item), (make_menu), (gncs_get_widget):
+	* src/gnome-search/search-int64.c: (gnc_search_int64_get_type),
+	(gnc_search_int64_class_init), (gnc_search_int64_finalize),
+	(option_changed), (add_menu_item), (make_menu), (gncs_get_widget):
+	* src/gnome-search/search-numeric.c: (gnc_search_numeric_get_type),
+	(gnc_search_numeric_class_init), (gnc_search_numeric_finalize),
+	(how_option_changed), (option_changed), (add_menu_item),
+	(make_how_menu), (make_option_menu), (gncs_get_widget):
+	* src/gnome-search/search-reconciled.c:
+	(gnc_search_reconciled_get_type),
+	(gnc_search_reconciled_class_init),
+	(gnc_search_reconciled_finalize), (option_changed),
+	(toggle_changed), (add_menu_item), (make_menu), (make_toggle):
+	* src/gnome-search/search-string.c: (gnc_search_string_get_type),
+	(gnc_search_string_class_init), (gnc_search_string_finalize),
+	(option_changed), (add_menu_item), (make_menu), (gncs_get_widget):
+	* src/gnome-search/search.glade:
+	* src/gnome-utils/dialog-utils.c: (gnc_option_menu_set_one_item),
+	(gnc_option_menu_init_w_signal), (gnc_glade_autoconnect_full_func):
+	* src/gnome-utils/dialog-utils.h:
+	* src/gnome-utils/druid-utils.h:
+	* src/gnome-utils/gnc-account-sel.c: (gnc_account_sel_get_type),
+	(gnc_account_sel_class_init), (gnc_account_sel_init),
+	(gnc_account_sel_new), (gnc_account_sel_finalize),
+	(gnc_account_sel_dispose),
+	(gnc_account_sel_set_new_account_ability),
+	(gnc_account_sel_set_new_account_modal):
+	* src/gnome-utils/gnc-account-sel.h:
+	* src/gnome-utils/gnc-account-tree.c: (gnc_account_tree_get_type),
+	(gnc_account_tree_new), (gnc_account_tree_init),
+	(gnc_account_tree_class_init), (gnc_account_tree_set_view_info),
+	(gnc_account_tree_get_view_info),
+	(gnc_account_tree_expand_account),
+	(gnc_account_tree_toggle_account_expansion),
+	(gnc_account_tree_expand_all), (gnc_account_tree_set_view_filter),
+	(gnc_account_tree_set_selectable_filter),
+	(gnc_account_tree_finalize), (gnc_account_tree_dispose):
+	* src/gnome-utils/gnc-account-tree.h:
+	* src/gnome-utils/gnc-amount-edit.c: (gnc_amount_edit_get_type),
+	(gnc_amount_edit_class_init):
+	* src/gnome-utils/gnc-amount-edit.h:
+	* src/gnome-utils/gnc-currency-edit.c:
+	(gnc_currency_edit_get_type), (gnc_currency_edit_class_init),
+	(gnc_currency_edit_init):
+	* src/gnome-utils/gnc-currency-edit.h:
+	* src/gnome-utils/gnc-date-delta.c: (gnc_date_delta_get_type),
+	(gnc_date_delta_class_init):
+	* src/gnome-utils/gnc-date-delta.h:
+	* src/gnome-utils/gnc-frequency.c: (gnc_frequency_get_type),
+	(gnc_frequency_class_init):
+	* src/gnome-utils/gnc-frequency.h:
+	* src/gnome-utils/gnc-general-select.c: (create_children):
+	* src/gnome-utils/gnc-html-history.c: (gnc_html_history_append):
+	* src/gnome-utils/gnc-html.c: (gnc_html_parse_url), (http_allowed),
+	(https_allowed), (gnc_network_allowed), (gnc_html_http_request_cb),
+	(gnc_html_start_request), (gnc_html_load_to_stream),
+	(gnc_html_link_clicked_cb), (gnc_html_request_url_cb),
+	(gnc_html_object_requested_cb), (gnc_html_on_url_cb),
+	(gnc_html_set_base_cb), (gnc_html_submit_cb), (gnc_html_open_scm),
+	(gnc_html_show_data), (gnc_html_show_url), (gnc_html_reload),
+	(gnc_html_new), (html_cancel_helper), (gnc_html_cancel),
+	(gnc_html_destroy), (gnc_html_set_urltype_cb),
+	(gnc_html_set_load_cb), (gnc_html_set_flyover_cb),
+	(gnc_html_set_button_cb), (gnc_html_export), (gnc_html_print),
+	(gnc_html_get_history), (gnc_html_get_widget),
+	(gnc_html_register_object_handler),
+	(gnc_html_unregister_object_handler):
+	* src/gnome-utils/gnc-html.h:
+	* src/gnome-utils/gnc-mdi-utils.c: (gnc_mdi_show_progress),
+	(gnc_mdi_child_find_menu_item), (gnc_mdi_child_find_toolbar_item),
+	(gnc_mdi_child_changed_cb), (gnc_mdi_has_apps),
+	(gnc_mdi_create_child_toolbar):
+	* src/gnome-utils/gnc-menu-extensions.c:
+	(gnc_create_extension_info), (cleanup_extension_info),
+	(gnc_add_c_extension):
+	* src/gnome-utils/gtkselect.c: (gtk_select_get_pos):
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/gnome-utils/print-session.c: (gnc_print_session_create),
+	(gnc_print_session_print), (gnc_print_session_render),
+	(gnc_print_session_preview):
+	* src/gnome-utils/print-session.h:
+	* src/gnome-utils/search-param.c: (gnc_search_param_get_type),
+	(gnc_search_param_class_init), (gnc_search_param_finalize),
+	(gnc_search_param_clone), (gnc_search_param_set_param_path),
+	(gnc_search_param_override_param_type),
+	(gnc_search_param_get_param_path),
+	(gnc_search_param_get_converters),
+	(gnc_search_param_get_param_type), (gnc_search_param_set_title),
+	(gnc_search_param_set_justify), (gnc_search_param_type_match):
+	* src/gnome-utils/search-param.h:
+	* src/gnome-utils/window-help.c:
+	(gnc_help_window_search_button_cb):
+	* src/gnome/dialog-print-check.c:
+	(gnc_ui_print_check_dialog_create):
+	* src/gnome/dialog-scheduledxaction.c: (gnc_sxed_check_changed),
+	(gnc_sxed_check_consistent), (gnc_sxed_save_sx),
+	(gnc_sxed_get_widgets), (schedXact_editor_populate),
+	(gnc_sxed_update_cal):
+	* src/gnome/dialog-sxsincelast.c: (reminders_prep), (created_prep),
+	(obsolete_prep), (auto_create_prep), (to_create_prep),
+	(add_reminders_to_gui), (add_dead_list_to_gui):
+	* src/gnome/dialog-tax-info.c:
+	* src/gnome/druid-hierarchy.c:
+	* src/gnome/druid-loan.c: (gnc_loan_druid_get_widgets):
+	* src/gnome/glade/account.glade:
+	* src/gnome/glade/sched-xact.glade:
+	* src/gnome/gnc-splash.c: (gnc_show_splash_screen):
+	* src/gnome/gnc-split-reg.c: (gsr_create_popup_menu):
+	* src/gnome/mainwindow-account-tree.c:
+	(gnc_mainwin_account_tree_class_init),
+	(gnc_mainwin_account_tree_get_type):
+	* src/gnome/reconcile-list.c: (gnc_reconcile_list_init),
+	(gnc_reconcile_list_class_init),
+	(gnc_reconcile_list_get_needed_height):
+	* src/gnome/window-acct-tree.c: (gnc_acct_tree_view_new):
+	* src/gnome/window-main-summarybar.c:
+	(gnc_main_window_summary_new):
+	* src/gnome/window-main.c: (gnc_main_window_app_created_cb),
+	(gnc_main_window_flip_summary_bar_cb), (gnc_main_window_about_cb):
+	* src/network-utils/gnc-http.c: (gnc_http_new):
+	* src/register/register-gnome/combocell-gnome.c:
+	(combo_disconnect_signals), (combo_connect_signals):
+	* src/register/register-gnome/datecell-gnome.c:
+	(date_picker_disconnect_signals), (date_picker_connect_signals):
+	* src/register/register-gnome/gnucash-color.c:
+	(gnucash_color_alloc), (gnucash_color_alloc_gdk),
+	(gnucash_color_alloc_name), (gnucash_color_argb_to_gdk),
+	(gnucash_color_init):
+	* src/register/register-gnome/gnucash-date-picker.c:
+	(gnc_date_picker_class_init):
+	* src/register/register-gnome/gnucash-grid.c:
+	(gnucash_grid_update):
+	* src/register/register-gnome/gnucash-item-edit.c:
+	(item_edit_draw_info), (item_edit_destroy),
+	(item_edit_set_cursor_pos), (item_edit_claim_selection),
+	(item_edit_cut_copy_clipboard), (item_edit_selection_get),
+	(item_edit_selection_received):
+	* src/register/register-gnome/gnucash-item-edit.h:
+	* src/register/register-gnome/gnucash-item-list.c:
+	(gnc_item_list_class_init):
+	* src/register/register-gnome/gnucash-sheet.c:
+	(gnucash_sheet_modify_current_cell), (gnucash_sheet_insert_cb),
+	(gnucash_sheet_delete_cb), (gnucash_sheet_check_grab),
+	(gnucash_button_press_event), (gnucash_sheet_direct_event),
+	(gnucash_sheet_key_press_event):
+	* src/register/register-gnome/table-gnome.c:
+	(gnc_table_save_state):
+	* src/report/report-gnome/dialog-column-view.c:
+	(gnc_column_view_edit_options):
+	* src/report/report-gnome/window-report.c:
+	(gnc_report_window_view_new):
+
 
 2003-05-15 TomF changes for gnucash-gnome2-dev, 15th batch
 	* src/gnome/druid-stock-split.c: gnc_stock_split_druid_create:

@@ -26,6 +26,8 @@
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
 
+/* Need GNOME 2 port */
+#undef USE_XIM
 
 #define ITEM_EDIT(obj)          (GTK_CHECK_CAST((obj), item_edit_get_type (), ItemEdit))
 #define ITEM_EDIT_CLASS(k)      (GTK_CHECK_CLASS_CAST ((k), item_edit_get_type (), ItemEditClass))

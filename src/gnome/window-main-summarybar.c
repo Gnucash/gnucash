@@ -497,8 +497,8 @@ gnc_main_window_summary_new (void) {
   gtk_widget_show (retval->totals_combo);
   gtk_widget_show (retval->hbox);
 
-  gtk_signal_connect(GTK_OBJECT(retval->hbox), "destroy",
-                     gnc_main_window_summary_destroy_cb, retval);
+  g_signal_connect(G_OBJECT(retval->hbox), "destroy",
+                   G_CALLBACK(gnc_main_window_summary_destroy_cb), retval);
 
   gnc_main_window_summary_refresh(retval);
 

@@ -594,7 +594,7 @@ sixtp_sax_end_handler(void *user_data, const xmlChar *name)
 }
 
 xmlEntityPtr
-sixtp_sax_get_entity_handler(void *user_data, const CHAR *name) 
+sixtp_sax_get_entity_handler(void *user_data, const xmlChar *name) 
 {
   return xmlGetPredefinedEntity(name);
 }

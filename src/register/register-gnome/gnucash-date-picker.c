@@ -141,7 +141,7 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
   gnc_date_picker_signals[DATE_PICKED] =
     gtk_signal_new("date_picked",
                    GTK_RUN_LAST,
-                   object_class->type,
+                   GTK_CLASS_TYPE(object_class),
                    GTK_SIGNAL_OFFSET(GNCDatePickerClass,
                                      date_picked),
                    gtk_signal_default_marshaller,
@@ -155,13 +155,7 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
                                       key_press_event),
                     gtk_marshal_NONE__POINTER,
                     GTK_TYPE_NONE, 1,
-                    GTK_TYPE_GDK_EVENT);
-
-#if 0
-  gtk_object_class_add_signals (object_class,
-                                gnc_date_picker_signals,
-                                LAST_SIGNAL);
-#endif
+                    GDK_TYPE_EVENT);
 
   date_picker_class->date_selected = NULL;
   date_picker_class->date_picked = NULL;

@@ -34,9 +34,10 @@
 #include "gnc-numeric.h"
 #include "gnc-ui-util.h"
 
-#define GNC_AMOUNT_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_amount_edit_get_type(), GNCAmountEdit)
-#define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_amount_edit_get_type(), GNCAmountEditClass)
-#define GNC_IS_AMOUNT_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_amount_edit_get_type ())
+#define GNC_TYPE_AMOUNT_EDIT          (gnc_amount_edit_get_type())
+#define GNC_AMOUNT_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_AMOUNT_EDIT, GNCAmountEdit)
+#define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_AMOUNT_EDIT, GNCAmountEditClass)
+#define GNC_IS_AMOUNT_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_AMOUNT_EDIT)
 
 typedef struct
 {
@@ -62,7 +63,7 @@ typedef struct
   void (*amount_changed) (GNCAmountEdit *gae);
 } GNCAmountEditClass;
 
-guint     gnc_amount_edit_get_type        (void);
+GType     gnc_amount_edit_get_type        (void);
 
 GtkWidget *gnc_amount_edit_new            (void);
 

@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include <gnome.h>
+#include <gconf/gconf-client.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
@@ -115,11 +116,11 @@ gnc_mdi_show_progress (const char *message, double percentage)
 
   if (percentage < 0) {
     gnome_appbar_refresh(appbar);
-    gnome_appbar_set_progress(appbar, 0.0);
+    gnome_appbar_set_progress_percentage(appbar, 0.0);
   } else {
     if (message)
       gnome_appbar_set_status(appbar, message);
-    gnome_appbar_set_progress(appbar, percentage/100);
+    gnome_appbar_set_progress_percentage(appbar, percentage/100);
   }
 
   /* make sure new text is up */
@@ -277,7 +278,7 @@ gnc_mdi_update_widgets(GNCMDIChildInfo *mc, gboolean topmost)
 GtkWidget *
 gnc_mdi_child_find_menu_item(GNCMDIChildInfo *mc, gchar *path)
 {
-  GnomeDockItem *di;
+  BonoboDockItem *di;
   GtkWidget *menubar;
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -290,7 +291,7 @@ gnc_mdi_child_find_menu_item(GNCMDIChildInfo *mc, gchar *path)
   if (di == NULL)
     return(NULL);
 
-  menubar = gnome_dock_item_get_child (di);
+  menubar = bonobo_dock_item_get_child (di);
   if (menubar == NULL)
     return(NULL);
 
@@ -330,7 +331,7 @@ gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name)
   g_return_val_if_fail(mc != NULL, NULL);
   g_return_val_if_fail(mc->toolbar != NULL, NULL);
 
-  transl = L_(name);
+  transl = g_strdup(L_(name));
   toolbar = GTK_TOOLBAR(mc->toolbar);
   for (pos = 0; pos < toolbar->num_children; pos++) {
     child = g_list_nth_data(toolbar->children, pos);
@@ -340,6 +341,7 @@ gnc_mdi_child_find_toolbar_item(GNCMDIChildInfo *mc, gchar *name)
     if (strcasecmp(label, transl) == 0)
       return(child->widget);
   }
+  g_free (transl);
   return(NULL);
 }
 
@@ -665,7 +667,8 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
   GnomeUIInfo      * hintinfo;
   GtkWidget        * oldbar;
   GnomeApp         * new_app = NULL; 
-  GnomeDockItemBehavior behavior;
+  BonoboDockItemBehavior behavior;
+  GConfClient      * client;
 
   if (prev_child)
   {
@@ -680,9 +683,10 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
     new_app = gnome_mdi_get_app_from_view (childwin->contents);
   }
 
-  behavior = GNOME_DOCK_ITEM_BEH_EXCLUSIVE;
-  if (!gnome_preferences_get_toolbar_detachable ())
-    behavior |= GNOME_DOCK_ITEM_BEH_LOCKED;
+  behavior = BONOBO_DOCK_ITEM_BEH_EXCLUSIVE;
+  client = gconf_client_get_default ();
+  if (!gconf_client_get_bool (client, "/desktop/gnome/interface/toolbar_detachable", NULL))
+    behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
 
   if (childwin && childwin->toolbar)
   {
@@ -716,7 +720,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
       gnome_app_add_toolbar (GNOME_APP(childwin->app), 
                              GTK_TOOLBAR(childwin->toolbar),
                              "Toolbar", behavior,
-                             GNOME_DOCK_TOP, 1, 0, 0);
+                             BONOBO_DOCK_TOP, 1, 0, 0);
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
@@ -732,7 +736,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
       gnome_app_add_toolbar (GNOME_APP(childwin->app), 
                              GTK_TOOLBAR(childwin->toolbar),
                              "Toolbar", behavior,
-                             GNOME_DOCK_TOP, 1, 0, 0);
+                             BONOBO_DOCK_TOP, 1, 0, 0);
 
       gtk_toolbar_set_style (GTK_TOOLBAR(childwin->toolbar), 
                              gnc_get_toolbar_style ());
@@ -994,8 +998,10 @@ gnc_mdi_has_apps (void)
     if (!GNOME_IS_APP (toplevels->data))
       continue;
 
+#if 0
     if (GTK_OBJECT_DESTROYED (toplevels->data))
       continue;
+#endif
 
     gnc_mdi = gtk_object_get_data (GTK_OBJECT (toplevels->data), "gnc_mdi");
     if (!gnc_mdi)
@@ -1147,8 +1153,7 @@ gnc_mdi_create_child_toolbar (GNCMDIInfo * mi, GNCMDIChildInfo * child)
   g_free (child->toolbar_info);
   child->toolbar_info = tbinfo;
 
-  tb = GTK_TOOLBAR (gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL,
-                                     GTK_TOOLBAR_BOTH));
+  tb = GTK_TOOLBAR (gtk_toolbar_new ());
 
   child->toolbar = GTK_WIDGET (tb);
 
