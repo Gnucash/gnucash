@@ -290,11 +290,14 @@ Most of the items on this list are 'good-to-fix' but are not
 truly critical.  They may result in abberations, but general
 operation is probably OK.
 
+-- when an account is edited, price lookups happen *twice* !!
+   once when opend for edit, and again when committed !!
+   (the first one is due to gnc_account_tree_refresh ()
+   called by gnc_account_window_create() near dialog-account.c:1642)
+
 -- if always in multi-mode, then initial checkpoints not set up.
    They're not needed until there are a lot of transactions in the 
    system.  Need to recompute checkpoints on some periodic basis.
-
--- put marks on transactions during FillOut
 
 -- NOTIFY is not updating main window balances ...
 
