@@ -166,7 +166,7 @@ fill_account_list (EuroConvInfo *info)
       continue;
 
     if (account_type == CURRENCY &&
-	FALSE && /* some GUI query here */
+	TRUE && /* some GUI query here */
 	gnc_commodity_equiv (xaccAccountGetSecurity (account),
 			     gnc_get_euro ()) &&
 	!g_hash_table_lookup (currencyhash, currency) )
