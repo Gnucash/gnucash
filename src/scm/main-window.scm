@@ -165,7 +165,7 @@ the account instead of opening a register.") #f))
 (define (gnc:main-window-save-report)
   (let ((conf-file-name gnc:current-saved-reports))
     ;;(display conf-file-name)
-    (with-output-to-port (open-output-file conf-file-name)
+    (with-output-to-port (open-file conf-file-name "a")
       (lambda ()
 	(hash-fold
 	 (lambda (k v p)

@@ -501,7 +501,7 @@ string and 'directories' must be a list of strings."
   (gnc:add-extension
    (gnc:make-menu-item
     (N_ "_Save all current reports")
-    (N_ "Save all the current report in ~/.gnucash/saved-reports-1.8 so that they are accessible as menu entries in the report menu.")
+    (N_ "Save all the current report in ~/.gnucash/saved-reports-1.8 so that they are accessible as menu entries in the report menu. Effects are only visible at next startup of gnucash.")
     (list gnc:window-name-main "_File" "_Export")
     (lambda ()
       (gnc:main-window-save-report))))
