@@ -474,20 +474,19 @@ gnc_ledger_display_template_gl (char *id)
   AccountGroup *ag;
   Account *acct;
 
+  acct = NULL;
+
   q = xaccMallocQuery ();
 
   book = gnc_get_current_book ();
   xaccQuerySetBook (q, book);
 
-  ag = gnc_book_get_template_group (book);
-  acct = xaccGetAccountFromName (ag, id);
-  if (!acct)
-  {
-    /* FIXME: this should be a more serious error, somehow */
-    PERR( "can't get template account for id \"%s\"\n", id );
+  if ( id != NULL ) {
+    ag = gnc_book_get_template_group (book);
+    acct = xaccGetAccountFromName (ag, id);
+    g_assert( acct );
+    xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
   }
-
-  xaccQueryAddSingleAccountMatch (q, acct, QUERY_AND);
 
   ld = gnc_ledger_display_internal (NULL, q, LD_GL,
                                     GENERAL_LEDGER,
@@ -495,23 +494,30 @@ gnc_ledger_display_template_gl (char *id)
                                     FALSE, TRUE); /* TRUE : template mode */
 
   sr = gnc_ledger_display_get_split_register (ld);
-  gnc_split_register_set_template_account (sr, acct);
+  if ( acct ) {
+    gnc_split_register_set_template_account (sr, acct);
+  }
 
   return ld;
+}
+
+gncUIWidget
+gnc_ledger_display_get_parent( GNCLedgerDisplay *ld )
+{
+  if ( ld == NULL )
+    return NULL;
+
+  if ( ld->get_parent == NULL )
+    return NULL;
+
+  return ld->get_parent( ld );
 }
 
 static gncUIWidget
 gnc_ledger_display_parent (void *user_data)
 {
-  GNCLedgerDisplay *regData = user_data;
-
-  if (regData == NULL)
-    return NULL;
-
-  if (regData->get_parent == NULL)
-    return NULL;
-
-  return regData->get_parent (regData);
+  GNCLedgerDisplay *ld = user_data;
+  return gnc_ledger_display_get_parent( ld );
 }
 
 static void

@@ -2314,13 +2314,14 @@ sxsincelast_destroy( GtkObject *o, gpointer ud )
         /* appropriate place to destroy data structures */
         clean_sincelast_data( sxsld );
 
-        /* We don't need to close the ledgers, as the gnc-reg-widget will do
-         * this for us. */
         gnc_ledger_display_close( sxsld->ac_ledger );
         sxsld->ac_ledger = NULL;
 
         gnc_ledger_display_close( sxsld->created_ledger );
         sxsld->created_ledger = NULL;
+
+        gnc_ledger_display_close( sxsld->to_create_ledger );
+        sxsld->to_create_ledger = NULL;
 
 	gnc_unregister_gui_component_by_data( DIALOG_SXSINCELAST_CM_CLASS,
 					      sxsld->sincelast_window );
@@ -3524,6 +3525,7 @@ create_autoCreate_ledger( sxSinceLastData *sxsld )
                                            4,
                                            (CREATE_TOOLBAR | CREATE_POPUP),
                                            CAP_SCHEDULE ) );
+        DEBUG( "(ac gsr)%.8x", sxsld->ac_gsr );
 
         vbox = glade_xml_get_widget( sxsld->gxml, AUTO_CREATE_VBOX );
         toolbar = gnc_split_reg_get_toolbar( sxsld->ac_gsr );
@@ -3570,6 +3572,7 @@ create_created_ledger( sxSinceLastData *sxsld )
                                            ( CREATE_TOOLBAR | CREATE_POPUP ),
                                            CAP_SCHEDULE ) );
 
+        DEBUG( "(created gsr)%.8x", sxsld->created_gsr );
         vbox = glade_xml_get_widget( sxsld->gxml, CREATED_VBOX );
         toolbar = gnc_split_reg_get_toolbar( sxsld->created_gsr );
 
@@ -3614,10 +3617,10 @@ create_to_create_ledger( sxSinceLastData *sxsld )
                                            ( CREATE_TOOLBAR | CREATE_POPUP ),
                                            ( CAP_READ_ONLY | CAP_SCHEDULE) ) );
 
+        DEBUG( "(to_create gsr)%.8x", sxsld->to_create_gsr );
         txn_reg_frame = glade_xml_get_widget( sxsld->gxml, TO_CREATE_TXN_REG_FRAME );
         gtk_container_add( GTK_CONTAINER( txn_reg_frame ),
                            GTK_WIDGET( sxsld->to_create_gsr ) );
-
 
         /* configure... */
         /* don't use double-line */

@@ -70,6 +70,9 @@ void gnc_ledger_display_set_handlers (GNCLedgerDisplay *ld,
                                       GNCLedgerDisplayDestroy destroy,
                                       GNCLedgerDisplayGetParent get_parent);
 
+/** Returns the parent of a given */
+gncUIWidget gnc_ledger_display_get_parent( GNCLedgerDisplay *ld );
+
 /* return the split register associated with a ledger display */
 SplitRegister * gnc_ledger_display_get_split_register (GNCLedgerDisplay *ld);
 

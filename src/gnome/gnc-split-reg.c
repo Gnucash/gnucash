@@ -38,6 +38,7 @@
 #include "Account.h"
 #include "AccWindow.h"
 #include "Scrub.h"
+#include "dialog-sx-from-trans.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
@@ -91,7 +92,7 @@ static void gnc_split_reg_determine_read_only( GNCSplitReg *gsr );
 static void gnc_split_reg_change_style (GNCSplitReg *gsr, SplitRegisterStyle style);
 
 static GNCPlaceholderType gnc_split_reg_get_placeholder( GNCSplitReg *gsr );
-static gnc_numeric gnc_account_present_balance( Account *account );
+static gnc_numeric gsr_account_present_balance( Account *account );
 static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
 
 static void gsr_create_menus( GNCSplitReg *gsr );
@@ -490,7 +491,8 @@ static
 void
 gsr_foobar( GtkWidget *w, gpointer ud )
 {
-  DEBUG( "Happiness is being destroyed" );
+  DEBUG( "Happiness is being destroyed (widget)%.8x, (ud)%.8x",
+         w, ud );
 }
 
 static
@@ -670,7 +672,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
 
   if ( gsr->createFlags & CREATE_SUMMARYBAR ) {
     gsr_update_summary_label( gsr->balance_label,
-                              (AmountGetterFn)gnc_account_present_balance,
+                              (AmountGetterFn)gsr_account_present_balance,
                               leader, print_info, commodity, reverse, euro );
     gsr_update_summary_label( gsr->cleared_label,
                               (AmountGetterFn)xaccAccountGetClearedBalance,
@@ -804,7 +806,8 @@ gnc_split_reg_ld_destroy( GNCLedgerDisplay *ledger )
       gnc_table_save_state (reg->table);
 
     gtk_widget_hide_all( gsr->window );
-    DEBUG( "destroying" );
+    DEBUG( "destroying (gsr)%.8x (->window)%.8x with ledger %.8x",
+           gsr, gsr->window, ledger );
     gtk_widget_destroy( gsr->window );
   }
   gnc_ledger_display_set_user_data (ledger, NULL);
@@ -1175,9 +1178,7 @@ gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data )
     }
   }
 
-#if 0 /* FIXME */
   gnc_sx_create_from_trans(pending_trans);
-#endif /* 0 -- FIXME */
 }
 
 void
@@ -1357,7 +1358,6 @@ gnc_split_reg_new_trans_cb (GtkWidget *widget, gpointer data)
 void
 gsr_default_jump_handler( GNCSplitReg *gsr, gpointer data )
 {
-  RegWindow *rw;
   SplitRegister *reg;
   Account *account;
   Account *leader;
@@ -1388,12 +1388,23 @@ gsr_default_jump_handler( GNCSplitReg *gsr, gpointer data )
       return;
   }
 
-  rw = regWindowSimple(account);
-  if (rw == NULL)
-    return;
+  {
+    GNCLedgerDisplay *ld;
+    GNCSplitReg *gsr;
 
-  gnc_register_raise( rw );
-  gnc_register_jump_to_split( rw, split );
+    ld = gnc_ledger_display_simple( account );
+    gsr = gnc_ledger_display_get_user_data( ld );
+    if ( !gsr ) {
+      /* create new */
+      RegWindow *rw = regWindowSimple( account );
+      gnc_register_raise( rw );
+      gnc_register_jump_to_split( rw, split );
+    } else {
+      /* Use existing. */
+      gtk_window_present( GTK_WINDOW(gsr->window) );
+      gnc_split_reg_jump_to_split( gsr, split );
+    }
+  }
 }
 
 void
@@ -2062,7 +2073,7 @@ gnc_toolbar_change_cb (void *data)
  **/
 static
 gnc_numeric
-gnc_account_present_balance (Account *account)
+gsr_account_present_balance (Account *account)
 {
   GList *list;
   GList *node;
@@ -2101,6 +2112,9 @@ gnc_split_reg_get_parent( GNCLedgerDisplay *ledger )
 
   if (gsr == NULL)
     return NULL;
+
+  DEBUG( "(ledger)%.8x parent: (gsr->window)%.8x",
+         ledger, gsr->window );
 
   return gsr->window;
 }

@@ -39,7 +39,6 @@
 #include "dialog-find-transactions.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
-#include "dialog-sx-from-trans.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
@@ -185,6 +184,7 @@ static void gnc_register_insert_cloned_toolbar_elt( GtkToolbar *dstToolbar,
                                                     gint idx );
 
 static gboolean gnc_register_include_date(RegWindow *regData, time_t date);
+static void gnc_reg_save_size (RegWindow *regData);
 
 
 /********************************************************************\
@@ -653,6 +653,10 @@ gnc_register_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
   gnc_split_reg_check_close(regData->gsr);
   gnc_ledger_display_close (regData->ledger);
 
+  if ( regData ) {
+    gnc_reg_save_size( regData );
+  }
+
   return TRUE; /* don't close */
 }
 
@@ -672,6 +676,9 @@ gnc_register_destroy_cb(GtkWidget *widget, gpointer data)
 
   if (regData->pcd)
     gnc_ui_print_check_dialog_destroy(regData->pcd);
+
+  gtk_widget_destroy( regData->window );
+
   g_free(regData);
 }
 
@@ -768,8 +775,7 @@ gnc_register_size_allocate (GtkWidget *widget,
     return;
 
   regData->width = allocation->width;
-
-  gtk_window_set_default_size (GTK_WINDOW(regData->window), regData->width, 0);
+  gtk_window_set_default_size( GTK_WINDOW(regData->window), regData->width, 0 );
 }
 
 /********************************************************************\
@@ -919,6 +925,8 @@ regWindowLedger( GNCLedgerDisplay *ledger )
     gnc_ledger_display_refresh( regData->ledger );
   }
 
+  DEBUG( "(regData)%.8x (->window)%.8x (->gsr)%.8x (->ledger)%.8x",
+         regData, regData->window, regData->gsr, regData->ledger );
 
   return regData;
 }
@@ -1188,42 +1196,6 @@ gnc_reg_save_size (RegWindow *regData)
 
   gnc_save_window_size (prefix, *width, 0);
 }
-
-
-/********************************************************************\
- * regDestroy()
-\********************************************************************/
-
-static void
-regDestroy (GNCLedgerDisplay *ledger)
-{
-  RegWindow *regData = gnc_ledger_display_get_user_data (ledger);
-
-  if ( regData ) {
-    gnc_reg_save_size( regData );
-  }
-
-  gtk_widget_destroy( regData->window );
-
-#if 0 /* old and busted */
-  if (regData)
-  {
-    SplitRegister *reg;
-
-    gnc_reg_save_size (regData);
-
-    reg = gnc_ledger_display_get_split_register (ledger);
-
-    if (reg && reg->table)
-      gnc_table_save_state (reg->table);
-
-    gtk_widget_destroy (regData->window);
-  }
-
-  gnc_ledger_display_set_user_data (ledger, NULL);
-#endif /* 0 -- oldd an busted */
-}
-
 
 void 
 gnc_register_new_account_cb (GtkWidget * w, gpointer data)

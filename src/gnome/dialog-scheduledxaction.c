@@ -128,6 +128,7 @@ struct _SchedXactionEditorDialog
 
         /* The various widgets in the dialog */
         GNCLedgerDisplay *ledger;
+        GNCSplitReg *gsr;
         GnucashRegister *reg;
 
         GNCFrequency *gncfreq;
@@ -954,6 +955,9 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         if (sxed == NULL)
                 return;
 
+        DEBUG( "(gsr)%.8x, (gsr->window)%.8x",
+               sxed->gsr, sxed->gsr->window );
+
         gnc_unregister_gui_component_by_data
                 (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
@@ -964,7 +968,9 @@ scheduledxaction_editor_dialog_destroy(GtkObject *object, gpointer data)
         sxed->sx = NULL;
 
         /* We don't need to deal with the ledger, as the gncRegWidget will do
-         * so for us. */
+         * so for us. [Is this still true?? -- jsled] */
+        gnc_ledger_display_close( sxed->ledger );
+        sxed->ledger = NULL;
 
         g_free (sxed->sxGUIDstr);
         sxed->sxGUIDstr = NULL;
@@ -1206,6 +1212,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
                                              editor_component_sx_equality,
                                              sx );
         if ( dlgExists != NULL ) {
+                DEBUG( "dialog already exists; using that one." );
                 sxed = (SchedXactionEditorDialog*)dlgExists->data;
                 gtk_window_present( GTK_WINDOW(sxed->dialog) );
                 g_list_free( dlgExists );
@@ -1288,6 +1295,10 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 
         gtk_widget_show_all(sxed->dialog);
 
+        gnc_ledger_display_refresh( sxed->ledger );
+        DEBUG( "(sxed)%.8x, (->window)%.8x (->gsr)%.8x",
+               sxed, sxed->dialog, sxed->gsr );
+
         return sxed;
 }
 
@@ -1334,7 +1345,7 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
 {
         GtkFrame *tempxaction_frame;
         SplitRegister *splitreg;
-        GtkWidget *gsr, *vbox;
+        GtkWidget *vbox;
         int numLedgerLines = NUM_LEDGER_LINES_DEFAULT;
 
         tempxaction_frame =
@@ -1350,39 +1361,41 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
                 (int)gnc_lookup_number_option( SX_OPT_STR,
                                                "Template Register Lines",
                                                NUM_LEDGER_LINES_DEFAULT );
-        gsr = gnc_split_reg_new( sxed->ledger, GTK_WINDOW(sxed->dialog),
-                                 numLedgerLines,
-                                 (CREATE_TOOLBAR | CREATE_POPUP | CREATE_MENUS),
-                                 (CAP_JUMP | CAP_SCHEDULE) );
+        sxed->gsr = GNC_SPLIT_REG(
+                gnc_split_reg_new( sxed->ledger, GTK_WINDOW(sxed->dialog),
+                                   numLedgerLines,
+                                   (CREATE_TOOLBAR | CREATE_POPUP | CREATE_MENUS),
+                                   (CAP_JUMP | CAP_SCHEDULE) ) );
 
         gtk_box_pack_start( GTK_BOX(vbox),
-                            gnc_split_reg_get_toolbar( GNC_SPLIT_REG(gsr) ),
+                            gnc_split_reg_get_toolbar( sxed->gsr ),
                             FALSE, TRUE, 2 );
         {
                 GtkWidget *popup, *tmpMenu, *tmpMI;
                 /* Fixup the popup menu with the menus that would normally be in the
                  * menu-bar of the window-register. */
-                popup = gnc_split_reg_get_popup( GNC_SPLIT_REG(gsr) );
+                popup = gnc_split_reg_get_popup( sxed->gsr );
                 gtk_menu_append( GTK_MENU(popup), gtk_menu_item_new() );
 
-                tmpMenu = gnc_split_reg_get_edit_menu( GNC_SPLIT_REG(gsr) );
+                tmpMenu = gnc_split_reg_get_edit_menu( sxed->gsr );
                 tmpMI = gtk_menu_item_new_with_label( N_("Edit") );
                 gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
                 gtk_menu_append( GTK_MENU(popup), tmpMI );
 
-                tmpMenu = gnc_split_reg_get_style_menu( GNC_SPLIT_REG(gsr) );
+                tmpMenu = gnc_split_reg_get_style_menu( sxed->gsr );
                 tmpMI = gtk_menu_item_new_with_label( N_("Style") );
                 gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
                 gtk_menu_append( GTK_MENU(popup), tmpMI );
 
-                tmpMenu = gnc_split_reg_get_sort_menu( GNC_SPLIT_REG(gsr) );
+                tmpMenu = gnc_split_reg_get_sort_menu( sxed->gsr );
                 tmpMI = gtk_menu_item_new_with_label( N_("Sort") );
                 gtk_menu_item_set_submenu( GTK_MENU_ITEM(tmpMI), tmpMenu );
                 gtk_menu_append( GTK_MENU(popup), tmpMI );
 
                 gtk_widget_show_all( popup );
         }
-        gtk_box_pack_start( GTK_BOX(vbox), gsr, TRUE, TRUE, 2 );
+        gtk_box_pack_start( GTK_BOX(vbox), GTK_WIDGET(sxed->gsr),
+                            TRUE, TRUE, 2 );
 
         /* configure... */
         /* don't use double-line */
@@ -1393,8 +1406,6 @@ schedXact_editor_create_ledger( SchedXactionEditorDialog *sxed )
         /* don't show present/future divider [by definition, not necessary] */
         gnc_split_register_show_present_divider( splitreg, FALSE );
 
-        /* force a refresh */
-        gnc_ledger_display_refresh( sxed->ledger );
 }
 
 static

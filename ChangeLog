@@ -1,3 +1,23 @@
+2002-11-14  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/register/ledger-core/gnc-ledger-display.c
+	(gnc_ledger_display_template_gl): Extended to allow a template GL
+	without a specific transaction being displayed at the time of
+	creation.
+
+	* src/engine/SchedXaction.h: Removed some deprecated function defs.
+
+	* src/gnome/gnc-split-reg.c (gsr_default_jump_handler): Don't make
+	assumptions about the window-register.c code that we can't
+	support, and don't let it be responsible for too much.  Fixes
+	recent serious register crashes.
+
+	* src/gnome/dialog-scheduledxaction.c
+	(scheduledxaction_editor_dialog_destroy): 
+	* src/gnome/dialog-sxsincelast.c (sxsincelast_destroy): 
+	Close the ledger_display on window teardown.  Fixes sx-related
+	register crashes.
+
 2002-11-14  Christian Stimming  <stimming@tuhh.de>
 
 	* po/*.po: Updated translations (merged from 1.6 branch plus
@@ -107,6 +127,7 @@
 	transaction matcher UI changes.  Create a pseudo-widget in first 
 	column to select the action to be taken with the transaction.
 	
+>>>>>>> 1.1149
 2002-11-12  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/gnome/dialog-sxsincelast.c

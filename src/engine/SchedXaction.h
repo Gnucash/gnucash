@@ -181,31 +181,6 @@ void xaccSchedXactionSetGUID( SchedXaction *sx, GUID g );
 
 ///@{
 /**
- * Next-Instance state data.
- *
- * If you're looking at to-create [but not-yet-created] scheduled
- * transactions, you'll want to use this to keep track of any
- * SX-type-specific information that relates to the sequence and when it
- * should end.  This is an opaque structure to the caller; it should be
- * created and freed with the following functions, and passed into the
- * GetNextInstance and GetInstanceAfter functions.
- *
- * The necessity for this arose in dealing with SXes with some number of
- * remaining occurances, and thinking about how to keep track of this when
- * looking at reminders... and generally thinking about not wanting the
- * caller to know every possible thing that needs to be kept track of in a
- * forward-looking sequence of SXes.
- *
- * 	THESE (3) FUNCTIONS ARE DEPRECATED.  See/Use the
- * 	'temporal_state_snapshot' functions below.
- **/
-//void *xaccSchedXactionCreateSequenceState( SchedXaction *sx );
-//void xaccSchedXactionIncrSequenceState( SchedXaction *sx, void *stateData );
-//void xaccSchedXactionDestroySequenceState( void *stateData );
-///@}
-
-///@{
-/**
  * Temporal state data.
  *
  * These functions allow us to opaquely save the entire temporal state of
