@@ -119,7 +119,7 @@ run_test (void)
   tsmiddle = tsfirst;
   tsmiddle.tv_sec = (tsfirst.tv_sec + tslast.tv_sec)/2;
 
-  gnc_session_save (session);
+  gnc_session_save (session, NULL);
   io_err = gnc_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
@@ -135,7 +135,7 @@ run_test (void)
     exit(get_rv());
   }
 
-  gnc_session_save (session);
+  gnc_session_save (session, NULL);
   io_err = gnc_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 

@@ -41,7 +41,7 @@ save_xml_file (GNCSession *session, const char *filename_base)
   io_err = gnc_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
-  gnc_session_save (session);
+  gnc_session_save (session, NULL);
   io_err = gnc_session_get_error (session);
   g_return_if_fail (io_err == ERR_BACKEND_NO_ERR);
 
@@ -96,7 +96,7 @@ save_db_file (GNCSession *session, const char *db_name, const char *mode)
                      db_name, mode))
     return FALSE;
 
-  gnc_session_save (session);
+  gnc_session_save (session, NULL);
   io_err = gnc_session_get_error (session);
   if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
                      "Saving db session",
@@ -141,7 +141,7 @@ load_db_file (GNCSession *session, const char *db_name, const char *mode,
                      db_name, mode))
     return FALSE;
 
-  gnc_session_load (session);
+  gnc_session_load (session, NULL);
   io_err = gnc_session_get_error (session);
   if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
                      "Loading db session",
@@ -542,7 +542,7 @@ test_trans_query (Transaction *trans, gpointer data)
                      filename))
     return FALSE;
 
-  gnc_session_load (session);
+  gnc_session_load (session, NULL);
   io_err = gnc_session_get_error (session);
   if (!do_test_args (io_err == ERR_BACKEND_NO_ERR,
                      "Loading db session",
