@@ -655,6 +655,7 @@ account_latest_price_any_currency (Account *account)
   pdb = gnc_book_get_pricedb (book);
 
   price_list = gnc_pricedb_lookup_latest_any_currency (pdb, commodity);
+  if (!price_list) return NULL;
 
   result = gnc_price_clone((GNCPrice *)(price_list->data), book);
 
