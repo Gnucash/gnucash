@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include "Account.h"
+#include "AccountP.h"
 #include "Group.h"
 #include "LedgerUtils.h"
 #include "MultiLedger.h"

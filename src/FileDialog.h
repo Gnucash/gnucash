@@ -56,6 +56,5 @@ void gncFileQuerySave (void);
 void gncFileQuit (void);
 
 extern Session *current_session;
-extern AccountGroup *topgroup;
 
 #endif /* __GNC_FILE_DIALOG_H__ */

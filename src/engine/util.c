@@ -45,7 +45,7 @@ int loglevel[MODULE_MAX] =
 {0,      /* DUMMY */
  2,      /* ENGINE */
  2,      /* IO */
- 2,      /* REGISTER */
+ 4,      /* REGISTER */
  2,      /* LEDGER */
  4,      /* HTML */
  2,      /* GUI */

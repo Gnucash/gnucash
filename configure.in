@@ -24,7 +24,10 @@
 AC_INIT(src/guile/gnucash.h.in)
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+
+### AC_PROG_CC sets CFLAGS if it's not already set.
 AC_PROG_CC
+
 AC_ISC_POSIX
 AC_C_BIGENDIAN
 AC_PROG_MAKE_SET
@@ -33,11 +36,7 @@ AC_PROG_MAKE_SET
 ### Variables
 ### Set up all the initial variable values...
 
-CFLAGS="${CFLAGS} -O2 -Wall"
-# some plything option lists
-#        CFLAGS="-g -Wall -ansi -pedantic -Wwrite-strings -Wid-clash-31 -Wpointer-arith -Wcast-qual -Wcast-align -Wtraditional -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Woverloaded-virtual -Winline -felide-constructors -fnonnull-objects"
-#       CFLAGS="-g -Wall -ansi -pedantic -Wwrite-strings -Wtraditional  -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs -Wshadow -Winline" 
-#       CFLAGS="-g -Wall -ansi -pedantic"
+
 
 
 # USE_QUICKFILL:
@@ -363,10 +362,10 @@ AC_SUBST(GNC_RUNTIME_CONFIGDIR)
 
 # UGLY HACK
 
-GTKSHEET_DIR="gtksheet-5.7"
+GTKSHEET_DIR="gtksheet"
 AC_SUBST(GTKSHEET_DIR)
 
-# CFLAGS="${CFLAGS} -Werror"
+CFLAGS="${CFLAGS} -Werror -Wno-unused"
 
 AC_CONFIG_HEADER(config.h)
 

@@ -30,10 +30,10 @@
 
 void refreshMainWindow( void );
 
-gncBool  verifyBox( const char *text );
-void     errorBox( const char *message );
-void     setBusyCursor( gncUIWidget w );
-void     unsetBusyCursor( gncUIWidget w );
+gncBoolean  verifyBox( const char *text );
+void        errorBox( const char *message );
+void        setBusyCursor( gncUIWidget w );
+void        unsetBusyCursor( gncUIWidget w );
 
 #endif
 
