@@ -99,7 +99,7 @@ be tricky, since it requires hacks on the Xbae widget used to
 display the register.
 
 -------------
-The "reports" menu item is unimplemented and will result in a core dump.
+The "reports" menu item is unimplemented.
 -------------
 
 That's all folks!

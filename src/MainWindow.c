@@ -434,7 +434,7 @@ mainWindow( Widget parent )
       NULL,         NULL,                    (MenuItem *)NULL },
     { "Transfer",           &xmPushButtonWidgetClass, 'C', NULL, NULL, True,
       accountMenubarCB, (XtPointer)AMB_TRNS,  (MenuItem *)NULL },
-    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, True,
+    { "Report",             &xmPushButtonWidgetClass, 'R', NULL, NULL, False,
       accountMenubarCB, (XtPointer)AMB_RPRT,  (MenuItem *)NULL },
 #if 0
     { "Edit Categories...", &xmPushButtonWidgetClass, 'C', NULL, NULL, True,

@@ -72,8 +72,7 @@ simpleReportWindow( Widget parent )
    /* Makes a nice looking frame */
   frame = XtVaCreateManagedWidget( "frame", 
 				   xmFrameWidgetClass, form,
-				   XmNtopAttachment,   XmATTACH_WIDGET,
-				   XmNtopWidget,       widget,
+				   XmNtopAttachment,   XmATTACH_FORM,
 				   XmNleftAttachment,  XmATTACH_FORM,
 				   XmNleftOffset,      20,
 				   XmNrightAttachment, XmATTACH_FORM,
@@ -85,7 +84,7 @@ simpleReportWindow( Widget parent )
    * The buttons at the bottom...                                   *
   \******************************************************************/
   
-  buttonform = XtVaCreateWidget( "form", 
+  buttonform = XtVaCreateWidget( "buttonform", 
 				 xmFormWidgetClass,   form,
 				 XmNfractionBase,     5,
 				 XmNtopAttachment,    XmATTACH_WIDGET,
