@@ -25,31 +25,34 @@ struct _QifContext {
   QifContext	parent;
 
   /* file information */
+  char *	filename;
   FILE *	fp;
   gint		lineno;
 
   /* This describes what we are parsing right now */
   QifType	parse_type;
   QifHandler	handler;
+  gpointer	parse_state;
 
   /* A bunch of flags for the current handler */
   gint		parse_flags;
 
-  /* The current and last seen account */
+  /* The current and "opening balance" account */
   QifAccount	current_acct;
-  QifAccount	last_seen_acct;
+  QifAccount	opening_bal_acct;
 
-  /* Current parse state */
-  QifObject	parse_state;
+  /* HashTable of Maps of data objects */
+  GHashTable *	object_maps;
 
   /* HashTable of Lists of data objects */
   GHashTable *	object_lists;
 
-  /* HashTable of Maps of data objects */
-  GHashTable *	object_maps;
+  /* List of files */
+  GList *files;
 };
 
 /* Object Maps */
+gint qif_object_map_count(QifContext ctx, const char *type);
 void qif_object_map_foreach(QifContext ctx, const char *type,
 			    GHFunc func, gpointer arg);
 void qif_object_map_insert(QifContext ctx, const char *key, QifObject obj);
@@ -60,6 +63,7 @@ void qif_object_map_destroy(QifContext ctx);
 GList * qif_object_map_get(QifContext ctx, const char *type);
 
 /* Object Lists */
+gint qif_object_list_count(QifContext ctx, const char *type);
 void qif_object_list_foreach(QifContext ctx, const char *type,
 			     GFunc func, gpointer arg);
 void qif_object_list_insert(QifContext ctx, QifObject obj);
@@ -67,5 +71,9 @@ void qif_object_list_remove(QifContext ctx, QifObject obj);
 void qif_object_list_destroy(QifContext ctx);
 /* GList should NOT be freed by the caller */
 GList *qif_object_list_get(QifContext ctx, const char *type);
+
+/* Set and clear flags in bit-flags */
+#define qif_set_flag(i,f) (i |= f)
+#define qif_clear_flag(i,f) (i &= ~f)
 
 #endif /* QIF_IMPORT_P_H */

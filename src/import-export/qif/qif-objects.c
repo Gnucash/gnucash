@@ -31,10 +31,6 @@ static short module = MOD_IMPORT;
 	obj; \
 })
 
-/* Set and clear flags in bit-flags */
-#define qif_set_flag(i,f) (i |= f)
-#define qif_clear_flag(i,f) (i &= ~f)
-
 /* Save the string from this "line".  Also:
  * - make sure we're not over-writing anything.
  * - make sure the 'line' object no longer references the string.
@@ -133,7 +129,6 @@ qif_account_parse(QifContext ctx, GList *record)
     switch (line->type) {
     case 'N':			/* N : account name */
       qif_save_str(acct->name);
-      ctx->last_seen_acct = acct;
       break;
     case 'D': 			/* D : account description */
       qif_save_str(acct->desc);
@@ -578,9 +573,6 @@ qif_txn_new(void)
 static void
 qif_txn_init(QifContext ctx)
 {
-  if (ctx->parse_flags & QIF_F_IGNORE_ACCOUNTS)
-    ctx->current_acct = ctx->last_seen_acct;
-
   qif_clear_flag(ctx->parse_flags, QIF_F_IGNORE_ACCOUNTS);
   ctx->parse_state = NULL;
 }
@@ -615,7 +607,7 @@ static void
 qif_process_opening_balance_txn(QifContext ctx, QifTxn txn)
 {
   QifSplit split = txn->default_split;
-  QifAccount cur_acct = ctx->current_acct;
+  QifAccount cur_acct = NULL;	/* We know that ctx->current_acct is NULL */
 
   g_return_if_fail(txn->invst_info == NULL);
 
@@ -643,8 +635,17 @@ qif_process_opening_balance_txn(QifContext ctx, QifTxn txn)
     split->cat.acct = qif_default_equity_acct(ctx);
   }
 
-  if (!ctx->current_acct)
+  /*
+   * If we found an opening balance account then set up the context.
+   * If we didn't actually succeed in finding an account then
+   * set a flag so we can go back later and look for it.
+   */
+
+  if (cur_acct) {
+    ctx->opening_bal_acct = cur_acct;
     ctx->current_acct = cur_acct;
+  } else
+    qif_set_flag(ctx->parse_flags, QIF_F_TXN_NEEDS_ACCT);
 }
 
 /* process all the splits in the transaction -- if this is a "split
@@ -763,22 +764,15 @@ qif_txn_parse(QifContext ctx, GList *record)
     if (txn->default_split->catstr)
       qif_split_parse_category(ctx, txn->default_split);
 
-    /* if this is the first transaction, then deal with the opening balance */
-    if (!ctx->parse_state || !ctx->current_acct) {
+    /* if we don't have an account, then deal with the opening balance */
+    if (!ctx->current_acct)
       qif_process_opening_balance_txn(ctx, txn);
-
-      /* If we didn't actually succeed in finding an account then
-       * set a flag so we can go back later and look for it.
-       */
-      if (!ctx->current_acct)
-	qif_set_flag(ctx->parse_flags, QIF_F_TXN_NEEDS_ACCT);
-    }
 
     /* Set the transaction's from account */
     txn->from_acct = ctx->current_acct;
 
     /* And add it to the process list */
-    ctx->parse_state = (gpointer)g_list_prepend((GList *)ctx->parse_state, txn);
+    ctx->parse_state = g_list_prepend(ctx->parse_state, txn);
 
   } else
     /* no date?  Ignore this txn */
@@ -787,9 +781,9 @@ qif_txn_parse(QifContext ctx, GList *record)
   return QIF_E_OK;
 }
 
-/* after we parse the amounts, fix up the transaction */
+/* after we parse the amounts, fix up the transaction splits */
 void
-qif_txn_post_parse_amounts(QifTxn txn)
+qif_txn_setup_splits(QifTxn txn)
 {
   QifSplit split, this_split;
   GList *node;
@@ -838,6 +832,7 @@ qif_txn_end_acct(QifContext ctx)
 {
   GList *node;
   QifTxn txn;
+  gboolean txn_needs_acct;
 
   g_return_val_if_fail(ctx, QIF_E_INTERNAL);
 
@@ -848,21 +843,24 @@ qif_txn_end_acct(QifContext ctx)
    * needs a from-account; then add it to the context.
    */
 
-  for (node = (GList*)ctx->parse_state; node; node = node->next) {
+  txn_needs_acct = (ctx->parse_flags & QIF_F_TXN_NEEDS_ACCT);
+
+  for (node = ctx->parse_state; node; node = node->next) {
     txn = node->data;
 
     /* If we need a from account, then set it.. */
-    if (ctx->parse_flags & QIF_F_TXN_NEEDS_ACCT && !txn->from_acct)
-      txn->from_acct = ctx->current_acct;
+    if (txn_needs_acct && ctx->opening_bal_acct && !txn->from_acct)
+      txn->from_acct = ctx->opening_bal_acct;
 
     /* merge the txn into the context */
     qif_object_list_insert(ctx, (QifObject)txn);
   }
 
-  qif_clear_flag(ctx->parse_flags, QIF_F_TXN_NEEDS_ACCT);
+  if (txn_needs_acct && ctx->opening_bal_acct)
+    qif_clear_flag(ctx->parse_flags, QIF_F_TXN_NEEDS_ACCT);
 
   /* clean up our state */
-  g_list_free((GList*)ctx->parse_state);
+  g_list_free(ctx->parse_state);
   ctx->parse_state = NULL;
 
   return QIF_E_OK;
@@ -895,6 +893,8 @@ qif_txn_invst_destroy(QifInvstTxn itxn)
   g_free(itxn->commissionstr);
   g_free(itxn->security);
 
+  g_free(itxn->catstr);
+
   g_free(itxn);
 }
 
@@ -904,18 +904,6 @@ qif_txn_invst_parse(QifContext ctx, GList *record)
   QifTxn txn;
   QifInvstTxn itxn;
   QifLine line;
-
-  char *cat = NULL;
-  char *cat_class = NULL;
-  gboolean cat_is_acct = FALSE;
-  char *miscx = NULL;
-  char *miscx_class = NULL;
-  gboolean miscx_is_acct = FALSE;
-
-  gboolean invalid_action = FALSE;
-
-  /* Cached account-type lists */
-  static GList *bank_list = NULL;
 
   g_return_val_if_fail(ctx, QIF_E_INTERNAL);
   g_return_val_if_fail(record, QIF_E_BADSTATE);
@@ -966,10 +954,7 @@ qif_txn_invst_parse(QifContext ctx, GList *record)
       qif_save_str(itxn->commissionstr);
       break;
     case 'L':			/* L : category */
-      if (!qif_parse_split_category(line->line,
-				    &cat, &cat_is_acct, &cat_class,
-				    &miscx, &miscx_is_acct, &miscx_class))
-	PERR("Failure parsing category at line %d: %s", line->lineno, line->line);
+      qif_save_str(itxn->catstr);
       break;
     default:
       PERR("Unknown QIF Investment transaction data at line %d: %s",
@@ -980,121 +965,25 @@ qif_txn_invst_parse(QifContext ctx, GList *record)
   /* If we have no date string then there is no reason to do anything else */
   if (txn->datestr && itxn->action != QIF_A_NONE) {
     
-    /* Make sure we've got a cached list */
-    if (bank_list == NULL)
-      bank_list = qif_parse_acct_type("__any_bank__", -1);
-
     /* Make sure we've got a security name */
     if (!itxn->security)
       itxn->security = g_strdup("");	/* XXX */
 
-    /* find the NEAR account */
-    switch (itxn->action) {
-    case QIF_A_BUY: case QIF_A_BUYX: case QIF_A_REINVDIV: case QIF_A_REINVINT:
-    case QIF_A_REINVLG: case QIF_A_REINVMD: case QIF_A_REINVSG: case QIF_A_REINVSH:
-    case QIF_A_SELL: case QIF_A_SELLX: case QIF_A_SHRSIN: case QIF_A_SHRSOUT:
-    case QIF_A_STKSPLIT:
-      txn->from_acct = qif_default_stock_acct(ctx, itxn->security);
-      break;
-
-    case QIF_A_CGLONG: case QIF_A_CGMID: case QIF_A_CGSHORT: case QIF_A_DIV:
-    case QIF_A_INTINC: case QIF_A_MARGINT: case QIF_A_MISCEXP: case QIF_A_MISCINC:
-    case QIF_A_RTRNCAP: case QIF_A_XIN: case QIF_A_XOUT:
+    /* if we don't have a from account, then mark the fact that
+     * we'll need one later.
+     */
+    if (ctx->current_acct)
       txn->from_acct = ctx->current_acct;
-      break;
-
-    case QIF_A_CGLONGX: case QIF_A_CGMIDX: case QIF_A_CGSHORTX: case QIF_A_DIVX:
-    case QIF_A_INTINCX: case QIF_A_MARGINTX: case QIF_A_RTRNCAPX:
-      txn->from_acct = find_or_make_acct(ctx, cat, bank_list);
-      cat = NULL;
-      break;
-
-    case QIF_A_MISCEXPX: case QIF_A_MISCINCX:
-      txn->from_acct = find_or_make_acct(ctx, miscx, bank_list);
-      miscx = NULL;
-      break;
-
-    default:
-      PERR("Unhandled Action: %d", itxn->action);
-      invalid_action = TRUE;
-      break;
-    }
-
-    /* find the FAR account */
-    itxn->far_cat_is_acct = TRUE;
-    switch (itxn->action) {
-    case QIF_A_BUY: case QIF_A_SELL:
-      itxn->far_cat.acct = ctx->current_acct;
-      break;
-
-    case QIF_A_BUYX: case QIF_A_MISCEXP: case QIF_A_MISCEXPX: case QIF_A_MISCINC:
-    case QIF_A_MISCINCX: case QIF_A_SELLX: case QIF_A_XIN: case QIF_A_XOUT:
-      itxn->far_cat.cat = find_or_make_cat(ctx, cat);
-      itxn->far_cat_is_acct = FALSE;
-      cat = NULL;
-      break;
-
-    case QIF_A_CGLONG: case QIF_A_CGLONGX: case QIF_A_REINVLG:
-      itxn->far_cat.acct = qif_default_cglong_acct(ctx, itxn->security);
-      break;
-
-    case QIF_A_CGMID: case QIF_A_CGMIDX: case QIF_A_REINVMD:
-      itxn->far_cat.acct = qif_default_cgmid_acct(ctx, itxn->security);
-      break;
-
-    case QIF_A_CGSHORT: case QIF_A_CGSHORTX: case QIF_A_REINVSG: case QIF_A_REINVSH:
-      itxn->far_cat.acct = qif_default_cgshort_acct(ctx, itxn->security);
-      break;
-
-    case QIF_A_DIV: case QIF_A_DIVX: case QIF_A_REINVDIV:
-      itxn->far_cat.acct = qif_default_dividend_acct(ctx, itxn->security);
-      break;
-
-    case QIF_A_INTINC: case QIF_A_INTINCX: case QIF_A_REINVINT:
-      itxn->far_cat.acct = qif_default_interest_acct(ctx, itxn->security);
-      break;
-
-    case QIF_A_MARGINT: case QIF_A_MARGINTX:
-      itxn->far_cat.acct = qif_default_margin_interest_acct(ctx);
-      break;
-
-    case QIF_A_RTRNCAP: case QIF_A_RTRNCAPX:
-      itxn->far_cat.acct = qif_default_capital_return_acct(ctx, itxn->security);
-      break;
-
-    case QIF_A_SHRSIN: case QIF_A_SHRSOUT:
-      itxn->far_cat.acct = qif_default_equity_holding(ctx, itxn->security);
-      break;
-
-    case QIF_A_STKSPLIT:
-      itxn->far_cat.acct = qif_default_stock_acct(ctx, itxn->security);
-      break;
-
-    default:
-      break;
-    }
-
-    /* If we dont have a far acct (or far category) then reset the flag */
-    if (!itxn->far_cat.obj)
-      itxn->far_cat_is_acct = FALSE;
-
-    /* If this is invalid then destroy it */
-    if (invalid_action)
-      qif_txn_destroy((QifObject)txn);
     else
-      /* Add this transaction to the parse state for later processing */
-      ctx->parse_state = (gpointer)g_list_prepend((GList*)ctx->parse_state, txn);
+      qif_set_flag(ctx->parse_flags, QIF_F_ITXN_NEEDS_ACCT);
+
+    /* Add this transaction to the parse state for later processing */
+    ctx->parse_state = g_list_prepend(ctx->parse_state, txn);
 
   } else {
     /* no date?  Just destroy it */
     qif_txn_destroy((QifObject)txn);
   }
-
-  /* Free parsed strings.. */
-  g_free(cat);
-  g_free(cat_class);
-  g_free(miscx);
-  g_free(miscx_class);
 
   return QIF_E_OK;
 }
@@ -1105,6 +994,17 @@ qif_invst_txn_setup_splits(QifContext ctx, QifTxn txn)
 {
   QifInvstTxn itxn;
   QifSplit near_split, far_split, comm_split;
+  QifAccount from_acct;
+
+  char *cat = NULL;
+  char *cat_class = NULL;
+  gboolean cat_is_acct = FALSE;
+  char *miscx = NULL;
+  char *miscx_class = NULL;
+  gboolean miscx_is_acct = FALSE;
+
+  /* Cached account-type lists */
+  static GList *bank_list = NULL;
 
   gnc_numeric split_value;
 
@@ -1124,6 +1024,108 @@ qif_invst_txn_setup_splits(QifContext ctx, QifTxn txn)
   /* near and far splits..  for simplicity */
   near_split = txn->default_split;
   far_split = qif_split_new();
+  from_acct = txn->from_acct;
+
+  /* Parse the category string */
+  if (!qif_parse_split_category(itxn->catstr,
+				&cat, &cat_is_acct, &cat_class,
+				&miscx, &miscx_is_acct, &miscx_class))
+    PERR("Failure parsing category: %s", itxn->catstr);
+
+  /* Make sure we've got a cached list */
+  if (bank_list == NULL)
+    bank_list = qif_parse_acct_type("__any_bank__", -1);
+
+  /* find the NEAR account */
+
+  switch (itxn->action) {
+  case QIF_A_BUY: case QIF_A_BUYX: case QIF_A_REINVDIV: case QIF_A_REINVINT:
+  case QIF_A_REINVLG: case QIF_A_REINVMD: case QIF_A_REINVSG: case QIF_A_REINVSH:
+  case QIF_A_SELL: case QIF_A_SELLX: case QIF_A_SHRSIN: case QIF_A_SHRSOUT:
+  case QIF_A_STKSPLIT:
+    txn->from_acct = qif_default_stock_acct(ctx, itxn->security);
+    break;
+
+  case QIF_A_CGLONG: case QIF_A_CGMID: case QIF_A_CGSHORT: case QIF_A_DIV:
+  case QIF_A_INTINC: case QIF_A_MARGINT: case QIF_A_MISCEXP: case QIF_A_MISCINC:
+  case QIF_A_RTRNCAP: case QIF_A_XIN: case QIF_A_XOUT:
+    txn->from_acct = from_acct;
+    break;
+
+  case QIF_A_CGLONGX: case QIF_A_CGMIDX: case QIF_A_CGSHORTX: case QIF_A_DIVX:
+  case QIF_A_INTINCX: case QIF_A_MARGINTX: case QIF_A_RTRNCAPX:
+    txn->from_acct = find_or_make_acct(ctx, cat, bank_list);
+    cat = NULL;
+    break;
+
+  case QIF_A_MISCEXPX: case QIF_A_MISCINCX:
+    txn->from_acct = find_or_make_acct(ctx, miscx, bank_list);
+    miscx = NULL;
+    break;
+
+  default:
+    PERR("Unhandled Action: %d", itxn->action);
+    break;
+  }
+
+  /* find the FAR account */
+
+  itxn->far_cat_is_acct = TRUE;
+  switch (itxn->action) {
+  case QIF_A_BUY: case QIF_A_SELL:
+    itxn->far_cat.acct = from_acct;
+    break;
+
+  case QIF_A_BUYX: case QIF_A_MISCEXP: case QIF_A_MISCEXPX: case QIF_A_MISCINC:
+  case QIF_A_MISCINCX: case QIF_A_SELLX: case QIF_A_XIN: case QIF_A_XOUT:
+    itxn->far_cat.cat = find_or_make_cat(ctx, cat);
+    itxn->far_cat_is_acct = FALSE;
+    cat = NULL;
+    break;
+
+  case QIF_A_CGLONG: case QIF_A_CGLONGX: case QIF_A_REINVLG:
+    itxn->far_cat.acct = qif_default_cglong_acct(ctx, itxn->security);
+    break;
+
+  case QIF_A_CGMID: case QIF_A_CGMIDX: case QIF_A_REINVMD:
+    itxn->far_cat.acct = qif_default_cgmid_acct(ctx, itxn->security);
+    break;
+
+  case QIF_A_CGSHORT: case QIF_A_CGSHORTX: case QIF_A_REINVSG: case QIF_A_REINVSH:
+    itxn->far_cat.acct = qif_default_cgshort_acct(ctx, itxn->security);
+    break;
+
+  case QIF_A_DIV: case QIF_A_DIVX: case QIF_A_REINVDIV:
+    itxn->far_cat.acct = qif_default_dividend_acct(ctx, itxn->security);
+    break;
+
+  case QIF_A_INTINC: case QIF_A_INTINCX: case QIF_A_REINVINT:
+    itxn->far_cat.acct = qif_default_interest_acct(ctx, itxn->security);
+    break;
+
+  case QIF_A_MARGINT: case QIF_A_MARGINTX:
+    itxn->far_cat.acct = qif_default_margin_interest_acct(ctx);
+    break;
+
+  case QIF_A_RTRNCAP: case QIF_A_RTRNCAPX:
+    itxn->far_cat.acct = qif_default_capital_return_acct(ctx, itxn->security);
+    break;
+
+  case QIF_A_SHRSIN: case QIF_A_SHRSOUT:
+    itxn->far_cat.acct = qif_default_equity_holding(ctx, itxn->security);
+    break;
+
+  case QIF_A_STKSPLIT:
+    itxn->far_cat.acct = qif_default_stock_acct(ctx, itxn->security);
+    break;
+
+  default:
+    break;
+  }
+
+  /* If we dont have a far acct (or far category) then reset the flag */
+  if (!itxn->far_cat.obj)
+    itxn->far_cat_is_acct = FALSE;
 
   /* And now fill in the "near" and "far" splits.  In particular we need
    *
@@ -1206,6 +1208,12 @@ qif_invst_txn_setup_splits(QifContext ctx, QifTxn txn)
 
   /* Push the "far split" into the txn split-list */
   txn->splits = g_list_prepend(txn->splits, far_split);
+
+  /* Free parsed strings.. */
+  g_free(cat);
+  g_free(cat_class);
+  g_free(miscx);
+  g_free(miscx_class);
 }
 
 
@@ -1288,6 +1296,7 @@ find_or_make_class(QifContext ctx, char *name)
 void
 qif_object_init(void)
 {
+  int i;
   static struct {
     QifType		type;
     struct _QifHandler	handler;
@@ -1305,9 +1314,13 @@ qif_object_init(void)
     { QIF_ACCOUNT, { NULL, qif_account_parse, NULL } },
     { QIF_AUTOSWITCH, { qif_autoswitch_set, NULL, NULL } },
     { QIF_CLEAR_AUTOSWITCH, { qif_autoswitch_clear, NULL, NULL } },
-    { -1, {NULL} },
+    { 0, {NULL, NULL, NULL} }
   };
 
-  (void)handlers;		/* XXX */
-  
+  for (i = 0; handlers[i].type > 0; i++) {
+    if (handlers[i].type <= 0) {
+      PERR("Invalid type?!?  (%d @ %d)", handlers[i].type, i);
+    } else
+      qif_register_handler(handlers[i].type, &(handlers[i].handler));
+  }
 }

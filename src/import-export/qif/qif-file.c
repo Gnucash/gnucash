@@ -17,6 +17,7 @@
 #include "gnc-engine-util.h"
 
 #include "qif-import-p.h"
+#include "qif-objects-p.h"
 
 static short module = MOD_IMPORT;
 
@@ -118,7 +119,7 @@ qif_make_record(QifContext ctx, char *buf, size_t bufsiz, gboolean *found_bangty
 /* read a qif file and parse it, line by line
  * return FALSE on fatal error, TRUE otherwise
  */
-QifError
+static QifError
 qif_read_file(QifContext ctx, FILE *f)
 {
   char buf[BUFSIZ];
@@ -126,8 +127,8 @@ qif_read_file(QifContext ctx, FILE *f)
   gboolean found_bang;
   QifError err = QIF_E_OK;
 
-  g_return_val_if_fail(ctx, FALSE);
-  g_return_val_if_fail(f, FALSE);
+  g_return_val_if_fail(ctx, QIF_E_BADARGS);
+  g_return_val_if_fail(f, QIF_E_BADARGS);
 
   ctx->fp = f;
   ctx->lineno = -1;
@@ -173,3 +174,114 @@ qif_read_file(QifContext ctx, FILE *f)
 
   return err;
 }
+
+static QifError
+qif_import_file(QifContext ctx, const char *filename)
+{
+  QifError err;
+  FILE *fp;
+
+  g_return_val_if_fail(ctx, QIF_E_BADARGS);
+  g_return_val_if_fail(filename, QIF_E_BADARGS);
+  g_return_val_if_fail(*filename, QIF_E_BADARGS);
+
+  /* Open the file */
+  fp = fopen(filename, "r");
+  if (fp == NULL)
+    return QIF_E_NOFILE;
+
+  ctx->filename = g_strdup(filename);
+
+  /* read the file */
+  err = qif_read_file(ctx, fp);
+
+  /* close the file */
+  fclose(fp);
+
+  return err;
+}
+
+
+QifContext
+qif_file_new(QifContext ctx, const char *filename)
+{
+  QifContext fctx;
+
+  g_return_val_if_fail(ctx, NULL);
+  g_return_val_if_fail(filename, NULL);
+
+  fctx = qif_context_new();
+
+  /* we should assume that we've got a bank account... just in case.. */
+  qif_parse_bangtype(fctx, "!type:bank");
+
+  /* Open the file */
+  if (qif_import_file(fctx, filename) != QIF_E_OK) {
+    qif_context_destroy(fctx);
+    fctx = NULL;
+  }
+
+  /* Return the new context */
+  if (fctx) {
+    ctx->files = g_list_prepend(ctx->files, fctx);
+    fctx->parent = ctx;
+  }
+
+  return fctx;
+}
+
+QifError
+qif_file_parse(QifContext ctx, gpointer ui_args)
+{
+  g_return_val_if_fail(ctx, QIF_E_BADARGS);
+  g_return_val_if_fail(!qif_file_needs_account(ctx), QIF_E_BADSTATE);
+
+  qif_parse_all(ctx, ui_args);
+  return QIF_E_OK;
+}
+
+gboolean
+qif_file_needs_account(QifContext ctx)
+{
+  g_return_val_if_fail(ctx, FALSE);
+
+  return ((ctx->parse_flags & QIF_F_TXN_NEEDS_ACCT) ||
+	  (ctx->parse_flags & QIF_F_ITXN_NEEDS_ACCT));
+}
+
+const char *
+qif_file_filename(QifContext ctx)
+{
+  g_return_val_if_fail(ctx, NULL);
+  return ctx->filename;
+}
+
+static void
+set_txn_acct(gpointer obj, gpointer arg)
+{
+  QifTxn txn = obj;
+  QifAccount acct = arg;
+
+  if (!txn->from_acct)
+    txn->from_acct = acct;
+}
+
+void
+qif_file_set_default_account(QifContext ctx, const char *acct_name)
+{
+  QifAccount acct;
+
+  g_return_if_fail(ctx);
+  g_return_if_fail(acct_name);
+
+  if (! qif_file_needs_account(ctx)) return;
+
+  acct = find_or_make_acct(ctx, g_strdup(acct_name),
+			   qif_parse_acct_type_guess(ctx->parse_type));
+
+  qif_object_list_foreach(ctx, QIF_O_TXN, set_txn_acct, acct);
+
+  qif_clear_flag(ctx->parse_flags, QIF_F_TXN_NEEDS_ACCT);
+  qif_clear_flag(ctx->parse_flags, QIF_F_ITXN_NEEDS_ACCT);
+}
+

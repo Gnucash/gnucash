@@ -12,7 +12,7 @@
 #include "gnc-numeric.h"
 
 typedef enum {
-  QIF_TYPE_BANK,
+  QIF_TYPE_BANK = 1,
   QIF_TYPE_CASH,
   QIF_TYPE_CCARD,
   QIF_TYPE_INVST,
@@ -37,6 +37,7 @@ typedef struct _QifLine *QifLine;
 /* Qif Flags */
 #define QIF_F_IGNORE_ACCOUNTS	(1 << 0)
 #define QIF_F_TXN_NEEDS_ACCT	(1 << 1)
+#define QIF_F_ITXN_NEEDS_ACCT	(1 << 2)
 
 /* Qif Reconciled Flag */
 typedef enum {
@@ -52,6 +53,8 @@ typedef enum {
   QIF_E_OK = 0,
   QIF_E_INTERNAL,
   QIF_E_BADSTATE,
+  QIF_E_BADARGS,
+  QIF_E_NOFILE,
 } QifError;
 
 
@@ -101,13 +104,25 @@ typedef enum {
 
 /* Public API Functions */
 
-QifContext qif_context_new(QifContext parent);
+/* Create a QIF Import Context */
+QifContext qif_context_new(void);
 void qif_context_destroy(QifContext ctx);
 
-/* Reads the file into the qif context */
-QifError qif_read_file(QifContext ctx, FILE *f);
+/* Open and read a QIF File.  You must pass in the parent
+ * context; it will return the child (file) context
+ */
+QifContext qif_file_new(QifContext ctx, const char* filename);
 
-/* Parse all objects */
-void qif_parse_all(QifContext ctx, gpointer arg);
+/* Does a qif-file need a default QIF account? */
+gboolean qif_file_needs_account(QifContext ctx);
+
+/* Return the filename of the QIF file */
+const char * qif_file_filename(QifContext ctx);
+
+/* Provide a default QIF Account for the QIF File */
+void qif_file_set_default_account(QifContext ctx, const char *acct_name);
+
+/* Parse the QIF File */
+QifError qif_file_parse(QifContext ctx, gpointer ui_arg);
 
 #endif /* QIF_IMPORT_H */

@@ -30,11 +30,11 @@
 static short module = MOD_IMPORT;
 
 /* An array of handlers for the various bang-types */
-static QifHandler qif_handlers[QIF_TYPE_MAX] = { NULL };
+static QifHandler qif_handlers[QIF_TYPE_MAX+1] = { NULL };
 
 /* Parser Regular Expressions */
+static gboolean qifp_regex_compiled = FALSE;
 static regex_t category_regex;
-static gboolean regex_compiled = FALSE;
 
 /* A Hash Table of bang-types */
 static GHashTable *qif_bangtype_map = NULL;
@@ -51,6 +51,10 @@ static GHashTable *qif_atype_map = NULL;
 void
 qif_register_handler(QifType type, QifHandler handler)
 {
+  if (type <= 0 || type > QIF_TYPE_MAX) {
+    PERR("Invalid type: %d", type);
+    return;
+  }
   qif_handlers[type] = handler;
 }
 
@@ -61,7 +65,7 @@ compile_regex()
       "^ *(\\[)?([^]/\\|]*)(]?)(/([^\\|]*))?(\\|(\\[)?([^]/]*)(]?)(/(.*))?)? *$",
 	  REG_EXTENDED);
 
-  regex_compiled = TRUE;
+  qifp_regex_compiled = TRUE;
 }
 
 #define QIF_ADD_TYPE(ts,t) \
@@ -187,8 +191,8 @@ build_atype_map()
 {
   g_return_if_fail(!qif_atype_map);
 
-  qif_action_map = g_hash_table_new(g_str_hash, g_str_equal);
-  g_assert(qif_action_map);
+  qif_atype_map = g_hash_table_new(g_str_hash, g_str_equal);
+  g_assert(qif_atype_map);
 
   QIF_ADD_ATYPE("bank", make_list(1, BANK));
   QIF_ADD_ATYPE("port", make_list(1, BANK));
@@ -233,12 +237,12 @@ qif_parse_bangtype(QifContext ctx, const char *line)
    * - strip off leading/trailing whitespace
    * - make it all lower case
    */
-  bangtype = g_strdup(line);
+  bangtype = g_strdup(line+1);
   g_strstrip(bangtype);
   g_strdown(bangtype);
 
   /* In some cases we get "!Type Bank" -- change the space to a colon */
-  if (!strncmp(bangtype, "!type ", 6))
+  if (!strncmp(bangtype, "type ", 5))
     bangtype[5] = ':';
 
   /* Lookup the bangtype in the map and then destroy the local copy */
@@ -290,7 +294,7 @@ qif_parse_split_category(const char* str,
 		       miscx_cat && miscx_cat_is_acct && miscx_class, FALSE);
 
 
-  if (!regex_compiled)
+  if (!qifp_regex_compiled)
     compile_regex();
 
   if (regexec(&category_regex, str, 12, pmatch, 0) != 0) {
@@ -582,7 +586,7 @@ qif_parse_parse_txn(gpointer val, gpointer data)
 	split = NULL;
     } while (split);
 
-    qif_txn_post_parse_amounts(txn);
+    qif_txn_setup_splits(txn);
   }
 }
 

@@ -5,3 +5,5 @@
 *.lo
 Makefile
 Makefile.in
+test-link
+test-qif

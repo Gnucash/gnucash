@@ -14,26 +14,33 @@
 #include "qif-import-p.h"
 
 QifContext
-qif_context_new(QifContext parent)
+qif_context_new(void)
 {
   QifContext ctx = g_new0(struct _QifContext, 1);
-
-  if (parent)
-    ctx->parent = parent;
 
   ctx->object_lists = g_hash_table_new(g_str_hash, g_str_equal);
   ctx->object_maps = g_hash_table_new(g_str_hash, g_str_equal);
 
-  /* we should assume that we've got a bank account... just in case.. */
-  qif_parse_bangtype(ctx, "!type:bank");
-
-  /* Return the new context */
   return ctx;
 }
 
 void
 qif_context_destroy(QifContext ctx)
 {
+  GList *node, *temp;
+  QifContext fctx;
+
+  if (!ctx) return;
+
+  /* First, try to destroy all the children contexts */
+  for (node = ctx->files; node; node = temp) {
+    fctx = node->data;
+    temp = node->next;
+    qif_context_destroy(fctx);
+  }
+  
+  /* ok, at this point we're actually destroying this context. */
+
   /* force the end of record */
   if (ctx->handler && ctx->handler->end)
     ctx->handler->end(ctx);
@@ -42,6 +49,13 @@ qif_context_destroy(QifContext ctx)
   qif_object_list_destroy(ctx);
   qif_object_map_destroy(ctx);
 
+  /* Remove us from our parent context */
+  if (ctx->parent)
+    ctx->parent->files = g_list_remove(ctx->parent->files, ctx);
+
+  g_free(ctx->filename);
+
+  g_assert(ctx->files == NULL);
   g_free(ctx);
 }
 
@@ -50,6 +64,22 @@ qif_context_destroy(QifContext ctx)
 /*
  * Insert and remove a QifObject from the Object Maps in this Qif Context
  */
+
+gint
+qif_object_map_count(QifContext ctx, const char *type)
+{
+  GHashTable *ht;
+
+  g_return_val_if_fail(ctx, 0);
+  g_return_val_if_fail(ctx->object_maps, 0);
+  g_return_val_if_fail(type, 0);
+
+  ht = g_hash_table_lookup(ctx->object_maps, type);
+  if (!ht)
+    return 0;
+
+  return g_hash_table_size(ht);
+}
 
 void
 qif_object_map_foreach(QifContext ctx, const char *type, GHFunc func, gpointer arg)
@@ -171,8 +201,8 @@ void qif_object_map_destroy(QifContext ctx)
   g_return_if_fail(ctx);
   g_return_if_fail(ctx->object_maps);
 
-  g_hash_table_foreach_remove(ctx->object_lists, qif_object_map_remove_all, NULL);
-  g_hash_table_destroy(ctx->object_lists);
+  g_hash_table_foreach_remove(ctx->object_maps, qif_object_map_remove_all, NULL);
+  g_hash_table_destroy(ctx->object_maps);
 }
 
 /*****************************************************************************/
@@ -180,6 +210,19 @@ void qif_object_map_destroy(QifContext ctx)
 /*
  * Insert and remove a QifObject from the Object Lists in this Qif Context
  */
+
+gint
+qif_object_list_count(QifContext ctx, const char *type)
+{
+  GList *list;
+
+  g_return_val_if_fail(ctx, 0);
+  g_return_val_if_fail(ctx->object_lists, 0);
+  g_return_val_if_fail(type, 0);
+
+  list = g_hash_table_lookup(ctx->object_lists, type);
+  return g_list_length(list);
+}
 
 void
 qif_object_list_foreach(QifContext ctx, const char *type, GFunc func, gpointer arg)
