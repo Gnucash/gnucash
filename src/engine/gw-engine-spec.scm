@@ -97,8 +97,6 @@
 (gw:wrap-as-wct ws '<gnc:id-type> "QofIdType" "QofIdTypeConst")
 (gw:wrap-as-wct ws '<gnc:Account*> "Account*" "const Account*")
 (gw:wrap-as-wct ws '<gnc:Account**> "Account**" "const Account**")
-(gw:wrap-as-wct ws '<gnc:InvAcct*> "InvAcct*" "const InvAcct*")
-(gw:wrap-as-wct ws '<gnc:AccInfo*> "AccInfo*" "const AccInfo*")
 (gw:wrap-as-wct ws '<gnc:AccountGroup*> "AccountGroup*" "const AccountGroup*")
 (gw:wrap-as-wct ws '<gnc:Book*> "QofBook*" "const QofBook*")
 (gw:wrap-as-wct ws '<gnc:Lot*> "GNCLot*" "const GNCLot*")

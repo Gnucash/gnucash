@@ -24,6 +24,8 @@
 #ifndef _GNC_DIALOG_SEARCH_H
 #define _GNC_DIALOG_SEARCH_H
 
+#include <gtk/gtk.h>
+
 #include "GNCId.h"
 #include "QueryNew.h"
 
