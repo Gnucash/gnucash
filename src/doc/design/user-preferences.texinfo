@@ -1,5 +1,6 @@
 @node User Preferences, Function Index, Reports, Top
 @chapter User Preferences
+@cindex User Preferences
 
 The options system is used to obtain user preferences, both globally,
 and when displaying a report.  A wide variety of option types are
@@ -11,7 +12,8 @@ gnucash internals and GTK+/GNOME, it is not documented here.
 At present, users are most likely to come across the options system when
 designing custom reports, and are consequently mostly going to use the
 Scheme interface.  There is also a C interface to much of the options
-system which is used to access preferences for the UI, but it is not yet documented..
+system which is used to access preferences for the UI, but it is not yet
+documented..
 
 @menu
 * Option Databases::            
@@ -21,7 +23,8 @@ system which is used to access preferences for the UI, but it is not yet documen
 @end menu
 
 @node Option Databases, Option Types, User Preferences, User Preferences
-@section Options Databases
+@section Option Databases
+@cindex Option Databases
 
 The options for a particular report are placed in an @dfn{options
 database}.  For doing a report, the option-generator function must
@@ -102,6 +105,7 @@ preserved along with other preferences.
 
 @node Option Creation, Option Values, Option Types, User Preferences
 @section Option Creation
+@cindex Option Creation
 
 To add an option to an options database, you first create that option,
 then register it with the database.  For example, to create a simple
@@ -264,6 +268,7 @@ to which the option will be displayed (FIXME:and rounded to?).  Step-size specif
 
 @node Option Values,  , Option Creation, User Preferences
 @section Option Values
+@cindex Option Values
 
 To get the value of an option, you must first lookup the option in
 the options database.
