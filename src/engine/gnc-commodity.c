@@ -106,6 +106,7 @@ static gnc_quote_source currency_quote_source =
 
 static gnc_quote_source single_quote_sources[] = {
   { FALSE, 0, 0, "AEX", "AEX", "aex" },
+  { FALSE, 0, 0, "AMFI India", "AMFIINDIA", "amfiindia" },
   { FALSE, 0, 0, "ASX", "ASX", "asx" },
   { FALSE, 0, 0, "DWS", "DWS", "dwsfunds" },
   { FALSE, 0, 0, "Fidelity Direct", "FIDELITY_DIRECT", "fidelity_direct" },
@@ -131,6 +132,7 @@ static gnc_quote_source multiple_quote_sources[] = {
   { FALSE, 0, 0, "Canada Mutual (Fund Library, ...)", "CANADAMUTUAL", "canadamutual" },
   { FALSE, 0, 0, "Dutch (AEX, ...)", "DUTCH", "dutch" },
   { FALSE, 0, 0, "Europe (Yahoo, ...)", "EUROPE", "europe" },
+  { FALSE, 0, 0, "India Mutual (AMFI, ...)", "INDIAMUTUAL", "indiamutual" },
   { FALSE, 0, 0, "Fidelity (Fidelity, ...)", "FIDELITY", "fidelity" },
   { FALSE, 0, 0, "Nasdaq (Yahoo, ...)", "NASDAQ", "nasdaq" },
   { FALSE, 0, 0, "NYSE (Yahoo, ...)", "NYSE", "nyse" },

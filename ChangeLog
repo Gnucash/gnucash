@@ -1,3 +1,8 @@
+2004-05-07  David Hampton  <hampton@employees.org>
+
+	* src/engine/gnc-commodity.c: Added quote sources for Indian
+	Mutual Funds.
+
 2004-05-05  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/iso-currencies-to-c: don't automatically try to
