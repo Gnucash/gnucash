@@ -43,6 +43,12 @@ splash_timeout (gpointer not_used)
   return FALSE;
 }
 
+static void
+splash_destroy_cb (GtkObject *object, gpointer user_data)
+{
+  splash = NULL;
+}
+
 void
 gnc_show_splash_screen (void)
 {
@@ -51,8 +57,12 @@ gnc_show_splash_screen (void)
 
   if (splash) return;
 
-  splash = gtk_window_new (GTK_WINDOW_POPUP);
+  splash = gtk_window_new (GTK_WINDOW_DIALOG);
 
+  gtk_signal_connect (GTK_OBJECT (splash), "destroy",
+                      GTK_SIGNAL_FUNC (splash_destroy_cb), NULL);
+
+  gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
   gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
 
   pixmap = gnc_get_pixmap ("gnucash_splash.png");
