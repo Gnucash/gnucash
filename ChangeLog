@@ -1,5 +1,11 @@
 2004-12-04  Derek Atkins  <derek@ihtfp.com>
 
+	* src/backend/file/Makefile.am:
+	* src/backend/file/test/Makefile.am:
+	* src/business/business-core/file/Makefile.am:
+	  Need to include GNOME_XML_CFLAGS to make sure the libxml includes
+	  are found during the compile.  Fixes #121026.
+
 	* src/gnome/glade/register.glade:
 	  Increase "number" spin box to a maximum of 1billion.  Fixes #152772.
 
