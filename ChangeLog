@@ -1,3 +1,9 @@
+2004-01-01  Derek Atkins  <derek@ihtfp.com>
+
+	* src/engine/qofinstance.c: return a "valid" GUID even if passed a NULL
+	  object, because lots of code assumes you can get a guid all the time.
+	  So, just return guid_null() instead of NULL.  Fixes a SEGV.
+
 2003-12-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/engine/gnc-trace.c: Patch enabling compilation on Mac OS X

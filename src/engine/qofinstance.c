@@ -69,7 +69,7 @@ qof_instance_release (QofInstance *inst)
 const GUID *
 qof_instance_get_guid (QofInstance *inst)
 {
-   if (!inst) return NULL;
+   if (!inst) return guid_null(); /* some callers depend on a real return value */
    return &inst->entity.guid;
 }
 
