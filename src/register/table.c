@@ -337,6 +337,7 @@ void xaccMoveCursor (Table *table, int virt_row, int virt_col)
 
    table->current_cursor_row = virt_row;
    table->current_cursor_col = virt_col;
+   table->cursor->user_data = NULL;
 
    if ((0 > virt_row) || (0 > virt_col)) return;
    if (virt_row >= table->num_rows) return;
@@ -375,6 +376,7 @@ void xaccMoveCursorGUI (Table *table, int virt_row, int virt_col)
 
    table->current_cursor_row = virt_row;
    table->current_cursor_col = virt_col;
+   table->cursor->user_data = NULL;
 
    if ((0 > virt_row) || (0 > virt_col)) return;
    if (virt_row >= table->num_rows) return;

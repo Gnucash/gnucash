@@ -44,6 +44,7 @@ xaccSaveRegEntry (BasicRegister *reg)
 {
    Split *split;
    Transaction *trans;
+   Account * acc;
 
    /* get the handle to the current split and transaction */
    split = xaccGetCurrentSplit (reg);
@@ -60,6 +61,16 @@ xaccSaveRegEntry (BasicRegister *reg)
    xaccSplitSetMemo (split, reg->memoCell->value);
    xaccSplitSetAction (split, reg->actionCell->cell.value);
    xaccSplitSetReconcile (split, reg->recnCell->value[0]);
+
+   /* hack alert -- do transfers */
+
+   /* lets assume that the amount changed, and 
+    * refresh all related accounts & account windows */
+   xaccTransRecomputeBalance (trans);
+   acc = (Account *) split->acc;
+   accRefresh (acc);
+   acc = (Account *) trans->credit_split.acc;
+   accRefresh (acc);
 }
 
 /* ======================================================== */
@@ -173,6 +184,8 @@ void xaccLoadXferCell (ComboCell *cell,  AccountGroup *grp)
 {
    Account * acc;
    int n;
+
+   xaccAddComboCellMenuItem (cell, SPLIT_STR);
 
    if (!grp) return;
 

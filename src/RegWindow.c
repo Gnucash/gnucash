@@ -91,6 +91,7 @@ static RegWindow **fullList = NULL;    /* all registers */
 /** PROTOTYPES ******************************************************/
 RegWindow * regWindowLedger( Widget parent, Account *lead, Account **acclist, int type);
 void        accRefresh (Account *acc);
+void        regRefresh (RegWindow *regData);
 
 static void closeRegWindow( Widget mw, XtPointer cd, XtPointer cb );
 static void startRecnCB( Widget mw, XtPointer cd, XtPointer cb );
@@ -632,7 +633,7 @@ regWindowLedger( Widget parent, Account *lead_acc, Account **acclist, int ledger
   /******************************************************************/
   XtManageChild(pane);
   
-  accRefresh (regData->leader);
+  regRefresh (regData);
   
   XtPopup( regData->dialog, XtGrabNone );
   
@@ -679,6 +680,9 @@ void accRefresh (Account *acc)
       n++;
       regData = fullList[n];
    }
+
+   /* hack alert -- refesh adjbwindow too */
+   recnRefresh (acc);
 }
 
 /********************************************************************\
@@ -861,6 +865,8 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
       xaccRemoveSplit (acc, split);
       xaccFreeSplit (split);
 
+      accRefresh (acc);
+
       i++;
       split = trans->debit_splits[i];
     }
@@ -869,6 +875,7 @@ deleteCB( Widget mw, XtPointer cd, XtPointer cb )
     acc = (Account *) (trans->credit_split.acc);
     xaccRemoveSplit (acc, &(trans->credit_split));
     xaccFreeTransaction (trans);
+    accRefresh (acc);
 
   } else {
     Account *credit_acc, *debit_acc;
