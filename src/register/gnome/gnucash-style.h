@@ -39,12 +39,10 @@ void gnucash_sheet_style_set_col_width (GnucashSheet *sheet,
                                         SheetBlockStyle *style,
                                         int col, int width, int same_size);
 
-gint gnucash_style_default_width(GnucashSheet *sheet, SheetBlockStyle *style);
-
 gint gnucash_style_row_width(SheetBlockStyle *style, int row);
 
 void gnucash_sheet_style_set_dimensions (GnucashSheet *sheet,
-					 SheetBlockStyle *style);
+					 SheetBlockStyle *style, int width);
 
 void gnucash_sheet_style_destroy (GnucashSheet *sheet, SheetBlockStyle *style);
 

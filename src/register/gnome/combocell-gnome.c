@@ -23,6 +23,7 @@
  * HISTORY:
  * Copyright (c) 1998 Linas Vepstas <linas@linas.org>
  * Copyright (c) 1998-1999 Rob Browning <rlb@cs.utexas.edu>
+ * Copyright (c) 2000 Linas Vepstas <linas@linas.org>
  */
 
 /*

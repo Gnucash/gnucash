@@ -130,6 +130,8 @@ typedef struct
 typedef struct {
         GnomeCanvas canvas;
 
+        GtkWidget *window;
+
         Table *table;
         SplitRegister *split_register;
 
@@ -165,6 +167,9 @@ typedef struct {
 
         gint width;  /* the width in pixels of the sheet */
         gint height;
+
+        gint window_height;
+        gint window_width;
 
         gint alignment;
 
@@ -229,6 +234,7 @@ const char * gnucash_sheet_modify_current_cell(GnucashSheet *sheet,
 
 void gnucash_sheet_block_set_from_table (GnucashSheet *sheet, gint virt_row,
                                          gint virt_col);
+void gnucash_sheet_set_scroll_region (GnucashSheet *sheet);
 
 void gnucash_sheet_cursor_set_from_table (GnucashSheet *sheet,
                                           gncBoolean do_scroll);
@@ -263,6 +269,7 @@ void gnucash_register_set_initial_rows(guint num_rows);
 void gnucash_register_cut_clipboard (GnucashRegister *reg);
 void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
+
 
 
 typedef struct {

@@ -31,6 +31,7 @@
 
 #define DEFAULT_FONT "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*"
 #define ITALIC_FONT "-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*"
+#define DEFAULT_STYLE_WIDTH 680
 
 GdkFont *gnucash_default_font = NULL;
 GdkFont *gnucash_italic_font = NULL;
@@ -448,7 +449,7 @@ static CellDimensions *
 style_dimensions_new (SheetBlockStyle *style)
 {
         CellDimensions *dimensions;
-        int i;
+        int i, j;
 
         dimensions = g_new0 (CellDimensions, 1);
         dimensions->nrows = style->nrows;
@@ -462,9 +463,15 @@ style_dimensions_new (SheetBlockStyle *style)
         for (i=0; i < style->nrows; i++) {
                 dimensions->pixel_heights[i] = g_new0 (gint, style->ncols);
                 dimensions->pixel_widths[i] = g_new0 (gint, style->ncols);
+
+                for (j = 0; j < style->ncols; j++)
+                        dimensions->pixel_widths[i][j] = -1;
+                
                 dimensions->origin_x[i] = g_new0 (gint, style->ncols);
                 dimensions->origin_y[i] = g_new0 (gint, style->ncols);        
         }
+
+        
 
         return dimensions;
 }
@@ -539,10 +546,12 @@ set_dimensions_pass_one (GnucashSheet *sheet, CellLayoutInfo *layout_info,
         g_return_if_fail (font != NULL);
         
         for (j = 0; j < layout_info->ncols; j++) {
-                dimensions->pixel_widths[i][j] = layout_info->cell_perc[i][j] * dimensions->width + 0.5;
-                        dimensions->pixel_heights[i][j] =
-                                font->ascent + font->descent +
-                                2*CELL_VPADDING;
+
+                if (dimensions->pixel_widths[i][j] < 0)
+                        dimensions->pixel_widths[i][j] = layout_info->cell_perc[i][j] * dimensions->width + 0.5;
+                dimensions->pixel_heights[i][j] =
+                        font->ascent + font->descent +
+                        2*CELL_VPADDING;
                 }
                 dimensions->height += dimensions->pixel_heights[i][0];
 }
@@ -794,43 +803,6 @@ set_dimensions_pass_four(GnucashSheet *sheet, CellLayoutInfo *layout_info,
         }
 }
 
-gint
-gnucash_style_default_width(GnucashSheet *sheet, SheetBlockStyle *style)
-{
-        CellLayoutInfo *layout_info;
-        CellDimensions *dimensions;
-        gint width;
-        gint i;
-
-        layout_info = style->layout_info;
-        dimensions = style->dimensions;
-
-        dimensions->height = 0;
-        width = dimensions->width = 0;
-
-        /* Well, this is kind of wierd, isn't it. We do this five times
-         * because pass one and pass two interact in a strange way. Pass
-         * one sets widths based on percentages, and then pass two fixes
-         * them up based on layout info. If we only do this once, then
-         * when we get the allocation and we recompute them below, the
-         * pass one iteration messes up the pass two fixes. Then, when
-         * pass two is run again, the size gets bumped up to compensate.
-         * Running these 5 times is a hack to make the window come up
-         * in full horizontal view. */
-        for (i = 0; i < 5; i++)
-        {
-                set_dimensions_pass_one(sheet, layout_info, dimensions, 0);
-                set_dimensions_pass_two(sheet, layout_info, dimensions, 0);
-
-                width = compute_row_width(dimensions, 0, 0,
-                                          layout_info->ncols - 1);
-
-                dimensions->width = width;
-        }
-
-        return width;
-}
-
 
 gint
 gnucash_style_row_width(SheetBlockStyle *style, int row)
@@ -871,13 +843,13 @@ compute_cell_origins_y (CellDimensions *dimensions)
 }
 
 static void
-style_recompute_layout_dimensions (GnucashSheet *sheet, CellLayoutInfo *layout_info, CellDimensions *dimensions)
+style_recompute_layout_dimensions (GnucashSheet *sheet, CellLayoutInfo *layout_info, CellDimensions *dimensions, int width)
 {
         int i;
         int ideal_width;
 
         dimensions->height = 0;
-        dimensions->width = GTK_WIDGET (sheet)->allocation.width;
+        dimensions->width = width;
         ideal_width = dimensions->width;
 
         /* First set the top rows */
@@ -900,7 +872,7 @@ style_recompute_layout_dimensions (GnucashSheet *sheet, CellLayoutInfo *layout_i
 }
 
 
-
+#if 0
 static void
 sheet_recompute_style_dimensions_internal (gpointer _key, gpointer _layout_info, gpointer _data)
 {
@@ -922,18 +894,18 @@ gnucash_sheet_recompute_style_dimensions (GnucashSheet *sheet)
         g_hash_table_foreach (sheet->layout_info_hash_table,
                               sheet_recompute_style_dimensions_internal, sheet);
 }
-
+#endif
 
 void
 gnucash_sheet_style_set_dimensions (GnucashSheet *sheet,
-				    SheetBlockStyle *style)
+				    SheetBlockStyle *style, int width)
 {
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
         g_return_if_fail (style != NULL);
 
         style_recompute_layout_dimensions (sheet, style->layout_info,
-                                           style->dimensions);
+                                           style->dimensions, width);
 }
 
 gint
@@ -965,11 +937,13 @@ gnucash_sheet_style_set_col_width (GnucashSheet *sheet, SheetBlockStyle *style,
         if (width >= 0) {
 
                 style->layout_info->pixels_width[0][col] = width;
-                /* Note that we may want to preserve the FILL flag on
-                 * this, but for now let's leave it off.
-                 * style->layout_info->flags[0][col] = PIXELS_FIXED |
-                 *     (style->layout_info->flags[0][col] & FILL); */
-                style->layout_info->flags[0][col] = PIXELS_FIXED;
+
+                style->layout_info->flags[0][col] = PIXELS_FIXED |
+                        (style->layout_info->flags[0][col] & FILL);
+
+                /* adjust the overall width of this style */
+                style->dimensions->width -=  style->dimensions->pixel_widths[0][col] - width;
+
                 style->dimensions->pixel_widths[0][col] = width;
 
                 for (i = 0; i < style->nrows; i++) {
@@ -977,8 +951,11 @@ gnucash_sheet_style_set_col_width (GnucashSheet *sheet, SheetBlockStyle *style,
                                 if ((style->layout_info->flags[i][j] & SAME_SIZE)
                                     && (style->layout_info->size_r[i][j] == 0)
                                     && (style->layout_info->size_c[i][j] == col)) {
-                                        if (same_size)
+                                        if (same_size) {
+                                                /* adjust the overall width of this style */
+                                                style->dimensions->width -=  style->dimensions->pixel_widths[0][col] - width;                                                
                                                 style->dimensions->pixel_widths[i][j] = width;
+                                        }
                                         else
                                         {
                                                 style->layout_info->flags[i][j] = PIXELS_FIXED;
@@ -1196,7 +1173,7 @@ gnucash_sheet_style_compile (GnucashSheet *sheet, CellBlock *cellblock,
 
         gnucash_style_layout_init (sheet, style);
         gnucash_style_dimensions_init (sheet, style);
-        gnucash_sheet_style_set_dimensions (sheet, style);
+        gnucash_sheet_style_set_dimensions (sheet, style, DEFAULT_STYLE_WIDTH);
         return style;
 }
 

@@ -73,7 +73,7 @@
  * re-'printed'.
  *
  * HISTORY:
- * Copyright (c) 1998,1999 Linas Vepstas
+ * Copyright (c) 1998,1999,2000 Linas Vepstas
  */
 
 /********************************************************************\

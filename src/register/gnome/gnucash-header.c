@@ -218,9 +218,18 @@ gnucash_header_destroy (GtkObject *object)
 void
 gnucash_header_reconfigure (GnucashHeader *header)
 {
-        GnomeCanvas *canvas = GNOME_CANVAS_ITEM(header)->canvas;
-        GtkWidget *widget = GTK_WIDGET (header->sheet);
         int w, h;
+
+        GnomeCanvas *canvas;
+        GtkWidget *widget;
+        GnucashSheet *sheet;
+
+        g_return_if_fail (header != NULL);
+        g_return_if_fail (GNUCASH_IS_HEADER (header));
+        
+        canvas = GNOME_CANVAS_ITEM(header)->canvas;
+        widget = GTK_WIDGET (header->sheet);
+        sheet = GNUCASH_SHEET(header->sheet);
 
         header->style = header->sheet->cursor_style[header->type];
 
@@ -231,6 +240,8 @@ gnucash_header_reconfigure (GnucashHeader *header)
            arg setting. */
         if (header->row < 0 || header->row >= header->style->nrows)
                 return;
+
+        sheet->width = header->style->dimensions->width;
 
         w = MAX (widget->allocation.width, header->style->dimensions->width);
         h = header->style->dimensions->height;
@@ -321,7 +332,7 @@ gnucash_header_auto_resize_column (GnucashHeader *header, gint col)
         gnucash_sheet_style_set_col_width (sheet, header->style,
                                            col, width, FALSE);
 
-        gnucash_sheet_style_set_dimensions (sheet, header->style);
+        gtk_window_set_default_size(GTK_WINDOW(sheet->window), 0, 0); 
 
         gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
         item_edit_configure (ITEM_EDIT(sheet->item_editor));
@@ -420,7 +431,8 @@ gnucash_header_event (GnomeCanvasItem *item, GdkEvent *event)
 
                                 gnucash_sheet_style_set_col_width (sheet, header->style,
                                                                    header->resize_col, header->resize_col_width, FALSE);
-                                gnucash_sheet_style_set_dimensions (sheet, header->style);
+
+                                gtk_window_set_default_size(GTK_WINDOW(sheet->window), 0, 0);
 
                                 gnucash_cursor_configure (GNUCASH_CURSOR(sheet->cursor));
                                 item_edit_configure (ITEM_EDIT(sheet->item_editor));

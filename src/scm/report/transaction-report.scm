@@ -241,43 +241,53 @@
 (define (gnc:split-get-description-from-parent split)
   (gnc:transaction-get-description (gnc:split-get-parent split)))
 
+;; get a full account name
+(define (gnc:account-get-full-name account)
+  (cond ((pointer-token-null? account) "")
+	(else 
+	 (let ((parent-name
+		(gnc:account-get-full-name 
+		 (gnc:group-get-parent
+		  (gnc:account-get-parent account)))))	   
+	   (if (string=? parent-name "")
+	       (gnc:account-get-name account)
+	       (string-append
+		parent-name
+		":"
+		(gnc:account-get-name account)))))))
+		
+
 ;; get the account name of a split
 (define (gnc:split-get-account-name split)  
-  (gnc:account-get-name (gnc:split-get-account split)))
+  (gnc:account-get-full-name (gnc:split-get-account split)))
 
 ;; builds a list of the account name and values for the other
 ;; splits in a transaction
 
-(define (gnc:split-get-corresponding-account-name-and-values split) 
-  (let* ((my-sign (positive? (gnc:split-get-value split)))
-         (diff-list '())
+(define (gnc:split-get-corresponding-account-name-and-values 
+	 split split-filter) 
+  (let* ((diff-list '())
          (parent-transaction (gnc:split-get-parent split))
          (num-splits (gnc:transaction-get-split-count parent-transaction)))
-    (cond 
-     ((= num-splits 1) '())
-     (else
-	  
-	  
-      (gnc:for-loop 
-       (lambda (n) 
-	 (let ((split-in-trans 
-		(gnc:transaction-get-split parent-transaction n)))
-	   (if (not (eq? my-sign 
-			 (positive? (gnc:split-get-value split-in-trans))))
-	       (set! diff-list
-		     (cons
-		      (list
-		       (gnc:split-get-account-name split-in-trans)
-		       (gnc:split-get-value split-in-trans))
-		      diff-list)))))
-       0 num-splits 1)
-      (reverse diff-list)))))
+    (gnc:for-loop 
+     (lambda (n) 
+       (let* ((split-in-trans 
+	       (gnc:transaction-get-split parent-transaction n))
+	      (sub-split
+	       (list 
+		 (gnc:split-get-account-name split-in-trans)
+		 (gnc:split-get-value split-in-trans))))
+	 (if (split-filter sub-split)
+	     (set! diff-list
+		   (cons sub-split diff-list)))))
+     0 num-splits 1)
+    (reverse diff-list)))
 
 
 ;; takes a C split, extracts relevant data and converts to a scheme 
-;; representation
+;; representation.  split-filter is a predicate that filters the splits.
 
-(define (gnc:make-split-scheme-data split)
+(define (gnc:make-split-scheme-data split split-filter)
   (vector (gnc:split-get-memo split) 
 	  (gnc:split-get-action split)
 	  (gnc:split-get-description-from-parent split)
@@ -288,7 +298,8 @@
 	  (gnc:split-get-share-price split)
 	  (gnc:split-get-value split)
 	  (gnc:transaction-get-num (gnc:split-get-parent split))
-	  (gnc:split-get-corresponding-account-name-and-values split)))
+	  (gnc:split-get-corresponding-account-name-and-values split
+							       split-filter)))
 
 ;; timepair manipulation functions
 ;; hack alert  - these should probably be put somewhere else
@@ -307,7 +318,9 @@
     (set-tm:min bdt 0)
     (set-tm:hour bdt 12)
     (let ((newtime (car (mktime bdt))))
-      (cons newtime (* 1000 newtime)))))
+      ; alert - blarsen@ada-works.com fixed this.  you may want to
+      ; revert if I'm wrong.
+      (cons newtime 0))))
 
 (define (gnc:timepair-earlier-or-eq-date t1 t2)
   (let ((time1 (car (gnc:timepair-canonical-day-time t1)))
@@ -416,6 +429,24 @@
       (and (gnc:timepair-later-or-eq-date split-date early-date)
            (gnc:timepair-earlier-or-eq-date split-date late-date)))))
 
+;; applies 
+
+;; makes a predicate that returns true only if a sub-split account
+;; does not match one of the accounts
+(define (gnc:tr-report-make-sub-split-filter-predicate accounts)
+  (lambda (sub-split)
+    (let ((result #t))
+      (for-each
+       (lambda (account)
+	 (set! 
+	  result
+	  (not 
+	   (string=? 
+	    (gnc:account-get-full-name account) 
+	    (car sub-split)))))
+       accounts)
+      result)))
+
 ;; converts a scheme split representation to a line of HTML,
 ;; updates the values of total-inflow and total-outflow based
 ;; on the split value
@@ -423,46 +454,54 @@
 
 (define (gnc:tr-report-split-to-html split-scm 
                                      starting-balance)
-  (let ((other-splits (gnc:tr-report-get-other-splits split-scm)))
-    (string-append 
-     "<TR><TD>" 
-     (gnc:timepair-to-datestring
-      (gnc:tr-report-get-date split-scm))
-     "</TD><TD>"
-     (gnc:tr-report-get-num split-scm)
-     "</TD><TD>"
-     (gnc:tr-report-get-description split-scm)
-     "</TD><TD>"
-     (gnc:tr-report-get-memo split-scm)
-     "</TD><TD>"
-   (cond ((null? other-splits) "")
-	 ((= (length other-splits) 1) 
-	  (cond ((eqv? (caar other-splits) #f)
-		 "-")
-		(else (caar other-splits))))
-         (else "Multi-split (not implemented yet)"))
-     "</TD><TD>"
+  (let ((other-splits (gnc:tr-report-get-other-splits split-scm))
+	(report-string ""))
     (cond ((> (gnc:tr-report-get-value split-scm) 0)
-           (begin
 	   (gnc:set-total-inflow! (+ gnc:total-inflow
-                                  (gnc:tr-report-get-value split-scm)))
-	    (string-append 
-	     (sprintf #f "%.2f" (gnc:tr-report-get-value split-scm))
-	     "</TD><TD>")))
-    
-           (else 
-	    (begin
-            (gnc:set-total-outflow! (+ gnc:total-outflow
-                                   (- (gnc:tr-report-get-value split-scm))))
-            (string-append 
-	     "</TD><TD>"
-             (sprintf #f "%.2f" 
-                      (- (gnc:tr-report-get-value split-scm)))))))
-	   "</TD><TD>"
-
-    (sprintf #f "%.2f" (- (+ starting-balance gnc:total-inflow) 
-			  gnc:total-outflow))
-
+				     (gnc:tr-report-get-value split-scm))))
+	  (else 
+	   (gnc:set-total-outflow! (+ gnc:total-outflow
+				      (- (gnc:tr-report-get-value split-scm))))))
+    (for-each
+     (lambda (split-sub first last)
+       (set! report-string
+	     (string-append 
+	      report-string
+	      "<TR><TD>"
+	      (cond (first (gnc:timepair-to-datestring
+			    (gnc:tr-report-get-date split-scm)))
+		    (else ""))
+	      "</TD><TD>"
+	      (cond (first (gnc:tr-report-get-num split-scm))
+		    (else ""))
+	      "</TD><TD>"
+	      (cond (first (gnc:tr-report-get-description split-scm))
+		    (else ""))
+	      "</TD><TD>"
+	      (cond (first (gnc:tr-report-get-memo split-scm))
+		    (else ""))
+	      "</TD><TD>"
+	      (car split-sub)
+	      "</TD><TD>"
+	      (cond ((< (cadr split-sub) 0)
+		     (string-append
+		      (sprintf #f "%.2f" (- (cadr split-sub)))
+		      "</TD><TD>"))
+		    (else
+		     (string-append
+		      "</TD><TD>"	
+		      (sprintf #f "%.2f" (cadr split-sub)))))		
+	      "</TD>"
+	      (cond ((not last) "</TR>")
+		    (else "")))))
+     other-splits
+     (append (list #t) (make-list (- (length other-splits) 1) #f))
+     (append (make-list (- (length other-splits) 1) #f) (list #t)))
+    (string-append
+     report-string
+     "<TD>"
+     (sprintf #f "%.2f" (- (+ starting-balance gnc:total-inflow)
+			   gnc:total-outflow))
      "</TD></TR>")))
 
 ;; gets the balance for a list of splits before beginning-date
@@ -510,7 +549,8 @@
                                                          "Secondary Key"))
           (tr-report-secondary-order-op
            (gnc:lookup-option options "Sorting" "Secondary Sort Order"))
-          (prefix  (list "<HTML>" "<BODY bgcolor=#99ccff>" "<TABLE>"
+          (prefix  (list "<HTML>" "<BODY bgcolor=#99ccff>" 
+			 "<TABLE>"
 	                 "<TH>Date</TH>"
                          "<TH>Num</TH>"
                          "<TH>Description</TH>"
@@ -524,27 +564,29 @@
 	  (inflow-outflow-line '())
 	  (net-inflow-line '())
 	  (report-lines '())
+          (accounts (gnc:option-value tr-report-account-op))
 	  (date-filter-pred (gnc:tr-report-make-filter-predicate
 			     (gnc:option-value begindate) 
 			     (gnc:option-value enddate)))
-	  (starting-balance 0)
-          (accounts (gnc:option-value tr-report-account-op)))
+	  (sub-split-filter-pred (gnc:tr-report-make-sub-split-filter-predicate
+				  accounts))
+	  (starting-balance 0))
      gnc:tr-report-initialize-inflow-and-outflow!
      (if (null? accounts)
          (set! report-lines
                (list "<TR><TD>There are no accounts to report on.</TD></TR>"))
 	 (begin
-	   
+	   ; reporting on more than one account not yet supported
            (gnc:for-each-split-in-account
             (car accounts)
             (lambda (split)		
               (set! report-lines 
                     (append! report-lines 
-                             (list (gnc:make-split-scheme-data split))))))
+                             (list (gnc:make-split-scheme-data 
+				    split sub-split-filter-pred))))))
            (set! starting-balance
                  (gnc:tr-report-get-starting-balance
-                  report-lines (gnc:option-value begindate)))
-	   
+                  report-lines (gnc:option-value begindate)))	
            (set! report-lines (gnc:filter-list report-lines date-filter-pred))
 	   (set! report-lines
                  (sort!
@@ -558,7 +600,7 @@
 	     (set! report-lines (gnc:inorder-map report-lines html-mapper)))
 	   (set!
 	    balance-line 
-	    (list "<TR><TD><STRONG>Balance at: "
+	    (list "<TR><TD><STRONG>"
 		  (gnc:timepair-to-datestring (gnc:option-value begindate))
 		  "</STRONG></TD>"
 		  "<TD></TD>" 
@@ -598,3 +640,14 @@
 		  "</TD></STRONG></TR>"))))
      (append prefix balance-line report-lines
              inflow-outflow-line net-inflow-line suffix))))
+
+
+
+
+
+
+
+
+
+
+

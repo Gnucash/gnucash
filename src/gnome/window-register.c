@@ -3,6 +3,7 @@
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997, 1998 Linas Vepstas                           *
  * Copyright (C) 1998 Rob Browning <rlb@cs.utexas.edu>              *
+ * Copyright (C) 1999-2000 Dave Peticolas <peticola@cs.ucdavis.edu> *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -1465,6 +1466,7 @@ regWindowLedger(xaccLedgerDisplay *ledger)
     gtk_container_add(GTK_CONTAINER(table_frame), register_widget);
 
     regData->reg = GNUCASH_REGISTER(register_widget);
+    GNUCASH_SHEET(regData->reg->sheet)->window = register_window;
 
     gtk_signal_connect(GTK_OBJECT(register_widget), "activate_cursor",
                        GTK_SIGNAL_FUNC(gnc_register_record_cb), regData);

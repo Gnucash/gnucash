@@ -1,3 +1,19 @@
+2000-03-06  Dave Peticolas  <peticola@cs.ucdavis.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_update_adjustments): set the step increment.
+
+2000-03-06  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-style.c
+ 	(gnucash_sheet_style_set_col_width): Adjust the overall style
+ 	width, too.
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_auto_resize_column): Resize the window to fit the
+ 	register.
+	(gnucash_header_event): ditto on a column resize.
+
 2000-03-05  Rob Browning  <rlb@cs.utexas.edu>
 
 	* src/scm/report/transaction-report.scm: add support for depend
@@ -49,6 +65,61 @@
  	current locale. The default "C" locale is always searched last.
 
 	* src/reports/File.c (gncFindFile): take out dead code.
+
+2000-03-04  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-style.c (set_dimensions_pass_one):
+ 	Only set the dimensions based on percentages if the dimensions
+ 	have not been set before.  This gets rid of some strange behavior
+ 	where styles change width by a few pixels when window size was
+ 	changed.
+	(gnucash_sheet_style_set_dimensions): Add a width argument; now we
+ 	compute dimensions to fit "width" as best as possible.  Most of
+ 	the time width should be the allocation width of the sheet, except
+ 	that when the style is first compiled, the allocation width may be
+ 	unavailable.
+	(style_recompute_layout_dimensions): Set dimensions->width
+ 	properly.
+	(gnucash_style_default_width): Nuke this function, since we can
+ 	now use dimensions->width.
+	(gnucash_sheet_style_compile): Use a default width to set
+ 	dimensions.
+
+	* src/register/gnome/gnucash-sheet.c (gnucash_sheet_set_top_row):
+ 	Update the canvas before the scroll.  This helps eliminate some of
+ 	the flashing when the register scrolls.  Still not perfect,
+ 	though.
+
+2000-03-03  Heath Martin  <martinh@pegasus.cc.ucf.edu>
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_size_allocate): Keep track of the allocation and
+ 	update everything only if the allocation changes.  This is needed
+ 	because gnome canvas widget items always do a gtk_widget_set_usize
+ 	(), which in turn forces a reconfigure of the parent widgets.  So
+ 	we were getting size_allocate events even when the size of the
+ 	window was not changing.
+	(gnucash_sheet_set_top_row): Scroll the sheet by setting the
+ 	adjustment values rather than calling gnome_canvas_scroll_to ().
+
+	* src/register/gnome/gnucash-header.c
+ 	(gnucash_header_reconfigure): Set the sheet width from the header.
+
+	* src/register/gnome/gnucash-sheet.c
+ 	(gnucash_sheet_block_set_from_table): Check to see if the style
+ 	has changed before we reallocate all the entries and colors.
+	(gnucash_sheet_block_set_entries): Don't strdup the entries from
+ 	the table.
+	(gnucash_sheet_block_clear_entries): Don't free the text in the
+ 	entries, since now the table owns this.
+	(gnucash_sheet_set_scroll_region): New function; sets the scroll
+ 	region on the register canvas.
+	(gnucash_sheet_update_adjustments): This was being done
+ 	incorrectly.  The layout widget on which the gnome canvas is based
+ 	takes care of the adjustments, and we've just connected to these
+ 	adjustments in the smooth-scroll case.  Now that the scroll region
+ 	is set correctly, just let the layout manage the adjustments.
+	
 
 2000-03-03  Dave Peticolas  <peticola@cs.ucdavis.edu>
 

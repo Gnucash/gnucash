@@ -10,6 +10,7 @@
  * Copyright (c) 1998 Linas Vepstas
  * Copyright (c) 1998 Rob Browning <rlb@cs.utexas.edu>
  * Copyright (c) 1999 Heath Martin <martinh@pegasus.cc.ucf.edu>
+ * Copyright (c) 2000 Heath Martin <martinh@pegasus.cc.ucf.edu>
  */
 
 /********************************************************************\

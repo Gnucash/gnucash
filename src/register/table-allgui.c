@@ -6,7 +6,7 @@
  * Implements the gui-independent parts of the table infrastructure.
  *
  * HISTORY:
- * Copyright (c) 1998,1999 Linas Vepstas
+ * Copyright (c) 1998,1999,2000 Linas Vepstas
  */
 
 /********************************************************************\
@@ -779,8 +779,10 @@ xaccGetUserData (Table *table, int phys_row, int phys_col)
  * now is the time to initialize its GUI.  */
 
 void        
-xaccCreateCursor (Table * table, CellBlock *curs) { 
+xaccCreateCursor (Table * table, CellBlock *curs)
+{
   int i,j;
+
   if (!curs || !table) return;  
   if (!table->table_widget) return;
   

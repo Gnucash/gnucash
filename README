@@ -532,7 +532,7 @@ Andrew Arensburger <arensb@cfar.umd.edu> for FreeBSD & other patches
 Matt Armstrong <matt_armstrong@bigfoot.com> for misc fixes
 Fred Baube <fred@moremagic.com> for attempted Java port/MoneyDance
 Per Bojsen <bojsen@worldnet.att.net> several core dump fixes
-Christopher B. Browne <cbbrowne@hex.net> for perl, scheme scripts
+Christopher B. Browne <cbbrowne@hex.net> for perl and lots of scheme
 Graham Chapman <grahamc@zeta.org.au> for the xacc-rpts addon package
 George Chen <georgec@sco.com> for MS-Money QIF's & fixes
 Albert Chin-A-Young <china@thewrittenword.com> configure.in patch
@@ -552,11 +552,12 @@ Prakash Kailasa <PrakashK@bigfoot.com> for gnome build fixes
 Ben Kelly <ben.kelly@ieee.org> for motif menu bug fix, core dump fixes
 Tom Kludy <tkludy@csd.sgi.com> for SGI Irix port
 Sven Kuenzler <sk@xgm.de> for SuSE README file
+Bryan Larsen <blarsen@ada-works.com> guile budget report
 Graham Leggett <minfrin@sharp.fm> for fixing a hang
 Ted Lemon <mellon@andare.fugue.com> for NetBSD port
 Yannick Le Ny <y-le-ny@ifrance.com> pour la traduction en francais 
 Grant Likely <glikely@nortelnetworks.com> gnome and engine patches
-Heath Martin <martinh@pegasus.cc.ucf.edu> gnome and register patches
+Heath Martin <martinh@pegasus.cc.ucf.edu> gnome patches, major register work
 Matt Martin <mgmartin@abacusnet.net> guile error handling code
 Robert Graham Merkel <rgmerk@mira.net> reporting, gnome, and config patches.
 Tim Mooney <mooney@dogbert.cc.ndsu.NoDak.edu> port to alpha-dec-osf4.0f
