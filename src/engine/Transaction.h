@@ -142,18 +142,22 @@ GNCBook *     xaccTransGetBook (Transaction *trans);
 kvp_frame *xaccTransGetSlots(Transaction *trans);
 void xaccTransSetSlots_nc(Transaction *t, kvp_frame *frm);
 
-/* The xaccTransSetDateSecs() method will modify the posted date 
- *    of the transaction.  (Footnote: this shouldn't matter to a user,
- *    but anyone modifying the engine should understand that when
- *    xaccTransCommitEdit() is called, the date order of each of the 
- *    component splits will be checked, and will be restored in 
- *    ascending date order.)
+/* The xaccTransSetDateSecs() method will modify the posted date of
+ *     the transaction, specified by a time_t (see ctime(3)).
+ *     xaccTransSetDatePostedSecs() is just an alias for
+ *     xaccTransSetDateSecs() -- both functions access the same date.
  *
- * The xaccTransSetDate() method does the same thing as 
- *    xaccTransSetDateSecs(), but takes a convenient day-month-year format.
+ * (Footnote: this shouldn't matter to a user, but anyone modifying
+ * the engine should understand that when xaccTransCommitEdit() is
+ * called, the date order of each of the component splits will be
+ * checked, and will be restored in ascending date order.)
  *
- * The xaccTransSetDatePostedTS() method does the same thing as 
- *    xaccTransSetDateSecs(), but takes a struct timespec64.
+ * The xaccTransSetDate() method does the same thing as
+ * xaccTransSetDate[Posted]Secs(), but takes a convenient
+ * day-month-year format.
+ *
+ * The xaccTransSetDatePostedTS() method does the same thing as
+ * xaccTransSetDate[Posted]Secs(), but takes a struct timespec64.
  *
  */
 void          xaccTransSetDate (Transaction *trans,
@@ -163,6 +167,7 @@ void          xaccTransSetDatePostedSecs (Transaction *trans, time_t time);
 void          xaccTransSetDatePostedTS (Transaction *trans,
                                         const Timespec *ts);
 
+/* Modify the date of when the transaction was entered. */
 void          xaccTransSetDateEnteredSecs (Transaction *trans, time_t time);
 void          xaccTransSetDateEnteredTS (Transaction *trans,
                                          const Timespec *ts);
@@ -218,14 +223,17 @@ SplitList *   xaccTransGetSplitList (Transaction *trans);
 const char *  xaccTransGetNum (Transaction *trans);
 const char *  xaccTransGetDescription (Transaction *trans);
 const char *  xaccTransGetNotes (Transaction *trans);
+
+/* Retrieve the posted date of the transaction. (Although having
+   different function names, GetDate and GetDatePosted refer to the
+   same single date.)*/
 time_t        xaccTransGetDate (Transaction *trans);
-
 void          xaccTransGetDatePostedTS (Transaction *trans, Timespec *ts);
-
-void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
-
-Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
 Timespec      xaccTransRetDatePostedTS (Transaction *trans);
+
+/* Retrieve the date of when the transaction was entered. */
+void          xaccTransGetDateEnteredTS (Transaction *trans, Timespec *ts);
+Timespec      xaccTransRetDateEnteredTS (Transaction *trans);
 
 /* Dates and txn-type for A/R and A/P "invoice" postings */
 Timespec      xaccTransRetDateDueTS (Transaction *trans);
