@@ -12,13 +12,16 @@ reports, account operations, window operations, and getting help.
 It is dynamic, changing to provide the functions required depending 
 on whether you are displaying a <link linkend="xacc-reports">report</link>, 
 or an <link linkend="xacc-mainwin">account tree</link>.</para>
-<para>
 
 <para>The menus that are always present include:</para>
-	<itemizedlist><listitem><para><emphasis>File</emphasis>: Items in
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>File</emphasis>: Items in
 	    this menu to create, import, load, and save accounts.  See
 	    <link linkend="xacc-file-operations">File Operations</link>.
-	</para></listitem>
+	</para>
+        </listitem>
 	<listitem>
 	  <para>
 	    <emphasis><link linkend="xacc-reports">Reports</link></emphasis>
@@ -41,17 +44,19 @@ or an <link linkend="xacc-mainwin">account tree</link>.</para>
 		  Transactions.</link>
 		</para>
 	    </listitem>
-	  </itemizedlist>
-	  <listitem>
-	    <para>
-	    <emphasis>Settings</emphasis>: Customize 
+            <listitem>
+              <para><emphasis>Settings</emphasis>: Customize 
 	    <link linkend="xacc-style-sheets">Style Sheets</link> and 
 	    <link linkend="xacc-preferences">Preferences</link>.
 	    </para></listitem>
-	  <listitem><para>
+            <listitem><para>
 	    <emphasis>Help</emphasis>
-	    </para></listitem>
+	    </para>
+            </listitem>
 	  </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
 </sect1>
   <sect1 id="xacc-toplevel-toolbar">
     <title>

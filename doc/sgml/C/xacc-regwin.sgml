@@ -159,13 +159,15 @@
 	</para>
 	<para>
 	  General ledgers show the ledger entries in all the accounts
-	  a transaction appears in, which you can edit directly.  Note that
-	  the general ledger window is more complicated and harder to use
-    than the individual account registers. The general ledger
-    window allows a more comprehensive overview of accounts in a
-    smaller and quicker-to-navigate (for experienced users who know exactly what 
-they are doing) space. Because of its increased complexity, it use is
-    recommended only for accounting experts.
+	  a transaction appears in, which you can edit directly.  Note
+	  that the general ledger window is more complicated and
+	  harder to use than the individual account registers. The
+	  general ledger window allows a more comprehensive overview
+	  of accounts in a smaller and quicker-to-navigate (for
+	  experienced users who know exactly what they are doing)
+	  space. Because of its increased complexity, it use is
+	  recommended only for accounting experts.
+</para>
     </sect2>
  </sect1>
 </article>

@@ -22,7 +22,7 @@
 	To use the financial calculator, find it on the "tools" menu.
 	</para>
 
-      <para><emphasis>PICTURE NEEDED</emphasis>
+      <para><emphasis>PICTURE NEEDED</emphasis></para>
 
       <para>To do a calculation, simply enter the figures that you <emphasis>do</emphasis>
 	have into the text boxes on the left, and select the appropriate compounding and
@@ -39,6 +39,7 @@
 	button is selected), and then press "calculate" for the "payment periods" box.  
 	You should find that "26" appears in the "Payment Period" box.  Therefore, you'll need
 	to make 26 monthly payments to pay back the loan.
+       </para>
     </sect1>
     <sect1 id="xacc-compound-interest">
       <title>
@@ -55,7 +56,8 @@
 	  this loan?", "Which of these two term deposits generate better
 	  returns?", and "What loan payments do I need to make to pay
 	  off this loan in, say, five years?"  GnuCash's financial
-	  calculator gives you that information, and more.  
+	  calculator gives you that information, and more.
+      </para>
       </sect2>
       <sect2>
 	<title>
