@@ -1,6 +1,34 @@
 Version history:
 ------- -------
 
+ 1.8.0  - 02 February 2003
+ 	 o Release of new stable version 1.8.0
+	 o Fix problem getting quotes from trustnet.
+	 o Add new script that dumps all the data returned by F::Q for a
+	   stock.
+	 o Apply Bill Nottingham's patch to use db4/db_185.h
+	 o Updated translations, po/en_GB.po by Nigel Titley, po/it.po by
+	   Lorenzo Cappelletti
+	 o Fix HBCI problem with negative account balances.
+	 o Add preference (on advanced tab) to enable HBCI debug messages.
+	 o Fix the Recurrence-Frequency example-calendar date calculation to
+	   show upcoming instances correctly.
+	 o Add HBCI user messages about what is supported by the bank.
+	 o Fixes for gcc 3.x build problems with postgresql backend
+	 o Many more fixes for the postgresql backend
+	 o Fix the "bill reminder" so it doesn't create a query if there are
+	   no payables accounts.
+	 o Fix some of the accounts in the tree to be more accurate to the
+	   real world.
+	 o Only set ReadOnly status for Invoices, not Payments.
+	 o Fix several bugs in QIF importer
+	 o Recognize even more error codes from OpenHBCI.
+	 o No longer assume that transaction with type OFX_OTHER are
+	   investment transactions.
+	 o Don't add income accounts to bills, or expense accounts to
+	   invoices.  This should help further reduce user confusion with what
+	   to do when entering invoices.
+	 
  1.7.8  - 20 January 2003
  	 o Welcome to Release Canidate 3
 	 o Fixed build issues introduced in last release
