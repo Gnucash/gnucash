@@ -85,8 +85,9 @@
     
     (define (render-month-subheading split table width subheading-style)
       (add-subheading-row (strftime "%B %Y" (gnc:timepair->date
-					     gnc:transaction-get-date-posted
-					     (gnc:split-get-parent split)))))
+					     (gnc:transaction-get-date-posted
+					     (gnc:split-get-parent split))))
+			  table width subheading-style))
   
     (define (render-year-subheading split table width subheading-style)
       (add-subheading-row (strftime "%Y" (gnc:timepair->date

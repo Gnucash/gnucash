@@ -1,3 +1,8 @@
+2001-04-11  Robert Graham Merkel  <rgmerk@mira.net>
+
+	* src/scm/report/transaction-report.scm (render-month-subheading):
+	fix bug.
+
 2001-04-11  Christian Stimming  <stimming@tuhh.de>
 
 	* src/scm/report/report-list.scm: Renamed file.
