@@ -39,9 +39,5 @@ void    xaccLogDisable (void);
  */
 void    xaccLogSetBaseName (const char *);
 
-/* returned strings will have been allocated with malloc, free with free() */
-char *xaccSplitAsString(Split *s, const char prefix[]);
-char *xaccTransAsString(Transaction *t, const char prefix[]);
-
 #endif /* __XACC_TRANS_LOG_H__ */
 
