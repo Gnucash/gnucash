@@ -34,13 +34,18 @@
 #include "hbci-interaction.h"
 #include "gnc-hbci-utils.h"
 #include "dialog-hbcitrans.h"
+#include "gnc-hbci-kvp.h"
+#include "dialog-daterange.h"
 
 
 static void *trans_list_cb (const HBCI_Transaction *trans, void *user_data);
+
 struct trans_list_data 
 {
   Account *gnc_acc;
 };
+
+
 
 void
 gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
@@ -99,13 +104,53 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
     HBCI_OutboxJobGetTransactions *trans_job;
     HBCI_OutboxJob *job;
     HBCI_Error *err;
-    HBCI_Date *blank_date = HBCI_Date_new_blank();
-        
+    Timespec last_timespec, until_timespec;
+    time_t now = time(NULL), time_convert;
+    struct tm tm;
+    HBCI_Date *from_date, *to_date;
+    gboolean use_last_date = TRUE, 
+      use_earliest_date = TRUE, use_until_now = TRUE;
+
+    /* Get time of last retrieval */
+    last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
+    if (last_timespec.tv_sec == 0) {
+      use_last_date = FALSE;
+      timespecFromTime_t (&last_timespec, now);
+    }
+    timespecFromTime_t (&until_timespec, now);
+
+    /* Let the user choose the date range of retrieval */
+    if (!gnc_hbci_enter_daterange (parent, NULL, 
+				   &last_timespec, 
+				   &use_last_date, &use_earliest_date,
+				   &until_timespec, &use_until_now))
+      return;
+
+    /*printf("Retrieving transactions from date %s to date %s. \n",
+	   ctime(&()))*/
+    
+    /* Now calculate from date */
+    if (use_earliest_date)
+      from_date = HBCI_Date_new_blank();
+    else {
+      if (use_last_date)
+	last_timespec = gnc_hbci_get_account_trans_retrieval (gnc_acc);
+      time_convert = timespecToTime_t(last_timespec);
+      from_date = HBCI_Date_new (localtime_r (&time_convert, &tm));
+    }
+
+    /* Now calculate to date */
+    if (use_until_now)
+      timespecFromTime_t (&until_timespec, now);
+    time_convert = timespecToTime_t (until_timespec);
+    to_date = HBCI_Date_new (localtime_r (&time_convert, &tm));
+
+    /* Create OutboxJob */
     trans_job = 
       HBCI_OutboxJobGetTransactions_new (customer, 
 					 (HBCI_Account *)h_acc,
-					 blank_date,
-					 blank_date);
+					 from_date,
+					 to_date);
     job = HBCI_OutboxJobGetTransactions_OutboxJob (trans_job);
     g_assert (job);
     HBCI_API_addJob (api, job);
@@ -114,8 +159,11 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
       GNCInteractor_show (interactor);
 
     HBCI_Hbci_setDebugLevel(0);
-    err = HBCI_API_executeQueue (api, TRUE);
-    g_assert (err);
+    do {
+      err = HBCI_API_executeQueue (api, TRUE);
+      g_assert (err);
+    } while (gnc_hbci_error_retry (parent, err));
+    
     if (!HBCI_Error_isOk(err)) {
       char *errstr = g_strdup_printf("gnc_hbci_gettrans: Error at executeQueue: %s",
 				     HBCI_Error_message (err));
@@ -128,19 +176,28 @@ gnc_hbci_gettrans (GtkWidget *parent, Account *gnc_acc)
       gnc_hbci_debug_outboxjob (job);
       return;
     }
-    /*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
     HBCI_Error_delete (err);
-    HBCI_Date_delete (blank_date);
-        
+    HBCI_Date_delete (from_date);
+    HBCI_Date_delete (to_date);
+
+    /* Store the date of this retrieval */
+    gnc_hbci_set_account_trans_retrieval (gnc_acc, until_timespec);
+
     {
+      /* Now add the retrieved transactions to the gnucash account. */
       const list_HBCI_Transaction *trans_list;
       struct trans_list_data data;
       
       data.gnc_acc = gnc_acc;
       
       trans_list = HBCI_OutboxJobGetTransactions_transactions (trans_job);
+      printf("Got %d transactions.\n", 
+	     list_HBCI_Transaction_size(trans_list));
       list_HBCI_Transaction_foreach (trans_list, trans_list_cb, &data);
     }
+
+    /* Clean up behind ourself. */
+    /*HBCI_API_clearQueueByStatus (api, HBCI_JOB_STATUS_DONE);*/
   }
 }
 
@@ -249,7 +306,3 @@ static void *trans_list_cb (const HBCI_Transaction *h_trans,
 
   return NULL;
 }
-
-
-
-

@@ -951,5 +951,11 @@ timespecFromTime_t( Timespec *ts, time_t t )
     ts->tv_nsec = 0;
 }
 
+time_t 
+timespecToTime_t (Timespec ts)
+{
+    return ts.tv_sec;
+}
+
 /********************** END OF FILE *********************************\
 \********************************************************************/

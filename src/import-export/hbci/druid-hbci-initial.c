@@ -151,7 +151,7 @@ reset_initial_info (HBCIInitialInfo *info)
   if (info == NULL) return;
   
   if (info->api != NULL) 
-    HBCI_API_delete (info->api);
+    gnc_hbci_api_delete (info->api);
   info->api = NULL;
   info->newcustomer = NULL;
   info->newbank = NULL;
@@ -907,7 +907,7 @@ on_accountinfo_next (GnomeDruidPage  *gnomedruidpage,
     if (info->interactor)
       GNCInteractor_show (info->interactor);
 
-    HBCI_Hbci_setDebugLevel(0);
+    HBCI_Hbci_setDebugLevel(3);
     err = HBCI_API_executeQueue (info->api, TRUE);
     g_assert (err);
     if (!HBCI_Error_isOk(err)) {

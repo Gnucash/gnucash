@@ -103,8 +103,10 @@ gnc_hbci_getbalance (GtkWidget *parent, Account *gnc_acc)
       GNCInteractor_show (interactor);
 
     HBCI_Hbci_setDebugLevel(0);
-    err = HBCI_API_executeQueue (api, TRUE);
-    g_assert (err);
+    do {
+      err = HBCI_API_executeQueue (api, TRUE);
+      g_assert (err);
+    } while (gnc_hbci_error_retry (parent, err));
     if (!HBCI_Error_isOk(err)) {
       char *errstr = g_strdup_printf("gnc_hbci_getbalance: Error at executeQueue: %s",
 				     HBCI_Error_message (err));

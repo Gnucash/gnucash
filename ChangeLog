@@ -1,3 +1,19 @@
+2002-10-26  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-kvp.h,
+	src/import-export/hbci/gnc-hbci-gettrans.c: Remember the user's
+	date of last transaction retrieval. REQUIRES updating to current
+	OPENHBCI CVS.
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Cache the created
+	HBCI_API for subsequent calls. Will also cache the user's
+	password. Also, make more meaningful error handling. 
+
+	* src/import-export/hbci/dialog-daterange.[hc]: Add a dialog
+	asking for the date range of transactions to retrieve.
+
+	* src/engine/date.h: Add timespecToTime_t function.
+
 2002-10-25  David Hampton  <hampton@employees.org>
 
 	* src/gnome/window-register.c: Use a better function for making

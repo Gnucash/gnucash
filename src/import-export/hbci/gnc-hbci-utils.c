@@ -68,14 +68,31 @@ gnc_hbci_api_new (const char *filename, gboolean allowNewFile,
   return api;
 };
 
+static HBCI_API *gnc_hbci_api = NULL;
+static GNCInteractor *gnc_hbci_inter = NULL;
 
 HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent, 
 					 GNCInteractor **inter)
 {
-  return gnc_hbci_api_new 
-    (gnc_hbci_get_book_configfile (gnc_get_current_book ()), 
-     FALSE, parent, inter);
+  if (gnc_hbci_api == NULL) {
+    gnc_hbci_api = gnc_hbci_api_new 
+      (gnc_hbci_get_book_configfile (gnc_get_current_book ()), 
+       FALSE, parent, inter);
+    gnc_hbci_inter = *inter;
+  }
+  *inter = gnc_hbci_inter;
+  return gnc_hbci_api;
 };
+
+void gnc_hbci_api_delete (HBCI_API *api)
+{
+  if (api == gnc_hbci_api) {
+    gnc_hbci_api = NULL;
+    gnc_hbci_inter = NULL;
+  }
+  HBCI_API_delete (api);
+}
+
 
 HBCI_Error * gnc_hbci_api_save (const HBCI_API *api)
 {
@@ -184,3 +201,34 @@ gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job)
   printf("Probable cause of error was: code %d, msg: %s\n", cause, msg);
   list_int_delete (list);
 }
+
+
+gboolean
+gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error)
+{
+  int code = HBCI_Error_code (error);
+
+  switch (code) {
+  case HBCI_ERROR_CODE_PIN_WRONG:
+    return gnc_verify_dialog_parented (parent,
+				       TRUE,
+				       _("The PIN you entered was wrong.\n"
+					 "Do you want to try again?"));
+  case HBCI_ERROR_CODE_PIN_ABORTED:
+    printf("gnc_hbci_error_feedback: PIN dialog was aborted.\n");
+    return FALSE;
+  case HBCI_ERROR_CODE_PIN_TOO_SHORT:
+    return gnc_verify_dialog_parented (parent,
+				       TRUE,
+				       _("The PIN you entered was too short.\n"
+					 "Do you want to try again?"));
+  case HBCI_ERROR_CODE_FILE_NOT_FOUND:
+    printf("gnc_hbci_error_feedback: File not found error.\n");
+    return FALSE;
+    
+  default:
+  }
+  
+  return FALSE;
+}
+

@@ -50,9 +50,9 @@ HBCI_API * gnc_hbci_api_new (const char *filename,
 			     GNCInteractor **inter);
 
 /** Same as above, but takes the filename already from the current
- * book's kvp frame. Returns NULL if the file from the book's kvp
- * frame doesn't exist. Returns NULL also when there was an error upon
- * opening that file. 
+ * book's kvp frame AND caches a pointer to the api. Returns NULL if
+ * the file from the book's kvp frame doesn't exist. Returns NULL also
+ * when there was an error upon opening that file.
  *
  * @param parent When displaying dialogs, use this GtkWidget as parent.
  * @param inter Reference to a GNCInteractor-pointer in order to use this later. 
@@ -60,6 +60,10 @@ HBCI_API * gnc_hbci_api_new (const char *filename,
  */ 
 HBCI_API * gnc_hbci_api_new_currentbook (GtkWidget *parent,
 					 GNCInteractor **inter);
+
+/** Delete the given HBCI_API. If this is also the one that was cached
+    by gnc_hbci_api_new_currentbook, then that reference is deleted, too. */
+void gnc_hbci_api_delete (HBCI_API *api);
 
 
 /** Save this API to the config file given in the current book. Return
@@ -83,6 +87,11 @@ gnc_hbci_get_hbci_acc (const HBCI_API *api, Account *gnc_acc);
 void 
 gnc_hbci_debug_outboxjob (HBCI_OutboxJob *job);
 
-
+/* Check HBCI_Error on whether some feedback should be given to the
+ * user. Returns true if the HBCI action should be tried again; on the
+ * other hand, returns false if the user can't do anything about this
+ * error right now. */
+gboolean
+gnc_hbci_error_retry (GtkWidget *parent, HBCI_Error *error);
 
 #endif

@@ -151,6 +151,12 @@ const char * gnc_print_date(Timespec ts);
 void timespecFromTime_t( Timespec *ts, time_t t );
 
 /**
+ * Turns a Timespec into a time_t 
+ */
+time_t timespecToTime_t (Timespec ts);
+
+
+/**
  * scanDate
  *    Convert a string into  day / month / year integers according to
  *    the current dateFormat value.

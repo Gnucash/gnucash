@@ -27,6 +27,7 @@
 #define HBCI_BANK_CODE "bank-code"
 #define HBCI_COUNTRY_CODE "country-code"
 #define HBCI_CONFIGFILE "config-filename"
+#define HBCI_TRANS_RETRIEVAL "trans-retrieval"
 
 /* Account */
 char *gnc_hbci_get_account_accountid (Account *a)
@@ -46,6 +47,12 @@ gint gnc_hbci_get_account_countrycode (Account *a)
   kvp_frame *frame = gnc_hbci_get_account_kvp (a);
   kvp_value *value = kvp_frame_get_slot (frame, HBCI_COUNTRY_CODE);
   return kvp_value_get_gint64 (value);
+}
+Timespec gnc_hbci_get_account_trans_retrieval (Account *a)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_frame_get_slot (frame, HBCI_TRANS_RETRIEVAL);
+  return kvp_value_get_timespec (value);
 }
 void gnc_hbci_set_account_accountid (Account *a, const char *id)
 {
@@ -71,6 +78,15 @@ void gnc_hbci_set_account_countrycode (Account *a, gint code)
   kvp_frame_set_slot_nc (frame, HBCI_COUNTRY_CODE, value);
   xaccAccountCommitEdit (a);
 }
+void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time)
+{
+  kvp_frame *frame = gnc_hbci_get_account_kvp (a);
+  kvp_value *value = kvp_value_new_timespec (time);
+  xaccAccountBeginEdit (a);
+  kvp_frame_set_slot_nc (frame, HBCI_TRANS_RETRIEVAL, value);
+  xaccAccountCommitEdit (a);
+}
+
 
 
 /* GNCBook */

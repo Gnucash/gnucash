@@ -53,6 +53,13 @@ gint gnc_hbci_get_account_countrycode (Account *a);
  * will be marked as "dirty". */
 void gnc_hbci_set_account_countrycode (Account *a, gint code);
 
+/** Returns the time of last online transaction retrieval */
+Timespec gnc_hbci_get_account_trans_retrieval (Account *a);
+/** Set the time of last online transaction retrieval. The account
+ * will be marked as "dirty". */
+void gnc_hbci_set_account_trans_retrieval (Account *a, Timespec time);
+
+
 /* GNCBook */
 
 /** Returns a non-copied pointer to the configfile string in the
