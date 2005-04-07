@@ -552,7 +552,6 @@
 
 (export list-ref-safe)
 (export list-set-safe!)
-(export gnc:amount->string)
 (export gnc:commodity-value->string)
 (export gnc:monetary->string)
 (export gnc:account-has-shares?)
@@ -567,7 +566,6 @@
 (export gnc:account-get-immediate-subaccounts)
 (export gnc:account-get-all-subaccounts)
 (export gnc:acccounts-get-all-subaccounts)
-(export gnc:transaction-map-splits)
 (export gnc:make-stats-collector)
 (export gnc:make-drcr-collector)
 (export gnc:make-value-collector)

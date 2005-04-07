@@ -109,6 +109,7 @@
 
 (define gnc:invoice-report-create gnc:invoice-report-create-internal)
 
-(export gnc:invoice-report-create gnc:owner-report-create
+(export gnc:invoice-report-create
 	gnc:customer-anchor-text gnc:job-anchor-text gnc:vendor-anchor-text
 	gnc:invoice-anchor-text gnc:owner-anchor-text gnc:owner-report-text)
+(re-export gnc:owner-report-create)

@@ -13,4 +13,4 @@
 (use-modules (gnucash report view-column))
 (use-modules (gnucash report welcome-to-gnucash))
 
-(export gnc:make-welcome-report)
+(re-export gnc:make-welcome-report)
