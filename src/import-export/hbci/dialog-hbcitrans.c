@@ -568,15 +568,18 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
   g_free (tmpchar);
   tmpchar = gnc_call_iconv(gnc_iconv_handler, 
 			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
-  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
   g_free (tmpchar);
   tmpchar = gnc_call_iconv(gnc_iconv_handler, 
 			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont2_entry)));
-  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
   g_free (tmpchar);
   tmpchar = gnc_call_iconv(gnc_iconv_handler, 
 			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont3_entry)));
-  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
   g_free (tmpchar);
 	
   /* FIXME: Replace "EUR" by account-dependent string here. */
