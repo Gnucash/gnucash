@@ -170,7 +170,14 @@ Stock Split Dialog
 
 - Importing
 
-  - HBCI - Needs new HTTP support [gnet]
+  - HBCI - Needs new HTTP support [gnet] -- huh, no, the
+    import-export/hbci module does not need any extra http library,
+    especially not at compile-time. The module only needs the
+    aqbanking library but really nothing else. If the aqbanking
+    library links against any http library, then that's a business of
+    that library, but to my knowledge it comes with its own http
+    implementation so gnucash should really not be concerned about
+    http! cstim, 2005-04-09.
 
 - Budgeting
 
