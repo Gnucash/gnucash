@@ -53,7 +53,6 @@ libgncmod_hbci_la_LIBADD = \
   ${GLIB_LIBS} \
   ${GNOME_LIBS} \
   ${HBCI_LIBS}
-  ${XML_LIB}
 
 gncscmdir = ${GNC_SCM_INSTALL_DIR}/hbci
 
@@ -83,8 +82,7 @@ AM_CFLAGS = \
   ${GLADE_CFLAGS} \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
-  ${HBCI_CFLAGS} \
-  ${XML_CFLAGS}
+  ${HBCI_CFLAGS}
 
 #gladedir = $(GNC_GLADE_DIR)
 #glade_DATA = 
