@@ -166,7 +166,6 @@
 
 <widget class="GtkFileChooserDialog" id="chartfilechooserdialog">
   <property name="visible">True</property>
-  <property name="tooltip" translatable="yes">The extension .xml is optional</property>
   <property name="action">GTK_FILE_CHOOSER_ACTION_SAVE</property>
   <property name="local_only">True</property>
   <property name="select_multiple">False</property>

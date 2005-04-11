@@ -34,6 +34,7 @@
 #include "global-options.h"
 #include "gnc-event.h"
 #include "gnc-file-dialog.h"
+#include "gnc-file.h"
 
 #define EQUITY_ACCOUNT_NAME  _("Opening Balances")
 #define OPENING_BALANCE_DESC _("Opening Balance")
@@ -261,6 +262,7 @@ on_dateok_clicked (GtkButton *button, gpointer user_data)
 		qof_object_foreach(GNC_ID_SPLIT, book, chart_reference_cb, data);
 		g_list_free(data->param_ref_list);
 	qof_session_save(chart_session, NULL);
+		show_session_error(qof_session_get_error(chart_session), filename);
 		gnc_engine_resume_events();
 	}
 	qof_session_end(chart_session);

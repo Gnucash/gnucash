@@ -15,6 +15,7 @@ libgncgnome_la_LIBADD = \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
+  ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/lib/egg/libegg.la \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS}
 

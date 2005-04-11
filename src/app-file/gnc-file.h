@@ -114,11 +114,17 @@
 #define GNC_FILE_H
 
 #include <glib.h>
+#include "qofbackend.h"
 
 void gnc_file_new (void);
 gboolean gnc_file_open (void);
 void gnc_file_save (void);
 void gnc_file_save_as (void);
+
+/** Tell the user about errors in the backends
+
+*/
+gboolean show_session_error (QofBackendError io_error, const char *newfile);
 
 gboolean gnc_file_open_file (const char *filename);
 void gnc_file_export_file(const char * filename);

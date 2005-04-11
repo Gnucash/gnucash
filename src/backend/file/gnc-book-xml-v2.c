@@ -158,7 +158,11 @@ write_book_parts(FILE *out, QofBook *book)
 
     domnode = guid_to_dom_tree(book_id_string, qof_book_get_guid(book));
     xmlElemDump(out, NULL, domnode);
-    fprintf(out, "\n");
+    if(fprintf(out, "\n") < 0) {
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+		xmlFreeNode (domnode);
+		return;
+	}
     xmlFreeNode (domnode);
 
     if(qof_book_get_slots(book))
@@ -173,6 +177,7 @@ write_book_parts(FILE *out, QofBook *book)
         }
     }
 }
+
 
 /* ================================================================ */
 

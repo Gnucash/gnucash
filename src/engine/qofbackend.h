@@ -41,7 +41,7 @@
 #define QOF_BACKEND_H
 
 /** \brief The errors that can be reported to the GUI & other front-end users
- *  \warning If you modify QofBackendError, please update 
+ *  \warning (GnuCash) If you modify QofBackendError, please update 
  *   src/engine/gw-engine-spec.scm 
 */
 typedef enum {
@@ -106,6 +106,7 @@ typedef enum {
   ERR_FILEIO_UNKNOWN_FILE_TYPE, /**< didn't recognize the file type */
   ERR_FILEIO_PARSE_ERROR,    /**< couldn't parse the data in the file */
   ERR_FILEIO_BACKUP_ERROR,   /**< couldn't make a backup of the file */
+  ERR_FILEIO_WRITE_ERROR,    /**< couldn't write to the file */
 
   /* network errors */
   ERR_NETIO_SHORT_READ = 2000,  /**< not enough bytes received */

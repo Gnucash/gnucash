@@ -84,7 +84,7 @@ gnc_file_init (void)
   qof_session_get_current_session ();
 }
 
-static gboolean
+gboolean
 show_session_error (QofBackendError io_error, const char *newfile)
 {
   GtkWidget *parent = gnc_ui_get_toplevel();
@@ -287,6 +287,18 @@ show_session_error (QofBackendError io_error, const char *newfile)
       gnc_error_dialog(parent, fmt, newfile);
       break;
       
+    case ERR_FILEIO_BACKUP_ERROR:
+      fmt = _("Could not make a backup of %s\n");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
+    case ERR_FILEIO_WRITE_ERROR:
+      fmt = _("Could not write to %s\nCheck that you have"
+              " permission to write to this file and that "
+              " there is sufficient space to create it.");
+      gnc_error_dialog(parent, fmt, newfile);
+      break;
+
     case ERR_SQL_DB_TOO_OLD:
       fmt = _("This database is from an older version of GnuCash.\n"
               "Do you want to want to upgrade the database "

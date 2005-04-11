@@ -132,15 +132,10 @@ static void
 qsf_session_end( QofBackend *be)
 {
 	QSFBackend *qsf_be;
-	GList *book_ref_list;
-	QofBook *book;
 	
 	qsf_be = (QSFBackend*)be;
 	g_return_if_fail(qsf_be != NULL);
-	book = qsf_be->params->book;
-	book_ref_list = (GList*)qof_book_get_data(book, ENTITYREFERENCE);
-	g_list_free(book_ref_list);
-	qof_book_set_data(book, PARTIAL_QOFBOOK, (gboolean*)FALSE);
+
 	qsf_free_params(qsf_be->params);
 	g_free(qsf_be->fullpath);
 	qsf_be->fullpath = NULL;
@@ -605,16 +600,25 @@ qofbook_to_qsf(QofBook *book)
 	return params->output_doc;
 }
 
-static void
+static gboolean
 write_qsf_from_book(FILE *out, QofBook *book)
 {
 	xmlDocPtr qsf_doc;
+	gint write_result;
+	QofBackend *be;
 	
 	qsf_doc = qofbook_to_qsf(book);
-	g_return_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE);
-	xmlDocFormatDump(out, qsf_doc, 1);
+	write_result = 0;
+	g_return_val_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE, FALSE);
+	write_result = xmlDocFormatDump(out, qsf_doc, 1);
+	if(write_result < 0) {
+		be = qof_book_get_backend(book);
+		qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);
+		return FALSE;
+	}
 	fprintf(out, "\n");
 	xmlFreeDoc(qsf_doc);
+	return TRUE;
 }
 
 static void
@@ -635,6 +639,7 @@ qsf_write_file(QofBackend *be, QofBook *book)
 	QSFBackend *qsf_be;
 	FILE *out;
 	char *path;
+	gboolean result;
 	
 	qsf_be = (QSFBackend*)be;
 	/* if fullpath is blank, book_id was set to QOF_STDOUT */
@@ -644,7 +649,11 @@ qsf_write_file(QofBackend *be, QofBook *book)
 	}
 	path = strdup(qsf_be->fullpath);
 	out = fopen(path, "w");
-	write_qsf_from_book(out, book);
+	result = write_qsf_from_book(out, book);
+	if(result == FALSE) { 
+		g_free(path);
+		return; 
+	}
 	g_free(path);
 	fclose(out);
 }

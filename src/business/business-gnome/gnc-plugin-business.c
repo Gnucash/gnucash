@@ -40,7 +40,7 @@
 #include "messages.h"
 #include "gnc-ui-util.h"
 #include "gnc-file-dialog.h"
-
+#include "gnc-file.h"
 
 /* g_object functions */
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
@@ -635,6 +635,7 @@ gnc_plugin_business_cmd_export_invoice (EggAction *action, GncMainWindowActionDa
 			qof_session_save(chart_session, NULL);
 		}
 	}
+	show_session_error(qof_session_get_error(chart_session), filename);
 	g_free(filename);
 	qof_session_end(chart_session);
 	qof_session_set_current_session(current_session);
@@ -664,6 +665,7 @@ gnc_plugin_business_cmd_export_customer (EggAction *action, GncMainWindowActionD
 			qof_session_save(chart_session, NULL);
 		}
 	}
+	show_session_error(qof_session_get_error(chart_session), filename);
 	qof_session_end(chart_session);
 	g_free(filename);
 	qof_session_set_current_session(current_session);
@@ -693,6 +695,7 @@ gnc_plugin_business_cmd_export_vendor (EggAction *action, GncMainWindowActionDat
 			qof_session_save(chart_session, NULL);
 		}
 	}
+	show_session_error(qof_session_get_error(chart_session), filename);
 	qof_session_end(chart_session);
 	g_free(filename);
 	qof_session_set_current_session(current_session);
@@ -722,6 +725,7 @@ gnc_plugin_business_cmd_export_employee (EggAction *action, GncMainWindowActionD
 			qof_session_save(chart_session, NULL);
 		}
 	}
+	show_session_error(qof_session_get_error(chart_session), filename);
 	qof_session_end(chart_session);
 	g_free(filename);
 	qof_session_set_current_session(current_session);

@@ -753,7 +753,6 @@ write_counts(FILE* out, ...)
     char *type;
 
     va_start(ap, out);
-
     type = va_arg(ap, char *);
 
     while(type)
@@ -854,15 +853,22 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
     }
     
     xmlElemDump(out, NULL, node);
-    fprintf(out, "\n");
+    if(fprintf(out, "\n") < 0)
+	{
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+		return;
+	}
 
     xmlFreeNode(node);
 #endif
 
     be_data.out = out;
     be_data.book = book;
-
-    fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string );
+    if(fprintf( out, "<%s version=\"%s\">\n", BOOK_TAG, gnc_v2_book_version_string) < 0)
+	{
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+		return;
+	}
     write_book_parts (out, book);
 
     write_counts(out,
@@ -888,7 +894,9 @@ write_book(FILE *out, QofBook *book, sixtp_gdv2 *gd)
 
     gncObjectForeachBackend (GNC_FILE_BACKEND, write_data_cb, &be_data);
 
-    fprintf( out, "</%s>\n", BOOK_TAG );
+    if(fprintf( out, "</%s>\n", BOOK_TAG ) < 0) {
+		qof_backend_set_error(qof_book_get_backend(book), ERR_FILEIO_WRITE_ERROR);
+	}
 }
 
 void

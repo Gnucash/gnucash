@@ -112,9 +112,7 @@ qof_book_merge_abort (qof_book_mergeData *mergeData)
 	g_free(mergeData);
 }
 
-/*  Q: This could be a general usage function:
-	qof_param_as_string(QofParam*, QofEntity*);
-	Useful? Worth transferring to qofclass.c?
+/*
 	Need to fix the KVP->string. How?
 
 	The QOF_TYPE_DATE output format from
@@ -142,6 +140,7 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 	gboolean 	param_boolean, 	(*boolean_getter)	(QofEntity*, QofParam*);
 	gint32 		param_i32, 		(*int32_getter)		(QofEntity*, QofParam*);
 	gint64 		param_i64, 		(*int64_getter)		(QofEntity*, QofParam*);
+	char        param_char,     (*char_getter)    (QofEntity*, QofParam*);
 	
 	param_string = NULL;
 	paramType = qtparam->param_type;
@@ -205,7 +204,9 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_CHAR) == 0) { 
-			param_string = g_strdup(qtparam->param_getfcn(qtEnt,qtparam));
+			char_getter = (char (*)(QofEntity*, QofParam*)) qtparam->param_getfcn;
+			param_char = char_getter(qtEnt, qtparam);
+			param_string = g_strdup_printf("%c", param_char);
 			return param_string;
 		}
 	return NULL;
@@ -350,6 +351,7 @@ int
 qof_book_mergeCompare( qof_book_mergeData *mergeData ) 
 {
 	qof_book_mergeRule *currentRule;
+
 	gchar 			*stringImport, *stringTarget, *charImport, *charTarget;
 	QofEntity	 	*mergeEnt, *targetEnt, *referenceEnt;
 	const GUID 		*guidImport, *guidTarget;
