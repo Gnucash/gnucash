@@ -37,7 +37,8 @@
 ( "Brazilian Real" "real" "centavo"  "ISO4217" "BRL" "986" 100 100 ) ;; 1994 on
 ( "British Pound" "pound" "pence" "ISO4217" "GBP" "826" 100 100 )
 ( "Brunei Dollar" "dollar" "cent" "ISO4217" "BND" "096" 100 100 )
-( "Bulgarian Lev" "lev" "stotinki" "ISO4217" "BGL" "100" 100 100 )
+( "Bulgarian Lev" "lev" "stotinki" "ISO4217" "BGL" "100" 100 100 ) ;; replaced 1999
+( "Bulgarian Lev" "lev" "stotinki" "ISO4217" "BGN" "975" 100 100 )
 ( "Burundi Franc" "franc" "centime" "ISO4217" "BIF" "108" 100 100 )
 ( "CFA Franc BEAC" "franc" "centime" "ISO4217" "XAF" "950" 100 100 )
 ( "CFA Franc BCEAO" "franc" "centime" "ISO4217" "XOF" "952" 100 100 )
@@ -110,7 +111,8 @@
 ( "Luxembourg Franc" "franc" "centime" "ISO4217" "LUF" "442" 100 100  ) ;; through 1998
 ( "Macau Pataca" "pataca" "avo"  "ISO4217" "MOP" "446" 100 100 )
 ( "Macedonian Denar" "denar" "deni" "ISO4217" "MKD" "807" 100 100 )
-( "Malagasy Franc" "franc" "centime" "ISO4217" "MGF" "450" 500 500 )
+( "Malagasy Ariary" "ariary" "iraimbilanja" "ISO4217" "MGA" "969" 200 200 )
+( "Malagasy Franc" "franc" "centime" "ISO4217" "MGF" "450" 500 500 ) ;; replaced 2003-07-31
 ( "Malawi Kwacha" "kwacha" "tambala"  "ISO4217" "MWK" "454" 100 100 )
 ( "Malaysian Ringgit" "ringgit" "sen"  "ISO4217" "MYR" "458" 100 100 )
 ( "Maldive Rufiyaa" "rufiyaa" "lari" "ISO4217" "MVR" "462" 100 100 )
