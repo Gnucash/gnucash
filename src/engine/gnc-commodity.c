@@ -87,6 +87,8 @@ struct gnc_new_iso_code
   {"PLZ", "PLN"}, /* Polish Zloty */
   {"UAG", "UAH"}, /* Ukraine Hryvnia */
   {"ILS", "NIS"}, /* New Israeli Shekel */
+  {"BGL", "BGN"}, /* Bulgarian Lev */
+  {"MGF", "MGA"}, /* Malagasy Ariary */
 };
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))

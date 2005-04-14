@@ -1,7 +1,24 @@
+2005-04-14  David Hampton  <hampton@employees.org>
+
+	* src/engine/iso-4217-currencies.scm: 
+	* src/engine/gnc-commodity.c: Update the Bulgarian Lev and add the
+	Malagasy Ariary.
+
 2005-04-06  Christian Stimming  <stimming@tuhh.de>
 
 	* po/rw.po, po/glossary/rw.po: Add Kinyarwanda translation by
 	Steven Michael Murphy <murf@e-tools.com>
+
+2005-04-06  David Hampton  <hampton@employees.org>
+
+	* src/bin/generate-gnc-script: Be vocal when using deprecated
+	guile functions.
+
+	* src/report/report-system/report-system.scm:
+
+	* src/report/utility-reports/utility-reports.scm:
+	* src/business/business-reports/business-reports.scm: Use
+	re-export instead of export for one function.
 
 2005-04-02  Christian Stimming  <stimming@tuhh.de>
 
