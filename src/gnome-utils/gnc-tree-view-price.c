@@ -193,10 +193,10 @@ get_prices (GtkTreeModel *f_model,
   GtkTreeModel *tree_model;
   GtkTreeIter iter_a, iter_b;
 
-  tree_model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  tree_model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   model = GNC_TREE_MODEL_PRICE(tree_model);
 
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter_a,
 						    f_iter_a);
 
@@ -204,7 +204,7 @@ get_prices (GtkTreeModel *f_model,
   if (!gnc_tree_model_price_iter_is_price (model, &iter_a))
     return FALSE;
 
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter_b,
 						    f_iter_b);
 
@@ -224,13 +224,13 @@ sort_ns_or_cm (GtkTreeModel *f_model,
   gnc_commodity_namespace *ns_a, *ns_b;
   gnc_commodity *comm_a, *comm_b;
 
-  tree_model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  tree_model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   model = GNC_TREE_MODEL_PRICE(tree_model);
 
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter_a,
 						    f_iter_a);
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter_b,
 						    f_iter_b);
 
@@ -422,7 +422,7 @@ gnc_tree_view_price_new (QofBook *book)
   model = gnc_tree_model_price_new (book, price_db);
 
   /* Set up the view private filter on the common model. */
-  f_model = egg_tree_model_filter_new (model, NULL);
+  f_model = gtk_tree_model_filter_new (model, NULL);
   gtk_object_sink(GTK_OBJECT(model));
   s_model = gtk_tree_model_sort_new_with_model (f_model);
   g_object_unref(G_OBJECT(f_model));
@@ -473,7 +473,7 @@ gnc_tree_view_price_get_path_from_price (GncTreeViewPrice *view,
   /* Reach down to the real model and get a path for this price */
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   path = gnc_tree_model_price_get_path_from_price (GNC_TREE_MODEL_PRICE(model), price);
   if (path == NULL) {
     LEAVE("no path");
@@ -481,7 +481,7 @@ gnc_tree_view_price_get_path_from_price (GncTreeViewPrice *view,
   }
 
   /* convert back to a filtered path */
-  f_path = egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (f_model), path);
+  f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model), path);
   gtk_tree_path_free(path);
   if (!f_path) {
     LEAVE("no filter path");
@@ -489,7 +489,7 @@ gnc_tree_view_price_get_path_from_price (GncTreeViewPrice *view,
   }
 
   /* convert back to a sorted path */
-  s_path = egg_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
+  s_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
   gtk_tree_path_free(f_path);
   debug_path(LEAVE, s_path);
   return s_path;
@@ -513,14 +513,14 @@ gnc_tree_view_price_get_iter_from_price (GncTreeViewPrice *view,
   /* Reach down to the real model and get an iter for this price */
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   if (!gnc_tree_model_price_get_iter_from_price (GNC_TREE_MODEL_PRICE(model), price, &iter)) {
     LEAVE("model_get_iter_from_price failed");
     return FALSE;
   }
 
   /* convert back to a sort iter */
-  egg_tree_model_filter_convert_child_iter_to_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &f_iter, &iter);
   gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(s_model),
 						    s_iter, &f_iter);
@@ -574,10 +574,10 @@ gnc_tree_view_price_get_price_from_column (GtkTreeViewColumn *column,
 						  &f_iter,
 						  s_iter);
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter,
 						    &f_iter);
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   price = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model), &iter);
   LEAVE("price %p", price);
   return price;
@@ -679,7 +679,7 @@ gnc_tree_view_price_filter_helper (GtkTreeModel *model,
 }
 
 /*
- * Set an eggtreemodel visible filter on this price.  This filter will be
+ * Set an GtkTreeModel visible filter on this price.  This filter will be
  * called for each price that the tree is about to show, and the
  * price will be passed to the callback function.
  */
@@ -709,14 +709,14 @@ gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  egg_tree_model_filter_set_visible_func (EGG_TREE_MODEL_FILTER (f_model),
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
 					  gnc_tree_view_price_filter_helper,
 					  fd,
 					  gnc_tree_view_price_filter_destroy);
 
   /* Whack any existing levels. The top two levels have been created
    * before this routine can be called. */
-  egg_tree_model_filter_refilter (EGG_TREE_MODEL_FILTER (f_model));
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
   LEAVE(" ");
 }
 
@@ -734,7 +734,7 @@ gnc_tree_view_price_refilter (GncTreeViewPrice *view)
 
   s_model = gtk_tree_view_get_model (GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (s_model));
-  egg_tree_model_filter_refilter (EGG_TREE_MODEL_FILTER (f_model));
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
   LEAVE(" ");
 }
 
@@ -767,14 +767,14 @@ gnc_tree_view_price_get_price_from_path (GncTreeViewPrice *view,
     }
 
     f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-    path = egg_tree_model_filter_convert_path_to_child_path (EGG_TREE_MODEL_FILTER (f_model), f_path);
+    path = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), f_path);
     gtk_tree_path_free(f_path);
     if (!path) {
       LEAVE("no path");
       return NULL;
     }
 
-    model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+    model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     if (!gtk_tree_model_get_iter (model, &iter, path)) {
       LEAVE("no iter");
       return NULL;
@@ -812,10 +812,10 @@ gnc_tree_view_price_get_selected_price (GncTreeViewPrice *view)
 						    &f_iter, &s_iter);
 
     f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-    egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (f_model),
+    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (f_model),
 						      &iter, &f_iter);
 
-    model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+    model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     price = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model),
 							&iter);
     LEAVE("price %p", price);
@@ -845,7 +845,7 @@ gnc_tree_view_price_set_selected_price (GncTreeViewPrice *view,
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model (EGG_TREE_MODEL_FILTER (f_model));
+  model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (f_model));
 
   path = gnc_tree_model_price_get_path_from_price (GNC_TREE_MODEL_PRICE(model), price);
   if (path == NULL) {
@@ -854,7 +854,7 @@ gnc_tree_view_price_set_selected_price (GncTreeViewPrice *view,
   }
   debug_path(DEBUG, path);
 
-  f_path = egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (f_model),
+  f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model),
 							     path);
   gtk_tree_path_free(path);
   if (f_path == NULL) {
@@ -907,10 +907,10 @@ get_selected_prices_helper (GtkTreeModel *s_model,
 						  &f_iter, s_iter);
 
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (f_model),
 						    &iter, &f_iter);
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   price = gnc_tree_model_price_get_price (GNC_TREE_MODEL_PRICE(model),
 						      &iter);
   *return_list = g_list_append(*return_list, price);
@@ -951,7 +951,7 @@ gnc_tree_view_price_set_selected_prices (GncTreeViewPrice *view,
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
   /* Clear any existing selection. */
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
@@ -972,7 +972,7 @@ gnc_tree_view_price_set_selected_prices (GncTreeViewPrice *view,
       continue;
     }
 
-    f_path = egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (f_model),
+    f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model),
 							       path);
     gtk_tree_path_free(path);
     if (f_path == NULL)

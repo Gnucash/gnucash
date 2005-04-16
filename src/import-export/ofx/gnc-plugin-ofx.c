@@ -35,14 +35,14 @@ static void gnc_plugin_ofx_init (GncPluginOfx *plugin);
 static void gnc_plugin_ofx_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_ofx_cmd_import (EggAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_ofx_cmd_import (GtkAction *action, GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-ofx-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-ofx-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
-  { "OfxImportAction", N_("Import OFX/QFX"), GTK_STOCK_CONVERT, NULL,
+static GtkActionEntry gnc_plugin_actions [] = {
+  { "OfxImportAction", GTK_STOCK_CONVERT, N_("Import OFX/QFX"), NULL,
     N_("Process an OFX/QFX response file"),
     G_CALLBACK (gnc_plugin_ofx_cmd_import) },
 };
@@ -162,7 +162,7 @@ gnc_plugin_ofx_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_ofx_cmd_import (EggAction *action,
+gnc_plugin_ofx_cmd_import (GtkAction *action,
 			   GncMainWindowActionData *data)
 {
   gnc_file_ofx_import ();

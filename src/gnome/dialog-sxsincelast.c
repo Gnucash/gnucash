@@ -63,8 +63,6 @@
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "dialog-utils.h"
-#include "egg-action-group.h"
-#include "eggtoolbar.h"
 #include "finvar.h"
 #include "gnc-book.h"
 #include "gnc-date.h"
@@ -294,7 +292,7 @@ static void create_autoCreate_ledger( sxSinceLastData *sxsld );
 static void create_created_ledger( sxSinceLastData *sxsld );
 static void create_to_create_ledger( sxSinceLastData *sxsld );
 static void gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld );
-static void sxsld_jump_to_real_txn( EggAction *action, sxSinceLastData *sxsld );
+static void sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld );
 
 static gint sxsincelast_populate( sxSinceLastData *sxsld );
 static void sxsincelast_druid_cancelled( GnomeDruid *druid, gpointer ud );
@@ -384,30 +382,30 @@ static gint sxsld_create_to_create_txns( sxSinceLastData *sxsld,
                                          toCreateInstance *tci );
 static gint sxsld_get_future_created_txn_count( sxSinceLastData *sxsld );
 
-static void gnc_sxsld_cmd_edit_cut (EggAction *action, sxSinceLastData *sxsld);
-static void gnc_sxsld_cmd_edit_copy (EggAction *action, sxSinceLastData *sxsld);
-static void gnc_sxsld_cmd_edit_paste (EggAction *action, sxSinceLastData *sxsld);
+static void gnc_sxsld_cmd_edit_cut (GtkAction *action, sxSinceLastData *sxsld);
+static void gnc_sxsld_cmd_edit_copy (GtkAction *action, sxSinceLastData *sxsld);
+static void gnc_sxsld_cmd_edit_paste (GtkAction *action, sxSinceLastData *sxsld);
 
-static EggActionEntry gnc_sxsld_menu_entries [] =
+static GtkActionEntry gnc_sxsld_menu_entries [] =
 {
 	/* Toplevel */
-	{ "EditAction", N_("_Edit"), NULL, NULL, NULL, NULL },
-	{ "ViewAction", N_("_View"), NULL, NULL, NULL, NULL },
-	{ "ActionsAction", N_("_Actions"), NULL, NULL, NULL, NULL },
+	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
+	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
+	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
 
 	/* Edit menu */
-	{ "EditCutAction", N_("Cu_t"), GTK_STOCK_CUT, "<control>x",
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
 	  NULL,
 	  G_CALLBACK (gnc_sxsld_cmd_edit_cut) },
-	{ "EditCopyAction", N_("_Copy"), GTK_STOCK_COPY, "<control>c",
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
 	  NULL,
 	  G_CALLBACK (gnc_sxsld_cmd_edit_copy) },
-	{ "EditPasteAction", N_("_Paste"), GTK_STOCK_PASTE, "<control>v",
+	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
 	  NULL,
 	  G_CALLBACK (gnc_sxsld_cmd_edit_paste) },
 
 	/* Actions menu */
-	{ "JumpTransactionAction", N_("_Jump"), GTK_STOCK_JUMP_TO, NULL,
+	{ "JumpTransactionAction", GTK_STOCK_JUMP_TO, N_("_Jump"), NULL,
 	  N_("Jump to the corresponding transaction in the other account"),
 	  G_CALLBACK (sxsld_jump_to_real_txn) },
 };
@@ -3649,7 +3647,7 @@ create_created_ledger( sxSinceLastData *sxsld )
 
 static
 void
-sxsld_jump_to_real_txn( EggAction *action, sxSinceLastData *sxsld )
+sxsld_jump_to_real_txn( GtkAction *action, sxSinceLastData *sxsld )
 {
         SplitRegister *reg;
 	GNCSplitReg *gsr;
@@ -3921,16 +3919,16 @@ gnc_sxsld_commit_ledgers( sxSinceLastData *sxsld )
 
 /* Command callbacks */
 static void
-gnc_sxsld_cmd_edit_cut (EggAction *action, sxSinceLastData *sxsld)
+gnc_sxsld_cmd_edit_cut (GtkAction *action, sxSinceLastData *sxsld)
 {
 }
 
 static void
-gnc_sxsld_cmd_edit_copy (EggAction *action, sxSinceLastData *sxsld)
+gnc_sxsld_cmd_edit_copy (GtkAction *action, sxSinceLastData *sxsld)
 {
 }
 
 static void
-gnc_sxsld_cmd_edit_paste (EggAction *action, sxSinceLastData *sxsld)
+gnc_sxsld_cmd_edit_paste (GtkAction *action, sxSinceLastData *sxsld)
 {
 }

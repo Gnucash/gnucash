@@ -27,11 +27,6 @@
 
 #include <gtk/gtk.h>
 
-#include "eggtoolbar.h"
-#include "egg-action-group.h"
-#include "egg-menu-merge.h"
-#include "egg-toggle-action.h"
-
 #include "gnc-embedded-window.h"
 
 #include "gnc-engine.h"
@@ -67,7 +62,7 @@ struct GncEmbeddedWindowPrivate
   GtkWidget *toolbar_dock;
   GtkWidget *statusbar;
 
-  EggActionGroup *action_group;
+  GtkActionGroup *action_group;
 
   GncPluginPage *page;
   GtkWidget     *parent_window;
@@ -149,7 +144,7 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
   gnc_plugin_page_removed (page);
 
   gnc_plugin_page_unmerge_actions (page, window->ui_merge);
-  egg_menu_merge_ensure_update (window->ui_merge);
+  gtk_ui_manager_ensure_update (window->ui_merge);
 
   gnc_plugin_page_destroy_widget (page);
   g_object_unref(page);
@@ -228,12 +223,12 @@ gnc_embedded_window_dispose (GObject *object)
 }
 
 static void
-gnc_embedded_window_add_widget (EggMenuMerge *merge,
+gnc_embedded_window_add_widget (GtkUIManager *merge,
 				GtkWidget *widget,
 				GncEmbeddedWindow *window)
 {
   ENTER("merge %p, new widget %p, window %p", merge, widget, window);
-  if (EGG_IS_TOOLBAR (widget)) {
+  if (GTK_IS_TOOLBAR (widget)) {
     window->priv->toolbar_dock = widget;
   }
 
@@ -262,7 +257,7 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
   gtk_widget_show (priv->statusbar);
   gtk_box_pack_end (GTK_BOX (window), priv->statusbar, FALSE, TRUE, 0);
 
-  window->ui_merge = egg_menu_merge_new ();
+  window->ui_merge = gtk_ui_manager_new ();
   g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
 		    G_CALLBACK (gnc_embedded_window_add_widget), window);
 
@@ -272,7 +267,7 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
 
 GncEmbeddedWindow *
 gnc_embedded_window_new (const gchar *action_group_name,
-			 EggActionEntry *action_entries,
+			 GtkActionEntry *action_entries,
 			 gint n_action_entries,
 			 const gchar *ui_filename,
 			 GtkWidget *enclosing_win,
@@ -295,11 +290,11 @@ gnc_embedded_window_new (const gchar *action_group_name,
   ui_fullname = gnc_gnome_locate_ui_file(ui_filename);
 
   /* Create menu and toolbar information */
-  priv->action_group = egg_action_group_new (action_group_name);
-  egg_action_group_add_actions (priv->action_group, action_entries,
+  priv->action_group = gtk_action_group_new (action_group_name);
+  gtk_action_group_add_actions (priv->action_group, action_entries,
 				n_action_entries, user_data);
-  egg_menu_merge_insert_action_group (window->ui_merge, priv->action_group, 0);
-  merge_id = egg_menu_merge_add_ui_from_file (window->ui_merge, ui_fullname,
+  gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
+  merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge, ui_fullname,
 					      &error);
 
   /* Error checking */
@@ -316,9 +311,9 @@ gnc_embedded_window_new (const gchar *action_group_name,
   /* Add accelerators (if wanted) */
   if (add_accelerators)
     gtk_window_add_accel_group (GTK_WINDOW(enclosing_win),
-				window->ui_merge->accel_group);
+				gtk_ui_manager_get_accel_group(window->ui_merge));
 
-  egg_menu_merge_ensure_update (window->ui_merge);
+  gtk_ui_manager_ensure_update (window->ui_merge);
   g_free(ui_fullname);
   LEAVE("window %p", window);
   return window;

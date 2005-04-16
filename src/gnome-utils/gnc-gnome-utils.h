@@ -33,10 +33,6 @@
 #ifndef GNC_GNOME_UTILS_H
 #define GNC_GNOME_UTILS_H
 
-/* These will go away when gtk2.4 becomes our base target. */
-#include "egg-action-group.h"
-#include "egg-menu-merge.h"
-
 #ifdef LIBGUILEH
 /** Initialize the Gnome libraries.
  *
@@ -144,7 +140,7 @@ typedef struct {
  *  @param short_labels A pointer to a data structure containing
  *  [action name, label string] string pairs.
  */
-void gnc_gnome_utils_init_short_names (EggActionGroup *action_group,
+void gnc_gnome_utils_init_short_names (GtkActionGroup *action_group,
 				       action_short_labels *short_labels);
 
 
@@ -167,7 +163,7 @@ void gnc_gnome_utils_init_short_names (EggActionGroup *action_group,
  *  @param enabled A boolean specifying the new state of the
  *  associated property.
  */
-void gnc_gnome_utils_update_actions (EggActionGroup *action_group,
+void gnc_gnome_utils_update_actions (GtkActionGroup *action_group,
 				     const gchar **action_names,
 				     const gchar *property_name,
 				     gboolean enabled);
@@ -188,8 +184,8 @@ void gnc_gnome_utils_update_actions (EggActionGroup *action_group,
  *  @return The merge_id number for the newly merged UI.  If an error
  *  occurred, the return value is 0.
  */
-gint gnc_menu_merge_add_actions (EggMenuMerge *ui_merge,
-				 EggActionGroup *action_group,
+gint gnc_menu_merge_add_actions (GtkUIManager *ui_merge,
+				 GtkActionGroup *action_group,
 				 const gchar *filename);
 #endif
 /** @} */

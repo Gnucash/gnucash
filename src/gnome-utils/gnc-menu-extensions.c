@@ -29,7 +29,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
-// #include "egg-menu-merge.h"
 
 typedef struct _ExtensionInfo ExtensionInfo;
 struct _ExtensionInfo
@@ -38,10 +37,10 @@ struct _ExtensionInfo
   gchar *window;
   gchar *path;
 
-  EggMenuMergeNodeType type;
+  GtkUIManagerItemType type;
 
   // GnomeUIInfo info[2];
-  // EggActionEntry action;
+  // GtkActionEntry action;
 
   gpointer extra_info;
 };
@@ -80,11 +79,9 @@ initialize_getters()
 }
 
 
-//static GnomeUIInfoType
-static EggMenuMergeNodeType
-gnc_extension_type(ExtensionInfo *ext_info)
+static gboolean
+gnc_extension_type(ExtensionInfo *ext_info, GtkUIManagerItemType *type)
 {
-  EggMenuMergeNodeType type;
   char *string;
 
   initialize_getters();
@@ -93,23 +90,23 @@ gnc_extension_type(ExtensionInfo *ext_info)
   if (string == NULL)
   {
     PERR("bad type");
-    return EGG_MENU_MERGE_UNDECIDED;
+    return FALSE;
   }
 
   if (safe_strcmp(string, "menu-item") == 0) {
-    type = EGG_MENU_MERGE_MENUITEM;
+    *type = GTK_UI_MANAGER_MENUITEM;
   } else if (safe_strcmp(string, "menu") == 0) {
-    type = EGG_MENU_MERGE_MENU;
+    *type = GTK_UI_MANAGER_MENU;
   } else if (safe_strcmp(string, "separator") == 0) {
-    type = EGG_MENU_MERGE_SEPARATOR;
+    *type = GTK_UI_MANAGER_SEPARATOR;
   } else {
     PERR("bad type");
-    type = EGG_MENU_MERGE_UNDECIDED;
+    return FALSE;
   }
 
   free(string);
 
-  return type;
+  return TRUE;
 }
 
 /* returns malloc'd name */
@@ -260,8 +257,8 @@ gnc_extension_run_script(ExtensionInfo *ext_info)
 }
 
 static void
-//gnc_main_window_cmd_test( EggAction *action, GncMainWindow *window )
-gnc_extension_action_cb( EggAction *action, /* GtkWindow *window */ gpointer data )
+//gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window )
+gnc_extension_action_cb( GtkAction *action, /* GtkWindow *window */ gpointer data )
 {
   ExtensionInfo *ext_info = data;
 
@@ -298,14 +295,19 @@ gnc_create_extension_info(SCM extension)
   gnc_extension_path(extension, &ext_info->window, &ext_info->path);
 
   //ext_info->info[0].type = gnc_extension_type(ext_info);
-  ext_info->type = gnc_extension_type( ext_info );
+  if (!gnc_extension_type( ext_info, &ext_info->type )) {
+    /* Can't parse the type passed to us.  Bail now. */
+    g_free(ext_info);
+    return NULL;
+  }
+
 
   // FIXME: convert this over to GtkAction / new UI-builder framework.
   // http://developer.gnome.org/doc/API/2.0/gtk/migrating-gnomeuiinfo.html
   // 1/ Define our own enum-values for the three types of widgets:
   //    MENU, MENU_ITEM, SEPERATOR
   //
-  // 2/ Figure out and use egg-menu-merge to auto-merge/unmerge menus
+  // 2/ Figure out and use GtkUIManager to auto-merge/unmerge menus
   // together.
   //    * get a merge-id
   //    * overlay the new menu
@@ -315,7 +317,7 @@ gnc_create_extension_info(SCM extension)
   switch ( ext_info->type )
   {
     //case GNOME_APP_UI_ITEM:
-  case EGG_MENU_MERGE_MENUITEM:
+  case GTK_UI_MANAGER_MENUITEM:
     /*
       ext_info->info[0].moreinfo = gnc_extension_cb;
 
@@ -334,7 +336,7 @@ gnc_create_extension_info(SCM extension)
       break;
 
       //case GNOME_APP_UI_SUBTREE:
-  case EGG_MENU_MERGE_MENU:
+  case GTK_UI_MANAGER_MENU:
     /*
       info = g_new(GnomeUIInfo, 1);
       info->type = GNOME_APP_UI_ENDOFINFO;
@@ -351,7 +353,7 @@ gnc_create_extension_info(SCM extension)
       break;
 
       //case GNOME_APP_UI_SEPARATOR:
-  case EGG_MENU_MERGE_SEPARATOR:
+  case GTK_UI_MANAGER_SEPARATOR:
     /*
       ext_info->info[0].type = GNOME_APP_UI_SEPARATOR;
     */
@@ -642,7 +644,7 @@ gnc_ext_gen_ui_path( ExtensionInfo *extInfo )
 }
 
 void
-gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge )
+gnc_extensions_menu_setup( GtkWindow *app, gchar *window, GtkUIManager *uiMerge )
 {
   //char *windowTmp;
   //char *pathTmp;
@@ -659,13 +661,13 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
 
     {
       guint new_merge_id;
-      EggActionGroup *eag;
+      GtkActionGroup *eag;
       GString *extActionName;
       GString *extUIPath;
       gchar *docString;
       char *tmpname;
       GCallback gcb;
-      //EggMenuMergeType extType;
+      //GtkUIManagerType extType;
 
       tmpname = gnc_extension_name( info );
       extActionName = gnc_ext_gen_action_name( tmpname );
@@ -681,9 +683,9 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
       //gnc_extension_path( info->extension, (char**)&windowTmp, (char**)&pathTmp );
       /*printf( "extension [%s] path: %s:%s\n",
         gnc_extension_name( info ), windowTmp, pathTmp );*/
-      switch ( gnc_extension_type( info ) )
+      switch ( info->type )
       {
-      case EGG_MENU_MERGE_MENUITEM:
+      case GTK_UI_MANAGER_MENUITEM:
         gcb = G_CALLBACK( gnc_extension_action_cb );
         break;
       default:
@@ -692,12 +694,12 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
       }
 
       {
-        //EggMenuMerge *ui_merge;
-        EggActionEntry newEntry[] = 
+        //GtkUIManager *ui_merge;
+        GtkActionEntry newEntry[] = 
           {
             { extActionName->str,
-              gnc_extension_name( info ), 
               NULL,
+              gnc_extension_name( info ), 
               "", // NULL /*FIXME: accel*/,
               docString,
               gcb
@@ -705,21 +707,21 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
           };
         
 
-        // ui_merge = egg_menu_merge_new();
+        // ui_merge = gtk_ui_manager_new();
 
-        eag = egg_action_group_new ("MainWindowActionsN" );
-        egg_action_group_add_actions( eag, newEntry, G_N_ELEMENTS (newEntry), info );
-        egg_menu_merge_insert_action_group( uiMerge, eag, 0 );
-        new_merge_id = egg_menu_merge_new_merge_id( uiMerge );
+        eag = gtk_action_group_new ("MainWindowActionsN" );
+        gtk_action_group_add_actions( eag, newEntry, G_N_ELEMENTS (newEntry), info );
+        gtk_ui_manager_insert_action_group( uiMerge, eag, 0 );
+        new_merge_id = gtk_ui_manager_new_merge_id( uiMerge );
         g_free(docString);
 
         {
           gchar *typeStr;
 
-          switch ( gnc_extension_type( info ) )
+          switch ( info->type )
           {
-          case EGG_MENU_MERGE_MENU: typeStr = "menu"; break;
-          case EGG_MENU_MERGE_MENUITEM: typeStr = "menuitem"; break;
+          case GTK_UI_MANAGER_MENU: typeStr = "menu"; break;
+          case GTK_UI_MANAGER_MENUITEM: typeStr = "menuitem"; break;
           default: typeStr = "unk"; break;
           }
         
@@ -729,15 +731,15 @@ gnc_extensions_menu_setup( GtkWindow *app, gchar *window, EggMenuMerge *uiMerge 
                  typeStr );
         }
 
-        egg_menu_merge_add_ui( uiMerge,
+        gtk_ui_manager_add_ui( uiMerge,
                                new_merge_id,
                                extUIPath->str, //"/menubar/AdditionalMenusPlaceholder/ReportAction",
                                extActionName->str, // "BarAction",
                                extActionName->str, // "BarAction",
-                               gnc_extension_type( info ), //EGG_MENU_MERGE_MENUITEM,
+                               info->type,         //GTK_UI_MANAGER_MENUITEM,
                                FALSE );
         
-        egg_menu_merge_ensure_update( uiMerge );
+        gtk_ui_manager_ensure_update( uiMerge );
         
       }
       g_string_free(extActionName, TRUE);

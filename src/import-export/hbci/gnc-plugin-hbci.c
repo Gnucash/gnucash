@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include "druid-hbci-initial.h"
-#include "egg-action-group.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-hbci-getbalance.h"
@@ -62,34 +61,34 @@ static void gnc_plugin_hbci_account_selected         (GncPluginPage *plugin_page
 						      gpointer user_data);
 
 /* Command callbacks */
-static void gnc_plugin_hbci_cmd_setup (EggAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_hbci_cmd_get_balance (EggAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_hbci_cmd_get_transactions (EggAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_hbci_cmd_issue_transaction (EggAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_hbci_cmd_issue_direct_debit (EggAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_hbci_cmd_setup (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_hbci_cmd_get_balance (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_hbci_cmd_get_transactions (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_hbci_cmd_issue_transaction (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_hbci_cmd_issue_direct_debit (GtkAction *action, GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-hbci-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-hbci-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
+static GtkActionEntry gnc_plugin_actions [] = {
   /* Menus */
-  { "OnlineActionsAction", N_("_Online Actions"), NULL, NULL, NULL, NULL },
+  { "OnlineActionsAction", NULL, N_("_Online Actions"), NULL, NULL, NULL },
 
   /* Menu Items */
-  { "HbciSetupAction", N_("HBCI Setup..."), NULL, NULL,
+  { "HbciSetupAction", NULL, N_("HBCI Setup..."), NULL,
     N_("Gather initial HBCI information"),
     G_CALLBACK (gnc_plugin_hbci_cmd_setup) },
-  { "HbciGetBalanceAction", N_("HBCI Get _Balance"), NULL, NULL,
+  { "HbciGetBalanceAction", NULL, N_("HBCI Get _Balance"), NULL,
     N_("Get the account balance online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_balance) },
-  { "HbciGetTransAction", N_("HBCI Get _Transactions"), NULL, NULL,
+  { "HbciGetTransAction", NULL, N_("HBCI Get _Transactions"), NULL,
     N_("Get the transactions online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_get_transactions) },
-  { "HbciIssueTransAction", N_("HBCI _Issue Transactions"), NULL, NULL,
+  { "HbciIssueTransAction", NULL, N_("HBCI _Issue Transactions"), NULL,
     N_("Issue a new transaction online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_transaction) },
-  { "HbciIssueDirectDebitAction", N_("HBCI Issue _Direct Debit"), NULL, NULL,
+  { "HbciIssueDirectDebitAction", NULL, N_("HBCI Issue _Direct Debit"), NULL,
     N_("Issue a new direct debit note online through HBCI"),
     G_CALLBACK (gnc_plugin_hbci_cmd_issue_direct_debit) },
 };
@@ -317,7 +316,7 @@ gnc_plugin_hbci_account_selected (GncPluginPage *plugin_page,
 				  Account *account,
 				  gpointer user_data)
 {
-  EggActionGroup *action_group;
+  GtkActionGroup *action_group;
   GncMainWindow  *window;
 
   window = GNC_MAIN_WINDOW(plugin_page->window);
@@ -353,7 +352,7 @@ static void
 gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
 					  GncPluginPage *page)
 {
-  EggActionGroup *action_group;
+  GtkActionGroup *action_group;
   const gchar    *page_name;
   Account        *account;
 
@@ -400,7 +399,7 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
  ************************************************************/
 
 static void
-gnc_plugin_hbci_cmd_setup (EggAction *action,
+gnc_plugin_hbci_cmd_setup (GtkAction *action,
 			   GncMainWindowActionData *data)
 {
   ENTER("action %p, main window data %p", action, data);
@@ -409,7 +408,7 @@ gnc_plugin_hbci_cmd_setup (EggAction *action,
 }
 
 static void
-gnc_plugin_hbci_cmd_get_balance (EggAction *action,
+gnc_plugin_hbci_cmd_get_balance (GtkAction *action,
 				 GncMainWindowActionData *data)
 {
   Account *account;
@@ -426,7 +425,7 @@ gnc_plugin_hbci_cmd_get_balance (EggAction *action,
 }
 
 static void
-gnc_plugin_hbci_cmd_get_transactions (EggAction *action,
+gnc_plugin_hbci_cmd_get_transactions (GtkAction *action,
 				      GncMainWindowActionData *data)
 {
   Account *account;
@@ -443,7 +442,7 @@ gnc_plugin_hbci_cmd_get_transactions (EggAction *action,
 }
 
 static void
-gnc_plugin_hbci_cmd_issue_transaction (EggAction *action,
+gnc_plugin_hbci_cmd_issue_transaction (GtkAction *action,
 					GncMainWindowActionData *data)
 {
   Account *account;
@@ -460,7 +459,7 @@ gnc_plugin_hbci_cmd_issue_transaction (EggAction *action,
 }
 
 static void
-gnc_plugin_hbci_cmd_issue_direct_debit (EggAction *action,
+gnc_plugin_hbci_cmd_issue_direct_debit (GtkAction *action,
 					GncMainWindowActionData *data)
 {
   Account *account;

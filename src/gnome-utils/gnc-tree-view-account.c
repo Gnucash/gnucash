@@ -246,17 +246,17 @@ sort_by_xxx_value (xaccGetBalanceInCurrencyFn fn,
   Account *account;
   gnc_numeric balance_a, balance_b;
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
   /* Get balance 1 */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter,
 						    f_iter_a);
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
   balance_a = gnc_ui_account_get_balance_full(fn, account, recurse, NULL, NULL);
 
   /* Get balance 2 */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter,
 						    f_iter_b);
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
@@ -336,17 +336,17 @@ sort_by_placeholder (GtkTreeModel *f_model,
   Account *account;
   gboolean flag_a, flag_b;
 
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
   /* Get balance 1 */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter,
 						    f_iter_a);
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
   flag_a = xaccAccountGetPlaceholder(account);
 
   /* Get balance 2 */
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter,
 						    f_iter_b);
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
@@ -389,7 +389,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   /* Set up the view private filter layer on the common model. */
   if (!show_root)
     virtual_root_path = gtk_tree_path_new_first ();
-  f_model = egg_tree_model_filter_new (model, virtual_root_path);
+  f_model = gtk_tree_model_filter_new (model, virtual_root_path);
   gtk_object_sink(GTK_OBJECT(model));
   if (virtual_root_path)
     gtk_tree_path_free(virtual_root_path);
@@ -455,7 +455,7 @@ gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
   /* Reach down to the real model and get a path for this account */
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
   if (path == NULL) {
     LEAVE("no path");
@@ -463,7 +463,7 @@ gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
   }
 
   /* convert back to a filtered path */
-  f_path = egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (f_model), path);
+  f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model), path);
   gtk_tree_path_free(path);
   if (!f_path) {
     LEAVE("no filter path");
@@ -471,7 +471,7 @@ gnc_tree_view_account_get_path_from_account (GncTreeViewAccount *view,
   }
 
   /* convert back to a sorted path */
-  s_path = egg_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
+  s_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_SORT (s_model), f_path);
   gtk_tree_path_free(f_path);
   debug_path(LEAVE, s_path);
   return s_path;
@@ -495,14 +495,14 @@ gnc_tree_view_account_get_iter_from_account (GncTreeViewAccount *view,
   /* Reach down to the real model and get an iter for this account */
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   if (!gnc_tree_model_account_get_iter_from_account (GNC_TREE_MODEL_ACCOUNT(model), account, &iter)) {
     LEAVE("model_get_iter_from_account failed");
     return FALSE;
   }
 
   /* convert back to a sort iter */
-  egg_tree_model_filter_convert_child_iter_to_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &f_iter, &iter);
   gtk_tree_model_sort_convert_child_iter_to_iter (GTK_TREE_MODEL_SORT(s_model),
 						  s_iter, &f_iter);
@@ -556,10 +556,10 @@ gnc_tree_view_account_get_account_from_column (GtkTreeViewColumn *column,
 						  &f_iter,
 						  s_iter);
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 						    &iter,
 						    &f_iter);
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
   LEAVE("account %p (%s)", account, xaccAccountGetName (account));
   return account;
@@ -664,7 +664,7 @@ gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
  * This function does not do anything with the 'include_type' field.
  * Should there be a automatic filter for backward compatability
  * that uses these flags, or should all uses of this be converted to
- * a eggtreemodelfilter?
+ * a GtkTreeModelFilter?
  */
 void
 gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
@@ -719,7 +719,7 @@ gnc_tree_view_account_filter_helper (GtkTreeModel *model,
 }
 
 /*
- * Set an eggtreemodel visible filter on this account.  This filter will be
+ * Set an GtkTreeModel visible filter on this account.  This filter will be
  * called for each account that the tree is about to show, and the
  * account will be passed to the callback function.
  */
@@ -745,14 +745,14 @@ gnc_tree_view_account_set_filter (GncTreeViewAccount *view,
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  egg_tree_model_filter_set_visible_func (EGG_TREE_MODEL_FILTER (f_model),
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
 					  gnc_tree_view_account_filter_helper,
 					  fd,
 					  gnc_tree_view_account_filter_destroy);
 
   /* Whack any existing levels. The top two levels have been created
    * before this routine can be called. */
-  egg_tree_model_filter_refilter (EGG_TREE_MODEL_FILTER (f_model));
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
   LEAVE(" ");
 }
 
@@ -768,7 +768,7 @@ gnc_tree_view_account_refilter (GncTreeViewAccount *view)
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  egg_tree_model_filter_refilter (EGG_TREE_MODEL_FILTER (f_model));
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
 }
 
 
@@ -789,7 +789,7 @@ gnc_tree_view_account_get_top_level (GncTreeViewAccount *view)
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
   return gnc_tree_model_account_get_toplevel (GNC_TREE_MODEL_ACCOUNT(model));
 }
@@ -819,14 +819,14 @@ gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
     }
 
     f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-    path = egg_tree_model_filter_convert_path_to_child_path (EGG_TREE_MODEL_FILTER (f_model), f_path);
+    path = gtk_tree_model_filter_convert_path_to_child_path (GTK_TREE_MODEL_FILTER (f_model), f_path);
     gtk_tree_path_free(f_path);
     if (!path) {
       LEAVE("no path");
       return NULL;
     }
 
-    model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+    model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
     if (!gtk_tree_model_get_iter (model, &iter, path)) {
       LEAVE("no iter");
       return NULL;
@@ -863,7 +863,7 @@ gnc_tree_view_account_get_selected_account (GncTreeViewAccount *view)
 						    &f_iter, &s_iter);
 
     f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-    egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (f_model),
+    gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (f_model),
 						      &iter, &f_iter);
 
     account = iter.user_data;
@@ -896,7 +896,7 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
   path = gnc_tree_model_account_get_path_from_account (GNC_TREE_MODEL_ACCOUNT(model), account);
   if (path == NULL) {
@@ -905,7 +905,7 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
   }
   debug_path(DEBUG, path);
 
-  f_path = egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (f_model),
+  f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model),
 							     path);
   gtk_tree_path_free(path);
   if (f_path == NULL) {
@@ -958,7 +958,7 @@ get_selected_accounts_helper (GtkTreeModel *s_model,
 						  &f_iter, s_iter);
 
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER (f_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (f_model),
 						    &iter, &f_iter);
   account = iter.user_data;
   *return_list = g_list_append(*return_list, account);
@@ -1003,7 +1003,7 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
 
   s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
   f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 
   /* Clear any existing selection. */
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(view));
@@ -1024,7 +1024,7 @@ gnc_tree_view_account_set_selected_accounts (GncTreeViewAccount *view,
       continue;
     }
 
-    f_path = egg_tree_model_filter_convert_child_path_to_path (EGG_TREE_MODEL_FILTER (f_model),
+    f_path = gtk_tree_model_filter_convert_child_path_to_path (GTK_TREE_MODEL_FILTER (f_model),
 							       path);
     gtk_tree_path_free(path);
     if (f_path == NULL)
@@ -1159,11 +1159,11 @@ account_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
 							&f_iter, s_iter);
 
 	f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-	egg_tree_model_filter_convert_iter_to_child_iter (EGG_TREE_MODEL_FILTER(f_model),
+	gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
 							  &iter,
 							  &f_iter);
 
-	model = egg_tree_model_filter_get_model(EGG_TREE_MODEL_FILTER(f_model));
+	model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
 	account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
 	frame = xaccAccountGetSlots(account);
 

@@ -41,14 +41,14 @@ static void gnc_plugin_account_tree_finalize (GObject *object);
 static GncPluginPage *gnc_plugin_account_tree_create_page (GncPlugin *plugin, const gchar *uri);
 
 /* Command callbacks */
-static void gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-account-tree-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
-	{ "FileNewAccountTreeAction", N_("New Account Tree"), NULL, NULL,
+static GtkActionEntry gnc_plugin_actions [] = {
+	{ "FileNewAccountTreeAction", NULL, N_("New Account Tree"), NULL,
 	  N_("Open a new Account Tree page"),
 	  G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree) },
 };
@@ -192,7 +192,7 @@ gnc_plugin_account_tree_create_page (GncPlugin *plugin,
  ************************************************************/
 
 static void
-gnc_plugin_account_tree_cmd_new_account_tree (EggAction *action,
+gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action,
 					      GncMainWindowActionData *data)
 {
 	g_return_if_fail (data != NULL);

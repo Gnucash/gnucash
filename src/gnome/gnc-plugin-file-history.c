@@ -45,14 +45,24 @@ static void gnc_plugin_file_history_finalize (GObject *object);
 static void gnc_plugin_file_history_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 
 /* Command callbacks */
-static void gnc_plugin_file_history_cmd_open_file (EggAction *action, GncPlugin *plugin);
+static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncPlugin *plugin);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-file-history-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-file-history-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
-	{ "FileOpenRecentAction", N_("Open _Recent"), NULL, NULL, NULL, NULL },
+static GtkActionEntry gnc_plugin_actions [] = {
+	{ "FileOpenRecentAction", NULL, N_("Open _Recent"), NULL, NULL, NULL },
+	{ "RecentFile0Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile1Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile2Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile3Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile4Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile5Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile6Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile7Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile8Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
+	{ "RecentFile9Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -95,16 +105,12 @@ static void
 gnc_history_update_menus (GncPlugin *plugin)
 {
 	GncMainWindow *window;
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 	gchar action_name[40], *label_name, *old_filename;
 	const GList *history_list, *tmp;
 	GValue label = { 0 };
 	guint i;
-
-	static EggActionEntry new_actions =
-	  { NULL, "", NULL, NULL, NULL,
-	    G_CALLBACK (gnc_plugin_file_history_cmd_open_file) };
 
 	/* Get the history list */
 	history_list = gnc_history_get_file_list();
@@ -121,18 +127,12 @@ gnc_history_update_menus (GncPlugin *plugin)
 	for (tmp = history_list, i = 1; tmp; tmp = g_list_next(tmp), i++) {
 	  /* Find or create the action object */
 	  g_sprintf(action_name, "RecentFile%dAction", i % 10);
-	  action = egg_action_group_get_action (action_group, action_name);
-	  if (action == NULL) {
-	    new_actions.name = action_name;
-	    egg_action_group_add_actions (action_group, &new_actions, 1, plugin);
-	    action = egg_action_group_get_action (action_group, action_name);
-	  }
+	  action = gtk_action_group_get_action (action_group, action_name);
 
 	  /* set the menu label (w/accelerator) */
 	  label_name = gnc_history_generate_label(i, tmp->data);
 	  g_value_set_string (&label, label_name);
 	  g_object_set_property (G_OBJECT(action), "label", &label);
-          g_value_unset(&label);
 	  g_free(label_name);
 
 	  /* set the filename for the callback function */
@@ -141,6 +141,7 @@ gnc_history_update_menus (GncPlugin *plugin)
 	    g_free(old_filename);
 	  g_object_set_data(G_OBJECT(action), FILENAME_STRING, g_strdup(tmp->data));
 	}
+	g_value_unset(&label);
 
 	gnc_main_window_actions_updated (window);
 }
@@ -290,12 +291,12 @@ gnc_plugin_file_history_add_to_window (GncPlugin *plugin,
  ************************************************************/
 
 static void
-gnc_plugin_file_history_cmd_open_file (EggAction *action,
+gnc_plugin_file_history_cmd_open_file (GtkAction *action,
 				       GncPlugin *plugin)
 {
 	gchar *filename;
 
-	g_return_if_fail(EGG_IS_ACTION(action));
+	g_return_if_fail(GTK_IS_ACTION(action));
 	g_return_if_fail(GNC_IS_PLUGIN(plugin));
 
 	filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);

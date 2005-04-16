@@ -36,7 +36,6 @@
 #include <gtk/gtktreeview.h>
 
 #include "gnc-pricedb.h"
-#include "eggtreemodelfilter.h"
 #include "gnc-ui-util.h"
 
 G_BEGIN_DECLS
@@ -159,8 +158,8 @@ void gnc_tree_view_price_set_filter (GncTreeViewPrice *view,
  *  view is incorrect.  This appears to only be necessary if the
  *  filter affects one of the top level prices in gnucash.
  *
- *  @note This calls a function in libegg that is annotated as being
- *  slow.  You have been warned.
+ *  @note This calls a function in gtk that is annotated in the
+ *  sources as being slow.  You have been warned.
  *
  *  @param price_view A pointer to an price tree view.
  */

@@ -33,7 +33,6 @@
 #endif
 
 #include "argv-list-converters.h"
-#include "egg-action-group.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 #include "gnc-trace.h"
@@ -281,10 +280,10 @@ gnc_gnome_get_gdkpixbuf (const char *name)
 /** Add "short" labels to existing actions.  The "short" label is the
  *  string used on toolbar buttons when the action is visible.*/
 void
-gnc_gnome_utils_init_short_names (EggActionGroup *action_group,
+gnc_gnome_utils_init_short_names (GtkActionGroup *action_group,
 				  action_short_labels *short_labels)
 {
-  EggAction *action;
+  GtkAction *action;
   GValue value = { 0, };
   gint i;
 
@@ -292,7 +291,7 @@ gnc_gnome_utils_init_short_names (EggActionGroup *action_group,
 
   for (i = 0; short_labels[i].action_name; i++) {
     /* Add a couple of short labels for the toolbar */
-    action = egg_action_group_get_action (action_group,
+    action = gtk_action_group_get_action (action_group,
 					  short_labels[i].action_name);
     g_value_set_static_string (&value, gettext(short_labels[i].label));
     g_object_set_property (G_OBJECT(action), "short_label", &value);
@@ -304,12 +303,12 @@ gnc_gnome_utils_init_short_names (EggActionGroup *action_group,
  *  modify actions making them visible, invisible, sensitive, or
  *  insensitive. */
 void
-gnc_gnome_utils_update_actions (EggActionGroup *action_group,
+gnc_gnome_utils_update_actions (GtkActionGroup *action_group,
 				const gchar **action_names,
 				const gchar *property_name,
 				gboolean enabled)
 {
-  EggAction    *action;
+  GtkAction    *action;
   GValue        value = { 0 };
   gint          i;
 
@@ -317,7 +316,7 @@ gnc_gnome_utils_update_actions (EggActionGroup *action_group,
   g_value_set_boolean (&value, enabled);
 
   for (i = 0; action_names[i]; i++) {
-    action = egg_action_group_get_action (action_group, action_names[i]);
+    action = gtk_action_group_get_action (action_group, action_names[i]);
     g_object_set_property (G_OBJECT(action), property_name, &value);
   }
 }
@@ -326,8 +325,8 @@ gnc_gnome_utils_update_actions (EggActionGroup *action_group,
 
 /** Load a new set of actions into an existing UI. */
 gint
-gnc_menu_merge_add_actions (EggMenuMerge *ui_merge,
-			    EggActionGroup *action_group,
+gnc_menu_merge_add_actions (GtkUIManager *ui_merge,
+			    GtkActionGroup *action_group,
 			    const gchar *filename)
 {
 	GError *error = NULL;
@@ -340,18 +339,18 @@ gnc_menu_merge_add_actions (EggMenuMerge *ui_merge,
 	g_return_val_if_fail (action_group, 0);
 	g_return_val_if_fail (filename, 0);
 
-	egg_menu_merge_insert_action_group (ui_merge, action_group, 0);
+	gtk_ui_manager_insert_action_group (ui_merge, action_group, 0);
 
 	pathname = gnc_gnome_locate_ui_file (filename);
 	if (pathname == NULL)
 	  return 0;
 
-	merge_id = egg_menu_merge_add_ui_from_file (ui_merge, pathname, &error);
+	merge_id = gtk_ui_manager_add_ui_from_file (ui_merge, pathname, &error);
 	DEBUG("merge_id is %d", merge_id);
 
 	g_assert(merge_id || error);
 	if (merge_id) {
-	  egg_menu_merge_ensure_update (ui_merge);
+	  gtk_ui_manager_ensure_update (ui_merge);
 	} else {
 	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
 		     filename, error->message);

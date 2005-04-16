@@ -38,18 +38,18 @@ static void gnc_plugin_qif_import_init (GncPluginQifImport *plugin);
 static void gnc_plugin_qif_import_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_qif_import_cmd_new_qif_import (EggAction *action, GncMainWindowActionData *data);
-static void gnc_plugin_qif_test_druid (EggAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-qif-import-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-qif-import-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
-	{ "QIFImportAction", N_("Import _QIF..."), GTK_STOCK_CONVERT, "<control>i",
+static GtkActionEntry gnc_plugin_actions [] = {
+	{ "QIFImportAction", GTK_STOCK_CONVERT, N_("Import _QIF..."), "<control>i",
 	  N_("Import a Quicken QIF file"),
 	  G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import) },
-	{ "QIFTestDruid", "Test Druid", GTK_STOCK_CONVERT, NULL, 
+	{ "QIFTestDruid", GTK_STOCK_CONVERT, "Test Druid", NULL, 
 	  "Test the new Druid", G_CALLBACK(gnc_plugin_qif_test_druid) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
@@ -168,14 +168,14 @@ gnc_plugin_qif_import_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_qif_import_cmd_new_qif_import (EggAction *action,
+gnc_plugin_qif_import_cmd_new_qif_import (GtkAction *action,
 					  GncMainWindowActionData *data)
 {
 	gnc_ui_qif_import_druid_make ();
 }
 
 static void
-gnc_plugin_qif_test_druid (EggAction *action, GncMainWindowActionData *data)
+gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionData *data)
 {
 	gnc_druid_gnome_test();
 }

@@ -35,8 +35,6 @@
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "druid-stock-split.h"
-#include "egg-action-group.h"
-#include "egg-radio-action.h"
 #include "global-options.h"
 #include "gnc-book.h"
 #include "gnc-date.h"
@@ -69,8 +67,8 @@ static void gnc_plugin_page_register_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
-static void gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
-static void gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
+static void gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
+static void gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
 
 static gchar *gnc_plugin_page_register_get_tab_name (GncPluginPage *plugin_page);
 
@@ -84,29 +82,29 @@ void gnc_plugin_page_register_end_toggle_cb(GtkToggleButton *toggle, gpointer da
 void gnc_plugin_page_register_today_cb(GtkButton *buttontoggle, gpointer data);
 
 /* Command callbacks */
-static void gnc_plugin_page_register_cmd_print_check (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_date_show_all (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_date_set_range (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_status_all (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_status_one (EggToggleAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_sort_changed (EggAction *action, EggRadioAction *current, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_style_changed (EggAction *action, EggRadioAction *current, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_style_double_line (EggToggleAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_print_check (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_date_show_all (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_date_set_range (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_status_all (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_status_one (GtkToggleAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_sort_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_style_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction *action, GncPluginPageRegister *plugin_page);
 
-static void gnc_plugin_page_register_cmd_reconcile (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_transfer (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_stock_split (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_lots (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_enter_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_cancel_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_delete_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_blank_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_duplicate_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_reinitialize_transaction (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_expand_transaction (EggToggleAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_exchange_rate (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_jump (EggAction *action, GncPluginPageRegister *plugin_page);
-static void gnc_plugin_page_register_cmd_schedule (EggAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_reconcile (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_transfer (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_stock_split (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_lots (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_cancel_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_delete_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_blank_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_duplicate_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_reinitialize_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_exchange_rate (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_jump (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_schedule (GtkAction *action, GncPluginPageRegister *plugin_page);
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 
@@ -114,74 +112,74 @@ static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegi
 /*                          Actions                         */
 /************************************************************/
 
-static EggActionEntry gnc_plugin_page_register_actions [] =
+static GtkActionEntry gnc_plugin_page_register_actions [] =
 {
 	/* Toplevel */
-	{ "FakeToplevel", "", NULL, NULL, NULL, NULL },
-	{ "SelectTransactionsAction", N_("Select _Transactions"), NULL, NULL, NULL, NULL },
-	{ "TransDateRangeAction", N_("_Date Range"), NULL, NULL, NULL, NULL },
-	{ "TransStatusAction", N_("_Status"), NULL, NULL, NULL, NULL },
-	{ "SortOrderAction", N_("Sort _Order"), NULL, NULL, NULL, NULL },
-	{ "StyleAction", N_("St_yle"), NULL, NULL, NULL, NULL },
+	{ "FakeToplevel", NULL, "", NULL, NULL, NULL },
+	{ "SelectTransactionsAction", NULL, N_("Select _Transactions"), NULL, NULL, NULL },
+	{ "TransDateRangeAction", NULL, N_("_Date Range"), NULL, NULL, NULL },
+	{ "TransStatusAction", NULL, N_("_Status"), NULL, NULL, NULL },
+	{ "SortOrderAction", NULL, N_("Sort _Order"), NULL, NULL, NULL },
+	{ "StyleAction", NULL, N_("St_yle"), NULL, NULL, NULL },
 
 	/* File menu */
-	{ "FilePrintCheckAction", N_("Print Check"), NULL, NULL, NULL,
+	{ "FilePrintCheckAction", NULL, N_("Print Check"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_print_check) },
 
 	/* View menu */
-	{ "TransDateShowAllAction", N_("Show _All"), NULL, NULL, NULL,
+	{ "TransDateShowAllAction", NULL, N_("Show _All"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_date_show_all) },
-	{ "TransDateSetRangeAction", N_("Set _Range..."), NULL, NULL, NULL,
+	{ "TransDateSetRangeAction", NULL, N_("Set _Range..."), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_date_set_range) },
 
-	{ "StatusAllAction", N_("_All"), NULL, NULL, NULL,
+	{ "StatusAllAction", NULL, N_("_All"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_status_all) },
 
 	/* Actions menu */
-	{ "ActionsTransferAction", N_("_Transfer..."), GTK_STOCK_MISSING_IMAGE, "<control>t",
+	{ "ActionsTransferAction", GTK_STOCK_MISSING_IMAGE, N_("_Transfer..."), "<control>t",
 	  N_("Transfer funds from one account to another"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transfer) },
-	{ "ActionsReconcileAction", N_("_Reconcile..."), NULL, "<control>r",
+	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), "<control>r",
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_reconcile) },
-	{ "ActionsStockSplitAction", N_("Stock S_plit..."), NULL, NULL,
+	{ "ActionsStockSplitAction", NULL, N_("Stock S_plit..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_stock_split) },
-	{ "ActionsLotsAction", N_("_Lot Viewer..."), NULL, NULL,
+	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
-	{ "RecordTransactionAction", N_("_Enter Transaction"), GTK_STOCK_ADD, NULL,
+	{ "RecordTransactionAction", GTK_STOCK_ADD, N_("_Enter Transaction"), NULL,
 	  N_("Record the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction) },
-	{ "CancelTransactionAction", N_("_Cancel Transaction"), GTK_STOCK_CANCEL, NULL,
+	{ "CancelTransactionAction", GTK_STOCK_CANCEL, N_("_Cancel Transaction"), NULL,
 	  N_("_Cancel the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction) },
-	{ "DeleteTransactionAction", N_("_Delete Transaction"), GTK_STOCK_DELETE, NULL,
+	{ "DeleteTransactionAction", GTK_STOCK_DELETE, N_("_Delete Transaction"), NULL,
 	  N_("Delete the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction) },
-	{ "BlankTransactionAction", N_("_Blank Transaction"), GTK_STOCK_MISSING_IMAGE, NULL,
+	{ "BlankTransactionAction", GTK_STOCK_MISSING_IMAGE, N_("_Blank Transaction"), NULL,
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
 
-	{ "DuplicateTransactionAction", N_("D_uplicate Transaction"), GTK_STOCK_COPY, NULL,
+	{ "DuplicateTransactionAction", GTK_STOCK_COPY, N_("D_uplicate Transaction"), NULL,
 	  N_("Make a copy of the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction) },
-	{ "RemoveTransactionSplitsAction", N_("Remove Transaction Splits"), GTK_STOCK_CLEAR, NULL,
+	{ "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remove Transaction Splits"), NULL,
 	  N_("Remove all splits in the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_reinitialize_transaction) },
-	{ "EditExchangeRateAction", N_("Edit Exchange Rate"), GTK_STOCK_MISSING_IMAGE, NULL,
+	{ "EditExchangeRateAction", GTK_STOCK_MISSING_IMAGE, N_("Edit Exchange Rate"), NULL,
 	  N_("Exit the exchange rate for the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate) },
-	{ "JumpTransactionAction", N_("_Jump"), GTK_STOCK_JUMP_TO, NULL,
+	{ "JumpTransactionAction", GTK_STOCK_JUMP_TO, N_("_Jump"), NULL,
 	  N_("Jump to the corresponding transaction in the other account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_jump) },
-	{ "ScheduleTransactionAction", N_("Schedule..."), GTK_STOCK_COPY, NULL,
+	{ "ScheduleTransactionAction", GTK_STOCK_COPY, N_("Schedule..."), NULL,
 	  N_("Edit scheduled transactions"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
 
-static EggToggleActionEntry toggle_entries[] = {
+static GtkToggleActionEntry toggle_entries[] = {
 	{ "StatusReconciledAction", NULL, N_("_Reconciled"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_status_one), TRUE },
 	{ "StatusClearedAction", NULL, N_("_Cleared"), NULL, NULL,
@@ -202,7 +200,7 @@ static EggToggleActionEntry toggle_entries[] = {
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
-static EggRadioActionEntry radio_entries_1 [] =
+static GtkRadioActionEntry radio_entries_1 [] =
 {
 	{ "SortStandardAction", NULL, N_("_Standard"), NULL, NULL, BY_STANDARD },
 	{ "SortDateAction", NULL, N_("_Date"), NULL, NULL, BY_DATE },
@@ -217,7 +215,7 @@ static EggRadioActionEntry radio_entries_1 [] =
 };
 static guint n_radio_entries_1 = G_N_ELEMENTS (radio_entries_1);
 
-static EggRadioActionEntry radio_entries_2 [] =
+static GtkRadioActionEntry radio_entries_2 [] =
 {
 	{ "StyleBasicAction", NULL, N_("_Basic Ledger"), NULL, NULL, REG_STYLE_LEDGER },
 	{ "StyleAutoSplitAction", NULL, N_("_Auto-Split Ledger"), NULL, NULL, REG_STYLE_AUTO_LEDGER },
@@ -231,7 +229,7 @@ static const gchar *actions_requiring_account[] = {
 	NULL
 };
 
-/* DRH - Suggest this be added to libegg */
+/* DRH - Suggest short_labels be added to libegg */
 static action_short_labels short_labels[] = {
   { "ActionsTransferAction", 	  N_("Transfer") },
   { "RecordTransactionAction", 	  N_("Enter") },
@@ -265,9 +263,9 @@ struct {
 
 struct GncPluginPageRegisterPrivate
 {
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 	guint merge_id;
-	EggMenuMerge *ui_merge;
+	GtkUIManager *ui_merge;
 
 	GNCLedgerDisplay *ledger;
 	GNCSplitReg *gsr;
@@ -434,14 +432,14 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 }
 
 static void
-gnc_plugin_page_register_init_values (EggActionGroup *action_group)
+gnc_plugin_page_register_init_values (GtkActionGroup *action_group)
 {
-  EggAction *action;
+  GtkAction *action;
   gint i;
 
   for (i = 0; status_actions[i].action_name; i++) {
     /* Add a couple of short labels for the toolbar */
-    action = egg_action_group_get_action (action_group,
+    action = gtk_action_group_get_action (action_group,
 					  status_actions[i].action_name);
     g_object_set_data (G_OBJECT(action), CLEARED_VALUE,
 		       GINT_TO_POINTER(status_actions[i].value));
@@ -453,7 +451,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 {
 	GncPluginPageRegisterPrivate *priv;
 	GncPluginPage *parent;
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 
 	priv = g_new0 (GncPluginPageRegisterPrivate, 1);
 	plugin_page->priv = priv;
@@ -465,19 +463,19 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	parent->uri         = g_strdup("default:");
 
 	/* Create menu and toolbar information */
-	action_group = egg_action_group_new ("GncPluginPageRegisterActions");
+	action_group = gtk_action_group_new ("GncPluginPageRegisterActions");
 	priv->action_group = action_group;
-	egg_action_group_add_actions (action_group, gnc_plugin_page_register_actions,
+	gtk_action_group_add_actions (action_group, gnc_plugin_page_register_actions,
 				      gnc_plugin_page_register_n_actions, plugin_page);
-	egg_action_group_add_toggle_actions (action_group,
+	gtk_action_group_add_toggle_actions (action_group,
 					     toggle_entries, n_toggle_entries,
 					     plugin_page);
-	egg_action_group_add_radio_actions (action_group,
+	gtk_action_group_add_radio_actions (action_group,
 					    radio_entries_1, n_radio_entries_1,
 					    REG_STYLE_LEDGER,
 					    G_CALLBACK(gnc_plugin_page_register_cmd_sort_changed),
 					    plugin_page);
-	egg_action_group_add_radio_actions (action_group,
+	gtk_action_group_add_radio_actions (action_group,
 					    radio_entries_2, n_radio_entries_2,
 					    REG_STYLE_LEDGER,
 					    G_CALLBACK(gnc_plugin_page_register_cmd_style_changed),
@@ -539,7 +537,7 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 	GncPluginPageRegisterPrivate *priv ;
 	Account *account;
 	SplitRegister *sr;
-	EggAction *action;
+	GtkAction *action;
 
 	priv = page->priv;
 	account = gnc_plugin_page_register_get_account (page);
@@ -547,10 +545,10 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 				 "sensitive", account != NULL);
 
 	sr = gnc_ledger_display_get_split_register(priv->ledger);
-	action = egg_action_group_get_action (priv->action_group,
+	action = gtk_action_group_get_action (priv->action_group,
 					      "StyleDoubleLineAction");
 	g_signal_handlers_block_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
-	egg_toggle_action_set_active (EGG_TOGGLE_ACTION(action), sr->use_double_line);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(action), sr->use_double_line);
 	g_signal_handlers_unblock_by_func(action, gnc_plugin_page_register_cmd_style_double_line, page);
 }
 
@@ -621,7 +619,7 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 
 static void
 gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
-					EggMenuMerge *ui_merge)
+					GtkUIManager *ui_merge)
 {
 	GncPluginPageRegister *register_page;
 	GncPluginPageRegisterPrivate *priv;
@@ -640,7 +638,7 @@ gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
 	
 static void
 gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page,
-					      EggMenuMerge *ui_merge)
+					      GtkUIManager *ui_merge)
 {
 	GncPluginPageRegister *plugin_page_register = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
 	
@@ -648,8 +646,8 @@ gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page,
 	g_return_if_fail (plugin_page_register->priv->merge_id != 0);
 	g_return_if_fail (plugin_page_register->priv->action_group != NULL);
 
-	egg_menu_merge_remove_ui (ui_merge, plugin_page_register->priv->merge_id);
-	egg_menu_merge_remove_action_group (ui_merge, plugin_page_register->priv->action_group);
+	gtk_ui_manager_remove_ui (ui_merge, plugin_page_register->priv->merge_id);
+	gtk_ui_manager_remove_action_group (ui_merge, plugin_page_register->priv->action_group);
 
 	plugin_page_register->priv->ui_merge = NULL;
 }
@@ -706,7 +704,7 @@ gnc_plugin_page_register_button_press_cb (GtkWidget *widget,
 
 	if (event->button == 3 && page->priv->ui_merge != NULL) {
 		/* Maybe show a different popup menu if no account is selected. */
-		menu = egg_menu_merge_get_widget (page->priv->ui_merge, "/RegisterPopup");
+		menu = gtk_ui_manager_get_widget (page->priv->ui_merge, "/RegisterPopup");
 		if (menu)
 		  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
 				  event->button, event->time);
@@ -917,7 +915,7 @@ set_date_range (GncPluginPageRegisterPrivate *priv,
 /************************************************************/
 
 static void
-gnc_plugin_page_register_cmd_print_check (EggAction *action,
+gnc_plugin_page_register_cmd_print_check (GtkAction *action,
 					  GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -955,7 +953,7 @@ gnc_plugin_page_register_cmd_print_check (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_date_set_range (EggAction *action,
+gnc_plugin_page_register_cmd_date_set_range (GtkAction *action,
 					     GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -983,7 +981,7 @@ gnc_plugin_page_register_cmd_date_set_range (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_date_show_all (EggAction *action,
+gnc_plugin_page_register_cmd_date_show_all (GtkAction *action,
 					    GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1015,12 +1013,12 @@ gnc_plugin_page_register_cmd_date_show_all (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_status_all (EggAction *action,
+gnc_plugin_page_register_cmd_status_all (GtkAction *action,
 					 GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
   GSList *param_list = NULL;
-  EggAction *other_action;
+  GtkAction *other_action;
   Query *query;
   gint i;
 
@@ -1037,10 +1035,10 @@ gnc_plugin_page_register_cmd_status_all (EggAction *action,
 
   /* Turn off all the other check menu items */
   for (i = 0; status_actions[i].action_name; i++) {
-    other_action = egg_action_group_get_action (priv->action_group,
+    other_action = gtk_action_group_get_action (priv->action_group,
 						status_actions[i].action_name);
     g_signal_handlers_block_by_func(other_action, gnc_plugin_page_register_cmd_status_one, plugin_page);
-    egg_toggle_action_set_active (EGG_TOGGLE_ACTION(other_action), TRUE);
+    gtk_toggle_action_set_active (GTK_TOGGLE_ACTION(other_action), TRUE);
     g_signal_handlers_unblock_by_func(other_action, gnc_plugin_page_register_cmd_status_one, plugin_page);
   }
 
@@ -1055,7 +1053,7 @@ gnc_plugin_page_register_cmd_status_all (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_status_one (EggToggleAction *action,
+gnc_plugin_page_register_cmd_status_one (GtkToggleAction *action,
 					 GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1064,7 +1062,7 @@ gnc_plugin_page_register_cmd_status_one (EggToggleAction *action,
   gint value;
 
   ENTER("(toggle action %p (%s), plugin_page %p)",
-	action, action ? action->parent.name : "<no name>",
+	action, action ? gtk_action_get_name(GTK_ACTION(action)) : "<no name>",
 	plugin_page);
 
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
@@ -1078,7 +1076,7 @@ gnc_plugin_page_register_cmd_status_one (EggToggleAction *action,
 
   /* Compute the new match status */
   value = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(action), CLEARED_VALUE));
-  if (egg_toggle_action_get_active (action))
+  if (gtk_toggle_action_get_active (action))
     priv->cleared_match |= value;
   else
     priv->cleared_match &= ~value;
@@ -1099,8 +1097,8 @@ gnc_plugin_page_register_cmd_status_one (EggToggleAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_sort_changed (EggAction *action,
-					   EggRadioAction *current,
+gnc_plugin_page_register_cmd_sort_changed (GtkAction *action,
+					   GtkRadioAction *current,
 					   GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1109,19 +1107,19 @@ gnc_plugin_page_register_cmd_sort_changed (EggAction *action,
   ENTER("(action %p, radio action %p, plugin_page %p)",
 	action, current, plugin_page);
 
-  g_return_if_fail(EGG_IS_ACTION(action));
-  g_return_if_fail(EGG_IS_RADIO_ACTION(current));
+  g_return_if_fail(GTK_IS_ACTION(action));
+  g_return_if_fail(GTK_IS_RADIO_ACTION(current));
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
   priv = plugin_page->priv;
-  value = egg_radio_action_get_current_value(current);
+  value = gtk_radio_action_get_current_value(current);
   gnc_split_reg_set_sort_type(priv->gsr, value);
   LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_style_changed (EggAction *action,
-					    EggRadioAction *current,
+gnc_plugin_page_register_cmd_style_changed (GtkAction *action,
+					    GtkRadioAction *current,
 					    GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1130,18 +1128,18 @@ gnc_plugin_page_register_cmd_style_changed (EggAction *action,
   ENTER("(action %p, radio action %p, plugin_page %p)",
 	action, current, plugin_page);
 
-  g_return_if_fail(EGG_IS_ACTION(action));
-  g_return_if_fail(EGG_IS_RADIO_ACTION(current));
+  g_return_if_fail(GTK_IS_ACTION(action));
+  g_return_if_fail(GTK_IS_RADIO_ACTION(current));
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
   priv = plugin_page->priv;
-  value = egg_radio_action_get_current_value(current);
+  value = gtk_radio_action_get_current_value(current);
   gnc_split_reg_change_style(priv->gsr, value);
   LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_style_double_line (EggToggleAction *action,
+gnc_plugin_page_register_cmd_style_double_line (GtkToggleAction *action,
 						GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1150,13 +1148,13 @@ gnc_plugin_page_register_cmd_style_double_line (EggToggleAction *action,
 
   ENTER("(action %p, plugin_page %p)", action, plugin_page);
 
-  g_return_if_fail(EGG_IS_ACTION(action));
+  g_return_if_fail(GTK_IS_ACTION(action));
   g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
 
   priv = plugin_page->priv;
   reg = gnc_ledger_display_get_split_register (priv->ledger);
 
-  use_double_line =  egg_toggle_action_get_active (action);
+  use_double_line =  gtk_toggle_action_get_active (action);
   if (use_double_line != reg->use_double_line) {
     gnc_split_register_config(reg, reg->type, reg->style, use_double_line);
     gnc_ledger_display_refresh(priv->ledger);
@@ -1165,7 +1163,7 @@ gnc_plugin_page_register_cmd_style_double_line (EggToggleAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_transfer (EggAction *action,
+gnc_plugin_page_register_cmd_transfer (GtkAction *action,
 				       GncPluginPageRegister *page)
 {
   Account *account;
@@ -1182,7 +1180,7 @@ gnc_plugin_page_register_cmd_transfer (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_reconcile (EggAction *action,
+gnc_plugin_page_register_cmd_reconcile (GtkAction *action,
 					GncPluginPageRegister *page)
 {
   Account *account;
@@ -1202,7 +1200,7 @@ gnc_plugin_page_register_cmd_reconcile (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_stock_split (EggAction *action,
+gnc_plugin_page_register_cmd_stock_split (GtkAction *action,
 					  GncPluginPageRegister *page)
 {
   Account *account;
@@ -1217,7 +1215,7 @@ gnc_plugin_page_register_cmd_stock_split (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_lots (EggAction *action,
+gnc_plugin_page_register_cmd_lots (GtkAction *action,
 				   GncPluginPageRegister *page)
 {
   Account *account;
@@ -1232,7 +1230,7 @@ gnc_plugin_page_register_cmd_lots (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_enter_transaction (EggAction *action,
+gnc_plugin_page_register_cmd_enter_transaction (GtkAction *action,
 						GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1247,7 +1245,7 @@ gnc_plugin_page_register_cmd_enter_transaction (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_cancel_transaction (EggAction *action,
+gnc_plugin_page_register_cmd_cancel_transaction (GtkAction *action,
 						 GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1263,7 +1261,7 @@ gnc_plugin_page_register_cmd_cancel_transaction (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_delete_transaction (EggAction *action,
+gnc_plugin_page_register_cmd_delete_transaction (GtkAction *action,
 						 GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1279,7 +1277,7 @@ gnc_plugin_page_register_cmd_delete_transaction (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_blank_transaction (EggAction *action,
+gnc_plugin_page_register_cmd_blank_transaction (GtkAction *action,
 						GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1299,7 +1297,7 @@ gnc_plugin_page_register_cmd_blank_transaction (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_duplicate_transaction (EggAction *action,
+gnc_plugin_page_register_cmd_duplicate_transaction (GtkAction *action,
 						    GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1315,7 +1313,7 @@ gnc_plugin_page_register_cmd_duplicate_transaction (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_reinitialize_transaction (EggAction *action,
+gnc_plugin_page_register_cmd_reinitialize_transaction (GtkAction *action,
 						       GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1330,7 +1328,7 @@ gnc_plugin_page_register_cmd_reinitialize_transaction (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_expand_transaction (EggToggleAction *action,
+gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction *action,
 						 GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1343,13 +1341,13 @@ gnc_plugin_page_register_cmd_expand_transaction (EggToggleAction *action,
 
   priv = plugin_page->priv;
   reg = gnc_ledger_display_get_split_register (priv->ledger);
-  expand = egg_toggle_action_get_active (action);
+  expand = gtk_toggle_action_get_active (action);
   gnc_split_register_expand_current_trans (reg, expand);
   LEAVE(" ");
 }
 
 static void
-gnc_plugin_page_register_cmd_exchange_rate (EggAction *action,
+gnc_plugin_page_register_cmd_exchange_rate (GtkAction *action,
 					    GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1368,7 +1366,7 @@ gnc_plugin_page_register_cmd_exchange_rate (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_jump (EggAction *action,
+gnc_plugin_page_register_cmd_jump (GtkAction *action,
 				   GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
@@ -1442,7 +1440,7 @@ gnc_plugin_page_register_cmd_jump (EggAction *action,
 }
 
 static void
-gnc_plugin_page_register_cmd_schedule (EggAction *action,
+gnc_plugin_page_register_cmd_schedule (GtkAction *action,
 				       GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;

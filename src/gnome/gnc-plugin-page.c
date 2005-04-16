@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
 #include "gnc-plugin-page.h"
 
 static gpointer         parent_class = NULL;
@@ -116,7 +117,7 @@ gnc_plugin_page_destroy_widget (GncPluginPage *plugin_page)
 
 void
 gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
-			       EggMenuMerge *ui_merge)
+			       GtkUIManager *ui_merge)
 {
 	GncPluginPageClass *klass;
 
@@ -131,7 +132,7 @@ gnc_plugin_page_merge_actions (GncPluginPage *plugin_page,
 
 void
 gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
-				 EggMenuMerge *ui_merge)
+				 GtkUIManager *ui_merge)
 {
 	GncPluginPageClass *klass;
 

@@ -1,3 +1,10 @@
+2005-04-16  David Hampton  <hampton@employees.org>
+
+	* lots of file: Switch from a requirement of Gtk-2.2 to Gtk-2.4.
+	This replaces all EggAction references with GtkAction, and
+	EggMenuMerge with GtkUIManager.  It also drops all the files in
+	lib/egg since they are no longer needed.
+
 2005-04-11  Neil Williams  <linux@codehelp.co.uk>
 	* src/app-file/gnc-file.c: Added handlers for
 	write errors and made show_session_error()
@@ -23,6 +30,9 @@
 	* src/gnome/glade/chart-export.glade: Removing nuisance tooltip.
 
 2005-04-03  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/transfer.glade: Make all input fields expand on
+	the X axis.
 
 	* configure.in: Remove reqirement for Berkeley DB.  The G2 branch
 	compiles and runs fine without it.

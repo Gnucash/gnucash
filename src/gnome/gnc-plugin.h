@@ -53,7 +53,7 @@ typedef struct {
 	const gchar *plugin_name;
 
 	const gchar *actions_name;
-	EggActionEntry *actions;
+	GtkActionEntry *actions;
 	guint n_actions; 
 	const gchar *ui_filename;
  

@@ -35,14 +35,14 @@ static void gnc_plugin_mt940_init (GncPluginMt940 *plugin);
 static void gnc_plugin_mt940_finalize (GObject *object);
 
 /* Command callbacks */
-static void gnc_plugin_mt940_cmd_import (EggAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_mt940_cmd_import (GtkAction *action, GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-mt940-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-mt940-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
-  { "Mt940ImportAction", N_("Import MT940"), GTK_STOCK_CONVERT, NULL,
+static GtkActionEntry gnc_plugin_actions [] = {
+  { "Mt940ImportAction", GTK_STOCK_CONVERT, N_("Import MT940"), NULL,
     N_("Process an MT940 response file"),
     G_CALLBACK (gnc_plugin_mt940_cmd_import) },
 };
@@ -162,7 +162,7 @@ gnc_plugin_mt940_finalize (GObject *object)
  ************************************************************/
 
 static void
-gnc_plugin_mt940_cmd_import (EggAction *action,
+gnc_plugin_mt940_cmd_import (GtkAction *action,
 			   GncMainWindowActionData *data)
 {
   gnc_file_mt940_import ();

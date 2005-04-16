@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "egg-action-group.h"
 
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
@@ -78,8 +77,8 @@ static void gnc_plugin_page_account_tree_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page);
-static void gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
-static void gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page, EggMenuMerge *ui_merge);
+static void gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
+static void gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
 
 /* Callbacks */
 static gboolean gnc_plugin_page_account_tree_popup_menu_cb (GtkTreeView *treeview,
@@ -96,20 +95,20 @@ static void gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection 
 							       GncPluginPageAccountTree *page);
 
 /* Command callbacks */
-static void gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAccountTree *plugin_page);
-static void gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (EggAction *action, GncPluginPageAccountTree *plugin_page);
-static void gnc_plugin_page_account_tree_cmd_open_account (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_edit_account (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_transfer (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_lots (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAccountTree *page);
-static void gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAccountTree *plugin_page);
+static void gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (GtkAction *action, GncPluginPageAccountTree *plugin_page);
+static void gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_view_options (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_lots (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page);
+static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page);
 
 
 static void gnc_plugin_page_acct_tree_options_new(GncPluginPageAccountTreePrivate *priv);
@@ -119,57 +118,57 @@ static void gnc_plugin_page_account_tree_configure (GncPluginPageAccountTreePriv
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
 
 
-static EggActionEntry gnc_plugin_page_account_tree_actions [] = {
+static GtkActionEntry gnc_plugin_page_account_tree_actions [] = {
 	/* Toplevel */
-	{ "FakeToplevel", "", NULL, NULL, NULL, NULL },
+	{ "FakeToplevel", NULL, "", NULL, NULL, NULL },
 
 	/* File menu */
-	{ "FileNewAccountAction", N_("New Account..."), GNC_STOCK_NEW_ACCOUNT, NULL,
+	{ "FileNewAccountAction", GNC_STOCK_NEW_ACCOUNT, N_("New Account..."), NULL,
 	  N_("Create a new Account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_new_account) },
-	{ "FileAddAccountHierarchyDruidAction", N_("Add New Account _Hierarchy..."), NULL, NULL,
+	{ "FileAddAccountHierarchyDruidAction", NULL, N_("Add New Account _Hierarchy..."), NULL,
 	  N_("Extend the current book by merging with new account type categories"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_file_hierarchy_merge) },
-	{ "FileOpenAccountAction", N_("Open Account"), GNC_STOCK_OPEN_ACCOUNT, "<control>o",
+	{ "FileOpenAccountAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open Account"), "<control>o",
 	  N_("Open the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_account) },
-	{ "FileOpenSubaccountsAction", N_("Open _Subaccounts"), GNC_STOCK_OPEN_ACCOUNT, NULL,
+	{ "FileOpenSubaccountsAction", GNC_STOCK_OPEN_ACCOUNT, N_("Open _Subaccounts"), NULL,
 	  N_("Open the selected account and all its subaccounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_open_subaccounts) },
 
 	/* Edit menu */
-	{ "EditEditAccountAction", N_("_Edit Account"), GNC_STOCK_EDIT_ACCOUNT, "<control>e",
+	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("_Edit Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_edit_account) },
-	{ "EditDeleteAccountAction", N_("_Delete Account"), GNC_STOCK_DELETE_ACCOUNT, NULL,
+	{ "EditDeleteAccountAction", GNC_STOCK_DELETE_ACCOUNT, N_("_Delete Account"), NULL,
 	  N_("Delete selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_delete_account) },
-	{ "EditAccountViewOptionsAction", N_("Account Tree Options"), GTK_STOCK_PROPERTIES, NULL,
+	{ "EditAccountViewOptionsAction", GTK_STOCK_PROPERTIES, N_("Account Tree Options"), NULL,
 	  N_("Edit the account view options"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_view_options) },
 
 	/* Actions menu */
-	{ "ActionsReconcileAction", N_("_Reconcile..."), NULL, "<control>r",
+	{ "ActionsReconcileAction", NULL, N_("_Reconcile..."), "<control>r",
 	  N_("Reconcile the selected account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_reconcile) },
-	{ "ActionsTransferAction", N_("_Transfer..."), NULL, "<control>t",
+	{ "ActionsTransferAction", NULL, N_("_Transfer..."), "<control>t",
 	  N_("Transfer funds from one account to another"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_transfer) },
-	{ "ActionsStockSplitAction", N_("Stock S_plit..."), NULL, NULL,
+	{ "ActionsStockSplitAction", NULL, N_("Stock S_plit..."), NULL,
 	  N_("Record a stock split or a stock merger"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_stock_split) },
-	{ "ActionsLotsAction", N_("View _Lots..."), NULL, NULL,
+	{ "ActionsLotsAction", NULL, N_("View _Lots..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_lots) },
-	{ "ScrubMenuAction", N_("Check & Repair"), NULL, NULL, NULL, NULL },
-	{ "ScrubAction", N_("Check & Repair A_ccount"), NULL, NULL,
+	{ "ScrubMenuAction", NULL, N_("Check & Repair"), NULL, NULL, NULL },
+	{ "ScrubAction", NULL, N_("Check & Repair A_ccount"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in this account"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub) },
-	{ "ScrubSubAction", N_("Check & Repair Su_baccount"), NULL, NULL,
+	{ "ScrubSubAction", NULL, N_("Check & Repair Su_baccount"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits "
              "in this account and its subaccounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_sub) },
-	{ "ScrubAllAction", N_("Check & Repair A_ll"), NULL, NULL,
+	{ "ScrubAllAction", NULL, N_("Check & Repair A_ll"), NULL,
 	  N_("Check for and repair unbalanced transactions and orphan splits " "in all accounts"),
 	  G_CALLBACK (gnc_plugin_page_account_tree_cmd_scrub_all) },
 };
@@ -185,7 +184,7 @@ static const gchar *actions_requiring_account[] = {
 	NULL
 };
 
-/* DRH - Suggest this be added to libegg */
+/* DRH - Suggest short_labels be added to libegg */
 static action_short_labels short_labels[] = {
   { "FileOpenAccountAction", 	    N_("Open") },
   { "EditEditAccountAction", 	    N_("Edit") },
@@ -197,9 +196,9 @@ static action_short_labels short_labels[] = {
 
 struct GncPluginPageAccountTreePrivate
 {
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 	guint merge_id;
-	EggMenuMerge *ui_merge;
+	GtkUIManager *ui_merge;
 
 	GtkWidget *widget;
 	GtkTreeView *tree_view;
@@ -323,7 +322,7 @@ gnc_plugin_page_acct_tree_view_refresh (gpointer data)
 static void
 gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 {
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 	GncPluginPageAccountTreePrivate *priv;
 	GncPluginPage *parent;
 	const gchar *url = NULL;
@@ -345,9 +344,9 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());
 
 	/* Create menu and toolbar information */
-	action_group = egg_action_group_new ("GncPluginPageAccountTreeActions");
+	action_group = gtk_action_group_new ("GncPluginPageAccountTreeActions");
 	priv->action_group = action_group;
-	egg_action_group_add_actions (action_group,
+	gtk_action_group_add_actions (action_group,
 				      gnc_plugin_page_account_tree_actions,
 				      gnc_plugin_page_account_tree_n_actions,
 				      plugin_page);
@@ -554,7 +553,7 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 
 static void
 gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page,
-					    EggMenuMerge *ui_merge)
+					    GtkUIManager *ui_merge)
 {
 	GncPluginPageAccountTree *account_page;
 	GncPluginPageAccountTreePrivate *priv;
@@ -576,7 +575,7 @@ gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page,
 	
 static void
 gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page,
-					      EggMenuMerge *ui_merge)
+					      GtkUIManager *ui_merge)
 {
 	GncPluginPageAccountTree *plugin_page_account_tree = GNC_PLUGIN_PAGE_ACCOUNT_TREE(plugin_page);
 	
@@ -589,8 +588,8 @@ gnc_plugin_page_account_tree_unmerge_actions (GncPluginPage *plugin_page,
 	g_return_if_fail (plugin_page_account_tree->priv->merge_id != 0);
 	g_return_if_fail (plugin_page_account_tree->priv->action_group != NULL);
 
-	egg_menu_merge_remove_ui (ui_merge, plugin_page_account_tree->priv->merge_id);
-	egg_menu_merge_remove_action_group (ui_merge, plugin_page_account_tree->priv->action_group);
+	gtk_ui_manager_remove_ui (ui_merge, plugin_page_account_tree->priv->merge_id);
+	gtk_ui_manager_remove_action_group (ui_merge, plugin_page_account_tree->priv->action_group);
 
 	plugin_page_account_tree->priv->ui_merge = NULL;
 	LEAVE(" ");
@@ -623,7 +622,7 @@ gnc_plugin_page_account_tree_button_press_cb (GtkTreeView *treeview,
 	time = event ? event->time : 0;
 
 	/* Maybe show a different popup menu if no account is selected. */
-	menu = egg_menu_merge_get_widget (page->priv->ui_merge, "/AccountPopup");
+	menu = gtk_ui_manager_get_widget (page->priv->ui_merge, "/AccountPopup");
 	if (!menu) {
 	  LEAVE("no menu");
 	  return FALSE;
@@ -670,8 +669,8 @@ static void
 gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 						   GncPluginPageAccountTree *page)
 {
-	EggActionGroup *action_group;
-	EggAction *action;
+	GtkActionGroup *action_group;
+	GtkAction *action;
 	GtkTreeView *view;
 	Account *account = NULL;
 	GValue value = { 0 };
@@ -695,7 +694,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 	g_value_set_boolean (&value, sensitive);
 	action_group = page->priv->action_group;
 	for (i = 0; actions_requiring_account[i]; i++) {
-	  	action = egg_action_group_get_action (action_group,
+	  	action = gtk_action_group_get_action (action_group,
 						      actions_requiring_account[i]);
 		g_object_set_property (G_OBJECT(action), "sensitive", &value);
 	}
@@ -706,7 +705,7 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 
 /* Command callbacks */
 static void
-gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_new_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
@@ -714,13 +713,13 @@ gnc_plugin_page_account_tree_cmd_new_account (EggAction *action, GncPluginPageAc
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_file_hierarchy_merge (GtkAction *action, GncPluginPageAccountTree *page)
 {
 	gnc_ui_qof_book_merge_druid();
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_account (EggAction *action,
+gnc_plugin_page_account_tree_cmd_open_account (GtkAction *action,
 					       GncPluginPageAccountTree *page)
 {
 	GtkWidget *window;
@@ -738,7 +737,7 @@ gnc_plugin_page_account_tree_cmd_open_account (EggAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action,
+gnc_plugin_page_account_tree_cmd_open_subaccounts (GtkAction *action,
 						   GncPluginPageAccountTree *page)
 {
 	GtkWidget *window;
@@ -756,7 +755,7 @@ gnc_plugin_page_account_tree_cmd_open_subaccounts (EggAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_edit_account (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_edit_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
 	Account *account;
 
@@ -806,7 +805,7 @@ delete_account_helper (Account * account, gpointer data)
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_delete_account (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPageAccountTree *page)
 {
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
@@ -954,7 +953,7 @@ gnc_plugin_page_acct_tree_options_new (GncPluginPageAccountTreePrivate *priv)
 /*********************/
 
 static void
-gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_view_options (GtkAction *action, GncPluginPageAccountTree *page)
 {
   GncPluginPageAccountTreePrivate *priv;
 
@@ -980,7 +979,7 @@ gnc_plugin_page_account_tree_cmd_view_options (EggAction *action, GncPluginPageA
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action,
+gnc_plugin_page_account_tree_cmd_reconcile (GtkAction *action,
 					    GncPluginPageAccountTree *page)
 {
 	GtkWidget *window;
@@ -996,7 +995,7 @@ gnc_plugin_page_account_tree_cmd_reconcile (EggAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_transfer (EggAction *action,
+gnc_plugin_page_account_tree_cmd_transfer (GtkAction *action,
 					   GncPluginPageAccountTree *page)
 {
 	GtkWidget *window;
@@ -1008,7 +1007,7 @@ gnc_plugin_page_account_tree_cmd_transfer (EggAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action,
+gnc_plugin_page_account_tree_cmd_stock_split (GtkAction *action,
 					      GncPluginPageAccountTree *page)
 {
 	GtkWidget *window;
@@ -1020,7 +1019,7 @@ gnc_plugin_page_account_tree_cmd_stock_split (EggAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_lots (EggAction *action,
+gnc_plugin_page_account_tree_cmd_lots (GtkAction *action,
 				       GncPluginPageAccountTree *page)
 {
 	Account *account;
@@ -1030,7 +1029,7 @@ gnc_plugin_page_account_tree_cmd_lots (EggAction *action,
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_scrub (GtkAction *action, GncPluginPageAccountTree *page)
 {
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
@@ -1045,7 +1044,7 @@ gnc_plugin_page_account_tree_cmd_scrub (EggAction *action, GncPluginPageAccountT
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_scrub_sub (GtkAction *action, GncPluginPageAccountTree *page)
 {
 	Account *account = gnc_plugin_page_account_tree_get_current_account (page);
 
@@ -1060,7 +1059,7 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (EggAction *action, GncPluginPageAcco
 }
 
 static void
-gnc_plugin_page_account_tree_cmd_scrub_all (EggAction *action, GncPluginPageAccountTree *page)
+gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPluginPageAccountTree *page)
 {
 	AccountGroup *group = gnc_get_current_group ();
 

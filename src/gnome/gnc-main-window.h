@@ -28,8 +28,6 @@
 
 #include <gtk/gtk.h>
 
-#include "egg-menu-merge.h"
-
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -50,7 +48,7 @@ typedef struct GncMainWindowPrivate GncMainWindowPrivate;
 typedef struct {
 	GtkWindow parent;
 
-	EggMenuMerge *ui_merge;
+	GtkUIManager *ui_merge;
 
 	GncMainWindowPrivate *priv;
 } GncMainWindow;
@@ -85,14 +83,14 @@ GncPluginPage  *gnc_main_window_get_current_page  (GncMainWindow *window);
 
 void            gnc_main_window_merge_actions     (GncMainWindow *window,
 						   const gchar *group_name,
-						   EggActionEntry *entries,
+						   GtkActionEntry *entries,
 						   guint n_entries,
 						   const gchar *filename,
 						   gpointer user_data);
 void            gnc_main_window_unmerge_actions   (GncMainWindow *window,
 						   const gchar *group_name);
 void            gnc_main_window_actions_updated   (GncMainWindow *window);
-EggActionGroup *gnc_main_window_get_action_group  (GncMainWindow *window,
+GtkActionGroup *gnc_main_window_get_action_group  (GncMainWindow *window,
                                                    const gchar *group_name);
 void            gnc_main_window_update_title      (GncMainWindow *window);
 

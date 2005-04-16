@@ -26,7 +26,6 @@
 #include <gnome.h>
 #include <libguile.h>
 #include "guile-mappings.h"
-#include "egg-menu-merge.h"
 
 #define WINDOW_NAME_MAIN     "Main"
 #define WINDOW_NAME_REGISTER "Register"
@@ -61,9 +60,9 @@ gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path,
  *
  * @param app The GnomeApp to add the stored menu items
  * @param prefix The prefix of the window that is currently being set up.
- * @param uiMerge The EggMenuMerge [GtkUIManager] object to use for merging.
+ * @param uiMerge The GtkUIManager [GtkUIManager] object to use for merging.
  */
-void gnc_extensions_menu_setup( GtkWindow *app, gchar *prefix, EggMenuMerge *uiMerge );
+void gnc_extensions_menu_setup( GtkWindow *app, gchar *prefix, GtkUIManager *uiMerge );
 
 /* This is called from the window initializing code, when the actual
  * menu items stored by the above functions should now be inserted in

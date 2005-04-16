@@ -33,8 +33,6 @@
 #include "SX-book-p.h"
 #include "dialog-scheduledxaction.h"
 #include "dialog-utils.h"
-#include "egg-action-group.h"
-#include "eggtoolbar.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
@@ -230,25 +228,25 @@ static SxRuntimeInfo* _new_sx_runtime_info( SchedXaction *sx );
 static void _clear_runtime_info_row( gpointer key, gpointer value, gpointer user_data );
 
 
-static void gnc_sxed_cmd_edit_cut (EggAction *action, SchedXactionEditorDialog *sxed);
-static void gnc_sxed_cmd_edit_copy (EggAction *action, SchedXactionEditorDialog *sxed);
-static void gnc_sxed_cmd_edit_paste (EggAction *action, SchedXactionEditorDialog *sxed);
+static void gnc_sxed_cmd_edit_cut (GtkAction *action, SchedXactionEditorDialog *sxed);
+static void gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed);
+static void gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed);
 
-static EggActionEntry gnc_sxed_menu_entries [] =
+static GtkActionEntry gnc_sxed_menu_entries [] =
 {
 	/* Toplevel */
-	{ "EditAction", N_("_Edit"), NULL, NULL, NULL, NULL },
-	{ "ViewAction", N_("_View"), NULL, NULL, NULL, NULL },
-	{ "ActionsAction", N_("_Actions"), NULL, NULL, NULL, NULL },
+	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
+	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
+	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
 
 	/* Edit menu */
-	{ "EditCutAction", N_("Cu_t"), GTK_STOCK_CUT, "<control>x",
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
 	  NULL,
 	  G_CALLBACK (gnc_sxed_cmd_edit_cut) },
-	{ "EditCopyAction", N_("_Copy"), GTK_STOCK_COPY, "<control>c",
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
 	  NULL,
 	  G_CALLBACK (gnc_sxed_cmd_edit_copy) },
-	{ "EditPasteAction", N_("_Paste"), GTK_STOCK_PASTE, "<control>v",
+	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
 	  NULL,
 	  G_CALLBACK (gnc_sxed_cmd_edit_paste) },
 
@@ -2467,17 +2465,17 @@ sxed_excal_update_adapt( GtkObject *o, gpointer ud )
 
 /* Command callbacks */
 static void
-gnc_sxed_cmd_edit_cut (EggAction *action, SchedXactionEditorDialog *sxed)
+gnc_sxed_cmd_edit_cut (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
 }
 
 static void
-gnc_sxed_cmd_edit_copy (EggAction *action, SchedXactionEditorDialog *sxed)
+gnc_sxed_cmd_edit_copy (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
 }
 
 static void
-gnc_sxed_cmd_edit_paste (EggAction *action, SchedXactionEditorDialog *sxed)
+gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
 }
 

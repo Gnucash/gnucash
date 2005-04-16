@@ -41,13 +41,13 @@ static void gnc_plugin_register_finalize (GObject *object);
 static GncPluginPage *gnc_plugin_register_create_page (GncPlugin *plugin, const gchar *uri);
 
 /* Command callbacks */
-static void gnc_plugin_register_cmd_general_ledger (EggAction *action, GncMainWindowActionData *data);
+static void gnc_plugin_register_cmd_general_ledger (GtkAction *action, GncMainWindowActionData *data);
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-register-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-register-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
-	{ "ToolsGeneralLedgerAction", N_("_General Ledger"), NULL, NULL,
+static GtkActionEntry gnc_plugin_actions [] = {
+	{ "ToolsGeneralLedgerAction", NULL, N_("_General Ledger"), NULL,
 	  N_("Open a general ledger window"),
 	  G_CALLBACK (gnc_plugin_register_cmd_general_ledger) },
 };
@@ -190,7 +190,7 @@ gnc_plugin_register_create_page (GncPlugin *plugin,
  ************************************************************/
 
 static void
-gnc_plugin_register_cmd_general_ledger (EggAction *action,
+gnc_plugin_register_cmd_general_ledger (GtkAction *action,
 					GncMainWindowActionData *data)
 {
 	GncPluginPage *page;
@@ -203,7 +203,7 @@ gnc_plugin_register_cmd_general_ledger (EggAction *action,
 
 #if 0
 static void
-gnc_main_window_cmd_tools_general_ledger (EggAction *action,
+gnc_main_window_cmd_tools_general_ledger (GtkAction *action,
 					  GncMainWindow *window)
 {
 	GNCLedgerDisplay *ld;

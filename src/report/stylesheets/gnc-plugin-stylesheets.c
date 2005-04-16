@@ -23,7 +23,7 @@
 #include "config.h"
 
 #include "dialog-style-sheet.h"
-#include "egg-action-group.h"
+#include <gtk/gtk.h>
 #include "gnc-gnome-utils.h"
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-stylesheets.h"
@@ -51,16 +51,16 @@ static void gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *wind
 							     GncPluginPage *page);
 
 /* Command callbacks */
-static void gnc_plugin_stylesheets_cmd_edit_style_sheet (EggAction *action,
+static void gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
 							 GncMainWindowActionData *data);
 
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-stylesheets-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-stylesheets-ui.xml"
 
-static EggActionEntry gnc_plugin_actions [] = {
+static GtkActionEntry gnc_plugin_actions [] = {
   /* Menu Items */
-  { "EditStyleSheetsAction", N_("_Style Sheets..."), NULL, NULL,
+  { "EditStyleSheetsAction", NULL, N_("_Style Sheets..."), NULL,
     N_("Edit report style sheets."),
     G_CALLBACK (gnc_plugin_stylesheets_cmd_edit_style_sheet) },
 };
@@ -220,7 +220,7 @@ static void
 gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *window,
 						 GncPluginPage *page)
 {
-  EggActionGroup *action_group;
+  GtkActionGroup *action_group;
   const gchar    *page_name;
 
   ENTER("main window %p, page %p", window, page);
@@ -252,7 +252,7 @@ gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *window,
  ************************************************************/
 
 static void
-gnc_plugin_stylesheets_cmd_edit_style_sheet (EggAction *action,
+gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
 					     GncMainWindowActionData *data)
 {
   gnc_style_sheet_dialog_open();

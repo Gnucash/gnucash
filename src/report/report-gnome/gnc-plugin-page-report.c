@@ -34,7 +34,6 @@
 #include <libguile.h>
 #include <sys/stat.h>
 
-#include "egg-menu-merge.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-gnome-utils.h"
@@ -69,8 +68,8 @@ static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
 
 static GtkWidget* gnc_plugin_page_report_create_widget( GncPluginPage *plugin_page );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
-static void gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page, EggMenuMerge *merge );
-static void gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page, EggMenuMerge *merge );
+static void gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page, GtkUIManager *merge );
+static void gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page, GtkUIManager *merge );
 static void gnc_plugin_page_report_destroy_widget( GncPluginPage *plugin_page );
 
 static int gnc_plugin_page_report_check_urltype(URLType t);
@@ -90,13 +89,13 @@ void gnc_plugin_page_report_remove_edited_report(GncPluginPageReportPrivate * wi
 void gnc_plugin_page_report_add_edited_report(GncPluginPageReportPrivate * win, SCM report);
 void gnc_plugin_page_report_raise_editor(SCM report);
 
-static void gnc_plugin_page_report_forw_cb(EggAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_back_cb(EggAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_reload_cb(EggAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_stop_cb(EggAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_export_cb(EggAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_options_cb(EggAction *action, GncPluginPageReport *rep);
-static void gnc_plugin_page_report_print_cb(EggAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_forw_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_back_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_reload_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_stop_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_export_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_options_cb(GtkAction *action, GncPluginPageReport *rep);
+static void gnc_plugin_page_report_print_cb(GtkAction *action, GncPluginPageReport *rep);
 
 struct GncPluginPageReportPrivate
 {
@@ -127,10 +126,10 @@ struct GncPluginPageReportPrivate
         /// the container the above HTML widget is in.
         GtkContainer *container;
 
-        /// The EggActionGroup to use for [un]merging our UI.
-        EggActionGroup *action_group;
+        /// The GtkActionGroup to use for [un]merging our UI.
+        GtkActionGroup *action_group;
 
-        EggMenuMerge *ui_merge;
+        GtkUIManager *ui_merge;
         gint merge_id;
 };
 
@@ -607,7 +606,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * win)
 static
 void
 gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page,
-                                      EggMenuMerge *ui_merge )
+                                      GtkUIManager *ui_merge )
 {
         GncPluginPageReport *page;
         GncPluginPageReportPrivate *priv;
@@ -627,35 +626,35 @@ gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page,
 static
 void
 gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page,
-                                        EggMenuMerge *ui_merge )
+                                        GtkUIManager *ui_merge )
 {
         GncPluginPageReport *rep = GNC_PLUGIN_PAGE_REPORT( plugin_page );
         GncPluginPageReportPrivate *priv = (GncPluginPageReportPrivate*)rep->priv;
 
         DEBUG( "unmerge actions" );
-	egg_menu_merge_remove_ui( ui_merge, priv->merge_id );
-	egg_menu_merge_remove_action_group( ui_merge, priv->action_group );
+	gtk_ui_manager_remove_ui( ui_merge, priv->merge_id );
+	gtk_ui_manager_remove_action_group( ui_merge, priv->action_group );
 
 	priv->ui_merge = NULL;
         DEBUG( "done unmerging" );
 }
 
-static EggActionEntry report_actions[] =
+static GtkActionEntry report_actions[] =
 {
-        { "ReportBackAction", N_("Back"), GTK_STOCK_GO_BACK, NULL, NULL,
+        { "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_back_cb) },
-        { "ReportForwAction", N_("Forward"), GTK_STOCK_GO_FORWARD, NULL, NULL,
+        { "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_forw_cb) },
-        { "ReportReloadAction", N_("Reload"), GTK_STOCK_REFRESH, NULL, NULL,
+        { "ReportReloadAction", GTK_STOCK_REFRESH, N_("Reload"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_reload_cb) },
-        { "ReportStopAction", N_("Stop"), GTK_STOCK_STOP, NULL, NULL,
+        { "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_stop_cb) },
 
-        { "ReportExportAction", N_("Export"), GTK_STOCK_SAVE, NULL, NULL,
+        { "ReportExportAction", GTK_STOCK_SAVE, N_("Export"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_export_cb) },
-        { "ReportOptionsAction", N_("Options"), GTK_STOCK_PROPERTIES, NULL, NULL,
+        { "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("Options"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_options_cb) },
-        { "ReportPrintAction", N_("Print"), GTK_STOCK_PRINT, NULL, NULL,
+        { "ReportPrintAction", GTK_STOCK_PRINT, N_("Print"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_print_cb) },
 };
 static guint num_report_actions = G_N_ELEMENTS( report_actions );
@@ -663,7 +662,7 @@ static guint num_report_actions = G_N_ELEMENTS( report_actions );
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 {
-	EggActionGroup *action_group;
+	GtkActionGroup *action_group;
 	GncPluginPageReportPrivate *priv;
 	GncPluginPage *parent;
         GString *tmpStr;
@@ -693,9 +692,9 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
         /* Note that we're not actually doing the merge, here ... just setup
          * the UI objects.  See gnc_plugin_page_report_[un]merge_actions(...) */
 
-	action_group = egg_action_group_new ("GncPluginPageReportActions");
+	action_group = gtk_action_group_new ("GncPluginPageReportActions");
 	priv->action_group = action_group;
-	egg_action_group_add_actions( action_group,
+	gtk_action_group_add_actions( action_group,
 				      report_actions,
 				      num_report_actions,
 				      plugin_page );
@@ -753,9 +752,9 @@ static void
 gnc_plugin_page_report_set_fwd_button(GncPluginPageReportPrivate *win, int enabled)
 {
         GValue value = { 0 };
-        EggAction *act;
+        GtkAction *act;
 
-        act = egg_action_group_get_action( win->action_group, "ReportForwAction" );
+        act = gtk_action_group_get_action( win->action_group, "ReportForwAction" );
 	g_value_init (&value, G_TYPE_BOOLEAN);
 	g_value_set_boolean (&value, enabled);
         g_object_set_property( G_OBJECT(act), "sensitive", &value );
@@ -765,9 +764,9 @@ static void
 gnc_plugin_page_report_set_back_button(GncPluginPageReportPrivate *win, int enabled)
 {
         GValue value = { 0 };
-        EggAction *act;
+        GtkAction *act;
 
-        act = egg_action_group_get_action( win->action_group, "ReportBackAction" );
+        act = gtk_action_group_get_action( win->action_group, "ReportBackAction" );
 	g_value_init (&value, G_TYPE_BOOLEAN);
 	g_value_set_boolean (&value, enabled);
         g_object_set_property( G_OBJECT(act), "sensitive", &value );
@@ -777,7 +776,7 @@ gnc_plugin_page_report_set_back_button(GncPluginPageReportPrivate *win, int enab
 // GTK ACTION CALLBACKS
 
 static void
-gnc_plugin_page_report_forw_cb( EggAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_forw_cb( GtkAction *action, GncPluginPageReport *report )
 {
         gnc_html_history_node * node = NULL;
 
@@ -791,7 +790,7 @@ gnc_plugin_page_report_forw_cb( EggAction *action, GncPluginPageReport *report )
 }
 
 static void
-gnc_plugin_page_report_back_cb( EggAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_back_cb( GtkAction *action, GncPluginPageReport *report )
 {
         gnc_html_history_node * node;
   
@@ -805,7 +804,7 @@ gnc_plugin_page_report_back_cb( EggAction *action, GncPluginPageReport *report )
 }
 
 static void
-gnc_plugin_page_report_reload_cb( EggAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_reload_cb( GtkAction *action, GncPluginPageReport *report )
 {
         SCM dirty_report;
 
@@ -828,7 +827,7 @@ gnc_plugin_page_report_reload_cb( EggAction *action, GncPluginPageReport *report
 }
 
 static void
-gnc_plugin_page_report_stop_cb( EggAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_stop_cb( GtkAction *action, GncPluginPageReport *report )
 {
         gnc_html_cancel(report->priv->html);
 }
@@ -970,7 +969,7 @@ gnc_get_export_filename (SCM choice)
 }
 
 static void
-gnc_plugin_page_report_export_cb( EggAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_export_cb( GtkAction *action, GncPluginPageReport *report )
 {
         GncPluginPageReportPrivate *priv = report->priv;
         char * filepath;
@@ -1025,7 +1024,7 @@ gnc_plugin_page_report_export_cb( EggAction *action, GncPluginPageReport *report
 }
 
 static void
-gnc_plugin_page_report_options_cb( EggAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_options_cb( GtkAction *action, GncPluginPageReport *report )
 {
         GncPluginPageReportPrivate *priv = report->priv;
         SCM start_editor = scm_c_eval_string("gnc:report-edit-options");
@@ -1043,7 +1042,7 @@ gnc_plugin_page_report_options_cb( EggAction *action, GncPluginPageReport *repor
 }
 
 static void
-gnc_plugin_page_report_print_cb( EggAction *action, GncPluginPageReport *report )
+gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report )
 {
         gnc_html_print(report->priv->html);
 }

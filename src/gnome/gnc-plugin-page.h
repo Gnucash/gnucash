@@ -26,7 +26,6 @@
 #ifndef __GNC_PLUGIN_PAGE_H
 #define __GNC_PLUGIN_PAGE_H
 
-#include "egg-menu-merge.h"
 #include "guid.h"
 #include "qofbook.h"
 
@@ -73,8 +72,8 @@ typedef struct {
 	GtkWidget *(* create_widget) (GncPluginPage *plugin_page);
 	void (* destroy_widget) (GncPluginPage *plugin_page);
 
-	void (* merge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
-	void (* unmerge_actions) (GncPluginPage *plugin_page, EggMenuMerge *merge);
+	void (* merge_actions) (GncPluginPage *plugin_page, GtkUIManager *merge);
+	void (* unmerge_actions) (GncPluginPage *plugin_page, GtkUIManager *merge);
 } GncPluginPageClass;
 
 /* function prototypes */
@@ -84,9 +83,9 @@ GtkWidget            *gnc_plugin_page_create_widget   (GncPluginPage *plugin_pag
 void                  gnc_plugin_page_destroy_widget  (GncPluginPage *plugin_page);
 
 void                  gnc_plugin_page_merge_actions   (GncPluginPage *plugin_page,
-                                                       EggMenuMerge *merge);
+                                                       GtkUIManager *merge);
 void                  gnc_plugin_page_unmerge_actions (GncPluginPage *plugin_page,
-                                                       EggMenuMerge *merge);
+                                                       GtkUIManager *merge);
 
 const gchar *         gnc_plugin_page_get_name        (GncPluginPage *plugin_page);
 

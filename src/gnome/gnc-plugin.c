@@ -177,7 +177,7 @@ gnc_plugin_base_init (gpointer klass)
 						       g_cclosure_marshal_VOID__POINTER,
 						       G_TYPE_NONE,
 						       1,
-						       EGG_TYPE_MENU_MERGE);
+						       GTK_TYPE_MENU_MERGE);
 		signals[UNMERGE_ACTIONS] = g_signal_new ("unmerge-actions",
 							 G_OBJECT_CLASS_TYPE (klass),
 							 G_SIGNAL_RUN_FIRST,
@@ -186,7 +186,7 @@ gnc_plugin_base_init (gpointer klass)
 							 g_cclosure_marshal_VOID__POINTER,
 							 G_TYPE_NONE,
 							 1,
-							 EGG_TYPE_MENU_MERGE);
+							 GTK_TYPE_MENU_MERGE);
 	}
 }
 #endif

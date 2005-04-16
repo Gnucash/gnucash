@@ -28,8 +28,6 @@
 
 #include <gtk/gtkwindow.h>
 
-#include "egg-menu-merge.h"
-
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -52,7 +50,7 @@ typedef struct {
 
 	GncEmbeddedWindowPrivate *priv;
 
-	EggMenuMerge   	 *ui_merge;
+	GtkUIManager   	 *ui_merge;
 } GncEmbeddedWindow;
 
 typedef struct {
@@ -60,8 +58,8 @@ typedef struct {
 } GncEmbeddedWindowClass;
 
 typedef struct gnc_embedded_window {
-	EggMenuMerge   	 *ui_merge;
-	EggActionGroup 	 *action_group;
+	GtkUIManager   	 *ui_merge;
+	GtkActionGroup 	 *action_group;
 	GtkWidget        *main_vbox;
 	GtkWidget      	 *menu_dock;
         GtkWidget      	 *toolbar_dock;
@@ -71,7 +69,7 @@ typedef struct gnc_embedded_window {
 GType               gnc_embedded_window_get_type (void);
 
 GncEmbeddedWindow * gnc_embedded_window_new      (const gchar *action_group_name,
-						  EggActionEntry *action_entries,
+						  GtkActionEntry *action_entries,
 						  gint n_action_entries,
 						  const gchar *ui_filename,
 						  GtkWidget *enclosing_win,

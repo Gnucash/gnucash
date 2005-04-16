@@ -4,7 +4,7 @@
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
  */
 
-#include <gtk/gtkiconfactory.h>
+#include <gtk/gtk.h>
 
 #include "gnc-icons.h"
 #include "gnc-gnome-utils.h"

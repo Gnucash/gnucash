@@ -103,8 +103,8 @@ if test "x$ac_cv_header_ltdl_h" = xno; then
   AC_MSG_ERROR([Cannot find ltdl.h -- libtool-devel not installed?])
 fi
 
-AM_PATH_GLIB_2_0(2.0.0,,AC_MSG_ERROR([
-*** GLIB >= 2.0 is required to build Gnucash; please make sure you have the
+AM_PATH_GLIB_2_0(2.6.0,,AC_MSG_ERROR([
+*** GLIB >= 2.6 is required to build Gnucash; please make sure you have the
 *** development headers installed. The latest version of GLIB is
 *** always available at ftp://ftp.gnome.org/pub/gnome/sources/glib/.]),
 	gthread gobject)
@@ -844,8 +844,8 @@ then
     GNOME_COMPILE_WARNINGS
 
     # Look for libgnomeui by pkg-config
-    PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.2
-			       gtk+-2.0 >= 2.2)
+    PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.8
+			       gtk+-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GNOME_CFLAGS)
     AC_SUBST(GNOME_CFLAGS)
     AC_SUBST(GNOME_LIBS)
@@ -886,7 +886,7 @@ then
     ### ----------------------------------------------------------------------
     ### Check for glade, gtkhtml
     
-    PKG_CHECK_MODULES(GLADE, libglade-2.0)
+    PKG_CHECK_MODULES(GLADE, libglade-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GLADE_CFLAGS)
     AC_SUBST(GLADE_CFLAGS)
     AC_SUBST(GLADE_LIBS)
@@ -1110,7 +1110,6 @@ AC_OUTPUT( po/Makefile.in
           doc/examples/Makefile
           intl-scm/Makefile
           lib/Makefile
-          lib/egg/Makefile
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
