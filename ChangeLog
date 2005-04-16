@@ -3,7 +3,9 @@
 	* lots of file: Switch from a requirement of Gtk-2.2 to Gtk-2.4.
 	This replaces all EggAction references with GtkAction, and
 	EggMenuMerge with GtkUIManager.  It also drops all the files in
-	lib/egg since they are no longer needed.
+	lib/egg since they are no longer needed.  Due to a flub, the log
+	message on the changed source files simply reads 'foo4' instead of
+	containing the previous description.
 
 2005-04-11  Neil Williams  <linux@codehelp.co.uk>
 	* src/app-file/gnc-file.c: Added handlers for
