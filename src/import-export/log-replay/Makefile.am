@@ -17,7 +17,6 @@ libgncmod_log_replay_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
-  ${top_builddir}/lib/egg/libegg.la \
   ${GLIB_LIBS}
 
 AM_CFLAGS = \
@@ -29,7 +28,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/import-export \
-  -I${top_srcdir}/lib/egg \
   ${GNOME_CFLAGS} \
   ${GTKHTML_CFLAGS} \
   ${GLADE_CFLAGS} \

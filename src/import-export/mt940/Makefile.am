@@ -18,12 +18,10 @@ libgncmod_mt940_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
-  ${top_builddir}/lib/egg/libegg.la \
   ${GLIB_LIBS} \
   $(HBCI_LIBS)
 
 AM_CFLAGS = \
-  -I${top_srcdir}/lib/egg \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \

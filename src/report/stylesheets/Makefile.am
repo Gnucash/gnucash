@@ -12,11 +12,9 @@ noinst_HEADERS = \
 libgncmod_stylesheets_la_LDFLAGS=-module
 
 libgncmod_stylesheets_la_LIBADD = \
-  ${top_builddir}/lib/egg/libegg.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la
 
 AM_CFLAGS = \
-  -I${top_srcdir}/lib/egg \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \

@@ -14,7 +14,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/gnome \
   -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/report/report-system \
-  -I${top_srcdir}/lib/egg \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
   ${GTKHTML_CFLAGS} \
