@@ -389,7 +389,7 @@ gog_plugindir='${GNC_LIBDIR}/plugins'
 gnumeric_plugindir='${gog_plugindir}'
 AC_SUBST(gog_plugindir)
 AC_SUBST(gnumeric_plugindir)
-AC_SUBST(pkglibdir)
+#AC_SUBST(pkglibdir) -- this breaks builds into /opt.
 gnumeric_icondir='${GNC_SHAREDIR}/pixmaps'
 AC_SUBST(gnumeric_icondir)
 

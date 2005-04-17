@@ -1,3 +1,9 @@
+2005-04-17  Derek Atkins <derek@ihtfp.com>
+
+	* configure.in: don't set pkglibdir
+	* lib/goffice/split.c: implement e_xml_get_child_by_name()
+	  GOG branch now builds on FC3.
+
 2005-02-12  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/report/utility-reports/test-graphing.scm: Add to make

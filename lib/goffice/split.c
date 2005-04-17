@@ -227,6 +227,22 @@ xml_node_get_int (xmlNodePtr node, char const *name, int *val)
 }
 
 xmlNode *
+e_xml_get_child_by_name (xmlNode const *parent, char const *child_name)
+{
+	xmlNode *child;
+
+	g_return_val_if_fail (parent != NULL, NULL);
+	g_return_val_if_fail (child_name != NULL, NULL);
+
+	for (child = parent->xmlChildrenNode; child != NULL; child = child->next) {
+		if (xmlStrcmp (child->name, child_name) == 0) {
+			return child;
+		}
+	}
+	return NULL;
+}
+
+xmlNode *
 e_xml_get_child_by_name_no_lang (xmlNode const *parent, char const *name)
 {
 	xmlNodePtr node;
