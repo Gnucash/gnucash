@@ -194,7 +194,7 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   const AB_ACCOUNT_STATUS *response;
   const AB_BALANCE *noted_grp, *booked_grp;
   const AB_VALUE *booked_val, *noted_val;
-  time_t booked_tt;
+  time_t booked_tt=0;
   gboolean dialogres;
   double booked_value, noted_value;
   gnc_numeric value;
@@ -209,8 +209,12 @@ gnc_hbci_getbalance_finish (GtkWidget *parent,
   booked_grp = AB_AccountStatus_GetBookedBalance(response);
 
   if (booked_grp) {
+    const GWEN_TIME *ti;
+
+    ti=AB_Balance_GetTime(booked_grp);
+    if (ti)
+      booked_tt = GWEN_Time_toTime_t (ti);
     booked_val = AB_Balance_GetValue(booked_grp);
-    booked_tt = GWEN_Time_toTime_t (AB_Balance_GetTime(booked_grp));
     if (booked_val)
       booked_value = AB_Value_GetValue (booked_val);
     else {
