@@ -1,3 +1,8 @@
+2005-04-21  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix forgotten NULL
+	check as reported by Martin Preuss <aquamaniac@gmx.de>.
+
 2005-04-14  David Hampton  <hampton@employees.org>
 
 	* src/engine/iso-4217-currencies.scm: 
