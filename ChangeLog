@@ -1,3 +1,9 @@
+2005-04-22  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/scm/main.scm (gnc:main): Expose and use functionality to
+	update the main-window title after init-file load, plus collateral
+	changes. 
+
 2005-04-16  Derek Atkins <derek@ihtfp.com>
 
 	* configure.in: Downgrade glib dep to 2.4.0 so it builds on FC3.

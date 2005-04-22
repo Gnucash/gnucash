@@ -403,9 +403,9 @@ gnc_gui_init (SCM command_line)
 
     // return ( main_window . command_line )
     {
-      SCM gncWindowType;
-      gncWindowType = scm_c_eval_string("<gnc:Window*>");
-      ret = scm_cons( gw_wcp_assimilate_ptr(main_window, gncWindowType), ret );
+      SCM gncMainWindowType;
+      gncMainWindowType = scm_c_eval_string("<gnc:MainWindow*>");
+      ret = scm_cons( gw_wcp_assimilate_ptr(main_window, gncMainWindowType), ret );
     }
   }
 

@@ -94,6 +94,8 @@ GtkActionGroup *gnc_main_window_get_action_group  (GncMainWindow *window,
                                                    const gchar *group_name);
 void            gnc_main_window_update_title      (GncMainWindow *window);
 
+void            gnc_main_window_set_progressbar_window( GncMainWindow *window );
+
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */

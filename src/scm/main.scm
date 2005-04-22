@@ -622,9 +622,9 @@ string and 'directories' must be a list of strings."
       ;; We're not in batch mode; we can go ahead and do the normal thing.
       (begin
         (gnc:hook-add-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)
-        (let* ((init-pair (gnc:gui-init gnc:*command-line-remaining*))
-               (main-window (car init-pair)))
-          (set! gnc:*command-line-remaining* (cdr init-pair))
+        (let* ((init-window-cons-rest (gnc:gui-init gnc:*command-line-remaining*))
+               (main-window (car init-window-cons-rest)))
+          (set! gnc:*command-line-remaining* (cdr init-window-cons-rest))
           (if (and
                (not (gnc:account-file-to-load))
                (not (string? (gnc:history-get-last)))
@@ -635,8 +635,11 @@ string and 'directories' must be a list of strings."
                 (gnc:new-user-dialog))
               (begin
                 (gnc:destroy-splash-screen)
-                (gnc:window-set-progressbar-window main-window)
-                (gnc:load-account-file)))
+                (gnc:main-window-set-progressbar-window main-window)
+                (gnc:load-account-file)
+                ))
+          ;; no matter how or what we loaded, ensure the main-window title is valid...
+          (gnc:main-window-update-title main-window)
           (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
           (gnc:start-ui-event-loop)
           (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))

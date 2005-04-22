@@ -842,10 +842,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
                 new_merge_id = gtk_ui_manager_new_merge_id( window->ui_merge );
 
                 gtk_ui_manager_add_ui( window->ui_merge, new_merge_id,
-                                       //"/menubar/Actions",
-                                       //"/menubar/Actions/ActionsPlaceholder",
-                                       // "/menubar/AdditionalMenusPlaceholder/AReportAction",
-                                       "/menubar/AdditionalMenusPlaceholder",
+                                       // "/menubar/Actions", no
+                                       // "/menubar/Actions/ActionsPlaceholder", no
+                                       // "/menubar/AdditionalMenusPlaceholder/AReportAction", no 
+                                       "/menubar/AdditionalMenusPlaceholder", // winnah!
                                        "BarAction",
                                        "BarAction", GTK_UI_MANAGER_MENUITEM, FALSE );
                 gtk_ui_manager_ensure_update( window->ui_merge );
@@ -1369,4 +1369,12 @@ gnc_window_main_window_init (GncWindowIface *iface)
 {
 	iface->get_statusbar   = gnc_main_window_get_statusbar;
 	iface->get_progressbar = gnc_main_window_get_progressbar;
+}
+
+void
+gnc_main_window_set_progressbar_window (GncMainWindow *window)
+{
+  GncWindow *gncwin;
+  gncwin = GNC_WINDOW(window);
+  gnc_window_set_progressbar_window(gncwin);
 }

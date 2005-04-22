@@ -71,6 +71,9 @@ Stock Split Dialog
 
   - Window size/position not being saved or used.
 
+    - We used to do this via Gnome MDI support, but now we will need to
+      manage it ourselves. :/
+
   - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
     
     - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012797.html
@@ -78,9 +81,6 @@ Stock Split Dialog
     - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012824.html
 
 - Main Window
-
-  - Initially-loaded file name not in window title; subsequent file-loads
-    correct set window-title text correctly.
 
   - Summary Bar
 

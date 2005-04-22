@@ -166,6 +166,22 @@
 
   (gw:wrap-function
    ws
+   'gnc:main-window-set-progressbar-window
+   '<gw:void>
+   "gnc_main_window_set_progressbar_window"
+   '((<gnc:MainWindow*> window))
+   "Set the progressbar window from the given GncMainWindow; does the cast. :p")
+
+  (gw:wrap-function
+   ws
+   'gnc:main-window-update-title
+   '<gw:void>
+   "gnc_main_window_update_title"
+   '((<gnc:MainWindow*> window))
+   "Update the window title based on whatever is loaded in the current session.")
+
+  (gw:wrap-function
+   ws
    'gnc:totd-dialog-create-and-run
    '<gw:void>
    "gnc_totd_dialog_create_and_run"
