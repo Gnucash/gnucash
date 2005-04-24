@@ -45,6 +45,7 @@ libgncmod_hbci_la_LDFLAGS = -module
 
 libgncmod_hbci_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/import-export/libgncmod-generic-import.la \
   ${top_builddir}/src/gnome/libgncgnome.la \
@@ -63,6 +64,7 @@ gncscm_DATA = \
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \

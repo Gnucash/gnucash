@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
@@ -67,6 +68,7 @@ libgncmod_business_gnome_la_LDFLAGS = -module
 libgncmod_business_gnome_la_LIBADD = \
   ${top_builddir}/src/business/business-core/libgncmod-business-core.la \
   ${top_builddir}/src/business/business-ledger/libgnc-business-ledger.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \

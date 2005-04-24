@@ -40,6 +40,7 @@
 
 
 #define DIALOG_COMMODITIES_CM_CLASS "dialog-commodities"
+#define GCONF_SECTION "dialogs/edit_commodities"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -54,7 +55,6 @@ typedef struct
   gboolean    show_currencies;
 
   gboolean new;
-  gchar *gconf_section;
 } CommoditiesDialog;
 
 
@@ -72,7 +72,6 @@ gnc_commodities_window_destroy_cb (GtkObject *object,   CommoditiesDialog *cd)
 {
   gnc_unregister_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 
-  g_free (cd->gconf_section);
   g_free (cd);
 }
 
@@ -279,9 +278,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   dialog = glade_xml_get_widget (xml, "Commodities Dialog");
 
   cd->dialog = dialog;
-  cd->gconf_section = gnc_gconf_section_name ("dialogs/commodities_dialog");
-  gnc_gconf_client_get_bool (NULL, NULL, cd->gconf_section,
-			     "include_iso", &cd->show_currencies);
+  cd->show_currencies = gnc_gconf_get_bool(GCONF_SECTION, "include_iso", NULL);
   
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, cd);
 
@@ -320,7 +317,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     gtk_window_resize (GTK_WINDOW(cd->dialog), last_width, last_height);
 
   gnc_tree_view_commodity_restore_settings (cd->commodity_tree,
-					    cd->gconf_section);
+					    GCONF_SECTION);
 }
 
 static void
@@ -331,9 +328,8 @@ close_handler (gpointer user_data)
   gtk_window_get_size(GTK_WINDOW(cd->dialog), &last_width, &last_height);
   gnc_save_window_size("commodities_win", last_width, last_height);
 
-  gnc_gconf_client_set_bool (NULL, NULL, cd->gconf_section,
-			     "include_iso", cd->show_currencies);
-  gnc_tree_view_commodity_save_settings (cd->commodity_tree, cd->gconf_section);
+  gnc_gconf_set_bool(GCONF_SECTION, "include_iso", cd->show_currencies, NULL);
+  gnc_tree_view_commodity_save_settings (cd->commodity_tree, GCONF_SECTION);
 
   gtk_widget_destroy(cd->dialog);
 }

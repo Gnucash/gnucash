@@ -2,7 +2,7 @@
  * gnc-tree-view-common.c -- common utilities for manipulating a
  *                     GtkTreeView within gnucash
  *
- * Copyright (C) 2003 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -210,7 +210,6 @@ gnc_tree_view_common_create_columns (GtkTreeView *view,
 static void
 gnc_tree_view_common_save_sort_info (GtkTreeView *view,
 				     const gchar *section,
-				     GConfClient *client,
 				     gnc_view_column *defaults)
 {
   GtkTreeViewColumn *column;
@@ -239,8 +238,8 @@ gnc_tree_view_common_save_sort_info (GtkTreeView *view,
   enum_value = g_enum_get_value (enum_class, order);
   enum_name  = enum_value->value_nick;
 
-  gnc_gconf_client_set_string (client, NULL, section, "sort_column", col_name);
-  gnc_gconf_client_set_string (client, NULL, section, "sort_order", enum_name);
+  gnc_gconf_set_string(section, "sort_column", col_name, NULL);
+  gnc_gconf_set_string(section, "sort_order", enum_name, NULL);
 }
 
 void
@@ -254,8 +253,6 @@ gnc_tree_view_common_save_settings (GtkTreeView *view,
   const gchar *tree_name;
   const gchar *name;
   gint i, num;
-  GConfClient    * client;
-  GError         * error;
 
   g_return_if_fail (GTK_IS_TREE_VIEW(view));
   g_return_if_fail (section != NULL);
@@ -264,8 +261,6 @@ gnc_tree_view_common_save_settings (GtkTreeView *view,
   tree_name = g_object_get_data(G_OBJECT(view), TREE_NAME);
   ENTER("view %p, name %s, section %s, defaults %p",
 	view, tree_name, section, defaults);
-
-  client = gconf_client_get_default ();
 
   for (i = 0; defaults[i].pref_name != NULL; i++) {
     column = gtk_tree_view_get_column (view, i);
@@ -276,37 +271,29 @@ gnc_tree_view_common_save_settings (GtkTreeView *view,
     column_names = g_slist_append(column_names, (gpointer)name);
 
     /* Remember whether the column is visible */
-    key = g_strdup_printf("%s/%s_visible", section, name);
-    gnc_gconf_client_set_bool (client, key, NULL, NULL,
-			       gtk_tree_view_column_get_visible (column));
+    key = g_strdup_printf("%s_visible", name);
+    gnc_gconf_set_bool(section, key,
+		       gtk_tree_view_column_get_visible(column), NULL);
+    g_free(key);
 
     /* Remember whether the column width */
-    key = g_strdup_printf("%s/%s_width", section, name);
-    gnc_gconf_client_set_int (client, key, NULL, NULL,
-			      gtk_tree_view_column_get_width (column));
+    key = g_strdup_printf("%s_width", name);
+    gnc_gconf_set_int(section, key,
+		      gtk_tree_view_column_get_width(column), NULL);
+    g_free(key);
   }
 
-  gnc_tree_view_common_save_sort_info (view, section, client, defaults);
+  gnc_tree_view_common_save_sort_info (view, section, defaults);
 
-  /* Remember whether the rules hint is active */
-  key = g_strdup_printf("%s/rules_hint", section);
-  gnc_gconf_client_set_bool (client, key, NULL, NULL,
-			     gtk_tree_view_get_rules_hint (view));
-
-  key = g_strdup_printf("%s/column_order", section);
-  if (!gconf_client_set_list (client, key, GCONF_VALUE_STRING,
-			      column_names, &error)) {
-    DEBUG("Failed to save order: %s", error->message);
-    g_error_free (error);
-  }
-  g_free(key);
+  gnc_gconf_set_list(section, "column_order", GCONF_VALUE_STRING,
+		     column_names, NULL);
+  gnc_gconf_suggest_sync();
   LEAVE(" ");
 }
 
 static void
 gnc_tree_view_common_restore_sort_info (GtkTreeView *view,
 					const gchar *section,
-					GConfClient *client,
 					gnc_view_column *defaults)
 {
   GtkTreeModel *s_model;
@@ -316,15 +303,13 @@ gnc_tree_view_common_restore_sort_info (GtkTreeView *view,
   GEnumClass   *enum_class;
   GEnumValue   *enum_value;
 
-  if (!gnc_gconf_client_get_string (client, NULL, section, "sort_column", &value))
-    return;
+  value = gnc_gconf_get_string(section, "sort_column", NULL);
   if (value) {
     sort_column_id = view_column_find_by_name(defaults, value);
     g_free(value);
   }
 
-  if (!gnc_gconf_client_get_string (client, NULL, section, "sort_order", &value))
-    return;
+  value = gnc_gconf_get_string(section, "sort_order", NULL);
   if (value) {
     enum_class = g_type_class_ref (GTK_TYPE_SORT_TYPE);
     enum_value = g_enum_get_value_by_nick (enum_class, value);
@@ -351,8 +336,6 @@ gnc_tree_view_common_restore_settings (GtkTreeView *view,
   GSList *column_names, *tmp, *next;
   gboolean visible;
   gint i, width;
-  GConfClient  *client;
-  GError       *error = NULL;
 
   g_return_if_fail (GTK_IS_TREE_VIEW(view));
   g_return_if_fail (section != NULL);
@@ -362,30 +345,19 @@ gnc_tree_view_common_restore_settings (GtkTreeView *view,
   ENTER("view %p, name %s, section %s, defaults %p",
 	view, tree_name, section, defaults);
 
-  client = gconf_client_get_default ();
-
   /* Get the column order information first.  This can be used as a
    * key to see if 1) there is any information present in the users
    * gconf files, and 2) the gconf schema have been installed.  If the
    * result is a null list, neither of the two is present and this
    * routine should bail now. We'll actually swap the columns around
    * after setting up all the other information. */
-  key = g_strdup_printf("%s/column_order", section);
-  column_names =
-    gconf_client_get_list (client, key, GCONF_VALUE_STRING, &error);
-  g_free(key);
+  column_names = gnc_gconf_get_list(section, "column_order",
+				    GCONF_VALUE_STRING, NULL);
   if (column_names == NULL)
     return;
 
-  /* Restore whether the rules hint is visible */
-  key = g_strdup_printf("%s/rules_hint", section);
-  if (gnc_gconf_client_get_bool (client, key, NULL, NULL, &visible)) {
-    DEBUG("Setting rules hint to %d", visible);
-    gtk_tree_view_set_rules_hint (view, visible);
-  }
-
   /* Restore the sort information, if any */
-  gnc_tree_view_common_restore_sort_info (view, section, client, defaults);
+  gnc_tree_view_common_restore_sort_info (view, section, defaults);
 
   /* Restore any per-column information */
   for (i = 0; defaults[i].pref_name != NULL; i++) {
@@ -394,18 +366,20 @@ gnc_tree_view_common_restore_settings (GtkTreeView *view,
     DEBUG("Processing column %s", col_name);
 
     /* visible */
-    key = g_strdup_printf("%s/%s_visible", section, col_name);
-    if (gnc_gconf_client_get_bool (client, key, NULL, NULL, &visible)) {
-      DEBUG("  Setting %s column visibility to %d", col_name, visible);
-      gtk_tree_view_column_set_visible (column, visible);
-    }
+    key = g_strdup_printf("%s_visible", col_name);
+    visible = gnc_gconf_get_bool(section, key, NULL);
+    DEBUG("  Setting %s column visibility to %d", col_name, visible);
+    gtk_tree_view_column_set_visible (column, visible);
+    g_free(key);
 
     /* column width */
-    key = g_strdup_printf("%s/%s_width", section, col_name);
-    if (gnc_gconf_client_get_int (client, key, NULL, NULL, &width)) {
+    key = g_strdup_printf("%s_width", col_name);
+    width = gnc_gconf_get_int(section, key, NULL);
+    if (width != 0) {
       DEBUG("  Would set %s column width to %d", col_name, width);
       // gtk_tree_view_column_set_width (column, width);
     }
+    g_free(key);
   }
 
   /* Now swap the columns around the way the user had them. */
@@ -434,6 +408,5 @@ gnc_tree_view_common_restore_settings (GtkTreeView *view,
   }
 
   g_slist_free(column_names);
-
   LEAVE(" ");
 }

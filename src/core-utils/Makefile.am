@@ -1,16 +1,23 @@
 
 lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 
-gwmoddir = ${GNC_GWRAP_LIBDIR}
-gwmod_DATA = gw-core-utils-spec.scm gw-core-utils.scm
+libcore_utils_la_SOURCES = \
+  core-utils.c \
+  gnc-gconf-utils.c
 
-libcore_utils_la_SOURCES = core-utils.c
-libcore_utils_la_LDFLAGS = -module ${GLIB_LIBS}
-libcore_utils_la_LIBADD =
+libcore_utils_la_LDFLAGS = -module
 
-libgw_core_utils_la_SOURCES = gw-core-utils.c
-libgw_core_utils_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS} ${GUILE_LIBS}
-libgw_core_utils_la_LIBADD = libcore-utils.la
+libcore_utils_la_LIBADD = \
+  ${GLIB_LIBS} \
+  ${GCONF_LIBS}
+
+libgw_core_utils_la_SOURCES = \
+  gw-core-utils.c
+
+libgw_core_utils_la_LDFLAGS = -module ${G_WRAP_LINK_ARGS}
+libgw_core_utils_la_LIBADD = \
+  libcore-utils.la \
+  ${GUILE_LIBS}
 
 noinst_HEADERS = \
   core-utils.h \
@@ -18,7 +25,14 @@ noinst_HEADERS = \
 
 EXTRA_DIST = .cvsignore ${gwmod_DATA}
 
-AM_CFLAGS = ${G_WRAP_COMPILE_ARGS} ${GLIB_CFLAGS} ${GUILE_INCS}
+AM_CFLAGS = \
+  ${G_WRAP_COMPILE_ARGS} \
+  ${GUILE_INCS} \
+  ${GLIB_CFLAGS} \
+  ${GCONF_CFLAGS}
+
+gwmoddir = ${GNC_GWRAP_LIBDIR}
+gwmod_DATA = gw-core-utils-spec.scm gw-core-utils.scm
 
 if GNUCASH_SEPARATE_BUILDDIR
 #Only needed when srcdir and builddir are different

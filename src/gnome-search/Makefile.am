@@ -4,6 +4,7 @@ pkglib_LTLIBRARIES = libgncmod-gnome-search.la libgw-gnome-search.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
@@ -53,6 +54,7 @@ libgncmod_gnome_search_la_LDFLAGS = -module
 
 libgncmod_gnome_search_la_LIBADD = \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${GTKHTML_LIBS} \

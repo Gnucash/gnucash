@@ -47,6 +47,7 @@
       "#include <gnc-menu-extensions.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <print-session.h>\n"
+      "#include <gnc-gconf-utils.h>\n"
       )))
 
 
@@ -496,6 +497,13 @@ be left empty")
    "gnc_unset_busy_cursor"
    '((<gtk:Widget*> window))
    "Remove a busy cursor for a specific window. If null, the busy cursor will be removed on all windows.")
+
+  (gw:wrap-function
+   ws
+   'gnc:gconf-get-bool
+   '<gw:bool>
+   "gnc_gconf_get_bool_no_error"
+   '(((<gw:mchars> caller-owned) section)
+     ((<gw:mchars> caller-owned) name))
+   "Get a boolean value from gconf.")
 )
-
-

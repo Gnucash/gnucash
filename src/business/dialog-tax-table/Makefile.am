@@ -4,6 +4,7 @@ pkglib_LTLIBRARIES = libgncmod-dialog-tax-table.la libgw-dialog-tax-table.la
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/gnome-utils \
@@ -30,6 +31,7 @@ libgncmod_dialog_tax_table_la_LDFLAGS = -module
 
 libgncmod_dialog_tax_table_la_LIBADD = \
   ../../gnc-module/libgncmodule.la \
+  ../../core-utils/libcore-utils.la \
   ${GUILE_LIBS} \
   ${GNOME_LIBS} \
   ${G_WRAP_LINK_ARGS} \

@@ -9,6 +9,7 @@ AM_CFLAGS = \
   -DSYSCONFDIR=\"${GNC_CONFIGDIR}\" \
   -DDATADIR=\"${GNC_SHAREDIR}\" \
   -DLIBDIR=\"${GNC_LIBDIR}\" \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/backend/file \
@@ -56,7 +57,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-druid-provider-multifile-gnome.c \
   gnc-frequency.c \
   gnc-general-select.c \
-  gnc-gconf-utils.c \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
   gnc-html-history.c \
@@ -108,7 +108,6 @@ gncinclude_HEADERS = \
   gnc-druid-gnome-ui.h \
   gnc-frequency.h \
   gnc-general-select.h \
-  gnc-gconf-utils.h \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
   gnc-html-history.h \
@@ -148,6 +147,7 @@ noinst_HEADERS = \
 libgncmod_gnome_utils_la_LDFLAGS = -module
 
 libgncmod_gnome_utils_la_LIBADD = \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/calculation/libgncmod-calculation.la \
