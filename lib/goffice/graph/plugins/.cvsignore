@@ -1,0 +1,9 @@
+Makefile
+Makefile.in
+*.diff
+*.diffs
+*.patch
+*.log
+*.xac.*.xac
+.deps
+.libs
