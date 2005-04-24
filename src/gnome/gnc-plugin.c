@@ -26,6 +26,7 @@
 
 #include "gnc-plugin.h"
 #include "gnc-trace.h"
+#include "gnc-gconf-utils.h"
 
 static gpointer parent_class = NULL;
 static short module = MOD_GUI;
@@ -79,8 +80,6 @@ gnc_plugin_init (GncPlugin *plugin_page)
 	GncPluginPrivate *priv;
 
 	priv = plugin_page->priv = g_new0 (GncPluginPrivate, 1);
-
-	plugin_page->window      = NULL;
 }
 
 static void
@@ -107,19 +106,38 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 	GncPluginClass *class;
 
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-	ENTER (""); 
 	class = GNC_PLUGIN_GET_CLASS (plugin);
-	plugin->window = window;
+	ENTER (": plugin %s(%p), window %p", gnc_plugin_get_name(plugin),
+	       plugin, window);
+
+	/*
+	 * Update window with additional UI items
+	 */
 	if (class->actions_name) {
+	  DEBUG ("%s: %d actions to merge with gui from %s",
+		 class->actions_name, class->n_actions, class->ui_filename);
 	  gnc_main_window_merge_actions (window, class->actions_name,
 					 class->actions, class->n_actions,
 					 class->ui_filename, plugin);
 	}
 
+	/*
+	 * Setup gconf notifications if requested
+	 */
+	if (class->gconf_section && class->gconf_notifications) {
+	  DEBUG ("Requesting notification for section %s", class->gconf_section);
+	  gnc_gconf_add_notification(G_OBJECT(window), class->gconf_section,
+				     class->gconf_notifications);
+	}
+
+	/*
+	 * Do plugin specific actions.
+	 */
 	if (GNC_PLUGIN_GET_CLASS (plugin)->add_to_window) {
+	  DEBUG ("Calling child class function %p", GNC_PLUGIN_GET_CLASS (plugin)->add_to_window);
 	  GNC_PLUGIN_GET_CLASS (plugin)->add_to_window (plugin, window, type);
 	}
-	LEAVE ("plugin name = %s", gnc_plugin_get_name(plugin));
+	LEAVE ("");
 }
 
 void
@@ -130,16 +148,36 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
 	GncPluginClass *class;
 
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
-
 	class = GNC_PLUGIN_GET_CLASS (plugin);
+	ENTER (": plugin %s(%p), window %p", gnc_plugin_get_name(plugin),
+	       plugin, window);
+
+	/*
+	 * Do plugin specific actions.
+	 */
 	if (GNC_PLUGIN_GET_CLASS (plugin)->remove_from_window) {
+	  DEBUG ("Calling child class function %p",
+		 GNC_PLUGIN_GET_CLASS (plugin)->remove_from_window);
 	  GNC_PLUGIN_GET_CLASS (plugin)->remove_from_window (plugin, window, type);
 	}
 
+	/*
+	 * Remove any gconf notifications
+	 */
+	if (class->gconf_section && class->gconf_notifications) {
+	  DEBUG ("Remove notification for section %s", class->gconf_section);
+	  gnc_gconf_remove_notification (G_OBJECT(window), class->gconf_section);
+	}
+
+	/*
+	 * Update window to remove UI items
+	 */
 	if (class->actions_name) {
+	  DEBUG ("%s: %d actions to unmerge",
+		 class->actions_name, class->n_actions);
 	  gnc_main_window_unmerge_actions (window, class->actions_name);
 	}
-	plugin->window = NULL;
+	LEAVE ("");
 }
 
 GncPluginPage *

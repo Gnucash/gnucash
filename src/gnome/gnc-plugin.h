@@ -27,6 +27,7 @@
 
 #include "gnc-main-window.h"
 #include "gnc-plugin-page.h"
+#include <gconf/gconf-client.h>
 
 G_BEGIN_DECLS
 
@@ -44,8 +45,6 @@ typedef struct GncPluginPrivate GncPluginPrivate;
 typedef struct {
 	GObject parent;
 	GncPluginPrivate *priv;
-
-	GncMainWindow *window;
 } GncPlugin;
 
 typedef struct {
@@ -56,7 +55,10 @@ typedef struct {
 	GtkActionEntry *actions;
 	guint n_actions; 
 	const gchar *ui_filename;
- 
+
+	const gchar* gconf_section;
+	void (* gconf_notifications) (GConfClient *client, guint cnxn_id, GConfEntry *entry, gpointer user_data);
+
 	/* Virtual Table */
 	void (* add_to_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
 	void (* remove_from_window) (GncPlugin *plugin, GncMainWindow *window, GQuark type);
