@@ -1190,6 +1190,7 @@ AC_OUTPUT( po/Makefile.in
           src/app-file/Makefile
           src/app-file/test/Makefile
           src/app-file/gnome/Makefile
+          src/app-file/schemas/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile

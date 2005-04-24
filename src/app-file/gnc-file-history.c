@@ -1,6 +1,7 @@
 /********************************************************************\
  * gnc-file-history.c -- functions to maintain file history menu    *
  * Copyright (C) 2000 Robby Stephenson         	                    *
+ * Copyright (C) 2005 David Hampton            	                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -26,135 +27,100 @@
 #include <gnome.h>
 #include "gnc-file.h"
 #include "gnc-file-history.h"
+#include "gnc-gconf-utils.h"
 
-#define HISTORY_SECTION "/GnuCash/History/"
-
-static GList *history_list = NULL;
-static gnc_history_changed_cb history_changed_cb = NULL;
-
-void
-gnc_history_set_callback (gnc_history_changed_cb cb)
+gchar *
+gnc_history_gconf_index_to_key (guint index)
 {
-  history_changed_cb = cb;
+  return g_strdup_printf(HISTORY_STRING_FILE_N, index);
 }
 
-static void
-gnc_history_config_write (void)
+gint
+gnc_history_gconf_key_to_index (const gchar *fullkey)
 {
-  guint num_files, i;
-  char key[20];
-  GList *tmp;
+  char *key;
+  gint index, result;
 
-  if (history_list == NULL)
-    return;
-
-  num_files = g_list_length(history_list);
-  if (num_files == 0)
-    return;
-
-  gnome_config_clean_section (HISTORY_SECTION);
-  gnome_config_push_prefix (HISTORY_SECTION);
-  gnome_config_set_int ("MaxFiles", num_files);
-
-  for (tmp = history_list, i = 0; tmp != NULL; tmp = g_list_next(tmp), i++)
-  {
-    g_sprintf(key, "File%d", i);
-    gnome_config_set_string (key, tmp->data);
-  }
-
-  gnome_config_pop_prefix ();
-  gnome_config_sync ();
+  key = rindex(fullkey, '/');
+  result = sscanf(key+1, HISTORY_STRING_FILE_N, &index);
+  return (result == 1) ? index : -1;
 }
-
-
-void
-gnc_history_init_list (void)
-{
-  int num_files, i;
-  char key[20], *filename;
-
-  gnome_config_push_prefix (HISTORY_SECTION);
-
-  g_sprintf (key, "MaxFiles=%d", MAX_HISTORY_FILES);
-  num_files = gnome_config_get_int (key);
-  if (num_files > MAX_HISTORY_FILES)
-    num_files = MAX_HISTORY_FILES;
-
-  for (i = 0; i < num_files; i++)
-  {
-    g_sprintf (key, "File%d", i);
-    filename = gnome_config_get_string (key);
-    if (filename == NULL)
-      continue;
-    if (!g_utf8_validate(filename, -1, NULL))
-      return;
-    history_list = g_list_append (history_list, filename);
-  }
-
-  gnome_config_pop_prefix ();
-}
-
 
 void
 gnc_history_add_file (const char *newfile)
 {
-  GList *tmp;
+  gchar *filename, *from, *to;
+  gint i, last;
 
   if (newfile == NULL)
     return;
   if (!g_utf8_validate(newfile, -1, NULL))
     return;
 
-  if (history_list == NULL)
-    gnc_history_init_list ();
+  /*
+   * Look for the filename in gconf.
+   */
+  last = MAX_HISTORY_FILES - 1;
+  for (i = 0; i < MAX_HISTORY_FILES; i++) {
+    from = g_strdup_printf(HISTORY_STRING_FILE_N, i);
+    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+    g_free(from);
 
-  /* See if its already there. If so, move to the top. */
-  for (tmp = history_list; tmp; tmp = g_list_next(tmp)) {
-    if (g_utf8_collate (newfile, tmp->data) == 0) {
-      history_list = g_list_remove_link (history_list, tmp);
-      history_list = g_list_concat (tmp, history_list);
+    if (!filename) {
+      last = i;
       break;
     }
+    if (g_utf8_collate(newfile, filename) == 0) {
+      g_free(filename);
+      last = i;
+      break;
+    }
+    g_free(filename);
   }
 
-  /* If not there, add a new item at the top. */
-  if (tmp == NULL) {
-      history_list = g_list_prepend (history_list, g_strdup(newfile));
+  /*
+   * Shuffle filenames upward through gconf.
+   */
+  to = g_strdup_printf(HISTORY_STRING_FILE_N, last);
+  for (i = last - 1; i >= 0; i--) {
+    from = g_strdup_printf(HISTORY_STRING_FILE_N, i);
+    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+    if (filename) {
+      gnc_gconf_set_string(HISTORY_STRING_SECTION, to, filename, NULL);
+      g_free(filename);
+    } else {
+      gnc_gconf_unset(HISTORY_STRING_SECTION, to, NULL);
+    }
+    g_free(to);
+    to = from;
   }
 
-  /* Trim the list  if necessary*/
-  if (g_list_length(history_list) > MAX_HISTORY_FILES) {
-    tmp = g_list_last(history_list);
-    g_free(tmp->data);
-    history_list = g_list_delete_link(history_list, tmp);
-  }
-
-  /* Write the new list to disk */
-  gnc_history_config_write ();
-
-  /* Update the menus actions */
-  if (history_changed_cb)
-    history_changed_cb();
+  /*
+   * Store the new zero entry.
+   */
+  gnc_gconf_set_string(HISTORY_STRING_SECTION, to, newfile, NULL);
 }
 
 
-const GList *
-gnc_history_get_file_list (void)
-{
-  if (history_list == NULL)
-    gnc_history_init_list ();
-
-  return history_list;
-}
-
-const char *
+char *
 gnc_history_get_last (void)
 {
-  if (history_list == NULL)
-    gnc_history_init_list ();
+  static char *filename = NULL;
+  char *key;
 
-  if (history_list == NULL)
-    return NULL;
+  /* The static string supports the current signature of this
+   * function.  At some point this should be changed to pass the
+   * allocated string up to the caller and make them responsible for
+   * freeing irt, but that change percolates up into the scheme code
+   * and requires changing that as well. */
+  if (filename) {
+    g_free(filename);
+    filename = NULL;
+  }
 
-  return g_list_last(history_list)->data;
+  key = g_strdup_printf(HISTORY_STRING_FILE_N, 0);
+  filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
+  g_free(key);
+
+  return filename;
 }

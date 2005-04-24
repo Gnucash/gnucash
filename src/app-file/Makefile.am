@@ -1,9 +1,10 @@
-SUBDIRS = gnome . test
+SUBDIRS = gnome schemas . test
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-app-file.la libgw-app-file.la
 
 AM_CFLAGS = \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
@@ -32,6 +33,7 @@ noinst_HEADERS = \
 libgncmod_app_file_la_LDFLAGS = -module
 
 libgncmod_app_file_la_LIBADD = \
+  ../core-utils/libcore-utils.la \
   ../gnc-module/libgncmodule.la \
   ../engine/libgncmod-engine.la \
   ../gnome-utils/libgncmod-gnome-utils.la \

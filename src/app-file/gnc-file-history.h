@@ -1,6 +1,7 @@
 /********************************************************************\
  * gnc-file-history.h -- functions to maintain file-history menu    *
  * Copyright (C) 2000 Robby Stephenson         	                    *
+ * Copyright (C) 2005 David Hampton            	                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -23,14 +24,14 @@
 #ifndef GNC_FILE_HISTORY_H
 #define GNC_FILE_HISTORY_H
 
-#define MAX_HISTORY_FILES 4	/* May be any number up to 10 */
+#define MAX_HISTORY_FILES 10	/* May be any number up to 10 */
+#define HISTORY_STRING_SECTION  "history"
+#define HISTORY_STRING_MAXFILES "maxfiles"
+#define HISTORY_STRING_FILE_N   "file%d"
 
-typedef void (*gnc_history_changed_cb) (void);
-
-void gnc_history_set_callback           (gnc_history_changed_cb cb);
-void gnc_history_init_list 		(void);
 void gnc_history_add_file 		(const char *filename);
-const char * gnc_history_get_last       (void);
-const GList * gnc_history_get_file_list (void);
+char * gnc_history_get_last		(void);
+gchar *gnc_history_gconf_index_to_key   (guint index);
+gint   gnc_history_gconf_key_to_index   (const gchar *fullkey);
 
 #endif

@@ -1,6 +1,6 @@
 /* 
  * gnc-plugin-file-history.h -- 
- * Copyright (C) 2003 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,6 +19,13 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
+
+/** @addtogroup GUI
+    @{ */
+/** @file gnc-plugin-file-history.h
+    @brief Utility functions for writing import modules.
+    @author Copyright (C) 2002 David Hampton <hampton@empployees.org>
+*/
 
 #ifndef __GNC_PLUGIN_FILE_HISTORY_H
 #define __GNC_PLUGIN_FILE_HISTORY_H
@@ -51,10 +58,23 @@ typedef struct {
 } GncPluginFileHistoryClass;
 
 /* function prototypes */
+
+
+/** Get the type of a file history plugin.
+ *
+ *  @return A GType.
+ */
 GType       gnc_plugin_file_history_get_type (void);
 
+/** Create a new file history plugin.  This plugin attaches the file
+ *  history menu to any window that is opened.
+ *
+ *  @return A pointer to the new object.
+ */
 GncPlugin  *gnc_plugin_file_history_new      (void);
 
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_FILE_HISTORY_H */
+
+/** @} */
