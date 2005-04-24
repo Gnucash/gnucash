@@ -1,3 +1,30 @@
+2005-04-23  Derek Atkins <derek@ihtfp.com>
+
+	* Merge gog-integ branch into g2 branch.
+
+ --- begin gog-integ Changelog ---
+
+2005-04-17  Derek Atkins <derek@ihtfp.com>
+
+	* configure.in: don't set pkglibdir
+	* lib/goffice/split.c: implement e_xml_get_child_by_name()
+	  GOG branch now builds on FC3.
+
+2005-02-12  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/report/utility-reports/test-graphing.scm: Add to make
+	graphing development easier.
+
+	* src/gnome-utils/gnc-html-graph-gog.c (handle_barchart): fix;
+	handle stacked-columns.
+	(handle_scatter): add.
+
+2005-02-10  Joshua Sled  <jsled@asynchronous.org>
+
+	* lib/goffice/ : Initial import of libgoffice "port".
+
+ -- end gog-integ Changelog --
+	
 2005-04-22  Joshua Sled  <jsled@asynchronous.org>
 
 	* src/scm/main.scm (gnc:main): Expose and use functionality to

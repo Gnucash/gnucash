@@ -132,7 +132,7 @@ Using Valgrind with GnuCash
 -- run ./src/bin/overrides/gnucash-valgrind
 
 However, I did not find valgrind to be useful.  It reported a bunch of
-guile bugs, some g_has_table bugs, and then the program exited prematurely 
+guile bugs, some g_hash_table bugs, and then the program exited prematurely 
 for no appearenet reason. :-( 
 
 For the moment, use the supressions in lib/gnucash_valgrind.supp.

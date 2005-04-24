@@ -32,6 +32,8 @@
 #include "gnc-html-guppi.h"
 #endif
 
+#include "gnc-html-graph-gog.h"
+
 #include "argv-list-converters.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"

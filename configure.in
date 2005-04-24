@@ -88,6 +88,13 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h)
 AC_CHECK_FUNCS(stpcpy memcpy timegm towupper setenv putenv)
 
+## +jsled
+# copied from gnumeric
+AC_CHECK_HEADERS(ieeefp.h ieee754.h)
+dnl Check for some functions
+AC_CHECK_FUNCS(random drand48 finite memmove mkdtemp uname times sysconf)
+## --jsled
+
 STRUCT_TM_GMTOFF_CHECK
 SCANF_LLD_CHECK
 if test $am_cv_scanf_lld = "no"; then
@@ -352,6 +359,48 @@ AC_CHECK_LIB(xml2, xmlElemDump, [:], [
   ])
 LIBS="$oLIBS"
 
+
+### --------------------------------------------------------------------------
+### for GOG/goffice...
+###
+### GSF
+PKG_CHECK_MODULES(GSF, libgsf-1 >= 1.8.0
+                       libgsf-gnome-1 >= 1.8.0)
+AC_SUBST(GSF_LIBS)
+AC_SUBST(GSF_CFLAGS)
+
+### libart
+PKG_CHECK_MODULES(ART, libart-2.0 >= 2.3.11)
+AC_SUBST(ART_LIBS)
+AC_SUBST(ART_CFLAGS)
+
+### silence convention-difference from cut-n-paste'd gnumeric Makefile.am's:
+AM_CONDITIONAL(WITH_GNOME, true)
+# for lib/goffice/graph/plugins/plot_barcol/gog-1.5d.c's use of
+# goffice/graph/gog-error-bar.h:gog_error_bar_prefs, which is bounded by
+# WITH_GTK for some reason... :/
+AM_CONDITIONAL(WITH_GTK, true)
+AC_DEFINE(WITH_GTK, 1, [Define if UI is built])
+
+### gnome-print [= gnome-font]
+PKG_CHECK_MODULES(PRINT, libgnomeprint-2.2 >= 2.5.2)
+AC_SUBST(PRINT_LIBS)
+AC_SUBST(PRINT_CFLAGS)
+
+AC_ARG_VAR(GLIB_GENMARSHAL, [Absolute path of the glib-genmarshal executable.])
+AC_PATH_PROG(GLIB_GENMARSHAL, glib-genmarshal)
+
+gog_plugindir='${GNC_LIBDIR}/plugins'
+# do this to minimize changes in the plugin makefiles...
+gnumeric_plugindir='${gog_plugindir}'
+AC_SUBST(gog_plugindir)
+AC_SUBST(gnumeric_plugindir)
+#AC_SUBST(pkglibdir) -- this breaks builds into /opt.
+gnumeric_icondir='${GNC_SHAREDIR}/pixmaps'
+AC_SUBST(gnumeric_icondir)
+
+
+# /GOG
 
 ### --------------------------------------------------------------------------
 ### Variables
@@ -876,7 +925,7 @@ then
     AS_SCRUB_INCLUDE(GNOME_PRINT_CFLAGS)
     AC_SUBST(GNOME_PRINT_CFLAGS)
     AC_SUBST(GNOME_PRINT_LIBS)
-    
+
     # There is no libguppi.  Just substitute empty stuff
     LIBGUPPI_CFLAGS=
     LIBGUPPI_LIBS=
@@ -890,7 +939,6 @@ then
     AS_SCRUB_INCLUDE(GLADE_CFLAGS)
     AC_SUBST(GLADE_CFLAGS)
     AC_SUBST(GLADE_LIBS)
-
 
     # check for gtkhtml 3.x
     gtkhtml=0
@@ -1039,16 +1087,19 @@ then
   # us to keep it turned on, but also not break configure proceses.
   # -- warlord, 02/02/2003
 
+
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
-  AC_ARG_ENABLE(error-on-warning,
-    [  --disable-error-on-warning    disable treating compile warnings as errors],
-    [case "${enableval}" in
-       yes) warnFLAGS="${warnFLAGS} -Werror" ;;
-       no)  ;;
-       *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
-     esac],
-       [  warnFLAGS="${warnFLAGS} -Werror" ])
+# Re-disabled for the moment since goffice/graph has a lot of specific/manual #warnings-as-TODOs.
+# 2004.12.30 -- jsled
+#   AC_ARG_ENABLE(error-on-warning,
+#     [  --disable-error-on-warning    disable treating compile warnings as errors],
+#     [case "${enableval}" in
+#        yes) warnFLAGS="${warnFLAGS} -Werror" ;;
+#        no)  ;;
+#        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
+#      esac],
+#        [  warnFLAGS="${warnFLAGS} -Werror" ])
 
   # For gcc >= 3.4.x, specifically enable the new warning switch
   # -Wdeclaration-after-statement in order to preserve source code
@@ -1113,6 +1164,24 @@ AC_OUTPUT( po/Makefile.in
           lib/guile-www/Makefile
           lib/srfi/Makefile
           lib/libc/Makefile
+          lib/goffice/Makefile
+          lib/goffice/split/Makefile
+          lib/goffice/split/widgets/Makefile
+          lib/goffice/app/Makefile
+          lib/goffice/graph/Makefile
+          lib/goffice/graph/plugins/Makefile
+          lib/goffice/graph/plugins/plot_barcol/Makefile
+          lib/goffice/graph/plugins/plot_pie/Makefile
+          lib/goffice/graph/plugins/plot_radar/Makefile
+          lib/goffice/graph/plugins/plot_surface/Makefile
+          lib/goffice/graph/plugins/plot_xy/Makefile
+          lib/goffice/utils/Makefile
+          lib/goffice/gui-utils/Makefile
+          lib/goffice/drawing/Makefile
+          lib/goffice/pixmaps/Makefile
+          lib/goffice/cut-n-paste/Makefile
+          lib/goffice/cut-n-paste/pcre/Makefile
+          lib/goffice/cut-n-paste/egg-recent-files/Makefile
           rpm/Makefile
           src/Makefile
           src/app-file/Makefile

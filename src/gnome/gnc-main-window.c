@@ -1275,7 +1275,7 @@ gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window )
 {
         GtkWindow *w = GTK_WINDOW(gtk_window_new( GTK_WINDOW_TOPLEVEL ));
         gnc_html *gnchtml = gnc_html_new( w );
-        gchar *html = "<html><head><title>testing</title></head><body><h1>testing</h1><h2>testing 2</h2> <p>Testing</p></body></html>";
+        gchar *html = "<html><head><title>testing</title></head><body><h1>testing</h1><h2>testing 2</h2> <p>Tes<br />ting<object classid=\"gnc-guppi-pie\" width=\"300\" height=\"200\">No pie for you!</object></p></body></html>";
         gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(gnc_html_get_widget(gnchtml)) );
 
         gnc_html_show_data( gnchtml, html, strlen( html ) );
