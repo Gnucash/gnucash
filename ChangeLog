@@ -1,3 +1,47 @@
+2005-04-24  David Hampton  <hampton@employees.org>
+
+	* gnucash/src/core-utils/gnc-gconf-utils.[ch]:
+	* gnucash/src/gnome-utils/gnc-gconf-utils.[ch]: Moved files from
+	the gnome-utils directory to the core-utils directory. Clean up
+	the usage of these functions.  Document the functions with
+	doxygen.
+
+	* various: Changes for the move/cleanup of gnc-gconf.
+
+	* gnucash/src/gnome/schemas/apps_gnucash_dialog_commodities.schemas:
+	* gnucash/src/gnome/schemas/apps_gnucash_dialog_prices.schemas:
+	* gnucash/src/gnome-utils/gnc-tree-view-account.c:
+	* gnucash/src/gnome-utils/gnc-tree-view-commodity.c:
+	* gnucash/src/gnome-utils/gnc-tree-view-price.c: Remove old
+	references to the GtkTreeView "rules_hint" property.  This
+	property is now controlled via the .gtkrc file (where it should
+	be).
+
+	* gnucash/src/gnome/gnc-plugin.[ch]: Add infrastructure for
+	plugins to easily request notification of changes to gconf for a
+	specific section of gnucash variables.
+
+	* configure.in:
+	* gnucash/src/app-file/Makefile.am:
+	* gnucash/src/app-file/gnc-file-history.[ch]:
+	* gnucash/src/app-file/gnc-file-p.h:
+	* gnucash/src/app-file/gw-app-file-spec.scm:
+	* gnucash/src/gnome/gnc-plugin-file-history.[ch]:
+	* gnucash/src/gnome/ui/gnc-plugin-file-history-ui.xml:
+	* gnucash/src/app-file/schemas/Makefile.am:
+	* gnucash/src/app-file/schemas/apps_gnucash_history.schemas: Hook
+	the file history list into gconf.
+
+	* gnucash/src/gnome/gnc-main-window.c:
+	* gnucash/src/gnome/gnc-plugin-page-account-tree.c:
+	* gnucash/src/gnome/gnc-plugin-page.[ch]:
+	* gnucash/src/gnome/window-main-summarybar.c: Move the summary bar
+	to the body of the page, just below the account tree.  Implement
+	support for changing the summary bar when the page is changed,
+	since the register page has a different summary bar. Hook the main
+	window in to use standard desktop gconf key to decide if the
+	toolbar is show as text/icons/both.
+
 2005-04-23  Derek Atkins <derek@ihtfp.com>
 
 	* Merge gog-integ branch into g2 branch.

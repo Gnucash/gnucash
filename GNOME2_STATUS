@@ -85,14 +85,8 @@ Stock Split Dialog
   - Summary Bar
 
     - Summarybar restored into GncMainWindow UI; summary-select list does not
-      respond to button-pressing.
-
-    - View > Summary Bar (toggle) menu option has no effect.
-
-  - File Menu
-
-    - The "Open Recent" menu only has the first entry; the rest of the lines
-      appear blank.
+      respond to button-pressing.  The problem is that the widget
+      never sees the button_press_event.
 
   - [low-priority] New registers should open in new top-level windows.
 
@@ -111,6 +105,8 @@ Stock Split Dialog
 
     (gnucash:26380): GLib-GObject-WARNING **: gsignal.c:989: no emission of
     signal "key-press-event" to stop for instance `0x855a240'
+
+  - doesn't remember custom check formats.
 
 - Reconcile
 
@@ -134,12 +130,6 @@ Stock Split Dialog
   the main window, seemingly populated correctly.
 
   - There's no way to edit/refine a search.
-
-- Transfer
-
-  - Top 5 fields and don't expand width-wise.
-
-  - Bottom 2 fields [Currency Transfer] don't expand width-wise.
 
 - View Lots
 
