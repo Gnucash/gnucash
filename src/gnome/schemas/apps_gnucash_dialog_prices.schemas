@@ -18,18 +18,6 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/rules_hint</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/rules_hint</applyto>
-      <owner>gnucash</owner>
-      <type>bool</type>
-      <default>FALSE</default>
-      <locale name="C">
-        <short>Whether or not to alternate row colors</short>
-        <long>Whether or not to alternate row colors.</long>
-      </locale>
-    </schema>
-
-    <schema>
       <key>/schemas/apps/gnucash/dialogs/prices_dialog/commodity_visible</key>
       <applyto>/apps/gnucash/dialogs/prices_dialog/commodity_visible</applyto>
       <owner>gnucash</owner>

@@ -401,7 +401,6 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (tree_view, FALSE);
-  //  gtk_tree_view_set_rules_hint (tree_view, TRUE);
   gnc_tree_view_account_init_view_info(&account_view->priv->avi);
 
   gnc_tree_view_common_create_columns (tree_view, "Accounts", GNC_STOCK_ACCOUNT,

@@ -435,7 +435,6 @@ gnc_tree_view_price_new (QofBook *book)
 
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (tree_view, FALSE);
-  //  gtk_tree_view_set_rules_hint (tree_view, TRUE);
 
   gnc_tree_view_common_create_columns (tree_view, "Prices", NULL,
 				       view_column_defaults);
