@@ -622,7 +622,8 @@ gnc_main_window_summary_refresh (GNCMainSummary * summary)
 }
 
 static void
-gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data) {
+gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data)
+{
   GNCMainSummary * summary = data;
   gnc_unregister_option_change_callback_id(summary->callback_id);
   gnc_unregister_gui_component(summary->component_id);
@@ -631,19 +632,22 @@ gnc_main_window_summary_destroy_cb(GtkObject * obj, gpointer data) {
 }
 
 static void
-summarybar_refresh_handler(GHashTable * changes, gpointer user_data) {
+summarybar_refresh_handler(GHashTable * changes, gpointer user_data)
+{
   GNCMainSummary * summary = user_data;
   gnc_main_window_summary_refresh(summary);
 }
 
 static void
-summarybar_option_change_handler(gpointer user_data) {
+summarybar_option_change_handler(gpointer user_data)
+{
   GNCMainSummary * summary = user_data;
   gnc_main_window_summary_refresh(summary);
 }
 
 GtkWidget *
-gnc_main_window_summary_new (void) {
+gnc_main_window_summary_new (void)
+{
   GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
   GNCCurrencyItem * def_item;
   gnc_commodity   * default_currency = gnc_default_report_currency ();

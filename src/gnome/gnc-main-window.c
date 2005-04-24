@@ -3,7 +3,7 @@
  *	GnuCash main window.
  *
  * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003 David Hampton <hampton@employees.org>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -54,10 +54,10 @@
 #include "gnc-version.h"
 #include "gnc-window.h"
 #include "window-main.h"
-#include "window-main-summarybar.h"
 #include "messages.h"
 #include "druid-merge.h"
 #include "dialog-chart-export.h"
+#include "gnc-gconf-utils.h"
 // +JSLED
 #include "gnc-html.h"
 
@@ -67,6 +67,9 @@ enum {
   LAST_SIGNAL
 };
 
+
+#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
+#define TOOLBAR_STYLE "/desktop/gnome/interface/toolbar_style"
 
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
@@ -133,8 +136,9 @@ struct GncMainWindowPrivate
 	GtkWidget *notebook;
 	GtkWidget *statusbar;
 	GtkWidget *progressbar;
-	
-	GtkWidget *gncSummaryBar;
+
+	GtkWidget *summarybar_dock;
+	gboolean   show_summarybar;
 
 	GtkActionGroup *action_group;
 
@@ -711,6 +715,8 @@ gnc_main_window_finalize (GObject *object)
 
 	g_return_if_fail (window->priv != NULL);
 
+	gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
+
 	gnc_engine_unregister_event_handler(window->priv->event_handler_id);
 	g_hash_table_destroy (window->priv->merged_actions_table);
 	g_free (window->priv);
@@ -744,6 +750,61 @@ gnc_main_window_add_plugin (gpointer plugin,
 }
 
 static void
+gnc_main_window_update_toolbar (GncMainWindow *window,
+				const gchar *style)
+{
+	GEnumClass   *enum_class;
+	GEnumValue   *enum_value;
+	GSList       *list, *tmp;
+
+	ENTER("window %p, style %s", window, style);
+	enum_class = g_type_class_ref (GTK_TYPE_TOOLBAR_STYLE);
+	enum_value = g_enum_get_value_by_nick (enum_class, style);
+	if (!enum_value) {
+	  char *pre;
+
+	  pre = index(style, '_');
+	  if (pre == NULL)
+	    return;
+	  *pre = '-';
+	  enum_value = g_enum_get_value_by_nick (enum_class, style);
+	  if (!enum_value) {
+	    return;
+	  }
+	}
+
+	list = gtk_ui_manager_get_toplevels(window->ui_merge, GTK_UI_MANAGER_TOOLBAR);
+	for (tmp = list; tmp; tmp = tmp->next) {
+	  gtk_toolbar_set_style(GTK_TOOLBAR(tmp->data), enum_value->value);
+	}
+	g_slist_free(list);
+	LEAVE("");
+}
+
+static void
+gnc_main_window_gconf_changed (GConfClient *client,
+			       guint cnxn_id,
+			       GConfEntry *entry,
+			       gpointer user_data)
+{
+	GncMainWindow *window;
+	GConfValue *value;
+	const gchar *key;
+
+	window = GNC_MAIN_WINDOW(user_data);
+
+	key = gconf_entry_get_key(entry);
+	value = gconf_entry_get_value(entry);
+	if (!key || !value)
+	  return;
+
+	if (strcmp(key, TOOLBAR_STYLE) == 0) {
+	  gnc_main_window_update_toolbar(window, gconf_value_get_string(value));
+	  return;
+	}
+}
+
+static void
 gnc_main_window_setup_window (GncMainWindow *window)
 {
 	GncMainWindowPrivate *priv;
@@ -752,7 +813,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	GncPluginManager *manager;
 	GList *plugins;
 	GError *error = NULL;
-	gchar *filename;
+	gchar *filename, *style;
 
 	/* Create widgets and add them to the window */
 	main_vbox = gtk_vbox_new (FALSE, 0);
@@ -774,17 +835,17 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
 			    TRUE, TRUE, 0);
 
+	priv->show_summarybar = TRUE;
+	priv->summarybar_dock = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (priv->summarybar_dock);
+	gtk_box_pack_start (GTK_BOX (main_vbox), priv->summarybar_dock,
+			    FALSE, TRUE, 0);
+
 	priv->statusbar = gtk_statusbar_new ();
 	gtk_widget_show (priv->statusbar);
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
 	                           FALSE, TRUE, 0);
         gtk_statusbar_set_has_resize_grip( GTK_STATUSBAR(priv->statusbar), TRUE );
-
-        priv->gncSummaryBar = gnc_main_window_summary_new();
-        gtk_widget_show( priv->gncSummaryBar );
-        gtk_box_pack_start( GTK_BOX(priv->statusbar), priv->gncSummaryBar, FALSE, TRUE, 0 );
-        // re-position at the beginning of the status area.
-        gtk_box_reorder_child( GTK_BOX(priv->statusbar), priv->gncSummaryBar, 0 );
 
 	priv->progressbar = gtk_progress_bar_new ();
 	gtk_widget_show (priv->progressbar);
@@ -823,6 +884,12 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	  g_error_free(error);
 	  g_assert(merge_id != 0);
 	}
+
+	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
+				   gnc_main_window_gconf_changed);
+	style = gnc_gconf_get_string(TOOLBAR_STYLE, NULL, NULL);
+	gnc_main_window_update_toolbar(window, style);
+	g_free(style);
 
         /* Testing */
         {
@@ -880,11 +947,18 @@ gnc_main_window_add_widget (GtkUIManager *merge,
 }
 
 static void
+container_remove(GtkWidget *widget, gpointer data)
+{
+  gtk_container_remove(GTK_CONTAINER(data), widget);
+}
+
+
+static void
 gnc_main_window_switch_page_internal (GtkNotebook *notebook,
 				      gint pos,
 				      GncMainWindow *window)
 {
-	GtkWidget *child;
+	GtkWidget *child, *summarybar, *summarybar_dock;
 	GncPluginPage *page;
 
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
@@ -901,7 +975,34 @@ gnc_main_window_switch_page_internal (GtkNotebook *notebook,
 	window->priv->current_page = page;
 
 	if (page != NULL) {
+		/* Update the user interface (e.g. menus and toolbars */
 		gnc_plugin_page_merge_actions (page, window->ui_merge);
+
+		/* Remove summarybar for old page */
+		summarybar_dock = window->priv->summarybar_dock;
+		gtk_container_foreach(GTK_CONTAINER(summarybar_dock),
+				      (GtkCallback)container_remove,
+				      summarybar_dock);
+
+		/* install new summarybar (if any) */
+		summarybar = page->summarybar;
+		if (summarybar) {
+		  if (GTK_OBJECT_FLOATING(summarybar)) {
+		    /* Own this object. This will prevent it from being deleted by
+		     * gtk when it is removed from the summarybar. */
+		    g_object_ref (summarybar);
+		    gtk_object_sink (GTK_OBJECT (summarybar));
+		  }
+
+		  if (window->priv->show_summarybar)
+		    gtk_widget_show(summarybar);
+		  else
+		    gtk_widget_hide(summarybar);
+		  gtk_box_pack_start(GTK_BOX(summarybar_dock), summarybar,
+				     FALSE, TRUE, 0 );
+		}
+
+		/* Allow page specific actions */
 		gnc_plugin_page_selected (page);
 		gnc_window_update_status (GNC_WINDOW(window), page);
 	}
@@ -1164,6 +1265,11 @@ gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window)
 {
+	if (gtk_toggle_action_get_active(GTK_TOGGLE_ACTION(action))) {
+		gtk_widget_show (window->priv->summarybar_dock);
+	} else {
+		gtk_widget_hide (window->priv->summarybar_dock);
+	}
 }
 
 static void

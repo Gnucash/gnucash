@@ -51,6 +51,7 @@
 #include "option-util.h"
 #include "window-reconcile.h"
 #include "window-register.h"
+#include "window-main-summarybar.h"
 
 #include "messages.h"
 #include "gnc-engine-util.h"
@@ -470,10 +471,12 @@ gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page
 static void
 gnc_plugin_page_account_tree_close_cb (gpointer user_data)
 {
-  GncPluginPage *page;
+  GncPluginPage *plugin_page;
+  GncPluginPageAccountTree *page;
 
-  page = GNC_PLUGIN_PAGE(user_data);
-  gnc_main_window_close_page (GNC_MAIN_WINDOW(page->window), page);
+  plugin_page = GNC_PLUGIN_PAGE(user_data);
+  page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+  gnc_main_window_close_page(GNC_MAIN_WINDOW(plugin_page->window), plugin_page);
 }
 
 static GtkWidget *
@@ -527,6 +530,9 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 	gnc_gui_component_set_session (page->priv->component_id,
 				       gnc_get_current_session());
 
+	plugin_page->summarybar = gnc_main_window_summary_new();
+	gtk_widget_show(plugin_page->summarybar);
+
 	LEAVE("widget = %p", page->priv->widget);
 	return page->priv->widget;
 }
@@ -546,6 +552,11 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 	if (page->priv->component_id) {
 	  gnc_unregister_gui_component(page->priv->component_id);
 	  page->priv->component_id = 0;
+	}
+
+	if (plugin_page->summarybar) {
+	  g_object_unref(G_OBJECT(plugin_page->summarybar));
+	  plugin_page->summarybar = NULL;
 	}
 
 	LEAVE("widget destroyed");

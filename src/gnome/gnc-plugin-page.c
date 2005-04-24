@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -249,6 +250,7 @@ gnc_plugin_page_init (GncPluginPage *plugin_page)
 	plugin_page->uri         = NULL;
 
 	plugin_page->window      = NULL;
+	plugin_page->summarybar  = NULL;
 }
 
 static void
@@ -279,6 +281,10 @@ gnc_plugin_page_finalize (GObject *object)
   g_free (priv);
   page->priv = NULL;
 
+  if (page->summarybar) {
+    g_object_unref(G_OBJECT(page->summarybar));
+    page->summarybar = NULL;
+  }
   page->window = NULL; // Don't need to free it.
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
