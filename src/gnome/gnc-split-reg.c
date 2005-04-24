@@ -2113,6 +2113,7 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
     ms->children = g_list_remove(ms->children, tearoff);
     gtk_widget_destroy(tearoff);
   }
+  g_object_unref(client);
 
   gsr->split_popup_check = glade_xml_get_widget( xml, "popup_splits" );
 

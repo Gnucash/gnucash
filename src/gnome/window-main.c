@@ -193,6 +193,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
     client = gconf_client_get_default ();
     if (!gconf_client_get_bool (client, "/desktop/gnome/interface/toolbar_detachable", NULL))
       behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
+    g_object_unref(client);
 
     item = bonobo_dock_item_new("Summary Bar", behavior);
     gtk_container_add( GTK_CONTAINER (item), summarybar );

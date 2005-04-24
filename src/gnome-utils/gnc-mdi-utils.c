@@ -802,6 +802,7 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
   client = gconf_client_get_default ();
   if (!gconf_client_get_bool (client, "/desktop/gnome/interface/toolbar_detachable", NULL))
     behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
+  g_object_unref(client);
 
   if (childwin && childwin->toolbar)
   {

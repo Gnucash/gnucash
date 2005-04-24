@@ -1898,6 +1898,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
 
   gtk_widget_grab_focus (recnData->debit);
+  g_object_unref(client);
 
   return recnData;
 }
