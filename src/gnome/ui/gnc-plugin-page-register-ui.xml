@@ -5,7 +5,7 @@
         <menuitem name="FilePrintCheck"         action="FilePrintCheckAction"/>
       </placeholder>
     </menu>
-    <menu name="View">
+    <menu name="View" action="ViewAction">
       <placeholder name="ViewPlaceholder">
         <menu name="SelectTransactions"         action="SelectTransactionsAction">
           <menu name="TransDateRange"           action="TransDateRangeAction">
@@ -45,7 +45,7 @@
       </placeholder>
     </menu>
 
-    <menu name="Actions">
+    <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">
         <separator name="ActionsSep1"/>
 	<menuitem name="ActionsTransfer"         action="ActionsTransferAction"/>
@@ -85,7 +85,7 @@
     </placeholder>
   </toolbar>
 
-  <popup name="RegisterPopup"                action="FakeToplevel">>
+  <popup name="RegisterPopup"                action="FakeToplevel">
     <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
     <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
     <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
