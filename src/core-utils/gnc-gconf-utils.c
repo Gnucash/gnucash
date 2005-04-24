@@ -56,7 +56,7 @@ gnc_gconf_make_key (const gchar *section, const gchar *name)
 {
   gchar *section_path, *key;
 
-  g_assert ((section != NULL) && (name != NULL));
+  g_assert ((section != NULL) || (name != NULL));
 
   if (section == NULL) {
     if (*name == '/')
@@ -341,7 +341,7 @@ gnc_gconf_add_notification (GObject *object,
 	gchar *path, *client_tag, *notify_tag;
 	guint id;
 
-	g_return_if_fail(!G_IS_OBJECT(object));
+	g_return_if_fail(G_IS_OBJECT(object));
 	g_return_if_fail(section != NULL);
 	g_return_if_fail(callback != NULL);
 
@@ -393,7 +393,7 @@ gnc_gconf_remove_notification (GObject *object,
 	gchar *path, *client_tag, *notify_tag;
 	guint id;
 
-	g_return_if_fail(!G_IS_OBJECT(object));
+	g_return_if_fail(G_IS_OBJECT(object));
 	g_return_if_fail(section != NULL);
 
 	/*
