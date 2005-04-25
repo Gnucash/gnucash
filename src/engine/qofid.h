@@ -78,7 +78,6 @@ typedef const char * QofIdTypeConst;
 #define QOF_ID_NULL           "null"
 
 #define QOF_ID_BOOK           "Book"
-#define QOF_ID_FREQSPEC       "FreqSpec"
 #define QOF_ID_SESSION        "Session"
 
 /** simple,cheesy cast but holds water for now */
@@ -155,7 +154,12 @@ const GUID * qof_entity_get_guid (QofEntity *);
 
 /** @name Collections of Entities 
  @{ */
+
+/** create a new collection of entities of type
+*/
 QofCollection * qof_collection_new (QofIdType type);
+
+/** destroy the collection */
 void qof_collection_destroy (QofCollection *col);
 
 /** return the type that the collection stores */

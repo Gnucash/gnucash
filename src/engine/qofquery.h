@@ -114,8 +114,8 @@ typedef enum {
 #define QOF_PARAM_VERSION "version" 
 
 /* --------------------------------------------------------- */
-/** @name Query Subsystem Initialization and Shudown  */
-/* @{ */
+/** \name Query Subsystem Initialization and Shudown  */
+// @{
 /** Subsystem initialization and shutdown. Call init() once 
  *  to initalize the query subsytem; call shutdown() to free
  *  up any resources associated with the query subsystem. 
@@ -124,11 +124,11 @@ typedef enum {
 
 void qof_query_init (void);
 void qof_query_shutdown (void);
-/* @} */
+// @}
 
 /* --------------------------------------------------------- */
-/** @name Low-Level API Functions */
-/* @{ */
+/** \name Low-Level API Functions */
+// @{
 
 GSList * qof_query_build_param_list (char const *param, ...);
 
@@ -365,6 +365,6 @@ QofIdType qof_query_get_search_for (QofQuery *q);
 /** Return the list of books we're using */
 GList * qof_query_get_books (QofQuery *q);
 
+// @}
 /* @} */
 #endif /* QOF_QUERYNEW_H */
-/* @} */

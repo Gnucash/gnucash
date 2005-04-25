@@ -413,7 +413,7 @@ qof_query_pred_date_from_xml (xmlNodePtr root)
 	xp = root->xmlChildrenNode;
 
 	how = QOF_COMPARE_EQUAL;
-	sm = QOF_DATE_MATCH_ROUNDED;
+	sm = QOF_DATE_MATCH_DAY;
 	date = (Timespec){0,0};
 
 	for (node=xp; node; node = node->next)
@@ -422,7 +422,7 @@ qof_query_pred_date_from_xml (xmlNodePtr root)
 
 		GET_HOW (how, "qofquery:compare", LT, LTE, EQUAL, GT, GTE, NEQ);
 		GET_MATCH2 (sm, "qofquery:date-match", 
-		            DATE_MATCH, NORMAL, ROUNDED);
+		            DATE_MATCH, NORMAL, DAY);
 		GET_DATE (0, date=, "qofquery:date");
 		{}
 	}

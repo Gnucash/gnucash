@@ -63,8 +63,8 @@ GtkWidget *gnc_date_format_new            (void);
 GtkWidget *gnc_date_format_new_without_label (void);
 GtkWidget *gnc_date_format_new_with_label (const char *label);
 
-void      gnc_date_format_set_format      (GNCDateFormat *gdf, DateFormat format);
-DateFormat gnc_date_format_get_format     (GNCDateFormat *gdf);
+void      gnc_date_format_set_format      (GNCDateFormat *gdf, QofDateFormat format);
+QofDateFormat gnc_date_format_get_format     (GNCDateFormat *gdf);
 
 void      gnc_date_format_set_months      (GNCDateFormat *gdf,
 					   GNCDateMonthFormat months);

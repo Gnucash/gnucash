@@ -63,6 +63,35 @@
 #define SAFE_STRCMP(da,db) SAFE_STRCMP_REAL(strcmp,(da),(db))
 #define SAFE_STRCASECMP(da,db) SAFE_STRCMP_REAL(strcasecmp,(da),(db))
 
+#define ENUM_BODY(name, value)           \
+    name value,
+#define AS_STRING_CASE(name, value)      \
+    case name: return #name;
+#define FROM_STRING_CASE(name, value)    \
+    if (strcmp(str, #name) == 0) {       \
+        return name;                     \
+    }
+#define DEFINE_ENUM(name, list)          \
+    typedef enum {                       \
+        list(ENUM_BODY)                  \
+    }name;
+#define AS_STRING_DEC(name, list)        \
+    const char* name##asString(name n);
+#define AS_STRING_FUNC(name, list)       \
+    const char* name##asString(name n) {       \
+        switch (n) {                     \
+            list(AS_STRING_CASE)         \
+            default: return "";          \
+        }                                \
+    }
+#define FROM_STRING_DEC(name, list)      \
+    name name##fromString(const char* str);
+#define FROM_STRING_FUNC(name, list)     \
+    name name##fromString(const char* str) {   \
+        list(FROM_STRING_CASE)           \
+        return 0;                        \
+    }
+
 /* Define the long long int conversion for scanf */
 #if HAVE_SCANF_LLD
 # define GNC_SCANF_LLD "%lld"

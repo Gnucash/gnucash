@@ -100,8 +100,11 @@
  * Strangely, most of the rest of glib does use const, so
  * perhaps this will change? When it does, just define this macro to
  * nothing and the compiler will check the constness of each pointer....
+ 
+ Done. NW 24/4/5.
  */
-#define CONST_HACK (GDate*)
+#define CONST_HACK 
+//(GDate*)
 
 static short module = MOD_SX;
 /* 
@@ -122,12 +125,18 @@ static short module = MOD_SX;
  
 /** PROTOTYPES ******************************************************/
 
+FROM_STRING_FUNC(UIFreqType, ENUM_LIST_UI)
+AS_STRING_FUNC(UIFreqType, ENUM_LIST_UI)
+
+FROM_STRING_FUNC(FreqType, ENUM_LIST_TYPE)
+AS_STRING_FUNC(FreqType, ENUM_LIST_TYPE)
+
 static int int_cmp( int a, int b );
 
-/**
+/*
  * Destroys all sub-FreqSpecs in a composite FreqSpec.
  * Assertion error if it's not a COMPOSITE FreqSpec.
- **/
+ */
 void xaccFreqSpecCompositesClear( FreqSpec *fs );
 
 void subSpecsListMapDelete( gpointer data, gpointer user_data );
@@ -167,12 +176,12 @@ get_abbrev_month_name(guint month)
   return month_name;
 }
 
-/**
+/*
  * Initializes a FreqSpec by setting it's to type INVALID.
  * Use this to initialise a stack object.
  * FreqSpec objects must be initalised before being used by
  * any other method.
- **/
+ */
 
 static void
 xaccFreqSpecInit( FreqSpec *fs, QofBook *book )
@@ -653,8 +662,6 @@ xaccFreqSpecGetMonthly( FreqSpec *fs, int *outRepeat, int *outDayOfMonth, int *o
    return 0;
 }
 
-/* FIXME: add month-relative getter */
-
 GList*
 xaccFreqSpecCompositeGet( FreqSpec *fs )
 {
@@ -704,6 +711,18 @@ get_dom_string(guint dom)
   return str;
 }
 
+static const char*
+qofFreqSpecPrintable (gpointer obj)
+{
+	FreqSpec *fs;
+	GString  *str;
+
+	fs = (FreqSpec*)obj;
+	g_return_val_if_fail(fs != NULL, NULL);
+	str = g_string_new("");
+	xaccFreqSpecGetFreqStr(fs, str);
+	return str->str;
+}
     
 void
 xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
@@ -996,9 +1015,9 @@ int_cmp( int a, int b )
    return 1;
 }
 
-/**
+/*
  * Returns the "min" FreqSpec sub-element of a composite FreqSpec.
- **/
+ */
 static
 FreqSpec*
 _gnc_freq_spec_get_min( FreqSpec *fs )
@@ -1110,4 +1129,237 @@ gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b )
       break;
    }
    return 0;
+}
+
+/*  QOF routines. */
+
+int
+qofFreqSpecGetMonthDay(FreqSpec *fs)
+{
+	int outDayOfMonth;
+
+	outDayOfMonth = 0;
+	if ( fs->type != MONTHLY ) { return outDayOfMonth; }
+	outDayOfMonth = fs->s.monthly.day_of_month;
+	return outDayOfMonth;
+}
+
+int
+qofFreqSpecGetMonthOffset(FreqSpec *fs)
+{
+	int outMonthOffset;
+
+	outMonthOffset = 0;
+	if ( fs->type != MONTHLY ) { return outMonthOffset; }
+	outMonthOffset = fs->s.monthly.offset_from_epoch;
+	return outMonthOffset;
+}
+
+Timespec
+qofFreqSpecGetBaseDate(FreqSpec *fs)
+{
+	GDate       *when;
+	struct tm   number;
+	time_t      start_t;
+	Timespec ts = {0,0};
+
+	g_return_val_if_fail( fs != NULL , ts);
+	when = g_date_new();
+	if(xaccFreqSpecGetOnce(fs, when) == -1) { return ts; }
+	g_date_to_struct_tm(when, &number);
+	start_t = mktime(&number);
+	timespecFromTime_t(&ts, start_t);
+	return ts;
+}
+
+char*
+qofFreqSpecGetUIType(FreqSpec *fs)
+{
+	char *type_string;
+
+	g_return_val_if_fail(fs, NULL);
+	type_string = g_strdup(UIFreqTypeasString(fs->uift));
+	return type_string;
+}
+
+int
+qofFreqSpecGetRepeat(FreqSpec *fs)
+{
+	int repeat, dump, dump2;
+
+	g_return_val_if_fail(fs != NULL, -1);
+	repeat = -1;
+	dump = dump2 = 0;
+	switch(xaccFreqSpecGetType(fs))
+	{
+		case INVALID: {
+			break;
+		}
+		case ONCE: {
+			repeat = 0;
+			break;
+		}
+		case DAILY: {
+			xaccFreqSpecGetDaily(fs, &repeat);
+			break;
+		}
+		case WEEKLY: {
+			xaccFreqSpecGetWeekly(fs, &repeat, &dump);
+			break;
+		}
+		case MONTHLY: {
+			xaccFreqSpecGetMonthly(fs, &repeat, &dump, &dump2);
+			break;
+		}
+		case MONTH_RELATIVE: {
+			repeat = 0;
+			break;
+		}
+		case COMPOSITE: {
+			repeat = 0;
+			break;
+		}
+		default: {
+			break;
+		}
+	}
+	return repeat;
+}
+
+/* QOF set routines - may look a little strange as QOF can set parameters in any order. */
+/* Initial state:  UIFREQ_ONCE, INVALID, union s memset to zero and value == 0 */
+
+static void 
+qofFreqSpecCalculate(FreqSpec *fs, gint value)
+{
+	GDate *when;
+
+	g_return_if_fail(fs != NULL);
+	/* If it's INVALID, nothing can be done until more data is set. */
+	if(xaccFreqSpecGetType(fs) == INVALID) { return; }
+	/* If it's still UIFREQ_ONCE, nothing needs to be done */
+	if(xaccFreqSpecGetUIType(fs) == UIFREQ_ONCE) { return; }
+	/* If value is zero, nothing needs to be done. */
+	if(value == 0) { return; }
+	when = g_date_new();
+	xaccFreqSpecGetOnce(fs, when);
+	switch (xaccFreqSpecGetUIType(fs)) {
+		case UIFREQ_NONE : {
+			xaccFreqSpecSetNone(fs);
+		}
+		break;
+		case UIFREQ_ONCE : {
+			/*  should be impossible but just to be sure. */
+			break;
+		}
+		case UIFREQ_DAILY : {
+			xaccFreqSpecSetDaily(fs, when, value);
+			break;
+		}
+		case UIFREQ_DAILY_MF : {
+			
+			break;
+		}
+		case UIFREQ_WEEKLY : {
+			xaccFreqSpecSetWeekly(fs, when, value);
+			break;
+		}
+		case UIFREQ_BI_WEEKLY : {
+			
+			break;
+		}
+		case UIFREQ_SEMI_MONTHLY : {
+			
+			break;
+		}
+		case UIFREQ_MONTHLY : {
+			 xaccFreqSpecSetMonthly(fs, when, value);
+			break;
+		}
+		case UIFREQ_QUARTERLY : {
+			
+			break;
+		}
+		case UIFREQ_TRI_ANUALLY : {
+			
+			break;
+		}
+		case UIFREQ_SEMI_YEARLY : {
+			
+			break;
+		}
+		case UIFREQ_YEARLY : {
+			
+			break;
+		}
+		default: { break; }
+	}
+}
+
+
+void
+qofFreqSpecSetUIType (FreqSpec *fs, const char *type_string)
+{
+	g_return_if_fail(fs != NULL);
+	xaccFreqSpecSetUIType(fs, UIFreqTypefromString(type_string));
+	qofFreqSpecCalculate(fs, fs->value);
+}
+
+void
+qofFreqSpecSetBaseDate(FreqSpec *fs, Timespec start_date)
+{
+	time_t      start_t;
+	FreqType    type;
+	GDate       *when;
+
+	g_return_if_fail( fs != NULL );
+	when = g_date_new();
+	type = xaccFreqSpecGetType(fs);
+	start_t = timespecToTime_t(start_date);
+	g_date_set_time(when, (GTime)start_t);
+	/* QOF sets this before a type is assigned. */
+	if(type == INVALID) {
+		fs->type = ONCE;
+	}
+	xaccFreqSpecSetOnceDate(fs, when);
+	/* Now we have a GDate available for the calculation. */
+	qofFreqSpecCalculate(fs, fs->value);
+}
+
+void
+qofFreqSpecSetRepeat(FreqSpec *fs, gint value)
+{
+	fs->value = value;
+	qofFreqSpecCalculate(fs, value);
+}
+
+static QofObject FreqSpecDesc = 
+{
+	interface_version : QOF_OBJECT_VERSION,
+	e_type            : QOF_ID_FREQSPEC,
+	type_label        : "Frequency Specification",
+	create            : (gpointer)xaccFreqSpecMalloc,
+	book_begin        : NULL,
+	book_end          : NULL,
+	is_dirty          : NULL,
+	mark_clean        : NULL,
+	foreach           : qof_collection_foreach,
+	printable         : qofFreqSpecPrintable,
+	version_cmp       : (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+};
+
+gboolean FreqSpecRegister (void)
+{
+	static QofParam params[] = {
+	 { FS_UI_TYPE, QOF_TYPE_STRING, (QofAccessFunc)qofFreqSpecGetUIType, (QofSetterFunc)qofFreqSpecSetUIType },
+	 { FS_REPEAT, QOF_TYPE_INT64, (QofAccessFunc)qofFreqSpecGetRepeat, (QofSetterFunc)qofFreqSpecSetRepeat },
+	 { FS_BASE_DATE, QOF_TYPE_DATE, (QofAccessFunc)qofFreqSpecGetBaseDate, 
+		 (QofSetterFunc)qofFreqSpecSetBaseDate },
+	 { FS_MONTH_DAY, QOF_TYPE_STRING, (QofAccessFunc)qofFreqSpecGetMonthDay, NULL },
+	 { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
+	 { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
+	 { NULL },
+	};
+	qof_class_register(QOF_ID_FREQSPEC, (QofSortFunc)gnc_freq_spec_compare, params);
+	return qof_object_register(&FreqSpecDesc);
 }

@@ -98,7 +98,7 @@ gnc_parse_date (struct tm *parsed, const char * datestr)
   if (!parsed) return;
   if (!datestr) return;
 
-  scanDate (datestr, &day, &month, &year);
+  qof_scan_date (datestr, &day, &month, &year);
 
   parsed->tm_mday = day;
   parsed->tm_mon  = month - 1;
@@ -115,7 +115,7 @@ gnc_date_cell_print_date (DateCell *cell, char *buff)
 {
   PopBox *box = cell->cell.gui_private;
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday,
              box->date.tm_mon + 1,
              box->date.tm_year+1900);
@@ -182,7 +182,7 @@ date_picked_cb (GNCDatePicker *gdp, gpointer data)
 
   gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
-  printDate (buffer, day, month + 1, year);
+  qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
   box->in_date_select = TRUE;
   gnucash_sheet_modify_current_cell (box->sheet, buffer);
@@ -202,7 +202,7 @@ date_selected_cb (GNCDatePicker *gdp, gpointer data)
 
   gtk_calendar_get_date (gdp->calendar, &year, &month, &day);
 
-  printDate (buffer, day, month + 1, year);
+  qof_print_date_dmy_buff (buffer, MAX_DATE_LENGTH, day, month + 1, year);
 
   box->in_date_select = TRUE;
   gnucash_sheet_modify_current_cell (box->sheet, buffer);
@@ -339,7 +339,7 @@ gnc_date_cell_set_value (DateCell *cell, int day, int mon, int year)
   box->date.tm_mon  = dada.tm_mon;
   box->date.tm_year = dada.tm_year;
 
-  printDate (buff, dada.tm_mday, dada.tm_mon + 1, dada.tm_year + 1900);
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH, dada.tm_mday, dada.tm_mon + 1, dada.tm_year + 1900);
 
   gnc_basic_cell_set_value_internal (&cell->cell, buff);
 
@@ -361,7 +361,7 @@ gnc_date_cell_set_value_secs (DateCell *cell, time_t secs)
   stm = localtime (&secs);
   box->date = *stm;
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday, 
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);
@@ -390,7 +390,7 @@ gnc_date_cell_commit (DateCell *cell)
 
   gnc_parse_date (&(box->date), cell->cell.value);
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday, 
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
@@ -423,7 +423,7 @@ gnc_date_cell_direct_update (BasicCell *bcell,
   if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
     return FALSE;
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday,
              box->date.tm_mon + 1,
              box->date.tm_year + 1900);
@@ -662,7 +662,7 @@ gnc_date_cell_set_value_internal (BasicCell *_cell, const char *str)
 
   gnc_parse_date (&(box->date), str);
 
-  printDate (buff,
+  qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,
              box->date.tm_mday, 
              box->date.tm_mon + 1, 
              box->date.tm_year + 1900);

@@ -313,6 +313,8 @@ qof_session_get_url (QofSession *session)
    return session->book_id;
 }
 
+/* =============================================================== */
+
 typedef struct qof_entity_copy_data {
 	QofEntity *from;
 	QofEntity *to;
@@ -569,7 +571,7 @@ qof_entity_list_foreach(gpointer data, gpointer user_data)
 	qecd->to = &inst->entity;
 	g = qof_entity_get_guid(original);
 	qof_entity_set_guid(qecd->to, g);
-	if(qecd->param_list != NULL) { g_slist_free(qecd->param_list); }
+//	if(qecd->param_list != NULL) { g_slist_free(qecd->param_list); }
 	qof_class_param_foreach(original->e_type, qof_entity_param_cb, qecd);
 	if(qsf_check_error(qecd)) { return; }
 	g_slist_foreach(qecd->param_list, qof_entity_foreach_copy, qecd);

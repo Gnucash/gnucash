@@ -30,13 +30,16 @@
 #ifndef QOF_QUERY_DESERIAL_H
 #define QOF_QUERY_DESERIAL_H
 
-#include <qof/qofquery.h>
+#include "qofquery.h"
 #include <libxml/tree.h>
 
 /** @addtogroup XML 
     Qof Queries can be converted to and from XML so that they
     can be sent from here to there. This file implements the
     routine needed to convert the XML back into a C struct.
+
+    \b Unfinished. XXX Why is this easier than reading a text/sql
+    file? 
 
  @{ */
 /** Given an XML tree, reconstruct and return the equivalent query. */

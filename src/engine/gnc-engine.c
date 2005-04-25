@@ -35,6 +35,8 @@
 #include "TransactionP.h"
 #include "gnc-commodity.h"
 #include "gnc-lot-p.h"
+#include "SchedXactionP.h"
+#include "FreqSpecP.h"
 #include "gnc-pricedb-p.h"
 #include "qofbook.h"
 #include "qofbook-p.h"
@@ -96,6 +98,8 @@ gnc_engine_init(int argc, char ** argv)
   xaccAccountRegister ();
   xaccGroupRegister ();
   gnc_sxtt_register ();
+  FreqSpecRegister ();
+  SXRegister ();
   gnc_budget_register();
   gnc_pricedb_register ();
   gnc_commodity_table_register();

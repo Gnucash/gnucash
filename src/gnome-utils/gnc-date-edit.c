@@ -253,7 +253,7 @@ select_clicked (GtkWidget *widget, GNCDateEdit *gde)
 	struct tm mtm;
 
         /* This code is pretty much just copied from gtk_date_edit_get_date */
-      	scanDate (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
+        qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
                   &mtm.tm_mday, &mtm.tm_mon, &mtm.tm_year);
 
         mtm.tm_mon--;
@@ -770,7 +770,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
 	g_assert(gde != NULL);
 	g_assert(GNC_IS_DATE_EDIT(gde));
 
-      	scanDate (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
+      qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
                   &tm.tm_mday, &tm.tm_mon, &tm.tm_year);
 
 	tm.tm_mon--;

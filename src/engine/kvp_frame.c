@@ -409,7 +409,7 @@ kvp_frame_set_double(KvpFrame * frame, const char * path, double dval)
 }
 
 void
-kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
+kvp_frame_set_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
 {
   KvpValue *value;
   value = kvp_value_new_gnc_numeric (nval);
@@ -418,7 +418,7 @@ kvp_frame_set_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval)
 }
 
 void
-kvp_frame_set_str(KvpFrame * frame, const char * path, const char* str) 
+kvp_frame_set_string(KvpFrame * frame, const char * path, const char* str) 
 {
   KvpValue *value;
   value = kvp_value_new_string (str);
@@ -585,7 +585,7 @@ kvp_frame_add_double(KvpFrame * frame, const char * path, double dval)
 }
 
 void
-kvp_frame_add_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
+kvp_frame_add_numeric(KvpFrame * frame, const char * path, gnc_numeric nval) 
 {
   KvpValue *value;
   value = kvp_value_new_gnc_numeric (nval);
@@ -594,7 +594,7 @@ kvp_frame_add_gnc_numeric(KvpFrame * frame, const char * path, gnc_numeric nval)
 }
 
 void
-kvp_frame_add_str(KvpFrame * frame, const char * path, const char* str) 
+kvp_frame_add_string(KvpFrame * frame, const char * path, const char* str) 
 {
   KvpValue *value;
   value = kvp_value_new_string (str);
@@ -1131,7 +1131,7 @@ kvp_value_new_double(double value)
 }
 
 KvpValue *
-kvp_value_new_gnc_numeric(gnc_numeric value) 
+kvp_value_new_numeric(gnc_numeric value) 
 {
   KvpValue * retval    = g_new0(KvpValue, 1);
   retval->type          = KVP_TYPE_NUMERIC;
@@ -1604,7 +1604,7 @@ binary_to_string(const void *data, guint32 size)
     
     for(i = 0; i < size; i++)
     {
-        g_string_sprintfa(output, "%02x", (unsigned int) (data_str[i]));
+        g_string_append_printf(output, "%02x", (unsigned int) (data_str[i]));
     }
 
     return output->str;

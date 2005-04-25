@@ -2835,7 +2835,7 @@ ld_rev_update_clist( LoanDruidData *ldd, GDate *start, GDate *end )
                 if ( g_date_compare( &rrr->date, end ) > 0 )
                         continue; /* though we can probably return, too. */
 
-                printGDate( tmpBuf, &rrr->date );
+                qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, &rrr->date );
                 rowText[0] = g_strdup( tmpBuf );
 
                 for ( i=0; i<ldd->ld.revNumPmts; i++ )

@@ -21,14 +21,15 @@
 /** @addtogroup Object
     @{ */
 /** @addtogroup Backend
- *  @{
- *  @file qof-be-utils.h 
- *  @brief QOF Backend Utilities
- *  @author Derek Atkins <derek@ihtfp.com>
- *    Common code used by objects to define begin_edit() and
- *    commit_edit() functions.
- *
- */
+   @{ */
+/**  @file qof-be-utils.h 
+   @brief QOF Backend Utilities
+   @author Derek Atkins <derek@ihtfp.com>
+
+  Common code used by objects to define begin_edit() and
+  commit_edit() functions.
+
+*/
 
 #ifndef QOF_BE_UTILS_H
 #define QOF_BE_UTILS_H

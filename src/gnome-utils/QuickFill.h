@@ -19,16 +19,11 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
+/** @addtogroup GUI
+@{
+*/
+/** @addtogroup QuickFill
 
-#ifndef QUICKFILL_H
-#define QUICKFILL_H
-
-#include "config.h"
-
-#include <gdk/gdk.h>
-#include <glib.h>
-
-/** @addtogroup QuickFill Quick Fill: auto-complete typed user input.  
    QuickFill is meant to be used by the GUI to auto-complete 
    (e.g. tab-complete) typed user input.  
    Quickfill is implemented as a heirarchical tree 
@@ -43,13 +38,22 @@
    QuickFill works with national-language i18n'ed/l10n'ed multi-byte 
    and wide-char strings, as well as plain-old C-locale strings.
    @{
-  
+*/
+/**
    @file QuickFill.h
    @brief Quickfill is used to auto-complete typed user entries.
    @author Copyright (C) 1997 Robin D. Clark
    @author Copyright (C) 1998,2004 Linas Vepstas <linas@linas.org>
    @author Copyright (C) 2000 Dave Peticolas
  */
+
+#ifndef QUICKFILL_H
+#define QUICKFILL_H
+
+#include "config.h"
+
+#include <gdk/gdk.h>
+#include <glib.h>
 
 typedef enum
 {
@@ -119,5 +123,6 @@ QuickFill *  gnc_quickfill_get_unique_len_match (QuickFill *qf, int *len);
 /** Add the string "text" to the collection of searchable strings. */
 void         gnc_quickfill_insert (QuickFill *root, const char *text,
                                    QuickFillSort sort_code);
-
+/** @} */
+/** @} */
 #endif /* QUICKFILL_H */

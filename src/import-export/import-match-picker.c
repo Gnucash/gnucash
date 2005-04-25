@@ -103,7 +103,7 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
   
   /*Date*/
   clist_text[DOWNLOADED_CLIST_DATE] = 
-    xaccPrintDateSecs 
+    qof_print_date 
     ( xaccTransGetDate
       ( gnc_import_TransInfo_get_trans(transaction_info) ) );
   
@@ -171,7 +171,7 @@ downloaded_transaction_select_cb (GtkCList *clist,
       
       /* Date */
       clist_text[MATCHER_CLIST_DATE]=
-	xaccPrintDateSecs 
+	qof_print_date 
 	( xaccTransGetDate
 	  ( xaccSplitGetParent
 	    ( gnc_import_MatchInfo_get_split(match_info) ) ));

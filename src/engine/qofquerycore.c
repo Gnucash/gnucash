@@ -261,7 +261,8 @@ string_to_string (gpointer object, QofParam *getter)
 static int 
 date_compare (Timespec ta, Timespec tb, QofDateMatch options)
 {
-  if (options == QOF_DATE_MATCH_ROUNDED) {
+
+  if (options == QOF_DATE_MATCH_DAY) {
     ta = timespecCanonicalDayTime (ta);
     tb = timespecCanonicalDayTime (tb);
   }

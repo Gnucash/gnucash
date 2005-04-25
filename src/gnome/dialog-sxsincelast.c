@@ -1192,7 +1192,7 @@ sxsld_process_to_create_instance( sxSinceLastData *sxsld,
                 /* add to the postponed list. */
                 { 
                         char tmpBuf[ MAX_DATE_LENGTH+1 ];
-                        printGDate( tmpBuf, tci->date );
+                        qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, tci->date );
                         DEBUG( "Adding defer instance on %s for %s",
                                tmpBuf,
                                xaccSchedXactionGetName( tci->parentTCT->sx ) );
@@ -1289,7 +1289,7 @@ sxsld_process_to_create_page( sxSinceLastData *sxsld )
                                               &allVarsBound );
                         if ( !allVarsBound ) {
                                 char tmpBuf[ MAX_DATE_LENGTH+1 ];
-                                printGDate( tmpBuf, tci->date );
+                                qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, tci->date );
                                 /* FIXME: this should be better-presented to the user. */
                                 DEBUG( "SX %s on date %s still has unbound variables.",
                                        xaccSchedXactionGetName(tci->parentTCT->sx), tmpBuf );
@@ -1856,7 +1856,7 @@ add_to_create_list_to_gui( GList *toCreateList, sxSinceLastData *sxsld )
                         }
 
                         rowText[0] = g_new0( char, MAX_DATE_LENGTH+1 );
-                        printGDate( rowText[0], tci->date );
+                        qof_print_gdate( rowText[0], MAX_DATE_LENGTH, tci->date );
                         
 
                         switch ( tci->state ) {
@@ -1943,7 +1943,7 @@ add_reminders_to_gui( GList *reminderList, sxSinceLastData *sxsld )
                         rit = (reminderInstanceTuple*)instances->data;
 
                         rowText[0] = g_new0( gchar, MAX_DATE_LENGTH+1 );
-                        printGDate( rowText[0], rit->occurDate );
+                        qof_print_gdate( rowText[0], MAX_DATE_LENGTH, rit->occurDate );
                         rowText[1] = "";
                         rowText[2] = g_new0( gchar, 5 ); /* FIXME: appropriate size? */
                         sprintf( rowText[2], "%d",
@@ -3494,7 +3494,7 @@ create_bad_reminders_msg( gpointer data, gpointer ud )
 
         rit = (reminderInstanceTuple*)data;
         msg = (GString*)ud;
-        printGDate( tmpBuf, rit->occurDate );
+        qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, rit->occurDate );
         g_string_sprintfa( msg, tmpBuf );
         g_string_sprintfa( msg, "\n" );
 }

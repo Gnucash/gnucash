@@ -2387,7 +2387,7 @@ gnc_option_set_ui_value_dateformat (GNCOption *option, gboolean use_default,
 				    GtkWidget *widget, SCM value)
 {
   GNCDateFormat * gdf = GNC_DATE_FORMAT(widget);
-  DateFormat format;
+  QofDateFormat format;
   GNCDateMonthFormat months;
   gboolean years;
   char *custom;
@@ -2656,7 +2656,7 @@ static SCM
 gnc_option_get_ui_value_dateformat (GNCOption *option, GtkWidget *widget)
 {
   GNCDateFormat *gdf = GNC_DATE_FORMAT(widget);
-  DateFormat format;
+  QofDateFormat format;
   GNCDateMonthFormat months;
   gboolean years;
   const char* custom;

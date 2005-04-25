@@ -252,11 +252,11 @@ qof_class_param_foreach (QofIdTypeConst obj_name,
 
 struct param_ref_list
 {
-	GList *ref_list;
+	GList *list;
 };
 
 static void
-find_reference_param(QofParam *param, gpointer user_data)
+find_reference_param_cb(QofParam *param, gpointer user_data)
 {
 	struct param_ref_list *b;
 
@@ -274,7 +274,7 @@ find_reference_param(QofParam *param, gpointer user_data)
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_KVP))      { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_TYPE_BOOLEAN))  { return; }
 	if(0 == safe_strcmp(param->param_type, QOF_ID_BOOK))       { return; }
-	b->ref_list = g_list_append(b->ref_list, param);
+	b->list = g_list_append(b->list, param);
 }
 
 GList*
@@ -284,11 +284,11 @@ qof_class_get_referenceList(QofIdTypeConst type)
 	struct param_ref_list b;
 
 	ref_list = NULL;
-	b.ref_list = NULL;
-	qof_class_param_foreach(type, find_reference_param, &b);
-	ref_list = g_list_copy(b.ref_list);
-	g_list_free(b.ref_list);
+	b.list = NULL;
+	qof_class_param_foreach(type, find_reference_param_cb, &b);
+	ref_list = g_list_copy(b.list);
 	return ref_list;
 }
+
 
 /* ============================= END OF FILE ======================== */

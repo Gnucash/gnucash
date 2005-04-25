@@ -17,81 +17,11 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org                   *
  *                                                                  *
 \********************************************************************/
-
-/** 
- * @addtogroup Ledger 
- * @file split-register.c
- * @brief Provide view for SplitRegister object.
- *
- *
- * DESIGN NOTES:
- * Some notes about the "blank split":
- * Q: What is the "blank split"?
- * A: A new, empty split appended to the bottom of the ledger
- *    window.  The blank split provides an area where the user
- *    can type in new split/transaction info.  
- *    The "blank split" is treated in a special way for a number
- *    of reasons:
- *    (1) it must always appear as the bottom-most split
- *        in the Ledger window,
- *    (2) it must be committed if the user edits it, and 
- *        a new blank split must be created.
- *    (3) it must be deleted when the ledger window is closed.
- * To implement the above, the register "user_data" is used
- * to store an SRInfo structure containing the blank split.
- *
- * =====================================================================
- * Some notes on Commit/Rollback:
- * 
- * There's an engine component and a gui component to the commit/rollback
- * scheme.  On the engine side, one must always call BeginEdit()
- * before starting to edit a transaction.  When you think you're done,
- * you can call CommitEdit() to commit the changes, or RollbackEdit() to
- * go back to how things were before you started the edit. Think of it as
- * a one-shot mega-undo for that transaction.
- * 
- * Note that the query engine uses the original values, not the currently
- * edited values, when performing a sort.  This allows your to e.g. edit
- * the date without having the transaction hop around in the gui while you
- * do it.
- * 
- * On the gui side, commits are now performed on a per-transaction basis,
- * rather than a per-split (per-journal-entry) basis.  This means that
- * if you have a transaction with a lot of splits in it, you can edit them
- * all you want without having to commit one before moving to the next.
- * 
- * Similarly, the "cancel" button will now undo the changes to all of the
- * lines in the transaction display, not just to one line (one split) at a
- * time.
- * 
- * =====================================================================
- * Some notes on Reloads & Redraws:
- * 
- * Reloads and redraws tend to be heavyweight. We try to use change flags
- * as much as possible in this code, but imagine the following scenario:
- *
- * Create two bank accounts.  Transfer money from one to the other.
- * Open two registers, showing each account. Change the amount in one window.
- * Note that the other window also redraws, to show the new correct amount.
- * 
- * Since you changed an amount value, potentially *all* displayed
- * balances change in *both* register windows (as well as the ledger
- * balance in the main window).  Three or more windows may be involved
- * if you have e.g. windows open for bank, employer, taxes and your
- * entering a paycheck (or correcting a typo in an old paycheck).
- * Changing a date might even cause all entries in all three windows
- * to be re-ordered.
- *
- * The only thing I can think of is a bit stored with every table
- * entry, stating 'this entry has changed since lst time, redraw it'.
- * But that still doesn't avoid the overhead of reloading the table
- * from the engine.
- * 
- *
- * @author Copyright (c) 1998-2000 Linas Vepstas <linas@linas.org>
- * @author Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
+ /*
+ * split-register.c
+ * author Copyright (c) 1998-2000 Linas Vepstas <linas@linas.org>
+ * author Copyright (c) 2000-2001 Dave Peticolas <dave@krondo.com>
  */
-
 #define _GNU_SOURCE
 
 #include "config.h"

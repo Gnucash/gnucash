@@ -42,8 +42,7 @@ struct qof_book_mergeRuleIterate {
 */
 #define DEFAULT_MERGE_WEIGHT    1
 #define QOF_STRING_WEIGHT       3
-#define QOF_DATE_STRING_LENGTH  31
-#define QOF_UTC_DATE_FORMAT     "%Y-%m-%dT%H:%M:%SZ"
+#define QOF_DATE_STRING_LENGTH  MAX_DATE_LENGTH
 
 /* ================================================================ */
 /* API functions. */
@@ -173,13 +172,13 @@ qof_book_merge_param_as_string(QofParam *qtparam, QofEntity *qtEnt)
 		if(safe_strcmp(paramType, QOF_TYPE_INT32) == 0) { 
 			int32_getter = (gint32 (*)(QofEntity*, QofParam*)) qtparam->param_getfcn;
 			param_i32 = int32_getter(qtEnt, qtparam);
-			param_string = g_strdup_printf("%u", param_i32);
+			param_string = g_strdup_printf("%d", param_i32);
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_INT64) == 0) { 
 			int64_getter = (gint64 (*)(QofEntity*, QofParam*)) qtparam->param_getfcn;
 			param_i64 = int64_getter(qtEnt, qtparam);
-			param_string = g_strdup_printf("%llu", param_i64);
+			param_string = g_strdup_printf("%lld", param_i64);
 			return param_string;
 		}
 		if(safe_strcmp(paramType, QOF_TYPE_DOUBLE) == 0) { 

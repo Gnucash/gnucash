@@ -282,7 +282,7 @@ qof_query_pred_data_to_xml (QofQueryPredData *pd)
 		pdata_d = (query_date_t) pd;
 		
 		PUT_MATCH2("qofquery:date-match", pdata_d->options,
-		                 DATE_MATCH, NORMAL, ROUNDED);
+		                 DATE_MATCH, NORMAL, DAY);
 
 		PUT_DATE ("qofquery:date", pdata_d->date);
 		return topnode;

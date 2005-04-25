@@ -44,14 +44,7 @@ xmlns="http://qof.sourceforge.net/">
   <calculate type="string" value="notes">
     <set object="qof-expenses">expense_note</set>
   </calculate>
-  <calculate type="guid" value="bill-to">
-    <if type="qof-expenses">
-      <set option="qsf_lookup_string">expenses_account</set>
-    </if>
-    <else>
-      <set option="qsf_lookup_string">datebook_account</set>
-    </else>
-  </calculate>
+  <calculate type="guid" value="bill-to"/>
   <calculate type="boolean" value="invoice-taxable"/>
   <calculate type="boolean" value="bill-taxable"/>
   <calculate type="boolean" value="billable?"/>

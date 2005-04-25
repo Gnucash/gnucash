@@ -180,7 +180,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
 				GTK_SIGNAL_FUNC(gnc_ui_date_format_changed_cb), gdf);
 
   /* Set initial format to gnucash default */
-  gnc_date_format_set_format(gdf, getDateFormat());
+  gnc_date_format_set_format(gdf, qof_date_format_get());
 
   /* pull in the dialog and table widgets and play the reconnect game */
   dialog = glade_xml_get_widget(xml, "GNC Date Format");
@@ -283,7 +283,7 @@ gnc_date_format_new_with_label (const char *label)
 }
 
 void
-gnc_date_format_set_format (GNCDateFormat *gdf, DateFormat format)
+gnc_date_format_set_format (GNCDateFormat *gdf, QofDateFormat format)
 {
   g_return_if_fail(gdf);
   g_return_if_fail(GNC_IS_DATE_FORMAT(gdf));
@@ -292,11 +292,11 @@ gnc_date_format_set_format (GNCDateFormat *gdf, DateFormat format)
   gnc_date_format_compute_format(gdf);
 }
 
-DateFormat
+QofDateFormat
 gnc_date_format_get_format (GNCDateFormat *gdf)
 {
-  g_return_val_if_fail (gdf, DATE_FORMAT_LOCALE);
-  g_return_val_if_fail (GNC_IS_DATE_FORMAT(gdf), DATE_FORMAT_LOCALE);
+  g_return_val_if_fail (gdf, QOF_DATE_FORMAT_LOCALE);
+  g_return_val_if_fail (GNC_IS_DATE_FORMAT(gdf), QOF_DATE_FORMAT_LOCALE);
 
   return gnc_option_menu_get_active(gdf->priv->format_omenu);
 }
@@ -455,18 +455,18 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
   sel_option = gnc_option_menu_get_active(gdf->priv->format_omenu);
 
   switch (sel_option) {
-   case DATE_FORMAT_CUSTOM:
+   case QOF_DATE_FORMAT_CUSTOM:
     format = g_strdup(gtk_entry_get_text(GTK_ENTRY(gdf->priv->custom_entry)));
     enable_year = enable_month = check_modifiers = FALSE;
     enable_custom = TRUE;
     break;
 
-   case DATE_FORMAT_LOCALE:
-    format = g_strdup(getDateFormatString(DATE_FORMAT_LOCALE));
+   case QOF_DATE_FORMAT_LOCALE:
+    format = g_strdup(qof_date_format_get_string(QOF_DATE_FORMAT_LOCALE));
     enable_year = enable_month = check_modifiers = enable_custom = FALSE;
     break;
 
-   case DATE_FORMAT_ISO:
+   case QOF_DATE_FORMAT_ISO:
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(gdf->priv->months_number), TRUE);
     enable_year = check_modifiers = TRUE;
     enable_month = enable_custom = FALSE;
@@ -486,9 +486,9 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
   /* Update the format string based upon the user's preferences */
   if (check_modifiers) {
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gdf->priv->months_number))) {
-      format = g_strdup(getDateFormatString(sel_option));
+      format = g_strdup(qof_date_format_get_string(sel_option));
     } else {
-      format = g_strdup(getDateTextFormatString(sel_option));
+      format = g_strdup(qof_date_format_get_string(sel_option));
       if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gdf->priv->months_name))) {
 	c = strchr(format, 'b');
 	if (c)
@@ -531,4 +531,3 @@ gnc_date_format_compute_format(GNCDateFormat *gdf)
   /* Emit a signal that we've changed */
   g_signal_emit(G_OBJECT(gdf), date_format_signals[FORMAT_CHANGED], 0);
 }
-

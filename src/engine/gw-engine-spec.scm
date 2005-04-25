@@ -145,7 +145,7 @@
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:date-match-how> "QofDateMatch")))
   (gw:enum-add-value! wt "QOF_DATE_MATCH_NORMAL" 'date-match-normal)
-  (gw:enum-add-value! wt "QOF_DATE_MATCH_ROUNDED" 'date-match-rounded)
+  (gw:enum-add-value! wt "QOF_DATE_MATCH_DAY" 'date-match-rounded)
   #t)
 
 (let ((wt (gw:wrap-enumeration ws '<gnc:numeric-match-how> "QofNumericMatch")))

@@ -30,7 +30,7 @@
 #ifndef QOF_QUERY_SERIALIZE_H
 #define QOF_QUERY_SERIALIZE_H
 
-#include <qof/qofquery.h>
+#include "qofquery.h"
 #include <libxml/tree.h>
 
 /** @addtogroup XML Serialize Queries to/from XML */

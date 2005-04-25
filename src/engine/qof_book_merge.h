@@ -73,7 +73,7 @@ make sure this is non-NULL to know that the Init has been successful.
 */
 
 #include <glib.h>
-#include "qof/gnc-engine-util.h"
+#include "gnc-engine-util.h"
 #include "qofbook.h"
 #include "qofclass.h"
 #include "qofobject.h"

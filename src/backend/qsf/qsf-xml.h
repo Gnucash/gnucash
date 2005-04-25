@@ -36,6 +36,11 @@ qof-qsf for the QSF object data and
 
 qsf-map to map sets of QSF objects between QOF applications.
 
+Maps exist to allow complex conversions between objects where object parameters
+need to be calculated, combined or processed using conditionals. Some QSF objects
+can be converted using XSL or other standard tools. For more information on maps,
+see http://code.neil.williamsleesmill.me.uk/map.html
+
 QSF object files will contain user data and are to be exported from QOF applications 
 under user control or they can be hand-edited. QSF maps contain application data and 
 can be created by application developers from application source code. Tools may be 
@@ -162,6 +167,9 @@ typedef struct qsf_object_set
 
 Make sure the same version of QOF is in use in both applications.
 */
+/** @name QSF Object XML
+
+@{ */
 #define QSF_ROOT_TAG	"qof-qsf" /**< The top level root tag */
 #define QSF_DEFAULT_NS	"http://qof.sourceforge.net/" /**< Default namespace for QSF root tag
 
@@ -173,7 +181,10 @@ The map namespace is not included as maps are not currently written out by QOF.
 #define QSF_BOOK_COUNT	"count" /**< Sequential counter of each book in this file */
 #define QSF_OBJECT_TAG	"object" /**< Second level child: object tag */
 #define QSF_OBJECT_TYPE	"type" /**< QSF parameter name for object type specifiers */
+#define QSF_OBJECT_COUNT "count" /**< Sequential counter for each QSF object in this file */
+#define QSF_XML_VERSION  "1.0"  /**< The current XML version. */
 
+/** @} */
 /** @name Representing KVP as XML
 
 <kvp type="kvp" path="/from-sched-xaction" value="guid">c858b9a3235723b55bc1179f0e8c1322</kvp>
@@ -189,9 +200,9 @@ A pilot_addr_kvp type KVP parameter located at /user/name containing a guid valu
 #define QSF_OBJECT_KVP  "path" /**< The path to this KVP value in the entity frame. */
 #define QSF_OBJECT_VALUE "value" /**< The KVP Value. */
 /** @} */
+/** @name QSF Map XML
 
-#define QSF_OBJECT_COUNT	"count" /**< Sequential counter for each QSF object in this file */
-#define QSF_XML_VERSION	"1.0"  /**< The current XML version. */
+@{ */
 #define MAP_ROOT_TAG	"qsf-map" /**< Top level root tag for QSF Maps */
 #define MAP_DEFINITION_TAG	"definition" /**< Second level container for defined objects 
 
@@ -311,36 +322,6 @@ of the same object in the same originating QOF application.
 /** \todo enum is an attempt to make enumerator values descriptive in the maps
 and QSF (possibly). Not working yet. */
 #define MAP_ENUM_TYPE "enum"
-#define QSF_XSD_TIME	"%Y-%m-%dT%H:%M:%SZ" /**< xsd:dateTime format in coordinated universal time, UTC.
-
-You can reproduce the string from the GNU/Linux command line using the date utility: 
-
-date -u +%Y-%m-%dT%H:%M:%SZ
-
-2004-12-12T23:39:11Z
-
-The datestring must be timezone independent and include all specified fields.
-
-Remember to use gmtime() NOT localtime()!. From the command line, use the -u switch with the 
-date command: date -u
-
-To generate a timestamp based on a real time, use the qsf_time_now and qsf_time_string defaults.
-
-qsf_time_now : Format: QOF_TYPE_DATE. The current time taken from the moment the default
-is read into a QSF object at runtime.
-
-qsf_time_string : Format: QOF_TYPE_STRING. The current timestamp taken from the moment the
-default is read into a QSF object at runtime. This form is used when the output parameter 
-needs a formatted date string, not an actual date object. The format is determined by the 
-optional format attribute of the set tag which takes the same operators as the GNU C Library 
-for strftime() and output may therefore be dependent on the locale of the calling process - 
-\b take \b care. Default value is %F, used when qsf_time_string is set without the format
-attribute.
-
-Both defaults use UTC.
-
-*/
-#define QSF_XML_BOOLEAN_TEST "true" /**< needs to be lowercase for XML validation */
 
 /** \brief A specific boolean default for this map.
 */
@@ -395,6 +376,39 @@ can be adjusted to personal preference. \a format will only be evaluated
 if the calculated parameter is a QOF_TYPE_STRING - any format attributes
 on other data types will be ignored.
  */
+
+/** @} */
+
+#define QSF_XSD_TIME  QOF_UTC_DATE_FORMAT /**< xsd:dateTime format in coordinated universal time, UTC.
+
+You can reproduce the string from the GNU/Linux command line using the date utility: 
+
+date -u +%Y-%m-%dT%H:%M:%SZ
+
+2004-12-12T23:39:11Z
+
+The datestring must be timezone independent and include all specified fields.
+
+Remember to use gmtime() NOT localtime()!. From the command line, use the -u switch with the 
+date command: date -u
+
+To generate a timestamp based on a real time, use the qsf_time_now and qsf_time_string defaults.
+
+qsf_time_now : Format: QOF_TYPE_DATE. The current time taken from the moment the default
+is read into a QSF object at runtime.
+
+qsf_time_string : Format: QOF_TYPE_STRING. The current timestamp taken from the moment the
+default is read into a QSF object at runtime. This form is used when the output parameter 
+needs a formatted date string, not an actual date object. The format is determined by the 
+optional format attribute of the set tag which takes the same operators as the GNU C Library 
+for strftime() and output may therefore be dependent on the locale of the calling process - 
+\b take \b care. Default value is %F, used when qsf_time_string is set without the format
+attribute.
+
+Both defaults use UTC.
+
+*/
+#define QSF_XML_BOOLEAN_TEST "true" /**< needs to be lowercase for XML validation */
 
 #define QSF_OBJECT_SCHEMA "qsf-object.xsd.xml" /**< Name of the QSF Object Schema. */
 #define QSF_MAP_SCHEMA "qsf-map.xsd.xml" /**< Name of the QSF Map Schema. */
@@ -463,7 +477,7 @@ typedef struct qsf_validates
 /** \brief shorthand function
 
 This may look repetitive but each one is used separately
-	as well as in a block.
+as well as in a block.
 */
 int
 qsf_compare_tag_strings(const xmlChar *node_name, char *tag_name);
@@ -471,7 +485,7 @@ qsf_compare_tag_strings(const xmlChar *node_name, char *tag_name);
 /** \brief shorthand function
 
 This may look repetitive but each one is used separately
-	as well as in a block.
+as well as in a block.
 */
 int
 qsf_strings_equal(const xmlChar *node_name, char *tag_name);
@@ -479,7 +493,7 @@ qsf_strings_equal(const xmlChar *node_name, char *tag_name);
 /** \brief shorthand function
 
 This may look repetitive but each one is used separately
-	as well as in a block.
+as well as in a block.
 */
 int
 qsf_is_element(xmlNodePtr a, xmlNsPtr ns, char *c);
@@ -487,7 +501,7 @@ qsf_is_element(xmlNodePtr a, xmlNsPtr ns, char *c);
 /** \brief shorthand function
 
 This may look repetitive but each one is used separately
-	as well as in a block.
+as well as in a block.
 */
 int
 qsf_check_tag(qsf_param *params, char *qof_type);
@@ -637,8 +651,6 @@ The parentage of qof_book_merge should be obvious in this function.
 Large chunks were just lifted directly from the commit loop and adjusted
 to obtain the data to commit from the xmlNodePtr instead of qof_book_mergeRule. If
 anything, it's easier here because all entities are new, there are no targets.
-
-\todo references
 
 Unlike qof_book_merge, this routine runs once per parameter within a loop
 that iterates over objects - it does not have a loop of it's own.

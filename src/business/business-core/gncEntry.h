@@ -100,7 +100,8 @@ void gncEntrySetInvTaxTable (GncEntry *entry, GncTaxTable *table);
 void gncEntrySetInvDiscount (GncEntry *entry, gnc_numeric discount);
 void gncEntrySetInvDiscountType (GncEntry *entry, GncAmountType type);
 void gncEntrySetInvDiscountHow (GncEntry *entry, GncDiscountHow how);
-
+void qofEntrySetInvDiscType (GncEntry *entry, const char *type);
+void qofEntrySetInvDiscHow  (GncEntry *entry, const char *type);
 /** @} */
 
 /** @name Vendor Bills (and Employee Expenses) */
@@ -137,6 +138,8 @@ gnc_numeric gncEntryGetInvPrice (GncEntry *entry);
 gnc_numeric gncEntryGetInvDiscount (GncEntry *entry);
 GncAmountType gncEntryGetInvDiscountType (GncEntry *entry);
 GncDiscountHow gncEntryGetInvDiscountHow (GncEntry *entry);
+char* qofEntryGetInvDiscType (GncEntry *entry);
+char* qofEntryGetInvDiscHow (GncEntry *entry);
 gboolean gncEntryGetInvTaxable (GncEntry *entry);
 gboolean gncEntryGetInvTaxIncluded (GncEntry *entry);
 GncTaxTable * gncEntryGetInvTaxTable (GncEntry *entry);
@@ -217,6 +220,8 @@ int gncEntryCompare (GncEntry *a, GncEntry *b);
 #define ENTRY_QTY			"qty"
 
 #define ENTRY_IPRICE		"iprice"
+#define ENTRY_IACCT			"invoice-account"
+#define ENTRY_BACCT			"bill-account"
 #define ENTRY_BPRICE		"bprice"
 #define ENTRY_BILLABLE		"billable?"
 #define ENTRY_BILLTO		"bill-to"

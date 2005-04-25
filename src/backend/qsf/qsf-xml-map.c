@@ -355,7 +355,8 @@ qsf_set_handler(xmlNodePtr parent, GHashTable *default_hash,
 				lookup_node = (xmlNodePtr) g_hash_table_lookup(default_hash, 
 					xmlNodeGetContent(cur_node));
 				content = xmlGetProp(lookup_node, MAP_VALUE_ATTR);
-				/** \todo FIXME: do the lookup. */
+				/** \todo FIXME: do the lookup. type is defined by output object. */
+				/* Find by name, get GUID, return GUID as string. */
 				g_message("Lookup %s in the receiving application\n", content );
 				return content;
 			}

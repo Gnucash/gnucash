@@ -558,7 +558,7 @@ gnc_configure_date_format (void)
                                                     "Date Format",
                                                     "locale");
 
-  DateFormat df;
+  QofDateFormat df;
 
   if (gnc_date_string_to_dateformat(format_code, &df))
   {
@@ -568,7 +568,7 @@ gnc_configure_date_format (void)
     return;
   }
 
-  setDateFormat(df);
+  qof_date_format_set(df);
 
   if (format_code != NULL)
     free(format_code);

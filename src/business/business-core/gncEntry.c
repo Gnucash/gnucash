@@ -434,6 +434,35 @@ void gncEntrySetInvDiscountHow (GncEntry *entry, GncDiscountHow how)
   gncEntryCommitEdit (entry);
 }
 
+void qofEntrySetInvDiscType (GncEntry *entry, const char *type_string)
+{
+	GncAmountType type;
+
+	if (!entry) return;
+	gncAmountStringToType(type_string, &type);
+	if (entry->i_disc_type == type) return;
+	gncEntryBeginEdit (entry);
+	entry->i_disc_type = type;
+	entry->values_dirty = TRUE;
+	mark_entry (entry);
+	gncEntryCommitEdit (entry);
+
+}
+
+void qofEntrySetInvDiscHow  (GncEntry *entry, const char *type)
+{
+	GncDiscountHow how;
+
+	if (!entry) return;
+	gncEntryBeginEdit (entry);
+	gncEntryDiscountStringToHow(type, &how);
+	if (entry->i_disc_how == how) return;
+	entry->i_disc_how = how;
+	entry->values_dirty = TRUE;
+	mark_entry (entry);
+	gncEntryCommitEdit (entry);
+}
+
 /* Vendor Bills */
 
 void gncEntrySetBillAccount (GncEntry *entry, Account *acc)
@@ -683,6 +712,24 @@ GncDiscountHow gncEntryGetInvDiscountHow (GncEntry *entry)
 {
   if (!entry) return 0;
   return entry->i_disc_how;
+}
+
+char* qofEntryGetInvDiscType (GncEntry *entry)
+{
+	char *type_string;
+
+	if (!entry) return 0;
+	type_string = g_strdup(gncAmountTypeToString(entry->i_disc_type));
+	return type_string;
+}
+
+char* qofEntryGetInvDiscHow (GncEntry *entry)
+{
+	char *type_string;
+
+	if (!entry) return 0;
+	type_string = g_strdup(gncEntryDiscountHowToString(entry->i_disc_how));
+	return type_string;
 }
 
 gboolean gncEntryGetInvTaxable (GncEntry *entry)
@@ -1191,7 +1238,21 @@ gboolean gncEntryRegister (void)
     { ENTRY_IPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetInvPrice, (QofSetterFunc)gncEntrySetInvPrice },
     { ENTRY_BPRICE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEntryGetBillPrice, (QofSetterFunc)gncEntrySetBillPrice },
     { ENTRY_INVOICE, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetInvoice, NULL },
+    { ENTRY_IACCT, GNC_ID_ACCOUNT,  (QofAccessFunc)gncEntryGetInvAccount,  (QofSetterFunc)gncEntrySetInvAccount  },
+    { ENTRY_BACCT, GNC_ID_ACCOUNT,  (QofAccessFunc)gncEntryGetBillAccount, (QofSetterFunc)gncEntrySetBillAccount },
     { ENTRY_BILL, GNC_ID_INVOICE, (QofAccessFunc)gncEntryGetBill, NULL },
+    { ENTRY_INV_DISC_TYPE, QOF_TYPE_STRING, (QofAccessFunc)qofEntryGetInvDiscType,
+       (QofSetterFunc)qofEntrySetInvDiscType },
+    { ENTRY_INV_DISC_HOW, QOF_TYPE_STRING, (QofAccessFunc)qofEntryGetInvDiscHow,
+       (QofSetterFunc)qofEntrySetInvDiscHow },
+    { ENTRY_INV_TAXABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetInvTaxable,
+       (QofSetterFunc)gncEntrySetInvTaxable },
+    { ENTRY_INV_TAX_INC, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetInvTaxIncluded,
+       (QofSetterFunc)gncEntrySetInvTaxIncluded },
+    { ENTRY_BILL_TAXABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetInvTaxable,
+       (QofSetterFunc)gncEntrySetInvTaxable },
+    { ENTRY_BILL_TAX_INC, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetBillTaxIncluded,
+       (QofSetterFunc)gncEntrySetBillTaxIncluded },
     { ENTRY_BILLABLE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEntryGetBillable, (QofSetterFunc)gncEntrySetBillable },
     { ENTRY_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncEntryGetBillTo, (QofSetterFunc)gncEntrySetBillTo },
     { ENTRY_ORDER, GNC_ID_ORDER, (QofAccessFunc)gncEntryGetOrder, NULL },

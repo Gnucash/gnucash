@@ -1,10 +1,12 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 targetNamespace="http://qof.sourceforge.net/"
-xmlns:qof-qsf="http://qof.sourceforge.net/">
+xmlns:qof-qsf="http://qof.sourceforge.net/"
+elementFormDefault="qualified"
+attributeFormDefault="unqualified">
  <xsd:annotation>
     <xsd:documentation xml:lang="en">
 	Query Object Framework Serialization Format (QSF)
-	Copyright 2004 Neil Williams linux@codehelp.co.uk
+	Copyright 2004-5 Neil Williams linux@codehelp.co.uk
 	QSF is part of QOF.
 	QOF is free software; you can redistribute it and/or modify it
 	under the terms of the GNU General Public License as published by the
@@ -19,18 +21,18 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
 	Temple	Place, Suite 330, Boston, MA 02111-1307 USA
     </xsd:documentation>
   </xsd:annotation>
-<xsd:element name="qof-qsf" qof-qsf:type="qsftype"/>
+<xsd:element name="qof-qsf" type="qof-qsf:qsftype"/>
 <xsd:complexType name="qsftype">
  <xsd:sequence>
-   <xsd:element name="book" qof-qsf:type="qofbook"/>
+   <xsd:element name="book" type="qof-qsf:qofbook" minOccurs="1" maxOccurs="unbounded"/>
  </xsd:sequence>
 </xsd:complexType>
 <xsd:complexType name="qofbook">
  <xsd:sequence>
-   <xsd:element name="book-guid" type="xsd:string"/>
-   <xsd:element name="object" qof-qsf:type="qsfobject" minOccurs="1" maxOccurs="unbounded"/>
+   <xsd:element name="book-guid" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+   <xsd:element name="object" type="qof-qsf:qsfobject" minOccurs="0" maxOccurs="unbounded"/>
  </xsd:sequence>
- <xsd:attribute name="count" type="xsd:positiveInteger"/>
+ <xsd:attribute name="count" type="xsd:positiveInteger" use="optional"/>
 </xsd:complexType>
 <xsd:complexType name="qsfobject">
  <xsd:sequence>
@@ -38,7 +40,7 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
      <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:string">
-       <xsd:attribute name="type" type="xsd:string"/>
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
      </xsd:complexType>
@@ -46,8 +48,8 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
    <xsd:element name="guid" minOccurs="0" maxOccurs="unbounded">
    <xsd:complexType>
    <xsd:simpleContent>
-     <xsd:extension base="xsd:string">
-       <xsd:attribute name="type" type="xsd:string"/>
+     <xsd:extension base="xsd:hexBinary">
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
      </xsd:extension>
     </xsd:simpleContent>
    </xsd:complexType>
@@ -56,7 +58,7 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
      <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:boolean">
-       <xsd:attribute name="type" type="xsd:string"/>
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
      </xsd:complexType>
@@ -65,7 +67,7 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
    <xsd:complexType>
     <xsd:simpleContent>
      <xsd:extension base="xsd:string">
-      <xsd:attribute name="type" type="xsd:string"/>
+      <xsd:attribute name="type" type="xsd:string" use="required"/>
      </xsd:extension>
     </xsd:simpleContent>
    </xsd:complexType>
@@ -74,7 +76,7 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
      <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:dateTime">
-       <xsd:attribute name="type" type="xsd:string"/>
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
      </xsd:complexType>
@@ -83,7 +85,7 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
      <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:int">
-       <xsd:attribute name="type" type="xsd:string"/>
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
      </xsd:complexType>
@@ -91,8 +93,8 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
    <xsd:element name="gint64" minOccurs="0" maxOccurs="unbounded">
      <xsd:complexType>
      <xsd:simpleContent>
-      <xsd:extension base="xsd:int">
-       <xsd:attribute name="type" type="xsd:string"/>
+      <xsd:extension base="xsd:long">
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
      </xsd:complexType>
@@ -101,7 +103,7 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
     <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:double">
-       <xsd:attribute name="type" type="xsd:string"/>
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
     </xsd:complexType>
@@ -110,7 +112,7 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
      <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:string">
-       <xsd:attribute name="type" type="xsd:string"/>
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
      </xsd:complexType>
@@ -119,16 +121,15 @@ xmlns:qof-qsf="http://qof.sourceforge.net/">
      <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:string">
-       <xsd:attribute name="type" type="xsd:string"/>
-       <xsd:attribute name="path" type="xsd:string"/>
-       <xsd:attribute name="value" type="xsd:string"/>
+       <xsd:attribute name="type" type="xsd:string" use="required"/>
+       <xsd:attribute name="path" type="xsd:string" use="required"/>
+       <xsd:attribute name="value" type="xsd:string" use="required"/>
       </xsd:extension>
      </xsd:simpleContent>
      </xsd:complexType>
    </xsd:element>
 </xsd:sequence>
- <xsd:attribute name="type" type="xsd:string"/>
- <xsd:attribute name="count" type="xsd:positiveInteger"/>
+ <xsd:attribute name="type" type="xsd:string" use="required"/>
+ <xsd:attribute name="count" type="xsd:positiveInteger" use="optional"/>
 </xsd:complexType>
 </xsd:schema>
-

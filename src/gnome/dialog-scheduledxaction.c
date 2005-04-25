@@ -1642,7 +1642,7 @@ schedXact_editor_populate( SchedXactionEditorDialog *sxed )
                 gd = xaccSchedXactionGetLastOccurDate( sxed->sx );
                 if ( g_date_valid( gd ) ) {
                         gchar dateBuf[ MAX_DATE_LENGTH+1 ];
-                        printGDate( dateBuf, gd );
+                        qof_print_gdate( dateBuf,MAX_DATE_LENGTH, gd );
                         gtk_label_set_text( sxed->lastOccurLabel, dateBuf );
                 } else {
                         gtk_label_set_text( sxed->lastOccurLabel, _( "(never)" ) );
@@ -2077,7 +2077,7 @@ putSchedXactionInDialog( gpointer data, gpointer user_data )
                 char tmpBuf[ MAX_DATE_LENGTH+1 ];
                 char dowBuf[ 25 ]; /* <- FIXME: appropriate length? */
                 nextInstDate = (GDate*)instList->data;
-                printGDate( tmpBuf, nextInstDate );
+                qof_print_gdate( tmpBuf, MAX_DATE_LENGTH, nextInstDate );
                 g_date_strftime( dowBuf, 25, "%A", nextInstDate );
                 g_string_sprintf( nextDate, "%s (%s)", tmpBuf, dowBuf );
         }
@@ -2478,5 +2478,3 @@ static void
 gnc_sxed_cmd_edit_paste (GtkAction *action, SchedXactionEditorDialog *sxed)
 {
 }
-
-

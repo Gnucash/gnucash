@@ -2704,7 +2704,7 @@ gnc_option_db_set_option_selectable_by_name(SCM guile_option,
  * format(symbol), month(symbol), include-years(bool), custom-string(string)
  */
 
-gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
+gboolean gnc_dateformat_option_value_parse(SCM value, QofDateFormat *format,
                                            GNCDateMonthFormat *months,
                                            gboolean *years, char **custom)
 {
@@ -2775,7 +2775,7 @@ gboolean gnc_dateformat_option_value_parse(SCM value, DateFormat *format,
   return TRUE;
 }
 
-SCM gnc_dateformat_option_set_value(DateFormat format, GNCDateMonthFormat months,
+SCM gnc_dateformat_option_set_value(QofDateFormat format, GNCDateMonthFormat months,
                                     gboolean years, const char *custom)
 {
   SCM value = SCM_EOL;
