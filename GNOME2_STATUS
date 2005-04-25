@@ -1,5 +1,8 @@
 # -*- reStructuredText -*-
 
+Intro
+-----
+
 This is a ad-hoc list of list of what works and doesn't work in the g2
 port of gnucash.  The plan is to finish porting those parts of gnucash
 that have already been started (i.e. new windowing system, account
@@ -10,9 +13,9 @@ and will disappear in a future release.  Its important to get this
 release out the door and not stall it until all the deprecated
 functionality has been removed.
 
-========================================
-   Last sync with HEAD on 2005-04-02
-========================================
++--------------------------------------+
+|  Last sync with HEAD on 2005-04-02   |
++--------------------------------------+
 
 ========================================
               DONE
@@ -67,11 +70,30 @@ Stock Split Dialog
             General Notes
 ========================================
 
+Resources
+---------
+- Porting applications to the GNOME 2.0 Platform -- http://developer.gnome.org/dotplan/porting/
+  - Should switch from `gnome_config` to gconf...
+    - Introduction to GConf -- http://developer.gnome.org/feature/archive/gconf/gconf.html
+
 - General
+  - Startup CRITICAL errors...
+
+    [jsled@phoenix:~/stuff/proj/gnucash/src-g2/gnucash]$ /opt/gnc-g2-unstable/bin/gnucash
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvaluetypes.c: line 741 (g_value_set_string): assertion `G_VALUE_HOLDS_STRING (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gobject.c: line 1239 (g_object_set_property): assertion `G_IS_VALUE (value)' failed
+    (gnucash:7823): GLib-GObject-CRITICAL **: file gvalue.c: line 149 (g_value_unset): assertion `G_IS_VALUE (value)' failed
+    Use of deprecated SAXv1 function getLineNumber
 
   - Window size/position not being saved or used.
 
-    - We used to do this via Gnome MDI support, but now we will need to
+    - Gnome MDI support used to handle this for us, but now we will need to
       manage it ourselves. :/
 
   - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
@@ -81,12 +103,6 @@ Stock Split Dialog
     - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012824.html
 
 - Main Window
-
-  - Summary Bar
-
-    - Summarybar restored into GncMainWindow UI; summary-select list does not
-      respond to button-pressing.  The problem is that the widget
-      never sees the button_press_event.
 
   - [low-priority] New registers should open in new top-level windows.
 
@@ -126,10 +142,11 @@ Stock Split Dialog
         #11 0x40327076 in g_signal_emit_by_name () from /usr/lib/libgobject-2.0.so.0
         #12 0x40326047 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
 
-- Find - mostly functional; creating a search creates a search results tab in
-  the main window, seemingly populated correctly.
+- Transfer
 
-  - There's no way to edit/refine a search.
+  - Top 5 fields and don't expand width-wise.
+
+  - Bottom 2 fields [Currency Transfer] don't expand width-wise.
 
 - View Lots
 
@@ -184,6 +201,8 @@ Stock Split Dialog
     Currently it is its own window but maybe each workbench should be a tab
     in the new layout.  How would this work with the sub-tabs?  Have to think
     about this some more.
+
+    - The druid for 'New' is created underneath the Budget-list window.
 
   - Probably more TODO but these are the main points.
 
@@ -249,9 +268,16 @@ Stock Split Dialog
   - Rename "New Account Tree" to "Display Account Tree" as "New" gives the
     impression that a creation of something will occur.  PJK
 
+- Find
+
+  - There's no way to edit/refine a search.
+    [There's no way to do so in 1.8, either...]
 
 -----------------------------------------
 <#GOG> ----------------------------------
+
+These are notes jsled was using during the GOG hack-porting effort.
+
 [dc:created 2004-12-17]
 
 gog-guru.c

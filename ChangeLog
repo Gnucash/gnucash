@@ -1,3 +1,10 @@
+2005-04-24  Joshua Sled  <jsled@asynchronous.org>
+
+	* src/gnome/window-main-summarybar.c: Switch from using a gtk_select
+	with locally-defined widgets to a GtkListStore backing a standard
+	combo box.  Re-define the layout a bit, but it's still ugly.
+	* src/gnome-utils/gtkselect.[ch]: Dead.
+	
 2005-04-24  David Hampton  <hampton@employees.org>
 
 	* gnucash/src/core-utils/gnc-gconf-utils.[ch]:
