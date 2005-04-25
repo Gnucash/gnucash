@@ -32,7 +32,6 @@
 #include <gnome.h>
 #include <time.h>
 #include <g-wrap-wct.h>
-#include <gconf/gconf-client.h>
 
 #include "Scrub.h"
 #include "dialog-account.h"
@@ -46,6 +45,7 @@
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
 #include "gnc-menu-extensions.h"
@@ -1025,7 +1025,6 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
 {
   int adj = 0;
   GtkWidget *mbar, *menu, *regMenu, *regMenuItem, *tmpMi;
-  GConfClient *client;
 
   /* Get our menu bar from glade. */
   mbar = glade_xml_get_widget( xml, "gnc_register_menubar" );
@@ -1038,8 +1037,7 @@ gnc_register_setup_menu_widgets( RegWindow *regData, GladeXML *xml )
    * . remove the RegWindow menu from the menu bar, saving it's index.
    * . insert the GNCSplitReg menu at the same index.
    * . destroy now-unused widgets. */
-  client = gconf_client_get_default ();
-  if ( gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_tearoff", NULL) ) {
+  if ( gnc_gconf_menus_have_tearoff() ) {
     /* offset by one for the tearoff menu item. */
     adj = 1;
   }

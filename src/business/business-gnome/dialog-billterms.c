@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <gconf/gconf-client.h>
 
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -362,15 +361,13 @@ make_menu (GtkWidget *omenu, NewBillTerm *nbt)
 {
   GladeXML *xml;
   GtkWidget *popup;
-  GConfClient *client;
 
   /* Open and read the Popup XML */
   xml = gnc_glade_xml_new ("billterms.glade", "Term Type Popup");
   popup = glade_xml_get_widget (xml, "Term Type Popup");
 
   /* Glade insists on making this a tearoff menu. */
-  client = gconf_client_get_default ();
-  if (gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_tearoff", NULL)) {
+  if (gnc_gconf_menus_have_tearoff()) {
     GtkMenuShell *ms = GTK_MENU_SHELL (popup);
     GtkWidget *tearoff;
 

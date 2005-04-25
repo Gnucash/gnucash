@@ -191,7 +191,7 @@ gnc_main_window_app_created_cb(GnomeMDI * mdi, GnomeApp * app,
     behavior = (BONOBO_DOCK_ITEM_BEH_EXCLUSIVE |
                 BONOBO_DOCK_ITEM_BEH_NEVER_VERTICAL);
     client = gconf_client_get_default ();
-    if (!gconf_client_get_bool (client, "/desktop/gnome/interface/toolbar_detachable", NULL))
+    if (!gnc_gconf_toolbar_detachable()))
       behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
     g_object_unref(client);
 

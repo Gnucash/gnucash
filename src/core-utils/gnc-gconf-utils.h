@@ -492,6 +492,33 @@ void gnc_gconf_remove_notification (GObject *object,
 				    const gchar *section);
 /** @} */
 
+/** @name GConf One Liners */
+/** @{ */
+
+#define DESTKOP_TEAROFF_MENUS "/desktop/gnome/interface/menus_have_tearoff"
+#define DESTKOP_MENUBAR_DETACHABLE "/desktop/gnome/interface/menubar_detachable"
+#define DESTKOP_TOOLBAR_DETACHABLE "/desktop/gnome/interface/toolbar_detachable"
+
+static inline gboolean
+gnc_gconf_menus_have_tearoff (void)
+{
+  return gnc_gconf_get_bool(DESTKOP_TEAROFF_MENUS, NULL, NULL);
+}
+
+static inline gboolean
+gnc_gconf_menubar_detachable (void)
+{
+  return gnc_gconf_get_bool(DESTKOP_MENUBAR_DETACHABLE, NULL, NULL);
+}
+
+static inline gboolean
+gnc_gconf_toolbar_detachable (void)
+{
+  return gnc_gconf_get_bool(DESTKOP_TOOLBAR_DETACHABLE, NULL, NULL);
+}
+
+/** @} */
+
 #endif /* GNC_GCONF_UTILS_H */
 /** @} */
 /** @} */

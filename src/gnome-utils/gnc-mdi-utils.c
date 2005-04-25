@@ -24,13 +24,13 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <gconf/gconf-client.h>
 
 #include "dialog-utils.h"
 #include "global-options.h"
 #include "gnc-book.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-html.h"
 #include "gnc-mdi-utils.h"
 #include "gnc-session.h"
@@ -782,7 +782,6 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
   GtkWidget        * oldbar;
   GnomeApp         * new_app = NULL; 
   BonoboDockItemBehavior behavior;
-  GConfClient      * client;
 
   ENTER(" ");
   if (prev_child)
@@ -799,10 +798,8 @@ gnc_mdi_child_changed_cb (GnomeMDI * mdi, GnomeMDIChild * prev_child,
   }
 
   behavior = BONOBO_DOCK_ITEM_BEH_EXCLUSIVE;
-  client = gconf_client_get_default ();
-  if (!gconf_client_get_bool (client, "/desktop/gnome/interface/toolbar_detachable", NULL))
+  if (!gnc_gconf_toolbar_detachable())
     behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
-  g_object_unref(client);
 
   if (childwin && childwin->toolbar)
   {

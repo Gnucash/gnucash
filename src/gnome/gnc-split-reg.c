@@ -31,7 +31,6 @@
 
 #include <gnome.h>
 #include <time.h>
-#include <gconf/gconf-client.h>
 
 #include "gnc-split-reg.h"
 
@@ -49,6 +48,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-err-popup.h"
 #include "gnc-euro.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
 #include "gnc-pricedb.h"
@@ -2095,7 +2095,6 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
 {
   GtkWidget *popup, *menuitem;
   GladeXML *xml;
-  GConfClient *client;
 
   xml = gnc_glade_xml_new( "register.glade", "register_popup" );
   popup = glade_xml_get_widget( xml, "register_popup" );
@@ -2103,9 +2102,8 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
                                      gnc_glade_autoconnect_full_func,
                                      gsr );
 
-  client = gconf_client_get_default ();
   /* Glade insists on making this a tearoff menu. */
-  if (gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_tearoff", NULL)) {
+  if (gnc_gconf_menus_have_tearoff()) {
     GtkMenuShell *ms = GTK_MENU_SHELL(popup);
     GtkWidget *tearoff;
 
@@ -2113,7 +2111,6 @@ gsr_create_popup_menu( GNCSplitReg *gsr )
     ms->children = g_list_remove(ms->children, tearoff);
     gtk_widget_destroy(tearoff);
   }
-  g_object_unref(client);
 
   gsr->split_popup_check = glade_xml_get_widget( xml, "popup_splits" );
 

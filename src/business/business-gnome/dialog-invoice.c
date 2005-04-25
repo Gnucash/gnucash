@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <gnome.h>
-#include <gconf/gconf-client.h>
 #include <g-wrap-wct.h>
 #include <libguile.h>
 
@@ -1055,7 +1054,6 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
 {
   GtkWidget *popup;
   GladeXML *xml;
-  GConfClient *client;
 
   xml = gnc_glade_xml_new ("invoice.glade", "Invoice Window Popup Menu");
 
@@ -1064,8 +1062,7 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
   glade_xml_signal_autoconnect_full (xml, gnc_glade_autoconnect_full_func, iw);
 
   /* Glade insists on making this a tearoff menu. */
-  client = gconf_client_get_default ();
-  if (gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_tearoff", NULL)) {
+  if (gnc_gconf_menus_have_tearoff()) {
     GtkMenuShell *ms = GTK_MENU_SHELL (popup);
     GtkWidget *tearoff;
 

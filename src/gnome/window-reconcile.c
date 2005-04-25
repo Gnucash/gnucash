@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <time.h>
 #include <libgnomeui/gnome-window-icon.h>
-#include <gconf/gconf-client.h>
 
 #include "Scrub.h"
 #include "dialog-account.h"
@@ -48,6 +47,7 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ledger-display.h"
 #include "gnc-main-window.h"
@@ -1661,7 +1661,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   GtkWidget *statusbar;
   GtkWidget *vbox;
   GtkWidget *dock;
-  GConfClient *client;
 
   if (account == NULL)
     return NULL;
@@ -1671,8 +1670,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   if (recnData)
     return recnData;
 
-  client = gconf_client_get_default ();
-  
   recnData = g_new0 (RecnWindow, 1);
 
   recnData->account = *xaccAccountGetGUID (account);
@@ -1714,7 +1711,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     GtkWidget *menubar;
 
     behavior = BONOBO_DOCK_ITEM_BEH_EXCLUSIVE;
-    if (!gconf_client_get_bool (client, "/desktop/gnome/interface/menubar_detachable", NULL))
+    if (!gnc_gconf_menubar_detachable())
       behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
 
     dock_item = bonobo_dock_item_new("menu", behavior);
@@ -1735,7 +1732,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
     SCM id;
 
     behavior = BONOBO_DOCK_ITEM_BEH_EXCLUSIVE;
-    if (!gconf_client_get_bool (client, "/desktop/gnome/interface/toolbar_detachable", NULL))
+    if (!gnc_gconf_toolbar_detachable())
       behavior |= BONOBO_DOCK_ITEM_BEH_LOCKED;
 
     dock_item = bonobo_dock_item_new("toolbar", behavior);
@@ -1898,7 +1895,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
   gnc_window_adjust_for_screen(GTK_WINDOW(recnData->window));
 
   gtk_widget_grab_focus (recnData->debit);
-  g_object_unref(client);
 
   return recnData;
 }
