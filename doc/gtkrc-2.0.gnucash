@@ -123,3 +123,14 @@ widget "Price Dialog.*.GNCAmountEdit" style "gnc-entry2"
 # Commodity Dialog
 #
 widget "Commodities Dialog.*.commodity_tree" style "gnc-treeview"
+
+
+#
+# Register
+#
+style "gnc-register"
+{
+  font_name    = "Sans 10"
+}
+
+widget "*.GnucashSheet" style "gnc-register"
