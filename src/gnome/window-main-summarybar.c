@@ -467,6 +467,10 @@ gnc_main_window_summary_new (void)
   GNCMainSummary  * retval = g_new0(GNCMainSummary, 1);
   GtkCellRenderer *textRenderer;
   int i;
+  // These options lead to a better looking layout for the combo-box, where
+  // the "Assets: $####.##" and "Profit: $####.##" values are visually next
+  // to each other.
+  gboolean expandOptions[] = { TRUE, FALSE, TRUE, FALSE, TRUE };
   
   retval->datamodel = gtk_list_store_new( N_COLUMNS,
                                           G_TYPE_STRING,
@@ -491,7 +495,7 @@ gnc_main_window_summary_new (void)
   for ( i = 0; i < N_COLUMNS; i++ )
   {
     textRenderer = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
-    gtk_cell_layout_pack_start( GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, TRUE );
+    gtk_cell_layout_pack_start( GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, expandOptions[i] );
     gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, "text", i );
   }
 
