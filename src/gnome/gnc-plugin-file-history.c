@@ -358,8 +358,8 @@ gnc_plugin_file_history_new (void)
 
 	ENTER("");
 	plugin_page = GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_FILE_HISTORY, NULL));
-	return plugin_page;
 	LEAVE("plugin %p", plugin_page);
+	return plugin_page;
 }
 
 /************************************************************
