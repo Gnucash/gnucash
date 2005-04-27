@@ -8,3 +8,5 @@ Makefile.in
 .deps
 .libs
 paths.h
+*.la
+*.lo

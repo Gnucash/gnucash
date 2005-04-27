@@ -9,3 +9,5 @@ Makefile.in
 .libs
 go-marshalers.h
 go-marshalers.c
+*.la
+*.lo
