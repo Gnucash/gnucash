@@ -15,8 +15,6 @@ gnc_regular_scm_files = \
   main-window.scm \
   path.scm \
   substring-search.scm \
-  tip-list.scm \
-  tip-of-the-day.scm \
   xml-generator.scm
 
 gncscm_DATA = ${gnc_regular_scm_files}

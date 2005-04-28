@@ -1,7 +1,8 @@
 schemadir   = @GCONF_SCHEMA_FILE_DIR@
 schema_DATA = \
   apps_gnucash_dialog_commodities.schemas \
-  apps_gnucash_dialog_prices.schemas
+  apps_gnucash_dialog_prices.schemas \
+  apps_gnucash_dialog_totd.schemas
 
 install-data-local:
 if GCONF_SCHEMAS_INSTALL

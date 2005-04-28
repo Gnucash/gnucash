@@ -49,7 +49,7 @@
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
 #include "gnc-session.h"
-#include "gnc-totd-dialog.h"
+#include "dialog-totd.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
 #include "gnc-window.h"
@@ -1363,11 +1363,7 @@ gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindow *window)
 {
-	GtkWidget *dialog;
-
-	dialog = gnc_totd_dialog_new (GTK_WINDOW (window));
-	gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
+	gnc_totd_dialog(GTK_WINDOW(window), FALSE);
 }
 
 static void

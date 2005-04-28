@@ -85,11 +85,6 @@
 (export make-print-check-format)
 (export gnc:print-check)
 
-;; from tip-of-the-day.scm
-(export gnc:get-current-tip)
-(export gnc:increment-tip-number)
-(export gnc:decrement-tip-number)
-
 ;; Get the Makefile.am/configure.in generated variables.
 (load-from-path "build-config.scm")
 
@@ -109,7 +104,8 @@
 ;; to print out various 'development version' strings throughout the code.
 ;; #t == development version, #f == stable version
 ;;
-;; NOTE: You still need to comment out the message in tip-list.scm by hand!
+;; NOTE: You still need to comment out the message in
+;; tip_of_the_day.list.in by hand!
 ;;
 (define gnc:*is-development-version?* #t)
 
@@ -446,7 +442,6 @@ string and 'directories' must be a list of strings."
     ;; they're "well behaved" (these should probably be in modules
     ;; eventually)
     (load-from-path "main-window.scm")  ;; depends on app-utils (N_, etc.)...
-    (load-from-path "tip-of-the-day.scm") ;; depends on app-utils (config-var...)
     (load-from-path "printing/print-check.scm") ;; depends on simple-obj...
     ;; +jsled - 2002.07.08
     (load-from-path "fin.scm")
@@ -458,7 +453,7 @@ string and 'directories' must be a list of strings."
 	  (gnc:quote-source-set-fq-installed sources)))
 
     (gnc:update-splash-screen (_ "Loading tip-of-the-day..."))
-    (gnc:initialize-tip-of-the-day)
+    (gnc:totd_dialog #f #t)
 
     (set-current-module original-module))
 

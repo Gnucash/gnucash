@@ -52,3 +52,4 @@ foreach my $file (@possible_files) {
 }
 
 print "intl-scm/guile-strings.c\n";
+print "doc/tip_of_the_day.list.in"

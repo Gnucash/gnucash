@@ -35,7 +35,7 @@
       "#include <gnc-engine.h>\n"
       "#include <gnc-commodity.h>\n"
       "#include <gnc-numeric.h>\n"
-      "#include <gnc-totd-dialog.h>\n"
+      "#include <dialog-totd.h>\n"
       "#include <window-main.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <dialog-new-user.h>\n"
@@ -182,11 +182,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:totd-dialog-create-and-run
+   'gnc:totd_dialog
    '<gw:void>
-   "gnc_totd_dialog_create_and_run"
-   '()
-   "Create and run the \"Tip Of The Day\" dialog")
+   "gnc_totd_dialog"
+   '((<gnc:UIWidget> parent) (<gw:bool> is_startup))
+   "Show the \"Tip Of The Day\" dialog.")
 
   (gw:wrap-as-wct ws
                   '<gnc:ProgressDialog*>

@@ -1,3 +1,27 @@
+2005-04-28  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-totd-dialog.[ch]:
+	* src/gnome/tip-of-the-day.[ch]:
+	* src/scm/tip-list.scm:
+	* src/scm/tip-of-the-day.scm: Remove old "tip of the day" code.
+
+	* make-gnucash-potfiles.in:
+	* doc/tip_of_the_day.list.in:
+	* src/gnome/dialog-totd.[ch]:
+	* src/gnome/glade/totd.glade:
+	* src/gnome/schemas/apps_gnucash_dialog_totd.schemas: New "tip of
+	the day" code entirely written in C.  The installed tip file can
+	still be updated by users, but is now essentially a free-form file
+	where tips are separated by two consecutive newline characters.
+	The tip file in the sources still contains gettext markup.  Store
+	the current tip number and whether or not to show tip in gconf.
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/gnome-utils/gnc-gnome-utils.[ch]:
+	* src/scm/main.scm: Other files affected by the "tip of the
+	day" changes.
+
 2005-04-25  Neil Williams <linux@codehelp.co.uk>
 	* src/app-utils/option-util.c:
 	* src/app-utils/option-util.h: Removing deprecated QOF code

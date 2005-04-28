@@ -39,7 +39,7 @@ libgncgnome_la_SOURCES = \
   dialog-sx-from-trans.c \
   dialog-sxsincelast.c \
   dialog-tax-info.c \
-  gnc-totd-dialog.c \
+  dialog-totd.c \
   dialog-userpass.c \
   dialog-scheduledxaction.c \
   druid-budget-create.c \
@@ -62,7 +62,6 @@ libgncgnome_la_SOURCES = \
   gnc-window.c \
   lot-viewer.c \
   reconcile-list.c \
-  tip-of-the-day.c \
   top-level.c \
   window-main.c \
   window-main-summarybar.c \
@@ -91,7 +90,7 @@ noinst_HEADERS = \
   dialog-progress.h \
   dialog-sx-from-trans.h \
   dialog-sxsincelast.h \
-  gnc-totd-dialog.h \
+  dialog-totd.h \
   dialog-scheduledxaction.h \
   druid-budget-create.h \
   druid-acct-period.h \
@@ -115,7 +114,6 @@ noinst_HEADERS = \
   gw-gnc.h \
   lot-viewer.h \
   reconcile-list.h \
-  tip-of-the-day.h \
   top-level.h \
   window-main.h \
   window-main-summarybar.h \

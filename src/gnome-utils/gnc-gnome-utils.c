@@ -83,6 +83,25 @@ gnc_gnome_locate_pixmap (const char *name)
 }
 
 char *
+gnc_gnome_locate_data_file (const char *name)
+{
+  char *fullname;
+
+  g_return_val_if_fail (name != NULL, NULL);
+
+  fullname = gnome_program_locate_file (gnucash_program,
+					GNOME_FILE_DOMAIN_APP_DATADIR,
+					name, TRUE, NULL);
+
+  if (fullname == NULL) {
+    PERR ("Could not locate file %s", name);
+    return NULL;
+  }
+
+  return fullname;
+}
+
+char *
 gnc_gnome_locate_ui_file (const char *name)
 {
   char *partial;
@@ -91,15 +110,8 @@ gnc_gnome_locate_ui_file (const char *name)
   g_return_val_if_fail (name != NULL, NULL);
 
   partial = g_strdup_printf("ui/%s", name);
-  fullname = gnome_program_locate_file (gnucash_program,
-					GNOME_FILE_DOMAIN_APP_DATADIR,
-					partial, TRUE, NULL);
+  fullname = gnc_gnome_locate_data_file(partial);
   g_free(partial);
-
-  if (fullname == NULL) {
-    PERR ("Could not locate file %s", name);
-    return NULL;
-  }
 
   return fullname;
 }
