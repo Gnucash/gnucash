@@ -30,8 +30,11 @@
 #include "druid-hierarchy.h"
 #include "global-options.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 
+#define GCONF_SECTION "dialogs/new_user"
+#define FIRST_STARTUP "first_startup"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -53,7 +56,7 @@ gnc_new_user_dialog_register_qif_druid (void (*cb_fcn)(void))
 void
 gnc_set_first_startup (gboolean first_startup)
 {
-  gnc_set_boolean_option ("__new_user", "first_startup", first_startup);
+  gnc_gconf_set_bool(GCONF_SECTION, FIRST_STARTUP, first_startup, NULL);
 }
 
 void

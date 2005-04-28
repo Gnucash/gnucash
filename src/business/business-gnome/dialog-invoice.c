@@ -68,6 +68,11 @@
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
+#define GCONF_SECTION_INVOICE "dialogs/business/invoice"
+#define GCONF_SECTION_BILL    "dialogs/business/bill"
+#define GCONF_SECTION_VOUCHER "dialogs/business/voucher"
+#define GCONF_SECTION_SEARCH  "dialogs/business/invoice_search"
+
 void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_help_cb (GtkWidget *widget, gpointer data);
@@ -228,9 +233,6 @@ void gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
 #define INV_WIDTH_PREFIX "invoice_reg"
 #define BILL_WIDTH_PREFIX "bill_reg"
 #define VOUCHER_WIDTH_PREFIX "voucher_reg"
-static int inv_last_width = 0;
-static int bill_last_width = 0;
-static int voucher_last_width = 0;
 
 static void gnc_invoice_update_window (InvoiceWindow *iw);
 static InvoiceWindow * gnc_ui_invoice_modify (GncInvoice *invoice);
@@ -1078,46 +1080,29 @@ gnc_invoice_window_create_popup_menu (InvoiceWindow *iw)
 }
 
 static char *
-gnc_invoice_get_width_prefix (InvoiceWindow *iw)
+gnc_invoice_get_gconf_section (InvoiceWindow *iw)
 {
   switch (gncOwnerGetType (&iw->owner)) {
   case GNC_OWNER_CUSTOMER:
-    return INV_WIDTH_PREFIX;
+    return GCONF_SECTION_INVOICE;
   case GNC_OWNER_VENDOR:
-    return BILL_WIDTH_PREFIX;
+    return GCONF_SECTION_BILL;
   case GNC_OWNER_EMPLOYEE:
-    return VOUCHER_WIDTH_PREFIX;
+    return GCONF_SECTION_VOUCHER;
   default:
     g_warning ("invalid owner");
-    return INV_WIDTH_PREFIX;
-  }
-}
-
-static int *
-gnc_invoice_get_width_integer (InvoiceWindow *iw)
-{
-  switch (gncOwnerGetType (&iw->owner)) {
-  case GNC_OWNER_CUSTOMER:
-    return &inv_last_width;
-  case GNC_OWNER_VENDOR:
-    return &bill_last_width;
-  case GNC_OWNER_EMPLOYEE:
-    return &voucher_last_width; 
-  default:
-    g_warning ("invalid owner");
-    return &inv_last_width;
+    return NULL;
   }
 }
 
 static void
 gnc_invoice_save_size (InvoiceWindow *iw)
 {
-  int *last_width = gnc_invoice_get_width_integer (iw);
-
-  gdk_window_get_geometry (iw->dialog->window, NULL, NULL,
-			   last_width, NULL, NULL);
-
-  gnc_save_window_size (gnc_invoice_get_width_prefix (iw), *last_width, 0);
+  const gchar *section = gnc_invoice_get_gconf_section(iw);
+  
+  if (!section)
+    return;
+  gnc_save_window_size( section, GTK_WINDOW(iw->dialog) );
 }
 
 static void
@@ -1613,20 +1598,10 @@ gnc_invoice_update_window (InvoiceWindow *iw)
 
   if (!iw->width_inited)
   {
-    int * last_width = gnc_invoice_get_width_integer (iw);
+    const gchar *section = gnc_invoice_get_gconf_section (iw);
 
-    switch (iw->dialog_type) {
-    case VIEW_INVOICE:
-    case EDIT_INVOICE:
-      if (*last_width == 0)
-	gnc_get_window_size (gnc_invoice_get_width_prefix (iw), last_width,
-			     NULL);
-
-      gtk_window_set_default_size (GTK_WINDOW (iw->dialog), *last_width, 0);
-      break;
-    default:
-      break;
-    }
+    if (section)
+      gnc_restore_window_size (section, GTK_WINDOW (iw->dialog));
 
     iw->width_inited = TRUE;
   }
@@ -2449,7 +2424,7 @@ gnc_invoice_search (GncInvoice *start, GncOwner *owner, GNCBook *book)
 
   return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_invoice_cb,
-				   sw, free_invoice_cb);
+				   sw, free_invoice_cb, GCONF_SECTION_SEARCH);
 
 }
 

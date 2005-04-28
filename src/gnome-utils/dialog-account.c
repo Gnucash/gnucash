@@ -2,6 +2,7 @@
  * dialog-account.c -- window for creating and editing accounts for *
  *                     GnuCash                                      *
  * Copyright (C) 2000 Dave Peticolas <dave@krondo.com>              *
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -49,6 +50,7 @@
 
 #define DIALOG_NEW_ACCOUNT_CM_CLASS "dialog-new-account"
 #define DIALOG_EDIT_ACCOUNT_CM_CLASS "dialog-edit-account"
+#define GCONF_SECTION "dialogs/account"
 
 typedef enum
 {
@@ -104,9 +106,6 @@ typedef struct _AccountWindow
 
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
-
-static gint last_width = 0;
-static gint last_height = 0;
 
 static int last_used_account_type = BANK;
 
@@ -1409,11 +1408,7 @@ gnc_account_window_create(AccountWindow *aw)
   aw->type_list = glade_xml_get_widget (xml, "type_list");
   gnc_account_type_list_create (aw);
 
-  if (last_width == 0)
-    gnc_get_window_size("account_win", &last_width, &last_height);
-
-  gtk_window_set_default_size(GTK_WINDOW(aw->dialog),
-                              last_width, last_height);
+  gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(aw->dialog));
 
   gtk_widget_grab_focus(GTK_WIDGET(aw->name_entry));
   LEAVE(" ");
@@ -1499,10 +1494,7 @@ close_handler (gpointer user_data)
   AccountWindow *aw = user_data;
 
   ENTER("aw %p, modal %d", aw, aw->modal);
-  gdk_window_get_geometry (GTK_WIDGET(aw->dialog)->window, NULL, NULL,
-                           &last_width, &last_height, NULL);
-
-  gnc_save_window_size ("account_win", last_width, last_height);
+  gnc_save_window_size (GCONF_SECTION, GTK_WINDOW(aw->dialog));
 
   gtk_widget_destroy (GTK_WIDGET (aw->dialog));
   LEAVE(" ");

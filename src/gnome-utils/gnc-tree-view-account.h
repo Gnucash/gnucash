@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-tree-view-account.h -- GtkTreeView implementation to display *
  *                            accounts in a GtkTreeView.            *
- * Copyright (C) 2003 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -367,8 +367,35 @@ void          gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view
 
 /** @} */
 
+
+
+
+/** @name Account Tree View Save/Restore Functions */
+/** @{ */
+
+/** This function saves the settings of a account tree.  This saves
+ *  column order, sort order, etc.
+ *
+ *  @param view A pointer to an account tree view.
+ *
+ *  @param section The name of a gconf section where the tree
+ *  information should be saved. */
+void gnc_tree_view_account_save_settings (GncTreeViewAccount *view,
+					  const gchar *section);
+
+/** This function restores the settings of a account tree.  This saves
+ *  column order, sort order, etc.
+ *
+ *  @param view A pointer to an account tree view.
+ *
+ *  @param section The name of a gconf section where the tree
+ *  information should be restores from. */
+void gnc_tree_view_account_restore_settings (GncTreeViewAccount *view,
+					     const gchar *section);
 /** @} */
 
 G_END_DECLS
 
 #endif /* __GNC_TREE_VIEW_ACCOUNT_H */
+
+/** @} */

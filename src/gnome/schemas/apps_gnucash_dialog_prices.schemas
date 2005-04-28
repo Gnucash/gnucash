@@ -2,8 +2,8 @@
 <gconfschemafile>
   <schemalist>
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/column_order</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/column_order</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_prices/column_order</key>
+      <applyto>/apps/gnucash/dialogs/edit_prices/column_order</applyto>
       <owner>gnucash</owner>
       <type>list</type>
       <list_type>string</list_type>
@@ -18,8 +18,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/commodity_visible</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/commodity_visible</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_prices/commodity_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_prices/commodity_visible</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>TRUE</default>
@@ -29,8 +29,8 @@
       </locale>
     </schema>
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/currency_visible</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/currency_visible</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_prices/currency_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_prices/currency_visible</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>TRUE</default>
@@ -40,8 +40,8 @@
       </locale>
     </schema>
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/date_visible</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/date_visible</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_prices/date_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_prices/date_visible</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>TRUE</default>
@@ -51,8 +51,8 @@
       </locale>
     </schema>
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/source_visible</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/source_visible</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_prices/source_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_prices/source_visible</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>TRUE</default>
@@ -62,8 +62,8 @@
       </locale>
     </schema>
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/type_visible</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/type_visible</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_prices/type_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_prices/type_visible</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>TRUE</default>
@@ -73,8 +73,8 @@
       </locale>
     </schema>
     <schema>
-      <key>/schemas/apps/gnucash/dialogs/prices_dialog/price_visible</key>
-      <applyto>/apps/gnucash/dialogs/prices_dialog/price_visible</applyto>
+      <key>/schemas/apps/gnucash/dialogs/edit_prices/price_visible</key>
+      <applyto>/apps/gnucash/dialogs/edit_prices/price_visible</applyto>
       <owner>gnucash</owner>
       <type>bool</type>
       <default>TRUE</default>

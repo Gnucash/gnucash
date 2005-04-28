@@ -2,6 +2,7 @@
  * dialog-commodities.c -- commodities dialog                       *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Author: Dave Peticolas <dave@krondo.com>                         *
+ * Copyright (C) 2003,2005 David Hampton                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -57,9 +58,6 @@ typedef struct
   gboolean new;
 } CommoditiesDialog;
 
-
-static gint last_width = 0;
-static gint last_height = 0;
 
 void gnc_commodities_window_destroy_cb (GtkObject *object, CommoditiesDialog *cd);
 void gnc_commodities_dialog_response (GtkDialog *dialog, gint response, CommoditiesDialog *cd);
@@ -310,12 +308,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     button = glade_xml_get_widget (xml, "show_currencies_button");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), cd->show_currencies);
 
-  if (last_width == 0)
-    gnc_get_window_size ("commodities_win", &last_width, &last_height);
-
-  if (last_width != 0)
-    gtk_window_resize (GTK_WINDOW(cd->dialog), last_width, last_height);
-
+  gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(cd->dialog));
   gnc_tree_view_commodity_restore_settings (cd->commodity_tree,
 					    GCONF_SECTION);
 }
@@ -325,8 +318,7 @@ close_handler (gpointer user_data)
 {
   CommoditiesDialog *cd = user_data;
 
-  gtk_window_get_size(GTK_WINDOW(cd->dialog), &last_width, &last_height);
-  gnc_save_window_size("commodities_win", last_width, last_height);
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(cd->dialog));
 
   gnc_gconf_set_bool(GCONF_SECTION, "include_iso", cd->show_currencies, NULL);
   gnc_tree_view_commodity_save_settings (cd->commodity_tree, GCONF_SECTION);

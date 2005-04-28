@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/business/coordinates</key>
+      <applyto>/apps/gnucash/dialogs/business/bill/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/customer_search/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/employee_search/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/invoice/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/invoice_search/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/job_search/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/order_search/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/vendor_search/window_coordinates</applyto>
+      <applyto>/apps/gnucash/dialogs/business/voucher/window_coordinates</applyto>
+      <owner>gnucash</owner>
+      <type>list</type>
+      <list_type>int</list_type>
+      <locale name="C">
+        <short>Window position and size</short>
+        <long>
+	  This key contains the coordinates describing the last
+	  location of the window.  The numbers are the X and Y
+	  coordinates of the top left corner of the window, and the
+	  width and height of the window.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/search_for_active_only</key>
+      <applyto>/apps/gnucash/dialogs/business/customer_search/search_for_active_only</applyto>
+      <applyto>/apps/gnucash/dialogs/business/employee_search/search_for_active_only</applyto>
+      <applyto>/apps/gnucash/dialogs/business/invoice_search/search_for_active_only</applyto>
+      <applyto>/apps/gnucash/dialogs/business/job_search/search_for_active_only</applyto>
+      <applyto>/apps/gnucash/dialogs/business/order_search/search_for_active_only</applyto>
+      <applyto>/apps/gnucash/dialogs/business/vendor_search/search_for_active_only</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <locale name="C">
+        <short>Search only in active items</short>
+        <long>
+	  This key indicates whether to search in all items in the
+	  current class, or only in 'active' items in the current
+	  class.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

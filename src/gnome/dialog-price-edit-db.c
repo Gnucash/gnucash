@@ -2,6 +2,7 @@
  * dialog-price-editor.c -- price selector dialog                   *
  * Copyright (C) 2001 Gnumatic, Inc.                                *
  * Author: Dave Peticolas <dave@krondo.com>                         *
+ * Copyright (C) 2003,2005 David Hampton                            *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -40,13 +41,13 @@
 #include "gnc-tree-view-price.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
-#include "gnc-gconf-utils.h"
 #include "guile-util.h"
 #include "engine-helpers.h"
 #include "messages.h"
 
 
 #define DIALOG_PRICE_DB_CM_CLASS "dialog-price-edit-db"
+#define GCONF_SECTION "dialogs/edit_prices"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
@@ -73,12 +74,7 @@ typedef struct
 
   GNCPriceDB *price_db;
   GNCPrice  * price;		/* Currently selected price */
-
-  gchar *gconf_section;
 } PricesDialog;
-
-static gint last_width = 0;
-static gint last_height = 0;
 
 
 void
@@ -95,7 +91,6 @@ gnc_prices_dialog_window_destroy_cb (GtkObject *object, gpointer data)
     pdb_dialog->price = NULL;
   }
 
-  g_free (pdb_dialog->gconf_section);
   g_free (pdb_dialog);
   LEAVE(" ");
 }
@@ -332,7 +327,6 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
   dialog = glade_xml_get_widget (xml, "Prices Dialog");
   pdb_dialog->dialog = dialog;
-  pdb_dialog->gconf_section = gnc_gconf_section_name ("dialogs/prices_dialog");
   pdb_dialog->price_db = gnc_pricedb_get_db(gnc_get_current_book());
 
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func, pdb_dialog);
@@ -374,17 +368,8 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     pdb_dialog->remove_old_button = button;
   }
 
-  if (last_width == 0)
-    gnc_get_window_size ("prices_win", &last_width, &last_height);
-
-  if (last_height == 0)
-    last_height = 400;
-
-  if (last_width != 0)
-    gtk_window_resize (GTK_WINDOW(pdb_dialog->dialog), last_width, last_height);
-
-  gnc_tree_view_price_restore_settings (pdb_dialog->price_tree,
-					pdb_dialog->gconf_section);
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pdb_dialog->dialog));
+  gnc_tree_view_price_restore_settings(pdb_dialog->price_tree, GCONF_SECTION);
   LEAVE(" ");
 }
 
@@ -394,13 +379,8 @@ close_handler (gpointer user_data)
   PricesDialog *pdb_dialog = user_data;
 
   ENTER(" ");
-  gdk_window_get_geometry (GTK_WIDGET(pdb_dialog->dialog)->window,
-                           NULL, NULL, &last_width, &last_height, NULL);
-
-  gnc_save_window_size ("prices_win", last_width, last_height);
-
-  gnc_tree_view_price_save_settings (pdb_dialog->price_tree,
-				     pdb_dialog->gconf_section);
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(pdb_dialog->dialog));
+  gnc_tree_view_price_save_settings(pdb_dialog->price_tree, GCONF_SECTION);
 
   gtk_widget_destroy (GTK_WIDGET (pdb_dialog->dialog));
   LEAVE(" ");

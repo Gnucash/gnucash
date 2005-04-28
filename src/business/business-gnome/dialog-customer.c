@@ -52,6 +52,8 @@
 #define DIALOG_NEW_CUSTOMER_CM_CLASS "dialog-new-customer"
 #define DIALOG_EDIT_CUSTOMER_CM_CLASS "dialog-edit-customer"
 
+#define GCONF_SECTION_SEARCH "dialogs/business/customer_search"
+
 void gnc_customer_taxtable_check_cb (GtkToggleButton *togglebutton,
 				     gpointer user_data);
 
@@ -826,7 +828,8 @@ gnc_customer_search (GncCustomer *start, GNCBook *book)
 
   return gnc_search_dialog_create (type, params, columns,
 				   q, q2, buttons, NULL,
-				   new_customer_cb, sw, free_userdata_cb);
+				   new_customer_cb, sw, free_userdata_cb,
+				   GCONF_SECTION_SEARCH);
 }
 
 GNCSearchWindow *

@@ -40,6 +40,8 @@
 #include "messages.h"
 #include "search-param.h"
 
+#define GCONF_SECTION "dialogs/find"
+
 struct _ftd_data {
   QueryNew *		q;
   QueryNew *		ledger_q;
@@ -168,7 +170,7 @@ gnc_ui_find_transactions_dialog_create(GNCLedgerDisplay * orig_ledg)
 
   ftd->sw = gnc_search_dialog_create (type, params, NULL, start_q, show_q,
 				      NULL, do_find_cb, NULL,
-				      ftd, free_ftd_cb);
+				      ftd, free_ftd_cb, GCONF_SECTION);
 
   if (!ftd->sw) {
     free_ftd_cb (ftd);

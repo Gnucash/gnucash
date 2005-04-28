@@ -63,6 +63,7 @@
 
 static short module = MOD_SX;
 
+#define SX_LIST_GCONF_SECTION "dialogs/scheduled_trans/transaction_list"
 #define SX_LIST_WIN_PREFIX "sx_list_win"
 #define SX_LIST_GLADE_NAME "Scheduled Transaction List"
 #define SX_LIST "sched_xact_list"
@@ -70,6 +71,7 @@ static short module = MOD_SX;
 #define SX_EDITOR_GLADE_NAME "Scheduled Transaction Editor"
 #define SX_OPT_STR "Scheduled Transactions"
 
+#define SXED_GCONF_SECTION "dialogs/scheduled_trans/transaction_editor"
 #define SXED_WIN_PREFIX "sx_editor_win"
 #define SXED_NAME_ENTRY "sxe_name"
 #define SXED_LAST_OCCUR_LABEL "last_occur_label"
@@ -1249,15 +1251,7 @@ gnc_ui_scheduled_xaction_dialog_create(void)
         gnc_sxd_set_sort_compare( GTK_CLIST(w), sxd->currentSortCol );
         gtk_clist_set_auto_sort( GTK_CLIST(w), TRUE );
 
-        {
-                int width, height;
-
-                gnc_get_window_size( SX_LIST_WIN_PREFIX, &width, &height );
-                if ( width != 0 && height != 0 ) {
-                        gtk_window_set_default_size( GTK_WINDOW(sxd->dialog),
-                                                     width, height );
-                }
-        }
+	gnc_restore_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(sxd->dialog));
 
         gnc_register_gui_component( DIALOG_SCHEDXACTION_CM_CLASS,
                                     NULL, /* no refresh_handler */
@@ -1275,10 +1269,7 @@ static
 void
 gnc_sxl_record_size( SchedXactionDialog *sxd )
 {
-        gint x, y, w, h, d;
-        gdk_window_get_geometry( sxd->dialog->window,
-                                 &x, &y, &w, &h, &d );
-        gnc_save_window_size( SX_LIST_WIN_PREFIX, w, h );
+	gnc_save_window_size(SX_LIST_GCONF_SECTION, GTK_WINDOW(sxd->dialog));
 }
 
 void
@@ -1505,14 +1496,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create( SchedXactionDialog *sxd,
 	/* Allow grow, allow shrink, auto-shrink */
         gtk_window_set_policy (GTK_WINDOW(sxed->dialog), TRUE, TRUE, FALSE);
 
-        {
-                int width, height;
-                gnc_get_window_size( SXED_WIN_PREFIX, &width, &height );
-                if ( width != 0 && height != 0 ) {
-                        gtk_window_set_default_size( GTK_WINDOW( sxed->dialog ),
-                                                     width, height );
-                }
-        }
+	gnc_restore_window_size(SXED_GCONF_SECTION, GTK_WINDOW(sxed->dialog));
 
         /* create the frequency-selection macrowidget and example
          * [dense-]calendar. */
@@ -1536,10 +1520,7 @@ static
 void
 gnc_sxed_record_size( SchedXactionEditorDialog *sxed )
 {
-        gint x, y, w, h, d;
-        gdk_window_get_geometry( sxed->dialog->window,
-                                 &x, &y, &w, &h, &d );
-        gnc_save_window_size( SXED_WIN_PREFIX, w, h );
+	gnc_save_window_size( SXED_GCONF_SECTION, GTK_WINDOW(sxed->dialog) );
 }
 
 static

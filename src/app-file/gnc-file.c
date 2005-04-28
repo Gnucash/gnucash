@@ -41,11 +41,14 @@
 #include "gnc-splash.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofsession.h"
 #include "messages.h"
 #include "TransLog.h"
+
+#define GCONF_SECTION "dialogs/export_accounts"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -689,7 +692,7 @@ gnc_file_export_file(const char * newfile)
   QofBackendError io_err = ERR_BACKEND_NO_ERR;
   char *default_dir;
 
-  default_dir = gnc_lookup_string_option("__paths", "Export Accounts", NULL);
+  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
 
@@ -700,13 +703,14 @@ gnc_file_export_file(const char * newfile)
     }
 
     newfile =  file_dialog_func (_("Export"), NULL, default_dir);
+    g_free(default_dir);
     if (!newfile)
       return;
   }
 
   /* Remember the directory as the default. */
   gnc_extract_directory(&default_dir, newfile);
-  gnc_set_string_option("__paths", "Export Accounts", default_dir);
+  gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
   g_free(default_dir);
   
   gnc_engine_suspend_events();

@@ -37,6 +37,7 @@
 
 
 #define DIALOG_TAX_INFO_CM_CLASS "dialog-tax-info"
+#define GCONF_SECTION "dialogs/tax_info"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -84,8 +85,6 @@ typedef struct
 
 
 static gboolean getters_initialized = FALSE;
-static gint last_width = 0;
-static gint last_height = 0;
 
 
 static void
@@ -754,17 +753,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
   clear_gui (ti_dialog);
   gnc_tax_info_set_changed (ti_dialog, FALSE);
 
-  if (last_width == 0)
-    gnc_get_window_size ("tax_info_win", &last_width, &last_height);
-
-  if (last_height == 0)
-  {
-    last_height = 400;
-    last_width = 500;
-  }
-
-  gtk_window_set_default_size (GTK_WINDOW(ti_dialog->dialog),
-                               last_width, last_height);
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(ti_dialog->dialog));
 }
 
 static void
@@ -772,11 +761,7 @@ close_handler (gpointer user_data)
 {
   TaxInfoDialog *ti_dialog = user_data;
 
-  gdk_window_get_geometry (GTK_WIDGET(ti_dialog->dialog)->window,
-                           NULL, NULL, &last_width, &last_height, NULL);
-
-  gnc_save_window_size ("tax_info_win", last_width, last_height);
-
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(ti_dialog->dialog));
   gtk_widget_destroy (ti_dialog->dialog);
 }
 

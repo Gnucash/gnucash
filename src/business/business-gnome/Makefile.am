@@ -1,4 +1,4 @@
-SUBDIRS = . glade ui
+SUBDIRS = . glade schemas ui
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-business-gnome.la libgw-business-gnome.la

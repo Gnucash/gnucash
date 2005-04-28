@@ -50,6 +50,8 @@
 #define DIALOG_NEW_EMPLOYEE_CM_CLASS "dialog-new-employee"
 #define DIALOG_EDIT_EMPLOYEE_CM_CLASS "dialog-edit-employee"
 
+#define GCONF_SECTION_SEARCH "dialogs/business/employee_search"
+
 void gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_employee_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_employee_window_help_cb (GtkWidget *widget, gpointer data);
@@ -722,7 +724,8 @@ gnc_employee_search (GncEmployee *start, GNCBook *book)
 
   return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_employee_cb,
-				   sw, free_employee_cb);
+				   sw, free_employee_cb,
+				   GCONF_SECTION_SEARCH);
 }
 
 GNCSearchWindow *

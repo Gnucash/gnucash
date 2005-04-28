@@ -61,6 +61,7 @@ static short module = MOD_GUI;
 static GList *active_pages = NULL;
 
 #define PLUGIN_PAGE_ACCT_TREE_CM_CLASS "plugin-page-acct-tree"
+#define GCONF_SECTION "window/pages/account_tree"
 
 enum {
   ACCOUNT_SELECTED,
@@ -531,6 +532,8 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 				       gnc_get_current_session());
 
 	plugin_page->summarybar = gnc_main_window_summary_new();
+	gnc_tree_view_account_restore_settings(GNC_TREE_VIEW_ACCOUNT(tree_view),
+					       GCONF_SECTION);
 	gtk_widget_show(plugin_page->summarybar);
 
 	LEAVE("widget = %p", page->priv->widget);
@@ -544,6 +547,10 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
+
+	gnc_tree_view_account_save_settings(GNC_TREE_VIEW_ACCOUNT(page->priv->tree_view),
+					    GCONF_SECTION);
+
 	if (page->priv->widget) {
 	  g_object_unref(G_OBJECT(page->priv->widget));
 	  page->priv->widget = NULL;

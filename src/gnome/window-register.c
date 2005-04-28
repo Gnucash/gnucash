@@ -992,9 +992,6 @@ regWindowLedger( GNCLedgerDisplay *ledger )
         break;
     }
 
-    if (*width == 0)
-      gnc_get_window_size (prefix, width, NULL);
-
     gtk_window_set_default_size (GTK_WINDOW(regData->window), *width, 0);
   }
 
@@ -1290,8 +1287,6 @@ gnc_reg_save_size (RegWindow *regData)
 
   gdk_window_get_geometry (regData->window->window, NULL, NULL,
                            width, NULL, NULL);
-
-  gnc_save_window_size (prefix, *width, 0);
 }
 
 void 

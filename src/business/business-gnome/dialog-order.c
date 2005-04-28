@@ -50,6 +50,8 @@
 #define DIALOG_EDIT_ORDER_CM_CLASS "dialog-edit-order"
 #define DIALOG_VIEW_ORDER_CM_CLASS "dialog-view-order"
 
+#define GCONF_SECTION_SEARCH "dialogs/business/order_search"
+
 void gnc_order_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_order_window_help_cb (GtkWidget *widget, gpointer data);
@@ -913,7 +915,7 @@ gnc_order_search (GncOrder *start, GncOwner *owner, GNCBook *book)
 
   return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL, new_order_cb,
-				   sw, free_order_cb);
+				   sw, free_order_cb, GCONF_SECTION_SEARCH);
 }
 
 GNCSearchWindow *

@@ -47,6 +47,9 @@
 
 #include <gconf/gconf-client.h>
 
+/* Keys used across multiple modules */
+#define KEY_LAST_PATH "last_path"
+
 /** @name GConf Miscellaneous Functions */
 /** @{ */
 

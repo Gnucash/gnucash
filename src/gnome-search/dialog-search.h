@@ -92,7 +92,8 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  GNCSearchCallbackButton *callbacks,
 			  GNCSearchResultCB result_callback,
 			  GNCSearchNewItemCB new_item_cb,
-			  gpointer user_data, GNCSearchFree free_user_data);
+			  gpointer user_data, GNCSearchFree free_user_data,
+			  const gchar *gconf_section);
 
 void gnc_search_dialog_destroy (GNCSearchWindow *sw);
 void gnc_search_dialog_raise (GNCSearchWindow *sw);

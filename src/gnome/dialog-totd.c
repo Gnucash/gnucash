@@ -106,7 +106,7 @@ gnc_totd_dialog_close (GtkButton *button,
 
   ENTER("button %p, dialog %p", button, user_data);
   dialog = GTK_WIDGET(user_data);
-  /* Save size here */
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
   gtk_widget_destroy(dialog);
   LEAVE("");
 }
@@ -209,6 +209,6 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
   button = glade_xml_get_widget(xml, "show_checkbutton");
   gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (button), show_tips);
 
-  gtk_widget_set_size_request (GTK_WIDGET (dialog), -1, -1);
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
   gtk_widget_show(GTK_WIDGET (dialog));
 }

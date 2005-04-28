@@ -97,6 +97,7 @@
 #define DIALOG_SXSINCELAST_GLADE_NAME "Since Last Run Druid"
 #define SXSLD_DRUID_GLADE_NAME "sincelast_druid"
 #define SXSLD_WIN_PREFIX "sx_sincelast_win"
+#define GCONF_SECTION "dialogs/scheduled_trans/since_last_run"
 
 #define SINCELAST_DRUID   "sincelast_druid"
 #define WHAT_TO_DO_PG "what_to_do"
@@ -1650,14 +1651,7 @@ sxsincelast_init( sxSinceLastData *sxsld )
         create_created_ledger( sxsld );
         create_to_create_ledger( sxsld );
 
-        {
-                int width, height;
-                gnc_get_window_size( SXSLD_WIN_PREFIX, &width, &height );
-                if ( width != 0 && height != 0 ) {
-                        gtk_window_set_default_size( GTK_WINDOW(sxsld->sincelast_window),
-                                                     width, height );
-                }
-        }
+	gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(sxsld->sincelast_window));
 
 	/* Do not call show_all here. Screws up the gtkuimanager code */
         gtk_widget_show( sxsld->sincelast_window );
@@ -1680,10 +1674,7 @@ static
 void
 sxsincelast_save_size( sxSinceLastData *sxsld )
 {
-        gint x, y, w, h, d;
-        gdk_window_get_geometry( sxsld->sincelast_window->window,
-                                 &x, &y, &w, &h, &d );
-        gnc_save_window_size( SXSLD_WIN_PREFIX, w, h );
+  gnc_save_window_size( GCONF_SECTION, GTK_WINDOW(sxsld->sincelast_window) );
 }
 
 static void

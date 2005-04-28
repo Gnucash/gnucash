@@ -33,6 +33,7 @@
 #include "gnc-gui-query.h"
 #include "global-options.h"
 #include "gnc-query-list.h"
+#include "gnc-gconf-utils.h"
 #include "gncObject.h"
 #include "QueryNew.h"
 #include "QueryObject.h"
@@ -45,6 +46,7 @@
 #include "search-param.h"
 
 #define DIALOG_SEARCH_CM_CLASS "dialog-search"
+#define KEY_ACTIVE_ONLY "search_for_active_only"
 
 typedef enum {
   GNC_SEARCH_MATCH_ALL = 0,
@@ -104,6 +106,7 @@ struct _GNCSearchWindow {
   GList *	crit_list;	/* list of crit_data */
 
   gint		component_id;
+  const gchar * gconf_section;
 };
 
 struct _crit_data {
@@ -320,8 +323,9 @@ search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 static void
 search_active_only_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 {
-  gnc_set_boolean_option("__gui", "search_for_active_only",
-			 gtk_toggle_button_get_active (button));
+
+  gnc_gconf_set_bool(sw->gconf_section, KEY_ACTIVE_ONLY,
+		     gtk_toggle_button_get_active (button), NULL);
 }
 
 static void
@@ -747,6 +751,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   GtkWidget *menu, *item, *omenu;
   GtkWidget *new_item_button;
   const char * type_label;
+  gboolean active;
 
   xml = gnc_glade_xml_new ("search.glade", "Search Dialog");
 
@@ -800,11 +805,10 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw)
   sw->add_rb = glade_xml_get_widget (xml, "add_search_radiobutton");
   sw->del_rb = glade_xml_get_widget (xml, "delete_search_radiobutton");
 
+  active = gnc_gconf_get_bool(sw->gconf_section, KEY_ACTIVE_ONLY, NULL);
   sw->active_only_check = glade_xml_get_widget (xml, "active_only_check");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sw->active_only_check),
-				gnc_lookup_boolean_option ("__gui",
-							   "search_for_active_only",
-							   TRUE));
+				active);
 
   /* Figure out if we this object-type has an "active" parameter, and
    * if not, then set the active-check button insensitive
@@ -876,6 +880,8 @@ void
 gnc_search_dialog_destroy (GNCSearchWindow *sw)
 {
   if (!sw) return;
+  if (sw->gconf_section)
+    gnc_save_window_size(sw->gconf_section, GTK_WINDOW(sw->dialog));
   gnc_close_gui_component (sw->component_id);
 }
 
@@ -893,7 +899,8 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
 			  GNCSearchCallbackButton *callbacks,
 			  GNCSearchResultCB result_callback,
 			  GNCSearchNewItemCB new_item_cb,
-			  gpointer user_data, GNCSearchFree free_cb)
+			  gpointer user_data, GNCSearchFree free_cb,
+			  const gchar *gconf_section)
 {
   GNCSearchWindow *sw = g_new0 (GNCSearchWindow, 1);
 
@@ -916,6 +923,7 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   sw->new_item_cb = new_item_cb;
   sw->user_data = user_data;
   sw->free_cb = free_cb;
+  sw->gconf_section = gconf_section;
 
   /* Grab the get_guid function */
   sw->get_guid = qof_class_get_parameter (sw->search_for, QOF_PARAM_GUID);
@@ -924,6 +932,8 @@ gnc_search_dialog_create (GNCIdTypeConst obj_type, GList *param_list,
   sw->q = show_start_query;
 
   gnc_search_dialog_init_widgets (sw);
+  if (sw->gconf_section)
+    gnc_restore_window_size(sw->gconf_section, GTK_WINDOW(sw->dialog));
 
   /* Maybe display the original query results? */
   if (callbacks && show_start_query) {
@@ -1056,5 +1066,6 @@ gnc_search_dialog_test (void)
     display = get_display_list (GNC_ID_SPLIT);
 
   sw = gnc_search_dialog_create (GNC_ID_SPLIT, params, display,
-				 NULL, NULL, buttons, NULL, NULL, NULL, NULL);
+				 NULL, NULL, buttons, NULL, NULL, NULL, NULL,
+				 NULL);
 }

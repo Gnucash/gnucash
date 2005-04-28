@@ -50,6 +50,8 @@
 #define DIALOG_NEW_VENDOR_CM_CLASS "dialog-new-vendor"
 #define DIALOG_EDIT_VENDOR_CM_CLASS "dialog-edit-vendor"
 
+#define GCONF_SECTION_SEARCH "dialogs/business/vendor_search"
+
 void gnc_vendor_taxtable_check_cb (GtkToggleButton *togglebutton, gpointer user_data);
 void gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data);
 void gnc_vendor_window_cancel_cb (GtkWidget *widget, gpointer data);
@@ -688,7 +690,8 @@ gnc_vendor_search (GncVendor *start, GNCBook *book)
 
   return gnc_search_dialog_create (type, params, columns, q, q2,
 				   buttons, NULL,
-				   new_vendor_cb, sw, free_vendor_cb);
+				   new_vendor_cb, sw, free_vendor_cb,
+				   GCONF_SECTION_SEARCH);
 }
 
 GNCSearchWindow *

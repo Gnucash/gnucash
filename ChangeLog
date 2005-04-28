@@ -1,5 +1,19 @@
 2005-04-28  David Hampton  <hampton@employees.org>
 
+	* lots-o-files: Migrate most hidden preferences over to gconf.
+	Remember geometry of more dialogs and restore it when the dialog
+	is next used.
+
+	* src/business/business-gnome/dialog-billterms.c:
+	* src/business/business-gnome/dialog-invoice.c:
+	* src/core-utils/gnc-gconf-utils.h:
+	* src/gnome/gnc-split-reg.c:
+	* src/gnome/window-main.c:
+	* src/gnome/window-reconcile.c:
+	* src/gnome/window-register.c:
+	* src/gnome-utils/gnc-mdi-utils.c: Collapse knowledge of desktop
+	gconf keys into a single file.
+
 	* src/gnome/gnc-totd-dialog.[ch]:
 	* src/gnome/tip-of-the-day.[ch]:
 	* src/scm/tip-list.scm:

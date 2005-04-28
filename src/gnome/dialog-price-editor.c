@@ -44,6 +44,7 @@
 
 
 #define DIALOG_PRICE_EDIT_CM_CLASS "dialog-price-edit"
+#define GCONF_SECTION "dialogs/price_editor"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 /* static short module = MOD_GUI; */
@@ -437,11 +438,7 @@ close_handler (gpointer user_data)
 {
   PriceEditDialog *pedit_dialog = user_data;
 
-  //  gdk_window_get_geometry (GTK_WIDGET(pedit_dialog->dialog)->window,
-  //                           NULL, NULL, &last_width, &last_height, NULL);
-
-  //  gnc_save_window_size ("prices_win", last_width, last_height);
-
+  gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
   gtk_widget_destroy (GTK_WIDGET (pedit_dialog->dialog));
 }
 
@@ -487,6 +484,7 @@ gnc_price_edit_dialog (GtkWidget * parent, GNCPrice * price, GNCPriceEditType ty
 
   pedit_dialog = g_new0 (PriceEditDialog, 1);
   gnc_price_pedit_dialog_create (parent, pedit_dialog);
+  gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pedit_dialog->dialog));
 
   switch (type) {
    case GNC_PRICE_NEW:

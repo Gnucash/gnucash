@@ -2,6 +2,7 @@
  * dialog-utils.h -- utility functions for creating dialogs         *
  *                   for GnuCash                                    *
  * Copyright (C) 1999-2000 Linas Vepstas                            *
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -66,7 +67,7 @@ void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
  *       height - pointer to height                                 *
  * Returns: nothing                                                 *
  \*******************************************************************/
-void gnc_get_window_size (const char *prefix, int *width, int *height);
+void gnc_restore_window_size (const char *prefix, GtkWindow *window);
 
 /********************************************************************\
  * Save the window size into options whose names are determined     *
@@ -77,7 +78,7 @@ void gnc_get_window_size (const char *prefix, int *width, int *height);
  *       height - height of the window to save                      *
  * Returns: nothing                                                 *
 \********************************************************************/
-void gnc_save_window_size (const char *prefix, int width, int height);
+void gnc_save_window_size (const char *section, GtkWindow *window);
 
 
 /********************************************************************\

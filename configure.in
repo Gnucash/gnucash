@@ -1244,6 +1244,7 @@ AC_OUTPUT( po/Makefile.in
           src/import-export/log-replay/Makefile
           src/import-export/hbci/Makefile
           src/import-export/hbci/glade/Makefile
+          src/import-export/hbci/schemas/Makefile
           src/import-export/hbci/test/Makefile
           src/network-utils/Makefile
           src/network-utils/test/Makefile
@@ -1288,6 +1289,7 @@ AC_OUTPUT( po/Makefile.in
           src/business/dialog-tax-table/Makefile
           src/business/business-gnome/Makefile
           src/business/business-gnome/glade/Makefile
+          src/business/business-gnome/schemas/Makefile
           src/business/business-gnome/ui/Makefile
           src/business/business-ledger/Makefile
           src/business/business-reports/Makefile

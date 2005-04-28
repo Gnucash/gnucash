@@ -93,8 +93,12 @@ Resources
 
   - Window size/position not being saved or used.
 
+    - Dialog window positions are now saved.  Saving position of the
+      main window is in progress.  Please annotate this file with any
+      windows whose positions are not saved but you think they should be.
+
     - Gnome MDI support used to handle this for us, but now we will need to
-      manage it ourselves. :/
+      manage it ourselves. :/  (On my list - DRH)
 
   - Weird pango_layout_set_text "string not UTF-8" issues reported by Neil Williams:
     
@@ -104,7 +108,7 @@ Resources
 
 - Main Window
 
-  - [low-priority] New registers should open in new top-level windows.
+  - [low-priority] New registers should open in new top-level windows. (On my list - DRH)
 
 - Register Core - mostly functional
 
@@ -141,12 +145,6 @@ Resources
         #10 0x40313310 in g_closure_invoke () from /usr/lib/libgobject-2.0.so.0
         #11 0x40327076 in g_signal_emit_by_name () from /usr/lib/libgobject-2.0.so.0
         #12 0x40326047 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
-
-- Transfer
-
-  - Top 5 fields and don't expand width-wise.
-
-  - Bottom 2 fields [Currency Transfer] don't expand width-wise.
 
 - View Lots
 

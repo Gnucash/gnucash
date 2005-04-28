@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-tree-view-account.c -- GtkTreeView implementation to display *
  *                            accounts in a GtkTreeView.            *
- * Copyright (C) 2003 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -59,7 +59,7 @@ struct GncTreeViewAccountPrivate
 };
 
 /* Defined at the end of the file */
-static gnc_view_column gnc_tree_view_account_defaults[];
+static gnc_view_column view_column_defaults[];
 
 
 /************************************************************/
@@ -404,7 +404,7 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   gnc_tree_view_account_init_view_info(&account_view->priv->avi);
 
   gnc_tree_view_common_create_columns (tree_view, "Accounts", GNC_STOCK_ACCOUNT,
-				       gnc_tree_view_account_defaults);
+				       view_column_defaults);
 
   gtk_widget_show(GTK_WIDGET(tree_view));
   LEAVE("%p", tree_view);
@@ -579,7 +579,7 @@ gnc_tree_view_account_pref_name_to_field (const char *pref_name)
   g_return_val_if_fail ((pref_name != NULL), GNC_TREE_MODEL_ACCOUNT_COL_NAME);
 
   for (i = 0; i <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE; i++)
-    if (safe_strcmp(gnc_tree_view_account_defaults[i].pref_name, pref_name) == 0)
+    if (safe_strcmp(view_column_defaults[i].pref_name, pref_name) == 0)
       return i;
   return(GNC_TREE_MODEL_ACCOUNT_COL_NAME);
 }
@@ -589,7 +589,7 @@ gnc_tree_view_account_get_field_name (AccountFieldCode field)
 {
   g_return_val_if_fail ((field >= 0) && (field <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE), NULL);
 
-  return(gettext(gnc_tree_view_account_defaults[field].field_name));
+  return(gettext(view_column_defaults[field].field_name));
 }
 
 
@@ -1197,10 +1197,29 @@ gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
 
 
 /************************************************************/
+/*          Account Tree View Get/Save Settings             */
+/************************************************************/
+
+void
+gnc_tree_view_account_save_settings (GncTreeViewAccount *view, const gchar *section)
+{
+  gnc_tree_view_common_save_settings (GTK_TREE_VIEW(view), section,
+				      view_column_defaults);
+}
+
+void
+gnc_tree_view_account_restore_settings (GncTreeViewAccount *view, const gchar *section)
+{
+  gnc_tree_view_common_restore_settings (GTK_TREE_VIEW(view), section,
+					 view_column_defaults);
+}
+
+
+/************************************************************/
 /*                    Column Definitions                    */
 /************************************************************/
 
-static gnc_view_column gnc_tree_view_account_defaults[] = {
+static gnc_view_column view_column_defaults[] = {
   {GNC_TREE_MODEL_ACCOUNT_COL_NAME,
    GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
    GNC_TREE_VIEW_COLUMN_COLOR_NONE,

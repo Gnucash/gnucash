@@ -2,6 +2,7 @@
  * dialog-utils.c -- utility functions for creating dialogs         *
  *                   for GnuCash                                    *
  * Copyright (C) 1999-2000 Linas Vepstas                            *
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>         *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -40,10 +41,13 @@
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_GUI;
 
+#define WINDOW_POSITION		"window_position"
+#define WINDOW_GEOMETRY		"window_geometry"
 
 /* =========================================================== */
 
@@ -248,7 +252,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
 
 
 /********************************************************************\
- * gnc_get_window_size                                              *
+ * gnc_restore_window_size                                          *
  *   returns the window size to use for the given option prefix,    *
  *   if window sizes are being saved, otherwise returns 0 for both. *
  *                                                                  *
@@ -258,32 +262,35 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
  * Returns: nothing                                                 *
  \*******************************************************************/
 void
-gnc_get_window_size(const char *prefix, int *width, int *height)
+gnc_restore_window_size(const char *section, GtkWindow *window)
 {
-  int w, h;
-  char *name;
+  GSList *coord_list;
+  gint coords[2];
 
-  if (gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", TRUE))
-  {
-    name = g_strconcat(prefix, "_width", NULL);
-    w = gnc_lookup_number_option("__gui", name, 0.0);
-    g_free(name);
+  g_return_if_fail(section != NULL);
+  g_return_if_fail(window != NULL);
 
-    name = g_strconcat(prefix, "_height", NULL);
-    h = gnc_lookup_number_option("__gui", name, 0.0);
-    g_free(name);
+  if (!gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE))
+    return;
+  
+  coord_list = gnc_gconf_get_list(section, WINDOW_POSITION,
+				  GCONF_VALUE_INT, NULL);
+  if (coord_list) {
+    coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
+    coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
+    gtk_window_move(window, coords[0], coords[1]);
+    g_slist_free(coord_list);
   }
-  else
-  {
-    w = 0;
-    h = 0;
+
+  coord_list = gnc_gconf_get_list(section, WINDOW_GEOMETRY,
+				  GCONF_VALUE_INT, NULL);
+  if (coord_list) {
+    coords[0] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 0));
+    coords[1] = GPOINTER_TO_INT(g_slist_nth_data(coord_list, 1));
+    if ((coords[0] != 0) && (coords[1] != 0))
+      gtk_window_resize(window, coords[0], coords[1]);
+    g_slist_free(coord_list);
   }
-
-  if (width != NULL)
-    *width = w;
-
-  if (height != NULL)
-    *height = h;
 }
 
 
@@ -298,26 +305,31 @@ gnc_get_window_size(const char *prefix, int *width, int *height)
  * Returns: nothing                                                 *
 \********************************************************************/
 void
-gnc_save_window_size(const char *prefix, int width, int height)
+gnc_save_window_size(const char *section, GtkWindow *window)
 {
-  char *name;
-  gboolean save;
+  GSList *coord_list = NULL;
+  gint coords[2];
 
-  save = gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE);
+  g_return_if_fail(section != NULL);
+  g_return_if_fail(window != NULL);
 
-  name = g_strconcat(prefix, "_width", NULL);
-  if (save)
-    gnc_set_number_option("__gui", name, width);
-  else
-    gnc_set_option_default("__gui", name);
-  g_free(name);
+  if (!gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE))
+    return;
 
-  name = g_strconcat(prefix, "_height", NULL);
-  if (save)
-    gnc_set_number_option("__gui", name, height);
-  else
-    gnc_set_option_default("__gui", name);
-  g_free(name);
+  gtk_window_get_size(GTK_WINDOW(window), &coords[0], &coords[1]);
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[0]));
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[1]));
+  gnc_gconf_set_list(section, WINDOW_GEOMETRY, GCONF_VALUE_INT,
+		     coord_list, NULL);
+  g_slist_free(coord_list);
+  coord_list = NULL;
+
+  gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[0]));
+  coord_list = g_slist_append(coord_list, GUINT_TO_POINTER(coords[1]));
+  gnc_gconf_set_list(section, WINDOW_POSITION, GCONF_VALUE_INT,
+		     coord_list, NULL);
+  g_slist_free(coord_list);
 }
 
 
