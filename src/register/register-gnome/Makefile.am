@@ -5,6 +5,7 @@ pkglib_LTLIBRARIES = libgncmod-register-gnome.la
 libgncmod_register_gnome_la_LDFLAGS = -module 
 libgncmod_register_gnome_la_LIBADD = \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/engine/libgncmod-engine.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
@@ -52,6 +53,7 @@ EXTRA_DIST = \
 
 AM_CFLAGS = \
   -I${top_srcdir}/src \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \

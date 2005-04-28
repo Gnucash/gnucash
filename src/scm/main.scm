@@ -623,8 +623,7 @@ string and 'directories' must be a list of strings."
           (if (and
                (not (gnc:account-file-to-load))
                (not (string? (gnc:history-get-last)))
-               (gnc:option-value
-                (gnc:lookup-global-option "__new_user" "first_startup")))
+	       (gnc:gconf-get-bool "dialogs/new_user" "first_startup"))
               (begin
                 (gnc:destroy-splash-screen)
                 (gnc:new-user-dialog))

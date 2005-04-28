@@ -45,6 +45,7 @@
 #include "gnc-file-dialog.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui.h"
 #include "messages.h"
 #include "guile-mappings.h"
@@ -52,6 +53,7 @@
 #include <g-wrap-wct.h>
 
 #define DRUID_QIF_IMPORT_CM_CLASS "druid-qif-import"
+#define GCONF_SECTION "dialogs/import/qif"
 
 struct _qifimportwindow {
   GtkWidget * window;
@@ -354,10 +356,11 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
   char *file_name, *default_dir;
 
   /* Default to whatever's already present */
-  default_dir = gnc_lookup_string_option("__paths", "Import QIF", NULL);
+  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
   new_file_name = gnc_file_dialog (_("Select QIF File"), "*.qif", default_dir);
+  g_free(default_dir);
 
   /* Insure valid data, and something that can be freed. */
   if (new_file_name == NULL) {
@@ -374,7 +377,7 @@ gnc_ui_qif_import_select_file_cb(GtkButton * button,
 
   /* Update the working directory */
   gnc_extract_directory(&default_dir, file_name);
-  gnc_set_string_option("__paths", "Import QIF", default_dir);
+  gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
   g_free(default_dir);
   g_free(file_name);
 

@@ -47,10 +47,12 @@
 #include "gnc-engine-util.h"
 #include "gnc-file-dialog.h"
 #include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-hbci-utils.h"
 
 #include "gnc-mt940-import.h"
 
+#define GCONF_SECTION "dialogs/import/mt940"
 
 static short module = MOD_IMPORT;
 
@@ -72,18 +74,19 @@ void gnc_file_mt940_import (void)
   /* gnc_should_log(MOD_IMPORT, GNC_LOG_TRACE); */
   DEBUG("gnc_file_mt940_import(): Begin...\n");
 
-  default_dir = gnc_lookup_string_option("__paths", "Import MT940", NULL);
+  default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
     gnc_init_default_directory(&default_dir);
   selected_filename = gnc_file_dialog(_("Select an MT940 file to process"),
 				      NULL,
 				      default_dir);
+  g_free(default_dir);
 
   if(selected_filename!=NULL)
     {
       /* Remember the directory as the default. */
       gnc_extract_directory(&default_dir, selected_filename);
-      gnc_set_string_option("__paths", "Import MT940", default_dir);
+      gnc_gconf_set_string(GCONF_SECTION, KEY_LAST_PATH, default_dir, NULL);
       g_free(default_dir);
 
       /*strncpy(file,selected_filename, 255);*/

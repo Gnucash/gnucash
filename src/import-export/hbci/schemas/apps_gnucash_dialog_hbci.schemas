@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/import/hbci/close_on_finish</key>
+      <applyto>/apps/gnucash/dialogs/import/hbci/close_on_finish</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>True</default>
+      <locale name="C">
+        <short>Close dialog when finished</short>
+        <long>
+	  Set this key to TRUE to automatically close the window when
+	  you finish the HBCI import process.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

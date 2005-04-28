@@ -12,10 +12,6 @@
   "b" (N_ "Remember the PIN for HBCI in memory during a session")
   #f))
 
-(gnc:register-configuration-option
- (gnc:make-internal-option
-  "__gui" "hbci_close_on_finish" 1))
-
 ;(gnc:register-configuration-option
 ; (gnc:make-simple-boolean-option
 ;  (N_ "Online Banking & Importing") (N_ "HBCI Use generic import matcher")

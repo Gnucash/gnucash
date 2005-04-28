@@ -1,4 +1,4 @@
-SUBDIRS = . glade test
+SUBDIRS = . glade schemas test
 
 pkglib_LTLIBRARIES = libgncmod-hbci.la
 

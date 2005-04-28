@@ -183,7 +183,7 @@ typedef enum
 #define DEBT_CELL  "debit"
 #define DESC_CELL  "description"
 #define FCRED_CELL "credit-formula"
-#define FDEBT_CELL "debit formula"
+#define FDEBT_CELL "debit-formula"
 #define MEMO_CELL  "memo"
 #define MXFRM_CELL "transfer"
 #define NOTES_CELL "notes"

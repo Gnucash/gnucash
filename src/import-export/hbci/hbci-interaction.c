@@ -34,6 +34,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 #include "global-options.h"
+#include "gnc-gconf-utils.h"
 
 #include "dialog-pass.h"
 #include "gnc-hbci-utils.h"
@@ -44,6 +45,8 @@
 #include <iconv.h>
 
 #define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
+#define GCONF_SECTION "dialogs/import/hbci"
+#define KEY_CLOSE_ON_FINISH "close_on_finish"
 
 gchar *gnc__extractText(const char *text);
 
@@ -79,9 +82,10 @@ void GNCInteractor_delete(GNCInteractor *data)
   if (data == NULL)
     return;
   if (data->dialog != NULL) {
-    gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
-			    gtk_toggle_button_get_active 
-			    (GTK_TOGGLE_BUTTON (data->close_checkbutton)));
+    gnc_gconf_set_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH,
+		       gtk_toggle_button_get_active 
+		       (GTK_TOGGLE_BUTTON (data->close_checkbutton)),
+		       NULL);
     gtk_object_unref (GTK_OBJECT (data->dialog));
     gtk_widget_destroy (data->dialog);
   }
@@ -173,9 +177,10 @@ void GNCInteractor_hide(GNCInteractor *i)
   if (gtk_toggle_button_get_active 
       (GTK_TOGGLE_BUTTON (i->close_checkbutton)))
     gtk_widget_hide_all (i->dialog);
-  gnc_set_boolean_option ("__gui", "hbci_close_on_finish",
-			  gtk_toggle_button_get_active 
-			  (GTK_TOGGLE_BUTTON (i->close_checkbutton)));
+  gnc_gconf_set_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH,
+		     gtk_toggle_button_get_active 
+		     (GTK_TOGGLE_BUTTON (i->close_checkbutton)),
+		     NULL);
 }
 
 gboolean GNCInteractor_get_cache_valid(const GNCInteractor *i)
@@ -759,7 +764,7 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
   gtk_widget_set_sensitive (data->action_progress, FALSE);
   gtk_toggle_button_set_active 
     (GTK_TOGGLE_BUTTON (data->close_checkbutton), 
-     gnc_lookup_boolean_option("__gui", "hbci_close_on_finish", TRUE));
+     gnc_gconf_get_bool(GCONF_SECTION, KEY_CLOSE_ON_FINISH, NULL));
 
   gtk_signal_connect (GTK_OBJECT (data->abort_button), "clicked", 
 		      GTK_SIGNAL_FUNC (on_button_clicked), data);
