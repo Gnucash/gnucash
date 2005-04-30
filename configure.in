@@ -1093,16 +1093,14 @@ then
 
   # Enable error-on-warning by default -- I'm tired of fixing other
   # people's missing #includes, etc.
-# Re-disabled for the moment since goffice/graph has a lot of specific/manual #warnings-as-TODOs.
-# 2004.12.30 -- jsled
-#   AC_ARG_ENABLE(error-on-warning,
-#     [  --disable-error-on-warning    disable treating compile warnings as errors],
-#     [case "${enableval}" in
-#        yes) warnFLAGS="${warnFLAGS} -Werror" ;;
-#        no)  ;;
-#        *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
-#      esac],
-#        [  warnFLAGS="${warnFLAGS} -Werror" ])
+  AC_ARG_ENABLE(error-on-warning,
+    [  --disable-error-on-warning    disable treating compile warnings as errors],
+    [case "${enableval}" in
+       yes) warnFLAGS="${warnFLAGS} -Werror" ;;
+       no)  ;;
+       *) AC_MSG_ERROR(bad value ${enableval} for --enable-error-on-warning) ;;
+     esac],
+       [  warnFLAGS="${warnFLAGS} -Werror" ])
 
   # For gcc >= 3.4.x, specifically enable the new warning switch
   # -Wdeclaration-after-statement in order to preserve source code

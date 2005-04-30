@@ -6,3 +6,8 @@ INCLUDES = -I$(top_srcdir)/lib/goffice \
 
 GOFFICE_PLUGIN_FLAGS = 
 # GOFFICE_PLUGIN_FLAGS = $(GNUCASH_PLUGIN_LDFLAGS)
+
+# This will produce automake complaints, but it allows everything
+# outside of goffice to be copiled with -Werror.  Its worth the one
+# complaint.
+CFLAGS += -Wno-error
