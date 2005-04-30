@@ -896,7 +896,7 @@ then
     GNOME_COMPILE_WARNINGS
 
     # Look for libgnomeui by pkg-config
-    PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.8
+    PKG_CHECK_MODULES(GNOME, libgnomeui-2.0 >= 2.4
 			       gtk+-2.0 >= 2.4)
     AS_SCRUB_INCLUDE(GNOME_CFLAGS)
     AC_SUBST(GNOME_CFLAGS)
