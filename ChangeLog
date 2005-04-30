@@ -1,3 +1,9 @@
+2005-04-30  Derek Atkins  <derek@ihtfp.com>
+
+	* src/gnome-utils/gnc-html-graph-gog.c: chris' patch
+	  to enable showing the graph to workaround a bug in
+	  gtkhtml-3.3.2 where the widget height is set to -1.
+
 2005-04-28  David Hampton  <hampton@employees.org>
 
 	* lots-o-files: Migrate most hidden preferences over to gconf.

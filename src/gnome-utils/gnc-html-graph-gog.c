@@ -179,6 +179,10 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   double *data = NULL;
   char **labels = NULL, **colors = NULL;
 
+  /* HACK ALERT! Compensate for bug in gtkhtml-3.3.2 */
+  if (eb->height < 1)
+      eb->height = eb->width;  /* only squares here :( */
+
   // First, parse data from the text-ized params.
   {
     char *datasizeStr, *dataStr, *labelsStr, *colorStr;
@@ -269,6 +273,10 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   gboolean stacked = FALSE;
   char *barType = "normal";
   int barOverlap = 0 /*percent*/; // seperate bars; no overlap.
+
+  /* HACK ALERT! Compensate for bug in gtkhtml-3.3.2 */
+  if (eb->height < 1)
+      eb->height = eb->width;  /* only squares here :( */
 
   // First, parse data from the text-ized params.
   {
@@ -380,6 +388,10 @@ handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
   char *title, *subtitle, *xAxisLabel, *yAxisLabel;
   int datasize;
   double *xData, *yData;
+
+  /* HACK ALERT! Compensate for bug in gtkhtml-3.3.2 */
+  if (eb->height < 1)
+      eb->height = eb->width;  /* only squares here :( */
 
   {
     char *datasizeStr, *xDataStr, *yDataStr;
