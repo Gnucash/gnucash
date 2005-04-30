@@ -165,6 +165,7 @@ static GtkActionEntry gnc_menu_entries [] =
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
 	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
 	{ "ToolsAction", NULL, N_("_Tools"), NULL, NULL, NULL },
+	{ "ExtensionsAction", NULL, N_("E_xtensions"), NULL, NULL, NULL },
 	{ "HelpAction", NULL, N_("_Help"), NULL, NULL, NULL },
 	{ "MiscAction", NULL, N_("_Misc"), NULL, NULL, NULL },
 
@@ -264,6 +265,8 @@ static GtkActionEntry gnc_menu_entries [] =
 	{ "ToolsFindTransactionsAction", GTK_STOCK_FIND, N_("_Find Transactions"), "<control>f",
 	  N_("Find transactions with a search"),
 	  G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
+
+	/* Extensions menu */
 
 	/* Help menu */
 	{ "HelpTutorialAction", GNOME_STOCK_BOOK_BLUE, N_("Tutorial and Concepts _Guide"), NULL,
@@ -814,6 +817,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	GList *plugins;
 	GError *error = NULL;
 	gchar *filename, *style;
+	SCM debugging;
 
 	/* Create widgets and add them to the window */
 	main_vbox = gtk_vbox_new (FALSE, 0);
@@ -918,8 +922,17 @@ gnc_main_window_setup_window (GncMainWindow *window)
                 gtk_ui_manager_ensure_update( window->ui_merge );
         }
 
-        /* Now update the extension-menus */
+        /* Now update any old-style add-in menus */
         gnc_extensions_menu_setup( GTK_WINDOW(window), WINDOW_NAME_MAIN, window->ui_merge );
+
+	/* Now update the "eXtensions" menu */
+	debugging = scm_c_eval_string("(gnc:debugging?)");
+	if (debugging == SCM_BOOL_F) {
+	  GtkAction*  action;
+
+	  action = gtk_action_group_get_action(priv->action_group,"ExtensionsAction");
+	  g_object_set(G_OBJECT(action), "visible", FALSE, NULL);
+	}
 
 	/* GncPluginManager stuff */
 	manager = gnc_plugin_manager_get ();

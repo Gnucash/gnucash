@@ -75,6 +75,10 @@
       <menuitem name="ToolsFindTransactions" action="ToolsFindTransactionsAction"/>
     </menu>
 
+    <menu name="Extensions" action="ExtensionsAction">
+      <placeholder name="ExtensionsPlaceholder"/>
+    </menu>
+
     <menu name="Help" action="HelpAction">
       <menuitem name="HelpTutorial" action="HelpTutorialAction"/>
       <menuitem name="HelpTipsOfTheDay" action="HelpTipsOfTheDayAction"/>
