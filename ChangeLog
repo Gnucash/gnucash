@@ -1,3 +1,28 @@
+2005-04-30  David Hampton  <hampton@employees.org>
+
+	* mkinstalldirs: Drop this generated file from CVS.
+
+	* configure.in: Drop the libgnomeui requirement back to 2.6 so we
+	can support SuSe 9.2.
+
+	* src/business/business-ledger/gncEntryLedger.h: Change a couple
+	of register cell names so the core register code can save/restore
+	column widths.
+
+	* src/gnome/gnc-main-window.c:
+	* src/gnome/ui/gnc-main-window-ui.xml: Add the (debug) extensions
+	menu back.
+	
+	* src/business/business-gnome/business-gnome.scm:
+	* src/business/business-gnome/gnc-plugin-business.c:
+	* src/business/business-gnome/ui/gnc-plugin-business-ui.xml:
+	* src/scm/main.scm: Migrate the business "test" menu to a
+	GtkAction based menu.
+	
+	* src/gnome-search/Makefile.am:
+	* src/gnome-search/gnome-search.scm:
+	* src/gnome-search/gw-gnome-search-spec.scm: Remove unused code.
+	
 2005-04-30  Derek Atkins  <derek@ihtfp.com>
 
 	* src/gnome-utils/gnc-html-graph-gog.c: chris' patch
