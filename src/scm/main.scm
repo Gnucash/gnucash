@@ -55,6 +55,7 @@
 (export gnc:find-localized-file)
 (export gnc:main)
 (export gnc:safe-strcmp) ;; only used by aging.scm atm...
+(export gnc:reload-module)
 
 (re-export hash-fold)
 (re-export string-split)
@@ -166,6 +167,11 @@
         (a 1)
         (b -1)
         (else 0)))))
+
+(define (gnc:reload-module name)
+  (let ((m (current-module)))
+    (load-from-path name)
+    (set-current-module m)))
 
 (if (not (defined? 'hash-fold))
     (define (hash-fold proc init table)

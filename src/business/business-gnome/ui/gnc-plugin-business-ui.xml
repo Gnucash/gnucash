@@ -42,5 +42,18 @@
 	</menu>
       </menu>
     </placeholder>
+
+    <menu name="Extensions" action="ExtensionsAction">
+      <placeholder name="ExtensionsPlaceholder">
+      	<menu name="BusinessTest" action="BusinessTestAction">
+      	  <menuitem name="BusinessTestSearch" action="BusinessTestSearchAction"/>
+      	  <menuitem name="BusinessTestReloadInvoice" action="BusinessTestReloadInvoiceAction"/>
+      	  <menuitem name="BusinessTestReloadOwner" action="BusinessTestReloadOwnerAction"/>
+      	  <menuitem name="BusinessTestReloadReceivable" action="BusinessTestReloadReceivableAction"/>
+      	  <menuitem name="BusinessTestInitData" action="BusinessTestInitDataAction"/>
+      	</menu>
+      </placeholder>
+    </menu>
+
   </menubar>
 </ui>

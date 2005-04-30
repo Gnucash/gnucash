@@ -1,8 +1,9 @@
 /* 
  * gnc-plugin-business.c -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen
  * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -39,8 +40,11 @@
 #include "gncOwner.h"
 #include "messages.h"
 #include "gnc-ui-util.h"
+#include "gnc-date.h"
 #include "gnc-file-dialog.h"
 #include "gnc-file.h"
+#include "guile-mappings.h"
+#include "global-options.h"
 
 /* g_object functions */
 static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
@@ -107,6 +111,21 @@ static void gnc_plugin_business_cmd_export_vendor   (GtkAction *action,
 
 static void gnc_plugin_business_cmd_export_employee (GtkAction *action,
 						     GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_test_search (GtkAction *action,
+						 GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_test_reload_invoice_report (GtkAction *action,
+								GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_test_reload_owner_report (GtkAction *action,
+							      GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_test_reload_receivable_report (GtkAction *action,
+								   GncMainWindowActionData *data);
+
+static void gnc_plugin_business_cmd_test_init_data (GtkAction *action,
+						    GncMainWindowActionData *data);
 
 /*static void gnc_plugin_business_cmd_export_report   (GtkAction *action,
 						      GncMainWindowActionData *data);*/
@@ -208,6 +227,24 @@ static GtkActionEntry gnc_plugin_actions [] =
 	{ "QSFEmployeeAction", NULL, N_("QSF _Employee"), NULL,
 	  N_("Export one or more employees to QSF"),
 	  G_CALLBACK (gnc_plugin_business_cmd_export_employee) },
+
+	/* Extensions Menu */
+	{ "BusinessTestAction", NULL, N_("_Business"), NULL, NULL, NULL },
+	{ "BusinessTestSearchAction", NULL, N_("Test Search Dialog"), NULL,
+	  N_("Test Search Dialog"),
+	  G_CALLBACK (gnc_plugin_business_cmd_test_search) },
+	{ "BusinessTestReloadInvoiceAction", NULL, N_("Reload invoice report"), NULL,
+	  N_("Reload invoice report scheme file"),
+	  G_CALLBACK (gnc_plugin_business_cmd_test_reload_invoice_report) },
+	{ "BusinessTestReloadOwnerAction", NULL, N_("Reload owner report"), NULL,
+	  N_("Reload owner report scheme file"),
+	  G_CALLBACK (gnc_plugin_business_cmd_test_reload_owner_report) },
+	{ "BusinessTestReloadReceivableAction", NULL, N_("Reload receivable report"), NULL,
+	  N_("Reload receivable report scheme file"),
+	  G_CALLBACK (gnc_plugin_business_cmd_test_reload_receivable_report) },
+	{ "BusinessTestInitDataAction", NULL, N_("Initialize Test Data"), NULL,
+	  N_("Initialize Test Data"),
+	  G_CALLBACK (gnc_plugin_business_cmd_test_init_data) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
@@ -730,3 +767,114 @@ gnc_plugin_business_cmd_export_employee (GtkAction *action, GncMainWindowActionD
 	g_free(filename);
 	qof_session_set_current_session(current_session);
 }
+
+static void
+gnc_plugin_business_cmd_test_search (GtkAction *action,
+				     GncMainWindowActionData *data)
+{
+	gnc_search_dialog_test();
+}
+
+static void
+gnc_plugin_business_reload_module (const gchar *name)
+{
+	SCM file_scm;
+
+	file_scm = scm_makfrom0str (name);
+	scm_call_1(scm_c_eval_string("gnc:reload-module"), file_scm);
+}
+
+static void
+gnc_plugin_business_cmd_test_reload_invoice_report (GtkAction *action,
+						    GncMainWindowActionData *data)
+{
+	gnc_plugin_business_reload_module("gnucash/report/invoice.scm");
+}
+
+static void
+gnc_plugin_business_cmd_test_reload_owner_report (GtkAction *action,
+						  GncMainWindowActionData *data)
+{
+	gnc_plugin_business_reload_module("gnucash/report/owner-report.scm");
+}
+
+static void
+gnc_plugin_business_cmd_test_reload_receivable_report (GtkAction *action,
+						       GncMainWindowActionData *data)
+{
+	gnc_plugin_business_reload_module("gnucash/report/receivable-report.scm");
+}
+
+static void
+gnc_plugin_business_cmd_test_init_data (GtkAction *action,
+					GncMainWindowActionData *data)
+{
+	QofBook *book		= gnc_get_current_book();
+	GncCustomer *customer	= gncCustomerCreate(book);
+	GncAddress *address	= gncCustomerGetAddr(customer);
+	GncInvoice *invoice	= gncInvoiceCreate(book);
+	GncOwner *owner		= gncOwnerCreate();
+	GncJob *job		= gncJobCreate(book);
+	AccountGroup *group	= xaccGetAccountGroup(book);
+	Account *inc_acct	= xaccMallocAccount(book);
+	Account *bank_acct	= xaccMallocAccount(book);
+	Account *tax_acct	= xaccMallocAccount(book);
+	Account *ar_acct	= xaccMallocAccount(book);
+	Timespec now;
+
+	// Create Customer
+	gncCustomerSetID(customer, "000001");
+	gncCustomerSetName(customer, "Test Customer");
+	gncCustomerSetCurrency(customer, gnc_default_currency());
+	gncAddressSetName(address, "Contact Person");
+	gncAddressSetAddr1(address, "20 Customer Lane");
+	gncAddressSetAddr2(address, "Customer M/S");
+	gncAddressSetAddr3(address, "Addr3, XXX  12345");
+
+	// Create the Owner
+	gncOwnerInitCustomer(owner, customer);
+
+	// Create the Invoice
+	timespecFromTime_t(&now, time(NULL));
+	gncInvoiceSetID(invoice, "000012");
+	gncInvoiceSetOwner(invoice, owner);
+	gncInvoiceSetDateOpened(invoice, now);
+	gncInvoiceSetCurrency(invoice, gnc_default_currency());
+
+	// Create the Job
+	gncJobSetID(job, "000025");
+	gncJobSetName(job, "Test Job");
+	gncJobSetReference(job, "Customer's ref#");
+	gncJobSetOwner(job, owner);
+
+	// MODIFY THE OWNER
+	gncOwnerInitJob(owner, job);
+
+	// Create the A/R account
+	xaccAccountSetType(ar_acct, RECEIVABLE);
+	xaccAccountSetName(ar_acct, "A/R");
+	xaccAccountSetCommodity(ar_acct, gnc_default_currency());
+	xaccGroupInsertAccount(group, ar_acct);
+
+	// Create the Income account
+	xaccAccountSetType(inc_acct, INCOME);
+	xaccAccountSetName(inc_acct, "Income");
+	xaccAccountSetCommodity(inc_acct, gnc_default_currency());
+	xaccGroupInsertAccount(group, inc_acct);
+
+	// Create the Bank account
+	xaccAccountSetType(bank_acct, BANK);
+	xaccAccountSetName(bank_acct, "Bank");
+	xaccAccountSetCommodity(bank_acct, gnc_default_currency());
+	xaccGroupInsertAccount(group, bank_acct);
+
+	// Create the Tax account
+	xaccAccountSetType(tax_acct, LIABILITY);
+	xaccAccountSetName(tax_acct, "Tax-Holding");
+	xaccAccountSetCommodity(tax_acct, gnc_default_currency());
+	xaccGroupInsertAccount(group, tax_acct);
+
+	// Launch the invoice editor
+	gnc_ui_invoice_edit(invoice);
+}
+
