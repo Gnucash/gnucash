@@ -102,6 +102,7 @@ read_strings(const char * string, int nvalues) {
   return retval;  
 }
 
+#if 0
 static void
 free_strings(char ** strings, int nstrings) {
   int count;
@@ -114,6 +115,7 @@ free_strings(char ** strings, int nstrings) {
   }
   g_free(strings);
 }
+#endif
 
 static void
 addPixbufGraphWidget( GtkHTMLEmbedded *eb, GogObject *graph )
@@ -211,7 +213,7 @@ handle_piechart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 		NULL);
   gog_object_add_by_name( chart, "Plot", GOG_OBJECT(plot) );
   series = gog_plot_new_series( plot );
-  labelData = go_data_vector_str_new( labels, datasize );
+  labelData = go_data_vector_str_new( (char const * const *)labels, datasize );
   gog_series_set_dim( series, 0, labelData, NULL );
   go_data_emit_changed (GO_DATA (labelData));
 
@@ -371,7 +373,7 @@ handle_barchart(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 static int
 handle_scatter(gnc_html * html, GtkHTMLEmbedded * eb, gpointer d)
 {
-  GogObject *graph, *chart, *legend;
+  GogObject *graph, *chart;
   GogPlot *plot;
   GogSeries *series;
   GOData *sliceData;

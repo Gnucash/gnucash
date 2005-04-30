@@ -52,6 +52,8 @@
       "#include <dialog-scheduledxaction.h>\n"
       "#include <dialog-sxsincelast.h>\n" )))
 
+  (gw:wrap-as-wct ws '<gtk:Window*> "GtkWindow*" "const GtkWindow*")
+
   (gw:wrap-function
    ws
    'gnc:ui-hierarchy-druid
@@ -185,7 +187,7 @@
    'gnc:totd_dialog
    '<gw:void>
    "gnc_totd_dialog"
-   '((<gnc:UIWidget> parent) (<gw:bool> is_startup))
+   '((<gtk:Window*> parent) (<gw:bool> is_startup))
    "Show the \"Tip Of The Day\" dialog.")
 
   (gw:wrap-as-wct ws

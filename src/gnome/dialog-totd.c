@@ -142,10 +142,9 @@ gnc_totd_dialog_startup_toggled (GtkToggleButton *button,
 static gboolean
 gnc_totd_initialize (void)
 {
-  gchar *filename, *contents, *from, *to, *new;
+  gchar *filename, *contents, *new;
   gsize length;
   GError *error;
-  gint i, len;
 
   /* Find the file */
   filename = gnc_gnome_locate_data_file("tip_of_the_day.list");
