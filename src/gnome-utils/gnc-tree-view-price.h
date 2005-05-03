@@ -24,6 +24,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiTreeModel
+ *  @{ */
 /** @file gnc-tree-view-price.h
     @brief GtkTreeView implementation for gnucash price tree.
     @author David Hampton <hampton@employees.org>
@@ -70,8 +72,8 @@ typedef struct {
 GType         gnc_tree_view_price_get_type              (void);
 
 
-/** @name Price Tree View Constructors */
-/** @{ */
+/** @name Price Tree View Constructors
+ @{ */
 
 /** Create a new price tree view.  This view may or may not show a
  *  pseudo top-level price.  The gnucash engine does not have a
@@ -87,8 +89,8 @@ GtkTreeView  *gnc_tree_view_price_new (QofBook *book);
 /** @} */
 
 
-/** @name Price Tree View Configuration */
-/** @{ */
+/** @name Price Tree View Configuration
+ @{ */
 
 /** Configure (by name) the set of visible columns in an price tree
  *  view.  By default, only the price name column is show.  The
@@ -121,8 +123,8 @@ void          gnc_tree_view_price_add_kvp_column (GncTreeViewPrice *view,
 /** @} */
 
 
-/** @name Price Tree View Filtering */
-/** @{ */
+/** @name Price Tree View Filtering
+ @{ */
 
 /** This function attaches a filter function to the given price
  *  tree.  This function will be called for each price that the view
@@ -167,8 +169,8 @@ void gnc_tree_view_price_refilter (GncTreeViewPrice *view);
 /** @} */
 
 
-/** @name Price Tree View Get/Set Functions */
-/** @{ */
+/** @name Price Tree View Get/Set Functions 
+ @{ */
 
 /** This function determines if an price in the price tree view
  *  has any visible children.
@@ -308,8 +310,8 @@ void          gnc_tree_view_price_select_subprices (GncTreeViewPrice *view,
 
 
 
-/** @name Price Tree View Save/Restore Functions */
-/** @{ */
+/** @name Price Tree View Save/Restore Functions
+ @{ */
 
 /** This function saves the settings of a price tree.  This saves
  *  column order, sort order, etc.
@@ -336,4 +338,5 @@ G_END_DECLS
 
 #endif /* __GNC_TREE_VIEW_PRICE_H */
 
+/** @} */
 /** @} */

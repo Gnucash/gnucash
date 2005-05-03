@@ -122,8 +122,8 @@ typedef enum
 
 
 
-/** @name Account Constructors, Edit/Commit, Comparison */
-/** @{ */
+/** @name Account Constructors, Edit/Commit, Comparison 
+ @{ */
 
 /** Constructor */
 Account    * xaccMallocAccount (QofBook *book);
@@ -178,8 +178,8 @@ int          xaccAccountOrder (Account **account_1, Account **account_2);
 
 /* ------------------ */
 
-/** @name Account lookup and GUID routines */
-/** @{ */
+/** @name Account lookup and GUID routines 
+ @{ */
 
 /** @deprecated */
 #define xaccAccountGetBook(X)     qof_instance_get_book(QOF_INSTANCE(X))
@@ -196,9 +196,8 @@ Account    * xaccAccountLookup (const GUID *guid, QofBook *book);
 
 /* ------------------ */
 
-/** @name Account general setters/getters */
-/** @{ */
-
+/** @name Account general setters/getters 
+ @{ */
 
 /** Set the account's type */
 void xaccAccountSetType (Account *account, GNCAccountType);
@@ -271,6 +270,7 @@ void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
 /** @} */
 
 /** @name Account Commodity setters/getters
+
  *   Accounts are used to store an amount of 'something', that 'something'
  *   is called the 'commodity'.  An account can only hold one kind of
  *   commodity.  The following are used to get and set the commodity,
@@ -297,8 +297,8 @@ void     xaccAccountSetAutoInterestXfer (Account *account, gboolean value);
  *   However, this default SCU can be over-ridden and set to an
  *   account-specific value.  This is account-specific value is 
  *   called the 'non-standard' value in the documentation below.
- */
-/** @{ */
+ @{
+*/
 
 /** Set the account's commodity */
 void xaccAccountSetCommodity (Account *account, gnc_commodity *comm);
@@ -340,8 +340,9 @@ gboolean  xaccAccountGetNonStdSCU (Account *account);
 /**@}*/
 
 
-/** @name Account Balance */
-/*@{*/
+/** @name Account Balance
+ @{
+*/
 /** Get the current balance of the account */
 gnc_numeric     xaccAccountGetBalance (Account *account);
 /** Get the current balance of the account, only including cleared transactions */
@@ -378,10 +379,10 @@ gnc_numeric xaccAccountGetPresentBalanceInCurrency (Account *account,
 gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (Account *account,
 							     gnc_commodity *report_commodity,
 							     gboolean include_children);
-/*@}*/
-
+/** @} */
 
 /** @name Account Children and Parents. 
+
  * The set of accounts is represented as a doubly-linked tree, so that given 
  * any account, both its parent and its children can be easily found.  
  * To make the management of sets of accounts easier, an account does not
@@ -391,8 +392,8 @@ gnc_numeric xaccAccountGetProjectedMinimumBalanceInCurrency (Account *account,
  * 
  * The account tree heirarchy is unique, in that a given account can 
  * have only one parent account. 
- */
-/** @{ */
+ @{
+*/
 
 /** This routine returns the group holding the set of subaccounts 
  * for this account.  */
@@ -442,8 +443,8 @@ gboolean       xaccAccountHasAncestor (Account *account, Account *ancestor);
 /* ------------------ */
 
 /** @name GNCAccountType conversion/checking
- */
-/* @{ */
+ @{
+*/
 /**
  * Conversion routines for the account types to/from strings
  * that are used in persistant storage, communications.  These
@@ -476,12 +477,13 @@ GNCAccountType xaccAccountGetTypeFromStr (const gchar *str);
  * of type child_type as children. */
 gboolean xaccAccountTypesCompatible (GNCAccountType parent_type,
                                      GNCAccountType child_type);
-/* @} */
+/** @} */
 
 /* ------------------ */
 
-/** @name Account split/transaction list management */
-/*@{*/
+/** @name Account split/transaction list management 
+@{
+*/
 /** The xaccAccountInsertSplit() method will insert the indicated
  *    split into the indicated account.  If the split already 
  *    belongs to another account, it will be removed from that
@@ -550,8 +552,9 @@ void         xaccTransFixSplitDateOrder (Transaction *trans);
 
 /* ------------------ */
 
-/** @name Account lots */
-/*@{*/
+/** @name Account lots 
+@{
+*/
 /** The xaccAccountInsertLot() method will register the indicated lot 
  *    with this account.   Any splits later inserted into this lot must 
  *    belong to this account.  If the lot is already in another account,
@@ -590,11 +593,12 @@ LotList * xaccAccountFindOpenLots (Account *acc,
 							  gpointer user_data),
 				   gpointer user_data, GCompareFunc sort_func);
 
-/*@}*/
+/** @} */
 /* ------------------ */
 
-/** @name Account Reconciliation information getters/setters */
-/** @{ */
+/** @name Account Reconciliation information getters/setters 
+@{
+*/
 /** DOCUMENT ME! */
 gboolean       xaccAccountGetReconcileLastDate (Account *account,
                                                 time_t *last_date);
@@ -636,8 +640,9 @@ typedef enum
   PLACEHOLDER_CHILD,
   } GNCPlaceholderType;
 
-/** @name Account Placeholder flag */
-/** @{ */
+/** @name Account Placeholder flag 
+ @{
+*/
 /** DOCUMENT ME! */
 gboolean        xaccAccountGetPlaceholder (Account *account);
 /** DOCUMENT ME! */
@@ -648,8 +653,9 @@ GNCPlaceholderType xaccAccountGetDescendantPlaceholder (Account *account);
 /** @} */
 
 
-/** @name Account Tax related getters/setters */
-/** @{ */
+/** @name Account Tax related getters/setters
+ @{
+*/
 
 /** DOCUMENT ME! */
 gboolean        xaccAccountGetTaxRelated (Account *account);
@@ -669,8 +675,9 @@ void            xaccAccountSetTaxUSPayerNameSource (Account *account,
 /** @} */
 
 
-/** @name Account marking */
-/*@{*/
+/** @name Account marking 
+@{
+*/
 /** Set a mark on the account.  The meaning of this mark is
  * completely undefined. Its presented here as a utility for the
  * programmer, to use as desired.  Handy for performing customer traversals
@@ -691,11 +698,12 @@ void           xaccClearMark (Account *account, short val);
 void           xaccClearMarkDown (Account *account, short val);
 /** Will clear the mark for all the accounts of the AccountGroup .*/
 void           xaccClearMarkDownGr (AccountGroup *group, short val);
-/*@}*/
+/** @} */
 
 
-/** @name Deprecated Routines. */
-/** @{ */
+/** @name Deprecated Routines. 
+ @{ 
+*/
 
 /** @deprecated The current API associates only one thing with an
  * account: the 'commodity'. Use xaccAccountGetCommodity() to fetch
@@ -724,11 +732,12 @@ void         dxaccAccountSetQuoteTZ (Account *account, const char *tz);
  *  @deprecated Price quote information is now stored on the
  *  commodity, not the account. */
 const char * dxaccAccountGetQuoteTZ (Account *account);
-/**@}*/
+/** @} */
 
 
-/** @name Account parameter names */
-/** @{ */
+/** @name Account parameter names 
+ @{
+*/
 #define ACCOUNT_KVP			"kvp"
 #define ACCOUNT_NAME_		"name"
 #define ACCOUNT_CODE_		"code"

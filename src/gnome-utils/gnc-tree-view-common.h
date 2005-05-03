@@ -24,6 +24,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiTreeModel
+ * @{ */
 /** @file gnc-tree-view-common.h
     @brief common utilities for manipulating a GtkTreeView within gnucash  
     @author David Hampton <hampton@employees.org>
@@ -57,8 +59,8 @@ typedef struct {
   const char *field_name;
 } gnc_view_column;
 
-/** @name Tree View Creation State */
-/** @{ */
+/** @name Tree View Creation State 
+ @{ */
 
 /** This function creates all the columns in a GtkTreeView.  It is
  *  passed a data structure that specifies all the details for each
@@ -81,8 +83,8 @@ void gnc_tree_view_common_create_columns (GtkTreeView *view,
 /** @} */
 
 
-/** @name Tree View Save/Restore State */
-/** @{ */
+/** @name Tree View Save/Restore State 
+ @{ */
 
 /** This function saves all settings common to a GtkTreeView as used
  *  in gnucash.  This function currently saves the order in which the
@@ -123,6 +125,7 @@ void gnc_tree_view_common_restore_settings (GtkTreeView *view,
 /** @} */
 
 
+/** @} */
 /** @} */
 
 G_END_DECLS

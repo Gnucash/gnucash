@@ -44,8 +44,8 @@ typedef struct _gncBillTerm GncBillTerm;
 #define GNC_IS_BILLTERM(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_BILLTERM))
 #define GNC_BILLTERM(obj)     (QOF_CHECK_CAST((obj), GNC_ID_BILLTERM, GncBillTerm))
 
-/** @name BillTerm parameter names */
-/** @{ */
+/** @name BillTerm parameter names
+ @{ */
 #define GNC_BILLTERM_NAME 		"name"
 #define GNC_BILLTERM_DESC 		"description"
 #define GNC_BILLTERM_DUEDAYS 	"number of days due"
@@ -66,8 +66,8 @@ typedef enum {
   GNC_TERM_TYPE_PROXIMO,
 } GncBillTermType;
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncBillTerm * gncBillTermCreate (QofBook *book);
 void gncBillTermDestroy (GncBillTerm *term);
 void gncBillTermIncRef (GncBillTerm *term);
@@ -78,7 +78,9 @@ void gncBillTermBeginEdit (GncBillTerm *term);
 void gncBillTermCommitEdit (GncBillTerm *term);
 /** @} */
 
-/** @name Set Functions */
+/** @name Set Functions 
+@{
+*/
 void gncBillTermSetName (GncBillTerm *term, const char *name);
 void gncBillTermSetDescription (GncBillTerm *term, const char *name);
 void gncBillTermSetType (GncBillTerm *term, GncBillTermType type);
@@ -89,8 +91,8 @@ void gncBillTermSetCutoff (GncBillTerm *term, gint cutoff);
 
 /** @} */
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 /** Return a pointer to the instance gncBillTerm that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 
  *  instance can't be found.

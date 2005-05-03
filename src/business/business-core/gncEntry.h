@@ -72,16 +72,16 @@ gboolean gncEntryDiscountStringToHow (const char *str, GncDiscountHow *how);
 const char * gncEntryPaymentTypeToString (GncEntryPaymentType type);
 gboolean gncEntryPaymentStringToType (const char *str, GncEntryPaymentType *type);
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncEntry *gncEntryCreate (QofBook *book);
 void gncEntryDestroy (GncEntry *entry);
 /** @} */
 
 /* SET FUNCTIONS */
 
-/** @name Generic (shared) data */
-/** @{ */
+/** @name Generic (shared) data 
+ @{ */
 void gncEntrySetDate (GncEntry *entry, Timespec date);
 void gncEntrySetDateEntered (GncEntry *entry, Timespec date);
 void gncEntrySetDescription (GncEntry *entry, const char *desc);
@@ -90,8 +90,8 @@ void gncEntrySetNotes (GncEntry *entry, const char *notes);
 void gncEntrySetQuantity (GncEntry *entry, gnc_numeric quantity);
 /** @} */
 
-/** @name Customer Invoices */
-/** @{ */
+/** @name Customer Invoices 
+ @{ */
 void gncEntrySetInvAccount (GncEntry *entry, Account *acc);
 void gncEntrySetInvPrice (GncEntry *entry, gnc_numeric price);
 void gncEntrySetInvTaxable (GncEntry *entry, gboolean taxable);
@@ -104,8 +104,8 @@ void qofEntrySetInvDiscType (GncEntry *entry, const char *type);
 void qofEntrySetInvDiscHow  (GncEntry *entry, const char *type);
 /** @} */
 
-/** @name Vendor Bills (and Employee Expenses) */
-/** @{ */
+/** @name Vendor Bills (and Employee Expenses) 
+ @{ */
 void gncEntrySetBillAccount (GncEntry *entry, Account *acc);
 void gncEntrySetBillPrice (GncEntry *entry, gnc_numeric price);
 void gncEntrySetBillTaxable (GncEntry *entry, gboolean taxable);
@@ -115,14 +115,14 @@ void gncEntrySetBillable (GncEntry *entry, gboolean billable);
 void gncEntrySetBillTo (GncEntry *entry, GncOwner *billto);
 /** @} */
 
-/** @name employee-stuff */
-/** @{ */
+/** @name employee-stuff 
+ @{ */
 void gncEntrySetBillPayment (GncEntry *entry, GncEntryPaymentType type);
 /** @} */
 
 /* GET FUNCTIONS */
-/** @name Generic (shared) data */
-/** @{ */
+/** @name Generic (shared) data 
+ @{ */
 Timespec gncEntryGetDate (GncEntry *entry);
 Timespec gncEntryGetDateEntered (GncEntry *entry);
 const char * gncEntryGetDescription (GncEntry *entry);
@@ -131,8 +131,8 @@ const char * gncEntryGetNotes (GncEntry *notes);
 gnc_numeric gncEntryGetQuantity (GncEntry *entry);
 /** @} */
 
-/** @name Customer Invoices */
-/** @{ */
+/** @name Customer Invoices 
+ @{ */
 Account * gncEntryGetInvAccount (GncEntry *entry);
 gnc_numeric gncEntryGetInvPrice (GncEntry *entry);
 gnc_numeric gncEntryGetInvDiscount (GncEntry *entry);
@@ -145,8 +145,8 @@ gboolean gncEntryGetInvTaxIncluded (GncEntry *entry);
 GncTaxTable * gncEntryGetInvTaxTable (GncEntry *entry);
 /** @} */
 
-/** @name Vendor Bills (and Employee Expenses) */
-/** @{ */
+/** @name Vendor Bills (and Employee Expenses) 
+ @{ */
 Account * gncEntryGetBillAccount (GncEntry *entry);
 gnc_numeric gncEntryGetBillPrice (GncEntry *entry);
 gboolean gncEntryGetBillTaxable (GncEntry *entry);
@@ -160,12 +160,13 @@ GncEntryPaymentType gncEntryGetBillPayment (GncEntry* entry);
 
 void gncEntryCopy (const GncEntry *src, GncEntry *dest);
 
-/** @name Getting Values */
-/** @{ */
-/** The first three return the rounded values -- the last returns the
+/** @name Getting Values 
+
+ * The first three return the rounded values -- the last returns the
  * list of unrounded account-values.  The list belongs to the entry
  * and will be destroyed, so use it quickly.
- */
+ @{
+*/
 gnc_numeric gncEntryReturnValue (GncEntry *entry, gboolean is_inv);
 gnc_numeric gncEntryReturnDiscountValue (GncEntry *entry, gboolean is_inv);
 gnc_numeric gncEntryReturnTaxValue (GncEntry *entry, gboolean is_inv);

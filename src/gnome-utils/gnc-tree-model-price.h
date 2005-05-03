@@ -25,6 +25,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiTreeModel
+ * @{ */
 /** @file gnc-tree-model-price.h
     @brief GtkTreeModel implementation for gnucash price database.
     @author Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -82,8 +84,8 @@ typedef struct {
 /* function prototypes */
 GType         gnc_tree_model_price_get_type   (void);
 
-/** @name Account Tree Model Constructors */
-/** @{ */
+/** @name Account Tree Model Constructors 
+ @{ */
 
 /** Create a new GtkTreeModel for manipulating gnucash commodities.
  *
@@ -96,8 +98,8 @@ GtkTreeModel *gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db);
 /** @} */
 
 
-/** @name Price Tree Model Filter Helper Functions */
-/** @{ */
+/** @name Price Tree Model Filter Helper Functions 
+ @{ */
 
 /** Determine whether or not the specified GtkTreeIter points to a
  *  commodity namespace.  This routine should only be called from a
@@ -194,8 +196,8 @@ GNCPrice *gnc_tree_model_price_get_price (GncTreeModelPrice *model,
 
 
 
-/** @name Commodity Tree Model Lookup Functions */
-/** @{ */
+/** @name Commodity Tree Model Lookup Functions 
+ @{ */
 
 /** Convert a commodity namespace pointer into a GtkTreeIter.
  *
@@ -284,4 +286,5 @@ G_END_DECLS
 
 #endif /* __GNC_TREE_MODEL_PRICE_H */
 
+/** @} */
 /** @} */

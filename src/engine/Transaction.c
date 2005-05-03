@@ -2385,11 +2385,28 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
 }
 
 void
+qofTransSetDatePosted (Transaction *trans, Timespec ts)
+{
+	if (!trans) { return; }
+	if((ts.tv_nsec == 0)&&(ts.tv_sec == 0)) { return; }
+	xaccTransSetDateInternal(trans, &trans->date_posted, ts);
+	set_gains_date_dirty(trans);
+}
+
+void
 xaccTransSetDatePostedTS (Transaction *trans, const Timespec *ts)
 {
    if (!trans || !ts) return;
    xaccTransSetDateInternal(trans, &trans->date_posted, *ts);
    set_gains_date_dirty (trans);
+}
+
+void
+qofTransSetDateEntered (Transaction *trans, Timespec ts)
+{
+	if (!trans) { return; }
+	if((ts.tv_nsec == 0)&&(ts.tv_sec == 0)) { return; }
+	xaccTransSetDateInternal(trans, &trans->date_entered, ts);
 }
 
 void
@@ -3347,9 +3364,9 @@ gboolean xaccTransRegister (void)
   static QofParam params[] = {
     { TRANS_NUM, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNum, (QofSetterFunc)xaccTransSetNum },
     { TRANS_DESCRIPTION, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetDescription, (QofSetterFunc)xaccTransSetDescription },
-    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)xaccTransSetDateEnteredTS },
-    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)xaccTransSetDatePostedTS },
-    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS, (QofSetterFunc)xaccTransSetDateDueTS },
+    { TRANS_DATE_ENTERED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateEnteredTS, (QofSetterFunc)qofTransSetDateEntered },
+    { TRANS_DATE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDatePostedTS, (QofSetterFunc)qofTransSetDatePosted },
+    { TRANS_DATE_DUE, QOF_TYPE_DATE, (QofAccessFunc)xaccTransRetDateDueTS, NULL },
     { TRANS_IMBALANCE, QOF_TYPE_NUMERIC, (QofAccessFunc)xaccTransGetImbalance,NULL },
     { TRANS_NOTES, QOF_TYPE_STRING, (QofAccessFunc)xaccTransGetNotes, (QofSetterFunc)xaccTransSetNotes },
     { TRANS_IS_BALANCED, QOF_TYPE_BOOLEAN, (QofAccessFunc)trans_is_balanced_p, NULL },

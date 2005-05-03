@@ -23,6 +23,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiCommodity
+    @{ */
 /** @file dialog-commodity.c
     @brief "select" and "new" commodity windows
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>

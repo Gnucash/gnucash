@@ -24,6 +24,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiGnome Gnome-specific GUI handling.
+    @{ */
 /** @file gnc-gnome-utils.h
     @brief Gnome specific utility functions.
     @author Copyright (C) 2001 Linux Developers Group

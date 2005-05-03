@@ -1,3 +1,44 @@
+2005-05-03  Neil Williams <linux@codehelp.co.uk>
+
+	* src/app-utils/gnc-ui-util.h: Doxygen update.
+	* src/backend/qsf/qsf-backend.c: Omitting kvp tag when
+	frame is empty.
+	* src/backend/qsf/qsf-object.xsd.xml: Typo.
+	* src/business/business-core/gncBillTerm.h: 
+	* src/business/business-core/gncEmployee.h: 
+	* src/business/business-core/gncEntry.h: 
+	* src/business/business-core/gncTaxTable.h:
+	* src/core-utils/gnc-gconf-utils.h:
+	* src/engine/Account.h: 
+	* src/engine/Group.h: Doxygen fixes.
+	* src/engine/Transaction.c: Replacement Timespec calls
+	because QOF needs to pass Timespec, not Timespec*
+	* src/engine/Transaction.h: qofTransSetDatePosted
+	and qofTransSetDateEntered new functions and Doxygen fixes.
+	* src/engine/gnc-commodity.h: 
+	* src/gnome-utils/dialog-account.h:
+	* src/gnome-utils/dialog-commodity.c:
+	* src/gnome-utils/dialog-commodity.h:
+	* src/gnome-utils/gnc-gnome-utils.h:
+	* src/gnome-utils/gnc-tree-model-account-types.h:
+	* src/gnome-utils/gnc-tree-model-account.h:
+	* src/gnome-utils/gnc-tree-model-commodity.h:
+	* src/gnome-utils/gnc-tree-model-price.h:
+	* src/gnome-utils/gnc-tree-view-account.h:
+	* src/gnome-utils/gnc-tree-view-commodity.h:
+	* src/gnome-utils/gnc-tree-view-common.h:
+	* src/gnome-utils/gnc-tree-view-price.h:
+	* src/gnome/gnc-plugin-file-history.c:
+	* src/gnome/gnc-plugin-file-history.h:
+	* src/gnome/gnc-plugin-page-account-tree.h:
+	* src/gnome/gnc-plugin-page-register.h:
+	* src/register/ledger-core/split-register-layout.h:
+	* src/report/report-gnome/gnc-plugin-page-report.h:
+	Doxygen fixes. Sub-divided the GUI module into manageable
+	chunks and fixed @name sections. Put the @{ inside the
+	same comment block as @name but NOT on the same line
+	as the closing */
+
 2005-04-30  David Hampton  <hampton@employees.org>
 
 	* mkinstalldirs: Drop this generated file from CVS.

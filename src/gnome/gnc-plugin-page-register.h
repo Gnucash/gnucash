@@ -24,6 +24,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiUtility
+    @{ */
 /** @file gnc-plugin-register-tree.h 
     @brief  utility functions for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -165,6 +167,8 @@ GNCSplitReg * gnc_plugin_page_register_get_gsr (GncPluginPage *plugin_page);
 Account *gnc_plugin_page_register_get_account (GncPluginPageRegister *page);
 
 G_END_DECLS
+/** @} */
+/** @} */
 
 #endif /* __GNC_PLUGIN_PAGE_REGISTER_H */
-/** @} */
+

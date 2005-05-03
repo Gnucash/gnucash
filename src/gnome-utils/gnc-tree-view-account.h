@@ -24,6 +24,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiTreeModel
+ * @{ */
 /** @file gnc-tree-view-account.h
     @brief GtkTreeView implementation for gnucash account tree.
     @author David Hampton <hampton@employees.org>
@@ -79,8 +81,8 @@ typedef struct {
 GType         gnc_tree_view_account_get_type              (void);
 
 
-/** @name Account Tree View Constructors */
-/** @{ */
+/** @name Account Tree View Constructors 
+ @{ */
 
 /** Create a new account tree view.  This view may or may not show a
  *  pseudo top-level account.  The gnucash engine does not have a
@@ -97,8 +99,8 @@ GtkTreeView  *gnc_tree_view_account_new                   (gboolean show_root);
 /** @} */
 
 
-/** @name Account Tree View Configuration */
-/** @{ */
+/** @name Account Tree View Configuration 
+ @{ */
 
 const char *gnc_tree_view_account_get_field_name (AccountFieldCode field);
 
@@ -132,8 +134,8 @@ void          gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
 /** @} */
 
 
-/** @name Account Tree View Filtering */
-/** @{ */
+/** @name Account Tree View Filtering 
+ @{ */
 
 /** Given pointers to an account tree and old style filter block, this
  *  function will copy the current configuration of the account tree
@@ -211,8 +213,8 @@ void          gnc_tree_view_account_refilter              (GncTreeViewAccount *v
 /** @} */
 
 
-/** @name Account Tree View Get/Set Functions */
-/** @{ */
+/** @name Account Tree View Get/Set Functions 
+ @{ */
 
 /** This function determines if an account in the account tree view
  *  has any visible children.
@@ -367,11 +369,10 @@ void          gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view
 
 /** @} */
 
+/** @} */
 
-
-
-/** @name Account Tree View Save/Restore Functions */
-/** @{ */
+/** @name Account Tree View Save/Restore Functions
+@{ */
 
 /** This function saves the settings of a account tree.  This saves
  *  column order, sort order, etc.
@@ -392,10 +393,9 @@ void gnc_tree_view_account_save_settings (GncTreeViewAccount *view,
  *  information should be restores from. */
 void gnc_tree_view_account_restore_settings (GncTreeViewAccount *view,
 					     const gchar *section);
+
 /** @} */
 
 G_END_DECLS
 
 #endif /* __GNC_TREE_VIEW_ACCOUNT_H */
-
-/** @} */

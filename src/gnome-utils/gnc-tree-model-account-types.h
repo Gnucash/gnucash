@@ -24,6 +24,8 @@
  */
 /** @addtogroup GUI
  *     @{ */
+/** @addtogroup GuiTreeModel
+ * @{ */
 /** @file gnc-tree-model-account-types.h
  *  @brief GtkTreeModel implementation to display account types in a GtkTreeView.
  *  @author Copyright (C) 2003 Jan Arne Petersen
@@ -82,4 +84,5 @@ G_END_DECLS
 
 #endif /* __GNC_TREE_MODEL_ACCOUNT_H */
 
+/** @} */
 /** @} */

@@ -23,6 +23,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiCommodity Commodity windows
+    @{ */
 /** @file dialog-commodity.h
     @brief "select" and "new" commodity windows
     @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
@@ -258,4 +260,5 @@ void gnc_ui_update_commodity_picker(GtkWidget * combobox,
 /** @} */
 
 #endif
+/** @} */
 /** @} */

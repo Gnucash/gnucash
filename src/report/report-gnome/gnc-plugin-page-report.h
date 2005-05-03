@@ -24,6 +24,8 @@
   
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiReport Reports
+    @{ */
 /** @file gnc-plugin-page-report.h 
     @brief  Report page.
     @author Copyright (C) 2004 Joshua Sled <jsled@asynchronous.org>
@@ -84,3 +86,5 @@ G_END_DECLS
 
 #endif /* __GNC_PLUGIN_PAGE_REPORT_H */
 /** @} */
+/** @} */
+

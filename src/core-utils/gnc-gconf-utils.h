@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup Object
+/** @addtogroup GUI
     @{ */
 /** @addtogroup GConf
 
@@ -30,10 +30,10 @@
     system from within Gnucash.  GConf is a shared key/value storage
     system.
 
-    The main benefits of these routines are that they 1) maintain a
-    GConfClient object, 2) convert gnucash internal section names into
-    full gconf pathnames, and 3) optionally take care of error
-    checking on return values.
+    The main benefits of these routines are that they 
+    -# maintain a GConfClient object, 
+    -# convert gnucash internal section names into full gconf pathnames, and 
+    -# optionally take care of error checking on return values.
 
     @{ */
 /** @file gnc-gconf-utils.h
@@ -50,8 +50,9 @@
 /* Keys used across multiple modules */
 #define KEY_LAST_PATH "last_path"
 
-/** @name GConf Miscellaneous Functions */
-/** @{ */
+/** @name GConf Miscellaneous Functions
+ @{ 
+*/
 
 /** Convert a local key name to a full gconf path name.
  *
@@ -85,8 +86,9 @@ void gnc_gconf_suggest_sync (void);
 
 
 
-/** @name GConf Get Functions */
-/** @{ */
+/** @name GConf Get Functions 
+ @{ 
+*/
 
 /** Get a boolean value from GConf.
  *
@@ -276,8 +278,9 @@ GSList *gnc_gconf_get_list (const gchar *section,
 			    GError **error);
 /** @} */
 
-/** @name GConf Set/Unset Functions */
-/** @{ */
+/** @name GConf Set/Unset Functions 
+ @{ 
+*/
 
 
 /** Store a boolean value into GConf.
@@ -452,8 +455,9 @@ void gnc_gconf_unset (const gchar *section,
 
 /** @} */
 
-/** @name GConf Notification Functions */
-/** @{ */
+/** @name GConf Notification Functions 
+ @{ 
+*/
 
 /** Add a notification callback to GConf.
  *
@@ -495,8 +499,9 @@ void gnc_gconf_remove_notification (GObject *object,
 				    const gchar *section);
 /** @} */
 
-/** @name GConf One Liners */
-/** @{ */
+/** @name GConf One Liners 
+ @{ 
+*/
 
 #define DESTKOP_TEAROFF_MENUS "/desktop/gnome/interface/menus_have_tearoff"
 #define DESTKOP_MENUBAR_DETACHABLE "/desktop/gnome/interface/menubar_detachable"

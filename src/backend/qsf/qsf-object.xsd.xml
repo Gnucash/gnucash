@@ -108,7 +108,7 @@ attributeFormDefault="unqualified">
      </xsd:simpleContent>
     </xsd:complexType>
    </xsd:element>
-   <xsd:element name="char" minOccurs="0" maxOccurs="unbounded">
+   <xsd:element name="character" minOccurs="0" maxOccurs="unbounded">
      <xsd:complexType>
      <xsd:simpleContent>
       <xsd:extension base="xsd:string">

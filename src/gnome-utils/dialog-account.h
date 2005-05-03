@@ -31,19 +31,20 @@
 
 /** @addtogroup GUI
     @{ */
-
+/** @addtogroup GuiAccount Creating and editing accounts in the GUI
+    @{ */
 /** @file dialog-account.h
  *
  *  This file contains the functions to present a gui to the user for
  *  creating a new account or editing an existing account.
  *
- *  @brief Dialog fo create/edit an account.
+ *  @brief Dialog for create/edit an account.
  *  @author Copyright (C) 1997 Robin D. Clark
  *  @author Copyright (C) 2000 Dave Peticolas
  */
 
-/** @name Non-Modal */
-/** @{ */
+/** @name Non-Modal
+ @{ */
 
 /** Disply a window for editing the attributes of an existing account.
  *
@@ -87,8 +88,8 @@ void gnc_ui_new_account_with_types (AccountGroup *unused,
 
 
 
-/** @name Modal */
-/** @{ */
+/** @name Modal 
+ @{ */
 
 /** Disply a modal window for creating a new account
  *
@@ -114,7 +115,7 @@ Account * gnc_ui_new_accounts_from_name_window_with_types (const char *name,
 							   GList *valid_types);
 
 
-/** Disply a modal window for creating a new account.  This function
+/** Display a modal window for creating a new account.  This function
  *  will restrict the available account type values to the list
  *  specified by the caller.
  *
@@ -137,9 +138,6 @@ Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
 						       gnc_commodity * default_commodity,
 						       Account * parent);
 
-/** @} */
-/** @} */
-
 /*
  * register a callback that get's called when the account has changed
  * so significantly that you need to destroy yourself.  In particular
@@ -147,5 +145,8 @@ Account * gnc_ui_new_accounts_from_name_with_defaults (const char *name,
  * account type has changed.
  */
 void gnc_ui_register_account_destroy_callback (void (*cb)(Account *));
+/** @} */
+/** @} */
+/** @} */
 
 #endif

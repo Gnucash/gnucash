@@ -22,6 +22,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiUtility Utility functions for the GnuCash GUI
+ * @{ */
 /** @file gnc-ui-util.h 
     @brief  utility functions for the GnuCash UI
     @author Copyright (C) 2000 Dave Peticolas <dave@krondo.com>
@@ -360,4 +362,5 @@ int iswlower (gint32 wc);
 #endif
 
 #endif
+/** @} */
 /** @} */

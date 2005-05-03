@@ -22,8 +22,10 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiImport Import GUI Utility functions.
+    @{ */
 /** @internal
-    @file gnc-plugin-file-history.h
+    @file gnc-plugin-file-history.c
     @brief Utility functions for writing import modules.
     @author Copyright (C) 2002 David Hampton <hampton@empployees.org>
 */
@@ -154,7 +156,7 @@ gnc_history_update_action (GncMainWindow *window,
 	  gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
 
 	action_name = g_strdup_printf("RecentFile%dAction", index);
-	action = gtk_action_group_get_action (action_group, action_name);
+	  action = gtk_action_group_get_action (action_group, action_name);
 
 	if (filename && (strlen(filename) > 0)) {
 	  /* set the menu label (w/accelerator) */
@@ -193,7 +195,7 @@ static void
 gnc_plugin_history_list_changed (GConfClient *client,
 				 guint cnxn_id,
 				 GConfEntry *entry,
-				 gpointer user_data)
+				       gpointer user_data)
 {
 	GncMainWindow *window;
 	GConfValue *value;
@@ -436,7 +438,7 @@ gnc_plugin_file_history_cmd_open_file (GtkAction *action,
 	g_return_if_fail(data != NULL);
 
 	/* DRH - Do we need to close all open windows but the first?
-	 * Which progressbar should we be using? One in a window, or 
+	 * Which progressbar should we be using? One in a window, or
 	 * in a new "file loading" dialog???
 	 */
 	filename = g_object_get_data(G_OBJECT(action), FILENAME_STRING);
@@ -447,4 +449,5 @@ gnc_plugin_file_history_cmd_open_file (GtkAction *action,
 	/* FIXME GNOME 2 Port (update the title etc.) */
 }
 
+/** @} */
 /** @} */

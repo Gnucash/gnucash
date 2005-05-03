@@ -279,7 +279,7 @@ qsf_object_sequence(QofParam *qof_param, gpointer data)
 		params->qsf_sequence = g_slist_append(params->qsf_sequence, qof_param);
 		params->knowntype = TRUE;
 	}
-}	
+}
 
 /* receives each entry from supported_types in sequence
 	type = qof data type from supported list
@@ -300,10 +300,10 @@ qsf_supported_parameters(gpointer type, gpointer user_data)
 static KvpValueType
 qsf_to_kvp_helper(const char *type_string)
 {
-	if(0 == safe_strcmp(QOF_TYPE_STRING, type_string)) { return KVP_TYPE_STRING; }
-	if(0 == safe_strcmp(QOF_TYPE_GUID, type_string)) { return KVP_TYPE_GUID; }
-	if(0 == safe_strcmp(QOF_TYPE_INT64, type_string)) { return KVP_TYPE_GINT64; }
-	if(0 == safe_strcmp(QOF_TYPE_DOUBLE, type_string)) { return KVP_TYPE_DOUBLE; }
+	if(0 == safe_strcmp(QOF_TYPE_STRING, type_string))  { return KVP_TYPE_STRING; }
+	if(0 == safe_strcmp(QOF_TYPE_GUID, type_string))    { return KVP_TYPE_GUID; }
+	if(0 == safe_strcmp(QOF_TYPE_INT64, type_string))   { return KVP_TYPE_GINT64; }
+	if(0 == safe_strcmp(QOF_TYPE_DOUBLE, type_string))  { return KVP_TYPE_DOUBLE; }
 	if(0 == safe_strcmp(QOF_TYPE_NUMERIC, type_string)) { return KVP_TYPE_NUMERIC; }
 	if(0 == safe_strcmp(QSF_TYPE_BINARY, type_string))  { return KVP_TYPE_BINARY; }
 	if(0 == safe_strcmp(QSF_TYPE_GLIST, type_string))   { return KVP_TYPE_GLIST; }
@@ -454,10 +454,12 @@ reference_list_lookup(gpointer data, gpointer user_data)
 			return;
 		}
 		ref_name = g_strdup(reference->param->param_name);
-		node = xmlAddChild(object_node, xmlNewNode(ns, QOF_TYPE_GUID));
-		guid_to_string_buff(reference->ref_guid, qsf_guid);
-		xmlNodeAddContent(node, qsf_guid);
-		xmlNewProp(node, QSF_OBJECT_TYPE ,ref_name);
+		if(guid_to_string_buff(reference->ref_guid, qsf_guid) != NULL)
+			{
+			node = xmlAddChild(object_node, xmlNewNode(ns, QOF_TYPE_GUID));
+			xmlNodeAddContent(node, qsf_guid);
+			xmlNewProp(node, QSF_OBJECT_TYPE ,ref_name);
+			}
 		g_free(ref_name);
 	}
 }
@@ -520,9 +522,11 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_KVP))
 		{
 			qsf_kvp = kvp_frame_copy(qof_param->param_getfcn(ent,qof_param));
-			params->qof_param = qof_param;
-			params->output_node = object_node;
-			kvp_frame_for_each_slot(qsf_kvp, qsf_from_kvp_helper, params);
+			if(kvp_frame_is_empty(qsf_kvp) == FALSE) {
+				params->qof_param = qof_param;
+				params->output_node = object_node;
+				kvp_frame_for_each_slot(qsf_kvp, qsf_from_kvp_helper, params);
+			}
 		}
 		if((qof_param->param_setfcn != NULL) && (qof_param->param_getfcn != NULL))
 		{
@@ -532,11 +536,11 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 			{
 				if(0 == safe_strcmp((const char*)supported->data, (const char*)qof_param->param_type))
 				{
-			node = xmlAddChild(object_node, xmlNewNode(ns, qof_param->param_type));
-			string_buffer = g_strdup(qof_book_merge_param_as_string(qof_param, ent));
-			xmlNodeAddContent(node, string_buffer);
-			xmlNewProp(node, QSF_OBJECT_TYPE ,qof_param->param_name);
-		}
+					node = xmlAddChild(object_node, xmlNewNode(ns, qof_param->param_type));
+					string_buffer = g_strdup(qof_book_merge_param_as_string(qof_param, ent));
+					xmlNodeAddContent(node, string_buffer);
+					xmlNewProp(node, QSF_OBJECT_TYPE ,qof_param->param_name);
+				}
 			}
 		}
 		param_list = g_slist_next(param_list);
@@ -606,7 +610,7 @@ write_qsf_from_book(FILE *out, QofBook *book)
 	xmlDocPtr qsf_doc;
 	gint write_result;
 	QofBackend *be;
-	
+
 	qsf_doc = qofbook_to_qsf(book);
 	write_result = 0;
 	g_return_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE);
@@ -638,7 +642,7 @@ qsf_write_file(QofBackend *be, QofBook *book)
 	QSFBackend *qsf_be;
 	FILE *out;
 	char *path;
-	
+
 	qsf_be = (QSFBackend*)be;
 	/* if fullpath is blank, book_id was set to QOF_STDOUT */
 	if(0 == safe_strcmp(qsf_be->fullpath, "")) {
@@ -697,12 +701,12 @@ KvpValue*
 string_to_kvp_value(const char *content, KvpValueType type)
 {
 	char        *tail;
-	gint64 	    cm_i64;
+	gint64      cm_i64;
 	double      cm_double;
 	gnc_numeric cm_numeric;
 	GUID        *cm_guid;
 	struct tm   kvp_time;
-	time_t	    kvp_time_t;
+	time_t      kvp_time_t;
 	Timespec    cm_date;
 	
 	switch(type) {

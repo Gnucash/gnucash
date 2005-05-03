@@ -24,6 +24,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiTreeModel
+ *  @{ */
 /** @file gnc-tree-view-commodity.h
     @brief GtkTreeView implementation for gnucash commodity tree.
     @author David Hampton <hampton@employees.org>
@@ -70,8 +72,8 @@ typedef struct {
 GType         gnc_tree_view_commodity_get_type              (void);
 
 
-/** @name Commodity Tree View Constructors */
-/** @{ */
+/** @name Commodity Tree View Constructors 
+ @{ */
 
 /** Create a new commodity tree view.  This view may or may not show a
  *  pseudo top-level commodity.  The gnucash engine does not have a
@@ -87,8 +89,8 @@ GtkTreeView  *gnc_tree_view_commodity_new (QofBook *book);
 /** @} */
 
 
-/** @name Commodity Tree View Configuration */
-/** @{ */
+/** @name Commodity Tree View Configuration 
+ @{ */
 
 /** Configure (by name) the set of visible columns in an commodity tree
  *  view.  By default, only the commodity name column is show.  The
@@ -121,8 +123,8 @@ void          gnc_tree_view_commodity_add_kvp_column (GncTreeViewCommodity *view
 /** @} */
 
 
-/** @name Commodity Tree View Filtering */
-/** @{ */
+/** @name Commodity Tree View Filtering 
+ @{ */
 
 /** This function attaches a filter function to the given commodity
  *  tree.  This function will be called for each commodity that the view
@@ -166,8 +168,8 @@ void          gnc_tree_view_commodity_refilter              (GncTreeViewCommodit
 /** @} */
 
 
-/** @name Commodity Tree View Get/Set Functions */
-/** @{ */
+/** @name Commodity Tree View Get/Set Functions 
+ @{ */
 
 /** This function determines if an commodity in the commodity tree view
  *  has any visible children.
@@ -307,8 +309,8 @@ void          gnc_tree_view_commodity_select_subcommodities (GncTreeViewCommodit
 
 
 
-/** @name Commodity Tree View Save/Restore Functions */
-/** @{ */
+/** @name Commodity Tree View Save/Restore Functions 
+ @{ */
 
 /** This function saves the settings of a commodity tree.  This saves
  *  column order, sort order, etc.
@@ -335,4 +337,5 @@ G_END_DECLS
 
 #endif /* __GNC_TREE_VIEW_COMMODITY_H */
 
+/** @} */
 /** @} */

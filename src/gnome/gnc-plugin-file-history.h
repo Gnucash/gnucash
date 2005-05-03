@@ -22,6 +22,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiImport Import GUI Utility functions.
+    @{ */
 /** @file gnc-plugin-file-history.h
     @brief Utility functions for writing import modules.
     @author Copyright (C) 2002 David Hampton <hampton@empployees.org>
@@ -77,4 +79,5 @@ G_END_DECLS
 
 #endif /* __GNC_PLUGIN_FILE_HISTORY_H */
 
+/** @} */
 /** @} */

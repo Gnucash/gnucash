@@ -24,6 +24,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiUtility
+    @{ */
 /** @file gnc-plugin-page-account-tree.h 
     @brief  utility functions for the GnuCash UI
     @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -97,4 +99,5 @@ Account * gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccount
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_PAGE_ACCOUNT_TREE_H */
+/** @} */
 /** @} */

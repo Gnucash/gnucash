@@ -25,6 +25,8 @@
 
 /** @addtogroup GUI
     @{ */
+/** @addtogroup GuiTreeModel GnuCash Tree Model
+    @{ */
 /** @file gnc-tree-model-account.h
     @brief GtkTreeModel implementation for gnucash account tree.
     @author Jan Arne Petersen <jpetersen@uni-bonn.de>
@@ -106,8 +108,8 @@ typedef struct {
 GType         gnc_tree_model_account_get_type              (void);
 
 
-/** @name Account Tree Model Constructors */
-/** @{ */
+/** @name Account Tree Model Constructors 
+ @{ */
 
 /** Create a new GtkTreeModel for manipulating gnucash accounts.
  *
@@ -116,8 +118,8 @@ GtkTreeModel *gnc_tree_model_account_new                   (AccountGroup *group)
 /** @} */
 
 
-/** @name Account Tree Model Get/Set Functions */
-/** @{ */
+/** @name Account Tree Model Get/Set Functions 
+  @{ */
 
 /** This function returns the account associated with the top level
  *  pseudo-account.  The gnucash engine does not have a single top
@@ -192,4 +194,5 @@ G_END_DECLS
 
 #endif /* __GNC_TREE_MODEL_ACCOUNT_H */
 
+/** @} */
 /** @} */

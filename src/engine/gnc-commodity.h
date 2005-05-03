@@ -73,8 +73,9 @@
 #define GNC_COMMODITY_NS_ASX    "ASX"
 
 
-/** @name Commodity Quote Source functions */
-/** @{ */
+/** @name Commodity Quote Source functions 
+ @{
+*/
 
 /** The quote source type enum account types are used to determine how
  *  the transaction data in the account is displayed.  These values
@@ -223,8 +224,9 @@ const char *gnc_quote_source_get_old_internal_name (gnc_quote_source *source);
 /** @} */
 
 
-/** @name Commodity Creation */
-/** @{ */
+/** @name Commodity Creation 
+ @{ 
+*/
 
 /** Create a new commodity. This function allocates a new commodity
  *  data structure, populates it with the data provided, and then
@@ -279,8 +281,9 @@ gnc_commodity * gnc_commodity_clone(gnc_commodity *src);
 
 
 
-/** @name Commodity Accessor Routines - Get */
-/** @{ */
+/** @name Commodity Accessor Routines - Get
+@{
+*/
 
 /** Retrieve the mnemonic for the specified commodity.  This will be a
  *  pointer to a null terminated string of the form "ACME", "QWER",
@@ -428,8 +431,9 @@ const char* gnc_commodity_get_quote_tz(const gnc_commodity *cm);
 
 
 
-/** @name Commodity Accessor Routines - Set */
-/** @{ */
+/** @name Commodity Accessor Routines - Set
+@{
+*/
 
 /** Set the mnemonic for the specified commodity.  This should be a
  *  pointer to a null terminated string of the form "ACME", "QWER",
@@ -535,8 +539,9 @@ void  gnc_commodity_set_quote_tz(gnc_commodity *cm, const char *tz);
 
 
 
-/** @name Commodity Comparison */
-/** @{ */
+/** @name Commodity Comparison 
+ @{
+*/
 
 /** This routine returns TRUE if the two commodities are equivalent.
  *  Commodities are equivalent if they have the same namespace and
@@ -554,8 +559,9 @@ gboolean gnc_commodity_equal(const gnc_commodity * a, const gnc_commodity * b);
 /** @} */
 
 
-/** @name Currency Checks */
-/** @{ */
+/** @name Currency Checks 
+ @{
+*/
 
 /** Checks to see if the specified commodity namespace is the
  *  namespace for ISO 4217 currencies.
@@ -575,8 +581,9 @@ gboolean gnc_commodity_is_iso(const gnc_commodity * cm);
 
 
 /* =============================================================== */
-/** @name Commodity Table */
-/** @{ */
+/** @name Commodity Table 
+@{
+*/
 
 /** Returns the commodity table assoicated with a book.
  */
@@ -594,8 +601,9 @@ void gnc_commodity_table_copy(gnc_commodity_table *dest,
                               gnc_commodity_table *src);
 /** @} */
 /* ---------------------------------------------------------- */
-/** @name Commodity Table Lookup functions */
-/** @{ */
+/** @name Commodity Table Lookup functions
+@{
+*/
 gnc_commodity * gnc_commodity_table_lookup(const gnc_commodity_table * table, 
                                            const char * namespace, 
                                            const char * mnemonic);
@@ -612,8 +620,9 @@ gnc_commodity_namespace * gnc_commodity_find_namespace_by_guid(const GUID *guid,
 /** @} */
 /* ---------------------------------------------------------- */
 
-/** @name Commodity Table Maintenance functions */
-/** @{ */
+/** @name Commodity Table Maintenance functions
+ @{
+*/
 
 /** Add a new commodity to the commodity table.  This routine handles
  *  the cases where the commodity already exists in the database (does
@@ -651,8 +660,9 @@ gboolean gnc_commodity_table_add_default_data(gnc_commodity_table *table, QofBoo
 
 /** @} */
 /* ---------------------------------------------------------- */
-/** @name Commodity Table Namespace functions */
-/** @{ */
+/** @name Commodity Table Namespace functions
+ @{
+*/
 
 /** Return the textual name of a namespace data strucure.
  *
@@ -743,8 +753,9 @@ void      gnc_commodity_table_delete_namespace(gnc_commodity_table * t,
                                                const char * namespace);
 /** @} */
 /* ---------------------------------------------------------- */
-/** @name Commodity Table Accessor functions */
-/** @{ */
+/** @name Commodity Table Accessor functions
+ @{
+*/
 
 /** Returns the number of commodities in the commodity table.
  *
@@ -806,8 +817,9 @@ gboolean gnc_commodity_table_foreach_commodity(const gnc_commodity_table * table
 
 
 /* ---------------------------------------------------------- */
-/** @name Commodity Table Private/Internal-Use Only Routines */
-/** @{ */
+/** @name Commodity Table Private/Internal-Use Only Routines
+ @{
+*/
 
 /** Set the 'mark' field for the specified commodity.
  *

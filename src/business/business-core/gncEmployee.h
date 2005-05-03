@@ -43,8 +43,8 @@ typedef struct _gncEmployee GncEmployee;
 #define GNC_IS_EMPLOYEE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_EMPLOYEE))
 #define GNC_EMPLOYEE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_EMPLOYEE, GncEmployee))
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncEmployee *gncEmployeeCreate (QofBook *book);
 void gncEmployeeDestroy (GncEmployee *employee);
 void gncEmployeeBeginEdit (GncEmployee *employee);
@@ -52,8 +52,8 @@ void gncEmployeeCommitEdit (GncEmployee *employee);
 int gncEmployeeCompare (GncEmployee *a, GncEmployee *b);
 /** @} */
 
-/** @name Set Functions */
-/** @{ */
+/** @name Set Functions 
+ @{ */
 void gncEmployeeSetID (GncEmployee *employee, const char *id);
 void gncEmployeeSetUsername (GncEmployee *employee, const char *username);
 void gncEmployeeSetLanguage (GncEmployee *employee, const char *language);
@@ -65,8 +65,8 @@ void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
 void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
 /** @} */
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 QofBook * gncEmployeeGetBook (GncEmployee *employee);
 const char * gncEmployeeGetID (GncEmployee *employee);
 const char * gncEmployeeGetUsername (GncEmployee *employee);

@@ -43,9 +43,10 @@
 #include "qofbook.h"
 
 
-/** PROTOTYPES ******************************************************/
-/** @name Constructors, Destructors */
-/** @{ */
+/* PROTOTYPES ******************************************************/
+/** @name Constructors, Destructors 
+ @{
+*/
 /**
  * The xaccMallocAccountGroup() routine will create a new account group.
  *    This is an internal-use function, you almost certainly want to
@@ -90,8 +91,9 @@ gboolean xaccGroupEqual(AccountGroup *a, AccountGroup *b,
 
 /** @} */
 
-/** @name Editing */
-/** @{ */
+/** @name Editing
+ @{
+*/
 /** Start of begine/commit sequence.  All changes to an account 
  *  group should be bracketed by calls to begin-edit/commit-edit
  */
@@ -124,8 +126,9 @@ void     xaccGroupMarkSaved (AccountGroup *grp);
 void     xaccGroupMarkNotSaved (AccountGroup *grp);
 /** @} */
 
-/** @name Concatenation, Merging */
-/** @{ */
+/** @name Concatenation, Merging
+ @{
+*/
 /**
  * The xaccGroupConcatGroup() subroutine will move (reparent) 
  *    all accounts from the "src" group to the "dest" group,
@@ -167,8 +170,9 @@ void    xaccGroupInsertAccount (AccountGroup *grp, Account *acc);
 void    xaccAccountInsertSubAccount (Account *parent, Account *child);
 /** @} */
 
-/** @name Counting the Size and Depth of the Account Tree */
-/** @{ */
+/** @name Counting the Size and Depth of the Account Tree
+ @{
+*/
 /** The xaccGroupGetNumSubAccounts() subroutine returns the number
  *    of accounts, including subaccounts, in the account group
  */
@@ -186,8 +190,9 @@ int     xaccGroupGetNumAccounts (AccountGroup *grp);
 int     xaccGroupGetDepth (AccountGroup *grp);
 /** @} */
 
-/** @name Getting Accounts and Subaccounts */
-/** @{ */
+/** @name Getting Accounts and Subaccounts
+ @{
+*/
 /** DOCUMENT ME! is this routine deprecated? XXX using index is weird! */
 Account * xaccGroupGetAccount (AccountGroup *group, int index);
 
@@ -220,8 +225,9 @@ Account * xaccGroupGetParentAccount (AccountGroup *group);
 
 /** @} */
 
-/** @name Getting Accounts and Subaccounts by Name */
-/** @{ */
+/** @name Getting Accounts and Subaccounts by Name
+ @{
+*/
 /** The xaccGetAccountFromName() subroutine fetches the
  *    account by name from the collection of accounts
  *    in the indicated AccountGroup group.  It returns NULL if the
@@ -254,8 +260,9 @@ Account *xaccGetPeerAccountFromFullName (Account *acc,
 
 /** @} */
 
-/** @name Traversal, ForEach */
-/** @{ */
+/** @name Traversal, ForEach
+ @{
+*/
 
 typedef  gpointer (*AccountCallback)(Account *a, gpointer data);
 
@@ -284,7 +291,8 @@ gpointer xaccGroupForEachAccount (AccountGroup *grp,
 
 /** @} */
 
-/** @name Staged Traversal 
+/** @name Staged Traversal
+
  * The following functions provide support for "staged traversals"
  * over all of the transactions in an account or group.  The idea
  * is to be able to perform a sequence of traversals ("stages"),
@@ -318,9 +326,9 @@ gpointer xaccGroupForEachAccount (AccountGroup *grp,
  *
  * Note that currently, there is a hard limit of 256 stages, which
  * can be changed by enlarging "marker" in the transaction struct.
- * */
-
-/** @{ */
+ *
+ @{
+*/
 /** xaccGroupBeginStagedTransactionTraversals() resets the traversal
  *    marker inside each of all the transactions in the group so that
  *    a new sequence of staged traversals can begin.
@@ -419,4 +427,3 @@ int xaccGroupForEachTransaction(AccountGroup *g,
 #endif /* XACC_ACCOUNT_GROUP_H */
 /** @} */
 /** @} */
-

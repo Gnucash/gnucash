@@ -26,7 +26,7 @@
 #include "table-layout.h"
 #include "split-register.h"
 /** @addtogroup GUI
-@{ */
+    @{ */
 /** @addtogroup Register Register visual layout.
 
  *  pick specific cell types to sit in specific columns, and add 
@@ -40,8 +40,8 @@
  *  original intent was that the layout would be fetched from a 
  *  config file that could be tweaked for a specific, non-GnuCash 
  *  application.
+    @{
  */
-/** @{ */
 /** @file split-register-layout.h
     @brief Create the actual register visual layout
     @author Copyright (C) 1998, 2004 Linas Vepstas <linas@linas.org>
