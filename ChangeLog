@@ -1,3 +1,8 @@
+2005-05-05  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/gnc-hbci-utils.c: Improve debugging
+	messages.
+
 2005-04-21  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-getbalance.c: Fix forgotten NULL

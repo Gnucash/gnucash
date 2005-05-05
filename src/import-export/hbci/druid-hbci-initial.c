@@ -450,7 +450,8 @@ on_aqhbci_button (GtkButton *button,
   HBCIInitialInfo *info = user_data;
   GWEN_BUFFER *buf;
   int res;
-  const char *backend_name = "aqhbci";
+  const GWEN_STRINGLIST *active_backends;
+  const char *backend_name;
 
   /* This is the point where we look for and start an external
      application shipped with aqhbci that contains the setup druid for
@@ -465,6 +466,15 @@ on_aqhbci_button (GtkButton *button,
   const char *wizard_path;
   AB_BANKING *banking = info->api;
   g_assert(info->druid);
+
+  active_backends = AB_Banking_GetActiveProviders (banking);
+  if (GWEN_StringList_Count(active_backends) <= 1)
+    backend_name = "aqhbci";
+  else {
+    /* FIXME: Present a selection dialog to select a particular
+       backend */
+    backend_name = "aqhbci";
+  }
 
   buf = GWEN_Buffer_new(NULL, 300, 0, 0);
   AB_Banking_FindWizard(banking, backend_name, NULL, buf);
