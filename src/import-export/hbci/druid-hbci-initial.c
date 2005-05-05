@@ -43,6 +43,7 @@
 #include "gnc-component-manager.h"
 
 #include <aqbanking/banking.h>
+#include <gwenhywfar/stringlist.h>
 
 /* #define DEFAULT_HBCI_VERSION 201 */
 
@@ -467,13 +468,38 @@ on_aqhbci_button (GtkButton *button,
   AB_BANKING *banking = info->api;
   g_assert(info->druid);
 
+  /* Uh, backends will only show up here if they have been "activated"
+     before, i.e. a newly installed backend without setup will not
+     appear here. Well, we leave it at this for now. */
   active_backends = AB_Banking_GetActiveProviders (banking);
-  if (GWEN_StringList_Count(active_backends) <= 1)
+
+  if (GWEN_StringList_Count(active_backends) < 1)
     backend_name = "aqhbci";
+  else if (GWEN_StringList_Count(active_backends) == 1)
+    backend_name = GWEN_StringList_FirstString(active_backends);
   else {
-    /* FIXME: Present a selection dialog to select a particular
-       backend */
-    backend_name = "aqhbci";
+    /* Present a selection dialog to select a particular backend */
+    GList *radio_list = NULL;
+    int x;
+    GWEN_STRINGLISTENTRY *sentry = GWEN_StringList_FirstEntry(active_backends);
+
+    while (!sentry) {
+      radio_list = g_list_append(radio_list, g_strdup(GWEN_StringListEntry_Data(sentry)));
+      sentry = GWEN_StringListEntry_Next (sentry);
+    }
+    x = gnc_choose_radio_option_dialog (GTK_WIDGET(info->window),
+						 _("Choose AqBanking Backend"),
+						 _("Please choose an AqBanking backend to be configured"),
+						 0,
+						 radio_list);
+    g_list_free(radio_list);
+
+    sentry = GWEN_StringList_FirstEntry(active_backends);
+    while (x > 0) {
+      sentry = GWEN_StringListEntry_Next (sentry);
+      x--;
+    }
+    backend_name = GWEN_StringListEntry_Data (sentry);
   }
 
   buf = GWEN_Buffer_new(NULL, 300, 0, 0);
