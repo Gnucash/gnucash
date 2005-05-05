@@ -28,6 +28,7 @@
 #include <iconv.h>
 #include <langinfo.h>
 #include <gwenhywfar/directory.h>
+#include <gwenhywfar/logger.h>
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
@@ -189,6 +190,7 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 /*   list_int *list; */
 /*   const char *msg; */
   int cause = 0;
+  AB_JOB_STATUS jobstatus;
   
   g_assert (job);
 /*   if (AB_JOB_status (job) != HBCI_JOB_STATUS_DONE) */
@@ -197,10 +199,21 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 /*     return; */
 
   if (verbose) {
-    printf("OutboxJob status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
+    printf("gnc_hbci_debug_outboxjob: Job status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
 
     printf(", result: %s", AB_Job_GetResultText(job));
     printf("\n");
+  }
+
+  jobstatus = AB_Job_GetStatus (job);
+  if (jobstatus == AB_Job_StatusError) {
+    if (!verbose)
+      printf("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
+	     AB_Job_Type2Char(AB_Job_GetType(job)),
+	     AB_Job_GetResultText(job));
+    cause = 9000;
+  } else {
+    cause = 0;
   }
 
 #if 0  
@@ -420,17 +433,23 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 {
   int err;
   int resultcode;
+  int be_verbose = FALSE;
 	  
   if (inter)
     GNCInteractor_show (inter);
 
   if (gnc_lookup_boolean_option("_+Advanced", 
 				"HBCI Verbose Debug Messages", FALSE)) {
-/*     GWEN_Logger_SetLevel(0, GWEN_LoggerLevelDebug); */
-/*     HBCI_Hbci_setDebugLevel (4); */
+    GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevelNotice);
+    GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevelInfo);
+    GWEN_Logger_SetLevel("aqhbci", GWEN_LoggerLevelInfo);
+    be_verbose = TRUE;
   }
-/*   else */
-/*     HBCI_Hbci_setDebugLevel (0); */
+  else {
+    GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevelError);
+    GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevelError);
+    GWEN_Logger_SetLevel("aqhbci", GWEN_LoggerLevelError);
+  }
 
   do {
     if (inter) {
@@ -450,7 +469,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
     
   } while (gnc_hbci_Error_retry (parent, err, inter));
   
-  resultcode = gnc_hbci_debug_outboxjob (job, FALSE);
+  resultcode = gnc_hbci_debug_outboxjob (job, be_verbose);
   if (!hbci_Error_isOk(err)) {
 /*     char *errstr =  */
 /*       g_strdup_printf("gnc_AB_BANKING_execute: Error at executeQueue: %s", */
