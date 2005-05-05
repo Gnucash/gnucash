@@ -271,6 +271,12 @@ Resources
   - There's no way to edit/refine a search.
     [There's no way to do so in 1.8, either...]
 
+- Scheduled Transactions
+
+  - Font hard-coded (dense-cal), especially broken for non-ISO8859-1 locales.
+
+    - http://bugzilla.gnome.org/show_bug.cgi?id=303180
+
 -----------------------------------------
 <#GOG> ----------------------------------
 
