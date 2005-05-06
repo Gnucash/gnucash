@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-13 13:46+0100\n"
-"PO-Revision-Date: 2005-03-13 13:47+0100\n"
+"POT-Creation-Date: 2005-05-06 23:24+0200\n"
+"PO-Revision-Date: 2005-05-06 23:26+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2685,7 +2685,7 @@ msgstr ""
 "Fehler aufgetreten beim Speichern eines Kontos:\n"
 "%d: %s"
 
-#: src/engine/Account.c:2513 src/import-export/hbci/gnc-hbci-utils.c:571
+#: src/engine/Account.c:2513 src/import-export/hbci/gnc-hbci-utils.c:607
 #: intl-scm/guile-strings.c:107 intl-scm/guile-strings.c:1882
 msgid "Bank"
 msgstr "Bank"
@@ -3571,7 +3571,7 @@ msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 #: src/import-export/generic-import.glade:161
 #: src/import-export/generic-import.glade:389
 #: src/import-export/generic-import.glade:899
-#: src/import-export/hbci/gnc-hbci-utils.c:570
+#: src/import-export/hbci/gnc-hbci-utils.c:606
 #: src/import-export/qif-import/qif.glade:125
 #: src/register/ledger-core/split-register-model.c:191
 #: intl-scm/guile-strings.c:2312 intl-scm/guile-strings.c:2432
@@ -7282,42 +7282,52 @@ msgstr ""
 "Die beiden PINs haben nicht übereingestimmt.\n"
 "Bitte erneut eingeben."
 
-#: src/import-export/hbci/druid-hbci-initial.c:140
+#: src/import-export/hbci/druid-hbci-initial.c:141
 #, c-format
 msgid "%s at %s (code %s)"
 msgstr "%s bei %s (BLZ %s)"
 
-#: src/import-export/hbci/druid-hbci-initial.c:145
+#: src/import-export/hbci/druid-hbci-initial.c:146
 #, c-format
 msgid "%s at bank code %s"
 msgstr "%s bei %s"
 
-#: src/import-export/hbci/druid-hbci-initial.c:535
+#: src/import-export/hbci/druid-hbci-initial.c:506
+msgid "Choose AqBanking Backend"
+msgstr "AqBanking-Modul wählen"
+
+#: src/import-export/hbci/druid-hbci-initial.c:507
+msgid "Please choose an AqBanking backend to be configured"
+msgstr "Wählen Sie das Modul von AqBanking, das Sie einrichten möchten."
+
+#: src/import-export/hbci/druid-hbci-initial.c:609
+#, c-format
 msgid ""
-"The external program \"AqHBCI Setup Wizard\" returned a nonzero \n"
+"The external program \"%s Setup Wizard\" returned a nonzero \n"
 "exit code which means it has not been finished successfully. \n"
-"The further HBCI setup can only be finished if the AqHBCI \n"
+"The further HBCI setup can only be finished if the %s \n"
 "Setup Wizard is run successfully. Please try to start and \n"
-"successfully finish the AqHBCI Setup Wizard program again."
+"successfully finish the %s Setup Wizard program again."
 msgstr ""
-"Das externe Programm \"AqHBCI Einrichtungs-Assistent\" hat einen \n"
+"Das externe Programm \"%s Einrichtungs-Assistent\" hat einen \n"
 "Fehlercode zurückgegeben, was bedeutet, daß die Einrichtung nicht\n"
 "erfolgreich abgeschlossen worden ist. Die weitere HBCI Einrichtung\n"
-"in GnuCash kann nur fortgesetzt werden, wenn der AqHBCI Assistent \n"
+"in GnuCash kann nur fortgesetzt werden, wenn der %s Assistent \n"
 "erfolgreich aufgerufen worden ist. Bitte versuchen Sie erneut, \n"
-"den AqHBCI Einrichtungs-Assistent korrekt auszuführen."
+"den %s Einrichtungs-Assistent korrekt auszuführen."
 
-#: src/import-export/hbci/druid-hbci-initial.c:546
+#: src/import-export/hbci/druid-hbci-initial.c:622
+#, c-format
 msgid ""
-"The external program \"AqHBCI Setup Wizard\" has not been found. \n"
+"The external program \"%s Setup Wizard\" has not been found. \n"
 "\n"
-"Did you install the package \"aqhbci-qt-tools\" of AqHBCI? \n"
+"Did you install the package \"%s-qt-tools\" of %s? \n"
 "If not, please install it now."
 msgstr ""
-"Das externe Programm \"AqHBCI Einrichtungs-Assistent\" konnte nicht\n"
+"Das externe Programm \"%s Einrichtungs-Assistent\" konnte nicht\n"
 "gefunden werden. \n"
 "\n"
-"Haben Sie das Paket \"aqhbci-qt-tools\" der Bibliothek AqHBCI\n"
+"Haben Sie das Paket \"%s-qt-tools\" der Bibliothek %s\n"
 "installiert? Falls nicht, dann installieren Sie es jetzt bitte."
 
 #: src/import-export/hbci/druid-hbci-utils.c:171
@@ -7342,7 +7352,7 @@ msgstr ""
 "existiert nicht.\n"
 "Bitte wählen Sie einen anderen Ort für diese Datei."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:267
+#: src/import-export/hbci/gnc-hbci-utils.c:282
 msgid ""
 "The PIN you entered was wrong.\n"
 "Do you want to try again?"
@@ -7350,7 +7360,7 @@ msgstr ""
 "Die eingegebene PIN war falsch.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:273
+#: src/import-export/hbci/gnc-hbci-utils.c:288
 msgid ""
 "The PIN you entered was wrong.\n"
 "ATTENTION: You have zero further wrong retries left!\n"
@@ -7360,7 +7370,7 @@ msgstr ""
 "VORSICHT: Es ist kein weiterer Fehlversuch möglich!\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:280
+#: src/import-export/hbci/gnc-hbci-utils.c:295
 msgid ""
 "The PIN you entered was wrong.\n"
 "You have one further wrong retry left.\n"
@@ -7370,7 +7380,7 @@ msgstr ""
 "Es ist genau ein weiterer Fehlversuch möglich.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:287
+#: src/import-export/hbci/gnc-hbci-utils.c:302
 msgid ""
 "The PIN you entered was wrong.\n"
 "You have two further wrong retries left.\n"
@@ -7380,7 +7390,7 @@ msgstr ""
 "Es sind zwei weitere Fehlversuche möglich.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:297
+#: src/import-export/hbci/gnc-hbci-utils.c:312
 msgid ""
 "The PIN you entered was too short.\n"
 "Do you want to try again?"
@@ -7388,7 +7398,7 @@ msgstr ""
 "Die eingegebene PIN war zu kurz.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:303
+#: src/import-export/hbci/gnc-hbci-utils.c:318
 msgid ""
 "Unfortunately you entered a wrong PIN for too many times.\n"
 "Your chip card is therefore destroyed. Aborting."
@@ -7396,7 +7406,7 @@ msgstr ""
 "Sie haben zu oft eine falsche PIN eingegeben. Ihre Chipkarte ist\n"
 "damit leider unbrauchbar geworden. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:312
+#: src/import-export/hbci/gnc-hbci-utils.c:327
 msgid ""
 "No chip card has been found in the chip card reader.\n"
 "Do you want to try again?"
@@ -7404,7 +7414,7 @@ msgstr ""
 "Im Kartenleser wurde keine Chipkarte erkannt.\n"
 "Möchten Sie erneut versuchen?"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:318
+#: src/import-export/hbci/gnc-hbci-utils.c:333
 msgid ""
 "Unfortunately this HBCI job is not supported \n"
 "by your bank or for your account. Aborting."
@@ -7412,7 +7422,7 @@ msgstr ""
 "Dieser HBCI Geschäftsvorfall wird von Ihrer Bank leider nicht\n"
 "unterstützt oder ist Ihnen nicht gestattet. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:326
+#: src/import-export/hbci/gnc-hbci-utils.c:341
 msgid ""
 "The server of your bank refused the HBCI connection.\n"
 "Please try again later. Aborting."
@@ -7420,7 +7430,7 @@ msgstr ""
 "Der HBCI Server der Bank hat die Verbindung abgewiesen. Bitte\n"
 "versuchen Sie es später noch einmal. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:333
+#: src/import-export/hbci/gnc-hbci-utils.c:348
 msgid ""
 "There was an error when loading the plugin for your security medium \n"
 "(see log window). Probably the versions of your currently installed \n"
@@ -7433,7 +7443,7 @@ msgstr ""
 "zusammen. In diesem Fall müssten Sie das Plugin neu kompilieren und\n"
 "neu installieren. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:342
+#: src/import-export/hbci/gnc-hbci-utils.c:357
 msgid ""
 "Your security medium is not supported. No appropriate plugin \n"
 "has been found for that medium. Aborting."
@@ -7441,21 +7451,21 @@ msgstr ""
 "Ihr Sicherheitsmedium wird nicht unterstützt. Es konnte kein passendes\n"
 "Plugin für dieses Medium gefunden werden. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:540 intl-scm/guile-strings.c:3576
+#: src/import-export/hbci/gnc-hbci-utils.c:575 intl-scm/guile-strings.c:3576
 #: intl-scm/guile-strings.c:3598
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:558
-#: src/import-export/hbci/gnc-hbci-utils.c:560
+#: src/import-export/hbci/gnc-hbci-utils.c:594
+#: src/import-export/hbci/gnc-hbci-utils.c:596
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:653
+#: src/import-export/hbci/gnc-hbci-utils.c:689
 msgid "Choose HBCI bank"
 msgstr "HBCI Bank auswählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:654
+#: src/import-export/hbci/gnc-hbci-utils.c:690
 msgid ""
 "More than one HBCI bank is available for \n"
 "the requested operation. Please choose \n"
@@ -7464,17 +7474,17 @@ msgstr ""
 "Für die gewünschte Operation stehen mehr als eine HBCI Bank zur\n"
 "Verfügung. Bitte wählen Sie, welche benutzt werden soll."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:723
-#: src/import-export/hbci/gnc-hbci-utils.c:799
+#: src/import-export/hbci/gnc-hbci-utils.c:759
+#: src/import-export/hbci/gnc-hbci-utils.c:835
 #, c-format
 msgid "%s (%s) at bank %s (%s)"
 msgstr "%s (%s) bei Bank %s (BLZ %s)"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:733
+#: src/import-export/hbci/gnc-hbci-utils.c:769
 msgid "Choose HBCI customer"
 msgstr "HBCI Kundennummer wählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:734
+#: src/import-export/hbci/gnc-hbci-utils.c:770
 msgid ""
 "More than one HBCI customer is available for \n"
 "the requested operation. Please choose \n"
@@ -7484,11 +7494,11 @@ msgstr ""
 "Verfügung, unterschieden nach Kundennummer. Bitte wählen Sie, welcher\n"
 "benutzt werden soll."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:809
+#: src/import-export/hbci/gnc-hbci-utils.c:845
 msgid "Choose HBCI user"
 msgstr "HBCI Benutzerkennung wählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:810
+#: src/import-export/hbci/gnc-hbci-utils.c:846
 msgid ""
 "More than one HBCI user is available for \n"
 "the requested operation. Please choose \n"
@@ -7540,7 +7550,7 @@ msgstr "Online Aktionen"
 msgid "Online Banking & Importing"
 msgstr "Online Banking & Import"
 
-#: src/import-export/hbci/hbci-interaction.c:348
+#: src/import-export/hbci/hbci-interaction.c:343
 #, c-format
 msgid ""
 "The PIN needs to be at least %d characters \n"
@@ -7549,7 +7559,7 @@ msgstr ""
 "Die PIN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
-#: src/import-export/hbci/hbci-interaction.c:415
+#: src/import-export/hbci/hbci-interaction.c:410
 #, c-format
 msgid ""
 "This TAN needs to be at least %d characters \n"
@@ -7558,41 +7568,41 @@ msgstr ""
 "Diese TAN muß mindestens %d Zeichen lang \n"
 "sein.  Erneut versuchen?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:335
+#: src/import-export/hbci/dialog-hbcitrans.c:337
 msgid "Enter an Online Direct Debit Note"
 msgstr "Online-Lastschrift eingeben"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:338
+#: src/import-export/hbci/dialog-hbcitrans.c:340
 msgid "Debited Account Owner"
 msgstr "Zahlungspflichtiger"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:340
+#: src/import-export/hbci/dialog-hbcitrans.c:342
 msgid "Debited Account Number"
 msgstr "Konto-Nr. des Zahlungspflichtigen"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:342
+#: src/import-export/hbci/dialog-hbcitrans.c:344
 msgid "Debited Account Bank Code"
 msgstr "BLZ des Zahlungspflichtigen"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:345
+#: src/import-export/hbci/dialog-hbcitrans.c:347
 msgid "Credited Account Owner"
 msgstr "Auftraggeber"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:347
+#: src/import-export/hbci/dialog-hbcitrans.c:349
 msgid "Credited Account Number"
 msgstr "Konto-Nr. des Auftraggebers"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:349
+#: src/import-export/hbci/dialog-hbcitrans.c:351
 msgid "Credited Account Bank Code"
 msgstr "BLZ des Auftraggebers"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:368
-#: src/import-export/hbci/dialog-hbcitrans.c:762
-#: src/import-export/hbci/dialog-hbcitrans.c:771
+#: src/import-export/hbci/dialog-hbcitrans.c:370
+#: src/import-export/hbci/dialog-hbcitrans.c:798
+#: src/import-export/hbci/dialog-hbcitrans.c:807
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:483
+#: src/import-export/hbci/dialog-hbcitrans.c:494
 msgid ""
 "The amount is zero or the amount field could not be \n"
 "interpreted correctly. You might have mixed up decimal \n"
@@ -7610,7 +7620,7 @@ msgstr ""
 "Dies ergibt keinen zulässigen Zahlungsauftrag. Wollen Sie den Auftrag\n"
 "erneut eingeben?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:592
+#: src/import-export/hbci/dialog-hbcitrans.c:628
 #, c-format
 msgid ""
 "The internal check of the destination account number '%s' \n"
@@ -7623,7 +7633,7 @@ msgstr ""
 "einen Fehler enthält. Wollen Sie den Auftrag trotzdem mit dieser\n"
 "Kontonummer abschicken?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:673
+#: src/import-export/hbci/dialog-hbcitrans.c:709
 msgid ""
 "The job was sent to the bank successfully, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -7641,20 +7651,20 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:803
+#: src/import-export/hbci/dialog-hbcitrans.c:839
 msgid "Enter name for new template:"
 msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:925
+#: src/import-export/hbci/dialog-hbcitrans.c:961
 msgid "Do you really want to sort the list of templates?"
 msgstr "Wollen Sie die Liste der Vorlagen wirklich sortieren?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:961
+#: src/import-export/hbci/dialog-hbcitrans.c:997
 #, c-format
 msgid "Do you really want to delete the template '%s'?"
 msgstr "Wollen Sie die Vorlage »%s« wirklich löschen?"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:253
+#: src/import-export/hbci/gnc-hbci-getbalance.c:257
 msgid ""
 "The downloaded HBCI Balance was zero.\n"
 "Either this is the correct balance, or your bank does not \n"
@@ -7670,7 +7680,7 @@ msgstr ""
 "HBCI-Version auswählen. Versuchen Sie anschließend erneut, den Saldo\n"
 "abzufragen.  \n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:268
+#: src/import-export/hbci/gnc-hbci-getbalance.c:272
 #, c-format
 msgid ""
 "Result of HBCI job: \n"
@@ -7679,7 +7689,7 @@ msgstr ""
 "Ergebnis des HBCI Auftrag:\n"
 "Gebuchter Saldo des Kontos ist %s\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:275
+#: src/import-export/hbci/gnc-hbci-getbalance.c:279
 #, c-format
 msgid ""
 "For your information: This account also \n"
@@ -7688,7 +7698,7 @@ msgstr ""
 "Zu Ihrer Information: Dieses Konto hat außerdem folgenden \n"
 "Saldo an zur Ausführung vorgemerkten Aufträgen: %s\n"
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:280
+#: src/import-export/hbci/gnc-hbci-getbalance.c:284
 msgid ""
 "The booked balance is identical to the current \n"
 "reconciled balance of the account."
@@ -7696,7 +7706,7 @@ msgstr ""
 "Dieser gebuchte Saldo stimmt mit dem aktuellen\n"
 "abgeglichenen Saldo Ihres Kontos überein."
 
-#: src/import-export/hbci/gnc-hbci-getbalance.c:288
+#: src/import-export/hbci/gnc-hbci-getbalance.c:292
 msgid "Reconcile account now?"
 msgstr "Konto jetzt abgleichen?"
 

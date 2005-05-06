@@ -1,3 +1,10 @@
+2005-05-06  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/druid-hbci-initial.c (on_aqhbci_button):
+	Finally generalize the AqBanking setup call. Now the setup wizard
+	for OFX-DirectConnect can be called by Tools -> HBCI Setup as
+	well.
+
 2005-05-05  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/gnc-hbci-utils.c: Improve debugging
