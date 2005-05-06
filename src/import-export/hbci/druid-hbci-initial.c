@@ -522,10 +522,7 @@ on_aqhbci_button (GtkButton *button,
 	plugindescr = GWEN_PluginDescription_List2Iterator_Next (pluginlist_it);
 	x--;
       }
-      if (x > -1)
-	backend_name_nc = GWEN_PluginDescription_GetName(plugindescr);
-      else
-	backend_name_nc = 0;
+      backend_name_nc = GWEN_PluginDescription_GetName(plugindescr);
     }
     GWEN_PluginDescription_List2Iterator_free(pluginlist_it);
   }
