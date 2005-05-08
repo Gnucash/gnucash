@@ -70,17 +70,16 @@ void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
 void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
-void qofInvoiceSetOwner (GncInvoice *invoice, QofEntity *ent);
+void qofInvoiceSetOwner (GncInvoice *invoice, QofCollection *coll);
+void qofInvoiceSetBillTo (GncInvoice *invoice, QofCollection *coll);
 /** \brief create the entry list from a temporary frame.
 
 An invoice can hold an open ended list of entries that are summed to
 make the total payable. To represent these entries within the invoice,
-KVP is used to list the references to the GncEntry's for the invoice.
-
-The KvpFrame of KVP_TYPE_GLIST KvpValues is converted to the internal
-GList of entries for this invoice.
+QOF_TYPE_COLLECT is used to list the references to the GncEntry's for
+the invoice. The collection contains a number of GncEntry objects.
 */
-void qofInvoiceSetEntries(GncInvoice *invoice, KvpFrame *invoice_frame);
+void qofInvoiceSetEntries(GncInvoice *invoice, QofCollection *entry_coll);
 void qofInvoiceSetJob (GncInvoice *invoice, GncJob *job);
 /** @} */
 
@@ -110,8 +109,10 @@ gboolean gncInvoiceGetActive (GncInvoice *invoice);
 
 Converts the GList of GncEntry inside GncInvoice to a KVP_TYPE_GLIST.
 */
-KvpFrame* qofInvoiceGetEntries (GncInvoice *invoice);
+QofCollection* qofInvoiceGetEntries (GncInvoice *invoice);
 GncJob* qofInvoiceGetJob (GncInvoice *invoice);
+QofCollection* qofInvoiceGetOwner (GncInvoice *invoice);
+QofCollection* qofInvoiceGetBillTo (GncInvoice *invoice);
 
 GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);

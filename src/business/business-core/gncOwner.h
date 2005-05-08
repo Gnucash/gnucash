@@ -65,6 +65,12 @@ to QOF as they can be used by objects like GncInvoice.
 void qofOwnerSetType(GncOwner *owner, const char* type_string);
 /** \brief Allow the union to be set independently of the type. */
 char* qofOwnerGetTypeString(GncOwner *owner);
+/** return the type for the collection. */
+QofIdType qofOwnerGetType(GncOwner *owner);
+/** return the owner itself as an entity. */
+QofEntity* qofOwnerGetOwner (GncOwner *owner);
+/** set the owner from the entity. */
+void qofOwnerSetEntity (GncOwner *owner, QofEntity *ent);
 
 /** \brief QOF union set routine.
 

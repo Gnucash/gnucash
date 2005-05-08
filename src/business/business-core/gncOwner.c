@@ -117,6 +117,77 @@ qofOwnerSetType(GncOwner *owner, const char* type_string)
 	qofOwnerSetOwner(owner, NULL);
 }
 
+QofIdType
+qofOwnerGetType(GncOwner *owner)
+{
+	gchar *type;
+
+	type = NULL;
+	switch(owner->type)
+	{
+		case GNC_OWNER_NONE : {
+			type = NULL;
+			break;
+		}
+		case GNC_OWNER_UNDEFINED : {
+			type = NULL;
+			break;
+		}
+		case GNC_OWNER_CUSTOMER : {
+			type = g_strdup(GNC_ID_CUSTOMER);
+			break;
+		}
+		case GNC_OWNER_JOB : {
+			type = g_strdup(GNC_ID_JOB);
+			break;
+		}
+		case GNC_OWNER_VENDOR : {
+			type = g_strdup(GNC_ID_VENDOR);
+			break;
+		}
+		case GNC_OWNER_EMPLOYEE : {
+			type = g_strdup(GNC_ID_EMPLOYEE);
+			break;
+		}
+	}
+	return (QofIdType)type;
+}
+
+QofEntity*
+qofOwnerGetOwner (GncOwner *owner)
+{
+	QofEntity *ent;
+
+	if(!owner) { return NULL; }
+	ent = NULL;
+	switch(owner->type)
+	{
+		case GNC_OWNER_NONE : {
+			break;
+		}
+		case GNC_OWNER_UNDEFINED : {
+			break;
+		}
+		case GNC_OWNER_CUSTOMER : {
+			ent = (QofEntity*)owner->owner.customer;
+			break;
+		}
+		case GNC_OWNER_JOB : {
+			ent = (QofEntity*)owner->owner.job;
+			break;
+		}
+		case GNC_OWNER_VENDOR : {
+			ent = (QofEntity*)owner->owner.vendor;
+			break;
+		}
+		case GNC_OWNER_EMPLOYEE : {
+			ent = (QofEntity*)owner->owner.employee;
+			break;
+		}
+	}
+	return ent;
+}
+
 char*
 qofOwnerGetTypeString(GncOwner *owner)
 {
@@ -126,6 +197,33 @@ qofOwnerGetTypeString(GncOwner *owner)
 	t = g_strdup(GncOwnerTypeasString(owner->type));
 	return t;
 }
+
+void
+qofOwnerSetEntity (GncOwner *owner, QofEntity *ent)
+{
+	if(!owner || !ent) { return; }
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_CUSTOMER))
+	{
+		owner->type = GNC_OWNER_CUSTOMER;
+		gncOwnerInitCustomer(owner, (GncCustomer*)ent);
+	}
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_JOB))
+	{
+		owner->type = GNC_OWNER_JOB;
+		gncOwnerInitJob(owner, (GncJob*)ent);
+	}
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_VENDOR))
+	{
+		owner->type = GNC_OWNER_VENDOR;
+		gncOwnerInitVendor(owner, (GncVendor*)ent);
+	}
+	if(0 == safe_strcmp(ent->e_type, GNC_ID_EMPLOYEE))
+	{
+		owner->type = GNC_OWNER_EMPLOYEE;
+		gncOwnerInitEmployee(owner, (GncEmployee*)ent);
+	}
+}
+
 
 void
 qofOwnerSetOwner(GncOwner *owner, gpointer obj)

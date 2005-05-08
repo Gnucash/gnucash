@@ -1,4 +1,13 @@
 2005-05-08  Neil Williams <linux@codehelp.co.uk>
+	* src/business/business-core/gncInvoice.c: Implementing
+	QOF_TYPE_COLLECT.
+	* src/business/business-core/gncInvoice.h: New functions to
+	support collections.
+	* src/business/business-core/gncOwner.c: Invoice collection
+	support.
+	* src/business/business-core/gncOwner.h: Doxygen and declarations.
+
+2005-05-08  Neil Williams <linux@codehelp.co.uk>
 	* src/backend/file/test/.cvsignore: Tweak
 	* src/backend/qsf/qsf-backend.c: Handling collections
 	in QSF
