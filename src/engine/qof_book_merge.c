@@ -350,7 +350,7 @@ int
 qof_book_mergeCompare( qof_book_mergeData *mergeData ) 
 {
 	qof_book_mergeRule *currentRule;
-
+	QofCollection *mergeColl, *targetColl;
 	gchar 			*stringImport, *stringTarget, *charImport, *charTarget;
 	QofEntity	 	*mergeEnt, *targetEnt, *referenceEnt;
 	const GUID 		*guidImport, *guidTarget;
@@ -476,6 +476,13 @@ qof_book_mergeCompare( qof_book_mergeData *mergeData )
 		}
 		/* No object should have QofSetterFunc defined for the book, but just to be safe, do nothing. */
 		if(safe_strcmp(mergeType, QOF_ID_BOOK) == 0) { knowntype= TRUE;	}
+		if(safe_strcmp(mergeType, QOF_TYPE_COLLECT) == 0) {
+			mergeColl = qtparam->param_getfcn(mergeEnt, qtparam);
+			targetColl = qtparam->param_getfcn(targetEnt, qtparam);
+			if(0 == qof_collection_compare(mergeColl, targetColl)) { mergeMatch = TRUE; }
+			currentRule = qof_book_mergeUpdateRule(currentRule, mergeMatch, DEFAULT_MERGE_WEIGHT);
+			knowntype = TRUE;
+		}
 		/* deal with custom type parameters : 
 		 using references to other registered QOF objects. */
 		if(knowntype == FALSE) {
@@ -817,6 +824,7 @@ void qof_book_mergeCommitRuleLoop(
 	QofEntity   *referenceEnt;
 	GSList      *linkage;
 	/* cm_ prefix used for variables that hold the data to commit */
+	QofCollection *cm_coll;
 	QofParam    *cm_param;
 	gchar       *cm_string;
 	const GUID  *cm_guid;
@@ -841,6 +849,7 @@ void qof_book_mergeCommitRuleLoop(
 	void (*char_setter)      (QofEntity*, char);
 	void (*kvp_frame_setter) (QofEntity*, KvpFrame*);
 	void (*reference_setter) (QofEntity*, QofEntity*);
+	void (*collection_setter)(QofEntity*, QofCollection*);
 
 	g_return_if_fail(rule != NULL);
 	g_return_if_fail(mergeData != NULL);
@@ -930,6 +939,12 @@ void qof_book_mergeCommitRuleLoop(
 			cm_char = char_getter(rule->importEnt,cm_param);
 			char_setter = (void(*)(QofEntity*, char))cm_param->param_setfcn;
 			if(char_setter != NULL) { char_setter(rule->targetEnt, cm_char); }
+			registered_type = TRUE;
+		}
+		if(safe_strcmp(rule->mergeType, QOF_TYPE_COLLECT) == 0) {
+			cm_coll = cm_param->param_getfcn(rule->importEnt, cm_param);
+			collection_setter = (void(*)(QofEntity*, QofCollection*))cm_param->param_setfcn;
+			if(collection_setter != NULL) { collection_setter(rule->targetEnt, cm_coll); }
 			registered_type = TRUE;
 		}
 		if(registered_type == FALSE) {

@@ -58,13 +58,15 @@
     a collection that is associated with that type, then you must use
     Books.
 
+	Entities can refer to other entities as well as to the basic
+	QOF types, using the qofclass parameters.
+
  @{ */
 /** @file qofid.h
     @brief QOF entity type identification system 
     @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu> 
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
 */
-
 
 #include <string.h>
 #include "guid.h"
@@ -147,7 +149,7 @@ void qof_entity_init (QofEntity *, QofIdType, QofCollection *);
 /** Release the data associated with this entity. Dont actually free
  * the memory associated with the instance. */
 void qof_entity_release (QofEntity *);
- /* @} */
+/** @} */
 
 /** Return the GUID of this entity */
 const GUID * qof_entity_get_guid (QofEntity *);
@@ -155,8 +157,7 @@ const GUID * qof_entity_get_guid (QofEntity *);
 /** @name Collections of Entities 
  @{ */
 
-/** create a new collection of entities of type
-*/
+/** create a new collection of entities of type */
 QofCollection * qof_collection_new (QofIdType type);
 
 /** destroy the collection */
@@ -186,8 +187,49 @@ void qof_collection_set_data (QofCollection *col, gpointer user_data);
 
 /** Return value of 'dirty' flag on collection */
 gboolean qof_collection_is_dirty (QofCollection *col);
-/** @} */
 
+/** \brief Add an entity to a QOF_TYPE_COLLECT.
+
+\note These are \b NOT the same as the main collections in the book.
+
+QOF_TYPE_COLLECT is a secondary collection, used to select entities
+as references of another entity. Entities can be freely added and merged
+across these secondary collections, they will not be removed from the
+original collection as they would by using ::qof_entity_insert_entity
+or ::qof_entity_remove_entity. 
+
+*/
+gboolean
+qof_collection_add_entity (QofCollection *coll, QofEntity *ent);
+
+/** \brief Merge two QOF_TYPE_COLLECT of the same type.
+
+\note \b NOT the same as the main collections in the book.
+
+QOF_TYPE_COLLECT uses a secondary collection, independent of
+those in the book. Entities will not be removed from the
+original collection as when using ::qof_entity_insert_entity
+or ::qof_entity_remove_entity.
+
+*/
+gboolean
+qof_collection_merge (QofCollection *target, QofCollection *merge);
+
+/** \brief Compare two secondary collections.
+
+Performs a deep comparision of the collections. Each QofEntity in
+each collection is looked up in the other collection, via the GUID.
+
+\return 0 if the collections are identical or both are NULL
+otherwise -1 if target is NULL or either collection contains an entity with an invalid
+GUID or if the types of the two collections do not match,
+or +1 if merge is NULL or if any entity exists in one collection but
+not in the other.
+*/
+gint
+qof_collection_compare (QofCollection *target, QofCollection *merge);
+
+/** @} */
 
 #endif /* QOF_ID_H */
 /** @} */

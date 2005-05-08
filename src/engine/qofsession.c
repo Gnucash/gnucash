@@ -370,7 +370,6 @@ qof_entity_param_cb(QofParam *param, gpointer data)
 	if((param->param_getfcn != NULL)&&(param->param_setfcn != NULL)) {
 			qecd->param_list = g_slist_prepend(qecd->param_list, param);
 	}
-	if(g_slist_length(qecd->param_list) == 0) { qecd->error = TRUE; }
 }
 
 QofEntityReference*
@@ -439,6 +438,8 @@ qof_entity_foreach_copy(gpointer data, gpointer user_data)
 	/* in case of any error, let the process know. */
 	if(context->error == TRUE) { return; }
 	context->error = TRUE;
+	cm_date.tv_nsec = 0;
+	cm_date.tv_sec =  0;
 	importEnt = context->from;
 	targetEnt = context->to;
 	registered_type = FALSE;
@@ -624,7 +625,7 @@ gboolean qof_entity_copy_to_session(QofSession* new_session, QofEntity* original
 	QofBook *book;
 	const GUID *g;
 
-	if(qof_entity_guid_match(new_session, original)) return FALSE;
+	if(qof_entity_guid_match(new_session, original)) { return FALSE; }
 	gnc_engine_suspend_events();
 	qecd.param_list = NULL;
 	book = qof_session_get_book(new_session);
@@ -637,7 +638,7 @@ gboolean qof_entity_copy_to_session(QofSession* new_session, QofEntity* original
 	g = qof_entity_get_guid(original);
 	qof_entity_set_guid(qecd.to, g);
 	qof_class_param_foreach(original->e_type, qof_entity_param_cb, &qecd);
-	if(qsf_check_error(&qecd)) { return FALSE; }
+	if(g_slist_length(qecd.param_list) == 0) { return FALSE; }
 	g_slist_foreach(qecd.param_list, qof_entity_foreach_copy, &qecd);
 	if(qsf_check_error(&qecd)) { return FALSE; }
 	g_slist_free(qecd.param_list);
@@ -686,6 +687,140 @@ gboolean qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_col
 	gnc_engine_resume_events();
 	return TRUE;
 }
+
+struct recurse_s
+{
+	QofSession *session;
+	gboolean   success;
+	GList      *ref_list;
+	GList      *ent_list;
+};
+
+static void
+recurse_collection_cb (QofEntity *ent, gpointer user_data)
+{
+	struct recurse_s *store;
+
+	if(user_data == NULL) { return; }
+	store = (struct recurse_s*)user_data;
+	if(!ent || !store) { return; }
+	store->ent_list = g_list_append(store->ent_list, ent);
+}
+
+static void
+recurse_ent_cb(QofEntity *ent, gpointer user_data)
+{
+	GList      *ref_list, *i, *j, *ent_list, *child_list;
+	QofParam   *ref_param;
+	QofEntity  *ref_ent, *child_ent;
+	QofSession *session;
+	struct recurse_s *store;
+	gboolean   success;
+
+	if(user_data == NULL) { return; }
+	store = (struct recurse_s*)user_data;
+	session = store->session;
+	success = store->success;
+	ref_list = NULL;
+	child_ent = NULL;
+	ref_list = g_list_copy(store->ref_list);
+	if((!session)||(!ent)) { return; }
+	ent_list = NULL;
+	child_list = NULL;
+	i = NULL;
+	j = NULL;
+	for(i = ref_list; i != NULL; i=i->next)
+	{
+		if(i->data == NULL) { continue; }
+		ref_param = (QofParam*)i->data;
+		if(ref_param->param_name == NULL) { continue; }
+		if(ref_param->param_type == QOF_TYPE_COLLECT) {
+			QofCollection *col;
+			col = ref_param->param_getfcn(ent, ref_param);
+			qof_collection_foreach(col, recurse_collection_cb, store);
+			continue;
+		}
+		ref_ent = (QofEntity*)ref_param->param_getfcn(ent, ref_param);
+		if((ref_ent)&&(ref_ent->e_type))
+		{
+			store->success = qof_entity_copy_to_session(session, ref_ent);
+			if(store->success) { ent_list = g_list_append(ent_list, ref_ent); }
+		}
+	}
+	for(i = ent_list; i != NULL; i = i->next)
+	{
+		if(i->data == NULL) { continue; }
+		child_ent = (QofEntity*)i->data;
+		if(child_ent == NULL) { continue; }
+		ref_list = qof_class_get_referenceList(child_ent->e_type);
+		for(j = ref_list; j != NULL; j = j->next)
+		{
+			if(j->data == NULL) { continue; }
+			ref_param = (QofParam*)j->data;
+			ref_ent = ref_param->param_getfcn(child_ent, ref_param);
+			if(ref_ent != NULL)
+			{
+				success = qof_entity_copy_to_session(session, ref_ent);
+				if(success) { child_list = g_list_append(child_list, ref_ent); }
+			}
+		}
+	}
+	for(i = child_list; i != NULL; i = i->next)
+	{
+		if(i->data == NULL) { continue; }
+		ref_ent = (QofEntity*)i->data;
+		if(ref_ent == NULL) { continue; }
+		ref_list = qof_class_get_referenceList(ref_ent->e_type);
+		for(j = ref_list; j != NULL; j = j->next)
+		{
+			if(j->data == NULL) { continue; }
+			ref_param = (QofParam*)j->data;
+			child_ent = ref_param->param_getfcn(ref_ent, ref_param);
+			if(child_ent != NULL)
+			{
+				qof_entity_copy_to_session(session, child_ent);
+			}
+		}
+	}
+}
+
+gboolean
+qof_entity_copy_coll_r(QofSession *new_session, QofCollection *coll)
+{
+	struct recurse_s store;
+	gboolean success;
+
+	if((!new_session)||(!coll)) { return FALSE; }
+	store.session = new_session;
+	success = TRUE;
+	store.success = success;
+	store.ent_list = NULL;
+	store.ref_list = qof_class_get_referenceList(qof_collection_get_type(coll));
+	success = qof_entity_copy_coll(new_session, coll);
+	if(success){ qof_collection_foreach(coll, recurse_ent_cb, &store); }
+	return success;
+}
+
+gboolean qof_entity_copy_one_r(QofSession *new_session, QofEntity *ent)
+{
+	struct recurse_s store;
+	QofCollection *coll;
+	gboolean success;
+
+	if((!new_session)||(!ent)) { return FALSE; }
+	store.session = new_session;
+	success = TRUE;
+	store.success = success;
+	store.ref_list = qof_class_get_referenceList(ent->e_type);
+	success = qof_entity_copy_to_session(new_session, ent);
+	if(success == TRUE) {
+		coll = qof_book_get_collection(qof_session_get_book(new_session), ent->e_type);
+		qof_collection_foreach(coll, recurse_ent_cb, &store);
+	}
+	return success;
+}
+
+
 
 /* ====================================================================== */
 

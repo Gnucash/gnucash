@@ -71,16 +71,16 @@ typedef struct _gncCustomer GncCustomer;
 #define GNC_IS_CUSTOMER(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_CUSTOMER))
 #define GNC_CUSTOMER(obj)     (QOF_CHECK_CAST((obj), GNC_ID_CUSTOMER, GncCustomer))
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncCustomer *gncCustomerCreate (QofBook *book);
 void gncCustomerDestroy (GncCustomer *customer);
 void gncCustomerBeginEdit (GncCustomer *customer);
 void gncCustomerCommitEdit (GncCustomer *customer);
 /** @} */
 
-/** @name Set Functions */
-/** @{ */
+/** @name Set Functions 
+ @{ */
 
 void gncCustomerSetID (GncCustomer *customer, const char *id);
 void gncCustomerSetName (GncCustomer *customer, const char *name);
@@ -100,8 +100,8 @@ void gncCustomerRemoveJob (GncCustomer *customer, GncJob *job);
 
 /** @} */
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 /** Return a pointer to the instance gncCustomer that is identified
  *  by the guid, and is residing in the book. Returns NULL if the 
  *  instance can't be found.
@@ -130,7 +130,13 @@ KvpFrame *gncCustomerGetSlots (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 /** @} */
 
+/** \name QOF additions
+ @{
+ */
+void qofCustomerSetAddr (GncCustomer *cust, QofEntity *addr_ent);
 
+void qofCustomerSetShipAddr (GncCustomer *cust, QofEntity *ship_addr_ent);
+/** @} */
 
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (GncCustomer *a, GncCustomer *b);

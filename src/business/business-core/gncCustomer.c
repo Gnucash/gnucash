@@ -426,6 +426,26 @@ GncAddress * gncCustomerGetAddr (GncCustomer *cust)
   return cust->addr;
 }
 
+void
+qofCustomerSetAddr (GncCustomer *cust, QofEntity *addr_ent)
+{
+	GncAddress *addr;
+
+	if(!cust) { return; }
+	addr = (GncAddress*)addr_ent;
+	cust->addr = addr;
+}
+
+void
+qofCustomerSetShipAddr (GncCustomer *cust, QofEntity *ship_addr_ent)
+{
+	GncAddress *ship_addr;
+
+	if(!cust) { return; }
+	ship_addr = (GncAddress*)ship_addr_ent;
+	cust->shipaddr = ship_addr;
+}
+
 GncAddress * gncCustomerGetShipAddr (GncCustomer *cust)
 {
   if (!cust) return NULL;
@@ -556,8 +576,8 @@ gboolean gncCustomerRegister (void)
 		(QofSetterFunc)gncCustomerSetDiscount },
 	{ CUSTOMER_CREDIT, QOF_TYPE_NUMERIC, (QofAccessFunc)gncCustomerGetCredit,
 		(QofSetterFunc)gncCustomerSetCredit },
-    { CUSTOMER_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetAddr, NULL },
-    { CUSTOMER_SHIPADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncCustomerGetShipAddr, NULL },
+    { CUSTOMER_ADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetAddr, (QofSetterFunc)qofCustomerSetAddr },
+    { CUSTOMER_SHIPADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetShipAddr, (QofSetterFunc)qofCustomerSetShipAddr },
 	{ CUSTOMER_TT_OVER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetTaxTableOverride, 
 		(QofSetterFunc)gncCustomerSetTaxTableOverride },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },

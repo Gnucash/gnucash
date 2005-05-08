@@ -32,16 +32,19 @@
 #include "gnc-engine-util.h"	/* safe_strcmp */
 #include "qofquerycore.h"
 #include "qofclass.h"
+#include "qofinstance-p.h"
 #include "guid.h"
 #include "gnc-event-p.h"
-
+#include "qofquery.h"
 #include "gncAddress.h"
 #include "gncAddressP.h"
+#include "gncOwner.h"
 
 struct _gncAddress 
 {
   QofBook *	book;
   QofEntity * parent;
+  QofInstance inst;
   gboolean	dirty;
   char *	name;
   char *	addr1;
@@ -77,6 +80,7 @@ gncAddressCreate (QofBook *book, QofEntity *prnt)
   if (!book) return NULL;
 
   addr = g_new0 (GncAddress, 1);
+  qof_instance_init(&addr->inst, GNC_ID_ADDRESS, book);
   addr->book = book;
   addr->dirty = FALSE;
   addr->parent = prnt;
@@ -91,6 +95,45 @@ gncAddressCreate (QofBook *book, QofEntity *prnt)
   addr->email = CACHE_INSERT ("");
 
   return addr;
+}
+
+GncAddress * 
+qofAddressCreate (QofBook *book)
+{
+  GncAddress *addr;
+
+  if (!book) return NULL;
+
+  addr = g_new0 (GncAddress, 1);
+  qof_instance_init(&addr->inst, GNC_ID_ADDRESS, book);
+  addr->book = book;
+  addr->dirty = FALSE;
+  addr->parent = NULL; /* set using an independent function. */
+
+  addr->name = CACHE_INSERT ("");
+  addr->addr1 = CACHE_INSERT ("");
+  addr->addr2 = CACHE_INSERT ("");
+  addr->addr3 = CACHE_INSERT ("");
+  addr->addr4 = CACHE_INSERT ("");
+  addr->phone = CACHE_INSERT ("");
+  addr->fax = CACHE_INSERT ("");
+  addr->email = CACHE_INSERT ("");
+
+  return addr;
+}
+
+void
+qofAddressSetOwner(GncAddress *addr, QofEntity *owner)
+{
+	if(!addr) { return; }
+	addr->parent = owner;
+}
+
+QofEntity*
+qofAddressGetOwner(GncAddress *addr)
+{
+	if(!addr) { return NULL; }
+	return addr->parent;
 }
 
 GncAddress * 
@@ -281,6 +324,21 @@ int gncAddressCompare (const GncAddress *a, const GncAddress *b)
   return safe_strcmp (a->name, b->name);
 }
 
+static QofObject GncAddressDesc =
+{
+	interface_version:  QOF_OBJECT_VERSION,
+	e_type:             GNC_ID_ADDRESS,
+	type_label:         "Address",
+	create:             (gpointer)qofAddressCreate,
+	book_begin:         NULL,
+	book_end:           NULL,
+	is_dirty:           NULL,
+	mark_clean:         NULL,
+	foreach:            qof_collection_foreach,
+	printable:          NULL,
+	version_cmp:        (int (*)(gpointer, gpointer)) qof_instance_version_cmp,
+};
+
 gboolean gncAddressRegister (void)
 {
   static QofParam params[] = {
@@ -293,10 +351,13 @@ gboolean gncAddressRegister (void)
     { ADDRESS_PHONE, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, (QofSetterFunc)gncAddressSetPhone },
     { ADDRESS_FAX, 		QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax, 	(QofSetterFunc)gncAddressSetFax },
     { ADDRESS_EMAIL, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, (QofSetterFunc)gncAddressSetEmail },
+    { ADDRESS_OWNER, GNC_ID_OWNER,    (QofAccessFunc)qofAddressGetOwner, (QofSetterFunc)qofAddressSetOwner },
+    { QOF_PARAM_BOOK, QOF_ID_BOOK,   (QofAccessFunc)qof_instance_get_book, NULL },
+    { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },
   };
 
-  qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncAddressCompare, params);
+  qof_class_register (GNC_ID_ADDRESS, (QofSortFunc)gncAddressCompare, params);
 
-  return TRUE;
+  return qof_object_register(&GncAddressDesc);
 }

@@ -22,10 +22,15 @@
 /** @addtogroup Business
     @{ */
 /** @addtogroup Invoice
+
+An invoice holds a list of entries, a pointer to the customer, 
+and the job, the dates entered and posted, as well as the account, 
+transaction and lot for the posted invoice.
     @{ */
 /** @file gncInvoice.h
     @brief  Business Invoice Interface 
     @author Copyright (C) 2001 Derek Atkins <warlord@MIT.EDU>
+    @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef GNC_INVOICE_H_
@@ -46,14 +51,14 @@ typedef struct _gncInvoice GncInvoice;
 #define GNC_IS_INVOICE(obj)  (QOF_CHECK_TYPE((obj), GNC_ID_INVOICE))
 #define GNC_INVOICE(obj)     (QOF_CHECK_CAST((obj), GNC_ID_INVOICE, GncInvoice))
 
-/** @name Create/Destroy Functions */
-/** @{ */
+/** @name Create/Destroy Functions 
+ @{ */
 GncInvoice *gncInvoiceCreate (QofBook *book);
 void gncInvoiceDestroy (GncInvoice *invoice);
 /** @} */
 
-/** @name Set Functions */
-/** @{ */
+/** @name Set Functions 
+ @{ */
 void gncInvoiceSetID (GncInvoice *invoice, const char *id);
 void gncInvoiceSetOwner (GncInvoice *invoice, GncOwner *owner);
 void gncInvoiceSetDateOpened (GncInvoice *invoice, Timespec date);
@@ -65,6 +70,18 @@ void gncInvoiceSetCurrency (GncInvoice *invoice, gnc_commodity *currency);
 void gncInvoiceSetActive (GncInvoice *invoice, gboolean active);
 void gncInvoiceSetBillTo (GncInvoice *invoice, GncOwner *billto);
 void gncInvoiceSetToChargeAmount (GncInvoice *invoice, gnc_numeric amount);
+void qofInvoiceSetOwner (GncInvoice *invoice, QofEntity *ent);
+/** \brief create the entry list from a temporary frame.
+
+An invoice can hold an open ended list of entries that are summed to
+make the total payable. To represent these entries within the invoice,
+KVP is used to list the references to the GncEntry's for the invoice.
+
+The KvpFrame of KVP_TYPE_GLIST KvpValues is converted to the internal
+GList of entries for this invoice.
+*/
+void qofInvoiceSetEntries(GncInvoice *invoice, KvpFrame *invoice_frame);
+void qofInvoiceSetJob (GncInvoice *invoice, GncJob *job);
 /** @} */
 
 void gncInvoiceAddEntry (GncInvoice *invoice, GncEntry *entry);
@@ -74,8 +91,8 @@ void gncInvoiceRemoveEntry (GncInvoice *invoice, GncEntry *entry);
 void gncBillAddEntry (GncInvoice *bill, GncEntry *entry);
 void gncBillRemoveEntry (GncInvoice *bill, GncEntry *entry);
 
-/** @name Get Functions */
-/** @{ */
+/** @name Get Functions 
+ @{ */
 const char * gncInvoiceGetID (GncInvoice *invoice);
 GncOwner * gncInvoiceGetOwner (GncInvoice *invoice);
 Timespec gncInvoiceGetDateOpened (GncInvoice *invoice);
@@ -89,6 +106,12 @@ gnc_commodity * gncInvoiceGetCurrency (GncInvoice *invoice);
 GncOwner * gncInvoiceGetBillTo (GncInvoice *invoice);
 gnc_numeric gncInvoiceGetToChargeAmount (GncInvoice *invoice);
 gboolean gncInvoiceGetActive (GncInvoice *invoice);
+/** \brief Create a temporary frame for the entry list.
+
+Converts the GList of GncEntry inside GncInvoice to a KVP_TYPE_GLIST.
+*/
+KvpFrame* qofInvoiceGetEntries (GncInvoice *invoice);
+GncJob* qofInvoiceGetJob (GncInvoice *invoice);
 
 GNCLot * gncInvoiceGetPostedLot (GncInvoice *invoice);
 Transaction * gncInvoiceGetPostedTxn (GncInvoice *invoice);
@@ -176,6 +199,8 @@ gboolean gncInvoiceIsPaid (GncInvoice *invoice);
 #define INVOICE_POST_LOT	"posted_lot"
 #define INVOICE_TYPE	"type"
 #define INVOICE_BILLTO	"bill-to"
+#define INVOICE_ENTRIES     "list_of_entries"
+#define INVOICE_JOB         "invoice_job"
 
 #define INVOICE_FROM_LOT	"invoice-from-lot"
 #define INVOICE_FROM_TXN	"invoice-from-txn"

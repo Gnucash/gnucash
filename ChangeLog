@@ -1,3 +1,28 @@
+2005-05-08  Neil Williams <linux@codehelp.co.uk>
+	* src/backend/file/test/.cvsignore: Tweak
+	* src/backend/qsf/qsf-backend.c: Handling collections
+	in QSF
+	* src/business/business-core/gncAddress.c: QOF enhancements.
+	* src/business/business-core/gncAddress.h: QOF enhancements.
+	* src/business/business-core/gncCustomer.c: Setting the address
+	via QOF.
+	* src/business/business-core/gncCustomer.h: Address handling in QOF.
+	* src/business/business-core/gncInvoice.c: Using QOF_TYPE_COLLECT for
+	owner, billto and entries.
+	* src/business/business-core/gncInvoice.h: Declarations for collect
+	handlers.
+	* src/business/business-core/gncOwner.c: Handling as a collection.
+	* src/business/business-core/gncOwner.h: Easing QOF handling.
+	* src/business/business-gnome/gnc-plugin-business.c: Recursive
+	handling.
+	* src/engine/kvp_frame.h: Doxygen fix.
+	* src/engine/qof_book_merge.c: QOF_TYPE_COLLECT merges.
+	* src/engine/qofclass.h: New QOF type, collection.
+	* src/engine/qofid.c: Collection handling.
+	* src/engine/qofid.h: Documenting QOF_TYPE_COLLECT.
+	* src/engine/qofsession.c: Recursive copies.
+	* src/engine/qofsession.h: Recursive copying documentation.
+
 2005-05-03  Neil Williams <linux@codehelp.co.uk>
 
 	* src/app-utils/gnc-ui-util.h: Doxygen update.

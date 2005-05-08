@@ -248,8 +248,8 @@ between sessions - see the \ref QSF (QSF) documentation
 
 The recommended backend for the new session is QSF or a future
 SQL backend. Using any of these entity copy functions sets a 
-flag in the backend that this is now a partial QofBook - see 
-below. When you save a session containing a partial QofBook,
+flag in the backend that this is now a partial QofBook.
+When you save a session containing a partial QofBook,
 the session will check that the backend is able to handle the
 partial book. If not, the backend will be replaced by one that
 can handle partial books, preferably one using the same
@@ -323,6 +323,61 @@ with the same GUID. Otherwise TRUE.
 
 gboolean qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_coll);
 
+/** \brief Recursively copy a collection of entities to a session.
+
+\note This function creates a <b>partial QofBook</b>. See 
+::qof_entity_copy_to_session for more information.
+
+The QofBook in the new_session must \b not contain any entities
+with the same GUID as any entities to be copied - there is
+no support for handling collisions - instead, use \ref BookMerge
+
+Objects can be defined solely in terms of QOF data types or
+as a mix of data types and other objects, which may in turn
+include other objects. These references can be copied recursively
+down to the third level. e.g. ::GncInvoice refers to ::GncOwner which
+refers to ::GncCustomer which refers to ::GncAddress. See
+::QofEntityReference.
+
+\note This is a deep recursive copy - every referenced entity is copied
+to the new session, including all parameters. The starting point is all
+entities in the top level collection. It can take some time.
+
+@param coll A QofCollection of entities that may or may not have 
+references.
+
+@param session The QofSession to receive the copied entities.
+
+@return TRUE on success; if any individual copy fails, returns FALSE.
+<b>Note</b> : Some entities may have been copied successfully even if
+one of the references fails to copy.
+
+*/
+gboolean
+qof_entity_copy_coll_r(QofSession *new_session, QofCollection *coll);
+
+/** \brief Recursively copy a single entity to a new session.
+
+Copy the single entity and all referenced entities to the second level.
+
+Only entities that are directly referenced by the top level entity are
+copied.
+
+This is a deep copy - all parameters of all referenced entities are copied. If 
+the top level entity has no references, this is identical to 
+::qof_entity_copy_to_session.
+
+@param ent A single entity that may or may not have references.
+
+@param session The QofSession to receive the copied entities.
+
+@return TRUE on success; if any individual copy fails, returns FALSE.
+<b>Note</b> : Some entities may have been copied successfully even if
+one of the references fails to copy.
+*/
+gboolean
+qof_entity_copy_one_r(QofSession *new_session, QofEntity *ent);
+
 /** @} 
 */
 
@@ -330,16 +385,17 @@ gboolean qof_entity_copy_coll(QofSession *new_session, QofCollection *entity_col
 
 Part of the handling for partial books requires a storage mechanism for
 references to entities that are not within reach of the partial book.
-This requires a hash table in the book data to contain the reference 
+This requires a GList in the book data to contain the reference 
 QofIdType and GUID so that when the book is written out, the
 reference can be included. See ::qof_book_get_data. 
-When the file is imported back in, the hash table needs to be rebuilt.
+
+When the file is imported back in, the list needs to be rebuilt.
 The QSF backend rebuilds the references by linking to real entities. Other
 backends can process the hash table in similar ways.
 
-The hashtable key is the GUID of the known entity and the value is a 
-QofEntityReference to the referenced entity - a struct that contains the
-GUID and the QofIdType of the referenced entity.
+The list stores the QofEntityReference to the referenced entity -
+a struct that contains the GUID and the QofIdType of the referenced entity 
+as well as the parameter used to obtain the reference.
 
 Partial books need to be differentiated in the backend, the 
 flag in the book data is used by qof_session_save to prevent a partial

@@ -58,6 +58,7 @@
     @brief API for registering paramters on objects 
     @author Copyright (C) 2002 Derek Atkins <warlord@MIT.EDU>
     @author Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+    @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
 #ifndef QOF_CLASS_H
@@ -65,8 +66,14 @@
 
 #include "qofid.h"
 
-/** Core types of objects that can be used in parameters.
- *  Note that QofIdTypes may also be used.  */
+/** \name Core types
+
+Core data types for objects that can be used in parameters.
+Note that QofIdTypes may also be used and will create a 
+single reference between two known objects.
+
+ @{
+ */
 
 #define QOF_TYPE_STRING    "string"
 #define QOF_TYPE_DATE      "date"
@@ -79,10 +86,38 @@
 #define QOF_TYPE_BOOLEAN   "boolean"
 #define QOF_TYPE_KVP       "kvp"
 #define QOF_TYPE_CHAR      "character"
+#define QOF_TYPE_COLLECT   "collection" /**< secondary collections
+are used for one-to-many references between entities and are
+implemented using ::QofCollection.
+These are \b NOT the same as the main collections in the QofBook.
 
+-# Each ::QofCollection contains one or many entities - *all* of a single type.
+-# The entity type within the collection can be determined at run time.
+-# Easy conversions to GList or whatever in the param_setfcn handler.
+-# Each parameter can have it's own collection.
+-# Each entity can have a different *type* of collection to it's siblings, 
+provided that it is acceptable to the set function.
+-# Each object decides which types are acceptable for which parameter in the 
+set functions. This is then part of the API for that object.
+
+QOF_TYPE_COLLECT has two functions, both related to one-to-many 
+links:
+- Represent a reference between 2 entities with a list of acceptable types.
+        (one object linked to many types of single entities)
+- Represent a reference between one entity and many entities of another type.
+        (one object linked to many entities of a single type.)
+
+If the set function can handle it, it could also be used for true one-to-many 
+links: one object linked to many entities of many types.
+
+n.b. Always subject to each collection holding only one type at runtime.
+(otherwise use books).
+
+*/
+/** @} */
 /** Type of Paramters (String, Date, Numeric, GUID, etc.) */
 typedef const char * QofType;
-/** Type of QofParam */
+
 typedef struct _QofParam QofParam;
 
 /** The QofAccessFunc defines an arbitrary function pointer
@@ -220,6 +255,7 @@ Used for partial QofBook support, see ::QofEntityReference
 */
 GList* qof_class_get_referenceList(QofIdTypeConst type);
 
+
 #endif /* QOF_CLASS_H */
-/* @} */
-/* @} */
+/** @} */
+/** @} */

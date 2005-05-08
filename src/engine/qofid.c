@@ -201,6 +201,91 @@ qof_collection_insert_entity (QofCollection *col, QofEntity *ent)
   ent->collection = col;
 }
 
+gboolean
+qof_collection_add_entity (QofCollection *coll, QofEntity *ent)
+{
+	QofEntity *e;
+
+	e = NULL;
+	if (!coll || !ent) { return FALSE; }
+	if (guid_equal(&ent->guid, guid_null())) { return FALSE; }
+	g_return_val_if_fail (coll->e_type == ent->e_type, FALSE);
+	e = qof_collection_lookup_entity(coll, &ent->guid);
+	if ( e != NULL ) { return FALSE; }
+	g_hash_table_insert (coll->hash_of_entities, &ent->guid, ent);
+	return TRUE;
+}
+
+static void
+collection_merge_cb (QofEntity *ent, gpointer data)
+{
+	QofCollection *target;
+
+	target = (QofCollection*)data;
+	qof_collection_add_entity(target, ent);	
+}
+
+gboolean
+qof_collection_merge (QofCollection *target, QofCollection *merge)
+{
+	if(!target || !merge) { return FALSE; }
+	g_return_val_if_fail (target->e_type == merge->e_type, FALSE);
+	qof_collection_foreach(merge, collection_merge_cb, target);
+	return TRUE;
+}
+
+static void
+collection_compare_cb (QofEntity *ent, gpointer user_data)
+{
+	QofCollection *target;
+	QofEntity *e;
+	gint value;
+
+	e = NULL;
+	target = (QofCollection*)user_data;
+	if (!target || !ent) { return; }
+	value = *(gint*)qof_collection_get_data(target);
+	if (value != 0) { return; }
+	if (guid_equal(&ent->guid, guid_null())) 
+	{
+		value = -1;
+		qof_collection_set_data(target, &value);
+		return; 
+	}
+	g_return_if_fail (target->e_type == ent->e_type);
+	e = qof_collection_lookup_entity(target, &ent->guid);
+	if ( e == NULL )
+	{
+		value = 1;
+		qof_collection_set_data(target, &value);
+		return;
+	}
+	value = 0;
+	qof_collection_set_data(target, &value);
+}
+
+gint
+qof_collection_compare (QofCollection *target, QofCollection *merge)
+{
+	gint value;
+
+	value = 0;
+	if (!target && !merge) { return 0; }
+	if (target == merge) { return 0; }
+	if (!target && merge) { return -1; }
+	if (target && !merge) { return 1; }
+	if(target->e_type != merge->e_type) { return -1; }
+	qof_collection_set_data(target, &value);
+	qof_collection_foreach(merge, collection_compare_cb, target);
+	value = *(gint*)qof_collection_get_data(target);
+	if(value == 0) {
+		qof_collection_set_data(merge, &value);
+		qof_collection_foreach(target, collection_compare_cb, merge);
+		value = *(gint*)qof_collection_get_data(merge);
+	}
+	return value;
+}
+
 QofEntity *
 qof_collection_lookup_entity (QofCollection *col, const GUID * guid)
 {

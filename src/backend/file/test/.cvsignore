@@ -16,3 +16,4 @@ test-save-in-lang
 Makefile.in
 *.la
 *.lo
+test_file_*

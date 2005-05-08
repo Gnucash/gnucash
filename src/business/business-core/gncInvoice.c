@@ -23,6 +23,7 @@
 /*
  * Copyright (C) 2001,2002 Derek Atkins
  * Copyright (C) 2003 Linas Vepstas <linas@linas.org>
+ * Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
  * Author: Derek Atkins <warlord@MIT.EDU>
  */
 
@@ -64,17 +65,17 @@ struct _gncInvoice
 {
   QofInstance inst;
   
-  char *	id;
-  char *	notes;
+  char        *id;
+  char        *notes;
   gboolean 	active;
 
-  char *	billing_id;
-  char *	printname;
-  GncBillTerm *	terms;
-  GList * 	entries;
+  char        *billing_id;
+  char        *printname;
+  GncBillTerm *terms;
+  GList       *entries;
   GncOwner	owner;
   GncOwner	billto;
-  GncJob *	job;
+  GncJob      *job;
   Timespec 	date_opened;
   Timespec 	date_posted;
 
@@ -82,9 +83,9 @@ struct _gncInvoice
 
   gnc_commodity * currency;
 
-  Account * 	posted_acc;
-  Transaction * posted_txn;
-  GNCLot *	posted_lot;
+  Account     *posted_acc;
+  Transaction *posted_txn;
+  GNCLot      *posted_lot;
 };
 
 static short	module = MOD_BUSINESS;
@@ -623,6 +624,61 @@ GList * gncInvoiceGetEntries (GncInvoice *invoice)
 {
   if (!invoice) return NULL;
   return invoice->entries;
+}
+
+/* test to see how to get the list of entries.  */
+KvpFrame*
+qofInvoiceGetEntries (GncInvoice *invoice)
+{
+	KvpFrame   *invoice_frame;
+	KvpValue   *entry_value;
+	GList      *entry_list, *i;
+	QofEntity  *entry;
+	const GUID *entry_guid;
+	const char *entry_path;
+
+	entry_list = NULL;
+	entry_value = NULL;
+	entry_path = g_strdup("Invoice/Entry");
+	invoice_frame = kvp_frame_new();
+	entry_list = gncInvoiceGetEntries(invoice);
+	for(i = entry_list; i != NULL; i = i->next)
+	{
+		entry = (QofEntity*)entry_list->data;
+		entry_guid = qof_entity_get_guid(entry);
+		kvp_frame_add_guid(invoice_frame, entry_path, entry_guid);
+	}
+	return invoice_frame;
+}
+
+void 
+qofInvoiceSetEntries(GncInvoice *invoice, KvpFrame *invoice_frame)
+{
+	GList *entry_list;
+	KvpValue *entry_value;
+	const char *entry_path;
+
+	entry_path = g_strdup("Invoice/Entry");
+	entry_value = kvp_frame_get_slot_path(invoice_frame, entry_path);
+	for(entry_list = kvp_value_get_glist(entry_value); entry_list != NULL; entry_list = entry_list->next)
+	{
+		gncInvoiceAddEntry(invoice, (GncEntry*)entry_list->data);
+	}
+	kvp_frame_delete(invoice_frame);
+}
+
+GncJob*
+qofInvoiceGetJob (GncInvoice *invoice)
+{
+	if(!invoice) { return NULL; }
+	return invoice->job;
+}
+
+void 
+qofInvoiceSetJob (GncInvoice *invoice, GncJob *job)
+{
+	if(!invoice) { return; }
+	invoice->job = job;
 }
 
 static void
@@ -1426,7 +1482,7 @@ gboolean gncInvoiceRegister (void)
 {
   static QofParam params[] = {
     { INVOICE_ID, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetID, (QofSetterFunc)gncInvoiceSetID },
-    { INVOICE_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetOwner, (QofSetterFunc)gncInvoiceSetOwner },
+    { INVOICE_OWNER,   GNC_ID_OWNER,    (QofAccessFunc)gncInvoiceGetOwner,   NULL },
     { INVOICE_OPENED, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDateOpened, (QofSetterFunc)gncInvoiceSetDateOpened },
     { INVOICE_DUE, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDateDue, NULL },
     { INVOICE_POSTED, QOF_TYPE_DATE, (QofAccessFunc)gncInvoiceGetDatePosted, (QofSetterFunc)gncInvoiceSetDatePosted },
@@ -1434,12 +1490,14 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_IS_PAID, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceIsPaid, NULL },
     { INVOICE_BILLINGID, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetBillingID, (QofSetterFunc)gncInvoiceSetBillingID },
     { INVOICE_NOTES, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetNotes, (QofSetterFunc)gncInvoiceSetNotes },
-    { INVOICE_ACC, GNC_ID_ACCOUNT, (QofAccessFunc)gncInvoiceGetPostedAcc, NULL },
-    { INVOICE_POST_TXN, GNC_ID_TRANS, (QofAccessFunc)gncInvoiceGetPostedTxn, NULL },
-    { INVOICE_POST_LOT, GNC_ID_LOT, (QofAccessFunc)gncInvoiceGetPostedLot, NULL },
+    { INVOICE_ACC,     GNC_ID_ACCOUNT,  (QofAccessFunc)gncInvoiceGetPostedAcc, (QofSetterFunc)gncInvoiceSetPostedAcc },
+    { INVOICE_POST_TXN, GNC_ID_TRANS,   (QofAccessFunc)gncInvoiceGetPostedTxn, (QofSetterFunc)gncInvoiceSetPostedTxn },
+    { INVOICE_POST_LOT, GNC_ID_LOT,     (QofAccessFunc)gncInvoiceGetPostedLot, NULL/*(QofSetterFunc)gncInvoiceSetPostedLot*/ },
     { INVOICE_TYPE, QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetType, NULL },
     { INVOICE_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncInvoiceGetTerms, (QofSetterFunc)gncInvoiceSetTerms },
-    { INVOICE_BILLTO, GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetBillTo, (QofSetterFunc)gncInvoiceSetBillTo },
+    { INVOICE_BILLTO,  GNC_ID_OWNER,    (QofAccessFunc)gncInvoiceGetBillTo,  NULL },
+    { INVOICE_ENTRIES, QOF_TYPE_KVP,    (QofAccessFunc)qofInvoiceGetEntries, (QofSetterFunc)qofInvoiceSetEntries },
+    { INVOICE_JOB,     GNC_ID_JOB,      (QofAccessFunc)qofInvoiceGetJob,     (QofSetterFunc)qofInvoiceSetJob }, 
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, (QofSetterFunc)gncInvoiceSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
