@@ -81,9 +81,6 @@ libgncmod_gnome_search_LTX_gnc_module_init(int refcount)
     gnc_search_core_initialize ();
   }
   
-  scm_c_eval_string("(use-modules (g-wrapped gw-gnome-search))");
-  scm_c_eval_string("(use-modules (gnucash gnome-search))");
-
   return TRUE;
 }
 
