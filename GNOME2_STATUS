@@ -277,6 +277,12 @@ Resources
 
     - http://bugzilla.gnome.org/show_bug.cgi?id=303180
 
+- Main Window
+
+  - Change Notebook tabs to include an 'x' to act as the "close tab" method,
+    and then remove the "Close" button from the toolbar.  Then we can also
+    decide if we want to allow a user to 'close' the account tree.
+
 -----------------------------------------
 <#GOG> ----------------------------------
 
