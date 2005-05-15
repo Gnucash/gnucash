@@ -342,6 +342,8 @@ gnc_tree_model_account_get_flags (GtkTreeModel *tree_model)
 static int
 gnc_tree_model_account_get_n_columns (GtkTreeModel *tree_model)
 {
+	g_return_val_if_fail(GNC_IS_TREE_MODEL_ACCOUNT(tree_model), -1);
+    
 	return GNC_TREE_MODEL_ACCOUNT_NUM_COLUMNS;
 }
 
@@ -551,8 +553,8 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 	gboolean negative; /* used to set "defecit style" aka red numbers */
 	gchar *string;
 
-	// ENTER("model %p, iter %s, col %d", tree_model,
-	//       iter_to_string(iter), column);
+	ENTER("model %p, iter %s, col %d", tree_model,
+              iter_to_string(iter), column);
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model));
 	g_return_if_fail (iter != NULL);
 	g_return_if_fail (iter->user_data != NULL);
@@ -604,6 +606,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			string = gnc_ui_account_get_print_balance(xaccAccountGetPresentBalanceInCurrency,
 								  account, FALSE, &negative);
 			g_value_set_static_string (value, negative ? "red" : "black");
+			g_free(string);
 			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE:
@@ -623,6 +626,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, FALSE, &negative);
 			g_value_set_static_string (value, negative ? "red" : "black");
+			g_free(string);
 			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_CLEARED:
@@ -642,6 +646,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			string = gnc_ui_account_get_print_balance(xaccAccountGetClearedBalanceInCurrency,
 								  account, FALSE, &negative);
 			g_value_set_static_string (value, negative ? "red" : "black");
+			g_free(string);
 			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED:
@@ -711,7 +716,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO:
 			g_value_init (value, G_TYPE_STRING);
-			g_value_set_string (value, gnc_ui_account_get_tax_info_string (account));
+			g_value_take_string (value, gnc_ui_account_get_tax_info_string (account));
 			break;
 
 		case GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM:
@@ -732,7 +737,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 		default:
 			g_assert_not_reached ();
 	}
-	//LEAVE(" ");
+	LEAVE(" ");
 }
 
 static gboolean
@@ -813,9 +818,10 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 		}
 	}
 
-	if (model->priv->root == NULL || xaccGroupGetNumAccounts (model->priv->root) == 0) {
+	if (model->priv->root == NULL || 
+            xaccGroupGetNumAccounts (model->priv->root) == 0) {
 		iter->stamp = 0;
-		LEAVE("failed (1)");
+		LEAVE("failed (either no group or group has no accounts)");
 		return FALSE;
 	}
 
@@ -824,7 +830,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 		
 		if (account == NULL) {
 			iter->stamp = 0;
-			LEAVE("failed (2)");
+			LEAVE("failed (couldn't get account from group)");
 			return FALSE;
 		}
 
@@ -844,7 +850,8 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 
 	if (group == NULL || xaccGroupGetNumAccounts (group) == 0) {
 		iter->stamp = 0;
-		LEAVE("failed (3)");
+		LEAVE("failed (chilren group was %s)", 
+                      group ? "empty" : "null");
 		return FALSE;
 	}
 
@@ -852,7 +859,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
 	
 	if (account == NULL) {
 		iter->stamp = 0;
-		LEAVE("failed (4)");
+		LEAVE("failed (group's account is null)");
 		return FALSE;
 	}
 
@@ -1114,7 +1121,8 @@ account_row_inserted (Account *account,
 
 	ENTER("account %p (%s), model %p",
 	      account, xaccAccountGetName(account), data);
-	if (!gnc_tree_model_account_get_iter_from_account (GNC_TREE_MODEL_ACCOUNT (data), account, &iter))
+	if (!gnc_tree_model_account_get_iter_from_account
+            (GNC_TREE_MODEL_ACCOUNT (data), account, &iter))
 	  return NULL;
 
 	path = gtk_tree_model_get_path (GTK_TREE_MODEL (data), &iter);
@@ -1128,7 +1136,7 @@ account_row_inserted (Account *account,
 }
 
 /*
- * Add a new top node to the model.  This node is for a pseudo-account
+ * Gets the top node of the model.  This node is for a pseudo-account
  * that lives above the main level accounts in the engine.
  */
 Account *
@@ -1156,10 +1164,15 @@ gnc_tree_model_account_set_toplevel (GncTreeModelAccount *model,
 
 	DEBUG("old toplevel %p", model->priv->toplevel);
 	if (model->priv->toplevel != NULL) {
+            /* CAS: this can't happen because we only set toplevel on
+             * new tree models. */
 		path = gtk_tree_path_new_first ();
 		gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
 		gtk_tree_path_free (path);
 	} else {
+            /* CAS: I think this is bogus for the same reason - we'll
+             * have no rows, so why are we emitting a bunch of
+             * "row_deleted" signals when no rows can exist? */
 		path = gtk_tree_path_new_first ();
 		for (i = 0; i < xaccGroupGetNumAccounts (model->priv->root); i++) {
 			gtk_tree_model_row_deleted (GTK_TREE_MODEL (model), path);
@@ -1238,7 +1251,8 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
 	}
 
 	group = xaccAccountGetParent (account);
-	DEBUG("Looking through %d accounts at this level", xaccGroupGetNumAccounts (group));
+	DEBUG("Looking through %d accounts at this level", 
+              xaccGroupGetNumAccounts (group));
 	for (i = 0; i < xaccGroupGetNumAccounts (group); i++) {
 		if (xaccGroupGetAccount (group, i) == account) {
 			found = TRUE;
@@ -1268,7 +1282,8 @@ gnc_tree_model_account_get_path_from_account (GncTreeModelAccount *model,
 	g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), NULL);
 	g_return_val_if_fail (account != NULL, NULL);
 
-	if (!gnc_tree_model_account_get_iter_from_account (model, account, &tree_iter)) {
+	if (!gnc_tree_model_account_get_iter_from_account (model, account, 
+                                                           &tree_iter)) {
 	  LEAVE("no iter");
 	  return NULL;
 	}

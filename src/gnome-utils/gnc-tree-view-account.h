@@ -94,8 +94,9 @@ GType         gnc_tree_view_account_get_type              (void);
  *
  *  @return A pointer to a new account tree view.
  */
-GtkTreeView * gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root);
-GtkTreeView  *gnc_tree_view_account_new                   (gboolean show_root);
+GtkTreeView *gnc_tree_view_account_new_with_group (AccountGroup *group, 
+                                                   gboolean show_root);
+GtkTreeView *gnc_tree_view_account_new (gboolean show_root);
 /** @} */
 
 
@@ -105,20 +106,42 @@ GtkTreeView  *gnc_tree_view_account_new                   (gboolean show_root);
 const char *gnc_tree_view_account_get_field_name (AccountFieldCode field);
 
 /** Configure (by name) the set of visible columns in an account tree
- *  view.  By default, only the account name column is show.  The
- *  avalible list of columns can be found in the file
- *  gnc-tree-view-account.c
+ *  view.  By default, when a GncTreeViewAccount is created, all
+ *  columns are shown, but if you call this function with a NULL list,
+ *  only the account name column will be shown.  Unrecognized column
+ *  names are silently ignored.  The avalible list of columns can be
+ *  found in the file gnc-tree-view-account.c.  NOTE: This function
+ *  does not handle columns added with
+ *  gnc_tree_view_account_add_kvp_column() -- it only handles the
+ *  "builtin" columns.
  *
  *  @param account_view A pointer to an account tree view.
  *
  *  @param column_names A list of column names to make visible.
  */
-void          gnc_tree_view_account_configure_columns     (GncTreeViewAccount *account_view,
-							   GSList *column_names);
+void gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view,
+                                              GSList *column_names);
+
+typedef gchar * (*GncTreeViewAccountColumnSource) (Account *account, 
+                                                   GtkTreeViewColumn *col,
+                                                   GtkCellRenderer *cell);
+
+typedef void (*GncTreeViewAccountColumnTextEdited) (Account *account, 
+                                                    GtkTreeViewColumn *col, 
+                                                    const gchar *new_text);
+
+
+/* The TreeView owns the TreeViewColumn, but caller may set properties. */
+GtkTreeViewColumn * gnc_tree_view_account_add_custom_column(
+    GncTreeViewAccount *account_view, const gchar *column_title,
+    GncTreeViewAccountColumnSource source_cb, 
+    GncTreeViewAccountColumnTextEdited edited_cb);
+
 
 
 /** Add a new column to the set of columns in an account tree view.
- *  This column will display the contents of a specified KVP slot.
+ *  This column will be visible as soon as it is added and will
+ *  display the contents of the specified KVP slot.
  *
  *  @param view A pointer to an account tree view.
  *
@@ -147,8 +170,8 @@ void          gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
  *
  *  @param avi A pointer to an old style filter block to fill in.
  */
-void          gnc_tree_view_account_get_view_info         (GncTreeViewAccount *account_view,
-							   AccountViewInfo *avi);
+void gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
+                                          AccountViewInfo *avi);
 
 /** Given pointers to an account tree and old style filter block, this
  *  function will applies the settings specified to the current
@@ -159,10 +182,10 @@ void          gnc_tree_view_account_get_view_info         (GncTreeViewAccount *a
  *  @param account_view A pointer to an account tree view.
  *
  *  @param avi A pointer to an old style filter block to apply to the
- *  view..
+ *  view.
  */
-void          gnc_tree_view_account_set_view_info         (GncTreeViewAccount *account_view,
-							   AccountViewInfo *avi);
+void gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
+                                          AccountViewInfo *avi);
 
 /** Given a pointer to an old style filter block, initialize it to the
  *  default values for an account tree.  The defaults are to show all
@@ -170,7 +193,7 @@ void          gnc_tree_view_account_set_view_info         (GncTreeViewAccount *a
  *
  *  @param avi A pointer to an old style filter block.
  */
-void          gnc_tree_view_account_init_view_info        (AccountViewInfo *avi);
+void gnc_tree_view_account_init_view_info (AccountViewInfo *avi);
 
 
 /** This function attaches a filter function to the given account
@@ -198,6 +221,25 @@ void gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view,
 				       gpointer data,
 				       GtkDestroyNotify destroy);
 
+/*  This is a convenient filter function for use with
+ *  gnc_tree_view_account_set_filter() and the functions in
+ *  gnc-tree-model-account-types.h.  If you have some view that is
+ *  backed by the "account types" tree model, you can get a guint32
+ *  from that view's tree selection.  Then, you can use that account
+ *  type selection as a filter for the account tree view.  For
+ *  example:
+ *
+ *  guint sel_mask;
+ *
+ *  sel_mask = gnc_tree_model_account_types_get_selection(view);
+ *
+ *  gnc_tree_view_account_set_filter(account_view, 
+ *    gnc_tree_view_account_filter_by_type_selection, 
+ *    GUINT_TO_POINTER(sel_mask), NULL);
+ * 
+ */
+gboolean gnc_tree_view_account_filter_by_type_selection(
+    Account* acct, gpointer data);
 
 /** This function forces the account tree filter to be evaluated.  It
  *  may be necessary to call this function if the initial state of the
@@ -209,7 +251,7 @@ void gnc_tree_view_account_set_filter (GncTreeViewAccount *account_view,
  *
  *  @param account_view A pointer to an account tree view.
  */
-void          gnc_tree_view_account_refilter              (GncTreeViewAccount *view);
+void gnc_tree_view_account_refilter (GncTreeViewAccount *view);
 /** @} */
 
 
@@ -229,11 +271,6 @@ void          gnc_tree_view_account_refilter              (GncTreeViewAccount *v
 gint          gnc_tree_view_account_count_children (GncTreeViewAccount *view,
 						    Account *account);
 
-
-
-Account     * gnc_tree_view_account_get_account_from_column (GtkTreeViewColumn *column,
-							     GtkTreeModel *f_model,
-							     GtkTreeIter  *f_iter);
 
 
 /** This function returns the account associated with the top level
@@ -266,6 +303,20 @@ Account     * gnc_tree_view_account_get_top_level         (GncTreeViewAccount *v
  */
 Account     * gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
 							   GtkTreePath *path);
+
+
+/** This function returns the account associated with the specified
+ *  iter.  This function is useful in selection callbacks on an
+ *  account tree widget.
+ *
+ *  @param model The model provided to the callback function.
+ *
+ *  @param iter The iter provided to the callback function.
+ *
+ *  @return The account associated with this iter.
+ */
+Account     * gnc_tree_view_account_get_account_from_iter (GtkTreeModel *model,
+							   GtkTreeIter  *iter);
 
 
 /** This function returns the account in the account tree view at the

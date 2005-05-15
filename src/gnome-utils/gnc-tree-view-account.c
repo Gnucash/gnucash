@@ -53,9 +53,17 @@ static void gnc_tree_view_account_init (GncTreeViewAccount *view);
 static void gnc_tree_view_account_finalize (GObject *object);
 static void gnc_tree_view_account_destroy (GtkObject *object);
 
+static gboolean gnc_tree_view_account_filter_helper (GtkTreeModel *model,
+                                                     GtkTreeIter *iter,
+                                                     gpointer data);
+
 struct GncTreeViewAccountPrivate
 {
-  AccountViewInfo avi;
+    AccountViewInfo avi;
+
+    gnc_tree_view_account_filter_func filter_fn;
+    gpointer                          filter_data;
+    GtkDestroyNotify                  filter_destroy;
 };
 
 /* Defined at the end of the file */
@@ -170,6 +178,7 @@ static void
 gnc_tree_view_account_finalize (GObject *object)
 {
   GncTreeViewAccount *account_view;
+  GncTreeViewAccountPrivate *priv;
 
   ENTER("view %p", object);
   g_return_if_fail (object != NULL);
@@ -177,6 +186,12 @@ gnc_tree_view_account_finalize (GObject *object)
 
   account_view = GNC_TREE_VIEW_ACCOUNT (object);
   active_views = g_list_remove (active_views, account_view);
+
+  priv = account_view->priv;
+  if (priv->filter_destroy) {
+      priv->filter_destroy(priv->filter_data);
+      priv->filter_destroy = NULL;
+  }
 
   g_free (account_view->priv);
 
@@ -403,8 +418,13 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
   gtk_tree_view_set_headers_visible (tree_view, FALSE);
   gnc_tree_view_account_init_view_info(&account_view->priv->avi);
 
-  gnc_tree_view_common_create_columns (tree_view, "Accounts", GNC_STOCK_ACCOUNT,
+  gnc_tree_view_common_create_columns (tree_view, "Accounts", 
+                                       GNC_STOCK_ACCOUNT,
 				       view_column_defaults);
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
+					  gnc_tree_view_account_filter_helper,
+					  account_view,
+					  NULL);
 
   gtk_widget_show(GTK_WIDGET(tree_view));
   LEAVE("%p", tree_view);
@@ -537,51 +557,29 @@ gnc_tree_view_account_count_children (GncTreeViewAccount *view,
 }
 
 
-Account *
-gnc_tree_view_account_get_account_from_column (GtkTreeViewColumn *column,
-					       GtkTreeModel *s_model,
-					       GtkTreeIter  *s_iter)
-{
-  GtkTreeModel *model, *f_model;
-  GtkTreeIter iter, f_iter;
-  Account *account;
-
-  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN(column), NULL);
-  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT(s_model), NULL);
-  g_return_val_if_fail (s_iter != NULL, NULL);
-
-  ENTER("column %p, s_model %p, s_iter %p", column, s_model, s_iter);
-  gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(s_model),
-						  &f_iter,
-						  s_iter);
-  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-						    &iter,
-						    &f_iter);
-  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
-  LEAVE("account %p (%s)", account, xaccAccountGetName (account));
-  return account;
-}
-
 /************************************************************/
 /*            Account Tree View Filter Functions            */
 /************************************************************/
 
 /*
- * Convert a column name to a numeric identifier.  This is a
- * helper routine for the following function.
+ * Convert a column name to a column index.  This index valid for the
+ * TreeView's list of TreeViewColumns.  When the column is a "builtin"
+ * TreeViewAccount column, then the index is also valid for the
+ * gnc_tree_view_account_defaults[] array.
+ *
+ *  Returns -1 when column is not found.
  */
 static gint
 gnc_tree_view_account_pref_name_to_field (const char *pref_name)
 {
   gint i;
-  g_return_val_if_fail ((pref_name != NULL), GNC_TREE_MODEL_ACCOUNT_COL_NAME);
+  g_return_val_if_fail (pref_name, -1);
 
   for (i = 0; i <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE; i++)
     if (safe_strcmp(view_column_defaults[i].pref_name, pref_name) == 0)
       return i;
-  return(GNC_TREE_MODEL_ACCOUNT_COL_NAME);
+
+  return -1;
 }
 
 const char *
@@ -609,7 +607,7 @@ gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view,
   ENTER(" ");
   memset (&new_avi, 0, sizeof(new_avi));
 
-  for (node = column_names; node != NULL; node = node->next)
+  for (node = column_names; node; node = node->next)
   {
     field = gnc_tree_view_account_pref_name_to_field(node->data);
     if (field <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE)
@@ -664,6 +662,9 @@ gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
  * Should there be a automatic filter for backward compatability
  * that uses these flags, or should all uses of this be converted to
  * a GtkTreeModelFilter?
+ *
+ * CAS - For now, I'll try the automatic filter approach by making
+ * this function use GtkTreeModelFilter.
  */
 void
 gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
@@ -671,6 +672,7 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
 {
   GtkTreeViewColumn *column;
   gint i;
+  guint sel_bits = 0;
 
   ENTER("%p", account_view);
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
@@ -683,23 +685,19 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
     gtk_tree_view_column_set_visible (column, avi->show_field[i]);
   }
 
+  for (i = 0; i < NUM_ACCOUNT_TYPES; i++) {
+      sel_bits |= avi->include_type[i] ? (1 << i): 0;
+  }
+
+  /* FIXME: if we want to allow a truly empty bitfield, we'll have to fix
+     the callers who don't set the include_type fields. */
+  if (sel_bits) {
+      gnc_tree_view_account_set_filter(
+          account_view, gnc_tree_view_account_filter_by_type_selection, 
+          GUINT_TO_POINTER(sel_bits), NULL);
+  }
+
   LEAVE(" ");
-}
-
-typedef struct {
-  gnc_tree_view_account_filter_func user_fn;
-  gpointer                          user_data;
-  GtkDestroyNotify                  user_destroy;
-} filter_user_data;
-
-static void
-gnc_tree_view_account_filter_destroy (gpointer data)
-{
-  filter_user_data *fd = data;
-
-  if (fd->user_destroy)
-    fd->user_destroy(fd->user_data);
-  g_free(fd);
 }
 
 static gboolean
@@ -708,19 +706,25 @@ gnc_tree_view_account_filter_helper (GtkTreeModel *model,
 				     gpointer data)
 {
   Account *account;
-  filter_user_data *fd = data;
+  GncTreeViewAccount *view = data;
 
   g_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (model), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
 
-  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), iter);
-  return fd->user_fn(account, fd->user_data);
+  account = gnc_tree_model_account_get_account (
+      GNC_TREE_MODEL_ACCOUNT(model), iter);
+  
+  if (view->priv->filter_fn)
+      return view->priv->filter_fn(account, view->priv->filter_data);
+  else return TRUE;
 }
 
 /*
  * Set an GtkTreeModel visible filter on this account.  This filter will be
  * called for each account that the tree is about to show, and the
  * account will be passed to the callback function.
+ *
+ * Use NULL as func to remove filter. 
  */
 void
 gnc_tree_view_account_set_filter (GncTreeViewAccount *view,
@@ -728,30 +732,22 @@ gnc_tree_view_account_set_filter (GncTreeViewAccount *view,
 				  gpointer data,
 				  GtkDestroyNotify destroy)
 {
-  GtkTreeModel *f_model, *s_model;
-  filter_user_data *fd = data;
+  GncTreeViewAccountPrivate *priv;
 
   ENTER("view %p, filter func %p, data %p, destroy %p",
 	view, func, data, destroy);
 
   g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(view));
-  g_return_if_fail(func != NULL);
 
-  fd = g_malloc(sizeof(filter_user_data));
-  fd->user_fn      = func;
-  fd->user_data    = data;
-  fd->user_destroy = destroy;
+  priv = view->priv;
+  if (priv->filter_destroy) {
+      priv->filter_destroy(priv->filter_data);
+  }
+  priv->filter_destroy = destroy;
+  priv->filter_data = data;
+  priv->filter_fn = func;  
 
-  s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(view));
-  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
-					  gnc_tree_view_account_filter_helper,
-					  fd,
-					  gnc_tree_view_account_filter_destroy);
-
-  /* Whack any existing levels. The top two levels have been created
-   * before this routine can be called. */
-  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
+  gnc_tree_view_account_refilter(view);
   LEAVE(" ");
 }
 
@@ -770,6 +766,19 @@ gnc_tree_view_account_refilter (GncTreeViewAccount *view)
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (f_model));
 }
 
+gboolean 
+gnc_tree_view_account_filter_by_type_selection(Account* acct, gpointer data)
+{
+    GNCAccountType acct_type;
+    guint sel_bits = GPOINTER_TO_UINT(data);
+
+    g_return_val_if_fail(GNC_IS_ACCOUNT(acct), FALSE);
+    acct_type = xaccAccountGetType(acct);
+
+    /* Because of some silly '== TRUE' comparisons in treemodelfilter,
+       we have to return exactly TRUE */
+    return (sel_bits & (1 << acct_type)) ? TRUE : FALSE;
+}
 
 /************************************************************/
 /*           Account Tree View Get/Set Functions            */
@@ -836,6 +845,32 @@ gnc_tree_view_account_get_account_from_path (GncTreeViewAccount *view,
     LEAVE("account %p (%s)", account, xaccAccountGetName (account));
     return account;
 }
+
+
+Account *
+gnc_tree_view_account_get_account_from_iter (GtkTreeModel *s_model,
+					     GtkTreeIter  *s_iter)
+{
+  GtkTreeModel *model, *f_model;
+  GtkTreeIter iter, f_iter;
+  Account *account;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT(s_model), NULL);
+  g_return_val_if_fail (s_iter != NULL, NULL);
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT(s_model),
+						  &f_iter,
+						  s_iter);
+  f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
+						    &iter,
+						    &f_iter);
+  model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
+  account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
+  LEAVE("account %p (%s)", account, xaccAccountGetName (account));
+  return account;
+}
+
 
 /*
  * Retrieve the selected account from an account tree view.  The
@@ -939,7 +974,7 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
 
 /*
  * This helper function is called once for each row in the tree view
- * that is currently selected.  Its task is to an the corresponding
+ * that is currently selected.  Its task is to append the corresponding
  * account to the end of a glist.
  */
 static void
@@ -1140,6 +1175,8 @@ gnc_tree_view_account_get_cursor_account (GncTreeViewAccount *view)
 /*         Account Tree View Add Column Functions           */
 /************************************************************/
 
+/* This function implements a custom mapping between an account's KVP
+ * and the cell renderer's 'text' property. */
 static void
 account_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
 			    GtkCellRenderer *cell,
@@ -1147,29 +1184,18 @@ account_cell_kvp_data_func (GtkTreeViewColumn *tree_column,
 			    GtkTreeIter *s_iter,
 			    gpointer key)
 {
-	GtkTreeModel *model, *f_model;
-	GtkTreeIter iter, f_iter;
-	Account *account;
-	kvp_frame * frame;
-
-	g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
-
-	gtk_tree_model_sort_convert_iter_to_child_iter (GTK_TREE_MODEL_SORT (s_model),
-							&f_iter, s_iter);
-
-	f_model = gtk_tree_model_sort_get_model(GTK_TREE_MODEL_SORT(s_model));
-	gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(f_model),
-							  &iter,
-							  &f_iter);
-
-	model = gtk_tree_model_filter_get_model(GTK_TREE_MODEL_FILTER(f_model));
-	account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
-	frame = xaccAccountGetSlots(account);
-
-	g_object_set (G_OBJECT (cell),
-		      "text", kvp_frame_get_string(frame, (gchar *)key),
-		      "xalign", 0.0,
-		      NULL);
+    Account *account;
+    kvp_frame * frame;
+    
+    g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
+    account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
+    frame = xaccAccountGetSlots(account);
+    
+    g_object_set (G_OBJECT (cell),
+                  "text", kvp_frame_get_string(frame, (gchar *)key),
+                  "xalign", 0.0,
+                  NULL);
+    
 }
 
 
@@ -1178,21 +1204,95 @@ gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
 				      const gchar *column_title,
 				      const gchar *kvp_key)
 {
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
+    GtkCellRenderer *renderer;
+    GtkTreeViewColumn *column;
 
-  g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view));
-  g_return_if_fail (kvp_key != NULL);
+    g_return_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view));
+    g_return_if_fail (kvp_key != NULL);
 
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
-  column = gtk_tree_view_column_new_with_attributes (column_title,
-						     renderer,
-						     NULL);
-  gtk_tree_view_column_set_cell_data_func (column, renderer, 
-					   account_cell_kvp_data_func,
-					   g_strdup(kvp_key), g_free);
-  gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+    renderer = gtk_cell_renderer_text_new ();
+    g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
+
+    column = gtk_tree_view_column_new_with_attributes (column_title,
+						       renderer, NULL);
+    gtk_tree_view_column_set_cell_data_func (column, renderer, 
+					     account_cell_kvp_data_func,
+					     g_strdup(kvp_key), g_free);
+    gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
+}
+
+static void col_edited_helper(GtkCellRendererText *cell, gchar *path_string, 
+                              gchar *new_text, gpointer _s_model)
+{
+    Account *account;
+    GtkTreeModel *s_model;
+    GtkTreeIter s_iter;
+    GncTreeViewAccountColumnTextEdited col_edited_cb;
+    GtkTreeViewColumn *col;
+
+    col_edited_cb = g_object_get_data(G_OBJECT(cell), 
+                                      "column_edited_callback");
+    col = GTK_TREE_VIEW_COLUMN(g_object_get_data(G_OBJECT(cell), 
+                                                 "column_view"));
+    s_model = GTK_TREE_MODEL(_s_model);
+
+    if (!gtk_tree_model_get_iter_from_string(s_model, &s_iter, path_string))
+        return;
+        
+    account = gnc_tree_view_account_get_account_from_iter(s_model, &s_iter);
+    col_edited_cb(account, col, new_text);
+}
+
+static void col_source_helper(GtkTreeViewColumn *col, GtkCellRenderer *cell,
+                              GtkTreeModel *s_model, GtkTreeIter *s_iter,
+                              gpointer _col_source_cb)
+{
+    Account *account;
+    gchar *text;
+    GncTreeViewAccountColumnSource col_source_cb;
+    
+    g_return_if_fail (GTK_IS_TREE_MODEL_SORT (s_model));
+    col_source_cb = (GncTreeViewAccountColumnSource) _col_source_cb;
+    account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
+    text = col_source_cb(account, col, cell);
+    g_object_set (G_OBJECT (cell), "text", text, "xalign", 0.0, NULL);
+    g_free(text);
+}
+
+ 
+GtkTreeViewColumn *
+gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
+                                        const gchar *column_title,
+                                        GncTreeViewAccountColumnSource
+                                        col_source_cb,
+                                        GncTreeViewAccountColumnTextEdited
+                                        col_edited_cb)
+{
+    GtkCellRenderer *renderer;
+    GtkTreeViewColumn *column;
+    GtkTreeModel *s_model;
+    
+    g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (account_view), NULL);
+    
+    renderer = gtk_cell_renderer_text_new ();
+    g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
+    
+    column = gtk_tree_view_column_new_with_attributes (column_title,
+                                                       renderer, NULL);
+    if (col_edited_cb) {
+        g_object_set(G_OBJECT(renderer), "editable", TRUE, NULL);
+        g_object_set_data(G_OBJECT(renderer), "column_edited_callback",
+                          col_edited_cb);
+        s_model = gtk_tree_view_get_model(GTK_TREE_VIEW(account_view));
+        g_signal_connect(G_OBJECT(renderer), "edited", 
+                         (GCallback) col_edited_helper, s_model);
+        g_object_set_data(G_OBJECT(renderer), "column_view", column);
+    }
+    gtk_tree_view_column_set_cell_data_func (column, renderer, 
+                                             col_source_helper,
+                                             col_source_cb, NULL);
+    gtk_tree_view_append_column (GTK_TREE_VIEW(account_view), column);
+    return column;
 }
 
 

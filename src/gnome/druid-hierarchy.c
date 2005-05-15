@@ -621,8 +621,7 @@ balance_cell_data_func (GtkTreeViewColumn *tree_column,
 	hierarchy_data *data = (hierarchy_data *)user_data;
 
 	g_return_if_fail (GTK_TREE_MODEL (model));
-	account = gnc_tree_view_account_get_account_from_column (tree_column,
-								 model, iter);
+	account = gnc_tree_view_account_get_account_from_iter (model, iter);
 
 	balance = get_final_balance (data->balance_hash, account);
 	if (gnc_reverse_balance (account))
