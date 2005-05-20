@@ -33,6 +33,57 @@
 
 static GConfClient *our_client = NULL;
 
+/************************************************************/
+/*                      Enum Utilities                      */
+/************************************************************/
+
+const gchar *
+gnc_enum_to_nick(GType type,
+		 gint value)
+{
+  GEnumClass   	    *enum_class;
+  GEnumValue   	    *enum_value;
+
+  /* Lookup the enum in the glib type system */
+  enum_class = g_type_class_ref (type);
+  if (!enum_class) {
+    /* g_type_class_ref has already printed a warning. */
+    return NULL;
+  }
+
+  enum_value = g_enum_get_value (enum_class, value);
+  if (!enum_value) {
+    /* Use the first item in the enum */
+    enum_value = g_enum_get_value (enum_class, 0);
+  }
+  return enum_value->value_nick;
+}
+
+gint
+gnc_enum_from_nick(GType type,
+		   const gchar *name,
+		   gint default_value)
+{
+  GEnumClass   *enum_class;
+  GEnumValue   *enum_value;
+
+  /* Lookup the enum class in the glib type system */
+  enum_class = g_type_class_ref (type);
+  if (!enum_class) {
+    /* g_type_class_ref has already printed a warning. */
+    return default_value;
+  }
+
+  /* Lookup the specified enum in the class */
+  enum_value = g_enum_get_value_by_nick(enum_class, name);
+  if (enum_value)
+    return enum_value->value;
+  return default_value;
+}
+
+/************************************************************/
+/*                      Gconf Utilities                     */
+/************************************************************/
 
 char *
 gnc_gconf_section_name (const char *name)
@@ -290,6 +341,27 @@ gnc_gconf_set_list (const gchar *section,
   g_free(key);
 }
 
+GSList *
+gnc_gconf_client_all_entries (GObject *object,
+			      const gchar *name)
+{
+  GError *error = NULL;
+  GSList *value;
+  gchar *section;
+
+  if (our_client == NULL)
+    our_client = gconf_client_get_default();
+
+  section = gnc_gconf_section_name(name);
+  value = gconf_client_all_entries(our_client, section, &error);
+  if (error != NULL) {
+    printf("Failed to get list of all gconf keys: %s", error->message);
+    g_error_free(error);
+  }
+
+  return value;
+}
+
 void
 gnc_gconf_unset (const gchar *section,
 		 const gchar *name,
@@ -335,7 +407,6 @@ gnc_gconf_add_notification (GObject *object,
 			    const gchar *section,
 			    GConfClientNotifyFunc callback)
 {
-
 	GConfClient *client;
 	GError *error = NULL;
 	gchar *path, *client_tag, *notify_tag;

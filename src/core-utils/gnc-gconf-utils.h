@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @addtogroup GUI
+/** @addtogroup GLib
     @{ */
 /** @addtogroup GConf
 
@@ -50,9 +50,41 @@
 /* Keys used across multiple modules */
 #define KEY_LAST_PATH "last_path"
 
+
 /** @name GConf Miscellaneous Functions
  @{ 
 */
+
+/** This function takes an enum value and returns its nickname.
+ *
+ *  @param type The value defining the enum class.  For example,
+ *  GTK_TYPE_SORT_TYPE.
+ *
+ *  @param value A value contained in the enum.  For example,
+ *  GTK_SORT_ASCENDING.
+ *
+ *  @return A pointer to the textual "nickname" for this enum.  Tor
+ *  example, "ascending".
+ */
+const gchar * gnc_enum_to_nick(GType type, gint value);
+
+/** This function takes an enum nickname and returns its value.
+ *
+ *  @param type The value defining the enum class.  For example,
+ *  GTK_TYPE_SORT_TYPE or GTK_TYPE_ARROW_TYPE.
+ *
+ *  @param name The textual name for one of the items in the enum.
+ *  For example, "ascending".
+ *
+ *  @param value A value contained in the enum.  This value will be
+ *  returned if the supplied nickname is invalid.  For example,
+ *  GTK_SORT_ASCENDING.
+ *
+ *  @return A pointer to the textual "nickname" for this enum.
+ */
+gint gnc_enum_from_nick(GType type,
+			const gchar *name,
+			gint default_value);
 
 /** Convert a local key name to a full gconf path name.
  *
@@ -235,7 +267,7 @@ char *gnc_gconf_get_string (const gchar *section,
 /** Get a list of values from GConf.
  *
  *  Retrieve a list of values from GConf.  This list may be of any
- *  kind of value understoof by GConf, but all values in the list will
+ *  kind of value understood by GConf, but all values in the list will
  *  be of the same type.  The section and key names provided as
  *  arguments are combined with the standard gnucash key prefix to
  *  produce a fully qualified key name.  Either name (but not both)
@@ -384,7 +416,7 @@ void gnc_gconf_set_string (const gchar *section,
 /** Store a list of values into GConf.
  *
  *  Store a list of values into GConf.  This list may be of any kind
- *  of value understoof by GConf, but all values in the list must be
+ *  of value understood by GConf, but all values in the list must be
  *  of the same type.  The section and key names provided as arguments
  *  are combined with the standard gnucash key prefix to produce a
  *  fully qualified key name.  Either name (but not both) may be a
@@ -497,6 +529,36 @@ void gnc_gconf_add_notification (GObject *object,
  */
 void gnc_gconf_remove_notification (GObject *object,
 				    const gchar *section);
+
+
+/** Retrieve a list of all key/value pairs in the specified GConf
+ *  section.  The section name provided as an argument is combined
+ *  with the standard gnucash key prefix to produce a fully qualified
+ *  section name.
+ *
+ *  @param section This string provides a grouping of keys within the
+ *  GnuCash section of the gconf database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs/business/invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param section This string provides a grouping of keys within the
+ *  GnuCash section of the gconf database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs/business/invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @return This function returns a list of all key/value pairs stored
+ *  in this section of the gconf database.  It is the callers
+ *  responsibility to free any memory returned by this function.  This
+ *  include the list itself, and any entries contained in the list.
+ *  See gconf_client_all_entries in the gconf documentation.
+ */
+GSList *gnc_gconf_client_all_entries (GObject *object,
+				      const gchar *section);
+
 /** @} */
 
 /** @name GConf One Liners 
