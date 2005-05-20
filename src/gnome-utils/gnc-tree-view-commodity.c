@@ -1155,7 +1155,7 @@ static gnc_view_column view_column_defaults[] = {
    sort_by_cusip_code,
    GTK_TREE_VIEW_COLUMN_AUTOSIZE,
    FALSE, NULL,
-   "cusip code",
+   "cusip_code",
    N_("CUSIP Code")},
   {GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
