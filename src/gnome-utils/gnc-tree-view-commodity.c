@@ -355,10 +355,10 @@ sort_by_unique_name (GtkTreeModel *f_model,
 }
 
 static gint
-sort_by_exchange_code (GtkTreeModel *f_model,
-		       GtkTreeIter *f_iter_a,
-		       GtkTreeIter *f_iter_b,
-		       gpointer user_data)
+sort_by_cusip_code (GtkTreeModel *f_model,
+		    GtkTreeIter *f_iter_a,
+		    GtkTreeIter *f_iter_b,
+		    gpointer user_data)
 {
   gnc_commodity *comm_a, *comm_b;
 
@@ -1152,11 +1152,11 @@ static gnc_view_column view_column_defaults[] = {
    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
    0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_exchange_code,
+   sort_by_cusip_code,
    GTK_TREE_VIEW_COLUMN_AUTOSIZE,
    FALSE, NULL,
-   "code",
-   N_("Exchange Code")},
+   "cusip code",
+   N_("CUSIP Code")},
   {GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
