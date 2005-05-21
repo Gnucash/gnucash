@@ -216,9 +216,6 @@ Resources
 
     - dialog doesn't expand/fill on resize
 
-    - changing displayed columns has strange effects (some columns being
-      added, some not, some seeming off-by-one errors, &c.)
-
   - Stylesheets
 
     - Dialog opens with inappropriate scrollbars.

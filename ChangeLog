@@ -1,3 +1,50 @@
+2005-05-21  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/gnc-tree-view-common.[ch]:
+	* src/gnome-utils/gnc-tree-view.[ch]: Convert common functions
+	into a new base gnc-tree-view object.  Integrate the object with
+	gconf for tracking sizes and visibilities of columns within a
+	view.  Add a new popup menu for selecting column visibilities.
+	Make it easier to add new columns after a view has been created.
+	
+	* src/gnome-utils/gnc-tree-view-*: Base these views on the new
+	common gnc-tree-view class.
+
+	* src/gnome-utils/gnc-tree-model-*: Remove the dedicated column
+	for right aligning numbers.  This is done by a simpler method now.
+
+	* src/gnome/dialog-budget-category.c:
+	* src/gnome/dialog-commodities.c:
+	* src/gnome/dialog-price-edit-db.c:
+	* src/gnome/druid-hierarchy.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/import-export/import-account-matcher.c: Changes because
+	called functions have moved in to the base gnc tree view.
+
+	* src/app-utils/gnc-ui-util.[ch]:
+	* src/gnome-utils/dialog-account.c:
+	* src/scm/main-window.scm: Prune three or four layers of
+	complicated code that is only ever used to extract a single value
+	from an account.
+
+2005-05-20  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-model-account.c: Store the book as part
+	of the model private data.  In the event handler for the model,
+	ensure that events are for accounts that are in the model.
+
+2005-05-19  David Hampton  <hampton@employees.org>
+
+	* src/core-utils/gnc-gconf-utils.[ch]: Add some more utility
+	functions.
+
+	* src/gnome/schemas/apps_gnucash_dialog_commodities.schemas:
+	* src/gnome-utils/gnc-tree-view-commodity.c: Renamed "exchange
+	code" to "cusip code".  The former seems like it is referring to
+	NASDAQ, NYSE, etc, not a code that is unique to a specific
+	security.  The latter is by definition security specific.
+	
 2005-05-15  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-tree-view-account.[ch]:
