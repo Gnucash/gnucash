@@ -471,8 +471,6 @@ gnc_tree_model_price_get_column_type (GtkTreeModel *tree_model,
 			return G_TYPE_STRING;
 		case GNC_TREE_MODEL_PRICE_COL_VISIBILITY:
 			return G_TYPE_BOOLEAN;
-		case GNC_TREE_MODEL_PRICE_COL_ALIGN_RIGHT:
-			return G_TYPE_FLOAT;
 		default:
 			g_assert_not_reached ();
 			return G_TYPE_INVALID;
@@ -641,10 +639,6 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
 	    g_value_init (value, G_TYPE_STRING);
 	    g_value_set_string (value, gnc_commodity_namespace_get_name (namespace));
 	    break;
-	   case GNC_TREE_MODEL_PRICE_COL_ALIGN_RIGHT:
-	    g_value_init (value, G_TYPE_FLOAT);
-	    g_value_set_float (value, 1.0);
-	    break;
 	   case GNC_TREE_MODEL_PRICE_COL_VISIBILITY:
 	    g_value_init (value, G_TYPE_BOOLEAN);
 	    g_value_set_boolean (value, FALSE);
@@ -663,10 +657,6 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
 	   case GNC_TREE_MODEL_PRICE_COL_COMMODITY:
 	    g_value_init (value, G_TYPE_STRING);
 	    g_value_set_string (value, gnc_commodity_get_printname (commodity));
-	    break;
-	   case GNC_TREE_MODEL_PRICE_COL_ALIGN_RIGHT:
-	    g_value_init (value, G_TYPE_FLOAT);
-	    g_value_set_float (value, 1.0);
 	    break;
 	   case GNC_TREE_MODEL_PRICE_COL_VISIBILITY:
 	    g_value_init (value, G_TYPE_BOOLEAN);
@@ -689,10 +679,6 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
 	   case GNC_TREE_MODEL_PRICE_COL_COMMODITY:
 	    g_value_init (value, G_TYPE_STRING);
 	    g_value_set_string (value, "");
-	    break;
-	   case GNC_TREE_MODEL_PRICE_COL_ALIGN_RIGHT:
-	    g_value_init (value, G_TYPE_FLOAT);
-	    g_value_set_float (value, 1.0);
 	    break;
 	   case GNC_TREE_MODEL_PRICE_COL_VISIBILITY:
 	    g_value_init (value, G_TYPE_BOOLEAN);
@@ -734,10 +720,6 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			g_value_set_string (value, xaccPrintAmount (gnc_price_get_value (price),
 							            model->priv->print_info));
-			break;
-		case GNC_TREE_MODEL_PRICE_COL_ALIGN_RIGHT:
-			g_value_init (value, G_TYPE_FLOAT);
-			g_value_set_float (value, 1.0);
 			break;
 		case GNC_TREE_MODEL_PRICE_COL_VISIBILITY:
 			g_value_init (value, G_TYPE_BOOLEAN);

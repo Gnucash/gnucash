@@ -391,9 +391,6 @@ gnc_tree_model_account_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
 			return G_TYPE_BOOLEAN;
 
-		case GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT:
-			return G_TYPE_FLOAT;
-
 		default:
 			g_assert_not_reached ();
 			return G_TYPE_INVALID;
@@ -731,11 +728,6 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER:
 			g_value_init (value, G_TYPE_BOOLEAN);
 			g_value_set_boolean (value, xaccAccountGetPlaceholder (account));
-			break;
-
-		case GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT:
-			g_value_init (value, G_TYPE_FLOAT);
-			g_value_set_float (value, 1.0);
 			break;
 
 		default:

@@ -418,8 +418,6 @@ gnc_tree_model_commodity_get_column_type (GtkTreeModel *tree_model,
 		case GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG:
 		case GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY:
 			return G_TYPE_BOOLEAN;
-		case GNC_TREE_MODEL_COMMODITY_COL_ALIGN_RIGHT:
-			return G_TYPE_FLOAT;
 		default:
 			g_assert_not_reached ();
 			return G_TYPE_INVALID;
@@ -554,10 +552,6 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
 	    g_value_init (value, G_TYPE_STRING);
 	    g_value_set_string (value, gnc_commodity_namespace_get_name (namespace));
 	    break;
-	   case GNC_TREE_MODEL_COMMODITY_COL_ALIGN_RIGHT:
-	    g_value_init (value, G_TYPE_FLOAT);
-	    g_value_set_float (value, 1.0);
-	    break;
 	   default:
 	    g_value_init (value, G_TYPE_STRING);
 	    g_value_set_string (value, "");
@@ -639,10 +633,6 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
 			} else {
 			  g_value_set_static_string (value, "");
 			}
-			break;
-		case GNC_TREE_MODEL_COMMODITY_COL_ALIGN_RIGHT:
-	       		g_value_init (value, G_TYPE_FLOAT);
-			g_value_set_float (value, 1.0);
 			break;
 		case GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY:
 	       		g_value_init (value, G_TYPE_BOOLEAN);
