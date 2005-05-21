@@ -92,6 +92,7 @@ static void gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 
 struct GncTreeModelAccountPrivate
 {
+	QofBook *book;
 	AccountGroup *root;
 	Account *toplevel;
 	gint event_handler_id;
@@ -188,6 +189,7 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
 	}
 
 	model->priv = g_new0 (GncTreeModelAccountPrivate, 1);
+	model->priv->book = NULL;
 	model->priv->root = NULL;
 	model->priv->toplevel = NULL;
 
@@ -208,6 +210,7 @@ gnc_tree_model_account_finalize (GObject *object)
 	model = GNC_TREE_MODEL_ACCOUNT (object);
 	active_models = g_list_remove (active_models, model);
 
+	model->priv->book = NULL;
 	g_free (model->priv);
 
 	if (G_OBJECT_CLASS (parent_class)->finalize)
@@ -261,12 +264,13 @@ gnc_tree_model_account_new (AccountGroup *group)
 			      NULL);
 
 	priv = model->priv;
+	priv->book = gnc_get_current_book();
 	priv->root = group;
 
 	{
 	  Account *account;
 
-	  account = xaccMallocAccount(gnc_get_current_book());
+	  account = xaccMallocAccount(priv->book);
 	  gnc_tree_model_account_set_toplevel (model, account);
 	}
 
@@ -1424,9 +1428,11 @@ gnc_tree_model_account_event_handler (GUID *entity, QofIdType type,
 	model = (GncTreeModelAccount *)user_data;
 
 	/* Get the account.*/
-	/* DRH - Put the book in the model private data so this code
-	 * supports multiple simultaneous books. */
-	account = xaccAccountLookup (entity, gnc_get_current_book ());
+	account = xaccAccountLookup (entity, model->priv->book);
+	if (!account) {
+	  LEAVE("account not in this model's book");
+	  return;
+	}
 	account_name = xaccAccountGetName(account);
 
 	switch (event_type) {
