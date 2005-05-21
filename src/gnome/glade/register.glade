@@ -12,6 +12,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="enable_layout_config">True</property>
   <signal name="destroy" handler="gnc_register_destroy_cb"/>
   <signal name="delete_event" handler="gnc_register_delete_cb"/>
@@ -256,6 +261,11 @@
   <property name="modal">True</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -277,6 +287,7 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-6</property>
 	    </widget>
 	  </child>
@@ -289,6 +300,7 @@
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
 	    </widget>
 	  </child>
@@ -403,7 +415,7 @@
 		      <property name="update_policy">GTK_UPDATE_ALWAYS</property>
 		      <property name="snap_to_ticks">False</property>
 		      <property name="wrap">False</property>
-		      <property name="adjustment">0 0 1000000000 1 10 10</property>
+		      <property name="adjustment">0 0 1e+09 1 10 10</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -457,6 +469,11 @@
   <property name="modal">False</property>
   <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -478,6 +495,7 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-6</property>
 	    </widget>
 	  </child>
@@ -492,6 +510,7 @@
 	      <property name="label">gtk-apply</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-10</property>
 	    </widget>
 	  </child>
@@ -528,6 +547,7 @@
 		  <property name="label" translatable="yes">Show Earliest</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
 		  <property name="active">True</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
@@ -550,6 +570,7 @@
 		  <property name="label" translatable="yes">Start date:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
@@ -592,6 +613,7 @@
 		  <property name="label" translatable="yes">Show Latest</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
 		  <property name="active">True</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
@@ -614,6 +636,7 @@
 		  <property name="label" translatable="yes">End date:</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
 		  <property name="active">False</property>
 		  <property name="inconsistent">False</property>
 		  <property name="draw_indicator">True</property>
@@ -637,6 +660,7 @@
 		  <property name="label" translatable="yes">Today</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
+		  <property name="focus_on_click">True</property>
 		  <signal name="clicked" handler="gnc_plugin_page_register_today_cb" last_modification_time="Wed, 24 Sep 2003 06:48:30 GMT"/>
 		</widget>
 		<packing>
@@ -704,6 +728,11 @@
   <property name="modal">True</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -725,6 +754,7 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">0</property>
 	    </widget>
 	  </child>
@@ -738,6 +768,7 @@
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">0</property>
 	    </widget>
 	  </child>
@@ -778,6 +809,7 @@
 		      <property name="label" translatable="yes">Delete the whole transaction</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">True</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
@@ -796,6 +828,7 @@
 		      <property name="label" translatable="yes">Delete all the other splits</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
@@ -829,6 +862,8 @@
 		<widget class="GtkTextView" id="text">
 		  <property name="visible">True</property>
 		  <property name="editable">False</property>
+		  <property name="overwrite">False</property>
+		  <property name="accepts_tab">True</property>
 		  <property name="justification">GTK_JUSTIFY_LEFT</property>
 		  <property name="wrap_mode">GTK_WRAP_WORD</property>
 		  <property name="cursor_visible">True</property>
@@ -867,6 +902,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkToolbar" id="toolbar">
@@ -875,102 +915,176 @@
       <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
       <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
       <property name="tooltips">True</property>
+      <property name="show_arrow">True</property>
 
       <child>
-	<widget class="button" id="toolbar_enter">
+	<widget class="GtkToolButton" id="toolbar_enter">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Record the current transaction</property>
 	  <property name="label" translatable="yes">Enter</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-add</property>
+	  <property name="stock_id">gtk-add</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_split_reg_record_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
 
       <child>
-	<widget class="button" id="toolbar_cancel">
+	<widget class="GtkToolButton" id="toolbar_cancel">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Cancel the current transaction</property>
 	  <property name="label" translatable="yes">Cancel</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-undelete</property>
+	  <property name="stock_id">gtk-undelete</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_split_reg_cancel_trans_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
 
       <child>
-	<widget class="button" id="toolbar_delete">
+	<widget class="GtkToolButton" id="toolbar_delete">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Delete the current transaction</property>
 	  <property name="label" translatable="yes">Delete</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gnome-stock-trash</property>
+	  <property name="stock_id">gnome-stock-trash</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_split_reg_delete_trans_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
 
       <child>
-	<widget class="button" id="toolbar_duplicate">
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem1">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_duplicate">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Make a copy of the current transaction</property>
 	  <property name="label" translatable="yes">Duplicate</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-copy</property>
-	  <property name="new_group">True</property>
+	  <property name="stock_id">gtk-copy</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_split_reg_duplicate_trans_cb"/>
 	</widget>
 	<packing>
-	  <property name="new_group">True</property>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
 	</packing>
       </child>
 
       <child>
-	<widget class="button" id="toolbar_schedule">
+	<widget class="GtkToolButton" id="toolbar_schedule">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</property>
 	  <property name="label" translatable="yes">Schedule</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gnome-stock-line-in</property>
+	  <property name="stock_id">gnome-stock-line-in</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_split_reg_recur_cb"/>
 	</widget>
-      </child>
-
-      <child>
-	<widget class="toggle" id="toolbar_split">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">Split</property>
-	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gnome-stock-book-open</property>
-	  <property name="active">False</property>
-	  <property name="inconsistent">False</property>
-	  <property name="new_group">True</property>
-	  <signal name="clicked" handler="gnc_split_reg_expand_trans_toolbar_cb"/>
-	</widget>
 	<packing>
-	  <property name="new_group">True</property>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
 	</packing>
       </child>
 
       <child>
-	<widget class="button" id="toolbar_blank">
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToggleToolButton" id="toolbar_split">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Split</property>
+	  <property name="use_underline">True</property>
+	  <property name="stock_id">gnome-stock-book-open</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
+	  <property name="active">False</property>
+	  <signal name="clicked" handler="gnc_split_reg_expand_trans_toolbar_cb"/>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="toolbar_blank">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</property>
 	  <property name="label" translatable="yes">Blank</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-new</property>
+	  <property name="stock_id">gtk-new</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_split_reg_new_trans_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
 
       <child>
-	<widget class="button" id="toolbar_jump">
+	<widget class="GtkToolButton" id="toolbar_jump">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">Jump to the corresponding transaction in the other account</property>
 	  <property name="label" translatable="yes">Jump</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-jump-to</property>
+	  <property name="stock_id">gtk-jump-to</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_split_reg_jump_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
     </widget>
   </child>
@@ -984,6 +1098,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkMenuBar" id="register_menubar">
@@ -1425,6 +1544,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkToolbar" id="gnc_register_toolbar">
@@ -1433,68 +1557,122 @@
       <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
       <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
       <property name="tooltips">True</property>
+      <property name="show_arrow">True</property>
 
       <child>
-	<widget class="button" id="gnc_register_close_b">
+	<widget class="GtkToolButton" id="gnc_register_close_b">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
 	  <property name="label" translatable="yes">Close</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-close</property>
+	  <property name="stock_id">gtk-close</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_register_close_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
 
       <child>
-	<widget class="button" id="gnc_register_xfer_b">
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem3">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="gnc_register_xfer_b">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
 	  <property name="label" translatable="yes">Transfer</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-convert</property>
-	  <property name="new_group">True</property>
+	  <property name="stock_id">gtk-convert</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_register_xfer_cb"/>
 	</widget>
 	<packing>
-	  <property name="new_group">True</property>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
 	</packing>
       </child>
 
       <child>
-	<widget class="button" id="gnc_register_find_b">
+	<widget class="GtkSeparatorToolItem" id="separatortoolitem4">
+	  <property name="visible">True</property>
+	  <property name="draw">True</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkToolButton" id="gnc_register_find_b">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
 	  <property name="label" translatable="yes">Find</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-find</property>
-	  <property name="new_group">True</property>
+	  <property name="stock_id">gtk-find</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_ui_find_transactions_cb"/>
 	</widget>
 	<packing>
-	  <property name="new_group">True</property>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
 	</packing>
       </child>
 
       <child>
-	<widget class="button" id="gnc_register_report_b">
+	<widget class="GtkToolButton" id="gnc_register_report_b">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
 	  <property name="label" translatable="yes">Report</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gnome-stock-book-green</property>
+	  <property name="stock_id">gnome-stock-book-green</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_register_report_account_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
 
       <child>
-	<widget class="button" id="gnc_register_print_b">
+	<widget class="GtkToolButton" id="gnc_register_print_b">
 	  <property name="visible">True</property>
 	  <property name="tooltip" translatable="yes">NOTUSED: Defined in src/gnome/window-register.c</property>
 	  <property name="label" translatable="yes">Print</property>
 	  <property name="use_underline">True</property>
-	  <property name="stock_pixmap">gtk-print</property>
+	  <property name="stock_id">gtk-print</property>
+	  <property name="visible_horizontal">True</property>
+	  <property name="visible_vertical">True</property>
+	  <property name="is_important">False</property>
 	  <signal name="clicked" handler="gnc_register_print_cb"/>
 	</widget>
+	<packing>
+	  <property name="expand">False</property>
+	  <property name="homogeneous">True</property>
+	</packing>
       </child>
     </widget>
   </child>
@@ -1617,6 +1795,11 @@
   <property name="modal">True</property>
   <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -1638,6 +1821,7 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-6</property>
 	    </widget>
 	  </child>
@@ -1650,6 +1834,7 @@
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
 	    </widget>
 	  </child>

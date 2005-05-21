@@ -97,11 +97,11 @@
 	      <property name="wrap">True</property>
 	      <property name="selectable">False</property>
 	      <property name="xalign">0.5</property>
-	      <property name="yalign">0.519999980927</property>
+	      <property name="yalign">0.52</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
 	      <accessibility>
-		<atkproperty name="AtkObject::accessible_name" translatable="yes" comments="QSF is QOF Serialization Format">You can export the Chart of Accounts to a QSF XML file that can be imported into another GnuCash file or used in other programs.</atkproperty>
+		<atkproperty name="AtkObject::accessible_name" translatable="yes">You can export the Chart of Accounts to a QSF XML file that can be imported into another GnuCash file or used in other programs.</atkproperty>
 	      </accessibility>
 	    </widget>
 	    <packing>

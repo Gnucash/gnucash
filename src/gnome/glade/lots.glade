@@ -12,6 +12,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkVBox" id="vbox1">
@@ -27,44 +32,73 @@
 	  <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	  <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
 	  <property name="tooltips">True</property>
+	  <property name="show_arrow">True</property>
 
 	  <child>
-	    <widget class="button" id="regview button">
+	    <widget class="GtkToolButton" id="regview button">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Open a register showing the transactions in this lot</property>
 	      <property name="label" translatable="yes">View Lot
 in Register</property>
 	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
 	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
 	  </child>
 
 	  <child>
-	    <widget class="button" id="delete button">
+	    <widget class="GtkToolButton" id="delete button">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Delete the highlighted lot</property>
 	      <property name="label" translatable="yes">Delete
 Lot</property>
 	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
 	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
 	  </child>
 
 	  <child>
-	    <widget class="button" id="scrub lot button">
+	    <widget class="GtkToolButton" id="scrub lot button">
 	      <property name="visible">True</property>
 	      <property name="tooltip" translatable="yes">Scrub the highlighted lot</property>
 	      <property name="label" translatable="yes">Scrub
 Lot</property>
 	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
 	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
 	  </child>
 
 	  <child>
-	    <widget class="button" id="scrub account button">
+	    <widget class="GtkToolButton" id="scrub account button">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Scrub
 Account</property>
 	      <property name="use_underline">True</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
 	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
 	  </child>
 	</widget>
 	<packing>
@@ -168,6 +202,8 @@ Account</property>
 			      <property name="tooltip" translatable="yes">Enter any notes you want to make about this lot.</property>
 			      <property name="can_focus">True</property>
 			      <property name="editable">True</property>
+			      <property name="overwrite">False</property>
+			      <property name="accepts_tab">True</property>
 			      <property name="justification">GTK_JUSTIFY_LEFT</property>
 			      <property name="wrap_mode">GTK_WRAP_WORD</property>
 			      <property name="cursor_visible">True</property>

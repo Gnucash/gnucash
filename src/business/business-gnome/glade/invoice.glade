@@ -13,6 +13,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
   <signal name="destroy" handler="gnc_invoice_window_destroy_cb" last_modification_time="Sat, 19 Jul 2003 22:55:50 GMT"/>
 
@@ -35,6 +40,7 @@
 	      <property name="label">gtk-help</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-11</property>
 	      <signal name="clicked" handler="gnc_invoice_window_help_cb" last_modification_time="Sat, 19 Jul 2003 22:54:50 GMT"/>
 	    </widget>
@@ -48,6 +54,7 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-6</property>
 	      <signal name="clicked" handler="gnc_invoice_window_cancel_cb" last_modification_time="Sat, 19 Jul 2003 22:55:04 GMT"/>
 	    </widget>
@@ -61,6 +68,7 @@
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
 	      <signal name="clicked" handler="gnc_invoice_window_ok_cb" last_modification_time="Sat, 19 Jul 2003 22:55:18 GMT"/>
 	    </widget>
@@ -633,6 +641,8 @@
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
 		      <property name="editable">False</property>
+		      <property name="overwrite">False</property>
+		      <property name="accepts_tab">True</property>
 		      <property name="justification">GTK_JUSTIFY_LEFT</property>
 		      <property name="wrap_mode">GTK_WRAP_WORD</property>
 		      <property name="cursor_visible">True</property>
@@ -691,6 +701,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="enable_layout_config">False</property>
 
   <child internal-child="dock">
@@ -1292,142 +1307,243 @@
 	      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	      <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
 	      <property name="tooltips">True</property>
+	      <property name="show_arrow">True</property>
 
 	      <child>
-		<widget class="button" id="close_button">
+		<widget class="GtkToolButton" id="close_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Close this invoice window</property>
 		  <property name="label" translatable="yes">Close</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-close</property>
+		  <property name="stock_id">gtk-close</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_closeCB"/>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="edit_button">
+		<widget class="GtkToolButton" id="edit_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Edit this Invoice</property>
 		  <property name="label" translatable="yes">Edit</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-preferences</property>
+		  <property name="stock_id">gtk-preferences</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_editCB"/>
 		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkVSeparator" id="vseparator1">
-		  <property name="visible">True</property>
-		</widget>
 		<packing>
-		  <property name="new_group">True</property>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="enter_button">
+		<widget class="GtkToolItem" id="toolitem1">
+		  <property name="visible">True</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+
+		  <child>
+		    <widget class="GtkVSeparator" id="vseparator1">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolButton" id="enter_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Record the current entry</property>
 		  <property name="label" translatable="yes">Enter</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-add</property>
+		  <property name="stock_id">gtk-add</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_recordCB"/>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="cancel_button">
+		<widget class="GtkToolButton" id="cancel_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Cancel the current entry</property>
 		  <property name="label" translatable="yes">Cancel</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-undelete</property>
+		  <property name="stock_id">gtk-undelete</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_cancelCB"/>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="delete_button">
+		<widget class="GtkToolButton" id="delete_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Delete the current entry</property>
 		  <property name="label" translatable="yes">Delete</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gnome-stock-trash</property>
+		  <property name="stock_id">gnome-stock-trash</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_deleteCB"/>
 		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkVSeparator" id="vseparator2">
-		  <property name="visible">True</property>
-		</widget>
 		<packing>
-		  <property name="new_group">True</property>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="duplicate_button">
+		<widget class="GtkToolItem" id="toolitem2">
+		  <property name="visible">True</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+
+		  <child>
+		    <widget class="GtkVSeparator" id="vseparator2">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolButton" id="duplicate_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Make a copy of the current entry</property>
 		  <property name="label" translatable="yes">Duplicate</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-copy</property>
+		  <property name="stock_id">gtk-copy</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_duplicateCB"/>
 		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="blank_button">
-		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Move to the blank entry at the bottom of the Invoice</property>
-		  <property name="label" translatable="yes">Blank</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-new</property>
-		  <signal name="clicked" handler="gnc_invoice_window_blankCB"/>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="GtkVSeparator" id="vseparator3">
-		  <property name="visible">True</property>
-		</widget>
 		<packing>
-		  <property name="new_group">True</property>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="print_button">
+		<widget class="GtkToolButton" id="blank_button">
+		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Move to the blank entry at the bottom of the Invoice</property>
+		  <property name="label" translatable="yes">Blank</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_id">gtk-new</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+		  <signal name="clicked" handler="gnc_invoice_window_blankCB"/>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolItem" id="toolitem3">
+		  <property name="visible">True</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+
+		  <child>
+		    <widget class="GtkVSeparator" id="vseparator3">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolButton" id="print_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Make a printable Invoice</property>
 		  <property name="label" translatable="yes">Print</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-print</property>
+		  <property name="stock_id">gtk-print</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_printCB"/>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="post_button">
+		<widget class="GtkToolButton" id="post_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Post this Invoice to your Chart of Accounts</property>
 		  <property name="label" translatable="yes">Post</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-jump-to</property>
+		  <property name="stock_id">gtk-jump-to</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_postCB"/>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="unpost_button">
+		<widget class="GtkToolButton" id="unpost_button">
 		  <property name="visible">True</property>
 		  <property name="tooltip" translatable="yes">Unpost this Invoice and make it editable</property>
 		  <property name="label" translatable="yes">Unpost</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-convert</property>
+		  <property name="stock_id">gtk-convert</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		  <signal name="clicked" handler="gnc_invoice_window_unpostCB"/>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 	    </widget>
 	  </child>
@@ -1708,6 +1824,7 @@
 			      <property name="label" translatable="yes">Active</property>
 			      <property name="use_underline">True</property>
 			      <property name="relief">GTK_RELIEF_NORMAL</property>
+			      <property name="focus_on_click">True</property>
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
@@ -2070,6 +2187,8 @@
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="editable">True</property>
+			  <property name="overwrite">False</property>
+			  <property name="accepts_tab">True</property>
 			  <property name="justification">GTK_JUSTIFY_LEFT</property>
 			  <property name="wrap_mode">GTK_WRAP_WORD</property>
 			  <property name="cursor_visible">True</property>
@@ -2444,6 +2563,11 @@
   <property name="modal">True</property>
   <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -2465,6 +2589,7 @@
 	      <property name="label">gtk-cancel</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-6</property>
 	    </widget>
 	  </child>
@@ -2477,6 +2602,7 @@
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="focus_on_click">True</property>
 	      <property name="response_id">-5</property>
 	    </widget>
 	  </child>
@@ -2566,6 +2692,7 @@ Are you sure you want to unpost it?</property>
 		      <property name="label" translatable="yes">Yes, reset the Tax Tables</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">False</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>
@@ -2585,6 +2712,7 @@ Are you sure you want to unpost it?</property>
 		      <property name="label" translatable="yes">No, keep them as they are</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
 		      <property name="active">True</property>
 		      <property name="inconsistent">False</property>
 		      <property name="draw_indicator">True</property>

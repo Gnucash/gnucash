@@ -12,6 +12,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
   <signal name="destroy" handler="gnc_stock_split_druid_window_destroy_cb" last_modification_time="Sat, 23 Aug 2003 22:43:04 GMT"/>
 
   <child>
@@ -39,7 +44,7 @@
 	<widget class="GnomeDruidPageStandard" id="account_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Stock Account</property>
-	  <property name="title_foreground">#FFFFFFFFFFFF</property>
+	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669999</property>
 	  <property name="logo_background">#666666669999</property>
 	  <signal name="next" handler="gnc_stock_split_druid_account_next" last_modification_time="Sat, 23 Aug 2003 22:43:13 GMT"/>
@@ -79,6 +84,10 @@
 		  <property name="yalign">0.5</property>
 		  <property name="xscale">1</property>
 		  <property name="yscale">1</property>
+		  <property name="top_padding">0</property>
+		  <property name="bottom_padding">0</property>
+		  <property name="left_padding">0</property>
+		  <property name="right_padding">0</property>
 
 		  <child>
 		    <widget class="GtkScrolledWindow" id="scrolledwindow21">
@@ -163,7 +172,7 @@
 	<widget class="GnomeDruidPageStandard" id="details_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Stock Split Details</property>
-	  <property name="title_foreground">#FFFFFFFFFFFF</property>
+	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669999</property>
 	  <property name="logo_background">#666666669999</property>
 	  <signal name="prepare" handler="gnc_stock_split_druid_details_prepare" last_modification_time="Sat, 23 Aug 2003 22:44:51 GMT"/>
@@ -513,7 +522,7 @@ You may safely leave it blank.</property>
 	<widget class="GnomeDruidPageStandard" id="cash_page">
 	  <property name="visible">True</property>
 	  <property name="title" translatable="yes">Cash In Lieu</property>
-	  <property name="title_foreground">#FFFFFFFFFFFF</property>
+	  <property name="title_foreground">#ffffffffffff</property>
 	  <property name="background">#666666669999</property>
 	  <property name="logo_background">#666666669999</property>
 	  <signal name="prepare" handler="gnc_stock_split_druid_cash_prepare" last_modification_time="Sat, 23 Aug 2003 22:55:18 GMT"/>
