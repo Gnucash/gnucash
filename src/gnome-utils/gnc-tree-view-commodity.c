@@ -1,7 +1,7 @@
 /********************************************************************\
  * gnc-tree-view-commodity.c -- GtkTreeView implementation to       *
  *                            display commodities in a GtkTreeView. *
- * Copyright (C) 2003 David Hampton <hampton@employees.org>         *
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
