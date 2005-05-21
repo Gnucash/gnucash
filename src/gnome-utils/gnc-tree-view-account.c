@@ -27,9 +27,9 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#include "gnc-tree-view.h"
 #include "gnc-tree-model-account.h"
 #include "gnc-tree-view-account.h"
-#include "gnc-tree-view-common.h"
 
 #include "Account.h"
 #include "Group.h"
@@ -38,8 +38,11 @@
 #include "gnc-engine-util.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
+#include "global-options.h"
 #include "messages.h"
 
+
+#define SAMPLE_ACCOUNT_VALUE "$1,000,000.00"
 
 /** Static Globals *******************************************************/
 
@@ -66,9 +69,6 @@ struct GncTreeViewAccountPrivate
     GtkDestroyNotify                  filter_destroy;
 };
 
-/* Defined at the end of the file */
-static gnc_view_column view_column_defaults[];
-
 
 /************************************************************/
 /*               g_object required functions                */
@@ -94,7 +94,7 @@ gnc_tree_view_account_get_type (void)
 			(GInstanceInitFunc) gnc_tree_view_account_init
 		};
 		
-		gnc_tree_view_account_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
+		gnc_tree_view_account_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
 								     "GncTreeViewAccount",
 								     &our_info, 0);
 	}
@@ -155,13 +155,6 @@ gnc_init_account_view_info(AccountViewInfo *avi)
 
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     avi->include_type[i] = TRUE;
-
-  for (i = 0; i < NUM_ACCOUNT_FIELDS; i++)
-    avi->show_field[i] = FALSE;
-
-  avi->show_field[ACCOUNT_NAME] = TRUE;
-  avi->show_field[ACCOUNT_DESCRIPTION] = TRUE;
-  avi->show_field[ACCOUNT_TOTAL] = TRUE;
 }
 
 static void
@@ -367,7 +360,7 @@ sort_by_placeholder (GtkTreeModel *f_model,
   account = gnc_tree_model_account_get_account (GNC_TREE_MODEL_ACCOUNT(model), &iter);
   flag_b = xaccAccountGetPlaceholder(account);
 
-  if (flag_a < flag_b)
+  if (flag_a > flag_b)
     return -1;
   else if (flag_a == flag_b)
     return 0;
@@ -388,15 +381,14 @@ sort_by_placeholder (GtkTreeModel *f_model,
 GtkTreeView *
 gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 {
-  GncTreeViewAccount *account_view;
-  GtkTreeView *tree_view;
+  GncTreeView *view;
   GtkTreeModel *model, *f_model, *s_model;
   GtkTreePath *virtual_root_path = NULL;
+  const gchar *sample_type, *sample_commodity;
 
   ENTER(" ");
   /* Create our view */
-  account_view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT, "name", "account_tree", NULL);
-  tree_view = GTK_TREE_VIEW (account_view);
+  view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT, "name", "account_tree", NULL);
 
   /* Create/get a pointer to the existing model for this set of books. */
   model = gnc_tree_model_account_new (group);
@@ -411,24 +403,141 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 
   /* Set up the view private sort layer on the common model. */
   s_model = gtk_tree_model_sort_new_with_model(f_model);
-  gtk_tree_view_set_model (tree_view, s_model);
+  gnc_tree_view_set_model (view, s_model);
   g_object_unref(G_OBJECT(f_model));
 
   /* Set default visibilities */
-  gtk_tree_view_set_headers_visible (tree_view, FALSE);
-  gnc_tree_view_account_init_view_info(&account_view->priv->avi);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
 
-  gnc_tree_view_common_create_columns (tree_view, "Accounts", 
-                                       GNC_STOCK_ACCOUNT,
-				       view_column_defaults);
+  sample_type = xaccAccountGetTypeStr(CREDIT);
+  sample_commodity = gnc_commodity_get_fullname(gnc_default_currency());
+
+  gnc_tree_view_add_text_column(view, N_("Account Name"), "name",
+				GNC_STOCK_ACCOUNT, "Expenses:Entertainment",
+				GNC_TREE_MODEL_ACCOUNT_COL_NAME,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				NULL);
+  gnc_tree_view_add_text_column(view, N_("Type"), "type", NULL, sample_type,
+				GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				NULL);
+  gnc_tree_view_add_text_column(view, N_("Commodity"), "commodity", NULL,
+				sample_commodity,
+				GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				NULL);
+  gnc_tree_view_add_text_column(view, N_("Account Code"), "account-code", NULL,
+				"1-123-1234",
+				GNC_TREE_MODEL_ACCOUNT_COL_CODE,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				NULL);
+  gnc_tree_view_add_text_column(view, N_("Description"), "description", NULL,
+				"Sample account description.",
+				GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				NULL);
+  gnc_tree_view_add_numeric_column(view, N_("Last Num"), "lastnum", "12345",
+				   GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
+				   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   NULL);
+  gnc_tree_view_add_numeric_column(view, N_("Present"), "present",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_present_value);
+  gnc_tree_view_add_numeric_column(view, N_("Present (Report)"), "present_report",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_present_value);
+  gnc_tree_view_add_numeric_column(view, N_("Balance"), "balance",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_BALANCE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_balance_value);
+  gnc_tree_view_add_numeric_column(view, N_("Balance (Report)"), "balance_report",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_balance_value);
+  gnc_tree_view_add_numeric_column(view, N_("Cleared"), "cleared",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_cleared_value);
+  gnc_tree_view_add_numeric_column(view, N_("Cleared (Report)"), "cleared_report",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_cleared_value);
+  gnc_tree_view_add_numeric_column(view, N_("Reconciled"), "reconciled",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_reconciled_value);
+  gnc_tree_view_add_numeric_column(view, N_("Reconciled (Report)"), "reconciled_report",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_reconciled_value);
+  gnc_tree_view_add_numeric_column(view, N_("Future Minimum"), "future_min",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_future_min_value);
+  gnc_tree_view_add_numeric_column(view, N_("Future Minimum (Report)"), "future_min_report",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_future_min_value);
+  gnc_tree_view_add_numeric_column(view, N_("Total"), "total",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_TOTAL,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_total_value);
+  gnc_tree_view_add_numeric_column(view, N_("Total (Report)"), "total_report",
+				   SAMPLE_ACCOUNT_VALUE,
+				   GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT,
+				   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
+				   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				   sort_by_total_value);
+  gnc_tree_view_add_text_column(view, N_("Notes"), "notes", NULL,
+				"Sample account notes.",
+				GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				NULL);
+  gnc_tree_view_add_text_column(view, N_("Tax Info"), "tax-info", NULL,
+				"Sample tax info.",
+				GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
+				GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				NULL);
+  gnc_tree_view_add_toggle_column(view, N_("Placeholder"), "P", "placeholder",
+				  GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
+				  GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				  sort_by_placeholder,
+				  gnc_tree_view_account_placeholder_toggled);
+
+  gnc_tree_view_configure_columns(view, "description", "total", NULL);
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
 					  gnc_tree_view_account_filter_helper,
-					  account_view,
+					  view,
 					  NULL);
 
-  gtk_widget_show(GTK_WIDGET(tree_view));
-  LEAVE("%p", tree_view);
-  return tree_view;
+  gtk_widget_show(GTK_WIDGET(view));
+  LEAVE("%p", view);
+  return GTK_TREE_VIEW(view);
 }
 
 /*
@@ -562,79 +671,6 @@ gnc_tree_view_account_count_children (GncTreeViewAccount *view,
 /************************************************************/
 
 /*
- * Convert a column name to a column index.  This index valid for the
- * TreeView's list of TreeViewColumns.  When the column is a "builtin"
- * TreeViewAccount column, then the index is also valid for the
- * gnc_tree_view_account_defaults[] array.
- *
- *  Returns -1 when column is not found.
- */
-static gint
-gnc_tree_view_account_pref_name_to_field (const char *pref_name)
-{
-  gint i;
-  g_return_val_if_fail (pref_name, -1);
-
-  for (i = 0; i <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE; i++)
-    if (safe_strcmp(view_column_defaults[i].pref_name, pref_name) == 0)
-      return i;
-
-  return -1;
-}
-
-const char *
-gnc_tree_view_account_get_field_name (AccountFieldCode field)
-{
-  g_return_val_if_fail ((field >= 0) && (field <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE), NULL);
-
-  return(gettext(view_column_defaults[field].field_name));
-}
-
-
-/*
- * Set the list of columns that will be visible in an account tree view.
- */
-void
-gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view,
-					 GSList *column_names)
-{
-  AccountViewInfo new_avi;
-  AccountFieldCode field;
-  GSList *node;
-
-  g_return_if_fail(GNC_IS_TREE_VIEW_ACCOUNT(account_view));
-
-  ENTER(" ");
-  memset (&new_avi, 0, sizeof(new_avi));
-
-  for (node = column_names; node; node = node->next)
-  {
-    field = gnc_tree_view_account_pref_name_to_field(node->data);
-    if (field <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE)
-      new_avi.show_field[field] = TRUE;
-  }
-
-  new_avi.show_field[ACCOUNT_NAME] = TRUE;
-
-  gnc_tree_view_account_set_view_info (account_view, &new_avi);
-  LEAVE(" ");
-}
-
-/*
- * Initialize an account view info structure with default values.
- */
-void
-gnc_tree_view_account_init_view_info(AccountViewInfo *avi)
-{
-  int i;
-
-  for (i = 0; i <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE; i++)
-    avi->show_field[i] = FALSE;
-
-  avi->show_field[ACCOUNT_NAME] = TRUE;
-}
-
-/*
  * Get a copy of the account view info structure in use by the
  * specified tree.
  */
@@ -670,7 +706,6 @@ void
 gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
 				     AccountViewInfo *avi)
 {
-  GtkTreeViewColumn *column;
   gint i;
   guint sel_bits = 0;
 
@@ -680,11 +715,6 @@ gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
 
   account_view->priv->avi = *avi;
   
-  for (i = 0; i <= GNC_TREE_MODEL_ACCOUNT_COL_LAST_VISIBLE; i++) {
-    column = gtk_tree_view_get_column (GTK_TREE_VIEW(account_view), i);
-    gtk_tree_view_column_set_visible (column, avi->show_field[i]);
-  }
-
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++) {
       sel_bits |= avi->include_type[i] ? (1 << i): 0;
   }
@@ -1213,12 +1243,12 @@ gnc_tree_view_account_add_kvp_column (GncTreeViewAccount *view,
     renderer = gtk_cell_renderer_text_new ();
     g_object_set (G_OBJECT (renderer), "xalign", 1.0, NULL);
 
-    column = gtk_tree_view_column_new_with_attributes (column_title,
-						       renderer, NULL);
+    column = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), column_title,
+					   kvp_key, NULL, "Sample text",
+					   -1, -1, NULL);
     gtk_tree_view_column_set_cell_data_func (column, renderer, 
 					     account_cell_kvp_data_func,
 					     g_strdup(kvp_key), g_free);
-    gtk_tree_view_append_column (GTK_TREE_VIEW(view), column);
 }
 
 static void col_edited_helper(GtkCellRendererText *cell, gchar *path_string, 
@@ -1255,7 +1285,7 @@ static void col_source_helper(GtkTreeViewColumn *col, GtkCellRenderer *cell,
     col_source_cb = (GncTreeViewAccountColumnSource) _col_source_cb;
     account = gnc_tree_view_account_get_account_from_iter(s_model, s_iter);
     text = col_source_cb(account, col, cell);
-    g_object_set (G_OBJECT (cell), "text", text, "xalign", 0.0, NULL);
+    g_object_set (G_OBJECT (cell), "text", text, "xalign", 1.0, NULL);
     g_free(text);
 }
 
@@ -1291,223 +1321,6 @@ gnc_tree_view_account_add_custom_column(GncTreeViewAccount *account_view,
     gtk_tree_view_column_set_cell_data_func (column, renderer, 
                                              col_source_helper,
                                              col_source_cb, NULL);
-    gtk_tree_view_append_column (GTK_TREE_VIEW(account_view), column);
+    gnc_tree_view_append_column (GNC_TREE_VIEW(account_view), column);
     return column;
 }
-
-
-/************************************************************/
-/*          Account Tree View Get/Save Settings             */
-/************************************************************/
-
-void
-gnc_tree_view_account_save_settings (GncTreeViewAccount *view, const gchar *section)
-{
-  gnc_tree_view_common_save_settings (GTK_TREE_VIEW(view), section,
-				      view_column_defaults);
-}
-
-void
-gnc_tree_view_account_restore_settings (GncTreeViewAccount *view, const gchar *section)
-{
-  gnc_tree_view_common_restore_settings (GTK_TREE_VIEW(view), section,
-					 view_column_defaults);
-}
-
-
-/************************************************************/
-/*                    Column Definitions                    */
-/************************************************************/
-
-static gnc_view_column view_column_defaults[] = {
-  {GNC_TREE_MODEL_ACCOUNT_COL_NAME,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   NULL,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "name",
-   N_("Account Name")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_TYPE,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   NULL,
-   GTK_TREE_VIEW_COLUMN_FIXED,
-   FALSE, NULL,
-   "type",
-   N_("Type")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_COMMODITY,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   NULL,
-   GTK_TREE_VIEW_COLUMN_FIXED,
-   FALSE, NULL,
-   "commodity",
-   N_("Commodity")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_CODE,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   NULL,
-   GTK_TREE_VIEW_COLUMN_FIXED,
-   FALSE, NULL,
-   "code",
-   N_("Account Code")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_DESCRIPTION,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   NULL,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "description",
-   N_("Description")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_LASTNUM,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   NULL,
-   FALSE,
-   FALSE, NULL,
-   "lastnum",
-   N_("Last Num")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_PRESENT,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_present_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "present",
-   N_("Present")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_PRESENT_REPORT,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_PRESENT,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_present_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "present_report",
-   N_("Present (Report)")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_BALANCE,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_balance_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "balance",
-   N_("Balance")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_REPORT,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_BALANCE,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_balance_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "balance_report",
-   N_("Balance (Report)")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_CLEARED,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_cleared_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "cleared",
-   N_("Cleared")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_CLEARED_REPORT,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_CLEARED,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_cleared_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "cleared_report",
-   N_("Cleared (Report)")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_reconciled_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "reconciled",
-   N_("Reconciled")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_RECONCILED_REPORT,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_RECONCILED,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_reconciled_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "reconciled_report",
-   N_("Reconciled (Report)")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_future_min_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "future_min",
-   N_("Future Minimum")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_FUTURE_MIN_REPORT,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_FUTURE_MIN,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_future_min_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "future_min_report",
-   N_("Future Minimum (Report)")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_TOTAL,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_total_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "total",
-   N_("Total")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_TOTAL_REPORT,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_MODEL_ACCOUNT_COL_COLOR_TOTAL,
-   1.0, GNC_TREE_MODEL_ACCOUNT_COL_ALIGN_RIGHT,
-   sort_by_total_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "total_report",
-   N_("Total (Report)")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_NOTES,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   NULL,
-   FALSE,
-   FALSE, NULL,
-   "notes",
-   N_("Notes")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_TAX_INFO,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   NULL,
-   FALSE,
-   FALSE, NULL,
-   "tax-info",
-   N_("Tax Info")},
-  {GNC_TREE_MODEL_ACCOUNT_COL_PLACEHOLDER,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_placeholder,
-   FALSE,
-   TRUE, gnc_tree_view_account_placeholder_toggled,
-   "placeholder",
-   N_("Placeholder")},
-  { 0 }
-};

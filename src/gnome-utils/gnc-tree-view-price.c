@@ -27,8 +27,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#include "gnc-tree-view.h"
 #include "gnc-tree-model-price.h"
-#include "gnc-tree-view-common.h"
 #include "gnc-tree-view-price.h"
 
 #include "gnc-pricedb.h"
@@ -38,6 +38,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
 #include "gnc-ui-util.h"
+#include "global-options.h"
 //#include "messages.h"
 #include <libgnome/libgnome.h>
 
@@ -58,9 +59,6 @@ struct GncTreeViewPricePrivate
 {
   gboolean show_currencies;
 };
-
-/* Defined at the end of the file */
-static gnc_view_column view_column_defaults[];
 
 
 /************************************************************/
@@ -87,7 +85,7 @@ gnc_tree_view_price_get_type (void)
 			(GInstanceInitFunc) gnc_tree_view_price_init
 		};
 		
-		gnc_tree_view_price_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
+		gnc_tree_view_price_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
 								     "GncTreeViewPrice",
 								     &our_info, 0);
 	}
@@ -405,17 +403,24 @@ sort_by_value (GtkTreeModel *f_model,
  * model.
  */
 GtkTreeView *
-gnc_tree_view_price_new (QofBook *book)
+gnc_tree_view_price_new (QofBook *book,
+			 const gchar *first_property_name,
+			 ...)
 {
-  GncTreeViewPrice *view;
-  GtkTreeView *tree_view;
+  GncTreeView *view;
   GtkTreeModel *model, *f_model, *s_model;
   GNCPriceDB *price_db;
+  va_list var_args;
+  const gchar *sample_text;
+  gchar *sample_text2;
 
   ENTER(" ");
   /* Create our view */
-  view = g_object_new (GNC_TYPE_TREE_VIEW_PRICE, "name", "price_tree", NULL);
-  tree_view = GTK_TREE_VIEW (view);
+  va_start (var_args, first_property_name);
+  view = (GncTreeView *)g_object_new_valist (GNC_TYPE_TREE_VIEW_PRICE,
+					     first_property_name, var_args);
+  va_end (var_args);
+  g_object_set(view, "name", "price_tree", NULL);
 
   /* Create/get a pointer to the existing model for this set of books. */
   price_db = gnc_pricedb_get_db(book);
@@ -426,22 +431,52 @@ gnc_tree_view_price_new (QofBook *book)
   gtk_object_sink(GTK_OBJECT(model));
   s_model = gtk_tree_model_sort_new_with_model (f_model);
   g_object_unref(G_OBJECT(f_model));
-  gtk_tree_view_set_model (tree_view, s_model);
+  gnc_tree_view_set_model (view, s_model);
   g_object_unref(G_OBJECT(s_model));
 
   DEBUG("model ref count is %d",   G_OBJECT(model)->ref_count);
   DEBUG("f_model ref count is %d", G_OBJECT(f_model)->ref_count);
   DEBUG("s_model ref count is %d", G_OBJECT(s_model)->ref_count);
 
-  /* Set default visibilities */
-  gtk_tree_view_set_headers_visible (tree_view, FALSE);
+  sample_text = gnc_commodity_get_printname(gnc_default_currency());
+  sample_text2 = g_strdup_printf("%s%s", sample_text, sample_text);
+  gnc_tree_view_add_text_column (view, N_("Commodity"), "commodity", NULL,
+				 sample_text2,
+				 GNC_TREE_MODEL_PRICE_COL_COMMODITY,
+				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				 sort_by_name);
+  g_free(sample_text2);
+  gnc_tree_view_add_text_column (view, N_("Currency"), "currency", NULL,
+				 sample_text,
+				 GNC_TREE_MODEL_PRICE_COL_CURRENCY,
+				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+				 sort_by_name);
+  gnc_tree_view_add_text_column (view, N_("Date"), "date", NULL,
+				 "2005-05-20",
+				 GNC_TREE_MODEL_PRICE_COL_DATE,
+				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+				 sort_by_date);
+  gnc_tree_view_add_text_column (view, N_("Source"), "source", NULL,
+				 "Finance::Quote",
+				 GNC_TREE_MODEL_PRICE_COL_SOURCE,
+				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+				 sort_by_source);
+  gnc_tree_view_add_text_column (view, N_("Type"), "type", NULL, "last",
+				 GNC_TREE_MODEL_PRICE_COL_TYPE,
+				 GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+				 sort_by_type);
+  gnc_tree_view_add_numeric_column (view, N_("Price"), "price", "100.00000",
+				    GNC_TREE_MODEL_PRICE_COL_VALUE,
+				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
+				    GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
+				    sort_by_value);
 
-  gnc_tree_view_common_create_columns (tree_view, "Prices", NULL,
-				       view_column_defaults);
+  gnc_tree_view_configure_columns(view, "commodity", "currency",
+				  "date", "source", "type", "price", NULL);
 
-  gtk_widget_show(GTK_WIDGET(tree_view));
-  LEAVE(" %p", tree_view);
-  return tree_view;
+  gtk_widget_show(GTK_WIDGET(view));
+  LEAVE(" %p", view);
+  return GTK_TREE_VIEW(view);
 }
 
 /************************************************************/
@@ -1026,85 +1061,3 @@ gnc_tree_view_price_get_cursor_account (GncTreeViewPrice *view)
     return account;
 }
 #endif
-
-
-/************************************************************/
-/*         Price Tree View Save/Restore Settings            */
-/************************************************************/
-
-void
-gnc_tree_view_price_save_settings (GncTreeViewPrice *view, const gchar *section)
-{
-  gnc_tree_view_common_save_settings (GTK_TREE_VIEW(view), section,
-				      view_column_defaults);
-}
-
-void
-gnc_tree_view_price_restore_settings (GncTreeViewPrice *view, const gchar *section)
-{
-  gnc_tree_view_common_restore_settings (GTK_TREE_VIEW(view), section,
-					 view_column_defaults);
-}
-
-
-/************************************************************/
-/*                    Column Definitions                    */
-/************************************************************/
-
-static gnc_view_column view_column_defaults[] = {
-  {GNC_TREE_MODEL_PRICE_COL_COMMODITY,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_name,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "commodity",
-   N_("Commodity")},
-  {GNC_TREE_MODEL_PRICE_COL_CURRENCY,
-   GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_name,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "currency",
-   N_("Currency")},
-  {GNC_TREE_MODEL_PRICE_COL_DATE,
-   GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_date,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "date",
-   N_("Date")},
-  {GNC_TREE_MODEL_PRICE_COL_SOURCE,
-   GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_source,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "source",
-   N_("Source")},
-  {GNC_TREE_MODEL_PRICE_COL_TYPE,
-   GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_type,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "type",
-   N_("Type")},
-  {GNC_TREE_MODEL_PRICE_COL_VALUE,
-   GNC_TREE_MODEL_PRICE_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   1.0, GNC_TREE_MODEL_PRICE_COL_ALIGN_RIGHT,
-   sort_by_value,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "price",
-   N_("Price")},
-  { 0 }
-};

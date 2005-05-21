@@ -36,6 +36,7 @@
 
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
+#include "gnc-tree-view.h"
 
 #include "gnc-commodity.h"
 #include "gnc-ui-util.h"
@@ -55,7 +56,7 @@ typedef struct GncTreeViewCommodityPrivate GncTreeViewCommodityPrivate;
 
 
 typedef struct {
-	GtkTreeView parent;
+	GncTreeView parent;
 
 	GncTreeViewCommodityPrivate *priv;
 
@@ -63,7 +64,7 @@ typedef struct {
 } GncTreeViewCommodity;
 
 typedef struct {
-	GtkTreeViewClass parent;
+	GncTreeViewClass parent;
 } GncTreeViewCommodityClass;
 
 
@@ -83,9 +84,15 @@ GType         gnc_tree_view_commodity_get_type              (void);
  *
  *  @param book The book containing the commodities to show.
  *
+ *  @param first_property_name Pairs of property name/value settings
+ *  for the newly created object.  Terminate the properties with a
+ *  single NULL argument.
+ *
  *  @return A pointer to a new commodity tree view.
  */
-GtkTreeView  *gnc_tree_view_commodity_new (QofBook *book);
+GtkTreeView  *gnc_tree_view_commodity_new (QofBook *book,
+					   const gchar *first_property_name,
+					   ...);
 /** @} */
 
 
@@ -305,32 +312,6 @@ void          gnc_tree_view_commodity_set_selected_commodities (GncTreeViewCommo
 void          gnc_tree_view_commodity_select_subcommodities (GncTreeViewCommodity *view,
 							     gnc_commodity *commodity);
 
-/** @} */
-
-
-
-/** @name Commodity Tree View Save/Restore Functions 
- @{ */
-
-/** This function saves the settings of a commodity tree.  This saves
- *  column order, sort order, etc.
- *
- *  @param view A pointer to an commodity tree view.
- *
- *  @param section The name of a gconf section where the tree
- *  information should be saved. */
-void gnc_tree_view_commodity_save_settings (GncTreeViewCommodity *view,
-					    const gchar *section);
-
-/** This function restores the settings of a commodity tree.  This saves
- *  column order, sort order, etc.
- *
- *  @param view A pointer to an commodity tree view.
- *
- *  @param section The name of a gconf section where the tree
- *  information should be restores from. */
-void gnc_tree_view_commodity_restore_settings (GncTreeViewCommodity *view,
-					       const gchar *section);
 /** @} */
 
 G_END_DECLS

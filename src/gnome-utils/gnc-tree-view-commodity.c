@@ -27,8 +27,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
+#include "gnc-tree-view.h"
 #include "gnc-tree-model-commodity.h"
-#include "gnc-tree-view-common.h"
 #include "gnc-tree-view-commodity.h"
 
 #include "gnc-commodity.h"
@@ -59,9 +59,6 @@ struct GncTreeViewCommodityPrivate
   gboolean show_currencies;
 };
 
-/* Defined at the end of the file */
-static gnc_view_column view_column_defaults[];
-
 
 /************************************************************/
 /*               g_object required functions                */
@@ -87,7 +84,7 @@ gnc_tree_view_commodity_get_type (void)
 			(GInstanceInitFunc) gnc_tree_view_commodity_init
 		};
 		
-		gnc_tree_view_commodity_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
+		gnc_tree_view_commodity_type = g_type_register_static (GNC_TYPE_TREE_VIEW,
 								     "GncTreeViewCommodity",
 								     &our_info, 0);
 	}
@@ -466,17 +463,22 @@ sort_by_quote_tz (GtkTreeModel *f_model,
  * model.
  */
 GtkTreeView *
-gnc_tree_view_commodity_new (QofBook *book)
+gnc_tree_view_commodity_new (QofBook *book,
+			     const gchar *first_property_name,
+			     ...)
 {
-  GncTreeViewCommodity *view;
-  GtkTreeView *tree_view;
+  GncTreeView *view;
   GtkTreeModel *model, *f_model, *s_model;
   gnc_commodity_table *ct;
+  va_list var_args;
 
   ENTER(" ");
   /* Create our view */
-  view = g_object_new (GNC_TYPE_TREE_VIEW_COMMODITY, "name", "commodity_tree", NULL);
-  tree_view = GTK_TREE_VIEW (view);
+  va_start (var_args, first_property_name);
+  view = (GncTreeView *)g_object_new_valist (GNC_TYPE_TREE_VIEW_COMMODITY,
+					     first_property_name, var_args);
+  va_end (var_args);
+  g_object_set(view, "name", "commodity_tree", NULL);
 
   /* Create/get a pointer to the existing model for this set of books. */
   ct = gnc_book_get_commodity_table (book);
@@ -487,7 +489,7 @@ gnc_tree_view_commodity_new (QofBook *book)
   gtk_object_sink(GTK_OBJECT(model));
   s_model = gtk_tree_model_sort_new_with_model (f_model);
   g_object_unref(G_OBJECT(f_model));
-  gtk_tree_view_set_model (tree_view, s_model);
+  gnc_tree_view_set_model (view, s_model);
   g_object_unref(G_OBJECT(s_model));
 
   DEBUG("model ref count is %d",   G_OBJECT(model)->ref_count);
@@ -495,14 +497,65 @@ gnc_tree_view_commodity_new (QofBook *book)
   DEBUG("s_model ref count is %d", G_OBJECT(s_model)->ref_count);
 
   /* Set default visibilities */
-  gtk_tree_view_set_headers_visible (tree_view, FALSE);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
 
-  gnc_tree_view_common_create_columns (tree_view, "Commodities", NULL,
-				       view_column_defaults);
+  gnc_tree_view_add_text_column (view, N_("Namespace"), "namespace", NULL,
+				 "NASDAQ",
+				 GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
+				 GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
+				 sort_by_namespace);
+  gnc_tree_view_add_text_column (view, N_("Symbol"), "symbol", NULL,
+				 "ACMEACME",
+				 GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_mnemonic);
+  gnc_tree_view_add_text_column (view, N_("Name"), "name", NULL,
+				 "Acme Corporation, Inc.",
+				 GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_fullname);
+  gnc_tree_view_add_text_column (view, N_("Print Name"), "printname", NULL,
+				 "ACMEACME (Acme Corporation, Inc.)",
+				 GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_printname);
+  gnc_tree_view_add_text_column (view, N_("Unique Name"), "uniquename", NULL,
+				 "NASDAQ::ACMEACME",
+				 GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_unique_name);
+  gnc_tree_view_add_text_column (view, N_("CUSIP code"), "cusip_code", NULL,
+				 "QWERTYUIOP",
+				 GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_cusip_code);
+  gnc_tree_view_add_numeric_column (view, N_("Fraction"), "fraction", "10000",
+				    GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
+				    GNC_TREE_VIEW_COLUMN_COLOR_NONE,
+				    GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				    sort_by_fraction);
+  gnc_tree_view_add_toggle_column (view, N_("Get Quotes"), "Q", "quote_flag",
+				   GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
+				   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				   sort_by_quote_flag,
+				   NULL);
+  gnc_tree_view_add_text_column (view, N_("Source"), "quote_source", NULL,
+				 "yahoo",
+				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_quote_source);
+  gnc_tree_view_add_text_column (view, N_("Timezone"), "quote_timezone", NULL,
+				 "America/New_York",
+				 GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
+				 GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
+				 sort_by_quote_tz);
 
-  gtk_widget_show(GTK_WIDGET(tree_view));
-  LEAVE(" %p", tree_view);
-  return tree_view;
+  gnc_tree_view_configure_columns(view, "symbol", "name", "cusip_code",
+				  "fraction", NULL);
+
+  gtk_widget_show(GTK_WIDGET(view));
+  LEAVE(" %p", view);
+  return GTK_TREE_VIEW(view);
 }
 
 /************************************************************/
@@ -1077,121 +1130,3 @@ gnc_tree_view_commodity_get_cursor_account (GncTreeViewCommodity *view)
     return account;
 }
 #endif
-
-
-/************************************************************/
-/*         Commodity Tree View Get/Save Settings            */
-/************************************************************/
-
-void
-gnc_tree_view_commodity_save_settings (GncTreeViewCommodity *view, const gchar *section)
-{
-  gnc_tree_view_common_save_settings (GTK_TREE_VIEW(view), section,
-				      view_column_defaults);
-}
-
-void
-gnc_tree_view_commodity_restore_settings (GncTreeViewCommodity *view, const gchar *section)
-{
-  gnc_tree_view_common_restore_settings (GTK_TREE_VIEW(view), section,
-					 view_column_defaults);
-}
-
-
-/************************************************************/
-/*                    Column Definitions                    */
-/************************************************************/
-
-static gnc_view_column view_column_defaults[] = {
-  {GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
-   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_namespace,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "namespace",
-   N_("Namespace")},
-  {GNC_TREE_MODEL_COMMODITY_COL_MNEMONIC,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_mnemonic,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "symbol",
-   N_("Symbol")},
-  {GNC_TREE_MODEL_COMMODITY_COL_FULLNAME,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_fullname,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "name",
-   N_("Name")},
-  {GNC_TREE_MODEL_COMMODITY_COL_PRINTNAME,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_printname,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "printname",
-   N_("Print Name")},
-  {GNC_TREE_MODEL_COMMODITY_COL_UNIQUE_NAME,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_unique_name,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "uniquename",
-   N_("Unique Name")},
-  {GNC_TREE_MODEL_COMMODITY_COL_EXCHANGE_CODE,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_cusip_code,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "cusip_code",
-   N_("CUSIP Code")},
-  {GNC_TREE_MODEL_COMMODITY_COL_FRACTION,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   1.0, GNC_TREE_MODEL_COMMODITY_COL_ALIGN_RIGHT,
-   sort_by_fraction,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "fraction",
-   N_("Fraction")},
-  {GNC_TREE_MODEL_COMMODITY_COL_QUOTE_FLAG,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_quote_flag,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   TRUE, NULL,
-   "quote_flag",
-   N_("Quotes")},
-  {GNC_TREE_MODEL_COMMODITY_COL_QUOTE_SOURCE,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_quote_source,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "quote_source",
-   N_("Source")},
-  {GNC_TREE_MODEL_COMMODITY_COL_QUOTE_TZ,
-   GNC_TREE_MODEL_COMMODITY_COL_VISIBILITY,
-   GNC_TREE_VIEW_COLUMN_COLOR_NONE,
-   0.0, GNC_TREE_VIEW_COLUMN_ALIGN_NONE,
-   sort_by_quote_tz,
-   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
-   FALSE, NULL,
-   "quote_timezone",
-   N_("Timezone")},
-  { 0 }
-};

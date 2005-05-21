@@ -36,6 +36,7 @@
 
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
+#include "gnc-tree-view.h"
 
 #include "Group.h"
 #include "gnc-ui-util.h"
@@ -58,13 +59,11 @@ typedef struct AccountViewInfo_s     AccountViewInfo;
 struct AccountViewInfo_s
 {
   gboolean include_type[NUM_ACCOUNT_TYPES];
-
-  gboolean show_field[NUM_ACCOUNT_FIELDS];
 };
 
 
 typedef struct {
-	GtkTreeView parent;
+	GncTreeView parent;
 
 	GncTreeViewAccountPrivate *priv;
 
@@ -72,7 +71,7 @@ typedef struct {
 } GncTreeViewAccount;
 
 typedef struct {
-	GtkTreeViewClass parent;
+	GncTreeViewClass parent;
 } GncTreeViewAccountClass;
 
 
@@ -102,25 +101,6 @@ GtkTreeView *gnc_tree_view_account_new (gboolean show_root);
 
 /** @name Account Tree View Configuration 
  @{ */
-
-const char *gnc_tree_view_account_get_field_name (AccountFieldCode field);
-
-/** Configure (by name) the set of visible columns in an account tree
- *  view.  By default, when a GncTreeViewAccount is created, all
- *  columns are shown, but if you call this function with a NULL list,
- *  only the account name column will be shown.  Unrecognized column
- *  names are silently ignored.  The avalible list of columns can be
- *  found in the file gnc-tree-view-account.c.  NOTE: This function
- *  does not handle columns added with
- *  gnc_tree_view_account_add_kvp_column() -- it only handles the
- *  "builtin" columns.
- *
- *  @param account_view A pointer to an account tree view.
- *
- *  @param column_names A list of column names to make visible.
- */
-void gnc_tree_view_account_configure_columns (GncTreeViewAccount *account_view,
-                                              GSList *column_names);
 
 typedef gchar * (*GncTreeViewAccountColumnSource) (Account *account, 
                                                    GtkTreeViewColumn *col,
@@ -186,14 +166,6 @@ void gnc_tree_view_account_get_view_info (GncTreeViewAccount *account_view,
  */
 void gnc_tree_view_account_set_view_info (GncTreeViewAccount *account_view,
                                           AccountViewInfo *avi);
-
-/** Given a pointer to an old style filter block, initialize it to the
- *  default values for an account tree.  The defaults are to show all
- *  types of accounts, and show only the account name column.
- *
- *  @param avi A pointer to an old style filter block.
- */
-void gnc_tree_view_account_init_view_info (AccountViewInfo *avi);
 
 
 /** This function attaches a filter function to the given account
@@ -419,31 +391,6 @@ void          gnc_tree_view_account_select_subaccounts (GncTreeViewAccount *view
 							Account *account);
 
 /** @} */
-
-/** @} */
-
-/** @name Account Tree View Save/Restore Functions
-@{ */
-
-/** This function saves the settings of a account tree.  This saves
- *  column order, sort order, etc.
- *
- *  @param view A pointer to an account tree view.
- *
- *  @param section The name of a gconf section where the tree
- *  information should be saved. */
-void gnc_tree_view_account_save_settings (GncTreeViewAccount *view,
-					  const gchar *section);
-
-/** This function restores the settings of a account tree.  This saves
- *  column order, sort order, etc.
- *
- *  @param view A pointer to an account tree view.
- *
- *  @param section The name of a gconf section where the tree
- *  information should be restores from. */
-void gnc_tree_view_account_restore_settings (GncTreeViewAccount *view,
-					     const gchar *section);
 
 /** @} */
 
