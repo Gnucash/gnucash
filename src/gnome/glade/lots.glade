@@ -272,7 +272,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label3">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Opened</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -288,7 +287,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label4">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Closed</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -304,7 +302,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label5">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Title</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -320,7 +317,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label6">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Balance</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -336,7 +332,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label7">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Gains</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -411,7 +406,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label9">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Date</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -427,7 +421,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label10">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Num</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -443,7 +436,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label11">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Description</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -459,7 +451,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label12">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Amount</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -475,7 +466,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label13">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Value</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -491,7 +481,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label14">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Gain/Loss</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
@@ -507,7 +496,6 @@ Account</property>
 
 		      <child>
 			<widget class="GtkLabel" id="label15">
-			  <property name="visible">True</property>
 			  <property name="label" translatable="yes">Balance</property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
