@@ -71,31 +71,6 @@ the account instead of opening a register.") #f))
 	    (list->vector (list 'payable   (N_ "Accounts Payable") ""))
 	    (list->vector (list 'receivable (N_ "Accounts Receivable") "")))))
 
-    (add-option
-     (gnc:make-list-option
-      (N_ "Account Tree") (N_ "Account fields to display")
-      "c" ""
-      (list 'description 'total)
-      (list (list->vector (list 'type           (N_ "Type") ""))
-            (list->vector (list 'code           (N_ "Code") ""))
-            (list->vector (list 'description    (N_ "Description") ""))
-            (list->vector (list 'notes          (N_ "Notes") ""))
-            (list->vector (list 'commodity      (N_ "Commodity") ""))
-            (list->vector (list 'balance        (N_ "Balance") ""))
-            (list->vector (list 'balance_report (N_ "Balance in Report Currency") ""))
-            (list->vector (list 'present        (N_ "Present Balance") ""))
-            (list->vector (list 'present_report (N_ "Present Balance in Report Currency") ""))
-            (list->vector (list 'cleared        (N_ "Cleared Balance") ""))
-            (list->vector (list 'cleared_report (N_ "Cleared Balance in Report Currency") ""))
-            (list->vector (list 'reconciled        (N_ "Reconciled Balance") ""))
-            (list->vector (list 'reconciled_report (N_ "Reconciled Balance in Report Currency") ""))
-            (list->vector (list 'future_min        (N_ "Future Minimum Balance") ""))
-            (list->vector (list 'future_min_report (N_ "Future Minimum Balance in Report Currency") ""))
-            (list->vector (list 'total          (N_ "Total") ""))
-            (list->vector (list 'total_report   (N_ "Total in Report Currency") ""))
-            (list->vector (list 'lastnum        (N_ "Last Number Used") ""))
-            (list->vector (list 'tax-info       (N_ "Tax Info") "")))))
-
     options))
 
 (define (gnc:make-new-acct-tree-window)  

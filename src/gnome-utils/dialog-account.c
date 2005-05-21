@@ -501,36 +501,25 @@ gnc_edit_change_account_types(GHashTable *change_type, Account *account,
 
 /* helper function to perform changes to accounts */
 static void
-change_func (gpointer key, gpointer value, gpointer field_code)
+change_func (gpointer key, gpointer value, gpointer unused)
 {
   Account *account = key;
-  AccountFieldCode field = GPOINTER_TO_INT(field_code);
-
+  int type;
+ 
   if (account == NULL)
     return;
 
   xaccAccountBeginEdit(account);
 
-  switch (field)
-  {
-    case ACCOUNT_TYPE:
-      {
-        int type = GPOINTER_TO_INT(value);
+  type = GPOINTER_TO_INT(value);
 
-        if (type == xaccAccountGetType(account))
-          break;
+  if (type == xaccAccountGetType(account))
+    return;
 
-        /* Just refreshing won't work. */
-        aw_call_destroy_callbacks (account);
+  /* Just refreshing won't work. */
+  aw_call_destroy_callbacks (account);
 
-        xaccAccountSetType(account, type);
-      }
-      break;
-
-    default:
-      PERR ("unexpected account field code");
-      break;
-  }
+  xaccAccountSetType(account, type);
 
   xaccAccountCommitEdit(account);
 }
@@ -541,15 +530,13 @@ static void
 make_account_changes(GHashTable *change_type)
 {
   if (change_type != NULL)
-    g_hash_table_foreach(change_type, change_func,
-                         GINT_TO_POINTER(ACCOUNT_TYPE));
+    g_hash_table_foreach(change_type, change_func, NULL);
 }
 
 
 typedef struct
 {
   Account *account;
-  AccountFieldCode field;
   GtkCList *list;
   guint count;
 } FillStruct;
@@ -563,7 +550,6 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   gchar *account_field_name;
   gchar *account_field_value;
   gchar *value_str;
-  gboolean dummy;
 
   if (fs == NULL) return;
   if (fs->account == account) return;
@@ -572,27 +558,16 @@ fill_helper(gpointer key, gpointer value, gpointer data)
   if(!full_name)
     full_name = g_strdup("");
 
-  account_field_name = g_strdup(gnc_tree_view_account_get_field_name(fs->field));
+  account_field_name = g_strdup("Type");
   if (!account_field_name)
     account_field_name = g_strdup("");
 
   account_field_value =
-    gnc_ui_account_get_field_value_string(account, fs->field, &dummy);
+    g_strdup (xaccAccountGetTypeStr(xaccAccountGetType(account)));
   if (!account_field_value)
     account_field_value = g_strdup("");
 
-  switch (fs->field)
-  {
-    case ACCOUNT_TYPE:
-      value_str = g_strdup(xaccAccountGetTypeStr(GPOINTER_TO_INT(value)));
-      break;
-    default:
-      g_warning("unexpected field type");
-      g_free(full_name);
-      g_free(account_field_name);
-      g_free(account_field_value);
-      return;
-  }
+  value_str = g_strdup(xaccAccountGetTypeStr(GPOINTER_TO_INT(value)));
 
   {  
     gchar *strings[5];
@@ -615,7 +590,7 @@ fill_helper(gpointer key, gpointer value, gpointer data)
 
 static guint
 fill_list(Account *account, GtkCList *list,
-          GHashTable *change, AccountFieldCode field)
+          GHashTable *change)
 {
   FillStruct fs;
 
@@ -623,7 +598,6 @@ fill_list(Account *account, GtkCList *list,
     return 0;
 
   fs.account = account;
-  fs.field = field;
   fs.list = list;
   fs.count = 0;
 
@@ -660,7 +634,7 @@ extra_change_verify (AccountWindow *aw,
   list = GTK_CLIST(gtk_clist_new_with_titles(4, titles));
 
   size = 0;
-  size += fill_list(account, list, change_type, ACCOUNT_TYPE);
+  size += fill_list(account, list, change_type);
 
   if (size == 0)
   {
@@ -1366,7 +1340,7 @@ gnc_account_window_create(AccountWindow *aw)
   //  group = gnc_book_get_group (gnc_get_current_book ());
   aw->parent_tree = gnc_tree_view_account_new(TRUE);
   gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(aw->parent_tree));
-  gnc_tree_view_account_configure_columns (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree), NULL);
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(aw->parent_tree), NULL);
   gtk_widget_show(GTK_WIDGET(aw->parent_tree));
   aw->top_level_account =
     gnc_tree_view_account_get_top_level (GNC_TREE_VIEW_ACCOUNT(aw->parent_tree));

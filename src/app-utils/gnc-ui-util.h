@@ -68,57 +68,6 @@ AccountGroup * gnc_get_current_group (void);
 gnc_commodity_table * gnc_get_current_commodities (void);
 
 /*
- * These values are order according to the way they should appear in
- * the register.  If you change this enum, you must also change the
- * acct_tree_defaults data structure in gnc-account-tree.c.
- */
-typedef enum
-{
-  ACCOUNT_NAME = 0,
-  ACCOUNT_TYPE,
-  ACCOUNT_COMMODITY,
-  ACCOUNT_CODE,
-  ACCOUNT_DESCRIPTION,
-  ACCOUNT_PRESENT,
-  ACCOUNT_PRESENT_REPORT,
-  ACCOUNT_BALANCE,        /* with sign reversal */
-  ACCOUNT_BALANCE_REPORT, /* ACCOUNT_BALANCE in default report currency */
-  ACCOUNT_CLEARED,
-  ACCOUNT_CLEARED_REPORT,
-  ACCOUNT_RECONCILED,
-  ACCOUNT_RECONCILED_REPORT,
-  ACCOUNT_FUTURE_MIN,
-  ACCOUNT_FUTURE_MIN_REPORT,
-  ACCOUNT_TOTAL,          /* balance + children's balance with sign reversal */
-  ACCOUNT_TOTAL_REPORT,   /* ACCOUNT_TOTAL in default report currency */
-  ACCOUNT_NOTES,
-  ACCOUNT_TAX_INFO,
-  ACCOUNT_PLACEHOLDER,
-  ACCOUNT_LAST_NUM,
-  NUM_ACCOUNT_FIELDS
-} AccountFieldCode;
-
-/**
- * This routine retrives the content for any given field in the
- * account tree data structure.  The account specifies the "row" and
- * the field parameter specifies the "column".  In essence, this is
- * one giant accessor routine for the Account object where all the
- * results are string values.
- *
- * @param account  The account to retrieve data about.
- * @param field    An indicator of which field in the account tree to return
- * @param negative An indicator that the result was a negative numeric
- *                 value.  May be used by the caller for colorization of the
- *                 returned string.
- * @return         The textual string representing the requested field.
- *
- * @note The caller must free the returned string when done with it.
- */
-char * gnc_ui_account_get_field_value_string (Account *account,
-                                              AccountFieldCode field,
-					      gboolean *negative);
-
-/*
  * This is a wrapper routine around an xaccGetBalanceInCurrency
  * function that handles additional needs of the gui.
  *
