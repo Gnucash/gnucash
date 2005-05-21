@@ -291,7 +291,10 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
   /* commodity tree */
     
     scrolled_window = glade_xml_get_widget (xml, "commodity_list_window");
-    view = gnc_tree_view_commodity_new(gnc_get_current_book ());
+    view = gnc_tree_view_commodity_new(gnc_get_current_book (),
+				       "gconf-section", GCONF_SECTION,
+				       "show-column-menu", TRUE,
+				       NULL);
     cd->commodity_tree = GNC_TREE_VIEW_COMMODITY(view);
     gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(view));
     gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(cd->commodity_tree), TRUE);
@@ -309,8 +312,6 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), cd->show_currencies);
 
   gnc_restore_window_size (GCONF_SECTION, GTK_WINDOW(cd->dialog));
-  gnc_tree_view_commodity_restore_settings (cd->commodity_tree,
-					    GCONF_SECTION);
 }
 
 static void
@@ -321,7 +322,6 @@ close_handler (gpointer user_data)
   gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(cd->dialog));
 
   gnc_gconf_set_bool(GCONF_SECTION, "include_iso", cd->show_currencies, NULL);
-  gnc_tree_view_commodity_save_settings (cd->commodity_tree, GCONF_SECTION);
 
   gtk_widget_destroy(cd->dialog);
 }

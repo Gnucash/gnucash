@@ -340,10 +340,12 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
   /* price tree */
   scrolled_window = glade_xml_get_widget (xml, "price_list_window");
-  view = gnc_tree_view_price_new(gnc_get_current_book());
+  view = gnc_tree_view_price_new(gnc_get_current_book(),
+				 "gconf-section", GCONF_SECTION,
+				 "show-column-menu", TRUE,
+				 NULL);
   pdb_dialog->price_tree = GNC_TREE_VIEW_PRICE(view);
   gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(view));
-  gtk_tree_view_set_headers_visible(view, TRUE);
   gnc_tree_view_price_set_filter (pdb_dialog->price_tree,
 				  gnc_price_dialog_filter_ns_func,
 				  gnc_price_dialog_filter_cm_func,
@@ -369,7 +371,6 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
   }
 
   gnc_restore_window_size(GCONF_SECTION, GTK_WINDOW(pdb_dialog->dialog));
-  gnc_tree_view_price_restore_settings(pdb_dialog->price_tree, GCONF_SECTION);
   LEAVE(" ");
 }
 
@@ -380,7 +381,6 @@ close_handler (gpointer user_data)
 
   ENTER(" ");
   gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(pdb_dialog->dialog));
-  gnc_tree_view_price_save_settings(pdb_dialog->price_tree, GCONF_SECTION);
 
   gtk_widget_destroy (GTK_WIDGET (pdb_dialog->dialog));
   LEAVE(" ");

@@ -257,7 +257,7 @@ static void category_dialog_create(BudgetCategoryDlg* dlg)
     dlg->relatedView = gnc_tree_view_account_new(FALSE);
     gtk_container_add(GTK_CONTAINER(box), GTK_WIDGET(dlg->relatedView));
     
-    gnc_tree_view_account_configure_columns(GNC_TREE_VIEW_ACCOUNT(dlg->relatedView), NULL);
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(dlg->relatedView), NULL);
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(dlg->relatedView));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
  

@@ -114,7 +114,6 @@ static void gnc_plugin_page_account_tree_cmd_scrub_all (GtkAction *action, GncPl
 
 
 static void gnc_plugin_page_acct_tree_options_new(GncPluginPageAccountTreePrivate *priv);
-static void gnc_plugin_page_account_tree_configure (GncPluginPageAccountTreePrivate *priv);
 
 
 static guint plugin_page_signals[LAST_SIGNAL] = { 0 };
@@ -506,6 +505,11 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 			    TRUE, TRUE, 0);
 
 	tree_view = gnc_tree_view_account_new(FALSE);
+	g_object_set(G_OBJECT(tree_view),
+		     "gconf-section", GCONF_SECTION,
+		     "show-column-menu", TRUE,
+		     NULL);
+
 	page->priv->tree_view = tree_view;
 	selection = gtk_tree_view_get_selection(tree_view);
 	g_signal_connect (G_OBJECT (selection), "changed",
@@ -518,7 +522,6 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 			  G_CALLBACK (gnc_plugin_page_account_tree_double_click_cb), page);
 
 	gtk_tree_view_set_headers_visible(tree_view, TRUE);
-	gnc_plugin_page_account_tree_configure (page->priv);
 	gnc_plugin_page_account_tree_selection_changed_cb (NULL, page);
 	gtk_widget_show (GTK_WIDGET (tree_view));
 	gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
@@ -532,8 +535,6 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 				       gnc_get_current_session());
 
 	plugin_page->summarybar = gnc_main_window_summary_new();
-	gnc_tree_view_account_restore_settings(GNC_TREE_VIEW_ACCOUNT(tree_view),
-					       GCONF_SECTION);
 	gtk_widget_show(plugin_page->summarybar);
 
 	LEAVE("widget = %p", page->priv->widget);
@@ -547,9 +548,6 @@ gnc_plugin_page_account_tree_destroy_widget (GncPluginPage *plugin_page)
 
 	ENTER("page %p", plugin_page);
 	page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
-
-	gnc_tree_view_account_save_settings(GNC_TREE_VIEW_ACCOUNT(page->priv->tree_view),
-					    GCONF_SECTION);
 
 	if (page->priv->widget) {
 	  g_object_unref(G_OBJECT(page->priv->widget));
@@ -897,23 +895,6 @@ gnc_plugin_page_account_tree_cmd_delete_account (GtkAction *action, GncPluginPag
 /******************************/
 
 static void
-gnc_plugin_page_account_tree_configure (GncPluginPageAccountTreePrivate *priv)
-{
-  GtkTreeView *tree_view;
-  GSList *list;
-
-  ENTER(" ");
-  tree_view = priv->tree_view;
-  list = gnc_option_db_lookup_list_option(priv->odb, 
-                                          "Account Tree",
-                                          "Account fields to display",
-                                          NULL);
-  gnc_tree_view_account_configure_columns (GNC_TREE_VIEW_ACCOUNT(tree_view), list);
-  gnc_free_list_option_value (list);
-  LEAVE(" ");
-}
-
-static void
 gnc_plugin_page_account_tree_options_apply_cb (GNCOptionWin * propertybox,
 					       gpointer user_data)
 {
@@ -923,7 +904,6 @@ gnc_plugin_page_account_tree_options_apply_cb (GNCOptionWin * propertybox,
 
   ENTER(" ");
   gnc_option_db_commit(priv->odb);
-  gnc_plugin_page_account_tree_configure (priv);
   LEAVE(" ");
 }
 

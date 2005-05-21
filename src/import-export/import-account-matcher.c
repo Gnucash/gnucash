@@ -63,7 +63,6 @@ static void
 build_acct_tree(struct _accountpickerdialog * picker)
 {
   GtkTreeView *account_tree;
-  GSList *list = NULL;
 
   /* Build a new account tree */
   TRACE("Begin");
@@ -72,10 +71,8 @@ build_acct_tree(struct _accountpickerdialog * picker)
   gtk_tree_view_set_headers_visible (account_tree, TRUE);
 
   /* Configure the columns */
-  list = g_slist_append(list, "type");
-  list = g_slist_append(list, "description");
-  gnc_tree_view_account_configure_columns (picker->account_tree, list);
-  g_slist_free(list);
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree),
+				   "type", "description");
 
   /* Add our custom column. */
   gnc_tree_view_account_add_kvp_column (picker->account_tree,

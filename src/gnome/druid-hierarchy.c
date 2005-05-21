@@ -425,6 +425,8 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
 		gtk_label_set_text (data->category_description, gea->long_description);
 
 		tree_view = gnc_tree_view_account_new_with_group (gea->group, FALSE);
+		gnc_tree_view_configure_columns (GNC_TREE_VIEW(tree_view), NULL);
+
 		data->category_accounts_tree = tree_view;
 		gtk_tree_view_expand_all (tree_view);
 		gtk_container_add(GTK_CONTAINER(data->category_accounts_box), GTK_WIDGET(tree_view));
@@ -697,7 +699,6 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   gnc_commodity *com;
-  GSList *list = NULL;
   GtkWidget *entry;
 
   /* Anything to do? */
@@ -726,10 +727,8 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   tree_view = GTK_TREE_VIEW(data->final_account_tree);
   gtk_tree_view_set_headers_visible (tree_view, TRUE);
 
-  list = g_slist_append(list, "type");
-  list = g_slist_append(list, "placeholder");
-  gnc_tree_view_account_configure_columns (data->final_account_tree, list);
-  g_slist_free(list);
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(data->final_account_tree),
+				   "type", "placeholder", NULL);
 
   selection = gtk_tree_view_get_selection (tree_view);
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
@@ -747,7 +746,7 @@ on_final_account_prepare (GnomeDruidPage  *gnomedruidpage,
   gtk_tree_view_column_set_cell_data_func (column, renderer, 
 					   balance_cell_data_func,
 					   (gpointer)data, NULL);
-  gtk_tree_view_append_column (tree_view, column);
+  gnc_tree_view_append_column (GNC_TREE_VIEW(tree_view), column);
 
   gtk_container_add(GTK_CONTAINER(data->final_account_tree_box),
 		    GTK_WIDGET(data->final_account_tree));
