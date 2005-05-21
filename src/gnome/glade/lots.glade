@@ -10,6 +10,8 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
+  <property name="default_width">600</property>
+  <property name="default_height">400</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
   <property name="decorated">True</property>
@@ -111,7 +113,7 @@ Account</property>
       <child>
 	<widget class="GtkVPaned" id="lot vpaned">
 	  <property name="visible">True</property>
-	  <property name="position">0</property>
+	  <property name="position">150</property>
 
 	  <child>
 	    <widget class="GtkHPaned" id="lot hpaned">
@@ -260,88 +262,99 @@ Account</property>
 		  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 		  <child>
-		    <widget class="GtkCList" id="lot clist">
+		    <widget class="GtkScrolledWindow" id="scrolledwindow5">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">A list of all of the lots in this account.</property>
 		      <property name="can_focus">True</property>
-		      <property name="n_columns">5</property>
-		      <property name="column_widths">80,80,80,80,80</property>
-		      <property name="selection_mode">GTK_SELECTION_SINGLE</property>
-		      <property name="show_titles">True</property>
-		      <property name="shadow_type">GTK_SHADOW_IN</property>
+		      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+		      <property name="shadow_type">GTK_SHADOW_NONE</property>
+		      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 		      <child>
-			<widget class="GtkLabel" id="label3">
-			  <property name="label" translatable="yes">Opened</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+			<widget class="GtkCList" id="lot clist">
+			  <property name="visible">True</property>
+			  <property name="tooltip" translatable="yes">A list of all of the lots in this account.</property>
+			  <property name="can_focus">True</property>
+			  <property name="n_columns">5</property>
+			  <property name="column_widths">80,80,80,80,80</property>
+			  <property name="selection_mode">GTK_SELECTION_SINGLE</property>
+			  <property name="show_titles">True</property>
+			  <property name="shadow_type">GTK_SHADOW_IN</property>
 
-		      <child>
-			<widget class="GtkLabel" id="label4">
-			  <property name="label" translatable="yes">Closed</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+			  <child>
+			    <widget class="GtkLabel" id="label3">
+			      <property name="label" translatable="yes">Opened</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 
-		      <child>
-			<widget class="GtkLabel" id="label5">
-			  <property name="label" translatable="yes">Title</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+			  <child>
+			    <widget class="GtkLabel" id="label4">
+			      <property name="label" translatable="yes">Closed</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 
-		      <child>
-			<widget class="GtkLabel" id="label6">
-			  <property name="label" translatable="yes">Balance</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
+			  <child>
+			    <widget class="GtkLabel" id="label5">
+			      <property name="label" translatable="yes">Title</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 
-		      <child>
-			<widget class="GtkLabel" id="label7">
-			  <property name="label" translatable="yes">Gains</property>
-			  <property name="use_underline">False</property>
-			  <property name="use_markup">False</property>
-			  <property name="justify">GTK_JUSTIFY_CENTER</property>
-			  <property name="wrap">False</property>
-			  <property name="selectable">False</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
+			  <child>
+			    <widget class="GtkLabel" id="label6">
+			      <property name="label" translatable="yes">Balance</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+
+			  <child>
+			    <widget class="GtkLabel" id="label7">
+			      <property name="label" translatable="yes">Gains</property>
+			      <property name="use_underline">False</property>
+			      <property name="use_markup">False</property>
+			      <property name="justify">GTK_JUSTIFY_CENTER</property>
+			      <property name="wrap">False</property>
+			      <property name="selectable">False</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
 			</widget>
 		      </child>
 		    </widget>

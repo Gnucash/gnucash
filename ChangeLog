@@ -1,5 +1,10 @@
 2005-05-21  David Hampton  <hampton@employees.org>
 
+	* src/gnome/glade/lots.glade: Geert Jan Janssens'
+	<janssens.geert@advalvas.be> changes to add scrollbars to 'lot
+	clist'.  Add a default window size for easier use.  Add start
+	position for vpane divider to show both panes on startup.
+	
 	* All glade files: Run through the FC3 version of glade (2.6.0).
 	Additional properties added and minor reordering of properties.
 

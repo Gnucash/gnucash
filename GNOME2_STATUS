@@ -148,7 +148,9 @@ Resources
 
 - View Lots
 
-  - Dialog opens too small [whole bottom panel is invisible]
+  - Dialog buttons were broken when the glade file was run through
+    glade 2.6.0.  It changed them from GtkButton to GtkToolButton
+    because GtkButtons aren't supposed to put into a GtkToolbar.
 
   - Weird toolbar/menubar/action-list thingy at top.
 
