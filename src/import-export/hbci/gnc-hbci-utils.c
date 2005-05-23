@@ -533,10 +533,9 @@ static void *gnc_list_string_cb (const char *string, void *user_data)
 char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
 {
   /* Description */
-  char *h_descr = NULL;
+  char *h_descr = gnc_hbci_getpurpose (h_trans);
   char *othername = NULL;
   char *g_descr;
-  const GWEN_STRINGLIST *h_purpose = AB_Transaction_GetPurpose (h_trans);
   const GWEN_STRINGLIST *h_remotename = AB_Transaction_GetRemoteName (h_trans);
   struct cb_struct cb_object;
 
@@ -544,16 +543,7 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
     iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
   g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
 
-  /* Don't use list_string_concat_delim here since we need to
-     g_strstrip every single element of the string list, which is
-     only done in our callback gnc_list_string_cb. The separator is
-     also set there. */
-  cb_object.result = &h_descr;
-  if (h_purpose)
-    GWEN_StringList_ForEach (h_purpose,
-			     &gnc_list_string_cb,
-			     &cb_object);
-
+  /* Get othername */
   cb_object.result = &othername;
   if (h_remotename)
     GWEN_StringList_ForEach (h_remotename,
@@ -563,20 +553,45 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
 
   if (othername && (strlen (othername) > 0))
     g_descr = 
-      ((h_descr && (strlen (h_descr) > 0)) ?
+      ((strlen (h_descr) > 0) ?
        g_strdup_printf ("%s; %s", 
 			h_descr,
 			othername) :
        g_strdup (othername));
   else
     g_descr = 
-      ((h_descr && (strlen (h_descr) > 0)) ?
+      ((strlen (h_descr) > 0) ?
        g_strdup (h_descr) : 
        g_strdup (_("Unspecified")));
 
   iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   free (othername);
+  return g_descr;
+}
+
+char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
+{
+  /* Description */
+  char *h_descr = NULL;
+  char *g_descr;
+  const GWEN_STRINGLIST *h_purpose = AB_Transaction_GetPurpose (h_trans);
+  struct cb_struct cb_object;
+
+  cb_object.gnc_iconv_handler = 
+    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
+
+  cb_object.result = &h_descr;
+  if (h_purpose)
+    GWEN_StringList_ForEach (h_purpose,
+			     &gnc_list_string_cb,
+			     &cb_object);
+
+  g_descr = g_strdup (h_descr ? h_descr : "");
+
+  iconv_close(cb_object.gnc_iconv_handler);
+  free (h_descr);
   return g_descr;
 }
 

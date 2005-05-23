@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-06 23:24+0200\n"
-"PO-Revision-Date: 2005-05-06 23:26+0200\n"
+"POT-Creation-Date: 2005-05-23 22:16+0200\n"
+"PO-Revision-Date: 2005-05-23 22:18+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2685,7 +2685,7 @@ msgstr ""
 "Fehler aufgetreten beim Speichern eines Kontos:\n"
 "%d: %s"
 
-#: src/engine/Account.c:2513 src/import-export/hbci/gnc-hbci-utils.c:607
+#: src/engine/Account.c:2513 src/import-export/hbci/gnc-hbci-utils.c:622
 #: intl-scm/guile-strings.c:107 intl-scm/guile-strings.c:1882
 msgid "Bank"
 msgstr "Bank"
@@ -3571,7 +3571,7 @@ msgstr "Auswählen oder Hinzufügen eines GnuCash Kontos"
 #: src/import-export/generic-import.glade:161
 #: src/import-export/generic-import.glade:389
 #: src/import-export/generic-import.glade:899
-#: src/import-export/hbci/gnc-hbci-utils.c:606
+#: src/import-export/hbci/gnc-hbci-utils.c:621
 #: src/import-export/qif-import/qif.glade:125
 #: src/register/ledger-core/split-register-model.c:191
 #: intl-scm/guile-strings.c:2312 intl-scm/guile-strings.c:2432
@@ -7300,7 +7300,7 @@ msgstr "AqBanking-Modul wählen"
 msgid "Please choose an AqBanking backend to be configured"
 msgstr "Wählen Sie das Modul von AqBanking, das Sie einrichten möchten."
 
-#: src/import-export/hbci/druid-hbci-initial.c:609
+#: src/import-export/hbci/druid-hbci-initial.c:606
 #, c-format
 msgid ""
 "The external program \"%s Setup Wizard\" returned a nonzero \n"
@@ -7316,7 +7316,7 @@ msgstr ""
 "erfolgreich aufgerufen worden ist. Bitte versuchen Sie erneut, \n"
 "den %s Einrichtungs-Assistent korrekt auszuführen."
 
-#: src/import-export/hbci/druid-hbci-initial.c:622
+#: src/import-export/hbci/druid-hbci-initial.c:619
 #, c-format
 msgid ""
 "The external program \"%s Setup Wizard\" has not been found. \n"
@@ -7451,21 +7451,21 @@ msgstr ""
 "Ihr Sicherheitsmedium wird nicht unterstützt. Es konnte kein passendes\n"
 "Plugin für dieses Medium gefunden werden. Aktion wird abgebrochen."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:575 intl-scm/guile-strings.c:3576
+#: src/import-export/hbci/gnc-hbci-utils.c:565 intl-scm/guile-strings.c:3576
 #: intl-scm/guile-strings.c:3598
 msgid "Unspecified"
 msgstr "Nicht spezifiziert"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:594
-#: src/import-export/hbci/gnc-hbci-utils.c:596
+#: src/import-export/hbci/gnc-hbci-utils.c:609
+#: src/import-export/hbci/gnc-hbci-utils.c:611
 msgid "unknown"
 msgstr "unbekannt"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:689
+#: src/import-export/hbci/gnc-hbci-utils.c:704
 msgid "Choose HBCI bank"
 msgstr "HBCI Bank auswählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:690
+#: src/import-export/hbci/gnc-hbci-utils.c:705
 msgid ""
 "More than one HBCI bank is available for \n"
 "the requested operation. Please choose \n"
@@ -7474,17 +7474,17 @@ msgstr ""
 "Für die gewünschte Operation stehen mehr als eine HBCI Bank zur\n"
 "Verfügung. Bitte wählen Sie, welche benutzt werden soll."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:759
-#: src/import-export/hbci/gnc-hbci-utils.c:835
+#: src/import-export/hbci/gnc-hbci-utils.c:774
+#: src/import-export/hbci/gnc-hbci-utils.c:850
 #, c-format
 msgid "%s (%s) at bank %s (%s)"
 msgstr "%s (%s) bei Bank %s (BLZ %s)"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:769
+#: src/import-export/hbci/gnc-hbci-utils.c:784
 msgid "Choose HBCI customer"
 msgstr "HBCI Kundennummer wählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:770
+#: src/import-export/hbci/gnc-hbci-utils.c:785
 msgid ""
 "More than one HBCI customer is available for \n"
 "the requested operation. Please choose \n"
@@ -7494,11 +7494,11 @@ msgstr ""
 "Verfügung, unterschieden nach Kundennummer. Bitte wählen Sie, welcher\n"
 "benutzt werden soll."
 
-#: src/import-export/hbci/gnc-hbci-utils.c:845
+#: src/import-export/hbci/gnc-hbci-utils.c:860
 msgid "Choose HBCI user"
 msgstr "HBCI Benutzerkennung wählen"
 
-#: src/import-export/hbci/gnc-hbci-utils.c:846
+#: src/import-export/hbci/gnc-hbci-utils.c:861
 msgid ""
 "More than one HBCI user is available for \n"
 "the requested operation. Please choose \n"
@@ -7597,8 +7597,8 @@ msgid "Credited Account Bank Code"
 msgstr "BLZ des Auftraggebers"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:370
-#: src/import-export/hbci/dialog-hbcitrans.c:798
-#: src/import-export/hbci/dialog-hbcitrans.c:807
+#: src/import-export/hbci/dialog-hbcitrans.c:819
+#: src/import-export/hbci/dialog-hbcitrans.c:828
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
@@ -7620,7 +7620,20 @@ msgstr ""
 "Dies ergibt keinen zulässigen Zahlungsauftrag. Wollen Sie den Auftrag\n"
 "erneut eingeben?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:628
+#: src/import-export/hbci/dialog-hbcitrans.c:516
+msgid ""
+"You did not enter any transaction purpose. A purpose is \n"
+"required for an online transfer.\n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Sie haben keinen Verwendungszweck eingegeben. Für einen\n"
+"Überweisungsauftrag ist die Eingabe eines Verwendungszweck \n"
+"erforderlich.\n"
+"\n"
+"Wollen Sie den Auftrag erneut eingeben?"
+
+#: src/import-export/hbci/dialog-hbcitrans.c:649
 #, c-format
 msgid ""
 "The internal check of the destination account number '%s' \n"
@@ -7633,7 +7646,7 @@ msgstr ""
 "einen Fehler enthält. Wollen Sie den Auftrag trotzdem mit dieser\n"
 "Kontonummer abschicken?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:709
+#: src/import-export/hbci/dialog-hbcitrans.c:730
 msgid ""
 "The job was sent to the bank successfully, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -7651,15 +7664,15 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:839
+#: src/import-export/hbci/dialog-hbcitrans.c:860
 msgid "Enter name for new template:"
 msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:961
+#: src/import-export/hbci/dialog-hbcitrans.c:982
 msgid "Do you really want to sort the list of templates?"
 msgstr "Wollen Sie die Liste der Vorlagen wirklich sortieren?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:997
+#: src/import-export/hbci/dialog-hbcitrans.c:1018
 #, c-format
 msgid "Do you really want to delete the template '%s'?"
 msgstr "Wollen Sie die Vorlage »%s« wirklich löschen?"

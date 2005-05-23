@@ -109,6 +109,10 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans);
  * string must be g_free'd by the caller. */
 char *gnc_hbci_memo_tognc (const AB_TRANSACTION *h_trans);
 
+/* Retrieve the merged purpose fields from the transaction. The
+ * returned string must be g_free'd by the caller. If there was no
+ * purpose, an empty (but allocated) string is returned. */
+char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans);
 /** Return the first customer that can act on the specified account,
     or NULL if none was found (and an error message is printed on
     stdout). */
