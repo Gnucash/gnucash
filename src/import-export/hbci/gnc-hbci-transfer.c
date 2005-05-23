@@ -77,7 +77,7 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
       ( gnc_hbci_get_book_template_list
 	( xaccAccountGetBook(gnc_acc)));
     int result;
-    gboolean successful;
+    gboolean successful = FALSE;
     HBCITransDialog *td;
 
     /* Now open the HBCI_trans_dialog, which also calls
@@ -110,6 +110,28 @@ gnc_hbci_maketrans (GtkWidget *parent, Account *gnc_acc,
 	AB_JOB *job = 
 	  gnc_hbci_trans_dialog_enqueue(td, api,
 					(AB_ACCOUNT *)h_acc, trans_type);
+
+	/* Check whether we really got a job */
+	if (!job) {
+	  /* Oops, no job, probably not supported by bank. */
+	  if (gnc_verify_dialog
+	      (parent, 
+	       FALSE,
+	       "%s",
+	       _("The backend found an error during the preparation \n"
+		 "of the job. It is not possible to execute this job. \n"
+		 "\n"
+		 "Most probable the bank does not support your chosen \n"
+		 "job or your HBCI account does not have the permission \n"
+		 "to execute this job. More error messages might be \n"
+		 "visible on your console log.\n"
+		 "\n"
+		 "Do you want to enter the job again?")))
+	    continue;
+	  else
+	    /* job is NULL anyway, so it doesn't have to be cleaned up */
+	    break;
+	}
       
 	/* HBCI Transaction has been created and enqueued, so now open
 	 * the gnucash transaction dialog and fill in all values. */

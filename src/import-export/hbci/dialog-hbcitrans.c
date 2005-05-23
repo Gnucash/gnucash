@@ -506,7 +506,6 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 
     {
       char *purpose = gnc_hbci_getpurpose (td->hbci_trans);
-      printf ("%d: %s\n", strlen(purpose), purpose);
       if (strlen(purpose) == 0) {
 	gtk_widget_show_all (td->dialog); 
 	values_ok = !gnc_verify_dialog
@@ -694,10 +693,15 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
     printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
     return NULL;
   }
-  AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
 
-  /* Make really sure there is no other job in the queue */
-/*   HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE); */
+  switch (trans_type) {
+  case SINGLE_DEBITNOTE:
+    AB_JobSingleDebitNote_SetTransaction(job, td->hbci_trans);
+    break;
+  default:
+  case SINGLE_TRANSFER:
+    AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
+  };
 
   /* Add job to queue */
   AB_Banking_EnqueueJob(api, job);
