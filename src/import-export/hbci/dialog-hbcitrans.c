@@ -504,6 +504,27 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       continue;
     } /* check Transaction_value */
 
+    {
+      char *purpose = gnc_hbci_getpurpose (td->hbci_trans);
+      printf ("%d: %s\n", strlen(purpose), purpose);
+      if (strlen(purpose) == 0) {
+	gtk_widget_show_all (td->dialog); 
+	values_ok = !gnc_verify_dialog
+	  (GTK_WIDGET (td->dialog),
+	   TRUE,
+	   "%s",
+	   _("You did not enter any transaction purpose. A purpose is \n"
+	     "required for an online transfer.\n"
+	     "\n"
+	     "Do you want to enter the job again?"));
+	if (values_ok) {
+	  AB_Transaction_free (td->hbci_trans);
+	  return -1;
+	}
+	continue;
+      } /* check Transaction_purpose */
+    }
+
     /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
        transactionCode according to some GUI selection here!! */
     /*if (td->trans_type == SINGLE_DEBITNOTE)
