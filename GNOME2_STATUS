@@ -146,16 +146,6 @@ Resources
         #11 0x40327076 in g_signal_emit_by_name () from /usr/lib/libgobject-2.0.so.0
         #12 0x40326047 in g_signal_emit_valist () from /usr/lib/libgobject-2.0.so.0
 
-- View Lots
-
-  - Dialog buttons were broken when the glade file was run through
-    glade 2.6.0.  It changed them from GtkButton to GtkToolButton
-    because GtkButtons aren't supposed to put into a GtkToolbar.
-
-  - Weird toolbar/menubar/action-list thingy at top.
-
-  - [HIG] no "ok/cancel" buttons in dialog.
-
 - Business Functions
 
   - Everything works but the New Invoice/Bill code.  The dialog seems to

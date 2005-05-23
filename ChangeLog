@@ -1,3 +1,15 @@
+2005-05-22  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/dialog-utils.c (gnc_save_window_size): Protect
+	against being called after window destruction has started.
+
+	* src/gnome/glade/lots.glade: 
+	* src/gnome/lot-viewer.c: Make the dialog more HIG compliate.
+	Install the callbacks via glade instead of by hand.  Rework some
+	of the callback logic.  The buttons that require a lot be selected
+	now cannot be clicked unless a lot is selected.  Rememver window
+	and divider information in gconf.
+	
 2005-05-21  David Hampton  <hampton@employees.org>
 
 	* src/gnome/glade/lots.glade: Geert Jan Janssens'
