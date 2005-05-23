@@ -1,5 +1,9 @@
 2005-05-23  Christian Stimming  <stimming@tuhh.de>
 
+	* src/import-export/hbci/dialog-hbcitrans.c: Fix handling of debit
+	notes -- they were broken at all times since the aqbanking
+	transition, oops.
+
 	* src/import-export/hbci/dialog-hbcitrans.c: Add sanity checks and
 	ask user when there are no purpose lines.
 

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-05-23 22:16+0200\n"
-"PO-Revision-Date: 2005-05-23 22:18+0200\n"
+"POT-Creation-Date: 2005-05-23 23:06+0200\n"
+"PO-Revision-Date: 2005-05-23 23:11+0200\n"
 "Last-Translator: Christian Stimming <stimming@tuhh.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -7597,8 +7597,8 @@ msgid "Credited Account Bank Code"
 msgstr "BLZ des Auftraggebers"
 
 #: src/import-export/hbci/dialog-hbcitrans.c:370
-#: src/import-export/hbci/dialog-hbcitrans.c:819
-#: src/import-export/hbci/dialog-hbcitrans.c:828
+#: src/import-export/hbci/dialog-hbcitrans.c:823
+#: src/import-export/hbci/dialog-hbcitrans.c:832
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
@@ -7620,7 +7620,7 @@ msgstr ""
 "Dies ergibt keinen zulässigen Zahlungsauftrag. Wollen Sie den Auftrag\n"
 "erneut eingeben?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:516
+#: src/import-export/hbci/dialog-hbcitrans.c:515
 msgid ""
 "You did not enter any transaction purpose. A purpose is \n"
 "required for an online transfer.\n"
@@ -7633,7 +7633,7 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:649
+#: src/import-export/hbci/dialog-hbcitrans.c:648
 #, c-format
 msgid ""
 "The internal check of the destination account number '%s' \n"
@@ -7646,7 +7646,7 @@ msgstr ""
 "einen Fehler enthält. Wollen Sie den Auftrag trotzdem mit dieser\n"
 "Kontonummer abschicken?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:730
+#: src/import-export/hbci/dialog-hbcitrans.c:734
 msgid ""
 "The job was sent to the bank successfully, but the \n"
 "bank is refusing to execute the job. Please check \n"
@@ -7664,15 +7664,15 @@ msgstr ""
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:860
+#: src/import-export/hbci/dialog-hbcitrans.c:864
 msgid "Enter name for new template:"
 msgstr "Bitte geben Sie einen Namen für die neue Überweisungsvorlage ein:"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:982
+#: src/import-export/hbci/dialog-hbcitrans.c:986
 msgid "Do you really want to sort the list of templates?"
 msgstr "Wollen Sie die Liste der Vorlagen wirklich sortieren?"
 
-#: src/import-export/hbci/dialog-hbcitrans.c:1018
+#: src/import-export/hbci/dialog-hbcitrans.c:1022
 #, c-format
 msgid "Do you really want to delete the template '%s'?"
 msgstr "Wollen Sie die Vorlage »%s« wirklich löschen?"
@@ -7728,7 +7728,29 @@ msgstr "Konto jetzt abgleichen?"
 msgid "The HBCI import returned no transactions for the selected time period."
 msgstr "Es liegen keine Buchungen für die gewählte Zeitspanne vor."
 
-#: src/import-export/hbci/gnc-hbci-transfer.c:178
+#: src/import-export/hbci/gnc-hbci-transfer.c:121
+msgid ""
+"The backend found an error during the preparation \n"
+"of the job. It is not possible to execute this job. \n"
+"\n"
+"Most probable the bank does not support your chosen \n"
+"job or your HBCI account does not have the permission \n"
+"to execute this job. More error messages might be \n"
+"visible on your console log.\n"
+"\n"
+"Do you want to enter the job again?"
+msgstr ""
+"Das AqBanking-Modul hat einen Fehler während der Vorbereitung des\n"
+"Auftrags gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
+"\n"
+"Wahrscheinlich wird dieser HBCI Geschäftsvorfall von Ihrer Bank leider\n"
+"nicht unterstützt oder ist für Ihren HBCI-Zugang nicht\n"
+"freigeschaltet. Weitere Fehlermeldungen könnten auf dem Console-Log\n"
+"sichtbar sein.\n"
+"\n"
+"Wollen Sie den Auftrag erneut eingeben?"
+
+#: src/import-export/hbci/gnc-hbci-transfer.c:200
 msgid ""
 "You have changed the list of online transfer templates,\n"
 "but you cancelled the transfer dialog.\n"
@@ -7738,11 +7760,11 @@ msgstr ""
 "den Überweisungsdialog abgebrochen. Möchten Sie die Liste der\n"
 "Überweisungsvorlagen trotzdem speichern?"
 
-#: src/import-export/hbci/gnc-hbci-transfer.c:209
+#: src/import-export/hbci/gnc-hbci-transfer.c:231
 msgid "Online HBCI Direct Debit Note"
 msgstr "Online-Auftrag Einzellastschrift"
 
-#: src/import-export/hbci/gnc-hbci-transfer.c:212
+#: src/import-export/hbci/gnc-hbci-transfer.c:234
 msgid "Online HBCI Transaction"
 msgstr "Online-Auftrag Einzelüberweisung"
 
