@@ -446,8 +446,12 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       ((AQBANKING_VERSION_MINOR > 0) || \
        ((AQBANKING_VERSION_MINOR == 0) && \
         (AQBANKING_VERSION_PATCHLEVEL > 6)))))
-    max_purpose_lines = AB_TransactionLimits_GetMaxLinesPurpose
-      ( AB_JobSingleTransfer_GetFieldLimits(job) );
+    {
+      const AB_TRANSACTION_LIMITS *joblimits = AB_JobSingleTransfer_GetFieldLimits(job);
+      max_purpose_lines = (joblimits ?
+			   AB_TransactionLimits_GetMaxLinesPurpose (joblimits) :
+			   2);
+    }
 #else
     max_purpose_lines = AB_JobSingleTransfer_GetMaxPurposeLines(job);
 #endif
