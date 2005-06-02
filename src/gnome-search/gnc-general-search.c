@@ -102,32 +102,9 @@ gnc_general_search_get_type (void)
 }
 
 static void
-gnc_general_search_forall (GtkContainer *container, gboolean include_internals,
-                           GtkCallback callback, gpointer callback_data)
-{
-	g_return_if_fail (container != NULL);
-	g_return_if_fail (GNC_IS_GENERAL_SEARCH (container));
-	g_return_if_fail (callback != NULL);
-
-	/* Let GtkBox handle things only if the internal widgets need
-	 * to be poked. */
-	if (!include_internals)
-		return;
-
-	if (!GTK_CONTAINER_CLASS (parent_class)->forall)
-		return;
-
-	GTK_CONTAINER_CLASS (parent_class)->forall (container,
-						    include_internals,
-						    callback,
-						    callback_data);
-}
-
-static void
 gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 {
 	GtkObjectClass *object_class = (GtkObjectClass *) klass;
-	GtkContainerClass *container_class = (GtkContainerClass *) klass;
 
 	object_class = (GtkObjectClass*) klass;
 
@@ -141,8 +118,6 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 						 changed),
 			       gtk_marshal_NONE__NONE,
 			       GTK_TYPE_NONE, 0);
-
-	container_class->forall = gnc_general_search_forall;
 
 	object_class->destroy = gnc_general_search_destroy;
 
