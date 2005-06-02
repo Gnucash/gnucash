@@ -261,6 +261,7 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   CustomerWindow *cw = data;
   gnc_numeric min, max;
+  gchar *string;
 
   /* Check for valid company name */
   if (check_entry_nonempty (cw->dialog, cw->company_entry,
@@ -296,9 +297,10 @@ gnc_customer_window_ok_cb (GtkWidget *widget, gpointer data)
 
   /* Set the customer id if one has not been chosen */
   if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (cw->id_entry)), "") == 0) {
-    gtk_entry_set_text (GTK_ENTRY (cw->id_entry),
-			g_strdup_printf ("%.6lld",
-					 gncCustomerNextID (cw->book)));
+    string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
+			      gncCustomerNextID (cw->book));
+    gtk_entry_set_text (GTK_ENTRY (cw->id_entry), string);
+    g_free(string);
   }
 
   /* Now save it off */

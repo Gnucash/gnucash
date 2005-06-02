@@ -1,3 +1,20 @@
+2005-06-02  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/dialog-customer.c: Eliminate a
+	double free of memory.
+
+	* src/business/business-gnome/dialog-customer.c:
+	* src/business/business-gnome/dialog-employee.c:
+	* src/business/business-gnome/dialog-invoice.c:
+	* src/business/business-gnome/dialog-job.c:
+	* src/business/business-gnome/dialog-order.c:
+	* src/business/business-gnome/dialog-vendor.c: Fix a small memory
+	leak. Also tweak printfs for a 64 bit system.
+
+	* src/gnome-search/gnc-general-search.c: Remove the custom forall
+	method.  This allows all the child widgets to be properly
+	destroyed.
+
 2005-05-22  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/dialog-utils.c (gnc_save_window_size): Protect

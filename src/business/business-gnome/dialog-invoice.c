@@ -355,6 +355,7 @@ static gboolean
 gnc_invoice_window_verify_ok (InvoiceWindow *iw)
 {
   const char *res;
+  gchar *string;
 
   /* save the current entry in the ledger? */
   if (!gnc_entry_ledger_check_close (iw->dialog, iw->ledger))
@@ -377,8 +378,10 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
   /* Check the ID; set one if necessary */
   res = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
   if (safe_strcmp (res, "") == 0) {
-  gtk_entry_set_text (GTK_ENTRY (iw->id_entry),
-		      g_strdup_printf ("%.6lld", gncInvoiceNextID(iw->book)));
+    string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
+			      gncInvoiceNextID(iw->book));
+    gtk_entry_set_text (GTK_ENTRY (iw->id_entry), string);
+    g_free(string);
   }
       
   return TRUE;
@@ -1622,6 +1625,7 @@ gnc_invoice_update_window (InvoiceWindow *iw)
   do {
     GtkTextBuffer* text_buffer;
     const char *string;
+    gchar * tmp_string;
     Timespec ts, ts_zero = {0,0};
     Account *acct;
 
@@ -1671,8 +1675,9 @@ gnc_invoice_update_window (InvoiceWindow *iw)
     ts = gncInvoiceGetDatePosted (invoice);
     gnc_date_edit_set_time_ts (GNC_DATE_EDIT (iw->posted_date), ts);
 
-    string = xaccAccountGetFullName (acct, gnc_get_account_separator ());
-    gtk_entry_set_text (GTK_ENTRY (acct_entry), string);
+    tmp_string = xaccAccountGetFullName (acct, gnc_get_account_separator ());
+    gtk_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);
+    g_free(tmp_string);
 
   } while (FALSE);
 

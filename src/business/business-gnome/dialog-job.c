@@ -121,6 +121,7 @@ static gboolean
 gnc_job_verify_ok (JobWindow *jw)
 {
   const char *res;
+  gchar *string;
 
   /* Check for valid name */
   res = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
@@ -142,8 +143,10 @@ gnc_job_verify_ok (JobWindow *jw)
   /* Set a valid id if one was not created */
   res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
   if (safe_strcmp (res, "") == 0) {
-    gtk_entry_set_text (GTK_ENTRY (jw->id_entry),
-			g_strdup_printf ("%.6lld", gncJobNextID(jw->book)));
+    string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
+			      gncJobNextID(jw->book));
+    gtk_entry_set_text (GTK_ENTRY (jw->id_entry), string);
+    g_free(string);
   }
 
   /* Now save it off */

@@ -209,6 +209,7 @@ void
 gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 {
   EmployeeWindow *ew = data;
+  gchar *string;
 
   /* Check for valid username */
   if (check_entry_nonempty (ew->dialog, ew->username_entry,
@@ -232,9 +233,10 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 
   /* Set the employee id if one has not been chosen */
   if (safe_strcmp (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0) {
-    gtk_entry_set_text (GTK_ENTRY (ew->id_entry),
-			g_strdup_printf ("%.6lld",
-					 gncEmployeeNextID (ew->book)));
+    string = g_strdup_printf ("%.6" G_GINT64_FORMAT,
+			      gncEmployeeNextID (ew->book));
+    gtk_entry_set_text (GTK_ENTRY (ew->id_entry), string);
+    g_free(string);
   }
 
   /* Now save it off */
