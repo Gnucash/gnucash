@@ -1,7 +1,25 @@
+2005-06-03  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-main-window.[ch]: Move one function out of
+	window-main.c.  This may be a temporary home.
+
+	* src/gnome/window-main.[ch]:
+	* src/gnome/window-register.[ch]: Remove files that are no longer
+	needed in the g2 branch.
+
+	* src/gnome/Makefile.am:
+	* src/gnome/dialog-scheduledxaction.c:
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-split-reg.c:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/gnome/top-level.[ch]:
+	* src/gnome/window-main-summarybar.c: Remove references to these
+	files.
+
 2005-06-02  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/dialog-customer.c: Eliminate a
-	double free of memory.
+	memory corruption bug.
 
 	* src/business/business-gnome/dialog-customer.c:
 	* src/business/business-gnome/dialog-employee.c:
