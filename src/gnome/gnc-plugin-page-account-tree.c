@@ -50,7 +50,6 @@
 #include "lot-viewer.h"
 #include "option-util.h"
 #include "window-reconcile.h"
-#include "window-register.h"
 #include "window-main-summarybar.h"
 
 #include "messages.h"

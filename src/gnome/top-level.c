@@ -71,7 +71,6 @@
 #include "messages.h"
 #include "split-register.h"
 #include "top-level.h"
-#include "window-register.h"
 #include "window-report.h"
 
 

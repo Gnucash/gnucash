@@ -34,7 +34,6 @@
 
 #include "gnc-split-reg.h"
 
-#include "window-register.h"
 #include "Account.h"
 #include "QueryNew.h"
 #include "SX-book.h"

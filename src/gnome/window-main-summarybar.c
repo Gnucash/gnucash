@@ -41,7 +41,6 @@
 #include "option-util.h"
 #include "top-level.h"
 #include "window-main-summarybar.h"
-#include "window-main.h"
 
 typedef struct {
   GtkWidget * hbox;

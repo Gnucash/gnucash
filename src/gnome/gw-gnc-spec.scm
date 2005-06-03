@@ -36,7 +36,6 @@
       "#include <gnc-commodity.h>\n"
       "#include <gnc-numeric.h>\n"
       "#include <dialog-totd.h>\n"
-      "#include <window-main.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <dialog-new-user.h>\n"
       "#include <dialog-progress.h>\n"

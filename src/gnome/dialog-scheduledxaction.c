@@ -50,7 +50,6 @@
 #include "global-options.h"
 #include "gnucash-sheet.h"
 #include "messages.h"
-#include "window-register.h"
 
 #include "gnc-split-reg.h"
 

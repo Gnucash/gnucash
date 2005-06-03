@@ -63,10 +63,8 @@ libgncgnome_la_SOURCES = \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
-  window-main.c \
   window-main-summarybar.c \
-  window-reconcile.c \
-  window-register.c
+  window-reconcile.c
 
 gnomeappdir = ${datadir}/gnome/apps/Applications
 
@@ -115,10 +113,8 @@ noinst_HEADERS = \
   lot-viewer.h \
   reconcile-list.h \
   top-level.h \
-  window-main.h \
   window-main-summarybar.h \
   window-reconcile.h \
-  window-register.h \
   gw-gnc.h
 
 EXTRA_DIST = \
