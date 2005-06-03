@@ -96,6 +96,8 @@ void            gnc_main_window_update_title      (GncMainWindow *window);
 
 void            gnc_main_window_set_progressbar_window( GncMainWindow *window );
 
+void            gnc_shutdown (int exit_status);
+
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */

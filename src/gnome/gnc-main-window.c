@@ -53,7 +53,6 @@
 #include "gnc-ui.h"
 #include "gnc-version.h"
 #include "gnc-window.h"
-#include "window-main.h"
 #include "messages.h"
 #include "druid-merge.h"
 #include "dialog-chart-export.h"
@@ -1492,4 +1491,28 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
   GncWindow *gncwin;
   gncwin = GNC_WINDOW(window);
   gnc_window_set_progressbar_window(gncwin);
+}
+
+/********************************************************************
+ * gnc_shutdown
+ * close down gnucash from the C side...
+ ********************************************************************/
+void
+gnc_shutdown (int exit_status)
+{
+  /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/
+  SCM scm_shutdown = scm_c_eval_string("gnc:shutdown");
+
+  if(scm_procedure_p(scm_shutdown) != SCM_BOOL_F)
+  {
+    SCM scm_exit_code = scm_long2num(exit_status);    
+    scm_call_1(scm_shutdown, scm_exit_code);
+  }
+  else
+  {
+    /* Either guile is not running, or for some reason we
+       can't find gnc:shutdown. Either way, just exit. */
+    g_warning("couldn't find gnc:shutdown -- exiting anyway.");
+    exit(exit_status);
+  }
 }
