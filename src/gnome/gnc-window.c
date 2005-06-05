@@ -32,7 +32,7 @@
 #include "gnc-plugin-page.h"
 #include "gnc-window.h"
 
-static short module = MOD_TEST;
+static short module = MOD_GUI;
 
 GType
 gnc_window_get_type (void)
