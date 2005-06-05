@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <strings.h>
 #include "gnc-gconf-utils.h"
 
 #define APP_GNUCASH "/apps/gnucash/%s"
@@ -66,6 +67,7 @@ gnc_enum_from_nick(GType type,
 {
   GEnumClass   *enum_class;
   GEnumValue   *enum_value;
+  gchar        *alt_name, *ptr;
 
   /* Lookup the enum class in the glib type system */
   enum_class = g_type_class_ref (type);
@@ -76,6 +78,27 @@ gnc_enum_from_nick(GType type,
 
   /* Lookup the specified enum in the class */
   enum_value = g_enum_get_value_by_nick(enum_class, name);
+  if (enum_value)
+    return enum_value->value;
+
+  /* Flip '-' and '_' and try again */
+  alt_name = g_strdup(name);
+  if ((ptr = index(alt_name, '-')) != NULL) {
+    do {
+      *ptr++ = '_';
+    } while ((ptr = index(ptr, '-')) != NULL);
+  } else  if ((ptr = index(alt_name, '_')) != NULL) {
+    do {
+      *ptr++ = '-';
+    } while ((ptr = index(ptr, '_')) != NULL);
+  } else {
+    g_free(alt_name);
+    return default_value;
+  }
+
+  /* Lookup the specified enum in the class */
+  enum_value = g_enum_get_value_by_nick(enum_class, alt_name);
+  g_free(alt_name);
   if (enum_value)
     return enum_value->value;
   return default_value;
