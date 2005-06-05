@@ -1,3 +1,47 @@
+2005-06-05  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml: Restore the
+	register report menu items.  They've been missing for a while.
+
+	* src/gnome/Makefile.am:
+	* src/gnome/top-level.c:
+	* src/gnome/gnc-plugin-menu-additions.[ch]: New files for
+	installing the report menu items into the main window(s).
+
+	* src/gnome-utils/gnc-menu-extensions.[ch]: 
+	* src/gnome-utils/gnc-menu-extensions.scm: Build data structures
+	that are easier to use with the new menu installation code. Code
+	cleanup.
+
+	* src/business/business-gnome/business-gnome.scm:
+	* src/report/report-gnome/Makefile.am:
+	* src/report/report-gnome/gnc-plugin-page-report.[ch]:
+	* src/report/report-gnome/gw-report-gnome-spec.scm:
+	* src/report/report-gnome/report-gnome.scm:
+	* src/report/report-system/report.scm:
+	* src/scm/main.scm: Reports are now opened in the window where the
+	menu was selected. Other updates for recent changes.
+	
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/report/report-gnome/window-report.[ch]: Removal of old code.
+	
+	* src/gnome/gnc-main-window.[ch]:
+	* src/gnome/ui/gnc-main-window-ui.xml:
+	* src/gnome/gnc-plugin-page-account-tree.c: Include the Reports
+	menu in the main user interface.  Extracted common code into
+	utility functions.  New function for adding hand crafted actions
+	to the user interface.  Don't allow the initial page to be closed
+	or moved.  Rename a menu entry.  Remove the dispose function.  Add
+	doxygen comments.
+
+	* src/gnome/gnc-plugin.[ch]: Add doxygen comments.
+
+	* src/gnome/gw-gnc-spec.scm Remove extraneous includes.
+
+	* src/core-utils/gnc-gconf-utils.c: Treat the dash and underscore
+	characters the same when looking up an enum by name.
+
 2005-06-04  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin.[ch]: 
