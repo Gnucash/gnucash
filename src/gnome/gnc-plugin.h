@@ -80,6 +80,67 @@ GncPluginPage        *gnc_plugin_create_page     (GncPlugin *plugin,
 						  const gchar *uri);
 const gchar          *gnc_plugin_get_name (GncPlugin *plugin);
 
+typedef struct {
+  const char *action_name;
+  const char *label;
+} action_short_labels;
+
+/** Add "short" labels to existing actions.  The "short" label is the
+ *  string used on toolbar buttons when the action is visible.
+ *
+ *  @param action_group The group of all actions associated with a
+ *  plugin or plugin page.  All actions to me modified must be in this
+ *  group.
+ *
+ *  @param short_labels A pointer to a data structure containing
+ *  [action name, label string] string pairs.
+ */
+void gnc_plugin_init_short_names (GtkActionGroup *action_group,
+				  action_short_labels *short_labels);
+
+
+/** Update a property on a set of existing GtkActions.  This function
+ *  can be easily used to make a llist of actions visible, invisible,
+ *  sensitive, or insensitive.
+ *
+ *  @param action_group The group of all actions associated with a
+ *  plugin or plugin page.  All actions to be modified must be
+ *  contained in this group.
+ *
+ *  @param action_names A null terminated list of actions names that
+ *  should modified.
+ *
+ *  @param property_name The property name to be changed on the
+ *  specified actions. The only two GtkAction properties that it makes
+ *  sense to modify are "visible" and "sensitive".
+ *
+ *  @param value A boolean specifying the new state for the specified
+ *  property.
+ */
+void gnc_plugin_update_actions (GtkActionGroup *action_group,
+				const gchar **action_names,
+				const gchar *property_name,
+				gboolean value);
+
+
+/** Load a new set of actions into an existing UI.
+ *
+ *  @param ui_merge The existing set of merged actions. This is the ui
+ *  that a user sees.  The actions from the ui file will be added to
+ *  this ui.
+ *
+ *  @param action_group The local action group.  The actions from the
+ *  ui file will be added to this private action group.
+ *
+ *  @param filename The name of the ui file to load.  This file name
+ *  will be searched for in the ui directory.
+ *
+ *  @return The merge_id number for the newly merged UI.  If an error
+ *  occurred, the return value is 0.
+ */
+gint gnc_plugin_add_actions (GtkUIManager *ui_merge,
+			     GtkActionGroup *action_group,
+			     const gchar *filename);
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_H */

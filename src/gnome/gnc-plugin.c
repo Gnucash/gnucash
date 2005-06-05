@@ -27,6 +27,8 @@
 #include "gnc-plugin.h"
 #include "gnc-trace.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-gnome-utils.h"
+#include "messages.h"
 
 static gpointer parent_class = NULL;
 static short module = MOD_GUI;
@@ -196,6 +198,96 @@ gnc_plugin_get_name (GncPlugin *plugin)
 {
 	g_return_val_if_fail (GNC_IS_PLUGIN (plugin), NULL);
 	return (GNC_PLUGIN_GET_CLASS(plugin)->plugin_name);
+}
+
+
+/************************************************************
+ *                    Utility Functions                     *
+ ************************************************************/
+
+
+/** Add "short" labels to existing actions.  The "short" label is the
+ *  string used on toolbar buttons when the action is visible.*/
+void
+gnc_plugin_init_short_names (GtkActionGroup *action_group,
+			     action_short_labels *short_labels)
+{
+  GtkAction *action;
+  GValue value = { 0, };
+  gint i;
+
+  g_value_init (&value, G_TYPE_STRING);
+
+  for (i = 0; short_labels[i].action_name; i++) {
+    /* Add a couple of short labels for the toolbar */
+    action = gtk_action_group_get_action (action_group,
+					  short_labels[i].action_name);
+    g_value_set_static_string (&value, gettext(short_labels[i].label));
+    g_object_set_property (G_OBJECT(action), "short_label", &value);
+  }
+}
+
+
+/** Update the status of existing UI actions.  This function can
+ *  modify actions making them visible, invisible, sensitive, or
+ *  insensitive. */
+void
+gnc_plugin_update_actions (GtkActionGroup *action_group,
+			   const gchar **action_names,
+			   const gchar *property_name,
+			   gboolean value)
+{
+  GtkAction    *action;
+  GValue        gvalue = { 0 };
+  gint          i;
+
+  g_value_init (&gvalue, G_TYPE_BOOLEAN);
+  g_value_set_boolean (&gvalue, value);
+
+  for (i = 0; action_names[i]; i++) {
+    action = gtk_action_group_get_action (action_group, action_names[i]);
+    g_object_set_property (G_OBJECT(action), property_name, &gvalue);
+  }
+}
+
+
+/** Load a new set of actions into an existing UI. */
+gint
+gnc_plugin_add_actions (GtkUIManager *ui_merge,
+			GtkActionGroup *action_group,
+			const gchar *filename)
+{
+	GError *error = NULL;
+	gchar *pathname;
+	gint merge_id;
+	
+	ENTER("ui_merge %p, action_group %p, filename %s",
+	      ui_merge, action_group, filename);
+	g_return_val_if_fail (ui_merge, 0);
+	g_return_val_if_fail (action_group, 0);
+	g_return_val_if_fail (filename, 0);
+
+	gtk_ui_manager_insert_action_group (ui_merge, action_group, 0);
+
+	pathname = gnc_gnome_locate_ui_file (filename);
+	if (pathname == NULL)
+	  return 0;
+
+	merge_id = gtk_ui_manager_add_ui_from_file (ui_merge, pathname, &error);
+	DEBUG("merge_id is %d", merge_id);
+
+	g_assert(merge_id || error);
+	if (merge_id) {
+	  gtk_ui_manager_ensure_update (ui_merge);
+	} else {
+	  g_critical("Failed to load ui file.\n  Filename %s\n  Error %s",
+		     filename, error->message);
+	  g_error_free(error);
+	}
+
+	g_free(pathname);
+	LEAVE(" ");
+	return merge_id;
 }
 
 #if 0
