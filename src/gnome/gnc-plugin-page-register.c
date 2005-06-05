@@ -481,7 +481,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 					    G_CALLBACK(gnc_plugin_page_register_cmd_style_changed),
 					    plugin_page);
 
-	gnc_gnome_utils_init_short_names (action_group, short_labels);
+	gnc_plugin_init_short_names (action_group, short_labels);
 	gnc_plugin_page_register_init_values (action_group);
 
 	priv->ui_description = g_strdup("gnc-plugin-page-register-ui.xml");
@@ -541,8 +541,8 @@ gnc_plugin_page_register_update_menus (GncPluginPageRegister *page)
 
 	priv = page->priv;
 	account = gnc_plugin_page_register_get_account (page);
-	gnc_gnome_utils_update_actions(priv->action_group, actions_requiring_account,
-				 "sensitive", account != NULL);
+	gnc_plugin_update_actions(priv->action_group, actions_requiring_account,
+				  "sensitive", account != NULL);
 
 	sr = gnc_ledger_display_get_split_register(priv->ledger);
 	action = gtk_action_group_get_action (priv->action_group,
@@ -630,10 +630,9 @@ gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
 	priv = register_page->priv;
 
 	priv->ui_merge = ui_merge;
-	priv->merge_id =
-	  gnc_menu_merge_add_actions (priv->ui_merge,
-				      priv->action_group,
-				      priv->ui_description);
+	priv->merge_id = gnc_plugin_add_actions (priv->ui_merge,
+						 priv->action_group,
+						 priv->ui_description);
 }
 	
 static void

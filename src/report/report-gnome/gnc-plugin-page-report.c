@@ -40,6 +40,7 @@
 #include "gnc-html-history.h"
 #include "gnc-html.h"
 #include "gnc-file-dialog.h"
+#include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-report.h"
 #include "gnc-ui-util.h"
@@ -617,9 +618,9 @@ gnc_plugin_page_report_merge_actions( GncPluginPage *plugin_page,
         DEBUG( "merge actions" );
         priv->ui_merge = ui_merge;
         priv->merge_id
-                = gnc_menu_merge_add_actions( priv->ui_merge,
-                                              priv->action_group,
-                                              "gnc-plugin-page-report-ui.xml" );
+                = gnc_plugin_add_actions( priv->ui_merge,
+					  priv->action_group,
+					  "gnc-plugin-page-report-ui.xml" );
         DEBUG( "done merging" );
 }
 

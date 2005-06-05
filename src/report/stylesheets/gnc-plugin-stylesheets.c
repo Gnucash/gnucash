@@ -228,8 +228,8 @@ gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *window,
   g_return_if_fail(action_group != NULL);
 
   /* Reset everything to known state */
-  gnc_gnome_utils_update_actions(action_group, account_tree_actions,
-				 "visible", FALSE);
+  gnc_plugin_update_actions(action_group, account_tree_actions,
+			    "visible", FALSE);
 
   /* Any page selected? */
   if (page == NULL) {
@@ -241,8 +241,8 @@ gnc_plugin_stylesheets_main_window_page_changed (GncMainWindow *window,
   page_name = gnc_plugin_page_get_name(page);
   if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
-    gnc_gnome_utils_update_actions(action_group, account_tree_actions,
-				   "visible", TRUE);
+    gnc_plugin_update_actions(action_group, account_tree_actions,
+			      "visible", TRUE);
   }
 
   LEAVE(" ");

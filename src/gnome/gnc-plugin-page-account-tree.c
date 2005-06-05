@@ -350,7 +350,7 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 				      gnc_plugin_page_account_tree_actions,
 				      gnc_plugin_page_account_tree_n_actions,
 				      plugin_page);
-	gnc_gnome_utils_init_short_names (action_group, short_labels);
+	gnc_plugin_init_short_names (action_group, short_labels);
 
 	
 	/* get the options and the window ID */ 
@@ -582,9 +582,9 @@ gnc_plugin_page_account_tree_merge_actions (GncPluginPage *plugin_page,
 
 	priv->ui_merge = ui_merge;
 	priv->merge_id =
-	  gnc_menu_merge_add_actions (priv->ui_merge,
-				      priv->action_group,
-				      "gnc-plugin-page-account-tree-ui.xml");
+	  gnc_plugin_add_actions (priv->ui_merge,
+				  priv->action_group,
+				  "gnc-plugin-page-account-tree-ui.xml");
 	LEAVE(" ");
 }
 	
@@ -685,12 +685,9 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 						   GncPluginPageAccountTree *page)
 {
 	GtkActionGroup *action_group;
-	GtkAction *action;
 	GtkTreeView *view;
 	Account *account = NULL;
-	GValue value = { 0 };
 	gboolean sensitive;
-	gint i;
 
 	g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
 
@@ -705,15 +702,9 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
 		/* Check here for placeholder accounts, etc. */
 	}
 
-	g_value_init (&value, G_TYPE_BOOLEAN);
-	g_value_set_boolean (&value, sensitive);
 	action_group = page->priv->action_group;
-	for (i = 0; actions_requiring_account[i]; i++) {
-	  	action = gtk_action_group_get_action (action_group,
-						      actions_requiring_account[i]);
-		g_object_set_property (G_OBJECT(action), "sensitive", &value);
-	}
-
+	gnc_plugin_update_actions (action_group, actions_requiring_account,
+				   "sensitive", sensitive);
 	g_signal_emit (page, plugin_page_signals[ACCOUNT_SELECTED], 0, account);
 }
 	

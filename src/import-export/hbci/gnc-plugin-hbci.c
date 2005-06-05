@@ -321,8 +321,8 @@ gnc_plugin_hbci_account_selected (GncPluginPage *plugin_page,
 
   window = GNC_MAIN_WINDOW(plugin_page->window);
   action_group = gnc_main_window_get_action_group(window, PLUGIN_ACTIONS_NAME);
-  gnc_gnome_utils_update_actions(action_group, need_account_actions,
-				 "sensitive", account != NULL);
+  gnc_plugin_update_actions(action_group, need_account_actions,
+			    "sensitive", account != NULL);
 }
 
 /** A new page has been added to a main window.  Connect a signal to
@@ -361,12 +361,12 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
   g_return_if_fail(action_group != NULL);
 
   /* Reset everything to known state */
-  gnc_gnome_utils_update_actions(action_group, need_account_actions,
-				 "sensitive", FALSE);
-  gnc_gnome_utils_update_actions(action_group, account_tree_actions,
-				 "visible", FALSE);
-  gnc_gnome_utils_update_actions(action_group, register_actions,
-				 "visible", FALSE);
+  gnc_plugin_update_actions(action_group, need_account_actions,
+			    "sensitive", FALSE);
+  gnc_plugin_update_actions(action_group, account_tree_actions,
+			    "visible", FALSE);
+  gnc_plugin_update_actions(action_group, register_actions,
+			    "visible", FALSE);
 
   /* Any page selected? */
   if (page == NULL) {
@@ -378,19 +378,19 @@ gnc_plugin_hbci_main_window_page_changed (GncMainWindow *window,
   page_name = gnc_plugin_page_get_name(page);
   if (strcmp(page_name, GNC_PLUGIN_PAGE_ACCOUNT_TREE_NAME) == 0) {
     DEBUG("account tree page");
-    gnc_gnome_utils_update_actions(action_group, account_tree_actions,
-				   "visible", TRUE);
+    gnc_plugin_update_actions(action_group, account_tree_actions,
+			      "visible", TRUE);
   } else if (strcmp(page_name, GNC_PLUGIN_PAGE_REGISTER_NAME) == 0) {
     DEBUG("register page");
-    gnc_gnome_utils_update_actions(action_group, register_actions,
-				   "visible", TRUE);
+    gnc_plugin_update_actions(action_group, register_actions,
+			      "visible", TRUE);
   }
 
   /* Only make items sensitive is an account can be determined */
   account = main_window_to_account (window);
   if (account) {
-    gnc_gnome_utils_update_actions(action_group, need_account_actions,
-				   "sensitive", TRUE);
+    gnc_plugin_update_actions(action_group, need_account_actions,
+			      "sensitive", TRUE);
   }
   LEAVE(" ");
 }
