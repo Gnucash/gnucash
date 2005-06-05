@@ -475,7 +475,7 @@ gnc_plugin_page_account_tree_close_cb (gpointer user_data)
 
   plugin_page = GNC_PLUGIN_PAGE(user_data);
   page = GNC_PLUGIN_PAGE_ACCOUNT_TREE (plugin_page);
-  gnc_main_window_close_page(GNC_MAIN_WINDOW(plugin_page->window), plugin_page);
+  gnc_main_window_close_page(plugin_page);
 }
 
 static GtkWidget *
