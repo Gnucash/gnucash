@@ -23,11 +23,6 @@
 
   (gw:wrapset-set-guile-module! ws '(g-wrapped gw-gnome-utils))
 
-  (gw:wrap-value ws 'gnc:window-name-main '(<gw:mchars> callee-owned const) "WINDOW_NAME_MAIN")
-  (gw:wrap-value ws 'gnc:window-name-register '(<gw:mchars> callee-owned const) "WINDOW_NAME_REGISTER")
-  (gw:wrap-value ws 'gnc:window-name-invoice '(<gw:mchars> callee-owned const) "WINDOW_NAME_INVOICE")
-  (gw:wrap-value ws 'gnc:window-name-all '(<gw:mchars> callee-owned const) "WINDOW_NAME_ALL")
-
   (gw:wrap-value ws 'gnc:additional-menus-placeholder '(<gw:mchars> callee-owned const) "ADDITIONAL_MENUS_PLACEHOLDER")
 
   (gw:wrapset-add-cs-declarations!
