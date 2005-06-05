@@ -52,6 +52,7 @@ libgncgnome_la_SOURCES = \
   gnc-main-window.c \
   gnc-plugin.c \
   gnc-plugin-file-history.c \
+  gnc-plugin-menu-additions.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-register.c \
   gnc-plugin-manager.c \
@@ -101,6 +102,7 @@ noinst_HEADERS = \
   gnc-plugin.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-file-history.h \
+  gnc-plugin-menu-additions.h \
   gnc-plugin-register.h \
   gnc-plugin-manager.h \
   gnc-plugin-page.h \
