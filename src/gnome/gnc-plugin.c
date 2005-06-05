@@ -41,6 +41,9 @@ struct  GncPluginPrivate {
 	gpointer dummy;
 };
 
+
+/** Get the type of a gnc window plugin.
+ */
 GType
 gnc_plugin_get_type (void)
 {
@@ -67,6 +70,16 @@ gnc_plugin_get_type (void)
 	return gnc_plugin_type;
 }
 
+
+/** Initialize the class for the new gnucash plugin object.  This will
+ *  set up any function pointers that override functions in the parent
+ *  class, and also installs the proprieties that are unique to this
+ *  class.
+ *
+ *  @param klass The new class structure created by the object system.
+ *
+ *  @internal
+ */
 static void
 gnc_plugin_class_init (GncPluginClass *klass)
 {
@@ -76,6 +89,15 @@ gnc_plugin_class_init (GncPluginClass *klass)
 	gobject_class->finalize = gnc_plugin_finalize;
 }
 
+
+/** Initialize a new instance of a gnucash plugin object.  This
+ *  function allocates and initializes the object private storage
+ *  space.
+ *
+ *  @param view The new object instance created by the object system.
+ *
+ *  @internal
+ */
 static void
 gnc_plugin_init (GncPlugin *plugin_page)
 {
@@ -84,6 +106,17 @@ gnc_plugin_init (GncPlugin *plugin_page)
 	priv = plugin_page->priv = g_new0 (GncPluginPrivate, 1);
 }
 
+
+/** Finalize the gnucash plugin object.  This function is called from
+ *  the G_Object level to complete the destruction of the object.  It
+ *  should release any memory not previously released by the destroy
+ *  function (i.e. the private data structure), then chain up to the
+ *  parent's destroy function.
+ *
+ *  @param object The object being destroyed.
+ *
+ *  @internal
+ */
 static void
 gnc_plugin_finalize (GObject *object)
 {
@@ -100,6 +133,11 @@ gnc_plugin_finalize (GObject *object)
 }
 
 
+/** Add the specified plugin from the specified window.  This function
+ *  will add the page's user interface from the window, set up gconf
+ *  notifications if the page uses gconf, and call the plugin to
+ *  perform any plugin specific actions.
+ */
 void
 gnc_plugin_add_to_window (GncPlugin *plugin,
 			  GncMainWindow *window,
@@ -142,6 +180,12 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 	LEAVE ("");
 }
 
+
+/*  Remove the specified plugin from the specified window.  This
+ *  function will call the plugin to perform any plugin specific
+ *  actions, remove any gconf notifications that were set up for the
+ *  page, and remove the page's user interface from the window.
+ */
 void
 gnc_plugin_remove_from_window (GncPlugin *plugin,
 			       GncMainWindow *window,
@@ -182,6 +226,7 @@ gnc_plugin_remove_from_window (GncPlugin *plugin,
 	LEAVE ("");
 }
 
+
 GncPluginPage *
 gnc_plugin_create_page (GncPlugin *plugin,
 			const gchar *uri)
@@ -193,6 +238,9 @@ gnc_plugin_create_page (GncPlugin *plugin,
 	return GNC_PLUGIN_GET_CLASS (plugin)->create_page (plugin, uri);
 }
 
+
+/** Retrieve the name of a plugin.
+ */
 const gchar *
 gnc_plugin_get_name (GncPlugin *plugin)
 {

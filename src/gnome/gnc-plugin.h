@@ -22,6 +22,15 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup GUI
+    @{ */
+/** @addtogroup Wwindow plugin functions.
+    @{ */
+/** @file gnc-plugin.h
+    @brief Functions for adding plugins to a Gnucash window.
+    @author Copyright (C) 2002 David Hampton <hampton@employees.org>
+*/
+
 #ifndef __GNC_PLUGIN_H
 #define __GNC_PLUGIN_H
 
@@ -67,18 +76,59 @@ typedef struct {
 } GncPluginClass;
 
 /* function prototypes */
-GType                 gnc_plugin_get_type        (void);
 
-void                  gnc_plugin_add_to_window   (GncPlugin *plugin,
-					          GncMainWindow *window,
-					          GQuark type);
-void                  gnc_plugin_remove_from_window (GncPlugin *plugin,
-					             GncMainWindow *window,
-					             GQuark type);
+/** Get the type of a gnc window plugin.
+ *
+ *  @return A GType.
+ */
+GType gnc_plugin_get_type (void);
 
-GncPluginPage        *gnc_plugin_create_page     (GncPlugin *plugin,
-						  const gchar *uri);
-const gchar          *gnc_plugin_get_name (GncPlugin *plugin);
+
+/** Add the specified plugin from the specified window.  This function
+ *  will add the page's user interface from the window, set up gconf
+ *  notifications if the page uses gconf, and call the plugin to
+ *  perform any plugin specific actions.
+ *
+ *  @param plugin The plugin to be added.
+ *
+ *  @param window Add the plugin to this window.
+ *
+ *  @param type An identifier for the type of window specified.
+ */
+void gnc_plugin_add_to_window (GncPlugin *plugin,
+			       GncMainWindow *window,
+			       GQuark type);
+
+
+/** Remove the specified plugin from the specified window.  This
+ *  function will call the plugin to perform any plugin specific
+ *  actions, remove any gconf notifications that were set up for the
+ *  page, and remove the page's user interface from the window.
+ *
+ *  @param plugin The plugin to be removed.
+ *
+ *  @param window The window the plugin should be removed from.
+ *
+ *  @param type An identifier for the type of window specified.
+ */
+void gnc_plugin_remove_from_window (GncPlugin *plugin,
+				    GncMainWindow *window,
+				    GQuark type);
+
+
+GncPluginPage *gnc_plugin_create_page (GncPlugin *plugin,
+				       const gchar *uri);
+
+
+/** Retrieve the name of a plugin.
+ *
+ *  @param plugin The plugin whose name should be returned.
+ *
+ *  @return  short_labels A pointer to a data structure containing
+ *  [action name, label string] string pairs.
+ */
+const gchar *gnc_plugin_get_name (GncPlugin *plugin);
+
 
 typedef struct {
   const char *action_name;
@@ -100,14 +150,14 @@ void gnc_plugin_init_short_names (GtkActionGroup *action_group,
 
 
 /** Update a property on a set of existing GtkActions.  This function
- *  can be easily used to make a llist of actions visible, invisible,
+ *  can be easily used to make a list of actions visible, invisible,
  *  sensitive, or insensitive.
  *
  *  @param action_group The group of all actions associated with a
  *  plugin or plugin page.  All actions to be modified must be
  *  contained in this group.
  *
- *  @param action_names A null terminated list of actions names that
+ *  @param action_names A NULL terminated list of actions names that
  *  should modified.
  *
  *  @param property_name The property name to be changed on the
@@ -144,3 +194,6 @@ gint gnc_plugin_add_actions (GtkUIManager *ui_merge,
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_H */
+
+/** @} */
+/** @} */
