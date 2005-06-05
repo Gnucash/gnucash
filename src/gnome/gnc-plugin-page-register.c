@@ -24,12 +24,13 @@
 
 #include "config.h"
 
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtkvbox.h>
+#include <gtk/gtk.h>
+#include <g-wrap-wct.h>
 
 #include "gnc-plugin-page-register.h"
 #include "gnc-plugin-register.h"
+#include "gnc-plugin-menu-additions.h"
+#include "gnc-plugin-page-report.h"
 
 #include "dialog-print-check.h"
 #include "dialog-transfer.h"
@@ -47,6 +48,7 @@
 #include "lot-viewer.h"
 #include "QueryNew.h"
 #include "window-reconcile.h"
+#include "window-report.h"
 
 #include "messages.h"
 #include "gnc-engine-util.h"
@@ -105,6 +107,8 @@ static void gnc_plugin_page_register_cmd_expand_transaction (GtkToggleAction *ac
 static void gnc_plugin_page_register_cmd_exchange_rate (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_jump (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_schedule (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_account_report (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, GncPluginPageRegister *plugin_page);
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
 
@@ -176,6 +180,12 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ScheduleTransactionAction", GTK_STOCK_COPY, N_("Schedule..."), NULL,
 	  N_("Edit scheduled transactions"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
+
+	/* Reports menu */
+	{ "ReportsAccountReportAction", NULL, N_("_Account Report"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_account_report) },
+	{ "ReportsTransactionReportAction", NULL, N_("_Transaction Report"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_transaction_report) },
 };
 static guint gnc_plugin_page_register_n_actions = G_N_ELEMENTS (gnc_plugin_page_register_actions);
 
@@ -361,6 +371,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	  gnc_plugin_page_add_book (plugin_page, (QofBook *)item->data);
 	// Do not free the list. It is owned by the query.
 	
+	g_object_set_data(G_OBJECT(plugin_page),
+			  GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME,
+			  GINT_TO_POINTER(1));
+
 	return plugin_page;
 }
 
@@ -910,6 +924,155 @@ set_date_range (GncPluginPageRegisterPrivate *priv,
 }
 
 /************************************************************/
+/*                  Report Helper Functions                 */
+/************************************************************/
+
+static char *
+gnc_reg_get_name (GNCLedgerDisplay *ledger, gboolean for_window)
+{
+  Account *leader;
+  SplitRegister *reg;
+  gchar *account_name;
+  gchar *reg_name;
+  gchar *name;
+  GNCLedgerDisplayType ledger_type;
+
+  if (ledger == NULL)
+    return NULL;
+
+  reg = gnc_ledger_display_get_split_register (ledger);
+  ledger_type = gnc_ledger_display_type (ledger);
+
+  switch (reg->type)
+  {
+    case GENERAL_LEDGER:
+    case INCOME_LEDGER:
+      if (for_window)
+        reg_name = _("General Ledger");
+      else
+        reg_name = _("General Ledger Report");
+      break;
+    case PORTFOLIO_LEDGER:
+      if (for_window)
+        reg_name = _("Portfolio");
+      else
+        reg_name = _("Portfolio Report");
+      break;
+    case SEARCH_LEDGER:
+      if (for_window)
+        reg_name = _("Search Results");
+      else
+        reg_name = _("Search Results Report");
+      break;
+    default:
+      if (for_window)
+        reg_name = _("Register");
+      else
+        reg_name = _("Register Report");
+      break;
+  }
+
+  leader = gnc_ledger_display_leader (ledger);
+
+  if ((leader != NULL) && (ledger_type != LD_GL))
+  {
+    account_name = xaccAccountGetFullName (leader,
+                                           gnc_get_account_separator ());
+
+    if (ledger_type == LD_SINGLE)
+    {
+      name = g_strconcat (account_name, " - ", reg_name, NULL);
+    }
+    else 
+    {
+      name = g_strconcat (account_name, " ", _("and subaccounts"), " - ", reg_name, NULL);
+    }
+    g_free(account_name);
+  }
+  else
+    name = g_strdup (reg_name);
+
+  return name;
+}
+
+static int
+report_helper (GNCLedgerDisplay *ledger, Split *split, Query *query)
+{
+  SplitRegister *reg = gnc_ledger_display_get_split_register (ledger);
+  Account *account;
+  char *str;
+  SCM qtype;
+  SCM args;
+  SCM func;
+  SCM arg;
+
+  args = SCM_EOL;
+
+  func = scm_c_eval_string ("gnc:register-report-create");
+  g_return_val_if_fail (SCM_PROCEDUREP (func), -1);
+
+  arg = scm_makfrom0str (gnc_split_register_get_credit_string (reg));
+  args = scm_cons (arg, args);
+
+  arg = scm_makfrom0str (gnc_split_register_get_debit_string (reg));
+  args = scm_cons (arg, args);
+
+  str = gnc_reg_get_name (ledger, FALSE);
+  arg = scm_makfrom0str (str);
+  args = scm_cons (arg, args);
+  g_free (str);
+
+  arg = SCM_BOOL (reg->use_double_line);
+  args = scm_cons (arg, args);
+
+  arg = SCM_BOOL (reg->style == REG_STYLE_JOURNAL);
+  args = scm_cons (arg, args);
+
+  if (!query)
+  {
+    query = gnc_ledger_display_get_query (ledger);
+    g_return_val_if_fail (query != NULL, -1);
+  }
+
+  qtype = scm_c_eval_string("<gnc:Query*>");
+  g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
+
+  arg = gw_wcp_assimilate_ptr (query, qtype);
+  args = scm_cons (arg, args);
+  g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
+
+
+  if (split)
+  {
+    qtype = scm_c_eval_string("<gnc:Split*>");
+    g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
+    arg = gw_wcp_assimilate_ptr (split, qtype);
+  }
+  else
+  {
+    arg = SCM_BOOL_F;
+  }
+  args = scm_cons (arg, args);
+  g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
+
+
+  qtype = scm_c_eval_string("<gnc:Account*>");
+  g_return_val_if_fail (qtype != SCM_UNDEFINED, -1);
+
+  account = gnc_ledger_display_leader (ledger);
+  arg = gw_wcp_assimilate_ptr (account, qtype);
+  args = scm_cons (arg, args);
+  g_return_val_if_fail (arg != SCM_UNDEFINED, -1);
+
+
+  /* Apply the function to the args */
+  arg = scm_apply (func, args, SCM_EOL);
+  g_return_val_if_fail (SCM_EXACTP (arg), -1);
+
+  return scm_num2int (arg, SCM_ARG1, __FUNCTION__);
+}
+
+/************************************************************/
 /*                     Command callbacks                    */
 /************************************************************/
 
@@ -1453,6 +1616,59 @@ gnc_plugin_page_register_cmd_schedule (GtkAction *action,
   LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_register_cmd_account_report (GtkAction *action,
+					     GncPluginPageRegister *plugin_page)
+{
+  GncMainWindow *window;
+  int id;
+
+  ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+  window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
+  id = report_helper (plugin_page->priv->ledger, NULL, NULL);
+  if (id >= 0)
+    gnc_main_window_open_report(id, window);
+  LEAVE(" ");
+}
+
+static void
+gnc_plugin_page_register_cmd_transaction_report (GtkAction *action,
+						 GncPluginPageRegister *plugin_page)
+{
+  GncPluginPageRegisterPrivate *priv;
+  SplitRegister *reg;
+  Split *split;
+  Query *query;
+  int id;
+
+
+  ENTER("(action %p, plugin_page %p)", action, plugin_page);
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(plugin_page));
+
+  priv = plugin_page->priv;
+  reg = gnc_ledger_display_get_split_register (priv->ledger);
+
+  split = gnc_split_register_get_current_split (reg);
+  if (!split)
+    return;
+
+  query = xaccMallocQuery ();
+
+  xaccQuerySetBook (query, gnc_get_current_book ());
+
+  xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
+                         GNC_ID_SPLIT, QUERY_AND);
+
+  id = report_helper (priv->ledger, split, query);
+  if (id >= 0)
+    reportWindow (id);
+  LEAVE(" ");
+}
+
 /************************************************************/
 /*                    Auxiliary functions                   */
 /************************************************************/
@@ -1518,6 +1734,11 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister *regist
 	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(register_page));
 
 	window = GNC_WINDOW(GNC_PLUGIN_PAGE(register_page)->window);
+	if (!window) {
+	  // This routine can be called before the page is added to a
+	  // window.
+	  return;
+	}
 
 	/* Get the text from the ledger */
 	priv = register_page->priv;

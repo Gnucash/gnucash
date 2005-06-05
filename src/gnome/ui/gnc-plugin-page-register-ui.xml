@@ -66,6 +66,11 @@
         <menuitem name="JumpTransaction"         action="JumpTransactionAction"/>
       </placeholder>
     </menu>
+
+    <menu name="Reports" action="ReportsAction">
+      <menuitem name="ReportsAccountReport"      action="ReportsAccountReportAction"/>
+      <menuitem name="ReportsTransactionReport"  action="ReportsTransactionReportAction"/>
+    </menu>
   </menubar>
 
   <toolbar name="DefaultToolbar">
