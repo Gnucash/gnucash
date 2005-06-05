@@ -31,7 +31,6 @@
 #include "gnc-main-window.h"
 
 #include "dialog-budget-list.h"
-#include "gnc-menu-extensions.h"
 
 #include "dialog-fincalc.h"
 #include "dialog-find-transactions.h"
