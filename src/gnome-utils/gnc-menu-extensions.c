@@ -30,21 +30,6 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-ui.h"
 
-typedef struct _ExtensionInfo ExtensionInfo;
-struct _ExtensionInfo
-{
-  SCM extension;
-  gchar *window;
-  gchar *path;
-
-  GtkUIManagerItemType type;
-
-  // GnomeUIInfo info[2];
-  // GtkActionEntry action;
-
-  gpointer extra_info;
-};
-
 typedef struct _Getters Getters;
 struct _Getters
 {
@@ -60,6 +45,12 @@ static short module = MOD_GUI;
 
 static GSList *extension_list = NULL;
 static Getters getters = {0, 0, 0, 0, 0};
+
+GSList *
+gnc_extensions_get_menu_list (void)
+{
+  return extension_list;
+}
 
 static void
 initialize_getters()
@@ -80,13 +71,13 @@ initialize_getters()
 
 
 static gboolean
-gnc_extension_type(ExtensionInfo *ext_info, GtkUIManagerItemType *type)
+gnc_extension_type (SCM extension, GtkUIManagerItemType *type)
 {
   char *string;
 
   initialize_getters();
 
-  string = gnc_guile_call1_symbol_to_string(getters.type, ext_info->extension);
+  string = gnc_guile_call1_symbol_to_string(getters.type, extension);
   if (string == NULL)
   {
     PERR("bad type");
@@ -111,71 +102,26 @@ gnc_extension_type(ExtensionInfo *ext_info, GtkUIManagerItemType *type)
 
 /* returns malloc'd name */
 static char *
-gnc_extension_name(ExtensionInfo *ext_info)
+gnc_extension_name (SCM extension)
 {
   initialize_getters();
 
-  return gnc_guile_call1_to_string(getters.name, ext_info->extension);
+  return gnc_guile_call1_to_string(getters.name, extension);
 }
 
 
 /* returns malloc'd docs */
 static char *
-gnc_extension_documentation(ExtensionInfo *ext_info)
+gnc_extension_documentation (SCM extension)
 {
   initialize_getters();
 
-  return gnc_guile_call1_to_string(getters.documentation, ext_info->extension);
+  return gnc_guile_call1_to_string(getters.documentation, extension);
 }
-
-/** @return A GSList of copies of the path elts [gchar*s]. **/
-static GSList*
-gnc_extension_path_elts( ExtensionInfo *extInfo )
-{
-  SCM path;
-  GSList *pathElts = NULL;
-
-  initialize_getters();
-
-  path = gnc_guile_call1_to_list( getters.path, extInfo->extension );
-  if (path == SCM_UNDEFINED) {
-    return NULL;
-  }
-
-  if (SCM_NULLP(path)) {
-    return NULL;
-  }
-
-  while (!SCM_NULLP(path))
-  {
-    SCM item;
-
-    item = SCM_CAR(path);
-    path = SCM_CDR(path);
-
-    if (SCM_STRINGP(item))
-    {
-      char *pathEltStr = gh_scm2newstr(item, NULL);
-      pathElts = g_slist_append( pathElts, (gpointer)pathEltStr );
-    }
-    else
-    {
-      for ( ; pathElts; pathElts = pathElts->next )
-        free( pathElts->data );
-      g_slist_free( pathElts );
-      pathElts = NULL;
-
-      return NULL;
-    }
-  }
-
-  return pathElts;
-}
-
 
 /* returns g_malloc'd path */
 static void
-gnc_extension_path(SCM extension, char **window, char **fullpath)
+gnc_extension_path (SCM extension, char **fullpath)
 {
   SCM path;
   gchar **strings;
@@ -184,21 +130,15 @@ gnc_extension_path(SCM extension, char **window, char **fullpath)
   initialize_getters();
 
   path = gnc_guile_call1_to_list(getters.path, extension);
-  if (path == SCM_UNDEFINED) {
-    *window = g_strdup("");
+  if ((path == SCM_UNDEFINED) || SCM_NULLP(path)) {
     *fullpath = g_strdup("");
     return;
   }
 
-  if (SCM_NULLP(path)) {
-    *window = g_strdup("");
-    *fullpath = g_strdup("");
-    return;
-  }
+  strings = g_new0(gchar *, scm_ilength(path) + 2);
+  strings[0] = "/menubar";
 
-  strings = g_new0(gchar *, scm_ilength(path) + 1);
-
-  i = 0;
+  i = 1;
   while (!SCM_NULLP(path))
   {
     SCM item;
@@ -217,7 +157,6 @@ gnc_extension_path(SCM extension, char **window, char **fullpath)
 
       PERR("not a string");
 
-      *window = g_strdup("");
       *fullpath = g_strdup("");
       return;
     }
@@ -225,376 +164,20 @@ gnc_extension_path(SCM extension, char **window, char **fullpath)
     i++;
   }
 
-  //GSList pathElts = 
-
-  if (i > 0) {
-    *window = g_strdup(strings[0]);
-    *fullpath = g_strjoinv("/", strings+1);
-  } else {
-    *window = g_strdup(WINDOW_NAME_MAIN);
-    *fullpath = g_strjoinv("/", strings);
-  }
+  *fullpath = g_strjoinv("/", strings);
 
   g_free(strings);
 }
 
+/******************** New Menu Item ********************/
 
-static void
-gnc_extension_run_script(ExtensionInfo *ext_info)
-{
-  SCM script;
-
-  initialize_getters();
-
-  script = gnc_guile_call1_to_procedure(getters.script, ext_info->extension);
-  if (script == SCM_UNDEFINED)
-  {
-    PERR("not a procedure.");
-    return;
-  }
-
-  scm_call_0(script);
-}
-
-static void
-//gnc_main_window_cmd_test( GtkAction *action, GncMainWindow *window )
-gnc_extension_action_cb( GtkAction *action, /* GtkWindow *window */ gpointer data )
-{
-  ExtensionInfo *ext_info = data;
-
-  if (ext_info == NULL)
-    return;
-
-  gnc_extension_run_script(ext_info);
-}
-
-#if 0
-static void
-gnc_extension_cb(GtkWidget *w, ExtensionInfo *data )
-{
-  ExtensionInfo *ext_info = data;
-
-  if (ext_info == NULL)
-    return;
-
-  gnc_extension_run_script(ext_info);
-}
-#endif // 0
-
-
-static ExtensionInfo *
-gnc_create_extension_info(SCM extension)
-{
-  // GnomeUIInfo *info;
-  
-  ExtensionInfo *ext_info;
-  //char *string;
-
-  ext_info = g_new0(ExtensionInfo, 1);
-  ext_info->extension = extension;
-  gnc_extension_path(extension, &ext_info->window, &ext_info->path);
-
-  //ext_info->info[0].type = gnc_extension_type(ext_info);
-  if (!gnc_extension_type( ext_info, &ext_info->type )) {
-    /* Can't parse the type passed to us.  Bail now. */
-    g_free(ext_info);
-    return NULL;
-  }
-
-
-  // FIXME: convert this over to GtkAction / new UI-builder framework.
-  // http://developer.gnome.org/doc/API/2.0/gtk/migrating-gnomeuiinfo.html
-  // 1/ Define our own enum-values for the three types of widgets:
-  //    MENU, MENU_ITEM, SEPERATOR
-  //
-  // 2/ Figure out and use GtkUIManager to auto-merge/unmerge menus
-  // together.
-  //    * get a merge-id
-  //    * overlay the new menu
-  //    * ensure_update
-
-  //switch (ext_info->info[0].type)
-  switch ( ext_info->type )
-  {
-    //case GNOME_APP_UI_ITEM:
-  case GTK_UI_MANAGER_MENUITEM:
-    /*
-      ext_info->info[0].moreinfo = gnc_extension_cb;
-
-      string = gnc_extension_documentation(ext_info);
-      ext_info->info[0].hint = string;
-      if (string != NULL)
-        free(string);
-
-      string = gnc_extension_name(ext_info);
-      ext_info->info[0].label = string;
-      if (string != NULL)
-        free(string);
-    */
-    DEBUG( "menuitem" );
-
-      break;
-
-      //case GNOME_APP_UI_SUBTREE:
-  case GTK_UI_MANAGER_MENU:
-    /*
-      info = g_new(GnomeUIInfo, 1);
-      info->type = GNOME_APP_UI_ENDOFINFO;
-      ext_info->info[0].moreinfo = info;
-      ext_info->extra_info = info;
-
-      string = gnc_extension_name(ext_info);
-      ext_info->info[0].label = string;
-      if (string != NULL)
-        free(string);
-    */
-    DEBUG( "menu" );
-
-      break;
-
-      //case GNOME_APP_UI_SEPARATOR:
-  case GTK_UI_MANAGER_SEPARATOR:
-    /*
-      ext_info->info[0].type = GNOME_APP_UI_SEPARATOR;
-    */
-    DEBUG( "sep" );
-      break;
-
-    default:
-      PERR("bad item type");
-      g_free(ext_info);
-      return NULL;
-  }
-
-  /*
-  ext_info->info[0].user_data = ext_info;
-  ext_info->info[0].pixmap_type = GNOME_APP_PIXMAP_NONE;
-  ext_info->info[1].type = GNOME_APP_UI_ENDOFINFO;
-  */
-
-  scm_gc_protect_object(extension);
-  
-  /* need to append so we can run them in order */
-  extension_list = g_slist_append(extension_list, ext_info);
-
-  return ext_info;
-}
-
-
-static void
-cleanup_extension_info(gpointer extension_info, gpointer not_used)
-{
-  ExtensionInfo *ext_info = extension_info;
-
-  if (ext_info->extension)
-    scm_gc_unprotect_object(ext_info->extension);
-
-  g_free(ext_info->extra_info);
-  g_free(ext_info->path);
-  g_free(ext_info);
-}
-
-
-void
-gnc_add_scm_extension(SCM extension)
-{
-  ExtensionInfo *ext_info;
-  ext_info = gnc_create_extension_info(extension);
-  if (ext_info == NULL)
-  {
-    PERR("bad extension");
-    return;
-  }
-}
-
-#if 0 /* -- unused.*/
-void
-gnc_add_c_extension(GnomeUIInfo *info, gchar *path)
-{
-  ExtensionInfo *ext_info;
-  char *separator;
-
-  ext_info = g_new0(ExtensionInfo, 1);
-  separator = index(path, '/');
-  if (separator) {
-    ext_info->window = g_strndup(path, separator-path);
-    ext_info->path = g_strdup(separator+1);
-  } else {
-    ext_info->window = g_strdup(WINDOW_NAME_MAIN);
-    ext_info->path = g_strdup(path);
-  }
-
-  ext_info->info[0] = *info;
-  ext_info->info[0].label = info->label;
-  ext_info->info[0].hint  = info->hint;
-  ext_info->info[1].type  = GNOME_APP_UI_ENDOFINFO;
-  /* need to append so we can run them in order */
-  extension_list = g_slist_append(extension_list, ext_info);
-}
-#endif // 0
-
-/* This code is directly copied from libgnomeui's gnome-app-helper.c
- * without modifications. */
-static gint
-g_strncmp_ignore_char( const gchar *first, const gchar *second, gint length, gchar ignored )
-{
-    gint i, j;
-    for ( i = 0, j = 0; i < length; i++, j++ )
-	{
-	    while ( first[i] == ignored && i < length ) i++;
-	    while ( second[j] == ignored ) j++;
-	    if ( i == length )
-		return 0;
-	    if ( first[i] < second[j] )
-		return -1;
-	    if ( first[i] > second[j] )
-		return 1;
-	}
-    return 0;
-}
-
-/* This code is copied from libgnomeui's gnome-app-helper.c
- * originally. */
-static const gchar *
-gnc_gnome_app_helper_gettext (const gchar *str)
-{
-    const char *s;
-
-    /* First try to look up the string in gettext domain gnome-libs,
-     * since this is where the original gnome stock labels have been
-     * translated. */
-    s = dgettext ("gnome-libs", str);
-    if ( s == str )
-	s = gettext (str);
-
-    return s;
-}
-
-/* This code is directly copied from libgnomeui's gnome-app-helper.c,
- * except for the call to the translation lookup . */
-/**
- * gnome_app_find_menu_pos
- * @parent: Root menu shell widget containing menu items to be searched
- * @path: Specifies the target menu item by menu path
- * @pos: (output) returned item position
- *
- * Description:
- * finds menu item described by path starting
- * in the GtkMenuShell top and returns its parent GtkMenuShell and the
- * position after this item in pos:  gtk_menu_shell_insert(p, w, pos)
- * would then insert widget w in GtkMenuShell p right after the menu item
- * described by path.
- **/
-static GtkWidget *
-gnc_gnome_app_find_menu_pos (GtkWidget *parent, const gchar *path, gint *pos)
-{
-    GtkBin *item;
-    gchar *label = NULL;
-    GList *children;
-    gchar *name_end;
-    gchar *part;
-    const gchar *transl;
-    gint p;
-    int  path_len;
-
-    g_return_val_if_fail (parent != NULL, NULL);
-    g_return_val_if_fail (path != NULL, NULL);
-    g_return_val_if_fail (pos != NULL, NULL);
-
-    children = GTK_MENU_SHELL (parent)->children;
-
-    name_end = strchr(path, '/');
-    if(name_end == NULL)
-	path_len = strlen(path);
-    else
-	path_len = name_end - path;
-
-    if (path_len == 0) {
-
-	if (children && GTK_IS_TEAROFF_MENU_ITEM(children->data))
-	    /* consider the position after the tear off item as the topmost one. */
-	    *pos = 1;
-	else
-	    *pos = 0;
-	return parent;
-    }
-
-    /* this ugly thing should fix the localization problems */
-    part = g_malloc(path_len + 1);
-    if(!part)
-	return NULL;
-    strncpy(part, path, path_len);
-    part[path_len] = '\0';
-    transl = gnc_gnome_app_helper_gettext (part);
-    path_len = strlen(transl);
-
-    p = 0;
-
-    while (children){
-	item = GTK_BIN (children->data);
-	children = children->next;
-	label = NULL;
-	p++;
-
-	if (GTK_IS_TEAROFF_MENU_ITEM(item))
-	    label = NULL;
-	else if (!item->child)          /* this is a separator, right? */
-	    label = "<Separator>";
-	else if (GTK_IS_LABEL (item->child))  /* a simple item with a label */
-	    label = GTK_LABEL (item->child)->label;
-	else
-	    label = NULL; /* something that we just can't handle */
-	/*fprintf(stderr, "Transl '%s', Label '%s'\n", transl, label);*/
-	if (label && (g_strncmp_ignore_char (transl, label, path_len, '_') == 0)){
-	    if (name_end == NULL) {
-		*pos = p;
-		g_free(part);
-		return parent;
-	    }
-	    else if (GTK_MENU_ITEM (item)->submenu) {
-		g_free(part);
-		return gnc_gnome_app_find_menu_pos
-		    (GTK_MENU_ITEM (item)->submenu,
-		     (gchar *)(name_end + 1), pos);
-	    }
-	    else {
-		g_free(part);
-		return NULL;
-	    }
-	}
-    }
-
-    g_free(part);
-    return NULL;
-}
-
-/* This code is more or less copied from libgnomeui's gnome-app-helper.c . */
-void
-gnc_gnome_app_insert_menus (GnomeApp *app, const gchar *path, GnomeUIInfo *menuinfo)
-{
-    GtkWidget *menu_shell;
-    gint pos;
-
-    menu_shell = gnc_gnome_app_find_menu_pos(app->menubar, path, &pos);
-    if(menu_shell == NULL) {
-	g_warning("gnc_gnome_app_insert_menus: couldn't find "
-		  "insertion point for menus!");
-	return;
-    }
-
-    /* create menus and insert them */
-    gnome_app_fill_menu (GTK_MENU_SHELL (menu_shell), menuinfo, 
-			 app->accel_group, TRUE, pos);
-}
-
-static GString*
-gnc_ext_gen_action_name(const gchar *name )
+static gchar*
+gnc_ext_gen_action_name (const gchar *name)
 {
   //gchar *extName;
   const gchar *extChar;
   GString *actionName;
 
-  //extName = gnc_extension_name(extInf);
   actionName = g_string_sized_new( strlen( name ) + 7 );
 
   // 'Mum & ble' => 'Mumble'
@@ -607,170 +190,141 @@ gnc_ext_gen_action_name(const gchar *name )
   // 'Mumble + 'Action' => 'MumbleAction'
   g_string_append_printf( actionName, "Action" );
 
-  return actionName;
+  return g_string_free(actionName, FALSE);
 }
 
-/**
- * @return A GTK-2.4-UiManager style path through the applicaiton window for
- * this specific extension.
- **/
-static GString*
-gnc_ext_gen_ui_path( ExtensionInfo *extInfo )
+/******************** Callback ********************/
+
+void
+gnc_extension_invoke_cb (SCM extension, SCM window)
 {
-  GString *path;
-  GSList *pathElts;
+  SCM script;
 
-  path = g_string_new( "" );
-  g_string_append_printf( path, "/menubar/AdditionalMenusPlaceholder" );
-  
-  for ( pathElts = gnc_extension_path_elts( extInfo );
-        pathElts; pathElts = pathElts->next ) {
-    GString *eltActionName;
+  initialize_getters();
 
-    eltActionName = gnc_ext_gen_action_name( pathElts->data );
-
-    if ( safe_strcmp( (gchar*)pathElts->data, "Main" ) != 0 )
-    {
-      g_string_append_printf( path, "/%s", eltActionName->str );
-    }
-    g_string_free( eltActionName, TRUE );
-    // free the copied-from-scheme strings as we're going over the list.
-    free( pathElts->data );
+  script = gnc_guile_call1_to_procedure(getters.script, extension);
+  if (script == SCM_UNDEFINED)
+  {
+    PERR("not a procedure.");
+    return;
   }
-  g_slist_free( pathElts );
-  pathElts = NULL;
-  
-  return path;
+
+  scm_call_1(script, window);
+}
+
+/******************** New Menu Item ********************/
+
+static gboolean
+gnc_create_extension_info (SCM extension)
+{
+  ExtensionInfo *ext_info;
+  gchar *typeStr;
+
+  ext_info = g_new0(ExtensionInfo, 1);
+  ext_info->extension = extension;
+  gnc_extension_path(extension, &ext_info->path);
+  if (!gnc_extension_type( extension, &ext_info->type )) {
+    /* Can't parse the type passed to us.  Bail now. */
+    g_free(ext_info);
+    return FALSE;
+  }
+
+  /* Get all the pieces */
+  ext_info->ae.label = gnc_extension_name(extension);
+  ext_info->ae.name = gnc_ext_gen_action_name(ext_info->ae.label);
+  ext_info->ae.tooltip = gnc_extension_documentation(extension);
+  ext_info->ae.stock_id = "";
+  ext_info->ae.accelerator = NULL;
+  ext_info->ae.callback = NULL;
+
+  switch ( ext_info->type ) {
+    case GTK_UI_MANAGER_MENU: typeStr = "menu"; break;
+    case GTK_UI_MANAGER_MENUITEM: typeStr = "menuitem"; break;
+    default: typeStr = "unk"; break;
+  }
+  ext_info->typeStr = typeStr;
+
+  DEBUG( "extension: %s/%s [%s] tip [%s] type %s\n",
+	 ext_info->path, ext_info->ae.label, ext_info->ae.name,
+	 ext_info->ae.tooltip, ext_info->typeStr );
+
+  scm_gc_protect_object(extension);
+
+  /* need to append so we can run them in order */
+  extension_list = g_slist_append(extension_list, ext_info);
+
+  return TRUE;
+}
+
+static void
+cleanup_extension_info(gpointer extension_info, gpointer not_used)
+{
+  ExtensionInfo *ext_info = extension_info;
+
+  if (ext_info->extension)
+    scm_gc_unprotect_object(ext_info->extension);
+
+  g_free((gchar *)ext_info->ae.name);
+  g_free((gchar *)ext_info->ae.label);
+  g_free((gchar *)ext_info->ae.tooltip);
+  g_free(ext_info->path);
+  g_free(ext_info);
+}
+
+
+void
+gnc_add_scm_extension (SCM extension)
+{
+  if (!gnc_create_extension_info(extension))
+  {
+    PERR("bad extension");
+    return;
+  }
+}
+
+/******************** Install Menus ********************/
+
+typedef struct {
+  GtkUIManager *uiMerge;
+  GtkActionGroup *group;
+  guint merge_id;
+} setup_data;
+
+static void
+gnc_extensions_menu_setup_one (ExtensionInfo *ext_info,
+			       setup_data *data)
+{
+  DEBUG( "Adding %s/%s [%s] as [%s]\n", ext_info->path, ext_info->ae.label,
+	 ext_info->ae.name, ext_info->typeStr );
+
+  gtk_action_group_add_actions(data->group, &ext_info->ae, 1,
+			       ext_info->extension);
+  gtk_ui_manager_add_ui(data->uiMerge, data->merge_id, ext_info->path,
+			ext_info->ae.label, ext_info->ae.name,
+			ext_info->type, FALSE);
+  gtk_ui_manager_ensure_update(data->uiMerge);
 }
 
 void
-gnc_extensions_menu_setup( GtkWindow *app, gchar *window, GtkUIManager *uiMerge )
+gnc_extensions_menu_setup (GtkUIManager *uiMerge )
 {
-  //char *windowTmp;
-  //char *pathTmp;
-  GSList        * l = NULL;
-  ExtensionInfo * info;
+  setup_data data;
 
   ENTER(" ");
-  for (l = extension_list; l; l = l->next) {
-    info = l->data;
-    if ((strcmp(info->window, window) != 0)
-        && (strcmp(info->window, WINDOW_NAME_ALL) != 0)) {
-      continue;
-    }
 
-    {
-      guint new_merge_id;
-      GtkActionGroup *eag;
-      GString *extActionName;
-      GString *extUIPath;
-      gchar *docString;
-      char *tmpname;
-      GCallback gcb;
-      //GtkUIManagerType extType;
+  data.uiMerge = uiMerge;
+  data.group = gtk_action_group_new ("MainWindowActionsN" );
+  gtk_ui_manager_insert_action_group( uiMerge, data.group, 0 );
+  data.merge_id = gtk_ui_manager_new_merge_id( uiMerge );
 
-      tmpname = gnc_extension_name( info );
-      extActionName = gnc_ext_gen_action_name( tmpname );
-      extUIPath = gnc_ext_gen_ui_path( info );
-      docString = gnc_extension_documentation( info );
-
-      DEBUG( "extension [%s]: %s / %s [%s]\n",
-             tmpname,
-             extUIPath->str, extActionName->str,
-             docString );
-      g_free(tmpname);
-
-      //gnc_extension_path( info->extension, (char**)&windowTmp, (char**)&pathTmp );
-      /*printf( "extension [%s] path: %s:%s\n",
-        gnc_extension_name( info ), windowTmp, pathTmp );*/
-      switch ( info->type )
-      {
-      case GTK_UI_MANAGER_MENUITEM:
-        gcb = G_CALLBACK( gnc_extension_action_cb );
-        break;
-      default:
-        gcb = NULL;
-        break;
-      }
-
-      {
-        //GtkUIManager *ui_merge;
-        GtkActionEntry newEntry[] = 
-          {
-            { extActionName->str,
-              NULL,
-              gnc_extension_name( info ), 
-              "", // NULL /*FIXME: accel*/,
-              docString,
-              gcb
-            }
-          };
-        
-
-        // ui_merge = gtk_ui_manager_new();
-
-        eag = gtk_action_group_new ("MainWindowActionsN" );
-        gtk_action_group_add_actions( eag, newEntry, G_N_ELEMENTS (newEntry), info );
-        gtk_ui_manager_insert_action_group( uiMerge, eag, 0 );
-        new_merge_id = gtk_ui_manager_new_merge_id( uiMerge );
-        g_free(docString);
-
-        {
-          gchar *typeStr;
-
-          switch ( info->type )
-          {
-          case GTK_UI_MANAGER_MENU: typeStr = "menu"; break;
-          case GTK_UI_MANAGER_MENUITEM: typeStr = "menuitem"; break;
-          default: typeStr = "unk"; break;
-          }
-        
-          DEBUG( "Adding [%s]/[%s] as [%s]\n",
-                 extUIPath->str,
-                 extActionName->str,
-                 typeStr );
-        }
-
-        gtk_ui_manager_add_ui( uiMerge,
-                               new_merge_id,
-                               extUIPath->str, //"/menubar/AdditionalMenusPlaceholder/ReportAction",
-                               extActionName->str, // "BarAction",
-                               extActionName->str, // "BarAction",
-                               info->type,         //GTK_UI_MANAGER_MENUITEM,
-                               FALSE );
-        
-        gtk_ui_manager_ensure_update( uiMerge );
-        
-      }
-      g_string_free(extActionName, TRUE);
-      g_string_free(extUIPath, TRUE);
-    }
-  } /* end of for loop */
+  g_slist_foreach(extension_list, (GFunc)gnc_extensions_menu_setup_one, &data);
   LEAVE(" ");
 }
 
-#if 0 /* re-add */
-void
-gnc_extensions_menu_setup_with_data(GnomeApp * app, 
-				    gchar *window, gpointer user_data)
-{
-  GSList        * l = NULL;
-  ExtensionInfo * info;
-
-  for(l=extension_list; l; l=l->next) {
-    info = l->data;
-    if ((strcmp(info->window, window) != 0) &&
-	(strcmp(info->window, WINDOW_NAME_ALL) != 0))
-      continue;
-    /* fprintf(stderr, "Inserting extension menu/w/d at path '%s'\n", info->path); */
-    /*gnome_app_insert_menus_with_data(app, info->path, info->info, user_data);
-      gnome_app_install_menu_hints(app, info->info); */
-  }
-}
-#endif /* 0; re-add */
+/******************** Shutdown ********************/
 
 void
-gnc_extensions_shutdown(void)
+gnc_extensions_shutdown (void)
 {
   g_slist_foreach(extension_list, cleanup_extension_info, NULL);
 
@@ -778,4 +332,3 @@ gnc_extensions_shutdown(void)
 
   extension_list = NULL;
 }
-
