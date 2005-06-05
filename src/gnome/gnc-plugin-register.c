@@ -202,6 +202,21 @@ gnc_plugin_register_cmd_general_ledger (GtkAction *action,
 }
 
 #if 0
+/**
+ * Raise an existing register window to the front.
+ **/
+void
+gnc_register_raise (RegWindow *regData)
+{
+  if (regData == NULL)
+    return;
+
+  if (regData->window == NULL)
+    return;
+
+  gtk_window_present( GTK_WINDOW(regData->window) );
+}
+
 static void
 gnc_main_window_cmd_tools_general_ledger (GtkAction *action,
 					  GncMainWindow *window)
