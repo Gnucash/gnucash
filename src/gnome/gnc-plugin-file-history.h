@@ -26,7 +26,7 @@
     @{ */
 /** @file gnc-plugin-file-history.h
     @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 David Hampton <hampton@empployees.org>
+    @author Copyright (C) 2002 David Hampton <hampton@employees.org>
 */
 
 #ifndef __GNC_PLUGIN_FILE_HISTORY_H

@@ -27,7 +27,7 @@
 /** @internal
     @file gnc-plugin-file-history.c
     @brief Utility functions for writing import modules.
-    @author Copyright (C) 2002 David Hampton <hampton@empployees.org>
+    @author Copyright (C) 2002 David Hampton <hampton@employees.org>
 */
 
 #include "config.h"
