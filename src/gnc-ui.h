@@ -28,6 +28,10 @@
 #include "gnc-pricedb.h"
 
 
+/* Temporary workaround until restructuring is done. */
+typedef struct GncWindow GncWindow;
+typedef struct GncMainWindow GncMainWindow;
+
 /** Help Files ******************************************************/
 #define HF_USAGE             "gnucash-help/usage.html"
 #define HF_CUSTOM            "gnucash-help/custom-gnucash.html"

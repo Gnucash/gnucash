@@ -9,7 +9,6 @@
 (use-modules (g-wrap gw-wct-spec))
 (use-modules (g-wrap gw-glib-spec))
 
-(use-modules (g-wrapped gw-gnc-spec))
 (use-modules (g-wrapped gw-engine-spec))
 (use-modules (g-wrapped gw-gnome-utils-spec))
 
@@ -19,7 +18,6 @@
   (gw:wrapset-depends-on ws "gw-wct")
   (gw:wrapset-depends-on ws "gw-glib")
 
-  (gw:wrapset-depends-on ws "gw-gnc")
   (gw:wrapset-depends-on ws "gw-engine")
   (gw:wrapset-depends-on ws "gw-gnome-utils")
 

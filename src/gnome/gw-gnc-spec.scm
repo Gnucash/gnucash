@@ -50,8 +50,6 @@
       "#include <dialog-scheduledxaction.h>\n"
       "#include <dialog-sxsincelast.h>\n" )))
 
-  (gw:wrap-as-wct ws '<gtk:Window*> "GtkWindow*" "const GtkWindow*")
-
   (gw:wrap-function
    ws
    'gnc:ui-hierarchy-druid
@@ -140,10 +138,6 @@
    '()
    "Destroy the UI.")
 
-  (gw:wrap-as-wct ws
-                  '<gnc:Window*>
-                  "GncWindow *" "const GncWindow *")
-
   (gw:wrap-function
    ws
    'gnc:window-set-progressbar-window
@@ -151,10 +145,6 @@
    "gnc_window_set_progressbar_window"
    '((<gnc:Window*> window))
    "Set the progressbar window from the given GncWindow.")
-
-  (gw:wrap-as-wct ws
-                  '<gnc:MainWindow*>
-                  "GncMainWindow *" "const GncMainWindow *")
 
   (gw:wrap-function
    ws

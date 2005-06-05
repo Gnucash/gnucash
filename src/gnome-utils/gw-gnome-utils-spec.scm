@@ -66,10 +66,13 @@
    "Shutdown the GnuCash gnome system.")
 
   (gw:wrap-as-wct ws '<gtk:Widget*> "GtkWidget*" "const GtkWidget*")
+  (gw:wrap-as-wct ws '<gtk:Window*> "GtkWindow*" "const GtkWindow*")
   (gw:wrap-as-wct ws '<gnc:UIWidget> "gncUIWidget" "const gncUIWidget")
   (gw:wrap-as-wct ws '<gnc:mdi-info*> "GNCMDIInfo*" "const GNCMDIInfo*")
   (gw:wrap-as-wct ws '<gnc:OptionWin*> "GNCOptionWin*" "const GNCOptionWin*")
   (gw:wrap-as-wct ws '<gnc:url-type> "URLType" "const URLType")
+  (gw:wrap-as-wct ws '<gnc:Window*> "GncWindow *" "const GncWindow *")
+  (gw:wrap-as-wct ws '<gnc:MainWindow*> "GncMainWindow *" "const GncMainWindow *")
 
   ;;
   ;; URLTypes
