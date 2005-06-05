@@ -1303,10 +1303,10 @@ gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *wind
 	g_object_unref(page);
 
 	/* just a little debugging. :-) */
-	printf("Moved page %p (sb %p) from window %p to new window %p\n",
-	       page, page->summarybar, window, new_window);
-	printf("Old window current is %p, new window current is %p\n",
-	       window->priv->current_page, new_window->priv->current_page);
+	DEBUG("Moved page %p (sb %p) from window %p to new window %p",
+	      page, page->summarybar, window, new_window);
+	DEBUG("Old window current is %p, new window current is %p",
+	      window->priv->current_page, new_window->priv->current_page);
 }
 
 static void
