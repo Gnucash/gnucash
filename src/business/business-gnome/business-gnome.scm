@@ -14,7 +14,6 @@
 (use-modules (gnucash report business-reports))
 (use-modules (gnucash main))		;for gnc:debug
 
-(define main-window gnc:window-name-main)
 (define top-level (N_ "_Business"))
 (define new-label (N_ "New"))
 (define find-label (N_ "Find"))
@@ -34,7 +33,7 @@
 (define (business-report-function)
   (gnc:add-extension
    (gnc:make-menu gnc:menuname-business-reports
-		  (list "Main" gnc:menuname-reports))))
+		  (list gnc:menuname-reports))))
 
 (define (business-book-opened session)
   (remind-bills-due session))

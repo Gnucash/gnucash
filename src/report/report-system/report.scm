@@ -36,7 +36,7 @@
 (define *gnc:_report-next-serial_* 0)
 
 ;; Define those strings here to make changes easier and avoid typos.
-(define gnc:menuname-reports (N_ "_Reports"))
+(define gnc:menuname-reports "Reports")
 (define gnc:menuname-asset-liability (N_ "_Assets & Liabilities"))
 (define gnc:menuname-income-expense (N_ "_Income & Expense"))
 (define gnc:menuname-taxes (N_ "_Taxes"))

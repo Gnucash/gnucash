@@ -35,7 +35,7 @@
 #define __GNC_PLUGIN_PAGE_REPORT_H
 
 #include <gtk/gtkwindow.h>
-#include "gnc-plugin-page.h"
+#include "gnc-plugin.h"
 
 G_BEGIN_DECLS
 
@@ -81,6 +81,11 @@ GType gnc_plugin_page_report_get_type( void );
  * @return a new "report" plugin page.
  */
 GncPluginPage *gnc_plugin_page_report_new( int reportId );
+
+// entry-point from scm menu-extension callback [gnc:menu-extension].
+void       gnc_main_window_open_report (int report_id, GncMainWindow *window);
+// directly called through from above
+void       gnc_main_window_open_report_url (const char * url, GncMainWindow *window);
 
 G_END_DECLS
 

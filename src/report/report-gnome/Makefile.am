@@ -105,6 +105,7 @@ gw-report-gnome.scm gw-report-gnome.c gw-report-gnome.h: \
 	  (set! %load-path (cons \"${top_builddir}/src/engine\" %load-path)) \
 	  (set! %load-path (cons \"${top_builddir}/src/app-utils\" %load-path)) \
 	  (set! %load-path (cons \"${top_builddir}/src/gnome-utils\" %load-path)) \
+	  (set! %load-path (cons \"${top_builddir}/src/gnome\" %load-path)) \
 	  (primitive-load \"./gw-report-gnome-spec.scm\") \
 	  (gw:generate-wrapset \"gw-report-gnome\")"
 

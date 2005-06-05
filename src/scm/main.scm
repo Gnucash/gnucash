@@ -498,7 +498,7 @@ string and 'directories' must be a list of strings."
    (gnc:make-menu-item 
     (N_ "Welcome Sample Report")
     (N_ "Welcome-to-GnuCash report screen")
-    (list gnc:window-name-main gnc:menuname-reports gnc:menuname-utility "")
+    (list gnc:menuname-reports gnc:menuname-utility "")
     (lambda ()
       (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
 

@@ -59,7 +59,7 @@
           (if (not menu-path)
               (set! menu-path '()))
 
-          (set! menu-path (append (list gnc:window-name-main gnc:menuname-reports) menu-path))
+          (set! menu-path (append (list gnc:menuname-reports) menu-path))
 
           (if (not menu-tip)
               (set! menu-tip
@@ -70,10 +70,10 @@
                  ((menu-namer 'add-name) name)
                  menu-tip
                  menu-path
-                 (lambda ()
+                 (lambda (window)
                    (let ((report (gnc:make-report
                                   (gnc:report-template-name template))))
-                     (gnc:main-window-open-report report #f)))))
+                     (gnc:main-window-open-report report window)))))
           (gnc:add-extension item))))
 
   (define (add-template name template)
@@ -91,29 +91,19 @@
    (sort *template-items* sort-templates)))
 
 (define (gnc:report-menu-setup)
-  ;; since this menu gets added to every child window, we say it 
-  ;; comes after the "_Actions" menu;
-  (define menu (gnc:make-menu gnc:menuname-reports
-			      (list gnc:window-name-main)))
   (define menu-namer (gnc:new-menu-namer))
   (define asset-liability-menu
-    (gnc:make-menu gnc:menuname-asset-liability
-                   (list gnc:window-name-main gnc:menuname-reports)))
+    (gnc:make-menu gnc:menuname-asset-liability (list gnc:menuname-reports)))
   (define income-expense-menu
-    (gnc:make-menu gnc:menuname-income-expense
-                   (list gnc:window-name-main gnc:menuname-reports)))
+    (gnc:make-menu gnc:menuname-income-expense (list gnc:menuname-reports)))
   (define utility-menu
-    (gnc:make-menu gnc:menuname-utility
-                   (list gnc:window-name-main gnc:menuname-reports)))
+    (gnc:make-menu gnc:menuname-utility (list gnc:menuname-reports)))
   (define custom-menu
-    (gnc:make-menu gnc:menuname-custom
-                   (list gnc:window-name-main gnc:menuname-reports)))
+    (gnc:make-menu gnc:menuname-custom (list gnc:menuname-reports)))
   (define tax-menu 
-    (gnc:make-menu gnc:menuname-taxes
-		   (list gnc:window-name-main gnc:menuname-reports)))
+    (gnc:make-menu gnc:menuname-taxes (list gnc:menuname-reports)))
 
   (gnc:warn "report-menu-setup")
-  (gnc:add-extension menu)
 
   ;; (gnc:add-extension tax-menu)
   (gnc:add-extension income-expense-menu)

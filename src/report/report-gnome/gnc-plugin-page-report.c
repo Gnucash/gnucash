@@ -1047,3 +1047,34 @@ gnc_plugin_page_report_print_cb( GtkAction *action, GncPluginPageReport *report 
 {
         gnc_html_print(report->priv->html);
 }
+
+/********************************************************************
+ * gnc_main_window_open_report()
+ * open an report in a top level window from an ID number 
+ ********************************************************************/
+
+void
+gnc_main_window_open_report(int report_id, GncMainWindow *window)
+{
+  GncPluginPage *reportPage;
+
+  if (window)
+    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+
+  reportPage = gnc_plugin_page_report_new( report_id );
+  gnc_main_window_open_page( window, reportPage );
+}
+
+void
+gnc_main_window_open_report_url(const char * url, GncMainWindow *window)
+{
+  GncPluginPage *reportPage;
+
+  printf( "report url: [%s]\n", url );
+
+  if (window)
+    g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+
+  reportPage = gnc_plugin_page_report_new( 42 /* url? */ );
+  gnc_main_window_open_page( window, reportPage );
+}

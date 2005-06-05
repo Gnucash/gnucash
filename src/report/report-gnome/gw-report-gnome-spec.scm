@@ -9,6 +9,7 @@
 (use-modules (g-wrap gw-wct-spec))
 (use-modules (g-wrap gw-glib-spec))
 
+(use-modules (g-wrapped gw-gnc-spec))
 (use-modules (g-wrapped gw-engine-spec))
 (use-modules (g-wrapped gw-gnome-utils-spec))
 
@@ -18,6 +19,7 @@
   (gw:wrapset-depends-on ws "gw-wct")
   (gw:wrapset-depends-on ws "gw-glib")
 
+  (gw:wrapset-depends-on ws "gw-gnc")
   (gw:wrapset-depends-on ws "gw-engine")
   (gw:wrapset-depends-on ws "gw-gnome-utils")
 
@@ -29,11 +31,8 @@
      (list
       "#include <dialog-column-view.h>\n"
       "#include <dialog-style-sheet.h>\n"
+      "#include <gnc-plugin-page-report.h>\n"
       "#include <window-report.h>\n")))
-
-  (gw:wrap-as-wct ws
-                  '<gnc:report-window*>
-                  "gnc_report_window*" "const gnc_report_window*")
 
   (gw:wrap-function
    ws
@@ -42,22 +41,6 @@
    "reportWindow"
    '((<gw:int> report-id))
    "Show report window")
-
-  (gw:wrap-function
-   ws
-   'gnc:report-window-reload
-   '<gw:void>
-   "gnc_report_window_reload"
-   '((<gnc:report-window*> wind))
-   "Force reload of a report window")
-
-  (gw:wrap-function
-   ws
-   'gnc:report-window-add-edited-report
-   '<gw:void>
-   "gnc_report_window_add_edited_report"
-   '((<gnc:report-window*> wind) (<gw:scm> report))
-   "Add a report to the list of reports with open editors")
 
   (gw:wrap-function
    ws
@@ -80,7 +63,7 @@
    'gnc:main-window-open-report
    '<gw:void>
    "gnc_main_window_open_report"
-   '((<gw:int> report-id) (<gw:bool> top-level))
+   '((<gw:int> report-id) (<gnc:MainWindow*> window))
    "Show report window")
 
   (gw:wrap-function
