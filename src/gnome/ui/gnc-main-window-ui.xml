@@ -67,12 +67,17 @@
   
     <placeholder name="AdditionalMenusPlaceholder"/>
 
+    <menu name="Reports" action="ReportsAction">
+      <placeholder name="ReportsPlaceholder"/>
+    </menu>
+
     <menu name="Tools" action="ToolsAction">
       <placeholder name="ToolsPlaceholder"/>
       <menuitem name="ToolsPriceEditor" action="ToolsPriceEditorAction"/>
       <menuitem name="ToolsCommodityEditor" action="ToolsCommodityEditorAction"/>
       <menuitem name="ToolsFinancialCalculator" action="ToolsFinancialCalculatorAction"/>
       <menuitem name="ToolsFindTransactions" action="ToolsFindTransactionsAction"/>
+      <placeholder name="ToolsPlaceholder2"/>
     </menu>
 
     <menu name="Extensions" action="ExtensionsAction">
@@ -95,8 +100,7 @@
   <toolbar name="DefaultToolbar">
     <toolitem name="ToolbarSave" action="FileSaveAction"/>
     <toolitem name="ToolbarClose" action="FileCloseAction"/>
-    <placeholder name="DefaultToolbarPlaceholder"/>
     <separator name="ToolbarSep1"/>
-    <toolitem name="ToolbarQuit" action="FileQuitAction"/>
+    <placeholder name="DefaultToolbarPlaceholder"/>
   </toolbar>
 </ui>

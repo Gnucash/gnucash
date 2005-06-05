@@ -2,8 +2,8 @@
  * gnc-main-window.h -- GtkWindow which represents the
  *	GnuCash main window.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,6 +22,15 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
+
+/** @addtogroup GUI
+    @{ */
+/** @addtogroup GuiWindow Main Window functions.
+    @{ */
+/** @file gnc-main-window.h
+    @brief Functions for adding content to a window.
+    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+*/
 
 #ifndef __GNC_MAIN_WINDOW_H
 #define __GNC_MAIN_WINDOW_H
@@ -71,33 +80,188 @@ typedef struct {
 typedef void (*GncMainWindowFunc) (GncMainWindow *window, GncPluginPage *page);
 
 /* function prototypes */
-GType           gnc_main_window_get_type          (void);
 
-GncMainWindow  *gnc_main_window_new               (void);
+/** Get the type of a gnc main window.
+ *
+ *  @return A GType.
+ */
+GType gnc_main_window_get_type (void);
 
-void            gnc_main_window_open_page	  (GncMainWindow *window,
-						   GncPluginPage *page);
-void            gnc_main_window_close_page	  (GncMainWindow *window,
-						   GncPluginPage *page);
-GncPluginPage  *gnc_main_window_get_current_page  (GncMainWindow *window);
 
-void            gnc_main_window_merge_actions     (GncMainWindow *window,
-						   const gchar *group_name,
-						   GtkActionEntry *entries,
-						   guint n_entries,
-						   const gchar *filename,
-						   gpointer user_data);
-void            gnc_main_window_unmerge_actions   (GncMainWindow *window,
-						   const gchar *group_name);
-void            gnc_main_window_actions_updated   (GncMainWindow *window);
-GtkActionGroup *gnc_main_window_get_action_group  (GncMainWindow *window,
-                                                   const gchar *group_name);
-void            gnc_main_window_update_title      (GncMainWindow *window);
+/** Create a new gnc main window plugin.
+ *
+ *  @return A pointer to the new object.
+ */
+GncMainWindow *gnc_main_window_new (void);
 
-void            gnc_main_window_set_progressbar_window( GncMainWindow *window );
 
-void            gnc_shutdown (int exit_status);
+/** Display a data plugin page in a window.  If the page already
+ *  exists in any window, then that window will be brought to the
+ *  front and the notebook switch to display the specified page.  If
+ *  the page is new then it will be added to the specified window.  If
+ *  the window is NULL, the new page will be added to the first
+ *  window.
+ *
+ *  @param window The window to display a new page in.
+ *
+ *  @param page The new page of data to be displayed, or the existing
+ *  page of data the should be brought to the top and displayed.
+ */
+void gnc_main_window_open_page (GncMainWindow *window,
+				GncPluginPage *page);
+
+
+/** Remove a data plugin page from a window and display the previous
+ *  page.  If the page removed was the last page in the window, and
+ *  there is more than one window open, then the entire window will be
+ *  destroyed.
+ *
+ *  @param page The page of data to be removed.
+ */
+void gnc_main_window_close_page (GncPluginPage *page);
+
+
+/** Retrieve a pointer to the page that is currently at the front of
+ *  the specified window.  Any plugin that needs to manipulate its
+ *  menus based upon the currently selected menu page should connect
+ *  to the "page_changed" signal on a window.  The callback function
+ *  from that signal can then call this function to obtain a pointer
+ *  to the current page.
+ *
+ *  @param window A pointer to the window whose front page should be
+ *  returned.
+ *
+ *  @return A pointer to the GncPluginPage currently at the front of
+ *  the specified window.  If the window pointer is invalid or the
+ *  window is empty, this function will return NULL.
+ */
+GncPluginPage *gnc_main_window_get_current_page (GncMainWindow *window);
+
+
+/** Manually add a set of actions to the specified window.  Plugins
+ *  whose user interface is not hard coded (e.g. the menu-additions *
+ *  plugin) must create their actions at run time, then use this *
+ *  function to install them into the window.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param group_name The name for this set of actions.  This name
+ *  should be unique among all groups added to the window, and will be
+ *  needed to remove the actions from this window.
+ *
+ *  @param group A pointer to an array of GtkActions.  These are the
+ *  actions that will be added to the user interface.
+ *
+ *  @param merge_id A merge identifier retrieved from a call to
+ *  gtk_ui_manager_new_merge_id().
+ */
+void gnc_main_window_manual_merge_actions (GncMainWindow *window,
+					   const gchar *group_name,
+					   GtkActionGroup *group,
+					   guint merge_id);
+
+
+/** Add a set of actions to the specified window.  This function
+ *  should not need to be called directly by plugin implementors.
+ *  Correctly assigning values to the GncPluginClass fields during
+ *  plugin initialization will cause this routine to be automatically
+ *  called.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param group_name The name for this set of actions.  This name
+ *  should be unique among all groups added to the window, and will be
+ *  needed to remove the actions from this window.
+ *
+ *  @param entries A pointer to an array of GtkActionEntries.  These
+ *  are the actions that will be added to the user interface.
+ *
+ *  @param n_entries The number of actions in the array.
+ *
+ *  @param filename The filename containing the user interface
+ *  definition that goes with this set of actions.
+ *
+ *  @param user_data The data to be provided to all callback
+ *  functions.
+ */
+void gnc_main_window_merge_actions (GncMainWindow *window,
+				    const gchar *group_name,
+				    GtkActionEntry *entries,
+				    guint n_entries,
+				    const gchar *filename,
+				    gpointer user_data);
+
+
+/** Remove a set of actions from the specified window.  This function
+ *  should not need to be called directly by plugin implementors.  It
+ *  will automatically be called when a plugin is removed from a
+ *  window.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @param group_name The name for this set of actions.  This must be
+ *  the same name provided when the actions were installed.
+ */
+void gnc_main_window_unmerge_actions (GncMainWindow *window,
+				      const gchar *group_name);
+
+
+/** Force a full update of the user interface for the specified
+ *  window.  This can be an expensive function, but is needed because
+ *  the gtk ui manager doesn't always seem to update properly when
+ *  actions are changed.
+ *
+ *  @param window A pointer to the window whose user interface should
+ *  be updated.
+ *
+ *  @comment Is this function still needed?
+ */
+void gnc_main_window_actions_updated (GncMainWindow *window);
+
+
+/** Retrieve a specific set of user interface actions from a window.
+ *  This function can be used to get an group of action to be
+ *  manipulated when the front page of a window has changed.
+ *
+ *  @param window The window to check when looking for the action group.
+ *
+ *  @param group_name The name of a set of actions.  This must be a
+ *  name provided when the actions were installed.
+ *
+ *  @return A pointer to a GtkActionGroup that was added with the
+ *  specified name.  If the name cannot be found, then NULL will be
+ *  returned.
+ */
+GtkActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
+						  const gchar *group_name);
+
+
+void gnc_main_window_update_title (GncMainWindow *window);
+
+
+/** Set the window where all progressbar updates should occur.  This
+ *  is a wrapper around the gnc_window_set_progressbar_window()
+ *  function.
+ *
+ *  @param window The window to use for all progressbar updates.
+ */
+void gnc_main_window_set_progressbar_window( GncMainWindow *window );
+
+
+/** Shutdown gnucash.  This function will call the Scheme side of
+ *  GnuCash to initiate an orderly shutdown, and when that has
+ *  finished it will exit the program.
+ *
+ *  @param exit_status The exit status for the program.
+ */
+void gnc_shutdown (int exit_status);
 
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */
+
+/** @} */
+/** @} */

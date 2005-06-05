@@ -67,6 +67,8 @@ enum {
 };
 
 
+#define PLUGIN_PAGE_IMMUTABLE "page-immutable"
+
 #define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
 #define TOOLBAR_STYLE "/desktop/gnome/interface/toolbar_style"
 
@@ -78,14 +80,12 @@ static GList *active_windows = NULL;
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
 static void gnc_main_window_init (GncMainWindow *window);
 static void gnc_main_window_finalize (GObject *object);
-static void gnc_main_window_dispose (GObject *object);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
 
 /* Callbacks */
 static void gnc_main_window_add_widget (GtkUIManager *merge, GtkWidget *widget, GncMainWindow *window);
-static void gnc_main_window_change_current_page (GtkNotebook *notebook, gint pos, GncMainWindow *window);
 static void gnc_main_window_switch_page (GtkNotebook *notebook, GtkNotebookPage *notebook_page, gint pos, GncMainWindow *window);
 static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
@@ -163,6 +163,7 @@ static GtkActionEntry gnc_menu_entries [] =
 	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
 	{ "ActionsAction", NULL, N_("_Actions"), NULL, NULL, NULL },
+	{ "ReportsAction", NULL, N_("_Reports"), NULL, NULL, NULL },
 	{ "ToolsAction", NULL, N_("_Tools"), NULL, NULL, NULL },
 	{ "ExtensionsAction", NULL, N_("E_xtensions"), NULL, NULL, NULL },
 	{ "HelpAction", NULL, N_("_Help"), NULL, NULL, NULL },
@@ -175,8 +176,8 @@ static GtkActionEntry gnc_menu_entries [] =
 	{ "FileOpenAction", GTK_STOCK_OPEN, N_("_Open"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_open) },
-	{ "FileOpenNewWindowAction", NULL, N_("Open in a New Window"), NULL,
-	  N_("Open a new top-level GnuCash window for the current view"),
+	{ "FileOpenNewWindowAction", NULL, N_("Move to a New Window"), NULL,
+	  N_("Open a new top-level GnuCash window for the current page."),
 	  G_CALLBACK (gnc_main_window_cmd_file_open_new_window) },
 	{ "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
 	  NULL,
@@ -302,6 +303,12 @@ static GtkToggleActionEntry toggle_entries [] =
 };
 static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
 
+static const gchar *immutable_account_actions[] = {
+	"FileCloseAction",
+	"FileOpenNewWindowAction",
+	NULL
+};
+
 static GObjectClass *parent_class = NULL;
 
 static GQuark window_type = 0;
@@ -390,15 +397,17 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 	  page = GNC_PLUGIN_PAGE(item->data);
 	  if (!gnc_plugin_page_has_book (page, entity))
 	    continue;
-	  gnc_main_window_close_page (window, page);
+	  gnc_main_window_close_page (page);
 	}
 	LEAVE(" ");
 }
 
 /************************************************************
- *                                                          *
+ *                   Widget Implementation                  *
  ************************************************************/
 
+/*  Get the type of a gnc main window.
+ */
 GType
 gnc_main_window_get_type (void)
 {
@@ -434,6 +443,131 @@ gnc_main_window_get_type (void)
 	return gnc_main_window_type;
 }
 
+
+/** Initialize the class for the new gnucash main window.  This will
+ *  set up any function pointers that override functions in the parent
+ *  class, and also the signals that this class of widget can
+ *  generate.
+ *
+ *  @param klass The new class structure created by the object system.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_class_init (GncMainWindowClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	parent_class = g_type_class_peek_parent (klass);
+
+	window_type = g_quark_from_static_string ("gnc-main-window");
+
+	object_class->finalize = gnc_main_window_finalize;
+
+	/**
+	 * GncMainWindow::page_added:
+	 * @window: the #GncMainWindow
+	 * @page: the #GncPluginPage
+	 *
+	 * The "page_added" signal is emitted when a new page is added
+	 * to the notebook of a GncMainWindow.  This can be used to
+	 * attach a signal from the page so that menu actions can be
+	 * adjusted based upon events that occur within the page
+	 * (e.g. an account is selected.)
+	 */
+	main_window_signals[PAGE_ADDED] =
+	  g_signal_new ("page_added",
+			G_OBJECT_CLASS_TYPE (object_class),
+			G_SIGNAL_RUN_FIRST,
+			G_STRUCT_OFFSET (GncMainWindowClass, page_added),
+			NULL, NULL,
+			g_cclosure_marshal_VOID__OBJECT,
+			G_TYPE_NONE, 1,
+			G_TYPE_OBJECT);
+
+	/**
+	 * GncMainWindow::page_changed:
+	 * @window: the #GncMainWindow
+	 * @page: the #GncPluginPage
+	 *
+	 * The "page_changed" signal is emitted when a new page is
+	 * selected in the notebook of a GncMainWindow.  This can be
+	 * used to to adjust menu actions based upon which page is
+	 * currently displayed in a window.
+	 */
+	main_window_signals[PAGE_CHANGED] =
+	  g_signal_new ("page_changed",
+			G_OBJECT_CLASS_TYPE (object_class),
+			G_SIGNAL_RUN_FIRST,
+			G_STRUCT_OFFSET (GncMainWindowClass, page_changed),
+			NULL, NULL,
+			g_cclosure_marshal_VOID__OBJECT,
+			G_TYPE_NONE, 1,
+			G_TYPE_OBJECT);
+
+	qof_session_add_close_hook(gnc_main_window_shutdown, NULL);
+}
+
+
+/** Initialize a new instance of a gnucash main window.  This function
+ *  allocates and initializes the object private storage space.  It
+ *  also adds the new object to a list (for memory tracking purposes).
+ *
+ *  @param view The new object instance created by the object system.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_init (GncMainWindow *window)
+{
+	window->priv = g_new0 (GncMainWindowPrivate, 1);
+
+	window->priv->merged_actions_table =
+	  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+	window->priv->event_handler_id =
+	  gnc_engine_register_event_handler(gnc_main_window_event_handler,
+					    window);
+
+	gnc_main_window_setup_window (window);
+}
+
+
+/** Finalize the GncMainWindow object.  This function is called from
+ *  the G_Object level to complete the destruction of the object.  It
+ *  should release any memory not previously released by the destroy
+ *  function (i.e. the private data structure), then chain up to the
+ *  parent's destroy function.
+ *
+ *  @param object The object being destroyed.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_finalize (GObject *object)
+{
+	GncMainWindow *window;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
+
+	window = GNC_MAIN_WINDOW (object);
+	active_windows = g_list_remove (active_windows, window);
+
+	g_return_if_fail (window->priv != NULL);
+
+	gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
+
+	gnc_engine_unregister_event_handler(window->priv->event_handler_id);
+	g_hash_table_destroy (window->priv->merged_actions_table);
+	g_free (window->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+
+/*  Create a new gnc main window plugin.
+ */
 GncMainWindow *
 gnc_main_window_new (void)
 {
@@ -444,6 +578,117 @@ gnc_main_window_new (void)
 	return window;
 }
 
+/************************************************************
+ *                     Utility Functions                    *
+ ************************************************************/
+
+/** Connect a GncPluginPage to the window.  This function will insert
+ *  the page in to the window's notebook and its list of active pages.
+ *  It will also emit the "inserted" signal on the page, and the
+ *  "add_page" signal on the window.  This function does not connect
+ *  the page's summarybar widget (if any).  That will be connected in
+ *  a callback function generated by the page being inserted into the
+ *  notebook.
+ *
+ *  @param window The window where the new page should be added.
+ *
+ *  @param page The GncPluginPage that should be added to the window.
+ *  The visible widget for this plugin must have already been created.
+ *
+ *  @param tab_widget The widget that should be added into the
+ *  notebook tab for this page.  Generally this is a GtkLabel, but
+ *  could also be a GtkHBox containing an icon and a label.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_connect (GncMainWindow *window,
+			 GncPluginPage *page,
+			 GtkWidget *tab_widget)
+{
+	GtkNotebook *notebook;
+
+	page->window = GTK_WIDGET(window);
+	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	gtk_notebook_append_page (notebook, page->notebook_page, tab_widget);
+	gnc_plugin_page_inserted (page);
+	gtk_notebook_set_current_page (notebook, -1);
+	window->priv->installed_pages =
+	  g_list_append (window->priv->installed_pages, page);
+	g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
+}
+
+
+/** Disconnect a GncPluginPage page from the window.  If this page is
+ *  currently foremost in the window's notebook, its user interface
+ *  actions will be disconnected and the page's summarybar widget (if
+ *  any) will be removed.  The page is then removed from the window's
+ *  notebook and its list of active pages.
+ *
+ *  @param window The window the page should be removed from.
+ *
+ *  @param page The GncPluginPage that should be removed from the
+ *  window.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_disconnect (GncMainWindow *window,
+			    GncPluginPage *page)
+{
+	GtkNotebook *notebook;
+	gint page_num;
+
+	/* Disconnect the page and summarybar from the window */
+	if (window->priv->current_page == page) {
+		gnc_plugin_page_unmerge_actions (page, window->ui_merge);
+		gnc_plugin_page_unselected (page);
+		window->priv->current_page = NULL;
+
+		if (page->summarybar) {
+			gtk_container_remove(GTK_CONTAINER(window->priv->summarybar_dock),
+					     page->summarybar);
+		}
+	}
+
+	/* Remove it from the list of pages in the window */
+	window->priv->installed_pages =
+	  g_list_remove (window->priv->installed_pages, page);
+
+
+	/* Remove the page from the notebook */
+	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
+	gtk_notebook_remove_page (notebook, page_num);
+
+	if ( gtk_notebook_get_current_page(notebook) == -1) {
+	  /* Need to synthesize a page changed signal when the last
+	   * page is removed.  The notebook doesn't generate a signal
+	   * for this, therefore the switch_page code in this file
+	   * never gets called to generate this signal. */
+	  gnc_main_window_switch_page(notebook, NULL, -1, window);
+	  //g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, NULL);
+	}
+
+	gnc_plugin_page_removed (page);
+
+	gtk_ui_manager_ensure_update (window->ui_merge);
+	gnc_window_set_status (GNC_WINDOW(window), page, NULL);
+}
+
+
+/************************************************************
+ *                                                          *
+ ************************************************************/
+
+
+/*  Display a data plugin page in a window.  If the page already
+ *  exists in any window, then that window will be brought to the
+ *  front and the notebook switch to display the specified page.  If
+ *  the page is new then it will be added to the specified window.  If
+ *  the window is NULL, the new page will be added to the first
+ *  window.
+ */
 void
 gnc_main_window_open_page (GncMainWindow *window,
 			   GncPluginPage *page)
@@ -468,10 +713,17 @@ gnc_main_window_open_page (GncMainWindow *window,
 	  gtk_window_present(GTK_WINDOW(window));
 	  return;
 	}
-	
+
 	if ((window == NULL) && active_windows)
 	  window = active_windows->data;
-	page->window = GTK_WIDGET(window);
+
+	/* Is this the first page in the first window? */
+	if ((window == active_windows->data) &&
+	    (window->priv->installed_pages == NULL)) {
+	  g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE,
+			     GINT_TO_POINTER(1));
+	}
+
 	page->notebook_page = gnc_plugin_page_create_widget (page);
 	g_object_set_data (G_OBJECT (page->notebook_page),
 			   PLUGIN_PAGE_LABEL, page);
@@ -492,53 +744,34 @@ gnc_main_window_open_page (GncMainWindow *window,
 		label_box = label;
 	}
 	
-	notebook = GTK_NOTEBOOK (window->priv->notebook);
-	gtk_notebook_append_page (notebook, page->notebook_page, label_box);
-	gnc_plugin_page_inserted (page);
-	gtk_notebook_set_current_page (notebook, -1);
-
-	window->priv->installed_pages =
-	  g_list_append (window->priv->installed_pages, page);
-
-	g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
+	gnc_main_window_connect(window, page, label_box);
 }
 
+
+/*  Remove a data plugin page from a window and display the previous
+ *  page.  If the page removed was the last page in the window, and
+ *  there is more than one window open, then the entire window will be
+ *  destroyed.
+ */
 void
-gnc_main_window_close_page (GncMainWindow *window,
-			    GncPluginPage *page)
+gnc_main_window_close_page (GncPluginPage *page)
 {
-	GtkNotebook *notebook;
-	gint page_num;
+	GncMainWindow *window;
 
 	if (!page->notebook_page)
 		return;
 
-	if (window->priv->current_page == page) {
-		gnc_plugin_page_unmerge_actions (page, window->ui_merge);
-		gnc_plugin_page_unselected (page);
-
-		window->priv->current_page = NULL;
+	window = GNC_MAIN_WINDOW (page->window);
+	if (!window) {
+	  g_warning("Page is not in a window.");
+	  return;
 	}
 
-	notebook = GTK_NOTEBOOK (window->priv->notebook);
-	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
-	gtk_notebook_remove_page (notebook, page_num);
-	if ( gtk_notebook_get_current_page(notebook) == -1) {
-	  /* Synthesize a page changed signal when the last page is removed. */
-	  g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, NULL);
-	}
-	window->priv->installed_pages =
-	  g_list_remove (window->priv->installed_pages, page);
-
-	gnc_plugin_page_removed (page);
-
-	gtk_ui_manager_ensure_update (window->ui_merge);
-	gnc_window_set_status (GNC_WINDOW(window), page, NULL);
-
+	gnc_main_window_disconnect(window, page);
 	gnc_plugin_page_destroy_widget (page);
 	g_object_unref(page);
 
-	/* If this isn't the last window, go ahead and destroy it. */
+	/* If this isn't the last window, go ahead and destroy the window. */
 	if (window->priv->installed_pages == NULL) {
 		if (g_list_length(active_windows) > 1) {
 			gtk_widget_destroy(GTK_WIDGET(window));
@@ -546,12 +779,53 @@ gnc_main_window_close_page (GncMainWindow *window,
 	}
 }
 
+
+/*  Retrieve a pointer to the page that is currently at the front of
+ *  the specified window.  Any plugin that needs to manipulate its
+ *  menus based upon the currently selected menu page should connect
+ *  to the "page_changed" signal on a window.  The callback function
+ *  from that signal can then call this function to obtain a pointer
+ *  to the current page.
+ */
 GncPluginPage *
 gnc_main_window_get_current_page (GncMainWindow *window)
 {
 	return window->priv->current_page;
 }
 
+
+/*  Manually add a set of actions to the specified window.  Plugins
+ *  whose user interface is not hard coded (e.g. the menu-additions *
+ *  plugin) must create their actions at run time, then use this *
+ *  function to install them into the window.
+ */
+void
+gnc_main_window_manual_merge_actions (GncMainWindow *window,
+				      const gchar *group_name,
+				      GtkActionGroup *group,
+				      guint merge_id)
+{
+	MergedActionEntry *entry;
+
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
+	g_return_if_fail (group_name != NULL);
+	g_return_if_fail (GTK_IS_ACTION_GROUP(group));
+	g_return_if_fail (merge_id > 0);
+
+	entry = g_new0 (MergedActionEntry, 1);
+	entry->action_group = group;
+	entry->merge_id = merge_id;
+	gtk_ui_manager_ensure_update (window->ui_merge);
+	g_hash_table_insert (window->priv->merged_actions_table, g_strdup (group_name), entry);
+}
+
+
+/*  Add a set of actions to the specified window.  This function
+ *  should not need to be called directly by plugin implementors.
+ *  Correctly assigning values to the GncPluginClass fields during
+ *  plugin initialization will cause this routine to be automatically
+ *  called.
+ */
 void
 gnc_main_window_merge_actions (GncMainWindow *window,
 			       const gchar *group_name,
@@ -597,6 +871,12 @@ gnc_main_window_merge_actions (GncMainWindow *window,
 	g_free(pathname);
 }
 
+
+/*  Remove a set of actions from the specified window.  This function
+ *  should not need to be called directly by plugin implementors.  It
+ *  will automatically be called when a plugin is removed from a
+ *  window.
+ */
 void
 gnc_main_window_unmerge_actions (GncMainWindow *window,
 				 const gchar *group_name)
@@ -618,6 +898,12 @@ gnc_main_window_unmerge_actions (GncMainWindow *window,
 	g_hash_table_remove (window->priv->merged_actions_table, group_name);
 }
 
+
+/*  Force a full update of the user interface for the specified
+ *  window.  This can be an expensive function, but is needed because
+ *  the gtk ui manager doesn't always seem to update properly when
+ *  actions are changed.
+ */
 void
 gnc_main_window_actions_updated (GncMainWindow *window)
 {
@@ -636,9 +922,14 @@ gnc_main_window_actions_updated (GncMainWindow *window)
 	g_object_unref(force);
 }
 
+
+/*  Retrieve a specific set of user interface actions from a window.
+ *  This function can be used to get an group of action to be
+ *  manipulated when the front page of a window has changed.
+ */
 GtkActionGroup *
-gnc_main_window_get_action_group  (GncMainWindow *window,
-				   const gchar *group_name)
+gnc_main_window_get_action_group (GncMainWindow *window,
+				  const gchar *group_name)
 {
 	MergedActionEntry *entry;
 
@@ -655,91 +946,6 @@ gnc_main_window_get_action_group  (GncMainWindow *window,
 
 
 static void
-gnc_main_window_class_init (GncMainWindowClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	parent_class = g_type_class_peek_parent (klass);
-
-	window_type = g_quark_from_static_string ("gnc-main-window");
-
-	object_class->finalize = gnc_main_window_finalize;
-	object_class->dispose = gnc_main_window_dispose;
-
-	main_window_signals[PAGE_ADDED] =
-	  g_signal_new ("page_added",
-			G_OBJECT_CLASS_TYPE (object_class),
-			G_SIGNAL_RUN_FIRST,
-			G_STRUCT_OFFSET (GncMainWindowClass, page_added),
-			NULL, NULL,
-			g_cclosure_marshal_VOID__OBJECT,
-			G_TYPE_NONE, 1,
-			G_TYPE_OBJECT);
-
-	main_window_signals[PAGE_CHANGED] =
-	  g_signal_new ("page_changed",
-			G_OBJECT_CLASS_TYPE (object_class),
-			G_SIGNAL_RUN_FIRST,
-			G_STRUCT_OFFSET (GncMainWindowClass, page_changed),
-			NULL, NULL,
-			g_cclosure_marshal_VOID__OBJECT,
-			G_TYPE_NONE, 1,
-			G_TYPE_OBJECT);
-
-	qof_session_add_close_hook(gnc_main_window_shutdown, NULL);
-}
-
-static void
-gnc_main_window_init (GncMainWindow *window)
-{
-	window->priv = g_new0 (GncMainWindowPrivate, 1);
-
-	window->priv->merged_actions_table =
-	  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-
-	window->priv->event_handler_id =
-	  gnc_engine_register_event_handler(gnc_main_window_event_handler,
-					    window);
-
-	gnc_main_window_setup_window (window);
-}
-
-static void
-gnc_main_window_finalize (GObject *object)
-{
-	GncMainWindow *window;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
-
-	window = GNC_MAIN_WINDOW (object);
-	active_windows = g_list_remove (active_windows, window);
-
-	g_return_if_fail (window->priv != NULL);
-
-	gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
-
-	gnc_engine_unregister_event_handler(window->priv->event_handler_id);
-	g_hash_table_destroy (window->priv->merged_actions_table);
-	g_free (window->priv);
-
-	G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
-gnc_main_window_dispose (GObject *object)
-{
-	GncMainWindow *window;
-
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
-
-	window = GNC_MAIN_WINDOW (object);
-
-	G_OBJECT_CLASS (parent_class)->dispose (object);
-}
-
-static void
 gnc_main_window_add_plugin (gpointer plugin,
 			    gpointer window)
 {
@@ -753,32 +959,17 @@ gnc_main_window_add_plugin (gpointer plugin,
 
 static void
 gnc_main_window_update_toolbar (GncMainWindow *window,
-				const gchar *style)
+				const gchar *style_name)
 {
-	GEnumClass   *enum_class;
-	GEnumValue   *enum_value;
-	GSList       *list, *tmp;
+	GtkToolbarStyle style;
+	GSList *list;
 
-	ENTER("window %p, style %s", window, style);
-	enum_class = g_type_class_ref (GTK_TYPE_TOOLBAR_STYLE);
-	enum_value = g_enum_get_value_by_nick (enum_class, style);
-	if (!enum_value) {
-	  char *pre;
+	ENTER("window %p, style %s", window, style_name);
 
-	  pre = index(style, '_');
-	  if (pre == NULL)
-	    return;
-	  *pre = '-';
-	  enum_value = g_enum_get_value_by_nick (enum_class, style);
-	  if (!enum_value) {
-	    return;
-	  }
-	}
-
+	style = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_name,
+				   GTK_TOOLBAR_BOTH);
 	list = gtk_ui_manager_get_toplevels(window->ui_merge, GTK_UI_MANAGER_TOOLBAR);
-	for (tmp = list; tmp; tmp = tmp->next) {
-	  gtk_toolbar_set_style(GTK_TOOLBAR(tmp->data), enum_value->value);
-	}
+	g_slist_foreach(list, (GFunc)gtk_toolbar_set_style, GINT_TO_POINTER(style));
 	g_slist_free(list);
 	LEAVE("");
 }
@@ -831,8 +1022,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	priv->notebook = gtk_notebook_new ();
 	gtk_widget_show (priv->notebook);
-	g_signal_connect (G_OBJECT (priv->notebook), "change-current-page",
-			  G_CALLBACK (gnc_main_window_change_current_page), window);
 	g_signal_connect (G_OBJECT (priv->notebook), "switch-page",
 			  G_CALLBACK (gnc_main_window_switch_page), window);
 	gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
@@ -875,7 +1064,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	merge_id = gtk_ui_manager_add_ui_from_file (window->ui_merge,
 						    filename, &error);
-	g_free(filename);
 	g_assert(merge_id || error);
 	if (merge_id) {
 	  gtk_window_add_accel_group (GTK_WINDOW (window),
@@ -887,6 +1075,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	  g_error_free(error);
 	  g_assert(merge_id != 0);
 	}
+	g_free(filename);
 
 	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
 				   gnc_main_window_gconf_changed);
@@ -920,9 +1109,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                        "BarAction", GTK_UI_MANAGER_MENUITEM, FALSE );
                 gtk_ui_manager_ensure_update( window->ui_merge );
         }
-
-        /* Now update any old-style add-in menus */
-        gnc_extensions_menu_setup( GTK_WINDOW(window), WINDOW_NAME_MAIN, window->ui_merge );
 
 	/* Now update the "eXtensions" menu */
 	debugging = scm_c_eval_string("(gnc:debugging?)");
@@ -958,43 +1144,55 @@ gnc_main_window_add_widget (GtkUIManager *merge,
 	gtk_widget_show (widget);
 }
 
+/** This function is invoked when the GtkNotebook switches pages.  It
+ *  is responsible for updating the rest of the window contents
+ *  outside of the notebook.  I.E. Updating the user interface, the
+ *  summary bar, etc.  This function also emits the "page_changed"
+ *  signal from the window so that any plugin can also learn about the
+ *  fact that the page has changed.
+ *
+ *  @internal
+ */
 static void
-container_remove(GtkWidget *widget, gpointer data)
-{
-  gtk_container_remove(GTK_CONTAINER(data), widget);
-}
-
-
-static void
-gnc_main_window_switch_page_internal (GtkNotebook *notebook,
-				      gint pos,
-				      GncMainWindow *window)
+gnc_main_window_switch_page (GtkNotebook *notebook,
+			     GtkNotebookPage *notebook_page,
+			     gint pos,
+			     GncMainWindow *window)
 {
 	GtkWidget *child, *summarybar, *summarybar_dock;
 	GncPluginPage *page;
+	gboolean immutable;
 
+	DEBUG("Notebook %p, page, %p, index %d, window %p",
+	       notebook, notebook_page, pos, window);
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 
+	summarybar_dock = window->priv->summarybar_dock;
+
 	if (window->priv->current_page != NULL) {
-		gnc_plugin_page_unmerge_actions (window->priv->current_page,
-						 window->ui_merge);
-		gnc_plugin_page_unselected (window->priv->current_page);
+		page = window->priv->current_page;
+		gnc_plugin_page_unmerge_actions (page, window->ui_merge);
+		gnc_plugin_page_unselected (page);
+
+		/* Remove old page's summarybar too */
+		if (page->summarybar) {
+			gtk_container_remove(GTK_CONTAINER(summarybar_dock),
+					     page->summarybar);
+		}
 	}
 
 	child = gtk_notebook_get_nth_page (notebook, pos);
-	page = g_object_get_data (G_OBJECT (child), PLUGIN_PAGE_LABEL);
+	if (child) {
+		page = g_object_get_data (G_OBJECT (child), PLUGIN_PAGE_LABEL);
+	} else {
+		page = NULL;
+	}
 
 	window->priv->current_page = page;
 
 	if (page != NULL) {
 		/* Update the user interface (e.g. menus and toolbars */
 		gnc_plugin_page_merge_actions (page, window->ui_merge);
-
-		/* Remove summarybar for old page */
-		summarybar_dock = window->priv->summarybar_dock;
-		gtk_container_foreach(GTK_CONTAINER(summarybar_dock),
-				      (GtkCallback)container_remove,
-				      summarybar_dock);
 
 		/* install new summarybar (if any) */
 		summarybar = page->summarybar;
@@ -1019,24 +1217,14 @@ gnc_main_window_switch_page_internal (GtkNotebook *notebook,
 		gnc_window_update_status (GNC_WINDOW(window), page);
 	}
 
+	/* Update the menus based upon whether this is an "immutable" page. */
+	immutable = page &&
+	  g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
+	gnc_plugin_update_actions(window->priv->action_group,
+				  immutable_account_actions,
+				  "sensitive", !immutable);
+
 	g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
-}
-
-static void
-gnc_main_window_switch_page (GtkNotebook *notebook,
-			     GtkNotebookPage *notebook_page,
-			     gint pos,
-			     GncMainWindow *window)
-{
-	gnc_main_window_switch_page_internal (notebook, pos, window);
-}
-
-static void
-gnc_main_window_change_current_page (GtkNotebook *notebook,
-				     gint pos,
-				     GncMainWindow *window)
-{
-	gnc_main_window_switch_page_internal (notebook, pos, window);
 }
 
 static void
@@ -1088,7 +1276,6 @@ gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *wind
 	GncPluginPage *page;
 	GtkNotebook *notebook;
 	GtkWidget *tab_widget;
-	gint page_num;
 
 	/* Setup */
 	priv = window->priv;
@@ -1098,34 +1285,29 @@ gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *wind
 	page = priv->current_page;
 	tab_widget = gtk_notebook_get_tab_label (notebook, page->notebook_page);
 
-	/* Remove the page from its old window, but hang onto a ref */
+	/* Ref the page components, then remove it from its old window */
 	g_object_ref(page);
 	g_object_ref(tab_widget);
 	g_object_ref(page->notebook_page);
-	page_num =  gtk_notebook_page_num(notebook, page->notebook_page);
-	gtk_notebook_remove_page (notebook, page_num);
-	priv->installed_pages = g_list_remove (priv->installed_pages, page);
-	gnc_plugin_page_removed (page);
-	gtk_ui_manager_ensure_update (window->ui_merge);
-	gnc_window_set_status (GNC_WINDOW(window), page, NULL);
+	gnc_main_window_disconnect(window, page);
 
 	/* Create the new window */
 	new_window = gnc_main_window_new ();
 	gtk_widget_show(GTK_WIDGET(new_window));
-	priv = new_window->priv;
-	notebook = GTK_NOTEBOOK (priv->notebook);
 
-	/* Now add it to the new window */
-	page->window = GTK_WIDGET(new_window);
-	gtk_notebook_append_page (notebook, page->notebook_page, tab_widget);
-	g_object_unref(tab_widget);
+	/* Now add the page to the new window */
+	gnc_main_window_connect (new_window, page, tab_widget);
+
+	/* Unref the page components now that we're done */
 	g_object_unref(page->notebook_page);
-	gnc_plugin_page_inserted (page);
-	gtk_notebook_set_current_page (notebook, -1);
-	priv->installed_pages = g_list_append (priv->installed_pages, page);
-	g_signal_emit (new_window, main_window_signals[PAGE_ADDED], 0, page);
-
+	g_object_unref(tab_widget);
 	g_object_unref(page);
+
+	/* just a little debugging. :-) */
+	printf("Moved page %p (sb %p) from window %p to new window %p\n",
+	       page, page->summarybar, window, new_window);
+	printf("Old window current is %p, new window current is %p\n",
+	       window->priv->current_page, new_window->priv->current_page);
 }
 
 static void
@@ -1221,8 +1403,10 @@ gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 {
+	g_return_if_fail(GNC_IS_MAIN_WINDOW(window));
+
 	if (window->priv->current_page != NULL) {
-		gnc_main_window_close_page (window, window->priv->current_page);
+		gnc_main_window_close_page (window->priv->current_page);
 	}
 }
 
@@ -1438,16 +1622,19 @@ void
 gnc_main_window_update_title (GncMainWindow *window)
 {
   const gchar *filename;
-  gchar *title;
+  gchar *title, *ptr;
 
   filename = gnc_session_get_url (gnc_get_current_session ());
 
   if (!filename)
     filename = _("<no file>");
-  else if (strncmp ("file:", filename, 5) == 0)
-    filename += 5;
-
-  title = g_strdup_printf ("Gnucash (%s)", filename);
+  else {
+    /* Recommended gnome naming scheme */
+    ptr = rindex(filename, '/');
+    if (ptr != NULL)
+      filename = ptr+1;
+  }
+  title = g_strdup_printf ("%s - Gnucash", filename);
   gtk_window_set_title (GTK_WINDOW(&window->parent), title);
   g_free(title);
 }
@@ -1485,6 +1672,11 @@ gnc_window_main_window_init (GncWindowIface *iface)
 	iface->get_progressbar = gnc_main_window_get_progressbar;
 }
 
+
+/*  Set the window where all progressbar updates should occur.  This
+ *  is a wrapper around the gnc_window_set_progressbar_window()
+ *  function.
+ */
 void
 gnc_main_window_set_progressbar_window (GncMainWindow *window)
 {
@@ -1493,10 +1685,11 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
   gnc_window_set_progressbar_window(gncwin);
 }
 
-/********************************************************************
- * gnc_shutdown
- * close down gnucash from the C side...
- ********************************************************************/
+
+/*  Shutdown gnucash.  This function will call the Scheme side of
+ *  GnuCash to initiate an orderly shutdown, and when that has
+ *  finished it will exit the program.
+ */
 void
 gnc_shutdown (int exit_status)
 {
