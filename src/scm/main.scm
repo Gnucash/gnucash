@@ -499,8 +499,8 @@ string and 'directories' must be a list of strings."
     (N_ "Welcome Sample Report")
     (N_ "Welcome-to-GnuCash report screen")
     (list gnc:menuname-reports gnc:menuname-utility "")
-    (lambda ()
-      (gnc:main-window-open-report (gnc:make-welcome-report) #f))))
+    (lambda (window)
+      (gnc:main-window-open-report (gnc:make-welcome-report) window))))
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
 
