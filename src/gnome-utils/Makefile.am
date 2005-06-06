@@ -1,4 +1,4 @@
-SUBDIRS = . test
+SUBDIRS = . test ui
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
@@ -55,29 +55,36 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-druid-provider-edge-gnome.c \
   gnc-druid-provider-file-gnome.c \
   gnc-druid-provider-multifile-gnome.c \
+  gnc-embedded-window.c \
   gnc-frequency.c \
   gnc-general-select.c \
   gnc-gnome-utils.c \
   gnc-gui-query.c \
-  gnc-html-history.c \
-  gnc-html-guppi.c \
   gnc-html-graph-gog.c \
+  gnc-html-guppi.c \
+  gnc-html-history.c \
   gnc-html.c \
   gnc-icons.c \
+  gnc-main-window.c \
   gnc-mdi-utils.c \
   gnc-menu-extensions.c \
+  gnc-plugin-manager.c \
+  gnc-plugin-menu-additions.c \
+  gnc-plugin-page.c \
+  gnc-plugin.c \
   gnc-query-list.c \
   gnc-splash.c \
-  gnc-tree-model-account.c \
   gnc-tree-model-account-types.c \
+  gnc-tree-model-account.c \
   gnc-tree-model-commodity.c \
   gnc-tree-model-example-account.c \
   gnc-tree-model-price.c \
   gnc-tree-model-selection.c \
-  gnc-tree-view.c \
   gnc-tree-view-account.c \
   gnc-tree-view-commodity.c \
   gnc-tree-view-price.c \
+  gnc-tree-view.c \
+  gnc-window.c \
   gncmod-gnome-utils.c \
   misc-gnome-utils.c \
   print-session.c \
@@ -95,9 +102,9 @@ gncinclude_HEADERS = \
   dialog-utils.h \
   druid-utils.h \
   gnc-account-sel.h \
+  gnc-amount-edit.h \
   gnc-budget-list-tree-model.h \
   gnc-budget-tree-model.h \
-  gnc-amount-edit.h \
   gnc-commodity-edit.h \
   gnc-currency-edit.h \
   gnc-date-delta.h \
@@ -105,29 +112,36 @@ gncinclude_HEADERS = \
   gnc-date-format.h \
   gnc-dense-cal.h \
   gnc-druid-gnome-ui.h \
+  gnc-embedded-window.h \
   gnc-frequency.h \
   gnc-general-select.h \
   gnc-gnome-utils.h \
   gnc-gui-query.h \
-  gnc-html-history.h \
-  gnc-html-guppi.h \
   gnc-html-graph-gog.h \
+  gnc-html-guppi.h \
+  gnc-html-history.h \
   gnc-html.h \
   gnc-icons.h \
+  gnc-main-window.h \
   gnc-mdi-utils.h \
   gnc-menu-extensions.h \
+  gnc-plugin-manager.h \
+  gnc-plugin-menu-additions.h \
+  gnc-plugin-page.h \
+  gnc-plugin.h \
   gnc-query-list.h \
   gnc-splash.h \
-  gnc-tree-model-account.h \
   gnc-tree-model-account-types.h \
+  gnc-tree-model-account.h \
   gnc-tree-model-commodity.h \
   gnc-tree-model-example-account.h \
   gnc-tree-model-price.h \
   gnc-tree-model-selection.h \
-  gnc-tree-view.h \
   gnc-tree-view-account.h \
   gnc-tree-view-commodity.h \
   gnc-tree-view-price.h \
+  gnc-tree-view.h \
+  gnc-window.h \
   misc-gnome-utils.h \
   print-session.h
 

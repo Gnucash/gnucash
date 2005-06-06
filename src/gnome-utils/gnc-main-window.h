@@ -37,7 +37,6 @@
 
 #include <gtk/gtk.h>
 
-#include "gnc-ui.h"
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -55,13 +54,13 @@ G_BEGIN_DECLS
 /* typedefs & structures */
 typedef struct GncMainWindowPrivate GncMainWindowPrivate;
 
-struct GncMainWindow {
+typedef struct GncMainWindow {
 	GtkWindow parent;
 
 	GtkUIManager *ui_merge;
 
 	GncMainWindowPrivate *priv;
-};
+} GncMainWindow;
 
 typedef struct {
 	GtkWindowClass parent;

@@ -1,25 +1,18 @@
 <ui>
   <menubar>
     <menu name="File" action="FileAction">
-      <menuitem name="FileNew" action="FileNewAction"/>
       <placeholder name="FileNewPlaceholder"/>
       <separator name="FileSep1"/>
-      <menuitem name="FileOpen" action="FileOpenAction"/>
       <placeholder name="FileOpenPlaceholder"/>
       <menuitem name="FileOpenNewWindow" action="FileOpenNewWindowAction"/>
       <placeholder name="FileOpenRecentPlaceholder"/>
       <separator name="FileSep2"/>
-      <menuitem name="FileSave" action="FileSaveAction"/>
-      <menuitem name="FileSaveAs" action="FileSaveAsAction"/>
       <placeholder name="FileSavePlaceholder"/>
       <separator name="FileSep3"/>
       <menu name="FileImport" action="FileImportAction">
-        <menuitem name="FileImportQSF" action="FileImportQSFAction"/>
         <placeholder name="FileImportPlaceholder"/>
       </menu>
       <menu name="FileExport" action="FileExportAction">
-        <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
-        <menuitem name="FileExportChart" action="FileExportChartAction"/>
         <placeholder name="FileExportPlaceholder"/>
       </menu>
       <separator name="FileSep4"/>
@@ -41,7 +34,6 @@
       <menuitem name="EditPreferences" action="EditPreferencesAction"/>
       <placeholder name="EditPreferencesPlaceholder"/>
       <placeholder name="EditStyleSheetsPlaceholder"/>
-      <menuitem name="EditTaxOptions" action="EditTaxOptionsAction"/>
     </menu>
   
     <menu name="View" action="ViewAction">
@@ -55,14 +47,7 @@
     </menu>
   
     <menu name="Actions" action="ActionsAction">
-      <menu name="ActionsScheduledTransactions" action="ActionsScheduledTransactionsAction">
-        <menuitem name="ActionsScheduledTransactionEditor" action="ActionsScheduledTransactionEditorAction"/>
-        <menuitem name="ActionsSinceLastRun" action="ActionsSinceLastRunAction"/>
-        <menuitem name="ActionsMortgageLoan" action="ActionsMortgageLoanAction"/>
-      </menu>
-      <menuitem name="ActionsBudgetWorkbenchAction" action="ActionsBudgetWorkbenchAction"/>
       <placeholder name="ActionsPlaceholder"/>
-      <menuitem name="ActionsCloseBooks" action="ActionsCloseBooksAction"/>
     </menu>
   
     <placeholder name="AdditionalMenusPlaceholder"/>
@@ -73,11 +58,6 @@
 
     <menu name="Tools" action="ToolsAction">
       <placeholder name="ToolsPlaceholder"/>
-      <menuitem name="ToolsPriceEditor" action="ToolsPriceEditorAction"/>
-      <menuitem name="ToolsCommodityEditor" action="ToolsCommodityEditorAction"/>
-      <menuitem name="ToolsFinancialCalculator" action="ToolsFinancialCalculatorAction"/>
-      <menuitem name="ToolsFindTransactions" action="ToolsFindTransactionsAction"/>
-      <placeholder name="ToolsPlaceholder2"/>
     </menu>
 
     <menu name="Extensions" action="ExtensionsAction">
@@ -86,7 +66,7 @@
 
     <menu name="Help" action="HelpAction">
       <menuitem name="HelpTutorial" action="HelpTutorialAction"/>
-      <menuitem name="HelpTipsOfTheDay" action="HelpTipsOfTheDayAction"/>
+      <placeholder name="HelpPlaceholder1"/>
       <menuitem name="HelpContents" action="HelpContentsAction"/>
       <menuitem name="HelpAbout" action="HelpAboutAction"/>
     </menu>
@@ -98,7 +78,7 @@
   </menubar>
 
   <toolbar name="DefaultToolbar">
-    <toolitem name="ToolbarSave" action="FileSaveAction"/>
+    <placeholder name="ToolbarSavePlaceholder"/>
     <toolitem name="ToolbarClose" action="FileCloseAction"/>
     <separator name="ToolbarSep1"/>
     <placeholder name="DefaultToolbarPlaceholder"/>

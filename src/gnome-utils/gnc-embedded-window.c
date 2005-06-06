@@ -33,7 +33,6 @@
 #include "gnc-engine-util.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-dir.h"
-#include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"

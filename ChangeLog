@@ -1,3 +1,42 @@
+2005-06-06  David Hampton  <hampton@employees.org>
+
+	Restructure the code.
+	
+	* src/gnome/gnc-embedded-window.[ch]:
+	* src/gnome/gnc-plugin-basic-commands.[ch]:
+	* src/gnome/gnc-plugin-manager.[ch]:
+	* src/gnome/gnc-plugin-menu-additions.[ch]:
+	* src/gnome/gnc-plugin-page.[ch]:
+	* src/gnome/gnc-plugin.[ch]:
+	* src/gnome/gnc-window.[ch]: These files were moved whole from
+	src/gnome to src/gnome-utils:
+
+	* src/gnome/gnc-main-window.[ch]:
+	* src/gnome/ui/gnc-main-window-ui.xml: These files were split into
+	two parts, and the part with the existing name was moved from
+	src/gnome to src/gnome-utils.  The parts left in src/gnome are
+	called gnc-plugin-basic-commands.[ch].
+
+	* src/app-file/gnc-file.[ch]:
+	* src/app-file/gncmod-app-file.c: Call gnc-main-window directly
+	now instead of through a function pointer loaded at runtime.
+
+	* src/gnome/top-level.c:
+
+	* gnucash/src/gnc-ui.h:
+	* src/report/stylesheets/Makefile.am: Revert temporary workaround.
+
+	(Now removed) Temporary workaround.
+	
+	* gnucash/src/gnc-ui.h:
+	* gnucash/src/gnome/gnc-main-window.h:
+	* gnucash/src/gnome/gnc-window.h:
+	* gnucash/src/gnome/gw-gnc-spec.scm:
+	* gnucash/src/gnome-utils/gw-gnome-utils-spec.scm:
+	* gnucash/src/report/report-gnome/gw-report-gnome-spec.scm:
+	* gnucash/src/report/stylesheets/ Makefile.am: Temporary
+	workaround to resolve circular build dependency:
+
 2005-06-05  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-register.c:

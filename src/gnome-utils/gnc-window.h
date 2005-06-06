@@ -26,7 +26,6 @@
 #define __GNC_WINDOW_H
 
 #include <gtk/gtkwindow.h>
-#include "gnc-ui.h"
 #include "gnc-plugin-page.h"
 
 G_BEGIN_DECLS
@@ -40,7 +39,7 @@ G_BEGIN_DECLS
 #define GNC_WINDOW_GET_IFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GNC_TYPE_WINDOW, GncWindowIface))
 
 /* typedefs & structures */
-//typedef struct GncWindow GncWindow; /* dummy typedef */
+typedef struct GncWindow GncWindow; /* dummy typedef */
 
 typedef struct {
 	GTypeInterface parent;

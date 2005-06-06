@@ -41,6 +41,7 @@
 #include "gnc-splash.h"
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "gnc-window.h"
 #include "gnc-gconf-utils.h"
 #include "qofbackend.h"
 #include "qofbook.h"
@@ -61,7 +62,6 @@ static GNCHistoryAddFileFunc history_add_file_func = NULL;
 static GNCHistoryGetLastFunc history_get_last_func = NULL;
 
 static GNCFileDialogFunc file_dialog_func = NULL;
-static GNCFilePercentageFunc file_percentage_func = NULL;
 
 
 void
@@ -72,12 +72,6 @@ gnc_file_set_handlers (GNCHistoryAddFileFunc history_add_file_func_in,
   history_add_file_func = history_add_file_func_in;
   history_get_last_func = history_get_last_func_in;
   file_dialog_func = file_dialog_func_in;
-}
-
-void
-gnc_file_set_pct_handler (GNCFilePercentageFunc file_percentage_func_in)
-{
-  file_percentage_func = file_percentage_func_in;
 }
 
 void
@@ -574,13 +568,9 @@ gnc_post_file_open (const char * filename)
     xaccLogSetBaseName (logpath);
     xaccLogDisable();
 
-    if (file_percentage_func) {
-      file_percentage_func(_("Reading file..."), 0.0);
-      qof_session_load (new_session, file_percentage_func);
-      file_percentage_func(NULL, -1.0);
-    } else {
-      qof_session_load (new_session, NULL);
-    }
+    gnc_window_show_progress(_("Reading file..."), 0.0);
+    qof_session_load (new_session, gnc_window_show_progress);
+    gnc_window_show_progress(NULL, -1.0);
     xaccLogEnable();
 
     /* check for i/o error, put up appropriate error dialog */
@@ -752,14 +742,10 @@ gnc_file_export_file(const char * newfile)
   /* use the current session to save to file */
   gnc_set_busy_cursor (NULL, TRUE);
   current_session = qof_session_get_current_session();
-  if (file_percentage_func) {
-    file_percentage_func(_("Exporting file..."), 0.0);
-    ok = qof_session_export (new_session, current_session,
-                             file_percentage_func);
-    file_percentage_func(NULL, -1.0);
-  } else {
-    ok = qof_session_export (new_session, current_session, NULL);
-  }
+  gnc_window_show_progress(_("Exporting file..."), 0.0);
+  ok = qof_session_export (new_session, current_session,
+			   gnc_window_show_progress);
+  gnc_window_show_progress(NULL, -1.0);
   gnc_unset_busy_cursor (NULL);
   xaccLogDisable();
   qof_session_destroy (new_session);
@@ -799,13 +785,9 @@ gnc_file_save (void)
 
   /* use the current session to save to file */
   gnc_set_busy_cursor (NULL, TRUE);
-  if (file_percentage_func) {
-    file_percentage_func(_("Writing file..."), 0.0);
-    qof_session_save (session, file_percentage_func);
-    file_percentage_func(NULL, -1.0);
-  } else {
-    qof_session_save (session, NULL);
-  }
+  gnc_window_show_progress(_("Writing file..."), 0.0);
+  qof_session_save (session, gnc_window_show_progress);
+  gnc_window_show_progress(NULL, -1.0);
   gnc_unset_busy_cursor (NULL);
 
   /* Make sure everything's OK - disk could be full, file could have

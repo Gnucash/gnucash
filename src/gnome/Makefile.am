@@ -48,19 +48,13 @@ libgncgnome_la_SOURCES = \
   druid-merge.c \
   druid-loan.c \
   druid-stock-split.c \
-  gnc-embedded-window.c \
-  gnc-main-window.c \
-  gnc-plugin.c \
   gnc-plugin-file-history.c \
-  gnc-plugin-menu-additions.c \
+  gnc-plugin-basic-commands.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-register.c \
-  gnc-plugin-manager.c \
   gnc-plugin-page-account-tree.c \
   gnc-plugin-page-register.c \
-  gnc-plugin-page.c \
   gnc-split-reg.c \
-  gnc-window.c \
   lot-viewer.c \
   reconcile-list.c \
   top-level.c \
@@ -97,20 +91,14 @@ noinst_HEADERS = \
   druid-merge.h \
   druid-loan.h \
   druid-stock-split.h \
-  gnc-embedded-window.h \
-  gnc-main-window.h \
-  gnc-plugin.h \
   gnc-plugin-account-tree.h \
+  gnc-plugin-basic-commands.h \
   gnc-plugin-file-history.h \
-  gnc-plugin-menu-additions.h \
   gnc-plugin-register.h \
-  gnc-plugin-manager.h \
-  gnc-plugin-page.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-register.h \
   gnc-network.h \
   gnc-split-reg.h \
-  gnc-window.h \
   gw-gnc.h \
   lot-viewer.h \
   reconcile-list.h \

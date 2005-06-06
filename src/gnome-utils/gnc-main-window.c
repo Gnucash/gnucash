@@ -28,33 +28,21 @@
 #include <gdk/gdkpixbuf.h>
 #include <gtk/gtk.h>
 
+#include "gnc-plugin.h"
+#include "gnc-plugin-manager.h"
 #include "gnc-main-window.h"
 
-#include "dialog-budget-list.h"
-
-#include "dialog-fincalc.h"
-#include "dialog-find-transactions.h"
 #include "dialog-options.h"
-#include "dialog-scheduledxaction.h"
-#include "dialog-sxsincelast.h"
 #include "dialog-transfer.h"
-#include "druid-acct-period.h"
-#include "druid-loan.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-gnome-utils.h"
-#include "gnc-file.h"
 #include "gnc-gui-query.h"
-#include "gnc-plugin.h"
-#include "gnc-plugin-manager.h"
 #include "gnc-session.h"
-#include "dialog-totd.h"
 #include "gnc-ui.h"
 #include "gnc-version.h"
 #include "gnc-window.h"
 #include "messages.h"
-#include "druid-merge.h"
-#include "dialog-chart-export.h"
 #include "gnc-gconf-utils.h"
 // +JSLED
 #include "gnc-html.h"
@@ -90,14 +78,7 @@ static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin,
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 
 /* Command callbacks */
-static void gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_chart_export (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_print (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
@@ -106,22 +87,11 @@ static void gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *wind
 static void gnc_main_window_cmd_edit_copy (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_actions_budget_workbench(GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window);
 
@@ -155,7 +125,7 @@ typedef struct {
 
 static guint main_window_signals[LAST_SIGNAL] = { 0 };
 
-static GtkActionEntry gnc_menu_entries [] =
+static GtkActionEntry gnc_menu_actions [] =
 {
 	/* Toplevel */
 	{ "FileAction", NULL, N_("_File"), NULL, NULL, NULL, },
@@ -168,36 +138,11 @@ static GtkActionEntry gnc_menu_entries [] =
 	{ "HelpAction", NULL, N_("_Help"), NULL, NULL, NULL },
 	{ "MiscAction", NULL, N_("_Misc"), NULL, NULL, NULL },
 
-	/* File menu */
-	{ "FileNewAction", GTK_STOCK_NEW, N_("_New File"), "<control>n",
-	  N_("Create a new file"),
-	  G_CALLBACK (gnc_main_window_cmd_file_new) },
-	{ "FileOpenAction", GTK_STOCK_OPEN, N_("_Open"), NULL,
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_open) },
 	{ "FileOpenNewWindowAction", NULL, N_("Move to a New Window"), NULL,
 	  N_("Open a new top-level GnuCash window for the current page."),
 	  G_CALLBACK (gnc_main_window_cmd_file_open_new_window) },
-	{ "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_save) },
-	{ "FileSaveAsAction", GTK_STOCK_SAVE_AS, N_("Save _As..."), "<shift><control>s",
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_save_as) },
 	{ "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
-	{ "FileImportQSFAction", GTK_STOCK_CONVERT,
-		N_("_QSF Import"), NULL,
-		N_("Import a QSF object file"),
-		G_CALLBACK (gnc_main_window_cmd_file_qsf_import) },
 	{ "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
-	{ "FileExportAccountsAction", GTK_STOCK_CONVERT,
-		N_("Export _Accounts"), NULL,
-		N_("Export the account hierarchy to a new file"),
-		G_CALLBACK (gnc_main_window_cmd_file_export_accounts) },
-	{ "FileExportChartAction", GTK_STOCK_CONVERT,
-		N_("Export _Chart of Accounts"), NULL,
-		N_("Export the chart of accounts for a date with balances"),
-		G_CALLBACK (gnc_main_window_cmd_chart_export) },
 	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_print) },
@@ -224,56 +169,16 @@ static GtkActionEntry gnc_menu_entries [] =
 	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("_Preferences"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
-	{ "EditTaxOptionsAction", NULL, N_("Ta_x Options"), NULL,
-	  N_("Setup tax information for all income and expense accounts"),
-	  G_CALLBACK (gnc_main_window_cmd_edit_tax_options) },
 
 	/* View menu */
 	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
 	  N_("Refresh this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_refresh) },
 
-	/* Actions menu */
-	{ "ActionsScheduledTransactionsAction", NULL, N_("_Scheduled Transactions"), NULL, NULL, NULL },
-	{ "ActionsScheduledTransactionEditorAction", NULL, N_("_Scheduled Transaction Editor"), NULL,
-	  N_("The list of Scheduled Transactions"),
-	  G_CALLBACK (gnc_main_window_cmd_actions_scheduled_transaction_editor) },
-	{ "ActionsSinceLastRunAction", NULL, N_("_Since Last Run..."), NULL,
-	  N_("Create Scheduled Transactions since the last time run"),
-	  G_CALLBACK (gnc_main_window_cmd_actions_since_last_run) },
-	{ "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
-	  N_("Setup scheduled transactions for repayment of a loan"),
-	  G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
-	{ "ActionsBudgetWorkbenchAction", NULL, N_("_Budget Workbench (Experimental)"), NULL, 
-      N_("Create, Manage, and Monitor Budgets." ),
-      G_CALLBACK(gnc_main_window_cmd_actions_budget_workbench) },
-	{ "ActionsCloseBooksAction", NULL, N_("Close Books"), NULL,
-	  N_("Archive old data using accounting periods"),
-	  G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
-
-	/* Tools menu */
-	{ "ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
-	  N_("View and edit the prices for stocks and mutual funds"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_price_editor) },
-	{ "ToolsCommodityEditorAction", NULL, N_("Commodity _Editor"), NULL,
-	  N_("View and edit the commodities for stocks and mutual funds"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor) },
-	{ "ToolsFinancialCalculatorAction", NULL, N_("Financial _Calculator"), NULL,
-	  N_("Use the financial calculator"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator) },
-	{ "ToolsFindTransactionsAction", GTK_STOCK_FIND, N_("_Find Transactions"), "<control>f",
-	  N_("Find transactions with a search"),
-	  G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
-
-	/* Extensions menu */
-
 	/* Help menu */
 	{ "HelpTutorialAction", GNOME_STOCK_BOOK_BLUE, N_("Tutorial and Concepts _Guide"), NULL,
 	  N_("Open the GnuCash Tutorial"),
 	  G_CALLBACK (gnc_main_window_cmd_help_tutorial) },
-	{ "HelpTipsOfTheDayAction", NULL, N_("_Tips Of The Day"), NULL,
-	  N_("View the Tips of the Day"),
-	  G_CALLBACK (gnc_main_window_cmd_help_totd) },
 	{ "HelpContentsAction", GTK_STOCK_HELP, N_("_Contents"), NULL,
 	  N_("Open the GnuCash Help"),
 	  G_CALLBACK (gnc_main_window_cmd_help_contents) },
@@ -286,9 +191,9 @@ static GtkActionEntry gnc_menu_entries [] =
           N_("Testing stuff"), G_CALLBACK (gnc_main_window_cmd_test) },
 
 };
-static guint gnc_menu_n_entries = G_N_ELEMENTS (gnc_menu_entries);
+static guint gnc_menu_n_actions = G_N_ELEMENTS (gnc_menu_actions);
 
-static GtkToggleActionEntry toggle_entries [] =
+static GtkToggleActionEntry toggle_actions [] =
 {
 	{ "ViewToolbarAction", NULL, N_("_Toolbar"), "<shift><control>t",
 	  N_("Show/hide the toolbar on this window"),
@@ -300,7 +205,7 @@ static GtkToggleActionEntry toggle_entries [] =
 	  N_("Show/hide the status bar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_statusbar), TRUE },
 };
-static guint n_toggle_entries = G_N_ELEMENTS (toggle_entries);
+static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
 
 static const gchar *immutable_account_actions[] = {
 	"FileCloseAction",
@@ -1047,10 +952,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
 	/* Create menu and toolbar information */
 	priv->action_group = gtk_action_group_new ("MainWindowActions");
-	gtk_action_group_add_actions (priv->action_group, gnc_menu_entries,
-				      gnc_menu_n_entries, window);
+	gtk_action_group_add_actions (priv->action_group, gnc_menu_actions,
+				      gnc_menu_n_actions, window);
 	gtk_action_group_add_toggle_actions (priv->action_group, 
-					     toggle_entries, n_toggle_entries, 
+					     toggle_actions, n_toggle_actions, 
 					     window);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 
@@ -1251,23 +1156,6 @@ gnc_main_window_plugin_removed (GncPlugin *manager,
 
 /* Command callbacks */
 static void
-gnc_main_window_cmd_file_new (GtkAction *action, GncMainWindow *window)
-{
-	gnc_file_new ();
-	/* FIXME GNOME 2 Port (update the title etc.) */
-}
-
-static void
-gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindow *window)
-{
-	gnc_window_set_progressbar_window (GNC_WINDOW(window));
-	gnc_file_open ();
-	gnc_window_set_progressbar_window (NULL);
-	gnc_main_window_update_title (window);
-	/* FIXME GNOME 2 Port (update the title etc.) */
-}
-
-static void
 gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *window)
 {
 	GncMainWindowPrivate *priv;
@@ -1307,80 +1195,6 @@ gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *wind
 	      page, page->summarybar, window, new_window);
 	DEBUG("Old window current is %p, new window current is %p",
 	      window->priv->current_page, new_window->priv->current_page);
-}
-
-static void
-gnc_main_window_cmd_file_save (GtkAction *action, GncMainWindow *window)
-{
-	gnc_window_set_progressbar_window (GNC_WINDOW(window));
-	gnc_file_save ();
-	gnc_window_set_progressbar_window (NULL);
-	/* FIXME GNOME 2 Port (update the title etc.) */
-}
-
-static void
-gnc_main_window_cmd_file_save_as (GtkAction *action, GncMainWindow *window)
-{
-	gnc_window_set_progressbar_window (GNC_WINDOW(window));
-	gnc_file_save_as ();
-	gnc_window_set_progressbar_window (NULL);
-	/* FIXME GNOME 2 Port (update the title etc.) */
-}
-
-static void
-qsf_file_select_ok(GtkWidget *w, GtkFileSelection *fs )
-{
-	QofSession *qsf_session, *first_session;
-	const gchar *filename;
-	QofBook *original;
-
-	ENTER (" ");
-	gnc_engine_suspend_events();
-	filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION (fs));
-	gtk_widget_destroy((GtkWidget*) fs);
-	first_session = qof_session_get_current_session();
-	original = qof_session_get_book(first_session);
-	qsf_session = qof_session_new();
-	qof_session_begin(qsf_session, filename, TRUE, FALSE);
-	qof_session_load(qsf_session, NULL);
-	gnc_engine_resume_events();
-	gnc_ui_qsf_import_merge_druid(first_session, qsf_session);
-	LEAVE (" ");
-}
-
-static void
-gnc_main_window_cmd_file_qsf_import (GtkAction *action, GncMainWindow *window)
-{
-	GtkWidget *file_select;
-
-	gnc_window_set_progressbar_window(GNC_WINDOW(window));
-	file_select = gtk_file_selection_new("Select the QSF file to import into GnuCash");
-	g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (file_select)->ok_button),
-		"clicked", G_CALLBACK (qsf_file_select_ok), (gpointer) file_select);
-	g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (file_select)->cancel_button),
-		"clicked", G_CALLBACK (gtk_widget_destroy), G_OBJECT (file_select));
-	gtk_widget_show (file_select);
-	gnc_window_set_progressbar_window(NULL);
-}
-
-static void
-gnc_main_window_cmd_file_export_accounts (GtkAction *action, GncMainWindow *window)
-{
-	gnc_window_set_progressbar_window (GNC_WINDOW(window));
-	gnc_file_export_file (NULL);
-	gnc_window_set_progressbar_window (NULL);
-	/* FIXME GNOME 2 Port (update the title etc.) */
-	/* gnc_refresh_main_window_info (); */
-}
-
-static void
-gnc_main_window_cmd_chart_export (GtkAction *action, GncMainWindow *window)
-{
-	gnc_window_set_progressbar_window (GNC_WINDOW(window));
-	gnc_main_window_chart_export();
-	gnc_window_set_progressbar_window (NULL);
-	/* FIXME GNOME 2 Port (update the title etc.) */
-	/* gnc_refresh_main_window_info (); */
 }
 
 static void
@@ -1437,12 +1251,6 @@ gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window)
 }
 
 static void
-gnc_main_window_cmd_edit_tax_options (GtkAction *action, GncMainWindow *window)
-{
-	gnc_tax_info_dialog (GTK_WIDGET (window));
-}
-
-static void
 gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window)
 {
 }
@@ -1478,87 +1286,9 @@ gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window)
 }
 
 static void
-gnc_main_window_cmd_actions_scheduled_transaction_editor (GtkAction *action, GncMainWindow *window)
-{
-	gnc_ui_scheduled_xaction_dialog_create ();
-}
-
-static void
-gnc_main_window_cmd_actions_since_last_run (GtkAction *action, GncMainWindow *window)
-{
-	gint ret;
-	const char *nothing_to_do_msg =
-		_( "There are no Scheduled Transactions to be entered at this time." );
-	
-	ret = gnc_ui_sxsincelast_dialog_create ();
-	if ( ret == 0 ) {
-		gnc_info_dialog (GTK_WIDGET(&window->parent), nothing_to_do_msg);
-	} else if ( ret < 0 ) {
-		gnc_info_dialog (GTK_WIDGET(&window->parent), ngettext
-			 /* Translators: %d is the number of transactions. This is a
-			    ngettext(3) message. */
-			 ("There are no Scheduled Transactions to be entered at this time.\n"
-			  "(%d transaction automatically created)",
-			  "There are no Scheduled Transactions to be entered at this time.\n"
-			  "(%d transactions automatically created)",
-			  -(ret)),
-			 -(ret));
-	} /* else { this else [>0 means dialog was created] intentionally left
-	   * blank. } */	       
-}
-
-static void
-gnc_main_window_cmd_actions_mortgage_loan (GtkAction *action, GncMainWindow *window)
-{
-	gnc_ui_sx_loan_druid_create ();
-}
-
-static void 
-gnc_main_window_cmd_actions_budget_workbench(GtkAction *action, GncMainWindow *window)
-{
-    gnc_budget_list_dialog_create();
-}
-
-static void
-gnc_main_window_cmd_actions_close_books (GtkAction *action, GncMainWindow *window)
-{
-	gnc_acct_period_dialog();
-}
-
-static void
-gnc_main_window_cmd_tools_price_editor (GtkAction *action, GncMainWindow *window)
-{
-	gnc_prices_dialog (NULL);
-}
-
-static void
-gnc_main_window_cmd_tools_commodity_editor (GtkAction *action, GncMainWindow *window)
-{
-	gnc_commodities_dialog (NULL);
-}
-
-static void
-gnc_main_window_cmd_tools_financial_calculator (GtkAction *action, GncMainWindow *window)
-{
-	gnc_ui_fincalc_dialog_create();
-}
-
-static void
-gnc_main_window_cmd_tools_find_transactions (GtkAction *action, GncMainWindow *window)
-{
-	gnc_ui_find_transactions_dialog_create (NULL);
-}
-
-static void
 gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window)
 {
 	gnc_gnome_help (HF_GUIDE, NULL);
-}
-
-static void
-gnc_main_window_cmd_help_totd (GtkAction *action, GncMainWindow *window)
-{
-	gnc_totd_dialog(GTK_WINDOW(window), FALSE);
 }
 
 static void

@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 
 #include "gnc-trace.h"
-#include "gnc-file.h"
 #include "gnc-mdi-utils.h"
 #include "gnc-plugin-page.h"
 #include "gnc-window.h"
@@ -57,7 +56,6 @@ gnc_window_get_type (void)
 					      &our_info, 0);
     g_type_interface_add_prerequisite (gnc_window_type, G_TYPE_OBJECT);
 
-    gnc_file_set_pct_handler (gnc_window_show_progress);
     gnc_mdi_set_progress_handler (gnc_window_show_progress);
   }
 

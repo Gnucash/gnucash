@@ -84,7 +84,6 @@ libgncmod_app_file_LTX_gnc_module_end(int refcount)
   if(refcount == 0) 
   {
     gnc_file_set_handlers (NULL, NULL, NULL);
-    gnc_file_set_pct_handler (NULL);
   }
   return TRUE;
 }
