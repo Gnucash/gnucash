@@ -664,12 +664,16 @@ qsf_write_file(QofBackend *be, QofBook *book)
 
 	qsf_be = (QSFBackend*)be;
 	/* if fullpath is blank, book_id was set to QOF_STDOUT */
-	if (!qsf_be->fullpath || (0 == safe_strcmp(qsf_be->fullpath, ""))) {
+	if (!qsf_be->fullpath || (*qsf_be->fullpath == '\0')) {
 		write_qsf_to_stdout(book);
 		return;
 	}
 	path = strdup(qsf_be->fullpath);
 	out = fopen(path, "w");
+	if (!out) {
+		qof_backend_set_error(be, ERR_FILEIO_WRITE_ERROR);
+		return;
+	}
 	write_qsf_from_book(out, book);
 	g_free(path);
 	fclose(out);
