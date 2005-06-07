@@ -1,5 +1,14 @@
 2005-06-06  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-basic-commands.c: Forgot to change the
+	callback data provided to these commands now that they're provided
+	by a plugin.
+
+	* src/app-file/gnc-file.c: Fix double free.
+
+	* src/gnome/druid-merge.c: Use gtk_widget_show_all so that the
+	first page of the druid is shown.
+
 	Restructure the code.
 	
 	* src/gnome/gnc-embedded-window.[ch]:
