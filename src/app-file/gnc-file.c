@@ -680,7 +680,7 @@ gnc_file_export_file(const char * newfile)
   QofSession *current_session, *new_session;
   gboolean ok;
   QofBackendError io_err = ERR_BACKEND_NO_ERR;
-  char *default_dir;
+  gchar *default_dir;
 
   default_dir = gnc_gconf_get_string(GCONF_SECTION, KEY_LAST_PATH, NULL);
   if (default_dir == NULL)
@@ -694,6 +694,7 @@ gnc_file_export_file(const char * newfile)
 
     newfile =  file_dialog_func (_("Export"), NULL, default_dir);
     g_free(default_dir);
+    default_dir = NULL;
     if (!newfile)
       return;
   }
