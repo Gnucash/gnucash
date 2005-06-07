@@ -609,6 +609,10 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 
 	gnc_plugin_page_register_update_menus (page);
 
+	plugin_page->summarybar = gsr_create_summary_bar(priv->gsr);
+	if (plugin_page->summarybar)
+	  gtk_widget_show_all(plugin_page->summarybar);
+
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
 	return priv->widget;
 }

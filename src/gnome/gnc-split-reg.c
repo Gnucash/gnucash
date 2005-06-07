@@ -101,7 +101,6 @@ static gncUIWidget gnc_split_reg_get_parent( GNCLedgerDisplay *ledger );
 static void gsr_create_menus( GNCSplitReg *gsr );
 static void gsr_setup_menu_widgets( GNCSplitReg *gsr, GladeXML *xml );
 static void gsr_create_toolbar( GNCSplitReg *gsr );
-static void gsr_create_summary_bar( GNCSplitReg *gsr );
 static void gsr_create_table( GNCSplitReg *gsr );
 static void gsr_setup_table( GNCSplitReg *gsr );
 static void gsr_setup_status_widgets( GNCSplitReg *gsr );
@@ -703,7 +702,7 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
   gboolean reverse;
   gboolean euro;
 
-  if ( gsr->window == NULL )
+  if ( gsr->summarybar == NULL )
     return;
 
   leader = gnc_ledger_display_leader( gsr->ledger );
@@ -723,9 +722,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
   print_info = gnc_account_print_info( leader, TRUE );
   reverse = gnc_reverse_balance( leader );
 
-  /* Handle the summary bar */
-  if ( gsr->createFlags & CREATE_SUMMARYBAR ) 
-  {
     gsr_update_summary_label( gsr->balance_label,
                               xaccAccountGetPresentBalance,
                               leader, print_info, commodity, reverse, euro );
@@ -841,49 +837,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
             gnc_price_unref (price);
           }
       }
-  }
-
-  {
-    gboolean expand;
-    gboolean sensitive;
-    SplitRegister *reg;
-
-    reg = gnc_ledger_display_get_split_register( gsr->ledger );
-    expand = gnc_split_register_current_trans_expanded (reg);
-    sensitive = (reg->style == REG_STYLE_LEDGER);
-
-#if 0
-    if ( gsr->createFlags & CREATE_TOOLBAR ) {
-      gtk_signal_handler_block_by_data
-        (GTK_OBJECT(gsr->split_button), gsr);
-      gtk_toggle_button_set_active
-        (GTK_TOGGLE_BUTTON (gsr->split_button), expand);
-      gtk_signal_handler_unblock_by_data
-        (GTK_OBJECT (gsr->split_button), gsr);
-      gtk_widget_set_sensitive( gsr->split_button, sensitive );
-    }
-#endif
-
-    if ( gsr->createFlags & CREATE_MENUS ) {
-      gtk_signal_handler_block_by_data
-        (GTK_OBJECT (gsr->split_menu_check), gsr);
-      gtk_check_menu_item_set_active
-        (GTK_CHECK_MENU_ITEM (gsr->split_menu_check), expand);
-      gtk_signal_handler_unblock_by_data
-        (GTK_OBJECT (gsr->split_menu_check), gsr);
-      gtk_widget_set_sensitive( gsr->split_menu_check, sensitive );
-    }
-
-    if ( gsr->createFlags & CREATE_POPUP ) {
-      gtk_signal_handler_block_by_data
-        (GTK_OBJECT (gsr->split_popup_check), gsr);
-      gtk_check_menu_item_set_active
-        (GTK_CHECK_MENU_ITEM (gsr->split_popup_check), expand);
-      gtk_signal_handler_unblock_by_data
-        (GTK_OBJECT (gsr->split_popup_check), gsr);
-      gtk_widget_set_sensitive( gsr->split_popup_check, sensitive );
-    }
-  }
 }
 
 static void
@@ -1955,8 +1908,7 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
   return label;
 }
 
-static
-void
+GtkWidget *
 gsr_create_summary_bar( GNCSplitReg *gsr )
 {
   gboolean has_shares;
@@ -1972,6 +1924,7 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
 
   if ( gnc_ledger_display_type(gsr->ledger) >= LD_SUBACCOUNT ) {
     gsr->summarybar = NULL;
+    return NULL;
   }
 
   {
@@ -2012,6 +1965,10 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
   }
 
   gsr->summarybar = summarybar;
+
+  /* Force the first update */
+  gsr_redraw_all_cb(NULL, gsr);
+  return gsr->summarybar;
 }
 
 static

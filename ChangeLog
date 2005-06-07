@@ -1,5 +1,9 @@
 2005-06-07  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-split-reg.[ch]: Make the summarybar for the
+	register work again.
+
 	* src/core-utils/gnc-hooks.[ch]: Implement C side hook lists.  Will
 	allow hooks to be easily installed from either Scheme or C code.
 

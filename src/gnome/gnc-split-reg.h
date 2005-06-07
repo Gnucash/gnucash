@@ -108,6 +108,7 @@ struct _GNCSplitReg {
   GtkWidget *split_menu_check;
   GtkWidget *split_popup_check;
 
+  /* Summary Bar Labels */
   GtkWidget *balance_label;
   GtkWidget *cleared_label;
   GtkWidget *reconciled_label;
@@ -236,6 +237,11 @@ GtkWidget* gnc_split_reg_new( GNCLedgerDisplay *ld,
  * Returns the GnucashRegister in effect for this GNCSplitReg.
  **/
 GnucashRegister *gnc_split_reg_get_register( GNCSplitReg *gsr );
+
+/**
+ * Create and returns a summarybar for this GNCSplitReg.
+ **/
+GtkWidget *gsr_create_summary_bar( GNCSplitReg *gsr );
 
 /**
  * Gets/sets the sort-type of the GNCSplitReg.
