@@ -19,6 +19,7 @@
 
 (require 'sort)
 (require 'hash-table)
+(use-modules (g-wrapped gw-core-utils))
 
 ;; (define gnc:*double-entry-restriction*
 ;;   (gnc:make-config-var
@@ -80,7 +81,8 @@
 ;; hook should probably revert back to just save-global-options.
 (define (gnc:save-all-options)
   (gnc:save-global-options)
-  (gnc:hook-run-danglers gnc:*save-options-hook*))
+  (gnc:hook-run-danglers gnc:*save-options-hook*)
+  (gnc:run-c-hook "save-options-hook" #f))
 
 (define (gnc:save-global-options)
   (gnc:make-home-dir)

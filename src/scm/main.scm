@@ -20,7 +20,7 @@
 (use-modules (ice-9 slib))
 
 (use-modules (g-wrap gw-wct))
-
+(use-modules (g-wrapped gw-core-utils))
 (use-modules (g-wrapped gw-gnc))
 
 ;; Load the srfis (eventually, we should see where these are needed
@@ -503,6 +503,7 @@ string and 'directories' must be a list of strings."
       (gnc:main-window-open-report (gnc:make-welcome-report) window))))
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
+  (gnc:run-c-hook "startup-hook" #f)
 
   (if (gnc:config-var-value-get gnc:*loglevel*)
       (gnc:set-log-level-global (gnc:config-var-value-get gnc:*loglevel*))))
@@ -516,10 +517,12 @@ string and 'directories' must be a list of strings."
              (if (gnc:file-query-save)
                  (begin
                    (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
+		   (gnc:run-c-hook "ui-shutdown-hook" #f)
                    (gnc:gui-shutdown)))))
         (else
 	 (gnc:gui-destroy)
 	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
+	 (gnc:run-c-hook "shutdown-hook" #f)
          (gnc:engine-shutdown)
 	 (exit exit-status))))
 
@@ -578,8 +581,10 @@ string and 'directories' must be a list of strings."
 	(begin
 	  (gnc:update-splash-screen (_ "Loading data..."))
 	  (and (not (gnc:file-open-file file))
-	       (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))
-        (gnc:hook-run-danglers gnc:*book-opened-hook* #f))))
+	       (gnc:hook-run-danglers gnc:*book-opened-hook* #f)
+	       (gnc:run-c-hook "book-opened-hook" #f)))
+        (and (gnc:hook-run-danglers gnc:*book-opened-hook* #f)
+	     (gnc:run-c-hook "book-opened-hook" #f)))))
 
 (define (gnc:main)
 
@@ -641,6 +646,7 @@ string and 'directories' must be a list of strings."
           ;; no matter how or what we loaded, ensure the main-window title is valid...
           (gnc:main-window-update-title main-window)
           (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
+	  (gnc:run-c-hook "ui-post-startup-hook" #f)
           (gnc:start-ui-event-loop)
           (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))
         

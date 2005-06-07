@@ -12,6 +12,7 @@
 (use-modules (ice-9 slib))
 (require 'printf)
 
+(use-modules (g-wrapped gw-core-utils))
 (use-modules (g-wrapped gw-report-gnome))
 
 (gnc:module-load "gnucash/gnome-utils" 0)
@@ -113,6 +114,7 @@
 
   ;; run report-hook danglers
   (gnc:hook-run-danglers gnc:*report-hook*)
+  (gnc:run-c-hook "report-hook" #f)
 
   ;; push reports (new items added on top of menu)
   (gnc:add-report-template-menu-items))

@@ -1,3 +1,10 @@
+2005-06-07  David Hampton  <hampton@employees.org>
+
+	* src/core-utils/gnc-hooks.[ch]: Implement C side hook lists.  Will
+	allow hooks to be easily installed from either Scheme or C code.
+
+	* various files: Call the C hooks whenever a Scheme hook is called.
+
 2005-06-06  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-basic-commands.c: Forgot to change the

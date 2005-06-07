@@ -45,6 +45,7 @@
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
 #include "gnc-file.h"
+#include "gnc-hooks.h"
 #include "gnc-main-window.h"
 #include "gnc-menu-extensions.h"
 #include "gnc-plugin-menu-additions.h" /* FIXME Remove this line*/
@@ -402,6 +403,7 @@ gnc_gui_init (SCM command_line)
       SCM run_danglers = scm_c_eval_string("gnc:hook-run-danglers");
       SCM hook = scm_c_eval_string("gnc:*ui-startup-hook*");
       scm_call_1(run_danglers, hook); 
+      gnc_run_c_hook(HOOK_UI_STARTUP, NULL);
     }
 
     // return ( main_window . command_line )

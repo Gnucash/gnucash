@@ -31,6 +31,7 @@
 #include "global-options.h"
 #include "gnc-engine-util.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-hooks.h"
 #include "gnc-ui.h"
 
 #define GCONF_SECTION "dialogs/new_user"
@@ -136,4 +137,5 @@ void
 gncp_new_user_finish (void)
 {
   scm_c_eval_string("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
+  gnc_run_c_hook(HOOK_BOOK_OPENED, NULL);
 }
