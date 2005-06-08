@@ -9,6 +9,10 @@
 	* src/gnome/top-level.c:
 	  point to new gnc-hook function names
 
+	* src/engine/qofsession-p.h, src/engine/qofsession.c:
+	  Make a session sort of look like a QofEntity.  This will
+	  be useful when I add scheme bindings to the hooks.
+
 2005-06-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-register.c:
