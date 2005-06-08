@@ -209,7 +209,7 @@ qof_session_init (QofSession *session)
 {
   if (!session) return;
 
-  session->entity->e_type = QOF_ID_SESSION;
+  session->entity.e_type = QOF_ID_SESSION;
   session->books = g_list_append (NULL, qof_book_new ());
   session->book_id = NULL;
   session->backend = NULL;
