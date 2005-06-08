@@ -1,3 +1,14 @@
+2005-06-08  Derek Atkins  <derek@ihtfp.com>
+
+	* src/core-utils/gnc-hooks.[ch]: rename some functions, set up the
+	  architecture to handle SCM and C hook danglers all in the same
+	  place.
+	* src/app-file/gnc-file.c:
+	* src/core-utils/gw-core-utils-spec.scm:
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/top-level.c:
+	  point to new gnc-hook function names
+
 2005-06-07  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-register.c:

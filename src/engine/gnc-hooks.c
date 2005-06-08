@@ -26,113 +26,175 @@
 #include <stdio.h>
 #include "gnc-hooks.h"
 
-GHashTable* all_hook_lists = NULL;
+static GHashTable* gnc_hooks_list = NULL;
+static gboolean gnc_hooks_initialized = FALSE;
 
-static GHookList *
-gnc_lookup_hook_list (const gchar *name)
+typedef struct {
+  gchar		*desc;
+  GHookList	*c_danglers;
+  GHookList	*scm_danglers;
+} GncHook;
+
+const gchar *
+gnc_hook_create (const gchar *name, const gchar *desc)
 {
-  GHookList *hook_list;
+  GncHook *hook_list;
 
   //printf("Enter %s: name %s\n", __FUNCTION__, name);
-  if (all_hook_lists == NULL) {
-    //printf("Leave %s: no hook lists\n", __FUNCTION__);
-    return NULL;
+  if (gnc_hooks_list == NULL) {
+    gnc_hooks_list = g_hash_table_new(g_str_hash, g_str_equal);
+
+    /* If we're not initialized then initialize now */
+    if (!gnc_hooks_initialized)
+      gnc_hooks_init();
   }
 
-  hook_list = g_hash_table_lookup(all_hook_lists, name);
-  //printf("Leave %s: hook list %p\n", __FUNCTION__, hook_list);
-  return(hook_list);
-}
-
-static GHookList *
-gnc_create_hook_list (const gchar *name)
-{
-  GHookList *hook_list;
-
-  //printf("Enter %s: name %s\n", __FUNCTION__, name);
-  if (all_hook_lists == NULL)
-    all_hook_lists = g_hash_table_new(g_str_hash, g_str_equal);
-
-  hook_list = g_hash_table_lookup(all_hook_lists, name);
+  hook_list = g_hash_table_lookup(gnc_hooks_list, name);
   if (hook_list) {
     //printf("Leave %s: list %s(%p) already exists\n\n", __FUNCTION__, name, hook_list);
-    return(hook_list);
+    return(name);
   }
 
-  hook_list = g_malloc(sizeof(GHookList));
-  g_hook_list_init(hook_list, sizeof(GHook));
-  g_hash_table_insert(all_hook_lists, (gchar *)name, hook_list);
+  hook_list = g_new0(GncHook, 1);
+  hook_list->desc = g_strdup(desc);
+  hook_list->c_danglers = g_malloc(sizeof(GHookList));
+  g_hook_list_init(hook_list->c_danglers, sizeof(GHook));
+  hook_list->scm_danglers = g_malloc(sizeof(GHookList));
+  g_hook_list_init(hook_list->scm_danglers, sizeof(GHook));
+  g_hash_table_insert(gnc_hooks_list, (gchar *)name, hook_list);
   //printf("Leave %s: created list %s(%p)\n", __FUNCTION__, name, hook_list);
-  return(hook_list);
+
+  return name;
+}
+
+static GncHook *
+gnc_hook_lookup (const gchar *name)
+{
+  GncHook *hook;
+
+  //printf("Enter %s: name %s\n", __FUNCTION__, name);
+  if (gnc_hooks_list == NULL) {
+    //printf("Leave %s: no hook lists\n", __FUNCTION__);
+    gnc_hooks_init();
+  }
+
+  hook = g_hash_table_lookup(gnc_hooks_list, name);
+  //printf("Leave %s: hook list %p\n", __FUNCTION__, hook_list);
+  return(hook);
+}
+
+const gchar *
+gnc_hook_get_description(const gchar *name)
+{
+  GncHook *hook;
+
+  hook = gnc_hook_lookup(name);
+  if (!hook) return "";
+  return hook->desc;
 }
 
 void
-gnc_add_to_c_hook (const gchar *name,
-		   GHookFunc callback)
+gnc_hook_add_dangler (const gchar *name, GHookFunc callback)
 {
-  GHookList *hook_list;
+  GncHook *gnc_hook;
   GHook *hook;
 
   //printf("Enter %s: list %s, function %p\n\n", __FUNCTION__, name, callback);
-  hook_list = gnc_create_hook_list(name);
-  hook = g_hook_alloc(hook_list);
+  gnc_hook = gnc_hook_lookup(name);
+  g_return_if_fail(gnc_hook != NULL);
+  hook = g_hook_alloc(gnc_hook->c_danglers);
   hook->func = callback;
-  g_hook_append(hook_list, hook);
+  g_hook_append(gnc_hook->c_danglers, hook);
   //printf("Leave %s:  \n", __FUNCTION__);
 }
 
 static gboolean
-hook_remove_runner (GHook *hook,
-		    gpointer data)
+hook_remove_runner (GHook *hook, gpointer data)
 {
   return(hook->func == data);
 }
 
-
 void
-gnc_remove_from_c_hook (const gchar *name,
-			GHookFunc callback)
+gnc_hook_remove_dangler (const gchar *name, GHookFunc callback)
 {
-  GHookList *hook_list;
+  GncHook *gnc_hook;
   GHook *hook;
 
   //printf("Enter %s: name %s, function %p\n\n", __FUNCTION__, name, callback);
-  hook_list = gnc_lookup_hook_list(name);
-  if (hook_list == NULL) {
+  gnc_hook = gnc_hook_lookup(name);
+  if (gnc_hook == NULL) {
     //printf("Leave %s: Unknown hook list %s\n", __FUNCTION__, name);
     return;
   }
 
-  hook = g_hook_find(hook_list, TRUE, hook_remove_runner, callback);
+  hook = g_hook_find(gnc_hook->c_danglers, TRUE, hook_remove_runner, callback);
   if (hook == NULL) {
     //printf("Leave %s: Hook %p not found in %s\n", __FUNCTION__, callback, name);
     return;
   }
 
-  g_hook_unref(hook_list, hook);
+  g_hook_unref(gnc_hook->c_danglers, hook);
   //printf("Leave %s: Removed %p from %s\n", __FUNCTION__ , hook, name);
 }
 
 
 static void
-call_hook (GHook *hook, gpointer data)
+call_c_hook (GHook *hook, gpointer data)
 {
   //printf("Enter %s: hook %p (func %p), data %p\n", __FUNCTION__, hook, hook->func, data);
   ((GHookFunc)hook->func)(data);
   //printf("Leave %s:  \n", __FUNCTION__);
 }
 
-void
-gnc_run_c_hook (const gchar *name, gpointer data)
+static void
+call_scm_hook (GHook *hook, gpointer data)
 {
-  GHookList *hook_list;
+  // XXX.  Implement me.
+}
+
+void
+gnc_hook_run (const gchar *name, gpointer data)
+{
+  GncHook *hook;
 
   //printf("Enter %s: list %s, data %p\n", __FUNCTION__, name, data);
-  hook_list = gnc_lookup_hook_list(name);
-  if (!hook_list) {
+  hook = gnc_hook_lookup(name);
+  if (!hook) {
     //printf("Leave %s: No such hook list\n", __FUNCTION__);
     return;
   }
-  g_hook_list_marshal(hook_list, TRUE, call_hook, data);
+  g_hook_list_marshal(hook->c_danglers, TRUE, call_c_hook, data);
+  g_hook_list_marshal(hook->scm_danglers, TRUE, call_scm_hook, data);
   //printf("Leave %s:  \n", __FUNCTION__);
+}
+
+void
+gnc_hooks_init(void)
+{
+  if (gnc_hooks_initialized)
+    return;
+
+  gnc_hooks_initialized = TRUE;
+
+  gnc_hook_create(HOOK_STARTUP,
+		  "Functions to run at startup.  Hook args: ()");
+  gnc_hook_create(HOOK_SHUTDOWN,
+		  "Functions to run at guile shutdown.  Hook args: ()");
+  gnc_hook_create(HOOK_UI_STARTUP,
+		  "Functions to run when the ui comes up.  Hook args: ()");
+  gnc_hook_create(HOOK_UI_POST_STARTUP,
+		  "Functions to run after the ui comes up.  Hook args: ()");
+  gnc_hook_create(HOOK_UI_SHUTDOWN,
+		  "Functions to run at ui shutdown.  Hook args: ()");
+  gnc_hook_create(HOOK_NEW_BOOK,
+		  "Run after a new (empty) book is opened, before the"
+		  " book-opened-hook. Hook args: ()");
+  gnc_hook_create(HOOK_REPORT,
+		  "Run just before the reports are pushed into the menus."
+		  "  Hook args: ()");
+
+  gnc_hook_create(HOOK_BOOK_OPENED,
+		  "Run after book open.  Hook args: <gnc:Session*>.");
+  gnc_hook_create(HOOK_BOOK_CLOSED,
+		  "Run before file close.  Hook args: <gnc:Session*>");
 }

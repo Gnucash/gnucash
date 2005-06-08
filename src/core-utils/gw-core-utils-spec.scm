@@ -41,7 +41,7 @@
    ws
    'gnc:run-c-hook
    '<gw:void>
-   "gnc_run_c_hook"
+   "gnc_hook_run"
    '(((<gw:mchars> caller-owned) name) (<gw:void*> data))
    "Run a callback hook in the C domain.")
 )

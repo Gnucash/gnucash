@@ -137,5 +137,5 @@ void
 gncp_new_user_finish (void)
 {
   scm_c_eval_string("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
-  gnc_run_c_hook(HOOK_BOOK_OPENED, NULL);
+  gnc_hook_run(HOOK_BOOK_OPENED, NULL);
 }

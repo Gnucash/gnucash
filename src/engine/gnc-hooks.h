@@ -21,12 +21,47 @@
  *
  */
 
-void gnc_run_c_hook(const gchar *name, gpointer data);
-void gnc_add_to_c_hook(const gchar *name, GHookFunc callback);
-void gnc_remove_from_c_hook(const gchar *name, GHookFunc callback);
+#ifndef GNC_HOOKS_H
+#define GNC_HOOKS_H
 
+/**
+ * Create a new hook.  Not a common occurrance, but...
+ * The returned string is just the 'name' argument,
+ * which belongs to the caller.
+ */
+const gchar * gnc_hook_create(const gchar *name, const gchar *desc);
 
-/* Common hook name */
+/**
+ * lookup the description of a hook.  returned description belongs to
+ * the hook and not the caller
+ */
+const gchar * gnc_hook_get_description(const gchar *name);
+
+/**
+ * add and remove C-style dangers from a hook
+ */
+void gnc_hook_add_dangler(const gchar *name, GHookFunc callback);
+void gnc_hook_remove_dangler(const gchar *name, GHookFunc callback);
+
+#if 0
+/**
+ * add and remove Scheme-style danglers from a hook
+ */
+void gnc_hook_add_scm_dangler(const gchar *name, SCM proc);
+void gnc_hook_del_scm_dangler(const gchar *name, SCM proc);
+#endif
+
+/**
+ * Run the hook danglers.
+ */
+void gnc_hook_run(const gchar *name, gpointer data);
+
+/**
+ * Initialize the known hooks
+ */
+void gnc_hooks_init(void);
+
+/* Common hook names */
 #define HOOK_STARTUP		"hook_startup"
 #define HOOK_SHUTDOWN		"hook_shutdown"
 #define HOOK_UI_STARTUP		"ui-startup-hook"
@@ -38,3 +73,5 @@ void gnc_remove_from_c_hook(const gchar *name, GHookFunc callback);
 /* Common session hook names */
 #define HOOK_BOOK_OPENED	"book-opened-hook"
 #define HOOK_BOOK_CLOSED	"book-closed-hook"
+
+#endif /* GNC_HOOKS_H */

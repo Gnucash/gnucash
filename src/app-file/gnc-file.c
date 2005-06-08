@@ -355,7 +355,7 @@ gnc_book_opened (void)
               (session ? 
                gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
                SCM_BOOL_F));
-  gnc_run_c_hook(HOOK_BOOK_OPENED, session);
+  gnc_hook_run(HOOK_BOOK_OPENED, session);
 }
 
 void
@@ -380,7 +380,7 @@ gnc_file_new (void)
              (session ?
               gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
               SCM_BOOL_F));
-  gnc_run_c_hook(HOOK_BOOK_CLOSED, session);
+  gnc_hook_run(HOOK_BOOK_CLOSED, session);
 
   gnc_close_gui_component_by_session (session);
   xaccLogDisable();
@@ -392,7 +392,7 @@ gnc_file_new (void)
 
   scm_call_1(scm_c_eval_string("gnc:hook-run-danglers"),
              scm_c_eval_string("gnc:*new-book-hook*"));
-  gnc_run_c_hook(HOOK_NEW_BOOK, NULL);
+  gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
   gnc_book_opened ();
 
@@ -475,7 +475,7 @@ gnc_post_file_open (const char * filename)
               gw_wcp_assimilate_ptr (current_session,
                                      scm_c_eval_string("<gnc:Session*>")) :
               SCM_BOOL_F));
-  gnc_run_c_hook(HOOK_BOOK_CLOSED, current_session);
+  gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
   xaccLogDisable();
   qof_session_destroy (current_session);
   xaccLogEnable();
@@ -970,7 +970,7 @@ gnc_file_quit (void)
              (session ?
               gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
               SCM_BOOL_F));
-  gnc_run_c_hook(HOOK_BOOK_CLOSED, session);
+  gnc_hook_run(HOOK_BOOK_CLOSED, session);
   
   xaccLogDisable();
   qof_session_destroy (session);
