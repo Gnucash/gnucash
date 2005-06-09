@@ -1,3 +1,8 @@
+2005-06-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-tree-view-account.c: Unref the sort_model so
+	that the entire set of models will be properly deleted.
+
 2005-06-08  Derek Atkins  <derek@ihtfp.com>
 
 	* src/core-utils/gnc-hooks.[ch]: rename some functions, set up the
@@ -26,6 +31,8 @@
 
 2005-06-06  David Hampton  <hampton@employees.org>
 
+	* gnucash/src/backend/qsf/qsf-backend.c: Couple of bug fixes.
+	
 	* src/gnome/gnc-plugin-basic-commands.c: Forgot to change the
 	callback data provided to these commands now that they're provided
 	by a plugin.

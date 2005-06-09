@@ -106,7 +106,8 @@ gnc_tree_view_account_get_type (void)
 static void
 dump_view (GncTreeViewAccount *view, gpointer dummy)
 {
-    g_warning("GncTreeViewAccount %p still exists.", view);
+  g_warning("GncTreeViewAccount %p still exists (ref count %d).",
+	    view, G_OBJECT(view)->ref_count);
 }
 
 static gint
@@ -403,8 +404,9 @@ gnc_tree_view_account_new_with_group (AccountGroup *group, gboolean show_root)
 
   /* Set up the view private sort layer on the common model. */
   s_model = gtk_tree_model_sort_new_with_model(f_model);
-  gnc_tree_view_set_model (view, s_model);
   g_object_unref(G_OBJECT(f_model));
+  gnc_tree_view_set_model (view, s_model);
+  g_object_unref(G_OBJECT(s_model));
 
   /* Set default visibilities */
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(view), FALSE);
