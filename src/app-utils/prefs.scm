@@ -82,7 +82,7 @@
 (define (gnc:save-all-options)
   (gnc:save-global-options)
   (gnc:hook-run-danglers gnc:*save-options-hook*)
-  (gnc:run-c-hook "save-options-hook" #f))
+  (gnc:run-c-hook "hook_save_options" #f))
 
 (define (gnc:save-global-options)
   (gnc:make-home-dir)

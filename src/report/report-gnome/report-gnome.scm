@@ -114,7 +114,7 @@
 
   ;; run report-hook danglers
   (gnc:hook-run-danglers gnc:*report-hook*)
-  (gnc:run-c-hook "report-hook" #f)
+  (gnc:run-c-hook "hook_report" #f)
 
   ;; push reports (new items added on top of menu)
   (gnc:add-report-template-menu-items))

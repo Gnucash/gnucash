@@ -63,7 +63,7 @@
   (define menu (gnc:make-menu (N_ "Extensions") (list "_Tools")))
   (gnc:add-extension menu)
   (gnc:hook-run-danglers gnc:*add-extension-hook*)
-  (gnc:run-c-hook "add-extension-hook") #f)
+  (gnc:run-c-hook "hook_add_extension") #f)
 
 (if (gnc:debugging?)
     (gnc:hook-add-dangler gnc:*ui-startup-hook*

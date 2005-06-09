@@ -64,14 +64,16 @@ void gnc_hooks_init(void);
 /* Common hook names */
 #define HOOK_STARTUP		"hook_startup"
 #define HOOK_SHUTDOWN		"hook_shutdown"
-#define HOOK_UI_STARTUP		"ui-startup-hook"
+#define HOOK_UI_STARTUP		"hook_ui_startup"
 #define HOOK_UI_POST_STARTUP	"hook_ui_post_startup"
 #define HOOK_UI_SHUTDOWN	"hook_ui_shutdown"
-#define HOOK_NEW_BOOK		"new-book-hook"
-#define HOOK_REPORT		"report-hook"
+#define HOOK_NEW_BOOK		"hook_new_book"
+#define HOOK_REPORT		"hook_report"
+#define HOOK_SAVE_OPTIONS	"hook_save_options"
+#define HOOK_ADD_EXTENSION	"hook_add_extension"
 
 /* Common session hook names */
-#define HOOK_BOOK_OPENED	"book-opened-hook"
-#define HOOK_BOOK_CLOSED	"book-closed-hook"
+#define HOOK_BOOK_OPENED	"hook_book_opened"
+#define HOOK_BOOK_CLOSED	"hook_book_closed"
 
 #endif /* GNC_HOOKS_H */
