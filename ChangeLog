@@ -1,4 +1,36 @@
+2005-06-10  David Hampton  <hampton@employees.org>
+
+	* configure.in: Break out gtk from gnome to get access to a
+	GTK_CFLAGS variable.
+
+	* src/core-utils/gnc-gobject-utils.[ch]: Add functions for
+	tracking GObject based items.  To help find memory leaks, if
+	gnucash is compiled with --enable-ref-counts-dumps the contents of
+	this database will be dumped when gnucash quits.
+
+	* src/gnome-utils/gnc-tree-model.[ch]: New base tree model that
+	utilizes the new object tracking functions.
+
+	* src/gnome-utils/gnc-plugin.c:
+	* src/gnome-utils/gnc-plugin-page.c:
+	* src/gnome-utils/gnc-tree-view.[ch]: Utilize the new object
+	tracking functions in these gnucash base class objects.
+
+	* various: Remove old debugging code that is no longer
+	needed. Debugging is now in the base class objects.
+
 2005-06-09  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-plugin-manager.[ch]: Assume ownership of all
+	registered plugins instead of incrementing their reference count.
+	Install a ui-shutdown hook so that the plugin manager can clean up
+	and free any installed plugins..
+
+	* src/app-utils/prefs.scm:
+	* src/core-utils/gnc-hooks.h:
+	* src/gnome-utils/gnc-menu-extensions.scm:
+	* src/report/report-gnome/report-gnome.scm:
+	* src/scm/main.scm: Finish regularizing C side hook names.
 
 	* src/gnome-utils/gnc-tree-view-account.c: Unref the sort_model so
 	that the entire set of models will be properly deleted.
