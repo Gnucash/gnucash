@@ -28,8 +28,6 @@
 #include "gnc-ofx-import.h"
 #include "messages.h"
 
-static GList *active_plugins = NULL;
-
 static void gnc_plugin_ofx_class_init (GncPluginOfxClass *klass);
 static void gnc_plugin_ofx_init (GncPluginOfx *plugin);
 static void gnc_plugin_ofx_finalize (GObject *object);
@@ -87,21 +85,6 @@ gnc_plugin_ofx_new (void)
   return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_OFX, NULL));
 }
 
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncPluginOfx *plugin, gpointer dummy)
-{
-  g_warning("GncPluginOfx %p still exists.", plugin);
-}
-
-static gint
-gnc_plugin_ofx_report_references (void)
-{
-  g_list_foreach(active_plugins, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
-
 static void
 gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
 {
@@ -120,20 +103,12 @@ gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
   plugin_class->actions      = gnc_plugin_actions;
   plugin_class->n_actions    = gnc_plugin_n_actions;
   plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-#if DEBUG_REFERENCE_COUNTING
-  gtk_quit_add (0,
-		(GtkFunction)gnc_plugin_ofx_report_references,
-		NULL);
-#endif
 }
 
 static void
 gnc_plugin_ofx_init (GncPluginOfx *plugin)
 {
   plugin->priv = g_new0 (GncPluginOfxPrivate, 1);
-
-  active_plugins = g_list_append (active_plugins, plugin);
 }
 
 static void
@@ -144,8 +119,6 @@ gnc_plugin_ofx_finalize (GObject *object)
   g_return_if_fail (GNC_IS_PLUGIN_OFX (object));
 
   plugin = GNC_PLUGIN_OFX (object);
-  active_plugins = g_list_remove (active_plugins, plugin);
-
   g_return_if_fail (plugin->priv != NULL);
 
   g_free (plugin->priv);

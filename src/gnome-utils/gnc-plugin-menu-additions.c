@@ -52,7 +52,6 @@
 #include "gnc-ui.h"
 #include "gnc-menu-extensions.h"
 
-static GList *active_plugins = NULL;
 static GObjectClass *parent_class = NULL;
 
 static void gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass);
@@ -117,21 +116,6 @@ gnc_plugin_menu_additions_get_type (void)
   return gnc_plugin_menu_additions_type;
 }
 
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncPluginMenuAdditions *plugin, gpointer dummy)
-{
-  g_warning("GncPluginMenuAdditions %p still exists.", plugin);
-}
-
-static gint
-gnc_plugin_menu_additions_report_references (void)
-{
-  g_list_foreach(active_plugins, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
-
 static void
 gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
 {
@@ -148,12 +132,6 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
   /* function overrides */
   plugin_class->add_to_window = gnc_plugin_menu_additions_add_to_window;
   plugin_class->remove_from_window = gnc_plugin_menu_additions_remove_from_window;
-
-#if DEBUG_REFERENCE_COUNTING
-  gtk_quit_add (0,
-		(GtkFunction)gnc_plugin_menu_additions_report_references,
-		NULL);
-#endif
 }
 
 static void
@@ -161,8 +139,6 @@ gnc_plugin_menu_additions_init (GncPluginMenuAdditions *plugin)
 {
   ENTER("plugin %p", plugin);
   plugin->priv = g_new0 (GncPluginMenuAdditionsPrivate, 1);
-
-  active_plugins = g_list_append (active_plugins, plugin);
   LEAVE("");
 }
 
@@ -175,7 +151,6 @@ gnc_plugin_menu_additions_finalize (GObject *object)
 
   plugin = GNC_PLUGIN_MENU_ADDITIONS (object);
   ENTER("plugin %p", plugin);
-  active_plugins = g_list_remove (active_plugins, plugin);
 
   g_return_if_fail (plugin->priv != NULL);
   g_free (plugin->priv);

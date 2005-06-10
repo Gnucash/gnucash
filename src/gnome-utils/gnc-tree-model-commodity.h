@@ -38,6 +38,7 @@
 
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeselection.h>
+#include "gnc-tree-model.h"
 
 #include "gnc-commodity.h"
 
@@ -50,6 +51,8 @@ G_BEGIN_DECLS
 #define GNC_IS_TREE_MODEL_COMMODITY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_MODEL_COMMODITY))
 #define GNC_IS_TREE_MODEL_COMMODITY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_MODEL_COMMODITY))
 #define GNC_TREE_MODEL_COMMODITY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_COMMODITY, GncTreeModelCommodityClass))
+#define GNC_TREE_MODEL_COMMODITY_NAME            "GncTreeModelCommodity"
+
 
 typedef enum {
 	GNC_TREE_MODEL_COMMODITY_COL_NAMESPACE,
@@ -75,7 +78,7 @@ typedef enum {
 typedef struct GncTreeModelCommodityPrivate GncTreeModelCommodityPrivate;
 
 typedef struct {
-	GtkObject parent;
+	GncTreeModel gnc_tree_model;
 
 	GncTreeModelCommodityPrivate *priv;
 
@@ -83,7 +86,7 @@ typedef struct {
 } GncTreeModelCommodity;
 
 typedef struct {
-	GtkObjectClass parent;
+	GncTreeModelClass gnc_tree_model;
 } GncTreeModelCommodityClass;
 
 /* function prototypes */

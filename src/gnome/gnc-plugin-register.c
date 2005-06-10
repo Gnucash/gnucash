@@ -31,8 +31,6 @@
 
 #include "messages.h"
 
-static GList *active_plugins = NULL;
-
 static void gnc_plugin_register_class_init (GncPluginRegisterClass *klass);
 static void gnc_plugin_register_init (GncPluginRegister *plugin);
 static void gnc_plugin_register_finalize (GObject *object);
@@ -97,21 +95,6 @@ gnc_plugin_register_new (void)
 	return GNC_PLUGIN (plugin);
 }
 
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncPluginRegister *plugin, gpointer dummy)
-{
-    g_warning("GncPluginRegister %p still exists.", plugin);
-}
-
-static gint
-gnc_plugin_register_report_references (void)
-{
-  g_list_foreach(active_plugins, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
-
 static void
 gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 {
@@ -133,20 +116,12 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 	plugin_class->actions      = gnc_plugin_actions;
 	plugin_class->n_actions    = gnc_plugin_n_actions;
 	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0,
-		      (GtkFunction)gnc_plugin_register_report_references,
-		      NULL);
-#endif
 }
 
 static void
 gnc_plugin_register_init (GncPluginRegister *plugin)
 {
 	plugin->priv = g_new0 (GncPluginRegisterPrivate, 1);
-
-	active_plugins = g_list_append (active_plugins, plugin);
 }
 
 static void
@@ -157,7 +132,6 @@ gnc_plugin_register_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_REGISTER (object));
 
 	plugin = GNC_PLUGIN_REGISTER (object);
-	active_plugins = g_list_remove (active_plugins, plugin);
 
 	g_return_if_fail (plugin->priv != NULL);
 

@@ -35,6 +35,7 @@
 
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-model-price.h"
 #include "gnc-trace.h"
@@ -63,7 +64,6 @@
 
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
-static GList *active_models = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass);
@@ -139,8 +139,8 @@ gnc_tree_model_price_get_type (void)
 			NULL
 		};
 
-		gnc_tree_model_price_type = g_type_register_static (GTK_TYPE_OBJECT,
-								    "GncTreeModelPrice",
+		gnc_tree_model_price_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
+								    GNC_TREE_MODEL_PRICE_NAME,
 								    &our_info, 0);
 		
 		g_type_add_interface_static (gnc_tree_model_price_type,
@@ -150,21 +150,6 @@ gnc_tree_model_price_get_type (void)
 
 	return gnc_tree_model_price_type;
 }
-
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncTreeModelPrice *model, gpointer dummy)
-{
-    g_warning("GncTreeModelPrice %p still exists.", model);
-}
-
-static gint
-report_references (void)
-{
-  g_list_foreach(active_models, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
 
 static void
 gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass)
@@ -178,10 +163,6 @@ gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_model_price_destroy;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0, (GtkFunction)report_references, NULL);
-#endif
 }
 
 static void
@@ -193,8 +174,6 @@ gnc_tree_model_price_init (GncTreeModelPrice *model)
 
 	model->priv = g_new0 (GncTreeModelPricePrivate, 1);
 	model->priv->print_info = gnc_share_print_info_places(6);
-
-	active_models = g_list_append (active_models, model);
 }
 
 static void
@@ -214,8 +193,6 @@ gnc_tree_model_price_finalize (GObject *object)
 	model->priv->book = NULL;
 	model->priv->price_db = NULL;
 	g_free (model->priv);
-
-	active_models = g_list_remove (active_models, model);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
@@ -246,9 +223,10 @@ GtkTreeModel *
 gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 {
 	GncTreeModelPrice *model;
-	GList *item;
+	const GList *item;
 
-	for (item = active_models; item; item = g_list_next(item)) {
+	item = gnc_gobject_tracking_get_list(GNC_TREE_MODEL_PRICE_NAME);
+	for ( ; item; item = g_list_next(item)) {
 		model = (GncTreeModelPrice *)item->data;
 		if (model->priv->price_db == price_db) {
 			LEAVE("returning existing model %p", model);

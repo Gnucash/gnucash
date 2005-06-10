@@ -37,6 +37,7 @@
 #define __GNC_TREE_MODEL_ACCOUNT_H
 
 #include <gtk/gtktreemodel.h>
+#include "gnc-tree-model.h"
 
 #include "Group.h"
 
@@ -49,6 +50,8 @@ G_BEGIN_DECLS
 #define GNC_IS_TREE_MODEL_ACCOUNT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_MODEL_ACCOUNT))
 #define GNC_IS_TREE_MODEL_ACCOUNT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_MODEL_ACCOUNT))
 #define GNC_TREE_MODEL_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_ACCOUNT, GncTreeModelAccountClass))
+#define GNC_TREE_MODEL_ACCOUNT_NAME            "GncTreeModelAccount"
+
 
 typedef enum {
 	GNC_TREE_MODEL_ACCOUNT_COL_NAME,
@@ -90,7 +93,7 @@ typedef enum {
 typedef struct GncTreeModelAccountPrivate GncTreeModelAccountPrivate;
 
 typedef struct {
-	GtkObject parent;
+	GncTreeModel gnc_tree_model;
 
 	GncTreeModelAccountPrivate *priv;
 
@@ -98,7 +101,7 @@ typedef struct {
 } GncTreeModelAccount;
 
 typedef struct {
-	GtkObjectClass parent;
+	GncTreeModelClass gnc_tree_model;
 } GncTreeModelAccountClass;
 
 

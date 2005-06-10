@@ -28,8 +28,6 @@
 #include "gnc-plugin-manager.h"
 #include "messages.h"
 
-static GList *active_plugins = NULL;
-
 static void gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass);
 static void gnc_plugin_log_replay_init (GncPluginLogreplay *plugin);
 static void gnc_plugin_log_replay_finalize (GObject *object);
@@ -87,21 +85,6 @@ gnc_plugin_log_replay_new (void)
 	return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_LOG_REPLAY, NULL));
 }
 
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncPluginLogreplay *plugin, gpointer dummy)
-{
-    g_warning("GncPluginLogreplay %p still exists.", plugin);
-}
-
-static gint
-gnc_plugin_log_replay_report_references (void)
-{
-  g_list_foreach(active_plugins, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
-
 static void
 gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
 {
@@ -120,20 +103,12 @@ gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
 	plugin_class->actions      = gnc_plugin_actions;
 	plugin_class->n_actions    = gnc_plugin_n_actions;
 	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0,
-		      (GtkFunction)gnc_plugin_log_replay_report_references,
-		      NULL);
-#endif
 }
 
 static void
 gnc_plugin_log_replay_init (GncPluginLogreplay *plugin)
 {
 	plugin->priv = g_new0 (GncPluginLogreplayPrivate, 1);
-
-	active_plugins = g_list_append (active_plugins, plugin);
 }
 
 static void
@@ -144,8 +119,6 @@ gnc_plugin_log_replay_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_LOG_REPLAY (object));
 
 	plugin = GNC_PLUGIN_LOG_REPLAY (object);
-	active_plugins = g_list_remove (active_plugins, plugin);
-
 	g_return_if_fail (plugin->priv != NULL);
 
 	g_free (plugin->priv);

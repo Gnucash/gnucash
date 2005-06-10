@@ -41,6 +41,7 @@
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-icons.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui-util.h"
@@ -55,7 +56,6 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
-static GList *active_pages = NULL;
 
 #define DEFAULT_LINES_OPTION_PAGE "_+Advanced"
 #define DEFAULT_LINES_OPTION_NAME "Number of Rows"
@@ -332,7 +332,7 @@ gnc_plugin_page_register_get_type (void)
 		};
 		
 		gnc_plugin_page_register_type = g_type_register_static (GNC_TYPE_PLUGIN_PAGE,
-									"GncPluginPageRegister",
+									GNC_PLUGIN_PAGE_REGISTER_NAME,
 									&our_info, 0);
 	}
 
@@ -345,13 +345,15 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GncPluginPageRegister *register_page;
 	GncPluginPage *plugin_page;
 	GNCSplitReg *gsr;
-	GList *item, *book_list;
+	const GList *item;
+	GList *book_list;
 	QofQuery *q;
 
 	/* Is there an existing page? */
 	gsr = gnc_ledger_display_get_user_data (ledger);
 	if (gsr) {
-	  for (item = active_pages; item; item = g_list_next(item)) {
+	  item = gnc_gobject_tracking_get_list(GNC_PLUGIN_PAGE_REGISTER_NAME);
+	  for ( ; item; item = g_list_next(item)) {
 	    register_page = (GncPluginPageRegister *)item->data;
 	    if (register_page->priv->gsr == gsr)
 	      return GNC_PLUGIN_PAGE(register_page);
@@ -406,21 +408,6 @@ gnc_plugin_page_register_new_ledger (GNCLedgerDisplay *ledger)
 	return gnc_plugin_page_register_new_common(ledger);
 }
 
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncPluginPageRegister *page, gpointer dummy)
-{
-    g_warning("GncPluginPageRegister %p still exists.", page);
-}
-
-static gint
-gnc_plugin_page_register_report_references (void)
-{
-  g_list_foreach(active_pages, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
-
 static void
 gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 {
@@ -437,12 +424,6 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
 	gnc_plugin_class->merge_actions   = gnc_plugin_page_register_merge_actions;
 	gnc_plugin_class->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0,
-		      (GtkFunction)gnc_plugin_page_register_report_references,
-		      NULL);
-#endif
 }
 
 static void
@@ -505,8 +486,6 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 	priv->lines_default  = DEFAULT_LINES_AMOUNT;
 	priv->disallowCaps = 0;
 	priv->cleared_match = CLEARED_ALL;
-
-	active_pages = g_list_append (active_pages, plugin_page);
 }
 
 static void
@@ -519,8 +498,6 @@ gnc_plugin_page_register_finalize (GObject *object)
 
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 	g_return_if_fail (page->priv != NULL);
-
-	active_pages = g_list_remove (active_pages, page);
 
 	g_free (page->priv->ui_description);
 	g_free (page->priv);

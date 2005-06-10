@@ -46,7 +46,6 @@
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
-static GList *active_views = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass);
@@ -92,21 +91,6 @@ gnc_tree_view_commodity_get_type (void)
 	return gnc_tree_view_commodity_type;
 }
 
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_view (GncTreeViewCommodity *view, gpointer dummy)
-{
-    g_warning("GncTreeViewCommodity %p still exists.", view);
-}
-
-static gint
-gnc_tree_view_commodity_report_references (void)
-{
-  g_list_foreach(active_views, (GFunc)dump_view, NULL);
-  return 0;
-}
-#endif
-
 static void
 gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
 {
@@ -123,20 +107,12 @@ gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_view_commodity_destroy;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0,
-		      (GtkFunction)gnc_tree_view_commodity_report_references,
-		      NULL);
-#endif
 }
 
 static void
 gnc_tree_view_commodity_init (GncTreeViewCommodity *view)
 {
   view->priv = g_new0 (GncTreeViewCommodityPrivate, 1);
-
-  active_views = g_list_append (active_views, view);
 }
 
 static void
@@ -149,7 +125,6 @@ gnc_tree_view_commodity_finalize (GObject *object)
   g_return_if_fail (GNC_IS_TREE_VIEW_COMMODITY (object));
 
   view = GNC_TREE_VIEW_COMMODITY (object);
-  active_views = g_list_remove (active_views, view);
 
   g_free (view->priv);
 

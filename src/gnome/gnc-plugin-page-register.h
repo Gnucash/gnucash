@@ -51,8 +51,7 @@ G_BEGIN_DECLS
 #define GNC_IS_PLUGIN_PAGE_REGISTER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_PAGE_REGISTER))
 #define GNC_IS_PLUGIN_PAGE_REGISTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_PAGE_REGISTER))
 #define GNC_PLUGIN_PAGE_REGISTER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_PAGE_REGISTER, GncPluginPageRegisterClass))
-
-#define GNC_PLUGIN_PAGE_REGISTER_NAME "gnc-plugin-page-register"
+#define GNC_PLUGIN_PAGE_REGISTER_NAME "GncPluginPageRegister"
 
 /* typedefs & structures */
 typedef struct GncPluginPageRegisterPrivate GncPluginPageRegisterPrivate;

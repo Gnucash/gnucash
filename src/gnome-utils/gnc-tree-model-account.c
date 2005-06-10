@@ -34,6 +34,7 @@
 #include "Group.h"
 #include "gnc-commodity.h"
 #include "gnc-engine-util.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-ui-util.h"
 #include "messages.h"
 
@@ -41,7 +42,6 @@
 
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
-static GList *active_models = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass);
@@ -129,8 +129,8 @@ gnc_tree_model_account_get_type (void)
 			NULL
 		};
 
-		gnc_tree_model_account_type = g_type_register_static (GTK_TYPE_OBJECT,
-								      "GncTreeModelAccount",
+		gnc_tree_model_account_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
+								      GNC_TREE_MODEL_ACCOUNT_NAME,
 								      &our_info, 0);
 		
 		g_type_add_interface_static (gnc_tree_model_account_type,
@@ -140,21 +140,6 @@ gnc_tree_model_account_get_type (void)
 
 	return gnc_tree_model_account_type;
 }
-
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncTreeModelAccount *model, gpointer dummy)
-{
-    g_warning("GncTreeModelAccount %p still exists.", model);
-}
-
-static gint
-gnc_tree_model_account_report_references (void)
-{
-  g_list_foreach(active_models, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
 
 static void
 gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
@@ -172,12 +157,6 @@ gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_model_account_destroy;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0,
-		      (GtkFunction)gnc_tree_model_account_report_references,
-		      NULL);
-#endif
 }
 
 static void
@@ -193,8 +172,6 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
 	model->priv->root = NULL;
 	model->priv->toplevel = NULL;
 
-	active_models = g_list_append (active_models, model);
-
 	LEAVE(" ");
 }
 
@@ -208,7 +185,6 @@ gnc_tree_model_account_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
 
 	model = GNC_TREE_MODEL_ACCOUNT (object);
-	active_models = g_list_remove (active_models, model);
 
 	model->priv->book = NULL;
 	g_free (model->priv);
@@ -249,10 +225,11 @@ gnc_tree_model_account_new (AccountGroup *group)
 {
 	GncTreeModelAccount *model;
 	GncTreeModelAccountPrivate *priv;
-	GList *item;
+	const GList *item;
 	
 	ENTER("group %p", group);
-	for (item = active_models; item; item = g_list_next(item)) {
+	item = gnc_gobject_tracking_get_list(GNC_TREE_MODEL_ACCOUNT_NAME);
+	for ( ; item; item = g_list_next(item)) {
 		model = (GncTreeModelAccount *)item->data;
 		if (model->priv->root == group) {
 			LEAVE("returning existing model %p", model);

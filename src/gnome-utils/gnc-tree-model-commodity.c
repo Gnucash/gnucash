@@ -37,6 +37,7 @@
 
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-trace.h"
 #include "gnc-ui-util.h"
 
@@ -45,7 +46,6 @@
 
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
-static GList *active_models = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass);
@@ -120,8 +120,8 @@ gnc_tree_model_commodity_get_type (void)
 			NULL
 		};
 
-		gnc_tree_model_commodity_type = g_type_register_static (GTK_TYPE_OBJECT,
-									"GncTreeModelCommodity",
+		gnc_tree_model_commodity_type = g_type_register_static (GNC_TYPE_TREE_MODEL,
+									GNC_TREE_MODEL_COMMODITY_NAME,
 									&our_info, 0);
 		
 		g_type_add_interface_static (gnc_tree_model_commodity_type,
@@ -131,21 +131,6 @@ gnc_tree_model_commodity_get_type (void)
 
 	return gnc_tree_model_commodity_type;
 }
-
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncTreeModelCommodity *model, gpointer dummy)
-{
-    g_warning("GncTreeModelCommodity %p still exists.", model);
-}
-
-static gint
-report_references (void)
-{
-  g_list_foreach(active_models, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
 
 static void
 gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass)
@@ -159,10 +144,6 @@ gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass)
 
 	/* GtkObject signals */
 	object_class->destroy = gnc_tree_model_commodity_destroy;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0, (GtkFunction)report_references, NULL);
-#endif
 }
 
 static void
@@ -173,8 +154,6 @@ gnc_tree_model_commodity_init (GncTreeModelCommodity *model)
 	}
 
 	model->priv = g_new0 (GncTreeModelCommodityPrivate, 1);
-
-	active_models = g_list_append (active_models, model);
 }
 
 static void
@@ -194,8 +173,6 @@ gnc_tree_model_commodity_finalize (GObject *object)
 	model->priv->book = NULL;
 	model->priv->commodity_table = NULL;
 	g_free (model->priv);
-
-	active_models = g_list_remove (active_models, model);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
@@ -226,9 +203,10 @@ GtkTreeModel *
 gnc_tree_model_commodity_new (QofBook *book, gnc_commodity_table *ct)
 {
 	GncTreeModelCommodity *model;
-	GList *item;
+	const GList *item;
 
-	for (item = active_models; item; item = g_list_next(item)) {
+	item = gnc_gobject_tracking_get_list(GNC_TREE_MODEL_COMMODITY_NAME);
+	for ( ; item; item = g_list_next(item)) {
 		model = (GncTreeModelCommodity *)item->data;
 		if (model->priv->commodity_table == ct) {
 			LEAVE("returning existing model %p", model);

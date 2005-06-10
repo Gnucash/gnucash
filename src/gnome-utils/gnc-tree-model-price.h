@@ -37,6 +37,7 @@
 #define __GNC_TREE_MODEL_PRICE_H
 
 #include <gtk/gtktreemodel.h>
+#include "gnc-tree-model.h"
 
 #include "gnc-pricedb.h"
 
@@ -49,6 +50,8 @@ G_BEGIN_DECLS
 #define GNC_IS_TREE_MODEL_PRICE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_MODEL_PRICE))
 #define GNC_IS_TREE_MODEL_PRICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_MODEL_PRICE))
 #define GNC_TREE_MODEL_PRICE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_PRICE, GncTreeModelPriceClass))
+#define GNC_TREE_MODEL_PRICE_NAME            "GncTreeModelPrice"
+
 
 typedef enum {
 	GNC_TREE_MODEL_PRICE_COL_COMMODITY,
@@ -69,7 +72,7 @@ typedef enum {
 typedef struct GncTreeModelPricePrivate GncTreeModelPricePrivate;
 
 typedef struct {
-	GtkObject parent;
+	GncTreeModel gnc_tree_model;
 
 	GncTreeModelPricePrivate *priv;
 
@@ -77,7 +80,7 @@ typedef struct {
 } GncTreeModelPrice;
 
 typedef struct {
-	GtkObjectClass parent;
+	GncTreeModelClass gnc_tree_model;
 } GncTreeModelPriceClass;
 
 /* function prototypes */

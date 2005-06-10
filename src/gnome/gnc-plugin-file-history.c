@@ -45,7 +45,6 @@
 #include "messages.h"
 #include "gnc-gconf-utils.h"
 
-static GList *active_plugins = NULL;
 static GObjectClass *parent_class = NULL;
 
 #define FILENAME_STRING "filename"
@@ -277,21 +276,6 @@ gnc_plugin_file_history_get_type (void)
 	return gnc_plugin_file_history_type;
 }
 
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_model (GncPluginFileHistory *plugin, gpointer dummy)
-{
-    g_warning("GncPluginFileHistory %p still exists.", plugin);
-}
-
-static gint
-gnc_plugin_file_history_report_references (void)
-{
-  g_list_foreach(active_plugins, (GFunc)dump_model, NULL);
-  return 0;
-}
-#endif
-
 static void
 gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 {
@@ -317,12 +301,6 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 
 	plugin_class->gconf_section = HISTORY_STRING_SECTION;
 	plugin_class->gconf_notifications = gnc_plugin_history_list_changed;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0,
-		      (GtkFunction)gnc_plugin_file_history_report_references,
-		      NULL);
-#endif
 }
 
 static void
@@ -330,8 +308,6 @@ gnc_plugin_file_history_init (GncPluginFileHistory *plugin)
 {
 	ENTER("plugin %p", plugin);
 	plugin->priv = g_new0 (GncPluginFileHistoryPrivate, 1);
-
-	active_plugins = g_list_append (active_plugins, plugin);
 	LEAVE("");
 }
 
@@ -344,7 +320,6 @@ gnc_plugin_file_history_finalize (GObject *object)
 
 	plugin = GNC_PLUGIN_FILE_HISTORY (object);
 	ENTER("plugin %p", plugin);
-	active_plugins = g_list_remove (active_plugins, plugin);
 
 	g_return_if_fail (plugin->priv != NULL);
 	g_free (plugin->priv);
