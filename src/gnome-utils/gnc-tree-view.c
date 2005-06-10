@@ -41,6 +41,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 
 /* The column id refers to a specific column in the tree model.  It is
  * also attached to the side of the tree column to allow lookup of a
@@ -87,11 +88,10 @@ enum {
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
-static GList *active_views = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_tree_view_class_init (GncTreeViewClass *klass);
-static void gnc_tree_view_init (GncTreeView *view);
+static void gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass);
 static void gnc_tree_view_finalize (GObject *object);
 static void gnc_tree_view_destroy (GtkObject *object);
 static void gnc_tree_view_set_property (GObject         *object,
@@ -169,27 +169,12 @@ gnc_tree_view_get_type (void)
 		};
 		
 		gnc_tree_view_type = g_type_register_static (GTK_TYPE_TREE_VIEW,
-							     "GncTreeView",
+							     GNC_TREE_VIEW_NAME,
 							     &our_info, 0);
 	}
 
 	return gnc_tree_view_type;
 }
-
-#if DEBUG_REFERENCE_COUNTING
-static void
-dump_view (GncTreeView *view, gpointer dummy)
-{
-    g_warning("GncTreeView %p still exists.", view);
-}
-
-static gint
-gnc_tree_view_report_references (void)
-{
-  g_list_foreach(active_views, (GFunc)dump_view, NULL);
-  return 0;
-}
-#endif
 
 /** Initialize the class for the new base gnucash tree view.  This
  *  will set up any function pointers that override functions in the
@@ -234,12 +219,6 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
 
 	/* GtkObject signals */
 	gtkobject_class->destroy = gnc_tree_view_destroy;
-
-#if DEBUG_REFERENCE_COUNTING
-	gtk_quit_add (0,
-		      (GtkFunction)gnc_tree_view_report_references,
-		      NULL);
-#endif
 }
 
 /** Initialize a new instance of a base gnucash tree view.  This
@@ -252,12 +231,13 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
  *  @internal
  */
 static void
-gnc_tree_view_init (GncTreeView *view)
+gnc_tree_view_init (GncTreeView *view, GncTreeViewClass *klass)
 {
   GtkTreeViewColumn *column;
   GtkWidget *icon;
   GtkRequisition requisition;
 
+  gnc_gobject_tracking_remember(G_OBJECT(view), G_OBJECT_CLASS(klass));
 
   view->priv = g_new0 (GncTreeViewPrivate, 1);
 
@@ -269,8 +249,6 @@ gnc_tree_view_init (GncTreeView *view)
   view->priv->columns_changed_cb_id = 0;
   view->priv->sort_column_changed_cb_id = 0;
   view->priv->size_allocate_cb_id = 0;
-
-  active_views = g_list_append (active_views, view);
 
   /* Ask gtk to help the user keep track of rows. */
   g_object_set(view, "rules-hint", TRUE, NULL);
@@ -327,9 +305,9 @@ gnc_tree_view_finalize (GObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GNC_IS_TREE_VIEW (object));
 
-  view = GNC_TREE_VIEW (object);
-  active_views = g_list_remove (active_views, view);
+  gnc_gobject_tracking_forget(object);
 
+  view = GNC_TREE_VIEW (object);
   g_free (view->priv);
 
   if (G_OBJECT_CLASS (parent_class)->finalize)

@@ -27,11 +27,13 @@
 
 #include <gtk/gtk.h>
 #include "gnc-plugin-page.h"
+#include "gnc-gobject-utils.h"
 
 static gpointer         parent_class = NULL;
 
 static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
-static void gnc_plugin_page_init       (GncPluginPage *plugin_page);
+static void gnc_plugin_page_init       (GncPluginPage *plugin_page,
+					GncPluginPageClass *klass);
 static void gnc_plugin_page_finalize   (GObject *object);
 
 enum {
@@ -239,7 +241,7 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 }
 
 static void
-gnc_plugin_page_init (GncPluginPage *plugin_page)
+gnc_plugin_page_init (GncPluginPage *plugin_page, GncPluginPageClass *klass)
 {
 	GncPluginPagePrivate *priv;
 
@@ -251,6 +253,9 @@ gnc_plugin_page_init (GncPluginPage *plugin_page)
 
 	plugin_page->window      = NULL;
 	plugin_page->summarybar  = NULL;
+
+	gnc_gobject_tracking_remember(G_OBJECT(plugin_page),
+				      G_OBJECT_CLASS(klass));
 }
 
 static void
@@ -287,6 +292,7 @@ gnc_plugin_page_finalize (GObject *object)
   }
   page->window = NULL; // Don't need to free it.
 
+  gnc_gobject_tracking_forget(object);
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

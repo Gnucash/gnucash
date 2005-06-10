@@ -44,6 +44,8 @@ G_BEGIN_DECLS
 #define GNC_IS_TREE_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW))
 #define GNC_IS_TREE_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW))
 #define GNC_TREE_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW, GncTreeViewClass))
+#define GNC_TREE_VIEW_NAME            "GncTreeView"
+
 
 /* typedefs & structures */
 typedef struct GncTreeViewPrivate GncTreeViewPrivate;

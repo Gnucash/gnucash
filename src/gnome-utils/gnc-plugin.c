@@ -28,13 +28,15 @@
 #include "gnc-trace.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 #include "messages.h"
 
 static gpointer parent_class = NULL;
 static short module = MOD_GUI;
 
 static void gnc_plugin_class_init (GncPluginClass *klass);
-static void gnc_plugin_init       (GncPlugin *plugin_page);
+static void gnc_plugin_init       (GncPlugin *plugin_page,
+				   GncPluginClass *klass);
 static void gnc_plugin_finalize   (GObject *object);
 
 struct  GncPluginPrivate {
@@ -99,11 +101,13 @@ gnc_plugin_class_init (GncPluginClass *klass)
  *  @internal
  */
 static void
-gnc_plugin_init (GncPlugin *plugin_page)
+gnc_plugin_init (GncPlugin *plugin_page, GncPluginClass *klass)
 {
 	GncPluginPrivate *priv;
 
 	priv = plugin_page->priv = g_new0 (GncPluginPrivate, 1);
+	gnc_gobject_tracking_remember(G_OBJECT(plugin_page),\
+				      G_OBJECT_CLASS(klass));
 }
 
 
@@ -129,6 +133,7 @@ gnc_plugin_finalize (GObject *object)
 
 	g_free (plugin->priv);
 
+	gnc_gobject_tracking_forget(object);
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
