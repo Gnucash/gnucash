@@ -74,6 +74,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-plugin.c \
   gnc-query-list.c \
   gnc-splash.c \
+  gnc-tree-model.c \
   gnc-tree-model-account-types.c \
   gnc-tree-model-account.c \
   gnc-tree-model-commodity.c \
@@ -131,6 +132,7 @@ gncinclude_HEADERS = \
   gnc-plugin.h \
   gnc-query-list.h \
   gnc-splash.h \
+  gnc-tree-model.h \
   gnc-tree-model-account-types.h \
   gnc-tree-model-account.h \
   gnc-tree-model-commodity.h \
