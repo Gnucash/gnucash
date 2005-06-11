@@ -28,12 +28,15 @@
 
 #include "messages.h"
 #include "gnc-trace.h"
+#include "gnc-hooks.h"
 
 static short module = MOD_GUI;
 
 static void gnc_plugin_manager_class_init (GncPluginManagerClass *klass);
 static void gnc_plugin_manager_init (GncPluginManager *plugin);
+static void gnc_plugin_manager_dispose (GObject *object);
 static void gnc_plugin_manager_finalize (GObject *object);
+static void gnc_plugin_manager_shutdown (gpointer dummy, gpointer dummy2);
 
 struct GncPluginManagerPrivate
 {
@@ -84,6 +87,8 @@ gnc_plugin_manager_get (void)
 	if (singleton == NULL) {
 		singleton = g_object_new (GNC_TYPE_PLUGIN_MANAGER,
   					  NULL);
+		gnc_hook_add_dangler (HOOK_UI_SHUTDOWN,
+				      gnc_plugin_manager_shutdown, NULL);
 	}
 
 	return singleton;
@@ -103,8 +108,6 @@ gnc_plugin_manager_add_plugin (GncPluginManager *manager,
 
 	if (index >= 0)
 		return;
-
-	g_object_ref (plugin);
 
 	manager->priv->plugins = g_list_append (manager->priv->plugins, plugin);
 	g_hash_table_insert (manager->priv->plugins_table,
@@ -167,6 +170,7 @@ gnc_plugin_manager_class_init (GncPluginManagerClass *klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
+	object_class->dispose = gnc_plugin_manager_dispose;
 	object_class->finalize = gnc_plugin_manager_finalize;
 
 	signals[PLUGIN_ADDED] = g_signal_new ("plugin-added",
@@ -198,6 +202,24 @@ gnc_plugin_manager_init (GncPluginManager *manager)
 }
 
 static void
+gnc_plugin_manager_dispose (GObject *object)
+{
+	GncPluginManager *manager = GNC_PLUGIN_MANAGER (object);
+
+	g_return_if_fail (GNC_IS_PLUGIN_MANAGER (manager));
+	g_return_if_fail (manager->priv != NULL);
+
+	g_hash_table_destroy (manager->priv->plugins_table);
+	manager->priv->plugins_table = NULL;
+
+	g_list_foreach (manager->priv->plugins, (GFunc)g_object_unref, NULL);
+	g_list_free (manager->priv->plugins);
+	manager->priv->plugins = NULL;
+
+	G_OBJECT_CLASS (parent_class)->dispose (object);
+}
+
+static void
 gnc_plugin_manager_finalize (GObject *object)
 {
 	GncPluginManager *manager = GNC_PLUGIN_MANAGER (object);
@@ -205,9 +227,16 @@ gnc_plugin_manager_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_MANAGER (manager));
 	g_return_if_fail (manager->priv != NULL);
 
-	g_list_free (manager->priv->plugins);
-	g_hash_table_destroy (manager->priv->plugins_table);
 	g_free (manager->priv);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gnc_plugin_manager_shutdown (gpointer dummy, gpointer dummy2)
+{
+	if (singleton != NULL) {
+	  g_object_unref(singleton);
+	  singleton = NULL;
+	}
 }

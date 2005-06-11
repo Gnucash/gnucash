@@ -1,3 +1,9 @@
+2005-06-11  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-plugin-manager.[ch]: Take ownership of
+	plugins passed to the manager.  Free all plugins at gui shutdown.
+	Documentation.
+
 2005-06-11  Derek Atkins  <derek@ihtfp.com>
 
 	* src/core-utils/Makefile.am
