@@ -4,8 +4,7 @@ lib_LTLIBRARIES = libcore-utils.la libgw-core-utils.la
 libcore_utils_la_SOURCES = \
   core-utils.c \
   gnc-gconf-utils.c \
-  gnc-gobject-utils.c \
-  gnc-hooks.c
+  gnc-gobject-utils.c
 
 libcore_utils_la_LDFLAGS = -module
 
@@ -26,7 +25,6 @@ noinst_HEADERS = \
   core-utils.h \
   gnc-gconf-utils.h \
   gnc-gobject-utils.h \
-  gnc-hooks.h \
   gw-core-utils.h
 
 EXTRA_DIST = .cvsignore ${gwmod_DATA}

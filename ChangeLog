@@ -1,3 +1,15 @@
+2005-06-11  Derek Atkins  <derek@ihtfp.com>
+
+	* src/core-utils/Makefile.am
+	  Removed gnc-hooks to src/engine.
+	* src/core-utils/gw-core-utils-spec.scm:
+	  Removed gnc-hooks
+	* src/engine/gnc-hooks.[ch]:
+	  gnc-hooks are here, so it can deal with QofEntity handling.
+	  Changed the API to take a GFunc and a cbarg.
+	* src/engine/gw-engine-spec.scm:
+	  added gnc-hooks wrapper
+
 2005-06-10  David Hampton  <hampton@employees.org>
 
 	* configure.in: Break out gtk from gnome to get access to a

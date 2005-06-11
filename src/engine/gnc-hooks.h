@@ -38,10 +38,11 @@ const gchar * gnc_hook_create(const gchar *name, const gchar *desc);
 const gchar * gnc_hook_get_description(const gchar *name);
 
 /**
- * add and remove C-style dangers from a hook
+ * add and remove C-style dangers from a hook.  The callback is called
+ *   function(hook_run_data, cb_data)
  */
-void gnc_hook_add_dangler(const gchar *name, GHookFunc callback);
-void gnc_hook_remove_dangler(const gchar *name, GHookFunc callback);
+void gnc_hook_add_dangler(const gchar *name, GFunc callback, gpointer cb_data);
+void gnc_hook_remove_dangler(const gchar *name, GFunc callback);
 
 #if 0
 /**

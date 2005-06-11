@@ -94,7 +94,7 @@ gnc_hook_get_description(const gchar *name)
 }
 
 void
-gnc_hook_add_dangler (const gchar *name, GHookFunc callback)
+gnc_hook_add_dangler (const gchar *name, GFunc callback, gpointer cb_arg)
 {
   GncHook *gnc_hook;
   GHook *hook;
@@ -104,6 +104,8 @@ gnc_hook_add_dangler (const gchar *name, GHookFunc callback)
   g_return_if_fail(gnc_hook != NULL);
   hook = g_hook_alloc(gnc_hook->c_danglers);
   hook->func = callback;
+  hook->data = cb_arg;
+  hook->destroy = NULL;
   g_hook_append(gnc_hook->c_danglers, hook);
   //printf("Leave %s:  \n", __FUNCTION__);
 }
@@ -115,7 +117,7 @@ hook_remove_runner (GHook *hook, gpointer data)
 }
 
 void
-gnc_hook_remove_dangler (const gchar *name, GHookFunc callback)
+gnc_hook_remove_dangler (const gchar *name, GFunc callback)
 {
   GncHook *gnc_hook;
   GHook *hook;
@@ -142,7 +144,7 @@ static void
 call_c_hook (GHook *hook, gpointer data)
 {
   //printf("Enter %s: hook %p (func %p), data %p\n", __FUNCTION__, hook, hook->func, data);
-  ((GHookFunc)hook->func)(data);
+  ((GFunc)hook->func)(data, hook->data);
   //printf("Leave %s:  \n", __FUNCTION__);
 }
 

@@ -25,8 +25,7 @@
    (lambda (wrapset client-wrapset)
      (list
       "#include <core-utils.h>\n"
-      "#include <gnc-gconf-utils.h>\n"
-      "#include <gnc-hooks.h>\n")))
+      "#include <gnc-gconf-utils.h>\n")))
 
   (gw:wrap-function
    ws
@@ -36,12 +35,4 @@
    '(((<gw:mchars> caller-owned) section)
      ((<gw:mchars> caller-owned) name))
    "Get a boolean value from gconf.")
-
-  (gw:wrap-function
-   ws
-   'gnc:run-c-hook
-   '<gw:void>
-   "gnc_hook_run"
-   '(((<gw:mchars> caller-owned) name) (<gw:void*> data))
-   "Run a callback hook in the C domain.")
 )
