@@ -38,7 +38,7 @@
     "#include <qofbackend.h>\n"
     "#include <qofbook.h>\n"
     "#include <qofsession.h>\n"
-    "#include <gnc-hooks.h>\n"
+    "#include <gnc-hooks-scm.h>\n"
     "#include <engine-helpers.h>\n")))
 
 (gw:wrapset-add-cs-initializers!
@@ -2491,10 +2491,14 @@ the timepair representing midday on that day")
  '(((gw:glist-of (<gw:mchars> callee-owned) callee-owned) choices))
  "Takes a list of installed Finance::Quote souces and records it internally.")
 
-  (gw:wrap-function
-   ws
-   'gnc:run-c-hook
-   '<gw:void>
-   "gnc_hook_run"
-   '(((<gw:mchars> caller-owned) name) (<gw:void*> data))
-   "Run a callback hook in the C domain.")
+;;
+;; gnc-hooks-scm.h
+;;   (and gnc-hooks.h)
+;;
+(gw:wrap-function
+ ws
+ 'gnc:run-c-hook
+ '<gw:void>
+ "gnc_hook_run"
+ '(((<gw:mchars> caller-owned) name) (<gw:void*> data))
+ "Run a callback hook in the C domain.")

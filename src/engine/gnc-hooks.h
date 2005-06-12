@@ -30,13 +30,13 @@
  * The returned string is just the 'name' argument,
  * which belongs to the caller.
  */
-const gchar * gnc_hook_create(const gchar *name, const gchar *desc);
+gchar * gnc_hook_create(const gchar *name, const gchar *desc);
 
 /**
  * lookup the description of a hook.  returned description belongs to
  * the hook and not the caller
  */
-const gchar * gnc_hook_get_description(const gchar *name);
+gchar * gnc_hook_get_description(const gchar *name);
 
 /**
  * add and remove C-style dangers from a hook.  The callback is called

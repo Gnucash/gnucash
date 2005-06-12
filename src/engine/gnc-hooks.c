@@ -46,7 +46,7 @@ typedef struct {
   SCM		proc;
 } GncScmDangler;
 
-const gchar *
+gchar *
 gnc_hook_create (const gchar *name, const gchar *desc)
 {
   GncHook *hook_list;
@@ -63,7 +63,7 @@ gnc_hook_create (const gchar *name, const gchar *desc)
   hook_list = g_hash_table_lookup(gnc_hooks_list, name);
   if (hook_list) {
     LEAVE("List %s(%p) already exists", name, hook_list);
-    return(name);
+    return((gchar*)name);
   }
 
   hook_list = g_new0(GncHook, 1);
@@ -75,7 +75,7 @@ gnc_hook_create (const gchar *name, const gchar *desc)
   g_hash_table_insert(gnc_hooks_list, (gchar *)name, hook_list);
 
   LEAVE("created list %s(%p)", name, hook_list);
-  return name;
+  return (gchar *)name;
 }
 
 static GncHook *
@@ -94,7 +94,7 @@ gnc_hook_lookup (const gchar *name)
   return(hook);
 }
 
-const gchar *
+gchar *
 gnc_hook_get_description(const gchar *name)
 {
   GncHook *hook;
@@ -107,7 +107,7 @@ gnc_hook_get_description(const gchar *name)
   }
 
   LEAVE("desc: %s", hook->desc);
-  return hook->desc;
+  return (gchar*) hook->desc;
 }
 
 void

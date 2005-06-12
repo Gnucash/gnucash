@@ -8,6 +8,11 @@
 	* src/engine/gnc-hooks.c:
 	  Use ENTER/LEAVE macros instead of commented printfs
 
+	* src/engine/gw-engine-spec.scm:
+	  use gnc-hooks-scm.h header
+	* src/engine/gnc-hooks.[ch]:
+	  Fix APIs..  Even though we return 'const' don't say we do.
+
 2005-06-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-plugin-manager.[ch]: Take ownership of
