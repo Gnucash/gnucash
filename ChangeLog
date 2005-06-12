@@ -5,6 +5,9 @@
 	* src/engine/Makefile.am:
 	  Handle new (private) header file, gnc-hooks-scm.h
 
+	* src/engine/gnc-hooks.c:
+	  Use ENTER/LEAVE macros instead of commented printfs
+
 2005-06-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-plugin-manager.[ch]: Take ownership of
