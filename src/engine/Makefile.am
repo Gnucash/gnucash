@@ -145,6 +145,7 @@ noinst_HEADERS = \
   gnc-budget-period-p.h \
   gnc-budget-p.h \
   gnc-event-p.h \
+  gnc-hooks-scm.h \
   gnc-lot.h \
   gnc-lot-p.h \
   gnc-pricedb-p.h \

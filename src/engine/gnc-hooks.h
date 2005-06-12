@@ -1,6 +1,7 @@
 /*
  * gnc-hooks.h -- helpers for using Glib hook functions
  * Copyright (C) 2005 David Hampton <hampton@employees.org>
+ *                    Derek Atkins <derek@ihtfp.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -43,14 +44,6 @@ const gchar * gnc_hook_get_description(const gchar *name);
  */
 void gnc_hook_add_dangler(const gchar *name, GFunc callback, gpointer cb_data);
 void gnc_hook_remove_dangler(const gchar *name, GFunc callback);
-
-#if 0
-/**
- * add and remove Scheme-style danglers from a hook
- */
-void gnc_hook_add_scm_dangler(const gchar *name, SCM proc);
-void gnc_hook_del_scm_dangler(const gchar *name, SCM proc);
-#endif
 
 /**
  * Run the hook danglers.

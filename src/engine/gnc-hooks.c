@@ -1,6 +1,7 @@
 /*
  * gnc-hooks.c -- helpers for using Glib hook functions
  * Copyright (C) 2005 David Hampton <hampton@employees.org>
+ *                    Derek Atkins <derek@ihtfp.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,7 +25,10 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include <libguile.h>
+#include <g-wrap-wct.h>
 #include "gnc-hooks.h"
+#include "gnc-hooks-scm.h"
 
 static GHashTable* gnc_hooks_list = NULL;
 static gboolean gnc_hooks_initialized = FALSE;
@@ -34,6 +38,10 @@ typedef struct {
   GHookList	*c_danglers;
   GHookList	*scm_danglers;
 } GncHook;
+
+typedef struct {
+  SCM		proc;
+} GncScmDangler;
 
 const gchar *
 gnc_hook_create (const gchar *name, const gchar *desc)
@@ -139,6 +147,84 @@ gnc_hook_remove_dangler (const gchar *name, GFunc callback)
   //printf("Leave %s: Removed %p from %s\n", __FUNCTION__ , hook, name);
 }
 
+static void
+delete_scm_hook (gpointer data)
+{
+  GncScmDangler *scm = data;
+  scm_unprotect_object(scm->proc);
+  g_free(scm);
+}
+
+static void
+call_scm_hook (GHook *hook, gpointer data)
+{
+  GncScmDangler *scm = hook->data;
+
+  // XXX: FIXME: We really should make sure this is a session!!! */
+  scm_call_1 (scm->proc,
+	      (data ? 
+	       gw_wcp_assimilate_ptr (data,
+				      scm_c_eval_string("<gnc:Session*>")) :
+               SCM_BOOL_F));
+}
+
+void
+gnc_hook_add_scm_dangler (const gchar *name, SCM proc)
+{
+  GncHook *gnc_hook;
+  GHook *hook;
+  GncScmDangler *scm;
+
+  //printf("Enter %s: list %s, function %p\n\n", __FUNCTION__, name, callback);
+  gnc_hook = gnc_hook_lookup(name);
+  g_return_if_fail(gnc_hook != NULL);
+  scm = g_new0(GncScmDangler, 1);
+  scm_protect_object(proc);
+  scm->proc = proc;
+  hook = g_hook_alloc(gnc_hook->scm_danglers);
+  hook->func = call_scm_hook;
+  hook->data = scm;
+  hook->destroy = delete_scm_hook;
+  g_hook_append(gnc_hook->scm_danglers, hook);
+  //printf("Leave %s:  \n", __FUNCTION__);
+}
+
+static gboolean
+hook_remove_scm_runner (GHook *hook, gpointer data)
+{
+  GncScmDangler *scm1 = data;
+  GncScmDangler *scm2 = hook->data;
+  SCM res;
+
+  res = scm_equal_p(scm1->proc, scm2->proc);
+  return(SCM_NFALSEP(res));
+}
+
+void
+gnc_hook_del_scm_dangler (const gchar *name, SCM proc)
+{
+  GncHook *gnc_hook;
+  GHook *hook;
+  GncScmDangler scm;
+
+  scm.proc = proc;
+
+  //printf("Enter %s: name %s, function %p\n\n", __FUNCTION__, name, &scm);
+  gnc_hook = gnc_hook_lookup(name);
+  if (gnc_hook == NULL) {
+    //printf("Leave %s: Unknown hook list %s\n", __FUNCTION__, name);
+    return;
+  }
+
+  hook = g_hook_find(gnc_hook->scm_danglers, TRUE, hook_remove_scm_runner, &scm);
+  if (hook == NULL) {
+    //printf("Leave %s: Hook %p not found in %s\n", __FUNCTION__, callback, name);
+    return;
+  }
+
+  g_hook_unref(gnc_hook->scm_danglers, hook);
+  //printf("Leave %s: Removed %p from %s\n", __FUNCTION__ , hook, name);
+}
 
 static void
 call_c_hook (GHook *hook, gpointer data)
@@ -146,12 +232,6 @@ call_c_hook (GHook *hook, gpointer data)
   //printf("Enter %s: hook %p (func %p), data %p\n", __FUNCTION__, hook, hook->func, data);
   ((GFunc)hook->func)(data, hook->data);
   //printf("Leave %s:  \n", __FUNCTION__);
-}
-
-static void
-call_scm_hook (GHook *hook, gpointer data)
-{
-  // XXX.  Implement me.
 }
 
 void
