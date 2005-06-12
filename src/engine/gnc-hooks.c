@@ -172,11 +172,13 @@ call_scm_hook (GHook *hook, gpointer data)
   ENTER("hook %p, data %p, cbarg %p", hook, data, hook->data);
 
   // XXX: FIXME: We really should make sure this is a session!!! */
-  scm_call_1 (scm->proc,
-	      (data ? 
-	       gw_wcp_assimilate_ptr (data,
-				      scm_c_eval_string("<gnc:Session*>")) :
-               SCM_BOOL_F));
+  if (data) {
+    scm_call_1 (scm->proc,
+		gw_wcp_assimilate_ptr (data,
+				       scm_c_eval_string("<gnc:Session*>")));
+  } else {
+    scm_call_0 (scm->proc);
+  }
 
   LEAVE("");
 }
@@ -291,6 +293,11 @@ gnc_hooks_init(void)
 		  " book-opened-hook. Hook args: ()");
   gnc_hook_create(HOOK_REPORT,
 		  "Run just before the reports are pushed into the menus."
+		  "  Hook args: ()");
+  gnc_hook_create(HOOK_SAVE_OPTIONS,
+		  "Functions to run when saving options.  Hook args: ()");
+  gnc_hook_create(HOOK_ADD_EXTENSION,
+		  "Functions to run when the extensions menu is created."
 		  "  Hook args: ()");
 
   gnc_hook_create(HOOK_BOOK_OPENED,

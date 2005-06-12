@@ -503,7 +503,6 @@ string and 'directories' must be a list of strings."
       (gnc:main-window-open-report (gnc:make-welcome-report) window))))
 
   (gnc:hook-run-danglers gnc:*startup-hook*)
-  (gnc:run-c-hook "hook_startup" #f)
 
   (if (gnc:config-var-value-get gnc:*loglevel*)
       (gnc:set-log-level-global (gnc:config-var-value-get gnc:*loglevel*))))
@@ -517,12 +516,10 @@ string and 'directories' must be a list of strings."
              (if (gnc:file-query-save)
                  (begin
                    (gnc:hook-run-danglers gnc:*ui-shutdown-hook*)
-		   (gnc:run-c-hook "hook_ui_shutdown" #f)
                    (gnc:gui-shutdown)))))
         (else
 	 (gnc:gui-destroy)
 	 (gnc:hook-run-danglers gnc:*shutdown-hook*)
-	 (gnc:run-c-hook "hook_shutdown" #f)
          (gnc:engine-shutdown)
 	 (exit exit-status))))
 
@@ -581,10 +578,8 @@ string and 'directories' must be a list of strings."
 	(begin
 	  (gnc:update-splash-screen (_ "Loading data..."))
 	  (and (not (gnc:file-open-file file))
-	       (gnc:hook-run-danglers gnc:*book-opened-hook* #f)
-	       (gnc:run-c-hook "hook_book_opened" #f)))
-        (and (gnc:hook-run-danglers gnc:*book-opened-hook* #f)
-	     (gnc:run-c-hook "hook_book_opened" #f)))))
+	       (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))
+        (and (gnc:hook-run-danglers gnc:*book-opened-hook* #f)))))
 
 (define (gnc:main)
 
@@ -646,7 +641,6 @@ string and 'directories' must be a list of strings."
           ;; no matter how or what we loaded, ensure the main-window title is valid...
           (gnc:main-window-update-title main-window)
           (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
-	  (gnc:run-c-hook "hook_ui_post_startup" #f)
           (gnc:start-ui-event-loop)
           (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))
         

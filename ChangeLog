@@ -13,6 +13,20 @@
 	* src/engine/gnc-hooks.[ch]:
 	  Fix APIs..  Even though we return 'const' don't say we do.
 
+	* src/app-utils/hooks.scm:
+	  remove most of the hooks code; use the C impl.
+	* src/app-utils/prefs.scm: don't define the save-options-hook here
+	* src/engine/gnc-hooks.[ch]:
+	  Fix the actual implementation of the scheme callback
+	  Make sure we call back with appropriate number of args
+	* src/engine/gw-engine-spec.scm:
+	  wrap the gnc-hooks APIs
+	  define the old hooks as strings.
+	* src/gnome-utils/gnc-menu-extensions.scm:
+	  remove definition of add-extension-hook
+	* various others:
+	  remove call to run-c-hook, just use the run-dangers API
+
 2005-06-11  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-plugin-manager.[ch]: Take ownership of

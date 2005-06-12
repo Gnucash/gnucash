@@ -2497,8 +2497,64 @@ the timepair representing midday on that day")
 ;;
 (gw:wrap-function
  ws
- 'gnc:run-c-hook
+ 'gnc:hook-define
+ '(<gw:mchars> caller-owned)
+ "gnc_hook_create"
+ '(((<gw:mchars> caller-owned) name) ((<gw:mchars> caller-owned) desc))
+ "Define (create) a new hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-get-description
+ '(<gw:mchars> callee-owned)
+ "gnc_hook_get_description"
+ '(((<gw:mchars> caller-owned) hook))
+ "Get the description of a hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-add-dangler
+ '<gw:void>
+ "gnc_hook_add_scm_dangler"
+ '(((<gw:mchars> caller-owned) hook) (<gw:scm> procedure))
+ "Add a hook dangler to an existing hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-remove-dangler
+ '<gw:void>
+ "gnc_hook_del_scm_dangler"
+ '(((<gw:mchars> caller-owned) hook) (<gw:scm> procedure))
+ "Remove a hook dangler from an existing hook")
+
+(gw:wrap-function
+ ws
+ 'gnc:hook-run-danglers-real
  '<gw:void>
  "gnc_hook_run"
- '(((<gw:mchars> caller-owned) name) (<gw:void*> data))
- "Run a callback hook in the C domain.")
+ '(((<gw:mchars> caller-owned) name) (<gnc:Session*> arg))
+ "Run the danglers on a hook.")
+
+; Now wrap all the 'known' hooks
+(gw:wrap-value ws 'gnc:*startup-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_STARTUP")
+(gw:wrap-value ws 'gnc:*shutdown-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_SHUTDOWN")
+(gw:wrap-value ws 'gnc:*ui-startup-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_UI_STARTUP")
+(gw:wrap-value ws 'gnc:*ui-post-startup-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_UI_POST_STARTUP")
+(gw:wrap-value ws 'gnc:*ui-shutdown-hook* 
+	       '(<gw:mchars> callee-owned) "HOOK_UI_SHUTDOWN")
+(gw:wrap-value ws 'gnc:*new-book-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_NEW_BOOK")
+(gw:wrap-value ws 'gnc:*report-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_REPORT")
+(gw:wrap-value ws 'gnc:*save-options-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_SAVE_OPTIONS")
+(gw:wrap-value ws 'gnc:*add-extension-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_ADD_EXTENSION")
+(gw:wrap-value ws 'gnc:*book-opened-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_BOOK_OPENED")
+(gw:wrap-value ws 'gnc:*book-closed-hook*
+	       '(<gw:mchars> callee-owned) "HOOK_BOOK_CLOSED")
