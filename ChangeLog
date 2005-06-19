@@ -1,4 +1,28 @@
 2005-06-19  Neil Williams <linux@codehelp.co.uk>
+	* src/business/business-core/gncAddress.c:
+	* src/business/business-core/gncAddress.h:
+	* src/business/business-core/gncCustomer.c:
+	* src/business/business-core/gncCustomer.h:
+	* src/business/business-core/gncEmployee.c:
+	* src/business/business-core/gncEmployee.h:
+	* src/business/business-core/gncInvoice.c:
+	* src/business/business-core/gncInvoice.h:
+	* src/business/business-core/gncJob.c:
+	* src/business/business-core/gncJob.h:
+	* src/business/business-core/gncOwner.c:
+	* src/business/business-core/gncOwner.h:
+	* src/business/business-core/gncVendor.c:
+	* src/business/business-core/gncVendor.h
+	* src/engine/Account.c
+	* src/engine/Account.h: Changing to static functions,
+	and using QOF_TYPE_COLLECT in QofObject parameters.
+	* src/engine/FreqSpec.c
+	* src/engine/FreqSpec.h: Removing compiler hack, using
+	static functions.
+	* src/engine/Transaction.c
+	* src/engine/Transaction.h: Changing to static functions.
+
+2005-06-19  Neil Williams <linux@codehelp.co.uk>
 	* src/backend/qsf/qsf-backend.c: API
 	* src/backend/qsf/qsf-object.xsd.xml: QOF_TYPE_COLLECT
 	* src/backend/qsf/qsf-xml.h: Make into a private header.

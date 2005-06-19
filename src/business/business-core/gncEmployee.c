@@ -279,6 +279,20 @@ void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc)
   gncEmployeeCommitEdit (employee);
 }
 
+void
+qofEmployeeSetAddr (GncEmployee *employee, QofEntity *addr_ent)
+{
+	GncAddress *addr;
+
+	if(!employee || !addr_ent) { return; }
+	addr = (GncAddress*)addr_ent;
+	if(addr == employee->addr) { return; }
+	if(employee->addr != NULL) { gncAddressDestroy(employee->addr); }
+	gncEmployeeBeginEdit(employee);
+	employee->addr = addr;
+	gncEmployeeCommitEdit(employee);
+}
+
 /* ============================================================== */
 /* Get Functions */
 const char * gncEmployeeGetID (GncEmployee *employee)
@@ -425,7 +439,8 @@ gboolean gncEmployeeRegister (void)
 	{ EMPLOYEE_WORKDAY, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEmployeeGetWorkday,
 		(QofSetterFunc)gncEmployeeSetWorkday },
 	{ EMPLOYEE_RATE, QOF_TYPE_NUMERIC, (QofAccessFunc)gncEmployeeGetRate, (QofSetterFunc)gncEmployeeSetRate },
-    { EMPLOYEE_ADDR, GNC_ADDRESS_MODULE_NAME, (QofAccessFunc)gncEmployeeGetAddr, NULL },
+    { EMPLOYEE_ADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncEmployeeGetAddr, (QofSetterFunc)qofEmployeeSetAddr },
+    { EMPLOYEE_CC,  GNC_ID_ACCOUNT, (QofAccessFunc)gncEmployeeGetCCard, (QofSetterFunc)gncEmployeeSetCCard },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncEmployeeGetActive, (QofSetterFunc)gncEmployeeSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

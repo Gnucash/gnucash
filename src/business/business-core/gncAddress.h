@@ -82,14 +82,6 @@ typedef struct _gncAddress GncAddress;
  @{ */
 /** create a new address */
 GncAddress * gncAddressCreate (QofBook *book, QofEntity *parent);
-/** \brief QOF address creation 
-
-An address cannot exist without a parent, yet to merge and 
-export the parent, a QOF address object must exist and it 
-must be created using standard QOF calls. QOF will always 
-set the parent.
-*/
-GncAddress* qofAddressCreate (QofBook *book);
 
 /** destroy an address */
 void gncAddressDestroy (GncAddress *addr);
@@ -108,15 +100,6 @@ void gncAddressSetPhone (GncAddress *addr, const char *phone);
 void gncAddressSetFax (GncAddress *addr, const char *fax);
 void gncAddressSetEmail (GncAddress *addr, const char *email);
 void gncAddressClearDirty (GncAddress *address);
-/** \brief Set the address owner.
-
-\note Every address must have a genuine ::GncOwner as this 
-provides the name or identifier to use the address.
-
-In order to export a Customer, QOF must be able to find the
-address as an entity.
-*/
-void qofAddressSetOwner (GncAddress *address, QofEntity *owner);
 /** @} */
 
 /** @name Get Functions 
@@ -130,7 +113,6 @@ const char * gncAddressGetAddr4 (const GncAddress *addr);
 const char * gncAddressGetPhone (const GncAddress *addr);
 const char * gncAddressGetFax (const GncAddress *addr);
 const char * gncAddressGetEmail (const GncAddress *addr);
-QofEntity*   qofAddressGetOwner (GncAddress *addr);
 /** @} */
 
 gboolean gncAddressIsDirty (const GncAddress *addr);

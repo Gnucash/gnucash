@@ -94,18 +94,6 @@
 #include "qofbook-p.h"
 #include "qofid-p.h"
 
-/* I have done this to prevent compiler warnings...
- * This is used to convert a const GDate* to a GDate* for passing
- * to the glib g_date_xxx functions which don't use const...
- * Strangely, most of the rest of glib does use const, so
- * perhaps this will change? When it does, just define this macro to
- * nothing and the compiler will check the constness of each pointer....
- 
- Done. NW 24/4/5.
- */
-#define CONST_HACK 
-//(GDate*)
-
 static short module = MOD_SX;
 /* 
  *  FIXME: should be in a header file
@@ -292,8 +280,8 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
       break;
 
    case ONCE:
-      if ( g_date_compare( &(fs->s.once.date),
-                 CONST_HACK in_date ) > 0 ) {
+      if ( g_date_compare( &(fs->s.once.date), in_date ) > 0 ) 
+      {
          *out_date = fs->s.once.date;
       } else {
          /* Date is past due. Return an invalid date. */
@@ -304,7 +292,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
    case DAILY: {
       guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-      julian_in_date = g_date_julian( CONST_HACK in_date );
+      julian_in_date = g_date_julian( in_date );
       complete_intervals =
          (julian_in_date - fs->s.daily.offset_from_epoch) /
          fs->s.daily.interval_days;
@@ -320,7 +308,7 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
        * It is very similar to the daily repeat representation. */
       guint32 julian_in_date, julian_next_repeat, complete_intervals;
 
-      julian_in_date = g_date_julian( CONST_HACK in_date );
+      julian_in_date = g_date_julian( in_date );
       complete_intervals =
          (julian_in_date - fs->s.weekly.offset_from_epoch) /
          (fs->s.weekly.interval_weeks * 7);
@@ -334,18 +322,18 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
       guint32 in_months_from_epoch, after_repeat_in_month_interval,
          complete_intervals, next_repeat_months_from_epoch, month, year;
 
-      in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
-         g_date_month( CONST_HACK in_date ) - 1;
+      in_months_from_epoch = (g_date_year( in_date )-1) * 12 +
+         g_date_month( in_date ) - 1;
       complete_intervals =
          (in_months_from_epoch - fs->s.monthly.offset_from_epoch) /
          fs->s.monthly.interval_months;
       after_repeat_in_month_interval =
-         (g_date_day( CONST_HACK in_date ) >= fs->s.monthly.day_of_month ||
+         (g_date_day( in_date ) >= fs->s.monthly.day_of_month ||
           (in_months_from_epoch - fs->s.monthly.offset_from_epoch) %
           fs->s.monthly.interval_months > 0 ||
-          g_date_day( CONST_HACK in_date ) >=
-          g_date_days_in_month( g_date_month( CONST_HACK in_date ),
-                      g_date_year( CONST_HACK in_date ) ) )  ? 1 : 0;
+          g_date_day( in_date ) >=
+          g_date_days_in_month( g_date_month( in_date ),
+                      g_date_year( in_date ) ) )  ? 1 : 0;
       next_repeat_months_from_epoch =
          fs->s.monthly.offset_from_epoch +
          (complete_intervals + after_repeat_in_month_interval) *
@@ -372,19 +360,19 @@ xaccFreqSpecGetNextInstance( FreqSpec *fs,
          wday_of_1st, day_of_repeat;
 
       GDate date1;
-      in_months_from_epoch = (g_date_year( CONST_HACK in_date )-1) * 12 +
-         g_date_month( CONST_HACK in_date ) - 1;
+      in_months_from_epoch = (g_date_year( in_date )-1) * 12 +
+         g_date_month( in_date ) - 1;
       complete_intervals =
          (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) /
          fs->s.month_relative.interval_months;
-      month = g_date_month( CONST_HACK in_date );
-      year = g_date_year( CONST_HACK in_date );
+      month = g_date_month( in_date );
+      year = g_date_year( in_date );
       g_date_set_dmy( &date1, 1, month, year );
       wday_of_1st = g_date_get_weekday( &date1 );
       day_of_repeat = (fs->s.month_relative.occurrence-1)*7 +
          ((fs->s.month_relative.weekday + 7 - wday_of_1st)%7 + 1);
       after_repeat_in_month_interval =
-         (g_date_day( CONST_HACK in_date ) >= day_of_repeat ||
+         (g_date_day( in_date ) >= day_of_repeat ||
           day_of_repeat > g_date_days_in_month( month, year ) ||
           (in_months_from_epoch - fs->s.month_relative.offset_from_epoch) %
           fs->s.month_relative.interval_months > 0 )  ? 1 : 0;
@@ -493,7 +481,7 @@ xaccFreqSpecSetDaily( FreqSpec *fs,
    fs->type = DAILY;
    fs->s.daily.interval_days = interval_days;
 
-   julian_days_since_epoch = g_date_julian( CONST_HACK initial_date );
+   julian_days_since_epoch = g_date_julian( initial_date );
    fs->s.daily.offset_from_epoch = julian_days_since_epoch % interval_days;
 }
 
@@ -522,7 +510,7 @@ xaccFreqSpecSetWeekly( FreqSpec *fs,
    fs->type = DAILY;
    fs->s.daily.interval_days = 7 * interval_weeks;
 
-   julian_days_since_epoch = g_date_julian( CONST_HACK initial_date );
+   julian_days_since_epoch = g_date_julian( initial_date );
    fs->s.daily.offset_from_epoch = julian_days_since_epoch % (7*interval_weeks);
 #endif
 #if 1
@@ -536,7 +524,7 @@ xaccFreqSpecSetWeekly( FreqSpec *fs,
    fs->type = WEEKLY;
    fs->s.weekly.interval_weeks = interval_weeks;
 
-   julian_days_since_epoch = g_date_julian( CONST_HACK initial_date );
+   julian_days_since_epoch = g_date_julian( initial_date );
    fs->s.weekly.offset_from_epoch = julian_days_since_epoch % (7*interval_weeks);
 #endif
 #if 0
@@ -554,7 +542,7 @@ xaccFreqSpecSetWeekly( FreqSpec *fs,
    fs->type = WEEKLY;
    fs->s.weekly.interval_weeks = interval_weeks;
 
-   julian_day_initial = g_date_julian( CONST_HACK initial_date );
+   julian_day_initial = g_date_julian( initial_date );
    weeks_since_epoch = (julian_day_initial-1) / 7;
    fs->s.weekly.day_of_week = (julian_day_initial-1) % 7;
    fs->s.weekly.offset_from_epoch = weeks_since_epoch % interval_weeks;
@@ -578,10 +566,10 @@ xaccFreqSpecSetMonthly( FreqSpec *fs,
    fs->type = MONTHLY;
    fs->s.monthly.interval_months = interval_months;
 
-   months_since_epoch = (g_date_year( CONST_HACK initial_date )-1) * 12 +
-      g_date_month( CONST_HACK initial_date ) - 1;
+   months_since_epoch = (g_date_year( initial_date )-1) * 12 +
+      g_date_month( initial_date ) - 1;
    fs->s.monthly.offset_from_epoch = months_since_epoch % interval_months;
-   fs->s.monthly.day_of_month = g_date_day( CONST_HACK initial_date );
+   fs->s.monthly.day_of_month = g_date_day( initial_date );
 
    g_return_if_fail( fs->s.monthly.offset_from_epoch <
       fs->s.monthly.interval_months );
@@ -599,12 +587,12 @@ xaccFreqSpecSetMonthRelative( FreqSpec *fs,
    fs->type = MONTH_RELATIVE;
    fs->s.month_relative.interval_months = interval_months;
 
-   months_since_epoch = (g_date_year( CONST_HACK initial_date )-1) * 12 +
-      g_date_month( CONST_HACK initial_date ) - 1;
+   months_since_epoch = (g_date_year( initial_date )-1) * 12 +
+      g_date_month( initial_date ) - 1;
    fs->s.month_relative.offset_from_epoch = months_since_epoch % interval_months;
    
-   fs->s.month_relative.weekday = g_date_get_weekday( CONST_HACK initial_date );
-   fs->s.month_relative.occurrence = (g_date_day( CONST_HACK initial_date )-1) / 7 + 1;
+   fs->s.month_relative.weekday = g_date_get_weekday( initial_date );
+   fs->s.month_relative.occurrence = (g_date_day( initial_date )-1) / 7 + 1;
    
    g_return_if_fail( fs->s.month_relative.weekday > 0 );
    g_return_if_fail( fs->s.month_relative.weekday <= 7 );
@@ -723,7 +711,7 @@ qofFreqSpecPrintable (gpointer obj)
 	xaccFreqSpecGetFreqStr(fs, str);
 	return str->str;
 }
-    
+
 void
 xaccFreqSpecGetFreqStr( FreqSpec *fs, GString *str )
 {
@@ -1133,7 +1121,7 @@ gnc_freq_spec_compare( FreqSpec *a, FreqSpec *b )
 
 /*  QOF routines. */
 
-int
+static int
 qofFreqSpecGetMonthDay(FreqSpec *fs)
 {
 	int outDayOfMonth;
@@ -1143,8 +1131,8 @@ qofFreqSpecGetMonthDay(FreqSpec *fs)
 	outDayOfMonth = fs->s.monthly.day_of_month;
 	return outDayOfMonth;
 }
-
-int
+/*
+static int
 qofFreqSpecGetMonthOffset(FreqSpec *fs)
 {
 	int outMonthOffset;
@@ -1154,8 +1142,8 @@ qofFreqSpecGetMonthOffset(FreqSpec *fs)
 	outMonthOffset = fs->s.monthly.offset_from_epoch;
 	return outMonthOffset;
 }
-
-Timespec
+*/
+static Timespec
 qofFreqSpecGetBaseDate(FreqSpec *fs)
 {
 	GDate       *when;
@@ -1172,7 +1160,7 @@ qofFreqSpecGetBaseDate(FreqSpec *fs)
 	return ts;
 }
 
-char*
+static char*
 qofFreqSpecGetUIType(FreqSpec *fs)
 {
 	char *type_string;
@@ -1182,7 +1170,7 @@ qofFreqSpecGetUIType(FreqSpec *fs)
 	return type_string;
 }
 
-int
+static int
 qofFreqSpecGetRepeat(FreqSpec *fs)
 {
 	int repeat, dump, dump2;
@@ -1296,8 +1284,7 @@ qofFreqSpecCalculate(FreqSpec *fs, gint value)
 	}
 }
 
-
-void
+static void
 qofFreqSpecSetUIType (FreqSpec *fs, const char *type_string)
 {
 	g_return_if_fail(fs != NULL);
@@ -1305,7 +1292,7 @@ qofFreqSpecSetUIType (FreqSpec *fs, const char *type_string)
 	qofFreqSpecCalculate(fs, fs->value);
 }
 
-void
+static void
 qofFreqSpecSetBaseDate(FreqSpec *fs, Timespec start_date)
 {
 	time_t      start_t;
@@ -1326,7 +1313,7 @@ qofFreqSpecSetBaseDate(FreqSpec *fs, Timespec start_date)
 	qofFreqSpecCalculate(fs, fs->value);
 }
 
-void
+static void
 qofFreqSpecSetRepeat(FreqSpec *fs, gint value)
 {
 	fs->value = value;

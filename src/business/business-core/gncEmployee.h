@@ -63,6 +63,8 @@ void gncEmployeeSetRate (GncEmployee *employee, gnc_numeric rate);
 void gncEmployeeSetCurrency (GncEmployee *employee, gnc_commodity * currency);
 void gncEmployeeSetActive (GncEmployee *employee, gboolean active);
 void gncEmployeeSetCCard (GncEmployee *employee, Account* ccard_acc);
+void qofEmployeeSetAddr (GncEmployee *employee, QofEntity *addr_ent);
+
 /** @} */
 
 /** @name Get Functions 
@@ -99,6 +101,7 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee);
 #define EMPLOYEE_ACL		"acl"
 #define EMPLOYEE_WORKDAY	"workday"
 #define EMPLOYEE_RATE		"rate"
+#define EMPLOYEE_CC    "credit_card_account"
 
 /** deprecated routines */
 #define gncEmployeeGetGUID(E) qof_entity_get_guid(QOF_ENTITY(E))

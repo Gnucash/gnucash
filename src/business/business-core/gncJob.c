@@ -268,6 +268,25 @@ void gncJobSetActive (GncJob *job, gboolean active)
   mark_job (job);
   gncJobCommitEdit (job);
 }
+static void
+qofJobOwnerCB (QofEntity *ent, gpointer user_data)
+{
+	GncJob *job;
+
+	job = (GncJob*)user_data;
+	qofOwnerSetEntity(&job->owner, ent);
+}
+
+static void
+qofJobSetOwner (GncJob *job, QofCollection *coll)
+{
+	if(!job || !coll) { return; }
+	g_return_if_fail(qof_collection_count(coll) == 1);
+	gncJobBeginEdit (job);
+	qof_collection_foreach(coll, qofJobOwnerCB, job);
+	mark_job (job);
+	gncJobCommitEdit (job);
+}
 
 void gncJobBeginEdit (GncJob *job)
 {
@@ -327,6 +346,17 @@ gboolean gncJobGetActive (GncJob *job)
   return job->active;
 }
 
+static QofCollection*
+qofJobGetOwner (GncJob *job)
+{
+	QofCollection *job_coll;
+
+	if(!job) { return NULL; }
+	job_coll = qof_collection_new(GNC_ID_JOB);
+	qof_collection_add_entity(job_coll, qofOwnerGetOwner(&job->owner));
+	return job_coll;
+}
+
 /* Other functions */
 
 int gncJobCompare (const GncJob * a, const GncJob *b) {
@@ -370,7 +400,8 @@ gboolean gncJobRegister (void)
     { JOB_NAME, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetName, (QofSetterFunc)gncJobSetName },
     { JOB_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, (QofSetterFunc)gncJobSetActive },
     { JOB_REFERENCE, QOF_TYPE_STRING, (QofAccessFunc)gncJobGetReference, (QofSetterFunc)gncJobSetReference },
-    { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, (QofSetterFunc)gncJobSetOwner },
+    { JOB_OWNER, GNC_ID_OWNER, (QofAccessFunc)gncJobGetOwner, NULL },
+    { Q_JOB_OWNER, QOF_TYPE_COLLECT, (QofAccessFunc)qofJobGetOwner, (QofSetterFunc)qofJobSetOwner },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncJobGetActive, NULL },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

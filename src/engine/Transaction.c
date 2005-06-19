@@ -2384,7 +2384,7 @@ xaccTransSetDateEnteredSecs (Transaction *trans, time_t secs)
    xaccTransSetDateInternal(trans, &trans->date_entered, ts);
 }
 
-void
+static void
 qofTransSetDatePosted (Transaction *trans, Timespec ts)
 {
 	if (!trans) { return; }
@@ -2401,7 +2401,7 @@ xaccTransSetDatePostedTS (Transaction *trans, const Timespec *ts)
    set_gains_date_dirty (trans);
 }
 
-void
+static void
 qofTransSetDateEntered (Transaction *trans, Timespec ts)
 {
 	if (!trans) { return; }
@@ -3266,7 +3266,7 @@ no_op (gpointer obj, const QofParam *p)
   return obj;
 }
 
-void
+static void
 qofSplitSetParentTrans(Split *s, QofEntity *ent)
 {
 	Transaction *trans;
@@ -3276,7 +3276,7 @@ qofSplitSetParentTrans(Split *s, QofEntity *ent)
 	xaccTransAppendSplit(trans, s);
 }
 
-void
+static void
 qofSplitSetAccount(Split *s, QofEntity *ent)
 {
 	Account *acc;

@@ -52,7 +52,7 @@
 /** @file FreqSpec.h
     @brief Period / Date Frequency Specification
     @author Copyright (C) 2001 Joshua Sled <jsled@asynchronous.org>
-    @author Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>  
+    @author Copyright (C) 2001 Ben Stanley <bds02@uow.edu.au>
     @author Copyright (c) 2005 Neil Williams <linux@codehelp.co.uk>
 */
 
@@ -285,60 +285,6 @@ In keeping with the rest of QOF, dates are handled as Timespec.
 #define FS_BASE_DATE          "fs-initial-date"
 #define FS_MONTH_DAY          "fs-day-of-month"
 #define FS_MONTH_OFFSET       "fs-month-offset"
-
-/** \brief Use a string for enum values.
-
-Uses a macro defined in gnc-engine-util.h to swap the enum value for
-the string equivalent. The string is a direct copy of the enum value
-in the source, so UIFREQ_SEMI_MONTHLY returns "UIFREQ_SEMI_MONTHLY"
-*/
-char* qofFreqSpecGetUIType(FreqSpec *fs);
-/** \brief Use a string for enum values. */
-void qofFreqSpecSetUIType (FreqSpec *fs, const char *type_string);
-/** \brief Single get routine for all types.
-
-This routine dumps the other calculated values from certain types
-and returns only the repeat interval.
-
-\return -1 on error or if the type in INVALID,
-otherwise the repeat interval for the current type.
-*/
-int qofFreqSpecGetRepeat(FreqSpec *fs);
-/** \brief Single set routine for all types.
-
-Store the value temporarily. When the repeat interval,
-base date and UIType are all set, QOF calculates the
-other FreqSpec parameters.
-*/
-void qofFreqSpecSetRepeat(FreqSpec *fs, gint value);
-/** \brief Get the base date.
-
-Uses Timespec for QOF.
-*/
-Timespec qofFreqSpecGetBaseDate(FreqSpec *fs);
-/** \brief Set the base date.
-
-Uses Timespec for QOF.
-*/
-void qofFreqSpecSetBaseDate(FreqSpec *fs, Timespec ts);
-/** \brief Get just the day of month for a monthly repeat.
-
-This isolates the one parameter value from the current object.
-
-\note QOF requires the value to be returned, not set via a pointer.
-
-@return 0 if this is not a monthly FreqSpec.
-*/
-int qofFreqSpecGetMonthDay(FreqSpec *fs);
-/** \brief Get just the month offset for a monthly repeat.
-
-This isolates the one parameter value from the current object.
-
-\note QOF requires the value to be returned, not set via a pointer.
-
-@return 0 if this is not a monthly FreqSpec.
-*/
-int qofFreqSpecGetMonthOffset(FreqSpec *fs);
 
 /** \todo Need support for monthly and weekly extra values and composite. */
 gboolean FreqSpecRegister(void);

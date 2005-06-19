@@ -426,24 +426,32 @@ GncAddress * gncCustomerGetAddr (GncCustomer *cust)
   return cust->addr;
 }
 
-void
+static void
 qofCustomerSetAddr (GncCustomer *cust, QofEntity *addr_ent)
 {
 	GncAddress *addr;
 
-	if(!cust) { return; }
+	if(!cust || !addr_ent) { return; }
 	addr = (GncAddress*)addr_ent;
+	if(addr == cust->addr) { return; }
+	if(cust->addr != NULL) { gncAddressDestroy(cust->addr); }
+	gncCustomerBeginEdit(cust);
 	cust->addr = addr;
+	gncCustomerCommitEdit(cust);
 }
 
-void
+static void
 qofCustomerSetShipAddr (GncCustomer *cust, QofEntity *ship_addr_ent)
 {
 	GncAddress *ship_addr;
 
-	if(!cust) { return; }
+	if(!cust || !ship_addr_ent) { return; }
 	ship_addr = (GncAddress*)ship_addr_ent;
+	if(ship_addr == cust->shipaddr) { return; }
+	if(cust->shipaddr != NULL) { gncAddressDestroy(cust->shipaddr); }
+	gncCustomerBeginEdit(cust);
 	cust->shipaddr = ship_addr;
+	gncCustomerCommitEdit(cust);
 }
 
 GncAddress * gncCustomerGetShipAddr (GncCustomer *cust)
@@ -580,6 +588,8 @@ gboolean gncCustomerRegister (void)
     { CUSTOMER_SHIPADDR, GNC_ID_ADDRESS, (QofAccessFunc)gncCustomerGetShipAddr, (QofSetterFunc)qofCustomerSetShipAddr },
 	{ CUSTOMER_TT_OVER, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetTaxTableOverride, 
 		(QofSetterFunc)gncCustomerSetTaxTableOverride },
+	{ CUSTOMER_TERMS, GNC_ID_BILLTERM, (QofAccessFunc)gncCustomerGetTerms, (QofSetterFunc)gncCustomerSetTerms },
+	{ CUSTOMER_SLOTS, QOF_TYPE_KVP, (QofAccessFunc)qof_instance_get_slots, NULL },
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncCustomerGetActive, (QofSetterFunc)gncCustomerSetActive },
     { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },

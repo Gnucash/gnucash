@@ -213,8 +213,6 @@ void xaccAccountSetNotes (Account *account, const char *notes);
 void xaccAccountSetLastNum (Account *account, const char *num);
 /** Set the account's type */
 GNCAccountType xaccAccountGetType (Account *account);
-const char* qofAccountGetTypeString (Account *acc);
-void qofAccountSetType (Account *acc, const char *type_string);
 
 /** Get the account's name */
 const char *   xaccAccountGetName (Account *account);

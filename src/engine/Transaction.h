@@ -427,18 +427,6 @@ Timespec      xaccTransRetDateEnteredTS (const Transaction *trans);
 Timespec      xaccTransRetDateDueTS (const Transaction *trans);
 /** Dates and txn-type for A/R and A/P "invoice" postings */
 void	      xaccTransGetDateDueTS (const Transaction *trans, Timespec *ts);
-/** \brief QOF date posted setter.
-
-Required because xaccTransSetDatePostedTS has a Timespec pointer argument
-when QOF passes a Timespec.
-*/
-void qofTransSetDatePosted (Transaction *trans, Timespec ts);
-/** \brief QOF date entered setter.
-
-Required because xaccTransSetDateEnteredTS has a Timespec pointer argument
-when QOF passes a Timespec.
-*/
-void qofTransSetDateEntered (Transaction *trans, Timespec ts);
 /** @} */
 
 
@@ -943,16 +931,17 @@ Timespec xaccTransGetVoidTime(const Transaction *tr);
 
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
-/* QOF only */
-void qofSplitSetParentTrans(Split *s, QofEntity *ent);
-void qofSplitSetAccount(Split *s, QofEntity *ent);
-
-/** deprecated rouitines */
+/** \deprecated */
 #define xaccSplitGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+/** \deprecated */
 #define xaccSplitReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+/** \deprecated */
 #define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
+/** \deprecated */
 #define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_ENTITY(X))
+/** \deprecated */
 #define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_ENTITY(X))) : *(guid_null()))
+/** \deprecated */
 #define xaccTransGetSlots(X)     qof_instance_get_slots (QOF_INSTANCE(X))
 
 #endif /* XACC_TRANSACTION_H */

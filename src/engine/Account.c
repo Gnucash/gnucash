@@ -1471,14 +1471,14 @@ xaccAccountGetType (Account *acc)
    return (acc->type);
 }
 
-const char*
+static const char*
 qofAccountGetTypeString (Account *acc)
 {
 	if(!acc) { return NULL; }
 	return (xaccAccountTypeEnumAsString(acc->type));
 }
 
-void
+static void
 qofAccountSetType (Account *acc, const char *type_string)
 {
 	GNCAccountType type;

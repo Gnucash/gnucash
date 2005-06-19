@@ -97,7 +97,7 @@ gncAddressCreate (QofBook *book, QofEntity *prnt)
   return addr;
 }
 
-GncAddress * 
+static GncAddress * 
 qofAddressCreate (QofBook *book)
 {
   GncAddress *addr;
@@ -122,18 +122,35 @@ qofAddressCreate (QofBook *book)
   return addr;
 }
 
-void
-qofAddressSetOwner(GncAddress *addr, QofEntity *owner)
+static void
+qofAddressOwnerCB (QofEntity *ent, gpointer user_data)
 {
-	if(!addr) { return; }
-	addr->parent = owner;
+	GncAddress *addr;
+
+	addr = (GncAddress*)user_data;
+	if(!ent || !addr) { return; }
+	if(addr->parent == NULL) { addr->parent = ent; }
 }
 
-QofEntity*
+static void
+qofAddressSetOwner(GncAddress *addr, QofCollection *col)
+{
+	if(!addr || !col) { return; }
+	if(qof_collection_count(col) != 1) { return; }
+	qof_collection_foreach(col, qofAddressOwnerCB, addr);
+}
+
+static QofCollection*
 qofAddressGetOwner(GncAddress *addr)
 {
+	QofCollection *col;
+	QofEntity *parent;
+
 	if(!addr) { return NULL; }
-	return addr->parent;
+	parent = addr->parent;
+	col = qof_collection_new(parent->e_type);
+	qof_collection_add_entity(col, addr->parent);
+	return col;
 }
 
 GncAddress * 
@@ -343,15 +360,15 @@ gboolean gncAddressRegister (void)
 {
   static QofParam params[] = {
 
-    { ADDRESS_NAME, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName, 	(QofSetterFunc)gncAddressSetName },
-    { ADDRESS_ONE, 		QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr1, (QofSetterFunc)gncAddressSetAddr1 },
-    { ADDRESS_TWO, 		QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr2, (QofSetterFunc)gncAddressSetAddr2 },
-    { ADDRESS_THREE, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr3, (QofSetterFunc)gncAddressSetAddr3 },
-    { ADDRESS_FOUR, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr4, (QofSetterFunc)gncAddressSetAddr4 },
-    { ADDRESS_PHONE, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, (QofSetterFunc)gncAddressSetPhone },
-    { ADDRESS_FAX, 		QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax, 	(QofSetterFunc)gncAddressSetFax },
-    { ADDRESS_EMAIL, 	QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, (QofSetterFunc)gncAddressSetEmail },
-    { ADDRESS_OWNER, GNC_ID_OWNER,    (QofAccessFunc)qofAddressGetOwner, (QofSetterFunc)qofAddressSetOwner },
+    { ADDRESS_NAME,  QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetName,  (QofSetterFunc)gncAddressSetName },
+    { ADDRESS_ONE,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr1, (QofSetterFunc)gncAddressSetAddr1 },
+    { ADDRESS_TWO,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr2, (QofSetterFunc)gncAddressSetAddr2 },
+    { ADDRESS_THREE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr3, (QofSetterFunc)gncAddressSetAddr3 },
+    { ADDRESS_FOUR,  QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetAddr4, (QofSetterFunc)gncAddressSetAddr4 },
+    { ADDRESS_PHONE, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetPhone, (QofSetterFunc)gncAddressSetPhone },
+    { ADDRESS_FAX,   QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetFax,   (QofSetterFunc)gncAddressSetFax },
+    { ADDRESS_EMAIL, QOF_TYPE_STRING, (QofAccessFunc)gncAddressGetEmail, (QofSetterFunc)gncAddressSetEmail },
+    { ADDRESS_OWNER, QOF_TYPE_COLLECT,(QofAccessFunc)qofAddressGetOwner, (QofSetterFunc)qofAddressSetOwner },
     { QOF_PARAM_BOOK, QOF_ID_BOOK,   (QofAccessFunc)qof_instance_get_book, NULL },
     { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_instance_get_guid, NULL },
     { NULL },

@@ -130,14 +130,6 @@ KvpFrame *gncCustomerGetSlots (GncCustomer *customer);
 GList * gncCustomerGetJoblist (GncCustomer *customer, gboolean show_all);
 /** @} */
 
-/** \name QOF additions
- @{
- */
-void qofCustomerSetAddr (GncCustomer *cust, QofEntity *addr_ent);
-
-void qofCustomerSetShipAddr (GncCustomer *cust, QofEntity *ship_addr_ent);
-/** @} */
-
 gboolean gncCustomerIsDirty (GncCustomer *customer);
 int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 
@@ -149,6 +141,11 @@ int gncCustomerCompare (GncCustomer *a, GncCustomer *b);
 #define CUSTOMER_DISCOUNT 	"amount of discount"
 #define CUSTOMER_CREDIT 	"amount of credit"
 #define CUSTOMER_TT_OVER 	"tax table override"
+#define CUSTOMER_TAX_INC    "customer_tax_included"
+#define CUSTOMER_TERMS      "customer_terms"
+#define CUSTOMER_ACTIVE     "customer_is_active"
+#define CUSTOMER_SLOTS      "customer_values"
+
 /** @deprecated functions, should be removed */
 #define gncCustomerGetGUID(x) qof_instance_get_guid(QOF_INSTANCE(x))
 #define gncCustomerRetGUID(x) (x ? *(qof_instance_get_guid(QOF_INSTANCE(x))) : *(guid_null()))

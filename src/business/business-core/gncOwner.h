@@ -44,15 +44,14 @@ typedef struct gnc_owner_s GncOwner;
 #include "gnc-lot.h" 
 #include "gnc-engine-util.h"
 
-#define ENUM_OWNER_TYPE(_) \
-  _(GNC_OWNER_NONE,)       \
-  _(GNC_OWNER_UNDEFINED,)  \
-  _(GNC_OWNER_CUSTOMER,)   \
-  _(GNC_OWNER_JOB,)        \
-  _(GNC_OWNER_VENDOR,)     \
-  _(GNC_OWNER_EMPLOYEE,)
-
-DEFINE_ENUM(GncOwnerType, ENUM_OWNER_TYPE)
+typedef enum { 
+	GNC_OWNER_NONE , 
+	GNC_OWNER_UNDEFINED , 
+	GNC_OWNER_CUSTOMER , 
+	GNC_OWNER_JOB , 
+	GNC_OWNER_VENDOR , 
+	GNC_OWNER_EMPLOYEE , 
+}GncOwnerType;
 
 /** \name QOF handling
 
@@ -61,10 +60,6 @@ are still expected to be useful in making GncOwner transparent
 to QOF as they can be used by objects like GncInvoice.
 @{
 */
-/** \brief Allow the type to be set separate from the union. */
-void qofOwnerSetType(GncOwner *owner, const char* type_string);
-/** \brief Allow the union to be set independently of the type. */
-char* qofOwnerGetTypeString(GncOwner *owner);
 /** return the type for the collection. */
 QofIdType qofOwnerGetType(GncOwner *owner);
 /** return the owner itself as an entity. */
@@ -72,28 +67,9 @@ QofEntity* qofOwnerGetOwner (GncOwner *owner);
 /** set the owner from the entity. */
 void qofOwnerSetEntity (GncOwner *owner, QofEntity *ent);
 
-/** \brief QOF union set routine.
-
- If ::qofOwnerSetType has already been called, initialise the owner.\n
- If no type has been set, store the object in a temporary pointer.
- When qofOwnerSetType is then called, qofOwnerSetOwner is called again
- and uses the value in the pointer to initialise the owner.
-
-QOF makes sure both owner and type set functions are called once.
-*/
-void qofOwnerSetOwner(GncOwner *owner, gpointer obj);
-
-void qofOwnerSetUndefined (GncOwner *owner, gpointer obj);
-void qofOwnerSetCustomer (GncOwner *owner, GncCustomer* customer);
-void qofOwnerSetJob (GncOwner *owner, GncJob* job);
-void qofOwnerSetVendor (GncOwner *owner, GncVendor* vendor);
-void qofOwnerSetEmployee (GncOwner *owner, GncEmployee* employee);
 /** \brief Set the parent owner. */
 void qofOwnerSetEndOwner (GncOwner *owner, GncOwner *parent);
 GncOwner* qofOwnerCreate (QofBook *book);
-
-AS_STRING_DEC(GncOwnerType, ENUM_OWNER_TYPE)
-FROM_STRING_DEC(GncOwnerType, ENUM_OWNER_TYPE)
 
 gboolean
 gncOwnerRegister(void);
