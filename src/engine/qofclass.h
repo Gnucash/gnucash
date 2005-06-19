@@ -42,8 +42,8 @@
   declaring a new QOF Class.
 
   Because a QOF Class associates getters and setters with
-  a type, one can then ask, at run time, what paramters
-  are associated with a given type, even if those paramters
+  a type, one can then ask, at run time, what parameters
+  are associated with a given type, even if those parameters
   were not known at compile time.  Thus, a QOF Class is 
   sort-of like a DynAny implementation.  QOF classes can
   be used to provide "object introspection", i.e. asking 

@@ -1,4 +1,10 @@
 2005-06-19  Neil Williams <linux@codehelp.co.uk>
+	* src/engine/qof_book_merge.c: Re-organising to
+	use static functions.
+	* src/engine/qof_book_merge.h: Setting public API.
+	* src/engine/qofclass.h: Typos.
+
+2005-06-19  Neil Williams <linux@codehelp.co.uk>
 	* src/business/business-core/gncAddress.c:
 	* src/business/business-core/gncAddress.h:
 	* src/business/business-core/gncCustomer.c:
