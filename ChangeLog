@@ -1,4 +1,10 @@
 2005-06-19  Neil Williams <linux@codehelp.co.uk>
+	* src/backend/qsf/qsf-backend.c: API
+	* src/backend/qsf/qsf-object.xsd.xml: QOF_TYPE_COLLECT
+	* src/backend/qsf/qsf-xml.h: Make into a private header.
+	* src/backend/qsf/qof-backend-qsf.h: Public API for the library.
+
+2005-06-19  Neil Williams <linux@codehelp.co.uk>
 	* src/doc/backend-api.txt
 	* src/doc/backend-errors.txt
 	* src/doc/backup.txt

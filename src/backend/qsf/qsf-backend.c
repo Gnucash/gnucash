@@ -26,6 +26,7 @@
 
 #include "qsf-xml.h"
 #include "qsf-dir.h"
+#include "qof-backend-qsf.h"
 #include <errno.h>
 
 #define QSF_TYPE_BINARY "binary"
@@ -103,7 +104,7 @@ qsf_session_begin(QofBackend *be, QofSession *session, const char *book_path,
 {
 	QSFBackend *qsf_be;
 	char *p, *path;
-	
+
 	g_return_if_fail(be != NULL);
 	qsf_be = (QSFBackend*)be;
 	g_return_if_fail(qsf_be->params != NULL);
@@ -133,7 +134,7 @@ static void
 qsf_session_end( QofBackend *be)
 {
 	QSFBackend *qsf_be;
-	
+
 	qsf_be = (QSFBackend*)be;
 	g_return_if_fail(qsf_be != NULL);
 	qsf_free_params(qsf_be->params);
@@ -142,7 +143,8 @@ qsf_session_end( QofBackend *be)
 	xmlCleanupParser();
 }
 
-void qsf_destroy_backend (QofBackend *be)
+static void 
+qsf_destroy_backend (QofBackend *be)
 {
 	g_free(be);
 }
@@ -470,10 +472,10 @@ reference_list_lookup(gpointer data, gpointer user_data)
 			return;
 		}
 		ref_name = g_strdup(reference->param->param_name);
-			node = xmlAddChild(object_node, xmlNewNode(ns, QOF_TYPE_GUID));
+		node = xmlAddChild(object_node, xmlNewNode(ns, QOF_TYPE_GUID));
 		guid_to_string_buff(reference->ref_guid, qsf_guid);
-			xmlNodeAddContent(node, qsf_guid);
-			xmlNewProp(node, QSF_OBJECT_TYPE ,ref_name);
+		xmlNodeAddContent(node, qsf_guid);
+		xmlNewProp(node, QSF_OBJECT_TYPE ,ref_name);
 		g_free(ref_name);
 	}
 }
@@ -543,10 +545,10 @@ qsf_entity_foreach(QofEntity *ent, gpointer data)
 		if(0 == safe_strcmp(qof_param->param_type, QOF_TYPE_KVP))
 		{
 			qsf_kvp = kvp_frame_copy(qof_param->param_getfcn(ent,qof_param));
-				params->qof_param = qof_param;
-				params->output_node = object_node;
-				kvp_frame_for_each_slot(qsf_kvp, qsf_from_kvp_helper, params);
-			}
+			params->qof_param = qof_param;
+			params->output_node = object_node;
+			kvp_frame_for_each_slot(qsf_kvp, qsf_from_kvp_helper, params);
+		}
 		if((qof_param->param_setfcn != NULL) && (qof_param->param_getfcn != NULL))
 		{
 			supported = g_slist_copy(params->supported_types);
@@ -647,7 +649,7 @@ static void
 write_qsf_to_stdout(QofBook *book)
 {
 	xmlDocPtr qsf_doc;
-	
+
 	qsf_doc = qofbook_to_qsf(book);
 	g_return_if_fail(qsf_is_valid(QSF_SCHEMA_DIR, QSF_OBJECT_SCHEMA, qsf_doc) == TRUE);
 	xmlDocFormatDump(stdout, qsf_doc, 1);
@@ -906,15 +908,15 @@ qsf_object_commitCB(gpointer key, gpointer value, gpointer data)
 		boolean_setter = (void(*)(QofEntity*, gboolean))cm_setter;
 		if(boolean_setter != NULL) { boolean_setter(qsf_ent, cm_boolean); }
 	}
-		if(safe_strcmp(qof_type, QOF_TYPE_KVP) == 0) { 
-			cm_type = qsf_to_kvp_helper(xmlGetProp(node, QSF_OBJECT_VALUE));
-			if(!cm_type) { return; }
-			cm_value = string_to_kvp_value(xmlNodeGetContent(node), cm_type);
-			cm_kvp = kvp_frame_copy(cm_param->param_getfcn(qsf_ent, cm_param));
-			cm_kvp = kvp_frame_set_value(cm_kvp, xmlGetProp(node, QSF_OBJECT_KVP), cm_value);
-			kvp_frame_setter = (void(*)(QofEntity*, KvpFrame*))cm_setter;
-			if(kvp_frame_setter != NULL) { kvp_frame_setter(qsf_ent, cm_kvp); }
-		}
+	if(safe_strcmp(qof_type, QOF_TYPE_KVP) == 0) { 
+		cm_type = qsf_to_kvp_helper(xmlGetProp(node, QSF_OBJECT_VALUE));
+		if(!cm_type) { return; }
+		cm_value = string_to_kvp_value(xmlNodeGetContent(node), cm_type);
+		cm_kvp = kvp_frame_copy(cm_param->param_getfcn(qsf_ent, cm_param));
+		cm_kvp = kvp_frame_set_value(cm_kvp, xmlGetProp(node, QSF_OBJECT_KVP), cm_value);
+		kvp_frame_setter = (void(*)(QofEntity*, KvpFrame*))cm_setter;
+		if(kvp_frame_setter != NULL) { kvp_frame_setter(qsf_ent, cm_kvp); }
+	}
 	if(safe_strcmp(qof_type, QOF_TYPE_COLLECT) == 0) {
 		QofCollection *qsf_coll;
 		QofIdType type;
