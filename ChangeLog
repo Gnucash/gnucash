@@ -1,4 +1,8 @@
 2005-06-19  Neil Williams <linux@codehelp.co.uk>
+	* qofid.c:
+	* qofid.h: qof_collection_count
+
+2005-06-19  Neil Williams <linux@codehelp.co.uk>
 	* src/engine/qof_book_merge.c: Re-organising to
 	use static functions.
 	* src/engine/qof_book_merge.h: Setting public API.

@@ -296,6 +296,34 @@ qof_collection_lookup_entity (QofCollection *col, const GUID * guid)
   return ent;
 }
 
+QofCollection *
+qof_collection_from_glist (QofIdType type, GList *glist)
+{
+	QofCollection *coll;
+	QofEntity *ent;
+	GList *list;
+
+	coll = qof_collection_new(type);
+	for(list = glist; list != NULL; list = list->next)
+	{
+		ent = (QofEntity*)list->data;
+		if(FALSE == qof_collection_add_entity(coll, ent))
+		{
+			return NULL;
+		}
+	}
+	return coll;
+}
+
+guint
+qof_collection_count (QofCollection *col)
+{
+	guint c;
+
+	c = g_hash_table_size(col->hash_of_entities);
+	return c;
+}
+
 /* =============================================================== */
 
 gboolean 
