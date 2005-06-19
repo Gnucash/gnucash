@@ -1,16 +1,16 @@
+/** \page gnucashextension Proposed GnuCash Extensions
 
-Proposed Extensions
--------------------
 The following are proposals for various, as-yet-unimplemented
 enhancements.  The goal of this document is to understand some
 of the changes that will come soon to the interfaces.
 
-Accounting Periods
-------------------
+\section accountperiods Accounting Periods
+
 Acconting periods are implemented by creating an object that
 describes the accounting period, and then assigning every 
 transaction to at least one period.
 
+\verbatim
 typedef struct _accountingPeriod {
         GUID guid;           // id
 	char *name;          // user-selectable name
@@ -19,6 +19,7 @@ typedef struct _accountingPeriod {
 	Timespec * end_date;
         AccountGroup  *topgrp;  // chart of accounts for this period.
 } AccountingPeriod;
+\endverbatim
 
 The Transaction struct has to be extended with a period guid.
 Every transaction can belong to at most one accounting period.
@@ -29,27 +30,24 @@ from 'open books', without having to delete that same account from old
 closed books.  Basically, a new chart of accounts needs to be written
 out/read from the engine for each new accounting period.
 
-
 The xaccPeriodClose() subroutine performs the following:
--- crawl over all transactions and mark them as being part of this
+- crawl over all transactions and mark them as being part of this
    accounting period (actually, new transactions should by default be
    getting put into the currently open period...)
--- find the equity account (what if there is more than one equity account
+- find the equity account (what if there is more than one equity account
    ?? what if equity has sub-accounts ?? )
--- transfer all income/expense to equity  (shouldn't the equity account
+- transfer all income/expense to equity  (shouldn't the equity account
    match the income/expense heirarchy?)
--- return a new account group with new opening balances ...
+- return a new account group with new opening balances ...
 
+\section transactionchanges Changes to Transaction Structure
 
-
-Changes to Transaction Structure
---------------------------------
 Add an accounting period guid (see above).
 
-Changes to Journal Entry (Split) Structure
-------------------------------------------
-Voucher Reference
------------------
+\section splitchanges Changes to Journal Entry (Split) Structure
+
+\subsection splitvoucher Voucher Reference
+
 Add a char * voucher;  This is a generic id string that somehow
 identifies the piece of paper/electronic document(s) that indicate
 where/how to find the paper trial for this entry.   This list of id's
@@ -58,19 +56,15 @@ can be completely configured by the user, and hold the needed data
 that the user wants to store.  For the SQL backend, this is a key
 to a user-definable table.
 
-====================================================================
-
-Additional Banking Info
+\section bankingchanges Additional Banking Info
 
 BankId -- routing & transit number (US) or Bankleitzan (DE) or Banque (FR)
 BranchID -- Agence (FR), blank for other countries
 
 AcctKey -- Cle (FR), blank in others
 
-
 Account type enumerants:
 bank account types:
     checking, savings, moneymarket, creditline, cma (cash amangement account)
 
-
-
+*/

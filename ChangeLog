@@ -1,3 +1,35 @@
+2005-06-19  Neil Williams <linux@codehelp.co.uk>
+	* src/doc/backend-api.txt
+	* src/doc/backend-errors.txt
+	* src/doc/backup.txt
+	* src/doc/books.txt
+	* src/doc/budget.txt
+	* src/doc/business.txt
+	* src/doc/constraints.txt
+	* src/doc/currencies.txt
+	* src/doc/doxygen.cfg.in
+	* src/doc/doxygen_main_page.c
+	* src/doc/engine.txt
+	* src/doc/g2-architecture.txt
+	* src/doc/generic-druid-framework.txt
+	* src/doc/guid.txt
+	* src/doc/loans.txt
+	* src/doc/lots.txt
+	* src/doc/multicurrency-discussion.txt
+	* src/doc/netlogin.txt
+	* src/doc/plugin.txt
+	* src/doc/prices.txt
+	* src/doc/qif.txt
+	* src/doc/tax.txt
+	* src/doc/user-prefs-howto.txt
+	* src/engine/design.txt
+	* src/engine/extensions.txt
+	* src/engine/kvp_doc.txt
+	* src/scm/startup-design.txt: Folding text files 
+	into Doxygen output.
+
+	* src/doc/gnc-commodity.txt: Removed: empty.
+
 2005-06-12  Derek Atkins  <derek@ihtfp.com>
 
 	* src/engine/gnc-hooks*:

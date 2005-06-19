@@ -1,14 +1,96 @@
 /** \mainpage GnuCash design and developer's reference
 
 This is the new developer and design manual for GnuCash.
-Previous documentation will slowly be integrated into this, and
-eventually it should always be up to date since it is generated
-directly from the source files using Doxygen.
 
-\section hacking Hacking on this documentation
+\section maindocs Documentation Sections.
+
+The documentation is organised in a rough sequence:
+
+-# \ref manualguide Start with the main GnuCash manual.
+-# \ref texihtml Design overview.
+-# \ref doxylist Individual topic overviews, linked into the
+	full API reference for each topic, generated from source code.
+-# \ref maingeneral How to work with Doxygen in your own code.
+
+\subsection manualguide External documentation.
+
+Please refer to the main 
+<a href="http://www.gnucash.org/en/docs.phtml">documentation
+page</a> on the gnucash website which includes links to the 
+GnuCash Manual and the Concepts Guide in various formats.
+
+\subsection texihtml Documentation elsewhere in the source tree.
+
+See also <a href="http://code.neil.williamsleesmill.me.uk/texi/gnucash-design.html">
+GnuCash Design Overview</a> which can be generated from the source using texi2html
+from the texinfo files in src/doc/design.
+
+The <a href="http://code.neil.williamsleesmill.me.uk/finutil.html">
+Financial Transaction Utility</a> documentation is not compatible with Doxygen.
+
+\section doxylist Doxygen overviews.
+
+Where possible, each overview is dated - take care to review older texts
+in relation to existing code.
+
+- \ref backuppolicy
+- \ref bookperiods
+- \ref business1
+- \ref currencies
+- \ref deprecated
+- \ref engine
+- \ref backendold
+- \ref financeconstraints
+- \ref druidframework
+- \ref guid
+- \ref gnome2
+- \ref networkoverview
+- \ref backenderrors
+- \ref loanhandling
+- \ref kvpvalues
+- \ref lotsoverview
+- \ref multicurrency
+- \ref plugindesign
+- \ref pricedocs
+- \ref gnucashextension
+- \ref qif
+- \ref backendapi
+- \ref budgetplan
+- \ref taxnotes
+- \ref todo
+- \ref userprefs
+
+Each overview in this section is generated directly from the 
+source files using Doxygen but some topics need updating.
+
+\section maingeneral General Doxygen help.
+
+- \ref tipshints
+- \ref reference
+- \ref stylediscussion
+
+*/
+
+/* Editing this file? Comments can be inserted in this file
+ Remember to use C syntax but skip the extra asterisk so that doxygen
+ignores the extra notes, like this one.
+*/
+/* Hacking alert: When adding new sections, keep the references in
+alphabetical order OF THE DESCRIPTION, not the reference title.
+
+Also, make sure all reference titles are unique across the entire
+Doxygen output.
+
+Keep each section within one C comment block and any text before
+the first section of a page must be in the same comment block as the
+page title itself.
+
+*/
+
+/** \section hacking Hacking on this documentation
 
 There is the beginning of a style guide for documenting under
-\ref tips_hints.
+\ref tipshints.
 
 The Book Merge files are an attempt to document "by the book". 
 \ref BookMerge\n
@@ -17,21 +99,29 @@ This main page can be found in src/doc/doxygen_main_page.c .
 
 Each doxygen section must be within a single comment block although 
 large comment blocks can be split into separate pages:
-\ref style_discussion.
+\ref stylediscussion.
 
 This main page is just an introduction to doxygen markup, see the
 Doxygen manual for the full command set.
 
-- \ref tips_hints Tips and hints for using doxygen
-- \ref style_discussion Long comments, pages, editors
+- \ref tipshints Tips and hints for using doxygen
+- \ref stylediscussion Long comments, pages, editors
 - \ref reference Links to the Doxygen manual
+
+Code snippets need special handling in the text overviews. Change all
+comment markers to // (so that the overview comment remains intact) 
+and then wrap each code snippet in the \a verbatim \a endverbatim 
+doxygen markers.
+
+One useful method is to edit these .txt files using the syntax highlighting
+of normal C files.
 
 */
 /**
-\page tips_hints Useful tips for doxygen in C files
+\page tipshints Useful tips for doxygen in C files
 
  - \ref index Introduction
- - \ref style_discussion Long comments, pages, editors
+ - \ref stylediscussion Long comments, pages, editors
  - \ref reference The Doxygen manual
  
 \section tips An introduction to doxygen markup
@@ -54,14 +144,14 @@ If your declarations are in separate files, like private header files,
 a simple block can still be linked into doxygen as long as the file is
 identified to doxygen using a '\\file' section:
 
-/** \\file filename.h\n
+** \\file filename.h\n
 	\\brief one-liner summary of the file purpose\n
 	\\author the usual copyright statement
 
 \subsection Methods How to document
 
 Every doxygen comment block starts with an adapted comment marker. 
-You can use an extra slash /// or an extra asterisk /** . Blocks end
+You can use an extra slash /// or an extra asterisk ** . Blocks end
 in the usual way. Doxygen accepts commands using a backslash.
 
 To put a description with each function or structure, use '\\brief' 
@@ -86,7 +176,7 @@ Use the param command to describe function parameters in the text.
 
 Use the 'back reference' to document enumerator values:\n
 enum testenum {\n
-	enum_one /**< less than marker tells doxygen to use this line
+	enum_one **< less than marker tells doxygen to use this line
 		to document enum_one.
 
 \subsection config Editing Doxygen configuration
@@ -99,10 +189,10 @@ doxywizard doxygen.cfg &
 
 */
 
-/** \page style_discussion Style discussion
+/** \page stylediscussion Style discussion
 
 - \ref index Introduction
-- \ref tips_hints Tips and hints for using doxygen
+- \ref tipshints Tips and hints for using doxygen
 - \ref reference Links to the Doxygen manual
 
 [codehelpgpg 2004-07-25] Doxygen now copes with addgroup and this page
@@ -131,8 +221,8 @@ the declaration. Doxygen will accept both valid C struct definition formats.
 /** \page reference Doxygen reference documentation
 
 - \ref index Introduction
-- \ref tips_hints Tips and hints for using doxygen
-- \ref style_discussion Long comments, pages, editors
+- \ref tipshints Tips and hints for using doxygen
+- \ref stylediscussion Long comments, pages, editors
 	
 The Doxygen web site (http://www.stack.nl/~dimitri/doxygen/) has a
 complete user manual.  For the impatient, here are the most
@@ -153,7 +243,9 @@ blocks: http://www.stack.nl/~dimitri/doxygen/commands.html
 News about GnuCash as well as the latest version can always be found at http://www.gnucash.org/
 
 \subsection email Email
-If you have any suggestions concerning this documentation, do not hesitate to send suggestions to gnucash-devel (see http://www.gnucash.org/en/lists.phtml for details)
+If you have any suggestions concerning this documentation, do not hesitate to send suggestions to 
+gnucash-devel (see http://www.gnucash.org/en/lists.phtml for details)
 
-Benoit Grégoire mailto:bock@step.polymtl.ca
+Benoit Grégoire <bock@step.polymtl.ca>
+Neil Williams <linux@codehelp.co.uk>
  */

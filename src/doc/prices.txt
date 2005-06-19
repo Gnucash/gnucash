@@ -1,10 +1,15 @@
+/** \page pricedocs Price Overview
 
+The Prices and the Price DB overview is in src/doc/design/engine.texinfo
+(also available online as individual HTML:
+http://code.neil.williamsleesmill.me.uk/texi/gnucash-design_4.html#SEC66 )
 
-Prices and the Price DB API is documented in design/engine.texinfo
+API: \ref Price
 
 Below, a few meta-notes about how prices and the GUI (should) interact:
 
-----------
+\section pricecompute Computing Prices
+
 When a price is computed from the (value/amt) that a user entered
 in a register, and this price is stored in the priceDB, then 
 both the register entry and the price must have links to each other
@@ -20,14 +25,15 @@ contains an error in date/amt/value), then it is adviasable that
 the correpsonding priceDB entry must be deleted as well (since
 it is not safe to assume that the price is 'correct').
 
-----------
+\section Rounding errors
+
 When doing price math in the register, one must be careful, because
 round-off errors can make 'obvious' math inaccurate.  Note that if
 we define price as (value/amt), then we will find that 
 value != price * amt due to roundoff handling.  One must be careful
 and consistent in handling this in the register, as otherwise
 users will be driven crazy by inconsitent behaviour.
-----------
-
 
 (Linas Vepstas April 2003)
+
+*/

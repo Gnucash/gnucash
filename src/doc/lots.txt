@@ -1,11 +1,9 @@
-
-                           Lots
-                           ====
-             Architecture & Implementation Overview
+/** \page lotsoverview Lots Architecture & Implementation Overview
 
                Linas Vepstas <linas@linas.org>
                   Last Revised May 2004
 
+API \ref Lot
 
 One often needs to know that the item 'bought' in one transaction
 is the same one as the item 'sold' in a different transaction.
@@ -23,8 +21,8 @@ is that a set of items is tracked together as a 'lot'; the date of
 creation of the lot helps determine when a bill is due, when depreciation
 starts, or the tax rate for capital gains on a stock market investment.
 
-Definition
-==========
+\section lotsdefines Definition
+
 In GnuCash, a 'lot' will consist of a set of splits identified with 
 a unique lot number.  Any given split can belong to one lot and one 
 lot only.  All splits in a lot must also belong to the same account.
@@ -36,14 +34,13 @@ once closed, a lot cannot be re-opened.   Open lots are always carried
 forward into the current open book; closed lots are left behind in the 
 book in which they were closed.
 
+\section How Lots Are Used
 
-How Lots Are Used
-=================
 The following sections review how lots are used to implement various
 accounting devices, and some of the related issues.
 
-Billing:
---------
+\subsection Billing
+
 Tracking lots is the 'definition' of A/R and A/P.  You want to be able
 to say that this bill is 120 days old, and its balance has been partly
 paid off; and you want to be able to do this whether or not there are
@@ -55,15 +52,15 @@ receivables can be computed by traversing all lots, etc.  Additional
 information about bills, such as a due date or payment terms, should
 be stored as kvp values associated with the lot.
 
-Billing Example:
-----------------
+\subsection Billing Example
+
 Normally, there is a one-to-one correspondence between bills and 
 lots: there  is one lot per bill, and one bill per lot.  (Note: this 
 is not how gnucash invoices are currently implemented; this is a
 proposed implementation.)
 
 For example:
-
+\verbatim
    invoice #258    customer XXX
    Order placed 20 December 2001
        quant (10)  gallons paint      $10/each   $100
@@ -75,6 +72,7 @@ For example:
    Payment received 24 january  2002  $50      Balance Due: $88.27
    Payment received 13 february 2002  $60      Balance Due: $28.27
    Payment received 18 march    2002  $28.27   PAID IN FULL
+\endverbatim
 
 In this example, the lot encompasses four transactions, dated
 December, January, February and March.  The December transaction
@@ -93,9 +91,8 @@ account, and the split describing the paintbrushes might be a part
 of a lot in the "Paintbrush Inventory" account.   These lots should
 not be confused with the invoice lot. 
 
+\subsection lotsinventory Inventory
 
-Inventory:
-----------
 The correct way of handling inventory under GnuCash is to have a 
 separate account for each widget type.  The account balance represents
 how many widgets there are in the warehouse.  Lots offer an additional
@@ -115,9 +112,8 @@ modified to treat inventory accounts in a special way, e.g. by
 not listing them in account lists, and providing an alternate 
 management GUI.
 
+\subsection Capital Gains
 
-Capital Gains:
---------------
 In the United States, gains on stock investments are taxed at different
 rates depending on how long they were held before being sold. By using
 lots with an investment account, it becomes easy to track when any given
@@ -129,21 +125,25 @@ users, since some transactions might be split across different lots.
 For example, the user may have conceptually made the following 
 transactions:
 
+\verbatim
 >        Date     Desc    Buy     Sell    Price    Value
 >        18/1/01  XCORP   500             $10.00   $5000.00
 >        21/3/01  XCORP   500             $12.00   $6000.00
 >        14/7/02  XCORP           750     $20.00  $15000.00   
+\endverbatim
 
 However, the two buy transactions create different lots (because
 you can't add to a stock-investment lot after its been created, because
 the purchases occurred on different dates).  Thus, when the shares are 
 sold, the sale is split across two lots:
 
+\verbatim
 >        Date     Desc    Lot     Buy     Sell    Price    Value
 >        18/1/01  XCORP   187     500             $10.00   $5000.00
 >        21/3/01  XCORP   188     500             $12.00   $6000.00
 >        14/7/02  XCORP   187             500     $20.00  $10000.00   
 >        14/7/02  XCORP   188             250     $20.00   $5000.00   
+\endverbatim
 
 In the above, lot 187 was closed, and lot 188 has a balance of 250 
 shares.  Note that we used a FIFO accounting method in this example:
@@ -167,9 +167,8 @@ GUI wants to hide the fact that there are lots under the covers, it
 must figure out a way of doing this (i.e. re-combining splits) on
 its own.
 
+\section lotsclosing Closing of Books
 
-Closing of Books
-================
 A few words on lots and the closing of books.  Without lots, there 
 is really no way of correctly implementing book closing.  That is
 because some reports, such as the capital-gains report, need to know 
@@ -190,14 +189,13 @@ have splits that participate in teh open lot, and, by extension,
 all closed lots that participate in these 'open transations', 
 ad infinitum.
 
+\section lotsdouble The "Double Balance" Requirment
 
-The "Double Balance" Requirment
-===============================
 The following is a proposal for how to handle both realized
 and unrealized gains/losses by means of "adjusting transactions."
 It works for simple cases, but has issues for more complex cases.
 
-------------------
+
 Canonical transaction balancing: If all splits in a transaction 
 are in the same 'currency' as the transaction currency, then the
 sum of the splits *must* equal zero.  This is the old, existing
@@ -208,21 +206,19 @@ If some splits are in one commodity, and others in another, then
 we can't force a zero balance as above.  Instead, we will force
 a different requirement, the 'double-balance' requirement:
 
--- All splits that are *not* in the transaction currency C
+- All splits that are *not* in the transaction currency C
    must be made a part of a lot.   (Thus, for example, 
    the transaction currency C is dollars, whereas the split
    commodity is 'S', shares of RHAT.  If a transaction
    has C in dollars, and 'S' in RHAT, then the S split must 
    be made a part of a Lot.)
-   
--- The lot will have a designated 'lot currency' L that must
+- The lot will have a designated 'lot currency' L that must
    be the same as the C of every split in the lot.  One
    cannot enter a split into the lot if C != L.  (That is,
    if I'm working with a Lot of RHAT shares, then *all*
    splits in the lot must belong to dollar-denominated
    transactions.)
-
--- When a lot is closed, we must have the 'double-balance'
+- When a lot is closed, we must have the 'double-balance'
    condition:  The sum total of all 'S' is zero, and the
    sum total of all 'C' is zero.  Thus, if I buy 100 shares
    of RHAT for $5 and sell 100 shares of RHAT for $10, then
@@ -245,7 +241,7 @@ and will not be flagged as 'out of balance'.  Note also
 that because the 'adjusting transaction' contains a split
 holding S (albeit zero S), it *must* be a part of a Lot.
 
-------------------
+
 The above seems to work for simple stock-transactions, but
 fails in other more complex cases.   Here's an example.
 
@@ -267,14 +263,13 @@ Is the correct answer to just 'punt' in these cases?
 How is the closing of books to be handled in such a case?
 
 GUI Elements:
--- The user should be able to specify a default 'realized-gain'
+- The user should be able to specify a default 'realized-gain'
    account that is associated witha a stock account.
--- The user should be able to specify a default 'unrealized-gain'
+- The user should be able to specify a default 'unrealized-gain'
    account that is associated witha a stock account.
 	
+\section lotsfifo FIFO's
 
-FIFO's
-======
 What is a FIFO ?  A FIFO is a type of accounting policy where
 income from selling inventory is accounted by selling the oldest
 inventory first.  Thus, the profit/loss of the sale corresponds
@@ -286,9 +281,8 @@ code is the FIFO policy.  I beleive that it's been abstracted
 properly, so that it should be easy to add other policies, 
 e.g. LIFO.  See policy.c for what would need to be implemented.
 
+\section lotsimplement Implementation 
 
-Implementation 
-==============
 Every split has a pointer to a lot (which may be null).   A lot has a list
 of splits in it (so that the other splits in the lot can be easily found).
 A lot does not need to maintain a balance (this is easy enough to calculate 
@@ -301,22 +295,25 @@ lots so that all lots belonging to an account can be quickly retreived.
 (In principle, the lots can be found by scanning every split in the
 account, but this is a painful process.)
 
-Implementing Cap Gains (Is a Pain in the Neck)
-==============================================
+\section lotscapgains Implementing Cap Gains (Is a Pain in the Neck)
+
 Although Lots provide a good conceptual framework for determing
 gains or losses when a lot is closed, cap-gains on half-open
 lots present additional complexities.   Consider the following
 stock purchase and subsequent sale of half the stock:
 
 Account A is a stock account
-Account B is a bank account
-Account C is an income account
 
+Account B is a bank account
+
+Account C is an income account
+\verbatim
                 Acct A       Txn    Acct B    Acct C
 Date     Action  Amt    Prc  Value    Amt      Amt
 1/1/01   buy     100s   $10  $1000   ($1000)   -
 2/2/02   sell    (50)s  $25  $1250    $1250    -
 2/2/02   gain     -      -    $750            $750
+\endverbatim
 
 The gain, shown in the third line, is computed as a straight
 sum of purchase price to sale price. 
@@ -345,22 +342,22 @@ separate one for the gains.  This makes computing the balance
 easier, although it makes the logic for setting the date
 more complex.  Ughh..
 
-Cap Gains Implementation Notes
-==============================
+\section loanscapnotes Cap Gains Implementation Notes
+
 Cap Gains will be handled by GnuCash as described above, using 
 two distinct transactions.  These transactions will be marked up
 using KVP, pointing to each other, so that the one can be found
 from the other.  Implementation in src/engine/cap-gains.c
 
 Quick API Overview:
-   xaccSplitGetCapGains(): Returns the capital gains associated with
+-  xaccSplitGetCapGains(): Returns the capital gains associated with
       a split.  Split must have been a sale/purchase in a previously 
       opened lot.
-   xaccSplitAssignToLot(): If a split is not already in a lot,
+-  xaccSplitAssignToLot(): If a split is not already in a lot,
       then it places it into a lot, using a FIFO accounting policy.
 
-Cap Gains Actual Implementation
-===============================
+\section lotscapimplement Cap Gains Actual Implementation
+
 Cap Gains are noted by creating a separate transaction with two 
 splits in it.  One of the splits is as described above: zero
 amount, non-zero value.   There is a GUI requirement that when
@@ -371,14 +368,14 @@ flags, and a pair of pointers between the gains split and the
 source split, so that the one can be quickly found from the other.
 
 Things kept in sync:
--- date posted
--- value
--- void status
--- other things ?
+- date posted
+- value
+- void status
+- other things ?
 
 Things not kept in sync:
--- kvp trees
--- description, memo, action.
+- kvp trees
+- description, memo, action.
 
 The posted date is kept in sync using a data-constraint scheme.
 If xaccTransactionSetDatePosted() is called, the date change is
@@ -402,18 +399,17 @@ potentially unbalanced.  This requires the lot membership to be
 recomputed; this in turn may require the split to be split into
 peices, or to be recombined into one from several pieces.
 
-TODO:
--- need to copy void status when source split date changes.
--- its possible for the the price, as recorded by one split
+\section lotstodo TODO
+- need to copy void status when source split date changes.
+- its possible for the the price, as recorded by one split
    to vary wildly from that in another split in the same
    transaction.  That's bad, prices should be normalized.
    Theres a routine to do this, xaccScrubSubSplitPrice()
    but its not currently used.
--- write automated test cases to handle each situation.
+- write automated test cases to handle each situation.
 
+\section lotsconversion Conversion
 
-Conversion
-==========
 As Lots are put into production, old GnuCash datasets
 will need to be converted.   Conversion will be done by running 
 all splits in an account through an accounting policy (currently, 
@@ -421,7 +417,7 @@ there is only one policy, a FIFO).  The goal of the policy is to
 match up purchases and sales so that these can be assigned to a Lot.
 
 The conversion algorithm will work as follows:
-
+\verbatim
 for each account {
    loop over splits {
       // perform the 'double-balance' check
@@ -433,6 +429,7 @@ for each account {
       If (split amount < 0)  find oldest lot, put split in that lot
    }
 }
+\endverbatim
 
 See the file Scrub2.h for details of teh low-level API, and Scrub3.h 
 for the high-level API.
@@ -442,11 +439,11 @@ user had prviously recorded cap gains using a 'handmade' version of
 lots, those cap gains will be ignored and will throw off balances.
 User will need to hand-edit to recover.
 
--- TODO: Modify scrub routines to look for splits with zero amount,
+- TODO: Modify scrub routines to look for splits with zero amount,
    try to assign these to lots as appropriate. ??
 
-GUI
-===
+\section lotsgui GUI
+
 A GUI for handling Lots is needed: ability to view a lot, and to cut/paste
 or move a split from one lot to another.  Need a GUI to create a lot,
 maybe append some notes to it.  Need ability to view account in lot-mode.
@@ -455,81 +452,76 @@ For automatically managing accounts, need to implement a variety of
 different accounting policies (of which the FIFO policy is currently 
 implemented in the 'Scrub' routines).
 
-
-Basic GUI: 
+\subsection lotsbasicgui Basic GUI
    The goal of the basic GUI is to handle most usages of
    most lots in most places.  There also need to be special-purpose
    dialogs for specific applications, e.g. stocks, inventory, etc.
 
    Shows three areas: 
-   -- list of lots, one of which can be highlighted.
+- list of lots, one of which can be highlighted.
       Lot names can be edited in-place.
-   -- contents of a single lot (displayed in a narrow, 
+- contents of a single lot (displayed in a narrow, 
       mini-register view, showing only date, memo, quant, 
       balance)
-   -- list of splits not in any lot.
+- list of splits not in any lot.
       (not clear if screen real-estate allows side-by-side 
       placement, or if this must be above/below. above/below
       would suck)
 
    Shows various buttons:
-   -- two arrows, which move split into/out of lot.
+- two arrows, which move split into/out of lot.
       This is a traditional way of moving something from one
       list to another, but some UI designers argue against this.
       Is there a better way to move splits into/out-of a lot?
 
-   -- button, labelled 'close lot', which, when pressed, will
+- button, labelled 'close lot', which, when pressed, will
       set lot balance to zero. (by using fifo on the unassigned 
       splits, if possible).
 
-   -- A field showing realized gain/loss on a closed lot, and
+- A field showing realized gain/loss on a closed lot, and
       a pull-down allowing the gain/loss to be posted to a 
       specific account.
       (The default is stored in kvp:/lots-mgmt/gains-acct/)
 
-   -- button or menu item, 'add notes to this lot'.
+- button or menu item, 'add notes to this lot'.
 
-todo:
----- change lot viewer to use gnc-query-list
----- after the gnome2 port, add the 'unclaimed splits" window
+\subsection lotsguitodo todo:
+- change lot viewer to use gnc-query-list
+- after the gnome2 port, add the 'unclaimed splits" window
      to the lot viewer, this will allow it to be a simple lot editor.
----- Add a new policy (or change the existing fifo policy) to only 
+- Add a new policy (or change the existing fifo policy) to only 
      open lots with a particular sign for the opening split.  This
      way, things like business invoice overpayments are not used
      to start new lots, but are instead applied to new purchases.
 
+\section lotsstatus Status
 
-Status
-======
- o Core support for Lots in the engine is complete (April 2002, ships in 
+- Core support for Lots in the engine is complete (April 2002, ships in 
    version 1.8.x, used by business backend).  
- o See src/engine/gnc-lot.h for the public API.
- o The XML backend support for lot is complete (April 2002,  ships in 
+- See src/engine/gnc-lot.h for the public API.
+- The XML backend support for lot is complete (April 2002,  ships in 
    version 1.8.x).
- o Scrub routines to automatically take old gnucash datasets and
+- Scrub routines to automatically take old gnucash datasets and
    transition them to double-balanced lots have been implemented.
    These implement a FIFO accounting policy (April 2003)
- o Closed/Open lots are handled correctly during book closing.
+- Closed/Open lots are handled correctly during book closing.
    See src/engine/Period.c (August 2003)
- o Work is finished on the automatic computation & tracking 
+- Work is finished on the automatic computation & tracking 
    of gain/loss transactions.  Most of the engine API is in 
    src/engine/cap-gains.h although the high-level 'scrub' API
    is in src/engine/Scrub3.h.  See src/doc/constraints.txt for 
    a 'big picture' view of how its done. (September 2003)
- o A basic lot-viewing GUI is in src/gnome/lot-viewer.c
+- A basic lot-viewing GUI is in src/gnome/lot-viewer.c
    This GUI cannot 'edit' lots. (August 2003)
-
- o The Postgres backend does not yet support lots.
+- The Postgres backend does not yet support lots.
    XXX In particular, the programming API for Lots is currently
    non-transactional. There's no dirty flag, and the backend is not 
    signalled that the lots have changed.  This is the case both for
    Scrub2.c and for src/gnome/lot-viewer.c (which changes KVP's).
-
- o Need to write extensive test cases to verify the rather complex
+- Need to write extensive test cases to verify the rather complex
    constraints between the gains and lots and splits.
+- Need to write a cap-gains report!
 
- o Need to write a cap-gains report!
-
-
+*/
 
 -------------------------- end of file ------------------------------

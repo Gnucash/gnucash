@@ -1,13 +1,12 @@
-0) Naming
----------
+/** \page gnome2 GnuCash Gnome2 architecture
+
+\section gnome2names Naming
 
 g1 - The gtk1 and gnome1 libraries.
+
 g2 - The gtk2 and gnome2 libraries.
 
-
-
-1) GTK2 Primer
---------------
+\section gnome2primer GTK2 Primer
 
 In gtk2, an "action" is a g_object that represents some action that
 the user might want to perform.  This object could represent opening a
@@ -45,10 +44,7 @@ functions on in gtk_object but you cannot mix and match calls to
 g_object and gtk_object.  You must use one function set or the other
 for any given item.
 
-
-
-2) Windowing Architecture
--------------------------
+\section gnome2windows  Windowing Architecture
 
 In the gtk1/gnome1 (hereafter g1) version of Gnucash, the windowing
 was based on the "Multiple Document Interface" of g1.  This code was
@@ -66,9 +62,9 @@ can be removed from the gnucash sources.]
 The first level of this architecture is an object representing a
 "pluggable" window.  This object is responsible for:
 
-    1) the window itself
-    2) providing a framework for plugins
-    3) providing a base set of menus (and actions)
+-# the window itself
+-# providing a framework for plugins
+-# providing a base set of menus (and actions)
 
 Plugins can be one of two types.  The first type is simply called a
 "plugin" (e.g. gnc-plugin-register.c) and is used to add functionality
@@ -81,10 +77,9 @@ window.  This widget may be an account tree, a register, etc.  The
 plugin page must also provide a standard set of functions to interact
 with the plugin manager code.
 
+\section gnome2model Model/View Architecture
 
-
-3) Model/View Architecture
---------------------------
+API: \ref GuiTreeModel
 
 As mentioned above, the ctree widget has been deprecated in g2.  Some
 parts of gnucash have been converted to the new style using either a
@@ -148,13 +143,14 @@ view.  It is used in the new account dialog, for instance, to limit
 the accounts the user may select for the opening balance to an account
 that has the same currency as the account being created.
 
+\section gnome2ref References
 
-
-
-References
-----------
 http://developer.gnome.org/dotplan/porting/index.html
 
 http://developer.gnome.org/doc/API/2.0/glib/index.html
+
 http://developer.gnome.org/doc/API/2.0/gobject/index.html
+
 http://developer.gnome.org/doc/API/2.0/gtk/index.html
+
+*/
