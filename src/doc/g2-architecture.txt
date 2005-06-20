@@ -52,12 +52,7 @@ hard to use in the first place, and has been deprecated in g2.
 
 The g2 version of gnucash is a series of plugin modules designed
 around the g2 concepts of "actions" and "menu merging".  These
-concepts will be integrated into gtk2.4 release.  We are currently
-using the version of this code from the "egg" (proof of concept) code.
-These files have been copied from libegg into the gnucash sources.
-[Note: Some of these files may have been replaced with their gtk2.4
-versions.  Once gtk2.4 is targeted as out base platform level, they
-can be removed from the gnucash sources.]
+concepts will be integrated into gtk2.4 release.
 
 The first level of this architecture is an object representing a
 "pluggable" window.  This object is responsible for:
@@ -83,12 +78,13 @@ API: \ref GuiTreeModel
 
 As mentioned above, the ctree widget has been deprecated in g2.  Some
 parts of gnucash have been converted to the new style using either a
-gtktreemodel/gtktreeview pair of widgets, or using a
-gtktreemodel/eggtreemodelfilter/gtktreeview triplet of widgets.  The
-account tree is presented here as example of the latter.
+GtkTreeModel/GtkTreeView pair of widgets, or using a
+GtkTreeModel/GtkTreeModelFilter/GtkTreeModelSort/GtkTreeView set of
+stacked widgets.  The account tree is presented here as example of the
+latter.
 
 In gnucash, all the accounts are stored in the engine.  The account
-tree "model" (a gtktreemodel) provides a representation of these
+tree "model" (a GtkTreeModel) provides a representation of these
 accounts that can be used by one or more views presented on the user's
 screen.  This code is designed so that there is only one single model
 for the accounts in a given book, and this single model drives all
@@ -102,16 +98,16 @@ The account tree model is designed as a tree and contains a "pseudo"
 account that is the root node of this tree.  Whether the root node is
 visible is a per-view setting.  Also in the model is code to display
 the contents of any row/column intersection in the tree.  The
-gtktreemodel/view base code drives the actual display, and pulls
-numbers from the account tree model as necessary to display them.  For
-all intents and purposes, the model is the sole gui representation of
-the account tree.  The overlaying filters and views simply limit what
-the user sees to some subset of the information in the model.  There
-are very, very few instances where code interacts directly with the
-account tree model.  All interaction should be done through the
-account tree view described later.
+GtkTreeView code drives the actual display, and pulls numbers from the
+account tree model as necessary to display them.  For all intents and
+purposes, the model is the sole gui representation of the account
+tree.  The overlaying filters and views simply limit what the user
+sees to some subset of the information in the model.  There are very,
+very few instances where code interacts directly with the account tree
+model.  All interaction should be done through the account tree view
+described later.
 
-The next layer in the account tree is the treemodelfilter.  This
+The next layer in the account tree is the GtkTreeModelFilter.  This
 filter is automatically created when the account tree view is created.
 In most instances, this filter is used to install a "virtual root" on
 the model that hides the top level "pseudo" account from the user.  At
@@ -129,8 +125,17 @@ corresponding account.  After that the callback may do whatever it
 wants on the account and then return TRUE if it wants the account to
 be visible, FALSE if not.
 
+The next layer in the account tree is the GtkTreeModelSort.  This
+layer provides the capabilities needed by a GtkTreeView to allow
+sorting by clicking on column headers.  If a column has a
+non-alphanumeric sort, the GtkTreeView implementation must provide a
+sort function for each different type of sort.  This function will be
+called by the GtkTreeSortModel for each pair of items it needs to
+sort.  The account tree model provides seven different sort functions
+that are used by various columns.
+
 The top layer of the account tree is the account tree view.  The
-underlying gtktreeview object provides all the standard tree
+underlying GtkTreeView object provides all the standard tree
 manipulation functions; opening accounts to see sub-accounts, selecting
 an item, etc.  The account tree view is the programming interface that
 should be used to manipulate an account tree.  It provides the
