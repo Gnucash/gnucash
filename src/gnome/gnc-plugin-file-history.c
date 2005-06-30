@@ -66,7 +66,6 @@ static void gnc_plugin_file_history_cmd_open_file (GtkAction *action, GncMainWin
 #define PLUGIN_UI_FILENAME  "gnc-plugin-file-history-ui.xml"
 
 static GtkActionEntry gnc_plugin_actions [] = {
-	{ "FileOpenRecentAction", NULL, N_("Open _Recent"), NULL, NULL, NULL },
 	{ "RecentFile0Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
 	{ "RecentFile1Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
 	{ "RecentFile2Action", NULL, "", NULL, NULL, G_CALLBACK (gnc_plugin_file_history_cmd_open_file) },
@@ -110,8 +109,17 @@ gnc_history_generate_label (int index, const gchar *filename)
 	/* raw byte length, not num characters */
 	result = g_malloc(strlen(filename) * 2);
 
-	dst = result + g_sprintf(result, "_%d ", index);
-	for (src = filename; *src; src = g_utf8_next_char(src)) {
+	dst = result;
+	if (index < 10)
+	  dst += g_sprintf(result, "_%d ", (index + 1) % 10);
+
+	/* Find the filename portion of the path */
+	src = g_utf8_strrchr(filename, -1, '/');
+	src = g_utf8_next_char(src);
+
+	/* Fix up any underline characters so they aren't mistaken as
+	 * command accelerator keys. */
+	for ( ; *src; src = g_utf8_next_char(src)) {
 	  unichar = g_utf8_get_char(src);
 	  dst += g_unichar_to_utf8 (unichar, dst);
 
@@ -420,8 +428,6 @@ gnc_plugin_file_history_cmd_open_file (GtkAction *action,
 	gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
 	gnc_file_open_file (filename); /* also opens new account page */
 	gnc_window_set_progressbar_window (NULL);
-	gnc_main_window_update_title (data->window);
-	/* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 /** @} */
