@@ -639,7 +639,6 @@ string and 'directories' must be a list of strings."
                 (gnc:load-account-file)
                 ))
           ;; no matter how or what we loaded, ensure the main-window title is valid...
-          (gnc:main-window-update-title main-window)
           (gnc:hook-run-danglers gnc:*ui-post-startup-hook*)
           (gnc:start-ui-event-loop)
           (gnc:hook-remove-dangler gnc:*ui-shutdown-hook* gnc:gui-finish)))

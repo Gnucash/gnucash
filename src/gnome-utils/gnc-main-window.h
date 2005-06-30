@@ -239,9 +239,6 @@ GtkActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
 						  const gchar *group_name);
 
 
-void gnc_main_window_update_title (GncMainWindow *window);
-
-
 /** Set the window where all progressbar updates should occur.  This
  *  is a wrapper around the gnc_window_set_progressbar_window()
  *  function.

@@ -164,14 +164,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:main-window-update-title
-   '<gw:void>
-   "gnc_main_window_update_title"
-   '((<gnc:MainWindow*> window))
-   "Update the window title based on whatever is loaded in the current session.")
-
-  (gw:wrap-function
-   ws
    'gnc:totd_dialog
    '<gw:void>
    "gnc_totd_dialog"
