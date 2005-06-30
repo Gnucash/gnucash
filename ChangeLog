@@ -1,3 +1,41 @@
+2005-06-30  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-plugin-page.[ch]: Add a utility function to
+	retrieve the page title.
+	
+	* src/gnome-utils/gnc-date-edit.[ch]: Reconnect the
+	focus_out_event signal.  Add a function so this widget can be
+	generated from a glade file.
+
+	* src/gnome/gnc-split-reg.[ch]: Enable translation of the
+	SortType enumeration to/from a string.
+	
+	* src/gnome/gnc-plugin-file-history.c:
+	* src/gnome/ui/gnc-plugin-file-history-ui.xml: Promote file
+	history information to the 'File' menu per Gnome HIG 2.0.
+
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
+	* src/gnome/glade/register.glade: Promote the register style
+	options to the 'Edit' menu per Gnome HIG 2.0.  Rework the various
+	sort, status and date menu items into the HIG "Sort By" and
+	"Filter By" menus.
+
+	* src/gnome/gnc-plugin-basic-commands.c:
+	* src/gnome/ui/gnc-plugin-basic-commands-ui.xml:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml: Move a few commands
+	around to try and better align with HIG 2.0.
+
+	* src/gnome-utils/gnc-main-window.h:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/scm/main.scm: Remove unneeded functions now that the main
+	window title is updated internally.
+
+	* various: Use HIG 2.0 specified access keys wherever
+	possible. Try and ensure that all menu items have access keys
+	defined.
+
 2005-06-19  Neil Williams <linux@codehelp.co.uk>
 	* qofid.c:
 	* qofid.h: qof_collection_count

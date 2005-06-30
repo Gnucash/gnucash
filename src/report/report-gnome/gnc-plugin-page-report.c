@@ -51,7 +51,7 @@
 
 #define WINDOW_REPORT_CM_CLASS "window-report"
 
-static short module = MOD_TEST; // MOD_GUI; // MOD_REPORT;?
+static short module = MOD_GUI; // MOD_GUI; // MOD_REPORT;?
 
 static GObjectClass *parent_class = NULL;
 static GList *active_pages = NULL;

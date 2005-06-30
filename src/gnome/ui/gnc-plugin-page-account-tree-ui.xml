@@ -1,14 +1,18 @@
 <ui>
   <menubar>
     <menu name="File" action="FileAction">
-      <placeholder name="FileNewPlaceholder">
-        <menuitem name="FileAddAccountHierarchyDruid" action="FileAddAccountHierarchyDruidAction"/>
-        <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
-      </placeholder>
-      <placeholder name="FileOpenPlaceholder">
-        <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
-        <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
-      </placeholder>
+      <menu name="FileNewMenu" action="FileNewMenuAction">
+        <placeholder name="FileNewBottonPlaceholder">
+          <menuitem name="FileNewAccount" action="FileNewAccountAction"/>
+          <menuitem name="FileAddAccountHierarchyDruid" action="FileAddAccountHierarchyDruidAction"/>
+        </placeholder>
+      </menu>
+      <menu name="FileOpenMenu" action="FileOpenMenuAction">
+        <placeholder name="FileOpenBottomPlaceholder">
+          <menuitem name="FileOpenAccount" action="FileOpenAccountAction"/>
+          <menuitem name="FileOpenSubaccounts" action="FileOpenSubaccountsAction"/>
+        </placeholder>
+      </menu>
     </menu>
     <menu name="Edit" action="EditAction">
       <placeholder name="EditPlaceholder">

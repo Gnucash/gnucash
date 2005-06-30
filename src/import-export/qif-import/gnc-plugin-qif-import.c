@@ -44,10 +44,10 @@ static void gnc_plugin_qif_test_druid (GtkAction *action, GncMainWindowActionDat
 #define PLUGIN_UI_FILENAME  "gnc-plugin-qif-import-ui.xml"
 
 static GtkActionEntry gnc_plugin_actions [] = {
-	{ "QIFImportAction", GTK_STOCK_CONVERT, N_("Import _QIF..."), "<control>i",
+	{ "QIFImportAction", GTK_STOCK_CONVERT, N_("Import _QIF..."), NULL,
 	  N_("Import a Quicken QIF file"),
 	  G_CALLBACK (gnc_plugin_qif_import_cmd_new_qif_import) },
-	{ "QIFTestDruid", GTK_STOCK_CONVERT, "Test Druid", NULL, 
+	{ "QIFTestDruid", GTK_STOCK_CONVERT, "_Test Druid...", NULL, 
 	  "Test the new Druid", G_CALLBACK(gnc_plugin_qif_test_druid) },
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);

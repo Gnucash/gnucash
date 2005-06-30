@@ -59,7 +59,7 @@ static void gnc_plugin_stylesheets_cmd_edit_style_sheet (GtkAction *action,
 
 static GtkActionEntry gnc_plugin_actions [] = {
   /* Menu Items */
-  { "EditStyleSheetsAction", NULL, N_("_Style Sheets..."), NULL,
+  { "EditStyleSheetsAction", NULL, N_("St_yle Sheets"), NULL,
     N_("Edit report style sheets."),
     G_CALLBACK (gnc_plugin_stylesheets_cmd_edit_style_sheet) },
 };

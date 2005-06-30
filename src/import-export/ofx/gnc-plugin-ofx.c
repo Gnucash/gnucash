@@ -40,7 +40,7 @@ static void gnc_plugin_ofx_cmd_import (GtkAction *action, GncMainWindowActionDat
 #define PLUGIN_UI_FILENAME  "gnc-plugin-ofx-ui.xml"
 
 static GtkActionEntry gnc_plugin_actions [] = {
-  { "OfxImportAction", GTK_STOCK_CONVERT, N_("Import OFX/QFX"), NULL,
+  { "OfxImportAction", GTK_STOCK_CONVERT, N_("Import _OFX/QFX..."), NULL,
     N_("Process an OFX/QFX response file"),
     G_CALLBACK (gnc_plugin_ofx_cmd_import) },
 };

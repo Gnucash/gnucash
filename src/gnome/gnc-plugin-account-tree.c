@@ -46,7 +46,7 @@ static void gnc_plugin_account_tree_cmd_new_account_tree (GtkAction *action, Gnc
 #define PLUGIN_UI_FILENAME  "gnc-plugin-account-tree-ui.xml"
 
 static GtkActionEntry gnc_plugin_actions [] = {
-	{ "FileNewAccountTreeAction", NULL, N_("New Account Tree"), NULL,
+	{ "FileNewAccountTreeAction", NULL, N_("New Accounts _Page"), NULL,
 	  N_("Open a new Account Tree page"),
 	  G_CALLBACK (gnc_plugin_account_tree_cmd_new_account_tree) },
 };

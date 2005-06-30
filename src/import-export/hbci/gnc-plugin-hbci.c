@@ -75,7 +75,7 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "OnlineActionsAction", NULL, N_("_Online Actions"), NULL, NULL, NULL },
 
   /* Menu Items */
-  { "HbciSetupAction", NULL, N_("HBCI Setup..."), NULL,
+  { "HbciSetupAction", NULL, N_("_HBCI Setup..."), NULL,
     N_("Gather initial HBCI information"),
     G_CALLBACK (gnc_plugin_hbci_cmd_setup) },
   { "HbciGetBalanceAction", NULL, N_("HBCI Get _Balance"), NULL,
