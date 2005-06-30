@@ -6,42 +6,16 @@
       </placeholder>
     </menu>
     <menu name="View" action="ViewAction">
-      <placeholder name="ViewPlaceholder">
-        <menu name="SelectTransactions"         action="SelectTransactionsAction">
-          <menu name="TransDateRange"           action="TransDateRangeAction">
-            <menuitem name="TransDateShowAll"   action="TransDateShowAllAction"/>
-            <menuitem name="TransDateSetRange"  action="TransDateSetRangeAction"/>
-          </menu>
-          <menu name="TransStatus"              action="TransStatusAction">
-            <menuitem name="StatusAll"          action="StatusAllAction"/>
-            <separator name="ViewSep42"/>
-            <menuitem name="StatusReconciled"   action="StatusReconciledAction"/>
-            <menuitem name="StatusCleared"      action="StatusClearedAction"/>
-            <menuitem name="StatusVoided"       action="StatusVoidedAction"/>
-            <menuitem name="StatusFrozen"       action="StatusFrozenAction"/>
-            <menuitem name="StatusUnreconciled" action="StatusUnreconciledAction"/>
-          </menu>
-        </menu>
-        <menu name="SortOrder"                  action="SortOrderAction">
-          <menuitem name="SortStandard"         action="SortStandardAction"/>
-          <separator name="ViewSep43"/>
-          <menuitem name="SortDate"             action="SortDateAction"/>
-          <menuitem name="SortDateEntry"        action="SortDateEntryAction"/>
-          <menuitem name="SortDateStatement"    action="SortDateStatementAction"/>
-          <menuitem name="SortNumber"           action="SortNumberAction"/>
-          <menuitem name="SortAmount"           action="SortAmountAction"/>
-          <menuitem name="SortMemo"             action="SortMemoAction"/>
-          <menuitem name="SortDescription"      action="SortDescriptionAction"/>
-          <menuitem name="SortAction"           action="SortActionAction"/>
-          <menuitem name="SortNotes"            action="SortNotesAction"/>
-        </menu>
-        <menu name="Style"                      action="StyleAction">
-          <menuitem name="StyleBasic"           action="StyleBasicAction"/>
-          <menuitem name="StyleAutoSplit"       action="StyleAutoSplitAction"/>
-          <menuitem name="StyleJournal"         action="StyleJournalAction"/>
-          <separator name="ViewSep44"/>
-          <menuitem name="StyleDoubleLine"      action="StyleDoubleLineAction"/>
-        </menu>
+      <placeholder name="ViewContentPlaceholder">
+        <menuitem name="ViewStyleBasic"        	action="ViewStyleBasicAction"/>
+        <menuitem name="ViewStyleAutoSplit"    	action="ViewStyleAutoSplitAction"/>
+        <menuitem name="ViewStyleJournal"      	action="ViewStyleJournalAction"/>
+        <separator name="ViewSep44"/>
+        <menuitem name="ViewStyleDoubleLine"   	action="ViewStyleDoubleLineAction"/>
+      </placeholder>
+      <placeholder name="ViewSortPlaceholder">
+        <menuitem name="ViewSortBy"             action="ViewSortByAction"/>
+        <menuitem name="ViewFilterBy"           action="ViewFilterByAction"/>
       </placeholder>
     </menu>
 
@@ -91,11 +65,14 @@
   </toolbar>
 
   <popup name="RegisterPopup"                action="FakeToplevel">
+    <menuitem name="ViewSortBy"              action="ViewSortByAction"/>
+    <menuitem name="ViewFilterBy"            action="ViewFilterByAction"/>
+    <separator name="PopupSep1"/>
     <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
     <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
     <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
     <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
-    <separator name="PopupSep1"/>
+    <separator name="PopupSep2"/>
     <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
     <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
     <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
