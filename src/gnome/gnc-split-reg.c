@@ -202,6 +202,8 @@ void gnc_split_register_size_allocate (GtkWidget *widget,
                                        GtkAllocation *allocation,
                                        gpointer user_data);
 
+FROM_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
+AS_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 
 guint
 gnc_split_reg_get_type( void )

@@ -182,19 +182,22 @@ typedef enum {
  * but this provides a simple case statement internally.  This should
  * probably not actually be exposed in the external interface....
  */
-typedef enum {
-  BY_NONE = 0,
-  BY_STANDARD,
-  BY_DATE,
-  BY_DATE_ENTERED,
-  BY_DATE_RECONCILED,
-  BY_NUM,
-  BY_AMOUNT,
-  BY_MEMO,
-  BY_DESC,
-  BY_ACTION,
-  BY_NOTES
-} SortType;
+#define ENUM_LIST_SORTTYPE(_) \
+  _(BY_NONE,) \
+  _(BY_STANDARD,) \
+  _(BY_DATE,) \
+  _(BY_DATE_ENTERED,) \
+  _(BY_DATE_RECONCILED,) \
+  _(BY_NUM,) \
+  _(BY_AMOUNT,) \
+  _(BY_MEMO,) \
+  _(BY_DESC,) \
+  _(BY_ACTION,) \
+  _(BY_NOTES,)
+
+DEFINE_ENUM(SortType, ENUM_LIST_SORTTYPE)
+AS_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
+FROM_STRING_DEC(SortType, ENUM_LIST_SORTTYPE)
 
 /**
  * Flags for creation-time selection of what subwidgets are to be created.
