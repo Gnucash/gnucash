@@ -60,13 +60,14 @@ enum {
 #define TOOLBAR_STYLE "/desktop/gnome/interface/toolbar_style"
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static short module = MOD_TEST;
 static GList *active_windows = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
 static void gnc_main_window_init (GncMainWindow *window);
 static void gnc_main_window_finalize (GObject *object);
+static void gnc_main_window_destroy (GtkObject *object);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
 static void gnc_window_main_window_init (GncWindowIface *iface);
@@ -78,7 +79,6 @@ static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin,
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 
 /* Command callbacks */
-static void gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_print (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
@@ -91,6 +91,9 @@ static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_window_raise (GtkAction *action, GtkRadioAction *current, GncMainWindow *window);
 static void gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_contents (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window);
@@ -128,6 +131,7 @@ static guint main_window_signals[LAST_SIGNAL] = { 0 };
 static GtkActionEntry gnc_menu_actions [] =
 {
 	/* Toplevel */
+
 	{ "FileAction", NULL, N_("_File"), NULL, NULL, NULL, },
 	{ "EditAction", NULL, N_("_Edit"), NULL, NULL, NULL },
 	{ "ViewAction", NULL, N_("_View"), NULL, NULL, NULL },
@@ -135,21 +139,23 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "ReportsAction", NULL, N_("_Reports"), NULL, NULL, NULL },
 	{ "ToolsAction", NULL, N_("_Tools"), NULL, NULL, NULL },
 	{ "ExtensionsAction", NULL, N_("E_xtensions"), NULL, NULL, NULL },
+	{ "WindowsAction", NULL, N_("_Windows"), NULL, NULL, NULL },
 	{ "HelpAction", NULL, N_("_Help"), NULL, NULL, NULL },
 	{ "MiscAction", NULL, N_("_Misc"), NULL, NULL, NULL },
 
-	{ "FileOpenNewWindowAction", NULL, N_("Move to a New Window"), NULL,
-	  N_("Open a new top-level GnuCash window for the current page."),
-	  G_CALLBACK (gnc_main_window_cmd_file_open_new_window) },
+	/* File menu */
+
+	{ "FileNewMenuAction", GTK_STOCK_NEW, N_("_New"), "", NULL, NULL },
+	{ "FileOpenMenuAction", GTK_STOCK_OPEN, N_("_Open"), "", NULL, NULL },
 	{ "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
 	{ "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
 	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_print) },
-	{ "FilePropertiesAction", GTK_STOCK_PROPERTIES, N_("Properties..."), NULL,
+	{ "FilePropertiesAction", GTK_STOCK_PROPERTIES, N_("Proper_ties"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_properties) },
-	{ "FileCloseAction", GTK_STOCK_CLOSE, N_("_Close"), "<control>w",
+	{ "FileCloseAction", GTK_STOCK_CLOSE, N_("_Close"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_close) },
 	{ "FileQuitAction", GTK_STOCK_QUIT, N_("_Quit"), NULL,
@@ -157,6 +163,7 @@ static GtkActionEntry gnc_menu_actions [] =
 	  G_CALLBACK (gnc_main_window_cmd_file_quit) },
 
 	/* Edit menu */
+
 	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_edit_cut) },
@@ -166,7 +173,7 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_edit_paste) },
-	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("_Preferences"), NULL,
+	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
 
@@ -174,6 +181,14 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
 	  N_("Refresh this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_refresh) },
+
+	/* Windows menu */
+	{ "WindowNewAction", NULL, N_("_New Window"), NULL,
+	  N_("Open a new top-level GnuCash window."),
+	  G_CALLBACK (gnc_main_window_cmd_window_new) },
+	{ "WindowMovePageAction", NULL, N_("New Window with _Page"), NULL,
+	  N_("Move the current page to a new top-level GnuCash window."),
+	  G_CALLBACK (gnc_main_window_cmd_window_move_page) },
 
 	/* Help menu */
 	{ "HelpTutorialAction", GNOME_STOCK_BOOK_BLUE, N_("Tutorial and Concepts _Guide"), NULL,
@@ -195,21 +210,45 @@ static guint gnc_menu_n_actions = G_N_ELEMENTS (gnc_menu_actions);
 
 static GtkToggleActionEntry toggle_actions [] =
 {
-	{ "ViewToolbarAction", NULL, N_("_Toolbar"), "<shift><control>t",
+	{ "ViewToolbarAction", NULL, N_("_Toolbar"), NULL,
 	  N_("Show/hide the toolbar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_toolbar), TRUE },
-	{ "ViewSummaryAction", NULL, N_("S_ummary Bar"), NULL,
+	{ "ViewSummaryAction", NULL, N_("Su_mmary Bar"), NULL,
 	  N_("Show/hide the summary bar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_summary), TRUE },
-	{ "ViewStatusbarAction", NULL, N_("_Status Bar"), NULL,
+	{ "ViewStatusbarAction", NULL, N_("Stat_us Bar"), NULL,
 	  N_("Show/hide the status bar on this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_statusbar), TRUE },
 };
 static guint n_toggle_actions = G_N_ELEMENTS (toggle_actions);
 
-static const gchar *immutable_account_actions[] = {
+static GtkRadioActionEntry radio_entries [] =
+{
+	{ "Window0Action", NULL, N_("Window _1"), NULL, NULL, 0 },
+	{ "Window1Action", NULL, N_("Window _2"), NULL, NULL, 1 },
+	{ "Window2Action", NULL, N_("Window _3"), NULL, NULL, 2 },
+	{ "Window3Action", NULL, N_("Window _4"), NULL, NULL, 3 },
+	{ "Window4Action", NULL, N_("Window _5"), NULL, NULL, 4 },
+	{ "Window5Action", NULL, N_("Window _6"), NULL, NULL, 5 },
+	{ "Window6Action", NULL, N_("Window _7"), NULL, NULL, 6 },
+	{ "Window7Action", NULL, N_("Window _8"), NULL, NULL, 7 },
+	{ "Window8Action", NULL, N_("Window _9"), NULL, NULL, 8 },
+	{ "Window9Action", NULL, N_("Window _0"), NULL, NULL, 9 },
+};
+static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
+
+
+/** If a page is flagged as immutable, then the following actions
+ *  cannot be peformed on that page. */
+static const gchar *immutable_page_actions[] = {
 	"FileCloseAction",
-	"FileOpenNewWindowAction",
+	NULL
+};
+
+/** The following actions can only be performed if there are multiple
+ *  pages in a window. */
+static const gchar *multiple_page_actions[] = {
+	"WindowMovePageAction",
 	NULL
 };
 
@@ -306,6 +345,255 @@ gnc_main_window_event_handler (GUID *entity, QofIdType type,
 	LEAVE(" ");
 }
 
+
+/** Generate a title for this window based upon the Gnome Human
+ *  Interface Guidelines, v2.0.  This title will be used as both the
+ *  window title and the title of the "Window" menu item associated
+ *  with the window.
+ *
+ *  @param window The window whose title should be generated.
+ *
+ *  @return The title for the window.  It is the callers
+ *  responsibility to free this string.
+ *
+ *  @internal
+ */
+static gchar *
+gnc_main_window_generate_title (GncMainWindow *window)
+{
+  GncPluginPage *page;
+  const gchar *filename;
+  gchar *title, *ptr;
+
+  filename = gnc_session_get_url (gnc_get_current_session ());
+
+  if (!filename)
+    filename = _("<no file>");
+  else {
+    /* The Gnome HIG 2.0 recommends only the file name (no path) be used. (p15) */
+    ptr = rindex(filename, '/');
+    if (ptr != NULL)
+      filename = ptr+1;
+  }
+
+  page = window->priv->current_page;
+  if (page) {
+    /* The Gnome HIG 2.0 recommends the application name not be used. (p16) */
+    title = g_strdup_printf("%s - %s", filename,
+			    gnc_plugin_page_get_title(page));
+  } else {
+    title = g_strdup_printf("%s", filename);
+  }
+  
+  return title;
+}
+
+
+/** Update the title bar on the specified window.  This routine uses
+ *  the gnc_main_window_generate_title() function to create the title.
+ *  It is called whenever the user switched pages in a window, as the
+ *  title includes the name of the current page.
+ *
+ *  @param window The window whose title should be updated.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_update_title (GncMainWindow *window)
+{
+  gchar *title;
+
+  title = gnc_main_window_generate_title(window);
+  gtk_window_set_title(GTK_WINDOW(window), title);
+  g_free(title);
+}
+
+
+/** This data structure is used to describe the requested state of a
+ *  GtkRadioAction, and us used to pass data among several
+ *  functions. */
+struct menu_update {
+  /** The name of the GtkRadioAction to be updated. */
+  gchar    *action_name;
+
+  /** The new label for this GtkRadioAction. */
+  gchar    *label;
+
+  /** Whether or not the GtkRadioAction should be visible. */
+  gboolean  visible;
+};
+
+
+/** Update the label on the specified GtkRadioAction in the specified
+ *  window.  This action is displayed as a menu item in the "Windows"
+ *  menu.  This function will end up being called whenever the front
+ *  page is changed in any window, or whenever a window is added or
+ *  deleted.
+ *
+ *  @param window The window whose menu item should be updated.
+ *
+ *  @param data A data structure containing the name of the
+ *  GtkRadioAction, and describing the new state for this action.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_update_one_menu_action (GncMainWindow *window,
+					struct menu_update *data)
+{
+  GtkAction* action;
+
+  ENTER("window %p, action %s, label %s, visible %d", window,
+	data->action_name, data->label, data->visible);
+  action = gtk_action_group_get_action(window->priv->action_group,
+				       data->action_name);
+  if (action)
+    g_object_set(G_OBJECT(action),
+		 "label", data->label,
+		 "visible", data->visible,
+		 NULL);
+  LEAVE(" ");
+}
+
+
+/** Update the window selection GtkRadioAction for a specific window.
+ *  This is fairly simple since the windows are listed in the same
+ *  order that they appear in the active_windows list, so the index
+ *  from the window list is used to generate the name of the action.
+ *  If the code is ever changed to allow more than ten open windows in
+ *  the menu, then the actions in the menu will need to be dynamically
+ *  generated/deleted and it gets harder.
+ *
+ *  @param window The window whose menu item should be updated.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_update_radio_button (GncMainWindow *window)
+{
+  GtkAction *action, *first_action;
+  GSList *action_list;
+  gchar *action_name;
+  gint index;
+
+  ENTER("window %p", window);
+
+  /* Show the new entry in all windows. */
+  index = g_list_index(active_windows, window);
+  if (index > n_radio_entries) {
+    LEAVE("window %d, only %d actions", index, n_radio_entries);
+    return;
+  }
+
+  action_name = g_strdup_printf("Window%dAction", index);
+  action = gtk_action_group_get_action(window->priv->action_group,
+				       action_name);
+
+  /* Block the signal so as not to affect window ordering (top to
+   * bottom) on the screen */
+  action_list = gtk_radio_action_get_group(GTK_RADIO_ACTION(action));
+  first_action = g_slist_last(action_list)->data;
+  g_signal_handlers_block_by_func(first_action,
+				  gnc_main_window_cmd_window_raise, window);
+  DEBUG("blocked signal on %p, set %p active, window %p", first_action, action, window);
+  gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(action), TRUE);
+  g_signal_handlers_unblock_by_func(first_action,
+				    gnc_main_window_cmd_window_raise, window);
+  g_free(action_name);
+  LEAVE(" ");
+}
+
+
+/** In every window that the user has open, update the "Window" menu
+ *  item that points to the specified window.  This keeps the "Window"
+ *  menu items consistent across all open windows.  (These items
+ *  cannot be shared because of the way the GtkUIManager code works.)
+ *
+ *  This function is called whenever the user switches pages in a
+ *  window, or whenever a window is added or deleted.
+ *
+ *  @param window The window whose menu item should be updated in all
+ *  open windows.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_update_menu_item (GncMainWindow *window)
+{
+  struct menu_update data;
+  gchar **strings, *title, *expanded;
+  gint index;
+
+  ENTER("window %p", window);
+  index = g_list_index(active_windows, window);
+  if (index > n_radio_entries) {
+    LEAVE("skip window %d (only %d entries)", index, n_radio_entries);
+    return;
+  }
+
+  /* Figure out the label name. Add the accelerator if possible. */
+  title = gnc_main_window_generate_title(window);
+  strings = g_strsplit(title, "_", 0);
+  expanded = g_strjoinv("__", strings);
+  if (index < 10) {
+    data.label = g_strdup_printf("_%d %s", (index + 1) % 10, expanded);
+    g_free(expanded);
+  } else {
+    data.label = expanded;
+  }
+  g_strfreev(strings);
+
+  data.visible = TRUE;
+  data.action_name = g_strdup_printf("Window%dAction", index);
+  g_list_foreach(active_windows,
+		 (GFunc)gnc_main_window_update_one_menu_action,
+		 &data);
+  g_free(data.action_name);
+  g_free(data.label);
+  LEAVE(" ");
+}
+
+/** Update all menu entries for all window menu items in all windows.
+ *  This function is called whenever a window is added or deleted.
+ *  The worst case scenario is where the user has deleted the first
+ *  window, so every single visible item needs to be updated.
+ *
+ *  @internal
+ */
+static void
+gnc_main_window_update_all_menu_items (void)
+{
+  struct menu_update data;
+  gchar *label;
+  gint i;
+
+  ENTER("");
+
+  /* First update the entries for all existing windows */
+  g_list_foreach(active_windows,
+		 (GFunc)gnc_main_window_update_menu_item,
+		 NULL);
+  g_list_foreach(active_windows,
+		 (GFunc)gnc_main_window_update_radio_button,
+		 NULL);
+
+  /* Now hide any entries that aren't being used. */
+  data.visible = FALSE;
+  for (i = g_list_length(active_windows); i < n_radio_entries; i++) {
+    data.action_name = g_strdup_printf("Window%dAction", i);
+    label = g_strdup_printf("Window _%d", (i - 1) % 10);
+    data.label = gettext(label);
+
+    g_list_foreach(active_windows,
+		   (GFunc)gnc_main_window_update_one_menu_action,
+		   &data);
+
+    g_free(data.action_name);
+    g_free(label);
+  }
+  LEAVE(" ");
+}
+
 /************************************************************
  *                   Widget Implementation                  *
  ************************************************************/
@@ -361,12 +649,16 @@ static void
 gnc_main_window_class_init (GncMainWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkObjectClass *gtkobject_class = GTK_OBJECT_CLASS(klass);
 
 	parent_class = g_type_class_peek_parent (klass);
 
 	window_type = g_quark_from_static_string ("gnc-main-window");
 
 	object_class->finalize = gnc_main_window_finalize;
+
+	/* GtkObject signals */
+	gtkobject_class->destroy = gnc_main_window_destroy;
 
 	/**
 	 * GncMainWindow::page_added:
@@ -456,17 +748,53 @@ gnc_main_window_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
 
 	window = GNC_MAIN_WINDOW (object);
+
+	if (active_windows == NULL) {
+	  /* Oops. User killed last window and we didn't catch it. */
+	  g_idle_add((GSourceFunc)gnc_shutdown, 0);
+	}
+
+	g_return_if_fail (window->priv != NULL);
+
+	g_free (window->priv);
+
+	G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+
+static void
+gnc_main_window_destroy (GtkObject *object)
+{
+	GncMainWindow *window;
+
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (GNC_IS_MAIN_WINDOW (object));
+
+	window = GNC_MAIN_WINDOW (object);
+
 	active_windows = g_list_remove (active_windows, window);
 
 	g_return_if_fail (window->priv != NULL);
 
-	gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
+	/* Do these things once */
+	if (window->priv->merged_actions_table) {
 
-	gnc_engine_unregister_event_handler(window->priv->event_handler_id);
-	g_hash_table_destroy (window->priv->merged_actions_table);
-	g_free (window->priv);
+	  /* Close any pages in this window */
+	  while (window->priv->current_page)
+	    gnc_main_window_close_page(window->priv->current_page);
 
-	G_OBJECT_CLASS (parent_class)->finalize (object);
+	  /* Update the "Windows" menu in all other windows */
+	  gnc_main_window_update_all_menu_items();
+
+	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
+
+	  gnc_engine_unregister_event_handler(window->priv->event_handler_id);
+	  window->priv->event_handler_id = 0;
+
+	  g_hash_table_destroy (window->priv->merged_actions_table);
+	  window->priv->merged_actions_table = NULL;
+	}
+	GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 
@@ -479,6 +807,7 @@ gnc_main_window_new (void)
 
 	window = g_object_new (GNC_TYPE_MAIN_WINDOW, NULL);
 	active_windows = g_list_append (active_windows, window);
+	gnc_main_window_update_all_menu_items();
 	return window;
 }
 
@@ -514,11 +843,11 @@ gnc_main_window_connect (GncMainWindow *window,
 
 	page->window = GTK_WIDGET(window);
 	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	window->priv->installed_pages =
+	  g_list_append (window->priv->installed_pages, page);
 	gtk_notebook_append_page (notebook, page->notebook_page, tab_widget);
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
-	window->priv->installed_pages =
-	  g_list_append (window->priv->installed_pages, page);
 	g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
 }
 
@@ -957,6 +1286,11 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	gtk_action_group_add_toggle_actions (priv->action_group, 
 					     toggle_actions, n_toggle_actions, 
 					     window);
+	gtk_action_group_add_radio_actions (priv->action_group,
+					    radio_entries, n_radio_entries,
+					    0,
+					    G_CALLBACK(gnc_main_window_cmd_window_raise),
+					    window);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
@@ -988,32 +1322,6 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	g_free(style);
 
         /* Testing */
-        {
-                guint new_merge_id;
-                GtkActionGroup *eag;
-                GtkActionEntry newEntry[] =
-                        {
-                          { "BarAction", NULL, N_("_GtkHtml3 test"), "<control>3", NULL, G_CALLBACK (gnc_main_window_cmd_test) }
-                        };
-
-                eag = gtk_action_group_new ("MainWindowActions2");
-
-                gtk_action_group_add_actions (eag, newEntry,
-                                              G_N_ELEMENTS (newEntry), window);
-                gtk_ui_manager_insert_action_group( window->ui_merge, eag, 0 );
-
-                new_merge_id = gtk_ui_manager_new_merge_id( window->ui_merge );
-
-                gtk_ui_manager_add_ui( window->ui_merge, new_merge_id,
-                                       // "/menubar/Actions", no
-                                       // "/menubar/Actions/ActionsPlaceholder", no
-                                       // "/menubar/AdditionalMenusPlaceholder/AReportAction", no 
-                                       "/menubar/AdditionalMenusPlaceholder", // winnah!
-                                       "BarAction",
-                                       "BarAction", GTK_UI_MANAGER_MENUITEM, FALSE );
-                gtk_ui_manager_ensure_update( window->ui_merge );
-        }
-
 	/* Now update the "eXtensions" menu */
 	debugging = scm_c_eval_string("(gnc:debugging?)");
 	if (debugging == SCM_BOOL_F) {
@@ -1067,7 +1375,7 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	GncPluginPage *page;
 	gboolean immutable;
 
-	DEBUG("Notebook %p, page, %p, index %d, window %p",
+	ENTER("Notebook %p, page, %p, index %d, window %p",
 	       notebook, notebook_page, pos, window);
 	g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
 
@@ -1125,10 +1433,19 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	immutable = page &&
 	  g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
 	gnc_plugin_update_actions(window->priv->action_group,
-				  immutable_account_actions,
+				  immutable_page_actions,
 				  "sensitive", !immutable);
+	DEBUG("installed pages: %d", g_list_length(window->priv->installed_pages));
+	gnc_plugin_update_actions(window->priv->action_group,
+				  multiple_page_actions,
+				  "sensitive",
+				  g_list_length(window->priv->installed_pages) > 1);
+
+	gnc_main_window_update_title(window);
+	gnc_main_window_update_menu_item(window);
 
 	g_signal_emit (window, main_window_signals[PAGE_CHANGED], 0, page);
+	LEAVE(" ");
 }
 
 static void
@@ -1155,48 +1472,6 @@ gnc_main_window_plugin_removed (GncPlugin *manager,
 
 
 /* Command callbacks */
-static void
-gnc_main_window_cmd_file_open_new_window (GtkAction *action, GncMainWindow *window)
-{
-	GncMainWindowPrivate *priv;
-	GncMainWindow *new_window;
-	GncPluginPage *page;
-	GtkNotebook *notebook;
-	GtkWidget *tab_widget;
-
-	/* Setup */
-	priv = window->priv;
-	if (priv->current_page == NULL)
-		return;
-	notebook = GTK_NOTEBOOK (priv->notebook);
-	page = priv->current_page;
-	tab_widget = gtk_notebook_get_tab_label (notebook, page->notebook_page);
-
-	/* Ref the page components, then remove it from its old window */
-	g_object_ref(page);
-	g_object_ref(tab_widget);
-	g_object_ref(page->notebook_page);
-	gnc_main_window_disconnect(window, page);
-
-	/* Create the new window */
-	new_window = gnc_main_window_new ();
-	gtk_widget_show(GTK_WIDGET(new_window));
-
-	/* Now add the page to the new window */
-	gnc_main_window_connect (new_window, page, tab_widget);
-
-	/* Unref the page components now that we're done */
-	g_object_unref(page->notebook_page);
-	g_object_unref(tab_widget);
-	g_object_unref(page);
-
-	/* just a little debugging. :-) */
-	DEBUG("Moved page %p (sb %p) from window %p to new window %p",
-	      page, page->summarybar, window, new_window);
-	DEBUG("Old window current is %p, new window current is %p",
-	      window->priv->current_page, new_window->priv->current_page);
-}
-
 static void
 gnc_main_window_cmd_file_print (GtkAction *action, GncMainWindow *window)
 {
@@ -1286,6 +1561,80 @@ gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window)
 }
 
 static void
+gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window)
+{
+	GncMainWindow *new_window;
+
+	/* Create the new window */
+	ENTER(" ");
+	new_window = gnc_main_window_new ();
+	gtk_widget_show(GTK_WIDGET(new_window));
+	LEAVE(" ");
+}
+
+static void
+gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window)
+{
+	GncMainWindowPrivate *priv;
+	GncMainWindow *new_window;
+	GncPluginPage *page;
+	GtkNotebook *notebook;
+	GtkWidget *tab_widget;
+
+	/* Setup */
+	priv = window->priv;
+	if (priv->current_page == NULL)
+		return;
+	notebook = GTK_NOTEBOOK (priv->notebook);
+	page = priv->current_page;
+	tab_widget = gtk_notebook_get_tab_label (notebook, page->notebook_page);
+
+	/* Ref the page components, then remove it from its old window */
+	g_object_ref(page);
+	g_object_ref(tab_widget);
+	g_object_ref(page->notebook_page);
+	gnc_main_window_disconnect(window, page);
+
+	/* Create the new window */
+	new_window = gnc_main_window_new ();
+	gtk_widget_show(GTK_WIDGET(new_window));
+
+	/* Now add the page to the new window */
+	gnc_main_window_connect (new_window, page, tab_widget);
+
+	/* Unref the page components now that we're done */
+	g_object_unref(page->notebook_page);
+	g_object_unref(tab_widget);
+	g_object_unref(page);
+
+	/* just a little debugging. :-) */
+	DEBUG("Moved page %p (sb %p) from window %p to new window %p",
+	      page, page->summarybar, window, new_window);
+	DEBUG("Old window current is %p, new window current is %p",
+	      window->priv->current_page, new_window->priv->current_page);
+}
+
+static void
+gnc_main_window_cmd_window_raise (GtkAction *action,
+				  GtkRadioAction *current,
+				  GncMainWindow *unused)
+{
+	GncMainWindow *window;
+	gint value;
+
+	g_return_if_fail(GTK_IS_ACTION(action));
+	g_return_if_fail(GTK_IS_RADIO_ACTION(current));
+	g_return_if_fail(GNC_IS_MAIN_WINDOW(unused));
+	
+	/* DRH - Start here */
+	ENTER("action %p, current %p, window %p", action, current, unused);
+	value = gtk_radio_action_get_current_value(current);
+	window = g_list_nth_data(active_windows, value);
+	gtk_window_present(GTK_WINDOW(window));
+	LEAVE(" ");
+}
+
+static void
 gnc_main_window_cmd_help_tutorial (GtkAction *action, GncMainWindow *window)
 {
 	gnc_gnome_help (HF_GUIDE, NULL);
@@ -1345,27 +1694,6 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 
 	gdk_pixbuf_unref (logo);
 	gtk_dialog_run (GTK_DIALOG (about));
-}
-
-void
-gnc_main_window_update_title (GncMainWindow *window)
-{
-  const gchar *filename;
-  gchar *title, *ptr;
-
-  filename = gnc_session_get_url (gnc_get_current_session ());
-
-  if (!filename)
-    filename = _("<no file>");
-  else {
-    /* Recommended gnome naming scheme */
-    ptr = rindex(filename, '/');
-    if (ptr != NULL)
-      filename = ptr+1;
-  }
-  title = g_strdup_printf ("%s - Gnucash", filename);
-  gtk_window_set_title (GTK_WINDOW(&window->parent), title);
-  g_free(title);
 }
 
 static GtkWidget *
