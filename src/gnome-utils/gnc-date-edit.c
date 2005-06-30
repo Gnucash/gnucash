@@ -593,7 +593,6 @@ key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
 	return TRUE;
 }
 
-#if 0
 static int
 date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
@@ -610,9 +609,8 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [DATE_CHANGED]);
 	gtk_signal_emit (GTK_OBJECT (gde), date_edit_signals [TIME_CHANGED]);
 
-        return TRUE;
+        return FALSE;
 }
-#endif
 
 static void
 create_children (GNCDateEdit *gde)
@@ -627,10 +625,8 @@ create_children (GNCDateEdit *gde)
 	gtk_widget_show (GTK_WIDGET(gde->date_entry));
 	g_signal_connect (G_OBJECT (gde->date_entry), "key_press_event",
 			  G_CALLBACK (key_press_entry), gde);
-#if 0
 	g_signal_connect (G_OBJECT (gde->date_entry), "focus_out_event",
 			  G_CALLBACK (date_focus_out_event), gde);
-#endif
 
 	gde->date_button = gtk_button_new ();
 	g_signal_connect (G_OBJECT (gde->date_button), "clicked",
@@ -736,6 +732,23 @@ gnc_date_edit_new_ts (Timespec the_time, int show_time, int use_24_format)
 {
         return gnc_date_edit_new (the_time.tv_sec, show_time, use_24_format);
 }
+
+
+/*
+ * Create a new GncDateEdit widget from a glade file.  The widget
+ * generated is set to today's date, and will not show a time as part
+ * of the date.  This function does not use any of the arguments
+ * passed by glade.
+ */
+GtkWidget *
+gnc_date_edit_new_glade (gchar *widget_name,
+			 gchar *string1, gchar *string2,
+			 gint int1, gint int2)
+{
+	/* None of the standard glade arguments are used. */
+        return gnc_date_edit_new(time(NULL), FALSE, FALSE);
+}
+
 
 /**
  * gnc_date_edit_new_flags:

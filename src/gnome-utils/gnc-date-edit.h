@@ -87,6 +87,27 @@ GtkWidget *gnc_date_edit_new            (time_t the_time,
                                          int show_time, int use_24_format);
 GtkWidget *gnc_date_edit_new_ts         (Timespec the_time,
                                          int show_time, int use_24_format);
+
+/**
+ * Create a new GncDateEdit widget from a glade file.  The widget
+ * generated is set to today's date, and will not show a time as part
+ * of the date.  This function does not use any of the arguments
+ * passed by glade.
+ *
+ * @param widget_name This parameter is unused.  The actual widget
+ * name will be set by glade so it does not need to be done here.
+ *
+ * @param string1 Unused.
+ * @param string2 Unused.
+ * @param int1 Unused.
+ * @param int2 Unused.
+ *
+ * @return A pointer to the newly created GncDateEdit widget.
+ */
+GtkWidget *gnc_date_edit_new_glade (gchar *widget_name,
+				    gchar *string1, gchar *string2,
+				    gint int1, gint int2);
+
 GtkWidget *gnc_date_edit_new_flags      (time_t the_time,
                                          GNCDateEditFlags flags);
 
