@@ -60,7 +60,7 @@ enum {
 #define TOOLBAR_STYLE "/desktop/gnome/interface/toolbar_style"
 
 /** Static Globals *******************************************************/
-static short module = MOD_TEST;
+static short module = MOD_GUI;
 static GList *active_windows = NULL;
 
 /** Declarations *********************************************************/
@@ -1435,7 +1435,6 @@ gnc_main_window_switch_page (GtkNotebook *notebook,
 	gnc_plugin_update_actions(window->priv->action_group,
 				  immutable_page_actions,
 				  "sensitive", !immutable);
-	DEBUG("installed pages: %d", g_list_length(window->priv->installed_pages));
 	gnc_plugin_update_actions(window->priv->action_group,
 				  multiple_page_actions,
 				  "sensitive",
