@@ -79,10 +79,10 @@ static GtkActionEntry gnc_plugin_actions [] = {
 
   /* File menu */
 
-  { "FileNewAction", GTK_STOCK_NEW, N_("_New File"), "<control>n",
+  { "FileNewAction", GTK_STOCK_NEW, N_("New _File"), NULL,
     N_("Create a new file"),
     G_CALLBACK (gnc_main_window_cmd_file_new) },
-  { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open"), NULL,
+  { "FileOpenAction", GTK_STOCK_OPEN, N_("_Open..."), NULL,
     NULL,
     G_CALLBACK (gnc_main_window_cmd_file_open) },
   { "FileSaveAction", GTK_STOCK_SAVE, N_("_Save"), "<control>s",
@@ -106,6 +106,9 @@ static GtkActionEntry gnc_plugin_actions [] = {
 
   /* Edit menu */
 
+  { "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find Transactions..."), "<control>f",
+    N_("Find transactions with a search"),
+    G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
   { "EditTaxOptionsAction", NULL, N_("Ta_x Options"), NULL,
     N_("Setup tax information for all income and expense accounts"),
     G_CALLBACK (gnc_main_window_cmd_edit_tax_options) },
@@ -122,10 +125,10 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ActionsMortgageLoanAction", NULL, N_("_Mortgage & Loan Repayment..."), NULL,
     N_("Setup scheduled transactions for repayment of a loan"),
     G_CALLBACK (gnc_main_window_cmd_actions_mortgage_loan) },
-  { "ActionsBudgetWorkbenchAction", NULL, N_("_Budget Workbench (Experimental)"), NULL, 
+  { "ActionsBudgetWorkbenchAction", NULL, N_("Budget _Workbench (Experimental)"), NULL, 
     N_("Create, Manage, and Monitor Budgets." ),
     G_CALLBACK(gnc_main_window_cmd_actions_budget_workbench) },
-  { "ActionsCloseBooksAction", NULL, N_("Close Books"), NULL,
+  { "ActionsCloseBooksAction", NULL, N_("Close _Books"), NULL,
     N_("Archive old data using accounting periods"),
     G_CALLBACK (gnc_main_window_cmd_actions_close_books) },
 
@@ -134,15 +137,12 @@ static GtkActionEntry gnc_plugin_actions [] = {
   { "ToolsPriceEditorAction", NULL, N_("_Price Editor"), NULL,
     N_("View and edit the prices for stocks and mutual funds"),
     G_CALLBACK (gnc_main_window_cmd_tools_price_editor) },
-  { "ToolsCommodityEditorAction", NULL, N_("Commodity _Editor"), NULL,
+  { "ToolsCommodityEditorAction", NULL, N_("_Commodity Editor"), NULL,
     N_("View and edit the commodities for stocks and mutual funds"),
     G_CALLBACK (gnc_main_window_cmd_tools_commodity_editor) },
-  { "ToolsFinancialCalculatorAction", NULL, N_("Financial _Calculator"), NULL,
+  { "ToolsFinancialCalculatorAction", NULL, N_("_Financial Calculator"), NULL,
     N_("Use the financial calculator"),
     G_CALLBACK (gnc_main_window_cmd_tools_financial_calculator) },
-  { "ToolsFindTransactionsAction", GTK_STOCK_FIND, N_("_Find Transactions"), "<control>f",
-    N_("Find transactions with a search"),
-    G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
 
   /* Help menu */
 
@@ -257,8 +257,6 @@ gnc_main_window_cmd_file_open (GtkAction *action, GncMainWindowActionData *data)
   gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
   gnc_file_open ();
   gnc_window_set_progressbar_window (NULL);
-  gnc_main_window_update_title (data->window);
-  /* FIXME GNOME 2 Port (update the title etc.) */
 }
 
 static void

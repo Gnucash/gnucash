@@ -1,21 +1,20 @@
 <ui>
   <menubar>
     <menu name="File" action="FileAction">
-      <placeholder name="FileNewPlaceholder">
-        <menuitem name="FileNew" action="FileNewAction"/>
-      </placeholder>
-      <separator name="FileSep1"/>
-      <placeholder name="FileOpenPlaceholder">
-        <menuitem name="FileOpen" action="FileOpenAction"/>
-      </placeholder>
-      <menuitem name="FileOpenNewWindow" action="FileOpenNewWindowAction"/>
-      <placeholder name="FileOpenRecentPlaceholder"/>
-      <separator name="FileSep2"/>
+      <menu name="FileNewMenu" action="FileNewMenuAction">
+        <placeholder name="FileNewTopPlaceholder">
+          <menuitem name="FileNew" action="FileNewAction"/>
+        </placeholder>
+      </menu>
+      <menu name="FileOpenMenu" action="FileOpenMenuAction">
+        <placeholder name="FileOpenTopPlaceholder">
+          <menuitem name="FileOpen" action="FileOpenAction"/>
+        </placeholder>
+      </menu>
       <placeholder name="FileSavePlaceholder">
         <menuitem name="FileSave" action="FileSaveAction"/>
         <menuitem name="FileSaveAs" action="FileSaveAsAction"/>
       </placeholder>
-      <separator name="FileSep3"/>
       <menu name="FileImport" action="FileImportAction">
         <menuitem name="FileImportQSF" action="FileImportQSFAction"/>
       </menu>
@@ -23,25 +22,12 @@
         <menuitem name="FileExportAccounts" action="FileExportAccountsAction"/>
         <menuitem name="FileExportChart" action="FileExportChartAction"/>
       </menu>
-      <separator name="FileSep4"/>
-      <menuitem name="FilePrint" action="FilePrintAction"/>
-      <placeholder name="FilePrintPlaceholder"/>
-      <separator name="FileSep5"/>
-      <menuitem name="FileProperties" action="FilePropertiesAction"/>
-      <separator name="FileSep6"/>
-      <menuitem name="FileClose" action="FileCloseAction"/>
-      <menuitem name="FileQuit" action="FileQuitAction"/>
     </menu>
   
     <menu name="Edit" action="EditAction">
-      <menuitem name="EditCut" action="EditCutAction"/>
-      <menuitem name="EditCopy" action="EditCopyAction"/>
-      <menuitem name="EditPaste" action="EditPasteAction"/>
-      <separator name="EditSep1"/>
-      <placeholder name="EditPlaceholder"/>
-      <menuitem name="EditPreferences" action="EditPreferencesAction"/>
-      <placeholder name="EditPreferencesPlaceholder"/>
-      <placeholder name="EditStyleSheetsPlaceholder"/>
+      <placeholder name="EditFindPlaceholder">
+        <menuitem name="EditFindTransactions" action="EditFindTransactionsAction"/>
+      </placeholder>
       <menuitem name="EditTaxOptions" action="EditTaxOptionsAction"/>
     </menu>
   
@@ -77,7 +63,6 @@
         <menuitem name="ToolsPriceEditor" action="ToolsPriceEditorAction"/>
         <menuitem name="ToolsCommodityEditor" action="ToolsCommodityEditorAction"/>
         <menuitem name="ToolsFinancialCalculator" action="ToolsFinancialCalculatorAction"/>
-        <menuitem name="ToolsFindTransactions" action="ToolsFindTransactionsAction"/>
       </placeholder>
     </menu>
 
