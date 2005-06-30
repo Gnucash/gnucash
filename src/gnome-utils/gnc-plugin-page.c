@@ -337,3 +337,11 @@ gnc_plugin_page_has_books (GncPluginPage *page)
 
   return (page->priv->books != NULL);
 }
+
+const gchar *
+gnc_plugin_page_get_title (GncPluginPage *page)
+{
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+
+  return page->title;
+}

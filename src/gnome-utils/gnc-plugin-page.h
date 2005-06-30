@@ -109,7 +109,7 @@ void gnc_plugin_page_add_book (GncPluginPage *page, QofBook *book);
  *  @return TRUE if the page refers to the specified book. FALSE
  *  otherwise.
  */
-gboolean              gnc_plugin_page_has_book        (GncPluginPage *page, GUID *book);
+gboolean gnc_plugin_page_has_book (GncPluginPage *page, GUID *book);
 
 /** Query a page to see if it has a reference to any book.
  *
@@ -117,8 +117,13 @@ gboolean              gnc_plugin_page_has_book        (GncPluginPage *page, GUID
  *
  *  @return TRUE if the page references any books. FALSE otherwise.
  */
-gboolean              gnc_plugin_page_has_books       (GncPluginPage *page);
+gboolean gnc_plugin_page_has_books (GncPluginPage *page);
 
+/** Retrieve the page part of the window title.
+ *
+ *  @param page The page whose title component should be retrieved.
+ */
+const gchar *gnc_plugin_page_get_title (GncPluginPage *page);
 
 /* Signals */
 void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);
