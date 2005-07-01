@@ -15,14 +15,11 @@
       </menu>
     </menu>
     <menu name="Edit" action="EditAction">
-      <placeholder name="EditPlaceholder">
+      <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditAccount" action="EditEditAccountAction"/>
 	<menuitem name="EditDeleteAccount" action="EditDeleteAccountAction"/>
-	<separator name="EditSep2"/>
       </placeholder>
-      <placeholder name="EditPreferencesPlaceholder">
-        <menuitem name="EditAccountViewOptions" action="EditAccountViewOptionsAction"/>
-      </placeholder>
+      <menuitem name="EditAccountViewOptions" action="EditAccountViewOptionsAction"/>
     </menu>
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder">

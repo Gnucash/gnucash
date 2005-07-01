@@ -46,8 +46,8 @@
       <separator name="EditSep4"/>
       <menuitem name="EditPreferences" action="EditPreferencesAction"/>
       <placeholder name="EditPreferencesPlaceholder"/>
-      <placeholder name="EditStyleSheetsPlaceholder"/>
       <separator name="EditSep5"/>
+      <placeholder name="EditStyleSheetsPlaceholder"/>
     </menu>
   
     <menu name="View" action="ViewAction">
@@ -63,7 +63,7 @@
       <placeholder name="ViewZoomPlaceholder"/>
       <separator name="ViewSep4"/>
       <placeholder name="ViewOtherPlaceholder"/>
-      <separator name="ViewSep4"/>
+      <separator name="ViewSep5"/>
       <menuitem name="ViewRefresh" action="ViewRefreshAction"/>
     </menu>
   
