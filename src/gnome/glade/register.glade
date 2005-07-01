@@ -1532,8 +1532,8 @@
 <widget class="GtkDialog" id="Void Transaction">
   <property name="visible">True</property>
   <property name="title" translatable="yes">Void Transaction</property>
-  <property name="type">GTK_WINDOW_POPUP</property>
-  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
   <property name="modal">True</property>
   <property name="resizable">False</property>
   <property name="destroy_with_parent">False</property>
@@ -1572,6 +1572,7 @@
 	    <widget class="GtkButton" id="okbutton1">
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
+	      <property name="has_default">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="label">gtk-ok</property>
 	      <property name="use_stock">True</property>
