@@ -33,6 +33,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-dir.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-manager.h"
@@ -42,11 +43,11 @@
 #include "messages.h"
 
 /** Static Globals *******************************************************/
-static short module = MOD_GUI;
+static short module = MOD_TEST;
 
 /** Declarations *********************************************************/
 static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);
-static void gnc_embedded_window_init (GncEmbeddedWindow *window);
+static void gnc_embedded_window_init (GncEmbeddedWindow *window, GncEmbeddedWindowClass *klass);
 static void gnc_embedded_window_finalize (GObject *object);
 static void gnc_embedded_window_dispose (GObject *object);
 
@@ -172,12 +173,16 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
 }
 
 static void
-gnc_embedded_window_init (GncEmbeddedWindow *window)
+gnc_embedded_window_init (GncEmbeddedWindow *window,
+			  GncEmbeddedWindowClass *klass)
 {
   ENTER("window %p", window);
   window->priv = g_new0 (GncEmbeddedWindowPrivate, 1);
 
   gnc_embedded_window_setup_window (window);
+
+  gnc_gobject_tracking_remember(G_OBJECT(window),
+				G_OBJECT_CLASS(klass));
   LEAVE(" ");
 }
 
@@ -196,6 +201,7 @@ gnc_embedded_window_finalize (GObject *object)
 
   g_free (window->priv);
 
+  gnc_gobject_tracking_forget(object);
   G_OBJECT_CLASS (parent_class)->finalize (object);
   LEAVE(" ");
 }
