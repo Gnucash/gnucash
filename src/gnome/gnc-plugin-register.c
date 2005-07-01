@@ -174,38 +174,3 @@ gnc_plugin_register_cmd_general_ledger (GtkAction *action,
 	page = gnc_plugin_page_register_new_gl ();
 	gnc_main_window_open_page (data->window, page);
 }
-
-#if 0
-/**
- * Raise an existing register window to the front.
- **/
-void
-gnc_register_raise (RegWindow *regData)
-{
-  if (regData == NULL)
-    return;
-
-  if (regData->window == NULL)
-    return;
-
-  gtk_window_present( GTK_WINDOW(regData->window) );
-}
-
-static void
-gnc_main_window_cmd_tools_general_ledger (GtkAction *action,
-					  GncMainWindow *window)
-{
-	GNCLedgerDisplay *ld;
-	GNCSplitReg *gsr;
-	RegWindow *regData;
-
-	ld = gnc_ledger_display_gl ();
-	gsr = gnc_ledger_display_get_user_data (ld);
-	if (!gsr) {
-		regData = regWindowLedger (ld);
-		gnc_register_raise (regData);
-	} else {
-		gnc_split_reg_raise (gsr);
-	}
-}
-#endif
