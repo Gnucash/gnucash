@@ -2511,7 +2511,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="filtre_status_voided">
+		<widget class="GtkCheckButton" id="filter_status_voided">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">_Voided</property>
