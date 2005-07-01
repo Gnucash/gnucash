@@ -43,7 +43,7 @@
 #include "messages.h"
 
 /** Static Globals *******************************************************/
-static short module = MOD_TEST;
+static short module = MOD_GUI;
 
 /** Declarations *********************************************************/
 static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);
