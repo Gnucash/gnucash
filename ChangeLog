@@ -1,3 +1,28 @@
+2005-07-01  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-plugin-basic-commands.c: Rename "Find Transactions"
+	back to "Find".
+
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
+	* src/gnome/ui/gnc-plugin-page-sxregister-ui.xml: Restore missing
+	commands.
+	
+	* src/gnome/ui/gnc-plugin-page-account-tree-ui.xml:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml: Tweak menu locations.
+
+	* src/gnome/dialog-scheduledxaction.c: Destroy the dialog when the
+	user dismisses it. Releases resources instead of losing them.
+	
+	* src/gnome/glade/register.glade: Tweak the "Void Transaction"
+	dialog.
+	
+	* src/gnome-utils/gnc-embedded-window.c: Add object tracking.
+	
+	* src/gnome-utils/gnc-main-window.c: Add object tracking.
+	Cut/Copy/Paste are only placeholders that must be overridden.
+	Remove function stubs and make the actions insensitive.
+
 2005-06-30  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/gnc-plugin-page.[ch]: Add a utility function to
