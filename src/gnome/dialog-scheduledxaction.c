@@ -302,8 +302,8 @@ sxed_close_handler ( gpointer user_data )
 
         gnc_sxed_reg_check_close( sxed );
         gnc_sxed_record_size( sxed );
-        /* Real dialog cleanup occurs in "destroy" callback. */
-        gtk_widget_hide( sxed->dialog );
+        gtk_widget_destroy( sxed->dialog );
+        /* The data will be cleaned up in the destroy handler. */
 }
 
 static
