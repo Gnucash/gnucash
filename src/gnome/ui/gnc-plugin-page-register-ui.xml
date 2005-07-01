@@ -5,6 +5,20 @@
         <menuitem name="FilePrintCheck"         action="FilePrintCheckAction"/>
       </placeholder>
     </menu>
+
+    <menu name="Edit" action="EditAction">
+      <placeholder name="EditSelectedPlaceholder">
+        <menuitem name="EditEditAccount"        action="EditEditAccountAction"/>
+        <separator name="EditSep22"/>
+        <menuitem name="EditCutTransaction"     action="EditCutTransactionAction"/>
+        <menuitem name="EditCopyTransaction"    action="EditCopyTransactionAction"/>
+        <menuitem name="EditPasteTransaction"   action="EditPasteTransactionAction"/>
+        <menuitem name="EditVoidTransaction"    action="EditVoidTransactionAction"/>
+        <menuitem name="EditUnvoidTransaction"  action="EditUnvoidTransactionAction"/>
+        <menuitem name="EditReverseTransaction" action="EditReverseTransactionAction"/>
+      </placeholder>
+    </menu>
+
     <menu name="View" action="ViewAction">
       <placeholder name="ViewContentPlaceholder">
         <menuitem name="ViewStyleBasic"        	action="ViewStyleBasicAction"/>

@@ -32,6 +32,7 @@
 #include "gnc-plugin-menu-additions.h"
 #include "gnc-plugin-page-report.h"
 
+#include "dialog-account.h"
 #include "dialog-print-check.h"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
@@ -42,10 +43,12 @@
 #include "gnc-date-edit.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
+#include "gnc-gui-query.h"
 #include "gnc-icons.h"
 #include "gnc-split-reg.h"
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
+#include "gnucash-sheet.h"
 #include "lot-viewer.h"
 #include "QueryNew.h"
 #include "window-reconcile.h"
@@ -93,6 +96,16 @@ void gnc_plugin_page_register_filter_status_one_cb(GtkToggleButton *button, GncP
 
 /* Command callbacks */
 static void gnc_plugin_page_register_cmd_print_check (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_cut (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_copy (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_paste (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_edit_account (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_cut_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_copy_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_paste_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_void_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
+static void gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action, GncPluginPageRegister *plugin_page);
 static void gnc_plugin_page_register_cmd_style_changed (GtkAction *action, GtkRadioAction *current, GncPluginPageRegister *plugin_page);
@@ -125,14 +138,36 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 {
 	/* Toplevel */
 	{ "FakeToplevel", NULL, "", NULL, NULL, NULL },
-	{ "SelectTransactionsAction", NULL, N_("Select _Transactions"), NULL, NULL, NULL },
-	{ "TransDateRangeAction", NULL, N_("_Date Range"), NULL, NULL, NULL },
-	{ "TransStatusAction", NULL, N_("_Status"), NULL, NULL, NULL },
-	{ "SortOrderAction", NULL, N_("Sort _Order"), NULL, NULL, NULL },
 
 	/* File menu */
 	{ "FilePrintCheckAction", NULL, N_("Print Check"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_print_check) },
+
+	/* Edit menu */
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
+	  NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_cut) },
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL,
+	  NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_copy) },
+	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL,
+	  NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_paste) },
+	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit Account"), "<control>e",
+	  N_("Edit the selected account"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_edit_account) },
+	{ "EditCutTransactionAction", NULL, N_("Cut Transaction"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_cut_transaction) },
+	{ "EditCopyTransactionAction", NULL, N_("Copy Transaction"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_copy_transaction) },
+	{ "EditPasteTransactionAction", NULL, N_("Paste Transaction"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction) },
+	{ "EditVoidTransactionAction", NULL, N_("_Void Transaction"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_void_transaction) },
+	{ "EditUnvoidTransactionAction", NULL, N_("_Unvoid Transaction"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_unvoid_transaction) },
+	{ "EditReverseTransactionAction", NULL, N_("_Reverse Transaction"), NULL, NULL,
+	  G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction) },
 
 	/* View menu */
 	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL, NULL,
@@ -209,6 +244,7 @@ static GtkRadioActionEntry radio_entries_2 [] =
 static guint n_radio_entries_2 = G_N_ELEMENTS (radio_entries_2);
 
 static const gchar *actions_requiring_account[] = {
+	"EditEditAccountAction",
 	"ActionsReconcileAction",
 	"ActionsLotsAction",
 	NULL
@@ -1361,6 +1397,225 @@ gnc_plugin_page_register_cmd_print_check (GtkAction *action,
 
     gnc_ui_print_check_dialog_create(plugin_page, payee, amount, date, memo);
   }
+  LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_cut (GtkAction *action,
+				  GncPluginPageRegister *page)
+{
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  gnucash_register_cut_clipboard(page->priv->gsr->reg);
+  LEAVE("");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_copy (GtkAction *action,
+				   GncPluginPageRegister *page)
+{
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  gnucash_register_copy_clipboard(page->priv->gsr->reg);
+  LEAVE("");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_paste (GtkAction *action,
+				    GncPluginPageRegister *page)
+{
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  gnucash_register_paste_clipboard(page->priv->gsr->reg);
+  LEAVE("");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_edit_account (GtkAction *action,
+					   GncPluginPageRegister *page)
+{
+  Account *account;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  account = gnc_plugin_page_register_get_account (page);
+  if (account)
+    gnc_ui_edit_account_window (account);
+  LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_cut_transaction (GtkAction *action,
+					      GncPluginPageRegister *page)
+{
+  SplitRegister *reg;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  reg = gnc_ledger_display_get_split_register(page->priv->ledger);
+  gnc_split_register_cut_current(reg);
+  LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_copy_transaction (GtkAction *action,
+					       GncPluginPageRegister *page)
+{
+  SplitRegister *reg;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  reg = gnc_ledger_display_get_split_register(page->priv->ledger);
+  gnc_split_register_copy_current(reg);
+  LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_paste_transaction (GtkAction *action,
+						GncPluginPageRegister *page)
+{
+  SplitRegister *reg;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  ENTER("(action %p, page %p)", action, page);
+  reg = gnc_ledger_display_get_split_register(page->priv->ledger);
+  gnc_split_register_paste_current(reg);
+  LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_void_transaction (GtkAction *action,
+					       GncPluginPageRegister *page)
+{
+  GtkWidget *dialog, *entry;
+  SplitRegister *reg;
+  Transaction *trans;
+  GladeXML *xml;
+  const char *reason;
+  gint result;
+
+  ENTER("(action %p, page %p)", action, page);
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  reg = gnc_ledger_display_get_split_register(page->priv->ledger);
+  trans = gnc_split_register_get_current_trans(reg);
+  if (trans == NULL)
+    return;
+  if (xaccTransHasSplitsInState(trans, VREC)) {
+    gnc_error_dialog(NULL, _("This transaction has already been voided."));
+    return;
+  }
+  if (xaccTransHasReconciledSplits(trans) || xaccTransHasSplitsInState(trans, CREC)) {
+    gnc_error_dialog(NULL, _("You cannot void a transaction with reconciled or cleared splits."));
+    return;
+  }
+
+  xml = gnc_glade_xml_new("register.glade", "Void Transaction");
+  dialog = glade_xml_get_widget(xml, "Void Transaction");
+  entry = glade_xml_get_widget(xml, "reason");
+
+  result = gtk_dialog_run(GTK_DIALOG(dialog));
+  if (result == GTK_RESPONSE_OK) {
+    reason = gtk_entry_get_text(GTK_ENTRY(entry));
+    if (reason == NULL)
+      reason = "";
+    gnc_split_register_void_current_trans(reg, reason);
+  }
+
+  /* All done. Get rid of it. */
+  gtk_widget_destroy(dialog);
+  g_free(xml);
+}
+
+
+static void
+gnc_plugin_page_register_cmd_unvoid_transaction (GtkAction *action,
+						 GncPluginPageRegister *page)
+{
+  SplitRegister *reg;
+  Transaction *trans;
+
+
+  ENTER("(action %p, page %p)", action, page);
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  reg = gnc_ledger_display_get_split_register(page->priv->ledger);
+  trans = gnc_split_register_get_current_trans(reg);
+  if (!xaccTransHasSplitsInState(trans, VREC)) {
+    gnc_error_dialog(NULL, _("This transaction is not voided."));
+    return;
+  }
+  gnc_split_register_unvoid_current_trans(reg);
+  LEAVE(" ");
+}
+
+
+static void
+gnc_plugin_page_register_cmd_reverse_transaction (GtkAction *action,
+						  GncPluginPageRegister *page)
+{
+  SplitRegister *reg;
+  GNCSplitReg *gsr;
+  Transaction *trans, *new_trans;
+  kvp_frame *txn_frame;
+  kvp_value *kvp_val;
+
+
+  ENTER("(action %p, page %p)", action, page);
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  reg = gnc_ledger_display_get_split_register(page->priv->ledger);
+  trans = gnc_split_register_get_current_trans(reg);
+  if (trans == NULL)
+    return;
+
+  txn_frame = xaccTransGetSlots( trans );
+  if ( txn_frame != NULL ) {
+    kvp_val = kvp_frame_get_slot( txn_frame, "reversed-by" );
+    if ( kvp_val ) {
+      // GUID *fromSXId = kvp_value_get_guid( kvp_val );
+      gnc_error_dialog(GNC_PLUGIN_PAGE(page)->window,
+		       _("This transaction has already been reversed."));
+      return;
+    }
+  }
+
+  new_trans = xaccTransClone(trans);
+  xaccTransReverse(new_trans);
+
+  /* Clear transaction level info */
+  xaccTransBeginEdit(new_trans);
+  xaccTransSetDatePostedSecs(new_trans, time(NULL));
+  xaccTransSetDateEnteredSecs(new_trans, time(NULL));
+  xaccTransCommitEdit(new_trans);
+
+  /* Now update the original with a pointer to the new one */
+  xaccTransBeginEdit(trans);
+  kvp_val = kvp_value_new_guid (xaccTransGetGUID(new_trans));
+  kvp_frame_set_slot_nc(txn_frame, "reversed-by", kvp_val);
+  xaccTransCommitEdit(trans);
+
+  /* Now jump to new trans */
+  gsr = gnc_plugin_page_register_get_gsr(GNC_PLUGIN_PAGE(page));
+  gnc_split_reg_jump_to_split(gsr, xaccTransGetSplit(new_trans, 0));
   LEAVE(" ");
 }
 
