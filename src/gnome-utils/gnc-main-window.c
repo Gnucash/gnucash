@@ -37,6 +37,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-gnome-utils.h"
+#include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-session.h"
 #include "gnc-ui.h"
@@ -65,7 +66,7 @@ static GList *active_windows = NULL;
 
 /** Declarations *********************************************************/
 static void gnc_main_window_class_init (GncMainWindowClass *klass);
-static void gnc_main_window_init (GncMainWindow *window);
+static void gnc_main_window_init (GncMainWindow *window, GncMainWindowClass *klass);
 static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_destroy (GtkObject *object);
 
@@ -83,9 +84,6 @@ static void gnc_main_window_cmd_file_print (GtkAction *action, GncMainWindow *wi
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_edit_copy (GtkAction *action, GncMainWindow *window);
-static void gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
@@ -164,15 +162,9 @@ static GtkActionEntry gnc_menu_actions [] =
 
 	/* Edit menu */
 
-	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), "<control>x",
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_cut) },
-	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), "<control>c",
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_copy) },
-	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), "<control>v",
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_edit_paste) },
+	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL, NULL, NULL },
+	{ "EditCopyAction", GTK_STOCK_COPY, N_("_Copy"), NULL, NULL, NULL },
+	{ "EditPasteAction", GTK_STOCK_PASTE, N_("_Paste"), NULL, NULL, NULL },
 	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
@@ -237,6 +229,17 @@ static GtkRadioActionEntry radio_entries [] =
 };
 static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
 
+
+/** The following are in the main window so they will always be
+ *  present in the menu structure, but they are never sensitive.
+ *  These actions should be overridden in child windows where they
+ *  have meaning. */
+static const gchar *always_insensitive_actions[] = {
+	"EditCutAction",
+	"EditCopyAction",
+	"EditPasteAction",
+	NULL
+};
 
 /** If a page is flagged as immutable, then the following actions
  *  cannot be peformed on that page. */
@@ -714,7 +717,8 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
  *  @internal
  */
 static void
-gnc_main_window_init (GncMainWindow *window)
+gnc_main_window_init (GncMainWindow *window,
+		      GncMainWindowClass *klass)
 {
 	window->priv = g_new0 (GncMainWindowPrivate, 1);
 
@@ -726,6 +730,8 @@ gnc_main_window_init (GncMainWindow *window)
 					    window);
 
 	gnc_main_window_setup_window (window);
+	gnc_gobject_tracking_remember(G_OBJECT(window),
+				      G_OBJECT_CLASS(klass));
 }
 
 
@@ -758,6 +764,7 @@ gnc_main_window_finalize (GObject *object)
 
 	g_free (window->priv);
 
+	gnc_gobject_tracking_forget(object);
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -1291,6 +1298,9 @@ gnc_main_window_setup_window (GncMainWindow *window)
 					    0,
 					    G_CALLBACK(gnc_main_window_cmd_window_raise),
 					    window);
+	gnc_plugin_update_actions(window->priv->action_group,
+				  always_insensitive_actions,
+				  "sensitive", FALSE);
 	gtk_ui_manager_insert_action_group (window->ui_merge, priv->action_group, 0);
 
 	g_signal_connect (G_OBJECT (window->ui_merge), "add_widget",
@@ -1501,21 +1511,6 @@ static void
 gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 {
 	gnc_shutdown (0);
-}
-
-static void
-gnc_main_window_cmd_edit_cut (GtkAction *action, GncMainWindow *window)
-{
-}
-
-static void
-gnc_main_window_cmd_edit_copy (GtkAction *action, GncMainWindow *window)
-{
-}
-
-static void
-gnc_main_window_cmd_edit_paste (GtkAction *action, GncMainWindow *window)
-{
 }
 
 static void
