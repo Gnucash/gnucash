@@ -106,7 +106,7 @@ static GtkActionEntry gnc_plugin_actions [] = {
 
   /* Edit menu */
 
-  { "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find Transactions..."), "<control>f",
+  { "EditFindTransactionsAction", GTK_STOCK_FIND, N_("_Find..."), "<control>f",
     N_("Find transactions with a search"),
     G_CALLBACK (gnc_main_window_cmd_tools_find_transactions) },
   { "EditTaxOptionsAction", NULL, N_("Ta_x Options"), NULL,
