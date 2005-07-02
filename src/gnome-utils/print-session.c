@@ -26,11 +26,7 @@
 
 #include <gnome.h>
 #include <libgnomeprint/gnome-font.h>
-#if GNOME_PRINT_VER == 2
 #include <libgnomeprintui/gnome-print-job-preview.h>
-#else
-#include <libgnomeprintui/gnome-print-master-preview.h>
-#endif
 #include <stdio.h>
 
 #include "gnc-ui.h"
@@ -45,13 +41,8 @@ gnc_print_session_create(gboolean hand_built_pages)
   GnomePrintConfig *config;
 
   /* this is about the most basic we can get */
-#if GNOME_PRINT_VER==2
   ps->master       = gnome_print_job_new(NULL);
   config = gnome_print_job_get_config(ps->master);
-#else
-  ps->master       = gnome_print_master_new();
-  config = gnome_print_master_get_config(ps->master);
-#endif
   ps->meta         = gnome_print_context_new(config);
   ps->default_font = gnome_font_find("Courier", 12);
 
@@ -126,13 +117,8 @@ gnc_print_session_grestore(PrintSession *ps)
 void
 gnc_print_session_print(PrintSession * ps)
 {
-#if GNOME_PRINT_VER==2
   GtkWidget * dialog    =
     gnome_print_dialog_new(ps->master,_("Print GnuCash Document"), 0);
-#else
-  GtkWidget * dialog    =
-    gnome_print_dialog_new(_("Print GnuCash Document"), 0);
-#endif
   int button            = gnome_dialog_run(GNOME_DIALOG(dialog));
   GnomePrintConfig *config;
 
@@ -144,11 +130,7 @@ gnc_print_session_print(PrintSession * ps)
       ps->master = NULL;
     }
     config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));
-#if GNOME_PRINT_VER==2
     ps->master = gnome_print_job_new(config);
-#else
-    ps->master = gnome_print_master_new_from_config(config);
-#endif
     gnome_dialog_close(GNOME_DIALOG(dialog));
     gnc_print_session_render(ps);
     break;
@@ -159,11 +141,7 @@ gnc_print_session_print(PrintSession * ps)
       ps->master = NULL;
     }
     config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));
-#if GNOME_PRINT_VER==2
     ps->master = gnome_print_job_new(config);
-#else
-    ps->master = gnome_print_master_new_from_config(config);
-#endif
     gnome_dialog_close(GNOME_DIALOG(dialog));
     gnc_print_session_preview(ps);    
     break;
@@ -178,29 +156,17 @@ gnc_print_session_print(PrintSession * ps)
 void 
 gnc_print_session_render(PrintSession * ps)
 {
-#if GNOME_PRINT_VER==2
   gnome_print_job_render (ps->master, ps->meta);
   gnome_print_job_close (ps->master);
   gnome_print_job_print(ps->master);
-#else
-  gnome_print_master_render (ps->master, ps->meta);
-  gnome_print_master_close (ps->master);
-  gnome_print_master_print(ps->master);
-#endif
 }
 
 void 
 gnc_print_session_preview(PrintSession * ps)
 {
   GtkWidget * preview;
-#if GNOME_PRINT_VER==2
   gnome_print_job_render (ps->master, ps->meta);
   gnome_print_job_close (ps->master);
   preview = gnome_print_job_preview_new(ps->master, _("Print Preview"));
-#else
-  gnome_print_master_render (ps->master, ps->meta);
-  gnome_print_master_close (ps->master);
-  preview = gnome_print_master_preview_new(ps->master, _("Print Preview"));
-#endif
   gtk_widget_show_all(preview);
 }
