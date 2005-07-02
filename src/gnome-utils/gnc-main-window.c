@@ -80,7 +80,6 @@ static void gnc_main_window_plugin_added (GncPlugin *manager, GncPlugin *plugin,
 static void gnc_main_window_plugin_removed (GncPlugin *manager, GncPlugin *plugin, GncMainWindow *window);
 
 /* Command callbacks */
-static void gnc_main_window_cmd_file_print (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
@@ -147,9 +146,7 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "FileOpenMenuAction", GTK_STOCK_OPEN, N_("_Open"), "", NULL, NULL },
 	{ "FileImportAction", NULL, N_("_Import"), NULL, NULL, NULL },
 	{ "FileExportAction", NULL, N_("_Export"), NULL, NULL, NULL },
-	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), "<control>p",
-	  NULL,
-	  G_CALLBACK (gnc_main_window_cmd_file_print) },
+	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print..."), NULL, NULL, NULL },
 	{ "FilePropertiesAction", GTK_STOCK_PROPERTIES, N_("Proper_ties"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_file_properties) },
@@ -235,6 +232,7 @@ static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
  *  These actions should be overridden in child windows where they
  *  have meaning. */
 static const gchar *always_insensitive_actions[] = {
+	"FilePrintAction",
 	"EditCutAction",
 	"EditCopyAction",
 	"EditPasteAction",
@@ -1481,11 +1479,6 @@ gnc_main_window_plugin_removed (GncPlugin *manager,
 
 
 /* Command callbacks */
-static void
-gnc_main_window_cmd_file_print (GtkAction *action, GncMainWindow *window)
-{
-}
-
 static void
 gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindow *window)
 {
