@@ -54,7 +54,6 @@
 static short module = MOD_GUI; // MOD_GUI; // MOD_REPORT;?
 
 static GObjectClass *parent_class = NULL;
-static GList *active_pages = NULL;
 
 // Property-id values.
 enum {
@@ -264,8 +263,6 @@ gnc_plugin_page_report_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT (page));
 	priv = page->priv;
 	g_return_if_fail (priv != NULL);
-
-	active_pages = g_list_remove (active_pages, page);
 
 	G_OBJECT_CLASS (parent_class)->finalize (object);
 	LEAVE(" ");
@@ -642,6 +639,13 @@ gnc_plugin_page_report_unmerge_actions( GncPluginPage *plugin_page,
 
 static GtkActionEntry report_actions[] =
 {
+        { "FilePrintAction", GTK_STOCK_PRINT, N_("Print Report..."), NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_print_cb) },
+        { "ReportExportAction", GTK_STOCK_CONVERT, N_("Export Report"), NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_export_cb) },
+        { "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("Report Options"), NULL, NULL,
+          G_CALLBACK(gnc_plugin_page_report_options_cb) },
+
         { "ReportBackAction", GTK_STOCK_GO_BACK, N_("Back"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_back_cb) },
         { "ReportForwAction", GTK_STOCK_GO_FORWARD, N_("Forward"), NULL, NULL,
@@ -650,15 +654,16 @@ static GtkActionEntry report_actions[] =
           G_CALLBACK(gnc_plugin_page_report_reload_cb) },
         { "ReportStopAction", GTK_STOCK_STOP, N_("Stop"), NULL, NULL,
           G_CALLBACK(gnc_plugin_page_report_stop_cb) },
-
-        { "ReportExportAction", GTK_STOCK_SAVE, N_("Export"), NULL, NULL,
-          G_CALLBACK(gnc_plugin_page_report_export_cb) },
-        { "ReportOptionsAction", GTK_STOCK_PROPERTIES, N_("Options"), NULL, NULL,
-          G_CALLBACK(gnc_plugin_page_report_options_cb) },
-        { "ReportPrintAction", GTK_STOCK_PRINT, N_("Print"), NULL, NULL,
-          G_CALLBACK(gnc_plugin_page_report_print_cb) },
 };
 static guint num_report_actions = G_N_ELEMENTS( report_actions );
+
+static action_short_labels short_labels[] = {
+  { "FilePrintAction", 	    N_("Print") },
+  { "ReportExportAction",   N_("Export") },
+  { "ReportOptionsAction",  N_("Options") },
+  { NULL, NULL },
+};
+
 
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
@@ -699,7 +704,7 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 				      report_actions,
 				      num_report_actions,
 				      plugin_page );
-	active_pages = g_list_append (active_pages, plugin_page);
+	gnc_plugin_init_short_names (action_group, short_labels);
 }
 
 GncPluginPage*
