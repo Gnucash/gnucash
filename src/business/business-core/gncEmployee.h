@@ -105,6 +105,7 @@ gboolean gncEmployeeIsDirty (GncEmployee *employee);
 
 /** deprecated routines */
 #define gncEmployeeGetGUID(E) qof_entity_get_guid(QOF_ENTITY(E))
+#define gncEmployeeGetBook(E) qof_instance_get_book(QOF_INSTANCE(E))
 #define gncEmployeeRetGUID(E) (E ? *(qof_entity_get_guid(QOF_ENTITY(E))) : *(guid_null()))
 #define gncEmployeeLookupDirect(G,B) gncEmployeeLookup((B),&(G))
 
