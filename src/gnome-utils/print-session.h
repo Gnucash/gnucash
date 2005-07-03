@@ -24,6 +24,13 @@
 #ifndef PRINT_SESSION_H
 #define PRINT_SESSION_H
 
+/** @addtogroup Printing
+    @{ */
+/** @file print-session.h
+    @brief Functions for printing
+    @author Copyright (C) 2000 Bill Gribble <grib@billgribble.com>
+*/
+
 #include "config.h"
 
 #include <gnome.h>
@@ -35,62 +42,72 @@
 #include <libgnomeprintui/gnome-print-preview.h>
 
 typedef struct {
-  GnomePrintJob      * master;
-  GnomePrintContext  * meta;
+  gboolean             hand_built_pages;
+  gint                 print_type;
+
+  GnomePrintJob      * job;
+  GnomePrintContext  * context;		/* Convenience only. Owned by the job */
   GnomeFont          * default_font;
   GnomePrintPaper    * paper;
 } PrintSession;
 
-typedef struct {
-  GtkWidget         * toplevel;
-  GtkWidget         * canvas;
-  GnomePrintContext * meta;
-  PrintSession      * session;
-} PrintPreviewDialog;
 
-typedef struct {
-  GtkWidget         * toplevel;
-  GtkWidget         * printer_entry;
-  GtkWidget         * paper_entry;
-  PrintSession      * session;
-} PrintDialog;
+/** @addtogroup Basic Session Functions
+    @{ */
 
-typedef struct {
-  GtkWidget         * toplevel;
-  GtkWidget         * papersel;
-  GtkWidget         * entry;
-  PrintSession      * session;
-} PaperDialog;
+/** Create a new print 'session'.  Once created, a series of commands
+ *  can be issued on the session to create the output page.  The
+ *  output will be printed when the session is done.  This function
+ *  will present the standard print/preview selection box to the user
+ *  and wait for the result.
+ *
+ *  If the hand_built_pages argument is set to TRUE, this function
+ *  will perform a couple of extra setup steps.  Specifically it will
+ *  call the gnome begin page, set color and set font functions.  The
+ *  code will also call close page when the #gnc_print_session_done
+ *  function is called.
+ *
+ *  @param hand_built_pages If TRUE, this funciton will perform extra setup.
+ *
+ *  @return A pointer to the data structure describing this print session.
+ */
+PrintSession * gnc_print_session_create(gboolean hand_built_pages);
 
 
-/* paper selector dialog */
-PaperDialog * gnc_ui_paper_dialog_create(PrintSession * ps, GtkWidget * entry);
-void gnc_ui_paper_dialog_destroy(PaperDialog * psd);
-
-/* print preview dialog stuff */
-PrintPreviewDialog * gnc_ui_print_preview_create(PrintSession * ps);
-void gnc_ui_print_preview_destroy(PrintPreviewDialog * ppd);
-
-/* print check dialog stuff */
-PrintDialog * gnc_ui_print_dialog_create(PrintSession * ps);
-void gnc_ui_print_dialog_destroy(PrintDialog * pcd);
-
-/* printsession stuff */
-PrintSession * gnc_print_session_create(gboolean);
+/** Destroy a print 'session' without producing any output.
+ *
+ *  @ps A pointer to the session to be destroyed.
+ */
 void gnc_print_session_destroy(PrintSession * ps);
 
+
+/** Finish a print 'session'.  The output from this session will be
+ *  printed to the device selected when the session was created.
+ *
+ *  If the hand_built_pages argument was set to TRUE in the call to
+ *  #gnc_print_session_create, this function will perform the
+ *  additional setp of calling the gnome show page function before
+ *  doing anything else.
+ *
+ *  @param hand_built_pages If TRUE, this funciton will perform extra setup.
+ *
+ *  @return A pointer to the data structure describing this print session.
+ */
+void gnc_print_session_done(PrintSession * ps);
+
+/** @} */
+
+/** @addtogroup Adding Output to a Page
+    @{ */
 void gnc_print_session_moveto(PrintSession * ps, double x, double y);
 void gnc_print_session_text(PrintSession * ps, const char * text);
-void gnc_print_session_done(PrintSession * ps, gboolean);
 
 void gnc_print_session_rotate(PrintSession *ps, double theta_in_degrees);
 void gnc_print_session_translate(PrintSession *ps, double x, double y);
 
 void gnc_print_session_gsave(PrintSession *ps);
 void gnc_print_session_grestore(PrintSession *ps);
-
-void gnc_print_session_preview(PrintSession * ps);
-void gnc_print_session_print(PrintSession * ps);
-void gnc_print_session_render(PrintSession * ps);
+/** @} */
+/** @} */
 
 #endif

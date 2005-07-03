@@ -1361,12 +1361,16 @@ gnc_html_export(gnc_html * html, const char *filepath)
 void
 gnc_html_print(gnc_html * html)
 {
-  PrintSession * ps = gnc_print_session_create(FALSE);
-  
-  gtk_html_print(GTK_HTML(html->html),
-                 GNOME_PRINT_CONTEXT(ps->meta));
-  gnc_print_session_done(ps, FALSE);
-  gnc_print_session_print(ps);
+  PrintSession *ps;
+
+  ps = gnc_print_session_create(FALSE);
+  if (ps == NULL) {
+    /* user cancelled */
+    return;
+  }
+
+  gtk_html_print(GTK_HTML(html->html), ps->context);
+  gnc_print_session_done(ps);
 }
 
 gnc_html_history * 

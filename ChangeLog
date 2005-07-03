@@ -1,4 +1,39 @@
+2005-07-03  David Hampton  <hampton@employees.org>
+
+	* src/gnome/dialog-print-check.c:
+	* src/gnome-utils/gnc-html.c:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/gnome-utils/print-session.[ch]:
+	* src/scm/printing/print-check.scm: Convert printing over to g2.
+
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml: Move the "Print
+	Check" command to overlay the "Print" placeholder.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c: Replace the
+	gtk1.2 "draw" signal with the gtk2.0 "expose_event" signal.
+
+2005-07-02  David Hampton  <hampton@employees.org>
+
+	* src/report/report-gnome/gnc-plugin-page-report-ui.xml:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Duplicate a
+	couple of the toolbar buttons as menu items.
+
+	* src/gnome-utils/print-session.[ch]:
+	* configure.in: Remove old checks for libgnomeprint2.0.
+
+	* src/gnome-utils/gnc-main-window.c: Print is a placeholder that
+	must be overridden.
+
+	* src/business/business-core/gncEmployee.h: Add #define for
+	deprecated function.
+		
 2005-07-01  David Hampton  <hampton@employees.org>
+
+	* src/business/business-core/gncEmployee.h: Add #define for
+	deprecated function.
+
+	* src/gnome-utils/dialog-query-list.c: Finish g1->g2 widget conversion.
 
 	* src/gnome/gnc-plugin-basic-commands.c: Rename "Find Transactions"
 	back to "Find".

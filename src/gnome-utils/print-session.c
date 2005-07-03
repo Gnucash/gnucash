@@ -39,19 +39,36 @@ gnc_print_session_create(gboolean hand_built_pages)
 {
   PrintSession * ps = g_new0(PrintSession, 1);
   GnomePrintConfig *config;
+  GtkWidget *dialog;
+  gint response;
 
-  /* this is about the most basic we can get */
-  ps->master       = gnome_print_job_new(NULL);
-  config = gnome_print_job_get_config(ps->master);
-  ps->meta         = gnome_print_context_new(config);
-  ps->default_font = gnome_font_find("Courier", 12);
+  /* Ask the user what to do with the output */
+  dialog = gnome_print_dialog_new(ps->job, _("Print GnuCash Document"), 0);
+  response = gtk_dialog_run(GTK_DIALOG(dialog));
+  switch (response) {
+    case GNOME_PRINT_DIALOG_RESPONSE_PRINT: 
+    case GNOME_PRINT_DIALOG_RESPONSE_PREVIEW:
+      config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));
+      gtk_widget_destroy(dialog);
+      ps->job = gnome_print_job_new(config);
+      ps->context = gnome_print_job_get_context(ps->job);
+      break;
+    
+    default:
+      gtk_widget_destroy(dialog);
+      g_free(ps);
+      return NULL;
+  }
+
+  ps->hand_built_pages = hand_built_pages;
+  ps->print_type = response;
+
+  ps->default_font = gnome_font_find_closest("Sans Regular", 12);
 
   if (hand_built_pages) {
-    gnome_print_beginpage(GNOME_PRINT_CONTEXT(ps->meta), "");
-    gnome_print_setrgbcolor(GNOME_PRINT_CONTEXT(ps->meta),
-			    0.0, 0.0, 0.0);
-    gnome_print_setfont(GNOME_PRINT_CONTEXT(ps->meta), 
-			GNOME_FONT(ps->default_font));
+    gnome_print_beginpage(ps->context, "");
+    gnome_print_setrgbcolor(ps->context, 0.0, 0.0, 0.0);
+    gnome_print_setfont(ps->context, ps->default_font);
   }
   return ps;
 }
@@ -59,8 +76,7 @@ gnc_print_session_create(gboolean hand_built_pages)
 void 
 gnc_print_session_destroy(PrintSession * ps)
 {
-  g_object_unref(ps->meta);
-  g_object_unref(ps->master);
+  g_object_unref(ps->job);
   g_object_unref(ps->default_font);
 
   g_free(ps);
@@ -69,104 +85,62 @@ gnc_print_session_destroy(PrintSession * ps)
 void 
 gnc_print_session_moveto(PrintSession * ps, double x, double y)
 {
-  gnome_print_moveto(GNOME_PRINT_CONTEXT(ps->meta), x, y);
+  gnome_print_moveto(ps->context, x, y);
 }
 
 
 void 
 gnc_print_session_text(PrintSession * ps, const char * text)
 {
-  gnome_print_show(GNOME_PRINT_CONTEXT(ps->meta), text);  
+  gnome_print_show(ps->context, text);  
 }
 
 
 void
-gnc_print_session_done(PrintSession * ps, gboolean hand_built_pages)
+gnc_print_session_done(PrintSession * ps)
 {
-  if (hand_built_pages) {
-    gnome_print_showpage(GNOME_PRINT_CONTEXT(ps->meta));
-  }
-  gnome_print_context_close(GNOME_PRINT_CONTEXT(ps->meta));
+  GtkWidget *widget;
 
+  if (ps->hand_built_pages) {
+    gnome_print_showpage(ps->context);
+  }
+  gnome_print_job_close (ps->job);
+
+  switch (ps->print_type) {
+    case GNOME_PRINT_DIALOG_RESPONSE_PRINT: 
+      gnome_print_job_print(ps->job);
+      break;
+
+    case GNOME_PRINT_DIALOG_RESPONSE_PREVIEW:
+      widget = gnome_print_job_preview_new(ps->job, "Print Preview");
+      gtk_widget_show(widget);
+      break;
+    
+    default:
+      break;
+  }
 }
 
 void
 gnc_print_session_rotate(PrintSession *ps, double theta_in_degrees)
 {
-  gnome_print_rotate(GNOME_PRINT_CONTEXT(ps->meta), theta_in_degrees);
+  gnome_print_rotate(ps->context, theta_in_degrees);
 }
 
 void
 gnc_print_session_translate(PrintSession *ps, double x, double y)
 {
-  gnome_print_translate(GNOME_PRINT_CONTEXT(ps->meta), x, y);
+  gnome_print_translate(ps->context, x, y);
 }
 
 void
 gnc_print_session_gsave(PrintSession *ps)
 {
-  gnome_print_gsave(GNOME_PRINT_CONTEXT(ps->meta));
+  gnome_print_gsave(ps->context);
 }
 
 void
 gnc_print_session_grestore(PrintSession *ps)
 {
-  gnome_print_grestore(GNOME_PRINT_CONTEXT(ps->meta));
-}
-
-void
-gnc_print_session_print(PrintSession * ps)
-{
-  GtkWidget * dialog    =
-    gnome_print_dialog_new(ps->master,_("Print GnuCash Document"), 0);
-  int button            = gnome_dialog_run(GNOME_DIALOG(dialog));
-  GnomePrintConfig *config;
-
-  switch(button) {
-  case 0: 
-    /* print button */
-    if(ps->master) {
-      g_object_unref(ps->master);
-      ps->master = NULL;
-    }
-    config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));
-    ps->master = gnome_print_job_new(config);
-    gnome_dialog_close(GNOME_DIALOG(dialog));
-    gnc_print_session_render(ps);
-    break;
-    
-  case 1:
-    if(ps->master) {
-      g_object_unref(ps->master);
-      ps->master = NULL;
-    }
-    config = gnome_print_dialog_get_config (GNOME_PRINT_DIALOG (dialog));
-    ps->master = gnome_print_job_new(config);
-    gnome_dialog_close(GNOME_DIALOG(dialog));
-    gnc_print_session_preview(ps);    
-    break;
-
-  case 2:
-    gnome_dialog_close(GNOME_DIALOG(dialog));
-    break;
-  }
-}
-
-
-void 
-gnc_print_session_render(PrintSession * ps)
-{
-  gnome_print_job_render (ps->master, ps->meta);
-  gnome_print_job_close (ps->master);
-  gnome_print_job_print(ps->master);
-}
-
-void 
-gnc_print_session_preview(PrintSession * ps)
-{
-  GtkWidget * preview;
-  gnome_print_job_render (ps->master, ps->meta);
-  gnome_print_job_close (ps->master);
-  preview = gnome_print_job_preview_new(ps->master, _("Print Preview"));
-  gtk_widget_show_all(preview);
+  gnome_print_grestore(ps->context);
 }

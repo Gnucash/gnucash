@@ -117,7 +117,7 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
   gnc_option_menu_init(pcd->units_picker);
 
   window = GTK_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
-  gnome_dialog_set_parent(GNOME_DIALOG(pcd->dialog), window);
+  gtk_window_set_transient_for(GTK_WINDOW(pcd->dialog), window);
 
   /* Create and attach the date-format chooser */
   table = glade_xml_get_widget (xml, "options_table");
@@ -139,11 +139,10 @@ gnc_ui_print_check_dialog_create(GncPluginPageRegister *plugin_page,
 void
 gnc_ui_print_check_dialog_destroy(PrintCheckDialog * pcd)
 {
-  gnome_dialog_close(GNOME_DIALOG(pcd->dialog));
   gtk_widget_destroy(pcd->dialog);
   pcd->dialog = NULL;
 
-  g_object_set_data(G_OBJECT(pcd->plugin_page), PRINT_CHECK_DATA, pcd);
+  g_object_set_data(G_OBJECT(pcd->plugin_page), PRINT_CHECK_DATA, NULL);
   g_free(pcd);
 }
 

@@ -169,7 +169,8 @@
    '<gnc:PrintSession*>
    "gnc_print_session_create"
    '((<gw:bool> yes_is_default))
-   "Start a new print session.")
+   "Start a new print session.  This will display a dialog asking for "
+   "number of copies, print vs. preview, etc.")
 
   (gw:wrap-function
    ws
@@ -232,17 +233,8 @@
    'gnc:print-session-done
    '<gw:void>
    "gnc_print_session_done"
-   '((<gnc:PrintSession*> p)
-     (<gw:bool> yes_is_default))
-   "Let the print context know you're finished with it.")
-
-  (gw:wrap-function
-   ws
-   'gnc:print-session-print
-   '<gw:void>
-   "gnc_print_session_print"
    '((<gnc:PrintSession*> p))
-   "Show the GNOME print dialog to start printing.")
+   "Let the print context know you're finished with it.")
 
   (gw:wrap-function
    ws
