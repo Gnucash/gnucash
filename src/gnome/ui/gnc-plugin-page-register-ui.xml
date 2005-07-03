@@ -1,11 +1,5 @@
 <ui>
   <menubar>
-    <menu name="File" action="FileAction">
-      <placeholder name="FilePrintPlaceholder">
-        <menuitem name="FilePrintCheck"         action="FilePrintCheckAction"/>
-      </placeholder>
-    </menu>
-
     <menu name="Edit" action="EditAction">
       <placeholder name="EditSelectedPlaceholder">
         <menuitem name="EditEditAccount"        action="EditEditAccountAction"/>

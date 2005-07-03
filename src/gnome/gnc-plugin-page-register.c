@@ -140,7 +140,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "FakeToplevel", NULL, "", NULL, NULL, NULL },
 
 	/* File menu */
-	{ "FilePrintCheckAction", NULL, N_("Print Check"), NULL, NULL,
+	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Check..."), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_print_check) },
 
 	/* Edit menu */
