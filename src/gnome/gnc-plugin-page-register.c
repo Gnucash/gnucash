@@ -356,6 +356,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GNCSplitReg *gsr;
 	const GList *item;
 	GList *book_list;
+	gchar *label;
 	QofQuery *q;
 
 	/* Is there an existing page? */
@@ -373,8 +374,10 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	register_page->priv->ledger = ledger;
 
 	plugin_page = GNC_PLUGIN_PAGE(register_page);
-	plugin_page->title = gnc_plugin_page_register_get_tab_name(plugin_page);
-	plugin_page->tab_name = gnc_plugin_page_register_get_tab_name(plugin_page);
+	label = gnc_plugin_page_register_get_tab_name(plugin_page);
+	gnc_plugin_page_set_title(plugin_page, label);
+	gnc_plugin_page_set_tab_name(plugin_page, label);
+	g_free(label);
 
 	q = gnc_ledger_display_get_query (ledger);
 	book_list = qof_query_get_books (q);
@@ -447,9 +450,9 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
-	parent->title       = g_strdup(_("General Ledger"));
-	parent->tab_name    = g_strdup(_("General Ledger"));
-	parent->uri         = g_strdup("default:");
+	gnc_plugin_page_set_title(parent, _("General Ledger"));
+	gnc_plugin_page_set_tab_name(parent, _("General Ledger"));
+	gnc_plugin_page_set_uri(parent, "default:");
 
 	/* Create menu and toolbar information */
 	action_group = gtk_action_group_new ("GncPluginPageRegisterActions");
@@ -1646,7 +1649,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GtkAction *action,
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
 			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
   title = g_strdup_printf(N_("Sort %s by..."),
-			  GNC_PLUGIN_PAGE(page)->tab_name);
+			  gnc_plugin_page_get_tab_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);
 
@@ -1695,7 +1698,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GtkAction *action,
   gtk_window_set_transient_for(GTK_WINDOW(dialog),
 			       GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window));
   title = g_strdup_printf(N_("Filter %s by..."),
-			  GNC_PLUGIN_PAGE(page)->tab_name);
+			  gnc_plugin_page_get_tab_name(GNC_PLUGIN_PAGE(page)));
   gtk_window_set_title(GTK_WINDOW(dialog), title);
   g_free(title);
 

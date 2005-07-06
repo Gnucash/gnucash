@@ -46,15 +46,11 @@ typedef struct GncPluginPage {
 	GObject parent;
 	GncPluginPagePrivate *priv;
 
+	/** These fields are semi-private.  They should only be access by
+	 *  the gnucash window management code. */
 	GtkWidget *window;
 	GtkWidget *notebook_page;
 	GtkWidget *summarybar;
-
-	gchar *title;
-	gchar *tab_name;
-	gchar *uri;
-
-	gchar *statusbar_text;
 } GncPluginPage;
 
 typedef struct {
@@ -72,7 +68,7 @@ typedef struct {
 	/* Virtual Table */
 	GtkWidget *(* create_widget) (GncPluginPage *plugin_page);
 	void (* destroy_widget) (GncPluginPage *plugin_page);
-
+	void (* window_changed) (GncPluginPage *plugin_page, GtkWidget *window);
 	void (* merge_actions) (GncPluginPage *plugin_page, GtkUIManager *merge);
 	void (* unmerge_actions) (GncPluginPage *plugin_page, GtkUIManager *merge);
 } GncPluginPageClass;
@@ -119,11 +115,82 @@ gboolean gnc_plugin_page_has_book (GncPluginPage *page, GUID *book);
  */
 gboolean gnc_plugin_page_has_books (GncPluginPage *page);
 
+/** Retrieve a pointer to the GncMainWindow (GtkWindow) containing
+ *  this page.
+ *
+ *  @param page The page whose window should be retrieved.
+ *
+ *  @return A pointer to the window.
+ */
+GtkWidget *gnc_plugin_page_get_window (GncPluginPage *page);
+
+/** Retrieve the name used in the notebook tab for this page.
+ *
+ *  @param page The page whose tab name should be retrieved.
+ *
+ *  @return The page's tab name.  This string is owned by the page and
+ *  should not be freed by the caller.
+ */
+const gchar *gnc_plugin_page_get_tab_name (GncPluginPage *page);
+
+/** Set the name used in the notebook tab for this page.
+ *
+ *  @param page The page whose tab label should be set.
+ *
+ *  @param name The new string for the tab label.
+ */
+void gnc_plugin_page_set_tab_name (GncPluginPage *page, const char *name);
+
 /** Retrieve the page part of the window title.
  *
  *  @param page The page whose title component should be retrieved.
+ *
+ *  @return The page title.  This string is owned by the page and
+ *  should not be freed by the caller.
  */
 const gchar *gnc_plugin_page_get_title (GncPluginPage *page);
+
+/** Set the page part of the window title.
+ *
+ *  @param page The page whose title component should be set.
+ *
+ *  @param name The new title for the page.
+ */
+void gnc_plugin_page_set_title (GncPluginPage *page, const char *name);
+
+/** Retrieve the Uniform Resource Identifier for this page.
+ *
+ *  @param page The page whose URI should be retrieved.
+ *
+ *  @return The URI for this page.  This string is owned by the page and
+ *  should not be freed by the caller.
+ */
+const gchar *gnc_plugin_page_get_uri (GncPluginPage *page);
+
+/** Set the Uniform Resource Identifier for this page.
+ *
+ *  @param page The page whose URI should be set.
+ *
+ *  @param name The new URI for the page.
+ */
+void gnc_plugin_page_set_uri (GncPluginPage *page, const char *name);
+
+/** Retrieve the statusbar text associated with this page.
+ *
+ *  @param page The page whose statusbar should text be retrieved.
+ *
+ *  @return A pointer to the statusbar text for this page.  This
+ *  string is owned by the page and should not be freed by the caller.
+ */
+const gchar *gnc_plugin_page_get_statusbar_text (GncPluginPage *page);
+
+/** Set the statusbar text associated with this page.
+ *
+ *  @param page The page whose statusbar text should be set.
+ *
+ *  @param name The new statusbar text for the page.
+ */
+void gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const char *name);
 
 /* Signals */
 void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);

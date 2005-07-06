@@ -314,9 +314,9 @@ gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page)
 
 	/* Init parent declared variables */
 	parent = GNC_PLUGIN_PAGE(plugin_page);
-	parent->title       = g_strdup(_("Accounts"));
-	parent->tab_name    = g_strdup(_("Accounts"));
-	parent->uri         = g_strdup("default:");
+	gnc_plugin_page_set_title(parent, _("Accounts"));
+	gnc_plugin_page_set_tab_name(parent, _("Accounts"));
+	gnc_plugin_page_set_uri(parent, "default:");
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());

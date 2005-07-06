@@ -49,6 +49,11 @@ static guint signals[LAST_SIGNAL] = { 0 };
 struct GncPluginPagePrivate
 {
 	GList *books;
+
+	gchar *title;
+	gchar *tab_name;
+	gchar *uri;
+	gchar *statusbar_text;
 };
 
 GType
@@ -247,9 +252,9 @@ gnc_plugin_page_init (GncPluginPage *plugin_page, GncPluginPageClass *klass)
 
 	priv = plugin_page->priv = g_new0 (GncPluginPagePrivate, 1);
 
-	plugin_page->title       = NULL;
-	plugin_page->tab_name    = NULL;
-	plugin_page->uri         = NULL;
+	priv->title       = NULL;
+	priv->tab_name    = NULL;
+	priv->uri         = NULL;
 
 	plugin_page->window      = NULL;
 	plugin_page->summarybar  = NULL;
@@ -266,16 +271,17 @@ gnc_plugin_page_finalize (GObject *object)
   GList *item;
 
   page = GNC_PLUGIN_PAGE (object);
-  if (page->statusbar_text)
-    g_free (page->statusbar_text);
-  if (page->title)
-	g_free(page->title);
-  if (page->tab_name)
-	g_free(page->tab_name);
-  if (page->uri)
-	g_free(page->uri);
 
   priv = page->priv;
+  if (priv->title)
+	g_free(priv->title);
+  if (priv->tab_name)
+	g_free(priv->tab_name);
+  if (priv->uri)
+	g_free(priv->uri);
+  if (priv->statusbar_text)
+	g_free(priv->statusbar_text);
+
   if (priv->books) {
     for (item = priv->books; item; item = g_list_next(item)) {
       guid_free (item->data);
@@ -338,10 +344,82 @@ gnc_plugin_page_has_books (GncPluginPage *page)
   return (page->priv->books != NULL);
 }
 
+GtkWidget *
+gnc_plugin_page_get_window (GncPluginPage *page)
+{
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+
+  return page->window;
+}
+
+const gchar *
+gnc_plugin_page_get_tab_name (GncPluginPage *page)
+{
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+
+  return page->priv->tab_name;
+}
+
+void
+gnc_plugin_page_set_tab_name (GncPluginPage *page, const gchar *name)
+{
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+  if (page->priv->tab_name)
+    g_free(page->priv->tab_name);
+  page->priv->tab_name = g_strdup(name);
+}
+
 const gchar *
 gnc_plugin_page_get_title (GncPluginPage *page)
 {
   g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
 
-  return page->title;
+  return page->priv->title;
+}
+
+void
+gnc_plugin_page_set_title (GncPluginPage *page, const gchar *name)
+{
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+  if (page->priv->title)
+    g_free(page->priv->title);
+  page->priv->title = g_strdup(name);
+}
+
+const gchar *
+gnc_plugin_page_get_uri (GncPluginPage *page)
+{
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+
+  return page->priv->uri;
+}
+
+void
+gnc_plugin_page_set_uri (GncPluginPage *page, const gchar *name)
+{
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+  if (page->priv->uri)
+    g_free(page->priv->uri);
+  page->priv->uri = g_strdup(name);
+}
+
+const gchar *
+gnc_plugin_page_get_statusbar_text (GncPluginPage *page)
+{
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), NULL);
+
+  return page->priv->statusbar_text;
+}
+
+void
+gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const gchar *message)
+{
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+  if (page->priv->statusbar_text)
+    g_free(page->priv->statusbar_text);
+  page->priv->statusbar_text = g_strdup(message);
 }

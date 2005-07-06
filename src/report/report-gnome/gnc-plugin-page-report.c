@@ -687,9 +687,9 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
         tmpStr = g_string_sized_new( 32 );
         g_string_sprintf( tmpStr, "%s: %s", _("Report"),
                           gnc_report_name( priv->initial_report ) );
-	parent->title       = g_strdup(tmpStr->str);
-        parent->tab_name = g_strdup( tmpStr->str );
-	parent->uri         = g_strdup("default:");
+	gnc_plugin_page_set_title(parent, tmpStr->str);
+	gnc_plugin_page_set_tab_name(parent, tmpStr->str);
+	gnc_plugin_page_set_uri(parent, "default:");
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());

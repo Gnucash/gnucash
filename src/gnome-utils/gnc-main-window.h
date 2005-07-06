@@ -95,6 +95,14 @@ GType gnc_main_window_get_type (void);
 GncMainWindow *gnc_main_window_new (void);
 
 
+/** Bring the window containing the specified page to the top of the
+ *  window stack, then switch the notebook to show the specified page.
+ *
+ *  @param page The existing page to be displayed.
+ */
+void gnc_main_window_display_page (GncPluginPage *page);
+
+
 /** Display a data plugin page in a window.  If the page already
  *  exists in any window, then that window will be brought to the
  *  front and the notebook switch to display the specified page.  If

@@ -853,6 +853,8 @@ gnc_main_window_connect (GncMainWindow *window,
 	gtk_notebook_append_page (notebook, page->notebook_page, tab_widget);
 	gnc_plugin_page_inserted (page);
 	gtk_notebook_set_current_page (notebook, -1);
+	if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
+	  (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)(page, GTK_WIDGET(window));
 	g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
 }
 
@@ -920,6 +922,21 @@ gnc_main_window_disconnect (GncMainWindow *window,
  ************************************************************/
 
 
+void
+gnc_main_window_display_page (GncPluginPage *page)
+{
+	GncMainWindow *window;
+	GtkNotebook *notebook;
+	gint page_num;
+
+	window = GNC_MAIN_WINDOW (page->window);
+	notebook = GTK_NOTEBOOK (window->priv->notebook);
+	page_num = gtk_notebook_page_num(notebook, page->notebook_page);
+	gtk_notebook_set_current_page (notebook, page_num);
+	gtk_window_present(GTK_WINDOW(window));
+}
+
+
 /*  Display a data plugin page in a window.  If the page already
  *  exists in any window, then that window will be brought to the
  *  front and the notebook switch to display the specified page.  If
@@ -935,8 +952,6 @@ gnc_main_window_open_page (GncMainWindow *window,
 	GtkWidget *label;
 	const gchar *icon;
 	GtkWidget *image;
-	GtkNotebook *notebook;
-	gint page_num;
 
 	if (window)
 	  g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
@@ -944,11 +959,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 	g_return_if_fail (gnc_plugin_page_has_books(page));
 
 	if (gnc_main_window_page_exists(page)) {
-	  window = GNC_MAIN_WINDOW (page->window);
-	  notebook = GTK_NOTEBOOK (window->priv->notebook);
-	  page_num = gtk_notebook_page_num(notebook, page->notebook_page);
-	  gtk_notebook_set_current_page (notebook, page_num);
-	  gtk_window_present(GTK_WINDOW(window));
+	  gnc_main_window_display_page(page);
 	  return;
 	}
 
@@ -967,7 +978,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 			   PLUGIN_PAGE_LABEL, page);
 
 	icon = GNC_PLUGIN_PAGE_GET_CLASS(page)->tab_icon;
-	label = gtk_label_new (page->tab_name);
+	label = gtk_label_new (gnc_plugin_page_get_tab_name(page));
 	gtk_widget_show (label);
 
 	if (icon != NULL) {
@@ -1613,7 +1624,6 @@ gnc_main_window_cmd_window_raise (GtkAction *action,
 	g_return_if_fail(GTK_IS_RADIO_ACTION(current));
 	g_return_if_fail(GNC_IS_MAIN_WINDOW(unused));
 	
-	/* DRH - Start here */
 	ENTER("action %p, current %p, window %p", action, current, unused);
 	value = gtk_radio_action_get_current_value(current);
 	window = g_list_nth_data(active_windows, value);

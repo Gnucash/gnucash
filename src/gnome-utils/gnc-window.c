@@ -97,13 +97,14 @@ void
 gnc_window_update_status (GncWindow *window, GncPluginPage *page)
 {
   GtkWidget *statusbar;
+  const gchar *message;
 
   g_return_if_fail(GNC_WINDOW (window));
 
   statusbar = gnc_window_get_statusbar (window);
+  message = gnc_plugin_page_get_statusbar_text(page);
   gtk_statusbar_pop(GTK_STATUSBAR(statusbar), 0);
-  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0,
-		     page->statusbar_text ? page->statusbar_text : "");
+  gtk_statusbar_push(GTK_STATUSBAR(statusbar), 0, message ? message : "");
 }
 
 void
@@ -112,10 +113,7 @@ gnc_window_set_status (GncWindow *window, GncPluginPage *page, const gchar *mess
   g_return_if_fail(GNC_WINDOW (window));
   g_return_if_fail(GNC_PLUGIN_PAGE (page));
 
-  if (page->statusbar_text)
-    g_free(page->statusbar_text);
-  page->statusbar_text = g_strdup(message ? message : "");
-
+  gnc_plugin_page_set_statusbar_text(page, message);
   gnc_window_update_status (window, page);
 }
 
