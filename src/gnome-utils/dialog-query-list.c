@@ -120,13 +120,31 @@ gnc_dialog_query_list_double_click_entry (GNCQueryList *list, gpointer item,
   gnc_dialog_query_run_callback (dql->buttons, item, dql);
 }
 
+static int
+gnc_dialog_query_list_delete_cb (GtkDialog *dialog, GdkEvent  *event, DialogQueryList *dql)
+{
+  g_return_val_if_fail (dql, TRUE);
+
+  gnc_unregister_gui_component (dql->component_id);
+
+  /* XXX: Clear/destroy the param_list? */  
+
+  /* destroy the book list */
+  dql_clear_booklist (dql);
+
+  /* Destroy and exit */
+  gtk_widget_destroy(dql->dialog);
+  g_free (dql);
+  return FALSE;
+}
+
 static void
 close_handler (gpointer data)
 {
   DialogQueryList * dql = data;
 
   g_return_if_fail (dql);
-  gtk_widget_destroy (dql->dialog);
+  gnc_dialog_query_list_delete_cb (GTK_DIALOG(dql->dialog), NULL, dql);
 }
 
 static void
@@ -148,23 +166,6 @@ gnc_dialog_query_list_refresh_handler (GHashTable *changes, gpointer user_data)
       }
     }
   }
-}
-
-static int
-gnc_dialog_query_list_close_cb (GtkDialog *dialog, DialogQueryList *dql)
-{
-  g_return_val_if_fail (dql, TRUE);
-
-  gnc_unregister_gui_component (dql->component_id);
-
-  /* XXX: Clear/destroy the param_list? */  
-
-  /* destroy the book list */
-  dql_clear_booklist (dql);
-
-  /* Destroy and exit */
-  g_free (dql);
-  return FALSE;
 }
 
 static void
@@ -212,8 +213,8 @@ gnc_dialog_query_list_new (GList *param_list, Query *q)
 		    G_CALLBACK (gnc_dialog_query_list_close), dql);
 
   /* connect to the cleanup */
-  g_signal_connect (G_OBJECT (dql->dialog), "close",
-		    G_CALLBACK (gnc_dialog_query_list_close_cb), dql);
+  g_signal_connect (G_OBJECT (dql->dialog), "delete_event",
+		    G_CALLBACK (gnc_dialog_query_list_delete_cb), dql);
 
 
   /* register ourselves */
