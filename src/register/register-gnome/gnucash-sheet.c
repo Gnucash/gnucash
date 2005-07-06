@@ -2490,6 +2490,7 @@ gnucash_register_new (Table *table)
                           GTK_FILL | GTK_EXPAND | GTK_SHRINK,
                           0, 0);
         gtk_widget_hide(GNUCASH_SHEET(sheet)->entry);
+	gtk_widget_set_no_show_all(GNUCASH_SHEET(sheet)->entry, TRUE);
 
         scrollbar = gtk_vscrollbar_new(GNUCASH_SHEET(sheet)->vadj);
         gtk_table_attach (GTK_TABLE(widget), GTK_WIDGET(scrollbar),
