@@ -136,6 +136,5 @@ gnc_ui_new_user_cancel_dialog (void)
 void
 gncp_new_user_finish (void)
 {
-  scm_c_eval_string("(gnc:hook-run-danglers gnc:*book-opened-hook* #f)");
   gnc_hook_run(HOOK_BOOK_OPENED, NULL);
 }

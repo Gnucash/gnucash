@@ -399,12 +399,7 @@ gnc_gui_init (SCM command_line)
     gnc_load_stock_icons ();
 
     /* Run the ui startup hooks. */
-    {
-      SCM run_danglers = scm_c_eval_string("gnc:hook-run-danglers");
-      SCM hook = scm_c_eval_string("gnc:*ui-startup-hook*");
-      scm_call_1(run_danglers, hook); 
-      gnc_hook_run(HOOK_UI_STARTUP, NULL);
-    }
+    gnc_hook_run(HOOK_UI_STARTUP, NULL);
 
     // return ( main_window . command_line )
     {

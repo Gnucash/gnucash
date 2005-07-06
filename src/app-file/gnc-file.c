@@ -349,13 +349,7 @@ gnc_add_history (QofSession * session)
 static void
 gnc_book_opened (void)
 {
-  QofSession *session = qof_session_get_current_session();
-  scm_call_2 (scm_c_eval_string("gnc:hook-run-danglers"),
-              scm_c_eval_string("gnc:*book-opened-hook*"),
-              (session ? 
-               gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-               SCM_BOOL_F));
-  gnc_hook_run(HOOK_BOOK_OPENED, session);
+  gnc_hook_run(HOOK_BOOK_OPENED, qof_session_get_current_session());
 }
 
 void
@@ -375,11 +369,6 @@ gnc_file_new (void)
   gnc_engine_suspend_events ();
   
   qof_session_call_close_hooks(session);
-  scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
-             scm_c_eval_string("gnc:*book-closed-hook*"),
-             (session ?
-              gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-              SCM_BOOL_F));
   gnc_hook_run(HOOK_BOOK_CLOSED, session);
 
   gnc_close_gui_component_by_session (session);
@@ -390,8 +379,6 @@ gnc_file_new (void)
   /* start a new book */
   qof_session_get_current_session ();
 
-  scm_call_1(scm_c_eval_string("gnc:hook-run-danglers"),
-             scm_c_eval_string("gnc:*new-book-hook*"));
   gnc_hook_run(HOOK_NEW_BOOK, NULL);
 
   gnc_book_opened ();
@@ -469,12 +456,6 @@ gnc_post_file_open (const char * filename)
   /* -- this code is almost identical in FileOpen and FileSaveAs -- */
   current_session  = qof_session_get_current_session();
   qof_session_call_close_hooks(current_session);
-  scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
-             scm_c_eval_string("gnc:*book-closed-hook*"),
-             (current_session ?
-              gw_wcp_assimilate_ptr (current_session,
-                                     scm_c_eval_string("<gnc:Session*>")) :
-              SCM_BOOL_F));
   gnc_hook_run(HOOK_BOOK_CLOSED, current_session);
   xaccLogDisable();
   qof_session_destroy (current_session);
@@ -965,11 +946,6 @@ gnc_file_quit (void)
   gnc_engine_suspend_events ();
 
   qof_session_call_close_hooks(session);
-  scm_call_2(scm_c_eval_string("gnc:hook-run-danglers"),
-             scm_c_eval_string("gnc:*book-closed-hook*"),
-             (session ?
-              gw_wcp_assimilate_ptr (session, scm_c_eval_string("<gnc:Session*>")) :
-              SCM_BOOL_F));
   gnc_hook_run(HOOK_BOOK_CLOSED, session);
   
   xaccLogDisable();
