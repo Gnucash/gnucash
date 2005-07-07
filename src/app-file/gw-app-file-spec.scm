@@ -54,7 +54,7 @@ if they say 'Yes'. The return is false if the user says 'Cancel'.")
   (gw:wrap-function
    ws
    'gnc:history-get-last
-   '(<gw:mchars> caller-owned)
+   '(<gw:mchars> callee-owned)
    "gnc_history_get_last"
    '()
    "Get the last file opened by the user.")
