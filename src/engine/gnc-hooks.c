@@ -40,6 +40,7 @@ typedef struct {
   gchar		*desc;
   GHookList	*c_danglers;
   GHookList	*scm_danglers;
+  gint           num_args;
 } GncHook;
 
 typedef struct {
@@ -47,9 +48,13 @@ typedef struct {
 } GncScmDangler;
 
 gchar *
-gnc_hook_create (const gchar *name, const gchar *desc)
+gnc_hook_create (const gchar *name, gint num_args, const gchar *desc)
 {
   GncHook *hook_list;
+
+  g_return_val_if_fail(name != NULL, NULL);
+  g_return_val_if_fail(num_args <= 1, NULL);
+  g_return_val_if_fail(desc != NULL, NULL);
 
   ENTER("name %s", name)
   if (gnc_hooks_list == NULL) {
@@ -71,6 +76,7 @@ gnc_hook_create (const gchar *name, const gchar *desc)
   hook_list->c_danglers = g_malloc(sizeof(GHookList));
   g_hook_list_init(hook_list->c_danglers, sizeof(GHook));
   hook_list->scm_danglers = g_malloc(sizeof(GHookList));
+  hook_list->num_args = num_args;
   g_hook_list_init(hook_list->scm_danglers, sizeof(GHook));
   g_hash_table_insert(gnc_hooks_list, (gchar *)name, hook_list);
 
@@ -171,14 +177,22 @@ call_scm_hook (GHook *hook, gpointer data)
 
   ENTER("hook %p, data %p, cbarg %p", hook, data, hook->data);
 
+  scm_call_0 (scm->proc);
+
+  LEAVE("");
+}
+
+static void
+call_scm_hook_1 (GHook *hook, gpointer data)
+{
+  GncScmDangler *scm = hook->data;
+
+  ENTER("hook %p, data %p, cbarg %p", hook, data, hook->data);
+
   // XXX: FIXME: We really should make sure this is a session!!! */
-  if (data) {
-    scm_call_1 (scm->proc,
-		gw_wcp_assimilate_ptr (data,
-				       scm_c_eval_string("<gnc:Session*>")));
-  } else {
-    scm_call_0 (scm->proc);
-  }
+  scm_call_1 (scm->proc,
+	      gw_wcp_assimilate_ptr (data,
+				     scm_c_eval_string("<gnc:Session*>")));
 
   LEAVE("");
 }
@@ -262,7 +276,10 @@ gnc_hook_run (const gchar *name, gpointer data)
     return;
   }
   g_hook_list_marshal(hook->c_danglers, TRUE, call_c_hook, data);
-  g_hook_list_marshal(hook->scm_danglers, TRUE, call_scm_hook, data);
+  if (hook->num_args == 0)
+    g_hook_list_marshal(hook->scm_danglers, TRUE, call_scm_hook, data);
+  else
+    g_hook_list_marshal(hook->scm_danglers, TRUE, call_scm_hook_1, data);
   LEAVE("");
 }
 
@@ -278,31 +295,31 @@ gnc_hooks_init(void)
 
   gnc_hooks_initialized = TRUE;
 
-  gnc_hook_create(HOOK_STARTUP,
+  gnc_hook_create(HOOK_STARTUP, 0,
 		  "Functions to run at startup.  Hook args: ()");
-  gnc_hook_create(HOOK_SHUTDOWN,
+  gnc_hook_create(HOOK_SHUTDOWN, 0,
 		  "Functions to run at guile shutdown.  Hook args: ()");
-  gnc_hook_create(HOOK_UI_STARTUP,
+  gnc_hook_create(HOOK_UI_STARTUP, 0,
 		  "Functions to run when the ui comes up.  Hook args: ()");
-  gnc_hook_create(HOOK_UI_POST_STARTUP,
+  gnc_hook_create(HOOK_UI_POST_STARTUP, 0,
 		  "Functions to run after the ui comes up.  Hook args: ()");
-  gnc_hook_create(HOOK_UI_SHUTDOWN,
+  gnc_hook_create(HOOK_UI_SHUTDOWN, 0,
 		  "Functions to run at ui shutdown.  Hook args: ()");
-  gnc_hook_create(HOOK_NEW_BOOK,
+  gnc_hook_create(HOOK_NEW_BOOK, 0,
 		  "Run after a new (empty) book is opened, before the"
 		  " book-opened-hook. Hook args: ()");
-  gnc_hook_create(HOOK_REPORT,
+  gnc_hook_create(HOOK_REPORT, 0,
 		  "Run just before the reports are pushed into the menus."
 		  "  Hook args: ()");
-  gnc_hook_create(HOOK_SAVE_OPTIONS,
+  gnc_hook_create(HOOK_SAVE_OPTIONS, 0,
 		  "Functions to run when saving options.  Hook args: ()");
-  gnc_hook_create(HOOK_ADD_EXTENSION,
+  gnc_hook_create(HOOK_ADD_EXTENSION, 0,
 		  "Functions to run when the extensions menu is created."
 		  "  Hook args: ()");
 
-  gnc_hook_create(HOOK_BOOK_OPENED,
+  gnc_hook_create(HOOK_BOOK_OPENED, 1,
 		  "Run after book open.  Hook args: <gnc:Session*>.");
-  gnc_hook_create(HOOK_BOOK_CLOSED,
+  gnc_hook_create(HOOK_BOOK_CLOSED, 1,
 		  "Run before file close.  Hook args: <gnc:Session*>");
 
   LEAVE("");

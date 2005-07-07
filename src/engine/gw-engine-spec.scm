@@ -2500,7 +2500,7 @@ the timepair representing midday on that day")
  'gnc:hook-define
  '(<gw:mchars> caller-owned)
  "gnc_hook_create"
- '(((<gw:mchars> caller-owned) name) ((<gw:mchars> caller-owned) desc))
+ '(((<gw:mchars> caller-owned) name) (<gw:int> how) ((<gw:mchars> caller-owned) desc))
  "Define (create) a new hook")
 
 (gw:wrap-function
