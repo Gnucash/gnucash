@@ -42,6 +42,7 @@
 #include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-pricedb-p.h"
+#include "gnc-session.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
 
@@ -506,4 +507,13 @@ gnc_ui_commodity_druid_finish_cb(GnomeDruidPage * page, gpointer druid,
 
   /* destroy the dialog */
   gnc_ui_commodity_druid_destroy(cd);
+}
+
+
+void gnc_import_commodities(QofSession *session, gpointer unused)
+{
+  const gchar *book_url;
+
+  book_url = gnc_session_get_url(session);
+  gnc_import_legacy_commodities(book_url);
 }

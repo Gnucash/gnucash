@@ -32,6 +32,7 @@
 
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include "qofsession.h"
 
 typedef struct _commoditydruid CommodityDruid;
 
@@ -41,6 +42,9 @@ void            gnc_ui_commodity_druid_destroy(CommodityDruid * d);
 
 /* invoke import druid modally */
 void            gnc_import_legacy_commodities(const char * filename);
+
+/* book-opened callback hook */
+void gnc_import_commodities(QofSession *session, gpointer data);
 
 #endif
 
