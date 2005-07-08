@@ -31,6 +31,7 @@
 #include <libguile.h>
 #include <glib.h>
 
+#include "gnc-hooks.h"
 #include "gnc-module.h"
 #include "gnc-module-api.h"
 #include "gw-business-gnome.h"
@@ -108,6 +109,9 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
 
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (),
 				   gnc_plugin_business_new ());
+
+    gnc_hook_add_dangler(HOOK_UI_POST_STARTUP,
+			 (GFunc)gnc_invoice_remind_bills_due, NULL);
   }
 
   return TRUE;

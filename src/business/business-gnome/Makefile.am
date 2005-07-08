@@ -44,6 +44,7 @@ libgncmod_business_gnome_la_SOURCES = \
   dialog-payment.c \
   dialog-vendor.c \
   gnc-plugin-business.c \
+  gnc-plugin-page-invoice.c \
   search-owner.c
 
 noinst_HEADERS = \

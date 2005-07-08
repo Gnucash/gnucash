@@ -133,6 +133,14 @@ static void gnc_plugin_business_cmd_test_init_data (GtkAction *action,
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-business-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-business-ui.xml"
 
+/** This variable maintains a pointer to the last window where a
+ *  Business command was executed.  It is used to determine where new
+ *  invoices will be placed.  This is a HACK done instead of trudging
+ *  through several layers of dialog (search dialog, new invoice
+ *  dialog) forcing them to track the original parent window.
+ */
+static GncMainWindow *last_window = NULL;
+
 static GtkActionEntry gnc_plugin_actions [] = 
 {
 	/* Toplevel */
@@ -140,25 +148,25 @@ static GtkActionEntry gnc_plugin_actions [] =
 
 	/* Customer submenu */
 	{ "CustomerMenuAction", NULL, N_("_Customer"), NULL, NULL, NULL },
-	{ "CustomerNewCustomerOpenAction", NULL, N_("New Customer"), NULL,
+	{ "CustomerNewCustomerOpenAction", NULL, N_("_New Customer"), NULL,
 	  N_("Open the New Customer dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_customer_new_customer) },
-	{ "CustomerFindCustomerOpenAction", NULL, N_("Find Customer"), NULL,
+	{ "CustomerFindCustomerOpenAction", NULL, N_("_Find Customer"), NULL,
 	  N_("Open the Find Customer dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_customer_find_customer) },
-	{ "CustomerNewInvoiceOpenAction", NULL, N_("New Invoice"), NULL,
+	{ "CustomerNewInvoiceOpenAction", NULL, N_("New _Invoice"), NULL,
 	  N_("Open the New Invoice dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_customer_new_invoice) },
-	{ "CustomerFindInvoiceOpenAction", NULL, N_("Find Invoice"), NULL,
+	{ "CustomerFindInvoiceOpenAction", NULL, N_("Find In_voice"), NULL,
 	  N_("Open the Find Invoice dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_customer_find_invoice) },
-	{ "CustomerNewJobOpenAction", NULL, N_("New Job"), NULL,
+	{ "CustomerNewJobOpenAction", NULL, N_("New _Job"), NULL,
 	  N_("Open the New Job dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_customer_new_job) },
-	{ "CustomerFindJobOpenAction", NULL, N_("Find Job"), NULL,
+	{ "CustomerFindJobOpenAction", NULL, N_("Find Jo_b"), NULL,
 	  N_("Open the Find Job dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_customer_find_job) },
-	{ "CustomerProcessPaymentAction", NULL, N_("Process Payment"), NULL,
+	{ "CustomerProcessPaymentAction", NULL, N_("_Process Payment"), NULL,
 	  N_("Open the Process Payment dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_customer_process_payment) },
 
@@ -170,16 +178,16 @@ static GtkActionEntry gnc_plugin_actions [] =
 	{ "VendorFindVendorOpenAction", NULL, N_("_Find Vendor"), NULL,
 	  N_("Open the Find Vendor dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_vendor_find_vendor) },
-	{ "VendorNewBillOpenAction", NULL, N_("New Bill"), NULL,
+	{ "VendorNewBillOpenAction", NULL, N_("New _Bill"), NULL,
 	  N_("Open the New Bill dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_vendor_new_bill) },
-	{ "VendorFindBillOpenAction", NULL, N_("Find Bill"), NULL,
+	{ "VendorFindBillOpenAction", NULL, N_("Find Bi_ll"), NULL,
 	  N_("Open the Find Bill dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_vendor_find_bill) },
-	{ "VendorNewJobOpenAction", NULL, N_("New Job"), NULL,
+	{ "VendorNewJobOpenAction", NULL, N_("New _Job"), NULL,
 	  N_("Open the New Job dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_vendor_new_job) },
-	{ "VendorFindJobOpenAction", NULL, N_("Find Job"), NULL,
+	{ "VendorFindJobOpenAction", NULL, N_("Find Jo_b"), NULL,
 	  N_("Open the Find Job dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_vendor_find_job) },
 	{ "VendorProcessPaymentAction", NULL, N_("_Process Payment"), NULL,
@@ -194,10 +202,10 @@ static GtkActionEntry gnc_plugin_actions [] =
 	{ "EmployeeFindEmployeeOpenAction", NULL, N_("_Find Employee"), NULL,
 	  N_("Open the Find Employee dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_employee_find_employee) },
-	{ "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New Expense Voucher"), NULL,
+	{ "EmployeeNewExpenseVoucherOpenAction", NULL, N_("New _Expense Voucher"), NULL,
 	  N_("Open the New Expense Voucher dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_employee_new_expense_voucher) },
-	{ "EmployeeFindExpenseVoucherOpenAction", NULL, N_("Find Expense Voucher"), NULL,
+	{ "EmployeeFindExpenseVoucherOpenAction", NULL, N_("Find Expense _Voucher"), NULL,
 	  N_("Open the Find Expense Voucher dialog"),
 	  G_CALLBACK (gnc_plugin_business_cmd_employee_find_expense_voucher) },
 	{ "EmployeeProcessPaymentAction", NULL, N_("_Process Payment"), NULL,
@@ -205,11 +213,11 @@ static GtkActionEntry gnc_plugin_actions [] =
 	  G_CALLBACK (gnc_plugin_business_cmd_employee_process_payment) },
 
 	/* Other menu items */
-	{ "TaxTablesOpenAction", NULL, N_("_Tax Tables"), NULL,
-	  N_("Open the Tax Tables dialog"),
+	{ "TaxTablesOpenAction", NULL, N_("_Tax Table Editor"), NULL,
+	  N_("View and edit the list of Tax Tables"),
 	  G_CALLBACK (gnc_plugin_business_cmd_tax_tables) },
-	{ "BillingTermsOpenAction", NULL, N_("_Billing Terms"), NULL,
-	  N_("Open the Billing Terms dialog"),
+	{ "BillingTermsOpenAction", NULL, N_("_Billing Terms Editor"), NULL,
+	  N_("View and edit the list of Billing Terms"),
 	  G_CALLBACK (gnc_plugin_business_cmd_billing_terms) },
 	{ "BillsDueReminderOpenAction", NULL, N_("Bills _Due Reminder"), NULL,
 	  N_("Open the Bills Due Reminder dialog"),
@@ -248,6 +256,10 @@ static GtkActionEntry gnc_plugin_actions [] =
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
+
+/************************************************************
+ *              Plugin Function Implementation              *
+ ************************************************************/
 
 struct GncPluginBusinessPrivate
 {
@@ -349,8 +361,32 @@ gnc_plugin_business_finalize (GObject *object)
 }
 
 /************************************************************
- *              Plugin Function Implementation              *
+ *                     Helper Functions                     *
  ************************************************************/
+
+GncMainWindow*
+gnc_plugin_business_get_window()
+{
+  return last_window;
+}
+
+
+void
+gnc_invoice_remind_bills_due (void)
+{
+  GNCBook *book;
+  gint days;
+
+//if (!gnc_gconf_get_bool(GCONF_SECTION_BILL, "notify_when_due", NULL))
+  if (!gnc_lookup_boolean_option("Business", "Notify Bills Due?", FALSE))
+    return;
+
+  book = qof_session_get_book(qof_session_get_current_session());
+//days = gnc_gconf_get_int(GCONF_SECTION_BILL, "days_in_advance", NULL);
+  days = gnc_lookup_number_option("Business", "Bills Due Days", 7.0);
+
+  gnc_invoice_show_bills_due(book, days);
+}
 
 /************************************************************
  *                    Command Callbacks                     *
@@ -394,6 +430,7 @@ gnc_plugin_business_cmd_customer_new_invoice (GtkAction *action,
 	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
 	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
+	last_window = mw->window;
 	gnc_ui_invoice_new (priv->last_customer, gnc_get_current_book());
 }
 
@@ -407,6 +444,7 @@ gnc_plugin_business_cmd_customer_find_invoice (GtkAction *action,
 	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
 	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
+	last_window = mw->window;
 	gnc_invoice_search (NULL, priv->last_customer, gnc_get_current_book());
 }
 
@@ -484,6 +522,7 @@ gnc_plugin_business_cmd_vendor_new_bill (GtkAction *action,
 	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
 	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
+	last_window = mw->window;
 	gnc_ui_invoice_new (priv->last_vendor, gnc_get_current_book());
 }
 
@@ -497,6 +536,7 @@ gnc_plugin_business_cmd_vendor_find_bill (GtkAction *action,
 	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
 	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
+	last_window = mw->window;
 	gnc_invoice_search (NULL, priv->last_vendor, gnc_get_current_book());
 }
 
@@ -574,6 +614,7 @@ gnc_plugin_business_cmd_employee_new_expense_voucher (GtkAction *action,
 	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
 	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
+	last_window = mw->window;
 	gnc_ui_invoice_new (priv->last_employee, gnc_get_current_book());
 }
 
@@ -587,6 +628,7 @@ gnc_plugin_business_cmd_employee_find_expense_voucher (GtkAction *action,
 	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
 	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
+	last_window = mw->window;
 	gnc_invoice_search (NULL, priv->last_employee, gnc_get_current_book());
 }
 
@@ -629,19 +671,15 @@ gnc_plugin_business_cmd_billing_terms (GtkAction *action,
 	gnc_ui_billterms_window_new (gnc_get_current_book());
 }
 
+
 static void
 gnc_plugin_business_cmd_bills_due_reminder (GtkAction *action,
 					    GncMainWindowActionData *mw)
 {
-#if 0
-	GncPluginBusinessPrivate *priv;
-
 	g_return_if_fail (mw != NULL);
 	g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
-	priv = GNC_PLUGIN_BUSINESS (mw->data)->priv;
-	gnc_remind_bills_due gnc_ui_payment_new (priv->last_employee, gnc_get_current_book());
-#endif
+	gnc_invoice_remind_bills_due();
 }
 
 /**************************************************************

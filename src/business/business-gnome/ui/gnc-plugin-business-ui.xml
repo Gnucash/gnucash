@@ -1,7 +1,7 @@
 <ui>
   <menubar>
     <placeholder name="AdditionalMenusPlaceholder">
-      <menu action="BusinessAction">
+      <menu name="Business" action="BusinessAction">
 	<menu name="CustomerMenu" action="CustomerMenuAction">
 	  <menuitem name="CustomerNewCustomerOpen"  action="CustomerNewCustomerOpenAction"/>
 	  <menuitem name="CustomerFindCustomerOpen" action="CustomerFindCustomerOpenAction"/>
@@ -30,9 +30,15 @@
 	  <menuitem name="EmployeeProcessPayment"   action="EmployeeProcessPaymentAction"/>
 	</menu>
 
+        <placeholder name="BusinessPlaceholderTop"/>
+        <separator name="Sep1"/>
+
 	<menuitem name="TaxTablesOpen" action="TaxTablesOpenAction"/>
 	<menuitem name="BillingTermsOpen" action="BillingTermsOpenAction"/>
 	<menuitem name="BillsDueReminderOpen" action="BillsDueReminderOpenAction"/>
+
+        <placeholder name="BusinessPlaceholderMiddle"/>
+        <separator name="Sep2"/>
 
 	<menu name="ExportMenu" action="ExportMenuAction">
 	  <menuitem name="QSFInvoice" action="QSFInvoiceAction"/>
@@ -40,6 +46,8 @@
 	  <menuitem name="QSFVendor" action="QSFVendorAction"/>
 	  <menuitem name="QSFEmployee" action="QSFEmployeeAction"/>
 	</menu>
+        <placeholder name="BusinessPlaceholderBottom"/>
+
       </menu>
     </placeholder>
 

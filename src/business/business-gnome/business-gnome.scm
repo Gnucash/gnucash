@@ -18,30 +18,9 @@
 (define new-label (N_ "New"))
 (define find-label (N_ "Find"))
 
-(define ui-started #f)
-
-(define (remind-bills-due session)
-  (define (option-value name)
-    (gnc:option-value (gnc:lookup-global-option gnc:*business-label* name)))
-
-  (let ((check-bills? (option-value "Notify Bills Due?")))
-    (if (and session check-bills?)
-	(let* ((book (gnc:session-get-book session))
-	       (days (option-value "Bills Due Days")))
-	  (gnc:invoice-show-bills-due book days)))))
-
 (define (business-report-function)
   (gnc:add-extension
    (gnc:make-menu gnc:menuname-business-reports
 		  (list gnc:menuname-reports))))
 
-(define (business-book-opened session)
-  (remind-bills-due session))
-
-(define (business-ui-started)
-  (set! ui-started #t)
-  (remind-bills-due (gnc:get-current-session)))
-
 (gnc:hook-add-dangler gnc:*report-hook* business-report-function)
-;(gnc:hook-add-dangler gnc:*ui-post-startup-hook* business-ui-started)
-(gnc:hook-add-dangler gnc:*book-opened-hook* business-book-opened)
