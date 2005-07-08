@@ -297,6 +297,59 @@ gnc_main_window_page_exists (GncPluginPage *page)
 	return FALSE;
 }
 
+
+static gboolean
+gnc_main_window_delete_event (GtkWidget *window,
+			      GdkEvent *event,
+			      gpointer user_data)
+{
+  QofSession *session;
+  GtkWidget *dialog;
+  gint response;
+
+  if (g_list_length(active_windows) > 1)
+    return FALSE;
+
+  dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
+				   GTK_DIALOG_MODAL,
+				   GTK_MESSAGE_WARNING,
+				   GTK_BUTTONS_NONE,
+				   _("<b>Quit Gnucash?</b>\n\n"
+				     "You are attempting to close the last "
+				     "Gnucash window.  Doing so will quit the "
+				     "application.  Are you sure that this is "
+				     "what you want to do?"));
+  session = qof_session_get_current_session();
+
+#ifdef DIRECTORY_ORDERING_PROBLEM_FIXED
+  if (qof_book_not_saved(qof_session_get_book(session))) {
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   "_Save and Quit", GTK_RESPONSE_ACCEPT,
+			   GTK_STOCK_QUIT, GTK_RESPONSE_OK,
+			   NULL);
+  } else {
+#endif
+    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			   GTK_STOCK_QUIT, GTK_RESPONSE_OK,
+			   NULL);
+#ifdef DIRECTORY_ORDERING_PROBLEM_FIXED
+  }
+#endif
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy(dialog);
+
+#ifdef DIRECTORY_ORDERING_PROBLEM_FIXED
+  if (response == GTK_RESPONSE_ACCEPT)
+    gnc_file_save();
+#endif
+
+  return ((response != GTK_RESPONSE_OK) &&
+	  (response != GTK_RESPONSE_OK));
+}
+
+
 /** This function handles any event notifications from the engine.
  *  The only event it currently cares about is the deletion of a book.
  *  When a book is deleted, it runs through all installed pages
@@ -1257,6 +1310,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	GError *error = NULL;
 	gchar *filename, *style;
 	SCM debugging;
+
+	/* Catch window manager delete signal */
+	g_signal_connect (G_OBJECT (window), "delete-event",
+			  G_CALLBACK (gnc_main_window_delete_event), window);
 
 	/* Create widgets and add them to the window */
 	main_vbox = gtk_vbox_new (FALSE, 0);

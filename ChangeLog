@@ -1,4 +1,83 @@
+2005-07-07  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/Makefile.am:
+	* src/business/business-gnome/dialog-invoice.[ch]:
+	* src/business/business-gnome/gnc-plugin-page-invoice.[ch]:
+	* src/business/business-gnome/glade/invoice.glade:
+	* src/business/business-gnome/ui/Makefile.am:
+	* src/business/business-gnome/ui/gnc-plugin-page-invoice-ui.xml:
+	Convert the invoice dialog over to a GncPluginPage.  The new file
+	is in large part a wrapper around the original dialog code, since
+	the same logic was actually used to drive two different dialogs.
+
+	* src/business/business-gnome/business-gnome.scm: 
+	* src/business/business-gnome/businessmod-gnome.c:
+	* src/business/business-gnome/gnc-plugin-business.[ch]:
+	* src/business/business-gnome/gw-business-gnome-spec.scm: Move the
+	logic to call the bills due dialog at startup.  Track the window
+	where the last business command was issued and use this value to
+	place any new business pages created.  Update accelerator keys.
+
+	* src/business/business-gnome/ui/gnc-plugin-business-ui.xml:
+	Add a couple of placeholders.
+	
+	* src/gnome-utils/gnc-main-window.c: Catch the window manager
+	delete signal and query the user before allowing the last window
+	to be deleted.
+
+	* src/import-export/binary-import/Makefile.am:
+	* src/import-export/binary-import/druid-commodity.[ch]:
+	* src/import-export/binary-import/gncmod-binary-import.c:
+	* src/import-export/binary-import/binary-import.scm (removed):
+	* src/import-export/binary-import/gw-binary-import-spec.scm (removed):
+	Rewrite this module's book-opened-hook into C.
+	
+	* src/enginc/gnc-hooks.[ch]:
+	* src/engine/gw-engine-spec.scm: Explicitly state the number of
+	arguments a hook callback should have.  Scheme gets very unhappy
+	if you don't supply the right number of arguments.
+
+	* src/app-file/gw-app-file-spec.scm: Eliminate double free of
+	memory.
+	
+2005-07-06  David Hampton  <hampton@employees.org>
+
+	* src/register/register-gnome/gnucash-sheet.c: The register uses a
+	non-visible GtkEntry to handle its data input.  Except this widget
+	from being shown by gtk_widget_show_all.
+
+2005-07-05  David Hampton  <hampton@employees.org>
+
+	* src/app-file/gnc-file.c:
+	* src/gnome/dialog-new-user.c:
+	* src/gnome/top-level.c: Eliminate double call of some hooks.
+	
+	* src/gnome/top_level.c: 
+	* src/gnome-utils/gnc-main-window.c: A new GncMainWindow should
+	show itself instead of requiring the caller to call
+	gtk_widget_show.
+
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome-utils/gnc-main-window.[ch]:
+	* src/gnome-utils/gnc-plugin-page.[ch]:
+	* src/gnome-utils/gnc-window.c:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Move some of
+	the fields in a GncPluginPage from the public to the private data
+	structures.
+
+	* src/gnome-utils/dialog-query-list.c: 
+
+	Look for the window manager deletion signal and clean up the
+	dialog.
+
+	* src/gnome-utils/dialog-query-list.glade: Give the dialog a
+	default size.
+
 2005-07-03  David Hampton  <hampton@employees.org>
+
+	* src/gnome/glade/price.glade: Update to use HIG2.0 guidelines for
+	widget spacing.
 
 	* src/gnome/dialog-print-check.c:
 	* src/gnome-utils/gnc-html.c:
