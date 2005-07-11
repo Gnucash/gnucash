@@ -1,3 +1,7 @@
+2005-07-10  David Hampton  <hampton@employees.org>
+
+	* src/engine/iso-4217-currencies.scm: Add the new Romanian Leu.
+
 2005-05-23  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Fix handling of debit
