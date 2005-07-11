@@ -143,7 +143,8 @@
 ( "Polish Zloty" "zloty" "groszy" "ISO4217" "PLN" "985" 100 100 )
 ( "Portuguese Escudo" "escudo" "centavo" "ISO4217" "PTE" "620" 100 100 ) ;; through 1998
 ( "Qatari Rial" "rial" "dirham" "ISO4217" "QAR" "634" 100 100 )
-( "Romanian Leu" "leu" "bani"  "ISO4217" "ROL" "642" 100 100 )
+( "Romanian Leu" "leu" "bani"  "ISO4217" "ROL" "642" 100 100 ) ;; through 2005-06
+( "Romanian Leu" "leu" "bani"  "ISO4217" "RON" "946" 100 100 ) ;; from 2005-07
 ( "Russian Rouble" "rouble" "kopek" "ISO4217" "RUR" "810" 100 100 )
 ( "Rwanda Franc" "franc" "centime" "ISO4217" "RWF" "646" 100 100 )
 ( "Samoan Tala" "tala" "sene" "ISO4217" "WST" "882" 100 100 )
