@@ -23,6 +23,8 @@
 
 #include <gnome.h>
 
+#include "split-register-model.h"
+
 #include "table-allgui.h"
 
 #define CELL_VPADDING 3
@@ -84,6 +86,14 @@ typedef struct
 
         GnomeCanvasItem *item_editor;
         GtkWidget *entry;   
+
+        gboolean   use_theme_colors;
+        gboolean   use_horizontal_lines;
+        gboolean   use_vertical_lines;
+        GtkWidget *header_color;   
+        GtkWidget *primary_color;   
+        GtkWidget *secondary_color;   
+        GtkWidget *split_color;   
 
         gboolean input_cancelled;
 
@@ -202,7 +212,7 @@ void gnucash_register_set_initial_rows(guint num_rows);
 void gnucash_register_cut_clipboard (GnucashRegister *reg);
 void gnucash_register_copy_clipboard (GnucashRegister *reg);
 void gnucash_register_paste_clipboard (GnucashRegister *reg);
-
+void gnucash_register_refresh_from_gconf (GnucashRegister *reg);
 
 typedef struct
 {
@@ -218,6 +228,8 @@ typedef struct
         void (*redraw_all)      (GnucashRegister *reg);
         void (*redraw_help)     (GnucashRegister *reg);
 } GnucashRegisterClass;
+
+GdkColor *get_gtkrc_color (GnucashSheet *sheet, RegisterColor field_type);
 
 #endif
 

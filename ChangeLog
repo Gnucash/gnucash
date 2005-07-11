@@ -1,3 +1,35 @@
+2005-07-11  David Hampton  <hampton@employees.org>
+
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/gnc-plugin-register.c: Add a hook to catch changes to
+	register configuration keys and update any registers.  This gives
+	live updating when changes are made.
+
+	* doc/gtkrc-2.0.gnucash:
+	* src/app-utils/prefs.scm:
+	* src/business/business-gnome/dialog-invoice.c:
+	* src/business/business-gnome/dialog-order.c:
+	* src/business/business-ledger/gncEntryLedger.h:
+	* src/business/business-ledger/gncEntryLedgerModel.c:
+	* src/gnome/top-level.c:
+	* src/gnome/schemas/Makefile.am:
+	* src/gnome/schemas/apps_gnucash_general.schemas:
+	* src/register/ledger-core/Makefile.am:
+	* src/register/ledger-core/split-register-model.[ch]:
+	* src/register/ledger-core/split-register.h:
+	* src/register/register-core/table-allgui.[ch]:
+	* src/register/register-gnome/gnucash-grid.c:
+	* src/register/register-gnome/gnucash-header.c:
+	* src/register/register-gnome/gnucash-item-edit.c:
+	* src/register/register-gnome/gnucash-sheet.[ch]:
+	* src/register/register-gnome/gnucash-style.[ch]: Add code to
+	allow the register colors to be set by the system theme (i.e from
+	gtkrc files).  Remove the preferences to set the register colors.
+	Add a gconf keys to 1) specify whether to use the gtkrc colors or
+	the default gnucash colors, 2) display the horizontal/vertical
+	lines in the register, and 3) set the alternate coloring mode.
+
 2005-07-07  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/Makefile.am:

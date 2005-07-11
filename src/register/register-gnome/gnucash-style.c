@@ -31,14 +31,12 @@
 #include "gnucash-item-edit.h"
 #include "gnucash-style.h"
 #include "messages.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-engine-util.h"
 
 /** GLOBALS *********************************************************/
 /* This static indicates the debugging module that this .o belongs to.  */
 #define DEFAULT_STYLE_WIDTH 680
-
-static gboolean use_vertical_lines = TRUE;
-static gboolean use_horizontal_lines = TRUE;
 
 
 static gpointer
@@ -568,15 +566,6 @@ gnucash_sheet_styles_recompile(GnucashSheet *sheet)
 
 
 void
-gnucash_style_config_register_borders (gboolean use_vertical_lines_in,
-                                       gboolean use_horizontal_lines_in)
-{
-        use_vertical_lines = use_vertical_lines_in;
-        use_horizontal_lines = use_horizontal_lines_in;
-}
-
-
-void
 gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                            PhysicalCellBorders *borders)
 {
@@ -586,13 +575,13 @@ gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
         g_return_if_fail (sheet != NULL);
         g_return_if_fail (GNUCASH_IS_SHEET (sheet));
 
-        line_style = use_horizontal_lines ?
+        line_style = sheet->use_horizontal_lines ?
                 CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
 
         borders->top    = line_style;
         borders->bottom = line_style;
 
-        line_style = use_vertical_lines ?
+        line_style = sheet->use_vertical_lines ?
                 CELL_BORDER_LINE_NORMAL : CELL_BORDER_LINE_NONE;
 
         borders->left  = line_style;

@@ -369,12 +369,18 @@ draw_cell (GnucashGrid *grid,
 /*        gint x_offset, y_offset;*/
         GdkRectangle rect;
         gboolean hatching;
-        guint32 argb;
+        guint32 argb, color_type;
 
         gdk_gc_set_background (grid->gc, &gn_white);
 
-        argb = gnc_table_get_bg_color (table, virt_loc, &hatching);
-        bg_color = gnucash_color_argb_to_gdk (argb);
+	if (grid->sheet->use_theme_colors) {
+		color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc,
+							   &hatching);
+		bg_color = get_gtkrc_color(grid->sheet, color_type);
+	} else {
+		argb = gnc_table_get_bg_color (table, virt_loc, &hatching);
+		bg_color = gnucash_color_argb_to_gdk (argb);
+	}
 
         gdk_gc_set_foreground (grid->gc, bg_color);
         gdk_draw_rectangle (drawable, grid->gc, TRUE,

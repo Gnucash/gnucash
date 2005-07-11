@@ -229,8 +229,6 @@ typedef struct split_register_colors
 
   guint32 split_bg_color;
   guint32 split_active_bg_color;
-
-  gboolean double_alternate_virt;
 } SplitRegisterColors;
 
 
@@ -402,9 +400,6 @@ gboolean gnc_split_register_changed (SplitRegister *reg);
  * the splits are ordered primarily by post date. */
 void gnc_split_register_show_present_divider (SplitRegister *reg,
                                               gboolean show_present);
-
-/** Set the colors used by SplitRegisters */
-void gnc_split_register_set_colors (SplitRegisterColors reg_colors);
 
 /** If use_red is TRUE, negative amounts will be printed in red. */
 void gnc_split_register_colorize_negative (gboolean use_red);

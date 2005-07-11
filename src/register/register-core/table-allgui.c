@@ -390,6 +390,30 @@ gnc_table_get_bg_color (Table *table, VirtualLocation virt_loc,
                            table->model->handler_user_data);
 }
 
+guint32
+gnc_table_get_gtkrc_bg_color (Table *table, VirtualLocation virt_loc,
+			      gboolean *hatching)
+{
+  TableGetBGColorHandler bg_color_handler;
+  const char *cell_name;
+
+  if (hatching)
+    *hatching = FALSE;
+
+  if (!table || !table->model)
+    return 0xffffff; /* white */
+
+  cell_name = gnc_table_get_cell_name (table, virt_loc);
+
+  bg_color_handler = gnc_table_model_get_bg_color_handler (table->model,
+                                                           "gtkrc");
+  if (!bg_color_handler)
+    return 0xffffff;
+
+  return bg_color_handler (virt_loc, hatching,
+                           table->model->handler_user_data);
+}
+
 void
 gnc_table_get_borders (Table *table, VirtualLocation virt_loc,
                        PhysicalCellBorders *borders)

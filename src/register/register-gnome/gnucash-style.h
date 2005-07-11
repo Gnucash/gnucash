@@ -108,8 +108,6 @@ void gnucash_sheet_style_get_cell_pixel_rel_coords (SheetBlockStyle *style,
 void gnucash_style_ref   (SheetBlockStyle *style);
 void gnucash_style_unref (SheetBlockStyle *style);
 
-void gnucash_style_config_register_borders (gboolean use_vertical_lines,
-                                            gboolean use_horizontal_lines);
 void gnucash_sheet_get_borders (GnucashSheet *sheet, VirtualLocation virt_loc,
                                 PhysicalCellBorders *borders);
 

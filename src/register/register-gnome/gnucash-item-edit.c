@@ -129,7 +129,7 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         Table *table;
 
         gboolean hatching;
-        guint32 argb;
+        guint32 argb, color_type;
 
         int xd, yd, wd, hd, dx, dy;
         int start_pos, end_pos;
@@ -145,9 +145,17 @@ gnc_item_edit_draw_info (GncItemEdit *item_edit, int x, int y, TextDrawInfo *inf
         block = gnucash_sheet_get_block (item_edit->sheet,
                                          item_edit->virt_loc.vcell_loc);
 
-        argb = gnc_table_get_bg_color (table, item_edit->virt_loc, &hatching);
+	if (item_edit->sheet->use_theme_colors) {
+		color_type = gnc_table_get_gtkrc_bg_color (table,
+							   item_edit->virt_loc,
+							   &hatching);
+		info->bg_color = get_gtkrc_color(item_edit->sheet, color_type);
+	} else {
+		argb = gnc_table_get_bg_color (table, item_edit->virt_loc,
+					       &hatching);
+		info->bg_color = gnucash_color_argb_to_gdk (argb);
+	}
 
-        info->bg_color = gnucash_color_argb_to_gdk (argb);
         info->hatching = hatching;
         info->fg_color = &gn_black;
 

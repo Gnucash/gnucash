@@ -221,87 +221,6 @@ and expand the current transaction")))
   "h" (N_ "If selected, use a dialog to confirm a change to a reconciled \
 transaction.") #t))
 
-(define (string-take-n string n)
-  (substring string n (string-length string)))
-
-(gnc:register-configuration-option
- (gnc:make-font-option
-  (N_ "Register") (N_ "Register font")
-  "i" (N_ "The font to use in the register")
-  (string-take-n (_ "register-default-font:-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*") 22)))
-
-(gnc:register-configuration-option
- (gnc:make-font-option
-  (N_ "Register") (N_ "Register hint font")
-  "j" (N_ "The font used to show hints in the register")
-  (string-take-n (_ "register-hint-font:-adobe-helvetica-medium-o-normal--*-120-*-*-*-*-*-*") 19)))
-
-
-;; Register Color options
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  (N_ "Register Colors") (N_ "Header color")
-  "a" (N_ "The header background color")
-  (list #x96 #xb2 #x84 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  (N_ "Register Colors") (N_ "Primary color")
-  "b" (N_ "The default background color for register rows")
-  (list #xbf #xde #xba 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  (N_ "Register Colors") (N_ "Secondary color")
-  "c" (N_ "The default secondary background color for register rows")
-  (list #xf6 #xff #xdb 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  (N_ "Register Colors") (N_ "Primary active color")
-  "d" (N_ "The background color for the current register row")
-  (list #xff #xf0 #x99 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  (N_ "Register Colors") (N_ "Secondary active color")
-  "e" (N_ "The secondary background color for the current register row")
-  (list #xff #xf0 #x99 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  (N_ "Register Colors") (N_ "Split color")
-  "f" (N_ "The default background color for split rows in the register")
-  (list #xed #xe8 #xd4 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-color-option
-  (N_ "Register Colors") (N_ "Split active color")
-  "g" (N_ "The background color for the current split row in the register")
-  (list #xff #xf0 #x99 0)
-  255
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Register Colors") (N_ "Double mode colors alternate with transactions")
-  "h" (N_ "Alternate the primary and secondary colors with each transaction, \
-not each row")
-  #f))
-
 
 ;;; Summarybar Options
 
@@ -619,16 +538,6 @@ through Window menu)")))
                (N_ "Use GNOME default")
                (N_ "Default MDI mode can be set in the GNOME \
 Control Center"))))))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Show Vertical Borders")
-  "c" (N_ "By default, show vertical borders on the cells.") #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Show Horizontal Borders")
-  "d" (N_ "By default, show horizontal borders on the cells.") #f))
 
 (gnc:register-configuration-option     
  (gnc:make-simple-boolean-option

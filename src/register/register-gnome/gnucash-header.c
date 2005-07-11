@@ -75,7 +75,7 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         int xpaint, ypaint;
         const char *text;
         CellBlock *cb;
-        guint32 argb;
+        guint32 argb, color_type;
         int i, j;
         int w, h;
 	PangoLayout *layout;
@@ -85,9 +85,14 @@ gnc_header_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
         virt_loc.phys_row_offset = 0;
         virt_loc.phys_col_offset = 0;
 
-        argb = gnc_table_get_bg_color (table, virt_loc, NULL);
-
-        bg_color = gnucash_color_argb_to_gdk (argb);
+	if (header->sheet->use_theme_colors) {
+		color_type = gnc_table_get_gtkrc_bg_color (table, virt_loc,
+							   NULL);
+		bg_color = get_gtkrc_color(header->sheet, color_type);
+	} else {
+		argb = gnc_table_get_bg_color (table, virt_loc, NULL);
+		bg_color = gnucash_color_argb_to_gdk (argb);
+	}
 
         h = style->dimensions->height;
         h *= header->num_phys_rows;

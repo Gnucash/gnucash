@@ -39,6 +39,7 @@
 #include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-book.h"
+#include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
 #include "gnc-gnome-utils.h"
@@ -129,6 +130,7 @@ static void gnc_plugin_page_register_cmd_account_report (GtkAction *action, GncP
 static void gnc_plugin_page_register_cmd_transaction_report (GtkAction *action, GncPluginPageRegister *plugin_page);
 
 static void gnc_plugin_page_help_changed_cb( GNCSplitReg *gsr, GncPluginPageRegister *register_page );
+static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data);
 
 /************************************************************/
 /*                          Actions                         */
@@ -295,6 +297,8 @@ struct GncPluginPageRegisterPrivate
 
 	char *ui_description;
 
+	gint component_manager_id;
+
 	const char *lines_opt_page;
 	const char *lines_opt_name;
 	gint lines_default;
@@ -389,6 +393,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 			  GNC_PLUGIN_HIDE_MENU_ADDITIONS_NAME,
 			  GINT_TO_POINTER(1));
 
+	register_page->priv->component_manager_id = 0;
 	return plugin_page;
 }
 
@@ -600,6 +605,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	if (plugin_page->summarybar)
 	  gtk_widget_show_all(plugin_page->summarybar);
 
+	priv->component_manager_id =
+	  gnc_register_gui_component(GNC_PLUGIN_PAGE_REGISTER_NAME,
+				     gnc_plugin_page_register_refresh_cb,
+				     NULL, page);
+
 	/* DRH - Probably lots of other stuff from regWindowLedger should end up here. */
 	LEAVE(" ");
 	return priv->widget;
@@ -617,6 +627,11 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 
 	if (priv->widget == NULL)
 		return;
+
+	if (priv->component_manager_id) {
+	  gnc_unregister_gui_component(priv->component_manager_id);
+	  priv->component_manager_id = 0;
+	}
 
 	if (page->priv->sd.dialog) {
 	  gtk_widget_destroy(page->priv->sd.dialog);
@@ -2255,3 +2270,17 @@ gnc_plugin_page_help_changed_cb (GNCSplitReg *gsr, GncPluginPageRegister *regist
 	g_free(help);
 }
 
+static void
+gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer user_data)
+{
+  GncPluginPageRegister *page = user_data;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_REGISTER(page));
+
+  /* We're only looking for forced updates here. */
+  if (changes)
+    return;
+
+  gnucash_register_refresh_from_gconf(page->priv->gsr->reg);
+  gtk_widget_queue_draw(page->priv->widget);
+}

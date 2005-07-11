@@ -81,10 +81,6 @@
 static void gnc_configure_date_format_cb(gpointer);
 static void gnc_configure_date_format(void);
 static void gnc_configure_account_separator_cb(gpointer);
-static void gnc_configure_register_colors_cb(gpointer);
-static void gnc_configure_register_colors(void);
-static void gnc_configure_register_borders_cb(gpointer);
-static void gnc_configure_register_borders(void);
 static void gnc_configure_auto_raise_cb(gpointer);
 static void gnc_configure_auto_raise(void);
 static void gnc_configure_negative_color_cb(gpointer);
@@ -110,8 +106,6 @@ static int gnome_is_terminating = FALSE;
 
 static SCM date_callback_id = SCM_UNDEFINED;
 static SCM account_separator_callback_id = SCM_UNDEFINED;
-static SCM register_colors_callback_id = SCM_UNDEFINED;
-static SCM register_borders_callback_id = SCM_UNDEFINED;
 static SCM auto_raise_callback_id = SCM_UNDEFINED;
 static SCM negative_color_callback_id = SCM_UNDEFINED;
 static SCM auto_decimal_callback_id = SCM_UNDEFINED;
@@ -321,16 +315,6 @@ gnc_gui_init (SCM command_line)
                                           NULL, "Accounts",
                                           "Account Separator");
 
-    gnc_configure_register_colors();
-    register_colors_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_register_colors_cb,
-                                          NULL, "Register Colors", NULL);
-
-    gnc_configure_register_borders();
-    register_borders_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_register_borders_cb,
-                                          NULL, "Register", NULL);
-    
     gnc_configure_auto_raise();
     auto_raise_callback_id = 
       gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
@@ -439,8 +423,6 @@ gnc_gui_destroy (void)
 
   gnc_unregister_option_change_callback_id(date_callback_id);
   gnc_unregister_option_change_callback_id(account_separator_callback_id);
-  gnc_unregister_option_change_callback_id(register_colors_callback_id);
-  gnc_unregister_option_change_callback_id(register_borders_callback_id);
   gnc_unregister_option_change_callback_id(auto_raise_callback_id);
   gnc_unregister_option_change_callback_id(negative_color_callback_id);
   gnc_unregister_option_change_callback_id(register_font_callback_id);
@@ -585,114 +567,6 @@ static void
 gnc_configure_account_separator_cb (gpointer data)
 {
   gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_register_colors_cb
- *    Callback called when options change - sets
- *    register colors to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_colors_cb (gpointer data)
-{
-  gnc_configure_register_colors ();
-  gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_register_colors_cb
- *    sets register colors to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_colors (void)
-{
-  SplitRegisterColors reg_colors;
-
-  reg_colors.header_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Header color",
-                                 0xffffff);
-
-  reg_colors.primary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary color",
-                                 0xffffff);
-
-  reg_colors.secondary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary color",
-                                 0xffffff);
-
-  reg_colors.primary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary active color",
-                                 0xffffff);
-
-  reg_colors.secondary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary active color",
-                                 0xffffff);
-
-  reg_colors.split_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Split color",
-                                 0xffffff);
-
-  reg_colors.split_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Split active color",
-                                 0xffffff);
-
-  reg_colors.double_alternate_virt =
-    gnc_lookup_boolean_option("Register Colors",
-                              "Double mode colors alternate with transactions",
-                              FALSE);
-
-  gnc_split_register_set_colors (reg_colors);
-}
-
-
-/* gnc_configure_register_borders_cb
- *    Callback called when options change - sets
- *    register borders to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_borders_cb (gpointer data)
-{
-  gnc_configure_register_borders ();
-  gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_register_border
- *    sets register borders to their guile values
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_register_borders (void)
-{
-  gboolean use_vertical_lines;
-  gboolean use_horizontal_lines;
-
-  use_vertical_lines = gnc_lookup_boolean_option("_+Advanced",
-                                                 "Show Vertical Borders",
-                                                 FALSE);
-
-  
-  use_horizontal_lines = gnc_lookup_boolean_option("_+Advanced",
-                                                   "Show Horizontal Borders",
-                                                   FALSE);
-
-  gnucash_style_config_register_borders (use_vertical_lines,
-                                         use_horizontal_lines);
 }
 
 /* gnc_configure_auto_raise_cb

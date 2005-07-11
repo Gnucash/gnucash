@@ -126,11 +126,46 @@ widget "Commodities Dialog.*.commodity_tree" style "gnc-treeview"
 
 
 #
-# Register
+# Register - Font
 #
 style "gnc-register"
 {
   font_name    = "Sans 10"
 }
-
 widget "*.GnucashSheet" style "gnc-register"
+
+
+#
+# Register Window - Colors
+#
+
+# The header lines at the top of a register.
+style "gnc-register-header"
+{
+  base[NORMAL]      = "#B18396"
+}
+
+# The color of the first line/transaction in a register.
+style "gnc-register-primary"
+{
+  base[NORMAL]      = "#DEB9BF"
+  base[SELECTED]    = "#EF98FF"
+}
+
+# The color of the second line/transaction in a register.
+style "gnc-register-secondary"
+{
+  base[NORMAL]      = "#FFDAF6"
+  base[SELECTED]    = "#EF98FF"
+}
+
+# The color of any "split" lines in a register.
+style "gnc-register-split"
+{
+  base[NORMAL]      = "#E7D3ED"
+  base[SELECTED]    = "#EF98FF"
+}
+widget "GncMainWindow.*.header_color"    style : highest "gnc-register-header"
+widget "GncMainWindow.*.primary_color"   style : highest "gnc-register-primary"
+widget "GncMainWindow.*.secondary_color" style : highest "gnc-register-secondary"
+widget "GncMainWindow.*.split_color"     style : highest "gnc-register-split"

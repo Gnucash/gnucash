@@ -33,6 +33,7 @@
 #include "gnucash-sheet.h"
 
 #include "dialog-utils.h"
+#include "gnc-gconf-utils.h"
 #include "gnucash-color.h"
 #include "gnucash-grid.h"
 #include "gnucash-cursor.h"
@@ -1422,6 +1423,32 @@ gnucash_register_paste_clipboard (GnucashRegister *reg)
         gnc_item_edit_paste_clipboard(item_edit, GDK_CURRENT_TIME);
 }
 
+static void
+gnucash_sheet_refresh_from_gconf (GnucashSheet *sheet)
+{
+        g_return_if_fail(sheet != NULL);
+        g_return_if_fail(GNUCASH_IS_SHEET(sheet));
+
+	sheet->use_theme_colors = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
+						     "use_theme_colors", NULL);
+	sheet->use_horizontal_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
+							 "use_horizontal_lines", NULL);
+	sheet->use_vertical_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
+						       "use_vertical_lines", NULL);
+}
+
+void
+gnucash_register_refresh_from_gconf (GnucashRegister *reg)
+{
+        GnucashSheet *sheet;
+
+        g_return_if_fail(reg != NULL);
+        g_return_if_fail(GNUCASH_IS_REGISTER(reg));
+
+        sheet = GNUCASH_SHEET(reg->sheet);
+	gnucash_sheet_refresh_from_gconf(sheet);
+}
+
 static gboolean
 gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
 {
@@ -2188,6 +2215,115 @@ gnucash_sheet_selection_received (GtkWidget          *widget,
 }
 
 static void
+gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
+{
+	gtk_widget_realize (entry);
+}
+
+/*************************************************************/
+
+/* This code is one big hack to use gtkrc to set cell colors in a
+ * register.  Because the cells are just boxes drawn on a gnome
+ * canvas, there's no way to specify the individual cells in a gtkrc
+ * file.  This code creates four hidden GtkEntry widgets and names
+ * them so that they *can* be specified in gtkrc.  It then looks up
+ * the colors specified on these hidden widgets and uses it for the
+ * cells drawn on the canvas.  This code should all go away whenever
+ * the register is rewritten.
+ */
+
+/** Map a cell type to a gtkrc specified color. */
+GdkColor *
+get_gtkrc_color (GnucashSheet *sheet,
+		 RegisterColor field_type)
+{
+	GtkWidget *widget = NULL;
+	GtkStyle *style;
+	GdkColor *white;
+	GdkColor *color = NULL;
+
+	white = gnucash_color_argb_to_gdk (0xFFFFFF);
+	switch (field_type) {
+	  default:
+		return white;
+
+	  case COLOR_HEADER:
+		widget = sheet->header_color;
+		break;
+
+	  case COLOR_PRIMARY:
+	  case COLOR_PRIMARY_ACTIVE:
+		widget = sheet->primary_color;
+		break;
+
+	  case COLOR_SECONDARY:
+	  case COLOR_SECONDARY_ACTIVE:
+		widget = sheet->secondary_color;
+		break;
+
+	  case COLOR_SPLIT:
+	  case COLOR_SPLIT_ACTIVE:	
+		widget = sheet->split_color;
+		break;
+	}
+
+	style = gtk_widget_get_style(widget);
+	if (!style)
+		return white;
+
+	switch (field_type) {
+	  default:
+		return white;
+
+	  case COLOR_HEADER:
+	  case COLOR_PRIMARY:
+	  case COLOR_SECONDARY:
+	  case COLOR_SPLIT:
+		color = &style->base[GTK_STATE_NORMAL];
+		break;
+
+	  case COLOR_PRIMARY_ACTIVE:
+	  case COLOR_SECONDARY_ACTIVE:
+	  case COLOR_SPLIT_ACTIVE:	
+		color = &style->base[GTK_STATE_SELECTED];
+		break;
+	}
+
+        gnucash_color_alloc_gdk(color);
+	return color;
+}
+
+/** Create the entries used for nameing register colors in gtkrc. */
+static void
+gnucash_sheet_create_color_hack(GnucashSheet *sheet)
+{
+	sheet->header_color    = gtk_entry_new();
+	sheet->primary_color   = gtk_entry_new();
+	sheet->secondary_color = gtk_entry_new();
+	sheet->split_color     = gtk_entry_new();
+
+	gtk_widget_set_name(sheet->header_color,    "header_color");
+	gtk_widget_set_name(sheet->primary_color,   "primary_color");
+	gtk_widget_set_name(sheet->secondary_color, "secondary_color");
+	gtk_widget_set_name(sheet->split_color,     "split_color");
+
+	g_signal_connect_after(sheet, "realize",
+			       G_CALLBACK(gnucash_sheet_realize_entry),
+			       sheet->header_color);
+	g_signal_connect_after(sheet, "realize",
+			       G_CALLBACK(gnucash_sheet_realize_entry),
+			       sheet->primary_color);
+	g_signal_connect_after(sheet, "realize",
+			       G_CALLBACK(gnucash_sheet_realize_entry),
+			       sheet->secondary_color);
+	g_signal_connect_after(sheet, "realize",
+			       G_CALLBACK(gnucash_sheet_realize_entry),
+			       sheet->split_color);
+}
+
+/*************************************************************/
+
+static void
 gnucash_sheet_class_init (GnucashSheetClass *class)
 {
         GObjectClass *gobject_class;
@@ -2285,12 +2421,6 @@ gnucash_sheet_get_type (void)
         return gnucash_sheet_type;
 }
 
-static void
-gnucash_sheet_realize_entry (GnucashSheet *sheet, GtkWidget *entry)
-{
-	gtk_widget_realize (entry);
-}
-
 GtkWidget *
 gnucash_sheet_new (Table *table)
 {
@@ -2343,6 +2473,10 @@ gnucash_sheet_new (Table *table)
 	g_signal_connect_after(sheet, "realize",
 			       G_CALLBACK(gnucash_sheet_realize_entry),
 			       sheet->entry);
+
+	gnucash_sheet_refresh_from_gconf(sheet);
+	gnucash_sheet_create_color_hack(sheet);
+
         return GTK_WIDGET(sheet);
 }
 
@@ -2459,6 +2593,7 @@ gnucash_register_new (Table *table)
         GtkWidget *widget;
         GtkWidget *sheet;
         GtkWidget *scrollbar;
+	GtkWidget *box;
 
         reg = g_object_new (GNUCASH_TYPE_REGISTER, NULL);
         widget = GTK_WIDGET(reg);
@@ -2509,6 +2644,27 @@ gnucash_register_new (Table *table)
                           0, 0);
         reg->hscrollbar = scrollbar;
         gtk_widget_show(scrollbar);
+
+	/* The gtkrc color helper widgets need to be part of a window
+	 * hierarchy so they can be realized. Stick them in a box
+	 * underneath the register, but don't show the box to the
+	 * user. */
+	box = gtk_hbox_new(FALSE, 0);
+	gtk_widget_set_no_show_all(GTK_WIDGET(box), TRUE);
+	gtk_box_pack_start_defaults(GTK_BOX(box),
+				    GNUCASH_SHEET(sheet)->header_color);
+	gtk_box_pack_start_defaults(GTK_BOX(box),
+				    GNUCASH_SHEET(sheet)->primary_color);
+	gtk_box_pack_start_defaults(GTK_BOX(box),
+				    GNUCASH_SHEET(sheet)->secondary_color);
+	gtk_box_pack_start_defaults(GTK_BOX(box),
+				    GNUCASH_SHEET(sheet)->split_color);
+
+        gtk_table_attach (GTK_TABLE(widget), box,
+                          0, 1, 4, 5,
+                          GTK_FILL | GTK_EXPAND | GTK_SHRINK,
+                          GTK_FILL | GTK_EXPAND | GTK_SHRINK,
+                          0, 0);
 
         return widget;
 }

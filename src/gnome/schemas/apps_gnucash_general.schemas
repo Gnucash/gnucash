@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/use_theme_colors</key>
+      <applyto>/apps/gnucash/general/register/use_theme_colors</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Color the register as specified by the system theme</short>
+        <long>
+	  A value of TRUE says to color the register as specified by
+	  the system theme.  This can be overridden to provide custom
+	  colors by editing the gtkrc file in the users home
+	  directory.  A value of FALSE says to show the standard
+	  register colors that GnuCash has always used.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/alternate_color_by_transaction</key>
+      <applyto>/apps/gnucash/general/register/alternate_color_by_transaction</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Color all lines of a transaction the same.</short>
+        <long>
+	 If TRUE all lines that make up a single transaction will use
+	 the same color for their background.  If FALSE, the
+	 background colors are alternated on each line.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/use_horizontal_lines</key>
+      <applyto>/apps/gnucash/general/register/use_horizontal_lines</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show horizontal borders in a register.</short>
+        <long>
+	 Show horizontal borders between cells in a register.  If TRUE
+	 the border between cells will be indicated with a heavy line.
+	 If FALSE, the border between cells will not be marked.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/register/use_vertical_lines</key>
+      <applyto>/apps/gnucash/general/register/use_vertical_lines</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show vertical borders in a register.</short>
+        <long>
+	 Show vertical borders between cells in a register.  If TRUE
+	 the border between cells will be indicated with a heavy line.
+	 If FALSE, the border between cells will not be marked.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>
+</gconfschemafile>

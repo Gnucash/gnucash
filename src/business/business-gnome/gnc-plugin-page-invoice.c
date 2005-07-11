@@ -29,6 +29,7 @@
 #include "gnc-plugin-page-invoice.h"
 
 #include "dialog-account.h"
+#include "gnc-component-manager.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
@@ -83,6 +84,7 @@ static void gnc_plugin_page_invoice_cmd_pay_invoice (GtkAction *action, GncPlugi
 static void gnc_plugin_page_invoice_cmd_company_report (GtkAction *action, GncPluginPageInvoice *plugin_page);
 
 static void gnc_plugin_page_redraw_help_cb( GnucashRegister *gsr, GncPluginPageInvoice *invoice_page );
+static void gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data);
 
 /************************************************************
  *                          Actions                         *
@@ -214,6 +216,8 @@ struct GncPluginPageInvoicePrivate
 	InvoiceWindow *iw;
 
 	GtkWidget *widget;
+
+	gint component_manager_id;
 };
 
 static GObjectClass *parent_class = NULL;
@@ -270,6 +274,7 @@ gnc_plugin_page_invoice_new (InvoiceWindow *iw)
 	gnc_plugin_page_invoice_update_title(plugin_page);
 	gnc_plugin_page_set_uri(plugin_page, "default:");
 
+	invoice_page->priv->component_manager_id = 0;
 	return plugin_page;
 }
 
@@ -391,6 +396,11 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 			    G_CALLBACK (gnc_plugin_page_invoice_button_press_cb), page);
 	}
 
+	priv->component_manager_id =
+	  gnc_register_gui_component(GNC_PLUGIN_PAGE_INVOICE_NAME,
+				     gnc_plugin_page_invoice_refresh_cb,
+				     NULL, page);
+
 	return priv->widget;
 }
 
@@ -406,6 +416,11 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
 
 	if (priv->widget == NULL)
 		return;
+
+	if (priv->component_manager_id) {
+	  gnc_unregister_gui_component(priv->component_manager_id);
+	  priv->component_manager_id = 0;
+	}
 
 	gtk_widget_hide(priv->widget);
 	gnc_invoice_window_destroy_cb(priv->widget, priv->iw);
@@ -746,4 +761,21 @@ gnc_plugin_page_invoice_update_title (GncPluginPage *plugin_page)
   gnc_plugin_page_set_tab_name(plugin_page, title);
   gnc_plugin_page_set_title(plugin_page, title);
   g_free(title);
+}
+
+static void
+gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data)
+{
+  GncPluginPageInvoice *page = user_data;
+  GtkWidget *reg;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(page));
+
+  /* We're only looking for forced updates here. */
+  if (changes)
+    return;
+
+  reg = gnc_invoice_get_register(page->priv->iw);
+  gnucash_register_refresh_from_gconf(GNUCASH_REGISTER(reg));
+  gtk_widget_queue_draw(page->priv->widget);
 }

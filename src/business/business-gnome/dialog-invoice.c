@@ -1303,39 +1303,6 @@ gnc_invoice_window_refresh_handler (GHashTable *changes, gpointer user_data)
   gnc_invoice_update_window (iw, NULL);
 }
 
-static void
-gnc_configure_register_colors (void)
-{
-  GncEntryLedgerColors reg_colors;
-
-  reg_colors.header_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Header color",
-                                 0xffffff);
-
-  reg_colors.primary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary color",
-                                 0xffffff);
-
-  reg_colors.secondary_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary color",
-                                 0xffffff);
-
-  reg_colors.primary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Primary active color",
-                                 0xffffff);
-
-  reg_colors.secondary_active_bg_color =
-    gnc_lookup_color_option_argb("Register Colors",
-                                 "Secondary active color",
-                                 0xffffff);
-
-  gnc_entry_ledger_set_colors (reg_colors);
-}
-
 /** Update the various widgets in the window/page vased upon the data
  *  in the InvoiceWindow data structure.
  *
@@ -1670,8 +1637,6 @@ gnc_invoice_new_page (GNCBook *bookp, InvoiceDialogType type,
   /*
    * No existing invoice window found.  Build a new one.
    */
-  gnc_configure_register_colors ();
-
   iw = g_new0 (InvoiceWindow, 1);
   iw->book = bookp;
   iw->dialog_type = type;

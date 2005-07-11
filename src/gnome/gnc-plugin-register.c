@@ -26,6 +26,7 @@
 
 #include <string.h>
 
+#include "gnc-component-manager.h"
 #include "gnc-plugin-register.h"
 #include "gnc-plugin-page-register.h"
 
@@ -43,6 +44,7 @@ static void gnc_plugin_register_cmd_general_ledger (GtkAction *action, GncMainWi
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-register-actions"
 #define PLUGIN_UI_FILENAME  "gnc-plugin-register-ui.xml"
+#define GCONF_REGISTER_SECTION "general/register"
 
 static GtkActionEntry gnc_plugin_actions [] = {
 	{ "ToolsGeneralLedgerAction", NULL, N_("_General Ledger"), NULL,
@@ -57,6 +59,40 @@ struct GncPluginRegisterPrivate
 };
 
 static GObjectClass *parent_class = NULL;
+static short module = MOD_GUI;
+
+/************************************************************
+ *                     Other Functions                      *
+ ************************************************************/
+
+/** This function is called whenever an entry in the general register
+ *  section of gconf is changed.  It does nothing more than kick off a
+ *  gui refresh which should be delivered to any open register page.
+ *  The register pages will then reread their settings from gconf and
+ *  update the screen.
+ *
+ *  @client Unused.
+ *
+ *  @cnxn_id Unused.
+ *
+ *  @entry Unused.
+ *
+ *  @user_data Unused.
+ */
+static void
+gnc_plugin_register_gconf_changed (GConfClient *client,
+				   guint cnxn_id,
+				   GConfEntry *entry,
+				   gpointer user_data)
+{
+	ENTER("");
+	gnc_gui_refresh_all ();
+	LEAVE("");
+}
+
+/************************************************************
+ *                  Object Implementation                   *
+ ************************************************************/
 
 GType
 gnc_plugin_register_get_type (void)
@@ -116,6 +152,9 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
 	plugin_class->actions      = gnc_plugin_actions;
 	plugin_class->n_actions    = gnc_plugin_n_actions;
 	plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+
+	plugin_class->gconf_section = GCONF_REGISTER_SECTION;
+	plugin_class->gconf_notifications = gnc_plugin_register_gconf_changed;
 }
 
 static void
