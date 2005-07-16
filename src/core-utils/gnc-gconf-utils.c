@@ -153,6 +153,20 @@ gnc_gconf_make_key (const gchar *section, const gchar *name)
 }
 
 
+static gchar *
+gnc_gconf_make_schema_key (const gchar *section, const gchar *name)
+{
+  gchar *intermediate, *key;
+
+  g_assert ((section != NULL) || (name != NULL));
+
+  intermediate = gnc_gconf_make_key(section, name);
+  key = g_strconcat("/schemas", intermediate, NULL);
+  g_free(intermediate);
+  return key;
+}
+
+
 gboolean
 gnc_gconf_get_bool (const gchar *section,
 		    const gchar *name,
@@ -442,7 +456,6 @@ gnc_gconf_add_notification (GObject *object,
 	client = gconf_client_get_default();
 	path = gnc_gconf_section_name(section);
 
-
 	/*
 	 * First we have to add the directory...
 	 */
@@ -451,6 +464,7 @@ gnc_gconf_add_notification (GObject *object,
 	    printf("Failed to add history section to watched directories in gconf: %s", error->message);
 	    g_error_free(error);
 	    g_object_unref(client);
+	    g_free(path);
 	    return;
 	}
 
@@ -464,6 +478,7 @@ gnc_gconf_add_notification (GObject *object,
 	      gconf_client_remove_dir(client, path, NULL);
 	      g_error_free(error);
 	      g_object_unref(client);
+	      g_free(path);
 	      return;
 	}
 	
@@ -476,6 +491,54 @@ gnc_gconf_add_notification (GObject *object,
 	g_object_set_data(object, notify_tag, GUINT_TO_POINTER(id));
 	g_free(notify_tag);
 	g_free(client_tag);
+	g_free(path);
+}
+
+
+guint
+gnc_gconf_add_anon_notification (const gchar *section,
+				 GConfClientNotifyFunc callback,
+				 gpointer data)
+{
+	GConfClient *client;
+	GError *error = NULL;
+	gchar *path;
+	guint id;
+
+	g_return_val_if_fail(section != NULL, 0);
+	g_return_val_if_fail(callback != NULL, 0);
+
+	client = gconf_client_get_default();
+	path = gnc_gconf_section_name(section);
+
+
+	/*
+	 * First we have to add the directory...
+	 */
+	gconf_client_add_dir(client, path, GCONF_CLIENT_PRELOAD_ONELEVEL, &error);
+	if (error != NULL) {
+	    printf("Failed to add history section to watched directories in gconf: %s", error->message);
+	    g_error_free(error);
+	    g_object_unref(client);
+	    g_free(path);
+	    return 0;
+	}
+
+	/*
+	 * Then we can add the notification callback.
+	 */
+	id = gconf_client_notify_add(client, path, callback,
+				     data, NULL, &error);
+	if (error != NULL) {
+	      printf("Failed to set gconf notify for history section: %s", error->message);
+	      gconf_client_remove_dir(client, path, NULL);
+	      g_error_free(error);
+	      g_object_unref(client);
+	      g_free(path);
+	      return 0;
+	}
+	g_free(path);
+	return id;
 }
 
 
@@ -506,4 +569,48 @@ gnc_gconf_remove_notification (GObject *object,
 	}
 	g_free(path);
 	g_free(client_tag);
+}
+
+
+void
+gnc_gconf_remove_anon_notification (const gchar *section,
+				    guint cnxn_id)
+{
+	GConfClient *client;
+	gchar *path;
+
+	g_return_if_fail(section != NULL);
+
+	/*
+	 * Remove any gconf notifications
+	 */
+	path = gnc_gconf_section_name(section);
+	client = gconf_client_get_default();
+	if (client) {
+	  gconf_client_notify_remove(client, cnxn_id);
+	  gconf_client_remove_dir(client, path, NULL);
+	  g_object_unref(client);
+	}
+	g_free(path);
+}
+
+gboolean
+gnc_gconf_schemas_found (void)
+{
+  GConfSchema* schema;
+  GError *err = NULL;
+  gboolean found = FALSE;
+  gchar *key;
+
+  if (our_client == NULL)
+    our_client = gconf_client_get_default();
+
+  key = gnc_gconf_make_schema_key(GCONF_GENERAL_REGISTER, "use_theme_colors");
+  schema = gconf_client_get_schema(our_client, key, &err);
+  if (schema != NULL) {
+    gconf_schema_free(schema);
+    found = TRUE;
+  }
+  g_free(key);
+  return found;
 }

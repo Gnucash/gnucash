@@ -47,6 +47,11 @@
 
 #include <gconf/gconf-client.h>
 
+/* Section names used across multiple modules */
+#define GCONF_GENERAL		"general"
+#define GCONF_GENERAL_REGISTER	"general/register"
+#define GCONF_WARNINGS		"general/warnings"
+
 /* Keys used across multiple modules */
 #define KEY_LAST_PATH "last_path"
 
@@ -501,6 +506,11 @@ void gnc_gconf_unset (const gchar *section,
  *  without the standard gnucash prefix.  This allows the object to
  *  respond to keys like standard desktop settings.
  *
+ *  @param object This is a pointer to a GObject derivative.  This
+ *  object will be provided to the callback function when it is
+ *  invoked.  Several values will also be attached to this object that
+ *  are used by the gnc_gconf_remove_notification() function.
+ *
  *  @param section This string provides a grouping of keys within the
  *  GnuCash section of the gconf database.  It can be a simple string
  *  as in "history" for settings that are common to many areas of
@@ -517,6 +527,42 @@ void gnc_gconf_add_notification (GObject *object,
 				 const gchar *section,
 				 GConfClientNotifyFunc callback);
 
+
+/** An alternative function for adding a notification callback to
+ *  GConf.
+ *
+ *  Add a function that will be called whenever a value within the
+ *  specified section of the GConf tree changes.  The section name
+ *  provided as an argument is combined with the standard gnucash key
+ *  prefix to produce a fully qualified key name.  This name may be a
+ *  fully qualified key path name, in which case it is used as is,
+ *  without the standard gnucash prefix.  This allows the object to
+ *  respond to keys like standard desktop settings.
+ *
+ *  @param section This string provides a grouping of keys within the
+ *  GnuCash section of the gconf database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs/business/invoice" for setting that only apply to one
+ *  specific area of the program.  Any key changes within this section
+ *  will invoke the notification function.
+ *
+ *  @param callback The function to call when a value changes.  This
+ *  function will receive the key/value pair as one argument, and the
+ *  'object' argument to this function as another of its arguments.
+ *
+ *  @param data This pointer will be provided to the callback function
+ *  when it is invoked.
+ *
+ *  @return This function returns an identification number that must
+ *  be passed to the gnc_gconf_remove_anon_notification() function to
+ *  reverse the actions of this function.
+ */
+guint gnc_gconf_add_anon_notification (const gchar *section,
+				       GConfClientNotifyFunc callback,
+				       gpointer data);
+
+
 /** Remove a callback from GConf.
  *
  *  Remove a GConf callback function previously added with the
@@ -529,6 +575,25 @@ void gnc_gconf_add_notification (GObject *object,
  */
 void gnc_gconf_remove_notification (GObject *object,
 				    const gchar *section);
+
+
+
+/** An alternative method for remove a callback from GConf; paired
+ *  with gnc_gconf_add_anon_notification().
+ *
+ *  Remove a GConf callback function previously added with the
+ *  gnc_gconf_add_notification function.  The section name must be the
+ *  same string provided when the callback function was added.  This
+ *  name is used to find/remove the callback.
+ *
+ *  @param section This string is used to find the correct
+ *  notification function to remove from GConf.
+ *
+ *  @param cnxn_id An identification number returned by the
+ *  gnc_gconf_add_anon_notification() function.
+ */
+void gnc_gconf_remove_anon_notification (const gchar *section,
+					 guint cnxn_id);
 
 
 /** Retrieve a list of all key/value pairs in the specified GConf
@@ -558,6 +623,16 @@ void gnc_gconf_remove_notification (GObject *object,
  */
 GSList *gnc_gconf_client_all_entries (GObject *object,
 				      const gchar *section);
+
+
+/** Check gconf to see if the schema for one of the gnucash keys can
+ *  be found.  This function is called to determine whether or not to
+ *  launch a druid to help the user properly set up GConf for Gnucash.
+ *
+ *  @return This function returns TRUE if it was able to find a
+ *  schema.
+ */
+gboolean gnc_gconf_schemas_found (void);
 
 /** @} */
 
