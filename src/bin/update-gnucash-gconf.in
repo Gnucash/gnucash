@@ -1,0 +1,8 @@
+#!/bin/sh
+
+SCHEMA_INSTALL_DIR="@-GCONF_SCHEMA_FILE_DIR-@"
+
+cd ${SCHEMA_INSTALL_DIR}
+for file in *.schemas; do
+  gconftool-2 --config-source=xml::${HOME}/.gconf --install-schema-file $file;
+done

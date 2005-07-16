@@ -20,7 +20,7 @@ AM_CFLAGS = -I${top_builddir} ${GLIB_CFLAGS}
 # by these top-level "common" scripts.
 gnc_common_scripts = gnucash gnucash-env gnucash-run-script gnucash-make-guids
 
-bin_SCRIPTS = ${gnc_common_scripts}
+bin_SCRIPTS = ${gnc_common_scripts} update-gnucash-gconf
 
 # if you change gncoverridedir, make sure you change ./overrides/Makefile.am too.
 gncoverridesdir = ${GNC_LIBEXECDIR}/overrides
@@ -31,4 +31,15 @@ EXTRA_DIST = .cvsignore generate-gnc-script
 ${gnc_common_scripts}: generate-gnc-script
 	${srcdir}/generate-gnc-script $@ "${gncoverridesdir}"
 
-CLEANFILES = ${gnc_common_scripts}
+CLEANFILES = ${gnc_common_scripts} update-gnucash-gconf
+
+## We borrow guile's convention and use @-...-@ as the substitution
+## brackets here, instead of the usual @...@.  This prevents autoconf
+## from substituting the values directly into the left-hand sides of
+## the sed substitutions.
+update-gnucash-gconf: update-gnucash-gconf.in ${top_builddir}/config.status
+	rm -f $@.tmp
+	sed < $< > $@.tmp \
+	    -e 's:@-GCONF_SCHEMA_FILE_DIR-@:${GCONF_SCHEMA_FILE_DIR}:g'
+	mv $@.tmp $@
+	chmod +x $@
