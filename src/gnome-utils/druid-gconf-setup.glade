@@ -278,7 +278,6 @@ The configuration data used to specify default values for Gnucash cannot be foun
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <signal name="destroy_event" handler="druid_gconf_destroy_event" last_modification_time="Thu, 14 Jul 2005 21:19:31 GMT"/>
   <signal name="delete_event" handler="druid_gconf_delete_event" last_modification_time="Sat, 16 Jul 2005 02:04:17 GMT"/>
 
   <child>
