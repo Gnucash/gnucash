@@ -255,15 +255,6 @@ GtkActionGroup *gnc_main_window_get_action_group (GncMainWindow *window,
  */
 void gnc_main_window_set_progressbar_window( GncMainWindow *window );
 
-
-/** Shutdown gnucash.  This function will call the Scheme side of
- *  GnuCash to initiate an orderly shutdown, and when that has
- *  finished it will exit the program.
- *
- *  @param exit_status The exit status for the program.
- */
-void gnc_shutdown (int exit_status);
-
 G_END_DECLS
 
 #endif /* __GNC_MAIN_WINDOW_H */

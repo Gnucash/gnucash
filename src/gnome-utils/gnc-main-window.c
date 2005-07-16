@@ -1795,28 +1795,3 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
   gncwin = GNC_WINDOW(window);
   gnc_window_set_progressbar_window(gncwin);
 }
-
-
-/*  Shutdown gnucash.  This function will call the Scheme side of
- *  GnuCash to initiate an orderly shutdown, and when that has
- *  finished it will exit the program.
- */
-void
-gnc_shutdown (int exit_status)
-{
-  /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/
-  SCM scm_shutdown = scm_c_eval_string("gnc:shutdown");
-
-  if(scm_procedure_p(scm_shutdown) != SCM_BOOL_F)
-  {
-    SCM scm_exit_code = scm_long2num(exit_status);    
-    scm_call_1(scm_shutdown, scm_exit_code);
-  }
-  else
-  {
-    /* Either guile is not running, or for some reason we
-       can't find gnc:shutdown. Either way, just exit. */
-    g_warning("couldn't find gnc:shutdown -- exiting anyway.");
-    exit(exit_status);
-  }
-}

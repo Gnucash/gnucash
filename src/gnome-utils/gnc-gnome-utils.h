@@ -141,5 +141,14 @@ GtkWidget * gnc_gnome_get_pixmap (const char *name);
 GdkPixbuf * gnc_gnome_get_gdkpixbuf (const char *name);
 
 
+/** Shutdown gnucash.  This function will call the Scheme side of
+ *  GnuCash to initiate an orderly shutdown, and when that has
+ *  finished it will exit the program.
+ *
+ *  @param exit_status The exit status for the program.
+ */
+void gnc_shutdown (int exit_status);
+
+
 #endif
 /** @} */
