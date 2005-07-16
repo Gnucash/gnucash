@@ -1,3 +1,34 @@
+2005-07-15  David Hampton  <hampton@employees.org>
+
+	* src/gnc-ui.h:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/druid-gconf-setup.[ch]:
+	* src/gnome-utils/druid-gconf-setup.glade:
+	* src/gnome-utils/gnc-dir.h.in: Test whether or not Gnucash can
+	find its GConf keys.  If not present the user with a warning
+	message.  If the user chooses to setup gconf, launch a druid to
+	lead them through the process.
+
+	* src/core-utils/gnc-gconf-utils.[ch]: New function to check
+	existence of gconf keys.  New functions to add/remove gconf
+	notifications for use by code that doesn't have a GObject
+	available.
+	
+	* src/bin/Makefile.am:
+	* src/bin/update-gnucash-gconf.in: New script to install all of
+	Gnucash's gconf schemas into the users ~/.gconf directory.
+
+	* configure.in:
+	* src/app-file/schemas/Makefile.am:
+	* src/business/business-gnome/schemas/Makefile.am:
+	* src/gnome/schemas/Makefile.am: Do all schema installs into
+	${prefix}/etc/gconf, not /etc/gconf.  Make sure this directory
+	exists before installing.
+
+	* src/gnome-utils/gnc-gnome-utils.[ch]:
+	* src/gnome-utils/gnc-main-window.[ch]: Move the gnc_shutdown
+	routine to a different file.
+
 2005-07-11  David Hampton  <hampton@employees.org>
 
 	* src/business/business-gnome/gnc-plugin-page-invoice.c:

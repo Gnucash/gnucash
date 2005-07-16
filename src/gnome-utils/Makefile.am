@@ -41,6 +41,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-transfer.c \
   dialog-utils.c \
   druid-utils.c \
+  druid-gconf-setup.c \
   gnc-account-sel.c \
   gnc-amount-edit.c \
   gnc-budget-list-tree-model.c \
@@ -102,6 +103,7 @@ gncinclude_HEADERS = \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
+  druid-gconf-setup.h \
   gnc-account-sel.h \
   gnc-amount-edit.h \
   gnc-budget-list-tree-model.h \
@@ -199,6 +201,7 @@ glade_DATA = \
   dialog-query-list.glade \
   druid-provider-multifile.glade \
   exchange-dialog.glade \
+  druid-gconf-setup.glade \
   gnc-date-format.glade \
   preferences.glade \
   transfer.glade
@@ -219,7 +222,8 @@ gnc-dir.h: gnc-dir.h.in ${top_builddir}/config.status
 	rm -f $@.tmp
 	sed < $< > $@.tmp \
 	    -e 's:@-GNC_ACCOUNTS_DIR-@:${GNC_ACCOUNTS_DIR}:g' \
-	    -e 's:@-GNC_GLADE_DIR-@:${GNC_GLADE_DIR}:g'
+	    -e 's:@-GNC_GLADE_DIR-@:${GNC_GLADE_DIR}:g' \
+	    -e 's:@-GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY-@:${GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY}:g'
 	mv $@.tmp $@
 
 gnc-version.h: _gnc-version.h

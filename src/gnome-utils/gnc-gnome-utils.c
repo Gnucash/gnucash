@@ -35,9 +35,12 @@
 #include "gnc-html-graph-gog.h"
 
 #include "argv-list-converters.h"
+#include "druid-gconf-setup.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html.h"
 #include "gnc-trace.h"
+#include "gnc-ui.h"
 
 #include <libgnomeui/gnome-window-icon.h>
 #include <gnc-dir.h>
@@ -173,13 +176,6 @@ gnc_gnome_init (const char * arg0,
   restargv2 = (char**) poptGetArgs (returnedPoptContext);
   ret = gnc_argv2scm (argv_length (restargv2), (const char**)restargv2);
 
-#ifdef GTKHTML_HAVE_GCONF
-  {
-    if (!gconf_init (restargc, restargv, &error))
-      g_error_free (error);
-  }
-#endif
-
   gnc_free_argv (restargv);
 
   /* initialization required for gtkhtml */
@@ -202,6 +198,8 @@ gnc_gnome_init (const char * arg0,
   /* initialize guppi handling in gnc-html */
   gnc_html_guppi_init ();
 #endif
+
+  druid_gconf_install_check_schemas();
 
   return ret;
 }
