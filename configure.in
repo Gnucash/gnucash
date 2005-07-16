@@ -38,6 +38,15 @@ AC_PROG_INTLTOOL
 
 AM_GCONF_SOURCE_2
 
+# Override gconf default install locations.  The default is to always
+# put them into /etc.  This change puts them into $(prefix)/etc.
+if test "x$GCONF_SCHEMA_INSTALL_SOURCE" = "x"; then
+  GCONF_SCHEMA_CONFIG_SOURCE="xml::${sysconfdir}/gconf/gconf.xml.defaults"
+fi
+GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY=`echo $GCONF_SCHEMA_CONFIG_SOURCE | cut -d ':' -f 3`
+AC_SUBST(GCONF_SCHEMA_CONFIG_SOURCE_DIRONLY)
+
+
 # Comment out for production or semi-production builds.  I.E. Anything
 # that is explicitly tagged in cvs as a version.
 AC_DEFINE(GNUCASH_CVS,1,[Define if built from untagged cvs])
