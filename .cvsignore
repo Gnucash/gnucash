@@ -52,3 +52,5 @@ tags
 *.diffs
 *.xac.*.xac
 autom4te.cache
+ltmain.sh
+mkinstalldirs
