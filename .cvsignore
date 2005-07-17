@@ -50,3 +50,5 @@ tags
 *.diff
 *.diffs
 *.xac.*.xac
+ltmain.sh
+mkinstalldirs
