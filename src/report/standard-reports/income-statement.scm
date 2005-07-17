@@ -537,7 +537,7 @@
 		   (balance
 		    (or (and (gnc:uniform-commodity? pos-bal report-commodity)
 			     bal)
-			(and show-fucr?
+			(and show-fcur?
 			     (gnc:commodity-table
 			      pos-bal report-commodity exchange-fn))
 			bal
