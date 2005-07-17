@@ -2,7 +2,7 @@
 # (c) 2004 Martin Preuss<martin@libchipcard.de>
 # This function checks for AqBanking
 
-AC_DEFUN(AC_AQBANKING, [
+AC_DEFUN([AC_AQBANKING], [
 dnl searches for aqbanking
 dnl Arguments: 
 dnl   $1: major version minimum

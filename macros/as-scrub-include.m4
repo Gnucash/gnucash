@@ -17,7 +17,7 @@ dnl example
 dnl AS_SCRUB_INCLUDE(CFLAGS)
 dnl will remove all system include dirs from the given CFLAGS
 
-AC_DEFUN(AS_SCRUB_INCLUDE,
+AC_DEFUN([AS_SCRUB_INCLUDE],
 [
   GIVEN_CFLAGS=$[$1]
   INCLUDE_DIRS=`echo | cpp -v 2>&1`

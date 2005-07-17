@@ -30,7 +30,6 @@ MACROS=						\
   gperf-check.m4				\
   linger.m4					\
   need-declaration.m4				\
-  openhbci.m4					\
   aqbanking.m4
 
 EXTRA_DIST=$(MACROS) gnome-common.m4 autogen.sh

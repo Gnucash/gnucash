@@ -1,3 +1,8 @@
+2005-07-17  Christian Stimming  <stimming@tuhh.de>
+
+	* macros/openhbci.m4: Remove old unused macros. Add macro name
+	quotations as required by newer automake.
+
 2005-07-10  David Hampton  <hampton@employees.org>
 
 	* src/engine/iso-4217-currencies.scm: Add the new Romanian Leu.
