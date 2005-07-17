@@ -43,10 +43,11 @@ EXTRA_DIST = config.rpath  \
   gnucash-config.in \
   make-gnucash-patch.in \
   make-gnucash-potfiles.in \
+  macros/aqbanking.m4 \
   macros/as-scrub-include.m4 \
   macros/autogen.sh \
+  macros/compiler-flags.m4 \
   macros/gnome-guile-checks.m4 \
-  macros/openhbci.m4 \
   po/.cvsignore \
   po/README \
   po/glossary/da.po \
