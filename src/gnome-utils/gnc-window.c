@@ -141,6 +141,14 @@ gnc_window_set_progressbar_window (GncWindow *window)
   progress_bar_hack_window = window;
 }
 
+
+GncWindow *
+gnc_window_get_progressbar_window (void)
+{
+  return progress_bar_hack_window;
+}
+
+
 void
 gnc_window_show_progress (const char *message, double percentage)
 {

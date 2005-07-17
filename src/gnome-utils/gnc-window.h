@@ -56,6 +56,7 @@ void           gnc_window_update_status (GncWindow *window, GncPluginPage *page)
 void           gnc_window_set_status (GncWindow *window, GncPluginPage *page, const gchar *message);
 
 void           gnc_window_set_progressbar_window (GncWindow *window);
+GncWindow     *gnc_window_get_progressbar_window (void);
 void           gnc_window_show_progress (const char *message, double percentage);
 
 G_END_DECLS

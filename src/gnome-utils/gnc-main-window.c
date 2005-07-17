@@ -345,7 +345,7 @@ gnc_main_window_delete_event (GtkWidget *window,
     gnc_file_save();
 #endif
 
-  return ((response != GTK_RESPONSE_OK) &&
+  return ((response != GTK_RESPONSE_ACCEPT) &&
 	  (response != GTK_RESPONSE_OK));
 }
 
@@ -840,6 +840,9 @@ gnc_main_window_destroy (GtkObject *object)
 	  /* Close any pages in this window */
 	  while (window->priv->current_page)
 	    gnc_main_window_close_page(window->priv->current_page);
+
+	  if (gnc_window_get_progressbar_window() == GNC_WINDOW(window))
+	    gnc_window_set_progressbar_window(NULL);
 
 	  /* Update the "Windows" menu in all other windows */
 	  gnc_main_window_update_all_menu_items();
