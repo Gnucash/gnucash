@@ -51,6 +51,8 @@
 #define GCONF_GENERAL		"general"
 #define GCONF_GENERAL_REGISTER	"general/register"
 #define GCONF_WARNINGS		"general/warnings"
+#define GCONF_WARNINGS_TEMP	"general/warnings/temporary"
+#define GCONF_WARNINGS_PERM	"general/warnings/permanent"
 
 /* Keys used across multiple modules */
 #define KEY_LAST_PATH "last_path"
@@ -107,6 +109,26 @@ gint gnc_enum_from_nick(GType type,
  *  responsibility to free this string.
  */
 char *gnc_gconf_section_name (const char *name);
+
+
+/** Convert a local schema key name to a full gconf schemapath name.
+ *
+ *  This function takes a gconf schema key name and converts it into a
+ *  fully qualified gconf schema path name.  It does this by
+ *  prepending the standard path for all gnucash schema keys.  It the
+ *  key is already fully qualified (i.e. begins with the string
+ *  "/schemas), this routine does not change the key.
+ *
+ *  @param A partial gconf schema key or section name.  This name is
+ *  added to the standard schema prefix to produce a fully qualified
+ *  schema key name.
+ *
+ *  @return This function returns a string pointer to the fully
+ *  qualified path name of the gconf schema key.  It is the caller's
+ *  responsibility to free this string.
+ */
+char *gnc_gconf_schema_section_name (const char *name);
+
 
 /** Tell GConf to propagate changes.
  *
@@ -313,6 +335,43 @@ GSList *gnc_gconf_get_list (const gchar *section,
 			    const gchar *name,
 			    GConfValueType list_type,
 			    GError **error);
+
+
+/** Get a schema value from GConf.
+ *
+ *  Retrieve a schema value from GConf.  The section and key names
+ *  provided as arguments are combined with the standard gnucash key
+ *  prefix to produce a fully qualified key name.  Either name (but
+ *  not both) may be a fully qualified key path name, in which case it
+ *  is used as is, without the standard gnucash prefix.  This allows
+ *  the program to access keys like standard desktop settings.  Either
+ *  name (but not both) may be NULL.
+ *
+ *  @param section This string provides a grouping of keys within the
+ *  GnuCash section of the gconf database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs/business/invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param name This string is the name of the particular key within
+ *  the named section of gconf.
+ *
+ *  @param error An optional pointer to a GError structure.  If NULL,
+ *  this function will check for any errors returned by GConf and will
+ *  display an error message via stdout.  If present, this function
+ *  will pass any error back to the calling function for it to handle.
+ *
+ *  @return This function returns the schema stored at the requested
+ *  key in the gconf database.  If there is an error in processing,
+ *  this function passed on the NULL value as returned by GConf.  It
+ *  is the callers responsibility to free any returned schema by
+ *  calling the gconf_schema_free() function.
+ */
+GConfSchema *gnc_gconf_get_schema (const gchar *section,
+				    const gchar *name,
+				   GError **caller_error);
+
 /** @} */
 
 /** @name GConf Set/Unset Functions 
@@ -461,7 +520,7 @@ void gnc_gconf_set_list (const gchar *section,
 
 /** Delete a value from GConf.
  *
- *  Complete remove a value from GConf.  The next attempt to read this
+ *  Completely remove a value from GConf.  The next attempt to read this
  *  value will return the default as specified in the GConf schema for
  *  this key.  The section and key names provided as arguments are
  *  combined with the standard gnucash key prefix to produce a fully
@@ -489,6 +548,30 @@ void gnc_gconf_set_list (const gchar *section,
 void gnc_gconf_unset (const gchar *section,
 		      const gchar *name,
 		      GError **error);
+
+
+/** Delete a directory of values from GConf.
+ *
+ *  Completely remove a directory of values from GConf.  The next
+ *  attempt to read any of these values will return the default as
+ *  specified in the GConf schema for the key.  The section names
+ *  provided as an arguments is combined with the standard gnucash key
+ *  prefix to produce a fully qualified directory name.
+ *
+ *  @param section This string provides a grouping of keys within the
+ *  GnuCash section of the gconf database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs/business/invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param error An optional pointer to a GError structure.  If NULL,
+ *  this function will check for any errors returned by GConf and will
+ *  display an error message via stdout.  If present, this function
+ *  will pass any error back to the calling function for it to handle.
+ */
+void gnc_gconf_unset_dir (const gchar *section,
+			  GError **error);
 
 /** @} */
 
@@ -608,21 +691,14 @@ void gnc_gconf_remove_anon_notification (const gchar *section,
  *  "dialogs/business/invoice" for setting that only apply to one
  *  specific area of the program.
  *
- *  @param section This string provides a grouping of keys within the
- *  GnuCash section of the gconf database.  It can be a simple string
- *  as in "history" for settings that are common to many areas of
- *  gnucash, or it can be a partial path name as in
- *  "dialogs/business/invoice" for setting that only apply to one
- *  specific area of the program.
- *
  *  @return This function returns a list of all key/value pairs stored
- *  in this section of the gconf database.  It is the callers
- *  responsibility to free any memory returned by this function.  This
- *  include the list itself, and any entries contained in the list.
- *  See gconf_client_all_entries in the gconf documentation.
+ *  in this section of the gconf database.  These are GConfEntry
+ *  objects.  It is the callers responsibility to free any memory
+ *  returned by this function.  This include the list itself, and any
+ *  entries contained in the list.  See gconf_client_all_entries in
+ *  the gconf documentation.
  */
-GSList *gnc_gconf_client_all_entries (GObject *object,
-				      const gchar *section);
+GSList *gnc_gconf_client_all_entries (const gchar *section);
 
 
 /** Check gconf to see if the schema for one of the gnucash keys can

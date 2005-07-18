@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include "gnc-gconf-utils.h"
 
 #define APP_GNUCASH "/apps/gnucash/%s"
@@ -123,6 +123,23 @@ gnc_gconf_section_name (const char *name)
    * used.
    */
   return g_strdup_printf(APP_GNUCASH, name);
+}
+
+char *
+gnc_gconf_schema_section_name (const char *name)
+{
+  if (strncmp(name, "/schemas", sizeof("/schemas")) == 0) {
+    /* Need to return a newly allocated string */
+    return g_strdup(name);
+  }
+
+  /* This could (should?) be accomplished with a call to
+   * gnome_gconf_get_app_settings_relative(), but that would introduce
+   * a new library dependancy, even though its not a gui library.  In
+   * order to keep this file completely "gnome-free" this approach was
+   * used.
+   */
+  return g_strdup_printf("/schemas" APP_GNUCASH, name);
 }
 
 static gchar *
@@ -378,9 +395,34 @@ gnc_gconf_set_list (const gchar *section,
   g_free(key);
 }
 
+GConfSchema *
+gnc_gconf_get_schema (const gchar *section,
+		      const gchar *name,
+		      GError **caller_error)
+{
+  GError *error = NULL;
+  GConfSchema *value;
+  gchar *key;
+
+  if (our_client == NULL)
+    our_client = gconf_client_get_default();
+
+  key = gnc_gconf_make_key(section, name);
+  value = gconf_client_get_schema(our_client, key, &error);
+  if (error) {
+    if (caller_error) {
+      g_propagate_error(caller_error, error);
+    } else {
+      printf("Failed to load key %s: %s", key, error->message);
+      g_error_free(error);
+    }
+  }
+  g_free(key);
+  return value;
+}
+
 GSList *
-gnc_gconf_client_all_entries (GObject *object,
-			      const gchar *name)
+gnc_gconf_client_all_entries (const gchar *name)
 {
   GError *error = NULL;
   GSList *value;
@@ -415,11 +457,55 @@ gnc_gconf_unset (const gchar *section,
     if (caller_error) {
       g_propagate_error(caller_error, error);
     } else {
-      printf("Failed to save key %s: %s", key, error->message);
+      printf("Failed to unset key %s: %s", key, error->message);
       g_error_free(error);
     }
   }
   g_free(key);
+}
+
+
+void
+gnc_gconf_unset_dir (const gchar *section,
+		     GError **caller_error)
+{
+  GError *error = NULL;
+  GSList *entries, *tmp;
+  const gchar *key;
+  gchar *dir_key;
+
+  if (our_client == NULL)
+    our_client = gconf_client_get_default();
+
+  dir_key = gnc_gconf_make_key(section, NULL);
+  entries = gconf_client_all_entries(our_client, dir_key, &error);
+  g_free(dir_key);
+  if (error) {
+    if (caller_error) {
+      g_propagate_error(caller_error, error);
+    } else {
+      printf("Failed to get directory entries for key %s: %s",
+	     dir_key, error->message);
+      g_error_free(error);
+    }
+    return;
+  }
+
+  for (tmp = entries; tmp; tmp = g_slist_next(tmp)) {
+    key = gconf_entry_get_key(tmp->data);
+    if (!gconf_client_unset(our_client, key, &error)) {
+      if (caller_error) {
+	g_propagate_error(caller_error, error);
+      } else {
+	printf("Failed to unset key %s: %s", key, error->message);
+	g_error_free(error);
+      }
+      break;
+    }
+  }
+
+  g_slist_foreach(entries, (GFunc)gconf_entry_free, NULL);
+  g_slist_free(entries);
 }
 
 

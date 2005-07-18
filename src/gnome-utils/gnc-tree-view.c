@@ -1087,8 +1087,7 @@ gnc_tree_view_gconf_force_update (GncTreeView *view)
   GList *columns;
 
   ENTER("view %p", view);
-  all_entries = gnc_gconf_client_all_entries(G_OBJECT(view),
-					     view->priv->gconf_section);
+  all_entries = gnc_gconf_client_all_entries(view->priv->gconf_section);
 
   /* Set a flag indicating that the gconf data section may be empty.
    * It will be checked later on and appropriate action taken if its
