@@ -581,8 +581,10 @@ druid_gconf_install_check_schemas (void)
   gboolean done = FALSE;
   gint response;
 
-  if (gnc_gconf_schemas_found())
+  if (gnc_gconf_schemas_found()) {
+    gnc_gconf_unset_dir(GCONF_WARNINGS_TEMP, NULL);
     return;
+  }
 
   xml = gnc_glade_xml_new ("druid-gconf-setup.glade", "GConf Query");
   dialog = glade_xml_get_widget (xml, "GConf Query");
