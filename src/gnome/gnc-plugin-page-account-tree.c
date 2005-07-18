@@ -442,6 +442,20 @@ gnc_plugin_page_account_tree_get_current_account (GncPluginPageAccountTree *page
 /* Virtual Functions */
 
 static void
+gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
+{
+  GncPluginPageAccountTree *page = user_data;
+
+  g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
+
+  /* We're only looking for forced updates here. */
+  if (changes)
+    return;
+
+  gtk_widget_queue_draw(page->priv->widget);
+}
+
+static void
 gnc_plugin_page_account_tree_close_cb (gpointer user_data)
 {
   GncPluginPage *plugin_page;
@@ -501,7 +515,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 
 	page->priv->component_id =
 	  gnc_register_gui_component(PLUGIN_PAGE_ACCT_TREE_CM_CLASS,
-				     NULL,
+				     gnc_plugin_page_account_refresh_cb,
 				     gnc_plugin_page_account_tree_close_cb,
 				     page);
 	gnc_gui_component_set_session (page->priv->component_id,
