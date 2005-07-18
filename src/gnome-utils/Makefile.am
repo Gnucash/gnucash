@@ -38,6 +38,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-commodity.c \
   dialog-options.c \
   dialog-query-list.c \
+  dialog-reset-warnings.c \
   dialog-transfer.c \
   dialog-utils.c \
   druid-utils.c \
@@ -100,6 +101,7 @@ gncinclude_HEADERS = \
   dialog-commodity.h \
   dialog-options.h \
   dialog-query-list.h \
+  dialog-reset-warnings.h \
   dialog-transfer.h \
   dialog-utils.h \
   druid-utils.h \
@@ -199,10 +201,12 @@ gladedir = $(GNC_GLADE_DIR)
 glade_DATA = \
   commodity.glade \
   dialog-query-list.glade \
+  dialog-reset-warnings.glade \
   druid-provider-multifile.glade \
   exchange-dialog.glade \
   druid-gconf-setup.glade \
   gnc-date-format.glade \
+  gnc-gui-query.glade \
   preferences.glade \
   transfer.glade
 

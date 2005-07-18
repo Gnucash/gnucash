@@ -69,6 +69,8 @@
   
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder"/>
+      <separator name="ActionSep1"/>
+      <menuitem name="ActionsForgetWarnings" action="ActionsForgetWarningsAction"/>
     </menu>
   
     <placeholder name="AdditionalMenusPlaceholder"/>

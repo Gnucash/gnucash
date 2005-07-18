@@ -1,3 +1,44 @@
+2005-07-17  David Hampton  <hampton@employees.org>
+
+	* src/gnome/schemas/apps_gnucash_dialog_common.schemas:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/dialog-reset-warnings.[ch]:
+	* src/gnome-utils/dialog-reset-warnings.glade:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml: Add a new dialog to
+	reset the state of warning messages.
+
+	* src/gnome-utils/druid-gconf-setup.c: Reset all temporary warning
+	suppressions at startup.
+
+	* src/gnc-ui.h:
+	* src/gnome-utils/gnc-gui-query.c:
+	* src/gnome-utils/gnc-gui-query.glade: New info/question/warning
+	dialogs that remember whether or not the user wants to see them
+	again.
+
+	* src/gnome/gnc-plugin-page-account-tree.c: Add a refresh callback
+	to update the page when preferences change.
+
+	* src/engine/gnc-trace.[ch]: New log module for the
+	preferences/warnings code.
+
+	* src/gnome-utils/gnc-tree-view.c:
+	* src/core-utils/gnc-gconf-utils.[ch]: Add some schema related
+	functions.  Remove extraneous argument from
+	gnc_gconf_client_all_entries().  Doxygen updates.
+
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-window.[ch]: When deleting a window make
+	sure to update the progress bar code.  Fixes a crash when you
+	delete the last window and then try to save.  From Phil Longstaff
+	<plongstaff@newearth.org>.
+
+	* src/report/standard-reports/equity-statement.scm:
+	* src/report/standard-reports/income-statement.scm: Fix for
+	mispellings in scheme code from Phil Longstaff
+	<plongstaff@newearth.org>.
+
 2005-07-15  David Hampton  <hampton@employees.org>
 
 	* src/gnc-ui.h:

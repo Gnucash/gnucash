@@ -33,6 +33,7 @@
 #include "gnc-main-window.h"
 
 #include "dialog-options.h"
+#include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
@@ -88,6 +89,7 @@ static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_statusbar (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_new (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_move_page (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_window_raise (GtkAction *action, GtkRadioAction *current, GncMainWindow *window);
@@ -167,11 +169,19 @@ static GtkActionEntry gnc_menu_actions [] =
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
 
 	/* View menu */
+
 	{ "ViewRefreshAction", GTK_STOCK_REFRESH, N_("_Refresh"), "<control>r",
 	  N_("Refresh this window"),
 	  G_CALLBACK (gnc_main_window_cmd_view_refresh) },
 
+	/* Actions menu */
+
+	{ "ActionsForgetWarningsAction", NULL, N_("_Reset Warnings..."), NULL,
+	  N_("Reset the state of all warning message so they will be shown again."),
+	  G_CALLBACK (gnc_main_window_cmd_actions_reset_warnings) },
+
 	/* Windows menu */
+
 	{ "WindowNewAction", NULL, N_("_New Window"), NULL,
 	  N_("Open a new top-level GnuCash window."),
 	  G_CALLBACK (gnc_main_window_cmd_window_new) },
@@ -180,6 +190,7 @@ static GtkActionEntry gnc_menu_actions [] =
 	  G_CALLBACK (gnc_main_window_cmd_window_move_page) },
 
 	/* Help menu */
+
 	{ "HelpTutorialAction", GNOME_STOCK_BOOK_BLUE, N_("Tutorial and Concepts _Guide"), NULL,
 	  N_("Open the GnuCash Tutorial"),
 	  G_CALLBACK (gnc_main_window_cmd_help_tutorial) },
@@ -191,6 +202,7 @@ static GtkActionEntry gnc_menu_actions [] =
 	  G_CALLBACK (gnc_main_window_cmd_help_about) },
 
         /* Misc menu */
+
         { "MiscTestAction", NULL, N_("TEST"), NULL,
           N_("Testing stuff"), G_CALLBACK (gnc_main_window_cmd_test) },
 
@@ -1029,6 +1041,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 			     GINT_TO_POINTER(1));
 	}
 
+	page->window = GTK_WIDGET(window);
 	page->notebook_page = gnc_plugin_page_create_widget (page);
 	g_object_set_data (G_OBJECT (page->notebook_page),
 			   PLUGIN_PAGE_LABEL, page);
@@ -1586,6 +1599,12 @@ gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window)
 {
+}
+
+static void
+gnc_main_window_cmd_actions_reset_warnings (GtkAction *action, GncMainWindow *window)
+{
+  gnc_reset_warnings_dialog(GTK_WIDGET(window));
 }
 
 static void
