@@ -156,10 +156,8 @@ gnc_window_show_progress (const char *message, double percentage)
   GtkWidget *progressbar;
 
   window = progress_bar_hack_window;
-  if (window == NULL) {
-    DEBUG( "no [progress_bar_hack]window" );
+  if (window == NULL)
     return;
-  }
 
   progressbar = gnc_window_get_progressbar (window);
   if (progressbar == NULL) {
