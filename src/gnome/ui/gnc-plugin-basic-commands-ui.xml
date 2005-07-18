@@ -42,7 +42,7 @@
     </menu>
   
     <menu name="Actions" action="ActionsAction">
-      <placeholder name="ActionsPlaceholder"/>
+      <placeholder name="ActionsPlaceholder">
         <menu name="ActionsScheduledTransactions" action="ActionsScheduledTransactionsAction">
           <menuitem name="ActionsScheduledTransactionEditor" action="ActionsScheduledTransactionEditorAction"/>
           <menuitem name="ActionsSinceLastRun" action="ActionsSinceLastRunAction"/>
