@@ -138,14 +138,13 @@ static void gnc_plugin_page_register_refresh_cb (GHashTable *changes, gpointer u
 
 static GtkActionEntry gnc_plugin_page_register_actions [] =
 {
-	/* Toplevel */
-	{ "FakeToplevel", NULL, "", NULL, NULL, NULL },
-
 	/* File menu */
+
 	{ "FilePrintAction", GTK_STOCK_PRINT, N_("_Print Check..."), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_print_check) },
 
 	/* Edit menu */
+
 	{ "EditCutAction", GTK_STOCK_CUT, N_("Cu_t"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cut) },
@@ -158,26 +157,46 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "EditEditAccountAction", GNC_STOCK_EDIT_ACCOUNT, N_("Edit Account"), "<control>e",
 	  N_("Edit the selected account"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_edit_account) },
-	{ "EditCutTransactionAction", NULL, N_("Cut Transaction"), NULL, NULL,
+
+	/* Transaction menu */
+
+	{ "CutTransactionAction", GTK_STOCK_CUT, N_("Cu_t Transaction"), "", NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_cut_transaction) },
-	{ "EditCopyTransactionAction", NULL, N_("Copy Transaction"), NULL, NULL,
+	{ "CopyTransactionAction", GTK_STOCK_COPY, N_("_Copy Transaction"), "", NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_copy_transaction) },
-	{ "EditPasteTransactionAction", NULL, N_("Paste Transaction"), NULL, NULL,
+	{ "PasteTransactionAction", GTK_STOCK_PASTE, N_("_Paste Transaction"), "", NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_paste_transaction) },
-	{ "EditVoidTransactionAction", NULL, N_("_Void Transaction"), NULL, NULL,
+	{ "DuplicateTransactionAction", GTK_STOCK_COPY, N_("Du_plicate Transaction"), "",
+	  N_("Make a copy of the current transaction"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction) },
+	{ "DeleteTransactionAction", GTK_STOCK_DELETE, N_("Delete Transaction"), NULL,
+	  N_("Delete the current transaction"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction) },
+	{ "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Transaction Splits"), NULL,
+	  N_("Remove all splits in the current transaction"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_reinitialize_transaction) },
+	{ "RecordTransactionAction", GTK_STOCK_ADD, N_("_Enter Transaction"), NULL,
+	  N_("Record the current transaction"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction) },
+	{ "CancelTransactionAction", GTK_STOCK_CANCEL, N_("Ca_ncel Transaction"), NULL,
+	  N_("_Cancel the current transaction"),
+	  G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction) },
+	{ "VoidTransactionAction", NULL, N_("_Void Transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_void_transaction) },
-	{ "EditUnvoidTransactionAction", NULL, N_("_Unvoid Transaction"), NULL, NULL,
+	{ "UnvoidTransactionAction", NULL, N_("_Unvoid Transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_unvoid_transaction) },
-	{ "EditReverseTransactionAction", NULL, N_("_Reverse Transaction"), NULL, NULL,
+	{ "ReverseTransactionAction", NULL, N_("_Reverse Transaction"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_reverse_transaction) },
 
 	/* View menu */
+
 	{ "ViewSortByAction", NULL, N_("_Sort By..."), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_view_sort_by) },
 	{ "ViewFilterByAction", NULL, N_("_Filter By..."), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_view_filter_by) },
 
 	/* Actions menu */
+
 	{ "ActionsTransferAction", GTK_STOCK_MISSING_IMAGE, N_("_Transfer..."), "<control>t",
 	  N_("Transfer funds from one account to another"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_transfer) },
@@ -190,25 +209,9 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	{ "ActionsLotsAction", NULL, N_("_Lot Viewer..."), NULL,
 	  N_("Bring up the lot viewer/editor window"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_lots) },
-	{ "RecordTransactionAction", GTK_STOCK_ADD, N_("_Enter Transaction"), NULL,
-	  N_("Record the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_enter_transaction) },
-	{ "CancelTransactionAction", GTK_STOCK_CANCEL, N_("_Cancel Transaction"), NULL,
-	  N_("_Cancel the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_cancel_transaction) },
-	{ "DeleteTransactionAction", GTK_STOCK_DELETE, N_("_Delete Transaction"), NULL,
-	  N_("Delete the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_delete_transaction) },
 	{ "BlankTransactionAction", GTK_STOCK_MISSING_IMAGE, N_("_Blank Transaction"), NULL,
 	  N_("Move to the blank transaction at the bottom of the register"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_blank_transaction) },
-
-	{ "DuplicateTransactionAction", GTK_STOCK_COPY, N_("D_uplicate Transaction"), NULL,
-	  N_("Make a copy of the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_duplicate_transaction) },
-	{ "RemoveTransactionSplitsAction", GTK_STOCK_CLEAR, N_("Remo_ve Transaction Splits"), NULL,
-	  N_("Remove all splits in the current transaction"),
-	  G_CALLBACK (gnc_plugin_page_register_cmd_reinitialize_transaction) },
 	{ "EditExchangeRateAction", GTK_STOCK_MISSING_IMAGE, N_("Edit E_xchange Rate"), NULL,
 	  N_("Exit the exchange rate for the current transaction"),
 	  G_CALLBACK (gnc_plugin_page_register_cmd_exchange_rate) },
@@ -220,6 +223,7 @@ static GtkActionEntry gnc_plugin_page_register_actions [] =
 	  G_CALLBACK (gnc_plugin_page_register_cmd_schedule) },
 
 	/* Reports menu */
+
 	{ "ReportsAccountReportAction", NULL, N_("_Account Report"), NULL, NULL,
 	  G_CALLBACK (gnc_plugin_page_register_cmd_account_report) },
 	{ "ReportsTransactionReportAction", NULL, N_("_Transaction Report"), NULL, NULL,

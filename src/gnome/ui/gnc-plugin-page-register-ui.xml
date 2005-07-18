@@ -1,16 +1,25 @@
 <ui>
   <menubar>
     <menu name="Edit" action="EditAction">
-      <placeholder name="EditSelectedPlaceholder">
+      <placeholder name="EditAllSelectedPlaceholder">
         <menuitem name="EditEditAccount"        action="EditEditAccountAction"/>
-        <separator name="EditSep22"/>
-        <menuitem name="EditCutTransaction"     action="EditCutTransactionAction"/>
-        <menuitem name="EditCopyTransaction"    action="EditCopyTransactionAction"/>
-        <menuitem name="EditPasteTransaction"   action="EditPasteTransactionAction"/>
-        <menuitem name="EditVoidTransaction"    action="EditVoidTransactionAction"/>
-        <menuitem name="EditUnvoidTransaction"  action="EditUnvoidTransactionAction"/>
-        <menuitem name="EditReverseTransaction" action="EditReverseTransactionAction"/>
       </placeholder>
+    </menu>
+
+    <menu name="Transaction" action="TransactionAction">
+      <menuitem name="CutTransaction"     	action="CutTransactionAction"/>
+      <menuitem name="CopyTransaction"    	action="CopyTransactionAction"/>
+      <menuitem name="PasteTransaction"   	action="PasteTransactionAction"/>
+      <menuitem name="DuplicateTransaction"    	action="DuplicateTransactionAction"/>
+      <menuitem name="DeleteTransaction"       	action="DeleteTransactionAction"/>
+      <menuitem name="RemoveTransactionSplits" 	action="RemoveTransactionSplitsAction"/>
+      <separator name="TransactionSep1"/>
+      <menuitem name="RecordTransaction"        action="RecordTransactionAction"/>
+      <menuitem name="CancelTransaction"        action="CancelTransactionAction"/>
+      <separator name="TransactionSep2"/>
+      <menuitem name="VoidTransaction"    	action="VoidTransactionAction"/>
+      <menuitem name="UnvoidTransaction"  	action="UnvoidTransactionAction"/>
+      <menuitem name="ReverseTransaction" 	action="ReverseTransactionAction"/>
     </menu>
 
     <menu name="View" action="ViewAction">
@@ -35,13 +44,8 @@
 	<menuitem name="ActionsStockSplit"       action="ActionsStockSplitAction"/>
 	<menuitem name="ActionLots"              action="ActionsLotsAction"/>
         <separator name="ActionsSep3"/>
-        <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
-        <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
-        <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
-        <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
         <separator name="ActionsSep4"/>
-        <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
-        <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
+        <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
         <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
         <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
         <menuitem name="ScheduleTransaction"     action="ScheduleTransactionAction"/>
@@ -57,16 +61,16 @@
 
   <toolbar name="DefaultToolbar">
     <placeholder name="DefaultToolbarPlaceholder">
-      <toolitem name="ToolbarRecordTransaction"    action="RecordTransactionAction"/>
-      <toolitem name="ToolbarCancelTransaction"    action="CancelTransactionAction"/>
+      <toolitem name="ToolbarDuplicateTransaction" action="DuplicateTransactionAction"/>
       <toolitem name="ToolbarDeleteTransaction"    action="DeleteTransactionAction"/>
       <separator name="ToolbarSep66"/>
-      <toolitem name="ToolbarDuplicateTransaction" action="DuplicateTransactionAction"/>
-      <toolitem name="ToolbarScheduleTransaction"  action="ScheduleTransactionAction"/>
+      <toolitem name="ToolbarRecordTransaction"    action="RecordTransactionAction"/>
+      <toolitem name="ToolbarCancelTransaction"    action="CancelTransactionAction"/>
       <separator name="ToolbarSep67"/>
-      <toolitem name="ToolbarSplitTransaction"     action="SplitTransactionAction"/>
       <toolitem name="ToolbarBlankTransaction"     action="BlankTransactionAction"/>
+      <toolitem name="ToolbarSplitTransaction"     action="SplitTransactionAction"/>
       <toolitem name="ToolbarJumpTransaction"      action="JumpTransactionAction"/>
+      <toolitem name="ToolbarScheduleTransaction"  action="ScheduleTransactionAction"/>
       <separator name="ToolbarSep68"/>
       <toolitem name="ToolbarTransfer"             action="ActionsTransferAction"/>
     </placeholder>
@@ -76,13 +80,14 @@
     <menuitem name="ViewSortBy"              action="ViewSortByAction"/>
     <menuitem name="ViewFilterBy"            action="ViewFilterByAction"/>
     <separator name="PopupSep1"/>
+    <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
+    <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
+    <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
+    <separator name="PopupSep2"/>
     <menuitem name="RecordTransaction"       action="RecordTransactionAction"/>
     <menuitem name="CancelTransaction"       action="CancelTransactionAction"/>
-    <menuitem name="DeleteTransaction"       action="DeleteTransactionAction"/>
+    <separator name="PopupSep3"/>
     <menuitem name="BlankTransaction"        action="BlankTransactionAction"/>
-    <separator name="PopupSep2"/>
-    <menuitem name="DuplicateTransaction"    action="DuplicateTransactionAction"/>
-    <menuitem name="RemoveTransactionSplits" action="RemoveTransactionSplitsAction"/>
     <menuitem name="SplitTransaction"        action="SplitTransactionAction"/>
     <menuitem name="EditExchangeRate"        action="EditExchangeRateAction"/>
     <menuitem name="ScheduleTransaction"     action="ScheduleTransactionAction"/>

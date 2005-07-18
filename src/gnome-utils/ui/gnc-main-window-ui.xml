@@ -67,6 +67,9 @@
       <menuitem name="ViewRefresh" action="ViewRefreshAction"/>
     </menu>
   
+    <menu name="Transaction" action="TransactionAction">
+    </menu>
+
     <menu name="Actions" action="ActionsAction">
       <placeholder name="ActionsPlaceholder"/>
       <separator name="ActionSep1"/>

@@ -1,5 +1,16 @@
 2005-07-17  David Hampton  <hampton@employees.org>
 
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/ui/gnc-plugin-page-register-ui.xml:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml: Add a "Transaction"
+	top level menu that collects all the menu items from Edit and
+	Actions that modify transactions.  This menu parallels the HIG
+	definition of an "Edit" menu as much as possible.
+	
+	* src/gnome/ui/gnc-plugin-basic-commands-ui.xml: Move a couple
+	menu items within the Actions menu.
+
 	* src/gnome/schemas/apps_gnucash_dialog_common.schemas:
 	* src/gnome-utils/Makefile.am:
 	* src/gnome-utils/dialog-reset-warnings.[ch]:
