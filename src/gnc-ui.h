@@ -65,6 +65,10 @@ gnc_verify_dialog(gncUIWidget parent,
 		  gboolean yes_is_default,
 		  const char *format, ...) G_GNUC_PRINTF (3, 4);
 
+gint
+gnc_verify_remember_dialog(gncUIWidget parent, const gchar *gconf_key,
+			   const gchar *yes_label, const gchar *no_label,
+			   const gchar *format, ...) G_GNUC_PRINTF (5,6);
 
 
 extern gint
@@ -78,6 +82,12 @@ extern void
 gnc_warning_dialog(gncUIWidget parent,
 		   const char *forrmat, ...) G_GNUC_PRINTF (2, 3);
 
+
+
+gint
+gnc_warning_remember_dialog(gncUIWidget parent, const gchar *gconf_key,
+			   const gchar *yes_label, const gchar *no_label,
+			   const gchar *format, ...) G_GNUC_PRINTF (5,6);
 
 
 extern void
