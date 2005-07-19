@@ -84,6 +84,7 @@ mark_account (Account *account)
 static void
 xaccInitAccount (Account * acc, QofBook *book)
 {
+  ENTER ("book=%p\n", book);
   qof_instance_init (&acc->inst, GNC_ID_ACCOUNT, book);
 
   acc->parent   = NULL;
@@ -352,7 +353,7 @@ xaccAccountCommitEdit (Account *acc)
     xaccFreeAccountGroup (acc->children);
     acc->children = NULL;
 
-    PINFO ("freeing splits for account %p (%s)\n",
+    PINFO ("freeing splits for account %p (%s)",
            acc, acc->accountName ? acc->accountName : "(null)");
 
     while (acc->splits)

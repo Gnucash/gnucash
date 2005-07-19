@@ -67,7 +67,8 @@
   } else {                                                          \
      /* We tried and failed to start transaction! */                \
      (inst)->dirty = TRUE;                                          \
-  }
+  }                                                                 \
+  LEAVE ("(inst=%p)", (inst));
 
 
 /**
