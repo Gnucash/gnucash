@@ -33,9 +33,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-event.h"
-#include "gnc-file-dialog.h"
-#include "gnc-file-history.h"
-#include "gnc-file-p.h"
+#include "gnc-file.h"
 #include "gnc-filepath-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
@@ -44,6 +42,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-window.h"
 #include "gnc-gconf-utils.h"
+#include "gnc-plugin-file-history.h"
 #include "qofbackend.h"
 #include "qofbook.h"
 #include "qofsession.h"
@@ -59,28 +58,67 @@ static short module = MOD_GUI;
 static GNCCanCancelSaveCB can_cancel_cb = NULL;
 static GNCShutdownCB shutdown_cb = NULL;
 
-static GNCHistoryAddFileFunc history_add_file_func = NULL;
-static GNCHistoryGetLastFunc history_get_last_func = NULL;
 
-static GNCFileDialogFunc file_dialog_func = NULL;
+/********************************************************************\
+ * gnc_file_dialog                                                  * 
+ *   Pops up a file selection dialog (either a "Save As" or an      * 
+ *   "Open"), and returns the name of the file the user selected.   *
+ *   (This function does not return until the user selects a file   * 
+ *   or presses "Cancel" or the window manager destroy button)      * 
+ *                                                                  * 
+ * Args:   title        - the title of the window                   *
+ *         filter       - the file filter to use                    * 
+ *         default_name - the default name to use                   *
+ * Return: containing the name of the file the user selected        *
+\********************************************************************/
 
-
-void
-gnc_file_set_handlers (GNCHistoryAddFileFunc history_add_file_func_in,
-                       GNCHistoryGetLastFunc history_get_last_func_in,
-                       GNCFileDialogFunc file_dialog_func_in)
+char *
+gnc_file_dialog (const char * title,
+                 const char * filter,
+                 const char *default_name)
 {
-  history_add_file_func = history_add_file_func_in;
-  history_get_last_func = history_get_last_func_in;
-  file_dialog_func = file_dialog_func_in;
+  GtkFileSelection *file_box;
+  const char *internal_name;
+  char *file_name = NULL;
+  gint response;
+
+  ENTER("\n");
+
+  /* Set a default title if nothing was passed in */  
+  if (title == NULL)
+    title = _("Open");
+
+  file_box = GTK_FILE_SELECTION(gtk_file_selection_new(title));
+
+  if (default_name)
+    gtk_file_selection_set_filename(file_box, default_name);
+
+  /* hack alert - this was filtering directory names as well as file 
+   * names, so I think we should not do this by default (rgmerk) */
+#if 0
+  if (filter != NULL)
+    gtk_file_selection_complete(file_box, filter);
+#endif
+
+  gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
+  gtk_window_set_transient_for(GTK_WINDOW(file_box),
+			       GTK_WINDOW(gnc_ui_get_toplevel()));
+  response = gtk_dialog_run(GTK_DIALOG(file_box));
+
+  if (response == GTK_RESPONSE_OK) {
+    /* look for constructs like postgres://foo */
+    internal_name = gtk_entry_get_text(GTK_ENTRY(file_box->selection_entry));
+    if (strstr (internal_name, "://") == 0) {
+      /* nope, a local file name */
+      internal_name = gtk_file_selection_get_filename(file_box);
+    }
+    file_name = g_strdup(internal_name);
+  }
+  gtk_widget_destroy(GTK_WIDGET(file_box));
+  LEAVE("%s", file_name);
+  return file_name;
 }
 
-void
-gnc_file_init (void)
-{
-  /* Make sure we have a current session. */
-  qof_session_get_current_session ();
-}
 
 gboolean
 show_session_error (QofBackendError io_error, const char *newfile)
@@ -330,7 +368,6 @@ gnc_add_history (QofSession * session)
   char *file;
 
   if (!session) return;
-  if (!history_add_file_func) return;
 
   url = xaccResolveURL (qof_session_get_url (session));
   if (!url)
@@ -341,7 +378,7 @@ gnc_add_history (QofSession * session)
   else
     file = url;
 
-  history_add_file_func (file);
+  gnc_history_add_file (file);
 
   g_free (url);
 }
@@ -624,20 +661,12 @@ gboolean
 gnc_file_open (void)
 {
   const char * newfile;
-  const char * last;
   gboolean result;
 
   if (!gnc_file_query_save ())
     return FALSE;
 
-  if (!file_dialog_func)
-  {
-    PWARN ("no file dialog function");
-    return FALSE;
-  }
-
-  last = history_get_last_func ? history_get_last_func () : NULL;
-  newfile = file_dialog_func (_("Open"), NULL, last);
+  newfile = gnc_file_dialog (_("Open"), NULL, gnc_history_get_last());
   result = gnc_post_file_open (newfile);
 
   /* This dialogue can show up early in the startup process. If the
@@ -673,12 +702,7 @@ gnc_file_export_file(const char * newfile)
     gnc_init_default_directory(&default_dir);
 
   if (!newfile) {
-    if (!file_dialog_func) {
-      PWARN ("no file dialog function");
-      return;
-    }
-
-    newfile =  file_dialog_func (_("Export"), NULL, default_dir);
+    newfile =  gnc_file_dialog (_("Export"), NULL, default_dir);
     g_free(default_dir);
     default_dir = NULL;
     if (!newfile)
@@ -817,18 +841,12 @@ gnc_file_save_as (void)
 
   ENTER(" ");
 
-  if (!file_dialog_func)
-  {
-    PWARN ("no file dialog func");
-    return;
-  }
-
-  last = history_get_last_func ? history_get_last_func() : NULL;
+  last = gnc_history_get_last();
   if (last)
     gnc_extract_directory(&default_dir, last);
   else
     gnc_init_default_directory(&default_dir);
-  filename = file_dialog_func (_("Save"), "*.gnc", default_dir);
+  filename = gnc_file_dialog (_("Save"), "*.gnc", default_dir);
   if (default_dir)
     free(default_dir);
   if (!filename) return;

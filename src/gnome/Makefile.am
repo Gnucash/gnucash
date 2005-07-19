@@ -9,13 +9,11 @@ gwmod_DATA = gw-gnc-spec.scm gw-gnc.scm
 libgncgnome_la_LDFLAGS = -module
 libgncgnome_la_LIBADD = \
   ${top_builddir}/src/engine/libgncmod-engine.la \
-  ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/backend/file/libgncmod-backend-file.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${top_builddir}/src/report/report-gnome/libgncmod-report-gnome.la \
   ${top_builddir}/src/register/ledger-core/libgncmod-ledger-core.la \
   ${top_builddir}/src/gnome-search/libgncmod-gnome-search.la \
-  ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${GUILE_LIBS} ${GNOME_LIBS} ${GLIB_LIBS}
 
 libgw_gnc_la_SOURCES = gw-gnc.c
@@ -48,7 +46,6 @@ libgncgnome_la_SOURCES = \
   druid-merge.c \
   druid-loan.c \
   druid-stock-split.c \
-  gnc-plugin-file-history.c \
   gnc-plugin-basic-commands.c \
   gnc-plugin-account-tree.c \
   gnc-plugin-register.c \
@@ -93,7 +90,6 @@ noinst_HEADERS = \
   druid-stock-split.h \
   gnc-plugin-account-tree.h \
   gnc-plugin-basic-commands.h \
-  gnc-plugin-file-history.h \
   gnc-plugin-register.h \
   gnc-plugin-page-account-tree.h \
   gnc-plugin-page-register.h \
@@ -123,8 +119,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/engine \
   -I${top_srcdir}/src/network-utils \
   -I${top_srcdir}/src/app-utils \
-  -I${top_srcdir}/src/app-file \
-  -I${top_srcdir}/src/app-file/gnome \
   -I${top_srcdir}/src/backend/file \
   -I${top_srcdir}/src/g-wrap \
   -I${top_srcdir}/src/gnome-utils \

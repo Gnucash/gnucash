@@ -37,7 +37,6 @@
 #include <libgnome/libgnome.h>
 
 #include "gnc-file.h"
-#include "gnc-file-history.h"
 #include "gnc-main-window.h"
 #include "gnc-plugin-file-history.h"
 #include "gnc-window.h"
@@ -89,6 +88,120 @@ struct GncPluginFileHistoryPrivate
 /************************************************************
  *                     Other Functions                      *
  ************************************************************/
+
+/*  Add a file name to the front of the file "history list".  If the
+ *  name already exist on the list, then it is moved from its current
+ *  location to the front of the list.  The "list" is actually a
+ *  sequence of up to ten gconf keys.
+ */
+void
+gnc_history_add_file (const char *newfile)
+{
+  gchar *filename, *from, *to;
+  gint i, last;
+
+  if (newfile == NULL)
+    return;
+  if (!g_utf8_validate(newfile, -1, NULL))
+    return;
+
+  /*
+   * Look for the filename in gconf.
+   */
+  last = MAX_HISTORY_FILES - 1;
+  for (i = 0; i < MAX_HISTORY_FILES; i++) {
+    from = g_strdup_printf(HISTORY_STRING_FILE_N, i);
+    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+    g_free(from);
+
+    if (!filename) {
+      last = i;
+      break;
+    }
+    if (g_utf8_collate(newfile, filename) == 0) {
+      g_free(filename);
+      last = i;
+      break;
+    }
+    g_free(filename);
+  }
+
+  /*
+   * Shuffle filenames upward through gconf.
+   */
+  to = g_strdup_printf(HISTORY_STRING_FILE_N, last);
+  for (i = last - 1; i >= 0; i--) {
+    from = g_strdup_printf(HISTORY_STRING_FILE_N, i);
+    filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, from, NULL);
+    if (filename) {
+      gnc_gconf_set_string(HISTORY_STRING_SECTION, to, filename, NULL);
+      g_free(filename);
+    } else {
+      gnc_gconf_unset(HISTORY_STRING_SECTION, to, NULL);
+    }
+    g_free(to);
+    to = from;
+  }
+
+  /*
+   * Store the new zero entry.
+   */
+  gnc_gconf_set_string(HISTORY_STRING_SECTION, to, newfile, NULL);
+}
+
+
+/*  Retrieve the name of the file most recently accessed.  This is the
+ *  name at the front of the list.  Since the "list" is actually a
+ *  sequence of up to ten gconf keys, this is the value of key zero.
+ */
+char *
+gnc_history_get_last (void)
+{
+  static char *filename = NULL;
+  char *key;
+
+  /* The static string supports the current signature of this
+   * function.  At some point this should be changed to pass the
+   * allocated string up to the caller and make them responsible for
+   * freeing irt, but that change percolates up into the scheme code
+   * and requires changing that as well. */
+  if (filename) {
+    g_free(filename);
+    filename = NULL;
+  }
+
+  key = g_strdup_printf(HISTORY_STRING_FILE_N, 0);
+  filename = gnc_gconf_get_string(HISTORY_STRING_SECTION, key, NULL);
+  g_free(key);
+
+  return filename;
+}
+
+
+/************************************************************
+ *                     Other Functions                      *
+ ************************************************************/
+
+#if 0
+static gchar *
+gnc_history_gconf_index_to_key (guint index)
+{
+  return g_strdup_printf(HISTORY_STRING_FILE_N, index);
+}
+#endif
+
+
+static gint
+gnc_history_gconf_key_to_index (const gchar *fullkey)
+{
+  char *key;
+  gint index, result;
+
+  key = rindex(fullkey, '/');
+  result = sscanf(key+1, HISTORY_STRING_FILE_N, &index);
+  return (result == 1) ? index : -1;
+}
+
 
 /** This routine takes a filename and modifies it so that it will
  * display correctly in a GtkLabel.  It also adds a mnemonic to
@@ -258,6 +371,8 @@ gnc_history_update_menus (GncMainWindow *window)
  *                  Object Implementation                   *
  ************************************************************/
 
+/*  Get the type of a file history plugin.
+ */
 GType
 gnc_plugin_file_history_get_type (void)
 {
@@ -336,6 +451,10 @@ gnc_plugin_file_history_finalize (GObject *object)
 	LEAVE("");
 }
 
+
+/*  Create a new file history plugin.  This plugin attaches the file
+ *  history menu to any window that is opened.
+ */
 GncPlugin *
 gnc_plugin_file_history_new (void)
 {

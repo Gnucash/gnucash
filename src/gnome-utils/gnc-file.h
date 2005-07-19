@@ -126,6 +126,10 @@ void gnc_file_save_as (void);
 */
 gboolean show_session_error (QofBackendError io_error, const char *newfile);
 
+char * gnc_file_dialog (const char * title,
+			const char * filter,
+			const char * default_name);
+
 gboolean gnc_file_open_file (const char *filename);
 void gnc_file_export_file(const char * filename);
 

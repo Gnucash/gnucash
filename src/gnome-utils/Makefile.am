@@ -1,4 +1,4 @@
-SUBDIRS = . test ui
+SUBDIRS = schemas . test ui
 PWD := $(shell pwd)
 
 pkglib_LTLIBRARIES = libgncmod-gnome-utils.la libgw-gnome-utils.la
@@ -58,6 +58,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-druid-provider-file-gnome.c \
   gnc-druid-provider-multifile-gnome.c \
   gnc-embedded-window.c \
+  gnc-file.c \
   gnc-frequency.c \
   gnc-general-select.c \
   gnc-gnome-utils.c \
@@ -70,6 +71,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-main-window.c \
   gnc-mdi-utils.c \
   gnc-menu-extensions.c \
+  gnc-plugin-file-history.c \
   gnc-plugin-manager.c \
   gnc-plugin-menu-additions.c \
   gnc-plugin-page.c \
@@ -118,6 +120,7 @@ gncinclude_HEADERS = \
   gnc-dense-cal.h \
   gnc-druid-gnome-ui.h \
   gnc-embedded-window.h \
+  gnc-file.h \
   gnc-frequency.h \
   gnc-general-select.h \
   gnc-gnome-utils.h \
@@ -130,6 +133,7 @@ gncinclude_HEADERS = \
   gnc-main-window.h \
   gnc-mdi-utils.h \
   gnc-menu-extensions.h \
+  gnc-plugin-file-history.h \
   gnc-plugin-manager.h \
   gnc-plugin-menu-additions.h \
   gnc-plugin-page.h \

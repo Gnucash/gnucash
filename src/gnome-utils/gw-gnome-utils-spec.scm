@@ -35,14 +35,16 @@
       "#include <gtk/gtk.h>\n"
       "#include <gnc-amount-edit.h>\n"
       "#include <gnc-date-edit.h>\n"
+      "#include <gnc-file.h>\n"
+      "#include <gnc-gconf-utils.h>\n"
       "#include <gnc-gnome-utils.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <gnc-html.h>\n"
       "#include <gnc-mdi-utils.h>\n"
       "#include <gnc-menu-extensions.h>\n"
+      "#include <gnc-plugin-file-history.h>\n"
       "#include <gnc-ui.h>\n"
       "#include <print-session.h>\n"
-      "#include <gnc-gconf-utils.h>\n"
       )))
 
 
@@ -496,4 +498,37 @@ be left empty")
    '(((<gw:mchars> caller-owned) section)
      ((<gw:mchars> caller-owned) name))
    "Get a boolean value from gconf.")
+
+  (gw:wrap-function
+   ws
+   'gnc:file-query-save
+   '<gw:bool>
+   "gnc_file_query_save"
+   '()
+   "Query the user whether to save the current file, and save
+if they say 'Yes'. The return is false if the user says 'Cancel'.")
+
+  (gw:wrap-function
+   ws
+   'gnc:file-quit
+   '<gw:void>
+   "gnc_file_quit"
+   '()
+   "Stop working with the current file.")
+
+  (gw:wrap-function
+   ws
+   'gnc:file-open-file
+   '<gw:bool>
+   "gnc_file_open_file"
+   '(((<gw:mchars> caller-owned const) filename))
+   "Open filename.")
+
+  (gw:wrap-function
+   ws
+   'gnc:history-get-last
+   '(<gw:mchars> callee-owned)
+   "gnc_history_get_last"
+   '()
+   "Get the last file opened by the user.")
 )
