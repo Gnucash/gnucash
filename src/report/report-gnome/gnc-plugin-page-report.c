@@ -311,12 +311,12 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         DEBUG( "passing id_name=[%s] child_name=[%s] type=[%s], location=[%s], label=[%s]",
                id_name, child_name, type, url_location, url_label );
 
-        gnc_window_set_progressbar_window( GNC_WINDOW(gnc_ui_get_toplevel()) );
+        gnc_window_set_progressbar_window( GNC_WINDOW(page->window) );
         gnc_html_show_url(report->html, type, url_location, url_label, 0);
         gnc_window_set_progressbar_window( NULL );
 
         gtk_signal_connect(GTK_OBJECT(report->container), "expose_event",
-                           GTK_SIGNAL_FUNC(gnc_plugin_page_report_expose_event_cb), report);
+                           GTK_SIGNAL_FUNC(gnc_plugin_page_report_expose_event_cb), gppReport);
   
         gtk_widget_show_all( GTK_WIDGET(report->container) );
 
@@ -525,8 +525,12 @@ gnc_plugin_page_report_history_destroy_cb(gnc_html_history_node * node,
 static void
 gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused1, gpointer data)
 {
-        GncPluginPageReportPrivate *win = data;
+        GncPluginPageReport *page = data;
+        GncPluginPageReportPrivate *win;
 
+	g_return_if_fail(GNC_IS_PLUGIN_PAGE_REPORT(page));
+
+	win = page->priv;
         DEBUG( "drawin'" );
         ENTER( "report_draw" );
         if (!win->need_reload)
@@ -536,7 +540,7 @@ gnc_plugin_page_report_expose_event_cb(GtkWidget *unused, GdkEventExpose *unused
         }
 
         win->need_reload = FALSE;
-        gnc_window_set_progressbar_window( GNC_WINDOW(gnc_ui_get_toplevel()) );
+        gnc_window_set_progressbar_window( GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window) );
         gnc_html_reload(win->html);
         gnc_window_set_progressbar_window( NULL );
         LEAVE( "reload forced" );
