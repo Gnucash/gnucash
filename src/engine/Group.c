@@ -732,6 +732,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   if (!grp || !grp->book) return;
   if (!acc) return;
 
+  ENTER("group %p, account %p named %s", grp, acc, xaccAccountGetName(acc));
   /* If the account is currently in another group, remove it there
    * first. Basically, we can't have accounts being in two places at
    * once. If old and new parents are the same, reinsertion causes
@@ -787,6 +788,7 @@ xaccGroupInsertAccount (AccountGroup *grp, Account *acc)
   grp->saved = 0;
 
   gnc_engine_gen_event (&acc->inst.entity, GNC_EVENT_MODIFY);
+  LEAVE(" ");
 }
 
 /********************************************************************\
