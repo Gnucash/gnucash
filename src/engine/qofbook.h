@@ -148,6 +148,13 @@ gboolean qof_book_shutting_down (QofBook *book);
  */
 gboolean qof_book_not_saved (QofBook *book);
 
+/** The qof_book_mark_saved() routine marks the book as having been
+ *    saved (to a file, to a database). Used by backends to mark the
+ *    notsaved flag as FALSE just after loading.  Also used by the
+ *    main window code when the used has said to abandon any changes.
+ */
+void qof_book_mark_saved(QofBook *book);
+
 /** Call this function when you change the book kvp, to make sure the book
  * is marked 'dirty'. */
 void qof_book_kvp_changed (QofBook *book);
