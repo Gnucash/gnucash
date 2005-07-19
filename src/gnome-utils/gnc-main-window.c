@@ -37,6 +37,7 @@
 #include "dialog-transfer.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-file.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gui-query.h"
@@ -311,6 +312,96 @@ gnc_main_window_page_exists (GncPluginPage *page)
 }
 
 
+/** This function prompts the user to save the file with a dialog that
+ *  follows the HIG guidelines.
+ *
+ *  @returns This function returns TRUE if the user clicked the Cancel
+ *  button.  It returns FALSE if the closing of the window should
+ *  continue.
+ */
+static gboolean
+gnc_main_window_prompt_for_save (GtkWidget *window)
+{
+  QofSession *session;
+  QofBook *book;
+  GtkWidget *dialog;
+  gint response;
+  const gchar *filename, *tmp;
+#ifdef HIG_COMPLIANT
+  gint oldest_change, minutes;
+#endif
+
+  session = qof_session_get_current_session();
+  book = qof_session_get_book(session);
+  filename = qof_session_get_file_path(session);
+  if (filename == NULL)
+    filename = _("<unknown>");
+  if ((tmp = rindex(filename, '/')) != NULL)
+    filename = tmp + 1;
+
+  /*
+   * *** THIS DIALOG IS NOT HIG COMPLIANT. ***
+   *
+   * According to the HIG, the secondary context should include
+   * context about the number of changes that will be lost (either in
+   * time or a count).  While it is possible to simply provide the
+   * time since the last save, that doesn't appear too usefule.  If
+   * the user has had Gnucash open for hours in the background, but
+   * only made a change in the last few minutes, then telling them
+   * they will lose hours work of work is wring.  The QOF code needs
+   * to be modified to provide better timing information.  The best
+   * case scenario would be if QOF could provide a timestamp of the
+   * oldest unsaved change.
+   */
+#ifdef HIG_COMPLIANT
+  oldest_change = qof_book_time_changed(book);
+  minutes = (time() - oldest_change) / 60 + 1;
+  dialog =
+    gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
+					GTK_DIALOG_MODAL,
+					GTK_MESSAGE_WARNING,
+					GTK_BUTTONS_NONE,
+					_("<b>Save changes to file %s before "
+					  "closing?</b>\n\nIf you don't save, "
+					  "changes from the past %d minutes "
+					  "will be discarded."),
+					filename, minutes);
+#else
+  dialog =
+    gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
+					GTK_DIALOG_MODAL,
+					GTK_MESSAGE_WARNING,
+					GTK_BUTTONS_NONE,
+					_("<b>Save changes to file %s before "
+					  "closing?</b>\n\nIf you don't save, "
+					  "changes will be discarded."),
+					filename);
+#endif
+
+  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			 "Close _without Saving", GTK_RESPONSE_CLOSE,
+			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			 GTK_STOCK_SAVE, GTK_RESPONSE_APPLY,
+			 NULL);
+  gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_APPLY);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy(dialog);
+
+  switch (response) {
+    case GTK_RESPONSE_APPLY:
+      gnc_file_save();
+      return FALSE;
+
+    case GTK_RESPONSE_CLOSE:
+      qof_book_mark_saved(book);
+      return FALSE;
+
+    default:
+      return TRUE;
+  }
+}
+
+
 static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
 			      GdkEvent *event,
@@ -323,6 +414,11 @@ gnc_main_window_delete_event (GtkWidget *window,
   if (g_list_length(active_windows) > 1)
     return FALSE;
 
+  session = qof_session_get_current_session();
+  if (qof_book_not_saved(qof_session_get_book(session))) {
+    return gnc_main_window_prompt_for_save(GTK_WIDGET(window));
+  }
+
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW(window),
 				   GTK_DIALOG_MODAL,
 				   GTK_MESSAGE_WARNING,
@@ -332,34 +428,16 @@ gnc_main_window_delete_event (GtkWidget *window,
 				     "Gnucash window.  Doing so will quit the "
 				     "application.  Are you sure that this is "
 				     "what you want to do?"));
-  session = qof_session_get_current_session();
 
-#ifdef DIRECTORY_ORDERING_PROBLEM_FIXED
-  if (qof_book_not_saved(qof_session_get_book(session))) {
-    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			   "_Save and Quit", GTK_RESPONSE_ACCEPT,
-			   GTK_STOCK_QUIT, GTK_RESPONSE_OK,
-			   NULL);
-  } else {
-#endif
-    gtk_dialog_add_buttons(GTK_DIALOG(dialog),
-			   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			   GTK_STOCK_QUIT, GTK_RESPONSE_OK,
-			   NULL);
-#ifdef DIRECTORY_ORDERING_PROBLEM_FIXED
-  }
-#endif
+  gtk_dialog_add_buttons(GTK_DIALOG(dialog),
+			 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			 GTK_STOCK_QUIT, GTK_RESPONSE_OK,
+			 NULL);
+  gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy(dialog);
 
-#ifdef DIRECTORY_ORDERING_PROBLEM_FIXED
-  if (response == GTK_RESPONSE_ACCEPT)
-    gnc_file_save();
-#endif
-
-  return ((response != GTK_RESPONSE_ACCEPT) &&
-	  (response != GTK_RESPONSE_OK));
+  return (response != GTK_RESPONSE_OK);
 }
 
 
@@ -1588,6 +1666,15 @@ gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window)
 static void
 gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window)
 {
+	QofSession *session;
+	session = qof_session_get_current_session();
+	if (qof_book_not_saved(qof_session_get_book(session))) {
+	  if (gnc_main_window_prompt_for_save(GTK_WIDGET(window))) {
+	    /* User cancelled */
+	    return;
+	  }
+	}
+
 	gnc_shutdown (0);
 }
 
