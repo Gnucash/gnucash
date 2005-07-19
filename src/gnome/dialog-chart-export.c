@@ -33,7 +33,6 @@
 #include "gnc-engine-util.h"
 #include "global-options.h"
 #include "gnc-event.h"
-#include "gnc-file-dialog.h"
 #include "gnc-file.h"
 
 #define EQUITY_ACCOUNT_NAME  _("Opening Balances")

@@ -13,7 +13,6 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \
   -I${top_srcdir}/src/gnome \
-  -I${top_srcdir}/src/app-file \
   -I${top_srcdir}/src/report/report-system \
   ${GLADE_CFLAGS} \
   ${GUILE_INCS} \
@@ -43,7 +42,6 @@ libgncmod_report_gnome_la_LIBADD = \
   ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnc-module/libgncmodule.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
-  ${top_builddir}/src/app-file/libgncmod-app-file.la \
   ${top_builddir}/src/report/report-system/libgncmod-report-system.la \
   ${GLADE_LIBS} \
   ${GUILE_LIBS} \

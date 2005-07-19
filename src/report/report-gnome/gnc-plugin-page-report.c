@@ -39,7 +39,7 @@
 #include "gnc-gnome-utils.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
-#include "gnc-file-dialog.h"
+#include "gnc-file.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-report.h"
 #include "gnc-report.h"

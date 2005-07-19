@@ -426,7 +426,6 @@ string and 'directories' must be a list of strings."
     ;; Hopefully we can gradually make them autoloading.
     (load-module "gnucash/engine" 0 #f)
 
-    (load-module "gnucash/app-file" 0 #f)
     (load-module "gnucash/register/ledger-core" 0 #f)
     (load-module "gnucash/register/register-core" 0 #f)
     (load-module "gnucash/register/register-gnome" 0 #f)

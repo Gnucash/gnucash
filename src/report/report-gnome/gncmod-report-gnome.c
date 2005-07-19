@@ -62,10 +62,6 @@ libgncmod_report_gnome_LTX_gnc_module_init(int refcount) {
     return FALSE;
   }
 
-  if(!gnc_module_load("gnucash/app-file", 0)) {
-    return FALSE;
-  }
-
   if(!gnc_module_load("gnucash/report/report-system", 0)) {
     return FALSE;
   }

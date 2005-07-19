@@ -13,7 +13,6 @@
   (gnc:module-system-init)
   (gnc:module-load "gnucash/qif-io/core" 0)
   ;; XXX: Need app/file to initialize (gnc:get-current-session/book)
-  (gnc:module-load "gnucash/app-file" 0)
   
   (let ((qiffile (qif-io:make-empty-file))
         (acct-table (qif-io:make-empty-acct-table))

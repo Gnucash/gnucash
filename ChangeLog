@@ -1,3 +1,23 @@
+2005-07-18  David Hampton  <hampton@employees.org>
+
+	* src/app-file/gnc-file.[ch]:
+	* src/app-file/gnc-file-dialog.h:
+	* src/app-file/gnome/gnc-file-dialog.c: Combined together as
+	gnc-file.[ch] in the gnome-utils directory.
+
+	* src/app-file/gnc-file-history.[ch]:
+	* src/gnome/gnc-plugin-file-history.[ch]: Combined together as
+	gnc-plugin-file-history.[ch] in the gnome-utils directory.
+
+	* src/app-file/gw-app-file-spec.scm: Folded into
+	gw-gnome-utils-spec.scm in the gnome-utils directory.
+
+	* src/app-file/schemas/apps_gnucash_history.schemas: Moved to the
+	gnome-utils directory.
+
+	* various: Update file include statements, remove files no longer
+	needed, etc.
+
 2005-07-17  David Hampton  <hampton@employees.org>
 
 	* src/gnome/gnc-plugin-page-register.c:

@@ -46,7 +46,7 @@
 #include "global-options.h"
 #include "gnc-associate-account.h"
 #include "gnc-ofx-import.h"
-#include "gnc-file-dialog.h"
+#include "gnc-file.h"
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"

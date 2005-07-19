@@ -40,7 +40,7 @@
 #include "TransactionP.h"
 #include "global-options.h"
 #include "gnc-log-replay.h"
-#include "gnc-file-dialog.h"
+#include "gnc-file.h"
 #include "gnc-engine-util.h"
 #include "gnc-book.h"
 #include "gnc-ui-util.h"

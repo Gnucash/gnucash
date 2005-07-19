@@ -42,7 +42,7 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
-#include "gnc-file-dialog.h"
+#include "gnc-file.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"

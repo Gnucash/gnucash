@@ -1188,10 +1188,6 @@ AC_OUTPUT( po/Makefile.in
           lib/goffice/cut-n-paste/egg-recent-files/Makefile
           rpm/Makefile
           src/Makefile
-          src/app-file/Makefile
-          src/app-file/test/Makefile
-          src/app-file/gnome/Makefile
-          src/app-file/schemas/Makefile
           src/app-utils/Makefile
           src/app-utils/test/Makefile
           src/backend/Makefile
@@ -1227,6 +1223,7 @@ AC_OUTPUT( po/Makefile.in
 	  src/gnome/schemas/Makefile
 	  src/gnome/ui/Makefile
           src/gnome-utils/Makefile
+	  src/gnome-utils/schemas/Makefile
 	  src/gnome-utils/test/Makefile
 	  src/gnome-utils/ui/Makefile
           src/gnome-search/Makefile

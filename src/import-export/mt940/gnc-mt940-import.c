@@ -45,7 +45,7 @@
 #include "global-options.h"
 
 #include "gnc-engine-util.h"
-#include "gnc-file-dialog.h"
+#include "gnc-file.h"
 #include "gnc-ui-util.h"
 #include "gnc-gconf-utils.h"
 #include "gnc-hbci-utils.h"

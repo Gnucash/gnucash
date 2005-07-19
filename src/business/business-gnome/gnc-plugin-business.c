@@ -41,7 +41,6 @@
 #include "messages.h"
 #include "gnc-ui-util.h"
 #include "gnc-date.h"
-#include "gnc-file-dialog.h"
 #include "gnc-file.h"
 #include "guile-mappings.h"
 #include "global-options.h"
