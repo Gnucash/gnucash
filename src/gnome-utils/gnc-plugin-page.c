@@ -50,6 +50,8 @@ struct GncPluginPagePrivate
 {
 	GList *books;
 
+	gboolean use_new_window;
+
 	gchar *title;
 	gchar *tab_name;
 	gchar *uri;
@@ -422,4 +424,20 @@ gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const gchar *message)
   if (page->priv->statusbar_text)
     g_free(page->priv->statusbar_text);
   page->priv->statusbar_text = g_strdup(message);
+}
+
+gboolean
+gnc_plugin_page_get_use_new_window (GncPluginPage *page)
+{
+  g_return_val_if_fail (GNC_IS_PLUGIN_PAGE (page), FALSE);
+
+  return page->priv->use_new_window;
+}
+
+void
+gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new)
+{
+  g_return_if_fail (GNC_IS_PLUGIN_PAGE (page));
+
+  page->priv->use_new_window = use_new;
 }

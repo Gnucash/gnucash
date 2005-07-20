@@ -99,8 +99,6 @@
 #include "table-layout.h"
 #include "table-model.h"
 
-#define GCONF_GENERAL_REGISTER "general/register"
-
 /* The VirtualCell structure holds information about each virtual cell. */
 typedef struct
 {

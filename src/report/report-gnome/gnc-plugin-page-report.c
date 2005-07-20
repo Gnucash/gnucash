@@ -36,6 +36,7 @@
 
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-html-history.h"
 #include "gnc-html.h"
@@ -677,6 +678,7 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 	GncPluginPage *parent;
         GString *tmpStr;
         gint reportId;
+	gboolean use_new;
 
 	priv = plugin_page->priv = g_new0( GncPluginPageReportPrivate, 1 );
 
@@ -694,6 +696,9 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 	gnc_plugin_page_set_title(parent, tmpStr->str);
 	gnc_plugin_page_set_tab_name(parent, tmpStr->str);
 	gnc_plugin_page_set_uri(parent, "default:");
+
+	use_new = gnc_gconf_get_bool(GCONF_GENERAL_REPORT, KEY_USE_NEW, NULL);
+	gnc_plugin_page_set_use_new_window(parent, use_new);
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());

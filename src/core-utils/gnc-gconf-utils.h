@@ -50,12 +50,14 @@
 /* Section names used across multiple modules */
 #define GCONF_GENERAL		"general"
 #define GCONF_GENERAL_REGISTER	"general/register"
+#define GCONF_GENERAL_REPORT	"general/report"
 #define GCONF_WARNINGS		"general/warnings"
 #define GCONF_WARNINGS_TEMP	"general/warnings/temporary"
 #define GCONF_WARNINGS_PERM	"general/warnings/permanent"
 
 /* Keys used across multiple modules */
 #define KEY_LAST_PATH "last_path"
+#define KEY_USE_NEW   "use_new_window"
 
 
 /** @name GConf Miscellaneous Functions

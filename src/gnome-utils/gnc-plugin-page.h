@@ -192,6 +192,27 @@ const gchar *gnc_plugin_page_get_statusbar_text (GncPluginPage *page);
  */
 void gnc_plugin_page_set_statusbar_text (GncPluginPage *page, const char *name);
 
+
+/** Retrieve the "use new window" setting associated with this page.
+ *
+ *  @param page The page whose setting should be retrieved.
+ *
+ *  @return Whether this page should be created in a new window.
+ */
+gboolean gnc_plugin_page_get_use_new_window (GncPluginPage *page);
+
+/** Set the "use new window" setting associated with this page.  If
+ *  this setting is TRUE, the page will be installed into a new
+ *  window.  Otherwise the page will be installed into an existing
+ *  window.
+ *
+ *  @param page The page whose setting should be updated.
+ *
+ *  @param use_new The new value for this setting.
+ */
+void gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new);
+
+
 /* Signals */
 void                  gnc_plugin_page_inserted        (GncPluginPage *plugin_page);
 void                  gnc_plugin_page_removed         (GncPluginPage *plugin_page);

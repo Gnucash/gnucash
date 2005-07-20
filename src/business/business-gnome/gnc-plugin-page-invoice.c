@@ -30,6 +30,7 @@
 
 #include "dialog-account.h"
 #include "gnc-component-manager.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-gnome-utils.h"
 #include "gnc-icons.h"
@@ -303,6 +304,7 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 	GncPluginPageInvoicePrivate *priv;
 	GncPluginPage *parent;
 	GtkActionGroup *action_group;
+	gboolean use_new;
 
 	priv = g_new0 (GncPluginPageInvoicePrivate, 1);
 	plugin_page->priv = priv;
@@ -312,6 +314,9 @@ gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page)
 	gnc_plugin_page_set_title(parent, _("Invoice"));
 	gnc_plugin_page_set_tab_name(parent, _("Incoice"));
 	gnc_plugin_page_set_uri(parent, "default:");
+
+	use_new = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, KEY_USE_NEW, NULL);
+	gnc_plugin_page_set_use_new_window(parent, use_new);
 
 	/* change me when the system supports multiple books */
 	gnc_plugin_page_add_book(parent, gnc_get_current_book());

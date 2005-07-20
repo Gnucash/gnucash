@@ -45,6 +45,11 @@ typedef enum
 } invoice_sort_type_t;
 
 
+#define GCONF_SECTION_INVOICE "dialogs/business/invoice"
+#define GCONF_SECTION_BILL    "dialogs/business/bill"
+#define GCONF_SECTION_VOUCHER "dialogs/business/voucher"
+
+
 /* Create and edit an invoice */
 InvoiceWindow * gnc_ui_invoice_edit (GncInvoice *invoice);
 InvoiceWindow * gnc_ui_invoice_new (GncOwner *owner, QofBook *book);

@@ -1110,8 +1110,12 @@ gnc_main_window_open_page (GncMainWindow *window,
 	  return;
 	}
 
-	if ((window == NULL) && active_windows)
+	if (gnc_plugin_page_get_use_new_window(page)) {
+	  window = gnc_main_window_new ();
+	  gtk_widget_show(GTK_WIDGET(window));
+	} else if ((window == NULL) && active_windows) {
 	  window = active_windows->data;
+	}
 
 	/* Is this the first page in the first window? */
 	if ((window == active_windows->data) &&

@@ -106,9 +106,9 @@ void gnc_main_window_display_page (GncPluginPage *page);
 /** Display a data plugin page in a window.  If the page already
  *  exists in any window, then that window will be brought to the
  *  front and the notebook switch to display the specified page.  If
- *  the page is new then it will be added to the specified window.  If
- *  the window is NULL, the new page will be added to the first
- *  window.
+ *  the page is new then it will be added to the specified window
+ *  (unless the page itself requests otherwise.).  If the window is
+ *  NULL, the new page will be added to the first window.
  *
  *  @param window The window to display a new page in.
  *

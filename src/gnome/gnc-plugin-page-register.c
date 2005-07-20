@@ -39,6 +39,7 @@
 #include "druid-stock-split.h"
 #include "global-options.h"
 #include "gnc-book.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-date-edit.h"
@@ -367,6 +368,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	GList *book_list;
 	gchar *label;
 	QofQuery *q;
+	gboolean use_new;
 
 	/* Is there an existing page? */
 	gsr = gnc_ledger_display_get_user_data (ledger);
@@ -387,6 +389,9 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay *ledger)
 	gnc_plugin_page_set_title(plugin_page, label);
 	gnc_plugin_page_set_tab_name(plugin_page, label);
 	g_free(label);
+
+	use_new = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER, KEY_USE_NEW, NULL);
+	gnc_plugin_page_set_use_new_window(plugin_page, use_new);
 
 	q = gnc_ledger_display_get_query (ledger);
 	book_list = qof_query_get_books (q);

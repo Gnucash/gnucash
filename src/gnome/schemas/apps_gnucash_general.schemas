@@ -21,6 +21,38 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/register/use_new_window</key>
+      <applyto>/apps/gnucash/general/register/use_new_window</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Create a new window for each new register.</short>
+        <long>
+	  Set this value to TRUE to have gnucash open each new
+	  register in its own window.  Set to FALSE to have gnucash
+	  open new registers as tabs in the front window.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnucash/general/report/use_new_window</key>
+      <applyto>/apps/gnucash/general/report/use_new_window</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>FALSE</default>
+      <locale name="C">
+        <short>Create a new window for each new report.</short>
+        <long>
+	  Set this value to TRUE to have gnucash open each new
+	  report in its own window.  Set to FALSE to have gnucash
+	  open new registers as tabs in the front window.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/register/alternate_color_by_transaction</key>
       <applyto>/apps/gnucash/general/register/alternate_color_by_transaction</applyto>
       <owner>gnucash</owner>
