@@ -149,6 +149,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 			  GQuark type)
 {
 	GncPluginClass *class;
+	GtkActionGroup *action_group;
 
 	g_return_if_fail (GNC_IS_PLUGIN (plugin));
 	class = GNC_PLUGIN_GET_CLASS (plugin);
@@ -164,6 +165,14 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
 	  gnc_main_window_merge_actions (window, class->actions_name,
 					 class->actions, class->n_actions,
 					 class->ui_filename, plugin);
+
+
+	  if (class->important_actions) {
+	    action_group =
+	      gnc_main_window_get_action_group(window, class->actions_name);
+	    gnc_plugin_set_important_actions(action_group,
+					     class->important_actions);
+	  }
 	}
 
 	/*
@@ -278,6 +287,27 @@ gnc_plugin_init_short_names (GtkActionGroup *action_group,
     g_value_set_static_string (&value, gettext(short_labels[i].label));
     g_object_set_property (G_OBJECT(action), "short_label", &value);
   }
+}
+
+
+/** Mark certain actions as "important".  This means that their labels
+ *  will appear when the toolbar is set to "Icons and important text"
+ *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode. */
+void
+gnc_plugin_set_important_actions (GtkActionGroup *action_group,
+				  const gchar **name)
+{
+  GtkAction *action;
+  gint i;
+
+  for (i = 0; name[i]; i++) {
+    action = gtk_action_group_get_action (action_group, name[i]);
+    g_object_set (G_OBJECT(action), "is_important", TRUE, FALSE);
+  }
+
+  /* If this trips, you've got too many "important" actions.  That
+   * can't *all* me that important, can they? */
+  g_assert(i <= 3);
 }
 
 

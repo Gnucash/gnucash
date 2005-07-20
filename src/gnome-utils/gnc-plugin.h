@@ -63,6 +63,7 @@ typedef struct {
 	const gchar *actions_name;
 	GtkActionEntry *actions;
 	guint n_actions; 
+	const gchar **important_actions;
 	const gchar *ui_filename;
 
 	const gchar* gconf_section;
@@ -147,6 +148,21 @@ typedef struct {
  */
 void gnc_plugin_init_short_names (GtkActionGroup *action_group,
 				  action_short_labels *short_labels);
+
+
+/** Mark certain actions as "important".  This means that their labels
+ *  will appear when the toolbar is set to "Icons and important text"
+ *  (e.g. GTK_TOOLBAR_BOTH_HORIZ) mode.
+ *
+ *  @param action_group The group of all actions associated with a
+ *  plugin or plugin page.  All actions to me modified must be in this
+ *  group.
+ *
+ *  @param name A list of actions names to be marked important.  This
+ *  list must be NULL terminated.
+ */
+void gnc_plugin_set_important_actions (GtkActionGroup *action_group,
+				       const gchar **names);
 
 
 /** Update a property on a set of existing GtkActions.  This function
