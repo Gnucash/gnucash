@@ -167,34 +167,6 @@ gnc_get_toolbar_style(void)
   return tbstyle;
 }
 
-/********************************************************************
- * gnc_get_mdi_mode                                                 *
- * returns the current Gnome MDI mode preference                    *
- ********************************************************************/
-GnomeMDIMode 
-gnc_get_mdi_mode(void) {
-  GnomeMDIMode mode = GNOME_MDI_DEFAULT_MODE;
-  char * mode_string = gnc_lookup_multichoice_option("_+Advanced",
-                                                     "Application MDI mode",
-                                                     "");
-  if(!safe_strcmp(mode_string, "mdi-notebook")) {
-    mode = GNOME_MDI_NOTEBOOK;
-  }
-  else if(!safe_strcmp(mode_string, "mdi-toplevel")) {
-    mode = GNOME_MDI_TOPLEVEL;    
-  }
-  else if(!safe_strcmp(mode_string, "mdi-modal")) {
-    mode = GNOME_MDI_MODAL;    
-  }
-  else if(!safe_strcmp(mode_string, "mdi-default")) {
-    mode = GNOME_MDI_DEFAULT_MODE;    
-  }
-
-  if(mode_string) free(mode_string);
-  return mode;
-}
-
-
 /********************************************************************\
  * gnc_get_deficit_color                                            *
  *   fill in the 3 color values for the color of deficit values     *

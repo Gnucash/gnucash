@@ -513,32 +513,6 @@ without one.")
   (N_ "_+Advanced") (N_ "Save Window Geometry")
   "a" (N_ "Save window sizes and positions.") #t))
 
-(gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "_+Advanced") (N_ "Application MDI mode")
-  "ba" (N_ "Choose how new windows are created for reports and account trees.")
-  'mdi-notebook
-  (list (list->vector
-         (list 'mdi-notebook
-               (N_ "Notebook")
-               (N_ "New windows are created as notebook tabs in the \
-current top-level window")))
-        (list->vector
-         (list 'mdi-toplevel
-               (N_ "Top-level")
-               (N_ "Create a new top-level window for each report \
-or account tree")))
-        (list->vector
-         (list 'mdi-modal
-               (N_ "Single window")
-               (N_ "One window is used for all displays (select contents \
-through Window menu)")))
-        (list->vector
-         (list 'mdi-default
-               (N_ "Use GNOME default")
-               (N_ "Default MDI mode can be set in the GNOME \
-Control Center"))))))
-
 (gnc:register-configuration-option     
  (gnc:make-simple-boolean-option
   (N_ "_+Advanced") (N_ "Auto-Raise Lists")

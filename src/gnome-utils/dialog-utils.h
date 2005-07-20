@@ -52,7 +52,6 @@ GtkWidget * gnc_build_option_menu (GNCOptionInfo *option_info,
 				   gint num_options);
 
 
-GnomeMDIMode    gnc_get_mdi_mode(void);
 GtkToolbarStyle gnc_get_toolbar_style (void);
 void gnc_get_deficit_color (GdkColor *color);
 void gnc_set_label_color (GtkWidget *label, gnc_numeric value);
