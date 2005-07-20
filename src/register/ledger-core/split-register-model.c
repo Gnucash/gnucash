@@ -1830,22 +1830,23 @@ gnc_split_register_confirm (VirtualLocation virt_loc, gpointer user_data)
 
   if (recn == YREC)
   {
-    gboolean confirm;
-    const gchar *message = _("You are about to change a reconciled split.\n"
-			     "Are you sure you want to do that?");
+    gint response;
+    const gchar *message =
+      _("<b>Change reconciled split?</b>\n\n"
+	"You are about to change a reconciled split.  Doing so might make "
+	"future reconciliation difficult!  Continue with this change?\n");
+  
+    /* Does the user want to be warned? */
+    response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
+					   "change_reconciled_split",
+					   "Change _Split", GTK_STOCK_CANCEL,
+					   message);
 
-    confirm = gnc_lookup_boolean_option ("Register",
-                                         "Confirm before changing reconciled",
-                                         TRUE);
-    if (!confirm)
-      return TRUE;
+    if (response != GTK_RESPONSE_YES)
+      return FALSE;
 
-    confirm = gnc_verify_dialog (gnc_split_register_get_parent (reg),
-				 FALSE, message);
-
-    info->change_confirmed = confirm;
-
-    return confirm;
+    info->change_confirmed = TRUE;
+    return TRUE;
   }
 
   return TRUE;

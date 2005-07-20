@@ -1537,23 +1537,21 @@ gboolean
 gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 {
   SplitRegister *reg = data;
+  gint response;
+  const gchar *message =
+    _("<b>Mark split as unreconciled?</b>\n\n"
+      "You are about to mark a reconciled split as unreconciled.  Doing "
+      "so might make future reconciliation difficult!  Continue "
+      "with this change?\n");
 
-  if (old_flag == YREC)
-  {
-    const char *message = _("Do you really want to mark this transaction "
-                            "not reconciled?\nDoing so might make future "
-                            "reconciliation difficult!");
-    gboolean confirm;
+  if (old_flag != YREC)
+    return TRUE;
 
-    confirm = gnc_lookup_boolean_option ("Register",
-                                         "Confirm before changing reconciled",
-                                         TRUE);
-    if (!confirm)
-      return TRUE;
+  /* Does the user want to be warned? */
+  response = gnc_warning_remember_dialog(gnc_split_register_get_parent(reg),
+					 "mark_split_unreconciled",
+					 "_Unreconcile", GTK_STOCK_CANCEL,
+					 message);
 
-    return gnc_verify_dialog (gnc_split_register_get_parent (reg),
-                              TRUE, message);
-  }
-
-  return TRUE;
+  return (response == GTK_RESPONSE_YES);
 }

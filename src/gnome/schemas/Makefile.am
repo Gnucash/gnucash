@@ -5,6 +5,7 @@ schema_DATA = \
   apps_gnucash_dialog_prices.schemas \
   apps_gnucash_dialog_totd.schemas \
   apps_gnucash_general.schemas \
+  apps_gnucash_warnings.schemas \
   apps_gnucash_window_pages_register.schemas
 
 install-data-local:
