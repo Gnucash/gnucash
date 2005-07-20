@@ -152,6 +152,11 @@ static GtkActionEntry gnc_plugin_actions [] = {
 };
 static guint gnc_plugin_n_actions = G_N_ELEMENTS (gnc_plugin_actions);
 
+static const gchar *gnc_plugin_important_actions[] = {
+  "FileSaveAction",
+  NULL,
+};
+
 
 struct GncPluginBasicCommandsPrivate
 {
@@ -210,10 +215,11 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
   plugin_class->plugin_name  = GNC_PLUGIN_BASIC_COMMANDS_NAME;
 
   /* widget addition/removal */
-  plugin_class->actions_name = PLUGIN_ACTIONS_NAME;
-  plugin_class->actions      = gnc_plugin_actions;
-  plugin_class->n_actions    = gnc_plugin_n_actions;
-  plugin_class->ui_filename  = PLUGIN_UI_FILENAME;
+  plugin_class->actions_name 	  = PLUGIN_ACTIONS_NAME;
+  plugin_class->actions      	  = gnc_plugin_actions;
+  plugin_class->n_actions    	  = gnc_plugin_n_actions;
+  plugin_class->important_actions = gnc_plugin_important_actions;
+  plugin_class->ui_filename       = PLUGIN_UI_FILENAME;
 }
 
 static void
