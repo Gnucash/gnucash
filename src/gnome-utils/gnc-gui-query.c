@@ -49,6 +49,7 @@ gnc_remember_all_toggled (GtkToggleButton *togglebutton,
   other_button = gnc_glade_lookup_widget(GTK_WIDGET(togglebutton),
 					 "remember_one");
   gtk_widget_set_sensitive(other_button, !active);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(other_button), FALSE);
 }
 
 
@@ -75,6 +76,8 @@ gnc_remember_common(gncUIWidget parent, const gchar *dialog_name,
     /* Find the glade page layout */
     xml = gnc_glade_xml_new ("gnc-gui-query.glade", dialog_name);
     dialog = glade_xml_get_widget (xml, dialog_name);
+    glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
+				      dialog);
 
     /* Insert the message. */
     label = glade_xml_get_widget (xml, "label");
@@ -108,11 +111,14 @@ gnc_remember_common(gncUIWidget parent, const gchar *dialog_name,
 
     /* Save the answer? */
     checkbox = glade_xml_get_widget (xml, "remember_all");
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox)))
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox))) {
       gnc_gconf_set_int(GCONF_WARNINGS_PERM, gconf_key, response, NULL);
-    checkbox = glade_xml_get_widget (xml, "remember_one");
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox)))
-      gnc_gconf_set_int(GCONF_WARNINGS_TEMP, gconf_key, response, NULL);
+    } else {
+      checkbox = glade_xml_get_widget (xml, "remember_one");
+      if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(checkbox))) {
+	gnc_gconf_set_int(GCONF_WARNINGS_TEMP, gconf_key, response, NULL);
+      }
+    }
 
     gtk_widget_destroy(GTK_WIDGET(dialog));
     return response;
