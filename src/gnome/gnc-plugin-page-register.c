@@ -73,6 +73,7 @@ static void gnc_plugin_page_register_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page);
 static void gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page);
+static void gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page, GtkWidget *window);
 static void gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
 static void gnc_plugin_page_register_unmerge_actions (GncPluginPage *plugin_page, GtkUIManager *ui_merge);
 
@@ -443,6 +444,7 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass)
 	gnc_plugin_class->plugin_name     = GNC_PLUGIN_PAGE_REGISTER_NAME;
 	gnc_plugin_class->create_widget   = gnc_plugin_page_register_create_widget;
 	gnc_plugin_class->destroy_widget  = gnc_plugin_page_register_destroy_widget;
+	gnc_plugin_class->window_changed  = gnc_plugin_page_register_window_changed;
 	gnc_plugin_class->merge_actions   = gnc_plugin_page_register_merge_actions;
 	gnc_plugin_class->unmerge_actions = gnc_plugin_page_register_unmerge_actions;
 }
@@ -653,6 +655,18 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage *plugin_page)
 	LEAVE(" ");
 }
 
+static void
+gnc_plugin_page_register_window_changed (GncPluginPage *plugin_page,
+					 GtkWidget *window)
+{
+	GncPluginPageRegister *page;
+	
+	g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page));
+
+	page = GNC_PLUGIN_PAGE_REGISTER(plugin_page);
+	page->priv->gsr->window = window;
+}
+	
 static void
 gnc_plugin_page_register_merge_actions (GncPluginPage *plugin_page,
 					GtkUIManager *ui_merge)
@@ -2165,6 +2179,7 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction *action,
 						 GncPluginPageRegister *plugin_page)
 {
   GncPluginPageRegisterPrivate *priv;
+  GncMainWindow *window;
   SplitRegister *reg;
   Split *split;
   Query *query;
@@ -2189,9 +2204,10 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction *action,
   xaccQueryAddGUIDMatch (query, xaccSplitGetGUID (split),
                          GNC_ID_SPLIT, QUERY_AND);
 
+  window = GNC_MAIN_WINDOW(GNC_PLUGIN_PAGE(plugin_page)->window);
   id = report_helper (priv->ledger, split, query);
   if (id >= 0)
-    reportWindow (id);
+    gnc_main_window_open_report(id, window);
   LEAVE(" ");
 }
 
