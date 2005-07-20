@@ -161,10 +161,14 @@ gnc_gconf_make_key (const gchar *section, const gchar *name)
     return gnc_gconf_section_name(section);
   }
 
-  g_assert ((*section != '/') && (*name != '/'));
+  if (*section == '/') {
+    if (*name == '/')
+      return g_strjoin(NULL, section, name, NULL);
+    return g_strjoin("/", section, name, NULL);
+  }
 
   section_path = gnc_gconf_section_name(section);
-  key = g_strdup_printf("%s/%s", section_path, name);
+  key = g_strjoin("/", section_path, name, NULL);
   g_free(section_path);
   return key;
 }
