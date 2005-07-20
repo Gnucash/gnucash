@@ -69,7 +69,6 @@ libgncmod_gnome_utils_la_SOURCES = \
   gnc-html.c \
   gnc-icons.c \
   gnc-main-window.c \
-  gnc-mdi-utils.c \
   gnc-menu-extensions.c \
   gnc-plugin-file-history.c \
   gnc-plugin-manager.c \
@@ -131,7 +130,6 @@ gncinclude_HEADERS = \
   gnc-html.h \
   gnc-icons.h \
   gnc-main-window.h \
-  gnc-mdi-utils.h \
   gnc-menu-extensions.h \
   gnc-plugin-file-history.h \
   gnc-plugin-manager.h \

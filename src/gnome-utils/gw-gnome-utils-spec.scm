@@ -40,7 +40,8 @@
       "#include <gnc-gnome-utils.h>\n"
       "#include <gnc-gui-query.h>\n"
       "#include <gnc-html.h>\n"
-      "#include <gnc-mdi-utils.h>\n"
+      "#include <gnc-main-window.h>\n"
+      "#include <gnc-window.h>\n"
       "#include <gnc-menu-extensions.h>\n"
       "#include <gnc-plugin-file-history.h>\n"
       "#include <gnc-ui.h>\n"
@@ -70,7 +71,6 @@
   (gw:wrap-as-wct ws '<gtk:Widget*> "GtkWidget*" "const GtkWidget*")
   (gw:wrap-as-wct ws '<gtk:Window*> "GtkWindow*" "const GtkWindow*")
   (gw:wrap-as-wct ws '<gnc:UIWidget> "gncUIWidget" "const gncUIWidget")
-  (gw:wrap-as-wct ws '<gnc:mdi-info*> "GNCMDIInfo*" "const GNCMDIInfo*")
   (gw:wrap-as-wct ws '<gnc:OptionWin*> "GNCOptionWin*" "const GNCOptionWin*")
   (gw:wrap-as-wct ws '<gnc:url-type> "URLType" "const URLType")
   (gw:wrap-as-wct ws '<gnc:Window*> "GncWindow *" "const GncWindow *")
@@ -127,38 +127,6 @@
    "gnc_options_dialog_set_scm_callbacks"
    '((<gnc:OptionWin*> option-window) (<gw:scm> apply-cb) (<gw:scm> close-cb))
    "Setup callbacks for the option window.")
-
-  (gw:wrap-function
-   ws
-   'gnc:mdi-has-apps?
-   '<gw:bool>
-   "gnc_mdi_has_apps"
-   '()
-   "Return true if there are gnc mdi app windows open.")
-
-  (gw:wrap-function
-   ws
-   'gnc:mdi-get-current
-   '<gnc:mdi-info*>
-   "gnc_mdi_get_current"
-   '()
-   "Return the main window data structure for the application.")
-
-  (gw:wrap-function
-   ws
-   'gnc:mdi-save 
-   '<gw:void>
-   "gnc_mdi_save" '((<gnc:mdi-info*> mi) 
-                    ((<gw:mchars> caller-owned) bookname))
-   "Save the MDI window configuration for the specified book")
-
-  (gw:wrap-function
-   ws
-   'gnc:mdi-restore
-   '<gw:void>
-   "gnc_mdi_restore" '((<gnc:mdi-info*> mi) 
-                       ((<gw:mchars> caller-owned const) bookname))
-   "Restore MDI window configuration for the specified book")
 
 
   (gw:wrap-as-wct ws '<gnc:PrintSession*> "PrintSession*" "const PrintSession*")
@@ -466,15 +434,6 @@ be left empty")
 
   (gw:wrap-function
    ws
-   'gnc:mdi-show-progress
-   '<gw:void>
-   "gnc_mdi_show_progress"
-   '(((<gw:mchars> caller-owned const) message)
-     (<gw:double> percentage))
-   "Show progress bar with the associated percentage (from 0 to 100).")
-
-  (gw:wrap-function
-   ws
    'gnc:set-busy-cursor
    '<gw:void>
    "gnc_set_busy_cursor"
@@ -531,4 +490,29 @@ if they say 'Yes'. The return is false if the user says 'Cancel'.")
    "gnc_history_get_last"
    '()
    "Get the last file opened by the user.")
+
+  (gw:wrap-function
+   ws
+   'gnc:main-window-set-progressbar-window
+   '<gw:void>
+   "gnc_main_window_set_progressbar_window"
+   '((<gnc:MainWindow*> window))
+   "Set the progressbar window from the given GncMainWindow; does the cast. :p")
+
+  (gw:wrap-function
+   ws
+   'gnc:window-set-progressbar-window
+   '<gw:void>
+   "gnc_window_set_progressbar_window"
+   '((<gnc:Window*> window))
+   "Set the progressbar window from the given GncWindow.")
+
+  (gw:wrap-function
+   ws
+   'gnc:window-show-progress
+   '<gw:void>
+   "gnc_window_show_progress"
+   '(((<gw:mchars> caller-owned const) message)
+     (<gw:double> percentage))
+   "Set the progressbar window from the given GncWindow.")
 )

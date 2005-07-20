@@ -118,7 +118,7 @@ the account instead of opening a register.") #f))
 
     (if (not save-file?) (gnc:warn (_ "Can't save window state")))
 
-    (if (and save-file? conf-file-name (gnc:mdi-has-apps?))
+    (if (and save-file? conf-file-name)
         (let ((book-path (build-path (getenv "HOME") ".gnucash" "books" 
                                      conf-file-name)))
           (with-output-to-port (open-output-file book-path)
@@ -136,7 +136,7 @@ the account instead of opening a register.") #f))
                #t gnc:*acct-tree-options*)
 
               (force-output)))
-          (gnc:mdi-save (gnc:mdi-get-current) book-url)))))
+	  ))))
 
 (define (gnc:main-window-book-close-handler session)
     (gnc:main-window-save-state session)
@@ -171,7 +171,6 @@ the account instead of opening a register.") #f))
     (if conf-file-name 
         (try-load conf-file-name))
     (gnc:new-account-tree #f)
-;;    (gnc:mdi-restore (gnc:mdi-get-current) book-url)
     ))
 
 (define (gnc:main-window-properties-cb)

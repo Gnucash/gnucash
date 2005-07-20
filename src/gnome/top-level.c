@@ -363,14 +363,10 @@ gnc_gui_init (SCM command_line)
 
     gnc_ui_commodity_set_help_callback (gnc_commodity_help_cb);
 
-    gnc_file_set_can_cancel_callback (gnc_mdi_has_apps);
     gnc_file_set_shutdown_callback (gnc_shutdown);
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
-    /* initialize gnome MDI and set up application window defaults  */
-    /* if (!gnc_mdi_get_current ())
-      gnc_main_window_new (); */
     main_window = gnc_main_window_new ();
     gtk_widget_show (GTK_WIDGET (main_window));
 
@@ -427,8 +423,6 @@ gnc_gui_destroy (void)
   gnc_unregister_option_change_callback_id(negative_color_callback_id);
   gnc_unregister_option_change_callback_id(register_font_callback_id);
   gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
-
-  gnc_mdi_destroy (gnc_mdi_get_current ());
 
   gnc_extensions_shutdown ();
 }

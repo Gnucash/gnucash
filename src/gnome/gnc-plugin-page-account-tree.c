@@ -294,7 +294,6 @@ gnc_euro_change (gpointer data)
 static void
 gnc_plugin_page_acct_tree_view_refresh (gpointer data)
 {
-  //  gnc_mdi_child_refresh (data);
 }
 
 static void

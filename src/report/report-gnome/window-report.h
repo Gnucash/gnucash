@@ -27,7 +27,6 @@
 #include <libguile.h>
 
 #include "gnc-html.h"
-#include "gnc-mdi-utils.h"
   
 typedef struct gnc_report_window_s gnc_report_window;
 

@@ -140,27 +140,11 @@
 
   (gw:wrap-function
    ws
-   'gnc:window-set-progressbar-window
-   '<gw:void>
-   "gnc_window_set_progressbar_window"
-   '((<gnc:Window*> window))
-   "Set the progressbar window from the given GncWindow.")
-
-  (gw:wrap-function
-   ws
    'gnc:new-account-tree
    '<gw:void>
    "gnc_new_account_tree"
    '((<gnc:MainWindow*> window))
    "Create a new account tree window.")
-
-  (gw:wrap-function
-   ws
-   'gnc:main-window-set-progressbar-window
-   '<gw:void>
-   "gnc_main_window_set_progressbar_window"
-   '((<gnc:MainWindow*> window))
-   "Set the progressbar window from the given GncMainWindow; does the cast. :p")
 
   (gw:wrap-function
    ws

@@ -1860,6 +1860,19 @@ gnc_main_window_cmd_help_about (GtkAction *action, GncMainWindow *window)
 	gtk_dialog_run (GTK_DIALOG (about));
 }
 
+
+/************************************************************
+ *                                                          *
+ ************************************************************/
+
+gncUIWidget
+gnc_ui_get_toplevel (void)
+{
+  if (active_windows)
+    return active_windows->data;
+  return NULL;
+}
+
 static GtkWidget *
 gnc_main_window_get_statusbar (GncWindow *window_in)
 {
