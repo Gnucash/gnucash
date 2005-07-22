@@ -33,8 +33,10 @@
 #include "gnc-main-window.h"
 
 #include "dialog-options.h"
+#include "dialog-preferences.h"
 #include "dialog-reset-warnings.h"
 #include "dialog-transfer.h"
+#include "dialog-utils.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
 #include "gnc-file.h"
@@ -60,7 +62,7 @@ enum {
 #define PLUGIN_PAGE_IMMUTABLE "page-immutable"
 
 #define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
-#define TOOLBAR_STYLE "/desktop/gnome/interface/toolbar_style"
+#define KEY_TOOLBAR_STYLE	"toolbar_style"
 
 /** Static Globals *******************************************************/
 static short module = MOD_GUI;
@@ -86,6 +88,7 @@ static void gnc_main_window_cmd_file_properties (GtkAction *action, GncMainWindo
 static void gnc_main_window_cmd_file_close (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_file_quit (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window);
+static void gnc_main_window_cmd_edit_preferences2 (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_refresh (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_toolbar (GtkAction *action, GncMainWindow *window);
 static void gnc_main_window_cmd_view_summary (GtkAction *action, GncMainWindow *window);
@@ -169,6 +172,9 @@ static GtkActionEntry gnc_menu_actions [] =
 	{ "EditPreferencesAction", GTK_STOCK_PREFERENCES, N_("Pr_eferences"), NULL,
 	  NULL,
 	  G_CALLBACK (gnc_main_window_cmd_edit_preferences) },
+	{ "EditPreferences2Action", GTK_STOCK_PREFERENCES, N_("Pr_eferences (New)"), NULL,
+	  NULL,
+	  G_CALLBACK (gnc_main_window_cmd_edit_preferences2) },
 
 	/* View menu */
 
@@ -939,6 +945,7 @@ gnc_main_window_destroy (GtkObject *object)
 	  gnc_main_window_update_all_menu_items();
 
 	  gnc_gconf_remove_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE);
+	  gnc_gconf_remove_notification(G_OBJECT(window), GCONF_GENERAL);
 
 	  gnc_engine_unregister_event_handler(window->priv->event_handler_id);
 	  window->priv->event_handler_id = 0;
@@ -1359,16 +1366,14 @@ gnc_main_window_add_plugin (gpointer plugin,
 }
 
 static void
-gnc_main_window_update_toolbar (GncMainWindow *window,
-				const gchar *style_name)
+gnc_main_window_update_toolbar (GncMainWindow *window)
 {
 	GtkToolbarStyle style;
 	GSList *list;
 
-	ENTER("window %p, style %s", window, style_name);
+	ENTER("window %p", window);
 
-	style = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_name,
-				   GTK_TOOLBAR_BOTH);
+	style = gnc_get_toolbar_style();
 	list = gtk_ui_manager_get_toplevels(window->ui_merge, GTK_UI_MANAGER_TOOLBAR);
 	g_slist_foreach(list, (GFunc)gtk_toolbar_set_style, GINT_TO_POINTER(style));
 	g_slist_free(list);
@@ -1383,7 +1388,7 @@ gnc_main_window_gconf_changed (GConfClient *client,
 {
 	GncMainWindow *window;
 	GConfValue *value;
-	const gchar *key;
+	const gchar *key, *key_tail;
 
 	window = GNC_MAIN_WINDOW(user_data);
 
@@ -1392,9 +1397,11 @@ gnc_main_window_gconf_changed (GConfClient *client,
 	if (!key || !value)
 	  return;
 
-	if (strcmp(key, TOOLBAR_STYLE) == 0) {
-	  gnc_main_window_update_toolbar(window, gconf_value_get_string(value));
-	  return;
+	key_tail = rindex(key, '/');
+	if (key_tail != NULL)
+	  key_tail++;
+	if (strcmp(key_tail, KEY_TOOLBAR_STYLE) == 0) {
+	  gnc_main_window_update_toolbar(window);
 	}
 }
 
@@ -1407,7 +1414,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	GncPluginManager *manager;
 	GList *plugins;
 	GError *error = NULL;
-	gchar *filename, *style;
+	gchar *filename;
 	SCM debugging;
 
 	/* Catch window manager delete signal */
@@ -1490,11 +1497,11 @@ gnc_main_window_setup_window (GncMainWindow *window)
 	}
 	g_free(filename);
 
+	gnc_gconf_add_notification(G_OBJECT(window), GCONF_GENERAL,
+				   gnc_main_window_gconf_changed);
 	gnc_gconf_add_notification(G_OBJECT(window), DESKTOP_GNOME_INTERFACE,
 				   gnc_main_window_gconf_changed);
-	style = gnc_gconf_get_string(TOOLBAR_STYLE, NULL, NULL);
-	gnc_main_window_update_toolbar(window, style);
-	g_free(style);
+	gnc_main_window_update_toolbar(window);
 
         /* Testing */
 	/* Now update the "eXtensions" menu */
@@ -1686,6 +1693,12 @@ static void
 gnc_main_window_cmd_edit_preferences (GtkAction *action, GncMainWindow *window)
 {
 	gnc_show_options_dialog ();
+}
+
+static void
+gnc_main_window_cmd_edit_preferences2 (GtkAction *action, GncMainWindow *window)
+{
+	gnc_preferences_dialog ();
 }
 
 static void

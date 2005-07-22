@@ -37,6 +37,7 @@ libgncmod_gnome_utils_la_SOURCES = \
   dialog-account.c \
   dialog-commodity.c \
   dialog-options.c \
+  dialog-preferences.c \
   dialog-query-list.c \
   dialog-reset-warnings.c \
   dialog-transfer.c \
@@ -100,6 +101,7 @@ gncinclude_HEADERS = \
   account-quickfill.h \
   dialog-account.h \
   dialog-commodity.h \
+  dialog-preferences.h \
   dialog-options.h \
   dialog-query-list.h \
   dialog-reset-warnings.h \
