@@ -304,6 +304,23 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnucash/general/register/number_of_rows</key>
+      <applyto>/apps/gnucash/general/register/number_of_rows</applyto>
+      <owner>gnucash</owner>
+      <type>float</type>
+      <default>10.0</default>
+      <locale name="C">
+        <short>The number of rows in an invoice.</short>
+        <long>
+	  This field sets the number of rows to show in an invoice.
+	  It does not actually affect the display of the contents of
+	  the window.  It is only used to set the size of the window
+	  when first opened.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/gnucash/general/report/use_new_window</key>
       <applyto>/apps/gnucash/general/report/use_new_window</applyto>
       <owner>gnucash</owner>
