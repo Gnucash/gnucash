@@ -28,11 +28,12 @@
 #include <string.h>
 #include "gnc-gconf-utils.h"
 
-#define APP_GNUCASH "/apps/gnucash/%s"
+#define APP_GNUCASH "/apps/gnucash"
 #define CLIENT_TAG  "%s-client"
 #define NOTIFY_TAG  "%s-notify_id"
 
 static GConfClient *our_client = NULL;
+static guint gconf_general_cb_id = 0;
 
 /************************************************************/
 /*                      Enum Utilities                      */
@@ -105,12 +106,154 @@ gnc_enum_from_nick(GType type,
 }
 
 /************************************************************/
+/*        Notification of "General" Section Changes         */
+/************************************************************/
+
+static GOnce gcb_init_once = G_ONCE_INIT;
+static GHashTable *gcb_callback_hash = NULL;
+static GHookList *gcb_final_hook_list = NULL;
+
+static gpointer
+gcb_init (gpointer unused)
+{
+  gcb_callback_hash = g_hash_table_new(g_str_hash, g_str_equal);
+
+  gcb_final_hook_list = g_malloc(sizeof(GHookList));
+  g_hook_list_init(gcb_final_hook_list, sizeof(GHook));
+  return NULL;
+}
+
+static void
+gcb_call_hook (GHook *hook, gpointer data)
+{
+  ((GFunc)hook->func)(data, hook->data);
+}
+
+static void
+gnc_gconf_general_changed (GConfClient *client,
+			   guint cnxn_id,
+			   GConfEntry *entry,
+			   gpointer data)
+{
+  const gchar *key, *key_tail;
+  GHookList *hook_list;
+
+  g_once(&gcb_init_once, gcb_init, NULL);
+
+  key = gconf_entry_get_key(entry);
+  key_tail = rindex(key, '/');
+  if (key_tail != NULL) {
+    key_tail++;
+  }
+  if (key_tail == NULL) {
+    /* Should never happen. */
+    g_warning("Malformed key %s:",key);
+    return;
+  }
+
+  hook_list = g_hash_table_lookup(gcb_callback_hash, key_tail);
+  if (hook_list != NULL)
+    g_hook_list_marshal(hook_list, TRUE, gcb_call_hook, entry);
+  g_hook_list_invoke(gcb_final_hook_list, TRUE);
+}
+
+
+void
+gnc_gconf_general_register_cb (const gchar *key,
+			       GncGconfGeneralCb func,
+			       gpointer user_data)
+{
+  GHookList *hook_list;
+  GHook *hook;
+
+  g_once(&gcb_init_once, gcb_init, NULL);
+  hook_list = g_hash_table_lookup(gcb_callback_hash, key);
+  if (hook_list == NULL) {
+    hook_list = g_malloc(sizeof(GHookList));
+    g_hook_list_init(hook_list, sizeof(GHook));
+    g_hash_table_insert(gcb_callback_hash, (gpointer)key, hook_list);
+  }
+
+  hook = g_hook_find_func_data(hook_list, TRUE, func, user_data);
+  if (hook != NULL) {
+    return;
+  }
+
+  hook = g_hook_alloc(hook_list);
+  hook->func = func;
+  hook->data = user_data;
+  g_hook_append(hook_list, hook);
+}
+
+
+void
+gnc_gconf_general_remove_cb (const gchar *key,
+			     GncGconfGeneralCb func,
+			     gpointer user_data)
+{
+  GHookList *hook_list;
+  GHook *hook;
+
+  g_once(&gcb_init_once, gcb_init, NULL);
+  hook_list = g_hash_table_lookup(gcb_callback_hash, key);
+  if (hook_list == NULL)
+    return;
+  hook = g_hook_find_func_data(hook_list, TRUE, func, user_data);
+  if (hook == NULL)
+    return;
+
+  g_hook_destroy_link(hook_list, hook);
+  if (hook_list->hooks == NULL) {
+    g_hash_table_remove(gcb_callback_hash, key);
+    g_free(hook_list);
+  }
+}
+
+
+void
+gnc_gconf_general_register_any_cb (GncGconfGeneralAnyCb func,
+				   gpointer user_data)
+{
+  GHook *hook;
+
+  g_once(&gcb_init_once, gcb_init, NULL);
+  hook = g_hook_find_func_data(gcb_final_hook_list, TRUE, func, user_data);
+  if (hook != NULL)
+    return;
+
+  hook = g_hook_alloc(gcb_final_hook_list);
+  hook->func = func;
+  hook->data = user_data;
+  g_hook_append(gcb_final_hook_list, hook);
+}
+
+
+void
+gnc_gconf_general_remove_any_cb (GncGconfGeneralAnyCb func,
+				 gpointer user_data)
+{
+  GHook *hook;
+
+  g_once(&gcb_init_once, gcb_init, NULL);
+  hook = g_hook_find_func_data(gcb_final_hook_list, TRUE, func, user_data);
+  if (hook == NULL)
+    return;
+
+  g_hook_unref(gcb_final_hook_list, hook);
+}
+
+
+/************************************************************/
 /*                      Gconf Utilities                     */
 /************************************************************/
 
 char *
 gnc_gconf_section_name (const char *name)
 {
+  if (name == NULL) {
+    /* Need to return a newly allocated string */
+    return g_strdup(APP_GNUCASH);
+  }
   if (*name == '/') {
     /* Need to return a newly allocated string */
     return g_strdup(name);
@@ -122,7 +265,7 @@ gnc_gconf_section_name (const char *name)
    * order to keep this file completely "gnome-free" this approach was
    * used.
    */
-  return g_strdup_printf(APP_GNUCASH, name);
+  return g_strjoin("/", APP_GNUCASH, name, NULL);
 }
 
 char *
@@ -139,7 +282,7 @@ gnc_gconf_schema_section_name (const char *name)
    * order to keep this file completely "gnome-free" this approach was
    * used.
    */
-  return g_strdup_printf("/schemas" APP_GNUCASH, name);
+  return g_strconcat("/schemas", APP_GNUCASH, "/", name, NULL);
 }
 
 static gchar *
@@ -287,6 +430,57 @@ gnc_gconf_set_int (const gchar *section,
   /* Remember whether the column width */
   key = gnc_gconf_make_key(section, name);
   if (!gconf_client_set_int(our_client, key, value, &error)) {
+    if (caller_error) {
+      g_propagate_error(caller_error, error);
+    } else {
+      printf("Failed to save key %s: %s", key, error->message);
+      g_error_free(error);
+    }
+  }
+  g_free(key);
+}
+
+gdouble
+gnc_gconf_get_float (const gchar *section,
+		     const gchar *name,
+		     GError **caller_error)
+{
+  GError *error = NULL;
+  gint value;
+  gchar *key;
+
+  if (our_client == NULL)
+    our_client = gconf_client_get_default();
+
+  key = gnc_gconf_make_key(section, name);
+  value = gconf_client_get_float(our_client, key, &error);
+  if (error) {
+    if (caller_error) {
+      g_propagate_error(caller_error, error);
+    } else {
+      printf("Failed to load key %s: %s", key, error->message);
+      g_error_free(error);
+    }
+  }
+  g_free(key);
+  return value;
+}
+
+void
+gnc_gconf_set_float (const gchar *section,
+		     const gchar *name,
+		     const gdouble value,
+		     GError **caller_error)
+{
+  GError *error = NULL;
+  gchar *key;
+
+  if (our_client == NULL)
+    our_client = gconf_client_get_default();
+
+  /* Remember whether the column width */
+  key = gnc_gconf_make_key(section, name);
+  if (!gconf_client_set_float(our_client, key, value, &error)) {
     if (caller_error) {
       g_propagate_error(caller_error, error);
     } else {
@@ -540,7 +734,6 @@ gnc_gconf_add_notification (GObject *object,
 	guint id;
 
 	g_return_if_fail(G_IS_OBJECT(object));
-	g_return_if_fail(section != NULL);
 	g_return_if_fail(callback != NULL);
 
 	client = gconf_client_get_default();
@@ -595,7 +788,6 @@ gnc_gconf_add_anon_notification (const gchar *section,
 	gchar *path;
 	guint id;
 
-	g_return_val_if_fail(section != NULL, 0);
 	g_return_val_if_fail(callback != NULL, 0);
 
 	client = gconf_client_get_default();
@@ -641,7 +833,6 @@ gnc_gconf_remove_notification (GObject *object,
 	guint id;
 
 	g_return_if_fail(G_IS_OBJECT(object));
-	g_return_if_fail(section != NULL);
 
 	/*
 	 * Remove any gconf notifications
@@ -669,8 +860,6 @@ gnc_gconf_remove_anon_notification (const gchar *section,
 	GConfClient *client;
 	gchar *path;
 
-	g_return_if_fail(section != NULL);
-
 	/*
 	 * Remove any gconf notifications
 	 */
@@ -684,12 +873,13 @@ gnc_gconf_remove_anon_notification (const gchar *section,
 	g_free(path);
 }
 
+/* ============================================================== */
+
 gboolean
 gnc_gconf_schemas_found (void)
 {
   GConfSchema* schema;
   GError *err = NULL;
-  gboolean found = FALSE;
   gchar *key;
 
   if (our_client == NULL)
@@ -697,10 +887,16 @@ gnc_gconf_schemas_found (void)
 
   key = gnc_gconf_make_schema_key(GCONF_GENERAL_REGISTER, "use_theme_colors");
   schema = gconf_client_get_schema(our_client, key, &err);
-  if (schema != NULL) {
-    gconf_schema_free(schema);
-    found = TRUE;
+  if (schema == NULL) {
+    g_free(key);
+    return FALSE;
   }
-  g_free(key);
-  return found;
+  gconf_schema_free(schema);
+
+  /* Set up convenience callback for general section */
+  
+  gconf_general_cb_id =
+    gnc_gconf_add_anon_notification(GCONF_GENERAL, gnc_gconf_general_changed,
+				    NULL);
+    return TRUE;
 }

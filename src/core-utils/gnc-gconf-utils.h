@@ -56,8 +56,15 @@
 #define GCONF_WARNINGS_PERM	"general/warnings/permanent"
 
 /* Keys used across multiple modules */
-#define KEY_LAST_PATH "last_path"
-#define KEY_USE_NEW   "use_new_window"
+#define KEY_LAST_PATH		"last_path"
+#define KEY_USE_NEW   		"use_new_window"
+#define KEY_ACCOUNTING_LABELS	"use_accounting_labels"
+#define KEY_ACCOUNT_SEPARATOR	"account_separator"
+#define KEY_NEGATIVE_IN_RED	"negative_in_red"
+#define KEY_NUMBER_OF_ROWS	"number_of_rows"
+
+typedef void (*GncGconfGeneralCb)    (GConfEntry *entry, gpointer user_data);
+typedef void (*GncGconfGeneralAnyCb) (gpointer user_data);
 
 
 /** @name GConf Miscellaneous Functions
@@ -142,6 +149,85 @@ char *gnc_gconf_schema_section_name (const char *name);
  *  a short period of time.
  */
 void gnc_gconf_suggest_sync (void);
+
+/** @} */
+
+
+
+/** @name GConf "General" Section Convenience Functions 
+ @{ 
+*/
+
+
+/** Register a callback for when a specific key in the general section
+ *  of Gnucash's gconf data is changed.  Any time the key's value
+ *  chagnes, the routine will be invoked and will be passed both the
+ *  changes gconf entry and the user data passed to this function.
+ *
+ *  @param key This value contains the name of the key within the
+ *  "general" section to watch.
+ *
+ *  @param func This is a pointer to the function to call when the key
+ *  changes.
+ *
+ *  @param user_data This pointer will be passed to the callback
+ *  function.
+ */
+void gnc_gconf_general_register_cb (const gchar *key,
+				    GncGconfGeneralCb func,
+				    gpointer user_data);
+
+
+/** Remove a function that was registered for a callback when a
+ *  specific key in the general section of Gnucash's gconf data
+ *  changed.  Both the func and user_data arguments are used to match
+ *  up the callback to remove.
+ *
+ *  @param key This value contains the name of the key within the
+ *  "general" section to watch.
+ *
+ *  @param func This is a pointer to the function to call when the key
+ *  changes.
+ *
+ *  @param user_data This pointer will be passed to the callback
+ *  function.
+ */
+void gnc_gconf_general_remove_cb (const gchar *key,
+				  GncGconfGeneralCb func,
+				  gpointer user_data);
+
+
+/** Register a callback for when any key in the general section of
+ *  Gnucash's gconf data is changed.  Any time the value of a key in
+ *  this section chagnes, the routine will be invoked and will be
+ *  passed the specified user data.
+ *
+ *  @param func This is a pointer to the function to call when the key
+ *  changes.
+ *
+ *  @param user_data This pointer will be passed to the callback
+ *  function.
+ */
+void gnc_gconf_general_register_any_cb (GncGconfGeneralAnyCb func,
+					gpointer user_data);
+
+
+/** Remove a function that was registered for a callback when any key
+ *  in the general section of Gnucash's gconf data changed.  Both the
+ *  func and user_data arguments are used to match up the callback to
+ *  remove.
+ *
+ *  @param key This value contains the name of the key within the
+ *  "general" section to watch.
+ *
+ *  @param func This is a pointer to the function to call when the key
+ *  changes.
+ *
+ *  @param user_data This pointer will be passed to the callback
+ *  function.
+ */
+void gnc_gconf_general_remove_any_cb (GncGconfGeneralAnyCb func,
+				      gpointer user_data);
 
 /** @} */
 
@@ -245,7 +331,7 @@ gboolean gnc_gconf_get_bool_no_error (const gchar *section,
  *  display an error message via stdout.  If present, this function
  *  will pass any error back to the calling function for it to handle.
  *
- *  @return This function returns the integer value stored at the
+ *  @return This function returns the float value stored at the
  *  requested key in the gconf database.  If the key has never been
  *  set, this function passes on the default value returned by GConf
  *  as specified in the schema for this key.  If there is an error in
@@ -255,6 +341,42 @@ gboolean gnc_gconf_get_bool_no_error (const gchar *section,
 gint gnc_gconf_get_int (const gchar *section,
 			const gchar *name,
 			GError **error);
+
+/** Get an float value from GConf.
+ *
+ *  Retrieve an float value from GConf.  The section and key names
+ *  provided as arguments are combined with the standard gnucash key
+ *  prefix to produce a fully qualified key name.  Either name (but
+ *  not both) may be a fully qualified key path name, in which case it
+ *  is used as is, without the standard gnucash prefix.  This allows
+ *  the program to access keys like standard desktop settings.  Either
+ *  name (but not both) may be NULL.
+ *
+ *  @param section This string provides a grouping of keys within the
+ *  GnuCash section of the gconf database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs/business/invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param name This string is the name of the particular key within
+ *  the named section of gconf.
+ *
+ *  @param error An optional pointer to a GError structure.  If NULL,
+ *  this function will check for any errors returned by GConf and will
+ *  display an error message via stdout.  If present, this function
+ *  will pass any error back to the calling function for it to handle.
+ *
+ *  @return This function returns the integer value stored at the
+ *  requested key in the gconf database.  If the key has never been
+ *  set, this function passes on the default value returned by GConf
+ *  as specified in the schema for this key.  If there is an error in
+ *  processing, this function passed on the value of zero as returned
+ *  by GConf.
+ */
+gdouble gnc_gconf_get_float (const gchar *section,
+			     const gchar *name,
+			     GError **error);
 
 /** Get a string value from GConf.
  *
@@ -401,7 +523,7 @@ GConfSchema *gnc_gconf_get_schema (const gchar *section,
  *  @param name This string is the name of the particular key within
  *  the named section of gconf.
  *
- *  @value The TRUE/FALSE value to be stored.
+ *  @param value The TRUE/FALSE value to be stored.
  *
  *  @param error An optional pointer to a GError structure.  If NULL,
  *  this function will check for any errors returned by GConf and will
@@ -433,7 +555,7 @@ void gnc_gconf_set_bool (const gchar *section,
  *  @param name This string is the name of the particular key within
  *  the named section of gconf.
  *
- *  @value The number to be stored.
+ *  @param value The number to be stored.
  *
  *  @param error An optional pointer to a GError structure.  If NULL,
  *  this function will check for any errors returned by GConf and will
@@ -444,6 +566,38 @@ void gnc_gconf_set_int (const gchar *section,
 			const gchar *name,
 			const gint value,
 			GError **error);
+
+/** Store an float value into GConf.
+ *
+ *  Store an float into GConf.  The section and key names provided
+ *  as arguments are combined with the standard gnucash key prefix to
+ *  produce a fully qualified key name.  Either name (but not both)
+ *  may be a fully qualified key path name, in which case it is used
+ *  as is, without the standard gnucash prefix.  This allows the
+ *  program to access keys like standard desktop settings.  Either
+ *  name (but not both) may be NULL.
+ *
+ *  @param section This string provides a grouping of keys within the
+ *  GnuCash section of the gconf database.  It can be a simple string
+ *  as in "history" for settings that are common to many areas of
+ *  gnucash, or it can be a partial path name as in
+ *  "dialogs/business/invoice" for setting that only apply to one
+ *  specific area of the program.
+ *
+ *  @param name This string is the name of the particular key within
+ *  the named section of gconf.
+ *
+ *  @param value The number to be stored.
+ *
+ *  @param error An optional pointer to a GError structure.  If NULL,
+ *  this function will check for any errors returned by GConf and will
+ *  display an error message via stdout.  If present, this function
+ *  will pass any error back to the calling function for it to handle.
+ */
+void gnc_gconf_set_float (const gchar *section,
+			  const gchar *name,
+			  const gdouble value,
+			  GError **error);
 
 /** Store a string into GConf.
  *
@@ -465,7 +619,7 @@ void gnc_gconf_set_int (const gchar *section,
  *  @param name This string is the name of the particular key within
  *  the named section of gconf.
  *
- *  @value The string to be stored.  GConf will make a copy of this
+ *  @param value The string to be stored.  GConf will make a copy of this
  *  string, so it is the callers responsibility to free the space used
  *  by this string (if necessary).
  *
@@ -504,7 +658,7 @@ void gnc_gconf_set_string (const gchar *section,
  *  @param list_type This enum indicates the type of each item in the
  *  list to be stored.
  *
- *  @value The list of items to be stored.  Each item in the list must
+ *  @param value The list of items to be stored.  Each item in the list must
  *  be of the type specified.  E.G. If the list_type is
  *  GCONF_VALUE_STRING, then the data field of each element in the
  *  list must be a string pointer.
