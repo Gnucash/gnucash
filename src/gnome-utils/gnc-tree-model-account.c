@@ -33,6 +33,7 @@
 #include "Account.h"
 #include "Group.h"
 #include "gnc-commodity.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-engine-util.h"
 #include "gnc-gobject-utils.h"
 #include "gnc-ui-util.h"
@@ -96,9 +97,34 @@ struct GncTreeModelAccountPrivate
 	AccountGroup *root;
 	Account *toplevel;
 	gint event_handler_id;
+	const gchar *negative_color;
 };
 
 
+
+/************************************************************/
+/*           Account Tree Model - Misc Functions            */
+/************************************************************/
+
+/** Tell the GncTreeModelAccount code to update the color that it will
+ *  use for negative numbers.  This function will iterate over all
+ *  existing models and update their setting from gconf.
+ *
+ *  @internal
+ */
+static void
+gnc_tree_model_account_update_color (GConfEntry *entry, gpointer user_data)
+{
+	GncTreeModelAccount *model;
+	GConfValue *value;
+	gboolean use_red;
+
+	g_return_if_fail(GNC_IS_TREE_MODEL_ACCOUNT(user_data));
+	model = user_data;
+	value = gconf_entry_get_value(entry);
+	use_red = gconf_value_get_bool(value);
+	model->priv->negative_color = use_red ? "red" : "black";
+}
 /************************************************************/
 /*               g_object required functions                */
 /************************************************************/
@@ -162,16 +188,25 @@ gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 static void
 gnc_tree_model_account_init (GncTreeModelAccount *model)
 {
+	gboolean red;
+
 	ENTER("model %p", model);
 	while (model->stamp == 0) {
 		model->stamp = g_random_int ();
 	}
 
+	red = gnc_gconf_get_bool(GCONF_GENERAL, KEY_NEGATIVE_IN_RED, NULL);
+
 	model->priv = g_new0 (GncTreeModelAccountPrivate, 1);
 	model->priv->book = NULL;
 	model->priv->root = NULL;
 	model->priv->toplevel = NULL;
+	model->priv->negative_color = red ? "red" : "black";
 
+	gnc_gconf_general_register_cb(KEY_NEGATIVE_IN_RED,
+				      gnc_tree_model_account_update_color,
+				      model);
+	
 	LEAVE(" ");
 }
 
@@ -185,6 +220,10 @@ gnc_tree_model_account_finalize (GObject *object)
 	g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT (object));
 
 	model = GNC_TREE_MODEL_ACCOUNT (object);
+
+	gnc_gconf_general_remove_cb(KEY_NEGATIVE_IN_RED,
+				    gnc_tree_model_account_update_color,
+				    model);
 
 	model->priv->book = NULL;
 	g_free (model->priv);
@@ -521,6 +560,17 @@ gnc_tree_model_account_get_path (GtkTreeModel *tree_model,
 }
 
 static void
+gnc_tree_model_account_set_color(GncTreeModelAccount *model,
+				 gboolean negative,
+				 GValue *value)
+{
+	if (negative)
+	  g_value_set_static_string (value, model->priv->negative_color);
+	else 
+	  g_value_set_static_string (value, "black");
+}
+
+static void
 gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 				  GtkTreeIter *iter,
 				  int column,
@@ -583,7 +633,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetPresentBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_static_string (value, negative ? "red" : "black");
+			gnc_tree_model_account_set_color(model, negative, value);
 			g_free(string);
 			break;
 
@@ -603,7 +653,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_static_string (value, negative ? "red" : "black");
+			gnc_tree_model_account_set_color(model, negative, value);
 			g_free(string);
 			break;
 
@@ -623,7 +673,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetClearedBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_static_string (value, negative ? "red" : "black");
+			gnc_tree_model_account_set_color(model, negative, value);
 			g_free(string);
 			break;
 
@@ -643,7 +693,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetReconciledBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_static_string (value, negative ? "red" : "black");
+			gnc_tree_model_account_set_color(model, negative, value);
 			g_free (string);
 			break;
 
@@ -663,7 +713,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetProjectedMinimumBalanceInCurrency,
 								  account, FALSE, &negative);
-			g_value_set_static_string (value, negative ? "red" : "black");
+			gnc_tree_model_account_set_color(model, negative, value);
 			g_free (string);
 			break;
 
@@ -683,7 +733,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
 			g_value_init (value, G_TYPE_STRING);
 			string = gnc_ui_account_get_print_balance(xaccAccountGetBalanceInCurrency,
 								  account, TRUE, &negative);
-			g_value_set_static_string (value, negative ? "red" : "black");
+			gnc_tree_model_account_set_color(model, negative, value);
 			g_free (string);
 			break;
 

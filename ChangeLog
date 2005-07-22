@@ -1,4 +1,79 @@
+2005-07-22  David Hampton  <hampton@employees.org>
+
+	* numerous file: Begin migrating preferences over to the new
+	dialog.
+
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/dialog-preferences.[ch]:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/preferences.glade:
+	* src/gnome-utils/ui/gnc-main-window-ui.xml: Add the
+	infrastructure for the new preferences dialog.  Begin migrating
+	preferences over to the new dialog.
+
+	* src/core-utils/gnc-gconf-utils.[ch]: Add central notification
+	dispatcher for the "general" set of gconf keys.  This is needed
+	because lots of file need callbacks for just one or two keys from
+	this section.  Add routines to get/set float values in gconf.
+	Miscellaneous tweaks.
+
+2005-07-20  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gnc-gui-query.c: Skipping a dialog permanently
+	takes precedence over skipping it temporarily.  Make sure to set
+	only one flag per dialog.  Actually wire up the callbacks.
+
+	* src/gnome/schemas/Makefile.am:
+	* src/gnome/schemas/apps_gnucash_warnings.schemas:
+	* src/register/ledger-core/split-register-control.c:
+	* src/register/ledger-core/split-register-model.c: Use the new
+	dialog that remembers whether or not it should suppress further
+	instances.
+
+	* src/business/business-gnome/dialog-invoice.h:
+	* src/business/business-gnome/gnc-plugin-page-invoice.c:
+	* src/business/business-gnome/schemas/apps_gnucash_dialog_business_common.schemas:
+	* src/core-utils/gnc-gconf-utils.h:
+	* src/gnome/gnc-plugin-page-register.c:
+	* src/gnome/schemas/apps_gnucash_general.schemas:
+	* src/gnome-utils/gnc-main-window.[ch]:
+	* src/gnome-utils/gnc-plugin-page.[ch[:
+	* src/register/register-core/table-allgui.h:
+	* src/report/report-gnome/gnc-plugin-page-report.c: Allow pages to
+	state whether they should be loaded in the current window or in a
+	new window.  This will soon be controlled by preferences.
+
+	* src/gnome/gnc-plugin-page-register.c: Propagate window changes
+	to the register.  Fix the "transaction report" to use the current
+	window's status bar for updates.
+
+	* src/gnome/gnc-plugin-basic-commands.c: Example "important"
+	actions.  Subject to review.
+
+	* src/gnome-utils/gnc-plugin.[ch]: Add support for marking actions
+	as "important".  This is a setting used by the toolbar when it is
+	set to GTK_TOOLBAR_BOTH_HORIZ.
+
+	* src/core-utils/gnc-gconf-utils.c: Handle what was thought to be
+	an unexpected case when building gconf keys.
+
 2005-07-19  David Hampton  <hampton@employees.org>
+
+	* src/gnome/gnc-plugin-page-account-tree.c:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/gnome/top-level.c:
+	* src/gnome-utils/Makefile.am:
+	* src/gnome-utils/gnc-main-window.c:
+	* src/gnome-utils/gnc-mdi-utils.[ch]:
+	* src/gnome-utils/gnc-window.c:
+	* src/gnome-utils/gw-gnome-utils-spec.scm:
+	* src/report/report-gnome/window-report.h:
+	* src/report/report-system/report-utilities.scm:
+	* src/scm/main-window.scm: Remove the remnants of the gtk1/gnome1
+	MDI code.
+
+	* src/report/report-gnome/gnc-plugin-page-report.c: Use the
+	progress bar in the current window, not always the first window.
 
 	* src/gnome-utils/gnc-main-window.c: Spruce up the delete window
 	dialog to make it more HIG compliant.

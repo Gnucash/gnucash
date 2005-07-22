@@ -26,6 +26,7 @@
 #include "gnc-engine-util.h"
 #include "engine-helpers.h"
 #include "glib-helpers.h"
+#include "gnc-gconf-utils.h"
 #include "guile-util.h"
 #include "messages.h"
 
@@ -1096,7 +1097,7 @@ gnc_get_debit_string(GNCAccountType account_type)
 
   initialize_scm_functions();
 
-  if (gnc_lookup_boolean_option("Accounts", "Use accounting labels", FALSE))
+  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
     return g_strdup(_("Debit"));
 
   if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))
@@ -1141,7 +1142,7 @@ gnc_get_credit_string(GNCAccountType account_type)
 
   initialize_scm_functions();
 
-  if (gnc_lookup_boolean_option("Accounts", "Use accounting labels", FALSE))
+  if (gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL))
     return g_strdup(_("Credit"));
 
   if ((account_type < NO_TYPE) || (account_type >= NUM_ACCOUNT_TYPES))

@@ -365,8 +365,8 @@ gnc_split_reg_init( GNCSplitReg *gsr )
   gsr->width = -1;
   gsr->height = -1;
   gsr->disallowedCaps = 0;
-  gsr->numRows = (guint) gnc_lookup_number_option ( "_+Advanced",
-                                                    "Number of Rows", 20.0 );
+  gsr->numRows = gnc_gconf_get_float(GCONF_GENERAL_REGISTER,
+				     KEY_NUMBER_OF_ROWS, NULL);
   gsr->read_only = FALSE;
 
   /* IMPORTANT: If we set this to anything other than GTK_RESIZE_QUEUE, we
@@ -1823,9 +1823,8 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
   SplitRegister *sr = gnc_ledger_display_get_split_register( gsr->ledger );
   gboolean goto_blank;
 
-  goto_blank = gnc_lookup_boolean_option( "Register",
-                                          "'Enter' moves to blank transaction",
-                                          FALSE );
+  goto_blank = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
+				  "enter_moves_to_end", NULL);
 
   /* If we are in single or double line mode and we hit enter
    * on the blank split, go to the blank split instead of the

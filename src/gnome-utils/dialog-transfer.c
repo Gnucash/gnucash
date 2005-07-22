@@ -36,6 +36,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-euro.h"
 #include "gnc-exp-parser.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-pricedb.h"
 #include "gnc-tree-view-account.h"
@@ -433,9 +434,8 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
   GtkTreeSelection *selection;
   gboolean  use_accounting_labels;
 
-  use_accounting_labels = gnc_lookup_boolean_option("Accounts",
-						    "Use accounting labels",
-						    FALSE);
+  use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
+					     KEY_ACCOUNTING_LABELS, NULL);
 
   /* In "normal" mode (non accounting terms) the account where the
    * money comes from is displayed on the left side and the account
@@ -1627,9 +1627,8 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
   GladeXML  *xml;
   gboolean  use_accounting_labels;
 
-  use_accounting_labels = gnc_lookup_boolean_option("Accounts",
-						    "Use accounting labels",
-						    FALSE);
+  use_accounting_labels = gnc_gconf_get_bool(GCONF_GENERAL,
+					     KEY_ACCOUNTING_LABELS, NULL);
 
   ENTER(" ");
   xml = gnc_glade_xml_new ("transfer.glade", "Transfer Dialog");

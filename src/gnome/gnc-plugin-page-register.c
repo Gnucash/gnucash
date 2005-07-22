@@ -62,9 +62,9 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_GUI;
 
-#define DEFAULT_LINES_OPTION_PAGE "_+Advanced"
-#define DEFAULT_LINES_OPTION_NAME "Number of Rows"
-#define DEFAULT_LINES_AMOUNT      20
+#define DEFAULT_LINES_OPTION_SECTION GCONF_GENERAL_REGISTER
+#define DEFAULT_LINES_OPTION_NAME    KEY_NUMBER_OF_ROWS
+#define DEFAULT_LINES_AMOUNT         20
 
 static void gnc_plugin_page_register_class_init (GncPluginPageRegisterClass *klass);
 static void gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page);
@@ -305,7 +305,7 @@ struct GncPluginPageRegisterPrivate
 
 	gint component_manager_id;
 
-	const char *lines_opt_page;
+	const char *lines_opt_section;
 	const char *lines_opt_name;
 	gint lines_default;
 	gint disallowCaps;
@@ -488,11 +488,11 @@ gnc_plugin_page_register_init (GncPluginPageRegister *plugin_page)
 
 	priv->ui_description = g_strdup("gnc-plugin-page-register-ui.xml");
 
-	priv->lines_opt_page = DEFAULT_LINES_OPTION_PAGE;
-	priv->lines_opt_name = DEFAULT_LINES_OPTION_NAME;
-	priv->lines_default  = DEFAULT_LINES_AMOUNT;
-	priv->disallowCaps = 0;
-	priv->fd.cleared_match = CLEARED_ALL;
+	priv->lines_opt_section = DEFAULT_LINES_OPTION_SECTION;
+	priv->lines_opt_name    = DEFAULT_LINES_OPTION_NAME;
+	priv->lines_default     = DEFAULT_LINES_AMOUNT;
+	priv->disallowCaps      = 0;
+	priv->fd.cleared_match  = CLEARED_ALL;
 }
 
 static void
@@ -590,12 +590,16 @@ gnc_plugin_page_register_create_widget (GncPluginPage *plugin_page)
 	priv->widget = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (priv->widget);
 	
-	numRows = (guint) gnc_lookup_number_option (priv->lines_opt_page,
-						    priv->lines_opt_name,
-						    priv->lines_default);
+	if (priv->lines_opt_section) {
+	  numRows = gnc_gconf_get_float (priv->lines_opt_section,
+					 priv->lines_opt_name, NULL);
+	} else {
+	  numRows = priv->lines_default;
+	}
 
-	gsr = gnc_split_reg_new(priv->ledger, NULL, numRows,
-				0, priv->disallowCaps);
+	gsr = gnc_split_reg_new(priv->ledger,
+				GTK_WINDOW(GNC_PLUGIN_PAGE(page)->window),
+				numRows, 0, priv->disallowCaps);
 	priv->gsr = (GNCSplitReg *)gsr;
 	gtk_widget_show (gsr);
 	gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
@@ -2222,7 +2226,7 @@ gnc_plugin_page_register_cmd_transaction_report (GtkAction *action,
 
 void
 gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
-				      const char *lines_opt_page,
+				      const char *lines_opt_section,
 				      const char *lines_opt_name,
 				      gint lines_default,
 				      gint disallowCaps)
@@ -2234,10 +2238,10 @@ gnc_plugin_page_register_set_options (GncPluginPage *plugin_page,
 
 	page = GNC_PLUGIN_PAGE_REGISTER (plugin_page);
 	priv = page->priv;
-	priv->lines_opt_page = lines_opt_page;
-	priv->lines_opt_name = lines_opt_name;
-	priv->lines_default  = lines_default;
-	priv->disallowCaps   = disallowCaps;
+	priv->lines_opt_section = lines_opt_section;
+	priv->lines_opt_name 	= lines_opt_name;
+	priv->lines_default  	= lines_default;
+	priv->disallowCaps   	= disallowCaps;
 }
 
 void

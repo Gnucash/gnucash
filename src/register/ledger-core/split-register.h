@@ -401,9 +401,6 @@ gboolean gnc_split_register_changed (SplitRegister *reg);
 void gnc_split_register_show_present_divider (SplitRegister *reg,
                                               gboolean show_present);
 
-/** If use_red is TRUE, negative amounts will be printed in red. */
-void gnc_split_register_colorize_negative (gboolean use_red);
-
 /** Expand the current transaction if it is collapsed. */
 void gnc_split_register_expand_current_trans (SplitRegister *reg,
                                               gboolean expand);

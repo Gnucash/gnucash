@@ -42,6 +42,7 @@
 #include "gnc-engine-util.h"
 #include "gnc-engine.h"
 #include "gnc-euro.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-module.h"
 #include "gnc-session.h"
 #include "gnc-ui-util.h"
@@ -57,25 +58,7 @@ static gboolean auto_decimal_enabled = FALSE;
 static int auto_decimal_places = 2;    /* default, can be changed */
 
 static gboolean reverse_balance_inited = FALSE;
-static SCM reverse_balance_callback_id = SCM_UNDEFINED;
 static gboolean reverse_type[NUM_ACCOUNT_TYPES];
-
-/********************************************************************\
- * gnc_color_deficits                                               *
- *   return a boolean value indicating whether deficit quantities   *
- *   should be displayed using the gnc_get_deficit_color().         *
- *                                                                  *
- * Args: none                                                       *
- * Returns: boolean deficit color indicator                         *
- \*******************************************************************/
-gboolean
-gnc_color_deficits (void)
-{
-  return gnc_lookup_boolean_option ("General",
-                                    "Display negative amounts in red",
-                                    TRUE);
-}
-
 
 /********************************************************************\
  * gnc_get_account_separator                                        *
@@ -90,11 +73,9 @@ gnc_get_account_separator (void)
   char separator = ':';
   char *string;
 
-  string = gnc_lookup_multichoice_option("Accounts",
-                                         "Account Separator",
-                                         "colon");
+  string = gnc_gconf_get_string(GCONF_GENERAL, KEY_ACCOUNT_SEPARATOR, NULL);
 
-  if (safe_strcmp(string, "colon") == 0)
+  if (!string || safe_strcmp(string, "colon") == 0)
     separator = ':';
   else if (safe_strcmp(string, "slash") == 0)
     separator = '/';
@@ -121,32 +102,25 @@ gnc_configure_reverse_balance (void)
   for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
     reverse_type[i] = FALSE;
 
-  choice = gnc_lookup_multichoice_option ("Accounts",
-                                          "Reversed-balance account types",
-                                          "credit");
+  choice = gnc_gconf_get_string(GCONF_GENERAL, "reversed_accounts", NULL);
 
-  if (safe_strcmp (choice, "income-expense") == 0)
+  if (safe_strcmp (choice, "none") == 0)
+  {
+  }
+  else if (safe_strcmp (choice, "income_expense") == 0)
   {
     reverse_type[INCOME]  = TRUE;
     reverse_type[EXPENSE] = TRUE;
   }
-  else if (safe_strcmp (choice, "credit") == 0)
+  else
   {
+    if (safe_strcmp (choice, "credit") != 0)
+      PERR("bad value '%s'", choice);
     reverse_type[LIABILITY] = TRUE;
     reverse_type[PAYABLE]   = TRUE;
     reverse_type[EQUITY]    = TRUE;
     reverse_type[INCOME]    = TRUE;
     reverse_type[CREDIT]    = TRUE;
-  }
-  else if (safe_strcmp (choice, "none") == 0)
-  {
-  }
-  else
-  {
-    PERR("bad value\n");
-
-    reverse_type[INCOME]  = TRUE;
-    reverse_type[EXPENSE] = TRUE;
   }
 
   if (choice != NULL)
@@ -154,23 +128,10 @@ gnc_configure_reverse_balance (void)
 }
 
 static void
-gnc_configure_reverse_balance_cb (gpointer not_used)
-{
-  gnc_configure_reverse_balance ();
-  gnc_gui_refresh_all ();
-}
-
-static void
 gnc_reverse_balance_init (void)
 {
   gnc_configure_reverse_balance ();
-
-  reverse_balance_callback_id = 
-    gnc_register_option_change_callback (gnc_configure_reverse_balance_cb,
-                                         NULL, "Accounts",
-                                         "Reversed-balance account types");
-
-  reverse_balance_inited = (reverse_balance_callback_id != SCM_UNDEFINED);
+  reverse_balance_inited = TRUE;
 }
 
 gboolean
@@ -1989,17 +1950,38 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 }
 
 /* enable/disable the auto_decimal_enabled option */
-void
-gnc_set_auto_decimal_enabled(gboolean enabled)
+static void
+gnc_set_auto_decimal_enabled (GConfEntry *entry, gpointer user_data)
 {
-  auto_decimal_enabled = enabled;
+  GConfValue *value;
+
+  value = gconf_entry_get_value(entry);
+  auto_decimal_enabled = gconf_value_get_bool(value);
 }
 
 /* set the number of auto decimal places to use */
-void
-gnc_set_auto_decimal_places( int places )
+static void
+gnc_set_auto_decimal_places  (GConfEntry *entry, gpointer user_data)
 {
-  auto_decimal_places = places;
+  GConfValue *value;
+
+  value = gconf_entry_get_value(entry);
+  auto_decimal_places = gconf_value_get_float(value);
+}
+
+void
+gnc_ui_util_init (void)
+{
+  gnc_gconf_general_register_cb("reversed_accounts",
+				(GncGconfGeneralCb)gnc_configure_reverse_balance,
+				NULL);
+  gnc_gconf_general_register_cb("auto_decimal_point",
+				gnc_set_auto_decimal_enabled,
+				NULL);
+  gnc_gconf_general_register_cb("auto_decimal_places",
+				gnc_set_auto_decimal_places,
+				NULL);
+ 
 }
 
 /* These implementations are rather lame. */

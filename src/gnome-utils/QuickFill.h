@@ -68,6 +68,7 @@ typedef struct _QuickFill QuickFill;
 
 QuickFill *  gnc_quickfill_new (void);
 void         gnc_quickfill_destroy (QuickFill *qf);
+void         gnc_quickfill_purge (QuickFill *qf);
 
 /** For the given node 'qf', return the best-guess matching string.
  */

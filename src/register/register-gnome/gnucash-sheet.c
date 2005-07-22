@@ -1432,9 +1432,9 @@ gnucash_sheet_refresh_from_gconf (GnucashSheet *sheet)
 	sheet->use_theme_colors = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
 						     "use_theme_colors", NULL);
 	sheet->use_horizontal_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-							 "use_horizontal_lines", NULL);
+							 "draw_horizontal_lines", NULL);
 	sheet->use_vertical_lines = gnc_gconf_get_bool(GCONF_GENERAL_REGISTER,
-						       "use_vertical_lines", NULL);
+						       "draw_vertical_lines", NULL);
 }
 
 void

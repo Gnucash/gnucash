@@ -7,6 +7,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/calculation \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/engine \
   ${GUILE_INCS} \
   ${G_WRAP_COMPILE_ARGS} \

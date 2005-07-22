@@ -44,6 +44,7 @@
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "gnc-date.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-trace.h"
 #include "gnc-engine-util.h"
 #include "gnc-filepath-utils.h"
@@ -62,20 +63,6 @@
 
 static short module = MOD_BACKEND;
 
-static int file_retention_days = 0;
-static gboolean file_compression = FALSE;
-
-void
-gnc_file_be_set_retention_days (int days)
-{
-    file_retention_days = days;
-}
-
-void
-gnc_file_be_set_compression (gboolean compress)
-{
-    file_compression = compress;
-}
 
 /* ================================================================= */
 
@@ -467,6 +454,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
     struct stat statbuf;
     int rc;
     QofBackendError be_err;
+    gboolean file_compression;
 
     ENTER (" book=%p file=%s", book, datafile);
 
@@ -492,6 +480,7 @@ gnc_file_be_write_to_file(FileBackend *fbe,
         }
     }
   
+    file_compression = gnc_gconf_get_bool(GCONF_GENERAL, "compress_files", NULL);
     if(gnc_book_write_to_xml_file_v2(book, tmp_name, file_compression)) 
     {
         /* Record the file's permissions before unlinking it */
@@ -598,6 +587,7 @@ gnc_file_be_select_files (const struct dirent *d)
 static void
 gnc_file_be_remove_old_files(FileBackend *be)
 {
+    int file_retention_days;
     struct dirent *dent;
     DIR *dir;
     struct stat lockstatbuf, statbuf;
@@ -631,6 +621,7 @@ gnc_file_be_remove_old_files(FileBackend *be)
         return;
 
     now = time(NULL);
+    file_retention_days = gnc_gconf_get_float(GCONF_GENERAL, "retain_days", NULL);
     while((dent = readdir(dir)) != NULL) {
         char *name;
         int len;

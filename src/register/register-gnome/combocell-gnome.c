@@ -38,7 +38,7 @@
 
 #include "QuickFill.h"
 #include "combocell.h"
-#include "gnc-ui-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnucash-item-edit.h"
 #include "gnucash-item-list.h"
 #include "gnucash-sheet.h"
@@ -85,13 +85,34 @@ static gboolean gnc_combo_cell_enter (BasicCell *bcell,
 static void gnc_combo_cell_leave (BasicCell *bcell);
 static void gnc_combo_cell_destroy (BasicCell *bcell);
 
+static GOnce auto_pop_init_once = G_ONCE_INIT;
 static gboolean auto_pop_combos = FALSE;
 
+
+static void
+gnc_combo_cell_set_autopop (GConfEntry *entry, gpointer user_data)
+{
+	GConfValue *value;
+
+	value = gconf_entry_get_value(entry);
+	auto_pop_combos = gconf_value_get_bool(value);
+}
+
+static gpointer
+gnc_combo_cell_autopop_init (gpointer unused)
+{
+	gnc_gconf_general_register_cb("auto_raise_lists",
+				      gnc_combo_cell_set_autopop,
+				      NULL);
+	return NULL;
+}
 
 BasicCell *
 gnc_combo_cell_new (void)
 {
 	ComboCell * cell;
+
+	g_once(&auto_pop_init_once, gnc_combo_cell_autopop_init, NULL);
 
         cell = g_new0 (ComboCell, 1);
 
@@ -436,6 +457,54 @@ gnc_combo_cell_add_menu_item (ComboCell *cell, char * menustr)
                     (strcmp (menustr, cell->cell.value) == 0))
                         gnc_item_list_select (box->item_list, menustr);
 
+                unblock_list_signals (cell);
+        }
+	else
+		box->list_in_sync = FALSE;
+
+        /* If we're going to be using a pre-fab quickfill, 
+         * then don't fill it in here */
+        if (FALSE == box->use_quickfill_cache)
+        {
+                gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
+        }
+
+        box->list_sorted = FALSE;
+}
+
+void 
+gnc_combo_cell_add_account_menu_item (ComboCell *cell, char * menustr)
+{ 
+	PopBox *box;
+	gchar *menu_copy, *value_copy;
+
+	if (cell == NULL)
+		return;
+	if (menustr == NULL)
+		return;
+
+	box = cell->cell.gui_private;
+	box->menustrings = g_list_append (box->menustrings,
+                                          g_strdup (menustr));
+
+	gnc_combo_sync_edit_list(box);
+
+	if (box->item_list != NULL)
+        {
+                block_list_signals (cell);
+
+                gnc_item_list_append (box->item_list, menustr);
+                if (cell->cell.value) {
+		    menu_copy = g_strdelimit(g_strdup(menustr), "-:/\\.", ' ');
+		    value_copy =
+			g_strdelimit(g_strdup(cell->cell.value), "-:/\\.", ' ');
+		    if (strcmp (menu_copy, value_copy) == 0) {
+			gnc_combo_cell_set_value (cell, menustr);
+                        gnc_item_list_select (box->item_list, menustr);
+		    }
+		    g_free(value_copy);
+		    g_free(menu_copy);
+		}
                 unblock_list_signals (cell);
         }
 	else
@@ -919,12 +988,6 @@ gnc_combo_cell_set_autosize (ComboCell *cell, gboolean autosize)
                 return;
 
         box->autosize = autosize;
-}
-
-void
-gnc_combo_cell_set_autopop (gboolean auto_pop_combos_arg)
-{
-        auto_pop_combos = auto_pop_combos_arg;
 }
 
 /*

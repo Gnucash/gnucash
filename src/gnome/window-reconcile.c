@@ -92,8 +92,6 @@ struct _RecnWindow
   GtkWidget *debit_frame;   /* Frame around debit matrix            */
   GtkWidget *credit_frame;  /* Frame around credit matrix           */
 
-  SCM title_change_cb_id;   /* id for label preference cb           */
-
   GtkWidget *edit_item;     /* Edit transaction menu item           */
   GtkWidget *delete_item;   /* Delete transaction menu item         */
 
@@ -724,7 +722,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     else if( account_type_has_auto_interest_charge( data.account_type ) )
       gtk_button_set_label(GTK_BUTTON(interest), _("Enter Interest Charge...") );
     else {
-      gtk_widget_destroy(interest);
+      gtk_widget_hide(interest);
       interest = NULL;
     }
 
@@ -897,8 +895,7 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
   gboolean formal;
   gchar *title;
 
-  formal = gnc_lookup_boolean_option("General",
-                                     "Use accounting labels", FALSE);
+  formal = gnc_gconf_get_bool(GCONF_GENERAL, KEY_ACCOUNTING_LABELS, NULL);
 
   if (formal)
     title = _("Debits");
@@ -919,12 +916,6 @@ gnc_reconcile_window_set_titles(RecnWindow *recnData)
 
   if (!formal)
     g_free(title);
-}
-
-static void
-set_titles_cb(void *data)
-{
-  gnc_reconcile_window_set_titles(data);
 }
 
 static GtkWidget *
@@ -1591,6 +1582,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
     }
   }
 
+  gnc_reconcile_window_set_titles(recnData);
   recn_set_watches (recnData);
 
   recnRefresh (recnData);
@@ -1884,10 +1876,6 @@ recnWindowWithBalance (GtkWidget *parent, Account *account,
 
   gnc_reconcile_window_set_titles(recnData);
 
-  recnData->title_change_cb_id =
-    gnc_register_option_change_callback(set_titles_cb, recnData,
-                                        "General", "Use accounting labels");
-
   recnRecalculateBalance(recnData);
 
   gnc_recn_refresh_toolbar(recnData);
@@ -1937,9 +1925,6 @@ recn_destroy_cb (GtkWidget *w, gpointer data)
   gnc_unregister_gui_component_by_data (WINDOW_RECONCILE_CM_CLASS, recnData);
 
   id = recnData->toolbar_change_cb_id;
-  gnc_unregister_option_change_callback_id (id);
-
-  id = recnData->title_change_cb_id;
   gnc_unregister_option_change_callback_id (id);
 
   if (recnData->delete_refresh)

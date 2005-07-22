@@ -48,8 +48,6 @@ typedef QofSession * (*QofSessionCB) (void);
 
 
 /* User Settings ****************************************************/
-gboolean gnc_color_deficits (void);
-
 char gnc_get_account_separator (void);
 
 gboolean gnc_reverse_balance(Account *account);
@@ -294,14 +292,9 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 			 char group_separator, char *group, char *ignore_list,
 			 gnc_numeric *result, char **endstr);
 
-/* Automatic decimal place conversion *******************************/
+/* Initialization ***************************************************/
 
-/* enable/disable the auto decimal option */
-void gnc_set_auto_decimal_enabled(gboolean enabled);
-
-/* set how many auto decimal places to use */
-void gnc_set_auto_decimal_places(int places);
-
+void gnc_ui_util_init (void);
 
 /* Missing functions ************************************************/
 

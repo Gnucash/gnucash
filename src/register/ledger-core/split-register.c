@@ -38,6 +38,7 @@
 #include "global-options.h"
 #include "gnc-component-manager.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "split-register-p.h"
 #include "gnc-ledger-display.h"
 #include "gnc-ui-util.h"
@@ -2162,6 +2163,31 @@ gnc_split_register_config_cells (SplitRegister *reg)
   gnc_split_register_config_action (reg);
 }
 
+static void
+split_register_gconf_changed (GConfEntry *entry, gpointer user_data)
+{
+  SplitRegister * reg = user_data;
+  SRInfo *info;
+
+  if (reg == NULL)
+    return;
+
+  info = reg->sr_info;
+  if (!info)
+    return;
+
+  /* Release current strings. Will be reloaded at next reference. */
+  g_free (info->debit_str);
+  g_free (info->tdebit_str);
+  g_free (info->credit_str);
+  g_free (info->tcredit_str);
+
+  info->debit_str = NULL;
+  info->tdebit_str = NULL;
+  info->credit_str = NULL;
+  info->tcredit_str = NULL;
+}
+
 static void 
 gnc_split_register_init (SplitRegister *reg,
                          SplitRegisterType type,
@@ -2175,6 +2201,9 @@ gnc_split_register_init (SplitRegister *reg,
 
   /* Register 'destroy' callback */
   gnc_ui_register_account_destroy_callback (gnc_ledger_display_destroy_by_account);
+  gnc_gconf_general_register_cb(KEY_ACCOUNTING_LABELS,
+				split_register_gconf_changed,
+				reg);
 
   reg->sr_info = NULL;
 
@@ -2391,6 +2420,9 @@ gnc_split_register_destroy (SplitRegister *reg)
   if (!reg)
     return;
 
+  gnc_gconf_general_remove_cb(KEY_ACCOUNTING_LABELS,
+			      split_register_gconf_changed,
+			      reg);
   gnc_split_register_cleanup (reg);
 
   gnc_table_destroy (reg->table);

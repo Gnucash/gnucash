@@ -2064,10 +2064,34 @@ gnc_split_register_guid_copy (gpointer p_to, gconstpointer p_from)
     *to = *from;
 }
 
+
+static void
+gnc_split_register_colorize_negative (GConfEntry *entry, gpointer unused)
+{
+  GConfValue *value;
+
+  value = gconf_entry_get_value(entry);
+  use_red_for_negative = gconf_value_get_bool(value);
+}
+
+
+static gpointer
+gnc_split_register_model_add_hooks (gpointer unused)
+{
+  gnc_gconf_general_register_cb(KEY_NEGATIVE_IN_RED,
+				gnc_split_register_colorize_negative,
+				NULL);
+  return NULL;
+}
+
+
 TableModel *
 gnc_split_register_model_new (void)
 {
   TableModel *model;
+  static GOnce once = G_ONCE_INIT;
+
+  g_once(&once, gnc_split_register_model_add_hooks, NULL);
 
   model = gnc_table_model_new ();
 
@@ -2532,10 +2556,4 @@ gnc_template_register_model_new (void)
   gnc_template_register_model_add_save_handlers (model);
 
   return model;
-}
-
-void
-gnc_split_register_colorize_negative (gboolean use_red)
-{
-  use_red_for_negative = use_red;
 }

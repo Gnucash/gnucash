@@ -46,8 +46,12 @@
 /* This static indicates the debugging module that this .o belongs to. */
 static short module = MOD_GUI;
 
+#define KEY_SAVE_GEOMETRY	"save_window_geometry"
 #define WINDOW_POSITION		"window_position"
 #define WINDOW_GEOMETRY		"window_geometry"
+
+#define DESKTOP_GNOME_INTERFACE "/desktop/gnome/interface"
+#define KEY_TOOLBAR_STYLE	"toolbar_style"
 
 /* =========================================================== */
 
@@ -150,17 +154,17 @@ gnc_get_toolbar_style(void)
   GtkToolbarStyle tbstyle = GTK_TOOLBAR_BOTH;
   char *style_string;
 
-  style_string = gnc_lookup_multichoice_option("General",
-                                               "Toolbar Buttons",
-                                               "icons_and_text");
+  style_string = gnc_gconf_get_string(GCONF_GENERAL,
+				      KEY_TOOLBAR_STYLE, NULL);
+  if (!style_string || strcmp(style_string, "system") == 0) {
+    if (style_string)
+      g_free(style_string);
+    style_string = gnc_gconf_get_string(DESKTOP_GNOME_INTERFACE,
+					KEY_TOOLBAR_STYLE, NULL);
+  }
 
-  if (safe_strcmp(style_string, "icons_and_text") == 0)
-    tbstyle = GTK_TOOLBAR_BOTH;
-  else if (safe_strcmp(style_string, "icons_only") == 0)
-    tbstyle = GTK_TOOLBAR_ICONS;
-  else if (safe_strcmp(style_string, "text_only") == 0)
-    tbstyle = GTK_TOOLBAR_TEXT;
-
+  tbstyle = gnc_enum_from_nick(GTK_TYPE_TOOLBAR_STYLE, style_string,
+			       GTK_TOOLBAR_BOTH);
   if (style_string != NULL)
     free(style_string);
 
@@ -198,7 +202,7 @@ gnc_set_label_color(GtkWidget *label, gnc_numeric value)
   GdkColormap *cm;
   GtkStyle *style;
 
-  if (!gnc_color_deficits())
+  if (!gnc_gconf_get_bool(GCONF_GENERAL, "red_for_negative", NULL))
     return;
 
   cm = gtk_widget_get_colormap(GTK_WIDGET(label));
@@ -242,7 +246,7 @@ gnc_restore_window_size(const char *section, GtkWindow *window)
   g_return_if_fail(section != NULL);
   g_return_if_fail(window != NULL);
 
-  if (!gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE))
+  if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
     return;
   
   coord_list = gnc_gconf_get_list(section, WINDOW_POSITION,
@@ -288,7 +292,7 @@ gnc_save_window_size(const char *section, GtkWindow *window)
   if (GTK_OBJECT_FLAGS(window) & GTK_IN_DESTRUCTION)
     return;
 
-  if (!gnc_lookup_boolean_option("_+Advanced", "Save Window Geometry", FALSE))
+  if (!gnc_gconf_get_bool(GCONF_GENERAL, KEY_SAVE_GEOMETRY, NULL))
     return;
 
   gtk_window_get_size(GTK_WINDOW(window), &coords[0], &coords[1]);

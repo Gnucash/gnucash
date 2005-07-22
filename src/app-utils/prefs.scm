@@ -183,45 +183,6 @@
   "e" (N_ "The default date format used for fancy printed dates") #f))
 
 
-;;; Register options
-
-(gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "Register") (N_ "Default Register Style")
-  "a" (N_ "Default style for register windows")
-  'ledger
-  (list (list->vector
-         (list 'ledger
-               (N_ "Basic Ledger")
-               (N_ "Show transactions on one or two lines")))
-        (list->vector
-         (list 'auto_ledger
-               (N_ "Auto-Split Ledger")
-               (N_ "Show transactions on one or two lines \
-and expand the current transaction")))
-        (list->vector
-         (list 'journal
-               (N_ "Transaction Journal")
-               (N_ "Show expanded transactions with all splits"))))))
-
-(gnc:register-configuration-option     
- (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Double Line Mode")
-  "aa" (N_ "Show two lines of information for each transaction") #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "'Enter' moves to blank transaction")
-  "g" (N_ "If selected, move to the blank transaction after the user presses \
-'Enter'. Otherwise, move down one row.") #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Register") (N_ "Confirm before changing reconciled")
-  "h" (N_ "If selected, use a dialog to confirm a change to a reconciled \
-transaction.") #t))
-
-
 ;;; Summarybar Options
 
 (gnc:register-configuration-option
@@ -287,129 +248,14 @@ to enter a credit card payment")
   "a" (N_ "Allow modification of less commonly used settings.") #f))
 
 (gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "General") (N_ "Toolbar Buttons")
-  "b" (N_ "Choose whether to display icons, text, or both for toolbar buttons")
-  'icons_and_text
-  (list (list->vector
-         (list 'icons_and_text
-               (N_ "Icons and Text")
-               (N_ "Show both icons and text")))
-        (list->vector
-         (list 'icons_only
-               (N_ "Icons only")
-               (N_ "Show icons only")))
-        (list->vector
-         (list 'text_only
-               (N_ "Text only")
-               (N_ "Show text only"))))))
-
-(gnc:register-configuration-option
- (gnc:make-radiobutton-option
-  (N_ "Accounts") (N_ "Account Separator")
-  "c" (N_ "The character used to separate fully-qualified account names")
-  'colon
-  (list (list->vector
-         (list 'colon
-               (N_ ": (Colon)")
-               (N_ "Income:Salary:Taxable")))
-        (list->vector
-         (list 'slash
-               (N_ "/ (Slash)")
-               (N_ "Income/Salary/Taxable")))
-        (list->vector
-         (list 'backslash
-               (N_ "\\ (Backslash)")
-               (N_ "Income\\Salary\\Taxable")))
-        (list->vector
-         (list 'dash
-               (N_ "- (Dash)")
-               (N_ "Income-Salary-Taxable")))
-        (list->vector
-         (list 'period
-               (N_ ". (Period)")
-               (N_ "Income.Salary.Taxable"))))))
-
-(gnc:register-configuration-option
- (gnc:make-multichoice-option
-  (N_ "Accounts") (N_ "Reversed-balance account types")
-  "d" (N_ "The types of accounts for which balances are sign-reversed")
- 'credit
-  (list (list->vector
-         (list 'income-expense
-               (N_ "Income & Expense")
-               (N_ "Reverse Income and Expense Accounts")))
-        (list->vector
-         (list 'credit
-               (N_ "Credit Accounts")
-               (N_ "Reverse Credit Card, Payable, Liability, Equity, and Income \
-Accounts")))
-        (list->vector
-         (list 'none
-               (N_ "None")
-               (N_ "Don't reverse any accounts"))))))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "Accounts") (N_ "Use accounting labels")
-  "e" (N_ "Only use 'debit' and 'credit' instead of informal synonyms") #f))
-
-(gnc:register-configuration-option
  (gnc:make-simple-boolean-option
   (N_ "General") (N_ "Display \"Tip of the Day\"")
   "f" (N_ "Display hints for using GnuCash at startup") #t))
 
 (gnc:register-configuration-option
  (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Display negative amounts in red")
-  "g" (N_ "Display negative amounts in red") #t))
-
-; this option also changes the next option so that its
-; selectability matches the state of this option.
-(gnc:register-configuration-option
- (gnc:make-complex-boolean-option
-  (N_ "General") (N_ "Automatic Decimal Point")
-  "h" 
-  (N_ "Automatically insert a decimal point into values that are entered \
-without one.") 
-  #f #f
-  (lambda (x) (gnc:set-option-selectable-by-name "General"
-                                                 "Auto Decimal Places"
-                                                 x))))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "General") (N_ "Auto Decimal Places")
-  "i" (N_ "How many automatic decimal places will be filled in.")
-    ;; current range is 1-8 with default from the locale
-    (gnc:locale-decimal-places) ;; default
-    1.0 ;; lower bound
-    8.0 ;; upper bound
-    0.0 ;; number of decimals used for this range calculation
-    1.0 ;; step size
-  ))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
   (N_ "General") (N_ "No account list setup on new file")
   "j" (N_ "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu") #f))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Use file compression")
-  "k" (N_ "Compress the data file.")
-  #f))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "General") (N_ "Days to retain log files")
-  "k" (N_ "Delete old log/backup files after this many days (0 = never).")
-    30.0 ;; default
-    0.0 ;; lower bound
-    99999.0 ;; upper bound
-    0.0 ;; number of decimals used for this range calculation
-    1.0 ;; step size
-  ))
 
 ;; QIF Import options. 
 
@@ -507,33 +353,6 @@ without one.")
 
 
 ;;; Advanced Options
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Save Window Geometry")
-  "a" (N_ "Save window sizes and positions.") #t))
-
-(gnc:register-configuration-option     
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Auto-Raise Lists")
-  "e" (N_ "Automatically raise the list of accounts or actions during input.")
-  #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "_+Advanced") (N_ "Show All Transactions")
-  "f" (N_ "By default, show every transaction in an account.") #t))
-
-(gnc:register-configuration-option
- (gnc:make-number-range-option
-  (N_ "_+Advanced") (N_ "Number of Rows")
-  "g" (N_ "Default number of register rows to display.")
-   20.0 ;; default
-    1.0 ;; lower bound
-  200.0 ;; upper bound
-    0.0 ;; number of decimals
-    1.0 ;; step size
-  ))
 
 (gnc:register-configuration-option
  (gnc:make-number-range-option

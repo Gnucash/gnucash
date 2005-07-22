@@ -117,5 +117,20 @@
       </locale>
     </schema>
 
+
+    <schema>
+      <key>/schemas/apps/gnucash/dialogs/new_hierarchy/show_on_new_file</key>
+      <applyto>/apps/gnucash/dialogs/new_hierarchy/show_on_new_file</applyto>
+      <owner>gnucash</owner>
+      <type>bool</type>
+      <default>TRUE</default>
+      <locale name="C">
+        <short>Show the new hierarchy dialog whenever the "New File" menu item is chosen.</short>
+        <long>
+	 Show the new hierarchy dialog whenever the "New File" menu item is chosen.
+	</long>
+      </locale>
+    </schema>
+
   </schemalist>
 </gconfschemafile>

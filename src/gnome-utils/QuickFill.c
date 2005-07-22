@@ -102,10 +102,11 @@ gnc_quickfill_new (void)
 /********************************************************************\
 \********************************************************************/
 
-static void
+static gboolean
 destroy_helper (gpointer key, gpointer value, gpointer data)
 {
   gnc_quickfill_destroy (value);
+  return TRUE;
 }
 
 void
@@ -114,7 +115,7 @@ gnc_quickfill_destroy (QuickFill *qf)
   if (qf == NULL)
     return;
 
-  g_hash_table_foreach (qf->matches, destroy_helper, NULL);
+  g_hash_table_foreach (qf->matches, (GHFunc)destroy_helper, NULL);
   g_hash_table_destroy (qf->matches);
   qf->matches = NULL;
 
@@ -124,6 +125,20 @@ gnc_quickfill_destroy (QuickFill *qf)
   qf->len = 0;
 
   g_free (qf);
+}
+
+void
+gnc_quickfill_purge (QuickFill *qf)
+{
+  if (qf == NULL)
+    return;
+
+  g_hash_table_foreach_remove (qf->matches, destroy_helper, NULL);
+
+  if (qf->text)
+    g_cache_remove (qf_string_cache, qf->text);
+  qf->text = NULL;
+  qf->len = 0;
 }
 
 /********************************************************************\

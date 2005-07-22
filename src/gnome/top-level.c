@@ -32,7 +32,6 @@
 #include <X11/Xlib.h>
 
 #include "TransLog.h"
-#include "backend/gnc-backend-api.h"
 #include "combocell.h"
 #include "dialog-account.h"
 #include "dialog-commodity.h"
@@ -44,6 +43,7 @@
 #include "gnc-component-manager.h"
 #include "gnc-date.h"
 #include "gnc-engine-util.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-file.h"
 #include "gnc-hooks.h"
 #include "gnc-main-window.h"
@@ -72,7 +72,6 @@
 #include "qofbook.h"
 #include "qofsession.h"
 #include "messages.h"
-#include "split-register.h"
 #include "top-level.h"
 #include "window-report.h"
 
@@ -80,19 +79,6 @@
 /** PROTOTYPES ******************************************************/
 static void gnc_configure_date_format_cb(gpointer);
 static void gnc_configure_date_format(void);
-static void gnc_configure_account_separator_cb(gpointer);
-static void gnc_configure_auto_raise_cb(gpointer);
-static void gnc_configure_auto_raise(void);
-static void gnc_configure_negative_color_cb(gpointer);
-static void gnc_configure_negative_color(void);
-static void gnc_configure_auto_decimal_cb(gpointer);
-static void gnc_configure_auto_decimal(void);
-static void gnc_configure_auto_decimal_places_cb(gpointer);
-static void gnc_configure_auto_decimal_places(void);
-static void gnc_configure_file_be_retention_days_cb(gpointer);
-static void gnc_configure_file_be_retention_days(void);
-static void gnc_configure_file_be_compression_cb(gpointer);
-static void gnc_configure_file_be_compression(void);
 
 
 /** GLOBALS *********************************************************/
@@ -105,15 +91,6 @@ static int gnome_is_initialized = FALSE;
 static int gnome_is_terminating = FALSE;
 
 static SCM date_callback_id = SCM_UNDEFINED;
-static SCM account_separator_callback_id = SCM_UNDEFINED;
-static SCM auto_raise_callback_id = SCM_UNDEFINED;
-static SCM negative_color_callback_id = SCM_UNDEFINED;
-static SCM auto_decimal_callback_id = SCM_UNDEFINED;
-static SCM auto_decimal_places_callback_id = SCM_UNDEFINED;
-static SCM log_retention_days_callback_id = SCM_UNDEFINED;
-static SCM compression_callback_id = SCM_UNDEFINED;
-static SCM register_font_callback_id = SCM_UNDEFINED;
-static SCM register_hint_font_callback_id = SCM_UNDEFINED;
 
 
 gboolean
@@ -305,51 +282,13 @@ gnc_gui_init (SCM command_line)
     /* load default HTML action handlers */ 
     // gnc_network_init();
 
+    gnc_ui_util_init();
+    gnc_gconf_general_register_any_cb((GncGconfGeneralAnyCb)gnc_gui_refresh_all, NULL);
+
     gnc_configure_date_format();
     date_callback_id =
       gnc_register_option_change_callback(gnc_configure_date_format_cb, NULL,
                                           "International", "Date Format");
-
-    account_separator_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_account_separator_cb,
-                                          NULL, "Accounts",
-                                          "Account Separator");
-
-    gnc_configure_auto_raise();
-    auto_raise_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_auto_raise_cb,
-                                          NULL, "_+Advanced",
-                                          "Auto-Raise Lists");
-
-    gnc_configure_negative_color();
-    negative_color_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_negative_color_cb,
-                                          NULL, "General",
-                                          "Display negative amounts in red");
-
-    gnc_configure_auto_decimal();
-    auto_decimal_callback_id =
-      gnc_register_option_change_callback(gnc_configure_auto_decimal_cb,
-                                          NULL, "General",
-                                          "Automatic Decimal Point");
-
-    gnc_configure_auto_decimal_places();
-    auto_decimal_places_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_auto_decimal_places_cb,
-                                          NULL, "General",
-                                          "Auto Decimal Places");
-
-    gnc_configure_file_be_retention_days();
-    log_retention_days_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_file_be_retention_days_cb,
-                                          NULL, "General",
-                                          "Days to retain log files");
-
-    gnc_configure_file_be_compression();
-    compression_callback_id = 
-      gnc_register_option_change_callback(gnc_configure_file_be_compression_cb,
-                                          NULL, "General",
-                                          "Use file compression");
 
     if (!gnucash_style_init())
       gnc_shutdown(1);
@@ -418,11 +357,6 @@ gnc_gui_destroy (void)
     return;
 
   gnc_unregister_option_change_callback_id(date_callback_id);
-  gnc_unregister_option_change_callback_id(account_separator_callback_id);
-  gnc_unregister_option_change_callback_id(auto_raise_callback_id);
-  gnc_unregister_option_change_callback_id(negative_color_callback_id);
-  gnc_unregister_option_change_callback_id(register_font_callback_id);
-  gnc_unregister_option_change_callback_id(register_hint_font_callback_id);
 
   gnc_extensions_shutdown ();
 }
@@ -550,192 +484,30 @@ gnc_configure_date_format (void)
     free(format_code);
 }
 
-/* gnc_configure_account_separator_cb
- *    Callback called when options change - sets account separator
- *    to the current value on the scheme side
- *
- * Args: Nothing
- * Returns: Nothing
+
+
+/*  Shutdown gnucash.  This function will call the Scheme side of
+ *  GnuCash to initiate an orderly shutdown, and when that has
+ *  finished it will exit the program.
  */
-static void 
-gnc_configure_account_separator_cb (gpointer data)
+void
+gnc_shutdown (int exit_status)
 {
-  gnc_gui_refresh_all ();
-}
+  /*SCM scm_shutdown = gnc_scm_lookup("gnucash bootstrap", "gnc:shutdown");*/
+  SCM scm_shutdown = scm_c_eval_string("gnc:shutdown");
 
-/* gnc_configure_auto_raise_cb
- *    Callback called when options change - sets
- *    auto-raise status of combocell class
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_raise_cb (gpointer data)
-{
-  gnc_configure_auto_raise ();
-}
-
-/* gnc_configure_auto_raise
- *    sets combocell auto raise status
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_raise (void)
-{
-  gboolean auto_pop;
-
-  auto_pop = gnc_lookup_boolean_option("_+Advanced", "Auto-Raise Lists", TRUE);
-
-  gnc_combo_cell_set_autopop (auto_pop);
-}
-
-/* gnc_configure_negative_color_cb
- *    Callback called when options change - sets
- *    negative amount color flags
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_negative_color_cb (gpointer data)
-{
-  gnc_configure_negative_color ();
-
-  gnc_gui_refresh_all ();
-}
-
-/* gnc_configure_negative_color
- *    sets negative amount color flags
- *
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_negative_color(void)
-{
-  gboolean use_red;
-
-  use_red = gnc_lookup_boolean_option("General",
-                                      "Display negative amounts in red",
-                                      TRUE);
-
-  gnc_split_register_colorize_negative (use_red);
-}
-
-
-/* gnc_configure_auto_decimal_cb
- *     Callback called when options change -
- *     sets auto decimal option.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal_cb(gpointer not_used)
-{
-  gnc_configure_auto_decimal();
-}
-
-/* gnc_configure_auto_decimal
- *     Pass the global value for the auto decimal field to the engine.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal(void)
-{
-  gboolean enabled;
-
-  enabled = gnc_lookup_boolean_option("General",
-                                      "Automatic Decimal Point",
-                                      FALSE);
-
-  gnc_set_auto_decimal_enabled(enabled);
-}
-
-/* gnc_configure_auto_decimal_places_cb
- *     Callback called when options change -
- *     sets auto decimal places option.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal_places_cb (gpointer not_used)
-{
-  gnc_configure_auto_decimal_places ();
-}
-
-/* gnc_configure_auto_decimal_places
- *     Pass the global value for the auto decimal places range to the engine.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_auto_decimal_places (void)
-{
-   gnc_set_auto_decimal_places
-     (gnc_lookup_number_option("General",
-                               "Auto Decimal Places", 2));
-}
-
-
-/* gnc_configure_file_be_retention_days_cb
- *     Callback called when options change -
- *     sets days retained for the file backend.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_file_be_retention_days_cb (gpointer not_used)
-{
-  gnc_configure_file_be_retention_days ();
-}
-
-/* gnc_configure_file_be_retention_days
- *     Pass the global value for the number of days to retain files to the file backend.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_file_be_retention_days (void)
-{
-  gnc_file_be_set_retention_days
-    (gnc_lookup_number_option("General",
-                              "Days to retain log files", 0));
-}
-
-/* gnc_configure_file_be_retention_days_cb
- *     Callback called when options change -
- *     sets days retained for the file backend.
- * 
- *  Args: Nothing
- *  Returns: Nothing
- */
-static void
-gnc_configure_file_be_compression_cb (gpointer not_used)
-{
-  gnc_configure_file_be_compression ();
-}
-
-/* gnc_configure_file_be_retention_days
- *     Pass the global value for the number of days to retain files to the file backend.
- * 
- * Args: Nothing
- * Returns: Nothing
- */
-static void
-gnc_configure_file_be_compression (void)
-{
-  gnc_file_be_set_compression
-    (gnc_lookup_boolean_option("General", "Use file compression", FALSE));
+  if(scm_procedure_p(scm_shutdown) != SCM_BOOL_F)
+  {
+    SCM scm_exit_code = scm_long2num(exit_status);    
+    scm_call_1(scm_shutdown, scm_exit_code);
+  }
+  else
+  {
+    /* Either guile is not running, or for some reason we
+       can't find gnc:shutdown. Either way, just exit. */
+    g_warning("couldn't find gnc:shutdown -- exiting anyway.");
+    exit(exit_status);
+  }
 }
 
 /****************** END OF FILE **********************/
