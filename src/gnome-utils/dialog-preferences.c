@@ -20,6 +20,40 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup GUI
+    @{ */
+/** @addtogroup Preferences Dialog
+    @{ */
+/** @file dialog-preferences.c
+    @brief Dialog for handling user preferences.
+    @author Copyright (c) 2005 David Hampton <hampton@employees.org>
+    
+    These functions are the external API available for the new user
+    preference dialog.  Preferences are now stored in GConf.  This
+    code ends up being nothing more than a pretty interface to set
+    key/value pairs in that database.  Any module may add a page (or
+    partial page) of preferences to the dialog.  These additions are
+    done by providing the name of a glade file, and a widget in that
+    file.  If a partial page is added, the widget name provided must
+    be that of a GtkTable containing four columns. If a full page is
+    added, the widget name provided to this code can be any kind of
+    widget, but for consistence it should probably be the same.
+
+    If a widget names is in the form gconf/xxx/yyy... and it is a type
+    of widget this code knows how to handle, then the callback signals
+    will be automatically wired up for the widget.  The only fields
+    that is required to be set in the glade file is the widget name.
+    This code currently know about radio buttons, check buttons, spin
+    boxes, an combo boxes.  (Combo boxes should not be used for less
+    than six choices.  Use a radio button group instead.)
+
+    The argument *is* a glade file, so if your code has special
+    requirements (e.g. make one widget insensitive until another is
+    selected) feel free to go ahead and add your own callbacks to the
+    glade file.  This code will connect any callbacks that exist in
+    the glade file.
+*/
+
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -35,6 +69,8 @@
 #define DIALOG_PREFERENCES_CM_CLASS	"dialog-newpreferences"
 #define GCONF_SECTION			"dialogs/preferences"
 #define PREFIX_LEN			sizeof("gconf/") - 1
+#define WIDGET_HASH			"widget_hash"
+#define NOTEBOOK			"notebook"
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static short module = MOD_PREFS;
@@ -54,16 +90,58 @@ typedef struct addition_t {
 
 GSList *add_ins = NULL;
 
+
+/** This function compares two add-ins to see if they specify the same
+ *  tab name.
+ *
+ *  @internal
+ *
+ *  @param a A pointer to the first add-in.
+ *  
+ *  @param b A pointer to the second add-in.
+ *  
+ *  @return Zero if the tab name is the same in both add-ins. Non-zero otherwise.
+ */
+static gint
+gnc_prefs_compare_addins (addition *a,
+			  addition *b)
+{
+  return strcmp(a->tabname, b->tabname);
+}
+
+
+/** This is the common function that adds any set of preferences to
+ *  the preferences dialog.  It allocates a data structure to remember
+ *  the passed in data and queues it for later when the dialog is
+ *  actually built.  This code does check to insure there arent any
+ *  conflicts, like multiple additions of the same tab name when the
+ *  two pages being added aren't compatible.
+ *
+ *  @internal
+ *
+ *  @param filename The name of a glade file.
+ *  
+ *  @param widgetname The name of the widget to extract from the glade file.
+ *  
+ *  @param tabname The name this page of preferences should have in
+ *  the dialog notebook.
+ *
+ *  @param full_page Is this a full page of preferences or a partial page.
+ */
 static void
 gnc_preferences_add_page_internal (const gchar *filename,
 				   const gchar *widgetname,
 				   const gchar *tabname,
 				   gboolean full_page)
 {
-  addition *add_in;
+  addition *add_in, *preexisting;
+  gboolean error = FALSE;
+  GSList *ptr;
 
   ENTER("file %s, widget %s, tab %s full page %d",
 	filename, widgetname, tabname, full_page);
+
+
   add_in = g_malloc(sizeof(addition));
   if (add_in == NULL) {
     g_critical("Unable to allocate memory.\n");
@@ -80,14 +158,50 @@ gnc_preferences_add_page_internal (const gchar *filename,
     g_free(add_in->filename);
     g_free(add_in->widgetname);
     g_free(add_in->tabname);
+    g_free(add_in);
     LEAVE("no memory");
     return;
   }
-  add_ins = g_slist_append(add_ins, add_in);
+
+  ptr = g_slist_find_custom(add_ins, add_in, (GCompareFunc)gnc_prefs_compare_addins);
+  if (ptr) {
+    /* problem? */
+    preexisting = ptr->data;
+    
+    if (preexisting->full_page) {
+      g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/full)",
+		add_in->tabname, add_in->filename, add_in->widgetname,
+		add_in->full_page ? "full" : "partial",
+		preexisting->tabname, preexisting->filename, preexisting->widgetname);
+      error = TRUE;
+    } else if (add_in->full_page) {
+      g_warning("New tab %s(%s/%s/%s) conflicts with existing tab %s(%s/%s/partial)",
+		add_in->tabname, add_in->filename, add_in->widgetname,
+		add_in->full_page ? "full" : "partial",
+		preexisting->tabname, preexisting->filename, preexisting->widgetname);
+      error = TRUE;
+    }
+  }
+
+  if (error) {
+    g_free(add_in->filename);
+    g_free(add_in->widgetname);
+    g_free(add_in->tabname);
+    g_free(add_in);
+    return;
+  } else {
+    add_ins = g_slist_append(add_ins, add_in);
+  }
   LEAVE("");
 }
 
 
+/*  This function adds a full page of preferences to the preferences
+ *  dialog.  When the dialog is created, the specified widget will be
+ *  pulled from the specified glade file and added to the preferences
+ *  dialog with the specified tab name.  The tab name may not be
+ *  duplicated.  For example, the Business code might have a full page
+ *  of its own preferences. */
 void
 gnc_preferences_add_page (const gchar *filename,
 			  const gchar *widgetname,
@@ -96,6 +210,13 @@ gnc_preferences_add_page (const gchar *filename,
   gnc_preferences_add_page_internal(filename, widgetname, tabname, TRUE);
 }
 
+
+/*  This function adds a partial page of preferences to the
+ *  preferences dialog.  When the dialog is created, the specified
+ *  widget will be pulled from the specified glade file and added to
+ *  the preferences dialog with the specified tab name.  The tab name
+ *  may be duplicated.  For example, the HBCI preferences may share a
+ *  "Data Import" page with QIF and other methods. */
 void
 gnc_preferences_add_to_page (const gchar *filename,
 			     const gchar *widgetname,
@@ -105,6 +226,41 @@ gnc_preferences_add_to_page (const gchar *filename,
 }
 
 /****************************************/
+
+/** This function builds a hash table of "interesting" widgets,
+ *  i.e. widgets whose name starts with "gconf/".  This table is
+ *  needed to perform name->widget lookups in the gconf callback
+ *  functions.  Normally glade could be used for this function, but
+ *  since the widgets come from multiple glade files that won;t work
+ *  in this dialog.
+ *
+ *  @internal
+ *
+ *  @param xml A pointer to glade xml file currently being added to
+ *  the dialog.
+ *  
+ *  @param dialog A pointer to the dialog.  The hash table is stored
+ *  as a pointer off the dialog so that it can be found in the
+ *  callback from gconf. */
+static void
+gnc_prefs_build_widget_table (GladeXML *xml,
+			      GtkWidget *dialog)
+{
+  GHashTable *table;
+  GList *interesting, *runner;
+  const gchar *name;
+  GtkWidget *widget;
+
+  table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
+  interesting = glade_xml_get_widget_prefix(xml, "gconf");
+  for (runner = interesting; runner; runner = g_list_next(runner)) {
+    widget = runner->data;
+    name = gtk_widget_get_name(widget);
+    g_hash_table_insert(table, (gchar *)name, widget);
+  }
+  g_list_free(interesting);
+}
+
 
 struct find_data {
   GtkNotebook *notebook;
@@ -124,6 +280,21 @@ struct page_data {
   GList *widgets;
 };
 
+
+/** This function is used while building the preferences dialog.  It
+ *  searches through the existing pages in the dialog to determin
+ *  where a new page should go alphabetically.  If a matching page
+ *  name is found, a pointer to that page will be returned.  This
+ *  function can also be called and asked to perform an exact match
+ *  instead of just determining where a page would go.
+ *
+ *  @internal
+ *
+ *  @param child A pointer to one page from the GtkNotebook contained
+ *  in the preferences dialog.
+ *  
+ *  @param data A pointer to a data structure passed in by the caller.
+ */
 static void
 gnc_prefs_find_page (GtkWidget *child,
 		     gpointer data)
@@ -164,8 +335,21 @@ gnc_prefs_find_page (GtkWidget *child,
   LEAVE("insert at offset %d", index);
 }
 
+
+/** This function moves a GtkWidget from one GtkTable to another,
+ *  preserving its attachment data, etc.  It is called when adding one
+ *  partial preference page to another.
+ *
+ *  @internal
+ *
+ *  @param widget A pointer to the widget to move.
+ *  
+ *  @param data A pointer to a data structure passed in by the caller.
+ *  This data structure contains pointers to the old and new tables,
+ *  plus the row offset into the new table.
+ */
 static void
-gnc_prefs_copy_table_entry (GtkWidget *child,
+gnc_prefs_move_table_entry (GtkWidget *child,
 			    gpointer data)
 {
   struct copy_data *copydata = data;
@@ -193,24 +377,33 @@ gnc_prefs_copy_table_entry (GtkWidget *child,
   LEAVE(" ");
 }
 
+
+/** At dialog creation time, this function will be called once per
+ *  adds-in.  It performs the work of addding the page into the main
+ *  dialog.  It handles both the case of a full page being added to
+ *  the dialog, and a partial page being added.
+ *
+ *  @internal
+ *
+ *  @param data A pointer to an addition data structure.
+ *  
+ *  @param user_data A pointer to the dialog.
+ */
 static void
 gnc_preferences_build_page (gpointer data,
 			    gpointer user_data)
 {
   GladeXML *xml;
-  GtkWidget *existing_content, *new_content, *label;
+  GtkWidget *dialog, *existing_content, *new_content, *label;
   GtkNotebook *notebook;
-  struct page_data *page_data;
   addition *add_in;
   struct find_data location;
   struct copy_data copydata;
   gint rows, cols;
-  GList *interesting;
 
-  ENTER("add_in %p, notebook %p", data, user_data);
+  ENTER("add_in %p, dialog %p", data, user_data);
   add_in = (addition *)data;
-  page_data = (struct page_data *) user_data;
-  notebook = page_data->notebook;
+  dialog = user_data;
 
   DEBUG("Opening %s to get %s:", add_in->filename, add_in->widgetname);
   xml = gnc_glade_xml_new(add_in->filename, add_in->widgetname);
@@ -218,10 +411,10 @@ gnc_preferences_build_page (gpointer data,
   DEBUG("done");
 
   /* Add to the list of interesting widgets */
-  interesting = glade_xml_get_widget_prefix(xml, "gconf");
-  page_data->widgets = g_list_concat(page_data->widgets, interesting);
+  gnc_prefs_build_widget_table(xml, dialog);
 
   /* Prepare for recursion */
+  notebook = g_object_get_data(G_OBJECT(dialog), NOTEBOOK);
   location.notebook = notebook;
   location.index = -1;
   location.tabname = add_in->tabname;
@@ -271,7 +464,7 @@ gnc_preferences_build_page (gpointer data,
   copydata.table_from = GTK_TABLE(new_content);
   copydata.table_to = GTK_TABLE(existing_content);
   copydata.row_offset = rows;
-  gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_copy_table_entry,
+  gtk_container_foreach(GTK_CONTAINER(new_content), gnc_prefs_move_table_entry,
 			&copydata);
 
   gtk_object_sink(GTK_OBJECT(new_content));
@@ -283,6 +476,18 @@ gnc_preferences_build_page (gpointer data,
 /* Dynamically added Callbacks */
 /*******************************/
 
+
+/** The user clicked on a radio button.  Update gconf.  Radio button
+ *  group choices are stored as a string.  The last component of the
+ *  widget name is the string that will be stored.  I.E. The widet name
+ *  must be in this form "gconf/<some-key-name>/value".
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the radio button that was clicked.
+ *  
+ *  @param user_data Unused.
+ */
 static void
 gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
 				gpointer user_data)
@@ -306,6 +511,14 @@ gnc_prefs_radio_button_user_cb (GtkRadioButton *button,
 }
 
 
+/** A radio button group choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the radio button that should be shown
+ *  as selected.
+ */
 static void
 gnc_prefs_radio_button_gconf_cb (GtkRadioButton *button)
 {
@@ -321,6 +534,15 @@ gnc_prefs_radio_button_gconf_cb (GtkRadioButton *button)
 }
 
 
+/** Connect a radio button widget to the user callback function.  Set
+ *  the starting state of the radio button group from its value in
+ *  gconf.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the radio button that should be
+ *  connected.
+ */
 static void
 gnc_prefs_connect_radio_button (GtkRadioButton *button)
 {
@@ -358,6 +580,16 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
 
 /**********/
 
+
+/** The user clicked on a check button.  Update gconf.  Check button
+ *  choices are stored as a boolean
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the check button that was clicked.
+ *  
+ *  @param user_data Unused.
+ */
 static void
 gnc_prefs_check_button_user_cb (GtkCheckButton *button,
 				gpointer user_data)
@@ -373,6 +605,15 @@ gnc_prefs_check_button_user_cb (GtkCheckButton *button,
 }
 
 
+/** A check button choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the check button that changed.
+ *
+ *  @param active The new state of the check button.
+ */
 static void
 gnc_prefs_check_button_gconf_cb (GtkCheckButton *button,
 				 gboolean active)
@@ -389,6 +630,14 @@ gnc_prefs_check_button_gconf_cb (GtkCheckButton *button,
 }
 
 
+/** Connect a check button widget to the user callback function.  Set
+ *  the starting state of the button from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the check button that should be
+ *  connected.
+ */
 static void
 gnc_prefs_connect_check_button (GtkCheckButton *button)
 {
@@ -405,6 +654,16 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
 
 /**********/
 
+
+/** The user updated a spin button.  Update gconf.  Spin button
+ *  choices are stored as a float.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the spin button that was clicked.
+ *  
+ *  @param user_data Unused.
+ */
 static void
 gnc_prefs_spin_button_user_cb (GtkSpinButton *spin,
 			       gpointer user_data)
@@ -420,6 +679,15 @@ gnc_prefs_spin_button_user_cb (GtkSpinButton *spin,
 }
 
 
+/** A spin button choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the spin button that changed.
+ *
+ *  @param value The new value of the spin button.
+ */
 static void
 gnc_prefs_spin_button_gconf_cb (GtkSpinButton *spin,
 				gdouble value)
@@ -436,6 +704,14 @@ gnc_prefs_spin_button_gconf_cb (GtkSpinButton *spin,
 }
 
 
+/** Connect a spin button widget to the user callback function.  Set
+ *  the starting state of the button from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param button A pointer to the spin button that should be
+ *  connected.
+ */
 static void
 gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 {
@@ -454,6 +730,16 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 
 /**********/
 
+
+/** The user changed a combo box.  Update gconf.  Combo box
+ *  choices are stored as an int.
+ *
+ *  @internal
+ *
+ *  @param box A pointer to the combo box that was changed.
+ *  
+ *  @param user_data Unused.
+ */
 static void
 gnc_prefs_combo_box_user_cb (GtkComboBox *box,
 			     gpointer user_data)
@@ -469,6 +755,15 @@ gnc_prefs_combo_box_user_cb (GtkComboBox *box,
 }
 
 
+/** A combo box choice was updated in gconf.  Update the user
+ *  visible dialog.
+ *
+ *  @internal
+ *
+ *  @param box A pointer to the combo box that changed.
+ *
+ *  @param value The new value of the combo box.
+ */
 static void
 gnc_prefs_combo_box_gconf_cb (GtkComboBox *box,
 			      gint value)
@@ -485,6 +780,13 @@ gnc_prefs_combo_box_gconf_cb (GtkComboBox *box,
 }
 
 
+/** Connect a combo box widget to the user callback function.  Set
+ *  the starting state of the box from its value in gconf.
+ *
+ *  @internal
+ *
+ *  @param box A pointer to the combo box that should be connected.
+ */
 static void
 gnc_prefs_connect_combo_box (GtkComboBox *box)
 {
@@ -505,23 +807,33 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 /*    Callbacks     */
 /********************/
 
+/** Handle a user click on one of the buttons at the bottom of the
+ *  preference dialog.  Also handles delete_window events, which have
+ *  conveniently converted to a response by GtkDialog.
+ *
+ *  @internal
+ *
+ *  @param dialog A pointer to the preferences dialog.
+ *
+ *  @param response Indicates which button was pressed by the user.
+ *  The only expected values are HELP, CLOSE, and DELETE_EVENT.
+ *
+ *  @param unused
+ */
 void
 gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 {
   switch (response) {
    case GTK_RESPONSE_HELP:
      gnc_gnome_help(HF_CUSTOM, HL_GLOBPREFS);
-    break;
+     break;
 
-   case GTK_RESPONSE_CLOSE:
+   default:
      gnc_save_window_size(GCONF_SECTION, GTK_WINDOW(dialog));
      gnc_unregister_gui_component_by_data(DIALOG_PREFERENCES_CM_CLASS,
 					  dialog);
      gnc_gconf_remove_notification(G_OBJECT(dialog), NULL);
      gtk_widget_destroy(GTK_WIDGET(dialog));
-     break;
-
-   default:
      break;
   }
 }
@@ -530,51 +842,82 @@ gnc_preferences_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 /*    Creation      */
 /********************/
 
+
+/** Connect one dialog widget to the appropriate callback function for
+ *  its type.
+ *
+ *  @internal
+ *
+ *  @param name The name of the widget.
+ *
+ *  @param widget A pointer to the widget.
+ *
+ *  @param dialog A pointer to the dialog.
+ */
+static void
+gnc_prefs_connect_one (const gchar *name,
+		       GtkWidget *widget,
+		       gpointer user_data)
+{
+  if (GTK_IS_RADIO_BUTTON(widget)) {
+    DEBUG("  %s - radio button", name);
+    gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
+  } else if (GTK_IS_CHECK_BUTTON(widget)) {
+    DEBUG("  %s - check button", name);
+    gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
+  } else if (GTK_IS_SPIN_BUTTON(widget)) {
+    DEBUG("  %s - spin button", name);
+    gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
+  } else if (GTK_IS_COMBO_BOX(widget)) {
+    DEBUG("  %s - combo box", name);
+    gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
+  } else {
+    DEBUG("  %s - unsupported %s", name,
+	  G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
+  }
+}
+
+
+/** Create the preferences dialog.  This function first reads the
+ *  preferences.glade file to get obtain the dialog and set of common
+ *  preferences.  It then runs the list of add-ins, calling a helper
+ *  function to add each full/partial page to this dialog, Finally it
+ *  runs the list of "interesting: widgets that it has built,
+ *  connecting this widgets up to callback functions.
+ *
+ *  @internal
+ *
+ *  @return A pointer to the newly created dialog.
+ */
 static GtkWidget *
 gnc_preferences_dialog_create(void)
 {
   GladeXML *xml;
-  GtkWidget *dialog, *notebook, *widget;
-  struct page_data page_data;
-  GList *interesting, *runner;
+  GtkWidget *dialog, *notebook;
+  GHashTable *table;
 
   ENTER("");
   DEBUG("Opening preferences.glade:");
   xml = gnc_glade_xml_new("preferences.glade", "New Gnucash Preferences");
   dialog = glade_xml_get_widget(xml, "New Gnucash Preferences");
-  g_object_set_data(G_OBJECT(dialog), "xml", xml);
   DEBUG("autoconnect");
   glade_xml_signal_autoconnect_full(xml, gnc_glade_autoconnect_full_func,
 				    dialog);
   DEBUG("done");
 
   notebook = glade_xml_get_widget(xml, "notebook1");
-  interesting = glade_xml_get_widget_prefix(xml, "gconf");
+  table = g_hash_table_new(g_str_hash, g_str_equal);
+  g_object_set_data(G_OBJECT(dialog), NOTEBOOK, notebook);
+  g_object_set_data_full(G_OBJECT(dialog), WIDGET_HASH,
+			 table, (GDestroyNotify)g_hash_table_destroy);
 
-  page_data.notebook = GTK_NOTEBOOK(notebook);
-  page_data.widgets = interesting;
-  g_slist_foreach(add_ins, gnc_preferences_build_page, &page_data);
+  /* Add to the list of interesting widgets */
+  gnc_prefs_build_widget_table(xml, dialog);
+
+  g_slist_foreach(add_ins, gnc_preferences_build_page, dialog);
 
   DEBUG("We have the following interesting widgets:");
-  for (runner = page_data.widgets; runner; runner = g_list_next(runner)) {
-    widget = GTK_WIDGET(runner->data);
-    if (GTK_IS_RADIO_BUTTON(widget)) {
-      DEBUG("  %s - radio button", gtk_widget_get_name(widget));
-      gnc_prefs_connect_radio_button(GTK_RADIO_BUTTON(widget));
-    } else if (GTK_IS_CHECK_BUTTON(widget)) {
-      DEBUG("  %s - check button", gtk_widget_get_name(widget));
-      gnc_prefs_connect_check_button(GTK_CHECK_BUTTON(widget));
-    } else if (GTK_IS_SPIN_BUTTON(widget)) {
-      DEBUG("  %s - spin button", gtk_widget_get_name(widget));
-      gnc_prefs_connect_spin_button(GTK_SPIN_BUTTON(widget));
-    } else if (GTK_IS_COMBO_BOX(widget)) {
-      DEBUG("  %s - combo box", gtk_widget_get_name(widget));
-      gnc_prefs_connect_combo_box(GTK_COMBO_BOX(widget));
-    } else {
-      DEBUG("  %s - unsupported %s", gtk_widget_get_name(widget),
-	    G_OBJECT_TYPE_NAME(G_OBJECT(widget)));
-    }
-  }
+  g_hash_table_foreach(table, (GHFunc)gnc_prefs_connect_one, dialog);
   DEBUG("Done with interesting widgets.");
 
   LEAVE("dialog %p", dialog);
@@ -582,6 +925,54 @@ gnc_preferences_dialog_create(void)
 }
 
 
+/*************************************/
+/*    GConf common callback code     */
+/*************************************/
+
+
+/** Find a partial match from gconf key to widget name.  This function
+ *  is needed if the user manually updates the value of a radio button
+ *  setting (a string) and types in an illegal value.  This function
+ *  is called on all the "interesting" widgets in the dialog until
+ *  there is a match.  This matched widget represents a legal value
+ *  for the radio button.  The calling function can then force this
+ *  radio button to be "on", thus insuring that Gnucash always has a
+ *  legal value for the radio group.
+ *
+ *  @internal
+ *
+ *  @param key The name of a widget.
+ *
+ *  @param widget A pointer to the widget.
+ *
+ *  @param user_data The name of the gconf key that was changed.
+ *
+ *  @return Zero if the gconf key is a sublse of this button's
+ *  name. Non-zero otherwise.
+ */
+static gboolean
+gnc_prefs_nearest_match (gpointer key,
+			 gpointer value,
+			 gpointer user_data)
+{
+  const gchar *widget_name = key;
+  const gchar *gconf_name = user_data;
+
+  return (strncmp(widget_name, gconf_name, strlen(gconf_name)) == 0);
+}
+
+
+/** Create the preferences dialog.  This function first reads the
+ *  preferences.glade file to get obtain the dialog and set of common
+ *  preferences.  It then runs the list of add-ins, calling a helper
+ *  function to add each full/partial page to this dialog, Finally it
+ *  runs the list of "interesting: widgets that it has built,
+ *  connecting this widgets up to callback functions.
+ *
+ *  @internal
+ *
+ *  @return A pointer to the newly created dialog.
+ */
 static void
 gnc_preferences_gconf_changed (GConfClient *client,
 			       guint cnxn_id,
@@ -592,8 +983,7 @@ gnc_preferences_gconf_changed (GConfClient *client,
   const gchar *key, *string_value;
   gchar  **parts, *name, *group_name = NULL;
   GtkWidget *widget;
-  GList *possibilities;
-  GladeXML *xml;
+  GHashTable *table;
 
   ENTER("key %s, value %p", entry->key, entry->value);
   key = gconf_entry_get_key(entry);
@@ -609,13 +999,16 @@ gnc_preferences_gconf_changed (GConfClient *client,
   g_strfreev(parts);
   DEBUG("proposed widget name %s", name);
 
-  widget = gnc_glade_lookup_widget(dialog, name);
+  /* Can't just do a glade lookup here because not all of the widgets
+   * came from the same xml file. That's why the extra hash table. */
+  table = g_object_get_data(G_OBJECT(dialog), WIDGET_HASH);
+  widget = g_hash_table_lookup(table, name);
   if ((widget == NULL) && (entry->value->type == GCONF_VALUE_STRING)) {
     string_value = gconf_value_get_string(entry->value);
     group_name = name;
     name = g_strjoin("/", group_name, string_value, NULL);
     DEBUG("proposed widget name %s", name);
-    widget = gnc_glade_lookup_widget(dialog, name);
+    widget = g_hash_table_lookup(table, name);
     if (widget == NULL) {
       /* Mutter, mutter. Someone must have typed a bad string into
        * gconf.  Force the value to a legal string.  Do this by
@@ -623,13 +1016,15 @@ gnc_preferences_gconf_changed (GConfClient *client,
        * ensure synchronization of Gnucash, Gconf, and the Prefs
        * Dialog. */
       DEBUG("bad value");
-      xml = g_object_get_data(G_OBJECT(dialog), "xml");
-      possibilities = glade_xml_get_widget_prefix(xml, group_name);
-      if (possibilities) {
-	DEBUG("forcing %s", gtk_widget_get_name(possibilities->data));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(possibilities->data), TRUE);
-	g_list_free(possibilities);
+      widget = g_hash_table_find(table, gnc_prefs_nearest_match, group_name);
+      if (widget) {
+	DEBUG("forcing %s", gtk_widget_get_name(widget));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
       }
+      g_free(group_name);
+      g_free(name);
+      LEAVE("no exact match");
+      return;
     }
     g_free(group_name);
   }
@@ -660,6 +1055,20 @@ gnc_preferences_gconf_changed (GConfClient *client,
 }
 
 
+/** Raise the preferences dialog to the top of the window stack.  This
+ *  function is called if the user attempts to create a second
+ *  preferences dialog.
+ *
+ *  @internal
+ *
+ *  @param class Unused.
+ *
+ *  @param component_id Unused.
+ *
+ *  @param user_data A pointer to the preferences dialog.
+ *
+ *  @param iter_data Unused.
+ */
 static gboolean
 show_handler (const char *class, gint component_id,
 	      gpointer user_data, gpointer iter_data)
@@ -674,6 +1083,12 @@ show_handler (const char *class, gint component_id,
 }
 
 
+/** Close the preferences dialog.
+ *
+ *  @internal
+ *
+ *  @param user_data A pointer to the preferences dialog.
+ */
 static void
 close_handler (gpointer user_data)
 {
@@ -687,6 +1102,10 @@ close_handler (gpointer user_data)
 }
 
 
+/*  This function creates the preferences dialog and presents it to
+ *  the user.  The preferences dialog is a singletone, so if a
+ *  preferences dialog already exists it will be raised to the top of
+ *  the window stack instead of creating a new dialog. */
 void
 gnc_preferences_dialog (void)
 {
@@ -709,3 +1128,5 @@ gnc_preferences_dialog (void)
 			     NULL, close_handler, dialog);
   LEAVE(" ");
 }
+
+/** @} */
