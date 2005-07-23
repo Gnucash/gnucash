@@ -1,6 +1,9 @@
 2005-07-23  David Hampton  <hampton@employees.org>
 
-	* various file: Reorganize where these files appear in doxygen
+	* src/gnome-utils/druid-gconf-setup.c: Use $(HOME) instead of '~'
+	when creating the .gconf.path file.
+
+	* various files: Reorganize where these files appear in doxygen
 	output.
 
 2005-07-22  David Hampton  <hampton@employees.org>

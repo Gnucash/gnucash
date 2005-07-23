@@ -57,7 +57,7 @@
 #define HOW_UPDATE		1
 #define HOW_INSTALL		2
 
-#define PATH_STRING1 "xml:readwrite:~/.gconf\n"
+#define PATH_STRING1 "xml:readwrite:$(HOME)/.gconf\n"
 #define PATH_STRING2 "xml:readonly:%s\n"
 
 
