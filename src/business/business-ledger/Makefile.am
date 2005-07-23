@@ -19,6 +19,7 @@ noinst_HEADERS = \
 
 libgnc_business_ledger_la_LDFLAGS = -module
 libgnc_business_ledger_la_LIBADD = \
+  ${top_builddir}/src/core-utils/libcore-utils.la \
   ${top_builddir}/src/gnome-utils/libgncmod-gnome-utils.la \
   ${top_builddir}/src/app-utils/libgncmod-app-utils.la \
   ${top_builddir}/src/register/register-core/libgncmod-register-core.la \
@@ -32,6 +33,7 @@ AM_CFLAGS = \
   -I${top_srcdir}/src/business/dialog-tax-table \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/engine \
+  -I${top_srcdir}/src/core-utils \
   -I${top_srcdir}/src/gnc-module \
   -I${top_srcdir}/src/app-utils \
   -I${top_srcdir}/src/gnome-utils \

@@ -72,9 +72,6 @@
 #define DIALOG_NEW_INVOICE_CM_CLASS "dialog-new-invoice"
 #define DIALOG_VIEW_INVOICE_CM_CLASS "dialog-view-invoice"
 
-#define GCONF_SECTION_INVOICE "dialogs/business/invoice"
-#define GCONF_SECTION_BILL    "dialogs/business/bill"
-#define GCONF_SECTION_VOUCHER "dialogs/business/voucher"
 #define GCONF_SECTION_SEARCH  "dialogs/business/invoice_search"
 
 void gnc_invoice_window_ok_cb (GtkWidget *widget, gpointer data);
@@ -619,7 +616,7 @@ gnc_invoice_window_postCB (GtkWidget *widget, gpointer data)
   memo = NULL;
 
   /* Get the default for the accumulate option */
-  accumulate = gnc_lookup_boolean_option("Business", "Accumulate splits on Post?", TRUE);
+  accumulate = gnc_gconf_get_bool(GCONF_SECTION_INVOICE, "accumulate_splits", NULL);
 
   if (!gnc_dialog_dates_acct_question_parented (iw_get_window(iw), message, ddue_label,
 				       post_label, acct_label, question_label, TRUE,
@@ -1667,6 +1664,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
   GncEntryLedger *entry_ledger = NULL;
   GncOwnerType owner_type;
   GncEntryLedgerType ledger_type;
+  const gchar *gconf_section = NULL;
 
   invoice = gncInvoiceLookup(iw->book,&iw->invoice_guid);
 
@@ -1760,12 +1758,15 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     switch (owner_type) {
     case GNC_OWNER_CUSTOMER:
       ledger_type = GNCENTRY_INVOICE_VIEWER;
+      gconf_section = GCONF_SECTION_INVOICE;
       break;
     case GNC_OWNER_VENDOR:
       ledger_type = GNCENTRY_BILL_VIEWER;
+      gconf_section = GCONF_SECTION_BILL;
       break;
     case GNC_OWNER_EMPLOYEE:
       ledger_type = GNCENTRY_EXPVOUCHER_VIEWER;
+      gconf_section = GCONF_SECTION_BILL;
       break;
     default:
       g_warning ("Invalid owner type");
@@ -1779,6 +1780,9 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
   /* Set the entry_ledger's invoice */
   gnc_entry_ledger_set_default_invoice (entry_ledger, invoice);
+
+  /* Set the gconf section */
+  gnc_entry_ledger_set_gconf_section (entry_ledger, gconf_section);
 
   /* Setup initial values */
   iw->component_id =
@@ -1799,8 +1803,10 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     GtkWidget *regWidget, *frame, *window;
     guint num_rows;
 
-    num_rows = (guint) gnc_lookup_number_option ("Business",
-                                                 "Number of Rows", 10.0);
+    num_rows = gnc_gconf_get_float(GCONF_SECTION_INVOICE,
+				   KEY_NUMBER_OF_ROWS, NULL);
+    if (num_rows == 0)
+      num_rows = 10;
     gnucash_register_set_initial_rows( num_rows );
 
     /* Watch the order of operations, here... */
@@ -2266,3 +2272,25 @@ gnc_invoice_show_bills_due (GNCBook *book, double days_in_advance)
 				      TRUE, FALSE,
 				      buttons, NULL);
 }
+
+void
+gnc_invoice_remind_bills_due (void)
+{
+  GNCBook *book;
+  gint days;
+
+  book = qof_session_get_book(qof_session_get_current_session());
+  days = gnc_gconf_get_float(GCONF_SECTION_BILL, "days_in_advance", NULL);
+
+  gnc_invoice_show_bills_due(book, days);
+}
+
+void
+gnc_invoice_remind_bills_due_cb (void)
+{
+  if (!gnc_gconf_get_bool(GCONF_SECTION_BILL, "notify_when_due", NULL))
+    return;
+
+  gnc_invoice_remind_bills_due();
+}
+

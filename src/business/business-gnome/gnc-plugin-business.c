@@ -369,24 +369,6 @@ gnc_plugin_business_get_window()
   return last_window;
 }
 
-
-void
-gnc_invoice_remind_bills_due (void)
-{
-  GNCBook *book;
-  gint days;
-
-//if (!gnc_gconf_get_bool(GCONF_SECTION_BILL, "notify_when_due", NULL))
-  if (!gnc_lookup_boolean_option("Business", "Notify Bills Due?", FALSE))
-    return;
-
-  book = qof_session_get_book(qof_session_get_current_session());
-//days = gnc_gconf_get_int(GCONF_SECTION_BILL, "days_in_advance", NULL);
-  days = gnc_lookup_number_option("Business", "Bills Due Days", 7.0);
-
-  gnc_invoice_show_bills_due(book, days);
-}
-
 /************************************************************
  *                    Command Callbacks                     *
  ************************************************************/

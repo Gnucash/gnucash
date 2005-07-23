@@ -52,6 +52,8 @@ struct GncEntryLedger_s {
   GncEntryLedgerType type;
 
   gboolean	is_invoice;	/* is this an invoice (or a bill)? */
+
+  const gchar * gconf_section;
 };
 
 GncEntry * gnc_entry_ledger_get_entry (GncEntryLedger *ledger,

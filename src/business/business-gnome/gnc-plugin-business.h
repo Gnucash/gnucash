@@ -63,5 +63,6 @@ G_END_DECLS
 
 GncMainWindow *gnc_plugin_business_get_window (void);
 void gnc_invoice_remind_bills_due (void);
+void gnc_invoice_remind_bills_due_cb (void);
 
 #endif /* __GNC_PLUGIN_BUSINESS_H */

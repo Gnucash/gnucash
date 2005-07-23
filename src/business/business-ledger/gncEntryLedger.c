@@ -277,6 +277,7 @@ GncEntryLedger * gnc_entry_ledger_new (GNCBook *book, GncEntryLedgerType type)
   ledger->type = type;
   ledger->book = book;
   ledger->traverse_to_new = TRUE;
+  ledger->gconf_section = NULL;
 
   /* Orders and Invoices are "invoices" for lookups */
   switch (type) {
@@ -840,4 +841,13 @@ gnc_entry_ledger_get_query (GncEntryLedger *ledger)
     return NULL;
 
   return ledger->query;
+}
+
+void
+gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string)
+{
+  if (!ledger)
+    return;
+
+  ledger->gconf_section = string;
 }

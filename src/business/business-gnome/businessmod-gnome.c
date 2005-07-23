@@ -45,6 +45,10 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-plugin-business.h"
 
+#include "gnc-hooks.h"
+#include "dialog-invoice.h"
+#include "dialog-preferences.h"
+
 /* version of the gnc module system interface we require */
 int libgncmod_business_gnome_LTX_gnc_module_system_interface = 0;
 
@@ -111,7 +115,10 @@ libgncmod_business_gnome_LTX_gnc_module_init(int refcount)
 				   gnc_plugin_business_new ());
 
     gnc_hook_add_dangler(HOOK_UI_POST_STARTUP,
-			 (GFunc)gnc_invoice_remind_bills_due, NULL);
+			 (GFunc)gnc_invoice_remind_bills_due_cb, NULL);
+
+    gnc_preferences_add_page("businessprefs.glade", "business_prefs",
+			     "Business");
   }
 
   return TRUE;

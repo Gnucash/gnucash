@@ -130,4 +130,6 @@ void gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger);
 
 QueryNew * gnc_entry_ledger_get_query (GncEntryLedger *ledger);
 
+void gnc_entry_ledger_set_gconf_section (GncEntryLedger *ledger, const gchar *string);
+
 #endif /* GNC_ENTRY_LEDGER_H */
