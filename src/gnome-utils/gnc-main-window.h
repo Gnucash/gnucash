@@ -23,12 +23,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup Windows
     @{ */
-/** @addtogroup GuiWindow Main Window functions.
+/** @addtogroup GncMainWindow Main Window functions.
     @{ */
 /** @file gnc-main-window.h
     @brief Functions for adding content to a window.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
     @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
 */
 

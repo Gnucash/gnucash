@@ -1,8 +1,7 @@
 /* 
  * gnc-plugin-page-invoice.h -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003 David Hampton <hampton@employees.org>
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,14 +21,13 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup ContentPlugins
     @{ */
-/** @addtogroup GuiUtility
+/** @addtogroup InvoicePlugin Business Invoice Page
     @{ */
 /** @file gnc-plugin-register-tree.h 
     @brief  utility functions for the GnuCash UI
-    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
-    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
+    @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */
 
 #ifndef __GNC_PLUGIN_PAGE_INVOICE_H

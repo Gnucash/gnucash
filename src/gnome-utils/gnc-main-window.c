@@ -23,6 +23,16 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup Windows
+    @{ */
+/** @addtogroup GncMainWindow Main Window functions.
+    @{ */
+/** @file gnc-main-window.h
+    @brief Functions for adding content to a window.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+*/
+
 #include "config.h"
 
 #include <gdk/gdkpixbuf.h>
@@ -298,6 +308,8 @@ gnc_main_window_shutdown (gpointer session, gpointer user_data)
 /** Look through the list of pages installed in this window and see if
  *  the specified page is there.
  *
+ *  @internal
+ *
  *  @param page The page to search for.
  *
  *  @return TRUE if the page is present in the window, FALSE otherwise.
@@ -320,6 +332,8 @@ gnc_main_window_page_exists (GncPluginPage *page)
 
 /** This function prompts the user to save the file with a dialog that
  *  follows the HIG guidelines.
+ *
+ *  @internal
  *
  *  @returns This function returns TRUE if the user clicked the Cancel
  *  button.  It returns FALSE if the closing of the window should
@@ -454,15 +468,17 @@ gnc_main_window_delete_event (GtkWidget *window,
  *  book.  It closes any page it finds so there are no dangling
  *  references to the book.
  *
+ *  @internal
+ *
  *  @param entity     The guid the item being added, deleted, etc.
  *
- * @param type        The type of the item being added, deleted, etc. This
+ *  @param type       The type of the item being added, deleted, etc. This
  *                    function only cares about a type of GNC_ID_BOOK.
  *
- * @param event_type  The type of the event.  This function only cares
+ *  @param event_type The type of the event.  This function only cares
  *                    about an event type of GNC_EVENT_DESTROY.
  *
- * @param user_data   A pointer to the window data structure.
+ *  @param user_data  A pointer to the window data structure.
  */
 static void
 gnc_main_window_event_handler (GUID *entity, QofIdType type,
@@ -1935,3 +1951,6 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
   gncwin = GNC_WINDOW(window);
   gnc_window_set_progressbar_window(gncwin);
 }
+
+/** @} */
+/** @} */

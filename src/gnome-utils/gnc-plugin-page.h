@@ -23,6 +23,16 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup ContentPlugins
+    @{ */
+/** @addtogroup ContentPluginBase Common object and functions
+    @{ */
+/** @file gnc-plugin-page.h
+    @brief Functions for adding plugins to a Gnucash window.
+    @author Copyright (C) 2003 Jan Arne Petersen
+    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+*/
+
 #ifndef __GNC_PLUGIN_PAGE_H
 #define __GNC_PLUGIN_PAGE_H
 
@@ -222,3 +232,5 @@ void                  gnc_plugin_page_unselected      (GncPluginPage *plugin_pag
 G_END_DECLS
 
 #endif /* __GNC_PLUGIN_PAGE_H */
+/** @} */
+/** @} */

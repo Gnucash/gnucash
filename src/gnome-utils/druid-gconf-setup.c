@@ -21,9 +21,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup Druids
     @{ */
-/** @addtogroup GConf Setup Druid
+/** @addtogroup GConfDruid Setup Druid for GConf
     @{ */
 /** @file druid-gconf-setup.c
     @brief Check for gconf.  Help user set up if needed.

@@ -22,11 +22,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup Plugins
     @{ */
-/** @addtogroup Plugin Architecture
-    @{ */
-/** @addtogroup Plugin Manger
+/** @addtogroup PluginManager Plugin Management Functions
     @{ */
 /** @file gnc-plugin-manager.h 
     @brief  Plugin management functions for the GnuCash UI
@@ -163,6 +161,5 @@ G_END_DECLS
 
 #endif /* __GNC_PLUGIN_MANAGER_H */
 
-/** @} */
 /** @} */
 /** @} */

@@ -1,8 +1,7 @@
 /* 
  * gnc-plugin-page-invoice.c -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
- * Copyright (C) 2003 David Hampton <hampton@employees.org>
+ * Copyright (C) 2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as

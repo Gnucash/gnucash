@@ -24,9 +24,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup MenuPlugins
     @{ */
-/** @addtogroup GuiImport Import GUI Utility functions.
+/** @addtogroup PluginMenuAdditions Non-GtkAction Menu Support
     @{ */
 /** @internal
     @file gnc-plugin-menu-additions.c

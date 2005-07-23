@@ -2,8 +2,8 @@
  * gnc-embedded-window.h -- GtkWindow which represents an
  *	emvedded GnuCash window.
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,6 +22,16 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
+
+/** @addtogroup Windows
+    @{ */
+/** @addtogroup GncEmbeddedWindow Embedded Window Functions
+    @{ */
+/** @file gnc-embedded-window.h
+    @brief Functions that are supported by all types of windows.
+    @author Copyright (C) 2003 Jan Arne Petersen
+    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
+*/
 
 #ifndef __GNC_EMBEDDED_WINDOW_H
 #define __GNC_EMBEDDED_WINDOW_H
@@ -85,3 +95,6 @@ GncPluginPage  *gnc_embedded_window_get_page     (GncEmbeddedWindow *window);
 G_END_DECLS
 
 #endif /* __GNC_EMBEDDED_WINDOW_H */
+
+/** @} */
+/** @} */

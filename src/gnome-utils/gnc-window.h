@@ -22,6 +22,22 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
+/** @addtogroup Windows
+    @{ */
+/** @addtogroup GncWindow Basic Window Functions
+    @{ */
+/** @file gnc-window.h
+    @brief Functions that are supported by all types of windows.
+    @author Copyright (C) 2003 Jan Arne Petersen
+    @author Copyright (C) 2003 David Hampton <hampton@employees.org>
+
+    GnuCash has two types of "windows" that can show Plugin Pages.
+    The first is called a "Main Window" and is implemented on top of a
+    GtkWindow.  The second is called an "Embedded Window" and is
+    implemented on top of a GtkVBox.  The functions in this file will
+    work with either type of window.
+*/
+
 #ifndef __GNC_WINDOW_H
 #define __GNC_WINDOW_H
 
@@ -62,3 +78,6 @@ void           gnc_window_show_progress (const char *message, double percentage)
 G_END_DECLS
 
 #endif /* __GNC_WINDOW_H */
+
+/** @} */
+/** @} */

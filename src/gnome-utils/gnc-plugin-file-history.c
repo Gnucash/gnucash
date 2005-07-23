@@ -1,6 +1,6 @@
 /* 
  * gnc-plugin-file-history.c -- 
- * Copyright (C) 2003,2005 David Hampton hampton@employees.org>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,9 +20,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup MenuPlugins
     @{ */
-/** @addtogroup GuiImport Import GUI Utility functions.
+/** @addtogroup PluginFileHistory File History Menu Items
     @{ */
 /** @internal
     @file gnc-plugin-file-history.c

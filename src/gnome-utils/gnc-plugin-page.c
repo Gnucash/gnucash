@@ -1,8 +1,7 @@
 /* 
  * gnc-plugin_page.c -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
  * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +21,16 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
+
+/** @addtogroup ContentPlugins
+    @{ */
+/** @addtogroup ContentPluginBase Common object and functions
+    @{ */
+/** @file gnc-plugin-page.h
+    @brief Functions for adding plugins to a Gnucash window.
+    @author Copyright (C) 2003 Jan Arne Petersen
+    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+*/
 
 #include "config.h"
 
@@ -441,3 +450,6 @@ gnc_plugin_page_set_use_new_window (GncPluginPage *page, gboolean use_new)
 
   page->priv->use_new_window = use_new;
 }
+
+/** @} */
+/** @} */

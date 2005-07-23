@@ -18,6 +18,16 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.        *
 \********************************************************************/
 
+
+/** @addtogroup GUI
+    @{ */
+
+/** @defgroup Dialogs Dialogs */
+/** @defgroup Druids Druids */
+
+/** @} */
+
+
 #ifndef GNC_UI_H
 #define GNC_UI_H
 

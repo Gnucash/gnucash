@@ -24,7 +24,7 @@
 
 /** @addtogroup GLib
     @{ */
-/** @addtogroup GConf
+/** @addtogroup GConf GConf Utilities
 
     The API in this file is designed to make it easy to use the GConf
     system from within Gnucash.  GConf is a shared key/value storage

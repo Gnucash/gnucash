@@ -1,8 +1,8 @@
 /* 
  * gnc-plugin.h -- A module or plugin which can add more
  *	functionality to gnucash.
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,11 +24,43 @@
 
 /** @addtogroup GUI
     @{ */
-/** @addtogroup Wwindow plugin functions.
+
+/** @defgroup WindowsAndPlugin Window/Plugin Structure
+ @{ */
+
+/**
+    @addtogroup Windows Windows
+    @ingroup WindowsAndPlugin
+*/
+
+/**
+    @addtogroup Plugins Plugins
+    @ingroup WindowsAndPlugin
+ @{
+*/
+
+/**
+    @addtogroup MenuPlugins Menu Only Plugins
+    @ingroup Plugins
+*/
+
+/**
+    @addtogroup ContentPlugins Content Plugins
+    @ingroup Plugins
+*/
+
+/** @} */
+/** @} */
+/** @} */
+
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup MenuPluginBase Common object and functions
     @{ */
 /** @file gnc-plugin.h
     @brief Functions for adding plugins to a Gnucash window.
-    @author Copyright (C) 2002 David Hampton <hampton@employees.org>
+    @author Copyright (C) 2003 Jan Arne Petersen
+    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
 */
 
 #ifndef __GNC_PLUGIN_H

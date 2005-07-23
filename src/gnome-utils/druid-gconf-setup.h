@@ -21,11 +21,11 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup Druids
     @{ */
-/** @addtogroup GConf Setup Druid
+/** @addtogroup GConfDruid Setup Druid for GConf
     @{ */
-/** @file druid-gconf-setup.c
+/** @file druid-gconf-setup.h
     @brief Check for gconf.  Help user set up if needed.
     @author Copyright (C) 2005 David Hampton <hampton@employees.org>
 */

@@ -20,9 +20,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup Dialogs
     @{ */
-/** @addtogroup Dialog Preferences Dialog
+/** @addtogroup PrefDialog Preferences Dialog
     @{ */
 /** @file dialog-preferences.h
     @brief Dialog for handling user preferences.

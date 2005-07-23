@@ -20,9 +20,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup MenuPlugins
     @{ */
-/** @addtogroup GuiImport Import GUI Utility functions.
+/** @addtogroup PluginFileHistory File History Menu Items
     @{ */
 /** @file gnc-plugin-file-history.h
     @brief Utility functions for writing import modules.

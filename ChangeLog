@@ -1,7 +1,19 @@
+2005-07-23  David Hampton  <hampton@employees.org>
+
+	* various file: Reorganize where these files appear in doxygen
+	output.
+
 2005-07-22  David Hampton  <hampton@employees.org>
 
+	* numerous business file: Migrate the business preferences over to
+	the new preferences dialog.
+
+	* src/gnome-utils/dialog-preferences.[ch]: Rework the widget
+	lookup code to handle widgets from multiple glade files.
+	Documentation.
+
 	* numerous file: Begin migrating preferences over to the new
-	dialog.
+	preferences dialog.
 
 	* src/gnome-utils/Makefile.am:
 	* src/gnome-utils/dialog-preferences.[ch]:

@@ -22,9 +22,9 @@
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
 
-/** @addtogroup GUI
+/** @addtogroup ContentPlugins
     @{ */
-/** @addtogroup GuiUtility
+/** @addtogroup RegisterPlugin Register Page
     @{ */
 /** @file gnc-plugin-register-tree.h 
     @brief  utility functions for the GnuCash UI

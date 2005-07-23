@@ -1,8 +1,8 @@
 /* 
  * gnc-plugin.c -- 
  *
- * Copyright (C) 2003 Jan Arne Petersen
- * Author: Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+ * Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,6 +21,16 @@
  * 59 Temple Place - Suite 330        Fax:    +1-617-542-2652
  * Boston, MA  02111-1307,  USA       gnu@gnu.org
  */
+
+/** @addtogroup MenuPlugins
+    @{ */
+/** @addtogroup MenuPluginBase Common object and functions
+    @{ */
+/** @file gnc-plugin.h
+    @brief Functions for adding plugins to a Gnucash window.
+    @author Copyright (C) 2003 Jan Arne Petersen <jpetersen@uni-bonn.de>
+    @author Copyright (C) 2003,2005 David Hampton <hampton@employees.org>
+*/
 
 #include "config.h"
 
