@@ -44,6 +44,7 @@
 #include "gnc-component-manager.h"
 
 #include <aqbanking/banking.h>
+#include <gwenhywfar/stringlist.h>
 
 /* #define DEFAULT_HBCI_VERSION 201 */
 
@@ -450,7 +451,9 @@ on_aqhbci_button (GtkButton *button,
   HBCIInitialInfo *info = user_data;
   GWEN_BUFFER *buf;
   int res;
-  const char *backend_name = "aqhbci";
+  GWEN_PLUGIN_DESCRIPTION_LIST2 *pluginlist;
+  const char *backend_name_nc;
+  char *backend_name;
 
   /* This is the point where we look for and start an external
      application shipped with aqhbci that contains the setup druid for
@@ -466,6 +469,73 @@ on_aqhbci_button (GtkButton *button,
   AB_BANKING *banking = info->api;
   g_assert(info->druid);
 
+  /* Get list of all backends, active or inactive */
+  pluginlist = AB_Banking_GetProviderDescrs (banking);
+
+  /* If there is only one backend, use it, otherwise ask the user */
+  if (!pluginlist || (GWEN_PluginDescription_List2_GetSize(pluginlist) < 1))
+    /* No backend at all? Try aqhbci */
+    backend_name_nc = "aqhbci";
+  else {
+    GWEN_PLUGIN_DESCRIPTION_LIST2_ITERATOR *pluginlist_it = 
+      GWEN_PluginDescription_List2_First(pluginlist);
+    GWEN_PLUGIN_DESCRIPTION *plugindescr;
+    g_assert (pluginlist_it);
+
+    plugindescr = GWEN_PluginDescription_List2Iterator_Data (pluginlist_it);
+    if (GWEN_PluginDescription_List2_GetSize(pluginlist) == 1)
+      /* Only one backend? Use it */
+      backend_name_nc = GWEN_PluginDescription_GetName(plugindescr);
+    else {
+      /* Present a selection dialog to select a particular backend */
+      GList *radio_list = NULL;
+      int x;
+
+      while (plugindescr) {
+	radio_list = 
+	  g_list_append(radio_list, 
+			g_strdup_printf("%s: %s",
+					GWEN_PluginDescription_GetName(plugindescr),
+					GWEN_PluginDescription_GetShortDescr(plugindescr)));
+	plugindescr = GWEN_PluginDescription_List2Iterator_Next (pluginlist_it);
+      }
+      GWEN_PluginDescription_List2Iterator_free(pluginlist_it);
+
+      x = gnc_choose_radio_option_dialog
+	(GTK_WIDGET(info->window),
+	 _("Choose AqBanking Backend"),
+	 _("Please choose an AqBanking backend to be configured"),
+	 0,
+	 radio_list);
+      g_list_free(radio_list);
+
+      /* User pressed cancel in choice dialog */
+      if (x == -1) {
+	GWEN_PluginDescription_List2_freeAll(pluginlist);
+	GWEN_PluginDescription_List2_free(pluginlist);
+	return;
+      }
+
+      pluginlist_it = GWEN_PluginDescription_List2_First(pluginlist);
+      plugindescr = GWEN_PluginDescription_List2Iterator_Data (pluginlist_it);
+      while (x > 0) {
+	plugindescr = GWEN_PluginDescription_List2Iterator_Next (pluginlist_it);
+	x--;
+      }
+      backend_name_nc = GWEN_PluginDescription_GetName(plugindescr);
+    }
+    GWEN_PluginDescription_List2Iterator_free(pluginlist_it);
+  }
+
+  /* Allocate the backend name again because the PluginDescr list will
+     be freed */
+  backend_name = g_strdup (backend_name_nc);
+  GWEN_PluginDescription_List2_freeAll (pluginlist);
+  GWEN_PluginDescription_List2_free (pluginlist);
+
+  /* ***** */
+
+  /* Now find out the wizard name for that backend */
   buf = GWEN_Buffer_new(NULL, 300, 0, 0);
   AB_Banking_FindWizard(banking, backend_name, NULL, buf);
   wizard_exists = (strlen(GWEN_Buffer_GetStart(buf)) > 0);
@@ -531,23 +601,28 @@ on_aqhbci_button (GtkButton *button,
     else {
       printf("on_aqhbci_button: Oops, aqhbci wizard return nonzero value: %d. The called program was \"%s\".\n", res, wizard_path);
       gnc_error_dialog
-	(info->window, "%s",
-	 _("The external program \"AqHBCI Setup Wizard\" returned a nonzero \n"
+	(info->window,
+       /* Each of the %s is the name of the backend, e.g. "aqhbci". */
+	 _("The external program \"%s Setup Wizard\" returned a nonzero \n"
 	   "exit code which means it has not been finished successfully. \n"
-	   "The further HBCI setup can only be finished if the AqHBCI \n"
+	   "The further HBCI setup can only be finished if the %s \n"
 	   "Setup Wizard is run successfully. Please try to start and \n"
-	   "successfully finish the AqHBCI Setup Wizard program again."));
+	   "successfully finish the %s Setup Wizard program again."),
+	 backend_name, backend_name, backend_name);
       druid_disable_next_button(info);
     }
   } else {
     printf("on_aqhbci_button: Oops, no aqhbci setup wizard found.");
     gnc_error_dialog
-      (info->window, "%s",
-       _("The external program \"AqHBCI Setup Wizard\" has not been found. \n\n"
-	 "Did you install the package \"aqhbci-qt-tools\" of AqHBCI? \n"
-	 "If not, please install it now."));
+      (info->window,
+       /* Each of the %s is the name of the backend, e.g. "aqhbci". */
+       _("The external program \"%s Setup Wizard\" has not been found. \n\n"
+	 "Did you install the package \"%s-qt-tools\" of %s? \n"
+	 "If not, please install it now."),
+       backend_name, backend_name, backend_name);
     druid_disable_next_button(info);
   }
+  g_free (backend_name);
   GWEN_Buffer_free(buf);
 }
 

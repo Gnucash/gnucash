@@ -15,4 +15,4 @@
 
 (use-modules (gnucash report test-graphing))
 
-(export gnc:make-welcome-report)
+(re-export gnc:make-welcome-report)

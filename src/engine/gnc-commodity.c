@@ -95,6 +95,9 @@ struct gnc_new_iso_code
   {"PLZ", "PLN"}, /* Polish Zloty */
   {"UAG", "UAH"}, /* Ukraine Hryvnia */
   {"ILS", "NIS"}, /* New Israeli Shekel */
+
+  /* Only add currencies to this table when the old currency no longer
+   * exists in the file iso-4217-currencies.scm */
 };
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))

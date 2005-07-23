@@ -28,6 +28,7 @@
 #include <iconv.h>
 #include <langinfo.h>
 #include <gwenhywfar/directory.h>
+#include <gwenhywfar/logger.h>
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
@@ -189,6 +190,7 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 /*   list_int *list; */
 /*   const char *msg; */
   int cause = 0;
+  AB_JOB_STATUS jobstatus;
   
   g_assert (job);
 /*   if (AB_JOB_status (job) != HBCI_JOB_STATUS_DONE) */
@@ -197,10 +199,21 @@ gnc_hbci_debug_outboxjob (AB_JOB *job, gboolean verbose)
 /*     return; */
 
   if (verbose) {
-    printf("OutboxJob status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
+    printf("gnc_hbci_debug_outboxjob: Job status: %s", AB_Job_Status2Char(AB_Job_GetStatus(job)));
 
     printf(", result: %s", AB_Job_GetResultText(job));
     printf("\n");
+  }
+
+  jobstatus = AB_Job_GetStatus (job);
+  if (jobstatus == AB_Job_StatusError) {
+    if (!verbose)
+      printf("gnc_hbci_debug_outboxjob: Job %s had an error: %s\n",
+	     AB_Job_Type2Char(AB_Job_GetType(job)),
+	     AB_Job_GetResultText(job));
+    cause = 9000;
+  } else {
+    cause = 0;
   }
 
 #if 0  
@@ -420,17 +433,23 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
 {
   int err;
   int resultcode;
+  int be_verbose = FALSE;
 	  
   if (inter)
     GNCInteractor_show (inter);
 
   if (gnc_lookup_boolean_option("_+Advanced", 
 				"HBCI Verbose Debug Messages", FALSE)) {
-/*     GWEN_Logger_SetLevel(0, GWEN_LoggerLevelDebug); */
-/*     HBCI_Hbci_setDebugLevel (4); */
+    GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevelNotice);
+    GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevelInfo);
+    GWEN_Logger_SetLevel("aqhbci", GWEN_LoggerLevelInfo);
+    be_verbose = TRUE;
   }
-/*   else */
-/*     HBCI_Hbci_setDebugLevel (0); */
+  else {
+    GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevelError);
+    GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevelError);
+    GWEN_Logger_SetLevel("aqhbci", GWEN_LoggerLevelError);
+  }
 
   do {
     if (inter) {
@@ -450,7 +469,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
     
   } while (gnc_hbci_Error_retry (parent, err, inter));
   
-  resultcode = gnc_hbci_debug_outboxjob (job, FALSE);
+  resultcode = gnc_hbci_debug_outboxjob (job, be_verbose);
   if (!hbci_Error_isOk(err)) {
 /*     char *errstr =  */
 /*       g_strdup_printf("gnc_AB_BANKING_execute: Error at executeQueue: %s", */
@@ -514,10 +533,9 @@ static void *gnc_list_string_cb (const char *string, void *user_data)
 char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
 {
   /* Description */
-  char *h_descr = NULL;
+  char *h_descr = gnc_hbci_getpurpose (h_trans);
   char *othername = NULL;
   char *g_descr;
-  const GWEN_STRINGLIST *h_purpose = AB_Transaction_GetPurpose (h_trans);
   const GWEN_STRINGLIST *h_remotename = AB_Transaction_GetRemoteName (h_trans);
   struct cb_struct cb_object;
 
@@ -525,16 +543,7 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
     iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
   g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
 
-  /* Don't use list_string_concat_delim here since we need to
-     g_strstrip every single element of the string list, which is
-     only done in our callback gnc_list_string_cb. The separator is
-     also set there. */
-  cb_object.result = &h_descr;
-  if (h_purpose)
-    GWEN_StringList_ForEach (h_purpose,
-			     &gnc_list_string_cb,
-			     &cb_object);
-
+  /* Get othername */
   cb_object.result = &othername;
   if (h_remotename)
     GWEN_StringList_ForEach (h_remotename,
@@ -544,20 +553,45 @@ char *gnc_hbci_descr_tognc (const AB_TRANSACTION *h_trans)
 
   if (othername && (strlen (othername) > 0))
     g_descr = 
-      ((h_descr && (strlen (h_descr) > 0)) ?
+      ((strlen (h_descr) > 0) ?
        g_strdup_printf ("%s; %s", 
 			h_descr,
 			othername) :
        g_strdup (othername));
   else
     g_descr = 
-      ((h_descr && (strlen (h_descr) > 0)) ?
+      ((strlen (h_descr) > 0) ?
        g_strdup (h_descr) : 
        g_strdup (_("Unspecified")));
 
   iconv_close(cb_object.gnc_iconv_handler);
   free (h_descr);
   free (othername);
+  return g_descr;
+}
+
+char *gnc_hbci_getpurpose (const AB_TRANSACTION *h_trans)
+{
+  /* Description */
+  char *h_descr = NULL;
+  char *g_descr;
+  const GWEN_STRINGLIST *h_purpose = AB_Transaction_GetPurpose (h_trans);
+  struct cb_struct cb_object;
+
+  cb_object.gnc_iconv_handler = 
+    iconv_open(gnc_hbci_book_encoding(), gnc_hbci_AQBANKING_encoding());
+  g_assert(cb_object.gnc_iconv_handler != (iconv_t)(-1));
+
+  cb_object.result = &h_descr;
+  if (h_purpose)
+    GWEN_StringList_ForEach (h_purpose,
+			     &gnc_list_string_cb,
+			     &cb_object);
+
+  g_descr = g_strdup (h_descr ? h_descr : "");
+
+  iconv_close(cb_object.gnc_iconv_handler);
+  free (h_descr);
   return g_descr;
 }
 

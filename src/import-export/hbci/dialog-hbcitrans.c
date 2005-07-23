@@ -440,8 +440,12 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       ((AQBANKING_VERSION_MINOR > 0) || \
        ((AQBANKING_VERSION_MINOR == 0) && \
         (AQBANKING_VERSION_PATCHLEVEL > 6)))))
-    max_purpose_lines = AB_TransactionLimits_GetMaxLinesPurpose
-      ( AB_JobSingleTransfer_GetFieldLimits(job) );
+    {
+      const AB_TRANSACTION_LIMITS *joblimits = AB_JobSingleTransfer_GetFieldLimits(job);
+      max_purpose_lines = (joblimits ?
+			   AB_TransactionLimits_GetMaxLinesPurpose (joblimits) :
+			   2);
+    }
 #else
     max_purpose_lines = AB_JobSingleTransfer_GetMaxPurposeLines(job);
 #endif
@@ -499,6 +503,26 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
       }
       continue;
     } /* check Transaction_value */
+
+    {
+      char *purpose = gnc_hbci_getpurpose (td->hbci_trans);
+      if (strlen(purpose) == 0) {
+	gtk_widget_show_all (td->dialog); 
+	values_ok = !gnc_verify_dialog
+	  (GTK_WIDGET (td->dialog),
+	   TRUE,
+	   "%s",
+	   _("You did not enter any transaction purpose. A purpose is \n"
+	     "required for an online transfer.\n"
+	     "\n"
+	     "Do you want to enter the job again?"));
+	if (values_ok) {
+	  AB_Transaction_free (td->hbci_trans);
+	  return -1;
+	}
+	continue;
+      } /* check Transaction_purpose */
+    }
 
     /* FIXME: If this is a direct debit, set the textkey/ "Textschluessel"/
        transactionCode according to some GUI selection here!! */
@@ -564,15 +588,18 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
   g_free (tmpchar);
   tmpchar = gnc_call_iconv(gnc_iconv_handler, 
 			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont_entry)));
-  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
   g_free (tmpchar);
   tmpchar = gnc_call_iconv(gnc_iconv_handler, 
 			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont2_entry)));
-  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
   g_free (tmpchar);
   tmpchar = gnc_call_iconv(gnc_iconv_handler, 
 			   gtk_entry_get_text (GTK_ENTRY (td->purpose_cont3_entry)));
-  AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
+  if (strlen(tmpchar) > 0)
+    AB_Transaction_AddPurpose (trans, tmpchar, FALSE);
   g_free (tmpchar);
 	
   /* FIXME: Replace "EUR" by account-dependent string here. */
@@ -666,10 +693,15 @@ gnc_hbci_trans_dialog_enqueue(HBCITransDialog *td, AB_BANKING *api,
     printf("gnc_hbci_trans_dialog_enqueue: Oops, job not available. Aborting.\n");
     return NULL;
   }
-  AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
 
-  /* Make really sure there is no other job in the queue */
-/*   HBCI_Outbox_removeByStatus (outbox, HBCI_JOB_STATUS_NONE); */
+  switch (trans_type) {
+  case SINGLE_DEBITNOTE:
+    AB_JobSingleDebitNote_SetTransaction(job, td->hbci_trans);
+    break;
+  default:
+  case SINGLE_TRANSFER:
+    AB_JobSingleTransfer_SetTransaction(job, td->hbci_trans);
+  };
 
   /* Add job to queue */
   AB_Banking_EnqueueJob(api, job);
