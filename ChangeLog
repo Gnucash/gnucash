@@ -1,3 +1,9 @@
+2005-07-24  David Hampton  <hampton@employees.org>
+
+	* src/gnome-utils/gw-gnome-utils-spec.scm: Remove references to
+	deleted data structures.  Gnucash now compiles against
+	g-wrap-1.9.6 as well as g-wrap-1.3.
+
 2005-07-24  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-pass.c, gnc-hbci-utils.c,

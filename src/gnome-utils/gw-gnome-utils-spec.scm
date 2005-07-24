@@ -130,8 +130,6 @@
 
 
   (gw:wrap-as-wct ws '<gnc:PrintSession*> "PrintSession*" "const PrintSession*")
-  (gw:wrap-as-wct ws '<gnc:PrintDialog*> "PrintDialog*" "const PrintDialog*")
-  (gw:wrap-as-wct ws '<gnc:PaperDialog*> "PaperDialog*" "const PaperDialog*")
 
   (gw:wrap-function
    ws
