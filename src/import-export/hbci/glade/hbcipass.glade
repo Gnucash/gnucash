@@ -39,7 +39,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-6</property>
+	      <property name="response_id">2</property>
 	    </widget>
 	  </child>
 
@@ -53,7 +53,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-5</property>
+	      <property name="response_id">1</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -188,7 +188,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-6</property>
+	      <property name="response_id">2</property>
 	    </widget>
 	  </child>
 
@@ -202,7 +202,7 @@
 	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
 	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-5</property>
+	      <property name="response_id">1</property>
 	    </widget>
 	  </child>
 	</widget>

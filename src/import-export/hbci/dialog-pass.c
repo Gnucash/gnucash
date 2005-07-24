@@ -50,16 +50,15 @@ gnc_hbci_get_password (GtkWidget *parent,
   dialog = glade_xml_get_widget (xml, "Password Dialog");
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   heading_label  = glade_xml_get_widget (xml, "heading_label");
   password_entry = glade_xml_get_widget (xml, "password_entry");
   g_assert(heading_label && password_entry);
 
-  gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
 
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (password_entry));
+  gtk_entry_set_activates_default (GTK_ENTRY (password_entry), TRUE);
 
   if (windowtitle)
     gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
@@ -72,13 +71,14 @@ gnc_hbci_get_password (GtkWidget *parent,
   gtk_entry_set_visibility (GTK_ENTRY (password_entry), !hide_input);
 
   result = gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy(dialog);
 
-  if (result == GTK_RESPONSE_OK)
+  if (result == 1) /* the hand-assigned response value */
   {
-    *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
+    *password = g_strdup (gtk_entry_get_text (GTK_ENTRY (password_entry)) );
+    gtk_widget_destroy(dialog);
     return TRUE;
   }
+  gtk_widget_destroy(dialog);
 
   *password = NULL;
   return FALSE;
@@ -105,19 +105,17 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
   dialog = glade_xml_get_widget (xml, "Initial Password Dialog");
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   heading_label  = glade_xml_get_widget (xml, "heading_label");
   password_entry = glade_xml_get_widget (xml, "password_entry");
   confirm_entry = glade_xml_get_widget (xml, "confirm_entry");
   g_assert(heading_label && password_entry && confirm_entry);
 
-  gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
 
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (password_entry));
-  gnome_dialog_editable_enters (GNOME_DIALOG (dialog),
-                                GTK_EDITABLE (confirm_entry));
+  gtk_entry_set_activates_default (GTK_ENTRY (password_entry), FALSE);
+  gtk_entry_set_activates_default (GTK_ENTRY (confirm_entry), TRUE);
 
   if (windowtitle)
     gtk_window_set_title (GTK_WINDOW (dialog), windowtitle);
@@ -128,20 +126,15 @@ gnc_hbci_get_initial_password (GtkWidget *parent,
   while (TRUE) {
     result = gtk_dialog_run (GTK_DIALOG (dialog));
     
-    if (result == GTK_RESPONSE_OK)
+    if (result == 1) /* the hand-assigned response value */
       {
-	char *pw, *confirm;
-	pw = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
-	confirm = gtk_editable_get_chars (GTK_EDITABLE (confirm_entry), 
-					  0, -1);
+	const char *pw = gtk_entry_get_text (GTK_ENTRY (password_entry));
+	const char *confirm = gtk_entry_get_text (GTK_ENTRY (confirm_entry));
 	if (strcmp (pw, confirm) == 0) {
-	  *password = pw;
-	  g_free (confirm);
+	  *password = g_strdup(pw);
 	  gtk_widget_destroy (GTK_WIDGET (dialog));
 	  return TRUE;
 	}
-	g_free (pw);
-	g_free (confirm);
       }
     else
       break;

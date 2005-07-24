@@ -1,3 +1,10 @@
+2005-07-24  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-pass.c, gnc-hbci-utils.c,
+	hbci-interaction.c, glade/hbcipass.glade: Fix transition from
+	GNOME_DIALOG to GTK_DIALOG. Eventually enable HBCI online actions
+	again. Needs more work but at least contacts the bank correctly.
+
 2005-07-23  David Hampton  <hampton@employees.org>
 
 	* src/gnome-utils/druid-gconf-setup.c: Use $(HOME) instead of '~'

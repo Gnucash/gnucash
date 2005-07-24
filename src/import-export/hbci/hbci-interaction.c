@@ -209,7 +209,7 @@ void GNCInteractor_reparent (GNCInteractor *i, GtkWidget *new_parent)
 	gtk_widget_reparent (GTK_WIDGET (i->dialog), new_parent);
 	else
 	gtk_widget_set_parent (GTK_WIDGET (i->dialog), new_parent);*/
-      gnome_dialog_set_parent (GNOME_DIALOG (i->dialog), 
+      gtk_window_set_transient_for (GTK_WINDOW (i->dialog), 
 			       GTK_WINDOW (new_parent));
     }
 }
@@ -342,6 +342,7 @@ static int inputBoxCB(AB_BANKING *ab,
     if (!retval)
       break;
     
+    g_assert(passwd);
     if (strlen(passwd) < (unsigned int)minsize) {
       gboolean retval;
       char *msg = 
@@ -484,7 +485,7 @@ hideBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
     dialog = data->showbox_last;
   }
   if (dialog) {
-    gnome_dialog_close (GNOME_DIALOG (dialog));
+    gtk_widget_hide (dialog);
     gtk_widget_destroy (dialog);
     g_hash_table_remove(data->showbox_hash, (gpointer)id);
   }
@@ -552,14 +553,14 @@ static int messageBoxCB(AB_BANKING *ab, GWEN_TYPE_UINT32 flags,
 			     b2 ? b2text : NULL,
 			     b3 ? b3text : NULL,
 			     NULL);
-  gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));
   gnome_dialog_set_close (GNOME_DIALOG (dialog), TRUE);
   label = gtk_label_new (text);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
-  gtk_box_pack_start (GTK_BOX (GNOME_DIALOG (dialog)->vbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), label, TRUE, TRUE, 0);
   gtk_widget_show (label);
 
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+  result = gnome_dialog_run (GNOME_DIALOG (dialog));
   if (result<0 || result>2) {
     printf("messageBoxCB: Bad result %d", result);
     g_free(title);
@@ -772,7 +773,7 @@ gnc_hbci_add_callbacks(AB_BANKING *ab, GNCInteractor *data)
 		      GTK_SIGNAL_FUNC (on_button_clicked), data);
 
   if (data->parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (data->parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->parent));
   /*gtk_widget_set_parent (GTK_WIDGET (dialog), data->parent);*/
 
   gtk_object_ref (GTK_OBJECT (dialog));

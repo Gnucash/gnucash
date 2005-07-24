@@ -921,7 +921,7 @@ const char *gnc_hbci_book_encoding()
 #if HAVE_LANGINFO_CODESET
   char* encoding = nl_langinfo(CODESET);
 #else
-  char* encoding = "ISO8859-15";
+  char* encoding = "UTF-8";
 #endif
   return encoding;
 }
