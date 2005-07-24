@@ -317,9 +317,9 @@ qsf_map_top_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 	}
 }
 
-static char*
+static xmlChar*
 qsf_else_set_value(xmlNodePtr parent, GHashTable *default_hash,
-		char *content, xmlNsPtr map_ns)
+                   xmlChar *content, xmlNsPtr map_ns)
 {
 	xmlNodePtr cur_node;
 

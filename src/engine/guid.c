@@ -290,7 +290,7 @@ init_from_int(int val)
 }
 
 static size_t
-init_from_buff(char * buf, size_t buflen)
+init_from_buff(unsigned char * buf, size_t buflen)
 {
   md5_process_bytes(buf, buflen, &guid_context);
   return buflen;

@@ -251,12 +251,12 @@ get_random_binary_data(void)
 
     len = get_random_int_in_range(20,100);
     ret = g_new(bin_data, 1);
-    ret->data = g_new(char, len);
+    ret->data = g_new(guchar, len);
     ret->len = len;
 
     for(len--; len >= 0; len--)
     {
-        ret->data[len] = (char)get_random_int_in_range(0,255);
+        ret->data[len] = (guchar)get_random_int_in_range(0,255);
     }
 
     return ret;
