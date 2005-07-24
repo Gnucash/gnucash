@@ -169,7 +169,7 @@ obj_setDate(myobj *g, Timespec h)
 Timespec
 obj_getDate(myobj *g)
 {
-	Timespec ts;
+  Timespec ts = {0};
 	if(!g) return ts;
 	ts = g->date;
 	return ts;
