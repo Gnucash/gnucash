@@ -89,10 +89,6 @@ Resources
 
     - http://lists.gnucash.org/pipermail/gnucash-devel/2005-March/012824.html
 
-- Main Window
-
-  - [low-priority] New registers should open in new top-level windows. (On my list - DRH)
-
 - Register Core - mostly functional
 
   - Insertion point not shown. (fix gnucash-item-edit.c)
@@ -172,11 +168,7 @@ Resources
 
 - Preferences
 
-  - Business
-
-    - Business -> Accumulate splits on Post?  option not present.  Not sure if
-      this is intentionally missing. PJK [ tested after g2 merge of 30 Dec 04?
-      -derek ]
+  - Being converted over from a scheme file backend to gconf.  (In progress - DRH)
 
 - Hierarchy Merge - BROKEN
 
@@ -195,13 +187,6 @@ Resources
   - Report
 
     - "Report options", especially, since it often confuses users.
-
-- Preferences
-
-  - Support a preference on whether new plugin pages appear in the same or a
-    new window.
-
-     - We definitely want register windows to appear in new top-levels.
 
 - In-place editing
 
