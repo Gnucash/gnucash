@@ -1548,7 +1548,7 @@ gboolean gncInvoiceRegister (void)
 {
   static QofParam params[] = {
     { INVOICE_ID,      QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetID,     (QofSetterFunc)gncInvoiceSetID },
-    { INVOICE_OWNER,   QOF_TYPE_COLLECT, (QofAccessFunc)qofInvoiceGetOwner, (QofSetterFunc)qofInvoiceSetOwner  },
+    { INVOICE_OWNER,   GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetOwner, NULL },
     { INVOICE_OPENED,  QOF_TYPE_DATE,   (QofAccessFunc)gncInvoiceGetDateOpened, (QofSetterFunc)gncInvoiceSetDateOpened },
     { INVOICE_DUE,     QOF_TYPE_DATE,   (QofAccessFunc)gncInvoiceGetDateDue, NULL },
     { INVOICE_POSTED,  QOF_TYPE_DATE,   (QofAccessFunc)gncInvoiceGetDatePosted, (QofSetterFunc)gncInvoiceSetDatePosted },
@@ -1561,7 +1561,7 @@ gboolean gncInvoiceRegister (void)
     { INVOICE_POST_LOT, GNC_ID_LOT,     (QofAccessFunc)gncInvoiceGetPostedLot, NULL/*(QofSetterFunc)gncInvoiceSetPostedLot*/ },
     { INVOICE_TYPE,    QOF_TYPE_STRING, (QofAccessFunc)gncInvoiceGetType,    NULL },
     { INVOICE_TERMS,   GNC_ID_BILLTERM, (QofAccessFunc)gncInvoiceGetTerms,   (QofSetterFunc)gncInvoiceSetTerms },
-    { INVOICE_BILLTO,  QOF_TYPE_COLLECT, (QofAccessFunc)qofInvoiceGetBillTo, (QofSetterFunc)qofInvoiceSetBillTo  },
+    { INVOICE_BILLTO,  GNC_ID_OWNER, (QofAccessFunc)gncInvoiceGetBillTo, NULL  },
     { INVOICE_ENTRIES, QOF_TYPE_COLLECT, (QofAccessFunc)qofInvoiceGetEntries, (QofSetterFunc)qofInvoiceSetEntries },
     { INVOICE_JOB,     GNC_ID_JOB,      (QofAccessFunc)qofInvoiceGetJob,     (QofSetterFunc)qofInvoiceSetJob }, 
     { QOF_PARAM_ACTIVE, QOF_TYPE_BOOLEAN, (QofAccessFunc)gncInvoiceGetActive, (QofSetterFunc)gncInvoiceSetActive },
@@ -1573,6 +1573,14 @@ gboolean gncInvoiceRegister (void)
   qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncInvoiceCompare, params);
   reg_lot ();
   reg_txn ();
+
+  /* Make the compiler happy... */
+  if (0) {
+    qofInvoiceSetOwner(NULL, NULL);
+    qofInvoiceGetOwner(NULL);
+    qofInvoiceSetBillTo(NULL, NULL);
+    qofInvoiceGetBillTo(NULL);
+  }
 
   return qof_object_register (&gncInvoiceDesc);
 }

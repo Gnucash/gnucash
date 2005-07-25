@@ -1,3 +1,13 @@
+2005-07-25  Derek Atkins  <derek@ihtfp.com>
+
+	* src/business/business-core/gncInvoice.c:  revert the
+	  OWNER to GNC_ID_OWNER because it breaks lots of existing
+	  queries.  QSF needs to find a better method, either using
+	  a secondary entry into the parameter or coming up with a
+	  new meta-type in QOF where you can implement GNC_ID_OWNER
+	  in terms of the new metatype.  QOF_TYPE_COLLECT is absolutely
+	  the WRONG answer for GNC_ID_OWNER.
+
 2005-07-24  David Hampton  <hampton@employees.org>
 
 	* various src/backend and src/business/business-core: Add gchar*
