@@ -70,8 +70,8 @@ job_dom_tree_create (GncJob *job)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, gnc_job_string);
-    xmlSetProp(ret, "version", job_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_job_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST job_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(job_guid_string,
 				      qof_instance_get_guid (QOF_INSTANCE (job))));

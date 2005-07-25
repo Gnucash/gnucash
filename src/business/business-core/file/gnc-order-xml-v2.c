@@ -79,8 +79,8 @@ order_dom_tree_create (GncOrder *order)
     xmlNodePtr ret;
     Timespec ts;
 
-    ret = xmlNewNode(NULL, gnc_order_string);
-    xmlSetProp(ret, "version", order_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_order_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST order_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(order_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE (order))));

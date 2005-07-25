@@ -335,7 +335,7 @@ dom_tree_to_kvp_value(xmlNodePtr node)
     struct kvp_val_converter *mark;
     kvp_value *ret = NULL;
 
-    xml_type = xmlGetProp(node, "type");
+    xml_type = xmlGetProp(node, BAD_CAST "type");
     if(xml_type)
     {
         type = g_strdup (xml_type);

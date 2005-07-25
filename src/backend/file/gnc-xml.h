@@ -58,9 +58,6 @@ sixtp* gnc_pricedb_sixtp_parser_create(void);
 xmlNodePtr gnc_schedXaction_dom_tree_create( SchedXaction *sx );
 sixtp* gnc_schedXaction_sixtp_parser_create(void);
 
-xmlNodePtr split_to_dom_tree(const gchar *tag, Split *spl);
-Split* dom_tree_to_split(xmlNodePtr node, QofBook *book);
-
 xmlNodePtr gnc_transaction_dom_tree_create(Transaction *txn);
 sixtp* gnc_transaction_sixtp_parser_create(void);
 

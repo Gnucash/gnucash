@@ -72,7 +72,7 @@ guid_to_dom_tree(const char *tag, const GUID* gid)
 
     ret = xmlNewNode(NULL, tag);
 
-    xmlSetProp(ret, "type", "guid");
+    xmlSetProp(ret, BAD_CAST "type", BAD_CAST "guid");
 
     if (!guid_to_string_buff(gid, guid_str))
     {
@@ -99,8 +99,8 @@ commodity_ref_to_dom_tree(const char *tag, const gnc_commodity *c)
         return NULL;
     }
     
-    xmlNewTextChild(ret, NULL, "cmdty:space", gnc_commodity_get_namespace(c));
-    xmlNewTextChild(ret, NULL, "cmdty:id", gnc_commodity_get_mnemonic(c));
+    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:space", gnc_commodity_get_namespace(c));
+    xmlNewTextChild(ret, NULL, BAD_CAST "cmdty:id", gnc_commodity_get_mnemonic(c));
 
     return ret;
 }
@@ -144,12 +144,12 @@ timespec_to_dom_tree(const char *tag, const Timespec *spec)
     
 	ret = xmlNewNode(NULL, tag);
     
-	xmlNewTextChild(ret, NULL, "ts:date", date_str);
+	xmlNewTextChild(ret, NULL, BAD_CAST "ts:date", date_str);
 
 	if(spec->tv_nsec > 0){
 		ns_str = timespec_nsec_to_string(spec);
 		if(ns_str){
-			xmlNewTextChild(ret, NULL, "ts:ns", ns_str);
+			xmlNewTextChild(ret, NULL, BAD_CAST "ts:ns", ns_str);
 		}
 	}
 
@@ -174,7 +174,7 @@ gdate_to_dom_tree(const char *tag, GDate *date)
 
 	ret = xmlNewNode(NULL, tag);
 
-	xmlNewTextChild(ret, NULL, "gdate", date_str);
+	xmlNewTextChild(ret, NULL, BAD_CAST "gdate", date_str);
 
 	g_free(date_str);
 
@@ -234,7 +234,7 @@ double_to_string(double value)
 static void
 add_text_to_node(xmlNodePtr node, gchar *type, gchar *val)
 {
-    xmlSetProp(node, "type", type);
+    xmlSetProp(node, BAD_CAST "type", type);
     xmlNodeSetContent(node, val);
     g_free(val);
 }
@@ -245,7 +245,7 @@ static void
 add_kvp_slot(gpointer key, gpointer value, gpointer data);
 
 static void
-add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
+add_kvp_value_node(xmlNodePtr node, const xmlChar *tag, kvp_value* val)
 {
     xmlNodePtr val_node;
     gchar *tmp_str1;
@@ -277,7 +277,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
                          gnc_numeric_to_string(kvp_value_get_numeric(val)));
         break;
     case KVP_TYPE_STRING:
-        xmlSetProp(val_node, "type", "string");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
         break;
     case KVP_TYPE_GUID:
         add_text_to_node(val_node,"guid",
@@ -288,7 +288,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
       Timespec ts = kvp_value_get_timespec (val);
 
       val_node = timespec_to_dom_tree (tag, &ts);
-      xmlSetProp (val_node, "type", "timespec");
+      xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "timespec");
       xmlAddChild (node, val_node);
     }
     break;
@@ -296,7 +296,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     {
         guint64 size;
         void *binary_data = kvp_value_get_binary(val, &size);
-        xmlSetProp(val_node, "type", "binary");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "binary");
         g_return_if_fail(binary_data);
         tmp_str1 = binary_to_string(binary_data, size);
         xmlNodeSetContent(val_node, tmp_str1);
@@ -307,11 +307,11 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     {
         GList *cursor;
         
-        xmlSetProp(val_node, "type", "list");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "list");
         for(cursor = kvp_value_get_glist(val); cursor; cursor = cursor->next)
         {
             kvp_value *val = (kvp_value*)cursor->data;
-            add_kvp_value_node(val_node, "slot:value", val);
+            add_kvp_value_node(val_node, BAD_CAST "slot:value", val);
         }
     }
     
@@ -320,7 +320,7 @@ add_kvp_value_node(xmlNodePtr node, gchar *tag, kvp_value* val)
     {
         kvp_frame *frame;
 
-        xmlSetProp(val_node, "type", "frame");
+        xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "frame");
 
         frame = kvp_value_get_frame (val);
         if (!frame || !kvp_frame_get_hash (frame))
@@ -342,11 +342,11 @@ add_kvp_slot(gpointer key, gpointer value, gpointer data)
     xmlNodePtr slot_node;
     xmlNodePtr node = (xmlNodePtr)data;
 
-    slot_node = xmlNewChild(node, NULL, "slot", NULL);
+    slot_node = xmlNewChild(node, NULL, BAD_CAST "slot", NULL);
 
-    xmlNewTextChild(slot_node, NULL, "slot:key", (gchar*)key);
+    xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", (gchar*)key);
 
-    add_kvp_value_node(slot_node, "slot:value", (kvp_value*)value);
+    add_kvp_value_node(slot_node, BAD_CAST "slot:value", (kvp_value*)value);
 }
     
 xmlNodePtr

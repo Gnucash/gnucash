@@ -133,7 +133,7 @@ qsf_object_validation_handler(xmlNodePtr child, xmlNsPtr ns, qsf_validator *vali
 		cur_node = cur_node->next)
 	{
 		if(qsf_is_element(cur_node, ns, QSF_OBJECT_TAG)) {
-			object_declaration = xmlGetProp(cur_node, QSF_OBJECT_TYPE);
+			object_declaration = xmlGetProp(cur_node, BAD_CAST QSF_OBJECT_TYPE);
 			count = g_hash_table_size(valid->validation_table);
 			g_hash_table_insert(valid->validation_table, object_declaration, xmlNodeGetContent(cur_node));
 			if((g_hash_table_size(valid->validation_table) > count) &&
@@ -285,7 +285,7 @@ qsf_supported_data_types(gpointer type, gpointer user_data)
 	if(qsf_is_element(params->param_node, params->qsf_ns, (char*)type))
 	{
 		g_hash_table_insert(params->qsf_parameter_hash,
-			xmlGetProp(params->param_node, QSF_OBJECT_TYPE), params->param_node);
+			xmlGetProp(params->param_node, BAD_CAST QSF_OBJECT_TYPE), params->param_node);
 	}
 }
 
@@ -316,8 +316,8 @@ qsf_object_node_handler(xmlNodePtr child, xmlNsPtr qsf_ns, qsf_param *params)
 		object_set = g_new(qsf_objects, 1);
 		params->object_set = object_set;
 		object_set->parameters = g_hash_table_new(g_str_hash, g_str_equal);
-		object_set->object_type = g_strdup(xmlGetProp(child, QSF_OBJECT_TYPE));
-		object_count_s = g_strdup(xmlGetProp(child, QSF_OBJECT_COUNT));
+		object_set->object_type = g_strdup(xmlGetProp(child, BAD_CAST QSF_OBJECT_TYPE));
+		object_count_s = g_strdup(xmlGetProp(child, BAD_CAST QSF_OBJECT_COUNT));
 		c = (int)strtol(object_count_s, &tail, 0);
 		g_free(object_count_s);
 		params->qsf_object_list = g_list_prepend(params->qsf_object_list, object_set);
@@ -338,7 +338,7 @@ qsf_book_node_handler(xmlNodePtr child, xmlNsPtr ns, qsf_param *params)
 	GUID book_guid;
 
 	if(qsf_is_element(child, ns, QSF_BOOK_TAG)) {
-		book_count_s = xmlGetProp(child,QSF_BOOK_COUNT);
+		book_count_s = xmlGetProp(child,BAD_CAST QSF_BOOK_COUNT);
 		if(book_count_s) {
 			book_count = (int)strtol(book_count_s, &tail, 0);
 			/* More than one book not currently supported. */

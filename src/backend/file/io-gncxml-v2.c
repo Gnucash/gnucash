@@ -354,7 +354,7 @@ gnc_counter_end_handler(gpointer data_for_children,
     
     g_return_val_if_fail(tree, FALSE);
 
-    type = xmlGetProp(tree, "cd:type");
+    type = xmlGetProp(tree, BAD_CAST "cd:type");
     strval = dom_tree_to_text(tree);
     if(!string_to_gint64(strval, &val))
     {
@@ -765,8 +765,8 @@ write_counts(FILE* out, ...)
         {
             val = g_strdup_printf("%d", amount);
 
-            node = xmlNewNode(NULL, COUNT_DATA_TAG);
-            xmlSetProp(node, "cd:type", type);
+            node = xmlNewNode(NULL, BAD_CAST COUNT_DATA_TAG);
+            xmlSetProp(node, BAD_CAST "cd:type", type);
             xmlNodeAddContent(node, val);
 
             xmlElemDump(out, NULL, node);

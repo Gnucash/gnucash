@@ -63,8 +63,8 @@ gnc_lot_dom_tree_create(GNCLot *lot)
     kvp_frame *kf;
 
 	 ENTER("(lot=%p)", lot);
-    ret = xmlNewNode(NULL, gnc_lot_string);
-    xmlSetProp(ret, "version", lot_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_lot_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST lot_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(lot_id_string, gnc_lot_get_guid(lot)));
 

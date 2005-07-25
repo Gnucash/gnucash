@@ -67,7 +67,7 @@ test_dom_tree_to_text(void)
         gchar *test_string2;
         xmlNodePtr test_node;
 
-        test_node = xmlNewNode(NULL, "test-node");
+        test_node = xmlNewNode(NULL, BAD_CAST "test-node");
         test_string1 = get_random_string();
 
         xmlNodeAddContent(test_node, test_string1);

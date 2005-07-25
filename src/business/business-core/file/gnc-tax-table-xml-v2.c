@@ -86,7 +86,7 @@ ttentry_dom_tree_create (GncTaxTableEntry *entry)
   Account *account;
   gnc_numeric amount;
 
-  ret = xmlNewNode(NULL, gnc_taxtableentry_string);
+  ret = xmlNewNode(NULL, BAD_CAST gnc_taxtableentry_string);
 
   account = gncTaxTableEntryGetAccount (entry);
   if (account)
@@ -109,8 +109,8 @@ taxtable_dom_tree_create (GncTaxTable *table)
     xmlNodePtr ret, entries;
     GList *list;
 
-    ret = xmlNewNode(NULL, gnc_taxtable_string);
-    xmlSetProp(ret, "version", taxtable_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_taxtable_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST taxtable_version_string);
 
     maybe_add_guid(ret, taxtable_guid_string, table);
     xmlAddChild(ret, text_to_dom_tree (taxtable_name_string,
@@ -127,7 +127,7 @@ taxtable_dom_tree_create (GncTaxTable *table)
 
     maybe_add_guid(ret, taxtable_parent_string, gncTaxTableGetParent (table));
 
-    entries = xmlNewChild (ret, NULL, taxtable_entries_string, NULL);
+    entries = xmlNewChild (ret, NULL, BAD_CAST taxtable_entries_string, NULL);
     for (list = gncTaxTableGetEntries (table); list; list = list->next) {
       GncTaxTableEntry *entry = list->data;
       xmlAddChild(entries, ttentry_dom_tree_create (entry));

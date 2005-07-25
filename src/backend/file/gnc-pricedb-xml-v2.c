@@ -366,7 +366,7 @@ add_child_or_kill_parent(xmlNodePtr parent, xmlNodePtr child)
 }
 
 static xmlNodePtr
-gnc_price_to_dom_tree(const char *tag, GNCPrice *price)
+gnc_price_to_dom_tree(const xmlChar *tag, GNCPrice *price)
 {  
   xmlNodePtr price_xml;
   const gchar *typestr, *sourcestr;
@@ -424,7 +424,7 @@ xml_add_gnc_price_adapter(GNCPrice *p, gpointer data)
   xmlNodePtr xml_node = (xmlNodePtr) data;
   
   if(p) {
-    xmlNodePtr price_xml = gnc_price_to_dom_tree("price", p);
+    xmlNodePtr price_xml = gnc_price_to_dom_tree(BAD_CAST "price", p);
     if(!price_xml) return FALSE;
     xmlAddChild(xml_node, price_xml);
     return TRUE;
@@ -434,7 +434,7 @@ xml_add_gnc_price_adapter(GNCPrice *p, gpointer data)
 }
 
 static xmlNodePtr
-gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
+gnc_pricedb_to_dom_tree(const xmlChar *tag, GNCPriceDB *db)
 {
   xmlNodePtr db_xml = NULL;
 
@@ -443,7 +443,7 @@ gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
   db_xml= xmlNewNode(NULL, tag);
   if(!db_xml) return NULL;
 
-  xmlSetProp(db_xml, "version", "1");
+  xmlSetProp(db_xml, BAD_CAST "version", BAD_CAST "1");
 
   if(!gnc_pricedb_foreach_price(db, xml_add_gnc_price_adapter, db_xml, TRUE))
   {
@@ -464,5 +464,5 @@ gnc_pricedb_to_dom_tree(const char *tag, GNCPriceDB *db)
 xmlNodePtr
 gnc_pricedb_dom_tree_create(GNCPriceDB *db)
 {
-    return gnc_pricedb_to_dom_tree("gnc:pricedb", db);
+    return gnc_pricedb_to_dom_tree(BAD_CAST "gnc:pricedb", db);
 }

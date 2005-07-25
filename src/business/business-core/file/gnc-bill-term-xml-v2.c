@@ -84,8 +84,8 @@ billterm_dom_tree_create (GncBillTerm *term)
 {
     xmlNodePtr ret, data, kvpnode;
 
-    ret = xmlNewNode(NULL, gnc_billterm_string);
-    xmlSetProp(ret, "version", billterm_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_billterm_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST billterm_version_string);
 
     maybe_add_guid(ret, billterm_guid_string, QOF_INSTANCE(term));
     xmlAddChild(ret, text_to_dom_tree (billterm_name_string,
@@ -113,7 +113,7 @@ billterm_dom_tree_create (GncBillTerm *term)
 
     switch (gncBillTermGetType (term)) {
     case GNC_TERM_TYPE_DAYS:
-      data = xmlNewChild (ret, NULL, gnc_daystype_string, NULL);
+      data = xmlNewChild (ret, NULL, BAD_CAST gnc_daystype_string, NULL);
       maybe_add_int (data, days_duedays_string, gncBillTermGetDueDays (term));
       maybe_add_int (data, days_discdays_string,
 		     gncBillTermGetDiscountDays (term));
@@ -122,7 +122,7 @@ billterm_dom_tree_create (GncBillTerm *term)
       break;
 
     case GNC_TERM_TYPE_PROXIMO:
-      data = xmlNewChild (ret, NULL, gnc_proximotype_string, NULL);
+      data = xmlNewChild (ret, NULL, BAD_CAST gnc_proximotype_string, NULL);
       maybe_add_int (data, prox_dueday_string, gncBillTermGetDueDays (term));
       maybe_add_int (data, prox_discday_string,
 		     gncBillTermGetDiscountDays (term));

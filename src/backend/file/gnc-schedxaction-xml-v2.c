@@ -155,20 +155,20 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
     templ_acc_guid = xaccAccountGetGUID(sx->template_acct);
 
     /* FIXME: this should be the same as the def in io-gncxml-v2.c */
-    ret = xmlNewNode( NULL, GNC_SCHEDXACTION_TAG );
+    ret = xmlNewNode( NULL, BAD_CAST GNC_SCHEDXACTION_TAG );
 
-    xmlSetProp( ret, "version", schedxaction_version_string );
+    xmlSetProp( ret, BAD_CAST "version", BAD_CAST schedxaction_version_string );
 
     xmlAddChild( ret,
                  guid_to_dom_tree(SX_ID,
                                   xaccSchedXactionGetGUID(sx)) );
 
-    xmlNewTextChild( ret, NULL, SX_NAME, xaccSchedXactionGetName(sx) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_NAME, xaccSchedXactionGetName(sx) );
 
-    xmlNewTextChild( ret, NULL, SX_AUTOCREATE,
-                     ( sx->autoCreateOption ? "y" : "n" ) );
-    xmlNewTextChild( ret, NULL, SX_AUTOCREATE_NOTIFY,
-                     ( sx->autoCreateNotify ? "y" : "n" ) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE,
+                     BAD_CAST ( sx->autoCreateOption ? "y" : "n" ) );
+    xmlNewTextChild( ret, NULL, BAD_CAST SX_AUTOCREATE_NOTIFY,
+                     BAD_CAST ( sx->autoCreateNotify ? "y" : "n" ) );
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_CREATE_DAYS,
                                      sx->advanceCreateDays));
     xmlAddChild(ret, int_to_dom_tree(SX_ADVANCE_REMIND_DAYS,
@@ -206,7 +206,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
 				  templ_acc_guid));
 				  
     /* output freq spec */
-    fsNode = xmlNewNode(NULL, SX_FREQSPEC);
+    fsNode = xmlNewNode(NULL, BAD_CAST SX_FREQSPEC);
     xmlAddChild( fsNode,
                  gnc_freqSpec_dom_tree_create(
                          xaccSchedXactionGetFreqSpec(sx)) );
@@ -221,7 +221,7 @@ gnc_schedXaction_dom_tree_create(SchedXaction *sx)
             for ( l = gnc_sx_get_defer_instances( sx ); l; l = l->next ) {
                     tsd = (temporalStateData*)l->data;
 
-                    instNode = xmlNewNode( NULL, SX_DEFER_INSTANCE );
+                    instNode = xmlNewNode( NULL, BAD_CAST SX_DEFER_INSTANCE );
                     if ( g_date_valid( &tsd->last_date ) )
                     {
                       xmlAddChild( instNode, gdate_to_dom_tree( SX_LAST,

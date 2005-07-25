@@ -67,9 +67,9 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
     const char *string;
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, gnc_commodity_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_commodity_string);
 
-    xmlSetProp(ret, "version", commodity_version_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST commodity_version_string);
     
     xmlAddChild(ret, text_to_dom_tree(cmdty_namespace,
                                       gnc_commodity_get_namespace(com)));
@@ -94,7 +94,7 @@ gnc_commodity_dom_tree_create(const gnc_commodity *com)
                                      gnc_commodity_get_fraction(com)));
 
     if (gnc_commodity_get_quote_flag(com)) {
-      xmlNewChild(ret, NULL, cmdty_get_quotes, NULL);
+      xmlNewChild(ret, NULL, BAD_CAST cmdty_get_quotes, NULL);
       source = gnc_commodity_get_quote_source(com);
       if (source)
 	xmlAddChild(ret, text_to_dom_tree(cmdty_quote_source,

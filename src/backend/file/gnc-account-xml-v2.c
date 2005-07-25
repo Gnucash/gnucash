@@ -82,8 +82,8 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 
     ENTER ("(account=%p)", act);
 
-    ret = xmlNewNode(NULL, gnc_account_string);
-    xmlSetProp(ret, "version", account_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_account_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST account_version_string);
 
     xmlAddChild(ret, text_to_dom_tree(act_name_string,
                                       xaccAccountGetName(act)));
@@ -101,7 +101,7 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
                                      xaccAccountGetCommoditySCUi(act)));
     
     if (xaccAccountGetNonStdSCU(act))
-      xmlNewChild(ret, NULL, act_non_standard_scu_string, NULL);
+      xmlNewChild(ret, NULL, BAD_CAST act_non_standard_scu_string, NULL);
     
     str = xaccAccountGetCode(act);
     if (str && strlen(str) > 0)
@@ -134,22 +134,22 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
 	      !gnc_commodity_is_iso(com) &&
 	      gnc_commodity_get_quote_flag(com)) {
 	    if (!kvpnode)
-	      kvpnode= xmlNewNode(NULL, act_slots_string);
+	      kvpnode= xmlNewNode(NULL, BAD_CAST act_slots_string);
 
-	    slot_node = xmlNewChild(kvpnode, NULL, "slot", NULL);
-	    xmlNewTextChild(slot_node, NULL, "slot:key", "old-price-source");
+	    slot_node = xmlNewChild(kvpnode, NULL, BAD_CAST "slot", NULL);
+	    xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", BAD_CAST "old-price-source");
 
 	    source = gnc_commodity_get_quote_source(com);
-	    val_node = xmlNewTextChild(slot_node, NULL, "slot:value",
+	    val_node = xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:value",
 				       gnc_quote_source_get_old_internal_name(source));
-	    xmlSetProp(val_node, "type", "string");
+	    xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
 
 	    tz = gnc_commodity_get_quote_tz(com);
 	    if (tz) {
-	      slot_node = xmlNewChild(kvpnode, NULL, "slot", NULL);
-	      xmlNewTextChild(slot_node, NULL, "slot:key", "old-quote-tz");
-	      val_node = xmlNewTextChild(slot_node, NULL, "slot:value", tz);
-	      xmlSetProp(val_node, "type", "string");
+	      slot_node = xmlNewChild(kvpnode, NULL, BAD_CAST "slot", NULL);
+	      xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:key", BAD_CAST "old-quote-tz");
+	      val_node = xmlNewTextChild(slot_node, NULL, BAD_CAST "slot:value", tz);
+	      xmlSetProp(val_node, BAD_CAST "type", BAD_CAST "string");
 	    }
 	  }
 	}
@@ -171,7 +171,7 @@ gnc_account_dom_tree_create(Account *act, gboolean exporting)
     PINFO ("lot list=%p", n);
     if (n && !exporting)
     {
-       xmlNodePtr toaddto = xmlNewChild(ret, NULL, act_lots_string, NULL);
+       xmlNodePtr toaddto = xmlNewChild(ret, NULL, BAD_CAST act_lots_string, NULL);
 
        for (; n; n=n->next)
        {

@@ -108,8 +108,8 @@ gnc_book_dom_tree_create(QofBook *book)
 {
     xmlNodePtr ret;
 
-    ret = xmlNewNode(NULL, gnc_book_string);
-    xmlSetProp(ret, "version", gnc_v2_book_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_book_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST gnc_v2_book_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(book_id_string, qof_book_get_guid(book)));
 

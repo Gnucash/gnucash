@@ -83,8 +83,8 @@ gnc_owner_to_dom_tree (const char *tag, GncOwner *owner)
       return NULL;
     }
 
-    ret = xmlNewNode(NULL, tag);
-    xmlSetProp(ret, "version", owner_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST tag);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST owner_version_string);
 
     xmlAddChild (ret, text_to_dom_tree (owner_type_string, type_str));
     xmlAddChild (ret, guid_to_dom_tree (owner_id_string,

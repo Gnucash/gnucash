@@ -101,8 +101,8 @@ invoice_dom_tree_create (GncInvoice *invoice)
     GncOwner *billto;
     gnc_numeric amt;
 
-    ret = xmlNewNode(NULL, gnc_invoice_string);
-    xmlSetProp(ret, "version", invoice_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_invoice_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST invoice_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(invoice_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE(invoice))));

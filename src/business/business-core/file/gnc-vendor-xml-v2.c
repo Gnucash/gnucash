@@ -81,8 +81,8 @@ vendor_dom_tree_create (GncVendor *vendor)
     GncBillTerm *term;
     GncTaxTable *taxtable;
 
-    ret = xmlNewNode(NULL, gnc_vendor_string);
-    xmlSetProp(ret, "version", vendor_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_vendor_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST vendor_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(vendor_guid_string,
 				      qof_instance_get_guid (QOF_INSTANCE(vendor))));

@@ -1,5 +1,12 @@
 2005-07-24  David Hampton  <hampton@employees.org>
 
+	* various src/backend and src/business/business-core: Add gchar*
+	to xmlChar* casting of string constants to eliminate some gcc4
+	warnings.
+	
+	* src/gnome-utils/print-session.c: Some gchar* to guchar* casting
+	to make gcc4 happy.
+
 	* src/gnome-utils/gw-gnome-utils-spec.scm: Remove references to
 	deleted data structures.  Gnucash now compiles against
 	g-wrap-1.9.6 as well as g-wrap-1.3.

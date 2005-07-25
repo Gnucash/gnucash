@@ -84,8 +84,8 @@ employee_dom_tree_create (GncEmployee *employee)
     gnc_numeric num;
     Account* ccard_acc;
 
-    ret = xmlNewNode(NULL, gnc_employee_string);
-    xmlSetProp(ret, "version", employee_version_string);
+    ret = xmlNewNode(NULL, BAD_CAST gnc_employee_string);
+    xmlSetProp(ret, BAD_CAST "version", BAD_CAST employee_version_string);
 
     xmlAddChild(ret, guid_to_dom_tree(employee_guid_string,
 				      qof_instance_get_guid(QOF_INSTANCE (employee))));
