@@ -904,7 +904,7 @@ gchar *gnc_call_iconv(iconv_t handler, const char* input)
 {
   char *inbuffer = (char*)input;
   char *outbuffer, *outbufferstart;
-  int inbytes, outbytes;
+  size_t inbytes, outbytes;
 
   inbytes = strlen(inbuffer);
   outbytes = inbytes + 2;
