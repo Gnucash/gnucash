@@ -43,7 +43,7 @@ gnc_print_session_create(gboolean hand_built_pages)
   gint response;
 
   /* Ask the user what to do with the output */
-  dialog = gnome_print_dialog_new(ps->job, _("Print GnuCash Document"), 0);
+  dialog = gnome_print_dialog_new(ps->job, (guchar *) _("Print GnuCash Document"), 0);
   response = gtk_dialog_run(GTK_DIALOG(dialog));
   switch (response) {
     case GNOME_PRINT_DIALOG_RESPONSE_PRINT: 
@@ -63,10 +63,10 @@ gnc_print_session_create(gboolean hand_built_pages)
   ps->hand_built_pages = hand_built_pages;
   ps->print_type = response;
 
-  ps->default_font = gnome_font_find_closest("Sans Regular", 12);
+  ps->default_font = gnome_font_find_closest((guchar *)"Sans Regular", 12);
 
   if (hand_built_pages) {
-    gnome_print_beginpage(ps->context, "");
+    gnome_print_beginpage(ps->context, (guchar *)"");
     gnome_print_setrgbcolor(ps->context, 0.0, 0.0, 0.0);
     gnome_print_setfont(ps->context, ps->default_font);
   }
@@ -92,7 +92,7 @@ gnc_print_session_moveto(PrintSession * ps, double x, double y)
 void 
 gnc_print_session_text(PrintSession * ps, const char * text)
 {
-  gnome_print_show(ps->context, text);  
+  gnome_print_show(ps->context, (guchar*)text);  
 }
 
 
@@ -112,7 +112,7 @@ gnc_print_session_done(PrintSession * ps)
       break;
 
     case GNOME_PRINT_DIALOG_RESPONSE_PREVIEW:
-      widget = gnome_print_job_preview_new(ps->job, "Print Preview");
+      widget = gnome_print_job_preview_new(ps->job, (guchar*)"Print Preview");
       gtk_widget_show(widget);
       break;
     
