@@ -143,7 +143,7 @@
       <key>/schemas/apps/gnucash/general/use_accounting_labels</key>
       <applyto>/apps/gnucash/general/use_accounting_labels</applyto>
       <owner>gnucash</owner>
-      <type>boolean</type>
+      <type>bool</type>
       <default>FALSE</default>
       <locale name="C">
         <short>Use formal account labels.</short>
