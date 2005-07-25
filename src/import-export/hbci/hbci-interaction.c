@@ -167,7 +167,9 @@ void GNCInteractor_show(GNCInteractor *i)
   g_assert(i);
   GNCInteractor_show_nodelete(i);
   /* Clear log window. */
-  gtk_editable_delete_text (GTK_EDITABLE (i->log_text), 0, -1);
+  gtk_text_buffer_set_text
+    (gtk_text_view_get_buffer (GTK_TEXT_VIEW (i->log_text) ),
+     "", 0);
 }
 
 
@@ -605,6 +607,7 @@ static GWEN_TYPE_UINT32 progressStartCB(AB_BANKING *ab, const char *utf8title,
   /*   GNCInteractor_add_log_text (data, text); */
 
   /* Set progress bar */
+  gtk_widget_set_sensitive (data->action_progress, TRUE);
   gtk_progress_set_percentage (GTK_PROGRESS (data->action_progress), 
 			       0.0);
   data->action_max = total;
@@ -693,20 +696,12 @@ static int progressEndCB(AB_BANKING *ab, GWEN_TYPE_UINT32 id)
 int debug_pmonitor = FALSE;
 void GNCInteractor_add_log_text (GNCInteractor *data, const char *msg)
 {
-  int pos;
+  GtkTextBuffer *tb;
   g_assert(data);
 
-  //
-  // DRH - Fix me. This is a GtkTextView now, not a GtkText. These
-  // casts to an editable will fail at runtime.
-  //
-  //  pos = gtk_text_get_length (GTK_TEXT (data->log_text));
-  gtk_editable_insert_text (GTK_EDITABLE (data->log_text),
-			    msg, strlen (msg),
-			    &pos);
-  gtk_editable_insert_text (GTK_EDITABLE (data->log_text),
-			    "\n", 1,
-			    &pos);
+  tb = gtk_text_view_get_buffer (GTK_TEXT_VIEW (data->log_text) );
+  gtk_text_buffer_insert_at_cursor (tb, msg, -1);
+  gtk_text_buffer_insert_at_cursor (tb, "\n", -1);
 }
 
 static void

@@ -64,7 +64,7 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
   dialog = glade_xml_get_widget (xml, "HBCI_daterange_dialog");
 
   if (parent)
-    gnome_dialog_set_parent (GNOME_DIALOG (dialog), GTK_WINDOW (parent));
+    gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 
   heading_label  = glade_xml_get_widget (xml, "heading_label");
   last_retrieval_button  = glade_xml_get_widget (xml, "last_retrieval_button");
@@ -95,7 +95,7 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
   gtk_signal_connect (GTK_OBJECT (info.enter_to_button), "toggled", 
 		      GTK_SIGNAL_FUNC (on_button_toggled), &info);
 
-  gnome_dialog_set_default (GNOME_DIALOG (dialog), 0);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), 1);
 
   if (heading)
     gtk_label_set_text (GTK_LABEL (heading_label), heading);
@@ -104,12 +104,14 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
 
   /* Hide on close instead of destroy since we still need the values
      from the boxes. */
-  gnome_dialog_close_hides (GNOME_DIALOG (dialog), TRUE);
+  /* gnome_dialog_close_hides (GTK_DIALOG (dialog), TRUE); */
   gtk_widget_show_all (GTK_WIDGET (dialog));
   
-  result = gnome_dialog_run_and_close (GNOME_DIALOG (dialog));
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (result >= 0)
+    gtk_widget_hide (GTK_WIDGET (dialog));
 
-  if (result == 0)
+  if (result == 1)
   {
     *from_date = gnc_date_edit_get_date_ts (GNC_DATE_EDIT (info.from_dateedit));
     *last_retv_date = gtk_toggle_button_get_active 
@@ -124,7 +126,8 @@ gnc_hbci_enter_daterange (GtkWidget *parent,
     return TRUE;
   }
   
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  if (result >= 0)
+    gtk_widget_destroy (GTK_WIDGET (dialog));
   return FALSE;
 }
 

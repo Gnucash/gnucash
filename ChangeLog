@@ -1,3 +1,8 @@
+2005-07-25  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-daterange.c: Enable HBCI statement
+	download again. Works fully now.
+
 2005-07-25  Derek Atkins  <derek@ihtfp.com>
 
 	* src/business/business-core/gncInvoice.c:  revert the

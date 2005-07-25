@@ -32,7 +32,7 @@ View Statusbar
 Properties Dialog
 QIF Import
 OFX Import
-MT940 Import (need test data file)
+HBCI Import
 Export Accounts
 Stock Split Dialog
 
@@ -138,14 +138,12 @@ Resources
 
 - Importing
 
-  - HBCI - Needs new HTTP support [gnet] -- huh, no, the
-    import-export/hbci module does not need any extra http library,
-    especially not at compile-time. The module only needs the
-    aqbanking library but really nothing else. If the aqbanking
-    library links against any http library, then that's a business of
-    that library, but to my knowledge it comes with its own http
-    implementation so gnucash should really not be concerned about
-    http! cstim, 2005-04-09.
+  - HBCI - Issuing a transaction doesn't work fully, because some
+    widget changes have not been changed in the code. But Balance
+    download fully works.  (Earlier this
+    said: "Needs new HTTP support [gnet]", but no, the
+    import-export/hbci module does not need any extra http
+    library. cstim, 2005-04-09.)
 
 - Budgeting
 

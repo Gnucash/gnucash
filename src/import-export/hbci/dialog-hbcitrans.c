@@ -75,7 +75,7 @@ struct _trans_data
   GtkWidget *recp_bankname_label;
 
   /* The template choosing GtkList */
-  GtkWidget *template_gtk_list;
+  GtkWidget *template_gtktreeview;
 
   /* The selected template in the list */
   GtkWidget *selected_template;
@@ -194,7 +194,7 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data);
 static void fill_template_list_func(gpointer data, gpointer user_data)
 {
   GNCTransTempl *templ = data;
-  GtkList *list = user_data;
+  GtkTreeView *list = user_data;
   GtkWidget *item;
 
   g_assert(templ);
@@ -303,7 +303,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
     g_assert
       ((exec_later_button = glade_xml_get_widget (xml, "exec_later_button")) != NULL);
     g_assert
-      ((td->template_gtk_list = glade_xml_get_widget (xml, "template_list")) != NULL);
+      ((td->template_gtktreeview = glade_xml_get_widget (xml, "template_list")) != NULL);
     g_assert
       ((add_templ_button = glade_xml_get_widget (xml, "add_templ_button")) != NULL);
     g_assert
@@ -321,6 +321,16 @@ gnc_hbci_dialog_new (GtkWidget *parent,
       TRUE);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (td->amount_edit),
 				  xaccAccountGetCommoditySCU (gnc_acc));
+
+    /* FIXME: Greyed out the template widgets because they are not yet
+       implemented -- need to change the GTK_LIST code to
+       GTK_TREE_VIEW */
+    gtk_widget_set_sensitive (td->template_gtktreeview, FALSE);
+    gtk_widget_set_sensitive (add_templ_button, FALSE);
+    gtk_widget_set_sensitive (moveup_templ_button, FALSE);
+    gtk_widget_set_sensitive (movedown_templ_button, FALSE);
+    gtk_widget_set_sensitive (sort_templ_button, FALSE);
+    gtk_widget_set_sensitive (del_templ_button, FALSE);
 
     /* Check for what kind of transaction this should be, and change
        the labels accordingly. */
@@ -372,8 +382,9 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 			hbci_bankid);
 
     /* fill list for choosing a transaction template */
-    g_list_foreach(td->templ, fill_template_list_func, 
-		    GTK_LIST (td->template_gtk_list));
+    /* g_list_foreach(td->templ, fill_template_list_func, 
+       GTK_TREE_VIEW (td->template_gtktreeview)); */
+    /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
 
     td->selected_template = NULL;
     td->templ_changed = FALSE;
@@ -382,7 +393,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 /*    gnc_option_menu_init_w_signal (td->template_option, 
 				   GTK_SIGNAL_FUNC(template_selection_cb),
 				   td);   */
-    gtk_signal_connect (GTK_OBJECT (td->template_gtk_list), "select_child",
+    gtk_signal_connect (GTK_OBJECT (td->template_gtktreeview), "select_child",
                       GTK_SIGNAL_FUNC (on_template_list_select_child),
                       td);
                       
@@ -880,7 +891,7 @@ void add_template_cb(GtkButton *b,
   if (td->selected_template) {
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = 1+gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = 1+gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
     }
   else index = 0;
   
@@ -888,16 +899,16 @@ void add_template_cb(GtkButton *b,
     
   td->templ_changed = TRUE;
 
-  gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+  gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
   /* fill list for choosing a transaction template */
   g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		 GTK_TREE_VIEW (td->template_gtktreeview));
 
-  gtk_list_select_item(GTK_LIST(td->template_gtk_list), index);
+  gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index);
 
   /* the show_all is necessary since otherwise the new item doesn't show up */
-  gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+  gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
   }
 }
 
@@ -914,22 +925,22 @@ moveup_template_cb(GtkButton       *button,
   if (td->selected_template) {
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
     if (index > 0) {
       td->templ =  g_list_remove( td->templ, t);
       td->templ =  g_list_insert( td->templ, t, index-1);
 
       td->templ_changed = TRUE;
-      gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
       /* fill list for choosing a transaction template */
       g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		     GTK_TREE_VIEW (td->template_gtktreeview));
 
-      gtk_list_select_item(GTK_LIST(td->template_gtk_list), index-1);
+      gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index-1);
 
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
       }
     }
 }
@@ -947,22 +958,22 @@ movedown_template_cb(GtkButton       *button,
   if (td->selected_template) {
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
     if (index < g_list_length(td->templ)-1) {
       td->templ =  g_list_remove( td->templ, t);
       td->templ =  g_list_insert( td->templ, t, index+1);
 
       td->templ_changed = TRUE;
-      gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
       /* fill list for choosing a transaction template */
       g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		     GTK_TREE_VIEW (td->template_gtktreeview));
 
-      gtk_list_select_item(GTK_LIST(td->template_gtk_list), index+1);
+      gtk_list_select_item(GTK_LIST(td->template_gtktreeview), index+1);
 
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
       }
     }
 }
@@ -989,15 +1000,15 @@ sort_template_cb(GtkButton       *button,
   
     td->templ_changed = TRUE;
 
-    gtk_list_clear_items(GTK_LIST(td->template_gtk_list), 0, -1);
+    gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), 0, -1);
 
     /* fill list for choosing a transaction template */
     g_list_foreach(td->templ, fill_template_list_func,
-		    GTK_LIST (td->template_gtk_list));
+		   GTK_TREE_VIEW (td->template_gtktreeview));
 
-    gtk_list_unselect_all ( GTK_LIST (td->template_gtk_list) );
+    gtk_list_unselect_all ( GTK_LIST (td->template_gtktreeview) );
    
-    gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+    gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
   }
 }
 
@@ -1016,21 +1027,21 @@ del_template_cb(GtkButton       *button,
 
     t = gtk_object_get_user_data(GTK_OBJECT(td->selected_template));
 
-    index = gtk_list_child_position(GTK_LIST(td->template_gtk_list), td->selected_template);
+    index = gtk_list_child_position(GTK_LIST(td->template_gtktreeview), td->selected_template);
 
     if (gnc_verify_dialog (td->parent,
           FALSE, _("Do you really want to delete the template '%s'?"),
           gnc_trans_templ_get_name(g_list_nth_data(td->templ, index)))) {
-      gtk_list_clear_items(GTK_LIST(td->template_gtk_list), index, index+1);
+      gtk_list_clear_items(GTK_LIST(td->template_gtktreeview), index, index+1);
             
       td->templ =  g_list_remove( td->templ, t);
       td->templ_changed = TRUE;
 
       gnc_trans_templ_delete(t);
 
-      gtk_list_unselect_all ( GTK_LIST (td->template_gtk_list) );
+      gtk_list_unselect_all ( GTK_LIST (td->template_gtktreeview) );
 
-      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtk_list)));
+      gtk_widget_show_all (GTK_WIDGET ( GTK_LIST (td->template_gtktreeview)));
     
       }
     }
