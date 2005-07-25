@@ -19,8 +19,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/account_separator</key>
-      <applyto>/apps/gnucash/account_separator</applyto>
+      <key>/schemas/apps/gnucash/general/account_separator</key>
+      <applyto>/apps/gnucash/general/account_separator</applyto>
       <owner>gnucash</owner>
       <type>string</type>
       <default>colon</default>
@@ -99,8 +99,8 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gnucash/reversed_accounts</key>
-      <applyto>/apps/gnucash/reversed_accounts</applyto>
+      <key>/schemas/apps/gnucash/general/reversed_accounts</key>
+      <applyto>/apps/gnucash/general/reversed_accounts</applyto>
       <owner>gnucash</owner>
       <type>string</type>
       <default>credit</default>
