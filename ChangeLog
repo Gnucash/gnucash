@@ -8,6 +8,9 @@
 	  in terms of the new metatype.  QOF_TYPE_COLLECT is absolutely
 	  the WRONG answer for GNC_ID_OWNER.
 
+	* src/engine/gnc-hooks.c: Call the correct API to delete a hook
+	  so we don't throw an error at shutdown.
+
 2005-07-24  David Hampton  <hampton@employees.org>
 
 	* various src/backend and src/business/business-core: Add gchar*

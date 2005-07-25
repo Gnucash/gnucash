@@ -158,7 +158,7 @@ gnc_hook_remove_dangler (const gchar *name, GFunc callback)
     return;
   }
 
-  g_hook_unref(gnc_hook->c_danglers, hook);
+  g_hook_destroy_link(gnc_hook->c_danglers, hook);
   LEAVE("Removed %p from %s", hook, name);
 }
 
@@ -251,7 +251,7 @@ gnc_hook_del_scm_dangler (const gchar *name, SCM proc)
     return;
   }
 
-  g_hook_unref(gnc_hook->scm_danglers, hook);
+  g_hook_destroy_link(gnc_hook->scm_danglers, hook);
   LEAVE("Removed dangler from %s", name);
 }
 
