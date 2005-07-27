@@ -172,9 +172,6 @@ Resources
 
   - Doesn't let you complete the conflict resolution process, thus you can never complete the druid.
 
-- Tip of the day
-  - looks in the wrong place when you configure with --enable-opt-style-install
-
 ========================================
               ENHANCEMENTS
 ========================================

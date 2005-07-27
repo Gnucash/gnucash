@@ -11,7 +11,7 @@ man_MANS = \
   gnc-prices.1 \
   gnucash.1
 
-tipsdir = $(pkgdatadir)
+tipsdir = $(GNC_SHAREDIR)
 tips_DATA = tip_of_the_day.list
 
 EXTRA_DIST = \
