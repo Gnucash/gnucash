@@ -112,8 +112,9 @@ void gnc_hbci_dialog_delete(HBCITransDialog *td)
     AB_Transaction_free (td->hbci_trans);
 
   td->selected_template = NULL;
-    
-  gtk_widget_destroy (GTK_WIDGET (td->dialog));
+
+  if (td->dialog)
+    gtk_widget_destroy (GTK_WIDGET (td->dialog));
 #if HAVE_KTOBLZCHECK_H
   AccountNumberCheck_delete(td->blzcheck);
 #endif    
@@ -235,7 +236,8 @@ gnc_hbci_dialog_new (GtkWidget *parent,
   td->dialog = glade_xml_get_widget (xml, "HBCI_trans_dialog");
 
   if (parent)
-    gtk_widget_set_parent (td->dialog, parent);
+    gtk_window_set_transient_for (GTK_WINDOW (td->dialog), 
+				  GTK_WINDOW (parent));
   
   {
     GtkWidget *heading_label;
@@ -393,6 +395,8 @@ gnc_hbci_dialog_new (GtkWidget *parent,
 /*    gnc_option_menu_init_w_signal (td->template_option, 
 				   GTK_SIGNAL_FUNC(template_selection_cb),
 				   td);   */
+    /* FIXME: commented out until the GTK_TREE_VIEW is implemented! */
+    /*
     gtk_signal_connect (GTK_OBJECT (td->template_gtktreeview), "select_child",
                       GTK_SIGNAL_FUNC (on_template_list_select_child),
                       td);
@@ -415,7 +419,7 @@ gnc_hbci_dialog_new (GtkWidget *parent,
      gtk_signal_connect (GTK_OBJECT (del_templ_button), "clicked",
                       GTK_SIGNAL_FUNC (del_template_cb),
                       td);
-
+    */
 
     gtk_signal_connect(GTK_OBJECT (td->recp_bankcode_entry), "changed",
 		       GTK_SIGNAL_FUNC(blz_changed_cb), td);
@@ -481,9 +485,9 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
     /* The dialog gets hidden anyway as soon as any button is pressed. */
     gtk_widget_hide_all (td->dialog);
 
-    /* Was cancel pressed or dialog closed? 0 == execute now, 1 ==
-       scheduled for later execution (currently unimplemented) */
-    if (result != GTK_RESPONSE_OK) {
+    /* Was cancel pressed or dialog closed? 1 == execute now, 3 ==
+       scheduled for later execution (currently unimplemented); 2 == cancel */
+    if (result != 1 ) { /* <- currently hard-coded response-id from glade */
       gtk_widget_destroy (GTK_WIDGET (td->dialog));
       td->dialog = NULL;
       return -1;
@@ -510,6 +514,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 	   "Do you want to enter the job again?"));
       if (values_ok) {
 	AB_Transaction_free (td->hbci_trans);
+	td->hbci_trans = NULL;
 	return -1;
       }
       continue;
@@ -529,6 +534,7 @@ int gnc_hbci_dialog_run_until_ok(HBCITransDialog *td,
 	     "Do you want to enter the job again?"));
 	if (values_ok) {
 	  AB_Transaction_free (td->hbci_trans);
+	  td->hbci_trans = NULL;
 	  return -1;
 	}
 	continue;
@@ -558,9 +564,10 @@ hbci_trans_fill_values(const AB_ACCOUNT *h_acc, HBCITransDialog *td)
   AB_TRANSACTION *trans = AB_Transaction_new();
   gchar *tmpchar;
 
-  /* FIXME: The internal source encoding is hard-coded so far. This
-     needs to be fixed for the gnome2 version; the source encoding is
-     then probably utf-8 as well. iconv is also used in
+  /* The internal source encoding is returned by
+     gnc_hbci_book_encoding(), which is hard-coded so far. This needs
+     to be fixed for the gnome2 version; the source encoding is then
+     probably utf-8 as well. iconv is also used in
      gnc_AB_BANKING_interactors() in hbci-interaction.c. */
   iconv_t gnc_iconv_handler =
     iconv_open(gnc_hbci_AQBANKING_encoding(), gnc_hbci_book_encoding());
@@ -830,8 +837,19 @@ void blz_changed_cb(GtkEditable *e, gpointer user_data)
   
   if (record) {
     const char *bankname = AccountNumberCheck_Record_bankName (record);
+    GError *error = NULL;
+    gchar *utf8_bankname = g_convert (bankname, strlen(bankname), 
+				      "UTF-8", "ISO-8859-15",
+				      NULL, NULL, &error);
+    if (error != NULL) {
+      printf ("Error convertion bankname \"%s\" to UTF-8\n", bankname);
+      g_error_free (error);
+      utf8_bankname = g_strdup (bankname);
+    }
     gtk_label_set_text (GTK_LABEL (td->recp_bankname_label),
-			(strlen(bankname)>0 ? bankname : _("(unknown)")));
+			(strlen(utf8_bankname)>0 ? 
+			 utf8_bankname : _("(unknown)")));
+    g_free (utf8_bankname);
     gtk_widget_show_all (td->recp_bankname_label);
 
     /*printf("blz_changed_cb: KtoBlzCheck said check is bank is '%s' at '%s'.\n",

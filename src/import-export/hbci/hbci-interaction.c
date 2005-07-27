@@ -697,11 +697,16 @@ int debug_pmonitor = FALSE;
 void GNCInteractor_add_log_text (GNCInteractor *data, const char *msg)
 {
   GtkTextBuffer *tb;
+  GtkTextView *tv;
   g_assert(data);
 
-  tb = gtk_text_view_get_buffer (GTK_TEXT_VIEW (data->log_text) );
+  tv = GTK_TEXT_VIEW (data->log_text);
+  tb = gtk_text_view_get_buffer (tv);
   gtk_text_buffer_insert_at_cursor (tb, msg, -1);
   gtk_text_buffer_insert_at_cursor (tb, "\n", -1);
+  /* and scroll to the end of the buffer */
+  gtk_text_view_scroll_to_mark (tv, gtk_text_buffer_get_insert (tb),
+				0.0, FALSE, 0.0, 0.0);
 }
 
 static void

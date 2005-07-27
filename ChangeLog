@@ -1,3 +1,9 @@
+2005-07-27  Christian Stimming  <stimming@tuhh.de>
+
+	* src/import-export/hbci/dialog-hbcitrans.c: Eventually enable all
+	HBCI actions again. Only the convenience transfer templates are
+	not yet available, but all online actions work.
+
 2005-07-26  David Hampton  <hampton@employees.org>
 
 	* src/app-utils/prefs.scm:
