@@ -13,6 +13,7 @@
       <applyto>/apps/gnucash/dialogs/tax_info/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/preferences/window_position</applyto>
       <applyto>/apps/gnucash/dialogs/reset_warnings/window_position</applyto>
+      <applyto>/apps/gnucash/dialogs/tip_of_the_day/window_position</applyto>
       <owner>gnucash</owner>
       <type>list</type>
       <list_type>int</list_type>
@@ -36,6 +37,7 @@
       <applyto>/apps/gnucash/dialogs/tax_info/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/preferences/window_geometry</applyto>
       <applyto>/apps/gnucash/dialogs/reset_warnings/window_geometry</applyto>
+      <applyto>/apps/gnucash/dialogs/tip_of_the_day/window_geometry</applyto>
       <owner>gnucash</owner>
       <type>list</type>
       <list_type>int</list_type>

@@ -37,7 +37,9 @@
 #include "dialog-commodity.h"
 #include "dialog-options.h"
 #include "dialog-transfer.h"
+#include "dialog-totd.h"
 #include "dialog-utils.h"
+#include "druid-hierarchy.h"
 #include "file-utils.h"
 #include "global-options.h"
 #include "gnc-component-manager.h"
@@ -306,6 +308,8 @@ gnc_gui_init (SCM command_line)
 
     gnc_options_dialog_set_global_help_cb (gnc_global_options_help_cb, NULL);
 
+    gnc_totd_dialog(NULL, TRUE);
+
     main_window = gnc_main_window_new ();
     gtk_widget_show (GTK_WIDGET (main_window));
 
@@ -316,6 +320,7 @@ gnc_gui_init (SCM command_line)
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_menu_additions_new ());
     gnc_plugin_manager_add_plugin (gnc_plugin_manager_get (), gnc_plugin_register_new ());
     gnc_load_stock_icons ();
+    gnc_ui_hierarchy_druid_initialize();
 
     /* Run the ui startup hooks. */
     gnc_hook_run(HOOK_UI_STARTUP, NULL);

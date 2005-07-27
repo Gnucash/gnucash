@@ -457,9 +457,6 @@ string and 'directories' must be a list of strings."
       (if (list? sources)
 	  (gnc:quote-source-set-fq-installed sources)))
 
-    (gnc:update-splash-screen (_ "Loading tip-of-the-day..."))
-    (gnc:totd_dialog #f #t)
-
     (set-current-module original-module))
 
   (gnc:hook-add-dangler gnc:*book-opened-hook*
@@ -470,14 +467,6 @@ string and 'directories' must be a list of strings."
                                  "Run on GnuCash start" )))
                               (gnc:sx-since-last-run-wrapper
 			       (gnc:session-get-url session)))))
-
-  (gnc:hook-add-dangler gnc:*new-book-hook*
-                        (lambda ()
-                          (let ((option (gnc:lookup-global-option
-                                         "General"
-                                         "No account list setup on new file")))
-                            (if (and option (not (gnc:option-value option)))
-                                (gnc:ui-hierarchy-druid)))))
 
   ;; Load the system configs
   (gnc:update-splash-screen (_ "Loading configs..."))

@@ -37,6 +37,8 @@
 #include "gnc-amount-edit.h"
 #include "gnc-currency-edit.h"
 #include "gnc-general-select.h"
+#include "gnc-gconf-utils.h"
+#include "gnc-hooks.h"
 #include "gnc-component-manager.h"
 #include "gnc-event-p.h"
 #include "../gnome-utils/gnc-dir.h"
@@ -52,6 +54,8 @@
 
 #include "gnc-trace.h"
 static short module = MOD_IMPORT; 
+
+#define GCONF_SECTION "dialogs/new_hierarchy"
 
 static GtkWidget *hierarchy_window = NULL;
 GtkWidget *qof_book_merge_window = NULL;
@@ -915,4 +919,20 @@ gnc_ui_hierarchy_druid (void)
 	hierarchy_window = gnc_create_hierarchy_druid ();
 
 	return;
+}
+
+static void
+gnc_ui_hierarchy_druid_hook (void)
+{
+  if (gnc_gconf_get_bool(GCONF_SECTION, "show_on_new_file", NULL)) {
+    printf("start druid\n");
+    gnc_ui_hierarchy_druid();
+  }
+}
+
+void
+gnc_ui_hierarchy_druid_initialize (void)
+{
+  gnc_hook_add_dangler(HOOK_NEW_BOOK,
+		       (GFunc)gnc_ui_hierarchy_druid_hook, NULL);
 }

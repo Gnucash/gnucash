@@ -52,14 +52,6 @@
 
   (gw:wrap-function
    ws
-   'gnc:ui-hierarchy-druid
-   '<gw:void>
-   "gnc_ui_hierarchy_druid"
-   '()
-   "Open the hierarchy druid for importing an account hierarchy.")
-
-  (gw:wrap-function
-   ws
    'gnc:ui-is-running?
    '<gw:bool>
    "gnucash_ui_is_running"
@@ -145,14 +137,6 @@
    "gnc_new_account_tree"
    '((<gnc:MainWindow*> window))
    "Create a new account tree window.")
-
-  (gw:wrap-function
-   ws
-   'gnc:totd_dialog
-   '<gw:void>
-   "gnc_totd_dialog"
-   '((<gtk:Window*> parent) (<gw:bool> is_startup))
-   "Show the \"Tip Of The Day\" dialog.")
 
   (gw:wrap-as-wct ws
                   '<gnc:ProgressDialog*>

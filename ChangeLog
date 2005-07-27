@@ -1,3 +1,17 @@
+2005-07-26  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/prefs.scm:
+	* src/gnome/druid-hierarchy.[ch]:
+	* src/gnome/gw-gnc-spec.scm:
+	* src/gnome/top-level.c:
+	* src/gnome/schemas/apps_gnucash_dialog_common.schemas:
+	* src/gnome-utils/preferences.glade:
+	* src/scm/main.scm: Finish converting the "Tip of the Day" dialog
+	and the New File Hierarchy druid over to storing data in gconf.
+
+	* doc/Makefile.am: Fix problem with "tip of the day" file and opt
+	style installs.
+
 2005-07-25  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-daterange.c: Enable HBCI statement

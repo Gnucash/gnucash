@@ -247,16 +247,6 @@ to enter a credit card payment")
   (N_ "General") (N_ "Show Advanced Settings")
   "a" (N_ "Allow modification of less commonly used settings.") #f))
 
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "Display \"Tip of the Day\"")
-  "f" (N_ "Display hints for using GnuCash at startup") #t))
-
-(gnc:register-configuration-option
- (gnc:make-simple-boolean-option
-  (N_ "General") (N_ "No account list setup on new file")
-  "j" (N_ "Don't popup the new account list dialog when you choose \"New File\" from the \"File\" menu") #f))
-
 ;; QIF Import options. 
 
 (gnc:register-configuration-option

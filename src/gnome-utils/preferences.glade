@@ -847,9 +847,9 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkCheckButton" id="gconf/dialogs/new_hierarchy/open_for_new_file">
+		<widget class="GtkCheckButton" id="gconf/dialogs/new_hierarchy/show_on_new_file">
 		  <property name="visible">True</property>
-		  <property name="tooltip" translatable="yes">Don't popup the new account list dialog when you choose &quot;New File&quot; from the &quot;File&quot; menu</property>
+		  <property name="tooltip" translatable="yes">Present the new account list dialog when you choose &quot;New File&quot; from the &quot;File&quot; menu</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Perform account list _setup on new file</property>
 		  <property name="use_underline">True</property>
