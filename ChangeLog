@@ -1,3 +1,36 @@
+2005-07-28  David Hampton  <hampton@employees.org>
+
+	* src/import-export/hbci/Makefile.am:
+	* src/import-export/hbci/gnc-hbci-utils.c:
+	* src/import-export/hbci/gncmod-hbci.c:
+	* src/import-export/hbci/hbci-interaction.[ch]:
+	* src/import-export/hbci/hbci.scm:
+	* src/import-export/hbci/glade/Makefile.am:
+	* src/import-export/hbci/glade/hbci.glade:
+	* src/import-export/hbci/glade/hbcipass.glade:
+	* src/import-export/hbci/glade/hbciprefs.glade:
+	* src/import-export/hbci/schemas/Makefile.am:
+	* src/import-export/hbci/schemas/apps_gnucash_dialog_hbci.schemas:
+	Make HBCI setup work again.  Use gconf and the new preferences
+	dialog for HBCI preferences.  (Would be nice if these could be
+	pushed out to the dialogs where they apply.)
+
+	* src/import-export/import-account-matcher.c: Must specify what
+	columns should be visible columns after adding a new column.
+
+	* src/gnome-utils/gnc-tree-view-account.c: Build a kvp based column properly.
+
+	* src/import-export/hbci/glade/hbcipass.glade: Wrap the text in
+	labels.
+
+	* src/import-export/hbci/glade/hbci.glade: Run through glade-2.6
+	to reset properties to the gtk-2.4 level.  The changes are mostly
+	formatting though.  Content changes to follow in separate commits.
+
+	* src/gnome-utils/preferences.glade: When selecting the toolbar
+	style use the same labels as the gnome preferences dialog.  Add a
+	couple of explicit mnemonic targets.
+
 2005-07-27  Christian Stimming  <stimming@tuhh.de>
 
 	* src/import-export/hbci/dialog-hbcitrans.c: Eventually enable all

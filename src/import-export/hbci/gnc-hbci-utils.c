@@ -32,6 +32,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-hbci-kvp.h"
+#include "gnc-gconf-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine-util.h" 
 #include "global-options.h"
@@ -438,8 +439,7 @@ gnc_AB_BANKING_execute (GtkWidget *parent, AB_BANKING *api,
   if (inter)
     GNCInteractor_show (inter);
 
-  if (gnc_lookup_boolean_option("_+Advanced", 
-				"HBCI Verbose Debug Messages", FALSE)) {
+  if (gnc_gconf_get_bool(GCONF_SECTION, KEY_VERBOSE_DEBUG, NULL)) {
     GWEN_Logger_SetLevel(GWEN_LOGDOMAIN, GWEN_LoggerLevelNotice);
     GWEN_Logger_SetLevel(AQBANKING_LOGDOMAIN, GWEN_LoggerLevelInfo);
     GWEN_Logger_SetLevel("aqhbci", GWEN_LoggerLevelInfo);

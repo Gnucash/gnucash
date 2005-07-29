@@ -54,14 +54,6 @@ libgncmod_hbci_la_LIBADD = \
   ${GNOME_LIBS} \
   ${HBCI_LIBS}
 
-gncscmdir = ${GNC_SCM_INSTALL_DIR}/hbci
-
-gncscm_DATA = \
-  hbci.scm
-
-#gladedir = ${GNC_GLADE_DIR}
-#glade_DATA = 
-
 AM_CFLAGS = \
   -I${top_srcdir}/src \
   -I${top_srcdir}/src/core-utils \

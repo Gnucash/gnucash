@@ -44,10 +44,6 @@
 
 #include <iconv.h>
 
-#define PREF_TAB_ONLINE_BANKING N_("Online Banking & Importing")
-#define GCONF_SECTION "dialogs/import/hbci"
-#define KEY_CLOSE_ON_FINISH "close_on_finish"
-
 gchar *gnc__extractText(const char *text);
 
 /** Adds the interactor and progressmonitor classes to the api. */
@@ -66,9 +62,7 @@ GNCInteractor *gnc_AB_BANKING_interactors (AB_BANKING *api, GtkWidget *parent)
   g_assert(data->gnc_iconv_handler != (iconv_t)(-1));
   data->keepAlive = TRUE;
   data->cache_pin = 
-    gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
-			      "HBCI Remember PIN in memory",
-                              FALSE);
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_REMEMBER_PIN, NULL);
   data->showbox_id = 1;
   data->showbox_hash = g_hash_table_new(NULL, NULL); 
 
@@ -147,9 +141,7 @@ gboolean GNCInteractor_aborted(const GNCInteractor *i)
 void GNCInteractor_show_nodelete(GNCInteractor *i)
 {
   gboolean cache_pin = 
-    gnc_lookup_boolean_option(PREF_TAB_ONLINE_BANKING,
-			      "HBCI Remember PIN in memory",
-			      FALSE);
+    gnc_gconf_get_bool(GCONF_SECTION, KEY_REMEMBER_PIN, NULL);
   g_assert(i);
   /* Show widgets */
   gtk_widget_show_all (i->dialog);

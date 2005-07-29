@@ -16,6 +16,7 @@
 #include "druid-hbci-initial.h"
 #include "gnc-hbci-utils.h"
 #include <gwenhywfar/gwenhywfar.h>
+#include "dialog-preferences.h"
 
 /* version of the gnc module system interface we require */
 int libgncmod_hbci_LTX_gnc_module_system_interface = 0;
@@ -62,12 +63,12 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
     return FALSE;
   }
 
-  /* load the HBCI Scheme code */
-  scm_c_eval_string("(load-from-path \"hbci/hbci.scm\")");
-
   /* Add menu items with C callbacks */
   gnc_plugin_hbci_create_plugin();
   
+  gnc_preferences_add_to_page("hbciprefs.glade", "hbci_prefs",
+			      "Data Import");
+
   /* Initialize gwen library */
   GWEN_Init();
 

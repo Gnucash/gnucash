@@ -32,7 +32,7 @@ View Statusbar
 Properties Dialog
 QIF Import
 OFX Import
-HBCI Actions (Statement download, online transfer)
+HBCI Actions
 Export Accounts
 Stock Split Dialog
 
@@ -138,11 +138,8 @@ Resources
 
 - Importing
 
-  - HBCI - Transaction templates for not yet work because the GTK_LIST
-    code still needs to be changed to GTK_TREE_VIEW. Apart from that,
-    everything in the hbci subdirectory works.  (Earlier this said:
-    "Needs new HTTP support [gnet]", but no, the import-export/hbci
-    module does not need any extra http library. cstim, 2005-04-09.)
+  - HBCI - Transaction templates eventually need to be converted from a GTK_CLIST
+    to a GTK_TREE_VIEW.  Currently working as a GtkClist. 
 
 - Budgeting
 
