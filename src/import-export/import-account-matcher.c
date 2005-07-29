@@ -70,10 +70,6 @@ build_acct_tree(struct _accountpickerdialog * picker)
   picker->account_tree = GNC_TREE_VIEW_ACCOUNT(account_tree);
   gtk_tree_view_set_headers_visible (account_tree, TRUE);
 
-  /* Configure the columns */
-  gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree),
-				   "type", "description");
-
   /* Add our custom column. */
   gnc_tree_view_account_add_kvp_column (picker->account_tree,
 					_("Account ID"), "online_id");
@@ -81,6 +77,9 @@ build_acct_tree(struct _accountpickerdialog * picker)
   gtk_container_add(GTK_CONTAINER(picker->account_tree_box),
 		    GTK_WIDGET(picker->account_tree));
 
+  /* Configure the columns */
+  gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree),
+				   "type", "description", "online_id", NULL);
 }
 
 /* When user clicks to create a new account */
