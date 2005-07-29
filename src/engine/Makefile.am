@@ -1,5 +1,3 @@
-#INCLUDES = /usr/include/glib-1.2 /usr/lib/glib/include
-
 qof_book_merge_lo_INCLUDES = -DG_LOG_DOMAIN=\"qof-book-merge\"
 
 SUBDIRS = . test-core test 
