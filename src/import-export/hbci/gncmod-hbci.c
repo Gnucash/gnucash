@@ -67,7 +67,7 @@ libgncmod_hbci_LTX_gnc_module_init(int refcount)
   gnc_plugin_hbci_create_plugin();
   
   gnc_preferences_add_to_page("hbciprefs.glade", "hbci_prefs",
-			      "Data Import");
+			      "Online Banking");
 
   /* Initialize gwen library */
   GWEN_Init();
