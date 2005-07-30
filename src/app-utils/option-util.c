@@ -2028,7 +2028,7 @@ gnc_option_db_lookup_string_option(GNCOptionDB *odb,
     {
       value = scm_call_0(getter);
       if (SCM_STRINGP(value))
-        return SCM_STRING_CHARS(value);
+        return g_strdup(SCM_STRING_CHARS(value));
     }
   }
 

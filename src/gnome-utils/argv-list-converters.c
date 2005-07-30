@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <libguile.h>
-#include "guile-mappings.h"
 
 #include "argv-list-converters.h"
 
@@ -61,8 +60,7 @@ gnc_scheme_list_to_nulltermcharpp(int prelen, const char **prepend, SCM list)
         next = SCM_CDR(next);
         if(SCM_STRINGP(scm_string))
         {
-            /* char *onestr = gh_scm2newstr(scm_string, 0); */
-            char *onestr = SCM_STRING_CHARS(scm_string);
+	    const gchar *onestr = SCM_STRING_CHARS(scm_string);
             ret[loc] = g_strdup (onestr);
         }
         else

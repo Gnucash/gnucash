@@ -148,8 +148,7 @@ gnc_extension_path (SCM extension, char **fullpath)
 
     if (SCM_STRINGP(item))
     {
-      /* strings[i] = gh_scm2newstr(item, NULL); */
-      strings[i] = SCM_STRING_CHARS (item);
+      strings[i] = g_strdup(SCM_STRING_CHARS(item));
     }
     else
     {

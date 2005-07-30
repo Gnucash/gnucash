@@ -1,3 +1,15 @@
+2005-07-30  David Hampton  <hampton@employees.org>
+
+	* src/app-utils/option-util.c:
+	* src/engine/engine-helpers.c:
+	* src/engine/glib-helpers.c:
+	* src/engine/kvp-scm.c:
+	* src/gnome-utils/argv-list-converters.c:
+	* src/gnome-utils/dialog-options.c:
+	* src/gnome-utils/gnc-menu-extensions.c: The SCM_xxx_CHARS macros
+	return pointers to internal scheme data and should be treated as
+	const.  Use the compiler to enforce this restriction.
+
 2005-07-28  David Hampton  <hampton@employees.org>
 
 	* src/import-export/hbci/Makefile.am:

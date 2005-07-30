@@ -47,9 +47,8 @@ gnc_scm_to_kvp_value_ptr(SCM val)
     }
     else if(SCM_STRINGP(val))
     {
-        char *newstr;
+        const gchar *newstr;
         KvpValue *ret;
-        /* newstr = gh_scm2newstr(val, NULL); */
         newstr = SCM_STRING_CHARS (val);
         ret = kvp_value_new_string(newstr);
         return ret;

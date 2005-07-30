@@ -2019,8 +2019,7 @@ gnc_option_set_ui_value_string (GNCOption *option, gboolean use_default,
 {
   if (SCM_STRINGP(value))
   {
-    /* char *string = gh_scm2newstr(value, NULL); */
-    char *string = SCM_STRING_CHARS(value);
+    const gchar *string = SCM_STRING_CHARS(value);
     gtk_entry_set_text(GTK_ENTRY(widget), string);
     return FALSE;
   }
@@ -2041,10 +2040,8 @@ gnc_option_set_ui_value_text (GNCOption *option, gboolean use_default,
 
   if (SCM_STRINGP(value))
   {
-    /* char *string = gh_scm2newstr(value, NULL); */
-    char *string = SCM_STRING_CHARS(value);
+    const gchar *string = SCM_STRING_CHARS(value);
     gtk_text_buffer_set_text (buffer, string, strlen (string));
-    free(string);
     return FALSE;
   }
   else
@@ -2309,8 +2306,7 @@ gnc_option_set_ui_value_font (GNCOption *option, gboolean use_default,
 {
   if (SCM_STRINGP(value))
   {
-    /* char *string = gh_scm2newstr(value, NULL); */
-    char *string = SCM_STRING_CHARS(value);
+    const gchar *string = SCM_STRING_CHARS(value);
     if ((string != NULL) && (*string != '\0'))
     {
       GnomeFontPicker *picker = GNOME_FONT_PICKER(widget);
@@ -2329,8 +2325,7 @@ gnc_option_set_ui_value_pixmap (GNCOption *option, gboolean use_default,
   ENTER("option %p(%s)", option, gnc_option_name(option));
   if (SCM_STRINGP(value))
   {
-    /* char * string = gh_scm2newstr(value, NULL); */
-    char *string = SCM_STRING_CHARS(value);
+    const gchar *string = SCM_STRING_CHARS(value);
 
     if (string && *string)
     {
